@@ -5,9 +5,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 import extendedui.ui.TextureCache;
 import pinacolada.effects.PCLEffect;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
 import pinacolada.effects.VFX;
-import pinacolada.utilities.GameEffects;
 
 public class StrongPunchEffect extends PCLEffect
 {
@@ -54,7 +54,7 @@ public class StrongPunchEffect extends PCLEffect
         {
             if (!triggered)
             {
-                GameEffects.Queue.add(VFX.whack(x, y).setColor(Color.SCARLET)).setScale(2);
+                PCLEffects.Queue.add(VFX.whack(x, y).setColor(Color.SCARLET)).setScale(2);
                 SFX.play(SFX.PCL_PUNCH, 0.7f, 0.8f);
                 triggered = true;
             }

@@ -26,10 +26,12 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.ColoredString;
 import extendedui.utilities.EUIColors;
+import pinacolada.actions.PCLActions;
 import pinacolada.actions.powers.IncreasePower;
 import pinacolada.actions.powers.ReducePower;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLUseInfo;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
 import pinacolada.effects.powers.PCLFlashPowerEffect;
 import pinacolada.effects.powers.PCLGainPowerEffect;
@@ -38,8 +40,6 @@ import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PSpecialSkill;
-import pinacolada.utilities.GameActions;
-import pinacolada.utilities.GameEffects;
 import pinacolada.utilities.PCLRenderHelpers;
 
 import java.lang.reflect.Constructor;
@@ -251,7 +251,7 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
 
     public IncreasePower increasePower(int amount)
     {
-        return (IncreasePower) GameActions.bottom.increasePower(this, amount).setDuration(0.05f, false);
+        return (IncreasePower) PCLActions.bottom.increasePower(this, amount).setDuration(0.05f, false);
     }
 
     public void initialize(int amount)
@@ -277,17 +277,17 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
 
     }
 
-    public ReducePower reducePower(GameActions order, int amount)
+    public ReducePower reducePower(PCLActions order, int amount)
     {
-        return GameActions.bottom.reducePower(this, amount);
+        return PCLActions.bottom.reducePower(this, amount);
     }
 
     public RemoveSpecificPowerAction removePower()
     {
-        return removePower(GameActions.bottom);
+        return removePower(PCLActions.bottom);
     }
 
-    public RemoveSpecificPowerAction removePower(GameActions order)
+    public RemoveSpecificPowerAction removePower(PCLActions order)
     {
         return order.removePower(owner, owner, this);
     }
@@ -609,14 +609,14 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
     public void flash()
     {
         this.effects.add(new PCLGainPowerEffect(this, true));
-        GameEffects.Queue.add(new PCLFlashPowerEffect(this));
+        PCLEffects.Queue.add(new PCLFlashPowerEffect(this));
     }
 
     @Override
     public void flashWithoutSound()
     {
         this.effects.add(new PCLGainPowerEffect(this, false));
-        GameEffects.Queue.add(new PCLFlashPowerEffect(this));
+        PCLEffects.Queue.add(new PCLFlashPowerEffect(this));
     }
 
     @Override

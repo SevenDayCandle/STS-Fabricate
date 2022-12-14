@@ -1,4 +1,4 @@
-package pinacolada.utilities;
+package pinacolada.actions;
 
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
@@ -28,12 +28,14 @@ import com.megacrit.cardcrawl.vfx.BorderFlashEffect;
 import com.megacrit.cardcrawl.vfx.BorderLongFlashEffect;
 import com.megacrit.cardcrawl.vfx.cardManip.CardFlashVfx;
 import extendedui.interfaces.delegates.*;
-import pinacolada.actions.PCLAction;
 import pinacolada.actions.affinity.AddAffinityLevel;
 import pinacolada.actions.affinity.RerollAffinity;
 import pinacolada.actions.affinity.TryChooseChoice;
 import pinacolada.actions.basic.*;
 import pinacolada.actions.cardManipulation.*;
+import pinacolada.actions.creature.SummonAllyAction;
+import pinacolada.actions.creature.TriggerAllyAction;
+import pinacolada.actions.creature.WithdrawAllyAction;
 import pinacolada.actions.damage.DealDamage;
 import pinacolada.actions.damage.DealDamageToAll;
 import pinacolada.actions.damage.LoseHP;
@@ -57,7 +59,8 @@ import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.fields.PCLCardTag;
 import pinacolada.cards.pcl.tokens.AffinityToken;
 import pinacolada.interfaces.subscribers.OnPhaseChangedSubscriber;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
+import pinacolada.monsters.PCLCardAlly;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.powers.common.DelayedDamagePower;
@@ -65,6 +68,8 @@ import pinacolada.powers.common.DrawLessPower;
 import pinacolada.powers.common.EnergizedPower;
 import pinacolada.skills.PSkill;
 import pinacolada.stances.PCLStanceHelper;
+import pinacolada.utilities.GameUtilities;
+import pinacolada.utilities.ListSelection;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -75,7 +80,7 @@ import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.player;
 
 
 @SuppressWarnings("UnusedReturnValue")
-public final class GameActions
+public final class PCLActions
 {
 
     public enum ActionOrder
@@ -92,19 +97,19 @@ public final class GameActions
     }
 
     @Deprecated
-    public static GameActions nextCombat = new GameActions(ActionOrder.NextCombat);
+    public static PCLActions nextCombat = new PCLActions(ActionOrder.NextCombat);
     @Deprecated
-    public static GameActions turnStart = new GameActions(ActionOrder.TurnStart);
-    public static GameActions instant = new GameActions(ActionOrder.Instant);
-    public static GameActions top = new GameActions(ActionOrder.Top);
-    public static GameActions bottom = new GameActions(ActionOrder.Bottom);
-    public static GameActions delayed = new GameActions(ActionOrder.Delayed);
-    public static GameActions delayedTop = new GameActions(ActionOrder.DelayedTop);
-    public static GameActions last = new GameActions(ActionOrder.Last);
+    public static PCLActions turnStart = new PCLActions(ActionOrder.TurnStart);
+    public static PCLActions instant = new PCLActions(ActionOrder.Instant);
+    public static PCLActions top = new PCLActions(ActionOrder.Top);
+    public static PCLActions bottom = new PCLActions(ActionOrder.Bottom);
+    public static PCLActions delayed = new PCLActions(ActionOrder.Delayed);
+    public static PCLActions delayedTop = new PCLActions(ActionOrder.DelayedTop);
+    public static PCLActions last = new PCLActions(ActionOrder.Last);
 
     protected final ActionOrder actionOrder;
 
-    protected GameActions(ActionOrder actionOrder)
+    protected PCLActions(ActionOrder actionOrder)
     {
         this.actionOrder = actionOrder;
     }
@@ -198,29 +203,29 @@ public final class GameActions
         return add(new AddAffinityLevel(affinity, amount));
     }
 
-    public AddPowerEffectBonus addPowerEffectBonus(String powerID, CombatStats.Type effectType, int amount)
+    public AddPowerEffectBonus addPowerEffectBonus(String powerID, CombatManager.Type effectType, int amount)
     {
         return add(new AddPowerEffectBonus(powerID, effectType, amount));
     }
 
-    public AddPowerEffectBonus addPowerEffectBonus(AbstractPower power, CombatStats.Type effectType, int amount)
+    public AddPowerEffectBonus addPowerEffectBonus(AbstractPower power, CombatManager.Type effectType, int amount)
     {
         return add(new AddPowerEffectBonus(power, effectType, amount));
     }
 
     public AddPowerEffectBonus addPowerEffectEnemyBonus(String powerID, int amount)
     {
-        return add(new AddPowerEffectBonus(powerID, CombatStats.Type.Effect, amount));
+        return add(new AddPowerEffectBonus(powerID, CombatManager.Type.Effect, amount));
     }
 
     public AddPowerEffectBonus addPowerEffectPassiveDamageBonus(String powerID, int amount)
     {
-        return add(new AddPowerEffectBonus(powerID, CombatStats.Type.PassiveDamage, amount));
+        return add(new AddPowerEffectBonus(powerID, CombatManager.Type.PassiveDamage, amount));
     }
 
     public AddPowerEffectBonus addPowerEffectPlayerBonus(String powerID, int amount)
     {
-        return add(new AddPowerEffectBonus(powerID, CombatStats.Type.PlayerEffect, amount));
+        return add(new AddPowerEffectBonus(powerID, CombatManager.Type.PlayerEffect, amount));
     }
 
     public ApplyPower applyPower(AbstractPower power)
@@ -754,17 +759,17 @@ public final class GameActions
 
     public PlayCard playCard(AbstractCard card, CardGroup sourcePile, AbstractCreature target)
     {
-        return add(new PlayCard(card, target, false, actionOrder != GameActions.ActionOrder.Top)).setSourcePile(sourcePile);
+        return add(new PlayCard(card, target, false, actionOrder != PCLActions.ActionOrder.Top)).setSourcePile(sourcePile);
     }
 
     public PlayCard playCard(AbstractCard card, AbstractCreature target)
     {
-        return add(new PlayCard(card, target, false, actionOrder != GameActions.ActionOrder.Top));
+        return add(new PlayCard(card, target, false, actionOrder != PCLActions.ActionOrder.Top));
     }
 
     public PlayCard playCopy(AbstractCard card, AbstractCreature target)
     {
-        return add(new PlayCard(card, target, true, actionOrder != GameActions.ActionOrder.Top))
+        return add(new PlayCard(card, target, true, actionOrder != PCLActions.ActionOrder.Top))
                 .setCurrentPosition(card.current_x, card.current_y)
                 .spendEnergy(false)
                 .setPurge(true);
@@ -966,6 +971,11 @@ public final class GameActions
         return add(new ApplyAffinityPower(player, affinity, amount, temporary));
     }
 
+    public SummonAllyAction summonAlly(PCLCard card, PCLCardAlly slot)
+    {
+        return add(new SummonAllyAction(card, slot));
+    }
+
     public PlayVFX superFlash(AbstractCard card)
     {
         return playVFX(new CardFlashVfx(card, Color.ORANGE.cpy(), true));
@@ -989,6 +999,11 @@ public final class GameActions
     public TalkAction talk(AbstractCreature source, String text, float duration, float bubbleDuration)
     {
         return add(new TalkAction(source, text, duration, bubbleDuration));
+    }
+
+    public TriggerAllyAction triggerAlly(PCLCardAlly ally)
+    {
+        return add(new TriggerAllyAction(ally));
     }
 
     public TriggerOrbPassiveAbility triggerOrbPassive(int times)
@@ -1056,6 +1071,11 @@ public final class GameActions
         return add(new UsePotionAction(potion, target, amount));
     }
 
+    public WithdrawAllyAction withdrawAlly(PCLCardAlly ally)
+    {
+        return add(new WithdrawAllyAction(ally));
+    }
+
     public PlayVFX playVFX(AbstractGameEffect effect)
     {
         return add(new PlayVFX(effect, 0));
@@ -1092,7 +1112,7 @@ public final class GameActions
 
         public static void add(AbstractGameAction action)
         {
-            CombatStats.onPhaseChanged.subscribe(new ExecuteLast(action));
+            CombatManager.onPhaseChanged.subscribe(new ExecuteLast(action));
         }
 
         @Override
@@ -1100,8 +1120,8 @@ public final class GameActions
         {
             if (phase == GameActionManager.Phase.WAITING_ON_USER)
             {
-                GameActions.bottom.add(action);
-                CombatStats.onPhaseChanged.unsubscribe(this);
+                PCLActions.bottom.add(action);
+                CombatManager.onPhaseChanged.unsubscribe(this);
             }
         }
     }

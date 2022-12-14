@@ -10,7 +10,7 @@ import com.megacrit.cardcrawl.vfx.cardManip.ShowCardAndAddToDrawPileEffect;
 import com.megacrit.cardcrawl.vfx.cardManip.ShowCardAndAddToHandEffect;
 import com.megacrit.cardcrawl.vfx.cardManip.ShowCardAndObtainEffect;
 import extendedui.utilities.EUIClassUtils;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.patches.cardLibrary.PCLCardLibraryPatches;
 
 public class ShowCardAndAddPatches
@@ -23,7 +23,7 @@ public class ShowCardAndAddPatches
         {
             if (__instance.isDone)
             {
-                CombatStats.onCardCreated(EUIClassUtils.getField(__instance, "card"), false);
+                CombatManager.onCardCreated(EUIClassUtils.getField(__instance, "card"), false);
             }
         }
     }
@@ -36,7 +36,7 @@ public class ShowCardAndAddPatches
         {
             if (__instance.isDone)
             {
-                CombatStats.onCardCreated(EUIClassUtils.getField(__instance, "card"), false);
+                CombatManager.onCardCreated(EUIClassUtils.getField(__instance, "card"), false);
             }
         }
     }
@@ -49,7 +49,7 @@ public class ShowCardAndAddPatches
         {
             if (__instance.isDone)
             {
-                CombatStats.onCardCreated(EUIClassUtils.getField(__instance, "card"), false);
+                CombatManager.onCardCreated(EUIClassUtils.getField(__instance, "card"), false);
             }
         }
     }

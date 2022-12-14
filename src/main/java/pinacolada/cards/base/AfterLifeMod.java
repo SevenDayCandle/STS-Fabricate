@@ -3,9 +3,9 @@ package pinacolada.cards.base;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.resources.PGR;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ public class AfterLifeMod
     {
         if (GameUtilities.inBattle() && !isAdded(card))
         {
-            CombatStats.controlPile.add(card)
+            CombatManager.controlPile.add(card)
                     .setUseCondition(control -> canUse(control.card))
                     .onSelect(control ->
                     {
@@ -29,9 +29,9 @@ public class AfterLifeMod
                         {
                             currentCard = control.card;
                             PCLCardAffinities pAffinities = GameUtilities.getPCLCardAffinities(control.card);
-                            GameActions.bottom.selectCreature(control.card).addCallback(control, (state, creature) ->
+                            PCLActions.bottom.selectCreature(control.card).addCallback(control, (state, creature) ->
                             {
-                                GameActions.bottom.purgeFromPile(control.card.name, 9999, player.exhaustPile, player.hand)
+                                PCLActions.bottom.purgeFromPile(control.card.name, 9999, player.exhaustPile, player.hand)
                                         .setOptions(false, true)
                                         .setFilter(c -> canPurge(control.card, c, pAffinities))
                                         .setCompletionRequirement(AfterLifeMod::conditionMet)
@@ -40,10 +40,10 @@ public class AfterLifeMod
                                             currentCard = null;
                                             if (c.size() > 0)
                                             {
-                                                GameActions.bottom.playCard(state.card, EUIUtils.safeCast(creature, AbstractMonster.class))
+                                                PCLActions.bottom.playCard(state.card, EUIUtils.safeCast(creature, AbstractMonster.class))
                                                         .spendEnergy(false)
                                                         .addCallback(() -> {
-                                                            CombatStats.onAfterlife(state.card, c);
+                                                            CombatManager.onAfterlife(state.card, c);
                                                         });
                                             }
                                         });
@@ -165,7 +165,7 @@ public class AfterLifeMod
 
     public static boolean isAdded(AbstractCard card)
     {
-        return CombatStats.controlPile.find(card) != null;
+        return CombatManager.controlPile.find(card) != null;
     }
 }
 

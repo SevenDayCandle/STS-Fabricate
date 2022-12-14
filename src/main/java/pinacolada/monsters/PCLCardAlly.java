@@ -11,14 +11,14 @@ import com.megacrit.cardcrawl.vfx.BobEffect;
 import com.megacrit.cardcrawl.vfx.ExhaustBlurEffect;
 import extendedui.ui.EUIBase;
 import extendedui.ui.tooltips.EUICardPreview;
+import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLUseInfo;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
 import pinacolada.monsters.animations.PCLSlotAnimation;
 import pinacolada.monsters.animations.conjurer.ConjurerFireAllyAnimation;
 import pinacolada.skills.Skills;
-import pinacolada.utilities.GameActions;
-import pinacolada.utilities.GameEffects;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
@@ -158,7 +158,7 @@ public class PCLCardAlly extends PCLCreature
     }
 
     public void die() {
-        GameEffects.Queue.callback(() -> {
+        PCLEffects.Queue.callback(() -> {
             SFX.play(SFX.CARD_EXHAUST, 0.2F);
             for(int i = 0; i < 140; ++i) {
                 AbstractDungeon.effectsQueue.add(new ExhaustBlurEffect(this.hb.cX, this.hb.cY));
@@ -178,7 +178,7 @@ public class PCLCardAlly extends PCLCreature
         super.update();
         if (hb.clicked && card != null)
         {
-            GameActions.bottom.selectCreature(card).addCallback(t -> {
+            PCLActions.bottom.selectCreature(card).addCallback(t -> {
                if (t != null)
                {
                    target = t;

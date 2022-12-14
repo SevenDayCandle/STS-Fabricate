@@ -12,7 +12,7 @@ import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import extendedui.ui.EUIBase;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.misc.PCLHotkeys;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
@@ -62,10 +62,10 @@ public class PCLCombatScreen extends EUIBase
             }
         }
 
-        CombatStats.update();
-        CombatStats.playerSystem.update(EUIUtils.safeCast(player.hoveredCard, PCLCard.class), target, draggingCard);
-        CombatStats.summons.update();
-        CombatStats.controlPile.update();
+        CombatManager.update();
+        CombatManager.playerSystem.update(EUIUtils.safeCast(player.hoveredCard, PCLCard.class), target, draggingCard);
+        CombatManager.summons.update();
+        CombatManager.controlPile.update();
         helper.update();
 
         if (PGR.core.config.showFormulaDisplay.get())
@@ -81,9 +81,9 @@ public class PCLCombatScreen extends EUIBase
     @Override
     public void renderImpl(SpriteBatch sb)
     {
-        CombatStats.playerSystem.render(sb);
-        CombatStats.summons.render(sb);
-        CombatStats.controlPile.render(sb);
+        CombatManager.playerSystem.render(sb);
+        CombatManager.summons.render(sb);
+        CombatManager.controlPile.render(sb);
         if (PGR.core.config.showFormulaDisplay.get())
         {
             formulaDisplay.renderImpl(sb);

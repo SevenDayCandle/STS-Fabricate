@@ -4,9 +4,9 @@ import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIUtils;
 import pinacolada.actions.PCLActionWithCallback;
 import pinacolada.cards.base.PCLAffinity;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.ui.combat.PCLPlayerMeter;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.Arrays;
@@ -25,7 +25,7 @@ public class RerollAffinity extends PCLActionWithCallback<PCLAffinity>
 
         this.target = target;
         this.isRandom = true;
-        this.meter = CombatStats.playerSystem.getActiveMeter();
+        this.meter = CombatManager.playerSystem.getActiveMeter();
     }
 
     @Override
@@ -37,7 +37,7 @@ public class RerollAffinity extends PCLActionWithCallback<PCLAffinity>
         }
         else
         {
-            GameActions.top.tryChooseAffinity(name, 1, source, null, Arrays.asList(getAffinityChoices())).addConditionalCallback(choices -> {
+            PCLActions.top.tryChooseAffinity(name, 1, source, null, Arrays.asList(getAffinityChoices())).addConditionalCallback(choices -> {
                 if (choices.size() > 0)
                 {
                     complete(meter.set(choices.get(0).value, target));

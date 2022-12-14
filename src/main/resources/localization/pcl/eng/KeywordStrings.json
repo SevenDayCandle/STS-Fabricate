@@ -477,7 +477,7 @@
 								"PROPER_NAME": "Transform"
 				},
 				"Trigger":	{
-								"DESCRIPTION": "Activate the passive effect of an #yOrb.",
+								"DESCRIPTION": "Activate the passive effect of an #yOrb or #ySummon.",
 								"NAMES": ["trigger", "triggered", "triggers"],
 								"PROPER_NAME": "Trigger"
 				},
@@ -491,15 +491,12 @@
 								"NAMES": ["vitality"],
 								"PROPER_NAME": "Vitality"
 				},
-				"Warding":	{
-								"DESCRIPTION": "At the start of each turn, gain #yTemporary [Artifact].",
-								"NAMES": ["warding"],
-								"PROPER_NAME": "Warding"
-				},
 				"Withdraw":	{
-								"DESCRIPTION": "#yWithdrawing a #ySummon returns it to your discard pile.",
-								"NAMES": ["warding"],
-								"PROPER_NAME": "Warding"
+								"DESCRIPTION": "#yWithdrawing a #ySummon #yTriggers it once and returns it to your discard pile.",
+								"NAMES": ["withdraw"],
+								"PAST": "withdrew",
+								"PRESENT": "withdraws",
+								"PROPER_NAME": "Withdraw"
 				},
 				"~Blue Affinity":	{
 								"DESCRIPTION": "",

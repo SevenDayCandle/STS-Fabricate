@@ -12,10 +12,10 @@ import pinacolada.cards.base.fields.PCLCardTag;
 import pinacolada.interfaces.markers.PointerProvider;
 import pinacolada.interfaces.subscribers.OnApplyPowerSubscriber;
 import pinacolada.interfaces.subscribers.OnPhaseChangedSubscriber;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.skills.skills.PCustomCond;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.HashMap;
@@ -50,9 +50,9 @@ public class Curse_Normality extends PCLCard
 
         protected static void checkForNewBattle()
         {
-            if (CombatStats.battleID != battleID)
+            if (CombatManager.battleID != battleID)
             {
-                battleID = CombatStats.battleID;
+                battleID = CombatManager.battleID;
                 turnCache = -1;
                 POWERS.clear();
             }
@@ -67,8 +67,8 @@ public class Curse_Normality extends PCLCard
         public boolean triggerOnCreate(AbstractCard c, boolean startOfBattle)
         {
             tryActivate();
-            CombatStats.onApplyPower.subscribe(this);
-            CombatStats.onPhaseChanged.subscribe(this);
+            CombatManager.onApplyPower.subscribe(this);
+            CombatManager.onPhaseChanged.subscribe(this);
             return false;
         }
 
@@ -76,7 +76,7 @@ public class Curse_Normality extends PCLCard
         @Override
         public void onApplyPower(AbstractPower power, AbstractCreature target, AbstractCreature source)
         {
-            GameActions.last.callback(() -> {
+            PCLActions.last.callback(() -> {
                 if (hasNormality() && (GameUtilities.isCommonBuff(power) || GameUtilities.isCommonDebuff(power)))
                 {
                     negatePower(power, target);
@@ -111,7 +111,7 @@ public class Curse_Normality extends PCLCard
         {
             checkForNewBattle();
             storePower(power, owner, power.amount);
-            GameActions.bottom.callback(-power.amount, (a, __) -> {
+            PCLActions.bottom.callback(-power.amount, (a, __) -> {
                 GameUtilities.applyPowerInstantly(owner, power, a);
             });
         }
@@ -167,7 +167,7 @@ public class Curse_Normality extends PCLCard
 
                                 if (ph != null && amount != 0)
                                 {
-                                    GameActions.bottom.callback(amount, (a, __) -> {
+                                    PCLActions.bottom.callback(amount, (a, __) -> {
                                         GameUtilities.applyPowerInstantly(owner, ph, a);
                                     });
 

@@ -5,9 +5,9 @@ import com.badlogic.gdx.math.MathUtils;
 import extendedui.ui.TextureCache;
 import extendedui.utilities.EUIColors;
 import pinacolada.effects.PCLEffect;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.VFX;
 import pinacolada.resources.PGR;
-import pinacolada.utilities.GameEffects;
 import pinacolada.utilities.PCLRenderHelpers;
 import pinacolada.utilities.RandomizedList;
 
@@ -43,14 +43,14 @@ public class SnowBurstEffect extends PCLEffect
         for (int i = 0; i < 12; ++i)
         {
             float r = MathUtils.random(0, 360);
-            GameEffects.Queue.add(new FadingParticleEffect(PGR.core.images.effects.waterBubble.texture(), x + MathUtils.random(-16, 16), y + MathUtils.random(-16, 16))
+            PCLEffects.Queue.add(new FadingParticleEffect(PGR.core.images.effects.waterBubble.texture(), x + MathUtils.random(-16, 16), y + MathUtils.random(-16, 16))
                     .setBlendingMode(PCLRenderHelpers.BlendingMode.Glowing)
                     .setColor(EUIColors.white(MathUtils.random(0.5f, 1f)))
                             .setFlip(MathUtils.randomBoolean(), false)
                             .setScale(scale * MathUtils.random(0.2f, 0.6f))
                             .setRotation(0f, 600f)
                             .setTargetPosition(x + RADIUS * MathUtils.cosDeg(r), y + RADIUS * MathUtils.sinDeg(r))).setDuration(0.6f, false);
-            GameEffects.Queue.add(new FadingParticleEffect(getRandomTexture(), x + MathUtils.random(-16, 16), y + MathUtils.random(-16, 16))
+            PCLEffects.Queue.add(new FadingParticleEffect(getRandomTexture(), x + MathUtils.random(-16, 16), y + MathUtils.random(-16, 16))
                     .setBlendingMode(PCLRenderHelpers.BlendingMode.Glowing)
                     .setColor(EUIColors.white(MathUtils.random(0.5f, 1f)))
                             .setFlip(MathUtils.randomBoolean(), false)

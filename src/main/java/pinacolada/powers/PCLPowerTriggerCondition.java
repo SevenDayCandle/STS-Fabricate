@@ -11,12 +11,12 @@ import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.ColoredString;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PSpecialSkill;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -155,7 +155,7 @@ public class PCLPowerTriggerCondition
         }
         else if (move.requiresTarget())
         {
-            GameActions.bottom.selectCreature(PCLCardTarget.Single, power.name)
+            PCLActions.bottom.selectCreature(PCLCardTarget.Single, power.name)
                     .addCallback(c ->
                     {
                         if (c != null)
@@ -191,7 +191,7 @@ public class PCLPowerTriggerCondition
             return;
         }
 
-        move.use(null, CombatStats.onClickablePowerUsed(power, m));
+        move.use(null, CombatManager.onClickablePowerUsed(power, m));
         pool.use();
         power.flashWithoutSound();
         refresh(false, true);

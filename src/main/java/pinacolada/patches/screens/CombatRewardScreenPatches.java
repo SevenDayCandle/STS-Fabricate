@@ -5,7 +5,7 @@ import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
 import com.megacrit.cardcrawl.screens.CombatRewardScreen;
 import extendedui.utilities.EUIClassUtils;
-import pinacolada.utilities.GameEffects;
+import pinacolada.effects.PCLEffects;
 
 public class CombatRewardScreenPatches
 {
@@ -15,7 +15,7 @@ public class CombatRewardScreenPatches
         @SpirePrefixPatch
         public static SpireReturn<Void> prefix(CombatRewardScreen __instance)
         {
-            if (GameEffects.isEmpty())
+            if (PCLEffects.isEmpty())
             {
                 return SpireReturn.Continue();
             }

@@ -3,7 +3,7 @@ package pinacolada.cards.pcl.glyphs;
 import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLUseInfo;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.skills.skills.PSpecialSkill;
 import pinacolada.ui.combat.PCLPlayerMeter;
 
@@ -20,7 +20,7 @@ public class Glyph05 extends Glyph
     {
         for (PCLAffinity af : move.affinities)
         {
-            for (PCLPlayerMeter meter : CombatStats.playerSystem.getMeters())
+            for (PCLPlayerMeter meter : CombatManager.playerSystem.getMeters())
             {
                 meter.disableAffinity(af);
             }

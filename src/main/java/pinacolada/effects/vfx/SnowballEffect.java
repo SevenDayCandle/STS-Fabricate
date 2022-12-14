@@ -6,8 +6,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.vfx.combat.LightFlareParticleEffect;
 import pinacolada.effects.PCLEffect;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.PCLEffekseerEFX;
-import pinacolada.utilities.GameEffects;
 
 public class SnowballEffect extends PCLEffect
 {
@@ -53,14 +53,14 @@ public class SnowballEffect extends PCLEffect
         if (vfxTimer < 0f)
         {
             vfxTimer = 0.016f;
-            GameEffects.Queue.add(new LightFlareParticleEffect(x, y, secondaryColor));
-            GameEffects.Queue.add(new SnowBurstEffect(x, y));
+            PCLEffects.Queue.add(new LightFlareParticleEffect(x, y, secondaryColor));
+            PCLEffects.Queue.add(new SnowBurstEffect(x, y));
         }
 
         if (tickDuration(deltaTime))
         {
-            GameEffects.Queue.add(new SnowballImpactEffect(x, y).setColor(color)).setRealtime(isRealtime);
-            GameEffects.Queue.playEFX(PCLEffekseerEFX.MGC_W2_BlueBall, x, y).setScale(0.5f);
+            PCLEffects.Queue.add(new SnowballImpactEffect(x, y).setColor(color)).setRealtime(isRealtime);
+            PCLEffects.Queue.playEFX(PCLEffekseerEFX.MGC_W2_BlueBall, x, y).setScale(0.5f);
             complete();
         }
     }

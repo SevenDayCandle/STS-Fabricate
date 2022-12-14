@@ -3,7 +3,7 @@ package pinacolada.effects.vfx;
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.core.Settings;
 import pinacolada.effects.PCLEffect;
-import pinacolada.utilities.GameEffects;
+import pinacolada.effects.PCLEffects;
 
 public class TornadoEffect extends PCLEffect
 {
@@ -56,7 +56,7 @@ public class TornadoEffect extends PCLEffect
         {
             final float x = this.x + random(-spreadX, spreadX);
             final float y = this.y + random(-spreadY, spreadY);
-            GameEffects.Queue.add(new TornadoParticleEffect(x, y,
+            PCLEffects.Queue.add(new TornadoParticleEffect(x, y,
                     random(15f, 39f) * Settings.scale));
             vfxTimer = vfxFrequency;
         }

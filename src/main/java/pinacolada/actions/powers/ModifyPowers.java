@@ -6,7 +6,7 @@ import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
 import extendedui.utilities.GenericCondition;
 import pinacolada.actions.PCLActionWithCallback;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 import pinacolada.utilities.ListSelection;
 
 import java.util.ArrayList;
@@ -69,7 +69,7 @@ public class ModifyPowers extends PCLActionWithCallback<ArrayList<AbstractPower>
         {
             if (!relative && amount == 0)
             {
-                GameActions.bottom.removePower(source, power);
+                PCLActions.bottom.removePower(source, power);
                 result.add(power);
             }
 
@@ -79,11 +79,11 @@ public class ModifyPowers extends PCLActionWithCallback<ArrayList<AbstractPower>
         final int stacks = relative ? amount : (amount - power.amount);
         if (stacks >= 0)
         {
-            GameActions.bottom.increasePower(power, stacks);
+            PCLActions.bottom.increasePower(power, stacks);
         }
         else
         {
-            GameActions.bottom.reducePower(power, -stacks);
+            PCLActions.bottom.reducePower(power, -stacks);
         }
 
         result.add(power);

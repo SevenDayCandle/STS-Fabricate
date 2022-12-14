@@ -5,7 +5,7 @@ import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import pinacolada.cards.base.PCLAffinity;
 import pinacolada.interfaces.markers.Hidden;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.PTrait;
@@ -46,7 +46,7 @@ public class PTrait_OrbFocusScaling extends PTrait implements Hidden
     @Override
     public boolean triggerOnOrbFocus(AbstractOrb orb)
     {
-        GameUtilities.modifyOrbTemporaryFocus(orb, EUIUtils.sumInt(affinities, CombatStats.playerSystem::getLevel) * amount, true, false);
+        GameUtilities.modifyOrbTemporaryFocus(orb, EUIUtils.sumInt(affinities, CombatManager.playerSystem::getLevel) * amount, true, false);
         return true;
     }
 }

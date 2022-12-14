@@ -27,17 +27,17 @@ import pinacolada.blights.common.AbstractGlyphBlight;
 import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCustomCardSlot;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.card.PermanentUpgradeEffect;
 import pinacolada.effects.vfx.SmokeEffect;
 import pinacolada.interfaces.listeners.OnAddToDeckListener;
 import pinacolada.interfaces.listeners.OnAddingToCardRewardListener;
 import pinacolada.interfaces.listeners.OnCardPoolChangedListener;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PGR;
 import pinacolada.trials.PCLCustomTrial;
-import pinacolada.utilities.GameEffects;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -342,7 +342,7 @@ public class PCLDungeonData implements CustomSavable<PCLDungeonData>, PreStartGa
     public void initializeCardPool()
     {
         loadouts.clear();
-        final AbstractPlayer player = CombatStats.refreshPlayer();
+        final AbstractPlayer player = CombatManager.refreshPlayer();
         data = PGR.getPlayerData(player.chosenClass);
 
         if (data != null)
@@ -416,7 +416,7 @@ public class PCLDungeonData implements CustomSavable<PCLDungeonData>, PreStartGa
             {
                 for (int i = 0; i < data.selectedLoadout.getCommonUpgrades(); i++)
                 {
-                    GameEffects.TopLevelQueue.add(new PermanentUpgradeEffect()).setFilter(c -> AbstractCard.CardRarity.COMMON.equals(c.rarity));
+                    PCLEffects.TopLevelQueue.add(new PermanentUpgradeEffect()).setFilter(c -> AbstractCard.CardRarity.COMMON.equals(c.rarity));
                 }
 
                 player.potionSlots += data.selectedLoadout.getPotionSlots();
@@ -529,10 +529,10 @@ public class PCLDungeonData implements CustomSavable<PCLDungeonData>, PreStartGa
                 cards.remove(c);
             }
 
-            if (first != null && toRemove.size() > 0 && GameEffects.TopLevelQueue.count() < 5)
+            if (first != null && toRemove.size() > 0 && PCLEffects.TopLevelQueue.count() < 5)
             {
-                GameEffects.TopLevelQueue.add(new UpgradeShineEffect((float) Settings.WIDTH / 4f, (float) Settings.HEIGHT / 2f));
-                GameEffects.TopLevelQueue.showCardBriefly(first.makeStatEquivalentCopy(), (float) Settings.WIDTH / 4f, (float) Settings.HEIGHT / 2f);
+                PCLEffects.TopLevelQueue.add(new UpgradeShineEffect((float) Settings.WIDTH / 4f, (float) Settings.HEIGHT / 2f));
+                PCLEffects.TopLevelQueue.showCardBriefly(first.makeStatEquivalentCopy(), (float) Settings.WIDTH / 4f, (float) Settings.HEIGHT / 2f);
             }
         }
     }
@@ -599,7 +599,7 @@ public class PCLDungeonData implements CustomSavable<PCLDungeonData>, PreStartGa
         {
             if (GameUtilities.inBattle())
             {
-                GameEffects.Queue.add(new SmokeEffect(player.hb.cX, player.hb.cY, player.getCardRenderColor()));
+                PCLEffects.Queue.add(new SmokeEffect(player.hb.cX, player.hb.cY, player.getCardRenderColor()));
             }
             GameUtilities.setCreatureAnimation(player, currentForm);
         }
@@ -747,7 +747,7 @@ public class PCLDungeonData implements CustomSavable<PCLDungeonData>, PreStartGa
         augments.clear();
         fragments.clear();
         valueDivisor = 1;
-        AbstractPlayer player = CombatStats.refreshPlayer();
+        AbstractPlayer player = CombatManager.refreshPlayer();
         this.data = PGR.getPlayerData(player != null ? player.chosenClass : null);
 
         if (data != null)

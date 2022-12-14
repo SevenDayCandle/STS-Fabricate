@@ -1,4 +1,4 @@
-package pinacolada.misc;
+package pinacolada.utilities;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;

@@ -6,7 +6,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.vfx.combat.HealEffect;
 import pinacolada.actions.PCLActionWithCallback;
-import pinacolada.utilities.GameEffects;
+import pinacolada.effects.PCLEffects;
 
 public class HealCreature extends PCLActionWithCallback<Integer>
 {
@@ -55,7 +55,7 @@ public class HealCreature extends PCLActionWithCallback<Integer>
                 AbstractDungeon.topPanel.panelHealEffect();
             }
 
-            GameEffects.Queue.add(new HealEffect(target.hb.cX - target.animX, target.hb.cY, amount));
+            PCLEffects.Queue.add(new HealEffect(target.hb.cX - target.animX, target.hb.cY, amount));
         }
 
         complete(amount);

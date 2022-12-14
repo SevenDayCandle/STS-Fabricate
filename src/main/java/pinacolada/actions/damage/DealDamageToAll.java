@@ -8,12 +8,12 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import pinacolada.actions.PCLActionWithCallback;
+import pinacolada.actions.PCLActions;
 import pinacolada.effects.AttackEffects;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.PCLEffekseerEFX;
 import pinacolada.effects.VFX;
-import pinacolada.misc.CombatStats;
-import pinacolada.utilities.GameActions;
-import pinacolada.utilities.GameEffects;
+import pinacolada.misc.CombatManager;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -70,11 +70,11 @@ public class DealDamageToAll extends PCLActionWithCallback<ArrayList<AbstractCre
             {
                 if (mute)
                 {
-                    GameEffects.List.attackWithoutSound(source, enemy, this.attackEffect, vfxColor, 0.15f);
+                    PCLEffects.List.attackWithoutSound(source, enemy, this.attackEffect, vfxColor, 0.15f);
                 }
                 else
                 {
-                    GameEffects.List.attack(source, enemy, this.attackEffect, pitchMin, pitchMax, vfxColor, 0.15f);
+                    PCLEffects.List.attack(source, enemy, this.attackEffect, pitchMin, pitchMax, vfxColor, 0.15f);
                 }
 
                 if (onDamageEffect != null)
@@ -109,7 +109,7 @@ public class DealDamageToAll extends PCLActionWithCallback<ArrayList<AbstractCre
                     final DamageInfo info = new DamageInfo(this.source, this.damage[i], this.damageType);
                     if (orb != null)
                     {
-                        info.output = CombatStats.playerSystem.modifyOrbOutput(info.output, enemy, orb);
+                        info.output = CombatManager.playerSystem.modifyOrbOutput(info.output, enemy, orb);
                     }
                     if (applyPowers)
                     {
@@ -130,7 +130,7 @@ public class DealDamageToAll extends PCLActionWithCallback<ArrayList<AbstractCre
 
             if (!isFast && !Settings.FAST_MODE)
             {
-                GameActions.top.wait(0.1f);
+                PCLActions.top.wait(0.1f);
             }
 
             complete(targets);

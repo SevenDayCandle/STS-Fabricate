@@ -17,7 +17,7 @@ import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.subscribers.*;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PTrigger;
@@ -139,37 +139,37 @@ public class PSkillPower extends PCLPower implements OnCardCreatedSubscriber,
     public void onRemove()
     {
         super.onRemove();
-        CombatStats.onCardCreated.unsubscribe(this);
-        CombatStats.onCardDiscarded.unsubscribe(this);
-        CombatStats.onCardPurged.unsubscribe(this);
-        CombatStats.onCardReshuffled.unsubscribe(this);
-        CombatStats.onChannelOrb.unsubscribe(this);
-        CombatStats.onElementReact.unsubscribe(this);
-        CombatStats.onMatch.unsubscribe(this);
-        CombatStats.onNotMatch.unsubscribe(this);
-        CombatStats.onOrbApplyFocus.unsubscribe(this);
-        CombatStats.onOrbPassiveEffect.unsubscribe(this);
-        CombatStats.onPCLClickablePowerUsed.unsubscribe(this);
-        CombatStats.onShuffle.unsubscribe(this);
-        CombatStats.onIntensify.unsubscribe(this);
+        CombatManager.onCardCreated.unsubscribe(this);
+        CombatManager.onCardDiscarded.unsubscribe(this);
+        CombatManager.onCardPurged.unsubscribe(this);
+        CombatManager.onCardReshuffled.unsubscribe(this);
+        CombatManager.onChannelOrb.unsubscribe(this);
+        CombatManager.onElementReact.unsubscribe(this);
+        CombatManager.onMatch.unsubscribe(this);
+        CombatManager.onNotMatch.unsubscribe(this);
+        CombatManager.onOrbApplyFocus.unsubscribe(this);
+        CombatManager.onOrbPassiveEffect.unsubscribe(this);
+        CombatManager.onPCLClickablePowerUsed.unsubscribe(this);
+        CombatManager.onShuffle.unsubscribe(this);
+        CombatManager.onIntensify.unsubscribe(this);
     }
 
     public void onInitialApplication()
     {
         super.onInitialApplication();
-        CombatStats.onCardCreated.subscribe(this);
-        CombatStats.onCardDiscarded.subscribe(this);
-        CombatStats.onCardPurged.subscribe(this);
-        CombatStats.onCardReshuffled.subscribe(this);
-        CombatStats.onChannelOrb.subscribe(this);
-        CombatStats.onElementReact.subscribe(this);
-        CombatStats.onMatch.subscribe(this);
-        CombatStats.onNotMatch.subscribe(this);
-        CombatStats.onOrbApplyFocus.subscribe(this);
-        CombatStats.onOrbPassiveEffect.subscribe(this);
-        CombatStats.onPCLClickablePowerUsed.subscribe(this);
-        CombatStats.onShuffle.subscribe(this);
-        CombatStats.onIntensify.subscribe(this);
+        CombatManager.onCardCreated.subscribe(this);
+        CombatManager.onCardDiscarded.subscribe(this);
+        CombatManager.onCardPurged.subscribe(this);
+        CombatManager.onCardReshuffled.subscribe(this);
+        CombatManager.onChannelOrb.subscribe(this);
+        CombatManager.onElementReact.subscribe(this);
+        CombatManager.onMatch.subscribe(this);
+        CombatManager.onNotMatch.subscribe(this);
+        CombatManager.onOrbApplyFocus.subscribe(this);
+        CombatManager.onOrbPassiveEffect.subscribe(this);
+        CombatManager.onPCLClickablePowerUsed.subscribe(this);
+        CombatManager.onShuffle.subscribe(this);
+        CombatManager.onIntensify.subscribe(this);
     }
 
     @Override

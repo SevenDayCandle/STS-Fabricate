@@ -15,7 +15,6 @@ import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
-import pinacolada.utilities.GameEffects;
 import pinacolada.utilities.PCLRenderHelpers;
 import pinacolada.utilities.RandomizedList;
 
@@ -151,7 +150,7 @@ public abstract class PCLEffect extends AbstractGameEffect
 
     protected void complete()
     {
-        GameEffects.UnlistedEffects.remove(this);
+        PCLEffects.UnlistedEffects.remove(this);
         this.isDone = true;
     }
 

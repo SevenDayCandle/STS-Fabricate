@@ -3,7 +3,7 @@ package pinacolada.actions.player;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.ui.panels.EnergyPanel;
 import pinacolada.actions.PCLActionWithCallbackT2;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 
 public class SpendEnergy extends PCLActionWithCallbackT2<Integer, Integer>
 {
@@ -27,7 +27,7 @@ public class SpendEnergy extends PCLActionWithCallbackT2<Integer, Integer>
             energy = Math.min(energy, amount);
             if (checkConditions(energy))
             {
-                int finalEnergy = CombatStats.onTrySpendEnergy(null, AbstractDungeon.player, energy);
+                int finalEnergy = CombatManager.onTrySpendEnergy(null, AbstractDungeon.player, energy);
                 player.loseEnergy(finalEnergy);
                 complete(finalEnergy);
                 return;

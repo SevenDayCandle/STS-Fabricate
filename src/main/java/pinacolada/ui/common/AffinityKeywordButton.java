@@ -12,9 +12,9 @@ import extendedui.ui.TextureCache;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.hitboxes.EUIHitbox;
 import pinacolada.cards.base.PCLAffinity;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.affinity.GenericFlashEffect;
 import pinacolada.resources.PGR;
-import pinacolada.utilities.GameEffects;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class AffinityKeywordButton extends EUIBase
@@ -59,7 +59,7 @@ public class AffinityKeywordButton extends EUIBase
 
     public void flash()
     {
-        GameEffects.List.add(new GenericFlashEffect(this, true));
+        PCLEffects.List.add(new GenericFlashEffect(this, true));
     }
 
     public void reset(boolean invoke)
@@ -144,7 +144,7 @@ public class AffinityKeywordButton extends EUIBase
     @Override
     public void updateImpl()
     {
-        backgroundButton.setInteractable(GameEffects.isEmpty()).updateImpl();
+        backgroundButton.setInteractable(PCLEffects.isEmpty()).updateImpl();
         if (currentLevel > 2)
         {
             borderRotation = EUI.timeMulti(-20);

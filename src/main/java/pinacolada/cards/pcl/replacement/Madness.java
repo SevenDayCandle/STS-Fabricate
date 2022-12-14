@@ -3,7 +3,7 @@ package pinacolada.cards.pcl.replacement;
 import pinacolada.cards.base.*;
 import pinacolada.cards.base.fields.PCLCardTag;
 import pinacolada.skills.skills.PSpecialSkill;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 
 public class Madness extends PCLCard
 {
@@ -26,11 +26,11 @@ public class Madness extends PCLCard
 
     public void action(PSpecialSkill move, PCLUseInfo info)
     {
-        GameActions.bottom.modifyCost(player.hand, move.amount, -1, false, false)
+        PCLActions.bottom.modifyCost(player.hand, move.amount, -1, false, false)
                 .addCallback(c -> {
                     if (c.size() > 0)
                     {
-                        GameActions.bottom.modifyCost(player.drawPile, move.amount, 1, false, false);
+                        PCLActions.bottom.modifyCost(player.drawPile, move.amount, 1, false, false);
                     }
                 });
     }

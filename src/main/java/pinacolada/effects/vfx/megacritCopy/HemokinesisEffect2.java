@@ -3,8 +3,8 @@ package pinacolada.effects.vfx.megacritCopy;
 import com.badlogic.gdx.Gdx;
 import com.megacrit.cardcrawl.core.Settings;
 import pinacolada.effects.PCLEffect;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.vfx.HemokinesisParticleEffect;
-import pinacolada.utilities.GameEffects;
 
 public class HemokinesisEffect2 extends PCLEffect
 {
@@ -29,7 +29,7 @@ public class HemokinesisEffect2 extends PCLEffect
         this.scale -= Gdx.graphics.getDeltaTime();
         if (this.scale < 0f)
         {
-            GameEffects.Queue.add(new HemokinesisParticleEffect(this.x + random(60f, -60f) * Settings.scale, this.y + random(60f, -60f) * Settings.scale, this.tX, this.tY, this.x > this.tX));
+            PCLEffects.Queue.add(new HemokinesisParticleEffect(this.x + random(60f, -60f) * Settings.scale, this.y + random(60f, -60f) * Settings.scale, this.tX, this.tY, this.x > this.tX));
             this.scale = 0.04f;
         }
 

@@ -6,11 +6,11 @@ import com.evacipated.cardcrawl.mod.stslib.patches.NeutralPowertypePatch;
 import com.megacrit.cardcrawl.core.Settings;
 import extendedui.utilities.ColoredString;
 import pinacolada.cards.base.PCLAffinity;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.misc.PCLHotkeys;
 import pinacolada.powers.PCLPower;
 import pinacolada.resources.PGR;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class RerollAffinityPower extends PCLPower
@@ -36,30 +36,30 @@ public class RerollAffinityPower extends PCLPower
 
     public void advance(PCLAffinity... choices)
     {
-        PCLAffinity next = CombatStats.playerSystem.getActiveMeter().getNextAffinity();
-        GameActions.bottom.rerollAffinity(1).setAffinityChoices(choices).setOptions(!canChoose, true);
-        GameActions.bottom.rerollAffinity(0).setAffinityChoices(next).setOptions(true, true);
+        PCLAffinity next = CombatManager.playerSystem.getActiveMeter().getNextAffinity();
+        PCLActions.bottom.rerollAffinity(1).setAffinityChoices(choices).setOptions(!canChoose, true);
+        PCLActions.bottom.rerollAffinity(0).setAffinityChoices(next).setOptions(true, true);
     }
 
     public String getCurrentDescription()
     {
-        PCLAffinity af = CombatStats.playerSystem.getAffinity(0);
+        PCLAffinity af = CombatManager.playerSystem.getAffinity(0);
         return formatDescription(1, af.getTooltip(),
-                CombatStats.playerSystem.getRerollDescription(),
-                CombatStats.playerSystem.getRerollDescription2());
+                CombatManager.playerSystem.getRerollDescription(),
+                CombatManager.playerSystem.getRerollDescription2());
     }
 
     public String getNextDescription()
     {
-        PCLAffinity af = CombatStats.playerSystem.getAffinity(1);
+        PCLAffinity af = CombatManager.playerSystem.getAffinity(1);
         return formatDescription(2, af.getTooltip());
     }
 
     @Override
     public String getUpdatedDescription()
     {
-        PCLAffinity af = CombatStats.playerSystem.getAffinity(0);
-        PCLAffinity af2 = CombatStats.playerSystem.getAffinity(1);
+        PCLAffinity af = CombatManager.playerSystem.getAffinity(0);
+        PCLAffinity af2 = CombatManager.playerSystem.getAffinity(1);
         if (af != null && af2 != null)
         {
             return formatDescription(0, af.getTooltip(), af2.getTooltip(), PCLHotkeys.rerollCurrent.getKeyString());

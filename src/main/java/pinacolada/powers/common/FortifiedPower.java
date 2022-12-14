@@ -2,7 +2,7 @@ package pinacolada.powers.common;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import pinacolada.interfaces.markers.MultiplicativePower;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.powers.PCLPower;
 import pinacolada.utilities.PCLRenderHelpers;
 
@@ -25,7 +25,7 @@ public class FortifiedPower extends PCLPower implements MultiplicativePower
 
     public static float getMultiplier()
     {
-        return (MULTIPLIER + CombatStats.getPlayerEffectBonus(POWER_ID));
+        return (MULTIPLIER + CombatManager.getPlayerEffectBonus(POWER_ID));
     }
 
     @Override

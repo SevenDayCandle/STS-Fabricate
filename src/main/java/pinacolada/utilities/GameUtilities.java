@@ -45,6 +45,7 @@ import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.AbstractScreen;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.GenericCondition;
+import pinacolada.actions.PCLActions;
 import pinacolada.blights.common.UpgradedHand;
 import pinacolada.cards.base.*;
 import pinacolada.cards.base.fields.PCLCardTag;
@@ -53,7 +54,7 @@ import pinacolada.effects.SFX;
 import pinacolada.interfaces.listeners.OnTryApplyPowerListener;
 import pinacolada.interfaces.listeners.OnTryReducePowerListener;
 import pinacolada.interfaces.subscribers.OnPhaseChangedSubscriber;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.monsters.PCLIntentInfo;
 import pinacolada.orbs.PCLOrb;
 import pinacolada.orbs.PCLOrbHelper;
@@ -248,7 +249,7 @@ public class GameUtilities
 
     public static boolean canSpendAffinityPower(PCLAffinity affinity, int amount)
     {
-        PCLAffinityPower po = CombatStats.playerSystem.getPower(affinity);
+        PCLAffinityPower po = CombatManager.playerSystem.getPower(affinity);
         return po != null && po.canSpend(amount >= 0 ? amount : po.amount);
     }
 
@@ -306,7 +307,7 @@ public class GameUtilities
         for (int i = 0; i < retVal.length; ++i)
         {
             DamageInfo info = new DamageInfo(AbstractDungeon.player, baseDamage, DamageInfo.DamageType.THORNS);
-            retVal[i] = CombatStats.playerSystem.modifyOrbOutput(info.output, AbstractDungeon.getMonsters().monsters.get(i), orb);
+            retVal[i] = CombatManager.playerSystem.modifyOrbOutput(info.output, AbstractDungeon.getMonsters().monsters.get(i), orb);
         }
 
         return retVal;
@@ -414,7 +415,7 @@ public class GameUtilities
             }
         }
 
-        for (AbstractCreature summon : CombatStats.summons.summons)
+        for (AbstractCreature summon : CombatManager.summons.summons)
         {
             if (!aliveOnly || !isDeadOrEscaped(summon))
             {
@@ -519,7 +520,7 @@ public class GameUtilities
 
     public static List<? extends PCLAffinityPower> getAllPCLAffinityPowers()
     {
-        return CombatStats.playerSystem.getPowers();
+        return CombatManager.playerSystem.getPowers();
     }
 
     public static AbstractCard getAnyColorCardFiltered(AbstractCard.CardRarity rarity, AbstractCard.CardType type, boolean allowHealing)
@@ -975,12 +976,12 @@ public class GameUtilities
 
     public static PCLAffinity getCurrentAffinity()
     {
-        return CombatStats.playerSystem.getCurrentAffinity();
+        return CombatManager.playerSystem.getCurrentAffinity();
     }
 
     public static int getCurrentMatchCombo()
     {
-        return CombatStats.playerSystem.getActiveMeter().getCurrentMatchCombo();
+        return CombatManager.playerSystem.getActiveMeter().getCurrentMatchCombo();
     }
 
     public static int getDebuffsCount(AbstractCreature creature)
@@ -1152,7 +1153,7 @@ public class GameUtilities
 
     public static int getPCLAffinityLevel(PCLAffinity affinity)
     {
-        return CombatStats.playerSystem.getLevel(affinity);
+        return CombatManager.playerSystem.getLevel(affinity);
     }
 
     public static PCLCardAffinities getPCLCardAffinities(Iterable<AbstractCard> cards)
@@ -1189,12 +1190,12 @@ public class GameUtilities
 
     public static PCLAffinityPower getPCLAffinityPower(PCLAffinity affinity)
     {
-        return affinity != null ? CombatStats.playerSystem.getPower(affinity) : GameUtilities.getRandomElement(GameUtilities.getAllPCLAffinityPowers(), PCLCard.rng);
+        return affinity != null ? CombatManager.playerSystem.getPower(affinity) : GameUtilities.getRandomElement(GameUtilities.getAllPCLAffinityPowers(), PCLCard.rng);
     }
 
     public static int getPCLAffinityPowerAmount(PCLAffinity affinity)
     {
-        PCLAffinityPower po = CombatStats.playerSystem.getPower(affinity);
+        PCLAffinityPower po = CombatManager.playerSystem.getPower(affinity);
         return po != null ? po.amount : 0;
     }
 
@@ -1265,7 +1266,7 @@ public class GameUtilities
 
     public static int getPowerAmount(PCLAffinity affinity)
     {
-        return CombatStats.playerSystem.getPowerAmount(affinity);
+        return CombatManager.playerSystem.getPowerAmount(affinity);
     }
 
     public static int getPowerAmount(String powerID)
@@ -1431,11 +1432,11 @@ public class GameUtilities
     {
         if (!aliveOnly)
         {
-            return CombatStats.summons.summons;
+            return CombatManager.summons.summons;
         }
 
         final ArrayList<AbstractMonster> monsters = new ArrayList<>();
-        for (AbstractMonster m : CombatStats.summons.summons)
+        for (AbstractMonster m : CombatManager.summons.summons)
         {
             if (!isDeadOrEscaped(m))
             {
@@ -1544,7 +1545,7 @@ public class GameUtilities
     {
         int amount = !forceCountAll && card != null && card.energyOnUse != -1 ? card.energyOnUse : EnergyPanel.getCurrentEnergy();
 
-        return CombatStats.onTryUseXCost(amount, card);
+        return CombatManager.onTryUseXCost(amount, card);
     }
 
     public static boolean hasAffinity(AbstractCard card, PCLAffinity affinity)
@@ -1610,8 +1611,8 @@ public class GameUtilities
     public static boolean hasRelicEffect(String relicID)
     {
         return hasRelic(relicID)
-            || CombatStats.getCombatData(relicID, false)
-            || CombatStats.getTurnData(relicID, false);
+            || CombatManager.getCombatData(relicID, false)
+            || CombatManager.getTurnData(relicID, false);
     }
 
     public static void highlightMatchingCards(PCLAffinity affinity)
@@ -1635,10 +1636,10 @@ public class GameUtilities
     {
         if (forceRefresh)
         {
-            CombatStats.refresh();
+            CombatManager.refresh();
         }
 
-        return CombatStats.battleID != null;
+        return CombatManager.battleID != null;
     }
 
     public static boolean inBossRoom()
@@ -1718,7 +1719,7 @@ public class GameUtilities
 
     public static boolean isAffinityPowerActive(PCLAffinity affinity)
     {
-        return CombatStats.playerSystem.isPowerActive(affinity);
+        return CombatManager.playerSystem.isPowerActive(affinity);
     }
 
     public static boolean isAttacking(AbstractCreature monster)
@@ -1846,7 +1847,7 @@ public class GameUtilities
         boolean result = !AbstractDungeon.actionManager.turnHasEnded;
         if (beforeEndTurnEvents)
         {
-            result &= CombatStats.isPlayerTurn && !player.isEndingTurn;
+            result &= CombatManager.isPlayerTurn && !player.isEndingTurn;
         }
 
         return result;
@@ -1872,7 +1873,7 @@ public class GameUtilities
 
     public static boolean isPCLAffinityPowerActive(PCLAffinity affinity)
     {
-        PCLAffinityPower po = CombatStats.playerSystem.getPower(affinity);
+        PCLAffinityPower po = CombatManager.playerSystem.getPower(affinity);
         return po != null && po.isActive;
     }
 
@@ -1914,7 +1915,7 @@ public class GameUtilities
 
     public static boolean isUnplayableThisTurn(AbstractCard card)
     {
-        return CombatStats.unplayableCards().contains(card.uuid);
+        return CombatManager.unplayableCards().contains(card.uuid);
     }
 
     public static boolean isValidOrb(AbstractOrb orb)
@@ -2162,7 +2163,7 @@ public class GameUtilities
                     pCard.auxiliaryData.removedTags.add(tag);
                 }
             }
-            CombatStats.onTagChanged(card, tag, value);
+            CombatManager.onTagChanged(card, tag, value);
         }
     }
 
@@ -2194,7 +2195,7 @@ public class GameUtilities
         card.use(player, m);
         actionManager.cardsPlayedThisTurn.add(card);
         actionManager.cardsPlayedThisCombat.add(card);
-        CombatStats.playerSystem.setLastCardPlayed(card);
+        CombatManager.playerSystem.setLastCardPlayed(card);
     }
 
     protected static void refreshCardLists()
@@ -2220,7 +2221,7 @@ public class GameUtilities
         }
         else
         {
-            CombatStats.onPhaseChanged.subscribe(handLayoutRefresher);
+            CombatManager.onPhaseChanged.subscribe(handLayoutRefresher);
         }
     }
 
@@ -2246,7 +2247,7 @@ public class GameUtilities
     {
         if (player.hasPower(PenNibPower.POWER_ID))
         {
-            GameActions.bottom.reducePower(player, PenNibPower.POWER_ID, 1);
+            PCLActions.bottom.reducePower(player, PenNibPower.POWER_ID, 1);
 
             final AbstractRelic relic = player.getRelic(PenNib.ID);
             if (relic != null)
@@ -2259,7 +2260,7 @@ public class GameUtilities
 
         if (player.hasPower(VigorPower.POWER_ID))
         {
-            GameActions.bottom.removePower(player, player, VigorPower.POWER_ID);
+            PCLActions.bottom.removePower(player, player, VigorPower.POWER_ID);
         }
     }
 
@@ -2366,8 +2367,8 @@ public class GameUtilities
 
     public static void setUnplayableThisTurn(AbstractCard card)
     {
-        CombatStats.unplayableCards().add(card.uuid);
-        CombatStats.onTagChanged(card, PCLCardTag.Unplayable, 1);
+        CombatManager.unplayableCards().add(card.uuid);
+        CombatManager.onTagChanged(card, PCLCardTag.Unplayable, 1);
     }
 
     protected static void setupCharacterCardPool()
@@ -2419,7 +2420,7 @@ public class GameUtilities
             {
                 return new Vector2(CardGroup.DISCARD_PILE_X, CardGroup.DRAW_PILE_Y + (Settings.scale * 30f));
             }
-            else if (group == CombatStats.PURGED_CARDS)
+            else if (group == CombatManager.PURGED_CARDS)
             {
                 return new Vector2(CardGroup.DISCARD_PILE_X, CardGroup.DRAW_PILE_Y + (Settings.scale * 100f));
             }
@@ -2449,7 +2450,7 @@ public class GameUtilities
 
     public static boolean trySpendAffinityPower(PCLAffinity affinity, int amount)
     {
-        PCLAffinityPower po = CombatStats.playerSystem.getPower(affinity);
+        PCLAffinityPower po = CombatManager.playerSystem.getPower(affinity);
         return po != null && po.trySpend(amount >= 0 ? amount : po.amount);
     }
 
@@ -2504,7 +2505,7 @@ public class GameUtilities
         final AbstractPower artifact = getPower(target, ArtifactPower.POWER_ID);
         if (artifact != null)
         {
-            GameActions.top.add(new TextAboveCreatureAction(target, ApplyPowerAction.TEXT[0]));
+            PCLActions.top.add(new TextAboveCreatureAction(target, ApplyPowerAction.TEXT[0]));
             SFX.play(SFX.NULLIFY_SFX);
             artifact.flashWithoutSound();
             artifact.onSpecificTrigger();
@@ -2536,7 +2537,7 @@ public class GameUtilities
             {
                 refresh();
 
-                CombatStats.onPhaseChanged.unsubscribe(handLayoutRefresher);
+                CombatManager.onPhaseChanged.unsubscribe(handLayoutRefresher);
             }
         }
 

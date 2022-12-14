@@ -14,8 +14,8 @@ import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 import com.megacrit.cardcrawl.vfx.DarkSmokePuffEffect;
 import com.megacrit.cardcrawl.vfx.GenericSmokeEffect;
 import com.megacrit.cardcrawl.vfx.combat.SmokingEmberEffect;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
-import pinacolada.utilities.GameEffects;
 
 public class MeteorFallEffect extends AbstractGameEffect
 {
@@ -49,7 +49,7 @@ public class MeteorFallEffect extends AbstractGameEffect
         {
             for (int i = 0; i < 50; ++i)
             {
-                GameEffects.Queue.add(new GenericSmokeEffect(x + MathUtils.random(-280f, 250f) * Settings.scale, y - 80f * Settings.scale));
+                PCLEffects.Queue.add(new GenericSmokeEffect(x + MathUtils.random(-280f, 250f) * Settings.scale, y - 80f * Settings.scale));
             }
         }
 
@@ -59,11 +59,11 @@ public class MeteorFallEffect extends AbstractGameEffect
 
             if (!Settings.DISABLE_EFFECTS)
             {
-                GameEffects.Queue.add(new DarkSmokePuffEffect(this.x, this.y));
+                PCLEffects.Queue.add(new DarkSmokePuffEffect(this.x, this.y));
 
                 for (int i = 0; i < 12; ++i)
                 {
-                    GameEffects.Queue.add(new SmokingEmberEffect(this.x + MathUtils.random(-50f, 50f) * Settings.scale, this.y + MathUtils.random(-50f, 50f) * Settings.scale));
+                    PCLEffects.Queue.add(new SmokingEmberEffect(this.x + MathUtils.random(-50f, 50f) * Settings.scale, this.y + MathUtils.random(-50f, 50f) * Settings.scale));
                 }
             }
 

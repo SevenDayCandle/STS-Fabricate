@@ -2,7 +2,7 @@ package pinacolada.powers.common;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import pinacolada.powers.PCLPower;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 
 public class VitalityPower extends PCLPower
 {
@@ -20,6 +20,6 @@ public class VitalityPower extends PCLPower
     {
         super.atStartOfTurn();
 
-        GameActions.bottom.gainTemporaryHP(amount);
+        PCLActions.bottom.gainTemporaryHP(amount);
     }
 }

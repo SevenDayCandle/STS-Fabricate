@@ -3,7 +3,7 @@ package pinacolada.patches.cardCrawlGame;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 
 public class CardCrawlGamePatches
 {
@@ -13,7 +13,7 @@ public class CardCrawlGamePatches
         @SpirePrefixPatch
         public static void prefix()
         {
-            CombatStats.onStartOver();
+            CombatManager.onStartOver();
         }
     }
 }

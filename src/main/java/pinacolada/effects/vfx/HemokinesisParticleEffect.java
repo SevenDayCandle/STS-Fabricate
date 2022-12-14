@@ -11,7 +11,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.vfx.combat.DamageImpactLineEffect;
 import pinacolada.effects.PCLEffect;
-import pinacolada.utilities.GameEffects;
+import pinacolada.effects.PCLEffects;
 
 import java.util.ArrayList;
 
@@ -155,11 +155,11 @@ public class HemokinesisParticleEffect extends PCLEffect
             {
                 if (this.facingLeft)
                 {
-                    GameEffects.Queue.add(new DamageImpactLineEffect(this.target.x + DST_THRESHOLD, this.target.y));
+                    PCLEffects.Queue.add(new DamageImpactLineEffect(this.target.x + DST_THRESHOLD, this.target.y));
                 }
                 else
                 {
-                    GameEffects.Queue.add(new DamageImpactLineEffect(this.target.x - DST_THRESHOLD, this.target.y));
+                    PCLEffects.Queue.add(new DamageImpactLineEffect(this.target.x - DST_THRESHOLD, this.target.y));
                 }
             }
 

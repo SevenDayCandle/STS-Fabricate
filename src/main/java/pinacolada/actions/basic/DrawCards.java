@@ -9,7 +9,7 @@ import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
 import extendedui.utilities.GenericCondition;
 import pinacolada.actions.PCLActionWithCallback;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 
 import java.util.ArrayList;
 
@@ -58,7 +58,7 @@ public class DrawCards extends PCLActionWithCallback<ArrayList<AbstractCard>>
         {
             if (shuffleIfEmpty && !player.discardPile.isEmpty())
             {
-                GameActions.top.sequential(
+                PCLActions.top.sequential(
                         new EmptyDeckShuffleAction(),
                         new DrawCards(this, amount)
                 );
@@ -103,7 +103,7 @@ public class DrawCards extends PCLActionWithCallback<ArrayList<AbstractCard>>
 
             cards.add(player.drawPile.getTopCard());
 
-            GameActions.top.sequential(
+            PCLActions.top.sequential(
                     new DrawCardAction(source, 1, false),
                     new DrawCards(this, amount - 1)
             );

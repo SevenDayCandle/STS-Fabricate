@@ -6,9 +6,9 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIUtils;
 import pinacolada.actions.PCLActionWithCallback;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.powers.PCLPower;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
 
 public class ReducePower extends PCLActionWithCallback<AbstractPower>
@@ -65,13 +65,13 @@ public class ReducePower extends PCLActionWithCallback<AbstractPower>
             AbstractDungeon.onModifyPower();
             if (isDebuffInteraction)
             {
-                CombatStats.onModifyDebuff(power, initialAmount, power.amount);
+                CombatManager.onModifyDebuff(power, initialAmount, power.amount);
             }
 
             final PCLPower p = EUIUtils.safeCast(power, PCLPower.class);
             if (power.amount == 0 && (p == null || !p.canBeZero))
             {
-                GameActions.top.removePower(source, target, power);
+                PCLActions.top.removePower(source, target, power);
             }
         }
     }

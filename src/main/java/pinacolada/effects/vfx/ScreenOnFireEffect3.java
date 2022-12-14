@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.vfx.BorderLongFlashEffect;
 import pinacolada.effects.PCLEffect;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.vfx.megacritCopy.GiantFireEffect2;
-import pinacolada.utilities.GameEffects;
 
 public class ScreenOnFireEffect3 extends PCLEffect
 {
@@ -30,7 +30,7 @@ public class ScreenOnFireEffect3 extends PCLEffect
         if (this.duration == this.startingDuration)
         {
             CardCrawlGame.sound.play("GHOST_FLAMES");
-            GameEffects.Queue.add(new BorderLongFlashEffect(Color.FIREBRICK));
+            PCLEffects.Queue.add(new BorderLongFlashEffect(Color.FIREBRICK));
         }
 
         this.duration -= Gdx.graphics.getDeltaTime();
@@ -39,7 +39,7 @@ public class ScreenOnFireEffect3 extends PCLEffect
         {
             for (int i = 0; i < times; i++)
             {
-                GameEffects.Queue.add(new GiantFireEffect2());
+                PCLEffects.Queue.add(new GiantFireEffect2());
             }
             this.timer = 0.05F;
         }

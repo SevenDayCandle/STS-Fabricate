@@ -10,7 +10,7 @@ import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.ui.DialogWord;
 import com.megacrit.cardcrawl.vfx.SpeechTextEffect;
 import pinacolada.effects.PCLEffect;
-import pinacolada.utilities.GameEffects;
+import pinacolada.effects.PCLEffects;
 
 public class TalkEffect extends PCLEffect
 {
@@ -86,7 +86,7 @@ public class TalkEffect extends PCLEffect
             appearEffect = DialogWord.AppearEffect.BUMP_IN;
         }
 
-        (GameEffects.TopLevelList.getList().contains(this) ? GameEffects.TopLevelQueue : GameEffects.Queue)
+        (PCLEffects.TopLevelList.getList().contains(this) ? PCLEffects.TopLevelQueue : PCLEffects.Queue)
         .add(new SpeechTextEffect(sourceX, sourceY, duration, message, appearEffect));
     }
 

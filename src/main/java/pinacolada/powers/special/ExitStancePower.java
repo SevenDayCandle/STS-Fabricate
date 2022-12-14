@@ -7,7 +7,7 @@ import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.powers.PCLPower;
 import pinacolada.resources.PGR;
 import pinacolada.skills.skills.PSpecialSkill;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
 
 public class ExitStancePower extends PCLPower
@@ -28,6 +28,6 @@ public class ExitStancePower extends PCLPower
 
     public void onUse(PSpecialSkill move, PCLUseInfo info)
     {
-        GameActions.bottom.changeStance(NeutralStance.STANCE_ID);
+        PCLActions.bottom.changeStance(NeutralStance.STANCE_ID);
     }
 }

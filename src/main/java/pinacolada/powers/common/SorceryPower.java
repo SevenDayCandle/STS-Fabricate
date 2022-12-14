@@ -3,7 +3,7 @@ package pinacolada.powers.common;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import pinacolada.interfaces.subscribers.OnChannelOrbSubscriber;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.powers.PCLPower;
 import pinacolada.utilities.GameUtilities;
 
@@ -30,7 +30,7 @@ public class SorceryPower extends PCLPower implements OnChannelOrbSubscriber
     {
         super.onInitialApplication();
 
-        CombatStats.onChannelOrb.subscribe(this);
+        CombatManager.onChannelOrb.subscribe(this);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class SorceryPower extends PCLPower implements OnChannelOrbSubscriber
     {
         super.onRemove();
 
-        CombatStats.onChannelOrb.unsubscribe(this);
+        CombatManager.onChannelOrb.unsubscribe(this);
     }
 
     public float modifyOrbAmount(float initial)

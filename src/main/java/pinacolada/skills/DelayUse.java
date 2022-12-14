@@ -3,12 +3,12 @@ package pinacolada.skills;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.cards.base.PCLUseInfo;
+import pinacolada.effects.PCLEffects;
 import pinacolada.interfaces.subscribers.OnEndOfTurnFirstSubscriber;
 import pinacolada.interfaces.subscribers.OnEndOfTurnLastSubscriber;
 import pinacolada.interfaces.subscribers.OnStartOfTurnPostDrawSubscriber;
 import pinacolada.interfaces.subscribers.OnStartOfTurnSubscriber;
-import pinacolada.misc.CombatStats;
-import pinacolada.utilities.GameEffects;
+import pinacolada.misc.CombatManager;
 import pinacolada.utilities.GameUtilities;
 
 public class DelayUse implements OnStartOfTurnPostDrawSubscriber, OnStartOfTurnSubscriber, OnEndOfTurnFirstSubscriber, OnEndOfTurnLastSubscriber
@@ -70,17 +70,17 @@ public class DelayUse implements OnStartOfTurnPostDrawSubscriber, OnStartOfTurnS
         {
             if (capturedCardUseInfo.card != null)
             {
-                GameEffects.Queue.showCardBriefly(capturedCardUseInfo.card.makeStatEquivalentCopy());
+                PCLEffects.Queue.showCardBriefly(capturedCardUseInfo.card.makeStatEquivalentCopy());
             }
             if (capturedCardUseInfo.target == null || GameUtilities.isDeadOrEscaped(capturedCardUseInfo.target))
             {
                 capturedCardUseInfo = new PCLUseInfo(capturedCardUseInfo.card, capturedCardUseInfo.source, GameUtilities.getRandomEnemy(true));
             }
             onUse.invoke(capturedCardUseInfo);
-            CombatStats.onEndOfTurnFirst.unsubscribe(this);
-            CombatStats.onEndOfTurnLast.unsubscribe(this);
-            CombatStats.onStartOfTurn.unsubscribe(this);
-            CombatStats.onStartOfTurnPostDraw.unsubscribe(this);
+            CombatManager.onEndOfTurnFirst.unsubscribe(this);
+            CombatManager.onEndOfTurnLast.unsubscribe(this);
+            CombatManager.onStartOfTurn.unsubscribe(this);
+            CombatManager.onStartOfTurnPostDraw.unsubscribe(this);
         }
     }
 
@@ -114,16 +114,16 @@ public class DelayUse implements OnStartOfTurnPostDrawSubscriber, OnStartOfTurnS
         switch (timing)
         {
             case EndOfTurnFirst:
-                CombatStats.onEndOfTurnFirst.subscribe(this);
+                CombatManager.onEndOfTurnFirst.subscribe(this);
                 break;
             case EndOfTurnLast:
-                CombatStats.onEndOfTurnLast.subscribe(this);
+                CombatManager.onEndOfTurnLast.subscribe(this);
                 break;
             case StartOfTurnFirst:
-                CombatStats.onStartOfTurn.subscribe(this);
+                CombatManager.onStartOfTurn.subscribe(this);
                 break;
             default:
-                CombatStats.onStartOfTurnPostDraw.subscribe(this);
+                CombatManager.onStartOfTurnPostDraw.subscribe(this);
         }
     }
 

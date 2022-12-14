@@ -21,7 +21,7 @@ import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLDungeonData;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
 
 import java.lang.reflect.InvocationTargetException;
@@ -120,7 +120,7 @@ public abstract class PCLRelic extends CustomRelic implements TooltipProvider
 
     protected void displayAboveCreature(AbstractCreature creature)
     {
-        GameActions.top.add(new RelicAboveCreatureAction(creature, this));
+        PCLActions.top.add(new RelicAboveCreatureAction(creature, this));
     }
 
     protected String formatDescription(int index, Object... args)

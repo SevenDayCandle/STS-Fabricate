@@ -7,9 +7,9 @@ import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.localization.PowerStrings;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.vfx.combat.PowerIconShowEffect;
+import pinacolada.actions.PCLActions;
 import pinacolada.actions.special.KillCharacterAction;
-import pinacolada.utilities.GameActions;
-import pinacolada.utilities.GameEffects;
+import pinacolada.effects.PCLEffects;
 
 public class GenericFadingPower extends AbstractPower implements CloneablePowerInterface
 {
@@ -41,15 +41,15 @@ public class GenericFadingPower extends AbstractPower implements CloneablePowerI
 
     private void triggerEffect()
     {
-        GameEffects.Queue.add(new PowerIconShowEffect(this));
+        PCLEffects.Queue.add(new PowerIconShowEffect(this));
 
         if (this.amount == 1 && !this.owner.isDying)
         {
-            GameActions.bottom.add(new KillCharacterAction(owner, owner));
+            PCLActions.bottom.add(new KillCharacterAction(owner, owner));
         }
         else
         {
-            GameActions.bottom.reducePower(this, 1);
+            PCLActions.bottom.reducePower(this, 1);
             this.updateDescription();
         }
     }

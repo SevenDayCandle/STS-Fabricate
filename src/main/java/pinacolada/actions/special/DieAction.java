@@ -10,7 +10,7 @@ import com.megacrit.cardcrawl.screens.DeathScreen;
 import com.megacrit.cardcrawl.vfx.combat.DeckPoofEffect;
 import extendedui.EUIUtils;
 import pinacolada.actions.PCLAction;
-import pinacolada.utilities.GameEffects;
+import pinacolada.effects.PCLEffects;
 import pinacolada.utilities.GameUtilities;
 
 public class DieAction extends PCLAction
@@ -37,8 +37,8 @@ public class DieAction extends PCLAction
                 if (GameUtilities.areMonstersBasicallyDead())
                 {
                     AbstractDungeon.actionManager.cleanCardQueue();
-                    GameEffects.List.add(new DeckPoofEffect(64f * Settings.scale, 64f * Settings.scale, true));
-                    GameEffects.List.add(new DeckPoofEffect((float) Settings.WIDTH - 64f * Settings.scale, 64f * Settings.scale, false));
+                    PCLEffects.List.add(new DeckPoofEffect(64f * Settings.scale, 64f * Settings.scale, true));
+                    PCLEffects.List.add(new DeckPoofEffect((float) Settings.WIDTH - 64f * Settings.scale, 64f * Settings.scale, false));
                     AbstractDungeon.overlayMenu.hideCombatPanels();
                 }
             }

@@ -2,7 +2,7 @@ package pinacolada.powers.common;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import pinacolada.powers.PCLPower;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 
 public class DeenergizedPower extends PCLPower
 {
@@ -22,9 +22,9 @@ public class DeenergizedPower extends PCLPower
     {
         if (owner.isPlayer)
         {
-            GameActions.bottom.spendEnergy(amount, true);
+            PCLActions.bottom.spendEnergy(amount, true);
             flash();
-            GameActions.bottom.removePower(owner, owner, this);
+            PCLActions.bottom.removePower(owner, owner, this);
         }
     }
 }

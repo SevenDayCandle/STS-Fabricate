@@ -3,7 +3,7 @@ package pinacolada.effects.vfx;
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.vfx.combat.LightFlareParticleEffect;
 import pinacolada.effects.PCLEffect;
-import pinacolada.utilities.GameEffects;
+import pinacolada.effects.PCLEffects;
 
 public class SnowballImpactEffect extends PCLEffect
 {
@@ -23,8 +23,8 @@ public class SnowballImpactEffect extends PCLEffect
     {
         for (int i = 0; i < particles; i++)
         {
-            GameEffects.Queue.add(new SnowballParticleEffect(this.x, this.y, color).setDuration(0.75f, isRealtime));
-            GameEffects.Queue.add(new LightFlareParticleEffect(this.x, this.y, color));
+            PCLEffects.Queue.add(new SnowballParticleEffect(this.x, this.y, color).setDuration(0.75f, isRealtime));
+            PCLEffects.Queue.add(new LightFlareParticleEffect(this.x, this.y, color));
         }
 
         complete();

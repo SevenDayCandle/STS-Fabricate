@@ -4,7 +4,7 @@ import com.megacrit.cardcrawl.actions.unique.GamblingChipAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import pinacolada.utilities.CardSelection;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 
 import java.util.ArrayList;
 
@@ -25,11 +25,11 @@ public class ScoutCards extends FetchFromPile
         SelectFromPile action = new ReshuffleFromPile(name, result.size(), groups).setDestination(CardSelection.Top);
         if (reshuffleInstantly)
         {
-            GameActions.top.add(action);
+            PCLActions.top.add(action);
         }
         else
         {
-            GameActions.bottom.add(action);
+            PCLActions.bottom.add(action);
         }
 
         super.complete(result);

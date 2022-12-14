@@ -5,18 +5,18 @@ import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import pinacolada.actions.PCLActions;
 import pinacolada.actions.damage.DealDamage;
 import pinacolada.actions.damage.DealDamageToAll;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.vfx.megacritCopy.HemokinesisEffect2;
 import pinacolada.interfaces.markers.Hidden;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.skills.base.moves.PMove_DealDamage;
-import pinacolada.utilities.GameActions;
-import pinacolada.utilities.GameEffects;
 
 public class PMove_StealTempHP extends PMove_DealDamage implements Hidden
 {
@@ -60,8 +60,8 @@ public class PMove_StealTempHP extends PMove_DealDamage implements Hidden
     {
         super.setDamageOptions(damageAction, info);
         damageAction.addCallback((enemy) -> {
-            GameEffects.List.add(new HemokinesisEffect2(enemy.hb.cX, enemy.hb.cY, AbstractDungeon.player.hb.cX, AbstractDungeon.player.hb.cY).setColor(Color.GOLDENROD));
-            GameActions.top.gainTemporaryHP(amount);
+            PCLEffects.List.add(new HemokinesisEffect2(enemy.hb.cX, enemy.hb.cY, AbstractDungeon.player.hb.cX, AbstractDungeon.player.hb.cY).setColor(Color.GOLDENROD));
+            PCLActions.top.gainTemporaryHP(amount);
         });
     }
 
@@ -71,8 +71,8 @@ public class PMove_StealTempHP extends PMove_DealDamage implements Hidden
         damageAction.addCallback((enemy) -> {
             for (AbstractCreature c : enemy)
             {
-                GameEffects.List.add(new HemokinesisEffect2(c.hb.cX, c.hb.cY, AbstractDungeon.player.hb.cX, AbstractDungeon.player.hb.cY).setColor(Color.GOLDENROD));
-                GameActions.top.gainTemporaryHP(amount);
+                PCLEffects.List.add(new HemokinesisEffect2(c.hb.cX, c.hb.cY, AbstractDungeon.player.hb.cX, AbstractDungeon.player.hb.cY).setColor(Color.GOLDENROD));
+                PCLActions.top.gainTemporaryHP(amount);
             }
         });
     }

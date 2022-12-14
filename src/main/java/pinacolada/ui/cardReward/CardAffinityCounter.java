@@ -13,7 +13,7 @@ import extendedui.ui.hitboxes.PercentageRelativeHitbox;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCardAffinityStatistics;
-import pinacolada.utilities.GameEffects;
+import pinacolada.effects.PCLEffects;
 
 public class CardAffinityCounter extends EUIBase
 {
@@ -80,7 +80,7 @@ public class CardAffinityCounter extends EUIBase
         final int lv1 = affinityGroup.getTotal(1);
         final int lv2 = affinityGroup.getTotal(2);
 
-        backgroundButton.setInteractable(GameEffects.isEmpty()).updateImpl();
+        backgroundButton.setInteractable(PCLEffects.isEmpty()).updateImpl();
         counterweakText.setLabel(lv1 == 0 ? "-" : lv1).updateImpl();
         counterpercentageText.setLabel(affinityGroup.getPercentageString(0)).updateImpl();
         affinityImage.updateImpl();

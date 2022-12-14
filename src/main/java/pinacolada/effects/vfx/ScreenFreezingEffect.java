@@ -7,8 +7,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.vfx.BorderLongFlashEffect;
 import pinacolada.effects.PCLEffect;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
-import pinacolada.utilities.GameEffects;
 
 public class ScreenFreezingEffect extends PCLEffect
 {
@@ -25,7 +25,7 @@ public class ScreenFreezingEffect extends PCLEffect
 
     public void makeSnowflake()
     {
-        GameEffects.Queue.add(new SnowballParticleEffect(MathUtils.random(0.0F, (float) Settings.WIDTH), MathUtils.random(900.0F, 1100.0F) * Settings.scale, color)
+        PCLEffects.Queue.add(new SnowballParticleEffect(MathUtils.random(0.0F, (float) Settings.WIDTH), MathUtils.random(900.0F, 1100.0F) * Settings.scale, color)
                 .setSpeed(MathUtils.random(-70.0F, 70.0F) * Settings.scale, MathUtils.random(-1100.0F, -450.0F) * Settings.scale)
                 .enableTrail()
                 .setRealtime(isRealtime));
@@ -40,7 +40,7 @@ public class ScreenFreezingEffect extends PCLEffect
         if (this.duration == this.startingDuration)
         {
             SFX.play(SFX.HEAL_3);
-            GameEffects.Queue.add(new BorderLongFlashEffect(Color.NAVY));
+            PCLEffects.Queue.add(new BorderLongFlashEffect(Color.NAVY));
         }
 
         this.duration -= Gdx.graphics.getDeltaTime();

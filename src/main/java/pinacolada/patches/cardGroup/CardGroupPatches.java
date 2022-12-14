@@ -11,7 +11,7 @@ import com.megacrit.cardcrawl.random.Random;
 import extendedui.EUIUtils;
 import pinacolada.cards.base.fields.PCLCardTag;
 import pinacolada.interfaces.listeners.OnRemovedFromDeckListener;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -189,7 +189,7 @@ public class CardGroupPatches
         @SpirePrefixPatch
         public static void prefix(CardGroup __instance, AbstractCard usedCard)
         {
-            CombatStats.onAfterCardPlayed(usedCard);
+            CombatManager.onAfterCardPlayed(usedCard);
         }
     }
 
@@ -199,7 +199,7 @@ public class CardGroupPatches
         @SpirePrefixPatch
         public static void prefix(CardGroup __instance, AbstractCard card)
         {
-            CombatStats.onExhaust(card);
+            CombatManager.onExhaust(card);
         }
     }
 }

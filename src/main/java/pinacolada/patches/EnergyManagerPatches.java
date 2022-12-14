@@ -4,7 +4,7 @@ import com.evacipated.cardcrawl.modthespire.lib.*;
 import com.megacrit.cardcrawl.core.EnergyManager;
 import com.megacrit.cardcrawl.ui.panels.EnergyPanel;
 import javassist.CtBehavior;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 
 public class EnergyManagerPatches
 {
@@ -23,7 +23,7 @@ public class EnergyManagerPatches
         public static void insert(EnergyManager __instance)
         {
             final int currentEnergy = EnergyPanel.getCurrentEnergy();
-            final int newEnergyCount = CombatStats.onEnergyRecharge(previousEnergy, currentEnergy);
+            final int newEnergyCount = CombatManager.onEnergyRecharge(previousEnergy, currentEnergy);
             if (newEnergyCount != currentEnergy)
             {
                 EnergyPanel.setEnergy(newEnergyCount);

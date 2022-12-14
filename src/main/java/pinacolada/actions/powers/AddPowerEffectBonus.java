@@ -4,14 +4,14 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import pinacolada.actions.PCLActionWithCallback;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 
 public class AddPowerEffectBonus extends PCLActionWithCallback<AbstractPower>
 {
-    private final CombatStats.Type effectType;
+    private final CombatManager.Type effectType;
     private String powerID;
 
-    public AddPowerEffectBonus(String powerID, CombatStats.Type effectType, int amount)
+    public AddPowerEffectBonus(String powerID, CombatManager.Type effectType, int amount)
     {
         super(ActionType.POWER, Settings.FAST_MODE ? Settings.ACTION_DUR_XFAST : Settings.ACTION_DUR_FAST);
 
@@ -22,7 +22,7 @@ public class AddPowerEffectBonus extends PCLActionWithCallback<AbstractPower>
         initialize(amount);
     }
 
-    public AddPowerEffectBonus(AbstractPower power, CombatStats.Type effectType, int amount)
+    public AddPowerEffectBonus(AbstractPower power, CombatManager.Type effectType, int amount)
     {
         super(ActionType.POWER, Settings.FAST_MODE ? Settings.ACTION_DUR_XFAST : Settings.ACTION_DUR_FAST);
 
@@ -40,7 +40,7 @@ public class AddPowerEffectBonus extends PCLActionWithCallback<AbstractPower>
     {
         if (powerID != null)
         {
-            CombatStats.addBonus(powerID, effectType, amount);
+            CombatManager.addBonus(powerID, effectType, amount);
             AbstractDungeon.onModifyPower();
         }
     }

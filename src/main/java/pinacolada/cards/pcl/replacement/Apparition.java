@@ -6,7 +6,7 @@ import pinacolada.cards.base.fields.PCLCardTag;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.skills.PMove;
 import pinacolada.skills.skills.PSpecialSkill;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 
 public class Apparition extends PCLCard
 {
@@ -24,11 +24,11 @@ public class Apparition extends PCLCard
 
     public void action(PSpecialSkill move, PCLUseInfo info)
     {
-        GameActions.bottom.moveCards(AbstractDungeon.player.hand, AbstractDungeon.player.discardPile)
+        PCLActions.bottom.moveCards(AbstractDungeon.player.hand, AbstractDungeon.player.discardPile)
                 .setFilter(c -> c instanceof Apparition)
                 .showEffect(true, true, 0.25f)
                 .addCallback(cards -> {
-                    GameActions.bottom.draw(cards.size());
+                    PCLActions.bottom.draw(cards.size());
                 });
     }
 

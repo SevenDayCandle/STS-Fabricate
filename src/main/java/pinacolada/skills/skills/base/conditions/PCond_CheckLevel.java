@@ -3,7 +3,7 @@ package pinacolada.skills.skills.base.conditions;
 import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
@@ -42,13 +42,13 @@ public class PCond_CheckLevel extends PCond
     {
         if (affinities.isEmpty())
         {
-            return alt ^ CombatStats.playerSystem.getLevel(PCLAffinity.General) >= amount;
+            return alt ^ CombatManager.playerSystem.getLevel(PCLAffinity.General) >= amount;
         }
         else
         {
             for (PCLAffinity affinity : affinities)
             {
-                if (CombatStats.playerSystem.getLevel(affinity) < amount)
+                if (CombatManager.playerSystem.getLevel(affinity) < amount)
                 {
                     return alt;
                 }

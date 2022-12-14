@@ -7,12 +7,12 @@ import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.vfx.cardManip.ExhaustCardEffect;
 import extendedui.EUIRM;
 import extendedui.interfaces.delegates.ActionT1;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
 import pinacolada.effects.card.HideCardEffect;
 import pinacolada.interfaces.markers.CardRewardActionProvider;
 import pinacolada.relics.pcl.AbstractCubes;
 import pinacolada.resources.PGR;
-import pinacolada.utilities.GameEffects;
 import pinacolada.utilities.GameUtilities;
 
 public class PCLCardRewardRerollAction extends PCLCardRewardAction
@@ -30,8 +30,8 @@ public class PCLCardRewardRerollAction extends PCLCardRewardAction
         if (replacement != null)
         {
             SFX.play(SFX.CARD_SELECT);
-            GameEffects.TopLevelList.add(new ExhaustCardEffect(card));
-            GameEffects.TopLevelList.add(new HideCardEffect(card));
+            PCLEffects.TopLevelList.add(new ExhaustCardEffect(card));
+            PCLEffects.TopLevelList.add(new HideCardEffect(card));
             GameUtilities.copyVisualProperties(replacement, card);
             rewardItem.cards.set(cardIndex, replacement);
         }

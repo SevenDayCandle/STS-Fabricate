@@ -12,7 +12,7 @@ import pinacolada.cards.pcl.glyphs.Glyph;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RandomizedList;
 
@@ -65,7 +65,7 @@ public class GlyphBlight extends AbstractGlyphBlight
     {
         super.atBattleStart();
 
-        GameActions.bottom.selectFromPile(name, 1, createGlyphGroup())
+        PCLActions.bottom.selectFromPile(name, 1, createGlyphGroup())
                 .addCallback(selection -> {
                     if (selection.size() > 0)
                     {

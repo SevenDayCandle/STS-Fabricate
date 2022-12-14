@@ -3,7 +3,7 @@ package pinacolada.skills.skills.special.moves;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.interfaces.markers.Hidden;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
@@ -41,7 +41,7 @@ public class PMove_GainMorph extends PMove implements Hidden
     @Override
     public void use(PCLUseInfo info)
     {
-        CombatStats.playerSystem.addSkip(amount);
+        CombatManager.playerSystem.addSkip(amount);
         super.use(info);
     }
 

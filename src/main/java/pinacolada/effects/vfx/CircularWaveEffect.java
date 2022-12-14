@@ -3,8 +3,8 @@ package pinacolada.effects.vfx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import pinacolada.effects.PCLEffect;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.VFX;
-import pinacolada.utilities.GameEffects;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class CircularWaveEffect extends PCLEffect
@@ -56,7 +56,7 @@ public class CircularWaveEffect extends PCLEffect
 
         if (vfxTimer < 0f)
         {
-            GameEffects.Queue.add(new FadingParticleEffect(VFX.IMAGES.circle2.texture(), x, y)
+            PCLEffects.Queue.add(new FadingParticleEffect(VFX.IMAGES.circle2.texture(), x, y)
                             .setBlendingMode(PCLRenderHelpers.BlendingMode.Glowing)
                             .setColor(color, endColor, 2f)
                             .setScale(this.scaleLower, scaleUpper, scaleUpper - scaleLower + 0.5f))

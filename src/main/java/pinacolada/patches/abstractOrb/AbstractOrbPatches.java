@@ -18,9 +18,9 @@ import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.actions.orbs.DarkOrbEvokeAction;
 import pinacolada.actions.orbs.LightningOrbAction;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.resources.PGR;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.HashMap;
@@ -51,7 +51,7 @@ public class AbstractOrbPatches
         {
             if (!(__instance instanceof EmptyOrbSlot))
             {
-                CombatStats.onOrbPassiveEffect(__instance);
+                CombatManager.onOrbPassiveEffect(__instance);
             }
         }
     }
@@ -64,7 +64,7 @@ public class AbstractOrbPatches
         {
             if (!(__instance instanceof EmptyOrbSlot))
             {
-                CombatStats.onOrbPassiveEffect(__instance);
+                CombatManager.onOrbPassiveEffect(__instance);
             }
         }
     }
@@ -78,7 +78,7 @@ public class AbstractOrbPatches
             // Certain mods may instantiate Orb instances in static methods before CombatStats is initialized, which will cause this method call to crash without this in-game check
             if (GameUtilities.inGame())
             {
-                CombatStats.onOrbApplyFocus(__instance);
+                CombatManager.onOrbApplyFocus(__instance);
             }
 
         }
@@ -94,10 +94,10 @@ public class AbstractOrbPatches
             float inputDmg = retVal;
             if (GameUtilities.getPowerAmount(target, LockOnPower.POWER_ID) >= 1)
             {
-                float modifier = CombatStats.getEffectBonus(LockOnPower.POWER_ID);
+                float modifier = CombatManager.getEffectBonus(LockOnPower.POWER_ID);
                 inputDmg = modifier > 0 ? (dmg * ((retVal / (float) dmg) + modifier)) : retVal;
             }
-            return (int) CombatStats.onOrbApplyLockOn(target, inputDmg);
+            return (int) CombatManager.onOrbApplyLockOn(target, inputDmg);
         }
     }
 
@@ -130,7 +130,7 @@ public class AbstractOrbPatches
         {
             if (GameUtilities.inGame())
             {
-                CombatStats.onOrbApplyFocus(__instance);
+                CombatManager.onOrbApplyFocus(__instance);
             }
         }
     }
@@ -143,7 +143,7 @@ public class AbstractOrbPatches
         {
             if (GameUtilities.isPCLPlayerClass())
             {
-                GameActions.top.add(new DarkOrbEvokeAction(__instance.evokeAmount));
+                PCLActions.top.add(new DarkOrbEvokeAction(__instance.evokeAmount));
                 return SpireReturn.Return(null);
             }
             return SpireReturn.Continue();
@@ -184,7 +184,7 @@ public class AbstractOrbPatches
         {
             if (GameUtilities.isPCLPlayerClass())
             {
-                GameActions.top.add(new LightningOrbAction(null, __instance.evokeAmount, AbstractDungeon.player.hasPower(ElectroPower.POWER_ID)));
+                PCLActions.top.add(new LightningOrbAction(null, __instance.evokeAmount, AbstractDungeon.player.hasPower(ElectroPower.POWER_ID)));
                 return SpireReturn.Return(null);
             }
             return SpireReturn.Continue();
@@ -199,7 +199,7 @@ public class AbstractOrbPatches
         {
             if (GameUtilities.isPCLPlayerClass())
             {
-                GameActions.top.add(new LightningOrbAction(__instance, __instance.passiveAmount, AbstractDungeon.player.hasPower(ElectroPower.POWER_ID)));
+                PCLActions.top.add(new LightningOrbAction(__instance, __instance.passiveAmount, AbstractDungeon.player.hasPower(ElectroPower.POWER_ID)));
                 return SpireReturn.Return(null);
             }
             return SpireReturn.Continue();
@@ -214,7 +214,7 @@ public class AbstractOrbPatches
         {
             if (GameUtilities.isPCLPlayerClass())
             {
-                GameActions.top.add(new LightningOrbAction(__instance, info.output, hitAll));
+                PCLActions.top.add(new LightningOrbAction(__instance, info.output, hitAll));
                 return SpireReturn.Return(null);
             }
             return SpireReturn.Continue();

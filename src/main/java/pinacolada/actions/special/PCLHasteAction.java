@@ -5,8 +5,8 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import pinacolada.actions.PCLAction;
 import pinacolada.cards.base.fields.PCLCardTag;
-import pinacolada.misc.CombatStats;
-import pinacolada.utilities.GameActions;
+import pinacolada.misc.CombatManager;
+import pinacolada.actions.PCLActions;
 
 public class PCLHasteAction extends PCLAction
 {
@@ -23,10 +23,10 @@ public class PCLHasteAction extends PCLAction
     @Override
     protected void firstUpdate()
     {
-        if (PCLCardTag.Haste.has(card) && !CombatStats.hasteInfinitesThisTurn().contains(card))
+        if (PCLCardTag.Haste.has(card) && !CombatManager.hasteInfinitesThisTurn().contains(card))
         {
-            GameActions.top.draw(1);
-            GameActions.top.flash(card);
+            PCLActions.top.draw(1);
+            PCLActions.top.flash(card);
         }
         else
         {
@@ -37,11 +37,11 @@ public class PCLHasteAction extends PCLAction
     @Override
     protected void complete()
     {
-        if (PCLCardTag.Haste.has(card) && !CombatStats.hasteInfinitesThisTurn().contains(card))
+        if (PCLCardTag.Haste.has(card) && !CombatManager.hasteInfinitesThisTurn().contains(card))
         {
             CardCrawlGame.sound.playA("POWER_FLIGHT", MathUtils.random(0.3f, 0.4f));
             PCLCardTag.Haste.tryProgress(card);
-            CombatStats.hasteInfinitesThisTurn().add(card);
+            CombatManager.hasteInfinitesThisTurn().add(card);
         }
 
         isDone = true;

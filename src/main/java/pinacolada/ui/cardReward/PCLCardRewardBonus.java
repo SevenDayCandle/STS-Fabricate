@@ -10,13 +10,13 @@ import com.megacrit.cardcrawl.rewards.RewardItem;
 import extendedui.EUIUtils;
 import extendedui.ui.EUIBase;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
 import pinacolada.effects.card.PermanentUpgradeEffect;
 import pinacolada.interfaces.listeners.OnAddingToCardRewardListener;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.resources.pcl.PCLRuntimeLoadout;
-import pinacolada.utilities.GameEffects;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -197,7 +197,7 @@ public class PCLCardRewardBonus extends EUIBase
         {
             if (series.getCardPoolInPlay().containsKey(bundle.card.cardID))
             {
-                GameEffects.TopLevelQueue.add(new PermanentUpgradeEffect()).setFilter(c -> AbstractCard.CardRarity.COMMON.equals(c.rarity));
+                PCLEffects.TopLevelQueue.add(new PermanentUpgradeEffect()).setFilter(c -> AbstractCard.CardRarity.COMMON.equals(c.rarity));
                 series.bonus += 1;
 
                 EUIUtils.logInfoIfDebug(this, "Obtained Common Upgrade Bonus (+" + bundle.amount + "): " + bundle.card.cardID);

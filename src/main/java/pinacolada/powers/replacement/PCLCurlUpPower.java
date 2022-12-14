@@ -7,7 +7,7 @@ import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.localization.PowerStrings;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.powers.CurlUpPower;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 
 public class PCLCurlUpPower extends CurlUpPower implements CloneablePowerInterface
 {
@@ -45,8 +45,8 @@ public class PCLCurlUpPower extends CurlUpPower implements CloneablePowerInterfa
         if (damageAmount < this.owner.currentHealth && damageAmount > 0 && info.owner != null && info.type == DamageInfo.DamageType.NORMAL)
         {
             this.flash();
-            GameActions.bottom.gainBlock(this.owner, this.amount);
-            GameActions.last.removePower(owner, owner, this);
+            PCLActions.bottom.gainBlock(this.owner, this.amount);
+            PCLActions.last.removePower(owner, owner, this);
         }
 
         return damageAmount;

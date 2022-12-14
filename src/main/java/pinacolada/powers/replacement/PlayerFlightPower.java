@@ -7,7 +7,7 @@ import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.localization.PowerStrings;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import pinacolada.interfaces.markers.MultiplicativePower;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 
 public class PlayerFlightPower extends AbstractPower implements CloneablePowerInterface, MultiplicativePower
 {
@@ -75,7 +75,7 @@ public class PlayerFlightPower extends AbstractPower implements CloneablePowerIn
         if (info.owner != null && info.type != DamageInfo.DamageType.HP_LOSS && info.type != DamageInfo.DamageType.THORNS && damageAmount > 0 && willLive)
         {
             this.flash();
-            GameActions.bottom.reducePower(this, 1);
+            PCLActions.bottom.reducePower(this, 1);
         }
 
         return damageAmount;

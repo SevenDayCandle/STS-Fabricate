@@ -4,12 +4,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.vfx.FadingParticleEffect;
 import pinacolada.effects.vfx.FireIgniteEffect;
 import pinacolada.monsters.PCLCreature;
 import pinacolada.monsters.animations.PCLAllyAnimation;
 import pinacolada.resources.PGR;
-import pinacolada.utilities.GameEffects;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class ConjurerFireAllyAnimation extends PCLAllyAnimation
@@ -23,7 +23,7 @@ public class ConjurerFireAllyAnimation extends PCLAllyAnimation
 
     public void updateImpl(float deltaTime, float x, float y)
     {
-        GameEffects.Queue.add(new FadingParticleEffect(FireIgniteEffect.getRandomTexture(), x + MathUtils.random(-64, 64), y + MathUtils.random(-32, 4))
+        PCLEffects.Queue.add(new FadingParticleEffect(FireIgniteEffect.getRandomTexture(), x + MathUtils.random(-64, 64), y + MathUtils.random(-32, 4))
                 .setBlendingMode(PCLRenderHelpers.BlendingMode.Glowing)
                 .setFlip(MathUtils.randomBoolean(), false)
                 .setScale(MathUtils.random(0.09f, 0.64f))

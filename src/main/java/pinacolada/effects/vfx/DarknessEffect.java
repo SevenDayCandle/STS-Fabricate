@@ -4,8 +4,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import extendedui.ui.TextureCache;
 import pinacolada.effects.PCLEffect;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.VFX;
-import pinacolada.utilities.GameEffects;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class DarknessEffect extends PCLEffect
@@ -28,7 +28,7 @@ public class DarknessEffect extends PCLEffect
     {
         for (int i = images.length - 1; i >= 0; i--)
         {
-            GameEffects.Queue.add(new FadingParticleEffect(images[i].texture(), x, y)
+            PCLEffects.Queue.add(new FadingParticleEffect(images[i].texture(), x, y)
                     .setColor(new Color(0.47f, 0.35f, 0.6f, 0.4f))
                     .setBlendingMode(i <= 2 ? PCLRenderHelpers.BlendingMode.Glowing : PCLRenderHelpers.BlendingMode.Normal)
                     .setScale(scale * MathUtils.random(0.2f, i < 2 ? 0.7f : 0.4f), scale * MathUtils.random(1.7f, i < 2 ? 4.3f : 2.6f), 2.2f)

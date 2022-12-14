@@ -3,7 +3,7 @@ package pinacolada.actions.special;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 import pinacolada.actions.PCLActionWithCallback;
-import pinacolada.utilities.GameEffects;
+import pinacolada.effects.PCLEffects;
 
 public class PlayVFX extends PCLActionWithCallback<AbstractGameEffect>
 {
@@ -24,11 +24,11 @@ public class PlayVFX extends PCLActionWithCallback<AbstractGameEffect>
     {
         if (this.isTopLevelEffect)
         {
-            GameEffects.TopLevelList.add(effect);
+            PCLEffects.TopLevelList.add(effect);
         }
         else
         {
-            GameEffects.List.add(effect);
+            PCLEffects.List.add(effect);
         }
     }
 

@@ -5,7 +5,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import pinacolada.actions.PCLActionWithCallback;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 
 public class IncreasePower extends PCLActionWithCallback<AbstractPower>
 {
@@ -46,7 +46,7 @@ public class IncreasePower extends PCLActionWithCallback<AbstractPower>
 
             if (power.amount == 0)
             {
-                GameActions.top.removePower(source, target, power);
+                PCLActions.top.removePower(source, target, power);
             }
         }
     }

@@ -8,7 +8,7 @@ import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.powers.FrailPower;
 import extendedui.EUIUtils;
 import pinacolada.interfaces.markers.MultiplicativePower;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
@@ -41,7 +41,7 @@ public class PCLFrailPower extends FrailPower implements CloneablePowerInterface
 
     public float getMultiplier()
     {
-        return (GameUtilities.isPlayer(owner)) ? (CombatStats.getPlayerEffectBonus(ID)) : (CombatStats.getEffectBonus(ID));
+        return (GameUtilities.isPlayer(owner)) ? (CombatManager.getPlayerEffectBonus(ID)) : (CombatManager.getEffectBonus(ID));
     }
 
     @Override

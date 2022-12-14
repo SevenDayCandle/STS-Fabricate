@@ -3,7 +3,7 @@ package pinacolada.actions.player;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.vfx.GainPennyEffect;
 import pinacolada.actions.PCLAction;
-import pinacolada.utilities.GameEffects;
+import pinacolada.effects.PCLEffects;
 
 public class GainGold extends PCLAction
 {
@@ -30,7 +30,7 @@ public class GainGold extends PCLAction
             {
                 for (int i = 0; i < amount; ++i)
                 {
-                    GameEffects.Queue.add(new GainPennyEffect(player.hb.cX, player.hb.cY + (player.hb.height / 2)));
+                    PCLEffects.Queue.add(new GainPennyEffect(player.hb.cX, player.hb.cY + (player.hb.height / 2)));
                 }
             }
 

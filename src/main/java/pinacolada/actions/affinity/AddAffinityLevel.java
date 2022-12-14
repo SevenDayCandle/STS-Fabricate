@@ -5,8 +5,8 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.vfx.combat.PowerBuffEffect;
 import pinacolada.actions.PCLActionWithCallback;
 import pinacolada.cards.base.PCLAffinity;
-import pinacolada.misc.CombatStats;
-import pinacolada.utilities.GameEffects;
+import pinacolada.effects.PCLEffects;
+import pinacolada.misc.CombatManager;
 
 public class AddAffinityLevel extends PCLActionWithCallback<PCLAffinity>
 {
@@ -37,11 +37,11 @@ public class AddAffinityLevel extends PCLActionWithCallback<PCLAffinity>
             return;
         }
 
-        CombatStats.playerSystem.addLevel(affinity, amount);
+        CombatManager.playerSystem.addLevel(affinity, amount);
         if (showEffect)
         {
-            CombatStats.playerSystem.flashAffinity(affinity);
-            GameEffects.List.add(new PowerBuffEffect(target.hb.cX - target.animX, target.hb.cY + target.hb.height / 2f, "+" + amount + " " + affinity.getTooltip().title));
+            CombatManager.playerSystem.flashAffinity(affinity);
+            PCLEffects.List.add(new PowerBuffEffect(target.hb.cX - target.animX, target.hb.cY + target.hb.height / 2f, "+" + amount + " " + affinity.getTooltip().title));
         }
     }
 

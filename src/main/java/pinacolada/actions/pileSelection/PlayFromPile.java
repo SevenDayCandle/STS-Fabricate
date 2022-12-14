@@ -6,7 +6,7 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.screens.CardRewardScreen;
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.cardManipulation.PlayCard;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -58,7 +58,7 @@ public class PlayFromPile extends SelectFromPile
     {
         for (AbstractCard card : result)
         {
-            PlayCard action = GameActions.top.playCard(card, target)
+            PlayCard action = PCLActions.top.playCard(card, target)
                     .setSourcePile(GameUtilities.findCardGroup(card, false));
 
             if (onPlayCard != null)

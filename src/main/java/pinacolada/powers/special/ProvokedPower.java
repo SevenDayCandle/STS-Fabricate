@@ -8,9 +8,9 @@ import com.megacrit.cardcrawl.monsters.EnemyMoveInfo;
 import extendedui.EUIUtils;
 import pinacolada.effects.AttackEffects;
 import pinacolada.interfaces.subscribers.OnMonsterMoveSubscriber;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.powers.PCLPower;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -43,14 +43,14 @@ public class ProvokedPower extends PCLPower implements OnMonsterMoveSubscriber
     public void onInitialApplication()
     {
         super.onInitialApplication();
-        CombatStats.onMonsterMove.subscribe(this);
+        CombatManager.onMonsterMove.subscribe(this);
 
         final AbstractMonster monster = EUIUtils.safeCast(owner, AbstractMonster.class);
         if (monster != null)
         {
             this.moveByte = monster.nextMove;
             this.moveIntent = monster.intent;
-            GameActions.last.callback(() -> {
+            PCLActions.last.callback(() -> {
                 try
                 {
                     Field f = AbstractMonster.class.getDeclaredField("move");
@@ -83,7 +83,7 @@ public class ProvokedPower extends PCLPower implements OnMonsterMoveSubscriber
     public void onRemove()
     {
         super.onRemove();
-        CombatStats.onMonsterMove.unsubscribe(this);
+        CombatManager.onMonsterMove.unsubscribe(this);
 
         AbstractMonster m = EUIUtils.safeCast(this.owner, AbstractMonster.class);
         if (m != null && this.moveIntent != null)
@@ -101,11 +101,11 @@ public class ProvokedPower extends PCLPower implements OnMonsterMoveSubscriber
         ArrayList<DamageInfo> damages = m.damage;
         if (damages == null || damages.isEmpty())
         {
-            GameActions.bottom.dealDamage(m, AbstractDungeon.player, 1, DamageInfo.DamageType.NORMAL, AttackEffects.BLUNT_HEAVY);
+            PCLActions.bottom.dealDamage(m, AbstractDungeon.player, 1, DamageInfo.DamageType.NORMAL, AttackEffects.BLUNT_HEAVY);
         }
         else
         {
-            GameActions.bottom.dealDamage(m, AbstractDungeon.player, m.damage.get(0).base, m.damage.get(0).type, AttackEffects.BLUNT_HEAVY);
+            PCLActions.bottom.dealDamage(m, AbstractDungeon.player, m.damage.get(0).base, m.damage.get(0).type, AttackEffects.BLUNT_HEAVY);
         }
         return false;
     }

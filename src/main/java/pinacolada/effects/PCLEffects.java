@@ -1,4 +1,4 @@
-package pinacolada.utilities;
+package pinacolada.effects;
 
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
@@ -18,10 +18,6 @@ import extendedui.interfaces.delegates.ActionT0;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.ActionT2;
 import pinacolada.actions.utility.WaitRealtimeAction;
-import pinacolada.effects.AttackEffects;
-import pinacolada.effects.PCLEffect;
-import pinacolada.effects.PCLEffekseerEFX;
-import pinacolada.effects.VFX;
 import pinacolada.effects.combat.TalkEffect;
 import pinacolada.effects.player.ObtainRelicEffect;
 import pinacolada.effects.player.RemoveRelicEffect;
@@ -33,18 +29,18 @@ import pinacolada.effects.vfx.EffekseerEffect;
 import java.util.ArrayList;
 
 
-public final class GameEffects
+public final class PCLEffects
 {
     public final static ArrayList<AbstractGameEffect> UnlistedEffects = new ArrayList<>();
-    public final static GameEffects List = new GameEffects(EffectType.List);
-    public final static GameEffects Queue = new GameEffects(EffectType.Queue);
-    public final static GameEffects TopLevelList = new GameEffects(EffectType.TopLevelList);
-    public final static GameEffects TopLevelQueue = new GameEffects(EffectType.TopLevelQueue);
-    public final static GameEffects Manual = new GameEffects(EffectType.Manual);
+    public final static PCLEffects List = new PCLEffects(EffectType.List);
+    public final static PCLEffects Queue = new PCLEffects(EffectType.Queue);
+    public final static PCLEffects TopLevelList = new PCLEffects(EffectType.TopLevelList);
+    public final static PCLEffects TopLevelQueue = new PCLEffects(EffectType.TopLevelQueue);
+    public final static PCLEffects Manual = new PCLEffects(EffectType.Manual);
 
     protected final EffectType effectType;
 
-    protected GameEffects(EffectType effectType)
+    protected PCLEffects(EffectType effectType)
     {
         this.effectType = effectType;
     }

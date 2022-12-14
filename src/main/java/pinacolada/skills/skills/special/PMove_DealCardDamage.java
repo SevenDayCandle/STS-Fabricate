@@ -14,6 +14,7 @@ import pinacolada.actions.damage.DealDamageToAll;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.PCLEffekseerEFX;
 import pinacolada.effects.VFX;
 import pinacolada.interfaces.markers.Hidden;
@@ -22,7 +23,6 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.utilities.GameEffects;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -126,7 +126,7 @@ public class PMove_DealCardDamage extends PMove implements Hidden
 
     public PMove_DealCardDamage setDamageEffect(PCLEffekseerEFX effekseerKey)
     {
-        this.damageEffect = (m) -> GameEffects.Queue.add(VFX.eFX(effekseerKey, m.hb)).duration * 0.8f;
+        this.damageEffect = (m) -> PCLEffects.Queue.add(VFX.eFX(effekseerKey, m.hb)).duration * 0.8f;
         return this;
     }
 
@@ -137,13 +137,13 @@ public class PMove_DealCardDamage extends PMove implements Hidden
 
     public PMove_DealCardDamage setDamageEffect(PCLEffekseerEFX effekseerKey, float durationMult)
     {
-        this.damageEffect = (m) -> GameEffects.Queue.add(VFX.eFX(effekseerKey, m.hb)).duration * durationMult;
+        this.damageEffect = (m) -> PCLEffects.Queue.add(VFX.eFX(effekseerKey, m.hb)).duration * durationMult;
         return this;
     }
 
     public PMove_DealCardDamage setDamageEffect(PCLEffekseerEFX effekseerKey, Color color, float durationMult)
     {
-        this.damageEffect = (m) -> GameEffects.Queue.add(VFX.eFX(effekseerKey, m.hb).setColor(color)).duration * durationMult;
+        this.damageEffect = (m) -> PCLEffects.Queue.add(VFX.eFX(effekseerKey, m.hb).setColor(color)).duration * durationMult;
         return this;
     }
 

@@ -3,7 +3,7 @@ package pinacolada.actions.pileSelection;
 import com.badlogic.gdx.math.Vector2;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.resources.PGR;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public class PurgeFromPile extends SelectFromPile
     @Override
     protected void complete(ArrayList<AbstractCard> result)
     {
-        moveToPile(result, CombatStats.PURGED_CARDS);
+        moveToPile(result, CombatManager.PURGED_CARDS);
         super.complete(result);
     }
 

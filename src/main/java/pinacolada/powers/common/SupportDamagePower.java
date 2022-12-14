@@ -8,7 +8,7 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
 import pinacolada.effects.AttackEffects;
 import pinacolada.powers.PCLPower;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.List;
@@ -97,11 +97,11 @@ public class SupportDamagePower extends PCLPower
     {
         super.atEndOfTurn(isPlayer);
 
-        GameActions.bottom.callback(() -> {
+        PCLActions.bottom.callback(() -> {
             updateParameters();
             if (bestTarget != null)
             {
-                GameActions.bottom.dealDamage(bestTarget, targetDamageInfo, AttackEffects.NONE)
+                PCLActions.bottom.dealDamage(bestTarget, targetDamageInfo, AttackEffects.NONE)
                         .setPiercing(true, false)
                         .applyPowers(true)
                         .setVFX(true, false);

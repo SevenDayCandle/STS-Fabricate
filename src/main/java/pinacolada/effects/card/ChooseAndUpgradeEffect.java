@@ -15,7 +15,7 @@ import com.megacrit.cardcrawl.localization.UIStrings;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 import com.megacrit.cardcrawl.vfx.UpgradeShineEffect;
-import pinacolada.utilities.GameEffects;
+import pinacolada.effects.PCLEffects;
 
 import java.util.Iterator;
 import java.util.function.Predicate;
@@ -66,12 +66,12 @@ public class ChooseAndUpgradeEffect extends AbstractGameEffect
             while (var1.hasNext())
             {
                 AbstractCard c = (AbstractCard) var1.next();
-                GameEffects.Queue.add(new UpgradeShineEffect((float) Settings.WIDTH / 2f, (float) Settings.HEIGHT / 2f));
+                PCLEffects.Queue.add(new UpgradeShineEffect((float) Settings.WIDTH / 2f, (float) Settings.HEIGHT / 2f));
                 ++CardCrawlGame.metricData.campfire_upgraded;
                 CardCrawlGame.metricData.addCampfireChoiceData("SMITH", c.getMetricID());
                 c.upgrade();
                 AbstractDungeon.player.bottledCardUpgradeCheck(c);
-                GameEffects.Queue.showCardBriefly(c.makeStatEquivalentCopy());
+                PCLEffects.Queue.showCardBriefly(c.makeStatEquivalentCopy());
             }
 
             AbstractDungeon.gridSelectScreen.selectedCards.clear();

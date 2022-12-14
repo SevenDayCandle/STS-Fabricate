@@ -9,10 +9,10 @@ import extendedui.EUIUtils;
 import extendedui.debug.*;
 import imgui.ImGuiTextFilter;
 import org.apache.commons.lang3.StringUtils;
+import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCustomCardSlot;
-import pinacolada.utilities.GameActions;
-import pinacolada.utilities.GameEffects;
+import pinacolada.effects.PCLEffects;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -67,7 +67,7 @@ public class PCLDebugCardPanel
         AbstractCard chosen = cardList.get();
         if (chosen != null)
         {
-            GameActions.instant.makeCardInHand(getCopy(chosen)).repeat(cardCount.get());
+            PCLActions.instant.makeCardInHand(getCopy(chosen)).repeat(cardCount.get());
         }
     }
 
@@ -78,7 +78,7 @@ public class PCLDebugCardPanel
         {
             for (int i = 0; i < cardCount.get(); i++)
             {
-                GameEffects.List.add(new ShowCardAndObtainEffect(getCopy(chosen), (float) Settings.WIDTH * 0.5f, (float) Settings.HEIGHT * 0.5f));
+                PCLEffects.List.add(new ShowCardAndObtainEffect(getCopy(chosen), (float) Settings.WIDTH * 0.5f, (float) Settings.HEIGHT * 0.5f));
             }
         }
     }

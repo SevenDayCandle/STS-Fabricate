@@ -14,13 +14,13 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT3;
 import extendedui.utilities.GenericCallback;
 import pinacolada.actions.PCLActionWithCallback;
+import pinacolada.actions.PCLActions;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
 import pinacolada.effects.card.RenderCardEffect;
 import pinacolada.effects.card.UnfadeOutEffect;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.utilities.CardSelection;
-import pinacolada.utilities.GameActions;
-import pinacolada.utilities.GameEffects;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.List;
@@ -96,7 +96,7 @@ public class MoveCard extends PCLActionWithCallback<AbstractCard>
 
         if (GameUtilities.trySetPosition(sourcePile, card) && showEffect)
         {
-            GameEffects.TopLevelList.add(new RenderCardEffect(card, duration, isRealtime));
+            PCLEffects.TopLevelList.add(new RenderCardEffect(card, duration, isRealtime));
         }
 
         if (showEffect && targetPosition == null)
@@ -115,7 +115,7 @@ public class MoveCard extends PCLActionWithCallback<AbstractCard>
             targetPosition.y = DEFAULT_CARD_Y;
         }
 
-        if (targetPile.type == CombatStats.PURGED_CARDS.type)
+        if (targetPile.type == CombatManager.PURGED_CARDS.type)
         {
             purge();
             return;
@@ -145,13 +145,13 @@ public class MoveCard extends PCLActionWithCallback<AbstractCard>
                 moveToPile();
                 break;
         }
-        CombatStats.onCardMoved(card, sourcePile, targetPile);
+        CombatManager.onCardMoved(card, sourcePile, targetPile);
     }
 
     @Override
     protected void updateInternal(float deltaTime)
     {
-        if (showEffect && targetPile.type != CombatStats.PURGED_CARDS.type)
+        if (showEffect && targetPile.type != CombatManager.PURGED_CARDS.type)
         {
             updateCard();
         }
@@ -165,15 +165,15 @@ public class MoveCard extends PCLActionWithCallback<AbstractCard>
                 GameUtilities.refreshHandLayout();
             }
 
-            if (sourcePile != null && (sourcePile.type == CardGroup.CardGroupType.EXHAUST_PILE || sourcePile == CombatStats.PURGED_CARDS))
+            if (sourcePile != null && (sourcePile.type == CardGroup.CardGroupType.EXHAUST_PILE || sourcePile == CombatManager.PURGED_CARDS))
             {
-                GameEffects.Queue.add(new UnfadeOutEffect(card));
-                GameActions.bottom.callback(() -> GameEffects.Queue.add(new UnfadeOutEffect(card)));
+                PCLEffects.Queue.add(new UnfadeOutEffect(card));
+                PCLActions.bottom.callback(() -> PCLEffects.Queue.add(new UnfadeOutEffect(card)));
             }
 
             if (targetPile != player.limbo && player.limbo.contains(card))
             {
-                GameActions.bottom.add(new UnlimboAction(card, false));
+                PCLActions.bottom.add(new UnlimboAction(card, false));
             }
         }
     }
@@ -221,7 +221,7 @@ public class MoveCard extends PCLActionWithCallback<AbstractCard>
     protected void moveToDrawPile(AbstractCard card)
     {
         sourcePile.moveToDeck(card, true);
-        CombatStats.onCardReshuffled(card, sourcePile);
+        CombatManager.onCardReshuffled(card, sourcePile);
     }
 
     protected void moveToExhaustPile()
@@ -272,7 +272,7 @@ public class MoveCard extends PCLActionWithCallback<AbstractCard>
             card.triggerWhenDrawn();
             SFX.play(SFX.CARD_OBTAIN);
             sourcePile.moveToHand(card, sourcePile);
-            CombatStats.onAfterDraw(card);
+            CombatManager.onAfterDraw(card);
         }
     }
 
@@ -303,14 +303,14 @@ public class MoveCard extends PCLActionWithCallback<AbstractCard>
     protected void purge()
     {
         sourcePile.removeCard(card);
-        CombatStats.onCardPurged(card);
+        CombatManager.onCardPurged(card);
 
         if (showEffect)
         {
             showCard();
 
             final Vector2 pos = GameUtilities.tryGetPosition(sourcePile, card);
-            final AbstractGameEffect effect = GameEffects.List.add(new PurgeCardEffect(card, pos.x, pos.y));
+            final AbstractGameEffect effect = PCLEffects.List.add(new PurgeCardEffect(card, pos.x, pos.y));
             if (targetPosition != null)
             {
                 card.target_x = targetPosition.x;

@@ -6,7 +6,7 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.vfx.CollectorCurseEffect;
 import pinacolada.actions.PCLAction;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 
 public class KillCharacterAction extends PCLAction
 {
@@ -20,21 +20,21 @@ public class KillCharacterAction extends PCLAction
     @Override
     protected void firstUpdate()
     {
-        GameActions.bottom.wait(0.8f);
-        GameActions.bottom.playVFX(new CollectorCurseEffect(target.hb.cX, target.hb.cY), 2f);
+        PCLActions.bottom.wait(0.8f);
+        PCLActions.bottom.playVFX(new CollectorCurseEffect(target.hb.cX, target.hb.cY), 2f);
 
         for (int i = 1; i <= 10; i ++)
         {
-            GameActions.bottom.dealDamage(source, target, i * i * i, DamageInfo.DamageType.HP_LOSS, AbstractGameAction.AttackEffect.NONE)
+            PCLActions.bottom.dealDamage(source, target, i * i * i, DamageInfo.DamageType.HP_LOSS, AbstractGameAction.AttackEffect.NONE)
             .setVFX(true, false);
 
-            GameActions.bottom.dealDamage(source, target, i * i * i, DamageInfo.DamageType.HP_LOSS, AbstractGameAction.AttackEffect.NONE)
+            PCLActions.bottom.dealDamage(source, target, i * i * i, DamageInfo.DamageType.HP_LOSS, AbstractGameAction.AttackEffect.NONE)
             .setVFX(true, false);
         }
 
-        GameActions.bottom.dealDamage(source, target, 99999, DamageInfo.DamageType.HP_LOSS, AbstractGameAction.AttackEffect.NONE)
+        PCLActions.bottom.dealDamage(source, target, 99999, DamageInfo.DamageType.HP_LOSS, AbstractGameAction.AttackEffect.NONE)
         .setVFX(true, false);
 
-        GameActions.bottom.add(new DieAction(target));
+        PCLActions.bottom.add(new DieAction(target));
     }
 }

@@ -6,7 +6,7 @@ import com.megacrit.cardcrawl.powers.MinionPower;
 import com.megacrit.cardcrawl.powers.RegrowPower;
 import extendedui.EUIUtils;
 import pinacolada.powers.PCLPower;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 
 public class StolenGoldPower extends PCLPower
 {
@@ -48,7 +48,7 @@ public class StolenGoldPower extends PCLPower
     {
         super.onInitialApplication();
 
-        GameActions.top.gainGold(amount);
+        PCLActions.top.gainGold(amount);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class StolenGoldPower extends PCLPower
         int goldGain = this.amount - initialGold;
         if (goldGain > 0)
         {
-            GameActions.top.gainGold(goldGain);
+            PCLActions.top.gainGold(goldGain);
         }
     }
 }

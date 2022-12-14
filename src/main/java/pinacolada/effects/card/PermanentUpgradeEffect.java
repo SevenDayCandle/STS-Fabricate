@@ -10,8 +10,8 @@ import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
 import extendedui.utilities.GenericCondition;
 import pinacolada.effects.PCLEffectWithCallback;
+import pinacolada.effects.PCLEffects;
 import pinacolada.utilities.CardSelection;
-import pinacolada.utilities.GameEffects;
 import pinacolada.utilities.ListSelection;
 
 import java.util.ArrayList;
@@ -84,8 +84,8 @@ public class PermanentUpgradeEffect extends PCLEffectWithCallback<AbstractCard>
             final float x = Settings.WIDTH * (0.4f + (0.1f * EUIUtils.count(AbstractDungeon.topLevelEffects, e -> e instanceof PermanentUpgradeEffect)));
             final float y = Settings.HEIGHT * 0.5f;
 
-            GameEffects.TopLevelQueue.showCardBriefly(card.makeStatEquivalentCopy(), x + AbstractCard.IMG_WIDTH * 0.5f + 20f * Settings.scale, y);
-            GameEffects.TopLevelQueue.add(new UpgradeShineEffect(x, y));
+            PCLEffects.TopLevelQueue.showCardBriefly(card.makeStatEquivalentCopy(), x + AbstractCard.IMG_WIDTH * 0.5f + 20f * Settings.scale, y);
+            PCLEffects.TopLevelQueue.add(new UpgradeShineEffect(x, y));
         }
     }
 

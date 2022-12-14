@@ -5,7 +5,7 @@ import com.evacipated.cardcrawl.modthespire.lib.SpirePostfixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import pinacolada.characters.CreatureAnimationInfo;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 
 public class AbstractCreaturePatches
 {
@@ -25,7 +25,7 @@ public class AbstractCreaturePatches
         @SpirePostfixPatch
         public static void method(AbstractCreature __instance)
         {
-            CombatStats.onHealthBarUpdated(__instance);
+            CombatManager.onHealthBarUpdated(__instance);
         }
     }
 
@@ -35,7 +35,7 @@ public class AbstractCreaturePatches
         @SpirePostfixPatch
         public static void method(AbstractCreature __instance, int block)
         {
-            CombatStats.onBlockGained(__instance, block);
+            CombatManager.onBlockGained(__instance, block);
         }
     }
 
@@ -45,7 +45,7 @@ public class AbstractCreaturePatches
         @SpirePostfixPatch
         public static void method(AbstractCreature __instance)
         {
-            CombatStats.onBlockBroken(__instance);
+            CombatManager.onBlockBroken(__instance);
         }
     }
 
@@ -55,7 +55,7 @@ public class AbstractCreaturePatches
         @SpirePrefixPatch
         public static void method(AbstractCreature __instance, int amount, boolean noAnimation)
         {
-            CombatStats.onBeforeLoseBlock(__instance, amount, noAnimation);
+            CombatManager.onBeforeLoseBlock(__instance, amount, noAnimation);
         }
     }
 }

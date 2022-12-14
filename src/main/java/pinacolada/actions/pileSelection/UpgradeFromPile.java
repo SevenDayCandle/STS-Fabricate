@@ -3,8 +3,8 @@ package pinacolada.actions.pileSelection;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.Settings;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.vfx.megacritCopy.UpgradeShineEffect2;
-import pinacolada.utilities.GameEffects;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -59,8 +59,8 @@ public class UpgradeFromPile extends SelectFromPile
             }
 
             final float x = (Settings.WIDTH / 4f) + ((result.size() - 1) * (AbstractCard.IMG_WIDTH * 0.75f));
-            GameEffects.TopLevelQueue.add(new UpgradeShineEffect2(x, Settings.HEIGHT / 2f));
-            GameEffects.TopLevelQueue.showCardBriefly(card.makeStatEquivalentCopy(), x, Settings.HEIGHT / 2f);
+            PCLEffects.TopLevelQueue.add(new UpgradeShineEffect2(x, Settings.HEIGHT / 2f));
+            PCLEffects.TopLevelQueue.showCardBriefly(card.makeStatEquivalentCopy(), x, Settings.HEIGHT / 2f);
         }
 
         GameUtilities.refreshHandLayout(false);

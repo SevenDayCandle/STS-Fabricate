@@ -15,7 +15,7 @@ import extendedui.ui.tooltips.EUITooltip;
 import javassist.CtBehavior;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.modifiers.OverrideSkillModifier;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
@@ -35,13 +35,13 @@ public class AbstractPlayerPatches
             AbstractOrb orb = orbToSet[0];
 
             // Replace the orb to be channeled according to any effects
-            orbToSet[0] = CombatStats.onTryChannelOrb(orb);
+            orbToSet[0] = CombatManager.onTryChannelOrb(orb);
         }
 
         @SpireInsertPatch(locator = Locator.class)
         public static void insert2(AbstractPlayer __instance, @ByRef AbstractOrb[] orbToSet)
         {
-            CombatStats.onChannel(orbToSet[0]);
+            CombatManager.onChannel(orbToSet[0]);
         }
 
         private static class Locator extends SpireInsertLocator
@@ -64,14 +64,14 @@ public class AbstractPlayerPatches
             final PCLCard pCard = EUIUtils.safeCast(c, PCLCard.class);
             if (pCard != null)
             {
-                CombatStats.onUsingCard(pCard, __instance, m);
+                CombatManager.onUsingCard(pCard, __instance, m);
                 return SpireReturn.Return();
             }
 
             ArrayList<OverrideSkillModifier> wrappers = OverrideSkillModifier.getAll(c);
             if (!wrappers.isEmpty())
             {
-                CombatStats.onUsingCardPostActions(c, __instance, m);
+                CombatManager.onUsingCardPostActions(c, __instance, m);
                 return SpireReturn.Return();
             }
 
@@ -107,7 +107,7 @@ public class AbstractPlayerPatches
         @SpirePrefixPatch
         public static void method(AbstractPlayer __instance)
         {
-            CombatStats.onStartup();
+            CombatManager.onStartup();
         }
     }
 
@@ -136,7 +136,7 @@ public class AbstractPlayerPatches
         @SpireInsertPatch(localvars = {"damageAmount"}, locator = Locator.class)
         public static void insertPre(AbstractPlayer __instance, DamageInfo info, @ByRef int[] damageAmount)
         {
-            damageAmount[0] = Math.max(0, CombatStats.onModifyDamageFirst(__instance, info, damageAmount[0]));
+            damageAmount[0] = Math.max(0, CombatManager.onModifyDamageFirst(__instance, info, damageAmount[0]));
         }
 
         private static class Locator extends SpireInsertLocator
@@ -151,7 +151,7 @@ public class AbstractPlayerPatches
         @SpireInsertPatch(localvars = {"damageAmount"}, locator = Locator2.class)
         public static void insertPre2(AbstractPlayer __instance, DamageInfo info, @ByRef int[] damageAmount)
         {
-            damageAmount[0] = Math.max(0, CombatStats.onModifyDamageLast(__instance, info, damageAmount[0]));
+            damageAmount[0] = Math.max(0, CombatManager.onModifyDamageLast(__instance, info, damageAmount[0]));
         }
 
         private static class Locator2 extends SpireInsertLocator
@@ -166,7 +166,7 @@ public class AbstractPlayerPatches
         @SpireInsertPatch(localvars = {"damageAmount"}, locator = Locator3.class)
         public static void insertPre3(AbstractPlayer __instance, DamageInfo info, @ByRef int[] damageAmount)
         {
-            CombatStats.onAttack(info, damageAmount[0], __instance);
+            CombatManager.onAttack(info, damageAmount[0], __instance);
         }
 
         private static class Locator3 extends SpireInsertLocator
@@ -181,7 +181,7 @@ public class AbstractPlayerPatches
         @SpireInsertPatch(localvars = {"damageAmount"}, locator = Locator4.class)
         public static void insertPre4(AbstractPlayer __instance, DamageInfo info, @ByRef int[] damageAmount)
         {
-            damageAmount[0] = Math.max(0, CombatStats.onPlayerLoseHP(__instance, info, damageAmount[0]));
+            damageAmount[0] = Math.max(0, CombatManager.onPlayerLoseHP(__instance, info, damageAmount[0]));
         }
 
         private static class Locator4 extends SpireInsertLocator
@@ -218,7 +218,7 @@ public class AbstractPlayerPatches
         if (card != null && (card.pclTarget.targetsAllies() || card.type == PGR.Enums.CardType.SUMMON))
         {
             final MonsterGroup group = AbstractDungeon.getCurrRoom().monsters;
-            final ArrayList<AbstractMonster> summons = CombatStats.summons.getSummons(card.type != PGR.Enums.CardType.SUMMON);
+            final ArrayList<AbstractMonster> summons = CombatManager.summons.getSummons(card.type != PGR.Enums.CardType.SUMMON);
             if (card.pclTarget.targetsEnemies())
             {
                 summons.addAll(group.monsters);

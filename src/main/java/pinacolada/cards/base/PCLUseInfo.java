@@ -5,7 +5,7 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.powers.PCLAffinityPower;
 import pinacolada.utilities.GameUtilities;
 
@@ -33,19 +33,19 @@ public class PCLUseInfo
         this.card = card;
         this.source = source;
         this.target = target;
-        this.previousCard = CombatStats.playerSystem.getLastCardPlayed();
-        this.currentAffinity = CombatStats.playerSystem.getActiveMeter().getCurrentAffinity();
+        this.previousCard = CombatManager.playerSystem.getLastCardPlayed();
+        this.currentAffinity = CombatManager.playerSystem.getActiveMeter().getCurrentAffinity();
         this.enemies = GameUtilities.getEnemies(true);
-        this.auras = CombatStats.playerSystem.getActivePowers();
+        this.auras = CombatManager.playerSystem.getActivePowers();
         if (card != null)
         {
-            this.reactions = CombatStats.playerSystem.getReactions(card,
+            this.reactions = CombatManager.playerSystem.getReactions(card,
                     target != null ? Collections.singleton(target) :
                             card.target == AbstractCard.CardTarget.ALL_ENEMY ? enemies
                                     : card.target == AbstractCard.CardTarget.SELF ? Collections.singleton(AbstractDungeon.player) : new ArrayList<>());
-            this.canActivateSemiLimited = CombatStats.canActivateSemiLimited(card.cardID);
-            this.canActivateLimited = CombatStats.canActivateLimited(card.cardID);
-            this.isMatch = CombatStats.playerSystem.isMatch(card);
+            this.canActivateSemiLimited = CombatManager.canActivateSemiLimited(card.cardID);
+            this.canActivateLimited = CombatManager.canActivateLimited(card.cardID);
+            this.isMatch = CombatManager.playerSystem.isMatch(card);
             this.isStarter = GameUtilities.isStarter(card);
         }
         else
@@ -90,11 +90,11 @@ public class PCLUseInfo
 
     public boolean tryActivateLimited()
     {
-        return CombatStats.tryActivateLimited(card.cardID);
+        return CombatManager.tryActivateLimited(card.cardID);
     }
 
     public boolean tryActivateSemiLimited()
     {
-        return CombatStats.tryActivateSemiLimited(card.cardID);
+        return CombatManager.tryActivateSemiLimited(card.cardID);
     }
 }

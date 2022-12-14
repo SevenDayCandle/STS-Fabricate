@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.core.Settings;
 import pinacolada.effects.PCLEffect;
-import pinacolada.utilities.GameEffects;
+import pinacolada.effects.PCLEffects;
 
 public class BleedEffect extends PCLEffect
 {
@@ -40,7 +40,7 @@ public class BleedEffect extends PCLEffect
         {
             this.timer += MathUtils.random(0.001F, 0.02F);
             float degrees = MathUtils.random(0f, 360f);
-            GameEffects.Queue.add(new BleedParticleEffect(sX, sY));
+            PCLEffects.Queue.add(new BleedParticleEffect(sX, sY));
             --this.count;
             if (this.count == 0)
             {

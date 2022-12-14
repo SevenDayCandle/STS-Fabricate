@@ -6,9 +6,9 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import pinacolada.actions.PCLAction;
+import pinacolada.actions.PCLActions;
 import pinacolada.effects.AttackEffects;
-import pinacolada.utilities.GameActions;
-import pinacolada.utilities.GameEffects;
+import pinacolada.effects.PCLEffects;
 import pinacolada.utilities.GameUtilities;
 
 public class LoseHP extends PCLAction
@@ -45,7 +45,7 @@ public class LoseHP extends PCLAction
     {
         if (this.target.currentHealth > 0)
         {
-            GameEffects.List.attack(source, target, attackEffect, pitchMin, pitchMax, null);
+            PCLEffects.List.attack(source, target, attackEffect, pitchMin, pitchMax, null);
         }
     }
 
@@ -79,7 +79,7 @@ public class LoseHP extends PCLAction
 
             if (!Settings.FAST_MODE)
             {
-                GameActions.top.wait(0.1f);
+                PCLActions.top.wait(0.1f);
             }
         }
     }

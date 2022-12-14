@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.core.Settings;
 import pinacolada.effects.PCLEffect;
-import pinacolada.utilities.GameEffects;
+import pinacolada.effects.PCLEffects;
 
 public class ElectricityEffect extends PCLEffect
 {
@@ -24,10 +24,10 @@ public class ElectricityEffect extends PCLEffect
     @Override
     protected void firstUpdate()
     {
-        GameEffects.Queue.add(new SparkImpactEffect(this.x, this.y));
+        PCLEffects.Queue.add(new SparkImpactEffect(this.x, this.y));
         for (int i = 0; i < particles; i++)
         {
-            GameEffects.Queue.add(new ElectricityParticleEffect(x + random(-spread, spread) * Settings.scale,
+            PCLEffects.Queue.add(new ElectricityParticleEffect(x + random(-spread, spread) * Settings.scale,
                     y + random(-spread, spread) * Settings.scale,
                     jitter * Settings.scale,
                     color)

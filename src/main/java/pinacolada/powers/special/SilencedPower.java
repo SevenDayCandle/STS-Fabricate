@@ -5,7 +5,7 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import pinacolada.interfaces.listeners.OnTryApplyPowerListener;
 import pinacolada.powers.PCLPower;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
 
 public class SilencedPower extends PCLPower implements OnTryApplyPowerListener
@@ -32,6 +32,6 @@ public class SilencedPower extends PCLPower implements OnTryApplyPowerListener
     {
         super.atEndOfRound();
 
-        GameActions.bottom.reducePower(this, 1);
+        PCLActions.bottom.reducePower(this, 1);
     }
 }

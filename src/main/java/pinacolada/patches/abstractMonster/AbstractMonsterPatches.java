@@ -17,7 +17,7 @@ import javassist.CtBehavior;
 import javassist.expr.ExprEditor;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.characters.CreatureAnimationInfo;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.monsters.PCLIntentInfo;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
@@ -68,7 +68,7 @@ public class AbstractMonsterPatches
         @SpireInsertPatch(localvars = {"damageAmount"}, locator = Locator.class)
         public static void insertPre(AbstractMonster __instance, DamageInfo info, @ByRef int[] damageAmount)
         {
-            damageAmount[0] = Math.max(0, CombatStats.onModifyDamageFirst(__instance, info, damageAmount[0]));
+            damageAmount[0] = Math.max(0, CombatManager.onModifyDamageFirst(__instance, info, damageAmount[0]));
         }
 
         private static class Locator extends SpireInsertLocator
@@ -87,7 +87,7 @@ public class AbstractMonsterPatches
         @SpireInsertPatch(localvars = {"damageAmount"}, locator = Locator.class)
         public static void insertPre(AbstractMonster __instance, DamageInfo info, @ByRef int[] damageAmount)
         {
-            damageAmount[0] = Math.max(0, CombatStats.onModifyDamageLast(__instance, info, damageAmount[0]));
+            damageAmount[0] = Math.max(0, CombatManager.onModifyDamageLast(__instance, info, damageAmount[0]));
         }
 
         private static class Locator extends SpireInsertLocator
@@ -108,7 +108,7 @@ public class AbstractMonsterPatches
         {
             if (!__instance.isDying) // to avoid triggering this more than once
             {
-                CombatStats.onMonsterDeath(__instance, triggerRelics);
+                CombatManager.onMonsterDeath(__instance, triggerRelics);
             }
         }
     }
@@ -157,7 +157,7 @@ public class AbstractMonsterPatches
         {
             if (GameUtilities.isAttacking(__instance.intent))
             {
-                AbstractCreature c = CombatStats.summons.getTarget(__instance);
+                AbstractCreature c = CombatManager.summons.getTarget(__instance);
                 // null means aoe
                 if (c == null)
                 {
@@ -173,7 +173,7 @@ public class AbstractMonsterPatches
 
     public static AbstractCreature getTarget(AbstractMonster mo)
     {
-        AbstractCreature c = CombatStats.summons.getTarget(mo);
+        AbstractCreature c = CombatManager.summons.getTarget(mo);
         return c != null ? c : AbstractDungeon.player;
     }
 }

@@ -3,7 +3,7 @@ package pinacolada.actions.pileSelection;
 import com.megacrit.cardcrawl.actions.unique.GamblingChipAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 
 import java.util.ArrayList;
 
@@ -22,11 +22,11 @@ public class CycleCards extends DiscardFromPile
     {
         if (drawInstantly)
         {
-            GameActions.top.draw(result.size());
+            PCLActions.top.draw(result.size());
         }
         else
         {
-            GameActions.bottom.draw(result.size());
+            PCLActions.bottom.draw(result.size());
         }
 
         super.complete(result);

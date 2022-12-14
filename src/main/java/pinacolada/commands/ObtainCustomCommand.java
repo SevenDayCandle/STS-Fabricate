@@ -6,7 +6,7 @@ import basemod.helpers.ConvertHelper;
 import extendedui.EUIUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCustomCardSlot;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 
 import java.util.ArrayList;
 
@@ -62,7 +62,7 @@ public class ObtainCustomCommand extends ConsoleCommand
                     copy.upgrade();
                 }
 
-                GameActions.bottom.makeCardInHand(copy);
+                PCLActions.bottom.makeCardInHand(copy);
             }
         }
         else

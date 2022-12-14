@@ -8,8 +8,8 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.vfx.combat.LightFlareParticleEffect;
 import extendedui.ui.TextureCache;
 import pinacolada.effects.PCLEffect;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.VFX;
-import pinacolada.utilities.GameEffects;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class RazorWindEffect extends PCLEffect
@@ -74,15 +74,15 @@ public class RazorWindEffect extends PCLEffect
         vfxTimer -= deltaTime;
         if (vfxTimer < 0f)
         {
-            GameEffects.Queue.add(new RazorWindParticleEffect(x, y + (random(-100, 100) * Settings.scale),
+            PCLEffects.Queue.add(new RazorWindParticleEffect(x, y + (random(-100, 100) * Settings.scale),
                     random(-300f, -50f) * Math.signum(horizontalSpeed), random(-200f, 200f)));
-            GameEffects.Queue.add(new FadingParticleEffect(image.texture(), x, y)
+            PCLEffects.Queue.add(new FadingParticleEffect(image.texture(), x, y)
                     .setBlendingMode(PCLRenderHelpers.BlendingMode.Glowing)
                     .setOpacity(0.5f)
                             .setColor(new Color(MathUtils.random(0.8f, 1f), 1f, MathUtils.random(0.8f, 1f), 0.5f))
                             .setRotation(rotation)
                             .setScale(scale).setRotation(0, random(300f, 400f)));
-            GameEffects.Queue.add(new LightFlareParticleEffect(this.x, this.y, PARTICLE_COLOR));
+            PCLEffects.Queue.add(new LightFlareParticleEffect(this.x, this.y, PARTICLE_COLOR));
             vfxTimer = vfxFrequency;
         }
 

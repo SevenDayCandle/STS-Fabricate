@@ -14,7 +14,7 @@ import javassist.expr.ExprEditor;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardTag;
 import pinacolada.resources.PGR;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 
 @SpirePatch(clz = UseCardAction.class, method = "update", optional = true)
 public class UseCardAction_Update
@@ -45,7 +45,7 @@ public class UseCardAction_Update
         PCLCard c = EUIUtils.safeCast(EUIClassUtils.getField(__instance, "targetCard"), PCLCard.class);
         if (c != null && c.type == PGR.Enums.CardType.SUMMON)
         {
-            GameActions.top.add(new ShowCardAndPoofAction(c));
+            PCLActions.top.add(new ShowCardAndPoofAction(c));
             AbstractDungeon.player.cardInUse = null;
             __instance.isDone = true;
             return SpireReturn.Return();

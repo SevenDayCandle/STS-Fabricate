@@ -5,7 +5,7 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import pinacolada.actions.PCLAction;
 import pinacolada.effects.AttackEffects;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
 
 public class DarkOrbEvokeAction extends PCLAction
@@ -38,7 +38,7 @@ public class DarkOrbEvokeAction extends PCLAction
             int actualDamage = AbstractOrb.applyLockOn(enemy, amount);
             if (actualDamage > 0)
             {
-                GameActions.top.dealDamage(source, enemy, actualDamage, DamageInfo.DamageType.THORNS, AttackEffects.DARKNESS)
+                PCLActions.top.dealDamage(source, enemy, actualDamage, DamageInfo.DamageType.THORNS, AttackEffects.DARKNESS)
                         .setVFX(true, false);
             }
         }

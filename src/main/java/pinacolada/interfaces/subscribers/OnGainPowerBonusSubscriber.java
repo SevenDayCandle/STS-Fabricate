@@ -1,8 +1,8 @@
 package pinacolada.interfaces.subscribers;
 
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 
 public interface OnGainPowerBonusSubscriber
 {
-    float onGainPowerBonus(String powerID, CombatStats.Type gainType, float amount);
+    float onGainPowerBonus(String powerID, CombatManager.Type gainType, float amount);
 }

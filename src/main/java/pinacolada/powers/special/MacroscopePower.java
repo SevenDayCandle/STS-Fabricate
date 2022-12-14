@@ -11,7 +11,7 @@ import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import pinacolada.interfaces.markers.MultiplicativePower;
 import pinacolada.interfaces.subscribers.OnModifyMagicNumberSubscriber;
 import pinacolada.interfaces.subscribers.OnOrbApplyFocusSubscriber;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.powers.PCLPower;
 import pinacolada.relics.pcl.Macroscope;
 import pinacolada.resources.PGR;
@@ -31,8 +31,8 @@ public class MacroscopePower extends PCLPower implements InvisiblePower, OnModif
         owner.healthBarUpdatedEvent();
         if (owner instanceof AbstractPlayer)
         {
-            CombatStats.onModifyMagicNumber.subscribe(this);
-            CombatStats.onOrbApplyFocus.subscribe(this);
+            CombatManager.onModifyMagicNumber.subscribe(this);
+            CombatManager.onOrbApplyFocus.subscribe(this);
             PGR.core.dungeon.setDivisor(Macroscope.MULTIPLIER);
         }
     }
@@ -60,7 +60,7 @@ public class MacroscopePower extends PCLPower implements InvisiblePower, OnModif
     public void onRemove()
     {
         super.onRemove();
-        CombatStats.onModifyMagicNumber.unsubscribe(this);
+        CombatManager.onModifyMagicNumber.unsubscribe(this);
         if (PGR.core.dungeon.getDivisor() > 1)
         {
             owner.maxHealth = Math.max(1, AbstractDungeon.player.maxHealth / Macroscope.MULTIPLIER);

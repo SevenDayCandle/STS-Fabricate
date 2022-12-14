@@ -10,10 +10,10 @@ import javassist.CannotCompileException;
 import javassist.expr.ExprEditor;
 import javassist.expr.MethodCall;
 import pinacolada.cards.base.fields.PCLCardTag;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
 import pinacolada.interfaces.subscribers.OnAddedToDrawPileSubscriber;
 import pinacolada.resources.PGR;
-import pinacolada.utilities.GameEffects;
 import pinacolada.utilities.ListSelection;
 
 // Adapted from Animator
@@ -53,7 +53,7 @@ public class SoulPatches
             if (obtain && !PGR.core.dungeon.tryObtainCard(card))
             {
                 SFX.play(SFX.CARD_BURN, 0.8f, 1.2f, 0.5f);
-                GameEffects.TopLevelQueue.add(new CardPoofEffect(card.current_x, card.current_y));
+                PCLEffects.TopLevelQueue.add(new CardPoofEffect(card.current_x, card.current_y));
                 return SpireReturn.Return();
             }
 

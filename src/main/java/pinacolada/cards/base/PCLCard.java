@@ -58,7 +58,7 @@ import pinacolada.interfaces.listeners.OnRemovedFromDeckListener;
 import pinacolada.interfaces.listeners.OnSetFormListener;
 import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.markers.Hidden;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.patches.screens.GridCardSelectScreenMultiformPatches;
 import pinacolada.powers.PCLPower;
 import pinacolada.powers.common.PCLLockOnPower;
@@ -78,7 +78,7 @@ import pinacolada.skills.skills.special.PMove_GainCardBlock;
 import pinacolada.skills.skills.special.moves.PMove_StackCustomPower;
 import pinacolada.ui.cards.DrawPileCardPreview;
 import pinacolada.ui.combat.PowerFormulaDisplay;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 import pinacolada.utilities.RotatingList;
@@ -1125,7 +1125,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     }
 
     public boolean hasSynergy() {
-        return CombatStats.playerSystem.isMatch(this) || CombatStats.playerSystem.wouldMatch(this);
+        return CombatManager.playerSystem.isMatch(this) || CombatManager.playerSystem.wouldMatch(this);
     }
 
     public boolean isAoE() {
@@ -1252,7 +1252,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         boolean applyEnemyPowers = (enemy != null && !GameUtilities.isDeadOrEscaped(enemy));
         float tempBlock = baseBlock;
         float tempDamage = baseDamage;
-        float tempMagicNumber = CombatStats.onModifyMagicNumber(baseMagicNumber, this);
+        float tempMagicNumber = CombatManager.onModifyMagicNumber(baseMagicNumber, this);
         tempDamage = modifyDamage(enemy, tempDamage);
         tempBlock = modifyBlock(enemy, tempBlock);
 
@@ -1291,8 +1291,8 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
                 }
             }
 
-            tempBlock = CombatStats.playerSystem.modifyBlock(tempBlock, parent != null ? parent : this, this, enemy != null ? enemy : owner);
-            tempDamage = CombatStats.playerSystem.modifyDamage(tempDamage, parent != null ? parent : this,this, enemy);
+            tempBlock = CombatManager.playerSystem.modifyBlock(tempBlock, parent != null ? parent : this, this, enemy != null ? enemy : owner);
+            tempDamage = CombatManager.playerSystem.modifyDamage(tempDamage, parent != null ? parent : this,this, enemy);
 
             for (AbstractPower p : owner.powers) {
                 tempBlock = p.modifyBlockLast(tempBlock);
@@ -1338,13 +1338,13 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
                     }
                     addAttackDisplay(p, oldDamage, tempDamage);
                 }
-                tempDamage = CombatStats.onDamageOverride(enemy, damageTypeForTurn, tempDamage, this);
+                tempDamage = CombatManager.onDamageOverride(enemy, damageTypeForTurn, tempDamage, this);
             }
         }
 
         updateBlock(tempBlock);
         updateDamage(tempDamage);
-        updateMagicNumber(modifyMagicNumber(enemy, CombatStats.playerSystem.modifyMagicNumber(tempMagicNumber, parent != null ? parent : this, this)));
+        updateMagicNumber(modifyMagicNumber(enemy, CombatManager.playerSystem.modifyMagicNumber(tempMagicNumber, parent != null ? parent : this, this)));
         updateHitCount(modifyHitCount(enemy, baseHitCount));
         updateRightCount(modifyRightCount(enemy, baseRightCount));
 
@@ -1974,7 +1974,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         super.triggerWhenDrawn();
 
         if (AutoplayField.autoplay.get(this)) {
-            GameActions.last.playCard(this, player.hand, null)
+            PCLActions.last.playCard(this, player.hand, null)
                     .spendEnergy(true)
                     .addCondition(AbstractCard::hasEnoughEnergy);
         }

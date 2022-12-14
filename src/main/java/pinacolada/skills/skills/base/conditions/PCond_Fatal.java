@@ -11,7 +11,7 @@ import pinacolada.skills.PCond;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.List;
@@ -85,7 +85,7 @@ public class PCond_Fatal extends PCond implements PCondWithoutCheck
     protected void useImpl(PCLUseInfo info, ActionT0 callback)
     {
         List<AbstractCreature> targetList = getTargetList(info);
-        GameActions.last.callback(targetList, (targets, __) -> {
+        PCLActions.last.callback(targetList, (targets, __) -> {
             if (targets.size() > 0 && EUIUtils.any(targets, GameUtilities::isDeadOrEscaped) && (!(parent instanceof PCond_Info) || ((PCond_Info) parent).tryActivate(info)))
             {
                 callback.invoke();

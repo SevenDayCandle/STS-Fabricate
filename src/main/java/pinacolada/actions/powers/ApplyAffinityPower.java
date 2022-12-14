@@ -7,8 +7,8 @@ import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.vfx.combat.PowerBuffEffect;
 import pinacolada.actions.PCLActionWithCallback;
 import pinacolada.cards.base.PCLAffinity;
+import pinacolada.effects.PCLEffects;
 import pinacolada.powers.PCLAffinityPower;
-import pinacolada.utilities.GameEffects;
 import pinacolada.utilities.GameUtilities;
 
 public class ApplyAffinityPower extends PCLActionWithCallback<AbstractPower>
@@ -67,7 +67,7 @@ public class ApplyAffinityPower extends PCLActionWithCallback<AbstractPower>
 
         if (showEffect)
         {
-            GameEffects.List.add(new PowerBuffEffect(target.hb.cX - target.animX, target.hb.cY + target.hb.height / 2f, "+" + amount + " " + power.name));
+            PCLEffects.List.add(new PowerBuffEffect(target.hb.cX - target.animX, target.hb.cY + target.hb.height / 2f, "+" + amount + " " + power.name));
         }
 
         AbstractDungeon.onModifyPower();

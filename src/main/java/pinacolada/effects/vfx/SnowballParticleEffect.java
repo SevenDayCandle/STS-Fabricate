@@ -10,8 +10,8 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.vfx.combat.LightFlareParticleEffect;
 import extendedui.ui.TextureCache;
 import pinacolada.effects.PCLEffect;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.VFX;
-import pinacolada.utilities.GameEffects;
 import pinacolada.utilities.RandomizedList;
 
 public class SnowballParticleEffect extends PCLEffect
@@ -128,7 +128,7 @@ public class SnowballParticleEffect extends PCLEffect
             {
                 if (MathUtils.randomBoolean())
                 {
-                    GameEffects.Queue.add(new LightFlareParticleEffect(x, y, color));
+                    PCLEffects.Queue.add(new LightFlareParticleEffect(x, y, color));
                 }
                 vfxTimer = vfxFrequency;
             }

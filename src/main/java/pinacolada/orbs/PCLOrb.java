@@ -12,15 +12,15 @@ import com.megacrit.cardcrawl.powers.FocusPower;
 import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIColors;
+import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLAffinity;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
 import pinacolada.effects.vfx.OrbEvokeParticle;
 import pinacolada.effects.vfx.megacritCopy.OrbFlareEffect2;
 import pinacolada.interfaces.subscribers.OnStartOfTurnPostDrawSubscriber;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.resources.PGR;
-import pinacolada.utilities.GameActions;
-import pinacolada.utilities.GameEffects;
 import pinacolada.utilities.GameUtilities;
 
 import java.lang.reflect.InvocationTargetException;
@@ -79,7 +79,7 @@ public abstract class PCLOrb extends AbstractOrb implements OnStartOfTurnPostDra
     {
         if (passiveEffectTiming == Timing.StartOfTurnPostDraw)
         {
-            CombatStats.onStartOfTurnPostDraw.subscribeOnce(this);
+            CombatManager.onStartOfTurnPostDraw.subscribeOnce(this);
         }
     }
 
@@ -88,7 +88,7 @@ public abstract class PCLOrb extends AbstractOrb implements OnStartOfTurnPostDra
     {
         for (int i = 0; i < 4; i++)
         {
-            GameEffects.Queue.add(new OrbEvokeParticle(this.cX, this.cY, EUIColors.lerp(getColor1(), getColor2(), MathUtils.random(0, 0.5f))));
+            PCLEffects.Queue.add(new OrbEvokeParticle(this.cX, this.cY, EUIColors.lerp(getColor1(), getColor2(), MathUtils.random(0, 0.5f))));
         }
     }
 
@@ -142,7 +142,7 @@ public abstract class PCLOrb extends AbstractOrb implements OnStartOfTurnPostDra
         {
             if (AbstractDungeon.player.orbs.contains(this))
             {
-                CombatStats.onStartOfTurnPostDraw.subscribeOnce(this);
+                CombatManager.onStartOfTurnPostDraw.subscribeOnce(this);
                 passive();
             }
         }
@@ -153,10 +153,10 @@ public abstract class PCLOrb extends AbstractOrb implements OnStartOfTurnPostDra
         final OrbFlareEffect2 effect = getOrbFlareEffect();
         if (effect != null)
         {
-            GameActions.bottom.playVFX(effect, Settings.FAST_MODE ? 0 : (0.6F / (float)AbstractDungeon.player.orbs.size()));
+            PCLActions.bottom.playVFX(effect, Settings.FAST_MODE ? 0 : (0.6F / (float)AbstractDungeon.player.orbs.size()));
         }
 
-        CombatStats.onOrbPassiveEffect(this);
+        CombatManager.onOrbPassiveEffect(this);
     }
 
     public void evoke()
@@ -238,7 +238,7 @@ public abstract class PCLOrb extends AbstractOrb implements OnStartOfTurnPostDra
                 this.evokeAmount = Math.max(0, this.baseEvokeAmount + focus);
             }
         }
-        CombatStats.onOrbApplyFocus(this);
+        CombatManager.onOrbApplyFocus(this);
     }
 
 

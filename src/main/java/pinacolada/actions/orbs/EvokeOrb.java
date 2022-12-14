@@ -6,7 +6,7 @@ import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
 import extendedui.utilities.GenericCondition;
 import pinacolada.actions.PCLActionWithCallback;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RandomizedList;
 
@@ -69,7 +69,7 @@ public class EvokeOrb extends PCLActionWithCallback<ArrayList<AbstractOrb>>
         }
         if (amount > 0)
         {
-            GameActions.top.add(new EvokeSpecificOrbAction(orb));
+            PCLActions.top.add(new EvokeSpecificOrbAction(orb));
             orbs.add(orb);
         }
     }

@@ -7,8 +7,8 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import pinacolada.cards.base.fields.PCLCardTag;
 import pinacolada.cards.base.modifiers.OverrideSkillModifier;
-import pinacolada.misc.CombatStats;
-import pinacolada.utilities.GameActions;
+import pinacolada.misc.CombatManager;
+import pinacolada.actions.PCLActions;
 
 public class AbstractCardPatches
 {
@@ -107,7 +107,7 @@ public class AbstractCardPatches
         @SpirePrefixPatch
         public static SpireReturn<Void> method(AbstractCard __instance)
         {
-            CombatStats.onCardDiscarded(__instance);
+            CombatManager.onCardDiscarded(__instance);
             return quitIfOverride(__instance);
         }
     }
@@ -130,7 +130,7 @@ public class AbstractCardPatches
         {
             if (PCLCardTag.Fragile.has(__instance))
             {
-                GameActions.last.exhaust(__instance);
+                PCLActions.last.exhaust(__instance);
             }
             if (!OverrideSkillModifier.getAll(__instance).isEmpty())
             {

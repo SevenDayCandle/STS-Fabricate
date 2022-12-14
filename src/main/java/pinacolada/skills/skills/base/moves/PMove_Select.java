@@ -12,7 +12,7 @@ import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.utilities.CardSelection;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 
 public abstract class PMove_Select extends PMove implements SelectFromPileMarker
 {
@@ -43,7 +43,7 @@ public abstract class PMove_Select extends PMove implements SelectFromPileMarker
     {
         if (!useParent && groupTypes.isEmpty())
         {
-            GameActions.last.add(createAction(info))
+            PCLActions.last.add(createAction(info))
                     .setOptions(true, true)
                     .addCallback(cards -> {
                         if (this.childEffect != null)

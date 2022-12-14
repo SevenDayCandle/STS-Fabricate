@@ -10,13 +10,13 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.actions.PCLActionWithCallback;
+import pinacolada.actions.PCLActions;
 import pinacolada.effects.AttackEffects;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.PCLEffekseerEFX;
 import pinacolada.effects.VFX;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.powers.common.StolenGoldPower;
-import pinacolada.utilities.GameActions;
-import pinacolada.utilities.GameEffects;
 import pinacolada.utilities.GameUtilities;
 
 public class DealDamage extends PCLActionWithCallback<AbstractCreature>
@@ -116,7 +116,7 @@ public class DealDamage extends PCLActionWithCallback<AbstractCreature>
         {
             if (GameUtilities.getEnemies(true).size() > 0)
             {
-                GameActions.top.add(new DealDamage(GameUtilities.getRandomEnemy(true), this));
+                PCLActions.top.add(new DealDamage(GameUtilities.getRandomEnemy(true), this));
             }
 
             complete();
@@ -130,7 +130,7 @@ public class DealDamage extends PCLActionWithCallback<AbstractCreature>
 
         if (this.goldAmount > 0)
         {
-            GameActions.instant.applyPower(source, new StolenGoldPower(target, goldAmount));
+            PCLActions.instant.applyPower(source, new StolenGoldPower(target, goldAmount));
         }
     }
 
@@ -146,7 +146,7 @@ public class DealDamage extends PCLActionWithCallback<AbstractCreature>
         if (!hasPlayedEffect && duration <= 0.1f)
         {
             addDuration(AttackEffects.getDamageDelay(attackEffect));
-            GameEffects.List.attack(source, target, attackEffect, pitchMin, pitchMax, vfxColor);
+            PCLEffects.List.attack(source, target, attackEffect, pitchMin, pitchMax, vfxColor);
             hasPlayedEffect = true;
         }
 
@@ -167,7 +167,7 @@ public class DealDamage extends PCLActionWithCallback<AbstractCreature>
 
             if (orb != null)
             {
-                this.info.output = CombatStats.playerSystem.modifyOrbOutput(this.info.output, target, orb);
+                this.info.output = CombatManager.playerSystem.modifyOrbOutput(this.info.output, target, orb);
             }
 
             if (!canKill)
@@ -184,7 +184,7 @@ public class DealDamage extends PCLActionWithCallback<AbstractCreature>
 
             if (!this.skipWait && !Settings.FAST_MODE)
             {
-                GameActions.top.wait(0.1f);
+                PCLActions.top.wait(0.1f);
             }
 
             complete(target);

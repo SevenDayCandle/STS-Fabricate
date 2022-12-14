@@ -5,7 +5,7 @@ import extendedui.EUIUtils;
 import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -58,10 +58,10 @@ public class PMod_HighestAffinityBranch extends PMod_Branch<PCLAffinity>
     @Override
     public void use(PCLUseInfo info)
     {
-        int max = EUIUtils.max(PCLAffinity.getAvailableAffinities(), CombatStats.playerSystem::getLevel);
+        int max = EUIUtils.max(PCLAffinity.getAvailableAffinities(), CombatManager.playerSystem::getLevel);
         if (max > extra)
         {
-            branch(info, EUIUtils.filter(PCLAffinity.getAvailableAffinities(), af -> CombatStats.playerSystem.getLevel(af) >= max));
+            branch(info, EUIUtils.filter(PCLAffinity.getAvailableAffinities(), af -> CombatManager.playerSystem.getLevel(af) >= max));
         }
     }
 }

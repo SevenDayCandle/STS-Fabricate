@@ -6,7 +6,7 @@ import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
 
 import java.lang.reflect.Constructor;
@@ -105,7 +105,7 @@ public class TemporaryPower extends PCLPower
         {
             if (amount < 0 && constructorT2 != null)
             {
-                GameActions.top.applyPower(constructorT2.invoke(owner, -amount)).ignoreArtifact(true);
+                PCLActions.top.applyPower(constructorT2.invoke(owner, -amount)).ignoreArtifact(true);
             }
             removePower();
         }
@@ -140,11 +140,11 @@ public class TemporaryPower extends PCLPower
     {
         if (constructorT2 != null)
         {
-            GameActions.top.applyPower(constructorT2.invoke(owner, difference)).ignoreArtifact(true).addCallback(this::removeSourcePower);
+            PCLActions.top.applyPower(constructorT2.invoke(owner, difference)).ignoreArtifact(true).addCallback(this::removeSourcePower);
         }
         else if (constructorT1 != null && previousAmount + difference != 0)
         {
-            GameActions.top.applyPower(constructorT1.invoke(owner)).ignoreArtifact(true).addCallback(this::removeSourcePower);
+            PCLActions.top.applyPower(constructorT1.invoke(owner)).ignoreArtifact(true).addCallback(this::removeSourcePower);
         }
 
         super.onAmountChanged(previousAmount, difference);
@@ -154,7 +154,7 @@ public class TemporaryPower extends PCLPower
     {
         if (GameUtilities.getPowerAmount(sourcePowerID) <= 0 && !sourcePowerCanBeNegative)
         {
-            GameActions.bottom.removePower(owner, owner, sourcePowerID);
+            PCLActions.bottom.removePower(owner, owner, sourcePowerID);
         }
     }
 

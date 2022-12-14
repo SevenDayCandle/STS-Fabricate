@@ -4,7 +4,7 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.RitualPower;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PGR;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
 
 public class GlyphBlight1 extends AbstractGlyphBlight
@@ -26,7 +26,7 @@ public class GlyphBlight1 extends AbstractGlyphBlight
         {
             for (AbstractMonster mo : GameUtilities.getEnemies(true))
             {
-                GameActions.top.applyPower(mo, new RitualPower(mo, potency, false));
+                PCLActions.top.applyPower(mo, new RitualPower(mo, potency, false));
             }
         }
     }

@@ -9,8 +9,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.core.Settings;
 import extendedui.ui.TextureCache;
 import pinacolada.effects.PCLEffect;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.VFX;
-import pinacolada.utilities.GameEffects;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class HexagonEffect extends PCLEffect
@@ -97,7 +97,7 @@ public class HexagonEffect extends PCLEffect
             vfxTimer -= deltaTime;
             if (vfxTimer < 0f)
             {
-                GameEffects.Queue.add(new FadingParticleEffect(this.img, this.x + SIZE * MathUtils.cos(rotation), this.y + SIZE * MathUtils.sin(rotation))
+                PCLEffects.Queue.add(new FadingParticleEffect(this.img, this.x + SIZE * MathUtils.cos(rotation), this.y + SIZE * MathUtils.sin(rotation))
                         .setOpacity(0.75f)
                         .setBlendingMode(PCLRenderHelpers.BlendingMode.Glowing)
                         .setColor(this.color.cpy())

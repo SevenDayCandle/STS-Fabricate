@@ -9,7 +9,7 @@ import pinacolada.effects.AttackEffects;
 import pinacolada.effects.SFX;
 import pinacolada.powers.PCLPower;
 import pinacolada.ui.combat.CombatHelper;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 
 public class BlastedPower extends PCLPower implements HealthBarRenderPower
 {
@@ -40,7 +40,7 @@ public class BlastedPower extends PCLPower implements HealthBarRenderPower
     {
         this.flashWithoutSound();
 
-        GameActions.bottom.loseHP(source, owner, getPassiveDamage(), AttackEffects.SMALL_EXPLOSION)
+        PCLActions.bottom.loseHP(source, owner, getPassiveDamage(), AttackEffects.SMALL_EXPLOSION)
                 .canKill(owner == null || !owner.isPlayer);
         reducePower(1);
     }

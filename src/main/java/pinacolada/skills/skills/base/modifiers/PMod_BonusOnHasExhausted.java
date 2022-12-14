@@ -2,7 +2,7 @@ package pinacolada.skills.skills.base.modifiers;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.ui.tooltips.EUITooltip;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -37,7 +37,7 @@ public class PMod_BonusOnHasExhausted extends PMod_BonusOnHas
     @Override
     public List<AbstractCard> getCardPile()
     {
-        return CombatStats.cardsExhaustedThisTurn();
+        return CombatManager.cardsExhaustedThisTurn();
     }
 
     @Override

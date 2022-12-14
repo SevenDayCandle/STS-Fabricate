@@ -8,8 +8,8 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.vfx.BorderFlashEffect;
 import com.megacrit.cardcrawl.vfx.BorderLongFlashEffect;
 import pinacolada.effects.PCLEffect;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.VFX;
-import pinacolada.utilities.GameEffects;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RandomizedList;
 
@@ -45,7 +45,7 @@ public class CataclysmEffect extends PCLEffect
     {
         super.firstUpdate();
 
-        GameEffects.Queue.add(new BorderLongFlashEffect(Color.VIOLET, false));
+        PCLEffects.Queue.add(new BorderLongFlashEffect(Color.VIOLET, false));
     }
 
     @Override
@@ -66,9 +66,9 @@ public class CataclysmEffect extends PCLEffect
             AbstractMonster target = enemies.retrieve(RNG);
             if (target != null)
             {
-                GameEffects.Queue.add(VFX.fireball(sky_hb1, target.hb).setColor(Color.RED, Color.ORANGE));
-                GameEffects.Queue.add(VFX.fireball(sky_hb2, target.hb).setColor(Color.GOLDENROD, Color.VIOLET));
-                GameEffects.Queue.add(VFX.meteorFall(target.hb));
+                PCLEffects.Queue.add(VFX.fireball(sky_hb1, target.hb).setColor(Color.RED, Color.ORANGE));
+                PCLEffects.Queue.add(VFX.fireball(sky_hb2, target.hb).setColor(Color.GOLDENROD, Color.VIOLET));
+                PCLEffects.Queue.add(VFX.meteorFall(target.hb));
             }
         }
 
@@ -76,8 +76,8 @@ public class CataclysmEffect extends PCLEffect
         if (delay2 < 0)
         {
             delay2 = random(0.6f, 1f);
-            GameEffects.Queue.add(new BorderFlashEffect(randomBoolean(0.5f) ? Color.RED : Color.ORANGE));
-            GameEffects.Queue.add(VFX.whirlwind());
+            PCLEffects.Queue.add(new BorderFlashEffect(randomBoolean(0.5f) ? Color.RED : Color.ORANGE));
+            PCLEffects.Queue.add(VFX.whirlwind());
         }
 
         delay3 -= deltaTime;
@@ -88,14 +88,14 @@ public class CataclysmEffect extends PCLEffect
             {
                 for (int f = 0; f < 18; f++)
                 {
-                    GameEffects.Queue.add(VFX.fallingIce(18));
+                    PCLEffects.Queue.add(VFX.fallingIce(18));
                 }
             }
             else
             {
                 for (AbstractMonster m : GameUtilities.getEnemies(true))
                 {
-                    GameEffects.Queue.add(VFX.lightning(m.hb));
+                    PCLEffects.Queue.add(VFX.lightning(m.hb));
                 }
             }
         }

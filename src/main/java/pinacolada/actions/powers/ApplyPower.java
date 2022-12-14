@@ -16,12 +16,12 @@ import com.megacrit.cardcrawl.vfx.combat.PowerBuffEffect;
 import com.megacrit.cardcrawl.vfx.combat.PowerDebuffEffect;
 import extendedui.EUIUtils;
 import pinacolada.actions.PCLActionWithCallback;
-import pinacolada.misc.CombatStats;
+import pinacolada.actions.PCLActions;
+import pinacolada.effects.PCLEffects;
+import pinacolada.misc.CombatManager;
 import pinacolada.patches.actions.ApplyPowerActionPatches;
 import pinacolada.powers.PCLPower;
 import pinacolada.powers.common.ResistancePower;
-import pinacolada.utilities.GameActions;
-import pinacolada.utilities.GameEffects;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.Collections;
@@ -109,20 +109,20 @@ public class ApplyPower extends PCLActionWithCallback<AbstractPower>
 
             if (amount <= 0 && powerToApply.canGoNegative)
             {
-                GameEffects.List.add(new PowerDebuffEffect(target.hb.cX - target.animX,
+                PCLEffects.List.add(new PowerDebuffEffect(target.hb.cX - target.animX,
                         target.hb.cY + target.hb.height / 2f, powerToApply.name + TEXT[3]));
             }
             else if (powerToApply.type == AbstractPower.PowerType.BUFF)
             {
-                GameEffects.List.add(new PowerBuffEffect(target.hb.cX - target.animX, target.hb.cY + target.hb.height / 2f, powerToApply.name));
+                PCLEffects.List.add(new PowerBuffEffect(target.hb.cX - target.animX, target.hb.cY + target.hb.height / 2f, powerToApply.name));
             }
             else
             {
-                GameEffects.List.add(new PowerDebuffEffect(target.hb.cX - target.animX, target.hb.cY + target.hb.height / 2f, powerToApply.name));
+                PCLEffects.List.add(new PowerDebuffEffect(target.hb.cX - target.animX, target.hb.cY + target.hb.height / 2f, powerToApply.name));
             }
         }
 
-        CombatStats.onApplyPower(source, target, powerToApply);
+        CombatManager.onApplyPower(source, target, powerToApply);
         AbstractDungeon.onModifyPower();
         if (target.isPlayer)
         {
@@ -248,7 +248,7 @@ public class ApplyPower extends PCLActionWithCallback<AbstractPower>
 
         if (showEffect)
         {
-            GameEffects.List.add(new FlashAtkImgEffect(target.hb.cX, target.hb.cY, attackEffect));
+            PCLEffects.List.add(new FlashAtkImgEffect(target.hb.cX, target.hb.cY, attackEffect));
         }
 
 
@@ -284,7 +284,7 @@ public class ApplyPower extends PCLActionWithCallback<AbstractPower>
         AbstractPower artifact = target.getPower(ArtifactPower.POWER_ID);
         if (artifact != null)
         {
-            GameActions.top.add(new TextAboveCreatureAction(target, TEXT[0]));
+            PCLActions.top.add(new TextAboveCreatureAction(target, TEXT[0]));
 
             CardCrawlGame.sound.play("NULLIFY_SFX");
             artifact.flashWithoutSound();
@@ -341,7 +341,7 @@ public class ApplyPower extends PCLActionWithCallback<AbstractPower>
             AbstractRelic relic = player.getRelic(Ginger.ID);
             if (relic != null)
             {
-                GameActions.top.add(new TextAboveCreatureAction(target, TEXT[1]));
+                PCLActions.top.add(new TextAboveCreatureAction(target, TEXT[1]));
                 relic.flash();
 
                 return true;
@@ -352,7 +352,7 @@ public class ApplyPower extends PCLActionWithCallback<AbstractPower>
             AbstractRelic relic = player.getRelic(Turnip.ID);
             if (relic != null)
             {
-                GameActions.top.add(new TextAboveCreatureAction(target, TEXT[1]));
+                PCLActions.top.add(new TextAboveCreatureAction(target, TEXT[1]));
                 relic.flash();
 
                 return true;
@@ -409,7 +409,7 @@ public class ApplyPower extends PCLActionWithCallback<AbstractPower>
             final PCLPower p = EUIUtils.safeCast(power, PCLPower.class);
             if (power.amount == 0 && (p == null || !p.canBeZero))
             {
-                GameActions.top.removePower(source, target, power);
+                PCLActions.top.removePower(source, target, power);
             }
         }
 
@@ -420,36 +420,36 @@ public class ApplyPower extends PCLActionWithCallback<AbstractPower>
 
             if (amount <= 0 && power.canGoNegative)
             {
-                GameEffects.List.add(new PowerDebuffEffect(target.hb.cX - target.animX,
+                PCLEffects.List.add(new PowerDebuffEffect(target.hb.cX - target.animX,
                         target.hb.cY + target.hb.height / 2f, powerToApply.name + TEXT[3]));
             }
             else if (amount > 0)
             {
                 if (power.type != AbstractPower.PowerType.BUFF && !power.canGoNegative)
                 {
-                    GameEffects.List.add(new PowerDebuffEffect(target.hb.cX - target.animX,
+                    PCLEffects.List.add(new PowerDebuffEffect(target.hb.cX - target.animX,
                             target.hb.cY + target.hb.height / 2f, "+" + amount + " " + powerToApply.name));
                 }
                 else
                 {
-                    GameEffects.List.add(new PowerBuffEffect(target.hb.cX - target.animX,
+                    PCLEffects.List.add(new PowerBuffEffect(target.hb.cX - target.animX,
                             target.hb.cY + target.hb.height / 2f, "+" + amount + " " + powerToApply.name));
                 }
             }
             else if (power.type == AbstractPower.PowerType.BUFF)
             {
-                GameEffects.List.add(new PowerBuffEffect(target.hb.cX - target.animX,
+                PCLEffects.List.add(new PowerBuffEffect(target.hb.cX - target.animX,
                         target.hb.cY + target.hb.height / 2f, powerToApply.name + TEXT[3]));
             }
             else
             {
-                GameEffects.List.add(new PowerDebuffEffect(target.hb.cX - target.animX,
+                PCLEffects.List.add(new PowerDebuffEffect(target.hb.cX - target.animX,
                         target.hb.cY + target.hb.height / 2f, powerToApply.name + TEXT[3]));
             }
         }
 
         power.updateDescription();
-        CombatStats.onApplyPower(source, target, powerToApply);
+        CombatManager.onApplyPower(source, target, powerToApply);
         AbstractDungeon.onModifyPower();
     }
 }

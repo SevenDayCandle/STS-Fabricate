@@ -8,7 +8,7 @@ import extendedui.interfaces.delegates.FuncT2;
 import extendedui.utilities.GenericCondition;
 import pinacolada.actions.PCLActionWithCallback;
 import pinacolada.utilities.CardSelection;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 import pinacolada.utilities.ListSelection;
 
 import java.util.ArrayList;
@@ -76,7 +76,7 @@ public class MoveCards extends PCLActionWithCallback<ArrayList<AbstractCard>>
     private void moveCard(AbstractCard card)
     {
         selectedCards.add(card);
-        GameActions.top.moveCard(card, sourcePile, targetPile)
+        PCLActions.top.moveCard(card, sourcePile, targetPile)
                 .showEffect(showEffect, realtime, effectDuration)
                 .setDestination(destination);
     }

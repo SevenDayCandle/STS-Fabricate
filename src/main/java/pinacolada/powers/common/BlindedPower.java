@@ -10,7 +10,7 @@ import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.utilities.ColoredString;
 import pinacolada.interfaces.subscribers.OnChannelOrbSubscriber;
 import pinacolada.interfaces.subscribers.OnEvokeOrbSubscriber;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.powers.PCLPower;
 import pinacolada.utilities.GameUtilities;
 
@@ -33,7 +33,7 @@ public class BlindedPower extends PCLPower implements OnChannelOrbSubscriber, On
 
     public static int getDamageReduction()
     {
-        return (GameUtilities.hasOrb(Dark.ORB_ID) ? DAMAGE_REDUCTION_LV2 : DAMAGE_REDUCTION_LV1) + (int) CombatStats.getEffectBonus(POWER_ID);
+        return (GameUtilities.hasOrb(Dark.ORB_ID) ? DAMAGE_REDUCTION_LV2 : DAMAGE_REDUCTION_LV1) + (int) CombatManager.getEffectBonus(POWER_ID);
     }
 
     @Override
@@ -53,8 +53,8 @@ public class BlindedPower extends PCLPower implements OnChannelOrbSubscriber, On
     {
         super.onInitialApplication();
 
-        CombatStats.onChannelOrb.subscribe(this);
-        CombatStats.onEvokeOrb.subscribe(this);
+        CombatManager.onChannelOrb.subscribe(this);
+        CombatManager.onEvokeOrb.subscribe(this);
     }
 
     @Override
@@ -62,8 +62,8 @@ public class BlindedPower extends PCLPower implements OnChannelOrbSubscriber, On
     {
         super.onRemove();
 
-        CombatStats.onChannelOrb.unsubscribe(this);
-        CombatStats.onEvokeOrb.unsubscribe(this);
+        CombatManager.onChannelOrb.unsubscribe(this);
+        CombatManager.onEvokeOrb.unsubscribe(this);
     }
 
     @Override

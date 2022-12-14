@@ -2,7 +2,7 @@ package pinacolada.actions.utility;
 
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import pinacolada.actions.PCLAction;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 
 public class SequentialAction extends PCLAction
 {
@@ -24,7 +24,7 @@ public class SequentialAction extends PCLAction
     {
         if (updateAction())
         {
-            GameActions.top.add(action2);
+            PCLActions.top.add(action2);
 
             this.isDone = true;
         }

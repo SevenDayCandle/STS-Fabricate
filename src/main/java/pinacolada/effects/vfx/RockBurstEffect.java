@@ -7,10 +7,10 @@ import com.megacrit.cardcrawl.core.Settings;
 import extendedui.ui.TextureCache;
 import extendedui.utilities.EUIColors;
 import pinacolada.effects.PCLEffect;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
 import pinacolada.effects.VFX;
 import pinacolada.resources.PGR;
-import pinacolada.utilities.GameEffects;
 import pinacolada.utilities.RandomizedList;
 
 public class RockBurstEffect extends PCLEffect
@@ -46,12 +46,12 @@ public class RockBurstEffect extends PCLEffect
     protected void firstUpdate()
     {
         SFX.play(scale > 1 ? SFX.BLUNT_HEAVY : SFX.BLUNT_FAST, 0.9f, 1.1f);
-        GameEffects.Queue.add(VFX.whack(x, y).setScale(0.25f * Settings.scale).setColor(Color.TAN));
+        PCLEffects.Queue.add(VFX.whack(x, y).setScale(0.25f * Settings.scale).setColor(Color.TAN));
 
         for (int i = 0; i < PROJECTILES; ++i)
         {
             float angle = random(-500f, 500f);
-            GameEffects.Queue.add(new FadingParticleEffect(getRandomTexture(), x, y)
+            PCLEffects.Queue.add(new FadingParticleEffect(getRandomTexture(), x, y)
                             .setColor(EUIColors.random(0.7f, 1f, true))
                             .setScale(scale * random(0.18f, 0.66f))
                             .setRotation(0, random(500f, 800f))

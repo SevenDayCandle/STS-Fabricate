@@ -5,7 +5,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import extendedui.interfaces.delegates.FuncT0;
 import pinacolada.actions.PCLActionWithCallback;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -67,7 +67,7 @@ public class InduceOrb extends PCLActionWithCallback<ArrayList<AbstractOrb>>
             for (int i = 0; i < times; i++)
             {
                 orb.applyFocus();
-                GameActions.top.callback(new EvokeSpecificOrbAction(orb))
+                PCLActions.top.callback(new EvokeSpecificOrbAction(orb))
                         .addCallback(() -> {
                             while (player.orbs.size() > this.initialOrbSlotCount)
                             {

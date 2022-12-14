@@ -7,8 +7,8 @@ import com.badlogic.gdx.math.MathUtils;
 import extendedui.ui.TextureCache;
 import extendedui.utilities.EUIColors;
 import pinacolada.effects.PCLEffect;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.VFX;
-import pinacolada.utilities.GameEffects;
 
 import java.util.ArrayList;
 
@@ -98,10 +98,10 @@ public class StarEffect extends PCLEffect
         vfxTimer -= deltaTime;
         if (vfxTimer < 0f)
         {
-            GameEffects.Queue.add(new StarParticleEffect(x, y, random(-120f, -30f) * Math.signum(horizontalSpeed), random(-60f, 60f), random(0.01f, 0.28f) * Math.min(1f, this.scale), EUIColors.random(0.83f, 1f, false)));
+            PCLEffects.Queue.add(new StarParticleEffect(x, y, random(-120f, -30f) * Math.signum(horizontalSpeed), random(-60f, 60f), random(0.01f, 0.28f) * Math.min(1f, this.scale), EUIColors.random(0.83f, 1f, false)));
             if (randomBoolean(0.72f) && this.scale >= 0.7f)
             {
-                GameEffects.Queue.add(new StarEffect(x, y, horizontalSpeed * -0.25f, random(-horizontalSpeed * 0.05f, horizontalSpeed * 0.05f), random(-1000f, 1000f), random(0.05f, Math.min(0.5f, this.scale))));
+                PCLEffects.Queue.add(new StarEffect(x, y, horizontalSpeed * -0.25f, random(-horizontalSpeed * 0.05f, horizontalSpeed * 0.05f), random(-1000f, 1000f), random(0.05f, Math.min(0.5f, this.scale))));
             }
             vfxTimer = vfxFrequency;
         }

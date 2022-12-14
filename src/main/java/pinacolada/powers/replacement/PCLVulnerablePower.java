@@ -6,7 +6,7 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.powers.VulnerablePower;
 import pinacolada.interfaces.markers.MultiplicativePower;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
@@ -30,7 +30,7 @@ public class PCLVulnerablePower extends VulnerablePower implements CloneablePowe
 
     public float getMultiplier()
     {
-        return (GameUtilities.isPlayer(owner)) ? (CombatStats.getPlayerEffectBonus(ID)) : (CombatStats.getEffectBonus(ID));
+        return (GameUtilities.isPlayer(owner)) ? (CombatManager.getPlayerEffectBonus(ID)) : (CombatManager.getEffectBonus(ID));
     }
 
     @Override

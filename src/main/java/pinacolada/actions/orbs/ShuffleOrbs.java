@@ -2,7 +2,7 @@ package pinacolada.actions.orbs;
 
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import pinacolada.actions.PCLAction;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RandomizedList;
 
@@ -50,7 +50,7 @@ public class ShuffleOrbs extends PCLAction
 
         if (amount > 1)
         {
-            GameActions.bottom.add(new ShuffleOrbs(amount - 1));
+            PCLActions.bottom.add(new ShuffleOrbs(amount - 1));
         }
 
         complete();

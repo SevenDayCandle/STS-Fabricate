@@ -3,7 +3,7 @@ package pinacolada.powers.common;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import pinacolada.interfaces.subscribers.OnPCLClickablePowerUsed;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.powers.PCLPower;
 
 public class InnovationPower extends PCLPower implements OnPCLClickablePowerUsed
@@ -30,7 +30,7 @@ public class InnovationPower extends PCLPower implements OnPCLClickablePowerUsed
     {
         super.onInitialApplication();
 
-        CombatStats.onPCLClickablePowerUsed.subscribe(this);
+        CombatManager.onPCLClickablePowerUsed.subscribe(this);
     }
 
     @Override
@@ -38,6 +38,6 @@ public class InnovationPower extends PCLPower implements OnPCLClickablePowerUsed
     {
         super.onRemove();
 
-        CombatStats.onPCLClickablePowerUsed.unsubscribe(this);
+        CombatManager.onPCLClickablePowerUsed.unsubscribe(this);
     }
 }

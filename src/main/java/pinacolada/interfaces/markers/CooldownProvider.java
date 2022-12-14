@@ -5,7 +5,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import extendedui.utilities.ColoredString;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 
 public interface CooldownProvider
 {
@@ -16,7 +16,7 @@ public interface CooldownProvider
     public void activate(AbstractCard card, AbstractCreature m);
     public default void progressCooldownAndTrigger(AbstractCard card, AbstractCreature m, int amount)
     {
-        boolean canProgress = CombatStats.onCooldownTriggered(card, m, this);
+        boolean canProgress = CombatManager.onCooldownTriggered(card, m, this);
         if (canProgress)
         {
             int value = getCooldown();

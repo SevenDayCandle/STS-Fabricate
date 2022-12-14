@@ -3,8 +3,8 @@ package pinacolada.commands;
 import basemod.DevConsole;
 import basemod.devcommands.ConsoleCommand;
 import extendedui.EUIUtils;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.PCLEffekseerEFX;
-import pinacolada.utilities.GameEffects;
 
 import java.util.ArrayList;
 
@@ -28,7 +28,7 @@ public class EffekseerCommand extends ConsoleCommand
     {
         try {
             PCLEffekseerEFX augment = PCLEffekseerEFX.valueOf(tokens[1]);
-            GameEffects.Queue.playEFX(augment);
+            PCLEffects.Queue.playEFX(augment);
         }
         catch (IllegalArgumentException e)
         {

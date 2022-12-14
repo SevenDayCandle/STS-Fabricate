@@ -6,7 +6,7 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.powers.WeakPower;
 import pinacolada.interfaces.markers.MultiplicativePower;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
@@ -35,7 +35,7 @@ public class PCLWeakPower extends WeakPower implements CloneablePowerInterface, 
 
     public float getMultiplier()
     {
-        return (GameUtilities.isPlayer(owner)) ? (CombatStats.getPlayerEffectBonus(ID)) : (CombatStats.getEffectBonus(ID));
+        return (GameUtilities.isPlayer(owner)) ? (CombatManager.getPlayerEffectBonus(ID)) : (CombatManager.getEffectBonus(ID));
     }
 
     @Override

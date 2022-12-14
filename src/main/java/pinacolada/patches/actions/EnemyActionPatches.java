@@ -7,7 +7,7 @@ import com.megacrit.cardcrawl.actions.common.DamageAction;
 import com.megacrit.cardcrawl.actions.unique.VampireDamageAction;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 
 // Make the enemy hit itself (Also VampireDamageAction because it obviously does not inherit from DamageAction)
 public class EnemyActionPatches
@@ -20,7 +20,7 @@ public class EnemyActionPatches
         {
             if (action != null && action.source != null)
             {
-                CombatStats.onDamageAction(action, target, info, effect);
+                CombatManager.onDamageAction(action, target, info, effect);
             }
         }
     }
@@ -33,7 +33,7 @@ public class EnemyActionPatches
         {
             if (action != null && action.source != null)
             {
-                CombatStats.onDamageAction(action, target, info, effect);
+                CombatManager.onDamageAction(action, target, info, effect);
             }
         }
     }

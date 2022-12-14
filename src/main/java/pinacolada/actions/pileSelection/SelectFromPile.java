@@ -15,7 +15,7 @@ import extendedui.utilities.GenericCondition;
 import pinacolada.actions.PCLActionWithCallback;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.CardSelection;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.ListSelection;
 
@@ -258,7 +258,7 @@ public class SelectFromPile extends PCLActionWithCallback<ArrayList<AbstractCard
     {
         for (AbstractCard card : result)
         {
-            GameActions.top.moveCard(card, group).showEffect(showEffect, realtime);
+            PCLActions.top.moveCard(card, group).showEffect(showEffect, realtime);
         }
     }
 

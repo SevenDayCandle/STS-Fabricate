@@ -14,8 +14,8 @@ import com.megacrit.cardcrawl.vfx.cardManip.ShowCardAndAddToDrawPileEffect;
 import com.megacrit.cardcrawl.vfx.cardManip.ShowCardAndAddToHandEffect;
 import extendedui.EUIUtils;
 import pinacolada.actions.PCLActionWithCallback;
-import pinacolada.utilities.GameActions;
-import pinacolada.utilities.GameEffects;
+import pinacolada.actions.PCLActions;
+import pinacolada.effects.PCLEffects;
 import pinacolada.utilities.ListSelection;
 
 public class GenerateCard extends PCLActionWithCallback<AbstractCard>
@@ -73,7 +73,7 @@ public class GenerateCard extends PCLActionWithCallback<AbstractCard>
         {
             case DRAW_PILE:
             {
-                effect = GameEffects.List.add(new ShowCardAndAddToDrawPileEffect(actualCard,
+                effect = PCLEffects.List.add(new ShowCardAndAddToDrawPileEffect(actualCard,
                         (float) Settings.WIDTH / 2f - ((25f * Settings.scale) + AbstractCard.IMG_WIDTH),
                         (float) Settings.HEIGHT / 2f, true, true, false));
 
@@ -94,12 +94,12 @@ public class GenerateCard extends PCLActionWithCallback<AbstractCard>
                     }
 
                     player.createHandIsFullDialog();
-                    effect = GameEffects.List.add(new ShowCardAndAddToDiscardEffect(actualCard));
+                    effect = PCLEffects.List.add(new ShowCardAndAddToDiscardEffect(actualCard));
                 }
                 else
                 {
                     // If you don't specify x and y it won't play the card obtain sfx
-                    effect = GameEffects.List.add(new ShowCardAndAddToHandEffect(actualCard,
+                    effect = PCLEffects.List.add(new ShowCardAndAddToHandEffect(actualCard,
                             (float) Settings.WIDTH / 2f - ((25f * Settings.scale) + AbstractCard.IMG_WIDTH),
                             (float) Settings.HEIGHT / 2f));
                 }
@@ -109,21 +109,21 @@ public class GenerateCard extends PCLActionWithCallback<AbstractCard>
 
             case DISCARD_PILE:
             {
-                effect = GameEffects.List.add(new ShowCardAndAddToDiscardEffect(actualCard));
+                effect = PCLEffects.List.add(new ShowCardAndAddToDiscardEffect(actualCard));
 
                 break;
             }
 
             case EXHAUST_PILE:
             {
-                effect = GameEffects.List.add(new ExhaustCardEffect(actualCard));
+                effect = PCLEffects.List.add(new ExhaustCardEffect(actualCard));
                 player.exhaustPile.addToTop(actualCard);
                 break;
             }
 
             case MASTER_DECK:
             {
-                GameActions.top.add(new AddCardToDeckAction(actualCard));
+                PCLActions.top.add(new AddCardToDeckAction(actualCard));
 
                 if (destination != null)
                 {
@@ -164,7 +164,7 @@ public class GenerateCard extends PCLActionWithCallback<AbstractCard>
                 copy.upgrade = upgrade;
                 copy.cancelIfFull = cancelIfFull;
                 copy.amount = amount - 1;
-                GameActions.top.add(copy);
+                PCLActions.top.add(copy);
             }
 
             complete(actualCard);

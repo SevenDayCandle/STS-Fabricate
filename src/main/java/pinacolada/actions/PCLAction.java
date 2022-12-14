@@ -10,7 +10,6 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.random.Random;
 import extendedui.EUIUtils;
 import org.apache.commons.lang3.StringUtils;
-import pinacolada.utilities.GameActions;
 
 import java.util.ArrayList;
 
@@ -20,7 +19,7 @@ public abstract class PCLAction extends AbstractGameAction
 
     public boolean canCancel;
     public boolean isRealtime;
-    public GameActions.ActionOrder originalOrder;
+    public PCLActions.ActionOrder originalOrder;
     public AbstractCard sourceCard;
 
     protected final ArrayList<Object> tags = new ArrayList<>(1);
@@ -53,7 +52,7 @@ public abstract class PCLAction extends AbstractGameAction
         return this;
     }
 
-    public PCLAction setOriginalOrder(GameActions.ActionOrder order)
+    public PCLAction setOriginalOrder(PCLActions.ActionOrder order)
     {
         this.originalOrder = order;
 

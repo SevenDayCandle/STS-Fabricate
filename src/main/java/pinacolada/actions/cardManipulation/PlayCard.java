@@ -16,9 +16,9 @@ import com.megacrit.cardcrawl.vfx.ThoughtBubble;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.actions.PCLActionWithCallbackT2;
+import pinacolada.actions.PCLActions;
 import pinacolada.actions.special.DelayAllActions;
-import pinacolada.utilities.GameActions;
-import pinacolada.utilities.GameEffects;
+import pinacolada.effects.PCLEffects;
 import pinacolada.utilities.GameUtilities;
 
 // If this action needs 1 more refactoring due to queueing a card not counting
@@ -168,11 +168,11 @@ public class PlayCard extends PCLActionWithCallbackT2<AbstractMonster, AbstractC
             }
             else if (purge)
             {
-                GameActions.top.add(new UnlimboAction(card));
+                PCLActions.top.add(new UnlimboAction(card));
             }
             else if (exhaust)
             {
-                GameActions.top.exhaust(card, player.limbo).setRealtime(true);
+                PCLActions.top.exhaust(card, player.limbo).setRealtime(true);
             }
             else if (spendEnergy && sourcePile == player.hand)
             {
@@ -181,13 +181,13 @@ public class PlayCard extends PCLActionWithCallbackT2<AbstractMonster, AbstractC
             }
             else
             {
-                GameActions.top.discard(card, player.limbo).setRealtime(true);
-                GameActions.top.add(new WaitAction(Settings.ACTION_DUR_FAST));
+                PCLActions.top.discard(card, player.limbo).setRealtime(true);
+                PCLActions.top.add(new WaitAction(Settings.ACTION_DUR_FAST));
             }
 
             if (card.cantUseMessage != null)
             {
-                GameEffects.List.add(new ThoughtBubble(player.dialogX, player.dialogY, 3, card.cantUseMessage, true));
+                PCLEffects.List.add(new ThoughtBubble(player.dialogX, player.dialogY, 3, card.cantUseMessage, true));
             }
 
             card.freeToPlayOnce = false;
@@ -210,13 +210,13 @@ public class PlayCard extends PCLActionWithCallbackT2<AbstractMonster, AbstractC
         card.calculateCardDamage(enemy);
 
         //GameActions.Top.Add(new UnlimboAction(card));
-        GameActions.top.wait(Settings.FAST_MODE ? Settings.ACTION_DUR_FASTER : Settings.ACTION_DUR_MED);
+        PCLActions.top.wait(Settings.FAST_MODE ? Settings.ACTION_DUR_FASTER : Settings.ACTION_DUR_MED);
 
         int energyOnUse = EnergyPanel.getCurrentEnergy();
 
         if (spendEnergy)
         {
-            GameActions.top.add(new DelayAllActions()) // So the result of canUse() does not randomly change after queueing the card
+            PCLActions.top.add(new DelayAllActions()) // So the result of canUse() does not randomly change after queueing the card
                     .except(a -> a instanceof UnlimboAction || a instanceof WaitAction);
         }
         else if (card.energyOnUse != -1)

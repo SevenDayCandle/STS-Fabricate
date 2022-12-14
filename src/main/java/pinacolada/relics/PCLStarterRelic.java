@@ -13,11 +13,11 @@ import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.augments.PCLAugmentWeights;
 import pinacolada.cards.base.PCLAffinity;
+import pinacolada.effects.PCLEffects;
 import pinacolada.interfaces.listeners.OnReceiveRewardsListener;
 import pinacolada.resources.PGR;
 import pinacolada.rewards.pcl.AugmentReward;
 import pinacolada.ui.cardView.PCLAugmentSelectionEffect;
-import pinacolada.utilities.GameEffects;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.WeightedList;
 
@@ -123,7 +123,7 @@ public class PCLStarterRelic extends PCLRelic implements OnReceiveRewardsListene
         {
             if (augment == null)
             {
-                GameEffects.Queue.callback(new PCLAugmentSelectionEffect(this)
+                PCLEffects.Queue.callback(new PCLAugmentSelectionEffect(this)
                         .addCallback((augment -> {
                             if (augment != null)
                             {

@@ -7,7 +7,7 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import pinacolada.effects.SFX;
 import pinacolada.powers.PCLPower;
 import pinacolada.ui.combat.CombatHelper;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 
 public class PoisonPlayerPower extends PCLPower implements HealthBarRenderPower
 {
@@ -27,9 +27,9 @@ public class PoisonPlayerPower extends PCLPower implements HealthBarRenderPower
 
     public void atStartOfTurn()
     {
-        GameActions.bottom.loseHP(source, owner, amount, AttackEffect.POISON)
+        PCLActions.bottom.loseHP(source, owner, amount, AttackEffect.POISON)
                 .setSoundPitch(0.95f, 1.05f).canKill(!owner.isPlayer);
-        GameActions.bottom.reducePower(this, 1);
+        PCLActions.bottom.reducePower(this, 1);
 
         this.flashWithoutSound();
     }

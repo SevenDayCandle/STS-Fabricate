@@ -11,7 +11,7 @@ import pinacolada.interfaces.subscribers.OnEndOfTurnFirstSubscriber;
 import pinacolada.interfaces.subscribers.OnEndOfTurnLastSubscriber;
 import pinacolada.interfaces.subscribers.OnStartOfTurnPostDrawSubscriber;
 import pinacolada.interfaces.subscribers.OnStartOfTurnSubscriber;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.monsters.PCLCreature;
 import pinacolada.utilities.GameUtilities;
@@ -30,10 +30,10 @@ public class SummonPool extends EUIBase implements OnStartOfTurnSubscriber, OnSt
 
     public void initialize()
     {
-        CombatStats.onStartOfTurn.subscribe(this);
-        CombatStats.onStartOfTurnPostDraw.subscribe(this);
-        CombatStats.onEndOfTurnFirst.subscribe(this);
-        CombatStats.onEndOfTurnLast.subscribe(this);
+        CombatManager.onStartOfTurn.subscribe(this);
+        CombatManager.onStartOfTurnPostDraw.subscribe(this);
+        CombatManager.onEndOfTurnFirst.subscribe(this);
+        CombatManager.onEndOfTurnLast.subscribe(this);
 
         summons.clear();
         assignedTargets.clear();

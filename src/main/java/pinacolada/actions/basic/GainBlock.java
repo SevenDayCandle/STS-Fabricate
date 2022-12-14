@@ -4,7 +4,7 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import pinacolada.actions.PCLActionWithCallback;
 import pinacolada.effects.AttackEffects;
-import pinacolada.utilities.GameEffects;
+import pinacolada.effects.PCLEffects;
 
 public class GainBlock extends PCLActionWithCallback<AbstractCreature>
 {
@@ -37,7 +37,7 @@ public class GainBlock extends PCLActionWithCallback<AbstractCreature>
     {
         if (!target.isDying && !target.isDead && amount > 0)
         {
-            GameEffects.List.attack(source, target, attackEffect, 0.95f, 1.05f, null);
+            PCLEffects.List.attack(source, target, attackEffect, 0.95f, 1.05f, null);
 
             target.addBlock(amount);
             player.hand.applyPowers();

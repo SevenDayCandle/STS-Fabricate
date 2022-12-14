@@ -5,8 +5,8 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.vfx.combat.HealEffect;
 import pinacolada.actions.PCLActionWithCallback;
-import pinacolada.misc.CombatStats;
-import pinacolada.utilities.GameEffects;
+import pinacolada.effects.PCLEffects;
+import pinacolada.misc.CombatManager;
 
 public class GainTemporaryHP extends PCLActionWithCallback<AbstractCreature>
 {
@@ -30,11 +30,11 @@ public class GainTemporaryHP extends PCLActionWithCallback<AbstractCreature>
 
         if (!target.isDying && !target.isDead)
         {
-            int gainAmount = CombatStats.onGainTempHP(amount);
+            int gainAmount = CombatManager.onGainTempHP(amount);
             TempHPField.tempHp.set(target, TempHPField.tempHp.get(target) + gainAmount);
             if (gainAmount > 0)
             {
-                GameEffects.Queue.add(new HealEffect(target.hb.cX - target.animX, target.hb.cY, gainAmount));
+                PCLEffects.Queue.add(new HealEffect(target.hb.cX - target.animX, target.hb.cY, gainAmount));
                 target.healthBarUpdatedEvent();
             }
         }

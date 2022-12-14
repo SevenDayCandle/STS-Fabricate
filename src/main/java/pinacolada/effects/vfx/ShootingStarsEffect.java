@@ -3,7 +3,7 @@ package pinacolada.effects.vfx;
 
 import com.badlogic.gdx.math.MathUtils;
 import pinacolada.effects.PCLEffect;
-import pinacolada.utilities.GameEffects;
+import pinacolada.effects.PCLEffects;
 
 public class ShootingStarsEffect extends PCLEffect
 {
@@ -49,7 +49,7 @@ public class ShootingStarsEffect extends PCLEffect
             final float y = this.y + random(-spreadY, spreadY);
             final float h_speed = random(horizontalSpeedMin, horizontalSpeedMax);
             final float v_speed = random(verticalSpeedMin, verticalSpeedMax);
-            GameEffects.Queue.add(new StarEffect(x, y, h_speed, v_speed));
+            PCLEffects.Queue.add(new StarEffect(x, y, h_speed, v_speed));
             vfxTimer = vfxFrequency;
         }
 

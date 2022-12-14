@@ -17,9 +17,9 @@ import extendedui.utilities.EUIFontHelper;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCardAffinityStatistics;
+import pinacolada.effects.PCLEffects;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
-import pinacolada.utilities.GameEffects;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -152,7 +152,7 @@ public class CardAffinityPanel extends CustomCardPoolModule
                     upgradeToggle.toggle(SingleCardViewPopup.isViewingUpgrade);
                 }
 
-                upgradeToggle.setInteractable(GameEffects.isEmpty()).updateImpl();
+                upgradeToggle.setInteractable(PCLEffects.isEmpty()).updateImpl();
             }
         }
     }

@@ -5,7 +5,7 @@ import com.megacrit.cardcrawl.actions.common.EscapeAction;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.MinionPower;
 import pinacolada.actions.PCLActionWithCallback;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ public class SendMinionsAway extends PCLActionWithCallback<List<AbstractMonster>
         {
             if (m.hasPower(MinionPower.POWER_ID))
             {
-                GameActions.bottom.add(new EscapeAction(m));
+                PCLActions.bottom.add(new EscapeAction(m));
                 minions.add(m);
             }
         }

@@ -6,7 +6,7 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.stances.AbstractStance;
 import extendedui.utilities.EUIClassUtils;
 import javassist.CtBehavior;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 
 @SpirePatch(clz = ChangeStanceAction.class, method = "update")
 public class ChangeStanceActionPatches
@@ -14,7 +14,7 @@ public class ChangeStanceActionPatches
     @SpireInsertPatch(localvars = {"oldStance"}, locator = Locator.class)
     public static void insertPre(ChangeStanceAction __instance, AbstractStance oldStance)
     {
-        CombatStats.onChangeStance(oldStance, EUIClassUtils.getField(__instance, "newStance"));
+        CombatManager.onChangeStance(oldStance, EUIClassUtils.getField(__instance, "newStance"));
     }
 
     private static class Locator extends SpireInsertLocator

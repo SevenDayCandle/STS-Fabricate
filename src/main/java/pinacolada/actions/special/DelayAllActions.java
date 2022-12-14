@@ -4,7 +4,7 @@ import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.actions.PCLAction;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 
 import java.util.ArrayList;
 
@@ -47,7 +47,7 @@ public class DelayAllActions extends PCLAction
         AbstractDungeon.actionManager.actions.removeAll(actions);
         if (actions.size() > 0)
         {
-            GameActions.last.callback(() -> AbstractDungeon.actionManager.actions.addAll(actions));
+            PCLActions.last.callback(() -> AbstractDungeon.actionManager.actions.addAll(actions));
         }
 
         complete();

@@ -7,13 +7,13 @@ import com.megacrit.cardcrawl.metrics.MetricData;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.screens.select.BossRelicSelectScreen;
 import pinacolada.interfaces.subscribers.OnRelicObtainedSubscriber;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 
 public class WayTooManyDifferentRelicObtainedPatches
 {
     protected static void onRelicObtain(AbstractRelic relic, OnRelicObtainedSubscriber.Trigger trigger)
     {
-        CombatStats.onRelicObtained(relic, trigger);
+        CombatManager.onRelicObtained(relic, trigger);
     }
 
     @SpirePatch(clz = AbstractRelic.class, method = "onEquip")

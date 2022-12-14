@@ -7,8 +7,8 @@ import extendedui.EUIUtils;
 import extendedui.ui.TextureCache;
 import extendedui.utilities.EUIColors;
 import pinacolada.effects.PCLEffect;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.VFX;
-import pinacolada.utilities.GameEffects;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class SparkImpactEffect extends PCLEffect
@@ -32,14 +32,14 @@ public class SparkImpactEffect extends PCLEffect
         for (int i = 0; i < particles; i++)
         {
             float r = MathUtils.random(0, 360);
-            GameEffects.Queue.add(new FadingParticleEffect(EUIUtils.random(images).texture(), x, y)
+            PCLEffects.Queue.add(new FadingParticleEffect(EUIUtils.random(images).texture(), x, y)
                     .setColor(EUIColors.random(0.5f, 1f, false))
                     .setBlendingMode(PCLRenderHelpers.BlendingMode.Glowing)
                             .setScale(scale * MathUtils.random(0.04f, 0.55f)).setRotation(0f, 1440f)
                             .setTargetPosition(x + radius * MathUtils.cos(r), y + radius * MathUtils.sin(r))
                     ).setDuration(0.8f, false)
                     .setDuration(MathUtils.random(0.5F, 1.0F), true);
-            GameEffects.Queue.add(new LightFlareParticleEffect(this.x, this.y, color));
+            PCLEffects.Queue.add(new LightFlareParticleEffect(this.x, this.y, color));
         }
 
         complete();

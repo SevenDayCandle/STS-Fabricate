@@ -10,7 +10,7 @@ import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.localization.PowerStrings;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import pinacolada.interfaces.markers.MultiplicativePower;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 
 public class AntiArtifactSlowPower extends AbstractPower implements CloneablePowerInterface, MultiplicativePower
 {
@@ -65,7 +65,7 @@ public class AntiArtifactSlowPower extends AbstractPower implements CloneablePow
 
     public void onAfterUseCard(AbstractCard card, UseCardAction action)
     {
-        GameActions.bottom.applyPower(new AntiArtifactSlowPower(owner, 1))
+        PCLActions.bottom.applyPower(new AntiArtifactSlowPower(owner, 1))
                 .showEffect(false, true)
                 .ignoreArtifact(true);
     }

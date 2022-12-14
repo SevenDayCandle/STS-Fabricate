@@ -6,7 +6,7 @@ import com.evacipated.cardcrawl.modthespire.lib.SpirePostfixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.resources.PGR;
 
 public class BaseModPatches
@@ -41,7 +41,7 @@ public class BaseModPatches
         @SpirePostfixPatch
         public static void prefix(AbstractOrb orb)
         {
-            CombatStats.onEvokeOrb(orb);
+            CombatManager.onEvokeOrb(orb);
         }
     }
 }

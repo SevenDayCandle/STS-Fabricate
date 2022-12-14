@@ -5,7 +5,7 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import pinacolada.effects.AttackEffects;
 import pinacolada.effects.SFX;
 import pinacolada.powers.PCLPower;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 
 public class CounterAttackPower extends PCLPower
 {
@@ -44,7 +44,7 @@ public class CounterAttackPower extends PCLPower
         if (info.type == DamageInfo.DamageType.NORMAL && damageAmount < info.output)
         {
             int[] damageMatrix = DamageInfo.createDamageMatrix(amount, false);
-            GameActions.bottom.dealDamageToAll(damageMatrix, DamageInfo.DamageType.NORMAL, AttackEffects.BLUNT_HEAVY);
+            PCLActions.bottom.dealDamageToAll(damageMatrix, DamageInfo.DamageType.NORMAL, AttackEffects.BLUNT_HEAVY);
             reducePower(1);
         }
 

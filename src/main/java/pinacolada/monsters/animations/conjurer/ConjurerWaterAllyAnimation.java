@@ -5,12 +5,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import extendedui.EUIRenderHelpers;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.vfx.FadingParticleEffect;
 import pinacolada.effects.vfx.SnowBurstEffect;
 import pinacolada.monsters.PCLCreature;
 import pinacolada.monsters.animations.PCLAllyAnimation;
 import pinacolada.resources.PGR;
-import pinacolada.utilities.GameEffects;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class ConjurerWaterAllyAnimation extends PCLAllyAnimation
@@ -24,7 +24,7 @@ public class ConjurerWaterAllyAnimation extends PCLAllyAnimation
 
     public void updateImpl(float deltaTime, float x, float y)
     {
-        GameEffects.Queue.add(new FadingParticleEffect(SnowBurstEffect.getRandomTexture(), x, y)
+        PCLEffects.Queue.add(new FadingParticleEffect(SnowBurstEffect.getRandomTexture(), x, y)
                 .setBlendingMode(PCLRenderHelpers.BlendingMode.Glowing)
                 .setScale(scale * MathUtils.random(0.38f, 0.62f))
                 .setRotation(0, MathUtils.random(150f, 360f))

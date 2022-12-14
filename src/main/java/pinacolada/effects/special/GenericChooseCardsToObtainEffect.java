@@ -13,8 +13,8 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.utilities.GenericCondition;
 import pinacolada.effects.PCLEffectWithCallback;
+import pinacolada.effects.PCLEffects;
 import pinacolada.resources.PGR;
-import pinacolada.utilities.GameEffects;
 import pinacolada.utilities.RandomizedList;
 
 import java.util.ArrayList;
@@ -121,7 +121,7 @@ public class GenericChooseCardsToObtainEffect extends PCLEffectWithCallback<Gene
                 for (AbstractCard card : AbstractDungeon.gridSelectScreen.selectedCards)
                 {
                     cards.add(card.makeCopy());
-                    GameEffects.Queue.showAndObtain(card.makeCopy(), (float) Settings.WIDTH / 3f + displayCount, (float) Settings.HEIGHT / 2f, false);
+                    PCLEffects.Queue.showAndObtain(card.makeCopy(), (float) Settings.WIDTH / 3f + displayCount, (float) Settings.HEIGHT / 2f, false);
                     displayCount += (float) Settings.WIDTH / 6f;
                 }
                 cardsToAdd = 0;

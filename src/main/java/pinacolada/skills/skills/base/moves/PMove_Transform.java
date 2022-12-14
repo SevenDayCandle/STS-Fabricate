@@ -7,16 +7,16 @@ import extendedui.EUIRM;
 import extendedui.interfaces.delegates.FuncT3;
 import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.ui.tooltips.EUITooltip;
+import pinacolada.actions.PCLActions;
 import pinacolada.actions.pileSelection.SelectFromPile;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.PCLUseInfo;
+import pinacolada.effects.PCLEffects;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.utilities.GameActions;
-import pinacolada.utilities.GameEffects;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RotatingList;
 
@@ -127,8 +127,8 @@ public class PMove_Transform extends PMove_Select
         AbstractCard c2 = getCard(cardIDs.isEmpty() ? null : cardIDs.get(0));
         if (c2 != null)
         {
-            GameActions.last.replaceCard(c.uuid, c2);
-            GameEffects.Queue.showCardBriefly(c2.makeStatEquivalentCopy());
+            PCLActions.last.replaceCard(c.uuid, c2);
+            PCLEffects.Queue.showCardBriefly(c2.makeStatEquivalentCopy());
         }
     }
 }

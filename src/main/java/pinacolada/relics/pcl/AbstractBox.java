@@ -7,7 +7,7 @@ import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.characters.CreatureAnimationInfo;
 import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PGR;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ public abstract class AbstractBox extends PCLRelic
         if (GameUtilities.inBattle() && hb.hovered && EUIInputManager.rightClick.isJustPressed() && counter > 0)
         {
             addCounter(-1);
-            GameActions.bottom.selectCreature(PCLCardTarget.Any, name)
+            PCLActions.bottom.selectCreature(PCLCardTarget.Any, name)
                     .addCallback(c -> {
                         if (c.id == null)
                         {

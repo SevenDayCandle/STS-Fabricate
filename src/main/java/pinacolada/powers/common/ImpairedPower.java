@@ -4,7 +4,7 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import pinacolada.interfaces.markers.MultiplicativePower;
 import pinacolada.interfaces.subscribers.OnOrbApplyFocusSubscriber;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.powers.PCLPower;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
@@ -29,7 +29,7 @@ public class ImpairedPower extends PCLPower implements OnOrbApplyFocusSubscriber
 
     public static float getOrbMultiplier()
     {
-        return (CombatStats.getPlayerEffectBonus(POWER_ID));
+        return (CombatManager.getPlayerEffectBonus(POWER_ID));
     }
 
     @Override
@@ -43,7 +43,7 @@ public class ImpairedPower extends PCLPower implements OnOrbApplyFocusSubscriber
     {
         super.onInitialApplication();
 
-        CombatStats.onOrbApplyFocus.subscribe(this);
+        CombatManager.onOrbApplyFocus.subscribe(this);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class ImpairedPower extends PCLPower implements OnOrbApplyFocusSubscriber
     {
         super.onRemove();
 
-        CombatStats.onOrbApplyFocus.unsubscribe(this);
+        CombatManager.onOrbApplyFocus.unsubscribe(this);
     }
 
     @Override

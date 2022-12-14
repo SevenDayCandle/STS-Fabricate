@@ -5,7 +5,7 @@ import extendedui.EUIUtils;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PMod;
@@ -63,7 +63,7 @@ public class PMod_PerCardExhausted extends PMod
     @Override
     public int getModifiedAmount(PSkill be, PCLUseInfo info)
     {
-        return be.baseAmount * EUIUtils.count(CombatStats.cardsExhaustedThisTurn(),
+        return be.baseAmount * EUIUtils.count(CombatManager.cardsExhaustedThisTurn(),
                 c -> getFullCardFilter().invoke(c)) / Math.max(1, this.amount);
     }
 }

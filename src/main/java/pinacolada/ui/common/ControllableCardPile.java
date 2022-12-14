@@ -17,10 +17,10 @@ import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.interfaces.subscribers.OnCardMovedSubscriber;
 import pinacolada.interfaces.subscribers.OnCardPurgedSubscriber;
 import pinacolada.interfaces.subscribers.OnPhaseChangedSubscriber;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.misc.PCLHotkeys;
 import pinacolada.resources.PGR;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -67,7 +67,7 @@ public class ControllableCardPile implements OnPhaseChangedSubscriber, OnCardPur
                         }
                         if (cardGroup.size() > 0)
                         {
-                            GameActions.top.selectFromPile("", 1, cardGroup)
+                            PCLActions.top.selectFromPile("", 1, cardGroup)
                                     .setOptions(false, false)
                                     .addCallback(cards -> {
                                         if (cards.size() > 0)
@@ -104,9 +104,9 @@ public class ControllableCardPile implements OnPhaseChangedSubscriber, OnCardPur
 
     public void clear()
     {
-        CombatStats.onPhaseChanged.subscribe(this);
-        CombatStats.onCardPurged.subscribe(this);
-        CombatStats.onCardMoved.subscribe(this);
+        CombatManager.onPhaseChanged.subscribe(this);
+        CombatManager.onCardPurged.subscribe(this);
+        CombatManager.onCardMoved.subscribe(this);
         subscribers.clear();
         currentCard = null;
     }
@@ -129,7 +129,7 @@ public class ControllableCardPile implements OnPhaseChangedSubscriber, OnCardPur
     @Override
     public void onCardMoved(AbstractCard card, CardGroup source, CardGroup destination)
     {
-        GameActions.last.callback(this::refreshCards);
+        PCLActions.last.callback(this::refreshCards);
     }
 
     @Override
@@ -141,7 +141,7 @@ public class ControllableCardPile implements OnPhaseChangedSubscriber, OnCardPur
     @Override
     public void onPurge(AbstractCard card)
     {
-        GameActions.last.callback(this::refreshCards);
+        PCLActions.last.callback(this::refreshCards);
     }
 
     public void postRender(SpriteBatch sb)

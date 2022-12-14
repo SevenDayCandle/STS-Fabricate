@@ -6,7 +6,7 @@ import com.megacrit.cardcrawl.powers.FrailPower;
 import com.megacrit.cardcrawl.powers.VulnerablePower;
 import com.megacrit.cardcrawl.powers.WeakPower;
 import pinacolada.interfaces.markers.MultiplicativePower;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.powers.PCLPower;
 
 public class ResistancePower extends PCLPower implements MultiplicativePower
@@ -88,18 +88,18 @@ public class ResistancePower extends PCLPower implements MultiplicativePower
     public void updatePercentage()
     {
         //Undo the previous changes made by this power
-        CombatStats.addPlayerEffectBonus(ImpairedPower.POWER_ID, this.totalMultiplier);
-        CombatStats.addPlayerEffectBonus(VulnerablePower.POWER_ID, this.totalMultiplier);
-        CombatStats.addPlayerEffectBonus(WeakPower.POWER_ID, this.totalMultiplier2);
-        CombatStats.addPlayerEffectBonus(FrailPower.POWER_ID, this.totalMultiplier2);
+        CombatManager.addPlayerEffectBonus(ImpairedPower.POWER_ID, this.totalMultiplier);
+        CombatManager.addPlayerEffectBonus(VulnerablePower.POWER_ID, this.totalMultiplier);
+        CombatManager.addPlayerEffectBonus(WeakPower.POWER_ID, this.totalMultiplier2);
+        CombatManager.addPlayerEffectBonus(FrailPower.POWER_ID, this.totalMultiplier2);
 
         this.totalMultiplier = MULTIPLIER * this.amount;
         this.totalMultiplier2 = MULTIPLIER2 * this.amount;
 
-        CombatStats.addPlayerEffectBonus(ImpairedPower.POWER_ID, -this.totalMultiplier);
-        CombatStats.addPlayerEffectBonus(VulnerablePower.POWER_ID, -this.totalMultiplier);
-        CombatStats.addPlayerEffectBonus(WeakPower.POWER_ID, -this.totalMultiplier2);
-        CombatStats.addPlayerEffectBonus(FrailPower.POWER_ID, -this.totalMultiplier2);
+        CombatManager.addPlayerEffectBonus(ImpairedPower.POWER_ID, -this.totalMultiplier);
+        CombatManager.addPlayerEffectBonus(VulnerablePower.POWER_ID, -this.totalMultiplier);
+        CombatManager.addPlayerEffectBonus(WeakPower.POWER_ID, -this.totalMultiplier2);
+        CombatManager.addPlayerEffectBonus(FrailPower.POWER_ID, -this.totalMultiplier2);
     }
 
     @Override

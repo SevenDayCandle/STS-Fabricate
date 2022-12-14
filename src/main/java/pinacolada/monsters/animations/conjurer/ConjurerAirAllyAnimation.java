@@ -6,11 +6,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import extendedui.ui.TextureCache;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.vfx.FadingParticleEffect;
 import pinacolada.monsters.PCLCreature;
 import pinacolada.monsters.animations.PCLAllyAnimation;
 import pinacolada.resources.PGR;
-import pinacolada.utilities.GameEffects;
 import pinacolada.utilities.PCLRenderHelpers;
 import pinacolada.utilities.RandomizedList;
 
@@ -37,7 +37,7 @@ public class ConjurerAirAllyAnimation extends PCLAllyAnimation
 
     public void updateImpl(float deltaTime, float x, float y)
     {
-        GameEffects.List.add(new FadingParticleEffect(getRandomTexture(), x, y)
+        PCLEffects.List.add(new FadingParticleEffect(getRandomTexture(), x, y)
                 .setColor(new Color(MathUtils.random(0.7f, 1f), 1, MathUtils.random(0.8f, 1f), MathUtils.random(0.5f, 0.8f)))
                 .setBlendingMode(MathUtils.randomBoolean() ? PCLRenderHelpers.BlendingMode.Overlay : PCLRenderHelpers.BlendingMode.Normal)
                 .setScale(scale * MathUtils.random(0.11f, 0.32f)).setRotation(0f, MathUtils.random(150f, 250f))

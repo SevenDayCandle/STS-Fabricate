@@ -2,7 +2,7 @@ import basemod.BaseMod;
 import basemod.interfaces.*;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.resources.PGR;
 
 @SpireInitializer //
@@ -20,36 +20,36 @@ public class PCLModInitializer implements OnStartBattleSubscriber, PostBattleSub
     @Override
     public void receiveOnBattleStart(AbstractRoom abstractRoom)
     {
-        CombatStats.onBattleStart();
+        CombatManager.onBattleStart();
     }
 
     @Override
     public void receiveOnPlayerTurnStart()
     {
-        CombatStats.atPlayerTurnStart();
+        CombatManager.atPlayerTurnStart();
     }
 
     @Override
     public void receiveOnPlayerTurnStartPostDraw()
     {
-        CombatStats.atPlayerTurnStartPostDraw();
+        CombatManager.atPlayerTurnStartPostDraw();
     }
 
     @Override
     public void receivePostBattle(AbstractRoom abstractRoom)
     {
-        CombatStats.onBattleEnd();
+        CombatManager.onBattleEnd();
     }
 
     @Override
     public void receivePreStartGame()
     {
-        CombatStats.onGameStart();
+        CombatManager.onGameStart();
     }
 
     @Override
     public void receivePostDeath()
     {
-        CombatStats.onAfterDeath();
+        CombatManager.onAfterDeath();
     }
 }

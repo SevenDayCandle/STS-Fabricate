@@ -14,7 +14,7 @@ import pinacolada.cards.base.*;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.utilities.CardSelection;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.ListSelection;
 
@@ -96,7 +96,7 @@ public class TryChooseChoice<T> extends PCLActionWithCallback<ArrayList<ChoiceCa
                 .addConditionalCallback(choiceCards -> {
                     for (ChoiceCard<PSkill> card : choiceCards)
                     {
-                        GameActions.top.selectCreature(card).addCallback(target -> {
+                        PCLActions.top.selectCreature(card).addCallback(target -> {
                             card.value.use(new PCLUseInfo(card, source, target));
                         });
                     }

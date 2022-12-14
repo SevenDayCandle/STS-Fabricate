@@ -3,7 +3,7 @@ package pinacolada.powers.common;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import pinacolada.interfaces.markers.MultiplicativePower;
 import pinacolada.interfaces.subscribers.OnOrbApplyLockOnSubscriber;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.powers.PCLPower;
 import pinacolada.utilities.PCLRenderHelpers;
 
@@ -27,7 +27,7 @@ public class PCLLockOnPower extends PCLPower implements OnOrbApplyLockOnSubscrib
 
     public static float getOrbMultiplierForDescription()
     {
-        return (CombatStats.getEffectBonus(POWER_ID));
+        return (CombatManager.getEffectBonus(POWER_ID));
     }
 
     @Override

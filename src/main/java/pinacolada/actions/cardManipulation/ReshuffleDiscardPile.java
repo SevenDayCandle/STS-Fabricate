@@ -2,7 +2,7 @@ package pinacolada.actions.cardManipulation;
 
 import com.megacrit.cardcrawl.actions.common.EmptyDeckShuffleAction;
 import pinacolada.actions.PCLAction;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 
 public class ReshuffleDiscardPile extends PCLAction
 {
@@ -22,7 +22,7 @@ public class ReshuffleDiscardPile extends PCLAction
     {
         if (!onlyIfEmpty || player.drawPile.isEmpty())
         {
-            GameActions.top.add(new EmptyDeckShuffleAction());
+            PCLActions.top.add(new EmptyDeckShuffleAction());
         }
 
         complete();

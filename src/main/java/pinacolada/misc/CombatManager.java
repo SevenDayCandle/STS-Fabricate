@@ -23,14 +23,15 @@ import extendedui.patches.game.CardGlowBorderPatches;
 import extendedui.ui.GridCardSelectScreenHelper;
 import org.apache.commons.lang3.mutable.MutableInt;
 import pinacolada.actions.PCLAction;
+import pinacolada.actions.PCLActions;
 import pinacolada.actions.special.PCLHasteAction;
-import pinacolada.actions.special.SummonCardAction;
 import pinacolada.cards.base.AffinityReactions;
 import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.cards.base.fields.PCLCardTag;
 import pinacolada.cards.base.modifiers.SkillModifier;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
 import pinacolada.effects.combat.DodgeEffect;
 import pinacolada.interfaces.listeners.OnCardResetListener;
@@ -47,13 +48,11 @@ import pinacolada.skills.DelayUse;
 import pinacolada.ui.combat.PCLPlayerSystem;
 import pinacolada.ui.combat.SummonPool;
 import pinacolada.ui.common.ControllableCardPile;
-import pinacolada.utilities.GameActions;
-import pinacolada.utilities.GameEffects;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.*;
 
-public class CombatStats
+public class CombatManager
 {
     private static final ArrayList<AbstractCard> cardsDiscardedThisCombat= new ArrayList<>();
     private static final ArrayList<AbstractCard> cardsDiscardedThisTurn = new ArrayList<>();
@@ -89,6 +88,9 @@ public class CombatStats
     public static final GameEvent<OnAfterCardPlayedSubscriber> onAfterCardPlayed = registerEvent(new GameEvent<>());
     public static final GameEvent<OnAfterDeathSubscriber> onAfterDeath = registerEvent(new GameEvent<>());
     public static final GameEvent<OnAfterlifeSubscriber> onAfterlife = registerEvent(new GameEvent<>());
+    public static final GameEvent<OnAllySummonSubscriber> onAllySummon = registerEvent(new GameEvent<>());
+    public static final GameEvent<OnAllyTriggerSubscriber> onAllyTrigger = registerEvent(new GameEvent<>());
+    public static final GameEvent<OnAllyWithdrawSubscriber> onAllyWithdraw = registerEvent(new GameEvent<>());
     public static final GameEvent<OnApplyPowerSubscriber> onApplyPower = registerEvent(new GameEvent<>());
     public static final GameEvent<OnAttackSubscriber> onAttack = registerEvent(new GameEvent<>());
     public static final GameEvent<OnBattleEndSubscriber> onBattleEnd = registerEvent(new GameEvent<>());
@@ -169,7 +171,7 @@ public class CombatStats
 
     public static void addBonus(String powerID, Type effectType, float multiplier)
     {
-        multiplier = CombatStats.onGainTriggerablePowerBonus(powerID, effectType, multiplier);
+        multiplier = CombatManager.onGainTriggerablePowerBonus(powerID, effectType, multiplier);
         getEffectBonusMapForType(effectType).merge(powerID, multiplier, Float::sum);
 
         if (GameUtilities.inBattle())
@@ -211,7 +213,7 @@ public class CombatStats
 
     public static void atEndOfTurn()
     {
-        CombatStats.playerSystem.onEndOfTurn();
+        CombatManager.playerSystem.onEndOfTurn();
         cardsDiscardedThisTurn.clear();
         matchesThisTurn.clear();
         hasteInfinitesThisTurn.clear();
@@ -219,7 +221,7 @@ public class CombatStats
 
     public static void atStartOfTurn()
     {
-        CombatStats.playerSystem.onStartOfTurn();
+        CombatManager.playerSystem.onStartOfTurn();
         dodgeChance = 0;
     }
 
@@ -234,7 +236,7 @@ public class CombatStats
     private static void clearStats()
     {
         refreshPlayer();
-        EUIUtils.logInfoIfDebug(CombatStats.class, "Clearing PCL Player Stats");
+        EUIUtils.logInfoIfDebug(CombatManager.class, "Clearing PCL Player Stats");
         for (GameEvent<?> event : EVENTS)
         {
             event.clear();
@@ -589,11 +591,11 @@ public class CombatStats
 
     public static void onPlayCardPostActions(AbstractCard card, AbstractMonster m)
     {
-        CombatStats.playerSystem.trySynergize(card);
+        CombatManager.playerSystem.trySynergize(card);
         if (PCLCardTag.Recast.has(card))
         {
             PCLCardTag.Recast.tryProgress(card);
-            new DelayUse(1, DelayUse.Timing.StartOfTurnLast, new PCLUseInfo(card, AbstractDungeon.player, m), (i) -> GameActions.bottom.playCopy(card, EUIUtils.safeCast(i.target, AbstractMonster.class))).start();
+            new DelayUse(1, DelayUse.Timing.StartOfTurnLast, new PCLUseInfo(card, AbstractDungeon.player, m), (i) -> PCLActions.bottom.playCopy(card, EUIUtils.safeCast(i.target, AbstractMonster.class))).start();
         }
     }
 
@@ -641,9 +643,9 @@ public class CombatStats
         if (target == AbstractDungeon.player && info.type == DamageInfo.DamageType.NORMAL && GameUtilities.chance(dodgeChance))
         {
             AbstractDungeon.player.tint.color.a = 0;
-            GameActions.bottom.playSFX(SFX.NULLIFY_SFX, 1.6f, 1.6f);
-            GameActions.top.wait(0.15f);
-            GameEffects.Queue.add(new DodgeEffect(target.hb.cX - target.animX, target.hb.cY + target.hb.height / 2f, PGR.core.strings.combat.dodged));
+            PCLActions.bottom.playSFX(SFX.NULLIFY_SFX, 1.6f, 1.6f);
+            PCLActions.top.wait(0.15f);
+            PCLEffects.Queue.add(new DodgeEffect(target.hb.cX - target.animX, target.hb.cY + target.hb.height / 2f, PGR.core.strings.combat.dodged));
             return 0;
         }
 
@@ -834,6 +836,30 @@ public class CombatStats
         return original;
     }
 
+    public static void onAllySummon(PCLCard card, PCLCardAlly ally)
+    {
+        for (OnAllySummonSubscriber s : onAllySummon.getSubscribers())
+        {
+            s.onAllySummon(card, ally);
+        }
+    }
+
+    public static void onAllyTrigger(PCLCardAlly ally)
+    {
+        for (OnAllyTriggerSubscriber s : onAllyTrigger.getSubscribers())
+        {
+            s.onAllyTrigger(ally);
+        }
+    }
+
+    public static void onAllyWithdraw(PCLCardAlly ally, PCLCard returned)
+    {
+        for (OnAllyWithdrawSubscriber s : onAllyWithdraw.getSubscribers())
+        {
+            s.onAllyWithdraw(ally, returned);
+        }
+    }
+
     public static void onUsingCard(PCLCard card, AbstractPlayer p, AbstractMonster m)
     {
         if (card == null)
@@ -852,7 +878,7 @@ public class CombatStats
         if (card.type == PGR.Enums.CardType.SUMMON)
         {
             PCLCardAlly slot = EUIUtils.safeCast(info.target, PCLCardAlly.class);
-            GameActions.bottom.add(new SummonCardAction(card, slot));
+            PCLActions.bottom.summonAlly(card, slot);
         }
         else
         {
@@ -863,14 +889,14 @@ public class CombatStats
 
         if (info.isMatch)
         {
-            CombatStats.onMatch(card, info);
+            CombatManager.onMatch(card, info);
         }
         else
         {
-            CombatStats.onNotMatch(card, info);
+            CombatManager.onNotMatch(card, info);
         }
 
-        final ArrayList<AbstractGameAction> actions = GameActions.getActions();
+        final ArrayList<AbstractGameAction> actions = PCLActions.getActions();
 
         cachedActions.clear();
         cachedActions.addAll(actions);
@@ -901,7 +927,7 @@ public class CombatStats
         {
             for (int i = 0; i < cachedActions.size(); i++)
             {
-                GameActions.top.add(cachedActions.get(cachedActions.size() - 1 - i));
+                PCLActions.top.add(cachedActions.get(cachedActions.size() - 1 - i));
             }
         }
 
@@ -911,7 +937,7 @@ public class CombatStats
     // TODO Custom use card action
     public static void onUsingCardPostActions(AbstractCard card, AbstractPlayer p, AbstractMonster m)
     {
-        GameActions.bottom.add(new UseCardAction(card, m));
+        PCLActions.bottom.add(new UseCardAction(card, m));
         if (!card.dontTriggerOnUseCard)
         {
             p.hand.triggerOnOtherCardPlayed(card);
@@ -922,7 +948,7 @@ public class CombatStats
         card.target_x = (float) (Settings.WIDTH / 2);
         card.target_y = (float) (Settings.HEIGHT / 2);
 
-        int spendEnergy = CombatStats.onTrySpendEnergy(card, p, card.costForTurn);
+        int spendEnergy = CombatManager.onTrySpendEnergy(card, p, card.costForTurn);
         if (spendEnergy > 0 && !card.freeToPlay() && !card.isInAutoplay)
         {
             p.energy.use(spendEnergy);
@@ -933,7 +959,7 @@ public class CombatStats
             AbstractDungeon.overlayMenu.endTurnButton.isGlowing = true;
         }
 
-        CombatStats.playerSystem.setLastCardPlayed(card);
+        CombatManager.playerSystem.setLastCardPlayed(card);
         AbstractDungeon.player.hand.glowCheck();
     }
 
@@ -1061,7 +1087,7 @@ public class CombatStats
 
         if (PCLCardTag.Haste.has(card))
         {
-            GameActions.top.add(new PCLHasteAction(card));
+            PCLActions.top.add(new PCLHasteAction(card));
         }
     }
 
@@ -1192,7 +1218,7 @@ public class CombatStats
 
         if (AbstractDungeon.player.limbo.contains(card))
         {
-            GameActions.top.add(new UnlimboAction(card));
+            PCLActions.top.add(new UnlimboAction(card));
         }
     }
 

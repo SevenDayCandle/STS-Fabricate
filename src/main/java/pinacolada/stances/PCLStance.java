@@ -9,11 +9,11 @@ import com.megacrit.cardcrawl.stances.AbstractStance;
 import com.megacrit.cardcrawl.vfx.BorderFlashEffect;
 import extendedui.EUI;
 import extendedui.EUIUtils;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.stance.StanceAura;
 import pinacolada.effects.stance.StanceParticleVertical;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.resources.PGR;
-import pinacolada.utilities.GameEffects;
 
 import java.util.Objects;
 
@@ -59,23 +59,23 @@ public abstract class PCLStance extends AbstractStance
 
     protected void queueAura()
     {
-        GameEffects.Queue.add(new StanceAura(getAuraColor()));
+        PCLEffects.Queue.add(new StanceAura(getAuraColor()));
     }
 
     protected void queueParticle()
     {
-        GameEffects.Queue.add(new StanceParticleVertical(getParticleColor()));
+        PCLEffects.Queue.add(new StanceParticleVertical(getParticleColor()));
     }
 
     protected boolean tryApplyStance(String stanceID)
     {
-        String current = CombatStats.getCombatData(PCLStance.class.getSimpleName(), null);
+        String current = CombatManager.getCombatData(PCLStance.class.getSimpleName(), null);
         if (Objects.equals(stanceID, current))
         {
             return false;
         }
 
-        CombatStats.setCombatData(PCLStance.class.getSimpleName(), stanceID);
+        CombatManager.setCombatData(PCLStance.class.getSimpleName(), stanceID);
         return true;
     }
 
@@ -103,7 +103,7 @@ public abstract class PCLStance extends AbstractStance
 
         CardCrawlGame.sound.play("STANCE_ENTER_CALM");
         sfxId = CardCrawlGame.sound.playAndLoop("STANCE_LOOP_CALM");
-        GameEffects.Queue.add(new BorderFlashEffect(getMainColor(), true));
+        PCLEffects.Queue.add(new BorderFlashEffect(getMainColor(), true));
     }
 
     @Override

@@ -28,6 +28,7 @@ import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.ColoredString;
 import org.apache.commons.lang3.StringUtils;
+import pinacolada.actions.PCLActions;
 import pinacolada.augments.PCLAugment;
 import pinacolada.cards.base.*;
 import pinacolada.cards.base.fields.PCLCardTag;
@@ -93,7 +94,7 @@ public abstract class PSkill implements TooltipProvider
     public ArrayList<EUITooltip> tips = new ArrayList<>();
     public ArrayList<String> cardIDs = new ArrayList<>();
     public ListSelection<AbstractCard> origin = null;
-    public GameActions.ActionOrder order = GameActions.ActionOrder.Bottom;
+    public PCLActions.ActionOrder order = PCLActions.ActionOrder.Bottom;
     public PCLCardTarget target = PCLCardTarget.None;
     public PCLCardValueSource amountSource = PCLCardValueSource.None;
     public PCLCardValueSource extraSource = PCLCardValueSource.None;
@@ -629,26 +630,26 @@ public abstract class PSkill implements TooltipProvider
         }
     }
 
-    public final GameActions getActions()
+    public final PCLActions getActions()
     {
         switch (order)
         {
             case Top:
-                return GameActions.top;
+                return PCLActions.top;
             case Last:
-                return GameActions.last;
+                return PCLActions.last;
             case Instant:
-                return GameActions.instant;
+                return PCLActions.instant;
             case TurnStart:
-                return GameActions.turnStart;
+                return PCLActions.turnStart;
             case Delayed:
-                return GameActions.delayed;
+                return PCLActions.delayed;
             case DelayedTop:
-                return GameActions.delayedTop;
+                return PCLActions.delayedTop;
             case NextCombat:
-                return GameActions.nextCombat;
+                return PCLActions.nextCombat;
             default:
-                return GameActions.bottom;
+                return PCLActions.bottom;
         }
     }
 
@@ -1820,7 +1821,7 @@ public abstract class PSkill implements TooltipProvider
         return this;
     }
 
-    public final PSkill setOrder(GameActions.ActionOrder order)
+    public final PSkill setOrder(PCLActions.ActionOrder order)
     {
         this.order = order;
         return this;

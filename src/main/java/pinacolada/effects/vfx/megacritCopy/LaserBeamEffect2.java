@@ -9,8 +9,8 @@ import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.vfx.BorderLongFlashEffect;
 import pinacolada.effects.PCLEffect;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
-import pinacolada.utilities.GameEffects;
 
 public class LaserBeamEffect2 extends PCLEffect
 {
@@ -56,7 +56,7 @@ public class LaserBeamEffect2 extends PCLEffect
     {
         if (!this.playedSfx)
         {
-            GameEffects.Queue.add(new BorderLongFlashEffect(color));
+            PCLEffects.Queue.add(new BorderLongFlashEffect(color));
             this.playedSfx = true;
             CardCrawlGame.sound.play(SFX.ATTACK_MAGIC_BEAM);
             CardCrawlGame.screenShake.rumble(2f);

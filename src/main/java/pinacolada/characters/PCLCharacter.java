@@ -33,15 +33,15 @@ import extendedui.EUIRenderHelpers;
 import extendedui.EUIUtils;
 import extendedui.ui.TextureCache;
 import org.apache.commons.lang3.StringUtils;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
 import pinacolada.effects.vfx.SmokeEffect;
-import pinacolada.misc.BlendableSkeletonMeshRenderer;
 import pinacolada.patches.relicLibrary.RelicLibraryPatches;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLLoadout;
 import pinacolada.ui.PCLEnergyOrb;
 import pinacolada.ui.characterSelection.PCLBaseStatEditor;
-import pinacolada.utilities.GameEffects;
+import pinacolada.utilities.BlendableSkeletonMeshRenderer;
 import pinacolada.utilities.PCLRenderHelpers;
 
 import java.util.ArrayList;
@@ -325,7 +325,7 @@ public abstract class PCLCharacter extends CustomPlayer
 
     @Override
     public void playDeathAnimation() {
-        GameEffects.Manual.add(new SmokeEffect(hb.cX, hb.cY, getCardRenderColor()));
+        PCLEffects.Manual.add(new SmokeEffect(hb.cX, hb.cY, getCardRenderColor()));
         super.playDeathAnimation();
     }
 

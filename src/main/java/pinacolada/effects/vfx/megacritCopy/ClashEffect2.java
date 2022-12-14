@@ -6,8 +6,8 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.vfx.UpgradeShineParticleEffect;
 import com.megacrit.cardcrawl.vfx.combat.AnimatedSlashEffect;
 import pinacolada.effects.PCLEffect;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
-import pinacolada.utilities.GameEffects;
 
 public class ClashEffect2 extends PCLEffect
 {
@@ -51,12 +51,12 @@ public class ClashEffect2 extends PCLEffect
         SFX.play(SFX.ATTACK_WHIFF_1, 1.4f);
         SFX.play(SFX.ATTACK_IRON_1, 0.9f);
         SFX.play(SFX.ATTACK_IRON_3, 0.9f);
-        GameEffects.Queue.add(new AnimatedSlashEffect(this.x, this.y - 30.0F * Settings.scale, -500.0F, -500.0F, 135.0F, 4.0F, c11, c12));
-        GameEffects.Queue.add(new AnimatedSlashEffect(this.x, this.y - 30.0F * Settings.scale, 500.0F, -500.0F, 225.0F, 4.0F, c21, c22));
+        PCLEffects.Queue.add(new AnimatedSlashEffect(this.x, this.y - 30.0F * Settings.scale, -500.0F, -500.0F, 135.0F, 4.0F, c11, c12));
+        PCLEffects.Queue.add(new AnimatedSlashEffect(this.x, this.y - 30.0F * Settings.scale, 500.0F, -500.0F, 225.0F, 4.0F, c21, c22));
 
         for (int i = 0; i < 15; ++i)
         {
-            GameEffects.Queue.add(new UpgradeShineParticleEffect(this.x + random(-40.0F, 40.0F) * Settings.scale, this.y + random(-40.0F, 40.0F) * Settings.scale));
+            PCLEffects.Queue.add(new UpgradeShineParticleEffect(this.x + random(-40.0F, 40.0F) * Settings.scale, this.y + random(-40.0F, 40.0F) * Settings.scale));
         }
     }
 }

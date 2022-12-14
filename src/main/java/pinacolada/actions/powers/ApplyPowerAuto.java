@@ -13,7 +13,7 @@ import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLActionAutoTarget;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.powers.PCLPowerHelper;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 
 public class ApplyPowerAuto extends PCLActionAutoTarget<AbstractPower>
 {
@@ -76,7 +76,7 @@ public class ApplyPowerAuto extends PCLActionAutoTarget<AbstractPower>
                 action.addTag(tag);
             }
 
-            GameActions.top.add(action).addCallback((ActionT1<AbstractPower>) this::complete);
+            PCLActions.top.add(action).addCallback((ActionT1<AbstractPower>) this::complete);
         }
 
         complete();

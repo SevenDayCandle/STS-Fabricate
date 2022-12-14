@@ -6,11 +6,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import extendedui.ui.TextureCache;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.vfx.FadingParticleEffect;
 import pinacolada.monsters.PCLCreature;
 import pinacolada.monsters.animations.PCLAllyAnimation;
 import pinacolada.resources.PGR;
-import pinacolada.utilities.GameEffects;
 import pinacolada.utilities.PCLRenderHelpers;
 import pinacolada.utilities.RandomizedList;
 
@@ -46,7 +46,7 @@ public class ConjurerStarAllyAnimation extends PCLAllyAnimation
         if (this.projVfxTimer < 0.0F)
         {
             float r = MathUtils.random(0, 360f);
-            GameEffects.Queue.add(new FadingParticleEffect(PGR.core.images.monsters.chaosOrbital.texture(), x, y)
+            PCLEffects.Queue.add(new FadingParticleEffect(PGR.core.images.monsters.chaosOrbital.texture(), x, y)
                     .setBlendingMode(PCLRenderHelpers.BlendingMode.Glowing)
                     .setScale(scale * MathUtils.random(0.03f, 0.15f))
                     .setRotation(0f, MathUtils.random(150f, 360f))
@@ -59,7 +59,7 @@ public class ConjurerStarAllyAnimation extends PCLAllyAnimation
 
     public void updateImpl(float deltaTime, float x, float y)
     {
-        GameEffects.Queue.add(new FadingParticleEffect(getRandomTexture(), x + MathUtils.random(-64, 64), y + MathUtils.random(-32, 4))
+        PCLEffects.Queue.add(new FadingParticleEffect(getRandomTexture(), x + MathUtils.random(-64, 64), y + MathUtils.random(-32, 4))
                 .setBlendingMode(PCLRenderHelpers.BlendingMode.Glowing)
                 .setFlip(MathUtils.randomBoolean(), false)
                 .setScale(MathUtils.random(0.09f, 0.64f))

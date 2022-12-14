@@ -10,8 +10,8 @@ import com.megacrit.cardcrawl.vfx.combat.LightFlareParticleEffect;
 import extendedui.EUIUtils;
 import extendedui.ui.TextureCache;
 import pinacolada.effects.PCLEffect;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.VFX;
-import pinacolada.utilities.GameEffects;
 
 public class TornadoParticleEffect extends PCLEffect
 {
@@ -85,9 +85,9 @@ public class TornadoParticleEffect extends PCLEffect
 
         if (vfxTimer < 0f)
         {
-            GameEffects.Queue.add(new RazorWindParticleEffect(tX, tY,
+            PCLEffects.Queue.add(new RazorWindParticleEffect(tX, tY,
                     random(-300f, 300f), random(-300f, 300f)));
-            GameEffects.Queue.add(new LightFlareParticleEffect(this.x, this.y, PARTICLE_COLOR));
+            PCLEffects.Queue.add(new LightFlareParticleEffect(this.x, this.y, PARTICLE_COLOR));
             vfxTimer = random(0.3f, 3f);
         }
     }

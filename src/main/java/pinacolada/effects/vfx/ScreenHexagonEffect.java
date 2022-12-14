@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.vfx.BorderLongFlashEffect;
 import pinacolada.effects.PCLEffect;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
-import pinacolada.utilities.GameEffects;
 
 public class ScreenHexagonEffect extends PCLEffect
 {
@@ -26,7 +26,7 @@ public class ScreenHexagonEffect extends PCLEffect
     {
         for (int i = 0; i < ROWS; i++)
         {
-            GameEffects.Queue.add(new HexagonEffect(-100f * Settings.scale, Settings.HEIGHT * 0.65f - i * HexagonEffect.SIZE * 0.9f, color)
+            PCLEffects.Queue.add(new HexagonEffect(-100f * Settings.scale, Settings.HEIGHT * 0.65f - i * HexagonEffect.SIZE * 0.9f, color)
                     .setRealtime(isRealtime));
         }
     }
@@ -41,7 +41,7 @@ public class ScreenHexagonEffect extends PCLEffect
         {
             SFX.play(SFX.PCL_BOOST, 0.5f, 0.5f);
             SFX.play(SFX.ORB_LIGHTNING_CHANNEL, 0.7f, 0.7f);
-            GameEffects.Queue.add(new BorderLongFlashEffect(Color.GOLDENROD));
+            PCLEffects.Queue.add(new BorderLongFlashEffect(Color.GOLDENROD));
         }
 
         this.duration -= Gdx.graphics.getDeltaTime();

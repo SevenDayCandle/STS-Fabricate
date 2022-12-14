@@ -3,7 +3,7 @@ package pinacolada.skills.skills.base.conditions;
 import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
@@ -45,7 +45,7 @@ public class PCond_NextAffinity extends PCond
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
     {
-        return affinities.contains(CombatStats.playerSystem.getActiveMeter().get(Math.max(0, amount)));
+        return affinities.contains(CombatManager.playerSystem.getActiveMeter().get(Math.max(0, amount)));
     }
 
     @Override

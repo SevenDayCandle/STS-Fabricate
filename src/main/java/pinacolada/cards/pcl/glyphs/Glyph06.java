@@ -7,7 +7,7 @@ import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PTrigger;
 import pinacolada.skills.skills.PSpecialSkill;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
 
 public class Glyph06 extends Glyph
@@ -23,7 +23,7 @@ public class Glyph06 extends Glyph
     {
         for (AbstractMonster m1 : GameUtilities.getEnemies(true))
         {
-            GameActions.bottom.add(new HealAction(m1, null, move.amount));
+            PCLActions.bottom.add(new HealAction(m1, null, move.amount));
         }
     }
 

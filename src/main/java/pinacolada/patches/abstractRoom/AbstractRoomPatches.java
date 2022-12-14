@@ -3,7 +3,7 @@ package pinacolada.patches.abstractRoom;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
-import pinacolada.misc.CombatStats;
+import pinacolada.misc.CombatManager;
 
 public class AbstractRoomPatches
 {
@@ -13,7 +13,7 @@ public class AbstractRoomPatches
         @SpirePrefixPatch
         public static void prefix(AbstractRoom __instance)
         {
-            CombatStats.atEndOfTurn(true);
+            CombatManager.atEndOfTurn(true);
         }
     }
 
@@ -23,7 +23,7 @@ public class AbstractRoomPatches
         @SpirePrefixPatch
         public static void prefix(AbstractRoom __instance)
         {
-            CombatStats.atEndOfTurnPreEndTurnCards(true);
+            CombatManager.atEndOfTurnPreEndTurnCards(true);
         }
     }
 }

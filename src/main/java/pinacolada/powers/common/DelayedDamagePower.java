@@ -8,7 +8,7 @@ import pinacolada.effects.AttackEffects;
 import pinacolada.effects.SFX;
 import pinacolada.powers.PCLPower;
 import pinacolada.ui.combat.CombatHelper;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
 
 public class DelayedDamagePower extends PCLPower implements HealthBarRenderPower
@@ -60,7 +60,7 @@ public class DelayedDamagePower extends PCLPower implements HealthBarRenderPower
     public void atEndOfTurn(boolean isPlayer)
     {
         int damageAmount = owner.isPlayer ? Math.max(0, Math.min(GameUtilities.getHP(owner, true, true) - 1, amount)) : amount;
-        GameActions.bottom.takeDamage(owner, damageAmount, attackEffect);
+        PCLActions.bottom.takeDamage(owner, damageAmount, attackEffect);
         removePower();
 
         playApplyPowerSfx();

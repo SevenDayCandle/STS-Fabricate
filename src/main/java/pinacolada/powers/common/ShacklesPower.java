@@ -6,7 +6,7 @@ import com.megacrit.cardcrawl.powers.StrengthPower;
 import extendedui.EUIUtils;
 import pinacolada.effects.SFX;
 import pinacolada.powers.PCLPower;
-import pinacolada.utilities.GameActions;
+import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
 
 public class ShacklesPower extends PCLPower
@@ -25,7 +25,7 @@ public class ShacklesPower extends PCLPower
     @Override
     protected void onAmountChanged(int previousAmount, int difference)
     {
-        GameActions.top.applyPower(new StrengthPower(owner, -difference));
+        PCLActions.top.applyPower(new StrengthPower(owner, -difference));
 
         super.onAmountChanged(previousAmount, difference);
     }
@@ -44,7 +44,7 @@ public class ShacklesPower extends PCLPower
         final AbstractMonster m = EUIUtils.safeCast(owner, AbstractMonster.class);
         if (m != null && !GameUtilities.isAttacking(m.intent))
         {
-            GameActions.top.removePower(owner, this);
+            PCLActions.top.removePower(owner, this);
         }
     }
 

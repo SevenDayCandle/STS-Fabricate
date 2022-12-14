@@ -3,12 +3,12 @@ package pinacolada.monsters.animations.conjurer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.vfx.FadingParticleEffect;
 import pinacolada.effects.vfx.RockBurstEffect;
 import pinacolada.monsters.PCLCreature;
 import pinacolada.monsters.animations.PCLAllyAnimation;
 import pinacolada.resources.PGR;
-import pinacolada.utilities.GameEffects;
 
 public class ConjurerEarthAllyAnimation extends PCLAllyAnimation
 {
@@ -21,7 +21,7 @@ public class ConjurerEarthAllyAnimation extends PCLAllyAnimation
 
     public void updateImpl(float deltaTime, float x, float y)
     {
-        GameEffects.Queue.add(new FadingParticleEffect(RockBurstEffect.getRandomTexture(), x + MathUtils.random(-64, 64), y + MathUtils.random(-32, 4))
+        PCLEffects.Queue.add(new FadingParticleEffect(RockBurstEffect.getRandomTexture(), x + MathUtils.random(-64, 64), y + MathUtils.random(-32, 4))
                 .setFlip(MathUtils.randomBoolean(), false)
                 .setScale(MathUtils.random(0.09f, 0.64f))
                 .setRotation(0, MathUtils.random(400f, 600f))

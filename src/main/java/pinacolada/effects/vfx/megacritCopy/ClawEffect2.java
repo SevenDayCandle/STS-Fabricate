@@ -5,8 +5,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.vfx.combat.AnimatedSlashEffect;
 import pinacolada.effects.PCLEffect;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
-import pinacolada.utilities.GameEffects;
 
 public class ClawEffect2 extends PCLEffect
 {
@@ -96,6 +96,6 @@ public class ClawEffect2 extends PCLEffect
 
     protected void slash(float x, float y, float dX, float dY, float angle)
     {
-        GameEffects.Queue.add(new AnimatedSlashEffect(x, y, dX, dY, angle, scale * 2f, this.color, this.color2));
+        PCLEffects.Queue.add(new AnimatedSlashEffect(x, y, dX, dY, angle, scale * 2f, this.color, this.color2));
     }
 }

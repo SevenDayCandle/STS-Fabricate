@@ -22,11 +22,11 @@ import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.CardAffinityComparator;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.card.ShowCardPileEffect;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLRuntimeLoadout;
-import pinacolada.utilities.GameEffects;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.Collection;
@@ -263,7 +263,7 @@ public class PCLSeriesSelectScreen extends AbstractScreen
     {
         previewCardsEffect = new ShowCardPileEffect(this, cards)
                 .setStartingPosition(InputHelper.mX, InputHelper.mY);
-        GameEffects.Manual.add(previewCardsEffect);
+        PCLEffects.Manual.add(previewCardsEffect);
     }
 
     public void proceed()

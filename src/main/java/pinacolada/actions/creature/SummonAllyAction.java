@@ -1,15 +1,16 @@
-package pinacolada.actions.special;
+package pinacolada.actions.creature;
 
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import pinacolada.actions.PCLActionWithCallback;
+import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.vfx.SmokeEffect;
+import pinacolada.misc.CombatManager;
 import pinacolada.monsters.PCLCardAlly;
-import pinacolada.utilities.GameActions;
-import pinacolada.utilities.GameEffects;
 
-public class SummonCardAction extends PCLActionWithCallback<PCLCard>
+public class SummonAllyAction extends PCLActionWithCallback<PCLCard>
 {
     public final PCLCard card;
     public final PCLCardAlly ally;
@@ -17,15 +18,15 @@ public class SummonCardAction extends PCLActionWithCallback<PCLCard>
     public boolean stun = true;
     public boolean showEffect = true;
 
-    public SummonCardAction(PCLCard card, PCLCardAlly slot)
+    public SummonAllyAction(PCLCard card, PCLCardAlly slot)
     {
         super(ActionType.SPECIAL, Settings.FAST_MODE ? Settings.ACTION_DUR_XFAST : Settings.ACTION_DUR_FAST);
-        initialize(AbstractDungeon.player, target, 1);
+        initialize(AbstractDungeon.player, slot, 1);
         this.card = card;
         this.ally = slot;
     }
 
-    public SummonCardAction setOptions(boolean retainPowers, boolean stun, boolean showEffect)
+    public SummonAllyAction setOptions(boolean retainPowers, boolean stun, boolean showEffect)
     {
         this.retainPowers = retainPowers;
         this.stun = stun;
@@ -42,25 +43,29 @@ public class SummonCardAction extends PCLActionWithCallback<PCLCard>
             return;
         }
 
-        PCLCard returnedCard = null;
-
-        if (this.ally.hasCard())
+        PCLCard returnedCard = this.ally.card;
+        // If ally is withdrawed, setting up the new card must come after the previous card is withdrawn
+        if (returnedCard != null)
         {
-            returnedCard = this.ally.releaseCard();
-            if (returnedCard != null)
-            {
-                GameActions.bottom.makeCard(this.card, AbstractDungeon.player.discardPile).setMakeCopy(true);
-            }
+            PCLActions.top.withdrawAlly(ally).addCallback(this::initializeAlly);
+        }
+        else
+        {
+            initializeAlly();
         }
 
+        CombatManager.onAllySummon(card, ally);
+        complete(returnedCard);
+    }
+
+    protected void initializeAlly()
+    {
         this.ally.initializeForCard(card, retainPowers, stun);
 
         // TODO effects
         if (showEffect)
         {
-            GameEffects.Queue.add(new SmokeEffect(ally.hb.cX, ally.hb.cY));
+            PCLEffects.Queue.add(new SmokeEffect(ally.hb.cX, ally.hb.cY));
         }
-
-        complete(returnedCard);
     }
 }

@@ -9,8 +9,8 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.core.Settings;
 import pinacolada.effects.PCLEffect;
+import pinacolada.effects.PCLEffects;
 import pinacolada.effects.VFX;
-import pinacolada.utilities.GameEffects;
 
 public class BleedParticleEffect extends PCLEffect
 {
@@ -83,7 +83,7 @@ public class BleedParticleEffect extends PCLEffect
         if (this.smokeTimer < 0.0F)
         {
             this.smokeTimer = 0.01F;
-            GameEffects.Queue.add(new FadingParticleEffect(image, this.x, this.y)
+            PCLEffects.Queue.add(new FadingParticleEffect(image, this.x, this.y)
                     .setColor(new Color(1.0F, 0.1F, MathUtils.random(0.02F, 0.4F), 1.0F))
                             .setScale(scale * MathUtils.random(0.45f, 1f)).setRotation(36000f, MathUtils.random(300f, 500f))
                             .setTargetPosition(this.x + MathUtils.random(-500f, 500f), this.y + MathUtils.random(-500f, 500f)))
