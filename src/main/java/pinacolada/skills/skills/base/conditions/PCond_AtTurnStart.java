@@ -1,0 +1,86 @@
+package pinacolada.skills.skills.base.conditions;
+
+import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import pinacolada.cards.base.PCLCardTarget;
+import pinacolada.cards.base.PCLUseInfo;
+import pinacolada.resources.PGR;
+import pinacolada.skills.PCond;
+import pinacolada.skills.PSkill;
+import pinacolada.skills.PSkillData;
+import pinacolada.skills.PSkillSaveData;
+
+public class PCond_AtTurnStart extends PCond
+{
+
+    public static final PSkillData DATA = register(PCond_AtTurnStart.class, PCLEffectType.General, 1, 1)
+            .selfTarget();
+
+    public PCond_AtTurnStart()
+    {
+        super(DATA, PCLCardTarget.None, 0);
+    }
+
+    public PCond_AtTurnStart(PSkillSaveData content)
+    {
+        super(content);
+    }
+
+    public PCond_AtTurnStart(PSkill effect)
+    {
+        this();
+        setChild(effect);
+    }
+
+    public PCond_AtTurnStart(PSkill... effect)
+    {
+        this();
+        setChild(effect);
+    }
+
+    // This should not activate the child effect when played normally
+
+    @Override
+    public String getSampleText()
+    {
+        return TEXT.conditions.atStartOfTurn();
+    }
+
+    @Override
+    public String getSubText()
+    {
+        return isTrigger() ? TEXT.conditions.atStartOfTurn() : TEXT.conditions.onGeneric(PGR.core.tooltips.retain.title);
+    }
+
+    @Override
+    public void use(PCLUseInfo info)
+    {
+    }
+
+    @Override
+    public void use(PCLUseInfo info, int index)
+    {
+    }
+
+    @Override
+    public boolean canPlay(AbstractCard card, AbstractMonster m)
+    {
+        return true;
+    }
+
+    @Override
+    public boolean triggerOnStartOfTurn()
+    {
+        if (this.childEffect != null)
+        {
+            this.childEffect.use(makeInfo(null));
+        }
+        return true;
+    }
+
+    @Override
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
+    {
+        return fromTrigger;
+    }
+}

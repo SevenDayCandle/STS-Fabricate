@@ -1,0 +1,35 @@
+package pinacolada.skills.skills.base.conditions;
+
+import com.megacrit.cardcrawl.cards.AbstractCard;
+import extendedui.ui.tooltips.EUITooltip;
+import pinacolada.resources.PGR;
+import pinacolada.skills.PSkillData;
+import pinacolada.skills.PSkillSaveData;
+
+public class PCond_OnDraw extends PCond_Delegate
+{
+    public static final PSkillData DATA = register(PCond_OnDraw.class, PCLEffectType.Delegate, 1, 1)
+            .selfTarget();
+
+    public PCond_OnDraw()
+    {
+        super(DATA);
+    }
+
+    public PCond_OnDraw(PSkillSaveData content)
+    {
+        super(content);
+    }
+
+    @Override
+    public boolean triggerOnDraw(AbstractCard c)
+    {
+        return triggerOnCard(c);
+    }
+
+    @Override
+    public EUITooltip getDelegateTooltip()
+    {
+        return PGR.core.tooltips.draw;
+    }
+}

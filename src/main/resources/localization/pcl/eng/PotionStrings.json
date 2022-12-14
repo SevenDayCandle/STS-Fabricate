@@ -1,0 +1,45 @@
+
+{
+	"pcl:BerserkPotion":
+	{
+	  "NAME": "Berserk Potion",
+	  "DESCRIPTIONS":
+	  [
+	  ]
+	},
+	"pcl:BurgeoningPotion":
+	{
+	  "NAME": "Burgeoning Potion",
+	  "DESCRIPTIONS":
+	  [
+	  ]
+	},
+	"pcl:HeartPotion":
+	{
+		"NAME": "Heart Potion",
+		"DESCRIPTIONS":
+		[
+		]
+	},
+	"pcl:ResistancePotion":
+	{
+	  "NAME": "Resistance Potion",
+	  "DESCRIPTIONS":
+	  [
+	  ]
+	},
+	"pcl:SupportivePotion":
+	{
+	  "NAME": "Supportive Potion",
+	  "DESCRIPTIONS":
+	  [
+	  ]
+	},
+	"pcl:VitalityPotion":
+	{
+	  "NAME": "Vitality Potion",
+	  "DESCRIPTIONS":
+	  [
+	  ]
+	}
+}

@@ -1,0 +1,373 @@
+
+{
+	"_CommonEvent":
+	{
+		"DESCRIPTIONS": [""],
+		"NAME": "",
+		"OPTIONS":
+		[
+			"[Continue]",
+			"[Leave]"
+		]
+	},
+	"pcl:ContractEvent":
+	{
+		"DESCRIPTIONS":
+		[
+			"As you make your way through a sprawling city, you spot a strange cat-like creature perched on top of a fence. Suddenly, you hear a mysterious voice that seems to emanate from your head. NL NL \"Hello traveler. If you make a contract with me to kill witches, I can grant you any wish you want.\"",
+
+			"Out of the corner of your eye, you spot a black-haired girl readying a rifle whilst rushing towards you and the cat-like creature.  NL NL \"DON'T LISTEN TO THAT THING! IT IS TRYING TO TAKE YOUR SOUL!\" she screams at you. NL NL The cat-like creatures completely ignores her and stares at you, awaiting your response.",
+
+			"\"Great! To seal the contract, please choose one of these gems below. \" The voice in your head says. NL NL Three gems suddenly appear before your eyes, suspended in mid-air as if they were beckoning you to grab them. Which one do you choose?",
+
+			"\"Let me negotiate a reasonable contract.\" #yZhongli states calmly as he strides over to the cat-like creature. NL NL You and the girl watch as #yZhongli and the cat-like creature engage in intense negotation. Finally, after what seems like forever, #yZhongli approaches you with a written contract and a strange gem in his hand.",
+
+			"\"The contract has been sealed. Make sure to kill those witches!\" The voice in your head says as it fades, along with the strange cat-like creature. NL NL You notice that the black-haired girl has fallen to her knees, sobbing hysterically. NL NL \"I-I-I couldn't save them... I'm so sorry...\" The girl sobs uncontrollably. You decide it is best to let the girl be and go on your way.",
+
+			"The girl reaches out a hand towards you and you take it. Suddenly, your surroundings warp and distort. In the blink of an eye, you find yourself in the countryside, far away from the city. NL NL \"I'm glad I could save at least you\" she sighs with relief as she walks away.",
+
+			"\"The contract has been forged. Please honor it. Breaking the contract will incur the wrath of the rock.\" he states as he places the strange gem and the contract into your hands. NL NL You take a look at the contract and then quickly give up as you are greeted with a flood of legal mumbo jumbo. You decide that you'll probably be fine without reading it in detail and proceed on your way."
+		],
+		"NAME": "The Contract",
+		"OPTIONS":
+		[
+			"[Accept a Contract] #gChoose #g1 #gof #g3 #grelics #rwith #ra #rcatch",
+			"[Escape] Jump to any room on the next floor",
+			"[Bring in a professional diplomat] #g???",
+			"[Locked] ???.",
+			"[Accept] #gObtain #gRelic"
+		]
+	},
+	"pcl:MicrowaveEvent":
+	{
+		"DESCRIPTIONS":
+		[
+			"Before you lies an unpeeled #ybanana in a @ microwave @.",
+
+			"You snatch the #ybanana from the microwave and devour it. NL NL You probably should have been patient and cooked the banana in the @microwave@, but what's done is done.",
+
+			"You take the logical course of action and cook the #ybanana in the @microwave@, peel intact. NL NL As soon as the @microwave@ is done cooking, you peer inside to find that the #ybanana has become green and gel-like. NL NL In spite of its odd appearance, you devour it. After all, what could possibly go wrong?"
+		],
+		"NAME": "Banana in a Microwave",
+		"OPTIONS":
+		[
+			"[Eat the Banana] #gHeal #g{0} #gHP.",
+			"[Cook the Banana] #gHeal #g{0} #gHP. ???"
+		]
+	},
+	"pcl:TheAbandonedCabin":
+	{
+		"DESCRIPTIONS":
+		[
+			"You stumble across a small and seemingly abandoned cabin. NL NL Tired and hungry, you decide to go against your better instincts and enter it. NL NL After checking for possible inhabitants, you soon ~fall~ ~asleep...~",
+
+			"You are awakened by a loud knocking noise. NL NL The room is almost #pcompletely #pdark, NL but you perceive a @creature@ standing in front of you.",
+
+			"\"Hunger... need #rblood... trade?\" NL NL The @creature@ extends his arm towards you, revealing an #yAncient #yMedallion, you wonder if accepting would be a good idea...",
+
+			"You ran towards the door as fast as you could, NL and then as far away from the cabin as possible.",
+
+			"You try to grab the medallion when suddenly the @creature@ #rbites your arm with great force. Nonetheless, it lets you take the relic.",
+
+			"\"Need more... trade... again...\" NL NL The @creature@ reveals another #yAncient #yMedallion. NL NL You are #rseverely #rwounded from the previous trade...",
+
+			"You ran out of the cabin, NL but the creature managed to hurt you once more.",
+
+			"This hurt much more than before. NL NL But the @creature@ seems satisfied as it slowly abandons the cabin."
+		],
+		"NAME": "The Abandoned Cabin",
+		"OPTIONS":
+		[
+			"[Accept] #rLose #r{0} #rHP. #gObtain #gRelic",
+			"[Run]",
+			"[Try to Run] #r50% #rchance #rto #rlose #r{0} #rHP"
+		]
+	},
+	"pcl:TheBookPile":
+	{
+		"DESCRIPTIONS":
+		[
+			"You find yourself in a library filled to the brim with books. Towers of books surround you from all sides, and one of them suddenly topples, smothering you with books. You figure that you might as well give one of them a read.",
+
+			"You indulge yourself in a book about the lore and rituals surrounding various mythological demons from around the world. You walk away inspired to summon demons to terrorize innocent #yByrds.",
+
+			"You indulge yourself in a book about the lore surrounding various mythological reptiles from around the world. You slither away, inspired to act like a reptile wherever you go.",
+
+			"You indulge yourself in a book about the history and theories of various prominent scientists in history. You walk away armed with a vast vocabulary of scientific jargon to confuse passerbys.",
+
+			"You indulge yourself in a book about how to build your own robot. You follow the instructions to the letter and wind up with your very own functional robot! Cool!",
+
+			"You indulge yourself in a gory book on zombies and the apocalypse. You walk away with your hands stretched out in front of you, inspired to eat brains.",
+
+			"You indulge yourself in a book about how to be a wizard. You walk away armed with a vast vocabulary of mumbo jumbo that will make absolutely no sense to passerbys."
+		],
+		"NAME": "The Haunt",
+		"OPTIONS":
+		[
+			"[Read about Demons] #gObtain #g1 #gof #g3 #gDemons.",
+			"[Read about Machines] #gObtain #g1 #gof #g3 #gMachines.",
+			"[Read about Reptiles] #gObtain #g1 #gof #g3 #gReptiles.",
+			"[Read about Scientists] #gObtain #g1 #gof #g3 #gScientists.",
+			"[Read about the Undead] #gObtain #g1 #gof #g3 #gUndead.",
+			"[Read about Wizards] #gObtain #g1 #gof #g3 #gSpellcasters."
+		]
+	},
+	"pcl:TheFloatyThing":
+	{
+	  "DESCRIPTIONS":
+	  [
+		"As you are strolling around, minding your own business, a tiny floaty thing suddenly barges right up to your face.",
+
+		"\"Hey Traveler! I have some great, great bargains for you! Check them out!\" NL NL The ~floaty thing~ screeches into your face. NL NL As annoying as the floaty thing is, you decide it couldn't hurt to take a look of what it has to offer.",
+
+		"\"For just #b16 #yGold, you can cast a wish to obtain a prize! Every #b10 wishes will guarantee a rarer prize as well!\" NL NL The ~floaty thing~ screeches with undue excitement.",
+
+		"\"That's too bad. Maybe you'll have better luck if you WISH AGAIN!!!\" NL NL The ~floaty thing~ screeches into your face. NL NL (You have made {0} wishes so far).",
+
+		"\"CONGRATULATIONS ON YOUR 10TH ROLL IN A ROW! You've won a BETTER PRIZE!!!\" NL NL The ~floaty thing~ screeches into your face again. NL NL (You have made {0} wishes so far)",
+
+		"\"CONGRATULATIONS ON YOUR 10TH ROLL IN A ROW! You've won a BETTER PRIZE!!!\" NL NL The ~floaty thing~ screeches into your face again. NL NL The 'prize' you've gotten can't really be called a prize... NL NL (You have made {0} wishes so far)",
+
+		"\"NO REFUNDS!!!\" NL NL The ~floaty thing~ screeches into your face. (Seriously, does it really have to screech so much...) NL NL (You have made {0} wishes so far).",
+
+		"\"Urgh, fine... I can give you a partial refund... But my business is dying... Don't you care about small businesses?\" NL NL The ~floaty thing~ grumbles, finally uttering a noise that isn't a ear-wrenching screech. NL NL Reluctantly, it hands you some of the money it swindled from you and saunters away in disappointment.",
+
+		"A trinket plops down onto your hands. You look to see that it is a luxurious golden lockbox! When you open it, you are greeted with a very valuable reward indeed!",
+
+		"\"H-h-hey... That wasn't supposed to be given out. GIVE IT BACK!\" NL NL The ~floaty thing~ screeches into your face as it charges towards you. NL NL You quickly dodge it and run away as fast as you can from the screeching floaty thing throwing curses at you.",
+
+		"You snatch the ~floaty thing~ out of the air and gobble it down your throat before it is able to goad you any more. NL NL It'll probably be bad for your stomatch, but at least nobody will ever fall prey to that thing's sales pitches again."
+	  ],
+	  "NAME": "The Floaty Thing",
+	  "OPTIONS":
+	  [
+		"[Wish] #g{0}% #gchance #gto #gobtain #ga #gPrize. #rLose #r{1} #rGold.",
+		"[Locked] Not enough Gold.",
+		"[Demand your Gold back] #g50% chance to Gain #g{0} Gold.",
+		"[Eat the Thing] #gHeal #gto #gfull. #rObtain #ra #rrandom #rCurse."
+	  ]
+	},
+	"pcl:TheHaunt":
+	{
+		"DESCRIPTIONS":
+		[
+			"#yEverything #yin #ythis #yplace #yseems #yto #ybe #ymade #yof #ygold. #yIt #yseems #ythe #ywhole #ylandscape #yhas #ychanged... #yMountains #yof #yglimmering #yGold #yeverywhere. #yA #yriver #yof #ymolten #ygold #ycourses #ythrough #yit. #yWhy #ydid #yyou #ynot #ynotice #yit #yearlier? NL NL #yNo #ymatter, #yyou #yfeel #ycompelled #yto #ytake #ysome #yof #yit, NL #yyou #r@HAVE@ #yto #ytake #ysome #yof #yit. #yJust #ya #yfew #ygolden #yrocks. NL NL #y... #ywhat #yis #ythe #yworst #ythat #ycould #yhappen?",
+
+			"NL NL NL NL NL NL NL #ySomething #yis #ylaughing #yin #ythe #yfar #ydistance."
+		],
+		"NAME": "The Haunt",
+		"OPTIONS":
+		[
+			"[Take the Gold] #yGain #y{0} #yGold.",
+			"[Leave] #gHeal #g{0} #gHP"
+		]
+	},
+	"pcl:TheHeroAssociation":
+	{
+		"DESCRIPTIONS":
+		[
+			"You come across a giant building that compels you to enter it by virtue of how badass it looks. Inside, you spot a receptionist desk, which you promptly walk towards. NL NL The receptionist greets you warmly, and then hands you what appears to be a bounty. Your eyes are immediately drawn to the title of this bounty: \"Do you have what it takes to be a hero? If so, prove your worth by slaying the beast that plagues this land!\"",
+
+			"Your hero valiantly snatches the bounty and ventures out of the building to prove their worth. NL NL The receptionist informs you that they will notify you if the bounty gets completed and takes their leave. NL NL Several days pass without any news. NL NL Finally, out of the blue, you get a call from the receptionist, who tells you to return to the Hero Association.",
+
+			"\"I have some good and bad news. The good news is that we have recovered the body of the beast, so you will receive your due reward. The bad news... is that your friend has gone missing and there are no leads whatsoever on their whereabouts. \" NL NL \"My sincere condolences for your loss.\" NL NL The receptionist hands you your reward. Both you and the receptionist honor your comrades loss with a moment of silence. Then, you head out of the building and continue on your journey.",
+
+			"You decide that you're not enough of a hero to take on the bounty and opt to hire someone else to complete the bounty for your instead. NL NL When you return to the Hero Association to claim your reward, however, the receptionist informs you that buying off others to complete bounties is strictly forbidden, leaving you with nothing but a fuming hero who won't leave you alone."
+		],
+		"NAME": "The Hero Association",
+		"OPTIONS":
+		[
+			"[Be the Hero!] #gObtain #ga #gspecial #greward. #rLose #ra #rProtagonist.",
+			"[Hire a Hero] #gObtain #g1 #gof #g5 #gProtagonists. #rLose #r{0} #rGold.",
+			"[Locked] ???.",
+			"[Locked] Not enough Gold."
+		]
+	},
+	"pcl:TheMaskedTraveler1":
+	{
+		"DESCRIPTIONS":
+		[
+			"While passing by this #ytotally not #yreused game asset, a masked figure with a large backpack approaches you. NL NL \"Greetings friend, are you perchance carrying some @'special'@ weaponry?\" NL ... NL \"Are you willing to sell it?\" NL NL \"Or perhaps you would prefer to buy some from my ... #ycollection ?\"",
+
+			"\"Did he actually accept?\" NL ... NL NL \"Ahem... I am @grateful@ for the #ytrade , be safe on your journey.\" NL NL That said, he disappeared from your sight."
+		],
+		"NAME": "The Masked Traveler",
+		"OPTIONS":
+		[
+			"[Sell] #gRemove {0}. #gGain #g{1} #gGold.",
+			"[Trade] #gImprove #g1 #gStrike #gand #g1 #gDefend. #rLose #r{0} #rGold.",
+			"[Locked] No card to sell.",
+			"[Locked] Not enough Gold."
+		]
+	},
+	"pcl:TheMaskedTraveler2":
+	{
+		"DESCRIPTIONS":
+		[
+			"\"It's you! Are you on your way to defeat the @Heart@ of the Spire?\" NL NL \"Why don't you help me with another menace instead? You see, The Unnamed has returned, but don't you worry! It's nothing you can't defeat!\"",
+
+			"\"Well, there is a small detail... To fight the Unnamed you will have to trade ALL your Relics, Gold, Potions and cards Upgrades for one of these #ySpecial #yRelics:\" NL NL \"However you might be able to gain some Gold back based on your Equipment, I would say about #b{0} #yGold.\"",
+
+			"\"Perfect! just go ahead and you shall find him, I'm counting on you!\" NL NL \"Oh wait! I almost forgot, you will find a lot of these in there. Here, have one... Or if you prefer I could change some of your cards.\""
+		],
+		"NAME": "The Masked Traveler (Part 2)",
+		"OPTIONS":
+		[
+			"[Accept] #gObtain #gRelic",
+			"[Accept] #gRemove #g{0} #gcards, #gchoose #gand #gobtain #g{1} #gUncommon #gcards.",
+			"[Accept] #gRecover #gyour #gstarting #grelics. #rLose #r{0} #rMax #rHP."
+		]
+	},
+	"pcl:TheMaskedTraveler3":
+	{
+		"DESCRIPTIONS":
+		[
+			"\"Good evening friend!\" NL NL \"How did I get here? It matters not. We simply needed another event for this act! Trade 1 medallion or #b150 #yGold for a rare card, your choice. Or well... you could also leave\"",
+
+			"\"Thanks! Now you can click on 'Leave'.\""
+		],
+		"NAME": "The Masked Traveler (Part 3)",
+		"OPTIONS":
+		[
+			"[Trade] #rLose #r1 #rAncient #rMedallion. #gObtain #gan #gUpgraded #grare #gcard.",
+			"[Trade] #rLose #r{0} #rGold. #gObtain #gan #gUpgraded #grare #gcard.",
+			"[Locked] No #yAncient #yMedallion to trade.",
+			"[Locked] Not enough Gold."
+		]
+	},
+	"pcl:TheUnnamedMerchant":
+	{
+		"DESCRIPTIONS":
+		[
+			"\"I am a merchant\" NL NL You hear someone speaking, you turn your head and see a strange person, completely still, staring at you, as if expecting something.",
+
+			"\"I sell and I buy things...\" NL NL \"But the only things of value here are these #yAncient #yMedallions. Are you buying? Or are you selling?\"",
+
+			"\"Fine, but do not tempt your fate.\"",
+
+			"\"These are my prices. I will not change them.\"",
+
+			"\"Good Deal... Good Deal\""
+		],
+		"NAME": "The Unnamed Merchant",
+		"OPTIONS":
+		[
+			"[Sell] #gGain #g{0} #gGold. #rLose #rAncient #rMedallion.",
+			"[Buy] #gObtain #gAncient #gMedallion. #rLose #r{0} #rGold.",
+			"[Haggle] #g50%: #gBetter #gDeal. #r50%: #rWorse #rDeal.",
+			"[Locked] No #yAncient #yMedallion to sell.",
+			"[Locked] Not enough Gold."
+		]
+	},
+	"pcl:TheCursedForest":
+	{
+		"DESCRIPTIONS":
+		[
+			"Numerous trees flood your vision as you're quickly engulfed by a thick forest. NL NL The air is ~heavy~ ~and~ ~humid,~ filled with spores from fungi and the leafs all seem to be wet from recent rain. NL NL Dancing through the trees, a ghostly figure spins in the air, fading in and out of existence while approaching you.",
+
+			"\"This is no place for a mortal, are you perhaps lost?\" NL NL The green haired apparition says in a calm yet surprised tone. NL NL \"Oh! You've got your own set of afflictions, if you are going to persist they'll slow you down. It is my duty to contain those, but I can also show you how to harvest power from them.\" NL NL She seems to mean no harm, what will you do?",
+
+			"Blinding light envelops you completely robbing you of your vision, when you finally are able to see again, you're by yourself again. NL NL The trees and mushrooms stand mockingly still as you're left to wonder what happened, but somehow both the air and yourself feel lighter."
+		],
+		"NAME": "The Cursed Forest",
+		"OPTIONS":
+		[
+			"[Embrace] #gObtain #gHina #gKagiyama #rAnd #rA #rCurse.",
+			"[Purify] #gRemove #g{0} #gRandom #gCurses #gFrom #gYour #gDeck."
+		]
+	},
+	"pcl:TheMadLaboratory":
+	{
+		"DESCRIPTIONS":
+		[
+			"Numerous trees flood your vision as you're quickly engulfed by a thick forest. NL NL The air is ~heavy~ ~and~ ~humid,~ filled with spores from fungi and the leafs all seem to be wet from recent rain. NL NL Dancing through the trees, a ghostly figure spins in the air, fading in and out of existence while approaching you.",
+
+			"\"This is no place for a mortal, are you perhaps lost?\" NL NL The green haired apparition says in a calm yet surprised tone. NL NL \"Oh! You've got your own set of afflictions, if you are going to persist they'll slow you down. It is my duty to contain those, but I can also show you how to harvest power from them.\" NL NL She seems to mean no harm, what will you do?",
+
+			"Blinding light envelops you completely robbing you of your vision, when you finally are able to see again, you're by yourself again. NL NL The trees and mushrooms stand mockingly still as you're left to wonder what happened, but somehow both the air and yourself feel lighter."
+		],
+		"NAME": "The Mad Laboratory",
+		"OPTIONS":
+		[
+			"[Relic] #gCreate #ga #grelic.",
+			"[Card] #gCreate #ga #gcard.",
+			"[Nuke] #rLose #r{0} #rHP. ???",
+			"[Locked] ???"
+		]
+	},
+	"pcl:ThePharmacy":
+	{
+	  "DESCRIPTIONS":
+	  [
+		"You stumble into an indescript pharmacy on the side of the road. NL NL It is ~dark~ and ~humid~ inside, and the floorboards creak as you step on them. NL NL As you approach what appears to be a receptionist desk, the pharmacy suddenly ~lights~ up. A small girl wearing a strange hat peeps out of the desk. She appears to be the @receptionist@ of this pharmacy.",
+
+		"\"Buy #ypotions. Or take on bounties.\" NL NL The ~receptionist~ says in an emotionless tone.",
+
+		"\"Thank you. Buy more potions? Or take on bounties.\" NL NL The ~receptionist~ says, again with no emotion whatsoever.",
+
+		"\"Are you interested in bounties? If so, hunt a #yCocogoat or a #yBear for me. You will receive a great reward. Use this map to locate it.\"",
+
+		"\"Please hunt a #yCocogoat soon. Thank you.\"",
+
+		"\"Please hunt a #yBear soon. Thank you.\"",
+
+		"You decide that it is not wise to shop in such an ominous place as this and quickly take your leave before the ~receptionist~ can say anything else."
+	  ],
+	  "NAME": "The Pharmacy",
+	  "OPTIONS":
+	  [
+		"[Inquire about Bounties]",
+		"[Buy] #gObtain #ga #gPotion. #rLose #r{0} #rGold.",
+		"[Locked] Not enough Gold.",
+		"[Hunt the Cocogoat] #gObtain #gBounty",
+		"[Hunt the Pyrotechnician] #gObtain #gBounty",
+		"[Refuse Bounty]"
+	  ]
+	},
+  "pcl:TheMysteriousPeak":
+  {
+	"DESCRIPTIONS":
+	[
+	  "You finally come across the location shown on your bounty. After searching for hours through the thick fog, you finally bump into what appears to be an ordinary goat grazing on a hill. NL NL You feel a tug. You quickly spin around to find the ~receptionist~ from the pharmacy next to you. NL NL The receptionist points at the goat and states NL NL \"There is the #yCocogoat. Hunt it.\"",
+
+	  "You muster all the courage you have and charge towards the #yCocogoat. It lets out a ~bone-chilling~ screech before blasting you with a hailstorm of icicles. NL NL Despite your injuries, you still manage to take down the goat and subdue it.",
+
+	  "You set up a trap as bait for the #yCocogoat and retreat to a safe position. NL NL You watch as the goat walks straight into the trap. The trap ~explodes~, instantly knocking the goat out.",
+
+	  "The ~receptionist~ walks up to the defeated goat and searches through it. Then, she gets up and walks towards you, holding a bottle of white liquid. NL NL \"Obtained Cocomilk. Try some.\" NL NL Before you can protest, the receptionist forces open your mouth and pours the white liquid down your throat. It completely ~chills~ you to the bone, and you are left chattering as the receptionist walks away.",
+
+	  "You muster all the cowardice you have and flee as fast as you can. The receptionist stares at you as you flee in terror with no emotion whatsoever."
+	],
+	"NAME": "The Mysterious Peak",
+	"OPTIONS":
+	[
+	  "[Fight] #gObtain #gSheer #gCold. #rLose #r{0} #rHP.",
+	  "[Set a Trap] #gObtain #gSheer #gCold. #rLose #r{0}.",
+	  "[Locked] Requires an Uncommon relic.",
+	  "[Run]"
+	]
+  },
+    "pcl:TheSecludedHarbor":
+    {
+  	"DESCRIPTIONS":
+  	[
+	  "You finally come across the location shown on your bounty. After searching for hours through the bustling harbor, you stumble across a cafe with a bear posing outside as its mascot. NL NL You feel a tug. You quickly spin around to find the ~receptionist~ from the pharmacy next to you. NL NL The receptionist points and states NL NL \"There is the #yBear. Hunt it.\"",
+
+	  "You muster all the courage you have and charge towards the #yBear. It lets out a ~deafening~ roar before blasting you with a jet of flames. NL NL Despite your burns, you still manage to take down the bear and subdue it.",
+
+	  "You set up a trap as bait for the #yBear and retreat to a safe position. NL NL You watch as the bear walks straight into the trap. The trap ~explodes~, instantly knocking the bear out.",
+
+	  "The ~receptionist~ walks up to the defeated bear and searches through it. Then, she gets up and walks towards you, holding a chili pepper. NL NL \"Obtained chili peppers. Try some.\" NL NL Before you can protest, the receptionist forces open your mouth and shoves a chili pepper down your throat. It completely ~burns~ you on the inside, and you are left spitting out flames as the receptionist walks away.",
+
+	  "You muster all the cowardice you have and flee as fast as you can. The receptionist stares at you as you flee in terror with no emotion whatsoever."
+  	],
+  	"NAME": "The Secluded Harbor",
+  	"OPTIONS":
+  	[
+  	  "[Subdue] #gObtain #gBlazing #gHeat. #rLose #r{0} #rHP.",
+  	  "[Give a Gift] #gObtain #gBlazing #gHeat. #rLose #r{0}.",
+  	  "[Locked] Requires an Uncommon relic.",
+  	  "[Run]"
+  	]
+    }
+}

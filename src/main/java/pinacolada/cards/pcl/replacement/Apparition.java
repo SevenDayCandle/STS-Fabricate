@@ -1,0 +1,41 @@
+package pinacolada.cards.pcl.replacement;
+
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import pinacolada.cards.base.*;
+import pinacolada.cards.base.fields.PCLCardTag;
+import pinacolada.powers.PCLPowerHelper;
+import pinacolada.skills.PMove;
+import pinacolada.skills.skills.PSpecialSkill;
+import pinacolada.utilities.GameActions;
+
+public class Apparition extends PCLCard
+{
+    public static final PCLCardData DATA = register(Apparition.class)
+            .setSkill(1, CardRarity.SPECIAL, PCLCardTarget.None)
+            .setAffinities(PCLAffinity.Dark)
+            .setTags(PCLCardTag.Exhaust, PCLCardTag.Ethereal)
+            .setCostUpgrades(-1)
+            .setColorless();
+
+    public Apparition()
+    {
+        super(DATA);
+    }
+
+    public void action(PSpecialSkill move, PCLUseInfo info)
+    {
+        GameActions.bottom.moveCards(AbstractDungeon.player.hand, AbstractDungeon.player.discardPile)
+                .setFilter(c -> c instanceof Apparition)
+                .showEffect(true, true, 0.25f)
+                .addCallback(cards -> {
+                    GameActions.bottom.draw(cards.size());
+                });
+    }
+
+    @Override
+    public void setup(Object input)
+    {
+        addUseMove(PMove.apply(PCLCardTarget.All, 1, PCLPowerHelper.Intangible));
+        addSpecialMove(0, this::action, 1);
+    }
+}

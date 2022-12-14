@@ -1,0 +1,40 @@
+package pinacolada.skills.skills.base.moves;
+
+import extendedui.utilities.ColoredString;
+import pinacolada.cards.base.PCLCardTarget;
+import pinacolada.skills.PMove;
+import pinacolada.skills.PSkillData;
+import pinacolada.skills.PSkillSaveData;
+
+public abstract class PMove_Gain extends PMove
+{
+    public PMove_Gain(PSkillSaveData content)
+    {
+        super(content);
+    }
+
+    public PMove_Gain(PSkillData data, int amount)
+    {
+        super(data, PCLCardTarget.Self, amount);
+    }
+
+    public abstract String gainText();
+
+    @Override
+    public ColoredString getColoredValueString()
+    {
+        return getColoredValueString(Math.abs(baseAmount), Math.abs(amount));
+    }
+
+    @Override
+    public String getSampleText()
+    {
+        return TEXT.actions.gainAmount("X", gainText());
+    }
+
+    @Override
+    public String getSubText()
+    {
+        return amount < 0 ? TEXT.actions.loseAmount(getAmountRawString(), gainText()) : TEXT.actions.gainAmount(getAmountRawString(), gainText());
+    }
+}

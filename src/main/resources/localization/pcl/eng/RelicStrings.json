@@ -1,0 +1,141 @@
+
+{
+	"pcl:BountyMap":
+	{
+		"DESCRIPTIONS": ["When you enter (in order) a #yMonster room, an #yElite room, a #yTreasure room, and a #yShop room, the next ? room you enter will trigger a special event.{0}"," | Current Required Room: #b"],
+		"FLAVOR": "Hunt the Cocogoat. Wanted dead or alive.",
+		"NAME": "Bounty Map"
+	},
+	"pcl:BountyMap2":
+	{
+		"DESCRIPTIONS": ["When you enter (in order) a #yMonster room, an #yShop room, a #yCampfire room, and a #yElite room, the next ? room you enter will trigger a special event.{0}"," | Current Required Room: #b"],
+		"FLAVOR": "Hunt the Pyrotechnician. Wanted dead or alive.",
+		"NAME": "Bounty Map"
+	},
+	"pcl:ChiliPepper":
+	{
+		"DESCRIPTIONS": [""],
+		"FLAVOR": "You can't beat the heat!",
+		"NAME": "Chili Pepper"
+	},
+	"pcl:DungBall":
+	{
+	  "DESCRIPTIONS": ["#oRight-Click: Spend #b{0} charges to fetch the bottom card of your discard pile. Gain #b1 charge whenever you manually discard or #yReshuffle a card. Store up to #b{1} charges."],
+	  "FLAVOR": "You could roll with this all day.",
+	  "NAME": "Dung Ball"
+	},
+	"pcl:FoolishCubes":
+	{
+		"DESCRIPTIONS": ["You may reroll cards from card rewards into random #yCommons or #yUncommons. | Gain #b{0} uses when you enter #yMonster rooms. Gain #b{1} more if it was an #yElite or #yBoss room. Store up to #b{2} uses."],
+		"FLAVOR": "A pair of simple rolling cubes.",
+		"NAME": "Foolish Cubes"
+	},
+	"pcl:JadePendant":
+	{
+		"DESCRIPTIONS": ["At the start of battle, gain {0} [Resistance]."],
+		"FLAVOR": "You can't beat the heat!",
+		"NAME": "Jade Pendant"
+	},
+	"pcl:Macroscope":
+	{
+	  "DESCRIPTIONS": ["At the start of battle, the HP of ALL characters is multiplied by {0} until the end of combat. During battle, ALL HP, damage, [Block], and [THP] values are multiplied by {0}."],
+	  "FLAVOR": "You can't beat the heat!",
+	  "NAME": "Macroscope"
+	},
+	"pcl:MagicEraser":
+	{
+		"DESCRIPTIONS": ["Replaces #yFoolish #yCubes. You may break cards from card rewards to obtain #yAugments. | Gain #b1 use when you enter a #yElite or #yBoss room. Store up to #b{0} uses."],
+		"FLAVOR": "Erases everything and anything!",
+		"NAME": "Magic Eraser"
+	},
+	"pcl:Pacifiier":
+	{
+	  "DESCRIPTIONS": ["Upon pickup, double your Max. HP. All Max. HP gains from now on are doubled. All your Attacks deal 0 damage."],
+	  "FLAVOR": "You can't beat the heat!",
+	  "NAME": "Chili Pepper"
+	},
+	"pcl:PCLStarterRelic":
+	{
+		"DESCRIPTIONS": ["#gRight-Click: Apply any #yBlue #yAugment to this relic to modify its effect.", "#pCurrent #pAugment: {0} | #oRight-Click: Retrieve {0}."],
+		"FLAVOR": "",
+		"NAME": ""
+	},
+	"pcl:PizzaBox":
+	{
+		"DESCRIPTIONS": ["Once per combat, when you end your turn with spare [E]: Gain {0} [Energized], [NTD], and [Vigor]."],
+		"FLAVOR": "It's pizza time!",
+		"NAME": "Pizza Box"
+	},
+	"pcl:PortableCactus":
+	{
+		"DESCRIPTIONS": ["Start each battle with #b{0} [Malleable]. Whenever you receive #yAttack damage: Gain #b{0} #yTemp. [Thorns]."],
+		"FLAVOR": "Now you can finally fulfill your lifelong dream of being a Spiker!",
+		"NAME": "Portable Cactus"
+	},
+	"pcl:ReconScanner":
+	{
+		"DESCRIPTIONS": ["You can now see a list of possible encounters before entering a room."],
+		"FLAVOR": "You can't beat the heat!",
+		"NAME": "Recon Scanner"
+	},
+	"pcl:SoulGem1":
+	{
+		"DESCRIPTIONS": ["At the start of turn, if [Strength] is less than #b3, set it to #b3. Shuffle a #rCurse into your draw pile for every #b6 #yAttacks played."],
+		"FLAVOR": "Would you like to make a contract?",
+		"NAME": "Soul Gem of Rage"
+	},
+	"pcl:SoulGem2":
+	{
+		"DESCRIPTIONS": ["At the start of turn, if [Dexterity] is less than #b3, set it to #b3. Shuffle a #rCurse into your draw pile for every #b5 cards played that give #yBlock."],
+		"FLAVOR": "Would you like to make a contract?",
+		"NAME": "Soul Gem of Freedom"
+	},
+	"pcl:SoulGem3":
+	{
+		"DESCRIPTIONS": ["At the start of turn, if [Focus] is less than #b3, set it to #b3. Shuffle a #rCurse into your draw pile for every #b3 #yOrbs channeled."],
+		"FLAVOR": "Would you like to make a contract?",
+		"NAME": "Soul Gem of Contemplation"
+	},
+	"pcl:SoulGem4":
+	{
+		"DESCRIPTIONS": ["#At the start of turn, if [Resistance] is less than #b3, set it to #b3. Destroy this relic if you play #b16 cards in a single turn. Something very bad will happen if this relic is destroyed...", "This relic can no longer be used as you have broken the contract. You will surely face further repercussions for this..."],
+		"FLAVOR": "Would you like to make a contract?",
+		"NAME": "Soul Gem of Stoicism"
+	},
+	"pcl:SpiritPoop2":
+	{
+		"DESCRIPTIONS": ["It's unpleasant and rarer."],
+		"FLAVOR": "Just like Spirit Poop, except rarer.",
+		"NAME": "4-Star Spirit Poop"
+	},
+	"pcl:SpiritPoop3":
+	{
+		"DESCRIPTIONS": ["At the start of battle, gain #b2 #yInspiration."],
+		"FLAVOR": "Well, what do you know. It's actually pretty pleasant!",
+		"NAME": "5-Star Spirit Poop"
+	},
+	"pcl:SpitefulCubes":
+	{
+		"DESCRIPTIONS": ["Replaces #yFoolish #yCubes. You may reroll cards from card rewards into cards with any of its [A-W]. | Gain #b{0} uses when you enter #yMonster rooms. Gain #b{1} more if it was an #yElite or #yBoss room. Store up to #b{2} uses."],
+		"FLAVOR": "A pair of black cubes. You probably should not roll them.",
+		"NAME": "Spiteful Cubes"
+	},
+	"pcl:TimeShare":
+	{
+	  "DESCRIPTIONS": ["At shops, you may loan #yUncommon and #yRare cards and relics to gain #yGold after every battle."],
+	  "FLAVOR": "",
+	  "NAME": "TimeShare"
+	},
+	"pcl:UsefulBox":
+	{
+	  "DESCRIPTIONS": ["Once per combat, #oRight-Click: Target an enemy to take on its form, or target yourself to take the form of a random player character.", "#gCurrent #gBonus: {0}"],
+	  "FLAVOR": "A box that is useful.",
+	  "NAME": "Useful Box"
+	},
+	"pcl:VeryUsefulBox":
+	{
+	  "DESCRIPTIONS": ["Once per combat, #oRight-Click: Target an enemy to take on its form, or target yourself to take the form of a random player character. At the start of battle, activate an effect based on your current form.", "#gCurrent #gBonus: {0}"],
+	  "FLAVOR": "A box that is very useful.",
+	  "NAME": "Very-Useful Box"
+	}
+}

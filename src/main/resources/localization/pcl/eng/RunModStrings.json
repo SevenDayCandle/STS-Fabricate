@@ -1,0 +1,10 @@
+{
+  "No Relics": {
+    "NAME": "No Relics",
+    "DESCRIPTION": "Non-Event, non-Boss relics are replaced with Circlets."
+  },
+  "Series Deck": {
+    "NAME": "Series Deck",
+    "DESCRIPTION": "Starts with 1 copy of each card in your starting series."
+  }
+}

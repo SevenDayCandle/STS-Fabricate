@@ -1,0 +1,187 @@
+{
+	"CURSE":
+	{
+		"pcl:Curse_AscendersBane":
+		{
+			"NAME": "Ascender's Bane"
+		},
+		"pcl:Curse_Avarice": {"NAME": "Avarice"},
+		"pcl:Curse_Clumsy": {"NAME": "Clumsy"},
+		"pcl:Curse_Decay": {"NAME": "Decay"},
+		"pcl:Curse_Depression":{"NAME": "Depression"},
+		"pcl:Curse_Despair": {"NAME": "Despair"},
+		"pcl:Curse_Devastation": {"NAME": "Devastation"},
+		"pcl:Curse_Doubt": {"NAME": "Doubt"},
+		"pcl:Curse_GriefSeed":
+		{
+			"NAME": "Grief Seed"
+		},
+		"pcl:Curse_Injury": {"NAME": "Injury"},
+		"pcl:Curse_Normality":
+		{
+			"EXTENDED_DESCRIPTION": ["While in hand, Negate the {Buffs} and {Debuffs} of ALL characters (excluding those specific to cards or encounters)"],
+			"NAME": "Normality"
+		},
+		"pcl:Curse_Pain": {"NAME": "Pain"},
+		"pcl:Curse_Parasite": {"NAME": "Parasite"},
+		"pcl:Curse_Regret": {"NAME": "Regret"},
+		"pcl:Curse_SearingBurn": {"NAME": "Searing Burn"},
+		"pcl:Curse_Shame": {"NAME": "Shame"},
+		"pcl:Curse_Torment": {"NAME": "Torment"},
+	  	"pcl:Curse_Wither": {"NAME": "Wither"},
+		"pcl:Curse_Writhe": {"NAME": "Writhe"}
+	},
+	"ENCHANTMENTS":
+	{
+		"pcl:Glyph01":
+		{
+			"NAME": "Glyph of the Magician"
+		},
+		"pcl:Glyph02":
+		{
+			"NAME": "Glyph of the High Priestess"
+		},
+		"pcl:Glyph03":
+		{
+			"NAME": "Glyph of the Empress"
+		},
+		"pcl:Glyph04":
+		{
+			"NAME": "Glyph of the Emperor"
+		},
+		"pcl:Glyph05":
+		{
+			"EXTENDED_DESCRIPTION": ["{0} is disabled this combat"],
+			"NAME": "Glyph of the Hierophant"
+		},
+		"pcl:Glyph06":
+		{
+			"EXTENDED_DESCRIPTION": ["ALL enemies heal {0} [HP]"],
+			"NAME": "Glyph of the Lovers"
+		},
+		"pcl:Glyph07":
+		{
+			"DESCRIPTION": "Cycle the next !M! {0} card(s) drawn.",
+			"EXTENDED_DESCRIPTION": ["Cycle the next #b{0} {1} card(s) drawn."],
+			"NAME": "Glyph of the Chariot"
+		},
+		"pcl:Glyph08":
+		{
+			"DESCRIPTION": "ALL enemies start with ** !M! [Thorns] and [Artifact].",
+			"NAME": "Glyph of Justice"
+		},
+		"pcl:Glyph09":
+		{
+			"DESCRIPTION": "At the start of each turn: ** ALL enemies gain !M! [Curl Up].",
+			"NAME": "Glyph of the Hermit"
+		},
+		"pcl:Glyph10":
+		{
+			"DESCRIPTION": "Non-Minion enemies drop !S! [Gold] (+!S! for Elites and bosses). || Whenever you shuffle your deck: ALL enemies gain !M! [Plated Armor] and [Strength].",
+			"NAME": "Glyph of Fortune"
+		},
+		"pcl:Glyph11":
+		{
+			"DESCRIPTION": "ALL enemies start with !M! [Strength]. || Whenever you play a {Power}: ALL enemies gain !S! [Strength].",
+			"NAME": "Glyph of Strength"
+		},
+		"pcl:Glyph12":
+		{
+			"DESCRIPTION": "At the end of each turn: Gain !M! [Constricted].",
+			"NAME": "Glyph of the Hanged Man"
+		},
+		"pcl:Glyph13":
+		{
+			"DESCRIPTION": "Gain !S! [Vulnerable]. [Vulnerable] gains +!M!",
+			"NAME": "Glyph of Death"
+		}
+	},
+	"MISC":
+	{
+		"pcl:Apparition":
+		{
+			"EXTENDED_DESCRIPTION": ["Cycle ALL {Apparitions} in hand"],
+			"NAME": "Apparition"
+		},
+		"pcl:Bite":
+		{
+			"NAME": "Bite"
+		},
+		"pcl:Essence_Egnaro":
+		{
+			"NAME": "Egnaro Essence"
+		},
+		"pcl:Essence_Eruza":
+		{
+			"NAME": "Eruza Essence"
+		},
+		"pcl:Essence_Wolley":
+		{
+			"NAME": "Wolley Essence"
+		},
+		"pcl:Insight":
+		{
+		  "NAME": "Insight"
+		},
+		"pcl:JAX":
+		{
+			"NAME": "J.A.X."
+		},
+		"pcl:Madness":
+		{
+		  "EXTENDED_DESCRIPTION": ["Transfer {0} cost from a random card in hand to a random card in draw pile"],
+		  "NAME": "Madness"
+		},
+		"pcl:Miracle":
+		{
+			"NAME": "Miracle"
+		},
+		"pcl:MysteryCard":
+		{
+			"EXTENDED_DESCRIPTION": [
+			  "At the start of combat: Transforms into a random {0}-Cost {1} card",
+			  "At the start of combat: Transforms into a random Upgraded {0}-Cost {1} card",
+			  "Select this to fill this slot with a random 0-Cost Common card that changes every combat instead of removing a card from your deck"
+			],
+			"NAME": "? ? ?"
+		},
+		"pcl:Overheat":
+		{
+			"NAME": "Overheat"
+		},
+		"pcl:QuestionMark":
+		{
+			"NAME": "Question Mark"
+		},
+		"pcl:RitualDagger":
+		{
+			"NAME": "Ritual Dagger"
+		},
+		"pcl:ThrowingKnife":
+		{
+			"NAME": "Throwing Knife"
+		}
+	},
+	"SPECIAL":
+	{
+		"pcl:AffinityToken": {"NAME": "Affinity Token"},
+		"pcl:AffinityToken_Red": {"NAME": "Red Affinity"},
+		"pcl:AffinityToken_Green": {"NAME": "Green Affinity"},
+		"pcl:AffinityToken_Blue": {"NAME": "Blue Affinity"},
+		"pcl:AffinityToken_Orange": {"NAME": "Orange Affinity"},
+		"pcl:AffinityToken_Light": {"NAME": "Light Affinity"},
+		"pcl:AffinityToken_Dark": {"NAME": "Dark Affinity"},
+		"pcl:AffinityToken_Silver": {"NAME": "Silver Affinity"},
+		"pcl:AffinityToken_Star": {"NAME": "Star Affinity"}
+	},
+	"STATUS":
+	{
+		"pcl:Crystallize": {"NAME": "Crystallize"},
+		"pcl:Status_Burn": {"NAME": "Burn"},
+		"pcl:Status_Dazed": {"NAME": "Dazed"},
+		"pcl:Status_Frostbite": {"NAME": "Frostbite"},
+		"pcl:Status_Slimed": {"NAME": "Slimed"},
+		"pcl:Status_Wound": {"NAME": "Wound"},
+		"pcl:Status_Void": {"NAME": "Void"}
+	}
+}

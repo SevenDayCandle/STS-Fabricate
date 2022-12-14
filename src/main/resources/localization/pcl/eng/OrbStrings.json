@@ -1,0 +1,94 @@
+
+{
+	"pcl:Air":
+	{
+		"NAME": "Air",
+		"DESCRIPTION":
+		[
+			"#yTrigger: At turn start, deal #g{0} damage to ALL enemies and apply #b{1} [Flowed] to a random enemy. | #yEvoke: Deal #g{2} damage to ALL enemies #g{3} times, apply #b{1} [Flowed] a random enemy, and #yCycle #b1 card."
+		]
+	},
+	"pcl:Chaos":
+	{
+		"NAME": "Chaos",
+		"DESCRIPTION":
+		[
+			"#yTrigger: At turn start, {0} | #yEvoke: Invoke the #yPassive effect and gain #b{1} [Elemental Mastery]. || Whenever you play a card, the #yPassive will change based on the card's [A-Gen]. | #bCurrent [A-Gen]: {2}",
+		  	"Select the effect to give [Chaos] after playing a {0} card"
+		]
+	},
+	"pcl:Dark":
+	{
+	  "NAME": "Dark",
+	  "DESCRIPTION":
+	  [
+		"#yTrigger: At turn end, increase stacks by #b{0}. | #yEvoke: Deal #g{1} damage to the lowest health enemy."
+	  ]
+	},
+	"pcl:Earth":
+	{
+		"NAME": "Earth",
+		"DESCRIPTION":
+		[
+			"#yTrigger: At turn start: Gain #g{0} rocks (Max. #b{3}) and apply #g{1} [Stoned] to the highest HP enemy. Each rock gives #g{2} [Block] and deals #g{2} damage. Whenever you are attacked, throw #b{0} rocks at the attacker. | #yEvoke: Throw ALL rocks at random enemies."
+		]
+	},
+	"pcl:Fire":
+	{
+		"NAME": "Fire",
+		"DESCRIPTION":
+		[
+			"#yTrigger: At turn start, deal #g{0} damage and apply #g{1} [Burning] to the highest HP enemy. | #yEvoke: Deal #g{2} damage and apply #g{3} [Burning] to the highest HP enemy."
+		]
+	},
+	"pcl:Frost":
+	{
+		"NAME": "Frost",
+		"DESCRIPTION":
+		[
+			"#yTrigger: At turn end, gain #g{0} [Block]. | #yEvoke: Gain #g{1} [Block].",
+			"#yTrigger: At turn end, gain #g{0} [Block]. Deal #g{2} damage to the enemy with the highest damage and apply #g{3} [Chilled] to it. | #yEvoke: Gain #g{1} [Block]. Deal #g{4} damage to ALL enemies and apply #g{5} [Chilled] to them."
+		]
+	},
+	"pcl:Ghost":
+	{
+		"NAME": "Ghost",
+		"DESCRIPTION":
+		[
+			"#yTrigger: Scry #b{0}. Increase hits by #b{1} per card discarded. | #yEvoke: Random enemies lose #g{2} HP #b{3} time(s)."
+		]
+	},
+	"pcl:Lightning":
+	{
+		"NAME": "Lightning",
+		"DESCRIPTION":
+		[
+			"#yTrigger: At turn end, deal #g{0} damage to a random enemy. | #yEvoke: Deal #g{1} damage to a random enemy. | Enemies with [~Lock-On] are prioritized.",
+			"#yTrigger: At turn end, deal #g{0} damage to ALL enemies. | #yEvoke: Deal #g{1} damage to ALL enemies."
+		]
+	},
+	"pcl:Metal":
+	{
+		"NAME": "Metal",
+		"DESCRIPTION":
+		[
+			"#yTrigger: Have #g{0} [Enchanted Armor] this turn. | #yEvoke: Gain #g{1} [Metallicize]."
+		]
+	},
+	"pcl:Plasma":
+	{
+		"NAME": "Plasma",
+		"DESCRIPTION":
+		[
+			"#yTrigger: At turn start, gain #g{0} [E]. | #yEvoke: Gain #g{1} [E]."
+		]
+	},
+	"pcl:Water":
+	{
+	  "NAME": "Water",
+	  "DESCRIPTION":
+	  [
+		"#yTrigger: At turn start, deal #g{0} damage and apply #g{1} [Chilled] to the enemy with the highest damage intent (or a random enemy if none are attacking). | #yEvoke: Gain #g{2} [THP] and apply #g{3} [Chilled] to ALL enemies."
+	  ]
+	}
+}

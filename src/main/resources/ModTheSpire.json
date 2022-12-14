@@ -1,0 +1,12 @@
+{
+  "modid": "pinacolada-theclownemporium",
+  "name": "The Clown Emporium",
+  "author_list": ["PinaColada"],
+  "description": "Adds a card editor.",
+  "credits" : "Code: EatYourBeetS \n Character Art: shira_0411 \n SFX: The Berklee College of Music, SquishiSprite, Zoltan Mihalyi, ViRiX, SilverIllusionist \n VFX: Effekseer, ashishlko11, Cethiel, GNOME Project, ManuGamingCreations, The Free Archives @ Dreams Circle, Sinestesia, J. W. Bjerk, Airarcs, Font Awesome \n Card Portraits: View cards in pop-up view to see individual card art credits",
+  "version": "0.4.5",
+  "sts_version": "12-22-2020",
+  "mts_version": "3.22.0",
+  "dependencies": ["basemod", "stslib", "extendedui"],
+  "update_json": ""
+}
