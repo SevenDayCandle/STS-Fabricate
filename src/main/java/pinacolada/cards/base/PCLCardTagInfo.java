@@ -5,6 +5,7 @@ import extendedui.EUIUtils;
 import pinacolada.cards.base.fields.PCLCardTag;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 import static extendedui.EUIUtils.array;
 import static extendedui.EUIUtils.safeIndex;
@@ -68,17 +69,23 @@ public class PCLCardTagInfo implements Serializable
 
     public void set(int form, int v)
     {
-        if (form < value.length)
+        if (form >= value.length)
         {
-            value[form] = v;
+            value = Arrays.copyOf(value, form);
         }
+        value[form] = v;
     }
 
     public void setUpgrade(int form, int v)
     {
-        if (upgrades != null && form < upgrades.length)
+        if (upgrades == null)
         {
-            upgrades[form] = v;
+            upgrades = new Integer[form];
         }
+        else if (form >= upgrades.length)
+        {
+            value = Arrays.copyOf(upgrades, form);
+        }
+        upgrades[form] = v;
     }
 }

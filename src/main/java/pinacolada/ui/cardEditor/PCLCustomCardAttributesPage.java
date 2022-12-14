@@ -99,7 +99,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
         tagsDropdown.setLabelFunctionForButton((list, __) -> tagsDropdown.makeMultiSelectString(item -> item.tag.getTooltip().getTitleOrIcon()), null, true)
                 .setRowFunction(PCLCustomCardTagEditorRow::new)
                 .setRowWidthFunction((a, b, c) -> a.calculateRowWidth() + MENU_HEIGHT * 6)
-                .setItems(EUIUtils.map(PCLCardTag.getAll(), PCLCardTag::make))
+                .setItems(EUIUtils.map(PCLCardTag.getAll(), t -> t.make(1, 1)))
                 .setTooltip(PGR.core.strings.cardEditor.tags, EUIUtils.joinStrings(EUIUtils.DOUBLE_SPLIT_LINE, PGR.core.strings.cardEditorTutorial.attrTags1, PGR.core.strings.cardEditorTutorial.attrTags2));
 
         // Number editors

@@ -114,6 +114,7 @@ public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo>
         if (update)
         {
             item.set(form, displayValue.getCachedValue());
+            dr.updateForSelection(true);
         }
         return this;
     }
@@ -124,6 +125,7 @@ public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo>
         if (update)
         {
             item.setUpgrade(form, displayValue2.getCachedValue());
+            dr.updateForSelection(true);
         }
         return this;
     }
@@ -134,8 +136,8 @@ public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo>
         displayValue2.setValue(valueSecondary);
         if (update)
         {
-            item.set(form, value);
-            item.setUpgrade(form, valueSecondary);
+            item.set(form, displayValue.getCachedValue());
+            item.setUpgrade(form, displayValue2.getCachedValue());
             dr.updateForSelection(true);
         }
 
