@@ -9,8 +9,8 @@ import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.localization.PowerStrings;
 import com.megacrit.cardcrawl.powers.AbstractPower;
-import pinacolada.interfaces.markers.MultiplicativePower;
 import pinacolada.actions.PCLActions;
+import pinacolada.interfaces.markers.MultiplicativePower;
 
 public class AntiArtifactSlowPower extends AbstractPower implements CloneablePowerInterface, MultiplicativePower
 {

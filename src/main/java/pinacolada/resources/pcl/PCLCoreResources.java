@@ -15,6 +15,7 @@ import pinacolada.effects.PCLEffekseerEFX;
 import pinacolada.effects.SFX;
 import pinacolada.powers.replacement.GenericFadingPower;
 import pinacolada.resources.PCLAbstractPlayerData;
+import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.rewards.pcl.AugmentReward;
@@ -35,7 +36,7 @@ import pinacolada.ui.customRun.PCLCustomRunScreen;
 import pinacolada.ui.debug.PCLDebugAugmentPanel;
 import pinacolada.ui.debug.PCLDebugCardPanel;
 
-import static pinacolada.resources.PGR.Enums.Characters.THE_DECIDER;
+import static pinacolada.resources.PCLEnum.Characters.THE_DECIDER;
 
 public class PCLCoreResources extends PCLResources<PCLCoreConfig, PCLCoreImages, PCLCoreTooltips>
 {
@@ -87,7 +88,7 @@ public class PCLCoreResources extends PCLResources<PCLCoreConfig, PCLCoreImages,
     protected void initializeRewards()
     {
         AugmentReward.Serializer augmentSerializer = new AugmentReward.Serializer();
-        BaseMod.registerCustomReward(Enums.Rewards.AUGMENT, augmentSerializer, augmentSerializer);
+        BaseMod.registerCustomReward(PCLEnum.Rewards.AUGMENT, augmentSerializer, augmentSerializer);
     }
 
     protected void initializeAudio()
@@ -192,17 +193,17 @@ public class PCLCoreResources extends PCLResources<PCLCoreConfig, PCLCoreImages,
         EUI.addSubscriber(cardPopup);
         EUI.setCustomCardFilter(AbstractCard.CardColor.COLORLESS, affinityFilters);
         EUI.setCustomCardFilter(AbstractCard.CardColor.CURSE, affinityFilters);
-        EUI.setCustomCardFilter(Enums.Cards.THE_CONJURER, affinityFilters);
-        EUI.setCustomCardFilter(Enums.Cards.THE_DECIDER, affinityFilters);
-        EUI.setCustomCardFilter(Enums.Cards.THE_ETERNAL, affinityFilters);
-        EUI.setCustomCardPoolModule(Enums.Cards.THE_CONJURER, cardAffinities);
-        EUI.setCustomCardPoolModule(Enums.Cards.THE_DECIDER, cardAffinities);
-        EUI.setCustomCardPoolModule(Enums.Cards.THE_ETERNAL, cardAffinities);
+        EUI.setCustomCardFilter(PCLEnum.Cards.THE_CONJURER, affinityFilters);
+        EUI.setCustomCardFilter(PCLEnum.Cards.THE_DECIDER, affinityFilters);
+        EUI.setCustomCardFilter(PCLEnum.Cards.THE_ETERNAL, affinityFilters);
+        EUI.setCustomCardPoolModule(PCLEnum.Cards.THE_CONJURER, cardAffinities);
+        EUI.setCustomCardPoolModule(PCLEnum.Cards.THE_DECIDER, cardAffinities);
+        EUI.setCustomCardPoolModule(PCLEnum.Cards.THE_ETERNAL, cardAffinities);
         EUI.setCustomCardLibraryModule(AbstractCard.CardColor.COLORLESS, libraryFilters);
         EUI.setCustomCardLibraryModule(AbstractCard.CardColor.CURSE, libraryFilters);
-        EUI.setCustomCardLibraryModule(Enums.Cards.THE_CONJURER, libraryFilters);
-        EUI.setCustomCardLibraryModule(Enums.Cards.THE_DECIDER, libraryFilters);
-        EUI.setCustomCardLibraryModule(Enums.Cards.THE_ETERNAL, libraryFilters);
+        EUI.setCustomCardLibraryModule(PCLEnum.Cards.THE_CONJURER, libraryFilters);
+        EUI.setCustomCardLibraryModule(PCLEnum.Cards.THE_DECIDER, libraryFilters);
+        EUI.setCustomCardLibraryModule(PCLEnum.Cards.THE_ETERNAL, libraryFilters);
     }
 
 }

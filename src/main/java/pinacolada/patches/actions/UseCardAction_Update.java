@@ -11,10 +11,10 @@ import extendedui.utilities.EUIClassUtils;
 import javassist.CannotCompileException;
 import javassist.CtBehavior;
 import javassist.expr.ExprEditor;
+import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardTag;
-import pinacolada.resources.PGR;
-import pinacolada.actions.PCLActions;
+import pinacolada.resources.PCLEnum;
 
 @SpirePatch(clz = UseCardAction.class, method = "update", optional = true)
 public class UseCardAction_Update
@@ -43,7 +43,7 @@ public class UseCardAction_Update
     public static SpireReturn<Void> insert(UseCardAction __instance)
     {
         PCLCard c = EUIUtils.safeCast(EUIClassUtils.getField(__instance, "targetCard"), PCLCard.class);
-        if (c != null && c.type == PGR.Enums.CardType.SUMMON)
+        if (c != null && c.type == PCLEnum.CardType.SUMMON)
         {
             PCLActions.top.add(new ShowCardAndPoofAction(c));
             AbstractDungeon.player.cardInUse = null;

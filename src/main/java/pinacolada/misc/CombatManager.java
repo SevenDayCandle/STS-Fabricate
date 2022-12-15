@@ -43,6 +43,7 @@ import pinacolada.powers.PCLPower;
 import pinacolada.powers.common.ImpairedPower;
 import pinacolada.powers.common.PCLLockOnPower;
 import pinacolada.relics.PCLRelic;
+import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.skills.DelayUse;
 import pinacolada.ui.combat.PCLPlayerSystem;
@@ -77,7 +78,7 @@ public class CombatManager
     protected static final HashMap<String, Float> PLAYER_EFFECT_BONUSES = new HashMap<>();
     protected static final ArrayList<GameEvent<?>> EVENTS = new ArrayList<>();
     public static final ControllableCardPile controlPile = new ControllableCardPile();
-    public static final CardGroup PURGED_CARDS = new CardGroup(PGR.Enums.CardGroupType.PURGED_CARDS);
+    public static final CardGroup PURGED_CARDS = new CardGroup(PCLEnum.CardGroupType.PURGED_CARDS);
     public static int blockRetained;
     public static int maxHPSinceLastTurn;
     public static boolean isPlayerTurn;
@@ -875,7 +876,7 @@ public class CombatManager
         final PCLUseInfo info = new PCLUseInfo(card, p, m);
 
         PCLAction.currentCard = card;
-        if (card.type == PGR.Enums.CardType.SUMMON)
+        if (card.type == PCLEnum.CardType.SUMMON)
         {
             PCLCardAlly slot = EUIUtils.safeCast(info.target, PCLCardAlly.class);
             PCLActions.bottom.summonAlly(card, slot);
@@ -902,7 +903,7 @@ public class CombatManager
         cachedActions.addAll(actions);
 
         actions.clear();
-        if (card.type != PGR.Enums.CardType.SUMMON)
+        if (card.type != PCLEnum.CardType.SUMMON)
         {
             PCLAction.currentCard = card;
             card.onLateUse(info);

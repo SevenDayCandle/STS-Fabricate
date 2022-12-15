@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
 import extendedui.EUIRM;
@@ -86,21 +85,21 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
                 .setPosition(buttonWidth * 0.6f, button_cY)
                 .setColor(Color.FIREBRICK)
                 .setText(GridCardSelectScreen.TEXT[1])
-                .setFont(FontHelper.buttonLabelFont, 0.85f)
+                .setFont(EUIFontHelper.buttonFont, 0.85f)
                 .setOnClick(this::end);
 
         saveButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(cancelButton.hb.cX, cancelButton.hb.y + cancelButton.hb.height + labelHeight * 0.8f)
                 .setColor(Color.FOREST)
                 .setText(GridCardSelectScreen.TEXT[0])
-                .setFont(FontHelper.buttonLabelFont, 0.85f)
+                .setFont(EUIFontHelper.buttonFont, 0.85f)
                 .setOnClick(this::save);
 
         undoButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(cancelButton.hb.cX, saveButton.hb.y + saveButton.hb.height + labelHeight * 0.8f)
                 .setColor(Color.WHITE)
                 .setText(PGR.core.strings.cardEditor.undo)
-                .setFont(FontHelper.buttonLabelFont, 0.85f)
+                .setFont(EUIFontHelper.buttonFont, 0.85f)
                 .setOnClick(this::undo);
 
         imageButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
@@ -108,7 +107,7 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
                 .setColor(Color.WHITE)
                 .setText(PGR.core.strings.cardEditor.loadImage)
                 .setTooltip(PGR.core.strings.cardEditor.loadImage, PGR.core.strings.cardEditorTutorial.primaryImage)
-                .setFont(FontHelper.buttonLabelFont, 0.85f)
+                .setFont(EUIFontHelper.buttonFont, 0.85f)
                 .setOnClick(this::editImage);
 
         formEditor = new PCLCustomCardFormEditor(
@@ -128,10 +127,10 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
         for (int i = 0; i < currentEffects.size(); i++)
         {
             int finalI = i;
-            PCLCustomCardEffectPage page = new PCLCustomCardEffectPage(this, currentEffects.get(i), new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT)
+            PCLCustomCardEffectPage page = new PCLCustomCardEffectPage(this, currentEffects.get(i), new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), i
                     , EUIUtils.format(PGR.core.strings.cardEditor.effectX, i + 1), (be) -> {
                 currentEffects.set(finalI, be);
-                refreshCard(e -> e.setPSkill(currentEffects, true, true));
+                modifyBuilder(e -> e.setPSkill(currentEffects, true, true));
             });
             pages.add(page);
             effectPages.add(page);
@@ -140,12 +139,12 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
         for (int i = 0; i < currentPowers.size(); i++)
         {
             int finalI = i;
-            PCLCustomCardPowerPage page = new PCLCustomCardPowerPage(this, currentPowers.get(i), new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT)
+            PCLCustomCardPowerPage page = new PCLCustomCardPowerPage(this, currentPowers.get(i), new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), i
                     , EUIUtils.format(PGR.core.strings.cardEditor.powerX, i + 1), (be) -> {
                 if (be instanceof PTrigger)
                 {
                     currentPowers.set(finalI, (PTrigger) be);
-                    refreshCard(e -> e.setPPower(currentPowers, true, true));
+                    modifyBuilder(e -> e.setPPower(currentPowers, true, true));
                 }
             });
             pages.add(page);
@@ -157,27 +156,31 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
         {
             PCLCustomCardEditorPage pg = pages.get(i);
             String title = pg.getTitle();
-            pageButtons.add(new EUIButton(EUIRM.images.squaredButton.texture(), new EUIHitbox(0, 0, buttonHeight, buttonHeight))
+            pageButtons.add(new EUIButton(pg.getTextureCache().texture(), new EUIHitbox(0, 0, buttonHeight, buttonHeight))
                     .setPosition(Settings.WIDTH * (0.45f) + ((i - 1f) * buttonHeight), (buttonHeight * 0.85f))
-                    .setText(String.valueOf(title.charAt(0)))
+                            .setColor(i == 0 ? Color.WHITE : Color.GRAY)
                     .setOnClick(i, (finalI, __) -> {
                         currentPage = finalI;
+                        for (int j = 0; j < pageButtons.size(); j++)
+                        {
+                            pageButtons.get(j).setColor(j == finalI ? Color.WHITE : Color.GRAY);
+                        }
                     })
                     .setTooltip(title, pg instanceof PCLCustomCardPrimaryInfoPage ? PGR.core.strings.cardEditor.primaryInfoDesc : ""));
         }
 
-        refreshCard(__ -> {});
+        modifyBuilder(__ -> {});
     }
 
     private void toggleViewUpgrades(boolean value)
     {
         SingleCardViewPopup.isViewingUpgrade = !SingleCardViewPopup.isViewingUpgrade;
-        refreshCard(__ -> {});
+        modifyBuilder(__ -> {});
     }
 
     public void addBuilder()
     {
-        refreshCard(__ -> {
+        modifyBuilder(__ -> {
             tempBuilders.add(new PCLCardBuilder(getBuilder()));
         });
         for (PCLCustomCardEditorPage b : pages)
@@ -195,7 +198,7 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
                             if (pixmap != null)
                             {
                                 PixmapIO.writePNG(currentSlot.getImageHandle(), pixmap);
-                                refreshAll(e -> e
+                                modifyAllBuilders(e -> e
                                         .setImagePath(currentSlot.getImagePath()));
                                 if (previewCard != null)
                                 {
@@ -230,7 +233,7 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
         previewCard.current_y = previewCard.target_y = CARD_Y;
     }
 
-    public void refreshAll(ActionT1<PCLCardBuilder> updateFunc)
+    public void modifyAllBuilders(ActionT1<PCLCardBuilder> updateFunc)
     {
         prevBuilders = EUIUtils.map(tempBuilders, PCLCardBuilder::new);
         for (PCLCardBuilder b : tempBuilders)
@@ -240,23 +243,28 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
         rebuildCard();
     }
 
-    public void refreshCard(ActionT1<PCLCardBuilder> updateFunc)
+    public void modifyBuilder(ActionT1<PCLCardBuilder> updateFunc)
     {
         prevBuilders = EUIUtils.map(tempBuilders, PCLCardBuilder::new);
         updateFunc.invoke(getBuilder());
         rebuildCard();
     }
 
-    public void removeBuilder()
+    public void refreshPages()
     {
-        currentBuilder = MathUtils.clamp(currentBuilder, 0, tempBuilders.size() - 2);
-        refreshCard(__ -> {
-            tempBuilders.remove(getBuilder());
-        });
         for (PCLCustomCardEditorPage b : pages)
         {
             b.refresh();
         }
+    }
+
+    public void removeBuilder()
+    {
+        currentBuilder = MathUtils.clamp(currentBuilder, 0, tempBuilders.size() - 2);
+        modifyBuilder(__ -> {
+            tempBuilders.remove(getBuilder());
+        });
+        refreshPages();
         formEditor.refresh();
     }
 
@@ -273,12 +281,9 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
     public void setCurrentBuilder(int index)
     {
         currentBuilder = MathUtils.clamp(index, 0, tempBuilders.size() - 1);
-        refreshCard(__ -> {
+        modifyBuilder(__ -> {
         });
-        for (PCLCustomCardEditorPage b : pages)
-        {
-            b.refresh();
-        }
+        refreshPages();
         formEditor.refresh();
     }
 
@@ -296,13 +301,10 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
             ArrayList<PCLCardBuilder> backups = EUIUtils.map(prevBuilders, PCLCardBuilder::new);
             currentBuilder = MathUtils.clamp(currentBuilder, 0, backups.size() - 1);
             formEditor.refresh();
-            refreshCard(__ -> {
+            modifyBuilder(__ -> {
                 tempBuilders = backups;
             });
-            for (PCLCustomCardEditorPage b : pages)
-            {
-                b.refresh();
-            }
+            refreshPages();
         }
     }
 

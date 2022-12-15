@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT0;
@@ -84,14 +83,14 @@ public class PCLCustomCardImageEffect extends PCLEffectWithCallback<Pixmap>
                 .setPosition(buttonWidth * 0.6f, button_cY)
                 .setColor(Color.FIREBRICK)
                 .setText(GridCardSelectScreen.TEXT[1])
-                .setFont(FontHelper.buttonLabelFont, 0.85f)
+                .setFont(EUIFontHelper.buttonFont, 0.85f)
                 .setOnClick((ActionT0) this::complete);
 
         saveButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(cancelButton.hb.cX, cancelButton.hb.y + cancelButton.hb.height + labelHeight * 0.8f)
                 .setColor(Color.FOREST)
                 .setText(GridCardSelectScreen.TEXT[0])
-                .setFont(FontHelper.buttonLabelFont, 0.85f)
+                .setFont(EUIFontHelper.buttonFont, 0.85f)
                 .setInteractable(false)
                 .setOnClick(this::commit);
 
@@ -99,14 +98,14 @@ public class PCLCustomCardImageEffect extends PCLEffectWithCallback<Pixmap>
                 .setPosition(cancelButton.hb.cX, saveButton.hb.y + saveButton.hb.height + labelHeight * 0.8f)
                 .setColor(Color.WHITE)
                 .setText(PGR.core.strings.cardEditor.loadFile)
-                .setFont(FontHelper.buttonLabelFont, 0.85f)
+                .setFont(EUIFontHelper.buttonFont, 0.85f)
                 .setOnClick(this::getImageFromFileDialog);
 
         pasteButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(cancelButton.hb.cX, loadButton.hb.y + loadButton.hb.height + labelHeight * 0.8f)
                 .setColor(Color.WHITE)
                 .setText(PGR.core.strings.cardEditor.paste)
-                .setFont(FontHelper.buttonLabelFont, 0.85f)
+                .setFont(EUIFontHelper.buttonFont, 0.85f)
                 .setOnClick(this::getImageFromClipboard);
 
         zoomBar = new EUIVerticalScrollBar(new EUIHitbox(Settings.WIDTH * 0.03f, Settings.HEIGHT * 0.7f))

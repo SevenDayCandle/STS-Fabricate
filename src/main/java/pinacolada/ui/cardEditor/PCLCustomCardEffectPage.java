@@ -7,6 +7,7 @@ import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT0;
 import extendedui.interfaces.delegates.ActionT1;
+import extendedui.ui.TextureCache;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUILabel;
 import extendedui.ui.controls.EUISearchableDropdown;
@@ -59,6 +60,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
     protected EUISearchableDropdown<PSkill> primaryConditions;
     protected EUIToggle ifElseToggle;
     protected EUIToggle orToggle;
+    protected int editorIndex;
     protected PCLValueEditor choicesEditor;
     protected PCLValueEditor delayEditor;
     protected PSkill finalEffect;
@@ -68,9 +70,10 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
     protected PSkill.PCLEffectType modifierEffectType = PSkill.PCLEffectType.General;
 
 
-    public PCLCustomCardEffectPage(PCLCustomCardEditCardScreen screen, PSkill effect, EUIHitbox hb, String title, ActionT1<PSkill> onUpdate)
+    public PCLCustomCardEffectPage(PCLCustomCardEditCardScreen screen, PSkill effect, EUIHitbox hb, int index, String title, ActionT1<PSkill> onUpdate)
     {
         this.builder = screen.getBuilder();
+        this.editorIndex = index;
         this.onUpdate = onUpdate;
         this.hb = hb;
         this.scrollBar.setPosition(screenW(0.95f), screenH(0.5f));
@@ -324,6 +327,15 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
         ifElseToggle.setToggle(currentEffects[1].amount == 1);
         orToggle.setToggle(currentEffects[1].alt);
     }
+
+    @Override
+    public TextureCache getTextureCache()
+    {
+        return PGR.core.images.editorEffect;
+    }
+
+    @Override
+    public String getIconText() {return String.valueOf(editorIndex + 1);}
 
     protected void addEffectSlot(int priority)
     {

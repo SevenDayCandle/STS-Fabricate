@@ -5,21 +5,16 @@ import basemod.ReflectionHacks;
 import basemod.devcommands.ConsoleCommand;
 import basemod.helpers.RelicType;
 import com.badlogic.gdx.files.FileHandle;
-import com.evacipated.cardcrawl.modthespire.lib.SpireEnum;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.localization.*;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
-import com.megacrit.cardcrawl.rewards.RewardItem;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUIUtils;
 import extendedui.patches.EUIKeyword;
@@ -503,99 +498,6 @@ public class PGR
             {
                 EUITooltip.registerName(name, tooltip);
             }
-        }
-    }
-
-    public static class Enums
-    {
-        public static class Characters
-        {
-            @SpireEnum
-            public static AbstractPlayer.PlayerClass THE_ETERNAL;
-            @SpireEnum
-            public static AbstractPlayer.PlayerClass THE_CONJURER;
-            @SpireEnum
-            public static AbstractPlayer.PlayerClass THE_DECIDER;
-        }
-
-        public static class Cards
-        {
-            @SpireEnum
-            public static AbstractCard.CardColor THE_ETERNAL;
-            @SpireEnum
-            public static AbstractCard.CardColor THE_CONJURER;
-            @SpireEnum
-            public static AbstractCard.CardColor THE_DECIDER;
-        }
-
-        public static class Library
-        {
-            @SpireEnum
-            public static CardLibrary.LibraryType THE_ETERNAL;
-            @SpireEnum
-            public static CardLibrary.LibraryType THE_CONJURER;
-            @SpireEnum
-            public static CardLibrary.LibraryType THE_DECIDER;
-        }
-
-        public static class Rewards
-        {
-            @SpireEnum
-            public static RewardItem.RewardType AUGMENT;
-        }
-
-        public static class CardGroupType
-        {
-            @SpireEnum public static CardGroup.CardGroupType PURGED_CARDS;
-        }
-
-        public static class CardRarity
-        {
-            @SpireEnum
-            public static AbstractCard.CardRarity LEGENDARY;
-            @SpireEnum
-            public static AbstractCard.CardRarity SECRET;
-        }
-
-        public static class CardType
-        {
-            @SpireEnum
-            public static AbstractCard.CardType SUMMON;
-        }
-
-        public static class AttackEffect
-        {
-            @SpireEnum public static AbstractGameAction.AttackEffect GUNSHOT;
-            @SpireEnum public static AbstractGameAction.AttackEffect DAGGER;
-            @SpireEnum public static AbstractGameAction.AttackEffect PUNCH;
-            @SpireEnum public static AbstractGameAction.AttackEffect BITE;
-            @SpireEnum public static AbstractGameAction.AttackEffect CLAW;
-            @SpireEnum public static AbstractGameAction.AttackEffect DARK;
-            @SpireEnum public static AbstractGameAction.AttackEffect ICE;
-            @SpireEnum
-            public static AbstractGameAction.AttackEffect BLEED;
-            @SpireEnum
-            public static AbstractGameAction.AttackEffect BURN;
-            @SpireEnum
-            public static AbstractGameAction.AttackEffect CLASH;
-            @SpireEnum
-            public static AbstractGameAction.AttackEffect DARKNESS;
-            @SpireEnum
-            public static AbstractGameAction.AttackEffect EARTH;
-            @SpireEnum
-            public static AbstractGameAction.AttackEffect ELECTRIC;
-            @SpireEnum
-            public static AbstractGameAction.AttackEffect PSYCHOKINESIS;
-            @SpireEnum
-            public static AbstractGameAction.AttackEffect SMALL_EXPLOSION;
-            @SpireEnum
-            public static AbstractGameAction.AttackEffect SPARK;
-            @SpireEnum
-            public static AbstractGameAction.AttackEffect WATER;
-            @SpireEnum
-            public static AbstractGameAction.AttackEffect WAVE;
-            @SpireEnum
-            public static AbstractGameAction.AttackEffect WIND;
         }
     }
 }

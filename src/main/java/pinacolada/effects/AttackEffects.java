@@ -11,6 +11,7 @@ import extendedui.interfaces.delegates.FuncT3;
 import extendedui.utilities.EUIColors;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.effects.vfx.GenericRenderEffect;
+import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 
@@ -42,23 +43,23 @@ public class AttackEffects
     public static final AttackEffect SLASH_VERTICAL = AttackEffect.SLASH_VERTICAL;
     public static final AttackEffect SMASH = AttackEffect.SMASH;
     // Custom:
-    public static final AttackEffect BITE = PGR.Enums.AttackEffect.BITE;
-    public static final AttackEffect BURN = PGR.Enums.AttackEffect.BURN;
-    public static final AttackEffect CLAW = PGR.Enums.AttackEffect.CLAW;
-    public static final AttackEffect DAGGER = PGR.Enums.AttackEffect.DAGGER;
-    public static final AttackEffect DARK = PGR.Enums.AttackEffect.DARK;
-    public static final AttackEffect DARKNESS = PGR.Enums.AttackEffect.DARKNESS;
-    public static final AttackEffect EARTH = PGR.Enums.AttackEffect.EARTH;
-    public static final AttackEffect ELECTRIC = PGR.Enums.AttackEffect.ELECTRIC;
-    public static final AttackEffect GUNSHOT = PGR.Enums.AttackEffect.GUNSHOT;
-    public static final AttackEffect ICE = PGR.Enums.AttackEffect.ICE;
-    public static final AttackEffect PSYCHOKINESIS = PGR.Enums.AttackEffect.PSYCHOKINESIS;
-    public static final AttackEffect PUNCH = PGR.Enums.AttackEffect.PUNCH;
-    public static final AttackEffect SMALL_EXPLOSION = PGR.Enums.AttackEffect.SMALL_EXPLOSION;
-    public static final AttackEffect SPARK = PGR.Enums.AttackEffect.SPARK;
-    public static final AttackEffect WATER = PGR.Enums.AttackEffect.WATER;
-    public static final AttackEffect WAVE = PGR.Enums.AttackEffect.WAVE;
-    public static final AttackEffect WIND = PGR.Enums.AttackEffect.WIND;
+    public static final AttackEffect BITE = PCLEnum.AttackEffect.BITE;
+    public static final AttackEffect BURN = PCLEnum.AttackEffect.BURN;
+    public static final AttackEffect CLAW = PCLEnum.AttackEffect.CLAW;
+    public static final AttackEffect DAGGER = PCLEnum.AttackEffect.DAGGER;
+    public static final AttackEffect DARK = PCLEnum.AttackEffect.DARK;
+    public static final AttackEffect DARKNESS = PCLEnum.AttackEffect.DARKNESS;
+    public static final AttackEffect EARTH = PCLEnum.AttackEffect.EARTH;
+    public static final AttackEffect ELECTRIC = PCLEnum.AttackEffect.ELECTRIC;
+    public static final AttackEffect GUNSHOT = PCLEnum.AttackEffect.GUNSHOT;
+    public static final AttackEffect ICE = PCLEnum.AttackEffect.ICE;
+    public static final AttackEffect PSYCHOKINESIS = PCLEnum.AttackEffect.PSYCHOKINESIS;
+    public static final AttackEffect PUNCH = PCLEnum.AttackEffect.PUNCH;
+    public static final AttackEffect SMALL_EXPLOSION = PCLEnum.AttackEffect.SMALL_EXPLOSION;
+    public static final AttackEffect SPARK = PCLEnum.AttackEffect.SPARK;
+    public static final AttackEffect WATER = PCLEnum.AttackEffect.WATER;
+    public static final AttackEffect WAVE = PCLEnum.AttackEffect.WAVE;
+    public static final AttackEffect WIND = PCLEnum.AttackEffect.WIND;
 
     protected static AttackEffectData add(ArrayList<AttackEffect> category, AttackEffect effect)
     {

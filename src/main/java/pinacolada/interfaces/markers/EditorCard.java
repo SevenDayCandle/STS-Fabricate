@@ -6,7 +6,6 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import extendedui.interfaces.markers.CacheableCard;
 import pinacolada.cards.base.PCLAffinity;
-import pinacolada.cards.base.attributes.PCLAttribute;
 import pinacolada.skills.PTrigger;
 
 import java.util.ArrayList;
@@ -30,16 +29,6 @@ public interface EditorCard extends PointerProvider, CacheableCard
     int secondaryValue();
 
     void loadImage(String suffix, boolean refresh);
-
-    default PCLAttribute getPrimaryInfo()
-    {
-        return null;
-    }
-
-    default PCLAttribute getSecondaryInfo()
-    {
-        return null;
-    }
 
     default void loadImage(String suffix)
     {

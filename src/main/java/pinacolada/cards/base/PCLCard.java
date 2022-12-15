@@ -45,11 +45,9 @@ import extendedui.utilities.ColoredString;
 import extendedui.utilities.ColoredTexture;
 import extendedui.utilities.EUIClassUtils;
 import org.apache.commons.lang3.StringUtils;
+import pinacolada.actions.PCLActions;
 import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentData;
-import pinacolada.cards.base.attributes.DamageAttribute;
-import pinacolada.cards.base.attributes.HPAttribute;
-import pinacolada.cards.base.attributes.PCLAttribute;
 import pinacolada.cards.base.cardText.PCLCardText;
 import pinacolada.cards.base.fields.PCLCardTag;
 import pinacolada.cards.pcl.special.QuestionMark;
@@ -64,6 +62,7 @@ import pinacolada.powers.PCLPower;
 import pinacolada.powers.common.PCLLockOnPower;
 import pinacolada.powers.common.SorceryPower;
 import pinacolada.powers.replacement.PlayerFlightPower;
+import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.skills.*;
@@ -78,7 +77,6 @@ import pinacolada.skills.skills.special.PMove_GainCardBlock;
 import pinacolada.skills.skills.special.moves.PMove_StackCustomPower;
 import pinacolada.ui.cards.DrawPileCardPreview;
 import pinacolada.ui.combat.PowerFormulaDisplay;
-import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 import pinacolada.utilities.RotatingList;
@@ -673,7 +671,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     }
 
     public ColoredTexture getCardAttributeBanner() {
-        if (rarity == PGR.Enums.CardRarity.LEGENDARY || rarity == PGR.Enums.CardRarity.SECRET)
+        if (rarity == PCLEnum.CardRarity.LEGENDARY || rarity == PCLEnum.CardRarity.SECRET)
         {
             return new ColoredTexture((isPopup ? PGR.core.images.cardBanner : PGR.core.images.cardBannerAttribute2).texture(), getRarityColor());
         }
@@ -687,7 +685,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
             resources = PGR.core;
         }
 
-        if (type == PGR.Enums.CardType.SUMMON)
+        if (type == PCLEnum.CardType.SUMMON)
         {
             return isPopup ? resources.images.cardBackgroundSummonL.texture() : resources.images.cardBackgroundSummon.texture();
         }
@@ -702,7 +700,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     }
 
     protected ColoredTexture getCardBanner() {
-        if (rarity == PGR.Enums.CardRarity.LEGENDARY || rarity == PGR.Enums.CardRarity.SECRET)
+        if (rarity == PCLEnum.CardRarity.LEGENDARY || rarity == PCLEnum.CardRarity.SECRET)
         {
             return new ColoredTexture((isPopup ? PGR.core.images.cardBanner2L : PGR.core.images.cardBanner2).texture(), getRarityColor());
         }
@@ -852,7 +850,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     }
 
     protected ColoredTexture getPortraitFrame() {
-        if (type == PGR.Enums.CardType.SUMMON)
+        if (type == PCLEnum.CardType.SUMMON)
         {
             return new ColoredTexture(isPopup ? PGR.core.images.cardFrameSummonL.texture() : PGR.core.images.cardFrameSummon.texture(), getRarityColor());
         }
@@ -875,13 +873,9 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         return portraitImg;
     }
 
-    public PCLAttribute getPrimaryInfo() {
-        return this.type == PGR.Enums.CardType.SUMMON ? DamageAttribute.instance.setCard(this) : null;
-    }
-
     public Color getRarityColor() {
 
-        if (rarity == PGR.Enums.CardRarity.SECRET)
+        if (rarity == PCLEnum.CardRarity.SECRET)
         {
             return COLOR_SECRET;
         }
@@ -902,7 +896,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     }
 
     public Texture getTypeIcon() {
-        if (type == PGR.Enums.CardType.SUMMON)
+        if (type == PCLEnum.CardType.SUMMON)
         {
             return PGR.core.images.types.summon.texture();
         }
@@ -930,19 +924,15 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
                 : cardData.strings.DESCRIPTION != null ? EUIUtils.format(cardData.strings.DESCRIPTION, args) : "");
     }
 
-    public PCLAttribute getSecondaryInfo() {
-        return this.type == PGR.Enums.CardType.SUMMON ? HPAttribute.instance.setCard(this) : null;
-    }
-
     public ColoredString getSecondaryValueString() {
-        return new ColoredString(heal + "/" + baseHeal, heal > baseHeal ? Settings.GREEN_TEXT_COLOR : heal < baseHeal ? Settings.RED_TEXT_COLOR : Settings.CREAM_COLOR);
+        return new ColoredString(heal, heal > baseHeal ? Settings.GREEN_TEXT_COLOR : heal < baseHeal ? Settings.RED_TEXT_COLOR : Settings.CREAM_COLOR);
     }
 
     public String getEffectStrings()
     {
         ArrayList<PSkill> tempEffects = EUIUtils.filter(getFullEffects(), ef -> ef != null && !(ef instanceof PTrait));
         String effectString = EUIUtils.joinStrings(EUIUtils.DOUBLE_SPLIT_LINE, EUIUtils.mapAsNonnull(tempEffects, PSkill::getText));
-        if (type != PGR.Enums.CardType.SUMMON)
+        if (type != PCLEnum.CardType.SUMMON)
         {
             PMove_DealCardDamage damageMove = getCardDamage();
             if (damageMove != null)

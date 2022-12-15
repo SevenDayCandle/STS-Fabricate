@@ -3,9 +3,9 @@ package pinacolada.ui.cardReward;
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.helpers.FontHelper;
 import extendedui.EUIRM;
 import extendedui.interfaces.delegates.ActionT1;
+import extendedui.utilities.EUIFontHelper;
 import pinacolada.augments.PCLAugment;
 import pinacolada.interfaces.markers.CardRewardActionProvider;
 import pinacolada.relics.pcl.MagicEraser;
@@ -37,7 +37,7 @@ public class PCLCardRewardBreakAction extends PCLCardRewardAction
     {
         return (PCLCardRewardActionButton) new PCLCardRewardActionButton(this,
                 EUIRM.images.hexagonalButton.texture(), PGR.core.strings.rewards.rewardBreak, PGR.core.strings.rewards.breakDescription, REWARD_INDEX, index, true)
-                .setFont(FontHelper.buttonLabelFont, 0.85f)
+                .setFont(EUIFontHelper.buttonFont, 0.85f)
                 .setDimensions(AbstractCard.IMG_WIDTH * 0.75f, AbstractCard.IMG_HEIGHT * 0.14f)
                 .setColor(new Color(0.8f, 0.2f, 0.2f, 1f))
                 .setBorder(EUIRM.images.hexagonalButtonBorder.texture(), Settings.GOLD_COLOR);

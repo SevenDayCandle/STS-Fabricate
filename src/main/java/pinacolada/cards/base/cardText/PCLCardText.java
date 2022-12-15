@@ -3,34 +3,42 @@ package pinacolada.cards.base.cardText;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import extendedui.EUI;
 import extendedui.EUIRM;
+import extendedui.ui.TextureCache;
 import extendedui.utilities.ColoredString;
+import extendedui.utilities.ColoredTexture;
 import extendedui.utilities.EUIColors;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.augments.PCLAugment;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.attributes.PCLAttribute;
 import pinacolada.cards.base.fields.PCLCardTag;
+import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.PCLRenderHelpers;
+
+import java.util.HashMap;
 
 public class PCLCardText
 {
     private static final PCLCoreImages.Badges BADGES = PGR.core.images.badges;
     private static final PCLCoreImages.CardIcons ICONS = PGR.core.images.icons;
     private static final ColoredString cs = new ColoredString("", Settings.CREAM_COLOR);
+    protected final static HashMap<AbstractCard.CardRarity, ColoredTexture> panels = new HashMap<>();
+    protected final static HashMap<AbstractCard.CardRarity, ColoredTexture> panelsLarge = new HashMap<>();
+    protected final static float DESC_OFFSET_X = (AbstractCard.IMG_WIDTH * 0.5f);
+    protected final static float DESC_OFFSET_Y = (AbstractCard.IMG_HEIGHT * 0.10f);
+    protected static final GlyphLayout layout = new GlyphLayout();
 
-    private static AbstractPlayer player;
     protected final PCLTextContext context = new PCLTextContext();
     protected final PCLCard card;
     protected String overrideDescription;
@@ -72,6 +80,51 @@ public class PCLCardText
         context.initialize(card, card.rawDescription, ignoreEffects);
     }
 
+    protected TextureCache getBlockIcon()
+    {
+        return card.isPopup ? ICONS.blockL : ICONS.block;
+    }
+
+    protected TextureCache getDamageIcon()
+    {
+        switch (card.attackType)
+        {
+            case Brutal:
+                return card.isPopup ? ICONS.brutalL : ICONS.brutal;
+            case Magical:
+                return card.isPopup ? ICONS.magicL : ICONS.magic;
+            case Piercing:
+                return card.isPopup ? ICONS.piercingL : ICONS.piercing;
+            case Ranged:
+                return card.isPopup ? ICONS.rangedL : ICONS.ranged;
+            case Normal:
+            default:
+                return card.isPopup ? ICONS.damageL : ICONS.damage;
+        }
+    }
+
+    protected TextureCache getHPIcon()
+    {
+        return card.isPopup ? ICONS.hpL : ICONS.hp;
+    }
+
+    protected ColoredTexture getPanelByRarity()
+    {
+        HashMap<AbstractCard.CardRarity, ColoredTexture> map = card.isPopup ? panelsLarge : panels;
+        ColoredTexture result = map.getOrDefault(card.rarity, null);
+        if (result == null)
+        {
+            result = card.getCardAttributeBanner();
+            if (result != null)
+            {
+                map.put(card.rarity, result);
+            }
+
+        }
+
+        return result;
+    }
+
     public void overrideDescription(String description, boolean forceRefresh)
     {
         overrideDescription = description;
@@ -84,18 +137,64 @@ public class PCLCardText
 
     protected void renderAttributes(SpriteBatch sb)
     {
-        PCLAttribute.leftAlign = true;
-        PCLAttribute temp;
-        if ((temp = card.getPrimaryInfo()) != null)
+        if (card.type == PCLEnum.CardType.SUMMON)
         {
-            temp.render(sb, card);
-            PCLAttribute.leftAlign = false;
+            renderAttribute(sb, getDamageIcon(), card.getDamageString(), card.hitCount > 1 ? ("x" + card.hitCount) : null, card.pclTarget != null ? card.pclTarget.getTag() : null, 1f, true);
+            renderAttribute(sb, getHPIcon(), card.getSecondaryValueString(), "/" + card.baseHeal, null, 0.7f, false);
         }
-        if ((temp = card.getSecondaryInfo()) != null)
+    }
+
+    protected void renderAttribute(SpriteBatch sb, TextureCache icon, ColoredString text, String suffix, String iconTag, float scaleMult, boolean leftAlign)
+    {
+        final float suffix_scale = 0.66f;
+        final float cw = AbstractCard.RAW_W;
+        final float ch = AbstractCard.RAW_H;
+        final float b_w = 126f;
+        final float b_h = 85f;
+        final float y = -ch * 0.04f;
+        final ColoredTexture panel = getPanelByRarity();
+
+        BitmapFont largeFont = PCLRenderHelpers.getLargeAttributeFont(card, scaleMult);
+        largeFont.getData().setScale(card.isPopup ? 0.5f : 1);
+        layout.setText(largeFont, text.text);
+
+        float text_width = scaleMult * layout.width / Settings.scale;
+        float suffix_width = 0;
+
+        if (suffix != null)
         {
-            temp.render(sb, card);
-            PCLAttribute.leftAlign = false;
+            layout.setText(largeFont, suffix);
+            suffix_width = (layout.width / Settings.scale) * suffix_scale;
         }
+
+        largeFont = PCLRenderHelpers.getLargeAttributeFont(card, scaleMult);
+
+        final float sign = leftAlign ? -1 : +1;
+        final float icon_x = sign * (cw * 0.45f);
+        float text_x = sign * cw * scaleMult * ((suffix != null || text.text.length() > 2) ? (0.35f - sign * 0.25f) : 0.35f);
+
+        if (panel != null)
+        {
+            PCLRenderHelpers.drawOnCardAuto(sb, card, panel.texture, new Vector2(sign * cw * 0.33f, y), b_w, b_h, panel.color, panel.color.a * card.transparency, 1, 0, leftAlign, false);
+        }
+
+        PCLRenderHelpers.drawOnCardAuto(sb, card, icon.texture(), icon_x, y, 48, 48);
+        PCLRenderHelpers.writeOnCard(sb, card, largeFont, text.text, text_x + (text_width * 0.5f), y, text.color, true);
+
+        if (suffix != null)
+        {
+            largeFont.getData().setScale(largeFont.getScaleX() * suffix_scale);
+            PCLRenderHelpers.writeOnCard(sb, card, largeFont, suffix, text_x + (text_width * 0.75f) + (suffix_width * 0.55f * scaleMult), y, text.color, true);
+        }
+
+        if (iconTag != null)
+        {
+            BitmapFont smallFont = PCLRenderHelpers.getSmallAttributeFont(card, scaleMult);
+            PCLRenderHelpers.writeOnCard(sb, card, smallFont, iconTag, icon_x, y - 12, Settings.CREAM_COLOR, true);
+            PCLRenderHelpers.resetFont(smallFont);
+        }
+
+        PCLRenderHelpers.resetFont(largeFont);
     }
 
     private float renderAugment(SpriteBatch sb, PCLAugment augment, float y)
@@ -178,8 +277,6 @@ public class PCLCardText
 
     public void renderDescription(SpriteBatch sb)
     {
-        player = PCLCard.player;
-
         if (card.isLocked || !card.isSeen)
         {
             FontHelper.menuBannerFont.getData().setScale(card.drawScale * 1.25f);
@@ -193,7 +290,7 @@ public class PCLCardText
 
         renderAttributes(sb);
 
-        final boolean inHand = player != null && player.hand.contains(card);
+        final boolean inHand = PCLCard.player != null && PCLCard.player.hand.contains(card);
         if (card.drawScale > 0.3f)
         {
             renderBadges(sb, inHand);

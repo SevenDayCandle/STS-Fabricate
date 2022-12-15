@@ -1,9 +1,9 @@
 package pinacolada.cards.pcl.replacement;
 
+import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.*;
 import pinacolada.cards.base.fields.PCLCardTag;
 import pinacolada.skills.skills.PSpecialSkill;
-import pinacolada.actions.PCLActions;
 
 public class Madness extends PCLCard
 {

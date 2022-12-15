@@ -6,9 +6,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import extendedui.EUIUtils;
 import extendedui.ui.cardFilter.CustomCardLibraryScreen;
-import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.*;
-import pinacolada.cards.base.attributes.PCLAttribute;
 import pinacolada.cards.base.fields.PCLCardTag;
 import pinacolada.skills.PSkill;
 
@@ -78,23 +76,6 @@ public class CSVExporter
     private static String getHeaderRow()
     {
         return EUIUtils.joinStrings(",", EUIUtils.map(CardRow.class.getDeclaredFields(), Field::getName)) + NEWLINE;
-    }
-
-    private static int getAttributeCount(PCLAttribute info)
-    {
-        if (info != null)
-        {
-            String suffix = info.suffix;
-            if (suffix != null)
-            {
-                suffix = suffix.replace("x", "");
-                if (StringUtils.isNumeric(suffix))
-                {
-                    return Integer.parseInt(suffix);
-                }
-            }
-        }
-        return 1;
     }
 
     private static String parseCardString(AbstractCard card)

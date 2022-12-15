@@ -17,7 +17,7 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.modifiers.OverrideSkillModifier;
 import pinacolada.misc.CombatManager;
 import pinacolada.monsters.PCLCardAlly;
-import pinacolada.resources.PGR;
+import pinacolada.resources.PCLEnum;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -215,10 +215,10 @@ public class AbstractPlayerPatches
     protected static void replaceTargets(AbstractPlayer player)
     {
         final PCLCard card = EUIUtils.safeCast(player.hoveredCard, PCLCard.class);
-        if (card != null && (card.pclTarget.targetsAllies() || card.type == PGR.Enums.CardType.SUMMON))
+        if (card != null && (card.pclTarget.targetsAllies() || card.type == PCLEnum.CardType.SUMMON))
         {
             final MonsterGroup group = AbstractDungeon.getCurrRoom().monsters;
-            final ArrayList<AbstractMonster> summons = CombatManager.summons.getSummons(card.type != PGR.Enums.CardType.SUMMON);
+            final ArrayList<AbstractMonster> summons = CombatManager.summons.getSummons(card.type != PCLEnum.CardType.SUMMON);
             if (card.pclTarget.targetsEnemies())
             {
                 summons.addAll(group.monsters);
@@ -229,7 +229,7 @@ public class AbstractPlayerPatches
                 group.monsters = summons;
 
                 // Summons should always target an available slot, regardless of whether it is occupied or not
-                if (card.type == PGR.Enums.CardType.SUMMON)
+                if (card.type == PCLEnum.CardType.SUMMON)
                 {
                     card.target = AbstractCard.CardTarget.ENEMY;
                     PCLCardAlly.emptyAnimation.highlight();

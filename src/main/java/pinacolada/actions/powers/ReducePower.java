@@ -6,9 +6,9 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIUtils;
 import pinacolada.actions.PCLActionWithCallback;
+import pinacolada.actions.PCLActions;
 import pinacolada.misc.CombatManager;
 import pinacolada.powers.PCLPower;
-import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
 
 public class ReducePower extends PCLActionWithCallback<AbstractPower>

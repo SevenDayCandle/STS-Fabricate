@@ -13,10 +13,10 @@ import extendedui.ui.controls.EUILabel;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.PercentageRelativeHitbox;
 import pinacolada.cards.base.PCLAffinity;
-import pinacolada.cards.base.attributes.BlockAttribute;
-import pinacolada.cards.base.attributes.DamageAttribute;
+import pinacolada.cards.base.PCLCard;
 import pinacolada.interfaces.markers.MultiplicativePower;
 import pinacolada.powers.PCLPowerHelper;
+import pinacolada.resources.PGR;
 import pinacolada.utilities.PCLRenderHelpers;
 
 import java.util.ArrayList;
@@ -132,13 +132,13 @@ public class PowerFormulaRow extends EUIHoverable
             {
                 switch (type) {
                     case Attack:
-                        icon = DamageAttribute.instance.icon;
+                        icon = (card instanceof PCLCard ? ((PCLCard) card).attackType.getTooltip().icon : PGR.core.tooltips.damage.icon).getTexture();
                         int damage = card.baseDamage;
                         initial.setLabel(damage > 0 ?
                                 damage : "");
                         break;
                     case Defend:
-                        icon = BlockAttribute.instance.icon;
+                        icon = PGR.core.tooltips.block.icon.getTexture();
                         int block = card.baseBlock;
                         initial.setLabel(block > 0 ?
                                 block : "");

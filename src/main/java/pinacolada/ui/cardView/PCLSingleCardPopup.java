@@ -134,7 +134,7 @@ public class PCLSingleCardPopup extends EUIBase
 
         this.toggleAugment = new EUIButton(EUIRM.images.hexagonalButton.texture(),
                 new EUIHitbox(Settings.WIDTH * 0.85f, Settings.HEIGHT * 0.95f, scale(240), scale(50)))
-                .setFont(FontHelper.buttonLabelFont, 0.9f)
+                .setFont(EUIFontHelper.buttonFont, 0.9f)
                 .setColor(Color.GRAY)
                 .setBorder(EUIRM.images.hexagonalButtonBorder.texture(), Color.GRAY)
                 .setOnClick(() -> toggleAugmentView(!showAugments))

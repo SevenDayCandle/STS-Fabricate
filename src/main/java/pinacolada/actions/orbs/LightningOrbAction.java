@@ -7,10 +7,10 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import com.megacrit.cardcrawl.vfx.combat.OrbFlareEffect;
 import pinacolada.actions.PCLAction;
+import pinacolada.actions.PCLActions;
 import pinacolada.effects.AttackEffects;
 import pinacolada.effects.SFX;
 import pinacolada.powers.common.PCLLockOnPower;
-import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
 
 public class LightningOrbAction extends PCLAction

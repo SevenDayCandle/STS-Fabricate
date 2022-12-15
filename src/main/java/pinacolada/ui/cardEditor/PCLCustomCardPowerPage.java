@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
+import extendedui.ui.TextureCache;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.OriginRelativeHitbox;
@@ -27,9 +28,9 @@ public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
     protected ArrayList<EUIButton> quickAddButtons = new ArrayList<>();
 
 
-    public PCLCustomCardPowerPage(PCLCustomCardEditCardScreen screen, PSkill effect, EUIHitbox hb, String title, ActionT1<PSkill> onUpdate)
+    public PCLCustomCardPowerPage(PCLCustomCardEditCardScreen screen, PSkill effect, EUIHitbox hb, int index, String title, ActionT1<PSkill> onUpdate)
     {
-        super(screen, effect, hb, title, onUpdate);
+        super(screen, effect, hb, index, title, onUpdate);
         delayEditor.setActive(false);
         primaryConditions
                 .setItems(EUIUtils.map(PTrigger.getEligibleTriggers(builder.cardColor, PTrigger.TRIGGER_PRIORITY), bc -> currentEffects[0] != null && bc.effectID.equals(currentEffects[0].effectID) ? currentEffects[0] : bc))
@@ -141,6 +142,12 @@ public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
         {
             b.tryRender(sb);
         }
+    }
+
+    @Override
+    public TextureCache getTextureCache()
+    {
+        return PGR.core.images.editorPower;
     }
 
 }

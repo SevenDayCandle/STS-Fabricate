@@ -3,10 +3,10 @@ package pinacolada.ui.cardReward;
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.vfx.cardManip.ExhaustCardEffect;
 import extendedui.EUIRM;
 import extendedui.interfaces.delegates.ActionT1;
+import extendedui.utilities.EUIFontHelper;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
 import pinacolada.effects.card.HideCardEffect;
@@ -43,7 +43,7 @@ public class PCLCardRewardRerollAction extends PCLCardRewardAction
     {
         return (PCLCardRewardActionButton) new PCLCardRewardActionButton(this,
                 EUIRM.images.hexagonalButton.texture(), PGR.core.strings.rewards.reroll, PGR.core.strings.rewards.rerollDescription, REWARD_INDEX, index, false)
-                .setFont(FontHelper.buttonLabelFont, 0.85f)
+                .setFont(EUIFontHelper.buttonFont, 0.85f)
                 .setDimensions(AbstractCard.IMG_WIDTH * 0.75f, AbstractCard.IMG_HEIGHT * 0.14f)
                 .setColor(Color.TAN)
                 .setBorder(EUIRM.images.hexagonalButtonBorder.texture(), Settings.GOLD_COLOR);

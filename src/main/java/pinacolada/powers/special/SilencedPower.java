@@ -3,9 +3,9 @@ package pinacolada.powers.special;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.powers.AbstractPower;
+import pinacolada.actions.PCLActions;
 import pinacolada.interfaces.listeners.OnTryApplyPowerListener;
 import pinacolada.powers.PCLPower;
-import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
 
 public class SilencedPower extends PCLPower implements OnTryApplyPowerListener

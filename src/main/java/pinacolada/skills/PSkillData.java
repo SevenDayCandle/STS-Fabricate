@@ -3,7 +3,7 @@ package pinacolada.skills;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.PCLCardTarget;
-import pinacolada.resources.PGR;
+import pinacolada.resources.PCLEnum;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -70,9 +70,9 @@ public class PSkillData
 
     public PSkillData pclOnly()
     {
-        colors.add(PGR.Enums.Cards.THE_ETERNAL);
-        colors.add(PGR.Enums.Cards.THE_CONJURER);
-        colors.add(PGR.Enums.Cards.THE_DECIDER);
+        colors.add(PCLEnum.Cards.THE_ETERNAL);
+        colors.add(PCLEnum.Cards.THE_CONJURER);
+        colors.add(PCLEnum.Cards.THE_DECIDER);
         return this;
     }
 

@@ -15,14 +15,14 @@ public class PCLCardRewardScreen extends EUIBase
     public static final PCLCardRewardScreen Instance = new PCLCardRewardScreen();
 
     public final PCLCardRewardBonus rewardBundle = new PCLCardRewardBonus();
-    public final PCLCardRewardInfo cardBadgeLegend = new PCLCardRewardInfo();
+    public final PCLCardRewardInfo rewardInfo = new PCLCardRewardInfo();
     public final PCLCardRewardRerollAction purgingStoneUI = new PCLCardRewardRerollAction(rewardBundle::add, rewardBundle::remove);
     public final PCLCardRewardBreakAction breakUI = new PCLCardRewardBreakAction(rewardBundle::add, rewardBundle::remove);
 
     public void close()
     {
         PGR.core.cardAffinities.close();
-        cardBadgeLegend.close();
+        rewardInfo.close();
         rewardBundle.close();
         purgingStoneUI.close();
         breakUI.close();
@@ -45,13 +45,13 @@ public class PCLCardRewardScreen extends EUIBase
         rewardBundle.open(rItem, cards);
         breakUI.open(rItem, cards, true);
         purgingStoneUI.open(rItem, cards, !breakUI.isActive);
-        cardBadgeLegend.open();
+        rewardInfo.open();
     }
 
     public void preRender(SpriteBatch sb)
     {
         PGR.core.cardAffinities.tryRender(sb);
-        cardBadgeLegend.tryRender(sb);
+        rewardInfo.tryRender(sb);
         purgingStoneUI.tryRender(sb);
         breakUI.tryRender(sb);
     }
@@ -62,7 +62,7 @@ public class PCLCardRewardScreen extends EUIBase
         purgingStoneUI.tryUpdate();
         rewardBundle.tryUpdate();
         breakUI.tryUpdate();
-        cardBadgeLegend.tryUpdate();
+        rewardInfo.tryUpdate();
     }
 
     public void renderImpl(SpriteBatch sb)

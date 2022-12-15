@@ -5,8 +5,8 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.MinionPower;
 import com.megacrit.cardcrawl.powers.RegrowPower;
 import extendedui.EUIUtils;
-import pinacolada.powers.PCLPower;
 import pinacolada.actions.PCLActions;
+import pinacolada.powers.PCLPower;
 
 public class StolenGoldPower extends PCLPower
 {

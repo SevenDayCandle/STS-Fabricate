@@ -11,12 +11,14 @@ import com.megacrit.cardcrawl.screens.options.OptionsPanel;
 import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
+import extendedui.ui.TextureCache;
 import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.fields.CardTagItem;
+import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLLoadout;
 import pinacolada.ui.common.PCLValueEditor;
@@ -57,7 +59,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
         {
             return Arrays.asList(AbstractCard.CardType.values());
         }
-        return EUIUtils.filter(AbstractCard.CardType.values(), v -> v != PGR.Enums.CardType.SUMMON);
+        return EUIUtils.filter(AbstractCard.CardType.values(), v -> v != PCLEnum.CardType.SUMMON);
     }
 
     public PCLCustomCardPrimaryInfoPage(PCLCustomCardEditCardScreen effect)
@@ -73,7 +75,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
         nameInput = (EUITextBoxInput) new EUITextBoxInput(EUIRM.images.panelRoundedHalfH.texture(),
                 new EUIHitbox(START_X, screenH(0.82f), MENU_WIDTH * 2.3f, MENU_HEIGHT * 1.65f))
                 .setOnComplete(s -> {
-                    effect.refreshAll(e -> e.setName(s).setLanguageMapEntry(activeLanguage));
+                    effect.modifyAllBuilders(e -> e.setName(s).setLanguageMapEntry(activeLanguage));
                 })
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, LeaderboardScreen.TEXT[7])
                 .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.05f)
@@ -97,7 +99,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
                 .setOnChange(rarities -> {
                     if (!rarities.isEmpty())
                     {
-                        effect.refreshAll(e -> e.setRarity(rarities.get(0)));
+                        effect.modifyAllBuilders(e -> e.setRarity(rarities.get(0)));
                     }
                 })
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[0])
@@ -107,7 +109,9 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
                 .setOnChange(types -> {
                     if (!types.isEmpty())
                     {
-                        effect.refreshAll(e -> e.setType(types.get(0)));
+                        // Pages need to refresh because changing card type affects available skill options or attributes
+                        effect.modifyAllBuilders(e -> e.setType(types.get(0)));
+                        effect.refreshPages();
                     }
                 })
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[1])
@@ -118,16 +122,16 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
                 .setOnChange(targets -> {
                     if (!targets.isEmpty())
                     {
-                        effect.refreshAll(e -> e.setTarget(targets.get(0)));
+                        effect.modifyAllBuilders(e -> e.setTarget(targets.get(0)));
                     }
                 })
                 .setLabelFunctionForOption(PCLCardTarget::getTitle, false)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cardEditor.cardTarget)
                 .setCanAutosizeButton(true)
-                .setItems(PCLCardTarget.values());
+                .setItems(PCLCardTarget.getAll());
         flagsDropdown = new EUISearchableDropdown<CardTagItem>(new EUIHitbox(START_X, screenH(0.6f), MENU_WIDTH, MENU_HEIGHT), cs -> cs.getTip().title)
                 .setOnChange(selectedSeries -> {
-                    effect.refreshAll(e -> e.setExtraTags(selectedSeries));
+                    effect.modifyAllBuilders(e -> e.setExtraTags(selectedSeries));
                 })
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cardEditor.flags)
                 .setCanAutosizeButton(true)
@@ -136,7 +140,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
                 .setTooltip(PGR.core.strings.cardEditor.flags, PGR.core.strings.cardEditorTutorial.primaryFlags);
         seriesDropdown = new EUISearchableDropdown<PCLLoadout>(new EUIHitbox(flagsDropdown.hb.x + flagsDropdown.hb.width + SPACING_WIDTH, screenH(0.6f), MENU_WIDTH, MENU_HEIGHT), cs -> cs.getName())
                 .setOnChange(selectedSeries -> {
-                    effect.refreshAll(e -> e.setLoadout(!selectedSeries.isEmpty() ? selectedSeries.get(0) : null));
+                    effect.modifyAllBuilders(e -> e.setLoadout(!selectedSeries.isEmpty() ? selectedSeries.get(0) : null));
                 })
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.seriesUI.seriesUI)
                 .setCanAutosizeButton(true)
@@ -147,12 +151,12 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
                 .setActive(GameUtilities.isPCLCardColor(effect.currentSlot.slotColor));
 
         maxUpgrades = new PCLValueEditor(new EUIHitbox(START_X, screenH(0.5f), MENU_WIDTH / 4, MENU_HEIGHT)
-                , PGR.core.strings.cardEditor.maxUpgrades, (val) -> effect.refreshAll(e -> e.setMaxUpgrades(val)))
+                , PGR.core.strings.cardEditor.maxUpgrades, (val) -> effect.modifyAllBuilders(e -> e.setMaxUpgrades(val)))
                 .setLimits(-1, 9999);
         uniqueToggle = (EUIToggle) new EUIToggle(new EUIHitbox(screenW(0.35f), screenH(0.5f), MENU_WIDTH, MENU_HEIGHT))
                 .setFont(EUIFontHelper.carddescriptionfontNormal, 0.9f)
                 .setText(PGR.core.tooltips.unique.title)
-                .setOnToggle(val -> effect.refreshAll(e -> {
+                .setOnToggle(val -> effect.modifyAllBuilders(e -> {
                     e.setUnique(val);
                 }))
                 .setTooltip(PGR.core.tooltips.unique);
@@ -176,6 +180,12 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
         flagsDropdown.setSelection(effect.getBuilder().extraTags, false);
         maxUpgrades.setValue(effect.getBuilder().maxUpgradeLevel, false);
         uniqueToggle.setToggle(effect.getBuilder().unique);
+    }
+
+    @Override
+    public TextureCache getTextureCache()
+    {
+        return PGR.core.images.editorPrimary;
     }
 
     @Override

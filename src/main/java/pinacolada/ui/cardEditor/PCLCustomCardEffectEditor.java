@@ -10,6 +10,7 @@ import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
+import extendedui.ui.TextureCache;
 import extendedui.ui.controls.EUIDropdown;
 import extendedui.ui.controls.EUISearchableDropdown;
 import extendedui.ui.controls.EUIToggle;
@@ -353,12 +354,18 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
                 xOff = position(piles, xOff, curEffect.getGroups());
                 xOff = position(types, xOff, curEffect.getCardTypes());
                 xOff = position(rarities, xOff, curEffect.getCardRarities());
-                xOff = position(affinities, xOff, curEffect.getAffinities());
+                if (GameUtilities.isPCLCardColor(editor.builder.cardColor))
+                {
+                    xOff = position(affinities, xOff, curEffect.getAffinities());
+                }
                 break;
             case CardGroupAffinity:
                 xOff = position(piles, xOff, curEffect.getGroups());
             case Affinity:
-                xOff = position(affinities, xOff, curEffect.getAffinities());
+                if (GameUtilities.isPCLCardColor(editor.builder.cardColor))
+                {
+                    xOff = position(affinities, xOff, curEffect.getAffinities());
+                }
                 break;
             case Card:
                 xOff = position(piles, xOff, curEffect.getGroups());
@@ -373,7 +380,10 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
             case Delegate:
                 xOff = position(types, xOff, curEffect.getCardTypes());
                 xOff = position(rarities, xOff, curEffect.getCardRarities());
-                xOff = position(affinities, xOff, curEffect.getAffinities());
+                if (GameUtilities.isPCLCardColor(editor.builder.cardColor))
+                {
+                    xOff = position(affinities, xOff, curEffect.getAffinities());
+                }
                 break;
             case Orb:
                 xOff = position(orbs, xOff, curEffect.getOrbs());
@@ -400,6 +410,12 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
         altToggle.setToggle(curEffect != null && curEffect.alt)
                 .setPosition(Math.max(xOff, extraEditor.hb.cX + extraEditor.hb.width) + scale(70), hb.cY)
                 .setActive(data != null && data.altText != null);
+    }
+
+    @Override
+    public TextureCache getTextureCache()
+    {
+        return PGR.core.images.editorEffect;
     }
 
     protected String getTitleForPriority()

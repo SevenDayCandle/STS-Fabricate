@@ -6,8 +6,8 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.localization.PowerStrings;
 import com.megacrit.cardcrawl.powers.AbstractPower;
-import pinacolada.interfaces.markers.MultiplicativePower;
 import pinacolada.actions.PCLActions;
+import pinacolada.interfaces.markers.MultiplicativePower;
 
 public class PlayerFlightPower extends AbstractPower implements CloneablePowerInterface, MultiplicativePower
 {

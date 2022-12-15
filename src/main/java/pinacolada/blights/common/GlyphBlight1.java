@@ -2,9 +2,9 @@ package pinacolada.blights.common;
 
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.RitualPower;
+import pinacolada.actions.PCLActions;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PGR;
-import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
 
 public class GlyphBlight1 extends AbstractGlyphBlight

@@ -9,6 +9,7 @@ import extendedui.interfaces.delegates.ActionT2;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.ColoredString;
+import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.misc.CombatManager;
@@ -16,7 +17,6 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PSpecialSkill;
-import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;

@@ -37,9 +37,7 @@ public class ShowCardPileEffect extends PCLEffectWithCallback<CardGroup>
     private EUIButton selectAllButton;
     private EUICardGrid grid;
     private EUILabel selectedCount;
-    private EUIToggle simplifyCardUIToggle;
     private EUIToggle upgradeToggle;
-    private EUIToggle zoomToggle;
     private boolean draggingScreen;
     private boolean showTopPanelOnComplete;
     private final Color screenColor;
@@ -116,23 +114,7 @@ public class ShowCardPileEffect extends PCLEffectWithCallback<CardGroup>
                 .setText(SingleCardViewPopup.TEXT[6])
                 .setOnToggle(this::toggleViewUpgrades);
 
-        zoomToggle = new EUIToggle(new EUIHitbox(buttonWidth, buttonHeight))
-                .setBackground(EUIRM.images.panel.texture(), Color.DARK_GRAY)
-                .setPosition(xPos, upgradeToggle.hb.y - upgradeToggle.hb.height)
-                .setFont(EUIFontHelper.carddescriptionfontLarge, 0.475f)
-                .setText(PGR.core.strings.misc.dynamicPortraits)
-                .setOnToggle(this::toggleCardZoom);
-
-        simplifyCardUIToggle = new EUIToggle(new EUIHitbox(buttonWidth, buttonHeight))
-                .setBackground(EUIRM.images.panel.texture(), Color.DARK_GRAY)
-                .setPosition(xPos, zoomToggle.hb.y - zoomToggle.hb.height)
-                .setFont(EUIFontHelper.carddescriptionfontLarge, 0.475f)
-                .setText(PGR.core.strings.misc.simplifyCardUI)
-                .setOnToggle(this::toggleSimplifyCardUI);
-
         upgradeToggle.setToggle(SingleCardViewPopup.isViewingUpgrade);
-        zoomToggle.setToggle(PGR.core.config.cropCardImages.get());
-        simplifyCardUIToggle.setToggle(PGR.core.config.simplifyCardUI.get());
         refreshCountText();
     }
 
@@ -166,18 +148,6 @@ public class ShowCardPileEffect extends PCLEffectWithCallback<CardGroup>
             toggleCard(c, value);
         }
         refreshCountText();
-    }
-
-    private void toggleCardZoom(boolean value)
-    {
-        PGR.core.config.cropCardImages.set(value, true);
-        zoomToggle.setToggle(PGR.core.config.cropCardImages.get());
-    }
-
-    private void toggleSimplifyCardUI(boolean value)
-    {
-        PGR.core.config.simplifyCardUI.set(value, true);
-        simplifyCardUIToggle.setToggle(PGR.core.config.simplifyCardUI.get());
     }
 
     private void toggleViewUpgrades(boolean value)
@@ -218,8 +188,6 @@ public class ShowCardPileEffect extends PCLEffectWithCallback<CardGroup>
         sb.draw(ImageMaster.WHITE_SQUARE_IMG, 0f, 0f, (float) Settings.WIDTH, (float) Settings.HEIGHT);
         grid.tryRender(sb);
         upgradeToggle.renderImpl(sb);
-        zoomToggle.renderImpl(sb);
-        simplifyCardUIToggle.renderImpl(sb);
         selectAllButton.renderImpl(sb);
         deselectAllButton.renderImpl(sb);
         selectedCount.renderImpl(sb);
@@ -230,13 +198,11 @@ public class ShowCardPileEffect extends PCLEffectWithCallback<CardGroup>
     {
         grid.tryUpdate();
         upgradeToggle.updateImpl();
-        zoomToggle.updateImpl();
-        simplifyCardUIToggle.updateImpl();
         selectAllButton.updateImpl();
         deselectAllButton.updateImpl();
         selectedCount.updateImpl();
 
-        if (upgradeToggle.hb.hovered || zoomToggle.hb.hovered || simplifyCardUIToggle.hb.hovered || selectAllButton.hb.hovered || deselectAllButton.hb.hovered || grid.hoveredCard != null)
+        if (upgradeToggle.hb.hovered || selectAllButton.hb.hovered || deselectAllButton.hb.hovered || grid.hoveredCard != null)
         {
             duration = startingDuration * 0.1f;
             isDone = false;

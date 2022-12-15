@@ -9,6 +9,7 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.ui.TextureCache;
 import extendedui.ui.tooltips.EUITooltip;
+import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
@@ -118,11 +119,11 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>
         {
             return extended();
         }
-        if (pc == PGR.Enums.Cards.THE_CONJURER || pc == PGR.Enums.Cards.THE_DECIDER)
+        if (pc == PCLEnum.Cards.THE_CONJURER || pc == PCLEnum.Cards.THE_DECIDER)
         {
             return MAIN_TYPES;
         }
-        if (pc == PGR.Enums.Cards.THE_ETERNAL)
+        if (pc == PCLEnum.Cards.THE_ETERNAL)
         {
             return ETERNAL_TYPES;
         }
@@ -193,7 +194,7 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>
     public Texture getBorder(int level)
     {
         AbstractCard.CardColor color = GameUtilities.getActingColor();
-        if (color == PGR.Enums.Cards.THE_CONJURER)
+        if (color == PCLEnum.Cards.THE_CONJURER)
         {
             return PGR.core.images.core.borderSpecial2.texture();
         }

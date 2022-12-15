@@ -5,6 +5,7 @@ import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIGameUtils;
+import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 
 public class ExtendedUIPatches
@@ -15,11 +16,11 @@ public class ExtendedUIPatches
         @SpirePrefixPatch
         public static SpireReturn<String> prefix(AbstractCard.CardRarity type)
         {
-            if (type == PGR.Enums.CardRarity.SECRET)
+            if (type == PCLEnum.CardRarity.SECRET)
             {
                 return SpireReturn.Return(PGR.core.strings.cardType.secretRare);
             }
-            else if (type == PGR.Enums.CardRarity.LEGENDARY)
+            else if (type == PCLEnum.CardRarity.LEGENDARY)
             {
                 return SpireReturn.Return(PGR.core.strings.cardType.legendary);
             }
@@ -33,7 +34,7 @@ public class ExtendedUIPatches
         @SpirePrefixPatch
         public static SpireReturn<String> prefix(AbstractCard.CardType type)
         {
-            if (type == PGR.Enums.CardType.SUMMON)
+            if (type == PCLEnum.CardType.SUMMON)
             {
                 return SpireReturn.Return(PGR.core.tooltips.summon.title);
             }

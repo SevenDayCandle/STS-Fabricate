@@ -7,6 +7,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.screens.compendium.CardLibSortHeader;
 import extendedui.EUIUtils;
+import extendedui.ui.TextureCache;
 import extendedui.ui.controls.EUIDropdown;
 import extendedui.ui.controls.EUILabel;
 import extendedui.ui.hitboxes.EUIHitbox;
@@ -18,6 +19,7 @@ import pinacolada.cards.base.PCLCardBuilder;
 import pinacolada.cards.base.PCLCardTagInfo;
 import pinacolada.cards.base.fields.PCLCardTag;
 import pinacolada.effects.AttackEffects;
+import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 
 import java.util.ArrayList;
@@ -44,7 +46,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
     protected PCLCustomCardUpgradableEditor damageEditor;
     protected PCLCustomCardUpgradableEditor blockEditor;
     protected PCLCustomCardUpgradableEditor magicNumberEditor;
-    protected PCLCustomCardUpgradableEditor secondaryValueEditor;
+    protected PCLCustomCardUpgradableEditor hpEditor;
     protected PCLCustomCardUpgradableEditor hitCountEditor;
     protected PCLCustomCardUpgradableEditor rightCountEditor;
     protected ArrayList<PCLCustomCardAffinityValueEditor> affinityEditors = new ArrayList<>();
@@ -71,7 +73,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
                 .setOnChange(targets -> {
                     if (!targets.isEmpty())
                     {
-                        effect.refreshCard(e -> e.setAttackType(targets.get(0)));
+                        effect.modifyBuilder(e -> e.setAttackType(targets.get(0)));
                     }
                 })
                 .setLabelFunctionForOption(c -> c.getTooltip() != null ? c.getTooltip().title : "", false)
@@ -83,7 +85,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
                 .setOnChange(targets -> {
                     if (!targets.isEmpty())
                     {
-                        effect.refreshCard(e -> e.setAttackEffect(targets.get(0)));
+                        effect.modifyBuilder(e -> e.setAttackEffect(targets.get(0)));
                     }
                 })
                 .setLabelFunctionForOption(Enum::name, false)
@@ -91,7 +93,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
                 .setCanAutosizeButton(true)
                 .setItems(AttackEffects.keys());
         tagsDropdown = new EUIDropdown<PCLCardTagInfo>(new EUIHitbox(START_X, screenH(0.6f), MENU_WIDTH * 1.2f, MENU_HEIGHT))
-                .setOnChange(tags -> effect.refreshCard(e -> e.setTags(tags)))
+                .setOnChange(tags -> effect.modifyBuilder(e -> e.setTags(tags)))
                 .setLabelFunctionForOption(item -> item.tag.getTip().getTitleOrIcon() + " " + item.tag.getTip().title, true)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cardEditor.tags)
                 .setIsMultiSelect(true)
@@ -112,32 +114,32 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
                 .setLabel(PGR.core.strings.cardEditor.upgrades);
         curW += SPACING_WIDTH;
         costEditor = new PCLCustomCardUpgradableEditor(new EUIHitbox(curW, screenH(0.45f), MENU_WIDTH / 4, MENU_HEIGHT)
-                , CardLibSortHeader.TEXT[3], (val, upVal) -> effect.refreshCard(e -> e.setCosts(val).setCostUpgrades(upVal)))
+                , CardLibSortHeader.TEXT[3], (val, upVal) -> effect.modifyBuilder(e -> e.setCosts(val).setCostUpgrades(upVal)))
                 .setLimits(-2, 999);
         curW += SPACING_WIDTH;
         damageEditor = new PCLCustomCardUpgradableEditor(new EUIHitbox(curW, screenH(0.45f), MENU_WIDTH / 4, MENU_HEIGHT)
-                , PGR.core.strings.cardEditor.damage, (val, upVal) -> effect.refreshCard(e -> e.setDamage(val, upVal, e.hitCount, e.hitCountUpgrade)))
+                , PGR.core.strings.cardEditor.damage, (val, upVal) -> effect.modifyBuilder(e -> e.setDamage(val, upVal, e.hitCount, e.hitCountUpgrade)))
                 .setLimits(0, 999);
         curW += SPACING_WIDTH;
         blockEditor = new PCLCustomCardUpgradableEditor(new EUIHitbox(curW, screenH(0.45f), MENU_WIDTH / 4, MENU_HEIGHT)
-                , PGR.core.strings.cardEditor.block, (val, upVal) -> effect.refreshCard(e -> e.setBlock(val, upVal, e.rightCount, e.rightCountUpgrade)))
-                .setLimits(0, 999);
-        curW += SPACING_WIDTH;
-        magicNumberEditor = new PCLCustomCardUpgradableEditor(new EUIHitbox(curW, screenH(0.45f), MENU_WIDTH / 4, MENU_HEIGHT)
-                , PGR.core.strings.cardEditor.magicNumber, (val, upVal) -> effect.refreshCard(e -> e.setMagicNumber(val, upVal)))
-                .setLimits(0, 999);
-        curW += SPACING_WIDTH;
-        secondaryValueEditor = new PCLCustomCardUpgradableEditor(new EUIHitbox(curW, screenH(0.45f), MENU_WIDTH / 4, MENU_HEIGHT)
-                , PGR.core.strings.cardEditor.secondaryNumber, (val, upVal) -> effect.refreshCard(e -> e.setHp(val, upVal)))
+                , PGR.core.strings.cardEditor.block, (val, upVal) -> effect.modifyBuilder(e -> e.setBlock(val, upVal, e.rightCount, e.rightCountUpgrade)))
                 .setLimits(0, 999);
         curW += SPACING_WIDTH;
         hitCountEditor = new PCLCustomCardUpgradableEditor(new EUIHitbox(curW, screenH(0.45f), MENU_WIDTH / 4, MENU_HEIGHT)
-                , EUIUtils.format(PGR.core.strings.cardEditor.hitCount, PGR.core.strings.cardEditor.damage), (val, upVal) -> effect.refreshCard(e -> e.setHitCount(val, upVal)))
+                , EUIUtils.format(PGR.core.strings.cardEditor.hitCount, PGR.core.strings.cardEditor.damage), (val, upVal) -> effect.modifyBuilder(e -> e.setHitCount(val, upVal)))
                 .setLimits(1, 999);
         curW += SPACING_WIDTH;
         rightCountEditor = new PCLCustomCardUpgradableEditor(new EUIHitbox(curW, screenH(0.45f), MENU_WIDTH / 4, MENU_HEIGHT)
-                , EUIUtils.format(PGR.core.strings.cardEditor.hitCount, PGR.core.strings.cardEditor.block), (val, upVal) -> effect.refreshCard(e -> e.setRightCount(val, upVal)))
+                , EUIUtils.format(PGR.core.strings.cardEditor.hitCount, PGR.core.strings.cardEditor.block), (val, upVal) -> effect.modifyBuilder(e -> e.setRightCount(val, upVal)))
                 .setLimits(1, 999);
+        curW += SPACING_WIDTH;
+        magicNumberEditor = new PCLCustomCardUpgradableEditor(new EUIHitbox(curW, screenH(0.45f), MENU_WIDTH / 4, MENU_HEIGHT)
+                , PGR.core.strings.cardEditor.magicNumber, (val, upVal) -> effect.modifyBuilder(e -> e.setMagicNumber(val, upVal)))
+                .setLimits(0, 999);
+        curW += SPACING_WIDTH;
+        hpEditor = new PCLCustomCardUpgradableEditor(new EUIHitbox(curW, screenH(0.45f), MENU_WIDTH / 4, MENU_HEIGHT)
+                , PGR.core.strings.cardEditor.secondaryNumber, (val, upVal) -> effect.modifyBuilder(e -> e.setHp(val, upVal)))
+                .setLimits(0, 999);
 
         // Affinity editors
 
@@ -154,7 +156,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
         for (PCLAffinity affinity : availableAffinities)
         {
             affinityEditors.add(new PCLCustomCardAffinityValueEditor(new EUIHitbox(curW, screenH(0.32f), MENU_WIDTH / 4, MENU_HEIGHT)
-                    , affinity, (af, val, upVal) -> effect.refreshCard(e -> e.setAffinities(af, val, upVal))));
+                    , affinity, (af, val, upVal) -> effect.modifyBuilder(e -> e.setAffinities(af, val, upVal))));
             curW += SPACING_WIDTH;
         }
 
@@ -170,17 +172,18 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
     public void refresh()
     {
         PCLCardBuilder builder = effect.getBuilder();
+        boolean isSummon = builder.cardType == PCLEnum.CardType.SUMMON;
 
         costEditor.setValue(builder.getCost(0), builder.getCostUpgrade(0));
         damageEditor.setValue(builder.getDamage(0), builder.getDamageUpgrade(0));
         blockEditor.setValue(builder.getBlock(0), builder.getBlockUpgrade(0));
-        magicNumberEditor.setValue(builder.getMagicNumber(0), builder.getMagicNumberUpgrade(0));
-        secondaryValueEditor.setValue(builder.getHp(0), builder.getHpUpgrade(0));
         hitCountEditor.setValue(builder.getHitCount(0), builder.getHitCountUpgrade(0));
         rightCountEditor.setValue(builder.getRightCount(0), builder.getRightCountUpgrade(0));
         tagsDropdown.setSelection(EUIUtils.filter(builder.tags.values(), i -> i.get(0) != 0 || i.getUpgrade(0) != 0), false);
         attackTypeDropdown.setSelection(builder.attackType, false);
         attackEffectDropdown.setSelection(builder.attackEffect, false);
+        magicNumberEditor.setValue(builder.getMagicNumber(0), builder.getMagicNumberUpgrade(0)).setActive(isSummon);
+        hpEditor.setValue(builder.getHp(0), builder.getHpUpgrade(0)).setActive(isSummon);
 
         List<PCLCardTagInfo> infos = tagsDropdown.getAllItems();
         ArrayList<Integer> selection = new ArrayList<>();
@@ -205,6 +208,12 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
     }
 
     @Override
+    public TextureCache getTextureCache()
+    {
+        return PGR.core.images.editorAttribute;
+    }
+
+    @Override
     public void updateImpl()
     {
         header.tryUpdate();
@@ -212,7 +221,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
         damageEditor.tryUpdate();
         blockEditor.tryUpdate();
         magicNumberEditor.tryUpdate();
-        secondaryValueEditor.tryUpdate();
+        hpEditor.tryUpdate();
         hitCountEditor.tryUpdate();
         rightCountEditor.tryUpdate();
         tagsDropdown.tryUpdate();
@@ -240,7 +249,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
         damageEditor.tryRender(sb);
         blockEditor.tryRender(sb);
         magicNumberEditor.tryRender(sb);
-        secondaryValueEditor.tryRender(sb);
+        hpEditor.tryRender(sb);
         hitCountEditor.tryRender(sb);
         rightCountEditor.tryRender(sb);
         attackTypeDropdown.tryRender(sb);

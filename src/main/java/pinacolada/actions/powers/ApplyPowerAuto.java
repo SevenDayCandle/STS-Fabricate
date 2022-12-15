@@ -11,9 +11,9 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLActionAutoTarget;
+import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.powers.PCLPowerHelper;
-import pinacolada.actions.PCLActions;
 
 public class ApplyPowerAuto extends PCLActionAutoTarget<AbstractPower>
 {

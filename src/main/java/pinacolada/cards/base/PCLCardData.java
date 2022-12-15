@@ -12,6 +12,7 @@ import extendedui.interfaces.markers.CardObject;
 import pinacolada.cards.base.cardText.PCLCardText;
 import pinacolada.cards.base.fields.PCLCardTag;
 import pinacolada.interfaces.markers.Hidden;
+import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLLoadout;
@@ -774,7 +775,7 @@ public class PCLCardData implements CardObject
         setRarity(rarity);
 
         cardTarget = target;
-        cardType = PGR.Enums.CardType.SUMMON;
+        cardType = PCLEnum.CardType.SUMMON;
         this.attackType = attackType;
         this.cost = array(cost);
 

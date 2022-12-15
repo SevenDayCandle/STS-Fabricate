@@ -2,11 +2,13 @@ package pinacolada.cards.base.cardText;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.resources.PGR;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -95,7 +97,7 @@ public class SymbolToken extends PCLTextToken
     @Override
     public int getCharCount()
     {
-        return 1;
+        return (PGR.core.config.simplifyCardUI.get()) ? tooltip.title.length() : 1;
     }
 
     @Override
@@ -111,7 +113,7 @@ public class SymbolToken extends PCLTextToken
         float size = getWidth(context);// 24f * Settings.scale * card.drawScale * context.scaleModifier;
         float partial = size / 12f;
 
-        if (tooltip.icon != null)
+        if (tooltip.icon != null && !PGR.core.config.simplifyCardUI.get())
         {
             float iconW = size * tooltip.iconmultiW;
             float iconH = size * tooltip.iconmultiH;
@@ -124,12 +126,11 @@ public class SymbolToken extends PCLTextToken
             }
             sb.setColor(context.color);
             sb.draw(tooltip.icon, context.startX - diff, context.startY - (partial * 6), iconW, iconH);
+            context.startX += (size - partial);
         }
         else
         {
-            EUIUtils.logError(this, "tooltip.icon was null, " + tooltip.title);
+            super.render(sb, context, tooltip.title, Settings.GOLD_COLOR);
         }
-
-        context.startX += (size - partial);
     }
 }

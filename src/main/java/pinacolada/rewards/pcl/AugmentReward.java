@@ -11,6 +11,7 @@ import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.augments.PCLAugment;
 import pinacolada.effects.SFX;
+import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.rewards.PCLReward;
 
@@ -22,7 +23,7 @@ public class AugmentReward extends PCLReward
 
     public AugmentReward(PCLAugment augment)
     {
-        super(augment.getTexture(), augment.getName(), PGR.Enums.Rewards.AUGMENT);
+        super(augment.getTexture(), augment.getName(), PCLEnum.Rewards.AUGMENT);
 
         this.augment = augment;
     }

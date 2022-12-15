@@ -2,15 +2,18 @@ package pinacolada.cards.base;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIUtils;
+import extendedui.interfaces.markers.TooltipProvider;
+import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.cards.base.fields.PCLCardTag;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.List;
 
 import static extendedui.EUIUtils.array;
 import static extendedui.EUIUtils.safeIndex;
 
-public class PCLCardTagInfo implements Serializable
+public class PCLCardTagInfo implements Serializable, TooltipProvider
 {
     public final PCLCardTag tag;
     public Integer[] value;
@@ -41,6 +44,11 @@ public class PCLCardTagInfo implements Serializable
     public Integer get(int form)
     {
         return safeIndex(value, form);
+    }
+
+    public List<EUITooltip> getTips()
+    {
+        return tag.getTips();
     }
 
     public Integer getUpgrade(int form)

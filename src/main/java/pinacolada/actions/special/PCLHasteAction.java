@@ -4,9 +4,9 @@ import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import pinacolada.actions.PCLAction;
+import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLCardTag;
 import pinacolada.misc.CombatManager;
-import pinacolada.actions.PCLActions;
 
 public class PCLHasteAction extends PCLAction
 {

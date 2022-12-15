@@ -3,11 +3,11 @@ package pinacolada.powers.special;
 import com.evacipated.cardcrawl.mod.stslib.patches.NeutralPowertypePatch;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.stances.NeutralStance;
+import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.powers.PCLPower;
 import pinacolada.resources.PGR;
 import pinacolada.skills.skills.PSpecialSkill;
-import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
 
 public class ExitStancePower extends PCLPower

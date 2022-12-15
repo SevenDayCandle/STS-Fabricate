@@ -1,8 +1,8 @@
 package pinacolada.powers.common;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import pinacolada.powers.PCLPower;
 import pinacolada.actions.PCLActions;
+import pinacolada.powers.PCLPower;
 
 public class VitalityPower extends PCLPower
 {

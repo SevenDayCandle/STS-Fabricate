@@ -969,6 +969,11 @@ public class GameUtilities
         return getCardsInPile(player.hand, player.discardPile, player.drawPile, player.exhaustPile);
     }
 
+    public static ArrayList<AbstractCard> getCardsInGame()
+    {
+        return getCardsInPile(player.hand, player.discardPile, player.drawPile, player.exhaustPile, player.masterDeck, player.limbo, CombatManager.PURGED_CARDS);
+    }
+
     public static ArrayList<AbstractCard> getCardsInPile(CardGroup... groups)
     {
         return EUIUtils.flattenList(EUIUtils.map(groups, group -> group.group));
