@@ -16,6 +16,7 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
+import pinacolada.misc.CombatManager;
 import pinacolada.monsters.animations.PCLSlotAnimation;
 import pinacolada.monsters.animations.conjurer.ConjurerFireAllyAnimation;
 import pinacolada.skills.Skills;
@@ -147,6 +148,7 @@ public class PCLCardAlly extends PCLCreature
             card.onPreUse(info);
             card.onUse(info);
             card.onLateUse(info);
+            card.triggerWhenTriggered(this);
         }
     }
 
@@ -165,6 +167,8 @@ public class PCLCardAlly extends PCLCreature
             }
         });
 
+        CombatManager.onAllyDeath(card, this);
+        card.triggerWhenKilled(this);
         releaseCard();
     }
 

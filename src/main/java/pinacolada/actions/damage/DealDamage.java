@@ -43,7 +43,7 @@ public class DealDamage extends PCLActionWithCallback<AbstractCreature>
     {
         this(other.target, other.info, other.attackEffect);
 
-        Import(other);
+        copySettings(other);
 
         this.card = other.card;
         this.vfxColor = other.vfxColor;

@@ -1,9 +1,9 @@
 package pinacolada.actions.pileSelection;
 
-import com.megacrit.cardcrawl.actions.unique.GamblingChipAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import pinacolada.actions.PCLActions;
+import pinacolada.resources.PGR;
 
 import java.util.ArrayList;
 
@@ -33,9 +33,9 @@ public class CycleCards extends DiscardFromPile
     }
 
     @Override
-    public String updateMessage()
+    public String getActionMessage()
     {
-        return super.updateMessageInternal(GamblingChipAction.TEXT[1]);
+        return PGR.core.tooltips.cycle.title;
     }
 
     public CycleCards drawInstantly(boolean value)

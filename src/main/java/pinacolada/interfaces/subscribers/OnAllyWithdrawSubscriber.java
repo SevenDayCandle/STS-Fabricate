@@ -5,5 +5,5 @@ import pinacolada.monsters.PCLCardAlly;
 
 public interface OnAllyWithdrawSubscriber
 {
-    void onAllyWithdraw(PCLCardAlly ally, PCLCard returned);
+    void onAllyWithdraw(PCLCard returned, PCLCardAlly ally);
 }

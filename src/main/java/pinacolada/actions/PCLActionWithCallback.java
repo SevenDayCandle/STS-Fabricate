@@ -54,9 +54,9 @@ public abstract class PCLActionWithCallback<T> extends PCLAction
     }
 
     @Override
-    protected void Import(PCLAction other)
+    protected void copySettings(PCLAction other)
     {
-        super.Import(other);
+        super.copySettings(other);
 
         callbacks.addAll(((PCLActionWithCallback<T>) other).callbacks);
     }

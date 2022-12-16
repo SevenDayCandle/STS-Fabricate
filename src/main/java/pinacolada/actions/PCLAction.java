@@ -11,8 +11,6 @@ import com.megacrit.cardcrawl.random.Random;
 import extendedui.EUIUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-
 public abstract class PCLAction extends AbstractGameAction
 {
     public static AbstractCard currentCard;
@@ -22,7 +20,6 @@ public abstract class PCLAction extends AbstractGameAction
     public PCLActions.ActionOrder originalOrder;
     public AbstractCard sourceCard;
 
-    protected final ArrayList<Object> tags = new ArrayList<>(1);
     protected final AbstractPlayer player;
     protected final Random rng;
     protected AbstractCard card;
@@ -55,18 +52,6 @@ public abstract class PCLAction extends AbstractGameAction
     public PCLAction setOriginalOrder(PCLActions.ActionOrder order)
     {
         this.originalOrder = order;
-
-        return this;
-    }
-
-    public boolean hasTag(Object tag)
-    {
-        return this.tags.contains(tag);
-    }
-
-    public PCLAction addTag(Object tag)
-    {
-        this.tags.add(tag);
 
         return this;
     }
@@ -205,11 +190,10 @@ public abstract class PCLAction extends AbstractGameAction
         tickDuration(getDeltaTime());
     }
 
-    protected void Import(PCLAction other)
+    protected void copySettings(PCLAction other)
     {
         setDuration(other.startDuration, other.isRealtime);
         isCancellable(other.canCancel);
-        tags.addAll(other.tags);
         name = other.name;
         message = other.message;
         originalOrder = other.originalOrder;

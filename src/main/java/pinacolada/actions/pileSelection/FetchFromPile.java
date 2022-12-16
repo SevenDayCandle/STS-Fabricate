@@ -22,8 +22,8 @@ public class FetchFromPile extends SelectFromPile
     }
 
     @Override
-    public String updateMessage()
+    public String getActionMessage()
     {
-        return super.updateMessageInternal(PGR.core.strings.gridSelection.fetch);
+        return PGR.core.tooltips.fetch.title;
     }
 }

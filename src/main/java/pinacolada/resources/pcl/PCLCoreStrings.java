@@ -3,7 +3,6 @@ package pinacolada.resources.pcl;
 import com.megacrit.cardcrawl.actions.common.DiscardAction;
 import com.megacrit.cardcrawl.actions.common.ExhaustAction;
 import com.megacrit.cardcrawl.actions.unique.GamblingChipAction;
-import com.megacrit.cardcrawl.actions.unique.RetainCardsAction;
 import com.megacrit.cardcrawl.localization.LocalizedStrings;
 import com.megacrit.cardcrawl.localization.UIStrings;
 import com.megacrit.cardcrawl.screens.CardRewardScreen;
@@ -39,7 +38,6 @@ public class PCLCoreStrings extends PCLStrings
     public Combat combat;
     public Hotkeys hotkeys;
     public CardMods cardMods;
-    public HandSelection handSelection;
     public GridSelection gridSelection;
 
     public PCLCoreStrings(PCLResources resources)
@@ -68,7 +66,6 @@ public class PCLCoreStrings extends PCLStrings
         hotkeys = new Hotkeys();
         combat = new Combat();
         cardMods = new CardMods();
-        handSelection = new HandSelection();
         gridSelection = new GridSelection();
     }
 
@@ -1194,75 +1191,19 @@ public class PCLCoreStrings extends PCLStrings
         public final String imageCrop = strings.TEXT[18];
     }
 
-    public class HandSelection
-    {
-        public final UIStrings strings = getUIStrings("HandSelection");
-        public final String moveToDrawPile = strings.TEXT[0];
-        public final String genericBuff = strings.TEXT[1];
-        public final String copy = strings.TEXT[2];
-        public final String activate = strings.TEXT[3];
-        public final String discard = DiscardAction.TEXT[0];
-        public final String exhaust = ExhaustAction.TEXT[0];
-        public final String obtain = CardRewardScreen.TEXT[1];
-        public final String retain = RetainCardsAction.TEXT[0];
-    }
-
     public class GridSelection
     {
         public final UIStrings strings = getUIStrings("GridSelection");
-        public final String discardUpTo = strings.TEXT[0];
-        public final String moveToDrawPile = strings.TEXT[1];
-        public final String transformInto = strings.TEXT[2];
-        public final String chooseCards = strings.TEXT[3];
-        public final String purge = strings.TEXT[4];
-        public final String scry = strings.TEXT[5];
-        public final String fetch = strings.TEXT[6];
-        public final String pay = strings.TEXT[7];
-        public final String give = strings.TEXT[8];
-        public final String cardsInPile = strings.TEXT[9];
+        public final String chooseCards = strings.TEXT[0];
+        public final String cardsInPile = strings.TEXT[1];
         public final String discard = DiscardAction.TEXT[0];
         public final String exhaust = ExhaustAction.TEXT[0];
         public final String cycle = GamblingChipAction.TEXT[1];
         public final String chooseOneCard = CardRewardScreen.TEXT[1];
 
-        public final String discardUpTo(int amount)
-        {
-            return EUIUtils.format(discardUpTo, amount);
-        }
-
-        public final String moveToDrawPile(int amount)
-        {
-            return EUIUtils.format(moveToDrawPile, amount);
-        }
-
-        public final String transformInto(String name)
-        {
-            return EUIUtils.format(transformInto, name);
-        }
-
         public final String chooseCards(int amount)
         {
             return EUIUtils.format(chooseCards, amount);
-        }
-
-        public final String purge(int amount)
-        {
-            return EUIUtils.format(purge, amount);
-        }
-
-        public final String fetch(int amount)
-        {
-            return EUIUtils.format(fetch, amount);
-        }
-
-        public final String payAffinity(int amount)
-        {
-            return EUIUtils.format(pay, amount);
-        }
-
-        public final String give(int amount, Object item)
-        {
-            return EUIUtils.format(give, amount, item);
         }
 
         public final String cardsInPile(Object item, int amount)

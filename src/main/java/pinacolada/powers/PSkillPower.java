@@ -14,10 +14,12 @@ import extendedui.EUIUtils;
 import extendedui.utilities.ColoredString;
 import pinacolada.cards.base.AffinityReactions;
 import pinacolada.cards.base.PCLAffinity;
+import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.subscribers.*;
 import pinacolada.misc.CombatManager;
+import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PTrigger;
@@ -28,7 +30,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class PSkillPower extends PCLPower implements OnCardCreatedSubscriber,
+public class PSkillPower extends PCLPower implements OnAllyDeathSubscriber, OnAllySummonSubscriber, OnAllyTriggerSubscriber, OnAllyWithdrawSubscriber, OnCardCreatedSubscriber,
                                                      OnCardDiscardedSubscriber, OnCardPurgedSubscriber, OnCardReshuffledSubscriber, OnChannelOrbSubscriber, OnElementReactSubscriber,
                                                      OnMatchSubscriber, OnNotMatchSubscriber, OnOrbApplyFocusSubscriber, OnOrbPassiveEffectSubscriber, OnPCLClickablePowerUsed, OnShuffleSubscriber, OnIntensifySubscriber
 {
@@ -186,6 +188,42 @@ public class PSkillPower extends PCLPower implements OnCardCreatedSubscriber,
     public PSkillPower makeCopyOnTarget(AbstractCreature m, int amount)
     {
         return new PSkillPower(m, amount, EUIUtils.map(ptriggers, tr -> (PTrigger) tr.makeCopy()));
+    }
+
+    @Override
+    public void onAllyDeath(PCLCard returned, PCLCardAlly ally)
+    {
+        if (EUIUtils.any(ptriggers, effect -> effect.setCards(returned).triggerOnAllyDeath(returned, ally)))
+        {
+            flash();
+        }
+    }
+
+    @Override
+    public void onAllySummon(PCLCard card, PCLCardAlly ally)
+    {
+        if (EUIUtils.any(ptriggers, effect -> effect.setCards(card).triggerOnAllySummon(card, ally)))
+        {
+            flash();
+        }
+    }
+
+    @Override
+    public void onAllyTrigger(PCLCard card, PCLCardAlly ally)
+    {
+        if (EUIUtils.any(ptriggers, effect -> effect.setCards(card).triggerOnAllyTrigger(card, ally)))
+        {
+            flash();
+        }
+    }
+
+    @Override
+    public void onAllyWithdraw(PCLCard returned, PCLCardAlly ally)
+    {
+        if (EUIUtils.any(ptriggers, effect -> effect.setCards(returned).triggerOnAllyWithdraw(returned, ally)))
+        {
+            flash();
+        }
     }
 
     @Override

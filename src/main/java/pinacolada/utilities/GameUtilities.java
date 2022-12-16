@@ -55,6 +55,7 @@ import pinacolada.interfaces.listeners.OnTryApplyPowerListener;
 import pinacolada.interfaces.listeners.OnTryReducePowerListener;
 import pinacolada.interfaces.subscribers.OnPhaseChangedSubscriber;
 import pinacolada.misc.CombatManager;
+import pinacolada.monsters.PCLCardAlly;
 import pinacolada.monsters.PCLIntentInfo;
 import pinacolada.orbs.PCLOrb;
 import pinacolada.orbs.PCLOrbHelper;
@@ -1375,6 +1376,11 @@ public class GameUtilities
         return getRandomElement(getEnemies(aliveOnly), getRNG());
     }
 
+    public static PCLCardAlly getRandomSummon(Boolean isAlive)
+    {
+        return getRandomElement(getSummons(isAlive), getRNG());
+    }
+
     public static <T extends AbstractRelic> T getRelic(String relicID)
     {
         if (player == null)
@@ -1433,17 +1439,17 @@ public class GameUtilities
         }
     }
 
-    public static ArrayList<? extends AbstractMonster> getSummons(boolean aliveOnly)
+    public static ArrayList<PCLCardAlly> getSummons(Boolean isAlive)
     {
-        if (!aliveOnly)
+        if (isAlive == null)
         {
             return CombatManager.summons.summons;
         }
 
-        final ArrayList<AbstractMonster> monsters = new ArrayList<>();
-        for (AbstractMonster m : CombatManager.summons.summons)
+        final ArrayList<PCLCardAlly> monsters = new ArrayList<>();
+        for (PCLCardAlly m : CombatManager.summons.summons)
         {
-            if (!isDeadOrEscaped(m))
+            if (isDeadOrEscaped(m) ^ isAlive)
             {
                 monsters.add(m);
             }

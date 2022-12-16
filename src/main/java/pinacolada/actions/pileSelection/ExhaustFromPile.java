@@ -1,8 +1,8 @@
 package pinacolada.actions.pileSelection;
 
-import com.megacrit.cardcrawl.actions.common.ExhaustAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
+import pinacolada.resources.PGR;
 
 import java.util.ArrayList;
 
@@ -22,8 +22,8 @@ public class ExhaustFromPile extends SelectFromPile
     }
 
     @Override
-    public String updateMessage()
+    public String getActionMessage()
     {
-        return super.updateMessageInternal(ExhaustAction.TEXT[0]);
+        return PGR.core.tooltips.exhaust.title;
     }
 }

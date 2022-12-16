@@ -89,6 +89,7 @@ public class CombatManager
     public static final GameEvent<OnAfterCardPlayedSubscriber> onAfterCardPlayed = registerEvent(new GameEvent<>());
     public static final GameEvent<OnAfterDeathSubscriber> onAfterDeath = registerEvent(new GameEvent<>());
     public static final GameEvent<OnAfterlifeSubscriber> onAfterlife = registerEvent(new GameEvent<>());
+    public static final GameEvent<OnAllyDeathSubscriber> onAllyDeath = registerEvent(new GameEvent<>());
     public static final GameEvent<OnAllySummonSubscriber> onAllySummon = registerEvent(new GameEvent<>());
     public static final GameEvent<OnAllyTriggerSubscriber> onAllyTrigger = registerEvent(new GameEvent<>());
     public static final GameEvent<OnAllyWithdrawSubscriber> onAllyWithdraw = registerEvent(new GameEvent<>());
@@ -837,6 +838,14 @@ public class CombatManager
         return original;
     }
 
+    public static void onAllyDeath(PCLCard returned, PCLCardAlly ally)
+    {
+        for (OnAllyDeathSubscriber s : onAllyDeath.getSubscribers())
+        {
+            s.onAllyDeath(returned, ally);
+        }
+    }
+
     public static void onAllySummon(PCLCard card, PCLCardAlly ally)
     {
         for (OnAllySummonSubscriber s : onAllySummon.getSubscribers())
@@ -845,19 +854,19 @@ public class CombatManager
         }
     }
 
-    public static void onAllyTrigger(PCLCardAlly ally)
+    public static void onAllyTrigger(PCLCard card, PCLCardAlly ally)
     {
         for (OnAllyTriggerSubscriber s : onAllyTrigger.getSubscribers())
         {
-            s.onAllyTrigger(ally);
+            s.onAllyTrigger(card, ally);
         }
     }
 
-    public static void onAllyWithdraw(PCLCardAlly ally, PCLCard returned)
+    public static void onAllyWithdraw(PCLCard returned, PCLCardAlly ally)
     {
         for (OnAllyWithdrawSubscriber s : onAllyWithdraw.getSubscribers())
         {
-            s.onAllyWithdraw(ally, returned);
+            s.onAllyWithdraw(returned, ally);
         }
     }
 

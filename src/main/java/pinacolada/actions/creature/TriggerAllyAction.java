@@ -3,6 +3,7 @@ package pinacolada.actions.creature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import pinacolada.actions.PCLActionWithCallback;
+import pinacolada.cards.base.PCLCard;
 import pinacolada.misc.CombatManager;
 import pinacolada.monsters.PCLCardAlly;
 
@@ -26,8 +27,10 @@ public class TriggerAllyAction extends PCLActionWithCallback<PCLCardAlly>
             return;
         }
 
-        this.ally.takeTurn();
-        CombatManager.onAllyTrigger(ally);
-        complete(this.ally);
+        // Record card first in case the ally's actions cause it to lose the card
+        PCLCard card = ally.card;
+        ally.takeTurn();
+        CombatManager.onAllyTrigger(card, ally);
+        complete(ally);
     }
 }

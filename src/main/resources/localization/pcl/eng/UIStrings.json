@@ -579,15 +579,7 @@
 				},
 				"pcl:GridSelection": {
 								"TEXT": [
-												"Discard up to {0} card(s).",
-												"Shuffle {0} card(s) into your Draw Pile.",
-												"Transform into {0}.",
 												"Choose {0} card(s).",
-												"Purge {0} card(s).",
-												"Scry (You draw from left to right).",
-												"Fetch {0} card(s).",
-												"Choose {0} affinity color(s) to spend.",
-												"Give {0} card(s) {1}.",
 												"{{0}} | ({1} cards in Draw Pile)"
 								]
 				}

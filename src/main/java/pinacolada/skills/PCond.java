@@ -13,6 +13,7 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT0;
 import pinacolada.cards.base.*;
 import pinacolada.interfaces.markers.PointerProvider;
+import pinacolada.monsters.PCLCardAlly;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.powers.PCLPower;
 import pinacolada.powers.PCLPowerHelper;
@@ -523,6 +524,30 @@ public abstract class PCond extends PSkill
     public boolean triggerOnApplyPower(AbstractCreature source, AbstractCreature target, AbstractPower c)
     {
         return triggerOn(() -> this.childEffect.triggerOnApplyPower(source, target, c), makeInfo(target).setData(c));
+    }
+
+    @Override
+    public boolean triggerOnAllyDeath(PCLCard c, PCLCardAlly ally)
+    {
+        return triggerOn(() -> this.childEffect.triggerOnAllyDeath(c, ally));
+    }
+
+    @Override
+    public boolean triggerOnAllySummon(PCLCard c, PCLCardAlly ally)
+    {
+        return triggerOn(() -> this.childEffect.triggerOnAllySummon(c, ally));
+    }
+
+    @Override
+    public boolean triggerOnAllyTrigger(PCLCard c, PCLCardAlly ally)
+    {
+        return triggerOn(() -> this.childEffect.triggerOnAllyTrigger(c, ally));
+    }
+
+    @Override
+    public boolean triggerOnAllyWithdraw(PCLCard c, PCLCardAlly ally)
+    {
+        return triggerOn(() -> this.childEffect.triggerOnAllyWithdraw(c, ally));
     }
 
     @Override

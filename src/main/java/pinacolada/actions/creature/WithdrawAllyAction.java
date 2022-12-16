@@ -62,6 +62,7 @@ public class WithdrawAllyAction extends PCLActionWithCallback<PCLCard>
         if (returnedCard != null)
         {
             PCLActions.bottom.makeCard(this.card, AbstractDungeon.player.discardPile).setMakeCopy(true);
+            returnedCard.triggerWhenWithdrawn(ally);
         }
 
         // TODO effects
@@ -70,6 +71,6 @@ public class WithdrawAllyAction extends PCLActionWithCallback<PCLCard>
             PCLEffects.Queue.add(new SmokeEffect(ally.hb.cX, ally.hb.cY));
         }
 
-        CombatManager.onAllyWithdraw(ally, returnedCard);
+        CombatManager.onAllyWithdraw(returnedCard, ally);
     }
 }

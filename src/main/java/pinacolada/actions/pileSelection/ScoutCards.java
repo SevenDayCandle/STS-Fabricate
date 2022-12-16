@@ -1,9 +1,9 @@
 package pinacolada.actions.pileSelection;
 
-import com.megacrit.cardcrawl.actions.unique.GamblingChipAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import pinacolada.actions.PCLActions;
+import pinacolada.resources.PGR;
 import pinacolada.utilities.CardSelection;
 
 import java.util.ArrayList;
@@ -36,9 +36,9 @@ public class ScoutCards extends FetchFromPile
     }
 
     @Override
-    public String updateMessage()
+    public String getActionMessage()
     {
-        return super.updateMessageInternal(GamblingChipAction.TEXT[1]);
+        return PGR.core.tooltips.scout.title;
     }
 
     public ScoutCards drawInstantly(boolean value)

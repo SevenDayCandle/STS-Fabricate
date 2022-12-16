@@ -5,6 +5,7 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.Settings;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.vfx.megacritCopy.UpgradeShineEffect2;
+import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -73,5 +74,11 @@ public class UpgradeFromPile extends SelectFromPile
         this.permanent = isPermanent;
 
         return this;
+    }
+
+    @Override
+    public String getActionMessage()
+    {
+        return PGR.core.tooltips.upgrade.title;
     }
 }

@@ -21,8 +21,8 @@ public class ReshuffleFromPile extends SelectFromPile
     }
 
     @Override
-    public String updateMessage()
+    public String getActionMessage()
     {
-        return super.updateMessageInternal(PGR.core.tooltips.reshuffle.title);
+        return PGR.core.tooltips.reshuffle.title;
     }
 }

@@ -3,7 +3,7 @@ package pinacolada.interfaces.subscribers;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.monsters.PCLCardAlly;
 
-public interface OnAllyTriggerSubscriber
+public interface OnAllyDeathSubscriber
 {
-    void onAllyTrigger(PCLCard card, PCLCardAlly ally);
+    void onAllyDeath(PCLCard returned, PCLCardAlly ally);
 }

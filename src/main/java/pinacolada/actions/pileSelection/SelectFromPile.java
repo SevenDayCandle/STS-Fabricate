@@ -10,6 +10,7 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT3;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
+import extendedui.text.EUISmartText;
 import extendedui.ui.GridCardSelectScreenHelper;
 import extendedui.utilities.GenericCondition;
 import pinacolada.actions.PCLActionWithCallback;
@@ -245,6 +246,17 @@ public class SelectFromPile extends PCLActionWithCallback<ArrayList<AbstractCard
                 dest.add(card);
             }
         }
+    }
+
+    @Override
+    public String updateMessage()
+    {
+        return super.updateMessageInternal(PGR.core.strings.actions.generic2(getActionMessage(), EUISmartText.parseLogicString(EUIUtils.format(PGR.core.strings.subjects.cardN, amount))));
+    }
+
+    public String getActionMessage()
+    {
+        return PGR.core.tooltips.select.title;
     }
 
     public SelectFromPile hideTopPanel(boolean hideTopPanel)

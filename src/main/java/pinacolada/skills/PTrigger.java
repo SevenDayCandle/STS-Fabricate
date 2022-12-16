@@ -13,6 +13,7 @@ import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
+import pinacolada.monsters.PCLCardAlly;
 import pinacolada.powers.PCLPower;
 import pinacolada.skills.skills.base.triggers.PTrigger_Interactable;
 import pinacolada.skills.skills.base.triggers.PTrigger_Passive;
@@ -175,6 +176,30 @@ public abstract class PTrigger extends PSkill
         super.setTemporaryAmount(amount);
         this.usesThisTurn = this.amount;
         return this;
+    }
+
+    @Override
+    public boolean triggerOnAllyDeath(PCLCard c, PCLCardAlly ally)
+    {
+        return triggerOn(() -> this.childEffect.triggerOnAllyDeath(c, ally));
+    }
+
+    @Override
+    public boolean triggerOnAllySummon(PCLCard c, PCLCardAlly ally)
+    {
+        return triggerOn(() -> this.childEffect.triggerOnAllySummon(c, ally));
+    }
+
+    @Override
+    public boolean triggerOnAllyTrigger(PCLCard c, PCLCardAlly ally)
+    {
+        return triggerOn(() -> this.childEffect.triggerOnAllyTrigger(c, ally));
+    }
+
+    @Override
+    public boolean triggerOnAllyWithdraw(PCLCard c, PCLCardAlly ally)
+    {
+        return triggerOn(() -> this.childEffect.triggerOnAllyWithdraw(c, ally));
     }
 
     @Override

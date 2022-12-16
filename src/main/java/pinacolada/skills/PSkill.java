@@ -37,6 +37,7 @@ import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.markers.Hidden;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.interfaces.markers.PointerProvider;
+import pinacolada.monsters.PCLCardAlly;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.powers.PCLPower;
 import pinacolada.powers.PCLPowerHelper;
@@ -1967,6 +1968,26 @@ public abstract class PSkill implements TooltipProvider
         }
 
         return this;
+    }
+
+    public boolean triggerOnAllyDeath(PCLCard c, PCLCardAlly ally)
+    {
+        return this.childEffect != null && this.childEffect.triggerOnAllySummon(c, ally);
+    }
+
+    public boolean triggerOnAllySummon(PCLCard c, PCLCardAlly ally)
+    {
+        return this.childEffect != null && this.childEffect.triggerOnAllySummon(c, ally);
+    }
+
+    public boolean triggerOnAllyTrigger(PCLCard c, PCLCardAlly ally)
+    {
+        return this.childEffect != null && this.childEffect.triggerOnAllySummon(c, ally);
+    }
+
+    public boolean triggerOnAllyWithdraw(PCLCard c, PCLCardAlly ally)
+    {
+        return this.childEffect != null && this.childEffect.triggerOnAllySummon(c, ally);
     }
 
     public boolean triggerOnApplyPower(AbstractCreature source, AbstractCreature target, AbstractPower c)

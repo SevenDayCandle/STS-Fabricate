@@ -33,8 +33,8 @@ public class PurgeFromPile extends SelectFromPile
     }
 
     @Override
-    public String updateMessage()
+    public String getActionMessage()
     {
-        return super.updateMessageInternal(PGR.core.strings.gridSelection.purge(amount));
+        return PGR.core.tooltips.purge.title;
     }
 }

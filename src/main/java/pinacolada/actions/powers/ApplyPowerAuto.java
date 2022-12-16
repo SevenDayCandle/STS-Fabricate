@@ -44,7 +44,7 @@ public class ApplyPowerAuto extends PCLActionAutoTarget<AbstractPower>
 
         initialize(source, target, targetHelper, amount, limit);
 
-        if (AbstractDungeon.getMonsters().areMonstersBasicallyDead())
+        if (AbstractDungeon.getMonsters().areMonstersBasicallyDead() || this.powerHelper == null)
         {
             complete();
         }
@@ -71,10 +71,6 @@ public class ApplyPowerAuto extends PCLActionAutoTarget<AbstractPower>
             action.canStack(canStack);
             action.isCancellable(canCancel);
             action.allowNegative(allowNegative);
-            for (Object tag : tags)
-            {
-                action.addTag(tag);
-            }
 
             PCLActions.top.add(action).addCallback((ActionT1<AbstractPower>) this::complete);
         }
@@ -85,13 +81,6 @@ public class ApplyPowerAuto extends PCLActionAutoTarget<AbstractPower>
     public ApplyPowerAuto ignoreArtifact(boolean ignoreArtifact)
     {
         this.ignoreArtifact = ignoreArtifact;
-
-        return this;
-    }
-
-    public ApplyPowerAuto setSource(AbstractCreature source)
-    {
-        this.source = source;
 
         return this;
     }

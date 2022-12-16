@@ -89,19 +89,6 @@ public class PCLPowerHelper implements TooltipProvider
 
     public PCLPowerHelper(String powerID, EUITooltip tooltip, FuncT2<AbstractPower, AbstractCreature, Integer> constructor, Behavior endTurnBehavior, boolean isCommon, boolean isDebuff, boolean isPercentageBonus)
     {
-        ALL.putIfAbsent(powerID, this);
-        if (isCommon)
-        {
-            if (isDebuff)
-            {
-                CommonDebuffs.putIfAbsent(powerID, this);
-            }
-            else
-            {
-                CommonBuffs.putIfAbsent(powerID, this);
-            }
-        }
-
         this.ID = powerID;
         this.tooltip = tooltip;
         this.constructorT2 = constructor;
@@ -110,9 +97,25 @@ public class PCLPowerHelper implements TooltipProvider
         this.isCommon = isCommon;
         this.isDebuff = isDebuff;
         this.isPercentageBonus = isPercentageBonus;
+
+        registerHelper(powerID);
     }
 
     public PCLPowerHelper(String powerID, EUITooltip tooltip, FuncT3<AbstractPower, AbstractCreature, AbstractCreature, Integer> constructor, Behavior endTurnBehavior, boolean isCommon, boolean isDebuff, boolean isPercentageBonus)
+    {
+        this.ID = powerID;
+        this.tooltip = tooltip;
+        this.constructorT2 = null;
+        this.constructorT3 = constructor;
+        this.endTurnBehavior = endTurnBehavior;
+        this.isCommon = isCommon;
+        this.isDebuff = isDebuff;
+        this.isPercentageBonus = isPercentageBonus;
+
+        registerHelper(powerID);
+    }
+
+    protected void registerHelper(String powerID)
     {
         ALL.putIfAbsent(powerID, this);
         if (isCommon)
@@ -126,15 +129,6 @@ public class PCLPowerHelper implements TooltipProvider
                 CommonBuffs.putIfAbsent(powerID, this);
             }
         }
-
-        this.ID = powerID;
-        this.tooltip = tooltip;
-        this.constructorT2 = null;
-        this.constructorT3 = constructor;
-        this.endTurnBehavior = endTurnBehavior;
-        this.isCommon = isCommon;
-        this.isDebuff = isDebuff;
-        this.isPercentageBonus = isPercentageBonus;
     }
 
     public static ArrayList<PCLPowerHelper> commonBuffs()

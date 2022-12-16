@@ -1,6 +1,7 @@
 package pinacolada.skills.skills.base.conditions;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.cards.base.PCLCardTarget;
@@ -71,6 +72,20 @@ public abstract class PCond_Delegate extends PCond
             {
                 this.childEffect.setCards(c);
                 this.childEffect.use(makeInfo(null));
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public boolean triggerOnCard(AbstractCard c, AbstractCreature target)
+    {
+        if (getFullCardFilter().invoke(c))
+        {
+            if (this.childEffect != null)
+            {
+                this.childEffect.setCards(c);
+                this.childEffect.use(makeInfo(target));
             }
             return true;
         }

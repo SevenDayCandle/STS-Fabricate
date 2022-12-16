@@ -1,8 +1,8 @@
 package pinacolada.actions.pileSelection;
 
-import com.megacrit.cardcrawl.actions.unique.RetainCardsAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
+import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -26,8 +26,8 @@ public class RetainFromPile extends SelectFromPile
     }
 
     @Override
-    public String updateMessage()
+    public String getActionMessage()
     {
-        return super.updateMessageInternal(RetainCardsAction.TEXT[0]);
+        return PGR.core.tooltips.retain.title;
     }
 }

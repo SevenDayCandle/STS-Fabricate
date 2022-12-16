@@ -166,6 +166,7 @@ public class PCLCoreTooltips extends PCLTooltips
     public EUITooltip vitality = EUITooltip.findByID("Vitality");
     public EUITooltip vulnerable = EUITooltip.findByID("Vulnerable");
     public EUITooltip weak = EUITooltip.findByID("Weak");
+    public EUITooltip withdraw = EUITooltip.findByID("Withdraw");
     public EUITooltip wrath = EUITooltip.findByID("Wrath");
 
     public EUITooltip affinityGeneral = EUITooltip.findByID("Affinity");

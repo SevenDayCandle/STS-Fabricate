@@ -9,12 +9,10 @@ import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.tooltips.EUICardPreview;
-import pinacolada.cards.base.AffinityReactions;
-import pinacolada.cards.base.PCLAffinity;
-import pinacolada.cards.base.PCLCardTarget;
-import pinacolada.cards.base.PCLUseInfo;
+import pinacolada.cards.base.*;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.interfaces.markers.PointerProvider;
+import pinacolada.monsters.PCLCardAlly;
 import pinacolada.powers.PCLPower;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PCond;
@@ -225,6 +223,30 @@ public class PMultiCond extends PCond implements PMultiBase<PCond>
     public boolean triggerOnReshuffle(AbstractCard c, CardGroup sourcePile)
     {
         return triggerOn((effect) -> effect.triggerOnReshuffle(c, sourcePile));
+    }
+
+    @Override
+    public boolean triggerOnAllyDeath(PCLCard c, PCLCardAlly ally)
+    {
+        return triggerOn(effect -> effect.triggerOnAllyDeath(c, ally));
+    }
+
+    @Override
+    public boolean triggerOnAllySummon(PCLCard c, PCLCardAlly ally)
+    {
+        return triggerOn(effect -> effect.triggerOnAllySummon(c, ally));
+    }
+
+    @Override
+    public boolean triggerOnAllyTrigger(PCLCard c, PCLCardAlly ally)
+    {
+        return triggerOn(effect -> effect.triggerOnAllyTrigger(c, ally));
+    }
+
+    @Override
+    public boolean triggerOnAllyWithdraw(PCLCard c, PCLCardAlly ally)
+    {
+        return triggerOn(effect -> effect.triggerOnAllyWithdraw(c, ally));
     }
 
     @Override

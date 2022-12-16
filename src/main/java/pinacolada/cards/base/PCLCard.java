@@ -57,6 +57,7 @@ import pinacolada.interfaces.listeners.OnSetFormListener;
 import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.markers.Hidden;
 import pinacolada.misc.CombatManager;
+import pinacolada.monsters.PCLCardAlly;
 import pinacolada.patches.screens.GridCardSelectScreenMultiformPatches;
 import pinacolada.powers.PCLPower;
 import pinacolada.powers.common.PCLLockOnPower;
@@ -2397,6 +2398,22 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     public void triggerWhenCreated(boolean startOfBattle) {
         doEffects(be -> be.triggerOnCreate(this, startOfBattle));
         // Called at the start of a fight, or when a card is created by MakeTempCard.
+    }
+
+    public void triggerWhenKilled(PCLCardAlly ally) {
+        doEffects(be -> be.triggerOnAllyDeath(this, ally));
+    }
+
+    public void triggerWhenSummoned(PCLCardAlly ally) {
+        doEffects(be -> be.triggerOnAllySummon(this, ally));
+    }
+
+    public void triggerWhenTriggered(PCLCardAlly ally) {
+        doEffects(be -> be.triggerOnAllyTrigger(this, ally));
+    }
+
+    public void triggerWhenWithdrawn(PCLCardAlly ally) {
+        doEffects(be -> be.triggerOnAllyWithdraw(this, ally));
     }
 
     @SpireOverride

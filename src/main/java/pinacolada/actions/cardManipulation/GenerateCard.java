@@ -158,7 +158,7 @@ public class GenerateCard extends PCLActionWithCallback<AbstractCard>
             if (amount > 1)
             {
                 GenerateCard copy = new GenerateCard(actualCard, cardGroup);
-                copy.Import(this);
+                copy.copySettings(this);
                 copy.destination = destination;
                 copy.makeCopy = makeCopy;
                 copy.upgrade = upgrade;

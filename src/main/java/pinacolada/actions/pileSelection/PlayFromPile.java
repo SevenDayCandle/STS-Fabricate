@@ -4,16 +4,13 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.screens.CardRewardScreen;
-import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLActions;
-import pinacolada.actions.cardManipulation.PlayCard;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
 public class PlayFromPile extends SelectFromPile
 {
-    protected ActionT1<PlayCard> onPlayCard;
     protected AbstractMonster target;
 
     public PlayFromPile(String sourceName, int amount, CardGroup... groups)
@@ -58,23 +55,11 @@ public class PlayFromPile extends SelectFromPile
     {
         for (AbstractCard card : result)
         {
-            PlayCard action = PCLActions.top.playCard(card, target)
+            PCLActions.top.playCard(card, target)
                     .setSourcePile(GameUtilities.findCardGroup(card, false));
-
-            if (onPlayCard != null)
-            {
-                onPlayCard.invoke(action);
-            }
         }
 
         super.complete(result);
-    }
-
-    public PlayFromPile onPlayCard(ActionT1<PlayCard> onPlayCard)
-    {
-        this.onPlayCard = onPlayCard;
-
-        return this;
     }
 
     @Override

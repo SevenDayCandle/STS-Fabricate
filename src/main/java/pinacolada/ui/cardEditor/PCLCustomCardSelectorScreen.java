@@ -109,7 +109,7 @@ public class PCLCustomCardSelectorScreen extends AbstractScreen
                     }
                 })
                 .setCanAutosizeButton(true);
-        info = new EUITextBox(EUIRM.images.panel.texture(), new EUIHitbox(screenW(0.25f), screenH(0.07f), screenW(0.5f), buttonHeight * 2.5f))
+        info = new EUITextBox(EUIRM.images.panel.texture(), new EUIHitbox(screenW(0.25f), screenH(0.035f), screenW(0.5f), buttonHeight * 2.5f))
                 .setLabel(EUIUtils.joinStrings(EUIUtils.DOUBLE_SPLIT_LINE, PGR.core.strings.cardEditorTutorial.selector1, PGR.core.strings.cardEditorTutorial.selector2))
                 .setAlignment(0.75f, 0.1f, true)
                 .setColors(Color.DARK_GRAY, Settings.CREAM_COLOR)
