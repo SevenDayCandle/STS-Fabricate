@@ -1076,6 +1076,11 @@ public final class PCLActions
         return add(new WithdrawAllyAction(ally));
     }
 
+    public WithdrawAllyAction withdrawAlly(Collection<PCLCardAlly> ally)
+    {
+        return add(new WithdrawAllyAction(ally));
+    }
+
     public PlayVFX playVFX(AbstractGameEffect effect)
     {
         return add(new PlayVFX(effect, 0));

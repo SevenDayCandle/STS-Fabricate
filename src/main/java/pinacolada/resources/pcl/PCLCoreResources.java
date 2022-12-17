@@ -2,6 +2,7 @@ package pinacolada.resources.pcl;
 
 import basemod.BaseMod;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.localization.*;
 import extendedui.EUI;
@@ -36,8 +37,6 @@ import pinacolada.ui.customRun.PCLCustomRunScreen;
 import pinacolada.ui.debug.PCLDebugAugmentPanel;
 import pinacolada.ui.debug.PCLDebugCardPanel;
 
-import static pinacolada.resources.PCLEnum.Characters.THE_DECIDER;
-
 public class PCLCoreResources extends PCLResources<PCLCoreConfig, PCLCoreImages, PCLCoreTooltips>
 {
     public static final String ID = PGR.BASE_PREFIX;
@@ -64,7 +63,7 @@ public class PCLCoreResources extends PCLResources<PCLCoreConfig, PCLCoreImages,
 
     public PCLCoreResources()
     {
-        super(ID, AbstractCard.CardColor.COLORLESS, THE_DECIDER, null, new PCLCoreConfig(), new PCLCoreImages(ID));
+        super(ID, AbstractCard.CardColor.COLORLESS, AbstractPlayer.PlayerClass.IRONCLAD, null, new PCLCoreConfig(), new PCLCoreImages(ID));
     }
 
     public String createID(String suffix)
@@ -193,17 +192,14 @@ public class PCLCoreResources extends PCLResources<PCLCoreConfig, PCLCoreImages,
         EUI.addSubscriber(cardPopup);
         EUI.setCustomCardFilter(AbstractCard.CardColor.COLORLESS, affinityFilters);
         EUI.setCustomCardFilter(AbstractCard.CardColor.CURSE, affinityFilters);
-        EUI.setCustomCardFilter(PCLEnum.Cards.THE_CONJURER, affinityFilters);
-        EUI.setCustomCardFilter(PCLEnum.Cards.THE_DECIDER, affinityFilters);
-        EUI.setCustomCardFilter(PCLEnum.Cards.THE_ETERNAL, affinityFilters);
-        EUI.setCustomCardPoolModule(PCLEnum.Cards.THE_CONJURER, cardAffinities);
-        EUI.setCustomCardPoolModule(PCLEnum.Cards.THE_DECIDER, cardAffinities);
-        EUI.setCustomCardPoolModule(PCLEnum.Cards.THE_ETERNAL, cardAffinities);
         EUI.setCustomCardLibraryModule(AbstractCard.CardColor.COLORLESS, libraryFilters);
         EUI.setCustomCardLibraryModule(AbstractCard.CardColor.CURSE, libraryFilters);
-        EUI.setCustomCardLibraryModule(PCLEnum.Cards.THE_CONJURER, libraryFilters);
-        EUI.setCustomCardLibraryModule(PCLEnum.Cards.THE_DECIDER, libraryFilters);
-        EUI.setCustomCardLibraryModule(PCLEnum.Cards.THE_ETERNAL, libraryFilters);
+        for (PCLResources r : PGR.getAllResources())
+        {
+            EUI.setCustomCardFilter(r.cardColor, affinityFilters);
+            EUI.setCustomCardPoolModule(r.cardColor, cardAffinities);
+            EUI.setCustomCardLibraryModule(r.cardColor, libraryFilters);
+        }
     }
 
 }

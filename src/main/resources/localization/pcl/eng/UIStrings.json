@@ -580,7 +580,8 @@
 				"pcl:GridSelection": {
 								"TEXT": [
 												"Choose {0} card(s).",
-												"{{0}} | ({1} cards in Draw Pile)"
+												"{{0}} | ({1} cards in Draw Pile)",
+												"Scry (You draw from left to right)."
 								]
 				}
 }

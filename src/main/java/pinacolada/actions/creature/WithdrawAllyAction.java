@@ -10,9 +10,12 @@ import pinacolada.effects.vfx.SmokeEffect;
 import pinacolada.misc.CombatManager;
 import pinacolada.monsters.PCLCardAlly;
 
-public class WithdrawAllyAction extends PCLActionWithCallback<PCLCard>
+import java.util.ArrayList;
+import java.util.Collection;
+
+public class WithdrawAllyAction extends PCLActionWithCallback<ArrayList<PCLCard>>
 {
-    public final PCLCardAlly ally;
+    public final ArrayList<PCLCardAlly> allies = new ArrayList<>();
     public boolean trigger = true;
     public boolean showEffect = true;
 
@@ -20,7 +23,14 @@ public class WithdrawAllyAction extends PCLActionWithCallback<PCLCard>
     {
         super(ActionType.SPECIAL, Settings.FAST_MODE ? Settings.ACTION_DUR_XFAST : Settings.ACTION_DUR_FAST);
         initialize(AbstractDungeon.player, slot, 1);
-        this.ally = slot;
+        allies.add(slot);
+    }
+
+    public WithdrawAllyAction(Collection<PCLCardAlly> slot)
+    {
+        super(ActionType.SPECIAL, Settings.FAST_MODE ? Settings.ACTION_DUR_XFAST : Settings.ACTION_DUR_FAST);
+        initialize(AbstractDungeon.player, 1);
+        allies.addAll(slot);
     }
 
     public WithdrawAllyAction setOptions(boolean trigger, boolean showEffect)
@@ -33,32 +43,34 @@ public class WithdrawAllyAction extends PCLActionWithCallback<PCLCard>
     @Override
     protected void firstUpdate()
     {
-        if (this.ally == null)
+        ArrayList<PCLCard> returned = new ArrayList<>();
+
+        for (PCLCardAlly ally : allies)
         {
-            complete();
-            return;
+            if (ally != null)
+            {
+                PCLCard returnedCard = ally.card;
+
+                if (returnedCard != null)
+                {
+                    if (trigger)
+                    {
+                        PCLActions.top.triggerAlly(ally).addCallback(this::releaseCard);
+                    }
+                    else
+                    {
+                        releaseCard(ally);
+                    }
+                }
+            }
         }
 
-        PCLCard returnedCard = this.ally.card;
-
-        if (returnedCard != null)
-        {
-            if (trigger)
-            {
-                PCLActions.top.triggerAlly(ally).addCallback(this::releaseCard);
-            }
-            else
-            {
-                releaseCard();
-            }
-        }
-
-        complete(returnedCard);
+        complete(returned);
     }
 
-    protected void releaseCard()
+    protected void releaseCard(PCLCardAlly ally)
     {
-        PCLCard returnedCard = this.ally.releaseCard();
+        PCLCard returnedCard = ally.releaseCard();
         if (returnedCard != null)
         {
             PCLActions.bottom.makeCard(this.card, AbstractDungeon.player.discardPile).setMakeCopy(true);

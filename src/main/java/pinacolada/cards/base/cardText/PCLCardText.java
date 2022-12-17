@@ -30,6 +30,7 @@ import java.util.HashMap;
 
 public class PCLCardText
 {
+    private static final String UPGRADE_DESC_STRING = "<DESCRIPTION>";
     private static final PCLCoreImages.Badges BADGES = PGR.core.images.badges;
     private static final PCLCoreImages.CardIcons ICONS = PGR.core.images.icons;
     private static final ColoredString cs = new ColoredString("", Settings.CREAM_COLOR);
@@ -52,10 +53,9 @@ public class PCLCardText
 
     public static CardStrings processCardStrings(CardStrings strings)
     {
-        final String placeholder = "<DESCRIPTION>";
         if (StringUtils.isNotEmpty(strings.UPGRADE_DESCRIPTION))
         {
-            strings.UPGRADE_DESCRIPTION = strings.UPGRADE_DESCRIPTION.replace("<DESCRIPTION>", strings.DESCRIPTION);
+            strings.UPGRADE_DESCRIPTION = strings.UPGRADE_DESCRIPTION.replace(UPGRADE_DESC_STRING, strings.DESCRIPTION);
         }
 
         return strings;
@@ -171,7 +171,7 @@ public class PCLCardText
 
         final float sign = leftAlign ? -1 : +1;
         final float icon_x = sign * (cw * 0.45f);
-        float text_x = sign * cw * scaleMult * ((suffix != null || text.text.length() > 2) ? (0.35f - sign * 0.25f) : 0.35f);
+        float text_x = sign * cw * scaleMult * ((suffix != null || text.text.length() > 2) ? (0.35f - sign * 0.029f) : 0.35f);
 
         if (panel != null)
         {
@@ -184,7 +184,7 @@ public class PCLCardText
         if (suffix != null)
         {
             largeFont.getData().setScale(largeFont.getScaleX() * suffix_scale);
-            PCLRenderHelpers.writeOnCard(sb, card, largeFont, suffix, text_x + (text_width * 0.75f) + (suffix_width * 0.55f * scaleMult), y, text.color, true);
+            PCLRenderHelpers.writeOnCard(sb, card, largeFont, suffix, text_x + (text_width * 0.81f) + (suffix_width * 0.55f * scaleMult), y, text.color, true);
         }
 
         if (iconTag != null)

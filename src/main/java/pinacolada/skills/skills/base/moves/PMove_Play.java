@@ -27,7 +27,7 @@ public class PMove_Play extends PMove_Select
 
     public PMove_Play(int amount, PCLCardTarget target, PCLCardGroupHelper... h)
     {
-        super(DATA, amount, h);
+        super(DATA, target, amount, h);
     }
 
     @Override

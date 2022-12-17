@@ -878,6 +878,10 @@ public class PCLCoreStrings extends PCLStrings
         {
             return generic2(PGR.core.tooltips.upgrade.title, amount);
         }
+        public final String withdraw(Object subject)
+        {
+            return generic2(PGR.core.tooltips.withdraw.title, subject);
+        }
 
         public final String genericFrom(Object verb, Object amount, Object subject, Object target)
         {
@@ -1196,6 +1200,7 @@ public class PCLCoreStrings extends PCLStrings
         public final UIStrings strings = getUIStrings("GridSelection");
         public final String chooseCards = strings.TEXT[0];
         public final String cardsInPile = strings.TEXT[1];
+        public final String scry = strings.TEXT[2];
         public final String discard = DiscardAction.TEXT[0];
         public final String exhaust = ExhaustAction.TEXT[0];
         public final String cycle = GamblingChipAction.TEXT[1];

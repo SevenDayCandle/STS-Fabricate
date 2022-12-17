@@ -524,6 +524,16 @@ public abstract class PMove extends PSkill
         return new PMove_Stun(amount);
     }
 
+    public static PMove summon(int amount)
+    {
+        return summon(amount, PCLCardGroupHelper.Hand);
+    }
+
+    public static PMove summon(int amount, PCLCardGroupHelper... groups)
+    {
+        return new PMove_Summon(amount, PCLCardTarget.SingleAlly, groups);
+    }
+
     public static PMove_DealDamage takeDamage(int amount)
     {
         return takeDamage(amount, AbstractGameAction.AttackEffect.NONE);
@@ -532,6 +542,16 @@ public abstract class PMove extends PSkill
     public static PMove_DealDamage takeDamage(int amount, AbstractGameAction.AttackEffect attackEffect)
     {
         return new PMove_DealDamage(amount, attackEffect, PCLCardTarget.Self);
+    }
+
+    public static PMove triggerAlly(int amount)
+    {
+        return new PMove_TriggerAlly(amount);
+    }
+
+    public static PMove triggerAlly(PCLCardTarget target, int amount)
+    {
+        return new PMove_TriggerAlly(target, amount);
     }
 
     public static PMove triggerOrb(int amount, PCLOrbHelper... orb)
@@ -548,6 +568,16 @@ public abstract class PMove extends PSkill
     {
         return new PMove_TriggerOrb(0, orb)
                 .setSource(card, valueSource);
+    }
+
+    public static PMove withdrawAlly(int amount)
+    {
+        return new PMove_WithdrawAlly(amount);
+    }
+
+    public static PMove withdrawAlly(PCLCardTarget target, int amount)
+    {
+        return new PMove_WithdrawAlly(target, amount);
     }
 
     @Override

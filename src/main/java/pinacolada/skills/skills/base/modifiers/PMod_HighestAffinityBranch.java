@@ -6,7 +6,6 @@ import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.misc.CombatManager;
-import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -17,7 +16,7 @@ public class PMod_HighestAffinityBranch extends PMod_Branch<PCLAffinity>
 {
 
     public static final PSkillData DATA = register(PMod_ScryBranch.class, Affinity)
-            .setColors(PCLEnum.Cards.THE_DECIDER)
+            .pclOnly()
             .setExtra(-1, DEFAULT_MAX)
             .selfTarget();
 

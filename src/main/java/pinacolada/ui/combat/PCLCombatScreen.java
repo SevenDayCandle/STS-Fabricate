@@ -1,14 +1,11 @@
 package pinacolada.ui.combat;
 
-import basemod.DevConsole;
 import basemod.ReflectionHacks;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import extendedui.ui.EUIBase;
 import pinacolada.cards.base.PCLCard;
@@ -31,18 +28,13 @@ public class PCLCombatScreen extends EUIBase
     }
 
     public void initialize() {
-        setActive(GameUtilities.inBattle() && GameUtilities.isPCLPlayerClass());
+        setActive(GameUtilities.inBattle());
         helper.clear();
     }
 
     @Override
     public void updateImpl()
     {
-        if ((Settings.isDebug || DevConsole.infiniteEnergy) && EUIGameUtils.inGame())
-        {
-            PGR.core.dungeon.setCheating();
-        }
-
         if (player == null || player.hand == null || AbstractDungeon.overlayMenu.energyPanel.isHidden)
         {
             return;

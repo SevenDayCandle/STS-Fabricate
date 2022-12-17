@@ -10,7 +10,6 @@ import extendedui.EUIUtils;
 import extendedui.utilities.ColoredTexture;
 import pinacolada.cards.base.fields.CardTagItem;
 import pinacolada.cards.pcl.special.QuestionMark;
-import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLLoadout;
@@ -353,7 +352,7 @@ public class PCLCardBuilder extends PCLCardData
 
     public PCLCardBuilder setProperties(AbstractCard.CardType type, AbstractCard.CardRarity rarity)
     {
-        return setProperties(type, PCLEnum.Cards.THE_DECIDER, rarity);
+        return setProperties(type, AbstractCard.CardColor.COLORLESS, rarity);
     }
 
     public PCLCardBuilder setProperties(AbstractCard.CardType type, AbstractCard.CardColor color, AbstractCard.CardRarity rarity)

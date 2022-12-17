@@ -9,13 +9,13 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.ui.TextureCache;
 import extendedui.ui.tooltips.EUITooltip;
-import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>
@@ -33,13 +33,11 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>
 
     public static final int TOTAL_AFFINITIES = 7;
     public static final int MAX_LEVEL = 2;
+    private static final HashMap<AbstractCard.CardColor, PCLAffinity[]> REGISTERED_TYPES = new HashMap<>();
 
     private static final PCLAffinity[] BASIC_TYPES = new PCLAffinity[6];
     private static final PCLAffinity[] EXTENDED_TYPES = new PCLAffinity[TOTAL_AFFINITIES];
     private static final PCLAffinity[] ALL_TYPES = new PCLAffinity[8];
-
-    private static final PCLAffinity[] MAIN_TYPES = new PCLAffinity[]{Red, Green, Blue, Orange};
-    private static final PCLAffinity[] ETERNAL_TYPES = new PCLAffinity[]{Light, Dark, Silver};
 
     static
     {
@@ -113,21 +111,21 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>
         return null;
     }   //@Formatter: On
 
+    public static void registerAvailableAffinities(AbstractCard.CardColor pc, PCLAffinity... affinities)
+    {
+        REGISTERED_TYPES.putIfAbsent(pc, affinities);
+    }
+
     public static PCLAffinity[] getAvailableAffinities(AbstractCard.CardColor pc)
     {
         if (pc == AbstractCard.CardColor.COLORLESS || pc == AbstractCard.CardColor.CURSE)
         {
             return extended();
         }
-        if (pc == PCLEnum.Cards.THE_CONJURER || pc == PCLEnum.Cards.THE_DECIDER)
+        else
         {
-            return MAIN_TYPES;
+            return REGISTERED_TYPES.getOrDefault(pc, new PCLAffinity[]{});
         }
-        if (pc == PCLEnum.Cards.THE_ETERNAL)
-        {
-            return ETERNAL_TYPES;
-        }
-        return new PCLAffinity[]{};
     }
 
     public static PCLAffinity[] getAvailableAffinities()
@@ -191,13 +189,10 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>
         return (level ) > 1 ? PGR.core.images.core.borderBG.texture() : null;
     }
 
+    // TODO allow custom borders per color
     public Texture getBorder(int level)
     {
         AbstractCard.CardColor color = GameUtilities.getActingColor();
-        if (color == PCLEnum.Cards.THE_CONJURER)
-        {
-            return PGR.core.images.core.borderSpecial2.texture();
-        }
         return (level > 1 ? PGR.core.images.core.borderWeak : PGR.core.images.core.borderNormal).texture();
     }
 

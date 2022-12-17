@@ -44,7 +44,7 @@ public class PMove_LoseHP extends PMove
     @Override
     public boolean isDetrimental()
     {
-        return true;
+        return target.targetsSelf() || target.targetsAllies();
     }
 
     @Override

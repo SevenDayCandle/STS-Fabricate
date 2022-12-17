@@ -14,6 +14,7 @@ import pinacolada.skills.PSkillSaveData;
 public class PMove_Summon extends PMove_Select
 {
     public static final PSkillData DATA = register(PMove_Summon.class, PCLEffectType.CardGroupFull)
+            .setTargets(PCLCardTarget.AllAlly, PCLCardTarget.RandomAlly, PCLCardTarget.SingleAlly)
             .pclOnly();
 
     public PMove_Summon()
@@ -28,7 +29,7 @@ public class PMove_Summon extends PMove_Select
 
     public PMove_Summon(int amount, PCLCardTarget target, PCLCardGroupHelper... h)
     {
-        super(DATA, amount, h);
+        super(DATA, target, amount, h);
     }
 
     @Override

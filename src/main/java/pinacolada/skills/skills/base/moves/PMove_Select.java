@@ -26,6 +26,11 @@ public abstract class PMove_Select extends PMove implements SelectFromPileMarker
         super(data, PCLCardTarget.None, amount, h);
     }
 
+    public PMove_Select(PSkillData data, PCLCardTarget target, int amount, PCLCardGroupHelper... h)
+    {
+        super(data, target, amount, h);
+    }
+
     protected SelectFromPile createAction(PCLUseInfo info)
     {
         CardGroup[] g = getCardGroup();

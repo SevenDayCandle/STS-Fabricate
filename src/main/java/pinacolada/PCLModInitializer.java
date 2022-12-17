@@ -1,3 +1,5 @@
+package pinacolada;
+
 import basemod.BaseMod;
 import basemod.interfaces.*;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;

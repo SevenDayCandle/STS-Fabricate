@@ -53,7 +53,6 @@ public class PCLDungeonData implements CustomSavable<PCLDungeonData>, PreStartGa
     private transient boolean panelAdded;
     private transient int totalAugmentCount = 0;
     protected ArrayList<PCLLoadoutProxy> proxies = new ArrayList<>();
-    protected Boolean isCheating = false;
     protected Integer longestMatchCombo = 0;
     protected Integer rNGCounter = 0;
     protected Map<String, String> eventLog = new HashMap<>();
@@ -299,7 +298,6 @@ public class PCLDungeonData implements CustomSavable<PCLDungeonData>, PreStartGa
             allowCustomCards = data.allowCustomCards;
             simpleMode = data.simpleMode;
             rNGCounter = data.rNGCounter;
-            isCheating = data.isCheating;
             longestMatchCombo = data.longestMatchCombo;
             ascensionGlyphCounters.addAll(data.ascensionGlyphCounters);
             rng = data.rng;
@@ -321,7 +319,6 @@ public class PCLDungeonData implements CustomSavable<PCLDungeonData>, PreStartGa
             {
                 ascensionGlyphCounters.add(glyph.counter);
             }
-            isCheating = false;
             rng = null;
         }
     }
@@ -456,11 +453,6 @@ public class PCLDungeonData implements CustomSavable<PCLDungeonData>, PreStartGa
         //PCLCard.ToggleSimpleMode(player.masterDeck.group, SimpleMode);
     }
 
-    public boolean isCheating()
-    {
-        return isCheating;
-    }
-
     private void loadCustomCards(AbstractPlayer player)
     {
         // Add custom cards if applicable
@@ -583,15 +575,6 @@ public class PCLDungeonData implements CustomSavable<PCLDungeonData>, PreStartGa
         validate();
     }
 
-    public void setCheating()
-    {
-        if (!isCheating)
-        {
-            EUIUtils.logInfo(this, "Cheating detected.");
-            isCheating = true;
-        }
-    }
-
     public void setCreature(String id)
     {
         currentForm = id;
@@ -607,7 +590,6 @@ public class PCLDungeonData implements CustomSavable<PCLDungeonData>, PreStartGa
 
     public void setJumpAnywhere(boolean value)
     {
-        setCheating();
         canJumpAnywhere = value;
     }
 
@@ -647,11 +629,6 @@ public class PCLDungeonData implements CustomSavable<PCLDungeonData>, PreStartGa
         if (eventLog == null)
         {
             eventLog = new HashMap<>();
-        }
-
-        if (isCheating == null)
-        {
-            isCheating = false;
         }
 
         if (rng != null)

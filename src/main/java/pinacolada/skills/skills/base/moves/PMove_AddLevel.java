@@ -4,7 +4,6 @@ import extendedui.EUIUtils;
 import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
-import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
@@ -13,7 +12,7 @@ import pinacolada.skills.PSkillSaveData;
 public class PMove_AddLevel extends PMove
 {
     public static final PSkillData DATA = register(PMove_AddLevel.class, PCLEffectType.Affinity)
-            .setColors(PCLEnum.Cards.THE_CONJURER, PCLEnum.Cards.THE_DECIDER)
+            .pclOnly()
             .selfTarget();
 
     public PMove_AddLevel(PSkillSaveData content)

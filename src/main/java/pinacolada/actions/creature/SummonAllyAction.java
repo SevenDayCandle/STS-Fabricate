@@ -9,6 +9,7 @@ import pinacolada.effects.PCLEffects;
 import pinacolada.effects.vfx.SmokeEffect;
 import pinacolada.misc.CombatManager;
 import pinacolada.monsters.PCLCardAlly;
+import pinacolada.resources.PCLEnum;
 
 public class SummonAllyAction extends PCLActionWithCallback<PCLCard>
 {
@@ -17,6 +18,7 @@ public class SummonAllyAction extends PCLActionWithCallback<PCLCard>
     public boolean retainPowers;
     public boolean stun = true;
     public boolean showEffect = true;
+    public boolean summonCardOnly = true;
 
     public SummonAllyAction(PCLCard card, PCLCardAlly slot)
     {
@@ -26,18 +28,19 @@ public class SummonAllyAction extends PCLActionWithCallback<PCLCard>
         this.ally = slot;
     }
 
-    public SummonAllyAction setOptions(boolean retainPowers, boolean stun, boolean showEffect)
+    public SummonAllyAction setOptions(boolean retainPowers, boolean stun, boolean showEffect, boolean summonCardOnly)
     {
         this.retainPowers = retainPowers;
         this.stun = stun;
         this.showEffect = showEffect;
+        this.summonCardOnly = summonCardOnly;
         return this;
     }
 
     @Override
     protected void firstUpdate()
     {
-        if (this.card == null || this.ally == null)
+        if ((this.card == null || summonCardOnly && this.card.type != PCLEnum.CardType.SUMMON) || this.ally == null)
         {
             complete();
             return;
