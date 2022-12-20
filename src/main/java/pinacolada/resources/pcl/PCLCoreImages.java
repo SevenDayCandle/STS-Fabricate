@@ -117,12 +117,6 @@ public class PCLCoreImages extends PCLImages
         public final TextureCache controllableCardPileBorder = new TextureCache("images/pcl/ui/core/ControllableCardPileBorder.png");
         public final TextureCache leftArrow = new TextureCache("images/pcl/ui/core/LeftArrow.png");
         public final TextureCache rightArrow = new TextureCache("images/pcl/ui/core/RightArrow.png");
-        public final TextureCache elementAir = new TextureCache("images/pcl/ui/core/Element_Air.png");
-        public final TextureCache elementDark = new TextureCache("images/pcl/ui/core/Element_Dark.png");
-        public final TextureCache elementEarth = new TextureCache("images/pcl/ui/core/Element_Earth.png");
-        public final TextureCache elementFire = new TextureCache("images/pcl/ui/core/Element_Fire.png");
-        public final TextureCache elementLight = new TextureCache("images/pcl/ui/core/Element_Light.png");
-        public final TextureCache elementWater = new TextureCache("images/pcl/ui/core/Element_Water.png");
         public final TextureCache progressBar = new TextureCache("images/pcl/ui/core/ProgressBar.png");
         public final TextureCache progressBarPart = new TextureCache("images/pcl/ui/core/ProgressBarPart.png");
         public final TextureCache squareBG1 = new TextureCache("images/pcl/ui/core/SquareBG1.png", true);

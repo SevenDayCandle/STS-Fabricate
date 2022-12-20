@@ -10,6 +10,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
+import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.localization.*;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
@@ -475,6 +476,7 @@ public abstract class PCLResources<T extends AbstractConfig, U extends PCLImages
         tooltips.initializeIcons();
         data.initialize();
         PCLLoadoutsContainer.preloadResources(data);
+        config.load(CardCrawlGame.saveSlot);
     }
 
     @Override

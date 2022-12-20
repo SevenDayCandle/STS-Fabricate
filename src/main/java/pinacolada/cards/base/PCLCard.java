@@ -1667,11 +1667,19 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     protected void updateBlock(float amount) {
         block = Math.max(0, MathUtils.floor(amount));
         this.isBlockModified = (baseBlock != block);
+        if (onBlockEffect != null)
+        {
+            onBlockEffect.setAmountFromCard();
+        }
     }
 
     protected void updateDamage(float amount) {
         damage = Math.max(0, MathUtils.floor(amount));
         this.isDamageModified = (baseDamage != damage);
+        if (onDamageEffect != null)
+        {
+            onDamageEffect.setAmountFromCard();
+        }
     }
 
     protected void updateHitCount(float amount) {

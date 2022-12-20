@@ -153,7 +153,6 @@ public class PMove_DealCardDamage extends PMove implements Hidden
         return this;
     }
 
-    // TODO Have interface for dealing with this
     protected void setDamageOptions(DealDamage damageAction, PCLUseInfo info)
     {
         if (damageEffect != null)

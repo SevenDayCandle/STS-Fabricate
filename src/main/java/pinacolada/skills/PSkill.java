@@ -422,10 +422,18 @@ public abstract class PSkill implements TooltipProvider
                 return TEXT.subjects.allX(PCLCoreStrings.pluralForce(TEXT.subjects.allyN));
             case AllEnemy:
                 return TEXT.subjects.allX(PCLCoreStrings.pluralForce(TEXT.subjects.enemyN));
+            case Any:
+                return TEXT.subjects.characterN;
             case RandomAlly:
                 return TEXT.subjects.randomX(PCLCoreStrings.pluralForce(TEXT.subjects.allyN));
             case RandomEnemy:
                 return TEXT.subjects.randomX(PCLCoreStrings.pluralForce(TEXT.subjects.enemyN));
+            case SingleAlly:
+                return TEXT.subjects.allyN;
+            case Team:
+                return TEXT.subjects.your(target.getTitle());
+            case Self:
+                return TEXT.subjects.you;
             default:
                 return TEXT.subjects.enemyN;
         }
@@ -1877,12 +1885,14 @@ public abstract class PSkill implements TooltipProvider
     public PSkill setAmountSource(PCLCardValueSource valueSource)
     {
         this.amountSource = valueSource;
+        this.baseAmount = this.amount = getAmountFromCard();
         return this;
     }
 
     public PSkill setExtraSource(PCLCardValueSource valueSource)
     {
         this.extraSource = valueSource;
+        this.baseExtra = this.extra = getExtraFromCard();
         return this;
     }
 

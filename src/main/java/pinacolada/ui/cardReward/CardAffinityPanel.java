@@ -12,7 +12,7 @@ import extendedui.ui.cardFilter.CustomCardPoolModule;
 import extendedui.ui.controls.EUIToggle;
 import extendedui.ui.hitboxes.DraggableHitbox;
 import extendedui.ui.hitboxes.EUIHitbox;
-import extendedui.ui.hitboxes.PercentageRelativeHitbox;
+import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.cards.base.PCLAffinity;
@@ -47,7 +47,7 @@ public class CardAffinityPanel extends CustomCardPoolModule
             counters.add(new CardAffinityCounter(hb, t));
         }
 
-        upgradeToggle = new EUIToggle(new PercentageRelativeHitbox(hb, 1.3f, 1, 0.5f * (1 - (ICON_SIZE / hb.width)), -(0.5f + counters.size())))
+        upgradeToggle = new EUIToggle(RelativeHitbox.fromPercentages(hb, 1.3f, 1, 0.5f * (1 - (ICON_SIZE / hb.width)), -(0.5f + counters.size())))
                 .setBackground(EUIRM.images.panel.texture(), Color.DARK_GRAY)
                 .setFont(EUIFontHelper.carddescriptionfontLarge, 0.4f)
                 .setText(SingleCardViewPopup.TEXT[6])

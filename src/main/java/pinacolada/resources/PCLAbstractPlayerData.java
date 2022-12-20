@@ -295,8 +295,8 @@ public abstract class PCLAbstractPlayerData
                         continue;
                     }
 
-                    FileHandle writer = Gdx.files.local(getLoadoutPath(resources, loadout.id, data.preset));
-                    writer.writeString(EUIUtils.serialize(this, TInfo.getType()), false);
+                    FileHandle writer = Gdx.files.absolute(getLoadoutPath(resources, loadout.id, data.preset));
+                    writer.writeString(EUIUtils.serialize(new PCLLoadoutData.LoadoutInfo(data), TInfo.getType()), false);
                 }
             }
         }

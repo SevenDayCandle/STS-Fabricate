@@ -582,6 +582,9 @@ public class PCLCoreStrings extends PCLStrings
         public final String yourFirst(Object amount) {
             return EUIUtils.format(yourFirstX, amount);
         }
+        public final String your(Object amount) {
+            return EUIUtils.format(yourX, amount);
+        }
     }
 
     public class Actions

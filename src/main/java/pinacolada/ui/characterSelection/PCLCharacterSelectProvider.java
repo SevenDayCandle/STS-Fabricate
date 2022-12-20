@@ -12,7 +12,7 @@ import extendedui.text.EUISmartText;
 import extendedui.ui.controls.EUILabel;
 import extendedui.ui.controls.EUITutorial;
 import extendedui.ui.hitboxes.EUIHitbox;
-import extendedui.ui.hitboxes.PercentageRelativeHitbox;
+import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.pcl.replacement.RitualDagger;
@@ -79,10 +79,10 @@ public class PCLCharacterSelectProvider implements RunAttributesProvider
         simplePreview.hb.move(simplePreview.current_x, simplePreview.current_y);
         complexPreview.hb.move(complexPreview.current_x, complexPreview.current_y);
 
-        simpleModeOn = new EUILabel(EUIFontHelper.cardtitlefontSmall, new PercentageRelativeHitbox(simplePreview.hb, 1, 0.5f, 0, -0.6f))
+        simpleModeOn = new EUILabel(EUIFontHelper.cardtitlefontSmall, RelativeHitbox.fromPercentages(simplePreview.hb, 1, 0.5f, 0, -0.6f))
                 .setLabel(PGR.core.strings.misc.simpleMode)
                 .setColor(Settings.BLUE_TEXT_COLOR);
-        simpleModeOff = new EUILabel(EUIFontHelper.cardtitlefontSmall, new PercentageRelativeHitbox(complexPreview.hb, 1, 0.5f, 0, -0.6f))
+        simpleModeOff = new EUILabel(EUIFontHelper.cardtitlefontSmall, RelativeHitbox.fromPercentages(complexPreview.hb, 1, 0.5f, 0, -0.6f))
                 .setLabel(PGR.core.strings.misc.complexMode)
                 .setColor(EUISmartText.ORANGE_TEXT_COLOR);
         simpleModeOn.updateImpl();

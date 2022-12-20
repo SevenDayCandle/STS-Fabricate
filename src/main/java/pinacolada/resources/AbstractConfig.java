@@ -57,7 +57,7 @@ public abstract class AbstractConfig
 
     public FileHandle getConfigFolder()
     {
-        FileHandle folder = Gdx.files.local(getConfigPath());
+        FileHandle folder = Gdx.files.absolute(getConfigPath());
         if (!folder.exists())
         {
             folder.mkdirs();

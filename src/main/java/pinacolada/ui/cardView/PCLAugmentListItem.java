@@ -9,7 +9,6 @@ import extendedui.ui.EUIHoverable;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUILabel;
 import extendedui.ui.hitboxes.EUIHitbox;
-import extendedui.ui.hitboxes.PercentageRelativeHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
 import pinacolada.augments.PCLAugment;
 import pinacolada.utilities.PCLRenderHelpers;
@@ -46,7 +45,7 @@ public class PCLAugmentListItem extends EUIHoverable
                 .setColor(Settings.GOLD_COLOR)
                 .setAlignment(0.5f, 0.01f);
         amountText = new
-                EUILabel(FontHelper.cardTitleFont, new PercentageRelativeHitbox(hb, 1, 1, amountOffset, 0.5f))
+                EUILabel(FontHelper.cardTitleFont, RelativeHitbox.fromPercentages(hb, 1, 1, amountOffset, 0.5f))
                 .setAlignment(0.5f, 0.5f)
                 .setLabel(getAmountString(amount))
                 .setFontScale(0.75f);

@@ -34,6 +34,7 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>
     public static final int TOTAL_AFFINITIES = 7;
     public static final int MAX_LEVEL = 2;
     private static final HashMap<AbstractCard.CardColor, PCLAffinity[]> REGISTERED_TYPES = new HashMap<>();
+    private static final HashMap<AbstractCard.CardColor, TextureCache> REGISTERED_BORDERS = new HashMap<>();
 
     private static final PCLAffinity[] BASIC_TYPES = new PCLAffinity[6];
     private static final PCLAffinity[] EXTENDED_TYPES = new PCLAffinity[TOTAL_AFFINITIES];
@@ -116,6 +117,11 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>
         REGISTERED_TYPES.putIfAbsent(pc, affinities);
     }
 
+    public static void registerAffinityBorder(AbstractCard.CardColor pc, TextureCache cache)
+    {
+        REGISTERED_BORDERS.putIfAbsent(pc, cache);
+    }
+
     public static PCLAffinity[] getAvailableAffinities(AbstractCard.CardColor pc)
     {
         if (pc == AbstractCard.CardColor.COLORLESS || pc == AbstractCard.CardColor.CURSE)
@@ -189,10 +195,14 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>
         return (level ) > 1 ? PGR.core.images.core.borderBG.texture() : null;
     }
 
-    // TODO allow custom borders per color
     public Texture getBorder(int level)
     {
         AbstractCard.CardColor color = GameUtilities.getActingColor();
+        TextureCache cache = REGISTERED_BORDERS.get(color);
+        if (cache != null)
+        {
+            return cache.texture();
+        }
         return (level > 1 ? PGR.core.images.core.borderWeak : PGR.core.images.core.borderNormal).texture();
     }
 

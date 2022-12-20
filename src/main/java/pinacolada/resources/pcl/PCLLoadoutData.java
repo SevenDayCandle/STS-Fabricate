@@ -12,6 +12,7 @@ import java.util.HashMap;
 public class PCLLoadoutData
 {
     private static final TypeToken<HashMap<PCLBaseStatEditor.StatType, Integer>> TValue = new TypeToken<HashMap<PCLBaseStatEditor.StatType, Integer>>() {};
+    public static final TypeToken<TupleT2<String, Integer>> TTuple = new TypeToken<TupleT2<String, Integer>>(){};
     public static final TypeToken<LoadoutInfo> TInfo = new TypeToken<LoadoutInfo>(){};
     public final HashMap<PCLBaseStatEditor.StatType, Integer> values = new HashMap<>();
     public final ArrayList<PCLCardSlot> cardSlots = new ArrayList<>();
@@ -106,7 +107,7 @@ public class PCLLoadoutData
     {
         public String values;
         public String[] relics;
-        public TupleT2<String, Integer>[] cards;
+        public LoadoutCardInfo[] cards;
 
         public LoadoutInfo()
         {
@@ -116,8 +117,8 @@ public class PCLLoadoutData
         public LoadoutInfo(PCLLoadoutData data)
         {
             values = EUIUtils.serialize(data.values);
-            cards = EUIUtils.arrayMap(data.cardSlots, d -> new TupleT2<>(d.selected.data.ID, d.amount));
-            relics = EUIUtils.arrayMap(data.relicSlots, d -> d.selected.relic.relicId);
+            cards = EUIUtils.arrayMap(data.cardSlots, LoadoutCardInfo.class, d -> d.selected != null ? new LoadoutCardInfo(d.selected.data.ID, d.amount) : null);
+            relics = EUIUtils.arrayMap(data.relicSlots, String.class, d -> d.selected != null ? d.selected.relic.relicId : null);
         }
 
         public void fill(PCLLoadoutData data)
@@ -129,7 +130,26 @@ public class PCLLoadoutData
             }
             for (int i = 0; i < cards.length; i++)
             {
-                data.getCardSlot(i).select(cards[i].v1, cards[i].v2);
+                if (cards[i] != null)
+                {
+                    data.getCardSlot(i).select(cards[i].id, cards[i].count);
+                }
+                else
+                {
+                    data.getCardSlot(i).select(null);
+                }
+            }
+        }
+
+        public static class LoadoutCardInfo implements Serializable
+        {
+            public String id;
+            public Integer count;
+
+            public LoadoutCardInfo(String id, Integer count)
+            {
+                this.id = id;
+                this.count = count;
             }
         }
     }

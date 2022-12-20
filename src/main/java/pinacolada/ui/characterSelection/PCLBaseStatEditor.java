@@ -15,7 +15,6 @@ import extendedui.ui.controls.EUIDropdown;
 import extendedui.ui.controls.EUIImage;
 import extendedui.ui.controls.EUILabel;
 import extendedui.ui.hitboxes.EUIHitbox;
-import extendedui.ui.hitboxes.PercentageRelativeHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.resources.PGR;
@@ -58,7 +57,7 @@ public class PCLBaseStatEditor extends EUIBase
                 .setOnClick(this::increase)
                 .setText(null);
 
-        valueDropdown = new EUIDropdown<Integer>(new PercentageRelativeHitbox(hb, 0.85f, 0.75f, 0.5f, -0.2f))
+        valueDropdown = new EUIDropdown<Integer>(RelativeHitbox.fromPercentages(hb, 0.85f, 0.75f, 0.5f, -0.2f))
                 .setFontForButton(EUIFontHelper.cardtitlefontSmall, 1f)
                 .setOnOpenOrClose(isOpen -> {
                     editor.activeEditor = isOpen ? this : null;
