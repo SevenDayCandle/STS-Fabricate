@@ -70,7 +70,7 @@ public class PCLDungeonData implements CustomSavable<PCLDungeonData>, PreStartGa
     public HashSet<String> bannedRelics = new HashSet<>();
     public String currentForm = null;
     public final ArrayList<Integer> ascensionGlyphCounters = new ArrayList<>();
-    public transient PCLLoadout startingSeries = new _FakeLoadout();
+    public transient PCLLoadout startingSeries = new FakeLoadout();
     public transient final ArrayList<PCLRuntimeLoadout> loadouts = new ArrayList<>();
 
     public static PCLDungeonData register(String id)
@@ -567,7 +567,7 @@ public class PCLDungeonData implements CustomSavable<PCLDungeonData>, PreStartGa
         bannedRelics.clear();
         augments.clear();
         fragments.clear();
-        startingSeries = new _FakeLoadout();
+        startingSeries = new FakeLoadout();
         proxies.clear();
         startingLoadout = -1;
         valueDivisor = 1;

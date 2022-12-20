@@ -2,6 +2,7 @@ package pinacolada.resources.pcl;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
+import com.megacrit.cardcrawl.localization.CharacterStrings;
 import com.megacrit.cardcrawl.screens.CharSelectInfo;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUIUtils;
@@ -190,7 +191,12 @@ public abstract class PCLLoadout
 
     public String getName()
     {
-        String[] options = PGR.getCharacterStrings(color).OPTIONS;
+        String[] options = null;
+        CharacterStrings cString = PGR.getCharacterStrings(color);
+        if (cString != null)
+        {
+            options = cString.OPTIONS;
+        }
         return id >= 0 && options != null && options.length > id ? options[id] : "";
     }
 

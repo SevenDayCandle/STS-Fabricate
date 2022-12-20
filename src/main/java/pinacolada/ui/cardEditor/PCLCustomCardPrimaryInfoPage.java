@@ -19,6 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.fields.CardTagItem;
 import pinacolada.resources.PCLEnum;
+import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLLoadout;
 import pinacolada.ui.common.PCLValueEditor;
@@ -145,8 +146,8 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.seriesUI.seriesUI)
                 .setCanAutosizeButton(true)
                 .setShowClearForSingle(true)
-                .setItems(PCLLoadout.getAll(effect.currentSlot.slotColor))
                 .setTooltip(PGR.core.strings.seriesUI.seriesUI, PGR.core.strings.cardEditorTutorial.attrAffinity);
+
         seriesDropdown
                 .setActive(GameUtilities.isPCLCardColor(effect.currentSlot.slotColor));
 
@@ -160,6 +161,16 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
                     e.setUnique(val);
                 }))
                 .setTooltip(PGR.core.tooltips.unique);
+
+        PCLResources resources = PGR.getResources(effect.currentSlot.slotColor);
+        if (resources != null)
+        {
+            seriesDropdown.setItems(PCLLoadout.getAll(effect.currentSlot.slotColor));
+        }
+        else
+        {
+            seriesDropdown.setActive(false);
+        }
 
         refresh();
     }

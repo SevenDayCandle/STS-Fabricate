@@ -92,12 +92,14 @@ public class PGR
 
     public static CharacterStrings getCharacterStrings(AbstractCard.CardColor cardColor)
     {
-        return null;
+        PCLResources resources = colorResourceMap.getOrDefault(cardColor, null);
+        return resources != null ? resources.getCharacterStrings() : null;
     }
 
-    public static CharacterStrings getCharacterStrings(AbstractPlayer.PlayerClass cardColor)
+    public static CharacterStrings getCharacterStrings(AbstractPlayer.PlayerClass player)
     {
-        return null;
+        PCLResources resources = playerResourceMap.getOrDefault(player, null);
+        return resources != null ? resources.getCharacterStrings() : null;
     }
 
     public static ArrayList<String> getClassNamesFromJarFile(String prefix)

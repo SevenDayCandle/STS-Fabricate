@@ -1,15 +1,16 @@
 package pinacolada.resources.pcl;
 
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.pcl.special.QuestionMark;
 
 import java.util.ArrayList;
 
-public class _FakeLoadout extends PCLLoadout
+public class FakeLoadout extends PCLLoadout
 {
-    public _FakeLoadout()
+    public FakeLoadout()
     {
-        super(null, -1, 0);
+        super(AbstractCard.CardColor.COLORLESS, -1, 0);
     }
 
     @Override

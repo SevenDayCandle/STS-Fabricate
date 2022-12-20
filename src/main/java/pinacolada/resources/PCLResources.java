@@ -21,6 +21,7 @@ import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.patches.EUIKeyword;
 import extendedui.ui.tooltips.EUITooltip;
+import org.apache.commons.lang3.StringUtils;
 import pinacolada.augments.AugmentStrings;
 import pinacolada.ui.characterSelection.PCLLoadoutsContainer;
 import pinacolada.utilities.GameUtilities;
@@ -47,6 +48,7 @@ public abstract class PCLResources<T extends AbstractConfig, U extends PCLImages
     public final T config;
     public final U images;
     public V tooltips;
+    protected CharacterStrings characterStrings;
     protected final FileHandle testFolder;
     protected final String id;
     protected String defaultLanguagePath;
@@ -105,6 +107,15 @@ public abstract class PCLResources<T extends AbstractConfig, U extends PCLImages
     public String createID(String suffix)
     {
         return PGR.createID(id, suffix);
+    }
+
+    public CharacterStrings getCharacterStrings()
+    {
+        if (characterStrings == null)
+        {
+            characterStrings = PGR.getCharacterStrings(StringUtils.capitalize(id));
+        }
+        return characterStrings;
     }
 
     protected ArrayList<String> getClassNamesFromJarFile(String prefix)
