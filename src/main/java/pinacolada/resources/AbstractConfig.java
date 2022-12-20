@@ -4,17 +4,21 @@ import basemod.ModLabeledToggleButton;
 import basemod.ModPanel;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.math.Vector2;
 import com.evacipated.cardcrawl.modthespire.lib.ConfigUtils;
 import com.evacipated.cardcrawl.modthespire.lib.SpireConfig;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import extendedui.EUIUtils;
 import extendedui.configuration.STSConfigItem;
+import extendedui.configuration.STSSerializedConfigItem;
+import extendedui.configuration.STSStringConfigItem;
 import extendedui.ui.settings.ModSettingsScreen;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.HashSet;
 
 public abstract class AbstractConfig
 {
@@ -23,6 +27,11 @@ public abstract class AbstractConfig
     protected static final int BASE_OPTION_OFFSET_Y = 700;
     protected static final int BASE_OPTION_OPTION_HEIGHT = 50;
     protected static final ModSettingsScreen.Category pclCategory = ModSettingsScreen.registerByClass(AbstractConfig.class);
+    public STSSerializedConfigItem<HashSet<String>> bannedCards;
+    public STSSerializedConfigItem<HashSet<String>> bannedRelics;
+    public STSConfigItem<Integer> cardsCount;
+    public STSSerializedConfigItem<Vector2> meterPosition;
+    public STSStringConfigItem trophies;
 
     protected final String id;
     protected SpireConfig config;

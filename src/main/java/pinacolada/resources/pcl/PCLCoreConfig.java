@@ -53,7 +53,7 @@ public class PCLCoreConfig extends AbstractConfig
     public STSConfigItem<Boolean> enableRelicsForOtherCharacters = new STSConfigItem<Boolean>(ENABLE_RELICS_FOR_OTHER_CHARACTERS, false);
     public STSConfigItem<Boolean> hideIrrelevantAffinities = new STSConfigItem<Boolean>(HIDE_IRRELEVANT_AFFINITIES, true);
     public STSConfigItem<Boolean> replaceCardsPCL = new STSConfigItem<Boolean>(REPLACE_CARDS_PCL, false);
-    public STSConfigItem<Boolean> showFormulaDisplay = new STSConfigItem<Boolean>(SHOW_FORMULA_DISPLAY, true);
+    public STSConfigItem<Boolean> showFormulaDisplay = new STSConfigItem<Boolean>(SHOW_FORMULA_DISPLAY, false);
     public STSConfigItem<Boolean> simpleMode = new STSConfigItem<Boolean>(SIMPLE_MODE, true);
     public STSConfigItem<Boolean> simpleModeFtueSeen = new STSConfigItem<Boolean>(SIMPLE_MODE_FTUE_SEEN, false);
     public STSConfigItem<Boolean> simplifyCardUI = new STSConfigItem<Boolean>(DISABLE_CARD_ICONS, false);

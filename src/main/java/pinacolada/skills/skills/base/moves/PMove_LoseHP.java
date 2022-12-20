@@ -9,8 +9,6 @@ import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 
-import java.util.List;
-
 public class PMove_LoseHP extends PMove
 {
     public static final PSkillData DATA = register(PMove_LoseHP.class, PCLEffectType.General);
@@ -50,8 +48,7 @@ public class PMove_LoseHP extends PMove
     @Override
     public void use(PCLUseInfo info)
     {
-        List<AbstractCreature> targets = getTargetList(info);
-        for (AbstractCreature t : targets)
+        for (AbstractCreature t : getTargetList(info))
         {
             getActions().loseHP(info.source, t, amount, AbstractGameAction.AttackEffect.NONE).isCancellable(false);
         }

@@ -28,7 +28,7 @@ public class PMove_RecoverHP extends PMove
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.recover("X");
+        return TEXT.actions.heal("X");
     }
 
     @Override
@@ -41,6 +41,6 @@ public class PMove_RecoverHP extends PMove
     @Override
     public String getSubText()
     {
-        return TEXT.actions.recover(getAmountRawString());
+        return TEXT.actions.heal(getAmountRawString());
     }
 }

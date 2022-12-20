@@ -9,7 +9,7 @@ import pinacolada.utilities.PCLRenderHelpers;
 
 public class PCLSlotAnimation extends PCLAnimation
 {
-    protected static final float RATE = 0.5f * (float) Math.PI;
+    protected static final float RATE = 0.85f * (float) Math.PI;
     protected float transitionAlpha;
     public float targetTransitionAlpha;
 
@@ -48,6 +48,6 @@ public class PCLSlotAnimation extends PCLAnimation
     {
         renderColor.a = alpha;
         Texture t = PGR.core.images.monsters.emptyShadow.texture();
-        PCLRenderHelpers.drawGlowing(sb, s -> PCLRenderHelpers.drawCentered(s, renderColor, t, x, y + t.getHeight() * 0.25f, t.getWidth(), t.getHeight(), 1f, 0f));
+        PCLRenderHelpers.drawGlowing(sb, s -> PCLRenderHelpers.drawCentered(s, renderColor, t, x, y + t.getHeight() * 0.25f, t.getWidth(), t.getHeight(), 0.8f, 0f));
     }
 }

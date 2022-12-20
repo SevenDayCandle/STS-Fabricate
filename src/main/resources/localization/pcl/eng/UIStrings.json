@@ -20,7 +20,7 @@
 												"give {0} {1}",
 												"has {0}",
 												"has {0} {1}",
-												"Heal {0} HP",
+												"have {0} {1}",
 												"increase {0} by {1}",
 												"lose {0} {1}",
 												"move {0} to {1}",

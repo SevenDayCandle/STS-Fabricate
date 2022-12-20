@@ -6,15 +6,12 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.localization.*;
 import extendedui.EUI;
-import extendedui.EUIUtils;
 import extendedui.ui.AbstractScreen;
-import extendedui.utilities.EUIFontHelper;
 import pinacolada.augments.PCLAugment;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.effects.AttackEffects;
 import pinacolada.effects.PCLEffekseerEFX;
 import pinacolada.effects.SFX;
-import pinacolada.powers.replacement.GenericFadingPower;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLResources;
@@ -63,12 +60,12 @@ public class PCLCoreResources extends PCLResources<PCLCoreConfig, PCLCoreImages,
 
     public PCLCoreResources()
     {
-        super(ID, AbstractCard.CardColor.COLORLESS, AbstractPlayer.PlayerClass.IRONCLAD, null, new PCLCoreConfig(), new PCLCoreImages(ID));
+        super(ID, AbstractCard.CardColor.COLORLESS, AbstractPlayer.PlayerClass.IRONCLAD, new PCLCoreConfig(), new PCLCoreImages(ID), null);
     }
 
-    public String createID(String suffix)
+    protected void initializeEvents()
     {
-        return createID(ID, suffix);
+        /*PCLEvent.RegisterEvents();*/
     }
 
     public void initializeInternal()
@@ -79,9 +76,13 @@ public class PCLCoreResources extends PCLResources<PCLCoreConfig, PCLCoreImages,
     {
     }
 
-    protected void initializeEvents()
+    protected void initializePotions()
     {
-        /*PCLEvent.RegisterEvents();*/
+        loadCustomPotions();
+    }
+
+    protected void initializePowers()
+    {
     }
 
     protected void initializeRewards()
@@ -90,30 +91,30 @@ public class PCLCoreResources extends PCLResources<PCLCoreConfig, PCLCoreImages,
         BaseMod.registerCustomReward(PCLEnum.Rewards.AUGMENT, augmentSerializer, augmentSerializer);
     }
 
-    protected void initializeAudio()
+    public void receiveAddAudio()
     {
         SFX.initialize();
     }
 
-    protected void initializeCards()
+    public void receiveEditCards()
     {
-        EUIUtils.logInfo(this, "InitializeCards();");
-
         tooltips = new PCLCoreTooltips();
         strings.initialize();
         loadCustomCards();
     }
 
-    protected void initializePowers()
+    public void receiveEditKeywords()
     {
-        BaseMod.addPower(GenericFadingPower.class, GenericFadingPower.POWER_ID);
-        // LoadCustomPowers();
+        loadKeywords();
     }
 
-    protected void initializeStrings()
+    public void receiveEditRelics()
     {
-        EUIUtils.logInfo(this, "InitializeStrings();");
+        loadCustomRelics();
+    }
 
+    public void receiveEditStrings()
+    {
         loadCustomStrings(OrbStrings.class);
         loadCustomCardStrings();
         loadCustomStrings(RelicStrings.class);
@@ -126,33 +127,6 @@ public class PCLCoreResources extends PCLResources<PCLCoreConfig, PCLCoreImages,
         loadCustomStrings(RunModStrings.class);
         loadCustomStrings(StanceStrings.class);
         loadAugmentStrings();
-
-        EUIFontHelper.initialize();
-    }
-
-    protected void initializeTextures()
-    {
-    }
-
-    protected void initializeRelics()
-    {
-        EUIUtils.logInfo(this, "InitializeRelics();");
-
-        loadCustomRelics();
-    }
-
-    protected void initializePotions()
-    {
-        EUIUtils.logInfo(this, "InitializePotions();");
-
-        loadCustomPotions();
-    }
-
-    protected void initializeKeywords()
-    {
-        EUIUtils.logInfo(this, "InitializeKeywords();");
-
-        loadKeywords();
     }
 
     protected void postInitialize()

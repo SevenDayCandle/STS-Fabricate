@@ -838,16 +838,18 @@ public class CombatManager
         return original;
     }
 
-    public static void onAllyDeath(PCLCard returned, PCLCardAlly ally)
+    public static void onAllyDeath(PCLCard card, PCLCardAlly ally)
     {
+        card.triggerWhenKilled(ally);
         for (OnAllyDeathSubscriber s : onAllyDeath.getSubscribers())
         {
-            s.onAllyDeath(returned, ally);
+            s.onAllyDeath(card, ally);
         }
     }
 
     public static void onAllySummon(PCLCard card, PCLCardAlly ally)
     {
+        card.triggerWhenSummoned(ally);
         for (OnAllySummonSubscriber s : onAllySummon.getSubscribers())
         {
             s.onAllySummon(card, ally);
@@ -856,17 +858,22 @@ public class CombatManager
 
     public static void onAllyTrigger(PCLCard card, PCLCardAlly ally)
     {
+        card.triggerWhenTriggered(ally);
         for (OnAllyTriggerSubscriber s : onAllyTrigger.getSubscribers())
         {
             s.onAllyTrigger(card, ally);
         }
     }
 
-    public static void onAllyWithdraw(PCLCard returned, PCLCardAlly ally)
+    public static void onAllyWithdraw(PCLCard card, PCLCardAlly ally)
     {
+        if (card != null)
+        {
+            card.triggerWhenWithdrawn(ally);
+        }
         for (OnAllyWithdrawSubscriber s : onAllyWithdraw.getSubscribers())
         {
-            s.onAllyWithdraw(returned, ally);
+            s.onAllyWithdraw(card, ally);
         }
     }
 

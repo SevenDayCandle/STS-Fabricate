@@ -1,22 +1,39 @@
 package pinacolada.resources;
 
+import basemod.BaseMod;
+import basemod.ReflectionHacks;
+import basemod.helpers.RelicType;
 import basemod.interfaces.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.localization.UIStrings;
+import com.megacrit.cardcrawl.localization.*;
+import com.megacrit.cardcrawl.potions.AbstractPotion;
+import com.megacrit.cardcrawl.powers.AbstractPower;
+import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
+import extendedui.interfaces.delegates.FuncT1;
+import extendedui.patches.EUIKeyword;
+import extendedui.ui.tooltips.EUITooltip;
+import pinacolada.augments.AugmentStrings;
+import pinacolada.ui.characterSelection.PCLLoadoutsContainer;
 import pinacolada.utilities.GameUtilities;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-public abstract class PCLResources<T extends AbstractConfig, U extends PCLImages, V extends PCLTooltips> extends PGR
+public abstract class PCLResources<T extends AbstractConfig, U extends PCLImages, V extends PCLTooltips>
         implements EditCharactersSubscriber, EditCardsSubscriber, EditKeywordsSubscriber,
                    EditRelicsSubscriber, EditStringsSubscriber, PostInitializeSubscriber,
                    AddAudioSubscriber
@@ -31,33 +48,73 @@ public abstract class PCLResources<T extends AbstractConfig, U extends PCLImages
     public final U images;
     public V tooltips;
     protected final FileHandle testFolder;
-    protected final String prefix;
+    protected final String id;
     protected String defaultLanguagePath;
     protected boolean isLoaded;
 
-    protected PCLResources(String prefix, AbstractCard.CardColor color, AbstractPlayer.PlayerClass playerClass, PCLAbstractPlayerData data, T config, U images)
+    protected PCLResources(String id, AbstractCard.CardColor color, AbstractPlayer.PlayerClass playerClass, T config, U images, FuncT1<PCLAbstractPlayerData, PCLResources<T, U, V>> dataFunc)
     {
-        this.prefix = prefix;
+        this.id = id;
         this.cardColor = color;
         this.playerClass = playerClass;
         this.config = config;
         this.images = images;
-        this.testFolder = new FileHandle("c:/temp/" + prefix + "-localization/");
-        this.data = data;
-        if (this.data != null)
+        this.testFolder = new FileHandle("c:/temp/" + id + "-localization/");
+        this.data = dataFunc != null ? dataFunc.invoke(this) : null;
+    }
+
+    public static void loadAugmentStrings(String jsonString)
+    {
+        final Type typeToken = new TypeToken<Map<String, AugmentStrings>>()
         {
-            this.data.resources = this;
+        }.getType();
+        AugmentStrings.STRINGS.putAll(new HashMap<String, AugmentStrings>(EUIUtils.deserialize(jsonString, typeToken)));
+    }
+
+    public static void loadGroupedCardStrings(String jsonString)
+    {
+        final Map localizationStrings = ReflectionHacks.getPrivateStatic(LocalizedStrings.class, "cards");
+        final Map cardStrings = new HashMap<>();
+        try
+        {
+            final Type typeToken = new TypeToken<Map<String, Map<String, CardStrings>>>()
+            {
+            }.getType();
+            final Map map = new HashMap<>((Map) new Gson().fromJson(jsonString, typeToken));
+
+            for (Object key1 : map.keySet())
+            {
+                final Map map3 = ((Map<Object, CardStrings>) map.get(key1));
+                for (Object key2 : map3.keySet())
+                {
+                    cardStrings.put(key2, map3.get(key2));
+                }
+            }
         }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            EUIUtils.getLogger(PGR.class).error("Loading card strings failed. Using default method.");
+            BaseMod.loadCustomStrings(CardStrings.class, jsonString);
+            return;
+        }
+
+        localizationStrings.putAll(cardStrings);
     }
 
     public String createID(String suffix)
     {
-        return createID(prefix, suffix);
+        return PGR.createID(id, suffix);
+    }
+
+    protected ArrayList<String> getClassNamesFromJarFile(String prefix)
+    {
+        return GameUtilities.getClassNamesFromJarFile(this.getClass(), prefix);
     }
 
     public FileHandle getFallbackFile(String fileName)
     {
-        return Gdx.files.internal("localization/" + prefix.toLowerCase() + "/eng/" + fileName);
+        return Gdx.files.internal("localization/" + id.toLowerCase() + "/eng/" + fileName);
     }
 
     public <T> T getFallbackStrings(String fileName, Type typeOfT)
@@ -81,12 +138,12 @@ public abstract class PCLResources<T extends AbstractConfig, U extends PCLImages
         }
         else
         {
-            if (!isTranslationSupported(language))
+            if (!PGR.isTranslationSupported(language))
             {
                 language = Settings.GameLanguage.ENG;
             }
 
-            return Gdx.files.internal("localization/" + prefix.toLowerCase() + "/" + language.name().toLowerCase() + "/" + fileName);
+            return Gdx.files.internal("localization/" + id.toLowerCase() + "/" + language.name().toLowerCase() + "/" + fileName);
         }
     }
 
@@ -112,19 +169,7 @@ public abstract class PCLResources<T extends AbstractConfig, U extends PCLImages
 
     public UIStrings getUIStrings(String stringID)
     {
-        return getLanguagePack().getUIString(PGR.createID(prefix, stringID));
-    }
-
-    protected void initializeAudio()
-    {
-    }
-
-    protected void initializeCards()
-    {
-    }
-
-    protected void initializeCharacter()
-    {
+        return PGR.getLanguagePack().getUIString(PGR.createID(id, stringID));
     }
 
     protected void initializeColor()
@@ -136,10 +181,6 @@ public abstract class PCLResources<T extends AbstractConfig, U extends PCLImages
     }
 
     protected void initializeInternal()
-    {
-    }
-
-    protected void initializeKeywords()
     {
     }
 
@@ -155,19 +196,7 @@ public abstract class PCLResources<T extends AbstractConfig, U extends PCLImages
     {
     }
 
-    protected void initializeRelics()
-    {
-    }
-
     protected void initializeRewards()
-    {
-    }
-
-    protected void initializeStrings()
-    {
-    }
-
-    protected void initializeTextures()
     {
     }
 
@@ -183,17 +212,61 @@ public abstract class PCLResources<T extends AbstractConfig, U extends PCLImages
 
     protected void loadAugmentStrings()
     {
-        loadCustomNonBaseStrings(JSON_AUGMENTS, PGR::loadAugmentStrings);
+        loadCustomNonBaseStrings(JSON_AUGMENTS, PCLResources::loadAugmentStrings);
     }
 
     protected void loadCustomCardStrings()
     {
-        loadCustomNonBaseStrings(JSON_CARDS, PGR::loadGroupedCardStrings);
+        loadCustomNonBaseStrings(JSON_CARDS, PCLResources::loadGroupedCardStrings);
+    }
+
+    protected void loadCustomCard(Class<?> type)
+    {
+        if (!PGR.canInstantiate(type))
+        {
+            return;
+        }
+
+        AbstractCard card;
+        String id;
+
+        try
+        {
+            card = (AbstractCard) type.getConstructor().newInstance();
+            id = card.cardID;
+        }
+        catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e)
+        {
+            e.printStackTrace();
+            return;
+        }
+
+        if (UnlockTracker.isCardLocked(id))
+        {
+            UnlockTracker.unlockCard(id);
+            card.isLocked = false;
+        }
+
+        BaseMod.addCard(card);
     }
 
     protected void loadCustomCards()
     {
-        super.loadCustomCards(prefix);
+        final String fullPrefix = PGR.PREFIX_CARDS + id;
+        for (String s : getClassNamesFromJarFile(PGR.PREFIX_CARDS))
+        {
+            if (s.startsWith(fullPrefix))
+            {
+                try
+                {
+                    loadCustomCard(Class.forName(s));
+                }
+                catch (ClassNotFoundException e)
+                {
+                    EUIUtils.logWarning(null, "Class not found : " + s);
+                }
+            }
+        }
     }
 
     protected void loadCustomNonBaseStrings(String path, ActionT1<String> loadFunc)
@@ -201,7 +274,7 @@ public abstract class PCLResources<T extends AbstractConfig, U extends PCLImages
         String json = getFallbackFile(path).readString(StandardCharsets.UTF_8.name());
         loadFunc.invoke(json);
 
-        if (testFolder.isDirectory() || isTranslationSupported(Settings.language))
+        if (testFolder.isDirectory() || PGR.isTranslationSupported(Settings.language))
         {
             FileHandle file = getFile(Settings.language, path);
             if (file.exists())
@@ -212,79 +285,221 @@ public abstract class PCLResources<T extends AbstractConfig, U extends PCLImages
         }
     }
 
+    protected void loadCustomPotion(Class<?> type, AbstractPlayer.PlayerClass playerClass)
+    {
+        if (!PGR.canInstantiate(type))
+        {
+            return;
+        }
+
+        AbstractPotion potion;
+        try
+        {
+            potion = (AbstractPotion) type.getConstructor().newInstance();
+        }
+        catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e)
+        {
+            e.printStackTrace();
+            return;
+        }
+
+        BaseMod.addPotion(potion.getClass(), potion.liquidColor, potion.hybridColor, potion.spotsColor, potion.ID, playerClass);
+    }
+
     protected void loadCustomPotions()
     {
-        super.loadCustomPotions(prefix, playerClass);
+        final String potionPrefix = PGR.PREFIX_POTIONS + id;
+        for (String s : getClassNamesFromJarFile(PGR.PREFIX_POTIONS))
+        {
+            if (s.startsWith(potionPrefix))
+            {
+                try
+                {
+                    loadCustomPotion(Class.forName(s), playerClass);
+                }
+                catch (ClassNotFoundException e)
+                {
+                    EUIUtils.logWarning(null, "Class not found : " + s);
+                }
+            }
+        }
     }
 
     protected void loadCustomPowers()
     {
-        super.loadCustomPowers(prefix);
+        final String fullPrefix = PGR.PREFIX_POWERS + id;
+
+        for (String s : getClassNamesFromJarFile(PGR.PREFIX_POWERS))
+        {
+            if (s.startsWith(fullPrefix))
+            {
+                try
+                {
+                    Class<?> type = Class.forName(s);
+                    if (PGR.canInstantiate(type))
+                    {
+                        BaseMod.addPower((Class<AbstractPower>) type, createID(type.getSimpleName()));
+                    }
+                }
+                catch (ClassNotFoundException e)
+                {
+                    EUIUtils.logWarning(null, "Class not found : " + s);
+                }
+            }
+        }
+    }
+
+    protected void loadCustomRelic(Class<?> type, AbstractCard.CardColor color)
+    {
+        if (!PGR.canInstantiate(type))
+        {
+            return;
+        }
+
+        AbstractRelic relic;
+        try
+        {
+            relic = (AbstractRelic) type.getConstructor().newInstance();
+        }
+        catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e)
+        {
+            e.printStackTrace();
+            return;
+        }
+
+        if (color != null && color != AbstractCard.CardColor.COLORLESS)
+        {
+            BaseMod.addRelicToCustomPool(relic, color);
+        }
+        else
+        {
+            BaseMod.addRelic(relic, RelicType.SHARED);
+        }
     }
 
     protected void loadCustomRelics()
     {
-        super.loadCustomRelics(prefix, cardColor);
+        final String fullPrefix = PGR.PREFIX_RELIC + id;
+
+        for (String s : getClassNamesFromJarFile(PGR.PREFIX_RELIC))
+        {
+            if (s.startsWith(fullPrefix))
+            {
+                try
+                {
+                    //logger.info("Adding: " + s);
+
+                    loadCustomRelic(Class.forName(s), cardColor);
+                }
+                catch (ClassNotFoundException e)
+                {
+                    EUIUtils.logWarning(PGR.class, "Class not found : " + s);
+                }
+            }
+        }
     }
 
     protected void loadCustomStrings(Class<?> type)
     {
-        super.loadCustomStrings(type, getFallbackFile(type.getSimpleName() + ".json"));
+        loadCustomStrings(type, getFallbackFile(type.getSimpleName() + ".json"));
 
-        if (isBetaTranslation() || isTranslationSupported(Settings.language))
+        if (isBetaTranslation() || PGR.isTranslationSupported(Settings.language))
         {
-            super.loadCustomStrings(type, getFile(Settings.language, type.getSimpleName() + ".json"));
+            loadCustomStrings(type, getFile(Settings.language, type.getSimpleName() + ".json"));
+        }
+    }
+
+    protected void loadCustomStrings(Class<?> type, FileHandle file)
+    {
+        if (file.exists())
+        {
+            BaseMod.loadCustomStrings(type, file.readString(String.valueOf(StandardCharsets.UTF_8)));
+        }
+        else
+        {
+            EUIUtils.logWarning(this, "File not found: " + file.path());
         }
     }
 
     protected void loadKeywords()
     {
-        super.loadKeywords(getFallbackFile(JSON_KEYWORDS));
+        loadKeywords(getFallbackFile(JSON_KEYWORDS));
 
-        if (isBetaTranslation() || isTranslationSupported(Settings.language))
+        if (isBetaTranslation() || PGR.isTranslationSupported(Settings.language))
         {
-            super.loadKeywords(getFile(Settings.language, JSON_KEYWORDS));
+            loadKeywords(getFile(Settings.language, JSON_KEYWORDS));
+        }
+    }
+
+    protected void loadKeywords(FileHandle file)
+    {
+        if (!file.exists())
+        {
+            EUIUtils.logWarning(this, "File not found: " + file.path());
+            return;
+        }
+
+        String json = file.readString(String.valueOf(StandardCharsets.UTF_8));
+        Map<String, EUIKeyword> items = EUIUtils.deserialize(json, new TypeToken<Map<String, EUIKeyword>>()
+        {
+        }.getType());
+
+        for (Map.Entry<String, EUIKeyword> pair : items.entrySet())
+        {
+            String id = pair.getKey();
+            EUIKeyword keyword = pair.getValue();
+            EUITooltip tooltip = new EUITooltip(keyword);
+
+            EUITooltip.registerID(id, tooltip);
+
+            for (String name : keyword.NAMES)
+            {
+                EUITooltip.registerName(name, tooltip);
+            }
         }
     }
 
     protected void postInitialize()
     {
+        tooltips.initializeIcons();
+        data.initialize();
+        PCLLoadoutsContainer.preloadResources(data);
     }
 
     @Override
-    public final void receiveAddAudio()
+    public void receiveAddAudio()
     {
-        initializeAudio();
     }
 
     @Override
-    public final void receiveEditCards()
+    public void receiveEditCards()
     {
-        initializeCards();
     }
 
     @Override
-    public final void receiveEditCharacters()
+    public void receiveEditCharacters()
     {
-        initializeCharacter();
     }
 
     @Override
-    public final void receiveEditKeywords()
+    public void receiveEditKeywords()
     {
-        initializeKeywords();
+        loadKeywords();
     }
 
     @Override
-    public final void receiveEditRelics()
+    public void receiveEditRelics()
     {
-        initializeRelics();
     }
 
     @Override
-    public final void receiveEditStrings()
+    public void receiveEditStrings()
     {
-        initializeStrings();
+        loadCustomStrings(CharacterStrings.class);
+        loadCustomCardStrings();
+        loadCustomStrings(RelicStrings.class);
+        loadCustomStrings(PowerStrings.class);
+        loadCustomStrings(PotionStrings.class);
     }
 
     @Override

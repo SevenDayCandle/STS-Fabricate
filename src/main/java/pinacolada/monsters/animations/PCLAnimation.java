@@ -32,6 +32,11 @@ public class PCLAnimation extends AbstractAnimation
 
     }
 
+    public void playActAnimation(float x, float y)
+    {
+
+    }
+
     @Override
     public Type type()
     {

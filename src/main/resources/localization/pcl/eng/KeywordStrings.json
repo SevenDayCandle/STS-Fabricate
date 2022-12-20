@@ -194,10 +194,12 @@
 								"NAMES": ["grave"],
 								"PROPER_NAME": "Grave"
 				},
-				"Hindrance":	{
-								"DESCRIPTION": "A #yStatus or #yCurse card.",
-								"NAMES": ["hindrance", "hindrances"],
-								"PROPER_NAME": "Hindrance"
+				"Heal":	{
+								"DESCRIPTION": "Restore HP",
+								"NAMES": ["heal", "heals", "healing"],
+								"PAST": "Healed",
+								"PRESENT": "Heals",
+								"PROPER_NAME": "Heal"
 				},
 				"HP":	{
 								"DESCRIPTION": "-",
@@ -328,11 +330,6 @@
 								"DESCRIPTION": "Put the next card you play this turn on top of your draw pile.",
 								"NAMES": ["rebound"],
 								"PROPER_NAME": "Rebound"
-				},
-				"Recover":	{
-								"DESCRIPTION": "Gain [HP] up to the amount you had at the end of your last turn.",
-								"NAMES": ["recover", "recovered", "recovering"],
-								"PROPER_NAME": "Recover"
 				},
 				"Regeneration":	{
 								"DESCRIPTION": "Heal HP at the end of the turn. Reduce by 1 each turn.",

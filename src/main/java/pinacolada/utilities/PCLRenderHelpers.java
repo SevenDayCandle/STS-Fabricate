@@ -239,7 +239,7 @@ public class PCLRenderHelpers extends EUIRenderHelpers
         Vector2 cur = new Vector2();
         Vector2 prev = new Vector2();
         float origin = texture.getWidth() / 2f;
-        float scale = Settings.scale * 0.8f;
+        float scale = Settings.scale * 0.4f;
 
         for (int i = 0; i < points; ++i)
         {

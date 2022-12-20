@@ -31,6 +31,22 @@ public class PCLLockOnPower extends PCLPower implements OnOrbApplyLockOnSubscrib
     }
 
     @Override
+    public void onInitialApplication()
+    {
+        super.onInitialApplication();
+
+        CombatManager.onOrbApplyLockOn.subscribe(this);
+    }
+
+    @Override
+    public void onRemove()
+    {
+        super.onRemove();
+
+        CombatManager.onOrbApplyLockOn.unsubscribe(this);
+    }
+
+    @Override
     public String getUpdatedDescription()
     {
         return formatDescription(0, PCLRenderHelpers.decimalFormat(getOrbMultiplierForDescription()), amount, amount == 1 ? powerStrings.DESCRIPTIONS[1] : powerStrings.DESCRIPTIONS[2]);

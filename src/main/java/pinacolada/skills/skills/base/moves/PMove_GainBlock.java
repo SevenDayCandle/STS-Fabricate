@@ -1,5 +1,6 @@
 package pinacolada.skills.skills.base.moves;
 
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.utilities.ColoredString;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
@@ -57,7 +58,11 @@ public class PMove_GainBlock extends PMove
     @Override
     public void use(PCLUseInfo info)
     {
-        getActions().gainBlock(amount);
+        for (AbstractCreature c : getTargetList(info))
+        {
+            getActions().gainBlock(c, amount);
+        }
+
         super.use(info);
     }
 }

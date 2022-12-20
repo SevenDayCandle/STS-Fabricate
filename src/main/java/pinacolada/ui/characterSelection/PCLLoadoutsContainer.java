@@ -46,12 +46,12 @@ public class PCLLoadoutsContainer
     public void commitChanges(PCLAbstractPlayerData data)
     {
         data.selectedLoadout = find(currentSeriesCard).loadout;
-        data.bannedCardsConfig.set(bannedCards, true);
-        data.cardSizeConfig.set(Math.max(MINIMUM_CARDS, currentCardLimit), true);
+        data.resources.config.bannedCards.set(bannedCards, true);
+        data.resources.config.cardsCount.set(Math.max(MINIMUM_CARDS, currentCardLimit), true);
 
         EUIUtils.logInfoIfDebug(this, "Selected Loadout: " + data.selectedLoadout.getName());
-        EUIUtils.logInfoIfDebug(this, "Banned Size: " + data.bannedCardsConfig.get().size());
-        EUIUtils.logInfoIfDebug(this, "Cards Size: " + data.cardSizeConfig.get());
+        EUIUtils.logInfoIfDebug(this, "Banned Size: " + data.resources.config.bannedCards.get().size());
+        EUIUtils.logInfoIfDebug(this, "Cards Size: " + data.resources.config.cardsCount.get());
     }
 
     public void createCards(PCLAbstractPlayerData data)
@@ -70,7 +70,7 @@ public class PCLLoadoutsContainer
             }
         }
 
-        bannedCards.addAll(data.bannedCardsConfig.get());
+        bannedCards.addAll(data.resources.config.bannedCards.get());
         for (PCLRuntimeLoadout c : seriesSelectionItems)
         {
             final AbstractCard card = c.buildCard();
@@ -179,7 +179,7 @@ public class PCLLoadoutsContainer
         }
         if (data != null)
         {
-            currentCardLimit = MathUtils.clamp(data.cardSizeConfig.get(), MINIMUM_CARDS, totalCardsInPool);
+            currentCardLimit = MathUtils.clamp(data.resources.config.cardsCount.get(), MINIMUM_CARDS, totalCardsInPool);
         }
 
         for (PCLRuntimeLoadout loadout : getAllLoadouts())

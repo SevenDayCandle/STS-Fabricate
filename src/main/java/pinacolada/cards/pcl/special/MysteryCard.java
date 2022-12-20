@@ -15,6 +15,7 @@ import pinacolada.utilities.WeightedList;
 
 import java.util.ArrayList;
 
+// TODO transform when added to deck
 public class MysteryCard extends PCLCard implements Hidden
 {
     public static final PCLCardData DATA = register(MysteryCard.class)

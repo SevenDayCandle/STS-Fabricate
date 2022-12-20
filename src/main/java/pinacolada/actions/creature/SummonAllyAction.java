@@ -16,7 +16,7 @@ public class SummonAllyAction extends PCLActionWithCallback<PCLCard>
     public final PCLCard card;
     public final PCLCardAlly ally;
     public boolean retainPowers;
-    public boolean stun = true;
+    public boolean stun = false;
     public boolean showEffect = true;
     public boolean summonCardOnly = true;
 
@@ -63,12 +63,14 @@ public class SummonAllyAction extends PCLActionWithCallback<PCLCard>
 
     protected void initializeAlly()
     {
-        this.ally.initializeForCard(card, retainPowers, stun);
+        PCLActions.bottom.callback(() -> {
+            this.ally.initializeForCard(card, retainPowers, stun);
 
-        // TODO effects
-        if (showEffect)
-        {
-            PCLEffects.Queue.add(new SmokeEffect(ally.hb.cX, ally.hb.cY));
-        }
+            // TODO effects
+            if (showEffect)
+            {
+                PCLEffects.Queue.add(new SmokeEffect(ally.hb.cX, ally.hb.cY));
+            }
+        });
     }
 }

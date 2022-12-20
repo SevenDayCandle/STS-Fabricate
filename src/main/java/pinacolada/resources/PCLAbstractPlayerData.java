@@ -9,15 +9,16 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.unlock.AbstractUnlock;
 import extendedui.EUIUtils;
-import extendedui.configuration.STSConfigItem;
-import extendedui.configuration.STSSerializedConfigItem;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.blights.common.AbstractGlyphBlight;
 import pinacolada.blights.common.GlyphBlight;
 import pinacolada.blights.common.GlyphBlight1;
 import pinacolada.blights.common.GlyphBlight2;
 import pinacolada.cards.base.PCLCustomCardSlot;
-import pinacolada.resources.pcl.*;
+import pinacolada.resources.pcl.PCLLoadout;
+import pinacolada.resources.pcl.PCLLoadoutData;
+import pinacolada.resources.pcl.PCLRuntimeLoadout;
+import pinacolada.resources.pcl.PCLTrophies;
 import pinacolada.utilities.RandomizedList;
 
 import java.util.*;
@@ -33,28 +34,18 @@ public abstract class PCLAbstractPlayerData
     public static final ArrayList<AbstractGlyphBlight> Glyphs = new ArrayList<>();
     public final HashMap<Integer, PCLLoadout> loadouts = new HashMap<>();
     public final HashMap<Integer, PCLTrophies> trophies = new HashMap<>();
-    public final STSSerializedConfigItem<HashSet<String>> bannedCardsConfig;
-    public final STSSerializedConfigItem<HashSet<String>> bannedRelicsConfig;
-    public final STSConfigItem<Integer> cardSizeConfig;
-    public final STSConfigItem<String> trophiesConfig;
-    public PCLResources<?,?,?> resources;
-    public PCLLoadout selectedLoadout = new _FakeLoadout();
+    public final PCLResources<?,?,?> resources;
+    public PCLLoadout selectedLoadout;
 
-    public PCLAbstractPlayerData(
-            STSSerializedConfigItem<HashSet<String>> bannedCards,
-            STSSerializedConfigItem<HashSet<String>> bannedRelics,
-            STSConfigItem<Integer> cardSize,
-            STSConfigItem<String> trophies)
+    public PCLAbstractPlayerData(PCLResources<?,?,?> resources)
     {
-        this.bannedCardsConfig = bannedCards;
-        this.bannedRelicsConfig = bannedRelics;
-        this.cardSizeConfig = cardSize;
-        this.trophiesConfig = trophies;
+        this.resources = resources;
+        this.selectedLoadout = getCoreLoadout();
     }
 
     public static String getLoadoutPrefix(PCLResources<?,?,?> resources)
     {
-        return resources.config.getConfigPath() + resources.prefix + "_slot";
+        return resources.config.getConfigPath() + resources.id + "_slot";
     }
 
     public static String getLoadoutPath(PCLResources<?,?,?> resources, int id, int slot)
@@ -218,8 +209,8 @@ public abstract class PCLAbstractPlayerData
             EUIUtils.logInfo(this, "Starting Series: " + EUIUtils.joinStrings(",", EUIUtils.map(PGR.core.dungeon.loadouts, l -> l.loadout.getName())));
         }
 
-        PGR.core.dungeon.bannedCards.addAll(bannedCardsConfig.get());
-        PGR.core.dungeon.bannedRelics.addAll(bannedRelicsConfig.get());
+        PGR.core.dungeon.bannedCards.addAll(resources.config.bannedCards.get());
+        PGR.core.dungeon.bannedRelics.addAll(resources.config.bannedRelics.get());
     }
 
     public PCLLoadout prepareLoadout()
@@ -274,12 +265,12 @@ public abstract class PCLAbstractPlayerData
 
     public void reload()
     {
-        deserializeTrophies(trophiesConfig.get());
+        deserializeTrophies(resources.config.trophies.get());
         deserializeCustomLoadouts();
 
-        if (selectedLoadout == null || selectedLoadout.id < 0)
+        if (selectedLoadout == null)
         {
-            selectedLoadout = loadouts.get(0);
+            selectedLoadout = getCoreLoadout();
         }
     }
 
@@ -287,7 +278,7 @@ public abstract class PCLAbstractPlayerData
     {
         EUIUtils.logInfoIfDebug(this, "Saving Trophies");
 
-        trophiesConfig.set(serializeTrophies(), flush);
+        resources.config.trophies.set(serializeTrophies(), flush);
     }
 
     public void saveLoadouts()

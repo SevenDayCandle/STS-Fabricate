@@ -94,6 +94,7 @@ public class SummonPool extends EUIBase implements OnStartOfTurnSubscriber, OnSt
     @Override
     public void updateImpl()
     {
+        // Update empty animation independently so alpha is the same for all slots
         PCLCardAlly.emptyAnimation.update(EUI.delta(), 0, 0);
         for (PCLCardAlly ally : summons)
         {

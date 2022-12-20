@@ -86,7 +86,7 @@ public class GameUtilities
     private static final RandomizedList<AbstractCard> fullCardPool = new RandomizedList<>();
     private static final RandomizedList<AbstractCard> characterCardPool = new RandomizedList<>();
     private static final HandLayoutRefresher handLayoutRefresher = new HandLayoutRefresher();
-    private static final HashMap<String, ArrayList<String>> ClassNames = new HashMap<>();
+    private static final HashMap<String, ArrayList<String>> classNames = new HashMap<>();
     private static AbstractPlayer.PlayerClass lastPlayerClass;
 
     public static void applyPowerInstantly(Iterable<AbstractCreature> targets, PCLPowerHelper powerHelper, int stacks)
@@ -647,7 +647,7 @@ public class GameUtilities
         try
         {
             String path = url.getPath();
-            ArrayList<String> cNames = ClassNames.get(path);
+            ArrayList<String> cNames = classNames.get(path);
             if (cNames == null)
             {
                 cNames = new ArrayList<>();
@@ -667,7 +667,7 @@ public class GameUtilities
                         cNames.add(name.replaceAll("/", "\\."));
                     }
                 }
-                ClassNames.put(path, cNames);
+                classNames.put(path, cNames);
             }
 
             ArrayList<String> result = new ArrayList<>();
@@ -925,7 +925,7 @@ public class GameUtilities
     public static <T extends AbstractPower> ArrayList<T> getPowers(AbstractCreature target, PCLCardTarget targetHelper, String powerID)
     {
         final ArrayList<T> result = new ArrayList<>();
-        for (AbstractCreature c : PCLCardTarget.All.getTargets(player, target))
+        for (AbstractCreature c : targetHelper.getTargets(player, target))
         {
             final T t = getPower(c, powerID);
             if (t != null)

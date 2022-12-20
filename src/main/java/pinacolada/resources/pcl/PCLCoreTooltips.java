@@ -36,7 +36,8 @@ public class PCLCoreTooltips extends PCLTooltips
     public EUITooltip discard = EUITooltip.findByID("Discard").showText(false).canHighlight(false);
     public EUITooltip draw = EUITooltip.findByID("Draw").showText(false).canHighlight(false);
     public EUITooltip energy = EUITooltip.findByName("[E]").showText(false);
-    public EUITooltip fetch = EUITooltip.findByID("~Fetch").showText(false);
+    public EUITooltip fetch = EUITooltip.findByID("~Fetch").showText(false).canHighlight(false);
+    public EUITooltip heal = EUITooltip.findByID("Heal").showText(false).canHighlight(false);
     public EUITooltip hp = EUITooltip.findByID("HP").showText(false).canHighlight(false);
     public EUITooltip maxHP = EUITooltip.findByID("Max HP").showText(false).canHighlight(false);
     public EUITooltip orb = EUITooltip.findByID("Orb").showText(false).canHighlight(false);
@@ -128,7 +129,6 @@ public class PCLCoreTooltips extends PCLTooltips
     public EUITooltip ranged = EUITooltip.findByID("~Ranged");
     public EUITooltip rebound = EUITooltip.findByID("Rebound");
     public EUITooltip recast = EUITooltip.findByID("~Recast");
-    public EUITooltip recover = EUITooltip.findByID("Recover");
     public EUITooltip regeneration = EUITooltip.findByID("Regeneration");
     public EUITooltip reroll = EUITooltip.findByID("Reroll");
     public EUITooltip resistance = EUITooltip.findByID("Resistance");

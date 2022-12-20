@@ -9,7 +9,6 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
 import extendedui.EUI;
 import extendedui.EUIGameUtils;
@@ -100,7 +99,7 @@ public class PCLCustomCardSelectorScreen extends AbstractScreen
                 .setTooltip(PGR.core.strings.cardEditor.reloadCards, PGR.core.strings.cardEditorTutorial.selectorReload)
                 .setOnClick(PCLCustomCardSlot::initialize);
 
-        contextMenu = (EUIContextMenu<ContextOption>) new EUIContextMenu<ContextOption>(new EUIHitbox(0, 0, 0, 0), o -> o.name)
+        contextMenu = (EUIContextMenu<ContextOption>) new EUIContextMenu<ContextOption>(new EUIHitbox(-500f, -500f, 0, 0), o -> o.name)
                 .setItems(ContextOption.values())
                 .setOnChange(options -> {
                     for (ContextOption o : options)
@@ -235,8 +234,7 @@ public class PCLCustomCardSelectorScreen extends AbstractScreen
     private void onCardRightClicked(AbstractCard card)
     {
         clickedCard = card;
-        contextMenu.setPosition(InputHelper.mX, InputHelper.mY);
-        contextMenu.openOrCloseMenu();
+        contextMenu.positionToOpen();
     }
 
     public void open(AbstractPlayer.PlayerClass playerClass, AbstractCard.CardColor cardColor, ActionT0 onClose)
@@ -291,6 +289,7 @@ public class PCLCustomCardSelectorScreen extends AbstractScreen
         }
         else
         {
+            contextMenu.tryUpdate();
             boolean shouldDoStandardUpdate = !EUI.cardFilters.tryUpdate() && !CardCrawlGame.isPopupOpen;
             if (shouldDoStandardUpdate)
             {
@@ -302,7 +301,6 @@ public class PCLCustomCardSelectorScreen extends AbstractScreen
                 addButton.tryUpdate();
                 openButton.tryUpdate();
                 reloadButton.tryUpdate();
-                contextMenu.tryUpdate();
             }
         }
     }

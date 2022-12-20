@@ -112,7 +112,7 @@ public abstract class PCLCreature extends CustomMonster implements PointerProvid
     @Override
     public EUITooltip getIntentTip()
     {
-        return EUITooltip.fromMonsterIntent(this);
+        return null;
     }
 
     @Override
@@ -136,6 +136,12 @@ public abstract class PCLCreature extends CustomMonster implements PointerProvid
         {
             performActions();
         }
+    }
+
+    @Override
+    public void update()
+    {
+        super.update();
     }
 
     public void setAnimation(AbstractAnimation animation)

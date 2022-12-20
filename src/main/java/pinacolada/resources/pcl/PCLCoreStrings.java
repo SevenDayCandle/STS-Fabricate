@@ -660,9 +660,9 @@ public class PCLCoreStrings extends PCLStrings
         {
             return format(18, amount, power);
         }
-        public final String heal(Object amount)
+        public final String haveObject(Object amount, Object power)
         {
-            return format(19, amount);
+            return format(19, amount, power);
         }
         public final String increaseBy(Object power, Object amount)
         {
@@ -801,6 +801,14 @@ public class PCLCoreStrings extends PCLStrings
         {
             return generic2(PGR.core.tooltips.evoke.title, subject);
         }
+        public final String heal(Object amount)
+        {
+            return generic3(PGR.core.tooltips.heal.title, amount, PGR.core.tooltips.hp.title);
+        }
+        public final String healOn(Object amount, Object target)
+        {
+            return objectOnAmount(PGR.core.tooltips.heal.title, amount, PGR.core.tooltips.hp.title, target);
+        }
         public final String fetch(Object amount)
         {
             return generic2(PGR.core.tooltips.fetch.title, amount);
@@ -820,10 +828,6 @@ public class PCLCoreStrings extends PCLStrings
         public final String purge(Object amount)
         {
             return generic2(PGR.core.tooltips.purge.title, amount);
-        }
-        public final String recover(Object amount)
-        {
-            return generic3(PGR.core.tooltips.recover.title, amount, PGR.core.tooltips.hp.title);
         }
         public final String reduceCooldown(Object target, Object amount) {return reducePropertyBy(PGR.core.tooltips.cooldown.title, target, amount);}
         public final String reshuffle(Object amount)

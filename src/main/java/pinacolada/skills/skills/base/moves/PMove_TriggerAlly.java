@@ -9,8 +9,6 @@ import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 
-import java.util.List;
-
 public class PMove_TriggerAlly extends PMove
 {
     public static final PSkillData DATA = register(PMove_TriggerAlly.class, PCLEffectType.General)
@@ -46,8 +44,7 @@ public class PMove_TriggerAlly extends PMove
     @Override
     public void use(PCLUseInfo info)
     {
-        List<AbstractCreature> targets = getTargetList(info);
-        for (AbstractCreature t : targets)
+        for (AbstractCreature t : getTargetList(info))
         {
             if (t instanceof PCLCardAlly)
             {

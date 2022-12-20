@@ -3,6 +3,10 @@ package pinacolada.monsters.animations;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
+import extendedui.EUI;
+import pinacolada.effects.PCLEffects;
+import pinacolada.effects.VFX;
 import pinacolada.monsters.PCLCreature;
 
 public class PCLAllyAnimation extends PCLIntervalAnimation
@@ -10,7 +14,7 @@ public class PCLAllyAnimation extends PCLIntervalAnimation
     public static final float RADIUS = 320;
     public PCLCreature owner;
     protected Color shineColor;
-    protected float scale = 1f;
+    protected float scale = 0.5f;
     protected float angle;
     protected float transitionAlpha;
     protected float targetTransitionAlpha = 1f;
@@ -43,6 +47,12 @@ public class PCLAllyAnimation extends PCLIntervalAnimation
     {
         super.update(deltaTime, x, y);
         angle += deltaTime * 10f;
+        renderColor.a = transitionAlpha = MathUtils.lerp(transitionAlpha, targetTransitionAlpha, EUI.delta() * 12f);
+    }
+
+    public void playActAnimation(float x, float y)
+    {
+        PCLEffects.Queue.add(VFX.circularWave(x, y));
     }
 
     public void renderSprite(SpriteBatch sb, float x, float y)

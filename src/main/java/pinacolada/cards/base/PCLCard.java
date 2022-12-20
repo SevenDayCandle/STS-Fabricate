@@ -1767,7 +1767,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     }
 
     @Override
-    public AbstractCard makeStatEquivalentCopy() {
+    public PCLCard makeStatEquivalentCopy() {
         PCLCard copy = (PCLCard) super.makeStatEquivalentCopy();
         copy.auxiliaryData = new PCLCardSaveData(auxiliaryData);
         copy.changeForm(auxiliaryData.form, timesUpgraded);

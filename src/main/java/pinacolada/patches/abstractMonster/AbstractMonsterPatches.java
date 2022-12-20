@@ -30,16 +30,8 @@ public class AbstractMonsterPatches
         @SpirePrefixPatch
         public static SpireReturn prefix(AbstractMonster __instance, SpriteBatch sb)
         {
-            if (GameUtilities.isPCLPlayerClass())
-            {
-                if (__instance.reticleAlpha == 0)
-                {
-                    EUITooltip.queueTooltips(__instance);
-                }
-                return SpireReturn.Return();
-            }
-
-            return SpireReturn.Continue();
+            EUITooltip.queueTooltips(__instance);
+            return SpireReturn.Return();
         }
     }
 

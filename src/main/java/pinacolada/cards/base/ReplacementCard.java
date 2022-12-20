@@ -32,7 +32,7 @@ public class ReplacementCard extends PCLDynamicCard
     }
 
     @Override
-    public AbstractCard makeCopy()
+    public ReplacementCard makeCopy()
     {
         return new ReplacementCard(builder);
     }

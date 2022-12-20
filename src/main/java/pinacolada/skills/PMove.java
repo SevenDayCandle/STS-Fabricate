@@ -284,6 +284,11 @@ public abstract class PMove extends PSkill
         return new PMove_GainBlock(amount);
     }
 
+    public static PMove gainBlock(PCLCardTarget target, int amount)
+    {
+        return new PMove_GainBlock(target, amount);
+    }
+
     public static PMove gainBlock(PCLCard card)
     {
         return gainBlock(card, PSkill.PCLCardValueSource.Block);
@@ -346,6 +351,11 @@ public abstract class PMove extends PSkill
     public static PMove heal(int amount)
     {
         return new PMove_Heal(amount);
+    }
+
+    public static PMove heal(PCLCardTarget target, int amount)
+    {
+        return new PMove_Heal(target, amount);
     }
 
     public static PMove modifyAffinity(PCLAffinity... tag)

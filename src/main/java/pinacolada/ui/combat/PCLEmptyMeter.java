@@ -1,27 +1,33 @@
 package pinacolada.ui.combat;
 
+import extendedui.EUIUtils;
+
+// TODO add basic matching logic
 public class PCLEmptyMeter extends PCLPlayerMeter
 {
     public PCLEmptyMeter()
     {
         super(null, 12);
+        infoIcon.setActive(false);
+        draggablePanel.setActive(false);
+        draggableIcon.setActive(false);
     }
 
     @Override
     public String[] getInfoDescription()
     {
-        return new String[0];
+        return EUIUtils.array("");
     }
 
     @Override
     public String getInfoMainDescrption()
     {
-        return null;
+        return "";
     }
 
     @Override
     public String getInfoTitle()
     {
-        return null;
+        return "";
     }
 }

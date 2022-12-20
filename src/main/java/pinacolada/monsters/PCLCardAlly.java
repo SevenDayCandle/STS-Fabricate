@@ -2,6 +2,7 @@ package pinacolada.monsters;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
@@ -9,6 +10,8 @@ import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.vfx.BobEffect;
 import com.megacrit.cardcrawl.vfx.ExhaustBlurEffect;
+import extendedui.EUI;
+import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.EUIBase;
 import extendedui.ui.tooltips.EUICardPreview;
 import pinacolada.actions.PCLActions;
@@ -17,21 +20,30 @@ import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
 import pinacolada.misc.CombatManager;
+import pinacolada.monsters.animations.PCLAllyAnimation;
+import pinacolada.monsters.animations.PCLAnimation;
 import pinacolada.monsters.animations.PCLSlotAnimation;
 import pinacolada.monsters.animations.conjurer.ConjurerFireAllyAnimation;
 import pinacolada.skills.Skills;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
+import java.util.HashMap;
+
 public class PCLCardAlly extends PCLCreature
 {
+    protected static final HashMap<AbstractCard.CardColor, FuncT1<PCLAllyAnimation, PCLCard>> ANIMATION_MAP = new HashMap<>();
     public static final PCLCreatureData DATA = register(PCLCardAlly.class).setHb(0,0, 128, 128);
     public static PCLSlotAnimation emptyAnimation = new PCLSlotAnimation();
-
 
     protected EUICardPreview preview;
     public PCLCard card;
     public AbstractCreature target;
+
+    public static void registerAnimation(AbstractCard.CardColor color, FuncT1<PCLAllyAnimation, PCLCard> animationFunc)
+    {
+        ANIMATION_MAP.putIfAbsent(color, animationFunc);
+    }
 
     public PCLCardAlly(float xPos, float yPos)
     {
@@ -50,13 +62,13 @@ public class PCLCardAlly extends PCLCreature
             this.stunned = true;
         }
         card.owner = this;
+        this.halfDead = false;
         this.card = card;
         this.preview = new EUICardPreview(card, card.upgraded);
         this.name = card.name;
         this.maxHealth = card.baseHeal;
         this.currentHealth = Math.min(card.heal, this.maxHealth);
         this.priority = card.magicNumber;
-        this.halfDead = false;
         this.showHealthBar();
         this.healthBarUpdatedEvent();
         this.unhover();
@@ -71,16 +83,17 @@ public class PCLCardAlly extends PCLCreature
 
     public PCLCard releaseCard()
     {
-        if (card != null)
+        PCLCard releasedCard = this.card;
+        if (releasedCard != null)
         {
-            this.card.owner = null;
+            releasedCard.owner = null;
             this.powers.clear();
-            this.card.heal = this.currentHealth;
             this.halfDead = true;
             this.name = creatureData.strings.NAME;
             this.hideHealthBar();
             this.animation = emptyAnimation;
-            return this.card;
+            this.card = null;
+            return releasedCard;
         }
         return null;
     }
@@ -144,11 +157,14 @@ public class PCLCardAlly extends PCLCreature
         if (card != null)
         {
             refreshAction();
+            if (animation instanceof PCLAnimation)
+            {
+                ((PCLAnimation) animation).playActAnimation(hb.cX, hb.cY);
+            }
             final PCLUseInfo info = new PCLUseInfo(card, this, target);
             card.onPreUse(info);
             card.onUse(info);
             card.onLateUse(info);
-            card.triggerWhenTriggered(this);
         }
     }
 
@@ -168,7 +184,6 @@ public class PCLCardAlly extends PCLCreature
         });
 
         CombatManager.onAllyDeath(card, this);
-        card.triggerWhenKilled(this);
         releaseCard();
     }
 
@@ -180,14 +195,28 @@ public class PCLCardAlly extends PCLCreature
     public void update()
     {
         super.update();
-        if (hb.clicked && card != null)
+        if (card != null)
         {
-            PCLActions.bottom.selectCreature(card).addCallback(t -> {
-               if (t != null)
-               {
-                   target = t;
-               }
-            });
+            this.card.heal = this.currentHealth;
+            if (this.animation instanceof PCLAllyAnimation)
+            {
+                ((PCLAllyAnimation) this.animation).update(EUI.delta(), hb.cX, hb.cY);
+            }
+            if (AbstractDungeon.screen != AbstractDungeon.CurrentScreen.DEATH)
+            {
+                hb.update();
+                intentHb.update();
+                healthHb.update();
+            }
+            if (hb.clicked)
+            {
+                PCLActions.bottom.selectCreature(card).addCallback(t -> {
+                    if (t != null)
+                    {
+                        target = t;
+                    }
+                });
+            }
         }
     }
 
@@ -195,16 +224,27 @@ public class PCLCardAlly extends PCLCreature
     public void render(SpriteBatch sb)
     {
         super.render(sb);
-        if (target != null && (hb.hovered || intentHb.hovered))
+        if (card != null)
         {
-            PCLRenderHelpers.drawCurve(sb, ImageMaster.TARGET_UI_ARROW, Color.SCARLET.cpy(), this.hb, target.hb, EUIBase.scale(100), 20);
+            if (hb.hovered || intentHb.hovered)
+            {
+                renderTip(sb);
+                if (target != null)
+                {
+                    PCLRenderHelpers.drawCurve(sb, ImageMaster.TARGET_UI_ARROW, Color.SCARLET.cpy(), this.hb, target.hb, EUIBase.scale(100), 20);
+                }
+            }
         }
     }
 
     @Override
     protected void renderIntent(SpriteBatch sb)
     {
-        if (card != null)
+        if (stunned)
+        {
+            super.renderIntent(sb);
+        }
+        else if (card != null)
         {
             card.setPosition(this.intentHb.cX, this.intentHb.cY + 96.0F + getBobEffect().y);
             card.setDrawScale(0.2f);
@@ -215,7 +255,11 @@ public class PCLCardAlly extends PCLCreature
     @Override
     protected void renderDamageRange(SpriteBatch sb)
     {
-        if (card != null)
+        if (stunned)
+        {
+            super.renderIntent(sb);
+        }
+        else if (card != null)
         {
             BobEffect bobEffect = getBobEffect();
             PCLRenderHelpers.drawCentered(sb, Color.WHITE, card.attackType.getTooltip().icon, this.intentHb.cX - 40.0F * Settings.scale, this.intentHb.cY + bobEffect.y - 12.0F * Settings.scale, card.attackType.getTooltip().icon.getRegionWidth(), card.attackType.getTooltip().icon.getRegionHeight(), 0.9f, 0f);

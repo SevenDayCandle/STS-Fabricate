@@ -73,8 +73,7 @@ public class WithdrawAllyAction extends PCLActionWithCallback<ArrayList<PCLCard>
         PCLCard returnedCard = ally.releaseCard();
         if (returnedCard != null)
         {
-            PCLActions.bottom.makeCard(this.card, AbstractDungeon.player.discardPile).setMakeCopy(true);
-            returnedCard.triggerWhenWithdrawn(ally);
+            PCLActions.top.makeCard(returnedCard, AbstractDungeon.player.discardPile);
         }
 
         // TODO effects

@@ -6,11 +6,11 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import extendedui.utilities.ColoredString;
 import extendedui.utilities.ColoredTexture;
 import pinacolada.interfaces.markers.DynamicCard;
+import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PTrigger;
@@ -243,7 +243,7 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
     }
 
     @Override
-    public AbstractCard makeCopy()
+    public PCLDynamicCard makeCopy()
     {
         PCLDynamicCard copy = new PCLDynamicCard(builder);
         if (forms != null && !forms.isEmpty())
@@ -406,7 +406,7 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
         }
 
         // Automatically create Attack actions for Attacks that do not already have attack actions
-        if (builder.cardType == CardType.ATTACK && onDamageEffect == null)
+        if ((builder.cardType == CardType.ATTACK || builder.cardType == PCLEnum.CardType.SUMMON) && onDamageEffect == null)
         {
             this.addDamageMove(builder.attackEffect);
         }

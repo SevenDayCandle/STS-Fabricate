@@ -34,21 +34,21 @@ public class ConjurerFireAllyAnimation extends PCLAllyAnimation
     public void renderSprite(SpriteBatch sb, float x, float y)
     {
         sb.setColor(this.renderColor);
-        float scaleExt = owner.getBobEffect().y / 75f;
-        float scaleInt = -(owner.getBobEffect().y / 100f);
-        float angleExt = this.angle / 13f;
-        float angleInt = -(this.angle / 8f);
+        float scaleExt = owner.getBobEffect().y / 535f;
+        float scaleInt = -(owner.getBobEffect().y / 550f);
+        float angleExt = this.angle;
+        float angleInt = -(this.angle);
         int size = PGR.core.images.monsters.fireInternal.texture().getHeight();
         int hSize = size / 2;
 
-        sb.draw(PGR.core.images.monsters.fireInternal.texture(), x - hSize, y - hSize, hSize, hSize, size, size, this.scale + scaleExt, this.scale + scaleExt, angleExt, 0, 0, size, size, hFlip, vFlip);
+        sb.draw(PGR.core.images.monsters.fireInternal.texture(), x - hSize, y - hSize / 2f, hSize, hSize, size, size, this.scale + scaleExt, this.scale + scaleExt, angleExt, 0, 0, size, size, hFlip, vFlip);
         sb.setBlendFunction(770, 1);
         this.shineColor.a = Interpolation.sine.apply(0.1f, 0.42f, angleExt / 185) * this.transitionAlpha;
         sb.setColor(this.shineColor);
-        sb.draw(PGR.core.images.monsters.fireExternal.texture(), x - hSize, y - hSize, hSize, hSize, size, size, this.scale + scaleInt, this.scale + scaleInt, angleInt, 0, 0, size, size, hFlip, vFlip);
+        sb.draw(PGR.core.images.monsters.fireExternal.texture(), x - hSize, y - hSize / 2f, hSize, hSize, size, size, this.scale + scaleInt, this.scale + scaleInt, angleInt, 0, 0, size, size, hFlip, vFlip);
         this.shineColor.a = Interpolation.sine.apply(0.42f, 0.7f, angleInt / 185) * this.transitionAlpha;
         sb.setColor(this.shineColor);
-        sb.draw(PGR.core.images.monsters.fireExternal2.texture(), x - hSize, y - hSize, hSize, hSize, size, size, this.scale + scaleInt, this.scale + scaleInt, angleInt * 2, 0, 0, size, size, hFlip, vFlip);
+        sb.draw(PGR.core.images.monsters.fireExternal2.texture(), x - hSize, y - hSize / 2f, hSize, hSize, size, size, this.scale + scaleInt, this.scale + scaleInt, angleInt * 2, 0, 0, size, size, hFlip, vFlip);
         sb.setColor(this.renderColor);
         sb.setBlendFunction(770, 771);
 
