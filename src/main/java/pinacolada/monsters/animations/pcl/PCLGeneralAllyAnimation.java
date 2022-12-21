@@ -1,4 +1,4 @@
-package pinacolada.monsters.animations.conjurer;
+package pinacolada.monsters.animations.pcl;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -12,11 +12,11 @@ import pinacolada.monsters.animations.PCLAllyAnimation;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.PCLRenderHelpers;
 
-public class ConjurerFireAllyAnimation extends PCLAllyAnimation
+public class PCLGeneralAllyAnimation extends PCLAllyAnimation
 {
     public static final float RADIUS = 320;
 
-    public ConjurerFireAllyAnimation(PCLCreature creature)
+    public PCLGeneralAllyAnimation(PCLCreature creature)
     {
         super(creature);
     }
@@ -38,19 +38,14 @@ public class ConjurerFireAllyAnimation extends PCLAllyAnimation
         float scaleInt = -(owner.getBobEffect().y / 550f);
         float angleExt = this.angle;
         float angleInt = -(this.angle);
-        int size = PGR.core.images.monsters.fireInternal.texture().getHeight();
+        int size = PGR.core.images.monsters.metal.texture().getHeight();
         int hSize = size / 2;
 
-        sb.draw(PGR.core.images.monsters.fireInternal.texture(), x - hSize, y - hSize / 2f, hSize, hSize, size, size, this.scale + scaleExt, this.scale + scaleExt, angleExt, 0, 0, size, size, hFlip, vFlip);
+        sb.draw(PGR.core.images.monsters.metal.texture(), x - hSize, y - hSize / 2f, hSize, hSize, size, size, this.scale + scaleExt, this.scale + scaleExt, angleExt, 0, 0, size, size, hFlip, vFlip);
         sb.setBlendFunction(770, 1);
         this.shineColor.a = Interpolation.sine.apply(0.1f, 0.42f, angleExt / 185) * this.transitionAlpha;
         sb.setColor(this.shineColor);
-        sb.draw(PGR.core.images.monsters.fireExternal.texture(), x - hSize, y - hSize / 2f, hSize, hSize, size, size, this.scale + scaleInt, this.scale + scaleInt, angleInt, 0, 0, size, size, hFlip, vFlip);
-        this.shineColor.a = Interpolation.sine.apply(0.42f, 0.7f, angleInt / 185) * this.transitionAlpha;
-        sb.setColor(this.shineColor);
-        sb.draw(PGR.core.images.monsters.fireExternal2.texture(), x - hSize, y - hSize / 2f, hSize, hSize, size, size, this.scale + scaleInt, this.scale + scaleInt, angleInt * 2, 0, 0, size, size, hFlip, vFlip);
-        sb.setColor(this.renderColor);
-        sb.setBlendFunction(770, 771);
+        sb.draw(PGR.core.images.monsters.metal.texture(), x - hSize, y - hSize / 2f, hSize, hSize, size, size, this.scale + scaleInt, this.scale + scaleInt, angleInt, 0, 0, size, size, hFlip, vFlip);
 
         sb.setColor(Color.WHITE);
     }

@@ -230,30 +230,7 @@ public class PCLCoreImages extends PCLImages
     public static class Monsters
     {
         public final TextureCache emptyShadow = new TextureCache(EMPTY_SHADOW);
-        public final TextureCache airCloud1 = new TextureCache("images/pcl/monsters/AirCloud1.png");
-        public final TextureCache airCloud2 = new TextureCache("images/pcl/monsters/AirCloud2.png");
-        public final TextureCache air1 = new TextureCache("images/pcl/monsters/Air1.png");
-        public final TextureCache air2 = new TextureCache("images/pcl/monsters/Air2.png");
-        public final TextureCache air3 = new TextureCache("images/pcl/monsters/Air3.png");
-        public final TextureCache chaos1 = new TextureCache("images/pcl/monsters/Chaos1.png");
-        public final TextureCache chaos2 = new TextureCache("images/pcl/monsters/Chaos2.png");
-        public final TextureCache chaos3 = new TextureCache("images/pcl/monsters/Chaos3.png");
-        public final TextureCache chaosOrbital = new TextureCache("images/pcl/monsters/ChaosOrbital.png");
-        public final TextureCache earth1 = new TextureCache("images/pcl/monsters/Earth1.png");
-        public final TextureCache earth2 = new TextureCache("images/pcl/monsters/Earth2.png");
-        public final TextureCache earth3 = new TextureCache("images/pcl/monsters/Earth3.png");
-        public final TextureCache earth4 = new TextureCache("images/pcl/monsters/Earth4.png");
-        public final TextureCache fireExternal = new TextureCache("images/pcl/monsters/FireExternal.png");
-        public final TextureCache fireExternal2 = new TextureCache("images/pcl/monsters/FireExternal2.png");
-        public final TextureCache fireInternal = new TextureCache("images/pcl/monsters/FireInternal.png");
-        public final TextureCache fireParticle1 = new TextureCache("images/pcl/monsters/FireParticle1.png");
-        public final TextureCache fireParticle2 = new TextureCache("images/pcl/monsters/FireParticle2.png");
-        public final TextureCache fireParticle3 = new TextureCache("images/pcl/monsters/FireParticle3.png");
         public final TextureCache metal = new TextureCache("images/pcl/monsters/Metal.png");
-        public final TextureCache water1 = new TextureCache("images/pcl/monsters/Water1.png");
-        public final TextureCache water2 = new TextureCache("images/pcl/monsters/Water2.png");
-        public final TextureCache water3 = new TextureCache("images/pcl/monsters/Water3.png");
-        public final TextureCache water4 = new TextureCache("images/pcl/monsters/Water4.png");
     }
 
     public static class Effects
@@ -272,6 +249,9 @@ public class PCLCoreImages extends PCLImages
         public final TextureCache dark4 = new TextureCache("images/pcl/effects/Dark4.png");
         public final TextureCache dark5 = new TextureCache("images/pcl/effects/Dark5.png");
         public final TextureCache droplet = new TextureCache("images/pcl/effects/Droplet.png");
+        public final TextureCache earthParticle1 = new TextureCache("images/pcl/effects/EarthParticle1.png");
+        public final TextureCache earthParticle2 = new TextureCache("images/pcl/effects/EarthParticle2.png");
+        public final TextureCache earthParticle3 = new TextureCache("images/pcl/effects/EarthParticle3.png");
         public final TextureCache electric1 = new TextureCache("images/pcl/effects/Electric1.png");
         public final TextureCache electric2 = new TextureCache("images/pcl/effects/Electric2.png");
         public final TextureCache electric3 = new TextureCache("images/pcl/effects/Electric3.png");
@@ -281,6 +261,9 @@ public class PCLCoreImages extends PCLImages
         public final TextureCache electric7 = new TextureCache("images/pcl/effects/Electric7.png");
         public final TextureCache electroSigil = new TextureCache("images/pcl/effects/ElectroSigil.png");
         public final TextureCache fireBurst = new TextureCache("images/pcl/effects/FireBurst.png");
+        public final TextureCache fireParticle1 = new TextureCache("images/pcl/effects/FireParticle1.png");
+        public final TextureCache fireParticle2 = new TextureCache("images/pcl/effects/FireParticle2.png");
+        public final TextureCache fireParticle3 = new TextureCache("images/pcl/effects/FireParticle3.png");
         public final TextureCache frostSnow1 = new TextureCache("images/pcl/effects/FrostSnow1.png");
         public final TextureCache frostSnow2 = new TextureCache("images/pcl/effects/FrostSnow2.png");
         public final TextureCache frostSnow3 = new TextureCache("images/pcl/effects/FrostSnow3.png");

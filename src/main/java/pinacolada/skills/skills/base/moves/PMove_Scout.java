@@ -54,7 +54,7 @@ public class PMove_Scout extends PMove
         }
         else
         {
-            getActions().scout(getName(), amount).setOptions(false, true)
+            getActions().scout(getName(), amount)
                     .addCallback(cards -> {
                         if (this.childEffect != null)
                         {

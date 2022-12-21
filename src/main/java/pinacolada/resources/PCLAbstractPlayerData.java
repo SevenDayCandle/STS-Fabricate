@@ -68,6 +68,8 @@ public abstract class PCLAbstractPlayerData
     protected final void addBaseLoadouts()
     {
         loadouts.clear();
+        PCLLoadout core = getCoreLoadout();
+        loadouts.put(core.id, core);
         for (PCLLoadout loadout : getAvailableLoadouts())
         {
             loadouts.put(loadout.id, loadout);

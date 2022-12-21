@@ -1,5 +1,6 @@
 package pinacolada.patches.gameOverScreen;
 
+import basemod.ReflectionHacks;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
@@ -29,22 +30,22 @@ public class GameOverScreenPatches
 
     protected static Color getColor(GameOverScreen __instance, String name)
     {
-        return EUIClassUtils.getField(__instance, name);
+        return ReflectionHacks.getPrivate(__instance, GameOverScreen.class, name);
     }
 
     protected static boolean getBool(GameOverScreen __instance, String name)
     {
-        return EUIClassUtils.getField(__instance, name);
+        return ReflectionHacks.getPrivate(__instance, GameOverScreen.class, name);
     }
 
     protected static float getFloat(GameOverScreen __instance, String name)
     {
-        return EUIClassUtils.getField(__instance, name);
+        return ReflectionHacks.getPrivate(__instance, GameOverScreen.class, name);
     }
 
     protected static int getInt(GameOverScreen __instance, String name)
     {
-        return EUIClassUtils.getField(__instance, name);
+        return ReflectionHacks.getPrivate(__instance, GameOverScreen.class, name);
     }
 
     @SpirePatch(clz = GameOverScreen.class, method = "calculateUnlockProgress")

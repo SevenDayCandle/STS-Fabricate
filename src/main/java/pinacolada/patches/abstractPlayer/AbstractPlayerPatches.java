@@ -194,24 +194,6 @@ public class AbstractPlayerPatches
         }
     }
 
-    @SpirePatch(clz = AbstractPlayer.class, method = "isCursed")
-    public static class AbstractPlayer_IsCursed
-    {
-        @SpirePrefixPatch
-        public static SpireReturn<Boolean> method(AbstractPlayer __instance)
-        {
-            for (AbstractCard c : __instance.masterDeck.group)
-            {
-                if (c.type == AbstractCard.CardType.CURSE && c.rarity != AbstractCard.CardRarity.SPECIAL)
-                {
-                    return SpireReturn.Return(true);
-                }
-            }
-
-            return SpireReturn.Return(false);
-        }
-    }
-
     protected static void replaceTargets(AbstractPlayer player)
     {
         final PCLCard card = EUIUtils.safeCast(player.hoveredCard, PCLCard.class);
@@ -219,7 +201,7 @@ public class AbstractPlayerPatches
         {
             final MonsterGroup group = AbstractDungeon.getCurrRoom().monsters;
             final ArrayList<AbstractMonster> summons = CombatManager.summons.getSummons(card.type != PCLEnum.CardType.SUMMON);
-            if (card.pclTarget.targetsEnemies())
+            if (card.type != PCLEnum.CardType.SUMMON && card.pclTarget.targetsEnemies())
             {
                 summons.addAll(group.monsters);
             }

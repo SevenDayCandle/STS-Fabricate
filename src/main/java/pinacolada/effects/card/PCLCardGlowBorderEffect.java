@@ -18,16 +18,17 @@ public class PCLCardGlowBorderEffect extends PCLEffect
     public static final Color FALLBACK_COLOR = Color.valueOf("30c8dcff");
     protected AbstractCard card;
     protected AtlasRegion img = ImageMaster.CARD_ATTACK_BG_SILHOUETTE;
-    protected float scale;
+    protected float scaleMult = 1;
 
     public PCLCardGlowBorderEffect(AbstractCard card)
     {
-        this(card, FALLBACK_COLOR);
+        this(card, FALLBACK_COLOR, 1);
     }
 
-    public PCLCardGlowBorderEffect(AbstractCard card, Color gColor)
+    public PCLCardGlowBorderEffect(AbstractCard card, Color gColor, float scaleMult)
     {
         this.card = card;
+        this.scaleMult = scaleMult;
         this.img = ImageMaster.CARD_ATTACK_BG_SILHOUETTE;
 
         this.duration = 1.2F;
@@ -54,7 +55,7 @@ public class PCLCardGlowBorderEffect extends PCLEffect
 
     public void update()
     {
-        this.scale = (1.0F + Interpolation.pow2Out.apply(0.03F, 0.11F, 1.0F - this.duration)) * this.card.drawScale * Settings.scale;
+        this.scale = (1.0F + Interpolation.pow2Out.apply(0.03F, 0.11F, 1.0F - this.duration)) * this.card.drawScale * scaleMult * Settings.scale;
         this.color.a = this.duration / 2.0F;
         this.duration -= Gdx.graphics.getDeltaTime();
         if (this.duration < 0.0F)

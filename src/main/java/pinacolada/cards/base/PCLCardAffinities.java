@@ -164,9 +164,7 @@ public class PCLCardAffinities
     {
         if (affinity == null || affinity == PCLAffinity.General || affinity == PCLAffinity.Unknown)
         {
-            final int star = this.star != null ? this.star.level : 0;
-            final PCLCardAffinity a = EUIUtils.max(list, af -> af);
-            return a != null && a.level >= star ? a : this.star;
+            return getHighest();
         }
 
         if (affinity == PCLAffinity.Star)
@@ -257,6 +255,13 @@ public class PCLCardAffinities
         }
 
         return list[affinity.id];
+    }
+
+    public PCLCardAffinity getHighest()
+    {
+        final int star = this.star != null ? this.star.level : 0;
+        final PCLCardAffinity a = EUIUtils.max(list, af -> af);
+        return a != null && a.level >= star ? a : this.star;
     }
 
     public int getLevel(PCLAffinity affinity)

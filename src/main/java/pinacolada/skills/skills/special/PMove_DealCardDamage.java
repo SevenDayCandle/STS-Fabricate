@@ -3,6 +3,7 @@ package pinacolada.skills.skills.special;
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT2;
@@ -58,9 +59,11 @@ public class PMove_DealCardDamage extends PMove implements Hidden
     }
 
     @Override
-    public ColoredString getColoredValueString()
+    public ColoredString getColoredValueString(Object displayBase, Object displayAmount)
     {
-        return getColoredValueString(Math.abs(baseAmount), Math.abs(amount));
+        return new ColoredString(displayAmount,
+                (sourceCard != null && (sourceCard.upgradedDamage || sourceCard.isDamageModified))
+                        ? (amount > baseAmount ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR) : Settings.CREAM_COLOR);
     }
 
     @Override

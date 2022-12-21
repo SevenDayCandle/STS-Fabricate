@@ -23,16 +23,18 @@ import pinacolada.misc.CombatManager;
 import pinacolada.monsters.animations.PCLAllyAnimation;
 import pinacolada.monsters.animations.PCLAnimation;
 import pinacolada.monsters.animations.PCLSlotAnimation;
-import pinacolada.monsters.animations.conjurer.ConjurerFireAllyAnimation;
+import pinacolada.monsters.animations.pcl.PCLGeneralAllyAnimation;
 import pinacolada.skills.Skills;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
 import java.util.HashMap;
 
+import static pinacolada.utilities.GameUtilities.scale;
+
 public class PCLCardAlly extends PCLCreature
 {
-    protected static final HashMap<AbstractCard.CardColor, FuncT1<PCLAllyAnimation, PCLCard>> ANIMATION_MAP = new HashMap<>();
+    protected static final HashMap<AbstractCard.CardColor, FuncT1<PCLAllyAnimation, PCLCardAlly>> ANIMATION_MAP = new HashMap<>();
     public static final PCLCreatureData DATA = register(PCLCardAlly.class).setHb(0,0, 128, 128);
     public static PCLSlotAnimation emptyAnimation = new PCLSlotAnimation();
 
@@ -40,7 +42,7 @@ public class PCLCardAlly extends PCLCreature
     public PCLCard card;
     public AbstractCreature target;
 
-    public static void registerAnimation(AbstractCard.CardColor color, FuncT1<PCLAllyAnimation, PCLCard> animationFunc)
+    public static void registerAnimation(AbstractCard.CardColor color, FuncT1<PCLAllyAnimation, PCLCardAlly> animationFunc)
     {
         ANIMATION_MAP.putIfAbsent(color, animationFunc);
     }
@@ -62,7 +64,6 @@ public class PCLCardAlly extends PCLCreature
             this.stunned = true;
         }
         card.owner = this;
-        this.halfDead = false;
         this.card = card;
         this.preview = new EUICardPreview(card, card.upgraded);
         this.name = card.name;
@@ -73,7 +74,8 @@ public class PCLCardAlly extends PCLCreature
         this.healthBarUpdatedEvent();
         this.unhover();
 
-        this.animation = new ConjurerFireAllyAnimation(this);
+        FuncT1<PCLAllyAnimation, PCLCardAlly> animFunc = ANIMATION_MAP.get(card.color);
+        this.animation = animFunc != null ? animFunc.invoke(this) : new PCLGeneralAllyAnimation(this);
     }
 
     public boolean hasCard()
@@ -88,7 +90,6 @@ public class PCLCardAlly extends PCLCreature
         {
             releasedCard.owner = null;
             this.powers.clear();
-            this.halfDead = true;
             this.name = creatureData.strings.NAME;
             this.hideHealthBar();
             this.animation = emptyAnimation;
@@ -141,7 +142,6 @@ public class PCLCardAlly extends PCLCreature
 
     @Override
     public void applyPowers() {
-        super.applyPowers();
         refreshAction();
     }
 
@@ -165,6 +165,7 @@ public class PCLCardAlly extends PCLCreature
             card.onPreUse(info);
             card.onUse(info);
             card.onLateUse(info);
+            CombatManager.playerSystem.onCardPlayed(card, target, info, true);
         }
     }
 
@@ -189,6 +190,16 @@ public class PCLCardAlly extends PCLCreature
 
     public EUICardPreview getPreview()
     {
+        if (preview != null)
+        {
+            AbstractCard c = preview.getCard();
+            if (c != null)
+            {
+                c.current_x = c.target_x = this.hb.x + (AbstractCard.IMG_WIDTH * 0.9F + 16.0F) * (this.hb.x > (float)Settings.WIDTH * 0.7F ? card.drawScale : -card.drawScale);
+                c.current_y = c.target_y = this.hb.y + scale(60f);
+                c.hb.move(c.current_x, c.current_y);
+            }
+        }
         return preview;
     }
 
@@ -246,9 +257,12 @@ public class PCLCardAlly extends PCLCreature
         }
         else if (card != null)
         {
-            card.setPosition(this.intentHb.cX, this.intentHb.cY + 96.0F + getBobEffect().y);
+            card.setPosition(this.hb.cX, this.hb.y + scale(60f) + getBobEffect().y * -0.5f);
             card.setDrawScale(0.2f);
-            card.render(sb);
+            card.updateGlow(3f);
+            card.renderGlow(sb);
+            card.renderOuterGlow(sb);
+            card.renderImage(sb, false, true);
         }
     }
 

@@ -1,8 +1,10 @@
 package pinacolada.ui.combat;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUI;
@@ -23,8 +25,8 @@ import java.util.stream.Collectors;
 
 public class SummonPool extends EUIBase implements OnStartOfTurnSubscriber, OnStartOfTurnPostDrawSubscriber, OnEndOfTurnFirstSubscriber, OnEndOfTurnLastSubscriber
 {
-    public static int BASE_LIMIT = 1;
-    public static float OFFSET = scale(80);
+    public static int BASE_LIMIT = 3;
+    public static float OFFSET = scale(120);
     public ArrayList<PCLCardAlly> summons = new ArrayList<>();
     public HashMap<AbstractCreature, AbstractCreature> assignedTargets = new HashMap<>();
 
@@ -38,17 +40,25 @@ public class SummonPool extends EUIBase implements OnStartOfTurnSubscriber, OnSt
         summons.clear();
         assignedTargets.clear();
 
-        float baseX = 0;
-        float baseY = 0;
         if (AbstractDungeon.player != null)
         {
-            baseX = AbstractDungeon.player.drawX;
-            baseY = AbstractDungeon.player.drawY;
+            for (int i = 0; i < BASE_LIMIT; i++)
+            {
+                summons.add(addSummon(i));
+            }
         }
-        for (int i = 0; i < BASE_LIMIT; i++)
-        {
-            summons.add(new PCLCardAlly(baseX + (i + 3) * OFFSET, baseY));
-        }
+    }
+
+    protected PCLCardAlly addSummon(int i)
+    {
+        float dist = OFFSET + BASE_LIMIT * 10.0F * Settings.scale;
+        float angle = 100.0F + BASE_LIMIT * 12.0F;
+        float offsetAngle = angle / 2.0F;
+        angle *= i / (BASE_LIMIT - 1.0F);
+        angle += 90.0F - offsetAngle;
+        float x = dist * MathUtils.cosDeg(angle) + AbstractDungeon.player.drawX;
+        float y = dist * MathUtils.sinDeg(angle) + AbstractDungeon.player.drawY + AbstractDungeon.player.hb_h / 2.0F;
+        return new PCLCardAlly(x, y);
     }
 
     public void add(int times)

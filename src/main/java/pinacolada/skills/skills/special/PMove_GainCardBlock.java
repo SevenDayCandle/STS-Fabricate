@@ -1,5 +1,6 @@
 package pinacolada.skills.skills.special;
 
+import com.megacrit.cardcrawl.core.Settings;
 import extendedui.utilities.ColoredString;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
@@ -21,15 +22,17 @@ public class PMove_GainCardBlock extends PMove implements Hidden
     }
 
     @Override
-    public ColoredString getColoredValueString()
-    {
-        return getColoredValueString(Math.abs(baseAmount), Math.abs(amount));
-    }
-
-    @Override
     public String getSampleText()
     {
         return TEXT.actions.gainAmount("X", PGR.core.tooltips.block);
+    }
+
+    @Override
+    public ColoredString getColoredValueString(Object displayBase, Object displayAmount)
+    {
+        return new ColoredString(displayAmount,
+                (sourceCard != null && (sourceCard.upgradedBlock || sourceCard.isBlockModified))
+                        ? (amount > baseAmount ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR) : Settings.CREAM_COLOR);
     }
 
     @Override

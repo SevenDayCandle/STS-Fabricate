@@ -771,12 +771,16 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         return hitCount;
     }
 
+    public int hitCountBase() {
+        return baseHitCount;
+    }
+
     public int rightCount() {
         return rightCount;
     }
 
-    public int secondaryValue() {
-        return heal;
+    public int rightCountBase() {
+        return baseRightCount;
     }
 
     public void loadImage(String suffix, boolean refresh) {
@@ -2235,7 +2239,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     }
 
     @SpireOverride
-    protected void renderGlow(SpriteBatch sb) {
+    public void renderGlow(SpriteBatch sb) {
         if (transparency < 0.7f) {
             return;
         }
@@ -2250,7 +2254,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     }
 
     @SpireOverride
-    protected void renderImage(SpriteBatch sb, boolean hovered, boolean selected) {
+    public void renderImage(SpriteBatch sb, boolean hovered, boolean selected) {
         if (player != null) {
             if (selected) {
                 renderAtlas(sb, Color.SKY, getCardBgAtlas(), current_x, current_y, 1.03f);
@@ -2425,12 +2429,16 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     }
 
     @SpireOverride
-    protected void updateGlow() {
+    public void updateGlow() {
+        updateGlow(1f);
+    }
+
+    public void updateGlow(float mult) {
         float newValue = ReflectionHacks.getPrivate(this, AbstractCard.class, "glowTimer");
         if (this.isGlowing) {
             newValue -= Gdx.graphics.getDeltaTime();
             if (newValue < 0.0F) {
-                glowList.add(new PCLCardGlowBorderEffect(this, this.glowColor));
+                glowList.add(new PCLCardGlowBorderEffect(this, this.glowColor, mult));
                 newValue = 0.5F;
             }
             ReflectionHacks.setPrivate(this, AbstractCard.class, "glowTimer", newValue);

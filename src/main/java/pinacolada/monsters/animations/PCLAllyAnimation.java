@@ -14,8 +14,9 @@ public class PCLAllyAnimation extends PCLIntervalAnimation
     public static final float RADIUS = 320;
     public PCLCreature owner;
     protected Color shineColor;
-    protected float scale = 0.5f;
+    protected float scale = 0.4f;
     protected float angle;
+    protected float rate = 40f;
     protected float transitionAlpha;
     protected float targetTransitionAlpha = 1f;
 
@@ -46,13 +47,15 @@ public class PCLAllyAnimation extends PCLIntervalAnimation
     public void update(float deltaTime, float x, float y)
     {
         super.update(deltaTime, x, y);
-        angle += deltaTime * 10f;
+        angle += deltaTime * rate;
         renderColor.a = transitionAlpha = MathUtils.lerp(transitionAlpha, targetTransitionAlpha, EUI.delta() * 12f);
     }
 
+
+
     public void playActAnimation(float x, float y)
     {
-        PCLEffects.Queue.add(VFX.circularWave(x, y));
+        PCLEffects.TopLevelQueue.add(VFX.circularWave(x, y).setScale(0.25f, 12f));
     }
 
     public void renderSprite(SpriteBatch sb, float x, float y)

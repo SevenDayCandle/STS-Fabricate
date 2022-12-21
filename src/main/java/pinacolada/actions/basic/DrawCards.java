@@ -38,6 +38,13 @@ public class DrawCards extends PCLActionWithCallback<ArrayList<AbstractCard>>
         initialize(amount);
     }
 
+    public DrawCards(String name, int amount)
+    {
+        super(ActionType.DRAW);
+
+        initialize(amount, name);
+    }
+
     @Override
     protected void firstUpdate()
     {

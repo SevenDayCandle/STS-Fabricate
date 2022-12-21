@@ -29,7 +29,7 @@ public class PMove_WithdrawAlly extends PMove
 
     public PMove_WithdrawAlly(int amount)
     {
-        super(DATA, PCLCardTarget.Self, amount);
+        super(DATA, PCLCardTarget.SingleAlly, amount);
     }
 
     public PMove_WithdrawAlly(PCLCardTarget target, int amount)

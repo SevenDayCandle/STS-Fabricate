@@ -13,8 +13,13 @@ public class TriggerAllyAction extends PCLActionWithCallback<PCLCardAlly>
 
     public TriggerAllyAction(PCLCardAlly slot)
     {
+        this(slot, 1);
+    }
+
+    public TriggerAllyAction(PCLCardAlly slot, int amount)
+    {
         super(ActionType.SPECIAL, Settings.FAST_MODE ? Settings.ACTION_DUR_XFAST : Settings.ACTION_DUR_FAST);
-        initialize(AbstractDungeon.player, slot, 1);
+        initialize(AbstractDungeon.player, slot, amount);
         this.ally = slot;
     }
 
@@ -29,8 +34,11 @@ public class TriggerAllyAction extends PCLActionWithCallback<PCLCardAlly>
 
         // Record card first in case the ally's actions cause it to lose the card
         PCLCard card = ally.card;
-        ally.takeTurn();
-        CombatManager.onAllyTrigger(card, ally);
+        for (int i = 0; i < amount; i++)
+        {
+            ally.takeTurn();
+            CombatManager.onAllyTrigger(card, ally);
+        }
         complete(ally);
     }
 }

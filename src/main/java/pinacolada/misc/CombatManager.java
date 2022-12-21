@@ -895,6 +895,10 @@ public class CombatManager
         if (card.type == PCLEnum.CardType.SUMMON)
         {
             PCLCardAlly slot = EUIUtils.safeCast(info.target, PCLCardAlly.class);
+            if (slot == null)
+            {
+                slot = GameUtilities.getRandomSummon(false);
+            }
             PCLActions.bottom.summonAlly(card, slot);
         }
         else
@@ -903,15 +907,6 @@ public class CombatManager
             card.onUse(info);
         }
         PCLAction.currentCard = null;
-
-        if (info.isMatch)
-        {
-            CombatManager.onMatch(card, info);
-        }
-        else
-        {
-            CombatManager.onNotMatch(card, info);
-        }
 
         final ArrayList<AbstractGameAction> actions = PCLActions.getActions();
 
@@ -926,14 +921,16 @@ public class CombatManager
             PCLAction.currentCard = null;
         }
 
-        playerSystem.onCardPlayed(card, m, info);
+        playerSystem.onCardPlayed(card, m, info, false);
         if (info.isMatch)
         {
             playerSystem.onMatch(card);
+            CombatManager.onMatch(card, info);
         }
         else
         {
             playerSystem.onNotMatch(card);
+            CombatManager.onNotMatch(card, info);
         }
 
         if (actions.isEmpty())

@@ -3,6 +3,7 @@ package pinacolada.patches.abstractMonster;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.evacipated.cardcrawl.modthespire.lib.*;
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
@@ -30,8 +31,16 @@ public class AbstractMonsterPatches
         @SpirePrefixPatch
         public static SpireReturn prefix(AbstractMonster __instance, SpriteBatch sb)
         {
-            EUITooltip.queueTooltips(__instance);
-            return SpireReturn.Return();
+            if (GameUtilities.isPCLPlayerClass())
+            {
+                if (__instance.reticleAlpha == 0)
+                {
+                    EUITooltip.queueTooltips(__instance);
+                }
+                return SpireReturn.Return();
+            }
+
+            return SpireReturn.Continue();
         }
     }
 
@@ -131,7 +140,7 @@ public class AbstractMonsterPatches
             {
                 public void edit(javassist.expr.FieldAccess m) throws CannotCompileException
                 {
-                    if (m.getClassName().equals(DamageInfo.class.getName()) && m.getFieldName().equals("player"))
+                    if (m.getClassName().equals(AbstractCard.class.getName()) && m.getFieldName().equals("target"))
                     {
                         m.replace("{ $_ = $proceed($1, pinacolada.patches.abstractMonster.AbstractMonsterPatches.getTarget($0)); }");
                     }

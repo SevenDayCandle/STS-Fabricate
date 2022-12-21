@@ -48,7 +48,7 @@ public class PMove_TriggerAlly extends PMove
         {
             if (t instanceof PCLCardAlly)
             {
-                getActions().triggerAlly((PCLCardAlly) t);
+                getActions().triggerAlly((PCLCardAlly) t, amount);
             }
         }
         super.use(info);

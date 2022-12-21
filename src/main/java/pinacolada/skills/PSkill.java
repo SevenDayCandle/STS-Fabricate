@@ -727,13 +727,13 @@ public abstract class PSkill implements TooltipProvider
                     case MagicNumber:
                         return sourceCard.magicNumber;
                     case SecondaryNumber:
-                        return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).secondaryValue() : 0;
+                        return sourceCard.heal;
                     case RightCount:
                         return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).rightCount() : 1;
                     case Affinity:
                         return getCardAffinityValue();
                     case XValue:
-                        return sourceCard instanceof PCLCard ? ((PCLCard) sourceCard).getXValue() : 0;
+                        return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).xValue() : 0;
                 }
             }
 
@@ -744,6 +744,33 @@ public abstract class PSkill implements TooltipProvider
             return source.xValue();
         }
         return rootAmount;
+    }
+
+    public final int getAmountBaseFromCard()
+    {
+        if (this.sourceCard != null && this.amountSource != null)
+        {
+            switch (amountSource)
+            {
+                case Block:
+                    return sourceCard.baseBlock;
+                case Damage:
+                    return sourceCard.baseDamage;
+                case HitCount:
+                    return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).hitCountBase() : 1;
+                case MagicNumber:
+                    return sourceCard.baseMagicNumber;
+                case SecondaryNumber:
+                    return sourceCard.baseHeal;
+                case RightCount:
+                    return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).rightCountBase() : 1;
+                case Affinity:
+                    return getCardAffinityValue();
+                case XValue:
+                    return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).xValue() : 0;
+            }
+        }
+        return amount;
     }
 
     public final String getAmountRawString()
@@ -1023,13 +1050,13 @@ public abstract class PSkill implements TooltipProvider
                     case MagicNumber:
                         return sourceCard.magicNumber;
                     case SecondaryNumber:
-                        return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).secondaryValue() : 0;
+                        return sourceCard.heal;
                     case RightCount:
                         return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).rightCount() : 1;
                     case Affinity:
                         return getCardAffinityValue();
                     case XValue:
-                        return sourceCard instanceof PCLCard ? ((PCLCard) sourceCard).getXValue() : 0;
+                        return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).xValue() : 0;
                 }
             }
 
@@ -1040,6 +1067,33 @@ public abstract class PSkill implements TooltipProvider
             return source.xValue();
         }
         return rootExtra;
+    }
+
+    public final int getExtraBaseFromCard()
+    {
+        if (this.sourceCard != null && this.extraSource != null)
+        {
+            switch (extraSource)
+            {
+                case Block:
+                    return sourceCard.baseBlock;
+                case Damage:
+                    return sourceCard.baseDamage;
+                case HitCount:
+                    return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).hitCountBase() : 1;
+                case MagicNumber:
+                    return sourceCard.baseMagicNumber;
+                case SecondaryNumber:
+                    return sourceCard.baseHeal;
+                case RightCount:
+                    return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).rightCountBase() : 1;
+                case Affinity:
+                    return getCardAffinityValue();
+                case XValue:
+                    return sourceCard instanceof EditorCard ? ((EditorCard) sourceCard).xValue() : 0;
+            }
+        }
+        return extra;
     }
 
     public final String getExtraRawString()
@@ -1697,8 +1751,10 @@ public abstract class PSkill implements TooltipProvider
 
     public PSkill setAmountFromCard()
     {
-        this.baseAmount = this.amount = getAmountFromCard();
-        this.baseExtra = this.extra = getExtraFromCard();
+        this.amount = getAmountFromCard();
+        this.baseAmount = getAmountBaseFromCard();
+        this.extra = getExtraFromCard();
+        this.baseExtra = getExtraBaseFromCard();
         if (this.childEffect != null)
         {
             childEffect.setAmountFromCard();
@@ -1873,8 +1929,10 @@ public abstract class PSkill implements TooltipProvider
         this.sourceCard = EUIUtils.safeCast(card, AbstractCard.class);
         this.amountSource = valueSource;
         this.extraSource = extraSource;
-        this.baseAmount = this.amount = getAmountFromCard();
-        this.baseExtra = this.extra = getExtraFromCard();
+        this.amount = getAmountFromCard();
+        this.baseAmount = getAmountBaseFromCard();
+        this.extra = getExtraFromCard();
+        this.baseExtra = getExtraBaseFromCard();
         if (this.childEffect != null)
         {
             childEffect.setSource(card, valueSource, extraSource);
@@ -1885,14 +1943,16 @@ public abstract class PSkill implements TooltipProvider
     public PSkill setAmountSource(PCLCardValueSource valueSource)
     {
         this.amountSource = valueSource;
-        this.baseAmount = this.amount = getAmountFromCard();
+        this.amount = getAmountFromCard();
+        this.baseAmount = getAmountBaseFromCard();
         return this;
     }
 
     public PSkill setExtraSource(PCLCardValueSource valueSource)
     {
         this.extraSource = valueSource;
-        this.baseExtra = this.extra = getExtraFromCard();
+        this.extra = getExtraFromCard();
+        this.baseExtra = getExtraBaseFromCard();
         return this;
     }
 

@@ -547,7 +547,6 @@ public class PCLCardData implements CardObject
     {
         this.hp[0] = heal;
         this.hpUpgrade[0] = healUpgrade;
-        setObtainableInCombat(false);
         return this;
     }
 
@@ -641,6 +640,26 @@ public class PCLCardData implements CardObject
         cardType = AbstractCard.CardType.POWER;
         this.cost = array(cost);
 
+        return this;
+    }
+
+    public PCLCardData setPriority(int heal)
+    {
+        this.magicNumber[0] = heal;
+        return this;
+    }
+
+    public PCLCardData setPriority(int heal, int healUpgrade)
+    {
+        this.magicNumber[0] = heal;
+        this.magicNumberUpgrade[0] = healUpgrade;
+        return this;
+    }
+
+    public PCLCardData setPriority(Integer[] heal, Integer[] healUpgrade)
+    {
+        this.magicNumber = heal;
+        this.magicNumberUpgrade = healUpgrade;
         return this;
     }
 

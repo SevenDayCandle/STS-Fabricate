@@ -1006,6 +1006,11 @@ public final class PCLActions
         return add(new TriggerAllyAction(ally));
     }
 
+    public TriggerAllyAction triggerAlly(PCLCardAlly ally, int amount)
+    {
+        return add(new TriggerAllyAction(ally, amount));
+    }
+
     public TriggerOrbPassiveAbility triggerOrbPassive(int times)
     {
         return add(new TriggerOrbPassiveAbility(times));

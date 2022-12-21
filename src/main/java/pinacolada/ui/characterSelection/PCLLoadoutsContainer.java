@@ -14,10 +14,10 @@ import java.util.stream.Collectors;
 
 public class PCLLoadoutsContainer
 {
-    public static final int MINIMUM_CARDS = 75;
-    public static final int MINIMUM_COMMON = 30;
-    public static final int MINIMUM_UNCOMMON = 25;
-    public static final int MINIMUM_RARE = 8;
+    public static final int MINIMUM_CARDS = 3; // 75
+    public static final int MINIMUM_COMMON = 3;  // 30
+    public static final int MINIMUM_UNCOMMON = 3;  // 25
+    public static final int MINIMUM_RARE = 3;  // 8
     public static final int CHANCE_COMMON = 50;
     public static final int CHANCE_UNCOMMON = 40;
     public static final int CHANCE_RARE = 10;
@@ -148,7 +148,10 @@ public class PCLLoadoutsContainer
 
     public boolean isValid()
     {
-        return totalCardsInPool >= MINIMUM_CARDS && rarityCount.getOrDefault(AbstractCard.CardRarity.COMMON, 0) >= MINIMUM_COMMON && rarityCount.getOrDefault(AbstractCard.CardRarity.UNCOMMON, 0) >= MINIMUM_UNCOMMON && rarityCount.getOrDefault(AbstractCard.CardRarity.RARE, 0) >= MINIMUM_RARE;
+        return totalCardsInPool >= MINIMUM_CARDS
+                && rarityCount.getOrDefault(AbstractCard.CardRarity.COMMON, 0) >= MINIMUM_COMMON
+                && rarityCount.getOrDefault(AbstractCard.CardRarity.UNCOMMON, 0) >= MINIMUM_UNCOMMON
+                && rarityCount.getOrDefault(AbstractCard.CardRarity.RARE, 0) >= MINIMUM_RARE;
     }
 
     public int getMinimum(AbstractCard.CardRarity rarity)
@@ -162,7 +165,7 @@ public class PCLLoadoutsContainer
             case COMMON:
                 return MINIMUM_COMMON;
         }
-        return 0;
+        return MINIMUM_CARDS;
     }
 
     public void calculateCardCounts()

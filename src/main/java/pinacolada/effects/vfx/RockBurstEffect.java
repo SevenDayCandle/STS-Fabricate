@@ -15,7 +15,7 @@ import pinacolada.utilities.RandomizedList;
 
 public class RockBurstEffect extends PCLEffect
 {
-    private static final TextureCache[] particles = {PGR.core.images.monsters.earth1, PGR.core.images.monsters.earth2, PGR.core.images.monsters.earth3, PGR.core.images.monsters.earth4};
+    private static final TextureCache[] particles = {PGR.core.images.effects.earthParticle1, PGR.core.images.effects.earthParticle2, PGR.core.images.effects.earthParticle3};
     private static final RandomizedList<TextureCache> textures = new RandomizedList<>();
     public static final int PROJECTILES = 68;
     public static final float RADIUS = 240;

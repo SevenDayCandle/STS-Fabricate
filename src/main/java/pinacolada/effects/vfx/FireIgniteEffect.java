@@ -12,7 +12,7 @@ import pinacolada.utilities.RandomizedList;
 
 public class FireIgniteEffect extends PCLEffect
 {
-    private static final TextureCache[] particles = {PGR.core.images.monsters.fireParticle1, PGR.core.images.monsters.fireParticle2, PGR.core.images.monsters.fireParticle3};
+    private static final TextureCache[] particles = {PGR.core.images.effects.fireParticle1, PGR.core.images.effects.fireParticle2, PGR.core.images.effects.fireParticle3};
     private static final RandomizedList<TextureCache> textures = new RandomizedList<>();
     public static final float RADIUS = 320;
 

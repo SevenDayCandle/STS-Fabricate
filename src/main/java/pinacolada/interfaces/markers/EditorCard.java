@@ -24,9 +24,11 @@ public interface EditorCard extends PointerProvider, CacheableCard
 
     int hitCount();
 
+    int hitCountBase();
+
     int rightCount();
 
-    int secondaryValue();
+    int rightCountBase();
 
     void loadImage(String suffix, boolean refresh);
 

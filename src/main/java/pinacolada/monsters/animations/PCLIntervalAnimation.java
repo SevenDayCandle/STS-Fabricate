@@ -36,12 +36,12 @@ public class PCLIntervalAnimation extends PCLAnimation
         this.vfxTimer -= deltaTime;
         if (this.vfxTimer < 0.0F)
         {
-            updateImpl(x, y);
+            updateImpl(deltaTime, x, y);
             this.vfxTimer = MathUtils.random(vfxTimerStartMin, vfxTimerStartMax);
         }
     }
 
-    public void updateImpl(float x, float y)
+    public void updateImpl(float deltaTime, float x, float y)
     {
 
     }
