@@ -3,6 +3,7 @@ package pinacolada.skills.skills.base.moves;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
 import extendedui.interfaces.delegates.ActionT1;
+import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 
@@ -30,6 +31,11 @@ public class PMove_ModifyCost extends PMove_Modify
     public PMove_ModifyCost(int amount, int cost, ArrayList<AbstractCard> cards)
     {
         super(DATA, amount, cost, cards);
+    }
+
+    public PMove_ModifyCost(int amount, int damage, PCLCardGroupHelper... groups)
+    {
+        super(DATA, amount, damage, groups);
     }
 
     @Override

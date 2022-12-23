@@ -276,6 +276,11 @@ public abstract class PCond extends PSkill
         return new PCond_Match();
     }
 
+    public static PCond onAllyTrigger()
+    {
+        return new PCond_OnAllyTrigger();
+    }
+
     public static PCond onCreate()
     {
         return new PCond_OnCreate();
@@ -321,6 +326,11 @@ public abstract class PCond extends PSkill
         return new PCond_OnReshuffle();
     }
 
+    public static PCond onSummon()
+    {
+        return new PCond_OnSummon();
+    }
+
     public static PCond onTurnEnd()
     {
         return new PCond_AtTurnEnd();
@@ -329,6 +339,11 @@ public abstract class PCond extends PSkill
     public static PCond onTurnStart()
     {
         return new PCond_AtTurnStart();
+    }
+
+    public static PCond onWithdraw()
+    {
+        return new PCond_OnWithdraw();
     }
 
     public static PCond payEnergy(int amount)

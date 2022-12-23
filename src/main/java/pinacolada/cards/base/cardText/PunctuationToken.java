@@ -24,7 +24,7 @@ public class PunctuationToken extends PCLTextToken
         }
         else
         {
-            return ("{[!#<_*@$>]}¦║".indexOf(character) == -1) && !Character.isLetterOrDigit(character) && !Character.isWhitespace(character);
+            return ("{[!#<_*@$>]}¦║+-%".indexOf(character) == -1) && !Character.isLetterOrDigit(character) && !Character.isWhitespace(character);
         }
     }
 

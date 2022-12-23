@@ -177,6 +177,11 @@ public abstract class PMod extends PSkill
         return new PMod_PerCreatureAttacking(amount);
     }
 
+    public static PMod perCreatureWith(int amount, PCLPowerHelper... powers)
+    {
+        return new PMod_PerCreatureWith(amount, powers);
+    }
+
     public static PMod perDistinctPower(PCLPowerHelper... powers)
     {
         return perDistinctPower(1, powers);
@@ -185,6 +190,11 @@ public abstract class PMod extends PSkill
     public static PMod perDistinctPower(int amount, PCLPowerHelper... powers)
     {
         return new PMod_PerDistinctPower(amount, powers);
+    }
+
+    public static PMod perDistinctPower(PCLCardTarget target, int amount, PCLPowerHelper... powers)
+    {
+        return new PMod_PerDistinctPower(target, amount, powers);
     }
 
     public static PMod perEnergy(int amount)

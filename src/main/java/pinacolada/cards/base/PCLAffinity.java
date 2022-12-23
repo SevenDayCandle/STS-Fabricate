@@ -252,6 +252,11 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>
         return getTooltip().getTitleOrIcon();
     }
 
+    public String getFormattedSymbolForced(AbstractCard.CardColor pc)
+    {
+        return getTooltip().getTitleOrIconForced();
+    }
+
     public Texture getIcon()
     {
         return getTextureCache().texture();

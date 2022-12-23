@@ -79,7 +79,7 @@ public class GameOverScreenPatches
             EUIClassUtils.setField(__instance, "unlockTargetProgress", getFloat(__instance, "unlockProgress") + getInt(__instance, "score"));
             EUIClassUtils.setField(__instance, "nextUnlockCost", PGR.getResources(AbstractDungeon.player.chosenClass).getUnlockCost(1, true));
 
-            if (getInt(__instance,"unlockTargetProgress") >= getInt(__instance,"unlockCost"))
+            if (getFloat(__instance,"unlockTargetProgress") >= getInt(__instance,"unlockCost"))
             {
                 EUIClassUtils.setField(__instance, "unlockBundle", UnlockTracker.getUnlockBundle(AbstractDungeon.player.chosenClass, getInt(__instance, "unlockLevel")));
                 if (getInt(__instance, "unlockLevel") == (MAX_LEVEL - 1))

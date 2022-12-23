@@ -8,7 +8,7 @@ import pinacolada.interfaces.markers.PointerProvider;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.skills.skills.base.moves.*;
-import pinacolada.skills.skills.special.PMove_DealCardDamage;
+import pinacolada.skills.skills.special.moves.PMove_DealCardDamage;
 import pinacolada.skills.skills.special.moves.PMove_Stun;
 import pinacolada.stances.PCLStanceHelper;
 
@@ -383,6 +383,16 @@ public abstract class PMove extends PSkill
         return new PMove_ModifyBlock(amount, block, groups);
     }
 
+    public static PMove modifyCost(int block)
+    {
+        return new PMove_ModifyCost(1, block);
+    }
+
+    public static PMove modifyCost(int amount, int block, PCLCardGroupHelper... groups)
+    {
+        return new PMove_ModifyCost(amount, block, groups);
+    }
+
     public static PMove modifyDamage(int damage)
     {
         return new PMove_ModifyDamage(1, damage);
@@ -527,6 +537,11 @@ public abstract class PMove extends PSkill
     public static PMove selfTransform(PCLCardData cardData)
     {
         return new PMove_Transform(cardData.ID);
+    }
+
+    public static PMove stabilize(PCLCardTarget target, PCLPowerHelper... helpers)
+    {
+        return new PMove_StabilizePower(target, helpers);
     }
 
     public static PMove stun(int amount)

@@ -236,5 +236,6 @@ public class PGR
         ConsoleCommand.addCommand("obtain", ObtainCommand.class);
         ConsoleCommand.addCommand("obtaincustom", ObtainCustomCommand.class);
         ConsoleCommand.addCommand("reloadcustom", ReloadCustomCommand.class);
+        ConsoleCommand.addCommand("unlockall", UnlockAllCommand.class);
     }
 }

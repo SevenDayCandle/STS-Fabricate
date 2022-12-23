@@ -105,6 +105,8 @@ public class PCLLoadoutData
 
     public static class LoadoutInfo implements Serializable
     {
+        public int loadout;
+        public int preset;
         public String values;
         public String[] relics;
         public LoadoutCardInfo[] cards;
@@ -114,8 +116,10 @@ public class PCLLoadoutData
 
         }
 
-        public LoadoutInfo(PCLLoadoutData data)
+        public LoadoutInfo(int id, PCLLoadoutData data)
         {
+            loadout = id;
+            preset = data.preset;
             values = EUIUtils.serialize(data.values);
             cards = EUIUtils.arrayMap(data.cardSlots, LoadoutCardInfo.class, d -> d.selected != null ? new LoadoutCardInfo(d.selected.data.ID, d.amount) : null);
             relics = EUIUtils.arrayMap(data.relicSlots, String.class, d -> d.selected != null ? d.selected.relic.relicId : null);
@@ -123,6 +127,7 @@ public class PCLLoadoutData
 
         public void fill(PCLLoadoutData data)
         {
+            data.preset = preset;
             data.values.putAll(EUIUtils.deserialize(values, TValue.getType()));
             for (int i = 0; i < relics.length; i++)
             {

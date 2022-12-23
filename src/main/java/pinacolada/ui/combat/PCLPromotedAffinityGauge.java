@@ -126,7 +126,6 @@ public class PCLPromotedAffinityGauge extends EUIBase
     @Override
     public void updateImpl()
     {
-
         currentAffinity.tryUpdate();
         nextAffinity.tryUpdate();
 

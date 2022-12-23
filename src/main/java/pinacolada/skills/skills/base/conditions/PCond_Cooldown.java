@@ -73,7 +73,7 @@ public class PCond_Cooldown extends PCond implements CooldownProvider
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
     {
-        return true;
+        return getCooldown() <= 0;
     }
 
     @Override

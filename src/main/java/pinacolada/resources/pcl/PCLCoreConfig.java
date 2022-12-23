@@ -5,15 +5,15 @@ import basemod.ModPanel;
 import com.badlogic.gdx.math.Vector2;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
-import extendedui.EUIRM;
+import com.megacrit.cardcrawl.helpers.ImageMaster;
 import extendedui.EUIUtils;
+import extendedui.configuration.EUIConfiguration;
 import extendedui.configuration.STSConfigItem;
 import extendedui.configuration.STSSerializedConfigItem;
 import extendedui.configuration.STSStringConfigItem;
 import extendedui.ui.settings.ModSettingsScreen;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardPreviews;
-import pinacolada.powers.special.ToxicologyPower;
 import pinacolada.resources.AbstractConfig;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
@@ -38,7 +38,6 @@ public class PCLCoreConfig extends AbstractConfig
     private static final String ENABLE_EVENTS_FOR_OTHER_CHARACTERS = PCLCoreConfig.createFullID("EnableEventsForOtherCharacters");
     private static final String ENABLE_RELICS_FOR_OTHER_CHARACTERS = PCLCoreConfig.createFullID("EnableRelicsForOtherCharacters");
     private static final String FADE_CARDS_WITHOUT_SYNERGY = PCLCoreConfig.createFullID("FadeNonSynergicCards");
-    private static final String DISABLE_CARD_ICONS = PCLCoreConfig.createFullID("DisableCardIcons");
     private static final String HIDE_IRRELEVANT_AFFINITIES = PCLCoreConfig.createFullID("HideIrrelevantAffinities");
     private static final String HIDE_TIP_DESCRIPTION = PCLCoreConfig.createFullID("HideTipDescription");
     private static final String LAST_CSV_PATH = PCLCoreConfig.createFullID("LastCSVPath");
@@ -56,7 +55,6 @@ public class PCLCoreConfig extends AbstractConfig
     public STSConfigItem<Boolean> showFormulaDisplay = new STSConfigItem<Boolean>(SHOW_FORMULA_DISPLAY, false);
     public STSConfigItem<Boolean> simpleMode = new STSConfigItem<Boolean>(SIMPLE_MODE, true);
     public STSConfigItem<Boolean> simpleModeFtueSeen = new STSConfigItem<Boolean>(SIMPLE_MODE_FTUE_SEEN, false);
-    public STSConfigItem<Boolean> simplifyCardUI = new STSConfigItem<Boolean>(DISABLE_CARD_ICONS, false);
     public STSConfigItem<Integer> ascensionGlyph0 = new STSConfigItem<Integer>(ASCENSIONGLYPH0, 0);
     public STSConfigItem<Integer> ascensionGlyph1 = new STSConfigItem<Integer>(ASCENSIONGLYPH1, 0);
     public STSConfigItem<Integer> ascensionGlyph2 = new STSConfigItem<Integer>(ASCENSIONGLYPH2, 0);
@@ -127,21 +125,19 @@ public class PCLCoreConfig extends AbstractConfig
         int yPos = BASE_OPTION_OFFSET_Y;
 
         yPos = addToggle(panel, cropCardImages, misc.dynamicPortraits, yPos);
-        yPos = addToggle(panel, simplifyCardUI, misc.simplifyCardUI, yPos);
         yPos = addToggle(panel, enableEventsForOtherCharacters, misc.enableEventsForOtherCharacters, yPos);
         yPos = addToggle(panel, enableRelicsForOtherCharacters, misc.enableRelicsForOtherCharacters, yPos);
         yPos = addToggle(panel, showFormulaDisplay, misc.showFormulaDisplay, yPos);
         yPos = addToggle(panel, hideIrrelevantAffinities, misc.hideIrrelevantAffinities, yPos);
         yPos = addToggle(panel, replaceCardsPCL, misc.replaceCardsFool, yPos);
 
-        BaseMod.registerModBadge(EUIRM.getTexture(PGR.getPowerImage(ToxicologyPower.POWER_ID)), MOD_ID, "PinaColada", "", panel);
+        BaseMod.registerModBadge(ImageMaster.loadImage("images/pcl/modBadge.png"), MOD_ID, "PinaColada", "", panel);
 
         addModToggle(cropCardImages, misc.dynamicPortraits);
-        addModToggle(simplifyCardUI,  misc.simplifyCardUI);
         addModToggle(showFormulaDisplay,  misc.showFormulaDisplay);
         addModToggle(hideIrrelevantAffinities,  misc.hideIrrelevantAffinities);
 
-        simplifyCardUI.addListener(val -> this.updateCardDescriptions());
+        EUIConfiguration.disableDescrptionIcons.addListener(val -> this.updateCardDescriptions());
     }
 
 
@@ -162,7 +158,6 @@ public class PCLCoreConfig extends AbstractConfig
         replaceCardsPCL.addConfig(config);
         simpleMode.addConfig(config);
         simpleModeFtueSeen.addConfig(config);
-        simplifyCardUI.addConfig(config);
     }
 
     // Whenever this setting is updated, we need to force all cards everywhere to refresh their descriptions

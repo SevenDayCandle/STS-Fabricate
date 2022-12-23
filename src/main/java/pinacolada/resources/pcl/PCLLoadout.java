@@ -17,6 +17,7 @@ import pinacolada.relics.pcl.*;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PGR;
 import pinacolada.ui.characterSelection.PCLBaseStatEditor;
+import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -200,9 +201,11 @@ public abstract class PCLLoadout
         return id >= 0 && options != null && options.length > id ? options[id] : "";
     }
 
+    // PCL characters use summons instead of orbs
+    // TODO make this configurable
     public int getOrbSlots()
     {
-        return PCLBaseStatEditor.StatType.OrbSlot.getAmount(getPreset());
+        return GameUtilities.isPCLCardColor(color) ? 0 : PCLBaseStatEditor.StatType.OrbSlot.getAmount(getPreset());
     }
 
     public int getPotionSlots()
@@ -268,8 +271,8 @@ public abstract class PCLLoadout
             }
         }
 
-        addStarterRelic(res, FoolishCubes.ID);
         addStarterRelic(res, UsefulBox.ID);
+        addStarterRelic(res, FoolishCubes.ID);
 
         for (PCLRelicSlot rSlot : getPreset().relicSlots)
         {
@@ -366,7 +369,11 @@ public abstract class PCLLoadout
             r1.addItem(new SpitefulCubes(), 2);
             r1.addItem(new MagicEraser(), 3);
         }
+    }
 
+    public boolean isCore()
+    {
+        return id < 0;
     }
 
     public void onVictory(int ascensionLevel, int trophyLevel, int score)

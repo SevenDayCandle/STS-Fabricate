@@ -160,7 +160,8 @@ public class PCLBaseStatEditor extends EUIBase
 
     public enum StatType
     {
-        HP(ImageMaster.TP_HP, Settings.RED_TEXT_COLOR, 70, 2, 1, -6, 6),
+        // TODO configurable HP per character
+        HP(ImageMaster.TP_HP, Settings.RED_TEXT_COLOR, 46, 2, 1, -6, 6),
         Gold(ImageMaster.TP_GOLD, Settings.GOLD_COLOR, 99, 15, 1, -6, 6),
         OrbSlot(ImageMaster.ORB_SLOT_1, Settings.CREAM_COLOR, 3, 1, 3, -6, 3),
         PotionSlot(ImageMaster.POTION_PLACEHOLDER, Settings.CREAM_COLOR, 0, 1, 3, -3, 3),

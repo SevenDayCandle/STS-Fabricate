@@ -2,12 +2,15 @@ package pinacolada.monsters;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
+import com.megacrit.cardcrawl.powers.AbstractPower;
+import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.vfx.BobEffect;
 import com.megacrit.cardcrawl.vfx.ExhaustBlurEffect;
 import extendedui.EUI;
@@ -67,8 +70,8 @@ public class PCLCardAlly extends PCLCreature
         this.card = card;
         this.preview = new EUICardPreview(card, card.upgraded);
         this.name = card.name;
-        this.maxHealth = card.baseHeal;
-        this.currentHealth = Math.min(card.heal, this.maxHealth);
+        this.maxHealth = Math.max(1, card.baseHeal);
+        this.currentHealth = MathUtils.clamp(card.heal, 1, this.maxHealth);
         this.priority = card.magicNumber;
         this.showHealthBar();
         this.healthBarUpdatedEvent();
@@ -166,6 +169,7 @@ public class PCLCardAlly extends PCLCreature
             card.onUse(info);
             card.onLateUse(info);
             CombatManager.playerSystem.onCardPlayed(card, target, info, true);
+            GameUtilities.removeDamagePowers(this);
         }
     }
 
@@ -176,16 +180,47 @@ public class PCLCardAlly extends PCLCreature
 
     }
 
-    public void die() {
-        PCLEffects.Queue.callback(() -> {
-            SFX.play(SFX.CARD_EXHAUST, 0.2F);
-            for(int i = 0; i < 140; ++i) {
-                AbstractDungeon.effectsQueue.add(new ExhaustBlurEffect(this.hb.cX, this.hb.cY));
-            }
-        });
+    @Override
+    public void die()
+    {
+        die(true);
+    }
 
-        CombatManager.onAllyDeath(card, this);
-        releaseCard();
+    @Override
+    public void die(boolean triggerRelics) {
+        PCLCard releasedCard = releaseCard();
+        if (releasedCard != null)
+        {
+            PCLEffects.Queue.callback(() -> {
+                SFX.play(SFX.CARD_EXHAUST, 0.2F);
+                for(int i = 0; i < 140; ++i) {
+                    AbstractDungeon.effectsQueue.add(new ExhaustBlurEffect(this.hb.cX, this.hb.cY));
+                }
+            });
+
+            for (AbstractPower po : powers)
+            {
+                po.onDeath();
+            }
+            this.powers.clear();
+
+            if (triggerRelics) {
+                for (AbstractRelic relic : AbstractDungeon.player.relics)
+                {
+                    relic.onMonsterDeath(this);
+                }
+            }
+            CombatManager.onAllyDeath(releasedCard, this);
+
+            // Heal on summons should be at least 1
+            if (releasedCard.heal < 1)
+            {
+                releasedCard.heal = 1;
+            }
+        }
+
+        // Health needs to be 1 so that the slot can be re-selected
+        this.currentHealth = 1;
     }
 
     public EUICardPreview getPreview()
@@ -218,6 +253,10 @@ public class PCLCardAlly extends PCLCreature
                 hb.update();
                 intentHb.update();
                 healthHb.update();
+                for (int i = 0; i < powers.size(); i++)
+                {
+                    powers.get(i).update(i);
+                }
             }
             if (hb.clicked)
             {

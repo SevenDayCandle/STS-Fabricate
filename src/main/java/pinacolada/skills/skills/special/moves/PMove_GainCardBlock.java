@@ -1,4 +1,4 @@
-package pinacolada.skills.skills.special;
+package pinacolada.skills.skills.special.moves;
 
 import com.megacrit.cardcrawl.core.Settings;
 import extendedui.utilities.ColoredString;
@@ -31,8 +31,10 @@ public class PMove_GainCardBlock extends PMove implements Hidden
     public ColoredString getColoredValueString(Object displayBase, Object displayAmount)
     {
         return new ColoredString(displayAmount,
-                (sourceCard != null && (sourceCard.upgradedBlock || sourceCard.isBlockModified))
-                        ? (amount > baseAmount ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR) : Settings.CREAM_COLOR);
+                (sourceCard != null ?
+                        sourceCard.upgradedBlock ? Settings.GREEN_TEXT_COLOR :
+                                sourceCard.isBlockModified ? (amount > baseAmount ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR)
+                                        : Settings.CREAM_COLOR : Settings.CREAM_COLOR));
     }
 
     @Override

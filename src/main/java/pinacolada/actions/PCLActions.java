@@ -677,6 +677,16 @@ public final class PCLActions
         return add(new ModifyBlock(cardGroup, amount, costChange, permanent, relative));
     }
 
+    public ModifyCardHP modifyCardHp(AbstractCard card, int costChange, boolean permanent, boolean relative)
+    {
+        return add(new ModifyCardHP(card, costChange, permanent, relative));
+    }
+
+    public ModifyCardHP modifyCardHp(CardGroup cardGroup, int amount, int costChange, boolean permanent, boolean relative)
+    {
+        return add(new ModifyCardHP(cardGroup, amount, costChange, permanent, relative));
+    }
+
     public ModifyCost modifyCost(AbstractCard card, int costChange, boolean permanent, boolean relative)
     {
         return add(new ModifyCost(card, costChange, permanent, relative));
@@ -697,6 +707,16 @@ public final class PCLActions
         return add(new ModifyDamage(cardGroup, amount, costChange, permanent, relative));
     }
 
+    public ModifyPriority modifyPriority(AbstractCard card, int costChange, boolean permanent, boolean relative)
+    {
+        return add(new ModifyPriority(card, costChange, permanent, relative));
+    }
+
+    public ModifyPriority modifyPriority(CardGroup cardGroup, int amount, int costChange, boolean permanent, boolean relative)
+    {
+        return add(new ModifyPriority(cardGroup, amount, costChange, permanent, relative));
+    }
+
     public ModifyTag modifyTag(AbstractCard card, PCLCardTag tag, int value, boolean relative)
     {
         return add(new ModifyTag(card, tag, value, relative));
@@ -715,16 +735,6 @@ public final class PCLActions
     public ModifyTag modifyTag(CardGroup group, int cards, PCLCardTag tag, int value)
     {
         return add(new ModifyTag(group, cards, tag, value));
-    }
-
-    public ModifyTempHP modifyTempHP(AbstractCard card, int costChange, boolean permanent, boolean relative)
-    {
-        return add(new ModifyTempHP(card, costChange, permanent, relative));
-    }
-
-    public ModifyTempHP modifyTempHP(CardGroup cardGroup, int amount, int costChange, boolean permanent, boolean relative)
-    {
-        return add(new ModifyTempHP(cardGroup, amount, costChange, permanent, relative));
     }
 
     public MoveCard moveCard(AbstractCard card, CardGroup destination)

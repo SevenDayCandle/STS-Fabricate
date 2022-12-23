@@ -8,12 +8,8 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUI;
+import extendedui.EUIUtils;
 import extendedui.ui.EUIBase;
-import pinacolada.interfaces.subscribers.OnEndOfTurnFirstSubscriber;
-import pinacolada.interfaces.subscribers.OnEndOfTurnLastSubscriber;
-import pinacolada.interfaces.subscribers.OnStartOfTurnPostDrawSubscriber;
-import pinacolada.interfaces.subscribers.OnStartOfTurnSubscriber;
-import pinacolada.misc.CombatManager;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.monsters.PCLCreature;
 import pinacolada.utilities.GameUtilities;
@@ -23,20 +19,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SummonPool extends EUIBase implements OnStartOfTurnSubscriber, OnStartOfTurnPostDrawSubscriber, OnEndOfTurnFirstSubscriber, OnEndOfTurnLastSubscriber
+public class SummonPool extends EUIBase
 {
     public static int BASE_LIMIT = 3;
     public static float OFFSET = scale(120);
+    public DamageMode damageMode = DamageMode.First;
     public ArrayList<PCLCardAlly> summons = new ArrayList<>();
     public HashMap<AbstractCreature, AbstractCreature> assignedTargets = new HashMap<>();
 
     public void initialize()
     {
-        CombatManager.onStartOfTurn.subscribe(this);
-        CombatManager.onStartOfTurnPostDraw.subscribe(this);
-        CombatManager.onEndOfTurnFirst.subscribe(this);
-        CombatManager.onEndOfTurnLast.subscribe(this);
-
         summons.clear();
         assignedTargets.clear();
 
@@ -121,7 +113,6 @@ public class SummonPool extends EUIBase implements OnStartOfTurnSubscriber, OnSt
         }
     }
 
-    @Override
     public void onStartOfTurn()
     {
         assignedTargets.clear();
@@ -136,7 +127,6 @@ public class SummonPool extends EUIBase implements OnStartOfTurnSubscriber, OnSt
         }
     }
 
-    @Override
     public void onStartOfTurnPostDraw()
     {
         for (PCLCardAlly ally : summons)
@@ -149,8 +139,7 @@ public class SummonPool extends EUIBase implements OnStartOfTurnSubscriber, OnSt
         }
     }
 
-    @Override
-    public void onEndOfTurnFirst(boolean isPlayer)
+    public void onEndOfTurnFirst()
     {
         for (PCLCardAlly ally : summons)
         {
@@ -162,8 +151,7 @@ public class SummonPool extends EUIBase implements OnStartOfTurnSubscriber, OnSt
         }
     }
 
-    @Override
-    public void onEndOfTurnLast(boolean isPlayer)
+    public void onEndOfTurnLast()
     {
         List<PCLCardAlly> sorted = summons.stream().filter(a -> a.priority <= PCLCreature.PRIORITY_END_LAST).sorted((a, b) -> b.priority - a.priority).collect(Collectors.toList());
         for (PCLCardAlly ally : sorted)
@@ -172,17 +160,48 @@ public class SummonPool extends EUIBase implements OnStartOfTurnSubscriber, OnSt
         }
     }
 
+    public void onBattleEnd()
+    {
+        // TODO end of battle checks for cards
+        for (PCLCardAlly ally : summons)
+        {
+            ally.releaseCard();
+        }
+    }
+
     public int tryDamage(DamageInfo info, int damageAmount)
     {
         int leftover = damageAmount;
-        for (PCLCardAlly ally : summons)
+        switch (damageMode)
         {
-            if (leftover > 0 && ally.hasCard())
-            {
-                final int amount = Math.min(leftover, ally.currentHealth);
-                ally.damage(new DamageInfo(info.owner, amount, info.type));
-                leftover -= amount;
-            }
+            case First:
+                for (PCLCardAlly ally : summons)
+                {
+                    if (leftover > 0 && ally.hasCard())
+                    {
+                        final int amount = Math.min(leftover, ally.currentHealth);
+                        ally.damage(new DamageInfo(info.owner, amount, info.type));
+                        leftover -= amount;
+                    }
+                }
+                break;
+            case Distributed:
+                int livingCount = 1 + EUIUtils.count(summons, PCLCardAlly::hasCard);
+                int cut = leftover / livingCount;
+                leftover = leftover - cut * (livingCount - 1);
+                for (PCLCardAlly ally : summons)
+                {
+                    if (ally.hasCard())
+                    {
+                        int amount = cut - ally.currentHealth;
+                        if (amount > 0)
+                        {
+                            leftover += amount;
+                        }
+                        ally.damage(new DamageInfo(info.owner, cut, info.type));
+                    }
+                }
+                break;
         }
         return leftover;
     }
@@ -212,5 +231,12 @@ public class SummonPool extends EUIBase implements OnStartOfTurnSubscriber, OnSt
             }
         }
         return AbstractDungeon.player;
+    }
+
+    public enum DamageMode
+    {
+        First,
+        Distributed,
+        None
     }
 }

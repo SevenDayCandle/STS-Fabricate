@@ -14,7 +14,7 @@ import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PTrigger;
-import pinacolada.skills.skills.special.PMove_DealCardDamage;
+import pinacolada.skills.skills.special.moves.PMove_DealCardDamage;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 

@@ -26,7 +26,7 @@ public abstract class AbstractConfig
     protected static final int BASE_OPTION_OFFSET_X = 400;
     protected static final int BASE_OPTION_OFFSET_Y = 700;
     protected static final int BASE_OPTION_OPTION_HEIGHT = 50;
-    protected static final ModSettingsScreen.Category pclCategory = ModSettingsScreen.registerByClass(AbstractConfig.class);
+    protected static ModSettingsScreen.Category pclCategory;
     public STSSerializedConfigItem<HashSet<String>> bannedCards;
     public STSSerializedConfigItem<HashSet<String>> bannedRelics;
     public STSConfigItem<Integer> cardsCount;
@@ -38,6 +38,11 @@ public abstract class AbstractConfig
 
     protected static void addModToggle(STSConfigItem<Boolean> option, String label)
     {
+        // Must be initialized after Settings.scale is set, or the mod options will be in the wrong position
+        if (pclCategory == null)
+        {
+            pclCategory = ModSettingsScreen.registerByClass(AbstractConfig.class);
+        }
         ModSettingsScreen.addBoolean(pclCategory, option, label);
     }
 

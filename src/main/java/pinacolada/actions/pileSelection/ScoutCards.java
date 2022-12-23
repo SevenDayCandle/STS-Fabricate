@@ -1,19 +1,21 @@
 package pinacolada.actions.pileSelection;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import pinacolada.actions.PCLActions;
-import pinacolada.actions.basic.DrawCards;
 import pinacolada.utilities.CardSelection;
 
 import java.util.ArrayList;
 
-public class ScoutCards extends DrawCards
+public class ScoutCards extends FetchFromPile
 {
     public boolean reshuffleInstantly = false;
 
     public ScoutCards(String sourceName, int amount)
     {
-        super(sourceName, amount);
+        super(sourceName, amount, AbstractDungeon.player.drawPile);
+        setOrigin(CardSelection.Top);
+        setOptions(true, false);
     }
 
     @Override

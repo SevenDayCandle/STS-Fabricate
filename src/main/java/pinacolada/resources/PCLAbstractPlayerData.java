@@ -9,7 +9,6 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.unlock.AbstractUnlock;
 import extendedui.EUIUtils;
-import org.apache.commons.lang3.StringUtils;
 import pinacolada.blights.common.AbstractGlyphBlight;
 import pinacolada.blights.common.GlyphBlight;
 import pinacolada.blights.common.GlyphBlight1;
@@ -21,7 +20,10 @@ import pinacolada.resources.pcl.PCLRuntimeLoadout;
 import pinacolada.resources.pcl.PCLTrophies;
 import pinacolada.utilities.RandomizedList;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.StringJoiner;
 
 import static pinacolada.resources.pcl.PCLCoreConfig.JSON_FILTER;
 import static pinacolada.resources.pcl.PCLLoadoutData.TInfo;
@@ -70,10 +72,16 @@ public abstract class PCLAbstractPlayerData
         loadouts.clear();
         PCLLoadout core = getCoreLoadout();
         loadouts.put(core.id, core);
-        for (PCLLoadout loadout : getAvailableLoadouts())
+        List<PCLLoadout> availableLoadouts = getAvailableLoadouts();
+        if (availableLoadouts.size() > 0)
         {
-            loadouts.put(loadout.id, loadout);
+            this.selectedLoadout = availableLoadouts.get(0);
+            for (PCLLoadout loadout : getAvailableLoadouts())
+            {
+                loadouts.put(loadout.id, loadout);
+            }
         }
+
 
         for (PCLLoadout loadout : loadouts.values())
         {
@@ -117,13 +125,12 @@ public abstract class PCLAbstractPlayerData
             {
                 String jsonString = f.readString();
                 PCLLoadoutData.LoadoutInfo loadoutInfo = EUIUtils.deserialize(jsonString, TInfo.getType());
-                int slot = Integer.parseInt(StringUtils.split(f.nameWithoutExtension(), getLoadoutPrefix(resources))[1]);
-                final PCLLoadout loadout = getLoadout(slot);
+                final PCLLoadout loadout = getLoadout(loadoutInfo.loadout);
                 final PCLLoadoutData loadoutData = new PCLLoadoutData(loadout, loadoutInfo);
 
                 if (loadoutData.validate().isValid)
                 {
-                    loadout.presets[loadoutData.preset] = loadoutData;
+                    loadout.presets[loadoutInfo.preset] = loadoutData;
                 }
             }
             catch (Exception e)
@@ -146,7 +153,7 @@ public abstract class PCLAbstractPlayerData
             if (items.length > 0)
             {
                 int loadoutID = EUIUtils.parseInt(items[0], -1);
-                if (loadoutID > 0)
+                if (loadoutID >= 0)
                 {
                     selectedLoadout = getLoadout(loadoutID);
                 }
@@ -160,7 +167,7 @@ public abstract class PCLAbstractPlayerData
         }
     }
 
-    public abstract Collection<PCLLoadout> getAvailableLoadouts();
+    public abstract List<PCLLoadout> getAvailableLoadouts();
 
     public abstract PCLLoadout getCoreLoadout();
 
@@ -298,7 +305,7 @@ public abstract class PCLAbstractPlayerData
                     }
 
                     FileHandle writer = Gdx.files.absolute(getLoadoutPath(resources, loadout.id, data.preset));
-                    writer.writeString(EUIUtils.serialize(new PCLLoadoutData.LoadoutInfo(data), TInfo.getType()), false);
+                    writer.writeString(EUIUtils.serialize(new PCLLoadoutData.LoadoutInfo(loadout.id, data), TInfo.getType()), false);
                 }
             }
         }

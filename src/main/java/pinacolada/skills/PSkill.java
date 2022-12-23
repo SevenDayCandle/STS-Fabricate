@@ -414,6 +414,11 @@ public abstract class PSkill implements TooltipProvider
 
     public static String getTargetString(PCLCardTarget target)
     {
+        return getTargetString(target, 1);
+    }
+
+    public static String getTargetString(PCLCardTarget target, int count)
+    {
         switch (target)
         {
             case All:
@@ -423,19 +428,20 @@ public abstract class PSkill implements TooltipProvider
             case AllEnemy:
                 return TEXT.subjects.allX(PCLCoreStrings.pluralForce(TEXT.subjects.enemyN));
             case Any:
-                return TEXT.subjects.characterN;
+                return TEXT.subjects.anyone;
             case RandomAlly:
-                return TEXT.subjects.randomX(PCLCoreStrings.pluralForce(TEXT.subjects.allyN));
+                return EUIRM.strings.numNoun(count, TEXT.subjects.randomX(PCLCoreStrings.pluralEvaluated(TEXT.subjects.allyN, count)));
             case RandomEnemy:
-                return TEXT.subjects.randomX(PCLCoreStrings.pluralForce(TEXT.subjects.enemyN));
+                return EUIRM.strings.numNoun(count, TEXT.subjects.randomX(PCLCoreStrings.pluralEvaluated(TEXT.subjects.enemyN, count)));
+            case Single:
+                return EUIRM.strings.numNoun(count, PCLCoreStrings.pluralEvaluated(TEXT.subjects.enemyN, count));
             case SingleAlly:
-                return TEXT.subjects.allyN;
+                return EUIRM.strings.numNoun(count, PCLCoreStrings.pluralEvaluated(TEXT.subjects.allyN, count));
             case Team:
                 return TEXT.subjects.your(target.getTitle());
             case Self:
-                return TEXT.subjects.you;
             default:
-                return TEXT.subjects.enemyN;
+                return TEXT.subjects.you;
         }
     }
 

@@ -760,8 +760,12 @@ public class CombatManager
             s.onBattleEnd();
         }
 
+        summons.onBattleEnd();
+
         onBattleStart.clear();
         onBattleEnd.clear();
+
+
         clearStats();
     }
 
@@ -1305,6 +1309,8 @@ public class CombatManager
             }
         }
 
+        summons.onStartOfTurn();
+
         if (blockRetained > 0 && !AbstractDungeon.player.hasPower(BarricadePower.POWER_ID) && !AbstractDungeon.player.hasPower(BlurPower.POWER_ID))
         {
             blockRetained = 0;
@@ -1320,6 +1326,8 @@ public class CombatManager
                 s.onStartOfTurnPostDraw();
             }
         }
+
+        summons.onStartOfTurnPostDraw();
 
         if (blockRetained > 0)
         {
@@ -1347,6 +1355,8 @@ public class CombatManager
         {
             s.onEndOfTurnFirst(isPlayer);
         }
+
+        summons.onEndOfTurnFirst();
     }
 
     public static void atEndOfTurn(boolean isPlayer)
@@ -1355,6 +1365,8 @@ public class CombatManager
         {
             s.onEndOfTurnLast(isPlayer);
         }
+
+        summons.onEndOfTurnLast();
 
         turnData.clear();
         cardsExhaustedThisTurn.clear();

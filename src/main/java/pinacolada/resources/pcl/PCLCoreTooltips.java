@@ -123,7 +123,7 @@ public class PCLCoreTooltips extends PCLTooltips
     public EUITooltip plasma = EUITooltip.findByID("Plasma");
     public EUITooltip platedArmor = EUITooltip.findByID("Plated Armor");
     public EUITooltip poison = EUITooltip.findByID("Poison");
-    public EUITooltip polarity = EUITooltip.findByID("Polarity");
+    public EUITooltip priority = EUITooltip.findByID("Priority");
     public EUITooltip provoked = EUITooltip.findByID("Provoked");
     public EUITooltip purge = EUITooltip.findByID("~Purge");
     public EUITooltip ranged = EUITooltip.findByID("~Ranged");
@@ -238,7 +238,6 @@ public class PCLCoreTooltips extends PCLTooltips
         orbSlot.setIcon(tooltips.orbSlot.texture(), 6);
         randomOrb.setIcon(tooltips.randomOrb.texture(), 6);
         regeneration.setIcon(tooltips.regeneration.texture(), 6);
-        polarity.setIcon(tooltips.eternity.texture());
 
         afterImage.setIconFromPowerRegion("afterImage");
         artifact.setIconFromPowerRegion("artifact");

@@ -137,7 +137,7 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
                     getEffectAt().setAffinity(types);
                     editor.constructEffect();
                 })
-                .setLabelFunctionForOption(item -> item.getFormattedSymbol(editor.builder.cardColor), true)
+                .setLabelFunctionForOption(item -> item.getFormattedSymbolForced(editor.builder.cardColor) + " " + item.getTooltip().title, true)
                 .setIsMultiSelect(true)
                 .setShouldPositionClearAtTop(true)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.seriesUI.affinities)
@@ -150,7 +150,7 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
                     getEffectAt().setPower(types);
                     editor.constructEffect();
                 })
-                .setLabelFunctionForOption(item -> item.tooltip.getTitleOrIcon() + " " + item.tooltip.title, true)
+                .setLabelFunctionForOption(item -> item.tooltip.getTitleOrIconForced() + " " + item.tooltip.title, true)
                 .setIsMultiSelect(true)
                 .setShouldPositionClearAtTop(true)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cardEditor.powers)
@@ -163,7 +163,7 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
                     getEffectAt().setOrb(types);
                     editor.constructEffect();
                 })
-                .setLabelFunctionForOption(item -> item.tooltip.getTitleOrIcon() + " " + item.tooltip.title, true)
+                .setLabelFunctionForOption(item -> item.tooltip.getTitleOrIconForced() + " " + item.tooltip.title, true)
                 .setIsMultiSelect(true)
                 .setShouldPositionClearAtTop(true)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cardEditor.orbs)
@@ -177,7 +177,7 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
                     editor.constructEffect();
                 })
                 .setLabelFunctionForButton((items, __) -> items.size() > 0 ? items.get(0).tooltip.title : PGR.core.tooltips.neutralStance.title, null, false)
-                .setLabelFunctionForOption(item -> item.tooltip.getTitleOrIcon() + " " + item.tooltip.title, true)
+                .setLabelFunctionForOption(item -> item.tooltip.getTitleOrIconForced() + " " + item.tooltip.title, true)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.tooltips.stance.title)
                 .setIsMultiSelect(true)
                 .setCanAutosize(false, false)
@@ -189,7 +189,7 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
                     getEffectAt().setTag(types);
                     editor.constructEffect();
                 })
-                .setLabelFunctionForOption(item -> item.getTip().getTitleOrIcon() + " " + item.getTip().title, true)
+                .setLabelFunctionForOption(item -> item.getTip().getTitleOrIconForced() + " " + item.getTip().title, true)
                 .setIsMultiSelect(true)
                 .setShouldPositionClearAtTop(true)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cardEditor.tags)

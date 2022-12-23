@@ -1449,7 +1449,7 @@ public class GameUtilities
         final ArrayList<PCLCardAlly> monsters = new ArrayList<>();
         for (PCLCardAlly m : CombatManager.summons.summons)
         {
-            if (isDeadOrEscaped(m) ^ isAlive)
+            if (!m.hasCard() ^ isAlive)
             {
                 monsters.add(m);
             }
@@ -2152,6 +2152,16 @@ public class GameUtilities
         card.isHealModified = (card.heal != card.baseHeal);
     }
 
+    public static void modifySecondaryValueRelative(PCLCard card, int amount, boolean temporary)
+    {
+        card.heal += amount;
+        if (!temporary)
+        {
+            card.baseHeal += amount;
+        }
+        card.isHealModified = (card.heal != card.baseHeal);
+    }
+
     public static void modifyTag(AbstractCard card, PCLCardTag tag, int value)
     {
         modifyTag(card, tag, value, false);
@@ -2254,24 +2264,27 @@ public class GameUtilities
     }
 
     // TODO Rework to use PCLPowerHelper
-    public static void removeDamagePowers()
+    public static void removeDamagePowers(AbstractCreature creature)
     {
-        if (player.hasPower(PenNibPower.POWER_ID))
+        if (creature.hasPower(PenNibPower.POWER_ID))
         {
-            PCLActions.bottom.reducePower(player, PenNibPower.POWER_ID, 1);
+            PCLActions.bottom.reducePower(creature, PenNibPower.POWER_ID, 1);
 
-            final AbstractRelic relic = player.getRelic(PenNib.ID);
-            if (relic != null)
+            if (creature == player)
             {
-                relic.counter = 0;
-                relic.flash();
-                relic.stopPulse();
+                final AbstractRelic relic = player.getRelic(PenNib.ID);
+                if (relic != null)
+                {
+                    relic.counter = 0;
+                    relic.flash();
+                    relic.stopPulse();
+                }
             }
         }
 
-        if (player.hasPower(VigorPower.POWER_ID))
+        if (creature.hasPower(VigorPower.POWER_ID))
         {
-            PCLActions.bottom.removePower(player, player, VigorPower.POWER_ID);
+            PCLActions.bottom.removePower(creature, creature, VigorPower.POWER_ID);
         }
     }
 

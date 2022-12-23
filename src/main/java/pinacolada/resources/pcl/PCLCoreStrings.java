@@ -9,6 +9,7 @@ import com.megacrit.cardcrawl.screens.CardRewardScreen;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT2;
+import extendedui.text.EUISmartText;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PCLStrings;
@@ -1295,8 +1296,16 @@ public class PCLCoreStrings extends PCLStrings
         return EUIUtils.format(tip, evaluated);
     }
 
+    public static String pluralEvaluated(String tip, Object evaluated) {
+        return EUISmartText.parseLogicString(EUIUtils.format(tip, evaluated));
+    }
+
     public static String pluralForce(String tip) {
-        return plural(tip, 2);
+        return EUISmartText.parseLogicString(plural(tip, 2));
+    }
+
+    public static String singularForce(String tip) {
+        return EUISmartText.parseLogicString(plural(tip, 1));
     }
 
     public static String past(Object obj) {

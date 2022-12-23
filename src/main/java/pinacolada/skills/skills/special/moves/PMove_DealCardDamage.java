@@ -1,4 +1,4 @@
-package pinacolada.skills.skills.special;
+package pinacolada.skills.skills.special.moves;
 
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
@@ -62,8 +62,10 @@ public class PMove_DealCardDamage extends PMove implements Hidden
     public ColoredString getColoredValueString(Object displayBase, Object displayAmount)
     {
         return new ColoredString(displayAmount,
-                (sourceCard != null && (sourceCard.upgradedDamage || sourceCard.isDamageModified))
-                        ? (amount > baseAmount ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR) : Settings.CREAM_COLOR);
+                (sourceCard != null ?
+                        sourceCard.upgradedDamage ? Settings.GREEN_TEXT_COLOR :
+                        sourceCard.isDamageModified ? (amount > baseAmount ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR)
+                                : Settings.CREAM_COLOR : Settings.CREAM_COLOR));
     }
 
     @Override

@@ -316,10 +316,10 @@
 								"NAMES": ["play", "play"],
 								"PROPER_NAME": "Play"
 				},
-				"Polarity":	{
-								"DESCRIPTION": "Your #yPolarity is the number of [A-L] #yLast #yAffinities minus the number of [A-D] #yLast #yAffinities.",
-								"NAMES": ["polarity"],
-								"PROPER_NAME": "Polarity"
+				"Priority":	{
+								"DESCRIPTION": "Priority determines whether a #ySummon will act before or after your turn.",
+								"NAMES": ["priority"],
+								"PROPER_NAME": "Priority"
 				},
 				"Provoked":	{
 								"DESCRIPTION": "The target receives #b50% more damage and must attack.",

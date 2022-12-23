@@ -131,6 +131,7 @@ public class PCLCoreResources extends PCLResources<PCLCoreConfig, PCLCoreImages,
 
     protected void postInitialize()
     {
+
         AttackEffects.initialize();
         PGR.registerCommands();
         PCLAbstractPlayerData.postInitialize();

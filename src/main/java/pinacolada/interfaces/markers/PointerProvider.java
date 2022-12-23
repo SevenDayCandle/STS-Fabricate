@@ -13,8 +13,8 @@ import pinacolada.skills.skills.base.traits.PTrait_Block;
 import pinacolada.skills.skills.base.traits.PTrait_BlockMultiplier;
 import pinacolada.skills.skills.base.traits.PTrait_Damage;
 import pinacolada.skills.skills.base.traits.PTrait_DamageMultiplier;
-import pinacolada.skills.skills.special.PMove_DealCardDamage;
-import pinacolada.skills.skills.special.PMove_GainCardBlock;
+import pinacolada.skills.skills.special.moves.PMove_DealCardDamage;
+import pinacolada.skills.skills.special.moves.PMove_GainCardBlock;
 import pinacolada.utilities.UniqueList;
 
 import java.util.ArrayList;

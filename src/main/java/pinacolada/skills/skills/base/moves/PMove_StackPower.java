@@ -103,8 +103,10 @@ public class PMove_StackPower extends PMove
                 case RandomEnemy:
                 case AllEnemy:
                 case All:
+                case Team:
                     return TEXT.subjects.randomly(powers.size() > 0 && powers.get(0).isDebuff ? TEXT.actions.applyAmountToTarget(getAmountRawString(), joinedString, getTargetString()) : TEXT.actions.giveTargetAmount(getTargetString(), getAmountRawString(), joinedString));
                 case Single:
+                case SingleAlly:
                     return TEXT.subjects.randomly(powers.size() > 0 && powers.get(0).isDebuff ? TEXT.actions.applyAmount(getAmountRawString(), joinedString) : TEXT.actions.giveTargetAmount(getTargetString(), getAmountRawString(), joinedString));
                 default:
                     return TEXT.subjects.randomly(amount < 0 ? TEXT.actions.loseAmount(getAmountRawString(), joinedString)
@@ -117,8 +119,10 @@ public class PMove_StackPower extends PMove
             case RandomEnemy:
             case AllEnemy:
             case All:
+            case Team:
                 return powers.size() > 0 && powers.get(0).isDebuff ? TEXT.actions.applyAmountToTarget(getAmountRawString(), joinedString, getTargetString()) : TEXT.actions.giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
             case Single:
+            case SingleAlly:
                 return powers.size() > 0 && powers.get(0).isDebuff ? TEXT.actions.applyAmount(getAmountRawString(), joinedString) : TEXT.actions.giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
             default:
                 return amount < 0 ? TEXT.actions.loseAmount(getAmountRawString(), joinedString)

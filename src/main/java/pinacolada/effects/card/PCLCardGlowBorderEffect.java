@@ -55,7 +55,7 @@ public class PCLCardGlowBorderEffect extends PCLEffect
 
     public void update()
     {
-        this.scale = (1.0F + Interpolation.pow2Out.apply(0.03F, 0.11F, 1.0F - this.duration)) * this.card.drawScale * scaleMult * Settings.scale;
+        this.scale = (1.0F + Interpolation.pow2Out.apply(0.03F, 0.11F * scaleMult, 1.0F - this.duration)) * this.card.drawScale * Settings.scale;
         this.color.a = this.duration / 2.0F;
         this.duration -= Gdx.graphics.getDeltaTime();
         if (this.duration < 0.0F)

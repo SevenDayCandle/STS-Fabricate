@@ -5,10 +5,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
+import extendedui.configuration.EUIConfiguration;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.resources.PGR;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -97,13 +97,13 @@ public class SymbolToken extends PCLTextToken
     @Override
     public int getCharCount()
     {
-        return (PGR.core.config.simplifyCardUI.get()) ? tooltip.title.length() : 1;
+        return (EUIConfiguration.disableDescrptionIcons.get()) ? tooltip.title.length() : 1;
     }
 
     @Override
     protected float getWidth(BitmapFont font, String text)
     {
-        return font.getLineHeight() * 0.8f;// AbstractCard.CARD_ENERGY_IMG_WIDTH
+        return EUIConfiguration.disableDescrptionIcons.get() ? super.getWidth(font, text) : font.getLineHeight() * 0.8f;// AbstractCard.CARD_ENERGY_IMG_WIDTH
     }
 
     @Override
@@ -113,7 +113,7 @@ public class SymbolToken extends PCLTextToken
         float size = getWidth(context);// 24f * Settings.scale * card.drawScale * context.scaleModifier;
         float partial = size / 12f;
 
-        if (tooltip.icon != null && !PGR.core.config.simplifyCardUI.get())
+        if (tooltip.icon != null && !EUIConfiguration.disableDescrptionIcons.get())
         {
             float iconW = size * tooltip.iconmultiW;
             float iconH = size * tooltip.iconmultiH;

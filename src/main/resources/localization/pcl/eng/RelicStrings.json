@@ -128,13 +128,13 @@
 	},
 	"pcl:UsefulBox":
 	{
-	  "DESCRIPTIONS": ["Once per combat, #oRight-Click: Target an enemy to take on its form, or target yourself to take the form of a random player character.", "#gCurrent #gBonus: {0}"],
+	  "DESCRIPTIONS": ["At the start of combat, #ySummon a random #yCommon #ySummon from your selected #yLoadout. | Once per combat, #oRight-Click: Target a creature to take on its form.", "#gCurrent #gBonus: {0}"],
 	  "FLAVOR": "A box that is useful.",
 	  "NAME": "Useful Box"
 	},
 	"pcl:VeryUsefulBox":
 	{
-	  "DESCRIPTIONS": ["Once per combat, #oRight-Click: Target an enemy to take on its form, or target yourself to take the form of a random player character. At the start of battle, activate an effect based on your current form.", "#gCurrent #gBonus: {0}"],
+	  "DESCRIPTIONS": ["At the start of combat, #ySummon a random #yCommon #ySummon and activate an effect based on your current form. | Once per combat, #oRight-Click: Target a creature to take on its form.", "#gCurrent #gBonus: {0}"],
 	  "FLAVOR": "A box that is very useful.",
 	  "NAME": "Very-Useful Box"
 	}

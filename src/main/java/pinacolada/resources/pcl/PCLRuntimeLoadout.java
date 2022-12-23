@@ -83,51 +83,56 @@ public class PCLRuntimeLoadout
                 .setMaxUpgrades(0))
                 .build();
 
-        card.name = loadout.getName();
+        card.name = loadout.isCore() ? PGR.core.strings.seriesUI.core : loadout.getName();
         card.clearSkills();
 
         if (isLocked)
         {
+            card.isSeen = false;
             card.cardText.overrideDescription(unlockTooltip.description(), false);
             card.tooltips.add(unlockTooltip);
             card.rarity = AbstractCard.CardRarity.COMMON;
-            card.type = AbstractCard.CardType.CURSE;
+            card.type = AbstractCard.CardType.STATUS;
         }
         else
         {
             skill = new FakeSkill();
             card.addUseMove(skill);
             card.rarity = AbstractCard.CardRarity.COMMON;
-            card.type = AbstractCard.CardType.SKILL;
+            card.type = loadout.isCore() ? AbstractCard.CardType.CURSE : AbstractCard.CardType.SKILL;
             card.tooltips.add(trophyTooltip);
             card.tooltips.add(glyphTooltip);
         }
 
-        int i = 0;
-        int maxLevel = 2;
-        float maxPercentage = 0;
-        for (PCLCardAffinityStatistics.Group g : affinityStatistics)
+        if (!loadout.isCore())
         {
-            float percentage = g.getPercentage(0);
-            if (percentage == 0 || i > 2)
+            int i = 0;
+            int maxLevel = 2;
+            float maxPercentage = 0;
+            for (PCLCardAffinityStatistics.Group g : affinityStatistics)
             {
-                break;
-            }
+                float percentage = g.getPercentage(0);
+                if (percentage == 0 || i > 2)
+                {
+                    break;
+                }
 
-            if (percentage < maxPercentage || (maxLevel == 2 && percentage < 0.3f))
-            {
-                maxLevel -= 1;
-            }
-            if (maxLevel > 0)
-            {
-                card.affinities.add(g.affinity, maxLevel);
-            }
+                if (percentage < maxPercentage || (maxLevel == 2 && percentage < 0.3f))
+                {
+                    maxLevel -= 1;
+                }
+                if (maxLevel > 0)
+                {
+                    card.affinities.add(g.affinity, maxLevel);
+                }
 
-            maxPercentage = percentage;
-            i += 1;
+                maxPercentage = percentage;
+                i += 1;
+            }
+            card.affinities.collapseDuplicates = true;
+            card.affinities.updateSortedList();
         }
-        card.affinities.collapseDuplicates = true;
-        card.affinities.updateSortedList();
+
         card.initializeDescription();
 
         return card;
@@ -178,7 +183,7 @@ public class PCLRuntimeLoadout
 
         for (AbstractCard c : getCardPoolInPlay().values())
         {
-            if (c.type != AbstractCard.CardType.CURSE && c.type != AbstractCard.CardType.STATUS && (!inCombat || GameUtilities.isObtainableInCombat(c)))
+            if (canSelect(c) && (!inCombat || GameUtilities.isObtainableInCombat(c)))
             {
                 switch (c.rarity)
                 {
@@ -205,6 +210,11 @@ public class PCLRuntimeLoadout
         {
             skill.setAmount(EUIUtils.count(baseCards.keySet(), id -> !banned.contains(id)));
         }
+    }
+
+    private boolean canSelect(AbstractCard c)
+    {
+        return c.type != AbstractCard.CardType.CURSE && c.type != AbstractCard.CardType.STATUS;
     }
 
     private void initializeCards(PCLLoadout series)

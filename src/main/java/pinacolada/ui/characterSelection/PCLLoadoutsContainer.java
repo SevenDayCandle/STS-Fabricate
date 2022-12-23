@@ -71,15 +71,15 @@ public class PCLLoadoutsContainer
         }
 
         bannedCards.addAll(data.resources.config.bannedCards.get());
-        for (PCLRuntimeLoadout c : seriesSelectionItems)
+        for (PCLRuntimeLoadout series : seriesSelectionItems)
         {
-            final AbstractCard card = c.buildCard();
+            final AbstractCard card = series.buildCard();
             if (card != null)
             {
-                loadoutMap.put(card, c);
+                loadoutMap.put(card, series);
                 card.targetTransparency = 1f;
 
-                if (c.loadout.id == (data.selectedLoadout.id))
+                if (series.loadout.id == (data.selectedLoadout.id))
                 {
                     currentSeriesCard = card;
                     card.rarity = AbstractCard.CardRarity.RARE;
@@ -88,7 +88,7 @@ public class PCLLoadoutsContainer
             }
             else
             {
-                EUIUtils.logError(this, "BuildCard() failed, " + c.loadout.getName());
+                EUIUtils.logError(this, "BuildCard() failed, " + series.loadout.getName());
             }
         }
         calculateCardCounts();
