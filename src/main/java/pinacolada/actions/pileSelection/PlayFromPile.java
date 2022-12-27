@@ -2,7 +2,7 @@ package pinacolada.actions.pileSelection;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
-import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.screens.CardRewardScreen;
 import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
@@ -11,18 +11,14 @@ import java.util.ArrayList;
 
 public class PlayFromPile extends SelectFromPile
 {
-    protected AbstractMonster target;
-
     public PlayFromPile(String sourceName, int amount, CardGroup... groups)
     {
         this(sourceName, null, amount, groups);
     }
 
-    public PlayFromPile(String sourceName, AbstractMonster target, int amount, CardGroup... groups)
+    public PlayFromPile(String sourceName, AbstractCreature target, int amount, CardGroup... groups)
     {
-        super(ActionType.CARD_MANIPULATION, sourceName, amount, groups);
-
-        this.target = target;
+        super(ActionType.CARD_MANIPULATION, sourceName, target, amount, groups);
     }
 
     @Override
@@ -30,7 +26,7 @@ public class PlayFromPile extends SelectFromPile
     {
         super.addCard(group, card);
 
-        card.calculateCardDamage(target);
+        card.calculateCardDamage(GameUtilities.asMonster(target));
     }
 
     @Override

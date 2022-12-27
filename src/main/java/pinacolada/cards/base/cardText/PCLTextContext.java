@@ -73,18 +73,11 @@ public class PCLTextContext
 
     public void initialize(PCLCard card, String text)
     {
-        initialize(card, text, false);
-    }
-
-    public void initialize(PCLCard card, String text, boolean ignoreEffects)
-    {
         if (card != null)
         {
             card.getPointers().clear();
             String efStrings = card.getEffectStrings();
-            text = (text != null && !text.isEmpty()) ?
-                    (!ignoreEffects && efStrings != null && !efStrings.isEmpty() ? efStrings + EUIUtils.DOUBLE_SPLIT_LINE + text : text)
-                    : efStrings;
+            text = (text != null && !text.isEmpty()) ? text : efStrings;
             text = CardModifierManager.onCreateDescription(card, text);
         }
 

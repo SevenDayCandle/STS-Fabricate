@@ -190,7 +190,6 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
             loadImage(null);
         }
 
-        this.cropPortrait = cardData.cropPortrait;
         this.cardData = cardData;
         this.cardText = new PCLCardText(this);
         this.affinities = new PCLCardAffinities(this);
@@ -584,6 +583,15 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         }
     }
 
+    protected void doNonPowerEffects(ActionT1<PSkill> action) {
+        for (PSkill be : getFullEffects()) {
+            if (!(be instanceof PMove_StackCustomPower))
+            {
+                action.invoke(be);
+            }
+        }
+    }
+
     public void fullReset() {
         this.clearSkills();
         this.onDamageEffect = null;
@@ -597,7 +605,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     protected PMove_StackCustomPower getApplyPower(PCLCardTarget target, int amount, PTrigger... effects) {
         Integer[] powerIndexes = EUIUtils.range(getPowerEffects().size(), getPowerEffects().size() + effects.length - 1);
         for (PTrigger effect : effects) {
-            getPowerEffects().add((PTrigger) effect.setSource(this).onAddToCard(this));
+            addPowerMove(effect);
         }
         return (PMove_StackCustomPower) new PMove_StackCustomPower(target, amount, powerIndexes).setSource(this).onAddToCard(this);
     }
@@ -643,7 +651,8 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     }
 
     public ColoredString getBottomText() {
-        return (cardData.loadout == null) ? null : new ColoredString(cardData.loadout.getName(), Settings.CREAM_COLOR);
+        String loadoutName = cardData.getLoadoutName();
+        return (loadoutName == null || loadoutName.isEmpty()) ? null : new ColoredString(loadoutName, Settings.CREAM_COLOR);
     }
 
     @Override
@@ -919,16 +928,6 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         }
     }
 
-    public String getRawDescription() {
-        return getRawDescription((Object[]) null);
-    }
-
-    protected String getRawDescription(Object... args) {
-        return (upgraded && cardData.strings.UPGRADE_DESCRIPTION != null
-                ? EUIUtils.format(cardData.strings.UPGRADE_DESCRIPTION, args)
-                : cardData.strings.DESCRIPTION != null ? EUIUtils.format(cardData.strings.DESCRIPTION, args) : "");
-    }
-
     public ColoredString getSecondaryValueString() {
         return new ColoredString(heal, heal > baseHeal ? Settings.GREEN_TEXT_COLOR : heal < baseHeal ? Settings.RED_TEXT_COLOR : Settings.CREAM_COLOR);
     }
@@ -985,6 +984,12 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         ArrayList<PSkill> result = new ArrayList<>(getEffects());
         result.addAll(getAugmentSkills());
         return result;
+    }
+
+    public PSkill addPowerMove(PTrigger effect) {
+        PTrigger added = (PTrigger) effect.setSource(this).onAddToCard(this);
+        getPowerEffects().add(added);
+        return added;
     }
 
     public PSkill addUseMove(PSkill effect) {
@@ -1236,6 +1241,26 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
             }
             doEffects(be -> be.use(info));
         }
+    }
+
+    public void useEffects(PCLUseInfo info)
+    {
+        onPreUse(info);
+        onUse(info);
+        onLateUse(info);
+    }
+
+    public void useEffectsWithoutPowers(PCLUseInfo info)
+    {
+        onPreUse(info);
+        if (onDamageEffect != null) {
+            onDamageEffect.use(info);
+        }
+        if (onBlockEffect != null) {
+            onBlockEffect.use(info);
+        }
+        doNonPowerEffects(be -> be.use(info));
+        onLateUse(info);
     }
 
     public AbstractCreature getSourceCreature()

@@ -110,6 +110,16 @@ public abstract class PMove extends PSkill
                 .setAmountFromCard();
     }
 
+    public static PMove applyToAllies(int amount, PCLPowerHelper... powers)
+    {
+        return apply(PCLCardTarget.AllAlly, amount, powers);
+    }
+
+    public static PMove applyToAllies(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers)
+    {
+        return apply(PCLCardTarget.AllAlly, card, valueSource, powers);
+    }
+
     public static PMove applyToEnemies(int amount, PCLPowerHelper... powers)
     {
         return apply(PCLCardTarget.AllEnemy, amount, powers);
@@ -143,6 +153,16 @@ public abstract class PMove extends PSkill
     public static PMove applyToSingle(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers)
     {
         return apply(PCLCardTarget.Single, card, valueSource, powers);
+    }
+
+    public static PMove applyToTeam(int amount, PCLPowerHelper... powers)
+    {
+        return apply(PCLCardTarget.Team, amount, powers);
+    }
+
+    public static PMove applyToTeam(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers)
+    {
+        return apply(PCLCardTarget.Team, card, valueSource, powers);
     }
 
     public static PMove channelOrb(int amount, PCLOrbHelper... orb)
@@ -324,6 +344,11 @@ public abstract class PMove extends PSkill
     public static PMove gainTempHP(int amount)
     {
         return new PMove_GainTempHP(amount);
+    }
+
+    public static PMove gainTempHP(PCLCardTarget target, int amount)
+    {
+        return new PMove_GainTempHP(target, amount);
     }
 
     public static PMove gainTempHP(PCLCard card)
@@ -547,16 +572,6 @@ public abstract class PMove extends PSkill
     public static PMove stun(int amount)
     {
         return new PMove_Stun(amount);
-    }
-
-    public static PMove summon(int amount)
-    {
-        return summon(amount, PCLCardGroupHelper.Hand);
-    }
-
-    public static PMove summon(int amount, PCLCardGroupHelper... groups)
-    {
-        return new PMove_Summon(amount, PCLCardTarget.SingleAlly, groups);
     }
 
     public static PMove_DealDamage takeDamage(int amount)

@@ -7,6 +7,7 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUI;
 import extendedui.EUIUtils;
 import extendedui.ui.EUIBase;
@@ -23,7 +24,7 @@ public class SummonPool extends EUIBase
 {
     public static int BASE_LIMIT = 3;
     public static float OFFSET = scale(120);
-    public DamageMode damageMode = DamageMode.First;
+    public DamageMode damageMode = DamageMode.Half;
     public ArrayList<PCLCardAlly> summons = new ArrayList<>();
     public HashMap<AbstractCreature, AbstractCreature> assignedTargets = new HashMap<>();
 
@@ -119,11 +120,13 @@ public class SummonPool extends EUIBase
         List<PCLCardAlly> sorted = summons.stream().filter(a -> a.priority >= PCLCreature.PRIORITY_START_FIRST).sorted((a, b) -> b.priority - a.priority).collect(Collectors.toList());
         for (PCLCardAlly ally : summons)
         {
+            ally.loseBlock();
             ally.applyStartOfTurnPowers();
         }
         for (PCLCardAlly ally : sorted)
         {
             ally.takeTurn();
+            ally.applyTurnPowers();
         }
     }
 
@@ -135,6 +138,7 @@ public class SummonPool extends EUIBase
             if (ally.priority == PCLCreature.PRIORITY_START_LAST)
             {
                 ally.takeTurn();
+                ally.applyTurnPowers();
             }
         }
     }
@@ -147,6 +151,7 @@ public class SummonPool extends EUIBase
             if (ally.priority == PCLCreature.PRIORITY_END_FIRST)
             {
                 ally.takeTurn();
+                ally.applyTurnPowers();
             }
         }
     }
@@ -157,6 +162,15 @@ public class SummonPool extends EUIBase
         for (PCLCardAlly ally : sorted)
         {
             ally.takeTurn();
+            ally.applyTurnPowers();
+
+        }
+        for (PCLCardAlly ally : summons)
+        {
+            for (AbstractPower p : ally.powers)
+            {
+                p.atEndOfRound();
+            }
         }
     }
 
@@ -172,9 +186,18 @@ public class SummonPool extends EUIBase
     public int tryDamage(DamageInfo info, int damageAmount)
     {
         int leftover = damageAmount;
+        int remainder = 0;
+
+        if (damageMode == DamageMode.Half)
+        {
+            remainder = leftover / 2;
+            leftover -= remainder;
+        }
+
         switch (damageMode)
         {
-            case First:
+            case Half:
+            case Full:
                 for (PCLCardAlly ally : summons)
                 {
                     if (leftover > 0 && ally.hasCard())
@@ -203,7 +226,7 @@ public class SummonPool extends EUIBase
                 }
                 break;
         }
-        return leftover;
+        return leftover + remainder;
     }
 
     public AbstractCreature getTarget(AbstractCreature mo)
@@ -235,7 +258,8 @@ public class SummonPool extends EUIBase
 
     public enum DamageMode
     {
-        First,
+        Full,
+        Half,
         Distributed,
         None
     }

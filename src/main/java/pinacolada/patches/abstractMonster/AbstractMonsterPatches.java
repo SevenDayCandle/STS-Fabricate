@@ -166,7 +166,7 @@ public class AbstractMonsterPatches
                 }
                 else if (c != AbstractDungeon.player && (__instance.hb.hovered || __instance.intentHb.hovered))
                 {
-                    PCLRenderHelpers.drawCurve(sb, ImageMaster.TARGET_UI_ARROW, Color.SCARLET.cpy(), __instance.hb, c.hb, EUIBase.scale(100), 20);
+                    PCLRenderHelpers.drawCurve(sb, ImageMaster.TARGET_UI_ARROW, Color.SCARLET.cpy(), __instance.hb, c.hb, EUIBase.scale(100), 0.25f, 0.02f,20);
                 }
             }
         }

@@ -128,7 +128,7 @@
 	},
 	"pcl:UsefulBox":
 	{
-	  "DESCRIPTIONS": ["At the start of combat, #ySummon a random #yCommon #ySummon from your selected #yLoadout. | Once per combat, #oRight-Click: Target a creature to take on its form.", "#gCurrent #gBonus: {0}"],
+	  "DESCRIPTIONS": ["Whenever you #ySummon a #ySummon card, give it {0} [Block]. | Once per combat, #oRight-Click: Target a creature to take on its form.", "#gCurrent #gBonus: {0}"],
 	  "FLAVOR": "A box that is useful.",
 	  "NAME": "Useful Box"
 	},

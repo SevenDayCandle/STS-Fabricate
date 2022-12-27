@@ -2,9 +2,10 @@ package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import extendedui.EUIRM;
-import extendedui.interfaces.delegates.FuncT3;
+import extendedui.interfaces.delegates.FuncT4;
 import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.actions.PCLActions;
@@ -53,7 +54,7 @@ public class PMove_Transform extends PMove_Select
     }
 
     @Override
-    public FuncT3<SelectFromPile, String, Integer, CardGroup[]> getAction()
+    public FuncT4<SelectFromPile, String, AbstractCreature, Integer, CardGroup[]> getAction()
     {
         return SelectFromPile::new;
     }

@@ -31,6 +31,7 @@ public class DealDamageToAll extends PCLActionWithCallback<ArrayList<AbstractCre
     protected boolean bypassBlock;
     protected boolean bypassThorns;
     protected boolean isFast;
+    protected boolean targetAllies;
 
     protected Color vfxColor = null;
     protected Color enemyTint = null;
@@ -64,7 +65,7 @@ public class DealDamageToAll extends PCLActionWithCallback<ArrayList<AbstractCre
     {
         boolean mute = pitchMin == 0;
         int i = 0;
-        for (AbstractMonster enemy : GameUtilities.getEnemies(false))
+        for (AbstractMonster enemy : getTargets())
         {
             if (!GameUtilities.isDeadOrEscaped(enemy))
             {
@@ -102,7 +103,7 @@ public class DealDamageToAll extends PCLActionWithCallback<ArrayList<AbstractCre
             }
 
             int i = 0;
-            for (AbstractMonster enemy : GameUtilities.getEnemies(false))
+            for (AbstractMonster enemy : getTargets())
             {
                 if (!GameUtilities.isDeadOrEscaped(enemy))
                 {
@@ -135,6 +136,11 @@ public class DealDamageToAll extends PCLActionWithCallback<ArrayList<AbstractCre
 
             complete(targets);
         }
+    }
+
+    protected ArrayList<? extends AbstractMonster> getTargets()
+    {
+        return targetAllies ? GameUtilities.getSummons(null) : GameUtilities.getEnemies(false);
     }
 
     public DealDamageToAll setDamageEffect(PCLEffekseerEFX effekseerKey)
@@ -195,6 +201,13 @@ public class DealDamageToAll extends PCLActionWithCallback<ArrayList<AbstractCre
     {
         this.vfxColor = color.cpy();
         this.enemyTint = enemyTint.cpy();
+
+        return this;
+    }
+
+    public DealDamageToAll targetAllies(boolean val)
+    {
+        this.targetAllies = val;
 
         return this;
     }

@@ -436,7 +436,7 @@
 								"PROPER_NAME": "Stun"
 				},
 				"Summon": {
-								"DESCRIPTION": "#ySummon cards are placed onto the field and act every turn. If you would lose HP, your right-most #ySummon takes damage instead.",
+								"DESCRIPTION": "#ySummon cards are placed onto the field and act every turn. If you would lose HP, your right-most #ySummon takes half of that loss.",
 								"NAMES": ["summon"],
 								"PAST": "Summoned",
 								"PLURAL": "Summons",

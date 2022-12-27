@@ -63,6 +63,7 @@ import pinacolada.patches.cardLibrary.PCLCardLibraryPatches;
 import pinacolada.powers.PCLAffinityPower;
 import pinacolada.powers.PCLPower;
 import pinacolada.powers.PCLPowerHelper;
+import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreResources;
 import pinacolada.resources.pcl.PCLLoadout;
@@ -2290,7 +2291,7 @@ public class GameUtilities
 
     public static boolean requiresTarget(AbstractCard card)
     {
-        return card.target == AbstractCard.CardTarget.ENEMY || card.target == AbstractCard.CardTarget.SELF_AND_ENEMY;
+        return card.target == AbstractCard.CardTarget.ENEMY || card.target == AbstractCard.CardTarget.SELF_AND_ENEMY || card.type == PCLEnum.CardType.SUMMON;
     }
 
     public static void resetAffinityLevels(AbstractCard card)

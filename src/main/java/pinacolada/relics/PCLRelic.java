@@ -189,7 +189,7 @@ public abstract class PCLRelic extends CustomRelic implements TooltipProvider
     @Override
     public String getUpdatedDescription()
     {
-        return formatDescription(0, counter);
+        return formatDescription(0, getValue());
     }
 
     @Override
@@ -277,6 +277,11 @@ public abstract class PCLRelic extends CustomRelic implements TooltipProvider
         mainTooltip = playerClass != null ? new EUITooltip(name, this.playerClass, description) : new EUITooltip(name, description);
         tips.add(mainTooltip);
         EUIGameUtils.scanForTips(description, tips);
+    }
+
+    public int getValue()
+    {
+        return counter;
     }
 
     // Prevents duplicate relics from showing up for the Animator

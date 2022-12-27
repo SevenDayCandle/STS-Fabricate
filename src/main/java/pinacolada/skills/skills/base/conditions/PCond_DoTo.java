@@ -69,9 +69,9 @@ public abstract class PCond_DoTo extends PCond implements SelectFromPileMarker
         super(data, target, amount, powerHelpers);
     }
 
-    protected PCLActionWithCallback<ArrayList<AbstractCard>> createPileAction()
+    protected PCLActionWithCallback<ArrayList<AbstractCard>> createPileAction(PCLUseInfo info)
     {
-        return getAction().invoke(getName(), amount, getCardGroup())
+        return getAction().invoke(getName(), info.target, amount, getCardGroup())
                 .setFilter(c -> getFullCardFilter().invoke(c))
                 .setOptions(alt ? CardSelection.Random : origin, true);
     }
@@ -94,7 +94,7 @@ public abstract class PCond_DoTo extends PCond implements SelectFromPileMarker
     {
         if (childEffect != null)
         {
-            useImpl(() -> childEffect.use(info));
+            useImpl(info, () -> childEffect.use(info));
         }
     }
 
@@ -102,7 +102,7 @@ public abstract class PCond_DoTo extends PCond implements SelectFromPileMarker
     {
         if (childEffect != null)
         {
-            useImpl(() -> childEffect.use(info, index));
+            useImpl(info, () -> childEffect.use(info, index));
         }
     }
 
@@ -110,7 +110,7 @@ public abstract class PCond_DoTo extends PCond implements SelectFromPileMarker
     {
         if (isUsing && childEffect != null)
         {
-            useImpl(() -> childEffect.use(info));
+            useImpl(info, () -> childEffect.use(info));
         }
     }
 
@@ -139,7 +139,7 @@ public abstract class PCond_DoTo extends PCond implements SelectFromPileMarker
         return true;
     }
 
-    protected void useImpl(ActionT0 callback)
+    protected void useImpl(PCLUseInfo info, ActionT0 callback)
     {
         ArrayList<PCLCardGroupHelper> tempGroups = groupTypes;
         if (tempGroups.isEmpty())
@@ -147,7 +147,7 @@ public abstract class PCond_DoTo extends PCond implements SelectFromPileMarker
             tempGroups = new ArrayList<>();
             tempGroups.add(PCLCardGroupHelper.Hand);
         }
-        getActions().add(createPileAction())
+        getActions().add(createPileAction(info))
                 .addCallback(cards -> {
                     if (cards.size() >= amount)
                     {

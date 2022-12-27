@@ -2,6 +2,7 @@ package pinacolada.actions.pileSelection;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.relics.FrozenEye;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
@@ -50,10 +51,15 @@ public class SelectFromPile extends PCLActionWithCallback<ArrayList<AbstractCard
 
     public SelectFromPile(String sourceName, int amount, CardGroup... groups)
     {
-        this(ActionType.CARD_MANIPULATION, sourceName, amount, groups);
+        this(ActionType.CARD_MANIPULATION, sourceName, null, amount, groups);
     }
 
-    public SelectFromPile(ActionType type, String sourceName, int amount, CardGroup... groups)
+    public SelectFromPile(String sourceName, AbstractCreature target, int amount, CardGroup... groups)
+    {
+        this(ActionType.CARD_MANIPULATION, sourceName, target, amount, groups);
+    }
+
+    public SelectFromPile(ActionType type, String sourceName, AbstractCreature target, int amount, CardGroup... groups)
     {
         super(type);
 

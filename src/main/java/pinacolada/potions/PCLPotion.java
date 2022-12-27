@@ -4,6 +4,8 @@ import basemod.ReflectionHacks;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.evacipated.cardcrawl.modthespire.lib.SpireOverride;
+import com.evacipated.cardcrawl.modthespire.lib.SpireSuper;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
@@ -16,7 +18,6 @@ import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.ui.tooltips.EUITooltip;
-import extendedui.utilities.EUIClassUtils;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.interfaces.markers.PointerProvider;
 import pinacolada.resources.PCLResources;
@@ -134,8 +135,8 @@ public abstract class PCLPotion extends AbstractPotion implements TooltipProvide
         Texture outlineImg = ReflectionHacks.getPrivate(this, AbstractPotion.class, "outlineImg");
         ArrayList<FlashPotionEffect> effect = ReflectionHacks.getPrivate(this, AbstractPotion.class, "effect");
 
-        EUIClassUtils.invoke(this, "updateFlash");
-        EUIClassUtils.invoke(this, "updateEffect");
+        updateFlash();
+        updateEffect();
         if (this.hb.hovered)
         {
             EUITooltip.queueTooltips(this);
@@ -209,6 +210,16 @@ public abstract class PCLPotion extends AbstractPotion implements TooltipProvide
             EUIUtils.logError(this, e.getMessage());
             return null;
         }
+    }
+
+    @SpireOverride
+    protected void updateEffect() {
+        SpireSuper.call();
+    }
+
+    @SpireOverride
+    protected void updateFlash() {
+        SpireSuper.call();
     }
 
 }

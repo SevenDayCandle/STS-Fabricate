@@ -1,15 +1,12 @@
 package pinacolada.relics.pcl;
 
-import com.megacrit.cardcrawl.cards.AbstractCard;
-import extendedui.EUIUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.PCLCardData;
+import pinacolada.interfaces.subscribers.OnAllySummonSubscriber;
 import pinacolada.misc.CombatManager;
-import pinacolada.resources.PGR;
-import pinacolada.utilities.GameUtilities;
+import pinacolada.monsters.PCLCardAlly;
 
-public class UsefulBox extends AbstractBox
+public class UsefulBox extends AbstractBox implements OnAllySummonSubscriber
 {
     public static final String ID = createFullID(UsefulBox.class);
 
@@ -21,13 +18,17 @@ public class UsefulBox extends AbstractBox
     @Override
     public void atBattleStart()
     {
-        if (PGR.core.dungeon.startingSeries != null && CombatManager.summons.summons.size() > 0)
-        {
-            PCLCardData data = GameUtilities.getRandomElement(EUIUtils.filter(PGR.core.dungeon.startingSeries.cardData, cd -> cd.cardRarity == AbstractCard.CardRarity.COMMON));
-            if (data != null)
-            {
-                PCLActions.bottom.summonAlly((PCLCard) data.makeCopy(false), CombatManager.summons.summons.get(0));
-            }
-        }
+        CombatManager.onAllySummon.subscribe(this);
+    }
+
+    @Override
+    public void onAllySummon(PCLCard card, PCLCardAlly ally)
+    {
+        PCLActions.delayed.gainBlock(ally, getValue());
+    }
+
+    public int getValue()
+    {
+        return 8;
     }
 }

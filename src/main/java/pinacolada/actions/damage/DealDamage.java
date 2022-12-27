@@ -63,9 +63,9 @@ public class DealDamage extends PCLActionWithCallback<AbstractCreature>
         this(target, info, AttackEffect.NONE);
     }
 
-    public DealDamage(AbstractCard card, AbstractCreature target, AttackEffect effect)
+    public DealDamage(AbstractCard card, AbstractCreature source, AbstractCreature target, AttackEffect effect)
     {
-        this(card, target, new DamageInfo(AbstractDungeon.player, card.damage, card.damageTypeForTurn), effect);
+        this(card, target, new DamageInfo(source, card.damage, card.damageTypeForTurn), effect);
     }
 
     public DealDamage(AbstractCreature target, DamageInfo info, AttackEffect effect)

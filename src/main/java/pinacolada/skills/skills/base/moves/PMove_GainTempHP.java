@@ -1,5 +1,6 @@
 package pinacolada.skills.skills.base.moves;
 
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.resources.PGR;
@@ -26,6 +27,11 @@ public class PMove_GainTempHP extends PMove
         super(DATA, PCLCardTarget.Self, amount);
     }
 
+    public PMove_GainTempHP(PCLCardTarget target, int amount)
+    {
+        super(DATA, target, amount);
+    }
+
     @Override
     public String getSampleText()
     {
@@ -35,13 +41,20 @@ public class PMove_GainTempHP extends PMove
     @Override
     public void use(PCLUseInfo info)
     {
-        getActions().gainTemporaryHP(amount);
+        for (AbstractCreature c : getTargetList(info))
+        {
+            getActions().gainTemporaryHP(c, c, amount);
+        }
         super.use(info);
     }
 
     @Override
     public String getSubText()
     {
-        return TEXT.actions.gainAmount(getAmountRawString(), PGR.core.tooltips.tempHP);
+        if (target == PCLCardTarget.None || (target == PCLCardTarget.Self && isFromCreature()))
+        {
+            return TEXT.actions.gainAmount(getAmountRawString(), PGR.core.tooltips.tempHP);
+        }
+        return TEXT.actions.giveTargetAmount(getTargetString(), getAmountRawString(), PGR.core.tooltips.tempHP);
     }
 }

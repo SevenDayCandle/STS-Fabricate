@@ -2,8 +2,9 @@ package pinacolada.skills.skills.base.modifiers;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIRM;
-import extendedui.interfaces.delegates.FuncT3;
+import extendedui.interfaces.delegates.FuncT4;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.actions.PCLActionWithCallback;
 import pinacolada.actions.pileSelection.CycleCards;
@@ -11,6 +12,7 @@ import pinacolada.actions.pileSelection.DiscardFromPile;
 import pinacolada.actions.pileSelection.SelectFromPile;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.PCLCardTarget;
+import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -42,7 +44,7 @@ public class PMod_CyclePerCard extends PMod_Do
     }
 
     @Override
-    protected PCLActionWithCallback<ArrayList<AbstractCard>> createPileAction()
+    protected PCLActionWithCallback<ArrayList<AbstractCard>> createPileAction(PCLUseInfo info)
     {
         SelectFromPile action = new CycleCards(getName(), amount, alt);
         if (alt2)
@@ -65,7 +67,7 @@ public class PMod_CyclePerCard extends PMod_Do
     }
 
     @Override
-    public FuncT3<SelectFromPile, String, Integer, CardGroup[]> getAction()
+    public FuncT4<SelectFromPile, String, AbstractCreature, Integer, CardGroup[]> getAction()
     {
         return DiscardFromPile::new;
     }

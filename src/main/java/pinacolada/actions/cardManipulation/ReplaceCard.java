@@ -6,6 +6,8 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUIUtils;
 import extendedui.utilities.EUIClassUtils;
 import pinacolada.actions.PCLActionWithCallback;
+import pinacolada.cards.base.PCLCard;
+import pinacolada.monsters.PCLCardAlly;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -38,6 +40,19 @@ public class ReplaceCard extends PCLActionWithCallback<Map<AbstractCard, Abstrac
         replace(player.discardPile.group);
         replace(player.drawPile.group);
         replace(player.hand.group);
+
+        for (PCLCardAlly summon : GameUtilities.getSummons(false))
+        {
+            PCLCard summonCard = summon.card;
+            if (summonCard != null && cardUUID.equals(summonCard.uuid))
+            {
+                AbstractCard copy = replace(summonCard);
+                if (copy instanceof PCLCard)
+                {
+                    summon.initializeForCard((PCLCard) copy, false, false);
+                }
+            }
+        }
 
         for (int i = 0; i < AbstractDungeon.actionManager.actions.size(); i++)
         {

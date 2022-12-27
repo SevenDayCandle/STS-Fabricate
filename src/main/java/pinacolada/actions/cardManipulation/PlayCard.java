@@ -19,10 +19,10 @@ import pinacolada.actions.PCLActionWithCallbackT2;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.special.DelayAllActions;
 import pinacolada.effects.PCLEffects;
+import pinacolada.resources.PCLEnum;
 import pinacolada.utilities.GameUtilities;
 
-// If this action needs 1 more refactoring due to queueing a card not counting
-// as an action, completely override AbstractDungeon.actionManager instead.
+// Copied from STS-AnimatorMod
 public class PlayCard extends PCLActionWithCallbackT2<AbstractMonster, AbstractCard>
 {
     public static final float DEFAULT_TARGET_X_LEFT = (Settings.WIDTH / 2f) - (300f * Settings.scale);
@@ -90,7 +90,7 @@ public class PlayCard extends PCLActionWithCallbackT2<AbstractMonster, AbstractC
 
     protected boolean canUse()
     {
-        return card.canUse(player, (AbstractMonster) target) || card.dontTriggerOnUseCard;
+        return card.canUse(player, GameUtilities.asMonster(target)) || card.dontTriggerOnUseCard;
     }
 
     @Override
@@ -152,7 +152,18 @@ public class PlayCard extends PCLActionWithCallbackT2<AbstractMonster, AbstractC
         {
             if (GameUtilities.requiresTarget(card) && (target == null || GameUtilities.isDeadOrEscaped(target)))
             {
-                target = GameUtilities.getRandomEnemy(true);
+                if (card.type == PCLEnum.CardType.SUMMON)
+                {
+                    target = GameUtilities.getRandomSummon(false);
+                    if (target == null)
+                    {
+                        target = GameUtilities.getRandomSummon(true);
+                    }
+                }
+                else
+                {
+                    target = GameUtilities.getRandomEnemy(true);
+                }
             }
 
             if (!spendEnergy)
@@ -198,7 +209,7 @@ public class PlayCard extends PCLActionWithCallbackT2<AbstractMonster, AbstractC
     {
         addToLimbo();
 
-        final AbstractMonster enemy = (AbstractMonster) target;
+        final AbstractMonster enemy = GameUtilities.asMonster(target);
 
         if (!spendEnergy)
         {

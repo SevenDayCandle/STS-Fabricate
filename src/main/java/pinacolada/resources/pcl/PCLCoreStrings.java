@@ -462,8 +462,8 @@ public class PCLCoreStrings extends PCLStrings
         public final String damage = strings.TEXT[21];
         public final String debuffing = strings.TEXT[22];
         public final String defending = strings.TEXT[23];
-        public final String enemy = strings.TEXT[24];
-        public final String effectBonus = strings.TEXT[25];
+        public final String effectBonus = strings.TEXT[24];
+        public final String enemy = strings.TEXT[25];
         public final String fromX = strings.TEXT[26];
         public final String hits = strings.TEXT[27];
         public final String inX = strings.TEXT[28];

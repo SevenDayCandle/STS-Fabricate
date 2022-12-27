@@ -108,6 +108,11 @@ public class PMove_StackPower extends PMove
                 case Single:
                 case SingleAlly:
                     return TEXT.subjects.randomly(powers.size() > 0 && powers.get(0).isDebuff ? TEXT.actions.applyAmount(getAmountRawString(), joinedString) : TEXT.actions.giveTargetAmount(getTargetString(), getAmountRawString(), joinedString));
+                case Self:
+                    if (isFromCreature())
+                    {
+                        return TEXT.subjects.randomly(TEXT.actions.giveTargetAmount(getTargetString(), getAmountRawString(), joinedString));
+                    }
                 default:
                     return TEXT.subjects.randomly(amount < 0 ? TEXT.actions.loseAmount(getAmountRawString(), joinedString)
                             : TEXT.actions.gainAmount(getAmountRawString(), joinedString));
@@ -124,6 +129,11 @@ public class PMove_StackPower extends PMove
             case Single:
             case SingleAlly:
                 return powers.size() > 0 && powers.get(0).isDebuff ? TEXT.actions.applyAmount(getAmountRawString(), joinedString) : TEXT.actions.giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
+            case Self:
+                if (isFromCreature())
+                {
+                    return TEXT.actions.giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
+                }
             default:
                 return amount < 0 ? TEXT.actions.loseAmount(getAmountRawString(), joinedString)
                         : TEXT.actions.gainAmount(getAmountRawString(), joinedString);

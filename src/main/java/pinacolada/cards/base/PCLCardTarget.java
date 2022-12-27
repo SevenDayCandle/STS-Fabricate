@@ -233,4 +233,15 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget>
         }
         return false;
     }
+
+    public final boolean targetsSingle()
+    {
+        switch (this)
+        {
+            case Single:
+            case SingleAlly:
+                return true;
+        }
+        return false;
+    }
 }

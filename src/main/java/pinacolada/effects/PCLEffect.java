@@ -172,7 +172,8 @@ public abstract class PCLEffect extends AbstractGameEffect
         return isRealtime ? Gdx.graphics.getRawDeltaTime() : Gdx.graphics.getDeltaTime();
     }
 
-    protected static <T> T randomElement(T[] source, RandomizedList<T> container)
+    @SafeVarargs
+    protected static <T> T randomElement(RandomizedList<T> container, T... source)
     {
         if (container.size() <= 1)
         {

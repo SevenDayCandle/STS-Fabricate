@@ -8,10 +8,12 @@ import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
+import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.markers.CardObject;
-import pinacolada.cards.base.cardText.PCLCardText;
 import pinacolada.cards.base.fields.PCLCardTag;
 import pinacolada.interfaces.markers.Hidden;
+import pinacolada.monsters.PCLCardAlly;
+import pinacolada.monsters.animations.PCLAllyAnimation;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
@@ -46,7 +48,6 @@ public class PCLCardData implements CardObject
     public Integer[] costUpgrade = array(0);
     public HashMap<PCLCardTag, PCLCardTagInfo> tags = new HashMap<>();
     public CardStrings strings;
-    public Object shared;
     public String imagePath;
     public String ID;
     public PCLCardTarget cardTarget = PCLCardTarget.None;
@@ -54,6 +55,7 @@ public class PCLCardData implements CardObject
     public AbstractCard.CardType cardType = AbstractCard.CardType.SKILL;
     public AbstractCard.CardColor cardColor = AbstractCard.CardColor.COLORLESS;
     public AbstractCard.CardRarity cardRarity = AbstractCard.CardRarity.BASIC;
+    public FuncT1<PCLAllyAnimation, PCLCardAlly> customAnimation; // TODO use this
     public PCLResources resources;
     public PCLAttackType attackType = PCLAttackType.Normal;
     public PCLCardDataAffinityGroup affinities = new PCLCardDataAffinityGroup();
@@ -66,7 +68,6 @@ public class PCLCardData implements CardObject
     public boolean playAtEndOfTurn = false;
     public boolean unique = false;
     public boolean unUpgradedCanToggleForms = false;
-    public boolean cropPortrait;
     public int maxCopies;
     public int maxForms = 1;
     public int maxUpgradeLevel = 1;
@@ -93,7 +94,7 @@ public class PCLCardData implements CardObject
         this.resources = resources;
         this.cardColor = resources.cardColor;
         this.maxCopies = -1;
-        this.strings = strings != null ? PCLCardText.processCardStrings(strings) : new CardStrings();
+        this.strings = strings != null ? strings : new CardStrings();
         this.type = type;
     }
 
@@ -237,6 +238,11 @@ public class PCLCardData implements CardObject
         return hitCountUpgrade[Math.min(hitCountUpgrade.length - 1, form)];
     }
 
+    public String getLoadoutName()
+    {
+        return loadout != null ? loadout.getName() : strings.DESCRIPTION;
+    }
+
     public Integer[] getNumbers(int form)
     {
         return array(
@@ -257,11 +263,6 @@ public class PCLCardData implements CardObject
     public int getRightCountUpgrade(int form)
     {
         return rightCountUpgrade[Math.min(rightCountUpgrade.length - 1, form)];
-    }
-
-    public <T> T getSharedData()
-    {
-        return (T) shared;
     }
 
     public PCLCardTagInfo getTagInfo(PCLCardTag tag)
@@ -727,13 +728,6 @@ public class PCLCardData implements CardObject
             // Commons and Attacks/Skills get an extra slot
             slots = (cardType == AbstractCard.CardType.POWER ? 1 : 2) + (cardRarity == AbstractCard.CardRarity.COMMON ? 1 : 0);
         }
-
-        return this;
-    }
-
-    public PCLCardData setSharedData(Object shared)
-    {
-        this.shared = shared;
 
         return this;
     }

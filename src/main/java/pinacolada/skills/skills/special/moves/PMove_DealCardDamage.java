@@ -86,16 +86,18 @@ public class PMove_DealCardDamage extends PMove implements Hidden
         {
             switch (target)
             {
-                // TODO target allies
                 case All:
-                    getActions().dealCardDamage(pCard, AbstractDungeon.player, attackEffect).forEach(e -> setDamageOptions(e, info));
-                    getActions().dealCardDamageToAll(pCard, attackEffect).forEach(e -> setDamageOptions(e, info));
+                    getActions().dealCardDamageToAll(pCard, info.source, attackEffect).forEach(e -> setDamageOptions(e, info));
+                case Team:
+                    getActions().dealCardDamage(pCard, info.source, AbstractDungeon.player, attackEffect).forEach(e -> setDamageOptions(e, info));
+                case AllAlly:
+                    getActions().dealCardDamageToAll(pCard, info.source, attackEffect).forEach(e -> setDamageOptions(e.targetAllies(true), info));
                     break;
                 case AllEnemy:
-                    getActions().dealCardDamageToAll(pCard, attackEffect).forEach(e -> setDamageOptions(e, info));
+                    getActions().dealCardDamageToAll(pCard, info.source, attackEffect).forEach(e -> setDamageOptions(e, info));
                     break;
                 default:
-                    getActions().dealCardDamage(pCard, info.target, attackEffect).forEach(e -> setDamageOptions(e, info));
+                    getActions().dealCardDamage(pCard, info.source, info.target, attackEffect).forEach(e -> setDamageOptions(e, info));
 
             }
         }

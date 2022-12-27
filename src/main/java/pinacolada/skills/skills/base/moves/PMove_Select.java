@@ -34,7 +34,7 @@ public abstract class PMove_Select extends PMove implements SelectFromPileMarker
     protected SelectFromPile createAction(PCLUseInfo info)
     {
         CardGroup[] g = getCardGroup();
-        return getAction().invoke(getName(), useParent && g.length > 0 ? g[0].size() : amount <= 0 ? Integer.MAX_VALUE : amount, g);
+        return getAction().invoke(getName(), info.target, useParent && g.length > 0 ? g[0].size() : amount <= 0 ? Integer.MAX_VALUE : amount, g);
     }
 
     @Override

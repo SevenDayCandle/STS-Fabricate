@@ -9,7 +9,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.FontHelper;
-import com.megacrit.cardcrawl.localization.CardStrings;
 import extendedui.EUI;
 import extendedui.EUIRM;
 import extendedui.ui.TextureCache;
@@ -17,7 +16,6 @@ import extendedui.utilities.ColoredString;
 import extendedui.utilities.ColoredTexture;
 import extendedui.utilities.EUIColors;
 import extendedui.utilities.EUIFontHelper;
-import org.apache.commons.lang3.StringUtils;
 import pinacolada.augments.PCLAugment;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardTag;
@@ -30,7 +28,6 @@ import java.util.HashMap;
 
 public class PCLCardText
 {
-    private static final String UPGRADE_DESC_STRING = "<DESCRIPTION>";
     private static final PCLCoreImages.Badges BADGES = PGR.core.images.badges;
     private static final PCLCoreImages.CardIcons ICONS = PGR.core.images.icons;
     private static final ColoredString cs = new ColoredString("", Settings.CREAM_COLOR);
@@ -51,33 +48,10 @@ public class PCLCardText
         this.card = card;
     }
 
-    public static CardStrings processCardStrings(CardStrings strings)
-    {
-        if (StringUtils.isNotEmpty(strings.UPGRADE_DESCRIPTION))
-        {
-            strings.UPGRADE_DESCRIPTION = strings.UPGRADE_DESCRIPTION.replace(UPGRADE_DESC_STRING, strings.DESCRIPTION);
-        }
-
-        return strings;
-    }
-
     public void forceRefresh()
     {
-        forceRefresh(false);
-    }
-
-    public void forceRefresh(boolean ignoreEffects)
-    {
-        if (overrideDescription != null)
-        {
-            card.rawDescription = overrideDescription;
-        }
-        else
-        {
-            card.rawDescription = card.getRawDescription();
-        }
-
-        context.initialize(card, card.rawDescription, ignoreEffects);
+        card.rawDescription = overrideDescription;
+        context.initialize(card, card.rawDescription);
     }
 
     protected TextureCache getBlockIcon()
@@ -131,7 +105,7 @@ public class PCLCardText
 
         if (forceRefresh)
         {
-            forceRefresh(true);
+            forceRefresh();
         }
     }
 

@@ -2,16 +2,21 @@ package pinacolada.actions.pileSelection;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import pinacolada.resources.PGR;
 
 import java.util.ArrayList;
 
 public class ExhaustFromPile extends SelectFromPile
 {
-
     public ExhaustFromPile(String sourceName, int amount, CardGroup... groups)
     {
-        super(ActionType.EXHAUST, sourceName, amount, groups);
+        super(ActionType.EXHAUST, sourceName, null, amount, groups);
+    }
+
+    public ExhaustFromPile(String sourceName, AbstractCreature target, int amount, CardGroup... groups)
+    {
+        super(ActionType.EXHAUST, sourceName, target, amount, groups);
     }
 
     @Override

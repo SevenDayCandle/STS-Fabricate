@@ -37,7 +37,7 @@ public class SnowballParticleEffect extends PCLEffect
     {
         super(random(0.5f, 1f));
 
-        this.img = randomElement(images, textures).texture();
+        this.img = randomElement(textures, images).texture();
         this.x = x - (float) (SIZE / 2);
         this.y = y - (float) (SIZE / 2);
         this.rotation = random(-10f, 10f);

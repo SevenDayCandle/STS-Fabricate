@@ -9,16 +9,19 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
+import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.vfx.BobEffect;
 import com.megacrit.cardcrawl.vfx.ExhaustBlurEffect;
 import extendedui.EUI;
+import extendedui.EUIInputManager;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.EUIBase;
 import extendedui.ui.tooltips.EUICardPreview;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
@@ -27,7 +30,10 @@ import pinacolada.monsters.animations.PCLAllyAnimation;
 import pinacolada.monsters.animations.PCLAnimation;
 import pinacolada.monsters.animations.PCLSlotAnimation;
 import pinacolada.monsters.animations.pcl.PCLGeneralAllyAnimation;
+import pinacolada.powers.PSkillPower;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.Skills;
+import pinacolada.skills.skills.special.moves.PMove_StackCustomPower;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
@@ -58,14 +64,6 @@ public class PCLCardAlly extends PCLCreature
 
     public void initializeForCard(PCLCard card, boolean clearPowers, boolean stun)
     {
-        if (clearPowers)
-        {
-            this.powers.clear();
-        }
-        if (stun)
-        {
-            this.stunned = true;
-        }
         card.owner = this;
         this.card = card;
         this.preview = new EUICardPreview(card, card.upgraded);
@@ -79,6 +77,29 @@ public class PCLCardAlly extends PCLCreature
 
         FuncT1<PCLAllyAnimation, PCLCardAlly> animFunc = ANIMATION_MAP.get(card.color);
         this.animation = animFunc != null ? animFunc.invoke(this) : new PCLGeneralAllyAnimation(this);
+
+
+        if (clearPowers)
+        {
+            this.powers.clear();
+        }
+        else
+        {
+            this.powers.removeIf(p -> p instanceof PSkillPower);
+        }
+        if (stun)
+        {
+            this.stunned = true;
+        }
+        for (PSkill s : card.getFullEffects())
+        {
+            if (s instanceof PMove_StackCustomPower)
+            {
+                s.use(new PCLUseInfo(card, this, this));
+            }
+        }
+
+        refreshAction();
     }
 
     public boolean hasCard()
@@ -165,9 +186,7 @@ public class PCLCardAlly extends PCLCreature
                 ((PCLAnimation) animation).playActAnimation(hb.cX, hb.cY);
             }
             final PCLUseInfo info = new PCLUseInfo(card, this, target);
-            card.onPreUse(info);
-            card.onUse(info);
-            card.onLateUse(info);
+            card.useEffectsWithoutPowers(info);
             CombatManager.playerSystem.onCardPlayed(card, target, info, true);
             GameUtilities.removeDamagePowers(this);
         }
@@ -257,15 +276,18 @@ public class PCLCardAlly extends PCLCreature
                 {
                     powers.get(i).update(i);
                 }
-            }
-            if (hb.clicked)
-            {
-                PCLActions.bottom.selectCreature(card).addCallback(t -> {
-                    if (t != null)
-                    {
-                        target = t;
-                    }
-                });
+                if ((card.pclTarget.targetsSingle())
+                        && (hb.hovered || intentHb.hovered)
+                        && EUIInputManager.rightClick.isJustPressed()
+                        && !(AbstractDungeon.player.isDraggingCard || AbstractDungeon.player.inSingleTargetMode))
+                {
+                    PCLActions.bottom.selectCreature(card).addCallback(t -> {
+                        if (t != null)
+                        {
+                            target = t;
+                        }
+                    });
+                }
             }
         }
     }
@@ -279,9 +301,16 @@ public class PCLCardAlly extends PCLCreature
             if (hb.hovered || intentHb.hovered)
             {
                 renderTip(sb);
-                if (target != null)
+                if (card.pclTarget == PCLCardTarget.AllEnemy)
                 {
-                    PCLRenderHelpers.drawCurve(sb, ImageMaster.TARGET_UI_ARROW, Color.SCARLET.cpy(), this.hb, target.hb, EUIBase.scale(100), 20);
+                    for (AbstractMonster mo : GameUtilities.getEnemies(true))
+                    {
+                        PCLRenderHelpers.drawCurve(sb, ImageMaster.TARGET_UI_ARROW, Color.SCARLET.cpy(), this.hb, mo.hb, EUIBase.scale(100), 0.25f, 0.02f, 20);
+                    }
+                }
+                else if (card.pclTarget.targetsSingle() && target != null)
+                {
+                    PCLRenderHelpers.drawCurve(sb, ImageMaster.TARGET_UI_ARROW, Color.SCARLET.cpy(), this.hb, target.hb, EUIBase.scale(100), 0.25f, 0.02f, 20);
                 }
             }
         }

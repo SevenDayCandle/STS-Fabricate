@@ -41,6 +41,7 @@ import pinacolada.monsters.PCLCardAlly;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.powers.PCLPower;
 import pinacolada.powers.PCLPowerHelper;
+import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.skills.PMultiSkill;
@@ -410,39 +411,6 @@ public abstract class PSkill implements TooltipProvider
     public static String getGroupString(List<PCLCardGroupHelper> groups)
     {
         return groups.size() >= 3 ? PGR.core.strings.subjects.anyPile : PCLCoreStrings.joinWithOr(EUIUtils.map(groups, g -> g.name.toLowerCase()));
-    }
-
-    public static String getTargetString(PCLCardTarget target)
-    {
-        return getTargetString(target, 1);
-    }
-
-    public static String getTargetString(PCLCardTarget target, int count)
-    {
-        switch (target)
-        {
-            case All:
-                return TEXT.subjects.allX(PCLCoreStrings.pluralForce(TEXT.subjects.characterN));
-            case AllAlly:
-                return TEXT.subjects.allX(PCLCoreStrings.pluralForce(TEXT.subjects.allyN));
-            case AllEnemy:
-                return TEXT.subjects.allX(PCLCoreStrings.pluralForce(TEXT.subjects.enemyN));
-            case Any:
-                return TEXT.subjects.anyone;
-            case RandomAlly:
-                return EUIRM.strings.numNoun(count, TEXT.subjects.randomX(PCLCoreStrings.pluralEvaluated(TEXT.subjects.allyN, count)));
-            case RandomEnemy:
-                return EUIRM.strings.numNoun(count, TEXT.subjects.randomX(PCLCoreStrings.pluralEvaluated(TEXT.subjects.enemyN, count)));
-            case Single:
-                return EUIRM.strings.numNoun(count, PCLCoreStrings.pluralEvaluated(TEXT.subjects.enemyN, count));
-            case SingleAlly:
-                return EUIRM.strings.numNoun(count, PCLCoreStrings.pluralEvaluated(TEXT.subjects.allyN, count));
-            case Team:
-                return TEXT.subjects.your(target.getTitle());
-            case Self:
-            default:
-                return TEXT.subjects.you;
-        }
     }
 
     public static String idOf(PSkillData data)
@@ -1376,10 +1344,48 @@ public abstract class PSkill implements TooltipProvider
 
     public final ArrayList<AbstractCreature> getTargetList(PCLUseInfo info) {return target.getTargets(info.source, info.target);}
 
-    public final String getTargetString()
+    public String getTargetString()
     {
         return getTargetString(target);
     }
+
+    public String getTargetString(PCLCardTarget target)
+    {
+        return getTargetString(target, 1);
+    }
+
+    public String getTargetString(PCLCardTarget target, int count)
+    {
+        switch (target)
+        {
+            case All:
+                return TEXT.subjects.allX(PCLCoreStrings.pluralForce(TEXT.subjects.characterN));
+            case AllAlly:
+                return TEXT.subjects.allX(PCLCoreStrings.pluralForce(TEXT.subjects.allyN));
+            case AllEnemy:
+                return TEXT.subjects.allX(PCLCoreStrings.pluralForce(TEXT.subjects.enemyN));
+            case Any:
+                return TEXT.subjects.anyone;
+            case RandomAlly:
+                return EUIRM.strings.numNoun(count, TEXT.subjects.randomX(PCLCoreStrings.pluralEvaluated(TEXT.subjects.allyN, count)));
+            case RandomEnemy:
+                return EUIRM.strings.numNoun(count, TEXT.subjects.randomX(PCLCoreStrings.pluralEvaluated(TEXT.subjects.enemyN, count)));
+            case Single:
+                return EUIRM.strings.numNoun(count, PCLCoreStrings.pluralEvaluated(TEXT.subjects.enemyN, count));
+            case SingleAlly:
+                return EUIRM.strings.numNoun(count, PCLCoreStrings.pluralEvaluated(TEXT.subjects.allyN, count));
+            case Team:
+                return TEXT.subjects.your(target.getTitle());
+            case Self:
+                if (isFromCreature())
+                {
+                    return TEXT.subjects.thisObj;
+                }
+            default:
+                return TEXT.subjects.you;
+        }
+    }
+
 
     public String getText(int index, boolean addPeriod)
     {
@@ -1492,6 +1498,11 @@ public abstract class PSkill implements TooltipProvider
     public boolean isDetrimental()
     {
         return false;
+    }
+
+    public final boolean isFromCreature()
+    {
+        return (sourceCard != null && sourceCard.type == PCLEnum.CardType.SUMMON) || (getSourceCreature() instanceof AbstractMonster);
     }
 
     public final boolean isTrigger()

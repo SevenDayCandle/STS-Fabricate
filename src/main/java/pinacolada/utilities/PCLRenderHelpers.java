@@ -219,27 +219,27 @@ public class PCLRenderHelpers extends EUIRenderHelpers
         return result;
     }
 
-    public static void drawCurve(SpriteBatch sb, Texture texture, Color c1, Hitbox h1, Hitbox h2, float vDist, int points) {
-        drawCurve(sb, texture, c1, new Vector2(h1.cX, h1.cY), new Vector2(h2.cX, h2.cY), vDist, points);
+    public static void drawCurve(SpriteBatch sb, Texture texture, Color c1, Hitbox h1, Hitbox h2, float vDist, float startScale, float scaleGrowth, int points) {
+        drawCurve(sb, texture, c1, new Vector2(h1.cX, h1.cY), new Vector2(h2.cX, h2.cY), vDist, startScale, scaleGrowth, points);
     }
 
-    public static void drawCurve(SpriteBatch sb, Texture texture, Color c1, Color c2, Hitbox h1, Hitbox h2, float vDist, int points) {
-        drawCurve(sb, texture, c1, c2, new Vector2(h1.cX, h1.cY), new Vector2(h2.cX, h2.cY), vDist, points);
+    public static void drawCurve(SpriteBatch sb, Texture texture, Color c1, Color c2, Hitbox h1, Hitbox h2, float vDist, float startScale, float scaleGrowth, int points) {
+        drawCurve(sb, texture, c1, c2, new Vector2(h1.cX, h1.cY), new Vector2(h2.cX, h2.cY), vDist, startScale, scaleGrowth, points);
     }
 
-    public static void drawCurve(SpriteBatch sb, Texture texture, Color c1, Vector2 h1, Vector2 h2, float vDist, int points) {
-        drawCurve(sb, texture, c1, c1, h1, h2, new Vector2((h1.x + h2.x) / 2, (h1.y + h2.y) / 2 + vDist), points);
+    public static void drawCurve(SpriteBatch sb, Texture texture, Color c1, Vector2 h1, Vector2 h2, float vDist, float startScale, float scaleGrowth, int points) {
+        drawCurve(sb, texture, c1, c1, h1, h2, new Vector2((h1.x + h2.x) / 2, (h1.y + h2.y) / 2 + vDist), startScale, scaleGrowth, points);
     }
 
-    public static void drawCurve(SpriteBatch sb, Texture texture, Color c1, Color c2, Vector2 h1, Vector2 h2, float vDist, int points) {
-        drawCurve(sb, texture, c1, c2, h1, h2, new Vector2((h1.x + h2.x) / 2, (h1.y + h2.y) / 2 + vDist), points);
+    public static void drawCurve(SpriteBatch sb, Texture texture, Color c1, Color c2, Vector2 h1, Vector2 h2, float vDist, float startScale, float scaleGrowth, int points) {
+        drawCurve(sb, texture, c1, c2, h1, h2, new Vector2((h1.x + h2.x) / 2, (h1.y + h2.y) / 2 + vDist), startScale, scaleGrowth, points);
     }
 
-    public static void drawCurve(SpriteBatch sb, Texture texture, Color c1, Color c2, Vector2 h1, Vector2 h2, Vector2 c, int points) {
+    public static void drawCurve(SpriteBatch sb, Texture texture, Color c1, Color c2, Vector2 h1, Vector2 h2, Vector2 c, float startScale, float scaleGrowth, int points) {
         Vector2 cur = new Vector2();
         Vector2 prev = new Vector2();
         float origin = texture.getWidth() / 2f;
-        float scale = Settings.scale * 0.4f;
+        float scale = Settings.scale * startScale;
 
         for (int i = 0; i < points; ++i)
         {
@@ -262,6 +262,7 @@ public class PCLRenderHelpers extends EUIRenderHelpers
 
             sb.setColor(EUIColors.lerp(c1, c2, divisor));
             sb.draw(texture, cur.x - origin, cur.y - origin, origin, origin, texture.getWidth(), texture.getHeight(), scale, scale, angle, 0, 0, texture.getWidth(), texture.getHeight(), false, false);
+            scale += scaleGrowth;
         }
     }
 

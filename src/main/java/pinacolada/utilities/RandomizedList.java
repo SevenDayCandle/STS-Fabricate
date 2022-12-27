@@ -22,7 +22,8 @@ public class RandomizedList<T>
         items = new ArrayList<>(collection);
     }
 
-    public RandomizedList(T[] array)
+    @SafeVarargs
+    public RandomizedList(T... array)
     {
         items = new ArrayList<>(array.length);
         addAll(array);
@@ -33,7 +34,8 @@ public class RandomizedList<T>
         items.add(item);
     }
 
-    public void addAll(T[] arr)
+    @SafeVarargs
+    public final void addAll(T... arr)
     {
         Collections.addAll(items, arr);
     }

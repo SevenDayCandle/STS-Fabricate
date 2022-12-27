@@ -1,8 +1,9 @@
 package pinacolada.skills.skills.base.modifiers;
 
 import com.megacrit.cardcrawl.cards.CardGroup;
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIRM;
-import extendedui.interfaces.delegates.FuncT3;
+import extendedui.interfaces.delegates.FuncT4;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.actions.pileSelection.ReshuffleFromPile;
 import pinacolada.actions.pileSelection.SelectFromPile;
@@ -51,9 +52,9 @@ public class PMod_ReshuffleToTopPerCard extends PMod_Do
     }
 
     @Override
-    public FuncT3<SelectFromPile, String, Integer, CardGroup[]> getAction()
+    public FuncT4<SelectFromPile, String, AbstractCreature, Integer, CardGroup[]> getAction()
     {
-        return (a, b, c) -> new ReshuffleFromPile(a, b, c).setDestination(CardSelection.Top);
+        return (a, b, c, d) -> new ReshuffleFromPile(a, b, c, d).setDestination(CardSelection.Top);
     }
 
     @Override

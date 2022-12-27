@@ -2,7 +2,8 @@ package pinacolada.skills.skills.base.modifiers;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
-import extendedui.interfaces.delegates.FuncT3;
+import com.megacrit.cardcrawl.core.AbstractCreature;
+import extendedui.interfaces.delegates.FuncT4;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.actions.PCLActionWithCallback;
 import pinacolada.actions.cardManipulation.ScryWhichActuallyTriggersDiscard;
@@ -10,6 +11,7 @@ import pinacolada.actions.pileSelection.DiscardFromPile;
 import pinacolada.actions.pileSelection.SelectFromPile;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.PCLCardTarget;
+import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -40,7 +42,7 @@ public class PMod_ScryBranch extends PMod_DoBranch
     }
 
     @Override
-    protected PCLActionWithCallback<ArrayList<AbstractCard>> createPileAction()
+    protected PCLActionWithCallback<ArrayList<AbstractCard>> createPileAction(PCLUseInfo info)
     {
         return new ScryWhichActuallyTriggersDiscard(amount);
     }
@@ -52,7 +54,7 @@ public class PMod_ScryBranch extends PMod_DoBranch
     }
 
     @Override
-    public FuncT3<SelectFromPile, String, Integer, CardGroup[]> getAction()
+    public FuncT4<SelectFromPile, String, AbstractCreature, Integer, CardGroup[]> getAction()
     {
         return DiscardFromPile::new;
     }

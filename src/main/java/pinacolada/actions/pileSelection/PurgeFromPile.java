@@ -3,6 +3,7 @@ package pinacolada.actions.pileSelection;
 import com.badlogic.gdx.math.Vector2;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import pinacolada.misc.CombatManager;
 import pinacolada.resources.PGR;
 
@@ -14,7 +15,12 @@ public class PurgeFromPile extends SelectFromPile
 
     public PurgeFromPile(String sourceName, int amount, CardGroup... groups)
     {
-        super(ActionType.SPECIAL, sourceName, amount, groups);
+        super(ActionType.EXHAUST, sourceName, null, amount, groups);
+    }
+
+    public PurgeFromPile(String sourceName, AbstractCreature target, int amount, CardGroup... groups)
+    {
+        super(ActionType.EXHAUST, sourceName, target, amount, groups);
     }
 
     @Override

@@ -1,7 +1,8 @@
 package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.cards.CardGroup;
-import extendedui.interfaces.delegates.FuncT3;
+import com.megacrit.cardcrawl.core.AbstractCreature;
+import extendedui.interfaces.delegates.FuncT4;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.actions.pileSelection.ExhaustFromPile;
 import pinacolada.actions.pileSelection.SelectFromPile;
@@ -38,7 +39,7 @@ public class PMove_Exhaust extends PMove_Select
     }
 
     @Override
-    public FuncT3<SelectFromPile, String, Integer, CardGroup[]> getAction()
+    public FuncT4<SelectFromPile, String, AbstractCreature, Integer, CardGroup[]> getAction()
     {
         return ExhaustFromPile::new;
     }

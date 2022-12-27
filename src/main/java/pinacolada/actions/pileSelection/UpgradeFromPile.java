@@ -2,6 +2,7 @@ package pinacolada.actions.pileSelection;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.vfx.megacritCopy.UpgradeShineEffect2;
@@ -16,7 +17,12 @@ public class UpgradeFromPile extends SelectFromPile
 
     public UpgradeFromPile(String sourceName, int amount, CardGroup... groups)
     {
-        super(ActionType.EXHAUST, sourceName, amount, groups);
+        this(sourceName, null, amount, groups);
+    }
+
+    public UpgradeFromPile(String sourceName, AbstractCreature target, int amount, CardGroup... groups)
+    {
+        super(ActionType.CARD_MANIPULATION, sourceName, target, amount, groups);
         this.canCancel = false;
     }
 

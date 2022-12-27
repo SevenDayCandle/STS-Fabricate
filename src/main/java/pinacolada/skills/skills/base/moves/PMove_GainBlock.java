@@ -48,7 +48,7 @@ public class PMove_GainBlock extends PMove
     @Override
     public String getSubText()
     {
-        if (target == PCLCardTarget.Self)
+        if (target == PCLCardTarget.None || (target == PCLCardTarget.Self && isFromCreature()))
         {
             return TEXT.actions.gainAmount(getAmountRawString(), PGR.core.tooltips.block);
         }

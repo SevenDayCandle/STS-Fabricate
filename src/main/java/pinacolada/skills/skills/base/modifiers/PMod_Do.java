@@ -70,9 +70,9 @@ public abstract class PMod_Do extends PMod implements SelectFromPileMarker
         super(data, target, amount, powerHelpers);
     }
 
-    protected PCLActionWithCallback<ArrayList<AbstractCard>> createPileAction()
+    protected PCLActionWithCallback<ArrayList<AbstractCard>> createPileAction(PCLUseInfo info)
     {
-        SelectFromPile action = getAction().invoke(getName(), amount <= 0 ? Integer.MAX_VALUE : amount, getCardGroup())
+        SelectFromPile action = getAction().invoke(getName(), info.target, amount <= 0 ? Integer.MAX_VALUE : amount, getCardGroup())
                 .setOptions(alt || amount <= 0 ? CardSelection.Random : origin, true);
         if (alt2)
         {
@@ -113,7 +113,7 @@ public abstract class PMod_Do extends PMod implements SelectFromPileMarker
     @Override
     public void use(PCLUseInfo info)
     {
-        getActions().add(createPileAction())
+        getActions().add(createPileAction(info))
                 .addCallback(cards -> {
                     this.cards = cards;
                     if (this.childEffect != null)
@@ -134,7 +134,7 @@ public abstract class PMod_Do extends PMod implements SelectFromPileMarker
     @Override
     public void use(PCLUseInfo info, int index)
     {
-        getActions().add(createPileAction())
+        getActions().add(createPileAction(info))
                 .addCallback(cards -> {
                     this.cards = cards;
                     if (this.childEffect != null)

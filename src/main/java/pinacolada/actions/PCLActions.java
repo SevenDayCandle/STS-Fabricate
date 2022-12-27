@@ -363,33 +363,28 @@ public final class PCLActions
         return (CycleCards) add(new CycleCards(sourceName, amount, false));
     }
 
-    public ArrayList<DealDamage> dealCardDamage(PCLCard card, AbstractCreature target, AbstractGameAction.AttackEffect effect)
+    public ArrayList<DealDamage> dealCardDamage(PCLCard card, AbstractCreature source, AbstractCreature target, AbstractGameAction.AttackEffect effect)
     {
         ArrayList<DealDamage> actions = new ArrayList<>();
         for (int i = 0; i < card.hitCount; i++)
         {
-            actions.add(add(new DealDamage(card, target, effect))
+            actions.add(add(new DealDamage(card, source, target, effect))
                     .setPiercing(card.attackType.bypassThorns, card.attackType.bypassBlock));
         }
 
         return actions;
     }
 
-    public ArrayList<DealDamageToAll> dealCardDamageToAll(PCLCard card, AbstractGameAction.AttackEffect effect)
+    public ArrayList<DealDamageToAll> dealCardDamageToAll(PCLCard card, AbstractCreature source, AbstractGameAction.AttackEffect effect)
     {
         ArrayList<DealDamageToAll> actions = new ArrayList<>();
         for (int i = 0; i < card.hitCount; i++)
         {
-            actions.add(add(new DealDamageToAll(player, card.multiDamage, card.damageTypeForTurn, effect, false))
+            actions.add(add(new DealDamageToAll(source, card.multiDamage, card.damageTypeForTurn, effect, false))
                     .setPiercing(card.attackType.bypassThorns, card.attackType.bypassBlock));
         }
 
         return actions;
-    }
-
-    public ArrayList<DealDamage> dealCardDamageToRandomEnemy(PCLCard card, AbstractGameAction.AttackEffect effect)
-    {
-        return dealCardDamage(card, null, effect);
     }
 
     public DealDamage dealDamage(AbstractCreature source, AbstractCreature target, int baseDamage, DamageInfo.DamageType damageType, AbstractGameAction.AttackEffect effect)
@@ -550,6 +545,11 @@ public final class PCLActions
     public GainTemporaryHP gainTemporaryHP(int amount)
     {
         return add(new GainTemporaryHP(player, player, amount));
+    }
+
+    public GainTemporaryHP gainTemporaryHP(AbstractCreature source, AbstractCreature target, int amount)
+    {
+        return add(new GainTemporaryHP(source, target, amount));
     }
 
     public HealCreature heal(AbstractCreature source, AbstractCreature target, int amount)

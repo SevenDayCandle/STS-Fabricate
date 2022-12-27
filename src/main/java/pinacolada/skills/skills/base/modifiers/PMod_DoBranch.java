@@ -69,9 +69,9 @@ public abstract class PMod_DoBranch extends PMod_Branch<AbstractCard> implements
         super(data, target, amount, powerHelpers);
     }
 
-    protected PCLActionWithCallback<ArrayList<AbstractCard>> createPileAction()
+    protected PCLActionWithCallback<ArrayList<AbstractCard>> createPileAction(PCLUseInfo info)
     {
-        return getAction().invoke(getName(), amount, getCardGroup())
+        return getAction().invoke(getName(), info.target, amount, getCardGroup())
                 .setOptions(alt ? CardSelection.Random : origin, true);
     }
 
@@ -128,7 +128,7 @@ public abstract class PMod_DoBranch extends PMod_Branch<AbstractCard> implements
     @Override
     public void use(PCLUseInfo info)
     {
-        getActions().add(createPileAction())
+        getActions().add(createPileAction(info))
                 .addCallback(cards -> {
                     this.cards = cards;
                     if (this.childEffect != null)
