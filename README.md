@@ -1,4 +1,4 @@
-# STS-CardEditor
+# PCLCore (W.I.P. name)
 This mods adds an in-game card editor to Slay the Spire. This will also function as a base framework for reworked characters from the Clown Emporium
 
 Installation Instructions:
