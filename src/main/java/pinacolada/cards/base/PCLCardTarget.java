@@ -95,10 +95,17 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget>
 
             case Any:
             {
-                final RandomizedList<AbstractCreature> list = new RandomizedList<>(GameUtilities.getAllCharacters(true));
-                while (list.size() > 0 && targets.size() < autoAmount)
+                if (target != null)
                 {
-                    targets.add(list.retrieve(GameUtilities.getRNG()));
+                    targets.add(target);
+                }
+                else
+                {
+                    final RandomizedList<AbstractCreature> list = new RandomizedList<>(GameUtilities.getAllCharacters(true));
+                    while (list.size() > 0 && targets.size() < autoAmount)
+                    {
+                        targets.add(list.retrieve(GameUtilities.getRNG()));
+                    }
                 }
                 break;
             }

@@ -67,7 +67,7 @@ public class SelectFromPile extends PCLActionWithCallback<ArrayList<AbstractCard
         this.canPlayerCancel = false;
         this.message = PGR.core.strings.gridSelection.chooseCards;
 
-        initialize(amount, sourceName);
+        initialize(player, target, amount, sourceName);
     }
 
     protected void addCard(CardGroup group, AbstractCard card)

@@ -150,19 +150,20 @@ public class PlayCard extends PCLActionWithCallbackT2<AbstractMonster, AbstractC
     {
         if (tickDuration(deltaTime))
         {
-            if (GameUtilities.requiresTarget(card) && (target == null || GameUtilities.isDeadOrEscaped(target)))
+            AbstractMonster enemy = GameUtilities.asMonster(target);
+            if (GameUtilities.requiresTarget(card) && (enemy == null || GameUtilities.isDeadOrEscaped(enemy)))
             {
                 if (card.type == PCLEnum.CardType.SUMMON)
                 {
-                    target = GameUtilities.getRandomSummon(false);
-                    if (target == null)
+                    enemy = GameUtilities.getRandomSummon(false);
+                    if (enemy == null)
                     {
-                        target = GameUtilities.getRandomSummon(true);
+                        enemy = GameUtilities.getRandomSummon(true);
                     }
                 }
                 else
                 {
-                    target = GameUtilities.getRandomEnemy(true);
+                    enemy = GameUtilities.getRandomEnemy(true);
                 }
             }
 
@@ -174,7 +175,7 @@ public class PlayCard extends PCLActionWithCallbackT2<AbstractMonster, AbstractC
 
             if (canUse())
             {
-                queueCardItem();
+                queueCardItem(enemy);
                 return;
             }
             else if (purge)
@@ -205,11 +206,9 @@ public class PlayCard extends PCLActionWithCallbackT2<AbstractMonster, AbstractC
         }
     }
 
-    protected void queueCardItem()
+    protected void queueCardItem(AbstractMonster enemy)
     {
         addToLimbo();
-
-        final AbstractMonster enemy = GameUtilities.asMonster(target);
 
         if (!spendEnergy)
         {

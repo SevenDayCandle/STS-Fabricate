@@ -902,12 +902,7 @@ public class CombatManager
         PCLAction.currentCard = card;
         if (card.type == PCLEnum.CardType.SUMMON)
         {
-            PCLCardAlly slot = EUIUtils.safeCast(info.target, PCLCardAlly.class);
-            if (slot == null)
-            {
-                slot = GameUtilities.getRandomSummon(false);
-            }
-            PCLActions.bottom.summonAlly(card, slot);
+            PCLActions.bottom.summonAlly(card, EUIUtils.safeCast(info.target, PCLCardAlly.class));
         }
         else
         {
