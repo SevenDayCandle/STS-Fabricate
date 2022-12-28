@@ -443,8 +443,8 @@ public class PCLCardAffinities
         set(PCLAffinity.Green, green);
         set(PCLAffinity.Blue, blue);
         set(PCLAffinity.Orange, orange);
-        set(PCLAffinity.Light, light);
-        set(PCLAffinity.Dark, dark);
+        set(PCLAffinity.Yellow, light);
+        set(PCLAffinity.Purple, dark);
         set(PCLAffinity.Silver, silver);
     }
 

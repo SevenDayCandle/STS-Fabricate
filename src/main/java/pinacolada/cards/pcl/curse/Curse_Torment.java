@@ -11,7 +11,7 @@ public class Curse_Torment extends PCLCard
     public static final PCLCardData DATA = register(Curse_Torment.class)
             .setCurse(1, PCLCardTarget.None, false)
             .setTags(PCLCardTag.Exhaust)
-            .setAffinities(PCLAffinity.Dark);
+            .setAffinities(PCLAffinity.Purple);
 
     public Curse_Torment()
     {

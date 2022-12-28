@@ -202,9 +202,9 @@ public abstract class PCLAugment implements TooltipProvider
                 return Color.SKY;
             case Orange:
                 return Color.GOLDENROD;
-            case Light:
+            case Yellow:
                 return Color.CHARTREUSE;
-            case Dark:
+            case Purple:
                 return Color.VIOLET;
             case Silver:
                 return Color.GRAY;

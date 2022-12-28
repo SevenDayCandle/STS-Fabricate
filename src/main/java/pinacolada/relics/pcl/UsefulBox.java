@@ -29,6 +29,6 @@ public class UsefulBox extends AbstractBox implements OnAllySummonSubscriber
 
     public int getValue()
     {
-        return 8;
+        return 7;
     }
 }

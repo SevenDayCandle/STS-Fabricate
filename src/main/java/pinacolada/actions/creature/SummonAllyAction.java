@@ -10,11 +10,13 @@ import pinacolada.effects.vfx.SmokeEffect;
 import pinacolada.misc.CombatManager;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.PCLEnum;
+import pinacolada.utilities.GameUtilities;
 
 public class SummonAllyAction extends PCLActionWithCallback<PCLCard>
 {
     public final PCLCard card;
-    public final PCLCardAlly ally;
+    public PCLCardAlly ally;
+    public boolean requireTarget;
     public boolean retainPowers;
     public boolean stun = false;
     public boolean showEffect = true;
@@ -28,8 +30,9 @@ public class SummonAllyAction extends PCLActionWithCallback<PCLCard>
         this.ally = slot;
     }
 
-    public SummonAllyAction setOptions(boolean retainPowers, boolean stun, boolean showEffect, boolean summonCardOnly)
+    public SummonAllyAction setOptions(boolean requireTarget, boolean retainPowers, boolean stun, boolean showEffect, boolean summonCardOnly)
     {
+        this.requireTarget = requireTarget;
         this.retainPowers = retainPowers;
         this.stun = stun;
         this.showEffect = showEffect;
@@ -40,10 +43,32 @@ public class SummonAllyAction extends PCLActionWithCallback<PCLCard>
     @Override
     protected void firstUpdate()
     {
-        if ((this.card == null || summonCardOnly && this.card.type != PCLEnum.CardType.SUMMON) || this.ally == null)
+        if ((this.card == null || summonCardOnly && this.card.type != PCLEnum.CardType.SUMMON))
         {
             complete();
             return;
+        }
+        // If missing target, choose a random empty one, then a random filled one.
+        if (this.ally == null)
+        {
+            if (!requireTarget)
+            {
+                this.ally = GameUtilities.getRandomSummon(false);
+                if (this.ally == null)
+                {
+                    this.ally = GameUtilities.getRandomSummon(true);
+                }
+                if (this.ally == null)
+                {
+                    complete();
+                    return;
+                }
+            }
+            else
+            {
+                complete();
+                return;
+            }
         }
 
         PCLCard returnedCard = this.ally.card;

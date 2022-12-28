@@ -13,7 +13,7 @@ import pinacolada.skills.skills.base.moves.PMove_LoseHP;
 public class DPainA1 extends PCLAugment
 {
 
-    public static final PCLAugmentData DATA = register(DPainA1.class, 4, PCLAffinity.Dark)
+    public static final PCLAugmentData DATA = register(DPainA1.class, 4, PCLAffinity.Purple)
             .setSkill(PCond.onOtherCardPlayed(), new PMove_LoseHP(1), PMove.dealDamageToAll(3, AttackEffects.DARK))
             .setReqs(setTypes(AbstractCard.CardType.ATTACK, AbstractCard.CardType.SKILL));
 

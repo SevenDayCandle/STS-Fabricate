@@ -15,6 +15,7 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import com.megacrit.cardcrawl.orbs.EmptyOrbSlot;
 import com.megacrit.cardcrawl.powers.*;
+import com.megacrit.cardcrawl.powers.watcher.VigorPower;
 import com.megacrit.cardcrawl.relics.*;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import com.megacrit.cardcrawl.stances.AbstractStance;
@@ -52,6 +53,8 @@ import pinacolada.ui.common.ControllableCardPile;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.*;
+
+import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.player;
 
 public class CombatManager
 {
@@ -153,6 +156,7 @@ public class CombatManager
 
     public static boolean canActivateLimited(String id) { return !hasActivatedLimited(id); }
     public static boolean hasActivatedLimited(String id) { return combatData.containsKey(id); }
+
     public static boolean tryActivateLimited(String id) { return combatData.put(id, 1) == null; }
     public static boolean canActivateSemiLimited(String id) { return !hasActivatedSemiLimited(id); }
     public static boolean hasActivatedSemiLimited(String id) { return turnData.containsKey(id); }
@@ -1376,6 +1380,31 @@ public class CombatManager
         turnCount += 1;
 
         playerSystem.setLastCardPlayed(null);
+    }
+
+    // TODO add subscribers
+    public static void removeDamagePowers(AbstractCreature creature)
+    {
+        if (creature.hasPower(PenNibPower.POWER_ID))
+        {
+            PCLActions.bottom.reducePower(creature, PenNibPower.POWER_ID, 1);
+
+            if (creature == player)
+            {
+                final AbstractRelic relic = player.getRelic(PenNib.ID);
+                if (relic != null)
+                {
+                    relic.counter = 0;
+                    relic.flash();
+                    relic.stopPulse();
+                }
+            }
+        }
+
+        if (creature.hasPower(VigorPower.POWER_ID))
+        {
+            PCLActions.bottom.removePower(creature, creature, VigorPower.POWER_ID);
+        }
     }
 
     public enum Type

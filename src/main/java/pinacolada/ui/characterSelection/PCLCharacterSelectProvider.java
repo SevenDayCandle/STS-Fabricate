@@ -17,7 +17,7 @@ import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.pcl.replacement.RitualDagger;
 import pinacolada.interfaces.markers.RunAttributesProvider;
-import pinacolada.patches.unlockTracker.UnlockTrackerPatches;
+import pinacolada.patches.UnlockTrackerPatches;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;

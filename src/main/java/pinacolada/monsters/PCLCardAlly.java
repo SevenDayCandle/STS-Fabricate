@@ -82,6 +82,7 @@ public class PCLCardAlly extends PCLCreature
         if (clearPowers)
         {
             this.powers.clear();
+            this.loseBlock();
         }
         else
         {
@@ -188,7 +189,7 @@ public class PCLCardAlly extends PCLCreature
             final PCLUseInfo info = new PCLUseInfo(card, this, target);
             card.useEffectsWithoutPowers(info);
             CombatManager.playerSystem.onCardPlayed(card, target, info, true);
-            GameUtilities.removeDamagePowers(this);
+            PCLActions.bottom.callback(() -> CombatManager.removeDamagePowers(this));
         }
     }
 

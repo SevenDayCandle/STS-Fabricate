@@ -13,7 +13,7 @@ public class Status_Void extends PCLCard
     public static final PCLCardData DATA = register(Status_Void.class)
             .setStatus(-2, CardRarity.COMMON, PCLCardTarget.None)
             .setTags(PCLCardTag.Ethereal, PCLCardTag.Unplayable)
-            .setAffinities(PCLAffinity.Dark);
+            .setAffinities(PCLAffinity.Purple);
 
     public Status_Void()
     {

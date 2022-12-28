@@ -12,7 +12,7 @@ import pinacolada.skills.PTrait;
 public class LFortifyA1 extends PCLAugment
 {
 
-    public static final PCLAugmentData DATA = register(LFortifyA1.class, 3, PCLAffinity.Light)
+    public static final PCLAugmentData DATA = register(LFortifyA1.class, 3, PCLAffinity.Yellow)
             .setSkill(PMove.gain(2, PCLPowerHelper.Fortified), PTrait.hasCost(2))
             .setReqs(setTypes(AbstractCard.CardType.ATTACK, AbstractCard.CardType.SKILL));
 

@@ -7,6 +7,7 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import pinacolada.actions.PCLActions;
 import pinacolada.effects.SFX;
 import pinacolada.powers.PCLPower;
+import pinacolada.resources.pcl.PCLCoreTooltips;
 import pinacolada.ui.combat.CombatHelper;
 
 public class PoisonPlayerPower extends PCLPower implements HealthBarRenderPower
@@ -20,7 +21,7 @@ public class PoisonPlayerPower extends PCLPower implements HealthBarRenderPower
     {
         super(owner, source, POWER_ID);
 
-        this.loadRegion("poison");
+        this.loadRegion(PCLCoreTooltips.ICON_POISON);
 
         initialize(amount, PowerType.DEBUFF, true);
     }

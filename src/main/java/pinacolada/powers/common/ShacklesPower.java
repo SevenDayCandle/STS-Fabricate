@@ -7,6 +7,7 @@ import extendedui.EUIUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.effects.SFX;
 import pinacolada.powers.PCLPower;
+import pinacolada.resources.pcl.PCLCoreTooltips;
 import pinacolada.utilities.GameUtilities;
 
 public class ShacklesPower extends PCLPower
@@ -17,7 +18,7 @@ public class ShacklesPower extends PCLPower
     {
         super(owner, POWER_ID);
 
-        this.loadRegion("shackle");
+        this.loadRegion(PCLCoreTooltips.ICON_SHACKLE);
 
         initialize(amount, PowerType.DEBUFF, false);
     }

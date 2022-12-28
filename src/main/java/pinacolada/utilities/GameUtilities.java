@@ -25,11 +25,12 @@ import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.monsters.MonsterGroup;
 import com.megacrit.cardcrawl.orbs.*;
-import com.megacrit.cardcrawl.powers.*;
-import com.megacrit.cardcrawl.powers.watcher.VigorPower;
+import com.megacrit.cardcrawl.powers.AbstractPower;
+import com.megacrit.cardcrawl.powers.ArtifactPower;
+import com.megacrit.cardcrawl.powers.MinionPower;
+import com.megacrit.cardcrawl.powers.RegrowPower;
 import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
-import com.megacrit.cardcrawl.relics.PenNib;
 import com.megacrit.cardcrawl.relics.PrismaticShard;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import com.megacrit.cardcrawl.rooms.MonsterRoomBoss;
@@ -59,7 +60,7 @@ import pinacolada.monsters.PCLCardAlly;
 import pinacolada.monsters.PCLIntentInfo;
 import pinacolada.orbs.PCLOrb;
 import pinacolada.orbs.PCLOrbHelper;
-import pinacolada.patches.cardLibrary.PCLCardLibraryPatches;
+import pinacolada.patches.library.CardLibraryPatches;
 import pinacolada.powers.PCLAffinityPower;
 import pinacolada.powers.PCLPower;
 import pinacolada.powers.PCLPowerHelper;
@@ -1208,7 +1209,7 @@ public class GameUtilities
 
     public static PCLCardData getPCLCardReplacement(String cardID)
     {
-        return PCLCardLibraryPatches.getStandardReplacement(cardID);
+        return CardLibraryPatches.getStandardReplacement(cardID);
     }
 
     public static PCLCard getPCLCardReplacement(String cardID, boolean upgraded)
@@ -1597,7 +1598,7 @@ public class GameUtilities
 
     public static boolean hasDarkAffinity(AbstractCard card)
     {
-        return getPCLCardAffinityLevel(card, PCLAffinity.Dark, true) > 0;
+        return getPCLCardAffinityLevel(card, PCLAffinity.Purple, true) > 0;
     }
 
     public static boolean hasEncounteredEvent(String eventID)
@@ -1607,7 +1608,7 @@ public class GameUtilities
 
     public static boolean hasLightAffinity(AbstractCard card)
     {
-        return getPCLCardAffinityLevel(card, PCLAffinity.Light, true) > 0;
+        return getPCLCardAffinityLevel(card, PCLAffinity.Yellow, true) > 0;
     }
 
     public static boolean hasOrb(String orbID)
@@ -2262,31 +2263,6 @@ public class GameUtilities
     {
         card.baseBlock = card.block = 0;
         card.isBlockModified = false;
-    }
-
-    // TODO Rework to use PCLPowerHelper
-    public static void removeDamagePowers(AbstractCreature creature)
-    {
-        if (creature.hasPower(PenNibPower.POWER_ID))
-        {
-            PCLActions.bottom.reducePower(creature, PenNibPower.POWER_ID, 1);
-
-            if (creature == player)
-            {
-                final AbstractRelic relic = player.getRelic(PenNib.ID);
-                if (relic != null)
-                {
-                    relic.counter = 0;
-                    relic.flash();
-                    relic.stopPulse();
-                }
-            }
-        }
-
-        if (creature.hasPower(VigorPower.POWER_ID))
-        {
-            PCLActions.bottom.removePower(creature, creature, VigorPower.POWER_ID);
-        }
     }
 
     public static boolean requiresTarget(AbstractCard card)

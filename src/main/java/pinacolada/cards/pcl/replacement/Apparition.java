@@ -12,7 +12,7 @@ public class Apparition extends PCLCard
 {
     public static final PCLCardData DATA = register(Apparition.class)
             .setSkill(1, CardRarity.SPECIAL, PCLCardTarget.None)
-            .setAffinities(PCLAffinity.Dark)
+            .setAffinities(PCLAffinity.Purple)
             .setTags(PCLCardTag.Exhaust, PCLCardTag.Ethereal)
             .setCostUpgrades(-1)
             .setColorless();

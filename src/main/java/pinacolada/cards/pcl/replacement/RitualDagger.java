@@ -15,7 +15,7 @@ public class RitualDagger extends PCLCard
     public static final PCLCardData DATA = register(RitualDagger.class)
             .setAttack(1, CardRarity.SPECIAL, PCLAttackType.Normal, PCLCardTarget.Single)
             .setDamage(9, 3)
-            .setAffinities(PCLAffinity.Light, PCLAffinity.Dark)
+            .setAffinities(PCLAffinity.Yellow, PCLAffinity.Purple)
             .setTags(PCLCardTag.Exhaust)
             .setUnique(true, -1)
             .setColorless();

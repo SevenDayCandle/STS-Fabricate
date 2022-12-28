@@ -12,7 +12,7 @@ public class Bite extends PCLCard
             .setAttack(1, CardRarity.SPECIAL, PCLAttackType.Normal, PCLCardTarget.Single)
             .setDamage(6, 3)
             .setMagicNumber(3, 0)
-            .setAffinities(PCLAffinity.Dark).setColorless();
+            .setAffinities(PCLAffinity.Purple).setColorless();
 
     public Bite()
     {

@@ -12,7 +12,7 @@ import pinacolada.skills.PSkill;
 public class DShameA1 extends PCLAugment
 {
 
-    public static final PCLAugmentData DATA = register(DShameA1.class, 2, PCLAffinity.Dark)
+    public static final PCLAugmentData DATA = register(DShameA1.class, 2, PCLAffinity.Purple)
             .setSkill(PCond.onTurnEnd(), PMove.gain(1, PCLPowerHelper.Vulnerable), PMove.applyToEnemies(2, PCLPowerHelper.Vulnerable))
             .setReqs(setTypes(AbstractCard.CardType.ATTACK, AbstractCard.CardType.SKILL));
 

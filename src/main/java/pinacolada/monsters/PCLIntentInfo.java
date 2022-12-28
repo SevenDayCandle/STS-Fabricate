@@ -14,7 +14,7 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.monsters.EnemyMoveInfo;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.powers.SurroundedPower;
-import pinacolada.patches.abstractMonster.AbstractMonsterPatches;
+import pinacolada.patches.creature.AbstractMonsterPatches;
 import pinacolada.powers.special.MacroscopePower;
 import pinacolada.resources.PGR;
 

@@ -21,10 +21,10 @@ public class PCLOrbHelper implements TooltipProvider
 
     public static final int COMMON_THRESHOLD = 11;
     public static final Map<String, PCLOrbHelper> ALL = new HashMap<>();
-    public static final PCLOrbHelper Dark = new PCLOrbHelper(com.megacrit.cardcrawl.orbs.Dark.ORB_ID, PGR.core.tooltips.dark, PCLAffinity.Dark, com.megacrit.cardcrawl.orbs.Dark::new, COMMON_THRESHOLD);
+    public static final PCLOrbHelper Dark = new PCLOrbHelper(com.megacrit.cardcrawl.orbs.Dark.ORB_ID, PGR.core.tooltips.dark, PCLAffinity.Purple, com.megacrit.cardcrawl.orbs.Dark::new, COMMON_THRESHOLD);
     public static final PCLOrbHelper Frost = new PCLOrbHelper(com.megacrit.cardcrawl.orbs.Frost.ORB_ID, PGR.core.tooltips.frost, PCLAffinity.Blue, com.megacrit.cardcrawl.orbs.Frost::new, COMMON_THRESHOLD);
-    public static final PCLOrbHelper Lightning = new PCLOrbHelper(com.megacrit.cardcrawl.orbs.Lightning.ORB_ID, PGR.core.tooltips.lightning, PCLAffinity.Light, com.megacrit.cardcrawl.orbs.Lightning::new, COMMON_THRESHOLD);
-    public static final PCLOrbHelper Plasma = new PCLOrbHelper(com.megacrit.cardcrawl.orbs.Plasma.ORB_ID, PGR.core.tooltips.plasma, PCLAffinity.Light, com.megacrit.cardcrawl.orbs.Plasma::new, 2);
+    public static final PCLOrbHelper Lightning = new PCLOrbHelper(com.megacrit.cardcrawl.orbs.Lightning.ORB_ID, PGR.core.tooltips.lightning, PCLAffinity.Yellow, com.megacrit.cardcrawl.orbs.Lightning::new, COMMON_THRESHOLD);
+    public static final PCLOrbHelper Plasma = new PCLOrbHelper(com.megacrit.cardcrawl.orbs.Plasma.ORB_ID, PGR.core.tooltips.plasma, PCLAffinity.Yellow, com.megacrit.cardcrawl.orbs.Plasma::new, 2);
     public final EUITooltip tooltip;
     public final PCLAffinity affinity;
     public final String ID;

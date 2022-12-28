@@ -8,6 +8,7 @@ import com.megacrit.cardcrawl.localization.PowerStrings;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.powers.CurlUpPower;
 import pinacolada.actions.PCLActions;
+import pinacolada.resources.pcl.PCLCoreTooltips;
 
 public class PCLCurlUpPower extends CurlUpPower implements CloneablePowerInterface
 {
@@ -31,7 +32,7 @@ public class PCLCurlUpPower extends CurlUpPower implements CloneablePowerInterfa
         this.owner = owner;
         this.amount = amount;
         this.description = DESCRIPTIONS[0] + amount + DESCRIPTIONS[1];
-        this.loadRegion("closeUp");
+        this.loadRegion(PCLCoreTooltips.ICON_CURLUP);
     }
 
     @Override

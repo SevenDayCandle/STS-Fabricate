@@ -12,7 +12,7 @@ import pinacolada.skills.PTrait;
 public class LVenomA2 extends PCLAugment
 {
 
-    public static final PCLAugmentData DATA = register(LVenomA2.class, 3, PCLAffinity.Light)
+    public static final PCLAugmentData DATA = register(LVenomA2.class, 3, PCLAffinity.Yellow)
             .setSkill(PMove.applyToSingle(9, PCLPowerHelper.Poison), PTrait.hasCost(2))
             .setReqs(setTypes(AbstractCard.CardType.ATTACK, AbstractCard.CardType.SKILL));
 

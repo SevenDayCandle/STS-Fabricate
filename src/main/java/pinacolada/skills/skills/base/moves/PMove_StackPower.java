@@ -58,8 +58,8 @@ public class PMove_StackPower extends PMove
     @Override
     public boolean isDetrimental()
     {
-        return ((target == PCLCardTarget.None || target == PCLCardTarget.Self || target == PCLCardTarget.All) && EUIUtils.any(powers, po -> po.isDebuff)) ||
-                ((target != PCLCardTarget.None && target != PCLCardTarget.Self && target != PCLCardTarget.All) && EUIUtils.any(powers, po -> !po.isDebuff));
+        return ((target.targetsSelf()) && EUIUtils.any(powers, po -> po.isDebuff)) ||
+                ((!target.targetsSelf()) && EUIUtils.any(powers, po -> !po.isDebuff));
     }
 
     @Override
@@ -101,6 +101,7 @@ public class PMove_StackPower extends PMove
             switch (target)
             {
                 case RandomEnemy:
+                case AllAlly:
                 case AllEnemy:
                 case All:
                 case Team:

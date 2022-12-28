@@ -13,7 +13,7 @@ public class Curse_Writhe extends PCLCard
     public static final PCLCardData DATA = register(Curse_Writhe.class)
             .setCurse(-2, PCLCardTarget.None, false, true)
             .setTags(PCLCardTag.Unplayable.make(), PCLCardTag.Innate.make(-1))
-            .setAffinities(PCLAffinity.Dark);
+            .setAffinities(PCLAffinity.Purple);
 
     public Curse_Writhe()
     {

@@ -11,7 +11,7 @@ import pinacolada.skills.PSkill;
 public class DInjuryA1 extends PCLAugment
 {
 
-    public static final PCLAugmentData DATA = register(DInjuryA1.class, 2, PCLAffinity.Dark)
+    public static final PCLAugmentData DATA = register(DInjuryA1.class, 2, PCLAffinity.Purple)
             .setSkill(PCond.onTurnEnd(), PMove.takeDamage(2), PMove.dealDamageToAll(4))
             .setReqs(setTypes(AbstractCard.CardType.ATTACK, AbstractCard.CardType.SKILL));
 

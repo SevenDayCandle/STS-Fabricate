@@ -12,7 +12,7 @@ public class Curse_Regret extends PCLCard
     public static final PCLCardData DATA = register(Curse_Regret.class)
             .setCurse(-2, PCLCardTarget.None, false, true)
             .setTags(PCLCardTag.Unplayable)
-            .setAffinities(PCLAffinity.Dark);
+            .setAffinities(PCLAffinity.Purple);
 
     public Curse_Regret()
     {

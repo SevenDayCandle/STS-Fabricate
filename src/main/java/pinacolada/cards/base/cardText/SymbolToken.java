@@ -26,8 +26,8 @@ public class SymbolToken extends PCLTextToken
         tokenCache.put(PCLAffinity.Green.getPowerSymbol(), new SymbolToken(PCLAffinity.Green.getFormattedPowerSymbol()));
         tokenCache.put(PCLAffinity.Blue.getPowerSymbol(), new SymbolToken(PCLAffinity.Blue.getFormattedPowerSymbol()));
         tokenCache.put(PCLAffinity.Orange.getPowerSymbol(), new SymbolToken(PCLAffinity.Orange.getFormattedPowerSymbol()));
-        tokenCache.put(PCLAffinity.Light.getPowerSymbol(), new SymbolToken(PCLAffinity.Light.getFormattedPowerSymbol()));
-        tokenCache.put(PCLAffinity.Dark.getPowerSymbol(), new SymbolToken(PCLAffinity.Dark.getFormattedPowerSymbol()));
+        tokenCache.put(PCLAffinity.Yellow.getPowerSymbol(), new SymbolToken(PCLAffinity.Yellow.getFormattedPowerSymbol()));
+        tokenCache.put(PCLAffinity.Purple.getPowerSymbol(), new SymbolToken(PCLAffinity.Purple.getFormattedPowerSymbol()));
         tokenCache.put(PCLAffinity.Silver.getPowerSymbol(), new SymbolToken(PCLAffinity.Silver.getFormattedPowerSymbol()));
     }
 

@@ -11,7 +11,7 @@ import pinacolada.skills.PSkill;
 
 public class DClumsyA1 extends PCLAugment
 {
-    public static final PCLAugmentData DATA = register(DClumsyA1.class, 2, PCLAffinity.Dark)
+    public static final PCLAugmentData DATA = register(DClumsyA1.class, 2, PCLAffinity.Purple)
             .setSkill(PCond.onTurnEnd(), PMove.applyToEveryone(2, PCLPowerHelper.Blinded))
             .setReqs(setTypes(AbstractCard.CardType.ATTACK, AbstractCard.CardType.SKILL));
 

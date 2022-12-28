@@ -69,8 +69,8 @@ public class PCLAugmentWeights
             case Blue:
             case Orange:
                 return aff.level * 4;
-            case Light:
-            case Dark:
+            case Yellow:
+            case Purple:
                 return aff.level * 2;
         }
         return aff.level;

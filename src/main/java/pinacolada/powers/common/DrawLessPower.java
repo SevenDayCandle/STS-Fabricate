@@ -5,6 +5,7 @@ import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.powers.DrawReductionPower;
 import pinacolada.powers.PCLPower;
+import pinacolada.resources.pcl.PCLCoreTooltips;
 
 public class DrawLessPower extends PCLPower
 {
@@ -14,7 +15,7 @@ public class DrawLessPower extends PCLPower
     {
         super(owner, POWER_ID);
         this.powerStrings = CardCrawlGame.languagePack.getPowerStrings(DrawReductionPower.POWER_ID);
-        this.loadRegion("lessdraw");
+        this.loadRegion(PCLCoreTooltips.ICON_NEXT_TURN_DRAW_LESS);
         initialize(amount, PowerType.DEBUFF, false);
         updateDescription();
     }

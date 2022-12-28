@@ -14,7 +14,7 @@ public class Curse_Shame extends PCLCard
     public static final PCLCardData DATA = register(Curse_Shame.class)
             .setCurse(-2, PCLCardTarget.None, false, true)
             .setTags(PCLCardTag.Unplayable)
-            .setAffinities(PCLAffinity.Dark);
+            .setAffinities(PCLAffinity.Purple);
 
     public Curse_Shame()
     {

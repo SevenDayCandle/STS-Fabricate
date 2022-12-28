@@ -515,11 +515,6 @@
 								"NAMES": ["~damage"],
 								"PROPER_NAME": "Normal Damage"
 				},
-				"~Dark Affinity":	{
-								"DESCRIPTION": "",
-								"NAMES": ["~dark affinity"],
-								"PROPER_NAME": "Dark Affinity"
-				},
 				"~Delayed":	{
 								"DESCRIPTION": "Start each combat with this card at the bottom of your deck.",
 								"NAMES": ["~delayed"],
@@ -587,11 +582,6 @@
 								"NAMES": ["~intangible"],
 								"PROPER_NAME": "Intangible"
 				},
-				"~Light Affinity":	{
-								"DESCRIPTION": "",
-								"NAMES": ["~light affinity"],
-								"PROPER_NAME": "Light Affinity"
-				},
 				"~Lock-On":	{
 								"DESCRIPTION": "Receive #b+50% damage from #yOrbs. Prioritized by #ySummons with random targeting.",
 								"NAMES": ["~lock-on"],
@@ -623,6 +613,11 @@
 								"PAST": "Purged",
 								"PRESENT": "Purges",
 								"PROPER_NAME": "Purge"
+				},
+				"~Purple Affinity":	{
+								"DESCRIPTION": "",
+								"NAMES": ["~purple affinity"],
+								"PROPER_NAME": "Purple Affinity"
 				},
 				"~Random Orb":	{
 								"DESCRIPTION": "",
@@ -700,5 +695,10 @@
 								"DESCRIPTION": "At the start of battle, this #yAffinity becomes another random #yAffinity.",
 								"NAMES": ["~unknown affinity"],
 								"PROPER_NAME": "Unknown Affinity"
+				},
+				"~Yellow Affinity":	{
+								"DESCRIPTION": "",
+								"NAMES": ["~yellow affinity"],
+								"PROPER_NAME": "Yellow Affinity"
 				}
 }

@@ -8,6 +8,7 @@ import com.megacrit.cardcrawl.localization.PowerStrings;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import pinacolada.actions.PCLActions;
 import pinacolada.interfaces.markers.MultiplicativePower;
+import pinacolada.resources.pcl.PCLCoreTooltips;
 
 public class PlayerFlightPower extends AbstractPower implements CloneablePowerInterface, MultiplicativePower
 {
@@ -33,7 +34,7 @@ public class PlayerFlightPower extends AbstractPower implements CloneablePowerIn
         this.amount = amount;
         this.storedAmount = amount;
         this.updateDescription();
-        this.loadRegion("flight");
+        this.loadRegion(PCLCoreTooltips.ICON_FLIGHT);
         this.priority = 50;
     }
 

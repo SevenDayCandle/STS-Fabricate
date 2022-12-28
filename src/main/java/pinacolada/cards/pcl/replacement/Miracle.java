@@ -11,7 +11,7 @@ public class Miracle extends PCLCard
 {
     public static final PCLCardData DATA = register(Miracle.class)
             .setSkill(0, CardRarity.SPECIAL, PCLCardTarget.None)
-            .setAffinities(PCLAffinity.Light)
+            .setAffinities(PCLAffinity.Yellow)
             .setTags(PCLCardTag.Purge.make(), PCLCardTag.Retain.make(-1))
             .setColorless();
 

@@ -11,6 +11,7 @@ import com.megacrit.cardcrawl.localization.PowerStrings;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import pinacolada.actions.PCLActions;
 import pinacolada.interfaces.markers.MultiplicativePower;
+import pinacolada.resources.pcl.PCLCoreTooltips;
 
 public class AntiArtifactSlowPower extends AbstractPower implements CloneablePowerInterface, MultiplicativePower
 {
@@ -33,7 +34,7 @@ public class AntiArtifactSlowPower extends AbstractPower implements CloneablePow
         this.owner = owner;
         this.amount = amount;
         this.updateDescription();
-        this.loadRegion("slow");
+        this.loadRegion(PCLCoreTooltips.ICON_SLOW);
         this.type = PowerType.DEBUFF;
     }
 

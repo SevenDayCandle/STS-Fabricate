@@ -12,7 +12,7 @@ import pinacolada.skills.PTrait;
 public class LSpikesA2 extends PCLAugment
 {
 
-    public static final PCLAugmentData DATA = register(LSpikesA2.class, 3, PCLAffinity.Light)
+    public static final PCLAugmentData DATA = register(LSpikesA2.class, 3, PCLAffinity.Yellow)
             .setSkill(PMove.gainTemporary(8, PCLPowerHelper.Thorns), PTrait.hasCost(2))
             .setReqs(setTypes(AbstractCard.CardType.ATTACK, AbstractCard.CardType.SKILL));
 

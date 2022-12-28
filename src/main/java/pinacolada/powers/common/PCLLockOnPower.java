@@ -5,6 +5,7 @@ import pinacolada.interfaces.markers.MultiplicativePower;
 import pinacolada.interfaces.subscribers.OnOrbApplyLockOnSubscriber;
 import pinacolada.misc.CombatManager;
 import pinacolada.powers.PCLPower;
+import pinacolada.resources.pcl.PCLCoreTooltips;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class PCLLockOnPower extends PCLPower implements OnOrbApplyLockOnSubscriber, MultiplicativePower
@@ -15,7 +16,7 @@ public class PCLLockOnPower extends PCLPower implements OnOrbApplyLockOnSubscrib
     {
         super(owner, POWER_ID);
 
-        this.loadRegion("lockon");
+        this.loadRegion(PCLCoreTooltips.ICON_LOCKON);
 
         initialize(amount, PowerType.DEBUFF, true);
     }

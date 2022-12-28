@@ -12,7 +12,7 @@ import pinacolada.skills.PSkill;
 public class DDecayA1 extends PCLAugment
 {
 
-    public static final PCLAugmentData DATA = register(DDecayA1.class, 3, PCLAffinity.Dark)
+    public static final PCLAugmentData DATA = register(DDecayA1.class, 3, PCLAffinity.Purple)
             .setSkill(PCond.onTurnEnd(), PMove.gain(2, PCLPowerHelper.Poison), PMove.applyToEnemies(4, PCLPowerHelper.Poison))
             .setReqs(setTypes(AbstractCard.CardType.ATTACK, AbstractCard.CardType.SKILL));
 

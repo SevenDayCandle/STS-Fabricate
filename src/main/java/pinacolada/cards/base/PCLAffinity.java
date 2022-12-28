@@ -24,8 +24,8 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>
     Green(1, "Green",  "G"),
     Blue(2, "Blue",  "B"),
     Orange(3, "Orange",  "O"),
-    Light(4, "Light",  "L"),
-    Dark(5, "Dark",  "D"),
+    Yellow(4, "Yellow",  "Y"),
+    Purple(5, "Purple",  "P"),
     Silver(6, "Silver",  "S"),
     Star(-1, "Star",  "A"),
     General(-2, "Gen",  "W"),
@@ -46,8 +46,8 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>
         ALL_TYPES[1] = EXTENDED_TYPES[1] = BASIC_TYPES[1] = Green;
         ALL_TYPES[2] = EXTENDED_TYPES[2] = BASIC_TYPES[2] = Blue;
         ALL_TYPES[3] = EXTENDED_TYPES[3] = BASIC_TYPES[3] = Orange;
-        ALL_TYPES[4] = EXTENDED_TYPES[4] = BASIC_TYPES[4] = Light;
-        ALL_TYPES[5] = EXTENDED_TYPES[5] = BASIC_TYPES[5] = Dark;
+        ALL_TYPES[4] = EXTENDED_TYPES[4] = BASIC_TYPES[4] = Yellow;
+        ALL_TYPES[5] = EXTENDED_TYPES[5] = BASIC_TYPES[5] = Purple;
         ALL_TYPES[6] = EXTENDED_TYPES[6] = Silver;
         ALL_TYPES[7] = Star;
     }
@@ -91,11 +91,11 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>
         if (tooltip.is(PGR.core.tooltips.affinityOrange)) {
             return PCLAffinity.Orange;
         }
-        if (tooltip.is(PGR.core.tooltips.affinityLight)) {
-            return PCLAffinity.Light;
+        if (tooltip.is(PGR.core.tooltips.affinityYellow)) {
+            return PCLAffinity.Yellow;
         }
-        if (tooltip.is(PGR.core.tooltips.affinityDark)) {
-            return PCLAffinity.Dark;
+        if (tooltip.is(PGR.core.tooltips.affinityPurple)) {
+            return PCLAffinity.Purple;
         }
         if (tooltip.is(PGR.core.tooltips.affinitySilver)) {
             return PCLAffinity.Silver;
@@ -175,10 +175,10 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>
             case Orange:
                 return new Color(0.7f, 0.6f, 0.5f, 1f);
 
-            case Light:
+            case Yellow:
                 return new Color(0.8f, 0.8f, 0.3f, 1f);
 
-            case Dark:
+            case Purple:
                 return new Color(0.55f, 0.1f, 0.85f, 1);//0.7f, 0.55f, 0.7f, 1f);
 
             case Silver:
@@ -218,9 +218,9 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>
                 return PGR.core.images.affinities.blue;
             case Orange:
                 return PGR.core.images.affinities.orange;
-            case Light:
+            case Yellow:
                 return PGR.core.images.affinities.light;
-            case Dark:
+            case Purple:
                 return PGR.core.images.affinities.dark;
             case Silver:
                 return PGR.core.images.affinities.silver;
@@ -301,9 +301,9 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>
                 return resources.images.affinities.blue;
             case Orange:
                 return resources.images.affinities.orange;
-            case Light:
+            case Yellow:
                 return resources.images.affinities.light;
-            case Dark:
+            case Purple:
                 return resources.images.affinities.dark;
             case Silver:
                 return resources.images.affinities.silver;
@@ -334,10 +334,10 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>
                 return PGR.core.tooltips.affinityBlue;
             case Orange:
                 return PGR.core.tooltips.affinityOrange;
-            case Light:
-                return PGR.core.tooltips.affinityLight;
-            case Dark:
-                return PGR.core.tooltips.affinityDark;
+            case Yellow:
+                return PGR.core.tooltips.affinityYellow;
+            case Purple:
+                return PGR.core.tooltips.affinityPurple;
             case Silver:
                 return PGR.core.tooltips.affinitySilver;
             case Star:
@@ -355,9 +355,9 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>
     {
         switch (this)
         {
-            case Light:
+            case Yellow:
                 return 1;
-            case Dark:
+            case Purple:
                 return -1;
         }
         return 0;

@@ -14,7 +14,7 @@ public class Curse_Wither extends PCLCard
     public static final PCLCardData DATA = register(Curse_Wither.class)
             .setCurse(-2, PCLCardTarget.None, false, true)
             .setTags(PCLCardTag.Unplayable)
-            .setAffinities(PCLAffinity.Dark);
+            .setAffinities(PCLAffinity.Purple);
 
     public Curse_Wither()
     {

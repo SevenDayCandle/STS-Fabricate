@@ -11,7 +11,7 @@ import com.megacrit.cardcrawl.vfx.cardManip.ShowCardAndAddToHandEffect;
 import com.megacrit.cardcrawl.vfx.cardManip.ShowCardAndObtainEffect;
 import extendedui.utilities.EUIClassUtils;
 import pinacolada.misc.CombatManager;
-import pinacolada.patches.cardLibrary.PCLCardLibraryPatches;
+import pinacolada.patches.library.CardLibraryPatches;
 
 public class ShowCardAndAddPatches
 {
@@ -62,7 +62,7 @@ public class ShowCardAndAddPatches
         @SpirePrefixPatch
         public static void prefix(ShowCardAndObtainEffect __instance, @ByRef AbstractCard[] srcCard, float x, float y, boolean converge)
         {
-            PCLCardLibraryPatches.tryReplace(srcCard);
+            CardLibraryPatches.tryReplace(srcCard);
         }
     }
 
@@ -72,7 +72,7 @@ public class ShowCardAndAddPatches
         @SpirePrefixPatch
         public static void prefix(ShowCardAndAddToDrawPileEffect __instance, @ByRef AbstractCard[] srcCard, boolean randomSpot, boolean toBottom)
         {
-            PCLCardLibraryPatches.tryReplace(srcCard);
+            CardLibraryPatches.tryReplace(srcCard);
         }
     }
 
@@ -82,7 +82,7 @@ public class ShowCardAndAddPatches
         @SpirePrefixPatch
         public static void prefix(ShowCardAndAddToDrawPileEffect __instance, @ByRef AbstractCard[] srcCard, float x, float y, boolean randomSpot, boolean cardOffset, boolean toBottom)
         {
-            PCLCardLibraryPatches.tryReplace(srcCard);
+            CardLibraryPatches.tryReplace(srcCard);
         }
     }
 
@@ -92,7 +92,7 @@ public class ShowCardAndAddPatches
         @SpirePrefixPatch
         public static void prefix(ShowCardAndAddToDiscardEffect __instance, @ByRef AbstractCard[] card)
         {
-            PCLCardLibraryPatches.tryReplace(card);
+            CardLibraryPatches.tryReplace(card);
         }
     }
 
@@ -102,7 +102,7 @@ public class ShowCardAndAddPatches
         @SpirePrefixPatch
         public static void prefix(ShowCardAndAddToDiscardEffect __instance, @ByRef AbstractCard[] srcCard, float x, float y)
         {
-            PCLCardLibraryPatches.tryReplace(srcCard);
+            CardLibraryPatches.tryReplace(srcCard);
         }
     }
 
@@ -112,7 +112,7 @@ public class ShowCardAndAddPatches
         @SpirePrefixPatch
         public static void prefix(ShowCardAndAddToHandEffect __instance, @ByRef AbstractCard[] card)
         {
-            PCLCardLibraryPatches.tryReplace(card);
+            CardLibraryPatches.tryReplace(card);
         }
     }
 
@@ -122,7 +122,7 @@ public class ShowCardAndAddPatches
         @SpirePrefixPatch
         public static void prefix(ShowCardAndAddToHandEffect __instance, @ByRef AbstractCard[] card, float offsetX, float offsetY)
         {
-            PCLCardLibraryPatches.tryReplace(card);
+            CardLibraryPatches.tryReplace(card);
         }
     }
 }

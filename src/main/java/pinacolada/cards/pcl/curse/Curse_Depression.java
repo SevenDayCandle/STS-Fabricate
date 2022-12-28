@@ -14,7 +14,7 @@ public class Curse_Depression extends PCLCard
     public static final PCLCardData DATA = register(Curse_Depression.class)
             .setCurse(-2, PCLCardTarget.None, false)
             .setTags(PCLCardTag.Ethereal, PCLCardTag.Unplayable)
-            .setAffinities(PCLAffinity.Dark);
+            .setAffinities(PCLAffinity.Purple);
 
     public Curse_Depression()
     {

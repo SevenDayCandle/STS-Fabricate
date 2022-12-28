@@ -64,13 +64,13 @@ public abstract class AffinityToken extends PCLCard implements Hidden
         {
             return PCLAffinity.Orange;
         }
-        else if (AffinityToken_Light.DATA.ID.equals(ID))
+        else if (AffinityToken_Yellow.DATA.ID.equals(ID))
         {
-            return PCLAffinity.Light;
+            return PCLAffinity.Yellow;
         }
-        else if (AffinityToken_Dark.DATA.ID.equals(ID))
+        else if (AffinityToken_Purple.DATA.ID.equals(ID))
         {
-            return PCLAffinity.Dark;
+            return PCLAffinity.Purple;
         }
         else if (AffinityToken_Silver.DATA.ID.equals(ID))
         {
@@ -96,10 +96,10 @@ public abstract class AffinityToken extends PCLCard implements Hidden
                 return AffinityToken_Blue.DATA;
             case Orange:
                 return AffinityToken_Orange.DATA;
-            case Light:
-                return AffinityToken_Light.DATA;
-            case Dark:
-                return AffinityToken_Dark.DATA;
+            case Yellow:
+                return AffinityToken_Yellow.DATA;
+            case Purple:
+                return AffinityToken_Purple.DATA;
             case Silver:
                 return AffinityToken_Silver.DATA;
             case Star:

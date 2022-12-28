@@ -36,7 +36,7 @@ import org.apache.commons.lang3.StringUtils;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
 import pinacolada.effects.vfx.SmokeEffect;
-import pinacolada.patches.relicLibrary.RelicLibraryPatches;
+import pinacolada.patches.library.RelicLibraryPatches;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLLoadout;
 import pinacolada.ui.PCLEnergyOrb;

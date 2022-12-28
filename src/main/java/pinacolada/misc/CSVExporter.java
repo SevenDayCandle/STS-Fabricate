@@ -176,10 +176,10 @@ public class CSVExporter
             blueUpgrade = affinities.getUpgrade(PCLAffinity.Blue, form);
             orange = affinities.getLevel(PCLAffinity.Orange, form);
             orangeUpgrade = affinities.getUpgrade(PCLAffinity.Orange, form);
-            light = affinities.getLevel(PCLAffinity.Light, form);
-            lightUpgrade = affinities.getUpgrade(PCLAffinity.Light, form);
-            dark = affinities.getLevel(PCLAffinity.Dark, form);
-            darkUpgrade = affinities.getUpgrade(PCLAffinity.Dark, form);
+            light = affinities.getLevel(PCLAffinity.Yellow, form);
+            lightUpgrade = affinities.getUpgrade(PCLAffinity.Yellow, form);
+            dark = affinities.getLevel(PCLAffinity.Purple, form);
+            darkUpgrade = affinities.getUpgrade(PCLAffinity.Purple, form);
             silver = affinities.getLevel(PCLAffinity.Silver, form);
             silverUpgrade = affinities.getUpgrade(PCLAffinity.Silver, form);
             star = affinities.getLevel(PCLAffinity.Star, form);

@@ -5,12 +5,13 @@
 												"NAME": "Madness"
 								},
 								"pcl:PortableTrashCan": {
-												"EXTENDED_DESCRIPTION": ["While in hand, Negate the {Buffs} and {Debuffs} of ALL characters (excluding those specific to cards or encounters)"],
-												"NAME": "Ascender's Bane"
+												"EXTENDED_DESCRIPTION": ["Purge a card in hand and remove it from your deck"],
+												"NAME": "Portable Trash Can"
 								},
 								"pcl:Present": {
-												"EXTENDED_DESCRIPTION": ["Play a random card. Add it to your discard pile"],
-												"NAME": "Present"},
+												"EXTENDED_DESCRIPTION": ["Play a random card. Add a copy of it to your discard pile"],
+												"NAME": "Present"
+								},
 								"pcl:SonarAnalysis": {
 												"EXTENDED_DESCRIPTION": ["Reveal the next {0} intents on the target", "Reveal its weakness"],
 												"NAME": "Sonar Analysis"}
@@ -147,8 +148,8 @@
 								"pcl:AffinityToken_Green": {"NAME": "Green Affinity"},
 								"pcl:AffinityToken_Blue": {"NAME": "Blue Affinity"},
 								"pcl:AffinityToken_Orange": {"NAME": "Orange Affinity"},
-								"pcl:AffinityToken_Light": {"NAME": "Light Affinity"},
-								"pcl:AffinityToken_Dark": {"NAME": "Dark Affinity"},
+								"pcl:AffinityToken_Yellow": {"NAME": "Yellow Affinity"},
+								"pcl:AffinityToken_Purple": {"NAME": "Purple Affinity"},
 								"pcl:AffinityToken_Silver": {"NAME": "Silver Affinity"},
 								"pcl:AffinityToken_Star": {"NAME": "Star Affinity"}
 				},

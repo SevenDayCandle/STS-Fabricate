@@ -12,7 +12,7 @@ import pinacolada.skills.PTrait;
 public class LCrushA1 extends PCLAugment
 {
 
-    public static final PCLAugmentData DATA = register(LCrushA1.class, 2, PCLAffinity.Light)
+    public static final PCLAugmentData DATA = register(LCrushA1.class, 2, PCLAffinity.Yellow)
             .setSkill(PMove.applyToSingle(2, PCLPowerHelper.Vulnerable), PTrait.hasCost(1))
             .setReqs(setTypes(AbstractCard.CardType.ATTACK, AbstractCard.CardType.SKILL));
 

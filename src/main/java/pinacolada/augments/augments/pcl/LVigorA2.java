@@ -12,7 +12,7 @@ import pinacolada.skills.PTrait;
 public class LVigorA2 extends PCLAugment
 {
 
-    public static final PCLAugmentData DATA = register(LVigorA2.class, 3, PCLAffinity.Light)
+    public static final PCLAugmentData DATA = register(LVigorA2.class, 3, PCLAffinity.Yellow)
             .setSkill(PMove.gain(9, PCLPowerHelper.Vigor), PTrait.hasCost(2))
             .setReqs(setTypes(AbstractCard.CardType.ATTACK, AbstractCard.CardType.SKILL));
 
