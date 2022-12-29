@@ -67,7 +67,7 @@ public class PCLRelicSlotEditor extends EUIBase
             return this;
         }
 
-        final boolean change = slot.relics.count() > 1;
+        final boolean change = slot.relics.size() > 1;
 
         this.slot = slot;
         this.relic = slot.getRelic();

@@ -125,7 +125,7 @@ public class PCLRelicSlot
             {
                 return;
             }
-            else if (i >= relics.count())
+            else if (i >= relics.size())
             {
                 select((PCLRelic) null);
                 return;

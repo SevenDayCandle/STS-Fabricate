@@ -16,7 +16,7 @@ public class PCLCardPreviews
         setPreviews(card);
 
         EUICardPreview preview;
-        if (Previews.count() > 1)
+        if (Previews.size() > 1)
         {
             if (EUIHotkeys.cycle.isJustPressed())
             {

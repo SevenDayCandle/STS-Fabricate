@@ -67,7 +67,7 @@ public class CardLibraryPatches
             case JAX.ID:
                 return pinacolada.cards.pcl.replacement.JAX.DATA;
             case Madness.ID:
-                return pinacolada.cards.pcl.replacement.Madness.DATA;
+                return pinacolada.cards.pcl.colorless.Madness.DATA;
             case Miracle.ID:
                 return pinacolada.cards.pcl.replacement.Miracle.DATA;
             case Normality.ID:

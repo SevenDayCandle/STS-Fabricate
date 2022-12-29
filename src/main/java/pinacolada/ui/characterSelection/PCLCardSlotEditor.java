@@ -81,7 +81,7 @@ public class PCLCardSlotEditor extends EUIBase
         }
 
         final boolean add = card != null && slot.max > 1;
-        final boolean change = slot.cards.count() > 1;
+        final boolean change = slot.cards.size() > 1;
         final boolean remove = card != null && slot.max > slot.min;
 
         this.slot = slot;

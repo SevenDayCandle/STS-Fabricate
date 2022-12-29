@@ -1,4 +1,4 @@
-package pinacolada.cards.pcl.replacement;
+package pinacolada.cards.pcl.colorless;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.cards.AbstractCard;

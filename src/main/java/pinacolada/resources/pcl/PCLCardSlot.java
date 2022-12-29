@@ -190,7 +190,7 @@ public class PCLCardSlot
             {
                 return;
             }
-            else if (i >= cards.count())
+            else if (i >= cards.size())
             {
                 select(null);
                 return;

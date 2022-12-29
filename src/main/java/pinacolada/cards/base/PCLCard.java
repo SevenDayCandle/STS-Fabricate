@@ -34,10 +34,7 @@ import com.megacrit.cardcrawl.powers.FocusPower;
 import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.*;
-import extendedui.interfaces.delegates.ActionT1;
-import extendedui.interfaces.delegates.ActionT2;
-import extendedui.interfaces.delegates.FuncT1;
-import extendedui.interfaces.delegates.FuncT3;
+import extendedui.interfaces.delegates.*;
 import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.ui.tooltips.EUITooltip;
@@ -56,6 +53,7 @@ import pinacolada.interfaces.listeners.OnRemovedFromDeckListener;
 import pinacolada.interfaces.listeners.OnSetFormListener;
 import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.markers.Hidden;
+import pinacolada.interfaces.markers.SummonOnlyMove;
 import pinacolada.misc.CombatManager;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.patches.screens.GridCardSelectScreenMultiformPatches;
@@ -68,6 +66,7 @@ import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.skills.*;
 import pinacolada.skills.skills.PSpecialCond;
+import pinacolada.skills.skills.PSpecialPowerSkill;
 import pinacolada.skills.skills.PSpecialSkill;
 import pinacolada.skills.skills.base.traits.PTrait_Block;
 import pinacolada.skills.skills.base.traits.PTrait_BlockMultiplier;
@@ -511,6 +510,28 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         return move;
     }
 
+    protected PSpecialPowerSkill addSpecialPower(int descIndex, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse) {
+        return addSpecialPower(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, 1, 0);
+    }
+
+    protected PSpecialPowerSkill addSpecialPower(int descIndex, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount) {
+        return addSpecialPower(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, amount, 0);
+    }
+
+    protected PSpecialPowerSkill addSpecialPower(int descIndex, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount, int extra) {
+        return addSpecialPower(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, amount, extra);
+    }
+
+    protected PSpecialPowerSkill addSpecialPower(String description, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount) {
+        return addSpecialPower(description, onUse, amount, 0);
+    }
+
+    protected PSpecialPowerSkill addSpecialPower(String description, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount, int extra) {
+        PSpecialPowerSkill move = (PSpecialPowerSkill) getSpecialPower(description, onUse, amount, extra).setSource(this).onAddToCard(this);
+        getEffects().add(move);
+        return move;
+    }
+
     public int changeForm(Integer form, int timesUpgraded) {
         return changeForm(form, timesUpgraded, timesUpgraded);
     }
@@ -585,7 +606,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
 
     protected void doNonPowerEffects(ActionT1<PSkill> action) {
         for (PSkill be : getFullEffects()) {
-            if (!(be instanceof PMove_StackCustomPower))
+            if (!(be instanceof SummonOnlyMove))
             {
                 action.invoke(be);
             }
@@ -1034,6 +1055,30 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
 
     protected PSpecialSkill getSpecialMove(FuncT1<String, PSpecialSkill> strFunc, ActionT2<PSpecialSkill, PCLUseInfo> onUse, int amount, int extra) {
         return new PSpecialSkill(this.cardID + this.getEffects().size(), strFunc, onUse, amount, extra);
+    }
+
+    protected PSpecialPowerSkill getSpecialPower(int descIndex, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse) {
+        return getSpecialPower(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, 1, 0);
+    }
+
+    protected PSpecialPowerSkill getSpecialPower(int descIndex, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount) {
+        return getSpecialPower(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, amount, 0);
+    }
+
+    protected PSpecialPowerSkill getSpecialPower(int descIndex, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount, int extra) {
+        return getSpecialPower(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, amount, extra);
+    }
+
+    protected PSpecialPowerSkill getSpecialPower(String description, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount, int extra) {
+        return new PSpecialPowerSkill(this.cardID + this.getEffects().size(), description, onUse, amount, extra);
+    }
+
+    protected PSpecialPowerSkill getSpecialPower(FuncT1<String, PSpecialPowerSkill> strFunc, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount) {
+        return getSpecialPower(strFunc, onUse, amount, 0);
+    }
+
+    protected PSpecialPowerSkill getSpecialPower(FuncT1<String, PSpecialPowerSkill> strFunc, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount, int extra) {
+        return new PSpecialPowerSkill(this.cardID + this.getEffects().size(), strFunc, onUse, amount, extra);
     }
 
     public ColoredString getSpecialVariableString() {

@@ -1,5 +1,6 @@
 {
 				"COLORLESS": {
+								"pcl:Discovery": {"EXTENDED_DESCRIPTION": ["Obtain {0} of {1} cards that you haven't unlocked yet. It costs 0 this turn"], "NAME": "Discovery"},
 								"pcl:Madness": {
 												"EXTENDED_DESCRIPTION": ["Redistribute the costs of the cards in hand"],
 												"NAME": "Madness"
@@ -154,10 +155,8 @@
 								"pcl:AffinityToken_Star": {"NAME": "Star Affinity"}
 				},
 				"STATUS":	{
-								"pcl:Crystallize": {"NAME": "Crystallize"},
 								"pcl:Status_Burn": {"NAME": "Burn"},
 								"pcl:Status_Dazed": {"NAME": "Dazed"},
-								"pcl:Status_Frostbite": {"NAME": "Frostbite"},
 								"pcl:Status_Slimed": {"NAME": "Slimed"},
 								"pcl:Status_Wound": {"NAME": "Wound"},
 								"pcl:Status_Void": {"NAME": "Void"}

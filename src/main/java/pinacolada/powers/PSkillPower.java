@@ -1,6 +1,7 @@
 package pinacolada.powers;
 
 import com.badlogic.gdx.graphics.Color;
+import com.evacipated.cardcrawl.mod.stslib.patches.NeutralPowertypePatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.cards.DamageInfo;
@@ -75,7 +76,11 @@ public class PSkillPower extends PCLPower implements OnAllyDeathSubscriber, OnAl
         setupDescription();
         if (turns > 0)
         {
-            initialize(turns, PowerType.BUFF, true);
+            initialize(turns, NeutralPowertypePatch.NEUTRAL, true);
+        }
+        else
+        {
+            initialize(-1, NeutralPowertypePatch.NEUTRAL, false);
         }
     }
 

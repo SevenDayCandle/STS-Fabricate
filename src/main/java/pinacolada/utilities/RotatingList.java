@@ -3,53 +3,31 @@ package pinacolada.utilities;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 
-public class RotatingList<T> implements Iterable<T>
+public class RotatingList<T> extends ArrayList<T>
 {
-    private final ArrayList<T> items;
     private int index;
 
     public RotatingList()
     {
-        items = new ArrayList<>();
+        super();
     }
 
     public RotatingList(Collection<? extends T> collection)
     {
-        items = new ArrayList<>(collection);
+        super(collection);
     }
 
     public RotatingList(T[] array)
     {
-        items = new ArrayList<>(array.length);
-        Collections.addAll(items, array);
-    }
-
-    public void add(T item)
-    {
-        items.add(item);
-    }
-
-    public void addAll(ArrayList<T> list)
-    {
-        items.addAll(list);
+        super();
+        Collections.addAll(this, array);
     }
 
     public void clear()
     {
         resetIndex();
-        items.clear();
-    }
-
-    public boolean contains(T item)
-    {
-        return items.contains(item);
-    }
-
-    public int count()
-    {
-        return items.size();
+        super.clear();
     }
 
     public int getIndex()
@@ -57,15 +35,9 @@ public class RotatingList<T> implements Iterable<T>
         return index;
     }
 
-    /** Call ResetIndex() if you reduce the list size. */
-    public ArrayList<T> getInnerList()
-    {
-        return items;
-    }
-
     public T setIndex(int index)
     {
-        this.index = index < 0 ? 0 : index < items.size() ? index : items.size() - 1;
+        this.index = index < 0 ? 0 : index < size() ? index : size() - 1;
         return current();
     }
 
@@ -76,7 +48,7 @@ public class RotatingList<T> implements Iterable<T>
 
     public T current(boolean moveIndex)
     {
-        T item = items.isEmpty() ? null : items.get(index);
+        T item = isEmpty() ? null : get(index);
         if (moveIndex)
         {
             next(true);
@@ -88,7 +60,7 @@ public class RotatingList<T> implements Iterable<T>
     public T next(boolean moveIndex)
     {
         int newIndex = index + 1;
-        if (newIndex >= items.size())
+        if (newIndex >= size())
         {
             newIndex = 0;
         }
@@ -98,7 +70,7 @@ public class RotatingList<T> implements Iterable<T>
             index = newIndex;
         }
 
-        return items.get(newIndex);
+        return super.get(newIndex);
     }
 
     public T previous(boolean moveIndex)
@@ -106,7 +78,7 @@ public class RotatingList<T> implements Iterable<T>
         int newIndex = index - 1;
         if (newIndex < 0)
         {
-            newIndex = items.size() - 1;
+            newIndex = size() - 1;
         }
 
         if (moveIndex)
@@ -114,17 +86,11 @@ public class RotatingList<T> implements Iterable<T>
             index = newIndex;
         }
 
-        return items.get(newIndex);
+        return super.get(newIndex);
     }
 
     public void resetIndex()
     {
         index = 0;
-    }
-
-    @Override
-    public Iterator<T> iterator()
-    {
-        return items.iterator();
     }
 }

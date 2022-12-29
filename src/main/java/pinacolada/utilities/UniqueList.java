@@ -4,14 +4,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
-public class UniqueList<T>
+public class UniqueList<T> extends ArrayList<T>
 {
-    private final HashMap<T, Integer> indexes = new HashMap<>();
-    private final ArrayList<T> items = new ArrayList<>();
+    private final HashMap<Object, Integer> indexes = new HashMap<>();
 
     public UniqueList()
     {
-
+        super();
     }
 
     public UniqueList(Collection<T> items)
@@ -22,8 +21,15 @@ public class UniqueList<T>
         }
     }
 
+    public boolean add(T item)
+    {
+        int prevSize = size();
+        int result = addAndGetIndex(item);
+        return result >= prevSize;
+    }
+
     // Returns the index at which the item exists in the map
-    public int add(T item)
+    public int addAndGetIndex(T item)
     {
         Integer found = getIndex(item);
         if (found != null)
@@ -31,24 +37,24 @@ public class UniqueList<T>
             return found;
         }
 
-        int size = items.size();
-        items.add(item);
+        int size = size();
+        super.add(item);
         indexes.put(item, size);
         return size;
     }
 
     public void clear()
     {
+        super.clear();
         indexes.clear();
-        items.clear();
     }
 
     public T get(int index)
     {
-        return index >= 0 && items.size() > index ? items.get(index) : null;
+        return index >= 0 && size() > index ? super.get(index) : null;
     }
 
-    public Integer getIndex(T item)
+    public Integer getIndex(Object item)
     {
         return indexes.get(item);
     }
@@ -59,34 +65,28 @@ public class UniqueList<T>
         return found != null ? found : defaultValue;
     }
 
-    public boolean remove(int index)
+    public T remove(int index)
     {
-        if (items.size() > index)
+        if (size() > index)
         {
-            T item = items.get(index);
-            items.remove(index);
+            T item = super.remove(index);
             indexes.remove(item);
-            return true;
+            return item;
         }
 
-        return false;
+        return null;
     }
 
-    public boolean remove(T item)
+    public boolean remove(Object item)
     {
         Integer cIndex = getIndex(item);
         if (cIndex != null)
         {
             indexes.remove(item);
-            items.remove(cIndex.intValue());
+            super.remove(cIndex.intValue());
             return true;
         }
 
         return false;
-    }
-
-    public int size()
-    {
-        return items.size();
     }
 }

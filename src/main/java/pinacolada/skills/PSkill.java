@@ -848,7 +848,7 @@ public abstract class PSkill implements TooltipProvider
     {
         if (source != null)
         {
-            return (char) (source.getPointers().add(this) + CHAR_OFFSET);
+            return (char) (source.getPointers().addAndGetIndex(this) + CHAR_OFFSET);
         }
         return CHAR_OFFSET;
     }

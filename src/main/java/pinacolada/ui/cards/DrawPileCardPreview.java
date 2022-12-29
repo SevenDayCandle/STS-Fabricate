@@ -10,8 +10,6 @@ import extendedui.interfaces.delegates.ActionT2;
 import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.utilities.RotatingList;
 
-import java.util.ArrayList;
-
 public class DrawPileCardPreview
 {
     protected static final float REFRESH_DELAY = 0.625f;
@@ -47,14 +45,14 @@ public class DrawPileCardPreview
 
     public AbstractCard findCard(AbstractMonster target)
     {
-        final int previousSize = cards.count();
+        final int previousSize = cards.size();
         final int previousIndex = cards.getIndex();
 
         findCards(cards, target);
 
-        cards.setIndex((cards.count() == previousSize) ? previousIndex : 0);
+        cards.setIndex((cards.size() == previousSize) ? previousIndex : 0);
 
-        return (cards.count() > 0) ? cards.next(true) : null;
+        return (cards.size() > 0) ? cards.next(true) : null;
     }
 
     protected void findCards(RotatingList<AbstractCard> cards, AbstractMonster target)
@@ -66,19 +64,18 @@ public class DrawPileCardPreview
         }
 
         cards.clear();
-        final ArrayList<AbstractCard> list = cards.getInnerList();
         for (AbstractCard c : AbstractDungeon.player.drawPile.group)
         {
-            int index = list.size();
-            for (int i = 0; i < list.size(); i++)
+            int index = cards.size();
+            for (int i = 0; i < cards.size(); i++)
             {
-                final AbstractCard temp = list.get(i);
+                final AbstractCard temp = cards.get(i);
                 if (temp.cardID.equals(c.cardID))
                 {
                     index = -1;
                     break;
                 }
-                else if (c.name.compareTo(list.get(i).name) < 0)
+                else if (c.name.compareTo(cards.get(i).name) < 0)
                 {
                     index = i;
                     break;
@@ -87,7 +84,7 @@ public class DrawPileCardPreview
 
             if (index >= 0 && (findCard == null || findCard.invoke(c)))
             {
-                list.add(index, c);
+                cards.add(index, c);
             }
         }
     }

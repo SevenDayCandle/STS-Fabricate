@@ -6,66 +6,38 @@ import extendedui.EUIUtils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
-public class RandomizedList<T>
+public class RandomizedList<T> extends ArrayList<T>
 {
-    private final ArrayList<T> items;
-
     public RandomizedList()
     {
-        items = new ArrayList<>();
+        super();
     }
 
     public RandomizedList(Collection<? extends T> collection)
     {
-        items = new ArrayList<>(collection);
+        super(collection);
     }
 
     @SafeVarargs
     public RandomizedList(T... array)
     {
-        items = new ArrayList<>(array.length);
+        super();
         addAll(array);
     }
 
-    public void add(T item)
-    {
-        items.add(item);
-    }
-
     @SafeVarargs
-    public final void addAll(T... arr)
+    public final boolean addAll(T... arr)
     {
-        Collections.addAll(items, arr);
-    }
-
-    public void addAll(List<T> list)
-    {
-        items.addAll(list);
-    }
-
-    public void clear()
-    {
-        items.clear();
-    }
-
-    public int size()
-    {
-        return items.size();
-    }
-
-    public boolean remove(T item)
-    {
-        return items.remove(item);
+        return Collections.addAll(this, arr);
     }
 
     public T retrieve(Random rng, boolean remove)
     {
-        T item = GameUtilities.getRandomElement(items, rng);
+        T item = GameUtilities.getRandomElement(this, rng);
         if (remove)
         {
-            items.remove(item);
+            remove(item);
         }
 
         return item;
@@ -78,17 +50,12 @@ public class RandomizedList<T>
 
     public T retrieveUnseeded(boolean remove)
     {
-        T item = EUIUtils.random(items);
+        T item = EUIUtils.random(this);
         if (remove)
         {
-            items.remove(item);
+            remove(item);
         }
 
         return item;
-    }
-
-    public ArrayList<T> getInnerList()
-    {
-        return items;
     }
 }

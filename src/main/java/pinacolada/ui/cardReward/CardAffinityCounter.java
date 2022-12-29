@@ -55,7 +55,7 @@ public class CardAffinityCounter extends EUIBase
 
     public CardAffinityCounter setIndex(int index)
     {
-        float y = -index * 1.05f;
+        float y = -index * backgroundButton.hb.height * 1.05f;
         backgroundButton.hb.setOffsetY(y);
         counterweakText.hb.setOffsetY(y);
         counterpercentageText.hb.setOffsetY(y);

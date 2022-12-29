@@ -25,6 +25,7 @@ import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
+import pinacolada.interfaces.markers.SummonOnlyMove;
 import pinacolada.misc.CombatManager;
 import pinacolada.monsters.animations.PCLAllyAnimation;
 import pinacolada.monsters.animations.PCLAnimation;
@@ -33,7 +34,6 @@ import pinacolada.monsters.animations.pcl.PCLGeneralAllyAnimation;
 import pinacolada.powers.PSkillPower;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.Skills;
-import pinacolada.skills.skills.special.moves.PMove_StackCustomPower;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
@@ -94,7 +94,7 @@ public class PCLCardAlly extends PCLCreature
         }
         for (PSkill s : card.getFullEffects())
         {
-            if (s instanceof PMove_StackCustomPower)
+            if (s instanceof SummonOnlyMove)
             {
                 s.use(new PCLUseInfo(card, this, this));
             }

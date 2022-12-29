@@ -1288,11 +1288,12 @@ public class GameUtilities
         return power != null ? power.amount : 0;
     }
 
+    // Create a random card that matches the given parameters. Note that these random card methods poll from the in-combat card pool, so healing cards are already filtered out
     public static AbstractCard getRandomCard(List<AbstractCard.CardRarity> rarity, List<AbstractCard.CardType> type, List<PCLAffinity> affinity)
     {
         refreshCardLists();
         setupCharacterCardPool();
-        return getRandomElement(EUIUtils.filter(characterCardPool.getInnerList(),
+        return getRandomElement(EUIUtils.filter(characterCardPool,
                         c -> ((rarity.isEmpty() || EUIUtils.any(rarity, r -> c.rarity == r)) &&
                                 (type.isEmpty() || EUIUtils.any(type, t -> c.type == t)) &&
                                 (affinity.isEmpty() || EUIUtils.any(affinity, a -> GameUtilities.hasAffinity(c, a, true)))
@@ -1804,7 +1805,7 @@ public class GameUtilities
 
     public static boolean isObtainableInCombat(AbstractCard c)
     {
-        return !c.hasTag(AbstractCard.CardTags.HEALING) && c.rarity != AbstractCard.CardRarity.SPECIAL && !c.isLocked;
+        return !c.hasTag(AbstractCard.CardTags.HEALING) && c.rarity != AbstractCard.CardRarity.SPECIAL && !PCLCardTag.Fleeting.has(c) && !c.isLocked;
     }
 
     public static boolean isPlayable(AbstractCard card)
@@ -2372,6 +2373,7 @@ public class GameUtilities
         CombatManager.onTagChanged(card, PCLCardTag.Unplayable, 1);
     }
 
+    // Sets up the available pool of generated cards in combat (so no curses/statuses, basics, or unobtainable cards)
     protected static void setupCharacterCardPool()
     {
         if (characterCardPool.size() == 0)

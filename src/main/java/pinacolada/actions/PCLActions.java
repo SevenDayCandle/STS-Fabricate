@@ -795,6 +795,16 @@ public final class PCLActions
         return add(new ProgressCooldown(card, change));
     }
 
+    public MoveCard purge(AbstractCard card)
+    {
+        return moveCard(card, CombatManager.PURGED_CARDS);
+    }
+
+    public MoveCard purge(AbstractCard card, CardGroup group)
+    {
+        return moveCard(card, group, CombatManager.PURGED_CARDS);
+    }
+
     public PurgeFromPile purgeFromPile(String sourceName, int amount, CardGroup... groups)
     {
         return add(new PurgeFromPile(sourceName, amount, groups));

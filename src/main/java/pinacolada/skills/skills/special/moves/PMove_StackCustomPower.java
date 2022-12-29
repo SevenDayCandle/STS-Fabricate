@@ -5,6 +5,7 @@ import extendedui.EUIUtils;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.interfaces.markers.EditorCard;
+import pinacolada.interfaces.markers.SummonOnlyMove;
 import pinacolada.powers.PSkillPower;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PMove;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class PMove_StackCustomPower extends PMove
+public class PMove_StackCustomPower extends PMove implements SummonOnlyMove
 {
 
     public static final PSkillData DATA = register(PMove_StackCustomPower.class, PCLEffectType.CustomPower, -1, 999);

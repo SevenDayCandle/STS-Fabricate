@@ -14,11 +14,11 @@ public class PCLPreviewList extends RotatingList<EUICardPreview>
     }
 
     public AbstractCard getCard(int index) {
-        return getInnerList().get(index).defaultPreview;
+        return get(index).defaultPreview;
     }
 
     public AbstractCard getUpgrade(int index) {
-        return getInnerList().get(index).upgradedPreview;
+        return get(index).upgradedPreview;
     }
 
     public void add(AbstractCard card) {
@@ -29,17 +29,18 @@ public class PCLPreviewList extends RotatingList<EUICardPreview>
         set(index, EUICardPreview.generatePreviewCard(card));
     }
 
-    public void set(int index, EUICardPreview card) {
-        getInnerList().set(index, card);
+    public EUICardPreview set(int index, EUICardPreview card) {
+        set(index, card);
+        return card;
     }
 
     public ArrayList<AbstractCard> getCards() {
-        return EUIUtils.mapAsNonnull(getInnerList(), p -> p.defaultPreview);
+        return EUIUtils.mapAsNonnull(this, p -> p.defaultPreview);
     }
 
     public int getMatchingIndex(AbstractCard card) {
         if (card != null) {
-            for (int i = 0; i < count(); i++) {
+            for (int i = 0; i < size(); i++) {
                 if (getCard(i).uuid.equals(card.uuid)) {
                     return i;
                 }

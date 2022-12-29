@@ -10,6 +10,7 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.MathHelper;
 import com.megacrit.cardcrawl.localization.PotionStrings;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
@@ -19,6 +20,7 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.cards.base.PCLCardTarget;
+import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.interfaces.markers.PointerProvider;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
@@ -179,9 +181,10 @@ public abstract class PCLPotion extends AbstractPotion implements TooltipProvide
     @Override
     public void use(AbstractCreature target)
     {
+        final PCLUseInfo info = new PCLUseInfo(null, AbstractDungeon.player, target);
         for (PSkill ef : getEffects())
         {
-            ef.use(null);
+            ef.use(info);
         }
     }
 

@@ -6,9 +6,9 @@ import extendedui.EUIUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WeightedList<T>
+public class WeightedList<T> extends ArrayList<WeightedList<T>.Item>
 {
-    private class Item
+    protected class Item
     {
         final int weight;
         final T object;
@@ -20,20 +20,19 @@ public class WeightedList<T>
         }
     }
 
-    private final List<Item> items;
     private int totalWeight;
 
     public WeightedList()
     {
+        super();
         totalWeight = 0;
-        items = new ArrayList<>();
     }
 
     public WeightedList(WeightedList<T> copy)
     {
         this();
 
-        for (Item item : copy.items)
+        for (Item item : copy)
         {
             add(item.object, item.weight);
         }
@@ -42,7 +41,7 @@ public class WeightedList<T>
     public List<T> getInnerList()
     {
         final ArrayList<T> result = new ArrayList<>();
-        for (Item item : items)
+        for (Item item : this)
         {
             result.add(item.object);
         }
@@ -50,21 +49,16 @@ public class WeightedList<T>
         return result;
     }
 
-    public int size()
-    {
-        return items.size();
-    }
-
     public void clear()
     {
-        items.clear();
+        super.clear();
         totalWeight = 0;
     }
 
     public void add(T object, int weight)
     {
         totalWeight += weight;
-        items.add(new Item(object, weight));
+        super.add(new Item(object, weight));
     }
 
     public T retrieve(Random rng)
@@ -86,7 +80,7 @@ public class WeightedList<T>
     {
         Item selected = null;
         int currentWeight = 0;
-        for (Item item : items)
+        for (Item item : this)
         {
             if ((currentWeight + item.weight) >= roll)
             {
@@ -113,6 +107,6 @@ public class WeightedList<T>
     private void remove(Item item)
     {
         totalWeight -= item.weight;
-        items.remove(item);
+        super.remove(item);
     }
 }

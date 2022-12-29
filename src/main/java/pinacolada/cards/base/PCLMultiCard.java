@@ -117,8 +117,8 @@ public abstract class PCLMultiCard extends PCLCard
 
     @Override
     public void triggerWhenCreated(boolean startOfBattle) {
-        if (inheritedCards.count() < COPIED_CARDS) {
-            while (inheritedCards.count() < COPIED_CARDS) {
+        if (inheritedCards.size() < COPIED_CARDS) {
+            while (inheritedCards.size() < COPIED_CARDS) {
                 addInheritedCard(new MysteryCard(false));
             }
         }
@@ -146,7 +146,7 @@ public abstract class PCLMultiCard extends PCLCard
 
     public void removeInheritedCards() {
         PCLEffects.Queue.callback(() -> {
-            for (EUICardPreview card : inheritedCards.getInnerList()) {
+            for (EUICardPreview card : inheritedCards) {
                 if (!(card.defaultPreview instanceof MysteryCard)) {
                     PCLEffects.TopLevelList.showAndObtain(card.defaultPreview.makeStatEquivalentCopy());
                 }
