@@ -16,12 +16,25 @@ public class TemporaryPower extends PCLPower
     public static final String ID = createFullID(TemporaryPower.class);
 
     private final boolean sourcePowerCanBeNegative;
-    private final String sourcePowerID;
     private final String targetName;
     private final FuncT1<AbstractPower, AbstractCreature> constructorT1;
     private final FuncT2<AbstractPower, AbstractCreature, Integer> constructorT2;
     private int sourceMaxAmount = 9999;
+    public final String sourcePowerID;
     public int stabilizeTurns;
+
+    public static TemporaryPower getFromCreature(AbstractCreature owner, String sourcePowerID)
+    {
+        for (AbstractPower po : owner.powers)
+        {
+            TemporaryPower tmp = EUIUtils.safeCast(po, TemporaryPower.class);
+            if (tmp != null && sourcePowerID.equals(tmp.sourcePowerID))
+            {
+                return tmp;
+            }
+        }
+        return null;
+    }
 
     public TemporaryPower(AbstractCreature owner, AbstractPower sourcePower)
     {

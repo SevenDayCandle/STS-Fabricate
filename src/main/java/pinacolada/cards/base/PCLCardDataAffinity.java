@@ -41,6 +41,10 @@ public class PCLCardDataAffinity implements Serializable
 
     public int getUpgrade(int form)
     {
+        if (upgrades == null)
+        {
+            return 0;
+        }
         Integer value = safeIndex(upgrades, form);
         return value != null ? value : 0;
     }

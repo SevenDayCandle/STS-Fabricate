@@ -128,7 +128,7 @@
 	},
 	"pcl:UsefulBox":
 	{
-	  "DESCRIPTIONS": ["Whenever you #ySummon a #ySummon card, give it {0} [Block]. | Once per combat, #oRight-Click: Target a creature to take on its form.", "#gCurrent #gBonus: {0}"],
+	  "DESCRIPTIONS": ["The first time each turn you #ySummon a #ySummon card, you and it gain {0} [Block]. | Once per combat, #oRight-Click: Target a creature to take on its form.", "#gCurrent #gBonus: {0}"],
 	  "FLAVOR": "A box that is useful.",
 	  "NAME": "Useful Box"
 	},

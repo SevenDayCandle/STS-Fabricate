@@ -1,7 +1,6 @@
 package pinacolada.skills.skills.base.conditions;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
@@ -82,7 +81,7 @@ public class PCond_CheckPower extends PCond
     public boolean triggerOnApplyPower(AbstractCreature s, AbstractCreature t, AbstractPower c)
     {
         if (this.childEffect != null && powers.isEmpty() ? c.type == (alt2 ? AbstractPower.PowerType.BUFF : AbstractPower.PowerType.DEBUFF)
-                : getPowerFilter().invoke(c) && target == PCLCardTarget.Self ^ !(AbstractDungeon.player == t))
+                : getPowerFilter().invoke(c) && s == getSourceCreature() && target == PCLCardTarget.Self ^ !(s == t))
         {
             this.childEffect.use(makeInfo(null));
         }

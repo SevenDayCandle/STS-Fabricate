@@ -55,12 +55,9 @@ public class WithdrawAllyAction extends PCLActionWithCallback<ArrayList<PCLCard>
                 {
                     if (trigger)
                     {
-                        PCLActions.top.triggerAlly(ally).addCallback(this::releaseCard);
+                        ally.manualTrigger();
                     }
-                    else
-                    {
-                        releaseCard(ally);
-                    }
+                    releaseCard(ally);
                 }
             }
         }
@@ -73,10 +70,11 @@ public class WithdrawAllyAction extends PCLActionWithCallback<ArrayList<PCLCard>
         PCLCard returnedCard = ally.releaseCard();
         if (returnedCard != null)
         {
-            PCLActions.top.makeCard(returnedCard, AbstractDungeon.player.discardPile);
+            PCLActions.top.makeCard(returnedCard, AbstractDungeon.player.discardPile)
+                    .addCallback(returnedCard::unfadeOut);
         }
 
-        // TODO effects
+        // TODO better effects
         if (showEffect)
         {
             PCLEffects.Queue.add(new SmokeEffect(ally.hb.cX, ally.hb.cY));

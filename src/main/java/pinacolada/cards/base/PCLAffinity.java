@@ -362,4 +362,29 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>
         }
         return 0;
     }
+
+    public PCLCardDataAffinity make()
+    {
+        return make(1);
+    }
+
+    public PCLCardDataAffinity make(int level)
+    {
+        return new PCLCardDataAffinity(this, level);
+    }
+
+    public PCLCardDataAffinity make(int level, int upgrade)
+    {
+        return new PCLCardDataAffinity(this, level, upgrade);
+    }
+
+    public PCLCardDataAffinity make(int level, Integer[] upgrade)
+    {
+        return new PCLCardDataAffinity(this, level, upgrade);
+    }
+
+    public PCLCardDataAffinity make(Integer[] level, Integer[] upgrade)
+    {
+        return new PCLCardDataAffinity(this, level, upgrade);
+    }
 }

@@ -19,16 +19,27 @@ public class UsefulBox extends AbstractBox implements OnAllySummonSubscriber
     public void atBattleStart()
     {
         CombatManager.onAllySummon.subscribe(this);
+        setCounter(1);
     }
 
     @Override
     public void onAllySummon(PCLCard card, PCLCardAlly ally)
     {
-        PCLActions.delayed.gainBlock(ally, getValue());
+        if (counter > 0)
+        {
+            PCLActions.delayed.gainBlock(getValue());
+            PCLActions.delayed.gainBlock(ally, getValue());
+            addCounter(-1);
+        }
+    }
+
+    public void atTurnStart()
+    {
+        setCounter(1);
     }
 
     public int getValue()
     {
-        return 7;
+        return 2;
     }
 }

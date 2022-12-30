@@ -10,6 +10,7 @@ import javassist.CannotCompileException;
 import javassist.expr.ExprEditor;
 import javassist.expr.MethodCall;
 import pinacolada.cards.pcl.curse.Curse_AscendersBane;
+import pinacolada.misc.CombatManager;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -95,6 +96,15 @@ public class AbstractDungeonPatches
                     }
                 }
             };
+        }
+
+        @SpirePostfixPatch
+        public static void postfix()
+        {
+            if (GameUtilities.inBattle())
+            {
+                CombatManager.summons.applyPowers();
+            }
         }
     }
 

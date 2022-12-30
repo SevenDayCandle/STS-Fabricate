@@ -10,6 +10,7 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import javassist.CtBehavior;
 import pinacolada.actions.PCLAction;
 import pinacolada.misc.CombatManager;
+import pinacolada.monsters.PCLCardAlly;
 
 import java.util.ArrayList;
 
@@ -58,7 +59,10 @@ public class GameActionManagerPatches
         )
         public static void insert(GameActionManager __instance, AbstractMonster m)
         {
-            CombatManager.removeDamagePowers(m);
+            if (!(m instanceof PCLCardAlly))
+            {
+                CombatManager.removeDamagePowers(m);
+            }
         }
 
         private static class Locator extends SpireInsertLocator

@@ -356,6 +356,15 @@ public class PCLCardData implements CardObject
         return this;
     }
 
+    public PCLCardData setAffinities(PCLCardDataAffinity... affinity)
+    {
+        for (PCLCardDataAffinity af : affinity)
+        {
+            setAffinities(af);
+        }
+        return this;
+    }
+
     public PCLCardData setAffinities(PCLCardDataAffinityGroup group)
     {
         this.affinities = group;
@@ -366,6 +375,12 @@ public class PCLCardData implements CardObject
     public PCLCardData setAffinities(PCLAffinity affinity, int base, int upgrade)
     {
         affinities.set(affinity, base, upgrade);
+        return this;
+    }
+
+    public PCLCardData setAffinities(PCLCardDataAffinity affinity)
+    {
+        affinities.set(affinity);
         return this;
     }
 

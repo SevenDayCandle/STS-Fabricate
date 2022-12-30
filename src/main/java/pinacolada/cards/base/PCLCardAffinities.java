@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIUtils;
+import extendedui.interfaces.delegates.FuncT1;
 import extendedui.utilities.ColoredTexture;
 import pinacolada.resources.PGR;
 
@@ -261,6 +262,13 @@ public class PCLCardAffinities
     {
         final int star = this.star != null ? this.star.level : 0;
         final PCLCardAffinity a = EUIUtils.max(list, af -> af);
+        return a != null && a.level >= star ? a : this.star;
+    }
+
+    public PCLCardAffinity getHighest(FuncT1<Boolean, PCLCardAffinity> filter)
+    {
+        final int star = this.star != null ? this.star.level : 0;
+        final PCLCardAffinity a = EUIUtils.max(EUIUtils.filter(list, filter::invoke), af -> af);
         return a != null && a.level >= star ? a : this.star;
     }
 

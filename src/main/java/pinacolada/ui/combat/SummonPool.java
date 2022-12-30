@@ -69,6 +69,17 @@ public class SummonPool extends EUIBase
         }
     }
 
+    public void applyPowers()
+    {
+        for (PCLCardAlly ally : summons)
+        {
+            if (ally.hasCard())
+            {
+                ally.applyPowers();
+            }
+        }
+    }
+
     public void clear()
     {
         summons.clear();

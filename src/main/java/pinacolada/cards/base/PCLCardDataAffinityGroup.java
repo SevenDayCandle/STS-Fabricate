@@ -137,5 +137,4 @@ public class PCLCardDataAffinityGroup implements Serializable
     {
         return set(new PCLCardDataAffinity(affinity, level, upgrade));
     }
-
 }

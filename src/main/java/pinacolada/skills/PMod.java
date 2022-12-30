@@ -142,6 +142,16 @@ public abstract class PMod extends PSkill
         return (PMod) new PMod_FetchPerCard(amount, groups).setAlt(true);
     }
 
+    public static PMod highestAffinityBranch(PCLAffinity... groups)
+    {
+        return new PMod_HighestAffinityBranch(groups);
+    }
+
+    public static PMod increaseOnUse(int amount)
+    {
+        return new PMod_IncreaseOnUse(amount);
+    }
+
     public static PMod payXEnergy()
     {
         return (PMod) new PMod_PerEnergy().setAlt(true);

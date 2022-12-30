@@ -382,8 +382,7 @@ public class PCLDungeonData implements CustomSavable<PCLDungeonData>, PreStartGa
         {
             group.group.removeIf(card ->
             {
-                // TODO remove vanilla colorless cards once you've made enough colorless cards or you've made replacements for vanilla colorless
-                if (card.color == AbstractCard.CardColor.CURSE)
+                if (card.color == AbstractCard.CardColor.COLORLESS || card.color == AbstractCard.CardColor.CURSE)
                 {
                     return !(card instanceof PCLCard);
                 }

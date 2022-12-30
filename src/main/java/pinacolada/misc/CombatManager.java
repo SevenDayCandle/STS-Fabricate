@@ -41,6 +41,7 @@ import pinacolada.interfaces.subscribers.*;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.orbs.PCLOrb;
 import pinacolada.powers.PCLPower;
+import pinacolada.powers.TemporaryPower;
 import pinacolada.powers.common.ImpairedPower;
 import pinacolada.powers.common.PCLLockOnPower;
 import pinacolada.relics.PCLRelic;
@@ -1394,6 +1395,12 @@ public class CombatManager
                     relic.stopPulse();
                 }
             }
+        }
+
+        TemporaryPower tmpVigor = TemporaryPower.getFromCreature(creature, VigorPower.POWER_ID);
+        if (tmpVigor != null)
+        {
+            PCLActions.bottom.removePower(creature, tmpVigor);
         }
 
         if (creature.hasPower(VigorPower.POWER_ID))

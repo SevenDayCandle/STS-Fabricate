@@ -91,9 +91,9 @@ public class PMove_DealDamage extends PMove
         }
         if (target == PCLCardTarget.Single)
         {
-            return TEXT.actions.deal(getAmountRawString(), PGR.core.tooltips.damage.title);
+            return TEXT.actions.deal(getAmountRawString(), PGR.core.strings.subjects.damage);
         }
-        return TEXT.actions.dealTo(getAmountRawString(), PGR.core.tooltips.damage.title, getTargetString());
+        return TEXT.actions.dealTo(getAmountRawString(), PGR.core.strings.subjects.damage, getTargetString());
     }
 
     public void serialize(PSkillSaveData data)

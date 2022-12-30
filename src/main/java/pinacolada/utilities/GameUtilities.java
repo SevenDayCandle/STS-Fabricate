@@ -54,7 +54,6 @@ import pinacolada.characters.PCLCharacter;
 import pinacolada.effects.SFX;
 import pinacolada.interfaces.listeners.OnTryApplyPowerListener;
 import pinacolada.interfaces.listeners.OnTryReducePowerListener;
-import pinacolada.interfaces.subscribers.OnPhaseChangedSubscriber;
 import pinacolada.misc.CombatManager;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.monsters.PCLIntentInfo;
@@ -2531,27 +2530,4 @@ public class GameUtilities
         return amount;
     }
 
-    private static class HandLayoutRefresher implements OnPhaseChangedSubscriber
-    {
-        @Override
-        public void onPhaseChanged(GameActionManager.Phase phase)
-        {
-            if (phase == GameActionManager.Phase.WAITING_ON_USER)
-            {
-                refresh();
-
-                CombatManager.onPhaseChanged.unsubscribe(handLayoutRefresher);
-            }
-        }
-
-        public void refresh()
-        {
-            if (GameUtilities.getCurrentRoom(false) != null)
-            {
-                player.hand.refreshHandLayout();
-                player.hand.applyPowers();
-                player.hand.glowCheck();
-            }
-        }
-    }
 }

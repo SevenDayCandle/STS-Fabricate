@@ -383,6 +383,16 @@ public abstract class PMove extends PSkill
         return new PMove_Heal(target, amount);
     }
 
+    public static PMove loseHp(int amount)
+    {
+        return new PMove_LoseHP(amount);
+    }
+
+    public static PMove loseHp(PCLCardTarget target, int amount)
+    {
+        return new PMove_LoseHP(target, amount);
+    }
+
     public static PMove modifyAffinity(PCLAffinity... tag)
     {
         return new PMove_ModifyAffinity(1, tag);

@@ -314,7 +314,7 @@ public class ApplyPower extends PCLActionWithCallback<AbstractPower>
         {
             if (c.type == AbstractCard.CardType.SKILL)
             {
-                c.modifyCostForCombat(-9);
+                c.modifyCostForCombat(-99);
             }
         }
     }

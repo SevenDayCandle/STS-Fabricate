@@ -72,7 +72,7 @@ public class SummonAllyAction extends PCLActionWithCallback<PCLCard>
         }
 
         PCLCard returnedCard = this.ally.card;
-        // If ally is withdrawed, setting up the new card must come after the previous card is withdrawn
+        // If ally is withdrawn, setting up the new card must come after the previous card is withdrawn
         if (returnedCard != null)
         {
             PCLActions.top.withdrawAlly(ally).addCallback(this::initializeAlly);

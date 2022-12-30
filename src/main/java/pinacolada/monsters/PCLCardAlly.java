@@ -3,6 +3,7 @@ package pinacolada.monsters;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
+import com.megacrit.cardcrawl.actions.animations.AnimateFastAttackAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
@@ -108,6 +109,12 @@ public class PCLCardAlly extends PCLCreature
         return card != null;
     }
 
+    public void manualTrigger()
+    {
+        takeTurn();
+        CombatManager.onAllyTrigger(this.card, this);
+    }
+
     public PCLCard releaseCard()
     {
         PCLCard releasedCard = this.card;
@@ -182,14 +189,17 @@ public class PCLCardAlly extends PCLCreature
         if (card != null)
         {
             refreshAction();
+            final PCLUseInfo info = new PCLUseInfo(card, this, target);
             if (animation instanceof PCLAnimation)
             {
-                ((PCLAnimation) animation).playActAnimation(hb.cX, hb.cY);
+                PCLActions.bottom.callback(() -> {
+                    ((PCLAnimation) animation).playActAnimation(hb.cX, hb.cY);
+                });
             }
-            final PCLUseInfo info = new PCLUseInfo(card, this, target);
+            PCLActions.bottom.add(new AnimateFastAttackAction(this));
             card.useEffectsWithoutPowers(info);
             CombatManager.playerSystem.onCardPlayed(card, target, info, true);
-            PCLActions.bottom.callback(() -> CombatManager.removeDamagePowers(this));
+            PCLActions.delayed.callback(() -> CombatManager.removeDamagePowers(this));
         }
     }
 
