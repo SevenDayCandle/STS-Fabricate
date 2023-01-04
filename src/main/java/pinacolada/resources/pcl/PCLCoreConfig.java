@@ -35,9 +35,10 @@ public class PCLCoreConfig extends AbstractConfig
     private static final String ASCENSIONGLYPH2 = PCLCoreConfig.createFullID("AscensionGlyph2");
     private static final String CROP_CARD_PORTRAIT = PCLCoreConfig.createFullID("UseCroppedPortrait");
     private static final String DAMAGE_FORMULA_POSITION = PCLCoreConfig.createFullID("DamageFormulaPosition");
+    private static final String DISPLAY_CARD_TAG_DESCRIPTION = PCLCoreConfig.createFullID("DisplayCardTagDescription");
+    private static final String DISPLAY_CARD_TAG_TEXT = PCLCoreConfig.createFullID("DisplayCardTagText");
     private static final String ENABLE_EVENTS_FOR_OTHER_CHARACTERS = PCLCoreConfig.createFullID("EnableEventsForOtherCharacters");
     private static final String ENABLE_RELICS_FOR_OTHER_CHARACTERS = PCLCoreConfig.createFullID("EnableRelicsForOtherCharacters");
-    private static final String FADE_CARDS_WITHOUT_SYNERGY = PCLCoreConfig.createFullID("FadeNonSynergicCards");
     private static final String HIDE_IRRELEVANT_AFFINITIES = PCLCoreConfig.createFullID("HideIrrelevantAffinities");
     private static final String HIDE_TIP_DESCRIPTION = PCLCoreConfig.createFullID("HideTipDescription");
     private static final String LAST_CSV_PATH = PCLCoreConfig.createFullID("LastCSVPath");
@@ -48,6 +49,7 @@ public class PCLCoreConfig extends AbstractConfig
     private static final String SIMPLE_MODE_FTUE_SEEN = PCLCoreConfig.createFullID("SimpleModeFtueSeen");
     private static ModSettingsScreen.Category pclCategory;
     public STSConfigItem<Boolean> cropCardImages = new STSConfigItem<Boolean>(CROP_CARD_PORTRAIT, false);
+    public STSConfigItem<Boolean> displayCardTagDescription = new STSConfigItem<Boolean>(DISPLAY_CARD_TAG_DESCRIPTION, false);
     public STSConfigItem<Boolean> enableEventsForOtherCharacters = new STSConfigItem<Boolean>(ENABLE_EVENTS_FOR_OTHER_CHARACTERS, false);
     public STSConfigItem<Boolean> enableRelicsForOtherCharacters = new STSConfigItem<Boolean>(ENABLE_RELICS_FOR_OTHER_CHARACTERS, false);
     public STSConfigItem<Boolean> hideIrrelevantAffinities = new STSConfigItem<Boolean>(HIDE_IRRELEVANT_AFFINITIES, true);
@@ -120,24 +122,27 @@ public class PCLCoreConfig extends AbstractConfig
     public void initializeOptions()
     {
         final ModPanel panel = new ModPanel();
-        final PCLCoreStrings.Misc misc = PGR.core.strings.misc;
+        final PCLCoreStrings.Options misc = PGR.core.strings.options;
 
         int yPos = BASE_OPTION_OFFSET_Y;
 
-        yPos = addToggle(panel, cropCardImages, misc.dynamicPortraits, yPos);
+        yPos = addToggle(panel, cropCardImages, misc.cropCardImages, yPos);
+        yPos = addToggle(panel, displayCardTagDescription, misc.displayCardTagDescription, yPos);
         yPos = addToggle(panel, enableEventsForOtherCharacters, misc.enableEventsForOtherCharacters, yPos);
         yPos = addToggle(panel, enableRelicsForOtherCharacters, misc.enableRelicsForOtherCharacters, yPos);
         yPos = addToggle(panel, showFormulaDisplay, misc.showFormulaDisplay, yPos);
         yPos = addToggle(panel, hideIrrelevantAffinities, misc.hideIrrelevantAffinities, yPos);
-        yPos = addToggle(panel, replaceCardsPCL, misc.replaceCardsFool, yPos);
+        yPos = addToggle(panel, replaceCardsPCL, misc.replaceCards, yPos);
 
         BaseMod.registerModBadge(ImageMaster.loadImage("images/pcl/modBadge.png"), MOD_ID, "PinaColada", "", panel);
 
-        addModToggle(cropCardImages, misc.dynamicPortraits);
+        addModToggle(cropCardImages, misc.cropCardImages);
+        addModToggle(displayCardTagDescription, misc.displayCardTagDescription);
         addModToggle(showFormulaDisplay,  misc.showFormulaDisplay);
         addModToggle(hideIrrelevantAffinities,  misc.hideIrrelevantAffinities);
 
         EUIConfiguration.disableDescrptionIcons.addListener(val -> this.updateCardDescriptions());
+        displayCardTagDescription.addListener(val -> this.updateCardDescriptions());
     }
 
 
@@ -148,6 +153,7 @@ public class PCLCoreConfig extends AbstractConfig
         ascensionGlyph2.addConfig(config);
         cropCardImages.addConfig(config);
         damageFormulaPosition.addConfig(config);
+        displayCardTagDescription.addConfig(config);
         enableEventsForOtherCharacters.addConfig(config);
         enableRelicsForOtherCharacters.addConfig(config);
         showFormulaDisplay.addConfig(config);

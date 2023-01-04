@@ -219,7 +219,7 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase
             startingCardsLabel.setActive(provider instanceof PCLCharacterSelectProvider);
             startingCardsListLabel.setActive(provider instanceof PCLCharacterSelectProvider);
             ascensionGlyphsLabel.setActive(true);
-            simpleModeToggle.setToggle(PGR.core.config.simpleMode.get()).setActive(true);
+            simpleModeToggle.setToggle(PGR.core.config.simpleMode.get()).setActive(false); //TODO set to true once needed
             for (PCLGlyphEditor geditor : glyphEditors)
             {
                 geditor.refresh(provider.ascensionLevel());

@@ -71,7 +71,7 @@ public class PMove_ChannelOrb extends PMove
     @Override
     public String getSubText()
     {
-        String base = (!orbs.isEmpty() ? alt ? getOrbOrString(getRawString(EFFECT_CHAR)) : getOrbAndString(getRawString(EFFECT_CHAR)) : plural(PGR.core.tooltips.randomOrb));
+        String base = (!orbs.isEmpty() ? alt ? getOrbOrString(getRawString(EFFECT_CHAR)) : getOrbAndString(getRawString(EFFECT_CHAR)) : TEXT.subjects.randomX(plural(PGR.core.tooltips.orb)));
         if (extra > 0)
         {
             base = TEXT.subjects.withX(base, EUIRM.strings.numNoun("+" + getExtraRawString(), PGR.core.tooltips.focus.title));

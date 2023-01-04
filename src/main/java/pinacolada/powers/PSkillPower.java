@@ -33,7 +33,7 @@ import java.util.List;
 
 public class PSkillPower extends PCLPower implements OnAllyDeathSubscriber, OnAllySummonSubscriber, OnAllyTriggerSubscriber, OnAllyWithdrawSubscriber, OnCardCreatedSubscriber,
                                                      OnCardDiscardedSubscriber, OnCardPurgedSubscriber, OnCardReshuffledSubscriber, OnChannelOrbSubscriber, OnElementReactSubscriber,
-                                                     OnMatchSubscriber, OnNotMatchSubscriber, OnOrbApplyFocusSubscriber, OnOrbPassiveEffectSubscriber, OnPCLClickablePowerUsed, OnShuffleSubscriber, OnIntensifySubscriber
+                                                     OnMatchSubscriber, OnNotMatchSubscriber, OnOrbApplyFocusSubscriber, OnOrbPassiveEffectSubscriber, OnPCLClickableUsedSubscriber, OnShuffleSubscriber, OnIntensifySubscriber
 {
     public final ArrayList<PTrigger> ptriggers = new ArrayList<>();
 
@@ -69,7 +69,7 @@ public class PSkillPower extends PCLPower implements OnAllyDeathSubscriber, OnAl
 
             if (effect instanceof PTrigger_Interactable)
             {
-                triggerCondition = new PCLPowerTriggerCondition(this, effect.getChild(), effect.amount <= 0 ? -1 : effect.amount, !effect.alt, true);
+                triggerCondition = new PCLClickableUse(this, effect.getChild(), effect.amount <= 0 ? -1 : effect.amount, !effect.alt, true);
             }
         }
 
@@ -277,7 +277,7 @@ public class PSkillPower extends PCLPower implements OnAllyDeathSubscriber, OnAl
     }
 
     @Override
-    public boolean onClickablePowerUsed(PCLPower c, AbstractMonster target)
+    public boolean onClickablePowerUsed(PCLClickableUse c, AbstractMonster target, int uses)
     {
         if (EUIUtils.any(ptriggers, effect -> effect.triggerOnPCLPowerUsed(c)))
         {

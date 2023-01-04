@@ -32,7 +32,7 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>
     Unknown(-3, "NA",  "U");
 
     public static final int TOTAL_AFFINITIES = 7;
-    public static final int MAX_LEVEL = 2;
+    public static final int MAX_LEVEL = 3;
     private static final HashMap<AbstractCard.CardColor, PCLAffinity[]> REGISTERED_TYPES = new HashMap<>();
     private static final HashMap<AbstractCard.CardColor, TextureCache> REGISTERED_BORDERS = new HashMap<>();
 
@@ -147,6 +147,12 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>
     public static List<PCLAffinity> getAvailableAffinitiesAsList()
     {
         return Arrays.asList(getAvailableAffinities());
+    }
+
+    public static PCLAffinity getRandomAvailableAffinity()
+    {
+        PCLAffinity affinity = GameUtilities.getRandomElement(getAvailableAffinities());
+        return affinity != null ? affinity : General;
     }
 
     public String getAffinitySymbol()

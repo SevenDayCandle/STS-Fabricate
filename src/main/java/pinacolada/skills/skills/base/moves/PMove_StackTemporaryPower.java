@@ -12,7 +12,7 @@ import pinacolada.utilities.GameUtilities;
 
 public class PMove_StackTemporaryPower extends PMove
 {
-    public static final PSkillData DATA = register(PMove_StackTemporaryPower.class, PCLEffectType.Power, -999, 999);
+    public static final PSkillData DATA = register(PMove_StackTemporaryPower.class, PCLEffectType.Power, -DEFAULT_MAX, DEFAULT_MAX);
 
     public PMove_StackTemporaryPower()
     {

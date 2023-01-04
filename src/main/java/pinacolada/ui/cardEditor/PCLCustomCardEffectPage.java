@@ -110,7 +110,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
                     constructEffect();
                 })
                 .setTooltip(PGR.core.strings.cardEditor.turnDelay, PGR.core.strings.cardEditorTutorial.effectTurnDelay)
-                .setLimits(0, 999);
+                .setLimits(0, PSkill.DEFAULT_MAX);
 
         offsetY += OFFSET_EFFECT * 2;
         conditionHeader = new EUILabel(EUIFontHelper.cardtitlefontSmall, new OriginRelativeHitbox(hb, MENU_WIDTH / 4, MENU_HEIGHT, 0, offsetY))
@@ -160,7 +160,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
                     constructEffect();
                 })
                 .setTooltip(PGR.core.strings.cardEditor.choices, PGR.core.strings.cardEditorTutorial.effectChoices)
-                .setLimits(0, 999);
+                .setLimits(0, PSkill.DEFAULT_MAX);
         choicesEditor.header.hb.setOffset(-0.375f * MENU_WIDTH, MENU_HEIGHT * 0.5f);
 
         offsetY += OFFSET_EFFECT * 2f;
@@ -246,7 +246,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
         finalEffect = new PMultiSkill()
                 .setEffects(EUIUtils.mapAsNonnull(lowerEffects, e -> e != null ? e.makeCopy() : null))
                 .setAmount(currentEffects[4].amount);
-        currentEffects[3] = lowerModifiers.get(0);
+        currentEffects[3] = lowerModifiers.size() > 0 ? lowerModifiers.get(0) : null;
 
         if (currentEffects[3] != null)
         {
@@ -407,7 +407,14 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
 
         if (currentEffects[3] instanceof PMod)
         {
-            lowerModifiers.set(0, (PMod) currentEffects[3]);
+            if (lowerModifiers.size() == 0)
+            {
+                lowerModifiers.add((PMod) currentEffects[3]);
+            }
+            else
+            {
+                lowerModifiers.set(0, (PMod) currentEffects[3]);
+            }
         }
 
         lowerConditions.clear();

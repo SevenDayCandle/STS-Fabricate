@@ -14,7 +14,7 @@ import pinacolada.utilities.GameUtilities;
 
 public class PMove_StackPower extends PMove
 {
-    public static final PSkillData DATA = register(PMove_StackPower.class, PCLEffectType.Power, -999, 999);
+    public static final PSkillData DATA = register(PMove_StackPower.class, PCLEffectType.Power, -DEFAULT_MAX, DEFAULT_MAX);
 
     public PMove_StackPower()
     {

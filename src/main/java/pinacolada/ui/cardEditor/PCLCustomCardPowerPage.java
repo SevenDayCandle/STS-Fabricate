@@ -43,7 +43,7 @@ public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
                 constructEffect();
             }
         })
-                .setLimits(-1, 999)
+                .setLimits(-1, PSkill.DEFAULT_MAX)
                 .setValue(-1, false)
                 .setHasInfinite(true, true);
 

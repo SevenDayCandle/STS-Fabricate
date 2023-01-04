@@ -33,6 +33,7 @@ public class PCLCoreStrings extends PCLStrings
     public Conditions conditions;
     public CardPile cardPile;
     public CardType cardType;
+    public Options options;
     public Trophies trophies;
     public Tutorial tutorial;
     public CardEditorTutorial cardEditorTutorial;
@@ -68,6 +69,7 @@ public class PCLCoreStrings extends PCLStrings
         combat = new Combat();
         cardMods = new CardMods();
         gridSelection = new GridSelection();
+        options = new Options();
     }
 
     public class Rewards
@@ -185,19 +187,24 @@ public class PCLCoreStrings extends PCLStrings
         public final String simpleModeDescription = strings.TEXT[6];
         public final String complexMode = strings.TEXT[7];
         public final String complexModeDescription = strings.TEXT[8];
-        public final String dynamicPortraits = strings.TEXT[9];
-        public final String highlightMatches = strings.TEXT[10];
-        public final String simplifyCardUI = strings.TEXT[11];
-        public final String enableAlternateDelayedInnate = strings.TEXT[12];
-        public final String enableEventsForOtherCharacters = strings.TEXT[13];
-        public final String enableRelicsForOtherCharacters = strings.TEXT[14];
-        public final String allowCustomCards = strings.TEXT[15];
-        public final String replaceCardsFool = strings.TEXT[16];
-        public final String replaceCardsAnimator = strings.TEXT[17];
-        public final String usePCLPowersForAll = strings.TEXT[18];
-        public final String hideIrrelevantAffinities = strings.TEXT[19];
-        public final String showFormulaDisplay = strings.TEXT[20];
-        public final String pCL = strings.TEXT[21];
+        public final String allowCustomCards = strings.TEXT[9];
+        public final String pcl = strings.TEXT[10];
+        public final String leftClick = strings.TEXT[11];
+        public final String rightClick = strings.TEXT[12];
+    }
+
+    public class Options
+    {
+        private final UIStrings strings = getUIStrings("Options");
+
+        public final String cropCardImages = strings.TEXT[0];
+        public final String displayCardTagDescription = strings.TEXT[1];
+        public final String enableEventsForOtherCharacters = strings.TEXT[2];
+        public final String enableRelicsForOtherCharacters = strings.TEXT[3];
+        public final String replaceCards = strings.TEXT[4];
+        public final String usePCLPowersForAll = strings.TEXT[5];
+        public final String hideIrrelevantAffinities = strings.TEXT[6];
+        public final String showFormulaDisplay = strings.TEXT[7];
     }
 
     public class CharacterSelect
@@ -362,7 +369,7 @@ public class PCLCoreStrings extends PCLStrings
         public final String active = strings.TEXT[9];
         public final String inactive = strings.TEXT[10];
         public final String disabled = strings.TEXT[11];
-        public final String nA = strings.TEXT[12];
+        public final String na = strings.TEXT[12];
         public final String eternalMeter = strings.TEXT[13];
         public final String eternalMeterAffinity = strings.TEXT[14];
         public final String eternalMeterCurrent = strings.TEXT[15];
@@ -713,56 +720,57 @@ public class PCLCoreStrings extends PCLStrings
         {
             return format(31, item, target, place);
         }
+        public final String repeat(Object times) {return format(32, times);}
         public final String select(Object amount)
         {
-            return format(32, amount);
+            return format(33, amount);
         }
-        public final String setTheOf(Object item, Object target, Object affinity2) {return format(33, item, target, affinity2);}
-        public final String setTheOfFrom(Object item, Object target, Object place, Object affinity2) {return format(34, item, target, place, affinity2);}
-        public final String setTheItem(Object item, Object affinity) {return format(35, item, affinity);}
-        public final String setTheLast(Object amount, Object item, Object affinity) {return format(36, amount, item, affinity);}
+        public final String setTheOf(Object item, Object target, Object affinity2) {return format(34, item, target, affinity2);}
+        public final String setTheOfFrom(Object item, Object target, Object place, Object affinity2) {return format(35, item, target, place, affinity2);}
+        public final String setTheItem(Object item, Object affinity) {return format(36, item, affinity);}
+        public final String setTheLast(Object amount, Object item, Object affinity) {return format(37, amount, item, affinity);}
         public final String shift(Object item)
         {
-            return format(37, item);
+            return format(38, item);
         }
-        public final String stealFrom(Object amount, Object item, Object target) {return format(38, amount, item, target);}
+        public final String stealFrom(Object amount, Object item, Object target) {return format(39, amount, item, target);}
         public final String stealAmount(Object amount, Object power)
         {
-            return format(39, amount, power);
+            return format(40, amount, power);
         }
         public final String stun(Object target)
         {
-            return format(40, target);
+            return format(41, target);
         }
-        public final String takeDamage(Object amount) {return format(41, amount);}
-        public final String transform(Object subject, Object target) {return format(42, subject, target);}
+        public final String takeDamage(Object amount) {return format(42, amount);}
+        public final String transform(Object subject, Object target) {return format(43, subject, target);}
         public final String use(Object target)
-        {
-            return format(43, target);
-        }
-        public final String youCannotGain(Object target)
         {
             return format(44, target);
         }
+        public final String youCannotGain(Object target)
+        {
+            return format(45, target);
+        }
         public final String objectGainsBonus(Object object, Object amount, Object bonus)
         {
-            return format(45, object, amount, bonus);
+            return format(46, object, amount, bonus);
         }
         public final String objectHas(Object object, Object amount)
         {
-            return format(46, object, amount);
+            return format(47, object, amount);
         }
         public final String objectLoses(Object object, Object amount, Object bonus)
         {
-            return format(47, object, amount, bonus);
+            return format(48, object, amount, bonus);
         }
         public final String objectOn(Object action, Object object, Object target)
         {
-            return format(48, action, object, target);
+            return format(49, action, object, target);
         }
         public final String objectOnAmount(Object action, Object amount, Object object, Object target)
         {
-            return format(49, action, amount, object, target);
+            return format(50, action, amount, object, target);
         }
 
         public final String channelX(Object amount, Object subject)
@@ -1314,5 +1322,15 @@ public class PCLCoreStrings extends PCLStrings
 
     public static String present(Object obj) {
         return obj instanceof EUITooltip ? ((EUITooltip) obj).present() : EUIRM.strings.present(obj);
+    }
+
+    public static String leftClick(Object desc)
+    {
+        return "{#o:" + PGR.core.strings.misc.leftClick + "}: " + desc;
+    }
+
+    public static String rightClick(Object desc)
+    {
+        return "{#o:" + PGR.core.strings.misc.rightClick + "}: " + desc;
     }
 }

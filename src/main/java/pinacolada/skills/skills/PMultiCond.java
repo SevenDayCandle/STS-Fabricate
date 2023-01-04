@@ -13,7 +13,7 @@ import pinacolada.cards.base.*;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.interfaces.markers.PointerProvider;
 import pinacolada.monsters.PCLCardAlly;
-import pinacolada.powers.PCLPower;
+import pinacolada.powers.PCLClickableUse;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PSkill;
@@ -345,7 +345,7 @@ public class PMultiCond extends PCond implements PMultiBase<PCond>
     }
 
     @Override
-    public boolean triggerOnPCLPowerUsed(PCLPower c)
+    public boolean triggerOnPCLPowerUsed(PCLClickableUse c)
     {
         return triggerOn((effect) -> effect.triggerOnPCLPowerUsed(c));
     }

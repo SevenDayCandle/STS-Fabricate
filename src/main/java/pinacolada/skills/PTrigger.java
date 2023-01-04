@@ -14,7 +14,7 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.monsters.PCLCardAlly;
-import pinacolada.powers.PCLPower;
+import pinacolada.powers.PCLClickableUse;
 import pinacolada.skills.skills.base.triggers.PTrigger_Interactable;
 import pinacolada.skills.skills.base.triggers.PTrigger_Passive;
 import pinacolada.skills.skills.base.triggers.PTrigger_When;
@@ -287,7 +287,7 @@ public abstract class PTrigger extends PSkill
     }
 
     @Override
-    public boolean triggerOnPCLPowerUsed(PCLPower c)
+    public boolean triggerOnPCLPowerUsed(PCLClickableUse c)
     {
         return triggerOn(() -> this.childEffect.triggerOnPCLPowerUsed(c));
     }

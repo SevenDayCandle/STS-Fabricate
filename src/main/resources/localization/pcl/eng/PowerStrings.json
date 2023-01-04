@@ -10,6 +10,11 @@
 		"DESCRIPTIONS": ["Deal #b{0} less #yAttack damage."],
 		"NAME": "Blinded"
 	},
+				"pcl:CriticalPower":
+				{
+								"DESCRIPTIONS": ["The next #yAttack played deals #b{0}% damage."],
+								"NAME": "Critical"
+				},
 	"pcl:CounterAttackPower":
 	{
 		"DESCRIPTIONS": ["Whenever you block damage this turn: Deal #b{0} damage to ALL enemies, then reduce stacks by 1."],

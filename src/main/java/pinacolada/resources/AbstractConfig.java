@@ -14,6 +14,7 @@ import extendedui.configuration.STSConfigItem;
 import extendedui.configuration.STSSerializedConfigItem;
 import extendedui.configuration.STSStringConfigItem;
 import extendedui.ui.settings.ModSettingsScreen;
+import extendedui.ui.settings.ModSettingsToggle;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,14 +37,14 @@ public abstract class AbstractConfig
     protected final String id;
     protected SpireConfig config;
 
-    protected static void addModToggle(STSConfigItem<Boolean> option, String label)
+    protected static ModSettingsToggle addModToggle(STSConfigItem<Boolean> option, String label)
     {
         // Must be initialized after Settings.scale is set, or the mod options will be in the wrong position
         if (pclCategory == null)
         {
             pclCategory = ModSettingsScreen.registerByClass(AbstractConfig.class);
         }
-        ModSettingsScreen.addBoolean(pclCategory, option, label);
+        return ModSettingsScreen.addBoolean(pclCategory, option, label);
     }
 
     protected static int addToggle(ModPanel panel, STSConfigItem<Boolean> option, String label, int ypos)

@@ -217,13 +217,18 @@ public class PCLCardText
         final float alpha = updateBadgeAlpha();
 
         int offset_y = 0;
-        for (PCLCardTag tag : PCLCardTag.getAll())
+        // Only render tags if allowed
+        if (!PGR.core.config.displayCardTagDescription.get())
         {
-            if (tag.has(card) && tag.getTip().icon != null)
+            for (PCLCardTag tag : PCLCardTag.getAll())
             {
-                offset_y -= renderBadge(sb, tag, offset_y, alpha);
+                if (tag.has(card) && tag.getTip().icon != null)
+                {
+                    offset_y -= renderBadge(sb, tag, offset_y, alpha);
+                }
             }
         }
+
 
         // Render card footers
         offset_y = 0;

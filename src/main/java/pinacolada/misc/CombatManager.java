@@ -40,6 +40,7 @@ import pinacolada.interfaces.markers.CooldownProvider;
 import pinacolada.interfaces.subscribers.*;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.orbs.PCLOrb;
+import pinacolada.powers.PCLClickableUse;
 import pinacolada.powers.PCLPower;
 import pinacolada.powers.TemporaryPower;
 import pinacolada.powers.common.ImpairedPower;
@@ -137,7 +138,7 @@ public class CombatManager
     public static final GameEvent<OnOrbApplyFocusSubscriber> onOrbApplyFocus = registerEvent(new GameEvent<>());
     public static final GameEvent<OnOrbApplyLockOnSubscriber> onOrbApplyLockOn = registerEvent(new GameEvent<>());
     public static final GameEvent<OnOrbPassiveEffectSubscriber> onOrbPassiveEffect = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnPCLClickablePowerUsed> onPCLClickablePowerUsed = registerEvent(new GameEvent<>());
+    public static final GameEvent<OnPCLClickableUsedSubscriber> onPCLClickablePowerUsed = registerEvent(new GameEvent<>());
     public static final GameEvent<OnPhaseChangedSubscriber> onPhaseChanged = registerEvent(new GameEvent<>());
     public static final GameEvent<OnShuffleSubscriber> onShuffle = registerEvent(new GameEvent<>());
     public static final GameEvent<OnStanceChangedSubscriber> onStanceChanged = registerEvent(new GameEvent<>());
@@ -216,20 +217,6 @@ public class CombatManager
     public static void addPlayerEffectBonus(String powerID, float multiplier)
     {
         addBonus(powerID, Type.PlayerEffect, multiplier);
-    }
-
-    public static void atEndOfTurn()
-    {
-        CombatManager.playerSystem.onEndOfTurn();
-        cardsDiscardedThisTurn.clear();
-        matchesThisTurn.clear();
-        hasteInfinitesThisTurn.clear();
-    }
-
-    public static void atStartOfTurn()
-    {
-        CombatManager.playerSystem.onStartOfTurn();
-        dodgeChance = 0;
     }
 
     public static List<AbstractCard> cardsDiscardedThisCombat() {
@@ -443,12 +430,12 @@ public class CombatManager
         }
     }
 
-    public static boolean onClickablePowerUsed(PCLPower power, AbstractMonster target)
+    public static boolean onClickableUsed(PCLClickableUse condition, AbstractMonster target, int uses)
     {
         boolean shouldPayCost = true;
-        for (OnPCLClickablePowerUsed s : onPCLClickablePowerUsed.getSubscribers())
+        for (OnPCLClickableUsedSubscriber s : onPCLClickablePowerUsed.getSubscribers())
         {
-            shouldPayCost = shouldPayCost & s.onClickablePowerUsed(power, target);
+            shouldPayCost = shouldPayCost & s.onClickablePowerUsed(condition, target, uses);
         }
         return shouldPayCost;
     }
@@ -1300,6 +1287,8 @@ public class CombatManager
     {
         isPlayerTurn = true;
         maxHPSinceLastTurn = GameActionManager.playerHpLastTurn;
+        CombatManager.playerSystem.onStartOfTurn();
+        dodgeChance = 0;
 
         if (onStartOfTurn.count() > 0)
         {
@@ -1361,13 +1350,17 @@ public class CombatManager
 
     public static void atEndOfTurn(boolean isPlayer)
     {
+
         for (OnEndOfTurnLastSubscriber s : onEndOfTurnLast.getSubscribers())
         {
             s.onEndOfTurnLast(isPlayer);
         }
 
         summons.onEndOfTurnLast();
-
+        CombatManager.playerSystem.onEndOfTurn();
+        cardsDiscardedThisTurn.clear();
+        matchesThisTurn.clear();
+        hasteInfinitesThisTurn.clear();
         turnData.clear();
         cardsExhaustedThisTurn.clear();
         cardsDrawnThisTurn = 0;

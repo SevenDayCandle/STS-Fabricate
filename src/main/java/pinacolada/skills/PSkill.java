@@ -39,7 +39,7 @@ import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.interfaces.markers.PointerProvider;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.orbs.PCLOrbHelper;
-import pinacolada.powers.PCLPower;
+import pinacolada.powers.PCLClickableUse;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
@@ -74,7 +74,8 @@ public abstract class PSkill implements TooltipProvider
     public static final char EXTRA_CHAR = 'G';
     public static final char CONDITION_CHAR = 'H';
     public static final int CHAR_OFFSET = 48;
-    public static final int DEFAULT_MAX = Integer.MAX_VALUE;
+    public static final int DEFAULT_MAX = Integer.MAX_VALUE / 2; // So that upgrade limits will not go out of bounds
+    public static final int DEFAULT_EXTRA_MIN = -1;
     public static final int DEFAULT_PRIORITY = 4;
     protected static final String CARD_SEPARATOR = "|";
     protected static final String SUB_SEPARATOR = "<";
@@ -543,7 +544,7 @@ public abstract class PSkill implements TooltipProvider
 
     public PSkill addAmountForCombat(int amount)
     {
-        this.baseAmount = this.amount = MathUtils.clamp(this.amount + amount, data != null ? data.minAmount : 1, data != null ? data.maxAmount : DEFAULT_MAX);
+        this.baseAmount = this.amount = MathUtils.clamp(this.amount + amount, data != null ? data.minAmount : 0, data != null ? data.maxAmount : DEFAULT_MAX);
         return this;
     }
 
@@ -570,7 +571,7 @@ public abstract class PSkill implements TooltipProvider
 
     public PSkill addExtraForCombat(int amount)
     {
-        this.baseExtra = this.extra = MathUtils.clamp(this.amount + amount, data != null ? data.minExtra : -1, data != null ? data.maxExtra : DEFAULT_MAX);
+        this.baseExtra = this.extra = MathUtils.clamp(this.amount + amount, data != null ? data.minExtra : DEFAULT_EXTRA_MIN, data != null ? data.maxExtra : DEFAULT_MAX);
         return this;
     }
 
@@ -1755,7 +1756,7 @@ public abstract class PSkill implements TooltipProvider
 
     public PSkill setAmount(int amount)
     {
-        this.rootAmount = this.baseAmount = this.amount = MathUtils.clamp(amount, data != null ? data.minAmount : 1, data != null ? data.maxAmount : DEFAULT_MAX);
+        this.rootAmount = this.baseAmount = this.amount = MathUtils.clamp(amount, data != null ? data.minAmount : 0, data != null ? data.maxAmount : DEFAULT_MAX);
         return this;
     }
 
@@ -1874,7 +1875,7 @@ public abstract class PSkill implements TooltipProvider
 
     public PSkill setExtra(int amount)
     {
-        this.rootExtra = this.baseExtra = this.extra = MathUtils.clamp(amount, data != null ? data.minExtra : -1, data != null ? data.maxExtra : DEFAULT_MAX);
+        this.rootExtra = this.baseExtra = this.extra = MathUtils.clamp(amount, data != null ? data.minExtra : DEFAULT_EXTRA_MIN, data != null ? data.maxExtra : DEFAULT_MAX);
         return this;
     }
 
@@ -2162,7 +2163,7 @@ public abstract class PSkill implements TooltipProvider
         return this.childEffect != null && this.childEffect.triggerOnOtherCardPlayed(c);
     }
 
-    public boolean triggerOnPCLPowerUsed(PCLPower c)
+    public boolean triggerOnPCLPowerUsed(PCLClickableUse c)
     {
         return this.childEffect != null && this.childEffect.triggerOnPCLPowerUsed(c);
     }

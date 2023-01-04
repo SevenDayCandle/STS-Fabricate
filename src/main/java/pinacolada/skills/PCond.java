@@ -15,7 +15,7 @@ import pinacolada.cards.base.*;
 import pinacolada.interfaces.markers.PointerProvider;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.orbs.PCLOrbHelper;
-import pinacolada.powers.PCLPower;
+import pinacolada.powers.PCLClickableUse;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.skills.PMultiCond;
@@ -644,7 +644,7 @@ public abstract class PCond extends PSkill
     }
 
     @Override
-    public boolean triggerOnPCLPowerUsed(PCLPower c)
+    public boolean triggerOnPCLPowerUsed(PCLClickableUse c)
     {
         return triggerOn(() -> this.childEffect.triggerOnPCLPowerUsed(c));
     }

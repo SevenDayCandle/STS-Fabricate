@@ -174,7 +174,7 @@ public class PCLLibraryModule extends CustomCardPoolModule
         {
             if (this == ColorlessGroup.PCL)
             {
-                return PGR.core.strings.misc.pCL;
+                return PGR.core.strings.misc.pcl;
             }
             return EUIRM.strings.uiBasegame;
         }

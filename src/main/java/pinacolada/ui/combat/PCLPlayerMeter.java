@@ -12,31 +12,43 @@ import extendedui.configuration.STSConfigItem;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.hitboxes.DraggableHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
+import extendedui.ui.tooltips.EUITooltip;
 import extendedui.ui.tooltips.FakeFtue;
 import pinacolada.cards.base.AffinityReactions;
 import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLUseInfo;
+import pinacolada.interfaces.markers.ClickableProvider;
 import pinacolada.powers.PCLAffinityPower;
+import pinacolada.powers.PCLClickableUse;
+import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.ui.EUICardDraggable;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard>
+public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implements ClickableProvider
 {
+    public static String createFullID(PCLResources resources, Class<? extends PCLPlayerMeter> type)
+    {
+        return resources.createID(type.getSimpleName());
+    }
+
     public static final int TARGET_CURRENT = 0;
     public static final int TARGET_NEXT = 1;
     public static final int DEFAULT_REROLLS = 1;
     protected EUIButton infoIcon;
+    protected PCLClickableUse skips;
+    protected String id;
     protected int matchesThisCombat;
     protected int currentMatchCombo;
     protected int longestMatchCombo;
 
-    public PCLPlayerMeter(STSConfigItem<Vector2> config, float iconSize)
+    public PCLPlayerMeter(String id, STSConfigItem<Vector2> config, float iconSize)
     {
         super(config, new DraggableHitbox(screenW(0.0366f), screenH(0.425f), iconSize, iconSize, true), iconSize);
+        this.id = id;
         infoIcon = new EUIButton(ImageMaster.INTENT_UNKNOWN, new RelativeHitbox(hb, scale(40f), scale(40f), scale(100f), scale(20f)))
                 .setTooltip(getInfoTitle(), getInfoMainDescrption() + EUIUtils.DOUBLE_SPLIT_LINE + PGR.core.strings.tutorial.learnMore)
                 .setOnClick(() -> {
@@ -225,5 +237,15 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard>
     public PCLAffinity set(PCLAffinity affinity, int target)
     {
         return get(0);
+    }
+
+    public String getID()
+    {
+        return id;
+    }
+
+    public EUITooltip getTooltip()
+    {
+        return null;
     }
 }

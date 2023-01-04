@@ -107,7 +107,7 @@ public class PMove_DealCardDamage extends PMove implements Hidden
     public String getSubText()
     {
         int count = source != null ? getExtraFromCard() : 1;
-        EUITooltip tooltip = sourceCard instanceof PCLCard ? ((PCLCard) sourceCard).attackType.getTooltip() : PGR.core.tooltips.damage;
+        EUITooltip tooltip = sourceCard instanceof PCLCard ? ((PCLCard) sourceCard).attackType.getTooltip() : PGR.core.tooltips.normalDamage;
         String amountString = count > 1 ? getAmountRawString() + "x" + getExtraRawString() : getAmountRawString();
         if (target == PCLCardTarget.Self)
         {

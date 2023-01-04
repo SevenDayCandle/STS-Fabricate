@@ -95,7 +95,7 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
                 editor.constructEffect();
             }
         })
-                .setLimits(-999, 999);
+                .setLimits(-PSkill.DEFAULT_MAX, PSkill.DEFAULT_MAX);
         extraEditor = new PCLCustomCardUpgradableEditor(new OriginRelativeHitbox(hb,MENU_WIDTH / 5, MENU_HEIGHT, MAIN_OFFSET * 1.3f, OFFSET_AMOUNT)
                 , PGR.core.strings.cardEditor.extraValue, (val, upVal) -> {
             if (getEffectAt() != null)
@@ -104,7 +104,7 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
                 editor.constructEffect();
             }
         })
-                .setLimits(-999, 999);
+                .setLimits(-PSkill.DEFAULT_MAX, PSkill.DEFAULT_MAX);
 
         targets = new EUIDropdown<PCLCardTarget>(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, AUX_OFFSET, 0)
                 , item -> StringUtils.capitalize(item.toString().toLowerCase()))
@@ -155,7 +155,7 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
                 .setShouldPositionClearAtTop(true)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cardEditor.powers)
                 .setCanAutosize(false, false)
-                .setItems(PCLPowerHelper.sortedCommons());
+                .setItems(PCLPowerHelper.sortedValues());
         powers.setLabelFunctionForButton((list, __) -> powers.makeMultiSelectString(item -> item.getTooltip().getTitleOrIcon()), null, true);
 
         orbs = (EUISearchableDropdown<PCLOrbHelper>) new EUISearchableDropdown<PCLOrbHelper>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.2f, MENU_HEIGHT, AUX_OFFSET, 0))
@@ -314,10 +314,10 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
         PSkill curEffect = getEffectAt();
         PSkillData data = PSkill.getData(curEffect);
         effectType = data != null ? data.effectType : PSkill.PCLEffectType.General;
-        int min = data != null ? data.minAmount : 0;
-        int max = data != null ? data.maxAmount : 0;
-        int eMin = data != null ? data.minExtra : 0;
-        int eMax = data != null ? data.maxExtra : 0;
+        int min = data != null ? data.minAmount : Integer.MIN_VALUE / 2;
+        int max = data != null ? data.maxAmount : PSkill.DEFAULT_MAX;
+        int eMin = data != null ? data.minExtra : Integer.MIN_VALUE / 2;
+        int eMax = data != null ? data.maxExtra : PSkill.DEFAULT_MAX;
 
         effects.setSelection(curEffect, false);
         valueEditor

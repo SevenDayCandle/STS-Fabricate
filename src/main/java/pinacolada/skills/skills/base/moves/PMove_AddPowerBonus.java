@@ -9,7 +9,7 @@ import pinacolada.skills.PSkillSaveData;
 
 public class PMove_AddPowerBonus extends PMove
 {
-    public static final PSkillData DATA = register(PMove_AddPowerBonus.class, PCLEffectType.Power, -999, 999);
+    public static final PSkillData DATA = register(PMove_AddPowerBonus.class, PCLEffectType.Power, -DEFAULT_MAX, DEFAULT_MAX);
 
     public PMove_AddPowerBonus()
     {

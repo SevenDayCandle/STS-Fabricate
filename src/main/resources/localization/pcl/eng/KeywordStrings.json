@@ -34,17 +34,27 @@
 								"NAMES": ["blinded"],
 								"PROPER_NAME": "Blinded"
 				},
+				"Blue Affinity":	{
+								"DESCRIPTION": "",
+								"NAMES": ["blue affinity"],
+								"PROPER_NAME": "Blue Affinity"
+				},
 				"Blur":	{
 								"DESCRIPTION": "[Block] is conserved between turns.",
 								"NAMES": ["blur"],
 								"PROPER_NAME": "Blur"
 				},
+				"Brutal Damage":	{
+								"DESCRIPTION": "Affected twice by powers that modify damage.",
+								"NAMES": ["brutal damage"],
+								"PROPER_NAME": "Brutal Damage"
+				},
 				"Buff":	{
 								"DESCRIPTION": "Powers with positive effects.",
 								"NAMES": ["buff", "buffs", "buffing", "buffed"],
 								"PAST": "buffed",
-								"PRESENT": "buffing",
 								"PLURAL": "buffs",
+								"PRESENT": "buffing",
 								"PROPER_NAME": "Buff"
 				},
 				"Buffer":	{
@@ -89,6 +99,11 @@
 								"PRESENT": "creates",
 								"PROPER_NAME": "Create"
 				},
+				"Critical":	{
+								"DESCRIPTION": "The next #yAttack played deals #b+100% damage per stack.",
+								"NAMES": ["critical"],
+								"PROPER_NAME": "Critical"
+				},
 				"Curl Up":	{
 								"DESCRIPTION": "Gain [Block] when you receive unblocked attack damage, then remove this power.",
 								"NAMES": ["curl up"],
@@ -110,14 +125,14 @@
 								"DESCRIPTION": "Powers with negative effects.",
 								"NAMES": ["debuff", "debuffs", "debuffing", "debuffed"],
 								"PAST": "debuffed",
-								"PRESENT": "debuffing",
 								"PLURAL": "debuffs",
+								"PRESENT": "debuffing",
 								"PROPER_NAME": "Debuff"
 				},
-				"Delayed Block":	{
-								"DESCRIPTION": "Gain [Block] at the start of next turn.",
-								"NAMES": ["delayed block"],
-								"PROPER_NAME": "Delayed Block"
+				"Delayed":	{
+								"DESCRIPTION": "Start each combat with this card at the bottom of your deck.",
+								"NAMES": ["~delayed"],
+								"PROPER_NAME": "Delayed"
 				},
 				"Delayed Damage":	{
 								"DESCRIPTION": "Take damage at the end of your turn. Only enemies can die from this damage.",
@@ -194,17 +209,27 @@
 								"NAMES": ["grave"],
 								"PROPER_NAME": "Grave"
 				},
+				"Green Affinity":	{
+								"DESCRIPTION": "",
+								"NAMES": ["green affinity"],
+								"PROPER_NAME": "Green Affinity"
+				},
+				"HP":	{
+								"DESCRIPTION": "-",
+								"NAMES": ["~hp", "health", "~hp"],
+								"PROPER_NAME": "HP"
+				},
+				"Haste":	{
+								"DESCRIPTION": "When drawn, draw 1 card.",
+								"NAMES": ["~haste"],
+								"PROPER_NAME": "Haste"
+				},
 				"Heal":	{
 								"DESCRIPTION": "Restore HP",
 								"NAMES": ["heal", "heals", "healing"],
 								"PAST": "Healed",
 								"PRESENT": "Heals",
 								"PROPER_NAME": "Heal"
-				},
-				"HP":	{
-								"DESCRIPTION": "-",
-								"NAMES": ["~hp", "health", "~hp"],
-								"PROPER_NAME": "HP"
 				},
 				"Impaired":	{
 								"DESCRIPTION": "Reduces the effectiveness of your Orbs.",
@@ -251,6 +276,11 @@
 								"NAMES": ["loyal"],
 								"PROPER_NAME": "Loyal"
 				},
+				"Magic Damage":	{
+								"DESCRIPTION": "Affected by #yPowers modifying #yOrb output. Ignores #yPowers that modify #yAttack damage or activate on contact.",
+								"NAMES": ["magic damage"],
+								"PROPER_NAME": "Magic Damage"
+				},
 				"Malleable":	{
 								"DESCRIPTION": "Upon receiving damage, gain #yBlock. #yBlock gain increases as this power is triggered. Resets at the start of turn.",
 								"NAMES": ["malleable"],
@@ -286,15 +316,35 @@
 								"NAMES": ["multicolor"],
 								"PROPER_NAME": "Multicolor"
 				},
+				"Multiform":	{
+								"DESCRIPTION": "You may change this card's form in the pop-up viewer from your master deck outside of combat.",
+								"NAMES": ["multiform"],
+								"PROPER_NAME": "Multiform"
+				},
 				"Neutral Stance":	{
 								"DESCRIPTION": "",
 								"NAMES": ["neutral stance"],
 								"PROPER_NAME": "Neutral Stance"
 				},
+				"Next Turn Block":	{
+								"DESCRIPTION": "Gain [Block] at the start of next turn.",
+								"NAMES": ["next turn block"],
+								"PROPER_NAME": "Next Turn Block"
+				},
+				"Normal Damage":	{
+								"DESCRIPTION": "Affected by [Thorns].",
+								"NAMES": ["normal damage"],
+								"PROPER_NAME": "Normal Damage"
+				},
 				"Noxious Fumes":	{
 								"DESCRIPTION": "At the start of each turn, apply [Poison] to ALL enemies.",
 								"NAMES": ["noxious fumes"],
 								"PROPER_NAME": "Noxious Fumes"
+				},
+				"Orange Affinity":	{
+								"DESCRIPTION": "",
+								"NAMES": ["orange affinity"],
+								"PROPER_NAME": "Orange Affinity"
 				},
 				"Orb Slot":	{
 								"DESCRIPTION": "#yOrb #ySlots allow you to channel additional Orbs.",
@@ -305,6 +355,11 @@
 								"DESCRIPTION": "Lose the specified entity to activate an effect.",
 								"NAMES": ["pay"],
 								"PROPER_NAME": "Pay"
+				},
+				"Piercing Damage":	{
+								"DESCRIPTION": "Ignores [Block] and #yPowers activating on contact.",
+								"NAMES": ["piercing damage"],
+								"PROPER_NAME": "Piercing Damage"
 				},
 				"Plated Armor":	{
 								"DESCRIPTION": "Gain #yBlock at the end of your turn. Reduced by #b1 when receiving damage.",
@@ -326,10 +381,30 @@
 								"NAMES": ["Provoked"],
 								"PROPER_NAME": "Provoked"
 				},
+				"Purple Affinity":	{
+								"DESCRIPTION": "",
+								"NAMES": ["purple affinity"],
+								"PROPER_NAME": "Purple Affinity"
+				},
+				"Ranged Damage":	{
+								"DESCRIPTION": "Ignores [Flight] and #yPowers activating on contact.",
+								"NAMES": ["ranged damage"],
+								"PROPER_NAME": "Ranged Damage"
+				},
 				"Rebound":	{
 								"DESCRIPTION": "Put the next card you play this turn on top of your draw pile.",
 								"NAMES": ["rebound"],
 								"PROPER_NAME": "Rebound"
+				},
+				"Recast":	{
+								"DESCRIPTION": "Next turn, play a copy of this card. The copy #yPurges and does not #yRecast.",
+								"NAMES": ["recast"],
+								"PROPER_NAME": "Recast"
+				},
+				"Red Affinity":	{
+								"DESCRIPTION": "",
+								"NAMES": ["red affinity"],
+								"PROPER_NAME": "Red Affinity"
 				},
 				"Regeneration":	{
 								"DESCRIPTION": "Heal HP at the end of the turn. Reduce by 1 each turn.",
@@ -341,17 +416,17 @@
 								"NAMES": ["reroll"],
 								"PROPER_NAME": "Reroll"
 				},
-				"Resistance":	{
-								"DESCRIPTION": "Reduces incoming #yAttack damage and the effects of [Frail], [Weak], [Vulnerable], and [Impaired].",
-								"NAMES": ["resistance"],
-								"PROPER_NAME": "Resistance"
-				},
 				"Reshuffle":	{
 								"DESCRIPTION": "Reshuffling moves cards to your draw pile.",
 								"NAMES": ["reshuffle", "reshuffled", "reshuffles"],
 								"PAST": "Reshuffled",
 								"PRESENT": "Reshuffles",
 								"PROPER_NAME": "Reshuffle"
+				},
+				"Resistance":	{
+								"DESCRIPTION": "Reduces incoming #yAttack damage and the effects of [Frail], [Weak], [Vulnerable], and [Impaired].",
+								"NAMES": ["resistance"],
+								"PROPER_NAME": "Resistance"
 				},
 				"Sanctuary":	{
 								"DESCRIPTION": "If you would die, set your HP to this power's stacks and remove this power.",
@@ -389,6 +464,11 @@
 								"DESCRIPTION": "Negate incoming buffs. Does not affect powers specific to cards or monsters.",
 								"NAMES": ["silenced"],
 								"PROPER_NAME": "Silenced"
+				},
+				"Silver Affinity":	{
+								"DESCRIPTION": "",
+								"NAMES": ["silver affinity"],
+								"PROPER_NAME": "Silver Affinity"
 				},
 				"Slow":	{
 								"DESCRIPTION": "For every card you have played this turn, take #b10% more damage from #yAttacks.",
@@ -435,7 +515,7 @@
 								"NAMES": ["stun", "stunned", "stslib:stunned"],
 								"PROPER_NAME": "Stun"
 				},
-				"Summon": {
+				"Summon":	{
 								"DESCRIPTION": "#ySummon cards are placed onto the field and act every turn. If you would lose HP, your right-most #ySummon takes half of that loss.",
 								"NAMES": ["summon"],
 								"PAST": "Summoned",
@@ -478,6 +558,16 @@
 								"NAMES": ["trigger", "triggered", "triggers"],
 								"PROPER_NAME": "Trigger"
 				},
+				"Unique":	{
+								"DESCRIPTION": "Can be #yUpgraded any number of times. You can only have 1 copy of this card in your deck. Additional copies will #yUpgrade this card instead.",
+								"NAMES": ["unique"],
+								"PROPER_NAME": "Unique"
+				},
+				"Unknown Affinity":	{
+								"DESCRIPTION": "At the start of battle, this #yAffinity becomes another random #yAffinity.",
+								"NAMES": ["unknown affinity"],
+								"PROPER_NAME": "Unknown Affinity"
+				},
 				"Vigor":	{
 								"DESCRIPTION": "The next Attack played deals additional damage per hit.",
 								"NAMES": ["vigor"],
@@ -495,40 +585,10 @@
 								"PRESENT": "withdraws",
 								"PROPER_NAME": "Withdraw"
 				},
-				"~Blue Affinity":	{
+				"Yellow Affinity":	{
 								"DESCRIPTION": "",
-								"NAMES": ["~blue affinity"],
-								"PROPER_NAME": "Blue Affinity"
-				},
-				"~Branch Upgrade":	{
-								"DESCRIPTION": "This card has multiple upgrade paths. When upgraded outside of rest sites, the first path will always be chosen.",
-								"NAMES": ["~branchupgrade, ~branch upgrade"],
-								"PROPER_NAME": "Branch Upgrade"
-				},
-				"~Brutal":	{
-								"DESCRIPTION": "Affected twice by powers that modify damage.",
-								"NAMES": ["~brutal"],
-								"PROPER_NAME": "Brutal Damage"
-				},
-				"~Damage":	{
-								"DESCRIPTION": "Affected by [Thorns].",
-								"NAMES": ["~damage"],
-								"PROPER_NAME": "Normal Damage"
-				},
-				"~Delayed":	{
-								"DESCRIPTION": "Start each combat with this card at the bottom of your deck.",
-								"NAMES": ["~delayed"],
-								"PROPER_NAME": "Delayed"
-				},
-				"~DelayedInfinite":	{
-								"DESCRIPTION": "Start each combat with this card at the bottom of your deck. Whenever you shuffle your draw pile, place this card at the bottom.",
-								"NAMES": ["~delayed infinite"],
-								"PROPER_NAME": "Delayed Infinite"
-				},
-				"~Elemental":	{
-								"DESCRIPTION": "Ignores [Thorns]. Deal #b30% additional damage if the enemy has #yBlock.",
-								"NAMES": ["~elemental"],
-								"PROPER_NAME": "Elemental Damage"
+								"NAMES": ["yellow affinity"],
+								"PROPER_NAME": "Yellow Affinity"
 				},
 				"~Ethereal":	{
 								"DESCRIPTION": "#yExhausted if in hand at the end of turn.",
@@ -542,70 +602,15 @@
 								"PRESENT": "Fetches",
 								"PROPER_NAME": "Fetch"
 				},
-				"~Glyph":	{
-								"DESCRIPTION": "The highest Glyph level at which victory was achieved.",
-								"NAMES": ["~glyph"],
-								"PROPER_NAME": "Glyph"
-				},
-				"~Green Affinity":	{
-								"DESCRIPTION": "",
-								"NAMES": ["~green affinity"],
-								"PROPER_NAME": "Green Affinity"
-				},
-				"~Haste":	{
-								"DESCRIPTION": "When drawn, draw 1 card.",
-								"NAMES": ["~haste"],
-								"PROPER_NAME": "Haste"
-				},
-				"~HasteInfinite":	{
-								"DESCRIPTION": "When drawn, draw 1 card. | #yThis #yeffect #ycan #yactivate #yonce #yper #yturn.",
-								"NAMES": ["~haste infinite"],
-								"PROPER_NAME": "Haste Infinite"
-				},
-				"~HasteOnce":	{
-								"DESCRIPTION": "When drawn, draw 1 card. | #bOnce #bactivated, #bremove #bthis #beffect.",
-								"NAMES": ["~haste once"],
-								"PROPER_NAME": "Haste Once"
-				},
 				"~Innate":	{
 								"DESCRIPTION": "Start each combat with this card in hand.",
 								"NAMES": ["~innate"],
 								"PROPER_NAME": "Innate"
 				},
-				"~InnateInfinite":	{
-								"DESCRIPTION": "Start each combat with this card in hand. Whenever you shuffle your draw pile, place this card on the top.",
-								"NAMES": ["~innate infinite"],
-								"PROPER_NAME": "Innate Infinite"
-				},
-				"~Intangible":	{
-								"DESCRIPTION": "Set all incoming damage to 1.",
-								"NAMES": ["~intangible"],
-								"PROPER_NAME": "Intangible"
-				},
 				"~Lock-On":	{
-								"DESCRIPTION": "Receive #b+50% damage from #yOrbs. Prioritized by #ySummons with random targeting.",
+								"DESCRIPTION": "Receive #b+50% damage from #yOrbs. Prioritized by cards with random targeting.",
 								"NAMES": ["~lock-on"],
 								"PROPER_NAME": "Lock-On"
-				},
-				"~Magic Damage":	{
-								"DESCRIPTION": "Affected by #yPowers modifying #yOrb output. Ignores #yPowers that modify #yAttack damage or activate on contact.",
-								"NAMES": ["~magic damage"],
-								"PROPER_NAME": "Magic Damage"
-				},
-				"~Multiform":	{
-								"DESCRIPTION": "You may change this card's form in the pop-up viewer from your master deck outside of combat.",
-								"NAMES": ["~multiform"],
-								"PROPER_NAME": "Multiform"
-				},
-				"~Orange Affinity":	{
-								"DESCRIPTION": "",
-								"NAMES": ["~orange affinity"],
-								"PROPER_NAME": "Orange Affinity"
-				},
-				"~Piercing":	{
-								"DESCRIPTION": "Ignores [Block] and #yPowers activating on contact.",
-								"NAMES": ["~piercing"],
-								"PROPER_NAME": "Piercing Damage"
 				},
 				"~Purge":	{
 								"DESCRIPTION": "Removed from combat.",
@@ -614,31 +619,6 @@
 								"PRESENT": "Purges",
 								"PROPER_NAME": "Purge"
 				},
-				"~Purple Affinity":	{
-								"DESCRIPTION": "",
-								"NAMES": ["~purple affinity"],
-								"PROPER_NAME": "Purple Affinity"
-				},
-				"~Random Orb":	{
-								"DESCRIPTION": "",
-								"NAMES": ["~random orb", "~random orbs"],
-								"PROPER_NAME": "Random Orb"
-				},
-				"~Ranged":	{
-								"DESCRIPTION": "Ignores [Flight] and #yPowers activating on contact.",
-								"NAMES": ["~ranged"],
-								"PROPER_NAME": "Ranged Damage"
-				},
-				"~Recast":	{
-								"DESCRIPTION": "Next turn, play a copy of this card. The copy #yPurges and does not #yRecast.",
-								"NAMES": ["~recast"],
-								"PROPER_NAME": "Recast"
-				},
-				"~Red Affinity":	{
-								"DESCRIPTION": "",
-								"NAMES": ["~red affinity"],
-								"PROPER_NAME": "Red Affinity"
-				},
 				"~Retain":	{
 								"DESCRIPTION": "Retained cards are not discarded at the end of turn.",
 								"NAMES": ["~retain"],
@@ -646,59 +626,9 @@
 								"PRESENT": "Retains",
 								"PROPER_NAME": "Retain"
 				},
-				"~RetainInfinite":	{
-								"DESCRIPTION": "Remains in hand at the end of turn. | #yThis #yeffect #yis #ypermanent.",
-								"NAMES": ["~retain infinite"],
-								"PROPER_NAME": "Retain Infinite"
-				},
-				"~RetainOnce":	{
-								"DESCRIPTION": "Remains in hand at the end of turn. | #bOnce #bactivated, #bremove #bthis #beffect.",
-								"NAMES": ["~retain once"],
-								"PROPER_NAME": "Retain Once"
-				},
-				"~Silver Affinity":	{
-								"DESCRIPTION": "",
-								"NAMES": ["~silver affinity"],
-								"PROPER_NAME": "Silver Affinity"
-				},
 				"~Steal":	{
 								"DESCRIPTION": "You can steal up to #b50 #yGold from a boss, #b25 #yGold from an elite, or #b10 #yGold from other non-minion enemies.",
 								"NAMES": ["~steal"],
 								"PROPER_NAME": "Steal"
-				},
-				"~Trophy1":	{
-								"DESCRIPTION": "The highest Ascension level at which Act 3 was cleared with this series.",
-								"NAMES": ["~trophy1"],
-								"PROPER_NAME": "Bronze Trophy"
-				},
-				"~Trophy2":	{
-								"DESCRIPTION": "The highest Ascension level at which Act 4 was cleared with this series.",
-								"NAMES": ["~trophy2"],
-								"PROPER_NAME": "Silver Trophy"
-				},
-				"~Trophy3":	{
-								"DESCRIPTION": "The highest Ascension level at which Act 5 was cleared with this series.",
-								"NAMES": ["~trophy3"],
-								"PROPER_NAME": "Gold Trophy"
-				},
-				"~Ultra Rare":	{
-								"DESCRIPTION": "Has a very small chance of appearing in #ySeries card rewards. No more than 1 copy can be obtained.",
-								"NAMES": ["~ultra rare"],
-								"PROPER_NAME": "Ultra Rare"
-				},
-				"~Unique":	{
-								"DESCRIPTION": "Can be #yUpgraded any number of times. You can only have 1 copy of this card in your deck. Additional copies will #yUpgrade this card instead.",
-								"NAMES": ["~unique"],
-								"PROPER_NAME": "Unique"
-				},
-				"~Unknown Affinity":	{
-								"DESCRIPTION": "At the start of battle, this #yAffinity becomes another random #yAffinity.",
-								"NAMES": ["~unknown affinity"],
-								"PROPER_NAME": "Unknown Affinity"
-				},
-				"~Yellow Affinity":	{
-								"DESCRIPTION": "",
-								"NAMES": ["~yellow affinity"],
-								"PROPER_NAME": "Yellow Affinity"
 				}
 }

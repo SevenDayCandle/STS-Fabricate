@@ -1,9 +1,13 @@
 package pinacolada.cards.base;
 
+import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.resources.PGR;
 
-public enum PCLAttackType
+import java.util.Collections;
+import java.util.List;
+
+public enum PCLAttackType implements TooltipProvider
 {
     Normal(false, false, false, false),
     Brutal(false, false, false, false),
@@ -38,6 +42,12 @@ public enum PCLAttackType
             case Ranged:
                 return PGR.core.tooltips.ranged;
         }
-        return PGR.core.tooltips.damage;
+        return PGR.core.tooltips.normalDamage;
+    }
+
+    @Override
+    public List<EUITooltip> getTips()
+    {
+        return Collections.singletonList(getTooltip());
     }
 }

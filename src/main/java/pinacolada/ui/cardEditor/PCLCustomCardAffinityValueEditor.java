@@ -122,12 +122,12 @@ public class PCLCustomCardAffinityValueEditor extends EUIHoverable
     public PCLCustomCardAffinityValueEditor setValue(int value, int valueSecondary, boolean update)
     {
         this.value = MathUtils.clamp(value, 0, MAX_LEVEL);
-        displayValue.setLabel(value);
+        displayValue.setLabel(this.value);
         this.value2 = MathUtils.clamp(valueSecondary, -this.value, MAX_LEVEL - this.value);
-        displayValue2.setLabel(valueSecondary);
+        displayValue2.setLabel(this.value2);
         if (update)
         {
-            onUpdate.invoke(affinity, value, valueSecondary);
+            onUpdate.invoke(affinity, this.value, this.value2);
         }
 
         return this;

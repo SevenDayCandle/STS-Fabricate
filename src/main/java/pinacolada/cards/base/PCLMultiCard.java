@@ -285,6 +285,11 @@ public abstract class PCLMultiCard extends PCLCard
 
     }
 
+    public boolean isBanned(AbstractCard c)
+    {
+        return false;
+    }
+
     public void setup(Object input)
     {
         addUseMove(new PCLMultiCardMove(cardData, this));

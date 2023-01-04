@@ -21,7 +21,6 @@ public class PCLCardAffinities
     public final ArrayList<PCLCardAffinity> sorted = new ArrayList<>();
     public PCLCard card;
     public PCLCardAffinity star = null;
-    public boolean displayUpgrades = false;
     public boolean collapseDuplicates = false;
     protected PCLCardAffinity[] list = new PCLCardAffinity[TOTAL_AFFINITIES];
 
@@ -418,7 +417,7 @@ public class PCLCardAffinities
                 x = (step * 0.5f) + (step * (i - half));
             }
 
-            item.renderOnCard(sb, card, x, y, size, displayUpgrades, collapseDuplicates);
+            item.renderOnCard(sb, card, x, y, size, false, collapseDuplicates);
         }
     }
 

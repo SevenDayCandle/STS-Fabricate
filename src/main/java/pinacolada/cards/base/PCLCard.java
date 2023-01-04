@@ -989,6 +989,28 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         return effectString;
     }
 
+    public String getTagTipString()
+    {
+        ArrayList<String> tagNames = new ArrayList<>();
+        for (PCLCardTag tag : PCLCardTag.values())
+        {
+            int value = tag.getInt(this);
+            switch (value)
+            {
+                case 1:
+                    tagNames.add(tag.getTooltip().getTitleOrIcon());
+                    break;
+                case -1:
+                    tagNames.add(EUIRM.strings.generic2(tag.getTooltip().getTitleOrIcon(), PGR.core.strings.subjects.infinite));
+                    break;
+                case 2:
+                    tagNames.add(tag.getTooltip().getTitleOrIcon() + "+");
+                    break;
+            }
+        }
+        return EUIUtils.joinStrings(PSkill.EFFECT_SEPARATOR, tagNames);
+    }
+
     public Skills getSkills() {
         return skills;
     }
@@ -1119,7 +1141,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         }
 
         EUITooltip attackTooltip = attackType.getTooltip();
-        if (attackTooltip != PGR.core.tooltips.damage) {
+        if (attackTooltip != PGR.core.tooltips.normalDamage) {
             dynamicTooltips.add(attackTooltip);
         }
 
@@ -1842,7 +1864,6 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         // Force refresh the descriptions, affinities, and augments
         initializeDescription();
         affinities.updateSortedList();
-        affinities.displayUpgrades = true;
     }
 
     @Override
@@ -2133,7 +2154,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
             ArrayList<AbstractMonster> m = AbstractDungeon.getCurrRoom().monsters.monsters;
             multiDamage = new int[m.size()];
 
-            int best = -999;
+            int best = -PSkill.DEFAULT_MAX;
             for (int i = 0; i < multiDamage.length; i++) {
                 refresh(m.get(i));
                 multiDamage[i] = damage;

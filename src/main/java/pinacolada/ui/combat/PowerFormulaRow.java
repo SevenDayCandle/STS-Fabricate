@@ -132,7 +132,7 @@ public class PowerFormulaRow extends EUIHoverable
             {
                 switch (type) {
                     case Attack:
-                        icon = (card instanceof PCLCard ? ((PCLCard) card).attackType.getTooltip().icon : PGR.core.tooltips.damage.icon).getTexture();
+                        icon = (card instanceof PCLCard ? ((PCLCard) card).attackType.getTooltip().icon : PGR.core.tooltips.normalDamage.icon).getTexture();
                         int damage = card.baseDamage;
                         initial.setLabel(damage > 0 ?
                                 damage : "");

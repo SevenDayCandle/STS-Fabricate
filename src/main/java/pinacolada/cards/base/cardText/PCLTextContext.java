@@ -9,6 +9,7 @@ import extendedui.EUIUtils;
 import extendedui.utilities.EUIColors;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.resources.PGR;
 import pinacolada.utilities.PCLRenderHelpers;
 
 import java.util.ArrayList;
@@ -78,6 +79,10 @@ public class PCLTextContext
             card.getPointers().clear();
             String efStrings = card.getEffectStrings();
             text = (text != null && !text.isEmpty()) ? text : efStrings;
+            if (PGR.core.config.displayCardTagDescription.get())
+            {
+                text = text + EUIUtils.DOUBLE_SPLIT_LINE + card.getTagTipString();
+            }
             text = CardModifierManager.onCreateDescription(card, text);
         }
 

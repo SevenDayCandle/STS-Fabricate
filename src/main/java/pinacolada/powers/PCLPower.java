@@ -35,6 +35,7 @@ import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
 import pinacolada.effects.powers.PCLFlashPowerEffect;
 import pinacolada.effects.powers.PCLGainPowerEffect;
+import pinacolada.interfaces.markers.ClickableProvider;
 import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
@@ -47,7 +48,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class PCLPower extends AbstractPower implements CloneablePowerInterface, TooltipProvider
+public abstract class PCLPower extends AbstractPower implements CloneablePowerInterface, TooltipProvider, ClickableProvider
 {
     protected static final StringBuilder builder = new StringBuilder();
     protected static final float ICON_SIZE = 32f;
@@ -61,7 +62,7 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
     public EUIHitbox hb;
     public AbstractCreature source;
     public EUITooltip mainTip;
-    public PCLPowerTriggerCondition triggerCondition;
+    public PCLClickableUse triggerCondition;
     public boolean canBeZero = false;
     public boolean clickable;
     public boolean enabled = true;
@@ -130,39 +131,39 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         return base + "Power";
     }
 
-    public PCLPowerTriggerCondition createTrigger(ActionT2<PSpecialSkill, PCLUseInfo> onUse)
+    public PCLClickableUse createTrigger(ActionT2<PSpecialSkill, PCLUseInfo> onUse)
     {
-        triggerCondition = new PCLPowerTriggerCondition(this, onUse);
+        triggerCondition = new PCLClickableUse(this, onUse);
         return triggerCondition;
     }
 
-    public PCLPowerTriggerCondition createTrigger(ActionT2<PSpecialSkill, PCLUseInfo> onUse, int uses, boolean refreshEachTurn, boolean stackAutomatically)
+    public PCLClickableUse createTrigger(ActionT2<PSpecialSkill, PCLUseInfo> onUse, int uses, boolean refreshEachTurn, boolean stackAutomatically)
     {
-        triggerCondition = new PCLPowerTriggerCondition(this, onUse, uses, refreshEachTurn, stackAutomatically);
+        triggerCondition = new PCLClickableUse(this, onUse, uses, refreshEachTurn, stackAutomatically);
         return triggerCondition;
     }
 
-    public PCLPowerTriggerCondition createTrigger(ActionT2<PSpecialSkill, PCLUseInfo> onUse, PCLPowerUsePool pool)
+    public PCLClickableUse createTrigger(ActionT2<PSpecialSkill, PCLUseInfo> onUse, PCLTriggerUsePool pool)
     {
-        triggerCondition = new PCLPowerTriggerCondition(this, onUse, pool);
+        triggerCondition = new PCLClickableUse(this, onUse, pool);
         return triggerCondition;
     }
 
-    public PCLPowerTriggerCondition createTrigger(PSkill move)
+    public PCLClickableUse createTrigger(PSkill move)
     {
-        triggerCondition = new PCLPowerTriggerCondition(this, move);
+        triggerCondition = new PCLClickableUse(this, move);
         return triggerCondition;
     }
 
-    public PCLPowerTriggerCondition createTrigger(PSkill move, int uses, boolean refreshEachTurn, boolean stackAutomatically)
+    public PCLClickableUse createTrigger(PSkill move, int uses, boolean refreshEachTurn, boolean stackAutomatically)
     {
-        triggerCondition = new PCLPowerTriggerCondition(this, move, uses, refreshEachTurn, stackAutomatically);
+        triggerCondition = new PCLClickableUse(this, move, uses, refreshEachTurn, stackAutomatically);
         return triggerCondition;
     }
 
-    public PCLPowerTriggerCondition createTrigger(PSkill move, PCLPowerUsePool pool)
+    public PCLClickableUse createTrigger(PSkill move, PCLTriggerUsePool pool)
     {
-        triggerCondition = new PCLPowerTriggerCondition(this, move, pool);
+        triggerCondition = new PCLClickableUse(this, move, pool);
         return triggerCondition;
     }
 
@@ -480,7 +481,7 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
                 else if (hb.clicked)
                 {
                     hb.clicked = false;
-                    triggerCondition.targetToUse();
+                    triggerCondition.targetToUse(1);
                 }
             }
         }
@@ -497,10 +498,6 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
 
         this.description = getUpdatedDescription();
         mainTip.setDescription(this.description);
-        if (triggerCondition != null && PGR.isLoaded())
-        {
-            triggerCondition.updateTip(mainTip);
-        }
     }
 
     @Override
@@ -632,5 +629,10 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
                 triggerCondition.addUses(1);
             }
         }
+    }
+
+    public String getID()
+    {
+        return ID;
     }
 }

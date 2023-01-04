@@ -22,6 +22,7 @@ import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLLoadout;
+import pinacolada.skills.PSkill;
 import pinacolada.ui.common.PCLValueEditor;
 import pinacolada.utilities.GameUtilities;
 
@@ -104,7 +105,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
                     }
                 })
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[0])
-                .setItems(AbstractCard.CardRarity.values());
+                .setItems(GameUtilities.getStandardRarities());
         typesDropdown = new EUIDropdown<AbstractCard.CardType>(new EUIHitbox(raritiesDropdown.hb.x + raritiesDropdown.hb.width + SPACING_WIDTH, screenH(0.72f), MENU_WIDTH, MENU_HEIGHT)
                 , EUIGameUtils::textForType)
                 .setOnChange(types -> {
@@ -153,7 +154,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
 
         maxUpgrades = new PCLValueEditor(new EUIHitbox(START_X, screenH(0.5f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , PGR.core.strings.cardEditor.maxUpgrades, (val) -> effect.modifyAllBuilders(e -> e.setMaxUpgrades(val)))
-                .setLimits(-1, 9999);
+                .setLimits(-1, PSkill.DEFAULT_MAX);
         uniqueToggle = (EUIToggle) new EUIToggle(new EUIHitbox(screenW(0.35f), screenH(0.5f), MENU_WIDTH, MENU_HEIGHT))
                 .setFont(EUIFontHelper.carddescriptionfontNormal, 0.9f)
                 .setText(PGR.core.tooltips.unique.title)

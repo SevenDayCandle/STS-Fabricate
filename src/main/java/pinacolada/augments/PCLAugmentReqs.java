@@ -72,7 +72,7 @@ public class PCLAugmentReqs
                 rightMax != Integer.MAX_VALUE ? PGR.core.strings.subjects.count(PGR.core.tooltips.block) + " <= " + rightMax : null,
                 maxEffects != Integer.MAX_VALUE ? PGR.core.strings.cardEditor.effects + " <= " + maxEffects : null
         );
-        return base.isEmpty() ? PGR.core.strings.combat.nA : base;
+        return base.isEmpty() ? PGR.core.strings.combat.na : base;
     }
 
     public PCLAugmentReqs setAffinities(PCLAffinity... values)

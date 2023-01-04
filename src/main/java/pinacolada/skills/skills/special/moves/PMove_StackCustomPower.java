@@ -20,7 +20,7 @@ import java.util.List;
 public class PMove_StackCustomPower extends PMove implements SummonOnlyMove
 {
 
-    public static final PSkillData DATA = register(PMove_StackCustomPower.class, PCLEffectType.CustomPower, -1, 999);
+    public static final PSkillData DATA = register(PMove_StackCustomPower.class, PCLEffectType.CustomPower, -1, DEFAULT_MAX);
     protected ArrayList<Integer> indexes = new ArrayList<>();
 
     public PMove_StackCustomPower()

@@ -3,14 +3,9 @@ package pinacolada.monsters.animations.pcl;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.math.MathUtils;
-import pinacolada.effects.PCLEffects;
-import pinacolada.effects.vfx.FadingParticleEffect;
-import pinacolada.effects.vfx.FireIgniteEffect;
 import pinacolada.monsters.PCLCreature;
 import pinacolada.monsters.animations.PCLAllyAnimation;
 import pinacolada.resources.PGR;
-import pinacolada.utilities.PCLRenderHelpers;
 
 public class PCLGeneralAllyAnimation extends PCLAllyAnimation
 {
@@ -19,16 +14,6 @@ public class PCLGeneralAllyAnimation extends PCLAllyAnimation
     public PCLGeneralAllyAnimation(PCLCreature creature)
     {
         super(creature);
-    }
-
-    public void updateImpl(float deltaTime, float x, float y)
-    {
-        PCLEffects.Queue.add(new FadingParticleEffect(FireIgniteEffect.getRandomTexture(), x + MathUtils.random(-64, 64), y + MathUtils.random(-32, 4))
-                .setBlendingMode(PCLRenderHelpers.BlendingMode.Glowing)
-                .setFlip(MathUtils.randomBoolean(), false)
-                .setScale(MathUtils.random(0.09f, 0.64f))
-                .setRotation(0, MathUtils.random(400f, 600f))
-                .setTargetPosition(x, y + RADIUS, 100f)).setDuration(0.6f, false);
     }
 
     public void renderSprite(SpriteBatch sb, float x, float y)

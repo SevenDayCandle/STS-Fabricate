@@ -8,10 +8,10 @@ import java.util.List;
 
 public class WeightedList<T> extends ArrayList<WeightedList<T>.Item>
 {
-    protected class Item
+    public class Item
     {
-        final int weight;
-        final T object;
+        public final int weight;
+        public final T object;
 
         private Item(T object, int weight)
         {
@@ -71,12 +71,33 @@ public class WeightedList<T> extends ArrayList<WeightedList<T>.Item>
         return retrieve(rng.random(totalWeight), remove);
     }
 
+    public Item retrieveWithWeight(Random rng)
+    {
+        return retrieveWithWeight(rng, true);
+    }
+
+    public Item retrieveWithWeight(Random rng, boolean remove)
+    {
+        return retrieveWithWeight(rng.random(totalWeight), remove);
+    }
+
     public T retrieveUnseeded(boolean remove)
     {
         return retrieve(EUIUtils.RNG.nextInt(totalWeight + 1), remove);
     }
 
+    public Item retrieveUnseededWithWeight(boolean remove)
+    {
+        return retrieveWithWeight(EUIUtils.RNG.nextInt(totalWeight + 1), remove);
+    }
+
     private T retrieve(int roll, boolean remove)
+    {
+        Item i = retrieveWithWeight(roll, remove);
+        return i != null ? i.object : null;
+    }
+
+    private Item retrieveWithWeight(int roll, boolean remove)
     {
         Item selected = null;
         int currentWeight = 0;
@@ -101,7 +122,7 @@ public class WeightedList<T> extends ArrayList<WeightedList<T>.Item>
             remove(selected);
         }
 
-        return selected.object;
+        return selected;
     }
 
     private void remove(Item item)

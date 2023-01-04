@@ -22,8 +22,8 @@ public class PSkillData
     public final int priority;
     public int minAmount;
     public int maxAmount;
-    public int minExtra = -1;
-    public int maxExtra = -1;
+    public int minExtra = PSkill.DEFAULT_EXTRA_MIN;
+    public int maxExtra = PSkill.DEFAULT_EXTRA_MIN;
     public String altText;
     public String alt2Text;
     public boolean excludeColors;

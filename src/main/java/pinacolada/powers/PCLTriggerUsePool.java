@@ -1,25 +1,25 @@
 package pinacolada.powers;
 
-public class PCLPowerUsePool
+public class PCLTriggerUsePool
 {
     public int baseUses = 1;
     public int uses = 1;
     public boolean refreshEachTurn = true;
     public boolean stackAutomatically;
 
-    public PCLPowerUsePool()
+    public PCLTriggerUsePool()
     {
 
     }
 
-    public PCLPowerUsePool(int uses, boolean refreshEachTurn, boolean stackAutomatically)
+    public PCLTriggerUsePool(int uses, boolean refreshEachTurn, boolean stackAutomatically)
     {
         this.baseUses = this.uses = uses;
         this.refreshEachTurn = refreshEachTurn;
         this.stackAutomatically = stackAutomatically;
     }
 
-    public PCLPowerUsePool addUses(int uses)
+    public PCLTriggerUsePool addUses(int uses)
     {
         this.baseUses += uses;
         this.uses += uses;
@@ -28,7 +28,12 @@ public class PCLPowerUsePool
 
     public boolean canUse()
     {
-        return hasInfiniteUses() || uses > 0;
+        return canUse(1);
+    }
+
+    public boolean canUse(int amount)
+    {
+        return hasInfiniteUses() || uses >= amount;
     }
 
     public boolean hasInfiniteUses()
@@ -44,7 +49,12 @@ public class PCLPowerUsePool
         }
     }
 
-    public PCLPowerUsePool setUses(int uses, boolean refreshEachTurn, boolean stackAutomatically)
+    public PCLTriggerUsePool setUses(int uses, boolean refreshEachTurn, boolean stackAutomatically)
+    {
+        return setUses(uses, uses, refreshEachTurn, stackAutomatically);
+    }
+
+    public PCLTriggerUsePool setUses(int uses, int baseUses, boolean refreshEachTurn, boolean stackAutomatically)
     {
         this.baseUses = this.uses = uses;
         this.refreshEachTurn = refreshEachTurn;
@@ -54,9 +64,14 @@ public class PCLPowerUsePool
 
     public void use()
     {
+        use(1);
+    }
+
+    public void use(int amount)
+    {
         if (!hasInfiniteUses())
         {
-            uses -= 1;
+            uses = Math.max(0, uses - amount);
         }
     }
 }

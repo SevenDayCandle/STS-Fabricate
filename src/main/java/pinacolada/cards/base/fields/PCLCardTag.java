@@ -225,6 +225,11 @@ public enum PCLCardTag implements TooltipProvider
         return new EUITooltip(this.name());
     }
 
+    public String getName()
+    {
+        return getTip().title;
+    }
+
     @Override
     public List<EUITooltip> getTips()
     {

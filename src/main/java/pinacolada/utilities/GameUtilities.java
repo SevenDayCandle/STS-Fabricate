@@ -83,7 +83,7 @@ import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.player;
 
 public class GameUtilities
 {
-    private static final AbstractCard.CardRarity[] poolOrdering = AbstractCard.CardRarity.values().clone();
+    private static final AbstractCard.CardRarity[] poolOrdering = AbstractCard.CardRarity.values();
     private static final RandomizedList<AbstractCard> fullCardPool = new RandomizedList<>();
     private static final RandomizedList<AbstractCard> characterCardPool = new RandomizedList<>();
     private static final HandLayoutRefresher handLayoutRefresher = new HandLayoutRefresher();
@@ -1460,6 +1460,17 @@ public class GameUtilities
         return monsters;
     }
 
+    public static List<AbstractCard.CardRarity> getStandardRarities()
+    {
+        return EUIUtils.list(
+                AbstractCard.CardRarity.BASIC,
+                AbstractCard.CardRarity.COMMON,
+                AbstractCard.CardRarity.UNCOMMON,
+                AbstractCard.CardRarity.RARE,
+                AbstractCard.CardRarity.SPECIAL
+        );
+    }
+
     public static int getTempHP(AbstractCreature creature)
     {
         return creature != null ? TempHPField.tempHp.get(creature) : 0;
@@ -1761,6 +1772,12 @@ public class GameUtilities
     {
         PCLPowerHelper helper = PCLPowerHelper.get(power.ID);
         return helper != null && helper.isCommon && helper.isDebuff;
+    }
+
+    public static boolean isCommonPower(AbstractPower power)
+    {
+        PCLPowerHelper helper = PCLPowerHelper.get(power.ID);
+        return helper != null && helper.isCommon;
     }
 
     public static boolean isDeadOrEscaped(AbstractCreature target)

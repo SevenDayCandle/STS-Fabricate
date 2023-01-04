@@ -13,7 +13,7 @@ public class LWaveA1 extends PCLAugment
 {
 
     public static final PCLAugmentData DATA = register(LWaveA1.class, 2, PCLAffinity.Yellow)
-            .setSkill(PMove.gain(2, PCLPowerHelper.SupportDamage), PTrait.hasCost(1))
+            .setSkill(PMove.gain(2, PCLPowerHelper.NextTurnDraw), PTrait.hasCost(1))
             .setReqs(setTypes(AbstractCard.CardType.ATTACK, AbstractCard.CardType.SKILL));
 
     public LWaveA1()

@@ -77,8 +77,14 @@ public class PCLCardAlly extends PCLCreature
         this.unhover();
 
         FuncT1<PCLAllyAnimation, PCLCardAlly> animFunc = ANIMATION_MAP.get(card.color);
-        this.animation = animFunc != null ? animFunc.invoke(this) : new PCLGeneralAllyAnimation(this);
-
+        if (animFunc != null)
+        {
+            this.animation = animFunc.invoke(this);
+        }
+        if (this.animation == null)
+        {
+            this.animation = new PCLGeneralAllyAnimation(this);
+        }
 
         if (clearPowers)
         {
@@ -306,7 +312,10 @@ public class PCLCardAlly extends PCLCreature
     @Override
     public void render(SpriteBatch sb)
     {
-        super.render(sb);
+        if (this.animation != null)
+        {
+            super.render(sb);
+        }
         if (card != null)
         {
             if (hb.hovered || intentHb.hovered)
