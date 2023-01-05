@@ -3,7 +3,6 @@ package pinacolada.ui.cardEditor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.helpers.controller.CInputActionSet;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
@@ -15,6 +14,7 @@ import extendedui.ui.controls.EUIDropdownRow;
 import extendedui.ui.controls.EUITextBoxNumericalInput;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
+import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLCardTagInfo;
 
 import static pinacolada.ui.cardEditor.PCLCustomCardAttributesPage.MENU_HEIGHT;
@@ -49,7 +49,7 @@ public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo>
                 .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.05f)
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.5f)
-                .setFont(FontHelper.cardEnergyFont_L, 0.6f);
+                .setFont(EUIFontHelper.cardtitlefontSmall, 1f);
         displayValue.setValue(1);
 
         displayValue2 = (EUITextBoxNumericalInput) new EUITextBoxNumericalInput(EUIRM.images.panelRoundedHalfH.texture(),
@@ -63,7 +63,7 @@ public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo>
                 .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.05f)
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.5f)
-                .setFont(FontHelper.cardEnergyFont_L, 0.6f);
+                .setFont(EUIFontHelper.cardtitlefontSmall, 1f);
         displayValue2.setValue(1);
 
         decreaseButton = new EUIButton(ImageMaster.CF_LEFT_ARROW, new RelativeHitbox(displayValue.hb, ICON_SIZE, ICON_SIZE, ICON_SIZE * -0.4f, MENU_HEIGHT * 0.5f).setIsPopupCompatible(true).setParentElement(dr))

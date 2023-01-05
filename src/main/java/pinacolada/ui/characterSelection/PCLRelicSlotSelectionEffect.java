@@ -13,6 +13,7 @@ import extendedui.ui.controls.EUILabel;
 import extendedui.ui.controls.EUIRelic;
 import extendedui.ui.controls.EUITextBox;
 import extendedui.ui.hitboxes.EUIHitbox;
+import extendedui.utilities.EUIFontHelper;
 import pinacolada.effects.PCLEffect;
 import pinacolada.relics.PCLRelic;
 import pinacolada.resources.pcl.PCLRelicSlot;
@@ -29,7 +30,7 @@ public class PCLRelicSlotSelectionEffect extends PCLEffect
             .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.05f)
             .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
             .setAlignment(0.5f, 0.5f)
-            .setFont(FontHelper.cardEnergyFont_L, 0.75f);
+            .setFont(EUIFontHelper.cardtitlefontSmall, 1f);
 
     private final PCLRelicSlot slot;
     private final ArrayList<RenderItem> relics = new ArrayList<>();

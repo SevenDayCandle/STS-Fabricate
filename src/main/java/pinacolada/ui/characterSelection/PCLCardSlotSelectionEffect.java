@@ -5,12 +5,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import extendedui.EUIRM;
 import extendedui.ui.controls.EUICardGrid;
 import extendedui.ui.controls.EUITextBox;
 import extendedui.ui.hitboxes.EUIHitbox;
+import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.resources.pcl.PCLCardSlot;
@@ -24,7 +24,7 @@ public class PCLCardSlotSelectionEffect extends PCLEffectWithCallback<Object>
             .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.05f)
             .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
             .setAlignment(0.5f, 0.5f)
-            .setFont(FontHelper.cardEnergyFont_L, 0.75f);
+            .setFont(EUIFontHelper.cardtitlefontSmall, 1f);
 
     private final PCLCardSlot slot;
     private final ArrayList<PCLCard> cards;

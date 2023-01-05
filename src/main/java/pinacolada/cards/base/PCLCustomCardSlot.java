@@ -140,7 +140,7 @@ public class PCLCustomCardSlot
         return CustomCards.get(color);
     }
 
-    protected static FileHandle getFolder()
+    private static FileHandle getBaseCustomCardFolder()
     {
         FileHandle folder = Gdx.files.local(FOLDER);
         if (!folder.exists())
@@ -154,27 +154,43 @@ public class PCLCustomCardSlot
     public static void initialize()
     {
         CustomCards.clear();
-        FileHandle folder = getFolder();
+        loadFolder(getBaseCustomCardFolder());
+        PGR.core.debugCards.refreshCards();
+    }
+
+    public static void loadFolder(FileHandle folder)
+    {
         for (FileHandle f : folder.list(JSON_FILTER))
         {
-            String path = f.path();
-            try
-            {
-                String jsonString = f.readString();
-                PCLCustomCardSlot slot = EUIUtils.deserialize(jsonString, TToken.getType());
-                slot.setupBuilder(path);
-                getCards(slot.slotColor).add(slot);
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-                EUIUtils.logError(PCLCustomCardSlot.class, "Could not load Custom Card: " + path);
-            }
+            loadSingleCardImpl(f);
         }
         PGR.core.debugCards.refreshCards();
     }
 
-    protected static boolean isBuilderDuplicate(StringBuilder sb, AbstractCard.CardColor color)
+    private static void loadSingleCardImpl(FileHandle f)
+    {
+        String path = f.path();
+        try
+        {
+            String jsonString = f.readString();
+            PCLCustomCardSlot slot = EUIUtils.deserialize(jsonString, TToken.getType());
+            slot.setupBuilder(path);
+            getCards(slot.slotColor).add(slot);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            EUIUtils.logError(PCLCustomCardSlot.class, "Could not load Custom Card: " + path);
+        }
+    }
+
+    public static void loadSingleCard(FileHandle f)
+    {
+        loadSingleCardImpl(f);
+        PGR.core.debugCards.refreshCards();
+    }
+
+    private static boolean isBuilderDuplicate(StringBuilder sb, AbstractCard.CardColor color)
     {
         String s = sb.toString();
         return EUIUtils.any(getCards(color), c -> c.ID.equals(s));
@@ -195,7 +211,7 @@ public class PCLCustomCardSlot
         return sb.toString();
     }
 
-    protected static char makeRandomCharIndex()
+    private static char makeRandomCharIndex()
     {
         int i = MathUtils.random(65, 100);
         return (char) (i > 90 ? i - 43 : i);

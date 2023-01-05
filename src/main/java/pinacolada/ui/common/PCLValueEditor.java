@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import extendedui.EUIRM;
 import extendedui.interfaces.delegates.ActionT1;
@@ -47,7 +46,7 @@ public class PCLValueEditor extends EUIHoverable
                 .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.05f)
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.5f)
-                .setFont(FontHelper.cardEnergyFont_L, 0.6f);
+                .setFont(EUIFontHelper.cardtitlefontSmall, 1f);
 
         this.header = new EUILabel(EUIFontHelper.cardtitlefontSmall,
                 RelativeHitbox.fromPercentages(hb, 1, 1, 0.5f, 1.5f))

@@ -144,7 +144,7 @@ public class PCLSingleCardPopup extends EUIBase
                 .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.05f)
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.5f)
-                .setFont(FontHelper.cardEnergyFont_L, 0.75f);
+                .setFont(EUIFontHelper.cardtitlefontSmall, 1f);
 
         this.changeVariantLabel = new EUILabel(EUIFontHelper.carddescriptionfontLarge,
                 new RelativeHitbox(changeVariantHb, ICON_SIZE, ICON_SIZE, changeVariantHb.width / 2 - ICON_SIZE * 2, changeVariantHb.height * 1.6f))

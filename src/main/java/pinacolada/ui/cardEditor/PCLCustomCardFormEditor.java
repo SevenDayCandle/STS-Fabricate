@@ -2,7 +2,6 @@ package pinacolada.ui.cardEditor;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.Hitbox;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import extendedui.EUIRM;
@@ -49,7 +48,7 @@ public class PCLCustomCardFormEditor extends EUIBase
                         setValue(types.get(0));
                     }
                 })
-                .setFontForButton(FontHelper.cardEnergyFont_L, 0.5f)
+                .setFontForButton(EUIFontHelper.cardtitlefontSmall, 0.9f)
                 .setCanAutosize(true, true)
                 .setItems(EUIUtils.range(0, screen.tempBuilders.size() - 1));
         decreaseButton = new EUIButton(ImageMaster.CF_LEFT_ARROW, new RelativeHitbox(formValues.hb, ICON_SIZE, ICON_SIZE, ICON_SIZE * -0.4f, formValues.hb.height * 0.5f))

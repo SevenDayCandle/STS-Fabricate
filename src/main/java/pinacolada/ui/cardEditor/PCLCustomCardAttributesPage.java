@@ -100,6 +100,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
                 .setIsMultiSelect(true)
                 .setCanAutosize(true, true);
         tagsDropdown.setLabelFunctionForButton((list, __) -> tagsDropdown.makeMultiSelectString(item -> item.tag.getTooltip().getTitleOrIcon()), null, true)
+                .setHeaderRow(new PCLCustomCardTagEditorHeaderRow(tagsDropdown))
                 .setRowFunction(PCLCustomCardTagEditorRow::new)
                 .setRowWidthFunction((a, b, c) -> a.calculateRowWidth() + MENU_HEIGHT * 6)
                 .setItems(EUIUtils.map(PCLCardTag.getAll(), t -> t.make(1, 1)))

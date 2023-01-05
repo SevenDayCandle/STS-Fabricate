@@ -4,13 +4,13 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import extendedui.EUIRM;
 import extendedui.ui.EUIBase;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUITextBox;
 import extendedui.ui.hitboxes.EUIHitbox;
+import extendedui.utilities.EUIFontHelper;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCardSlot;
 
@@ -40,17 +40,17 @@ public class PCLCardSlotEditor extends EUIBase
                 .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.05f)
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.5f)
-                .setFont(FontHelper.cardEnergyFont_L, 0.75f);
+                .setFont(EUIFontHelper.cardtitlefontSmall, 1f);
 
         cardamountText = new EUITextBox(EUIRM.images.panelRoundedHalfH.texture(), new EUIHitbox(cardvalueText.hb.x + cardvalueText.hb.width, cY, AbstractCard.IMG_HEIGHT * 0.15f, ITEM_HEIGHT))
                 .setColors(Settings.HALF_TRANSPARENT_BLACK_COLOR, Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.5f)
-                .setFont(FontHelper.cardTitleFont, 1);
+                .setFont(EUIFontHelper.cardtitlefontNormal, 1f);
 
         cardnameText = new EUITextBox(EUIRM.images.panelRoundedHalfH.texture(), new EUIHitbox(cardamountText.hb.x + cardamountText.hb.width, cY, AbstractCard.IMG_WIDTH * 1.1f, ITEM_HEIGHT))
                 .setColors(Settings.HALF_TRANSPARENT_BLACK_COLOR, Settings.GOLD_COLOR)
                 .setAlignment(0.5f, 0.5f)
-                .setFont(FontHelper.cardTitleFont, 1);
+                .setFont(EUIFontHelper.cardtitlefontNormal, 1f);
 
         decrementButton = new EUIButton(EUIRM.images.minus.texture(), new EUIHitbox(cardnameText.hb.x + cardnameText.hb.width, cardnameText.hb.y, 64, 64))
                 .setClickDelay(0.02f);

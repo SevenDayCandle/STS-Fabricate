@@ -115,7 +115,7 @@ public class PCLCoreStrings extends PCLStrings
         public final String attributes = strings.TEXT[0];
         public final String effects = strings.TEXT[1];
         public final String tags = strings.TEXT[2];
-        public final String cardValue = strings.TEXT[3];
+        public final String value = strings.TEXT[3];
         public final String newCard = strings.TEXT[4];
         public final String damage = strings.TEXT[5];
         public final String block = strings.TEXT[6];

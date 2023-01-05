@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import extendedui.EUIRM;
 import extendedui.interfaces.delegates.ActionT2;
@@ -56,11 +55,10 @@ public class PCLCustomCardUpgradableEditor extends EUIBase
 
         displayValue = (EUITextBoxNumericalInput) new EUITextBoxNumericalInput(EUIRM.images.panelRoundedHalfH.texture(), hb)
                 .setOnComplete(this::setValue)
-
                 .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.05f)
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.5f)
-                .setFont(FontHelper.cardEnergyFont_L, 0.6f);
+                .setFont(EUIFontHelper.cardtitlefontSmall, 1f);
 
         displayValueSecondary = (EUITextBoxNumericalInput) new EUITextBoxNumericalInput(EUIRM.images.panelRoundedHalfH.texture(),
                 new RelativeHitbox(hb, hb.width, hb.height, w * 0.5f, -h * 0.35f))
@@ -68,7 +66,7 @@ public class PCLCustomCardUpgradableEditor extends EUIBase
                 .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.05f)
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.5f)
-                .setFont(FontHelper.cardEnergyFont_L, 0.6f);
+                .setFont(EUIFontHelper.cardtitlefontSmall, 1f);
 
         this.header = new EUILabel(EUIFontHelper.cardtitlefontSmall,
                 new RelativeHitbox(hb, w, h, 0, hb.height * 1.2f))

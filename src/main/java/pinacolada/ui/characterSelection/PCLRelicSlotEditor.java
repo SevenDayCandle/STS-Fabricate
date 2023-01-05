@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import extendedui.EUIRM;
 import extendedui.ui.EUIBase;
@@ -12,6 +11,7 @@ import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUIRelic;
 import extendedui.ui.controls.EUITextBox;
 import extendedui.ui.hitboxes.EUIHitbox;
+import extendedui.utilities.EUIFontHelper;
 import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLRelicSlot;
@@ -39,12 +39,12 @@ public class PCLRelicSlotEditor extends EUIBase
                 .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.05f)
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.5f)
-                .setFont(FontHelper.cardEnergyFont_L, 0.75f);
+                .setFont(EUIFontHelper.cardtitlefontSmall, 1f);
 
         relicnameText = new EUITextBox(EUIRM.images.panelRoundedHalfH.texture(), new EUIHitbox(relicvalueText.hb.x + relicvalueText.hb.width + SPACING, cY, AbstractCard.IMG_WIDTH * 1.1f, ITEM_HEIGHT))
                 .setColors(Settings.HALF_TRANSPARENT_BLACK_COLOR, Settings.GOLD_COLOR)
                 .setAlignment(0.5f, 0.5f)
-                .setFont(FontHelper.cardTitleFont, 1);
+                .setFont(EUIFontHelper.cardtitlefontNormal, 1f);
 
         clearButton = new EUIButton(EUIRM.images.x.texture(), new EUIHitbox(relicnameText.hb.x + relicnameText.hb.width, relicnameText.hb.y, 64, 64))
                 .setClickDelay(0.02f);
