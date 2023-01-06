@@ -7,7 +7,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT2;
-import extendedui.interfaces.delegates.FuncT1;
+import extendedui.interfaces.delegates.FuncT2;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.ColoredString;
 import pinacolada.actions.damage.DealDamage;
@@ -35,7 +35,7 @@ public class PMove_DealCardDamage extends PMove implements Hidden
     protected AbstractGameAction.AttackEffect attackEffect;
     protected Color vfxColor;
     protected Color vfxTargetColor;
-    protected FuncT1<Float, AbstractCreature> damageEffect;
+    protected FuncT2<Float, AbstractCreature, AbstractCreature> damageEffect;
     protected ActionT2<PCLUseInfo, ArrayList<AbstractCreature>> onCompletion;
 
     public PMove_DealCardDamage(PSkillSaveData content)
@@ -133,7 +133,7 @@ public class PMove_DealCardDamage extends PMove implements Hidden
 
     public PMove_DealCardDamage setDamageEffect(PCLEffekseerEFX effekseerKey)
     {
-        this.damageEffect = (m) -> PCLEffects.Queue.add(VFX.eFX(effekseerKey, m.hb)).duration * 0.8f;
+        this.damageEffect = (s, m) -> PCLEffects.Queue.add(VFX.eFX(effekseerKey, m.hb)).duration * 0.8f;
         return this;
     }
 
@@ -144,17 +144,17 @@ public class PMove_DealCardDamage extends PMove implements Hidden
 
     public PMove_DealCardDamage setDamageEffect(PCLEffekseerEFX effekseerKey, float durationMult)
     {
-        this.damageEffect = (m) -> PCLEffects.Queue.add(VFX.eFX(effekseerKey, m.hb)).duration * durationMult;
+        this.damageEffect = (s, m) -> PCLEffects.Queue.add(VFX.eFX(effekseerKey, m.hb)).duration * durationMult;
         return this;
     }
 
     public PMove_DealCardDamage setDamageEffect(PCLEffekseerEFX effekseerKey, Color color, float durationMult)
     {
-        this.damageEffect = (m) -> PCLEffects.Queue.add(VFX.eFX(effekseerKey, m.hb).setColor(color)).duration * durationMult;
+        this.damageEffect = (s, m) -> PCLEffects.Queue.add(VFX.eFX(effekseerKey, m.hb).setColor(color)).duration * durationMult;
         return this;
     }
 
-    public PMove_DealCardDamage setDamageEffect(FuncT1<Float, AbstractCreature> damageEffect)
+    public PMove_DealCardDamage setDamageEffect(FuncT2<Float, AbstractCreature, AbstractCreature> damageEffect)
     {
         this.damageEffect = damageEffect;
         return this;
@@ -164,7 +164,7 @@ public class PMove_DealCardDamage extends PMove implements Hidden
     {
         if (damageEffect != null)
         {
-            damageAction.setDamageEffect(enemy -> damageEffect.invoke(enemy));
+            damageAction.setDamageEffect(damageEffect);
         }
         if (vfxColor != null)
         {
@@ -187,7 +187,7 @@ public class PMove_DealCardDamage extends PMove implements Hidden
     {
         if (damageEffect != null)
         {
-            damageAction.setDamageEffect((enemy, __) -> damageEffect.invoke(enemy));
+            damageAction.setDamageEffect((enemy, __) -> damageEffect.invoke(info.source, enemy));
         }
         if (vfxColor != null)
         {

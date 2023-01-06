@@ -39,11 +39,6 @@ public class VFX
         return new BleedEffect(target.cX, target.cY - (50.0F * Settings.scale), 32);
     }
 
-    public static CataclysmEffect cataclysm()
-    {
-        return new CataclysmEffect();
-    }
-
     public static CircularWaveEffect circularWave(Hitbox target)
     {
         return circularWave(target.cX, target.cY);
@@ -143,7 +138,7 @@ public class VFX
 
     public static FireBurstEffect fireball(Hitbox source, Hitbox target)
     {
-        return new FireBurstEffect(source.cX, source.cY, target.cX, target.cY);
+        return new FireBurstEffect(source.cX, source.cY, target.cX, target.cY).setColor(Color.RED, Color.ORANGE);
     }
 
     public static FlameBarrierEffect flameBarrier(Hitbox source)
@@ -231,6 +226,11 @@ public class VFX
         return hb.cY + (variance == 0 ? 0 : (MathUtils.random(-variance, variance) * hb.height));
     }
 
+    public static RazorWindEffect razorWind(Hitbox source)
+    {
+        return razorWind(source, source, MathUtils.random(1000.0F, 1200.0F), MathUtils.random(-20.0F, 20.0F));
+    }
+
     public static RazorWindEffect razorWind(Hitbox source, Hitbox target, float horizontalSpeed, float horizontalAcceleration)
     {
         return new RazorWindEffect(source.cX, source.cY, randomY(target, 0.33f), horizontalSpeed, horizontalAcceleration);
@@ -299,7 +299,7 @@ public class VFX
 
     public static SnowballEffect snowball(Hitbox source, Hitbox target)
     {
-        return new SnowballEffect(source.cX, source.cY, randomX(target, 0.15f), randomY(target, 0.15f));
+        return new SnowballEffect(source.cX, source.cY, randomX(target, 0.15f), randomY(target, 0.15f)).setColor(Color.SKY, Color.NAVY);
     }
 
     public static SnowballImpactEffect snowballImpact(Hitbox target, float spread)

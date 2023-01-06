@@ -8,7 +8,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
-import extendedui.interfaces.delegates.FuncT1;
+import extendedui.interfaces.delegates.FuncT2;
 import pinacolada.actions.PCLActionWithCallback;
 import pinacolada.actions.PCLActions;
 import pinacolada.effects.AttackEffects;
@@ -23,7 +23,7 @@ public class DealDamage extends PCLActionWithCallback<AbstractCreature>
 {
     protected final DamageInfo info;
 
-    protected FuncT1<Float, AbstractCreature> onDamageEffect;
+    protected FuncT2<Float, AbstractCreature, AbstractCreature> onDamageEffect;
     protected AbstractOrb orb;
     protected boolean applyPowerRemovalMultiplier;
     protected boolean applyPowers;
@@ -125,7 +125,7 @@ public class DealDamage extends PCLActionWithCallback<AbstractCreature>
 
         if (onDamageEffect != null)
         {
-            addDuration(onDamageEffect.invoke(target));
+            addDuration(onDamageEffect.invoke(source, target));
         }
 
         if (this.goldAmount > 0)
@@ -193,11 +193,11 @@ public class DealDamage extends PCLActionWithCallback<AbstractCreature>
 
     public DealDamage setDamageEffect(PCLEffekseerEFX effekseerKey)
     {
-        this.onDamageEffect = (m) -> VFX.eFX(effekseerKey, m.hb).duration;
+        this.onDamageEffect = (s, m) -> VFX.eFX(effekseerKey, m.hb).duration;
         return this;
     }
 
-    public DealDamage setDamageEffect(FuncT1<Float, AbstractCreature> onDamageEffect)
+    public DealDamage setDamageEffect(FuncT2<Float, AbstractCreature, AbstractCreature> onDamageEffect)
     {
         this.onDamageEffect = onDamageEffect;
 

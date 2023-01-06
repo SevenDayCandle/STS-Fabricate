@@ -7,7 +7,6 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.vfx.combat.LightFlareParticleEffect;
 import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.PCLEffekseerEFX;
 
 public class SnowballEffect extends PCLEffect
 {
@@ -60,7 +59,6 @@ public class SnowballEffect extends PCLEffect
         if (tickDuration(deltaTime))
         {
             PCLEffects.Queue.add(new SnowballImpactEffect(x, y).setColor(color)).setRealtime(isRealtime);
-            PCLEffects.Queue.playEFX(PCLEffekseerEFX.MGC_W2_BlueBall, x, y).setScale(0.5f);
             complete();
         }
     }

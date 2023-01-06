@@ -5,7 +5,7 @@ import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.interfaces.delegates.ActionT2;
-import extendedui.interfaces.delegates.FuncT1;
+import extendedui.interfaces.delegates.FuncT2;
 import pinacolada.actions.damage.DealDamage;
 import pinacolada.actions.damage.DealDamageToAll;
 import pinacolada.cards.base.PCLCardTarget;
@@ -28,7 +28,7 @@ public class PMove_DealDamage extends PMove
     protected Color vfxColor;
     protected Color vfxTargetColor;
     protected DamageInfo.DamageType damageType = DamageInfo.DamageType.THORNS;
-    protected FuncT1<Float, AbstractCreature> damageEffect;
+    protected FuncT2<Float, AbstractCreature, AbstractCreature> damageEffect;
     protected ActionT2<PCLUseInfo, ArrayList<AbstractCreature>> onCompletion;
 
     public PMove_DealDamage(PSkillSaveData content)
@@ -107,7 +107,7 @@ public class PMove_DealDamage extends PMove
         return this;
     }
 
-    public PMove_DealDamage setDamageEffect(FuncT1<Float, AbstractCreature> damageEffect)
+    public PMove_DealDamage setDamageEffect(FuncT2<Float, AbstractCreature, AbstractCreature> damageEffect)
     {
         this.damageEffect = damageEffect;
         return this;
@@ -115,7 +115,7 @@ public class PMove_DealDamage extends PMove
 
     public PMove_DealDamage setDamageEffect(PCLEffekseerEFX effekseerKey)
     {
-        this.damageEffect = (m) -> VFX.eFX(effekseerKey, m.hb).duration;
+        this.damageEffect = (s, m) -> VFX.eFX(effekseerKey, m.hb).duration;
         return this;
     }
 
@@ -123,7 +123,7 @@ public class PMove_DealDamage extends PMove
     {
         if (damageEffect != null)
         {
-            damageAction.setDamageEffect(enemy -> damageEffect.invoke(enemy));
+            damageAction.setDamageEffect(damageEffect);
         }
         if (vfxColor != null)
         {
@@ -146,7 +146,7 @@ public class PMove_DealDamage extends PMove
     {
         if (damageEffect != null)
         {
-            damageAction.setDamageEffect((enemy, __) -> damageEffect.invoke(enemy));
+            damageAction.setDamageEffect((enemy, __) -> damageEffect.invoke(info.source, enemy));
         }
         if (vfxColor != null)
         {
