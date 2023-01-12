@@ -7,11 +7,11 @@ import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
-import pinacolada.skills.fields.PField_Random;
+import pinacolada.skills.fields.PField_CardCategory;
 
-public class PSpecialSkill extends PSkill<PField_Random>
+public class PSpecialSkill extends PSkill<PField_CardCategory>
 {
-    public static final PSkillData<PField_Random> DATA = register(PSpecialSkill.class, PField_Random.class)
+    public static final PSkillData<PField_CardCategory> DATA = register(PSpecialSkill.class, PField_CardCategory.class)
             .setAmounts(-DEFAULT_MAX, DEFAULT_MAX)
             .setExtra(-DEFAULT_MAX, DEFAULT_MAX)
             .selfTarget();

@@ -1,5 +1,7 @@
 package pinacolada.skills;
 
+import extendedui.EUIUtils;
+
 import java.io.Serializable;
 
 public class PSkillSaveData implements Serializable
@@ -26,7 +28,7 @@ public class PSkillSaveData implements Serializable
         this.upgrade = effect.upgrade;
         this.upgradeExtra = effect.upgradeExtra;
         this.useParent = effect.useParent;
-        this.effectData = effect.fields.serialize();
+        this.effectData = EUIUtils.serialize(effect.fields);
 
         PSkill cEffect = effect.childEffect;
         if (cEffect != null)

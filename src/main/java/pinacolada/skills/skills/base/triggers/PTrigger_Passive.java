@@ -5,11 +5,12 @@ import pinacolada.interfaces.markers.PSkillAttribute;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.PTrigger;
+import pinacolada.skills.fields.PField_Not;
 
 public class PTrigger_Passive extends PTrigger implements PSkillAttribute
 {
 
-    public static final PSkillData DATA = register(PTrigger_Passive.class, PField_Empty.class, TRIGGER_PRIORITY, -1, DEFAULT_MAX);
+    public static final PSkillData<PField_Not> DATA = register(PTrigger_Passive.class, PField_Not.class, TRIGGER_PRIORITY, -1, DEFAULT_MAX);
 
     public PTrigger_Passive()
     {

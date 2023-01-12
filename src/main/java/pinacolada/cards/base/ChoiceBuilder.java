@@ -5,6 +5,7 @@ import extendedui.utilities.ColoredTexture;
 import pinacolada.cards.pcl.tokens.AffinityToken;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
+import pinacolada.skills.fields.PField_Affinity;
 import pinacolada.utilities.GameUtilities;
 
 public class ChoiceBuilder<T> extends PCLCardBuilder
@@ -24,9 +25,9 @@ public class ChoiceBuilder<T> extends PCLCardBuilder
         return builder;
     }
 
-    public static ChoiceBuilder<PCLAffinity> skillAffinity(PSkill skill)
+    public static ChoiceBuilder<PCLAffinity> skillAffinity(PSkill<? extends PField_Affinity> skill)
     {
-        PCLAffinity affinity = skill.affinities.isEmpty() ? PCLAffinity.Star : skill.affinities.get(0);
+        PCLAffinity affinity = skill.fields.affinities.isEmpty() ? PCLAffinity.Star : skill.fields.affinities.get(0);
         return (ChoiceBuilder<PCLAffinity>) ChoiceBuilder.affinity(affinity)
                 .addPSkill(skill)
                 .setTarget(skill.target);

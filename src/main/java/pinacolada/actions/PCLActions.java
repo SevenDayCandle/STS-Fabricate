@@ -921,9 +921,9 @@ public final class PCLActions
         return (ScoutCards) add(new ScoutCards(sourceName, amount));
     }
 
-    public Scry scry(int amount)
+    public ScryCards scry(String sourceName, int amount)
     {
-        return add(new Scry(amount));
+        return add(new ScryCards(sourceName, amount));
     }
 
     public SelectCreature selectCreature(PCLCardTarget target, String source)

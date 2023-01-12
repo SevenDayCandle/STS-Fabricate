@@ -29,7 +29,7 @@ public class Glyph06 extends Glyph
 
     public void setup(Object input)
     {
-        addGainPower(PTrigger.when(PCond.onOtherCardPlayed().setAffinity(randomAffinity()),
+        addGainPower(PTrigger.when(PCond.onOtherCardPlayed(randomAffinity()),
                 getSpecialMove(0, this::action, 1).setUpgrade(1)).setAmount(1));
     }
 }

@@ -1,8 +1,5 @@
 package pinacolada.skills.fields;
 
-import com.megacrit.cardcrawl.orbs.AbstractOrb;
-import extendedui.EUIUtils;
-import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.resources.PGR;
 import pinacolada.stances.PCLStanceHelper;
 import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
@@ -54,10 +51,5 @@ public class PField_Stance extends PField_Random
     public String getStanceString()
     {
         return getStanceString(stances);
-    }
-
-    public final FuncT1<Boolean, AbstractOrb> getOrbFilter()
-    {
-        return (c -> (stances.isEmpty() || EUIUtils.any(stances, orb -> orb.ID.equals(c.ID))));
     }
 }

@@ -11,13 +11,13 @@ import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-
+import pinacolada.skills.fields.PField_CardCategory;
 
 
 public class PMod_RetainPerCard extends PMod_Do
 {
 
-    public static final PSkillData DATA = register(PMod_RetainPerCard.class, CardGroupFull)
+    public static final PSkillData<PField_CardCategory> DATA = register(PMod_RetainPerCard.class, PField_CardCategory.class)
             .selfTarget()
             .setGroups(PCLCardGroupHelper.Hand);
 

@@ -1,30 +1,22 @@
 package pinacolada.skills.skills.base.modifiers;
 
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIRM;
 import extendedui.interfaces.delegates.FuncT4;
 import extendedui.ui.tooltips.EUITooltip;
-import pinacolada.actions.PCLActionWithCallback;
 import pinacolada.actions.pileSelection.CycleCards;
-import pinacolada.actions.pileSelection.DiscardFromPile;
 import pinacolada.actions.pileSelection.SelectFromPile;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.PCLCardTarget;
-import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-
-import java.util.ArrayList;
-
-
+import pinacolada.skills.fields.PField_CardCategory;
 
 public class PMod_CyclePerCard extends PMod_Do
 {
-
-    public static final PSkillData DATA = register(PMod_CyclePerCard.class, CardGroupFull)
+    public static final PSkillData<PField_CardCategory> DATA = register(PMod_CyclePerCard.class, PField_CardCategory.class)
             .selfTarget()
             .setGroups(PCLCardGroupHelper.Hand);
 
@@ -44,20 +36,9 @@ public class PMod_CyclePerCard extends PMod_Do
     }
 
     @Override
-    protected PCLActionWithCallback<ArrayList<AbstractCard>> createPileAction(PCLUseInfo info)
-    {
-        SelectFromPile action = new CycleCards(getName(), amount, alt);
-        if (alt2)
-        {
-            action = action.setFilter(c -> getFullCardFilter().invoke(c));
-        }
-        return action;
-    }
-
-    @Override
     public String getMoveString(boolean addPeriod)
     {
-        return alt2 ? super.getMoveString(addPeriod) : EUIRM.strings.verbNoun(tooltipTitle(), getAmountRawString());
+        return fields.forced ? super.getMoveString(addPeriod) : EUIRM.strings.verbNoun(getActionTitle(), getAmountRawString());
     }
 
     @Override
@@ -69,6 +50,6 @@ public class PMod_CyclePerCard extends PMod_Do
     @Override
     public FuncT4<SelectFromPile, String, AbstractCreature, Integer, CardGroup[]> getAction()
     {
-        return DiscardFromPile::new;
+        return (s, c, i, g) -> new CycleCards(s, i, fields.random);
     }
 }

@@ -252,7 +252,7 @@ public class PCLCustomCardSlot
             f.attackType = builder.attackType.name();
             f.attackEffect = builder.attackEffect.name();
             f.effects = EUIUtils.mapAsNonnull(builder.moves, b -> b != null ? b.serialize() : null).toArray(new String[]{});
-            f.powerEffects = EUIUtils.mapAsNonnull(builder.pPowers, b -> b != null ? b.serialize() : null).toArray(new String[]{});
+            f.powerEffects = EUIUtils.mapAsNonnull(builder.powers, b -> b != null ? b.serialize() : null).toArray(new String[]{});
 
             tempForms.add(EUIUtils.serialize(f, TTokenForm.getType()));
         }

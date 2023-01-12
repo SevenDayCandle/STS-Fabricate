@@ -1,44 +1,41 @@
 package pinacolada.skills.skills.special.moves;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
-import extendedui.EUIUtils;
 import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.interfaces.markers.Hidden;
-import pinacolada.resources.PGR;
-import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
+import pinacolada.skills.fields.PField_RelicID;
 import pinacolada.utilities.GameUtilities;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-public class PMove_ObtainRelic extends PMove implements Hidden
+public class PMove_ObtainRelic extends PMove<PField_RelicID> implements Hidden
 {
-    public static final PSkillData DATA = register(PMove_ObtainRelic.class, PCLEffectType.Card)
+    public static final PSkillData<PField_RelicID> DATA = register(PMove_ObtainRelic.class, PField_RelicID.class)
             .selfTarget();
-
-    protected ArrayList<AbstractRelic> relics = new ArrayList<>();
 
     public PMove_ObtainRelic()
     {
-        this((AbstractRelic) null);
+        super(DATA);
     }
 
-    public PMove_ObtainRelic(Collection<AbstractRelic> relics)
+    public PMove_ObtainRelic(Collection<String> relics)
     {
         super(DATA);
-        this.relics.addAll(relics);
+        fields.relicIDs.addAll(relics);
     }
 
-    public PMove_ObtainRelic(AbstractRelic... relics)
+    public PMove_ObtainRelic(String... relics)
     {
-        this(Arrays.asList(relics));
+        super(DATA);
+        fields.relicIDs.addAll(Arrays.asList(relics));
     }
 
     @Override
@@ -50,9 +47,13 @@ public class PMove_ObtainRelic extends PMove implements Hidden
             List<EUITooltip> tips = ((TooltipProvider) card).getTips();
             if (tips != null)
             {
-                for (AbstractRelic r : relics)
+                for (String r : fields.relicIDs)
                 {
-                    tips.add(new EUITooltip(r.name, r.description));
+                    AbstractRelic relic = RelicLibrary.getRelic(r);
+                    if (relic != null)
+                    {
+                        tips.add(new EUITooltip(relic.name, relic.description));
+                    }
                 }
             }
         }
@@ -68,9 +69,13 @@ public class PMove_ObtainRelic extends PMove implements Hidden
     @Override
     public void use(PCLUseInfo info)
     {
-        for (AbstractRelic r : relics)
+        for (String r : fields.relicIDs)
         {
-            GameUtilities.getCurrentRoom(true).addRelicToRewards(r.makeCopy());
+            AbstractRelic relic = RelicLibrary.getRelic(r);
+            if (relic != null)
+            {
+                GameUtilities.getCurrentRoom(true).addRelicToRewards(relic.makeCopy());
+            }
         }
 
         super.use(info);
@@ -79,6 +84,6 @@ public class PMove_ObtainRelic extends PMove implements Hidden
     @Override
     public String getSubText()
     {
-        return TEXT.actions.obtain(PCLCoreStrings.joinWithAnd(EUIUtils.map(relics, g -> "{" + PGR.getRelicStrings(g.relicId).NAME + "}")));
+        return TEXT.actions.obtain(fields.random ? fields.getRelicIDOrString() : fields.getRelicIDAndString());
     }
 }

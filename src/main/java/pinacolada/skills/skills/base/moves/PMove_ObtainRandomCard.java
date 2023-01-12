@@ -10,11 +10,12 @@ import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.utilities.GameUtilities;
 
-public class PMove_ObtainRandomCard extends PMove
+public class PMove_ObtainRandomCard extends PMove<PField_CardCategory>
 {
-    public static final PSkillData DATA = register(PMove_ObtainRandomCard.class, PField_CardCategory.class)
+    public static final PSkillData<PField_CardCategory> DATA = register(PMove_ObtainRandomCard.class, PField_CardCategory.class)
             .setExtra(1, DEFAULT_MAX)
             .selfTarget();
 
@@ -30,13 +31,14 @@ public class PMove_ObtainRandomCard extends PMove
 
     public PMove_ObtainRandomCard(int copies, PCLCardGroupHelper... gt)
     {
-        super(DATA, PCLCardTarget.None, copies, gt);
+        super(DATA, PCLCardTarget.None, copies);
+        fields.setCardGroup(gt);
     }
 
     public PMove_ObtainRandomCard(int copies, int extra, PCLCardGroupHelper... gt)
     {
-        super(DATA, PCLCardTarget.None, copies, gt);
-        setExtra(extra);
+        super(DATA, PCLCardTarget.None, copies, extra);
+        fields.setCardGroup(gt);
     }
 
     @Override
@@ -52,7 +54,7 @@ public class PMove_ObtainRandomCard extends PMove
         final int limit = Math.max(extra, amount);
         while (choice.size() < limit)
         {
-            AbstractCard c = GameUtilities.getRandomCard(rarities, types, affinities);
+            AbstractCard c = GameUtilities.getRandomCard(fields.rarities, fields.types, fields.affinities);
             if (c != null && !EUIUtils.any(choice.group, ca -> ca.cardID.equals(c.cardID)))
             {
                 choice.addToBottom(c.makeCopy());
@@ -64,11 +66,11 @@ public class PMove_ObtainRandomCard extends PMove
                 .addCallback(cards -> {
                     for (AbstractCard c : cards)
                     {
-                        getActions().makeCard(c, groupTypes.size() > 0 ? groupTypes.get(0).getCardGroup() : AbstractDungeon.player.hand);
+                        getActions().makeCard(c, fields.groupTypes.size() > 0 ? fields.groupTypes.get(0).getCardGroup() : AbstractDungeon.player.hand);
                     }
                     if (this.childEffect != null)
                     {
-                        this.childEffect.receivePayload(choice.group);
+                        info.setData(choice.group);
                         super.use(info);
                     }
                 });
@@ -78,7 +80,7 @@ public class PMove_ObtainRandomCard extends PMove
     public String getSubText()
     {
         String amString = extra > amount ? TEXT.subjects.xOfY(getAmountRawString(), getExtraRawString()) : getAmountRawString();
-        String cString = getFullCardOrString(getRawString(EXTRA_CHAR));
-        return groupTypes.size() > 0 ? TEXT.actions.addToPile(amString, cString, groupTypes.get(0).name) : TEXT.actions.obtainAmount(amString, cString);
+        String cString = fields.getFullCardOrString(getRawString(EXTRA_CHAR));
+        return fields.groupTypes.size() > 0 ? TEXT.actions.addToPile(amString, cString, fields.groupTypes.get(0).name) : TEXT.actions.obtainAmount(amString, cString);
     }
 }

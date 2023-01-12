@@ -133,17 +133,17 @@ public abstract class PCond<T extends PField> extends PSkill<T>
         return (PCond_DiscardTo) new PCond_DiscardTo(amount, h).edit(r -> r.setRandom(true));
     }
 
-    public static PCond evoke(int amount, PCLOrbHelper... h)
+    public static PCond_EvokeOrb evoke(int amount, PCLOrbHelper... h)
     {
         return new PCond_EvokeOrb(amount, h);
     }
 
-    public static PCond exhaust(int amount)
+    public static PCond_ExhaustTo exhaust(int amount)
     {
         return new PCond_ExhaustTo(amount, PCLCardGroupHelper.Hand);
     }
 
-    public static PCond exhaust(int amount, PCLCardGroupHelper... h)
+    public static PCond_ExhaustTo exhaust(int amount, PCLCardGroupHelper... h)
     {
         return new PCond_ExhaustTo(amount, h);
     }
@@ -158,112 +158,112 @@ public abstract class PCond<T extends PField> extends PSkill<T>
         return (PCond_ExhaustTo) new PCond_ExhaustTo(amount, h).edit(r -> r.setRandom(true));
     }
 
-    public static PCond fatal()
+    public static PCond_Fatal fatal()
     {
         return new PCond_Fatal();
     }
 
-    public static PCond haveDiscarded()
+    public static PCond_HaveDiscarded haveDiscarded()
     {
         return new PCond_HaveDiscarded();
     }
 
-    public static PCond haveDiscarded(int amount)
+    public static PCond_HaveDiscarded haveDiscarded(int amount)
     {
         return new PCond_HaveDiscarded(amount);
     }
 
-    public static PCond haveExhausted()
+    public static PCond_HaveExhausted haveExhausted()
     {
         return new PCond_HaveExhausted();
     }
 
-    public static PCond haveExhausted(int amount)
+    public static PCond_HaveExhausted haveExhausted(int amount)
     {
         return new PCond_HaveExhausted(amount);
     }
 
-    public static PCond havePlayed()
+    public static PCond_HavePlayed havePlayed()
     {
         return new PCond_HavePlayed();
     }
 
-    public static PCond havePlayed(PCLAffinity... types)
+    public static PCond_HavePlayed havePlayed(PCLAffinity... types)
     {
-        return (PCond) new PCond_HavePlayed().setAffinity(types);
+        return (PCond_HavePlayed) new PCond_HavePlayed().edit(f -> f.setAffinity(types));
     }
 
-    public static PCond havePlayed(AbstractCard.CardType... types)
+    public static PCond_HavePlayed havePlayed(AbstractCard.CardType... types)
     {
-        return (PCond) new PCond_HavePlayed().setCardTypes(types);
+        return (PCond_HavePlayed) new PCond_HavePlayed().edit(f -> f.setType(types));
     }
 
-    public static PCond havePlayed(int amount)
+    public static PCond_HavePlayed havePlayed(int amount)
     {
         return new PCond_HavePlayed(amount);
     }
 
-    public static PCond hp(int amount)
+    public static PCond_HP hp(int amount)
     {
         return new PCond_HP(PCLCardTarget.Self, amount);
     }
 
-    public static PCond hp(PCLCardTarget target, int amount)
+    public static PCond_HP hp(PCLCardTarget target, int amount)
     {
         return new PCond_HP(target, amount);
     }
 
-    public static PCond ifElse(PSkill ef1, PSkill ef2, PCond... conds)
+    public static PMultiCond ifElse(PSkill ef1, PSkill ef2, PCond... conds)
     {
-        return (PCond) new PMultiCond().setEffects(conds).setChild(ef1, ef2).setAmount(1);
+        return (PMultiCond) new PMultiCond().setEffects(conds).setChild(ef1, ef2).setAmount(1);
     }
 
-    public static PCond isAttacking(PCLCardTarget target)
+    public static PCond_IsAttacking isAttacking(PCLCardTarget target)
     {
         return new PCond_IsAttacking(target);
     }
 
-    public static PCond limited()
+    public static PCond_Limited limited()
     {
         return new PCond_Limited();
     }
 
-    public static PCond match()
+    public static PCond_Match match()
     {
         return new PCond_Match();
     }
 
-    public static PCond onAllyTrigger()
+    public static PCond_OnAllyTrigger onAllyTrigger()
     {
         return new PCond_OnAllyTrigger();
     }
 
-    public static PCond onCreate()
+    public static PCond_OnCreate onCreate()
     {
         return new PCond_OnCreate();
     }
 
-    public static PCond onDiscard()
+    public static PCond_OnDiscard onDiscard()
     {
         return new PCond_OnDiscard();
     }
 
-    public static PCond onDraw()
+    public static PCond_OnDraw onDraw()
     {
         return new PCond_OnDraw();
     }
 
-    public static PCond onExhaust()
+    public static PCond_OnExhaust onExhaust()
     {
         return new PCond_OnExhaust();
     }
 
-    public static PCond onOtherCardPlayed()
+    public static PCond_OnOtherCardPlayed onOtherCardPlayed()
     {
         return new PCond_OnOtherCardPlayed();
     }
 
-    public static PCond onOtherCardPlayed(AbstractCard.CardType... cardType)
+    public static PCond_OnOtherCardPlayed onOtherCardPlayed(AbstractCard.CardType... cardType)
     {
         return (PCond_OnOtherCardPlayed) new PCond_OnOtherCardPlayed().edit(f -> f.setType(cardType));
     }

@@ -20,16 +20,12 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.OriginRelativeHitbox;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
-import pinacolada.cards.base.PCLAffinity;
-import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.PCLCardGroupHelper;
-import pinacolada.cards.base.PCLCardTarget;
+import pinacolada.cards.base.*;
 import pinacolada.cards.base.fields.PCLCardTag;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.resources.PGR;
 import pinacolada.skills.*;
-import pinacolada.skills.skills.special.moves.PMove_StackCustomPower;
 import pinacolada.stances.PCLStanceHelper;
 import pinacolada.utilities.GameUtilities;
 
@@ -50,7 +46,6 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
     protected EUIDropdown<AbstractCard.CardRarity> rarities;
     protected EUIDropdown<AbstractCard.CardType> types;
     protected EUIDropdown<PCLCardGroupHelper> piles;
-    protected EUIDropdown<Integer> customPowers;
     protected EUISearchableDropdown<PCLPowerHelper> powers;
     protected EUISearchableDropdown<PCLOrbHelper> orbs;
     protected EUISearchableDropdown<PCLStanceHelper> stances;
@@ -181,22 +176,6 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
                          :
                         EUIUtils.filter(CardLibrary.getAllCards(),
                                 c -> !(c instanceof PCLCard) && (c.color == AbstractCard.CardColor.COLORLESS || c.color == AbstractCard.CardColor.CURSE || c.color == editor.builder.cardColor)));
-
-
-        customPowers = new EUIDropdown<Integer>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.35f, MENU_HEIGHT, AUX_OFFSET, hb.y))
-                .setOnChange(types -> {
-                    if (getEffectAt() instanceof PMove_StackCustomPower)
-                    {
-                        ((PMove_StackCustomPower) getEffectAt()).setIndexes(types);
-                        editor.constructEffect();
-                    }
-                })
-                .setLabelFunctionForOption(item -> EUIUtils.format(PGR.core.strings.cardEditor.powerX, item + 1), false)
-                .setIsMultiSelect(true)
-                .setShouldPositionClearAtTop(true)
-                .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cardEditor.powers)
-                .setCanAutosize(true, true)
-                .setItems(EUIUtils.range(0, 1));
 
         rarities = new EUIDropdown<>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.35f, MENU_HEIGHT, AUX_OFFSET + MAIN_OFFSET * 2, 0)
                 , EUIGameUtils::textForRarity)
@@ -342,6 +321,18 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
         dropdown.setSelection(items, false);
     }
 
+    public <T> void registerDropdown(List<T> possibleItems, List<T> selectedItems, FuncT1<String, T> textFunc, String title, boolean smartText)
+    {
+        EUIDropdown<T> dropdown = new EUIDropdown<>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.35f, MENU_HEIGHT, AUX_OFFSET, 0)
+                , textFunc)
+                .setLabelFunctionForOption(textFunc, smartText)
+                .setIsMultiSelect(true)
+                .setShouldPositionClearAtTop(true)
+                .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, title)
+                .setCanAutosize(true, true)
+                .setItems(possibleItems);
+        registerDropdown(dropdown, selectedItems);
+    }
 
     public void registerPile(List<PCLCardGroupHelper> items)
     {
@@ -395,6 +386,11 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
                         EUIUtils.filter(CardLibrary.getAllCards(),
                                 c -> !(c instanceof PCLCard) && (c.color == AbstractCard.CardColor.COLORLESS || c.color == AbstractCard.CardColor.CURSE || c.color == editor.builder.cardColor))
         );
+    }
+
+    public PCLCardBuilder getBuilder()
+    {
+        return editor.builder;
     }
 
     @Override

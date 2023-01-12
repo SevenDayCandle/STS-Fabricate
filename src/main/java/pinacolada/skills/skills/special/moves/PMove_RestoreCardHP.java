@@ -7,18 +7,17 @@ import pinacolada.interfaces.markers.Hidden;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.skills.base.moves.PMove_Modify;
 
-import java.util.ArrayList;
-
-public class PMove_RestoreCardHP extends PMove_Modify implements Hidden
+public class PMove_RestoreCardHP extends PMove_Modify<PField_CardCategory> implements Hidden
 {
-    public static final PSkillData DATA = PMove_Modify.register(PMove_RestoreCardHP.class, PCLEffectType.CardGroup)
+    public static final PSkillData<PField_CardCategory> DATA = PMove_Modify.register(PMove_RestoreCardHP.class, PField_CardCategory.class)
             .pclOnly();
 
     public PMove_RestoreCardHP()
     {
-        this(1, 1, new ArrayList<>());
+        this(1, 1);
     }
 
     public PMove_RestoreCardHP(PSkillSaveData content)
@@ -29,11 +28,6 @@ public class PMove_RestoreCardHP extends PMove_Modify implements Hidden
     public PMove_RestoreCardHP(int amount, int block)
     {
         super(DATA, amount, block);
-    }
-
-    public PMove_RestoreCardHP(int amount, int block, ArrayList<AbstractCard> cards)
-    {
-        super(DATA, amount, block, cards);
     }
 
     @Override
@@ -58,8 +52,8 @@ public class PMove_RestoreCardHP extends PMove_Modify implements Hidden
     public String getSubText()
     {
         return TEXT.actions.healOn(getAmountRawString(),
-                useParent || (cards != null && !cards.isEmpty()) ? getInheritedString() :
-                        groupTypes != null && !groupTypes.isEmpty() ? getFullCardString() : TEXT.subjects.thisX);
+                useParent ? getInheritedString() :
+                        fields.hasGroups() ? fields.getFullCardString() : TEXT.subjects.thisX);
     }
 
     @Override

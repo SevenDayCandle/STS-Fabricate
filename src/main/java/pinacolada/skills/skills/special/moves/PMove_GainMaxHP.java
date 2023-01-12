@@ -6,11 +6,12 @@ import pinacolada.interfaces.markers.Hidden;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Empty;
 import pinacolada.skills.skills.base.moves.PMove_Gain;
 
 public class PMove_GainMaxHP extends PMove_Gain implements Hidden
 {
-    public static final PSkillData DATA = register(PMove_GainMaxHP.class, PField_Empty.class);
+    public static final PSkillData<PField_Empty> DATA = register(PMove_GainMaxHP.class, PField_Empty.class);
 
     public PMove_GainMaxHP()
     {

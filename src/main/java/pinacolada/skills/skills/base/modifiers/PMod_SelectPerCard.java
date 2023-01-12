@@ -11,15 +11,14 @@ import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_CardCategory;
 
 import java.util.List;
-
-
 
 public class PMod_SelectPerCard extends PMod_Do
 {
 
-    public static final PSkillData DATA = register(PMod_SelectPerCard.class, CardGroupFull)
+    public static final PSkillData<PField_CardCategory> DATA = register(PMod_SelectPerCard.class, PField_CardCategory.class)
             .selfTarget();
 
     public PMod_SelectPerCard(PSkillSaveData content)
@@ -63,6 +62,6 @@ public class PMod_SelectPerCard extends PMod_Do
     @Override
     public String getParentString()
     {
-        return EUIRM.strings.numNounPlace(amount <= 0 ? TEXT.subjects.all : getAmountRawString(), getFullCardString(), TEXT.subjects.in(getGroupString()));
+        return EUIRM.strings.numNounPlace(amount <= 0 ? TEXT.subjects.all : getAmountRawString(), fields.getFullCardString(), TEXT.subjects.in(fields.getGroupString()));
     }
 }

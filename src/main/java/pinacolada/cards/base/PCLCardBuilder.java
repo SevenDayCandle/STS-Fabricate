@@ -26,7 +26,7 @@ public class PCLCardBuilder extends PCLCardData
     private static final TypeToken<HashMap<Settings.GameLanguage, CardStrings>> TStrings = new TypeToken<HashMap<Settings.GameLanguage, CardStrings>>() {};
     public final HashMap<Settings.GameLanguage, CardStrings> languageMap = new HashMap<>();
     public final ArrayList<PSkill> moves = new ArrayList<>();
-    public final ArrayList<PTrigger> pPowers = new ArrayList<>();
+    public final ArrayList<PTrigger> powers = new ArrayList<>();
     public AbstractGameAction.AttackEffect attackEffect = AbstractGameAction.AttackEffect.NONE;
     public ColoredTexture portraitForeground;
     public ColoredTexture portraitImage;
@@ -105,7 +105,7 @@ public class PCLCardBuilder extends PCLCardData
         setImage(original.portraitImage, original.portraitForeground);
         setLanguageMap(original.languageMap);
         setPSkill(original.moves, true, true);
-        setPPower(original.pPowers, true, true);
+        setPPower(original.powers, true, true);
     }
 
     public PCLCardBuilder(PCLCustomCardSlot data)
@@ -192,7 +192,7 @@ public class PCLCardBuilder extends PCLCardData
 
     public PCLCardBuilder removePowerEffect(PTrigger effect)
     {
-        pPowers.remove(effect);
+        powers.remove(effect);
         return this;
     }
 
@@ -313,7 +313,7 @@ public class PCLCardBuilder extends PCLCardData
     {
         if (clear)
         {
-            pPowers.clear();
+            powers.clear();
         }
         for (PTrigger be : currentEffects)
         {
@@ -338,7 +338,7 @@ public class PCLCardBuilder extends PCLCardData
         {
             effect = (PTrigger) effect.makeCopy();
         }
-        pPowers.add(effect);
+        powers.add(effect);
 
         return this;
     }

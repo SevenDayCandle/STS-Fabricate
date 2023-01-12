@@ -4,7 +4,7 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.interfaces.delegates.FuncT4;
 import extendedui.ui.tooltips.EUITooltip;
-import pinacolada.actions.pileSelection.Scry;
+import pinacolada.actions.pileSelection.ScryCards;
 import pinacolada.actions.pileSelection.SelectFromPile;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.resources.PGR;
@@ -42,6 +42,6 @@ public class PMove_Scry extends PMove_Select
     @Override
     public FuncT4<SelectFromPile, String, AbstractCreature, Integer, CardGroup[]> getAction()
     {
-        return (s, c, i, g) -> new Scry(i);
+        return (s, c, i, g) -> new ScryCards(s, i);
     }
 }

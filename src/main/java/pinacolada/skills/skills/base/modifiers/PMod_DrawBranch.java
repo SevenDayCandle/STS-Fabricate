@@ -1,11 +1,9 @@
 package pinacolada.skills.skills.base.modifiers;
 
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.interfaces.delegates.FuncT4;
 import extendedui.ui.tooltips.EUITooltip;
-import pinacolada.actions.PCLActionWithCallback;
 import pinacolada.actions.pileSelection.DrawCards;
 import pinacolada.actions.pileSelection.FetchFromPile;
 import pinacolada.actions.pileSelection.SelectFromPile;
@@ -16,8 +14,6 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
-
-import java.util.ArrayList;
 
 public class PMod_DrawBranch extends PMod_DoBranch
 {
@@ -41,9 +37,16 @@ public class PMod_DrawBranch extends PMod_DoBranch
     }
 
     @Override
-    protected PCLActionWithCallback<ArrayList<AbstractCard>> createPileAction(PCLUseInfo info)
+    public void use(PCLUseInfo info)
     {
-        return new DrawCards(amount);
+        getActions().add(new DrawCards(amount))
+                .addCallback(cards -> {
+                    if (this.childEffect != null)
+                    {
+                        info.setData(cards);
+                        branch(info, cards);
+                    }
+                });
     }
 
     @Override

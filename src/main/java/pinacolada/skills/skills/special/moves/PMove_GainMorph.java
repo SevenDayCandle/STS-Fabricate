@@ -8,12 +8,13 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Empty;
 import pinacolada.utilities.GameUtilities;
 
 // TODO Different text for different classes
-public class PMove_GainMorph extends PMove implements Hidden
+public class PMove_GainMorph extends PMove<PField_Empty> implements Hidden
 {
-    public static final PSkillData DATA = register(PMove_GainMorph.class, PField_Empty.class)
+    public static final PSkillData<PField_Empty> DATA = register(PMove_GainMorph.class, PField_Empty.class)
             .pclOnly()
             .selfTarget();
 

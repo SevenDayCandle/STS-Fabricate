@@ -7,10 +7,11 @@ import pinacolada.interfaces.markers.Hidden;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_CardCategory;
 
-public class PMove_PermanentUpgrade extends PMove implements Hidden
+public class PMove_PermanentUpgrade extends PMove<PField_CardCategory> implements Hidden
 {
-    public static final PSkillData DATA = register(PMove_PermanentUpgrade.class, PCLEffectType.CardGroup)
+    public static final PSkillData<PField_CardCategory> DATA = register(PMove_PermanentUpgrade.class, PField_CardCategory.class)
             .selfTarget();
 
     public PMove_PermanentUpgrade()

@@ -11,12 +11,11 @@ import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.PTrigger;
+import pinacolada.skills.fields.PField_Orb;
 
-import java.util.List;
-
-public class PCond_IfIsOrb extends PCond implements PSkillAttribute
+public class PCond_IfIsOrb extends PCond<PField_Orb> implements PSkillAttribute
 {
-    public static final PSkillData DATA = register(PCond_IfIsOrb.class, PCLEffectType.Orb)
+    public static final PSkillData<PField_Orb> DATA = register(PCond_IfIsOrb.class, PField_Orb.class)
             .selfTarget();
 
     public PCond_IfIsOrb(PSkillSaveData content)
@@ -26,18 +25,15 @@ public class PCond_IfIsOrb extends PCond implements PSkillAttribute
 
     public PCond_IfIsOrb()
     {
-        super(DATA, PCLCardTarget.None, 0, new PCLOrbHelper[]{});
+        super(DATA, PCLCardTarget.None, 0);
     }
 
-    public PCond_IfIsOrb(PCLOrbHelper... affinities)
+    public PCond_IfIsOrb(PCLOrbHelper... orbs)
     {
-        super(DATA, PCLCardTarget.None, 0, affinities);
+        super(DATA, PCLCardTarget.None, 0);
+        fields.setOrb(orbs);
     }
 
-    public PCond_IfIsOrb(List<PCLOrbHelper> affinities)
-    {
-        super(DATA, PCLCardTarget.None, 0, affinities.toArray(new PCLOrbHelper[]{}));
-    }
 
     @Override
     public String getSampleText()
@@ -48,8 +44,8 @@ public class PCond_IfIsOrb extends PCond implements PSkillAttribute
     @Override
     public String getSubText()
     {
-        return hasParentType(PTrigger.class) ? getOrbAndString(0) :
-                TEXT.conditions.ifX(getOrbAndString(1));
+        return hasParentType(PTrigger.class) ? fields.getOrbAndString(0) :
+                TEXT.conditions.ifX(fields.getOrbAndString(1));
     }
 
     @Override
@@ -64,7 +60,7 @@ public class PCond_IfIsOrb extends PCond implements PSkillAttribute
         if (info != null)
         {
             AbstractOrb orb = EUIUtils.safeCast(info.getData(null), AbstractOrb.class);
-            return orb != null && EUIUtils.any(orbs, o -> o.ID.equals(orb.ID));
+            return orb != null && EUIUtils.any(fields.orbs, o -> o.ID.equals(orb.ID));
         }
         return false;
     }

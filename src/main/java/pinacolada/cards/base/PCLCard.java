@@ -207,7 +207,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
 
     public static void applySimpleMode(PCLCard card, boolean changeStats)
     {
-        if ((card.baseBlock > 0 || card.baseDamage > 0 || card.baseMagicNumber > 0 || card.baseHeal > 0) && card.getEffects().size() > 1)
+        if ((card.type == PCLEnum.CardType.SUMMON) && card.getEffects().size() > 1)
         {
             int bonus = 0;
             for (int i = card.getEffects().size() - 1; i >= 1; i--)
@@ -221,6 +221,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
             bonus = Math.max(1, bonus);
             if (changeStats)
             {
+                GameUtilities.modifySecondaryValue(card, Math.max(1, card.baseHeal + bonus), false);
                 if (card.baseDamage > 0)
                 {
                     GameUtilities.modifyDamage(card, Math.max(1, card.baseDamage + (bonus / Math.max(1, card.baseHitCount))), false);
@@ -228,14 +229,6 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
                 else if (card.baseBlock > 0)
                 {
                     GameUtilities.modifyBlock(card, Math.max(1, card.baseBlock + (bonus / Math.max(1, card.baseRightCount))), false);
-                }
-                else if (card.magicNumber > 0)
-                {
-                    GameUtilities.modifyMagicNumber(card, Math.max(1, card.baseMagicNumber + bonus), false);
-                }
-                else
-                {
-                    GameUtilities.modifySecondaryValue(card, Math.max(1, card.baseHeal + bonus), false);
                 }
             }
 

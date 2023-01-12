@@ -6,14 +6,14 @@ import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
-import pinacolada.skills.fields.PField_Random;
+import pinacolada.skills.fields.PField_CardCategory;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-public class PCustomCond extends PCond<PField_Random>
+public class PCustomCond extends PCond<PField_CardCategory>
 {
-    public static final PSkillData<PField_Random> DATA = register(PCustomCond.class, PField_Random.class)
+    public static final PSkillData<PField_CardCategory> DATA = register(PCustomCond.class, PField_CardCategory.class)
             .setAmounts(-DEFAULT_MAX, DEFAULT_MAX)
             .setExtra(-DEFAULT_MAX, DEFAULT_MAX);
     protected final PCLCardData cardData;

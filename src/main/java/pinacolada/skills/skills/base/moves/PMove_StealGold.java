@@ -10,11 +10,12 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Empty;
 import pinacolada.utilities.GameUtilities;
 
-public class PMove_StealGold extends PMove
+public class PMove_StealGold extends PMove<PField_Empty>
 {
-    public static final PSkillData DATA = register(PMove_StealGold.class, PField_Empty.class);
+    public static final PSkillData<PField_Empty> DATA = register(PMove_StealGold.class, PField_Empty.class);
 
     public PMove_StealGold()
     {

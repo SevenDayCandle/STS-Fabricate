@@ -9,10 +9,11 @@ import pinacolada.interfaces.markers.Hidden;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Empty;
 
-public class PMove_Stun extends PMove implements Hidden
+public class PMove_Stun extends PMove<PField_Empty> implements Hidden
 {
-    public static final PSkillData DATA = register(PMove_Stun.class, PField_Empty.class);
+    public static final PSkillData<PField_Empty> DATA = register(PMove_Stun.class, PField_Empty.class);
 
     public PMove_Stun()
     {

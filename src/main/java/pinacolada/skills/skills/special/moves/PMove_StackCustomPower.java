@@ -12,16 +12,15 @@ import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.PTrigger;
+import pinacolada.skills.fields.PField_CustomPower;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class PMove_StackCustomPower extends PMove implements SummonOnlyMove
+public class PMove_StackCustomPower extends PMove<PField_CustomPower> implements SummonOnlyMove
 {
 
-    public static final PSkillData DATA = register(PMove_StackCustomPower.class, PCLEffectType.CustomPower, -1, DEFAULT_MAX);
-    protected ArrayList<Integer> indexes = new ArrayList<>();
+    public static final PSkillData<PField_CustomPower> DATA = register(PMove_StackCustomPower.class, PField_CustomPower.class, -1, DEFAULT_MAX);
 
     public PMove_StackCustomPower()
     {
@@ -31,18 +30,12 @@ public class PMove_StackCustomPower extends PMove implements SummonOnlyMove
     public PMove_StackCustomPower(PSkillSaveData content)
     {
         super(content);
-        this.indexes = EUIUtils.mapAsNonnull(split(content.effectData), Integer::parseInt);
     }
 
     public PMove_StackCustomPower(PCLCardTarget target, int amount, Integer... indexes)
     {
         super(DATA, target, amount);
-        this.indexes.addAll(Arrays.asList(indexes));
-    }
-
-    public void addAdditionalData(PSkillSaveData data)
-    {
-        data.effectData = joinData(indexes, String::valueOf);
+        fields.setIndexes(Arrays.asList(indexes));
     }
 
     @Override
@@ -65,7 +58,7 @@ public class PMove_StackCustomPower extends PMove implements SummonOnlyMove
             return;
         }
 
-        List<PTrigger> triggers = EUIUtils.mapAsNonnull(indexes, i -> ((EditorCard) sourceCard).getPowerEffect(i));
+        List<PTrigger> triggers = EUIUtils.mapAsNonnull(fields.indexes, i -> ((EditorCard) sourceCard).getPowerEffect(i));
         for (AbstractCreature c : target.getTargets(info.source, info.target))
         {
             getActions().applyPower(new PSkillPower(c, amount, triggers)).allowDuplicates(true);
@@ -76,7 +69,7 @@ public class PMove_StackCustomPower extends PMove implements SummonOnlyMove
     @Override
     public String getSubText()
     {
-        String base = joinEffectTexts(EUIUtils.mapAsNonnull(indexes, i -> {
+        String base = joinEffectTexts(EUIUtils.mapAsNonnull(fields.indexes, i -> {
             if (sourceCard instanceof EditorCard && ((EditorCard) sourceCard).getPowerEffects().size() > i)
             {
                 return ((EditorCard) sourceCard).getPowerEffects().get(i);
@@ -84,17 +77,5 @@ public class PMove_StackCustomPower extends PMove implements SummonOnlyMove
             return null;
         }), amount > 0 ? " " : EUIUtils.DOUBLE_SPLIT_LINE, true);
         return amount > 0 ? (TEXT.conditions.forTurns(amount) + ", " + base) : base;
-    }
-
-    public List<Integer> getIndexes()
-    {
-        return this.indexes;
-    }
-
-    public PMove_StackCustomPower setIndexes(List<Integer> indexes)
-    {
-        this.indexes.clear();
-        this.indexes.addAll(indexes);
-        return this;
     }
 }

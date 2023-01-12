@@ -7,10 +7,11 @@ import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Empty;
 
-public class PCond_TakeDamage extends PCond
+public class PCond_TakeDamage extends PCond<PField_Empty>
 {
-    public static final PSkillData DATA = register(PCond_TakeDamage.class, PField_Empty.class)
+    public static final PSkillData<PField_Empty> DATA = register(PCond_TakeDamage.class, PField_Empty.class)
             .selfTarget();
 
     public PCond_TakeDamage(PSkillSaveData content)

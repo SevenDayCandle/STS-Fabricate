@@ -175,75 +175,85 @@ public abstract class PMove<T extends PField> extends PSkill<T>
                 .setSource(card, valueSource);
     }
 
-    public static PMove dealDamageToRandom(int amount)
+    public static PMove_DealDamage dealDamageToRandom(int amount)
     {
         return dealDamageToRandom(amount, AbstractGameAction.AttackEffect.NONE);
     }
 
-    public static PMove dealDamageToRandom(int amount, AbstractGameAction.AttackEffect attackEffect)
+    public static PMove_DealDamage dealDamageToRandom(int amount, AbstractGameAction.AttackEffect attackEffect)
     {
         return new PMove_DealDamage(amount, attackEffect, PCLCardTarget.RandomEnemy);
     }
 
-    public static PMove discard(int amount)
+    public static PMove_Discard discard(int amount)
     {
         return new PMove_Discard(amount, PCLCardGroupHelper.Hand);
     }
 
-    public static PMove discard(int amount, PCLCardGroupHelper... groups)
+    public static PMove_Discard discard(int amount, PCLCardGroupHelper... groups)
     {
         return new PMove_Discard(amount, groups);
     }
 
-    public static PMove draw(int amount)
+    public static PMove_Discard discardRandom(int amount)
+    {
+        return (PMove_Discard) new PMove_Discard(amount, PCLCardGroupHelper.Hand).edit(f -> f.setRandom(true));
+    }
+
+    public static PMove_Discard discardRandom(int amount, PCLCardGroupHelper... groups)
+    {
+        return (PMove_Discard) new PMove_Discard(amount, groups).edit(f -> f.setRandom(true));
+    }
+
+    public static PMove_Draw draw(int amount)
     {
         return new PMove_Draw(amount);
     }
 
-    public static PMove draw(PCLCard card, PSkill.PCLCardValueSource valueSource)
+    public static PMove_Draw draw(PCLCard card, PSkill.PCLCardValueSource valueSource)
     {
-        return new PMove_Draw(0)
+        return (PMove_Draw) new PMove_Draw(0)
                 .setSource(card, valueSource);
     }
 
-    public static PMove enterStance(PCLStanceHelper... helper)
+    public static PMove_EnterStance enterStance(PCLStanceHelper... helper)
     {
         return new PMove_EnterStance(helper);
     }
 
-    public static PMove evokeOrb(int amount, PCLOrbHelper... orb)
+    public static PMove_EvokeOrb evokeOrb(int amount, PCLOrbHelper... orb)
     {
         return new PMove_EvokeOrb(amount, 1, orb);
     }
 
-    public static PMove evokeOrb(int amount, int extra, PCLOrbHelper... orb)
+    public static PMove_EvokeOrb evokeOrb(int amount, int extra, PCLOrbHelper... orb)
     {
         return new PMove_EvokeOrb(amount, extra, orb);
     }
 
-    public static PMove exhaust(int amount)
+    public static PMove_Exhaust exhaust(int amount)
     {
         return new PMove_Exhaust(amount, PCLCardGroupHelper.Hand);
     }
 
-    public static PMove exhaust(int amount, PCLCardGroupHelper... groups)
+    public static PMove_Exhaust exhaust(int amount, PCLCardGroupHelper... groups)
     {
         return new PMove_Exhaust(amount, groups);
     }
 
-    public static PMove fetch(int amount, PCLCardGroupHelper... groups)
+    public static PMove_Fetch fetch(int amount, PCLCardGroupHelper... groups)
     {
         return new PMove_Fetch(amount, groups);
     }
 
-    public static PMove gain(int amount, PCLPowerHelper... powers)
+    public static PMove_StackPower gain(int amount, PCLPowerHelper... powers)
     {
         return new PMove_StackPower(PCLCardTarget.Self, amount, powers);
     }
 
-    public static PMove gain(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers)
+    public static PMove_StackPower gain(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers)
     {
-        return new PMove_StackPower(PCLCardTarget.Self, 0, powers)
+        return (PMove_StackPower) new PMove_StackPower(PCLCardTarget.Self, 0, powers)
                 .setSource(card, valueSource);
     }
 
@@ -386,14 +396,14 @@ public abstract class PMove<T extends PField> extends PSkill<T>
         return new PMove_ModifyDamage(amount, damage, groups);
     }
 
-    public static PMove modifyTag(PCLCardTag... tag)
+    public static PMove_ModifyTag modifyTag(PCLCardTag... tag)
     {
-        return new PMove_ModifyTag(1, tag);
+        return new PMove_ModifyTag(1, 1, tag);
     }
 
-    public static PMove modifyTag(int amount, PCLCardTag... tag)
+    public static PMove_ModifyTag modifyTag(int amount, int extra, PCLCardTag... tag)
     {
-        return new PMove_ModifyTag(amount, tag);
+        return new PMove_ModifyTag(amount, extra, tag);
     }
 
     public static PMove obtain(String... cardData)
@@ -416,14 +426,14 @@ public abstract class PMove<T extends PField> extends PSkill<T>
         return new PMove_Obtain(copies, EUIUtils.map(cardData, cd -> cd.ID));
     }
 
-    public static PMove obtainDiscardPile(int copies, PCLCardData... cardData)
+    public static PMove_Obtain obtainDiscardPile(int copies, PCLCardData... cardData)
     {
-        return new PMove_Obtain(copies, EUIUtils.map(cardData, cd -> cd.ID)).setCardGroup(PCLCardGroupHelper.DiscardPile);
+        return (PMove_Obtain) new PMove_Obtain(copies, EUIUtils.map(cardData, cd -> cd.ID)).edit(f -> f.setCardGroup(PCLCardGroupHelper.DiscardPile));
     }
 
-    public static PMove obtainDrawPile(int copies, PCLCardData... cardData)
+    public static PMove_Obtain obtainDrawPile(int copies, PCLCardData... cardData)
     {
-        return new PMove_Obtain(copies, EUIUtils.map(cardData, cd -> cd.ID)).setCardGroup(PCLCardGroupHelper.DrawPile);
+        return (PMove_Obtain) new PMove_Obtain(copies, EUIUtils.map(cardData, cd -> cd.ID)).edit(f -> f.setCardGroup(PCLCardGroupHelper.DrawPile));
     }
 
     public static PMove obtainRandom(int copies, int choices, PCLCardGroupHelper... cardgroup)
@@ -439,11 +449,6 @@ public abstract class PMove<T extends PField> extends PSkill<T>
     public static PMove playCopy(int copies, PCLCardTarget target, String... cardData)
     {
         return new PMove_PlayCopy(copies, target, cardData);
-    }
-
-    public static PMove playTop(int copies, PCLCardTarget target, PCLCardGroupHelper... g)
-    {
-        return new PMove_PlayTop(copies, target, g);
     }
 
     public static PMove purge(int amount)

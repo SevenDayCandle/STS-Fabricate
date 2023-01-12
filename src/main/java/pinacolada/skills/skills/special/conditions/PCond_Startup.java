@@ -10,12 +10,13 @@ import pinacolada.skills.PCond;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Empty;
 
 // Only for relics
-public class PCond_Startup extends PCond implements Hidden
+public class PCond_Startup extends PCond<PField_Empty> implements Hidden
 {
 
-    public static final PSkillData DATA = register(PCond_Startup.class, PField_Empty.class, 1, 1)
+    public static final PSkillData<PField_Empty> DATA = register(PCond_Startup.class, PField_Empty.class, 1, 1)
             .selfTarget();
 
     public PCond_Startup()

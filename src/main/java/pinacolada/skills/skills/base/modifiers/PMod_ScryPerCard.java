@@ -1,29 +1,21 @@
 package pinacolada.skills.skills.base.modifiers;
 
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.interfaces.delegates.FuncT4;
 import extendedui.ui.tooltips.EUITooltip;
-import pinacolada.actions.PCLActionWithCallback;
-import pinacolada.actions.pileSelection.DiscardFromPile;
-import pinacolada.actions.pileSelection.Scry;
+import pinacolada.actions.pileSelection.ScryCards;
 import pinacolada.actions.pileSelection.SelectFromPile;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.PCLCardTarget;
-import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-
-import java.util.ArrayList;
-
-
+import pinacolada.skills.fields.PField_CardCategory;
 
 public class PMod_ScryPerCard extends PMod_Do
 {
-
-    public static final PSkillData DATA = register(PMod_ScryPerCard.class, CardGroupFull)
+    public static final PSkillData<PField_CardCategory> DATA = register(PMod_ScryPerCard.class, PField_CardCategory.class)
             .selfTarget()
             .setGroups(PCLCardGroupHelper.DrawPile);
 
@@ -43,12 +35,6 @@ public class PMod_ScryPerCard extends PMod_Do
     }
 
     @Override
-    protected PCLActionWithCallback<ArrayList<AbstractCard>> createPileAction(PCLUseInfo info)
-    {
-        return new Scry(amount);
-    }
-
-    @Override
     public EUITooltip getActionTooltip()
     {
         return PGR.core.tooltips.scry;
@@ -57,6 +43,6 @@ public class PMod_ScryPerCard extends PMod_Do
     @Override
     public FuncT4<SelectFromPile, String, AbstractCreature, Integer, CardGroup[]> getAction()
     {
-        return DiscardFromPile::new;
+        return (s, c, i, g) -> new ScryCards(s, i);
     }
 }

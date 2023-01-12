@@ -9,6 +9,7 @@ import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.PTrigger;
+import pinacolada.skills.fields.PField;
 import pinacolada.skills.fields.PField_CardCategory;
 
 public class PCond_IfHasAffinity extends PCond<PField_CardCategory> implements PSkillAttribute
@@ -41,8 +42,8 @@ public class PCond_IfHasAffinity extends PCond<PField_CardCategory> implements P
     @Override
     public String getSubText()
     {
-        return hasParentType(PTrigger.class) ? getFullCardAndString(EFFECT_CHAR) :
-                TEXT.conditions.ifTargetHas(TEXT.subjects.thisObj, getAffinityOrString());
+        return hasParentType(PTrigger.class) ? fields.getFullCardAndString() :
+                TEXT.conditions.ifTargetHas(TEXT.subjects.thisObj, PField.getAffinityOrString(fields.affinities));
     }
 
     @Override
@@ -56,7 +57,7 @@ public class PCond_IfHasAffinity extends PCond<PField_CardCategory> implements P
     {
         if (info != null)
         {
-            return getFullCardFilter().invoke(info.card);
+            return fields.getFullCardFilter().invoke(info.card);
         }
         return false;
     }

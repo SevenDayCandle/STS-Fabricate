@@ -8,12 +8,12 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.PTrait;
 import pinacolada.skills.PTrigger;
+import pinacolada.skills.fields.PField_CardTarget;
 
 // Only used for augments
-public class PTrait_CardTarget extends PTrait implements Hidden
+public class PTrait_CardTarget extends PTrait<PField_CardTarget> implements Hidden
 {
-
-    public static final PSkillData DATA = register(PTrait_CardTarget.class, PField_Empty.class);
+    public static final PSkillData<PField_CardTarget> DATA = register(PTrait_CardTarget.class, PField_CardTarget.class);
 
     protected PCLCardTarget newTarget = PCLCardTarget.Single;
 
@@ -37,7 +37,7 @@ public class PTrait_CardTarget extends PTrait implements Hidden
     public String getSubText()
     {
         return hasParentType(PTrigger.class) ? getSubDescText() :
-                alt ? TEXT.actions.remove(getSubDescText()) : TEXT.actions.has(getSubDescText());
+                fields.random ? TEXT.actions.remove(getSubDescText()) : TEXT.actions.has(getSubDescText());
     }
 
     @Override

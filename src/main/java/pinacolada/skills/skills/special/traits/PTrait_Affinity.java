@@ -8,13 +8,14 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.PTrait;
+import pinacolada.skills.fields.PField_Affinity;
 import pinacolada.utilities.GameUtilities;
 
 // Only used for augments
-public class PTrait_Affinity extends PTrait implements Hidden
+public class PTrait_Affinity extends PTrait<PField_Affinity> implements Hidden
 {
 
-    public static final PSkillData DATA = register(PTrait_Affinity.class, PCLEffectType.Affinity);
+    public static final PSkillData<PField_Affinity> DATA = register(PTrait_Affinity.class, PField_Affinity.class);
 
     public PTrait_Affinity()
     {
@@ -33,13 +34,14 @@ public class PTrait_Affinity extends PTrait implements Hidden
 
     public PTrait_Affinity(int amount, PCLAffinity... affinities)
     {
-        super(DATA, amount, affinities);
+        super(DATA, amount);
+        fields.setAffinity(affinities);
     }
 
     @Override
     public void applyToCard(AbstractCard c, boolean conditionMet)
     {
-        for (PCLAffinity af : affinities)
+        for (PCLAffinity af : fields.affinities)
         {
             GameUtilities.modifyAffinityLevel(c, af, conditionMet ? amount : -amount, true);
         }
@@ -52,7 +54,7 @@ public class PTrait_Affinity extends PTrait implements Hidden
     @Override
     public String getSubDescText()
     {
-        return getAffinityAndString();
+        return fields.getAffinityAndString();
     }
 
     @Override

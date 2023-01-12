@@ -7,18 +7,17 @@ import pinacolada.interfaces.markers.Hidden;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.skills.base.moves.PMove_Modify;
 
-import java.util.ArrayList;
-
-public class PMove_ModifyPriority extends PMove_Modify implements Hidden
+public class PMove_ModifyPriority extends PMove_Modify<PField_CardCategory> implements Hidden
 {
-    public static final PSkillData DATA = PMove_Modify.register(PMove_ModifyPriority.class, PCLEffectType.CardGroup)
+    public static final PSkillData<PField_CardCategory> DATA = PMove_Modify.register(PMove_ModifyPriority.class, PField_CardCategory.class)
             .pclOnly();
 
     public PMove_ModifyPriority()
     {
-        this(1, 1, new ArrayList<>());
+        this(1, 1);
     }
 
     public PMove_ModifyPriority(PSkillSaveData content)
@@ -26,14 +25,9 @@ public class PMove_ModifyPriority extends PMove_Modify implements Hidden
         super(content);
     }
 
-    public PMove_ModifyPriority(int amount, int block)
+    public PMove_ModifyPriority(int amount, int priority)
     {
-        super(DATA, amount, block);
-    }
-
-    public PMove_ModifyPriority(int amount, int block, ArrayList<AbstractCard> cards)
-    {
-        super(DATA, amount, block, cards);
+        super(DATA, amount, priority);
     }
 
     @Override

@@ -19,11 +19,10 @@ import pinacolada.skills.skills.special.moves.PMove_StackCustomPower;
 import pinacolada.ui.common.PCLValueEditor;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
 {
-
+    protected PTrigger trigger;
     protected PCLValueEditor usesPerTurn;
     protected ArrayList<EUIButton> quickAddButtons = new ArrayList<>();
 
@@ -33,13 +32,13 @@ public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
         super(screen, effect, hb, index, title, onUpdate);
         delayEditor.setActive(false);
         primaryConditions
-                .setItems(EUIUtils.map(PTrigger.getEligibleTriggers(builder.cardColor, PTrigger.TRIGGER_PRIORITY), bc -> currentEffects[0] != null && bc.effectID.equals(currentEffects[0].effectID) ? currentEffects[0] : bc))
+                .setItems(EUIUtils.map(PTrigger.getEligibleEffects(builder.cardColor, PTrigger.class), bc -> trigger != null && bc.effectID.equals(trigger.effectID) ? trigger : bc))
                 .autosize();
         usesPerTurn = new PCLValueEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 4, MENU_HEIGHT, MENU_WIDTH * 3.2f, OFFSET_EFFECT * 2f)
                 , PGR.core.strings.combat.uses, (val) -> {
-            if (currentEffects[0] instanceof PTrigger)
+            if (trigger != null)
             {
-                currentEffects[0].setAmount(val);
+                trigger.setAmount(val);
                 constructEffect();
             }
         })
@@ -57,12 +56,12 @@ public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
                     .setText(EUIUtils.format(PGR.core.strings.cardEditor.addTo, EUIUtils.format(PGR.core.strings.cardEditor.effectX, i + 1)))
                     .setOnClick(() -> {
                         PCLCustomCardEffectPage effectPage = screen.effectPages.get(finalI);
-                        PSkill powerApplyEffect = null;
+                        PMove_StackCustomPower powerApplyEffect = null;
                         PCLCustomCardEffectEditor current = null;
                         for (PCLCustomCardEffectEditor editor : effectPage.effectEditors)
                         {
                             current = editor;
-                            powerApplyEffect = EUIUtils.find(current.effects.getCurrentItems(), e -> e instanceof PMove_StackCustomPower);
+                            powerApplyEffect = (PMove_StackCustomPower) EUIUtils.find(current.effects.getCurrentItems(), e -> e instanceof PMove_StackCustomPower);
                             if (current.effects.getCurrentItems().isEmpty() || powerApplyEffect != null)
                             {
                                 break;
@@ -73,17 +72,12 @@ public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
                         {
                             if (powerApplyEffect == null)
                             {
-                                powerApplyEffect = EUIUtils.find(current.effects.getAllItems(), e -> e instanceof PMove_StackCustomPower);
+                                powerApplyEffect = (PMove_StackCustomPower) EUIUtils.find(current.effects.getAllItems(), e -> e instanceof PMove_StackCustomPower);
                             }
                             if (powerApplyEffect != null)
                             {
-                                List<Integer> currentPowers = current.customPowers.getCurrentItems();
-                                if (!currentPowers.contains(screen.powerPages.indexOf(this)))
-                                {
-                                    currentPowers.add(screen.powerPages.indexOf(this));
-                                }
+                                powerApplyEffect.fields.setIndexes(screen.powerPages.indexOf(this));
                                 current.effects.setSelection(powerApplyEffect, true);
-                                current.customPowers.setSelection(screen.powerPages.indexOf(this), true);
                             }
                         }
                     }));

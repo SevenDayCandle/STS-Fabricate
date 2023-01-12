@@ -14,7 +14,7 @@ import pinacolada.skills.fields.PField_CardCategory;
 
 public class PMove_Retain extends PMove_Select
 {
-    public static final PSkillData DATA = register(PMove_Retain.class, PField_CardCategory.class).selfTarget();
+    public static final PSkillData<PField_CardCategory> DATA = register(PMove_Retain.class, PField_CardCategory.class).selfTarget();
 
     public PMove_Retain()
     {
@@ -47,7 +47,7 @@ public class PMove_Retain extends PMove_Select
     public String getSubText()
     {
         return useParent ? TEXT.actions.retain(getInheritedString()) :
-                !groupTypes.isEmpty() ? TEXT.actions.retain(amount <= 0 ? TEXT.subjects.all : getAmountRawString(), !cardIDs.isEmpty() ? getCardIDOrString() : getFullCardString(getRawString(EFFECT_CHAR)))
+                fields.hasGroups() ? TEXT.actions.retain(amount <= 0 ? TEXT.subjects.all : getAmountRawString(), fields.getFullCardString())
                 : TEXT.actions.retain(TEXT.subjects.thisObj);
     }
 }

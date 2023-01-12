@@ -75,7 +75,7 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
         {
             currentEffects.add(null);
         }
-        currentPowers.addAll(getBuilder().pPowers);
+        currentPowers.addAll(getBuilder().powers);
         while (currentPowers.size() < EFFECT_COUNT)
         {
             currentPowers.add(null);

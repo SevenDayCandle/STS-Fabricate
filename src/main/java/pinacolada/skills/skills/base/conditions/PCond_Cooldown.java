@@ -11,10 +11,11 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Empty;
 
-public class PCond_Cooldown extends PCond implements CooldownProvider
+public class PCond_Cooldown extends PCond<PField_Empty> implements CooldownProvider
 {
-    public static final PSkillData DATA = register(PCond_Cooldown.class, PField_Empty.class)
+    public static final PSkillData<PField_Empty> DATA = register(PCond_Cooldown.class, PField_Empty.class)
             .selfTarget();
 
     public PCond_Cooldown(PSkillSaveData content)

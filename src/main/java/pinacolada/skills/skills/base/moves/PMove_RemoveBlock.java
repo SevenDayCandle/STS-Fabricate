@@ -9,9 +9,9 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
 
-public class PMove_RemoveBlock extends PMove
+public class PMove_RemoveBlock extends PMove<PField_Empty>
 {
-    public static final PSkillData DATA = register(PMove_RemoveBlock.class, PField_Empty.class);
+    public static final PSkillData<PField_Empty> DATA = register(PMove_RemoveBlock.class, PField_Empty.class);
 
     public PMove_RemoveBlock(PSkillSaveData content)
     {

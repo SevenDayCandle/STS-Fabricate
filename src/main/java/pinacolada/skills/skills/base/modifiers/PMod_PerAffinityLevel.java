@@ -15,7 +15,6 @@ import pinacolada.utilities.GameUtilities;
 
 public class PMod_PerAffinityLevel extends PMod<PField_Affinity>
 {
-
     public static final PSkillData<PField_Affinity> DATA = register(PMod_PerAffinityLevel.class, PField_Affinity.class)
             .pclOnly()
             .selfTarget();
@@ -51,7 +50,7 @@ public class PMod_PerAffinityLevel extends PMod<PField_Affinity>
     @Override
     public String getSubText()
     {
-        return this.amount <= 1 ? EUIRM.strings.adjNoun(alt ? getAffinityLevelOrString() : getAffinityLevelAndString(), PGR.core.tooltips.level.title) :
-                EUIRM.strings.numAdjNoun(getAmountRawString(), alt ? getAffinityLevelOrString() : getAffinityLevelAndString(), PGR.core.tooltips.level.title);
+        return this.amount <= 1 ? EUIRM.strings.adjNoun(fields.getAffinityLevelAndOrString(), PGR.core.tooltips.level.title) :
+                EUIRM.strings.numAdjNoun(getAmountRawString(), fields.getAffinityLevelAndOrString(), PGR.core.tooltips.level.title);
     }
 }

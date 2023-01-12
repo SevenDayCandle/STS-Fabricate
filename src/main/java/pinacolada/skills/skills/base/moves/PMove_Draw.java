@@ -6,12 +6,13 @@ import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_CardCategory;
 
-public class PMove_Draw extends PMove
+public class PMove_Draw extends PMove<PField_CardCategory>
 {
-    public static final PSkillData DATA = register(PMove_Draw.class, PCLEffectType.CardGroup)
+    public static final PSkillData<PField_CardCategory> DATA = register(PMove_Draw.class, PField_CardCategory.class)
             .selfTarget()
-            .setGroups(PCLCardGroupHelper.DrawPile, PCLCardGroupHelper.DiscardPile, PCLCardGroupHelper.ExhaustPile);
+            .setGroups(PCLCardGroupHelper.DrawPile);
 
     public PMove_Draw()
     {
@@ -38,11 +39,11 @@ public class PMove_Draw extends PMove
     public void use(PCLUseInfo info)
     {
         getActions().draw(amount)
-                .setFilter(getFullCardFilter(), true)
+                .setFilter(fields.getFullCardFilter(), true)
                 .addCallback(ca -> {
                     if (this.childEffect != null)
                     {
-                        this.childEffect.receivePayload(ca);
+                        info.setData(ca);
                         this.childEffect.use(info);
                     }
                 });
@@ -51,6 +52,6 @@ public class PMove_Draw extends PMove
     @Override
     public String getSubText()
     {
-        return TEXT.actions.drawType(getAmountRawString(), getFullCardString());
+        return TEXT.actions.drawType(getAmountRawString(), fields.getFullCardString());
     }
 }

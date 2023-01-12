@@ -73,6 +73,11 @@ public class PField_Affinity extends PField_Random
         return getAffinityLevelOrString(affinities);
     }
 
+    public String getAffinityLevelAndOrString()
+    {
+        return getAffinityLevelAndOrString(affinities, random);
+    }
+
     public String getAffinityOrString()
     {
         return getAffinityOrString(affinities);

@@ -396,7 +396,7 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
             }
         }
 
-        for (PTrigger pe : builder.pPowers)
+        for (PTrigger pe : builder.powers)
         {
             if (pe == null)
             {

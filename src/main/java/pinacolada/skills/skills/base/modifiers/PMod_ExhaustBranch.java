@@ -11,6 +11,7 @@ import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_CardCategory;
 
 import java.util.List;
 
@@ -18,8 +19,7 @@ import java.util.List;
 
 public class PMod_ExhaustBranch extends PMod_DoBranch
 {
-
-    public static final PSkillData DATA = register(PMod_ExhaustBranch.class, CardGroupFull)
+    public static final PSkillData<PField_CardCategory> DATA = register(PMod_ExhaustBranch.class, PField_CardCategory.class)
             .selfTarget()
             .setGroups(PCLCardGroupHelper.DrawPile, PCLCardGroupHelper.DiscardPile, PCLCardGroupHelper.Hand);
 

@@ -2,6 +2,8 @@ package pinacolada.skills.fields;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
+import com.megacrit.cardcrawl.helpers.RelicLibrary;
+import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIUtils;
 import pinacolada.cards.base.CardSelection;
 import pinacolada.cards.base.PCLAffinity;
@@ -62,6 +64,11 @@ public abstract class PField implements Serializable
     public static String getAffinityLevelOrString(ArrayList<PCLAffinity> affinities)
     {
         return PCLCoreStrings.joinWithOr(EUIUtils.map(affinities, a -> a.getLevelTooltip().getTitleOrIcon()));
+    }
+
+    public static String getAffinityLevelAndOrString(ArrayList<PCLAffinity> affinities, boolean or)
+    {
+        return or ? getAffinityLevelOrString(affinities) : getAffinityLevelAndString(affinities);
     }
 
     public static String getAffinityOrString(ArrayList<PCLAffinity> affinities)
@@ -166,6 +173,29 @@ public abstract class PField implements Serializable
     public static String getPowerString(ArrayList<PCLPowerHelper> powers)
     {
         return EUIUtils.joinStrings(" ", EUIUtils.map(powers, a -> a.getTooltip().getTitleOrIcon()));
+    }
+
+    public static String getRelicNameForID(String relicID)
+    {
+        if (relicID != null)
+        {
+            AbstractRelic c = RelicLibrary.getRelic(relicID);
+            if (c != null)
+            {
+                return c.name;
+            }
+        }
+        return "";
+    }
+
+    public static String getRelicIDAndString(ArrayList<String> relicIDs)
+    {
+        return PCLCoreStrings.joinWithAnd(EUIUtils.map(relicIDs, g -> "{" + getRelicNameForID(g) + "}"));
+    }
+
+    public static String getRelicIDOrString(ArrayList<String> relicIDs)
+    {
+        return PCLCoreStrings.joinWithOr(EUIUtils.map(relicIDs, g -> "{" + getRelicNameForID(g) + "}"));
     }
 
     public static String getStanceString(ArrayList<PCLStanceHelper> stances)

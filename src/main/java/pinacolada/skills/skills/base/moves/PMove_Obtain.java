@@ -5,19 +5,20 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import extendedui.ui.tooltips.EUICardPreview;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.skills.PMove;
-import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_CardID;
 import pinacolada.utilities.RotatingList;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class PMove_Obtain extends PMove
+public class PMove_Obtain extends PMove<PField_CardID>
 {
-    public static final PSkillData DATA = register(PMove_Obtain.class, PCLEffectType.Card)
+    public static final PSkillData<PField_CardID> DATA = register(PMove_Obtain.class, PField_CardID.class)
             .selfTarget();
 
     public PMove_Obtain()
@@ -32,12 +33,14 @@ public class PMove_Obtain extends PMove
 
     public PMove_Obtain(int copies, Collection<String> cards)
     {
-        super(DATA, copies, cards);
+        super(DATA, PCLCardTarget.None, copies);
+        fields.setCardIDs(cards);
     }
 
     public PMove_Obtain(int copies, String... cards)
     {
-        super(DATA, copies, cards);
+        super(DATA, PCLCardTarget.None, copies);
+        fields.setCardIDs(cards);
     }
 
     private AbstractCard getCard(String id)
@@ -51,13 +54,14 @@ public class PMove_Obtain extends PMove
     }
 
     @Override
-    public PSkill makePreviews(RotatingList<EUICardPreview> previews)
+    public PMove_Obtain makePreviews(RotatingList<EUICardPreview> previews)
     {
-        for (String cd : cardIDs)
+        for (String cd : fields.cardIDs)
         {
             previews.add(EUICardPreview.generatePreviewCard(getCard(cd)));
         }
-        return super.makePreviews(previews);
+        super.makePreviews(previews);
+        return this;
     }
 
     @Override
@@ -69,8 +73,9 @@ public class PMove_Obtain extends PMove
     @Override
     public void use(PCLUseInfo info)
     {
+        ArrayList<AbstractCard> cards = info.getData(new ArrayList<>());
         ArrayList<AbstractCard> created = new ArrayList<>();
-        if (useParent && cards != null)
+        if (useParent)
         {
             for (AbstractCard card : cards)
             {
@@ -78,42 +83,39 @@ public class PMove_Obtain extends PMove
                 {
                     AbstractCard c = card.makeStatEquivalentCopy();
                     created.add(c);
-                    getActions().makeCard(c, groupTypes.size() > 0 ? groupTypes.get(0).getCardGroup() : AbstractDungeon.player.hand);
+                    getActions().makeCard(c, fields.groupTypes.size() > 0 ? fields.groupTypes.get(0).getCardGroup() : AbstractDungeon.player.hand);
                 }
             }
         }
-        else if (cardIDs.isEmpty())
+        else if (fields.cardIDs.isEmpty())
         {
             for (int i = 0; i < amount; i++)
             {
                 AbstractCard c = sourceCard.makeStatEquivalentCopy();
                 created.add(c);
-                getActions().makeCard(c, groupTypes.size() > 0 ? groupTypes.get(0).getCardGroup() : AbstractDungeon.player.hand);
+                getActions().makeCard(c, fields.groupTypes.size() > 0 ? fields.groupTypes.get(0).getCardGroup() : AbstractDungeon.player.hand);
             }
         }
         else
         {
-            for (String cd : cardIDs)
+            for (String cd : fields.cardIDs)
             {
                 for (int i = 0; i < amount; i++)
                 {
                     AbstractCard c = getCard(cd);
                     created.add(c);
-                    getActions().makeCard(c, groupTypes.size() > 0 ? groupTypes.get(0).getCardGroup() : AbstractDungeon.player.hand).setUpgrade(alt, alt2);
+                    getActions().makeCard(c, fields.groupTypes.size() > 0 ? fields.groupTypes.get(0).getCardGroup() : AbstractDungeon.player.hand).setUpgrade(fields.random, fields.forced);
                 }
             }
         }
-        if (this.childEffect != null)
-        {
-            this.childEffect.receivePayload(created);
-        }
+        info.setData(created);
         super.use(info);
     }
 
     @Override
     public String getSubText()
     {
-        String joinedString = useParent ? TEXT.subjects.copiesOf(getInheritedString()) : cardIDs.isEmpty() ? TEXT.subjects.copiesOf(TEXT.subjects.thisObj) : getCardIDAndString();
-        return groupTypes.size() > 0 ? TEXT.actions.addToPile(getAmountRawString(), joinedString, groupTypes.get(0).name) : TEXT.actions.obtainAmount(getAmountRawString(), joinedString);
+        String joinedString = useParent ? TEXT.subjects.copiesOf(getInheritedString()) : fields.cardIDs.isEmpty() ? TEXT.subjects.copiesOf(TEXT.subjects.thisObj) : fields.getCardIDAndString();
+        return fields.groupTypes.size() > 0 ? TEXT.actions.addToPile(getAmountRawString(), joinedString, fields.groupTypes.get(0).name) : TEXT.actions.obtainAmount(getAmountRawString(), joinedString);
     }
 }
