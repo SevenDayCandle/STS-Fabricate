@@ -23,6 +23,7 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PDelay;
 import pinacolada.skills.skills.PMultiCond;
 import pinacolada.skills.skills.PMultiSkill;
+import pinacolada.skills.skills.base.conditions.PCond_Info;
 import pinacolada.ui.common.PCLValueEditor;
 
 import java.util.ArrayList;
@@ -38,7 +39,12 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
     public static final float OFFSET_AMOUNT = scale(10);
 
     public final PCLCardBuilder builder;
-    protected final PSkill[] currentEffects = new PSkill[5];
+    protected PCond_Info primaryCond;
+    protected PMultiCond multiCond;
+    protected PDelay delayMove;
+    protected PMod modifier;
+    protected PMultiSkill multiSkill;
+
     protected ActionT1<PSkill> onUpdate;
     protected ArrayList<ActionT0> toRemove = new ArrayList<>();
     protected ArrayList<PCond> lowerConditions = new ArrayList<>(EUIUtils.list((PCond) null));
@@ -57,7 +63,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
     protected EUILabel conditionHeader;
     protected EUILabel effectHeader;
     protected EUILabel modifierHeader;
-    protected EUISearchableDropdown<PSkill> primaryConditions;
+    protected EUISearchableDropdown<PCond_Info> primaryConditions;
     protected EUIToggle ifElseToggle;
     protected EUIToggle orToggle;
     protected int editorIndex;
@@ -65,9 +71,6 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
     protected PCLValueEditor delayEditor;
     protected PSkill finalEffect;
     protected PSkill.PCLCardValueSource currentEffectSource = PSkill.PCLCardValueSource.MagicNumber;
-    protected PSkill.PCLEffectType conditionEffectType = PSkill.PCLEffectType.General;
-    protected PSkill.PCLEffectType effectType = PSkill.PCLEffectType.General;
-    protected PSkill.PCLEffectType modifierEffectType = PSkill.PCLEffectType.General;
 
 
     public PCLCustomCardEffectPage(PCLCustomCardEditCardScreen screen, PSkill effect, EUIHitbox hb, int index, String title, ActionT1<PSkill> onUpdate)
@@ -87,26 +90,26 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
                 .setLabel(title);
 
         float offsetY = OFFSET_EFFECT * 2f;
-        primaryConditions = (EUISearchableDropdown<PSkill>) new EUISearchableDropdown<PSkill>(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, 0, offsetY)
+        primaryConditions = (EUISearchableDropdown<PCond_Info>) new EUISearchableDropdown<PCond_Info>(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, 0, offsetY)
                 , PSkill::getSampleText)
                 .setOnChange(conditions -> {
                     if (!conditions.isEmpty())
                     {
-                        currentEffects[0] = conditions.get(0);
+                        primaryCond = conditions.get(0);
                     }
                     else
                     {
-                        currentEffects[0] = null;
+                        primaryCond = null;
                     }
                     constructEffect();
                 })
                 .setClearButtonOptions(true, true)
                 .setCanAutosizeButton(true)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cardEditor.mainCondition)
-                .setItems(EUIUtils.map(PCond.getEligibleConditions(builder.cardColor, PCond.SPECIAL_CONDITION_PRIORITY), bc -> currentEffects[0] != null && bc.effectID.equals(currentEffects[0].effectID) ? currentEffects[0] : bc));
+                .setItems(EUIUtils.map(PSkill.getEligibleEffects(builder.cardColor, PCond_Info.class), bc -> primaryCond != null && bc.effectID.equals(primaryCond.effectID) ? primaryCond : bc));
         delayEditor = new PCLValueEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 4, MENU_HEIGHT, MENU_WIDTH * 1.5f, offsetY)
                 , PGR.core.strings.cardEditor.turnDelay, (val) -> {
-                    currentEffects[2].setAmount(val);
+                    delayMove.setAmount(val);
                     constructEffect();
                 })
                 .setTooltip(PGR.core.strings.cardEditor.turnDelay, PGR.core.strings.cardEditorTutorial.effectTurnDelay)
@@ -125,7 +128,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
                 .setFont(EUIFontHelper.carddescriptionfontNormal, 0.9f)
                 .setText(PGR.core.strings.cardEditor.ifElseCondition)
                 .setOnToggle(val -> {
-                    currentEffects[1].setAmount(val ? 1 : 0);
+                    multiCond.setAmount(val ? 1 : 0);
                     constructEffect();
                 })
                 .setTooltip(PGR.core.strings.cardEditor.ifElseCondition, PGR.core.strings.cardEditorTutorial.effectConditionIfElse);
@@ -133,7 +136,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
                 .setFont(EUIFontHelper.carddescriptionfontNormal, 0.9f)
                 .setText(PGR.core.strings.cardEditor.orCondition)
                 .setOnToggle(val -> {
-                    currentEffects[1].setAlt(val);
+                    multiCond.edit(f -> f.setOr(val));
                     constructEffect();
                 })
                 .setTooltip(PGR.core.strings.cardEditor.orCondition, PGR.core.strings.cardEditorTutorial.effectConditionOr);
@@ -156,7 +159,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
                 .setClickDelay(0.02f);
         choicesEditor = new PCLValueEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 4, MENU_HEIGHT, MENU_WIDTH * 2.5f, offsetY)
                 , PGR.core.strings.cardEditor.choices, (val) -> {
-                    currentEffects[4].setAmount(val);
+                    modifier.setAmount(val);
                     constructEffect();
                 })
                 .setTooltip(PGR.core.strings.cardEditor.choices, PGR.core.strings.cardEditorTutorial.effectChoices)
@@ -245,28 +248,28 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
     {
         finalEffect = new PMultiSkill()
                 .setEffects(EUIUtils.mapAsNonnull(lowerEffects, e -> e != null ? e.makeCopy() : null))
-                .setAmount(currentEffects[4].amount);
-        currentEffects[3] = lowerModifiers.size() > 0 ? lowerModifiers.get(0) : null;
+                .setAmount(multiSkill.amount);
+        modifier = lowerModifiers.size() > 0 ? lowerModifiers.get(0) : null;
 
-        if (currentEffects[3] != null)
+        if (modifier != null)
         {
-            finalEffect = (currentEffects[3].makeCopy())
+            finalEffect = (modifier.makeCopy())
                     .setChild(finalEffect);
         }
-        if (currentEffects[2] != null && currentEffects[2].amount > 0)
+        if (delayMove != null && delayMove.amount > 0)
         {
-            finalEffect = (currentEffects[2].makeCopy()).setChild(finalEffect);
+            finalEffect = (delayMove.makeCopy()).setChild(finalEffect);
         }
-        if (currentEffects[1] != null)
+        if (multiCond != null)
         {
             finalEffect = new PMultiCond().setEffects(EUIUtils.mapAsNonnull(lowerConditions, e -> e != null ? (PCond) e.makeCopy() : null))
+                    .edit(f -> f.setOr(multiCond.fields.or))
                     .setChild(finalEffect)
-                    .setAmount(currentEffects[1].amount)
-                    .setAlt(currentEffects[1].alt);
+                    .setAmount(multiCond.amount);
         }
-        if (currentEffects[0] != null)
+        if (primaryCond != null)
         {
-            finalEffect = (currentEffects[0].makeCopy())
+            finalEffect = (primaryCond.makeCopy())
                     .setChild(finalEffect);
         }
         if (onUpdate != null)
@@ -276,21 +279,34 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
         refresh();
     }
 
-    protected void deconstructEffect(PSkill effect, int priority)
+    protected void deconstructEffect(PSkill effect)
     {
-        if (priority >= currentEffects.length || effect == null)
+        if (effect == null)
         {
             return;
         }
-        if (PSkill.getData(effect.effectID).priority == priority)
+
+        if (effect instanceof PCond_Info)
         {
-            currentEffects[priority] = effect.makeCopy();
-            deconstructEffect(effect.getChild(), priority + 1);
+            primaryCond = (PCond_Info) effect.makeCopy();
         }
-        else
+        else if (effect instanceof PMultiCond)
         {
-            deconstructEffect(effect, priority + 1);
+            multiCond = (PMultiCond) effect.makeCopy();
         }
+        else if (effect instanceof PDelay)
+        {
+            delayMove = (PDelay) effect.makeCopy();
+        }
+        else if (effect instanceof PMod)
+        {
+            modifier = (PMod) effect.makeCopy();
+        }
+        else if (effect instanceof PMultiSkill)
+        {
+            multiSkill = (PMultiSkill) effect.makeCopy();
+        }
+        deconstructEffect(effect.getChild());
     }
 
     public String getTitle()
@@ -300,7 +316,6 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
 
     public void refresh()
     {
-
         for (PCLCustomCardEffectEditor ce : conditionEditors)
         {
             ce.refresh();
@@ -314,18 +329,18 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
             ce.refresh();
         }
 
-        if (currentEffects[0] != null)
+        if (primaryCond != null)
         {
-            primaryConditions.setSelection(currentEffects[0], false);
+            primaryConditions.setSelection(primaryCond, false);
         }
-        if (currentEffects[2] == null)
+        if (delayMove == null)
         {
-            currentEffects[2] = new PDelay();
+            delayMove = new PDelay();
         }
-        delayEditor.setValue(currentEffects[2].amount, false);
-        choicesEditor.setValue(currentEffects[4].amount, false);
-        ifElseToggle.setToggle(currentEffects[1].amount == 1);
-        orToggle.setToggle(currentEffects[1].alt);
+        delayEditor.setValue(delayMove.amount, false);
+        choicesEditor.setValue(multiSkill.amount, false);
+        ifElseToggle.setToggle(multiCond.amount == 1);
+        orToggle.setToggle(multiCond.fields.or);
     }
 
     @Override
@@ -393,39 +408,38 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
 
     protected void initializeEffects(PSkill effect)
     {
-        deconstructEffect(effect, 0);
+        deconstructEffect(effect);
+
         lowerEffects.clear();
-        if (currentEffects[4] instanceof PMultiSkill)
+        if (multiSkill != null)
         {
-            lowerEffects.addAll(((PMultiSkill) currentEffects[4]).getSubEffects());
+            lowerEffects.addAll(multiSkill.getSubEffects());
         }
         else
         {
-            lowerEffects.add(currentEffects[4]);
-            currentEffects[4] = new PMultiSkill();
+            multiSkill = new PMultiSkill();
         }
 
-        if (currentEffects[3] instanceof PMod)
+        if (modifier != null)
         {
             if (lowerModifiers.size() == 0)
             {
-                lowerModifiers.add((PMod) currentEffects[3]);
+                lowerModifiers.add(modifier);
             }
             else
             {
-                lowerModifiers.set(0, (PMod) currentEffects[3]);
+                lowerModifiers.set(0, modifier);
             }
         }
 
         lowerConditions.clear();
-        if (currentEffects[1] instanceof PMultiCond)
+        if (multiCond != null)
         {
-            lowerConditions.addAll(((PMultiCond) currentEffects[1]).getSubEffects());
+            lowerConditions.addAll(multiCond.getSubEffects());
         }
         else
         {
-            lowerConditions.add((PCond) currentEffects[1]);
-            currentEffects[1] = new PMultiCond();
+            multiCond = new PMultiCond();
         }
     }
 

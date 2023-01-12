@@ -14,7 +14,7 @@ import pinacolada.utilities.GameUtilities;
 
 public class PMove_ObtainRandomCard extends PMove
 {
-    public static final PSkillData DATA = register(PMove_ObtainRandomCard.class, PCLEffectType.CardGroupFull)
+    public static final PSkillData DATA = register(PMove_ObtainRandomCard.class, PField_CardCategory.class)
             .setExtra(1, DEFAULT_MAX)
             .selfTarget();
 
@@ -68,7 +68,7 @@ public class PMove_ObtainRandomCard extends PMove
                     }
                     if (this.childEffect != null)
                     {
-                        this.childEffect.setCards(choice.group);
+                        this.childEffect.receivePayload(choice.group);
                         super.use(info);
                     }
                 });

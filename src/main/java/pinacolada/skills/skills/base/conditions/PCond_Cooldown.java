@@ -14,7 +14,7 @@ import pinacolada.skills.PSkillSaveData;
 
 public class PCond_Cooldown extends PCond implements CooldownProvider
 {
-    public static final PSkillData DATA = register(PCond_Cooldown.class, PCLEffectType.General)
+    public static final PSkillData DATA = register(PCond_Cooldown.class, PField_Empty.class)
             .selfTarget();
 
     public PCond_Cooldown(PSkillSaveData content)

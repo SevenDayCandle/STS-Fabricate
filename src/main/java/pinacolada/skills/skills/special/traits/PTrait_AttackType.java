@@ -8,12 +8,13 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.PTrait;
 import pinacolada.skills.PTrigger;
+import pinacolada.skills.fields.PField_Empty;
 
 // Only used for augments
 public class PTrait_AttackType extends PTrait implements Hidden
 {
 
-    public static final PSkillData DATA = register(PTrait_AttackType.class, PCLEffectType.General);
+    public static final PSkillData DATA = register(PTrait_AttackType.class, PField_Empty.class);
 
     protected PCLAttackType attackType = PCLAttackType.Normal;
 

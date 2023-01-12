@@ -24,13 +24,14 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Empty;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class PMove_DealCardDamage extends PMove implements Hidden
+public class PMove_DealCardDamage extends PMove<PField_Empty> implements Hidden
 {
-    public static final PSkillData DATA = register(PMove_DealCardDamage.class, PCLEffectType.General);
+    public static final PSkillData<PField_Empty> DATA = register(PMove_DealCardDamage.class, PField_Empty.class);
 
     protected AbstractGameAction.AttackEffect attackEffect;
     protected Color vfxColor;

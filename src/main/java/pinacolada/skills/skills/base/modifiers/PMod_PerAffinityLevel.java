@@ -10,16 +10,13 @@ import pinacolada.skills.PMod;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Affinity;
 import pinacolada.utilities.GameUtilities;
 
-import java.util.List;
-
-import static pinacolada.skills.PSkill.PCLEffectType.Affinity;
-
-public class PMod_PerAffinityLevel extends PMod
+public class PMod_PerAffinityLevel extends PMod<PField_Affinity>
 {
 
-    public static final PSkillData DATA = register(PMod_PerAffinityLevel.class, Affinity)
+    public static final PSkillData<PField_Affinity> DATA = register(PMod_PerAffinityLevel.class, PField_Affinity.class)
             .pclOnly()
             .selfTarget();
 
@@ -35,18 +32,14 @@ public class PMod_PerAffinityLevel extends PMod
 
     public PMod_PerAffinityLevel(int amount, PCLAffinity... affinities)
     {
-        super(DATA, PCLCardTarget.None, amount, affinities);
-    }
-
-    public PMod_PerAffinityLevel(int amount, List<PCLAffinity> affinities)
-    {
-        super(DATA, PCLCardTarget.None, amount, affinities.toArray(new PCLAffinity[]{}));
+        super(DATA, PCLCardTarget.None, amount);
+        fields.setAffinity(affinities);
     }
 
     @Override
     public int getModifiedAmount(PSkill be, PCLUseInfo info)
     {
-        return be.baseAmount * EUIUtils.sumInt(affinities, GameUtilities::getPCLAffinityLevel) / Math.max(1, this.amount);
+        return be.baseAmount * EUIUtils.sumInt(fields.affinities, GameUtilities::getPCLAffinityLevel) / Math.max(1, this.amount);
     }
 
     @Override

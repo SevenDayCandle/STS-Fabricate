@@ -10,10 +10,11 @@ import pinacolada.interfaces.markers.PointerProvider;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
+import pinacolada.skills.fields.PField_Empty;
 
-public class PMove_GainCardBlock extends PMove implements Hidden
+public class PMove_GainCardBlock extends PMove<PField_Empty> implements Hidden
 {
-    public static final PSkillData DATA = register(PMove_GainCardBlock.class, PCLEffectType.General);
+    public static final PSkillData<PField_Empty> DATA = register(PMove_GainCardBlock.class, PField_Empty.class);
 
     public PMove_GainCardBlock(PointerProvider card)
     {

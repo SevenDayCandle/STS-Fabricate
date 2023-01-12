@@ -19,7 +19,7 @@ import pinacolada.skills.PSkillSaveData;
 
 import java.util.ArrayList;
 
-import static pinacolada.skills.PSkill.PCLEffectType.CardGroupFull;
+
 
 public class PMod_CyclePerCard extends PMod_Do
 {

@@ -8,10 +8,11 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Empty;
 
-public class PMove_TriggerAlly extends PMove
+public class PMove_TriggerAlly extends PMove<PField_Empty>
 {
-    public static final PSkillData DATA = register(PMove_TriggerAlly.class, PCLEffectType.General)
+    public static final PSkillData<PField_Empty> DATA = register(PMove_TriggerAlly.class, PField_Empty.class)
             .setTargets(PCLCardTarget.AllAlly, PCLCardTarget.RandomAlly, PCLCardTarget.SingleAlly)
             .pclOnly();
 

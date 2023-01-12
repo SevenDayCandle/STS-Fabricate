@@ -1,21 +1,26 @@
 package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.cards.CardGroup;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import extendedui.EUIUtils;
-import pinacolada.cards.base.PCLCardTarget;
-import pinacolada.cards.base.PCLUseInfo;
-import pinacolada.skills.PMove;
+import com.megacrit.cardcrawl.core.AbstractCreature;
+import extendedui.interfaces.delegates.FuncT4;
+import extendedui.ui.tooltips.EUITooltip;
+import pinacolada.actions.pileSelection.ScoutCards;
+import pinacolada.actions.pileSelection.SelectFromPile;
+import pinacolada.cards.base.PCLCardGroupHelper;
+import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_CardCategory;
 
-public class PMove_Scout extends PMove
+public class PMove_Scout extends PMove_Select
 {
-    public static final PSkillData DATA = register(PMove_Scout.class, PCLEffectType.General).selfTarget();
+    public static final PSkillData<PField_CardCategory> DATA = register(PMove_Scout.class, PField_CardCategory.class)
+            .selfTarget()
+            .setGroups(PCLCardGroupHelper.DrawPile);
 
     public PMove_Scout()
     {
-        this(1);
+        this(1, (PCLCardGroupHelper) null);
     }
 
     public PMove_Scout(PSkillSaveData content)
@@ -23,53 +28,20 @@ public class PMove_Scout extends PMove
         super(content);
     }
 
-    public PMove_Scout(int amount)
+    public PMove_Scout(int amount, PCLCardGroupHelper... h)
     {
-        super(DATA, PCLCardTarget.None, amount);
+        super(DATA, amount, h);
     }
 
     @Override
-    public String getSampleText()
+    public EUITooltip getActionTooltip()
     {
-        return TEXT.actions.scout("X");
+        return PGR.core.tooltips.scout;
     }
 
     @Override
-    public void use(PCLUseInfo info)
+    public FuncT4<SelectFromPile, String, AbstractCreature, Integer, CardGroup[]> getAction()
     {
-        if (useParent && !EUIUtils.isNullOrEmpty(cards))
-        {
-            CardGroup cg = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
-            cg.group = cards;
-            getActions().fetchFromPile(getName(), cg.size(), cg)
-                    .setOptions(true, false)
-                    .addCallback(cards -> {
-                        getActions().reshuffleFromPile(getName(), cards.size(), AbstractDungeon.player.hand);
-                        if (this.childEffect != null)
-                        {
-                            this.childEffect.setCards(cards);
-                        }
-                        super.use(info);
-                    });
-        }
-        else
-        {
-            getActions().scout(getName(), amount)
-                    .addCallback(cards -> {
-                        if (this.childEffect != null)
-                        {
-                            this.childEffect.setCards(cards);
-                        }
-                        super.use(info);
-                    });
-
-        }
-
-    }
-
-    @Override
-    public String getSubText()
-    {
-        return TEXT.actions.scout(getAmountRawString());
+        return (s, c, i, g) -> new ScoutCards(s, i);
     }
 }

@@ -2,18 +2,16 @@ package pinacolada.skills.skills.base.modifiers;
 
 import com.megacrit.cardcrawl.core.Settings;
 import extendedui.utilities.ColoredString;
-import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
-import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PMod;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.stances.PCLStanceHelper;
+import pinacolada.skills.fields.PField;
 
-public abstract class PMod_BonusPer extends PMod
+public abstract class PMod_BonusPer<T extends PField> extends PMod<T>
 {
 
     public PMod_BonusPer(PSkillSaveData content)
@@ -21,29 +19,14 @@ public abstract class PMod_BonusPer extends PMod
         super(content);
     }
 
-    public PMod_BonusPer(PSkillData data)
+    public PMod_BonusPer(PSkillData<T> data)
     {
         super(data);
     }
 
-    public PMod_BonusPer(PSkillData data, int amount)
+    public PMod_BonusPer(PSkillData<T> data, int amount)
     {
         super(data, PCLCardTarget.None, amount);
-    }
-
-    public PMod_BonusPer(PSkillData data, int amount, PCLStanceHelper stance)
-    {
-        super(data, amount, stance);
-    }
-
-    public PMod_BonusPer(PSkillData data, int amount, PCLAffinity... affinities)
-    {
-        super(data, PCLCardTarget.None, amount, affinities);
-    }
-
-    public PMod_BonusPer(PSkillData data, int amount, PCLOrbHelper... orbs)
-    {
-        super(data, PCLCardTarget.None, amount, orbs);
     }
 
     public abstract String getConditionSampleText();

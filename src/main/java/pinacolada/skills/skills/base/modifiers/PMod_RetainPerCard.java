@@ -12,7 +12,7 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 
-import static pinacolada.skills.PSkill.PCLEffectType.CardGroupFull;
+
 
 public class PMod_RetainPerCard extends PMod_Do
 {

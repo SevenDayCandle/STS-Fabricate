@@ -7,13 +7,12 @@ import pinacolada.skills.DelayUse;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Empty;
 
-import static pinacolada.skills.PSkill.PCLEffectType.General;
-
-public class PDelay extends PSkill
+public class PDelay extends PSkill<PField_Empty>
 {
     public static final int DELAY_PRIORITY = 2;
-    public static final PSkillData DATA = register(PDelay.class, General, DELAY_PRIORITY, 0, DEFAULT_MAX);
+    public static final PSkillData<PField_Empty> DATA = register(PDelay.class, PField_Empty.class, DELAY_PRIORITY, 0, DEFAULT_MAX);
     protected DelayUse.Timing timing = DelayUse.Timing.StartOfTurnLast;
 
     public static PDelay turnEnd()

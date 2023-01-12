@@ -1,6 +1,5 @@
 package pinacolada.skills.skills.base.conditions;
 
-import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.powers.PCLPowerHelper;
@@ -8,13 +7,12 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Power;
 import pinacolada.utilities.GameUtilities;
 
-import java.util.List;
-
-public class PCond_PayPower extends PCond
+public class PCond_PayPower extends PCond<PField_Power>
 {
-    public static final PSkillData DATA = register(PCond_PayPower.class, PCLEffectType.Power)
+    public static final PSkillData<PField_Power> DATA = register(PCond_PayPower.class, PField_Power.class)
             .selfTarget();
 
     public PCond_PayPower(PSkillSaveData content)
@@ -24,23 +22,19 @@ public class PCond_PayPower extends PCond
 
     public PCond_PayPower()
     {
-        super(DATA, PCLCardTarget.None, 1, new PCLAffinity[]{});
+        super(DATA, PCLCardTarget.None, 1);
     }
 
     public PCond_PayPower(int amount, PCLPowerHelper... powers)
     {
-        super(DATA, PCLCardTarget.None, amount, powers);
-    }
-
-    public PCond_PayPower(int amount, List<PCLPowerHelper> powers)
-    {
-        super(DATA, PCLCardTarget.None, amount, powers.toArray(new PCLPowerHelper[]{}));
+        super(DATA, PCLCardTarget.None, amount);
+        fields.setPower(powers);
     }
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
     {
-        for (PCLPowerHelper power : powers)
+        for (PCLPowerHelper power : fields.powers)
         {
             if (GameUtilities.getPowerAmount(power.ID) < amount)
             {
@@ -49,7 +43,7 @@ public class PCond_PayPower extends PCond
         }
         if (isUsing)
         {
-            for (PCLPowerHelper power : powers)
+            for (PCLPowerHelper power : fields.powers)
             {
                 getActions().applyPower(PCLCardTarget.Self, power, -amount);
             }
@@ -66,8 +60,8 @@ public class PCond_PayPower extends PCond
     @Override
     public String getSubText()
     {
-        return capital(TEXT.actions.pay(amount, powers.isEmpty()
+        return capital(TEXT.actions.pay(amount, fields.powers.isEmpty()
                 ? plural(PGR.core.tooltips.debuff) :
-                getPowerAndString()), true);
+                fields.getPowerAndString()), true);
     }
 }

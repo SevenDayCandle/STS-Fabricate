@@ -16,13 +16,14 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Empty;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class PMove_DealDamage extends PMove
+public class PMove_DealDamage extends PMove<PField_Empty>
 {
-    public static final PSkillData DATA = register(PMove_DealDamage.class, PCLEffectType.General);
+    public static final PSkillData<PField_Empty> DATA = register(PMove_DealDamage.class, PField_Empty.class);
 
     protected final AbstractGameAction.AttackEffect attackEffect;
     protected Color vfxColor;

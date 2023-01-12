@@ -5,51 +5,38 @@ import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
+import pinacolada.skills.fields.PField;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public class PSkillData
+public class PSkillData<T extends PField>
 {
     public final String ID;
-    public final Class<? extends PSkill> effectClass;
-    public final PSkill.PCLEffectType effectType;
+    public final Class<? extends PSkill<T>> effectClass;
+    public final Class<T> fieldType;
     public final Set<AbstractCard.CardColor> colors;
     public final ArrayList<PCLCardGroupHelper> groups = new ArrayList<>();
     public final ArrayList<PCLCardTarget> targets = new ArrayList<>();
-    public final int priority;
     public int minAmount;
     public int maxAmount;
     public int minExtra = PSkill.DEFAULT_EXTRA_MIN;
     public int maxExtra = PSkill.DEFAULT_EXTRA_MIN;
-    public String altText;
-    public String alt2Text;
     public boolean excludeColors;
 
-    public PSkillData(String id, Class<? extends PSkill> effectClass, PSkill.PCLEffectType effectType)
+    public PSkillData(String id, Class<? extends PSkill<T>> effectClass, Class<T> effectType)
     {
-        this(id, effectClass, effectType, 1, PSkill.DEFAULT_MAX, PSkill.DEFAULT_PRIORITY);
+        this(id, effectClass, effectType, PSkill.DEFAULT_MAX, PSkill.DEFAULT_PRIORITY);
     }
 
-    public PSkillData(String id, Class<? extends PSkill> effectClass, PSkill.PCLEffectType effectType, int minAmount, int maxAmount)
-    {
-        this(id, effectClass, effectType, minAmount, maxAmount, PSkill.DEFAULT_PRIORITY);
-    }
-
-    public PSkillData(String id, Class<? extends PSkill> effectClass, PSkill.PCLEffectType effectType, int minAmount, int maxAmount, AbstractCard.CardColor... cardColors)
-    {
-        this(id, effectClass, effectType, PSkill.DEFAULT_PRIORITY, minAmount, maxAmount, cardColors);
-    }
-
-    public PSkillData(String id, Class<? extends PSkill> effectClass, PSkill.PCLEffectType effectType, int priority, int minAmount, int maxAmount, AbstractCard.CardColor... cardColors)
+    public PSkillData(String id, Class<? extends PSkill<T>> effectClass, Class<T> effectType, int minAmount, int maxAmount, AbstractCard.CardColor... cardColors)
     {
         this.ID = id;
         this.effectClass = effectClass;
-        this.effectType = effectType;
+        this.fieldType = effectType;
         this.colors = new HashSet<AbstractCard.CardColor>(Arrays.asList(cardColors));
-        this.priority = priority;
         this.minAmount = minAmount;
         this.maxAmount = Math.max(minAmount, maxAmount);
     }
@@ -64,12 +51,20 @@ public class PSkillData
         return colors.isEmpty() || (excludeColors ^ colors.contains(co));
     }
 
-    public final boolean matchesPriority(Integer pr)
+    public final T instantiateField()
     {
-        return pr == null || priority == pr;
+        try
+        {
+            return this.fieldType.newInstance();
+        }
+        catch (InstantiationException | IllegalAccessException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
     }
 
-    public PSkillData pclOnly()
+    public PSkillData<T> pclOnly()
     {
         colors.add(AbstractCard.CardColor.COLORLESS);
         for (PCLResources r : PGR.getAllResources())
@@ -79,57 +74,45 @@ public class PSkillData
         return this;
     }
 
-    public PSkillData selfTarget()
+    public PSkillData<T> selfTarget()
     {
         targets.add(PCLCardTarget.Self);
         return this;
     }
 
-    public PSkillData setAltText(String val)
-    {
-        altText = val;
-        return this;
-    }
-
-    public PSkillData setAlt2Text(String val)
-    {
-        alt2Text = val;
-        return this;
-    }
-
-    public PSkillData setAmounts(int min, int max)
+    public PSkillData<T> setAmounts(int min, int max)
     {
         this.minAmount = min;
         this.maxAmount = Math.max(min, max);
         return this;
     }
 
-    public PSkillData setColors(AbstractCard.CardColor... colors)
+    public PSkillData<T> setColors(AbstractCard.CardColor... colors)
     {
         this.colors.addAll(Arrays.asList(colors));
         return this;
     }
 
-    public PSkillData setExcludeColors(boolean val)
+    public PSkillData<T> setExcludeColors(boolean val)
     {
         excludeColors = val;
         return this;
     }
 
-    public PSkillData setExtra(int min, int max)
+    public PSkillData<T> setExtra(int min, int max)
     {
         this.minExtra = min;
         this.maxExtra = Math.max(min, max);
         return this;
     }
 
-    public PSkillData setGroups(PCLCardGroupHelper... groups)
+    public PSkillData<T> setGroups(PCLCardGroupHelper... groups)
     {
         this.groups.addAll(Arrays.asList(groups));
         return this;
     }
 
-    public PSkillData setTargets(PCLCardTarget... targets)
+    public PSkillData<T> setTargets(PCLCardTarget... targets)
     {
         this.targets.addAll(Arrays.asList(targets));
         return this;

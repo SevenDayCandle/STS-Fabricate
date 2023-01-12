@@ -4,13 +4,12 @@ import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Empty;
 
-import static pinacolada.skills.PSkill.PCLEffectType.General;
-
-public class PMod_BonusOnMatch extends PMod_BonusOn
+public class PMod_BonusOnMatch extends PMod_BonusOn<PField_Empty>
 {
 
-    public static final PSkillData DATA = register(PMod_BonusOnMatch.class, General).selfTarget();
+    public static final PSkillData<PField_Empty> DATA = register(PMod_BonusOnMatch.class, PField_Empty.class).selfTarget();
 
     public PMod_BonusOnMatch(PSkillSaveData content)
     {

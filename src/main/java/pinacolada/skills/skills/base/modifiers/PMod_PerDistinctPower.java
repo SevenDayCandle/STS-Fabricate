@@ -6,22 +6,20 @@ import extendedui.EUIUtils;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.powers.PCLPowerHelper;
-import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PMod;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Power;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.List;
 
-import static pinacolada.skills.PSkill.PCLEffectType.Power;
-
-public class PMod_PerDistinctPower extends PMod
+public class PMod_PerDistinctPower extends PMod<PField_Power>
 {
 
-    public static final PSkillData DATA = register(PMod_PerDistinctPower.class, Power);
+    public static final PSkillData<PField_Power> DATA = register(PMod_PerDistinctPower.class, PField_Power.class);
 
     public PMod_PerDistinctPower(PSkillSaveData content)
     {
@@ -35,22 +33,13 @@ public class PMod_PerDistinctPower extends PMod
 
     public PMod_PerDistinctPower(int amount, PCLPowerHelper... powerHelpers)
     {
-        super(DATA, PCLCardTarget.AllEnemy, amount, powerHelpers);
+        this(PCLCardTarget.AllEnemy, amount, powerHelpers);
     }
 
     public PMod_PerDistinctPower(PCLCardTarget target, int amount, PCLPowerHelper... powerHelpers)
     {
-        super(DATA, target, amount, powerHelpers);
-    }
-
-    public PMod_PerDistinctPower(int amount, List<PCLPowerHelper> powerHelpers)
-    {
-        super(DATA, PCLCardTarget.AllEnemy, amount, powerHelpers.toArray(new PCLPowerHelper[]{}));
-    }
-
-    public PMod_PerDistinctPower(PCLCardTarget target, int amount, List<PCLPowerHelper> powerHelpers)
-    {
-        super(DATA, target, amount, powerHelpers.toArray(new PCLPowerHelper[]{}));
+        super(DATA, target, amount);
+        fields.setPower(powerHelpers);
     }
 
     @Override
@@ -62,7 +51,7 @@ public class PMod_PerDistinctPower extends PMod
     @Override
     public String getSubText()
     {
-        String baseString = (powers.isEmpty() ? PGR.core.tooltips.debuff.title : getPowerAndString());
+        String baseString = fields.getPowerSubjectString();
         switch (target)
         {
             case All:
@@ -89,7 +78,7 @@ public class PMod_PerDistinctPower extends PMod
     public int getModifiedAmount(PSkill be, PCLUseInfo info)
     {
         List<AbstractCreature> targetList = getTargetList(info);
-        return powers.isEmpty() ? be.baseAmount * EUIUtils.sumInt(targetList, t -> EUIUtils.count(t.powers, po -> po.type == AbstractPower.PowerType.DEBUFF)) :
-                be.baseAmount * EUIUtils.sumInt(targetList, t -> EUIUtils.count(powers, po -> GameUtilities.getPowerAmount(t, po.ID) >= this.amount));
+        return fields.powers.isEmpty() ? be.baseAmount * EUIUtils.sumInt(targetList, t -> EUIUtils.count(t.powers, po -> po.type == AbstractPower.PowerType.DEBUFF)) :
+                be.baseAmount * EUIUtils.sumInt(targetList, t -> EUIUtils.count(fields.powers, po -> GameUtilities.getPowerAmount(t, po.ID) >= this.amount));
     }
 }

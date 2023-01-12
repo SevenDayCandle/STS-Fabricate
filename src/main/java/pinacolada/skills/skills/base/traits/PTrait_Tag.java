@@ -7,11 +7,14 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.PTrait;
 import pinacolada.skills.PTrigger;
+import pinacolada.skills.fields.PField;
+import pinacolada.skills.fields.PField_CardCategory;
 
-public class PTrait_Tag extends PTrait
+// TODO custom field type
+public class PTrait_Tag extends PTrait<PField_CardCategory>
 {
 
-    public static final PSkillData DATA = register(PTrait_Tag.class, PCLEffectType.General);
+    public static final PSkillData<PField_CardCategory> DATA = register(PTrait_Tag.class, PField_CardCategory.class);
 
     public PTrait_Tag()
     {
@@ -25,12 +28,13 @@ public class PTrait_Tag extends PTrait
 
     public PTrait_Tag(PCLCardTag... tags)
     {
-        super(DATA, tags);
+        this(1, tags);
     }
 
     public PTrait_Tag(int amount, PCLCardTag... tags)
     {
-        super(DATA, amount, tags);
+        super(DATA, amount);
+        fields.setTag(tags);
     }
 
     @Override
@@ -38,22 +42,22 @@ public class PTrait_Tag extends PTrait
     {
         String tagAmount = amount > 1 ? EUIRM.strings.numNoun(getAmountRawString(), getSubDescText()) : amount < 0 ? EUIRM.strings.numNoun(TEXT.subjects.infinite, getSubDescText()) : getSubDescText();
         return hasParentType(PTrigger.class) ? tagAmount :
-                alt ? TEXT.actions.remove(tagAmount) : TEXT.actions.has(tagAmount);
+                fields.random ? TEXT.actions.remove(tagAmount) : TEXT.actions.has(tagAmount);
     }
 
     @Override
     public void applyToCard(AbstractCard c, boolean conditionMet)
     {
-        for (PCLCardTag tag : tags)
+        for (PCLCardTag tag : fields.tags)
         {
-            tag.set(sourceCard, (alt ^ conditionMet ? 1 : 0) * amount);
+            tag.set(sourceCard, (fields.random ^ conditionMet ? 1 : 0) * amount);
         }
     }
 
     @Override
     public String getSubDescText()
     {
-        return getTagAndString();
+        return PField.getTagAndString(fields.tags);
     }
 
     @Override

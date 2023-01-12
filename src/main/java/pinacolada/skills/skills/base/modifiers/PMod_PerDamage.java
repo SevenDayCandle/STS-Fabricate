@@ -7,13 +7,12 @@ import pinacolada.skills.PMod;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Empty;
 
-import static pinacolada.skills.PSkill.PCLEffectType.General;
-
-public class PMod_PerDamage extends PMod
+public class PMod_PerDamage extends PMod<PField_Empty>
 {
 
-    public static final PSkillData DATA = register(PMod_PerDamage.class, General).selfTarget();
+    public static final PSkillData<PField_Empty> DATA = register(PMod_PerDamage.class, PField_Empty.class).selfTarget();
 
     public PMod_PerDamage()
     {

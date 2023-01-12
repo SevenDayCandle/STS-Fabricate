@@ -4,12 +4,16 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.resources.PGR;
-import pinacolada.skills.*;
+import pinacolada.skills.PCond;
+import pinacolada.skills.PSkillData;
+import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.PTrigger;
+import pinacolada.skills.fields.PField_CardCategory;
 
-public class PCond_Match extends PCond
+public class PCond_Match extends PCond<PField_CardCategory>
 {
 
-    public static final PSkillData DATA = register(PCond_Match.class, PCLEffectType.CardGroupFull, 1, 1)
+    public static final PSkillData<PField_CardCategory> DATA = register(PCond_Match.class, PField_CardCategory.class, 1, 1)
             .pclOnly()
             .selfTarget();
 
@@ -21,18 +25,6 @@ public class PCond_Match extends PCond
     public PCond_Match(PSkillSaveData content)
     {
         super(content);
-    }
-
-    public PCond_Match(PSkill effect)
-    {
-        this();
-        setChild(effect);
-    }
-
-    public PCond_Match(PSkill... effect)
-    {
-        this();
-        setChild(effect);
     }
 
     @Override
@@ -47,20 +39,20 @@ public class PCond_Match extends PCond
         String name = PGR.core.tooltips.match.title;
         if (extendsMatch())
         {
-            name =  TEXT.subjects.withX(name, getFullCardString());
+            name =  TEXT.subjects.withX(name, fields.getFullCardString());
         }
 
         if (hasParentType(PTrigger.class))
         {
             return TEXT.conditions.wheneverYou(name);
         }
-        return alt ? TEXT.conditions.not(name) : name;
+        return fields.random ? TEXT.conditions.not(name) : name;
     }
 
     @Override
     public boolean triggerOnMatch(AbstractCard c, PCLUseInfo info)
     {
-        if (getFullCardFilter().invoke(c))
+        if (fields.getFullCardFilter().invoke(c))
         {
             if (this.childEffect != null)
             {
@@ -74,17 +66,17 @@ public class PCond_Match extends PCond
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
     {
-        return alt ^ info.isMatch;
+        return fields.random ^ info.isMatch;
     }
 
     @Override
     public boolean canMatch(AbstractCard other)
     {
-        return extendsMatch() && getFullCardFilter().invoke(other);
+        return extendsMatch() && fields.getFullCardFilter().invoke(other);
     }
 
     protected boolean extendsMatch()
     {
-        return (!affinities.isEmpty() || !rarities.isEmpty() || !tags.isEmpty() || !types.isEmpty());
+        return (!fields.affinities.isEmpty() || !fields.rarities.isEmpty() || !fields.tags.isEmpty() || !fields.types.isEmpty());
     }
 }

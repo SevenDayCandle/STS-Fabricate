@@ -9,7 +9,6 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import com.megacrit.cardcrawl.powers.AbstractPower;
-import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT0;
 import pinacolada.cards.base.*;
 import pinacolada.interfaces.markers.PointerProvider;
@@ -18,14 +17,12 @@ import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.powers.PCLClickableUse;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.resources.pcl.PCLCoreStrings;
+import pinacolada.skills.fields.PField;
 import pinacolada.skills.skills.PMultiCond;
 import pinacolada.skills.skills.base.conditions.*;
-import pinacolada.stances.PCLStanceHelper;
 import pinacolada.utilities.GameUtilities;
 
-import java.util.ArrayList;
-
-public abstract class PCond extends PSkill
+public abstract class PCond<T extends PField> extends PSkill<T>
 {
     public static final int CONDITION_PRIORITY = 1;
     public static final int SPECIAL_CONDITION_PRIORITY = 0;
@@ -36,139 +33,104 @@ public abstract class PCond extends PSkill
         super(content);
     }
 
-    public PCond(PSkillData data)
+    public PCond(PSkillData<T> data)
     {
         super(data);
     }
 
-    public PCond(PSkillData data, PCLCardTarget target, int amount)
+    public PCond(PSkillData<T> data, PCLCardTarget target, int amount)
     {
         super(data, target, amount);
     }
 
-    public PCond(PSkillData data, PCLCardTarget target, int amount, PSkill effect)
-    {
-        super(data, target, amount);
-    }
-
-    public PCond(PSkillData data, PCLCardTarget target, int amount, PSkill... effect)
-    {
-        super(data, target, amount);
-    }
-
-    public PCond(PSkillData data, PCLCardTarget target, int amount, PCLCardGroupHelper... groups)
-    {
-        super(data, target, amount, groups);
-    }
-
-    public PCond(PSkillData data, PCLCardTarget target, int amount, PCLAffinity... affinities)
-    {
-        super(data, target, amount, affinities);
-    }
-
-    public PCond(PSkillData data, PCLCardTarget target, int amount, PCLPowerHelper... powers)
-    {
-        super(data, target, amount, powers);
-    }
-
-    public PCond(PSkillData data, PCLCardTarget target, int amount, PCLOrbHelper... orbs)
-    {
-        super(data, target, amount, orbs);
-    }
-
-    public PCond(PSkillData data, PCLStanceHelper... stance)
-    {
-        super(data, stance);
-    }
-
-    public static PCond block(int amount)
+    public static PCond_CheckBlock block(int amount)
     {
         return new PCond_CheckBlock(PCLCardTarget.Self, amount);
     }
 
-    public static PCond block(PCLCardTarget target, int amount)
+    public static PCond_CheckBlock block(PCLCardTarget target, int amount)
     {
         return new PCond_CheckBlock(target, amount);
     }
 
-    public static PCond checkEnergy(int amount)
+    public static PCond_CheckEnergy checkEnergy(int amount)
     {
         return new PCond_CheckEnergy(amount);
     }
 
-    public static PCond checkLevel(int amount, PCLAffinity... affinities)
+    public static PCond_CheckLevel checkLevel(int amount, PCLAffinity... affinities)
     {
         return new PCond_CheckLevel(amount, affinities);
     }
 
-    public static PCond checkOrb(int amount, PCLOrbHelper... orbs)
+    public static PCond_CheckOrb checkOrb(int amount, PCLOrbHelper... orbs)
     {
         return new PCond_CheckOrb(amount, orbs);
     }
 
-    public static PCond checkPower(PCLCardTarget target, int amount, PCLPowerHelper... powers)
+    public static PCond_CheckPower checkPower(PCLCardTarget target, int amount, PCLPowerHelper... powers)
     {
         return new PCond_CheckPower(target, amount, powers);
     }
 
-    public static PCond checkPowerAoe(int amount, PCLPowerHelper... powers)
+    public static PCond_CheckPower checkPowerAoe(int amount, PCLPowerHelper... powers)
     {
         return new PCond_CheckPower(PCLCardTarget.AllEnemy, amount, powers);
     }
 
-    public static PCond checkPowerSelf(int amount, PCLPowerHelper... powers)
+    public static PCond_CheckPower checkPowerSelf(int amount, PCLPowerHelper... powers)
     {
         return new PCond_CheckPower(PCLCardTarget.Self, amount, powers);
     }
 
-    public static PCond checkPowerSingle(int amount, PCLPowerHelper... powers)
+    public static PCond_CheckPower checkPowerSingle(int amount, PCLPowerHelper... powers)
     {
         return new PCond_CheckPower(PCLCardTarget.Single, amount, powers);
     }
 
-    public static PCond cooldown(int amount)
+    public static PCond_Cooldown cooldown(int amount)
     {
         return new PCond_Cooldown(amount);
     }
 
-    public static PCond cycle(int amount)
+    public static PCond_CycleTo cycle(int amount)
     {
         return new PCond_CycleTo(amount, PCLCardGroupHelper.Hand);
     }
 
-    public static PCond cycle(int amount, PCLCardGroupHelper... h)
+    public static PCond_CycleTo cycle(int amount, PCLCardGroupHelper... h)
     {
         return new PCond_CycleTo(amount, h);
     }
 
-    public static PCond cycleRandom(int amount)
+    public static PCond_CycleTo cycleRandom(int amount)
     {
-        return (PCond) new PCond_CycleTo(amount, PCLCardGroupHelper.Hand).setAlt(true);
+        return cycleRandom(amount, PCLCardGroupHelper.Hand);
     }
 
-    public static PCond cycleRandom(int amount, PCLCardGroupHelper... h)
+    public static PCond_CycleTo cycleRandom(int amount, PCLCardGroupHelper... h)
     {
-        return (PCond) new PCond_CycleTo(amount, h).setAlt(true);
+        return (PCond_CycleTo) new PCond_CycleTo(amount, h).edit(r -> r.setRandom(true));
     }
 
-    public static PCond discard(int amount)
+    public static PCond_DiscardTo discard(int amount)
     {
         return new PCond_DiscardTo(amount, PCLCardGroupHelper.Hand);
     }
 
-    public static PCond discard(int amount, PCLCardGroupHelper... h)
+    public static PCond_DiscardTo discard(int amount, PCLCardGroupHelper... h)
     {
         return new PCond_DiscardTo(amount, h);
     }
 
-    public static PCond discardRandom(int amount)
+    public static PCond_DiscardTo discardRandom(int amount)
     {
-        return (PCond) new PCond_DiscardTo(amount, PCLCardGroupHelper.Hand).setAlt(true);
+        return discardRandom(amount, PCLCardGroupHelper.Hand);
     }
 
-    public static PCond discardRandom(int amount, PCLCardGroupHelper... h)
+    public static PCond_DiscardTo discardRandom(int amount, PCLCardGroupHelper... h)
     {
-        return (PCond) new PCond_DiscardTo(amount, h).setAlt(true);
+        return (PCond_DiscardTo) new PCond_DiscardTo(amount, h).edit(r -> r.setRandom(true));
     }
 
     public static PCond evoke(int amount, PCLOrbHelper... h)
@@ -186,24 +148,19 @@ public abstract class PCond extends PSkill
         return new PCond_ExhaustTo(amount, h);
     }
 
-    public static PCond exhaustRandom(int amount)
+    public static PCond_ExhaustTo exhaustRandom(int amount)
     {
-        return (PCond) new PCond_ExhaustTo(amount, PCLCardGroupHelper.Hand).setAlt(true);
+        return exhaustRandom(amount, PCLCardGroupHelper.Hand);
     }
 
-    public static PCond exhaustRandom(int amount, PCLCardGroupHelper... h)
+    public static PCond_ExhaustTo exhaustRandom(int amount, PCLCardGroupHelper... h)
     {
-        return (PCond) new PCond_ExhaustTo(amount, h).setAlt(true);
+        return (PCond_ExhaustTo) new PCond_ExhaustTo(amount, h).edit(r -> r.setRandom(true));
     }
 
     public static PCond fatal()
     {
         return new PCond_Fatal();
-    }
-
-    public static ArrayList<PCond> getEligibleConditions(AbstractCard.CardColor co, Integer priority)
-    {
-        return EUIUtils.mapAsNonnull(getEligibleEffects(co, priority), ef -> EUIUtils.safeCast(ef, PCond.class));
     }
 
     public static PCond haveDiscarded()
@@ -308,12 +265,12 @@ public abstract class PCond extends PSkill
 
     public static PCond onOtherCardPlayed(AbstractCard.CardType... cardType)
     {
-        return (PCond) new PCond_OnOtherCardPlayed().setCardTypes(cardType);
+        return (PCond_OnOtherCardPlayed) new PCond_OnOtherCardPlayed().edit(f -> f.setType(cardType));
     }
 
     public static PCond onOtherCardPlayed(PCLAffinity... aff)
     {
-        return (PCond) new PCond_OnOtherCardPlayed().setAffinity(aff);
+        return (PCond_OnOtherCardPlayed) new PCond_OnOtherCardPlayed().edit(f -> f.setAffinity(aff));
     }
 
     public static PCond onPurge()
@@ -366,14 +323,14 @@ public abstract class PCond extends PSkill
         return new PCond_PurgeTo(amount, h);
     }
 
-    public static PCond purgeRandom(int amount)
+    public static PCond_PurgeTo purgeRandom(int amount)
     {
-        return (PCond) new PCond_PurgeTo(amount, PCLCardGroupHelper.Hand).setAlt(true);
+        return purgeRandom(amount, PCLCardGroupHelper.Hand);
     }
 
-    public static PCond purgeRandom(int amount, PCLCardGroupHelper... h)
+    public static PCond_PurgeTo purgeRandom(int amount, PCLCardGroupHelper... h)
     {
-        return (PCond) new PCond_PurgeTo(amount, h).setAlt(true);
+        return (PCond_PurgeTo) new PCond_PurgeTo(amount, h).edit(r -> r.setRandom(true));
     }
 
     public static PCond reshuffle(int amount)
@@ -386,14 +343,14 @@ public abstract class PCond extends PSkill
         return new PCond_ReshuffleTo(amount, h);
     }
 
-    public static PCond reshuffleRandom(int amount)
+    public static PCond_ReshuffleTo reshuffleRandom(int amount)
     {
-        return (PCond) new PCond_ReshuffleTo(amount, PCLCardGroupHelper.Hand).setAlt(true);
+        return reshuffleRandom(amount, PCLCardGroupHelper.Hand);
     }
 
-    public static PCond reshuffleRandom(int amount, PCLCardGroupHelper... h)
+    public static PCond_ReshuffleTo reshuffleRandom(int amount, PCLCardGroupHelper... h)
     {
-        return (PCond) new PCond_ReshuffleTo(amount, h).setAlt(true);
+        return (PCond_ReshuffleTo) new PCond_ReshuffleTo(amount, h).edit(r -> r.setRandom(true));
     }
 
     public static PCond semiLimited()

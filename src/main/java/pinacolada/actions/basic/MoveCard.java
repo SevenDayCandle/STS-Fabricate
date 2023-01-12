@@ -15,12 +15,12 @@ import extendedui.interfaces.delegates.ActionT3;
 import extendedui.utilities.GenericCallback;
 import pinacolada.actions.PCLActionWithCallback;
 import pinacolada.actions.PCLActions;
+import pinacolada.cards.base.CardSelection;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
 import pinacolada.effects.card.RenderCardEffect;
 import pinacolada.effects.card.UnfadeOutEffect;
 import pinacolada.misc.CombatManager;
-import pinacolada.utilities.CardSelection;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.List;

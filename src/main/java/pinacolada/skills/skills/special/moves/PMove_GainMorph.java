@@ -13,7 +13,7 @@ import pinacolada.utilities.GameUtilities;
 // TODO Different text for different classes
 public class PMove_GainMorph extends PMove implements Hidden
 {
-    public static final PSkillData DATA = register(PMove_GainMorph.class, PCLEffectType.General)
+    public static final PSkillData DATA = register(PMove_GainMorph.class, PField_Empty.class)
             .pclOnly()
             .selfTarget();
 

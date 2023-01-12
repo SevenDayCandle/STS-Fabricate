@@ -5,35 +5,24 @@ import com.megacrit.cardcrawl.core.Settings;
 import extendedui.utilities.EUIColors;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
-import pinacolada.interfaces.markers.PCondWithoutCheck;
 import pinacolada.skills.PCond;
-import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Empty;
+import pinacolada.skills.skills.PActionCond;
 import pinacolada.utilities.GameUtilities;
 
-public abstract class PCond_Info extends PCond
+// TODO move out of PCond
+public abstract class PCond_Info extends PCond<PField_Empty>
 {
     public PCond_Info(PSkillSaveData content)
     {
         super(content);
     }
 
-    public PCond_Info(PSkillData data)
+    public PCond_Info(PSkillData<PField_Empty> data)
     {
         super(data, PCLCardTarget.None, 0);
-    }
-
-    public PCond_Info(PSkillData data, PSkill effect)
-    {
-        this(data);
-        setChild(effect);
-    }
-
-    public PCond_Info(PSkillData data, PSkill... effect)
-    {
-        this(data);
-        setChild(effect);
     }
 
     @Override
@@ -51,7 +40,7 @@ public abstract class PCond_Info extends PCond
 
     public final boolean checkChild(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
     {
-        return !(this.childEffect instanceof PCond) || this.childEffect instanceof PCondWithoutCheck || ((PCond) this.childEffect).checkCondition(info, isUsing, fromTrigger);
+        return !(this.childEffect instanceof PCond) || this.childEffect instanceof PActionCond || ((PCond) this.childEffect).checkCondition(info, isUsing, fromTrigger);
     }
 
     public boolean testTry(PCLUseInfo info, boolean isUsing)

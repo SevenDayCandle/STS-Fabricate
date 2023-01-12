@@ -9,16 +9,15 @@ import pinacolada.skills.PMod;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Empty;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.List;
 
-import static pinacolada.skills.PSkill.PCLEffectType.Power;
-
-public class PMod_PerCreatureAttacking extends PMod
+public class PMod_PerCreatureAttacking extends PMod<PField_Empty>
 {
 
-    public static final PSkillData DATA = register(PMod_PerCreatureAttacking.class, Power);
+    public static final PSkillData<PField_Empty> DATA = register(PMod_PerCreatureAttacking.class, PField_Empty.class);
 
     public PMod_PerCreatureAttacking(PSkillSaveData content)
     {

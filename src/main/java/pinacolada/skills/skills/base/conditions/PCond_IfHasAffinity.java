@@ -9,12 +9,11 @@ import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.PTrigger;
+import pinacolada.skills.fields.PField_CardCategory;
 
-import java.util.List;
-
-public class PCond_IfHasAffinity extends PCond implements PSkillAttribute
+public class PCond_IfHasAffinity extends PCond<PField_CardCategory> implements PSkillAttribute
 {
-    public static final PSkillData DATA = register(PCond_IfHasAffinity.class, PCLEffectType.CardGroupFull)
+    public static final PSkillData<PField_CardCategory> DATA = register(PCond_IfHasAffinity.class, PField_CardCategory.class)
             .selfTarget();
 
     public PCond_IfHasAffinity(PSkillSaveData content)
@@ -24,17 +23,13 @@ public class PCond_IfHasAffinity extends PCond implements PSkillAttribute
 
     public PCond_IfHasAffinity()
     {
-        super(DATA, PCLCardTarget.None, 0, new PCLAffinity[]{});
+        super(DATA, PCLCardTarget.None, 0);
     }
 
     public PCond_IfHasAffinity(PCLAffinity... affinities)
     {
-        super(DATA, PCLCardTarget.None, 0, affinities);
-    }
-
-    public PCond_IfHasAffinity(List<PCLAffinity> affinities)
-    {
-        super(DATA, PCLCardTarget.None, 0, affinities.toArray(new PCLAffinity[]{}));
+        super(DATA, PCLCardTarget.None, 0);
+        fields.setAffinity(affinities);
     }
 
     @Override

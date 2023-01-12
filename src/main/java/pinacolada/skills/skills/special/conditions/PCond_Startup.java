@@ -15,7 +15,7 @@ import pinacolada.skills.PSkillSaveData;
 public class PCond_Startup extends PCond implements Hidden
 {
 
-    public static final PSkillData DATA = register(PCond_Startup.class, PCLEffectType.General, 1, 1)
+    public static final PSkillData DATA = register(PCond_Startup.class, PField_Empty.class, 1, 1)
             .selfTarget();
 
     public PCond_Startup()

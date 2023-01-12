@@ -6,8 +6,8 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.interfaces.delegates.FuncT4;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.actions.PCLActionWithCallback;
-import pinacolada.actions.cardManipulation.ScryWhichActuallyTriggersDiscard;
 import pinacolada.actions.pileSelection.DiscardFromPile;
+import pinacolada.actions.pileSelection.Scry;
 import pinacolada.actions.pileSelection.SelectFromPile;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.PCLCardTarget;
@@ -18,7 +18,7 @@ import pinacolada.skills.PSkillSaveData;
 
 import java.util.ArrayList;
 
-import static pinacolada.skills.PSkill.PCLEffectType.CardGroupFull;
+
 
 public class PMod_ScryPerCard extends PMod_Do
 {
@@ -45,7 +45,7 @@ public class PMod_ScryPerCard extends PMod_Do
     @Override
     protected PCLActionWithCallback<ArrayList<AbstractCard>> createPileAction(PCLUseInfo info)
     {
-        return new ScryWhichActuallyTriggersDiscard(amount);
+        return new Scry(amount);
     }
 
     @Override

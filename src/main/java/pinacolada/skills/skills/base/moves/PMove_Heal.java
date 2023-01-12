@@ -8,10 +8,11 @@ import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Empty;
 
-public class PMove_Heal extends PMove
+public class PMove_Heal extends PMove<PField_Empty>
 {
-    public static final PSkillData DATA = register(PMove_Heal.class, PCLEffectType.General);
+    public static final PSkillData<PField_Empty> DATA = register(PMove_Heal.class, PField_Empty.class);
 
     public PMove_Heal()
     {

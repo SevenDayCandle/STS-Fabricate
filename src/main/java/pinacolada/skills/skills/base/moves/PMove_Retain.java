@@ -10,10 +10,11 @@ import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_CardCategory;
 
 public class PMove_Retain extends PMove_Select
 {
-    public static final PSkillData DATA = register(PMove_Retain.class, PCLEffectType.CardGroupFull).selfTarget();
+    public static final PSkillData DATA = register(PMove_Retain.class, PField_CardCategory.class).selfTarget();
 
     public PMove_Retain()
     {

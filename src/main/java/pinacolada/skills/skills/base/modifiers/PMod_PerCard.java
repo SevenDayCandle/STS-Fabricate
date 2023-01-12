@@ -10,15 +10,12 @@ import pinacolada.skills.PMod;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_CardCategory;
 
-import java.util.List;
-
-import static pinacolada.skills.PSkill.PCLEffectType.CardGroupFull;
-
-public class PMod_PerCard extends PMod
+public class PMod_PerCard extends PMod<PField_CardCategory>
 {
 
-    public static final PSkillData DATA = register(PMod_PerCard.class, CardGroupFull).selfTarget();
+    public static final PSkillData<PField_CardCategory> DATA = register(PMod_PerCard.class, PField_CardCategory.class).selfTarget();
 
     public PMod_PerCard(PSkillSaveData content)
     {
@@ -32,12 +29,8 @@ public class PMod_PerCard extends PMod
 
     public PMod_PerCard(int amount, PCLCardGroupHelper... groups)
     {
-        super(DATA, PCLCardTarget.None, amount, groups);
-    }
-
-    public PMod_PerCard(int amount, List<PCLCardGroupHelper> groups)
-    {
-        super(DATA, PCLCardTarget.None, amount, groups.toArray(new PCLCardGroupHelper[]{}));
+        super(DATA, PCLCardTarget.None, amount);
+        fields.setCardGroup(groups);
     }
 
     @Override
@@ -49,23 +42,23 @@ public class PMod_PerCard extends PMod
     @Override
     public String getSubText()
     {
-        return this.amount <= 1 ? getFullCardOrString(1) : EUIRM.strings.numNoun(getAmountRawString(), getFullCardOrString(1));
+        return this.amount <= 1 ? fields.getFullCardOrString(1) : EUIRM.strings.numNoun(getAmountRawString(), fields.getFullCardOrString(1));
     }
 
     @Override
     public String getText(boolean addPeriod)
     {
-        return groupTypes != null && groupTypes.isEmpty() ? super.getText(addPeriod) :
+        return !fields.hasGroups() ? super.getText(addPeriod) :
                 TEXT.conditions.perIn(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", getSubText(),
-                        getGroupString() + getXRawString()) + PCLCoreStrings.period(addPeriod);
+                        fields.getGroupString() + getXRawString()) + PCLCoreStrings.period(addPeriod);
     }
 
     @Override
     public int getModifiedAmount(PSkill be, PCLUseInfo info)
     {
         return be.baseAmount *
-                EUIUtils.sumInt(groupTypes, g -> EUIUtils.count(g.getCards(),
-                        c -> getFullCardFilter().invoke(c))
+                EUIUtils.sumInt(fields.groupTypes, g -> EUIUtils.count(g.getCards(),
+                        c -> fields.getFullCardFilter().invoke(c))
                 ) / Math.max(1, this.amount);
     }
 }

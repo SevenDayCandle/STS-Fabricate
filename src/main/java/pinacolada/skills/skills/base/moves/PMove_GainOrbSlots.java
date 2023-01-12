@@ -4,10 +4,11 @@ import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Empty;
 
 public class PMove_GainOrbSlots extends PMove_Gain
 {
-    public static final PSkillData DATA = register(PMove_GainOrbSlots.class, PCLEffectType.General)
+    public static final PSkillData<PField_Empty> DATA = register(PMove_GainOrbSlots.class, PField_Empty.class)
             .selfTarget();
 
     public PMove_GainOrbSlots()

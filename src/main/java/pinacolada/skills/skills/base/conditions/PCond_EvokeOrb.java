@@ -7,17 +7,15 @@ import extendedui.EUIUtils;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.orbs.PCLOrbHelper;
-import pinacolada.resources.PGR;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Orb;
 import pinacolada.utilities.GameUtilities;
 
-import java.util.List;
-
-public class PCond_EvokeOrb extends PCond
+public class PCond_EvokeOrb extends PCond<PField_Orb>
 {
-    public static final PSkillData DATA = register(PCond_EvokeOrb.class, PCLEffectType.Orb)
+    public static final PSkillData<PField_Orb> DATA = register(PCond_EvokeOrb.class, PField_Orb.class)
             .selfTarget();
 
     public PCond_EvokeOrb(PSkillSaveData content)
@@ -27,17 +25,13 @@ public class PCond_EvokeOrb extends PCond
 
     public PCond_EvokeOrb()
     {
-        super(DATA, PCLCardTarget.None, 1, new PCLOrbHelper[]{});
+        super(DATA, PCLCardTarget.None, 1);
     }
 
-    public PCond_EvokeOrb(int amount, PCLOrbHelper... powers)
+    public PCond_EvokeOrb(int amount, PCLOrbHelper... orbs)
     {
-        super(DATA, PCLCardTarget.None, amount, powers);
-    }
-
-    public PCond_EvokeOrb(int amount, List<PCLOrbHelper> powers)
-    {
-        super(DATA, PCLCardTarget.None, amount, powers.toArray(new PCLOrbHelper[]{}));
+        super(DATA, PCLCardTarget.None, amount);
+        fields.setOrb(orbs);
     }
 
     @Override
@@ -58,7 +52,7 @@ public class PCond_EvokeOrb extends PCond
     @Override
     public String getSubText()
     {
-        Object tt = !orbs.isEmpty() ? getOrbString() : plural(PGR.core.tooltips.orb);
+        Object tt = fields.getOrbAndOrString();
         if (isTrigger())
         {
             return TEXT.conditions.wheneverYou(TEXT.actions.evoke(tt));
@@ -69,7 +63,7 @@ public class PCond_EvokeOrb extends PCond
     @Override
     public boolean triggerOnOrbEvoke(AbstractOrb o)
     {
-        if (this.childEffect != null && getOrbFilter().invoke(o))
+        if (this.childEffect != null && fields.getOrbFilter().invoke(o))
         {
             this.childEffect.use(makeInfo(null));
         }
@@ -79,13 +73,13 @@ public class PCond_EvokeOrb extends PCond
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
     {
-        if ((orbs.isEmpty() && GameUtilities.getOrbCount() < amount) || EUIUtils.any(orbs, o -> GameUtilities.getOrbCount(o.ID) < amount))
+        if ((fields.orbs.isEmpty() && GameUtilities.getOrbCount() < amount) || EUIUtils.any(fields.orbs, o -> GameUtilities.getOrbCount(o.ID) < amount))
         {
             return false;
         }
         if (isUsing)
         {
-            getActions().evokeOrb(1, amount).setFilter(getOrbFilter());
+            getActions().evokeOrb(1, amount).setFilter(fields.getOrbFilter());
         }
         return true;
     }

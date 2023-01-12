@@ -1,4 +1,4 @@
-package pinacolada.actions.cardManipulation;
+package pinacolada.actions.pileSelection;
 
 import com.megacrit.cardcrawl.actions.GameActionManager;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -7,16 +7,13 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.ui.GridCardSelectScreenHelper;
-import pinacolada.actions.PCLActionWithCallback;
+import pinacolada.actions.CardFilterAction;
 import pinacolada.resources.PGR;
 
-import java.util.ArrayList;
-
-public class ScryWhichActuallyTriggersDiscard extends PCLActionWithCallback<ArrayList<AbstractCard>>
+// TODO extend DiscardFromPile
+public class Scry extends CardFilterAction
 {
-    protected final ArrayList<AbstractCard> selectedCards = new ArrayList<>();
-
-    public ScryWhichActuallyTriggersDiscard(int amount)
+    public Scry(int amount)
     {
         super(ActionType.CARD_MANIPULATION, Settings.ACTION_DUR_FAST);
 

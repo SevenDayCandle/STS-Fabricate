@@ -1,5 +1,9 @@
 package pinacolada.powers;
 
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.powers.*;
 import com.megacrit.cardcrawl.powers.watcher.VigorPower;
@@ -19,9 +23,11 @@ import pinacolada.powers.special.ToxicologyPower;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@JsonAdapter(PCLPowerHelper.PCLPowerHelperAdapter.class)
 public class PCLPowerHelper implements TooltipProvider
 {
     protected static final Map<String, PCLPowerHelper> ALL = new HashMap<>();
@@ -222,5 +228,19 @@ public class PCLPowerHelper implements TooltipProvider
         Permanent,
         SingleTurn,
         TurnBased,
+    }
+
+    public static class PCLPowerHelperAdapter extends TypeAdapter<PCLPowerHelper>
+    {
+        @Override
+        public void write(JsonWriter writer, PCLPowerHelper value) throws IOException
+        {
+            writer.value(value.ID);
+        }
+
+        @Override
+        public PCLPowerHelper read(JsonReader in) throws IOException {
+            return get(in.nextString());
+        }
     }
 }

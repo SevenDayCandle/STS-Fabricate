@@ -5,14 +5,14 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.skills.PCond;
-import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Empty;
 
-public class PCond_AtTurnEnd extends PCond
+public class PCond_AtTurnEnd extends PCond<PField_Empty>
 {
 
-    public static final PSkillData DATA = register(PCond_AtTurnEnd.class, PCLEffectType.General, 1, 1)
+    public static final PSkillData<PField_Empty> DATA = register(PCond_AtTurnEnd.class, PField_Empty.class, 1, 1)
             .selfTarget();
 
     public PCond_AtTurnEnd()
@@ -23,18 +23,6 @@ public class PCond_AtTurnEnd extends PCond
     public PCond_AtTurnEnd(PSkillSaveData content)
     {
         super(content);
-    }
-
-    public PCond_AtTurnEnd(PSkill effect)
-    {
-        this();
-        setChild(effect);
-    }
-
-    public PCond_AtTurnEnd(PSkill... effect)
-    {
-        this();
-        setChild(effect);
     }
 
     // This should not activate the child effect when played normally

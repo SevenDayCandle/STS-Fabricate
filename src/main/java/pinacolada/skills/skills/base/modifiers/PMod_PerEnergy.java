@@ -1,6 +1,5 @@
 package pinacolada.skills.skills.base.modifiers;
 
-import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.resources.PGR;
@@ -8,16 +7,14 @@ import pinacolada.skills.PMod;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Not;
 import pinacolada.utilities.GameUtilities;
 
-import java.util.List;
-
-import static pinacolada.skills.PSkill.PCLEffectType.General;
-
-public class PMod_PerEnergy extends PMod
+// TODO better name for field
+public class PMod_PerEnergy extends PMod<PField_Not>
 {
 
-    public static final PSkillData DATA = register(PMod_PerEnergy.class, General).selfTarget();
+    public static final PSkillData DATA = register(PMod_PerEnergy.class, PField_Not.class).selfTarget();
 
     public PMod_PerEnergy(PSkillSaveData content)
     {
@@ -29,14 +26,9 @@ public class PMod_PerEnergy extends PMod
         super(DATA);
     }
 
-    public PMod_PerEnergy(int amount, PCLAffinity... affinities)
+    public PMod_PerEnergy(int amount)
     {
-        super(DATA, PCLCardTarget.None, amount, affinities);
-    }
-
-    public PMod_PerEnergy(int amount, List<PCLAffinity> affinities)
-    {
-        super(DATA, PCLCardTarget.None, amount, affinities.toArray(new PCLAffinity[]{}));
+        super(DATA, PCLCardTarget.None, amount);
     }
 
     @Override
@@ -54,7 +46,7 @@ public class PMod_PerEnergy extends PMod
     @Override
     public String getText(boolean addPeriod)
     {
-        String payString = (!(alt || sourceCard != null && sourceCard.energyOnUse == -1)) ? (TEXT.actions.pay("X", PGR.core.tooltips.energy) + ": ") : "";
+        String payString = (!(fields.not || sourceCard != null && sourceCard.energyOnUse == -1)) ? (TEXT.actions.pay("X", PGR.core.tooltips.energy) + ": ") : "";
         return payString + super.getText(addPeriod);
     }
 
@@ -64,7 +56,7 @@ public class PMod_PerEnergy extends PMod
         if (this.childEffect != null)
         {
             updateChildAmount(info);
-            if (alt || (sourceCard != null && sourceCard.energyOnUse == -1))
+            if (fields.not || (sourceCard != null && sourceCard.energyOnUse == -1))
             {
                 GameUtilities.useXCostEnergy(sourceCard);
             }
@@ -75,6 +67,6 @@ public class PMod_PerEnergy extends PMod
     @Override
     public int getModifiedAmount(PSkill be, PCLUseInfo info)
     {
-        return be.baseAmount * GameUtilities.getXCostEnergy(sourceCard, alt) / Math.max(1, this.amount);
+        return be.baseAmount * GameUtilities.getXCostEnergy(sourceCard, fields.not) / Math.max(1, this.amount);
     }
 }

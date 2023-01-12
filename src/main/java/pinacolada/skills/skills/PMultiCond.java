@@ -19,16 +19,16 @@ import pinacolada.skills.PCond;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Or;
 import pinacolada.utilities.RotatingList;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
-public class PMultiCond extends PCond implements PMultiBase<PCond>
+public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond>
 {
-    public static final PSkillData DATA = register(PMultiCond.class, PCLEffectType.General, 0, DEFAULT_MAX);
+    public static final PSkillData<PField_Or> DATA = register(PMultiCond.class, PField_Or.class, 0, DEFAULT_MAX);
     protected ArrayList<PCond> effects = new ArrayList<>();
 
     public PMultiCond()
@@ -61,7 +61,7 @@ public class PMultiCond extends PCond implements PMultiBase<PCond>
 
     public static PMultiCond or(PCond... effects)
     {
-        return (PMultiCond) new PMultiCond(effects).setAlt(true);
+        return (PMultiCond) new PMultiCond(effects).edit(r -> r.setOr(true));
     }
 
     public void addAdditionalData(PSkillSaveData data)
@@ -78,7 +78,7 @@ public class PMultiCond extends PCond implements PMultiBase<PCond>
     @Override
     public String getSubText()
     {
-        return alt ? PCLCoreStrings.joinWithOr(EUIUtils.map(effects, e -> e.getText(false))) : PSkill.joinEffectTexts(effects, ". ", false);
+        return fields.or ? PCLCoreStrings.joinWithOr(EUIUtils.map(effects, e -> e.getText(false))) : PSkill.joinEffectTexts(effects, ". ", false);
     }
 
     @Override
@@ -141,16 +141,6 @@ public class PMultiCond extends PCond implements PMultiBase<PCond>
         return target == PCLCardTarget.Single || EUIUtils.any(effects, PSkill::requiresTarget);
     }
 
-    public PMultiCond setCards(Collection<? extends AbstractCard> cards)
-    {
-        super.setCards(cards);
-        for (PSkill be : effects)
-        {
-            be.setCards(cards);
-        }
-        return this;
-    }
-
     @Override
     public boolean triggerOnElementReact(AffinityReactions reactions, AbstractCreature target)
     {
@@ -160,7 +150,7 @@ public class PMultiCond extends PCond implements PMultiBase<PCond>
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
     {
-        return effects.isEmpty() || (alt ? EUIUtils.any(effects, c -> c.checkCondition(info, isUsing, fromTrigger)) : EUIUtils.all(effects, c -> c.checkCondition(info, isUsing, fromTrigger)));
+        return effects.isEmpty() || (fields.or) ? EUIUtils.any(effects, c -> c.checkCondition(info, isUsing, fromTrigger)) : EUIUtils.all(effects, c -> c.checkCondition(info, isUsing, fromTrigger));
     }
 
     @Override

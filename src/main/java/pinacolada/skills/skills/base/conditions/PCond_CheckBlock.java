@@ -9,12 +9,13 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Not;
 
 import java.util.List;
 
-public class PCond_CheckBlock extends PCond
+public class PCond_CheckBlock extends PCond<PField_Not>
 {
-    public static final PSkillData DATA = register(PCond_CheckBlock.class, PCLEffectType.General);
+    public static final PSkillData<PField_Not> DATA = register(PCond_CheckBlock.class, PField_Not.class);
 
     public PCond_CheckBlock(PSkillSaveData content)
     {

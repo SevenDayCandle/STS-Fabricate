@@ -8,12 +8,13 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Empty;
 
 import java.util.List;
 
-public class PMove_WithdrawAlly extends PMove
+public class PMove_WithdrawAlly extends PMove<PField_Empty>
 {
-    public static final PSkillData DATA = register(PMove_WithdrawAlly.class, PCLEffectType.General)
+    public static final PSkillData<PField_Empty> DATA = register(PMove_WithdrawAlly.class, PField_Empty.class)
             .setTargets(PCLCardTarget.AllAlly, PCLCardTarget.RandomAlly, PCLCardTarget.SingleAlly)
             .pclOnly();
 
@@ -51,7 +52,7 @@ public class PMove_WithdrawAlly extends PMove
         {
             if (this.childEffect != null)
             {
-                this.childEffect.setCards(cards);
+                info.setData(cards);
                 this.childEffect.use(info);
             }
         });

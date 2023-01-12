@@ -3,79 +3,32 @@ package pinacolada.skills;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIRM;
-import pinacolada.cards.base.*;
+import pinacolada.cards.base.PCLAffinity;
+import pinacolada.cards.base.PCLAttackType;
+import pinacolada.cards.base.PCLCardTarget;
+import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.cards.base.fields.PCLCardTag;
 import pinacolada.interfaces.markers.PSkillAttribute;
-import pinacolada.orbs.PCLOrbHelper;
-import pinacolada.powers.PCLPowerHelper;
+import pinacolada.skills.fields.PField;
 import pinacolada.skills.skills.base.traits.*;
 import pinacolada.skills.skills.special.traits.PTrait_Affinity;
 import pinacolada.skills.skills.special.traits.PTrait_AttackType;
 import pinacolada.skills.skills.special.traits.PTrait_CardTarget;
-import pinacolada.stances.PCLStanceHelper;
 
-public abstract class PTrait extends PSkill implements PSkillAttribute
+public abstract class PTrait<T extends PField> extends PSkill<T> implements PSkillAttribute
 {
     protected boolean conditionMetCache;
 
-    public PTrait(PSkillSaveData content)
+    public static <T extends PField> PSkillData<T> register(Class<? extends PSkill<T>> type, Class<T> effectType)
     {
-        super(content);
+        return PSkill.register(type, effectType, getDefaultPriority(type), -DEFAULT_MAX, DEFAULT_MAX)
+                .selfTarget();
     }
 
-    public PTrait(PSkillData data)
+    public static <T extends PField> PSkillData<T> register(Class<? extends PSkill<T>> type, Class<T> effectType, AbstractCard.CardColor... cardColors)
     {
-        super(data);
-    }
-
-    public PTrait(PSkillData data, int amount)
-    {
-        super(data, PCLCardTarget.Self, amount);
-    }
-
-    public PTrait(PSkillData data, int amount, PSkill effect)
-    {
-        super(data, PCLCardTarget.Self, amount);
-    }
-
-    public PTrait(PSkillData data, int amount, PSkill... effect)
-    {
-        super(data, PCLCardTarget.Self, amount);
-    }
-
-    public PTrait(PSkillData data, int amount, PCLCardGroupHelper... groups)
-    {
-        super(data, PCLCardTarget.Self, amount, groups);
-    }
-
-    public PTrait(PSkillData data, int amount, PCLAffinity... affinities)
-    {
-        super(data, PCLCardTarget.Self, amount, affinities);
-    }
-
-    public PTrait(PSkillData data, int amount, PCLPowerHelper... powers)
-    {
-        super(data, PCLCardTarget.Self, amount, powers);
-    }
-
-    public PTrait(PSkillData data, int amount, PCLOrbHelper... orbs)
-    {
-        super(data, PCLCardTarget.Self, amount, orbs);
-    }
-
-    public PTrait(PSkillData data, int amount, PCLCardTag... tags)
-    {
-        super(data, amount, tags);
-    }
-
-    public PTrait(PSkillData data, PCLStanceHelper... stance)
-    {
-        super(data, stance);
-    }
-
-    public PTrait(PSkillData data, PCLCardTag... tags)
-    {
-        super(data, tags);
+        return PSkill.register(type, effectType, getDefaultPriority(type), -DEFAULT_MAX, DEFAULT_MAX, cardColors)
+                .selfTarget();
     }
 
     public static PTrait hasAffinity(PCLAffinity... tags)
@@ -150,7 +103,7 @@ public abstract class PTrait extends PSkill implements PSkillAttribute
 
     public static PTrait hasTagsNot(PCLCardTag... tags)
     {
-        return (PTrait) new PTrait_Tag(tags).setAlt(true);
+        return (PTrait) new PTrait_Tag(tags).edit(f -> f.setRandom(true));
     }
 
     public static PTrait hasTempHP(int amount)
@@ -158,16 +111,19 @@ public abstract class PTrait extends PSkill implements PSkillAttribute
         return new PTrait_TempHP(amount);
     }
 
-    public static PSkillData register(Class<? extends PSkill> type, PCLEffectType effectType)
+    public PTrait(PSkillSaveData content)
     {
-        return PSkill.register(type, effectType, getDefaultPriority(type), -DEFAULT_MAX, DEFAULT_MAX)
-                .selfTarget();
+        super(content);
     }
 
-    public static PSkillData register(Class<? extends PSkill> type, PCLEffectType effectType, AbstractCard.CardColor... cardColors)
+    public PTrait(PSkillData<T> data)
     {
-        return PSkill.register(type, effectType, getDefaultPriority(type), -DEFAULT_MAX, DEFAULT_MAX, cardColors)
-                .selfTarget();
+        super(data);
+    }
+
+    public PTrait(PSkillData<T> data, int amount)
+    {
+        super(data, PCLCardTarget.Self, amount);
     }
 
     public void applyToCard(AbstractCard c, boolean conditionMet)
@@ -192,21 +148,22 @@ public abstract class PTrait extends PSkill implements PSkillAttribute
     }
 
     @Override
-    public PTrait makeCopy()
+    public PTrait<T> makeCopy()
     {
-        PTrait copy = (PTrait) super.makeCopy();
+        PTrait<T> copy = (PTrait<T>) super.makeCopy();
         copy.conditionMetCache = conditionMetCache;
         return copy;
     }
 
     @Override
-    public PSkill onRemoveFromCard(AbstractCard card)
+    public PTrait<T> onRemoveFromCard(AbstractCard card)
     {
         if (conditionMetCache)
         {
             applyToCard(card, false);
         }
-        return super.onRemoveFromCard(card);
+        super.onRemoveFromCard(card);
+        return this;
     }
 
     @Override

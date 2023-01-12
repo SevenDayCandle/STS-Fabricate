@@ -10,8 +10,9 @@ import pinacolada.skills.PMod;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_CardGeneric;
 
-public abstract class PMod_ChangeGroup extends PMod
+public abstract class PMod_ChangeGroup extends PMod<PField_CardGeneric>
 {
 
     public PMod_ChangeGroup(PSkillSaveData content)
@@ -19,14 +20,15 @@ public abstract class PMod_ChangeGroup extends PMod
         super(content);
     }
 
-    public PMod_ChangeGroup(PSkillData data)
+    public PMod_ChangeGroup(PSkillData<PField_CardGeneric> data)
     {
         super(data, PCLCardTarget.None, 1);
     }
 
-    public PMod_ChangeGroup(PSkillData data, PCLCardGroupHelper... groups)
+    public PMod_ChangeGroup(PSkillData<PField_CardGeneric> data, PCLCardGroupHelper... groups)
     {
-        super(data, PCLCardTarget.None, 1, groups);
+        super(data, PCLCardTarget.None, 1);
+        fields.setCardGroup(groups);
     }
 
     public abstract String getConditionSampleText();
@@ -45,7 +47,7 @@ public abstract class PMod_ChangeGroup extends PMod
     @Override
     public String getSubText()
     {
-        return TEXT.conditions.numIf(getGroupString(), getConditionText());
+        return TEXT.conditions.numIf(fields.getGroupString(), getConditionText());
     }
 
     @Override
@@ -89,25 +91,26 @@ public abstract class PMod_ChangeGroup extends PMod
             {
                 for (PSkill ce : ((PMultiBase<?>) this.childEffect).getSubEffects())
                 {
-                    ce.setTemporaryGroups(this.groupTypes);
+                    if (ce.fields instanceof PField_CardGeneric)
+                    {
+                        ((PField_CardGeneric) ce.fields).setTemporaryGroups(fields.groupTypes);
+                    }
+                }
+                callback.invoke();
+                for (PSkill ce : ((PMultiBase<?>) this.childEffect).getSubEffects())
+                {
+                    if (ce.fields instanceof PField_CardGeneric)
+                    {
+                        ((PField_CardGeneric) ce.fields).resetTemporaryGroups();
+                    }
                 }
             }
-            else
+            else if (this.childEffect != null && this.childEffect.fields instanceof PField_CardGeneric)
             {
-                this.childEffect.setTemporaryGroups(this.groupTypes);
+                ((PField_CardGeneric) this.childEffect.fields).setTemporaryGroups(fields.groupTypes);
+                callback.invoke();
+                ((PField_CardGeneric) this.childEffect.fields).resetTemporaryGroups();
             }
-        }
-        callback.invoke();
-        if (this.childEffect instanceof PMultiBase)
-        {
-            for (PSkill ce : ((PMultiBase<?>) this.childEffect).getSubEffects())
-            {
-                ce.resetTemporaryGroups();
-            }
-        }
-        else
-        {
-            this.childEffect.resetTemporaryGroups();
         }
     }
 }

@@ -20,7 +20,7 @@ import pinacolada.skills.skills.base.moves.PMove_DealDamage;
 
 public class PMove_StealTempHP extends PMove_DealDamage implements Hidden
 {
-    public static final PSkillData DATA = register(PMove_StealTempHP.class, PCLEffectType.General);
+    public static final PSkillData DATA = register(PMove_StealTempHP.class, PField_Empty.class);
 
     public PMove_StealTempHP()
     {

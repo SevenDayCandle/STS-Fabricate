@@ -7,16 +7,18 @@ import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_CardCategory;
 
-import java.util.ArrayList;
-
-public class PMove_ModifyBlock extends PMove_Modify
+public class PMove_ModifyBlock extends PMove_Modify<PField_CardCategory>
 {
-    public static final PSkillData DATA = PMove_Modify.register(PMove_ModifyBlock.class, PCLEffectType.CardGroup);
+    public static final PSkillData<PField_CardCategory> DATA = PMove_Modify.register(PMove_ModifyBlock.class, PField_CardCategory.class)
+            .setExtra(-DEFAULT_MAX, DEFAULT_MAX)
+            .selfTarget()
+            .pclOnly();
 
     public PMove_ModifyBlock()
     {
-        this(1, 1, new ArrayList<>());
+        this(1, 1);
     }
 
     public PMove_ModifyBlock(PSkillSaveData content)
@@ -27,11 +29,6 @@ public class PMove_ModifyBlock extends PMove_Modify
     public PMove_ModifyBlock(int amount, int block)
     {
         super(DATA, amount, block);
-    }
-
-    public PMove_ModifyBlock(int amount, int block, ArrayList<AbstractCard> cards)
-    {
-        super(DATA, amount, block, cards);
     }
 
     public PMove_ModifyBlock(int amount, int damage, PCLCardGroupHelper... groups)

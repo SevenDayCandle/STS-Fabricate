@@ -6,17 +6,16 @@ import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
+import pinacolada.skills.fields.PField_Random;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
 
-public class PCustomCond extends PCond
+public class PCustomCond extends PCond<PField_Random>
 {
-    public static final PSkillData DATA = register(PCustomCond.class, PCLEffectType.General)
+    public static final PSkillData<PField_Random> DATA = register(PCustomCond.class, PField_Random.class)
             .setAmounts(-DEFAULT_MAX, DEFAULT_MAX)
             .setExtra(-DEFAULT_MAX, DEFAULT_MAX);
-    private static final HashMap<String, PSkillData> CUSTOM_MAP = new HashMap<>();
     protected final PCLCardData cardData;
     protected int descIndex;
 
@@ -91,6 +90,7 @@ public class PCustomCond extends PCond
             if (c != null)
             {
                 copy = c.newInstance(cardData);
+                makeCopyProperties(copy);
             }
         }
         catch (InstantiationException | IllegalAccessException | InvocationTargetException e)
@@ -98,6 +98,6 @@ public class PCustomCond extends PCond
             e.printStackTrace();
         }
 
-        return (PCustomCond) makeCopyProperties(copy);
+        return copy;
     }
 }

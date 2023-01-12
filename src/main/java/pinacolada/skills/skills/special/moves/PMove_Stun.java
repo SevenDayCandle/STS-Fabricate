@@ -12,7 +12,7 @@ import pinacolada.skills.PSkillSaveData;
 
 public class PMove_Stun extends PMove implements Hidden
 {
-    public static final PSkillData DATA = register(PMove_Stun.class, PCLEffectType.General);
+    public static final PSkillData DATA = register(PMove_Stun.class, PField_Empty.class);
 
     public PMove_Stun()
     {

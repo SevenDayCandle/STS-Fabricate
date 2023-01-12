@@ -7,26 +7,20 @@ import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_CardCategory;
 
-import java.util.ArrayList;
-
-public class PMove_ReduceCooldown extends PMove_Modify
+public class PMove_ReduceCooldown extends PMove_Modify<PField_CardCategory>
 {
-    public static final PSkillData DATA = PMove_Modify.register(PMove_ReduceCooldown.class, PCLEffectType.CardGroup);
+    public static final PSkillData<PField_CardCategory> DATA = PMove_Modify.register(PMove_ReduceCooldown.class, PField_CardCategory.class);
 
     public PMove_ReduceCooldown()
     {
-        this(1, 1, new ArrayList<>());
+        this(1, 1);
     }
 
     public PMove_ReduceCooldown(PSkillSaveData content)
     {
         super(content);
-    }
-
-    public PMove_ReduceCooldown(int amount, int cooldown, ArrayList<AbstractCard> cards)
-    {
-        super(DATA, amount, cooldown, cards);
     }
 
     public PMove_ReduceCooldown(int amount, int cooldown, PCLCardGroupHelper... groups)
@@ -55,8 +49,8 @@ public class PMove_ReduceCooldown extends PMove_Modify
     @Override
     public String getSubText()
     {
-        return useParent || (cards != null && !cards.isEmpty()) ? TEXT.actions.reduceBy(TEXT.subjects.theirX(getObjectText()), getExtraRawString()) :
-                groupTypes != null && !groupTypes.isEmpty() ?
+        return useParent ? TEXT.actions.reduceBy(TEXT.subjects.theirX(getObjectText()), getExtraRawString()) :
+                fields.hasGroups() ?
                         TEXT.actions.reduceCooldown(EUIRM.strings.numNoun(getAmountRawString(), pluralCard()), getExtraRawString()) :
                         TEXT.actions.reduceBy(getObjectText(), getExtraRawString());
     }

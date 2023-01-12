@@ -10,11 +10,12 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Power;
 import pinacolada.utilities.GameUtilities;
 
-public class PMove_StackPower extends PMove
+public class PMove_StackPower extends PMove<PField_Power>
 {
-    public static final PSkillData DATA = register(PMove_StackPower.class, PCLEffectType.Power, -DEFAULT_MAX, DEFAULT_MAX);
+    public static final PSkillData<PField_Power> DATA = register(PMove_StackPower.class, PField_Power.class, -DEFAULT_MAX, DEFAULT_MAX);
 
     public PMove_StackPower()
     {
@@ -28,7 +29,8 @@ public class PMove_StackPower extends PMove
 
     public PMove_StackPower(PCLCardTarget target, int amount, PCLPowerHelper... powers)
     {
-        super(DATA, target, amount, powers);
+        super(DATA, target, amount);
+        fields.setPower(powers);
     }
 
     @Override
@@ -36,7 +38,7 @@ public class PMove_StackPower extends PMove
     {
         if (m != null)
         {
-            for (PCLPowerHelper power : powers)
+            for (PCLPowerHelper power : fields.powers)
             {
                 GameUtilities.getIntent(m).addModifier(power.ID, amount);
             }
@@ -58,24 +60,24 @@ public class PMove_StackPower extends PMove
     @Override
     public boolean isDetrimental()
     {
-        return ((target.targetsSelf()) && EUIUtils.any(powers, po -> po.isDebuff)) ||
-                ((!target.targetsSelf()) && EUIUtils.any(powers, po -> !po.isDebuff));
+        return ((target.targetsSelf()) && EUIUtils.any(fields.powers, po -> po.isDebuff)) ||
+                ((!target.targetsSelf()) && EUIUtils.any(fields.powers, po -> !po.isDebuff));
     }
 
     @Override
     public void use(PCLUseInfo info)
     {
-        if (alt)
+        if (fields.random)
         {
-            PCLPowerHelper power = GameUtilities.getRandomElement(powers);
+            PCLPowerHelper power = GameUtilities.getRandomElement(fields.powers);
             if (power != null)
             {
                 getActions().applyPower(info.source, info.target, target, power, amount);
             }
         }
-        else if (!powers.isEmpty())
+        else if (!fields.powers.isEmpty())
         {
-            for (PCLPowerHelper power : powers)
+            for (PCLPowerHelper power : fields.powers)
             {
                 getActions().applyPower(info.source, info.target, target, power, amount);
             }
@@ -84,7 +86,7 @@ public class PMove_StackPower extends PMove
         {
             for (int i = 0; i < amount; i++)
             {
-                getActions().applyPower(info.source, info.target, target, alt2 ? PCLPowerHelper.randomBuff() : PCLPowerHelper.randomDebuff(), amount);
+                getActions().applyPower(info.source, info.target, target, fields.debuff ? PCLPowerHelper.randomDebuff() : PCLPowerHelper.randomBuff(), amount);
             }
         }
         super.use(info);
@@ -95,9 +97,9 @@ public class PMove_StackPower extends PMove
     public String getSubText()
     {
         String joinedString;
-        if (alt && !powers.isEmpty())
+        if (fields.random && !fields.powers.isEmpty())
         {
-            joinedString = getPowerOrString();
+            joinedString = fields.getPowerOrString();
             switch (target)
             {
                 case RandomEnemy:
@@ -105,10 +107,10 @@ public class PMove_StackPower extends PMove
                 case AllEnemy:
                 case All:
                 case Team:
-                    return TEXT.subjects.randomly(powers.size() > 0 && powers.get(0).isDebuff ? TEXT.actions.applyAmountToTarget(getAmountRawString(), joinedString, getTargetString()) : TEXT.actions.giveTargetAmount(getTargetString(), getAmountRawString(), joinedString));
+                    return TEXT.subjects.randomly(fields.powers.size() > 0 && fields.powers.get(0).isDebuff ? TEXT.actions.applyAmountToTarget(getAmountRawString(), joinedString, getTargetString()) : TEXT.actions.giveTargetAmount(getTargetString(), getAmountRawString(), joinedString));
                 case Single:
                 case SingleAlly:
-                    return TEXT.subjects.randomly(powers.size() > 0 && powers.get(0).isDebuff ? TEXT.actions.applyAmount(getAmountRawString(), joinedString) : TEXT.actions.giveTargetAmount(getTargetString(), getAmountRawString(), joinedString));
+                    return TEXT.subjects.randomly(fields.powers.size() > 0 && fields.powers.get(0).isDebuff ? TEXT.actions.applyAmount(getAmountRawString(), joinedString) : TEXT.actions.giveTargetAmount(getTargetString(), getAmountRawString(), joinedString));
                 case Self:
                     if (isFromCreature())
                     {
@@ -119,17 +121,17 @@ public class PMove_StackPower extends PMove
                             : TEXT.actions.gainAmount(getAmountRawString(), joinedString));
             }
         }
-        joinedString = powers.isEmpty() ? TEXT.subjects.randomX(plural(alt2 ? PGR.core.tooltips.buff : PGR.core.tooltips.debuff)) : getPowerString();
+        joinedString = fields.powers.isEmpty() ? TEXT.subjects.randomX(plural(fields.debuff ? PGR.core.tooltips.debuff : PGR.core.tooltips.buff)) : fields.getPowerString();
         switch (target)
         {
             case RandomEnemy:
             case AllEnemy:
             case All:
             case Team:
-                return powers.size() > 0 && powers.get(0).isDebuff ? TEXT.actions.applyAmountToTarget(getAmountRawString(), joinedString, getTargetString()) : TEXT.actions.giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
+                return fields.powers.size() > 0 && fields.powers.get(0).isDebuff ? TEXT.actions.applyAmountToTarget(getAmountRawString(), joinedString, getTargetString()) : TEXT.actions.giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
             case Single:
             case SingleAlly:
-                return powers.size() > 0 && powers.get(0).isDebuff ? TEXT.actions.applyAmount(getAmountRawString(), joinedString) : TEXT.actions.giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
+                return fields.powers.size() > 0 && fields.powers.get(0).isDebuff ? TEXT.actions.applyAmount(getAmountRawString(), joinedString) : TEXT.actions.giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
             case Self:
                 if (isFromCreature())
                 {

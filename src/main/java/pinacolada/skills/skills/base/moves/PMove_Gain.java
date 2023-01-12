@@ -5,15 +5,16 @@ import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Empty;
 
-public abstract class PMove_Gain extends PMove
+public abstract class PMove_Gain extends PMove<PField_Empty>
 {
     public PMove_Gain(PSkillSaveData content)
     {
         super(content);
     }
 
-    public PMove_Gain(PSkillData data, int amount)
+    public PMove_Gain(PSkillData<PField_Empty> data, int amount)
     {
         super(data, PCLCardTarget.Self, amount);
     }

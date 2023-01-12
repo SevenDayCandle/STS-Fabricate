@@ -7,15 +7,13 @@ import pinacolada.cards.base.fields.PCLCardTag;
 import pinacolada.interfaces.markers.PointerProvider;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.powers.PCLPowerHelper;
+import pinacolada.skills.fields.PField;
 import pinacolada.skills.skills.base.moves.*;
 import pinacolada.skills.skills.special.moves.PMove_DealCardDamage;
 import pinacolada.skills.skills.special.moves.PMove_Stun;
 import pinacolada.stances.PCLStanceHelper;
 
-import java.util.Collection;
-import java.util.List;
-
-public abstract class PMove extends PSkill
+public abstract class PMove<T extends PField> extends PSkill<T>
 {
 
     public PMove(PSkillSaveData content)
@@ -23,160 +21,110 @@ public abstract class PMove extends PSkill
         super(content);
     }
 
-    public PMove(PSkillData data)
+    public PMove(PSkillData<T> data)
     {
         super(data);
     }
 
-    public PMove(PSkillData data, PCLCardTarget target, int amount)
+    public PMove(PSkillData<T> data, PCLCardTarget target, int amount)
     {
         super(data, target, amount);
     }
 
-    public PMove(PSkillData data, PCLCardTarget target, int amount, PSkill effect)
+    public PMove(PSkillData<T> data, PCLCardTarget target, int amount, int extra)
     {
-        super(data, target, amount);
+        super(data, target, amount, extra);
     }
 
-    public PMove(PSkillData data, PCLCardTarget target, int amount, PSkill... effect)
-    {
-        super(data, target, amount);
-    }
-
-    public PMove(PSkillData data, PCLCardTarget target, int amount, PCLCardGroupHelper... groups)
-    {
-        super(data, target, amount, groups);
-    }
-
-    public PMove(PSkillData data, PCLCardTarget target, int amount, PCLAffinity... affinities)
-    {
-        super(data, target, amount, affinities);
-    }
-
-    public PMove(PSkillData data, PCLCardTarget target, int amount, PCLPowerHelper... powers)
-    {
-        super(data, target, amount, powers);
-    }
-
-    public PMove(PSkillData data, PCLCardTarget target, int amount, PCLOrbHelper... orbs)
-    {
-        super(data, target, amount, orbs);
-    }
-
-    public PMove(PSkillData data, PCLStanceHelper... stance)
-    {
-        super(data, stance);
-    }
-
-    public PMove(PSkillData data, int amount, PCLCardTag... tags)
-    {
-        super(data, amount, tags);
-    }
-
-    public PMove(PSkillData data, int copies, Collection<String> cards)
-    {
-        super(data, copies, cards);
-    }
-
-    public PMove(PSkillData data, int amount, String... cards)
-    {
-        super(data, amount, cards);
-    }
-
-    public PMove(PSkillData data, PCLCardTarget target, int amount, String... cards)
-    {
-        super(data, target, amount, cards);
-    }
-
-    public static PMove addLevel(int amount, PCLAffinity... affinities)
+    public static PMove_AddLevel addLevel(int amount, PCLAffinity... affinities)
     {
         return new PMove_AddLevel(amount, affinities);
     }
 
-    public static PMove addPowerBonus(int amount, PCLPowerHelper... p)
+    public static PMove_AddPowerBonus addPowerBonus(int amount, PCLPowerHelper... p)
     {
         return new PMove_AddPowerBonus(amount, p);
     }
 
-    public static PMove apply(PCLCardTarget target, int amount, PCLPowerHelper... powers)
+    public static PMove_StackPower apply(PCLCardTarget target, int amount, PCLPowerHelper... powers)
     {
         return new PMove_StackPower(target, amount, powers);
     }
 
-    public static PMove apply(PCLCardTarget target, PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers)
+    public static PMove_StackPower apply(PCLCardTarget target, PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers)
     {
-        return new PMove_StackPower(target, 0, powers)
+        return (PMove_StackPower) new PMove_StackPower(target, 0, powers)
                 .setSource(card, valueSource)
                 .setAmountFromCard();
     }
 
-    public static PMove applyToAllies(int amount, PCLPowerHelper... powers)
+    public static PMove_StackPower applyToAllies(int amount, PCLPowerHelper... powers)
     {
         return apply(PCLCardTarget.AllAlly, amount, powers);
     }
 
-    public static PMove applyToAllies(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers)
+    public static PMove_StackPower applyToAllies(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers)
     {
         return apply(PCLCardTarget.AllAlly, card, valueSource, powers);
     }
 
-    public static PMove applyToEnemies(int amount, PCLPowerHelper... powers)
+    public static PMove_StackPower applyToEnemies(int amount, PCLPowerHelper... powers)
     {
         return apply(PCLCardTarget.AllEnemy, amount, powers);
     }
 
-    public static PMove applyToEnemies(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers)
+    public static PMove_StackPower applyToEnemies(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers)
     {
         return apply(PCLCardTarget.AllEnemy, card, valueSource, powers);
     }
 
-    public static PMove applyToEveryone(int amount, PCLPowerHelper... powers)
+    public static PMove_StackPower applyToEveryone(int amount, PCLPowerHelper... powers)
     {
         return apply(PCLCardTarget.All, amount, powers);
     }
 
-    public static PMove applyToRandom(int amount, PCLPowerHelper... powers)
+    public static PMove_StackPower applyToRandom(int amount, PCLPowerHelper... powers)
     {
         return apply(PCLCardTarget.RandomEnemy, amount, powers);
     }
 
-    public static PMove applyToRandom(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers)
+    public static PMove_StackPower applyToRandom(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers)
     {
         return apply(PCLCardTarget.RandomEnemy, card, valueSource, powers);
     }
 
-    public static PMove applyToSingle(int amount, PCLPowerHelper... powers)
+    public static PMove_StackPower applyToSingle(int amount, PCLPowerHelper... powers)
     {
         return apply(PCLCardTarget.Single, amount, powers);
     }
 
-    public static PMove applyToSingle(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers)
+    public static PMove_StackPower applyToSingle(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers)
     {
         return apply(PCLCardTarget.Single, card, valueSource, powers);
     }
 
-    public static PMove applyToTeam(int amount, PCLPowerHelper... powers)
+    public static PMove_StackPower applyToTeam(int amount, PCLPowerHelper... powers)
     {
         return apply(PCLCardTarget.Team, amount, powers);
     }
 
-    public static PMove applyToTeam(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers)
+    public static PMove_StackPower applyToTeam(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers)
     {
         return apply(PCLCardTarget.Team, card, valueSource, powers);
     }
 
-    public static PMove channelOrb(int amount, PCLOrbHelper... orb)
+    public static PMove_ChannelOrb channelOrb(int amount, PCLOrbHelper... orb)
     {
         return new PMove_ChannelOrb(amount, orb);
     }
 
-    public static PMove channelOrb(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLOrbHelper... orb)
+    public static PMove_ChannelOrb channelOrb(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLOrbHelper... orb)
     {
-        return new PMove_ChannelOrb(0, orb)
+        return (PMove_ChannelOrb) new PMove_ChannelOrb(0, orb)
                 .setSource(card, valueSource);
     }
 
-    public static PMove cycle(int amount)
+    public static PMove_Cycle cycle(int amount)
     {
         return new PMove_Cycle(amount);
     }
@@ -650,20 +598,5 @@ public abstract class PMove extends PSkill
         super.setSource(card, valueSource);
         return this;
     }
-
-    @Override
-    public PMove setCardGroup(PCLCardGroupHelper... gt)
-    {
-        super.setCardGroup(gt);
-        return this;
-    }
-
-    @Override
-    public PMove setCardGroup(List<PCLCardGroupHelper> gt)
-    {
-        super.setCardGroup(gt);
-        return this;
-    }
-
 
 }

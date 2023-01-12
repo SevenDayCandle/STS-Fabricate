@@ -1,28 +1,29 @@
 package pinacolada.skills.skills.base.modifiers;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.cards.CardGroup;
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.localization.LocalizedStrings;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
+import extendedui.interfaces.delegates.FuncT4;
+import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.actions.PCLActionWithCallback;
 import pinacolada.actions.pileSelection.SelectFromPile;
-import pinacolada.cards.base.PCLAffinity;
+import pinacolada.cards.base.CardSelection;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
-import pinacolada.interfaces.markers.SelectFromPileMarker;
-import pinacolada.orbs.PCLOrbHelper;
-import pinacolada.powers.PCLPowerHelper;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PMod;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.utilities.CardSelection;
+import pinacolada.skills.fields.PField_CardCategory;
 
 import java.util.ArrayList;
 
-public abstract class PMod_Do extends PMod implements SelectFromPileMarker
+public abstract class PMod_Do extends PMod<PField_CardCategory>
 {
 
     public PMod_Do(PSkillSaveData content)
@@ -30,53 +31,29 @@ public abstract class PMod_Do extends PMod implements SelectFromPileMarker
         super(content);
     }
 
-    public PMod_Do(PSkillData data)
+    public PMod_Do(PSkillData<PField_CardCategory> data)
     {
         super(data);
     }
 
-    public PMod_Do(PSkillData data, PCLCardTarget target, int amount)
+    public PMod_Do(PSkillData<PField_CardCategory> data, PCLCardTarget target, int amount)
     {
         super(data, target, amount);
     }
 
-    public PMod_Do(PSkillData data, PCLCardTarget target, int amount, PCLCardGroupHelper... groups)
+    public PMod_Do(PSkillData<PField_CardCategory> data, PCLCardTarget target, int amount, PCLCardGroupHelper... groups)
     {
-        super(data, target, amount, groups);
-    }
-
-    public PMod_Do(PSkillData data, PCLCardTarget target, int amount, PSkill effect)
-    {
-        super(data, target, amount, effect);
-    }
-
-    public PMod_Do(PSkillData data, PCLCardTarget target, int amount, PSkill... effect)
-    {
-        super(data, target, amount, effect);
-    }
-
-    public PMod_Do(PSkillData data, PCLCardTarget target, int amount, PCLAffinity... affinities)
-    {
-        super(data, target, amount, affinities);
-    }
-
-    public PMod_Do(PSkillData data, PCLCardTarget target, int amount, PCLOrbHelper... orbs)
-    {
-        super(data, target, amount, orbs);
-    }
-
-    public PMod_Do(PSkillData data, PCLCardTarget target, int amount, PCLPowerHelper... powerHelpers)
-    {
-        super(data, target, amount, powerHelpers);
+        super(data, target, amount);
+        fields.setCardGroup(groups);
     }
 
     protected PCLActionWithCallback<ArrayList<AbstractCard>> createPileAction(PCLUseInfo info)
     {
-        SelectFromPile action = getAction().invoke(getName(), info.target, amount <= 0 ? Integer.MAX_VALUE : amount, getCardGroup())
-                .setOptions(alt || amount <= 0 ? CardSelection.Random : origin, true);
-        if (alt2)
+        SelectFromPile action = getAction().invoke(getName(), info.target, amount <= 0 ? Integer.MAX_VALUE : amount, fields.getCardGroup(info))
+                .setOptions(fields.random || amount <= 0 ? CardSelection.Random : fields.origin, true);
+        if (fields.forced)
         {
-            action = action.setFilter(c -> getFullCardFilter().invoke(c));
+            action = action.setFilter(c -> fields.getFullCardFilter().invoke(c));
         }
         return action;
     }
@@ -84,21 +61,21 @@ public abstract class PMod_Do extends PMod implements SelectFromPileMarker
     public String getMoveString(boolean addPeriod)
     {
         String amString = amount <= 0 ? TEXT.subjects.all : getAmountRawString();
-        return !groupTypes.isEmpty() ?
-                TEXT.actions.genericFrom(tooltipTitle(), amString, alt2 ? getFullCardString() : getShortCardString(), getGroupString())
-                : EUIRM.strings.verbNoun(tooltipTitle(), amString);
+        return !fields.groupTypes.isEmpty() ?
+                TEXT.actions.genericFrom(getActionTitle(), amString, fields.forced ? fields.getFullCardString() : fields.getShortCardString(), fields.getGroupString())
+                : EUIRM.strings.verbNoun(getActionTitle(), amString);
     }
 
     @Override
     public String getSampleText()
     {
-        return EUIRM.strings.verbNoun(tooltipTitle(), "X") + " " + TEXT.conditions.doX("Y");
+        return EUIRM.strings.verbNoun(getActionTitle(), "X") + " " + TEXT.conditions.doX("Y");
     }
 
     @Override
     public String getSubText()
     {
-        return getFullCardOrString(1);
+        return fields.getFullCardOrString(1);
     }
 
     @Override
@@ -106,7 +83,7 @@ public abstract class PMod_Do extends PMod implements SelectFromPileMarker
     {
         return getMoveString(addPeriod) + LocalizedStrings.PERIOD + (childEffect != null ? (" " +
                 (childEffect.useParent ? childEffect.getText(addPeriod) :
-                        (TEXT.conditions.per(capital(childEffect.getText(false), addPeriod), EUIRM.strings.nounVerb(getSubText(), tooltipPast())) + PCLCoreStrings.period(addPeriod))
+                        (TEXT.conditions.per(capital(childEffect.getText(false), addPeriod), EUIRM.strings.nounVerb(getSubText(), getActionPast())) + PCLCoreStrings.period(addPeriod))
                 )) : "");
     }
 
@@ -115,14 +92,10 @@ public abstract class PMod_Do extends PMod implements SelectFromPileMarker
     {
         getActions().add(createPileAction(info))
                 .addCallback(cards -> {
-                    this.cards = cards;
                     if (this.childEffect != null)
                     {
-                        if (this.childEffect.useParent)
-                        {
-                            this.childEffect.setCards(cards);
-                        }
-                        else
+                        info.setData(cards);
+                        if (!this.childEffect.useParent)
                         {
                             updateChildAmount(info);
                         }
@@ -136,14 +109,10 @@ public abstract class PMod_Do extends PMod implements SelectFromPileMarker
     {
         getActions().add(createPileAction(info))
                 .addCallback(cards -> {
-                    this.cards = cards;
                     if (this.childEffect != null)
                     {
-                        if (this.childEffect.useParent)
-                        {
-                            this.childEffect.setCards(cards);
-                        }
-                        else
+                        info.setData(cards);
+                        if (!this.childEffect.useParent)
                         {
                             updateChildAmount(info);
                         }
@@ -155,8 +124,20 @@ public abstract class PMod_Do extends PMod implements SelectFromPileMarker
     @Override
     public int getModifiedAmount(PSkill be, PCLUseInfo info)
     {
-        return cards == null || be == null ? 0 : be.baseAmount * (alt2 ? cards.size() : (EUIUtils.count(cards,
-                c -> getFullCardFilter().invoke(c)
+        ArrayList<AbstractCard> cards = info.getData(new ArrayList<>());
+        return cards == null || be == null ? 0 : be.baseAmount * (fields.forced ? cards.size() : (EUIUtils.count(cards,
+                c -> fields.getFullCardFilter().invoke(c)
         )));
     }
+
+    protected String getActionTitle()
+    {
+        return getActionTooltip().title;
+    }
+    protected String getActionPast()
+    {
+        return getActionTooltip().past;
+    }
+    public abstract EUITooltip getActionTooltip();
+    public abstract FuncT4<SelectFromPile, String, AbstractCreature, Integer, CardGroup[]> getAction();
 }

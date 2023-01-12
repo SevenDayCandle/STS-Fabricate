@@ -8,7 +8,7 @@ import pinacolada.skills.PSkillSaveData;
 
 public class PMove_RecoverHP extends PMove
 {
-    public static final PSkillData DATA = register(PMove_RecoverHP.class, PCLEffectType.General);
+    public static final PSkillData DATA = register(PMove_RecoverHP.class, PField_Empty.class);
 
     public PMove_RecoverHP()
     {

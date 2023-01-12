@@ -6,12 +6,13 @@ import pinacolada.misc.CombatManager;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_CardCategory;
 
 import java.util.List;
 
 public class PMod_BonusOnHasExhausted extends PMod_BonusOnHas
 {
-    public static final PSkillData DATA = register(PMod_BonusOnHasExhausted.class, PCLEffectType.Card)
+    public static final PSkillData<PField_CardCategory> DATA = register(PMod_BonusOnHasExhausted.class, PField_CardCategory.class)
             .selfTarget();
 
     public PMod_BonusOnHasExhausted()

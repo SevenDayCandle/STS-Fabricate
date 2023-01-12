@@ -105,7 +105,7 @@ public class PMove_Obtain extends PMove
         }
         if (this.childEffect != null)
         {
-            this.childEffect.setCards(created);
+            this.childEffect.receivePayload(created);
         }
         super.use(info);
     }

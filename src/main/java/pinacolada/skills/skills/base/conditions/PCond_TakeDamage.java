@@ -10,7 +10,7 @@ import pinacolada.skills.PSkillSaveData;
 
 public class PCond_TakeDamage extends PCond
 {
-    public static final PSkillData DATA = register(PCond_TakeDamage.class, PCLEffectType.General)
+    public static final PSkillData DATA = register(PCond_TakeDamage.class, PField_Empty.class)
             .selfTarget();
 
     public PCond_TakeDamage(PSkillSaveData content)

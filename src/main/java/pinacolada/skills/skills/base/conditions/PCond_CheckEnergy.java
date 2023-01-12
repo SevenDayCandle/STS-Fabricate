@@ -8,10 +8,11 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Not;
 
-public class PCond_CheckEnergy extends PCond
+public class PCond_CheckEnergy extends PCond<PField_Not>
 {
-    public static final PSkillData DATA = register(PCond_CheckEnergy.class, PCLEffectType.General);
+    public static final PSkillData<PField_Not> DATA = register(PCond_CheckEnergy.class, PField_Not.class);
 
     public PCond_CheckEnergy(PSkillSaveData content)
     {

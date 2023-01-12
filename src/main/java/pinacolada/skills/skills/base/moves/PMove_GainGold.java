@@ -5,10 +5,11 @@ import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Empty;
 
 public class PMove_GainGold extends PMove_Gain
 {
-    public static final PSkillData DATA = register(PMove_GainGold.class, PCLEffectType.General);
+    public static final PSkillData<PField_Empty> DATA = register(PMove_GainGold.class, PField_Empty.class);
 
     public PMove_GainGold()
     {

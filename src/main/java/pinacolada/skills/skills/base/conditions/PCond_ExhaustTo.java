@@ -11,10 +11,11 @@ import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_CardCategory;
 
 public class PCond_ExhaustTo extends PCond_DoTo
 {
-    public static final PSkillData DATA = register(PCond_ExhaustTo.class, PCLEffectType.CardGroupFull)
+    public static final PSkillData<PField_CardCategory> DATA = register(PCond_ExhaustTo.class, PField_CardCategory.class)
             .selfTarget()
             .setGroups(PCLCardGroupHelper.DrawPile, PCLCardGroupHelper.DiscardPile, PCLCardGroupHelper.Hand);
 

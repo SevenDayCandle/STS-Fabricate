@@ -6,20 +6,18 @@ import extendedui.interfaces.delegates.ActionT0;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
-import pinacolada.interfaces.markers.PCondWithoutCheck;
 import pinacolada.resources.PGR;
-import pinacolada.skills.PCond;
-import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Not;
+import pinacolada.skills.skills.PActionCond;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.List;
 
-public class PCond_Fatal extends PCond implements PCondWithoutCheck
+public class PCond_Fatal extends PActionCond<PField_Not>
 {
-
-    public static final PSkillData DATA = register(PCond_Fatal.class, PCLEffectType.General, 1, 1)
+    public static final PSkillData<PField_Not> DATA = register(PCond_Fatal.class, PField_Not.class, 1, 1)
             .selfTarget();
 
     public PCond_Fatal()
@@ -32,22 +30,10 @@ public class PCond_Fatal extends PCond implements PCondWithoutCheck
         super(content);
     }
 
-    public PCond_Fatal(PSkill effect)
-    {
-        this();
-        setChild(effect);
-    }
-
-    public PCond_Fatal(PSkill... effect)
-    {
-        this();
-        setChild(effect);
-    }
-
     @Override
     public String getSubText()
     {
-        return alt ? TEXT.conditions.not(PGR.core.tooltips.fatal.title) : TEXT.conditions.ifX(PGR.core.tooltips.fatal.title);
+        return fields.not ? TEXT.conditions.not(PGR.core.tooltips.fatal.title) : TEXT.conditions.ifX(PGR.core.tooltips.fatal.title);
     }
 
     @Override
@@ -75,13 +61,6 @@ public class PCond_Fatal extends PCond implements PCondWithoutCheck
         }
     }
 
-    // Use check is handled separately
-    @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
-    {
-        return false;
-    }
-
     protected void useImpl(PCLUseInfo info, ActionT0 callback)
     {
         List<AbstractCreature> targetList = getTargetList(info);
@@ -89,7 +68,6 @@ public class PCond_Fatal extends PCond implements PCondWithoutCheck
             if (targets.size() > 0 && EUIUtils.any(targets, GameUtilities::isDeadOrEscaped) && (!(parent instanceof PCond_Info) || ((PCond_Info) parent).tryActivate(info)))
             {
                 callback.invoke();
-
             }
         }).isCancellable(false);
     }

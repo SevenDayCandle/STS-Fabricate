@@ -3,86 +3,27 @@ package pinacolada.skills.skills.base.moves;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
 import extendedui.interfaces.delegates.ActionT1;
-import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
-import pinacolada.cards.base.fields.PCLCardTag;
 import pinacolada.skills.PMove;
-import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_CardCategory;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public abstract class PMove_Modify extends PMove
+public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<T>
 {
-
     public PMove_Modify(PSkillSaveData content)
     {
         super(content);
     }
 
-    public PMove_Modify(PSkillData data, int amount, ArrayList<AbstractCard> cards)
+    public PMove_Modify(PSkillData<T> data, int amount, int extraAmount, PCLCardGroupHelper... groups)
     {
-        super(data, PCLCardTarget.None, amount);
-        this.cards = cards;
-    }
-
-    public PMove_Modify(PSkillData data, int amount, int extraAmount)
-    {
-        this(data, amount, extraAmount, new ArrayList<>());
-    }
-
-    public PMove_Modify(PSkillData data, int amount, int extraAmount, PCLCardGroupHelper... groups)
-    {
-        this(data, amount, extraAmount);
-        setCardGroup(groups);
-    }
-
-    public PMove_Modify(PSkillData data, int amount, int extraAmount, ArrayList<AbstractCard> cards)
-    {
-        this(data, amount, cards);
-        setExtra(extraAmount);
-    }
-
-    public PMove_Modify(PSkillData data, int amount, ArrayList<AbstractCard> cards, PCLAffinity... affinities)
-    {
-        super(data, PCLCardTarget.None, amount, affinities);
-        this.cards = cards;
-    }
-
-    public PMove_Modify(PSkillData data, int amount, int extraAmount, ArrayList<AbstractCard> cards, PCLAffinity... affinities)
-    {
-        this(data, amount, cards, affinities);
-        setExtra(extraAmount);
-    }
-
-    public PMove_Modify(PSkillData data, int amount, ArrayList<AbstractCard> cards, PCLCardTag... tags)
-    {
-        super(data, amount, tags);
-        this.cards = cards;
-    }
-
-    public PMove_Modify(PSkillData data, int amount, int extraAmount, ArrayList<AbstractCard> cards, PCLCardTag... tags)
-    {
-        this(data, amount, cards, tags);
-        setExtra(extraAmount);
-    }
-
-    public static PSkillData register(Class<? extends PSkill> type, PCLEffectType effectType)
-    {
-        return PSkill.register(type, effectType, getDefaultPriority(type), 0, DEFAULT_MAX)
-                .setExtra(-DEFAULT_MAX, DEFAULT_MAX)
-                .selfTarget();
-    }
-
-    public static PSkillData register(Class<? extends PSkill> type, PCLEffectType effectType, AbstractCard.CardColor... cardColors)
-    {
-        return PSkill.register(type, effectType, getDefaultPriority(type), 0, DEFAULT_MAX, cardColors)
-                .setExtra(-DEFAULT_MAX, DEFAULT_MAX)
-                .selfTarget();
+        super(data, PCLCardTarget.None, amount, extraAmount);
+        fields.setCardGroup(groups);
     }
 
     public void cardAction(List<AbstractCard> cards)
@@ -117,8 +58,8 @@ public abstract class PMove_Modify extends PMove
     @Override
     public void use(PCLUseInfo info)
     {
-        getActions().selectFromPile(getName(), amount <= 0 ? Integer.MAX_VALUE : amount, getCardGroup())
-                .setOptions(amount <= 0 || groupTypes.isEmpty(), true)
+        getActions().selectFromPile(getName(), amount <= 0 ? Integer.MAX_VALUE : amount, fields.getCardGroup(info))
+                .setOptions(amount <= 0 || fields.groupTypes.isEmpty(), true)
                 .addCallback(this::cardAction);
         super.use(info);
     }
@@ -127,9 +68,9 @@ public abstract class PMove_Modify extends PMove
     public String getSubText()
     {
         String giveString = getObjectText();
-        return useParent || (cards != null && !cards.isEmpty()) ? TEXT.actions.giveTarget(getInheritedString(), giveString) :
-                groupTypes != null && !groupTypes.isEmpty() ?
-                        TEXT.actions.giveFrom(EUIRM.strings.numNoun(amount <= 0 ? TEXT.subjects.all : getAmountRawString(), pluralCard()), getGroupString(), giveString) :
+        return useParent ? TEXT.actions.giveTarget(getInheritedString(), giveString) :
+                fields.hasGroups() ?
+                        TEXT.actions.giveFrom(EUIRM.strings.numNoun(amount <= 0 ? TEXT.subjects.all : getAmountRawString(), pluralCard()), fields.getGroupString(), giveString) :
                         TEXT.actions.giveTarget(TEXT.subjects.thisX, giveString);
     }
 }

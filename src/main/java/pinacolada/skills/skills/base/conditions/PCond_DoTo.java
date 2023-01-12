@@ -1,92 +1,56 @@
 package pinacolada.skills.skills.base.conditions;
 
-import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.cards.CardGroup;
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT0;
-import pinacolada.actions.PCLActionWithCallback;
-import pinacolada.cards.base.PCLAffinity;
+import extendedui.interfaces.delegates.FuncT4;
+import extendedui.ui.tooltips.EUITooltip;
+import pinacolada.actions.pileSelection.SelectFromPile;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
-import pinacolada.interfaces.markers.SelectFromPileMarker;
-import pinacolada.orbs.PCLOrbHelper;
-import pinacolada.powers.PCLPowerHelper;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PCond;
-import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.utilities.CardSelection;
+import pinacolada.skills.fields.PField_CardCategory;
 
-import java.util.ArrayList;
-
-public abstract class PCond_DoTo extends PCond implements SelectFromPileMarker
+public abstract class PCond_DoTo extends PCond<PField_CardCategory>
 {
-
     public PCond_DoTo(PSkillSaveData content)
     {
         super(content);
     }
 
-    public PCond_DoTo(PSkillData data)
+    public PCond_DoTo(PSkillData<PField_CardCategory> data)
     {
         super(data);
     }
 
-    public PCond_DoTo(PSkillData data, PCLCardTarget target, int amount)
+    public PCond_DoTo(PSkillData<PField_CardCategory> data, PCLCardTarget target, int amount)
     {
         super(data, target, amount);
     }
 
-    public PCond_DoTo(PSkillData data, PCLCardTarget target, int amount, PCLCardGroupHelper... groups)
+    public PCond_DoTo(PSkillData<PField_CardCategory> data, PCLCardTarget target, int amount, PCLCardGroupHelper... groups)
     {
-        super(data, target, amount, groups);
-    }
-
-    public PCond_DoTo(PSkillData data, PCLCardTarget target, int amount, PSkill effect)
-    {
-        super(data, target, amount, effect);
-    }
-
-    public PCond_DoTo(PSkillData data, PCLCardTarget target, int amount, PSkill... effect)
-    {
-        super(data, target, amount, effect);
-    }
-
-    public PCond_DoTo(PSkillData data, PCLCardTarget target, int amount, PCLAffinity... affinities)
-    {
-        super(data, target, amount, affinities);
-    }
-
-    public PCond_DoTo(PSkillData data, PCLCardTarget target, int amount, PCLOrbHelper... orbs)
-    {
-        super(data, target, amount, orbs);
-    }
-
-    public PCond_DoTo(PSkillData data, PCLCardTarget target, int amount, PCLPowerHelper... powerHelpers)
-    {
-        super(data, target, amount, powerHelpers);
-    }
-
-    protected PCLActionWithCallback<ArrayList<AbstractCard>> createPileAction(PCLUseInfo info)
-    {
-        return getAction().invoke(getName(), info.target, amount, getCardGroup())
-                .setFilter(c -> getFullCardFilter().invoke(c))
-                .setOptions(alt ? CardSelection.Random : origin, true);
+        super(data, target, amount);
+        fields.setCardGroup(groups);
     }
 
     @Override
     public String getSampleText()
     {
-        return EUIRM.strings.verbNoun(tooltipTitle(), "X");
+        return EUIRM.strings.verbNoun(getActionTitle(), "X");
     }
 
     @Override
     public String getSubText()
     {
-        return !groupTypes.isEmpty() ? TEXT.actions.genericFrom(tooltipTitle(), getAmountRawString(), getFullCardString(), getGroupString())
-                : EUIRM.strings.verbNoun(tooltipTitle(), getAmountRawString());
+        return fields.hasGroups() ? TEXT.actions.genericFrom(getActionTitle(), getAmountRawString(), fields.getFullCardString(), fields.getGroupString())
+                : EUIRM.strings.verbNoun(getActionTitle(), getAmountRawString());
     }
 
     @Override
@@ -123,15 +87,9 @@ public abstract class PCond_DoTo extends PCond implements SelectFromPileMarker
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
     {
-        ArrayList<PCLCardGroupHelper> tempGroups = groupTypes;
-        if (tempGroups.isEmpty())
+        for (PCLCardGroupHelper group : fields.groupTypes)
         {
-            tempGroups = new ArrayList<>();
-            tempGroups.add(PCLCardGroupHelper.Hand);
-        }
-        for (PCLCardGroupHelper group : tempGroups)
-        {
-            if (EUIUtils.filter(group.getCards(), c -> getFullCardFilter().invoke(c)).size() < amount)
+            if (EUIUtils.filter(group.getCards(), c -> fields.getFullCardFilter().invoke(c)).size() < amount)
             {
                 return false;
             }
@@ -141,19 +99,20 @@ public abstract class PCond_DoTo extends PCond implements SelectFromPileMarker
 
     protected void useImpl(PCLUseInfo info, ActionT0 callback)
     {
-        ArrayList<PCLCardGroupHelper> tempGroups = groupTypes;
-        if (tempGroups.isEmpty())
-        {
-            tempGroups = new ArrayList<>();
-            tempGroups.add(PCLCardGroupHelper.Hand);
-        }
-        getActions().add(createPileAction(info))
+        getActions().add(fields.getGenericPileAction(getAction(), info))
                 .addCallback(cards -> {
                     if (cards.size() >= amount)
                     {
-                        childEffect.setCards(cards);
+                        info.setData(cards);
                         callback.invoke();
                     }
                 });
     }
+
+    protected String getActionTitle()
+    {
+        return getActionTooltip().title;
+    }
+    public abstract EUITooltip getActionTooltip();
+    public abstract FuncT4<SelectFromPile, String, AbstractCreature, Integer, CardGroup[]> getAction();
 }

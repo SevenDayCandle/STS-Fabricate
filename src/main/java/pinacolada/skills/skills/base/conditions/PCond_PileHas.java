@@ -6,14 +6,14 @@ import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.skills.PCond;
-import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_CardCategory;
 
-public class PCond_PileHas extends PCond
+public class PCond_PileHas extends PCond<PField_CardCategory>
 {
 
-    public static final PSkillData DATA = register(PCond_PileHas.class, PCLEffectType.CardGroupFull)
+    public static final PSkillData<PField_CardCategory> DATA = register(PCond_PileHas.class, PField_CardCategory.class)
             .selfTarget();
 
     public PCond_PileHas()
@@ -33,27 +33,16 @@ public class PCond_PileHas extends PCond
 
     public PCond_PileHas(int amount, PCLCardGroupHelper... groups)
     {
-        super(DATA, PCLCardTarget.None, amount, groups);
-    }
-
-    public PCond_PileHas(PSkill effect)
-    {
-        this();
-        setChild(effect);
-    }
-
-    public PCond_PileHas(PSkill... effect)
-    {
-        this();
-        setChild(effect);
+        super(DATA, PCLCardTarget.None, amount);
+        fields.setCardGroup(groups);
     }
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
     {
-        int count = EUIUtils.sumInt(groupTypes, g -> EUIUtils.count(g.getCards(),
-                c -> getFullCardFilter().invoke(c)));
-        return amount == 0 ? count == 0 : alt ^ count >= amount;
+        int count = EUIUtils.sumInt(fields.groupTypes, g -> EUIUtils.count(g.getCards(),
+                c -> fields.getFullCardFilter().invoke(c)));
+        return amount == 0 ? count == 0 : fields.random ^ count >= amount;
     }
 
     @Override
@@ -65,13 +54,13 @@ public class PCond_PileHas extends PCond
     @Override
     public String getSubText()
     {
-        return TEXT.conditions.ifTargetHas(getGroupString(),
-                EUIRM.strings.numNoun(getAmountRawString(), getFullCardString(getRawString(EFFECT_CHAR))));
+        return TEXT.conditions.ifTargetHas(fields.getGroupString(),
+                EUIRM.strings.numNoun(getAmountRawString(), fields.getFullCardString()));
     }
 
     @Override
     public String wrapAmount(int input)
     {
-        return input == 0 ? String.valueOf(input) : (alt ? (input + "-") : (input + "+"));
+        return input == 0 ? String.valueOf(input) : (fields.random ? (input + "-") : (input + "+"));
     }
 }

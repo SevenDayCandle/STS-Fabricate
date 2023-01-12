@@ -6,16 +6,18 @@ import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_CardCategory;
 
-import java.util.ArrayList;
-
-public class PMove_ModifyCost extends PMove_Modify
+public class PMove_ModifyCost extends PMove_Modify<PField_CardCategory>
 {
-    public static final PSkillData DATA = PMove_Modify.register(PMove_ModifyCost.class, PCLEffectType.CardGroup);
+    public static final PSkillData<PField_CardCategory> DATA = PMove_Modify.register(PMove_ModifyCost.class, PField_CardCategory.class)
+            .setExtra(-DEFAULT_MAX, DEFAULT_MAX)
+            .selfTarget()
+            .pclOnly();
 
     public PMove_ModifyCost()
     {
-        this(1, 1, new ArrayList<>());
+        this(1, 1);
     }
 
     public PMove_ModifyCost(PSkillSaveData content)
@@ -28,11 +30,6 @@ public class PMove_ModifyCost extends PMove_Modify
         super(DATA, amount, cost);
     }
 
-    public PMove_ModifyCost(int amount, int cost, ArrayList<AbstractCard> cards)
-    {
-        super(DATA, amount, cost, cards);
-    }
-
     public PMove_ModifyCost(int amount, int damage, PCLCardGroupHelper... groups)
     {
         super(DATA, amount, damage, groups);
@@ -41,7 +38,7 @@ public class PMove_ModifyCost extends PMove_Modify
     @Override
     public ActionT1<AbstractCard> getAction()
     {
-        return (c) -> getActions().modifyCost(c, extra, !alt, true);
+        return (c) -> getActions().modifyCost(c, extra, fields.forced, true);
     }
 
     @Override

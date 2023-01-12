@@ -8,11 +8,12 @@ import pinacolada.powers.PCLPowerHelper;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Power;
 import pinacolada.utilities.GameUtilities;
 
-public class PMove_StackTemporaryPower extends PMove
+public class PMove_StackTemporaryPower extends PMove<PField_Power>
 {
-    public static final PSkillData DATA = register(PMove_StackTemporaryPower.class, PCLEffectType.Power, -DEFAULT_MAX, DEFAULT_MAX);
+    public static final PSkillData<PField_Power> DATA = register(PMove_StackTemporaryPower.class, PField_Power.class, -DEFAULT_MAX, DEFAULT_MAX);
 
     public PMove_StackTemporaryPower()
     {
@@ -26,7 +27,8 @@ public class PMove_StackTemporaryPower extends PMove
 
     public PMove_StackTemporaryPower(PCLCardTarget target, int amount, PCLPowerHelper... powers)
     {
-        super(DATA, target, amount, powers);
+        super(DATA, target, amount);
+        fields.setPower(powers);
     }
 
     @Override
@@ -34,7 +36,7 @@ public class PMove_StackTemporaryPower extends PMove
     {
         if (m != null)
         {
-            for (PCLPowerHelper power : powers)
+            for (PCLPowerHelper power : fields.powers)
             {
                 GameUtilities.getIntent(m).addModifier(power.ID, amount);
             }
@@ -50,7 +52,7 @@ public class PMove_StackTemporaryPower extends PMove
     @Override
     public void use(PCLUseInfo info)
     {
-        for (PCLPowerHelper power : powers)
+        for (PCLPowerHelper power : fields.powers)
         {
             getActions().applyPower(info.source, info.target, target, power, amount, true);
         }
@@ -60,14 +62,14 @@ public class PMove_StackTemporaryPower extends PMove
     @Override
     public String getSubText()
     {
-        String joinedString = EUIUtils.format(TEXT.cardMods.tempPowerPrefix, EUIUtils.joinStrings(" ", EUIUtils.map(powers, power -> power.tooltip)));
+        String joinedString = EUIUtils.format(TEXT.cardMods.tempPowerPrefix, fields.getPowerString());
         switch (target)
         {
             case RandomEnemy:
             case AllEnemy:
-                return powers.size() > 0 && powers.get(0).isDebuff ? TEXT.actions.applyAmountToTarget(getAmountRawString(), joinedString, getTargetString()) : TEXT.actions.giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
+                return fields.powers.size() > 0 && fields.powers.get(0).isDebuff ? TEXT.actions.applyAmountToTarget(getAmountRawString(), joinedString, getTargetString()) : TEXT.actions.giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
             case Single:
-                return powers.size() > 0 && powers.get(0).isDebuff ? TEXT.actions.applyAmount(getAmountRawString(), joinedString) : TEXT.actions.giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
+                return fields.powers.size() > 0 && fields.powers.get(0).isDebuff ? TEXT.actions.applyAmount(getAmountRawString(), joinedString) : TEXT.actions.giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
             default:
                 return amount < 0 ? TEXT.actions.loseAmount(getAmountRawString(), joinedString)
                         : TEXT.actions.gainAmount(getAmountRawString(), joinedString);

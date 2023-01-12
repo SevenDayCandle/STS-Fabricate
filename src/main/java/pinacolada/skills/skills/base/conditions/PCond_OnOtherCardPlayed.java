@@ -5,10 +5,11 @@ import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_CardCategory;
 
 public class PCond_OnOtherCardPlayed extends PCond_Delegate
 {
-    public static final PSkillData DATA = register(PCond_OnOtherCardPlayed.class, PCLEffectType.Delegate, 1, 1)
+    public static final PSkillData<PField_CardCategory> DATA = register(PCond_OnOtherCardPlayed.class, PField_CardCategory.class, 1, 1)
             .selfTarget();
 
     public PCond_OnOtherCardPlayed()
@@ -31,7 +32,7 @@ public class PCond_OnOtherCardPlayed extends PCond_Delegate
     public String getDelegateSampleText() {return TEXT.subjects.playingXWith("X", TEXT.cardPile.hand);};
 
     @Override
-    public String getDelegateText() {return TEXT.subjects.playingXWith(getFullCardString(getRawString(EFFECT_CHAR)), TEXT.cardPile.hand);};
+    public String getDelegateText() {return TEXT.subjects.playingXWith(fields.getFullCardString(), TEXT.cardPile.hand);};
 
     @Override
     public EUITooltip getDelegateTooltip()

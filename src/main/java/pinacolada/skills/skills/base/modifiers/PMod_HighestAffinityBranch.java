@@ -9,13 +9,11 @@ import pinacolada.misc.CombatManager;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Affinity;
 
-import static pinacolada.skills.PSkill.PCLEffectType.Affinity;
-
-public class PMod_HighestAffinityBranch extends PMod_Branch<PCLAffinity>
+public class PMod_HighestAffinityBranch extends PMod_Branch<PField_Affinity, PCLAffinity>
 {
-
-    public static final PSkillData DATA = register(PMod_ScryBranch.class, Affinity)
+    public static final PSkillData<PField_Affinity> DATA = register(PMod_HighestAffinityBranch.class, PField_Affinity.class)
             .pclOnly()
             .setExtra(-1, DEFAULT_MAX)
             .selfTarget();
@@ -27,19 +25,20 @@ public class PMod_HighestAffinityBranch extends PMod_Branch<PCLAffinity>
 
     public PMod_HighestAffinityBranch(PCLAffinity... affinities)
     {
-        super(DATA, PCLCardTarget.None, 1, affinities);
+        super(DATA, PCLCardTarget.None, 1);
+        fields.setAffinity(affinities);
     }
 
     public String getQualifier(int i)
     {
-        PCLAffinity affinity = i < affinities.size() ? affinities.get(i) : null;
+        PCLAffinity affinity = i < fields.affinities.size() ? fields.affinities.get(i) : null;
         return affinity != null ? affinity.getLevelTooltip().getTitleOrIcon() : TEXT.subjects.other;
     }
 
     @Override
     public boolean matchesBranch(PCLAffinity c, int i, PCLUseInfo info)
     {
-        return i < affinities.size() ? affinities.get(i) == c : EUIUtils.all(affinities, af -> c != af);
+        return i < fields.affinities.size() ? fields.affinities.get(i) == c : EUIUtils.all(fields.affinities, af -> c != af);
     }
 
     @Override

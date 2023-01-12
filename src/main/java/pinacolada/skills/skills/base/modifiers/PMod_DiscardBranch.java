@@ -11,15 +11,12 @@ import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-
-import java.util.List;
-
-import static pinacolada.skills.PSkill.PCLEffectType.CardGroupFull;
+import pinacolada.skills.fields.PField_CardCategory;
 
 public class PMod_DiscardBranch extends PMod_DoBranch
 {
 
-    public static final PSkillData DATA = register(PMod_DiscardBranch.class, CardGroupFull)
+    public static final PSkillData<PField_CardCategory> DATA = register(PMod_DiscardBranch.class, PField_CardCategory.class)
             .selfTarget()
             .setGroups(PCLCardGroupHelper.DrawPile, PCLCardGroupHelper.ExhaustPile, PCLCardGroupHelper.Hand);
 
@@ -36,11 +33,6 @@ public class PMod_DiscardBranch extends PMod_DoBranch
     public PMod_DiscardBranch(int amount, PCLCardGroupHelper... groups)
     {
         super(DATA, PCLCardTarget.None, amount, groups);
-    }
-
-    public PMod_DiscardBranch(int amount, List<PCLCardGroupHelper> groups)
-    {
-        super(DATA, PCLCardTarget.None, amount, groups.toArray(new PCLCardGroupHelper[]{}));
     }
 
     @Override

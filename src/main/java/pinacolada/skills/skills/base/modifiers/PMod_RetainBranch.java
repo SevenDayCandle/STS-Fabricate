@@ -12,13 +12,12 @@ import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_CardCategory;
 
-import static pinacolada.skills.PSkill.PCLEffectType.CardGroupFull;
 
 public class PMod_RetainBranch extends PMod_DoBranch
 {
-
-    public static final PSkillData DATA = register(PMod_RetainBranch.class, CardGroupFull)
+    public static final PSkillData<PField_CardCategory> DATA = register(PMod_RetainBranch.class, PField_CardCategory.class)
             .selfTarget()
             .setGroups(PCLCardGroupHelper.Hand);
 
@@ -52,6 +51,6 @@ public class PMod_RetainBranch extends PMod_DoBranch
     @Override
     public String getSubText()
     {
-        return EUIRM.strings.verbNoun(tooltipTitle(), getAmountRawString());
+        return EUIRM.strings.verbNoun(getActionTitle(), getAmountRawString());
     }
 }

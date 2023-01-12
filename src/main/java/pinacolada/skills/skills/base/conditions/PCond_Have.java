@@ -10,22 +10,23 @@ import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_CardCategory;
 
 import java.util.List;
 
-public abstract class PCond_Have extends PCond
+public abstract class PCond_Have extends PCond<PField_CardCategory>
 {
     public PCond_Have(PSkillSaveData content)
     {
         super(content);
     }
 
-    public PCond_Have(PSkillData data)
+    public PCond_Have(PSkillData<PField_CardCategory> data)
     {
         super(data, PCLCardTarget.None, 1);
     }
 
-    public PCond_Have(PSkillData data, int amount)
+    public PCond_Have(PSkillData<PField_CardCategory> data, int amount)
     {
         super(data, PCLCardTarget.None, amount);
     }
@@ -34,8 +35,8 @@ public abstract class PCond_Have extends PCond
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
     {
         int count = EUIUtils.count(getCardPile(),
-                c -> getFullCardFilter().invoke(c));
-        return amount == 0 ? count == 0 : alt ^ count >= amount;
+                c -> fields.getFullCardFilter().invoke(c));
+        return amount == 0 ? count == 0 : fields.random ^ count >= amount;
     }
 
     @Override
@@ -47,13 +48,13 @@ public abstract class PCond_Have extends PCond
     @Override
     public String getSubText()
     {
-        return TEXT.conditions.ifYouDidThisTurn(PCLCoreStrings.past(getActionTooltip()), EUIRM.strings.numNoun(getAmountRawString(), getFullCardString(getRawString(EFFECT_CHAR))));
+        return TEXT.conditions.ifYouDidThisTurn(PCLCoreStrings.past(getActionTooltip()), EUIRM.strings.numNoun(getAmountRawString(), fields.getFullCardString()));
     }
 
     @Override
     public String wrapAmount(int input)
     {
-        return input == 0 ? String.valueOf(input) : (alt ? (input + "-") : (input + "+"));
+        return input == 0 ? String.valueOf(input) : (fields.random ? (input + "-") : (input + "+"));
     }
 
     abstract public List<AbstractCard> getCardPile();

@@ -9,7 +9,9 @@ import com.megacrit.cardcrawl.screens.runHistory.RunHistoryScreen;
 import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
+import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.FuncT1;
+import extendedui.ui.EUIHoverable;
 import extendedui.ui.TextureCache;
 import extendedui.ui.controls.EUIDropdown;
 import extendedui.ui.controls.EUISearchableDropdown;
@@ -26,14 +28,12 @@ import pinacolada.cards.base.fields.PCLCardTag;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.resources.PGR;
-import pinacolada.skills.PCond;
-import pinacolada.skills.PMod;
-import pinacolada.skills.PSkill;
-import pinacolada.skills.PSkillData;
+import pinacolada.skills.*;
 import pinacolada.skills.skills.special.moves.PMove_StackCustomPower;
 import pinacolada.stances.PCLStanceHelper;
 import pinacolada.utilities.GameUtilities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static pinacolada.ui.cardEditor.PCLCustomCardEffectPage.*;
@@ -43,7 +43,7 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
     public static final float MAIN_OFFSET = MENU_WIDTH * 1.58f;
     public static final float AUX_OFFSET = MENU_WIDTH * 2.43f;
     protected final PCLCustomCardEffectPage editor;
-    protected PSkill.PCLEffectType effectType = PSkill.PCLEffectType.General;
+    protected ArrayList<EUIHoverable> activeElements = new ArrayList<>();
     protected EUISearchableDropdown<PSkill> effects;
     protected EUIDropdown<PCLAffinity> affinities;
     protected EUIDropdown<PCLCardTarget> targets;
@@ -56,7 +56,6 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
     protected EUISearchableDropdown<PCLStanceHelper> stances;
     protected EUISearchableDropdown<PCLCardTag> tags;
     protected EUISearchableDropdown<AbstractCard> cardData;
-    protected EUIToggle altToggle;
     protected PCLCustomCardUpgradableEditor valueEditor;
     protected PCLCustomCardUpgradableEditor extraEditor;
     protected EUIHitbox hb;
@@ -121,10 +120,6 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
                 .setItems(PCLCardTarget.getAll());
         piles = new EUIDropdown<PCLCardGroupHelper>(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, AUX_OFFSET, 0)
                 , item -> StringUtils.capitalize(item.toString().toLowerCase()))
-                .setOnChange(targets -> {
-                    getEffectAt().setCardGroup(targets);
-                    editor.constructEffect();
-                })
                 .setLabelFunctionForOption(c -> c.name, false)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cardEditor.cardTarget)
                 .setCanAutosizeButton(true)
@@ -133,10 +128,6 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
                 .setItems(PCLCardGroupHelper.getAll());
 
         affinities = new EUIDropdown<PCLAffinity>(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, AUX_OFFSET, 0))
-                .setOnChange(types -> {
-                    getEffectAt().setAffinity(types);
-                    editor.constructEffect();
-                })
                 .setLabelFunctionForOption(item -> item.getFormattedSymbolForced(editor.builder.cardColor) + " " + item.getTooltip().title, true)
                 .setIsMultiSelect(true)
                 .setShouldPositionClearAtTop(true)
@@ -146,10 +137,6 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
         affinities.setLabelFunctionForButton((list, __) -> affinities.makeMultiSelectString(item -> item.getFormattedSymbol(editor.builder.cardColor)), null, true);
 
         powers = (EUISearchableDropdown<PCLPowerHelper>) new EUISearchableDropdown<PCLPowerHelper>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.35f, MENU_HEIGHT, AUX_OFFSET, 0))
-                .setOnChange(types -> {
-                    getEffectAt().setPower(types);
-                    editor.constructEffect();
-                })
                 .setLabelFunctionForOption(item -> item.tooltip.getTitleOrIconForced() + " " + item.tooltip.title, true)
                 .setIsMultiSelect(true)
                 .setShouldPositionClearAtTop(true)
@@ -159,10 +146,6 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
         powers.setLabelFunctionForButton((list, __) -> powers.makeMultiSelectString(item -> item.getTooltip().getTitleOrIcon()), null, true);
 
         orbs = (EUISearchableDropdown<PCLOrbHelper>) new EUISearchableDropdown<PCLOrbHelper>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.2f, MENU_HEIGHT, AUX_OFFSET, 0))
-                .setOnChange(types -> {
-                    getEffectAt().setOrb(types);
-                    editor.constructEffect();
-                })
                 .setLabelFunctionForOption(item -> item.tooltip.getTitleOrIconForced() + " " + item.tooltip.title, true)
                 .setIsMultiSelect(true)
                 .setShouldPositionClearAtTop(true)
@@ -172,10 +155,6 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
         orbs.setLabelFunctionForButton((list, __) -> orbs.makeMultiSelectString(item -> item.getTooltip().getTitleOrIcon()), null, true);
 
         stances = (EUISearchableDropdown<PCLStanceHelper>) new EUISearchableDropdown<PCLStanceHelper>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.2f, MENU_HEIGHT, AUX_OFFSET, 0))
-                .setOnChange(types -> {
-                    getEffectAt().setStance(types);
-                    editor.constructEffect();
-                })
                 .setLabelFunctionForButton((items, __) -> items.size() > 0 ? items.get(0).tooltip.title : PGR.core.tooltips.neutralStance.title, null, false)
                 .setLabelFunctionForOption(item -> item.tooltip.getTitleOrIconForced() + " " + item.tooltip.title, true)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.tooltips.stance.title)
@@ -185,10 +164,6 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
                 .setItems(PCLStanceHelper.values(editor.builder.cardColor));
 
         tags = (EUISearchableDropdown<PCLCardTag>) new EUISearchableDropdown<PCLCardTag>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.2f, MENU_HEIGHT, AUX_OFFSET, 0))
-                .setOnChange(types -> {
-                    getEffectAt().setTag(types);
-                    editor.constructEffect();
-                })
                 .setLabelFunctionForOption(item -> item.getTip().getTitleOrIconForced() + " " + item.getTip().title, true)
                 .setIsMultiSelect(true)
                 .setShouldPositionClearAtTop(true)
@@ -197,10 +172,6 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
                 .setItems(PCLCardTag.getAll());
 
         cardData = (EUISearchableDropdown<AbstractCard>) new EUISearchableDropdown<AbstractCard>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.2f, MENU_HEIGHT, AUX_OFFSET, 0))
-                .setOnChange(types -> {
-                    getEffectAt().setCardIDs(EUIUtils.mapAsNonnull(types, t -> t.cardID));
-                    editor.constructEffect();
-                })
                 .setLabelFunctionForOption(item -> item.name, false)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, RunHistoryScreen.TEXT[9])
                 .setCanAutosize(false, false)
@@ -229,10 +200,6 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
 
         rarities = new EUIDropdown<>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.35f, MENU_HEIGHT, AUX_OFFSET + MAIN_OFFSET * 2, 0)
                 , EUIGameUtils::textForRarity)
-                .setOnChange(types -> {
-                    getEffectAt().setCardRarities(types);
-                    editor.constructEffect();
-                })
                 .setLabelFunctionForOption(EUIGameUtils::textForRarity, false)
                 .setIsMultiSelect(true)
                 .setShouldPositionClearAtTop(true)
@@ -242,24 +209,12 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
 
         types = new EUIDropdown<>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.35f, MENU_HEIGHT, AUX_OFFSET, 0)
                 , EUIGameUtils::textForType)
-                .setOnChange(types -> {
-                    getEffectAt().setCardTypes(types);
-                    editor.constructEffect();
-                })
                 .setLabelFunctionForOption(EUIGameUtils::textForType, false)
                 .setIsMultiSelect(true)
                 .setShouldPositionClearAtTop(true)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[1])
                 .setCanAutosize(true, true)
                 .setItems(AbstractCard.CardType.values());
-
-        altToggle = new EUIToggle(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, MENU_WIDTH * 5.8f, 0))
-                .setFont(EUIFontHelper.carddescriptionfontNormal, 0.9f)
-                .setText(PGR.core.strings.cardEditor.not)
-                .setOnToggle(val -> {
-                    getEffectAt().setAlt(val);
-                    editor.constructEffect();
-                });
     }
 
     protected PSkill getEffectAt()
@@ -293,13 +248,13 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
         switch (priority)
         {
             case PCond.CONDITION_PRIORITY:
-                return EUIUtils.map(PCond.getEligibleConditions(editor.builder.cardColor, PCond.CONDITION_PRIORITY),
+                return EUIUtils.map(PSkill.getEligibleEffects(editor.builder.cardColor, PCond.class),
                         bc -> getEffectAt() != null && bc.effectID.equals(getEffectAt().effectID) ? getEffectAt() : bc.scanForTips());
             case PMod.MODIFIER_PRIORITY:
-                return EUIUtils.map(PMod.getEligibleModifiers(editor.builder.cardColor, PMod.MODIFIER_PRIORITY),
+                return EUIUtils.map(PSkill.getEligibleEffects(editor.builder.cardColor, PMod.class),
                         bc -> getEffectAt() != null && bc.effectID.equals(getEffectAt().effectID) ? getEffectAt() : bc.scanForTips());
             default:
-                return EUIUtils.map(PSkill.getEligibleEffects(editor.builder.cardColor, PSkill.DEFAULT_PRIORITY), bc -> getEffectAt() != null && bc.effectID.equals(getEffectAt().effectID) ? getEffectAt() : bc.scanForTips());
+                return EUIUtils.map(PSkill.getEligibleEffects(editor.builder.cardColor, PMove.class), bc -> getEffectAt() != null && bc.effectID.equals(getEffectAt().effectID) ? getEffectAt() : bc.scanForTips());
         }
     }
 
@@ -312,8 +267,7 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
     public void refresh()
     {
         PSkill curEffect = getEffectAt();
-        PSkillData data = PSkill.getData(curEffect);
-        effectType = data != null ? data.effectType : PSkill.PCLEffectType.General;
+        PSkillData data = curEffect != null ? curEffect.data : null;
         int min = data != null ? data.minAmount : Integer.MIN_VALUE / 2;
         int max = data != null ? data.maxAmount : PSkill.DEFAULT_MAX;
         int eMin = data != null ? data.minExtra : Integer.MIN_VALUE / 2;
@@ -331,16 +285,7 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
         targets
                 .setItems(PSkill.getEligibleTargets(curEffect))
                 .setActive(targets.getAllItems().size() > 1);
-        piles.setItems(PSkill.getEligiblePiles(curEffect)).setActive(false);
-        affinities.setActive(false);
-        cardData.setActive(false);
-        customPowers.setActive(false);
-        orbs.setActive(false);
-        powers.setActive(false);
-        stances.setActive(false);
-        tags.setActive(false);
-        rarities.setActive(false);
-        types.setActive(false);
+        piles.setItems(PSkill.getEligiblePiles(curEffect));
 
         float xOff = AUX_OFFSET;
         if (targets.isActive)
@@ -348,68 +293,108 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
             xOff = position(targets, xOff, curEffect != null ? curEffect.target : PCLCardTarget.None);
         }
 
-        switch (effectType)
+        if (curEffect != null)
         {
-            case CardGroupFull:
-                xOff = position(piles, xOff, curEffect.getGroups());
-                xOff = position(types, xOff, curEffect.getCardTypes());
-                xOff = position(rarities, xOff, curEffect.getCardRarities());
-                if (GameUtilities.isPCLCardColor(editor.builder.cardColor))
-                {
-                    xOff = position(affinities, xOff, curEffect.getAffinities());
-                }
-                break;
-            case CardGroupAffinity:
-                xOff = position(piles, xOff, curEffect.getGroups());
-            case Affinity:
-                if (GameUtilities.isPCLCardColor(editor.builder.cardColor))
-                {
-                    xOff = position(affinities, xOff, curEffect.getAffinities());
-                }
-                break;
-            case Card:
-                xOff = position(piles, xOff, curEffect.getGroups());
-                xOff = position(cardData, xOff, curEffect.getCards(), c -> c.cardID);
-                break;
-            case CustomPower:
-                if (curEffect instanceof PMove_StackCustomPower)
-                {
-                    xOff = position(customPowers, xOff, ((PMove_StackCustomPower) curEffect).getIndexes());
-                }
-                break;
-            case Delegate:
-                xOff = position(types, xOff, curEffect.getCardTypes());
-                xOff = position(rarities, xOff, curEffect.getCardRarities());
-                if (GameUtilities.isPCLCardColor(editor.builder.cardColor))
-                {
-                    xOff = position(affinities, xOff, curEffect.getAffinities());
-                }
-                break;
-            case Orb:
-                xOff = position(orbs, xOff, curEffect.getOrbs());
-                break;
-            case Power:
-                xOff = position(powers, xOff, curEffect.getPowers());
-                break;
-            case Stance:
-                xOff = position(stances, xOff, curEffect.getStances());
-                break;
-            case Tag:
-                xOff = position(piles, xOff, curEffect.getGroups());
-                xOff = position(tags, xOff, curEffect.getTags());
-                break;
-            case CardGroupCardType:
-                xOff = position(piles, xOff, curEffect.getGroups());
-                xOff = position(types, xOff, curEffect.getCardTypes());
-                break;
-            case CardGroup:
-                xOff = position(piles, xOff, curEffect.getGroups());
-                break;
+            curEffect.fields.setupEditor(this);
         }
+    }
 
-        altToggle.setToggle(curEffect != null && curEffect.alt)
-                .setPosition(Math.max(xOff, extraEditor.hb.cX + extraEditor.hb.width) + scale(70), hb.cY)
-                .setActive(data != null && data.altText != null);
+    public void registerBoolean(String title, ActionT1<Boolean> onChange, boolean initial)
+    {
+        registerBoolean(new EUIToggle(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, MENU_WIDTH, 0))
+                .setFont(EUIFontHelper.carddescriptionfontNormal, 0.9f)
+                .setText(title), onChange, initial);
+    }
+    public void registerBoolean(EUIToggle toggle, ActionT1<Boolean> onChange, boolean initial)
+    {
+        activeElements.add(toggle);
+        toggle.setToggle(initial);
+        toggle.setOnToggle(val -> {
+            onChange.invoke(val);
+            editor.constructEffect();
+        });
+    }
+
+    public <T> void registerDropdown(EUIDropdown<T> dropdown, ActionT1<List<T>> onChangeImpl, List<T> items)
+    {
+        activeElements.add(dropdown);
+        dropdown.setOnChange(targets -> {
+            if (!targets.isEmpty())
+            {
+                onChangeImpl.invoke(targets);
+                editor.constructEffect();
+            }
+        });
+        dropdown.setSelection(items, false);
+    }
+
+    public <T> void registerDropdown(EUIDropdown<T> dropdown, List<T> items)
+    {
+        activeElements.add(dropdown);
+        dropdown.setOnChange(targets -> {
+            if (!targets.isEmpty())
+            {
+                items.clear();
+                items.addAll(targets);
+                editor.constructEffect();
+            }
+        });
+        dropdown.setSelection(items, false);
+    }
+
+
+    public void registerPile(List<PCLCardGroupHelper> items)
+    {
+        registerDropdown(piles, items);
+    }
+
+    public void registerAffinity(List<PCLAffinity> items)
+    {
+        registerDropdown(affinities, items);
+    }
+
+    public void registerOrb(List<PCLOrbHelper> items)
+    {
+        registerDropdown(orbs, items);
+    }
+
+    public void registerPower(List<PCLPowerHelper> items)
+    {
+        registerDropdown(powers, items);
+    }
+
+    public void registerRarity(List<AbstractCard.CardRarity> items)
+    {
+        registerDropdown(rarities, items);
+    }
+
+    public void registerStance(List<PCLStanceHelper> items)
+    {
+        registerDropdown(stances, items);
+    }
+
+    public void registerTag(List<PCLCardTag> items)
+    {
+        registerDropdown(tags, items);
+    }
+
+    public void registerType(List<AbstractCard.CardType> items)
+    {
+        registerDropdown(types, items);
+    }
+
+    public void registerCard(List<String> cardIDs)
+    {
+        registerDropdown(cardData,
+                cards -> {
+                    cardIDs.clear();
+                    cardIDs.addAll(EUIUtils.mapAsNonnull(cards, t -> t.cardID));
+                },
+                GameUtilities.isPCLCardColor(editor.builder.cardColor) ? EUIUtils.mapAsNonnull(PCLCard.getAllData(false, true, editor.builder.cardColor), cd -> cd.makeCopy(false))
+                        :
+                        EUIUtils.filter(CardLibrary.getAllCards(),
+                                c -> !(c instanceof PCLCard) && (c.color == AbstractCard.CardColor.COLORLESS || c.color == AbstractCard.CardColor.CURSE || c.color == editor.builder.cardColor))
+        );
     }
 
     @Override
@@ -457,19 +442,12 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
     {
         this.effects.tryUpdate();
         this.targets.tryUpdate();
-        this.piles.tryUpdate();
-        this.affinities.tryUpdate();
-        this.powers.tryUpdate();
-        this.orbs.tryUpdate();
-        this.stances.tryUpdate();
-        this.tags.tryUpdate();
-        this.cardData.tryUpdate();
         this.valueEditor.tryUpdate();
         this.extraEditor.tryUpdate();
-        this.customPowers.tryUpdate();
-        this.rarities.tryUpdate();
-        this.types.tryUpdate();
-        this.altToggle.tryUpdate();
+        for (EUIHoverable element : activeElements)
+        {
+            element.tryUpdate();
+        }
     }
 
     @Override
@@ -477,18 +455,12 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
     {
         this.effects.tryRender(sb);
         this.targets.tryRender(sb);
-        this.piles.tryRender(sb);
-        this.affinities.tryRender(sb);
-        this.powers.tryRender(sb);
-        this.orbs.tryRender(sb);
-        this.stances.tryRender(sb);
-        this.tags.tryRender(sb);
-        this.cardData.tryRender(sb);
         this.valueEditor.tryRender(sb);
         this.extraEditor.tryRender(sb);
-        this.customPowers.tryRender(sb);
-        this.rarities.tryRender(sb);
-        this.types.tryRender(sb);
-        this.altToggle.tryRender(sb);
+        for (EUIHoverable element : activeElements)
+        {
+            element.tryRender(sb);
+        }
+
     }
 }

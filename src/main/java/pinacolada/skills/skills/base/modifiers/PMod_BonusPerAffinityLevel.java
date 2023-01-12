@@ -7,16 +7,13 @@ import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Affinity;
 import pinacolada.utilities.GameUtilities;
 
-import java.util.List;
-
-import static pinacolada.skills.PSkill.PCLEffectType.Affinity;
-
-public class PMod_BonusPerAffinityLevel extends PMod_BonusPer
+public class PMod_BonusPerAffinityLevel extends PMod_BonusPer<PField_Affinity>
 {
 
-    public static final PSkillData DATA = register(PMod_BonusPerAffinityLevel.class, Affinity).selfTarget();
+    public static final PSkillData<PField_Affinity> DATA = register(PMod_BonusPerAffinityLevel.class, PField_Affinity.class).selfTarget();
 
     public PMod_BonusPerAffinityLevel(PSkillSaveData content)
     {
@@ -30,13 +27,10 @@ public class PMod_BonusPerAffinityLevel extends PMod_BonusPer
 
     public PMod_BonusPerAffinityLevel(int amount, PCLAffinity... affinities)
     {
-        super(DATA, amount, affinities);
+        super(DATA, amount);
+        fields.setAffinity(affinities);
     }
 
-    public PMod_BonusPerAffinityLevel(int amount, List<PCLAffinity> affinities)
-    {
-        super(DATA, amount, affinities.toArray(new PCLAffinity[]{}));
-    }
 
     @Override
     public String getConditionSampleText()
@@ -47,12 +41,12 @@ public class PMod_BonusPerAffinityLevel extends PMod_BonusPer
     @Override
     public String getConditionText()
     {
-        return EUIRM.strings.adjNoun(getAffinityLevelAndString(), PGR.core.tooltips.level.title);
+        return EUIRM.strings.adjNoun(fields.getAffinityLevelAndString(), PGR.core.tooltips.level.title);
     }
 
     @Override
     public int multiplier(PCLUseInfo info)
     {
-        return EUIUtils.sumInt(affinities, GameUtilities::getPCLAffinityLevel);
+        return EUIUtils.sumInt(fields.affinities, GameUtilities::getPCLAffinityLevel);
     }
 }

@@ -8,11 +8,12 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Empty;
 import pinacolada.utilities.GameUtilities;
 
-public class PCond_Chance extends PCond
+public class PCond_Chance extends PCond<PField_Empty>
 {
-    public static final PSkillData DATA = register(PCond_Chance.class, PCLEffectType.General)
+    public static final PSkillData<PField_Empty> DATA = register(PCond_Chance.class, PField_Empty.class)
             .selfTarget();
 
     public PCond_Chance(PSkillSaveData content)

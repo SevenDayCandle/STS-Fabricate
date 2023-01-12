@@ -8,11 +8,12 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Empty;
 
-public class PTrait_Unplayable extends PMove
+public class PTrait_Unplayable extends PMove<PField_Empty>
 {
 
-    public static final PSkillData DATA = register(PTrait_Unplayable.class, PCLEffectType.General, 1, 1);
+    public static final PSkillData<PField_Empty> DATA = register(PTrait_Unplayable.class, PField_Empty.class, 1, 1);
 
     public PTrait_Unplayable()
     {

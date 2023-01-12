@@ -9,7 +9,7 @@ import pinacolada.skills.PTrigger;
 public class PTrigger_Passive extends PTrigger implements PSkillAttribute
 {
 
-    public static final PSkillData DATA = register(PTrigger_Passive.class, PCLEffectType.General, TRIGGER_PRIORITY, -1, DEFAULT_MAX);
+    public static final PSkillData DATA = register(PTrigger_Passive.class, PField_Empty.class, TRIGGER_PRIORITY, -1, DEFAULT_MAX);
 
     public PTrigger_Passive()
     {

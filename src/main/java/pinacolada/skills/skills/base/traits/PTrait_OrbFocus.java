@@ -5,12 +5,13 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.PTrait;
+import pinacolada.skills.fields.PField_Empty;
 import pinacolada.utilities.GameUtilities;
 
-public class PTrait_OrbFocus extends PTrait
+public class PTrait_OrbFocus extends PTrait<PField_Empty>
 {
 
-    public static final PSkillData DATA = register(PTrait_OrbFocus.class, PCLEffectType.General);
+    public static final PSkillData<PField_Empty> DATA = register(PTrait_OrbFocus.class, PField_Empty.class);
 
     public PTrait_OrbFocus()
     {

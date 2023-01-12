@@ -11,16 +11,15 @@ import pinacolada.skills.PMod;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Power;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.List;
 
-import static pinacolada.skills.PSkill.PCLEffectType.Power;
-
-public class PMod_PerCreatureWith extends PMod
+public class PMod_PerCreatureWith extends PMod<PField_Power>
 {
 
-    public static final PSkillData DATA = register(PMod_PerCreatureWith.class, Power);
+    public static final PSkillData<PField_Power> DATA = register(PMod_PerCreatureWith.class, PField_Power.class);
 
     public PMod_PerCreatureWith(PSkillSaveData content)
     {
@@ -34,25 +33,21 @@ public class PMod_PerCreatureWith extends PMod
 
     public PMod_PerCreatureWith(int amount, PCLPowerHelper... powerHelpers)
     {
-        super(DATA, PCLCardTarget.AllEnemy, amount, powerHelpers);
+        this(PCLCardTarget.AllEnemy, amount, powerHelpers);
     }
 
     public PMod_PerCreatureWith(PCLCardTarget target, int amount, PCLPowerHelper... powerHelpers)
     {
-        super(DATA, target, amount, powerHelpers);
-    }
-
-    public PMod_PerCreatureWith(int amount, List<PCLPowerHelper> powerHelpers)
-    {
-        super(DATA, PCLCardTarget.AllEnemy, amount, powerHelpers.toArray(new PCLPowerHelper[]{}));
+        super(DATA, target, amount);
+        fields.setPower(powerHelpers);
     }
 
     @Override
     public int getModifiedAmount(PSkill be, PCLUseInfo info)
     {
         List<AbstractCreature> targetList = getTargetList(info);
-        return powers.isEmpty() ? be.baseAmount * EUIUtils.count(targetList, t -> t.powers != null && EUIUtils.any(t.powers, po -> po.type == AbstractPower.PowerType.DEBUFF)) :
-                be.baseAmount * EUIUtils.count(targetList, t -> alt ? EUIUtils.any(powers, po -> GameUtilities.getPowerAmount(t, po.ID) >= amount) : EUIUtils.all(powers, po -> GameUtilities.getPowerAmount(t, po.ID) >= amount));
+        return fields.powers.isEmpty() ? be.baseAmount * EUIUtils.count(targetList, t -> t.powers != null && EUIUtils.any(t.powers, po -> po.type == AbstractPower.PowerType.DEBUFF)) :
+                be.baseAmount * EUIUtils.count(targetList, t -> fields.random ? EUIUtils.any(fields.powers, po -> GameUtilities.getPowerAmount(t, po.ID) >= amount) : EUIUtils.all(fields.powers, po -> GameUtilities.getPowerAmount(t, po.ID) >= amount));
     }
 
     @Override
@@ -64,7 +59,7 @@ public class PMod_PerCreatureWith extends PMod
     @Override
     public String getSubText()
     {
-        String baseString = (this.amount <= 1 ? "" : getAmountRawString() + " ") + (powers.isEmpty() ? plural(PGR.core.tooltips.debuff) : alt ? getPowerOrString() : getPowerAndString());
+        String baseString = (this.amount <= 1 ? "" : getAmountRawString() + " ") + (fields.powers.isEmpty() ? plural(PGR.core.tooltips.debuff) : fields.getPowerAndOrString());
         return target == PCLCardTarget.Any ? TEXT.subjects.characterWithX(baseString) : TEXT.subjects.enemyWithX(baseString);
     }
 }

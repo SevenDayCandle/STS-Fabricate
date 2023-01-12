@@ -1,18 +1,26 @@
 package pinacolada.skills.skills.base.moves;
 
-import pinacolada.cards.base.PCLCardTarget;
-import pinacolada.cards.base.PCLUseInfo;
-import pinacolada.skills.PMove;
+import com.megacrit.cardcrawl.cards.CardGroup;
+import com.megacrit.cardcrawl.core.AbstractCreature;
+import extendedui.interfaces.delegates.FuncT4;
+import extendedui.ui.tooltips.EUITooltip;
+import pinacolada.actions.pileSelection.Scry;
+import pinacolada.actions.pileSelection.SelectFromPile;
+import pinacolada.cards.base.PCLCardGroupHelper;
+import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_CardCategory;
 
-public class PMove_Scry extends PMove
+public class PMove_Scry extends PMove_Select
 {
-    public static final PSkillData DATA = register(PMove_Scry.class, PCLEffectType.General).selfTarget();
+    public static final PSkillData<PField_CardCategory> DATA = register(PMove_Scry.class, PField_CardCategory.class)
+            .selfTarget()
+            .setGroups(PCLCardGroupHelper.DrawPile);
 
     public PMove_Scry()
     {
-        this(1);
+        this(1, (PCLCardGroupHelper) null);
     }
 
     public PMove_Scry(PSkillSaveData content)
@@ -20,32 +28,20 @@ public class PMove_Scry extends PMove
         super(content);
     }
 
-    public PMove_Scry(int amount)
+    public PMove_Scry(int amount, PCLCardGroupHelper... h)
     {
-        super(DATA, PCLCardTarget.None, amount);
+        super(DATA, amount, h);
     }
 
     @Override
-    public String getSampleText()
+    public EUITooltip getActionTooltip()
     {
-        return TEXT.actions.scry("X");
+        return PGR.core.tooltips.scry;
     }
 
     @Override
-    public void use(PCLUseInfo info)
+    public FuncT4<SelectFromPile, String, AbstractCreature, Integer, CardGroup[]> getAction()
     {
-        getActions().scry(amount).addCallback(cards -> {
-            if (this.childEffect != null)
-            {
-                this.childEffect.setCards(cards);
-                this.childEffect.use(info);
-            }
-        });
-    }
-
-    @Override
-    public String getSubText()
-    {
-        return TEXT.actions.scry(getAmountRawString());
+        return (s, c, i, g) -> new Scry(i);
     }
 }

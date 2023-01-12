@@ -4,7 +4,6 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
-import extendedui.EUIUtils;
 import extendedui.utilities.ColoredString;
 import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCardGroupHelper;
@@ -14,29 +13,23 @@ import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.resources.pcl.PCLCoreStrings;
+import pinacolada.skills.fields.PField;
 import pinacolada.skills.skills.PDelay;
 import pinacolada.skills.skills.base.modifiers.*;
 import pinacolada.stances.PCLStanceHelper;
 
-import java.util.ArrayList;
-
-public abstract class PMod extends PSkill
+public abstract class PMod<T extends PField> extends PSkill<T>
 {
     public static final int MODIFIER_PRIORITY = 3;
     public int cachedValue;
 
-    public static ArrayList<PMod> getEligibleModifiers(AbstractCard.CardColor co, Integer priority)
-    {
-        return EUIUtils.mapAsNonnull(getEligibleEffects(co, priority), ef -> EUIUtils.safeCast(ef, PMod.class));
-    }
-
-    public static PSkillData register(Class<? extends PSkill> type, PCLEffectType effectType, AbstractCard.CardColor... cardColors)
+    public static <T extends PField> PSkillData<T> register(Class<? extends PSkill<T>> type, Class<T> effectType, AbstractCard.CardColor... cardColors)
     {
         return PSkill.register(type, effectType, getDefaultPriority(type), -1, DEFAULT_MAX, cardColors)
                 .setExtra(-1, DEFAULT_MAX);
     }
 
-    public static PSkillData register(Class<? extends PSkill> type, PCLEffectType effectType)
+    public static <T extends PField> PSkillData<T> register(Class<? extends PSkill<T>> type, Class<T> effectType)
     {
         return PSkill.register(type, effectType, getDefaultPriority(type), -1, DEFAULT_MAX)
                 .setExtra(-1, DEFAULT_MAX);
@@ -322,54 +315,19 @@ public abstract class PMod extends PSkill
         super(content);
     }
 
-    public PMod(PSkillData data)
+    public PMod(PSkillData<T> data)
     {
         super(data);
     }
 
-    public PMod(PSkillData data, PCLCardTarget target, int amount)
+    public PMod(PSkillData<T> data, PCLCardTarget target, int amount)
     {
         super(data, target, amount);
     }
 
-    public PMod(PSkillData data, PCLCardTarget target, int amount, int extra)
+    public PMod(PSkillData<T> data, PCLCardTarget target, int amount, int extra)
     {
         super(data, target, amount, extra);
-    }
-
-    public PMod(PSkillData data, PCLCardTarget target, int amount, PCLCardGroupHelper... groups)
-    {
-        super(data, target, amount, groups);
-    }
-
-    public PMod(PSkillData data, PCLCardTarget target, int amount, PSkill effect)
-    {
-        super(data, target, amount, effect);
-    }
-
-    public PMod(PSkillData data, PCLCardTarget target, int amount, PSkill... effect)
-    {
-        super(data, target, amount, effect);
-    }
-
-    public PMod(PSkillData data, PCLCardTarget target, int amount, PCLAffinity... affinities)
-    {
-        super(data, target, amount, affinities);
-    }
-
-    public PMod(PSkillData data, PCLCardTarget target, int amount, PCLOrbHelper... orbs)
-    {
-        super(data, target, amount, orbs);
-    }
-
-    public PMod(PSkillData data, PCLCardTarget target, int amount, PCLPowerHelper... powerHelpers)
-    {
-        super(data, target, amount, powerHelpers);
-    }
-
-    public PMod(PSkillData data, int amount, PCLStanceHelper powerHelpers)
-    {
-        super(data, amount, powerHelpers);
     }
 
     public int getModifiedAmount(PSkill be, PCLUseInfo info)
@@ -403,12 +361,6 @@ public abstract class PMod extends PSkill
         }
 
         return new ColoredString(amount, Settings.CREAM_COLOR);
-    }
-
-    @Override
-    public String getSubText()
-    {
-        return getFullCardOrString(1);
     }
 
     @Override

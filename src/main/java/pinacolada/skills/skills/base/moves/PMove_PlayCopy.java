@@ -13,12 +13,15 @@ import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.PTrigger;
+import pinacolada.skills.fields.PField_CardID;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RotatingList;
 
-public class PMove_PlayCopy extends PMove
+import java.util.ArrayList;
+
+public class PMove_PlayCopy extends PMove<PField_CardID>
 {
-    public static final PSkillData DATA = register(PMove_PlayCopy.class, PCLEffectType.Card)
+    public static final PSkillData<PField_CardID> DATA = register(PMove_PlayCopy.class, PField_CardID.class)
             .selfTarget();
 
     public PMove_PlayCopy()
@@ -33,13 +36,14 @@ public class PMove_PlayCopy extends PMove
 
     public PMove_PlayCopy(int copies, PCLCardTarget target, String... cards)
     {
-        super(DATA, target, copies, cards);
+        super(DATA, target, copies);
+        fields.setCardIDs(cards);
     }
 
     @Override
     public PMove_PlayCopy makePreviews(RotatingList<EUICardPreview> previews)
     {
-        for (String cd : cardIDs)
+        for (String cd : fields.cardIDs)
         {
             previews.add(EUICardPreview.generatePreviewCard(CardLibrary.getCopy(cd)));
         }
@@ -55,8 +59,9 @@ public class PMove_PlayCopy extends PMove
     @Override
     public void use(PCLUseInfo info)
     {
-        if (cardIDs.isEmpty())
+        if (fields.cardIDs.isEmpty())
         {
+            ArrayList<AbstractCard> cards = info.getData(new ArrayList<>());
             if (!cards.isEmpty())
             {
                 for (AbstractCard c : cards)
@@ -80,7 +85,7 @@ public class PMove_PlayCopy extends PMove
         }
         else
         {
-            for (String cd : cardIDs)
+            for (String cd : fields.cardIDs)
             {
                 for (int i = 0; i < amount; i++)
                 {
@@ -94,7 +99,7 @@ public class PMove_PlayCopy extends PMove
     @Override
     public String getSubText()
     {
-        return cardIDs.isEmpty() ? EUIRM.strings.verbNounAdv(PGR.core.tooltips.play.title, hasParentType(PTrigger.class) ? getInheritedString() : TEXT.subjects.thisX, TEXT.subjects.times(amount))
-                : TEXT.actions.play(PCLCoreStrings.joinWithAnd(EUIUtils.map(cardIDs, g -> "{" + PGR.getCardStrings(g).NAME + "}")));
+        return fields.cardIDs.isEmpty() ? EUIRM.strings.verbNounAdv(PGR.core.tooltips.play.title, hasParentType(PTrigger.class) ? getInheritedString() : TEXT.subjects.thisX, TEXT.subjects.times(amount))
+                : TEXT.actions.play(PCLCoreStrings.joinWithAnd(EUIUtils.map(fields.cardIDs, g -> "{" + PGR.getCardStrings(g).NAME + "}")));
     }
 }

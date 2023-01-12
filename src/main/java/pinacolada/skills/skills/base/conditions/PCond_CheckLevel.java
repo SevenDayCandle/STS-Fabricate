@@ -8,12 +8,11 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Affinity;
 
-import java.util.List;
-
-public class PCond_CheckLevel extends PCond
+public class PCond_CheckLevel extends PCond<PField_Affinity>
 {
-    public static final PSkillData DATA = register(PCond_CheckLevel.class, PCLEffectType.Affinity)
+    public static final PSkillData<PField_Affinity> DATA = register(PCond_CheckLevel.class, PField_Affinity.class)
             .pclOnly()
             .selfTarget();
 
@@ -22,39 +21,30 @@ public class PCond_CheckLevel extends PCond
         super(content);
     }
 
-    public PCond_CheckLevel()
+    public PCond_CheckLevel(int amount, PCLAffinity... stance)
     {
-        super(DATA, PCLCardTarget.None, 1, new PCLAffinity[]{});
-    }
-
-    public PCond_CheckLevel(int amount, PCLAffinity... affinities)
-    {
-        super(DATA, PCLCardTarget.None, amount, affinities);
-    }
-
-    public PCond_CheckLevel(int amount, List<PCLAffinity> affinities)
-    {
-        super(DATA, PCLCardTarget.None, amount, affinities.toArray(new PCLAffinity[]{}));
+        super(DATA, PCLCardTarget.None, amount);
+        fields.setAffinity(stance);
     }
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
     {
-        if (affinities.isEmpty())
+        if (fields.affinities.isEmpty())
         {
-            return alt ^ CombatManager.playerSystem.getLevel(PCLAffinity.General) >= amount;
+            return fields.random ^ CombatManager.playerSystem.getLevel(PCLAffinity.General) >= amount;
         }
         else
         {
-            for (PCLAffinity affinity : affinities)
+            for (PCLAffinity affinity : fields.affinities)
             {
                 if (CombatManager.playerSystem.getLevel(affinity) < amount)
                 {
-                    return alt;
+                    return fields.random;
                 }
             }
         }
-        return !alt;
+        return !fields.random;
     }
 
     @Override
@@ -66,6 +56,6 @@ public class PCond_CheckLevel extends PCond
     @Override
     public String getSubText()
     {
-        return TEXT.conditions.levelItem(amount, alt ? getAffinityLevelOrString() : getAffinityLevelAndString());
+        return TEXT.conditions.levelItem(amount, fields.getAffinityChoiceString());
     }
 }

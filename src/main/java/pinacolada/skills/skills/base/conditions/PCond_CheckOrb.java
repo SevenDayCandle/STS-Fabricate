@@ -8,13 +8,12 @@ import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Orb;
 import pinacolada.utilities.GameUtilities;
 
-import java.util.List;
-
-public class PCond_CheckOrb extends PCond
+public class PCond_CheckOrb extends PCond<PField_Orb>
 {
-    public static final PSkillData DATA = register(PCond_CheckOrb.class, PCLEffectType.Orb)
+    public static final PSkillData<PField_Orb> DATA = register(PCond_CheckOrb.class, PField_Orb.class)
             .selfTarget();
 
     public PCond_CheckOrb(PSkillSaveData content)
@@ -22,19 +21,10 @@ public class PCond_CheckOrb extends PCond
         super(content);
     }
 
-    public PCond_CheckOrb()
+    public PCond_CheckOrb(int amount, PCLOrbHelper... orb)
     {
-        super(DATA, PCLCardTarget.None, 1, new PCLOrbHelper[]{});
-    }
-
-    public PCond_CheckOrb(int amount, PCLOrbHelper... powers)
-    {
-        super(DATA, PCLCardTarget.None, amount, powers);
-    }
-
-    public PCond_CheckOrb(int amount, List<PCLOrbHelper> powers)
-    {
-        super(DATA, PCLCardTarget.None, amount, powers.toArray(new PCLOrbHelper[]{}));
+        super(DATA, PCLCardTarget.None, amount);
+        fields.setOrb(orb);
     }
 
     @Override
@@ -46,17 +36,17 @@ public class PCond_CheckOrb extends PCond
     @Override
     public String getSubText()
     {
-        Object tt = alt ? getOrbOrString(getRawString(EFFECT_CHAR)) : getOrbAndString(getRawString(EFFECT_CHAR));
+        String tt = fields.getOrbAndOrString();
         return TEXT.conditions.ifYouHave(amount == 1 ? tt : EUIRM.strings.numNoun(amount <= 0 ? amount : amount + "+", tt));
     }
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
     {
-        if (orbs.isEmpty())
+        if (fields.orbs.isEmpty())
         {
             return amount <= 0 ? GameUtilities.getOrbCount() == 0 : GameUtilities.getOrbCount() >= amount;
         }
-        return alt ? EUIUtils.any(orbs, o -> GameUtilities.getOrbCount(o.ID) >= amount) : EUIUtils.all(orbs, o -> GameUtilities.getOrbCount(o.ID) >= amount);
+        return fields.random ? EUIUtils.any(fields.orbs, o -> GameUtilities.getOrbCount(o.ID) >= amount) : EUIUtils.all(fields.orbs, o -> GameUtilities.getOrbCount(o.ID) >= amount);
     }
 }

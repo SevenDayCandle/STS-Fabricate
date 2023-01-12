@@ -8,10 +8,11 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Affinity;
 
-public class PMove_AddLevel extends PMove
+public class PMove_AddLevel extends PMove<PField_Affinity>
 {
-    public static final PSkillData DATA = register(PMove_AddLevel.class, PCLEffectType.Affinity)
+    public static final PSkillData<PField_Affinity> DATA = register(PMove_AddLevel.class, PField_Affinity.class)
             .pclOnly()
             .selfTarget();
 
@@ -22,7 +23,8 @@ public class PMove_AddLevel extends PMove
 
     public PMove_AddLevel(int amount, PCLAffinity... stance)
     {
-        super(DATA, PCLCardTarget.Self, amount, stance);
+        super(DATA, PCLCardTarget.Self, amount);
+        fields.setAffinity(stance);
     }
 
 
@@ -35,17 +37,17 @@ public class PMove_AddLevel extends PMove
     @Override
     public void use(PCLUseInfo info)
     {
-        if (affinities.isEmpty())
+        if (fields.affinities.isEmpty())
         {
             getActions().tryChooseAffinitySkill(getName(), amount, info.source, info.target, EUIUtils.map(PCLAffinity.getAvailableAffinities(), a -> PMove.addLevel(amount, a)));
         }
-        else if (affinities.size() == 1)
+        else if (fields.affinities.size() == 1)
         {
-            getActions().addAffinityLevel(affinities.get(0), amount);
+            getActions().addAffinityLevel(fields.affinities.get(0), amount);
         }
         else
         {
-            getActions().tryChooseAffinitySkill(getName(), amount, info.source, info.target, EUIUtils.map(affinities, a -> PMove.addLevel(amount, a)));
+            getActions().tryChooseAffinitySkill(getName(), amount, info.source, info.target, EUIUtils.map(fields.affinities, a -> PMove.addLevel(amount, a)));
         }
         super.use(info);
     }
@@ -53,8 +55,7 @@ public class PMove_AddLevel extends PMove
     @Override
     public String getSubText()
     {
-        String afs = affinities.isEmpty() ? TEXT.subjects.anyX(PGR.core.tooltips.affinityGeneral) : getAffinityLevelOrString();
-        String base = TEXT.actions.giveTargetAmount(afs, (amount > 0 ? ("+ " + getAmountRawString()) : getAmountRawString()), plural(PGR.core.tooltips.level));
-        return alt ? TEXT.subjects.randomly(base) : base;
+        String base = TEXT.actions.giveTargetAmount(fields.getAffinityChoiceString(), (amount > 0 ? ("+ " + getAmountRawString()) : getAmountRawString()), plural(PGR.core.tooltips.level));
+        return fields.random ? TEXT.subjects.randomly(base) : base;
     }
 }

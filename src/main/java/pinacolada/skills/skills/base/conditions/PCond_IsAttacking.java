@@ -6,11 +6,12 @@ import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Not;
 import pinacolada.utilities.GameUtilities;
 
-public class PCond_IsAttacking extends PCond
+public class PCond_IsAttacking extends PCond<PField_Not>
 {
-    public static final PSkillData DATA = register(PCond_IsAttacking.class, PCLEffectType.General);
+    public static final PSkillData<PField_Not> DATA = register(PCond_IsAttacking.class, PField_Not.class);
 
     public PCond_IsAttacking(PSkillSaveData content)
     {
@@ -32,9 +33,9 @@ public class PCond_IsAttacking extends PCond
     {
         if (target == PCLCardTarget.Single)
         {
-            return alt ^ (GameUtilities.isAttacking(info.target));
+            return fields.not ^ (GameUtilities.isAttacking(info.target));
         }
-        return alt ^ EUIUtils.any(GameUtilities.getIntents(), i -> alt ^ i.isAttacking());
+        return fields.not ^ EUIUtils.any(GameUtilities.getIntents(), i -> fields.not ^ i.isAttacking());
     }
 
     @Override
@@ -46,7 +47,7 @@ public class PCond_IsAttacking extends PCond
     @Override
     public String getSubText()
     {
-        String base = alt ? TEXT.conditions.not(TEXT.subjects.attacking) : TEXT.subjects.attacking;
+        String base = fields.not ? TEXT.conditions.not(TEXT.subjects.attacking) : TEXT.subjects.attacking;
         return target == PCLCardTarget.Single ? TEXT.conditions.ifTheEnemyIs(base) : TEXT.conditions.ifAnyEnemyIs(base);
     }
 }

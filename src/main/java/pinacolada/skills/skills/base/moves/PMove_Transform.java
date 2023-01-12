@@ -15,15 +15,15 @@ import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
 import pinacolada.resources.PGR;
-import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RotatingList;
 
 public class PMove_Transform extends PMove_Select
 {
-    public static final PSkillData DATA = register(PMove_Transform.class, PCLEffectType.Card)
+    public static final PSkillData<PField_CardCategory> DATA = register(PMove_Transform.class, PField_CardCategory.class)
             .selfTarget();
 
     public PMove_Transform()
@@ -44,7 +44,7 @@ public class PMove_Transform extends PMove_Select
     public PMove_Transform(String... cards)
     {
         super(DATA, 1);
-        setCardIDs(cards);
+        fields.setCardIDs(cards);
     }
 
     @Override
@@ -66,7 +66,8 @@ public class PMove_Transform extends PMove_Select
         {
             c = GameUtilities.getRandomCard();
         }
-        if (alt2 && c != null)
+        // TODO custom variable
+        if (fields.forced && c != null)
         {
             c.upgrade();
         }
@@ -86,15 +87,13 @@ public class PMove_Transform extends PMove_Select
     @Override
     public void use(PCLUseInfo info)
     {
-        if (groupTypes.isEmpty() && !useParent && sourceCard != null)
+        if (!fields.hasGroups() && !useParent && sourceCard != null)
         {
             transformImpl(sourceCard);
         }
         else
         {
-            getActions().add(createAction(info))
-                    .setFilter(getFullCardFilter())
-                    .setOptions(alt || useParent, true)
+            fields.getGenericPileAction(getAction(), info)
                     .addCallback(cards -> {
                         for (AbstractCard c : cards)
                         {
@@ -109,23 +108,24 @@ public class PMove_Transform extends PMove_Select
     public String getSubText()
     {
         return TEXT.actions.transform(
-                useParent ? getInheritedString() : groupTypes.size() > 0 ? EUIRM.strings.numNounPlace(getAmountRawString(), getFullCardString(), TEXT.subjects.from(getGroupString())) : TEXT.subjects.thisObj, getCardIDOrString()
+                useParent ? getInheritedString() : fields.groupTypes.size() > 0 ? EUIRM.strings.numNounPlace(getAmountRawString(), fields.getFullCardString(), TEXT.subjects.from(fields.getGroupString())) : TEXT.subjects.thisObj, fields.getCardIDOrString()
         );
     }
 
     @Override
-    public PSkill makePreviews(RotatingList<EUICardPreview> previews)
+    public PMove_Transform makePreviews(RotatingList<EUICardPreview> previews)
     {
-        for (String cd : cardIDs)
+        for (String cd : fields.cardIDs)
         {
             previews.add(EUICardPreview.generatePreviewCard(getCard(cd)));
         }
-        return super.makePreviews(previews);
+        super.makePreviews(previews);
+        return this;
     }
 
     private void transformImpl(AbstractCard c)
     {
-        AbstractCard c2 = getCard(cardIDs.isEmpty() ? null : cardIDs.get(0));
+        AbstractCard c2 = getCard(fields.cardIDs.isEmpty() ? null : fields.cardIDs.get(0));
         if (c2 != null)
         {
             PCLActions.last.replaceCard(c.uuid, c2);

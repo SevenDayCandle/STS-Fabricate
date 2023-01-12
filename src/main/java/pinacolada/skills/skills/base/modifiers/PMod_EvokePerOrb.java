@@ -11,16 +11,13 @@ import pinacolada.skills.PMod;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Orb;
 import pinacolada.utilities.GameUtilities;
 
-import java.util.List;
-
-import static pinacolada.skills.PSkill.PCLEffectType.Orb;
-
-public class PMod_EvokePerOrb extends PMod
+public class PMod_EvokePerOrb extends PMod<PField_Orb>
 {
 
-    public static final PSkillData DATA = register(PMod_EvokePerOrb.class, Orb).selfTarget();
+    public static final PSkillData<PField_Orb> DATA = register(PMod_EvokePerOrb.class, PField_Orb.class).selfTarget();
 
     public PMod_EvokePerOrb(PSkillSaveData content)
     {
@@ -34,12 +31,8 @@ public class PMod_EvokePerOrb extends PMod
 
     public PMod_EvokePerOrb(int amount, PCLOrbHelper... orbs)
     {
-        super(DATA, PCLCardTarget.None, amount, orbs);
-    }
-
-    public PMod_EvokePerOrb(int amount, List<PCLOrbHelper> orbs)
-    {
-        super(DATA, PCLCardTarget.None, amount, orbs.toArray(new PCLOrbHelper[]{}));
+        super(DATA, PCLCardTarget.None, amount);
+        fields.setOrb(orbs);
     }
 
     @Override
@@ -51,13 +44,13 @@ public class PMod_EvokePerOrb extends PMod
     @Override
     public String getSubText()
     {
-        return this.amount <= 1 ? getOrbAndString(1) : EUIRM.strings.numNoun(getAmountRawString(), getOrbAndString(getRawString(EFFECT_CHAR)));
+        return this.amount <= 1 ? fields.getOrbAndString() : EUIRM.strings.numNoun(getAmountRawString(), fields.getOrbAndString());
     }
 
     @Override
     public String getText(boolean addPeriod)
     {
-        return TEXT.actions.evoke(TEXT.subjects.allX(!orbs.isEmpty() ? getOrbString() : TEXT.cardEditor.orbs)) + EFFECT_SEPARATOR + super.getText(addPeriod);
+        return TEXT.actions.evoke(TEXT.subjects.allX(fields.getOrbString()) + EFFECT_SEPARATOR + super.getText(addPeriod));
     }
 
     @Override
@@ -88,12 +81,12 @@ public class PMod_EvokePerOrb extends PMod
     @Override
     public int getModifiedAmount(PSkill be, PCLUseInfo info)
     {
-        return AbstractDungeon.player == null ? 0 : be.baseAmount * (orbs.isEmpty() ? GameUtilities.getOrbCount() : EUIUtils.sumInt(orbs, GameUtilities::getOrbCount)) / Math.max(1, this.amount);
+        return AbstractDungeon.player == null ? 0 : be.baseAmount * (fields.orbs.isEmpty() ? GameUtilities.getOrbCount() : EUIUtils.sumInt(fields.orbs, GameUtilities::getOrbCount)) / Math.max(1, this.amount);
     }
 
     protected void useImpl(PCLUseInfo info, ActionT0 callback)
     {
-        getActions().evokeOrb(1, GameUtilities.getOrbCount()).setFilter(getOrbFilter())
+        getActions().evokeOrb(1, GameUtilities.getOrbCount()).setFilter(fields.getOrbFilter())
                 .addCallback(callback);
     }
 

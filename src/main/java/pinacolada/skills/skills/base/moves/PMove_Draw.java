@@ -42,7 +42,7 @@ public class PMove_Draw extends PMove
                 .addCallback(ca -> {
                     if (this.childEffect != null)
                     {
-                        this.childEffect.setCards(ca);
+                        this.childEffect.receivePayload(ca);
                         this.childEffect.use(info);
                     }
                 });

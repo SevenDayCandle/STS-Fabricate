@@ -13,16 +13,16 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.PTrait;
+import pinacolada.skills.fields.PField_Empty;
 import pinacolada.utilities.RotatingList;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
-public class PMultiTrait extends PTrait implements PMultiBase<PTrait>
+public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTrait>
 {
-    public static final PSkillData DATA = register(PMultiTrait.class, PCLEffectType.General, 0, DEFAULT_MAX);
+    public static final PSkillData<PField_Empty> DATA = register(PMultiTrait.class, PField_Empty.class, 0, DEFAULT_MAX);
     protected ArrayList<PTrait> effects = new ArrayList<>();
 
     public PMultiTrait()
@@ -207,16 +207,6 @@ public class PMultiTrait extends PTrait implements PMultiBase<PTrait>
         for (PSkill effect : effects)
         {
             effect.setAmountFromCard();
-        }
-        return this;
-    }
-
-    public PMultiTrait setCards(Collection<? extends AbstractCard> cards)
-    {
-        super.setCards(cards);
-        for (PSkill be : effects)
-        {
-            be.setCards(cards);
         }
         return this;
     }

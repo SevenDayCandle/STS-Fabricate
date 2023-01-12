@@ -15,15 +15,15 @@ import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_CardCategory;
 
 import java.util.ArrayList;
 
-import static pinacolada.skills.PSkill.PCLEffectType.CardGroupFull;
+
 
 public class PMod_ScoutPerCard extends PMod_Do
 {
-
-    public static final PSkillData DATA = register(PMod_ScoutPerCard.class, CardGroupFull)
+    public static final PSkillData<PField_CardCategory> DATA = register(PMod_ScoutPerCard.class, PField_CardCategory.class)
             .selfTarget()
             .setGroups(PCLCardGroupHelper.DrawPile);
 

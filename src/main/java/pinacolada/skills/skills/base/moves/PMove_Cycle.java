@@ -1,5 +1,6 @@
 package pinacolada.skills.skills.base.moves;
 
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import extendedui.EUIUtils;
 import pinacolada.cards.base.PCLCardTarget;
@@ -7,10 +8,13 @@ import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_CardCategory;
 
-public class PMove_Cycle extends PMove
+import java.util.ArrayList;
+
+public class PMove_Cycle extends PMove<PField_CardCategory>
 {
-    public static final PSkillData DATA = register(PMove_Cycle.class, PCLEffectType.General).selfTarget();
+    public static final PSkillData<PField_CardCategory> DATA = register(PMove_Cycle.class, PField_CardCategory.class).selfTarget();
 
     public PMove_Cycle()
     {
@@ -36,29 +40,24 @@ public class PMove_Cycle extends PMove
     @Override
     public void use(PCLUseInfo info)
     {
+        ArrayList<AbstractCard> cards = info.getData(null);
         if (useParent && !EUIUtils.isNullOrEmpty(cards))
         {
             CardGroup cg = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
             cg.group = cards;
             getActions().discardFromPile(getName(), cg.size(), cg)
                     .setOptions(false, true)
-                    .addCallback(cards -> {
-                        getActions().draw(cards.size());
-                        if (this.childEffect != null)
-                        {
-                            this.childEffect.setCards(cards);
-                        }
+                    .addCallback(c2 -> {
+                        getActions().draw(c2.size());
+                        info.setData(c2);
                         super.use(info);
                     });
         }
         else
         {
             getActions().cycle(getName(), amount).setOptions(false, true)
-                    .addCallback(cards -> {
-                        if (this.childEffect != null)
-                        {
-                            this.childEffect.setCards(cards);
-                        }
+                    .addCallback(c2 -> {
+                        info.setData(c2);
                         super.use(info);
                     });
 

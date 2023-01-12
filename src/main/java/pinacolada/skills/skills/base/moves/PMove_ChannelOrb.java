@@ -9,13 +9,14 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Orb;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.List;
 
-public class PMove_ChannelOrb extends PMove
+public class PMove_ChannelOrb extends PMove<PField_Orb>
 {
-    public static final PSkillData DATA = register(PMove_ChannelOrb.class, PCLEffectType.Orb)
+    public static final PSkillData<PField_Orb> DATA = register(PMove_ChannelOrb.class, PField_Orb.class)
             .setExtra(-1, DEFAULT_MAX)
             .selfTarget();
 
@@ -31,7 +32,14 @@ public class PMove_ChannelOrb extends PMove
 
     public PMove_ChannelOrb(int amount, PCLOrbHelper... orb)
     {
-        super(DATA, PCLCardTarget.None, amount, orb);
+        super(DATA, PCLCardTarget.None, amount);
+        fields.setOrb(orb);
+    }
+
+    public PMove_ChannelOrb(int amount, int extra, PCLOrbHelper... orb)
+    {
+        super(DATA, PCLCardTarget.None, amount, extra);
+        fields.setOrb(orb);
     }
 
     @Override
@@ -43,11 +51,11 @@ public class PMove_ChannelOrb extends PMove
     @Override
     public void use(PCLUseInfo info)
     {
-        if (!orbs.isEmpty())
+        if (!fields.orbs.isEmpty())
         {
-            if (alt)
+            if (fields.random)
             {
-                PCLOrbHelper orb = GameUtilities.getRandomElement(orbs);
+                PCLOrbHelper orb = GameUtilities.getRandomElement(fields.orbs);
                 if (orb != null)
                 {
                     getActions().channelOrbs(orb, amount).addCallback(this::modifyFocus);
@@ -55,7 +63,7 @@ public class PMove_ChannelOrb extends PMove
             }
             else
             {
-                for (PCLOrbHelper orb : orbs)
+                for (PCLOrbHelper orb : fields.orbs)
                 {
                     getActions().channelOrbs(orb, amount).addCallback(this::modifyFocus);
                 }
@@ -71,12 +79,12 @@ public class PMove_ChannelOrb extends PMove
     @Override
     public String getSubText()
     {
-        String base = (!orbs.isEmpty() ? alt ? getOrbOrString(getRawString(EFFECT_CHAR)) : getOrbAndString(getRawString(EFFECT_CHAR)) : TEXT.subjects.randomX(plural(PGR.core.tooltips.orb)));
+        String base = fields.getOrbAmountString();
         if (extra > 0)
         {
             base = TEXT.subjects.withX(base, EUIRM.strings.numNoun("+" + getExtraRawString(), PGR.core.tooltips.focus.title));
         }
-        return alt ? TEXT.subjects.randomly(TEXT.actions.channelX(getAmountRawString(), base))
+        return fields.random ? TEXT.subjects.randomly(TEXT.actions.channelX(getAmountRawString(), base))
                 : TEXT.actions.channelX(getAmountRawString(), base);
     }
 

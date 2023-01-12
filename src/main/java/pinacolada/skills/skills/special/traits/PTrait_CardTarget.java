@@ -13,7 +13,7 @@ import pinacolada.skills.PTrigger;
 public class PTrait_CardTarget extends PTrait implements Hidden
 {
 
-    public static final PSkillData DATA = register(PTrait_CardTarget.class, PCLEffectType.General);
+    public static final PSkillData DATA = register(PTrait_CardTarget.class, PField_Empty.class);
 
     protected PCLCardTarget newTarget = PCLCardTarget.Single;
 

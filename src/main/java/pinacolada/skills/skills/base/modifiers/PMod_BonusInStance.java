@@ -6,15 +6,14 @@ import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Stance;
 import pinacolada.stances.PCLStanceHelper;
 import pinacolada.utilities.GameUtilities;
 
-import static pinacolada.skills.PSkill.PCLEffectType.Stance;
-
-public class PMod_BonusInStance extends PMod_BonusOn
+public class PMod_BonusInStance extends PMod_BonusOn<PField_Stance>
 {
 
-    public static final PSkillData DATA = register(PMod_BonusInStance.class, Stance).selfTarget();
+    public static final PSkillData<PField_Stance> DATA = register(PMod_BonusInStance.class, PField_Stance.class).selfTarget();
 
     public PMod_BonusInStance(PSkillSaveData content)
     {
@@ -23,12 +22,13 @@ public class PMod_BonusInStance extends PMod_BonusOn
 
     public PMod_BonusInStance()
     {
-        this(0, null);
+        super(DATA, 0);
     }
 
-    public PMod_BonusInStance(int amount, PCLStanceHelper stance)
+    public PMod_BonusInStance(int amount, PCLStanceHelper... stance)
     {
-        super(DATA, amount, stance);
+        super(DATA, amount);
+        fields.setStance(stance);
     }
 
     @Override
@@ -40,13 +40,13 @@ public class PMod_BonusInStance extends PMod_BonusOn
     @Override
     public String getSubText()
     {
-        String base = stances.isEmpty() ? TEXT.conditions.any(PGR.core.tooltips.stance) : getStanceString();
-        return TEXT.conditions.numIf(getAmountRawString(), alt ? TEXT.conditions.not(base) : base);
+        String base = fields.getAnyStanceString();
+        return TEXT.conditions.numIf(getAmountRawString(), fields.random ? TEXT.conditions.not(base) : base);
     }
 
     @Override
     public boolean meetsCondition(PCLUseInfo info)
     {
-        return alt ^ (stances.isEmpty() ? !GameUtilities.inStance(NeutralStance.STANCE_ID) : EUIUtils.any(stances, GameUtilities::inStance));
+        return fields.random ^ (fields.stances.isEmpty() ? !GameUtilities.inStance(NeutralStance.STANCE_ID) : EUIUtils.any(fields.stances, GameUtilities::inStance));
     }
 }

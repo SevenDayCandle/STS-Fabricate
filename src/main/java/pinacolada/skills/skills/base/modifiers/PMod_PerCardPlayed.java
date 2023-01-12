@@ -12,15 +12,13 @@ import pinacolada.skills.PMod;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_CardCategory;
 
-import java.util.List;
 
-import static pinacolada.skills.PSkill.PCLEffectType.CardGroupFull;
 
-public class PMod_PerCardPlayed extends PMod
+public class PMod_PerCardPlayed extends PMod<PField_CardCategory>
 {
-
-    public static final PSkillData DATA = register(PMod_PerCardPlayed.class, CardGroupFull).selfTarget();
+    public static final PSkillData<PField_CardCategory> DATA = register(PMod_PerCardPlayed.class, PField_CardCategory.class).selfTarget();
 
     public PMod_PerCardPlayed(PSkillSaveData content)
     {
@@ -34,12 +32,8 @@ public class PMod_PerCardPlayed extends PMod
 
     public PMod_PerCardPlayed(int amount, PCLCardGroupHelper... groups)
     {
-        super(DATA, PCLCardTarget.None, amount, groups);
-    }
-
-    public PMod_PerCardPlayed(int amount, List<PCLCardGroupHelper> groups)
-    {
-        super(DATA, PCLCardTarget.None, amount, groups.toArray(new PCLCardGroupHelper[]{}));
+        super(DATA, PCLCardTarget.None, amount);
+        fields.setCardGroup(groups);
     }
 
     @Override
@@ -51,7 +45,7 @@ public class PMod_PerCardPlayed extends PMod
     @Override
     public String getSubText()
     {
-        return this.amount <= 1 ? getFullCardOrString(getRawString(EFFECT_CHAR)) : EUIRM.strings.numNoun(getAmountRawString(), getFullCardOrString(getRawString(EFFECT_CHAR)));
+        return this.amount <= 1 ? fields.getFullCardOrString() : EUIRM.strings.numNoun(getAmountRawString(), fields.getFullCardOrString());
     }
 
     @Override
@@ -64,6 +58,6 @@ public class PMod_PerCardPlayed extends PMod
     public int getModifiedAmount(PSkill be, PCLUseInfo info)
     {
         return be.baseAmount * EUIUtils.count(AbstractDungeon.actionManager.cardsPlayedThisTurn,
-                c -> getFullCardFilter().invoke(c)) / Math.max(1, this.amount);
+                c -> fields.getFullCardFilter().invoke(c)) / Math.max(1, this.amount);
     }
 }

@@ -6,12 +6,13 @@ import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_CardCategory;
 
 import java.util.List;
 
 public class PCond_HavePlayed extends PCond_Have
 {
-    public static final PSkillData DATA = register(PCond_HavePlayed.class, PCLEffectType.Card)
+    public static final PSkillData<PField_CardCategory> DATA = register(PCond_HavePlayed.class, PField_CardCategory.class)
             .selfTarget();
 
     public PCond_HavePlayed()

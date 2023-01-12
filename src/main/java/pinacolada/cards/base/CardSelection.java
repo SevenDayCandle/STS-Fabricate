@@ -1,12 +1,12 @@
-package pinacolada.utilities;
+package pinacolada.cards.base;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.interfaces.delegates.ActionT3;
 import extendedui.interfaces.delegates.FuncT3;
+import pinacolada.utilities.ListSelection;
 
 import java.util.List;
 
-// TODO Rework into generic classes
 public class CardSelection
 {
     public static final ListSelection<AbstractCard> Top = ListSelection.last(0);

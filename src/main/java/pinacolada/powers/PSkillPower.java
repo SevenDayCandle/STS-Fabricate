@@ -198,7 +198,7 @@ public class PSkillPower extends PCLPower implements OnAllyDeathSubscriber, OnAl
     @Override
     public void onAllyDeath(PCLCard returned, PCLCardAlly ally)
     {
-        if (EUIUtils.any(ptriggers, effect -> effect.setCards(returned).triggerOnAllyDeath(returned, ally)))
+        if (EUIUtils.any(ptriggers, effect -> effect.receivePayload(returned).triggerOnAllyDeath(returned, ally)))
         {
             flash();
         }
@@ -207,7 +207,7 @@ public class PSkillPower extends PCLPower implements OnAllyDeathSubscriber, OnAl
     @Override
     public void onAllySummon(PCLCard card, PCLCardAlly ally)
     {
-        if (EUIUtils.any(ptriggers, effect -> effect.setCards(card).triggerOnAllySummon(card, ally)))
+        if (EUIUtils.any(ptriggers, effect -> effect.receivePayload(card).triggerOnAllySummon(card, ally)))
         {
             flash();
         }
@@ -216,7 +216,7 @@ public class PSkillPower extends PCLPower implements OnAllyDeathSubscriber, OnAl
     @Override
     public void onAllyTrigger(PCLCard card, PCLCardAlly ally)
     {
-        if (EUIUtils.any(ptriggers, effect -> effect.setCards(card).triggerOnAllyTrigger(card, ally)))
+        if (EUIUtils.any(ptriggers, effect -> effect.receivePayload(card).triggerOnAllyTrigger(card, ally)))
         {
             flash();
         }
@@ -225,7 +225,7 @@ public class PSkillPower extends PCLPower implements OnAllyDeathSubscriber, OnAl
     @Override
     public void onAllyWithdraw(PCLCard returned, PCLCardAlly ally)
     {
-        if (EUIUtils.any(ptriggers, effect -> effect.setCards(returned).triggerOnAllyWithdraw(returned, ally)))
+        if (EUIUtils.any(ptriggers, effect -> effect.receivePayload(returned).triggerOnAllyWithdraw(returned, ally)))
         {
             flash();
         }
@@ -243,7 +243,7 @@ public class PSkillPower extends PCLPower implements OnAllyDeathSubscriber, OnAl
     @Override
     public void onCardCreated(AbstractCard c, boolean b)
     {
-        if (EUIUtils.any(ptriggers, effect -> effect.setCards(c).triggerOnCreate(c, b)))
+        if (EUIUtils.any(ptriggers, effect -> effect.receivePayload(c).triggerOnCreate(c, b)))
         {
             flash();
         }
@@ -252,7 +252,7 @@ public class PSkillPower extends PCLPower implements OnAllyDeathSubscriber, OnAl
     @Override
     public void onCardDiscarded(AbstractCard c)
     {
-        if (EUIUtils.any(ptriggers, effect -> effect.setCards(c).triggerOnDiscard(c)))
+        if (EUIUtils.any(ptriggers, effect -> effect.receivePayload(c).triggerOnDiscard(c)))
         {
             flash();
         }
@@ -424,7 +424,7 @@ public class PSkillPower extends PCLPower implements OnAllyDeathSubscriber, OnAl
     public void onCardDraw(AbstractCard c)
     {
         super.onCardDraw(c);
-        if (EUIUtils.any(ptriggers, effect -> effect.setCards(c).triggerOnDraw(c)))
+        if (EUIUtils.any(ptriggers, effect -> effect.receivePayload(c).triggerOnDraw(c)))
         {
             flash();
         }
@@ -433,7 +433,7 @@ public class PSkillPower extends PCLPower implements OnAllyDeathSubscriber, OnAl
     public void onPlayCard(AbstractCard c, AbstractMonster m)
     {
         super.onPlayCard(c, m);
-        if (EUIUtils.any(ptriggers, effect -> effect.setCards(c).triggerOnOtherCardPlayed(c)))
+        if (EUIUtils.any(ptriggers, effect -> effect.receivePayload(c).triggerOnOtherCardPlayed(c)))
         {
             flash();
         }
@@ -442,7 +442,7 @@ public class PSkillPower extends PCLPower implements OnAllyDeathSubscriber, OnAl
     public void onExhaust(AbstractCard c)
     {
         super.onExhaust(c);
-        if (EUIUtils.any(ptriggers, effect -> effect.setCards(c).triggerOnExhaust(c)))
+        if (EUIUtils.any(ptriggers, effect -> effect.receivePayload(c).triggerOnExhaust(c)))
         {
             flash();
         }

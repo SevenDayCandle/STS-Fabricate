@@ -2,14 +2,14 @@ package pinacolada.skills.skills.base.conditions;
 
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.resources.PGR;
-import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Empty;
 
 public class PCond_SemiLimited extends PCond_Info
 {
 
-    public static final PSkillData DATA = register(PCond_SemiLimited.class, PCLEffectType.General, SPECIAL_CONDITION_PRIORITY, 1, 1)
+    public static final PSkillData<PField_Empty> DATA = register(PCond_SemiLimited.class, PField_Empty.class, SPECIAL_CONDITION_PRIORITY, 1, 1)
             .selfTarget();
 
     public PCond_SemiLimited()
@@ -20,16 +20,6 @@ public class PCond_SemiLimited extends PCond_Info
     public PCond_SemiLimited(PSkillSaveData content)
     {
         super(content);
-    }
-
-    public PCond_SemiLimited(PSkill effect)
-    {
-        super(DATA, effect);
-    }
-
-    public PCond_SemiLimited(PSkill... effect)
-    {
-        super(DATA, effect);
     }
 
     @Override

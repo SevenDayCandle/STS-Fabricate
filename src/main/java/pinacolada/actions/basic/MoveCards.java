@@ -8,7 +8,7 @@ import extendedui.interfaces.delegates.FuncT2;
 import extendedui.utilities.GenericCondition;
 import pinacolada.actions.PCLActionWithCallback;
 import pinacolada.actions.PCLActions;
-import pinacolada.utilities.CardSelection;
+import pinacolada.cards.base.CardSelection;
 import pinacolada.utilities.ListSelection;
 
 import java.util.ArrayList;

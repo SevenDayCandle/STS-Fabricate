@@ -10,29 +10,25 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_CardModifyAffinity;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class PMove_ModifyAffinity extends PMove_Modify
+public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity>
 {
-    public static final PSkillData DATA = PMove_Modify.register(PMove_ModifyAffinity.class, PCLEffectType.CardGroupAffinity)
+    public static final PSkillData<PField_CardModifyAffinity> DATA = PMove_Modify.register(PMove_ModifyAffinity.class, PField_CardModifyAffinity.class)
+            .setExtra(-PCLAffinity.MAX_LEVEL, PCLAffinity.MAX_LEVEL)
+            .selfTarget()
             .pclOnly();
 
     public PMove_ModifyAffinity()
     {
-        this(1, 1, new ArrayList<>());
+        this(1, 1);
     }
 
     public PMove_ModifyAffinity(PSkillSaveData content)
     {
         super(content);
-    }
-
-    public PMove_ModifyAffinity(int amount, int level, ArrayList<AbstractCard> cards, PCLAffinity... affinities)
-    {
-        super(DATA, amount, cards, affinities);
-        setExtra(level);
     }
 
     public PMove_ModifyAffinity(PCLAffinity... affinities)
@@ -47,16 +43,16 @@ public class PMove_ModifyAffinity extends PMove_Modify
 
     public PMove_ModifyAffinity(int amount, int level, PCLAffinity... affinities)
     {
-        super(DATA, amount, new ArrayList<>(), affinities);
-        setExtra(level);
+        super(DATA, amount, level);
+        fields.setAddAffinity(affinities);
     }
 
     @Override
     public void cardAction(List<AbstractCard> cards)
     {
-        if (alt && affinities.size() > 1)
+        if (fields.random && fields.affinities.size() > 1)
         {
-            chooseEffect(cards, affinities);
+            chooseEffect(cards, fields.affinities);
         }
         else
         {
@@ -68,7 +64,7 @@ public class PMove_ModifyAffinity extends PMove_Modify
     public ActionT1<AbstractCard> getAction()
     {
         return (c) -> {
-            getActions().modifyAffinityLevel(c, affinities, extra, true, alt2);
+            getActions().modifyAffinityLevel(c, fields.affinities, extra, true, fields.forced);
         };
     }
 
@@ -81,7 +77,7 @@ public class PMove_ModifyAffinity extends PMove_Modify
     @Override
     public String getObjectText()
     {
-        String base = alt ? getAffinityOrString() : getAffinityAndString();
+        String base = fields.getAddAffinityChoiceString();
         return extra > 1 ? EUIRM.strings.numNoun(getExtraRawString(), base) : base;
     }
 
@@ -89,20 +85,20 @@ public class PMove_ModifyAffinity extends PMove_Modify
     public String getSubText()
     {
         String giveString = getObjectText();
-        if (alt2)
+        if (fields.forced)
         {
-            return useParent || (cards != null && !cards.isEmpty()) ? TEXT.actions.setTheOf(PGR.core.tooltips.affinityGeneral, getInheritedString(), giveString) :
-                    groupTypes != null && !groupTypes.isEmpty() ?
-                            TEXT.actions.setTheOfFrom(PGR.core.tooltips.affinityGeneral, EUIRM.strings.numNoun(amount <= 0 ? TEXT.subjects.all : getAmountRawString(), pluralCard()), getGroupString(), giveString) :
+            return useParent ? TEXT.actions.setTheOf(PGR.core.tooltips.affinityGeneral, getInheritedString(), giveString) :
+                    fields.hasGroups() ?
+                            TEXT.actions.setTheOfFrom(PGR.core.tooltips.affinityGeneral, EUIRM.strings.numNoun(amount <= 0 ? TEXT.subjects.all : getAmountRawString(), pluralCard()), fields.getGroupString(), giveString) :
                             TEXT.actions.setTheOf(PGR.core.tooltips.affinityGeneral, TEXT.subjects.thisObj, giveString);
         }
         if (extra >= 0)
         {
             return super.getSubText();
         }
-        return useParent || (cards != null && !cards.isEmpty()) ? TEXT.actions.removeFrom(giveString, getInheritedString()) :
-                groupTypes != null && !groupTypes.isEmpty() ?
-                        TEXT.actions.removeFromPlace(giveString, EUIRM.strings.numNoun(amount <= 0 ? TEXT.subjects.all : getAmountRawString(), pluralCard()), getGroupString()) :
+        return useParent ? TEXT.actions.removeFrom(giveString, getInheritedString()) :
+                fields.hasGroups() ?
+                        TEXT.actions.removeFromPlace(giveString, EUIRM.strings.numNoun(amount <= 0 ? TEXT.subjects.all : getAmountRawString(), pluralCard()), fields.getGroupString()) :
                         TEXT.actions.removeFrom(giveString, TEXT.subjects.thisObj);
     }
 

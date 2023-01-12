@@ -9,13 +9,14 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Power;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.List;
 
-public class PMove_SpreadPower extends PMove
+public class PMove_SpreadPower extends PMove<PField_Power>
 {
-    public static final PSkillData DATA = register(PMove_SpreadPower.class, PCLEffectType.Power);
+    public static final PSkillData<PField_Power> DATA = register(PMove_SpreadPower.class, PField_Power.class);
 
     public PMove_SpreadPower()
     {
@@ -34,7 +35,8 @@ public class PMove_SpreadPower extends PMove
 
     public PMove_SpreadPower(PCLCardTarget target, int amount, PCLPowerHelper... powers)
     {
-        super(DATA, target, amount, powers);
+        super(DATA, target, amount);
+        fields.setPower(powers);
     }
 
     @Override
@@ -47,16 +49,16 @@ public class PMove_SpreadPower extends PMove
     public void use(PCLUseInfo info)
     {
         List<AbstractCreature> targets = getTargetList(info);
-        if (powers.isEmpty())
+        if (fields.powers.isEmpty())
         {
             for (PCLPowerHelper power : PCLPowerHelper.commonDebuffs())
             {
                 spreadPower(info.source, targets, power);
             }
         }
-        else if (alt)
+        else if (fields.random)
         {
-            PCLPowerHelper power = GameUtilities.getRandomElement(powers);
+            PCLPowerHelper power = GameUtilities.getRandomElement(fields.powers);
             if (power != null)
             {
                 spreadPower(info.source, targets, power);
@@ -64,7 +66,7 @@ public class PMove_SpreadPower extends PMove
         }
         else
         {
-            for (PCLPowerHelper power : powers)
+            for (PCLPowerHelper power : fields.powers)
             {
                 spreadPower(info.source, targets, power);
             }
@@ -75,9 +77,9 @@ public class PMove_SpreadPower extends PMove
     @Override
     public String getSubText()
     {
-        String powerString = powers.isEmpty() ? PGR.core.tooltips.debuff.title : alt ? getPowerOrString() : getPowerString();
+        String powerString = fields.getPowerSubjectString();
         String mainString = amount <= 0 ? TEXT.actions.spread(powerString, getTargetString()) : TEXT.actions.spreadAmount(getAmountRawString(), powerString, getTargetString());
-        return alt ? TEXT.subjects.randomly(mainString) : mainString;
+        return fields.random ? TEXT.subjects.randomly(mainString) : mainString;
     }
 
     protected void spreadPower(AbstractCreature p, List<AbstractCreature> targets, PCLPowerHelper power)

@@ -2,21 +2,20 @@ package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.powers.IntangiblePower;
-import extendedui.EUIRM;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.powers.PCLPowerHelper;
-import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Power;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.List;
 
-public class PMove_RemovePower extends PMove
+public class PMove_RemovePower extends PMove<PField_Power>
 {
-    public static final PSkillData DATA = register(PMove_RemovePower.class, PCLEffectType.Power);
+    public static final PSkillData<PField_Power> DATA = register(PMove_RemovePower.class, PField_Power.class);
 
     public PMove_RemovePower()
     {
@@ -30,7 +29,8 @@ public class PMove_RemovePower extends PMove
 
     public PMove_RemovePower(PCLCardTarget target, PCLPowerHelper... powers)
     {
-        super(DATA, target, 1, powers);
+        super(DATA, target, 1);
+        fields.setPower(powers);
     }
 
     @Override
@@ -43,7 +43,7 @@ public class PMove_RemovePower extends PMove
     public void use(PCLUseInfo info)
     {
         List<AbstractCreature> targets = getTargetList(info);
-        if (powers.isEmpty())
+        if (fields.powers.isEmpty())
         {
             for (PCLPowerHelper power : PCLPowerHelper.commonDebuffs())
             {
@@ -53,9 +53,9 @@ public class PMove_RemovePower extends PMove
                 }
             }
         }
-        else if (alt)
+        else if (fields.random)
         {
-            PCLPowerHelper power = GameUtilities.getRandomElement(powers);
+            PCLPowerHelper power = GameUtilities.getRandomElement(fields.powers);
             if (power != null)
             {
                 removePower(targets, power);
@@ -63,7 +63,7 @@ public class PMove_RemovePower extends PMove
         }
         else
         {
-            for (PCLPowerHelper power : powers)
+            for (PCLPowerHelper power : fields.powers)
             {
                 removePower(targets, power);
             }
@@ -74,9 +74,9 @@ public class PMove_RemovePower extends PMove
     @Override
     public String getSubText()
     {
-        String powerString = powers.isEmpty() ? EUIRM.strings.numNoun(1, PGR.core.tooltips.debuff.title) : alt ? getPowerOrString() : getPowerString();
+        String powerString = fields.getPowerSubjectString();
         powerString = target == PCLCardTarget.Self ? TEXT.actions.remove(TEXT.subjects.onYou(powerString)) : TEXT.actions.removeFrom(powerString, getTargetString());
-        return alt ? TEXT.subjects.randomly(powerString) : powerString;
+        return fields.random ? TEXT.subjects.randomly(powerString) : powerString;
     }
 
     protected void removePower(List<AbstractCreature> targets, PCLPowerHelper power)

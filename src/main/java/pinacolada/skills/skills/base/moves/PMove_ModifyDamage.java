@@ -6,31 +6,20 @@ import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_CardCategory;
 
-import java.util.ArrayList;
-
-public class PMove_ModifyDamage extends PMove_Modify
+public class PMove_ModifyDamage extends PMove_Modify<PField_CardCategory>
 {
-    public static final PSkillData DATA = PMove_Modify.register(PMove_ModifyDamage.class, PCLEffectType.CardGroup);
+    public static final PSkillData<PField_CardCategory> DATA = PMove_Modify.register(PMove_ModifyDamage.class, PField_CardCategory.class);
 
     public PMove_ModifyDamage()
     {
-        this(1, 1, new ArrayList<>());
+        this(1, 1);
     }
 
     public PMove_ModifyDamage(PSkillSaveData content)
     {
         super(content);
-    }
-
-    public PMove_ModifyDamage(int amount, int damage)
-    {
-        super(DATA, amount, damage);
-    }
-
-    public PMove_ModifyDamage(int amount, int damage, ArrayList<AbstractCard> cards)
-    {
-        super(DATA, amount, damage, cards);
     }
 
     public PMove_ModifyDamage(int amount, int damage, PCLCardGroupHelper... groups)

@@ -10,10 +10,11 @@ import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_CardCategory;
 
 public class PMove_Reshuffle extends PMove_Select
 {
-    public static final PSkillData DATA = register(PMove_Reshuffle.class, PCLEffectType.CardGroupFull)
+    public static final PSkillData<PField_CardCategory> DATA = register(PMove_Reshuffle.class, PField_CardCategory.class)
             .selfTarget()
             .setGroups(PCLCardGroupHelper.Hand, PCLCardGroupHelper.DiscardPile, PCLCardGroupHelper.ExhaustPile);
 

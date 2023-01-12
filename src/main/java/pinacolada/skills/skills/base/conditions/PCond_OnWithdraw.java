@@ -6,10 +6,11 @@ import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_CardCategory;
 
 public class PCond_OnWithdraw extends PCond_Delegate
 {
-    public static final PSkillData DATA = register(PCond_OnWithdraw.class, PCLEffectType.Delegate, 1, 1)
+    public static final PSkillData<PField_CardCategory> DATA = register(PCond_OnWithdraw.class, PField_CardCategory.class, 1, 1)
             .pclOnly()
             .selfTarget();
 

@@ -1,5 +1,9 @@
 package pinacolada.cards.base;
 
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
@@ -7,13 +11,16 @@ import com.megacrit.cardcrawl.screens.options.InputSettingsScreen;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.resources.PGR;
 
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class PCLCardGroupHelper
+@JsonAdapter(PCLCardGroupHelper.PCLCardGroupHelperAdapter.class)
+public class PCLCardGroupHelper implements Serializable
 {
     public static final Map<CardGroup.CardGroupType, PCLCardGroupHelper> ALL = new HashMap<>();
 
@@ -72,5 +79,19 @@ public class PCLCardGroupHelper
     {
         CardGroup g = getCardGroup();
         return g != null ? g.group : new ArrayList<>();
+    }
+
+    public static class PCLCardGroupHelperAdapter extends TypeAdapter<PCLCardGroupHelper>
+    {
+        @Override
+        public void write(JsonWriter writer, PCLCardGroupHelper value) throws IOException
+        {
+            writer.value(String.valueOf(value.pile));
+        }
+
+        @Override
+        public PCLCardGroupHelper read(JsonReader in) throws IOException {
+            return get(in.nextString());
+        }
     }
 }

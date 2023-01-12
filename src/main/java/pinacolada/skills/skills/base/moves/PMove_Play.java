@@ -11,10 +11,11 @@ import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_CardCategory;
 
 public class PMove_Play extends PMove_Select
 {
-    public static final PSkillData DATA = register(PMove_Play.class, PCLEffectType.CardGroupFull);
+    public static final PSkillData<PField_CardCategory> DATA = register(PMove_Play.class, PField_CardCategory.class);
 
     public PMove_Play()
     {

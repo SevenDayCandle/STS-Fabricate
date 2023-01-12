@@ -12,13 +12,12 @@ import pinacolada.skills.PMod;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Empty;
 
-import static pinacolada.skills.PSkill.PCLEffectType.General;
-
-public class PMod_IncreaseOnUse extends PMod
+public class PMod_IncreaseOnUse extends PMod<PField_Empty>
 {
 
-    public static final PSkillData DATA = register(PMod_IncreaseOnUse.class, General).selfTarget();
+    public static final PSkillData<PField_Empty> DATA = register(PMod_IncreaseOnUse.class, PField_Empty.class).selfTarget();
 
     public PMod_IncreaseOnUse(PSkillSaveData content)
     {

@@ -1,4 +1,4 @@
-package pinacolada.actions.basic;
+package pinacolada.actions.pileSelection;
 
 import basemod.BaseMod;
 import com.megacrit.cardcrawl.actions.common.DrawCardAction;
@@ -8,15 +8,11 @@ import com.megacrit.cardcrawl.powers.NoDrawPower;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
 import extendedui.utilities.GenericCondition;
-import pinacolada.actions.PCLActionWithCallback;
+import pinacolada.actions.CardFilterAction;
 import pinacolada.actions.PCLActions;
 
-import java.util.ArrayList;
-
-public class DrawCards extends PCLActionWithCallback<ArrayList<AbstractCard>>
+public class DrawCards extends CardFilterAction
 {
-    protected final ArrayList<AbstractCard> cards = new ArrayList<>();
-    protected GenericCondition<AbstractCard> filter;
     protected boolean canDrawUnfiltered;
     protected boolean shuffleIfEmpty = true;
 
@@ -28,7 +24,7 @@ public class DrawCards extends PCLActionWithCallback<ArrayList<AbstractCard>>
         filter = other.filter;
         canDrawUnfiltered = other.canDrawUnfiltered;
         callbacks.addAll(other.callbacks);
-        cards.addAll(other.cards);
+        selectedCards.addAll(other.selectedCards);
     }
 
     public DrawCards(int amount)
@@ -51,13 +47,13 @@ public class DrawCards extends PCLActionWithCallback<ArrayList<AbstractCard>>
         if (player.hasPower(NoDrawPower.POWER_ID))
         {
             player.getPower(NoDrawPower.POWER_ID).flash();
-            complete(cards);
+            complete(selectedCards);
             return;
         }
 
         if (amount <= 0)
         {
-            complete(cards);
+            complete(selectedCards);
             return;
         }
 
@@ -74,13 +70,13 @@ public class DrawCards extends PCLActionWithCallback<ArrayList<AbstractCard>>
             }
             else
             {
-                complete(cards);
+                complete(selectedCards);
             }
         }
         else if (player.hand.size() >= BaseMod.MAX_HAND_SIZE)
         {
             player.createHandIsFullDialog();
-            complete(cards);
+            complete(selectedCards);
         }
         else
         {
@@ -103,12 +99,12 @@ public class DrawCards extends PCLActionWithCallback<ArrayList<AbstractCard>>
                 }
                 else if (!canDrawUnfiltered)
                 {
-                    complete(cards);
+                    complete(selectedCards);
                     return;
                 }
             }
 
-            cards.add(player.drawPile.getTopCard());
+            selectedCards.add(player.drawPile.getTopCard());
 
             PCLActions.top.sequential(
                     new DrawCardAction(source, 1, false),

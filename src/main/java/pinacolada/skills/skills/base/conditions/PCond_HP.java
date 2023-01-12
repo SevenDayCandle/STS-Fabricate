@@ -8,12 +8,13 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Not;
 
 import java.util.List;
 
-public class PCond_HP extends PCond
+public class PCond_HP extends PCond<PField_Not>
 {
-    public static final PSkillData DATA = register(PCond_HP.class, PCLEffectType.General)
+    public static final PSkillData<PField_Not> DATA = register(PCond_HP.class, PField_Not.class)
             .selfTarget();
 
     public PCond_HP(PSkillSaveData content)
@@ -40,7 +41,7 @@ public class PCond_HP extends PCond
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
     {
         List<AbstractCreature> targetList = getTargetList(info);
-        return EUIUtils.any(targetList, t -> alt ? t.currentHealth * 100 / t.maxHealth <= amount : t.currentHealth * 100 / t.maxHealth >= amount);
+        return EUIUtils.any(targetList, t -> fields.not ? t.currentHealth * 100 / t.maxHealth <= amount : t.currentHealth * 100 / t.maxHealth >= amount);
     }
 
     @Override
@@ -52,7 +53,7 @@ public class PCond_HP extends PCond
     @Override
     public String getSubText()
     {
-        String baseString = amount + (alt ? "%- " : "%+ ") + PGR.core.tooltips.hp.title;
+        String baseString = amount + (fields.not ? "%- " : "%+ ") + PGR.core.tooltips.hp.title;
         switch (target)
         {
             case All:

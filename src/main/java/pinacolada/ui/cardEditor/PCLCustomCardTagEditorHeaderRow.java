@@ -18,10 +18,10 @@ public class PCLCustomCardTagEditorHeaderRow extends EUIHoverable
     public PCLCustomCardTagEditorHeaderRow(EUIDropdown<?> parent)
     {
         super(new RelativeHitbox(parent.hb, parent.hb.width, parent.getRowHeight(), 0.0F, 0.0F));
-        valueHeader = new EUILabel(EUIFontHelper.cardtitlefontSmall, new RelativeHitbox(hb, MENU_HEIGHT, MENU_HEIGHT, MENU_HEIGHT * 6, 0).setIsPopupCompatible(true))
+        valueHeader = new EUILabel(EUIFontHelper.cardtitlefontSmall, new RelativeHitbox(hb, MENU_HEIGHT, MENU_HEIGHT, MENU_HEIGHT * 6, -MENU_HEIGHT * 0.25f).setIsPopupCompatible(true))
                 .setLabel(PGR.core.strings.cardEditor.value)
                 .setFontScale(0.6f);
-        upgradeHeader = new EUILabel(EUIFontHelper.cardtitlefontSmall, new RelativeHitbox(valueHeader.hb, valueHeader.hb.width, valueHeader.hb.height, MENU_HEIGHT * 2.7f, 0).setIsPopupCompatible(true))
+        upgradeHeader = new EUILabel(EUIFontHelper.cardtitlefontSmall, new RelativeHitbox(hb, MENU_HEIGHT, MENU_HEIGHT, MENU_HEIGHT * 8.7f, -MENU_HEIGHT * 0.25f).setIsPopupCompatible(true))
                 .setLabel(PGR.core.strings.cardEditor.upgrades)
                 .setFontScale(0.6f);
     }

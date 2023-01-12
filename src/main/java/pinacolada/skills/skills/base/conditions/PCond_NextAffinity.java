@@ -8,12 +8,11 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Affinity;
 
-import java.util.List;
-
-public class PCond_NextAffinity extends PCond
+public class PCond_NextAffinity extends PCond<PField_Affinity>
 {
-    public static final PSkillData DATA = register(PCond_NextAffinity.class, PCLEffectType.Affinity)
+    public static final PSkillData<PField_Affinity> DATA = register(PCond_NextAffinity.class, PField_Affinity.class)
             .pclOnly()
             .selfTarget();
 
@@ -24,28 +23,24 @@ public class PCond_NextAffinity extends PCond
 
     public PCond_NextAffinity()
     {
-        super(DATA, PCLCardTarget.None, 0, new PCLAffinity[]{});
+        super(DATA, PCLCardTarget.None, 0);
     }
 
     public PCond_NextAffinity(PCLAffinity... affinities)
     {
-        super(DATA, PCLCardTarget.None, 0, affinities);
+        this(0, affinities);
     }
 
     public PCond_NextAffinity(int amount, PCLAffinity... affinities)
     {
-        super(DATA, PCLCardTarget.None, amount, affinities);
-    }
-
-    public PCond_NextAffinity(int amount, List<PCLAffinity> affinities)
-    {
-        super(DATA, PCLCardTarget.None, amount, affinities.toArray(new PCLAffinity[]{}));
+        super(DATA, PCLCardTarget.None, amount);
+        fields.setAffinity(affinities);
     }
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
     {
-        return affinities.contains(CombatManager.playerSystem.getActiveMeter().get(Math.max(0, amount)));
+        return fields.affinities.contains(CombatManager.playerSystem.getActiveMeter().get(Math.max(0, amount)));
     }
 
     @Override
@@ -59,6 +54,6 @@ public class PCond_NextAffinity extends PCond
     {
         return TEXT.conditions.objIs(
                         amount <= 0 ? PGR.core.tooltips.currentAffinity : PGR.core.tooltips.lastAffinity,
-                affinities.isEmpty() ? TEXT.subjects.anyX(PGR.core.tooltips.affinityGeneral) : (getAffinityPowerOrString()));
+                fields.affinities.isEmpty() ? TEXT.subjects.anyX(PGR.core.tooltips.affinityGeneral) : (fields.getAffinityPowerOrString()));
     }
 }

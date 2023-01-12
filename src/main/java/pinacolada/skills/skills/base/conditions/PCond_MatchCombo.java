@@ -5,15 +5,15 @@ import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PCond;
-import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Not;
 import pinacolada.utilities.GameUtilities;
 
-public class PCond_MatchCombo extends PCond
+public class PCond_MatchCombo extends PCond<PField_Not>
 {
 
-    public static final PSkillData DATA = register(PCond_MatchCombo.class, PCLEffectType.General)
+    public static final PSkillData<PField_Not> DATA = register(PCond_MatchCombo.class, PField_Not.class)
             .pclOnly()
             .selfTarget();
 
@@ -32,28 +32,16 @@ public class PCond_MatchCombo extends PCond
         super(DATA, PCLCardTarget.None, amount);
     }
 
-    public PCond_MatchCombo(PSkill effect)
-    {
-        this();
-        setChild(effect);
-    }
-
-    public PCond_MatchCombo(PSkill... effect)
-    {
-        this();
-        setChild(effect);
-    }
-
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
     {
-        return alt ^ (GameUtilities.getCurrentMatchCombo() >= amount);
+        return fields.not ^ (GameUtilities.getCurrentMatchCombo() >= amount);
     }
 
     @Override
     public String getSubText()
     {
         String base = EUIRM.strings.numNoun(amount, PGR.core.tooltips.matchCombo);
-        return alt ? TEXT.conditions.not(base) : base;
+        return fields.not ? TEXT.conditions.not(base) : base;
     }
 }

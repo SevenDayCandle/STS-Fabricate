@@ -5,13 +5,12 @@ import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-
-import static pinacolada.skills.PSkill.PCLEffectType.General;
+import pinacolada.skills.fields.PField_CardGeneric;
 
 public class PMod_ChangeGroupOnMatch extends PMod_ChangeGroup
 {
 
-    public static final PSkillData DATA = register(PMod_ChangeGroupOnMatch.class, General).selfTarget();
+    public static final PSkillData<PField_CardGeneric> DATA = register(PMod_ChangeGroupOnMatch.class, PField_CardGeneric.class).selfTarget();
 
     public PMod_ChangeGroupOnMatch(PSkillSaveData content)
     {

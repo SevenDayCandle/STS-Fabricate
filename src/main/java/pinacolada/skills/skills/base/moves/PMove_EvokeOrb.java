@@ -1,19 +1,18 @@
 package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import extendedui.EUIRM;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.orbs.PCLOrbHelper;
-import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Orb;
 import pinacolada.utilities.GameUtilities;
 
-public class PMove_EvokeOrb extends PMove
+public class PMove_EvokeOrb extends PMove<PField_Orb>
 {
-    public static final PSkillData DATA = register(PMove_EvokeOrb.class, PCLEffectType.Orb)
+    public static final PSkillData<PField_Orb> DATA = register(PMove_EvokeOrb.class, PField_Orb.class)
             .setExtra(0, Integer.MAX_VALUE)
             .selfTarget();
 
@@ -34,8 +33,8 @@ public class PMove_EvokeOrb extends PMove
 
     public PMove_EvokeOrb(int amount, int orbs, PCLOrbHelper... orb)
     {
-        super(DATA, PCLCardTarget.None, amount, orb);
-        setExtra(orbs);
+        super(DATA, PCLCardTarget.None, amount, orbs);
+        fields.setOrb(orb);
     }
 
     @Override
@@ -56,26 +55,14 @@ public class PMove_EvokeOrb extends PMove
     @Override
     public void use(PCLUseInfo info)
     {
-        getActions().evokeOrb(amount, extra <= 0 ? GameUtilities.getOrbCount() : extra, alt).setFilter(orbs.isEmpty() ? null : getOrbFilter());
+        getActions().evokeOrb(amount, extra <= 0 ? GameUtilities.getOrbCount() : extra, fields.random).setFilter(fields.orbs.isEmpty() ? null : fields.getOrbFilter());
         super.use(info);
     }
 
     @Override
     public String getSubText()
     {
-        String orbStr = !orbs.isEmpty() ? getOrbString() : plural(PGR.core.tooltips.orb, EXTRA_CHAR);
-        if (alt)
-        {
-            orbStr = EUIRM.strings.numNoun(getExtraRawString(), TEXT.subjects.randomX(orbStr));
-        }
-        else
-        {
-            if (extra > 0)
-            {
-                orbStr = EUIRM.strings.numNoun(getExtraRawString(), orbStr);
-            }
-            orbStr = extra <= 0 ? TEXT.subjects.allX(orbStr) : TEXT.subjects.yourFirst(orbStr);
-        }
+        String orbStr = fields.getOrbExtraString();
         return amount == 1 ? TEXT.actions.evoke(orbStr) : TEXT.actions.evokeXTimes(orbStr, getAmountRawString());
     }
 }

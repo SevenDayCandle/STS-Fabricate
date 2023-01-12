@@ -15,18 +15,17 @@ import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.powers.PCLClickableUse;
+import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.base.triggers.PTrigger_Interactable;
 import pinacolada.skills.skills.base.triggers.PTrigger_Passive;
 import pinacolada.skills.skills.base.triggers.PTrigger_When;
 
-import java.util.ArrayList;
-
-public abstract class PTrigger extends PSkill
+public abstract class PTrigger extends PSkill<PField_Not>
 {
     public static final int TRIGGER_PRIORITY = 0;
     protected int usesThisTurn;
 
-    public PTrigger(PSkillData data)
+    public PTrigger(PSkillData<PField_Not> data)
     {
         this(data, PCLCardTarget.None, -1);
     }
@@ -37,15 +36,10 @@ public abstract class PTrigger extends PSkill
         this.usesThisTurn = this.amount;
     }
 
-    public PTrigger(PSkillData data, PCLCardTarget target, int maxUses)
+    public PTrigger(PSkillData<PField_Not> data, PCLCardTarget target, int maxUses)
     {
         super(data, target, maxUses);
         this.usesThisTurn = this.amount;
-    }
-
-    public static ArrayList<PTrigger> getEligibleTriggers(AbstractCard.CardColor co, Integer priority)
-    {
-        return EUIUtils.mapAsNonnull(getEligibleEffects(co, priority), ef -> EUIUtils.safeCast(ef, PTrigger.class));
     }
 
     public static PTrigger interactAny(PSkill... effects)
@@ -65,7 +59,7 @@ public abstract class PTrigger extends PSkill
 
     public static PTrigger interactablePerCombat(int amount, PSkill... effects)
     {
-        return chain((PTrigger) new PTrigger_Interactable(amount).setAlt(true), effects);
+        return chain((PTrigger) new PTrigger_Interactable(amount).edit(f -> f.setNot(true)), effects);
     }
 
     public static PTrigger passive(PSkill... effects)
@@ -106,7 +100,7 @@ public abstract class PTrigger extends PSkill
     @Override
     public String getSubText()
     {
-        return alt ? TEXT.conditions.timesPerCombat(amount) : amount > 0 ? TEXT.conditions.timesPerTurn(amount) + ", " : "";
+        return fields.not ? TEXT.conditions.timesPerCombat(amount) : amount > 0 ? TEXT.conditions.timesPerTurn(amount) + ", " : "";
     }
 
     @Override
@@ -369,7 +363,7 @@ public abstract class PTrigger extends PSkill
 
     public void resetUses()
     {
-        if (!alt)
+        if (!fields.not)
         {
             this.usesThisTurn = this.amount;
         }

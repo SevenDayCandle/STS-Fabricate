@@ -3,13 +3,11 @@ package pinacolada.skills.skills.base.triggers;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.PTrigger;
-
-import static pinacolada.skills.PSkill.PCLEffectType.General;
+import pinacolada.skills.fields.PField_Not;
 
 public class PTrigger_When extends PTrigger
 {
-
-    public static final PSkillData DATA = register(PTrigger_When.class, General, TRIGGER_PRIORITY, -1, DEFAULT_MAX);
+    public static final PSkillData<PField_Not> DATA = register(PTrigger_When.class, PField_Not.class, TRIGGER_PRIORITY, -1, DEFAULT_MAX);
 
     public PTrigger_When()
     {

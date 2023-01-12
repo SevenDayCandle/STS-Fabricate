@@ -1,22 +1,19 @@
 package pinacolada.skills.skills.base.modifiers;
 
 import extendedui.EUIUtils;
-import pinacolada.cards.base.PCLAffinity;
-import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.interfaces.markers.PMultiBase;
-import pinacolada.orbs.PCLOrbHelper;
-import pinacolada.powers.PCLPowerHelper;
 import pinacolada.skills.PMod;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class PMod_Branch<T> extends PMod
+public abstract class PMod_Branch<T extends PField, U> extends PMod<T>
 {
 
     public PMod_Branch(PSkillSaveData content)
@@ -24,52 +21,27 @@ public abstract class PMod_Branch<T> extends PMod
         super(content);
     }
 
-    public PMod_Branch(PSkillData data)
+    public PMod_Branch(PSkillData<T> data)
     {
         super(data);
     }
 
-    public PMod_Branch(PSkillData data, PCLCardTarget target, int amount)
+    public PMod_Branch(PSkillData<T> data, PCLCardTarget target, int amount)
     {
         super(data, target, amount);
     }
 
-    public PMod_Branch(PSkillData data, PCLCardTarget target, int amount, PCLCardGroupHelper... groups)
+    public PMod_Branch(PSkillData<T> data, PCLCardTarget target, int amount, int extra)
     {
-        super(data, target, amount, groups);
+        super(data, target, amount, extra);
     }
 
-    public PMod_Branch(PSkillData data, PCLCardTarget target, int amount, PSkill effect)
-    {
-        super(data, target, amount, effect);
-    }
-
-    public PMod_Branch(PSkillData data, PCLCardTarget target, int amount, PSkill... effect)
-    {
-        super(data, target, amount, effect);
-    }
-
-    public PMod_Branch(PSkillData data, PCLCardTarget target, int amount, PCLAffinity... affinities)
-    {
-        super(data, target, amount, affinities);
-    }
-
-    public PMod_Branch(PSkillData data, PCLCardTarget target, int amount, PCLOrbHelper... orbs)
-    {
-        super(data, target, amount, orbs);
-    }
-
-    public PMod_Branch(PSkillData data, PCLCardTarget target, int amount, PCLPowerHelper... powerHelpers)
-    {
-        super(data, target, amount, powerHelpers);
-    }
-
-    public final void branch(PCLUseInfo info, Iterable<T> items)
+    public final void branch(PCLUseInfo info, Iterable<U> items)
     {
         if (this.childEffect instanceof PMultiBase)
         {
             List<? extends PSkill> effects = ((PMultiBase<?>) this.childEffect).getSubEffects();
-            for (T c : items)
+            for (U c : items)
             {
                 for (int i = 0; i < effects.size(); i++)
                 {
@@ -120,5 +92,5 @@ public abstract class PMod_Branch<T> extends PMod
         return be.baseAmount;
     }
 
-    public abstract boolean matchesBranch(T c, int i, PCLUseInfo info);
+    public abstract boolean matchesBranch(U c, int i, PCLUseInfo info);
 }

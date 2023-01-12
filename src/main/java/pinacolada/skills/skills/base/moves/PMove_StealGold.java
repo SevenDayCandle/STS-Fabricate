@@ -14,7 +14,7 @@ import pinacolada.utilities.GameUtilities;
 
 public class PMove_StealGold extends PMove
 {
-    public static final PSkillData DATA = register(PMove_StealGold.class, PCLEffectType.General);
+    public static final PSkillData DATA = register(PMove_StealGold.class, PField_Empty.class);
 
     public PMove_StealGold()
     {

@@ -10,10 +10,11 @@ import pinacolada.powers.PCLPower;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
+import pinacolada.skills.fields.PField_Empty;
 
-public class PSpecialPowerSkill extends PSkill implements SummonOnlyMove
+public class PSpecialPowerSkill extends PSkill<PField_Empty> implements SummonOnlyMove
 {
-    public static final PSkillData DATA = register(PSpecialPowerSkill.class, PCLEffectType.General)
+    public static final PSkillData<PField_Empty> DATA = register(PSpecialPowerSkill.class, PField_Empty.class)
             .setAmounts(-DEFAULT_MAX, DEFAULT_MAX)
             .setExtra(-DEFAULT_MAX, DEFAULT_MAX)
             .selfTarget();

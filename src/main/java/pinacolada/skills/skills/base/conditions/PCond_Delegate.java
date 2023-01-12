@@ -3,6 +3,7 @@ package pinacolada.skills.skills.base.conditions;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
@@ -10,11 +11,12 @@ import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.PTrigger;
+import pinacolada.skills.fields.PField_CardCategory;
 
-public abstract class PCond_Delegate extends PCond
+public abstract class PCond_Delegate extends PCond<PField_CardCategory>
 {
 
-    public PCond_Delegate(PSkillData data)
+    public PCond_Delegate(PSkillData<PField_CardCategory> data)
     {
         super(data, PCLCardTarget.None, 0);
     }
@@ -35,7 +37,7 @@ public abstract class PCond_Delegate extends PCond
     {
         if (hasParentType(PTrigger.class))
         {
-            return TEXT.conditions.whenObjectIs(getFullCardString(getRawString(EFFECT_CHAR)), getDelegatePastText());
+            return TEXT.conditions.whenObjectIs(fields.getFullCardString(), getDelegatePastText());
         }
         return TEXT.conditions.onGeneric(getDelegateText());
     }
@@ -66,12 +68,11 @@ public abstract class PCond_Delegate extends PCond
 
     public boolean triggerOnCard(AbstractCard c)
     {
-        if (getFullCardFilter().invoke(c))
+        if (fields.getFullCardFilter().invoke(c))
         {
             if (this.childEffect != null)
             {
-                this.childEffect.setCards(c);
-                this.childEffect.use(makeInfo(null));
+                this.childEffect.use(makeInfo(null).setData(EUIUtils.list(c)));
             }
             return true;
         }
@@ -80,12 +81,11 @@ public abstract class PCond_Delegate extends PCond
 
     public boolean triggerOnCard(AbstractCard c, AbstractCreature target)
     {
-        if (getFullCardFilter().invoke(c))
+        if (fields.getFullCardFilter().invoke(c))
         {
             if (this.childEffect != null)
             {
-                this.childEffect.setCards(c);
-                this.childEffect.use(makeInfo(target));
+                this.childEffect.use(makeInfo(target).setData(EUIUtils.list(c)));
             }
             return true;
         }

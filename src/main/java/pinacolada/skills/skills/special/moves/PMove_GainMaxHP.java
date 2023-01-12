@@ -10,7 +10,7 @@ import pinacolada.skills.skills.base.moves.PMove_Gain;
 
 public class PMove_GainMaxHP extends PMove_Gain implements Hidden
 {
-    public static final PSkillData DATA = register(PMove_GainMaxHP.class, PCLEffectType.General);
+    public static final PSkillData DATA = register(PMove_GainMaxHP.class, PField_Empty.class);
 
     public PMove_GainMaxHP()
     {

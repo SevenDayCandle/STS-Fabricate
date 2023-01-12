@@ -1,30 +1,23 @@
 package pinacolada.skills.skills.base.modifiers;
 
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIRM;
 import extendedui.interfaces.delegates.FuncT4;
 import extendedui.ui.tooltips.EUITooltip;
-import pinacolada.actions.PCLActionWithCallback;
 import pinacolada.actions.pileSelection.CycleCards;
-import pinacolada.actions.pileSelection.DiscardFromPile;
 import pinacolada.actions.pileSelection.SelectFromPile;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.PCLCardTarget;
-import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-
-import java.util.ArrayList;
-
-import static pinacolada.skills.PSkill.PCLEffectType.CardGroupFull;
+import pinacolada.skills.fields.PField_CardCategory;
 
 public class PMod_CycleBranch extends PMod_DoBranch
 {
 
-    public static final PSkillData DATA = register(PMod_CycleBranch.class, CardGroupFull)
+    public static final PSkillData<PField_CardCategory> DATA = register(PMod_CycleBranch.class, PField_CardCategory.class)
             .selfTarget()
             .setGroups(PCLCardGroupHelper.Hand);
 
@@ -44,15 +37,9 @@ public class PMod_CycleBranch extends PMod_DoBranch
     }
 
     @Override
-    protected PCLActionWithCallback<ArrayList<AbstractCard>> createPileAction(PCLUseInfo info)
-    {
-        return new CycleCards(getName(), amount, alt);
-    }
-
-    @Override
     public String getSubText()
     {
-        return EUIRM.strings.verbNoun(tooltipTitle(), getAmountRawString());
+        return EUIRM.strings.verbNoun(getActionTitle(), getAmountRawString());
     }
 
     @Override
@@ -64,6 +51,6 @@ public class PMod_CycleBranch extends PMod_DoBranch
     @Override
     public FuncT4<SelectFromPile, String, AbstractCreature, Integer, CardGroup[]> getAction()
     {
-        return DiscardFromPile::new;
+        return (s, c, i, g) -> new CycleCards(s, i, fields.random);
     }
 }

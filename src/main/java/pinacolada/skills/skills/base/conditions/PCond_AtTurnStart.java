@@ -6,14 +6,14 @@ import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PCond;
-import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Empty;
 
-public class PCond_AtTurnStart extends PCond
+public class PCond_AtTurnStart extends PCond<PField_Empty>
 {
 
-    public static final PSkillData DATA = register(PCond_AtTurnStart.class, PCLEffectType.General, 1, 1)
+    public static final PSkillData<PField_Empty> DATA = register(PCond_AtTurnStart.class, PField_Empty.class, 1, 1)
             .selfTarget();
 
     public PCond_AtTurnStart()
@@ -24,18 +24,6 @@ public class PCond_AtTurnStart extends PCond
     public PCond_AtTurnStart(PSkillSaveData content)
     {
         super(content);
-    }
-
-    public PCond_AtTurnStart(PSkill effect)
-    {
-        this();
-        setChild(effect);
-    }
-
-    public PCond_AtTurnStart(PSkill... effect)
-    {
-        this();
-        setChild(effect);
     }
 
     // This should not activate the child effect when played normally

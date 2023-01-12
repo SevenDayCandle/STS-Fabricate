@@ -1,26 +1,21 @@
 package pinacolada.skills.skills.base.conditions;
 
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.interfaces.delegates.FuncT4;
 import extendedui.ui.tooltips.EUITooltip;
-import pinacolada.actions.PCLActionWithCallback;
 import pinacolada.actions.pileSelection.CycleCards;
-import pinacolada.actions.pileSelection.DiscardFromPile;
 import pinacolada.actions.pileSelection.SelectFromPile;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.PCLCardTarget;
-import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-
-import java.util.ArrayList;
+import pinacolada.skills.fields.PField_CardCategory;
 
 public class PCond_CycleTo extends PCond_DoTo
 {
-    public static final PSkillData DATA = register(PCond_CycleTo.class, PCLEffectType.CardGroupFull)
+    public static final PSkillData<PField_CardCategory> DATA = register(PCond_CycleTo.class, PField_CardCategory.class)
             .selfTarget()
             .setGroups(PCLCardGroupHelper.Hand);
 
@@ -40,13 +35,6 @@ public class PCond_CycleTo extends PCond_DoTo
     }
 
     @Override
-    protected PCLActionWithCallback<ArrayList<AbstractCard>> createPileAction(PCLUseInfo info)
-    {
-        return new CycleCards(getName(), amount, alt)
-                .setFilter(c -> getFullCardFilter().invoke(c));
-    }
-
-    @Override
     public EUITooltip getActionTooltip()
     {
         return PGR.core.tooltips.cycle;
@@ -55,6 +43,6 @@ public class PCond_CycleTo extends PCond_DoTo
     @Override
     public FuncT4<SelectFromPile, String, AbstractCreature, Integer, CardGroup[]> getAction()
     {
-        return DiscardFromPile::new;
+        return (s, c, i, g) -> new CycleCards(s, i, fields.random);
     }
 }

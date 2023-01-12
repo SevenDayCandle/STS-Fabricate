@@ -9,16 +9,13 @@ import pinacolada.skills.PMod;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Orb;
 import pinacolada.utilities.GameUtilities;
 
-import java.util.List;
-
-import static pinacolada.skills.PSkill.PCLEffectType.Orb;
-
-public class PMod_PerOrb extends PMod
+public class PMod_PerOrb extends PMod<PField_Orb>
 {
 
-    public static final PSkillData DATA = register(PMod_PerOrb.class, Orb).selfTarget();
+    public static final PSkillData<PField_Orb> DATA = register(PMod_PerOrb.class, PField_Orb.class).selfTarget();
 
     public PMod_PerOrb(PSkillSaveData content)
     {
@@ -32,18 +29,14 @@ public class PMod_PerOrb extends PMod
 
     public PMod_PerOrb(int amount, PCLOrbHelper... orbs)
     {
-        super(DATA, PCLCardTarget.None, amount, orbs);
-    }
-
-    public PMod_PerOrb(int amount, List<PCLOrbHelper> orbs)
-    {
-        super(DATA, PCLCardTarget.None, amount, orbs.toArray(new PCLOrbHelper[]{}));
+        super(DATA, PCLCardTarget.None, amount);
+        fields.setOrb(orbs);
     }
 
     @Override
     public int getModifiedAmount(PSkill be, PCLUseInfo info)
     {
-        return be.baseAmount * (orbs.isEmpty() ? GameUtilities.getOrbCount() : EUIUtils.sumInt(orbs, GameUtilities::getOrbCount)) / Math.max(1, this.amount);
+        return be.baseAmount * (fields.orbs.isEmpty() ? GameUtilities.getOrbCount() : EUIUtils.sumInt(fields.orbs, GameUtilities::getOrbCount)) / Math.max(1, this.amount);
     }
 
     @Override
@@ -55,6 +48,6 @@ public class PMod_PerOrb extends PMod
     @Override
     public String getSubText()
     {
-        return this.amount <= 1 ? getOrbAndString(1) : EUIRM.strings.numNoun(getAmountRawString(), getOrbAndString(getRawString(EFFECT_CHAR)));
+        return this.amount <= 1 ? fields.getOrbAndString(1) : EUIRM.strings.numNoun(getAmountRawString(), fields.getOrbAndString());
     }
 }
