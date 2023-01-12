@@ -1,22 +1,24 @@
-package pinacolada.skills.skills.base.conditions;
+package pinacolada.skills.skills.base.primary;
 
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.resources.PGR;
+import pinacolada.skills.PLimit;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
 
-public class PCond_Limited extends PCond_Info
+public class PLimit_SemiLimited extends PLimit
 {
-    public static final PSkillData<PField_Empty> DATA = register(PCond_Limited.class, PField_Empty.class, SPECIAL_CONDITION_PRIORITY, 1, 1)
+
+    public static final PSkillData<PField_Empty> DATA = register(PLimit_SemiLimited.class, PField_Empty.class, 1, 1)
             .selfTarget();
 
-    public PCond_Limited()
+    public PLimit_SemiLimited()
     {
         super(DATA);
     }
 
-    public PCond_Limited(PSkillSaveData content)
+    public PLimit_SemiLimited(PSkillSaveData content)
     {
         super(content);
     }
@@ -24,18 +26,18 @@ public class PCond_Limited extends PCond_Info
     @Override
     public boolean canActivate(PCLUseInfo info)
     {
-        return info.canActivateLimited;
+        return info.canActivateSemiLimited;
     }
 
     @Override
     public boolean tryActivate(PCLUseInfo info)
     {
-        return info.tryActivateLimited();
+        return info.tryActivateSemiLimited();
     }
 
     @Override
     public String getSubText()
     {
-        return PGR.core.tooltips.limited.title;
+        return PGR.core.tooltips.semiLimited.title;
     }
 }

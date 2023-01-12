@@ -1,4 +1,4 @@
-package pinacolada.skills.skills.base.triggers;
+package pinacolada.skills.skills.base.primary;
 
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -7,7 +7,7 @@ import pinacolada.skills.fields.PField_Not;
 
 public class PTrigger_When extends PTrigger
 {
-    public static final PSkillData<PField_Not> DATA = register(PTrigger_When.class, PField_Not.class, TRIGGER_PRIORITY, -1, DEFAULT_MAX);
+    public static final PSkillData<PField_Not> DATA = register(PTrigger_When.class, PField_Not.class, -1, DEFAULT_MAX);
 
     public PTrigger_When()
     {

@@ -30,6 +30,12 @@ public class PField_Affinity extends PField_Random
         super.setupEditor(editor);
     }
 
+    public PField_Affinity addAffinity(PCLAffinity... affinities)
+    {
+        this.affinities.addAll(Arrays.asList(affinities));
+        return this;
+    }
+
     public PField_Affinity setAffinity(PCLAffinity... affinities)
     {
         return setAffinity(Arrays.asList(affinities));

@@ -5,7 +5,7 @@ import pinacolada.cards.base.*;
 import pinacolada.cards.base.fields.PCLCardTag;
 import pinacolada.effects.PCLEffekseerEFX;
 import pinacolada.powers.PCLPowerHelper;
-import pinacolada.skills.PCond;
+import pinacolada.skills.PLimit;
 import pinacolada.skills.skills.base.conditions.PCond_Fatal;
 import pinacolada.skills.skills.base.moves.PMove_RemovePower;
 import pinacolada.skills.skills.special.moves.PMove_PermanentUpgrade;
@@ -31,7 +31,7 @@ public class RitualDagger extends PCLCard
         addUseMove(
                 new PMove_RemovePower(PCLCardTarget.Single, PCLPowerHelper.Intangible, PCLPowerHelper.Artifact));
         addUseMove(
-                PCond.limited(), new PCond_Fatal(), new PMove_PermanentUpgrade(1)
+                PLimit.limited(), new PCond_Fatal(), new PMove_PermanentUpgrade(1)
         );
     }
 }

@@ -10,9 +10,8 @@ import pinacolada.skills.PSkill;
 
 public class DWritheA1 extends PCLAugment
 {
-
     public static final PCLAugmentData DATA = register(DWritheA1.class, 3, PCLAffinity.Purple)
-            .setSkill(PCond.onDraw(), PMove.cycle(1).setAlt2(true))
+            .setSkill(PCond.onDraw(), PMove.cycle(1))
             .setReqs(setTypes(AbstractCard.CardType.ATTACK, AbstractCard.CardType.SKILL));
 
     public DWritheA1()

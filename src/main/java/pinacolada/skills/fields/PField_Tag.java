@@ -30,15 +30,21 @@ public class PField_Tag extends PField_Random
         super.setupEditor(editor);
     }
 
-    public PField_Tag setTag(PCLCardTag... orbs)
+    public PField_Tag addTag(PCLCardTag... tags)
     {
-        return setTag(Arrays.asList(orbs));
+        this.tags.addAll(Arrays.asList(tags));
+        return this;
     }
 
-    public PField_Tag setTag(List<PCLCardTag> orbs)
+    public PField_Tag setTag(PCLCardTag... tags)
+    {
+        return setTag(Arrays.asList(tags));
+    }
+
+    public PField_Tag setTag(List<PCLCardTag> tags)
     {
         this.tags.clear();
-        this.tags.addAll(orbs);
+        this.tags.addAll(tags);
         return this;
     }
 

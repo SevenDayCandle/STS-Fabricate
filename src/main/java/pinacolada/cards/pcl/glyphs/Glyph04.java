@@ -19,13 +19,13 @@ public class Glyph04 extends Glyph
     {
         addGainPower(PTrigger.passive(new PCond_IfHasAffinity(randomAffinity()),
                 new PTrait_Tag(PCLCardTag.Ethereal).setCustomUpgrade((s, f, u) -> {
-                    if (u >= 60 && !s.tags.contains(PCLCardTag.Purge))
+                    if (u >= 60 && !s.fields.tags.contains(PCLCardTag.Purge))
                     {
-                        s.addTag(PCLCardTag.Purge);
+                        s.fields.addTag(PCLCardTag.Purge);
                     }
-                    else if (u >= 30 && !s.tags.contains(PCLCardTag.Exhaust))
+                    else if (u >= 30 && !s.fields.tags.contains(PCLCardTag.Exhaust))
                     {
-                        s.addTag(PCLCardTag.Exhaust);
+                        s.fields.addTag(PCLCardTag.Exhaust);
                     }
                 })));
     }

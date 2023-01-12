@@ -17,13 +17,10 @@ import extendedui.ui.hitboxes.OriginRelativeHitbox;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLCardBuilder;
 import pinacolada.resources.PGR;
-import pinacolada.skills.PCond;
-import pinacolada.skills.PMod;
-import pinacolada.skills.PSkill;
+import pinacolada.skills.*;
 import pinacolada.skills.skills.PDelay;
 import pinacolada.skills.skills.PMultiCond;
 import pinacolada.skills.skills.PMultiSkill;
-import pinacolada.skills.skills.base.conditions.PCond_Info;
 import pinacolada.ui.common.PCLValueEditor;
 
 import java.util.ArrayList;
@@ -39,7 +36,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
     public static final float OFFSET_AMOUNT = scale(10);
 
     public final PCLCardBuilder builder;
-    protected PCond_Info primaryCond;
+    protected PPrimary primaryCond;
     protected PMultiCond multiCond;
     protected PDelay delayMove;
     protected PMod modifier;
@@ -63,7 +60,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
     protected EUILabel conditionHeader;
     protected EUILabel effectHeader;
     protected EUILabel modifierHeader;
-    protected EUISearchableDropdown<PCond_Info> primaryConditions;
+    protected EUISearchableDropdown<PPrimary> primaryConditions;
     protected EUIToggle ifElseToggle;
     protected EUIToggle orToggle;
     protected int editorIndex;
@@ -90,7 +87,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
                 .setLabel(title);
 
         float offsetY = OFFSET_EFFECT * 2f;
-        primaryConditions = (EUISearchableDropdown<PCond_Info>) new EUISearchableDropdown<PCond_Info>(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, 0, offsetY)
+        primaryConditions = (EUISearchableDropdown<PPrimary>) new EUISearchableDropdown<PPrimary>(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, 0, offsetY)
                 , PSkill::getSampleText)
                 .setOnChange(conditions -> {
                     if (!conditions.isEmpty())
@@ -106,7 +103,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
                 .setClearButtonOptions(true, true)
                 .setCanAutosizeButton(true)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cardEditor.mainCondition)
-                .setItems(EUIUtils.map(PSkill.getEligibleEffects(builder.cardColor, PCond_Info.class), bc -> primaryCond != null && bc.effectID.equals(primaryCond.effectID) ? primaryCond : bc));
+                .setItems(EUIUtils.map(PSkill.getEligibleEffects(builder.cardColor, PLimit.class), bc -> primaryCond != null && bc.effectID.equals(primaryCond.effectID) ? primaryCond : bc));
         delayEditor = new PCLValueEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 4, MENU_HEIGHT, MENU_WIDTH * 1.5f, offsetY)
                 , PGR.core.strings.cardEditor.turnDelay, (val) -> {
                     delayMove.setAmount(val);
@@ -286,9 +283,9 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
             return;
         }
 
-        if (effect instanceof PCond_Info)
+        if (effect instanceof PLimit)
         {
-            primaryCond = (PCond_Info) effect.makeCopy();
+            primaryCond = (PLimit) effect.makeCopy();
         }
         else if (effect instanceof PMultiCond)
         {

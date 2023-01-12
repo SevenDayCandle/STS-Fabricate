@@ -21,6 +21,6 @@ public class Curse_Torment extends PCLCard
     @Override
     public void setup(Object input)
     {
-        addUseMove(PCond.onDraw(), new PMod_SelectPerCard(1, PCLCardGroupHelper.Hand).setCardTypes(CardType.CURSE), PMove.obtainDiscardPile(1).useParent(true));
+        addUseMove(PCond.onDraw(), new PMod_SelectPerCard(1, PCLCardGroupHelper.Hand).edit(f -> f.setType(CardType.CURSE).setRandom(true)), PMove.obtainDiscardPile(1).useParent(true));
     }
 }

@@ -16,11 +16,11 @@ import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.powers.PCLClickableUse;
 import pinacolada.skills.fields.PField_Not;
-import pinacolada.skills.skills.base.triggers.PTrigger_Interactable;
-import pinacolada.skills.skills.base.triggers.PTrigger_Passive;
-import pinacolada.skills.skills.base.triggers.PTrigger_When;
+import pinacolada.skills.skills.base.primary.PTrigger_Interactable;
+import pinacolada.skills.skills.base.primary.PTrigger_Passive;
+import pinacolada.skills.skills.base.primary.PTrigger_When;
 
-public abstract class PTrigger extends PSkill<PField_Not>
+public abstract class PTrigger extends PPrimary<PField_Not>
 {
     public static final int TRIGGER_PRIORITY = 0;
     protected int usesThisTurn;

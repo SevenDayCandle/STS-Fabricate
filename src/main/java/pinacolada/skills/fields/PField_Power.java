@@ -36,6 +36,12 @@ public class PField_Power extends PField
         editor.registerBoolean(PGR.core.tooltips.debuff.title, v -> debuff = v, debuff);
     }
 
+    public PField_Power addPower(PCLPowerHelper... powers)
+    {
+        this.powers.addAll(Arrays.asList(powers));
+        return this;
+    }
+
     public PField_Power setPower(PCLPowerHelper... powers)
     {
         return setPower(Arrays.asList(powers));

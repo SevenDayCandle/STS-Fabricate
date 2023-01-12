@@ -11,6 +11,7 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.PActionCond;
+import pinacolada.skills.PLimit;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.List;
@@ -65,7 +66,7 @@ public class PCond_Fatal extends PActionCond<PField_Not>
     {
         List<AbstractCreature> targetList = getTargetList(info);
         PCLActions.last.callback(targetList, (targets, __) -> {
-            if (targets.size() > 0 && EUIUtils.any(targets, GameUtilities::isDeadOrEscaped) && (!(parent instanceof PCond_Info) || ((PCond_Info) parent).tryActivate(info)))
+            if (targets.size() > 0 && EUIUtils.any(targets, GameUtilities::isDeadOrEscaped) && (!(parent instanceof PLimit) || ((PLimit) parent).tryActivate(info)))
             {
                 callback.invoke();
             }

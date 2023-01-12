@@ -223,11 +223,6 @@ public abstract class PCond<T extends PField> extends PSkill<T>
         return new PCond_IsAttacking(target);
     }
 
-    public static PCond_Limited limited()
-    {
-        return new PCond_Limited();
-    }
-
     public static PCond_Match match()
     {
         return new PCond_Match();
@@ -251,6 +246,11 @@ public abstract class PCond<T extends PField> extends PSkill<T>
     public static PCond_OnDraw onDraw()
     {
         return new PCond_OnDraw();
+    }
+
+    public static PCond_OnDraw onDraw(PCLAffinity... aff)
+    {
+        return (PCond_OnDraw) new PCond_OnDraw().edit(f -> f.setAffinity(aff));
     }
 
     public static PCond_OnExhaust onExhaust()
@@ -351,11 +351,6 @@ public abstract class PCond<T extends PField> extends PSkill<T>
     public static PCond_ReshuffleTo reshuffleRandom(int amount, PCLCardGroupHelper... h)
     {
         return (PCond_ReshuffleTo) new PCond_ReshuffleTo(amount, h).edit(r -> r.setRandom(true));
-    }
-
-    public static PCond semiLimited()
-    {
-        return new PCond_SemiLimited();
     }
 
     public static PCond starter()

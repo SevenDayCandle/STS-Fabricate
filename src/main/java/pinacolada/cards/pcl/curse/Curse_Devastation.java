@@ -7,6 +7,7 @@ import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.fields.PCLCardTag;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.skills.PCond;
+import pinacolada.skills.PLimit;
 import pinacolada.skills.PMove;
 import pinacolada.skills.skills.PMultiSkill;
 import pinacolada.skills.skills.base.moves.PMove_GainEnergy;
@@ -27,6 +28,6 @@ public class Curse_Devastation extends PCLCard
     public void setup(Object input)
     {
         addUseMove(PCond.onTurnEnd(), PMultiSkill.join(PMove.selfExhaust(), PMove.gain(2, PCLPowerHelper.SelfImmolation)));
-        addUseMove(PCond.limited(), PCond.onPurge(), new PMove_GainEnergy(2));
+        addUseMove(PLimit.limited(), PCond.onPurge(), new PMove_GainEnergy(2));
     }
 }

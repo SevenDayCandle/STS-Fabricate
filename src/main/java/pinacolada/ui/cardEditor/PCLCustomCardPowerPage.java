@@ -14,7 +14,7 @@ import pinacolada.interfaces.markers.PSkillAttribute;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PTrigger;
-import pinacolada.skills.skills.base.triggers.PTrigger_Passive;
+import pinacolada.skills.skills.base.primary.PTrigger_Passive;
 import pinacolada.skills.skills.special.moves.PMove_StackCustomPower;
 import pinacolada.ui.common.PCLValueEditor;
 
@@ -22,7 +22,6 @@ import java.util.ArrayList;
 
 public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
 {
-    protected PTrigger trigger;
     protected PCLValueEditor usesPerTurn;
     protected ArrayList<EUIButton> quickAddButtons = new ArrayList<>();
 
@@ -32,13 +31,13 @@ public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
         super(screen, effect, hb, index, title, onUpdate);
         delayEditor.setActive(false);
         primaryConditions
-                .setItems(EUIUtils.map(PTrigger.getEligibleEffects(builder.cardColor, PTrigger.class), bc -> trigger != null && bc.effectID.equals(trigger.effectID) ? trigger : bc))
+                .setItems(EUIUtils.map(PTrigger.getEligibleEffects(builder.cardColor, PTrigger.class), bc -> primaryCond != null && bc.effectID.equals(primaryCond.effectID) ? primaryCond : bc))
                 .autosize();
         usesPerTurn = new PCLValueEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 4, MENU_HEIGHT, MENU_WIDTH * 3.2f, OFFSET_EFFECT * 2f)
                 , PGR.core.strings.combat.uses, (val) -> {
-            if (trigger != null)
+            if (primaryCond != null)
             {
-                trigger.setAmount(val);
+                primaryCond.setAmount(val);
                 constructEffect();
             }
         })
@@ -91,27 +90,27 @@ public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
             ce.refresh();
         }
 
-        if (currentEffects[0] != null)
+        if (primaryCond != null)
         {
-            primaryConditions.setSelection(currentEffects[0], false);
+            primaryConditions.setSelection(primaryCond, false);
         }
 
-        if (currentEffects[0] instanceof PTrigger)
+        if (primaryCond instanceof PTrigger)
         {
-            usesPerTurn.setValue(currentEffects[0].amount, false);
+            usesPerTurn.setValue(primaryCond.amount, false);
         }
 
         for (int i = 0; i < conditionEditors.size(); i++)
         {
             conditionEditors.get(i).effects.setItems(EUIUtils.filter(originalConditions.get(i), ef ->
-                    (currentEffects[0] instanceof PTrigger_Passive) == ef instanceof PSkillAttribute));
+                    (primaryCond instanceof PTrigger_Passive) == ef instanceof PSkillAttribute));
             conditionEditors.get(i).refresh();
         }
 
         for (int i = 0; i < effectEditors.size(); i++)
         {
             effectEditors.get(i).effects.setItems(EUIUtils.filter(originalEffects.get(i), ef ->
-                    (currentEffects[0] instanceof PTrigger_Passive) == ef instanceof PSkillAttribute));
+                    (primaryCond instanceof PTrigger_Passive) == ef instanceof PSkillAttribute));
             effectEditors.get(i).refresh();
         }
     }

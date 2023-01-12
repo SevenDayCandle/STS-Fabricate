@@ -24,7 +24,7 @@ import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PTrigger;
-import pinacolada.skills.skills.base.triggers.PTrigger_Interactable;
+import pinacolada.skills.skills.base.primary.PTrigger_Interactable;
 import pinacolada.utilities.PCLRenderHelpers;
 
 import java.util.ArrayList;

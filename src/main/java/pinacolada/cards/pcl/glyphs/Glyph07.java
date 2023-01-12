@@ -16,7 +16,7 @@ public class Glyph07 extends Glyph
 
     public void setup(Object input)
     {
-        addGainPower((PTrigger) PTrigger.when(PCond.onDraw().setAffinity(randomAffinity()),
-                PMove.cycle(1).useParent(true)).setAmount(1, 1).setAlt(true));
+        addGainPower((PTrigger) PTrigger.when(PCond.onDraw(randomAffinity()),
+                PMove.cycleRandom(1).useParent(true)).setAmount(1, 1));
     }
 }

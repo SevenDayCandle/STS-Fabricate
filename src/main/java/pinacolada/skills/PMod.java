@@ -25,13 +25,13 @@ public abstract class PMod<T extends PField> extends PSkill<T>
 
     public static <T extends PField> PSkillData<T> register(Class<? extends PSkill<T>> type, Class<T> effectType, AbstractCard.CardColor... cardColors)
     {
-        return PSkill.register(type, effectType, getDefaultPriority(type), -1, DEFAULT_MAX, cardColors)
+        return PSkill.register(type, effectType, -1, DEFAULT_MAX, cardColors)
                 .setExtra(-1, DEFAULT_MAX);
     }
 
     public static <T extends PField> PSkillData<T> register(Class<? extends PSkill<T>> type, Class<T> effectType)
     {
-        return PSkill.register(type, effectType, getDefaultPriority(type), -1, DEFAULT_MAX)
+        return PSkill.register(type, effectType, -1, DEFAULT_MAX)
                 .setExtra(-1, DEFAULT_MAX);
     }
 

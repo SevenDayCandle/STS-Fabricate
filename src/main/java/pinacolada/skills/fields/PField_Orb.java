@@ -38,6 +38,12 @@ public class PField_Orb extends PField_Random
         editor.registerBoolean(PGR.core.strings.cardEditor.random, v -> random = v, random);
     }
 
+    public PField_Orb addOrb(PCLOrbHelper... orbs)
+    {
+        this.orbs.addAll(Arrays.asList(orbs));
+        return this;
+    }
+
     public PField_Orb setOrb(PCLOrbHelper... orbs)
     {
         return setOrb(Arrays.asList(orbs));

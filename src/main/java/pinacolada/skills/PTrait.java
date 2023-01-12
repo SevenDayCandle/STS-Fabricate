@@ -21,13 +21,13 @@ public abstract class PTrait<T extends PField> extends PSkill<T> implements PSki
 
     public static <T extends PField> PSkillData<T> register(Class<? extends PSkill<T>> type, Class<T> effectType)
     {
-        return PSkill.register(type, effectType, getDefaultPriority(type), -DEFAULT_MAX, DEFAULT_MAX)
+        return PSkill.register(type, effectType, -DEFAULT_MAX, DEFAULT_MAX)
                 .selfTarget();
     }
 
     public static <T extends PField> PSkillData<T> register(Class<? extends PSkill<T>> type, Class<T> effectType, AbstractCard.CardColor... cardColors)
     {
-        return PSkill.register(type, effectType, getDefaultPriority(type), -DEFAULT_MAX, DEFAULT_MAX, cardColors)
+        return PSkill.register(type, effectType, -DEFAULT_MAX, DEFAULT_MAX, cardColors)
                 .selfTarget();
     }
 

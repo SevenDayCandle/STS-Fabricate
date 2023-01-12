@@ -36,7 +36,7 @@ public class MysteryCard extends PCLCard implements Hidden
 
     public MysteryCard(boolean isDummy, CardRarity... rarities)
     {
-        super(DATA, new MysteryCond(DATA, isDummy ? 2 : 0, DATA.getCost(0)).setCardRarities(rarities));
+        super(DATA, new MysteryCond(DATA, isDummy ? 2 : 0, DATA.getCost(0)).edit(f -> f.setRarity(rarities)));
     }
 
     public void setup(Object input)
@@ -59,7 +59,7 @@ public class MysteryCard extends PCLCard implements Hidden
         @Override
         public String getSubText()
         {
-            return EUIUtils.format(cardData.strings.EXTENDED_DESCRIPTION[descIndex], amount, PCLCoreStrings.joinWithOr(EUIUtils.map(rarities, EUIGameUtils::textForRarity)));
+            return EUIUtils.format(cardData.strings.EXTENDED_DESCRIPTION[descIndex], amount, PCLCoreStrings.joinWithOr(EUIUtils.map(fields.rarities, EUIGameUtils::textForRarity)));
         }
 
         private boolean checkCondition(AbstractCard c)
@@ -69,7 +69,7 @@ public class MysteryCard extends PCLCard implements Hidden
 
         public final AbstractCard createObscuredCard()
         {
-            ArrayList<AbstractCard> pool = getPool(this.rarities);
+            ArrayList<AbstractCard> pool = getPool(fields.rarities);
             WeightedList<AbstractCard> possiblePicks = new WeightedList<>();
             for (AbstractCard c : pool)
             {

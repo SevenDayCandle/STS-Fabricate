@@ -43,7 +43,7 @@ import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.skills.PMultiSkill;
-import pinacolada.skills.skills.base.triggers.PTrigger_Interactable;
+import pinacolada.skills.skills.base.primary.PTrigger_Interactable;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RotatingList;
 
@@ -52,9 +52,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static pinacolada.skills.PCond.CONDITION_PRIORITY;
-import static pinacolada.skills.PMod.MODIFIER_PRIORITY;
 
 public abstract class PSkill<T extends PField> implements TooltipProvider
 {
@@ -207,19 +204,6 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return EFFECT_MAP.get(id);
     }
 
-    public static int getDefaultPriority(Class<? extends PSkill> targetClass)
-    {
-        if (PCond.class.isAssignableFrom(targetClass))
-        {
-            return CONDITION_PRIORITY;
-        }
-        if (PMod.class.isAssignableFrom(targetClass))
-        {
-            return MODIFIER_PRIORITY;
-        }
-        return DEFAULT_PRIORITY;
-    }
-
     public static List<String> getEffectTexts(Collection<? extends PSkill> effects, boolean addPeriod)
     {
         return EUIUtils.mapAsNonnull(effects, e -> e.getText(addPeriod));
@@ -341,25 +325,15 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
 
     public static <T extends PField> PSkillData<T> register(Class<? extends PSkill<T>> type, Class<T> fieldType)
     {
-        return register(type, fieldType, getDefaultPriority(type), 0, DEFAULT_MAX);
+        return register(type, fieldType, 0, DEFAULT_MAX);
     }
 
     public static <T extends PField> PSkillData<T> register(Class<? extends PSkill<T>> type, Class<T> fieldType, AbstractCard.CardColor... cardColors)
     {
-        return register(type, fieldType, getDefaultPriority(type), 0, DEFAULT_MAX, cardColors);
-    }
-
-    public static <T extends PField> PSkillData<T> register(Class<? extends PSkill<T>> type, Class<T> fieldType, int minAmount, int maxAmount)
-    {
-        return register(type, fieldType, getDefaultPriority(type), minAmount, maxAmount);
+        return register(type, fieldType, 0, DEFAULT_MAX, cardColors);
     }
 
     public static <T extends PField> PSkillData<T> register(Class<? extends PSkill<T>> type, Class<T> fieldType, int minAmount, int maxAmount, AbstractCard.CardColor... cardColors)
-    {
-        return register(type, fieldType, getDefaultPriority(type), minAmount, maxAmount, cardColors);
-    }
-
-    public static <T extends PField> PSkillData<T> register(Class<? extends PSkill<T>> type, Class<T> fieldType, int priority, int minAmount, int maxAmount, AbstractCard.CardColor... cardColors)
     {
         String id = PGR.core.createID(type.getSimpleName());
         PSkillData<T> d = new PSkillData<T>(id, type, fieldType, minAmount, maxAmount, cardColors);

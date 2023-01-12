@@ -8,13 +8,11 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.PTrait;
 import pinacolada.skills.PTrigger;
 import pinacolada.skills.fields.PField;
-import pinacolada.skills.fields.PField_CardCategory;
+import pinacolada.skills.fields.PField_Tag;
 
-// TODO custom field type
-public class PTrait_Tag extends PTrait<PField_CardCategory>
+public class PTrait_Tag extends PTrait<PField_Tag>
 {
-
-    public static final PSkillData<PField_CardCategory> DATA = register(PTrait_Tag.class, PField_CardCategory.class);
+    public static final PSkillData<PField_Tag> DATA = register(PTrait_Tag.class, PField_Tag.class);
 
     public PTrait_Tag()
     {
