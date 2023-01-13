@@ -192,7 +192,7 @@ public class PSkillPower extends PCLPower implements OnAllyDeathSubscriber, OnAl
 
     public PSkillPower makeCopyOnTarget(AbstractCreature m, int amount)
     {
-        return new PSkillPower(m, amount, EUIUtils.map(ptriggers, tr -> (PTrigger) tr.makeCopy()));
+        return new PSkillPower(m, amount, EUIUtils.map(ptriggers, PTrigger::makeCopy));
     }
 
     @Override

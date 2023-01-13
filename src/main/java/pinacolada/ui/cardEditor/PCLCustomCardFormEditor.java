@@ -34,7 +34,7 @@ public class PCLCustomCardFormEditor extends EUIBase
         this.hb = hb;
         this.screen = screen;
 
-        this.header = (EUILabel) new EUILabel(EUIFontHelper.cardtitlefontSmall,
+        this.header = new EUILabel(EUIFontHelper.cardtitlefontSmall,
                 new EUIHitbox(hb.x, hb.y + hb.height * 0.8f, hb.width, hb.height))
                 .setAlignment(0.5f, 0.0f, false)
                 .setFont(EUIFontHelper.cardtitlefontSmall, 0.8f).setColor(Settings.GOLD_COLOR)

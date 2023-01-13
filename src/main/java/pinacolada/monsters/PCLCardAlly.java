@@ -366,7 +366,7 @@ public class PCLCardAlly extends PCLCreature
             BobEffect bobEffect = getBobEffect();
             PCLRenderHelpers.drawCentered(sb, Color.WHITE, card.attackType.getTooltip().icon, this.intentHb.cX - 40.0F * Settings.scale, this.intentHb.cY + bobEffect.y - 12.0F * Settings.scale, card.attackType.getTooltip().icon.getRegionWidth(), card.attackType.getTooltip().icon.getRegionHeight(), 0.9f, 0f);
             if (card.hitCount > 1) {
-                FontHelper.renderFontLeftTopAligned(sb, FontHelper.topPanelInfoFont, Integer.toString(card.damage) + "x" + Integer.toString(card.hitCount), this.intentHb.cX, this.intentHb.cY + bobEffect.y - 12.0F * Settings.scale, Settings.CREAM_COLOR);
+                FontHelper.renderFontLeftTopAligned(sb, FontHelper.topPanelInfoFont, card.damage + "x" + card.hitCount, this.intentHb.cX, this.intentHb.cY + bobEffect.y - 12.0F * Settings.scale, Settings.CREAM_COLOR);
             } else {
                 FontHelper.renderFontLeftTopAligned(sb, FontHelper.topPanelInfoFont, Integer.toString(card.damage), this.intentHb.cX, this.intentHb.cY + bobEffect.y - 12.0F * Settings.scale, Settings.CREAM_COLOR);
             }

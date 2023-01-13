@@ -38,9 +38,9 @@ public final class PCLEffects
     public final static PCLEffects TopLevelQueue = new PCLEffects(EffectType.TopLevelQueue);
     public final static PCLEffects Manual = new PCLEffects(EffectType.Manual);
 
-    protected final EffectType effectType;
+    private final EffectType effectType;
 
-    protected PCLEffects(EffectType effectType)
+    private PCLEffects(EffectType effectType)
     {
         this.effectType = effectType;
     }

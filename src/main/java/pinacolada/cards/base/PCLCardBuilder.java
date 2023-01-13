@@ -336,7 +336,7 @@ public class PCLCardBuilder extends PCLCardData
     {
         if (makeCopy && effect != null)
         {
-            effect = (PTrigger) effect.makeCopy();
+            effect = effect.makeCopy();
         }
         powers.add(effect);
 

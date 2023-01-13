@@ -112,17 +112,6 @@ public class ChooseAndUpgradeEffect extends AbstractGameEffect
                 r.onSmith();
             }
         }
-
-        if (this.duration < 0f)
-        {
-//            if (CampfireUI.hidden)
-//            {
-//                AbstractRoom.waitTimer = 0f;
-//                AbstractDungeon.getCurrRoom().phase = RoomPhase.COMPLETE;
-//                ((RestRoom) AbstractDungeon.getCurrRoom()).cutFireSound();
-//            }
-        }
-
     }
 
     public void render(SpriteBatch sb)

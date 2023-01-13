@@ -107,9 +107,9 @@ public final class PCLActions
     public static PCLActions delayedTop = new PCLActions(ActionOrder.DelayedTop);
     public static PCLActions last = new PCLActions(ActionOrder.Last);
 
-    protected final ActionOrder actionOrder;
+    private final ActionOrder actionOrder;
 
-    protected PCLActions(ActionOrder actionOrder)
+    private PCLActions(ActionOrder actionOrder)
     {
         this.actionOrder = actionOrder;
     }
@@ -177,11 +177,6 @@ public final class PCLActions
             }
 
             case Delayed:
-            {
-                bottom.callback(action, bottom::add);
-                break;
-            }
-
             case DelayedTop:
             {
                 bottom.callback(action, bottom::add);
@@ -360,7 +355,7 @@ public final class PCLActions
 
     public CycleCards cycle(String sourceName, int amount)
     {
-        return (CycleCards) add(new CycleCards(sourceName, amount, false));
+        return add(new CycleCards(sourceName, amount, false));
     }
 
     public ArrayList<DealDamage> dealCardDamage(PCLCard card, AbstractCreature source, AbstractCreature target, AbstractGameAction.AttackEffect effect)
@@ -918,7 +913,7 @@ public final class PCLActions
 
     public ScoutCards scout(String sourceName, int amount)
     {
-        return (ScoutCards) add(new ScoutCards(sourceName, amount));
+        return add(new ScoutCards(sourceName, amount));
     }
 
     public ScryCards scry(String sourceName, int amount)

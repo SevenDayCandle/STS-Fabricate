@@ -174,7 +174,7 @@ public class PCLCoreConfig extends AbstractConfig
         {
             if (c instanceof PCLCard)
             {
-                ((PCLCard) c).initializeDescription();
+                c.initializeDescription();
             }
         }
 
@@ -184,7 +184,7 @@ public class PCLCoreConfig extends AbstractConfig
             {
                 if (c instanceof PCLCard)
                 {
-                    ((PCLCard) c).initializeDescription();
+                    c.initializeDescription();
                 }
             }
         }

@@ -26,7 +26,7 @@ public class PField_Power extends PField
     @Override
     public PField_Power makeCopy()
     {
-        return (PField_Power) new PField_Power().setPower(powers).setRandom(random);
+        return new PField_Power().setPower(powers).setRandom(random);
     }
 
     public void setupEditor(PCLCustomCardEffectEditor<?> editor)

@@ -110,7 +110,7 @@ public class GameUtilities
         {
             if ((stacks != -1 || power.canGoNegative) && ((existingPower.amount += stacks) == 0))
             {
-                if (!((PCLPower) existingPower).canBeZero)
+                if (!existingPower.canBeZero)
                 {
                     target.powers.remove(existingPower);
                 }
@@ -615,11 +615,6 @@ public class GameUtilities
                             cards.add(c, 7);
                             break;
 
-                        case RARE:
-                            cards.add(c, 2);
-                            break;
-
-                        case CURSE:
                         default:
                             cards.add(c, 2);
                             break;

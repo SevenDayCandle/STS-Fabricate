@@ -25,7 +25,7 @@ public class BlendableSkeletonMeshRenderer extends SkeletonMeshRenderer
         int i = 0;
 
         for(int n = drawOrder.size; i < n; ++i) {
-            Slot slot = (Slot)drawOrder.get(i);
+            Slot slot = drawOrder.get(i);
             Attachment attachment = EUIClassUtils.getField(slot, "attachment");
             Texture texture = null;
             if (attachment instanceof RegionAttachment) {

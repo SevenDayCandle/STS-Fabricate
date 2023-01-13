@@ -84,10 +84,7 @@ public class PCLRelicSlot
     public PCLRelicSlot makeCopy(PCLLoadoutData container)
     {
         final PCLRelicSlot copy = new PCLRelicSlot(container);
-        for (Item item : relics)
-        {
-            copy.relics.add(item);
-        }
+        copy.relics.addAll(relics);
         if (selected != null)
         {
             copy.select(selected.relic);

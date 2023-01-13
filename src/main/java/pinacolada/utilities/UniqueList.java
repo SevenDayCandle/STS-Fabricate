@@ -15,10 +15,7 @@ public class UniqueList<T> extends ArrayList<T>
 
     public UniqueList(Collection<T> items)
     {
-        for (T item : items)
-        {
-            add(item);
-        }
+        this.addAll(items);
     }
 
     public boolean add(T item)

@@ -133,10 +133,7 @@ public class PCLCardSlot
     public PCLCardSlot makeCopy(PCLLoadoutData container)
     {
         final PCLCardSlot copy = new PCLCardSlot(container, min, max);
-        for (Item item : cards)
-        {
-            copy.cards.add(item);
-        }
+        copy.cards.addAll(cards);
         if (selected != null)
         {
             copy.select(selected.data, amount);

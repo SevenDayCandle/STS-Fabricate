@@ -129,7 +129,7 @@ public abstract class PCLResources<T extends AbstractConfig, U extends PCLImages
         return Gdx.files.internal("localization/" + id.toLowerCase() + "/eng/" + fileName);
     }
 
-    public <T> T getFallbackStrings(String fileName, Type typeOfT)
+    public <Z> Z getFallbackStrings(String fileName, Type typeOfT)
     {
         FileHandle file = getFallbackFile(fileName);
         if (!file.exists())

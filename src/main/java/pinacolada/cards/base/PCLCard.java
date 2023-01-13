@@ -1214,7 +1214,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     }
 
     public PCLCard makePopupCopy() {
-        PCLCard copy = (PCLCard) makeStatEquivalentCopy();
+        PCLCard copy = makeStatEquivalentCopy();
         copy.current_x = (float) Settings.WIDTH / 2f;
         copy.current_y = (float) Settings.HEIGHT / 2f;
         copy.drawScale = copy.targetDrawScale = 2f;

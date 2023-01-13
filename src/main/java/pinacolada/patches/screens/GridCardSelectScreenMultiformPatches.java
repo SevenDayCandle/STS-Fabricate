@@ -334,7 +334,7 @@ public class GridCardSelectScreenMultiformPatches
 
                 for (int i = 0; i < pC.getMaxForms(); i++)
                 {
-                    PCLCard previewCard = (PCLCard) pC.makeStatEquivalentCopy();
+                    PCLCard previewCard = pC.makeStatEquivalentCopy();
                     previewCard.changeForm(i, previewCard.timesUpgraded);
                     previewCard.upgrade();
                     previewCard.displayUpgrades();

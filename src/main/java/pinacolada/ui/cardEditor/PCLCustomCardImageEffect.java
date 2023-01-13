@@ -231,11 +231,11 @@ public class PCLCustomCardImageEffect extends PCLEffectWithCallback<Pixmap>
         if (forCommit)
         {
             Texture resized = new Texture(PCLRenderHelpers.scalrScaleAsPixmap(baseTexture, scale, scale));
-            sb.draw(resized, hb.x - resized.getWidth() / 2, hb.y - resized.getHeight() / 2, resized.getWidth() / 2, resized.getHeight() / 2, resized.getWidth(), resized.getHeight(), 1f, 1f, 0f, 0, 0, resized.getWidth(), resized.getHeight(), false, false);
+            sb.draw(resized, hb.x - resized.getWidth() / 2f, hb.y - resized.getHeight() / 2f, resized.getWidth() / 2f, resized.getHeight() / 2f, resized.getWidth(), resized.getHeight(), 1f, 1f, 0f, 0, 0, resized.getWidth(), resized.getHeight(), false, false);
         }
         else
         {
-            sb.draw(baseTexture, hb.x - baseTexture.getWidth() / 2, hb.y - baseTexture.getHeight() / 2, baseTexture.getWidth() / 2, baseTexture.getHeight() / 2, baseTexture.getWidth(), baseTexture.getHeight(), scale, scale, 0f, 0, 0, baseTexture.getWidth(), baseTexture.getHeight(), false, false);
+            sb.draw(baseTexture, hb.x - baseTexture.getWidth() / 2f, hb.y - baseTexture.getHeight() / 2f, baseTexture.getWidth() / 2f, baseTexture.getHeight() / 2f, baseTexture.getWidth(), baseTexture.getHeight(), scale, scale, 0f, 0, 0, baseTexture.getWidth(), baseTexture.getHeight(), false, false);
         }
 
         sb.end();
@@ -291,11 +291,11 @@ public class PCLCustomCardImageEffect extends PCLEffectWithCallback<Pixmap>
 
         if (outsideImage != null)
         {
-            PCLRenderHelpers.drawCentered(sb, Color.GRAY.cpy(), outsideImage, Settings.WIDTH / 2, Settings.HEIGHT / 2, outsideImage.getRegionWidth(), outsideImage.getRegionHeight(), 1, 0);
+            PCLRenderHelpers.drawCentered(sb, Color.GRAY.cpy(), outsideImage, Settings.WIDTH / 2f, Settings.HEIGHT / 2f, outsideImage.getRegionWidth(), outsideImage.getRegionHeight(), 1, 0);
         }
         if (insideImageRenderable != null)
         {
-            PCLRenderHelpers.drawCentered(sb, Color.WHITE.cpy(), insideImageRenderable, Settings.WIDTH / 2, Settings.HEIGHT / 2, insideImageRenderable.getRegionWidth(), insideImageRenderable.getRegionHeight(), 1, 0);
+            PCLRenderHelpers.drawCentered(sb, Color.WHITE.cpy(), insideImageRenderable, Settings.WIDTH / 2f, Settings.HEIGHT / 2f, insideImageRenderable.getRegionWidth(), insideImageRenderable.getRegionHeight(), 1, 0);
         }
 
     }

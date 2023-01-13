@@ -25,11 +25,9 @@ import static pinacolada.skills.PSkill.CHAR_OFFSET;
 
 public interface PointerProvider
 {
-    abstract Skills getSkills();
-
-    abstract String getID();
-
-    abstract String getName();
+    Skills getSkills();
+    String getID();
+    String getName();
 
     default PSkill<?> addUseMove(PSkill<?> effect)
     {

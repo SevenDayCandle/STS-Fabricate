@@ -19,7 +19,7 @@ public class PField_AttackEffect extends PField
     @Override
     public PField_AttackEffect makeCopy()
     {
-        return (PField_AttackEffect) new PField_AttackEffect().setAttackEffect(attackEffect);
+        return new PField_AttackEffect().setAttackEffect(attackEffect);
     }
 
     public void setupEditor(PCLCustomCardEffectEditor<?> editor)

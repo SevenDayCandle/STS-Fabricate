@@ -100,13 +100,13 @@ public class ShuffleEnemiesEffect extends AbstractGameEffect
         {
             float result = point1 + alpha;
 
-            return result > point2 ? point2 : result;
+            return Math.min(result, point2);
         }
         else
         {
             float result = point1 - alpha;
 
-            return result < point2 ? point2 : result;
+            return Math.max(result, point2);
         }
     }
 }

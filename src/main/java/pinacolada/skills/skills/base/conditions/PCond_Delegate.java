@@ -91,11 +91,11 @@ public abstract class PCond_Delegate extends PCond<PField_CardCategory>
         return false;
     }
 
-    public String getDelegatePastText() {return getDelegateTooltip().past();};
+    public String getDelegatePastText() {return getDelegateTooltip().past();}
 
-    public String getDelegateSampleText() {return getDelegateText();};
+    public String getDelegateSampleText() {return getDelegateText();}
 
-    public String getDelegateText() {return getDelegateTooltip().title;};
+    public String getDelegateText() {return getDelegateTooltip().title;}
 
     public abstract EUITooltip getDelegateTooltip();
 }

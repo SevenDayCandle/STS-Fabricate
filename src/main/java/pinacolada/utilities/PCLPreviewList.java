@@ -25,12 +25,12 @@ public class PCLPreviewList extends RotatingList<EUICardPreview>
         add(EUICardPreview.generatePreviewCard(card));
     }
 
-    public void set(int index, AbstractCard card) {
-        set(index, EUICardPreview.generatePreviewCard(card));
+    public EUICardPreview set(int index, AbstractCard card) {
+        return set(index, EUICardPreview.generatePreviewCard(card));
     }
 
     public EUICardPreview set(int index, EUICardPreview card) {
-        set(index, card);
+        super.set(index, card);
         return card;
     }
 

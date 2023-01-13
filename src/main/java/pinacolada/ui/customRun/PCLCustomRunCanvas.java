@@ -117,7 +117,7 @@ public class PCLCustomRunCanvas extends EUICanvas
                 .setFont(EUIFontHelper.cardtitlefontSmall, 0.9f);
         seedInput.header.setAlignment(1f, 0);
 
-        ascensionEditor = (PCLValueEditor) new PCLValueEditor(new EUIHitbox(scale(64), scale(48)), CustomModeScreen.TEXT[3], screen::setAscension)
+        ascensionEditor = new PCLValueEditor(new EUIHitbox(scale(64), scale(48)), CustomModeScreen.TEXT[3], screen::setAscension)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 1f, Settings.GOLD_COLOR, CustomModeScreen.TEXT[3])
                 .setLimits(0, 20)
                 .setTooltip(CustomModeScreen.TEXT[3], "");

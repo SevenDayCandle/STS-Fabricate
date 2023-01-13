@@ -85,7 +85,7 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implement
         return PCLAffinity.General;
     }
 
-    public ArrayList<? extends PCLAffinityPower> getActivePowers() {return new ArrayList<>();};
+    public ArrayList<? extends PCLAffinityPower> getActivePowers() {return new ArrayList<>();}
 
     public PCLAffinity getCurrentAffinity()
     {
@@ -128,14 +128,14 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implement
         return null;
     }
 
-    public int getPowerAmount(PCLAffinity affinity) {return 0;};
+    public int getPowerAmount(PCLAffinity affinity) {return 0;}
 
     public ArrayList<? extends PCLAffinityPower> getPowers()
     {
         return new ArrayList<>();
     }
 
-    public AffinityReactions getReactions(AbstractCard c, Collection<? extends AbstractCreature> mo) {return new AffinityReactions();};
+    public AffinityReactions getReactions(AbstractCard c, Collection<? extends AbstractCreature> mo) {return new AffinityReactions();}
 
     public Object getRerollDescription() {return null;}
 
@@ -171,7 +171,7 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implement
         return super.isHovered() || infoIcon.hb.hovered;
     }
 
-    public boolean isPowerActive(PCLAffinity affinity) {return false;};
+    public boolean isPowerActive(PCLAffinity affinity) {return false;}
 
     public void renderImpl(SpriteBatch sb)
     {

@@ -7,8 +7,8 @@ import extendedui.ui.tooltips.EUITooltip;
 // Denotes object that can hold a PCLClickableUse, used in onClickableUsed
 public interface ClickableProvider
 {
-    abstract String getID();
-    abstract EUITooltip getTooltip();
+    String getID();
+    EUITooltip getTooltip();
 
     default AbstractCreature getSource()
     {

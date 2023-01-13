@@ -80,7 +80,7 @@ public class PCLCustomCardAffinityValueEditor extends EUIHoverable
                 .setAlignment(0.5f, 0.5f)
                 .setFont(EUIFontHelper.cardtitlefontSmall, 1f);
 
-        this.affinityImage = (EUIImage) new EUIImage(affinity.getIcon(), new EUIHitbox(hb.x, hb.y + hb.height * 0.8f, ICON_SIZE, ICON_SIZE))
+        this.affinityImage = new EUIImage(affinity.getIcon(), new EUIHitbox(hb.x, hb.y + hb.height * 0.8f, ICON_SIZE, ICON_SIZE))
                 .setTooltip(affinity.getTooltip().title, PGR.core.strings.cardEditorTutorial.attrAffinity);
     }
 

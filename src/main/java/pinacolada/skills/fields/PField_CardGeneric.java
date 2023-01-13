@@ -61,7 +61,7 @@ public class PField_CardGeneric extends PField
     {
         this.origin = origin;
         return this;
-    };
+    }
 
     public PField_CardGeneric setCardGroup(PCLCardGroupHelper... gt)
     {

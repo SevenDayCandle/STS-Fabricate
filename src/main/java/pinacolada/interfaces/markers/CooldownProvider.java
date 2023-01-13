@@ -9,12 +9,12 @@ import pinacolada.misc.CombatManager;
 
 public interface CooldownProvider
 {
-    final static Color COOLDOWN_INCOMPLETE_COLOR = Settings.GREEN_TEXT_COLOR.cpy().lerp(Settings.CREAM_COLOR, 0.5f);
-    public int getCooldown();
-    public int getBaseCooldown();
-    public void setCooldown(int value);
-    public void activate(AbstractCard card, AbstractCreature m);
-    public default void progressCooldownAndTrigger(AbstractCard card, AbstractCreature m, int amount)
+    Color COOLDOWN_INCOMPLETE_COLOR = Settings.GREEN_TEXT_COLOR.cpy().lerp(Settings.CREAM_COLOR, 0.5f);
+    int getCooldown();
+    int getBaseCooldown();
+    void setCooldown(int value);
+    void activate(AbstractCard card, AbstractCreature m);
+    default void progressCooldownAndTrigger(AbstractCard card, AbstractCreature m, int amount)
     {
         boolean canProgress = CombatManager.onCooldownTriggered(card, m, this);
         if (canProgress)
@@ -32,12 +32,12 @@ public interface CooldownProvider
         }
     }
 
-    public default void reset()
+    default void reset()
     {
         setCooldown(getBaseCooldown());
     }
 
-    public default ColoredString getCooldownString()
+    default ColoredString getCooldownString()
     {
         int amount = getCooldown();
         if (amount < getBaseCooldown())

@@ -10,7 +10,6 @@ import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
 import extendedui.configuration.EUIHotkeys;
-import extendedui.interfaces.delegates.ActionT0;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.ui.tooltips.EUICardPreview;
 import pinacolada.augments.PCLAugment;
@@ -153,7 +152,7 @@ public abstract class PCLMultiCard extends PCLCard
             }
             this.inheritedCards.clear();
             refreshProperties();
-        }).addCallback((ActionT0) this::onCardsRemoved);
+        }).addCallback(this::onCardsRemoved);
     }
 
 
@@ -251,9 +250,9 @@ public abstract class PCLMultiCard extends PCLCard
             cardData.tempCard = upgrade = (PCLMultiCard) this.makeSameInstanceOf();
             upgrade.isPreview = true;
             for (AbstractCard iCard : inheritedCards.getCards()) {
-                ((PCLMultiCard) upgrade).addInheritedCard(iCard.makeSameInstanceOf());
+                upgrade.addInheritedCard(iCard.makeSameInstanceOf());
             }
-            ((PCLMultiCard) upgrade).refreshProperties();
+            upgrade.refreshProperties();
 
             upgrade.upgrade();
             upgrade.displayUpgrades();

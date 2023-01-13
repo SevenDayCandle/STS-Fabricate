@@ -120,7 +120,7 @@ public class CardGroupPatches
     }
 
     // These card getter methods crash if the group is empty
-
+    // Casting is intentional to avoid crashes from incorrect type inferences in patching
     @SpirePatch(clz = CardGroup.class, method = "getBottomCard", paramtypez = {})
     public static class CardGroupPatches_GetBottomCard
     {
