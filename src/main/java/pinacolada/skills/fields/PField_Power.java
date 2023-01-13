@@ -29,7 +29,7 @@ public class PField_Power extends PField
         return (PField_Power) new PField_Power().setPower(powers).setRandom(random);
     }
 
-    public void setupEditor(PCLCustomCardEffectEditor editor)
+    public void setupEditor(PCLCustomCardEffectEditor<?> editor)
     {
         editor.registerPower(powers);
         super.setupEditor(editor);

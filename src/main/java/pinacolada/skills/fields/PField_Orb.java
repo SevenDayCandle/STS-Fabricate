@@ -32,7 +32,7 @@ public class PField_Orb extends PField_Random
         return (PField_Orb) new PField_Orb().setOrb(orbs).setRandom(random);
     }
 
-    public void setupEditor(PCLCustomCardEffectEditor editor)
+    public void setupEditor(PCLCustomCardEffectEditor<?> editor)
     {
         editor.registerOrb(orbs);
         editor.registerBoolean(PGR.core.strings.cardEditor.random, v -> random = v, random);

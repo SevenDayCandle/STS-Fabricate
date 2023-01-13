@@ -25,7 +25,8 @@ import pinacolada.cards.base.fields.PCLCardTag;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.resources.PGR;
-import pinacolada.skills.*;
+import pinacolada.skills.PSkill;
+import pinacolada.skills.PSkillData;
 import pinacolada.stances.PCLStanceHelper;
 import pinacolada.utilities.GameUtilities;
 
@@ -34,13 +35,13 @@ import java.util.List;
 
 import static pinacolada.ui.cardEditor.PCLCustomCardEffectPage.*;
 
-public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
+public class PCLCustomCardEffectEditor<T extends PSkill> extends PCLCustomCardEditorPage
 {
     public static final float MAIN_OFFSET = MENU_WIDTH * 1.58f;
     public static final float AUX_OFFSET = MENU_WIDTH * 2.43f;
     protected final PCLCustomCardEffectPage editor;
     protected ArrayList<EUIHoverable> activeElements = new ArrayList<>();
-    protected EUISearchableDropdown<PSkill> effects;
+    protected EUISearchableDropdown<T> effects;
     protected EUIDropdown<PCLAffinity> affinities;
     protected EUIDropdown<PCLCardTarget> targets;
     protected EUIDropdown<AbstractCard.CardRarity> rarities;
@@ -54,18 +55,18 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
     protected PCLCustomCardUpgradableEditor valueEditor;
     protected PCLCustomCardUpgradableEditor extraEditor;
     protected EUIHitbox hb;
-    protected int priority;
+    protected PCLCustomCardEffectPage.EffectEditorGroup<T> group;
     protected int index;
-    private PSkill lastEffect;
+    private T lastEffect;
     private float additionalHeight;
 
-    public PCLCustomCardEffectEditor(PCLCustomCardEffectPage editor, EUIHitbox hb, int priority, int index)
+    public PCLCustomCardEffectEditor(PCLCustomCardEffectPage.EffectEditorGroup<T> group, EUIHitbox hb, int index)
     {
-        this.editor = editor;
-        this.priority = priority;
+        this.group = group;
+        this.editor = group.editor;
         this.index = index;
         this.hb = hb;
-        effects = (EUISearchableDropdown<PSkill>) new EUISearchableDropdown<PSkill>(hb, skill -> StringUtils.capitalize(skill.getSampleText()))
+        effects = (EUISearchableDropdown<T>) new EUISearchableDropdown<T>(hb, skill -> StringUtils.capitalize(skill.getSampleText()))
                 .setOnChange(effects -> {
                     if (!effects.isEmpty())
                     {
@@ -80,8 +81,8 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
                 .setClearButtonOptions(true, true)
                 .setCanAutosizeButton(true)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, getTitleForPriority())
-                .setItems(getEffectsForPriority(this.priority))
-                .setOnClear(__ -> editor.scheduleUpdate(() -> editor.removeEffectSlot(this.priority, this.index)));
+                .setItems(getEffects())
+                .setOnClear(__ -> editor.scheduleUpdate(() -> this.group.removeEffectSlot(this.index)));
 
         valueEditor = new PCLCustomCardUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 5, MENU_HEIGHT,MAIN_OFFSET, OFFSET_AMOUNT)
                 , EUIRM.strings.uiAmount, (val, upVal) -> {
@@ -198,45 +199,20 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
                 .setItems(AbstractCard.CardType.values());
     }
 
-    protected PSkill getEffectAt()
+    protected T getEffectAt()
     {
-        switch (priority)
-        {
-            case PCond.CONDITION_PRIORITY:
-                return editor.lowerConditions.get(index);
-            case PMod.MODIFIER_PRIORITY:
-                return editor.lowerModifiers.get(index);
-            default:
-                return editor.lowerEffects.get(index);
-        }
+        return group.lowerEffects.get(index);
     }
 
-    protected PSkill setEffectAt(PSkill skill)
+    protected T setEffectAt(T skill)
     {
-        switch (priority)
-        {
-            case PCond.CONDITION_PRIORITY:
-                return editor.lowerConditions.set(index, (PCond) skill);
-            case PMod.MODIFIER_PRIORITY:
-                return editor.lowerModifiers.set(index, (PMod) skill);
-            default:
-                return editor.lowerEffects.set(index, skill);
-        }
+        return group.lowerEffects.set(index, skill);
     }
 
-    protected List<PSkill> getEffectsForPriority(int priority)
+    protected List<T> getEffects()
     {
-        switch (priority)
-        {
-            case PCond.CONDITION_PRIORITY:
-                return EUIUtils.map(PSkill.getEligibleEffects(editor.builder.cardColor, PCond.class),
-                        bc -> getEffectAt() != null && bc.effectID.equals(getEffectAt().effectID) ? getEffectAt() : bc.scanForTips());
-            case PMod.MODIFIER_PRIORITY:
-                return EUIUtils.map(PSkill.getEligibleEffects(editor.builder.cardColor, PMod.class),
-                        bc -> getEffectAt() != null && bc.effectID.equals(getEffectAt().effectID) ? getEffectAt() : bc.scanForTips());
-            default:
-                return EUIUtils.map(PSkill.getEligibleEffects(editor.builder.cardColor, PMove.class), bc -> getEffectAt() != null && bc.effectID.equals(getEffectAt().effectID) ? getEffectAt() : bc.scanForTips());
-        }
+        return EUIUtils.map(group.getEffects(),
+                bc -> getEffectAt() != null && bc.effectID.equals(getEffectAt().effectID) ? getEffectAt() : (T) bc.scanForTips());
     }
 
     public float getAdditionalHeight()
@@ -252,7 +228,7 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
     @Override
     public void refresh()
     {
-        PSkill curEffect = getEffectAt();
+        T curEffect = getEffectAt();
         PSkillData data = curEffect != null ? curEffect.data : null;
         int min = data != null ? data.minAmount : Integer.MIN_VALUE / 2;
         int max = data != null ? data.maxAmount : PSkill.DEFAULT_MAX;
@@ -310,7 +286,7 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
         });
     }
 
-    public <T> void registerDropdown(EUIDropdown<T> dropdown, ActionT1<List<T>> onChangeImpl, List<T> items)
+    public <U> void registerDropdown(EUIDropdown<U> dropdown, ActionT1<List<U>> onChangeImpl, List<U> items)
     {
         activeElements.add(dropdown);
         dropdown.setOnChange(targets -> {
@@ -320,7 +296,7 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
         dropdown.setSelection(items, false);
     }
 
-    public <T> void registerDropdown(EUIDropdown<T> dropdown, List<T> items)
+    public <U> void registerDropdown(EUIDropdown<U> dropdown, List<U> items)
     {
         activeElements.add(dropdown);
         dropdown.setOnChange(targets -> {
@@ -331,9 +307,9 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
         dropdown.setSelection(items, false);
     }
 
-    public <T> void registerDropdown(List<T> possibleItems, List<T> selectedItems, FuncT1<String, T> textFunc, String title, boolean smartText)
+    public <U> void registerDropdown(List<U> possibleItems, List<U> selectedItems, FuncT1<String, U> textFunc, String title, boolean smartText)
     {
-        EUIDropdown<T> dropdown = new EUIDropdown<>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.35f, MENU_HEIGHT, AUX_OFFSET, 0)
+        EUIDropdown<U> dropdown = new EUIDropdown<>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.35f, MENU_HEIGHT, AUX_OFFSET, 0)
                 , textFunc)
                 .setLabelFunctionForOption(textFunc, smartText)
                 .setIsMultiSelect(true)
@@ -411,18 +387,16 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
 
     protected String getTitleForPriority()
     {
-        switch (priority)
-        {
-            case PCond.CONDITION_PRIORITY:
-                return EUIRM.strings.generic2(PGR.core.strings.cardEditor.condition, index + 1);
-            case PMod.MODIFIER_PRIORITY:
-                return EUIRM.strings.generic2(PGR.core.strings.cardEditor.modifier, index + 1);
-            default:
-                return EUIRM.strings.generic2(PGR.core.strings.cardEditor.effect, index + 1);
-        }
+        return EUIRM.strings.generic2(group.title, index + 1);
     }
 
-    protected <T> float position(EUIHoverable element, float x)
+    public void updateIndex(int index)
+    {
+        this.index = index;
+        effects.setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, getTitleForPriority());
+    }
+
+    protected <U> float position(EUIHoverable element, float x)
     {
         float setX = x;
         float end = x + element.hb.width;

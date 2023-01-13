@@ -10,11 +10,10 @@ import extendedui.ui.controls.EUIButton;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.OriginRelativeHitbox;
 import extendedui.utilities.EUIFontHelper;
-import pinacolada.interfaces.markers.PSkillAttribute;
 import pinacolada.resources.PGR;
+import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PTrigger;
-import pinacolada.skills.skills.base.primary.PTrigger_Passive;
 import pinacolada.skills.skills.special.moves.PMove_StackCustomPower;
 import pinacolada.ui.common.PCLValueEditor;
 
@@ -56,8 +55,8 @@ public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
                     .setOnClick(() -> {
                         PCLCustomCardEffectPage effectPage = screen.effectPages.get(finalI);
                         PMove_StackCustomPower powerApplyEffect = null;
-                        PCLCustomCardEffectEditor current = null;
-                        for (PCLCustomCardEffectEditor editor : effectPage.effectEditors)
+                        PCLCustomCardEffectEditor<PMove> current = null;
+                        for (PCLCustomCardEffectEditor<PMove> editor : effectPage.effectGroup.editors)
                         {
                             current = editor;
                             powerApplyEffect = (PMove_StackCustomPower) EUIUtils.find(current.effects.getCurrentItems(), e -> e instanceof PMove_StackCustomPower);
@@ -85,11 +84,6 @@ public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
 
     public void refresh()
     {
-        for (PCLCustomCardEffectEditor ce : modifierEditors)
-        {
-            ce.refresh();
-        }
-
         if (primaryCond != null)
         {
             primaryConditions.setSelection(primaryCond, false);
@@ -100,19 +94,10 @@ public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
             usesPerTurn.setValue(primaryCond.amount, false);
         }
 
-        for (int i = 0; i < conditionEditors.size(); i++)
-        {
-            conditionEditors.get(i).effects.setItems(EUIUtils.filter(originalConditions.get(i), ef ->
-                    (primaryCond instanceof PTrigger_Passive) == ef instanceof PSkillAttribute));
-            conditionEditors.get(i).refresh();
-        }
-
-        for (int i = 0; i < effectEditors.size(); i++)
-        {
-            effectEditors.get(i).effects.setItems(EUIUtils.filter(originalEffects.get(i), ef ->
-                    (primaryCond instanceof PTrigger_Passive) == ef instanceof PSkillAttribute));
-            effectEditors.get(i).refresh();
-        }
+        // TODO filter effects based on eligibility
+        conditionGroup.refresh();
+        modifierGroup.refresh();
+        effectGroup.refresh();
     }
 
     @Override

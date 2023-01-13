@@ -8,14 +8,13 @@ import pinacolada.cards.base.PCLAttackType;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.cards.base.fields.PCLCardTag;
-import pinacolada.interfaces.markers.PSkillAttribute;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.skills.base.traits.*;
 import pinacolada.skills.skills.special.traits.PTrait_Affinity;
 import pinacolada.skills.skills.special.traits.PTrait_AttackType;
 import pinacolada.skills.skills.special.traits.PTrait_CardTarget;
 
-public abstract class PTrait<T extends PField> extends PSkill<T> implements PSkillAttribute
+public abstract class PTrait<T extends PField> extends PMove<T>
 {
     protected boolean conditionMetCache;
 

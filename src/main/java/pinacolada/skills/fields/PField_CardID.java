@@ -36,7 +36,7 @@ public class PField_CardID extends PField_CardGeneric
         return new PField_CardID(this);
     }
 
-    public void setupEditor(PCLCustomCardEffectEditor editor)
+    public void setupEditor(PCLCustomCardEffectEditor<?> editor)
     {
         editor.registerPile(groupTypes);
         editor.registerCard(cardIDs);

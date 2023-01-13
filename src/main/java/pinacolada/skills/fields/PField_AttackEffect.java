@@ -22,7 +22,7 @@ public class PField_AttackEffect extends PField
         return (PField_AttackEffect) new PField_AttackEffect().setAttackEffect(attackEffect);
     }
 
-    public void setupEditor(PCLCustomCardEffectEditor editor)
+    public void setupEditor(PCLCustomCardEffectEditor<?> editor)
     {
         editor.registerDropdown(AttackEffects.keys(), EUIUtils.list(attackEffect), Enum::name, PGR.core.strings.cardEditor.attackEffect, false);
         super.setupEditor(editor);

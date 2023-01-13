@@ -51,7 +51,7 @@ public class PField_CardGeneric extends PField
         return new PField_CardGeneric(this);
     }
 
-    public void setupEditor(PCLCustomCardEffectEditor editor)
+    public void setupEditor(PCLCustomCardEffectEditor<?> editor)
     {
         editor.registerPile(groupTypes);
         super.setupEditor(editor);

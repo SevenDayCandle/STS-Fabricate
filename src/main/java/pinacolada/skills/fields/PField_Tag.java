@@ -24,7 +24,7 @@ public class PField_Tag extends PField_Random
         return (PField_Tag) new PField_Tag().setTag(tags).setRandom(random);
     }
 
-    public void setupEditor(PCLCustomCardEffectEditor editor)
+    public void setupEditor(PCLCustomCardEffectEditor<?> editor)
     {
         editor.registerTag(tags);
         super.setupEditor(editor);

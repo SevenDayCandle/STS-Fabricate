@@ -23,7 +23,7 @@ public class PField_RelicID extends PField_Random
     }
 
     // TODO custom dropdown for relics
-    public void setupEditor(PCLCustomCardEffectEditor editor)
+    public void setupEditor(PCLCustomCardEffectEditor<?> editor)
     {
         super.setupEditor(editor);
     }

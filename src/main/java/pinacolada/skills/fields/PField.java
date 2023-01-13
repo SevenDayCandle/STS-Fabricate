@@ -35,7 +35,7 @@ public abstract class PField implements Serializable
     }
 
     // Enables selectors for modifying this objects fields to appear in the card editor
-    public void setupEditor(PCLCustomCardEffectEditor editor)
+    public void setupEditor(PCLCustomCardEffectEditor<?> editor)
     {
 
     }

@@ -24,7 +24,7 @@ public class PField_Affinity extends PField_Random
         return new PField_Affinity().setAffinity(affinities).setRandom(random);
     }
 
-    public void setupEditor(PCLCustomCardEffectEditor editor)
+    public void setupEditor(PCLCustomCardEffectEditor<?> editor)
     {
         editor.registerAffinity(affinities);
         super.setupEditor(editor);

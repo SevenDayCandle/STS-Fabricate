@@ -25,7 +25,7 @@ public class PField_Or extends PField_Not
         return this;
     }
 
-    public void setupEditor(PCLCustomCardEffectEditor editor)
+    public void setupEditor(PCLCustomCardEffectEditor<?> editor)
     {
         super.setupEditor(editor);
         editor.registerBoolean(PGR.core.strings.cardEditor.orCondition, v -> or = v, or);

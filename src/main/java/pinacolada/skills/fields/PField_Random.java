@@ -25,7 +25,7 @@ public class PField_Random extends PField
         return this;
     }
 
-    public void setupEditor(PCLCustomCardEffectEditor editor)
+    public void setupEditor(PCLCustomCardEffectEditor<?> editor)
     {
         editor.registerBoolean(PGR.core.strings.cardEditor.random, v -> random = v, random);
     }

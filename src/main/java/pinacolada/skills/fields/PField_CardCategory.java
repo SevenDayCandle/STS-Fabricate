@@ -63,7 +63,7 @@ public class PField_CardCategory extends PField_CardID
         return new PField_CardCategory(this);
     }
 
-    public void setupEditor(PCLCustomCardEffectEditor editor)
+    public void setupEditor(PCLCustomCardEffectEditor<?> editor)
     {
         editor.registerPile(groupTypes);
         editor.registerRarity(rarities);

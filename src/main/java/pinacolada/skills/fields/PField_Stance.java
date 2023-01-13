@@ -25,7 +25,7 @@ public class PField_Stance extends PField_Random
         return (PField_Stance) new PField_Stance().setStance(stances).setRandom(random);
     }
 
-    public void setupEditor(PCLCustomCardEffectEditor editor)
+    public void setupEditor(PCLCustomCardEffectEditor<?> editor)
     {
         editor.registerStance(stances);
         super.setupEditor(editor);

@@ -25,7 +25,7 @@ public class PField_AttackType extends PField_Random
         return (PField_AttackType) new PField_AttackType().setAttackType(attackTypes).setRandom(random);
     }
 
-    public void setupEditor(PCLCustomCardEffectEditor editor)
+    public void setupEditor(PCLCustomCardEffectEditor<?> editor)
     {
         editor.registerDropdown(Arrays.asList(PCLAttackType.values()), attackTypes, t -> t.getTooltip().getTitleOrIcon(), PGR.core.strings.cardEditor.attackType, true);
         super.setupEditor(editor);

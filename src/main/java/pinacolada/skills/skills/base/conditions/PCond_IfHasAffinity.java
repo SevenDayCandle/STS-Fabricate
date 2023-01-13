@@ -3,7 +3,6 @@ package pinacolada.skills.skills.base.conditions;
 import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
-import pinacolada.interfaces.markers.PSkillAttribute;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
@@ -12,7 +11,7 @@ import pinacolada.skills.PTrigger;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.fields.PField_CardCategory;
 
-public class PCond_IfHasAffinity extends PCond<PField_CardCategory> implements PSkillAttribute
+public class PCond_IfHasAffinity extends PCond<PField_CardCategory>
 {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_IfHasAffinity.class, PField_CardCategory.class)
             .selfTarget();

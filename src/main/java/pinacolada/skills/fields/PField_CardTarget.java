@@ -25,7 +25,7 @@ public class PField_CardTarget extends PField_Random
         return (PField_CardTarget) new PField_CardTarget().setCardTarget(cardTargets).setRandom(random);
     }
 
-    public void setupEditor(PCLCustomCardEffectEditor editor)
+    public void setupEditor(PCLCustomCardEffectEditor<?> editor)
     {
         editor.registerDropdown(Arrays.asList(PCLCardTarget.values()), cardTargets, PCLCardTarget::getTitle, PGR.core.strings.cardEditor.cardTarget, true);
         super.setupEditor(editor);

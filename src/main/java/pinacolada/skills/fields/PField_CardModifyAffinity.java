@@ -54,7 +54,7 @@ public class PField_CardModifyAffinity extends PField_CardCategory
         return this;
     }
 
-    public void setupEditor(PCLCustomCardEffectEditor editor)
+    public void setupEditor(PCLCustomCardEffectEditor<?> editor)
     {
         editor.registerPile(groupTypes);
         editor.registerAffinity(addAffinities);
