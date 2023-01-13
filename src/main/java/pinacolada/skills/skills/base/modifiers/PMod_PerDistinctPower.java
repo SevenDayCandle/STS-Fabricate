@@ -75,7 +75,7 @@ public class PMod_PerDistinctPower extends PMod<PField_Power>
     }
 
     @Override
-    public int getModifiedAmount(PSkill be, PCLUseInfo info)
+    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info)
     {
         List<AbstractCreature> targetList = getTargetList(info);
         return fields.powers.isEmpty() ? be.baseAmount * EUIUtils.sumInt(targetList, t -> EUIUtils.count(t.powers, po -> po.type == AbstractPower.PowerType.DEBUFF)) :

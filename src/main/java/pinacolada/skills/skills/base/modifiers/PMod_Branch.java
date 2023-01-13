@@ -87,7 +87,7 @@ public abstract class PMod_Branch<T extends PField, U> extends PMod<T>
         use(info);
     }
 
-    public final int getModifiedAmount(PSkill be, PCLUseInfo info)
+    public final int getModifiedAmount(PSkill<?> be, PCLUseInfo info)
     {
         return be.baseAmount;
     }

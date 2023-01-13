@@ -35,277 +35,277 @@ public abstract class PMod<T extends PField> extends PSkill<T>
                 .setExtra(-1, DEFAULT_MAX);
     }
 
-    public static PMod bonusInStance(int amount, PCLStanceHelper s)
+    public static PMod_BonusInStance bonusInStance(int amount, PCLStanceHelper s)
     {
         return new PMod_BonusInStance(amount, s);
     }
 
-    public static PMod bonusOnDiscarded(int amount)
+    public static PMod_BonusOnHasDiscarded bonusOnDiscarded(int amount)
     {
         return new PMod_BonusOnHasDiscarded(amount);
     }
 
-    public static PMod bonusOnDiscarded(int amount, int count)
+    public static PMod_BonusOnHasDiscarded bonusOnDiscarded(int amount, int count)
     {
         return new PMod_BonusOnHasDiscarded(amount, count);
     }
 
-    public static PMod bonusOnExhausted(int amount)
+    public static PMod_BonusOnHasExhausted bonusOnExhausted(int amount)
     {
         return new PMod_BonusOnHasExhausted(amount);
     }
 
-    public static PMod bonusOnExhausted(int amount, int count)
+    public static PMod_BonusOnHasExhausted bonusOnExhausted(int amount, int count)
     {
         return new PMod_BonusOnHasExhausted(amount, count);
     }
 
-    public static PMod bonusOnStarter(int amount)
+    public static PMod_BonusOnStarter bonusOnStarter(int amount)
     {
         return new PMod_BonusOnStarter(amount);
     }
 
-    public static PMod bonusPerLevel(int amount, PCLAffinity... aff)
+    public static PMod_BonusPerAffinityLevel bonusPerLevel(int amount, PCLAffinity... aff)
     {
         return new PMod_BonusPerAffinityLevel(amount, aff);
     }
 
-    public static PMod bonusPerOrb(int amount, PCLOrbHelper... aff)
+    public static PMod_BonusPerOrb bonusPerOrb(int amount, PCLOrbHelper... aff)
     {
         return new PMod_BonusPerOrb(amount, aff);
     }
 
-    public static PMod cyclePer(int amount)
+    public static PMod_CyclePerCard cyclePer(int amount)
     {
         return new PMod_CyclePerCard(amount);
     }
 
-    public static PMod cycleRandomPer(int amount)
+    public static PMod_CyclePerCard cycleRandomPer(int amount)
     {
-        return (PMod) new PMod_CyclePerCard(amount).edit(f -> f.setRandom(true));
+        return (PMod_CyclePerCard) new PMod_CyclePerCard(amount).edit(f -> f.setRandom(true));
     }
 
-    public static PMod discardBranch(int amount, PCLCardGroupHelper... groups)
+    public static PMod_DiscardBranch discardBranch(int amount, PCLCardGroupHelper... groups)
     {
         return new PMod_DiscardBranch(amount, groups);
     }
 
-    public static PMod discardPer(int amount, PCLCardGroupHelper... groups)
+    public static PMod_DiscardPerCard discardPer(int amount, PCLCardGroupHelper... groups)
     {
         return new PMod_DiscardPerCard(amount, groups);
     }
 
-    public static PMod discardRandomPer(int amount, PCLCardGroupHelper... groups)
+    public static PMod_DiscardPerCard discardRandomPer(int amount, PCLCardGroupHelper... groups)
     {
-        return (PMod) new PMod_DiscardPerCard(amount, groups).edit(f -> f.setRandom(true));
+        return (PMod_DiscardPerCard) new PMod_DiscardPerCard(amount, groups).edit(f -> f.setRandom(true));
     }
 
-    public static PMod drawBranch(int amount)
+    public static PMod_DrawBranch drawBranch(int amount)
     {
         return new PMod_DrawBranch(amount);
     }
 
-    public static PMod drawPer(int amount)
+    public static PMod_DrawPerCard drawPer(int amount)
     {
         return new PMod_DrawPerCard(amount);
     }
 
-    public static PMod exhaustPer(int amount, PCLCardGroupHelper... groups)
+    public static PMod_ExhaustPerCard exhaustPer(int amount, PCLCardGroupHelper... groups)
     {
         return new PMod_ExhaustPerCard(amount, groups);
     }
 
-    public static PMod exhaustRandomPer(int amount, PCLCardGroupHelper... groups)
+    public static PMod_ExhaustPerCard exhaustRandomPer(int amount, PCLCardGroupHelper... groups)
     {
-        return (PMod) new PMod_ExhaustPerCard(amount, groups).edit(f -> f.setRandom(true));
+        return (PMod_ExhaustPerCard) new PMod_ExhaustPerCard(amount, groups).edit(f -> f.setRandom(true));
     }
 
-    public static PMod evokePerOrb(int amount, PCLOrbHelper... aff)
+    public static PMod_EvokePerOrb evokePerOrb(int amount, PCLOrbHelper... aff)
     {
         return new PMod_EvokePerOrb(amount, aff);
     }
 
-    public static PMod fetchPer(int amount, PCLCardGroupHelper... groups)
+    public static PMod_FetchPerCard fetchPer(int amount, PCLCardGroupHelper... groups)
     {
         return new PMod_FetchPerCard(amount, groups);
     }
 
-    public static PMod fetchRandomPer(int amount, PCLCardGroupHelper... groups)
+    public static PMod_FetchPerCard fetchRandomPer(int amount, PCLCardGroupHelper... groups)
     {
-        return (PMod) new PMod_FetchPerCard(amount, groups).edit(f -> f.setRandom(true));
+        return (PMod_FetchPerCard) new PMod_FetchPerCard(amount, groups).edit(f -> f.setRandom(true));
     }
 
-    public static PMod highestAffinityBranch(PCLAffinity... groups)
+    public static PMod_HighestAffinityBranch highestAffinityBranch(PCLAffinity... groups)
     {
         return new PMod_HighestAffinityBranch(groups);
     }
 
-    public static PMod increaseOnUse(int amount)
+    public static PMod_IncreaseOnUse increaseOnUse(int amount)
     {
         return new PMod_IncreaseOnUse(amount);
     }
 
-    public static PMod payXEnergy()
+    public static PMod_PerEnergy payXEnergy()
     {
-        return (PMod) new PMod_PerEnergy().edit(f -> f.setNot(true));
+        return (PMod_PerEnergy) new PMod_PerEnergy().edit(f -> f.setNot(true));
     }
 
-    public static PMod perCard(PCLCardGroupHelper... groups)
+    public static PMod_PerCard perCard(PCLCardGroupHelper... groups)
     {
         return perCard(1, groups);
     }
 
-    public static PMod perCard(int amount, PCLCardGroupHelper... groups)
+    public static PMod_PerCard perCard(int amount, PCLCardGroupHelper... groups)
     {
         return new PMod_PerCard(amount, groups);
     }
 
-    public static PMod perCardExhausted(int amount)
+    public static PMod_PerCardExhausted perCardExhausted(int amount)
     {
         return new PMod_PerCardExhausted(amount);
     }
 
-    public static PMod perCardPlayed(int amount)
+    public static PMod_PerCardPlayed perCardPlayed(int amount)
     {
         return new PMod_PerCardPlayed(amount);
     }
 
-    public static PMod perCardPlayedCombat(int amount)
+    public static PMod_PerCardPlayedCombat perCardPlayedCombat(int amount)
     {
         return new PMod_PerCardPlayedCombat(amount);
     }
 
-    public static PMod perCreatureAttacking(int amount)
+    public static PMod_PerCreatureAttacking perCreatureAttacking(int amount)
     {
         return new PMod_PerCreatureAttacking(amount);
     }
 
-    public static PMod perCreatureWith(int amount, PCLPowerHelper... powers)
+    public static PMod_PerCreatureWith perCreatureWith(int amount, PCLPowerHelper... powers)
     {
         return new PMod_PerCreatureWith(amount, powers);
     }
 
-    public static PMod perDistinctPower(PCLPowerHelper... powers)
+    public static PMod_PerDistinctPower perDistinctPower(PCLPowerHelper... powers)
     {
         return perDistinctPower(1, powers);
     }
 
-    public static PMod perDistinctPower(int amount, PCLPowerHelper... powers)
+    public static PMod_PerDistinctPower perDistinctPower(int amount, PCLPowerHelper... powers)
     {
         return new PMod_PerDistinctPower(amount, powers);
     }
 
-    public static PMod perDistinctPower(PCLCardTarget target, int amount, PCLPowerHelper... powers)
+    public static PMod_PerDistinctPower perDistinctPower(PCLCardTarget target, int amount, PCLPowerHelper... powers)
     {
         return new PMod_PerDistinctPower(target, amount, powers);
     }
 
-    public static PMod perEnergy(int amount)
+    public static PMod_PerEnergy perEnergy(int amount)
     {
-        return (PMod) new PMod_PerEnergy(amount);
+        return new PMod_PerEnergy(amount);
     }
 
-    public static PMod perLevel(int amount, PCLAffinity... aff)
+    public static PMod_PerAffinityLevel perLevel(int amount, PCLAffinity... aff)
     {
         return new PMod_PerAffinityLevel(amount, aff);
     }
 
-    public static PMod perOrb(PCLOrbHelper... orbs)
+    public static PMod_PerOrb perOrb(PCLOrbHelper... orbs)
     {
         return perOrb(1, orbs);
     }
 
-    public static PMod perOrb(int amount, PCLOrbHelper... orbs)
+    public static PMod_PerOrb perOrb(int amount, PCLOrbHelper... orbs)
     {
         return new PMod_PerOrb(amount, orbs);
     }
 
-    public static PMod perPower(PCLPowerHelper... powers)
+    public static PMod_PerPower perPower(PCLPowerHelper... powers)
     {
         return perPower(1, powers);
     }
 
-    public static PMod perPower(int amount, PCLPowerHelper... powers)
+    public static PMod_PerPower perPower(int amount, PCLPowerHelper... powers)
     {
         return new PMod_PerPower(amount, powers);
     }
 
-    public static PMod perPowerAny(PCLPowerHelper... powers)
+    public static PMod_PerPower perPowerAny(PCLPowerHelper... powers)
     {
         return perPowerAny(1, powers);
     }
 
-    public static PMod perPowerAny(int amount, PCLPowerHelper... powers)
+    public static PMod_PerPower perPowerAny(int amount, PCLPowerHelper... powers)
     {
-        return (PMod) new PMod_PerPower(amount, powers).setTarget(PCLCardTarget.Any);
+        return (PMod_PerPower) new PMod_PerPower(amount, powers).setTarget(PCLCardTarget.Any);
     }
 
-    public static PMod perPowerAoe(PCLPowerHelper... powers)
+    public static PMod_PerPower perPowerAoe(PCLPowerHelper... powers)
     {
         return perPowerAoe(1, powers);
     }
 
-    public static PMod perPowerAoe(int amount, PCLPowerHelper... powers)
+    public static PMod_PerPower perPowerAoe(int amount, PCLPowerHelper... powers)
     {
-        return (PMod) new PMod_PerPower(amount, powers).setTarget(PCLCardTarget.AllEnemy);
+        return (PMod_PerPower) new PMod_PerPower(amount, powers).setTarget(PCLCardTarget.AllEnemy);
     }
 
-    public static PMod perPowerSelf(PCLPowerHelper... powers)
+    public static PMod_PerPower perPowerSelf(PCLPowerHelper... powers)
     {
         return perPowerSelf(1, powers);
     }
 
-    public static PMod perPowerSelf(int amount, PCLPowerHelper... powers)
+    public static PMod_PerPower perPowerSelf(int amount, PCLPowerHelper... powers)
     {
-        return (PMod) new PMod_PerPower(amount, powers).setTarget(PCLCardTarget.Self);
+        return (PMod_PerPower) new PMod_PerPower(amount, powers).setTarget(PCLCardTarget.Self);
     }
 
-    public static PMod perPowerSingle(PCLPowerHelper... powers)
+    public static PMod_PerPower perPowerSingle(PCLPowerHelper... powers)
     {
         return perPowerSingle(1, powers);
     }
 
-    public static PMod perPowerSingle(int amount, PCLPowerHelper... powers)
+    public static PMod_PerPower perPowerSingle(int amount, PCLPowerHelper... powers)
     {
-        return (PMod) new PMod_PerPower(amount, powers).setTarget(PCLCardTarget.Single);
+        return (PMod_PerPower) new PMod_PerPower(amount, powers).setTarget(PCLCardTarget.Single);
     }
 
-    public static PMod purgePer(int amount, PCLCardGroupHelper... groups)
+    public static PMod_PurgePerCard purgePer(int amount, PCLCardGroupHelper... groups)
     {
         return new PMod_PurgePerCard(amount, groups);
     }
 
-    public static PMod purgeRandomPer(int amount, PCLCardGroupHelper... groups)
+    public static PMod_PurgePerCard purgeRandomPer(int amount, PCLCardGroupHelper... groups)
     {
-        return (PMod) new PMod_PurgePerCard(amount, groups).edit(f -> f.setRandom(true));
+        return (PMod_PurgePerCard) new PMod_PurgePerCard(amount, groups).edit(f -> f.setRandom(true));
     }
 
-    public static PMod reshufflePer(int amount, PCLCardGroupHelper... groups)
+    public static PMod_ReshufflePerCard reshufflePer(int amount, PCLCardGroupHelper... groups)
     {
         return new PMod_ReshufflePerCard(amount, groups);
     }
 
-    public static PMod reshuffleRandomPer(int amount, PCLCardGroupHelper... groups)
+    public static PMod_ReshufflePerCard reshuffleRandomPer(int amount, PCLCardGroupHelper... groups)
     {
-        return (PMod) new PMod_ReshufflePerCard(amount, groups).edit(f -> f.setRandom(true));
+        return (PMod_ReshufflePerCard) new PMod_ReshufflePerCard(amount, groups).edit(f -> f.setRandom(true));
     }
 
-    public static PMod scoutBranch(int amount)
+    public static PMod_ScoutBranch scoutBranch(int amount)
     {
         return new PMod_ScoutBranch(amount);
     }
 
-    public static PMod scoutPer(int amount)
+    public static PMod_ScoutPerCard scoutPer(int amount)
     {
         return new PMod_ScoutPerCard(amount);
     }
 
-    public static PMod scryBranch(int amount)
+    public static PMod_ScryBranch scryBranch(int amount)
     {
         return new PMod_ScryBranch(amount);
     }
 
-    public static PMod scryPer(int amount)
+    public static PMod_ScryPerCard scryPer(int amount)
     {
         return new PMod_ScryPerCard(amount);
     }
@@ -330,7 +330,7 @@ public abstract class PMod<T extends PField> extends PSkill<T>
         super(data, target, amount, extra);
     }
 
-    public int getModifiedAmount(PSkill be, PCLUseInfo info)
+    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info)
     {
         return 0;
     }

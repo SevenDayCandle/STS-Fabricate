@@ -43,7 +43,7 @@ public class PMod_PerPower extends PMod<PField_Power>
     }
 
     @Override
-    public int getModifiedAmount(PSkill be, PCLUseInfo info)
+    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info)
     {
         List<AbstractCreature> targetList = getTargetList(info);
         return fields.powers.isEmpty() ? be.baseAmount *

@@ -30,82 +30,82 @@ public abstract class PTrait<T extends PField> extends PMove<T>
                 .selfTarget();
     }
 
-    public static PTrait hasAffinity(PCLAffinity... tags)
+    public static PTrait_Affinity hasAffinity(PCLAffinity... tags)
     {
         return new PTrait_Affinity(tags);
     }
 
-    public static PTrait hasAffinity(int amount, PCLAffinity... tags)
+    public static PTrait_Affinity hasAffinity(int amount, PCLAffinity... tags)
     {
         return new PTrait_Affinity(amount, tags);
     }
 
-    public static PTrait hasAffinityNot(PCLAffinity... tags)
+    public static PTrait_Affinity hasAffinityNot(PCLAffinity... tags)
     {
         return new PTrait_Affinity(-1, tags);
     }
 
-    public static PTrait hasAttackType(PCLAttackType type)
+    public static PTrait_AttackType hasAttackType(PCLAttackType type)
     {
         return new PTrait_AttackType(type);
     }
 
-    public static PTrait hasBlock(int amount)
+    public static PTrait_Block hasBlock(int amount)
     {
         return new PTrait_Block(amount);
     }
 
-    public static PTrait hasBlockCount(int amount)
+    public static PTrait_BlockCount hasBlockCount(int amount)
     {
         return new PTrait_BlockCount(amount);
     }
 
-    public static PTrait hasBlockMultiplier(int amount)
+    public static PTrait_BlockMultiplier hasBlockMultiplier(int amount)
     {
         return new PTrait_BlockMultiplier(amount);
     }
 
-    public static PTrait hasCardTarget(PCLCardTarget type)
+    public static PTrait_CardTarget hasCardTarget(PCLCardTarget type)
     {
         return new PTrait_CardTarget(type);
     }
 
-    public static PTrait hasCost(int amount)
+    public static PTrait_Cost hasCost(int amount)
     {
         return new PTrait_Cost(amount);
     }
 
-    public static PTrait hasDamage(int amount)
+    public static PTrait_Damage hasDamage(int amount)
     {
         return new PTrait_Damage(amount);
     }
 
-    public static PTrait hasDamageMultiplier(int amount)
+    public static PTrait_DamageMultiplier hasDamageMultiplier(int amount)
     {
         return new PTrait_DamageMultiplier(amount);
     }
 
-    public static PTrait hasHits(int amount)
+    public static PTrait_HitCount hasHits(int amount)
     {
         return new PTrait_HitCount(amount);
     }
 
-    public static PTrait hasTags(PCLCardTag... tags)
+    public static PTrait_Tag hasTags(PCLCardTag... tags)
     {
         return new PTrait_Tag(tags);
     }
 
-    public static PTrait hasTags(int amount, PCLCardTag... tags)
+    public static PTrait_Tag hasTags(int amount, PCLCardTag... tags)
     {
         return new PTrait_Tag(tags);
     }
 
-    public static PTrait hasTagsNot(PCLCardTag... tags)
+    public static PTrait_Tag hasTagsNot(PCLCardTag... tags)
     {
-        return (PTrait) new PTrait_Tag(tags).edit(f -> f.setRandom(true));
+        return (PTrait_Tag) new PTrait_Tag(tags).edit(f -> f.setRandom(true));
     }
 
-    public static PTrait hasTempHP(int amount)
+    public static PTrait_TempHP hasTempHP(int amount)
     {
         return new PTrait_TempHP(amount);
     }

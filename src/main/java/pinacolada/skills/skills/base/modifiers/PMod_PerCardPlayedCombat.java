@@ -56,7 +56,7 @@ public class PMod_PerCardPlayedCombat extends PMod<PField_CardCategory>
     }
 
     @Override
-    public int getModifiedAmount(PSkill be, PCLUseInfo info)
+    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info)
     {
         return be.baseAmount * EUIUtils.count(AbstractDungeon.actionManager.cardsPlayedThisCombat,
                 c -> fields.getFullCardFilter().invoke(c)) / Math.max(1, this.amount);

@@ -456,88 +456,88 @@ public abstract class PMove<T extends PField> extends PSkill<T>
         return new PMove_PlayCopy(copies, target, cardData);
     }
 
-    public static PMove purge(int amount)
+    public static PMove_Purge purge(int amount)
     {
         return new PMove_Purge(amount, PCLCardGroupHelper.Hand);
     }
 
-    public static PMove purge(int amount, PCLCardGroupHelper... groups)
+    public static PMove_Purge purge(int amount, PCLCardGroupHelper... groups)
     {
         return new PMove_Purge(amount, groups);
     }
 
-    public static PMove reduceCooldown(int amount, int cooldown, PCLCardGroupHelper... groups)
+    public static PMove_ReduceCooldown reduceCooldown(int amount, int cooldown, PCLCardGroupHelper... groups)
     {
         return new PMove_ReduceCooldown(amount, cooldown, groups);
     }
 
-    public static PMove remove(PCLCardTarget target, PCLPowerHelper... powers)
+    public static PMove_RemovePower remove(PCLCardTarget target, PCLPowerHelper... powers)
     {
         return new PMove_RemovePower(target, powers);
     }
 
-    public static PMove removeSelf(PCLPowerHelper... powers)
+    public static PMove_RemovePower removeSelf(PCLPowerHelper... powers)
     {
         return new PMove_RemovePower(PCLCardTarget.Self, powers);
     }
 
-    public static PMove reshuffle(int amount)
+    public static PMove_Reshuffle reshuffle(int amount)
     {
         return new PMove_Reshuffle(amount, PCLCardGroupHelper.Hand);
     }
 
-    public static PMove reshuffle(int amount, PCLCardGroupHelper... groups)
+    public static PMove_Reshuffle reshuffle(int amount, PCLCardGroupHelper... groups)
     {
         return new PMove_Reshuffle(amount, groups);
     }
 
-    public static PMove retain(int amount)
+    public static PMove_Retain retain(int amount)
     {
         return new PMove_Retain(amount, PCLCardGroupHelper.Hand);
     }
 
-    public static PMove scout(int amount)
+    public static PMove_Scout scout(int amount)
     {
         return new PMove_Scout(amount);
     }
 
-    public static PMove scry(int amount)
+    public static PMove_Scry scry(int amount)
     {
         return new PMove_Scry(amount);
     }
 
-    public static PMove scry(PCLCard card, PSkill.PCLCardValueSource valueSource)
+    public static PMove_Scry scry(PCLCard card, PSkill.PCLCardValueSource valueSource)
     {
-        return new PMove_Scry(0)
+        return (PMove_Scry) new PMove_Scry(0)
                 .setSource(card, valueSource);
     }
 
-    public static PMove selfExhaust()
+    public static PMove_Exhaust selfExhaust()
     {
         return new PMove_Exhaust();
     }
 
-    public static PMove selfPurge()
+    public static PMove_Purge selfPurge()
     {
         return new PMove_Purge();
     }
 
-    public static PMove selfRetain()
+    public static PMove_Retain selfRetain()
     {
         return new PMove_Retain();
     }
 
-    public static PMove selfTransform(PCLCardData cardData)
+    public static PMove_Transform selfTransform(PCLCardData cardData)
     {
         return new PMove_Transform(cardData.ID);
     }
 
-    public static PMove stabilize(PCLCardTarget target, PCLPowerHelper... helpers)
+    public static PMove_StabilizePower stabilize(PCLCardTarget target, PCLPowerHelper... helpers)
     {
         return new PMove_StabilizePower(target, helpers);
     }
 
-    public static PMove stun(int amount)
+    public static PMove_Stun stun(int amount)
     {
         return new PMove_Stun(amount);
     }
@@ -552,58 +552,58 @@ public abstract class PMove<T extends PField> extends PSkill<T>
         return new PMove_DealDamage(amount, attackEffect, PCLCardTarget.Self);
     }
 
-    public static PMove triggerAlly(int amount)
+    public static PMove_TriggerAlly triggerAlly(int amount)
     {
         return new PMove_TriggerAlly(amount);
     }
 
-    public static PMove triggerAlly(PCLCardTarget target, int amount)
+    public static PMove_TriggerAlly triggerAlly(PCLCardTarget target, int amount)
     {
         return new PMove_TriggerAlly(target, amount);
     }
 
-    public static PMove triggerOrb(int amount, PCLOrbHelper... orb)
+    public static PMove_TriggerOrb triggerOrb(int amount, PCLOrbHelper... orb)
     {
         return new PMove_TriggerOrb(amount, 1, orb);
     }
 
-    public static PMove triggerOrb(int amount, int extra, PCLOrbHelper... orb)
+    public static PMove_TriggerOrb triggerOrb(int amount, int extra, PCLOrbHelper... orb)
     {
         return new PMove_TriggerOrb(amount, extra, orb);
     }
 
-    public static PMove triggerOrb(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLOrbHelper... orb)
+    public static PMove_TriggerOrb triggerOrb(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLOrbHelper... orb)
     {
-        return new PMove_TriggerOrb(0, orb)
+        return (PMove_TriggerOrb) new PMove_TriggerOrb(0, orb)
                 .setSource(card, valueSource);
     }
 
-    public static PMove withdrawAlly(int amount)
+    public static PMove_WithdrawAlly withdrawAlly(int amount)
     {
         return new PMove_WithdrawAlly(amount);
     }
 
-    public static PMove withdrawAlly(PCLCardTarget target, int amount)
+    public static PMove_WithdrawAlly withdrawAlly(PCLCardTarget target, int amount)
     {
         return new PMove_WithdrawAlly(target, amount);
     }
 
     @Override
-    public PMove setAmountFromCard()
+    public PMove<T> setAmountFromCard()
     {
         super.setAmountFromCard();
         return this;
     }
 
     @Override
-    public PMove setSource(PointerProvider card)
+    public PMove<T> setSource(PointerProvider card)
     {
         super.setSource(card);
         return this;
     }
 
     @Override
-    public PMove setSource(PointerProvider card, PCLCardValueSource valueSource)
+    public PMove<T> setSource(PointerProvider card, PCLCardValueSource valueSource)
     {
         super.setSource(card, valueSource);
         return this;

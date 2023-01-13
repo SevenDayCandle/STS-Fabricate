@@ -36,7 +36,7 @@ public class PMod_PerAffinityLevel extends PMod<PField_Affinity>
     }
 
     @Override
-    public int getModifiedAmount(PSkill be, PCLUseInfo info)
+    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info)
     {
         return be.baseAmount * EUIUtils.sumInt(fields.affinities, GameUtilities::getPCLAffinityLevel) / Math.max(1, this.amount);
     }

@@ -48,13 +48,13 @@ public abstract class PLimit extends PPrimary<PField_Empty>
         return new PLimit_SemiLimited();
     }
 
-    public PLimit setChild(PSkill effect)
+    public PLimit setChild(PSkill<?> effect)
     {
         super.setChild(effect);
         return this;
     }
 
-    public PLimit setChild(PSkill... effects)
+    public PLimit setChild(PSkill<?>... effects)
     {
         super.setChild(effects);
         return this;
@@ -112,7 +112,7 @@ public abstract class PLimit extends PPrimary<PField_Empty>
 
     public final boolean checkChild(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
     {
-        return !(this.childEffect instanceof PCond) || this.childEffect instanceof PActionCond || ((PCond) this.childEffect).checkCondition(info, isUsing, fromTrigger);
+        return !(this.childEffect instanceof PCond) || this.childEffect instanceof PActionCond || ((PCond<?>) this.childEffect).checkCondition(info, isUsing, fromTrigger);
     }
 
     public boolean testTry(PCLUseInfo info, boolean isUsing)

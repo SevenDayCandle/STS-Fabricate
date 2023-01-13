@@ -122,7 +122,7 @@ public abstract class PMod_Do extends PMod<PField_CardCategory>
     }
 
     @Override
-    public int getModifiedAmount(PSkill be, PCLUseInfo info)
+    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info)
     {
         ArrayList<AbstractCard> cards = info.getData(new ArrayList<>());
         return cards == null || be == null ? 0 : be.baseAmount * (fields.forced ? cards.size() : (EUIUtils.count(cards,

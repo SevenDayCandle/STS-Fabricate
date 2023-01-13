@@ -213,7 +213,7 @@ public abstract class PCond<T extends PField> extends PSkill<T>
         return new PCond_HP(target, amount);
     }
 
-    public static PMultiCond ifElse(PSkill ef1, PSkill ef2, PCond... conds)
+    public static PMultiCond ifElse(PSkill<?> ef1, PSkill<?> ef2, PCond<?>... conds)
     {
         return (PMultiCond) new PMultiCond().setEffects(conds).setChild(ef1, ef2).setAmount(1);
     }
@@ -268,57 +268,57 @@ public abstract class PCond<T extends PField> extends PSkill<T>
         return (PCond_OnOtherCardPlayed) new PCond_OnOtherCardPlayed().edit(f -> f.setType(cardType));
     }
 
-    public static PCond onOtherCardPlayed(PCLAffinity... aff)
+    public static PCond_OnOtherCardPlayed onOtherCardPlayed(PCLAffinity... aff)
     {
         return (PCond_OnOtherCardPlayed) new PCond_OnOtherCardPlayed().edit(f -> f.setAffinity(aff));
     }
 
-    public static PCond onPurge()
+    public static PCond_OnPurge onPurge()
     {
         return new PCond_OnPurge();
     }
 
-    public static PCond onReshuffle()
+    public static PCond_OnReshuffle onReshuffle()
     {
         return new PCond_OnReshuffle();
     }
 
-    public static PCond onSummon()
+    public static PCond_OnSummon onSummon()
     {
         return new PCond_OnSummon();
     }
 
-    public static PCond onTurnEnd()
+    public static PCond_AtTurnEnd onTurnEnd()
     {
         return new PCond_AtTurnEnd();
     }
 
-    public static PCond onTurnStart()
+    public static PCond_AtTurnStart onTurnStart()
     {
         return new PCond_AtTurnStart();
     }
 
-    public static PCond onWithdraw()
+    public static PCond_OnWithdraw onWithdraw()
     {
         return new PCond_OnWithdraw();
     }
 
-    public static PCond payEnergy(int amount)
+    public static PCond_PayEnergy payEnergy(int amount)
     {
         return new PCond_PayEnergy(amount);
     }
 
-    public static PCond pileHas(int amount, PCLCardGroupHelper... h)
+    public static PCond_PileHas pileHas(int amount, PCLCardGroupHelper... h)
     {
         return new PCond_PileHas(amount, h);
     }
 
-    public static PCond purge(int amount)
+    public static PCond_PurgeTo purge(int amount)
     {
         return new PCond_PurgeTo(amount, PCLCardGroupHelper.Hand);
     }
 
-    public static PCond purge(int amount, PCLCardGroupHelper... h)
+    public static PCond_PurgeTo purge(int amount, PCLCardGroupHelper... h)
     {
         return new PCond_PurgeTo(amount, h);
     }
@@ -333,12 +333,12 @@ public abstract class PCond<T extends PField> extends PSkill<T>
         return (PCond_PurgeTo) new PCond_PurgeTo(amount, h).edit(r -> r.setRandom(true));
     }
 
-    public static PCond reshuffle(int amount)
+    public static PCond_ReshuffleTo reshuffle(int amount)
     {
         return new PCond_ReshuffleTo(amount, PCLCardGroupHelper.Hand);
     }
 
-    public static PCond reshuffle(int amount, PCLCardGroupHelper... h)
+    public static PCond_ReshuffleTo reshuffle(int amount, PCLCardGroupHelper... h)
     {
         return new PCond_ReshuffleTo(amount, h);
     }
@@ -353,7 +353,7 @@ public abstract class PCond<T extends PField> extends PSkill<T>
         return (PCond_ReshuffleTo) new PCond_ReshuffleTo(amount, h).edit(r -> r.setRandom(true));
     }
 
-    public static PCond starter()
+    public static PCond_Starter starter()
     {
         return new PCond_Starter();
     }
@@ -361,40 +361,40 @@ public abstract class PCond<T extends PField> extends PSkill<T>
     public abstract boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger);
 
     @Override
-    public PCond setAmountFromCard()
+    public PCond<T> setAmountFromCard()
     {
         super.setAmountFromCard();
         return this;
     }
 
     @Override
-    public PCond setSource(PointerProvider card)
+    public PCond<T> setSource(PointerProvider card)
     {
         super.setSource(card);
         return this;
     }
 
     @Override
-    public PCond setSource(PointerProvider card, PCLCardValueSource valueSource)
+    public PCond<T> setSource(PointerProvider card, PCLCardValueSource valueSource)
     {
         super.setSource(card, valueSource);
         return this;
     }
 
     @Override
-    public PCond setSource(PointerProvider card, PCLCardValueSource valueSource, PCLCardValueSource extraSource)
+    public PCond<T> setSource(PointerProvider card, PCLCardValueSource valueSource, PCLCardValueSource extraSource)
     {
         super.setSource(card, valueSource, extraSource);
         return this;
     }
 
-    public PCond setChild(PSkill effect)
+    public PCond<T> setChild(PSkill<?> effect)
     {
         super.setChild(effect);
         return this;
     }
 
-    public PCond setChild(PSkill... effects)
+    public PCond<T> setChild(PSkill<?>... effects)
     {
         super.setChild(effects);
         return this;

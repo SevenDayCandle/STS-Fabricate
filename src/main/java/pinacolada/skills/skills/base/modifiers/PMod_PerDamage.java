@@ -30,7 +30,7 @@ public class PMod_PerDamage extends PMod<PField_Empty>
     }
 
     @Override
-    public int getModifiedAmount(PSkill be, PCLUseInfo info)
+    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info)
     {
         return be.baseAmount * (sourceCard != null ? sourceCard.damage : 0) / Math.max(1, this.amount);
     }

@@ -54,7 +54,7 @@ public class PMod_PerCard extends PMod<PField_CardCategory>
     }
 
     @Override
-    public int getModifiedAmount(PSkill be, PCLUseInfo info)
+    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info)
     {
         return be.baseAmount *
                 EUIUtils.sumInt(fields.groupTypes, g -> EUIUtils.count(g.getCards(),

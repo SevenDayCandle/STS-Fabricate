@@ -65,7 +65,7 @@ public class PMod_PerEnergy extends PMod<PField_Not>
     }
 
     @Override
-    public int getModifiedAmount(PSkill be, PCLUseInfo info)
+    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info)
     {
         return be.baseAmount * GameUtilities.getXCostEnergy(sourceCard, fields.not) / Math.max(1, this.amount);
     }

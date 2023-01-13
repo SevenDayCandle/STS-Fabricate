@@ -40,7 +40,7 @@ public class PMod_PerCreatureAttacking extends PMod<PField_Empty>
     }
 
     @Override
-    public int getModifiedAmount(PSkill be, PCLUseInfo info)
+    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info)
     {
         List<AbstractCreature> targetList = getTargetList(info);
         return be.baseAmount * EUIUtils.count(targetList, GameUtilities::isAttacking);

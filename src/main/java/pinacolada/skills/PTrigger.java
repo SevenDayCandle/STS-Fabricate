@@ -42,37 +42,37 @@ public abstract class PTrigger extends PPrimary<PField_Not>
         this.usesThisTurn = this.amount;
     }
 
-    public static PTrigger interactAny(PSkill... effects)
+    public static PTrigger interactAny(PSkill<?>... effects)
     {
         return chain(new PTrigger_Interactable(), effects).setAmount(-1);
     }
 
-    public static PTrigger interactable(PSkill... effects)
+    public static PTrigger interactable(PSkill<?>... effects)
     {
         return chain(new PTrigger_Interactable(), effects);
     }
 
-    public static PTrigger interactable(int amount, PSkill... effects)
+    public static PTrigger interactable(int amount, PSkill<?>... effects)
     {
         return chain(new PTrigger_Interactable(amount), effects);
     }
 
-    public static PTrigger interactablePerCombat(int amount, PSkill... effects)
+    public static PTrigger interactablePerCombat(int amount, PSkill<?>... effects)
     {
         return chain((PTrigger) new PTrigger_Interactable(amount).edit(f -> f.setNot(true)), effects);
     }
 
-    public static PTrigger passive(PSkill... effects)
+    public static PTrigger passive(PSkill<?>... effects)
     {
         return chain(new PTrigger_Passive(), effects);
     }
 
-    public static PTrigger when(PSkill... effects)
+    public static PTrigger when(PSkill<?>... effects)
     {
         return chain(new PTrigger_When(), effects);
     }
 
-    public static PTrigger when(int perTurn, PSkill... effects)
+    public static PTrigger when(int perTurn, PSkill<?>... effects)
     {
         return chain(new PTrigger_When().setAmount(perTurn), effects);
     }
@@ -92,7 +92,7 @@ public abstract class PTrigger extends PPrimary<PField_Not>
         return modifyDamage(EUIUtils.safeCast(card, PCLCard.class), EUIUtils.safeCast(owner, AbstractMonster.class), damage);
     }
 
-    public PTrigger chain(PSkill... effects)
+    public PTrigger chain(PSkill<?>... effects)
     {
         return PSkill.chain(this, effects);
     }
@@ -139,13 +139,13 @@ public abstract class PTrigger extends PPrimary<PField_Not>
         return this;
     }
 
-    public PTrigger setChild(PSkill effect)
+    public PTrigger setChild(PSkill<?> effect)
     {
         super.setChild(effect);
         return this;
     }
 
-    public PTrigger setChild(PSkill... effects)
+    public PTrigger setChild(PSkill<?>... effects)
     {
         super.setChild(effects);
         return this;
@@ -383,7 +383,7 @@ public abstract class PTrigger extends PPrimary<PField_Not>
         return this;
     }
 
-    public PTrigger stack(PSkill other)
+    public PTrigger stack(PSkill<?> other)
     {
         if (rootAmount > 0 && other.rootAmount > 0)
         {

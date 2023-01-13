@@ -66,7 +66,7 @@ public abstract class PMod_BonusPer<T extends PField> extends PMod<T>
     }
 
     @Override
-    public int getModifiedAmount(PSkill be, PCLUseInfo info)
+    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info)
     {
         return be.baseAmount + (multiplier(info) * amount);
     }

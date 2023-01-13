@@ -98,7 +98,7 @@ public class PMod_IncreaseOnUse extends PMod<PField_Empty>
     }
 
     @Override
-    public int getModifiedAmount(PSkill be, PCLUseInfo info)
+    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info)
     {
         return amount;
     }
