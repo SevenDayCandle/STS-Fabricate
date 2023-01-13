@@ -71,6 +71,7 @@ public class PField_CardCategory extends PField_CardID
         editor.registerAffinity(affinities);
         editor.registerTag(tags);
         editor.registerBoolean(PGR.core.strings.cardEditor.random, v -> random = v, random);
+        editor.registerBoolean(PGR.core.strings.cardEditor.required, v -> forced = v, forced);
     }
 
     public PField_CardCategory addAffinity(PCLAffinity... affinities)

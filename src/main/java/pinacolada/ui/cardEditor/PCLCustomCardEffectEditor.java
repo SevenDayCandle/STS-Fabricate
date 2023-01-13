@@ -37,6 +37,7 @@ import static pinacolada.ui.cardEditor.PCLCustomCardEffectPage.*;
 
 public class PCLCustomCardEffectEditor<T extends PSkill> extends PCLCustomCardEditorPage
 {
+    public static final float CUTOFF = Settings.WIDTH * 0.75f;
     public static final float MAIN_OFFSET = MENU_WIDTH * 1.58f;
     public static final float AUX_OFFSET = MENU_WIDTH * 2.43f;
     protected final PCLCustomCardEffectPage editor;
@@ -400,9 +401,9 @@ public class PCLCustomCardEffectEditor<T extends PSkill> extends PCLCustomCardEd
     {
         float setX = x;
         float end = x + element.hb.width;
-        if (end > Settings.WIDTH)
+        if (end > CUTOFF)
         {
-            additionalHeight += MENU_HEIGHT * 1.25;
+            additionalHeight -= MENU_HEIGHT * 1.5;
             setX = AUX_OFFSET;
             end = AUX_OFFSET + element.hb.width;
         }

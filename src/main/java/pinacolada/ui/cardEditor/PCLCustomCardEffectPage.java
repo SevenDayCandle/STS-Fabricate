@@ -143,7 +143,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
                 .setClickDelay(0.02f);
         choicesEditor = new PCLValueEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 4, MENU_HEIGHT, MENU_WIDTH * 2.5f, 0)
                 , PGR.core.strings.cardEditor.choices, (val) -> {
-                    modifier.setAmount(val);
+                    multiSkill.setAmount(val);
                     constructEffect();
                 })
                 .setTooltip(PGR.core.strings.cardEditor.choices, PGR.core.strings.cardEditorTutorial.effectChoices)
@@ -162,6 +162,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
         repositionItems();
     }
 
+    // Updates the offsets of all editors to avoid overlap (e.g. from adding/removing effects, or adding additional dropdowns from effects)
     protected void repositionItems()
     {
         float offsetY = OFFSET_EFFECT * 2f;
@@ -279,6 +280,8 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
         choicesEditor.setValue(multiSkill.amount, false);
         ifElseToggle.setToggle(multiCond.amount == 1);
         orToggle.setToggle(multiCond.fields.or);
+
+        repositionItems();
     }
 
     @Override
@@ -396,7 +399,6 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
     public static class EffectEditorGroup<T extends PSkill>
     {
         protected ArrayList<T> lowerEffects = new ArrayList<>();
-        protected ArrayList<List<T>> originalEffects = new ArrayList<>();
         protected ArrayList<PCLCustomCardEffectEditor<T>> editors = new ArrayList<>();
         protected final Class<T> className;
         protected final String title;
@@ -409,21 +411,26 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
             this.title = title;
         }
 
+        // Ensure that an editor exists for every subeffect for this card. Should be called after deconstructing the card JSON effect
         public void syncWithLower()
         {
             for (int i = 0; i < lowerEffects.size(); i++)
             {
                 PCLCustomCardEffectEditor<T> effectEditor = new PCLCustomCardEffectEditor<T>(this, new OriginRelativeHitbox(editor.hb, MENU_WIDTH, MENU_HEIGHT, 0, 0), i);
                 editors.add(effectEditor);
-                originalEffects.add(effectEditor.effects.getAllItems());
             }
         }
 
+        // Add a subeffect to this joint effect, and select the first effect in the list to prevent the user from saving a null effect
         public void addEffectSlot()
         {
             lowerEffects.add(null);
-            editors.add(new PCLCustomCardEffectEditor<T>(this, new OriginRelativeHitbox(editor.hb, MENU_WIDTH, MENU_HEIGHT, 0, 0), editors.size()));
-            editor.repositionItems();
+            PCLCustomCardEffectEditor<T> effectEditor = new PCLCustomCardEffectEditor<T>(this, new OriginRelativeHitbox(editor.hb, MENU_WIDTH, MENU_HEIGHT, 0, 0), editors.size());
+            editors.add(effectEditor);
+            if (effectEditor.effects.size() > 0)
+            {
+                effectEditor.effects.setSelectedIndex(0);
+            }
             editor.refresh();
         }
 
@@ -437,10 +444,9 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
                 // Update editor indexes to reflect changes in the effects
                 for (int i = 0; i < editors.size(); i++)
                 {
-                    editors.get(i).index = i;
+                    editors.get(i).updateIndex(i);
                 }
 
-                editor.repositionItems();
                 editor.refresh();
             }
         }
@@ -450,7 +456,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
             for (PCLCustomCardEffectEditor<T> editor : editors)
             {
                 editor.hb.setOffsetY(offsetY);
-                offsetY += OFFSET_EFFECT * 2;
+                offsetY += OFFSET_EFFECT * 2 + editor.getAdditionalHeight();
             }
             return offsetY;
         }

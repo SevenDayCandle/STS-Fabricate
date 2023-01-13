@@ -170,8 +170,9 @@ public class PCLCoreStrings extends PCLStrings
         public final String createRandom = strings.TEXT[55];
         public final String importExisting = strings.TEXT[56];
         public final String openFolder = strings.TEXT[57];
-        public final String random = strings.TEXT[58];
-        public final String required = strings.TEXT[59];
+        public final String exportCSV = strings.TEXT[58];
+        public final String random = strings.TEXT[59];
+        public final String required = strings.TEXT[60];
     }
 
     public class Misc
