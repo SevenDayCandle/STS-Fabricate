@@ -28,9 +28,9 @@ public abstract class PLimit extends PPrimary<PField_Empty>
 {
     protected boolean limitCache = false;
 
-    public PLimit(PSkillSaveData content)
+    public PLimit(PSkillData<PField_Empty> data, PSkillSaveData content)
     {
-        super(content);
+        super(data, content);
     }
 
     public PLimit(PSkillData<PField_Empty> data)

@@ -23,7 +23,7 @@ public class PMod_RetainBranch extends PMod_DoBranch
 
     public PMod_RetainBranch(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMod_RetainBranch()

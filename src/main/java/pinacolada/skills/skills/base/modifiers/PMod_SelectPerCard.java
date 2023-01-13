@@ -23,7 +23,7 @@ public class PMod_SelectPerCard extends PMod_Do
 
     public PMod_SelectPerCard(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMod_SelectPerCard()

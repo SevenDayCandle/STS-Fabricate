@@ -17,7 +17,7 @@ public class PMod_BonusPerOrb extends PMod_BonusPer<PField_Orb>
 
     public PMod_BonusPerOrb(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMod_BonusPerOrb()

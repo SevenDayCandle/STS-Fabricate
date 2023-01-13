@@ -14,9 +14,9 @@ import java.util.List;
 
 public abstract class PMod_BonusOnHas extends PMod_BonusOn<PField_CardCategory>
 {
-    public PMod_BonusOnHas(PSkillSaveData content)
+    public PMod_BonusOnHas(PSkillData<PField_CardCategory> data, PSkillSaveData content)
     {
-        super(content);
+        super(data, content);
     }
 
     public PMod_BonusOnHas(PSkillData<PField_CardCategory> data)

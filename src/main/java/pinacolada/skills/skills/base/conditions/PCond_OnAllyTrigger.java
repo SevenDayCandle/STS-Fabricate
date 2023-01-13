@@ -21,7 +21,7 @@ public class PCond_OnAllyTrigger extends PCond_Delegate
 
     public PCond_OnAllyTrigger(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     @Override

@@ -18,7 +18,7 @@ public class PMove_AddLevel extends PMove<PField_Affinity>
 
     public PMove_AddLevel(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_AddLevel(int amount, PCLAffinity... stance)

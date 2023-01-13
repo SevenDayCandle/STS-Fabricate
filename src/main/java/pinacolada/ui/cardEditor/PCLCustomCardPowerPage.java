@@ -25,7 +25,7 @@ public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
     protected ArrayList<EUIButton> quickAddButtons = new ArrayList<>();
 
 
-    public PCLCustomCardPowerPage(PCLCustomCardEditCardScreen screen, PSkill effect, EUIHitbox hb, int index, String title, ActionT1<PSkill> onUpdate)
+    public PCLCustomCardPowerPage(PCLCustomCardEditCardScreen screen, PSkill<?> effect, EUIHitbox hb, int index, String title, ActionT1<PSkill<?>> onUpdate)
     {
         super(screen, effect, hb, index, title, onUpdate);
         delayEditor.setActive(false);
@@ -55,8 +55,8 @@ public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
                     .setOnClick(() -> {
                         PCLCustomCardEffectPage effectPage = screen.effectPages.get(finalI);
                         PMove_StackCustomPower powerApplyEffect = null;
-                        PCLCustomCardEffectEditor<PMove> current = null;
-                        for (PCLCustomCardEffectEditor<PMove> editor : effectPage.effectGroup.editors)
+                        PCLCustomCardEffectEditor<PMove<?>> current = null;
+                        for (PCLCustomCardEffectEditor<PMove<?>> editor : effectPage.effectGroup.editors)
                         {
                             current = editor;
                             powerApplyEffect = (PMove_StackCustomPower) EUIUtils.find(current.effects.getCurrentItems(), e -> e instanceof PMove_StackCustomPower);

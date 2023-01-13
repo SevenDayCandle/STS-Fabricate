@@ -20,7 +20,7 @@ public class PCond_EvokeOrb extends PCond<PField_Orb>
 
     public PCond_EvokeOrb(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PCond_EvokeOrb()

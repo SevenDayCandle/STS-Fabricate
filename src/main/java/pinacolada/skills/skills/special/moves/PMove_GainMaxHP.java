@@ -20,7 +20,7 @@ public class PMove_GainMaxHP extends PMove_Gain implements Hidden
 
     public PMove_GainMaxHP(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_GainMaxHP(int amount)

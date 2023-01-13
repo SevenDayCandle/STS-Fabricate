@@ -61,7 +61,7 @@ public class PCLCharacterSelectProvider implements RunAttributesProvider
 
         final float size = Settings.scale * 36;
 
-        for (PCLResources resources : PGR.getAllResources())
+        for (PCLResources<?,?,?> resources : PGR.getAllResources())
         {
             UnlockTrackerPatches.validate(resources);
         }

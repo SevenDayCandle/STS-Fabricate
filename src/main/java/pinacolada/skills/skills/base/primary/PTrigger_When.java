@@ -16,7 +16,7 @@ public class PTrigger_When extends PTrigger
 
     public PTrigger_When(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     @Override

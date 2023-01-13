@@ -22,7 +22,7 @@ public class PMod_CyclePerCard extends PMod_Do
 
     public PMod_CyclePerCard(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMod_CyclePerCard()

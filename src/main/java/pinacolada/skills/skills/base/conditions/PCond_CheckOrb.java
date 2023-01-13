@@ -18,7 +18,7 @@ public class PCond_CheckOrb extends PCond<PField_Orb>
 
     public PCond_CheckOrb(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PCond_CheckOrb(int amount, PCLOrbHelper... orb)

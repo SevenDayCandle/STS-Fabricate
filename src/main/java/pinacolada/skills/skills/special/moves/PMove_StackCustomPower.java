@@ -29,7 +29,7 @@ public class PMove_StackCustomPower extends PMove<PField_CustomPower> implements
 
     public PMove_StackCustomPower(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_StackCustomPower(PCLCardTarget target, int amount, Integer... indexes)

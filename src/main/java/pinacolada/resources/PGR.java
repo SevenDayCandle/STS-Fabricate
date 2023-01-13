@@ -28,13 +28,13 @@ public class PGR
     public static final String PREFIX_POWERS = "pinacolada.powers.";
     public static final String PREFIX_RELIC = "pinacolada.relics.";
 
-    protected static final HashMap<AbstractCard.CardColor, PCLResources> colorResourceMap = new HashMap<>();
-    protected static final HashMap<AbstractPlayer.PlayerClass, PCLResources> playerResourceMap = new HashMap<>();
+    protected static final HashMap<AbstractCard.CardColor, PCLResources<?,?,?>> colorResourceMap = new HashMap<>();
+    protected static final HashMap<AbstractPlayer.PlayerClass, PCLResources<?,?,?>> playerResourceMap = new HashMap<>();
 
     public static PCLCoreResources core;
     public static boolean simpleModePreview;
 
-    public static void registerResource(PCLResources resources)
+    public static void registerResource(PCLResources<?,?,?> resources)
     {
         if (core == null)
         {
@@ -92,13 +92,13 @@ public class PGR
 
     public static CharacterStrings getCharacterStrings(AbstractCard.CardColor cardColor)
     {
-        PCLResources resources = colorResourceMap.getOrDefault(cardColor, null);
+        PCLResources<?,?,?> resources = colorResourceMap.getOrDefault(cardColor, null);
         return resources != null ? resources.getCharacterStrings() : null;
     }
 
     public static CharacterStrings getCharacterStrings(AbstractPlayer.PlayerClass player)
     {
-        PCLResources resources = playerResourceMap.getOrDefault(player, null);
+        PCLResources<?,?,?> resources = playerResourceMap.getOrDefault(player, null);
         return resources != null ? resources.getCharacterStrings() : null;
     }
 
@@ -142,17 +142,17 @@ public class PGR
         return getResources(playerClass).data;
     }
 
-    public static Collection<PCLResources> getAllResources()
+    public static Collection<PCLResources<?,?,?>> getAllResources()
     {
         return colorResourceMap.values();
     }
 
-    public static PCLResources getResources(AbstractCard.CardColor cardColor)
+    public static PCLResources<?,?,?> getResources(AbstractCard.CardColor cardColor)
     {
         return colorResourceMap.getOrDefault(cardColor, core);
     }
 
-    public static PCLResources getResources(AbstractPlayer.PlayerClass playerClass)
+    public static PCLResources<?,?,?> getResources(AbstractPlayer.PlayerClass playerClass)
     {
         return playerResourceMap.getOrDefault(playerClass, core);
     }
@@ -209,7 +209,7 @@ public class PGR
         initialize(core);
     }
 
-    protected static void initialize(PCLResources resources)
+    protected static void initialize(PCLResources<?,?,?> resources)
     {
         resources.initializeInternal();
         resources.initializeColor();

@@ -13,7 +13,7 @@ public class PMod_BonusOnMatch extends PMod_BonusOn<PField_Empty>
 
     public PMod_BonusOnMatch(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMod_BonusOnMatch()

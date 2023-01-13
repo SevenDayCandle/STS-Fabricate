@@ -20,7 +20,7 @@ public class PMove_NoBlock extends PMove<PField_Empty>
 
     public PMove_NoBlock(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_NoBlock(int amount)

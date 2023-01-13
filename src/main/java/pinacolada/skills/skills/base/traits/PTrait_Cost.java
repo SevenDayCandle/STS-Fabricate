@@ -20,7 +20,7 @@ public class PTrait_Cost extends PTrait<PField_Empty>
 
     public PTrait_Cost(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PTrait_Cost(int amount)

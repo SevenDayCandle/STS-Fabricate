@@ -21,7 +21,7 @@ public class PMod_IncreaseOnUse extends PMod<PField_Empty>
 
     public PMod_IncreaseOnUse(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMod_IncreaseOnUse()

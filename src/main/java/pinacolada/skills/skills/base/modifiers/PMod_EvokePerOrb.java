@@ -21,7 +21,7 @@ public class PMod_EvokePerOrb extends PMod<PField_Orb>
 
     public PMod_EvokePerOrb(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMod_EvokePerOrb()

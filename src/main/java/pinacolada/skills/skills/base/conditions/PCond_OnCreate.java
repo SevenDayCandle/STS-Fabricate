@@ -19,7 +19,7 @@ public class PCond_OnCreate extends PCond_Delegate
 
     public PCond_OnCreate(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     @Override

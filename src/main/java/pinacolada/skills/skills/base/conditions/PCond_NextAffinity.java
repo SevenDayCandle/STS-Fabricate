@@ -18,7 +18,7 @@ public class PCond_NextAffinity extends PCond<PField_Affinity>
 
     public PCond_NextAffinity(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PCond_NextAffinity()

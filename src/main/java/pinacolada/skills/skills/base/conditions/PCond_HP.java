@@ -19,7 +19,7 @@ public class PCond_HP extends PCond<PField_Not>
 
     public PCond_HP(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PCond_HP()

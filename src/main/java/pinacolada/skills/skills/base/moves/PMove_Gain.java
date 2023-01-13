@@ -9,9 +9,9 @@ import pinacolada.skills.fields.PField_Empty;
 
 public abstract class PMove_Gain extends PMove<PField_Empty>
 {
-    public PMove_Gain(PSkillSaveData content)
+    public PMove_Gain(PSkillData<PField_Empty> data, PSkillSaveData content)
     {
-        super(content);
+        super(data, content);
     }
 
     public PMove_Gain(PSkillData<PField_Empty> data, int amount)

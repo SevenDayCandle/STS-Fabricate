@@ -21,7 +21,7 @@ public class PMod_PerDamage extends PMod<PField_Empty>
 
     public PMod_PerDamage(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMod_PerDamage(int amount)

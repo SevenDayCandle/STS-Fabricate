@@ -20,7 +20,7 @@ public class PTrait_BlockMultiplier extends PTrait<PField_Empty>
 
     public PTrait_BlockMultiplier(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PTrait_BlockMultiplier(int amount)

@@ -21,7 +21,7 @@ public class PMove_GainBlock extends PMove<PField_Empty>
 
     public PMove_GainBlock(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_GainBlock(int amount)

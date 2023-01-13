@@ -19,7 +19,7 @@ public class PMove_GainGold extends PMove_Gain
 
     public PMove_GainGold(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_GainGold(int amount)

@@ -22,7 +22,7 @@ public class PMove_TriggerOrb extends PMove<PField_Orb>
 
     public PMove_TriggerOrb(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_TriggerOrb(int amount, PCLOrbHelper... orb)

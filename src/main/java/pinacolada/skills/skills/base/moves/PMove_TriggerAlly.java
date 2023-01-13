@@ -23,7 +23,7 @@ public class PMove_TriggerAlly extends PMove<PField_Empty>
 
     public PMove_TriggerAlly(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_TriggerAlly(int amount)

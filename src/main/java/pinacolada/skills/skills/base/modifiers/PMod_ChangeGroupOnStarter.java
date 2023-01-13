@@ -14,7 +14,7 @@ public class PMod_ChangeGroupOnStarter extends PMod_ChangeGroup
 
     public PMod_ChangeGroupOnStarter(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMod_ChangeGroupOnStarter()

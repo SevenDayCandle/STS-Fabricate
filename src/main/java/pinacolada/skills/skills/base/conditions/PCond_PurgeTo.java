@@ -25,7 +25,7 @@ public class PCond_PurgeTo extends PCond_DoTo
 
     public PCond_PurgeTo(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PCond_PurgeTo(int amount, PCLCardGroupHelper... h)

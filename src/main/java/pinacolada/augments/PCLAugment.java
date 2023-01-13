@@ -30,7 +30,7 @@ public abstract class PCLAugment implements TooltipProvider
 
     public PCLAugmentData data;
     public String ID;
-    public PSkill skill;
+    public PSkill<?> skill;
     public PCLCard card;
 
     public PCLAugment(PCLAugmentData data)
@@ -38,7 +38,7 @@ public abstract class PCLAugment implements TooltipProvider
         this(data, data.skill);
     }
 
-    public PCLAugment(PCLAugmentData data, PSkill skill)
+    public PCLAugment(PCLAugmentData data, PSkill<?> skill)
     {
         this.data = data;
         this.ID = data.ID;

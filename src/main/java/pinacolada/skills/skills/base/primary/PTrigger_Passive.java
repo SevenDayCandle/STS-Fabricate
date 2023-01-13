@@ -17,7 +17,7 @@ public class PTrigger_Passive extends PTrigger
 
     public PTrigger_Passive(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PTrigger_Passive(int maxUses)

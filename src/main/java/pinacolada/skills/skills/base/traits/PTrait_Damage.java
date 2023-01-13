@@ -19,7 +19,7 @@ public class PTrait_Damage extends PTrait<PField_Empty>
 
     public PTrait_Damage(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PTrait_Damage(int amount)

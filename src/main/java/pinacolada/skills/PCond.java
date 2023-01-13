@@ -28,9 +28,9 @@ public abstract class PCond<T extends PField> extends PSkill<T>
     public static final int SPECIAL_CONDITION_PRIORITY = 0;
     protected boolean conditionMetCache = false;
 
-    public PCond(PSkillSaveData content)
+    public PCond(PSkillData<T> data, PSkillSaveData content)
     {
-        super(content);
+        super(data, content);
     }
 
     public PCond(PSkillData<T> data)

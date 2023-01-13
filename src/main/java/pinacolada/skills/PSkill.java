@@ -56,7 +56,7 @@ import java.util.stream.Collectors;
 public abstract class PSkill<T extends PField> implements TooltipProvider
 {
     public static final String EFFECT_SEPARATOR = LocalizedStrings.PERIOD + " ";
-    private static final HashMap<String, PSkillData> EFFECT_MAP = new HashMap<>();
+    private static final HashMap<String, PSkillData<? extends PField>> EFFECT_MAP = new HashMap<>();
     private static final TypeToken<PSkillSaveData> TToken = new TypeToken<PSkillSaveData>() {};
     private static final TypeToken<ArrayList<String>> TStringToken = new TypeToken<ArrayList<String>>() {};
     private static final String PREFIX_EFFECTS = "pinacolada.skills.skills";
@@ -86,7 +86,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
     public PCLCardTarget target = PCLCardTarget.None;
     public PCLCardValueSource amountSource = PCLCardValueSource.None;
     public PCLCardValueSource extraSource = PCLCardValueSource.None;
-    public PSkill parent;
+    public PSkill<?> parent;
     public ActionT3<PSkill<T>, Integer, Integer> customUpgrade; // Callback for customizing upgrading properties
     public boolean useParent;
     public boolean displayUpgrades;
@@ -98,25 +98,25 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
     public int rootExtra = baseExtra;
     public int[] upgrade = new int[]{0};
     public int[] upgradeExtra = new int[]{0};
-    protected PSkill childEffect;
+    protected PSkill<?> childEffect;
 
-    public PSkill(PSkillSaveData data)
+    public PSkill(PSkillData<T> data, PSkillSaveData saveData)
     {
-        this.effectID = data.effectID;
-        this.data = getData(this.effectID);
-        this.target = PCLCardTarget.valueOf(data.target);
-        this.amountSource = PCLCardValueSource.valueOf(data.valueSource);
-        this.rootAmount = this.baseAmount = this.amount = data.amount;
-        this.rootExtra = this.baseExtra = this.extra = data.extra;
-        this.upgrade = data.upgrade;
-        this.upgradeExtra = data.upgradeExtra;
-        this.fields = EUIUtils.deserialize(data.effectData, this.data.fieldType);
+        this.effectID = saveData.effectID;
+        this.data = data;
+        this.target = PCLCardTarget.valueOf(saveData.target);
+        this.amountSource = PCLCardValueSource.valueOf(saveData.valueSource);
+        this.rootAmount = this.baseAmount = this.amount = saveData.amount;
+        this.rootExtra = this.baseExtra = this.extra = saveData.extra;
+        this.upgrade = saveData.upgrade;
+        this.upgradeExtra = saveData.upgradeExtra;
+        this.fields = EUIUtils.deserialize(saveData.effectData, this.data.fieldType);
         this.fields.skill = this;
-        this.useParent = data.useParent;
+        this.useParent = saveData.useParent;
 
-        if (data.children != null)
+        if (saveData.children != null)
         {
-            this.childEffect = PSkill.get(data.children);
+            this.childEffect = PSkill.get(saveData.children);
             if (this.childEffect != null)
             {
                 this.childEffect.parent = this;
@@ -138,7 +138,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
     {
         this.data = data;
         this.fields = this.data.instantiateField();
-        this.fields.skill = this;
+        if (this.fields != null)
+        {
+            this.fields.skill = this;
+        }
         this.effectID = this.data.ID;
         this.target = target;
         this.rootAmount = this.baseAmount = this.amount = amount;
@@ -150,10 +153,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return can ? StringUtils.capitalize(base) : base;
     }
 
-    public static <V extends PSkill> V chain(V first, PSkill... next)
+    public static <V extends PSkill<?>> V chain(V first, PSkill<?>... next)
     {
-        PSkill current = first;
-        for (PSkill ef : next)
+        PSkill<?> current = first;
+        for (PSkill<?> ef : next)
         {
             if (current != null)
             {
@@ -164,20 +167,21 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return first;
     }
 
-    public static String createFullID(Class<? extends PSkill> type)
+    public static String createFullID(Class<? extends PSkill<?>> type)
     {
         return PGR.core.createID(type.getSimpleName());
     }
 
-    public static PSkill get(String serializedString)
+    public static PSkill<?> get(String serializedString)
     {
         try
         {
-            PSkillSaveData data = EUIUtils.deserialize(serializedString, TToken.getType());
-            Constructor<? extends PSkill> c = EUIUtils.tryGetConstructor(EFFECT_MAP.get(data.effectID).effectClass, PSkillSaveData.class);
+            PSkillSaveData saveData = EUIUtils.deserialize(serializedString, TToken.getType());
+            PSkillData<?> skillData = EFFECT_MAP.get(saveData.effectID);
+            Constructor<? extends PSkill<?>> c = EUIUtils.tryGetConstructor(skillData.effectClass, PSkillSaveData.class);
             if (c != null)
             {
-                return c.newInstance(data);
+                return c.newInstance(skillData, saveData);
             }
         }
         catch (Exception e)
@@ -189,7 +193,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return null;
     }
 
-    public static Collection<PSkillData> getAllClasses()
+    public static Collection<PSkillData<?>> getAllClasses()
     {
         return EFFECT_MAP.values();
     }
@@ -199,22 +203,27 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return EFFECT_MAP.keySet();
     }
 
-    public static PSkillData getData(String id)
+    public static PSkillData<?> getData(String id)
     {
         return EFFECT_MAP.get(id);
     }
 
-    public static List<String> getEffectTexts(Collection<? extends PSkill> effects, boolean addPeriod)
+    public static List<String> getEffectTexts(Collection<? extends PSkill<?>> effects, boolean addPeriod)
     {
         return EUIUtils.mapAsNonnull(effects, e -> e.getText(addPeriod));
     }
 
-    public static <U extends PSkill> List<PSkillData> getEligibleClasses(AbstractCard.CardColor co, Class<U> targetClass)
+    public static List<PSkillData<? extends PField>> getEligibleClasses(AbstractCard.CardColor co)
+    {
+        return EUIUtils.filter(getAllClasses(), d -> d.isColorCompatible(co));
+    }
+
+    public static <U extends PSkill<?>> List<PSkillData<?>> getEligibleClasses(AbstractCard.CardColor co, Class<U> targetClass)
     {
         return EUIUtils.filter(getAllClasses(), d -> targetClass.isAssignableFrom(d.effectClass) && d.isColorCompatible(co));
     }
 
-    public static <U extends PSkill> List<U> getEligibleEffects(AbstractCard.CardColor co, Class<U> targetClass)
+    public static <U extends PSkill<?>> List<U> getEligibleEffects(AbstractCard.CardColor co, Class<U> targetClass)
     {
         return EUIUtils.mapAsNonnull(getEligibleClasses(co, targetClass), cl -> {
             // Do not show composite or hidden effects in the effect editor
@@ -222,12 +231,12 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
             {
                 return null;
             }
-            Constructor<? extends U> c = EUIUtils.tryGetConstructor(cl.effectClass);
+            Constructor<? extends PSkill<?>> c = EUIUtils.tryGetConstructor(cl.effectClass);
             if (c != null)
             {
                 try
                 {
-                    return c.newInstance();
+                    return (U) c.newInstance();
                 }
                 catch (InstantiationException | IllegalAccessException | InvocationTargetException e)
                 {
@@ -241,19 +250,14 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
                 .collect(Collectors.toList());
     }
 
-    public static List<PCLCardGroupHelper> getEligiblePiles(PSkill e)
+    public static List<PCLCardGroupHelper> getEligiblePiles(PSkill<?> e)
     {
         return e != null ? e.getEligiblePiles() : new ArrayList<>();
     }
 
-    public static List<PCLCardTarget> getEligibleTargets(PSkill e)
+    public static List<PCLCardTarget> getEligibleTargets(PSkill<?> e)
     {
         return e != null ? e.getEligibleTargets() : new ArrayList<>();
-    }
-
-    public static String idOf(PSkillData data)
-    {
-        return data != null ? data.ID : null;
     }
 
     // Each ID must be called at least once for it to appear in the card editor
@@ -267,7 +271,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
                 Class<?> name = Class.forName(s);
                 if (!Modifier.isAbstract(name.getModifiers()))
                 {
-                    PSkillData data = ReflectionHacks.getPrivateStatic(name, "DATA");
+                    PSkillData<?> data = ReflectionHacks.getPrivateStatic(name, "DATA");
                     EUIUtils.logInfoIfDebug(PSkill.class, "Adding effect " + data.ID);
                 }
             }
@@ -308,17 +312,17 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return items.size() > 0 ? EUIUtils.serialize(EUIUtils.mapAsNonnull(items, stringFunction), TStringToken.getType()) : null;
     }
 
-    public static String joinEffectTexts(Collection<? extends PSkill> effects)
+    public static String joinEffectTexts(Collection<? extends PSkill<?>> effects)
     {
         return joinEffectTexts(effects, EUIUtils.SPLIT_LINE, true);
     }
 
-    public static String joinEffectTexts(Collection<? extends PSkill> effects, boolean addPeriod)
+    public static String joinEffectTexts(Collection<? extends PSkill<?>> effects, boolean addPeriod)
     {
         return joinEffectTexts(effects, EUIUtils.SPLIT_LINE, addPeriod);
     }
 
-    public static String joinEffectTexts(Collection<? extends PSkill> effects, String delimiter, boolean addPeriod)
+    public static String joinEffectTexts(Collection<? extends PSkill<?>> effects, String delimiter, boolean addPeriod)
     {
         return EUIUtils.joinStrings(delimiter, getEffectTexts(effects, addPeriod));
     }
@@ -361,13 +365,13 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return null;
     }
 
-    public PSkill addAmountForCombat(int amount)
+    public PSkill<T> addAmountForCombat(int amount)
     {
         this.baseAmount = this.amount = MathUtils.clamp(this.amount + amount, data != null ? data.minAmount : 0, data != null ? data.maxAmount : DEFAULT_MAX);
         return this;
     }
 
-    public PSkill addExtraForCombat(int amount)
+    public PSkill<T> addExtraForCombat(int amount)
     {
         this.baseExtra = this.extra = MathUtils.clamp(this.amount + amount, data != null ? data.minExtra : DEFAULT_EXTRA_MIN, data != null ? data.maxExtra : DEFAULT_MAX);
         return this;
@@ -525,7 +529,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return CHAR_OFFSET;
     }
 
-    public final PSkill getChild()
+    public final PSkill<?> getChild()
     {
         return this.childEffect;
     }
@@ -720,7 +724,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return parent != null ? parent.getParentString() : this.getParentString();
     }
 
-    public final PSkill getLowestChild()
+    public final PSkill<?> getLowestChild()
     {
         if (this.childEffect != null)
         {
@@ -744,7 +748,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return source != null ? source.getName() : "";
     }
 
-    public final PSkill getParent()
+    public final PSkill<?> getParent()
     {
         return parent;
     }
@@ -931,12 +935,14 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return amount;
     }
 
+    // Necessary because we need to pass in class names, which are not reified
+    @SuppressWarnings("rawtypes")
     public final boolean hasParentType(Class<? extends PSkill> parentType)
     {
         return parentType.isInstance(this) || (parent != null && parent.hasParentType(parentType));
     }
 
-    public final boolean hasSameProperties(PSkill other)
+    public final boolean hasSameProperties(PSkill<?> other)
     {
         return effectID.equals(other.effectID) && fields.equals(other.fields);
     }
@@ -966,6 +972,11 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return hasParentType(PTrigger.class) && !hasParentType(PTrigger_Interactable.class) && !(parent != null && parent.hasParentType(PCond.class));
     }
 
+    /*
+        Make a copy of this skill with copies of its properties
+        Suppressing rawtype warning because we cannot reify the constructor class any further
+    */
+    @SuppressWarnings("rawtypes")
     public PSkill<T> makeCopy()
     {
         PSkill<T> copy = null;
@@ -1193,7 +1204,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return this;
     }
 
-    public PSkill<T> setChild(PSkill effect)
+    public PSkill<T> setChild(PSkill<?> effect)
     {
         this.childEffect = effect;
         if (effect != null)
@@ -1203,7 +1214,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return this;
     }
 
-    public PSkill<T> setChild(PSkill... effects)
+    public PSkill<T> setChild(PSkill<?>... effects)
     {
         this.childEffect = new PMultiSkill(effects);
         this.childEffect.parent = this;
@@ -1308,7 +1319,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return this;
     }
 
-    public PSkill<T> stack(PSkill other)
+    public PSkill<T> stack(PSkill<?> other)
     {
         if (rootAmount > 0 && other.rootAmount > 0)
         {

@@ -23,7 +23,7 @@ public class PMod_DrawBranch extends PMod_DoBranch
 
     public PMod_DrawBranch(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMod_DrawBranch()

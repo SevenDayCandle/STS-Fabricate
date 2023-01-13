@@ -24,7 +24,7 @@ public class PCond_MatchCombo extends PCond<PField_Not>
 
     public PCond_MatchCombo(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PCond_MatchCombo(int amount)

@@ -27,7 +27,7 @@ public class PMove_EnterStance extends PMove<PField_Stance>
 
     public PMove_EnterStance(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_EnterStance(PCLStanceHelper... stance)

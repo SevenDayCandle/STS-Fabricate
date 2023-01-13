@@ -22,7 +22,7 @@ public class PCond_Shuffle extends PCond<PField_Empty>
 
     public PCond_Shuffle(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     // This should not activate the child effect when played normally

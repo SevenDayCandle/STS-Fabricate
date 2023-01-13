@@ -21,7 +21,7 @@ public class PCond_OnSummon extends PCond_Delegate
 
     public PCond_OnSummon(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     @Override

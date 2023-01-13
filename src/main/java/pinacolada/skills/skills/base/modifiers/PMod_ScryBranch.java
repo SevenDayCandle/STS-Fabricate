@@ -21,7 +21,7 @@ public class PMod_ScryBranch extends PMod_DoBranch
 
     public PMod_ScryBranch(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMod_ScryBranch()

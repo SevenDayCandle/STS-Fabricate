@@ -16,7 +16,7 @@ public class PCond_CheckEnergy extends PCond<PField_Not>
 
     public PCond_CheckEnergy(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PCond_CheckEnergy()

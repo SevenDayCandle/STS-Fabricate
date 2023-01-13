@@ -22,7 +22,7 @@ public class PMod_DiscardBranch extends PMod_DoBranch
 
     public PMod_DiscardBranch(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMod_DiscardBranch()

@@ -23,7 +23,7 @@ public class PMove_Cycle extends PMove<PField_CardCategory>
 
     public PMove_Cycle(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_Cycle(int amount)

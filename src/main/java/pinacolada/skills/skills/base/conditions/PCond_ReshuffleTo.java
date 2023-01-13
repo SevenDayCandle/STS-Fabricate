@@ -26,7 +26,7 @@ public class PCond_ReshuffleTo extends PCond_DoTo
 
     public PCond_ReshuffleTo(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PCond_ReshuffleTo(int amount, PCLCardGroupHelper... h)

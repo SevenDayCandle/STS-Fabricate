@@ -19,7 +19,7 @@ public class PMod_PerCard extends PMod<PField_CardCategory>
 
     public PMod_PerCard(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMod_PerCard()

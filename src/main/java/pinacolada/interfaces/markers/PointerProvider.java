@@ -31,21 +31,21 @@ public interface PointerProvider
 
     abstract String getName();
 
-    default PSkill addUseMove(PSkill effect)
+    default PSkill<?> addUseMove(PSkill<?> effect)
     {
-        PSkill added = effect.setSource(this, PSkill.PCLCardValueSource.XValue);
+        PSkill<?> added = effect.setSource(this, PSkill.PCLCardValueSource.XValue);
         getEffects().add(added);
         return added;
     }
 
-    default ArrayList<PSkill> getEffects()
+    default ArrayList<PSkill<?>> getEffects()
     {
         return getSkills().onUseEffects;
     }
 
-    default PSkill addUseMove(PSkill primary, PSkill... effects)
+    default PSkill<?> addUseMove(PSkill<?> primary, PSkill<?>... effects)
     {
-        PSkill added = PSkill.chain(primary, effects).setSource(this, PSkill.PCLCardValueSource.XValue);
+        PSkill<?> added = PSkill.chain(primary, effects).setSource(this, PSkill.PCLCardValueSource.XValue);
         getEffects().add(added);
         return added;
     }
@@ -55,14 +55,14 @@ public interface PointerProvider
         getSkills().clear();
     }
 
-    default PSkill getEffect(int index)
+    default PSkill<?> getEffect(int index)
     {
         return index < getEffects().size() ? getEffects().get(index) : null;
     }
 
     default String getEffectStrings()
     {
-        ArrayList<PSkill> tempEffects = EUIUtils.filter(getFullEffects(), ef -> ef != null && !(ef instanceof PTrait));
+        ArrayList<PSkill<?>> tempEffects = EUIUtils.filter(getFullEffects(), ef -> ef != null && !(ef instanceof PTrait));
         String effectString = EUIUtils.joinStrings(EUIUtils.DOUBLE_SPLIT_LINE, EUIUtils.mapAsNonnull(tempEffects, PSkill::getText));
 
         PMove_DealCardDamage damageMove = getCardDamage();
@@ -94,7 +94,7 @@ public interface PointerProvider
         return effectString;
     }
 
-    default ArrayList<PSkill> getFullEffects()
+    default ArrayList<PSkill<?>> getFullEffects()
     {
         return getEffects();
     } // GetEffects plus any additional temporary effects not attached to Skills
@@ -109,7 +109,7 @@ public interface PointerProvider
         return null;
     }
 
-    default UniqueList<PSkill> getPointers()
+    default UniqueList<PSkill<?>> getPointers()
     {
         return getSkills().effectTextMapping;
     }
@@ -124,7 +124,7 @@ public interface PointerProvider
         return AbstractDungeon.player;
     }
 
-    default PSkill getSubEffect(Character c)
+    default PSkill<?> getSubEffect(Character c)
     {
         return getPointers().get(c - CHAR_OFFSET);
     }
@@ -141,7 +141,7 @@ public interface PointerProvider
             char c = baseString.charAt(i);
             if (c == CONDITION_TOKEN && EUIRenderHelpers.isCharAt(baseString, i + 2, CONDITION_TOKEN))
             {
-                PSkill move = getSubEffect(baseString.charAt(i + 1));
+                PSkill<?> move = getSubEffect(baseString.charAt(i + 1));
                 if (move != null)
                 {
                     sb.append(makeExportString(move.getSubText()));
@@ -150,7 +150,7 @@ public interface PointerProvider
             }
             else if (c == BOUND_TOKEN && EUIRenderHelpers.isCharAt(baseString, i + 3, BOUND_TOKEN))
             {
-                PSkill move = getSubEffect(baseString.charAt(i + 2));
+                PSkill<?> move = getSubEffect(baseString.charAt(i + 2));
                 if (move != null)
                 {
                     String s = move.getExportString(baseString.charAt(i + 1));
@@ -197,7 +197,7 @@ public interface PointerProvider
             char c = baseString.charAt(i);
             if (c == CONDITION_TOKEN && EUIRenderHelpers.isCharAt(baseString, i + 2, CONDITION_TOKEN))
             {
-                PSkill move = getSubEffect(baseString.charAt(i + 1));
+                PSkill<?> move = getSubEffect(baseString.charAt(i + 1));
                 if (move != null)
                 {
                     sb.append(makePowerString(move.getSubText()));
@@ -206,7 +206,7 @@ public interface PointerProvider
             }
             else if (c == BOUND_TOKEN && EUIRenderHelpers.isCharAt(baseString, i + 3, BOUND_TOKEN))
             {
-                PSkill move = getSubEffect(baseString.charAt(i + 2));
+                PSkill<?> move = getSubEffect(baseString.charAt(i + 2));
                 if (move != null)
                 {
                     String s = move.getAttributeString(baseString.charAt(i + 1));
@@ -226,9 +226,9 @@ public interface PointerProvider
         return sb.toString();
     }
 
-    default PSkill tryRemove(int index)
+    default PSkill<?> tryRemove(int index)
     {
-        PSkill toRemove = index < getEffects().size() ? getEffects().get(index) : null;
+        PSkill<?> toRemove = index < getEffects().size() ? getEffects().get(index) : null;
         if (toRemove == null || !toRemove.removable())
         {
             return null;

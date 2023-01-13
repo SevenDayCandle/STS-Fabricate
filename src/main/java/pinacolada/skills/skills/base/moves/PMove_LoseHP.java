@@ -21,7 +21,7 @@ public class PMove_LoseHP extends PMove<PField_Empty>
 
     public PMove_LoseHP(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_LoseHP(int amount)

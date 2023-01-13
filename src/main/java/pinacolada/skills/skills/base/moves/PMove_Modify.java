@@ -15,9 +15,9 @@ import java.util.List;
 
 public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<T>
 {
-    public PMove_Modify(PSkillSaveData content)
+    public PMove_Modify(PSkillData<T> data, PSkillSaveData content)
     {
-        super(content);
+        super(data, content);
     }
 
     public PMove_Modify(PSkillData<T> data, int amount, int extraAmount, PCLCardGroupHelper... groups)

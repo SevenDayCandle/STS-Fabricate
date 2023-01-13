@@ -34,7 +34,7 @@ public class PMove_DealDamage extends PMove<PField_Empty>
 
     public PMove_DealDamage(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
         attackEffect = AbstractGameAction.AttackEffect.valueOf(content.effectData);
     }
 

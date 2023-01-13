@@ -25,7 +25,7 @@ public class PMove_Scry extends PMove_Select
 
     public PMove_Scry(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_Scry(int amount, PCLCardGroupHelper... h)

@@ -24,7 +24,7 @@ public class PTrait_Affinity extends PTrait<PField_Affinity> implements Hidden
 
     public PTrait_Affinity(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PTrait_Affinity(PCLAffinity... affinities)

@@ -7,11 +7,11 @@ import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.resources.PGR;
+import pinacolada.skills.PLimit;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.PActionCond;
-import pinacolada.skills.PLimit;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.List;
@@ -28,7 +28,7 @@ public class PCond_Fatal extends PActionCond<PField_Not>
 
     public PCond_Fatal(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     @Override

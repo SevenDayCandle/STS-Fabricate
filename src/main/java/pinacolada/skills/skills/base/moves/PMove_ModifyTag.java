@@ -23,7 +23,7 @@ public class PMove_ModifyTag extends PMove_Modify<PField_CardModifyTag>
 
     public PMove_ModifyTag(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_ModifyTag(int amount, int extra, PCLCardTag... tags)

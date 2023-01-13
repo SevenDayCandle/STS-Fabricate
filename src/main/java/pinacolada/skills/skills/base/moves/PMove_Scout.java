@@ -25,7 +25,7 @@ public class PMove_Scout extends PMove_Select
 
     public PMove_Scout(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_Scout(int amount, PCLCardGroupHelper... h)

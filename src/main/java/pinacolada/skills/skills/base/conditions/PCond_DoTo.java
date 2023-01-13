@@ -19,9 +19,9 @@ import pinacolada.skills.fields.PField_CardCategory;
 
 public abstract class PCond_DoTo extends PCond<PField_CardCategory>
 {
-    public PCond_DoTo(PSkillSaveData content)
+    public PCond_DoTo(PSkillData<PField_CardCategory> data, PSkillSaveData content)
     {
-        super(content);
+        super(data, content);
     }
 
     public PCond_DoTo(PSkillData<PField_CardCategory> data)

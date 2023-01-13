@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 // Interface to denote that a baseeffect is comprised of multiple effects
-public interface PMultiBase<T extends PSkill>
+public interface PMultiBase<T extends PSkill<?>>
 {
     default PMultiBase<T> addEffect(T newEffect)
     {
@@ -18,7 +18,7 @@ public interface PMultiBase<T extends PSkill>
 
     default void addSubs(AbstractCard c)
     {
-        for (PSkill be : getSubEffects())
+        for (PSkill<?> be : getSubEffects())
         {
             be.onAddToCard(c);
         }
@@ -26,7 +26,7 @@ public interface PMultiBase<T extends PSkill>
 
     default void displayChildUpgrades()
     {
-        for (PSkill be : getSubEffects())
+        for (PSkill<?> be : getSubEffects())
         {
             be.displayUpgrades();
         }
@@ -41,7 +41,7 @@ public interface PMultiBase<T extends PSkill>
 
     default void removeSubs(AbstractCard c)
     {
-        for (PSkill be : getSubEffects())
+        for (PSkill<?> be : getSubEffects())
         {
             be.onRemoveFromCard(c);
         }
@@ -61,9 +61,7 @@ public interface PMultiBase<T extends PSkill>
         return setEffects(Arrays.asList(effects));
     }
 
-    // Intentional usage of generic to allow for subclasses to merge with each other
-    @SuppressWarnings("rawtypes")
-    default PMultiBase stackMulti(PMultiBase other)
+    default PMultiBase<T> stackMulti(PMultiBase<?> other)
     {
         for (int i = 0; i < Math.min(getSubEffects().size(), other.getSubEffects().size()); i++)
         {
@@ -74,11 +72,11 @@ public interface PMultiBase<T extends PSkill>
 
     default void setParentsForChildren()
     {
-        for (PSkill be : getSubEffects())
+        for (PSkill<?> be : getSubEffects())
         {
             if (be != null)
             {
-                be.parent = (PSkill) this;
+                be.parent = (PSkill<?>) this;
             }
         }
     }

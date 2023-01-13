@@ -163,7 +163,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
                 }))
                 .setTooltip(PGR.core.tooltips.unique);
 
-        PCLResources resources = PGR.getResources(effect.currentSlot.slotColor);
+        PCLResources<?,?,?> resources = PGR.getResources(effect.currentSlot.slotColor);
         if (resources != null)
         {
             seriesDropdown.setItems(PCLLoadout.getAll(effect.currentSlot.slotColor));

@@ -25,7 +25,7 @@ public class PMod_ExhaustBranch extends PMod_DoBranch
 
     public PMod_ExhaustBranch(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMod_ExhaustBranch()

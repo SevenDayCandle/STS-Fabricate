@@ -22,7 +22,7 @@ public class PMove_ModifyCost extends PMove_Modify<PField_CardCategory>
 
     public PMove_ModifyCost(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_ModifyCost(int amount, int cost)

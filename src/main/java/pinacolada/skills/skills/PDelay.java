@@ -51,7 +51,7 @@ public class PDelay extends PSkill<PField_Empty>
 
     public PDelay(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PDelay(int amount)

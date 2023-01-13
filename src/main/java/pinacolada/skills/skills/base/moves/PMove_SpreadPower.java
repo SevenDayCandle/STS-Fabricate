@@ -25,7 +25,7 @@ public class PMove_SpreadPower extends PMove<PField_Power>
 
     public PMove_SpreadPower(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_SpreadPower(PCLCardTarget target, PCLPowerHelper... powers)

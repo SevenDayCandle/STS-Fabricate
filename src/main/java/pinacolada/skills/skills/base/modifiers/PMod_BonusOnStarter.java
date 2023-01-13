@@ -13,7 +13,7 @@ public class PMod_BonusOnStarter extends PMod_BonusOn<PField_Empty>
 
     public PMod_BonusOnStarter(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMod_BonusOnStarter()

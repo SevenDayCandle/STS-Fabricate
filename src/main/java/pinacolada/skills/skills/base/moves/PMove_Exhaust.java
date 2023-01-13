@@ -25,7 +25,7 @@ public class PMove_Exhaust extends PMove_Select
 
     public PMove_Exhaust(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_Exhaust(int amount, PCLCardGroupHelper... h)

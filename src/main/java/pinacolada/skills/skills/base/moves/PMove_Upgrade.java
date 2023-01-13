@@ -23,7 +23,7 @@ public class PMove_Upgrade extends PMove_Select
 
     public PMove_Upgrade(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_Upgrade(int amount, PCLCardGroupHelper... h)

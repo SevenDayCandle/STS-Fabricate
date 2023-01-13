@@ -23,7 +23,7 @@ public class PMod_RetainPerCard extends PMod_Do
 
     public PMod_RetainPerCard(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMod_RetainPerCard()

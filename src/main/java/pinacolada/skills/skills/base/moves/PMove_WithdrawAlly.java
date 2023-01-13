@@ -25,7 +25,7 @@ public class PMove_WithdrawAlly extends PMove<PField_Empty>
 
     public PMove_WithdrawAlly(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_WithdrawAlly(int amount)

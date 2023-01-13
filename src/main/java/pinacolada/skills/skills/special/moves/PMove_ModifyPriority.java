@@ -22,7 +22,7 @@ public class PMove_ModifyPriority extends PMove_Modify<PField_CardCategory> impl
 
     public PMove_ModifyPriority(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_ModifyPriority(int amount, int priority)

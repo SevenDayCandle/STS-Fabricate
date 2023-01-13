@@ -33,7 +33,7 @@ public class PMove_Transform extends PMove_Select
 
     public PMove_Transform(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_Transform(int amount, PCLCardGroupHelper... groupHelpers)

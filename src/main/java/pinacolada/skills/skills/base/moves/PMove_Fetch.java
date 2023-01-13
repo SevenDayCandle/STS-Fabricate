@@ -25,7 +25,7 @@ public class PMove_Fetch extends PMove_Select
 
     public PMove_Fetch(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_Fetch(int amount, PCLCardGroupHelper... h)

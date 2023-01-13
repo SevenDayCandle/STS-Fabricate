@@ -20,7 +20,7 @@ public class PTrait_BlockCount extends PTrait<PField_Empty>
 
     public PTrait_BlockCount(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PTrait_BlockCount(int amount)

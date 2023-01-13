@@ -15,9 +15,9 @@ import pinacolada.skills.fields.PField_CardGeneric;
 public abstract class PMod_ChangeGroup extends PMod<PField_CardGeneric>
 {
 
-    public PMod_ChangeGroup(PSkillSaveData content)
+    public PMod_ChangeGroup(PSkillData<PField_CardGeneric> data, PSkillSaveData content)
     {
-        super(content);
+        super(data, content);
     }
 
     public PMod_ChangeGroup(PSkillData<PField_CardGeneric> data)

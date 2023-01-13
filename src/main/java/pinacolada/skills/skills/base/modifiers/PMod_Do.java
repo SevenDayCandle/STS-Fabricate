@@ -26,9 +26,9 @@ import java.util.ArrayList;
 public abstract class PMod_Do extends PMod<PField_CardCategory>
 {
 
-    public PMod_Do(PSkillSaveData content)
+    public PMod_Do(PSkillData<PField_CardCategory> data, PSkillSaveData content)
     {
-        super(content);
+        super(data, content);
     }
 
     public PMod_Do(PSkillData<PField_CardCategory> data)

@@ -36,17 +36,17 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
     public static final float OFFSET_AMOUNT = scale(10);
 
     public final PCLCardBuilder builder;
-    protected PPrimary primaryCond;
+    protected PPrimary<?> primaryCond;
     protected PMultiCond multiCond;
     protected PDelay delayMove;
-    protected PMod modifier; // TODO multi modifier
+    protected PMod<?> modifier; // TODO multi modifier
     protected PMultiSkill multiSkill;
 
-    protected ActionT1<PSkill> onUpdate;
+    protected ActionT1<PSkill<?>> onUpdate;
     protected ArrayList<ActionT0> toRemove = new ArrayList<>();
-    protected EffectEditorGroup<PCond> conditionGroup;
-    protected EffectEditorGroup<PMove> effectGroup;
-    protected EffectEditorGroup<PMod> modifierGroup;
+    protected EffectEditorGroup<PCond<?>> conditionGroup;
+    protected EffectEditorGroup<PMove<?>> effectGroup;
+    protected EffectEditorGroup<PMod<?>> modifierGroup;
     protected EUIButton addCondition;
     protected EUIButton addEffect;
     protected EUIButton addModifier;
@@ -55,17 +55,17 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
     protected EUILabel conditionHeader;
     protected EUILabel effectHeader;
     protected EUILabel modifierHeader;
-    protected EUISearchableDropdown<PPrimary> primaryConditions;
+    protected EUISearchableDropdown<PPrimary<?>> primaryConditions;
     protected EUIToggle ifElseToggle;
     protected EUIToggle orToggle;
     protected int editorIndex;
     protected PCLValueEditor choicesEditor;
     protected PCLValueEditor delayEditor;
-    protected PSkill finalEffect;
+    protected PSkill<?> finalEffect;
     protected PSkill.PCLCardValueSource currentEffectSource = PSkill.PCLCardValueSource.MagicNumber;
 
 
-    public PCLCustomCardEffectPage(PCLCustomCardEditCardScreen screen, PSkill effect, EUIHitbox hb, int index, String title, ActionT1<PSkill> onUpdate)
+    public PCLCustomCardEffectPage(PCLCustomCardEditCardScreen screen, PSkill<?> effect, EUIHitbox hb, int index, String title, ActionT1<PSkill<?>> onUpdate)
     {
         this.builder = screen.getBuilder();
         this.editorIndex = index;
@@ -73,9 +73,9 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
         this.hb = hb;
         this.scrollBar.setPosition(screenW(0.95f), screenH(0.5f));
         this.upperScrollBound = scale(550);
-        this.conditionGroup = new EffectEditorGroup<>(this, PCond.class, PGR.core.strings.cardEditor.condition);
-        this.effectGroup = new EffectEditorGroup<>(this, PMove.class, PGR.core.strings.cardEditor.effect);
-        this.modifierGroup = new EffectEditorGroup<>(this, PMod.class, PGR.core.strings.cardEditor.modifier);
+        this.conditionGroup = new EffectEditorGroup<PCond<?>>(this, PCond.class, PGR.core.strings.cardEditor.condition);
+        this.effectGroup = new EffectEditorGroup<PMove<?>>(this, PMove.class, PGR.core.strings.cardEditor.effect);
+        this.modifierGroup = new EffectEditorGroup<PMod<?>>(this, PMod.class, PGR.core.strings.cardEditor.modifier);
 
         initializeEffects(effect);
 
@@ -84,7 +84,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
                 .setFontScale(0.8f).setColor(Color.LIGHT_GRAY)
                 .setLabel(title);
 
-        primaryConditions = (EUISearchableDropdown<PPrimary>) new EUISearchableDropdown<PPrimary>(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, 0, 0)
+        primaryConditions = (EUISearchableDropdown<PPrimary<?>>) new EUISearchableDropdown<PPrimary<?>>(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, 0, 0)
                 , PSkill::getSampleText)
                 .setOnChange(conditions -> {
                     if (!conditions.isEmpty())
@@ -403,15 +403,16 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
         modifierGroup.render(sb);
     }
 
-    public static class EffectEditorGroup<T extends PSkill>
+    @SuppressWarnings("rawtypes")
+    public static class EffectEditorGroup<T extends PSkill<?>>
     {
         protected ArrayList<T> lowerEffects = new ArrayList<>();
         protected ArrayList<PCLCustomCardEffectEditor<T>> editors = new ArrayList<>();
-        protected final Class<T> className;
+        protected final Class<? extends PSkill> className;
         protected final String title;
         protected final PCLCustomCardEffectPage editor;
 
-        public EffectEditorGroup(PCLCustomCardEffectPage editor, Class<T> className, String title)
+        public EffectEditorGroup(PCLCustomCardEffectPage editor, Class<? extends PSkill> className, String title)
         {
             this.editor = editor;
             this.className = className;
@@ -470,7 +471,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
 
         public List<T> getEffects()
         {
-            return PSkill.getEligibleEffects(editor.builder.cardColor, className);
+            return (List<T>) PSkill.getEligibleEffects(editor.builder.cardColor, className);
         }
 
         public void refresh()

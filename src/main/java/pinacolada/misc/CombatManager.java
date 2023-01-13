@@ -163,13 +163,12 @@ public class CombatManager
     public static boolean canActivateSemiLimited(String id) { return !hasActivatedSemiLimited(id); }
     public static boolean hasActivatedSemiLimited(String id) { return turnData.containsKey(id); }
     public static boolean tryActivateSemiLimited(String id) { return turnData.put(id, 1) == null; }
-    //
     public static boolean canActivateLimited(String id, int cap) { return !hasActivatedLimited(id, cap); }
     public static boolean hasActivatedLimited(String id, int cap) { return combatData.containsKey(id) && (int)combatData.get(id) >= cap; }
-    public static boolean tryActivateLimited(String id, int cap) { return EUIUtils.incrementMapElement(combatData, id) <= cap; }
+    public static boolean tryActivateLimited(String id, int cap) { return incrementMapElement(combatData, id) <= cap; }
     public static boolean canActivateSemiLimited(String id, int cap) { return !hasActivatedSemiLimited(id, cap); }
     public static boolean hasActivatedSemiLimited(String id, int cap) { return turnData.containsKey(id) && (int)turnData.get(id) >= cap; }
-    public static boolean tryActivateSemiLimited(String id, int cap) { return EUIUtils.incrementMapElement(turnData, id) <= cap; }
+    public static boolean tryActivateSemiLimited(String id, int cap) { return incrementMapElement(turnData, id) <= cap; }
 
 
     public static void addAmplifierBonus(String powerID, int multiplier)
@@ -1400,6 +1399,23 @@ public class CombatManager
         {
             PCLActions.bottom.removePower(creature, creature, VigorPower.POWER_ID);
         }
+    }
+
+    // TODO better typing
+    private static int incrementMapElement(Map map, Object key)
+    {
+        return (int) map.compute(key, (k, v) -> v == null ? 1 : (int) v + 1);
+    }
+
+    private static int incrementMapElement(Map map, Object key, int amount)
+    {
+        if (map.containsKey(key))
+        {
+            amount += (int) map.get(key);
+        }
+
+        map.put(key, amount);
+        return amount;
     }
 
     public enum Type

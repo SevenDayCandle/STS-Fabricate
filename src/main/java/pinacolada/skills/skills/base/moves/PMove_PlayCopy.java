@@ -31,7 +31,7 @@ public class PMove_PlayCopy extends PMove<PField_CardID>
 
     public PMove_PlayCopy(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_PlayCopy(int copies, PCLCardTarget target, String... cards)

@@ -27,7 +27,7 @@ public class PMove_ChannelOrb extends PMove<PField_Orb>
 
     public PMove_ChannelOrb(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_ChannelOrb(int amount, PCLOrbHelper... orb)

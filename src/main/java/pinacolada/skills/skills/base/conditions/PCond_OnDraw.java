@@ -19,7 +19,7 @@ public class PCond_OnDraw extends PCond_Delegate
 
     public PCond_OnDraw(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     @Override

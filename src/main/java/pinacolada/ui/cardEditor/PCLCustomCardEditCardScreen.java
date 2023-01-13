@@ -43,7 +43,7 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
     public ArrayList<PCLCardBuilder> tempBuilders;
     public int currentBuilder;
     protected ActionT0 onSave;
-    protected ArrayList<PSkill> currentEffects = new ArrayList<>();
+    protected ArrayList<PSkill<?>> currentEffects = new ArrayList<>();
     protected ArrayList<PTrigger> currentPowers = new ArrayList<>();
     protected ArrayList<EUIButton> pageButtons = new ArrayList<>();
     protected ArrayList<PCLCustomCardEffectPage> effectPages = new ArrayList<>();

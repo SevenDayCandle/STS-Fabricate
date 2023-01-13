@@ -40,7 +40,7 @@ public class PMove_DealCardDamage extends PMove<PField_AttackEffect> implements 
 
     public PMove_DealCardDamage(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_DealCardDamage(PointerProvider card, AbstractGameAction.AttackEffect attackEffect)

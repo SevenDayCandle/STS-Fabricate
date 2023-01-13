@@ -25,7 +25,7 @@ public class PMove_Discard extends PMove_Select
 
     public PMove_Discard(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_Discard(int amount, PCLCardGroupHelper... h)

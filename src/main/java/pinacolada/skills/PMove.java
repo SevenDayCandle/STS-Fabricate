@@ -16,9 +16,9 @@ import pinacolada.stances.PCLStanceHelper;
 public abstract class PMove<T extends PField> extends PSkill<T>
 {
 
-    public PMove(PSkillSaveData content)
+    public PMove(PSkillData<T> data, PSkillSaveData content)
     {
-        super(content);
+        super(data, content);
     }
 
     public PMove(PSkillData<T> data)

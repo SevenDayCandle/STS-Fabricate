@@ -21,9 +21,9 @@ public class PCond_AtTurnStart extends PCond<PField_Empty>
         super(DATA, PCLCardTarget.None, 0);
     }
 
-    public PCond_AtTurnStart(PSkillSaveData content)
+    public PCond_AtTurnStart(PSkillData<PField_Empty> data, PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     // This should not activate the child effect when played normally

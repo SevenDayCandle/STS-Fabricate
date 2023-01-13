@@ -49,12 +49,12 @@ public class TryChooseChoice<T> extends PCLActionWithCallback<ArrayList<ChoiceCa
                 EUIUtils.map(affinities, ChoiceBuilder::affinity));
     }
 
-    public static TryChooseChoice<PCLAffinity> useAffinitySkill(String name, int choices, AbstractCreature source, AbstractCreature target, Collection<PSkill> skills)
+    public static TryChooseChoice<PCLAffinity> useAffinitySkill(String name, int choices, AbstractCreature source, AbstractCreature target, Collection<PSkill<?>> skills)
     {
         return useAffinitySkill(name, choices, -2, source, target, skills);
     }
 
-    public static TryChooseChoice<PCLAffinity> useAffinitySkill(String name, int choices, int cost, AbstractCreature source, AbstractCreature target, Collection<PSkill> skills)
+    public static TryChooseChoice<PCLAffinity> useAffinitySkill(String name, int choices, int cost, AbstractCreature source, AbstractCreature target, Collection<PSkill<?>> skills)
     {
         return new TryChooseChoice<PCLAffinity>(ActionType.CARD_MANIPULATION, name, source, choices, cost,
                 EUIUtils.map(skills, ChoiceBuilder::skillAffinity))
@@ -66,34 +66,34 @@ public class TryChooseChoice<T> extends PCLActionWithCallback<ArrayList<ChoiceCa
                 });
     }
 
-    public static TryChooseChoice<PSkill> useSkill(PCLCardData sourceData, int choices, AbstractCreature source, AbstractCreature target, Collection<PSkill> skills)
+    public static TryChooseChoice<PSkill<?>> useSkill(PCLCardData sourceData, int choices, AbstractCreature source, AbstractCreature target, Collection<PSkill<?>> skills)
     {
         return useSkill(sourceData, choices, -2, source, target, skills);
     }
 
-    public static TryChooseChoice<PSkill> useSkill(PCLCardData sourceData, int choices, int cost, AbstractCreature source, AbstractCreature target, Collection<PSkill> skills)
+    public static TryChooseChoice<PSkill<?>> useSkill(PCLCardData sourceData, int choices, int cost, AbstractCreature source, AbstractCreature target, Collection<PSkill<?>> skills)
     {
-        return new TryChooseChoice<PSkill>(ActionType.CARD_MANIPULATION, sourceData.strings.NAME, source, choices, cost,
+        return new TryChooseChoice<PSkill<?>>(ActionType.CARD_MANIPULATION, sourceData.strings.NAME, source, choices, cost,
                 EUIUtils.map(skills, i -> ChoiceBuilder.skill(sourceData, i)))
                 .addConditionalCallback(choiceCards -> {
-                    for (ChoiceCard<PSkill> card : choiceCards)
+                    for (ChoiceCard<PSkill<?>> card : choiceCards)
                     {
                         card.value.use(new PCLUseInfo(card, source, target));
                     }
                 });
     }
 
-    public static TryChooseChoice<PSkill> useSkillWithTargeting(PCLCardData sourceData, int choices, AbstractCreature source, Collection<PSkill> skills)
+    public static TryChooseChoice<PSkill<?>> useSkillWithTargeting(PCLCardData sourceData, int choices, AbstractCreature source, Collection<PSkill<?>> skills)
     {
         return useSkillWithTargeting(sourceData, choices, -2, source, skills);
     }
 
-    public static TryChooseChoice<PSkill> useSkillWithTargeting(PCLCardData sourceData, int choices, int cost, AbstractCreature source, Collection<PSkill> skills)
+    public static TryChooseChoice<PSkill<?>> useSkillWithTargeting(PCLCardData sourceData, int choices, int cost, AbstractCreature source, Collection<PSkill<?>> skills)
     {
-        return new TryChooseChoice<PSkill>(ActionType.CARD_MANIPULATION, sourceData.strings.NAME, source, choices, cost,
+        return new TryChooseChoice<PSkill<?>>(ActionType.CARD_MANIPULATION, sourceData.strings.NAME, source, choices, cost,
                 EUIUtils.map(skills, i -> ChoiceBuilder.skill(sourceData, i)))
                 .addConditionalCallback(choiceCards -> {
-                    for (ChoiceCard<PSkill> card : choiceCards)
+                    for (ChoiceCard<PSkill<?>> card : choiceCards)
                     {
                         PCLActions.top.selectCreature(card).addCallback(target -> {
                             card.value.use(new PCLUseInfo(card, source, target));

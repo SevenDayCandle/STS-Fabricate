@@ -121,7 +121,7 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         return createFullID(PGR.core, type);
     }
 
-    public static String createFullID(PCLResources resources, Class<? extends PCLPower> type)
+    public static String createFullID(PCLResources<?,?,?> resources, Class<? extends PCLPower> type)
     {
         return resources.createID(type.getSimpleName());
     }

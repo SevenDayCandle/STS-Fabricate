@@ -24,7 +24,7 @@ public class PMove_Play extends PMove_Select
 
     public PMove_Play(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_Play(int amount, PCLCardTarget target, PCLCardGroupHelper... h)

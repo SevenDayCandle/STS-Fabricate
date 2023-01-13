@@ -310,9 +310,9 @@ public abstract class PMod<T extends PField> extends PSkill<T>
         return new PMod_ScryPerCard(amount);
     }
 
-    public PMod(PSkillSaveData content)
+    public PMod(PSkillData<T> data, PSkillSaveData content)
     {
-        super(content);
+        super(data, content);
     }
 
     public PMod(PSkillData<T> data)
@@ -399,7 +399,7 @@ public abstract class PMod<T extends PField> extends PSkill<T>
         }
     }
 
-    public final int updateAmount(PSkill be, PCLUseInfo info)
+    public final int updateAmount(PSkill<?> be, PCLUseInfo info)
     {
         cachedValue = getModifiedAmount(be, info);
         if (extra > 0)
@@ -415,7 +415,7 @@ public abstract class PMod<T extends PField> extends PSkill<T>
         {
             if (this.childEffect instanceof PMultiBase)
             {
-                for (PSkill ce : ((PMultiBase<?>) this.childEffect).getSubEffects())
+                for (PSkill<?> ce : ((PMultiBase<?>) this.childEffect).getSubEffects())
                 {
                     ce.setTemporaryAmount(updateAmount(ce, info));
                 }

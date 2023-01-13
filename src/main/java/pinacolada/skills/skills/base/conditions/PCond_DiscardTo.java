@@ -26,7 +26,7 @@ public class PCond_DiscardTo extends PCond_DoTo
 
     public PCond_DiscardTo(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PCond_DiscardTo(int amount, PCLCardGroupHelper... h)

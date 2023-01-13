@@ -16,7 +16,7 @@ public class PCond_TakeDamage extends PCond<PField_Empty>
 
     public PCond_TakeDamage(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PCond_TakeDamage()

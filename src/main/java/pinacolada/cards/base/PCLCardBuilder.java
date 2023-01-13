@@ -25,7 +25,7 @@ public class PCLCardBuilder extends PCLCardData
 {
     private static final TypeToken<HashMap<Settings.GameLanguage, CardStrings>> TStrings = new TypeToken<HashMap<Settings.GameLanguage, CardStrings>>() {};
     public final HashMap<Settings.GameLanguage, CardStrings> languageMap = new HashMap<>();
-    public final ArrayList<PSkill> moves = new ArrayList<>();
+    public final ArrayList<PSkill<?>> moves = new ArrayList<>();
     public final ArrayList<PTrigger> powers = new ArrayList<>();
     public AbstractGameAction.AttackEffect attackEffect = AbstractGameAction.AttackEffect.NONE;
     public ColoredTexture portraitForeground;
@@ -40,7 +40,7 @@ public class PCLCardBuilder extends PCLCardData
         super(PCLDynamicCard.class, PGR.core, id, null);
     }
 
-    public PCLCardBuilder(String id, PCLResources resources)
+    public PCLCardBuilder(String id, PCLResources<?,?,?> resources)
     {
         super(PCLDynamicCard.class, resources, id, null);
     }
@@ -265,35 +265,35 @@ public class PCLCardBuilder extends PCLCardData
         return this;
     }
 
-    public PCLCardBuilder setPSkill(Iterable<PSkill> currentEffects)
+    public PCLCardBuilder setPSkill(Iterable<PSkill<?>> currentEffects)
     {
         return setPSkill(currentEffects, false, true);
     }
 
-    public PCLCardBuilder setPSkill(Iterable<PSkill> currentEffects, boolean makeCopy, boolean clear)
+    public PCLCardBuilder setPSkill(Iterable<PSkill<?>> currentEffects, boolean makeCopy, boolean clear)
     {
         if (clear)
         {
             moves.clear();
         }
-        for (PSkill be : currentEffects)
+        for (PSkill<?> be : currentEffects)
         {
             addPSkill(be, makeCopy);
         }
         return this;
     }
 
-    public PCLCardBuilder setPSkill(PSkill... effect)
+    public PCLCardBuilder setPSkill(PSkill<?>... effect)
     {
         return setPSkill(Arrays.asList(effect));
     }
 
-    public PCLCardBuilder addPSkill(PSkill effect)
+    public PCLCardBuilder addPSkill(PSkill<?> effect)
     {
         return addPSkill(effect, false);
     }
 
-    public PCLCardBuilder addPSkill(PSkill effect, boolean makeCopy)
+    public PCLCardBuilder addPSkill(PSkill<?> effect, boolean makeCopy)
     {
         if (makeCopy && effect != null)
         {

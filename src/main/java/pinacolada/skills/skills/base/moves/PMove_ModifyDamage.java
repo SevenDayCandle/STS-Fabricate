@@ -19,7 +19,7 @@ public class PMove_ModifyDamage extends PMove_Modify<PField_CardCategory>
 
     public PMove_ModifyDamage(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_ModifyDamage(int amount, int damage, PCLCardGroupHelper... groups)

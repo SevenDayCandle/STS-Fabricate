@@ -22,7 +22,7 @@ public class PCond_HavePlayed extends PCond_Have
 
     public PCond_HavePlayed(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PCond_HavePlayed(int amount)

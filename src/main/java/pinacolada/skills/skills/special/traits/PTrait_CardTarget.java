@@ -24,7 +24,7 @@ public class PTrait_CardTarget extends PTrait<PField_CardTarget> implements Hidd
 
     public PTrait_CardTarget(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PTrait_CardTarget(PCLCardTarget type)

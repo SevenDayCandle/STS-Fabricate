@@ -16,9 +16,9 @@ import java.util.List;
 
 public abstract class PCond_Have extends PCond<PField_CardCategory>
 {
-    public PCond_Have(PSkillSaveData content)
+    public PCond_Have(PSkillData<PField_CardCategory> data, PSkillSaveData content)
     {
-        super(content);
+        super(data, content);
     }
 
     public PCond_Have(PSkillData<PField_CardCategory> data)

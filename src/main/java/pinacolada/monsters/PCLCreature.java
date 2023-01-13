@@ -44,7 +44,7 @@ public abstract class PCLCreature extends CustomMonster implements PointerProvid
         return PCLCreature.register(type, PGR.core);
     }
 
-    protected static PCLCreatureData register(Class<? extends PCLCreature> type, PCLResources resources)
+    protected static PCLCreatureData register(Class<? extends PCLCreature> type, PCLResources<?,?,?> resources)
     {
         return registerData(new PCLCreatureData(type, resources));
     }

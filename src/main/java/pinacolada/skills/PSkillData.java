@@ -67,7 +67,7 @@ public class PSkillData<T extends PField>
     public PSkillData<T> pclOnly()
     {
         colors.add(AbstractCard.CardColor.COLORLESS);
-        for (PCLResources r : PGR.getAllResources())
+        for (PCLResources<?,?,?> r : PGR.getAllResources())
         {
             colors.add(r.cardColor);
         }

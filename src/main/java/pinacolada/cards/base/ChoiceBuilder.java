@@ -5,8 +5,12 @@ import extendedui.utilities.ColoredTexture;
 import pinacolada.cards.pcl.tokens.AffinityToken;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
+import pinacolada.skills.fields.PField;
 import pinacolada.skills.fields.PField_Affinity;
+import pinacolada.skills.fields.PField_CardModifyAffinity;
 import pinacolada.utilities.GameUtilities;
+
+import java.util.List;
 
 public class ChoiceBuilder<T> extends PCLCardBuilder
 {
@@ -25,17 +29,40 @@ public class ChoiceBuilder<T> extends PCLCardBuilder
         return builder;
     }
 
-    public static ChoiceBuilder<PCLAffinity> skillAffinity(PSkill<? extends PField_Affinity> skill)
+    public static ChoiceBuilder<PCLAffinity> skillAffinity(PSkill<?> skill, PCLAffinity affinity)
     {
-        PCLAffinity affinity = skill.fields.affinities.isEmpty() ? PCLAffinity.Star : skill.fields.affinities.get(0);
         return (ChoiceBuilder<PCLAffinity>) ChoiceBuilder.affinity(affinity)
                 .addPSkill(skill)
                 .setTarget(skill.target);
     }
 
-    public static ChoiceBuilder<PSkill> skill(PCLCardData card, PSkill skill)
+
+    public static ChoiceBuilder<PCLAffinity> skillAffinity(PSkill<?> skill)
     {
-        return (ChoiceBuilder<PSkill>) ChoiceBuilder.create(card, skill)
+        PCLAffinity affinity = PCLAffinity.Star;
+        PField fields = skill.fields;
+        if (fields instanceof PField_Affinity)
+        {
+            List<PCLAffinity> affinities = ((PField_Affinity) fields).affinities;
+            if (affinities.size() > 0)
+            {
+                affinity = affinities.get(0);
+            }
+        }
+        else if (fields instanceof PField_CardModifyAffinity)
+        {
+            List<PCLAffinity> affinities = ((PField_CardModifyAffinity) fields).addAffinities;
+            if (affinities.size() > 0)
+            {
+                affinity = affinities.get(0);
+            }
+        }
+        return skillAffinity(skill, affinity);
+    }
+
+    public static ChoiceBuilder<PSkill<?>> skill(PCLCardData card, PSkill<?> skill)
+    {
+        return (ChoiceBuilder<PSkill<?>>) ChoiceBuilder.create(card, skill)
                 .addPSkill(skill)
                 .setTarget(skill.target);
     }

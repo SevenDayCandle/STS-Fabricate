@@ -110,8 +110,8 @@ public abstract class PCLMultiCard extends PCLCard
 
     // Should not use effects directly on it unless its primary skill is disabled
     @Override
-    public ArrayList<PSkill> getFullEffects() {
-        ArrayList<PSkill> original = getEffects();
+    public ArrayList<PSkill<?>> getFullEffects() {
+        ArrayList<PSkill<?>> original = getEffects();
         return original.size() > 0 && original.get(0) instanceof PCLMultiCardMove ? original : super.getFullEffects();
     }
 

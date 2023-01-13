@@ -21,7 +21,7 @@ public class PCond_OnWithdraw extends PCond_Delegate
 
     public PCond_OnWithdraw(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     @Override

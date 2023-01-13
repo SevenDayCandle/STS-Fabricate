@@ -18,7 +18,7 @@ public class PMove_GainOrbSlots extends PMove_Gain
 
     public PMove_GainOrbSlots(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_GainOrbSlots(int amount)

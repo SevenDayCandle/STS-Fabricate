@@ -21,7 +21,7 @@ public class PMove_PermanentUpgrade extends PMove<PField_CardCategory> implement
 
     public PMove_PermanentUpgrade(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_PermanentUpgrade(int amount)

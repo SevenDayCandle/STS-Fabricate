@@ -42,7 +42,7 @@ public class PCLCoreStrings extends PCLStrings
     public CardMods cardMods;
     public GridSelection gridSelection;
 
-    public PCLCoreStrings(PCLResources resources)
+    public PCLCoreStrings(PCLResources<?,?,?> resources)
     {
         super(resources);
     }

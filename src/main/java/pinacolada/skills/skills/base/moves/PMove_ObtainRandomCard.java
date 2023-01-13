@@ -26,7 +26,7 @@ public class PMove_ObtainRandomCard extends PMove<PField_CardCategory>
 
     public PMove_ObtainRandomCard(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_ObtainRandomCard(int copies, PCLCardGroupHelper... gt)

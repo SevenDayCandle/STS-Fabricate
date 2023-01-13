@@ -24,7 +24,7 @@ public class PMove_StackPower extends PMove<PField_Power>
 
     public PMove_StackPower(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_StackPower(PCLCardTarget target, int amount, PCLPowerHelper... powers)

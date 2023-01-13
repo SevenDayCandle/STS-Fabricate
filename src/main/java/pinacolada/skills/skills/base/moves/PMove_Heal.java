@@ -21,7 +21,7 @@ public class PMove_Heal extends PMove<PField_Empty>
 
     public PMove_Heal(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_Heal(int amount)

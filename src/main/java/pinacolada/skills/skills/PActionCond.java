@@ -9,9 +9,9 @@ import pinacolada.skills.fields.PField;
 
 public abstract class PActionCond<T extends PField> extends PCond<T>
 {
-    public PActionCond(PSkillSaveData content)
+    public PActionCond(PSkillData<T> data, PSkillSaveData content)
     {
-        super(content);
+        super(data, content);
     }
 
     public PActionCond(PSkillData<T> data)

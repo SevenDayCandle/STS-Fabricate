@@ -18,7 +18,7 @@ public class PCond_IfHasAffinity extends PCond<PField_CardCategory>
 
     public PCond_IfHasAffinity(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PCond_IfHasAffinity()

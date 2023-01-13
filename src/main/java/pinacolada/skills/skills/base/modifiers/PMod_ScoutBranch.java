@@ -24,7 +24,7 @@ public class PMod_ScoutBranch extends PMod_DoBranch
 
     public PMod_ScoutBranch(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMod_ScoutBranch()

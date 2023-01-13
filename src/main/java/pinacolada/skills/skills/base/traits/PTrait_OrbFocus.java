@@ -20,7 +20,7 @@ public class PTrait_OrbFocus extends PTrait<PField_Empty>
 
     public PTrait_OrbFocus(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PTrait_OrbFocus(int amount)

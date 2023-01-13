@@ -20,10 +20,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTrait>
+public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTrait<?>>
 {
     public static final PSkillData<PField_Empty> DATA = register(PMultiTrait.class, PField_Empty.class, 0, DEFAULT_MAX);
-    protected ArrayList<PTrait> effects = new ArrayList<>();
+    protected ArrayList<PTrait<?>> effects = new ArrayList<>();
 
     public PMultiTrait()
     {
@@ -32,12 +32,12 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
 
     public PMultiTrait(PSkillSaveData content)
     {
-        super(content);
-        effects = EUIUtils.mapAsNonnull(splitJson(content.special), e -> (PTrait) PSkill.get(e));
+        super(DATA, content);
+        effects = EUIUtils.mapAsNonnull(splitJson(content.special), e -> (PTrait<?>) PSkill.get(e));
         setParentsForChildren();
     }
 
-    public PMultiTrait(PTrait... effects)
+    public PMultiTrait(PTrait<?>... effects)
     {
         super(DATA, 0);
         if (target == null)
@@ -48,7 +48,7 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
         setParentsForChildren();
     }
 
-    public static PMultiTrait join(PTrait... effects)
+    public static PMultiTrait join(PTrait<?>... effects)
     {
         return new PMultiTrait(effects);
     }
@@ -59,9 +59,9 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
     }
 
     @Override
-    public PSkill addAmountForCombat(int amount)
+    public PSkill<PField_Empty> addAmountForCombat(int amount)
     {
-        for (PSkill effect : effects)
+        for (PSkill<?> effect : effects)
         {
             effect.addAmountForCombat(amount);
         }
@@ -69,9 +69,9 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
     }
 
     @Override
-    public PSkill addExtraForCombat(int extra)
+    public PSkill<PField_Empty> addExtraForCombat(int extra)
     {
-        for (PSkill effect : effects)
+        for (PSkill<?> effect : effects)
         {
             effect.addExtraForCombat(extra);
         }
@@ -88,7 +88,7 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
     public boolean canPlay(AbstractCard card, AbstractMonster m)
     {
         boolean canPlay = true;
-        for (PSkill be : effects)
+        for (PSkill<?> be : effects)
         {
             canPlay = canPlay & be.canPlay(card, m);
         }
@@ -119,19 +119,20 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
         return EUIUtils.any(effects, PSkill::isDetrimental);
     }
 
-    public PSkill makePreviews(RotatingList<EUICardPreview> previews)
+    public PMultiTrait makePreviews(RotatingList<EUICardPreview> previews)
     {
-        for (PSkill effect : effects)
+        for (PSkill<?> effect : effects)
         {
             effect.makePreviews(previews);
         }
-        return super.makePreviews(previews);
+        super.makePreviews(previews);
+        return this;
     }
 
     @Override
     public float modifyBlock(AbstractCard card, AbstractMonster m, float amount)
     {
-        for (PSkill be : effects)
+        for (PSkill<?> be : effects)
         {
             amount = be.modifyBlock(card, m, amount);
         }
@@ -141,7 +142,7 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
     @Override
     public float modifyDamage(AbstractCard card, AbstractMonster m, float amount)
     {
-        for (PSkill be : effects)
+        for (PSkill<?> be : effects)
         {
             amount = be.modifyDamage(card, m, amount);
         }
@@ -151,7 +152,7 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
     @Override
     public float modifyHitCount(PCLCard card, AbstractMonster m, float amount)
     {
-        for (PSkill be : effects)
+        for (PSkill<?> be : effects)
         {
             amount = be.modifyHitCount(card, m, amount);
         }
@@ -161,7 +162,7 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
     @Override
     public float modifyMagicNumber(AbstractCard card, AbstractMonster m, float amount)
     {
-        for (PSkill be : effects)
+        for (PSkill<?> be : effects)
         {
             amount = be.modifyMagicNumber(card, m, amount);
         }
@@ -171,7 +172,7 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
     @Override
     public float modifyRightCount(PCLCard card, AbstractMonster m, float amount)
     {
-        for (PSkill be : effects)
+        for (PSkill<?> be : effects)
         {
             amount = be.modifyRightCount(card, m, amount);
         }
@@ -189,7 +190,7 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
     @Override
     public void onDrag(AbstractMonster m)
     {
-        for (PSkill effect : effects)
+        for (PSkill<?> effect : effects)
         {
             effect.onDrag(m);
         }
@@ -204,7 +205,7 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
     public PMultiTrait setAmountFromCard()
     {
         super.setAmountFromCard();
-        for (PSkill effect : effects)
+        for (PSkill<?> effect : effects)
         {
             effect.setAmountFromCard();
         }
@@ -215,7 +216,7 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
     public PMultiTrait setSource(PointerProvider card)
     {
         super.setSource(card);
-        for (PSkill effect : effects)
+        for (PSkill<?> effect : effects)
         {
             effect.setSource(card);
         }
@@ -226,7 +227,7 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
     public PMultiTrait setSource(PointerProvider card, PCLCardValueSource source)
     {
         super.setSource(card, source);
-        for (PSkill effect : effects)
+        for (PSkill<?> effect : effects)
         {
             effect.setSource(card, source);
         }
@@ -234,9 +235,9 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
     }
 
     @Override
-    public PSkill setTemporaryAmount(int amount)
+    public PMultiTrait setTemporaryAmount(int amount)
     {
-        for (PSkill effect : effects)
+        for (PSkill<?> effect : effects)
         {
             effect.setTemporaryAmount(amount);
         }
@@ -244,9 +245,9 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
     }
 
     @Override
-    public PSkill setTemporaryExtra(int extra)
+    public PMultiTrait setTemporaryExtra(int extra)
     {
-        for (PSkill effect : effects)
+        for (PSkill<?> effect : effects)
         {
             effect.setTemporaryExtra(extra);
         }
@@ -269,7 +270,7 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
     public PMultiTrait makeCopy()
     {
         PMultiTrait copy = (PMultiTrait) super.makeCopy();
-        for (PTrait effect : effects)
+        for (PTrait<?> effect : effects)
         {
             copy.addEffect(effect.makeCopy());
         }
@@ -287,7 +288,7 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
     @Override
     public void refresh(AbstractCreature m, AbstractCard c, boolean conditionMet)
     {
-        for (PSkill effect : effects)
+        for (PSkill<?> effect : effects)
         {
             effect.refresh(m, c, conditionMet);
         }
@@ -305,29 +306,29 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
         return null;
     }
 
-    public List<PTrait> getSubEffects()
+    public List<PTrait<?>> getSubEffects()
     {
         return effects;
     }
 
-    public PTrait getSubEffect(int index)
+    public PTrait<?> getSubEffect(int index)
     {
         return index < effects.size() ? effects.get(index) : null;
     }
 
-    public PMultiTrait addEffect(PTrait newEffect)
+    public PMultiTrait addEffect(PTrait<?> newEffect)
     {
         this.effects.add(newEffect);
         setParentsForChildren();
         return this;
     }
 
-    public PMultiTrait setEffects(PTrait... effects)
+    public PMultiTrait setEffects(PTrait<?>... effects)
     {
         return setEffects(Arrays.asList(effects));
     }
 
-    public PMultiTrait setEffects(List<PTrait> effects)
+    public PMultiTrait setEffects(List<PTrait<?>> effects)
     {
         this.effects.clear();
         this.effects.addAll(effects);
@@ -336,12 +337,12 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
         return this;
     }
 
-    public PMultiTrait stack(PSkill other)
+    public PMultiTrait stack(PSkill<?> other)
     {
         super.stack(other);
         if (other instanceof PMultiBase)
         {
-            stackMulti((PMultiBase) other);
+            stackMulti((PMultiBase<?>) other);
         }
         return this;
     }

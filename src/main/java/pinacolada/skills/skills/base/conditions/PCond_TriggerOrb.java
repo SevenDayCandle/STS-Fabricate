@@ -19,7 +19,7 @@ public class PCond_TriggerOrb extends PCond<PField_Orb>
 
     public PCond_TriggerOrb(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PCond_TriggerOrb()

@@ -14,7 +14,7 @@ public class PMod_ChangeGroupOnMatch extends PMod_ChangeGroup
 
     public PMod_ChangeGroupOnMatch(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMod_ChangeGroupOnMatch()

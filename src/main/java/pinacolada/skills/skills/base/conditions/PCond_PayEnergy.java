@@ -16,7 +16,7 @@ public class PCond_PayEnergy extends PCond<PField_Empty>
 
     public PCond_PayEnergy(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PCond_PayEnergy()

@@ -18,7 +18,7 @@ public class PMod_PerEnergy extends PMod<PField_Not>
 
     public PMod_PerEnergy(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMod_PerEnergy()

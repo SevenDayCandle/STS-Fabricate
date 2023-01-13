@@ -19,7 +19,7 @@ public class PTrait_HitCount extends PTrait<PField_Empty>
 
     public PTrait_HitCount(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PTrait_HitCount(int amount)

@@ -21,7 +21,7 @@ public class PMod_PerCreatureAttacking extends PMod<PField_Empty>
 
     public PMod_PerCreatureAttacking(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMod_PerCreatureAttacking()

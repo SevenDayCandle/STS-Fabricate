@@ -20,7 +20,7 @@ public class PMove_AddPowerBonus extends PMove<PField_Power>
 
     public PMove_AddPowerBonus(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_AddPowerBonus(int amount, PCLPowerHelper... powers)

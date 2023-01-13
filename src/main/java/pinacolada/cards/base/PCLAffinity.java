@@ -275,7 +275,7 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>
 
     public EUITooltip getLevelTooltip(AbstractCard.CardColor pc)
     {
-        PCLResources resources = PGR.getResources(pc);
+        PCLResources<?,?,?> resources = PGR.getResources(pc);
         if (pc != null)
         {
             return resources.tooltips.getLevelTooltip(this);
@@ -296,7 +296,7 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>
     public TextureCache getTextureCache()
     {
         AbstractCard.CardColor color = GameUtilities.getActingColor();
-        PCLResources resources = PGR.getResources(color);
+        PCLResources<?,?,?> resources = PGR.getResources(color);
         switch (this)
         {
             case Red:

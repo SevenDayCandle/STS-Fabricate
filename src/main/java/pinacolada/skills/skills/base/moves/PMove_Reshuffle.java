@@ -25,7 +25,7 @@ public class PMove_Reshuffle extends PMove_Select
 
     public PMove_Reshuffle(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_Reshuffle(int amount, PCLCardGroupHelper... h)

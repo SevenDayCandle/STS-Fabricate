@@ -18,7 +18,7 @@ public class PCond_Chance extends PCond<PField_Empty>
 
     public PCond_Chance(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PCond_Chance()

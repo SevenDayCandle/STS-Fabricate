@@ -22,7 +22,7 @@ public class PTrait_Unplayable extends PMove<PField_Empty>
 
     public PTrait_Unplayable(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PTrait_Unplayable(int amount)

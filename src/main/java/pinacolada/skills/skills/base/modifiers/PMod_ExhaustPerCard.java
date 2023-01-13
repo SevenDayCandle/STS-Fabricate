@@ -23,7 +23,7 @@ public class PMod_ExhaustPerCard extends PMod_Do
 
     public PMod_ExhaustPerCard(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMod_ExhaustPerCard()

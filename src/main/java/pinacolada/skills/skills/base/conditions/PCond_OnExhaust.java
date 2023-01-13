@@ -19,7 +19,7 @@ public class PCond_OnExhaust extends PCond_Delegate
 
     public PCond_OnExhaust(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     @Override

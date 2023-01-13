@@ -25,7 +25,7 @@ public class PMove_StabilizePower extends PMove<PField_Power>
 
     public PMove_StabilizePower(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_StabilizePower(PCLCardTarget target, PCLPowerHelper... powers)

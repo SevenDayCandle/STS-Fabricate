@@ -21,7 +21,7 @@ public class PMove_Draw extends PMove<PField_CardCategory>
 
     public PMove_Draw(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_Draw(int amount)

@@ -24,7 +24,7 @@ public class PMove_StealGold extends PMove<PField_Empty>
 
     public PMove_StealGold(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_StealGold(PCLCardTarget target, int amount)

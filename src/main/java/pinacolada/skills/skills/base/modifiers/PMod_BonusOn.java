@@ -14,9 +14,9 @@ import pinacolada.skills.fields.PField;
 public abstract class PMod_BonusOn<T extends PField> extends PMod<T>
 {
 
-    public PMod_BonusOn(PSkillSaveData content)
+    public PMod_BonusOn(PSkillData<T> data, PSkillSaveData content)
     {
-        super(content);
+        super(data, content);
     }
 
     public PMod_BonusOn(PSkillData<T> data)

@@ -20,7 +20,7 @@ public class PLimit_SemiLimited extends PLimit
 
     public PLimit_SemiLimited(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     @Override

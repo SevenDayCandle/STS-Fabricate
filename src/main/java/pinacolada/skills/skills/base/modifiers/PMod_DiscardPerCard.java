@@ -23,7 +23,7 @@ public class PMod_DiscardPerCard extends PMod_Do
 
     public PMod_DiscardPerCard(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMod_DiscardPerCard()

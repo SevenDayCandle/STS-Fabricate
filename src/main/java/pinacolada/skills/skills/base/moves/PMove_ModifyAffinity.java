@@ -28,7 +28,7 @@ public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity
 
     public PMove_ModifyAffinity(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_ModifyAffinity(PCLAffinity... affinities)

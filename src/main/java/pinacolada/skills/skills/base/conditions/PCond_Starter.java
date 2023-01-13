@@ -21,7 +21,7 @@ public class PCond_Starter extends PCond<PField_Not>
 
     public PCond_Starter(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     @Override

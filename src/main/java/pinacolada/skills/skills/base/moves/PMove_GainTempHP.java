@@ -20,7 +20,7 @@ public class PMove_GainTempHP extends PMove<PField_Empty>
 
     public PMove_GainTempHP(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_GainTempHP(int amount)

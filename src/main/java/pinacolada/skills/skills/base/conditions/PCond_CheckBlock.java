@@ -19,7 +19,7 @@ public class PCond_CheckBlock extends PCond<PField_Not>
 
     public PCond_CheckBlock(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PCond_CheckBlock()

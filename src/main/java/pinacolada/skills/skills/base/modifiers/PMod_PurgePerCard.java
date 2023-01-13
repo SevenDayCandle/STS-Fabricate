@@ -22,7 +22,7 @@ public class PMod_PurgePerCard extends PMod_Do
 
     public PMod_PurgePerCard(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMod_PurgePerCard()

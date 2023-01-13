@@ -23,7 +23,7 @@ public class PMod_ReshufflePerCard extends PMod_Do
 
     public PMod_ReshufflePerCard(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMod_ReshufflePerCard()

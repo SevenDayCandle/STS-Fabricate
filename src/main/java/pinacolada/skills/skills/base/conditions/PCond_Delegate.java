@@ -15,15 +15,14 @@ import pinacolada.skills.fields.PField_CardCategory;
 
 public abstract class PCond_Delegate extends PCond<PField_CardCategory>
 {
-
     public PCond_Delegate(PSkillData<PField_CardCategory> data)
     {
         super(data, PCLCardTarget.None, 0);
     }
 
-    public PCond_Delegate(PSkillSaveData content)
+    public PCond_Delegate(PSkillData<PField_CardCategory> data, PSkillSaveData content)
     {
-        super(content);
+        super(data, content);
     }
 
     @Override

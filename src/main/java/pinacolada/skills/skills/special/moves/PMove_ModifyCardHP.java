@@ -22,7 +22,7 @@ public class PMove_ModifyCardHP extends PMove_Modify<PField_CardCategory> implem
 
     public PMove_ModifyCardHP(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_ModifyCardHP(int amount, int hp)

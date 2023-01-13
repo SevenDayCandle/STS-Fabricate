@@ -20,7 +20,7 @@ public class PMove_ReduceCooldown extends PMove_Modify<PField_CardCategory>
 
     public PMove_ReduceCooldown(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_ReduceCooldown(int amount, int cooldown, PCLCardGroupHelper... groups)

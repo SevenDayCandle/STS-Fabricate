@@ -19,7 +19,7 @@ public class PTrigger_Interactable extends PTrigger
 
     public PTrigger_Interactable(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PTrigger_Interactable(int maxUses)

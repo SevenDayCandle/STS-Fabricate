@@ -16,9 +16,9 @@ import pinacolada.skills.fields.PField_CardCategory;
 
 public abstract class PMove_Select extends PMove<PField_CardCategory>
 {
-    public PMove_Select(PSkillSaveData content)
+    public PMove_Select(PSkillData<PField_CardCategory> data, PSkillSaveData content)
     {
-        super(content);
+        super(data, content);
     }
 
     public PMove_Select(PSkillData<PField_CardCategory> data, int amount, PCLCardGroupHelper... h)

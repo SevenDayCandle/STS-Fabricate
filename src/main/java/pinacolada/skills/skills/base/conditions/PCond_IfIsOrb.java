@@ -19,7 +19,7 @@ public class PCond_IfIsOrb extends PCond<PField_Orb>
 
     public PCond_IfIsOrb(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PCond_IfIsOrb()

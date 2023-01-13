@@ -26,7 +26,7 @@ public class PCond_Startup extends PCond<PField_Empty> implements Hidden
 
     public PCond_Startup(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PCond_Startup(PSkill effect)

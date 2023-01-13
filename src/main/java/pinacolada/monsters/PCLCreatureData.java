@@ -16,7 +16,7 @@ public class PCLCreatureData
     public int hp = 1;
     public String imgUrl;
 
-    public PCLCreatureData(Class<? extends PCLCreature> type, PCLResources resources)
+    public PCLCreatureData(Class<? extends PCLCreature> type, PCLResources<?,?,?> resources)
     {
         this.ID = resources.createID(type.getSimpleName());
         this.strings = PGR.getMonsterStrings(ID);

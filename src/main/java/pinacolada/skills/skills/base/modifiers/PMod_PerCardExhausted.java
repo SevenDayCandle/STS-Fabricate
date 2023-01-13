@@ -20,7 +20,7 @@ public class PMod_PerCardExhausted extends PMod<PField_CardCategory>
 
     public PMod_PerCardExhausted(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMod_PerCardExhausted()

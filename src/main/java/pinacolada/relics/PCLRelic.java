@@ -74,7 +74,7 @@ public abstract class PCLRelic extends CustomRelic implements TooltipProvider
         return createFullID(PGR.core, type);
     }
 
-    public static String createFullID(PCLResources resources, Class<? extends PCLRelic> type)
+    public static String createFullID(PCLResources<?,?,?> resources, Class<? extends PCLRelic> type)
     {
         return resources.createID(type.getSimpleName());
     }

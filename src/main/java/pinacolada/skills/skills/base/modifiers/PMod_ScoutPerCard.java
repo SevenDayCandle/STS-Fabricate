@@ -29,7 +29,7 @@ public class PMod_ScoutPerCard extends PMod_Do
 
     public PMod_ScoutPerCard(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMod_ScoutPerCard()

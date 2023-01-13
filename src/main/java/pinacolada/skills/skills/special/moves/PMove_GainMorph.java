@@ -25,7 +25,7 @@ public class PMove_GainMorph extends PMove<PField_Empty> implements Hidden
 
     public PMove_GainMorph(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_GainMorph(int amount)

@@ -30,9 +30,9 @@ public abstract class PTrigger extends PPrimary<PField_Not>
         this(data, PCLCardTarget.None, -1);
     }
 
-    public PTrigger(PSkillSaveData content)
+    public PTrigger(PSkillData<PField_Not> data, PSkillSaveData content)
     {
-        super(content);
+        super(data, content);
         this.usesThisTurn = this.amount;
     }
 

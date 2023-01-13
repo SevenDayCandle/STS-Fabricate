@@ -23,7 +23,7 @@ public class PMod_PerCardPlayedCombat extends PMod<PField_CardCategory>
 
     public PMod_PerCardPlayedCombat(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMod_PerCardPlayedCombat()

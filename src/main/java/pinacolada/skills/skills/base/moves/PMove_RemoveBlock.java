@@ -15,7 +15,7 @@ public class PMove_RemoveBlock extends PMove<PField_Empty>
 
     public PMove_RemoveBlock(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_RemoveBlock()

@@ -21,7 +21,7 @@ public class PTrait_Tag extends PTrait<PField_Tag>
 
     public PTrait_Tag(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PTrait_Tag(PCLCardTag... tags)

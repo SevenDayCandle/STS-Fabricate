@@ -22,7 +22,7 @@ public class PMove_Stun extends PMove<PField_Empty> implements Hidden
 
     public PMove_Stun(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_Stun(int amount)

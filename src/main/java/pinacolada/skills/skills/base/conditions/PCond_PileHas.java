@@ -23,7 +23,7 @@ public class PCond_PileHas extends PCond<PField_CardCategory>
 
     public PCond_PileHas(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PCond_PileHas(int amount)

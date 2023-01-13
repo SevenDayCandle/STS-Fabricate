@@ -22,7 +22,7 @@ public class PCond_HaveExhausted extends PCond_Have
 
     public PCond_HaveExhausted(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PCond_HaveExhausted(int amount)

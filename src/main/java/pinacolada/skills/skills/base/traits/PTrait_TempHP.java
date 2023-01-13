@@ -20,7 +20,7 @@ public class PTrait_TempHP extends PTrait<PField_Empty>
 
     public PTrait_TempHP(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PTrait_TempHP(int amount)

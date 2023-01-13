@@ -19,7 +19,7 @@ public class PCond_OnDiscard extends PCond_Delegate
 
     public PCond_OnDiscard(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     @Override

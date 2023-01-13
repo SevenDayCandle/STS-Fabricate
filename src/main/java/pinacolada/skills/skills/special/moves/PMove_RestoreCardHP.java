@@ -22,7 +22,7 @@ public class PMove_RestoreCardHP extends PMove_Modify<PField_CardCategory> imple
 
     public PMove_RestoreCardHP(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_RestoreCardHP(int amount, int block)

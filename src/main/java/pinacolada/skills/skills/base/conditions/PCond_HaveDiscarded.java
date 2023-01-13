@@ -22,7 +22,7 @@ public class PCond_HaveDiscarded extends PCond_Have
 
     public PCond_HaveDiscarded(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PCond_HaveDiscarded(int amount)

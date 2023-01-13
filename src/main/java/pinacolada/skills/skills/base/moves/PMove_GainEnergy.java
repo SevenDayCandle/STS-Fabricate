@@ -18,7 +18,7 @@ public class PMove_GainEnergy extends PMove_Gain
 
     public PMove_GainEnergy(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_GainEnergy(int amount)

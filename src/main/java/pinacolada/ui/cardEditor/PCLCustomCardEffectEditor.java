@@ -35,7 +35,7 @@ import java.util.List;
 
 import static pinacolada.ui.cardEditor.PCLCustomCardEffectPage.*;
 
-public class PCLCustomCardEffectEditor<T extends PSkill> extends PCLCustomCardEditorPage
+public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCardEditorPage
 {
     public static final float CUTOFF = Settings.WIDTH * 0.75f;
     public static final float MAIN_OFFSET = MENU_WIDTH * 1.58f;

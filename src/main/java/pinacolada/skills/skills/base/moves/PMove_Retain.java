@@ -23,7 +23,7 @@ public class PMove_Retain extends PMove_Select
 
     public PMove_Retain(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_Retain(int amount, PCLCardGroupHelper... h)

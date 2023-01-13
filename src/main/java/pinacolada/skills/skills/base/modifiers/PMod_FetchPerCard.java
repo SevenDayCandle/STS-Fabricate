@@ -23,7 +23,7 @@ public class PMod_FetchPerCard extends PMod_Do
 
     public PMod_FetchPerCard(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMod_FetchPerCard()

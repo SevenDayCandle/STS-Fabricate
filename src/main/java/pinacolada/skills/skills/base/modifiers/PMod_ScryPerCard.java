@@ -21,7 +21,7 @@ public class PMod_ScryPerCard extends PMod_Do
 
     public PMod_ScryPerCard(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMod_ScryPerCard()

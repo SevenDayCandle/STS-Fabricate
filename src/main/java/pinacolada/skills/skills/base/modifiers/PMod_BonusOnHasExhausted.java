@@ -22,7 +22,7 @@ public class PMod_BonusOnHasExhausted extends PMod_BonusOnHas
 
     public PMod_BonusOnHasExhausted(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMod_BonusOnHasExhausted(int amount)

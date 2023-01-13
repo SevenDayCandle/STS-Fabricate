@@ -20,7 +20,7 @@ public class PMod_HighestAffinityBranch extends PMod_Branch<PField_Affinity, PCL
 
     public PMod_HighestAffinityBranch(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMod_HighestAffinityBranch(PCLAffinity... affinities)

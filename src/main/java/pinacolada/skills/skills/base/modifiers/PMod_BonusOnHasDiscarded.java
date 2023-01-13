@@ -22,7 +22,7 @@ public class PMod_BonusOnHasDiscarded extends PMod_BonusOnHas
 
     public PMod_BonusOnHasDiscarded(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMod_BonusOnHasDiscarded(int amount)

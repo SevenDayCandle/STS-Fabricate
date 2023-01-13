@@ -20,7 +20,7 @@ public class PCond_Cooldown extends PCond<PField_Empty> implements CooldownProvi
 
     public PCond_Cooldown(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PCond_Cooldown()

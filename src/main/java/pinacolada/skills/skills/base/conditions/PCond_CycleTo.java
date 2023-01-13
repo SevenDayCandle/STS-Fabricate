@@ -26,7 +26,7 @@ public class PCond_CycleTo extends PCond_DoTo
 
     public PCond_CycleTo(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PCond_CycleTo(int amount, PCLCardGroupHelper... h)

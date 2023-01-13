@@ -23,7 +23,7 @@ public class PMod_CycleBranch extends PMod_DoBranch
 
     public PMod_CycleBranch(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMod_CycleBranch()

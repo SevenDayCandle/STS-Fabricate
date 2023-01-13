@@ -59,7 +59,7 @@ public abstract class PCLPotion extends AbstractPotion implements TooltipProvide
         return createFullID(PGR.core, type);
     }
 
-    public static String createFullID(PCLResources resources, Class<? extends PCLPotion> type)
+    public static String createFullID(PCLResources<?,?,?> resources, Class<? extends PCLPotion> type)
     {
         return resources.createID(type.getSimpleName());
     }

@@ -17,7 +17,7 @@ public class PMod_BonusInStance extends PMod_BonusOn<PField_Stance>
 
     public PMod_BonusInStance(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMod_BonusInStance()

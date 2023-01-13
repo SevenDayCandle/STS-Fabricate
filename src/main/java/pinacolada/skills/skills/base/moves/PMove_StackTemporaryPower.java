@@ -22,7 +22,7 @@ public class PMove_StackTemporaryPower extends PMove<PField_Power>
 
     public PMove_StackTemporaryPower(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_StackTemporaryPower(PCLCardTarget target, int amount, PCLPowerHelper... powers)

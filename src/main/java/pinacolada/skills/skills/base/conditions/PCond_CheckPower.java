@@ -21,7 +21,7 @@ public class PCond_CheckPower extends PCond<PField_Power>
 
     public PCond_CheckPower(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PCond_CheckPower()

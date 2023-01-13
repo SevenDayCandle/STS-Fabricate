@@ -24,7 +24,7 @@ public class PCond_Match extends PCond<PField_CardCategory>
 
     public PCond_Match(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     @Override

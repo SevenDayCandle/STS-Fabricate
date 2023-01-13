@@ -23,7 +23,7 @@ public class PMove_ModifyBlock extends PMove_Modify<PField_CardCategory>
 
     public PMove_ModifyBlock(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_ModifyBlock(int amount, int block)

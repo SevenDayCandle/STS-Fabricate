@@ -16,9 +16,9 @@ import java.util.List;
 public abstract class PMod_Branch<T extends PField, U> extends PMod<T>
 {
 
-    public PMod_Branch(PSkillSaveData content)
+    public PMod_Branch(PSkillData<T> data, PSkillSaveData content)
     {
-        super(content);
+        super(data, content);
     }
 
     public PMod_Branch(PSkillData<T> data)

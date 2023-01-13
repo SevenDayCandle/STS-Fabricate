@@ -28,7 +28,7 @@ public class PMove_Obtain extends PMove<PField_CardID>
 
     public PMove_Obtain(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_Obtain(int copies, Collection<String> cards)

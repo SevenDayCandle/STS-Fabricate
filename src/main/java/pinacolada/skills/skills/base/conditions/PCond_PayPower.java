@@ -17,7 +17,7 @@ public class PCond_PayPower extends PCond<PField_Power>
 
     public PCond_PayPower(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PCond_PayPower()

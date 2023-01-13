@@ -22,9 +22,9 @@ import pinacolada.utilities.GameUtilities;
 public abstract class PMod_DoBranch extends PMod_Branch<PField_CardCategory, AbstractCard>
 {
 
-    public PMod_DoBranch(PSkillSaveData content)
+    public PMod_DoBranch(PSkillData<PField_CardCategory> data, PSkillSaveData content)
     {
-        super(content);
+        super(data, content);
     }
 
     public PMod_DoBranch(PSkillData<PField_CardCategory> data)

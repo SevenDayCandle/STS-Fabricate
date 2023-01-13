@@ -169,7 +169,7 @@ public class PCLCoreResources extends PCLResources<PCLCoreConfig, PCLCoreImages,
         EUI.setCustomCardFilter(AbstractCard.CardColor.CURSE, affinityFilters);
         EUI.setCustomCardLibraryModule(AbstractCard.CardColor.COLORLESS, libraryFilters);
         EUI.setCustomCardLibraryModule(AbstractCard.CardColor.CURSE, libraryFilters);
-        for (PCLResources r : PGR.getAllResources())
+        for (PCLResources<?,?,?> r : PGR.getAllResources())
         {
             EUI.setCustomCardFilter(r.cardColor, affinityFilters);
             EUI.setCustomCardPoolModule(r.cardColor, cardAffinities);

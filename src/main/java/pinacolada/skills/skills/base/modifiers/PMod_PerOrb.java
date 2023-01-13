@@ -19,7 +19,7 @@ public class PMod_PerOrb extends PMod<PField_Orb>
 
     public PMod_PerOrb(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMod_PerOrb()

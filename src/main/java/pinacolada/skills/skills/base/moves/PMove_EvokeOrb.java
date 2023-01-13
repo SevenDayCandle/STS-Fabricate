@@ -23,7 +23,7 @@ public class PMove_EvokeOrb extends PMove<PField_Orb>
 
     public PMove_EvokeOrb(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_EvokeOrb(int amount, PCLOrbHelper... orb)

@@ -15,7 +15,7 @@ public class PCond_PayGold extends PCond<PField_Empty>
 
     public PCond_PayGold(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PCond_PayGold()

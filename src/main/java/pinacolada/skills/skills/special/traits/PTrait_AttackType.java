@@ -23,7 +23,7 @@ public class PTrait_AttackType extends PTrait<PField_AttackType> implements Hidd
 
     public PTrait_AttackType(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PTrait_AttackType(PCLAttackType... type)

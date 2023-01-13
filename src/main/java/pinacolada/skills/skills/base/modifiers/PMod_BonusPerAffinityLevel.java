@@ -17,7 +17,7 @@ public class PMod_BonusPerAffinityLevel extends PMod_BonusPer<PField_Affinity>
 
     public PMod_BonusPerAffinityLevel(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMod_BonusPerAffinityLevel()

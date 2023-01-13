@@ -15,7 +15,7 @@ public class PCond_IsAttacking extends PCond<PField_Not>
 
     public PCond_IsAttacking(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PCond_IsAttacking()

@@ -22,25 +22,25 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSkill>
+public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSkill<?>>
 {
     public static final PSkillData<PField_Empty> DATA = register(PMultiSkill.class, PField_Empty.class, 0, DEFAULT_MAX);
     public boolean generated = false;
-    protected ArrayList<PSkill> effects = new ArrayList<>();
+    protected ArrayList<PSkill<?>> effects = new ArrayList<>();
 
     public PMultiSkill()
     {
         super(DATA, PCLCardTarget.None, 0);
     }
 
-    public PMultiSkill(PSkillSaveData content)
+    public PMultiSkill(PSkillData<PField_Empty> data, PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
         effects = EUIUtils.mapAsNonnull(splitJson(content.special), PSkill::get);
         setParentsForChildren();
     }
 
-    public PMultiSkill(PSkill... effects)
+    public PMultiSkill(PSkill<?>... effects)
     {
         super(DATA, EUIUtils.max(effects, effect -> effect.target), 0);
         if (target == null)
@@ -51,22 +51,22 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
         setParentsForChildren();
     }
 
-    public static PMultiSkill choose(int amount, PSkill... effects)
+    public static PMultiSkill choose(int amount, PSkill<?>... effects)
     {
         return (PMultiSkill) new PMultiSkill(effects).setAmount(amount);
     }
 
-    public static PMultiSkill choose(PSkill... effects)
+    public static PMultiSkill choose(PSkill<?>... effects)
     {
         return choose(1, effects);
     }
 
-    public static PMultiSkill join(PSkill... effects)
+    public static PMultiSkill join(PSkill<?>... effects)
     {
         return new PMultiSkill(effects);
     }
 
-    public static PMultiSkill joinGen(PSkill... effects)
+    public static PMultiSkill joinGen(PSkill<?>... effects)
     {
         return new PMultiSkill(effects).setGenerated(true);
     }
@@ -77,9 +77,9 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     }
 
     @Override
-    public PSkill addAmountForCombat(int amount)
+    public PSkill<PField_Empty> addAmountForCombat(int amount)
     {
-        for (PSkill effect : effects)
+        for (PSkill<?> effect : effects)
         {
             effect.addAmountForCombat(amount);
         }
@@ -87,9 +87,9 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     }
 
     @Override
-    public PSkill addExtraForCombat(int extra)
+    public PSkill<PField_Empty> addExtraForCombat(int extra)
     {
-        for (PSkill effect : effects)
+        for (PSkill<?> effect : effects)
         {
             effect.addExtraForCombat(extra);
         }
@@ -398,29 +398,29 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
         return efTexts;
     }
 
-    public List<PSkill> getSubEffects()
+    public List<PSkill<?>> getSubEffects()
     {
         return effects;
     }
 
-    public PSkill getSubEffect(int index)
+    public PSkill<?> getSubEffect(int index)
     {
         return index < effects.size() ? effects.get(index) : null;
     }
 
-    public PMultiSkill addEffect(PSkill newEffect)
+    public PMultiSkill addEffect(PSkill<?> newEffect)
     {
         this.effects.add(newEffect);
         setParentsForChildren();
         return this;
     }
 
-    public PMultiSkill setEffects(PSkill... effects)
+    public PMultiSkill setEffects(PSkill<?>... effects)
     {
         return setEffects(Arrays.asList(effects));
     }
 
-    public PMultiSkill setEffects(List<PSkill> effects)
+    public PMultiSkill setEffects(List<PSkill<?>> effects)
     {
         this.effects.clear();
         this.effects.addAll(effects);
@@ -435,7 +435,7 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
         return this;
     }
 
-    public PMultiSkill stack(PSkill other)
+    public PMultiSkill stack(PSkill<?> other)
     {
         super.stack(other);
         if (other instanceof PMultiBase)

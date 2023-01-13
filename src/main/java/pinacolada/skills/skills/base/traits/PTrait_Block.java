@@ -20,7 +20,7 @@ public class PTrait_Block extends PTrait<PField_Empty>
 
     public PTrait_Block(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PTrait_Block(int amount)

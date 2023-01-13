@@ -29,7 +29,7 @@ public class PMod_DrawPerCard extends PMod_Do
 
     public PMod_DrawPerCard(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMod_DrawPerCard()

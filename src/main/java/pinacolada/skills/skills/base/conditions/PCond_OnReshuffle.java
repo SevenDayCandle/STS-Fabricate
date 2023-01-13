@@ -20,7 +20,7 @@ public class PCond_OnReshuffle extends PCond_Delegate
 
     public PCond_OnReshuffle(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     @Override

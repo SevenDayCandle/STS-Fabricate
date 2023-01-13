@@ -5,9 +5,9 @@ import pinacolada.skills.fields.PField;
 
 public abstract class PPrimary<T extends PField> extends PSkill<T>
 {
-    public PPrimary(PSkillSaveData data)
+    public PPrimary(PSkillData<T> data, PSkillSaveData content)
     {
-        super(data);
+        super(data, content);
     }
 
     public PPrimary(PSkillData<T> data)

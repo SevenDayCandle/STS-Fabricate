@@ -23,7 +23,7 @@ public class PMove_Purge extends PMove_Select
 
     public PMove_Purge(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMove_Purge(int amount, PCLCardGroupHelper... h)

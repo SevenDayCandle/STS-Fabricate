@@ -19,7 +19,7 @@ public class PTrait_DamageMultiplier extends PTrait<PField_Empty>
 
     public PTrait_DamageMultiplier(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PTrait_DamageMultiplier(int amount)

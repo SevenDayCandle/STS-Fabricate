@@ -18,7 +18,7 @@ public class PCond_CheckLevel extends PCond<PField_Affinity>
 
     public PCond_CheckLevel(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PCond_CheckLevel(int amount, PCLAffinity... stance)

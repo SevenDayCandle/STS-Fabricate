@@ -19,7 +19,7 @@ public class PCond_OnPurge extends PCond_Delegate
 
     public PCond_OnPurge(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     @Override

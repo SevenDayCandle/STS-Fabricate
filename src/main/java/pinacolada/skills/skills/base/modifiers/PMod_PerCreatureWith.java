@@ -23,7 +23,7 @@ public class PMod_PerCreatureWith extends PMod<PField_Power>
 
     public PMod_PerCreatureWith(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMod_PerCreatureWith()

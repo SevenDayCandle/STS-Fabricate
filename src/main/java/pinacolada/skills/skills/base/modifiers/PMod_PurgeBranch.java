@@ -23,7 +23,7 @@ public class PMod_PurgeBranch extends PMod_DoBranch
 
     public PMod_PurgeBranch(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMod_PurgeBranch()

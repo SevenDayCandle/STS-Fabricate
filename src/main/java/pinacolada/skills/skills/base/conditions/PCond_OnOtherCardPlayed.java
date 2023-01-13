@@ -19,7 +19,7 @@ public class PCond_OnOtherCardPlayed extends PCond_Delegate
 
     public PCond_OnOtherCardPlayed(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     @Override

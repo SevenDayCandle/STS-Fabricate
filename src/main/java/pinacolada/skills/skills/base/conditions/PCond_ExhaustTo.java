@@ -26,7 +26,7 @@ public class PCond_ExhaustTo extends PCond_DoTo
 
     public PCond_ExhaustTo(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PCond_ExhaustTo(int amount, PCLCardGroupHelper... h)

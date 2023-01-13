@@ -26,24 +26,24 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond>
+public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
 {
     public static final PSkillData<PField_Or> DATA = register(PMultiCond.class, PField_Or.class, 0, DEFAULT_MAX);
-    protected ArrayList<PCond> effects = new ArrayList<>();
+    protected ArrayList<PCond<?>> effects = new ArrayList<>();
 
     public PMultiCond()
     {
         super(DATA, PCLCardTarget.None, 0);
     }
 
-    public PMultiCond(PSkillSaveData content)
+    public PMultiCond(PSkillData<PField_Or> data, PSkillSaveData content)
     {
-        super(content);
-        effects = EUIUtils.mapAsNonnull(splitJson(content.special), e -> (PCond) PSkill.get(e));
+        super(DATA, content);
+        effects = EUIUtils.mapAsNonnull(splitJson(content.special), e -> (PCond<?>) PSkill.get(e));
         setParentsForChildren();
     }
 
-    public PMultiCond(PCond... effects)
+    public PMultiCond(PCond<?>... effects)
     {
         super(DATA, EUIUtils.max(effects, effect -> effect.target), 0);
         if (target == null)
@@ -54,12 +54,12 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond>
         setParentsForChildren();
     }
 
-    public static PMultiCond and(PCond... effects)
+    public static PMultiCond and(PCond<?>... effects)
     {
         return new PMultiCond(effects);
     }
 
-    public static PMultiCond or(PCond... effects)
+    public static PMultiCond or(PCond<?>... effects)
     {
         return (PMultiCond) new PMultiCond(effects).edit(r -> r.setOr(true));
     }
@@ -91,26 +91,27 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond>
     public PMultiCond makeCopy()
     {
         PMultiCond copy = (PMultiCond) super.makeCopy();
-        for (PCond effect : effects)
+        for (PCond<?> effect : effects)
         {
-            copy.addEffect((PCond) effect.makeCopy());
+            copy.addEffect((PCond<?>) effect.makeCopy());
         }
         return copy;
     }
 
-    public PSkill makePreviews(RotatingList<EUICardPreview> previews)
+    public PMultiCond makePreviews(RotatingList<EUICardPreview> previews)
     {
-        for (PSkill effect : effects)
+        for (PSkill<?> effect : effects)
         {
             effect.makePreviews(previews);
         }
-        return super.makePreviews(previews);
+        super.makePreviews(previews);
+        return this;
     }
 
     @Override
     public PMultiCond onAddToCard(AbstractCard card)
     {
-        for (PSkill effect : effects)
+        for (PSkill<?> effect : effects)
         {
             effect.onAddToCard(card);
         }
@@ -121,7 +122,7 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond>
     @Override
     public void onDrag(AbstractMonster m)
     {
-        for (PSkill effect : effects)
+        for (PSkill<?> effect : effects)
         {
             effect.onDrag(m);
         }
@@ -157,7 +158,7 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond>
     public PMultiCond setAmountFromCard()
     {
         super.setAmountFromCard();
-        for (PSkill effect : effects)
+        for (PSkill<?> effect : effects)
         {
             effect.setAmountFromCard();
         }
@@ -168,7 +169,7 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond>
     public PMultiCond setSource(PointerProvider card)
     {
         super.setSource(card);
-        for (PSkill effect : effects)
+        for (PSkill<?> effect : effects)
         {
             effect.setSource(card);
         }
@@ -179,7 +180,7 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond>
     public PMultiCond setSource(PointerProvider card, PCLCardValueSource source)
     {
         super.setSource(card, source);
-        for (PSkill effect : effects)
+        for (PSkill<?> effect : effects)
         {
             effect.setSource(card, source);
         }
@@ -191,7 +192,7 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond>
     public PMultiCond setSource(PointerProvider card, PCLCardValueSource source, PCLCardValueSource extra)
     {
         super.setSource(card, source, extra);
-        for (PSkill effect : effects)
+        for (PSkill<?> effect : effects)
         {
             effect.setSource(card, source, extra);
         }
@@ -203,7 +204,7 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond>
     {
         conditionMetCache = checkCondition(makeInfo(m), false, false);
         boolean refreshVal = conditionMetCache & conditionMet;
-        for (PSkill effect : effects)
+        for (PSkill<?> effect : effects)
         {
             effect.refresh(m, c, refreshVal);
         }
@@ -266,7 +267,7 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond>
     @Override
     public boolean triggerOnEndOfTurn(boolean isUsing)
     {
-        for (PSkill effect : effects)
+        for (PSkill<?> effect : effects)
         {
             if (effect.triggerOnEndOfTurn(isUsing))
             {
@@ -437,29 +438,29 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond>
         }
     }
 
-    public List<PCond> getSubEffects()
+    public List<PCond<?>> getSubEffects()
     {
         return effects;
     }
 
-    public PCond getSubEffect(int index)
+    public PCond<?> getSubEffect(int index)
     {
         return index < effects.size() ? effects.get(index) : null;
     }
 
-    public PMultiCond addEffect(PCond effect)
+    public PMultiCond addEffect(PCond<?> effect)
     {
         this.effects.add(effect);
         setParentsForChildren();
         return this;
     }
 
-    public PMultiCond setEffects(PCond... effects)
+    public PMultiCond setEffects(PCond<?>... effects)
     {
         return setEffects(Arrays.asList(effects));
     }
 
-    public PMultiCond setEffects(List<PCond> effects)
+    public PMultiCond setEffects(List<PCond<?>> effects)
     {
         this.effects.clear();
         this.effects.addAll(effects);
@@ -467,24 +468,24 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond>
         return this;
     }
 
-    public PMultiCond stack(PSkill other)
+    public PMultiCond stack(PSkill<?> other)
     {
         super.stack(other);
         if (other instanceof PMultiBase)
         {
-            stackMulti((PMultiBase) other);
+            stackMulti((PMultiBase<?>) other);
         }
         return this;
     }
 
-    protected boolean triggerOn(FuncT1<Boolean, PSkill> action)
+    protected boolean triggerOn(FuncT1<Boolean, PSkill<?>> action)
     {
         return triggerOn(action, makeInfo(null));
     }
 
-    protected boolean triggerOn(FuncT1<Boolean, PSkill> action, PCLUseInfo info)
+    protected boolean triggerOn(FuncT1<Boolean, PSkill<?>> action, PCLUseInfo info)
     {
-        for (PSkill effect : effects)
+        for (PSkill<?> effect : effects)
         {
             if (action.invoke(effect) && this.childEffect != null)
             {

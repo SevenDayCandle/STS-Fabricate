@@ -23,7 +23,7 @@ public class PMod_PerPower extends PMod<PField_Power>
 
     public PMod_PerPower(PSkillSaveData content)
     {
-        super(content);
+        super(DATA, content);
     }
 
     public PMod_PerPower()

@@ -110,9 +110,9 @@ public abstract class PTrait<T extends PField> extends PMove<T>
         return new PTrait_TempHP(amount);
     }
 
-    public PTrait(PSkillSaveData content)
+    public PTrait(PSkillData<T> data, PSkillSaveData content)
     {
-        super(content);
+        super(data, content);
     }
 
     public PTrait(PSkillData<T> data)

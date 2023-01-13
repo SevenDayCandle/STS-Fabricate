@@ -30,7 +30,7 @@ import java.util.Collection;
 
 public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implements ClickableProvider
 {
-    public static String createFullID(PCLResources resources, Class<? extends PCLPlayerMeter> type)
+    public static String createFullID(PCLResources<?,?,?> resources, Class<? extends PCLPlayerMeter> type)
     {
         return resources.createID(type.getSimpleName());
     }

@@ -320,7 +320,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         return PCLCard.register(type, PGR.core).setColorless();
     }
 
-    protected static PCLCardData register(Class<? extends PCLCard> type, PCLResources resources)
+    protected static PCLCardData register(Class<? extends PCLCard> type, PCLResources<?,?,?> resources)
     {
         return PCLCard.registerCardData(new PCLCardData(type, resources));
     }
@@ -591,14 +591,14 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         return false;
     }
 
-    protected void doEffects(ActionT1<PSkill> action) {
-        for (PSkill be : getFullEffects()) {
+    protected void doEffects(ActionT1<PSkill<?>> action) {
+        for (PSkill<?> be : getFullEffects()) {
             action.invoke(be);
         }
     }
 
-    protected void doNonPowerEffects(ActionT1<PSkill> action) {
-        for (PSkill be : getFullEffects()) {
+    protected void doNonPowerEffects(ActionT1<PSkill<?>> action) {
+        for (PSkill<?> be : getFullEffects()) {
             if (!(be instanceof SummonOnlyMove))
             {
                 action.invoke(be);
@@ -648,7 +648,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         return augments.size() > index ? augments.get(index) : null;
     }
 
-    public List<PSkill> getAugmentSkills() {
+    public List<PSkill<?>> getAugmentSkills() {
         return EUIUtils.mapAsNonnull(augments, aug -> aug != null ? aug.skill : null);
     }
 
@@ -703,7 +703,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     }
 
     protected Texture getCardBackground() {
-        PCLResources resources = PGR.getResources(color);
+        PCLResources<?,?,?> resources = PGR.getResources(color);
         if (resources == null || resources.images == null)
         {
             resources = PGR.core;
@@ -832,7 +832,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
 
     protected Texture getEnergyOrb() {
         // Use the original resource card color so that colorless/curses have their resource's energy orb
-        PCLResources resources = PGR.getResources(cardData.resources.cardColor);
+        PCLResources<?,?,?> resources = PGR.getResources(cardData.resources.cardColor);
         if (resources == null || resources.images == null)
         {
             resources = PGR.core;
@@ -948,7 +948,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
 
     public String getEffectStrings()
     {
-        ArrayList<PSkill> tempEffects = EUIUtils.filter(getFullEffects(), ef -> ef != null && !(ef instanceof PTrait));
+        ArrayList<PSkill<?>> tempEffects = EUIUtils.filter(getFullEffects(), ef -> ef != null && !(ef instanceof PTrait));
         String effectString = EUIUtils.joinStrings(EUIUtils.DOUBLE_SPLIT_LINE, EUIUtils.mapAsNonnull(tempEffects, PSkill::getText));
         if (type != PCLEnum.CardType.SUMMON)
         {
@@ -1016,26 +1016,26 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         return cardID;
     }
 
-    public ArrayList<PSkill> getFullEffects() {
-        ArrayList<PSkill> result = new ArrayList<>(getEffects());
+    public ArrayList<PSkill<?>> getFullEffects() {
+        ArrayList<PSkill<?>> result = new ArrayList<>(getEffects());
         result.addAll(getAugmentSkills());
         return result;
     }
 
-    public PSkill addPowerMove(PTrigger effect) {
+    public PTrigger addPowerMove(PTrigger effect) {
         PTrigger added = (PTrigger) effect.setSource(this).onAddToCard(this);
         getPowerEffects().add(added);
         return added;
     }
 
-    public PSkill addUseMove(PSkill effect) {
-        PSkill added = effect.setSource(this).onAddToCard(this);
+    public PSkill<?> addUseMove(PSkill<?> effect) {
+        PSkill<?> added = effect.setSource(this).onAddToCard(this);
         getEffects().add(added);
         return added;
     }
 
-    public PSkill addUseMove(PSkill primary, PSkill... effects) {
-        PSkill added = PSkill.chain(primary, effects).setSource(this).onAddToCard(this);
+    public PSkill<?> addUseMove(PSkill<?> primary, PSkill<?>... effects) {
+        PSkill<?> added = PSkill.chain(primary, effects).setSource(this).onAddToCard(this);
         getEffects().add(added);
         return added;
     }
