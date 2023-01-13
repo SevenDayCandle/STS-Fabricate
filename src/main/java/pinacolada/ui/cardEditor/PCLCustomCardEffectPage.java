@@ -39,16 +39,17 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
     protected PPrimary primaryCond;
     protected PMultiCond multiCond;
     protected PDelay delayMove;
-    protected PMod modifier;
+    protected PMod modifier; // TODO multi modifier
     protected PMultiSkill multiSkill;
 
     protected ActionT1<PSkill> onUpdate;
     protected ArrayList<ActionT0> toRemove = new ArrayList<>();
     protected EffectEditorGroup<PCond> conditionGroup;
-    protected EffectEditorGroup<PMod> modifierGroup;
     protected EffectEditorGroup<PMove> effectGroup;
+    protected EffectEditorGroup<PMod> modifierGroup;
     protected EUIButton addCondition;
     protected EUIButton addEffect;
+    protected EUIButton addModifier;
     protected EUIHitbox hb;
     protected EUILabel header;
     protected EUILabel conditionHeader;
@@ -73,8 +74,8 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
         this.scrollBar.setPosition(screenW(0.95f), screenH(0.5f));
         this.upperScrollBound = scale(550);
         this.conditionGroup = new EffectEditorGroup<>(this, PCond.class, PGR.core.strings.cardEditor.condition);
-        this.modifierGroup = new EffectEditorGroup<>(this, PMod.class, PGR.core.strings.cardEditor.modifier);
         this.effectGroup = new EffectEditorGroup<>(this, PMove.class, PGR.core.strings.cardEditor.effect);
+        this.modifierGroup = new EffectEditorGroup<>(this, PMod.class, PGR.core.strings.cardEditor.modifier);
 
         initializeEffects(effect);
 
@@ -155,6 +156,9 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
                 .setColor(Settings.BLUE_TEXT_COLOR)
                 .setTooltip(PGR.core.strings.cardEditor.modifier, PGR.core.strings.cardEditorTutorial.effectModifier)
                 .setLabel(PGR.core.strings.cardEditor.modifier);
+        addModifier = new EUIButton(EUIRM.images.plus.texture(), new OriginRelativeHitbox(hb, scale(48), scale(48), MENU_WIDTH, 0))
+                .setOnClick(() -> modifierGroup.addEffectSlot())
+                .setClickDelay(0.02f);
 
         conditionGroup.syncWithLower();
         effectGroup.syncWithLower();
@@ -187,6 +191,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
 
         offsetY += OFFSET_EFFECT;
         modifierHeader.hb.setOffsetY(offsetY);
+        addModifier.hb.setOffsetY(offsetY);
 
         offsetY += OFFSET_EFFECT * 2f;
         offsetY = modifierGroup.reposition(offsetY);
@@ -359,6 +364,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
         this.modifierHeader.tryUpdate();
         this.addCondition.tryUpdate();
         this.addEffect.tryUpdate();
+        this.addModifier.tryUpdate();
         this.primaryConditions.tryUpdate();
         this.delayEditor.tryUpdate();
         this.choicesEditor.tryUpdate();
@@ -386,6 +392,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
         this.modifierHeader.tryRender(sb);
         this.addCondition.tryRender(sb);
         this.addEffect.tryRender(sb);
+        this.addModifier.tryRender(sb);
         this.primaryConditions.tryRender(sb);
         this.delayEditor.tryRender(sb);
         this.choicesEditor.tryRender(sb);
