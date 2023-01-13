@@ -33,7 +33,7 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
     public PMultiTrait(PSkillSaveData content)
     {
         super(content);
-        effects = EUIUtils.mapAsNonnull(splitJson(content.effectData), e -> (PTrait) PSkill.get(e));
+        effects = EUIUtils.mapAsNonnull(splitJson(content.special), e -> (PTrait) PSkill.get(e));
         setParentsForChildren();
     }
 
@@ -53,9 +53,9 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
         return new PMultiTrait(effects);
     }
 
-    public void addAdditionalData(PSkillSaveData data)
+    public String getSpecialData()
     {
-        data.effectData = PSkill.joinDataAsJson(effects, PSkill::serialize);
+        return PSkill.joinDataAsJson(effects, PSkill::serialize);
     }
 
     @Override

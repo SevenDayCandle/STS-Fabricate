@@ -19,7 +19,7 @@ public class PMove_Play extends PMove_Select
 
     public PMove_Play()
     {
-        this(1, PCLCardTarget.None, (PCLCardGroupHelper) null);
+        this(1, PCLCardTarget.None);
     }
 
     public PMove_Play(PSkillSaveData content)

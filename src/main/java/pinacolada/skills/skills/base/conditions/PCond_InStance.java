@@ -19,7 +19,7 @@ public class PCond_InStance extends PCond<PField_Stance>
 
     public PCond_InStance()
     {
-        this((PCLStanceHelper) null);
+        super(DATA);
     }
 
     public PCond_InStance(PSkillSaveData content)

@@ -24,16 +24,15 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.skills.fields.PField_Empty;
+import pinacolada.skills.fields.PField_AttackEffect;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class PMove_DealCardDamage extends PMove<PField_Empty> implements Hidden
+public class PMove_DealCardDamage extends PMove<PField_AttackEffect> implements Hidden
 {
-    public static final PSkillData<PField_Empty> DATA = register(PMove_DealCardDamage.class, PField_Empty.class);
+    public static final PSkillData<PField_AttackEffect> DATA = register(PMove_DealCardDamage.class, PField_AttackEffect.class);
 
-    protected AbstractGameAction.AttackEffect attackEffect;
     protected Color vfxColor;
     protected Color vfxTargetColor;
     protected FuncT2<Float, AbstractCreature, AbstractCreature> damageEffect;
@@ -42,7 +41,6 @@ public class PMove_DealCardDamage extends PMove<PField_Empty> implements Hidden
     public PMove_DealCardDamage(PSkillSaveData content)
     {
         super(content);
-        attackEffect = AbstractGameAction.AttackEffect.valueOf(content.effectData);
     }
 
     public PMove_DealCardDamage(PointerProvider card, AbstractGameAction.AttackEffect attackEffect)
@@ -50,13 +48,8 @@ public class PMove_DealCardDamage extends PMove<PField_Empty> implements Hidden
         super(DATA,
                 card instanceof PCLCard ? ((PCLCard) card).pclTarget : PCLCardTarget.Single,
                 0);
-        this.attackEffect = attackEffect;
+        fields.attackEffect = attackEffect;
         setSource(card, PCLCardValueSource.Damage, PCLCardValueSource.HitCount);
-    }
-
-    public void addAdditionalData(PSkillSaveData data)
-    {
-        data.effectData = attackEffect.name();
     }
 
     @Override
@@ -73,7 +66,6 @@ public class PMove_DealCardDamage extends PMove<PField_Empty> implements Hidden
     public PMove_DealCardDamage makeCopy()
     {
         PMove_DealCardDamage copy = (PMove_DealCardDamage) super.makeCopy();
-        copy.attackEffect = this.attackEffect;
         copy.setDamageEffect(this.damageEffect).setVFXColor(this.vfxColor, this.vfxTargetColor);
         copy.onCompletion = this.onCompletion;
         return copy;
@@ -88,17 +80,17 @@ public class PMove_DealCardDamage extends PMove<PField_Empty> implements Hidden
             switch (target)
             {
                 case All:
-                    getActions().dealCardDamageToAll(pCard, info.source, attackEffect).forEach(e -> setDamageOptions(e, info));
+                    getActions().dealCardDamageToAll(pCard, info.source, fields.attackEffect).forEach(e -> setDamageOptions(e, info));
                 case Team:
-                    getActions().dealCardDamage(pCard, info.source, AbstractDungeon.player, attackEffect).forEach(e -> setDamageOptions(e, info));
+                    getActions().dealCardDamage(pCard, info.source, AbstractDungeon.player, fields.attackEffect).forEach(e -> setDamageOptions(e, info));
                 case AllAlly:
-                    getActions().dealCardDamageToAll(pCard, info.source, attackEffect).forEach(e -> setDamageOptions(e.targetAllies(true), info));
+                    getActions().dealCardDamageToAll(pCard, info.source, fields.attackEffect).forEach(e -> setDamageOptions(e.targetAllies(true), info));
                     break;
                 case AllEnemy:
-                    getActions().dealCardDamageToAll(pCard, info.source, attackEffect).forEach(e -> setDamageOptions(e, info));
+                    getActions().dealCardDamageToAll(pCard, info.source, fields.attackEffect).forEach(e -> setDamageOptions(e, info));
                     break;
                 default:
-                    getActions().dealCardDamage(pCard, info.source, info.target, attackEffect).forEach(e -> setDamageOptions(e, info));
+                    getActions().dealCardDamage(pCard, info.source, info.target, fields.attackEffect).forEach(e -> setDamageOptions(e, info));
 
             }
         }

@@ -12,6 +12,7 @@ public class PSkillSaveData implements Serializable
     public String extraSource;
     public String valueSource;
     public String children;
+    public String special; // Used for multibase skills
     public int amount;
     public int extra;
     public int[] upgrade;
@@ -35,5 +36,7 @@ public class PSkillSaveData implements Serializable
         {
             this.children = cEffect.serialize();
         }
+
+        this.special = effect.getSpecialData();
     }
 }

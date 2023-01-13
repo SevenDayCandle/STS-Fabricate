@@ -20,7 +20,7 @@ public class PMove_Scout extends PMove_Select
 
     public PMove_Scout()
     {
-        this(1, (PCLCardGroupHelper) null);
+        this(1);
     }
 
     public PMove_Scout(PSkillSaveData content)

@@ -356,6 +356,11 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return EUIUtils.deserialize(source, TStringToken.getType());
     }
 
+    public String getSpecialData()
+    {
+        return null;
+    }
+
     public PSkill addAmountForCombat(int amount)
     {
         this.baseAmount = this.amount = MathUtils.clamp(this.amount + amount, data != null ? data.minAmount : 0, data != null ? data.maxAmount : DEFAULT_MAX);

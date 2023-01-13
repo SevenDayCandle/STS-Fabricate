@@ -56,6 +56,8 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
     protected EUIHitbox hb;
     protected int priority;
     protected int index;
+    private PSkill lastEffect;
+    private float additionalHeight;
 
     public PCLCustomCardEffectEditor(PCLCustomCardEffectPage editor, EUIHitbox hb, int priority, int index)
     {
@@ -73,20 +75,20 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
                     {
                         setEffectAt(null);
                     }
-                    editor.constructEffect();
+                    editor.scheduleConstruct();
                 })
                 .setClearButtonOptions(true, true)
                 .setCanAutosizeButton(true)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, getTitleForPriority())
                 .setItems(getEffectsForPriority(this.priority))
-                .setOnClear(__ -> editor.toRemove.add(() -> editor.removeEffectSlot(this.priority, this.index)));
+                .setOnClear(__ -> editor.scheduleUpdate(() -> editor.removeEffectSlot(this.priority, this.index)));
 
         valueEditor = new PCLCustomCardUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 5, MENU_HEIGHT,MAIN_OFFSET, OFFSET_AMOUNT)
                 , EUIRM.strings.uiAmount, (val, upVal) -> {
             if (getEffectAt() != null)
             {
                 getEffectAt().setAmount(val, upVal);
-                editor.constructEffect();
+                editor.scheduleConstruct();
             }
         })
                 .setLimits(-PSkill.DEFAULT_MAX, PSkill.DEFAULT_MAX);
@@ -95,7 +97,7 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
             if (getEffectAt() != null)
             {
                 getEffectAt().setExtra(val, upVal);
-                editor.constructEffect();
+                editor.scheduleConstruct();
             }
         })
                 .setLimits(-PSkill.DEFAULT_MAX, PSkill.DEFAULT_MAX);
@@ -106,7 +108,7 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
                     if (getEffectAt() != null && !targets.isEmpty())
                     {
                         getEffectAt().setTarget(targets.get(0));
-                        editor.constructEffect();
+                        editor.scheduleConstruct();
                     }
                 })
                 .setLabelFunctionForOption(PCLCardTarget::getTitle, false)
@@ -237,6 +239,11 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
         }
     }
 
+    public float getAdditionalHeight()
+    {
+        return additionalHeight;
+    }
+
     public String getTitle()
     {
         return editor.getTitle();
@@ -267,14 +274,23 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
         piles.setItems(PSkill.getEligiblePiles(curEffect));
 
         float xOff = AUX_OFFSET;
+        additionalHeight = 0;
         if (targets.isActive)
         {
-            xOff = position(targets, xOff, curEffect != null ? curEffect.target : PCLCardTarget.None);
+            targets.setSelection(curEffect != null ? curEffect.target : PCLCardTarget.None, false);
+            xOff = position(targets, xOff);
         }
 
-        if (curEffect != null)
+        if (curEffect != null && lastEffect != curEffect)
         {
+            lastEffect = curEffect;
+            activeElements.clear();
             curEffect.fields.setupEditor(this);
+
+            for (EUIHoverable element : activeElements)
+            {
+                xOff = position(element, xOff);
+            }
         }
     }
 
@@ -290,7 +306,7 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
         toggle.setToggle(initial);
         toggle.setOnToggle(val -> {
             onChange.invoke(val);
-            editor.constructEffect();
+            editor.scheduleConstruct();
         });
     }
 
@@ -298,11 +314,8 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
     {
         activeElements.add(dropdown);
         dropdown.setOnChange(targets -> {
-            if (!targets.isEmpty())
-            {
-                onChangeImpl.invoke(targets);
-                editor.constructEffect();
-            }
+            onChangeImpl.invoke(targets);
+            editor.scheduleConstruct();
         });
         dropdown.setSelection(items, false);
     }
@@ -311,12 +324,9 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
     {
         activeElements.add(dropdown);
         dropdown.setOnChange(targets -> {
-            if (!targets.isEmpty())
-            {
-                items.clear();
-                items.addAll(targets);
-                editor.constructEffect();
-            }
+            items.clear();
+            items.addAll(targets);
+            editor.scheduleConstruct();
         });
         dropdown.setSelection(items, false);
     }
@@ -412,25 +422,19 @@ public class PCLCustomCardEffectEditor extends PCLCustomCardEditorPage
         }
     }
 
-    protected <T> float position(EUIDropdown<T> element, float x, T items)
+    protected <T> float position(EUIHoverable element, float x)
     {
-        element.setSelection(items, false).setOffsetX(x).setActive(true);
+        float setX = x;
+        float end = x + element.hb.width;
+        if (end > Settings.WIDTH)
+        {
+            additionalHeight += MENU_HEIGHT * 1.25;
+            setX = AUX_OFFSET;
+            end = AUX_OFFSET + element.hb.width;
+        }
+        element.setOffset(setX, additionalHeight);
         element.hb.update();
-        return x + element.hb.width + scale(20);
-    }
-
-    protected <T> float position(EUIDropdown<T> element, float x, List<T> items)
-    {
-        element.setSelection(items, false).setOffsetX(x).setActive(true);
-        element.hb.update();
-        return x + element.hb.width + scale(20);
-    }
-
-    protected <T, U> float position(EUIDropdown<T> element, float x, List<U> items, FuncT1<U, T> convertFunc)
-    {
-        element.setSelection(items, convertFunc, false).setOffsetX(x).setActive(true);
-        element.hb.update();
-        return x + element.hb.width + scale(20);
+        return end + scale(20);
     }
 
     @Override

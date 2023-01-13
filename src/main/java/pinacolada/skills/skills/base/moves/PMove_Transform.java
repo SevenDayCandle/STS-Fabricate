@@ -28,7 +28,7 @@ public class PMove_Transform extends PMove_Select
 
     public PMove_Transform()
     {
-        this((String) null);
+        this(1);
     }
 
     public PMove_Transform(PSkillSaveData content)

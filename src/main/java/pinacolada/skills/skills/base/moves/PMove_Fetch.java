@@ -20,7 +20,7 @@ public class PMove_Fetch extends PMove_Select
 
     public PMove_Fetch()
     {
-        this(1, (PCLCardGroupHelper) null);
+        this(1);
     }
 
     public PMove_Fetch(PSkillSaveData content)

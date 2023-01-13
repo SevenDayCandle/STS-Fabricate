@@ -19,7 +19,7 @@ public class PMod_ChangeGroupOnMatch extends PMod_ChangeGroup
 
     public PMod_ChangeGroupOnMatch()
     {
-        this((PCLCardGroupHelper) null);
+        super(DATA);
     }
 
     public PMod_ChangeGroupOnMatch(PCLCardGroupHelper... groups)

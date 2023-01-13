@@ -20,7 +20,7 @@ public class PMove_Discard extends PMove_Select
 
     public PMove_Discard()
     {
-        this(1, (PCLCardGroupHelper) null);
+        this(1);
     }
 
     public PMove_Discard(PSkillSaveData content)

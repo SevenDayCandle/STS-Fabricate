@@ -313,6 +313,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
 
     public void refresh()
     {
+
         for (PCLCustomCardEffectEditor ce : conditionEditors)
         {
             ce.refresh();
@@ -440,6 +441,17 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
         }
     }
 
+    // Schedule the editor to update its effect at the end of updateImpl. Use this instead of calling constructEffect directly to avoid concurrent modification errors when the visible UI changes
+    protected void scheduleConstruct()
+    {
+        toRemove.add(this::constructEffect);
+    }
+
+    protected void scheduleUpdate(ActionT0 update)
+    {
+        toRemove.add(update);
+    }
+
     @Override
     public void updateImpl()
     {
@@ -469,6 +481,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
             ce.tryUpdate();
         }
 
+        // Actions that involve changing the number of editors/components present must be executed after all other update actions to avoid concurrent modification
         for (ActionT0 action : toRemove)
         {
             action.invoke();

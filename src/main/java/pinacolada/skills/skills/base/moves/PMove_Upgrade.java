@@ -18,7 +18,7 @@ public class PMove_Upgrade extends PMove_Select
 
     public PMove_Upgrade()
     {
-        this(1, (PCLCardGroupHelper) null);
+        this(1);
     }
 
     public PMove_Upgrade(PSkillSaveData content)

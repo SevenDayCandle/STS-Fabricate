@@ -19,7 +19,7 @@ public class PMod_ChangeGroupOnStarter extends PMod_ChangeGroup
 
     public PMod_ChangeGroupOnStarter()
     {
-        this((PCLCardGroupHelper) null);
+        super(DATA);
     }
 
     public PMod_ChangeGroupOnStarter(PCLCardGroupHelper... groups)

@@ -25,7 +25,7 @@ import java.util.List;
 public abstract class PField implements Serializable
 {
     public static final PCLCoreStrings TEXT = PGR.core.strings;
-    public PSkill skill;
+    public transient PSkill skill;
 
     public abstract PField makeCopy();
 
@@ -48,7 +48,7 @@ public abstract class PField implements Serializable
 
     public static String getAffinityAndString(ArrayList<PCLAffinity> affinities)
     {
-        return PCLCoreStrings.joinWithAnd(EUIUtils.map(affinities, a -> a.getTooltip().getTitleOrIcon()));
+        return PCLCoreStrings.joinWithAnd(EUIUtils.mapAsNonnull(affinities, a -> a.getTooltip().getTitleOrIcon()));
     }
 
     public static String getAffinityAndOrString(ArrayList<PCLAffinity> affinities, boolean or)
@@ -58,12 +58,12 @@ public abstract class PField implements Serializable
 
     public static String getAffinityLevelAndString(ArrayList<PCLAffinity> affinities)
     {
-        return PCLCoreStrings.joinWithAnd(EUIUtils.map(affinities, a -> a.getLevelTooltip().getTitleOrIcon()));
+        return PCLCoreStrings.joinWithAnd(EUIUtils.mapAsNonnull(affinities, a -> a.getLevelTooltip().getTitleOrIcon()));
     }
 
     public static String getAffinityLevelOrString(ArrayList<PCLAffinity> affinities)
     {
-        return PCLCoreStrings.joinWithOr(EUIUtils.map(affinities, a -> a.getLevelTooltip().getTitleOrIcon()));
+        return PCLCoreStrings.joinWithOr(EUIUtils.mapAsNonnull(affinities, a -> a.getLevelTooltip().getTitleOrIcon()));
     }
 
     public static String getAffinityLevelAndOrString(ArrayList<PCLAffinity> affinities, boolean or)
@@ -73,27 +73,27 @@ public abstract class PField implements Serializable
 
     public static String getAffinityOrString(ArrayList<PCLAffinity> affinities)
     {
-        return PCLCoreStrings.joinWithOr(EUIUtils.map(affinities, a -> a.getTooltip().getTitleOrIcon()));
+        return PCLCoreStrings.joinWithOr(EUIUtils.mapAsNonnull(affinities, a -> a.getTooltip().getTitleOrIcon()));
     }
 
     public static String getAffinityPowerAndString(ArrayList<PCLAffinity> affinities)
     {
-        return PCLCoreStrings.joinWithAnd(EUIUtils.map(affinities, a -> a.getLevelTooltip().getTitleOrIcon()));
+        return PCLCoreStrings.joinWithAnd(EUIUtils.mapAsNonnull(affinities, a -> a.getLevelTooltip().getTitleOrIcon()));
     }
 
     public static String getAffinityPowerOrString(ArrayList<PCLAffinity> affinities)
     {
-        return PCLCoreStrings.joinWithOr(EUIUtils.map(affinities, a -> a.getLevelTooltip().getTitleOrIcon()));
+        return PCLCoreStrings.joinWithOr(EUIUtils.mapAsNonnull(affinities, a -> a.getLevelTooltip().getTitleOrIcon()));
     }
 
     public static String getAffinityPowerString(ArrayList<PCLAffinity> affinities)
     {
-        return EUIUtils.joinStrings(" ", EUIUtils.map(affinities, a -> a.getLevelTooltip().getTitleOrIcon()));
+        return EUIUtils.joinStrings(" ", EUIUtils.mapAsNonnull(affinities, a -> a.getLevelTooltip().getTitleOrIcon()));
     }
 
     public static String getAffinityString(ArrayList<PCLAffinity> affinities)
     {
-        return EUIUtils.joinStrings(" ", EUIUtils.map(affinities, a -> a.getTooltip().getTitleOrIcon()));
+        return EUIUtils.joinStrings(" ", EUIUtils.mapAsNonnull(affinities, a -> a.getTooltip().getTitleOrIcon()));
     }
 
     public static String getCardNameForID(String cardID)
@@ -121,7 +121,7 @@ public abstract class PField implements Serializable
 
     public static String getGroupString(List<PCLCardGroupHelper> groups)
     {
-        return groups.size() >= 3 ? PGR.core.strings.subjects.anyPile : PCLCoreStrings.joinWithOr(EUIUtils.map(groups, g -> g.name.toLowerCase()));
+        return groups.size() >= 3 ? PGR.core.strings.subjects.anyPile : PCLCoreStrings.joinWithOr(EUIUtils.mapAsNonnull(groups, g -> g.name.toLowerCase()));
     }
 
     public static String getGeneralAffinityAndString(ArrayList<PCLAffinity> affinities)
@@ -147,32 +147,32 @@ public abstract class PField implements Serializable
 
     public static String getOrbAndString(ArrayList<PCLOrbHelper> orbs, Object value)
     {
-        return orbs.isEmpty() ? PCLCoreStrings.plural(PGR.core.tooltips.orb, value) : PCLCoreStrings.joinWithAnd(EUIUtils.map(orbs, a -> a.getTooltip().getTitleOrIcon()));
+        return orbs.isEmpty() ? PCLCoreStrings.plural(PGR.core.tooltips.orb, value) : PCLCoreStrings.joinWithAnd(EUIUtils.mapAsNonnull(orbs, a -> a.getTooltip().getTitleOrIcon()));
     }
 
     public static String getOrbOrString(ArrayList<PCLOrbHelper> orbs, Object value)
     {
-        return orbs.isEmpty() ? PCLCoreStrings.plural(PGR.core.tooltips.orb, value) : PCLCoreStrings.joinWithOr(EUIUtils.map(orbs, a -> a.getTooltip().getTitleOrIcon()));
+        return orbs.isEmpty() ? PCLCoreStrings.plural(PGR.core.tooltips.orb, value) : PCLCoreStrings.joinWithOr(EUIUtils.mapAsNonnull(orbs, a -> a.getTooltip().getTitleOrIcon()));
     }
 
     public static String getOrbString(ArrayList<PCLOrbHelper> orbs)
     {
-        return EUIUtils.joinStrings(" ", EUIUtils.map(orbs, a -> a.getTooltip().getTitleOrIcon()));
+        return EUIUtils.joinStrings(" ", EUIUtils.mapAsNonnull(orbs, a -> a.getTooltip().getTitleOrIcon()));
     }
 
     public static String getPowerAndString(ArrayList<PCLPowerHelper> powers)
     {
-        return PCLCoreStrings.joinWithAnd(EUIUtils.map(powers, a -> a.getTooltip().getTitleOrIcon()));
+        return PCLCoreStrings.joinWithAnd(EUIUtils.mapAsNonnull(powers, a -> a.getTooltip().getTitleOrIcon()));
     }
 
     public static String getPowerOrString(ArrayList<PCLPowerHelper> powers)
     {
-        return PCLCoreStrings.joinWithOr(EUIUtils.map(powers, a -> a.getTooltip().getTitleOrIcon()));
+        return PCLCoreStrings.joinWithOr(EUIUtils.mapAsNonnull(powers, a -> a.getTooltip().getTitleOrIcon()));
     }
 
     public static String getPowerString(ArrayList<PCLPowerHelper> powers)
     {
-        return EUIUtils.joinStrings(" ", EUIUtils.map(powers, a -> a.getTooltip().getTitleOrIcon()));
+        return EUIUtils.joinStrings(" ", EUIUtils.mapAsNonnull(powers, a -> a.getTooltip().getTitleOrIcon()));
     }
 
     public static String getRelicNameForID(String relicID)

@@ -22,7 +22,7 @@ public class PMod_BonusPerOrb extends PMod_BonusPer<PField_Orb>
 
     public PMod_BonusPerOrb()
     {
-        this(0, (PCLOrbHelper) null);
+        this(0);
     }
 
     public PMod_BonusPerOrb(int amount, PCLOrbHelper... orbs)

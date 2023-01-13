@@ -36,7 +36,7 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     public PMultiSkill(PSkillSaveData content)
     {
         super(content);
-        effects = EUIUtils.mapAsNonnull(splitJson(content.effectData), PSkill::get);
+        effects = EUIUtils.mapAsNonnull(splitJson(content.special), PSkill::get);
         setParentsForChildren();
     }
 
@@ -71,9 +71,9 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
         return new PMultiSkill(effects).setGenerated(true);
     }
 
-    public void addAdditionalData(PSkillSaveData data)
+    public String getSpecialData()
     {
-        data.effectData = PSkill.joinDataAsJson(effects, PSkill::serialize);
+        return PSkill.joinDataAsJson(effects, PSkill::serialize);
     }
 
     @Override

@@ -22,7 +22,7 @@ public class PMod_BonusPerAffinityLevel extends PMod_BonusPer<PField_Affinity>
 
     public PMod_BonusPerAffinityLevel()
     {
-        this(0, (PCLAffinity) null);
+        this(0);
     }
 
     public PMod_BonusPerAffinityLevel(int amount, PCLAffinity... affinities)

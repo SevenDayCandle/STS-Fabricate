@@ -21,7 +21,7 @@ public class PCond_CycleTo extends PCond_DoTo
 
     public PCond_CycleTo()
     {
-        this(1, (PCLCardGroupHelper) null);
+        this(1);
     }
 
     public PCond_CycleTo(PSkillSaveData content)

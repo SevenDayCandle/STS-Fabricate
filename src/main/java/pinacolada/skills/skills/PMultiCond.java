@@ -39,7 +39,7 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond>
     public PMultiCond(PSkillSaveData content)
     {
         super(content);
-        effects = EUIUtils.mapAsNonnull(splitJson(content.effectData), e -> (PCond) PSkill.get(e));
+        effects = EUIUtils.mapAsNonnull(splitJson(content.special), e -> (PCond) PSkill.get(e));
         setParentsForChildren();
     }
 
@@ -64,9 +64,9 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond>
         return (PMultiCond) new PMultiCond(effects).edit(r -> r.setOr(true));
     }
 
-    public void addAdditionalData(PSkillSaveData data)
+    public String getSpecialData()
     {
-        data.effectData = PSkill.joinDataAsJson(effects, PSkill::serialize);
+        return PSkill.joinDataAsJson(effects, PSkill::serialize);
     }
 
     public void displayUpgrades()
