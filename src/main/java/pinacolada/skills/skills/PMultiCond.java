@@ -1,5 +1,6 @@
 package pinacolada.skills.skills;
 
+import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.AbstractCreature;
@@ -36,7 +37,7 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         super(DATA, PCLCardTarget.None, 0);
     }
 
-    public PMultiCond(PSkillData<PField_Or> data, PSkillSaveData content)
+    public PMultiCond(PSkillSaveData content)
     {
         super(DATA, content);
         effects = EUIUtils.mapAsNonnull(splitJson(content.special), e -> (PCond<?>) PSkill.get(e));
@@ -73,6 +74,36 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
     {
         super.displayUpgrades();
         displayChildUpgrades();
+    }
+
+    @Override
+    public Color getGlowColor()
+    {
+        Color c = super.getGlowColor();
+        for (PSkill<?> effect : effects)
+        {
+            Color c2 = effect.getGlowColor();
+            if (c2 != null)
+            {
+                c = c2;
+            }
+        }
+        return c;
+    }
+
+    @Override
+    public AbstractMonster.Intent getIntent()
+    {
+        AbstractMonster.Intent c = super.getIntent();
+        for (PSkill<?> effect : effects)
+        {
+            AbstractMonster.Intent c2 = effect.getIntent();
+            if (c2 != null)
+            {
+                c = c2;
+            }
+        }
+        return c;
     }
 
     @Override

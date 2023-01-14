@@ -181,8 +181,9 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
             Constructor<? extends PSkill<?>> c = EUIUtils.tryGetConstructor(skillData.effectClass, PSkillSaveData.class);
             if (c != null)
             {
-                return c.newInstance(skillData, saveData);
+                return c.newInstance(saveData);
             }
+            EUIUtils.logError(PSkill.class, "Unable to find constructor for skill " + saveData.effectID + " for effect class " + skillData.effectClass);
         }
         catch (Exception e)
         {
@@ -719,9 +720,18 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return source != null ? EUIUtils.format(BOUND_FORMAT, "G" + getCardPointer()) : wrapExtra(amount);
     }
 
+    public Color getGlowColor()
+    {
+        return childEffect != null ? childEffect.getGlowColor() : null;
+    }
+
     public final String getInheritedString()
     {
         return parent != null ? parent.getParentString() : this.getParentString();
+    }
+
+    public AbstractMonster.Intent getIntent() {
+        return childEffect != null ? childEffect.getIntent() : AbstractMonster.Intent.MAGIC;
     }
 
     public final PSkill<?> getLowestChild()

@@ -1,6 +1,7 @@
 package pinacolada.skills;
 
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIUtils;
 import pinacolada.cards.base.*;
 import pinacolada.cards.base.fields.PCLCardTag;
@@ -215,10 +216,16 @@ public abstract class PMove<T extends PField> extends PSkill<T>
         return new PMove_Draw(amount);
     }
 
-    public static PMove_Draw draw(PCLCard card, PSkill.PCLCardValueSource valueSource)
+    public static PMove_Draw draw(int amount, PCLAffinity... affinity)
     {
-        return (PMove_Draw) new PMove_Draw(0)
-                .setSource(card, valueSource);
+        return (PMove_Draw) new PMove_Draw(amount)
+                .edit(f -> f.setAffinity(affinity));
+    }
+
+    public static PMove_Draw draw(int amount, AbstractCard.CardType... t)
+    {
+        return (PMove_Draw) new PMove_Draw(amount)
+                .edit(f -> f.setType(t));
     }
 
     public static PMove_EnterStance enterStance(PCLStanceHelper... helper)
@@ -494,6 +501,18 @@ public abstract class PMove<T extends PField> extends PSkill<T>
     public static PMove_Retain retain(int amount)
     {
         return new PMove_Retain(amount, PCLCardGroupHelper.Hand);
+    }
+
+    public static PMove_Retain retain(int amount, PCLAffinity... affinity)
+    {
+        return (PMove_Retain) new PMove_Retain(amount)
+                .edit(f -> f.setAffinity(affinity));
+    }
+
+    public static PMove_Retain retain(int amount, AbstractCard.CardType... t)
+    {
+        return (PMove_Retain) new PMove_Retain(amount)
+                .edit(f -> f.setType(t));
     }
 
     public static PMove_Scout scout(int amount)

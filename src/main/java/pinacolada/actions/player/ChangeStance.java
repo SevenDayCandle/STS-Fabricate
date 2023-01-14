@@ -8,7 +8,6 @@ import com.megacrit.cardcrawl.powers.watcher.CannotChangeStancePower;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.stances.AbstractStance;
 import com.megacrit.cardcrawl.stances.NeutralStance;
-import extendedui.EUIUtils;
 import pinacolada.actions.PCLActionWithCallback;
 import pinacolada.stances.PCLStance;
 import pinacolada.stances.PCLStanceHelper;
@@ -91,7 +90,7 @@ public class ChangeStance extends PCLActionWithCallback<AbstractStance>
         player.stance = newStance;
         newStance.onEnterStance();
 
-        EUIUtils.incrementMapElement(AbstractDungeon.actionManager.uniqueStancesThisCombat, newStance.ID);
+        AbstractDungeon.actionManager.uniqueStancesThisCombat.merge(newStance.ID, 1, Integer::sum);
 
         player.switchedStance();
 

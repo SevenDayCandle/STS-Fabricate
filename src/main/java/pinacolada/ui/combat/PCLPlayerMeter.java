@@ -68,6 +68,11 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implement
     {
     }
 
+    public boolean canGlow(AbstractCard c)
+    {
+        return true;
+    }
+
     public void disableAffinity(PCLAffinity affinity)
     {
     }
@@ -141,7 +146,18 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implement
 
     public Object getRerollDescription2() {return null;}
 
-    public boolean hasMatch(AbstractCard card)
+    public void increaseMatchCombo(int amount)
+    {
+        currentMatchCombo += amount;
+        longestMatchCombo = Math.max(longestMatchCombo, currentMatchCombo);
+    }
+
+    public boolean isHovered()
+    {
+        return super.isHovered() || infoIcon.hb.hovered;
+    }
+
+    public boolean isMatch(AbstractCard card)
     {
         PCLAffinity current = getCurrentAffinity();
         if (current == PCLAffinity.General)
@@ -158,17 +174,6 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implement
             return (eCard.affinities.getLevel(current, true) > 0);
         }
         return false;
-    }
-
-    public void increaseMatchCombo(int amount)
-    {
-        currentMatchCombo += amount;
-        longestMatchCombo = Math.max(longestMatchCombo, currentMatchCombo);
-    }
-
-    public boolean isHovered()
-    {
-        return super.isHovered() || infoIcon.hb.hovered;
     }
 
     public boolean isPowerActive(PCLAffinity affinity) {return false;}

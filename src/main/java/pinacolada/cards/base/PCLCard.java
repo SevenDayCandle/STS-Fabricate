@@ -100,11 +100,11 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     protected static final Color COLOR_UNCOMMON = new Color(0.5f, 0.85f, 0.95f, 1f);
     protected static final Color HOVER_IMG_COLOR = new Color(1f, 0.815f, 0.314f, 0.8f);
     protected static final Color SELECTED_CARD_COLOR = new Color(0.5f, 0.9f, 0.9f, 1f);
-    protected static final Color defaultGlowColor = AbstractCard.BLUE_BORDER_GLOW_COLOR;
-    protected static final Color synergyGlowColor = new Color(1, 0.843f, 0, 0.25f);
     protected static final String UNPLAYABLE_MESSAGE = CardCrawlGame.languagePack.getCardStrings(Tactician.ID).EXTENDED_DESCRIPTION[0];
     protected static final float SHADOW_OFFSET_X = 18f * Settings.scale;
     protected static final float SHADOW_OFFSET_Y = 14f * Settings.scale;
+    public static final Color REGULAR_GLOW_COLOR = new Color(0.2F, 0.9F, 1.0F, 0.25F);
+    public static final Color SYNERGY_GLOW_COLOR = new Color(1, 0.843f, 0, 0.25f);
     public static final int CHAR_OFFSET = 97;
     public static AbstractPlayer player = null;
     public static Random rng = null;
@@ -144,7 +144,6 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     public transient PowerFormulaDisplay formulaDisplay;
     protected ColoredTexture portraitForeground;
     protected ColoredTexture portraitImg;
-    protected Color borderIndicatorColor;
     protected DrawPileCardPreview drawPileCardPreview;
     protected TextureAtlas.AtlasRegion fakePortrait;
     protected boolean playAtEndOfTurn;
@@ -581,16 +580,6 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         return setForm(form, timesUpgraded);
     }
 
-    // Condition text will be green if this passes
-    public boolean checkPrimaryCondition(boolean tryUse) {
-        return false;
-    }
-
-    // Card will glow green if this passes
-    public boolean checkSpecialCondition(boolean tryUse) {
-        return false;
-    }
-
     protected void doEffects(ActionT1<PSkill<?>> action) {
         for (PSkill<?> be : getFullEffects()) {
             action.invoke(be);
@@ -729,10 +718,6 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
             return new ColoredTexture((isPopup ? PGR.core.images.cardBanner2L : PGR.core.images.cardBanner2).texture(), getRarityColor());
         }
         return new ColoredTexture((isPopup ? PGR.core.images.cardBannerL : PGR.core.images.cardBanner).texture(), getRarityColor());
-    }
-
-    protected ColoredTexture getCardBorderIndicator() {
-        return borderIndicatorColor == null ? null : new ColoredTexture(PGR.core.images.cardBorderIndicator.texture(), borderIndicatorColor);
     }
 
     // Always use the skill silhouette because cards are all rectangular
@@ -1184,16 +1169,12 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         return -1;
     }
 
-    public boolean hasSynergy() {
-        return CombatManager.playerSystem.isMatch(this) || CombatManager.playerSystem.wouldMatch(this);
-    }
-
     public boolean isAoE() {
         return isMultiDamage;
     }
 
     protected boolean isEffectPlayable(AbstractMonster m) {
-        for (PSkill be : getFullEffects()) {
+        for (PSkill<?> be : getFullEffects()) {
             if (!be.canPlay(this, m)) {
                 return false;
             }
@@ -1227,35 +1208,35 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     }
 
     protected float modifyBlock(AbstractMonster enemy, float amount) {
-        for (PSkill be : getFullEffects()) {
+        for (PSkill<?> be : getFullEffects()) {
             amount = be.modifyBlock(this, enemy, amount);
         }
         return amount;
     }
 
     protected float modifyDamage(AbstractMonster enemy, float amount) {
-        for (PSkill be : getFullEffects()) {
+        for (PSkill<?> be : getFullEffects()) {
             amount = be.modifyDamage(this, enemy, amount);
         }
         return amount;
     }
 
     protected float modifyHitCount(AbstractMonster enemy, float amount) {
-        for (PSkill be : getFullEffects()) {
+        for (PSkill<?> be : getFullEffects()) {
             amount = be.modifyHitCount(this, enemy, amount);
         }
         return amount;
     }
 
     protected float modifyMagicNumber(AbstractMonster enemy, float amount) {
-        for (PSkill be : getFullEffects()) {
+        for (PSkill<?> be : getFullEffects()) {
             amount = be.modifyMagicNumber(this, enemy, amount);
         }
         return amount;
     }
 
     protected float modifyRightCount(AbstractMonster enemy, float amount) {
-        for (PSkill be : getFullEffects()) {
+        for (PSkill<?> be : getFullEffects()) {
             amount = be.modifyRightCount(this, enemy, amount);
         }
         return amount;
@@ -2088,7 +2069,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     @Override
     public void triggerOnEndOfTurnForPlayingCard() {
         boolean shouldPlay = playAtEndOfTurn;
-        for (PSkill be : getFullEffects()) {
+        for (PSkill<?> be : getFullEffects()) {
             shouldPlay = shouldPlay | be.triggerOnEndOfTurn(false);
         }
         if (playAtEndOfTurn) {
@@ -2167,16 +2148,14 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
 
     @Override
     public void triggerOnGlowCheck() {
-        this.glowColor = PCLCard.defaultGlowColor;
-        this.borderIndicatorColor = null;
+        this.glowColor = CombatManager.playerSystem.getGlowColor(this);
 
-        if (checkSpecialCondition(false)) {
-            this.glowColor = AbstractCard.GREEN_BORDER_GLOW_COLOR;
-            this.borderIndicatorColor = glowColor;
-        }
-
-        if (hasSynergy()) {
-            this.glowColor = PCLCard.synergyGlowColor;
+        for (PSkill<?> be : getFullEffects()) {
+            Color c = be.getGlowColor();
+            if (c != null)
+            {
+                this.glowColor = c;
+            }
         }
     }
 

@@ -34,7 +34,6 @@ public class PCLCoreImages extends PCLImages
     public final TextureCache cardBannerL = new TextureCache("images/pcl/cardui/1024/banner.png");
     public final TextureCache cardBannerRepl = new TextureCache("images/pcl/cardui/512/banner_repl.png");
     public final TextureCache cardBannerReplL = new TextureCache("images/pcl/cardui/1024/banner_repl.png");
-    public final TextureCache cardBorderIndicator = new TextureCache("images/pcl/cardui/512/border_indicator.png");
     public final TextureCache cardEnergyOrb = new TextureCache(ORB_A_PNG);
     public final TextureCache cardEnergyOrbL = new TextureCache(ORB_B_PNG);
     public final TextureCache cardFrameAttack = new TextureCache("images/pcl/cardui/512/frame_attack.png");

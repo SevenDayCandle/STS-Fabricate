@@ -273,9 +273,10 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
 
     public void registerBoolean(String title, ActionT1<Boolean> onChange, boolean initial)
     {
-        registerBoolean(new EUIToggle(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, MENU_WIDTH, 0))
+        registerBoolean(new EUIToggle(new OriginRelativeHitbox(hb, MENU_WIDTH * 0.62f, MENU_HEIGHT, MENU_WIDTH, 0))
                 .setFont(EUIFontHelper.carddescriptionfontNormal, 0.9f)
-                .setText(title), onChange, initial);
+                .setText(title)
+                , onChange, initial);
     }
     public void registerBoolean(EUIToggle toggle, ActionT1<Boolean> onChange, boolean initial)
     {
@@ -403,7 +404,7 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
         float end = x + element.hb.width;
         if (end > CUTOFF)
         {
-            additionalHeight -= MENU_HEIGHT * 1.5;
+            additionalHeight -= MENU_HEIGHT * 2f;
             setX = AUX_OFFSET;
             end = AUX_OFFSET + element.hb.width;
         }

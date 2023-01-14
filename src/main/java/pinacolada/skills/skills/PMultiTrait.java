@@ -1,5 +1,6 @@
 package pinacolada.skills.skills;
 
+import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
@@ -99,6 +100,36 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
     {
         super.displayUpgrades();
         displayChildUpgrades();
+    }
+
+    @Override
+    public Color getGlowColor()
+    {
+        Color c = super.getGlowColor();
+        for (PSkill<?> effect : effects)
+        {
+            Color c2 = effect.getGlowColor();
+            if (c2 != null)
+            {
+                c = c2;
+            }
+        }
+        return c;
+    }
+
+    @Override
+    public AbstractMonster.Intent getIntent()
+    {
+        AbstractMonster.Intent c = super.getIntent();
+        for (PSkill<?> effect : effects)
+        {
+            AbstractMonster.Intent c2 = effect.getIntent();
+            if (c2 != null)
+            {
+                c = c2;
+            }
+        }
+        return c;
     }
 
     @Override

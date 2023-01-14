@@ -1,5 +1,6 @@
 package pinacolada.ui.combat;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -31,8 +32,6 @@ public class PCLPlayerSystem extends EUIBase
     protected final LinkedHashMap<AbstractPlayer.PlayerClass, PCLPlayerMeter> meters = new LinkedHashMap<>();
     public final PCLEmptyMeter fakeMeter = new PCLEmptyMeter();
 
-    protected PCLAffinity currentAffinitySynergy = null;
-    protected AbstractCard currentSynergy = null;
     protected PCLCard lastCardPlayed = null;
 
     public PCLPlayerSystem()
@@ -104,14 +103,14 @@ public class PCLPlayerSystem extends EUIBase
         return getActiveMeter().getCurrentAffinity();
     }
 
+    public Color getGlowColor(AbstractCard c)
+    {
+        return isMatch(c) && getActiveMeter().canGlow(c) ? PCLCard.SYNERGY_GLOW_COLOR : PCLCard.REGULAR_GLOW_COLOR;
+    }
+
     public int getLastAffinityLevel(PCLAffinity affinity)
     {
         return lastCardPlayed == null ? 0 : lastCardPlayed.affinities.getLevel(affinity);
-    }
-
-    public PCLAffinity getLastAffinitySynergy()
-    {
-        return currentSynergy != null ? currentAffinitySynergy : null;
     }
 
     public PCLCard getLastCardPlayed()
@@ -167,14 +166,22 @@ public class PCLPlayerSystem extends EUIBase
         }
     }
 
+    public boolean isMatch(AbstractCard card)
+    {
+        for (OnMatchCheckSubscriber s : CombatManager.onMatchCheck.getSubscribers())
+        {
+            if (s.onMatchCheck(card, null))
+            {
+                return true;
+            }
+        }
+
+        return getActiveMeter().isMatch(card);
+    }
+
     public boolean isPowerActive(PCLAffinity affinity)
     {
         return getActiveMeter().isPowerActive(affinity);
-    }
-
-    public boolean isMatch(AbstractCard card)
-    {
-        return card != null && currentSynergy != null && currentSynergy.uuid == card.uuid;
     }
 
     public float modifyBlock(float block, PCLCard source, PCLCard card, AbstractCreature target)
@@ -278,22 +285,6 @@ public class PCLPlayerSystem extends EUIBase
     public void setLastCardPlayed(AbstractCard card)
     {
         lastCardPlayed = EUIUtils.safeCast(card, PCLCard.class);
-        currentSynergy = null;
-        currentAffinitySynergy = null;
-    }
-
-    public boolean trySynergize(AbstractCard card)
-    {
-        if (wouldMatch(card))
-        {
-            currentSynergy = card;
-            currentAffinitySynergy = getCurrentAffinity();
-            return true;
-        }
-
-        currentSynergy = null;
-        currentAffinitySynergy = null;
-        return false;
     }
 
     @Override
@@ -314,7 +305,6 @@ public class PCLPlayerSystem extends EUIBase
         return this.isActive;
     }
 
-
     public void renderImpl(SpriteBatch sb)
     {
         if (player == null || player.hand == null || AbstractDungeon.overlayMenu.energyPanel.isHidden)
@@ -323,23 +313,5 @@ public class PCLPlayerSystem extends EUIBase
         }
 
         getActiveMeter().renderImpl(sb);
-    }
-
-    public boolean wouldMatch(AbstractCard card)
-    {
-        for (OnMatchCheckSubscriber s : CombatManager.onMatchCheck.getSubscribers())
-        {
-            if (s.onMatchCheck(card, null))
-            {
-                return true;
-            }
-        }
-
-        final PCLCard a = EUIUtils.safeCast(card, PCLCard.class);
-        if (a != null)
-        {
-            return getActiveMeter().hasMatch(a);
-        }
-        return false;
     }
 }

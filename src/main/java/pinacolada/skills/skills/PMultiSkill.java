@@ -1,5 +1,6 @@
 package pinacolada.skills.skills;
 
+import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
@@ -33,7 +34,7 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
         super(DATA, PCLCardTarget.None, 0);
     }
 
-    public PMultiSkill(PSkillData<PField_Empty> data, PSkillSaveData content)
+    public PMultiSkill(PSkillSaveData content)
     {
         super(DATA, content);
         effects = EUIUtils.mapAsNonnull(splitJson(content.special), PSkill::get);
@@ -69,6 +70,36 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     public static PMultiSkill joinGen(PSkill<?>... effects)
     {
         return new PMultiSkill(effects).setGenerated(true);
+    }
+
+    @Override
+    public Color getGlowColor()
+    {
+        Color c = super.getGlowColor();
+        for (PSkill<?> effect : effects)
+        {
+            Color c2 = effect.getGlowColor();
+            if (c2 != null)
+            {
+                c = c2;
+            }
+        }
+        return c;
+    }
+
+    @Override
+    public AbstractMonster.Intent getIntent()
+    {
+        AbstractMonster.Intent c = super.getIntent();
+        for (PSkill<?> effect : effects)
+        {
+            AbstractMonster.Intent c2 = effect.getIntent();
+            if (c2 != null)
+            {
+                c = c2;
+            }
+        }
+        return c;
     }
 
     public String getSpecialData()

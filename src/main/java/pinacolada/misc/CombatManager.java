@@ -587,7 +587,6 @@ public class CombatManager
 
     public static void onPlayCardPostActions(AbstractCard card, AbstractMonster m)
     {
-        CombatManager.playerSystem.trySynergize(card);
         if (PCLCardTag.Recast.has(card))
         {
             PCLCardTag.Recast.tryProgress(card);

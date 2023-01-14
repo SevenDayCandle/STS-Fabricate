@@ -117,7 +117,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
         addCondition = new EUIButton(EUIRM.images.plus.texture(), new OriginRelativeHitbox(hb, scale(48), scale(48), MENU_WIDTH, 0))
                 .setOnClick(() -> conditionGroup.addEffectSlot())
                 .setClickDelay(0.02f);
-        ifElseToggle = (EUIToggle) new EUIToggle(new OriginRelativeHitbox(hb, MENU_WIDTH / 4, MENU_HEIGHT, MENU_WIDTH * 2f, 0))
+        ifElseToggle = (EUIToggle) new EUIToggle(new OriginRelativeHitbox(hb, MENU_WIDTH / 4, MENU_HEIGHT, MENU_WIDTH * 1.9f, 0))
                 .setFont(EUIFontHelper.carddescriptionfontNormal, 0.9f)
                 .setText(PGR.core.strings.cardEditor.ifElseCondition)
                 .setOnToggle(val -> {
@@ -125,7 +125,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
                     constructEffect();
                 })
                 .setTooltip(PGR.core.strings.cardEditor.ifElseCondition, PGR.core.strings.cardEditorTutorial.effectConditionIfElse);
-        orToggle = (EUIToggle) new EUIToggle(new OriginRelativeHitbox(hb, MENU_WIDTH / 4, MENU_HEIGHT, MENU_WIDTH * 3f, 0))
+        orToggle = (EUIToggle) new EUIToggle(new OriginRelativeHitbox(hb, MENU_WIDTH / 4, MENU_HEIGHT, MENU_WIDTH * 2.6f, 0))
                 .setFont(EUIFontHelper.carddescriptionfontNormal, 0.9f)
                 .setText(PGR.core.strings.cardEditor.orCondition)
                 .setOnToggle(val -> {
