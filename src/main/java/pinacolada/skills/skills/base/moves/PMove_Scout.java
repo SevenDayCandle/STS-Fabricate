@@ -3,6 +3,7 @@ package pinacolada.skills.skills.base.moves;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import extendedui.EUIRM;
 import extendedui.interfaces.delegates.FuncT5;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.actions.pileSelection.ScoutCards;
@@ -30,9 +31,9 @@ public class PMove_Scout extends PMove_Select
         super(DATA, content);
     }
 
-    public PMove_Scout(int amount, PCLCardGroupHelper... h)
+    public PMove_Scout(int amount)
     {
-        super(DATA, amount, h);
+        super(DATA, amount, PCLCardGroupHelper.DrawPile);
     }
 
     @Override
@@ -45,5 +46,12 @@ public class PMove_Scout extends PMove_Select
     public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction()
     {
         return (s, c, i, o, g) -> new ScoutCards(s, i);
+    }
+
+    @Override
+    public String getSubText()
+    {
+        return useParent ? EUIRM.strings.verbNoun(getActionTitle(), getInheritedString())
+                : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawString(), fields.getFullCardString());
     }
 }

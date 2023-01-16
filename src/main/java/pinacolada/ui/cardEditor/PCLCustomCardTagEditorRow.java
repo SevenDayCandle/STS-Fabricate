@@ -53,7 +53,7 @@ public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo>
         displayValue.setValue(1);
 
         displayValue2 = (EUITextBoxNumericalInput) new EUITextBoxNumericalInput(EUIRM.images.panelRoundedHalfH.texture(),
-                new RelativeHitbox(displayValue.hb, displayValue.hb.width, displayValue.hb.height, MENU_HEIGHT * 2.7f, MENU_HEIGHT * 0.5f).setIsPopupCompatible(true).setParentElement(dr))
+                new RelativeHitbox(displayValue.hb, displayValue.hb.width, displayValue.hb.height, MENU_HEIGHT * 3.2f, MENU_HEIGHT * 0.5f).setIsPopupCompatible(true).setParentElement(dr))
                 .showNegativeAsInfinity(true)
                 .setLimits(MIN_LEVEL, MAX_LEVEL)
                 .setOnComplete(v -> {
@@ -70,7 +70,7 @@ public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo>
                 .setOnClick(this::decreasePrimary)
                 .setText(null);
 
-        decreaseButton2 = new EUIButton(ImageMaster.CF_LEFT_ARROW, new RelativeHitbox(displayValue.hb, ICON_SIZE, ICON_SIZE, 2.2f * MENU_HEIGHT + ICON_SIZE * -0.4f, MENU_HEIGHT * 0.5f).setIsPopupCompatible(true).setParentElement(dr))
+        decreaseButton2 = new EUIButton(ImageMaster.CF_LEFT_ARROW, new RelativeHitbox(displayValue.hb, ICON_SIZE, ICON_SIZE, 2.7f * MENU_HEIGHT + ICON_SIZE * -0.4f, MENU_HEIGHT * 0.5f).setIsPopupCompatible(true).setParentElement(dr))
                 .setOnClick(this::decreaseSecondary)
                 .setText(null);
 
@@ -78,7 +78,7 @@ public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo>
                 .setOnClick(this::increasePrimary)
                 .setText(null);
 
-        increaseButton2 = new EUIButton(ImageMaster.CF_RIGHT_ARROW, new RelativeHitbox(displayValue.hb, ICON_SIZE, ICON_SIZE, 3.2f * MENU_HEIGHT + (ICON_SIZE * 0.4f), MENU_HEIGHT * 0.5f).setIsPopupCompatible(true).setParentElement(dr))
+        increaseButton2 = new EUIButton(ImageMaster.CF_RIGHT_ARROW, new RelativeHitbox(displayValue.hb, ICON_SIZE, ICON_SIZE, 3.7f * MENU_HEIGHT + (ICON_SIZE * 0.4f), MENU_HEIGHT * 0.5f).setIsPopupCompatible(true).setParentElement(dr))
                 .setOnClick(this::increaseSecondary)
                 .setText(null);
     }
