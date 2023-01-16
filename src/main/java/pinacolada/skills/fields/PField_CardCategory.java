@@ -7,12 +7,11 @@ import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
-import extendedui.interfaces.delegates.FuncT4;
+import extendedui.interfaces.delegates.FuncT5;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.actions.PCLActionWithCallback;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.pileSelection.SelectFromPile;
-import pinacolada.cards.base.CardSelection;
 import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.cards.base.fields.PCLCardTag;
@@ -21,6 +20,7 @@ import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
 import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
 import pinacolada.utilities.GameUtilities;
+import pinacolada.utilities.ListSelection;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -208,24 +208,24 @@ public class PField_CardCategory extends PField_CardID
                         : EUIRM.strings.verbNoun(tooltipTitle, TEXT.subjects.thisObj);
     }
 
-    protected SelectFromPile createAction(FuncT4<SelectFromPile, String, AbstractCreature, Integer, CardGroup[]> action, PCLUseInfo info)
+    protected SelectFromPile createAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> action, PCLUseInfo info)
     {
         CardGroup[] g = getCardGroup(info);
-        return action.invoke(skill.getName(), skill.target.getTarget(info.source, info.target), skill.useParent && g.length > 0 ? g[0].size() : skill.amount <= 0 ? Integer.MAX_VALUE : skill.amount, g);
+        return action.invoke(skill.getName(), skill.target.getTarget(info.source, info.target), skill.useParent && g.length > 0 ? g[0].size() : skill.amount <= 0 ? Integer.MAX_VALUE : skill.amount, origin.toSelection(), g);
     }
 
-    public PCLActionWithCallback<ArrayList<AbstractCard>> getGenericPileAction(FuncT4<SelectFromPile, String, AbstractCreature, Integer, CardGroup[]> action, PCLUseInfo info)
+    public PCLActionWithCallback<ArrayList<AbstractCard>> getGenericPileAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> action, PCLUseInfo info)
     {
         if (!skill.useParent && groupTypes.isEmpty())
         {
             return PCLActions.last.add(createAction(action, info))
-                    .setOptions(true, true);
+                    .setAnyNumber(!forced);
         }
         else
         {
             return skill.getActions().add(createAction(action, info))
                     .setFilter(getFullCardFilter())
-                    .setOptions((skill.amount <= 0 ? CardSelection.Random : origin).toSelection(), !forced);
+                    .setAnyNumber(!forced);
         }
     }
 }

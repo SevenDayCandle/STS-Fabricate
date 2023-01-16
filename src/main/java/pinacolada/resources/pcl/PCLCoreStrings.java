@@ -173,6 +173,7 @@ public class PCLCoreStrings extends PCLStrings
         public final String exportCSV = strings.TEXT[58];
         public final String random = strings.TEXT[59];
         public final String required = strings.TEXT[60];
+        public final String origins = strings.TEXT[61];
     }
 
     public class Misc

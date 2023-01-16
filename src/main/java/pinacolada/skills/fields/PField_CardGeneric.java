@@ -3,8 +3,8 @@ package pinacolada.skills.fields;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import extendedui.EUIUtils;
-import pinacolada.cards.base.CardSelection;
 import pinacolada.cards.base.PCLCardGroupHelper;
+import pinacolada.cards.base.PCLCardSelection;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.skills.PSkill;
 import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
@@ -17,7 +17,7 @@ public class PField_CardGeneric extends PField
 {
     public ArrayList<PCLCardGroupHelper> groupTypes = new ArrayList<>();
     public ArrayList<PCLCardGroupHelper> baseGroupTypes = groupTypes;
-    public CardSelection origin = CardSelection.Manual;
+    public PCLCardSelection origin = PCLCardSelection.Manual;
     public boolean not;
     public boolean forced;
 
@@ -58,7 +58,7 @@ public class PField_CardGeneric extends PField
         super.setupEditor(editor);
     }
 
-    public PField_CardGeneric setOrigin(CardSelection origin)
+    public PField_CardGeneric setOrigin(PCLCardSelection origin)
     {
         this.origin = origin;
         return this;
@@ -91,7 +91,7 @@ public class PField_CardGeneric extends PField
 
     public PField_CardGeneric setRandom()
     {
-        this.origin = CardSelection.Random;
+        this.origin = PCLCardSelection.Random;
         return this;
     }
 
@@ -148,6 +148,6 @@ public class PField_CardGeneric extends PField
 
     public boolean isRandom()
     {
-        return origin == CardSelection.Random;
+        return origin == PCLCardSelection.Random;
     }
 }

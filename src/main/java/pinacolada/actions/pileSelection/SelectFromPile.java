@@ -16,7 +16,7 @@ import extendedui.ui.GridCardSelectScreenHelper;
 import extendedui.utilities.GenericCondition;
 import pinacolada.actions.PCLActionWithCallback;
 import pinacolada.actions.PCLActions;
-import pinacolada.cards.base.CardSelection;
+import pinacolada.cards.base.PCLCardSelection;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.ListSelection;
@@ -41,7 +41,7 @@ public class SelectFromPile extends PCLActionWithCallback<ArrayList<AbstractCard
     protected int maxChoices;
     protected boolean hideTopPanel;
     protected boolean canPlayerCancel;
-    protected boolean anyNumber;
+    protected boolean anyNumber = true;
     protected boolean selected;
     protected boolean realtime = false;
     protected boolean showEffect = false;
@@ -54,16 +54,32 @@ public class SelectFromPile extends PCLActionWithCallback<ArrayList<AbstractCard
         this(ActionType.CARD_MANIPULATION, sourceName, null, amount, groups);
     }
 
+    public SelectFromPile(String sourceName, int amount, ListSelection<AbstractCard> origin, CardGroup... groups)
+    {
+        this(ActionType.CARD_MANIPULATION, sourceName, null, amount, origin, groups);
+    }
+
     public SelectFromPile(String sourceName, AbstractCreature target, int amount, CardGroup... groups)
     {
         this(ActionType.CARD_MANIPULATION, sourceName, target, amount, groups);
     }
 
+    public SelectFromPile(String sourceName, AbstractCreature target, int amount, ListSelection<AbstractCard> origin, CardGroup... groups)
+    {
+        this(ActionType.CARD_MANIPULATION, sourceName, target, amount, origin, groups);
+    }
+
     public SelectFromPile(ActionType type, String sourceName, AbstractCreature target, int amount, CardGroup... groups)
+    {
+        this(type, sourceName, target, amount, null, groups);
+    }
+
+    public SelectFromPile(ActionType type, String sourceName, AbstractCreature target, int amount, ListSelection<AbstractCard> origin, CardGroup... groups)
     {
         super(type);
 
         this.groups = groups;
+        this.origin = origin;
         this.canPlayerCancel = false;
         this.message = PGR.core.strings.gridSelection.chooseCards;
 
@@ -280,6 +296,13 @@ public class SelectFromPile extends PCLActionWithCallback<ArrayList<AbstractCard
         }
     }
 
+    public SelectFromPile setAnyNumber(boolean anyNumber)
+    {
+        this.anyNumber = anyNumber;
+
+        return this;
+    }
+
     public SelectFromPile setCompletionRequirement(FuncT1<Boolean, ArrayList<AbstractCard>> condition)
     {
         this.condition = GenericCondition.fromT1(condition);
@@ -287,9 +310,23 @@ public class SelectFromPile extends PCLActionWithCallback<ArrayList<AbstractCard
         return this;
     }
 
+    public SelectFromPile setOrigin(PCLCardSelection origin)
+    {
+        this.origin = origin.toSelection();
+
+        return this;
+    }
+
     public SelectFromPile setOrigin(ListSelection<AbstractCard> origin)
     {
         this.origin = origin;
+
+        return this;
+    }
+
+    public SelectFromPile setDestination(PCLCardSelection destination)
+    {
+        this.destination = destination.toSelection();
 
         return this;
     }
@@ -324,7 +361,7 @@ public class SelectFromPile extends PCLActionWithCallback<ArrayList<AbstractCard
 
     public SelectFromPile setMaxChoices(Integer maxChoices)
     {
-        return setMaxChoices(maxChoices, CardSelection.Random.toSelection());
+        return setMaxChoices(maxChoices, PCLCardSelection.Random.toSelection());
     }
 
     public SelectFromPile setMaxChoices(Integer maxChoices, ListSelection<AbstractCard> origin)
@@ -354,11 +391,6 @@ public class SelectFromPile extends PCLActionWithCallback<ArrayList<AbstractCard
         this.onClickCard = onClickCard;
 
         return this;
-    }
-
-    public SelectFromPile setOptions(boolean isRandom, boolean anyNumber)
-    {
-        return setOptions(isRandom ? CardSelection.Random.toSelection() : null, anyNumber);
     }
 
     public SelectFromPile setOptions(ListSelection<AbstractCard> origin, boolean anyNumber)

@@ -68,7 +68,7 @@ public class ControllableCardPile implements OnPhaseChangedSubscriber, OnCardPur
                         if (cardGroup.size() > 0)
                         {
                             PCLActions.top.selectFromPile("", 1, cardGroup)
-                                    .setOptions(false, false)
+                                    .setAnyNumber(false)
                                     .addCallback(cards -> {
                                         if (cards.size() > 0)
                                         {

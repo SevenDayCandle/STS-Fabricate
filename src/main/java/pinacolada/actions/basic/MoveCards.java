@@ -8,7 +8,7 @@ import extendedui.interfaces.delegates.FuncT2;
 import extendedui.utilities.GenericCondition;
 import pinacolada.actions.PCLActionWithCallback;
 import pinacolada.actions.PCLActions;
-import pinacolada.cards.base.CardSelection;
+import pinacolada.cards.base.PCLCardSelection;
 import pinacolada.utilities.ListSelection;
 
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ public class MoveCards extends PCLActionWithCallback<ArrayList<AbstractCard>>
         super(ActionType.CARD_MANIPULATION);
 
         this.destination = null;
-        this.origin = CardSelection.Top.toSelection();
+        this.origin = PCLCardSelection.Top.toSelection();
         this.targetPile = targetPile;
         this.sourcePile = sourcePile;
 
@@ -104,7 +104,7 @@ public class MoveCards extends PCLActionWithCallback<ArrayList<AbstractCard>>
 
     public MoveCards setOrigin(ListSelection<AbstractCard> origin)
     {
-        this.origin = (origin != null ? origin : CardSelection.Top.toSelection());
+        this.origin = (origin != null ? origin : PCLCardSelection.Top.toSelection());
 
         return this;
     }

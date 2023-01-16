@@ -38,7 +38,6 @@ public class PCLAugmentScreen extends AbstractScreen
         {
             curEffect = new CallbackEffect(new SelectFromPile(augment.getName(), 1, AbstractDungeon.player.masterDeck)
                     .cancellableFromPlayer(true)
-                    .setOptions(false, true)
                     .setFilter(augment::canApply)
                     .addCallback(selection -> {
                         for (AbstractCard c : selection)

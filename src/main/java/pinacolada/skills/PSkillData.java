@@ -2,6 +2,7 @@ package pinacolada.skills;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.cards.base.PCLCardGroupHelper;
+import pinacolada.cards.base.PCLCardSelection;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
@@ -19,6 +20,7 @@ public class PSkillData<T extends PField>
     public final Class<T> fieldType;
     public final Set<AbstractCard.CardColor> colors;
     public final ArrayList<PCLCardGroupHelper> groups = new ArrayList<>();
+    public final ArrayList<PCLCardSelection> origins = new ArrayList<>();
     public final ArrayList<PCLCardTarget> targets = new ArrayList<>();
     public int minAmount;
     public int maxAmount;
@@ -109,6 +111,12 @@ public class PSkillData<T extends PField>
     public PSkillData<T> setGroups(PCLCardGroupHelper... groups)
     {
         this.groups.addAll(Arrays.asList(groups));
+        return this;
+    }
+
+    public PSkillData<T> setOrigins(PCLCardSelection... groups)
+    {
+        this.origins.addAll(Arrays.asList(groups));
         return this;
     }
 

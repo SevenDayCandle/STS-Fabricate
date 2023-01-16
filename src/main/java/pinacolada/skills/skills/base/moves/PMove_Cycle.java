@@ -2,19 +2,24 @@ package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
-import extendedui.EUIUtils;
-import pinacolada.cards.base.PCLCardTarget;
-import pinacolada.cards.base.PCLUseInfo;
-import pinacolada.skills.PMove;
+import com.megacrit.cardcrawl.core.AbstractCreature;
+import extendedui.EUIRM;
+import extendedui.interfaces.delegates.FuncT5;
+import extendedui.ui.tooltips.EUITooltip;
+import pinacolada.actions.pileSelection.CycleCards;
+import pinacolada.actions.pileSelection.SelectFromPile;
+import pinacolada.cards.base.PCLCardGroupHelper;
+import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
+import pinacolada.utilities.ListSelection;
 
-import java.util.ArrayList;
-
-public class PMove_Cycle extends PMove<PField_CardCategory>
+public class PMove_Cycle extends PMove_Select
 {
-    public static final PSkillData<PField_CardCategory> DATA = register(PMove_Cycle.class, PField_CardCategory.class).selfTarget();
+    public static final PSkillData<PField_CardCategory> DATA = register(PMove_Cycle.class, PField_CardCategory.class)
+            .selfTarget()
+            .setGroups(PCLCardGroupHelper.DrawPile);
 
     public PMove_Cycle()
     {
@@ -26,48 +31,27 @@ public class PMove_Cycle extends PMove<PField_CardCategory>
         super(DATA, content);
     }
 
-    public PMove_Cycle(int amount)
+    public PMove_Cycle(int amount, PCLCardGroupHelper... h)
     {
-        super(DATA, PCLCardTarget.None, amount);
+        super(DATA, amount, h);
     }
 
     @Override
-    public String getSampleText()
+    public EUITooltip getActionTooltip()
     {
-        return TEXT.actions.cycle(TEXT.subjects.x);
+        return PGR.core.tooltips.cycle;
     }
 
     @Override
-    public void use(PCLUseInfo info)
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction()
     {
-        ArrayList<AbstractCard> cards = info.getData(null);
-        if (useParent && !EUIUtils.isNullOrEmpty(cards))
-        {
-            CardGroup cg = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
-            cg.group = cards;
-            getActions().discardFromPile(getName(), cg.size(), cg)
-                    .setOptions(false, true)
-                    .addCallback(c2 -> {
-                        getActions().draw(c2.size());
-                        info.setData(c2);
-                        super.use(info);
-                    });
-        }
-        else
-        {
-            getActions().cycle(getName(), amount).setOptions(false, true)
-                    .addCallback(c2 -> {
-                        info.setData(c2);
-                        super.use(info);
-                    });
-
-        }
-
+        return (s, c, i, o, g) -> new CycleCards(s, i, o);
     }
 
     @Override
     public String getSubText()
     {
-        return TEXT.actions.cycle(getAmountRawString());
+        return useParent ? EUIRM.strings.verbNoun(getActionTitle(), getInheritedString())
+                        : EUIRM.strings.verbNumNoun(getActionTitle(), TEXT.subjects.thisObj, fields.getFullCardString());
     }
 }

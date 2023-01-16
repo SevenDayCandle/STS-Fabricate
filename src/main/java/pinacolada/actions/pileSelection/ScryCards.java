@@ -3,7 +3,7 @@ package pinacolada.actions.pileSelection;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.powers.AbstractPower;
-import pinacolada.cards.base.CardSelection;
+import pinacolada.cards.base.PCLCardSelection;
 import pinacolada.resources.PGR;
 
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ public class ScryCards extends DiscardFromPile
     public ScryCards(String sourceName, int amount)
     {
         super(sourceName, amount, AbstractDungeon.player.drawPile);
-        setMaxChoices(amount, CardSelection.Top.toSelection());
+        setMaxChoices(amount, PCLCardSelection.Top.toSelection());
 
         initialize(amount);
     }

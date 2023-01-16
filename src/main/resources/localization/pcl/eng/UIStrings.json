@@ -463,7 +463,8 @@
 												"Open Card Folder",
 												"Export CSV",
 												"Random",
-												"Required"
+												"Required",
+												"Selection"
 								]
 				},
 				"pcl:CardEditorTutorial": {

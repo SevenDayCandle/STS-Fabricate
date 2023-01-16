@@ -33,7 +33,6 @@ public class PortableTrashCan extends PCLCard
     {
         PCLActions.bottom.purgeFromPile(name, move.amount, player.hand)
                 .setFilter(GameUtilities::canRemoveFromDeck)
-                .setOptions(false, true)
                 .addCallback(cards -> {
                     for (AbstractCard card : cards)
                     {

@@ -4,7 +4,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.ListSelection;
 
-public enum CardSelection
+public enum PCLCardSelection
 {
     Manual,
     Top,

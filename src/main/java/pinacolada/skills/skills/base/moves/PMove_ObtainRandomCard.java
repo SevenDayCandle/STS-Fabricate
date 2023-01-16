@@ -5,6 +5,7 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUIUtils;
 import pinacolada.cards.base.PCLCardGroupHelper;
+import pinacolada.cards.base.PCLCardSelection;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.skills.PMove;
@@ -62,7 +63,7 @@ public class PMove_ObtainRandomCard extends PMove<PField_CardCategory>
         }
         boolean automatic = extra <= amount;
         getActions().selectFromPile(getName(), amount, choice)
-                .setOptions(automatic, automatic)
+                .setOptions((automatic ? PCLCardSelection.Random : PCLCardSelection.Manual).toSelection(), automatic)
                 .addCallback(cards -> {
                     for (AbstractCard c : cards)
                     {

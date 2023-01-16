@@ -6,7 +6,7 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
-import extendedui.interfaces.delegates.FuncT4;
+import extendedui.interfaces.delegates.FuncT5;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.actions.pileSelection.SelectFromPile;
 import pinacolada.cards.base.PCLAffinity;
@@ -18,6 +18,7 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.utilities.GameUtilities;
+import pinacolada.utilities.ListSelection;
 
 public abstract class PMod_DoBranch extends PMod_Branch<PField_CardCategory, AbstractCard>
 {
@@ -112,5 +113,5 @@ public abstract class PMod_DoBranch extends PMod_Branch<PField_CardCategory, Abs
     }
 
     public abstract EUITooltip getActionTooltip();
-    public abstract FuncT4<SelectFromPile, String, AbstractCreature, Integer, CardGroup[]> getAction();
+    public abstract FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction();
 }

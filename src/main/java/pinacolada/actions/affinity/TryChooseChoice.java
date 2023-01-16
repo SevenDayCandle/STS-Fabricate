@@ -322,7 +322,7 @@ public class TryChooseChoice<T> extends PCLActionWithCallback<ArrayList<ChoiceCa
 
     public TryChooseChoice<T> setOptions(boolean isRandom, boolean anyNumber)
     {
-        return setOptions(isRandom ? CardSelection.Random.toSelection() : null, anyNumber);
+        return setOptions(isRandom ? PCLCardSelection.Random.toSelection() : null, anyNumber);
     }
 
     public TryChooseChoice<T> setOptions(ListSelection<AbstractCard> origin, boolean anyNumber)

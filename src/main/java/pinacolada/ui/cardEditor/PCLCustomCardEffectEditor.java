@@ -48,7 +48,7 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
     protected EUIDropdown<AbstractCard.CardRarity> rarities;
     protected EUIDropdown<AbstractCard.CardType> types;
     protected EUIDropdown<PCLCardGroupHelper> piles;
-    protected EUIDropdown<CardSelection> origins;
+    protected EUIDropdown<PCLCardSelection> origins;
     protected EUISearchableDropdown<PCLPowerHelper> powers;
     protected EUISearchableDropdown<PCLOrbHelper> orbs;
     protected EUISearchableDropdown<PCLStanceHelper> stances;
@@ -126,14 +126,14 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
                 .setIsMultiSelect(true)
                 .setShouldPositionClearAtTop(true)
                 .setItems(PCLCardGroupHelper.getAll());
-        origins = new EUIDropdown<CardSelection>(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, AUX_OFFSET, 0)
-                , CardSelection::getTitle)
-                .setLabelFunctionForOption(CardSelection::getTitle, false)
-                .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cardEditor.cardTarget)
+        origins = new EUIDropdown<PCLCardSelection>(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, AUX_OFFSET, 0)
+                , PCLCardSelection::getTitle)
+                .setLabelFunctionForOption(PCLCardSelection::getTitle, false)
+                .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cardEditor.origins)
                 .setCanAutosizeButton(true)
                 .setIsMultiSelect(true)
                 .setShouldPositionClearAtTop(true)
-                .setItems(CardSelection.values());
+                .setItems(PCLCardSelection.values());
 
         affinities = new EUIDropdown<PCLAffinity>(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, AUX_OFFSET, 0))
                 .setLabelFunctionForOption(item -> item.getFormattedSymbolForced(editor.builder.cardColor) + " " + item.getTooltip().title, true)
@@ -239,7 +239,7 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
     public void refresh()
     {
         T curEffect = getEffectAt();
-        PSkillData data = curEffect != null ? curEffect.data : null;
+        PSkillData<?> data = curEffect != null ? curEffect.data : null;
         int min = data != null ? data.minAmount : Integer.MIN_VALUE / 2;
         int max = data != null ? data.maxAmount : PSkill.DEFAULT_MAX;
         int eMin = data != null ? data.minExtra : Integer.MIN_VALUE / 2;
@@ -257,7 +257,10 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
         targets
                 .setItems(PSkill.getEligibleTargets(curEffect))
                 .setActive(targets.getAllItems().size() > 1);
-        piles.setItems(PSkill.getEligiblePiles(curEffect));
+        piles.setItems(PSkill.getEligiblePiles(curEffect))
+                .setActive(piles.getAllItems().size() > 1);
+        origins.setItems(PSkill.getEligibleOrigins(curEffect))
+                .setActive(origins.getAllItems().size() > 1);
 
         float xOff = AUX_OFFSET;
         additionalHeight = 0;
@@ -346,7 +349,7 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
         registerDropdown(orbs, items);
     }
 
-    public void registerOrigin(CardSelection item)
+    public void registerOrigin(PCLCardSelection item)
     {
         registerDropdown(origins, EUIUtils.list(item));
     }
@@ -414,6 +417,12 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
 
     protected <U> float position(EUIHoverable element, float x)
     {
+        // Don't shift the positions if the element is not visible
+        if (!element.isActive)
+        {
+            return x;
+        }
+
         float setX = x;
         float end = x + element.hb.width;
         if (end > CUTOFF)

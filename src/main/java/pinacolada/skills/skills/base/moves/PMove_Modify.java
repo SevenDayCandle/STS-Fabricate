@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.cards.base.PCLCardGroupHelper;
+import pinacolada.cards.base.PCLCardSelection;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.skills.PMove;
@@ -59,7 +60,7 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<
     public void use(PCLUseInfo info)
     {
         getActions().selectFromPile(getName(), amount <= 0 ? Integer.MAX_VALUE : amount, fields.getCardGroup(info))
-                .setOptions(amount <= 0 || fields.groupTypes.isEmpty(), true)
+                .setOptions((amount <= 0 || fields.groupTypes.isEmpty() ? PCLCardSelection.Random : PCLCardSelection.Manual).toSelection(), true)
                 .addCallback(this::cardAction);
         super.use(info);
     }

@@ -6,6 +6,7 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.screens.CardRewardScreen;
 import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
+import pinacolada.utilities.ListSelection;
 
 import java.util.ArrayList;
 
@@ -16,9 +17,19 @@ public class PlayFromPile extends SelectFromPile
         this(sourceName, null, amount, groups);
     }
 
+    public PlayFromPile(String sourceName, int amount, ListSelection<AbstractCard> origin, CardGroup... groups)
+    {
+        this(sourceName, null, amount, origin, groups);
+    }
+
     public PlayFromPile(String sourceName, AbstractCreature target, int amount, CardGroup... groups)
     {
         super(ActionType.CARD_MANIPULATION, sourceName, target, amount, groups);
+    }
+
+    public PlayFromPile(String sourceName, AbstractCreature target, int amount, ListSelection<AbstractCard> origin, CardGroup... groups)
+    {
+        super(ActionType.CARD_MANIPULATION, sourceName, target, amount, origin, groups);
     }
 
     @Override

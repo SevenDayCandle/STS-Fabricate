@@ -3,7 +3,7 @@ package pinacolada.skills.skills.base.modifiers;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import extendedui.interfaces.delegates.FuncT4;
+import extendedui.interfaces.delegates.FuncT5;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.actions.PCLActionWithCallback;
 import pinacolada.actions.pileSelection.DrawCards;
@@ -16,6 +16,7 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
+import pinacolada.utilities.ListSelection;
 
 import java.util.ArrayList;
 
@@ -55,7 +56,7 @@ public class PMod_DrawPerCard extends PMod_Do
     }
 
     @Override
-    public FuncT4<SelectFromPile, String, AbstractCreature, Integer, CardGroup[]> getAction()
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction()
     {
         return FetchFromPile::new;
     }

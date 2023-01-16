@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import pinacolada.actions.PCLActions;
 import pinacolada.resources.PGR;
+import pinacolada.utilities.ListSelection;
 
 import java.util.ArrayList;
 
@@ -11,10 +12,14 @@ public class CycleCards extends DiscardFromPile
 {
     public boolean drawInstantly = false;
 
-    public CycleCards(String sourceName, int amount, boolean isRandom)
+    public CycleCards(String sourceName, int amount)
     {
         super(sourceName, amount, AbstractDungeon.player.hand);
-        setOptions(isRandom, true);
+    }
+
+    public CycleCards(String sourceName, int amount, ListSelection<AbstractCard> origin)
+    {
+        super(sourceName, amount, origin, AbstractDungeon.player.hand);
     }
 
     @Override

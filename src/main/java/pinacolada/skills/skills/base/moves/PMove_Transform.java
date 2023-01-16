@@ -5,7 +5,7 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import extendedui.EUIRM;
-import extendedui.interfaces.delegates.FuncT4;
+import extendedui.interfaces.delegates.FuncT5;
 import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.actions.PCLActions;
@@ -19,6 +19,7 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.utilities.GameUtilities;
+import pinacolada.utilities.ListSelection;
 import pinacolada.utilities.RotatingList;
 
 public class PMove_Transform extends PMove_Select
@@ -54,7 +55,7 @@ public class PMove_Transform extends PMove_Select
     }
 
     @Override
-    public FuncT4<SelectFromPile, String, AbstractCreature, Integer, CardGroup[]> getAction()
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction()
     {
         return SelectFromPile::new;
     }

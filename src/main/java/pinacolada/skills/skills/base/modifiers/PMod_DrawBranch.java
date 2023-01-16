@@ -1,8 +1,9 @@
 package pinacolada.skills.skills.base.modifiers;
 
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import extendedui.interfaces.delegates.FuncT4;
+import extendedui.interfaces.delegates.FuncT5;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.actions.pileSelection.DrawCards;
 import pinacolada.actions.pileSelection.FetchFromPile;
@@ -14,6 +15,7 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
+import pinacolada.utilities.ListSelection;
 
 public class PMod_DrawBranch extends PMod_DoBranch
 {
@@ -56,7 +58,7 @@ public class PMod_DrawBranch extends PMod_DoBranch
     }
 
     @Override
-    public FuncT4<SelectFromPile, String, AbstractCreature, Integer, CardGroup[]> getAction()
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction()
     {
         return FetchFromPile::new;
     }

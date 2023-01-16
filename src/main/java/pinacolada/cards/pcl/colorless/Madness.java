@@ -30,7 +30,7 @@ public class Madness extends PCLCard
     public void action(PSpecialSkill move, PCLUseInfo info)
     {
         PCLActions.bottom.selectFromPile(name, player.hand.size(), player.hand)
-                .setOptions(true, true)
+                .setOrigin(PCLCardSelection.Random)
                 .addCallback(cards -> {
                     int totalCost = 0;
                     for (AbstractCard card : cards)

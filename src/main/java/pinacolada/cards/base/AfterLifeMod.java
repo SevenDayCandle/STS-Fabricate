@@ -32,7 +32,6 @@ public class AfterLifeMod
                             PCLActions.bottom.selectCreature(control.card).addCallback(control, (state, creature) ->
                             {
                                 PCLActions.bottom.purgeFromPile(control.card.name, 9999, player.exhaustPile, player.hand)
-                                        .setOptions(false, true)
                                         .setFilter(c -> canPurge(control.card, c, pAffinities))
                                         .setCompletionRequirement(AfterLifeMod::conditionMet)
                                         .setDynamicMessage(AfterLifeMod::getDynamicLabel)

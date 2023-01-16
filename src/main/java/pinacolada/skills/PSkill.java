@@ -251,6 +251,11 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
                 .collect(Collectors.toList());
     }
 
+    public static List<PCLCardSelection> getEligibleOrigins(PSkill<?> e)
+    {
+        return e != null ? e.getEligibleOrigins() : new ArrayList<>();
+    }
+
     public static List<PCLCardGroupHelper> getEligiblePiles(PSkill<?> e)
     {
         return e != null ? e.getEligiblePiles() : new ArrayList<>();
@@ -595,6 +600,11 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
     public final String getConditionRawString()
     {
         return EUIUtils.format(CONDITION_FORMAT, getCardPointer());
+    }
+
+    public final List<PCLCardSelection> getEligibleOrigins()
+    {
+        return data != null && !data.origins.isEmpty() ? data.origins : Arrays.asList(PCLCardSelection.values());
     }
 
     public final List<PCLCardGroupHelper> getEligiblePiles()

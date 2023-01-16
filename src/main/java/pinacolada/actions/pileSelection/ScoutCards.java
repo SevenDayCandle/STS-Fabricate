@@ -3,7 +3,7 @@ package pinacolada.actions.pileSelection;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import pinacolada.actions.PCLActions;
-import pinacolada.cards.base.CardSelection;
+import pinacolada.cards.base.PCLCardSelection;
 
 import java.util.ArrayList;
 
@@ -13,15 +13,13 @@ public class ScoutCards extends FetchFromPile
 
     public ScoutCards(String sourceName, int amount)
     {
-        super(sourceName, amount, AbstractDungeon.player.drawPile);
-        setOrigin(CardSelection.Top.toSelection());
-        setOptions(true, false);
+        super(sourceName, amount, PCLCardSelection.Top.toSelection(), AbstractDungeon.player.drawPile);
     }
 
     @Override
     protected void complete(ArrayList<AbstractCard> result)
     {
-        SelectFromPile action = new ReshuffleFromPile(name, result.size(), player.hand).setDestination(CardSelection.Top.toSelection());
+        SelectFromPile action = new ReshuffleFromPile(name, result.size(), player.hand).setDestination(PCLCardSelection.Top.toSelection());
         if (reshuffleInstantly)
         {
             PCLActions.top.add(action);

@@ -1,9 +1,10 @@
 package pinacolada.skills.skills.base.modifiers;
 
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIRM;
-import extendedui.interfaces.delegates.FuncT4;
+import extendedui.interfaces.delegates.FuncT5;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.actions.pileSelection.CycleCards;
 import pinacolada.actions.pileSelection.SelectFromPile;
@@ -13,6 +14,7 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
+import pinacolada.utilities.ListSelection;
 
 public class PMod_CyclePerCard extends PMod_Do
 {
@@ -48,8 +50,8 @@ public class PMod_CyclePerCard extends PMod_Do
     }
 
     @Override
-    public FuncT4<SelectFromPile, String, AbstractCreature, Integer, CardGroup[]> getAction()
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction()
     {
-        return (s, c, i, g) -> new CycleCards(s, i, fields.isRandom());
+        return (s, c, i, o, g) -> new CycleCards(s, i, o);
     }
 }

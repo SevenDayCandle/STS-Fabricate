@@ -6,12 +6,12 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.localization.LocalizedStrings;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
-import extendedui.interfaces.delegates.FuncT4;
+import extendedui.interfaces.delegates.FuncT5;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.actions.PCLActionWithCallback;
 import pinacolada.actions.pileSelection.SelectFromPile;
-import pinacolada.cards.base.CardSelection;
 import pinacolada.cards.base.PCLCardGroupHelper;
+import pinacolada.cards.base.PCLCardSelection;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.resources.pcl.PCLCoreStrings;
@@ -20,6 +20,7 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
+import pinacolada.utilities.ListSelection;
 
 import java.util.ArrayList;
 
@@ -49,8 +50,8 @@ public abstract class PMod_Do extends PMod<PField_CardCategory>
 
     protected PCLActionWithCallback<ArrayList<AbstractCard>> createPileAction(PCLUseInfo info)
     {
-        SelectFromPile action = getAction().invoke(getName(), info.target, amount <= 0 ? Integer.MAX_VALUE : amount, fields.getCardGroup(info))
-                .setOptions((amount <= 0 ? CardSelection.Random : fields.origin).toSelection(), true);
+        SelectFromPile action = getAction().invoke(getName(), info.target, amount <= 0 ? Integer.MAX_VALUE : amount, fields.origin.toSelection(), fields.getCardGroup(info))
+                .setOptions((amount <= 0 ? PCLCardSelection.Random : fields.origin).toSelection(), true);
         if (fields.forced)
         {
             action = action.setFilter(c -> fields.getFullCardFilter().invoke(c));
@@ -139,5 +140,5 @@ public abstract class PMod_Do extends PMod<PField_CardCategory>
         return getActionTooltip().past;
     }
     public abstract EUITooltip getActionTooltip();
-    public abstract FuncT4<SelectFromPile, String, AbstractCreature, Integer, CardGroup[]> getAction();
+    public abstract FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction();
 }

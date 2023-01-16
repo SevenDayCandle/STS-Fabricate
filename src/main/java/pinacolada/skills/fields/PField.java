@@ -5,9 +5,9 @@ import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIUtils;
-import pinacolada.cards.base.CardSelection;
 import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCardGroupHelper;
+import pinacolada.cards.base.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTag;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.powers.PCLPowerHelper;
@@ -138,10 +138,10 @@ public abstract class PField implements Serializable
         return PGR.core.tooltips.affinityGeneral.getTitleOrIcon();
     }
 
-    public static String getGroupString(ArrayList<PCLCardGroupHelper> groupTypes, CardSelection origin)
+    public static String getGroupString(ArrayList<PCLCardGroupHelper> groupTypes, PCLCardSelection origin)
     {
         String base = getGroupString(groupTypes);
-        return origin == CardSelection.Top ? TEXT.subjects.topOf(base) : origin == CardSelection.Bottom ? TEXT.subjects.bottomOf(base) : base;
+        return origin == PCLCardSelection.Top ? TEXT.subjects.topOf(base) : origin == PCLCardSelection.Bottom ? TEXT.subjects.bottomOf(base) : base;
     }
 
     public static String getOrbAndString(ArrayList<PCLOrbHelper> orbs, Object value)

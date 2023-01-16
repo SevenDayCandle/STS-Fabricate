@@ -355,7 +355,7 @@ public final class PCLActions
 
     public CycleCards cycle(String sourceName, int amount)
     {
-        return add(new CycleCards(sourceName, amount, false));
+        return add(new CycleCards(sourceName, amount));
     }
 
     public ArrayList<DealDamage> dealCardDamage(PCLCard card, AbstractCreature source, AbstractCreature target, AbstractGameAction.AttackEffect effect)
