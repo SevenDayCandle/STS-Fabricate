@@ -36,7 +36,7 @@ public class PMove_GainTempHP extends PMove<PField_Empty>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.gainAmount("X", PGR.core.tooltips.tempHP.title);
+        return TEXT.actions.gainAmount(TEXT.subjects.x, PGR.core.tooltips.tempHP.title);
     }
 
     @Override

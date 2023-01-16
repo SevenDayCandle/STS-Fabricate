@@ -39,7 +39,7 @@ public class PCond_CheckEnergy extends PCond<PField_Not>
     @Override
     public String getSampleText()
     {
-        return EUIRM.strings.numNoun("X", PGR.core.tooltips.energy.title);
+        return EUIRM.strings.numNoun(TEXT.subjects.x, PGR.core.tooltips.energy.title);
     }
 
     @Override

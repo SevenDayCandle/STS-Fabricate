@@ -39,7 +39,7 @@ public class PMove_TriggerOrb extends PMove<PField_Orb>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.trigger("X");
+        return TEXT.actions.trigger(TEXT.subjects.x);
     }
 
     @Override

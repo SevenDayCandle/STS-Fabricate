@@ -83,7 +83,7 @@ public abstract class PMod_DoBranch extends PMod_Branch<PField_CardCategory, Abs
     @Override
     public String getSampleText()
     {
-        return EUIRM.strings.verbNoun(getActionTitle(), "X") + EFFECT_SEPARATOR + TEXT.conditions.doForEach();
+        return EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects.x) + EFFECT_SEPARATOR + TEXT.conditions.doForEach();
     }
 
     @Override

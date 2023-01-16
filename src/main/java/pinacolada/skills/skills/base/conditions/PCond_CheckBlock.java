@@ -46,7 +46,7 @@ public class PCond_CheckBlock extends PCond<PField_Not>
     @Override
     public String getSampleText()
     {
-        return EUIRM.strings.numNoun("X", PGR.core.tooltips.block.title);
+        return EUIRM.strings.numNoun(TEXT.subjects.x, PGR.core.tooltips.block.title);
     }
 
     @Override

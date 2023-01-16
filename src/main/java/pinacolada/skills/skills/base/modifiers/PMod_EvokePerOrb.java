@@ -38,7 +38,7 @@ public class PMod_EvokePerOrb extends PMod<PField_Orb>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.evoke(TEXT.conditions.per("X", TEXT.cardEditor.orbs));
+        return TEXT.actions.evoke(TEXT.conditions.per(TEXT.subjects.x, TEXT.cardEditor.orbs));
     }
 
     @Override

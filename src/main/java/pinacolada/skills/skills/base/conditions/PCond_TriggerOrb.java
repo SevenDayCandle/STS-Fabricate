@@ -37,7 +37,7 @@ public class PCond_TriggerOrb extends PCond<PField_Orb>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.trigger("X");
+        return TEXT.actions.trigger(TEXT.subjects.x);
     }
 
     @Override

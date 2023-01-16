@@ -627,7 +627,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
             case 'K':
                 return String.valueOf(misc);
             case 'X':
-                return GameUtilities.inBattle() && player != null ? String.valueOf(getXValue()) : "X";
+                return GameUtilities.inBattle() && player != null ? String.valueOf(getXValue()) : PGR.core.strings.subjects.x;
             default:
                 return "?";
         }
@@ -751,7 +751,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         final ColoredString result = new ColoredString();
 
         if (cost == -1) {
-            result.text = "X";
+            result.text = PGR.core.strings.subjects.x;
         } else {
             result.text = freeToPlay() ? "0" : Integer.toString(Math.max(0, this.costForTurn));
         }

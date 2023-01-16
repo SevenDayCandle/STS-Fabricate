@@ -48,7 +48,7 @@ public class PMove_Heal extends PMove<PField_Empty>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.heal("X");
+        return TEXT.actions.heal(TEXT.subjects.x);
     }
 
     @Override

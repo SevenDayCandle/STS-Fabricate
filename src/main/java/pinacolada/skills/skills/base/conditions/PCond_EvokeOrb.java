@@ -46,7 +46,7 @@ public class PCond_EvokeOrb extends PCond<PField_Orb>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.evoke("X");
+        return TEXT.actions.evoke(TEXT.subjects.x);
     }
 
     @Override

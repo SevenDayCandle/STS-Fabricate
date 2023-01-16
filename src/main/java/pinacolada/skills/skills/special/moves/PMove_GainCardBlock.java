@@ -25,7 +25,7 @@ public class PMove_GainCardBlock extends PMove<PField_Empty> implements Hidden
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.gainAmount("X", PGR.core.tooltips.block);
+        return TEXT.actions.gainAmount(TEXT.subjects.x, PGR.core.tooltips.block);
     }
 
     @Override

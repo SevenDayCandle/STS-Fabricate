@@ -37,7 +37,7 @@ public class PMod_PerCardExhausted extends PMod<PField_CardCategory>
     @Override
     public String getSampleText()
     {
-        return TEXT.conditions.per("X", EUIRM.strings.nounVerb("Y", PGR.core.tooltips.exhaust.past()));
+        return TEXT.conditions.per(TEXT.subjects.x, EUIRM.strings.nounVerb(TEXT.subjects.x, PGR.core.tooltips.exhaust.past()));
     }
 
     @Override

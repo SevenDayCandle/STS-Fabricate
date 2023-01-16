@@ -41,7 +41,7 @@ public abstract class PMod_ChangeGroup extends PMod<PField_CardGeneric>
     @Override
     public String getSampleText()
     {
-        return TEXT.conditions.numIf(TEXT.subjects.from("X"), getConditionSampleText());
+        return TEXT.conditions.numIf(TEXT.subjects.from(TEXT.subjects.x), getConditionSampleText());
     }
 
     @Override

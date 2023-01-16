@@ -51,6 +51,6 @@ public class PMod_CycleBranch extends PMod_DoBranch
     @Override
     public FuncT4<SelectFromPile, String, AbstractCreature, Integer, CardGroup[]> getAction()
     {
-        return (s, c, i, g) -> new CycleCards(s, i, fields.random);
+        return (s, c, i, g) -> new CycleCards(s, i, fields.isRandom());
     }
 }

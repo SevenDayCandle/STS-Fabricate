@@ -45,7 +45,7 @@ public class PMod_PerDistinctPower extends PMod<PField_Power>
     @Override
     public String getSampleText()
     {
-        return TEXT.conditions.per("X", TEXT.cardEditor.powers);
+        return TEXT.conditions.per(TEXT.subjects.x, TEXT.cardEditor.powers);
     }
 
     @Override

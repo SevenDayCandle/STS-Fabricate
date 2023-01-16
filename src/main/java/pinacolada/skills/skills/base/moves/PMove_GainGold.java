@@ -36,7 +36,7 @@ public class PMove_GainGold extends PMove_Gain
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.gainAmount("X", PGR.core.tooltips.gold.title);
+        return TEXT.actions.gainAmount(TEXT.subjects.x, PGR.core.tooltips.gold.title);
     }
 
     @Override

@@ -45,7 +45,7 @@ public class PMove_ChannelOrb extends PMove<PField_Orb>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.channelX("X", TEXT.cardEditor.orbs);
+        return TEXT.actions.channelX(TEXT.subjects.x, TEXT.cardEditor.orbs);
     }
 
     @Override

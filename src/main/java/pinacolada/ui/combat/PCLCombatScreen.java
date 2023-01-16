@@ -11,6 +11,8 @@ import extendedui.ui.EUIBase;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.misc.CombatManager;
 import pinacolada.misc.PCLHotkeys;
+import pinacolada.monsters.PCLCardAlly;
+import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
@@ -42,20 +44,35 @@ public class PCLCombatScreen extends EUIBase
 
         boolean draggingCard = false;
         AbstractCreature target = ReflectionHacks.getPrivate(player, AbstractPlayer.class,"hoveredMonster");
+        PCLCard hoveredCard = null;
         if (player.hoveredCard != null)
         {
+            hoveredCard = EUIUtils.safeCast(player.hoveredCard, PCLCard.class);
             if (player.isDraggingCard || player.inSingleTargetMode)
             {
                 draggingCard = true;
             }
-            if ( target == null && draggingCard && player.hoveredCard.target == AbstractCard.CardTarget.SELF)
+            if (target == null && draggingCard && player.hoveredCard.target == AbstractCard.CardTarget.SELF)
             {
                 target = player;
             }
         }
 
+        // If you are dragging a Summon over another one, highlight the target Summon instead
+        if (player.hoveredCard == null || player.hoveredCard.type == PCLEnum.CardType.SUMMON)
+        {
+            for (PCLCardAlly summon : CombatManager.summons.summons)
+            {
+                if (summon.isHovered())
+                {
+                    hoveredCard = summon.card;
+                    target = summon.target;
+                }
+            }
+        }
+
         CombatManager.update();
-        CombatManager.playerSystem.update(EUIUtils.safeCast(player.hoveredCard, PCLCard.class), target, draggingCard);
+        CombatManager.playerSystem.update(hoveredCard, target, draggingCard);
         CombatManager.summons.update();
         CombatManager.controlPile.update();
         helper.update();

@@ -48,6 +48,7 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
     protected EUIDropdown<AbstractCard.CardRarity> rarities;
     protected EUIDropdown<AbstractCard.CardType> types;
     protected EUIDropdown<PCLCardGroupHelper> piles;
+    protected EUIDropdown<CardSelection> origins;
     protected EUISearchableDropdown<PCLPowerHelper> powers;
     protected EUISearchableDropdown<PCLOrbHelper> orbs;
     protected EUISearchableDropdown<PCLStanceHelper> stances;
@@ -105,7 +106,7 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
                 .setLimits(-PSkill.DEFAULT_MAX, PSkill.DEFAULT_MAX);
 
         targets = new EUIDropdown<PCLCardTarget>(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, AUX_OFFSET, 0)
-                , item -> StringUtils.capitalize(item.toString().toLowerCase()))
+                , PCLCardTarget::getTitle)
                 .setOnChange(targets -> {
                     if (getEffectAt() != null && !targets.isEmpty())
                     {
@@ -118,13 +119,21 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
                 .setCanAutosizeButton(true)
                 .setItems(PCLCardTarget.getAll());
         piles = new EUIDropdown<PCLCardGroupHelper>(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, AUX_OFFSET, 0)
-                , item -> StringUtils.capitalize(item.toString().toLowerCase()))
-                .setLabelFunctionForOption(c -> c.name, false)
+                , PCLCardGroupHelper::getCapitalTitle)
+                .setLabelFunctionForOption(PCLCardGroupHelper::getCapitalTitle, false)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cardEditor.cardTarget)
                 .setCanAutosizeButton(true)
                 .setIsMultiSelect(true)
                 .setShouldPositionClearAtTop(true)
                 .setItems(PCLCardGroupHelper.getAll());
+        origins = new EUIDropdown<CardSelection>(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, AUX_OFFSET, 0)
+                , CardSelection::getTitle)
+                .setLabelFunctionForOption(CardSelection::getTitle, false)
+                .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cardEditor.cardTarget)
+                .setCanAutosizeButton(true)
+                .setIsMultiSelect(true)
+                .setShouldPositionClearAtTop(true)
+                .setItems(CardSelection.values());
 
         affinities = new EUIDropdown<PCLAffinity>(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, AUX_OFFSET, 0))
                 .setLabelFunctionForOption(item -> item.getFormattedSymbolForced(editor.builder.cardColor) + " " + item.getTooltip().title, true)
@@ -335,6 +344,11 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
     public void registerOrb(List<PCLOrbHelper> items)
     {
         registerDropdown(orbs, items);
+    }
+
+    public void registerOrigin(CardSelection item)
+    {
+        registerDropdown(origins, EUIUtils.list(item));
     }
 
     public void registerPower(List<PCLPowerHelper> items)

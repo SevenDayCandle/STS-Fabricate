@@ -38,7 +38,7 @@ public class PMod_PerDamage extends PMod<PField_Empty>
     @Override
     public String getSampleText()
     {
-        return TEXT.conditions.per("X", TEXT.subjects.damage);
+        return TEXT.conditions.per(TEXT.subjects.x, TEXT.subjects.damage);
     }
 
     @Override

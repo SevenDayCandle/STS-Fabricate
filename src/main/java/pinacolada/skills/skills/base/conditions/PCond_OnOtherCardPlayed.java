@@ -29,7 +29,7 @@ public class PCond_OnOtherCardPlayed extends PCond_Delegate
     }
 
     @Override
-    public String getDelegateSampleText() {return TEXT.subjects.playingXWith("X", TEXT.cardPile.hand);}
+    public String getDelegateSampleText() {return TEXT.subjects.playingXWith(TEXT.subjects.x, TEXT.cardPile.hand);}
 
     @Override
     public String getDelegateText() {return TEXT.subjects.playingXWith(fields.getFullCardString(), TEXT.cardPile.hand);}

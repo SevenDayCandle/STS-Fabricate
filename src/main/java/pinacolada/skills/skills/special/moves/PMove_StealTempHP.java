@@ -49,7 +49,7 @@ public class PMove_StealTempHP extends PMove_DealDamage implements Hidden
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.stealAmount("X", PGR.core.tooltips.tempHP.title);
+        return TEXT.actions.stealAmount(TEXT.subjects.x, PGR.core.tooltips.tempHP.title);
     }
 
     @Override

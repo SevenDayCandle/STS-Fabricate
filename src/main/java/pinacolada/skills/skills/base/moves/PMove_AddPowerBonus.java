@@ -32,7 +32,7 @@ public class PMove_AddPowerBonus extends PMove<PField_Power>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.objectGainsBonus("X", "Y", TEXT.subjects.effectBonus);
+        return TEXT.actions.objectGainsBonus(TEXT.subjects.x, TEXT.subjects.x, TEXT.subjects.effectBonus);
     }
 
     @Override

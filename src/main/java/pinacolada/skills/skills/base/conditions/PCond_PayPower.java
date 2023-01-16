@@ -54,7 +54,7 @@ public class PCond_PayPower extends PCond<PField_Power>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.pay("X", TEXT.cardEditor.powers);
+        return TEXT.actions.pay(TEXT.subjects.x, TEXT.cardEditor.powers);
     }
 
     @Override

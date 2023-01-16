@@ -50,7 +50,7 @@ public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity
     @Override
     public void cardAction(List<AbstractCard> cards)
     {
-        if (fields.random && fields.affinities.size() > 1)
+        if (fields.or && fields.affinities.size() > 1)
         {
             chooseEffect(cards, fields.affinities);
         }

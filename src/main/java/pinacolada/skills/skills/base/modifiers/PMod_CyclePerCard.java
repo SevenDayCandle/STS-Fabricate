@@ -50,6 +50,6 @@ public class PMod_CyclePerCard extends PMod_Do
     @Override
     public FuncT4<SelectFromPile, String, AbstractCreature, Integer, CardGroup[]> getAction()
     {
-        return (s, c, i, g) -> new CycleCards(s, i, fields.random);
+        return (s, c, i, g) -> new CycleCards(s, i, fields.isRandom());
     }
 }

@@ -913,7 +913,7 @@ public class CombatManager
             PCLAction.currentCard = null;
         }
 
-        playerSystem.onCardPlayed(card, m, info, false);
+        playerSystem.onCardPlayed(card, info, false);
         if (info.isMatch)
         {
             playerSystem.onMatch(card);
@@ -1007,7 +1007,7 @@ public class CombatManager
         return PCLCard.player = PCLPower.player = PCLRelic.player = AbstractDungeon.player;
     }
 
-    protected static <T> GameEvent<T> registerEvent(GameEvent<T> event)
+    public static <T> GameEvent<T> registerEvent(GameEvent<T> event)
     {
         EVENTS.add(event);
         return event;

@@ -46,7 +46,7 @@ public class PMove_StealGold extends PMove<PField_Empty>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.stealAmount("X", PGR.core.tooltips.gold.title);
+        return TEXT.actions.stealAmount(TEXT.subjects.x, PGR.core.tooltips.gold.title);
     }
 
     @Override

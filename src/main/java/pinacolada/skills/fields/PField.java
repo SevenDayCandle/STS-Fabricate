@@ -16,7 +16,6 @@ import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
 import pinacolada.stances.PCLStanceHelper;
 import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
-import pinacolada.utilities.ListSelection;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -121,7 +120,7 @@ public abstract class PField implements Serializable
 
     public static String getGroupString(List<PCLCardGroupHelper> groups)
     {
-        return groups.size() >= 3 ? PGR.core.strings.subjects.anyPile : PCLCoreStrings.joinWithOr(EUIUtils.mapAsNonnull(groups, g -> g.name.toLowerCase()));
+        return groups.size() >= 3 ? PGR.core.strings.subjects.anyPile : PCLCoreStrings.joinWithOr(EUIUtils.mapAsNonnull(groups, g -> g.name));
     }
 
     public static String getGeneralAffinityAndString(ArrayList<PCLAffinity> affinities)
@@ -139,7 +138,7 @@ public abstract class PField implements Serializable
         return PGR.core.tooltips.affinityGeneral.getTitleOrIcon();
     }
 
-    public static String getGroupString(ArrayList<PCLCardGroupHelper> groupTypes, ListSelection<AbstractCard> origin)
+    public static String getGroupString(ArrayList<PCLCardGroupHelper> groupTypes, CardSelection origin)
     {
         String base = getGroupString(groupTypes);
         return origin == CardSelection.Top ? TEXT.subjects.topOf(base) : origin == CardSelection.Bottom ? TEXT.subjects.bottomOf(base) : base;

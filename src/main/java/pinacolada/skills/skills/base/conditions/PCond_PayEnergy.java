@@ -46,7 +46,7 @@ public class PCond_PayEnergy extends PCond<PField_Empty>
     @Override
     public String getSampleText()
     {
-        return capital(TEXT.actions.pay("X", PGR.core.tooltips.energy.title), true);
+        return capital(TEXT.actions.pay(TEXT.subjects.x, PGR.core.tooltips.energy.title), true);
     }
 
     @Override

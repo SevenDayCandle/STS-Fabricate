@@ -46,7 +46,7 @@ public abstract class PMod_BonusOnHas extends PMod_BonusOn<PField_CardCategory>
     {
         int count = EUIUtils.count(getCardPile(),
                 c -> fields.getFullCardFilter().invoke(c));
-        return extra == 0 ? count == 0 : fields.random ^ count >= extra;
+        return extra == 0 ? count == 0 : fields.forced ^ count >= extra;
     }
 
     abstract public List<AbstractCard> getCardPile();

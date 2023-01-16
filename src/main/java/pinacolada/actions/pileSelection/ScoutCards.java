@@ -14,14 +14,14 @@ public class ScoutCards extends FetchFromPile
     public ScoutCards(String sourceName, int amount)
     {
         super(sourceName, amount, AbstractDungeon.player.drawPile);
-        setOrigin(CardSelection.Top);
+        setOrigin(CardSelection.Top.toSelection());
         setOptions(true, false);
     }
 
     @Override
     protected void complete(ArrayList<AbstractCard> result)
     {
-        SelectFromPile action = new ReshuffleFromPile(name, result.size(), player.hand).setDestination(CardSelection.Top);
+        SelectFromPile action = new ReshuffleFromPile(name, result.size(), player.hand).setDestination(CardSelection.Top.toSelection());
         if (reshuffleInstantly)
         {
             PCLActions.top.add(action);

@@ -36,7 +36,7 @@ public class PMove_GainMorph extends PMove<PField_Empty> implements Hidden
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.gainAmount("X", PGR.core.tooltips.reroll.title);
+        return TEXT.actions.gainAmount(TEXT.subjects.x, PGR.core.tooltips.reroll.title);
     }
 
     @Override

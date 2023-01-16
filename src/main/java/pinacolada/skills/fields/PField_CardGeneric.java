@@ -3,11 +3,11 @@ package pinacolada.skills.fields;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import extendedui.EUIUtils;
+import pinacolada.cards.base.CardSelection;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.skills.PSkill;
 import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
-import pinacolada.utilities.ListSelection;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,8 +17,8 @@ public class PField_CardGeneric extends PField
 {
     public ArrayList<PCLCardGroupHelper> groupTypes = new ArrayList<>();
     public ArrayList<PCLCardGroupHelper> baseGroupTypes = groupTypes;
-    public ListSelection<AbstractCard> origin = null; // TODO use this instead of random to denote random
-    public boolean random; // TODO change to not
+    public CardSelection origin = CardSelection.Manual;
+    public boolean not;
     public boolean forced;
 
     public PField_CardGeneric()
@@ -31,7 +31,7 @@ public class PField_CardGeneric extends PField
         super();
         setCardGroup(other.groupTypes);
         setOrigin(other.origin);
-        setRandom(other.random);
+        setNot(other.not);
         setForced(other.forced);
     }
 
@@ -41,7 +41,7 @@ public class PField_CardGeneric extends PField
         return super.equals(other)
                 && groupTypes.equals(((PField_CardGeneric) other).groupTypes)
                 && origin.equals(((PField_CardGeneric) other).origin)
-                && random == ((PField_CardGeneric) other).random
+                && not == ((PField_CardGeneric) other).not
                 && forced == ((PField_CardGeneric) other).forced;
     }
 
@@ -54,10 +54,11 @@ public class PField_CardGeneric extends PField
     public void setupEditor(PCLCustomCardEffectEditor<?> editor)
     {
         editor.registerPile(groupTypes);
+        editor.registerOrigin(origin);
         super.setupEditor(editor);
     }
 
-    public PField_CardGeneric setOrigin(ListSelection<AbstractCard> origin)
+    public PField_CardGeneric setOrigin(CardSelection origin)
     {
         this.origin = origin;
         return this;
@@ -82,9 +83,15 @@ public class PField_CardGeneric extends PField
         return this;
     }
 
-    public PField_CardGeneric setRandom(boolean value)
+    public PField_CardGeneric setNot(boolean value)
     {
-        this.random = value;
+        this.not = value;
+        return this;
+    }
+
+    public PField_CardGeneric setRandom()
+    {
+        this.origin = CardSelection.Random;
         return this;
     }
 
@@ -107,7 +114,7 @@ public class PField_CardGeneric extends PField
 
     public String getShortCardString()
     {
-        return random ? PSkill.TEXT.subjects.randomX(skill.pluralCard()) : skill.pluralCard();
+        return isRandom() ? PSkill.TEXT.subjects.randomX(skill.pluralCard()) : skill.pluralCard();
     }
 
     public final CardGroup[] getCardGroup(PCLUseInfo info)
@@ -137,5 +144,10 @@ public class PField_CardGeneric extends PField
     public boolean hasGroups()
     {
         return !EUIUtils.isNullOrEmpty(groupTypes);
+    }
+
+    public boolean isRandom()
+    {
+        return origin == CardSelection.Random;
     }
 }

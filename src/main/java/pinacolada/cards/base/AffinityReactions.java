@@ -49,4 +49,24 @@ public class AffinityReactions
     {
         return !hasCombust() && !hasRedox();
     }
+
+    public int sum()
+    {
+        int sum = 0;
+        for (PCLAffinity affinity : combustions.keySet())
+        {
+            for (Integer value : combustions.get(affinity).values())
+            {
+                sum += value;
+            }
+        }
+        for (PCLAffinity affinity : redoxes.keySet())
+        {
+            for (Integer value : redoxes.get(affinity).values())
+            {
+                sum += value;
+            }
+        }
+        return sum;
+    }
 }

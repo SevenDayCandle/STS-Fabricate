@@ -43,7 +43,7 @@ public class PMove_GainBlock extends PMove<PField_Empty>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.gainAmount("X", PGR.core.tooltips.block.title);
+        return TEXT.actions.gainAmount(TEXT.subjects.x, PGR.core.tooltips.block.title);
     }
 
     @Override

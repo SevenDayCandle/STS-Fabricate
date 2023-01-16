@@ -42,7 +42,7 @@ public class PCond_PileHas extends PCond<PField_CardCategory>
     {
         int count = EUIUtils.sumInt(fields.groupTypes, g -> EUIUtils.count(g.getCards(),
                 c -> fields.getFullCardFilter().invoke(c)));
-        return amount == 0 ? count == 0 : fields.random ^ count >= amount;
+        return amount == 0 ? count == 0 : fields.forced ^ count >= amount;
     }
 
     @Override
@@ -61,6 +61,6 @@ public class PCond_PileHas extends PCond<PField_CardCategory>
     @Override
     public String wrapAmount(int input)
     {
-        return input == 0 ? String.valueOf(input) : (fields.random ? (input + "-") : (input + "+"));
+        return input == 0 ? String.valueOf(input) : (fields.forced ? (input + "-") : (input + "+"));
     }
 }

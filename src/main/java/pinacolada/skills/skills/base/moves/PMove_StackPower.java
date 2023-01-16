@@ -54,7 +54,7 @@ public class PMove_StackPower extends PMove<PField_Power>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.applyAmount("X", TEXT.cardEditor.powers);
+        return TEXT.actions.applyAmount(TEXT.subjects.x, TEXT.cardEditor.powers);
     }
 
     @Override

@@ -36,7 +36,7 @@ public abstract class PCond_Have extends PCond<PField_CardCategory>
     {
         int count = EUIUtils.count(getCardPile(),
                 c -> fields.getFullCardFilter().invoke(c));
-        return amount == 0 ? count == 0 : fields.random ^ count >= amount;
+        return amount == 0 ? count == 0 : fields.forced ^ count >= amount;
     }
 
     @Override
@@ -54,7 +54,7 @@ public abstract class PCond_Have extends PCond<PField_CardCategory>
     @Override
     public String wrapAmount(int input)
     {
-        return input == 0 ? String.valueOf(input) : (fields.random ? (input + "-") : (input + "+"));
+        return input == 0 ? String.valueOf(input) : (fields.forced ? (input + "-") : (input + "+"));
     }
 
     abstract public List<AbstractCard> getCardPile();

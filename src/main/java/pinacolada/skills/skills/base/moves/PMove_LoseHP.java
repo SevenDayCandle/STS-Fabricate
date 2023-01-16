@@ -37,7 +37,7 @@ public class PMove_LoseHP extends PMove<PField_Empty>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.loseAmount("X", PGR.core.tooltips.hp.title);
+        return TEXT.actions.loseAmount(TEXT.subjects.x, PGR.core.tooltips.hp.title);
     }
 
     @Override

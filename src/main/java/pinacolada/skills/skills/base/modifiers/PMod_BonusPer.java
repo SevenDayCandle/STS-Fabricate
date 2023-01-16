@@ -39,7 +39,7 @@ public abstract class PMod_BonusPer<T extends PField> extends PMod<T>
     @Override
     public String getSampleText()
     {
-        return TEXT.subjects.xBonus(TEXT.conditions.per("X", getConditionSampleText()));
+        return TEXT.subjects.xBonus(TEXT.conditions.per(TEXT.subjects.x, getConditionSampleText()));
     }
 
     @Override

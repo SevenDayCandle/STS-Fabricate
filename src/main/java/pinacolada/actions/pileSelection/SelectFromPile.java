@@ -324,7 +324,7 @@ public class SelectFromPile extends PCLActionWithCallback<ArrayList<AbstractCard
 
     public SelectFromPile setMaxChoices(Integer maxChoices)
     {
-        return setMaxChoices(maxChoices, CardSelection.Random);
+        return setMaxChoices(maxChoices, CardSelection.Random.toSelection());
     }
 
     public SelectFromPile setMaxChoices(Integer maxChoices, ListSelection<AbstractCard> origin)
@@ -358,7 +358,7 @@ public class SelectFromPile extends PCLActionWithCallback<ArrayList<AbstractCard
 
     public SelectFromPile setOptions(boolean isRandom, boolean anyNumber)
     {
-        return setOptions(isRandom ? CardSelection.Random : null, anyNumber);
+        return setOptions(isRandom ? CardSelection.Random.toSelection() : null, anyNumber);
     }
 
     public SelectFromPile setOptions(ListSelection<AbstractCard> origin, boolean anyNumber)

@@ -32,7 +32,7 @@ public class PMove_PermanentUpgrade extends PMove<PField_CardCategory> implement
     @Override
     public String getSampleText()
     {
-        return TEXT.subjects.permanentlyX(TEXT.actions.upgrade("X"));
+        return TEXT.subjects.permanentlyX(TEXT.actions.upgrade(TEXT.subjects.x));
     }
 
     @Override

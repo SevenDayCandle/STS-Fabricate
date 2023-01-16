@@ -39,7 +39,7 @@ public class PMod_PerCardPlayed extends PMod<PField_CardCategory>
     @Override
     public String getSampleText()
     {
-        return TEXT.conditions.perThisTurn("X", "Y", PGR.core.tooltips.play.past(), "");
+        return TEXT.conditions.perThisTurn(TEXT.subjects.x, TEXT.subjects.x, PGR.core.tooltips.play.past(), "");
     }
 
     @Override

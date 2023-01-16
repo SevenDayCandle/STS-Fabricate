@@ -256,9 +256,9 @@ public class PCLPlayerSystem extends EUIBase
         return (int) initial;
     }
 
-    public void onCardPlayed(PCLCard card, AbstractCreature m, PCLUseInfo info, boolean fromSummon)
+    public void onCardPlayed(PCLCard card, PCLUseInfo info, boolean fromSummon)
     {
-        getActiveMeter().onCardPlayed(card, m, info, fromSummon);
+        getActiveMeter().onCardPlayed(card, info, fromSummon);
     }
 
     public void onEndOfTurn()

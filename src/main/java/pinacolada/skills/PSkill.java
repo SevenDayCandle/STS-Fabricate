@@ -126,15 +126,15 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
 
     public PSkill(PSkillData<T> data)
     {
-        this(data, PCLCardTarget.None, 1, 0);
+        this(data, PCLCardTarget.None, 1, -1);
     }
 
     public PSkill(PSkillData<T> data, PCLCardTarget target, int amount)
     {
-        this(data, target, amount, 0);
+        this(data, target, amount, -1);
     }
 
-    public PSkill(PSkillData<T> data, PCLCardTarget target, int amount, int upgrade)
+    public PSkill(PSkillData<T> data, PCLCardTarget target, int amount, int extra)
     {
         this.data = data;
         this.fields = this.data.instantiateField();
@@ -145,7 +145,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         this.effectID = this.data.ID;
         this.target = target;
         this.rootAmount = this.baseAmount = this.amount = amount;
-        this.upgrade = new int[]{upgrade};
+        this.rootExtra = this.baseExtra = this.extra = extra;
     }
 
     public static String capital(String base, boolean can)
@@ -488,7 +488,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
 
     public final String getAmountRawString()
     {
-        return source != null ? EUIUtils.format(BOUND_FORMAT, "E" + getCardPointer()) : wrapAmount(amount);
+        return source != null ? EUIUtils.format(BOUND_FORMAT, "E" + getCardPointer()) : wrapAmountChild(amount);
     }
 
     public final int getAttribute(char attributeID)
@@ -511,7 +511,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         switch (attributeID)
         {
             case EFFECT_CHAR:
-                return wrapAmount(baseAmount);
+                return wrapAmountChild(baseAmount);
             case XVALUE_CHAR:
                 return getXString();
             case EXTRA_CHAR:
@@ -567,7 +567,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
 
     public ColoredString getColoredValueString()
     {
-        return getColoredValueString(wrapAmount(baseAmount), wrapAmount(amount));
+        return getColoredValueString(wrapAmountChild(baseAmount), wrapAmountChild(amount));
     }
 
     public ColoredString getColoredValueString(Object displayBase, Object displayAmount)
@@ -1523,9 +1523,24 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return String.valueOf(input);
     }
 
+    public String wrapAmountChild(int input)
+    {
+        return wrapAmountChild(wrapAmount(input));
+    }
+
+    public String wrapAmountChild(String input)
+    {
+        return parent != null ? parent.wrapAmountChild(input) : input;
+    }
+
     public String wrapExtra(int input)
     {
         return wrapAmount(input);
+    }
+
+    public String wrapExtraChild(String input)
+    {
+        return parent != null ? parent.wrapExtraChild(input) : input;
     }
 
     public enum PCLCardValueSource

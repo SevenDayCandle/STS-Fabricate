@@ -56,7 +56,7 @@ public class PCond_Cooldown extends PCond<PField_Empty> implements CooldownProvi
     @Override
     public String getSampleText()
     {
-        return EUIRM.strings.generic2(PGR.core.tooltips.cooldown.title, "X");
+        return EUIRM.strings.generic2(PGR.core.tooltips.cooldown.title, TEXT.subjects.x);
     }
 
     @Override

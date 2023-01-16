@@ -172,6 +172,7 @@ public class PCLIntentInfo
 
     protected float recordDamage(AbstractPower po, float damage, float result) {
         PGR.core.combatScreen.formulaDisplay.addEnemyAttackPower(po, damage, result);
+        // TODO add interception from summons
         return result;
     }
 

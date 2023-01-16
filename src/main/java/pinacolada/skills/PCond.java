@@ -110,7 +110,7 @@ public abstract class PCond<T extends PField> extends PSkill<T>
 
     public static PCond_CycleTo cycleRandom(int amount, PCLCardGroupHelper... h)
     {
-        return (PCond_CycleTo) new PCond_CycleTo(amount, h).edit(r -> r.setRandom(true));
+        return (PCond_CycleTo) new PCond_CycleTo(amount, h).edit(r -> r.setRandom());
     }
 
     public static PCond_DiscardTo discard(int amount)
@@ -130,7 +130,7 @@ public abstract class PCond<T extends PField> extends PSkill<T>
 
     public static PCond_DiscardTo discardRandom(int amount, PCLCardGroupHelper... h)
     {
-        return (PCond_DiscardTo) new PCond_DiscardTo(amount, h).edit(r -> r.setRandom(true));
+        return (PCond_DiscardTo) new PCond_DiscardTo(amount, h).edit(r -> r.setRandom());
     }
 
     public static PCond_EvokeOrb evoke(int amount, PCLOrbHelper... h)
@@ -155,7 +155,7 @@ public abstract class PCond<T extends PField> extends PSkill<T>
 
     public static PCond_ExhaustTo exhaustRandom(int amount, PCLCardGroupHelper... h)
     {
-        return (PCond_ExhaustTo) new PCond_ExhaustTo(amount, h).edit(r -> r.setRandom(true));
+        return (PCond_ExhaustTo) new PCond_ExhaustTo(amount, h).edit(r -> r.setRandom());
     }
 
     public static PCond_Fatal fatal()
@@ -330,7 +330,7 @@ public abstract class PCond<T extends PField> extends PSkill<T>
 
     public static PCond_PurgeTo purgeRandom(int amount, PCLCardGroupHelper... h)
     {
-        return (PCond_PurgeTo) new PCond_PurgeTo(amount, h).edit(r -> r.setRandom(true));
+        return (PCond_PurgeTo) new PCond_PurgeTo(amount, h).edit(r -> r.setRandom());
     }
 
     public static PCond_ReshuffleTo reshuffle(int amount)
@@ -350,7 +350,7 @@ public abstract class PCond<T extends PField> extends PSkill<T>
 
     public static PCond_ReshuffleTo reshuffleRandom(int amount, PCLCardGroupHelper... h)
     {
-        return (PCond_ReshuffleTo) new PCond_ReshuffleTo(amount, h).edit(r -> r.setRandom(true));
+        return (PCond_ReshuffleTo) new PCond_ReshuffleTo(amount, h).edit(r -> r.setRandom());
     }
 
     public static PCond_Starter starter()

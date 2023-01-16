@@ -1,5 +1,10 @@
 
 {
+				"pcl:BatonPassPower":
+				{
+								"DESCRIPTIONS": ["When you #yWithdraw this #ySummon by #ySummoning another one in its place, transfer this #ySummon's powers to the new one."],
+								"NAME": "Baton Pass"
+				},
 	"pcl:BlastedPower":
 	{
 	  "DESCRIPTIONS": ["At the start of turn, lose #b{0} HP. Take #b{1} more damage from #yAttacks."],

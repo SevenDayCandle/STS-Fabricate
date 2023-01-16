@@ -44,7 +44,7 @@ public class PMod_PerAffinityLevel extends PMod<PField_Affinity>
     @Override
     public String getSampleText()
     {
-        return TEXT.conditions.per("X", PGR.core.tooltips.level.title);
+        return TEXT.conditions.per(TEXT.subjects.x, PGR.core.tooltips.level.title);
     }
 
     @Override

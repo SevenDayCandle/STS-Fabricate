@@ -67,7 +67,7 @@ public class PMove_Obtain extends PMove<PField_CardID>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.obtain("X");
+        return TEXT.actions.obtain(TEXT.subjects.x);
     }
 
     @Override
@@ -104,7 +104,7 @@ public class PMove_Obtain extends PMove<PField_CardID>
                 {
                     AbstractCard c = getCard(cd);
                     created.add(c);
-                    getActions().makeCard(c, fields.groupTypes.size() > 0 ? fields.groupTypes.get(0).getCardGroup() : AbstractDungeon.player.hand).setUpgrade(fields.random, fields.forced);
+                    getActions().makeCard(c, fields.groupTypes.size() > 0 ? fields.groupTypes.get(0).getCardGroup() : AbstractDungeon.player.hand).setUpgrade(fields.forced, false);
                 }
             }
         }

@@ -10,6 +10,7 @@ import extendedui.ui.hitboxes.DraggableHitbox;
 import extendedui.ui.hitboxes.PercentageRelativeHitbox;
 import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.PGR;
 import pinacolada.ui.EUICardDraggable;
 
@@ -85,6 +86,15 @@ public class PowerFormulaDisplay extends EUICardDraggable<AbstractCard>
             enemyAttack.addPower(po, input, result);
         }
     }
+
+    public void addAllyIntercept(PCLCardAlly ally, int input, int result)
+    {
+        if (input != result)
+        {
+            enemyAttack.addSummon(ally, input, result);
+        }
+    }
+
 
     public void setAttackResult(float input, float result)
     {

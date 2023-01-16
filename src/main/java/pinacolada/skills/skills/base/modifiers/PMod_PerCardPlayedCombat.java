@@ -40,7 +40,7 @@ public class PMod_PerCardPlayedCombat extends PMod<PField_CardCategory>
     @Override
     public String getSampleText()
     {
-        return TEXT.conditions.perThisCombat("X", "Y", PGR.core.tooltips.play.past(), "");
+        return TEXT.conditions.perThisCombat(TEXT.subjects.x, TEXT.subjects.x, PGR.core.tooltips.play.past(), "");
     }
 
     @Override

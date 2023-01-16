@@ -22,6 +22,6 @@ public class Curse_Despair extends PCLCard
     public void setup(Object input)
     {
         addUseMove(PCond.onDraw(), PMove.gain(2, PCLPowerHelper.Shackles));
-        addUseMove(PCond.onExhaust(), PMove.modifyCost(1, -1, PCLCardGroupHelper.Hand).edit(f -> f.setRandom(true)));
+        addUseMove(PCond.onExhaust(), PMove.modifyCost(1, -1, PCLCardGroupHelper.Hand).edit(f -> f.setRandom()));
     }
 }

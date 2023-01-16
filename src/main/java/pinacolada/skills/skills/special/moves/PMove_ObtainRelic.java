@@ -63,7 +63,7 @@ public class PMove_ObtainRelic extends PMove<PField_RelicID> implements Hidden
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.obtain("X");
+        return TEXT.actions.obtain(TEXT.subjects.x);
     }
 
     @Override

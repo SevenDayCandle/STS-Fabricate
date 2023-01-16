@@ -41,7 +41,7 @@ public class PCond_MatchCombo extends PCond<PField_Not>
     @Override
     public String getSubText()
     {
-        String base = EUIRM.strings.numNoun(amount, PGR.core.tooltips.matchCombo);
+        String base = EUIRM.strings.numNoun(amount, PGR.core.tooltips.matchCombo.title);
         return fields.not ? TEXT.conditions.not(base) : base;
     }
 }

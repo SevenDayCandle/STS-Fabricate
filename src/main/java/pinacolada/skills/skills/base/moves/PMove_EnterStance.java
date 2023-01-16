@@ -49,7 +49,7 @@ public class PMove_EnterStance extends PMove<PField_Stance>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.enterStance("X");
+        return TEXT.actions.enterStance(TEXT.subjects.x);
     }
 
     @Override

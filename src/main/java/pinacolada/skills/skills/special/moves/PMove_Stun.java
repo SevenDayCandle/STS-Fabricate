@@ -33,7 +33,7 @@ public class PMove_Stun extends PMove<PField_Empty> implements Hidden
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.stun("X");
+        return TEXT.actions.stun(TEXT.subjects.x);
     }
 
     @Override

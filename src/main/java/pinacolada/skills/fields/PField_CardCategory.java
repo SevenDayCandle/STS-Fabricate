@@ -66,11 +66,11 @@ public class PField_CardCategory extends PField_CardID
     public void setupEditor(PCLCustomCardEffectEditor<?> editor)
     {
         editor.registerPile(groupTypes);
+        editor.registerOrigin(origin);
         editor.registerRarity(rarities);
         editor.registerType(types);
         editor.registerAffinity(affinities);
         editor.registerTag(tags);
-        editor.registerBoolean(PGR.core.strings.cardEditor.random, v -> random = v, random);
         editor.registerBoolean(PGR.core.strings.cardEditor.required, v -> forced = v, forced);
     }
 
@@ -170,7 +170,7 @@ public class PField_CardCategory extends PField_CardID
 
     public String getFullCardString(Object value)
     {
-        return !cardIDs.isEmpty() ? getCardIDOrString() : random ? PSkill.TEXT.subjects.randomX(getFullCardOrString(value)) : getFullCardOrString(value);
+        return !cardIDs.isEmpty() ? getCardIDOrString() : isRandom() ? PSkill.TEXT.subjects.randomX(getFullCardOrString(value)) : getFullCardOrString(value);
     }
 
     public final String getFullCardXString(FuncT1<String, ArrayList<PCLAffinity>> affinityFunc, FuncT1<String, ArrayList<String>> joinFunc, Object value)
@@ -186,7 +186,7 @@ public class PField_CardCategory extends PField_CardID
         }
         if (!rarities.isEmpty())
         {
-            stringsToJoin.add(joinFunc.invoke(EUIUtils.map(rarities, type -> EUIGameUtils.textForRarity(type))));
+            stringsToJoin.add(joinFunc.invoke(EUIUtils.map(rarities, EUIGameUtils::textForRarity)));
         }
         if (!types.isEmpty())
         {
@@ -225,7 +225,7 @@ public class PField_CardCategory extends PField_CardID
         {
             return skill.getActions().add(createAction(action, info))
                     .setFilter(getFullCardFilter())
-                    .setOptions(random || skill.amount <= 0 ? CardSelection.Random : origin, !forced);
+                    .setOptions((skill.amount <= 0 ? CardSelection.Random : origin).toSelection(), !forced);
         }
     }
 }

@@ -35,7 +35,7 @@ public class PCond_IfHasAffinity extends PCond<PField_CardCategory>
     @Override
     public String getSampleText()
     {
-        return TEXT.conditions.ifTargetHas("X", "Y");
+        return TEXT.conditions.ifTargetHas(TEXT.subjects.x, TEXT.subjects.x);
     }
 
     @Override

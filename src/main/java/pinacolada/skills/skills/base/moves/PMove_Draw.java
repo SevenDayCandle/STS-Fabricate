@@ -32,7 +32,7 @@ public class PMove_Draw extends PMove<PField_CardCategory>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.draw("X");
+        return TEXT.actions.draw(TEXT.subjects.x);
     }
 
     @Override

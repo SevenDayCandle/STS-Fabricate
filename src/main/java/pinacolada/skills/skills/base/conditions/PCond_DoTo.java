@@ -43,7 +43,7 @@ public abstract class PCond_DoTo extends PCond<PField_CardCategory>
     @Override
     public String getSampleText()
     {
-        return EUIRM.strings.verbNoun(getActionTitle(), "X");
+        return EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects.x);
     }
 
     @Override

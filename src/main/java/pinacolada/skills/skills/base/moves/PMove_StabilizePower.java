@@ -30,7 +30,7 @@ public class PMove_StabilizePower extends PMove<PField_Power>
 
     public PMove_StabilizePower(PCLCardTarget target, PCLPowerHelper... powers)
     {
-        this(target, 0, powers);
+        this(target, 1, powers);
     }
 
     public PMove_StabilizePower(PCLCardTarget target, int amount, PCLPowerHelper... powers)
@@ -79,7 +79,7 @@ public class PMove_StabilizePower extends PMove<PField_Power>
     {
         String powerString = fields.getPowerSubjectString();
         String mainString = TEXT.actions.stabilize(powerString, getTargetString());
-        if (amount >= 2)
+        if (amount != 1)
         {
             mainString = (TEXT.conditions.forTurns(getAmountRawString()) + ", " + mainString);
         }

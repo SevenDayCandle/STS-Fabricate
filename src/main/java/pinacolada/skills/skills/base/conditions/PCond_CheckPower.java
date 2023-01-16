@@ -50,7 +50,7 @@ public class PCond_CheckPower extends PCond<PField_Power>
     @Override
     public String getSampleText()
     {
-        return EUIRM.strings.numNoun("X", TEXT.cardEditor.powers);
+        return EUIRM.strings.numNoun(TEXT.subjects.x, TEXT.cardEditor.powers);
     }
 
     @Override

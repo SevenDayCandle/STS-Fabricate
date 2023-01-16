@@ -53,7 +53,7 @@ public class PMove_PlayCopy extends PMove<PField_CardID>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.play("X");
+        return TEXT.actions.play(TEXT.subjects.x);
     }
 
     @Override

@@ -45,7 +45,7 @@ public class PCond_PayGold extends PCond<PField_Empty>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.pay("X", PGR.core.tooltips.gold.title);
+        return TEXT.actions.pay(TEXT.subjects.x, PGR.core.tooltips.gold.title);
     }
 
     @Override

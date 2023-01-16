@@ -145,6 +145,7 @@
 												"them",
 												"this card",
 												"this",
+												"X",
 												"you",
 												"your first {0}",
 												"your {0}",
@@ -163,7 +164,12 @@
 												"draw pile",
 												"Exhaust pile",
 												"hand",
-												"master deck"
+												"master deck",
+												"Purged pile",
+												"Manual",
+												"Top",
+												"Bottom",
+												"Random"
 								]
 				},
 				"pcl:CardType": {

@@ -490,16 +490,17 @@ public class PCLCoreStrings extends PCLStrings
         public final String them = strings.TEXT[41];
         public final String thisObj = strings.TEXT[42];
         public final String thisX = strings.TEXT[43];
-        public final String you = strings.TEXT[44];
-        public final String yourFirstX = strings.TEXT[45];
-        public final String yourX = strings.TEXT[46];
-        public final String xOfY = strings.TEXT[47];
-        public final String xOnY = strings.TEXT[48];
-        public final String xThisTurn = strings.TEXT[49];
-        public final String xTimes = strings.TEXT[50];
-        public final String xWithY = strings.TEXT[51];
-        public final String xCost = strings.TEXT[52];
-        public final String xBonus = strings.TEXT[53];
+        public final String x = strings.TEXT[44];
+        public final String you = strings.TEXT[45];
+        public final String yourFirstX = strings.TEXT[46];
+        public final String yourX = strings.TEXT[47];
+        public final String xOfY = strings.TEXT[48];
+        public final String xOnY = strings.TEXT[49];
+        public final String xThisTurn = strings.TEXT[50];
+        public final String xTimes = strings.TEXT[51];
+        public final String xWithY = strings.TEXT[52];
+        public final String xCost = strings.TEXT[53];
+        public final String xBonus = strings.TEXT[54];
 
         public final String allX(Object amount) {
             return EUIUtils.format(allX, amount);
@@ -1132,6 +1133,11 @@ public class PCLCoreStrings extends PCLStrings
         public final String exhaustPile = strings.TEXT[2];
         public final String hand = strings.TEXT[3];
         public final String masterDeck = strings.TEXT[4];
+        public final String purgedPile = strings.TEXT[5];
+        public final String manual = strings.TEXT[6];
+        public final String top = strings.TEXT[7];
+        public final String bottom = strings.TEXT[8];
+        public final String random = strings.TEXT[9];
     }
 
     public class Trophies

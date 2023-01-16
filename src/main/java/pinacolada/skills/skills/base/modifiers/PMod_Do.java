@@ -50,7 +50,7 @@ public abstract class PMod_Do extends PMod<PField_CardCategory>
     protected PCLActionWithCallback<ArrayList<AbstractCard>> createPileAction(PCLUseInfo info)
     {
         SelectFromPile action = getAction().invoke(getName(), info.target, amount <= 0 ? Integer.MAX_VALUE : amount, fields.getCardGroup(info))
-                .setOptions(fields.random || amount <= 0 ? CardSelection.Random : fields.origin, true);
+                .setOptions((amount <= 0 ? CardSelection.Random : fields.origin).toSelection(), true);
         if (fields.forced)
         {
             action = action.setFilter(c -> fields.getFullCardFilter().invoke(c));
@@ -69,7 +69,7 @@ public abstract class PMod_Do extends PMod<PField_CardCategory>
     @Override
     public String getSampleText()
     {
-        return EUIRM.strings.verbNoun(getActionTitle(), "X") + " " + TEXT.conditions.doX("Y");
+        return EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects.x) + " " + TEXT.conditions.doX(TEXT.subjects.x);
     }
 
     @Override

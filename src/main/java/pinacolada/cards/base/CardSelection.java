@@ -1,37 +1,45 @@
 package pinacolada.cards.base;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import extendedui.interfaces.delegates.ActionT3;
-import extendedui.interfaces.delegates.FuncT3;
+import pinacolada.resources.PGR;
 import pinacolada.utilities.ListSelection;
 
-import java.util.List;
-
-public class CardSelection
+public enum CardSelection
 {
-    public static final ListSelection<AbstractCard> Top = ListSelection.last(0);
-    public static final ListSelection<AbstractCard> Bottom = ListSelection.first(0);
-    public static final ListSelection<AbstractCard> Random = ListSelection.random(null);
-    public static final ListSelection<AbstractCard> Default = Top;
+    Manual,
+    Top,
+    Bottom,
+    Random;
 
-    public static ListSelection<AbstractCard> top(int shift)
+    public ListSelection<AbstractCard> toSelection()
     {
-        return ListSelection.last(shift);
+        switch (this)
+        {
+            case Top:
+                return ListSelection.last(0);
+            case Bottom:
+                return ListSelection.first(0);
+            case Random:
+                ListSelection.random(null);
+            default:
+                return null;
+        }
     }
 
-    public static ListSelection<AbstractCard> bottom(int shift)
+    // These strings cannot be put in as an enum variable because cards are initialized before these strings are
+    public final String getTitle()
     {
-        return ListSelection.first(shift);
-    }
-
-    public static ListSelection<AbstractCard> random(com.megacrit.cardcrawl.random.Random rng)
-    {
-        return ListSelection.random(rng);
-    }
-
-    public static ListSelection<AbstractCard> special(ActionT3<List<AbstractCard>, AbstractCard, Integer> add,
-                                                      FuncT3<AbstractCard, List<AbstractCard>, Integer, Boolean> get)
-    {
-        return ListSelection.special(add, get);
+        switch (this)
+        {
+            case Manual:
+                return PGR.core.strings.cardPile.manual;
+            case Top:
+                return PGR.core.strings.cardPile.top;
+            case Bottom:
+                return PGR.core.strings.cardPile.bottom;
+            case Random:
+                return PGR.core.strings.cardPile.random;
+        }
+        return "";
     }
 }

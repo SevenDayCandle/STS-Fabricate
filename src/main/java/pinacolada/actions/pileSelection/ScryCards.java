@@ -8,13 +8,12 @@ import pinacolada.resources.PGR;
 
 import java.util.ArrayList;
 
-// TODO extend DiscardFromPile
 public class ScryCards extends DiscardFromPile
 {
     public ScryCards(String sourceName, int amount)
     {
         super(sourceName, amount, AbstractDungeon.player.drawPile);
-        setMaxChoices(amount, CardSelection.Top);
+        setMaxChoices(amount, CardSelection.Top.toSelection());
 
         initialize(amount);
     }

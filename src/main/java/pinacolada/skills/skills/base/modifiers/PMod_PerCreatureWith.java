@@ -53,7 +53,7 @@ public class PMod_PerCreatureWith extends PMod<PField_Power>
     @Override
     public String getSampleText()
     {
-        return TEXT.conditions.per("X", TEXT.subjects.enemyWithX("Y"));
+        return TEXT.conditions.per(TEXT.subjects.x, TEXT.subjects.enemyWithX(TEXT.subjects.x));
     }
 
     @Override

@@ -204,7 +204,7 @@ public class PCLCardAlly extends PCLCreature
             }
             PCLActions.bottom.add(new AnimateFastAttackAction(this));
             card.useEffectsWithoutPowers(info);
-            CombatManager.playerSystem.onCardPlayed(card, target, info, true);
+            CombatManager.playerSystem.onCardPlayed(card, info, true);
             PCLActions.delayed.callback(() -> CombatManager.removeDamagePowers(this));
         }
     }
@@ -316,22 +316,19 @@ public class PCLCardAlly extends PCLCreature
         {
             super.render(sb);
         }
-        if (card != null)
+        if (isHovered())
         {
-            if (hb.hovered || intentHb.hovered)
+            renderTip(sb);
+            if (card.pclTarget == PCLCardTarget.AllEnemy)
             {
-                renderTip(sb);
-                if (card.pclTarget == PCLCardTarget.AllEnemy)
+                for (AbstractMonster mo : GameUtilities.getEnemies(true))
                 {
-                    for (AbstractMonster mo : GameUtilities.getEnemies(true))
-                    {
-                        PCLRenderHelpers.drawCurve(sb, ImageMaster.TARGET_UI_ARROW, Color.SCARLET.cpy(), this.hb, mo.hb, EUIBase.scale(100), 0.25f, 0.02f, 20);
-                    }
+                    PCLRenderHelpers.drawCurve(sb, ImageMaster.TARGET_UI_ARROW, Color.SCARLET.cpy(), this.hb, mo.hb, EUIBase.scale(100), 0.25f, 0.02f, 20);
                 }
-                else if (card.pclTarget.targetsSingle() && target != null)
-                {
-                    PCLRenderHelpers.drawCurve(sb, ImageMaster.TARGET_UI_ARROW, Color.SCARLET.cpy(), this.hb, target.hb, EUIBase.scale(100), 0.25f, 0.02f, 20);
-                }
+            }
+            else if (card.pclTarget.targetsSingle() && target != null)
+            {
+                PCLRenderHelpers.drawCurve(sb, ImageMaster.TARGET_UI_ARROW, Color.SCARLET.cpy(), this.hb, target.hb, EUIBase.scale(100), 0.25f, 0.02f, 20);
             }
         }
     }
@@ -371,6 +368,11 @@ public class PCLCardAlly extends PCLCreature
                 FontHelper.renderFontLeftTopAligned(sb, FontHelper.topPanelInfoFont, Integer.toString(card.damage), this.intentHb.cX, this.intentHb.cY + bobEffect.y - 12.0F * Settings.scale, Settings.CREAM_COLOR);
             }
         }
+    }
+
+    public boolean isHovered()
+    {
+        return card != null && (hb.hovered || intentHb.hovered);
     }
 
     public void setTarget(AbstractCreature target)

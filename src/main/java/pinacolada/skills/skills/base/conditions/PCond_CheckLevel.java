@@ -50,7 +50,7 @@ public class PCond_CheckLevel extends PCond<PField_Affinity>
     @Override
     public String getSampleText()
     {
-        return TEXT.conditions.levelItem("X", PGR.core.tooltips.affinityGeneral.title);
+        return TEXT.conditions.levelItem(TEXT.subjects.x, PGR.core.tooltips.affinityGeneral.title);
     }
 
     @Override

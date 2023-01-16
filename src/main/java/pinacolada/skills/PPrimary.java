@@ -20,8 +20,8 @@ public abstract class PPrimary<T extends PField> extends PSkill<T>
         super(data, target, amount);
     }
 
-    public PPrimary(PSkillData<T> data, PCLCardTarget target, int amount, int upgrade)
+    public PPrimary(PSkillData<T> data, PCLCardTarget target, int amount, int extra)
     {
-        super(data, target, amount, upgrade);
+        super(data, target, amount, extra);
     }
 }

@@ -1,5 +1,6 @@
 package pinacolada.skills.skills.base.modifiers;
 
+import com.megacrit.cardcrawl.ui.panels.EnergyPanel;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.resources.PGR;
@@ -7,14 +8,11 @@ import pinacolada.skills.PMod;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.skills.fields.PField_Not;
-import pinacolada.utilities.GameUtilities;
+import pinacolada.skills.fields.PField_Empty;
 
-// TODO better name for field
-public class PMod_PerEnergy extends PMod<PField_Not>
+public class PMod_PerEnergy extends PMod<PField_Empty>
 {
-
-    public static final PSkillData DATA = register(PMod_PerEnergy.class, PField_Not.class).selfTarget();
+    public static final PSkillData<PField_Empty> DATA = register(PMod_PerEnergy.class, PField_Empty.class).selfTarget();
 
     public PMod_PerEnergy(PSkillSaveData content)
     {
@@ -34,7 +32,7 @@ public class PMod_PerEnergy extends PMod<PField_Not>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.pay("X", PGR.core.tooltips.energy.title);
+        return TEXT.conditions.per(TEXT.subjects.x, PGR.core.tooltips.energy.title);
     }
 
     @Override
@@ -44,22 +42,11 @@ public class PMod_PerEnergy extends PMod<PField_Not>
     }
 
     @Override
-    public String getText(boolean addPeriod)
-    {
-        String payString = (!(fields.not || sourceCard != null && sourceCard.energyOnUse == -1)) ? (TEXT.actions.pay("X", PGR.core.tooltips.energy) + ": ") : "";
-        return payString + super.getText(addPeriod);
-    }
-
-    @Override
     public void use(PCLUseInfo info)
     {
         if (this.childEffect != null)
         {
             updateChildAmount(info);
-            if (fields.not || (sourceCard != null && sourceCard.energyOnUse == -1))
-            {
-                GameUtilities.useXCostEnergy(sourceCard);
-            }
             this.childEffect.use(info);
         }
     }
@@ -67,6 +54,6 @@ public class PMod_PerEnergy extends PMod<PField_Not>
     @Override
     public int getModifiedAmount(PSkill<?> be, PCLUseInfo info)
     {
-        return be.baseAmount * GameUtilities.getXCostEnergy(sourceCard, fields.not) / Math.max(1, this.amount);
+        return be.baseAmount * EnergyPanel.getCurrentEnergy() / Math.max(1, this.amount);
     }
 }

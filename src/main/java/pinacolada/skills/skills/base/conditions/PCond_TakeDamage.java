@@ -32,7 +32,7 @@ public class PCond_TakeDamage extends PCond<PField_Empty>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.takeDamage("X");
+        return TEXT.actions.takeDamage(TEXT.subjects.x);
     }
 
     @Override

@@ -81,7 +81,7 @@ public class PMove_Transform extends PMove_Select
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.transform("X", "Y");
+        return TEXT.actions.transform(TEXT.subjects.x, TEXT.subjects.x);
     }
 
     @Override

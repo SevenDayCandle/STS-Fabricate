@@ -22,6 +22,6 @@ public class PTrigger_When extends PTrigger
     @Override
     public String getSampleText()
     {
-        return TEXT.conditions.whenSingle("X");
+        return TEXT.conditions.whenSingle(TEXT.subjects.x);
     }
 }

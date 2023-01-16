@@ -15,13 +15,13 @@ import extendedui.interfaces.delegates.ActionT3;
 import extendedui.utilities.GenericCallback;
 import pinacolada.actions.PCLActionWithCallback;
 import pinacolada.actions.PCLActions;
-import pinacolada.cards.base.CardSelection;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
 import pinacolada.effects.card.RenderCardEffect;
 import pinacolada.effects.card.UnfadeOutEffect;
 import pinacolada.misc.CombatManager;
 import pinacolada.utilities.GameUtilities;
+import pinacolada.utilities.ListSelection;
 
 import java.util.List;
 
@@ -335,7 +335,7 @@ public class MoveCard extends PCLActionWithCallback<AbstractCard>
 
     public MoveCard setDestination(ActionT3<List<AbstractCard>, AbstractCard, Integer> addCard)
     {
-        this.destination = CardSelection.special(addCard, null);
+        this.destination = ListSelection.special(addCard, null);
 
         return this;
     }

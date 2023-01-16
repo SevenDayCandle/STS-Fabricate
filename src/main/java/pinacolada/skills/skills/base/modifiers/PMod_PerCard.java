@@ -36,7 +36,7 @@ public class PMod_PerCard extends PMod<PField_CardCategory>
     @Override
     public String getSampleText()
     {
-        return TEXT.conditions.per("X", TEXT.subjects.card);
+        return TEXT.conditions.per(TEXT.subjects.x, TEXT.subjects.card);
     }
 
     @Override

@@ -34,7 +34,7 @@ public class PMove_Cycle extends PMove<PField_CardCategory>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.cycle("X");
+        return TEXT.actions.cycle(TEXT.subjects.x);
     }
 
     @Override

@@ -36,7 +36,7 @@ public abstract class PMove_Select extends PMove<PField_CardCategory>
     @Override
     public String getSampleText()
     {
-        return EUIRM.strings.verbNoun(getActionTitle(), "X");
+        return EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects.x);
     }
 
     @Override

@@ -46,7 +46,7 @@ public class PMove_StackTemporaryPower extends PMove<PField_Power>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.applyAmount(EUIUtils.format(TEXT.cardMods.tempPowerPrefix, "X"), TEXT.cardEditor.powers);
+        return TEXT.actions.applyAmount(EUIUtils.format(TEXT.cardMods.tempPowerPrefix, TEXT.subjects.x), TEXT.cardEditor.powers);
     }
 
     @Override

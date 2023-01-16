@@ -9,7 +9,6 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
 import extendedui.utilities.GenericCondition;
-import pinacolada.cards.base.CardSelection;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.effects.PCLEffects;
 import pinacolada.utilities.ListSelection;
@@ -74,7 +73,7 @@ public class PermanentUpgradeEffect extends PCLEffectWithCallback<AbstractCard>
         {
             if (selection == null)
             {
-                selection = CardSelection.random(AbstractDungeon.miscRng);
+                selection = ListSelection.random(AbstractDungeon.miscRng);
             }
 
             card = selection.get(upgradableCards, 1, false);

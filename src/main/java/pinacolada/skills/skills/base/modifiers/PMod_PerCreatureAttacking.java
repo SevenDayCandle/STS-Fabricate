@@ -49,7 +49,7 @@ public class PMod_PerCreatureAttacking extends PMod<PField_Empty>
     @Override
     public String getSampleText()
     {
-        return TEXT.conditions.per("X", EUIRM.strings.adjNoun(TEXT.subjects.attacking, "Y"));
+        return TEXT.conditions.per(TEXT.subjects.x, EUIRM.strings.adjNoun(TEXT.subjects.attacking, TEXT.subjects.x));
     }
 
     @Override

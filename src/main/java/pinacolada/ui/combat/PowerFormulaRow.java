@@ -12,9 +12,11 @@ import extendedui.ui.EUIHoverable;
 import extendedui.ui.controls.EUILabel;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.PercentageRelativeHitbox;
+import extendedui.ui.hitboxes.RelativeHitbox;
 import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.interfaces.markers.MultiplicativePower;
+import pinacolada.monsters.PCLCardAlly;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.PCLRenderHelpers;
@@ -33,7 +35,7 @@ public class PowerFormulaRow extends EUIHoverable
     public final Type type;
     protected final ArrayList<PowerFormulaItem> powers = new ArrayList<>();
     protected AbstractCard card;
-    protected PercentageRelativeHitbox resultHb;
+    protected RelativeHitbox resultHb;
     protected EUILabel initial;
     protected EUILabel result;
     protected Texture icon;
@@ -42,7 +44,7 @@ public class PowerFormulaRow extends EUIHoverable
     {
         super(hb);
         this.type = type;
-        this.resultHb = new PercentageRelativeHitbox(hb, 1, 1, getOffsetCx(0), -0.7f);
+        this.resultHb = RelativeHitbox.fromPercentages(hb, 1, 1, getOffsetCx(0), -0.7f);
         this.initial = new EUILabel(FontHelper.powerAmountFont, new PercentageRelativeHitbox(hb, 1, 1, 0, -0.7f))
                 .setSmartText(false);
         this.result = new EUILabel(FontHelper.powerAmountFont, resultHb)
@@ -51,13 +53,13 @@ public class PowerFormulaRow extends EUIHoverable
 
     protected void addAffinity(PCLAffinity af, float input, float result)
     {
-        powers.add(new PowerFormulaItem(new PercentageRelativeHitbox(hb, 1, 1, getOffsetCx(powers.size()), 1), true, af.getIcon(), result).setMultiplier(result / input));
+        powers.add(new PowerFormulaItem(RelativeHitbox.fromPercentages(hb, 1, 1, getOffsetCx(powers.size()), 1), true, af.getIcon(), result).setMultiplier(result / input));
         resultHb.setOffset(getOffsetCx(powers.size() + 1),-0.5f);
     }
 
     protected void addPower(AbstractPower po, float input, float result)
     {
-        PercentageRelativeHitbox hitbox = new PercentageRelativeHitbox(hb, 1, 1, getOffsetCx(powers.size()), 1);
+        RelativeHitbox hitbox = RelativeHitbox.fromPercentages(hb, 1, 1, getOffsetCx(powers.size()), 1);
         PowerFormulaItem item;
         if (po.region48 != null)
         {
@@ -94,6 +96,12 @@ public class PowerFormulaRow extends EUIHoverable
         }
         powers.add(item);
         resultHb.setOffset(getOffsetCx(powers.size()),-0.5f);
+    }
+
+    protected void addSummon(PCLCardAlly ally, int input, int result)
+    {
+        powers.add(new PowerFormulaItem(RelativeHitbox.fromPercentages(hb, 1, 1, getOffsetCx(powers.size()), 1), true, ally.card.getTypeIcon(), result).setAddition(result - input));
+        resultHb.setOffset(getOffsetCx(powers.size() + 1),-0.5f);
     }
 
     protected void setResult(float base, float amount) {

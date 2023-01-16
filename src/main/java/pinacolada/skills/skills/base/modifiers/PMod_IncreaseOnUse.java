@@ -37,7 +37,7 @@ public class PMod_IncreaseOnUse extends PMod<PField_Empty>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.increaseBy("X", "Y");
+        return TEXT.actions.increaseBy(TEXT.subjects.x, TEXT.subjects.x);
     }
 
     @Override

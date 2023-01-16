@@ -219,7 +219,7 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implement
         infoIcon.tryUpdate();
     }
 
-    public void onCardPlayed(AbstractCard card, AbstractCreature m, PCLUseInfo info, boolean fromSummon)
+    public void onCardPlayed(PCLCard card, PCLUseInfo info, boolean fromSummon)
     {
     }
 

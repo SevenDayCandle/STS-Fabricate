@@ -42,7 +42,7 @@ public class PMod_PerOrb extends PMod<PField_Orb>
     @Override
     public String getSampleText()
     {
-        return TEXT.conditions.per("X", TEXT.cardEditor.orbs);
+        return TEXT.conditions.per(TEXT.subjects.x, TEXT.cardEditor.orbs);
     }
 
     @Override

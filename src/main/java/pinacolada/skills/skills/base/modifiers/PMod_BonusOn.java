@@ -44,7 +44,7 @@ public abstract class PMod_BonusOn<T extends PField> extends PMod<T>
     @Override
     public String getSampleText()
     {
-        return TEXT.conditions.numIf("X", getConditionSampleText());
+        return TEXT.conditions.numIf(TEXT.subjects.x, getConditionSampleText());
     }
 
     @Override

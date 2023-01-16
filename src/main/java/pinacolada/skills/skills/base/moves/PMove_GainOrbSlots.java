@@ -35,7 +35,7 @@ public class PMove_GainOrbSlots extends PMove_Gain
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.gainAmount("X", PGR.core.tooltips.orbSlot.title);
+        return TEXT.actions.gainAmount(TEXT.subjects.x, PGR.core.tooltips.orbSlot.title);
     }
 
     @Override

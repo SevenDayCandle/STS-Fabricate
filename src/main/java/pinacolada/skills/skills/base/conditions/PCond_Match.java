@@ -46,7 +46,7 @@ public class PCond_Match extends PCond<PField_CardCategory>
         {
             return TEXT.conditions.wheneverYou(name);
         }
-        return fields.random ? TEXT.conditions.not(name) : name;
+        return fields.forced ? TEXT.conditions.not(name) : name;
     }
 
     @Override
@@ -66,7 +66,7 @@ public class PCond_Match extends PCond<PField_CardCategory>
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
     {
-        return fields.random ^ info.isMatch;
+        return fields.forced ^ info.isMatch;
     }
 
     @Override

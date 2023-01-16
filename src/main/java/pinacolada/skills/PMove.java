@@ -132,7 +132,7 @@ public abstract class PMove<T extends PField> extends PSkill<T>
 
     public static PMove_Cycle cycleRandom(int amount)
     {
-        return (PMove_Cycle) new PMove_Cycle(amount).edit(f -> f.setRandom(true));
+        return (PMove_Cycle) new PMove_Cycle(amount).edit(f -> f.setRandom());
     }
 
     public static PMove_DealCardDamage dealCardDamage(PCLCard card)
@@ -203,12 +203,12 @@ public abstract class PMove<T extends PField> extends PSkill<T>
 
     public static PMove_Discard discardRandom(int amount)
     {
-        return (PMove_Discard) new PMove_Discard(amount, PCLCardGroupHelper.Hand).edit(f -> f.setRandom(true));
+        return (PMove_Discard) new PMove_Discard(amount, PCLCardGroupHelper.Hand).edit(f -> f.setRandom());
     }
 
     public static PMove_Discard discardRandom(int amount, PCLCardGroupHelper... groups)
     {
-        return (PMove_Discard) new PMove_Discard(amount, groups).edit(f -> f.setRandom(true));
+        return (PMove_Discard) new PMove_Discard(amount, groups).edit(f -> f.setRandom());
     }
 
     public static PMove_Draw draw(int amount)
