@@ -215,7 +215,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
         }
         if (multiCond != null)
         {
-            finalEffect = new PMultiCond().setEffects(EUIUtils.mapAsNonnull(conditionGroup.lowerEffects, e -> e != null ? (PCond) e.makeCopy() : null))
+            finalEffect = new PMultiCond().setEffects(EUIUtils.mapAsNonnull(conditionGroup.lowerEffects, e -> e != null ? (PCond<?>) e.makeCopy() : null))
                     .edit(f -> f.setOr(multiCond.fields.or))
                     .setChild(finalEffect)
                     .setAmount(multiCond.amount);
@@ -232,7 +232,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
         refresh();
     }
 
-    protected void deconstructEffect(PSkill effect)
+    protected void deconstructEffect(PSkill<?> effect)
     {
         if (effect == null)
         {
@@ -253,7 +253,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
         }
         else if (effect instanceof PMod)
         {
-            modifier = (PMod) effect.makeCopy();
+            modifier = (PMod<?>) effect.makeCopy();
         }
         else if (effect instanceof PMultiSkill)
         {
@@ -298,16 +298,16 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
     @Override
     public String getIconText() {return String.valueOf(editorIndex + 1);}
 
-    protected void initializeEffects(PSkill effect)
+    protected void initializeEffects(PSkill<?> effect)
     {
         deconstructEffect(effect);
 
         effectGroup.lowerEffects.clear();
         if (multiSkill != null)
         {
-            for (PSkill skill : multiSkill.getSubEffects())
+            for (PSkill<?> skill : multiSkill.getSubEffects())
             {
-                PMove move = EUIUtils.safeCast(skill, PMove.class);
+                PMove<?> move = EUIUtils.safeCast(skill, PMove.class);
                 if (move != null)
                 {
                     effectGroup.lowerEffects.add(move);

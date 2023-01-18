@@ -13,6 +13,7 @@ import pinacolada.actions.PCLActionWithCallback;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.pileSelection.SelectFromPile;
 import pinacolada.cards.base.PCLAffinity;
+import pinacolada.cards.base.PCLCardSelection;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.cards.base.fields.PCLCardTag;
 import pinacolada.resources.PGR;
@@ -66,7 +67,7 @@ public class PField_CardCategory extends PField_CardID
     public void setupEditor(PCLCustomCardEffectEditor<?> editor)
     {
         editor.registerPile(groupTypes);
-        editor.registerOrigin(origin);
+        editor.registerOrigin(origin, origins -> setOrigin(origins.size() > 0 ? origins.get(0) : PCLCardSelection.Manual));
         editor.registerRarity(rarities);
         editor.registerType(types);
         editor.registerAffinity(affinities);

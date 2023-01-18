@@ -1,5 +1,6 @@
 package pinacolada.skills.fields;
 
+import pinacolada.cards.base.PCLCardSelection;
 import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
 
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class PField_CardID extends PField_CardGeneric
     {
         editor.registerPile(groupTypes);
         editor.registerCard(cardIDs);
-        editor.registerOrigin(origin);
+        editor.registerOrigin(origin, origins -> setOrigin(origins.size() > 0 ? origins.get(0) : PCLCardSelection.Manual));
     }
 
     public PField_CardID setCardIDs(String... cards)

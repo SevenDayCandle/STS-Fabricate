@@ -49,7 +49,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
     protected EUIDropdown<PCLCardTarget> targetDropdown;
     protected EUIDropdown<AbstractCard.CardRarity> raritiesDropdown;
     protected EUIDropdown<AbstractCard.CardType> typesDropdown;
-    protected EUIDropdown<PCLLoadout> seriesDropdown;
+    protected EUIDropdown<PCLLoadout> loadoutDropdown;
     protected EUIDropdown<CardTagItem> flagsDropdown;
     protected PCLValueEditor maxUpgrades;
     protected EUIToggle uniqueToggle;
@@ -140,7 +140,8 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
                 .setIsMultiSelect(true)
                 .setItems(CardTagItem.getCompatible(effect.currentSlot.slotColor))
                 .setTooltip(PGR.core.strings.cardEditor.flags, PGR.core.strings.cardEditorTutorial.primaryFlags);
-        seriesDropdown = new EUISearchableDropdown<PCLLoadout>(new EUIHitbox(flagsDropdown.hb.x + flagsDropdown.hb.width + SPACING_WIDTH, screenH(0.6f), MENU_WIDTH, MENU_HEIGHT), PCLLoadout::getName)
+
+        loadoutDropdown = new EUISearchableDropdown<PCLLoadout>(new EUIHitbox(flagsDropdown.hb.x + flagsDropdown.hb.width + SPACING_WIDTH, screenH(0.6f), MENU_WIDTH, MENU_HEIGHT), PCLLoadout::getName)
                 .setOnChange(selectedSeries -> {
                     effect.modifyAllBuilders(e -> e.setLoadout(!selectedSeries.isEmpty() ? selectedSeries.get(0) : null));
                 })
@@ -148,9 +149,8 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
                 .setCanAutosizeButton(true)
                 .setShowClearForSingle(true)
                 .setTooltip(PGR.core.strings.seriesUI.seriesUI, PGR.core.strings.cardEditorTutorial.attrAffinity);
-
-        seriesDropdown
-                .setActive(GameUtilities.isPCLCardColor(effect.currentSlot.slotColor));
+        loadoutDropdown
+                .setActive(GameUtilities.isPCLCardColor(effect.currentSlot.slotColor) && loadoutDropdown.size() > 0);
 
         maxUpgrades = new PCLValueEditor(new EUIHitbox(START_X, screenH(0.5f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , PGR.core.strings.cardEditor.maxUpgrades, (val) -> effect.modifyAllBuilders(e -> e.setMaxUpgrades(val)))
@@ -166,11 +166,11 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
         PCLResources<?,?,?> resources = PGR.getResources(effect.currentSlot.slotColor);
         if (resources != null)
         {
-            seriesDropdown.setItems(PCLLoadout.getAll(effect.currentSlot.slotColor));
+            loadoutDropdown.setItems(PCLLoadout.getAll(effect.currentSlot.slotColor));
         }
         else
         {
-            seriesDropdown.setActive(false);
+            loadoutDropdown.setActive(false);
         }
 
         refresh();
@@ -188,7 +188,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
         raritiesDropdown.setSelection(effect.getBuilder().cardRarity, false);
         typesDropdown.setSelection(effect.getBuilder().cardType, false);
         targetDropdown.setSelection(effect.getBuilder().cardTarget, false);
-        seriesDropdown.setSelection(effect.getBuilder().loadout, false);
+        loadoutDropdown.setSelection(effect.getBuilder().loadout, false);
         flagsDropdown.setSelection(effect.getBuilder().extraTags, false);
         maxUpgrades.setValue(effect.getBuilder().maxUpgradeLevel, false);
         uniqueToggle.setToggle(effect.getBuilder().unique);
@@ -205,7 +205,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
     {
         header.tryUpdate();
         maxUpgrades.tryUpdate();
-        seriesDropdown.tryUpdate();
+        loadoutDropdown.tryUpdate();
         flagsDropdown.tryUpdate();
         raritiesDropdown.tryUpdate();
         typesDropdown.tryUpdate();
@@ -223,7 +223,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
         raritiesDropdown.tryRender(sb);
         typesDropdown.tryRender(sb);
         targetDropdown.tryRender(sb);
-        seriesDropdown.tryRender(sb);
+        loadoutDropdown.tryRender(sb);
         flagsDropdown.tryRender(sb);
         languageDropdown.tryRender(sb);
         nameInput.tryRender(sb);

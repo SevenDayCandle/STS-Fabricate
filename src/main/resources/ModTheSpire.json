@@ -3,7 +3,7 @@
   "name": "Card Editor",
   "author_list": ["PinaColada"],
   "description": "In-game card creator for Slay the Spire.",
-  "credits" : "Code: EatYourBeetS \n Character Art: shira_0411 \n SFX: The Berklee College of Music, SquishiSprite, Zoltan Mihalyi, ViRiX, SilverIllusionist \n VFX: Effekseer, ashishlko11, Cethiel, GNOME Project, ManuGamingCreations, The Free Archives @ Dreams Circle, Sinestesia, J. W. Bjerk, Airarcs, Font Awesome \n Card Portraits: View cards in pop-up view to see individual card art credits",
+  "credits" : "Code: EatYourBeetS \n SFX: The Berklee College of Music, SquishiSprite, Zoltan Mihalyi, ViRiX, SilverIllusionist \n VFX: Effekseer, ashishlko11, Cethiel, GNOME Project, ManuGamingCreations, The Free Archives @ Dreams Circle, Sinestesia, J. W. Bjerk, Airarcs, Font Awesome",
   "version": "0.1.0",
   "sts_version": "10-04-2022",
   "mts_version": "3.30.0",

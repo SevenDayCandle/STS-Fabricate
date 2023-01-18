@@ -17,7 +17,6 @@ import extendedui.ui.AbstractScreen;
 import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITooltip;
-import extendedui.utilities.EUIColors;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.resources.PCLAbstractPlayerData;
@@ -59,7 +58,6 @@ public class PCLLoadoutEditor extends AbstractScreen
     protected EUIButton clearButton;
     protected EUIButton saveButton;
     protected EUIToggle upgradeToggle;
-    protected EUITextBox ascensionRequirement;
     protected EUITextBox cardscountText;
     protected EUITextBox cardsvalueText;
     protected EUITextBox hindrancevalueText;
@@ -176,13 +174,6 @@ public class PCLLoadoutEditor extends AbstractScreen
             baseStatEditors.add(new PCLBaseStatEditor(statTypes[i], screenW(0.6f), screenH(0.78f - i * 0.1f), this));
         }
 
-        ascensionRequirement = new EUITextBox(EUIRM.images.panelRounded.texture(), new EUIHitbox(labelWidth, labelHeight * 4))
-                .setColors(EUIColors.black(0.4f), EUIColors.cream(0.9f))
-                .setLabel(PGR.core.strings.charSelect.unlocksAtAscension(PCLLoadout.GOLD_AND_HP_EDITOR_ASCENSION_REQUIRED))
-                .setAlignment(0.5f, 0.5f)
-                .setPosition(screenW(0.62f), screenH(0.78f))
-                .setFont(FontHelper.charDescFont, 0.9f);
-
         contextMenu = new EUIContextMenu<ContextOption>(new EUIHitbox(0, 0, 0, 0), o -> o.name)
                 .setOnChange(options -> {
                     for (ContextOption o : options)
@@ -269,8 +260,6 @@ public class PCLLoadoutEditor extends AbstractScreen
                 }
             }
 
-            ascensionRequirement.tryUpdate();
-
             for (PCLBaseStatEditor beditor : baseStatEditors)
             {
                 if (activeEditor == null || activeEditor == beditor)
@@ -337,7 +326,6 @@ public class PCLLoadoutEditor extends AbstractScreen
                 baseStatEditors.get(i).tryRender(sb);
             }
 
-            ascensionRequirement.tryRender(sb);
             cancelButton.renderImpl(sb);
             clearButton.renderImpl(sb);
             saveButton.renderImpl(sb);
@@ -365,7 +353,6 @@ public class PCLLoadoutEditor extends AbstractScreen
         super.open();
 
         boolean enableHPAndGoldEditor = GameUtilities.getMaxAscensionLevel(option.c) >= PCLLoadout.GOLD_AND_HP_EDITOR_ASCENSION_REQUIRED;
-        ascensionRequirement.setActive(!enableHPAndGoldEditor);
         for (PCLBaseStatEditor beditor : baseStatEditors)
         {
             beditor.setActive(enableHPAndGoldEditor);

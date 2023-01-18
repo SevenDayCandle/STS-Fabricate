@@ -151,11 +151,12 @@ public class PCLCharacterSelectProvider implements RunAttributesProvider
                 if (current != o)
                 {
                     loadoutRenderer.refresh(this, o);
-                    if (GameUtilities.isPCLPlayerClass(o.c.chosenClass) && !PGR.core.config.simpleModeFtueSeen.get())
+                    // TODO Re-enable when simple mode is implemented
+/*                    if (GameUtilities.isPCLPlayerClass(o.c.chosenClass) && !PGR.core.config.simpleModeFtueSeen.get())
                     {
                         PGR.core.config.simpleModeFtueSeen.set(true);
                         openFtue();
-                    }
+                    }*/
                 }
 
                 return;

@@ -131,7 +131,6 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
                 .setLabelFunctionForOption(PCLCardSelection::getTitle, false)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cardEditor.origins)
                 .setCanAutosizeButton(true)
-                .setIsMultiSelect(true)
                 .setShouldPositionClearAtTop(true)
                 .setItems(PCLCardSelection.values());
 
@@ -310,6 +309,16 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
         dropdown.setSelection(items, false);
     }
 
+    public <U> void registerDropdown(EUIDropdown<U> dropdown, ActionT1<List<U>> onChangeImpl, U item)
+    {
+        activeElements.add(dropdown);
+        dropdown.setOnChange(targets -> {
+            onChangeImpl.invoke(targets);
+            editor.scheduleConstruct();
+        });
+        dropdown.setSelection(item, false);
+    }
+
     public <U> void registerDropdown(EUIDropdown<U> dropdown, List<U> items)
     {
         activeElements.add(dropdown);
@@ -349,9 +358,9 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
         registerDropdown(orbs, items);
     }
 
-    public void registerOrigin(PCLCardSelection item)
+    public void registerOrigin(PCLCardSelection item, ActionT1<List<PCLCardSelection>> onChangeImpl)
     {
-        registerDropdown(origins, EUIUtils.list(item));
+        registerDropdown(origins, onChangeImpl, item);
     }
 
     public void registerPower(List<PCLPowerHelper> items)

@@ -51,9 +51,11 @@ public class PCLLibraryModule extends CustomCardPoolModule
                 .setItems(ColorlessGroup.values());
         simpleModeToggle = (EUIToggle) new EUIToggle(new EUIHitbox(Settings.WIDTH * 0.7f, screen.quickSearch.hb.y, Settings.scale * 256f, Settings.scale * 48f))
                 .setFont(EUIFontHelper.carddescriptionfontLarge, 0.475f)
-                .setText(PGR.core.strings.misc.cardModeHeader)
+                .setText(PGR.core.strings.misc.simpleMode)
                 .setOnToggle(this::toggleSimpleMode)
                 .setTooltip(PGR.core.strings.misc.simpleMode, PGR.core.strings.misc.simpleModeDescription);
+        // TODO Re-enable when simple mode is re-implemented
+        simpleModeToggle.setActive(false);
     }
 
     @Override
