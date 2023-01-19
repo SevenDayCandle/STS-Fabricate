@@ -1,55 +1,8 @@
 package pinacolada.patches;
 
-/*
-public static void addScore(PlayerClass c, int scoreGained)
-{
-        String key_unlock_level = c.toString() + "UnlockLevel";
-        String key_progress = c.toString() + "Progress";
-        String key_current_cost = c.toString() + "CurrentCost";
-        String key_total_score = c.toString() + "TotalScore";
-        String key_high_score = c.toString() + "HighScore";
-        logger.info("Keys");
-        logger.info(key_unlock_level);
-        logger.info(key_progress);
-        logger.info(key_current_cost);
-        logger.info(key_total_score);
-        logger.info(key_high_score);
-        int p = unlockProgress.getInteger(key_progress, 0);
-        p += scoreGained;
-        int total;
-        int highscore;
-        if (p >= unlockProgress.getInteger(key_current_cost, 300)) {
-            logger.info("[DEBUG] Level up!");
-            total = unlockProgress.getInteger(key_unlock_level, 0);
-            ++total;
-            unlockProgress.putInteger(key_unlock_level, total);
-            p -= unlockProgress.getInteger(key_current_cost, 300);
-            unlockProgress.putInteger(key_progress, p);
-            logger.info("[DEBUG] Score Progress: " + key_progress);
-            highscore = unlockProgress.getInteger(key_current_cost, 300);
-            unlockProgress.putInteger(key_current_cost, incrementUnlockRamp(highscore));
-            if (p > unlockProgress.getInteger(key_current_cost, 300)) {
-                unlockProgress.putInteger(key_progress, unlockProgress.getInteger(key_current_cost, 300) - 1);
-                logger.info("Overfloat maxes out next level");
-            }
-        } else {
-            unlockProgress.putInteger(key_progress, p);
-        }
 
-        total = unlockProgress.getInteger(key_total_score, 0);
-        total += scoreGained;
-        unlockProgress.putInteger(key_total_score, total);
-        logger.info("[DEBUG] Total score: " + total);
-        highscore = unlockProgress.getInteger(key_high_score, 0);
-        if (scoreGained > highscore) {
-            unlockProgress.putInteger(key_high_score, scoreGained);
-            logger.info("[DEBUG] New high score: " + scoreGained);
-        }
-
-        unlockProgress.flush();
-    }
-*/
-
+// Copied and modified from STS-AnimatorMod
+// TODO remove, no longer necessary
 import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;

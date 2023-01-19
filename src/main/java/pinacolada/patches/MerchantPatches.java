@@ -11,6 +11,7 @@ import pinacolada.interfaces.listeners.OnAddingToCardRewardListener;
 
 import java.util.HashMap;
 
+// Copied and modified from STS-AnimatorMod
 public class MerchantPatches
 {
     @SpirePatch(clz = Merchant.class, method = SpirePatch.CONSTRUCTOR, paramtypez = {float.class, float.class, int.class})

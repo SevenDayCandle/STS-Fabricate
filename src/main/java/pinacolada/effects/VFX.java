@@ -15,6 +15,7 @@ import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.PCLRenderHelpers;
 
+// Copied and modified from STS-AnimatorMod
 public class VFX
 {
     public static final PCLCoreImages.Effects IMAGES = PGR.core.images.effects;

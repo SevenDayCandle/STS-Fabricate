@@ -13,6 +13,7 @@ import extendedui.utilities.EUIClassUtils;
 import pinacolada.misc.CombatManager;
 import pinacolada.patches.library.CardLibraryPatches;
 
+// Copied and modified from STS-AnimatorMod
 public class ShowCardAndAddPatches
 {
     @SpirePatch(clz = ShowCardAndAddToDrawPileEffect.class, method = "update")

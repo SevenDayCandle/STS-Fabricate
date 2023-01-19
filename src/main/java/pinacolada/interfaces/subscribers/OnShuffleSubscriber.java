@@ -1,6 +1,6 @@
 package pinacolada.interfaces.subscribers;
 
-public interface OnShuffleSubscriber
+public interface OnShuffleSubscriber extends PCLCombatSubscriber
 {
     void onShuffle(boolean triggerRelics);
 }

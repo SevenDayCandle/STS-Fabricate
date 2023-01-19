@@ -1,6 +1,6 @@
 package pinacolada.interfaces.subscribers;
 
-public interface OnAfterCardDiscardedSubscriber
+public interface OnAfterCardDiscardedSubscriber extends PCLCombatSubscriber
 {
     void onAfterCardDiscarded();
 }

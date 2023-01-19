@@ -17,7 +17,7 @@ import pinacolada.trials.PCLCustomTrial;
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO
+// TODO fix dropdown
 public class PCLCustomRunScreen extends AbstractScreen implements RunAttributesProvider
 {
 

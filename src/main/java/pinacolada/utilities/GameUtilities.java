@@ -69,14 +69,8 @@ import pinacolada.resources.pcl.PCLCoreResources;
 import pinacolada.resources.pcl.PCLLoadout;
 import pinacolada.stances.PCLStanceHelper;
 
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.lang.reflect.Field;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.*;
-import java.util.jar.JarEntry;
-import java.util.jar.JarInputStream;
 
 import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.actionManager;
 import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.player;
@@ -87,7 +81,6 @@ public class GameUtilities
     private static final RandomizedList<AbstractCard> fullCardPool = new RandomizedList<>();
     private static final RandomizedList<AbstractCard> characterCardPool = new RandomizedList<>();
     private static final HandLayoutRefresher handLayoutRefresher = new HandLayoutRefresher();
-    private static final HashMap<String, ArrayList<String>> classNames = new HashMap<>();
     private static AbstractPlayer.PlayerClass lastPlayerClass;
 
     public static void applyPowerInstantly(Iterable<AbstractCreature> targets, PCLPowerHelper powerHelper, int stacks)
@@ -624,63 +617,6 @@ public class GameUtilities
         }
 
         return cards;
-    }
-
-    public static ArrayList<String> getClassNamesFromJarFile(Class<?> objectClass, String prefix)
-    {
-        try
-        {
-            return getClassNamesFromJarFile(objectClass.getProtectionDomain().getCodeSource().getLocation().toURI(), prefix);
-        }
-        catch (URISyntaxException e)
-        {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static ArrayList<String> getClassNamesFromJarFile(URI url, String prefix)
-    {
-        try
-        {
-            String path = url.getPath();
-            ArrayList<String> cNames = classNames.get(path);
-            if (cNames == null)
-            {
-                cNames = new ArrayList<>();
-                JarInputStream jarFile = new JarInputStream(new FileInputStream(path));
-
-                while (true)
-                {
-                    JarEntry entry = jarFile.getNextJarEntry();
-                    if (entry == null)
-                    {
-                        break;
-                    }
-
-                    String name = entry.getName();
-                    if (name.endsWith(".class") && name.indexOf('$') == -1)
-                    {
-                        cNames.add(name.replaceAll("/", "\\."));
-                    }
-                }
-                classNames.put(path, cNames);
-            }
-
-            ArrayList<String> result = new ArrayList<>();
-            for (String entry : cNames)
-            {
-                if (entry.startsWith(prefix))
-                {
-                    result.add(entry.substring(0, entry.lastIndexOf('.')));
-                }
-            }
-
-            return result;
-        }
-        catch (IOException e)
-        {
-            throw new RuntimeException(e);
-        }
     }
 
     public static RandomizedList<AbstractCard> getColorlessCardPoolInCombat()

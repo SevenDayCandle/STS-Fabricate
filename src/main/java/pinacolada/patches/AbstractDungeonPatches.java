@@ -16,6 +16,7 @@ import pinacolada.utilities.GameUtilities;
 import java.util.ArrayList;
 import java.util.Map;
 
+// Copied and modified from STS-AnimatorMod
 public class AbstractDungeonPatches
 {
 /*    @SpirePatch(clz = AbstractDungeon.class, method = "getEvent", paramtypez = Random.class)

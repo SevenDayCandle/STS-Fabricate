@@ -12,6 +12,7 @@ import com.megacrit.cardcrawl.events.shrines.WeMeetAgain;
 import com.megacrit.cardcrawl.relics.DollysMirror;
 import pinacolada.utilities.GameUtilities;
 
+// Copied and modified from STS-AnimatorMod
 public class CardDuplicationPatches
 {
     private static CardGroup masterDeckCache;

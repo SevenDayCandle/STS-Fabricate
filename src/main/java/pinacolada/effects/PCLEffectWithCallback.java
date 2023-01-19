@@ -7,6 +7,7 @@ import extendedui.utilities.GenericCallback;
 
 import java.util.ArrayList;
 
+// Copied and modified from STS-AnimatorMod
 public abstract class PCLEffectWithCallback<T> extends PCLEffect
 {
     protected ArrayList<GenericCallback<T>> callbacks = new ArrayList<>();

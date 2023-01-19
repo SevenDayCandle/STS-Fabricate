@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+// Copied and modified from STS-AnimatorMod
 // TODO add color filtering
 @JsonAdapter(PCLPowerHelper.PCLPowerHelperAdapter.class)
 public class PCLPowerHelper implements TooltipProvider

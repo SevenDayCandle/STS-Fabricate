@@ -2,7 +2,7 @@ package pinacolada.misc;
 
 import java.util.LinkedHashSet;
 
-public class GameEvent<T>
+public class SubscriberGroup<T>
 {
     private final LinkedHashSet<T> subscribersCopy = new LinkedHashSet<>();
     private final LinkedHashSet<T> subscribers = new LinkedHashSet<>();

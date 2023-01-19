@@ -7,26 +7,23 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.localization.*;
+import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUIUtils;
 import pinacolada.augments.AugmentStrings;
 import pinacolada.commands.*;
 import pinacolada.interfaces.markers.Hidden;
 import pinacolada.resources.pcl.PCLCoreResources;
-import pinacolada.utilities.GameUtilities;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
+// Copied and modified from STS-AnimatorMod
 public class PGR
 {
     public static final String BASE_PREFIX = "pcl";
-    public static final String PREFIX_CARDS = "pinacolada.cards.";
-    public static final String PREFIX_POTIONS = "pinacolada.potions.";
-    public static final String PREFIX_POWERS = "pinacolada.powers.";
-    public static final String PREFIX_RELIC = "pinacolada.relics.";
 
     protected static final HashMap<AbstractCard.CardColor, PCLResources<?,?,?>> colorResourceMap = new HashMap<>();
     protected static final HashMap<AbstractPlayer.PlayerClass, PCLResources<?,?,?>> playerResourceMap = new HashMap<>();
@@ -100,11 +97,6 @@ public class PGR
     {
         PCLResources<?,?,?> resources = playerResourceMap.getOrDefault(player, null);
         return resources != null ? resources.getCharacterStrings() : null;
-    }
-
-    public static ArrayList<String> getClassNamesFromJarFile(String prefix)
-    {
-        return GameUtilities.getClassNamesFromJarFile(PGR.class, prefix);
     }
 
     public static EventStrings getEventStrings(String eventID)
@@ -237,5 +229,35 @@ public class PGR
         ConsoleCommand.addCommand("obtaincustom", ObtainCustomCommand.class);
         ConsoleCommand.addCommand("reloadcustom", ReloadCustomCommand.class);
         ConsoleCommand.addCommand("unlockall", UnlockAllCommand.class);
+    }
+
+    public void loadCustomCard(Class<?> type)
+    {
+        if (!PGR.canInstantiate(type))
+        {
+            return;
+        }
+
+        AbstractCard card;
+        String id;
+
+        try
+        {
+            card = (AbstractCard) type.getConstructor().newInstance();
+            id = card.cardID;
+        }
+        catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e)
+        {
+            e.printStackTrace();
+            return;
+        }
+
+        if (UnlockTracker.isCardLocked(id))
+        {
+            UnlockTracker.unlockCard(id);
+            card.isLocked = false;
+        }
+
+        BaseMod.addCard(card);
     }
 }

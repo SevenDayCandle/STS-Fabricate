@@ -6,12 +6,12 @@ import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
 import com.megacrit.cardcrawl.metrics.MetricData;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.screens.select.BossRelicSelectScreen;
-import pinacolada.interfaces.subscribers.OnRelicObtainedSubscriber;
+import pinacolada.interfaces.listeners.OnRelicObtainedListener;
 import pinacolada.misc.CombatManager;
 
 public class RelicObtainedPatches
 {
-    protected static void onRelicObtain(AbstractRelic relic, OnRelicObtainedSubscriber.Trigger trigger)
+    protected static void onRelicObtain(AbstractRelic relic, OnRelicObtainedListener.Trigger trigger)
     {
         CombatManager.onRelicObtained(relic, trigger);
     }
@@ -22,7 +22,7 @@ public class RelicObtainedPatches
         @SpirePostfixPatch
         public static void postfix(AbstractRelic relic)
         {
-            onRelicObtain(relic, OnRelicObtainedSubscriber.Trigger.Equip);
+            onRelicObtain(relic, OnRelicObtainedListener.Trigger.Equip);
         }
     }
 
@@ -32,7 +32,7 @@ public class RelicObtainedPatches
         @SpirePrefixPatch
         public static void prefix(BossRelicSelectScreen __instance, AbstractRelic relic)
         {
-            onRelicObtain(relic, OnRelicObtainedSubscriber.Trigger.Obtain);
+            onRelicObtain(relic, OnRelicObtainedListener.Trigger.Obtain);
         }
     }
 
@@ -42,7 +42,7 @@ public class RelicObtainedPatches
         @SpirePostfixPatch
         public static void postfix(AbstractRelic relic)
         {
-            onRelicObtain(relic, OnRelicObtainedSubscriber.Trigger.Obtain);
+            onRelicObtain(relic, OnRelicObtainedListener.Trigger.Obtain);
         }
     }
 
@@ -52,7 +52,7 @@ public class RelicObtainedPatches
         @SpirePrefixPatch
         public static void prefix(MetricData __instance, AbstractRelic relic)
         {
-            onRelicObtain(relic, OnRelicObtainedSubscriber.Trigger.MetricData);
+            onRelicObtain(relic, OnRelicObtainedListener.Trigger.MetricData);
         }
     }
 }

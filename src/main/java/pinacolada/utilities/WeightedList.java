@@ -6,6 +6,7 @@ import extendedui.EUIUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+// Copied and modified from STS-AnimatorMod
 public class WeightedList<T> extends ArrayList<WeightedList<T>.Item>
 {
     public class Item

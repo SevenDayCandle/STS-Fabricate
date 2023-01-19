@@ -28,7 +28,7 @@ import pinacolada.effects.vfx.EffekseerEffect;
 
 import java.util.ArrayList;
 
-
+// Copied and modified from STS-AnimatorMod
 public final class PCLEffects
 {
     public final static ArrayList<AbstractGameEffect> UnlistedEffects = new ArrayList<>();

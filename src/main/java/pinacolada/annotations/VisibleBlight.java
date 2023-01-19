@@ -5,9 +5,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-// Denote a relic that can be viewed in the relic compendium. Replaces Basemod.addRelic
+// Denote a Blight to be registered. Blights not registered in this fashion must be registered manually in BlightHelperPatches, or they will not be able to be loaded
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface VisibleRelic
+public @interface VisibleBlight
 {
 }

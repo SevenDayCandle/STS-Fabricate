@@ -7,6 +7,7 @@ import extendedui.interfaces.delegates.FuncT3;
 import java.util.ArrayList;
 import java.util.List;
 
+// Copied and modified from STS-AnimatorMod
 public abstract class ListSelection<Item>
 {
     public enum Mode

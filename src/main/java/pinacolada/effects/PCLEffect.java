@@ -18,6 +18,7 @@ import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.PCLRenderHelpers;
 import pinacolada.utilities.RandomizedList;
 
+// Copied and modified from STS-AnimatorMod
 public abstract class PCLEffect extends AbstractGameEffect
 {
     public static final PCLCoreImages.Effects IMAGES = PGR.core.images.effects;

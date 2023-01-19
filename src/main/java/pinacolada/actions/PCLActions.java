@@ -79,6 +79,7 @@ import java.util.UUID;
 import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.player;
 
 
+// Copied and modified from STS-AnimatorMod
 @SuppressWarnings("UnusedReturnValue")
 public final class PCLActions
 {
@@ -1137,7 +1138,7 @@ public final class PCLActions
 
         public static void add(AbstractGameAction action)
         {
-            CombatManager.onPhaseChanged.subscribe(new ExecuteLast(action));
+            CombatManager.subscribe(OnPhaseChangedSubscriber.class, new ExecuteLast(action));
         }
 
         @Override
@@ -1146,7 +1147,7 @@ public final class PCLActions
             if (phase == GameActionManager.Phase.WAITING_ON_USER)
             {
                 PCLActions.bottom.add(action);
-                CombatManager.onPhaseChanged.unsubscribe(this);
+                CombatManager.unsubscribe(OnPhaseChangedSubscriber.class, this);
             }
         }
     }

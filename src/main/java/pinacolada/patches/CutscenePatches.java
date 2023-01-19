@@ -10,6 +10,8 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
+// Copied and modified from STS-AnimatorMod
+// TODO Remove, no longer necessary
 public class CutscenePatches
 {
     @SpirePatch(clz = Cutscene.class, method = SpirePatch.CONSTRUCTOR, paramtypez = {AbstractPlayer.PlayerClass.class})

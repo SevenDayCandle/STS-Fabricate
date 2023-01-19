@@ -20,9 +20,13 @@ import com.megacrit.cardcrawl.relics.*;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import com.megacrit.cardcrawl.stances.AbstractStance;
 import extendedui.EUIUtils;
+import extendedui.interfaces.delegates.ActionT1;
+import extendedui.interfaces.delegates.FuncT1;
+import extendedui.interfaces.delegates.FuncT2;
 import extendedui.patches.game.CardGlowBorderPatches;
 import extendedui.ui.GridCardSelectScreenHelper;
-import org.apache.commons.lang3.mutable.MutableInt;
+import javassist.CannotCompileException;
+import javassist.CtClass;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.special.PCLHasteAction;
@@ -36,10 +40,12 @@ import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
 import pinacolada.effects.combat.DodgeEffect;
 import pinacolada.interfaces.listeners.OnCardResetListener;
+import pinacolada.interfaces.listeners.OnRelicObtainedListener;
 import pinacolada.interfaces.markers.CooldownProvider;
 import pinacolada.interfaces.subscribers.*;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.orbs.PCLOrb;
+import pinacolada.patches.ClassLoadingPatch;
 import pinacolada.powers.PCLClickableUse;
 import pinacolada.powers.PCLPower;
 import pinacolada.powers.TemporaryPower;
@@ -58,105 +64,44 @@ import java.util.*;
 
 import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.player;
 
+// Copied and modified from STS-AnimatorMod
+// TODO Merge with CombatScreen
 public class CombatManager
 {
+    private static GameActionManager.Phase currentPhase;
     private static final ArrayList<AbstractCard> cardsDiscardedThisCombat= new ArrayList<>();
     private static final ArrayList<AbstractCard> cardsDiscardedThisTurn = new ArrayList<>();
+    private static final ArrayList<AbstractCard> cardsExhaustedThisCombat = new ArrayList<>();
+    private static final ArrayList<AbstractCard> cardsExhaustedThisTurn = new ArrayList<>();
     private static final ArrayList<AbstractCard> hasteInfinitesThisTurn = new ArrayList<>();
     private static final ArrayList<AbstractCard> matchesThisCombat = new ArrayList<>();
     private static final ArrayList<AbstractCard> matchesThisTurn = new ArrayList<>();
-    private static final Map<String, Object> combatData = new HashMap<>();
-    private static final Map<String, Integer> limitedData = new HashMap<>();
-    private static final Map<String, Integer> semiLimitedData = new HashMap<>();
-    private static final Map<String, Object> turnData = new HashMap<>();
+    private static final ArrayList<AbstractGameAction> cachedActions = new ArrayList<>();
     private static final ArrayList<AbstractOrb> orbsEvokedThisCombat = new ArrayList<>();
     private static final ArrayList<AbstractOrb> orbsEvokedThisTurn = new ArrayList<>();
-    private static final Map<Integer, ArrayList<AbstractCard>> cardsPlayedThisCombat = new HashMap<>();
-    private static final ArrayList<AbstractCard> cardsExhaustedThisCombat = new ArrayList<>();
-    private static final ArrayList<AbstractCard> cardsExhaustedThisTurn = new ArrayList<>();
     private static final ArrayList<UUID> unplayableCards = new ArrayList<>();
-    private static final ArrayList<AbstractGameAction> cachedActions = new ArrayList<>();
-    private static GameActionManager.Phase currentPhase;
+    private static final HashMap<Class<? extends PCLCombatSubscriber>, SubscriberGroup<? extends PCLCombatSubscriber>> EVENTS = new HashMap<>();
+    private static final HashMap<String, Float> AMPLIFIER_BONUSES = new HashMap<>();
+    private static final HashMap<String, Float> EFFECT_BONUSES = new HashMap<>();
+    private static final HashMap<String, Float> PASSIVE_DAMAGE_BONUSES = new HashMap<>();
+    private static final HashMap<String, Float> PLAYER_EFFECT_BONUSES = new HashMap<>();
+    private static final Map<Integer, ArrayList<AbstractCard>> cardsPlayedThisCombat = new HashMap<>();
+    private static final Map<String, Integer> limitedData = new HashMap<>();
+    private static final Map<String, Integer> semiLimitedData = new HashMap<>();
+    private static final Map<String, Object> combatData = new HashMap<>();
+    private static final Map<String, Object> turnData = new HashMap<>();
     private static int cardsDrawnThisTurn = 0;
     private static int turnCount = 0;
-    protected static final HashMap<String, Float> AMPLIFIER_BONUSES = new HashMap<>();
-    protected static final HashMap<String, Float> EFFECT_BONUSES = new HashMap<>();
-    protected static final HashMap<String, Float> PASSIVE_DAMAGE_BONUSES = new HashMap<>();
-    protected static final HashMap<String, Float> PLAYER_EFFECT_BONUSES = new HashMap<>();
-    protected static final ArrayList<GameEvent<?>> EVENTS = new ArrayList<>();
-    public static final ControllableCardPile controlPile = new ControllableCardPile();
-    public static final CardGroup PURGED_CARDS = new CardGroup(PCLEnum.CardGroupType.PURGED_CARDS);
-    public static int blockRetained;
-    public static int maxHPSinceLastTurn;
-    public static boolean isPlayerTurn;
     public static AbstractRoom room;
     public static UUID battleID;
-    public static final GameEvent<OnAfterCardDrawnSubscriber> onAfterCardDrawn = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnAfterCardExhaustedSubscriber> onAfterCardExhausted = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnAfterCardPlayedSubscriber> onAfterCardPlayed = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnAfterDeathSubscriber> onAfterDeath = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnAfterlifeSubscriber> onAfterlife = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnAllyDeathSubscriber> onAllyDeath = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnAllySummonSubscriber> onAllySummon = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnAllyTriggerSubscriber> onAllyTrigger = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnAllyWithdrawSubscriber> onAllyWithdraw = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnApplyPowerSubscriber> onApplyPower = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnAttackSubscriber> onAttack = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnBattleEndSubscriber> onBattleEnd = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnBattleStartSubscriber> onBattleStart = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnBeforeLoseBlockSubscriber> onBeforeLoseBlock = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnBlockBrokenSubscriber> onBlockBroken = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnBlockGainedSubscriber> onBlockGained = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnCardCreatedSubscriber> onCardCreated = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnCardDiscardedSubscriber> onCardDiscarded = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnCardMovedSubscriber> onCardMoved = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnCardPurgedSubscriber> onCardPurged = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnCardResetSubscriber> onCardReset = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnCardReshuffledSubscriber> onCardReshuffled = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnChannelOrbSubscriber> onChannelOrb = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnCooldownTriggeredSubscriber> onCooldownTriggered = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnDamageActionSubscriber> onDamageAction = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnDamageOverrideSubscriber> onDamageOverride = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnElementReactSubscriber> onElementReact = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnEndOfTurnFirstSubscriber> onEndOfTurnFirst = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnEndOfTurnLastSubscriber> onEndOfTurnLast = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnEnergyRechargeSubscriber> onEnergyRecharge = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnEvokeOrbSubscriber> onEvokeOrb = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnGainPowerBonusSubscriber> onGainTriggerablePowerBonus = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnGainTempHPSubscriber> onGainTempHP = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnHealthBarUpdatedSubscriber> onHealthBarUpdated = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnIntensifySubscriber> onIntensify = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnLoseHPSubscriber> onLoseHP = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnMatchBonusSubscriber> onMatchBonus = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnMatchCheckSubscriber> onMatchCheck = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnMatchSubscriber> onMatch = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnModifyDamageFirstSubscriber> onModifyDamageFirst = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnModifyDamageLastSubscriber> onModifyDamageLast = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnModifyDebuffSubscriber> onModifyDebuff = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnModifyMagicNumberSubscriber> onModifyMagicNumber = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnMonsterDeathSubscriber> onMonsterDeath = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnMonsterMoveSubscriber> onMonsterMove = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnNotMatchSubscriber> onNotMatch = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnOrbApplyFocusSubscriber> onOrbApplyFocus = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnOrbApplyLockOnSubscriber> onOrbApplyLockOn = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnOrbPassiveEffectSubscriber> onOrbPassiveEffect = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnPCLClickableUsedSubscriber> onPCLClickablePowerUsed = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnPhaseChangedSubscriber> onPhaseChanged = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnShuffleSubscriber> onShuffle = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnStanceChangedSubscriber> onStanceChanged = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnStartOfTurnPostDrawSubscriber> onStartOfTurnPostDraw = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnStartOfTurnSubscriber> onStartOfTurn = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnTagChangedSubscriber> onTagChanged = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnTryChannelOrbSubscriber> onTryChannelOrb = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnTryElementReactSubscriber> onTryElementReact = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnTryGainResolveSubscriber> onTryGainResolve = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnTrySpendEnergySubscriber> onTrySpendEnergy = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnTryUseResolveSubscriber> onTryUseResolve = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnTryUseXCostSubscriber> onTryUseXCost = registerEvent(new GameEvent<>());
-    public static final GameEvent<OnTryUsingCardSubscriber> onTryUsingCard = registerEvent(new GameEvent<>());
+    public static boolean isPlayerTurn;
+    public static final CardGroup PURGED_CARDS = new CardGroup(PCLEnum.CardGroupType.PURGED_CARDS);
+    public static final ControllableCardPile controlPile = new ControllableCardPile();
     public static final PCLPlayerSystem playerSystem = new PCLPlayerSystem();
     public static final SummonPool summons = new SummonPool();
+    public static int blockRetained;
     public static int dodgeChance;
+    public static int maxHPSinceLastTurn;
 
     public static boolean canActivateLimited(String id) { return !hasActivatedLimited(id); }
     public static boolean hasActivatedLimited(String id) { return limitedData.containsKey(id); }
@@ -171,6 +116,13 @@ public class CombatManager
     public static boolean hasActivatedSemiLimited(String id, int cap) { return semiLimitedData.containsKey(id) && semiLimitedData.get(id) >= cap; }
     public static boolean tryActivateSemiLimited(String id, int cap) { return semiLimitedData.merge(id, 1, Integer::sum) <= cap; }
 
+    public static void initializeEvents() throws CannotCompileException
+    {
+        for (CtClass eventClass : ClassLoadingPatch.getClasses(PCLCombatSubscriber.class))
+        {
+            registerSubscribeGroup(eventClass.toClass());
+        }
+    }
 
     public static void addAmplifierBonus(String powerID, int multiplier)
     {
@@ -231,7 +183,7 @@ public class CombatManager
     {
         refreshPlayer();
         EUIUtils.logInfoIfDebug(CombatManager.class, "Clearing PCL Player Stats");
-        for (GameEvent<?> event : EVENTS)
+        for (SubscriberGroup<?> event : EVENTS.values())
         {
             event.clear();
         }
@@ -360,14 +312,6 @@ public class CombatManager
         return matchesThisTurn;
     }
 
-    public static void onAfterlife(AbstractCard playedCard, ArrayList<AbstractCard> fuelCards)
-    {
-        for (OnAfterlifeSubscriber s : onAfterlife.getSubscribers())
-        {
-            s.onAfterlife(playedCard, fuelCards);
-        }
-    }
-
     public static void onCardDiscarded(AbstractCard card)
     {
         cardsDiscardedThisCombat.add(card);
@@ -377,7 +321,7 @@ public class CombatManager
         {
             wrapper.onDiscard(card);
         }
-        for (OnCardDiscardedSubscriber s : onCardDiscarded.getSubscribers())
+        for (OnCardDiscardedSubscriber s : getSubscribers(OnCardDiscardedSubscriber.class))
         {
             s.onCardDiscarded(card);
         }
@@ -385,7 +329,7 @@ public class CombatManager
 
     public static void onCardMoved(AbstractCard card, CardGroup source, CardGroup destination)
     {
-        for (OnCardMovedSubscriber s : onCardMoved.getSubscribers())
+        for (OnCardMovedSubscriber s : getSubscribers(OnCardMovedSubscriber.class))
         {
             s.onCardMoved(card, source, destination);
         }
@@ -408,7 +352,7 @@ public class CombatManager
             wrapper.onPurged(card);
         }
 
-        for (OnCardPurgedSubscriber s : onCardPurged.getSubscribers())
+        for (OnCardPurgedSubscriber s : getSubscribers(OnCardPurgedSubscriber.class))
         {
             s.onPurge(card);
         }
@@ -426,30 +370,17 @@ public class CombatManager
             wrapper.onReshuffled(card, sourcePile);
         }
 
-        for (OnCardReshuffledSubscriber s : onCardReshuffled.getSubscribers())
-        {
-            s.onCardReshuffled(card, sourcePile);
-        }
+        subscriberDo(OnCardReshuffledSubscriber.class, s -> s.onCardReshuffled(card, sourcePile));
     }
 
     public static boolean onClickableUsed(PCLClickableUse condition, AbstractMonster target, int uses)
     {
-        boolean shouldPayCost = true;
-        for (OnPCLClickableUsedSubscriber s : onPCLClickablePowerUsed.getSubscribers())
-        {
-            shouldPayCost = shouldPayCost & s.onClickablePowerUsed(condition, target, uses);
-        }
-        return shouldPayCost;
+        return subscriberCanDeny(OnPCLClickableUsedSubscriber.class, s -> s.onClickablePowerUsed(condition, target, uses));
     }
 
     public static boolean onCooldownTriggered(AbstractCard card, AbstractCreature m, CooldownProvider cooldown)
     {
-        boolean canProgress = true;
-        for (OnCooldownTriggeredSubscriber s : onCooldownTriggered.getSubscribers())
-        {
-            canProgress = canProgress & s.onCooldownTriggered(card, m, cooldown);
-        }
-        return canProgress;
+        return subscriberCanDeny(OnCooldownTriggeredSubscriber.class, s -> s.onCooldownTriggered(card, m, cooldown));
     }
 
     public static void onDamageAction(AbstractGameAction action, AbstractCreature target, DamageInfo info, AbstractGameAction.AttackEffect effect)
@@ -459,20 +390,12 @@ public class CombatManager
             action.target = summons.getTarget(action.source);
         }
 
-        for (OnDamageActionSubscriber s : onDamageAction.getSubscribers())
-        {
-            s.onDamageAction(action, target, info, effect);
-        }
+        subscriberDo(OnDamageActionSubscriber.class, s -> s.onDamageAction(action, target, info, effect));
     }
 
     public static float onDamageOverride(AbstractCreature target, DamageInfo.DamageType type, float damage, AbstractCard card)
     {
-        for (OnDamageOverrideSubscriber s : onDamageOverride.getSubscribers())
-        {
-            damage = s.onDamageOverride(target, type, damage, card);
-        }
-
-        return damage;
+        return subscriberInout(OnDamageOverrideSubscriber.class, damage, (s, d) -> s.onDamageOverride(target, type, d, card));
     }
 
     public static void onDeath()
@@ -482,28 +405,17 @@ public class CombatManager
 
     public static void onElementReact(AffinityReactions reactions, AbstractCreature m)
     {
-        for (OnElementReactSubscriber s : onElementReact.getSubscribers())
-        {
-            s.onElementReact(reactions, m);
-        }
+        subscriberDo(OnElementReactSubscriber.class, s -> s.onElementReact(reactions, m));
     }
 
     public static int onGainTempHP(int amount)
     {
-        for (OnGainTempHPSubscriber s : onGainTempHP.getSubscribers())
-        {
-            amount = s.onGainTempHP(amount);
-        }
-        return amount;
+        return subscriberInout(OnGainTempHPSubscriber.class, amount, OnGainTempHPSubscriber::onGainTempHP);
     }
 
     public static float onGainTriggerablePowerBonus(String powerID, Type gainType, float amount)
     {
-        for (OnGainPowerBonusSubscriber s : onGainTriggerablePowerBonus.getSubscribers())
-        {
-            amount = s.onGainPowerBonus(powerID, gainType, amount);
-        }
-        return amount;
+        return subscriberInout(OnGainPowerBonusSubscriber.class, amount, (s, d) -> s.onGainPowerBonus(powerID, gainType, d));
     }
 
     public static void onGameStart()
@@ -513,21 +425,14 @@ public class CombatManager
         PGR.core.dungeon.reset();
     }
 
-    public static void onIntensify(PCLAffinity button)
+    public static void onIncreaseAffinityLevel(PCLAffinity affinity)
     {
-        for (OnIntensifySubscriber s : onIntensify.getSubscribers())
-        {
-            s.onIntensify(button);
-        }
+        subscriberDo(OnIntensifySubscriber.class, s -> s.onIntensify(affinity));
     }
 
     public static void onMatch(AbstractCard card, PCLUseInfo info)
     {
-
-        for (OnMatchSubscriber s : onMatch.getSubscribers())
-        {
-            s.onMatch(card, info);
-        }
+        subscriberDo(OnMatchSubscriber.class, s -> s.onMatch(card, info));
 
         matchesThisTurn.add(card);
         matchesThisCombat.add(card);
@@ -535,54 +440,32 @@ public class CombatManager
 
     public static void onMatchBonus(AbstractCard card, PCLAffinity affinity)
     {
-        for (OnMatchBonusSubscriber s : onMatchBonus.getSubscribers())
-        {
-            s.onMatchBonus(card, affinity);
-        }
+        subscriberDo(OnMatchBonusSubscriber.class, s -> s.onMatchBonus(card, affinity));
     }
 
     public static float onModifyMagicNumber(float amount, AbstractCard card)
     {
-        for (OnModifyMagicNumberSubscriber s : onModifyMagicNumber.getSubscribers())
-        {
-            amount = s.onModifyMagicNumber(amount, card);
-        }
-        return amount;
+        return subscriberInout(OnModifyMagicNumberSubscriber.class, amount, (s, d) -> s.onModifyMagicNumber(d, card));
     }
 
     public static boolean onMonsterMove(AbstractMonster target)
     {
-        boolean canMove = true;
-        for (OnMonsterMoveSubscriber s : onMonsterMove.getSubscribers())
-        {
-            canMove = canMove & s.onMonsterMove(target);
-        }
-        return canMove;
+        return subscriberCanDeny(OnMonsterMoveSubscriber.class, s -> s.onMonsterMove(target));
     }
 
     public static void onNotMatch(AbstractCard card, PCLUseInfo info)
     {
-        for (OnNotMatchSubscriber s : onNotMatch.getSubscribers())
-        {
-            s.onNotMatch(card, info);
-        }
+        subscriberDo(OnNotMatchSubscriber.class, s -> s.onNotMatch(card, info));
     }
 
     public static void onOrbApplyFocus(AbstractOrb orb)
     {
-        for (OnOrbApplyFocusSubscriber s : onOrbApplyFocus.getSubscribers())
-        {
-            s.onApplyFocus(orb);
-        }
+        subscriberDo(OnOrbApplyFocusSubscriber.class, s -> s.onApplyFocus(orb));
     }
 
     public static float onOrbApplyLockOn(AbstractCreature target, float dmg)
     {
-        for (OnOrbApplyLockOnSubscriber s : onOrbApplyLockOn.getSubscribers())
-        {
-            dmg = s.onOrbApplyLockOn(target, dmg);
-        }
-        return (int) dmg;
+        return subscriberInout(OnOrbApplyLockOnSubscriber.class, dmg, (s, d) -> s.onOrbApplyLockOn(target, d));
     }
 
     public static void onPlayCardPostActions(AbstractCard card, AbstractMonster m)
@@ -597,8 +480,6 @@ public class CombatManager
     public static void onStartOver()
     {
         clearStats();
-        onBattleStart.clear();
-        onBattleEnd.clear();
 
         PGR.core.dungeon.reset();
     }
@@ -611,30 +492,20 @@ public class CombatManager
 
     public static void onAfterDeath()
     {
-        for (OnAfterDeathSubscriber s : onAfterDeath.getSubscribers())
-        {
-            s.onAfterDeath();
-        }
+        subscriberDo(OnAfterDeathSubscriber.class, OnAfterDeathSubscriber::onAfterDeath);
 
         clearStats();
     }
 
     public static int onModifyDamageFirst(AbstractCreature target, DamageInfo info, int damage)
     {
-        for (OnModifyDamageFirstSubscriber s : onModifyDamageFirst.getSubscribers())
-        {
-            damage = s.onModifyDamageFirst(target, info, damage);
-        }
-
-        return damage;
+        return subscriberInout(OnModifyDamageFirstSubscriber.class, damage, (s, d) -> s.onModifyDamageFirst(target, info, d));
     }
 
     public static int onModifyDamageLast(AbstractCreature target, DamageInfo info, int damage)
     {
-        for (OnModifyDamageLastSubscriber s : onModifyDamageLast.getSubscribers())
-        {
-            damage = s.onModifyDamageLast(target, info, damage);
-        }
+        damage = subscriberInout(OnModifyDamageLastSubscriber.class, damage, (s, d) -> s.onModifyDamageLast(target, info, d));
+
         if (target == AbstractDungeon.player && info.type == DamageInfo.DamageType.NORMAL && GameUtilities.chance(dodgeChance))
         {
             AbstractDungeon.player.tint.color.a = 0;
@@ -649,22 +520,12 @@ public class CombatManager
 
     public static void onModifyDebuff(AbstractPower debuff, int initialAmount, int newAmount)
     {
-        for (OnModifyDebuffSubscriber s : onModifyDebuff.getSubscribers())
-        {
-            s.onModifyDebuff(debuff, initialAmount, newAmount);
-        }
+        subscriberDo(OnModifyDebuffSubscriber.class, s -> s.onModifyDebuff(debuff, initialAmount, newAmount));
     }
 
     public static int onEnergyRecharge(int previousEnergy, int currentEnergy)
     {
-        final MutableInt a = new MutableInt(previousEnergy);
-        final MutableInt b = new MutableInt(currentEnergy);
-        for (OnEnergyRechargeSubscriber s : onEnergyRecharge.getSubscribers())
-        {
-            s.onEnergyRecharge(a, b);
-        }
-
-        return b.getValue();
+        return subscriberInout(OnEnergyRechargeSubscriber.class, currentEnergy, (s, d) -> s.onEnergyRecharge(previousEnergy, currentEnergy));
     }
 
     public static void onCardReset(AbstractCard card)
@@ -675,10 +536,7 @@ public class CombatManager
             c.onReset();
         }
 
-        for (OnCardResetSubscriber s : onCardReset.getSubscribers())
-        {
-            s.onCardReset(card);
-        }
+        subscriberDo(OnCardResetSubscriber.class, s -> s.onCardReset(card));
     }
 
     public static void onCardCreated(AbstractCard card, boolean startOfBattle)
@@ -689,37 +547,31 @@ public class CombatManager
             c.triggerWhenCreated(startOfBattle);
         }
 
-        for (OnCardCreatedSubscriber s : onCardCreated.getSubscribers())
-        {
-            s.onCardCreated(card, startOfBattle);
-        }
+        subscriberDo(OnCardCreatedSubscriber.class, s -> s.onCardCreated(card, startOfBattle));
     }
 
     public static void onShuffle(boolean triggerRelics)
     {
-        for (OnShuffleSubscriber s : onShuffle.getSubscribers())
-        {
-            s.onShuffle(triggerRelics);
-        }
+        subscriberDo(OnShuffleSubscriber.class, s -> s.onShuffle(triggerRelics));
     }
 
-    public static void onRelicObtained(AbstractRelic relic, OnRelicObtainedSubscriber.Trigger trigger)
+    public static void onRelicObtained(AbstractRelic relic, OnRelicObtainedListener.Trigger trigger)
     {
         refreshPlayer();
 
         for (AbstractCard c : AbstractDungeon.player.masterDeck.group)
         {
-            if (c instanceof OnRelicObtainedSubscriber)
+            if (c instanceof OnRelicObtainedListener)
             {
-                ((OnRelicObtainedSubscriber) c).onRelicObtained(relic, trigger);
+                ((OnRelicObtainedListener) c).onRelicObtained(relic, trigger);
             }
         }
 
         for (AbstractRelic r : AbstractDungeon.player.relics)
         {
-            if (r instanceof OnRelicObtainedSubscriber)
+            if (r instanceof OnRelicObtainedListener)
             {
-                ((OnRelicObtainedSubscriber) r).onRelicObtained(relic, trigger);
+                ((OnRelicObtainedListener) r).onRelicObtained(relic, trigger);
             }
         }
     }
@@ -728,12 +580,7 @@ public class CombatManager
     {
         refresh();
 
-        onBattleEnd.clear();
-        for (OnBattleStartSubscriber s : onBattleStart.getSubscribers())
-        {
-            s.onBattleStart();
-        }
-        onBattleStart.clear();
+        subscriberDo(OnBattleStartSubscriber.class, OnBattleStartSubscriber::onBattleStart);
 
         final ArrayList<AbstractCard> cards = new ArrayList<>(AbstractDungeon.player.drawPile.group);
         cards.addAll(AbstractDungeon.player.hand.group);
@@ -748,55 +595,33 @@ public class CombatManager
 
     public static void onBattleEnd()
     {
-        for (OnBattleEndSubscriber s : onBattleEnd.getSubscribers())
-        {
-            s.onBattleEnd();
-        }
+        subscriberDo(OnBattleEndSubscriber.class, OnBattleEndSubscriber::onBattleEnd);
 
         summons.onBattleEnd();
-
-        onBattleStart.clear();
-        onBattleEnd.clear();
-
 
         clearStats();
     }
 
     public static void onTagChanged(AbstractCard card, PCLCardTag tag, int value)
     {
-        for (OnTagChangedSubscriber s : onTagChanged.getSubscribers())
-        {
-            s.onTagChanged(card, tag, value);
-        }
+        subscriberDo(OnTagChangedSubscriber.class, s -> s.onTagChanged(card, tag, value));
     }
 
     public static AbstractOrb onTryChannelOrb(AbstractOrb orb)
     {
-        for (OnTryChannelOrbSubscriber s : onTryChannelOrb.getSubscribers())
-        {
-            orb = s.onTryChannelOrb(orb);
-        }
-
-        return orb;
+        return subscriberInout(OnTryChannelOrbSubscriber.class, orb, OnTryChannelOrbSubscriber::onTryChannelOrb);
     }
 
+    // TODO Move to child mod
     public static int onTryElementReact(int amount, PCLAffinity button, PCLAffinity trigger)
     {
-        for (OnTryElementReactSubscriber s : onTryElementReact.getSubscribers())
-        {
-            amount = s.onTryElementReact(amount, button, trigger);
-        }
-        return amount;
+        return subscriberInout(OnTryElementReactSubscriber.class, amount, (s, d) -> s.onTryElementReact(d, button, trigger));
     }
 
+    // TODO Move to child mod
     public static int onTryGainResolve(AbstractCard card, AbstractPlayer p, int cost, boolean isActuallyGaining, boolean isFromMatch)
     {
-        for (OnTryGainResolveSubscriber s : onTryGainResolve.getSubscribers())
-        {
-            cost = s.onTryGainResolve(card, p, cost, isActuallyGaining, isFromMatch);
-        }
-
-        return cost;
+        return subscriberInout(OnTryGainResolveSubscriber.class, cost, (s, d) -> s.onTryGainResolve(card, p, d, isActuallyGaining, isFromMatch));
     }
 
     public static int onTrySpendEnergy(AbstractCard card, AbstractPlayer p, int cost)
@@ -807,59 +632,36 @@ public class CombatManager
             cost = 0;
         }
 
-        for (OnTrySpendEnergySubscriber s : onTrySpendEnergy.getSubscribers())
-        {
-            cost = s.onTrySpendEnergy(card, p, cost);
-        }
-
-        return cost;
+        return subscriberInout(OnTrySpendEnergySubscriber.class, cost, (s, d) -> s.onTrySpendEnergy(card, p, d));
     }
 
+    // TODO Move to child mod
     public static int onTryUseResolve(int original, int toSpend, boolean fromButton)
     {
-        for (OnTryUseResolveSubscriber s : onTryUseResolve.getSubscribers())
-        {
-            toSpend = s.onTryUseResolve(original, toSpend, fromButton);
-        }
-
-        return toSpend;
+        return subscriberInout(OnTryUseResolveSubscriber.class, toSpend, (s, d) -> s.onTryUseResolve(original, d, fromButton));
     }
 
     public static int onTryUseXCost(int original, AbstractCard card)
     {
-        for (OnTryUseXCostSubscriber s : onTryUseXCost.getSubscribers())
-        {
-            original = s.onTryUseXCost(original, card);
-        }
-
-        return original;
+        return subscriberInout(OnTryUseXCostSubscriber.class, original, (s, d) -> s.onTryUseXCost(d, card));
     }
 
     public static void onAllyDeath(PCLCard card, PCLCardAlly ally)
     {
         card.triggerWhenKilled(ally);
-        for (OnAllyDeathSubscriber s : onAllyDeath.getSubscribers())
-        {
-            s.onAllyDeath(card, ally);
-        }
+        subscriberDo(OnAllyDeathSubscriber.class, s -> s.onAllyDeath(card, ally));
     }
 
     public static void onAllySummon(PCLCard card, PCLCardAlly ally)
     {
         card.triggerWhenSummoned(ally);
-        for (OnAllySummonSubscriber s : onAllySummon.getSubscribers())
-        {
-            s.onAllySummon(card, ally);
-        }
+        subscriberDo(OnAllySummonSubscriber.class, s -> s.onAllySummon(card, ally));
     }
 
     public static void onAllyTrigger(PCLCard card, PCLCardAlly ally)
     {
         card.triggerWhenTriggered(ally);
-        for (OnAllyTriggerSubscriber s : onAllyTrigger.getSubscribers())
-        {
-            s.onAllyTrigger(card, ally);
-        }
+        subscriberDo(OnAllyTriggerSubscriber.class, s -> s.onAllyTrigger(card, ally));
     }
 
     public static void onAllyWithdraw(PCLCard card, PCLCardAlly ally)
@@ -868,10 +670,7 @@ public class CombatManager
         {
             card.triggerWhenWithdrawn(ally);
         }
-        for (OnAllyWithdrawSubscriber s : onAllyWithdraw.getSubscribers())
-        {
-            s.onAllyWithdraw(card, ally);
-        }
+        subscriberDo(OnAllyWithdrawSubscriber.class, s -> s.onAllyWithdraw(card, ally));
     }
 
     public static void onUsingCard(PCLCard card, AbstractPlayer p, AbstractMonster m)
@@ -1007,10 +806,65 @@ public class CombatManager
         return PCLCard.player = PCLPower.player = PCLRelic.player = AbstractDungeon.player;
     }
 
-    public static <T> GameEvent<T> registerEvent(GameEvent<T> event)
+    public static <T extends PCLCombatSubscriber> SubscriberGroup<T> registerSubscribeGroup(Class<T> eventClass)
     {
-        EVENTS.add(event);
+        SubscriberGroup<T> event = new SubscriberGroup<>();
+        EVENTS.put(eventClass, event);
         return event;
+    }
+
+    public static <T extends PCLCombatSubscriber> void subscribe(Class<T> subtype, T subscriber)
+    {
+        getSubscriberGroup(subtype).subscribe(subscriber);
+    }
+
+    public static <T extends PCLCombatSubscriber> void subscribeOnce(Class<T> subtype, T subscriber)
+    {
+        getSubscriberGroup(subtype).subscribeOnce(subscriber);
+    }
+
+    public static <T extends PCLCombatSubscriber> void unsubscribe(Class<T> subtype, T subscriber)
+    {
+        getSubscriberGroup(subtype).unsubscribe(subscriber);
+    }
+
+    public static void subscribe(PCLCombatSubscriber subscriber)
+    {
+        for (Class<? extends PCLCombatSubscriber> c : getInterfaces(subscriber))
+        {
+            castAndSubscribe(c, subscriber);
+        }
+    }
+
+    public static void subscribeOnce(PCLCombatSubscriber subscriber)
+    {
+        for (Class<? extends PCLCombatSubscriber> c : getInterfaces(subscriber))
+        {
+            castAndSubscribeOnce(c, subscriber);
+        }
+    }
+
+    public static void unsubscribe(PCLCombatSubscriber subscriber)
+    {
+        for (Class<? extends PCLCombatSubscriber> c : getInterfaces(subscriber))
+        {
+            castAndUnsubscribe(c, subscriber);
+        }
+    }
+
+    private static <T extends PCLCombatSubscriber> void castAndSubscribe(Class<T> subtype, PCLCombatSubscriber subscriber)
+    {
+        subscribe(subtype, (T) subscriber);
+    }
+
+    private static <T extends PCLCombatSubscriber> void castAndSubscribeOnce(Class<T> subtype, PCLCombatSubscriber subscriber)
+    {
+        subscribeOnce(subtype, (T) subscriber);
+    }
+
+    private static <T extends PCLCombatSubscriber> void castAndUnsubscribe(Class<T> subtype, PCLCombatSubscriber subscriber)
+    {
+        unsubscribe(subtype, (T) subscriber);
     }
 
     public static boolean onTryUsingCard(AbstractCard card, AbstractPlayer p, AbstractMonster m, boolean canPlay)
@@ -1020,7 +874,7 @@ public class CombatManager
             return false;
         }
 
-        for (OnTryUsingCardSubscriber s : onTryUsingCard.getSubscribers())
+        for (OnTryUsingCardSubscriber s : getSubscribers(OnTryUsingCardSubscriber.class))
         {
             canPlay &= s.onTryUsingCard(card, p, m, canPlay);
         }
@@ -1030,10 +884,7 @@ public class CombatManager
 
     public static void onMonsterDeath(AbstractMonster monster, boolean triggerRelics)
     {
-        for (OnMonsterDeathSubscriber s : onMonsterDeath.getSubscribers())
-        {
-            s.onMonsterDeath(monster, triggerRelics);
-        }
+        subscriberDo(OnMonsterDeathSubscriber.class, s -> s.onMonsterDeath(monster, triggerRelics));
     }
 
     public static void onHealthBarUpdated(AbstractCreature creature)
@@ -1043,53 +894,35 @@ public class CombatManager
             maxHPSinceLastTurn = creature.currentHealth;
         }
 
-        for (OnHealthBarUpdatedSubscriber s : onHealthBarUpdated.getSubscribers())
-        {
-            s.onHealthBarUpdated(creature);
-        }
+        subscriberDo(OnHealthBarUpdatedSubscriber.class, s -> s.onHealthBarUpdated(creature));
 
         GameUtilities.refreshHandLayout(true);
     }
 
     public static void onBlockGained(AbstractCreature creature, int block)
     {
-        for (OnBlockGainedSubscriber s : onBlockGained.getSubscribers())
-        {
-            s.onBlockGained(creature, block);
-        }
+        subscriberDo(OnBlockGainedSubscriber.class, s -> s.onBlockGained(creature, block));
     }
 
     public static void onBlockBroken(AbstractCreature creature)
     {
-        for (OnBlockBrokenSubscriber s : onBlockBroken.getSubscribers())
-        {
-            s.onBlockBroken(creature);
-        }
+        subscriberDo(OnBlockBrokenSubscriber.class, s -> s.onBlockBroken(creature));
     }
 
     public static void onBeforeLoseBlock(AbstractCreature creature, int amount, boolean noAnimation)
     {
-        for (OnBeforeLoseBlockSubscriber s : onBeforeLoseBlock.getSubscribers())
-        {
-            s.onBeforeLoseBlock(creature, amount, noAnimation);
-        }
+        subscriberDo(OnBeforeLoseBlockSubscriber.class, s -> s.onBeforeLoseBlock(creature, amount, noAnimation));
     }
 
     public static void onOrbPassiveEffect(AbstractOrb orb)
     {
-        for (OnOrbPassiveEffectSubscriber s : onOrbPassiveEffect.getSubscribers())
-        {
-            s.onOrbPassiveEffect(orb);
-        }
+        subscriberDo(OnOrbPassiveEffectSubscriber.class, s -> s.onOrbPassiveEffect(orb));
     }
 
     public static void onAfterDraw(AbstractCard card)
     {
         cardsDrawnThisTurn += 1;
-        for (OnAfterCardDrawnSubscriber s : onAfterCardDrawn.getSubscribers())
-        {
-            s.onAfterCardDrawn(card);
-        }
+        subscriberDo(OnAfterCardDrawnSubscriber.class, s -> s.onAfterCardDrawn(card));
 
         if (PCLCardTag.Haste.has(card))
         {
@@ -1179,10 +1012,7 @@ public class CombatManager
 
     public static void onApplyPower(AbstractCreature source, AbstractCreature target, AbstractPower power)
     {
-        for (OnApplyPowerSubscriber p : onApplyPower.getSubscribers())
-        {
-            p.onApplyPower(power, target, source);
-        }
+        subscriberDo(OnApplyPowerSubscriber.class, s -> s.onApplyPower(power, target, source));
     }
     public static void onChannel(AbstractOrb orb)
     {
@@ -1193,10 +1023,7 @@ public class CombatManager
                 ((PCLOrb) orb).onChannel();
             }
 
-            for (OnChannelOrbSubscriber p : onChannelOrb.getSubscribers())
-            {
-                p.onChannelOrb(orb);
-            }
+            subscriberDo(OnChannelOrbSubscriber.class, s -> s.onChannelOrb(orb));
         }
     }
 
@@ -1204,10 +1031,7 @@ public class CombatManager
     {
         if (orb != null && !(orb instanceof EmptyOrbSlot))
         {
-            for (OnEvokeOrbSubscriber p : onEvokeOrb.getSubscribers())
-            {
-                p.onEvokeOrb(orb);
-            }
+            subscriberDo(OnEvokeOrbSubscriber.class, s -> s.onEvokeOrb(orb));
             orbsEvokedThisCombat.add(orb);
             orbsEvokedThisTurn.add(orb);
         }
@@ -1215,10 +1039,7 @@ public class CombatManager
 
     public static void onAfterCardPlayed(AbstractCard card)
     {
-        for (OnAfterCardPlayedSubscriber p : onAfterCardPlayed.getSubscribers())
-        {
-            p.onAfterCardPlayed(card);
-        }
+        subscriberDo(OnAfterCardPlayedSubscriber.class, s -> s.onAfterCardPlayed(card));
 
         cardsPlayedThisCombat(turnCount).add(card);
 
@@ -1235,20 +1056,15 @@ public class CombatManager
         card.lighten(false);
         card.clearPowers();
 
-        for (OnAfterCardExhaustedSubscriber p : onAfterCardExhausted.getSubscribers())
-        {
-            p.onAfterCardExhausted(card);
-        }
+        subscriberDo(OnAfterCardExhaustedSubscriber.class, s -> s.onAfterCardExhausted(card));
+
         cardsExhaustedThisCombat.add(card);
         cardsExhaustedThisTurn.add(card);
     }
 
     public static void onAttack(DamageInfo info, int damageAmount, AbstractCreature target)
     {
-        for (OnAttackSubscriber p : onAttack.getSubscribers())
-        {
-            p.onAttack(info, damageAmount, target);
-        }
+        subscriberDo(OnAttackSubscriber.class, s -> s.onAttack(info, damageAmount, target));
     }
 
     public static void update()
@@ -1256,27 +1072,18 @@ public class CombatManager
         if (currentPhase != AbstractDungeon.actionManager.phase)
         {
             currentPhase = AbstractDungeon.actionManager.phase;
-            for (OnPhaseChangedSubscriber s : onPhaseChanged.getSubscribers())
-            {
-                s.onPhaseChanged(currentPhase);
-            }
+            subscriberDo(OnPhaseChangedSubscriber.class, s -> s.onPhaseChanged(currentPhase));
         }
     }
 
     public static void onChangeStance(AbstractStance oldStance, AbstractStance newStance)
     {
-        for (OnStanceChangedSubscriber s : onStanceChanged.getSubscribers())
-        {
-            s.onStanceChanged(oldStance, newStance);
-        }
+        subscriberDo(OnStanceChangedSubscriber.class, s -> s.onStanceChanged(oldStance, newStance));
     }
 
     public static int onPlayerLoseHP(AbstractPlayer p, DamageInfo info, int damageAmount)
     {
-        for (OnLoseHPSubscriber s : onLoseHP.getSubscribers())
-        {
-            damageAmount = s.onLoseHP(p, info, damageAmount);
-        }
+        damageAmount = subscriberInout(OnLoseHPSubscriber.class, damageAmount, (s, d) -> s.onLoseHP(p, info, d));
         if (damageAmount > 0)
         {
             damageAmount = summons.tryDamage(info, damageAmount);
@@ -1291,13 +1098,7 @@ public class CombatManager
         CombatManager.playerSystem.onStartOfTurn();
         dodgeChance = 0;
 
-        if (onStartOfTurn.count() > 0)
-        {
-            for (OnStartOfTurnSubscriber s : onStartOfTurn.getSubscribers())
-            {
-                s.onStartOfTurn();
-            }
-        }
+        subscriberDo(OnStartOfTurnSubscriber.class, OnStartOfTurnSubscriber::onStartOfTurn);
 
         summons.onStartOfTurn();
 
@@ -1309,12 +1110,9 @@ public class CombatManager
 
     public static void atPlayerTurnStartPostDraw()
     {
-        if (onStartOfTurnPostDraw.count() > 0)
+        for (OnStartOfTurnPostDrawSubscriber s : getSubscribers(OnStartOfTurnPostDrawSubscriber.class))
         {
-            for (OnStartOfTurnPostDrawSubscriber s : onStartOfTurnPostDraw.getSubscribers())
-            {
-                s.onStartOfTurnPostDraw();
-            }
+            s.onStartOfTurnPostDraw();
         }
 
         summons.onStartOfTurnPostDraw();
@@ -1341,7 +1139,7 @@ public class CombatManager
     {
         isPlayerTurn = false;
 
-        for (OnEndOfTurnFirstSubscriber s : onEndOfTurnFirst.getSubscribers())
+        for (OnEndOfTurnFirstSubscriber s : getSubscribers(OnEndOfTurnFirstSubscriber.class))
         {
             s.onEndOfTurnFirst(isPlayer);
         }
@@ -1352,7 +1150,7 @@ public class CombatManager
     public static void atEndOfTurn(boolean isPlayer)
     {
 
-        for (OnEndOfTurnLastSubscriber s : onEndOfTurnLast.getSubscribers())
+        for (OnEndOfTurnLastSubscriber s : getSubscribers(OnEndOfTurnLastSubscriber.class))
         {
             s.onEndOfTurnLast(isPlayer);
         }
@@ -1401,6 +1199,68 @@ public class CombatManager
         {
             PCLActions.bottom.removePower(creature, creature, VigorPower.POWER_ID);
         }
+    }
+
+    public static <T extends PCLCombatSubscriber> boolean subscriberCanDeny(Class<T> subscriberClass, FuncT1<Boolean, T> doFor)
+    {
+        boolean passes = true;
+        for (T subscriber : getSubscribers(subscriberClass))
+        {
+            passes = passes & doFor.invoke(subscriber);
+        }
+        return passes;
+    }
+
+    public static <T extends PCLCombatSubscriber> boolean subscriberCanPass(Class<T> subscriberClass, FuncT1<Boolean, T> doFor)
+    {
+        boolean passes = false;
+        for (T subscriber : getSubscribers(subscriberClass))
+        {
+            passes = passes | doFor.invoke(subscriber);
+        }
+        return passes;
+    }
+
+    public static <T extends PCLCombatSubscriber> void subscriberDo(Class<T> subscriberClass, ActionT1<T> doFor)
+    {
+        for (T subscriber : getSubscribers(subscriberClass))
+        {
+            doFor.invoke(subscriber);
+        }
+    }
+
+    public static <T extends PCLCombatSubscriber, U> U subscriberInout(Class<T> subscriberClass, U inout, FuncT2<U, T, U> doFor)
+    {
+        for (T subscriber : getSubscribers(subscriberClass))
+        {
+            inout = doFor.invoke(subscriber, inout);
+        }
+        return inout;
+    }
+
+    public static <T extends PCLCombatSubscriber> int subscriberSum(Class<T> subscriberClass, FuncT1<Integer, T> doFor)
+    {
+        int sum = 0;
+        for (T subscriber : getSubscribers(subscriberClass))
+        {
+            sum = sum + doFor.invoke(subscriber);
+        }
+        return sum;
+    }
+
+    private static ArrayList<Class<? extends PCLCombatSubscriber>> getInterfaces(PCLCombatSubscriber subscriber)
+    {
+        return (ArrayList<Class<? extends PCLCombatSubscriber>>) EUIUtils.filter(subscriber.getClass().getInterfaces(), PCLCombatSubscriber.class::isAssignableFrom);
+    }
+
+    private static <T extends PCLCombatSubscriber> SubscriberGroup<T> getSubscriberGroup(Class<T> subscriberClass)
+    {
+        return (SubscriberGroup<T>) EVENTS.get(subscriberClass);
+    }
+
+    private static <T extends PCLCombatSubscriber> Collection<T> getSubscribers(Class<T> subscriberClass)
+    {
+        return getSubscriberGroup(subscriberClass).getSubscribers();
     }
 
     public enum Type

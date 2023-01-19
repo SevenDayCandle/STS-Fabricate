@@ -14,6 +14,7 @@ import pinacolada.monsters.PCLCardAlly;
 
 import java.util.ArrayList;
 
+// Copied and modified from STS-AnimatorMod
 public class GameActionManagerPatches
 {
 

@@ -12,6 +12,8 @@ import pinacolada.utilities.GameUtilities;
 
 import static extendedui.ui.AbstractScreen.EUI_SCREEN;
 
+// Copied and modified from STS-AnimatorMod
+// TODO Change values as needed
 public class AbstractRelicPatches
 {
     @SpirePatch(clz = AbstractRelic.class, method = "getPrice")
@@ -54,23 +56,6 @@ public class AbstractRelicPatches
         {
             public int[] Locate(CtBehavior ctMethodToPatch) throws CannotCompileException, PatchingException
             {
-            /*
-            ...
-
-            <REPLACING_HERE>
-
-            if (AbstractDungeon.player != null && AbstractDungeon.player.relics.indexOf(this) / 25 == relicPage)
-            {
-                this.hb.update();
-            }
-            else
-            {
-                this.hb.hovered = false;
-            }
-
-            ...
-            */
-
                 Matcher finalMatcher = new Matcher.FieldAccessMatcher(AbstractDungeon.class, "player");
 
                 return LineFinder.findInOrder(ctMethodToPatch, finalMatcher);

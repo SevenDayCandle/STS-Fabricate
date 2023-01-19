@@ -1,6 +1,7 @@
 package pinacolada.augments.augments.pcl;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import pinacolada.annotations.VisibleAugment;
 import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.cards.base.PCLAffinity;
@@ -9,6 +10,7 @@ import pinacolada.skills.PCond;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;
 
+@VisibleAugment
 public class DDecayA1 extends PCLAugment
 {
 

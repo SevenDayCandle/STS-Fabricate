@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
 import pinacolada.actions.PCLActions;
+import pinacolada.interfaces.subscribers.OnAfterlifeSubscriber;
 import pinacolada.misc.CombatManager;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
@@ -42,7 +43,7 @@ public class AfterLifeMod
                                                 PCLActions.bottom.playCard(state.card, EUIUtils.safeCast(creature, AbstractMonster.class))
                                                         .spendEnergy(false)
                                                         .addCallback(() -> {
-                                                            CombatManager.onAfterlife(state.card, c);
+                                                            CombatManager.subscriberDo(OnAfterlifeSubscriber.class, t -> t.onAfterlife(state.card, c));
                                                         });
                                             }
                                         });

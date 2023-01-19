@@ -5,9 +5,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-// Denote a relic that can be viewed in the relic compendium. Replaces Basemod.addRelic
+// Denote an Augment to be registered. Augments not registered in this fashion cannot be spawned in the console or chosen in the loadout editor
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface VisibleRelic
+public @interface VisibleAugment
 {
 }

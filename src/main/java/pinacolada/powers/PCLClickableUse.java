@@ -21,6 +21,7 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PSpecialSkill;
 import pinacolada.utilities.GameUtilities;
 
+// Copied and modified from STS-AnimatorMod
 public class PCLClickableUse
 {
     public FuncT1<Boolean, PCLClickableUse> checkCondition;

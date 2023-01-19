@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+// Copied and modified from STS-AnimatorMod
 public abstract class PCLResources<T extends AbstractConfig, U extends PCLImages, V extends PCLTooltips>
         implements EditCharactersSubscriber, EditCardsSubscriber, EditKeywordsSubscriber,
                    EditRelicsSubscriber, EditStringsSubscriber, PostInitializeSubscriber,

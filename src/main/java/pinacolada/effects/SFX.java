@@ -4,6 +4,7 @@ import basemod.BaseMod;
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 
+// Copied and modified from STS-AnimatorMod
 public class SFX
 {
     public static final String PCL_SPRAY = "PCL_SPRAY";

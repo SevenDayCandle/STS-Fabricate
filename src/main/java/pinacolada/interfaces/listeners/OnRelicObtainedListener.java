@@ -1,8 +1,8 @@
-package pinacolada.interfaces.subscribers;
+package pinacolada.interfaces.listeners;
 
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 
-public interface OnRelicObtainedSubscriber
+public interface OnRelicObtainedListener
 {
     enum Trigger
     {

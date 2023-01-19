@@ -11,6 +11,7 @@ import com.megacrit.cardcrawl.random.Random;
 import extendedui.EUIUtils;
 import org.apache.commons.lang3.StringUtils;
 
+// Copied and modified from STS-AnimatorMod
 public abstract class PCLAction extends AbstractGameAction
 {
     public static AbstractCard currentCard;

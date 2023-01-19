@@ -6,6 +6,7 @@ import pinacolada.cards.base.PCLCardTarget;
 import java.util.ArrayList;
 import java.util.List;
 
+// Copied and modified from STS-AnimatorMod
 public class PCLActionAutoTarget<T> extends PCLActionWithCallback<T>
 {
     protected final List<AbstractCreature> targets = new ArrayList<>();

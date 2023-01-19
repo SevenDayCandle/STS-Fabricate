@@ -18,6 +18,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.effects.PCLEffects;
 import pinacolada.utilities.ListSelection;
 
+// Copied and modified from STS-AnimatorMod
 public class GenerateCard extends PCLActionWithCallback<AbstractCard>
 {
     protected final CardGroup cardGroup;

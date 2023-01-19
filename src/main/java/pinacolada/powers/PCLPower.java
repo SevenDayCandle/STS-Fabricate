@@ -48,6 +48,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
+// Copied and modified from STS-AnimatorMod
 public abstract class PCLPower extends AbstractPower implements CloneablePowerInterface, TooltipProvider, ClickableProvider
 {
     protected static final StringBuilder builder = new StringBuilder();

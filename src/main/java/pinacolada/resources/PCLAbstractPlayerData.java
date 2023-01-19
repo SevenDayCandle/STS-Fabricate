@@ -28,6 +28,7 @@ import java.util.StringJoiner;
 import static pinacolada.resources.pcl.PCLCoreConfig.JSON_FILTER;
 import static pinacolada.resources.pcl.PCLLoadoutData.TInfo;
 
+// Copied and modified from STS-AnimatorMod
 public abstract class PCLAbstractPlayerData
 {
     public static final int ASCENSION_GLYPH1_LEVEL_STEP = 2;

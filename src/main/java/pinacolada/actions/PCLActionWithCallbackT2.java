@@ -7,6 +7,7 @@ import extendedui.utilities.GenericCondition;
 
 import java.util.ArrayList;
 
+// Copied and modified from STS-AnimatorMod
 public abstract class PCLActionWithCallbackT2<T, C> extends PCLActionWithCallback<T>
 {
     protected ArrayList<GenericCondition<C>> conditions = new ArrayList<>();

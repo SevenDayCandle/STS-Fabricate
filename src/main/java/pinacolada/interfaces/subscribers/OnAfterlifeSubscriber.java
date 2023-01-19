@@ -4,7 +4,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 
 import java.util.ArrayList;
 
-public interface OnAfterlifeSubscriber
+public interface OnAfterlifeSubscriber extends PCLCombatSubscriber
 {
     void onAfterlife(AbstractCard playedCard, ArrayList<AbstractCard> fuelCards);
 }

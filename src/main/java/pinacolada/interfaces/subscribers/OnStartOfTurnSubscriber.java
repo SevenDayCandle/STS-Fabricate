@@ -1,6 +1,6 @@
 package pinacolada.interfaces.subscribers;
 
-public interface OnStartOfTurnSubscriber
+public interface OnStartOfTurnSubscriber extends PCLCombatSubscriber
 {
     void onStartOfTurn();
 }

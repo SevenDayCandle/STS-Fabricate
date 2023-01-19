@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
+// Copied and modified from STS-AnimatorMod
 public class RotatingList<T> extends ArrayList<T>
 {
     private int index;

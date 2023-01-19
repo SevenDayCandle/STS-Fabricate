@@ -6,6 +6,7 @@ import pinacolada.misc.CombatManager;
 
 import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.player;
 
+// Copied and modified from STS-AnimatorMod
 public class HandLayoutRefresher implements OnPhaseChangedSubscriber
 {
     @Override

@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.actions.common.EmptyDeckShuffleAction;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 
+// Copied and modified from STS-AnimatorMod
 public class ReshuffleDiscardPile extends PCLAction
 {
     protected boolean onlyIfEmpty;

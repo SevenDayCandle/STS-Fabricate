@@ -6,6 +6,7 @@ import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
 import com.megacrit.cardcrawl.stances.AbstractStance;
 import pinacolada.stances.PCLStanceHelper;
 
+// Copied and modified from STS-AnimatorMod
 @SpirePatch(clz = AbstractStance.class, method = "getStanceFromName", paramtypez = {String.class})
 public class AbstractStancePatches
 {

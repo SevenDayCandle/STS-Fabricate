@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+// Copied and modified from STS-AnimatorMod
 public class ReplaceCard extends PCLActionWithCallback<Map<AbstractCard, AbstractCard>>
 {
     protected final Map<AbstractCard, AbstractCard> newCards = new HashMap<>();

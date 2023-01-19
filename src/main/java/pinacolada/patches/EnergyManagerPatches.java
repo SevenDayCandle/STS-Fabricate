@@ -6,6 +6,7 @@ import com.megacrit.cardcrawl.ui.panels.EnergyPanel;
 import javassist.CtBehavior;
 import pinacolada.misc.CombatManager;
 
+// Copied and modified from STS-AnimatorMod
 public class EnergyManagerPatches
 {
     @SpirePatch(clz = EnergyManager.class, method = "recharge")

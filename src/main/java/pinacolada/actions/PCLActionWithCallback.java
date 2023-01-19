@@ -8,6 +8,7 @@ import extendedui.utilities.GenericCallback;
 
 import java.util.ArrayList;
 
+// Copied and modified from STS-AnimatorMod
 public abstract class PCLActionWithCallback<T> extends PCLAction
 {
     protected ArrayList<GenericCallback<T>> callbacks = new ArrayList<>();

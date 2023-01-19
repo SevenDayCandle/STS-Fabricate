@@ -1,6 +1,6 @@
 package pinacolada.interfaces.subscribers;
 
-public interface OnBattleEndSubscriber
+public interface OnBattleEndSubscriber extends PCLCombatSubscriber
 {
     void onBattleEnd();
 }

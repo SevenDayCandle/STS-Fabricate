@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
+// Copied and modified from STS-AnimatorMod
 public class RandomizedList<T> extends ArrayList<T>
 {
     public RandomizedList()

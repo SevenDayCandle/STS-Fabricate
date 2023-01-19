@@ -8,6 +8,7 @@ import com.megacrit.cardcrawl.monsters.MonsterGroup;
 import extendedui.utilities.EUIClassUtils;
 import pinacolada.utilities.GameUtilities;
 
+// Copied and modified from STS-AnimatorMod
 public class MetricsPatches
 {
     @SpirePatch(clz = Metrics.class, method = "gatherAllData", paramtypez = {boolean.class, boolean.class, MonsterGroup.class})

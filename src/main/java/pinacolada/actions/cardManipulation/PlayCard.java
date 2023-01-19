@@ -22,7 +22,7 @@ import pinacolada.effects.PCLEffects;
 import pinacolada.resources.PCLEnum;
 import pinacolada.utilities.GameUtilities;
 
-// Copied from STS-AnimatorMod
+// Copied and modified from STS-AnimatorMod
 public class PlayCard extends PCLActionWithCallbackT2<AbstractMonster, AbstractCard>
 {
     public static final float DEFAULT_TARGET_X_LEFT = (Settings.WIDTH / 2f) - (300f * Settings.scale);

@@ -1,8 +1,6 @@
 package pinacolada.interfaces.subscribers;
 
-import org.apache.commons.lang3.mutable.MutableInt;
-
-public interface OnEnergyRechargeSubscriber
+public interface OnEnergyRechargeSubscriber extends PCLCombatSubscriber
 {
-    void onEnergyRecharge(MutableInt previousEnergy, MutableInt currentEnergy);
+    int onEnergyRecharge(int originalEnergy, int newEnergy);
 } 

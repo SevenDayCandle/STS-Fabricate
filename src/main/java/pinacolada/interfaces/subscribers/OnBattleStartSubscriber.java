@@ -1,6 +1,6 @@
 package pinacolada.interfaces.subscribers;
 
-public interface OnBattleStartSubscriber
+public interface OnBattleStartSubscriber extends PCLCombatSubscriber
 {
     void onBattleStart();
 }
