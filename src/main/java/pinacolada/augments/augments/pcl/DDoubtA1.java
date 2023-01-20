@@ -10,6 +10,7 @@ import pinacolada.skills.PCond;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;
 
+
 @VisibleAugment
 public class DDoubtA1 extends PCLAugment
 {

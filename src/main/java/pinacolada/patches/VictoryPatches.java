@@ -40,11 +40,6 @@ public class VictoryPatches
         return new GameOverStat(PGR.core.tooltips.matchCombo.title, null, String.valueOf(PGR.core.dungeon.getLongestMatchCombo()));
     }
 
-    private static int getUnnamedScoreBonus()
-    {
-        return 300 + Math.round(200 * (GameUtilities.getAscensionLevel() / 20f));
-    }
-
     @SpirePatch(clz = VictoryRoom.class, method = "onPlayerEntry")
     public static class VictoryRoomPatches_onEnterRoom
     {

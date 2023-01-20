@@ -34,9 +34,7 @@ public class Present extends PCLCard
         if (random != null)
         {
             PCLActions.bottom.playCard(random, info.target)
-                    .addCallback(() -> {
-                        PCLActions.bottom.makeCardInDiscardPile(random.makeStatEquivalentCopy());
-                    });
+                    .addCallback(() -> PCLActions.bottom.makeCardInDiscardPile(random.makeStatEquivalentCopy()));
         }
     }
 }

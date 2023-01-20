@@ -7,6 +7,7 @@ import pinacolada.cards.base.PCLAffinity;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PTrait;
 
+
 @VisibleAugment
 public class BOrangeA2 extends PCLAugment
 {

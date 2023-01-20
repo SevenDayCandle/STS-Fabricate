@@ -65,9 +65,7 @@ public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity
     @Override
     public ActionT1<AbstractCard> getAction()
     {
-        return (c) -> {
-            getActions().modifyAffinityLevel(c, fields.affinities, extra, true, fields.forced);
-        };
+        return (c) -> getActions().modifyAffinityLevel(c, fields.affinities, extra, true, fields.forced);
     }
 
     @Override
