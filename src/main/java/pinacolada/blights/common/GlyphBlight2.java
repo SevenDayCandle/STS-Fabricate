@@ -1,10 +1,12 @@
 package pinacolada.blights.common;
 
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import pinacolada.annotations.VisibleBlight;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
+@VisibleBlight
 public class GlyphBlight2 extends AbstractGlyphBlight
 {
     public static final String ID = createFullID(GlyphBlight2.class);

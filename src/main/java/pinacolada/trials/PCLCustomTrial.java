@@ -24,9 +24,9 @@ public class PCLCustomTrial extends CustomTrial
     protected static final String MOD_INCEPTION = "Inception";
     protected static final String MOD_MY_TRUE_FORM = "My True Form";
     protected static final String MOD_STARTER_DECK = "Starter Deck";
-    private final ArrayList<String> cardIds = new ArrayList();
-    private final ArrayList<String> modIds = new ArrayList();
-    private final ArrayList<String> relicIds = new ArrayList();
+    private final ArrayList<String> cardIds = new ArrayList<>();
+    private final ArrayList<String> modIds = new ArrayList<>();
+    private final ArrayList<String> relicIds = new ArrayList<>();
     private Integer maxHpOverride = null;
     private boolean finalActAvailable;
     private boolean isEndless;

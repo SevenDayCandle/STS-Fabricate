@@ -1,7 +1,8 @@
-package pinacolada.skills.skills.special.moves;
+package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIUtils;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.interfaces.markers.EditorCard;
@@ -17,6 +18,7 @@ import pinacolada.skills.fields.PField_CustomPower;
 import java.util.Arrays;
 import java.util.List;
 
+@VisibleSkill
 public class PMove_StackCustomPower extends PMove<PField_CustomPower> implements SummonOnlyMove
 {
 

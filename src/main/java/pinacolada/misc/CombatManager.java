@@ -59,6 +59,7 @@ import pinacolada.ui.common.ControllableCardPile;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.player;
 
@@ -78,7 +79,7 @@ public class CombatManager
     private static final ArrayList<AbstractOrb> orbsEvokedThisCombat = new ArrayList<>();
     private static final ArrayList<AbstractOrb> orbsEvokedThisTurn = new ArrayList<>();
     private static final ArrayList<UUID> unplayableCards = new ArrayList<>();
-    private static final HashMap<Class<? extends PCLCombatSubscriber>, SubscriberGroup<? extends PCLCombatSubscriber>> EVENTS = new HashMap<>();
+    private static final HashMap<Class<? extends PCLCombatSubscriber>, ConcurrentLinkedQueue<? extends PCLCombatSubscriber>> EVENTS = new HashMap<>();
     private static final HashMap<String, Float> AMPLIFIER_BONUSES = new HashMap<>();
     private static final HashMap<String, Float> EFFECT_BONUSES = new HashMap<>();
     private static final HashMap<String, Float> PASSIVE_DAMAGE_BONUSES = new HashMap<>();
@@ -189,7 +190,7 @@ public class CombatManager
     {
         refreshPlayer();
         EUIUtils.logInfoIfDebug(CombatManager.class, "Clearing PCL Player Stats");
-        for (SubscriberGroup<?> event : EVENTS.values())
+        for (ConcurrentLinkedQueue<?> event : EVENTS.values())
         {
             event.clear();
         }
@@ -328,7 +329,7 @@ public class CombatManager
         {
             wrapper.onDiscard(card);
         }
-        for (OnCardDiscardedSubscriber s : getSubscribers(OnCardDiscardedSubscriber.class))
+        for (OnCardDiscardedSubscriber s : getSubscriberGroup(OnCardDiscardedSubscriber.class))
         {
             s.onCardDiscarded(card);
         }
@@ -336,7 +337,7 @@ public class CombatManager
 
     public static void onCardMoved(AbstractCard card, CardGroup source, CardGroup destination)
     {
-        for (OnCardMovedSubscriber s : getSubscribers(OnCardMovedSubscriber.class))
+        for (OnCardMovedSubscriber s : getSubscriberGroup(OnCardMovedSubscriber.class))
         {
             s.onCardMoved(card, source, destination);
         }
@@ -360,7 +361,7 @@ public class CombatManager
             wrapper.onPurged(card);
         }
 
-        for (OnCardPurgedSubscriber s : getSubscribers(OnCardPurgedSubscriber.class))
+        for (OnCardPurgedSubscriber s : getSubscriberGroup(OnCardPurgedSubscriber.class))
         {
             s.onPurge(card);
         }
@@ -819,26 +820,21 @@ public class CombatManager
         return PCLCard.player = PCLPower.player = PCLRelic.player = AbstractDungeon.player;
     }
 
-    public static <T extends PCLCombatSubscriber> SubscriberGroup<T> registerSubscribeGroup(Class<T> eventClass)
+    public static <T extends PCLCombatSubscriber> ConcurrentLinkedQueue<T> registerSubscribeGroup(Class<T> eventClass)
     {
-        SubscriberGroup<T> event = new SubscriberGroup<>();
+        ConcurrentLinkedQueue<T> event = new ConcurrentLinkedQueue<>();
         EVENTS.put(eventClass, event);
         return event;
     }
 
     public static <T extends PCLCombatSubscriber> void subscribe(Class<T> subtype, T subscriber)
     {
-        getSubscriberGroup(subtype).subscribe(subscriber);
-    }
-
-    public static <T extends PCLCombatSubscriber> void subscribeOnce(Class<T> subtype, T subscriber)
-    {
-        getSubscriberGroup(subtype).subscribeOnce(subscriber);
+        getSubscriberGroup(subtype).add(subscriber);
     }
 
     public static <T extends PCLCombatSubscriber> void unsubscribe(Class<T> subtype, T subscriber)
     {
-        getSubscriberGroup(subtype).unsubscribe(subscriber);
+        getSubscriberGroup(subtype).remove(subscriber);
     }
 
     public static void subscribe(PCLCombatSubscriber subscriber)
@@ -846,14 +842,6 @@ public class CombatManager
         for (Class<? extends PCLCombatSubscriber> c : getInterfaces(subscriber))
         {
             castAndSubscribe(c, subscriber);
-        }
-    }
-
-    public static void subscribeOnce(PCLCombatSubscriber subscriber)
-    {
-        for (Class<? extends PCLCombatSubscriber> c : getInterfaces(subscriber))
-        {
-            castAndSubscribeOnce(c, subscriber);
         }
     }
 
@@ -870,11 +858,6 @@ public class CombatManager
         subscribe(subtype, (T) subscriber);
     }
 
-    private static <T extends PCLCombatSubscriber> void castAndSubscribeOnce(Class<T> subtype, PCLCombatSubscriber subscriber)
-    {
-        subscribeOnce(subtype, (T) subscriber);
-    }
-
     private static <T extends PCLCombatSubscriber> void castAndUnsubscribe(Class<T> subtype, PCLCombatSubscriber subscriber)
     {
         unsubscribe(subtype, (T) subscriber);
@@ -887,7 +870,7 @@ public class CombatManager
             return false;
         }
 
-        for (OnTryUsingCardSubscriber s : getSubscribers(OnTryUsingCardSubscriber.class))
+        for (OnTryUsingCardSubscriber s : getSubscriberGroup(OnTryUsingCardSubscriber.class))
         {
             canPlay &= s.onTryUsingCard(card, p, m, canPlay);
         }
@@ -1128,7 +1111,7 @@ public class CombatManager
 
     public static void atPlayerTurnStartPostDraw()
     {
-        for (OnStartOfTurnPostDrawSubscriber s : getSubscribers(OnStartOfTurnPostDrawSubscriber.class))
+        for (OnStartOfTurnPostDrawSubscriber s : getSubscriberGroup(OnStartOfTurnPostDrawSubscriber.class))
         {
             s.onStartOfTurnPostDraw();
         }
@@ -1157,7 +1140,7 @@ public class CombatManager
     {
         isPlayerTurn = false;
 
-        for (OnEndOfTurnFirstSubscriber s : getSubscribers(OnEndOfTurnFirstSubscriber.class))
+        for (OnEndOfTurnFirstSubscriber s : getSubscriberGroup(OnEndOfTurnFirstSubscriber.class))
         {
             s.onEndOfTurnFirst(isPlayer);
         }
@@ -1168,7 +1151,7 @@ public class CombatManager
     public static void atEndOfTurn(boolean isPlayer)
     {
 
-        for (OnEndOfTurnLastSubscriber s : getSubscribers(OnEndOfTurnLastSubscriber.class))
+        for (OnEndOfTurnLastSubscriber s : getSubscriberGroup(OnEndOfTurnLastSubscriber.class))
         {
             s.onEndOfTurnLast(isPlayer);
         }
@@ -1237,7 +1220,7 @@ public class CombatManager
     public static <T extends PCLCombatSubscriber> boolean subscriberCanDeny(Class<T> subscriberClass, FuncT1<Boolean, T> doFor)
     {
         boolean passes = true;
-        for (T subscriber : getSubscribers(subscriberClass))
+        for (T subscriber : getSubscriberGroup(subscriberClass))
         {
             passes = passes & doFor.invoke(subscriber);
         }
@@ -1247,7 +1230,7 @@ public class CombatManager
     public static <T extends PCLCombatSubscriber> boolean subscriberCanPass(Class<T> subscriberClass, FuncT1<Boolean, T> doFor)
     {
         boolean passes = false;
-        for (T subscriber : getSubscribers(subscriberClass))
+        for (T subscriber : getSubscriberGroup(subscriberClass))
         {
             passes = passes | doFor.invoke(subscriber);
         }
@@ -1256,7 +1239,7 @@ public class CombatManager
 
     public static <T extends PCLCombatSubscriber> void subscriberDo(Class<T> subscriberClass, ActionT1<T> doFor)
     {
-        for (T subscriber : getSubscribers(subscriberClass))
+        for (T subscriber : getSubscriberGroup(subscriberClass))
         {
             doFor.invoke(subscriber);
         }
@@ -1264,7 +1247,7 @@ public class CombatManager
 
     public static <T extends PCLCombatSubscriber, U> U subscriberInout(Class<T> subscriberClass, U inout, FuncT2<U, T, U> doFor)
     {
-        for (T subscriber : getSubscribers(subscriberClass))
+        for (T subscriber : getSubscriberGroup(subscriberClass))
         {
             inout = doFor.invoke(subscriber, inout);
         }
@@ -1274,7 +1257,7 @@ public class CombatManager
     public static <T extends PCLCombatSubscriber> int subscriberSum(Class<T> subscriberClass, FuncT1<Integer, T> doFor)
     {
         int sum = 0;
-        for (T subscriber : getSubscribers(subscriberClass))
+        for (T subscriber : getSubscriberGroup(subscriberClass))
         {
             sum = sum + doFor.invoke(subscriber);
         }
@@ -1286,14 +1269,9 @@ public class CombatManager
         return EUIUtils.mapAsNonnull(subscriber.getClass().getInterfaces(), i -> PCLCombatSubscriber.class.isAssignableFrom(i) ? (Class<? extends PCLCombatSubscriber>) i : null);
     }
 
-    private static <T extends PCLCombatSubscriber> SubscriberGroup<T> getSubscriberGroup(Class<T> subscriberClass)
+    private static <T extends PCLCombatSubscriber> ConcurrentLinkedQueue<T> getSubscriberGroup(Class<T> subscriberClass)
     {
-        return (SubscriberGroup<T>) EVENTS.get(subscriberClass);
-    }
-
-    private static <T extends PCLCombatSubscriber> Collection<T> getSubscribers(Class<T> subscriberClass)
-    {
-        return getSubscriberGroup(subscriberClass).getSubscribers();
+        return (ConcurrentLinkedQueue<T>) EVENTS.get(subscriberClass);
     }
 
     public enum Type

@@ -680,4 +680,16 @@ public abstract class PCond<T extends PField> extends PSkill<T>
                 && checkCondition(info, false, true) && childAction.invoke()
                 && checkCondition(info, true, false);
     }
+
+    protected void useFromTrigger(PCLUseInfo info)
+    {
+        if (childEffect != null)
+        {
+            childEffect.use(info);
+        }
+        else if (parent instanceof PMultiCond && parent.childEffect != null)
+        {
+            parent.childEffect.use(info);
+        }
+    }
 }

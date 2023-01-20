@@ -1,8 +1,10 @@
 package pinacolada.blights.common;
 
 import basemod.BaseMod;
+import pinacolada.annotations.VisibleBlight;
 import pinacolada.blights.PCLBlight;
 
+@VisibleBlight
 public class UpgradedHand extends PCLBlight
 {
     public static final String ID = createFullID(UpgradedHand.class);

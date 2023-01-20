@@ -4,11 +4,11 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.skills.PSkill;
 
-public class PSpecialCardPower extends PCLPower
+public class PSpecialCardPower extends PCLSubscribingPower
 {
-    protected PSkill move;
+    protected PSkill<?> move;
 
-    public PSpecialCardPower(PCLCardData data, AbstractCreature owner, PSkill move)
+    public PSpecialCardPower(PCLCardData data, AbstractCreature owner, PSkill<?> move)
     {
         super(owner, data);
         this.move = move;

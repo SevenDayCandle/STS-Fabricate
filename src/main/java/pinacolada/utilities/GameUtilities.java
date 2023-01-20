@@ -83,7 +83,6 @@ public class GameUtilities
     private static final AbstractCard.CardRarity[] poolOrdering = AbstractCard.CardRarity.values();
     private static final RandomizedList<AbstractCard> fullCardPool = new RandomizedList<>();
     private static final RandomizedList<AbstractCard> characterCardPool = new RandomizedList<>();
-    private static final HandLayoutRefresher handLayoutRefresher = new HandLayoutRefresher();
     private static AbstractPlayer.PlayerClass lastPlayerClass;
 
     public static void applyPowerInstantly(Iterable<AbstractCreature> targets, PCLPowerHelper powerHelper, int stacks)
