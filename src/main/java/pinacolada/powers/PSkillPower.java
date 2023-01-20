@@ -19,7 +19,6 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.subscribers.*;
-import pinacolada.misc.CombatManager;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
@@ -146,37 +145,14 @@ public class PSkillPower extends PCLPower implements OnAllyDeathSubscriber, OnAl
     public void onRemove()
     {
         super.onRemove();
-        CombatManager.onCardCreated.unsubscribe(this);
-        CombatManager.onCardDiscarded.unsubscribe(this);
-        CombatManager.onCardPurged.unsubscribe(this);
-        CombatManager.onCardReshuffled.unsubscribe(this);
-        CombatManager.onChannelOrb.unsubscribe(this);
-        CombatManager.onElementReact.unsubscribe(this);
-        CombatManager.onMatch.unsubscribe(this);
-        CombatManager.onNotMatch.unsubscribe(this);
-        CombatManager.onOrbApplyFocus.unsubscribe(this);
-        CombatManager.onOrbPassiveEffect.unsubscribe(this);
-        CombatManager.onPCLClickablePowerUsed.unsubscribe(this);
-        CombatManager.onShuffle.unsubscribe(this);
-        CombatManager.onIntensify.unsubscribe(this);
+        unsubscribeFromAll();
     }
 
     public void onInitialApplication()
     {
         super.onInitialApplication();
-        CombatManager.onCardCreated.subscribe(this);
-        CombatManager.onCardDiscarded.subscribe(this);
-        CombatManager.onCardPurged.subscribe(this);
-        CombatManager.onCardReshuffled.subscribe(this);
-        CombatManager.onChannelOrb.subscribe(this);
-        CombatManager.onElementReact.subscribe(this);
-        CombatManager.onMatch.subscribe(this);
-        CombatManager.onNotMatch.subscribe(this);
-        CombatManager.onOrbApplyFocus.subscribe(this);
-        CombatManager.onOrbPassiveEffect.subscribe(this);
-        CombatManager.onPCLClickablePowerUsed.subscribe(this);
-        CombatManager.onShuffle.subscribe(this);
-        CombatManager.onIntensify.subscribe(this);
+        // TODO remove after you implement fields returning classes to subscribe to
+        subscribeToAll();
     }
 
     @Override

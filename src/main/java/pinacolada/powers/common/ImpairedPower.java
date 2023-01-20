@@ -43,7 +43,7 @@ public class ImpairedPower extends PCLPower implements OnOrbApplyFocusSubscriber
     {
         super.onInitialApplication();
 
-        CombatManager.onOrbApplyFocus.subscribe(this);
+        CombatManager.subscribe(this);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class ImpairedPower extends PCLPower implements OnOrbApplyFocusSubscriber
     {
         super.onRemove();
 
-        CombatManager.onOrbApplyFocus.unsubscribe(this);
+        CombatManager.unsubscribe(this);
     }
 
     @Override

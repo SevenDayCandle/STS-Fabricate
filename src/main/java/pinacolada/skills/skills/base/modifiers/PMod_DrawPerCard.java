@@ -9,6 +9,7 @@ import pinacolada.actions.PCLActionWithCallback;
 import pinacolada.actions.pileSelection.DrawCards;
 import pinacolada.actions.pileSelection.FetchFromPile;
 import pinacolada.actions.pileSelection.SelectFromPile;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 
 
 
+@VisibleSkill
 public class PMod_DrawPerCard extends PMod_Do
 {
     public static final PSkillData<PField_CardCategory> DATA = register(PMod_DrawPerCard.class, PField_CardCategory.class)

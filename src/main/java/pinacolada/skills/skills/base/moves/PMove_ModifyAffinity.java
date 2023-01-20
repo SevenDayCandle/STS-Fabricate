@@ -5,6 +5,7 @@ import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.utilities.ColoredString;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLAffinity;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
@@ -14,6 +15,7 @@ import pinacolada.skills.fields.PField_CardModifyAffinity;
 
 import java.util.List;
 
+@VisibleSkill
 public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity>
 {
     public static final PSkillData<PField_CardModifyAffinity> DATA = PMove_Modify.register(PMove_ModifyAffinity.class, PField_CardModifyAffinity.class)

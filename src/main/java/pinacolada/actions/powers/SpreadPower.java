@@ -11,7 +11,6 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
-
 public class SpreadPower extends PCLActionWithCallback<AbstractPower>
 {
     public String powerID;

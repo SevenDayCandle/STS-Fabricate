@@ -2,12 +2,14 @@ package pinacolada.cards.pcl.replacement;
 
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import pinacolada.actions.PCLActions;
+import pinacolada.annotations.VisibleCard;
 import pinacolada.cards.base.*;
 import pinacolada.cards.base.fields.PCLCardTag;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.skills.PMove;
 import pinacolada.skills.skills.PSpecialSkill;
 
+@VisibleCard
 public class Apparition extends PCLCard
 {
     public static final PCLCardData DATA = register(Apparition.class)

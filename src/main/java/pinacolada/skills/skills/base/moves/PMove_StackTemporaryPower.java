@@ -2,6 +2,7 @@ package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.powers.PCLPowerHelper;
@@ -11,6 +12,7 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Power;
 import pinacolada.utilities.GameUtilities;
 
+@VisibleSkill
 public class PMove_StackTemporaryPower extends PMove<PField_Power>
 {
     public static final PSkillData<PField_Power> DATA = register(PMove_StackTemporaryPower.class, PField_Power.class, -DEFAULT_MAX, DEFAULT_MAX);

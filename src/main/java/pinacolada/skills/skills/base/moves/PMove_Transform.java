@@ -10,6 +10,7 @@ import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.pileSelection.SelectFromPile;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.PCLUseInfo;
@@ -22,6 +23,7 @@ import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.ListSelection;
 import pinacolada.utilities.RotatingList;
 
+@VisibleSkill
 public class PMove_Transform extends PMove_Select
 {
     public static final PSkillData<PField_CardCategory> DATA = register(PMove_Transform.class, PField_CardCategory.class)

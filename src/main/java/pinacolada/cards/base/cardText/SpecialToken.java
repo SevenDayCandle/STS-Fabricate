@@ -6,6 +6,7 @@ import extendedui.EUIUtils;
 import extendedui.text.EUISmartText;
 import extendedui.ui.tooltips.EUITooltip;
 
+// Copied and modified from STS-AnimatorMod
 public abstract class SpecialToken extends PCLTextToken
 {
     private static final PCLTextParser internalParser = new PCLTextParser(true);
@@ -13,12 +14,6 @@ public abstract class SpecialToken extends PCLTextToken
     private SpecialToken()
     {
         super(null, null);
-        // this could be:
-        // {#G:+4.0} -> Green colored text
-        // {kw(Preview):Entou Jyuu} -> Add 'Preview' keyword, but show gold colored 'Entou Jyuu'
-        // {kw():Channel} -> do not parse keyword
-        // {Attack} -> Use gold color by default
-        // {#:Text} -> Reset to default color
     }
 
     public static int tryAdd(PCLTextParser parser)

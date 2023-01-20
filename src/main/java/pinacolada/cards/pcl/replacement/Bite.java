@@ -1,9 +1,11 @@
 package pinacolada.cards.pcl.replacement;
 
+import pinacolada.annotations.VisibleCard;
 import pinacolada.cards.base.*;
 import pinacolada.effects.AttackEffects;
 import pinacolada.skills.PMove;
 
+@VisibleCard
 public class Bite extends PCLCard
 {
     public static final PCLCardData DATA = register(Bite.class)

@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUIUtils;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.PCLCardSelection;
 import pinacolada.cards.base.PCLCardTarget;
@@ -14,6 +15,7 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.utilities.GameUtilities;
 
+@VisibleSkill
 public class PMove_ObtainRandomCard extends PMove<PField_CardCategory>
 {
     public static final PSkillData<PField_CardCategory> DATA = register(PMove_ObtainRandomCard.class, PField_CardCategory.class)

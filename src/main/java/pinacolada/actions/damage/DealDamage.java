@@ -19,6 +19,7 @@ import pinacolada.misc.CombatManager;
 import pinacolada.powers.common.StolenGoldPower;
 import pinacolada.utilities.GameUtilities;
 
+// Copied and modified from STS-AnimatorMod
 public class DealDamage extends PCLActionWithCallback<AbstractCreature>
 {
     protected final DamageInfo info;

@@ -1,6 +1,7 @@
 package pinacolada.skills.skills.base.conditions;
 
 import extendedui.EUIUtils;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.skills.PCond;
@@ -9,6 +10,7 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
 import pinacolada.utilities.GameUtilities;
 
+@VisibleSkill
 public class PCond_IsAttacking extends PCond<PField_Not>
 {
     public static final PSkillData<PField_Not> DATA = register(PCond_IsAttacking.class, PField_Not.class);

@@ -2,8 +2,10 @@ package pinacolada.resources;
 
 import basemod.BaseMod;
 import basemod.ReflectionHacks;
-import basemod.helpers.RelicType;
-import basemod.interfaces.*;
+import basemod.interfaces.EditCharactersSubscriber;
+import basemod.interfaces.EditKeywordsSubscriber;
+import basemod.interfaces.EditStringsSubscriber;
+import basemod.interfaces.PostInitializeSubscriber;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.google.gson.Gson;
@@ -13,9 +15,6 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.localization.*;
-import com.megacrit.cardcrawl.potions.AbstractPotion;
-import com.megacrit.cardcrawl.powers.AbstractPower;
-import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
@@ -28,18 +27,14 @@ import pinacolada.ui.characterSelection.PCLLoadoutsContainer;
 import pinacolada.utilities.GameUtilities;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 // Copied and modified from STS-AnimatorMod
 public abstract class PCLResources<T extends AbstractConfig, U extends PCLImages, V extends PCLTooltips>
-        implements EditCharactersSubscriber, EditCardsSubscriber, EditKeywordsSubscriber,
-                   EditRelicsSubscriber, EditStringsSubscriber, PostInitializeSubscriber,
-                   AddAudioSubscriber
+        implements EditCharactersSubscriber, EditKeywordsSubscriber, EditStringsSubscriber, PostInitializeSubscriber
 {
     public static final String JSON_AUGMENTS = "AugmentStrings.json";
     public static final String JSON_CARDS = "CardStrings.json";
@@ -75,6 +70,7 @@ public abstract class PCLResources<T extends AbstractConfig, U extends PCLImages
         AugmentStrings.STRINGS.putAll(new HashMap<String, AugmentStrings>(EUIUtils.deserialize(jsonString, typeToken)));
     }
 
+    // TODO rework for stronger typing
     public static void loadGroupedCardStrings(String jsonString)
     {
         final Map localizationStrings = ReflectionHacks.getPrivateStatic(LocalizedStrings.class, "cards");
@@ -118,11 +114,6 @@ public abstract class PCLResources<T extends AbstractConfig, U extends PCLImages
             characterStrings = PGR.getCharacterStrings(StringUtils.capitalize(id));
         }
         return characterStrings;
-    }
-
-    protected ArrayList<String> getClassNamesFromJarFile(String prefix)
-    {
-        return GameUtilities.getClassNamesFromJarFile(this.getClass(), prefix);
     }
 
     public FileHandle getFallbackFile(String fileName)
@@ -189,30 +180,6 @@ public abstract class PCLResources<T extends AbstractConfig, U extends PCLImages
     {
     }
 
-    protected void initializeEvents()
-    {
-    }
-
-    protected void initializeInternal()
-    {
-    }
-
-    protected void initializeMonsters()
-    {
-    }
-
-    protected void initializePotions()
-    {
-    }
-
-    protected void initializePowers()
-    {
-    }
-
-    protected void initializeRewards()
-    {
-    }
-
     public boolean isBetaTranslation()
     {
         return testFolder.isDirectory();
@@ -233,55 +200,6 @@ public abstract class PCLResources<T extends AbstractConfig, U extends PCLImages
         loadCustomNonBaseStrings(JSON_CARDS, PCLResources::loadGroupedCardStrings);
     }
 
-    protected void loadCustomCard(Class<?> type)
-    {
-        if (!PGR.canInstantiate(type))
-        {
-            return;
-        }
-
-        AbstractCard card;
-        String id;
-
-        try
-        {
-            card = (AbstractCard) type.getConstructor().newInstance();
-            id = card.cardID;
-        }
-        catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e)
-        {
-            e.printStackTrace();
-            return;
-        }
-
-        if (UnlockTracker.isCardLocked(id))
-        {
-            UnlockTracker.unlockCard(id);
-            card.isLocked = false;
-        }
-
-        BaseMod.addCard(card);
-    }
-
-    protected void loadCustomCards()
-    {
-        final String fullPrefix = PGR.PREFIX_CARDS + id;
-        for (String s : getClassNamesFromJarFile(PGR.PREFIX_CARDS))
-        {
-            if (s.startsWith(fullPrefix))
-            {
-                try
-                {
-                    loadCustomCard(Class.forName(s));
-                }
-                catch (ClassNotFoundException e)
-                {
-                    EUIUtils.logWarning(null, "Class not found : " + s);
-                }
-            }
-        }
-    }
-
     protected void loadCustomNonBaseStrings(String path, ActionT1<String> loadFunc)
     {
         String json = getFallbackFile(path).readString(StandardCharsets.UTF_8.name());
@@ -294,120 +212,6 @@ public abstract class PCLResources<T extends AbstractConfig, U extends PCLImages
             {
                 String json2 = file.readString(StandardCharsets.UTF_8.name());
                 loadFunc.invoke(json);
-            }
-        }
-    }
-
-    protected void loadCustomPotion(Class<?> type, AbstractPlayer.PlayerClass playerClass)
-    {
-        if (!PGR.canInstantiate(type))
-        {
-            return;
-        }
-
-        AbstractPotion potion;
-        try
-        {
-            potion = (AbstractPotion) type.getConstructor().newInstance();
-        }
-        catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e)
-        {
-            e.printStackTrace();
-            return;
-        }
-
-        BaseMod.addPotion(potion.getClass(), potion.liquidColor, potion.hybridColor, potion.spotsColor, potion.ID, playerClass);
-    }
-
-    protected void loadCustomPotions()
-    {
-        final String potionPrefix = PGR.PREFIX_POTIONS + id;
-        for (String s : getClassNamesFromJarFile(PGR.PREFIX_POTIONS))
-        {
-            if (s.startsWith(potionPrefix))
-            {
-                try
-                {
-                    loadCustomPotion(Class.forName(s), playerClass);
-                }
-                catch (ClassNotFoundException e)
-                {
-                    EUIUtils.logWarning(null, "Class not found : " + s);
-                }
-            }
-        }
-    }
-
-    protected void loadCustomPowers()
-    {
-        final String fullPrefix = PGR.PREFIX_POWERS + id;
-
-        for (String s : getClassNamesFromJarFile(PGR.PREFIX_POWERS))
-        {
-            if (s.startsWith(fullPrefix))
-            {
-                try
-                {
-                    Class<?> type = Class.forName(s);
-                    if (PGR.canInstantiate(type))
-                    {
-                        BaseMod.addPower((Class<AbstractPower>) type, createID(type.getSimpleName()));
-                    }
-                }
-                catch (ClassNotFoundException e)
-                {
-                    EUIUtils.logWarning(null, "Class not found : " + s);
-                }
-            }
-        }
-    }
-
-    protected void loadCustomRelic(Class<?> type, AbstractCard.CardColor color)
-    {
-        if (!PGR.canInstantiate(type))
-        {
-            return;
-        }
-
-        AbstractRelic relic;
-        try
-        {
-            relic = (AbstractRelic) type.getConstructor().newInstance();
-        }
-        catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e)
-        {
-            e.printStackTrace();
-            return;
-        }
-
-        if (color != null && color != AbstractCard.CardColor.COLORLESS)
-        {
-            BaseMod.addRelicToCustomPool(relic, color);
-        }
-        else
-        {
-            BaseMod.addRelic(relic, RelicType.SHARED);
-        }
-    }
-
-    protected void loadCustomRelics()
-    {
-        final String fullPrefix = PGR.PREFIX_RELIC + id;
-
-        for (String s : getClassNamesFromJarFile(PGR.PREFIX_RELIC))
-        {
-            if (s.startsWith(fullPrefix))
-            {
-                try
-                {
-                    //logger.info("Adding: " + s);
-
-                    loadCustomRelic(Class.forName(s), cardColor);
-                }
-                catch (ClassNotFoundException e)
-                {
-                    EUIUtils.logWarning(PGR.class, "Class not found : " + s);
-                }
             }
         }
     }
@@ -481,16 +285,6 @@ public abstract class PCLResources<T extends AbstractConfig, U extends PCLImages
     }
 
     @Override
-    public void receiveAddAudio()
-    {
-    }
-
-    @Override
-    public void receiveEditCards()
-    {
-    }
-
-    @Override
     public void receiveEditCharacters()
     {
     }
@@ -499,11 +293,7 @@ public abstract class PCLResources<T extends AbstractConfig, U extends PCLImages
     public void receiveEditKeywords()
     {
         loadKeywords();
-    }
-
-    @Override
-    public void receiveEditRelics()
-    {
+        setupTooltips();
     }
 
     @Override
@@ -519,12 +309,12 @@ public abstract class PCLResources<T extends AbstractConfig, U extends PCLImages
     @Override
     public final void receivePostInitialize()
     {
-        initializeEvents();
-        initializeMonsters();
-        initializePotions();
-        initializeRewards();
-        initializePowers();
         postInitialize();
         this.isLoaded = true;
+    }
+
+    public void setupTooltips()
+    {
+
     }
 }

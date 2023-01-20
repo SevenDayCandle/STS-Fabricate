@@ -1,19 +1,21 @@
 package pinacolada.skills.skills;
 
+import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.resources.pcl.PCLCoreStrings;
-import pinacolada.skills.DelayUse;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.delay.DelayUse;
 import pinacolada.skills.fields.PField_Empty;
+import pinacolada.skills.skills.base.delay.PDelayEndOfTurnFirst;
+import pinacolada.skills.skills.base.delay.PDelayEndOfTurnLast;
+import pinacolada.skills.skills.base.delay.PDelayStartOfTurn;
+import pinacolada.skills.skills.base.delay.PDelayStartOfTurnPostDraw;
 
-public class PDelay extends PSkill<PField_Empty>
+public abstract class PDelay extends PSkill<PField_Empty>
 {
-    public static final PSkillData<PField_Empty> DATA = register(PDelay.class, PField_Empty.class, 0, DEFAULT_MAX);
-    protected DelayUse.Timing timing = DelayUse.Timing.StartOfTurnLast;
-
     public static PDelay turnEnd()
     {
         return turnEnd(0);
@@ -24,45 +26,39 @@ public class PDelay extends PSkill<PField_Empty>
         return turnEndLast(0);
     }
 
-    public static PDelay turnEnd(int amount)
+    public static PDelayEndOfTurnFirst turnEnd(int amount)
     {
-        return new PDelay(amount, DelayUse.Timing.EndOfTurnFirst);
+        return new PDelayEndOfTurnFirst(amount);
     }
 
-    public static PDelay turnEndLast(int amount)
+    public static PDelayEndOfTurnLast turnEndLast(int amount)
     {
-        return new PDelay(amount, DelayUse.Timing.EndOfTurnLast);
+        return new PDelayEndOfTurnLast(amount);
     }
 
-    public static PDelay turnStart(int amount)
+    public static PDelayStartOfTurn turnStart(int amount)
     {
-        return new PDelay(amount, DelayUse.Timing.StartOfTurnFirst);
+        return new PDelayStartOfTurn(amount);
     }
 
-    public static PDelay turnStartLast(int amount)
+    public static PDelayStartOfTurnPostDraw turnStartLast(int amount)
     {
-        return new PDelay(amount, DelayUse.Timing.StartOfTurnLast);
+        return new PDelayStartOfTurnPostDraw(amount);
     }
 
-    public PDelay()
+    public PDelay(PSkillData<PField_Empty> data)
     {
-        super(DATA, PCLCardTarget.None, 0);
+        super(data, PCLCardTarget.None, 0);
     }
 
-    public PDelay(PSkillSaveData content)
+    public PDelay(PSkillData<PField_Empty> data, PSkillSaveData content)
     {
-        super(DATA, content);
+        super(data, content);
     }
 
-    public PDelay(int amount)
+    public PDelay(PSkillData<PField_Empty> data, int amount)
     {
-        super(DATA, PCLCardTarget.None, amount);
-    }
-
-    public PDelay(int amount, DelayUse.Timing timing)
-    {
-        this(amount);
-        setTiming(timing);
+        super(data, PCLCardTarget.None, amount);
     }
 
     @Override
@@ -96,7 +92,7 @@ public class PDelay extends PSkill<PField_Empty>
     {
         if (this.childEffect != null)
         {
-            new DelayUse(amount, timing, info, (i) -> this.childEffect.use(i)).start();
+            getDelayUse(info, (i) -> this.childEffect.use(i)).start();
         }
     }
 
@@ -104,20 +100,16 @@ public class PDelay extends PSkill<PField_Empty>
     {
         if (this.childEffect != null)
         {
-            new DelayUse(amount, timing, info, (i) -> this.childEffect.use(i, index)).start();
+            getDelayUse(info, (i) -> this.childEffect.use(i, index)).start();
         }
     }
 
     @Override
     public String getSubText()
     {
-        return (amount <= 0 && (timing == DelayUse.Timing.EndOfTurnFirst || timing == DelayUse.Timing.EndOfTurnLast) ? TEXT.conditions.atEndOfTurn() :
+        return (amount <= 0 ? TEXT.conditions.atEndOfTurn() :
                 amount <= 1 ? TEXT.conditions.nextTurn() : TEXT.conditions.inTurns(amount));
     }
 
-    public PDelay setTiming(DelayUse.Timing timing)
-    {
-        this.timing = timing;
-        return this;
-    }
+    public abstract DelayUse getDelayUse(PCLUseInfo info, ActionT1<PCLUseInfo> childAction);
 }

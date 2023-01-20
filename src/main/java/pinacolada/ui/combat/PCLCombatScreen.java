@@ -18,6 +18,8 @@ import pinacolada.utilities.GameUtilities;
 
 import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.player;
 
+// Copied and modified from STS-AnimatorMod
+// TODO Merge with CombatStats or PlayerSystem
 public class PCLCombatScreen extends EUIBase
 {
     public final PowerFormulaDisplay formulaDisplay;

@@ -25,11 +25,10 @@ import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
 import extendedui.patches.game.CardGlowBorderPatches;
 import extendedui.ui.GridCardSelectScreenHelper;
-import javassist.CannotCompileException;
-import javassist.CtClass;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.special.PCLHasteAction;
+import pinacolada.annotations.CombatSubscriber;
 import pinacolada.cards.base.AffinityReactions;
 import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCard;
@@ -45,7 +44,6 @@ import pinacolada.interfaces.markers.CooldownProvider;
 import pinacolada.interfaces.subscribers.*;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.orbs.PCLOrb;
-import pinacolada.patches.ClassLoadingPatch;
 import pinacolada.powers.PCLClickableUse;
 import pinacolada.powers.PCLPower;
 import pinacolada.powers.TemporaryPower;
@@ -54,7 +52,7 @@ import pinacolada.powers.common.PCLLockOnPower;
 import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
-import pinacolada.skills.DelayUse;
+import pinacolada.skills.delay.DelayUse;
 import pinacolada.ui.combat.PCLPlayerSystem;
 import pinacolada.ui.combat.SummonPool;
 import pinacolada.ui.common.ControllableCardPile;
@@ -90,6 +88,7 @@ public class CombatManager
     private static final Map<String, Integer> semiLimitedData = new HashMap<>();
     private static final Map<String, Object> combatData = new HashMap<>();
     private static final Map<String, Object> turnData = new HashMap<>();
+    private static boolean shouldRefreshHand;
     private static int cardsDrawnThisTurn = 0;
     private static int turnCount = 0;
     public static AbstractRoom room;
@@ -116,11 +115,18 @@ public class CombatManager
     public static boolean hasActivatedSemiLimited(String id, int cap) { return semiLimitedData.containsKey(id) && semiLimitedData.get(id) >= cap; }
     public static boolean tryActivateSemiLimited(String id, int cap) { return semiLimitedData.merge(id, 1, Integer::sum) <= cap; }
 
-    public static void initializeEvents() throws CannotCompileException
+    public static void initializeEvents()
     {
-        for (CtClass eventClass : ClassLoadingPatch.getClasses(PCLCombatSubscriber.class))
+        for (Class<?> eventClass : GameUtilities.getClassesWithAnnotation(CombatSubscriber.class))
         {
-            registerSubscribeGroup(eventClass.toClass());
+            try
+            {
+                registerSubscribeGroup((Class<? extends PCLCombatSubscriber>) eventClass);
+            }
+            catch (Exception e)
+            {
+                EUIUtils.logError(CombatManager.class, "Failed to load subscriber class " + eventClass);
+            }
         }
     }
 
@@ -204,6 +210,7 @@ public class CombatManager
         blockRetained = 0;
         battleID = null;
 
+        shouldRefreshHand = false;
         turnCount = 0;
         cardsDrawnThisTurn = 0;
         orbsEvokedThisCombat.clear();
@@ -333,6 +340,7 @@ public class CombatManager
         {
             s.onCardMoved(card, source, destination);
         }
+        PCLActions.last.callback(controlPile::refreshCards);
     }
 
     public static void onCardPurged(AbstractCard card)
@@ -443,6 +451,11 @@ public class CombatManager
         subscriberDo(OnMatchBonusSubscriber.class, s -> s.onMatchBonus(card, affinity));
     }
 
+    public static boolean onMatchCheck(AbstractCard target)
+    {
+        return subscriberCanPass(OnMatchCheckSubscriber.class, s -> s.onMatchCheck(target));
+    }
+
     public static float onModifyMagicNumber(float amount, AbstractCard card)
     {
         return subscriberInout(OnModifyMagicNumberSubscriber.class, amount, (s, d) -> s.onModifyMagicNumber(d, card));
@@ -473,7 +486,7 @@ public class CombatManager
         if (PCLCardTag.Recast.has(card))
         {
             PCLCardTag.Recast.tryProgress(card);
-            new DelayUse(1, DelayUse.Timing.StartOfTurnLast, new PCLUseInfo(card, AbstractDungeon.player, m), (i) -> PCLActions.bottom.playCopy(card, EUIUtils.safeCast(i.target, AbstractMonster.class))).start();
+            DelayUse.turnStartLast(1, new PCLUseInfo(card, AbstractDungeon.player, m), (i) -> PCLActions.bottom.playCopy(card, EUIUtils.safeCast(i.target, AbstractMonster.class))).start();
         }
     }
 
@@ -895,8 +908,7 @@ public class CombatManager
         }
 
         subscriberDo(OnHealthBarUpdatedSubscriber.class, s -> s.onHealthBarUpdated(creature));
-
-        GameUtilities.refreshHandLayout(true);
+        refreshHandLayout();
     }
 
     public static void onBlockGained(AbstractCreature creature, int block)
@@ -1073,6 +1085,12 @@ public class CombatManager
         {
             currentPhase = AbstractDungeon.actionManager.phase;
             subscriberDo(OnPhaseChangedSubscriber.class, s -> s.onPhaseChanged(currentPhase));
+            controlPile.refreshCards();
+            if (shouldRefreshHand)
+            {
+                shouldRefreshHand = false;
+                refreshHandLayout();
+            }
         }
     }
 
@@ -1170,6 +1188,21 @@ public class CombatManager
         playerSystem.setLastCardPlayed(null);
     }
 
+    public static void queueRefreshHandLayout()
+    {
+        shouldRefreshHand = true;
+    }
+
+    public static void refreshHandLayout()
+    {
+        if (GameUtilities.getCurrentRoom(false) != null)
+        {
+            player.hand.refreshHandLayout();
+            player.hand.applyPowers();
+            player.hand.glowCheck();
+        }
+    }
+
     // TODO add subscribers
     public static void removeDamagePowers(AbstractCreature creature)
     {
@@ -1248,9 +1281,9 @@ public class CombatManager
         return sum;
     }
 
-    private static ArrayList<Class<? extends PCLCombatSubscriber>> getInterfaces(PCLCombatSubscriber subscriber)
+    private static List<Class<? extends PCLCombatSubscriber>> getInterfaces(PCLCombatSubscriber subscriber)
     {
-        return (ArrayList<Class<? extends PCLCombatSubscriber>>) EUIUtils.filter(subscriber.getClass().getInterfaces(), PCLCombatSubscriber.class::isAssignableFrom);
+        return EUIUtils.mapAsNonnull(subscriber.getClass().getInterfaces(), i -> PCLCombatSubscriber.class.isAssignableFrom(i) ? (Class<? extends PCLCombatSubscriber>) i : null);
     }
 
     private static <T extends PCLCombatSubscriber> SubscriberGroup<T> getSubscriberGroup(Class<T> subscriberClass)

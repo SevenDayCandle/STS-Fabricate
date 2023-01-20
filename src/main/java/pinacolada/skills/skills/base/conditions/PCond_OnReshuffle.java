@@ -3,11 +3,13 @@ package pinacolada.skills.skills.base.conditions;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import extendedui.ui.tooltips.EUITooltip;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 
+@VisibleSkill
 public class PCond_OnReshuffle extends PCond_Delegate
 {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_OnReshuffle.class, PField_CardCategory.class, 1, 1)

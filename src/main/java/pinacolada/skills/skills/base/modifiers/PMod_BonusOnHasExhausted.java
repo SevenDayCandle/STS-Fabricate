@@ -2,6 +2,7 @@ package pinacolada.skills.skills.base.modifiers;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.ui.tooltips.EUITooltip;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.misc.CombatManager;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
@@ -10,6 +11,7 @@ import pinacolada.skills.fields.PField_CardCategory;
 
 import java.util.List;
 
+@VisibleSkill
 public class PMod_BonusOnHasExhausted extends PMod_BonusOnHas
 {
     public static final PSkillData<PField_CardCategory> DATA = register(PMod_BonusOnHasExhausted.class, PField_CardCategory.class)

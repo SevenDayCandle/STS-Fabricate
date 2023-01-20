@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT0;
 import pinacolada.actions.PCLActions;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.resources.PGR;
@@ -16,6 +17,7 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.List;
 
+@VisibleSkill
 public class PCond_Fatal extends PActionCond<PField_Not>
 {
     public static final PSkillData<PField_Not> DATA = register(PCond_Fatal.class, PField_Not.class, 1, 1)

@@ -1,5 +1,6 @@
 package pinacolada.cards.pcl.curse;
 
+import pinacolada.annotations.VisibleCard;
 import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
@@ -10,6 +11,7 @@ import pinacolada.skills.PMove;
 import pinacolada.skills.skills.base.modifiers.PMod_IncreaseOnUse;
 import pinacolada.skills.skills.base.moves.PMove_StealGold;
 
+@VisibleCard
 public class Curse_Avarice extends PCLCard
 {
     public static final PCLCardData DATA = register(Curse_Avarice.class)

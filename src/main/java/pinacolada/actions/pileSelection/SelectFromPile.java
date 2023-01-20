@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+// Copied and modified from STS-AnimatorMod
 public class SelectFromPile extends PCLActionWithCallback<ArrayList<AbstractCard>>
 {
     protected final ArrayList<AbstractCard> selectedCards = new ArrayList<>();

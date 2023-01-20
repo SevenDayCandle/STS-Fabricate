@@ -3,6 +3,7 @@ package pinacolada.skills.skills.base.modifiers;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.skills.PMod;
@@ -14,6 +15,7 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.List;
 
+@VisibleSkill
 public class PMod_PerCreatureAttacking extends PMod<PField_Empty>
 {
 

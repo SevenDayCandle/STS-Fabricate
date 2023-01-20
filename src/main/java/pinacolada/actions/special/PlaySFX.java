@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import pinacolada.actions.PCLActionWithCallback;
 import pinacolada.effects.SFX;
 
+// Copied and modified from STS-AnimatorMod
 public class PlaySFX extends PCLActionWithCallback<PlaySFX>
 {
     public final String key;

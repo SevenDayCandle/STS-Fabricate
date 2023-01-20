@@ -14,7 +14,6 @@ import pinacolada.cards.base.AffinityReactions;
 import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLUseInfo;
-import pinacolada.interfaces.subscribers.OnMatchCheckSubscriber;
 import pinacolada.misc.CombatManager;
 import pinacolada.powers.PCLAffinityPower;
 import pinacolada.powers.common.PCLLockOnPower;
@@ -168,15 +167,7 @@ public class PCLPlayerSystem extends EUIBase
 
     public boolean isMatch(AbstractCard card)
     {
-        for (OnMatchCheckSubscriber s : CombatManager.onMatchCheck.getSubscribers())
-        {
-            if (s.onMatchCheck(card, null))
-            {
-                return true;
-            }
-        }
-
-        return getActiveMeter().isMatch(card);
+        return CombatManager.onMatchCheck(card) || getActiveMeter().isMatch(card);
     }
 
     public boolean isPowerActive(PCLAffinity affinity)

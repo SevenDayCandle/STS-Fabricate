@@ -1,7 +1,9 @@
 package pinacolada.relics.pcl;
 
 import com.megacrit.cardcrawl.cards.CardGroup;
+import pinacolada.annotations.VisibleRelic;
 
+@VisibleRelic
 public class FoolishCubes extends AbstractCubes
 {
     public static final String ID = createFullID(FoolishCubes.class);

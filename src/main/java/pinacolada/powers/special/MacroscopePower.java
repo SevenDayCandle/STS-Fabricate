@@ -29,7 +29,7 @@ public class MacroscopePower extends PCLPower implements InvisiblePower, OnOrbAp
         owner.healthBarUpdatedEvent();
         if (owner instanceof AbstractPlayer)
         {
-            CombatManager.onOrbApplyFocus.subscribe(this);
+            CombatManager.subscribe(this);
             PGR.core.dungeon.setDivisor(Macroscope.MULTIPLIER);
         }
     }

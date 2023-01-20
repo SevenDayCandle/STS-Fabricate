@@ -26,6 +26,7 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.Collections;
 
+// Copied and modified from STS-AnimatorMod
 public class ApplyPower extends PCLActionWithCallback<AbstractPower>
 {
     public static final String[] TEXT = ApplyPowerAction.TEXT;

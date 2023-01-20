@@ -20,6 +20,7 @@ import pinacolada.resources.pcl.PCLRelicSlot;
 
 import java.util.ArrayList;
 
+// Copied and modified from STS-AnimatorMod
 public class PCLRelicSlotSelectionEffect extends PCLEffect
 {
     public static final float TARGET_X = Settings.WIDTH * 0.25f;

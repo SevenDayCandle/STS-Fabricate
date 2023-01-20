@@ -11,10 +11,10 @@ import extendedui.utilities.ColoredString;
 import pinacolada.interfaces.subscribers.OnChannelOrbSubscriber;
 import pinacolada.interfaces.subscribers.OnEvokeOrbSubscriber;
 import pinacolada.misc.CombatManager;
-import pinacolada.powers.PCLPower;
+import pinacolada.powers.PCLSubscribingPower;
 import pinacolada.utilities.GameUtilities;
 
-public class BlindedPower extends PCLPower implements OnChannelOrbSubscriber, OnEvokeOrbSubscriber
+public class BlindedPower extends PCLSubscribingPower implements OnChannelOrbSubscriber, OnEvokeOrbSubscriber
 {
     public static final String POWER_ID = createFullID(BlindedPower.class);
     public static final int DAMAGE_REDUCTION_LV1 = 3;
@@ -46,24 +46,6 @@ public class BlindedPower extends PCLPower implements OnChannelOrbSubscriber, On
     public AbstractPower makeCopy()
     {
         return new BlindedPower(owner, source, amount);
-    }
-
-    @Override
-    public void onInitialApplication()
-    {
-        super.onInitialApplication();
-
-        CombatManager.onChannelOrb.subscribe(this);
-        CombatManager.onEvokeOrb.subscribe(this);
-    }
-
-    @Override
-    public void onRemove()
-    {
-        super.onRemove();
-
-        CombatManager.onChannelOrb.unsubscribe(this);
-        CombatManager.onEvokeOrb.unsubscribe(this);
     }
 
     @Override

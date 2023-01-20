@@ -11,6 +11,7 @@ import pinacolada.effects.AttackEffects;
 import pinacolada.effects.PCLEffects;
 import pinacolada.utilities.GameUtilities;
 
+// Copied and modified from STS-AnimatorMod
 public class LoseHP extends PCLAction
 {
     protected boolean ignoreTempHP = false;

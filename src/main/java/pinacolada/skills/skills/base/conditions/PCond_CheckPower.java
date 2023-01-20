@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.powers.PCLPowerHelper;
@@ -15,6 +16,7 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.List;
 
+@VisibleSkill
 public class PCond_CheckPower extends PCond<PField_Power>
 {
     public static final PSkillData<PField_Power> DATA = register(PCond_CheckPower.class, PField_Power.class);

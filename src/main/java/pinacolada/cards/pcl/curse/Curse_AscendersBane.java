@@ -1,10 +1,12 @@
 package pinacolada.cards.pcl.curse;
 
+import pinacolada.annotations.VisibleCard;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.fields.PCLCardTag;
 
+@VisibleCard
 public class Curse_AscendersBane extends PCLCard
 {
     public static final PCLCardData DATA = register(Curse_AscendersBane.class)

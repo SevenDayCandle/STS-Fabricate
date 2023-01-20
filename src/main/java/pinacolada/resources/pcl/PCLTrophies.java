@@ -2,6 +2,8 @@ package pinacolada.resources.pcl;
 
 import extendedui.EUIUtils;
 
+// Copied and modified from STS-AnimatorMod
+@Deprecated
 public class PCLTrophies
 {
     public static final int MAXIMUM_TROPHY = 25;

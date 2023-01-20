@@ -2,7 +2,6 @@ package pinacolada.ui.common;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.megacrit.cardcrawl.actions.GameActionManager;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.Settings;
@@ -15,10 +14,6 @@ import extendedui.ui.controls.EUIButton;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.actions.PCLActions;
-import pinacolada.interfaces.subscribers.OnCardMovedSubscriber;
-import pinacolada.interfaces.subscribers.OnCardPurgedSubscriber;
-import pinacolada.interfaces.subscribers.OnPhaseChangedSubscriber;
-import pinacolada.misc.CombatManager;
 import pinacolada.misc.PCLHotkeys;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
@@ -26,7 +21,7 @@ import pinacolada.utilities.GameUtilities;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class ControllableCardPile implements OnPhaseChangedSubscriber, OnCardPurgedSubscriber, OnCardMovedSubscriber
+public class ControllableCardPile
 {
     public static final float OFFSET_X = AbstractCard.IMG_WIDTH * 0.85f;
     public static final float OFFSET_Y = -AbstractCard.IMG_WIDTH * 0.1f;
@@ -104,9 +99,6 @@ public class ControllableCardPile implements OnPhaseChangedSubscriber, OnCardPur
 
     public void clear()
     {
-        CombatManager.onPhaseChanged.subscribe(this);
-        CombatManager.onCardPurged.subscribe(this);
-        CombatManager.onCardMoved.subscribe(this);
         subscribers.clear();
         currentCard = null;
     }
@@ -124,24 +116,6 @@ public class ControllableCardPile implements OnPhaseChangedSubscriber, OnCardPur
     public int getUsableCount()
     {
         return EUIUtils.count(subscribers, ControllableCard::canUse);
-    }
-
-    @Override
-    public void onCardMoved(AbstractCard card, CardGroup source, CardGroup destination)
-    {
-        PCLActions.last.callback(this::refreshCards);
-    }
-
-    @Override
-    public void onPhaseChanged(GameActionManager.Phase phase)
-    {
-        refreshCards();
-    }
-
-    @Override
-    public void onPurge(AbstractCard card)
-    {
-        PCLActions.last.callback(this::refreshCards);
     }
 
     public void postRender(SpriteBatch sb)

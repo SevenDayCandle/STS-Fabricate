@@ -3,11 +3,13 @@ package pinacolada.relics.pcl;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import pinacolada.annotations.VisibleRelic;
 import pinacolada.powers.special.MacroscopePower;
 import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
+@VisibleRelic
 public class Macroscope extends PCLRelic
 {
     public static final String ID = createFullID(Macroscope.class);

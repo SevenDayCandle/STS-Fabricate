@@ -10,6 +10,7 @@ import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.ui.tooltips.EUITooltip;
+import pinacolada.annotations.VisibleAugment;
 import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardTarget;
@@ -17,6 +18,7 @@ import pinacolada.cards.base.fields.PCLCardTag;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
+import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.WeightedList;
 
 import java.lang.reflect.Constructor;
@@ -25,7 +27,7 @@ import java.util.*;
 public abstract class PCLAugment implements TooltipProvider
 {
     private static final HashMap<String, PCLAugmentData> AUGMENT_MAP = new HashMap<>();
-    private static final String PREFIX_AUGMENTS = "pinacolada.augments.augments";
+    private static final ArrayList<PCLAugmentData> AVAILABLE_AUGMENTS = new ArrayList<>();
     public static final int WEIGHT_MODIFIER = 3;
 
     public PCLAugmentData data;
@@ -102,19 +104,17 @@ public abstract class PCLAugment implements TooltipProvider
     // Each ID must be called at least once to have it selectable in the console
     public static void initialize()
     {
-        ArrayList<String> effectClassNames = PGR.getClassNamesFromJarFile(PREFIX_AUGMENTS);
-        for (String s : effectClassNames)
+        for (Class<?> augmentClass : GameUtilities.getClassesWithAnnotation(VisibleAugment.class))
         {
             try
             {
-
-                Class<?> name = Class.forName(s);
-                PCLAugmentData data = ReflectionHacks.getPrivateStatic(name, "DATA");
-                EUIUtils.logInfoIfDebug(PCLAugment.class, "Adding effect " + data.ID);
+                PCLAugmentData data = ReflectionHacks.getPrivateStatic(augmentClass, "DATA");
+                AVAILABLE_AUGMENTS.add(data);
+                EUIUtils.logInfoIfDebug(PCLAugment.class, "Adding augment " + data.ID);
             }
             catch (Exception e)
             {
-                EUIUtils.logError(PCLAugment.class, "Failed to load " + s + ": " + e.getLocalizedMessage());
+                EUIUtils.logError(PCLAugment.class, "Failed to load augment " + augmentClass + ": " + e.getLocalizedMessage());
             }
         }
     }

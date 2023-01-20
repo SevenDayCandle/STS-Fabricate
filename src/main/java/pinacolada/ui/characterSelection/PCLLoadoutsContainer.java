@@ -12,6 +12,7 @@ import pinacolada.resources.pcl.PCLRuntimeLoadout;
 import java.util.*;
 import java.util.stream.Collectors;
 
+// Copied and modified from STS-AnimatorMod
 public class PCLLoadoutsContainer
 {
     public static final int MINIMUM_CARDS = 3; // 75

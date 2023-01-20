@@ -12,6 +12,7 @@ import pinacolada.actions.PCLActionWithCallback;
 import pinacolada.stances.PCLStance;
 import pinacolada.stances.PCLStanceHelper;
 
+// Copied and modified from STS-AnimatorMod
 public class ChangeStance extends PCLActionWithCallback<AbstractStance>
 {
     private final String ID;

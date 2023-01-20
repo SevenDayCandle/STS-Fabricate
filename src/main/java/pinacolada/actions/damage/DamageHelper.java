@@ -10,6 +10,7 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
+// Copied and modified from STS-AnimatorMod
 public class DamageHelper
 {
     public static void addIgnoredPower(ArrayList<AbstractPower> powers, AbstractCreature target, String powerID)

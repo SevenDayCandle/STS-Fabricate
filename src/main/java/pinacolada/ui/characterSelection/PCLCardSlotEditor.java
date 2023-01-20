@@ -14,6 +14,7 @@ import extendedui.utilities.EUIFontHelper;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCardSlot;
 
+// Copied and modified from STS-AnimatorMod
 public class PCLCardSlotEditor extends EUIBase
 {
     public static final float PREVIEW_OFFSET_X = AbstractCard.IMG_WIDTH * 0.6f;

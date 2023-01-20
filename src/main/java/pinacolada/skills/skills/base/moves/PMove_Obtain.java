@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import extendedui.ui.tooltips.EUICardPreview;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
@@ -16,6 +17,7 @@ import pinacolada.utilities.RotatingList;
 import java.util.ArrayList;
 import java.util.Collection;
 
+@VisibleSkill
 public class PMove_Obtain extends PMove<PField_CardID>
 {
     public static final PSkillData<PField_CardID> DATA = register(PMove_Obtain.class, PField_CardID.class)

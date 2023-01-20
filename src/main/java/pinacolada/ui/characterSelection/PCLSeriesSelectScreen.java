@@ -34,6 +34,7 @@ import java.util.Collection;
 import static pinacolada.ui.characterSelection.PCLLoadoutsContainer.MINIMUM_CARDS;
 
 // TODO Card amount selector
+// Copied and modified from STS-AnimatorMod
 public class PCLSeriesSelectScreen extends AbstractScreen
 {
     public final PCLLoadoutsContainer container = new PCLLoadoutsContainer();

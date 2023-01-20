@@ -5,6 +5,7 @@ import com.megacrit.cardcrawl.helpers.CardLibrary;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUICardPreview;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.resources.PGR;
@@ -19,6 +20,7 @@ import pinacolada.utilities.RotatingList;
 
 import java.util.ArrayList;
 
+@VisibleSkill
 public class PMove_PlayCopy extends PMove<PField_CardID>
 {
     public static final PSkillData<PField_CardID> DATA = register(PMove_PlayCopy.class, PField_CardID.class)

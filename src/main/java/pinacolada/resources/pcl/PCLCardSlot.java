@@ -10,6 +10,7 @@ import pinacolada.utilities.RotatingList;
 
 import java.util.ArrayList;
 
+// Copied and modified from STS-AnimatorMod
 public class PCLCardSlot
 {
     public static final int MAX_LIMIT = 6;

@@ -17,6 +17,7 @@ import pinacolada.resources.pcl.PCLCardSlot;
 
 import java.util.ArrayList;
 
+// Copied and modified from STS-AnimatorMod
 public class PCLCardSlotSelectionEffect extends PCLEffectWithCallback<Object>
 {
     private static final EUITextBox cardValue_text = new

@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import static pinacolada.cards.base.cardText.PCLTextContext.isIdeographicLanguage;
 
+// Copied and modified from STS-AnimatorMod
 public class WhitespaceToken extends PCLTextToken
 {
     protected static final WhitespaceToken Default = new WhitespaceToken();

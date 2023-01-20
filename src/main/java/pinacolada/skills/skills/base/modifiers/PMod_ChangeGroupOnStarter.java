@@ -1,5 +1,6 @@
 package pinacolada.skills.skills.base.modifiers;
 
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.resources.PGR;
@@ -7,6 +8,7 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardGeneric;
 
+@VisibleSkill
 public class PMod_ChangeGroupOnStarter extends PMod_ChangeGroup
 {
 

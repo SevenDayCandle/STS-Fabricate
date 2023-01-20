@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.stances.NeutralStance;
 import extendedui.EUIUtils;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
@@ -15,6 +16,7 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.List;
 
+@VisibleSkill
 public class PMove_EnterStance extends PMove<PField_Stance>
 {
     public static final PSkillData<PField_Stance> DATA = register(PMove_EnterStance.class, PField_Stance.class, 1, 1)

@@ -1,5 +1,6 @@
 package pinacolada.cards.pcl.curse;
 
+import pinacolada.annotations.VisibleCard;
 import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
@@ -12,6 +13,7 @@ import pinacolada.skills.PMove;
 import pinacolada.skills.skills.PMultiSkill;
 import pinacolada.skills.skills.base.moves.PMove_GainEnergy;
 
+@VisibleCard
 public class Curse_Devastation extends PCLCard
 {
     public static final PCLCardData DATA = register(Curse_Devastation.class)

@@ -1,6 +1,7 @@
 package pinacolada.cards.pcl.curse;
 
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
+import pinacolada.annotations.VisibleCard;
 import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
@@ -11,6 +12,7 @@ import pinacolada.skills.PCond;
 import pinacolada.skills.PMove;
 import pinacolada.skills.skills.special.moves.PMove_StealTempHP;
 
+@VisibleCard
 public class Curse_Parasite extends PCLCard
 {
     public static final PCLCardData DATA = register(Curse_Parasite.class)

@@ -3,6 +3,7 @@ package pinacolada.skills.skills.base.modifiers;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIUtils;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.powers.PCLPowerHelper;
@@ -16,6 +17,7 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.List;
 
+@VisibleSkill
 public class PMod_PerDistinctPower extends PMod<PField_Power>
 {
 

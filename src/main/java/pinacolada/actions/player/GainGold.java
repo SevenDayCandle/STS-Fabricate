@@ -5,6 +5,7 @@ import com.megacrit.cardcrawl.vfx.GainPennyEffect;
 import pinacolada.actions.PCLAction;
 import pinacolada.effects.PCLEffects;
 
+// Copied and modified from STS-AnimatorMod
 public class GainGold extends PCLAction
 {
     protected boolean showCoins;

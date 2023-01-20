@@ -18,20 +18,21 @@ import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
 import pinacolada.effects.vfx.OrbEvokeParticle;
 import pinacolada.effects.vfx.megacritCopy.OrbFlareEffect2;
-import pinacolada.interfaces.subscribers.OnStartOfTurnPostDrawSubscriber;
 import pinacolada.misc.CombatManager;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
 import java.lang.reflect.InvocationTargetException;
 
-public abstract class PCLOrb extends AbstractOrb implements OnStartOfTurnPostDrawSubscriber
+// Copied and modified from STS-AnimatorMod
+// TODO Make into a PointerProvider
+public abstract class PCLOrb extends AbstractOrb
 {
+    @Deprecated
     public enum Timing
     {
         EndOfTurn,
-        StartOfTurn,
-        StartOfTurnPostDraw
+        StartOfTurn
     }
 
     public static final int IMAGE_SIZE = 96;
@@ -40,25 +41,23 @@ public abstract class PCLOrb extends AbstractOrb implements OnStartOfTurnPostDra
     public final boolean canOrbApplyFocusToPassive;
     public boolean clickable;
     public EUITooltip tooltip;
-    protected Timing passiveEffectTiming;
     protected final OrbStrings orbStrings;
 
-    public PCLOrb(String id, PCLAffinity affinity, Timing passiveEffectTiming)
+    public PCLOrb(String id, PCLAffinity affinity)
     {
-        this(id, affinity, passiveEffectTiming, true, true);
+        this(id, affinity, true, true);
     }
 
-    public PCLOrb(String id, PCLAffinity affinity, Timing passiveEffectTiming, boolean canOrbApplyFocusToEvoke)
+    public PCLOrb(String id, PCLAffinity affinity, boolean canOrbApplyFocusToEvoke)
     {
-        this(id, affinity, passiveEffectTiming, canOrbApplyFocusToEvoke, true);
+        this(id, affinity, canOrbApplyFocusToEvoke, true);
     }
 
-    public PCLOrb(String id, PCLAffinity affinity, Timing passiveEffectTiming, boolean canOrbApplyFocusToEvoke, boolean canOrbApplyFocusToPassive)
+    public PCLOrb(String id, PCLAffinity affinity, boolean canOrbApplyFocusToEvoke, boolean canOrbApplyFocusToPassive)
     {
         this.orbStrings = PGR.getOrbStrings(id);
         this.ID = id;
         this.name = orbStrings.NAME;
-        this.passiveEffectTiming = passiveEffectTiming;
         this.affinity = affinity;
         this.tooltip = new EUITooltip(name, description);
         this.canOrbApplyFocusToEvoke = canOrbApplyFocusToEvoke;
@@ -77,10 +76,6 @@ public abstract class PCLOrb extends AbstractOrb implements OnStartOfTurnPostDra
 
     public void onChannel()
     {
-        if (passiveEffectTiming == Timing.StartOfTurnPostDraw)
-        {
-            CombatManager.onStartOfTurnPostDraw.subscribeOnce(this);
-        }
     }
 
     @Override
@@ -111,41 +106,6 @@ public abstract class PCLOrb extends AbstractOrb implements OnStartOfTurnPostDra
     public void onEvoke()
     {
         evoke();
-    }
-
-    @Override
-    public void onEndOfTurn()
-    {
-        super.onEndOfTurn();
-
-        if (passiveEffectTiming == Timing.EndOfTurn)
-        {
-            passive();
-        }
-    }
-
-    @Override
-    public void onStartOfTurn()
-    {
-        super.onStartOfTurn();
-
-        if (passiveEffectTiming == Timing.StartOfTurn)
-        {
-            passive();
-        }
-    }
-
-    @Override
-    public void onStartOfTurnPostDraw()
-    {
-        if (passiveEffectTiming == Timing.StartOfTurnPostDraw)
-        {
-            if (AbstractDungeon.player.orbs.contains(this))
-            {
-                CombatManager.onStartOfTurnPostDraw.subscribeOnce(this);
-                passive();
-            }
-        }
     }
 
     public void passive()

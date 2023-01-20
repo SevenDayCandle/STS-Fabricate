@@ -31,7 +31,7 @@ public class InnovationPower extends PCLPower implements OnPCLClickableUsedSubsc
     {
         super.onInitialApplication();
 
-        CombatManager.onPCLClickablePowerUsed.subscribe(this);
+        CombatManager.subscribe(this);
     }
 
     @Override
@@ -39,6 +39,6 @@ public class InnovationPower extends PCLPower implements OnPCLClickableUsedSubsc
     {
         super.onRemove();
 
-        CombatManager.onPCLClickablePowerUsed.unsubscribe(this);
+        CombatManager.unsubscribe(this);
     }
 }

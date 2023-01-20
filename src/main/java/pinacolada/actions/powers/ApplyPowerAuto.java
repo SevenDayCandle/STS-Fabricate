@@ -15,6 +15,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.powers.PCLPowerHelper;
 
+// Copied and modified from STS-AnimatorMod
 public class ApplyPowerAuto extends PCLActionAutoTarget<AbstractPower>
 {
     public static final String[] TEXT = ApplyPowerAction.TEXT;

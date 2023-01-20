@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import pinacolada.actions.PCLActionWithCallback;
 
+// Copied and modified from STS-AnimatorMod
 public class LoseBlock extends PCLActionWithCallback<AbstractCreature>
 {
     protected boolean canLoseLess;

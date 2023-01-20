@@ -3,6 +3,7 @@ package pinacolada.skills.skills.base.conditions;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.orbs.PCLOrbHelper;
@@ -12,6 +13,7 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Orb;
 import pinacolada.utilities.GameUtilities;
 
+@VisibleSkill
 public class PCond_TriggerOrb extends PCond<PField_Orb>
 {
     public static final PSkillData<PField_Orb> DATA = register(PCond_TriggerOrb.class, PField_Orb.class)

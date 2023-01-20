@@ -26,6 +26,8 @@ import pinacolada.utilities.PCLRenderHelpers;
 
 import java.util.HashMap;
 
+// Copied and modified from STS-AnimatorMod
+// TODO Merge with PCLTextContext
 public class PCLCardText
 {
     private static final PCLCoreImages.Badges BADGES = PGR.core.images.badges;

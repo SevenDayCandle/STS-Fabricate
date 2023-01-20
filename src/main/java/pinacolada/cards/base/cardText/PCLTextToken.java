@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import extendedui.utilities.ColoredString;
 
+// Copied and modified from STS-AnimatorMod
 public abstract class PCLTextToken
 {
     protected static final GlyphLayout layout = new GlyphLayout();

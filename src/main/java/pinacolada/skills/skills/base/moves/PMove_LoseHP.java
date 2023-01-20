@@ -2,6 +2,7 @@ package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.resources.PGR;
@@ -10,6 +11,7 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
 
+@VisibleSkill
 public class PMove_LoseHP extends PMove<PField_Empty>
 {
     public static final PSkillData<PField_Empty> DATA = register(PMove_LoseHP.class, PField_Empty.class);

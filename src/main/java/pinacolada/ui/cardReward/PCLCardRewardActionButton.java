@@ -13,6 +13,7 @@ import pinacolada.augments.PCLAugmentData;
 import pinacolada.augments.PCLAugmentWeights;
 import pinacolada.resources.PGR;
 
+// Copied and modified from STS-AnimatorMod
 public class PCLCardRewardActionButton extends EUIButton
 {
     private static final float SIZE = scale(50);

@@ -1,5 +1,6 @@
 package pinacolada.cards.pcl.replacement;
 
+import pinacolada.annotations.VisibleCard;
 import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
@@ -7,6 +8,7 @@ import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.fields.PCLCardTag;
 import pinacolada.skills.PMove;
 
+@VisibleCard
 public class Miracle extends PCLCard
 {
     public static final PCLCardData DATA = register(Miracle.class)

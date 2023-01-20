@@ -1,12 +1,14 @@
 package pinacolada.skills.skills.base.traits;
 
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.PTrait;
 import pinacolada.skills.fields.PField_Empty;
 
+@VisibleSkill
 public class PTrait_HitCount extends PTrait<PField_Empty>
 {
 

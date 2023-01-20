@@ -2,6 +2,7 @@ package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import extendedui.EUIRM;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.orbs.PCLOrbHelper;
@@ -14,6 +15,7 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.List;
 
+@VisibleSkill
 public class PMove_ChannelOrb extends PMove<PField_Orb>
 {
     public static final PSkillData<PField_Orb> DATA = register(PMove_ChannelOrb.class, PField_Orb.class)

@@ -7,6 +7,7 @@ import extendedui.EUIRM;
 import extendedui.interfaces.delegates.FuncT5;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.actions.pileSelection.SelectFromPile;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.resources.PGR;
@@ -17,6 +18,7 @@ import pinacolada.utilities.ListSelection;
 
 import java.util.List;
 
+@VisibleSkill
 public class PMod_SelectPerCard extends PMod_Do
 {
 

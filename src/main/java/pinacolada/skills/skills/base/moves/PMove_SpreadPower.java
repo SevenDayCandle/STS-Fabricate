@@ -2,6 +2,7 @@ package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.powers.IntangiblePower;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.powers.PCLPowerHelper;
@@ -14,6 +15,7 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.List;
 
+@VisibleSkill
 public class PMove_SpreadPower extends PMove<PField_Power>
 {
     public static final PSkillData<PField_Power> DATA = register(PMove_SpreadPower.class, PField_Power.class);

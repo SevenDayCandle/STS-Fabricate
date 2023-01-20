@@ -28,12 +28,11 @@ import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.ColoredString;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.PCLActions;
-import pinacolada.augments.PCLAugment;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.*;
 import pinacolada.cards.base.fields.PCLCardTag;
 import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.interfaces.markers.EditorCard;
-import pinacolada.interfaces.markers.Hidden;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.interfaces.markers.PointerProvider;
 import pinacolada.monsters.PCLCardAlly;
@@ -49,7 +48,6 @@ import pinacolada.utilities.RotatingList;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -57,9 +55,9 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
 {
     public static final String EFFECT_SEPARATOR = LocalizedStrings.PERIOD + " ";
     private static final HashMap<String, PSkillData<? extends PField>> EFFECT_MAP = new HashMap<>();
+    private static final ArrayList<PSkillData<? extends PField>> AVAILABLE_SKILLS = new ArrayList<>();
     private static final TypeToken<PSkillSaveData> TToken = new TypeToken<PSkillSaveData>() {};
     private static final TypeToken<ArrayList<String>> TStringToken = new TypeToken<ArrayList<String>>() {};
-    private static final String PREFIX_EFFECTS = "pinacolada.skills.skills";
 
     public static final char EFFECT_CHAR = 'E';
     public static final char XVALUE_CHAR = 'F';
@@ -194,11 +192,6 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return null;
     }
 
-    public static Collection<PSkillData<?>> getAllClasses()
-    {
-        return EFFECT_MAP.values();
-    }
-
     public static Set<String> getAllIDs()
     {
         return EFFECT_MAP.keySet();
@@ -216,22 +209,17 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
 
     public static List<PSkillData<? extends PField>> getEligibleClasses(AbstractCard.CardColor co)
     {
-        return EUIUtils.filter(getAllClasses(), d -> d.isColorCompatible(co));
+        return EUIUtils.filter(AVAILABLE_SKILLS, d -> d.isColorCompatible(co));
     }
 
     public static <U extends PSkill<?>> List<PSkillData<?>> getEligibleClasses(AbstractCard.CardColor co, Class<U> targetClass)
     {
-        return EUIUtils.filter(getAllClasses(), d -> targetClass.isAssignableFrom(d.effectClass) && d.isColorCompatible(co));
+        return EUIUtils.filter(AVAILABLE_SKILLS, d -> targetClass.isAssignableFrom(d.effectClass) && d.isColorCompatible(co));
     }
 
     public static <U extends PSkill<?>> List<U> getEligibleEffects(AbstractCard.CardColor co, Class<U> targetClass)
     {
         return EUIUtils.mapAsNonnull(getEligibleClasses(co, targetClass), cl -> {
-            // Do not show composite or hidden effects in the effect editor
-            if (PMultiBase.class.isAssignableFrom(cl.effectClass) || Hidden.class.isAssignableFrom(cl.effectClass))
-            {
-                return null;
-            }
             Constructor<? extends PSkill<?>> c = EUIUtils.tryGetConstructor(cl.effectClass);
             if (c != null)
             {
@@ -269,21 +257,21 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
     // Each ID must be called at least once for it to appear in the card editor
     public static void initialize()
     {
-        ArrayList<String> effectClassNames = PGR.getClassNamesFromJarFile(PREFIX_EFFECTS);
-        for (String s : effectClassNames)
+        for (Class<?> ct : GameUtilities.getClassesWithAnnotation(VisibleSkill.class))
         {
             try
             {
-                Class<?> name = Class.forName(s);
-                if (!Modifier.isAbstract(name.getModifiers()))
+                // We purposely load the data for multibase classes even though they don't show up in the editor, because they need to be loaded for deserialization
+                PSkillData<?> data = ReflectionHacks.getPrivateStatic(ct, "DATA");
+                if (!PMultiBase.class.isAssignableFrom(ct))
                 {
-                    PSkillData<?> data = ReflectionHacks.getPrivateStatic(name, "DATA");
-                    EUIUtils.logInfoIfDebug(PSkill.class, "Adding effect " + data.ID);
+                    AVAILABLE_SKILLS.add(data);
                 }
+                EUIUtils.logInfoIfDebug(PSkill.class, "Adding skill " + data.ID);
             }
             catch (Exception e)
             {
-                EUIUtils.logError(PCLAugment.class, "Failed to load " + s + ": " + e.getLocalizedMessage());
+                EUIUtils.logError(PSkill.class, "Failed to load skill " + ct.getName() + ": " + e.getLocalizedMessage());
             }
         }
     }

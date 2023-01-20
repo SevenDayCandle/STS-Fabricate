@@ -7,6 +7,8 @@ import com.megacrit.cardcrawl.powers.AbstractPower;
 import pinacolada.actions.PCLActionWithCallback;
 import pinacolada.actions.PCLActions;
 
+// Copied and modified from STS-AnimatorMod
+@Deprecated
 public class IncreasePower extends PCLActionWithCallback<AbstractPower>
 {
     private String powerID;

@@ -10,6 +10,7 @@ import extendedui.interfaces.delegates.ActionT2;
 import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.utilities.RotatingList;
 
+// Copied and modified from STS-AnimatorMod
 public class DrawPileCardPreview
 {
     protected static final float REFRESH_DELAY = 0.625f;

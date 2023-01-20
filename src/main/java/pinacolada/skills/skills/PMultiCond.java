@@ -10,6 +10,7 @@ import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.tooltips.EUICardPreview;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.*;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.interfaces.markers.PointerProvider;
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@VisibleSkill
 public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
 {
     public static final PSkillData<PField_Or> DATA = register(PMultiCond.class, PField_Or.class, 0, DEFAULT_MAX);

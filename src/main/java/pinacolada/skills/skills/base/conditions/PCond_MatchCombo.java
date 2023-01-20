@@ -1,6 +1,7 @@
 package pinacolada.skills.skills.base.conditions;
 
 import extendedui.EUIRM;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.resources.PGR;
@@ -10,6 +11,7 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
 import pinacolada.utilities.GameUtilities;
 
+@VisibleSkill
 public class PCond_MatchCombo extends PCond<PField_Not>
 {
 

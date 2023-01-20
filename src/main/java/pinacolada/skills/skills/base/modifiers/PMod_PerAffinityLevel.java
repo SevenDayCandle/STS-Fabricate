@@ -2,6 +2,7 @@ package pinacolada.skills.skills.base.modifiers;
 
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
@@ -13,6 +14,7 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Affinity;
 import pinacolada.utilities.GameUtilities;
 
+@VisibleSkill
 public class PMod_PerAffinityLevel extends PMod<PField_Affinity>
 {
     public static final PSkillData<PField_Affinity> DATA = register(PMod_PerAffinityLevel.class, PField_Affinity.class)

@@ -6,6 +6,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.ColoredString;
 
+// Copied and modified from STS-AnimatorMod
 public class WordToken extends PCLTextToken
 {
     protected EUITooltip tooltip = null;

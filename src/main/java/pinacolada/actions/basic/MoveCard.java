@@ -25,6 +25,7 @@ import pinacolada.utilities.ListSelection;
 
 import java.util.List;
 
+// Copied and modified from STS-AnimatorMod
 public class MoveCard extends PCLActionWithCallback<AbstractCard>
 {
     public static final float DEFAULT_CARD_X_LEFT = Settings.WIDTH * 0.35f;
@@ -162,7 +163,7 @@ public class MoveCard extends PCLActionWithCallback<AbstractCard>
 
             if (targetPile.type == CardGroup.CardGroupType.HAND || (sourcePile != null && sourcePile.type == CardGroup.CardGroupType.HAND))
             {
-                GameUtilities.refreshHandLayout();
+                CombatManager.queueRefreshHandLayout();
             }
 
             if (sourcePile != null && (sourcePile.type == CardGroup.CardGroupType.EXHAUST_PILE || sourcePile == CombatManager.PURGED_CARDS))

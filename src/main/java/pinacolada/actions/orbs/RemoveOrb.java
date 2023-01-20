@@ -3,6 +3,7 @@ package pinacolada.actions.orbs;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import pinacolada.actions.PCLAction;
 
+// Copied and modified from STS-AnimatorMod
 public class RemoveOrb extends PCLAction
 {
     private final AbstractOrb orb;

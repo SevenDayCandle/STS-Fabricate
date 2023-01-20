@@ -26,6 +26,7 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
+// Copied and modified from STS-AnimatorMod
 public class PCLCharacterSelectOptionsRenderer extends EUIBase
 {
     protected static final float POS_X = 170f * Settings.scale;

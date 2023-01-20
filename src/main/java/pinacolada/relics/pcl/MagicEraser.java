@@ -3,9 +3,10 @@ package pinacolada.relics.pcl;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.rewards.RewardItem;
 import extendedui.EUIUtils;
+import pinacolada.annotations.VisibleRelic;
 import pinacolada.interfaces.markers.CardRewardActionProvider;
 
-
+@VisibleRelic
 public class MagicEraser extends AbstractCubes implements CardRewardActionProvider
 {
     public static final String ID = createFullID(MagicEraser.class);

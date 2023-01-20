@@ -3,6 +3,7 @@ package pinacolada.cards.base.cardText;
 import java.util.HashMap;
 import java.util.Map;
 
+// Copied and modified from STS-AnimatorMod
 public class PunctuationToken extends PCLTextToken
 {
     private static final Map<String, PunctuationToken> tokenCache = new HashMap<>();

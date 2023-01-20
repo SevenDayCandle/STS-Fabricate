@@ -4,12 +4,14 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import extendedui.utilities.GenericCondition;
 import pinacolada.actions.PCLActions;
+import pinacolada.annotations.VisibleCard;
 import pinacolada.cards.base.*;
 import pinacolada.cards.base.fields.PCLCardTag;
 import pinacolada.skills.skills.PSpecialSkill;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RandomizedList;
 
+@VisibleCard
 public class Discovery extends PCLCard
 {
     public static final PCLCardData DATA = register(Discovery.class)

@@ -1,5 +1,6 @@
 package pinacolada.skills.skills.base.conditions;
 
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
@@ -11,6 +12,7 @@ import pinacolada.skills.PTrigger;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.fields.PField_CardCategory;
 
+@VisibleSkill
 public class PCond_IfHasAffinity extends PCond<PField_CardCategory>
 {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_IfHasAffinity.class, PField_CardCategory.class)

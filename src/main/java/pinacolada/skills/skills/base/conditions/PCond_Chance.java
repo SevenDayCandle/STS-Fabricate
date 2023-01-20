@@ -2,6 +2,7 @@ package pinacolada.skills.skills.base.conditions;
 
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.core.Settings;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.resources.PGR;
@@ -11,6 +12,7 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
 import pinacolada.utilities.GameUtilities;
 
+@VisibleSkill
 public class PCond_Chance extends PCond<PField_Empty>
 {
     public static final PSkillData<PField_Empty> DATA = register(PCond_Chance.class, PField_Empty.class)

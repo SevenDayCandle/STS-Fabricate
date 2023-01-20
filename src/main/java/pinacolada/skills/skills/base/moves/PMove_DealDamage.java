@@ -8,6 +8,7 @@ import extendedui.interfaces.delegates.ActionT2;
 import extendedui.interfaces.delegates.FuncT2;
 import pinacolada.actions.damage.DealDamage;
 import pinacolada.actions.damage.DealDamageToAll;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.effects.PCLEffekseerEFX;
@@ -21,6 +22,7 @@ import pinacolada.skills.fields.PField_Empty;
 import java.util.ArrayList;
 import java.util.Collections;
 
+@VisibleSkill
 public class PMove_DealDamage extends PMove<PField_Empty>
 {
     public static final PSkillData<PField_Empty> DATA = register(PMove_DealDamage.class, PField_Empty.class);

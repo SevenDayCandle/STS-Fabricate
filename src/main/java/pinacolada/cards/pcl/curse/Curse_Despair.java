@@ -1,11 +1,13 @@
 package pinacolada.cards.pcl.curse;
 
+import pinacolada.annotations.VisibleCard;
 import pinacolada.cards.base.*;
 import pinacolada.cards.base.fields.PCLCardTag;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PMove;
 
+@VisibleCard
 public class Curse_Despair extends PCLCard
 {
     public static final PCLCardData DATA = register(Curse_Despair.class)

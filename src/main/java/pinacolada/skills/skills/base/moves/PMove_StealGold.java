@@ -3,6 +3,7 @@ package pinacolada.skills.skills.base.moves;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.powers.common.StolenGoldPower;
@@ -13,6 +14,7 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
 import pinacolada.utilities.GameUtilities;
 
+@VisibleSkill
 public class PMove_StealGold extends PMove<PField_Empty>
 {
     public static final PSkillData<PField_Empty> DATA = register(PMove_StealGold.class, PField_Empty.class);

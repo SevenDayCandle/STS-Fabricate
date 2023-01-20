@@ -13,6 +13,7 @@ import pinacolada.cards.base.PCLCard;
 import java.util.HashMap;
 import java.util.Map;
 
+// Copied and modified from STS-AnimatorMod
 public class SymbolToken extends PCLTextToken
 {
     public static final Map<String, SymbolToken> tokenCache = new HashMap<>();

@@ -12,6 +12,7 @@ import pinacolada.utilities.ListSelection;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+// Copied and modified from STS-AnimatorMod
 public class ModifyPowers extends PCLActionWithCallback<ArrayList<AbstractPower>>
 {
     protected final ArrayList<AbstractPower> result = new ArrayList<>();

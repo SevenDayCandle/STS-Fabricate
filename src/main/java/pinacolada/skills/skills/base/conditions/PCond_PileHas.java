@@ -2,6 +2,7 @@ package pinacolada.skills.skills.base.conditions;
 
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
@@ -10,6 +11,7 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 
+@VisibleSkill
 public class PCond_PileHas extends PCond<PField_CardCategory>
 {
 

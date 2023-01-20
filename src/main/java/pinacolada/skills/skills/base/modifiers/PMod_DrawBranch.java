@@ -8,6 +8,7 @@ import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.actions.pileSelection.DrawCards;
 import pinacolada.actions.pileSelection.FetchFromPile;
 import pinacolada.actions.pileSelection.SelectFromPile;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
@@ -17,6 +18,7 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.utilities.ListSelection;
 
+@VisibleSkill
 public class PMod_DrawBranch extends PMod_DoBranch
 {
     public static final PSkillData<PField_CardCategory> DATA = register(PMod_DrawBranch.class, PField_CardCategory.class)

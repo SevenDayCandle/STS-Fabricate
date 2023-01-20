@@ -3,11 +3,13 @@ package pinacolada.cards.pcl.colorless;
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.actions.PCLActions;
+import pinacolada.annotations.VisibleCard;
 import pinacolada.cards.base.*;
 import pinacolada.cards.base.fields.PCLCardTag;
 import pinacolada.skills.skills.PSpecialSkill;
 import pinacolada.utilities.GameUtilities;
 
+@VisibleCard
 public class Madness extends PCLCard
 {
     public static final PCLCardData DATA = register(Madness.class)

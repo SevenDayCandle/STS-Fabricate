@@ -15,6 +15,8 @@ import pinacolada.utilities.PCLRenderHelpers;
 import java.util.ArrayList;
 import java.util.List;
 
+// Copied and modified from STS-AnimatorMod
+// TODO merge with PCLCardText
 public class PCLTextContext
 {
     protected final static float IMG_HEIGHT = 420f * Settings.scale;

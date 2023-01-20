@@ -5,6 +5,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import pinacolada.actions.PCLAction;
 import pinacolada.utilities.GameUtilities;
 
+// Copied and modified from STS-AnimatorMod
 public class RemoveBlock extends PCLAction
 {
     protected boolean skipAnimation;

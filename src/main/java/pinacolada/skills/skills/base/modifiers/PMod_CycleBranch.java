@@ -8,6 +8,7 @@ import extendedui.interfaces.delegates.FuncT5;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.actions.pileSelection.CycleCards;
 import pinacolada.actions.pileSelection.SelectFromPile;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.resources.PGR;
@@ -16,6 +17,7 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.utilities.ListSelection;
 
+@VisibleSkill
 public class PMod_CycleBranch extends PMod_DoBranch
 {
 

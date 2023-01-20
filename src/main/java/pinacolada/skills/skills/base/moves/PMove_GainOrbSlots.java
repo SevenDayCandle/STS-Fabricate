@@ -1,11 +1,13 @@
 package pinacolada.skills.skills.base.moves;
 
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
 
+@VisibleSkill
 public class PMove_GainOrbSlots extends PMove_Gain
 {
     public static final PSkillData<PField_Empty> DATA = register(PMove_GainOrbSlots.class, PField_Empty.class)

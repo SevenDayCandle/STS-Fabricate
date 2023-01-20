@@ -29,6 +29,7 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
+// Copied and modified from STS-AnimatorMod
 public class PCLLoadoutEditor extends AbstractScreen
 {
     public static final int MAX_CARD_SLOTS = 6;

@@ -1,6 +1,5 @@
 package pinacolada.resources.pcl;
 
-import basemod.BaseMod;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
@@ -11,12 +10,9 @@ import pinacolada.augments.PCLAugment;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.effects.AttackEffects;
 import pinacolada.effects.PCLEffekseerEFX;
-import pinacolada.effects.SFX;
 import pinacolada.resources.PCLAbstractPlayerData;
-import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
-import pinacolada.rewards.pcl.AugmentReward;
 import pinacolada.skills.PSkill;
 import pinacolada.ui.PCLAugmentPanelItem;
 import pinacolada.ui.cardEditor.PCLCustomCardSelectorScreen;
@@ -34,6 +30,7 @@ import pinacolada.ui.customRun.PCLCustomRunScreen;
 import pinacolada.ui.debug.PCLDebugAugmentPanel;
 import pinacolada.ui.debug.PCLDebugCardPanel;
 
+// TODO Split from PCLResources
 public class PCLCoreResources extends PCLResources<PCLCoreConfig, PCLCoreImages, PCLCoreTooltips>
 {
     public static final String ID = PGR.BASE_PREFIX;
@@ -63,56 +60,6 @@ public class PCLCoreResources extends PCLResources<PCLCoreConfig, PCLCoreImages,
         super(ID, AbstractCard.CardColor.COLORLESS, AbstractPlayer.PlayerClass.IRONCLAD, new PCLCoreConfig(), new PCLCoreImages(ID), null);
     }
 
-    protected void initializeEvents()
-    {
-        /*PCLEvent.RegisterEvents();*/
-    }
-
-    public void initializeInternal()
-    {
-    }
-
-    protected void initializeMonsters()
-    {
-    }
-
-    protected void initializePotions()
-    {
-        loadCustomPotions();
-    }
-
-    protected void initializePowers()
-    {
-    }
-
-    protected void initializeRewards()
-    {
-        AugmentReward.Serializer augmentSerializer = new AugmentReward.Serializer();
-        BaseMod.registerCustomReward(PCLEnum.Rewards.AUGMENT, augmentSerializer, augmentSerializer);
-    }
-
-    public void receiveAddAudio()
-    {
-        SFX.initialize();
-    }
-
-    public void receiveEditCards()
-    {
-        tooltips = new PCLCoreTooltips();
-        strings.initialize();
-        loadCustomCards();
-    }
-
-    public void receiveEditKeywords()
-    {
-        loadKeywords();
-    }
-
-    public void receiveEditRelics()
-    {
-        loadCustomRelics();
-    }
-
     public void receiveEditStrings()
     {
         loadCustomStrings(OrbStrings.class);
@@ -127,6 +74,13 @@ public class PCLCoreResources extends PCLResources<PCLCoreConfig, PCLCoreImages,
         loadCustomStrings(RunModStrings.class);
         loadCustomStrings(StanceStrings.class);
         loadAugmentStrings();
+    }
+
+    @Override
+    public void setupTooltips()
+    {
+        tooltips = new PCLCoreTooltips();
+        strings.initialize();
     }
 
     protected void postInitialize()

@@ -1,39 +1,30 @@
 package pinacolada.misc;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 
 public class SubscriberGroup<T>
 {
-    private final LinkedHashSet<T> subscribersCopy = new LinkedHashSet<>();
     private final LinkedHashSet<T> subscribers = new LinkedHashSet<>();
     private final LinkedHashSet<T> oneTimeSubscribers = new LinkedHashSet<>();
 
-    public int count()
+    public int size()
     {
         return subscribers.size() + oneTimeSubscribers.size();
     }
 
-    public LinkedHashSet<T> getSubscribers()
+    public ArrayList<T> getSubscribers()
     {
-        subscribersCopy.clear();
-        subscribersCopy.addAll(subscribers);
-        subscribersCopy.addAll(oneTimeSubscribers);
-
+        ArrayList<T> list = new ArrayList<>(subscribers);
+        list.addAll(oneTimeSubscribers);
         oneTimeSubscribers.clear();
-
-        return subscribersCopy;
+        return list;
     }
 
     public void clear()
     {
         oneTimeSubscribers.clear();
-        subscribersCopy.clear();
         subscribers.clear();
-    }
-
-    public boolean toggleSubscription(T subscriber, boolean subscribe)
-    {
-        return subscribe ? subscribe(subscriber) : unsubscribe(subscriber);
     }
 
     public boolean unsubscribe(T subscriber)

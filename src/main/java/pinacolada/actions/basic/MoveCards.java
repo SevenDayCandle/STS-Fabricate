@@ -13,6 +13,7 @@ import pinacolada.utilities.ListSelection;
 
 import java.util.ArrayList;
 
+// Copied and modified from STS-AnimatorMod
 public class MoveCards extends PCLActionWithCallback<ArrayList<AbstractCard>>
 {
     protected ArrayList<AbstractCard> selectedCards = new ArrayList<>();

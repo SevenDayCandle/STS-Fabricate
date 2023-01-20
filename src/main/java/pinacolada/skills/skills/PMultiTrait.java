@@ -6,6 +6,7 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUICardPreview;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.interfaces.markers.PMultiBase;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@VisibleSkill
 public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTrait<?>>
 {
     public static final PSkillData<PField_Empty> DATA = register(PMultiTrait.class, PField_Empty.class, 0, DEFAULT_MAX);

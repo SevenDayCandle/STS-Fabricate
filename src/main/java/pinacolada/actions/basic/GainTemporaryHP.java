@@ -8,6 +8,7 @@ import pinacolada.actions.PCLActionWithCallback;
 import pinacolada.effects.PCLEffects;
 import pinacolada.misc.CombatManager;
 
+// Copied and modified from STS-AnimatorMod
 public class GainTemporaryHP extends PCLActionWithCallback<AbstractCreature>
 {
     public GainTemporaryHP(AbstractCreature target, AbstractCreature source, int amount)

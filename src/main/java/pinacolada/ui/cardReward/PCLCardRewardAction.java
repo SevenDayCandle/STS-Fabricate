@@ -11,6 +11,7 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
+// Copied and modified from STS-AnimatorMod
 public abstract class PCLCardRewardAction extends EUIBase
 {
     protected final ArrayList<PCLCardRewardActionButton> buttons = new ArrayList<>();

@@ -15,6 +15,7 @@ import extendedui.ui.hitboxes.DraggableHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.utilities.EUIColors;
 
+// Copied and modified from STS-AnimatorMod
 public abstract class EUICardDraggable<T extends AbstractCard> extends EUIBase
 {
     protected static final float EPSILON = 0.00001f;

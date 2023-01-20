@@ -1,11 +1,13 @@
 package pinacolada.cards.pcl.curse;
 
+import pinacolada.annotations.VisibleCard;
 import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.fields.PCLCardTag;
 
+@VisibleCard
 public class Curse_Injury extends PCLCard
 {
     public static final PCLCardData DATA = register(Curse_Injury.class)

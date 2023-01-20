@@ -2,6 +2,7 @@ package pinacolada.skills.skills.base.conditions;
 
 import com.megacrit.cardcrawl.ui.panels.EnergyPanel;
 import extendedui.EUIRM;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.resources.PGR;
@@ -10,6 +11,7 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
 
+@VisibleSkill
 public class PCond_CheckEnergy extends PCond<PField_Not>
 {
     public static final PSkillData<PField_Not> DATA = register(PCond_CheckEnergy.class, PField_Not.class);

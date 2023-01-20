@@ -36,7 +36,7 @@ public class PCLLockOnPower extends PCLPower implements OnOrbApplyLockOnSubscrib
     {
         super.onInitialApplication();
 
-        CombatManager.onOrbApplyLockOn.subscribe(this);
+        CombatManager.subscribe(this);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class PCLLockOnPower extends PCLPower implements OnOrbApplyLockOnSubscrib
     {
         super.onRemove();
 
-        CombatManager.onOrbApplyLockOn.unsubscribe(this);
+        CombatManager.unsubscribe(this);
     }
 
     @Override

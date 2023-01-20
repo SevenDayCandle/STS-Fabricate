@@ -1,20 +1,31 @@
 package pinacolada.resources;
 
 import basemod.BaseMod;
+import basemod.ReflectionHacks;
 import basemod.devcommands.ConsoleCommand;
+import basemod.helpers.RelicType;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.localization.*;
+import com.megacrit.cardcrawl.potions.AbstractPotion;
+import com.megacrit.cardcrawl.powers.AbstractPower;
+import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUIUtils;
+import pinacolada.annotations.VisibleCard;
+import pinacolada.annotations.VisiblePotion;
+import pinacolada.annotations.VisiblePower;
+import pinacolada.annotations.VisibleRelic;
 import pinacolada.augments.AugmentStrings;
 import pinacolada.commands.*;
 import pinacolada.interfaces.markers.Hidden;
 import pinacolada.resources.pcl.PCLCoreResources;
+import pinacolada.rewards.pcl.AugmentReward;
+import pinacolada.skills.PSkill;
+import pinacolada.utilities.GameUtilities;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.HashMap;
@@ -203,7 +214,6 @@ public class PGR
 
     protected static void initialize(PCLResources<?,?,?> resources)
     {
-        resources.initializeInternal();
         resources.initializeColor();
 
         BaseMod.subscribe(resources);
@@ -220,6 +230,78 @@ public class PGR
         return false;
     }
 
+    public static void loadCustomCards()
+    {
+        for (Class<?> ct : GameUtilities.getClassesWithAnnotation(VisibleCard.class))
+        {
+            try
+            {
+                AbstractCard card = (AbstractCard) ct.getConstructor().newInstance();
+                if (UnlockTracker.isCardLocked(card.cardID))
+                {
+                    UnlockTracker.unlockCard(card.cardID);
+                    card.isLocked = false;
+                }
+
+                BaseMod.addCard(card);
+            }
+            catch (Exception e)
+            {
+                EUIUtils.logError(PGR.class, "Failed to load potion " + ct.getName() + ": " + e.getLocalizedMessage());
+            }
+        }
+    }
+
+    public static void loadCustomPotions()
+    {
+        for (Class<?> ct : GameUtilities.getClassesWithAnnotation(VisiblePotion.class))
+        {
+            try
+            {
+                AbstractPotion potion = (AbstractPotion) ct.getConstructor().newInstance();
+                // TODO get color from potion and add it to the proper pool
+                BaseMod.addPotion(potion.getClass(), potion.liquidColor, potion.hybridColor, potion.spotsColor, potion.ID);
+            }
+            catch (Exception e)
+            {
+                EUIUtils.logError(PGR.class, "Failed to load potion " + ct.getName() + ": " + e.getLocalizedMessage());
+            }
+        }
+    }
+
+    public static void loadCustomPowers()
+    {
+        for (Class<?> ct : GameUtilities.getClassesWithAnnotation(VisiblePower.class))
+        {
+            try
+            {
+                String id = ReflectionHacks.getPrivateStatic(ct, "POWER_ID");
+                BaseMod.addPower((Class<? extends AbstractPower>) ct, id != null ? id : PGR.core.createID(ct.getSimpleName()));
+            }
+            catch (Exception e)
+            {
+                EUIUtils.logError(PSkill.class, "Failed to load power " + ct.getName() + ": " + e.getLocalizedMessage());
+            }
+        }
+    }
+
+    public static void loadCustomRelics()
+    {
+        for (Class<?> ct : GameUtilities.getClassesWithAnnotation(VisibleRelic.class))
+        {
+            try
+            {
+                AbstractRelic relic = (AbstractRelic) ct.getConstructor().newInstance();
+                // TODO get color from relic and add it to the proper pool
+                BaseMod.addRelic(relic, RelicType.SHARED);
+            }
+            catch (Exception e)
+            {
+                EUIUtils.logError(PGR.class, "Failed to load relic " + ct.getName() + ": " + e.getLocalizedMessage());
+            }
+        }
+    }
+
     public static void registerCommands()
     {
         ConsoleCommand.addCommand("augment", AugmentCommand.class);
@@ -231,33 +313,9 @@ public class PGR
         ConsoleCommand.addCommand("unlockall", UnlockAllCommand.class);
     }
 
-    public void loadCustomCard(Class<?> type)
+    public static void registerRewards()
     {
-        if (!PGR.canInstantiate(type))
-        {
-            return;
-        }
-
-        AbstractCard card;
-        String id;
-
-        try
-        {
-            card = (AbstractCard) type.getConstructor().newInstance();
-            id = card.cardID;
-        }
-        catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e)
-        {
-            e.printStackTrace();
-            return;
-        }
-
-        if (UnlockTracker.isCardLocked(id))
-        {
-            UnlockTracker.unlockCard(id);
-            card.isLocked = false;
-        }
-
-        BaseMod.addCard(card);
+        AugmentReward.Serializer augmentSerializer = new AugmentReward.Serializer();
+        BaseMod.registerCustomReward(PCLEnum.Rewards.AUGMENT, augmentSerializer, augmentSerializer);
     }
 }

@@ -1,5 +1,6 @@
 package pinacolada.skills.skills.base.moves;
 
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.orbs.PCLOrbHelper;
@@ -9,6 +10,7 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Orb;
 import pinacolada.utilities.GameUtilities;
 
+@VisibleSkill
 public class PMove_TriggerOrb extends PMove<PField_Orb>
 {
     public static final PSkillData<PField_Orb> DATA = register(PMove_TriggerOrb.class, PField_Orb.class)

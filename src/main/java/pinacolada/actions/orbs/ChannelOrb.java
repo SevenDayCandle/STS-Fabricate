@@ -9,6 +9,7 @@ import pinacolada.orbs.PCLOrbHelper;
 
 import java.util.ArrayList;
 
+// Copied and modified from STS-AnimatorMod
 public class ChannelOrb extends PCLActionWithCallback<ArrayList<AbstractOrb>>
 {
     private final ArrayList<AbstractOrb> channeledOrbs = new ArrayList<>();

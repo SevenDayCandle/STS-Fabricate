@@ -21,6 +21,7 @@ import pinacolada.skills.*;
 import pinacolada.skills.skills.PDelay;
 import pinacolada.skills.skills.PMultiCond;
 import pinacolada.skills.skills.PMultiSkill;
+import pinacolada.skills.skills.base.delay.PDelayStartOfTurnPostDraw;
 import pinacolada.ui.common.PCLValueEditor;
 
 import java.util.ArrayList;
@@ -279,7 +280,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
         }
         if (delayMove == null)
         {
-            delayMove = new PDelay();
+            delayMove = new PDelayStartOfTurnPostDraw();
         }
         delayEditor.setValue(delayMove.amount, false);
         choicesEditor.setValue(multiSkill.amount, false);

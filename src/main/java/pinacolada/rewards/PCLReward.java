@@ -21,6 +21,7 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
+// Copied and modified from STS-AnimatorMod
 public abstract class PCLReward extends CustomReward
 {
     protected static final EUITooltip warningTip = new EUITooltip("", "");
@@ -39,75 +40,6 @@ public abstract class PCLReward extends CustomReward
     {
         super(rewardImage, text, type);
     }
-
-/*    private void AddCards(CardGroup pool, WeightedList<AbstractCard> cards, RewardContext context)
-    {
-        PCLLoadout series = context.series;
-
-        for (AbstractCard c : pool.group)
-        {
-            PCLCard card = PCLUtils.SafeCast(c, PCLCard.class);
-            if (card != null)
-            {
-                if (PCLLoadout.COLORLESS.equals(series)) // colorless
-                {
-                    cards.Add(card, card.rarity == AbstractCard.CardRarity.UNCOMMON ? 8 : 2);
-                }
-                else if (GameUtilities.CanReceiveAnyColorCard() && PCLLoadout.ANY.equals(series))
-                {
-                    int weight = context.GetRarityWeight(card.rarity);
-                    if (weight > 0)
-                    {
-                        cards.Add(GameUtilities.GetAnyColorCardFiltered(card.rarity, null, true), weight);
-                    }
-                }
-                else if (series.Equals(card.series) || PCLLoadout.ANY.equals(series))
-                {
-                    int weight = context.GetRarityWeight(card.rarity);
-                    if (weight > 0)
-                    {
-                        cards.Add(card, weight);
-                    }
-                }
-            }
-        }
-    }
-
-    public ArrayList<AbstractCard> GenerateCardReward(PCLLoadout series, CardGroup... groups)
-    {
-        final RewardContext context = new RewardContext(series);
-        final WeightedList<AbstractCard> randomPool = new WeightedList<>();
-        if (series != null && series != PCLLoadout.COLORLESS)
-        {
-            for (CardGroup cg : groups)
-            {
-                AddCards(cg, randomPool, context);
-            }
-        }
-        else
-        {
-            AddCards(AbstractDungeon.srcColorlessCardPool, randomPool, context);
-        }
-
-        final ArrayList<AbstractCard> result = new ArrayList<>();
-        while (result.size() < context.rewardSize && randomPool.Size() > 0)
-        {
-            AbstractCard card = randomPool.Retrieve(AbstractDungeon.cardRng);
-            if (card instanceof OnAddingToCardRewardListener && ((OnAddingToCardRewardListener) card).ShouldCancel())
-            {
-                continue;
-            }
-
-            context.AddCard(card.makeCopy(), result);
-        }
-
-        return result;
-    }
-
-    public ArrayList<AbstractCard> GenerateCardReward(PCLLoadout series)
-    {
-        return GenerateCardReward(series, AbstractDungeon.srcCommonCardPool, AbstractDungeon.srcUncommonCardPool, AbstractDungeon.srcRareCardPool);
-    }*/
 
     public void render(SpriteBatch sb)
     {

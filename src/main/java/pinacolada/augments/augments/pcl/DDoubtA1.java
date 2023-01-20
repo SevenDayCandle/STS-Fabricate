@@ -13,7 +13,6 @@ import pinacolada.skills.PSkill;
 @VisibleAugment
 public class DDoubtA1 extends PCLAugment
 {
-
     public static final PCLAugmentData DATA = register(DDoubtA1.class, 2, PCLAffinity.Purple)
             .setSkill(PCond.onTurnEnd(), PMove.applyToEveryone(2, PCLPowerHelper.Weak))
             .setReqs(setTypes(AbstractCard.CardType.ATTACK, AbstractCard.CardType.SKILL));

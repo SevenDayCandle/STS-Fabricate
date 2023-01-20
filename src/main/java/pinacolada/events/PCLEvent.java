@@ -19,6 +19,7 @@ import pinacolada.resources.pcl.PCLImages;
 
 import java.util.ArrayList;
 
+// Copied and modified from STS-AnimatorMod
 public abstract class PCLEvent extends EYBEvent
 {
     public static final PCLImages.Events IMAGES = PGR.PCL.Images.Events;

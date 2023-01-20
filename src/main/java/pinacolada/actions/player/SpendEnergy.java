@@ -5,6 +5,7 @@ import com.megacrit.cardcrawl.ui.panels.EnergyPanel;
 import pinacolada.actions.PCLActionWithCallbackT2;
 import pinacolada.misc.CombatManager;
 
+// Copied and modified from STS-AnimatorMod
 public class SpendEnergy extends PCLActionWithCallbackT2<Integer, Integer>
 {
     protected boolean canSpendLess;

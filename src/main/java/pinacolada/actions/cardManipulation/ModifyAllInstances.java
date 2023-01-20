@@ -8,6 +8,7 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.UUID;
 
+// Copied and modified from STS-AnimatorMod
 public class ModifyAllInstances extends PCLActionWithCallback<AbstractCard>
 {
     protected final UUID uuid;

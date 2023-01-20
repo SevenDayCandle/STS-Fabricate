@@ -1,5 +1,6 @@
 package pinacolada.skills.skills.base.conditions;
 
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.powers.PCLPowerHelper;
@@ -10,6 +11,7 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Power;
 import pinacolada.utilities.GameUtilities;
 
+@VisibleSkill
 public class PCond_PayPower extends PCond<PField_Power>
 {
     public static final PSkillData<PField_Power> DATA = register(PCond_PayPower.class, PField_Power.class)

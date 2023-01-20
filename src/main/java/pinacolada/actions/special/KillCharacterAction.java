@@ -8,6 +8,7 @@ import com.megacrit.cardcrawl.vfx.CollectorCurseEffect;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 
+// Copied and modified from STS-AnimatorMod
 public class KillCharacterAction extends PCLAction
 {
     public KillCharacterAction(AbstractCreature source, AbstractCreature target)

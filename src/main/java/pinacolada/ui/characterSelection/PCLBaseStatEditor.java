@@ -20,6 +20,7 @@ import extendedui.utilities.EUIFontHelper;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLLoadoutData;
 
+// Copied and modified from STS-AnimatorMod
 public class PCLBaseStatEditor extends EUIBase
 {
 

@@ -30,7 +30,7 @@ public class SorceryPower extends PCLPower implements OnChannelOrbSubscriber
     {
         super.onInitialApplication();
 
-        CombatManager.onChannelOrb.subscribe(this);
+        CombatManager.subscribe(this);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class SorceryPower extends PCLPower implements OnChannelOrbSubscriber
     {
         super.onRemove();
 
-        CombatManager.onChannelOrb.unsubscribe(this);
+        CombatManager.unsubscribe(this);
     }
 
     public float modifyOrbAmount(float initial)

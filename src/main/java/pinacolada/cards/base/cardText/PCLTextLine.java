@@ -8,6 +8,7 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.LinkedList;
 
+// Copied and modified from STS-AnimatorMod
 public class PCLTextLine
 {
     protected final static float IMG_HEIGHT = 420f * Settings.scale;

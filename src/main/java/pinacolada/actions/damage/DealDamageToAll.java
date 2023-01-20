@@ -19,6 +19,7 @@ import pinacolada.utilities.GameUtilities;
 import java.util.ArrayList;
 import java.util.function.BiConsumer;
 
+// Copied and modified from STS-AnimatorMod
 public class DealDamageToAll extends PCLActionWithCallback<ArrayList<AbstractCreature>>
 {
     public final int[] damage;

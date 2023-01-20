@@ -17,6 +17,7 @@ import pinacolada.resources.PGR;
 
 import java.util.Objects;
 
+// Copied and modified from STS-AnimatorMod
 public abstract class PCLStance extends AbstractStance
 {
     public static final String STANCE_ID = PGR.core.createID(PCLStance.class.getSimpleName());

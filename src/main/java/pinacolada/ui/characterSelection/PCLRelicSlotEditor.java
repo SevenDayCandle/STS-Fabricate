@@ -16,6 +16,7 @@ import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLRelicSlot;
 
+// Copied and modified from STS-AnimatorMod
 public class PCLRelicSlotEditor extends EUIBase
 {
     public static final float SPACING = 64f * Settings.scale;

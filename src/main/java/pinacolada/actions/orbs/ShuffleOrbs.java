@@ -6,6 +6,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RandomizedList;
 
+// Copied and modified from STS-AnimatorMod
 public class ShuffleOrbs extends PCLAction
 {
     public ShuffleOrbs(int times)

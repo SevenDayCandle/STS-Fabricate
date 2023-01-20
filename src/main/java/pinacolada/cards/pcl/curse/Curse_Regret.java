@@ -1,5 +1,6 @@
 package pinacolada.cards.pcl.curse;
 
+import pinacolada.annotations.VisibleCard;
 import pinacolada.cards.base.*;
 import pinacolada.cards.base.fields.PCLCardTag;
 import pinacolada.skills.PCond;
@@ -7,6 +8,7 @@ import pinacolada.skills.skills.base.modifiers.PMod_PerCard;
 import pinacolada.skills.skills.base.moves.PMove_GainTempHP;
 import pinacolada.skills.skills.base.moves.PMove_LoseHP;
 
+@VisibleCard
 public class Curse_Regret extends PCLCard
 {
     public static final PCLCardData DATA = register(Curse_Regret.class)

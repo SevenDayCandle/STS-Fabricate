@@ -6,6 +6,7 @@ import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.ActionT2;
 import pinacolada.actions.PCLActionWithCallback;
 
+// Copied and modified from STS-AnimatorMod
 public class CallbackAction extends PCLActionWithCallback<AbstractGameAction>
 {
     private final AbstractGameAction action;

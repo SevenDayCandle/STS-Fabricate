@@ -24,6 +24,7 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
+// Copied and modified from STS-AnimatorMod
 public class SelectCreature extends PCLActionWithCallback<AbstractCreature>
 {
     protected ActionT1<AbstractCreature> onHovering;

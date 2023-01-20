@@ -3,6 +3,7 @@ package pinacolada.cards.base.cardText;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import extendedui.EUIUtils;
 
+// Copied and modified from STS-AnimatorMod
 public class NewLineToken extends PCLTextToken
 {
     public static final char NEWLINE = '|';

@@ -15,6 +15,7 @@ import pinacolada.relics.pcl.AbstractCubes;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
+// Copied and modified from STS-AnimatorMod
 public class PCLCardRewardRerollAction extends PCLCardRewardAction
 {
     protected static final float REWARD_INDEX = AbstractCard.IMG_HEIGHT * 0.515f;

@@ -6,6 +6,7 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIUtils;
 import pinacolada.actions.PCLActions;
+import pinacolada.annotations.VisibleCard;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLCardTarget;
@@ -21,6 +22,7 @@ import pinacolada.utilities.GameUtilities;
 import java.util.HashMap;
 import java.util.UUID;
 
+@VisibleCard
 public class Curse_Normality extends PCLCard
 {
     public static final PCLCardData DATA = register(Curse_Normality.class)
@@ -67,8 +69,7 @@ public class Curse_Normality extends PCLCard
         public boolean triggerOnCreate(AbstractCard c, boolean startOfBattle)
         {
             tryActivate();
-            CombatManager.onApplyPower.subscribe(this);
-            CombatManager.onPhaseChanged.subscribe(this);
+            CombatManager.subscribe(this);
             return false;
         }
 

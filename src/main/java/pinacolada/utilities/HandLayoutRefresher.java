@@ -16,7 +16,7 @@ public class HandLayoutRefresher implements OnPhaseChangedSubscriber
         {
             refresh();
 
-            CombatManager.onPhaseChanged.unsubscribe(this);
+            CombatManager.unsubscribe(OnPhaseChangedSubscriber.class, this);
         }
     }
 

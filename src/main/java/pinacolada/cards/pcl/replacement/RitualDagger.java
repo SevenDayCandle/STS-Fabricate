@@ -1,6 +1,7 @@
 package pinacolada.cards.pcl.replacement;
 
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
+import pinacolada.annotations.VisibleCard;
 import pinacolada.cards.base.*;
 import pinacolada.cards.base.fields.PCLCardTag;
 import pinacolada.effects.PCLEffekseerEFX;
@@ -10,6 +11,7 @@ import pinacolada.skills.skills.base.conditions.PCond_Fatal;
 import pinacolada.skills.skills.base.moves.PMove_RemovePower;
 import pinacolada.skills.skills.special.moves.PMove_PermanentUpgrade;
 
+@VisibleCard
 public class RitualDagger extends PCLCard
 {
     public static final PCLCardData DATA = register(RitualDagger.class)

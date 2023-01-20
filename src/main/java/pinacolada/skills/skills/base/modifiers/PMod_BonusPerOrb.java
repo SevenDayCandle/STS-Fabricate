@@ -2,6 +2,7 @@ package pinacolada.skills.skills.base.modifiers;
 
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUIUtils;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.resources.PGR;
@@ -10,6 +11,7 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Orb;
 import pinacolada.utilities.GameUtilities;
 
+@VisibleSkill
 public class PMod_BonusPerOrb extends PMod_BonusPer<PField_Orb>
 {
 

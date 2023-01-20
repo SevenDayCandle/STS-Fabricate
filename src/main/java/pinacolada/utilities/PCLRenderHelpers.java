@@ -32,6 +32,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.text.DecimalFormat;
 
+// Copied and modified from STS-AnimatorMod
 public class PCLRenderHelpers extends EUIRenderHelpers
 {
     public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.##");

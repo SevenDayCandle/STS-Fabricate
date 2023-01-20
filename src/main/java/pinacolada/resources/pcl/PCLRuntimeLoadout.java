@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
+// Copied and modified from STS-AnimatorMod
+// TODO Rework
 public class PCLRuntimeLoadout
 {
     public final int id;

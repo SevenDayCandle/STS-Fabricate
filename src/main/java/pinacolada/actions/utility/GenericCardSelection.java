@@ -10,7 +10,8 @@ import pinacolada.utilities.ListSelection;
 
 import java.util.ArrayList;
 
-// TODO merge with SelectFromPile
+// TODO merge with CardFilterAction
+// Copied and modified from STS-AnimatorMod
 public class GenericCardSelection extends PCLActionWithCallback<ArrayList<AbstractCard>>
 {
     protected ArrayList<AbstractCard> result = new ArrayList<>();

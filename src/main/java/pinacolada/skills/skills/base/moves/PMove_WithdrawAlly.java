@@ -1,6 +1,7 @@
 package pinacolada.skills.skills.base.moves;
 
 import extendedui.EUIUtils;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.monsters.PCLCardAlly;
@@ -12,6 +13,7 @@ import pinacolada.skills.fields.PField_Empty;
 
 import java.util.List;
 
+@VisibleSkill
 public class PMove_WithdrawAlly extends PMove<PField_Empty>
 {
     public static final PSkillData<PField_Empty> DATA = register(PMove_WithdrawAlly.class, PField_Empty.class)

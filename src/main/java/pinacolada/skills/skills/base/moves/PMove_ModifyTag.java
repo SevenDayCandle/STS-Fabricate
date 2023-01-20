@@ -3,12 +3,14 @@ package pinacolada.skills.skills.base.moves;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
 import extendedui.interfaces.delegates.ActionT1;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTag;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardModifyTag;
 
+@VisibleSkill
 public class PMove_ModifyTag extends PMove_Modify<PField_CardModifyTag>
 {
     public static final PSkillData<PField_CardModifyTag> DATA = PMove_Modify.register(PMove_ModifyTag.class, PField_CardModifyTag.class)

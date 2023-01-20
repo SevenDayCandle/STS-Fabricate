@@ -1,5 +1,6 @@
 package pinacolada.skills.skills.base.moves;
 
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.powers.PCLPowerHelper;
@@ -9,6 +10,7 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.fields.PField_Power;
 
+@VisibleSkill
 public class PMove_AddPowerBonus extends PMove<PField_Power>
 {
     public static final PSkillData<PField_Power> DATA = register(PMove_AddPowerBonus.class, PField_Power.class, -DEFAULT_MAX, DEFAULT_MAX);

@@ -7,6 +7,7 @@ import pinacolada.cards.base.PCLCard;
 import java.util.ArrayList;
 import java.util.List;
 
+// Copied and modified from STS-AnimatorMod
 public class PCLTextParser
 {
 

@@ -19,6 +19,7 @@ import pinacolada.actions.PCLActionWithCallbackT2;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.special.DelayAllActions;
 import pinacolada.effects.PCLEffects;
+import pinacolada.misc.CombatManager;
 import pinacolada.resources.PCLEnum;
 import pinacolada.utilities.GameUtilities;
 
@@ -291,7 +292,7 @@ public class PlayCard extends PCLActionWithCallbackT2<AbstractMonster, AbstractC
     {
         addToLimbo();
 
-        GameUtilities.refreshHandLayout();
+        CombatManager.queueRefreshHandLayout();
         AbstractDungeon.getCurrRoom().souls.remove(card);
 
         if (currentPosition != null)

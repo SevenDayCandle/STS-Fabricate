@@ -11,6 +11,7 @@ import pinacolada.effects.PCLEffects;
 import pinacolada.powers.PCLAffinityPower;
 import pinacolada.utilities.GameUtilities;
 
+// Copied and modified from STS-AnimatorMod
 public class ApplyAffinityPower extends PCLActionWithCallback<AbstractPower>
 {
     public PCLAffinityPower power;

@@ -6,6 +6,7 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.vfx.megacritCopy.UpgradeShineEffect2;
+import pinacolada.misc.CombatManager;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.ListSelection;
@@ -80,7 +81,7 @@ public class UpgradeFromPile extends SelectFromPile
             PCLEffects.TopLevelQueue.showCardBriefly(card.makeStatEquivalentCopy(), x, Settings.HEIGHT / 2f);
         }
 
-        GameUtilities.refreshHandLayout(false);
+        CombatManager.queueRefreshHandLayout();
 
         super.complete(result);
     }

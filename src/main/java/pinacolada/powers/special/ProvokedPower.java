@@ -43,7 +43,7 @@ public class ProvokedPower extends PCLPower implements OnMonsterMoveSubscriber
     public void onInitialApplication()
     {
         super.onInitialApplication();
-        CombatManager.onMonsterMove.subscribe(this);
+        CombatManager.subscribe(this);
 
         final AbstractMonster monster = EUIUtils.safeCast(owner, AbstractMonster.class);
         if (monster != null)
@@ -83,7 +83,7 @@ public class ProvokedPower extends PCLPower implements OnMonsterMoveSubscriber
     public void onRemove()
     {
         super.onRemove();
-        CombatManager.onMonsterMove.unsubscribe(this);
+        CombatManager.unsubscribe(this);
 
         AbstractMonster m = EUIUtils.safeCast(this.owner, AbstractMonster.class);
         if (m != null && this.moveIntent != null)

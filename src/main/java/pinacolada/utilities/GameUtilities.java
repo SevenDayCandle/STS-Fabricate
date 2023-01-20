@@ -46,6 +46,7 @@ import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.AbstractScreen;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.GenericCondition;
+import org.scannotation.AnnotationDB;
 import pinacolada.actions.PCLActions;
 import pinacolada.blights.common.UpgradedHand;
 import pinacolada.cards.base.*;
@@ -72,9 +73,11 @@ import pinacolada.stances.PCLStanceHelper;
 import java.lang.reflect.Field;
 import java.util.*;
 
+import static com.evacipated.cardcrawl.modthespire.Patcher.annotationDBMap;
 import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.actionManager;
 import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.player;
 
+// Copied and modified from STS-AnimatorMod
 public class GameUtilities
 {
     private static final AbstractCard.CardRarity[] poolOrdering = AbstractCard.CardRarity.values();
@@ -694,6 +697,28 @@ public class GameUtilities
         result.add(AbstractDungeon.rareCardPool);
         result.add(AbstractDungeon.curseCardPool);
         return result;
+    }
+
+    public static List<Class<?>> getClassesWithAnnotation(Class<?> annotation)
+    {
+        final ArrayList<Class<?>> names = new ArrayList<>();
+        for (AnnotationDB db : annotationDBMap.values())
+        {
+            Map<String, Set<String>> annotations = db.getAnnotationIndex();
+            for (String key : annotations.getOrDefault(annotation.getName(), new HashSet<>()))
+            {
+                try
+                {
+                    Class<?> annotatedClass = Class.forName(key);
+                    names.add(annotatedClass);
+                }
+                catch (Exception ignored)
+                {
+
+                }
+            }
+        }
+        return names;
     }
 
     public static AbstractRoom getCurrentRoom()
@@ -2179,23 +2204,6 @@ public class GameUtilities
         }
     }
 
-    public static void refreshHandLayout()
-    {
-        refreshHandLayout(false);
-    }
-
-    public static void refreshHandLayout(boolean refreshInstantly)
-    {
-        if (refreshInstantly)
-        {
-            handLayoutRefresher.refresh();
-        }
-        else
-        {
-            CombatManager.onPhaseChanged.subscribe(handLayoutRefresher);
-        }
-    }
-
     public static void refreshOrbs()
     {
         for (AbstractOrb orb : player.orbs)
@@ -2474,7 +2482,7 @@ public class GameUtilities
             AbstractDungeon.player.energy.use(card.energyOnUse);
         }
 
-        refreshHandLayout();
+        CombatManager.queueRefreshHandLayout();
         return amount;
     }
 

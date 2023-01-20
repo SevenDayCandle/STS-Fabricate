@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 
+// Copied and modified from STS-AnimatorMod
 public class SequentialAction extends PCLAction
 {
     private final AbstractGameAction action;

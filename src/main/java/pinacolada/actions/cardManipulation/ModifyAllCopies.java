@@ -6,6 +6,7 @@ import extendedui.interfaces.delegates.ActionT2;
 import pinacolada.actions.PCLActionWithCallback;
 import pinacolada.utilities.GameUtilities;
 
+// Copied and modified from STS-AnimatorMod
 public class ModifyAllCopies extends PCLActionWithCallback<AbstractCard>
 {
     protected final String cardID;

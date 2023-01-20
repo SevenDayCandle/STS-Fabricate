@@ -2,6 +2,7 @@ package pinacolada.skills.skills.base.conditions;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIUtils;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.resources.PGR;
@@ -12,6 +13,7 @@ import pinacolada.skills.fields.PField_Not;
 
 import java.util.List;
 
+@VisibleSkill
 public class PCond_HP extends PCond<PField_Not>
 {
     public static final PSkillData<PField_Not> DATA = register(PCond_HP.class, PField_Not.class)

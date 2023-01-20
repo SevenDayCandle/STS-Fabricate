@@ -2,6 +2,7 @@ package pinacolada.skills.skills.base.modifiers;
 
 import com.megacrit.cardcrawl.stances.NeutralStance;
 import extendedui.EUIUtils;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
@@ -10,6 +11,7 @@ import pinacolada.skills.fields.PField_Stance;
 import pinacolada.stances.PCLStanceHelper;
 import pinacolada.utilities.GameUtilities;
 
+@VisibleSkill
 public class PMod_BonusInStance extends PMod_BonusOn<PField_Stance>
 {
 

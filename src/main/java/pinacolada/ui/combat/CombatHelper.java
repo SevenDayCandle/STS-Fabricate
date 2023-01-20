@@ -7,6 +7,7 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
+// Copied and modified from STS-AnimatorMod
 // TODO Merge with PowerFormulaDisplay
 public class CombatHelper
 {

@@ -3,6 +3,7 @@ package pinacolada.skills.skills.base.modifiers;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
@@ -16,6 +17,7 @@ import pinacolada.skills.fields.PField_CardCategory;
 
 
 
+@VisibleSkill
 public class PMod_PerCardPlayed extends PMod<PField_CardCategory>
 {
     public static final PSkillData<PField_CardCategory> DATA = register(PMod_PerCardPlayed.class, PField_CardCategory.class).selfTarget();

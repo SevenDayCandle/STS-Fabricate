@@ -25,6 +25,7 @@ import java.util.StringJoiner;
 
 import static pinacolada.ui.characterSelection.PCLLoadoutEditor.MAX_RELIC_SLOTS;
 
+// Copied and modified from STS-AnimatorMod
 public abstract class PCLLoadout
 {
     public static final int GOLD_AND_HP_EDITOR_ASCENSION_REQUIRED = 7;

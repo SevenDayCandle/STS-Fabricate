@@ -5,6 +5,7 @@ import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 import pinacolada.actions.PCLActionWithCallback;
 import pinacolada.effects.PCLEffects;
 
+// Copied and modified from STS-AnimatorMod
 public class PlayVFX extends PCLActionWithCallback<AbstractGameEffect>
 {
     private AbstractGameEffect effect;

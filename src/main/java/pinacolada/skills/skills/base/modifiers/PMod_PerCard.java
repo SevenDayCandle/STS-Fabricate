@@ -2,6 +2,7 @@ package pinacolada.skills.skills.base.modifiers;
 
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.PCLCardTarget;
 import pinacolada.cards.base.PCLUseInfo;
@@ -12,6 +13,7 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 
+@VisibleSkill
 public class PMod_PerCard extends PMod<PField_CardCategory>
 {
 
