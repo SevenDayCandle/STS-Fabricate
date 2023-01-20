@@ -73,38 +73,14 @@ public class GlyphBlight extends AbstractGlyphBlight
                     {
                         Glyph e = (Glyph) selection.get(0);
                         e.onUse(null);
+                        for (PSkill<?> skill : e.getEffects())
+                        {
+                            skill.subscribeChildren();
+                        }
                         this.glyph = e;
                         flash();
                     }
                 });
-    }
-
-    @Override
-    public void atTurnStart()
-    {
-        super.atTurnStart();
-
-        if (this.glyph != null)
-        {
-            for (PSkill be : this.glyph.getEffects())
-            {
-                be.triggerOnStartOfTurn();
-            }
-        }
-    }
-
-    @Override
-    public void onPlayerEndTurn()
-    {
-        super.onPlayerEndTurn();
-
-        if (this.glyph != null)
-        {
-            for (PSkill be : this.glyph.getEffects())
-            {
-                be.triggerOnEndOfTurn(false);
-            }
-        }
     }
 
     @Override

@@ -6,7 +6,7 @@ import extendedui.EUIRM;
 import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLAttackType;
 import pinacolada.cards.base.PCLCardTarget;
-import pinacolada.cards.base.PCLUseInfo;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.cards.base.fields.PCLCardTag;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.skills.base.traits.*;

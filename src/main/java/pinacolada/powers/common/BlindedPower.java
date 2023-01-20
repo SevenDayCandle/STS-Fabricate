@@ -8,13 +8,13 @@ import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import com.megacrit.cardcrawl.orbs.Dark;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.utilities.ColoredString;
-import pinacolada.interfaces.subscribers.OnChannelOrbSubscriber;
-import pinacolada.interfaces.subscribers.OnEvokeOrbSubscriber;
+import pinacolada.interfaces.subscribers.OnOrbChannelSubscriber;
+import pinacolada.interfaces.subscribers.OnOrbEvokeSubscriber;
 import pinacolada.misc.CombatManager;
 import pinacolada.powers.PCLSubscribingPower;
 import pinacolada.utilities.GameUtilities;
 
-public class BlindedPower extends PCLSubscribingPower implements OnChannelOrbSubscriber, OnEvokeOrbSubscriber
+public class BlindedPower extends PCLSubscribingPower implements OnOrbChannelSubscriber, OnOrbEvokeSubscriber
 {
     public static final String POWER_ID = createFullID(BlindedPower.class);
     public static final int DAMAGE_REDUCTION_LV1 = 3;

@@ -3,6 +3,7 @@ package pinacolada.skills.skills.base.conditions;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.interfaces.subscribers.OnAllyTriggerSubscriber;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
@@ -10,7 +11,7 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 
 @VisibleSkill
-public class PCond_OnAllyTrigger extends PCond_Delegate
+public class PCond_OnAllyTrigger extends PCond_Delegate implements OnAllyTriggerSubscriber
 {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_OnAllyTrigger.class, PField_CardCategory.class, 1, 1)
             .pclOnly()
@@ -27,9 +28,9 @@ public class PCond_OnAllyTrigger extends PCond_Delegate
     }
 
     @Override
-    public boolean triggerOnAllyTrigger(PCLCard c, PCLCardAlly ally)
+    public void onAllyTrigger(PCLCard card, PCLCardAlly ally)
     {
-        return triggerOnCard(c, ally);
+        triggerOnCard(card, ally);
     }
 
     @Override

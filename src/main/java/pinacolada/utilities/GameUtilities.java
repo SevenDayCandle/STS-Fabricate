@@ -2251,6 +2251,8 @@ public class GameUtilities
         if (canRetain(card))
         {
             PCLCardTag.Retain.add(card, 1);
+            CombatManager.onTagChanged(card, PCLCardTag.Retain, 1);
+            CombatManager.onCardRetain(card);
             return true;
         }
 

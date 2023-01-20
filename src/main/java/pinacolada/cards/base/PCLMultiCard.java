@@ -1,7 +1,6 @@
 package pinacolada.cards.base;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.evacipated.cardcrawl.mod.stslib.cards.interfaces.StartupCard;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.AbstractCreature;
@@ -16,6 +15,7 @@ import pinacolada.augments.PCLAugment;
 import pinacolada.cards.base.fields.PCLCardTag;
 import pinacolada.cards.pcl.special.MysteryCard;
 import pinacolada.effects.PCLEffects;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
@@ -331,97 +331,89 @@ public abstract class PCLMultiCard extends PCLCard
         }
 
         @Override
-        public boolean triggerOnAllyDeath(PCLCard c, PCLCardAlly ally)
+        public void triggerOnAllyDeath(PCLCard c, PCLCardAlly ally)
         {
-            return doPCL(card -> card.triggerWhenKilled(ally));
+            doPCL(card -> card.triggerWhenKilled(ally));
         }
 
         @Override
-        public boolean triggerOnAllySummon(PCLCard c, PCLCardAlly ally)
+        public void triggerOnAllySummon(PCLCard c, PCLCardAlly ally)
         {
-            return doPCL(card -> card.triggerWhenSummoned(ally));
+            doPCL(card -> card.triggerWhenSummoned(ally));
         }
 
         @Override
-        public boolean triggerOnAllyTrigger(PCLCard c, PCLCardAlly ally)
+        public void triggerOnAllyTrigger(PCLCard c, PCLCardAlly ally)
         {
-            return doPCL(card -> card.triggerWhenTriggered(ally));
+            doPCL(card -> card.triggerWhenTriggered(ally));
         }
 
         @Override
-        public boolean triggerOnAllyWithdraw(PCLCard c, PCLCardAlly ally)
+        public void triggerOnAllyWithdraw(PCLCard c, PCLCardAlly ally)
         {
-            return doPCL(card -> card.triggerWhenWithdrawn(ally));
+            doPCL(card -> card.triggerWhenWithdrawn(ally));
         }
 
         @Override
-        public boolean triggerOnReshuffle(AbstractCard c, CardGroup sourcePile)
+        public void triggerOnReshuffle(AbstractCard c, CardGroup sourcePile)
         {
-            return doPCL(card -> card.triggerOnReshuffle(sourcePile));
+            doPCL(card -> card.triggerOnReshuffle(sourcePile));
         }
 
         @Override
-        public boolean triggerOnCreate(AbstractCard c, boolean startOfBattle)
+        public void triggerOnCreate(AbstractCard c, boolean startOfBattle)
         {
-            return doPCL(card -> card.triggerWhenCreated(startOfBattle));
+            doPCL(card -> card.triggerWhenCreated(startOfBattle));
         }
 
         @Override
-        public boolean triggerOnDiscard(AbstractCard c)
+        public void triggerOnDiscard(AbstractCard c)
         {
-            return doCard(AbstractCard::triggerOnManualDiscard);
+            doCard(AbstractCard::triggerOnManualDiscard);
         }
 
         @Override
-        public boolean triggerOnDraw(AbstractCard c)
+        public void triggerOnDraw(AbstractCard c)
         {
-            return doCard(AbstractCard::triggerWhenDrawn);
+            doCard(AbstractCard::triggerWhenDrawn);
         }
 
         @Override
         public boolean triggerOnEndOfTurn(boolean isUsing)
         {
-            return doCard(AbstractCard::triggerOnEndOfTurnForPlayingCard);
+            boolean result = EUIUtils.any(multicard.getCards(), c -> c.dontTriggerOnUseCard);
+            doCard(AbstractCard::triggerOnEndOfTurnForPlayingCard);
+            return result;
         }
 
         @Override
-        public boolean triggerOnExhaust(AbstractCard c)
+        public void triggerOnExhaust(AbstractCard c)
         {
-            return doCard(AbstractCard::triggerOnExhaust);
+            doCard(AbstractCard::triggerOnExhaust);
         }
 
         @Override
-        public boolean triggerOnOtherCardPlayed(AbstractCard c)
+        public void triggerOnOtherCardPlayed(AbstractCard c)
         {
-            return doCard(card -> card.triggerOnOtherCardPlayed(c));
+            doCard(card -> card.triggerOnOtherCardPlayed(c));
         }
 
         @Override
-        public boolean triggerOnPurge(AbstractCard c)
+        public void triggerOnPurge(AbstractCard c)
         {
-            return doPCL(PCLCard::triggerOnPurge);
+            doPCL(PCLCard::triggerOnPurge);
         }
 
         @Override
-        public boolean triggerOnScry()
+        public void triggerOnRetain(AbstractCard c)
         {
-            return doCard(AbstractCard::triggerOnScry);
+            doCard(AbstractCard::onRetained);
         }
 
         @Override
-        public boolean triggerOnStartOfTurn()
+        public void triggerOnScry(AbstractCard c)
         {
-            return doCard(AbstractCard::atTurnStartPreDraw);
-        }
-
-        @Override
-        public boolean triggerOnStartup()
-        {
-            return doCard((c) -> {
-                if (c instanceof StartupCard) {
-                    ((StartupCard) c).atBattleStartPreDraw();
-                }
-            });
+            doCard(AbstractCard::triggerOnScry);
         }
 
         @Override
@@ -446,22 +438,20 @@ public abstract class PCLMultiCard extends PCLCard
         }
 
 
-        protected boolean doCard(ActionT1<AbstractCard> childAction)
+        protected void doCard(ActionT1<AbstractCard> childAction)
         {
             for (AbstractCard c : multicard.getCards()) {
                 childAction.invoke(c);
             }
-            return true;
         }
 
-        protected boolean doPCL(ActionT1<PCLCard> childAction)
+        protected void doPCL(ActionT1<PCLCard> childAction)
         {
             for (AbstractCard c : multicard.getCards()) {
                 if (c instanceof PCLCard) {
                     childAction.invoke((PCLCard) c);
                 }
             }
-            return true;
         }
     }
 }

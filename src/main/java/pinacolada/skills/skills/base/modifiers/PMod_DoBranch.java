@@ -12,7 +12,7 @@ import pinacolada.actions.pileSelection.SelectFromPile;
 import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.PCLCardTarget;
-import pinacolada.cards.base.PCLUseInfo;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;

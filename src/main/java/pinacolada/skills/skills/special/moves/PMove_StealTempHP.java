@@ -9,7 +9,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.actions.damage.DealDamage;
 import pinacolada.actions.damage.DealDamageToAll;
 import pinacolada.cards.base.PCLCardTarget;
-import pinacolada.cards.base.PCLUseInfo;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.vfx.megacritCopy.HemokinesisEffect2;
 import pinacolada.interfaces.markers.Hidden;

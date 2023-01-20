@@ -6,7 +6,8 @@ import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardTarget;
-import pinacolada.cards.base.PCLUseInfo;
+import pinacolada.misc.PCLUseInfo;
+import pinacolada.interfaces.subscribers.OnOrbEvokeSubscriber;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
@@ -15,7 +16,7 @@ import pinacolada.skills.fields.PField_Orb;
 import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
-public class PCond_EvokeOrb extends PCond<PField_Orb>
+public class PCond_EvokeOrb extends PCond<PField_Orb> implements OnOrbEvokeSubscriber
 {
     public static final PSkillData<PField_Orb> DATA = register(PCond_EvokeOrb.class, PField_Orb.class)
             .selfTarget();
@@ -63,13 +64,12 @@ public class PCond_EvokeOrb extends PCond<PField_Orb>
     }
 
     @Override
-    public boolean triggerOnOrbEvoke(AbstractOrb o)
+    public void onEvokeOrb(AbstractOrb orb)
     {
-        if (this.childEffect != null && fields.getOrbFilter().invoke(o))
+        if (fields.getOrbFilter().invoke(orb))
         {
-            this.childEffect.use(makeInfo(null));
+            useFromTrigger(makeInfo(null).setData(orb));
         }
-        return true;
     }
 
     @Override

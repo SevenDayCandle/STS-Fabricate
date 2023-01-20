@@ -7,7 +7,7 @@ import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUICardPreview;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardTarget;
-import pinacolada.cards.base.PCLUseInfo;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PMove;

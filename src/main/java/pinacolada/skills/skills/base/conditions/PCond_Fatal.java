@@ -6,7 +6,7 @@ import extendedui.interfaces.delegates.ActionT0;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardTarget;
-import pinacolada.cards.base.PCLUseInfo;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PLimit;
 import pinacolada.skills.PSkillData;

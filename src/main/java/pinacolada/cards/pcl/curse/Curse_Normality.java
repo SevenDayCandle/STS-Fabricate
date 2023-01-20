@@ -66,11 +66,11 @@ public class Curse_Normality extends PCLCard
         }
 
         @Override
-        public boolean triggerOnCreate(AbstractCard c, boolean startOfBattle)
+        public void triggerOnCreate(AbstractCard c, boolean startOfBattle)
         {
+            super.triggerOnCreate(c, startOfBattle);
             tryActivate();
             CombatManager.subscribe(this);
-            return false;
         }
 
         // Apply the power then remove it, to allow effects that trigger on power application to activate
@@ -183,16 +183,5 @@ public class Curse_Normality extends PCLCard
                 }
             }
         }
-
-        /*        @Override
-        public boolean TryApplyPower(AbstractPower power, AbstractCreature target, AbstractCreature source, AbstractGameAction action)
-        {
-            if (HasNormality() && (PCLGameUtilities.IsCommonBuff(power) || PCLGameUtilities.IsCommonDebuff(power)))
-            {
-                StorePower(power, target, power.amount);
-                return false;
-            }
-            return true;
-        }*/
     }
 }

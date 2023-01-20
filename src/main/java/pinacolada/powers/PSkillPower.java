@@ -3,23 +3,15 @@ package pinacolada.powers;
 import com.badlogic.gdx.graphics.Color;
 import com.evacipated.cardcrawl.mod.stslib.patches.NeutralPowertypePatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.localization.PowerStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
-import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.utilities.ColoredString;
-import pinacolada.cards.base.AffinityReactions;
-import pinacolada.cards.base.PCLAffinity;
-import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.interfaces.markers.EditorCard;
-import pinacolada.interfaces.subscribers.*;
-import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PTrigger;
@@ -30,9 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class PSkillPower extends PCLPower implements OnAllyDeathSubscriber, OnAllySummonSubscriber, OnAllyTriggerSubscriber, OnAllyWithdrawSubscriber, OnCardCreatedSubscriber,
-                                                     OnCardDiscardedSubscriber, OnCardPurgedSubscriber, OnCardReshuffledSubscriber, OnChannelOrbSubscriber, OnElementReactSubscriber,
-                                                     OnMatchSubscriber, OnNotMatchSubscriber, OnOrbApplyFocusSubscriber, OnOrbPassiveEffectSubscriber, OnPCLClickableUsedSubscriber, OnShuffleSubscriber, OnIntensifySubscriber
+public class PSkillPower extends PCLPower
 {
     public final ArrayList<PTrigger> ptriggers = new ArrayList<>();
 
@@ -49,6 +39,7 @@ public class PSkillPower extends PCLPower implements OnAllyDeathSubscriber, OnAl
         for (PTrigger effect : effects)
         {
             this.ptriggers.add(effect.makeCopy());
+            effect.power = this;
             effect.resetUses();
 
             if (this.powerStrings.NAME == null)
@@ -83,7 +74,7 @@ public class PSkillPower extends PCLPower implements OnAllyDeathSubscriber, OnAl
         }
     }
 
-    public static String createPowerID(PSkill effect)
+    public static String createPowerID(PSkill<?> effect)
     {
         return effect != null ? deriveID(effect.source != null ? effect.source.getID() + effect.source.getPowerEffects().indexOf(effect) : effect.effectID) : null;
     }
@@ -142,187 +133,27 @@ public class PSkillPower extends PCLPower implements OnAllyDeathSubscriber, OnAl
         }
     }
 
-    public void onRemove()
-    {
-        super.onRemove();
-        unsubscribeFromAll();
-    }
-
     public void onInitialApplication()
     {
         super.onInitialApplication();
-        // TODO remove after you implement fields returning classes to subscribe to
-        subscribeToAll();
+        for (PTrigger effect : ptriggers)
+        {
+            effect.subscribeChildren();
+        }
     }
 
-    @Override
-    public void onApplyPower(AbstractPower power, AbstractCreature target, AbstractCreature source)
+    public void onRemove()
     {
-        super.onApplyPower(power, target, source);
-
-        if (EUIUtils.any(ptriggers, effect -> effect.triggerOnApplyPower(source, target, power)))
+        super.onRemove();
+        for (PTrigger effect : ptriggers)
         {
-            flash();
+            effect.unsubscribeChildren();
         }
     }
 
     public PSkillPower makeCopyOnTarget(AbstractCreature m, int amount)
     {
         return new PSkillPower(m, amount, EUIUtils.map(ptriggers, PTrigger::makeCopy));
-    }
-
-    @Override
-    public void onAllyDeath(PCLCard returned, PCLCardAlly ally)
-    {
-        if (EUIUtils.any(ptriggers, effect -> effect.triggerOnAllyDeath(returned, ally)))
-        {
-            flash();
-        }
-    }
-
-    @Override
-    public void onAllySummon(PCLCard card, PCLCardAlly ally)
-    {
-        if (EUIUtils.any(ptriggers, effect -> effect.triggerOnAllySummon(card, ally)))
-        {
-            flash();
-        }
-    }
-
-    @Override
-    public void onAllyTrigger(PCLCard card, PCLCardAlly ally)
-    {
-        if (EUIUtils.any(ptriggers, effect -> effect.triggerOnAllyTrigger(card, ally)))
-        {
-            flash();
-        }
-    }
-
-    @Override
-    public void onAllyWithdraw(PCLCard returned, PCLCardAlly ally)
-    {
-        if (EUIUtils.any(ptriggers, effect -> effect.triggerOnAllyWithdraw(returned, ally)))
-        {
-            flash();
-        }
-    }
-
-    @Override
-    public void onApplyFocus(AbstractOrb o)
-    {
-        for (PTrigger effect : ptriggers)
-        {
-            effect.triggerOnOrbFocus(o);
-        }
-    }
-
-    @Override
-    public void onCardCreated(AbstractCard c, boolean b)
-    {
-        if (EUIUtils.any(ptriggers, effect -> effect.triggerOnCreate(c, b)))
-        {
-            flash();
-        }
-    }
-
-    @Override
-    public void onCardDiscarded(AbstractCard c)
-    {
-        if (EUIUtils.any(ptriggers, effect -> effect.triggerOnDiscard(c)))
-        {
-            flash();
-        }
-    }
-
-    @Override
-    public void onCardReshuffled(AbstractCard c, CardGroup cardGroup)
-    {
-        if (EUIUtils.any(ptriggers, effect -> effect.triggerOnReshuffle(c, cardGroup)))
-        {
-            flash();
-        }
-    }
-
-    @Override
-    public void onChannelOrb(AbstractOrb o)
-    {
-        if (EUIUtils.any(ptriggers, effect -> effect.triggerOnOrbChannel(o)))
-        {
-            flash();
-        }
-    }
-
-    @Override
-    public boolean onClickablePowerUsed(PCLClickableUse c, AbstractMonster target, int uses)
-    {
-        if (EUIUtils.any(ptriggers, effect -> effect.triggerOnPCLPowerUsed(c)))
-        {
-            flash();
-        }
-        return true;
-    }
-
-    @Override
-    public void onElementReact(AffinityReactions reactions, AbstractCreature m)
-    {
-        if (EUIUtils.any(ptriggers, effect -> effect.triggerOnElementReact(reactions, m)))
-        {
-            flash();
-        }
-    }
-
-    @Override
-    public void onIntensify(PCLAffinity button)
-    {
-        if (EUIUtils.any(ptriggers, effect -> effect.triggerOnIntensify(button)))
-        {
-            flash();
-        }
-    }
-
-    @Override
-    public void onMatch(AbstractCard c, PCLUseInfo info)
-    {
-        if (EUIUtils.any(ptriggers, effect -> effect.triggerOnMatch(c, info)))
-        {
-            flash();
-        }
-    }
-
-    @Override
-    public void onNotMatch(AbstractCard c, PCLUseInfo info)
-    {
-        if (EUIUtils.any(ptriggers, effect -> effect.triggerOnMismatch(c, info)))
-        {
-            flash();
-        }
-    }
-
-    @Override
-    public void onOrbPassiveEffect(AbstractOrb o)
-    {
-        if (EUIUtils.any(ptriggers, effect -> effect.triggerOnOrbTrigger(o)))
-        {
-            flash();
-        }
-    }
-
-    @Override
-    public void onPurge(AbstractCard c)
-    {
-        if (EUIUtils.any(ptriggers, effect -> effect.triggerOnPurge(c)))
-        {
-            flash();
-        }
-    }
-
-    @Override
-    public void onShuffle(boolean triggerRelics)
-    {
-        if (EUIUtils.any(ptriggers, effect -> effect.triggerOnShuffle(triggerRelics)))
-        {
-            flash();
-        }
     }
 
     public float atDamageGive(float damage, DamageInfo.DamageType type, AbstractCard card)
@@ -341,87 +172,6 @@ public class PSkillPower extends PCLPower implements OnAllyDeathSubscriber, OnAl
             damage = effect.atDamageReceive(owner, damage, type, card);
         }
         return super.atDamageReceive(damage, type, card);
-    }
-
-    public void atStartOfTurnPostDraw()
-    {
-        super.atStartOfTurnPostDraw();
-        if (EUIUtils.any(ptriggers, PSkill::triggerOnStartOfTurn))
-        {
-            flash();
-        }
-    }
-
-    public void atEndOfTurn(boolean isPlayer)
-    {
-        super.atEndOfTurn(isPlayer);
-        if (EUIUtils.any(ptriggers, effect -> effect.triggerOnEndOfTurn(true)))
-        {
-            flash();
-        }
-    }
-
-    public void onScry()
-    {
-        super.onScry();
-        if (EUIUtils.any(ptriggers, PSkill::triggerOnScry))
-        {
-            flash();
-        }
-    }
-
-    public int onAttacked(DamageInfo info, int damageAmount)
-    {
-        for (PTrigger effect : ptriggers)
-        {
-            damageAmount = effect.triggerOnAttacked(info, damageAmount);
-        }
-        return super.onAttacked(info, damageAmount);
-    }
-
-    public void onAttack(DamageInfo info, int damageAmount, AbstractCreature target)
-    {
-        for (PTrigger effect : ptriggers)
-        {
-            damageAmount = effect.triggerOnAttack(info, damageAmount, target);
-        }
-        super.onAttack(info, damageAmount, target);
-    }
-
-    public void onEvokeOrb(AbstractOrb c)
-    {
-        super.onEvokeOrb(c);
-        if (EUIUtils.any(ptriggers, effect -> effect.triggerOnOrbEvoke(c)))
-        {
-            flash();
-        }
-    }
-
-    public void onCardDraw(AbstractCard c)
-    {
-        super.onCardDraw(c);
-        if (EUIUtils.any(ptriggers, effect -> effect.triggerOnDraw(c)))
-        {
-            flash();
-        }
-    }
-
-    public void onPlayCard(AbstractCard c, AbstractMonster m)
-    {
-        super.onPlayCard(c, m);
-        if (EUIUtils.any(ptriggers, effect -> effect.triggerOnOtherCardPlayed(c)))
-        {
-            flash();
-        }
-    }
-
-    public void onExhaust(AbstractCard c)
-    {
-        super.onExhaust(c);
-        if (EUIUtils.any(ptriggers, effect -> effect.triggerOnExhaust(c)))
-        {
-            flash();
-        }
     }
 
     public float modifyBlock(float damage, AbstractCard card)

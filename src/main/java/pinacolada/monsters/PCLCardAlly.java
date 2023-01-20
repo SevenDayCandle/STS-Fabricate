@@ -23,7 +23,7 @@ import extendedui.ui.tooltips.EUICardPreview;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardTarget;
-import pinacolada.cards.base.PCLUseInfo;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
 import pinacolada.interfaces.markers.SummonOnlyMove;
@@ -99,11 +99,11 @@ public class PCLCardAlly extends PCLCreature
         {
             this.stunned = true;
         }
-        for (PSkill s : card.getFullEffects())
+        for (PSkill<?> s : card.getFullEffects())
         {
             if (s instanceof SummonOnlyMove)
             {
-                s.use(new PCLUseInfo(card, this, this));
+                s.use(CombatManager.playerSystem.generateInfo(card, this, this));
             }
         }
 
@@ -195,7 +195,7 @@ public class PCLCardAlly extends PCLCreature
         if (card != null)
         {
             refreshAction();
-            final PCLUseInfo info = new PCLUseInfo(card, this, target);
+            final PCLUseInfo info = CombatManager.playerSystem.generateInfo(card, this, target);
             if (animation instanceof PCLAnimation)
             {
                 PCLActions.bottom.callback(() -> {

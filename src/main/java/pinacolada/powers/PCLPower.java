@@ -30,7 +30,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.actions.powers.IncreasePower;
 import pinacolada.actions.powers.ReducePower;
 import pinacolada.cards.base.PCLCardData;
-import pinacolada.cards.base.PCLUseInfo;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
 import pinacolada.effects.powers.PCLFlashPowerEffect;

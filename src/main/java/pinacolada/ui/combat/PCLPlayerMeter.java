@@ -17,7 +17,7 @@ import extendedui.ui.tooltips.FakeFtue;
 import pinacolada.cards.base.AffinityReactions;
 import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.PCLUseInfo;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.interfaces.markers.ClickableProvider;
 import pinacolada.powers.PCLAffinityPower;
 import pinacolada.powers.PCLClickableUse;
@@ -83,6 +83,11 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implement
 
     public void flashAffinity(PCLAffinity affinity)
     {
+    }
+
+    public PCLUseInfo generateInfo(AbstractCard card, AbstractCreature source, AbstractCreature target)
+    {
+        return new PCLUseInfo(card, source, target);
     }
 
     public PCLAffinity get(int target)

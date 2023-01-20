@@ -4,7 +4,7 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
 import pinacolada.actions.PCLActions;
-import pinacolada.cards.base.PCLUseInfo;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.interfaces.markers.SummonOnlyMove;
 import pinacolada.powers.PCLPower;
 import pinacolada.resources.pcl.PCLCoreStrings;

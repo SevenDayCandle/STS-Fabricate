@@ -2,10 +2,9 @@ package pinacolada.interfaces.subscribers;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.annotations.CombatSubscriber;
-import pinacolada.misc.PCLUseInfo;
 
 @CombatSubscriber
-public interface OnMatchSubscriber extends PCLCombatSubscriber
+public interface OnCardExhaustedSubscriber extends PCLCombatSubscriber
 {
-    void onMatch(AbstractCard card, PCLUseInfo info);
+    void onCardExhausted(AbstractCard card);
 }

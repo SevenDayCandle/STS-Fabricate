@@ -6,7 +6,8 @@ import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardTarget;
-import pinacolada.cards.base.PCLUseInfo;
+import pinacolada.misc.PCLUseInfo;
+import pinacolada.interfaces.subscribers.OnApplyPowerSubscriber;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
@@ -17,7 +18,7 @@ import pinacolada.utilities.GameUtilities;
 import java.util.List;
 
 @VisibleSkill
-public class PCond_CheckPower extends PCond<PField_Power>
+public class PCond_CheckPower extends PCond<PField_Power> implements OnApplyPowerSubscriber
 {
     public static final PSkillData<PField_Power> DATA = register(PCond_CheckPower.class, PField_Power.class);
 
@@ -82,14 +83,13 @@ public class PCond_CheckPower extends PCond<PField_Power>
     }
 
     @Override
-    public boolean triggerOnApplyPower(AbstractCreature s, AbstractCreature t, AbstractPower c)
+    public void onApplyPower(AbstractPower power, AbstractCreature t, AbstractCreature source)
     {
-        if (this.childEffect != null && fields.powers.isEmpty() ? c.type == (fields.debuff ? AbstractPower.PowerType.DEBUFF : AbstractPower.PowerType.BUFF)
-                : fields.getPowerFilter().invoke(c) && s == getSourceCreature() && target == PCLCardTarget.Self ^ !(s == t))
+        if (this.childEffect != null && fields.powers.isEmpty() ? power.type == (fields.debuff ? AbstractPower.PowerType.DEBUFF : AbstractPower.PowerType.BUFF)
+                : fields.getPowerFilter().invoke(power) && source == getSourceCreature() && target == PCLCardTarget.Self ^ !(source == t))
         {
-            this.childEffect.use(makeInfo(null));
+            useFromTrigger(makeInfo(null).setData(power));
         }
-        return true;
     }
 
     @Override

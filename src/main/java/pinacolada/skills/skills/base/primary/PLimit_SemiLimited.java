@@ -1,7 +1,7 @@
 package pinacolada.skills.skills.base.primary;
 
 import pinacolada.annotations.VisibleSkill;
-import pinacolada.cards.base.PCLUseInfo;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PLimit;
 import pinacolada.skills.PSkillData;

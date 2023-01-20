@@ -6,15 +6,11 @@ import com.badlogic.gdx.math.MathUtils;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
-import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.localization.LocalizedStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
-import com.megacrit.cardcrawl.orbs.AbstractOrb;
-import com.megacrit.cardcrawl.powers.AbstractPower;
-import com.megacrit.cardcrawl.stances.AbstractStance;
 import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
@@ -35,8 +31,10 @@ import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.interfaces.markers.PointerProvider;
+import pinacolada.interfaces.subscribers.*;
+import pinacolada.misc.CombatManager;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.monsters.PCLCardAlly;
-import pinacolada.powers.PCLClickableUse;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
@@ -1037,7 +1035,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
 
     protected PCLUseInfo makeInfo(AbstractCreature target)
     {
-        return new PCLUseInfo(sourceCard, getSourceCreature(), target);
+        return CombatManager.playerSystem.generateInfo(sourceCard, getSourceCreature(), target);
     }
 
     public PSkill<T> makePreviews(RotatingList<EUICardPreview> previews)
@@ -1347,149 +1345,198 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return this;
     }
 
-    public boolean triggerOnAllyDeath(PCLCard c, PCLCardAlly ally)
+    public void subscribeChildren()
     {
-        return this.childEffect != null && this.childEffect.triggerOnAllySummon(c, ally);
+        if (this instanceof PCLCombatSubscriber)
+        {
+            ((PCLCombatSubscriber) this).subscribeToAll();
+        }
+        if (this.childEffect != null)
+        {
+            this.childEffect.subscribeChildren();
+        }
     }
 
-    public boolean triggerOnAllySummon(PCLCard c, PCLCardAlly ally)
+    public void unsubscribeChildren()
     {
-        return this.childEffect != null && this.childEffect.triggerOnAllySummon(c, ally);
+        if (this instanceof PCLCombatSubscriber)
+        {
+            ((PCLCombatSubscriber) this).unsubscribeFromAll();
+        }
+        if (this.childEffect != null)
+        {
+            this.childEffect.unsubscribeChildren();
+        }
     }
 
-    public boolean triggerOnAllyTrigger(PCLCard c, PCLCardAlly ally)
+    public void triggerOnAllyDeath(PCLCard c, PCLCardAlly ally)
     {
-        return this.childEffect != null && this.childEffect.triggerOnAllySummon(c, ally);
+        if (this instanceof OnAllyDeathSubscriber)
+        {
+            ((OnAllyDeathSubscriber) this).onAllyDeath(c, ally);
+        }
+        else if (this.childEffect != null)
+        {
+            this.childEffect.triggerOnAllyDeath(c, ally);
+        }
     }
 
-    public boolean triggerOnAllyWithdraw(PCLCard c, PCLCardAlly ally)
+    public void triggerOnAllySummon(PCLCard c, PCLCardAlly ally)
     {
-        return this.childEffect != null && this.childEffect.triggerOnAllySummon(c, ally);
+        if (this instanceof OnAllySummonSubscriber)
+        {
+            ((OnAllySummonSubscriber) this).onAllySummon(c, ally);
+        }
+        else if (this.childEffect != null)
+        {
+            this.childEffect.triggerOnAllySummon(c, ally);
+        }
     }
 
-    public boolean triggerOnApplyPower(AbstractCreature source, AbstractCreature target, AbstractPower c)
+    public void triggerOnAllyTrigger(PCLCard c, PCLCardAlly ally)
     {
-        return this.childEffect != null && this.childEffect.triggerOnApplyPower(source, target, c);
+        if (this instanceof OnAllyTriggerSubscriber)
+        {
+            ((OnAllyTriggerSubscriber) this).onAllyTrigger(c, ally);
+        }
+        else if (this.childEffect != null)
+        {
+            this.childEffect.triggerOnAllyTrigger(c, ally);
+        }
     }
 
-    public int triggerOnAttack(DamageInfo info, int damageAmount, AbstractCreature target)
+    public void triggerOnAllyWithdraw(PCLCard c, PCLCardAlly ally)
     {
-        return this.childEffect != null ? this.childEffect.triggerOnAttack(info, damageAmount, target) : damageAmount;
+        if (this instanceof OnAllyWithdrawSubscriber)
+        {
+            ((OnAllyWithdrawSubscriber) this).onAllyWithdraw(c, ally);
+        }
+        else if (this.childEffect != null)
+        {
+            this.childEffect.triggerOnAllyWithdraw(c, ally);
+        }
     }
 
-    public int triggerOnAttacked(DamageInfo info, int damageAmount)
+    public void triggerOnCreate(AbstractCard c, boolean startOfBattle)
     {
-        return this.childEffect != null ? this.childEffect.triggerOnAttacked(info, damageAmount) : damageAmount;
+        if (this instanceof OnCardCreatedSubscriber)
+        {
+            ((OnCardCreatedSubscriber) this).onCardCreated(c, startOfBattle);
+        }
+        else if (this.childEffect != null)
+        {
+            this.childEffect.triggerOnCreate(c, startOfBattle);
+        }
     }
 
-    public boolean triggerOnCreate(AbstractCard c, boolean startOfBattle)
+    public void triggerOnDiscard(AbstractCard c)
     {
-        return this.childEffect != null && this.childEffect.triggerOnCreate(c, startOfBattle);
+        if (this instanceof OnCardDiscardedSubscriber)
+        {
+            ((OnCardDiscardedSubscriber) this).onCardDiscarded(c);
+        }
+        else if (this.childEffect != null)
+        {
+            this.childEffect.triggerOnDiscard(c);
+        }
     }
 
-    public boolean triggerOnDiscard(AbstractCard c)
+    public void triggerOnDraw(AbstractCard c)
     {
-        return this.childEffect != null && this.childEffect.triggerOnDiscard(c);
-    }
-
-    public boolean triggerOnDraw(AbstractCard c)
-    {
-        return this.childEffect != null && this.childEffect.triggerOnDraw(c);
-    }
-
-    public boolean triggerOnElementReact(AffinityReactions reactions, AbstractCreature target)
-    {
-        return this.childEffect != null && this.childEffect.triggerOnElementReact(reactions, target);
+        if (this instanceof OnCardDrawnSubscriber)
+        {
+            ((OnCardDrawnSubscriber) this).onCardDrawn(c);
+        }
+        else if (this.childEffect != null)
+        {
+            this.childEffect.triggerOnDraw(c);
+        }
     }
 
     public boolean triggerOnEndOfTurn(boolean isUsing)
     {
-        return this.childEffect != null && this.childEffect.triggerOnEndOfTurn(isUsing);
-    }
-
-    public boolean triggerOnExhaust(AbstractCard c)
-    {
-        return this.childEffect != null && this.childEffect.triggerOnExhaust(c);
-    }
-
-    public boolean triggerOnIntensify(PCLAffinity af)
-    {
-        return this.childEffect != null && this.childEffect.triggerOnIntensify(af);
-    }
-
-    public boolean triggerOnMatch(AbstractCard c, PCLUseInfo info)
-    {
-        return this.childEffect != null && this.childEffect.triggerOnMatch(c, info);
-    }
-
-    public boolean triggerOnMismatch(AbstractCard c, PCLUseInfo info)
-    {
-        return this.childEffect != null && this.childEffect.triggerOnMismatch(c, info);
-    }
-
-    public boolean triggerOnOrbChannel(AbstractOrb c)
-    {
-        return this.childEffect != null && this.childEffect.triggerOnOrbChannel(c);
-    }
-
-    public boolean triggerOnOrbEvoke(AbstractOrb c)
-    {
-        return this.childEffect != null && this.childEffect.triggerOnOrbEvoke(c);
-    }
-
-    public boolean triggerOnOrbFocus(AbstractOrb c)
-    {
-        return this.childEffect != null && this.childEffect.triggerOnOrbFocus(c);
-    }
-
-    public boolean triggerOnOrbTrigger(AbstractOrb c)
-    {
-        return this.childEffect != null && this.childEffect.triggerOnOrbTrigger(c);
-    }
-
-    public boolean triggerOnOtherCardPlayed(AbstractCard c)
-    {
-        return this.childEffect != null && this.childEffect.triggerOnOtherCardPlayed(c);
-    }
-
-    public boolean triggerOnPCLPowerUsed(PCLClickableUse c)
-    {
-        return this.childEffect != null && this.childEffect.triggerOnPCLPowerUsed(c);
-    }
-
-    public boolean triggerOnPurge(AbstractCard c)
-    {
-        return this.childEffect != null && this.childEffect.triggerOnPurge(c);
-    }
-
-    public boolean triggerOnReshuffle(AbstractCard c, CardGroup sourcePile)
-    {
-        return this.childEffect != null && this.childEffect.triggerOnReshuffle(c, sourcePile);
-    }
-
-    public boolean triggerOnScry()
-    {
-        return this.childEffect != null && this.childEffect.triggerOnScry();
-    }
-
-    public boolean triggerOnShuffle(boolean triggerRelics)
-    {
-        return this.childEffect != null && this.childEffect.triggerOnShuffle(triggerRelics);
-    }
-
-    public boolean triggerOnStanceChange(AbstractStance stance1, AbstractStance stance2)
-    {
+        if (this instanceof OnEndOfTurnFirstSubscriber)
+        {
+            ((OnEndOfTurnFirstSubscriber) this).onEndOfTurnFirst(isUsing);
+            return true;
+        }
+        else if (this.childEffect != null)
+        {
+            return this.childEffect.triggerOnEndOfTurn(isUsing);
+        }
         return false;
     }
 
-    public boolean triggerOnStartOfTurn()
+    public void triggerOnExhaust(AbstractCard c)
     {
-        return this.childEffect != null && this.childEffect.triggerOnStartOfTurn();
+        if (this instanceof OnCardExhaustedSubscriber)
+        {
+            ((OnCardExhaustedSubscriber) this).onCardExhausted(c);
+        }
+        else if (this.childEffect != null)
+        {
+            this.childEffect.triggerOnExhaust(c);
+        }
     }
 
-    public boolean triggerOnStartup()
+    public void triggerOnOtherCardPlayed(AbstractCard c)
     {
-        return this.childEffect != null && this.childEffect.triggerOnStartup();
+        if (this instanceof OnCardPlayedSubscriber)
+        {
+            ((OnCardPlayedSubscriber) this).onCardPlayed(c);
+        }
+        else if (this.childEffect != null)
+        {
+            this.childEffect.triggerOnOtherCardPlayed(c);
+        }
+    }
+
+    public void triggerOnPurge(AbstractCard c)
+    {
+        if (this instanceof OnCardPurgedSubscriber)
+        {
+            ((OnCardPurgedSubscriber) this).onPurge(c);
+        }
+        else if (this.childEffect != null)
+        {
+            this.childEffect.triggerOnPurge(c);
+        }
+    }
+
+    public void triggerOnReshuffle(AbstractCard c, CardGroup sourcePile)
+    {
+        if (this instanceof OnCardReshuffledSubscriber)
+        {
+            ((OnCardReshuffledSubscriber) this).onCardReshuffled(c, sourcePile);
+        }
+        else if (this.childEffect != null)
+        {
+            this.childEffect.triggerOnReshuffle(c, sourcePile);
+        }
+    }
+
+    public void triggerOnRetain(AbstractCard c)
+    {
+        if (this instanceof OnCardRetainSubscriber)
+        {
+            ((OnCardRetainSubscriber) this).onRetain(c);
+        }
+        else if (this.childEffect != null)
+        {
+            this.childEffect.triggerOnRetain(c);
+        }
+    }
+
+    public void triggerOnScry(AbstractCard c)
+    {
+        if (this instanceof OnCardScrySubscriber)
+        {
+            ((OnCardScrySubscriber) this).onScry(c);
+        }
+        else if (this.childEffect != null)
+        {
+            this.childEffect.triggerOnScry(c);
+        }
     }
 
     public void use(PCLUseInfo info)
@@ -1514,6 +1561,11 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
     {
         this.useParent = value;
         return this;
+    }
+
+    public boolean tryPassParent(PCLUseInfo info)
+    {
+        return parent == null || parent.tryPassParent(info);
     }
 
     public String wrapAmount(int input)

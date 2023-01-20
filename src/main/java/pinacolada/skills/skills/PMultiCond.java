@@ -5,17 +5,15 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
-import com.megacrit.cardcrawl.orbs.AbstractOrb;
-import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIUtils;
-import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.tooltips.EUICardPreview;
 import pinacolada.annotations.VisibleSkill;
-import pinacolada.cards.base.*;
+import pinacolada.cards.base.PCLCard;
+import pinacolada.cards.base.PCLCardTarget;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.interfaces.markers.PointerProvider;
 import pinacolada.monsters.PCLCardAlly;
-import pinacolada.powers.PCLClickableUse;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PSkill;
@@ -176,12 +174,6 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
     }
 
     @Override
-    public boolean triggerOnElementReact(AffinityReactions reactions, AbstractCreature target)
-    {
-        return triggerOn((effect) -> effect.triggerOnElementReact(reactions, target));
-    }
-
-    @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
     {
         return effects.isEmpty() || (fields.or) ? EUIUtils.any(effects, c -> c.checkCondition(info, isUsing, fromTrigger)) : EUIUtils.all(effects, c -> c.checkCondition(info, isUsing, fromTrigger));
@@ -241,167 +233,6 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         {
             effect.refresh(m, c, refreshVal);
         }
-    }
-
-    @Override
-    public boolean triggerOnReshuffle(AbstractCard c, CardGroup sourcePile)
-    {
-        return triggerOn((effect) -> effect.triggerOnReshuffle(c, sourcePile));
-    }
-
-    @Override
-    public boolean triggerOnAllyDeath(PCLCard c, PCLCardAlly ally)
-    {
-        return triggerOn(effect -> effect.triggerOnAllyDeath(c, ally));
-    }
-
-    @Override
-    public boolean triggerOnAllySummon(PCLCard c, PCLCardAlly ally)
-    {
-        return triggerOn(effect -> effect.triggerOnAllySummon(c, ally));
-    }
-
-    @Override
-    public boolean triggerOnAllyTrigger(PCLCard c, PCLCardAlly ally)
-    {
-        return triggerOn(effect -> effect.triggerOnAllyTrigger(c, ally));
-    }
-
-    @Override
-    public boolean triggerOnAllyWithdraw(PCLCard c, PCLCardAlly ally)
-    {
-        return triggerOn(effect -> effect.triggerOnAllyWithdraw(c, ally));
-    }
-
-    @Override
-    public boolean triggerOnApplyPower(AbstractCreature source, AbstractCreature target, AbstractPower c)
-    {
-        return triggerOn(() -> this.childEffect.triggerOnApplyPower(source, target, c), makeInfo(target).setData(c));
-    }
-
-    @Override
-    public boolean triggerOnCreate(AbstractCard c, boolean startOfBattle)
-    {
-        return triggerOn((effect) -> effect.triggerOnCreate(c, startOfBattle));
-    }
-
-    @Override
-    public boolean triggerOnDiscard(AbstractCard c)
-    {
-        return triggerOn((effect) -> effect.triggerOnDiscard(c));
-    }
-
-    @Override
-    public boolean triggerOnDraw(AbstractCard c)
-    {
-        return triggerOn((effect) -> effect.triggerOnDraw(c));
-    }
-
-    @Override
-    public boolean triggerOnEndOfTurn(boolean isUsing)
-    {
-        for (PSkill<?> effect : effects)
-        {
-            if (effect.triggerOnEndOfTurn(isUsing))
-            {
-                if (isUsing && this.childEffect != null)
-                {
-                    this.childEffect.use(makeInfo(null));
-                }
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public boolean triggerOnExhaust(AbstractCard c)
-    {
-        return triggerOn((effect) -> effect.triggerOnExhaust(c));
-    }
-
-    @Override
-    public boolean triggerOnIntensify(PCLAffinity c)
-    {
-        return triggerOn((effect) -> effect.triggerOnIntensify(c), makeInfo(null).setData(c));
-    }
-
-    @Override
-    public boolean triggerOnMatch(AbstractCard c, PCLUseInfo info)
-    {
-        return triggerOn((effect) -> effect.triggerOnMatch(c, info), info);
-    }
-
-    @Override
-    public boolean triggerOnMismatch(AbstractCard c, PCLUseInfo info)
-    {
-        return triggerOn((effect) -> effect.triggerOnMismatch(c, info), info);
-    }
-
-    @Override
-    public boolean triggerOnOrbChannel(AbstractOrb c)
-    {
-        return triggerOn((effect) -> effect.triggerOnOrbChannel(c), makeInfo(null).setData(c));
-    }
-
-    @Override
-    public boolean triggerOnOrbFocus(AbstractOrb c)
-    {
-        return triggerOn((effect) -> effect.triggerOnOrbFocus(c), makeInfo(null).setData(c));
-    }
-
-    @Override
-    public boolean triggerOnOrbEvoke(AbstractOrb c)
-    {
-        return triggerOn((effect) -> effect.triggerOnOrbEvoke(c), makeInfo(null).setData(c));
-    }
-
-    @Override
-    public boolean triggerOnOrbTrigger(AbstractOrb c)
-    {
-        return triggerOn((effect) -> effect.triggerOnOrbTrigger(c), makeInfo(null).setData(c));
-    }
-
-    @Override
-    public boolean triggerOnOtherCardPlayed(AbstractCard c)
-    {
-        return triggerOn((effect) -> effect.triggerOnOtherCardPlayed(c));
-    }
-
-    @Override
-    public boolean triggerOnPCLPowerUsed(PCLClickableUse c)
-    {
-        return triggerOn((effect) -> effect.triggerOnPCLPowerUsed(c));
-    }
-
-    @Override
-    public boolean triggerOnPurge(AbstractCard c)
-    {
-        return triggerOn((effect) -> effect.triggerOnPurge(c));
-    }
-
-    @Override
-    public boolean triggerOnScry()
-    {
-        return triggerOn(PSkill::triggerOnScry);
-    }
-
-    @Override
-    public boolean triggerOnShuffle(boolean c)
-    {
-        return triggerOn((effect) -> effect.triggerOnShuffle(c));
-    }
-
-    @Override
-    public boolean triggerOnStartOfTurn()
-    {
-        return triggerOn(PSkill::triggerOnStartOfTurn);
-    }
-
-    @Override
-    public boolean triggerOnStartup()
-    {
-        return triggerOn(() -> this.childEffect.triggerOnStartup());
     }
 
     @Override
@@ -511,21 +342,133 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         return this;
     }
 
-    protected boolean triggerOn(FuncT1<Boolean, PSkill<?>> action)
-    {
-        return triggerOn(action, makeInfo(null));
-    }
-
-    protected boolean triggerOn(FuncT1<Boolean, PSkill<?>> action, PCLUseInfo info)
+    public void triggerOnAllyDeath(PCLCard c, PCLCardAlly ally)
     {
         for (PSkill<?> effect : effects)
         {
-            if (action.invoke(effect) && this.childEffect != null)
-            {
-                this.childEffect.use(info);
-                return true;
-            }
+            effect.triggerOnAllyDeath(c, ally);
         }
-        return false;
+    }
+
+    public void triggerOnAllySummon(PCLCard c, PCLCardAlly ally)
+    {
+        for (PSkill<?> effect : effects)
+        {
+            effect.triggerOnAllySummon(c, ally);
+        }
+    }
+
+    public void triggerOnAllyTrigger(PCLCard c, PCLCardAlly ally)
+    {
+        for (PSkill<?> effect : effects)
+        {
+            effect.triggerOnAllyTrigger(c, ally);
+        }
+    }
+
+    public void triggerOnAllyWithdraw(PCLCard c, PCLCardAlly ally)
+    {
+        for (PSkill<?> effect : effects)
+        {
+            effect.triggerOnAllyWithdraw(c, ally);
+        }
+    }
+
+    public void triggerOnCreate(AbstractCard c, boolean startOfBattle)
+    {
+        for (PSkill<?> effect : effects)
+        {
+            effect.triggerOnCreate(c, startOfBattle);
+        }
+    }
+
+    public void triggerOnDiscard(AbstractCard c)
+    {
+        for (PSkill<?> effect : effects)
+        {
+            effect.triggerOnDiscard(c);
+        }
+    }
+
+    public void triggerOnDraw(AbstractCard c)
+    {
+        for (PSkill<?> effect : effects)
+        {
+            effect.triggerOnDraw(c);
+        }
+    }
+
+    public boolean triggerOnEndOfTurn(boolean isUsing)
+    {
+        boolean trigger = false;
+        for (PSkill<?> effect : effects)
+        {
+            trigger = trigger | effect.triggerOnEndOfTurn(isUsing);
+        }
+        return trigger;
+    }
+
+    public void triggerOnExhaust(AbstractCard c)
+    {
+        for (PSkill<?> effect : effects)
+        {
+            effect.triggerOnExhaust(c);
+        }
+    }
+
+    public void triggerOnOtherCardPlayed(AbstractCard c)
+    {
+        for (PSkill<?> effect : effects)
+        {
+            effect.triggerOnOtherCardPlayed(c);
+        }
+    }
+
+    public void triggerOnPurge(AbstractCard c)
+    {
+        for (PSkill<?> effect : effects)
+        {
+            effect.triggerOnPurge(c);
+        }
+    }
+
+    public void triggerOnReshuffle(AbstractCard c, CardGroup sourcePile)
+    {
+        for (PSkill<?> effect : effects)
+        {
+            effect.triggerOnReshuffle(c, sourcePile);
+        }
+    }
+
+    public void triggerOnRetain(AbstractCard c)
+    {
+        for (PSkill<?> effect : effects)
+        {
+            effect.triggerOnRetain(c);
+        }
+    }
+
+    public void subscribeChildren()
+    {
+        for (PSkill<?> effect : effects)
+        {
+            effect.subscribeChildren();
+        }
+        if (this.childEffect != null)
+        {
+            this.childEffect.subscribeChildren();
+        }
+    }
+
+    public void unsubscribeChildren()
+    {
+        for (PSkill<?> effect : effects)
+        {
+            effect.unsubscribeChildren();
+        }
+        if (this.childEffect != null)
+        {
+            this.childEffect.unsubscribeChildren();
+        }
     }
 }

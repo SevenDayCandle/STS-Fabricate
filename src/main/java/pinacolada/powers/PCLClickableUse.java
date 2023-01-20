@@ -12,7 +12,7 @@ import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.ColoredString;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCardTarget;
-import pinacolada.cards.base.PCLUseInfo;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.interfaces.markers.ClickableProvider;
 import pinacolada.misc.CombatManager;
 import pinacolada.resources.PGR;
@@ -215,7 +215,7 @@ public class PCLClickableUse
         {
             owner = source.getSource();
         }
-        PCLUseInfo info = new PCLUseInfo(move.sourceCard, owner, m);
+        PCLUseInfo info = CombatManager.playerSystem.generateInfo(move.sourceCard, owner, m);
         info.setData(amount);
         move.use(info, CombatManager.onClickableUsed(this, m, amount));
         pool.use(amount);

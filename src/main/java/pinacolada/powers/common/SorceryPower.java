@@ -2,12 +2,12 @@ package pinacolada.powers.common;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
-import pinacolada.interfaces.subscribers.OnChannelOrbSubscriber;
+import pinacolada.interfaces.subscribers.OnOrbChannelSubscriber;
 import pinacolada.misc.CombatManager;
 import pinacolada.powers.PCLPower;
 import pinacolada.utilities.GameUtilities;
 
-public class SorceryPower extends PCLPower implements OnChannelOrbSubscriber
+public class SorceryPower extends PCLPower implements OnOrbChannelSubscriber
 {
     public static final String POWER_ID = createFullID(SorceryPower.class);
 

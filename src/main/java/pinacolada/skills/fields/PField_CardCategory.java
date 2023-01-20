@@ -14,7 +14,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.actions.pileSelection.SelectFromPile;
 import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCardSelection;
-import pinacolada.cards.base.PCLUseInfo;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.cards.base.fields.PCLCardTag;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;

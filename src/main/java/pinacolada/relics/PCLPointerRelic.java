@@ -1,9 +1,7 @@
 package pinacolada.relics;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
-import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
 import pinacolada.interfaces.markers.PointerProvider;
 import pinacolada.skills.PSkill;
@@ -63,52 +61,12 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider
     }
 
     @Override
-    public void atBattleStart()
+    public void atPreBattle()
     {
-        super.atBattleStart();
-        for (PSkill be : getEffects())
+        super.atPreBattle();
+        for (PSkill<?> be : getEffects())
         {
-            be.triggerOnStartup();
-        }
-    }
-
-    @Override
-    public void atTurnStartPostDraw()
-    {
-        super.atTurnStartPostDraw();
-        for (PSkill be : getEffects())
-        {
-            be.triggerOnStartOfTurn();
-        }
-    }
-
-    @Override
-    public void onPlayCard(AbstractCard targetCard, AbstractMonster m)
-    {
-        super.onPlayCard(targetCard, m);
-        for (PSkill be : getEffects())
-        {
-            be.triggerOnOtherCardPlayed(targetCard);
-        }
-    }
-
-    @Override
-    public void onPlayerEndTurn()
-    {
-        super.onPlayerEndTurn();
-        for (PSkill be : getEffects())
-        {
-            be.triggerOnEndOfTurn(true);
-        }
-    }
-
-    @Override
-    public void onShuffle()
-    {
-        super.onShuffle();
-        for (PSkill be : getEffects())
-        {
-            be.triggerOnShuffle(true);
+            be.subscribeChildren();
         }
     }
 

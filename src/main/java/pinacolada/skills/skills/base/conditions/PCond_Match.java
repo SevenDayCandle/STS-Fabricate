@@ -3,7 +3,8 @@ package pinacolada.skills.skills.base.conditions;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardTarget;
-import pinacolada.cards.base.PCLUseInfo;
+import pinacolada.misc.PCLUseInfo;
+import pinacolada.interfaces.subscribers.OnMatchSubscriber;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
@@ -12,7 +13,7 @@ import pinacolada.skills.PTrigger;
 import pinacolada.skills.fields.PField_CardCategory;
 
 @VisibleSkill
-public class PCond_Match extends PCond<PField_CardCategory>
+public class PCond_Match extends PCond<PField_CardCategory> implements OnMatchSubscriber
 {
 
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_Match.class, PField_CardCategory.class, 1, 1)
@@ -52,17 +53,12 @@ public class PCond_Match extends PCond<PField_CardCategory>
     }
 
     @Override
-    public boolean triggerOnMatch(AbstractCard c, PCLUseInfo info)
+    public void onMatch(AbstractCard card, PCLUseInfo info)
     {
-        if (fields.getFullCardFilter().invoke(c))
+        if (fields.getFullCardFilter().invoke(card))
         {
-            if (this.childEffect != null)
-            {
-                this.childEffect.use(makeInfo(null));
-            }
-            return true;
+            useFromTrigger(info);
         }
-        return false;
     }
 
     @Override

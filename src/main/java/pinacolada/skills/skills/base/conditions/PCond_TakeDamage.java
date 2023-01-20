@@ -2,16 +2,18 @@ package pinacolada.skills.skills.base.conditions;
 
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.DamageInfo;
+import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardTarget;
-import pinacolada.cards.base.PCLUseInfo;
+import pinacolada.misc.PCLUseInfo;
+import pinacolada.interfaces.subscribers.OnLoseHPSubscriber;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
 
 @VisibleSkill
-public class PCond_TakeDamage extends PCond<PField_Empty>
+public class PCond_TakeDamage extends PCond<PField_Empty> implements OnLoseHPSubscriber
 {
     public static final PSkillData<PField_Empty> DATA = register(PCond_TakeDamage.class, PField_Empty.class)
             .selfTarget();
@@ -48,13 +50,13 @@ public class PCond_TakeDamage extends PCond<PField_Empty>
     }
 
     @Override
-    public int triggerOnAttacked(DamageInfo info, int damageAmount)
+    public int onLoseHP(AbstractPlayer p, DamageInfo info, int amount)
     {
         if (info.type == DamageInfo.DamageType.NORMAL && childEffect != null)
         {
-            childEffect.use(makeInfo(null));
+            useFromTrigger(makeInfo(p));
         }
-        return damageAmount;
+        return amount;
     }
 
     @Override

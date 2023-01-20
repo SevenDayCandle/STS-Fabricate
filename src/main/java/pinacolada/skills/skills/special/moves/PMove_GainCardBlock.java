@@ -3,7 +3,7 @@ package pinacolada.skills.skills.special.moves;
 import com.megacrit.cardcrawl.core.Settings;
 import extendedui.utilities.ColoredString;
 import pinacolada.cards.base.PCLCardTarget;
-import pinacolada.cards.base.PCLUseInfo;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.markers.Hidden;
 import pinacolada.interfaces.markers.PointerProvider;

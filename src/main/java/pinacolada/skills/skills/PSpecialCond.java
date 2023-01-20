@@ -2,7 +2,7 @@ package pinacolada.skills.skills;
 
 import extendedui.interfaces.delegates.FuncT3;
 import pinacolada.cards.base.PCLCardData;
-import pinacolada.cards.base.PCLUseInfo;
+import pinacolada.misc.PCLUseInfo;
 
 public class PSpecialCond extends PCustomCond
 {

@@ -2,19 +2,14 @@ package pinacolada.skills;
 
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.cards.CardGroup;
-import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
-import com.megacrit.cardcrawl.orbs.AbstractOrb;
-import com.megacrit.cardcrawl.powers.AbstractPower;
-import extendedui.interfaces.delegates.FuncT0;
 import pinacolada.cards.base.*;
 import pinacolada.interfaces.markers.PointerProvider;
-import pinacolada.monsters.PCLCardAlly;
+import pinacolada.misc.CombatManager;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.orbs.PCLOrbHelper;
-import pinacolada.powers.PCLClickableUse;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.fields.PField;
@@ -403,19 +398,19 @@ public abstract class PCond<T extends PField> extends PSkill<T>
     @Override
     public boolean canMatch(AbstractCard card)
     {
-        return this.childEffect != null && checkCondition(card != null ? new PCLUseInfo(card, getSourceCreature(), null) : null, false, false) && this.childEffect.canMatch(card);
+        return this.childEffect != null && checkCondition(card != null ? CombatManager.playerSystem.generateInfo(card, getSourceCreature(), null) : null, false, false) && this.childEffect.canMatch(card);
     }
 
     @Override
     public boolean canPlay(AbstractCard card, AbstractMonster m)
     {
-        return this.childEffect == null || !checkCondition(card != null ? new PCLUseInfo(card, getSourceCreature(), m) : null, false, false) || this.childEffect.canPlay(card, m);
+        return this.childEffect == null || !checkCondition(card != null ? CombatManager.playerSystem.generateInfo(card, getSourceCreature(), m) : null, false, false) || this.childEffect.canPlay(card, m);
     }
 
     @Override
     public float modifyBlock(AbstractCard card, AbstractMonster m, float amount)
     {
-        if (this.childEffect != null && sourceCard != null && checkCondition(card != null ? new PCLUseInfo(card, getSourceCreature(), m) : makeInfo(m), false, false))
+        if (this.childEffect != null && sourceCard != null && checkCondition(card != null ? CombatManager.playerSystem.generateInfo(card, getSourceCreature(), m) : makeInfo(m), false, false))
         {
             return this.childEffect.modifyBlock(card, m, amount);
         }
@@ -425,7 +420,7 @@ public abstract class PCond<T extends PField> extends PSkill<T>
     @Override
     public float modifyDamage(AbstractCard card, AbstractMonster m, float amount)
     {
-        if (this.childEffect != null && sourceCard != null && checkCondition(card != null ? new PCLUseInfo(card, getSourceCreature(), m) : makeInfo(m), false, false))
+        if (this.childEffect != null && sourceCard != null && checkCondition(card != null ? CombatManager.playerSystem.generateInfo(card, getSourceCreature(), m) : makeInfo(m), false, false))
         {
             return this.childEffect.modifyDamage(card, m, amount);
         }
@@ -435,7 +430,7 @@ public abstract class PCond<T extends PField> extends PSkill<T>
     @Override
     public float modifyMagicNumber(AbstractCard card, AbstractMonster m, float amount)
     {
-        if (this.childEffect != null && sourceCard != null && checkCondition(card != null ? new PCLUseInfo(card, getSourceCreature(), m) : makeInfo(m), false, false))
+        if (this.childEffect != null && sourceCard != null && checkCondition(card != null ? CombatManager.playerSystem.generateInfo(card, getSourceCreature(), m) : makeInfo(m), false, false))
         {
             return this.childEffect.modifyMagicNumber(card, m, amount);
         }
@@ -445,7 +440,7 @@ public abstract class PCond<T extends PField> extends PSkill<T>
     @Override
     public float modifyHitCount(PCLCard card, AbstractMonster m, float amount)
     {
-        if (this.childEffect != null && sourceCard != null && checkCondition(card != null ? new PCLUseInfo(card, getSourceCreature(), m) : makeInfo(m), false, false))
+        if (this.childEffect != null && sourceCard != null && checkCondition(card != null ? CombatManager.playerSystem.generateInfo(card, getSourceCreature(), m) : makeInfo(m), false, false))
         {
             return this.childEffect.modifyHitCount(card, m, amount);
         }
@@ -455,7 +450,7 @@ public abstract class PCond<T extends PField> extends PSkill<T>
     @Override
     public float modifyRightCount(PCLCard card, AbstractMonster m, float amount)
     {
-        if (this.childEffect != null && sourceCard != null && checkCondition(card != null ? new PCLUseInfo(card, getSourceCreature(), m) : makeInfo(m), false, false))
+        if (this.childEffect != null && sourceCard != null && checkCondition(card != null ? CombatManager.playerSystem.generateInfo(card, getSourceCreature(), m) : makeInfo(m), false, false))
         {
             return this.childEffect.modifyRightCount(card, m, amount);
         }
@@ -467,168 +462,6 @@ public abstract class PCond<T extends PField> extends PSkill<T>
     {
         conditionMetCache = checkCondition(makeInfo(m), false, false);
         super.refresh(m, c, conditionMetCache & conditionMet);
-    }
-
-    @Override
-    public int triggerOnAttack(DamageInfo info, int damageAmount, AbstractCreature target)
-    {
-        return this.childEffect != null && checkCondition(makeInfo(target), false, true) ? this.childEffect.triggerOnAttack(info, damageAmount, target) : damageAmount;
-    }
-
-    @Override
-    public int triggerOnAttacked(DamageInfo info, int damageAmount)
-    {
-        return this.childEffect != null && checkCondition(makeInfo(null), false, true) ? this.childEffect.triggerOnAttacked(info, damageAmount) : damageAmount;
-    }
-
-    @Override
-    public boolean triggerOnReshuffle(AbstractCard c, CardGroup sourcePile)
-    {
-        return triggerOn(() -> this.childEffect.triggerOnReshuffle(c, sourcePile));
-    }
-
-    @Override
-    public boolean triggerOnApplyPower(AbstractCreature source, AbstractCreature target, AbstractPower c)
-    {
-        return triggerOn(() -> this.childEffect.triggerOnApplyPower(source, target, c), makeInfo(target).setData(c));
-    }
-
-    @Override
-    public boolean triggerOnAllyDeath(PCLCard c, PCLCardAlly ally)
-    {
-        return triggerOn(() -> this.childEffect.triggerOnAllyDeath(c, ally));
-    }
-
-    @Override
-    public boolean triggerOnAllySummon(PCLCard c, PCLCardAlly ally)
-    {
-        return triggerOn(() -> this.childEffect.triggerOnAllySummon(c, ally));
-    }
-
-    @Override
-    public boolean triggerOnAllyTrigger(PCLCard c, PCLCardAlly ally)
-    {
-        return triggerOn(() -> this.childEffect.triggerOnAllyTrigger(c, ally));
-    }
-
-    @Override
-    public boolean triggerOnAllyWithdraw(PCLCard c, PCLCardAlly ally)
-    {
-        return triggerOn(() -> this.childEffect.triggerOnAllyWithdraw(c, ally));
-    }
-
-    @Override
-    public boolean triggerOnCreate(AbstractCard c, boolean startOfBattle)
-    {
-        return triggerOn(() -> this.childEffect.triggerOnCreate(c, startOfBattle));
-    }
-
-    @Override
-    public boolean triggerOnDiscard(AbstractCard c)
-    {
-        return triggerOn(() -> this.childEffect.triggerOnDiscard(c));
-    }
-
-    @Override
-    public boolean triggerOnDraw(AbstractCard c)
-    {
-        return triggerOn(() -> this.childEffect.triggerOnDraw(c));
-    }
-
-    @Override
-    public boolean triggerOnEndOfTurn(boolean isUsing)
-    {
-        return triggerOn(() -> this.childEffect.triggerOnEndOfTurn(isUsing));
-    }
-
-    @Override
-    public boolean triggerOnExhaust(AbstractCard c)
-    {
-        return triggerOn(() -> this.childEffect.triggerOnExhaust(c));
-    }
-
-    @Override
-    public boolean triggerOnIntensify(PCLAffinity c)
-    {
-        return triggerOn(() -> this.childEffect.triggerOnIntensify(c), makeInfo(null).setData(c));
-    }
-
-    @Override
-    public boolean triggerOnMatch(AbstractCard c, PCLUseInfo info)
-    {
-        return triggerOn(() -> this.childEffect.triggerOnMatch(c, info), info);
-    }
-
-    @Override
-    public boolean triggerOnMismatch(AbstractCard c, PCLUseInfo info)
-    {
-        return triggerOn(() -> this.childEffect.triggerOnMismatch(c, info), info);
-    }
-
-    @Override
-    public boolean triggerOnOrbChannel(AbstractOrb c)
-    {
-        return triggerOn(() -> this.childEffect.triggerOnOrbChannel(c), makeInfo(null).setData(c));
-    }
-
-    @Override
-    public boolean triggerOnOrbFocus(AbstractOrb c)
-    {
-        return triggerOn(() -> this.childEffect.triggerOnOrbFocus(c), makeInfo(null).setData(c));
-    }
-
-    @Override
-    public boolean triggerOnOrbEvoke(AbstractOrb c)
-    {
-        return triggerOn(() -> this.childEffect.triggerOnOrbEvoke(c), makeInfo(null).setData(c));
-    }
-
-    @Override
-    public boolean triggerOnOrbTrigger(AbstractOrb c)
-    {
-        return triggerOn(() -> this.childEffect.triggerOnOrbTrigger(c), makeInfo(null).setData(c));
-    }
-
-    @Override
-    public boolean triggerOnOtherCardPlayed(AbstractCard c)
-    {
-        return triggerOn(() -> this.childEffect.triggerOnOtherCardPlayed(c));
-    }
-
-    @Override
-    public boolean triggerOnPCLPowerUsed(PCLClickableUse c)
-    {
-        return triggerOn(() -> this.childEffect.triggerOnPCLPowerUsed(c));
-    }
-
-    @Override
-    public boolean triggerOnPurge(AbstractCard c)
-    {
-        return triggerOn(() -> this.childEffect.triggerOnPurge(c));
-    }
-
-    @Override
-    public boolean triggerOnScry()
-    {
-        return triggerOn(() -> this.childEffect.triggerOnScry());
-    }
-
-    @Override
-    public boolean triggerOnShuffle(boolean r)
-    {
-        return triggerOn(() -> this.childEffect.triggerOnShuffle(r));
-    }
-
-    @Override
-    public boolean triggerOnStartOfTurn()
-    {
-        return triggerOn(() -> this.childEffect.triggerOnStartOfTurn());
-    }
-
-    @Override
-    public boolean triggerOnStartup()
-    {
-        return triggerOn(() -> this.childEffect.triggerOnStartup());
     }
 
     @Override
@@ -668,28 +501,18 @@ public abstract class PCond<T extends PField> extends PSkill<T>
         }
     }
 
-    protected boolean triggerOn(FuncT0<Boolean> childAction)
-    {
-        return triggerOn(childAction, makeInfo(null));
-    }
-
-    // Only trigger the condition use effects if the child actually triggers for the specified action
-    protected boolean triggerOn(FuncT0<Boolean> childAction, PCLUseInfo info)
-    {
-        return this.childEffect != null && sourceCard != null
-                && checkCondition(info, false, true) && childAction.invoke()
-                && checkCondition(info, true, false);
-    }
-
     protected void useFromTrigger(PCLUseInfo info)
     {
-        if (childEffect != null)
+        if (tryPassParent(info))
         {
-            childEffect.use(info);
-        }
-        else if (parent instanceof PMultiCond && parent.childEffect != null)
-        {
-            parent.childEffect.use(info);
+            if (childEffect != null)
+            {
+                childEffect.use(info);
+            }
+            else if (parent instanceof PMultiCond && parent.childEffect != null)
+            {
+                parent.childEffect.use(info);
+            }
         }
     }
 }

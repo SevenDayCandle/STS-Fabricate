@@ -13,7 +13,7 @@ import extendedui.ui.EUIBase;
 import pinacolada.cards.base.AffinityReactions;
 import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.PCLUseInfo;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.misc.CombatManager;
 import pinacolada.powers.PCLAffinityPower;
 import pinacolada.powers.common.PCLLockOnPower;
@@ -76,6 +76,11 @@ public class PCLPlayerSystem extends EUIBase
     public void registerMeter(AbstractPlayer.PlayerClass playerClass, PCLPlayerMeter meter)
     {
         meters.put(playerClass, meter);
+    }
+
+    public PCLUseInfo generateInfo(AbstractCard card, AbstractCreature source, AbstractCreature target)
+    {
+        return getActiveMeter().generateInfo(card, source, target);
     }
 
     public PCLPlayerMeter getActiveMeter()

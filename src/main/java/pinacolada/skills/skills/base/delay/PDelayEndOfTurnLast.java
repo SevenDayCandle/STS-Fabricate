@@ -2,12 +2,12 @@ package pinacolada.skills.skills.base.delay;
 
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.annotations.VisibleSkill;
-import pinacolada.cards.base.PCLUseInfo;
+import pinacolada.misc.PCLUseInfo;
+import pinacolada.skills.PDelay;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.delay.DelayUse;
 import pinacolada.skills.fields.PField_Empty;
-import pinacolada.skills.skills.PDelay;
 
 @VisibleSkill
 public class PDelayEndOfTurnLast extends PDelay

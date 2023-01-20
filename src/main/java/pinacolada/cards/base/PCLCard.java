@@ -55,6 +55,7 @@ import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.markers.Hidden;
 import pinacolada.interfaces.markers.SummonOnlyMove;
 import pinacolada.misc.CombatManager;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.patches.screens.GridCardSelectScreenMultiformPatches;
 import pinacolada.powers.PCLPower;
@@ -1909,7 +1910,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
 
     @Override
     public final void use(AbstractPlayer p1, AbstractMonster m1) {
-        final PCLUseInfo info = new PCLUseInfo(this, p1, m1);
+        final PCLUseInfo info = CombatManager.playerSystem.generateInfo(this, p1, m1);
 
         onPreUse(info);
         onUse(info);
@@ -2092,12 +2093,16 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     }
 
     @Override
-    public final void triggerOnScry() { /* Useless */ }
+    public void triggerOnScry()
+    {
+        super.triggerOnScry();
+        doEffects(be -> be.triggerOnScry(this));
+    }
 
     @Override
-    public void atTurnStartPreDraw() {
-        super.atTurnStartPreDraw();
-        doEffects(PSkill::triggerOnStartOfTurn);
+    public void onRetained() {
+        super.onRetained();
+        doEffects(be -> be.triggerOnRetain(this));
     }
 
     public void triggerOnExhaust() {
@@ -2475,9 +2480,9 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         doEffects(be -> be.triggerOnReshuffle(this, sourcePile));
     }
 
+    // Called at the start of a fight, or when a card is created by MakeTempCard.
     public void triggerWhenCreated(boolean startOfBattle) {
         doEffects(be -> be.triggerOnCreate(this, startOfBattle));
-        // Called at the start of a fight, or when a card is created by MakeTempCard.
     }
 
     public void triggerWhenKilled(PCLCardAlly ally) {

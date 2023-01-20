@@ -3,13 +3,14 @@ package pinacolada.skills.skills.base.conditions;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.interfaces.subscribers.OnCardCreatedSubscriber;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 
 @VisibleSkill
-public class PCond_OnCreate extends PCond_Delegate
+public class PCond_OnCreate extends PCond_Delegate implements OnCardCreatedSubscriber
 {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_OnCreate.class, PField_CardCategory.class, 1, 1)
             .selfTarget();
@@ -25,9 +26,9 @@ public class PCond_OnCreate extends PCond_Delegate
     }
 
     @Override
-    public boolean triggerOnCreate(AbstractCard c, boolean startOfBattle)
+    public void onCardCreated(AbstractCard card, boolean startOfBattle)
     {
-        return triggerOnCard(c);
+        triggerOnCard(card);
     }
 
     @Override

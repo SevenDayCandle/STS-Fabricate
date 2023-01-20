@@ -6,7 +6,7 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.cards.base.PCLCardTarget;
-import pinacolada.cards.base.PCLUseInfo;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -65,30 +65,20 @@ public abstract class PCond_Delegate extends PCond<PField_CardCategory>
         return fromTrigger;
     }
 
-    public boolean triggerOnCard(AbstractCard c)
+    public void triggerOnCard(AbstractCard c)
     {
         if (fields.getFullCardFilter().invoke(c))
         {
-            if (this.childEffect != null)
-            {
-                this.childEffect.use(makeInfo(null).setData(EUIUtils.list(c)));
-            }
-            return true;
+            useFromTrigger(makeInfo(null).setData(EUIUtils.list(c)));
         }
-        return false;
     }
 
-    public boolean triggerOnCard(AbstractCard c, AbstractCreature target)
+    public void triggerOnCard(AbstractCard c, AbstractCreature target)
     {
         if (fields.getFullCardFilter().invoke(c))
         {
-            if (this.childEffect != null)
-            {
-                this.childEffect.use(makeInfo(target).setData(EUIUtils.list(c)));
-            }
-            return true;
+            useFromTrigger(makeInfo(target).setData(EUIUtils.list(c)));
         }
-        return false;
     }
 
     public String getDelegatePastText() {return getDelegateTooltip().past();}

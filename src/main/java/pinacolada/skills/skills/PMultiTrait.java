@@ -379,4 +379,28 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
         }
         return this;
     }
+
+    public void subscribeChildren()
+    {
+        for (PSkill<?> effect : effects)
+        {
+            effect.subscribeChildren();
+        }
+        if (this.childEffect != null)
+        {
+            this.childEffect.subscribeChildren();
+        }
+    }
+
+    public void unsubscribeChildren()
+    {
+        for (PSkill<?> effect : effects)
+        {
+            effect.unsubscribeChildren();
+        }
+        if (this.childEffect != null)
+        {
+            this.childEffect.unsubscribeChildren();
+        }
+    }
 }

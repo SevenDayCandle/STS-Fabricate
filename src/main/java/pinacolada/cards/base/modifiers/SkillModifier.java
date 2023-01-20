@@ -11,8 +11,8 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
-import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.interfaces.markers.EditorCard;
+import pinacolada.misc.CombatManager;
 import pinacolada.skills.PSkill;
 
 import java.util.ArrayList;
@@ -42,7 +42,7 @@ public class SkillModifier extends AbstractCardModifier
 
     public void manualUse(AbstractCard card, AbstractPlayer player, AbstractCreature monster)
     {
-        skill.use(new PCLUseInfo(card, player, monster));
+        skill.use(CombatManager.playerSystem.generateInfo(card, player, monster));
     }
 
     @Override

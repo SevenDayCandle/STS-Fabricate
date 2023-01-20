@@ -1,12 +1,12 @@
 package pinacolada.cards.base;
 
-import com.evacipated.cardcrawl.mod.stslib.cards.interfaces.StartupCard;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.skills.skills.PCustomCond;
 import pinacolada.utilities.GameUtilities;
 
@@ -89,55 +89,47 @@ public class ReplacementCard extends PCLDynamicCard
         }
 
         @Override
-        public boolean triggerOnDiscard(AbstractCard c)
+        public void triggerOnDiscard(AbstractCard c)
         {
-            return doCard(AbstractCard::triggerOnManualDiscard);
+            doCard(AbstractCard::triggerOnManualDiscard);
         }
 
         @Override
-        public boolean triggerOnDraw(AbstractCard c)
+        public void triggerOnDraw(AbstractCard c)
         {
-            return doCard(AbstractCard::triggerWhenDrawn);
+            doCard(AbstractCard::triggerWhenDrawn);
         }
 
         @Override
         public boolean triggerOnEndOfTurn(boolean isUsing)
         {
-            return doCard(AbstractCard::triggerOnEndOfTurnForPlayingCard);
+            boolean result = card.dontTriggerOnUseCard;
+            doCard(AbstractCard::triggerOnEndOfTurnForPlayingCard);
+            return result;
         }
 
         @Override
-        public boolean triggerOnExhaust(AbstractCard c)
+        public void triggerOnExhaust(AbstractCard c)
         {
-            return doCard(AbstractCard::triggerOnExhaust);
+            doCard(AbstractCard::triggerOnExhaust);
         }
 
         @Override
-        public boolean triggerOnOtherCardPlayed(AbstractCard c)
+        public void triggerOnOtherCardPlayed(AbstractCard c)
         {
-            return doCard(card -> card.triggerOnOtherCardPlayed(c));
+            doCard(card -> card.triggerOnOtherCardPlayed(c));
         }
 
         @Override
-        public boolean triggerOnScry()
+        public void triggerOnRetain(AbstractCard c)
         {
-            return doCard(AbstractCard::triggerOnScry);
+            doCard(AbstractCard::onRetained);
         }
 
         @Override
-        public boolean triggerOnStartOfTurn()
+        public void triggerOnScry(AbstractCard c)
         {
-            return doCard(AbstractCard::atTurnStartPreDraw);
-        }
-
-        @Override
-        public boolean triggerOnStartup()
-        {
-            return doCard((c) -> {
-                if (c instanceof StartupCard) {
-                    ((StartupCard) c).atBattleStartPreDraw();
-                }
-            });
+            doCard(AbstractCard::triggerOnScry);
         }
 
         @Override

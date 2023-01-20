@@ -1,17 +1,19 @@
-package pinacolada.cards.base;
+package pinacolada.misc;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
-import pinacolada.misc.CombatManager;
+import pinacolada.cards.base.AffinityReactions;
+import pinacolada.cards.base.PCLAffinity;
 import pinacolada.powers.PCLAffinityPower;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 import java.util.Collections;
 
+// TODO create class specific infos
 public class PCLUseInfo
 {
     public final AbstractCreature source;

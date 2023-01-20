@@ -9,7 +9,7 @@ import extendedui.ui.tooltips.EUICardPreview;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardTarget;
-import pinacolada.cards.base.PCLUseInfo;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.interfaces.markers.PointerProvider;
@@ -476,5 +476,29 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
             stackMulti((PMultiBase) other);
         }
         return this;
+    }
+
+    public void subscribeChildren()
+    {
+        for (PSkill<?> effect : effects)
+        {
+            effect.subscribeChildren();
+        }
+        if (this.childEffect != null)
+        {
+            this.childEffect.subscribeChildren();
+        }
+    }
+
+    public void unsubscribeChildren()
+    {
+        for (PSkill<?> effect : effects)
+        {
+            effect.unsubscribeChildren();
+        }
+        if (this.childEffect != null)
+        {
+            this.childEffect.unsubscribeChildren();
+        }
     }
 }

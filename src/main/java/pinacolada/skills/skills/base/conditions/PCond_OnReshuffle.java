@@ -4,13 +4,14 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.interfaces.subscribers.OnCardReshuffledSubscriber;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 
 @VisibleSkill
-public class PCond_OnReshuffle extends PCond_Delegate
+public class PCond_OnReshuffle extends PCond_Delegate implements OnCardReshuffledSubscriber
 {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_OnReshuffle.class, PField_CardCategory.class, 1, 1)
             .selfTarget();
@@ -26,9 +27,9 @@ public class PCond_OnReshuffle extends PCond_Delegate
     }
 
     @Override
-    public boolean triggerOnReshuffle(AbstractCard c, CardGroup sourcePile)
+    public void onCardReshuffled(AbstractCard card, CardGroup sourcePile)
     {
-        return triggerOnCard(c);
+        triggerOnCard(card);
     }
 
     @Override

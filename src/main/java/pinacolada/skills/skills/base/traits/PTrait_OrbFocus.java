@@ -2,6 +2,7 @@ package pinacolada.skills.skills.base.traits;
 
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.interfaces.subscribers.OnOrbApplyFocusSubscriber;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -10,7 +11,7 @@ import pinacolada.skills.fields.PField_Empty;
 import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
-public class PTrait_OrbFocus extends PTrait<PField_Empty>
+public class PTrait_OrbFocus extends PTrait<PField_Empty> implements OnOrbApplyFocusSubscriber
 {
 
     public static final PSkillData<PField_Empty> DATA = register(PTrait_OrbFocus.class, PField_Empty.class);
@@ -43,9 +44,8 @@ public class PTrait_OrbFocus extends PTrait<PField_Empty>
     }
 
     @Override
-    public boolean triggerOnOrbFocus(AbstractOrb orb)
+    public void onApplyFocus(AbstractOrb orb)
     {
         GameUtilities.modifyOrbTemporaryFocus(orb, amount, true, false);
-        return true;
     }
 }

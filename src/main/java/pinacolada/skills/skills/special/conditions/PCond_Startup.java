@@ -3,8 +3,8 @@ package pinacolada.skills.skills.special.conditions;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import pinacolada.cards.base.PCLCardTarget;
-import pinacolada.cards.base.PCLUseInfo;
-import pinacolada.interfaces.markers.Hidden;
+import pinacolada.misc.PCLUseInfo;
+import pinacolada.interfaces.subscribers.OnBattleStartSubscriber;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PSkill;
@@ -13,9 +13,8 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
 
 // Only for relics
-public class PCond_Startup extends PCond<PField_Empty> implements Hidden
+public class PCond_Startup extends PCond<PField_Empty> implements OnBattleStartSubscriber
 {
-
     public static final PSkillData<PField_Empty> DATA = register(PCond_Startup.class, PField_Empty.class, 1, 1)
             .selfTarget();
 
@@ -56,6 +55,12 @@ public class PCond_Startup extends PCond<PField_Empty> implements Hidden
     }
 
     @Override
+    public void onBattleStart()
+    {
+        useFromTrigger(makeInfo(null));
+    }
+
+    @Override
     public void use(PCLUseInfo info)
     {
     }
@@ -68,16 +73,6 @@ public class PCond_Startup extends PCond<PField_Empty> implements Hidden
     @Override
     public boolean canPlay(AbstractCard card, AbstractMonster m)
     {
-        return true;
-    }
-
-    @Override
-    public boolean triggerOnStartup()
-    {
-        if (this.childEffect != null)
-        {
-            this.childEffect.use(makeInfo(null));
-        }
         return true;
     }
 

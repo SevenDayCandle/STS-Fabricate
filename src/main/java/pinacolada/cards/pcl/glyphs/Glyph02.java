@@ -2,7 +2,7 @@ package pinacolada.cards.pcl.glyphs;
 
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import pinacolada.cards.base.PCLCardData;
-import pinacolada.cards.base.PCLUseInfo;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.skills.PSpecialSkill;
 import pinacolada.utilities.GameUtilities;

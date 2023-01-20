@@ -32,7 +32,6 @@ import pinacolada.annotations.CombatSubscriber;
 import pinacolada.cards.base.AffinityReactions;
 import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.PCLUseInfo;
 import pinacolada.cards.base.fields.PCLCardTag;
 import pinacolada.cards.base.modifiers.SkillModifier;
 import pinacolada.effects.PCLEffects;
@@ -382,6 +381,20 @@ public class CombatManager
         subscriberDo(OnCardReshuffledSubscriber.class, s -> s.onCardReshuffled(card, sourcePile));
     }
 
+    public static void onCardRetain(AbstractCard card)
+    {
+        card.onRetained();
+
+        subscriberDo(OnCardRetainSubscriber.class, s -> s.onRetain(card));
+    }
+
+    public static void onCardScry(AbstractCard card)
+    {
+        card.triggerOnScry();
+
+        subscriberDo(OnCardScrySubscriber.class, s -> s.onScry(card));
+    }
+
     public static boolean onClickableUsed(PCLClickableUse condition, AbstractMonster target, int uses)
     {
         return subscriberCanDeny(OnPCLClickableUsedSubscriber.class, s -> s.onClickablePowerUsed(condition, target, uses));
@@ -487,7 +500,7 @@ public class CombatManager
         if (PCLCardTag.Recast.has(card))
         {
             PCLCardTag.Recast.tryProgress(card);
-            DelayUse.turnStartLast(1, new PCLUseInfo(card, AbstractDungeon.player, m), (i) -> PCLActions.bottom.playCopy(card, EUIUtils.safeCast(i.target, AbstractMonster.class))).start();
+            DelayUse.turnStartLast(1, playerSystem.generateInfo(card, AbstractDungeon.player, m), (i) -> PCLActions.bottom.playCopy(card, EUIUtils.safeCast(i.target, AbstractMonster.class))).start();
         }
     }
 
@@ -506,7 +519,7 @@ public class CombatManager
 
     public static void onAfterDeath()
     {
-        subscriberDo(OnAfterDeathSubscriber.class, OnAfterDeathSubscriber::onAfterDeath);
+        subscriberDo(OnPlayerDeathSubscriber.class, OnPlayerDeathSubscriber::onAfterDeath);
 
         clearStats();
     }
@@ -699,7 +712,7 @@ public class CombatManager
 
         // The target may have been overwritten with a null value
         card.calculateCardDamage(m);
-        final PCLUseInfo info = new PCLUseInfo(card, p, m);
+        final PCLUseInfo info = playerSystem.generateInfo(card, p, m);
 
         PCLAction.currentCard = card;
         if (card.type == PCLEnum.CardType.SUMMON)
@@ -917,7 +930,7 @@ public class CombatManager
     public static void onAfterDraw(AbstractCard card)
     {
         cardsDrawnThisTurn += 1;
-        subscriberDo(OnAfterCardDrawnSubscriber.class, s -> s.onAfterCardDrawn(card));
+        subscriberDo(OnCardDrawnSubscriber.class, s -> s.onCardDrawn(card));
 
         if (PCLCardTag.Haste.has(card))
         {
@@ -1018,7 +1031,7 @@ public class CombatManager
                 ((PCLOrb) orb).onChannel();
             }
 
-            subscriberDo(OnChannelOrbSubscriber.class, s -> s.onChannelOrb(orb));
+            subscriberDo(OnOrbChannelSubscriber.class, s -> s.onChannelOrb(orb));
         }
     }
 
@@ -1026,7 +1039,7 @@ public class CombatManager
     {
         if (orb != null && !(orb instanceof EmptyOrbSlot))
         {
-            subscriberDo(OnEvokeOrbSubscriber.class, s -> s.onEvokeOrb(orb));
+            subscriberDo(OnOrbEvokeSubscriber.class, s -> s.onEvokeOrb(orb));
             orbsEvokedThisCombat.add(orb);
             orbsEvokedThisTurn.add(orb);
         }
@@ -1034,7 +1047,7 @@ public class CombatManager
 
     public static void onAfterCardPlayed(AbstractCard card)
     {
-        subscriberDo(OnAfterCardPlayedSubscriber.class, s -> s.onAfterCardPlayed(card));
+        subscriberDo(OnCardPlayedSubscriber.class, s -> s.onCardPlayed(card));
 
         cardsPlayedThisCombat(turnCount).add(card);
 
@@ -1051,7 +1064,7 @@ public class CombatManager
         card.lighten(false);
         card.clearPowers();
 
-        subscriberDo(OnAfterCardExhaustedSubscriber.class, s -> s.onAfterCardExhausted(card));
+        subscriberDo(OnCardExhaustedSubscriber.class, s -> s.onCardExhausted(card));
 
         cardsExhaustedThisCombat.add(card);
         cardsExhaustedThisTurn.add(card);

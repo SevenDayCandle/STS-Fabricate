@@ -1,12 +1,9 @@
-package pinacolada.skills.skills;
+package pinacolada.skills;
 
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.cards.base.PCLCardTarget;
-import pinacolada.cards.base.PCLUseInfo;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.pcl.PCLCoreStrings;
-import pinacolada.skills.PSkill;
-import pinacolada.skills.PSkillData;
-import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.delay.DelayUse;
 import pinacolada.skills.fields.PField_Empty;
 import pinacolada.skills.skills.base.delay.PDelayEndOfTurnFirst;

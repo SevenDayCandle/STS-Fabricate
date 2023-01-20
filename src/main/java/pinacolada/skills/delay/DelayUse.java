@@ -1,7 +1,7 @@
 package pinacolada.skills.delay;
 
 import extendedui.interfaces.delegates.ActionT1;
-import pinacolada.cards.base.PCLUseInfo;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
 import pinacolada.interfaces.subscribers.PCLCombatSubscriber;
 import pinacolada.misc.CombatManager;
@@ -62,7 +62,7 @@ public abstract class DelayUse implements PCLCombatSubscriber
             }
             if (capturedCardUseInfo.target == null || GameUtilities.isDeadOrEscaped(capturedCardUseInfo.target))
             {
-                capturedCardUseInfo = new PCLUseInfo(capturedCardUseInfo.card, capturedCardUseInfo.source, GameUtilities.getRandomEnemy(true));
+                capturedCardUseInfo = CombatManager.playerSystem.generateInfo(capturedCardUseInfo.card, capturedCardUseInfo.source, GameUtilities.getRandomEnemy(true));
             }
             onUse.invoke(capturedCardUseInfo);
             CombatManager.unsubscribe(this);
