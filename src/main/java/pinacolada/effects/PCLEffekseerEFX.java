@@ -2,172 +2,206 @@ package pinacolada.effects;
 
 import extendedui.EUIUtils;
 import extendedui.STSEffekseerManager;
+import org.apache.commons.lang3.StringUtils;
 
-public enum PCLEffekseerEFX
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+// TODO add audio paths
+public class PCLEffekseerEFX
 {
-    BLOW01("effects/Blow01.efk"),
-    BLOW02("effects/Blow02.efk"),
-    BLOW03("effects/Blow03.efk"),
-    BLOW04("effects/Blow04.efk"),
-    BLOW05("effects/Blow05.efk"),
-    BLOW06("effects/Blow06.efk"),
-    BLOW07("effects/Blow07.efk"),
-    BLOW08("effects/Blow08.efk"),
-    BLOW09("effects/Blow09.efk"),
-    BLOW11("effects/Blow11.efk"),
-    BLOW12("effects/Blow12.efk"),
-    BLOW13("effects/Blow13.efk"),
-    BLOW14("effects/Blow14.efk"),
-    BLOW15("effects/Blow15.efk"),
-    BLOW16("effects/Blow16.efk"),
-    BLOW17("effects/Blow17.efk"),
-    BLOW18("effects/Blow18.efk"),
-    BLOW19("effects/Blow19.efk"),
-    BLOW20("effects/Blow20.efk"),
-    BLOW21("effects/Blow21.efk"),
-    CLAW01("effects/Claw01.efk"),
-    CLAW02("effects/Claw02.efk"),
-    CLAW03("effects/Claw03.efk"),
-    CLAW04("effects/Claw04.efk"),
-    CURE01("effects/Cure01.efk"),
-    CURE02("effects/Cure02.efk"),
-    CURE03("effects/Cure03.efk"),
-    CURE04("effects/Cure04.efk"),
-    CURE05("effects/Cure05.efk"),
-    CURE06("effects/Cure06.efk"),
-    CURE07("effects/Cure07.efk"),
-    DARK01("effects/Dark01.efk"),
-    DARK02("effects/Dark02.efk"),
-    DARK03("effects/Dark03.efk"),
-    DARK04("effects/Dark04.efk"),
-    DARK05("effects/Dark05.efk"),
-    EVFX02_02_TwinEdge("effects/EVFX02_02_TwinEdge.efk"),
-    EVFX02_09_EruptionClaw("effects/EVFX02_09_EruptionClaw.efk"),
-    EVFX02_11_QuickBlade("effects/EVFX02_11_QuickBlade.efk"),
-    EVFX03_02_OrbitalSmash("effects/EVFX03_02_OrbitalSmash.efk"),
-    EVFX03_08_ThrustingStroke("effects/EVFX03_08_ThrustingStroke.efk"),
-    EVFX03_12_OneTwoStrike("effects/EVFX03_12_OneTwoStrike.efk"),
-    EVFX04_03_ThreefoldArrow("effects/EVFX04_03_ThreefoldArrow.efk"),
-    EVFX04_09_ArcaneArrow("effects/EVFX04_09_ArcaneArrow.efk"),
-    EVFX04_15_PairedShot("effects/EVFX04_15_PairedShot.efk"),
-    EVFX05_09_ParallelLunge("effects/EVFX05_09_ParallelLunge.efk"),
-    EVFX05_13_BoringDrill("effects/EVFX05_13_BoringDrill.efk"),
-    EVFX05_16_AerialKunai("effects/EVFX05_16_AerialKunai.efk"),
-    EVFX06_06_SpreadBeam("effects/EVFX06_06_SpreadBeam.efk"),
-    EVFX06_14_HomingMissile("effects/EVFX06_14_HomingMissile.efk"),
-    EVFX06_17_QuadraDrone("effects/EVFX06_17_QuadraDrone.efk"),
-    EVFXForge01_10_FrostforgeSlash("effects/EVFXForge01_10_FrostforgeSlash.efk"),
-    EVFXForge01_12_FrostforgeShoot("effects/EVFXForge01_12_FrostforgeShoot.efk"),
-    EVFXForge02_08_BloomforgeWard("effects/EVFXForge02_08_BloomforgeWard.efk"),
-    EVFXForge02_11_BloomforgeStrike("effects/EVFXForge02_11_BloomforgeStrike.efk"),
-    EVFXForge03_01_SparkInvocation("effects/EVFXForge03_01_SparkInvocation.efk"),
-    EVFXForge03_14_SparkforgeBlast("effects/EVFXForge03_14_SparkforgeBlast.efk"),
-    EVFXForge04_07_SpikeCrush("effects/EVFXForge04_07_SpikeCrush.efk"),
-    EVFXForge04_11_BloodforgeStrike("effects/EVFXForge04_11_BloodforgeStrike.efk"),
-    EVFXForge05_06_LiftingGust("effects/EVFXForge05_06_LiftingGust.efk"),
-    EVFXForge05_09_StormforgeAura("effects/EVFXForge05_09_StormforgeAura.efk"),
-    EVFXForge09_08_FloodforgeWard("effects/EVFXForge09_08_FloodforgeWard.efk"),
-    MGC_EarthSpell_LV1_Impact("effects/MGC_EarthSpell_LV1_Impact.efk"),
-    MGC_EarthSpell_LV2("effects/MGC_EarthSpell_LV2.efk"),
-    MGC_EarthSpell_LV3("effects/MGC_EarthSpell_LV3.efk"),
-    MGC_EarthSpell_Projectile("effects/MGC_EarthSpell_Projectile.efk"),
-    MGC_W2_BlueBall("effects/MGC_W2_BlueBall.efk"),
-    MGC_W2_BlueBall_Projectile("effects/MGC_W2_BlueBall_Projectile.efk"),
-    MGC_W2_BlueBeam("effects/MGC_W2_BlueBeam.efk"),
-    MGC_W2_BlueBeam_BeamOnly("effects/MGC_W2_BlueBeam_BeamOnly.efk"),
-    MGC_W2_BlueBeam_ChargeUp("effects/MGC_W2_BlueBeam_ChargeUp.efk"),
-    MGC_W2_BlueFlame("effects/MGC_W2_BlueFlame.efk"),
-    MGC_W2_ExploDome("effects/MGC_W2_ExploDome.efk"),
-    MGC_W2_ExploDome_ExplosionOnly("effects/MGC_W2_ExploDome_ExplosionOnly.efk"),
-    MGC_W2_ManaFire("effects/MGC_W2_ManaFire.efk"),
-    MGC_W2_Shield_Apply("effects/MGC_W2_Shield_Apply.efk"),
-    MGC_W2_Shield_Break("effects/MGC_W2_Shield_Break.efk"),
-    MGC_W2_Shield_Loop("effects/MGC_W2_Shield_Loop.efk"),
-    MGC_W2_Shield_OnHit("effects/MGC_W2_Shield_OnHit.efk"),
-    MGC_W2_SuperSphereAttackImpact("effects/MGC_W2_SuperSphereAttack - Impact.efk"),
-    MGC_W2_SuperSphereAttack("effects/MGC_W2_SuperSphereAttack.efk"),
-    MGC_HealingSpell_LV1("effects/MGC_HealingSpell_LV1.efk"),
-    MGC_HealingSpell_LV2("effects/MGC_HealingSpell_LV2.efk"),
-    MGC_HealingSpell_LV3("effects/MGC_HealingSpell_LV3.efk"),
-    FIRE01("effects/Fire01.efk"),
-    FIRE02("effects/Fire02.efk"),
-    FIRE03("effects/Fire03.efk"),
-    FIRE04("effects/Fire04.efk"),
-    FIRE05("effects/Fire05.efk"),
-    FIRE06("effects/Fire06.efk"),
-    FIRE07("effects/Fire07.efk"),
-    FIRE08("effects/Fire08.efk"),
-    FIRE09("effects/Fire09.efk"),
-    FIRE10("effects/Fire10.efk"),
-    FIRE11("effects/Fire11.efk"),
-    FIRE12("effects/Fire12.efk"),
-    FIRE13("effects/Fire13.efk"),
-    FIRE14("effects/Fire14.efk"),
-    FIRE15("effects/Fire15.efk"),
-    FIRE16("effects/Fire16.efk"),
-    GUN01("effects/Gun01.efk"),
-    GUN02("effects/Gun02.efk"),
-    GUN03("effects/Gun03.efk"),
-    GUN04("effects/Gun04.efk"),
-    GUN05("effects/Gun05.efk"),
-    GUN06("effects/Gun06.efk"),
-    GUN07("effects/Gun07.efk"),
-    GUN08("effects/Gun08.efk"),
-    GUN09("effects/Gun09.efk"),
-    HOZYO01("effects/Hozyo01.efk"),
-    HOZYO02("effects/Hozyo02.efk"),
-    HOZYO03("effects/Hozyo03.efk"),
-    HOZYO04("effects/Hozyo04.efk"),
-    HOZYO05("effects/Hozyo05.efk"),
-    KAMEHAMEHA("effects/Kamehameha.efk"),
-    LIGHT01("effects/Light01.efk"),
-    LIGHT02("effects/Light02.efk"),
-    LIGHT03("effects/Light03.efk"),
-    LIGHT04("effects/Light04.efk"),
-    MAGIC01("effects/Magic01.efk"),
-    MAGIC02("effects/Magic02.efk"),
-    SPEAR01("effects/Spear01.efk"),
-    SPEAR02("effects/Spear02.efk"),
-    SPEAR03("effects/Spear03.efk"),
-    SPEAR04("effects/Spear04.efk"),
-    SWORD01("effects/Sword01.efk"),
-    SWORD02("effects/Sword02.efk"),
-    SWORD03("effects/Sword03.efk"),
-    SWORD04("effects/Sword04.efk"),
-    SWORD05("effects/Sword05.efk"),
-    SWORD06("effects/Sword06.efk"),
-    SWORD07("effects/Sword07.efk"),
-    SWORD08("effects/Sword08.efk"),
-    SWORD09("effects/Sword09.efk"),
-    SWORD11("effects/Sword11.efk"),
-    SWORD12("effects/Sword12.efk"),
-    SWORD13("effects/Sword13.efk"),
-    SWORD14("effects/Sword14.efk"),
-    SWORD15("effects/Sword15.efk"),
-    SWORD16("effects/Sword16.efk"),
-    SWORD17("effects/Sword17.efk"),
-    SWORD18("effects/Sword18.efk"),
-    SWORD19("effects/Sword19.efk"),
-    SWORD20("effects/Sword20.efk"),
-    SWORD21("effects/Sword21.efk"),
-    SWORD22("effects/Sword22.efk"),
-    SWORD23("effects/Sword23.efk"),
-    SWORD24("effects/Sword24.efk"),
-    SWORD25("effects/Sword25.efk"),
-    SWORD26("effects/Sword26.efk"),
-    SWORD27("effects/Sword27.efk"),
-    SWORD28("effects/Sword28.efk"),
-    WIND01("effects/Wind01.efk"),
-    WIND02("effects/Wind02.efk");
+    protected static final Map<String, PCLEffekseerEFX> ALL = new HashMap<>();
 
+    public static final PCLEffekseerEFX BLOW01 = new PCLEffekseerEFX("effects/Blow01.efk");
+    public static final PCLEffekseerEFX BLOW02 = new PCLEffekseerEFX("effects/Blow02.efk");
+    public static final PCLEffekseerEFX BLOW03 = new PCLEffekseerEFX("effects/Blow03.efk");
+    public static final PCLEffekseerEFX BLOW04 = new PCLEffekseerEFX("effects/Blow04.efk");
+    public static final PCLEffekseerEFX BLOW05 = new PCLEffekseerEFX("effects/Blow05.efk");
+    public static final PCLEffekseerEFX BLOW06 = new PCLEffekseerEFX("effects/Blow06.efk");
+    public static final PCLEffekseerEFX BLOW07 = new PCLEffekseerEFX("effects/Blow07.efk");
+    public static final PCLEffekseerEFX BLOW08 = new PCLEffekseerEFX("effects/Blow08.efk");
+    public static final PCLEffekseerEFX BLOW09 = new PCLEffekseerEFX("effects/Blow09.efk");
+    public static final PCLEffekseerEFX BLOW11 = new PCLEffekseerEFX("effects/Blow11.efk");
+    public static final PCLEffekseerEFX BLOW12 = new PCLEffekseerEFX("effects/Blow12.efk");
+    public static final PCLEffekseerEFX BLOW13 = new PCLEffekseerEFX("effects/Blow13.efk");
+    public static final PCLEffekseerEFX BLOW14 = new PCLEffekseerEFX("effects/Blow14.efk");
+    public static final PCLEffekseerEFX BLOW15 = new PCLEffekseerEFX("effects/Blow15.efk");
+    public static final PCLEffekseerEFX BLOW16 = new PCLEffekseerEFX("effects/Blow16.efk");
+    public static final PCLEffekseerEFX BLOW17 = new PCLEffekseerEFX("effects/Blow17.efk");
+    public static final PCLEffekseerEFX BLOW18 = new PCLEffekseerEFX("effects/Blow18.efk");
+    public static final PCLEffekseerEFX BLOW19 = new PCLEffekseerEFX("effects/Blow19.efk");
+    public static final PCLEffekseerEFX BLOW20 = new PCLEffekseerEFX("effects/Blow20.efk");
+    public static final PCLEffekseerEFX BLOW21 = new PCLEffekseerEFX("effects/Blow21.efk");
+    public static final PCLEffekseerEFX CLAW01 = new PCLEffekseerEFX("effects/Claw01.efk");
+    public static final PCLEffekseerEFX CLAW02 = new PCLEffekseerEFX("effects/Claw02.efk");
+    public static final PCLEffekseerEFX CLAW03 = new PCLEffekseerEFX("effects/Claw03.efk");
+    public static final PCLEffekseerEFX CLAW04 = new PCLEffekseerEFX("effects/Claw04.efk");
+    public static final PCLEffekseerEFX CURE01 = new PCLEffekseerEFX("effects/Cure01.efk");
+    public static final PCLEffekseerEFX CURE02 = new PCLEffekseerEFX("effects/Cure02.efk");
+    public static final PCLEffekseerEFX CURE03 = new PCLEffekseerEFX("effects/Cure03.efk");
+    public static final PCLEffekseerEFX CURE04 = new PCLEffekseerEFX("effects/Cure04.efk");
+    public static final PCLEffekseerEFX CURE05 = new PCLEffekseerEFX("effects/Cure05.efk");
+    public static final PCLEffekseerEFX CURE06 = new PCLEffekseerEFX("effects/Cure06.efk");
+    public static final PCLEffekseerEFX CURE07 = new PCLEffekseerEFX("effects/Cure07.efk");
+    public static final PCLEffekseerEFX DARK01 = new PCLEffekseerEFX("effects/Dark01.efk");
+    public static final PCLEffekseerEFX DARK02 = new PCLEffekseerEFX("effects/Dark02.efk");
+    public static final PCLEffekseerEFX DARK03 = new PCLEffekseerEFX("effects/Dark03.efk");
+    public static final PCLEffekseerEFX DARK04 = new PCLEffekseerEFX("effects/Dark04.efk");
+    public static final PCLEffekseerEFX DARK05 = new PCLEffekseerEFX("effects/Dark05.efk");
+    public static final PCLEffekseerEFX EVFX02_02_TwinEdge = new PCLEffekseerEFX("effects/EVFX02_02_TwinEdge.efk");
+    public static final PCLEffekseerEFX EVFX02_09_EruptionClaw = new PCLEffekseerEFX("effects/EVFX02_09_EruptionClaw.efk");
+    public static final PCLEffekseerEFX EVFX02_11_QuickBlade = new PCLEffekseerEFX("effects/EVFX02_11_QuickBlade.efk");
+    public static final PCLEffekseerEFX EVFX03_02_OrbitalSmash = new PCLEffekseerEFX("effects/EVFX03_02_OrbitalSmash.efk");
+    public static final PCLEffekseerEFX EVFX03_08_ThrustingStroke = new PCLEffekseerEFX("effects/EVFX03_08_ThrustingStroke.efk");
+    public static final PCLEffekseerEFX EVFX03_12_OneTwoStrike = new PCLEffekseerEFX("effects/EVFX03_12_OneTwoStrike.efk");
+    public static final PCLEffekseerEFX EVFX04_03_ThreefoldArrow = new PCLEffekseerEFX("effects/EVFX04_03_ThreefoldArrow.efk");
+    public static final PCLEffekseerEFX EVFX04_09_ArcaneArrow = new PCLEffekseerEFX("effects/EVFX04_09_ArcaneArrow.efk");
+    public static final PCLEffekseerEFX EVFX04_15_PairedShot = new PCLEffekseerEFX("effects/EVFX04_15_PairedShot.efk");
+    public static final PCLEffekseerEFX EVFX05_09_ParallelLunge = new PCLEffekseerEFX("effects/EVFX05_09_ParallelLunge.efk");
+    public static final PCLEffekseerEFX EVFX05_13_BoringDrill = new PCLEffekseerEFX("effects/EVFX05_13_BoringDrill.efk");
+    public static final PCLEffekseerEFX EVFX05_16_AerialKunai = new PCLEffekseerEFX("effects/EVFX05_16_AerialKunai.efk");
+    public static final PCLEffekseerEFX EVFX06_06_SpreadBeam = new PCLEffekseerEFX("effects/EVFX06_06_SpreadBeam.efk");
+    public static final PCLEffekseerEFX EVFX06_14_HomingMissile = new PCLEffekseerEFX("effects/EVFX06_14_HomingMissile.efk");
+    public static final PCLEffekseerEFX EVFX06_17_QuadraDrone = new PCLEffekseerEFX("effects/EVFX06_17_QuadraDrone.efk");
+    public static final PCLEffekseerEFX EVFXForge01_10_FrostforgeSlash = new PCLEffekseerEFX("effects/EVFXForge01_10_FrostforgeSlash.efk");
+    public static final PCLEffekseerEFX EVFXForge01_12_FrostforgeShoot = new PCLEffekseerEFX("effects/EVFXForge01_12_FrostforgeShoot.efk");
+    public static final PCLEffekseerEFX EVFXForge02_08_BloomforgeWard = new PCLEffekseerEFX("effects/EVFXForge02_08_BloomforgeWard.efk");
+    public static final PCLEffekseerEFX EVFXForge02_11_BloomforgeStrike = new PCLEffekseerEFX("effects/EVFXForge02_11_BloomforgeStrike.efk");
+    public static final PCLEffekseerEFX EVFXForge03_01_SparkInvocation = new PCLEffekseerEFX("effects/EVFXForge03_01_SparkInvocation.efk");
+    public static final PCLEffekseerEFX EVFXForge03_14_SparkforgeBlast = new PCLEffekseerEFX("effects/EVFXForge03_14_SparkforgeBlast.efk");
+    public static final PCLEffekseerEFX EVFXForge04_07_SpikeCrush = new PCLEffekseerEFX("effects/EVFXForge04_07_SpikeCrush.efk");
+    public static final PCLEffekseerEFX EVFXForge04_11_BloodforgeStrike = new PCLEffekseerEFX("effects/EVFXForge04_11_BloodforgeStrike.efk");
+    public static final PCLEffekseerEFX EVFXForge05_06_LiftingGust = new PCLEffekseerEFX("effects/EVFXForge05_06_LiftingGust.efk");
+    public static final PCLEffekseerEFX EVFXForge05_09_StormforgeAura = new PCLEffekseerEFX("effects/EVFXForge05_09_StormforgeAura.efk");
+    public static final PCLEffekseerEFX EVFXForge09_08_FloodforgeWard = new PCLEffekseerEFX("effects/EVFXForge09_08_FloodforgeWard.efk");
+    public static final PCLEffekseerEFX MGC_EarthSpell_LV1_Impact = new PCLEffekseerEFX("effects/MGC_EarthSpell_LV1_Impact.efk");
+    public static final PCLEffekseerEFX MGC_EarthSpell_LV2 = new PCLEffekseerEFX("effects/MGC_EarthSpell_LV2.efk");
+    public static final PCLEffekseerEFX MGC_EarthSpell_LV3 = new PCLEffekseerEFX("effects/MGC_EarthSpell_LV3.efk");
+    public static final PCLEffekseerEFX MGC_EarthSpell_Projectile = new PCLEffekseerEFX("effects/MGC_EarthSpell_Projectile.efk");
+    public static final PCLEffekseerEFX MGC_W2_BlueBall = new PCLEffekseerEFX("effects/MGC_W2_BlueBall.efk");
+    public static final PCLEffekseerEFX MGC_W2_BlueBall_Projectile = new PCLEffekseerEFX("effects/MGC_W2_BlueBall_Projectile.efk");
+    public static final PCLEffekseerEFX MGC_W2_BlueBeam = new PCLEffekseerEFX("effects/MGC_W2_BlueBeam.efk");
+    public static final PCLEffekseerEFX MGC_W2_BlueBeam_BeamOnly = new PCLEffekseerEFX("effects/MGC_W2_BlueBeam_BeamOnly.efk");
+    public static final PCLEffekseerEFX MGC_W2_BlueBeam_ChargeUp = new PCLEffekseerEFX("effects/MGC_W2_BlueBeam_ChargeUp.efk");
+    public static final PCLEffekseerEFX MGC_W2_BlueFlame = new PCLEffekseerEFX("effects/MGC_W2_BlueFlame.efk");
+    public static final PCLEffekseerEFX MGC_W2_ExploDome = new PCLEffekseerEFX("effects/MGC_W2_ExploDome.efk");
+    public static final PCLEffekseerEFX MGC_W2_ExploDome_ExplosionOnly = new PCLEffekseerEFX("effects/MGC_W2_ExploDome_ExplosionOnly.efk");
+    public static final PCLEffekseerEFX MGC_W2_ManaFire = new PCLEffekseerEFX("effects/MGC_W2_ManaFire.efk");
+    public static final PCLEffekseerEFX MGC_W2_Shield_Apply = new PCLEffekseerEFX("effects/MGC_W2_Shield_Apply.efk");
+    public static final PCLEffekseerEFX MGC_W2_Shield_Break = new PCLEffekseerEFX("effects/MGC_W2_Shield_Break.efk");
+    public static final PCLEffekseerEFX MGC_W2_Shield_Loop = new PCLEffekseerEFX("effects/MGC_W2_Shield_Loop.efk");
+    public static final PCLEffekseerEFX MGC_W2_Shield_OnHit = new PCLEffekseerEFX("effects/MGC_W2_Shield_OnHit.efk");
+    public static final PCLEffekseerEFX MGC_W2_SuperSphereAttackImpact = new PCLEffekseerEFX("effects/MGC_W2_SuperSphereAttack - Impact.efk");
+    public static final PCLEffekseerEFX MGC_W2_SuperSphereAttack = new PCLEffekseerEFX("effects/MGC_W2_SuperSphereAttack.efk");
+    public static final PCLEffekseerEFX MGC_HealingSpell_LV1 = new PCLEffekseerEFX("effects/MGC_HealingSpell_LV1.efk");
+    public static final PCLEffekseerEFX MGC_HealingSpell_LV2 = new PCLEffekseerEFX("effects/MGC_HealingSpell_LV2.efk");
+    public static final PCLEffekseerEFX MGC_HealingSpell_LV3 = new PCLEffekseerEFX("effects/MGC_HealingSpell_LV3.efk");
+    public static final PCLEffekseerEFX FIRE01 = new PCLEffekseerEFX("effects/Fire01.efk");
+    public static final PCLEffekseerEFX FIRE02 = new PCLEffekseerEFX("effects/Fire02.efk");
+    public static final PCLEffekseerEFX FIRE03 = new PCLEffekseerEFX("effects/Fire03.efk");
+    public static final PCLEffekseerEFX FIRE04 = new PCLEffekseerEFX("effects/Fire04.efk");
+    public static final PCLEffekseerEFX FIRE05 = new PCLEffekseerEFX("effects/Fire05.efk");
+    public static final PCLEffekseerEFX FIRE06 = new PCLEffekseerEFX("effects/Fire06.efk");
+    public static final PCLEffekseerEFX FIRE07 = new PCLEffekseerEFX("effects/Fire07.efk");
+    public static final PCLEffekseerEFX FIRE08 = new PCLEffekseerEFX("effects/Fire08.efk");
+    public static final PCLEffekseerEFX FIRE09 = new PCLEffekseerEFX("effects/Fire09.efk");
+    public static final PCLEffekseerEFX FIRE10 = new PCLEffekseerEFX("effects/Fire10.efk");
+    public static final PCLEffekseerEFX FIRE11 = new PCLEffekseerEFX("effects/Fire11.efk");
+    public static final PCLEffekseerEFX FIRE12 = new PCLEffekseerEFX("effects/Fire12.efk");
+    public static final PCLEffekseerEFX FIRE13 = new PCLEffekseerEFX("effects/Fire13.efk");
+    public static final PCLEffekseerEFX FIRE14 = new PCLEffekseerEFX("effects/Fire14.efk");
+    public static final PCLEffekseerEFX FIRE15 = new PCLEffekseerEFX("effects/Fire15.efk");
+    public static final PCLEffekseerEFX FIRE16 = new PCLEffekseerEFX("effects/Fire16.efk");
+    public static final PCLEffekseerEFX GUN01 = new PCLEffekseerEFX("effects/Gun01.efk");
+    public static final PCLEffekseerEFX GUN02 = new PCLEffekseerEFX("effects/Gun02.efk");
+    public static final PCLEffekseerEFX GUN03 = new PCLEffekseerEFX("effects/Gun03.efk");
+    public static final PCLEffekseerEFX GUN04 = new PCLEffekseerEFX("effects/Gun04.efk");
+    public static final PCLEffekseerEFX GUN05 = new PCLEffekseerEFX("effects/Gun05.efk");
+    public static final PCLEffekseerEFX GUN06 = new PCLEffekseerEFX("effects/Gun06.efk");
+    public static final PCLEffekseerEFX GUN07 = new PCLEffekseerEFX("effects/Gun07.efk");
+    public static final PCLEffekseerEFX GUN08 = new PCLEffekseerEFX("effects/Gun08.efk");
+    public static final PCLEffekseerEFX GUN09 = new PCLEffekseerEFX("effects/Gun09.efk");
+    public static final PCLEffekseerEFX HOZYO01 = new PCLEffekseerEFX("effects/Hozyo01.efk");
+    public static final PCLEffekseerEFX HOZYO02 = new PCLEffekseerEFX("effects/Hozyo02.efk");
+    public static final PCLEffekseerEFX HOZYO03 = new PCLEffekseerEFX("effects/Hozyo03.efk");
+    public static final PCLEffekseerEFX HOZYO04 = new PCLEffekseerEFX("effects/Hozyo04.efk");
+    public static final PCLEffekseerEFX HOZYO05 = new PCLEffekseerEFX("effects/Hozyo05.efk");
+    public static final PCLEffekseerEFX KAMEHAMEHA = new PCLEffekseerEFX("effects/Kamehameha.efk");
+    public static final PCLEffekseerEFX LIGHT01 = new PCLEffekseerEFX("effects/Light01.efk");
+    public static final PCLEffekseerEFX LIGHT02 = new PCLEffekseerEFX("effects/Light02.efk");
+    public static final PCLEffekseerEFX LIGHT03 = new PCLEffekseerEFX("effects/Light03.efk");
+    public static final PCLEffekseerEFX LIGHT04 = new PCLEffekseerEFX("effects/Light04.efk");
+    public static final PCLEffekseerEFX MAGIC01 = new PCLEffekseerEFX("effects/Magic01.efk");
+    public static final PCLEffekseerEFX MAGIC02 = new PCLEffekseerEFX("effects/Magic02.efk");
+    public static final PCLEffekseerEFX SPEAR01 = new PCLEffekseerEFX("effects/Spear01.efk");
+    public static final PCLEffekseerEFX SPEAR02 = new PCLEffekseerEFX("effects/Spear02.efk");
+    public static final PCLEffekseerEFX SPEAR03 = new PCLEffekseerEFX("effects/Spear03.efk");
+    public static final PCLEffekseerEFX SPEAR04 = new PCLEffekseerEFX("effects/Spear04.efk");
+    public static final PCLEffekseerEFX SWORD01 = new PCLEffekseerEFX("effects/Sword01.efk");
+    public static final PCLEffekseerEFX SWORD02 = new PCLEffekseerEFX("effects/Sword02.efk");
+    public static final PCLEffekseerEFX SWORD03 = new PCLEffekseerEFX("effects/Sword03.efk");
+    public static final PCLEffekseerEFX SWORD04 = new PCLEffekseerEFX("effects/Sword04.efk");
+    public static final PCLEffekseerEFX SWORD05 = new PCLEffekseerEFX("effects/Sword05.efk");
+    public static final PCLEffekseerEFX SWORD06 = new PCLEffekseerEFX("effects/Sword06.efk");
+    public static final PCLEffekseerEFX SWORD07 = new PCLEffekseerEFX("effects/Sword07.efk");
+    public static final PCLEffekseerEFX SWORD08 = new PCLEffekseerEFX("effects/Sword08.efk");
+    public static final PCLEffekseerEFX SWORD09 = new PCLEffekseerEFX("effects/Sword09.efk");
+    public static final PCLEffekseerEFX SWORD11 = new PCLEffekseerEFX("effects/Sword11.efk");
+    public static final PCLEffekseerEFX SWORD12 = new PCLEffekseerEFX("effects/Sword12.efk");
+    public static final PCLEffekseerEFX SWORD13 = new PCLEffekseerEFX("effects/Sword13.efk");
+    public static final PCLEffekseerEFX SWORD14 = new PCLEffekseerEFX("effects/Sword14.efk");
+    public static final PCLEffekseerEFX SWORD15 = new PCLEffekseerEFX("effects/Sword15.efk");
+    public static final PCLEffekseerEFX SWORD16 = new PCLEffekseerEFX("effects/Sword16.efk");
+    public static final PCLEffekseerEFX SWORD17 = new PCLEffekseerEFX("effects/Sword17.efk");
+    public static final PCLEffekseerEFX SWORD18 = new PCLEffekseerEFX("effects/Sword18.efk");
+    public static final PCLEffekseerEFX SWORD19 = new PCLEffekseerEFX("effects/Sword19.efk");
+    public static final PCLEffekseerEFX SWORD20 = new PCLEffekseerEFX("effects/Sword20.efk");
+    public static final PCLEffekseerEFX SWORD21 = new PCLEffekseerEFX("effects/Sword21.efk");
+    public static final PCLEffekseerEFX SWORD22 = new PCLEffekseerEFX("effects/Sword22.efk");
+    public static final PCLEffekseerEFX SWORD23 = new PCLEffekseerEFX("effects/Sword23.efk");
+    public static final PCLEffekseerEFX SWORD24 = new PCLEffekseerEFX("effects/Sword24.efk");
+    public static final PCLEffekseerEFX SWORD25 = new PCLEffekseerEFX("effects/Sword25.efk");
+    public static final PCLEffekseerEFX SWORD26 = new PCLEffekseerEFX("effects/Sword26.efk");
+    public static final PCLEffekseerEFX SWORD27 = new PCLEffekseerEFX("effects/Sword27.efk");
+    public static final PCLEffekseerEFX SWORD28 = new PCLEffekseerEFX("effects/Sword28.efk");
+    public static final PCLEffekseerEFX WIND01 = new PCLEffekseerEFX("effects/Wind01.efk");
+    public static final PCLEffekseerEFX WIND02 = new PCLEffekseerEFX("effects/Wind02.efk");
+
+    public final String ID;
     public final String path;
 
-    PCLEffekseerEFX(String path) {
+    public PCLEffekseerEFX(String path)
+    {
+        this(makeID(path), path);
+    }
+
+    public PCLEffekseerEFX(String id, String path)
+    {
         this.path = path;
+        this.ID = id;
+        ALL.putIfAbsent(ID, this);
+    }
+
+    public static PCLEffekseerEFX get(String id)
+    {
+        return ALL.get(id);
     }
 
     public static void initialize()
     {
-        STSEffekseerManager.register(EUIUtils.map(PCLEffekseerEFX.values(), v -> v.path));
+        STSEffekseerManager.register(EUIUtils.map(ALL.values(), v -> v.path));
+    }
+
+    public static Collection<PCLEffekseerEFX> sortedValues()
+    {
+        return ALL.values().stream().sorted((a, b) -> StringUtils.compare(a.ID, b.ID)).collect(Collectors.toList());
+    }
+
+    private static String makeID(String path)
+    {
+        String[] splitPath = path.split("/");
+        return splitPath[splitPath.length - 1].split("\\.")[0];
     }
 }

@@ -18,16 +18,11 @@ public class EffekseerCommand extends ConsoleCommand
         this.simpleCheck = true;
     }
 
-    public static PCLEffekseerEFX[] getCustoms()
-    {
-        return PCLEffekseerEFX.values();
-    }
-
     @Override
     protected void execute(String[] tokens, int depth)
     {
         try {
-            PCLEffekseerEFX augment = PCLEffekseerEFX.valueOf(tokens[1]);
+            PCLEffekseerEFX augment = PCLEffekseerEFX.get(tokens[1]);
             PCLEffects.Queue.playEFX(augment);
         }
         catch (IllegalArgumentException e)
@@ -38,6 +33,6 @@ public class EffekseerCommand extends ConsoleCommand
 
     public ArrayList<String> extraOptions(String[] tokens, int depth)
     {
-        return EUIUtils.map(getCustoms(), Enum::name);
+        return EUIUtils.map(PCLEffekseerEFX.sortedValues(), e -> e.ID);
     }
 }
