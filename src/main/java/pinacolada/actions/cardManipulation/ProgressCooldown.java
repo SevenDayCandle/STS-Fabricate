@@ -2,7 +2,6 @@ package pinacolada.actions.cardManipulation;
 
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.cards.CardGroup;
 import extendedui.EUIUtils;
 import extendedui.utilities.EUIColors;
 import pinacolada.actions.utility.GenericCardSelection;
@@ -19,21 +18,16 @@ public class ProgressCooldown extends GenericCardSelection
     protected int change;
     protected Color flashColor = EUIColors.gold(1).cpy();
 
-    protected ProgressCooldown(AbstractCard card, CardGroup group, int amount, int change)
+    protected ProgressCooldown(AbstractCard card, int amount, int change)
     {
-        super(card, group, amount);
+        super(card, amount);
 
         this.change = change;
     }
 
-    public ProgressCooldown(CardGroup group, int amount, int change)
-    {
-        this(null, group, amount, change);
-    }
-
     public ProgressCooldown(AbstractCard card, int change)
     {
-        this(card, null, 1, change);
+        this(card, 1, change);
     }
 
     @Override

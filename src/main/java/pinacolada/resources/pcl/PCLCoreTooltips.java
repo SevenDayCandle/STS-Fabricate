@@ -98,12 +98,12 @@ public class PCLCoreTooltips extends PCLTooltips
     public EUITooltip chance = EUITooltip.findByID("Chance");
     public EUITooltip constricted = EUITooltip.findByID("Constricted");
     public EUITooltip cooldown = EUITooltip.findByID("Cooldown");
-    public EUITooltip counterAttack = EUITooltip.findByID("Counter-Attack");
     public EUITooltip critical = EUITooltip.findByID("Critical");
     public EUITooltip curlUp = EUITooltip.findByID("Curl Up");
     public EUITooltip currentAffinity = EUITooltip.findByID("Current Affinity");
     public EUITooltip cycle = EUITooltip.findByID("Cycle");
     public EUITooltip dark = EUITooltip.findByID("Dark");
+    public EUITooltip deflection = EUITooltip.findByID("Deflection");
     public EUITooltip delayed = EUITooltip.findByID("Delayed");
     public EUITooltip delayedDamage = EUITooltip.findByID("Delayed Damage");
     public EUITooltip demonForm = EUITooltip.findByID("Demon Form");
@@ -294,7 +294,7 @@ public class PCLCoreTooltips extends PCLTooltips
 
         blasted.setIconFromPath(PGR.getPowerImage(BlastedPower.POWER_ID));
         blinded.setIconFromPath(PGR.getPowerImage(BlindedPower.POWER_ID));
-        counterAttack.setIconFromPath(PGR.getPowerImage(CounterAttackPower.POWER_ID));
+        deflection.setIconFromPath(PGR.getPowerImage(DeflectionPower.POWER_ID));
         critical.setIconFromPath(PGR.getPowerImage(CriticalPower.POWER_ID));
         delayedDamage.setIconFromPath(PGR.getPowerImage(DelayedDamagePower.POWER_ID));
         energized.setIconFromPath(PGR.getPowerImage(EnergizedPower.POWER_ID));

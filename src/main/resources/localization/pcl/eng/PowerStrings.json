@@ -20,10 +20,10 @@
 								"DESCRIPTIONS": ["The next #yAttack played deals #b{0}% damage."],
 								"NAME": "Critical"
 				},
-	"pcl:CounterAttackPower":
+	"pcl:DeflectionPower":
 	{
-		"DESCRIPTIONS": ["Whenever you block damage this turn: Deal #b{0} damage to ALL enemies, then reduce stacks by 1."],
-		"NAME": "Counter-Attack"
+		"DESCRIPTIONS": ["Reflect up to #b{0} blocked damage back at the attacker."],
+		"NAME": "Deflection"
 	},
 	"pcl:DelayedDamagePower":
 	{

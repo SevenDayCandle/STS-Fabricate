@@ -27,7 +27,10 @@ import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 import com.megacrit.cardcrawl.vfx.BorderFlashEffect;
 import com.megacrit.cardcrawl.vfx.BorderLongFlashEffect;
 import com.megacrit.cardcrawl.vfx.cardManip.CardFlashVfx;
-import extendedui.interfaces.delegates.*;
+import extendedui.interfaces.delegates.ActionT0;
+import extendedui.interfaces.delegates.ActionT1;
+import extendedui.interfaces.delegates.ActionT2;
+import extendedui.interfaces.delegates.FuncT0;
 import pinacolada.actions.affinity.AddAffinityLevel;
 import pinacolada.actions.affinity.RerollAffinity;
 import pinacolada.actions.affinity.TryChooseChoice;
@@ -623,16 +626,6 @@ public final class PCLActions
         return add(new ModifyAffinityLevel(card, affinity, amount, relative));
     }
 
-    public ModifyAffinityLevel modifyAffinityLevel(CardGroup group, int cards, List<PCLAffinity> affinity, int amount, boolean relative, boolean reset)
-    {
-        return add(new ModifyAffinityLevel(group, cards, affinity, amount, relative, reset));
-    }
-
-    public ModifyAffinityLevel modifyAffinityLevel(CardGroup group, int cards, List<PCLAffinity> affinity, int amount, boolean relative)
-    {
-        return add(new ModifyAffinityLevel(group, cards, affinity, amount, relative));
-    }
-
     public <S> ModifyAllCopies modifyAllCopies(String cardID, S state, ActionT2<S, AbstractCard> onCompletion)
     {
         return add(new ModifyAllCopies(cardID, state, onCompletion));
@@ -668,19 +661,9 @@ public final class PCLActions
         return add(new ModifyBlock(card, costChange, permanent, relative));
     }
 
-    public ModifyBlock modifyBlock(CardGroup cardGroup, int amount, int costChange, boolean permanent, boolean relative)
-    {
-        return add(new ModifyBlock(cardGroup, amount, costChange, permanent, relative));
-    }
-
     public ModifyCardHP modifyCardHp(AbstractCard card, int costChange, boolean permanent, boolean relative)
     {
         return add(new ModifyCardHP(card, costChange, permanent, relative));
-    }
-
-    public ModifyCardHP modifyCardHp(CardGroup cardGroup, int amount, int costChange, boolean permanent, boolean relative)
-    {
-        return add(new ModifyCardHP(cardGroup, amount, costChange, permanent, relative));
     }
 
     public ModifyCost modifyCost(AbstractCard card, int costChange, boolean permanent, boolean relative)
@@ -688,29 +671,14 @@ public final class PCLActions
         return add(new ModifyCost(card, costChange, permanent, relative));
     }
 
-    public ModifyCost modifyCost(CardGroup cardGroup, int amount, int costChange, boolean permanent, boolean relative)
-    {
-        return add(new ModifyCost(cardGroup, amount, costChange, permanent, relative));
-    }
-
     public ModifyDamage modifyDamage(AbstractCard card, int costChange, boolean permanent, boolean relative)
     {
         return add(new ModifyDamage(card, costChange, permanent, relative));
     }
 
-    public ModifyDamage modifyDamage(CardGroup cardGroup, int amount, int costChange, boolean permanent, boolean relative)
-    {
-        return add(new ModifyDamage(cardGroup, amount, costChange, permanent, relative));
-    }
-
     public ModifyPriority modifyPriority(AbstractCard card, int costChange, boolean permanent, boolean relative)
     {
         return add(new ModifyPriority(card, costChange, permanent, relative));
-    }
-
-    public ModifyPriority modifyPriority(CardGroup cardGroup, int amount, int costChange, boolean permanent, boolean relative)
-    {
-        return add(new ModifyPriority(cardGroup, amount, costChange, permanent, relative));
     }
 
     public ModifyTag modifyTag(AbstractCard card, PCLCardTag tag, int value, boolean relative)
@@ -721,16 +689,6 @@ public final class PCLActions
     public ModifyTag modifyTag(AbstractCard card, PCLCardTag tag, int value)
     {
         return add(new ModifyTag(card, tag, value));
-    }
-
-    public ModifyTag modifyTag(CardGroup group, int cards, PCLCardTag tag, int value, boolean relative)
-    {
-        return add(new ModifyTag(group, cards, tag, value, relative));
-    }
-
-    public ModifyTag modifyTag(CardGroup group, int cards, PCLCardTag tag, int value)
-    {
-        return add(new ModifyTag(group, cards, tag, value));
     }
 
     public MoveCard moveCard(AbstractCard card, CardGroup destination)
@@ -756,11 +714,6 @@ public final class PCLActions
     public GenerateCard obtainAffinityToken(PCLAffinity affinity, boolean upgraded)
     {
         return makeCardInHand(AffinityToken.getCard(affinity)).setUpgrade(upgraded, false);
-    }
-
-    public PlayCard playCard(CardGroup sourcePile, AbstractCreature target, FuncT1<AbstractCard, CardGroup> findCard)
-    {
-        return add(new PlayCard(findCard, sourcePile, target));
     }
 
     public PlayCard playCard(AbstractCard card, CardGroup sourcePile, AbstractCreature target)

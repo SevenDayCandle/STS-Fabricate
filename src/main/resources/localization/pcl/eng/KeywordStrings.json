@@ -87,11 +87,6 @@
 								"NAMES": ["cooldown", "cdn"],
 								"PROPER_NAME": "Cooldown"
 				},
-				"Counter-Attack":	{
-								"DESCRIPTION": "Whenever you block damage this turn, deal damage to ALL enemies and reduce stacks by #b1. Affected by damage modifiers.",
-								"NAMES": ["counter attack", "counter-attack", "counterattack"],
-								"PROPER_NAME": "Counter-Attack"
-				},
 				"Create":	{
 								"DESCRIPTION": "Add a new card in the specified pile.",
 								"NAMES": ["create", "created", "creates"],
@@ -128,6 +123,11 @@
 								"PLURAL": "debuffs",
 								"PRESENT": "debuffing",
 								"PROPER_NAME": "Debuff"
+				},
+				"Deflection":	{
+								"DESCRIPTION": "Reflect blocked #yAttack damage back at the attacker. Final damage is affected by damage modifiers.",
+								"NAMES": ["deflection"],
+								"PROPER_NAME": "Deflection"
 				},
 				"Delayed":	{
 								"DESCRIPTION": "Start each combat with this card at the bottom of your deck.",

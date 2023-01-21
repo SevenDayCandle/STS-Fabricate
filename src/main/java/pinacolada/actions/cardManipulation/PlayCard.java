@@ -14,7 +14,6 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.ui.panels.EnergyPanel;
 import com.megacrit.cardcrawl.vfx.ThoughtBubble;
 import extendedui.EUIUtils;
-import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.actions.PCLActionWithCallbackT2;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.special.DelayAllActions;
@@ -30,7 +29,6 @@ public class PlayCard extends PCLActionWithCallbackT2<AbstractMonster, AbstractC
     public static final float DEFAULT_TARGET_X_RIGHT = (Settings.WIDTH / 2f) + (200f * Settings.scale);
     public static final float DEFAULT_TARGET_Y = (Settings.HEIGHT / 2f);
 
-    protected FuncT1<AbstractCard, CardGroup> findCard;
     protected CardGroup sourcePile;
     protected int sourcePileIndex;
     protected boolean purge;
@@ -39,17 +37,6 @@ public class PlayCard extends PCLActionWithCallbackT2<AbstractMonster, AbstractC
     protected Vector2 currentPosition;
     protected Vector2 targetPosition;
     protected boolean renderLast;
-
-    public PlayCard(FuncT1<AbstractCard, CardGroup> findCard, CardGroup sourcePile, AbstractCreature target)
-    {
-        super(ActionType.WAIT, Settings.ACTION_DUR_FAST);
-
-        this.isRealtime = true;
-        this.findCard = findCard;
-        this.sourcePile = sourcePile;
-
-        initialize(target, 1);
-    }
 
     public PlayCard(AbstractCard card, AbstractCreature target, boolean copy, boolean renderLast)
     {
@@ -98,24 +85,6 @@ public class PlayCard extends PCLActionWithCallbackT2<AbstractMonster, AbstractC
     protected void firstUpdate()
     {
         super.firstUpdate();
-
-        if (findCard != null)
-        {
-            if (sourcePile.size() > 0)
-            {
-                card = findCard.invoke(sourcePile);
-            }
-
-            if (card == null)
-            {
-                complete();
-                return;
-            }
-            else
-            {
-                GameUtilities.trySetPosition(sourcePile, card);
-            }
-        }
 
         if (!checkConditions(card))
         {

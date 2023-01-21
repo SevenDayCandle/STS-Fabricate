@@ -7,7 +7,7 @@ import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.ui.controls.EUILabel;
 import extendedui.ui.hitboxes.DraggableHitbox;
-import extendedui.ui.hitboxes.PercentageRelativeHitbox;
+import extendedui.ui.hitboxes.RelativeHitbox;
 import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.monsters.PCLCardAlly;
@@ -16,7 +16,6 @@ import pinacolada.ui.EUICardDraggable;
 
 public class PowerFormulaDisplay extends EUICardDraggable<AbstractCard>
 {
-
     // TODO Lock functionality to continue showing stats for a certain card
     // TODO support for non-PCL cards
 
@@ -28,21 +27,21 @@ public class PowerFormulaDisplay extends EUICardDraggable<AbstractCard>
     public final PowerFormulaRow defend;
     public final PowerFormulaEnemyRow enemyAttack;
     protected final EUILabel title;
-    private final PercentageRelativeHitbox attackHb;
-    private final PercentageRelativeHitbox defendHb;
-    private final PercentageRelativeHitbox enemyAttackHb;
+    private final RelativeHitbox attackHb;
+    private final RelativeHitbox defendHb;
+    private final RelativeHitbox enemyAttackHb;
 
     public PowerFormulaDisplay()
     {
         super(PGR.core.config.damageFormulaPosition, new DraggableHitbox(screenW(0.0366f), screenH(0.425f), ICON_SIZE, ICON_SIZE, true), ICON_SIZE);
-        attackHb = new PercentageRelativeHitbox(hb, 1, 1, 0.3f, OFFSET1);
-        defendHb = new PercentageRelativeHitbox(hb, 1, 1, 0.3f, OFFSET2);
-        enemyAttackHb = new PercentageRelativeHitbox(hb, 1, 1, 0.3f, OFFSET3);
+        attackHb = RelativeHitbox.fromPercentages(hb, 1, 1, 0.3f, OFFSET1);
+        defendHb = RelativeHitbox.fromPercentages(hb, 1, 1, 0.3f, OFFSET2);
+        enemyAttackHb = RelativeHitbox.fromPercentages(hb, 1, 1, 0.3f, OFFSET3);
 
         attack = new PowerFormulaRow(attackHb, PowerFormulaRow.Type.Attack);
         defend = new PowerFormulaRow(defendHb, PowerFormulaRow.Type.Defend);
         enemyAttack = new PowerFormulaEnemyRow(enemyAttackHb);
-        title = new EUILabel(FontHelper.powerAmountFont, new PercentageRelativeHitbox(hb, 1, 1, 1f, -2f))
+        title = new EUILabel(FontHelper.powerAmountFont, RelativeHitbox.fromPercentages(hb, 1, 1, 1f, -2f))
                 .setAlignment(0.5f, 0.2f)
                 .setLabel("--");
     }

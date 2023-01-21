@@ -2,7 +2,6 @@ package pinacolada.actions.cardManipulation;
 
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.cards.CardGroup;
 import extendedui.utilities.EUIColors;
 import pinacolada.actions.utility.GenericCardSelection;
 import pinacolada.utilities.GameUtilities;
@@ -14,23 +13,18 @@ public class ModifyCost extends GenericCardSelection
     protected int costChange;
     protected Color flashColor = EUIColors.gold(1).cpy();
 
-    protected ModifyCost(AbstractCard card, CardGroup group, int amount, int costChange, boolean permanent, boolean relative)
+    protected ModifyCost(AbstractCard card, int amount, int costChange, boolean permanent, boolean relative)
     {
-        super(card, group, amount);
+        super(card, amount);
 
         this.costChange = costChange;
         this.permanent = permanent;
         this.relative = relative;
     }
 
-    public ModifyCost(CardGroup group, int amount, int costChange, boolean permanent, boolean relative)
-    {
-        this(null, group, amount, costChange, permanent, relative);
-    }
-
     public ModifyCost(AbstractCard card, int costChange, boolean permanent, boolean relative)
     {
-        this(card, null, 1, costChange, permanent, relative);
+        this(card, 1, costChange, permanent, relative);
     }
 
     @Override

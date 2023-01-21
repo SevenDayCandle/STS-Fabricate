@@ -119,33 +119,35 @@ public class MoveCard extends PCLActionWithCallback<AbstractCard>
         if (targetPile.type == CombatManager.PURGED_CARDS.type)
         {
             purge();
-            return;
         }
-
-        switch (targetPile.type)
+        else
         {
-            case DRAW_PILE:
-                moveToDrawPile();
-                break;
+            switch (targetPile.type)
+            {
+                case DRAW_PILE:
+                    moveToDrawPile();
+                    break;
 
-            case HAND:
-                moveToHand();
-                break;
+                case HAND:
+                    moveToHand();
+                    break;
 
-            case DISCARD_PILE:
-                moveToDiscardPile();
-                break;
+                case DISCARD_PILE:
+                    moveToDiscardPile();
+                    break;
 
-            case EXHAUST_PILE:
-                moveToExhaustPile();
-                break;
+                case EXHAUST_PILE:
+                    moveToExhaustPile();
+                    break;
 
-            case MASTER_DECK:
-            case CARD_POOL:
-            case UNSPECIFIED:
-                moveToPile();
-                break;
+                case MASTER_DECK:
+                case CARD_POOL:
+                case UNSPECIFIED:
+                    moveToPile();
+                    break;
+            }
         }
+
         CombatManager.onCardMoved(card, sourcePile, targetPile);
     }
 
@@ -303,9 +305,6 @@ public class MoveCard extends PCLActionWithCallback<AbstractCard>
 
     protected void purge()
     {
-        sourcePile.removeCard(card);
-        CombatManager.onCardPurged(card);
-
         if (showEffect)
         {
             showCard();
@@ -325,6 +324,8 @@ public class MoveCard extends PCLActionWithCallback<AbstractCard>
             SFX.play(SFX.CARD_BURN);
         }
 
+        moveToPile(card);
+        CombatManager.onCardPurged(card);
     }
 
     public MoveCard setCardPosition(float x, float y)

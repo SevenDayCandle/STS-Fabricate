@@ -8,7 +8,8 @@ import pinacolada.utilities.GameUtilities;
 import java.util.ArrayList;
 
 // Copied and modified from STS-AnimatorMod
-// TODO Merge with PowerFormulaDisplay
+// TODO remove and replace with a power subscribing system
+@Deprecated
 public class CombatHelper
 {
     private static final ArrayList<CreatureStatus> creatures = new ArrayList<>();

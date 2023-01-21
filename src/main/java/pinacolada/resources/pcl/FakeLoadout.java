@@ -7,7 +7,6 @@ import pinacolada.cards.pcl.special.QuestionMark;
 import java.util.ArrayList;
 
 // Copied and modified from STS-AnimatorMod
-@Deprecated
 public class FakeLoadout extends PCLLoadout
 {
     public FakeLoadout()

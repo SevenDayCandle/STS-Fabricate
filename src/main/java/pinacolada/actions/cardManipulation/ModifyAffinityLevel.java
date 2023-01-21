@@ -2,7 +2,6 @@ package pinacolada.actions.cardManipulation;
 
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.cards.CardGroup;
 import extendedui.utilities.EUIColors;
 import pinacolada.actions.utility.GenericCardSelection;
 import pinacolada.cards.base.PCLAffinity;
@@ -19,9 +18,9 @@ public class ModifyAffinityLevel extends GenericCardSelection
     protected Color flashColor = EUIColors.gold(1).cpy();
     protected int level;
 
-    protected ModifyAffinityLevel(AbstractCard card, CardGroup group, int amount, List<PCLAffinity> affinities, int level, boolean relative, boolean resetLevels)
+    protected ModifyAffinityLevel(AbstractCard card, int amount, List<PCLAffinity> affinities, int level, boolean relative, boolean resetLevels)
     {
-        super(card, group, amount);
+        super(card, amount);
 
         this.affinities = affinities;
         this.level = level;
@@ -29,29 +28,19 @@ public class ModifyAffinityLevel extends GenericCardSelection
         this.resetLevels = resetLevels;
     }
 
-    protected ModifyAffinityLevel(AbstractCard card, CardGroup group, int amount, List<PCLAffinity> affinities, int level, boolean relative)
+    protected ModifyAffinityLevel(AbstractCard card, int amount, List<PCLAffinity> affinities, int level, boolean relative)
     {
-        this(card, group, amount, affinities, level, relative, false);
-    }
-
-    public ModifyAffinityLevel(CardGroup group, int amount, List<PCLAffinity> affinities, int level, boolean relative, boolean resetLevels)
-    {
-        this(null, group, amount, affinities, level, relative, resetLevels);
-    }
-
-    public ModifyAffinityLevel(CardGroup group, int amount, List<PCLAffinity> affinities, int level, boolean relative)
-    {
-        this(null, group, amount, affinities, level, relative);
+        this(card, amount, affinities, level, relative, false);
     }
 
     public ModifyAffinityLevel(AbstractCard card, List<PCLAffinity> affinities, int level, boolean relative, boolean resetLevels)
     {
-        this(card, null, 1, affinities, level, relative, resetLevels);
+        this(card, 1, affinities, level, relative, resetLevels);
     }
 
     public ModifyAffinityLevel(AbstractCard card, List<PCLAffinity> affinities, int level, boolean relative)
     {
-        this(card, null, 1, affinities, level, relative);
+        this(card, 1, affinities, level, relative);
     }
 
     @Override

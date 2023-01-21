@@ -340,6 +340,10 @@ public class GameUtilities
         {
             return player.limbo;
         }
+        else if (CombatManager.PURGED_CARDS.contains(card))
+        {
+            return CombatManager.PURGED_CARDS;
+        }
         else
         {
             return null;
