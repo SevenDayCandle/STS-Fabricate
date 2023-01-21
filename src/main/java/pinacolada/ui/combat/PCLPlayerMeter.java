@@ -14,19 +14,14 @@ import extendedui.ui.hitboxes.DraggableHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.ui.tooltips.FakeFtue;
-import pinacolada.cards.base.AffinityReactions;
 import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.misc.PCLUseInfo;
 import pinacolada.interfaces.markers.ClickableProvider;
-import pinacolada.powers.PCLAffinityPower;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.powers.PCLClickableUse;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.ui.EUICardDraggable;
-
-import java.util.ArrayList;
-import java.util.Collection;
 
 public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implements ClickableProvider
 {
@@ -95,8 +90,6 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implement
         return PCLAffinity.General;
     }
 
-    public ArrayList<? extends PCLAffinityPower> getActivePowers() {return new ArrayList<>();}
-
     public PCLAffinity getCurrentAffinity()
     {
         return get(0);
@@ -133,19 +126,7 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implement
         return get(1);
     }
 
-    public PCLAffinityPower getPower(PCLAffinity affinity)
-    {
-        return null;
-    }
-
     public int getPowerAmount(PCLAffinity affinity) {return 0;}
-
-    public ArrayList<? extends PCLAffinityPower> getPowers()
-    {
-        return new ArrayList<>();
-    }
-
-    public AffinityReactions getReactions(AbstractCard c, Collection<? extends AbstractCreature> mo) {return new AffinityReactions();}
 
     public Object getRerollDescription() {return null;}
 

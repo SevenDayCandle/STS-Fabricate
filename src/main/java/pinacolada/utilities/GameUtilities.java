@@ -61,7 +61,6 @@ import pinacolada.monsters.PCLIntentInfo;
 import pinacolada.orbs.PCLOrb;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.patches.library.CardLibraryPatches;
-import pinacolada.powers.PCLAffinityPower;
 import pinacolada.powers.PCLPower;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.resources.PCLEnum;
@@ -237,17 +236,6 @@ public class GameUtilities
                 || AbstractDungeon.screen == AbstractDungeon.CurrentScreen.COMBAT_REWARD
                 || AbstractDungeon.screen == AbstractDungeon.CurrentScreen.CARD_REWARD
                 || AbstractDungeon.screen == AbstractScreen.EUI_SCREEN);
-    }
-
-    public static boolean canSpendAffinityPower(PCLAffinity affinity)
-    {
-        return canSpendAffinityPower(affinity, -1);
-    }
-
-    public static boolean canSpendAffinityPower(PCLAffinity affinity, int amount)
-    {
-        PCLAffinityPower po = CombatManager.playerSystem.getPower(affinity);
-        return po != null && po.canSpend(amount >= 0 ? amount : po.amount);
     }
 
     public static boolean chance(float amount)
@@ -513,11 +501,6 @@ public class GameUtilities
         }
 
         return cards;
-    }
-
-    public static List<? extends PCLAffinityPower> getAllPCLAffinityPowers()
-    {
-        return CombatManager.playerSystem.getPowers();
     }
 
     public static AbstractCard getAnyColorCardFiltered(AbstractCard.CardRarity rarity, AbstractCard.CardType type, boolean allowHealing)
@@ -1148,17 +1131,6 @@ public class GameUtilities
     {
         final PCLCardAffinities a = getPCLCardAffinities(card);
         return a != null ? a.getLevel(affinity, useStarLevel) : 0;
-    }
-
-    public static PCLAffinityPower getPCLAffinityPower(PCLAffinity affinity)
-    {
-        return affinity != null ? CombatManager.playerSystem.getPower(affinity) : GameUtilities.getRandomElement(GameUtilities.getAllPCLAffinityPowers(), PCLCard.rng);
-    }
-
-    public static int getPCLAffinityPowerAmount(PCLAffinity affinity)
-    {
-        PCLAffinityPower po = CombatManager.playerSystem.getPower(affinity);
-        return po != null ? po.amount : 0;
     }
 
     public static PCLCardData getPCLCardReplacement(String cardID)
@@ -1856,12 +1828,6 @@ public class GameUtilities
         return isPCLCardColor(getActingColor());
     }
 
-    public static boolean isPCLAffinityPowerActive(PCLAffinity affinity)
-    {
-        PCLAffinityPower po = CombatManager.playerSystem.getPower(affinity);
-        return po != null && po.isActive;
-    }
-
     public static boolean isPCLCardColor(AbstractCard.CardColor cardColor)
     {
         return EUIUtils.any(PGR.getAllResources(), r -> r.cardColor == cardColor) || cardColor == AbstractCard.CardColor.COLORLESS || cardColor == AbstractCard.CardColor.CURSE;
@@ -2400,17 +2366,6 @@ public class GameUtilities
         card.current_y = pos.y;
 
         return true;
-    }
-
-    public static boolean trySpendAffinityPower(PCLAffinity affinity)
-    {
-        return trySpendAffinityPower(affinity, -1);
-    }
-
-    public static boolean trySpendAffinityPower(PCLAffinity affinity, int amount)
-    {
-        PCLAffinityPower po = CombatManager.playerSystem.getPower(affinity);
-        return po != null && po.trySpend(amount >= 0 ? amount : po.amount);
     }
 
     public static void unlockAllKeys()

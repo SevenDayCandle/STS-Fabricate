@@ -2,7 +2,6 @@ package pinacolada.ui.combat;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
@@ -10,19 +9,15 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import extendedui.EUIUtils;
 import extendedui.ui.EUIBase;
-import pinacolada.cards.base.AffinityReactions;
 import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.misc.PCLUseInfo;
 import pinacolada.misc.CombatManager;
-import pinacolada.powers.PCLAffinityPower;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.powers.common.PCLLockOnPower;
 import pinacolada.utilities.GameUtilities;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
-import java.util.List;
 
 import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.player;
 
@@ -45,22 +40,6 @@ public class PCLPlayerSystem extends EUIBase
     public void addSkip(int amount)
     {
         getActiveMeter().addSkip(amount);
-    }
-
-    public float applyScaling(PCLAffinity affinity, PCLCard card, float base)
-    {
-        if (affinity == PCLAffinity.Star)
-        {
-            for (PCLAffinity p : PCLAffinity.extended())
-            {
-                base = applyScaling(p, card, base);
-            }
-
-            return base;
-        }
-
-        PCLAffinityPower power = getPower(affinity);
-        return power != null ? (base + MathUtils.ceil(card.affinities.getLevel(affinity, true) * power.getEffectiveScaling())) : base;  // Decider Aura scaling is added onto level scaling
     }
 
     public void flash(int target)
@@ -90,11 +69,6 @@ public class PCLPlayerSystem extends EUIBase
             return meters.getOrDefault(player.chosenClass, fakeMeter);
         }
         return fakeMeter;
-    }
-
-    public ArrayList<? extends PCLAffinityPower> getActivePowers()
-    {
-        return getActiveMeter().getActivePowers();
     }
 
     public PCLAffinity getAffinity(int index)
@@ -129,24 +103,9 @@ public class PCLPlayerSystem extends EUIBase
 
     public Collection<PCLPlayerMeter> getMeters() {return meters.values();}
 
-    public PCLAffinityPower getPower(PCLAffinity affinity)
-    {
-        return getActiveMeter().getPower(affinity);
-    }
-
     public int getPowerAmount(PCLAffinity affinity)
     {
         return getActiveMeter().getPowerAmount(affinity);
-    }
-
-    public List<? extends PCLAffinityPower> getPowers()
-    {
-        return getActiveMeter().getPowers();
-    }
-
-    public AffinityReactions getReactions(AbstractCard c, Collection<? extends AbstractCreature> mo)
-    {
-        return getActiveMeter().getReactions(c, mo);
     }
 
     public Object getRerollDescription()
@@ -186,9 +145,7 @@ public class PCLPlayerSystem extends EUIBase
         {
             for (PCLAffinity p : PCLAffinity.extended())
             {
-                float oldBlock = block;
-                block = applyScaling(p, source, block);
-                card.addDefendDisplay(p, oldBlock, block);
+                card.addDefendDisplay(p, block, block);
             }
 
             for (PCLPlayerMeter meter : getMeters())
@@ -206,9 +163,7 @@ public class PCLPlayerSystem extends EUIBase
         {
             for (PCLAffinity p : PCLAffinity.extended())
             {
-                float oldDamage = damage;
-                damage = applyScaling(p, source, damage);
-                card.addAttackDisplay(p, oldDamage, damage);
+                card.addAttackDisplay(p, damage, damage);
             }
 
             for (PCLPlayerMeter meter : getMeters())
@@ -224,11 +179,6 @@ public class PCLPlayerSystem extends EUIBase
     {
         if (card.baseMagicNumber > 0)
         {
-            for (PCLAffinity p : PCLAffinity.extended())
-            {
-                magicNumber = applyScaling(p, source, magicNumber);
-            }
-
             for (PCLPlayerMeter meter : getMeters())
             {
                 magicNumber = meter.modifyMagicNumber(magicNumber, source, card);

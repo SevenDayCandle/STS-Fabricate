@@ -29,7 +29,6 @@ import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.special.PCLHasteAction;
 import pinacolada.annotations.CombatSubscriber;
-import pinacolada.cards.base.AffinityReactions;
 import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardTag;
@@ -188,7 +187,7 @@ public class CombatManager
     private static void clearStats()
     {
         refreshPlayer();
-        EUIUtils.logInfoIfDebug(CombatManager.class, "Clearing PCL Player Stats");
+        EUIUtils.logInfoIfDebug(CombatManager.class, "Clearing Stats");
         for (ConcurrentLinkedQueue<?> event : EVENTS.values())
         {
             event.clear();
@@ -425,11 +424,6 @@ public class CombatManager
         clearStats();
     }
 
-    public static void onElementReact(AffinityReactions reactions, AbstractCreature m)
-    {
-        subscriberDo(OnElementReactSubscriber.class, s -> s.onElementReact(reactions, m));
-    }
-
     public static int onGainTempHP(int amount)
     {
         return subscriberInout(OnGainTempHPSubscriber.class, amount, OnGainTempHPSubscriber::onGainTempHP);
@@ -639,18 +633,6 @@ public class CombatManager
         return subscriberInout(OnTryChannelOrbSubscriber.class, orb, OnTryChannelOrbSubscriber::onTryChannelOrb);
     }
 
-    // TODO Move to child mod
-    public static int onTryElementReact(int amount, PCLAffinity button, PCLAffinity trigger)
-    {
-        return subscriberInout(OnTryElementReactSubscriber.class, amount, (s, d) -> s.onTryElementReact(d, button, trigger));
-    }
-
-    // TODO Move to child mod
-    public static int onTryGainResolve(AbstractCard card, AbstractPlayer p, int cost, boolean isActuallyGaining, boolean isFromMatch)
-    {
-        return subscriberInout(OnTryGainResolveSubscriber.class, cost, (s, d) -> s.onTryGainResolve(card, p, d, isActuallyGaining, isFromMatch));
-    }
-
     public static int onTrySpendEnergy(AbstractCard card, AbstractPlayer p, int cost)
     {
         // Hardcoded base game logic
@@ -660,12 +642,6 @@ public class CombatManager
         }
 
         return subscriberInout(OnTrySpendEnergySubscriber.class, cost, (s, d) -> s.onTrySpendEnergy(card, p, d));
-    }
-
-    // TODO Move to child mod
-    public static int onTryUseResolve(int original, int toSpend, boolean fromButton)
-    {
-        return subscriberInout(OnTryUseResolveSubscriber.class, toSpend, (s, d) -> s.onTryUseResolve(original, d, fromButton));
     }
 
     public static int onTryUseXCost(int original, AbstractCard card)

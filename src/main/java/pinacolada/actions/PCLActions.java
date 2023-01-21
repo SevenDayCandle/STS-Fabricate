@@ -977,16 +977,6 @@ public final class PCLActions
         return add(new StabilizePower(source, target, power, amount));
     }
 
-    public ApplyAffinityPower stackAffinityPower(PCLAffinity affinity, int amount)
-    {
-        return add(new ApplyAffinityPower(player, affinity, amount, false));
-    }
-
-    public ApplyAffinityPower stackAffinityPower(PCLAffinity affinity, int amount, boolean temporary)
-    {
-        return add(new ApplyAffinityPower(player, affinity, amount, temporary));
-    }
-
     public SummonAllyAction summonAlly(PCLCard card, PCLCardAlly slot)
     {
         return add(new SummonAllyAction(card, slot));
