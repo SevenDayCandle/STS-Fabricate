@@ -3,7 +3,7 @@ package pinacolada.skills.skills.base.modifiers;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
-import pinacolada.cards.base.PCLCardTarget;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.skills.PMod;

@@ -24,7 +24,7 @@ public abstract class PCLTextToken
         this.rawText = text;
     }
 
-    public float getAdditionalWidth(PCLTextContext context)
+    public float getAdditionalWidth(PCLCardText context)
     {
         return 0;
     }
@@ -34,7 +34,7 @@ public abstract class PCLTextToken
         return rawText != null ? rawText.length() : 1;
     }
 
-    public float getWidth(PCLTextContext context)
+    public float getWidth(PCLCardText context)
     {
         return getWidth(context.font, rawText);
     }
@@ -45,17 +45,17 @@ public abstract class PCLTextToken
         return layout.width;
     }
 
-    public void render(SpriteBatch sb, PCLTextContext context)
+    public void render(SpriteBatch sb, PCLCardText context)
     {
         render(sb, context, rawText, context.color);
     }
 
-    protected void render(SpriteBatch sb, PCLTextContext context, Color color)
+    protected void render(SpriteBatch sb, PCLCardText context, Color color)
     {
         render(sb, context, rawText, color);
     }
 
-    protected void render(SpriteBatch sb, PCLTextContext context, ColoredString string)
+    protected void render(SpriteBatch sb, PCLCardText context, ColoredString string)
     {
         if (string == null)
         {
@@ -65,7 +65,7 @@ public abstract class PCLTextToken
         render(sb, context, string.text, string.color != null ? string.color : context.color);
     }
 
-    protected void render(SpriteBatch sb, PCLTextContext context, String text, Color color)
+    protected void render(SpriteBatch sb, PCLCardText context, String text, Color color)
     {
         float width = getWidth(context.font, text);
 

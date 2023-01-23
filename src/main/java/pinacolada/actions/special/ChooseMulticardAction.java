@@ -7,7 +7,7 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.ui.GridCardSelectScreenHelper;
 import pinacolada.actions.PCLActionWithCallback;
 import pinacolada.cards.base.PCLMultiCard;
-import pinacolada.cards.base.fields.PCLCardTag;
+import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.cards.pcl.special.MysteryCard;
 import pinacolada.resources.PGR;
 

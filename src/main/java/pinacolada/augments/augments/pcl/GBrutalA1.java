@@ -4,8 +4,8 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.annotations.VisibleAugment;
 import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentData;
-import pinacolada.cards.base.PCLAffinity;
-import pinacolada.cards.base.PCLAttackType;
+import pinacolada.cards.base.fields.PCLAffinity;
+import pinacolada.cards.base.fields.PCLAttackType;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PTrait;
 

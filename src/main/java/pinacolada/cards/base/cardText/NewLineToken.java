@@ -32,13 +32,13 @@ public class NewLineToken extends PCLTextToken
     } // Accounts for the reduced space available on the card with newlines present
 
     @Override
-    public float getWidth(PCLTextContext context)
+    public float getWidth(PCLCardText context)
     {
         return 0;
     }
 
     @Override
-    public void render(SpriteBatch sb, PCLTextContext context)
+    public void render(SpriteBatch sb, PCLCardText context)
     {
         throw new RuntimeException("New line token should not be rendered");
     }

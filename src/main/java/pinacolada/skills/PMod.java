@@ -5,15 +5,16 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.utilities.ColoredString;
-import pinacolada.cards.base.PCLAffinity;
+import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.PCLCardGroupHelper;
-import pinacolada.cards.base.PCLCardTarget;
-import pinacolada.misc.PCLUseInfo;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.markers.PMultiBase;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.fields.PField;
+import pinacolada.skills.fields.PField_CardGeneric;
 import pinacolada.skills.skills.base.modifiers.*;
 import pinacolada.stances.PCLStanceHelper;
 
@@ -271,7 +272,7 @@ public abstract class PMod<T extends PField> extends PSkill<T>
 
     public static PMod_PurgePerCard purgeRandomPer(int amount, PCLCardGroupHelper... groups)
     {
-        return (PMod_PurgePerCard) new PMod_PurgePerCard(amount, groups).edit(f -> f.setRandom());
+        return (PMod_PurgePerCard) new PMod_PurgePerCard(amount, groups).edit(PField_CardGeneric::setRandom);
     }
 
     public static PMod_ReshufflePerCard reshufflePer(int amount, PCLCardGroupHelper... groups)
@@ -281,7 +282,7 @@ public abstract class PMod<T extends PField> extends PSkill<T>
 
     public static PMod_ReshufflePerCard reshuffleRandomPer(int amount, PCLCardGroupHelper... groups)
     {
-        return (PMod_ReshufflePerCard) new PMod_ReshufflePerCard(amount, groups).edit(f -> f.setRandom());
+        return (PMod_ReshufflePerCard) new PMod_ReshufflePerCard(amount, groups).edit(PField_CardGeneric::setRandom);
     }
 
     public static PMod_ScoutBranch scoutBranch(int amount)
@@ -302,6 +303,16 @@ public abstract class PMod<T extends PField> extends PSkill<T>
     public static PMod_ScryPerCard scryPer(int amount)
     {
         return new PMod_ScryPerCard(amount);
+    }
+
+    public static PMod_SelectPerCard selectPer(int amount)
+    {
+        return new PMod_SelectPerCard(amount);
+    }
+
+    public static PMod_SelectPerCard selectPer(int amount, PCLCardGroupHelper... groups)
+    {
+        return new PMod_SelectPerCard(amount, groups);
     }
 
     public static PMod_XEnergy xEnergy()

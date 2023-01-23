@@ -6,7 +6,7 @@
 												"NAME": "Madness"
 								},
 								"pcl:PortableTrashCan": {
-												"EXTENDED_DESCRIPTION": ["Purge a card in hand and remove it from your deck"],
+												"EXTENDED_DESCRIPTION": ["Purge any number of cards in hand or discard pile. Remove {0} of them from your deck."],
 												"NAME": "Portable Trash Can"
 								},
 								"pcl:Present": {

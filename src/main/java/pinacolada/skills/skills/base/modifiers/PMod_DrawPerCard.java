@@ -11,7 +11,7 @@ import pinacolada.actions.pileSelection.FetchFromPile;
 import pinacolada.actions.pileSelection.SelectFromPile;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
-import pinacolada.cards.base.PCLCardTarget;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;

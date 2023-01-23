@@ -8,7 +8,7 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUIUtils;
-import pinacolada.cards.base.fields.PCLCardTag;
+import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.skills.PSkill;
 import pinacolada.utilities.GameUtilities;

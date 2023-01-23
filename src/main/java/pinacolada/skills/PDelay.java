@@ -1,7 +1,7 @@
 package pinacolada.skills;
 
 import extendedui.interfaces.delegates.ActionT1;
-import pinacolada.cards.base.PCLCardTarget;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.delay.DelayUse;

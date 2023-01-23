@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.utilities.EUIColors;
 import pinacolada.actions.utility.GenericCardSelection;
-import pinacolada.cards.base.fields.PCLCardTag;
+import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.utilities.GameUtilities;
 
 public class ModifyTag extends GenericCardSelection

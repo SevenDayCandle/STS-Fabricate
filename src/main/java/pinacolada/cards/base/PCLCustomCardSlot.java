@@ -7,6 +7,7 @@ import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIUtils;
+import pinacolada.cards.base.fields.PCLAttackType;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PTrigger;

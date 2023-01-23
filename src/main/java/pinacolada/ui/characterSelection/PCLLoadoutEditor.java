@@ -21,10 +21,10 @@ import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PGR;
-import pinacolada.resources.pcl.PCLCardSlot;
-import pinacolada.resources.pcl.PCLLoadout;
-import pinacolada.resources.pcl.PCLLoadoutData;
-import pinacolada.resources.pcl.PCLRelicSlot;
+import pinacolada.resources.loadout.PCLCardSlot;
+import pinacolada.resources.loadout.PCLLoadout;
+import pinacolada.resources.loadout.PCLLoadoutData;
+import pinacolada.resources.loadout.PCLRelicSlot;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;

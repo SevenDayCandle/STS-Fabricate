@@ -1,7 +1,7 @@
 package pinacolada.skills.skills.base.primary;
 
 import pinacolada.annotations.VisibleSkill;
-import pinacolada.cards.base.PCLCardTarget;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.PTrigger;

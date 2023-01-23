@@ -9,7 +9,7 @@ import com.megacrit.cardcrawl.vfx.combat.CardPoofEffect;
 import javassist.CannotCompileException;
 import javassist.expr.ExprEditor;
 import javassist.expr.MethodCall;
-import pinacolada.cards.base.fields.PCLCardTag;
+import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
 import pinacolada.interfaces.subscribers.OnAddedToDrawPileSubscriber;

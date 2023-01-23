@@ -6,8 +6,8 @@ import com.megacrit.cardcrawl.core.CardCrawlGame;
 import extendedui.EUIUtils;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.resources.PCLAbstractPlayerData;
-import pinacolada.resources.pcl.PCLLoadout;
-import pinacolada.resources.pcl.PCLRuntimeLoadout;
+import pinacolada.resources.loadout.PCLLoadout;
+import pinacolada.resources.loadout.PCLRuntimeLoadout;
 
 import java.util.*;
 import java.util.stream.Collectors;

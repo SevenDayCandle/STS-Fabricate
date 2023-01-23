@@ -14,10 +14,10 @@ import pinacolada.blights.common.GlyphBlight;
 import pinacolada.blights.common.GlyphBlight1;
 import pinacolada.blights.common.GlyphBlight2;
 import pinacolada.cards.base.PCLCustomCardSlot;
-import pinacolada.resources.pcl.PCLLoadout;
-import pinacolada.resources.pcl.PCLLoadoutData;
-import pinacolada.resources.pcl.PCLRuntimeLoadout;
-import pinacolada.resources.pcl.PCLTrophies;
+import pinacolada.resources.loadout.PCLLoadout;
+import pinacolada.resources.loadout.PCLLoadoutData;
+import pinacolada.resources.loadout.PCLRuntimeLoadout;
+import pinacolada.resources.loadout.PCLTrophies;
 import pinacolada.utilities.RandomizedList;
 
 import java.util.ArrayList;
@@ -25,8 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.StringJoiner;
 
+import static pinacolada.resources.loadout.PCLLoadoutData.TInfo;
 import static pinacolada.resources.pcl.PCLCoreConfig.JSON_FILTER;
-import static pinacolada.resources.pcl.PCLLoadoutData.TInfo;
 
 // Copied and modified from STS-AnimatorMod
 public abstract class PCLAbstractPlayerData

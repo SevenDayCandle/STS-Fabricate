@@ -1,9 +1,9 @@
 package pinacolada.augments;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import pinacolada.cards.base.PCLAffinity;
-import pinacolada.cards.base.PCLCardAffinities;
-import pinacolada.cards.base.PCLCardAffinity;
+import pinacolada.cards.base.fields.PCLAffinity;
+import pinacolada.cards.base.fields.PCLCardAffinities;
+import pinacolada.cards.base.fields.PCLCardAffinity;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.HashMap;

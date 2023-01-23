@@ -21,7 +21,7 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.interfaces.markers.RunAttributesProvider;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PGR;
-import pinacolada.resources.pcl.PCLLoadout;
+import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;

@@ -8,7 +8,7 @@ import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.ui.controls.EUILabel;
 import extendedui.ui.hitboxes.DraggableHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
-import pinacolada.cards.base.PCLAffinity;
+import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.PGR;
@@ -86,6 +86,7 @@ public class PowerFormulaDisplay extends EUICardDraggable<AbstractCard>
         }
     }
 
+    // TODO use this to show actual damage you will take
     public void addAllyIntercept(PCLCardAlly ally, int input, int result)
     {
         if (input != result)

@@ -1,6 +1,6 @@
 package pinacolada.skills.fields;
 
-import pinacolada.cards.base.fields.PCLCardTag;
+import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
 
 import java.util.ArrayList;

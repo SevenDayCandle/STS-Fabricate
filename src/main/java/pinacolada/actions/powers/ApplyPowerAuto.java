@@ -12,7 +12,7 @@ import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLActionAutoTarget;
 import pinacolada.actions.PCLActions;
-import pinacolada.cards.base.PCLCardTarget;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.powers.PCLPowerHelper;
 
 // Copied and modified from STS-AnimatorMod

@@ -19,7 +19,7 @@ import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.ui.tooltips.EUITooltip;
-import pinacolada.cards.base.PCLCardTarget;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.interfaces.markers.PointerProvider;
 import pinacolada.misc.CombatManager;

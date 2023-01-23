@@ -9,7 +9,7 @@ import extendedui.interfaces.delegates.FuncT2;
 import pinacolada.actions.damage.DealDamage;
 import pinacolada.actions.damage.DealDamageToAll;
 import pinacolada.annotations.VisibleSkill;
-import pinacolada.cards.base.PCLCardTarget;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.effects.PCLEffekseerEFX;
 import pinacolada.effects.VFX;

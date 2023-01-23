@@ -13,7 +13,7 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.effects.PCLEffectWithCallback;
-import pinacolada.resources.pcl.PCLCardSlot;
+import pinacolada.resources.loadout.PCLCardSlot;
 
 import java.util.ArrayList;
 

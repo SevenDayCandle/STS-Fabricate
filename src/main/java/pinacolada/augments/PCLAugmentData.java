@@ -2,7 +2,7 @@ package pinacolada.augments;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIUtils;
-import pinacolada.cards.base.PCLAffinity;
+import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;

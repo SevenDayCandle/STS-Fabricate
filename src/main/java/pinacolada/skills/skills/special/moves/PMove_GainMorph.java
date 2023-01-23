@@ -1,6 +1,6 @@
 package pinacolada.skills.skills.special.moves;
 
-import pinacolada.cards.base.PCLCardTarget;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.interfaces.markers.Hidden;
 import pinacolada.misc.CombatManager;

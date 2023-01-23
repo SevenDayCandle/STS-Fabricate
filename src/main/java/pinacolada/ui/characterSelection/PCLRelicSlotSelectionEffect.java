@@ -16,7 +16,7 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.effects.PCLEffect;
 import pinacolada.relics.PCLRelic;
-import pinacolada.resources.pcl.PCLRelicSlot;
+import pinacolada.resources.loadout.PCLRelicSlot;
 
 import java.util.ArrayList;
 

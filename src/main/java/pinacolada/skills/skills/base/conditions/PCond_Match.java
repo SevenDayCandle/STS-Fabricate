@@ -2,7 +2,7 @@ package pinacolada.skills.skills.base.conditions;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.annotations.VisibleSkill;
-import pinacolada.cards.base.PCLCardTarget;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.interfaces.subscribers.OnMatchSubscriber;
 import pinacolada.resources.PGR;

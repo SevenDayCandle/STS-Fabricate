@@ -26,7 +26,7 @@ import pinacolada.effects.PCLEffects;
 import pinacolada.effects.card.ShowCardPileEffect;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PGR;
-import pinacolada.resources.pcl.PCLRuntimeLoadout;
+import pinacolada.resources.loadout.PCLRuntimeLoadout;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.Collection;

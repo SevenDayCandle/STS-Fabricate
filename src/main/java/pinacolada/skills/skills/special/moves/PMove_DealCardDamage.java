@@ -13,7 +13,7 @@ import extendedui.utilities.ColoredString;
 import pinacolada.actions.damage.DealDamage;
 import pinacolada.actions.damage.DealDamageToAll;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.PCLCardTarget;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.PCLEffekseerEFX;

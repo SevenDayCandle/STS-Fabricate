@@ -2,7 +2,10 @@ package pinacolada.cards.pcl.curse;
 
 import pinacolada.annotations.VisibleCard;
 import pinacolada.cards.base.*;
-import pinacolada.cards.base.fields.PCLCardTag;
+import pinacolada.cards.base.fields.PCLAffinity;
+import pinacolada.cards.base.PCLCardData;
+import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PMove;

@@ -61,7 +61,7 @@ public class PointerToken extends PCLTextToken
     }
 
     @Override
-    public float getAdditionalWidth(PCLTextContext context)
+    public float getAdditionalWidth(PCLCardText context)
     {
         if (move != null && variableID == PSkill.XVALUE_CHAR)
         {
@@ -84,7 +84,7 @@ public class PointerToken extends PCLTextToken
     }
 
     @Override
-    public void render(SpriteBatch sb, PCLTextContext context)
+    public void render(SpriteBatch sb, PCLCardText context)
     {
         if (coloredString == null || EUI.elapsed25())
         {

@@ -5,7 +5,7 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.rewards.RewardItem;
 import pinacolada.annotations.VisibleRelic;
-import pinacolada.cards.base.PCLAffinity;
+import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;

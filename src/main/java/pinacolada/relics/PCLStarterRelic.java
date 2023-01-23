@@ -12,7 +12,7 @@ import extendedui.EUIUtils;
 import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.augments.PCLAugmentWeights;
-import pinacolada.cards.base.PCLAffinity;
+import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.effects.PCLEffects;
 import pinacolada.interfaces.listeners.OnReceiveRewardsListener;
 import pinacolada.resources.PGR;

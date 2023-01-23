@@ -5,7 +5,10 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
-import pinacolada.cards.base.*;
+import pinacolada.cards.base.fields.PCLAffinity;
+import pinacolada.cards.base.PCLCard;
+import pinacolada.cards.base.PCLCardGroupHelper;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.markers.PointerProvider;
 import pinacolada.misc.CombatManager;
 import pinacolada.misc.PCLUseInfo;
@@ -351,6 +354,16 @@ public abstract class PCond<T extends PField> extends PSkill<T>
     public static PCond_Starter starter()
     {
         return new PCond_Starter();
+    }
+
+    public static PCond_TakeDamage takeDamage()
+    {
+        return new PCond_TakeDamage();
+    }
+
+    public static PCond_TakeDamage takeDamage(int amount)
+    {
+        return new PCond_TakeDamage(amount);
     }
 
     public abstract boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger);

@@ -10,14 +10,15 @@ import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.markers.CardObject;
-import pinacolada.cards.base.fields.PCLCardTag;
+import pinacolada.cards.base.fields.*;
+import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.interfaces.markers.Hidden;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.monsters.animations.PCLAllyAnimation;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
-import pinacolada.resources.pcl.PCLLoadout;
+import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.utilities.PCLRenderHelpers;
 
 import java.lang.reflect.Constructor;

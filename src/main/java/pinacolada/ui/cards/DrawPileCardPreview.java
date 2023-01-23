@@ -11,6 +11,7 @@ import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.utilities.RotatingList;
 
 // Copied and modified from STS-AnimatorMod
+// TODO use this for a relic or remove
 public class DrawPileCardPreview
 {
     protected static final float REFRESH_DELAY = 0.625f;

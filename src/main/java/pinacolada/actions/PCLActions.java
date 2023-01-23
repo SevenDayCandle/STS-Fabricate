@@ -55,11 +55,11 @@ import pinacolada.actions.special.*;
 import pinacolada.actions.utility.CallbackAction;
 import pinacolada.actions.utility.SequentialAction;
 import pinacolada.actions.utility.WaitRealtimeAction;
-import pinacolada.cards.base.PCLAffinity;
+import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
-import pinacolada.cards.base.PCLCardTarget;
-import pinacolada.cards.base.fields.PCLCardTag;
+import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.cards.pcl.tokens.AffinityToken;
 import pinacolada.interfaces.subscribers.OnPhaseChangedSubscriber;
 import pinacolada.misc.CombatManager;
@@ -888,6 +888,11 @@ public final class PCLActions
     public SelectFromPile selectFromPile(String sourceName, int amount, CardGroup... groups)
     {
         return add(new SelectFromPile(sourceName, amount, groups));
+    }
+
+    public SelectFromPile selectFromPile(String sourceName, int amount, Collection<AbstractCard> cards)
+    {
+        return add(new SelectFromPile(sourceName, amount, new CardGroup(CardGroup.CardGroupType.UNSPECIFIED)));
     }
 
     public SequentialAction sequential(AbstractGameAction action, AbstractGameAction action2)

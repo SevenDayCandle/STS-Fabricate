@@ -15,10 +15,10 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.utilities.EUIColors;
 import extendedui.utilities.EUIFontHelper;
-import pinacolada.cards.base.PCLAffinity;
+import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.resources.PGR;
 
-import static pinacolada.cards.base.PCLAffinity.MAX_LEVEL;
+import static pinacolada.cards.base.fields.PCLAffinity.MAX_LEVEL;
 
 public class PCLCustomCardAffinityValueEditor extends EUIHoverable
 {

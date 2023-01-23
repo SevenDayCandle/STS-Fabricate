@@ -15,7 +15,7 @@ import extendedui.ui.controls.EUITextBoxNumericalInput;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.utilities.EUIFontHelper;
-import pinacolada.cards.base.PCLCardTagInfo;
+import pinacolada.cards.base.fields.PCLCardTagInfo;
 
 import static pinacolada.ui.cardEditor.PCLCustomCardAttributesPage.MENU_HEIGHT;
 

@@ -2,7 +2,7 @@ package pinacolada.skills.skills.base.moves;
 
 import pinacolada.actions.basic.RemoveBlock;
 import pinacolada.annotations.VisibleSkill;
-import pinacolada.cards.base.PCLCardTarget;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;

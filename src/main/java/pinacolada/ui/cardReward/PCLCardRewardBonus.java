@@ -15,8 +15,8 @@ import pinacolada.effects.SFX;
 import pinacolada.effects.card.PermanentUpgradeEffect;
 import pinacolada.interfaces.listeners.OnAddingToCardRewardListener;
 import pinacolada.resources.PGR;
+import pinacolada.resources.loadout.PCLRuntimeLoadout;
 import pinacolada.resources.pcl.PCLCoreStrings;
-import pinacolada.resources.pcl.PCLRuntimeLoadout;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;

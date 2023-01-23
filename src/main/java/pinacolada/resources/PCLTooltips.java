@@ -1,7 +1,7 @@
 package pinacolada.resources;
 
 import extendedui.ui.tooltips.EUITooltip;
-import pinacolada.cards.base.PCLAffinity;
+import pinacolada.cards.base.fields.PCLAffinity;
 
 public abstract class PCLTooltips
 {

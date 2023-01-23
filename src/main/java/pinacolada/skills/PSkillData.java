@@ -2,8 +2,8 @@ package pinacolada.skills;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.cards.base.PCLCardGroupHelper;
-import pinacolada.cards.base.PCLCardSelection;
-import pinacolada.cards.base.PCLCardTarget;
+import pinacolada.cards.base.fields.PCLCardSelection;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.skills.fields.PField;

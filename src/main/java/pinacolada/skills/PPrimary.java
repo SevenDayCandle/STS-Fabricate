@@ -1,6 +1,6 @@
 package pinacolada.skills;
 
-import pinacolada.cards.base.PCLCardTarget;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.skills.fields.PField;
 
 public abstract class PPrimary<T extends PField> extends PSkill<T>

@@ -12,7 +12,7 @@ import extendedui.ui.controls.EUITextBox;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.resources.PGR;
-import pinacolada.resources.pcl.PCLCardSlot;
+import pinacolada.resources.loadout.PCLCardSlot;
 
 // Copied and modified from STS-AnimatorMod
 public class PCLCardSlotEditor extends EUIBase

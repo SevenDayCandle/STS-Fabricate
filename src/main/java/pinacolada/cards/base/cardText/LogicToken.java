@@ -183,7 +183,7 @@ public class LogicToken extends PCLTextToken
     }
 
     @Override
-    public void render(SpriteBatch sb, PCLTextContext context)
+    public void render(SpriteBatch sb, PCLCardText context)
     {
         if (move != null)
         {

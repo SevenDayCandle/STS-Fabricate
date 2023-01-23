@@ -7,7 +7,7 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT0;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.PCLCardTarget;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.powers.PSkillPower;
 import pinacolada.skills.fields.PField_Not;

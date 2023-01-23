@@ -4,7 +4,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIUtils;
 import pinacolada.actions.PCLActionWithCallback;
 import pinacolada.actions.PCLActions;
-import pinacolada.cards.base.PCLAffinity;
+import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.misc.CombatManager;
 import pinacolada.ui.combat.PCLPlayerMeter;
 import pinacolada.utilities.GameUtilities;

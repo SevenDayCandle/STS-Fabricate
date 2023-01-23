@@ -3,7 +3,7 @@ package pinacolada.skills.skills.base.moves;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
-import pinacolada.cards.base.PCLCardTarget;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.markers.SummonOnlyMove;

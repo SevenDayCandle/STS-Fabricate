@@ -16,12 +16,12 @@ public class PCLTextLine
     protected final static float DESC_BOX_WIDTH = IMG_WIDTH * 0.81f;//0.79f;
     protected final static float DESC_OFFSET_Y = IMG_HEIGHT * 0.255f;
     protected final LinkedList<PCLTextToken> tokens = new LinkedList<>();
-    protected final PCLTextContext context;
+    protected final PCLCardText context;
 
     public float width = 0;
     public float additionalWidth = 0;
 
-    public PCLTextLine(PCLTextContext context)
+    public PCLTextLine(PCLCardText context)
     {
         this.context = context;
     }

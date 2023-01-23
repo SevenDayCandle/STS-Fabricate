@@ -11,7 +11,7 @@ import extendedui.ui.EUIBase;
 import extendedui.ui.TextureCache;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.hitboxes.EUIHitbox;
-import pinacolada.cards.base.PCLAffinity;
+import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.affinity.GenericFlashEffect;
 import pinacolada.resources.PGR;

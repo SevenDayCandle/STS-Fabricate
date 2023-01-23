@@ -6,7 +6,7 @@ import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
-import pinacolada.cards.base.PCLCardTarget;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.markers.Hidden;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.skills.PCustomCond;

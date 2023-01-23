@@ -16,7 +16,7 @@ import extendedui.ui.GridCardSelectScreenHelper;
 import extendedui.utilities.GenericCondition;
 import pinacolada.actions.PCLActionWithCallback;
 import pinacolada.actions.PCLActions;
-import pinacolada.cards.base.PCLCardSelection;
+import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.ListSelection;

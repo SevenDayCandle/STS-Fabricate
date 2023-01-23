@@ -16,7 +16,7 @@ import com.megacrit.cardcrawl.rewards.RewardItem;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.resources.PGR;
-import pinacolada.resources.pcl.PCLLoadout;
+import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;

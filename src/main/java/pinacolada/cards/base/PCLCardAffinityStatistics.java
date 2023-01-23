@@ -3,6 +3,8 @@ package pinacolada.cards.base;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import pinacolada.augments.PCLAugmentData;
+import pinacolada.cards.base.fields.PCLAffinity;
+import pinacolada.cards.base.fields.PCLCardAffinities;
 
 import java.util.*;
 

@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentData;
-import pinacolada.cards.base.PCLAffinity;
+import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.relics.PCLStarterRelic;

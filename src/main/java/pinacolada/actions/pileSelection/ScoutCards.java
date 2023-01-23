@@ -3,7 +3,7 @@ package pinacolada.actions.pileSelection;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import pinacolada.actions.PCLActions;
-import pinacolada.cards.base.PCLCardSelection;
+import pinacolada.cards.base.fields.PCLCardSelection;
 
 import java.util.ArrayList;
 

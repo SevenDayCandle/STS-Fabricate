@@ -8,11 +8,12 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import extendedui.EUIUtils;
 import extendedui.utilities.ColoredTexture;
-import pinacolada.cards.base.fields.CardTagItem;
+import pinacolada.cards.base.fields.*;
+import pinacolada.cards.base.tags.CardTagItem;
 import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
-import pinacolada.resources.pcl.PCLLoadout;
+import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PTrigger;
 

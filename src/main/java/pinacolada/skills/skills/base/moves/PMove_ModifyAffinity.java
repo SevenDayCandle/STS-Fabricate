@@ -6,7 +6,7 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.utilities.ColoredString;
 import pinacolada.annotations.VisibleSkill;
-import pinacolada.cards.base.PCLAffinity;
+import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;

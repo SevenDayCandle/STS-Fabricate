@@ -2,8 +2,8 @@ package pinacolada.augments.augments.special;
 
 import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentData;
-import pinacolada.cards.base.PCLAffinity;
-import pinacolada.cards.base.fields.PCLCardTag;
+import pinacolada.cards.base.fields.PCLAffinity;
+import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PTrait;
 

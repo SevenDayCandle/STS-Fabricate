@@ -11,7 +11,7 @@ import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.ColoredString;
 import pinacolada.actions.PCLActions;
-import pinacolada.cards.base.PCLCardTarget;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.interfaces.markers.ClickableProvider;
 import pinacolada.misc.CombatManager;

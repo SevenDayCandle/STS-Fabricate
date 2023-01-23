@@ -18,6 +18,7 @@ import pinacolada.resources.PGR;
 import java.util.List;
 import java.util.StringJoiner;
 
+// TODO collapse classes
 public class PCLCoreStrings extends PCLStrings
 {
     public Rewards rewards;
@@ -74,18 +75,18 @@ public class PCLCoreStrings extends PCLStrings
 
     public class Rewards
     {
-        private final UIStrings strings = getUIStrings("Rewards");
+        private final UIStrings rewards = getUIStrings("Rewards");
 
-        public final String rewardBreak = strings.TEXT[0];
-        public final String breakDescription = strings.TEXT[1];
-        public final String reroll = strings.TEXT[2];
-        public final String rerollDescription = strings.TEXT[3];
-        public final String maxhpbonusF1 = strings.TEXT[4];
-        public final String goldbonusF1 = strings.TEXT[5];
-        public final String commonUpgrade = strings.TEXT[6];
-        public final String rightClickPreview = strings.TEXT[7];
-        public final String potionSlot = strings.TEXT[8];
-        public final String orbSlot = strings.TEXT[9];
+        public final String rewardBreak = rewards.TEXT[0];
+        public final String breakDescription = rewards.TEXT[1];
+        public final String reroll = rewards.TEXT[2];
+        public final String rerollDescription = rewards.TEXT[3];
+        public final String maxhpbonusF1 = rewards.TEXT[4];
+        public final String goldbonusF1 = rewards.TEXT[5];
+        public final String commonUpgrade = rewards.TEXT[6];
+        public final String rightClickPreview = rewards.TEXT[7];
+        public final String potionSlot = rewards.TEXT[8];
+        public final String orbSlot = rewards.TEXT[9];
 
         public final String maxHPBonus(int amount)
         {
@@ -100,192 +101,192 @@ public class PCLCoreStrings extends PCLStrings
 
     public class SeriesUI
     {
-        private final UIStrings strings = getUIStrings("SeriesUI");
+        private final UIStrings seriesui = getUIStrings("SeriesUI");
 
-        public final String seriesUI = strings.TEXT[0];
-        public final String affinities = strings.TEXT[1];
-        public final String core = strings.TEXT[2];
-        public final String scalings = strings.TEXT[3];
+        public final String seriesUI = seriesui.TEXT[0];
+        public final String affinities = seriesui.TEXT[1];
+        public final String core = seriesui.TEXT[2];
+        public final String scalings = seriesui.TEXT[3];
     }
 
     public class CardEditor
     {
-        private final UIStrings strings = getUIStrings("CardEditor");
+        private final UIStrings cardeditor = getUIStrings("CardEditor");
 
-        public final String attributes = strings.TEXT[0];
-        public final String effects = strings.TEXT[1];
-        public final String tags = strings.TEXT[2];
-        public final String value = strings.TEXT[3];
-        public final String newCard = strings.TEXT[4];
-        public final String damage = strings.TEXT[5];
-        public final String block = strings.TEXT[6];
-        public final String magicNumber = strings.TEXT[7];
-        public final String secondaryNumber = strings.TEXT[8];
-        public final String hitCount = strings.TEXT[9];
-        public final String upgrades = strings.TEXT[10];
-        public final String cardTarget = strings.TEXT[11];
-        public final String attackType = strings.TEXT[12];
-        public final String attackEffect = strings.TEXT[13];
-        public final String condition = strings.TEXT[14];
-        public final String mainCondition = strings.TEXT[15];
-        public final String effect = strings.TEXT[16];
-        public final String effectX = strings.TEXT[17];
-        public final String powerX = strings.TEXT[18];
-        public final String modifier = strings.TEXT[19];
-        public final String trigger = strings.TEXT[20];
-        public final String not = strings.TEXT[21];
-        public final String addTo = strings.TEXT[22];
-        public final String orbs = strings.TEXT[23];
-        public final String powers = strings.TEXT[24];
-        public final String maxUpgrades = strings.TEXT[25];
-        public final String flags = strings.TEXT[26];
-        public final String editForm = strings.TEXT[27];
-        public final String turnDelay = strings.TEXT[28];
-        public final String extraValue = strings.TEXT[29];
-        public final String useBaseValue = strings.TEXT[30];
-        public final String loadImage = strings.TEXT[31];
-        public final String loadFile = strings.TEXT[32];
-        public final String paste = strings.TEXT[33];
-        public final String addForm = strings.TEXT[34];
-        public final String removeForm = strings.TEXT[35];
-        public final String undo = strings.TEXT[36];
-        public final String custom = strings.TEXT[37];
-        public final String delegate = strings.TEXT[38];
-        public final String duplicate = strings.TEXT[39];
-        public final String delete = strings.TEXT[40];
-        public final String reloadCards = strings.TEXT[41];
-        public final String confirmDeletion = strings.TEXT[42];
-        public final String confirmDeletionDesc = strings.TEXT[43];
-        public final String customCards = strings.TEXT[44];
-        public final String customCardsDesc = strings.TEXT[45];
-        public final String primaryInfo = strings.TEXT[46];
-        public final String primaryInfoDesc = strings.TEXT[47];
-        public final String choices = strings.TEXT[48];
-        public final String ifElseCondition = strings.TEXT[49];
-        public final String ifElseConditionDesc = strings.TEXT[50];
-        public final String orCondition = strings.TEXT[51];
-        public final String orConditionDesc = strings.TEXT[52];
-        public final String duplicateToColor = strings.TEXT[53];
-        public final String duplicateToColorDesc = strings.TEXT[54];
-        public final String createRandom = strings.TEXT[55];
-        public final String importExisting = strings.TEXT[56];
-        public final String openFolder = strings.TEXT[57];
-        public final String exportCSV = strings.TEXT[58];
-        public final String random = strings.TEXT[59];
-        public final String required = strings.TEXT[60];
-        public final String origins = strings.TEXT[61];
+        public final String attributes = cardeditor.TEXT[0];
+        public final String effects = cardeditor.TEXT[1];
+        public final String tags = cardeditor.TEXT[2];
+        public final String value = cardeditor.TEXT[3];
+        public final String newCard = cardeditor.TEXT[4];
+        public final String damage = cardeditor.TEXT[5];
+        public final String block = cardeditor.TEXT[6];
+        public final String magicNumber = cardeditor.TEXT[7];
+        public final String secondaryNumber = cardeditor.TEXT[8];
+        public final String hitCount = cardeditor.TEXT[9];
+        public final String upgrades = cardeditor.TEXT[10];
+        public final String cardTarget = cardeditor.TEXT[11];
+        public final String attackType = cardeditor.TEXT[12];
+        public final String attackEffect = cardeditor.TEXT[13];
+        public final String condition = cardeditor.TEXT[14];
+        public final String mainCondition = cardeditor.TEXT[15];
+        public final String effect = cardeditor.TEXT[16];
+        public final String effectX = cardeditor.TEXT[17];
+        public final String powerX = cardeditor.TEXT[18];
+        public final String modifier = cardeditor.TEXT[19];
+        public final String trigger = cardeditor.TEXT[20];
+        public final String not = cardeditor.TEXT[21];
+        public final String addTo = cardeditor.TEXT[22];
+        public final String orbs = cardeditor.TEXT[23];
+        public final String powers = cardeditor.TEXT[24];
+        public final String maxUpgrades = cardeditor.TEXT[25];
+        public final String flags = cardeditor.TEXT[26];
+        public final String editForm = cardeditor.TEXT[27];
+        public final String turnDelay = cardeditor.TEXT[28];
+        public final String extraValue = cardeditor.TEXT[29];
+        public final String useBaseValue = cardeditor.TEXT[30];
+        public final String loadImage = cardeditor.TEXT[31];
+        public final String loadFile = cardeditor.TEXT[32];
+        public final String paste = cardeditor.TEXT[33];
+        public final String addForm = cardeditor.TEXT[34];
+        public final String removeForm = cardeditor.TEXT[35];
+        public final String undo = cardeditor.TEXT[36];
+        public final String custom = cardeditor.TEXT[37];
+        public final String delegate = cardeditor.TEXT[38];
+        public final String duplicate = cardeditor.TEXT[39];
+        public final String delete = cardeditor.TEXT[40];
+        public final String reloadCards = cardeditor.TEXT[41];
+        public final String confirmDeletion = cardeditor.TEXT[42];
+        public final String confirmDeletionDesc = cardeditor.TEXT[43];
+        public final String customCards = cardeditor.TEXT[44];
+        public final String customCardsDesc = cardeditor.TEXT[45];
+        public final String primaryInfo = cardeditor.TEXT[46];
+        public final String primaryInfoDesc = cardeditor.TEXT[47];
+        public final String choices = cardeditor.TEXT[48];
+        public final String ifElseCondition = cardeditor.TEXT[49];
+        public final String ifElseConditionDesc = cardeditor.TEXT[50];
+        public final String orCondition = cardeditor.TEXT[51];
+        public final String orConditionDesc = cardeditor.TEXT[52];
+        public final String duplicateToColor = cardeditor.TEXT[53];
+        public final String duplicateToColorDesc = cardeditor.TEXT[54];
+        public final String createRandom = cardeditor.TEXT[55];
+        public final String importExisting = cardeditor.TEXT[56];
+        public final String openFolder = cardeditor.TEXT[57];
+        public final String exportCSV = cardeditor.TEXT[58];
+        public final String random = cardeditor.TEXT[59];
+        public final String required = cardeditor.TEXT[60];
+        public final String origins = cardeditor.TEXT[61];
     }
 
     public class Misc
     {
-        private final UIStrings strings = getUIStrings("Misc");
+        private final UIStrings misc = getUIStrings("Misc");
 
-        public final String viewAugments = strings.TEXT[0];
-        public final String viewAugmentsDescription = strings.TEXT[1];
-        public final String viewAugmentsNone = strings.TEXT[2];
-        public final String viewCardPoolSeries = strings.TEXT[3];
-        public final String cardModeHeader = strings.TEXT[4];
-        public final String simpleMode = strings.TEXT[5];
-        public final String simpleModeDescription = strings.TEXT[6];
-        public final String complexMode = strings.TEXT[7];
-        public final String complexModeDescription = strings.TEXT[8];
-        public final String allowCustomCards = strings.TEXT[9];
-        public final String pcl = strings.TEXT[10];
-        public final String leftClick = strings.TEXT[11];
-        public final String rightClick = strings.TEXT[12];
+        public final String viewAugments = misc.TEXT[0];
+        public final String viewAugmentsDescription = misc.TEXT[1];
+        public final String viewAugmentsNone = misc.TEXT[2];
+        public final String viewCardPoolSeries = misc.TEXT[3];
+        public final String cardModeHeader = misc.TEXT[4];
+        public final String simpleMode = misc.TEXT[5];
+        public final String simpleModeDescription = misc.TEXT[6];
+        public final String complexMode = misc.TEXT[7];
+        public final String complexModeDescription = misc.TEXT[8];
+        public final String allowCustomCards = misc.TEXT[9];
+        public final String pcl = misc.TEXT[10];
+        public final String leftClick = misc.TEXT[11];
+        public final String rightClick = misc.TEXT[12];
     }
 
     public class Options
     {
-        private final UIStrings strings = getUIStrings("Options");
+        private final UIStrings options = getUIStrings("Options");
 
-        public final String cropCardImages = strings.TEXT[0];
-        public final String displayCardTagDescription = strings.TEXT[1];
-        public final String enableEventsForOtherCharacters = strings.TEXT[2];
-        public final String enableRelicsForOtherCharacters = strings.TEXT[3];
-        public final String replaceCards = strings.TEXT[4];
-        public final String usePCLPowersForAll = strings.TEXT[5];
-        public final String hideIrrelevantAffinities = strings.TEXT[6];
-        public final String showFormulaDisplay = strings.TEXT[7];
+        public final String cropCardImages = options.TEXT[0];
+        public final String displayCardTagDescription = options.TEXT[1];
+        public final String enableEventsForOtherCharacters = options.TEXT[2];
+        public final String enableRelicsForOtherCharacters = options.TEXT[3];
+        public final String replaceCards = options.TEXT[4];
+        public final String usePCLPowersForAll = options.TEXT[5];
+        public final String hideIrrelevantAffinities = options.TEXT[6];
+        public final String showFormulaDisplay = options.TEXT[7];
     }
 
     public class CharacterSelect
     {
-        private final UIStrings strings = getUIStrings("CharacterSelect");
+        private final UIStrings charselect = getUIStrings("CharacterSelect");
 
-        public final String leftText = strings.TEXT[0];  // Starting Cards:
-        public final String rightText = strings.TEXT[1]; // Unlock
-        public final String invalidLoadout = strings.TEXT[3];
-        public final String deckEditor = strings.TEXT[5];
-        public final String deckEditorInfo = strings.TEXT[6];
-        public final String seriesEditor = strings.TEXT[8];
-        public final String seriesEditorInfo = strings.TEXT[9];
-        public final String deckHeader = strings.TEXT[10];
-        public final String relicsHeader = strings.TEXT[11];
-        public final String attributesHeader = strings.TEXT[12];
-        public final String valueHeader = strings.TEXT[13];
-        public final String hindranceDescription = strings.TEXT[18];
-        public final String affinityDescription = strings.TEXT[19];
-        public final String unsavedChanges = strings.TEXT[20];
-        public final String clear = strings.TEXT[21];
-        public final String copyTo = strings.TEXT[22];
-        public final String copyFrom = strings.TEXT[23];
-        public final String export = strings.TEXT[24];
-        public final String ascensionGlyph = strings.TEXT[25];
-        public final String cardEditor = strings.TEXT[26];
-        public final String cardEditorInfo = strings.TEXT[27];
-        public final String cardEditorEnabled = strings.TEXT[28];
-        public final String cardEditorDisabled = strings.TEXT[29];
-        public final String cardEditorToggle = strings.TEXT[30];
+        public final String leftText = charselect.TEXT[0];  // Starting Cards:
+        public final String rightText = charselect.TEXT[1]; // Unlock
+        public final String invalidLoadout = charselect.TEXT[3];
+        public final String deckEditor = charselect.TEXT[5];
+        public final String deckEditorInfo = charselect.TEXT[6];
+        public final String seriesEditor = charselect.TEXT[8];
+        public final String seriesEditorInfo = charselect.TEXT[9];
+        public final String deckHeader = charselect.TEXT[10];
+        public final String relicsHeader = charselect.TEXT[11];
+        public final String attributesHeader = charselect.TEXT[12];
+        public final String valueHeader = charselect.TEXT[13];
+        public final String hindranceDescription = charselect.TEXT[18];
+        public final String affinityDescription = charselect.TEXT[19];
+        public final String unsavedChanges = charselect.TEXT[20];
+        public final String clear = charselect.TEXT[21];
+        public final String copyTo = charselect.TEXT[22];
+        public final String copyFrom = charselect.TEXT[23];
+        public final String export = charselect.TEXT[24];
+        public final String ascensionGlyph = charselect.TEXT[25];
+        public final String cardEditor = charselect.TEXT[26];
+        public final String cardEditorInfo = charselect.TEXT[27];
+        public final String cardEditorEnabled = charselect.TEXT[28];
+        public final String cardEditorDisabled = charselect.TEXT[29];
+        public final String cardEditorToggle = charselect.TEXT[30];
 
         public final String unlocksAtLevel(int unlockLevel, int currentLevel)
         {
-            return EUIUtils.format(strings.TEXT[2], unlockLevel, currentLevel);
+            return EUIUtils.format(charselect.TEXT[2], unlockLevel, currentLevel);
         }
 
         public final String unlocksAtAscension(int ascension)
         {
-            return EUIUtils.format(strings.TEXT[4], ascension);
+            return EUIUtils.format(charselect.TEXT[4], ascension);
         }
 
         public final String obtainBronzeAtAscension(int ascension)
         {
-            return EUIUtils.format(strings.TEXT[7], ascension);
+            return EUIUtils.format(charselect.TEXT[7], ascension);
         }
 
         public final String hindranceValue(int value)
         {
-            return EUIUtils.format(strings.TEXT[14], value);
+            return EUIUtils.format(charselect.TEXT[14], value);
         }
 
         public final String affinityValue(int value)
         {
-            return EUIUtils.format(strings.TEXT[15], value);
+            return EUIUtils.format(charselect.TEXT[15], value);
         }
 
         public final String cardsCount(int value)
         {
-            return EUIUtils.format(strings.TEXT[16], value);
+            return EUIUtils.format(charselect.TEXT[16], value);
         }
 
         public final String totalValue(int value, int max)
         {
-            return EUIUtils.format(strings.TEXT[17], value, max);
+            return EUIUtils.format(charselect.TEXT[17], value, max);
         }
     }
 
     public class SeriesSelection
     {
-        private final UIStrings strings = getUIStrings("SeriesSelection");
+        private final UIStrings seriesselect = getUIStrings("SeriesSelection");
 
-        public final String selected = strings.TEXT[0];
-        public final String unlocked = strings.TEXT[1];
-        public final String removeFromPool = strings.TEXT[2];
-        public final String addToPool = strings.TEXT[3];
-        public final String viewPool = strings.TEXT[4];
-        public final String totalCards = strings.TEXT[5];
-        public final String instructions1 = strings.TEXT[6];
-        public final String instructions2 = strings.TEXT[7];
+        public final String selected = seriesselect.TEXT[0];
+        public final String unlocked = seriesselect.TEXT[1];
+        public final String removeFromPool = seriesselect.TEXT[2];
+        public final String addToPool = seriesselect.TEXT[3];
+        public final String viewPool = seriesselect.TEXT[4];
+        public final String totalCards = seriesselect.TEXT[5];
+        public final String instructions1 = seriesselect.TEXT[6];
+        public final String instructions2 = seriesselect.TEXT[7];
 
         public final String selected(Object amount, Object total) {
             return EUIUtils.format(selected, amount, total);
@@ -303,24 +304,24 @@ public class PCLCoreStrings extends PCLStrings
 
     public class SeriesSelectionButtons
     {
-        private final UIStrings strings = getUIStrings("SeriesSelectionButtons");
+        private final UIStrings seriesselectbuttons = getUIStrings("SeriesSelectionButtons");
 
-        public final String cardsInPool = strings.TEXT[0];
-        public final String selectAll = strings.TEXT[1];
-        public final String deselectAll = strings.TEXT[2];
-        public final String selectRandom = strings.TEXT[3];
-        public final String showCardPool = strings.TEXT[4];
-        public final String save = strings.TEXT[5];
-        public final String enableExpansion = strings.TEXT[6];
-        public final String disableExpansion = strings.TEXT[7];
-        public final String allExpansionEnable = strings.TEXT[8];
-        public final String allExpansionDisable = strings.TEXT[9];
-        public final String cancel = strings.TEXT[10];
-        public final String showColorless = strings.TEXT[11];
+        public final String cardsInPool = seriesselectbuttons.TEXT[0];
+        public final String selectAll = seriesselectbuttons.TEXT[1];
+        public final String deselectAll = seriesselectbuttons.TEXT[2];
+        public final String selectRandom = seriesselectbuttons.TEXT[3];
+        public final String showCardPool = seriesselectbuttons.TEXT[4];
+        public final String save = seriesselectbuttons.TEXT[5];
+        public final String enableExpansion = seriesselectbuttons.TEXT[6];
+        public final String disableExpansion = seriesselectbuttons.TEXT[7];
+        public final String allExpansionEnable = seriesselectbuttons.TEXT[8];
+        public final String allExpansionDisable = seriesselectbuttons.TEXT[9];
+        public final String cancel = seriesselectbuttons.TEXT[10];
+        public final String showColorless = seriesselectbuttons.TEXT[11];
 
         public final String selectRandom(int cards)
         {
-            return EUIUtils.format(strings.TEXT[2], cards) ;
+            return EUIUtils.format(seriesselectbuttons.TEXT[2], cards) ;
         }
     }
 
@@ -346,47 +347,47 @@ public class PCLCoreStrings extends PCLStrings
 
     public class Hotkeys
     {
-        private final UIStrings strings = getUIStrings("Hotkeys");
+        private final UIStrings hotkeys = getUIStrings("Hotkeys");
 
-        public final String controlPileChange = strings.TEXT[0];
-        public final String controlPileSelect = strings.TEXT[1];
-        public final String rerollCurrent = strings.TEXT[2];
-        public final String toggleFormulaDisplay = strings.TEXT[3];
-        public final String viewAugments = strings.TEXT[4];
+        public final String controlPileChange = hotkeys.TEXT[0];
+        public final String controlPileSelect = hotkeys.TEXT[1];
+        public final String rerollCurrent = hotkeys.TEXT[2];
+        public final String toggleFormulaDisplay = hotkeys.TEXT[3];
+        public final String viewAugments = hotkeys.TEXT[4];
     }
 
     public class Combat
     {
-        private final UIStrings strings = getUIStrings("Combat");
+        private final UIStrings combat = getUIStrings("Combat");
 
-        public final String current = strings.TEXT[0];
-        public final String next = strings.TEXT[1];
-        public final String uses = strings.TEXT[2];
-        public final String rerolls = strings.TEXT[3];
-        public final String controlPile = strings.TEXT[4];
-        public final String controlPileDescription = strings.TEXT[5];
-        public final String count = strings.TEXT[6];
-        public final String effect = strings.TEXT[7];
-        public final String nextLevelEffect = strings.TEXT[8];
-        public final String active = strings.TEXT[9];
-        public final String inactive = strings.TEXT[10];
-        public final String disabled = strings.TEXT[11];
-        public final String na = strings.TEXT[12];
-        public final String eternalMeter = strings.TEXT[13];
-        public final String eternalMeterAffinity = strings.TEXT[14];
-        public final String eternalMeterCurrent = strings.TEXT[15];
-        public final String eternalMeterGain = strings.TEXT[16];
-        public final String eternalMeterSpend = strings.TEXT[17];
-        public final String conjurerMeterDebuff = strings.TEXT[18];
-        public final String conjurerMeterCost = strings.TEXT[19];
-        public final String conjurerMeterDamage = strings.TEXT[20];
-        public final String conjurerMeterSwitch = strings.TEXT[21];
-        public final String conjurerMeterCombust = strings.TEXT[22];
-        public final String conjurerMeterRedox = strings.TEXT[23];
-        public final String conjurerMeterNextIntensity = strings.TEXT[24];
-        public final String deciderMeterStacks = strings.TEXT[25];
-        public final String deciderMeterStacksNextLevel = strings.TEXT[26];
-        public final String dodged = strings.TEXT[27];
+        public final String current = combat.TEXT[0];
+        public final String next = combat.TEXT[1];
+        public final String uses = combat.TEXT[2];
+        public final String rerolls = combat.TEXT[3];
+        public final String controlPile = combat.TEXT[4];
+        public final String controlPileDescription = combat.TEXT[5];
+        public final String count = combat.TEXT[6];
+        public final String effect = combat.TEXT[7];
+        public final String nextLevelEffect = combat.TEXT[8];
+        public final String active = combat.TEXT[9];
+        public final String inactive = combat.TEXT[10];
+        public final String disabled = combat.TEXT[11];
+        public final String na = combat.TEXT[12];
+        public final String eternalMeter = combat.TEXT[13];
+        public final String eternalMeterAffinity = combat.TEXT[14];
+        public final String eternalMeterCurrent = combat.TEXT[15];
+        public final String eternalMeterGain = combat.TEXT[16];
+        public final String eternalMeterSpend = combat.TEXT[17];
+        public final String conjurerMeterDebuff = combat.TEXT[18];
+        public final String conjurerMeterCost = combat.TEXT[19];
+        public final String conjurerMeterDamage = combat.TEXT[20];
+        public final String conjurerMeterSwitch = combat.TEXT[21];
+        public final String conjurerMeterCombust = combat.TEXT[22];
+        public final String conjurerMeterRedox = combat.TEXT[23];
+        public final String conjurerMeterNextIntensity = combat.TEXT[24];
+        public final String deciderMeterStacks = combat.TEXT[25];
+        public final String deciderMeterStacksNextLevel = combat.TEXT[26];
+        public final String dodged = combat.TEXT[27];
 
         public final String controlPileDescriptionFull(String keyName) {
             return EUIUtils.format(controlPileDescription, keyName);
@@ -407,101 +408,101 @@ public class PCLCoreStrings extends PCLStrings
 
     public class CardMods
     {
-        private final UIStrings strings = getUIStrings("CardMods");
+        private final UIStrings cardmods = getUIStrings("CardMods");
 
-        public final String handSize = strings.TEXT[0];
-        public final String afterlifeMet = strings.TEXT[1];
-        public final String afterlifeRequirement = strings.TEXT[2];
-        public final String respecLivingPicture = strings.TEXT[3];
-        public final String respecLivingPictureLocked = strings.TEXT[4];
-        public final String respecLivingPictureDescription = strings.TEXT[5];
-        public final String kirby = strings.TEXT[6];
-        public final String kirbyDescription = strings.TEXT[7];
-        public final String tempPowerPrefix = strings.TEXT[8];
-        public final String requirement = strings.TEXT[9];
+        public final String handSize = cardmods.TEXT[0];
+        public final String afterlifeMet = cardmods.TEXT[1];
+        public final String afterlifeRequirement = cardmods.TEXT[2];
+        public final String respecLivingPicture = cardmods.TEXT[3];
+        public final String respecLivingPictureLocked = cardmods.TEXT[4];
+        public final String respecLivingPictureDescription = cardmods.TEXT[5];
+        public final String kirby = cardmods.TEXT[6];
+        public final String kirbyDescription = cardmods.TEXT[7];
+        public final String tempPowerPrefix = cardmods.TEXT[8];
+        public final String requirement = cardmods.TEXT[9];
     }
 
     public class CardType
     {
-        private final UIStrings strings = getUIStrings("CardType");
+        private final UIStrings cardtype = getUIStrings("CardType");
 
-        public final String none = strings.TEXT[0];
-        public final String allAlly = strings.TEXT[1];
-        public final String allCharacter = strings.TEXT[2];
-        public final String allEnemy = strings.TEXT[3];
-        public final String any = strings.TEXT[4];
-        public final String randomAlly = strings.TEXT[5];
-        public final String randomEnemy = strings.TEXT[6];
-        public final String self = strings.TEXT[7];
-        public final String singleAlly = strings.TEXT[8];
-        public final String singleTarget = strings.TEXT[9];
-        public final String team = strings.TEXT[10];
-        public final String legendary = strings.TEXT[11];
-        public final String secretRare = strings.TEXT[12];
+        public final String none = cardtype.TEXT[0];
+        public final String allAlly = cardtype.TEXT[1];
+        public final String allCharacter = cardtype.TEXT[2];
+        public final String allEnemy = cardtype.TEXT[3];
+        public final String any = cardtype.TEXT[4];
+        public final String randomAlly = cardtype.TEXT[5];
+        public final String randomEnemy = cardtype.TEXT[6];
+        public final String self = cardtype.TEXT[7];
+        public final String singleAlly = cardtype.TEXT[8];
+        public final String singleTarget = cardtype.TEXT[9];
+        public final String team = cardtype.TEXT[10];
+        public final String legendary = cardtype.TEXT[11];
+        public final String secretRare = cardtype.TEXT[12];
 
-        public final String tagAoE = strings.EXTRA_TEXT[0];
-        public final String tagRandom = strings.EXTRA_TEXT[1];
+        public final String tagAoE = cardtype.EXTRA_TEXT[0];
+        public final String tagRandom = cardtype.EXTRA_TEXT[1];
     }
 
     public class Subjects
     {
-        private final UIStrings strings = getUIStrings("Subjects");
+        private final UIStrings subjects = getUIStrings("Subjects");
 
-        public final String allyN = strings.TEXT[0];
-        public final String cardN = strings.TEXT[1];
-        public final String characterN = strings.TEXT[2];
-        public final String enemyN = strings.TEXT[3];
-        public final String cost = strings.TEXT[4];
-        public final String infinite = strings.TEXT[5];
-        public final String maxX = strings.TEXT[6];
-        public final String minX = strings.TEXT[7];
-        public final String other = strings.TEXT[8];
-        public final String xCount = strings.TEXT[9];
-        public final String allX = strings.TEXT[10];
-        public final String all = strings.TEXT[11];
-        public final String ally = strings.TEXT[12];
-        public final String anyPile = strings.TEXT[13];
-        public final String anyX = strings.TEXT[14];
-        public final String anyone = strings.TEXT[15];
-        public final String attacking = strings.TEXT[16];
-        public final String buffing = strings.TEXT[17];
-        public final String card = strings.TEXT[18];
-        public final String character = strings.TEXT[19];
-        public final String copiesOfX = strings.TEXT[20];
-        public final String damage = strings.TEXT[21];
-        public final String debuffing = strings.TEXT[22];
-        public final String defending = strings.TEXT[23];
-        public final String effectBonus = strings.TEXT[24];
-        public final String enemy = strings.TEXT[25];
-        public final String fromX = strings.TEXT[26];
-        public final String hits = strings.TEXT[27];
-        public final String inX = strings.TEXT[28];
-        public final String ofX = strings.TEXT[29];
-        public final String permanentlyX = strings.TEXT[30];
-        public final String playingXWithY = strings.TEXT[31];
-        public final String randomX = strings.TEXT[32];
-        public final String randomlyX = strings.TEXT[33];
-        public final String shuffleYourDeck = strings.TEXT[34];
-        public final String bottomOfX = strings.TEXT[35];
-        public final String leftmostX = strings.TEXT[36];
-        public final String rightmostX = strings.TEXT[37];
-        public final String target = strings.TEXT[38];
-        public final String topOfX = strings.TEXT[39];
-        public final String theirX = strings.TEXT[40];
-        public final String them = strings.TEXT[41];
-        public final String thisObj = strings.TEXT[42];
-        public final String thisX = strings.TEXT[43];
-        public final String x = strings.TEXT[44];
-        public final String you = strings.TEXT[45];
-        public final String yourFirstX = strings.TEXT[46];
-        public final String yourX = strings.TEXT[47];
-        public final String xOfY = strings.TEXT[48];
-        public final String xOnY = strings.TEXT[49];
-        public final String xThisTurn = strings.TEXT[50];
-        public final String xTimes = strings.TEXT[51];
-        public final String xWithY = strings.TEXT[52];
-        public final String xCost = strings.TEXT[53];
-        public final String xBonus = strings.TEXT[54];
+        public final String allyN = subjects.TEXT[0];
+        public final String cardN = subjects.TEXT[1];
+        public final String characterN = subjects.TEXT[2];
+        public final String enemyN = subjects.TEXT[3];
+        public final String cost = subjects.TEXT[4];
+        public final String infinite = subjects.TEXT[5];
+        public final String maxX = subjects.TEXT[6];
+        public final String minX = subjects.TEXT[7];
+        public final String other = subjects.TEXT[8];
+        public final String xCount = subjects.TEXT[9];
+        public final String allX = subjects.TEXT[10];
+        public final String all = subjects.TEXT[11];
+        public final String ally = subjects.TEXT[12];
+        public final String anyPile = subjects.TEXT[13];
+        public final String anyX = subjects.TEXT[14];
+        public final String anyone = subjects.TEXT[15];
+        public final String attacking = subjects.TEXT[16];
+        public final String buffing = subjects.TEXT[17];
+        public final String card = subjects.TEXT[18];
+        public final String character = subjects.TEXT[19];
+        public final String copiesOfX = subjects.TEXT[20];
+        public final String damage = subjects.TEXT[21];
+        public final String debuffing = subjects.TEXT[22];
+        public final String defending = subjects.TEXT[23];
+        public final String effectBonus = subjects.TEXT[24];
+        public final String enemy = subjects.TEXT[25];
+        public final String fromX = subjects.TEXT[26];
+        public final String hits = subjects.TEXT[27];
+        public final String inX = subjects.TEXT[28];
+        public final String ofX = subjects.TEXT[29];
+        public final String permanentlyX = subjects.TEXT[30];
+        public final String playingXWithY = subjects.TEXT[31];
+        public final String randomX = subjects.TEXT[32];
+        public final String randomlyX = subjects.TEXT[33];
+        public final String shuffleYourDeck = subjects.TEXT[34];
+        public final String bottomOfX = subjects.TEXT[35];
+        public final String leftmostX = subjects.TEXT[36];
+        public final String rightmostX = subjects.TEXT[37];
+        public final String target = subjects.TEXT[38];
+        public final String topOfX = subjects.TEXT[39];
+        public final String theirX = subjects.TEXT[40];
+        public final String them = subjects.TEXT[41];
+        public final String thisObj = subjects.TEXT[42];
+        public final String thisX = subjects.TEXT[43];
+        public final String x = subjects.TEXT[44];
+        public final String you = subjects.TEXT[45];
+        public final String yourFirstX = subjects.TEXT[46];
+        public final String yourX = subjects.TEXT[47];
+        public final String xOfY = subjects.TEXT[48];
+        public final String xOnY = subjects.TEXT[49];
+        public final String xThisTurn = subjects.TEXT[50];
+        public final String xTimes = subjects.TEXT[51];
+        public final String xWithY = subjects.TEXT[52];
+        public final String xCost = subjects.TEXT[53];
+        public final String xBonus = subjects.TEXT[54];
 
         public final String allX(Object amount) {
             return EUIUtils.format(allX, amount);
@@ -600,7 +601,7 @@ public class PCLCoreStrings extends PCLStrings
 
     public class Actions
     {
-        private final UIStrings strings = getUIStrings("Actions");
+        private final UIStrings actions = getUIStrings("Actions");
         private final Subjects subjects;
         public Actions(Subjects subjects)
         {
@@ -924,12 +925,12 @@ public class PCLCoreStrings extends PCLStrings
 
         private String format(int index, Object... objects)
         {
-            return EUIUtils.format(strings.TEXT[index], objects);
+            return EUIUtils.format(actions.TEXT[index], objects);
         }
 
         private String format(int index)
         {
-            return strings.TEXT[index];
+            return actions.TEXT[index];
         }
     }
 

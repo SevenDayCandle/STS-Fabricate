@@ -7,8 +7,8 @@ import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.configuration.EUIConfiguration;
 import extendedui.ui.tooltips.EUITooltip;
-import pinacolada.cards.base.PCLAffinity;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.cards.base.fields.PCLAffinity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -108,7 +108,7 @@ public class SymbolToken extends PCLTextToken
     }
 
     @Override
-    public void render(SpriteBatch sb, PCLTextContext context)
+    public void render(SpriteBatch sb, PCLCardText context)
     {
         PCLCard card = context.card;
         float size = getWidth(context);// 24f * Settings.scale * card.drawScale * context.scaleModifier;

@@ -4,7 +4,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import extendedui.EUIUtils;
 import pinacolada.cards.base.PCLCardGroupHelper;
-import pinacolada.cards.base.PCLCardSelection;
+import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.skills.PSkill;
 import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;

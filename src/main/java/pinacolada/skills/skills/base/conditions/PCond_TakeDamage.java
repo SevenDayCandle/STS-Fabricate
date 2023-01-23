@@ -4,9 +4,9 @@ import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import pinacolada.annotations.VisibleSkill;
-import pinacolada.cards.base.PCLCardTarget;
-import pinacolada.misc.PCLUseInfo;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.subscribers.OnLoseHPSubscriber;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -54,7 +54,7 @@ public class PCond_TakeDamage extends PCond<PField_Empty> implements OnLoseHPSub
     {
         if (info.type == DamageInfo.DamageType.NORMAL && childEffect != null)
         {
-            useFromTrigger(makeInfo(p));
+            useFromTrigger(makeInfo(info.owner));
         }
         return amount;
     }

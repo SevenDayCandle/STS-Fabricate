@@ -5,7 +5,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
-import pinacolada.cards.base.fields.PCLCardTag;
+import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.misc.CombatManager;
 
 public class PCLHasteAction extends PCLAction

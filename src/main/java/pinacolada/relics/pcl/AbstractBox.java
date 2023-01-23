@@ -4,7 +4,7 @@ import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIInputManager;
 import extendedui.EUIUtils;
 import pinacolada.actions.PCLActions;
-import pinacolada.cards.base.PCLCardTarget;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.characters.CreatureAnimationInfo;
 import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PGR;

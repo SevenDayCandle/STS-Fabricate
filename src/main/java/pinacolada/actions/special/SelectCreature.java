@@ -19,7 +19,7 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLActionWithCallback;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.PCLCardTarget;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;

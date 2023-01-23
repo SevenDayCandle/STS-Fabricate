@@ -13,7 +13,7 @@ import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIColors;
 import pinacolada.actions.PCLActions;
-import pinacolada.cards.base.PCLAffinity;
+import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
 import pinacolada.effects.vfx.OrbEvokeParticle;

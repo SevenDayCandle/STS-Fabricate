@@ -7,7 +7,11 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import extendedui.EUIUtils;
 import extendedui.ui.cardFilter.CustomCardLibraryScreen;
 import pinacolada.cards.base.*;
-import pinacolada.cards.base.fields.PCLCardTag;
+import pinacolada.cards.base.fields.PCLAffinity;
+import pinacolada.cards.base.fields.PCLAttackType;
+import pinacolada.cards.base.PCLCardData;
+import pinacolada.cards.base.fields.PCLCardDataAffinityGroup;
+import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.skills.PSkill;
 
 import java.lang.reflect.Field;

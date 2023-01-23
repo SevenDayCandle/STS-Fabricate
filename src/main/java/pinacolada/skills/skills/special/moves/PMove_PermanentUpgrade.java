@@ -1,7 +1,7 @@
 package pinacolada.skills.skills.special.moves;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import pinacolada.cards.base.PCLCardTarget;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.interfaces.markers.Hidden;
 import pinacolada.skills.PMove;

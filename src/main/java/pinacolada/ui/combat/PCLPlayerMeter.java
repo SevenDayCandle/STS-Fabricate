@@ -14,7 +14,7 @@ import extendedui.ui.hitboxes.DraggableHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.ui.tooltips.FakeFtue;
-import pinacolada.cards.base.PCLAffinity;
+import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.interfaces.markers.ClickableProvider;
 import pinacolada.misc.PCLUseInfo;

@@ -2,7 +2,7 @@ package pinacolada.interfaces.subscribers;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.annotations.CombatSubscriber;
-import pinacolada.cards.base.fields.PCLCardTag;
+import pinacolada.cards.base.tags.PCLCardTag;
 
 @CombatSubscriber
 public interface OnTagChangedSubscriber extends PCLCombatSubscriber

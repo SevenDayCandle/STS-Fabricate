@@ -1,7 +1,7 @@
 package pinacolada.skills.skills.base.moves;
 
 import extendedui.utilities.ColoredString;
-import pinacolada.cards.base.PCLCardTarget;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;

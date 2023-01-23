@@ -46,7 +46,8 @@ import pinacolada.actions.PCLActions;
 import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.cards.base.cardText.PCLCardText;
-import pinacolada.cards.base.fields.PCLCardTag;
+import pinacolada.cards.base.fields.*;
+import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.effects.PCLEffekseerEFX;
 import pinacolada.effects.card.PCLCardGlowBorderEffect;
@@ -77,11 +78,9 @@ import pinacolada.skills.skills.base.traits.PTrait_Damage;
 import pinacolada.skills.skills.base.traits.PTrait_DamageMultiplier;
 import pinacolada.skills.skills.special.moves.PMove_DealCardDamage;
 import pinacolada.skills.skills.special.moves.PMove_GainCardBlock;
-import pinacolada.ui.cards.DrawPileCardPreview;
 import pinacolada.ui.combat.PowerFormulaDisplay;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
-import pinacolada.utilities.RotatingList;
 
 import java.lang.reflect.Type;
 import java.util.*;
@@ -146,7 +145,6 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     public transient PowerFormulaDisplay formulaDisplay;
     protected ColoredTexture portraitForeground;
     protected ColoredTexture portraitImg;
-    protected DrawPileCardPreview drawPileCardPreview;
     protected TextureAtlas.AtlasRegion fakePortrait;
     protected boolean playAtEndOfTurn;
     protected final ArrayList<PCLCardGlowBorderEffect> glowList = new ArrayList<>();
@@ -443,7 +441,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     }
 
     protected PMove_DealCardDamage addDamageMove(PCLEffekseerEFX efx) {
-        onDamageEffect = PMove.dealCardDamage(this, null).setDamageEffect(efx);
+        onDamageEffect = PMove.dealCardDamage(this).setDamageEffect(efx);
         return onDamageEffect;
     }
 
@@ -1255,10 +1253,6 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     }
 
     public void onDrag(AbstractMonster m) {
-        if (drawPileCardPreview != null && drawPileCardPreview.enabled) {
-            drawPileCardPreview.update(this, m);
-        }
-
         doEffects(be -> be.onDrag(m));
     }
 
@@ -1480,10 +1474,6 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         renderTint(sb);
         renderEnergy(sb);
         hb.render(sb);
-
-        if (!library && drawPileCardPreview != null && drawPileCardPreview.enabled) {
-            drawPileCardPreview.render(sb);
-        }
     }
 
     protected void renderAtlas(SpriteBatch sb, Color color, TextureAtlas.AtlasRegion img, float drawX, float drawY) {
@@ -1549,16 +1539,6 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         }
     }
 
-    public DrawPileCardPreview setDrawPileCardPreview(ActionT2<RotatingList<AbstractCard>, AbstractMonster> findCards) {
-        return this.drawPileCardPreview = new DrawPileCardPreview(findCards)
-                .requireTarget(target == CardTarget.ENEMY || target == CardTarget.SELF_AND_ENEMY);
-    }
-
-    public DrawPileCardPreview setDrawPileCardPreview(FuncT1<Boolean, AbstractCard> findCard) {
-        return this.drawPileCardPreview = new DrawPileCardPreview(findCard)
-                .requireTarget(target == CardTarget.ENEMY || target == CardTarget.SELF_AND_ENEMY);
-    }
-
     public void setEvokeOrbCount(int count) {
         this.showEvokeValue = count > 0;
         this.showEvokeOrbCount = count;
@@ -1578,10 +1558,10 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         {
             onBlockEffect.setAmountFromCard().onUpgrade();
         }
-        for (PSkill ef : getEffects()) {
+        for (PSkill<?> ef : getEffects()) {
             ef.setAmountFromCard().onUpgrade();
         }
-        for (PSkill ef : getPowerEffects()) {
+        for (PSkill<?> ef : getPowerEffects()) {
             ef.setAmountFromCard().onUpgrade();
         }
 

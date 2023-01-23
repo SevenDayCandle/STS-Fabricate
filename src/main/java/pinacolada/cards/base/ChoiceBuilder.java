@@ -2,6 +2,7 @@ package pinacolada.cards.base;
 
 import extendedui.EUIRM;
 import extendedui.utilities.ColoredTexture;
+import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.pcl.tokens.AffinityToken;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;

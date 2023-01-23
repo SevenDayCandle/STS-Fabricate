@@ -2,7 +2,7 @@ package pinacolada.skills.skills.special.conditions;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
-import pinacolada.cards.base.PCLCardTarget;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.interfaces.subscribers.OnBattleStartSubscriber;
 import pinacolada.resources.PGR;

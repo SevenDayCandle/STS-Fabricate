@@ -6,9 +6,9 @@ import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleCard;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
-import pinacolada.cards.base.PCLCardTarget;
+import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.misc.PCLUseInfo;
-import pinacolada.cards.base.fields.PCLCardTag;
 import pinacolada.skills.skills.PSpecialSkill;
 import pinacolada.utilities.GameUtilities;
 
@@ -17,7 +17,7 @@ public class PortableTrashCan extends PCLCard
 {
     public static final PCLCardData DATA = register(PortableTrashCan.class)
             .setSkill(0, CardRarity.RARE, PCLCardTarget.None)
-            .setTags(PCLCardTag.Fleeting.make(), PCLCardTag.Retain.make(0, -1))
+            .setTags(PCLCardTag.Fleeting.make())
             .setColorless();
 
     public PortableTrashCan()
@@ -28,26 +28,29 @@ public class PortableTrashCan extends PCLCard
     @Override
     public void setup(Object input)
     {
-        addSpecialMove(0, this::action, 1);
+        addSpecialMove(0, this::action, 1).setUpgrade(1);
     }
 
     public void action(PSpecialSkill move, PCLUseInfo info)
     {
-        PCLActions.bottom.purgeFromPile(name, move.amount, player.hand)
-                .setFilter(GameUtilities::canRemoveFromDeck)
+        PCLActions.bottom.purgeFromPile(name, player.hand.size() + player.discardPile.size() + 1, player.hand, player.discardPile)
                 .addCallback(cards -> {
-                    for (AbstractCard card : cards)
-                    {
-                        for (AbstractCard copy : GameUtilities.getAllInBattleInstances(card.uuid))
-                        {
-                            PCLActions.bottom.purge(copy);
-                        }
-                        AbstractCard masterCopy = GameUtilities.getMasterDeckInstance(card.uuid);
-                        if (masterCopy != null)
-                        {
-                            AbstractDungeon.player.masterDeck.removeCard(masterCopy);
-                        }
-                    }
+                    PCLActions.bottom.selectFromPile(name, move.amount, GameUtilities.makeCardGroup(cards))
+                            .setFilter(GameUtilities::canRemoveFromDeck)
+                            .addCallback((c2) -> {
+                                for (AbstractCard card : c2)
+                                {
+                                    for (AbstractCard copy : GameUtilities.getAllInBattleInstances(card.uuid))
+                                    {
+                                        PCLActions.bottom.purge(copy);
+                                    }
+                                    AbstractCard masterCopy = GameUtilities.getMasterDeckInstance(card.uuid);
+                                    if (masterCopy != null)
+                                    {
+                                        AbstractDungeon.player.masterDeck.removeCard(masterCopy);
+                                    }
+                                }
+                            });
                 });
     }
 }

@@ -2,6 +2,7 @@ package pinacolada.cards.base;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIUtils;
+import pinacolada.cards.base.fields.PCLAffinity;
 
 import java.util.Comparator;
 

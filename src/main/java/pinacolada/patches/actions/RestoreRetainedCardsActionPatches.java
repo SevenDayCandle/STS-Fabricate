@@ -6,7 +6,7 @@ import com.megacrit.cardcrawl.actions.unique.RestoreRetainedCardsAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import javassist.CannotCompileException;
 import javassist.expr.ExprEditor;
-import pinacolada.cards.base.fields.PCLCardTag;
+import pinacolada.cards.base.tags.PCLCardTag;
 
 @SpirePatch(clz = RestoreRetainedCardsAction.class, method = "update", optional = true)
 public class RestoreRetainedCardsActionPatches

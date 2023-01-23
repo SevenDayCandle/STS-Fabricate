@@ -13,7 +13,7 @@ import extendedui.ui.controls.EUILabel;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.PercentageRelativeHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
-import pinacolada.cards.base.PCLAffinity;
+import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.interfaces.markers.MultiplicativePower;
 import pinacolada.monsters.PCLCardAlly;

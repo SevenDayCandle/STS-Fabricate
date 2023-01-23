@@ -38,7 +38,7 @@ import pinacolada.effects.SFX;
 import pinacolada.effects.vfx.SmokeEffect;
 import pinacolada.patches.library.RelicLibraryPatches;
 import pinacolada.resources.PGR;
-import pinacolada.resources.pcl.PCLLoadout;
+import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.ui.PCLEnergyOrb;
 import pinacolada.ui.characterSelection.PCLBaseStatEditor;
 import pinacolada.utilities.BlendableSkeletonMeshRenderer;

@@ -50,7 +50,8 @@ import org.scannotation.AnnotationDB;
 import pinacolada.actions.PCLActions;
 import pinacolada.blights.common.UpgradedHand;
 import pinacolada.cards.base.*;
-import pinacolada.cards.base.fields.PCLCardTag;
+import pinacolada.cards.base.fields.*;
+import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.characters.PCLCharacter;
 import pinacolada.effects.SFX;
 import pinacolada.interfaces.listeners.OnTryApplyPowerListener;
@@ -65,8 +66,8 @@ import pinacolada.powers.PCLPower;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
+import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.pcl.PCLCoreResources;
-import pinacolada.resources.pcl.PCLLoadout;
 import pinacolada.stances.PCLStanceHelper;
 
 import java.lang.reflect.Field;
@@ -88,7 +89,7 @@ public class GameUtilities
     {
         for (AbstractCreature target : targets)
         {
-           applyPowerInstantly(target, powerHelper, stacks);
+            applyPowerInstantly(target, powerHelper, stacks);
         }
     }
 
@@ -649,11 +650,16 @@ public class GameUtilities
 
         switch (rarity)
         {
-            case CURSE: return AbstractDungeon.curseCardPool;
-            case COMMON: return AbstractDungeon.commonCardPool;
-            case UNCOMMON: return AbstractDungeon.uncommonCardPool;
-            case RARE: return AbstractDungeon.rareCardPool;
-            default: return null;
+            case CURSE:
+                return AbstractDungeon.curseCardPool;
+            case COMMON:
+                return AbstractDungeon.commonCardPool;
+            case UNCOMMON:
+                return AbstractDungeon.uncommonCardPool;
+            case RARE:
+                return AbstractDungeon.rareCardPool;
+            default:
+                return null;
         }
     }
 
@@ -666,11 +672,16 @@ public class GameUtilities
 
         switch (rarity)
         {
-            case CURSE: return AbstractDungeon.srcCurseCardPool;
-            case COMMON: return AbstractDungeon.srcCommonCardPool;
-            case UNCOMMON: return AbstractDungeon.srcUncommonCardPool;
-            case RARE: return AbstractDungeon.srcRareCardPool;
-            default: return null;
+            case CURSE:
+                return AbstractDungeon.srcCurseCardPool;
+            case COMMON:
+                return AbstractDungeon.srcCommonCardPool;
+            case UNCOMMON:
+                return AbstractDungeon.srcUncommonCardPool;
+            case RARE:
+                return AbstractDungeon.srcRareCardPool;
+            default:
+                return null;
         }
     }
 
@@ -1566,8 +1577,8 @@ public class GameUtilities
     public static boolean hasRelicEffect(String relicID)
     {
         return hasRelic(relicID)
-            || CombatManager.getCombatData(relicID, false)
-            || CombatManager.getTurnData(relicID, false);
+                || CombatManager.getCombatData(relicID, false)
+                || CombatManager.getTurnData(relicID, false);
     }
 
     public static void highlightMatchingCards(PCLAffinity affinity)
@@ -1736,8 +1747,8 @@ public class GameUtilities
     public static boolean isFatal(AbstractCreature enemy, boolean includeMinions)
     {
         return (enemy.isDead || enemy.isDying || enemy.currentHealth <= 0)
-            && !enemy.hasPower(RegrowPower.POWER_ID)
-            && (includeMinions || !enemy.hasPower(MinionPower.POWER_ID));
+                && !enemy.hasPower(RegrowPower.POWER_ID)
+                && (includeMinions || !enemy.hasPower(MinionPower.POWER_ID));
     }
 
     public static boolean isHindrance(AbstractCard card)
@@ -1881,6 +1892,28 @@ public class GameUtilities
     public static boolean isValidTarget(AbstractCreature target)
     {
         return target != null && !isDeadOrEscaped(target);
+    }
+
+    public static CardGroup makeCardGroup(Collection<AbstractCard> cards)
+    {
+        CardGroup group = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
+        group.group.addAll(cards);
+        return group;
+    }
+
+    public static CardGroup makeCardGroupRandomized(Collection<AbstractCard> source, int limit, boolean makeCopy)
+    {
+        final RandomizedList<AbstractCard> choices = new RandomizedList<>(source);
+        CardGroup choice = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
+        while (choice.size() < limit)
+        {
+            AbstractCard c = choices.retrieve(PCLCard.rng);
+            if (c != null)
+            {
+                choice.addToBottom(makeCopy ? c.makeCopy() : c);
+            }
+        }
+        return choice;
     }
 
     public static CardStrings mockCardStrings()

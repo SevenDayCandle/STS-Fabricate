@@ -2,6 +2,10 @@ package pinacolada.cards.pcl.replacement;
 
 import pinacolada.annotations.VisibleCard;
 import pinacolada.cards.base.*;
+import pinacolada.cards.base.fields.PCLAffinity;
+import pinacolada.cards.base.fields.PCLAttackType;
+import pinacolada.cards.base.PCLCardData;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.effects.AttackEffects;
 import pinacolada.skills.PMove;
 

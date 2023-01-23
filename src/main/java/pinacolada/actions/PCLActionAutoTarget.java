@@ -1,7 +1,7 @@
 package pinacolada.actions;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import pinacolada.cards.base.PCLCardTarget;
+import pinacolada.cards.base.fields.PCLCardTarget;
 
 import java.util.ArrayList;
 import java.util.List;

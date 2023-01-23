@@ -18,7 +18,7 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.resources.PGR;
-import pinacolada.resources.pcl.PCLLoadoutData;
+import pinacolada.resources.loadout.PCLLoadoutData;
 
 // Copied and modified from STS-AnimatorMod
 public class PCLBaseStatEditor extends EUIBase

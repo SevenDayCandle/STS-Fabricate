@@ -9,7 +9,7 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.random.Random;
 import extendedui.EUIUtils;
-import pinacolada.cards.base.fields.PCLCardTag;
+import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.interfaces.listeners.OnRemovedFromDeckListener;
 import pinacolada.misc.CombatManager;
 import pinacolada.utilities.GameUtilities;

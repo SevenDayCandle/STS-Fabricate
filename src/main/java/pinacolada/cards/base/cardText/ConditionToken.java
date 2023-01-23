@@ -84,7 +84,7 @@ public class ConditionToken extends PCLTextToken
     }
 
     @Override
-    public void render(SpriteBatch sb, PCLTextContext context)
+    public void render(SpriteBatch sb, PCLCardText context)
     {
         if (EUI.elapsed25() && move != null)
         {

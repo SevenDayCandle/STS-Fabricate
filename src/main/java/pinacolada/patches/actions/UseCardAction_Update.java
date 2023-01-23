@@ -13,7 +13,7 @@ import javassist.CtBehavior;
 import javassist.expr.ExprEditor;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.fields.PCLCardTag;
+import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.resources.PCLEnum;
 
 @SpirePatch(clz = UseCardAction.class, method = "update", optional = true)

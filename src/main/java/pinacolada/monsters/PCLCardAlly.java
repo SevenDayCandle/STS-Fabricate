@@ -22,7 +22,7 @@ import extendedui.ui.EUIBase;
 import extendedui.ui.tooltips.EUICardPreview;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.PCLCardTarget;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;

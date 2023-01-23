@@ -3,7 +3,7 @@ package pinacolada.actions.pileSelection;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.powers.AbstractPower;
-import pinacolada.cards.base.PCLCardSelection;
+import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.misc.CombatManager;
 import pinacolada.resources.PGR;
 

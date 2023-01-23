@@ -11,7 +11,7 @@ import extendedui.ui.controls.EUIImage;
 import extendedui.ui.controls.EUILabel;
 import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.utilities.EUIFontHelper;
-import pinacolada.cards.base.PCLAffinity;
+import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.PCLCardAffinityStatistics;
 import pinacolada.effects.PCLEffects;
 

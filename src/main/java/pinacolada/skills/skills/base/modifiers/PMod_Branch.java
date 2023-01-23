@@ -1,7 +1,7 @@
 package pinacolada.skills.skills.base.modifiers;
 
 import extendedui.EUIUtils;
-import pinacolada.cards.base.PCLCardTarget;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.skills.PMod;

@@ -3,7 +3,7 @@ package pinacolada.cards.base.cardText;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import static pinacolada.cards.base.cardText.PCLTextContext.isIdeographicLanguage;
+import static pinacolada.cards.base.cardText.PCLCardText.isIdeographicLanguage;
 
 // Copied and modified from STS-AnimatorMod
 public class WhitespaceToken extends PCLTextToken
@@ -42,7 +42,7 @@ public class WhitespaceToken extends PCLTextToken
     }
 
     @Override
-    public void render(SpriteBatch sb, PCLTextContext context)
+    public void render(SpriteBatch sb, PCLCardText context)
     {
         context.startX += getWidth(context.font, rawText);
     }

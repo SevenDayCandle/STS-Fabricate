@@ -1,6 +1,6 @@
 package pinacolada.skills.fields;
 
-import pinacolada.cards.base.PCLAttackType;
+import pinacolada.cards.base.fields.PCLAttackType;
 import pinacolada.resources.PGR;
 import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
 

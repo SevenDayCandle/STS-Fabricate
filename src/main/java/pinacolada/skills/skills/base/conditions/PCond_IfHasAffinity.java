@@ -1,8 +1,8 @@
 package pinacolada.skills.skills.base.conditions;
 
 import pinacolada.annotations.VisibleSkill;
-import pinacolada.cards.base.PCLAffinity;
-import pinacolada.cards.base.PCLCardTarget;
+import pinacolada.cards.base.fields.PCLAffinity;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PCond;

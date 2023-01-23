@@ -124,7 +124,7 @@ public class WordToken extends PCLTextToken
     }
 
     @Override
-    public void render(SpriteBatch sb, PCLTextContext context)
+    public void render(SpriteBatch sb, PCLCardText context)
     {
         if (coloredString.text == null)
         {

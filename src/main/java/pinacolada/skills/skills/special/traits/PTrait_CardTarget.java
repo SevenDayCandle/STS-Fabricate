@@ -2,7 +2,7 @@ package pinacolada.skills.skills.special.traits;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.PCLCardTarget;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.markers.Hidden;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
