@@ -36,6 +36,7 @@ import java.util.Map;
 public abstract class PCLResources<T extends AbstractConfig, U extends PCLImages, V extends PCLTooltips>
         implements EditCharactersSubscriber, EditKeywordsSubscriber, EditStringsSubscriber, PostInitializeSubscriber
 {
+    private static final Type GROUPED_CARD_TYPE = new TypeToken<Map<String, Map<String, CardStrings>>>() {}.getType();
     public static final String JSON_AUGMENTS = "AugmentStrings.json";
     public static final String JSON_CARDS = "CardStrings.json";
     public static final String JSON_KEYWORDS = "KeywordStrings.json";
@@ -70,22 +71,18 @@ public abstract class PCLResources<T extends AbstractConfig, U extends PCLImages
         AugmentStrings.STRINGS.putAll(new HashMap<String, AugmentStrings>(EUIUtils.deserialize(jsonString, typeToken)));
     }
 
-    // TODO rework for stronger typing
     public static void loadGroupedCardStrings(String jsonString)
     {
-        final Map localizationStrings = ReflectionHacks.getPrivateStatic(LocalizedStrings.class, "cards");
-        final Map cardStrings = new HashMap<>();
+        final Map<String, CardStrings> localizationStrings = ReflectionHacks.getPrivateStatic(LocalizedStrings.class, "cards");
+        final Map<String, CardStrings> cardStrings = new HashMap<>();
         try
         {
-            final Type typeToken = new TypeToken<Map<String, Map<String, CardStrings>>>()
-            {
-            }.getType();
-            final Map map = new HashMap<>((Map) new Gson().fromJson(jsonString, typeToken));
+            final Map<String, Map<String, CardStrings>> map = new HashMap<>(new Gson().fromJson(jsonString, GROUPED_CARD_TYPE));
 
-            for (Object key1 : map.keySet())
+            for (String key1 : map.keySet())
             {
-                final Map map3 = ((Map<Object, CardStrings>) map.get(key1));
-                for (Object key2 : map3.keySet())
+                final Map<String, CardStrings> map3 = (map.get(key1));
+                for (String key2 : map3.keySet())
                 {
                     cardStrings.put(key2, map3.get(key2));
                 }

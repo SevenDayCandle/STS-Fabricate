@@ -11,7 +11,6 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import extendedui.EUI;
-import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.ui.TextureCache;
 import extendedui.utilities.ColoredString;
@@ -31,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 
 // Copied and modified from STS-AnimatorMod
+// TODO Move generic logic into other classes
 public class PCLCardText
 {
     protected final static Color DEFAULT_COLOR = Settings.CREAM_COLOR.cpy();
@@ -201,53 +201,16 @@ public class PCLCardText
         {
             PCLRenderHelpers.drawColorized(sb, augment.getColor(), s ->
                     PCLRenderHelpers.drawOnCardAuto(s, card, augment.getTexture(), new Vector2(offset_x, offset_y + y), 28, 28, augment.getColor(), alpha, 1));
-            //final BitmapFont font = EUIFontHelper.CardIconFont_Small;
-            //font.getData().setScale(0.9f * card.drawScale);
-            //PCLRenderHelpers.WriteOnCard(sb, card, font, scaling.text, offset_x, offset_y + y - 6, scaling.color, true);
-            //PCLRenderHelpers.ResetFont(font);
         }
 
         return 30; // y offset
     }
 
-    private float renderBadge(SpriteBatch sb, PCLCardTag tag, float offset_y, float alpha)
-    {
-        Vector2 offset = new Vector2(AbstractCard.RAW_W * 0.45f, AbstractCard.RAW_H * 0.45f + offset_y);
-
-        PCLRenderHelpers.drawOnCardAuto(sb, card, EUIRM.images.baseBadge.texture(), new Vector2(AbstractCard.RAW_W * 0.45f, AbstractCard.RAW_H * 0.45f + offset_y), 64, 64, tag.color, alpha, 1);
-        PCLRenderHelpers.drawOnCardAuto(sb, card, tag.getTip().icon.getTexture(), new Vector2(AbstractCard.RAW_W * 0.45f, AbstractCard.RAW_H * 0.45f + offset_y), 64, 64, Color.WHITE, alpha, 1);
-        PCLRenderHelpers.drawOnCardAuto(sb, card, EUIRM.images.baseBorder.texture(), new Vector2(AbstractCard.RAW_W * 0.45f, AbstractCard.RAW_H * 0.45f + offset_y), 64, 64, Color.WHITE, alpha, 1);
-
-        int tagCount = tag.getInt(card);
-        if (tagCount < 0)
-        {
-            PCLRenderHelpers.drawOnCardAuto(sb, card, PGR.core.images.badges.baseInfinite.texture(), new Vector2(AbstractCard.RAW_W * 0.45f, AbstractCard.RAW_H * 0.45f + offset_y), 64, 64, Color.WHITE, alpha, 1);
-        }
-        else if (tagCount > 1)
-        {
-            PCLRenderHelpers.drawOnCardAuto(sb, card, PGR.core.images.badges.baseMulti.texture(), new Vector2(AbstractCard.RAW_W * 0.45f, AbstractCard.RAW_H * 0.45f + offset_y), 64, 64, Color.WHITE, alpha, 1);
-        }
-
-        return 38;
-    }
-
-    protected void renderBadges(SpriteBatch sb, boolean inHand)
+    protected void renderIcons(SpriteBatch sb, boolean inHand)
     {
         final float alpha = updateBadgeAlpha();
 
-        int offset_y = 0;
-        // Only render tags if allowed
-        if (!PGR.core.config.displayCardTagDescription.get())
-        {
-            for (PCLCardTag tag : PCLCardTag.getAll())
-            {
-                if (tag.has(card) && tag.getTip().icon != null)
-                {
-                    offset_y -= renderBadge(sb, tag, offset_y, alpha);
-                }
-            }
-        }
-
+        float offset_y = PCLCardTag.renderTagsOnCard(sb, card, alpha);
 
         // Render card footers
         offset_y = 0;
@@ -259,11 +222,6 @@ public class PCLCardText
         {
             offset_y += renderFooter(sb, card.isPopup ? ICONS.multiformL.texture() : ICONS.multiform.texture(), offset_y, Color.WHITE, null);
         }
-/*        if (card.hasTag(PGR.Enums.CardTags.EXPANDED))
-        {
-            offset_y += RenderFooter(sb, card.isPopup ? ICONS.BranchUpgrade_L.Texture() : ICONS.BranchUpgrade.Texture(), offset_y, Color.WHITE,
-                    card.cardData.MaxForms > 2 && card.auxiliaryData.form != 0 ? String.valueOf(card.auxiliaryData.form) : null);
-        }*/
 
         // Render augments
         offset_y = 0;
@@ -290,7 +248,7 @@ public class PCLCardText
         final boolean inHand = PCLCard.player != null && PCLCard.player.hand.contains(card);
         if (card.drawScale > 0.3f)
         {
-            renderBadges(sb, inHand);
+            renderIcons(sb, inHand);
 
             ColoredString header = card.getHeaderText();
             if (header != null)

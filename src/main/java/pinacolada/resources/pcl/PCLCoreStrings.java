@@ -936,7 +936,7 @@ public class PCLCoreStrings extends PCLStrings
 
     public class Conditions
     {
-        private final UIStrings strings = getUIStrings("Conditions");
+        private final UIStrings conditions = getUIStrings("Conditions");
         private final Subjects subjects;
         public Conditions(Subjects subjects)
         {
@@ -1117,44 +1117,44 @@ public class PCLCoreStrings extends PCLStrings
 
         private String format(int index, Object... objects)
         {
-            String text = strings.TEXT[index];
+            String text = conditions.TEXT[index];
             return EUIUtils.format(text, objects);
         }
         private String format(int index)
         {
-            return strings.TEXT[index];
+            return conditions.TEXT[index];
         }
     }
 
     public class CardPile
     {
-        private final UIStrings strings = getUIStrings("CardPile");
+        private final UIStrings cardPile = getUIStrings("CardPile");
 
-        public final String discardPile = strings.TEXT[0];
-        public final String drawPile = strings.TEXT[1];
-        public final String exhaustPile = strings.TEXT[2];
-        public final String hand = strings.TEXT[3];
-        public final String masterDeck = strings.TEXT[4];
-        public final String purgedPile = strings.TEXT[5];
-        public final String manual = strings.TEXT[6];
-        public final String top = strings.TEXT[7];
-        public final String bottom = strings.TEXT[8];
-        public final String random = strings.TEXT[9];
+        public final String discardPile = cardPile.TEXT[0];
+        public final String drawPile = cardPile.TEXT[1];
+        public final String exhaustPile = cardPile.TEXT[2];
+        public final String hand = cardPile.TEXT[3];
+        public final String masterDeck = cardPile.TEXT[4];
+        public final String purgedPile = cardPile.TEXT[5];
+        public final String manual = cardPile.TEXT[6];
+        public final String top = cardPile.TEXT[7];
+        public final String bottom = cardPile.TEXT[8];
+        public final String random = cardPile.TEXT[9];
     }
 
     public class Trophies
     {
-        private final UIStrings strings = getUIStrings("Trophies");
+        private final UIStrings trophies = getUIStrings("Trophies");
 
-        public final String trophy = strings.TEXT[0];
-        public final String glyph = strings.TEXT[1];
-        public final String gold = strings.TEXT[2];
-        public final String bronzeDescription = strings.TEXT[3];
-        public final String silverDescription = strings.TEXT[4];
-        public final String goldDescription = strings.TEXT[5];
-        public final String bronzeLocked = strings.TEXT[6];
-        public final String silverLocked = strings.TEXT[7];
-        public final String goldLocked = strings.TEXT[8];
+        public final String trophy = trophies.TEXT[0];
+        public final String glyph = trophies.TEXT[1];
+        public final String gold = trophies.TEXT[2];
+        public final String bronzeDescription = trophies.TEXT[3];
+        public final String silverDescription = trophies.TEXT[4];
+        public final String goldDescription = trophies.TEXT[5];
+        public final String bronzeLocked = trophies.TEXT[6];
+        public final String silverLocked = trophies.TEXT[7];
+        public final String goldLocked = trophies.TEXT[8];
 
         public final String bronzeFormatted(int ascension)
         {
@@ -1174,58 +1174,58 @@ public class PCLCoreStrings extends PCLStrings
 
     public class Tutorial
     {
-        private final UIStrings strings = getUIStrings("Tutorial");
+        private final UIStrings tutorial = getUIStrings("Tutorial");
 
-        public final String learnMore = strings.TEXT[0];
-        public final String deciderSimple = strings.TEXT[1];
-        public final String conjurerSimple = strings.TEXT[2];
-        public final String eternalSimple = strings.TEXT[3];
-        public final String affinityTutorial = strings.TEXT[4];
-        public final String deciderTutorial1 = strings.TEXT[5];
-        public final String deciderTutorial2 = strings.TEXT[6];
-        public final String deciderTutorial3 = strings.TEXT[7];
-        public final String conjurerTutorial1 = strings.TEXT[8];
-        public final String conjurerTutorial2 = strings.TEXT[9];
-        public final String conjurerTutorial3 = strings.TEXT[10];
-        public final String eternalTutorial1 = strings.TEXT[11];
-        public final String eternalTutorial2 = strings.TEXT[12];
-        public final String eternalTutorial3 = strings.TEXT[13];
-        public final String characterTutorial1 = strings.TEXT[14];
-        public final String characterTutorial2 = strings.TEXT[15];
-        public final String augmentTutorial1 = strings.TEXT[16];
-        public final String augmentTutorial2 = strings.TEXT[17];
+        public final String learnMore = tutorial.TEXT[0];
+        public final String deciderSimple = tutorial.TEXT[1];
+        public final String conjurerSimple = tutorial.TEXT[2];
+        public final String eternalSimple = tutorial.TEXT[3];
+        public final String affinityTutorial = tutorial.TEXT[4];
+        public final String deciderTutorial1 = tutorial.TEXT[5];
+        public final String deciderTutorial2 = tutorial.TEXT[6];
+        public final String deciderTutorial3 = tutorial.TEXT[7];
+        public final String conjurerTutorial1 = tutorial.TEXT[8];
+        public final String conjurerTutorial2 = tutorial.TEXT[9];
+        public final String conjurerTutorial3 = tutorial.TEXT[10];
+        public final String eternalTutorial1 = tutorial.TEXT[11];
+        public final String eternalTutorial2 = tutorial.TEXT[12];
+        public final String eternalTutorial3 = tutorial.TEXT[13];
+        public final String characterTutorial1 = tutorial.TEXT[14];
+        public final String characterTutorial2 = tutorial.TEXT[15];
+        public final String augmentTutorial1 = tutorial.TEXT[16];
+        public final String augmentTutorial2 = tutorial.TEXT[17];
     }
 
     public class CardEditorTutorial
     {
-        public final UIStrings strings = getUIStrings("CardEditorTutorial");
-        public final String selector1 = strings.TEXT[0];
-        public final String selector2 = strings.TEXT[1];
-        public final String selectorReload = strings.TEXT[2];
-        public final String primaryForm = strings.TEXT[3];
-        public final String primaryImage = strings.TEXT[4];
-        public final String primaryFlags = strings.TEXT[5];
-        public final String attrTags1 = strings.TEXT[6];
-        public final String attrTags2 = strings.TEXT[7];
-        public final String attrAffinity = strings.TEXT[8];
-        public final String effectCondition = strings.TEXT[9];
-        public final String effectEffect = strings.TEXT[10];
-        public final String effectModifier = strings.TEXT[11];
-        public final String effectTrigger = strings.TEXT[12];
-        public final String effectTurnDelay = strings.TEXT[13];
-        public final String effectChoices = strings.TEXT[14];
-        public final String effectConditionIfElse = strings.TEXT[15];
-        public final String effectConditionOr = strings.TEXT[16];
-        public final String imageSelect = strings.TEXT[17];
-        public final String imageCrop = strings.TEXT[18];
+        public final UIStrings cardeditortutorial = getUIStrings("CardEditorTutorial");
+        public final String selector1 = cardeditortutorial.TEXT[0];
+        public final String selector2 = cardeditortutorial.TEXT[1];
+        public final String selectorReload = cardeditortutorial.TEXT[2];
+        public final String primaryForm = cardeditortutorial.TEXT[3];
+        public final String primaryImage = cardeditortutorial.TEXT[4];
+        public final String primaryFlags = cardeditortutorial.TEXT[5];
+        public final String attrTags1 = cardeditortutorial.TEXT[6];
+        public final String attrTags2 = cardeditortutorial.TEXT[7];
+        public final String attrAffinity = cardeditortutorial.TEXT[8];
+        public final String effectCondition = cardeditortutorial.TEXT[9];
+        public final String effectEffect = cardeditortutorial.TEXT[10];
+        public final String effectModifier = cardeditortutorial.TEXT[11];
+        public final String effectTrigger = cardeditortutorial.TEXT[12];
+        public final String effectTurnDelay = cardeditortutorial.TEXT[13];
+        public final String effectChoices = cardeditortutorial.TEXT[14];
+        public final String effectConditionIfElse = cardeditortutorial.TEXT[15];
+        public final String effectConditionOr = cardeditortutorial.TEXT[16];
+        public final String imageSelect = cardeditortutorial.TEXT[17];
+        public final String imageCrop = cardeditortutorial.TEXT[18];
     }
 
     public class GridSelection
     {
-        public final UIStrings strings = getUIStrings("GridSelection");
-        public final String chooseCards = strings.TEXT[0];
-        public final String cardsInPile = strings.TEXT[1];
-        public final String scry = strings.TEXT[2];
+        public final UIStrings gridselection = getUIStrings("GridSelection");
+        public final String chooseCards = gridselection.TEXT[0];
+        public final String cardsInPile = gridselection.TEXT[1];
+        public final String scry = gridselection.TEXT[2];
         public final String discard = DiscardAction.TEXT[0];
         public final String exhaust = ExhaustAction.TEXT[0];
         public final String cycle = GamblingChipAction.TEXT[1];

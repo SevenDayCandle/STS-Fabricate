@@ -1,11 +1,14 @@
 package pinacolada.cards.base.tags;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.*;
 import com.evacipated.cardcrawl.modthespire.lib.SpireField;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.relics.BlueCandle;
 import com.megacrit.cardcrawl.relics.MedicalKit;
+import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.ui.TextureCache;
@@ -14,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.fields.PCLCardTagInfo;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
+import pinacolada.utilities.PCLRenderHelpers;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -38,6 +42,7 @@ public enum PCLCardTag implements TooltipProvider
     Soulbound(false, new Color(0.70f, 0.6f, 0.5f, 1)),
     Unplayable(false, new Color(0.3f, 0.20f, 0.20f, 1));
 
+    public static final float HEIGHT = 38f;
     public final boolean isPositive;
     public final Color color;
 
@@ -62,6 +67,23 @@ public enum PCLCardTag implements TooltipProvider
         PCLCardTag[] values = PCLCardTag.values();
         Arrays.sort(values, (a, b) -> StringUtils.compare(a.getTip().title, b.getTip().title));
         return Arrays.asList(values);
+    }
+
+    /* Renders all of the tags on a card. Returns the total height of all the tags rendered */
+    public static float renderTagsOnCard(SpriteBatch sb, AbstractCard card, float alpha)
+    {
+        int offset_y = 0;
+        if (!PGR.core.config.displayCardTagDescription.get())
+        {
+            for (PCLCardTag tag : PCLCardTag.getAll())
+            {
+                if (tag.has(card) && tag.getTip().icon != null)
+                {
+                    offset_y -= tag.renderOnCard(sb, card, offset_y, alpha);
+                }
+            }
+        }
+        return offset_y;
     }
 
     public SpireField<Boolean> getFieldBoolean()
@@ -290,6 +312,27 @@ public enum PCLCardTag implements TooltipProvider
     public PCLCardTagInfo make(Integer[] values, Integer[] upVals)
     {
         return new PCLCardTagInfo(this, values, upVals);
+    }
+
+    public float renderOnCard(SpriteBatch sb, AbstractCard card, float offset_y, float alpha)
+    {
+        Vector2 offset = new Vector2(AbstractCard.RAW_W * 0.45f, AbstractCard.RAW_H * 0.45f + offset_y);
+
+        PCLRenderHelpers.drawOnCardAuto(sb, card, EUIRM.images.baseBadge.texture(), new Vector2(AbstractCard.RAW_W * 0.45f, AbstractCard.RAW_H * 0.45f + offset_y), 64, 64, color, alpha, 1);
+        PCLRenderHelpers.drawOnCardAuto(sb, card, getTip().icon.getTexture(), new Vector2(AbstractCard.RAW_W * 0.45f, AbstractCard.RAW_H * 0.45f + offset_y), 64, 64, Color.WHITE, alpha, 1);
+        PCLRenderHelpers.drawOnCardAuto(sb, card, EUIRM.images.baseBorder.texture(), new Vector2(AbstractCard.RAW_W * 0.45f, AbstractCard.RAW_H * 0.45f + offset_y), 64, 64, Color.WHITE, alpha, 1);
+
+        int tagCount = getInt(card);
+        if (tagCount < 0)
+        {
+            PCLRenderHelpers.drawOnCardAuto(sb, card, PGR.core.images.badges.baseInfinite.texture(), new Vector2(AbstractCard.RAW_W * 0.45f, AbstractCard.RAW_H * 0.45f + offset_y), 64, 64, Color.WHITE, alpha, 1);
+        }
+        else if (tagCount > 1)
+        {
+            PCLRenderHelpers.drawOnCardAuto(sb, card, PGR.core.images.badges.baseMulti.texture(), new Vector2(AbstractCard.RAW_W * 0.45f, AbstractCard.RAW_H * 0.45f + offset_y), 64, 64, Color.WHITE, alpha, 1);
+        }
+
+        return HEIGHT;
     }
 
     private void set(AbstractCard card, boolean value)
