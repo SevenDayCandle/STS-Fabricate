@@ -14,12 +14,11 @@ import pinacolada.actions.damage.DealDamage;
 import pinacolada.actions.damage.DealDamageToAll;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.misc.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.PCLEffekseerEFX;
 import pinacolada.effects.VFX;
-import pinacolada.interfaces.markers.Hidden;
 import pinacolada.interfaces.markers.PointerProvider;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
@@ -29,7 +28,7 @@ import pinacolada.skills.fields.PField_AttackEffect;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class PMove_DealCardDamage extends PMove<PField_AttackEffect> implements Hidden
+public class PMove_DealCardDamage extends PMove<PField_AttackEffect>
 {
     public static final PSkillData<PField_AttackEffect> DATA = register(PMove_DealCardDamage.class, PField_AttackEffect.class);
 

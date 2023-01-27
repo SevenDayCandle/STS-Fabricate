@@ -1,9 +1,8 @@
 package pinacolada.skills.skills.special.traits;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import pinacolada.cards.base.fields.PCLAttackType;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.interfaces.markers.Hidden;
+import pinacolada.cards.base.fields.PCLAttackType;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.PTrait;
@@ -11,7 +10,7 @@ import pinacolada.skills.PTrigger;
 import pinacolada.skills.fields.PField_AttackType;
 
 // Only used for augments
-public class PTrait_AttackType extends PTrait<PField_AttackType> implements Hidden
+public class PTrait_AttackType extends PTrait<PField_AttackType>
 {
 
     public static final PSkillData<PField_AttackType> DATA = register(PTrait_AttackType.class, PField_AttackType.class);

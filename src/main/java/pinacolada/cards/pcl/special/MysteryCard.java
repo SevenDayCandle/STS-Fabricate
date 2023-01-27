@@ -7,7 +7,6 @@ import extendedui.EUIUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.interfaces.markers.Hidden;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.skills.PCustomCond;
 import pinacolada.utilities.GameUtilities;
@@ -16,7 +15,7 @@ import pinacolada.utilities.WeightedList;
 import java.util.ArrayList;
 
 // TODO transform when added to deck
-public class MysteryCard extends PCLCard implements Hidden
+public class MysteryCard extends PCLCard
 {
     public static final PCLCardData DATA = register(MysteryCard.class)
             .setImagePath(QuestionMark.DATA.imagePath)

@@ -3,16 +3,15 @@ package pinacolada.skills.skills.special.moves;
 import com.megacrit.cardcrawl.core.Settings;
 import extendedui.utilities.ColoredString;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.misc.PCLUseInfo;
 import pinacolada.interfaces.markers.EditorCard;
-import pinacolada.interfaces.markers.Hidden;
 import pinacolada.interfaces.markers.PointerProvider;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.fields.PField_Empty;
 
-public class PMove_GainCardBlock extends PMove<PField_Empty> implements Hidden
+public class PMove_GainCardBlock extends PMove<PField_Empty>
 {
     public static final PSkillData<PField_Empty> DATA = register(PMove_GainCardBlock.class, PField_Empty.class);
 

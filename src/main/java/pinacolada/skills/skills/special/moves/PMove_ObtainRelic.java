@@ -6,7 +6,6 @@ import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.misc.PCLUseInfo;
-import pinacolada.interfaces.markers.Hidden;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.fields.PField_RelicID;
@@ -16,7 +15,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-public class PMove_ObtainRelic extends PMove<PField_RelicID> implements Hidden
+public class PMove_ObtainRelic extends PMove<PField_RelicID>
 {
     public static final PSkillData<PField_RelicID> DATA = register(PMove_ObtainRelic.class, PField_RelicID.class)
             .selfTarget();

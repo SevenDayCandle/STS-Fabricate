@@ -13,7 +13,6 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardAffinityStatistics;
 import pinacolada.cards.base.PCLCardBuilder;
 import pinacolada.cards.base.PCLCardData;
-import pinacolada.cards.pcl.curse.*;
 import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.characters.PCLCharacter;
 import pinacolada.relics.PCLRelic;
@@ -162,7 +161,6 @@ public abstract class PCLLoadout
         slot.addItem(getStrike(), -2);
     }
 
-    // TODO dynamically add curses available for this player class
     public void addLoadoutCards(PCLCardSlot slot)
     {
         for (PCLCardData data : cardData)
@@ -173,25 +171,19 @@ public abstract class PCLLoadout
             }
         }
 
-        for (PCLCardData data : PGR.getPlayerData(color).getCoreLoadout().cardData)
+        for (PCLCardData data : getPlayerData().getCoreLoadout().cardData)
         {
             if (data.cardRarity == AbstractCard.CardRarity.COMMON)
             {
                 slot.addItem(data, 4);
             }
         }
-        slot.addItem(Curse_Clumsy.DATA, -3);
-        slot.addItem(Curse_Injury.DATA, -5);
-        slot.addItem(Curse_Writhe.DATA, -5);
-        slot.addItem(Curse_SearingBurn.DATA, -6);
-        slot.addItem(Curse_Depression.DATA, -7);
-        slot.addItem(Curse_Avarice.DATA, -7);
-        slot.addItem(Curse_Parasite.DATA, -7);
-        slot.addItem(Curse_Doubt.DATA, -7);
-        slot.addItem(Curse_Decay.DATA, -7);
-        slot.addItem(Curse_Shame.DATA, -7);
-        slot.addItem(Curse_Regret.DATA, -9);
-        slot.addItem(Curse_Pain.DATA, -10);
+
+        // Dynamically add non-special curses
+        for (PCLCardData data : PCLCard.getAllData(false, true, d -> d.cardType == AbstractCard.CardType.CURSE && d.cardRarity != AbstractCard.CardRarity.SPECIAL))
+        {
+            slot.addItem(data, -7);
+        }
     }
 
     public void addStarterRelic(ArrayList<String> res, String id)

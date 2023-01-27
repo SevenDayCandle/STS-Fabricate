@@ -2,17 +2,16 @@ package pinacolada.cards.pcl.glyphs;
 
 import extendedui.EUIRM;
 import extendedui.utilities.ColoredTexture;
-import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
+import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.interfaces.markers.Hidden;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
-public abstract class Glyph extends PCLCard implements Hidden
+public abstract class Glyph extends PCLCard
 {
     public static final String ID = PGR.core.createID(Glyph.class.getSimpleName());
     private static final ArrayList<Glyph> cards = new ArrayList<>();

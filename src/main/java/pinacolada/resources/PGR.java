@@ -20,13 +20,11 @@ import pinacolada.annotations.VisiblePower;
 import pinacolada.annotations.VisibleRelic;
 import pinacolada.augments.AugmentStrings;
 import pinacolada.commands.*;
-import pinacolada.interfaces.markers.Hidden;
 import pinacolada.resources.pcl.PCLCoreResources;
 import pinacolada.rewards.pcl.AugmentReward;
 import pinacolada.skills.PSkill;
 import pinacolada.utilities.GameUtilities;
 
-import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.regex.Pattern;
@@ -51,11 +49,6 @@ public class PGR
         colorResourceMap.put(resources.cardColor, resources);
         playerResourceMap.put(resources.playerClass, resources);
         initialize(resources);
-    }
-
-    public static boolean canInstantiate(Class<?> type)
-    {
-        return !Hidden.class.isAssignableFrom(type) && !Modifier.isAbstract(type.getModifiers());
     }
 
     public static String createID(String prefix, String suffix)

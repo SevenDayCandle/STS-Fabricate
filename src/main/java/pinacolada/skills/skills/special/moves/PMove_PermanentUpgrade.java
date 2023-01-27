@@ -3,13 +3,12 @@ package pinacolada.skills.skills.special.moves;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
-import pinacolada.interfaces.markers.Hidden;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 
-public class PMove_PermanentUpgrade extends PMove<PField_CardCategory> implements Hidden
+public class PMove_PermanentUpgrade extends PMove<PField_CardCategory>
 {
     public static final PSkillData<PField_CardCategory> DATA = register(PMove_PermanentUpgrade.class, PField_CardCategory.class)
             .selfTarget();

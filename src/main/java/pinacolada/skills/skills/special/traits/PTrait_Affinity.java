@@ -1,9 +1,8 @@
 package pinacolada.skills.skills.special.traits;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.interfaces.markers.Hidden;
+import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -12,7 +11,7 @@ import pinacolada.skills.fields.PField_Affinity;
 import pinacolada.utilities.GameUtilities;
 
 // Only used for augments
-public class PTrait_Affinity extends PTrait<PField_Affinity> implements Hidden
+public class PTrait_Affinity extends PTrait<PField_Affinity>
 {
 
     public static final PSkillData<PField_Affinity> DATA = register(PTrait_Affinity.class, PField_Affinity.class);

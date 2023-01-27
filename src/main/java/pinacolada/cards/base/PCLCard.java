@@ -43,6 +43,7 @@ import extendedui.utilities.ColoredTexture;
 import extendedui.utilities.EUIClassUtils;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.PCLActions;
+import pinacolada.annotations.VisibleCard;
 import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.cards.base.cardText.PCLCardText;
@@ -54,7 +55,6 @@ import pinacolada.effects.card.PCLCardGlowBorderEffect;
 import pinacolada.interfaces.listeners.OnRemovedFromDeckListener;
 import pinacolada.interfaces.listeners.OnSetFormListener;
 import pinacolada.interfaces.markers.EditorCard;
-import pinacolada.interfaces.markers.Hidden;
 import pinacolada.interfaces.markers.SummonOnlyMove;
 import pinacolada.misc.CombatManager;
 import pinacolada.misc.PCLUseInfo;
@@ -265,7 +265,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
                 .stream();
         if (!showHidden)
         {
-            stream = stream.filter(a -> !(Hidden.class.isAssignableFrom(a.type)) && !a.isNotSeen());
+            stream = stream.filter(a -> a.type.isAnnotationPresent(VisibleCard.class) && !a.isNotSeen());
         }
         if (filterFunc != null)
         {

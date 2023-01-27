@@ -9,10 +9,9 @@ import pinacolada.actions.PCLActions;
 import pinacolada.actions.damage.DealDamage;
 import pinacolada.actions.damage.DealDamageToAll;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.misc.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.vfx.megacritCopy.HemokinesisEffect2;
-import pinacolada.interfaces.markers.Hidden;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -20,7 +19,7 @@ import pinacolada.skills.fields.PField_Empty;
 import pinacolada.skills.skills.base.moves.PMove_DealDamage;
 
 // TODO move out of DealDamage
-public class PMove_StealTempHP extends PMove_DealDamage implements Hidden
+public class PMove_StealTempHP extends PMove_DealDamage
 {
     public static final PSkillData<PField_Empty> DATA = register(PMove_StealTempHP.class, PField_Empty.class);
 

@@ -1,9 +1,8 @@
 package pinacolada.skills.skills.special.moves;
 
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.misc.PCLUseInfo;
-import pinacolada.interfaces.markers.Hidden;
 import pinacolada.misc.CombatManager;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
@@ -12,7 +11,7 @@ import pinacolada.skills.fields.PField_Empty;
 import pinacolada.utilities.GameUtilities;
 
 // TODO Different text for different classes
-public class PMove_GainMorph extends PMove<PField_Empty> implements Hidden
+public class PMove_GainMorph extends PMove<PField_Empty>
 {
     public static final PSkillData<PField_Empty> DATA = register(PMove_GainMorph.class, PField_Empty.class)
             .pclOnly()

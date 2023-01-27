@@ -10,9 +10,9 @@ import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.markers.CardObject;
+import pinacolada.annotations.VisibleCard;
 import pinacolada.cards.base.fields.*;
 import pinacolada.cards.base.tags.PCLCardTag;
-import pinacolada.interfaces.markers.Hidden;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.monsters.animations.PCLAllyAnimation;
 import pinacolada.resources.PCLEnum;
@@ -320,7 +320,7 @@ public class PCLCardData implements CardObject
     // CardLibrary.getCopy may return an EYBCard if it determines a card should be replaced, so we cannot guarantee it is a PCLCard
     public AbstractCard makeCopy(boolean upgraded)
     {
-        return (type.isAssignableFrom(Hidden.class) ? createNewInstance(upgraded) : CardLibrary.getCopy(ID, upgraded ? 1 : 0, 0));
+        return (!type.isAnnotationPresent(VisibleCard.class) ? createNewInstance(upgraded) : CardLibrary.getCopy(ID, upgraded ? 1 : 0, 0));
     }
 
     public void markSeen()

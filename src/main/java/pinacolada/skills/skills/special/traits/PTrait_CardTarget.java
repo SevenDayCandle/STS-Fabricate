@@ -3,7 +3,6 @@ package pinacolada.skills.skills.special.traits;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.interfaces.markers.Hidden;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.PTrait;
@@ -11,7 +10,7 @@ import pinacolada.skills.PTrigger;
 import pinacolada.skills.fields.PField_CardTarget;
 
 // Only used for augments
-public class PTrait_CardTarget extends PTrait<PField_CardTarget> implements Hidden
+public class PTrait_CardTarget extends PTrait<PField_CardTarget>
 {
     public static final PSkillData<PField_CardTarget> DATA = register(PTrait_CardTarget.class, PField_CardTarget.class);
 

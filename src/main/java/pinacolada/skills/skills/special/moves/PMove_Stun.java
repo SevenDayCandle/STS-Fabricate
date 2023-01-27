@@ -5,13 +5,12 @@ import com.megacrit.cardcrawl.actions.watcher.PressEndTurnButtonAction;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
-import pinacolada.interfaces.markers.Hidden;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
 
-public class PMove_Stun extends PMove<PField_Empty> implements Hidden
+public class PMove_Stun extends PMove<PField_Empty>
 {
     public static final PSkillData<PField_Empty> DATA = register(PMove_Stun.class, PField_Empty.class);
 

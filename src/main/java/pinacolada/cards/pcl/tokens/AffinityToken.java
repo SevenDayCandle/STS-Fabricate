@@ -5,19 +5,18 @@ import com.megacrit.cardcrawl.random.Random;
 import extendedui.EUIRM;
 import extendedui.utilities.ColoredTexture;
 import pinacolada.actions.pileSelection.SelectFromPile;
-import pinacolada.cards.base.*;
+import pinacolada.cards.base.PCLCard;
+import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.fields.AffinityTokenData;
 import pinacolada.cards.base.fields.PCLAffinity;
-import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.interfaces.markers.Hidden;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RandomizedList;
 
 import java.util.ArrayList;
 
-public abstract class AffinityToken extends PCLCard implements Hidden
+public abstract class AffinityToken extends PCLCard
 {
     public static final String ID = PGR.core.createID(AffinityToken.class.getSimpleName());
 

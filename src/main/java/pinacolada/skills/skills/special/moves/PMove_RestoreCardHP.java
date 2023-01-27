@@ -3,14 +3,13 @@ package pinacolada.skills.skills.special.moves;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
 import extendedui.interfaces.delegates.ActionT1;
-import pinacolada.interfaces.markers.Hidden;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.skills.base.moves.PMove_Modify;
 
-public class PMove_RestoreCardHP extends PMove_Modify<PField_CardCategory> implements Hidden
+public class PMove_RestoreCardHP extends PMove_Modify<PField_CardCategory>
 {
     public static final PSkillData<PField_CardCategory> DATA = PMove_Modify.register(PMove_RestoreCardHP.class, PField_CardCategory.class)
             .pclOnly();
