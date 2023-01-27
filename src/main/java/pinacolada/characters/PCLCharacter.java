@@ -37,10 +37,10 @@ import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
 import pinacolada.effects.vfx.SmokeEffect;
 import pinacolada.patches.library.RelicLibraryPatches;
+import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.ui.PCLEnergyOrb;
-import pinacolada.ui.characterSelection.PCLBaseStatEditor;
 import pinacolada.utilities.BlendableSkeletonMeshRenderer;
 import pinacolada.utilities.PCLRenderHelpers;
 
@@ -184,7 +184,7 @@ public abstract class PCLCharacter extends CustomPlayer
     @Override
     public int getAscensionMaxHPLoss()
     {
-        return PCLBaseStatEditor.StatType.HP.baseAmount / 10;
+        return PCLAbstractPlayerData.DEFAULT_HP / 10;
     }
 
     @Override

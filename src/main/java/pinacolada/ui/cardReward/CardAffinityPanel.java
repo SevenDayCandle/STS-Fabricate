@@ -15,8 +15,8 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.augments.PCLAugmentData;
-import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.PCLCardAffinityStatistics;
+import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.effects.PCLEffects;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
@@ -112,8 +112,7 @@ public class CardAffinityPanel extends CustomCardPoolModule
 
     public void refresh(boolean showUpgrades)
     {
-        statistics.refreshStatistics(false);
-
+        statistics.sortGroups();
         counters.sort((a, b) -> (int) (1000 * (b.affinityGroup.getPercentage(0) - a.affinityGroup.getPercentage(0))));
 
         int index = 0;

@@ -193,19 +193,6 @@
 												"???"
 								]
 				},
-				"pcl:Trophies": {
-								"TEXT": [
-												"Trophy",
-												"Glyph",
-												"High Score",
-												"#bBronze: Act 3 Highest Ascension Clear | #bSilver: Act 4 Highest Ascension Clear | #bGold: Act 5 Highest Ascension Clear.",
-												"Highest Ascension Glyph levels at which victory was achieved.",
-												"Act 5 was cleared at Ascension Level {0}.",
-												"Complete Act 3 with this series.",
-												"Complete Act 4 with this series.",
-												"Complete Act 5 with this series."
-								]
-				},
 				"pcl:Rewards": {
 								"TEXT": [
 												"Break",

@@ -1,4 +1,4 @@
-package pinacolada.misc;
+package pinacolada.resources;
 
 import com.badlogic.gdx.Input;
 import com.megacrit.cardcrawl.helpers.input.InputAction;
@@ -9,7 +9,6 @@ import java.util.HashMap;
 
 public class PCLHotkeys
 {
-
     public static final HashMap<Integer, Integer> EQUIVALENT_KEYS = new HashMap<>();
 
     private static final String KEYMAP_CONTROL_PILE_CHANGE = PCLCoreConfig.createFullID("ControlPileChange");

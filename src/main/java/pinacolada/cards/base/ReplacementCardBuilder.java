@@ -3,8 +3,8 @@ package pinacolada.cards.base;
 import basemod.ReflectionHacks;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.cards.base.fields.PCLAttackType;
-import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.pcl.special.QuestionMark;
 
 // TODO Try to construct effects from card description

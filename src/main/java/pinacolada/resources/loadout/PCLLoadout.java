@@ -1,13 +1,17 @@
 package pinacolada.resources.loadout;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.characters.AbstractPlayer;
+import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.localization.CharacterStrings;
 import com.megacrit.cardcrawl.screens.CharSelectInfo;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
-import extendedui.utilities.TupleT2;
+import pinacolada.cards.base.PCLCard;
+import pinacolada.cards.base.PCLCardAffinityStatistics;
+import pinacolada.cards.base.PCLCardBuilder;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.pcl.curse.*;
 import pinacolada.cards.pcl.special.QuestionMark;
@@ -15,7 +19,9 @@ import pinacolada.characters.PCLCharacter;
 import pinacolada.relics.PCLRelic;
 import pinacolada.relics.pcl.*;
 import pinacolada.resources.PCLAbstractPlayerData;
+import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
+import pinacolada.skills.skills.PSpecialSkill;
 import pinacolada.ui.characterSelection.PCLBaseStatEditor;
 import pinacolada.utilities.GameUtilities;
 
@@ -29,22 +35,18 @@ import static pinacolada.ui.characterSelection.PCLLoadoutEditor.MAX_RELIC_SLOTS;
 // TODO rework
 public abstract class PCLLoadout
 {
-    public static final int GOLD_AND_HP_EDITOR_ASCENSION_REQUIRED = 7;
     public static final int MAX_PRESETS = 5;
     public static final int MAX_VALUE = 40;
     public static final int MIN_CARDS = 10;
     public static final int CARD_SLOTS = 4;
     public static final HashMap<AbstractCard.CardColor, ArrayList<PCLLoadout>> LOADOUTS = new HashMap<>();
     public final AbstractCard.CardColor color;
-    public PCLLoadoutData[] presets = new PCLLoadoutData[PCLLoadout.MAX_PRESETS];
-    public PCLCardSlot specialSlot1;
-    public PCLCardSlot specialSlot2;
-    public int id;
+    public final int id;
     public int preset;
-    public int cardDraw = 5;
     public int unlockLevel = 0;
     public ArrayList<PCLCardData> cardData = new ArrayList<>();
     public ArrayList<PCLCardData> colorlessData = new ArrayList<>();
+    public PCLLoadoutData[] presets = new PCLLoadoutData[PCLLoadout.MAX_PRESETS];
     protected ArrayList<String> startingDeck = new ArrayList<>();
     protected String shortDescription = "";
 
@@ -68,6 +70,80 @@ public abstract class PCLLoadout
         return EUIUtils.find(loadouts, l -> l.id == id);
     }
 
+    public static int getBaseDraw(AbstractCard.CardColor color)
+    {
+        PCLAbstractPlayerData data = PGR.getPlayerData(color);
+        if (data != null)
+        {
+            return data.baseDraw;
+        }
+        CharSelectInfo info = getCharSelectInfo(color);
+        {
+            if (info != null)
+            {
+                return info.cardDraw;
+            }
+        }
+        return PCLAbstractPlayerData.DEFAULT_DRAW;
+    }
+
+    public static int getBaseEnergy(AbstractCard.CardColor color)
+    {
+        PCLAbstractPlayerData data = PGR.getPlayerData(color);
+        if (data != null)
+        {
+            return data.baseEnergy;
+        }
+        return PCLAbstractPlayerData.DEFAULT_ENERGY;
+    }
+
+    public static int getBaseGold(AbstractCard.CardColor color)
+    {
+        PCLAbstractPlayerData data = PGR.getPlayerData(color);
+        if (data != null)
+        {
+            return data.baseGold;
+        }
+        CharSelectInfo info = getCharSelectInfo(color);
+        {
+            if (info != null)
+            {
+                return info.gold;
+            }
+        }
+        return PCLAbstractPlayerData.DEFAULT_HP;
+    }
+
+    public static int getBaseHP(AbstractCard.CardColor color)
+    {
+        PCLAbstractPlayerData data = PGR.getPlayerData(color);
+        if (data != null)
+        {
+            return data.baseHP;
+        }
+        CharSelectInfo info = getCharSelectInfo(color);
+        {
+            if (info != null)
+            {
+                return info.maxHp;
+            }
+        }
+        return PCLAbstractPlayerData.DEFAULT_HP;
+    }
+
+    private static CharSelectInfo getCharSelectInfo(AbstractCard.CardColor color)
+    {
+        for (AbstractPlayer p : CardCrawlGame.characterManager.getAllCharacters())
+        {
+            // PCLCharacter getLoadout will cause an infinite loop
+            if (!(p instanceof PCLCharacter) && p.getCardColor() == color)
+            {
+                return p.getLoadout();
+            }
+        }
+        return null;
+    }
+
     public PCLLoadout(AbstractCard.CardColor data, int id, int unlockLevel)
     {
         this.id = id;
@@ -85,6 +161,7 @@ public abstract class PCLLoadout
         slot.addItem(getStrike(), -2);
     }
 
+    // TODO dynamically add curses available for this player class
     public void addLoadoutCards(PCLCardSlot slot)
     {
         for (PCLCardData data : cardData)
@@ -130,9 +207,24 @@ public abstract class PCLLoadout
         return preset >= 0 && preset < MAX_PRESETS;
     }
 
-    public int getCommonUpgrades()
+    public int getBaseGold()
     {
-        return PCLBaseStatEditor.StatType.CommonUpgrade.getAmount(getPreset());
+        return getBaseGold(color);
+    }
+
+    public int getBaseDraw()
+    {
+        return getBaseDraw(color);
+    }
+
+    public int getBaseEnergy()
+    {
+        return getBaseEnergy(color);
+    }
+
+    public int getBaseHP()
+    {
+        return getBaseHP(color);
     }
 
     public String getDeckPreviewString(boolean forceRefresh)
@@ -176,20 +268,30 @@ public abstract class PCLLoadout
 
     protected abstract PCLCardData getDefend();
 
+    public int getDraw()
+    {
+        return getBaseDraw(color) + PCLBaseStatEditor.StatType.CardDraw.getAmount(this, getPreset());
+    }
+
+    public int getEnergy()
+    {
+        return getBaseEnergy(color) + PCLBaseStatEditor.StatType.Energy.getAmount(this, getPreset());
+    }
+
     public int getGold()
     {
-        return PCLBaseStatEditor.StatType.Gold.getAmount(getPreset());
+        return getBaseGold(color) + PCLBaseStatEditor.StatType.Gold.getAmount(this, getPreset());
     }
 
     public int getHP()
     {
-        return PCLBaseStatEditor.StatType.HP.getAmount(getPreset());
+        return getBaseHP(color) + PCLBaseStatEditor.StatType.HP.getAmount(this, getPreset());
     }
 
     public CharSelectInfo getLoadout(String name, String description, PCLCharacter c)
     {
         int hp = getHP();
-        return new CharSelectInfo(name + "-" + id, description, hp, hp, getOrbSlots(), getGold(), cardDraw, c, getStartingRelics(), getStartingDeck(), false);
+        return new CharSelectInfo(name + "-" + id, description, hp, hp, getOrbSlots(), getGold(), getDraw(), c, getStartingRelics(), getStartingDeck(), false);
     }
 
     public String getName()
@@ -204,16 +306,17 @@ public abstract class PCLLoadout
     }
 
     // PCL characters use summons instead of orbs
-    // TODO make this configurable
     public int getOrbSlots()
     {
-        return GameUtilities.isPCLCardColor(color) ? 0 : PCLBaseStatEditor.StatType.OrbSlot.getAmount(getPreset());
+        return GameUtilities.isPCLCardColor(color) ? 0 : PCLBaseStatEditor.StatType.Energy.getAmount(this, getPreset());
     }
 
     public int getPotionSlots()
     {
-        return PCLBaseStatEditor.StatType.PotionSlot.getAmount(getPreset());
+        return PCLBaseStatEditor.StatType.PotionSlot.getAmount(this, getPreset());
     }
+
+    public PCLAbstractPlayerData getPlayerData() {return PGR.getPlayerData(color);}
 
     public PCLLoadoutData getPreset()
     {
@@ -230,6 +333,8 @@ public abstract class PCLLoadout
 
         return presets[preset] = getDefaultData(preset);
     }
+
+    public PCLResources<?,?,?> getResources() {return PGR.getResources(color);}
 
     public ArrayList<String> getStartingDeck()
     {
@@ -263,7 +368,7 @@ public abstract class PCLLoadout
     {
         final ArrayList<String> res = new ArrayList<>();
 
-        PCLAbstractPlayerData data = PGR.getPlayerData(color);
+        PCLAbstractPlayerData data = getPlayerData();
         if (data != null)
         {
             String starterRelic = data.getStartingRelicID();
@@ -312,7 +417,7 @@ public abstract class PCLLoadout
 
     public PCLTrophies getTrophies()
     {
-        PCLAbstractPlayerData data = PGR.getPlayerData(color);
+        PCLAbstractPlayerData data = getPlayerData();
         if (data == null)
         {
             return null;
@@ -326,24 +431,6 @@ public abstract class PCLLoadout
         }
 
         return trophies;
-    }
-
-    public String getTrophyMessage(int trophy)
-    {
-        if (trophy == 1)
-        {
-            return PGR.core.strings.trophies.bronzeDescription;
-        }
-        else if (trophy == 2)
-        {
-            return PGR.core.strings.trophies.silverDescription;
-        }
-        else if (trophy == 3)
-        {
-            return PGR.core.strings.trophies.goldDescription;
-        }
-
-        return null;
     }
 
     public void initializeData(PCLLoadoutData data)
@@ -369,19 +456,40 @@ public abstract class PCLLoadout
             PCLRelicSlot r1 = data.addRelicSlot();
             r1.addItem(new Macroscope(), 2);
             r1.addItem(new SpitefulCubes(), 2);
-            r1.addItem(new MagicEraser(), 3);
         }
     }
 
+    public boolean isCardFromLoadout(AbstractCard card)
+    {
+        return isCardFromLoadout(card.cardID);
+    }
+
+    public boolean isCardFromLoadout(String cardID)
+    {
+        PCLCardData data = PCLCard.getStaticData(cardID);
+        return data != null && data.loadout == this;
+    }
+
+    /* Core loadouts:
+    *   - Cards can be used in any other loadout
+    *   - Cannot be unselected in the loadout screen
+    *   - You cannot actually select this loadout, unless no other loadouts exist
+    * */
     public boolean isCore()
     {
         return id < 0;
     }
 
+    public boolean isLocked()
+    {
+        PCLResources<?,?,?> resources = getResources();
+        return resources != null && resources.getUnlockLevel() < unlockLevel;
+    }
+
     public void onVictory(int ascensionLevel, int trophyLevel, int score)
     {
         PCLTrophies trophies = getTrophies();
-        PCLAbstractPlayerData data = PGR.getPlayerData(color);
+        PCLAbstractPlayerData data = getPlayerData();
         if (data != null && data.selectedLoadout.id == id)
         {
             switch (trophyLevel)
@@ -402,106 +510,94 @@ public abstract class PCLLoadout
         }
     }
 
-    public Validation validate()
+    public PCLLoadoutValidation validate()
     {
         return getPreset().validate();
     }
 
-    public static class Validation
+    public PCLCard buildCard()
     {
-        public final TupleT2<Integer, Boolean> cardsCount = new TupleT2<>();
-        public final TupleT2<Integer, Boolean> totalValue = new TupleT2<>();
-        public final HashMap<PCLBaseStatEditor.StatType, Integer> values = new HashMap<>();
-        public int hindranceLevel;
-        public boolean allCardsSeen;
-        public boolean isValid;
-
-        public Validation()
+        final PCLCardData data = getSymbolicCard();
+        if (data == null)
         {
-
+            EUIUtils.logWarning(this, getName() + " has no symbolic card.");
+            return null;
         }
 
-        public Validation(PCLLoadoutData data)
+        PCLCard card = ((PCLCardBuilder) new PCLCardBuilder(String.valueOf(id))
+                .setImagePath(data.imagePath)
+                .showTypeText(false)
+                .setMaxUpgrades(0))
+                .build();
+
+        card.name = isCore() ? PGR.core.strings.seriesUI.core : getName();
+        card.clearSkills();
+
+        if (isLocked())
         {
-            refresh(data);
+            card.isSeen = false;
+            card.cardText.overrideDescription(PGR.core.strings.charSelect.unlocksAtLevel(unlockLevel, data.resources.getUnlockLevel()), false);
+            card.rarity = AbstractCard.CardRarity.COMMON;
+            card.type = AbstractCard.CardType.STATUS;
+        }
+        else
+        {
+            card.addUseMove(new FakeSkill());
+            card.rarity = isCore() ? AbstractCard.CardRarity.CURSE : AbstractCard.CardRarity.COMMON;
+            card.type = isCore() ? AbstractCard.CardType.CURSE : AbstractCard.CardType.SKILL;
         }
 
-        public static Validation For(PCLLoadoutData data)
+        if (!isCore())
         {
-            return new Validation(data);
+            int i = 0;
+            int maxLevel = 2;
+            float maxPercentage = 0;
+            PCLCardAffinityStatistics affinityStatistics = new PCLCardAffinityStatistics(cardData);
+            for (PCLCardAffinityStatistics.Group g : affinityStatistics)
+            {
+                float percentage = g.getPercentage(0);
+                if (percentage == 0 || i > 2)
+                {
+                    break;
+                }
+
+                if (percentage < maxPercentage || (maxLevel == 2 && percentage < 0.3f))
+                {
+                    maxLevel -= 1;
+                }
+                if (maxLevel > 0)
+                {
+                    card.affinities.add(g.affinity, maxLevel);
+                }
+
+                maxPercentage = percentage;
+                i += 1;
+            }
+            card.affinities.collapseDuplicates = true;
+            card.affinities.updateSortedList();
         }
 
-        public Validation refresh(PCLLoadoutData data)
+        card.initializeDescription();
+
+        return card;
+    }
+
+    // This is used to show the number of cards currently selected. We update the amount of this skill to update the card description without rebuilding it from scratch
+    protected class FakeSkill extends PSpecialSkill
+    {
+        public FakeSkill()
         {
-            if (data == null || data.preset < 0 || data.preset >= MAX_PRESETS)
-            {
-                isValid = false;
-                return this;
-            }
+            super("", PGR.core.strings.seriesSelection.selected, (a, b) -> {
+            }, 0, cardData.size());
+        }
+    }
 
-            cardsCount.set(0, false);
-            totalValue.set(MAX_VALUE, false);
-            allCardsSeen = true;
-            int weakHindrances = 0;
-            int strongHindrances = 0;
-            for (PCLCardSlot slot : data.cardSlots)
-            {
-                if (slot == null)
-                {
-                    continue;
-                }
-
-                totalValue.v1 += slot.getEstimatedValue();
-                cardsCount.v1 += slot.amount;
-
-                if (slot.selected != null)
-                {
-                    if (slot.selected.data.isNotSeen())
-                    {
-                        allCardsSeen = false;
-                    }
-
-                    if (slot.selected.estimatedValue < -2)
-                    {
-                        strongHindrances += slot.amount;
-                    }
-                    else if (slot.selected.estimatedValue < 0)
-                    {
-                        weakHindrances += slot.amount;
-                    }
-                }
-            }
-            for (PCLRelicSlot slot : data.relicSlots)
-            {
-                if (slot == null)
-                {
-                    continue;
-                }
-
-                totalValue.v1 += slot.getEstimatedValue();
-            }
-
-            // Hindrance level is determined by the proportion of your deck that is "bad"
-            // Strikes/Defends and harmless hindrances have a weaker influence
-            // Curses and damaging hindrances have a stronger influence
-            if (cardsCount.v1 > 0)
-            {
-                int strongHindranceLevel = (int) Math.max(0, (30 * Math.pow(strongHindrances, 1.5) / cardsCount.v1) - 7);
-                int weakHindranceLevel = Math.max(0, (30 * (weakHindrances + strongHindrances) / cardsCount.v1) - 20);
-                hindranceLevel = -strongHindranceLevel - weakHindranceLevel;
-            }
-            else
-            {
-                hindranceLevel = 0;
-            }
-
-            values.putAll(data.values);
-            totalValue.v1 += (int) EUIUtils.sum(values.values(), Float::valueOf) + hindranceLevel;
-            totalValue.v2 = totalValue.v1 <= MAX_VALUE;
-            cardsCount.v2 = cardsCount.v1 >= MIN_CARDS;
-            isValid = totalValue.v2 && cardsCount.v2 && allCardsSeen;
-
-            return this;
+    protected class FakeSkill2 extends PSpecialSkill
+    {
+        public FakeSkill2()
+        {
+            super("", PGR.core.strings.seriesSelection.unlocked, (a, b) -> {
+            }, 0, cardData.size());
         }
     }
 }

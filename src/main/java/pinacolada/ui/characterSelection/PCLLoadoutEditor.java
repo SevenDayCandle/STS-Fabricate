@@ -21,10 +21,7 @@ import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PGR;
-import pinacolada.resources.loadout.PCLCardSlot;
-import pinacolada.resources.loadout.PCLLoadout;
-import pinacolada.resources.loadout.PCLLoadoutData;
-import pinacolada.resources.loadout.PCLRelicSlot;
+import pinacolada.resources.loadout.*;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -34,7 +31,7 @@ public class PCLLoadoutEditor extends AbstractScreen
 {
     public static final int MAX_CARD_SLOTS = 6;
     public static final int MAX_RELIC_SLOTS = 2;
-    protected final static PCLLoadout.Validation val = new PCLLoadout.Validation();
+    protected final static PCLLoadoutValidation val = new PCLLoadoutValidation();
     public final EUIContextMenu<ContextOption> contextMenu;
     protected final ArrayList<PCLCardSlotEditor> slotsEditors = new ArrayList<>();
     protected final ArrayList<PCLRelicSlotEditor> relicsEditors = new ArrayList<>();
@@ -353,27 +350,25 @@ public class PCLLoadoutEditor extends AbstractScreen
     {
         super.open();
 
-        boolean enableHPAndGoldEditor = GameUtilities.getMaxAscensionLevel(option.c) >= PCLLoadout.GOLD_AND_HP_EDITOR_ASCENSION_REQUIRED;
-        for (PCLBaseStatEditor beditor : baseStatEditors)
-        {
-            beditor.setActive(enableHPAndGoldEditor);
-            beditor.setInteractable(enableHPAndGoldEditor);
-        }
-
         for (int i = 0; i < loadout.presets.length; i++)
         {
             presets[i] = loadout.getPreset(i).makeCopy();
-
-            if (!enableHPAndGoldEditor)
-            {
-                presets[i].values.put(PCLBaseStatEditor.StatType.HP, 0);
-                presets[i].values.put(PCLBaseStatEditor.StatType.Gold, 0);
-            }
         }
 
-        presetButtons[0].setInteractable(loadout.canChangePreset(0));
-        presetButtons[1].setInteractable(loadout.canChangePreset(1));
-        presetButtons[2].setInteractable(loadout.canChangePreset(2));
+        for (PCLBaseStatEditor beditor : baseStatEditors)
+        {
+            final boolean available = GameUtilities.getMaxAscensionLevel(option.c) >= beditor.type.unlockLevel;
+            // TODO show locked message for base stat editors that are not unlocked
+            beditor.setActive(available);
+            beditor.setInteractable(available);
+            if (!available)
+            {
+                for (int i = 0; i < loadout.presets.length; i++)
+                {
+                    presets[i].values.put(beditor.type, 0);
+                }
+            }
+        }
 
         this.loadout = loadout;
         this.onClose = onClose;
@@ -447,7 +442,7 @@ public class PCLLoadoutEditor extends AbstractScreen
             }
             for (PCLBaseStatEditor beditor : baseStatEditors)
             {
-                beditor.setLoadout(data);
+                beditor.setLoadout(loadout, data);
             }
             val.refresh(presets[preset]);
         }

@@ -2,12 +2,14 @@ package pinacolada.ui.characterSelection;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
+import com.megacrit.cardcrawl.helpers.CardLibrary;
 import extendedui.EUIUtils;
 import org.apache.commons.lang3.StringUtils;
+import pinacolada.cards.base.PCLCard;
+import pinacolada.cards.base.PCLCardData;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.loadout.PCLLoadout;
-import pinacolada.resources.loadout.PCLRuntimeLoadout;
+import pinacolada.skills.PSkill;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -23,30 +25,18 @@ public class PCLLoadoutsContainer
     public static final int CHANCE_UNCOMMON = 40;
     public static final int CHANCE_RARE = 10;
 
-    public final HashMap<AbstractCard, PCLRuntimeLoadout> loadoutMap = new HashMap<>();
+    public final ArrayList<AbstractCard> allCards = new ArrayList<>();
+    public final HashMap<PCLCard, PCLLoadout> loadoutMap = new HashMap<>();
     public final HashMap<AbstractCard.CardRarity, Integer> rarityCount = new HashMap<>();
     public final HashSet<String> bannedCards = new HashSet<>();
     public int currentCardLimit;
     public int totalCardsInPool = 0;
-    public AbstractCard currentSeriesCard;
+    public PCLCard currentSeriesCard;
     private PCLAbstractPlayerData data;
-
-    public static void preloadResources(PCLAbstractPlayerData data)
-    {
-        CardCrawlGame.sound.preload("CARD_SELECT");
-        for (PCLLoadout loadout : data.loadouts.values())
-        {
-            PCLRuntimeLoadout temp = PCLRuntimeLoadout.tryCreate(loadout);
-            if (temp != null)
-            {
-                temp.buildCard();
-            }
-        }
-    }
 
     public void commitChanges(PCLAbstractPlayerData data)
     {
-        data.selectedLoadout = find(currentSeriesCard).loadout;
+        data.selectedLoadout = find(currentSeriesCard);
         data.resources.config.bannedCards.set(bannedCards, true);
         data.resources.config.cardsCount.set(Math.max(MINIMUM_CARDS, currentCardLimit), true);
 
@@ -58,44 +48,46 @@ public class PCLLoadoutsContainer
     public void createCards(PCLAbstractPlayerData data)
     {
         this.data = data;
+        allCards.clear();
         loadoutMap.clear();
         bannedCards.clear();
 
-        final ArrayList<PCLRuntimeLoadout> seriesSelectionItems = new ArrayList<>();
-        for (PCLLoadout loadout : data.getEveryLoadout())
-        {
-            final PCLRuntimeLoadout card = PCLRuntimeLoadout.tryCreate(loadout);
-            if (card != null)
-            {
-                seriesSelectionItems.add(card);
-            }
-        }
-
         bannedCards.addAll(data.resources.config.bannedCards.get());
-        for (PCLRuntimeLoadout series : seriesSelectionItems)
+        for (PCLLoadout series : data.getEveryLoadout())
         {
-            final AbstractCard card = series.buildCard();
-            if (card != null)
+            // Add series representation to the grid selection
+            final PCLCard gridCard = series.buildCard();
+            if (gridCard != null)
             {
-                loadoutMap.put(card, series);
-                card.targetTransparency = 1f;
+                loadoutMap.put(gridCard, series);
+                gridCard.targetTransparency = 1f;
 
-                if (series.loadout.id == (data.selectedLoadout.id))
+                if (series.id == (data.selectedLoadout.id))
                 {
-                    currentSeriesCard = card;
-                    card.rarity = AbstractCard.CardRarity.RARE;
-                    card.beginGlowing();
+                    currentSeriesCard = gridCard;
+                    gridCard.rarity = AbstractCard.CardRarity.RARE;
+                    gridCard.beginGlowing();
                 }
             }
             else
             {
-                EUIUtils.logError(this, "BuildCard() failed, " + series.loadout.getName());
+                EUIUtils.logError(this, "BuildCard() failed, " + series.getName());
+            }
+
+            // Add this series cards to the total list of available cards
+            for (PCLCardData cData : series.cardData)
+            {
+                AbstractCard card = CardLibrary.getCard(cData.ID);
+                if (card != null)
+                {
+                    allCards.add(card);
+                }
             }
         }
         calculateCardCounts();
     }
 
-    public PCLRuntimeLoadout find(AbstractCard card)
+    public PCLLoadout find(PCLCard card)
     {
         return loadoutMap.get(card);
     }
@@ -105,17 +97,17 @@ public class PCLLoadoutsContainer
         return loadoutMap.keySet().stream().sorted((a, b) -> StringUtils.compare(a.name, b.name)).collect(Collectors.toList());
     }
 
-    public Collection<PCLRuntimeLoadout> getAllLoadouts()
+    public Collection<PCLLoadout> getAllLoadouts()
     {
         return loadoutMap.values();
     }
 
-    public Set<String> toggleCards(PCLRuntimeLoadout loadout, boolean value)
+    public Collection<String> toggleCards(PCLLoadout loadout, boolean value)
     {
-        Set<String> cardIds = loadout.getCardPoolInPlay().keySet();
+        Collection<String> cardIds = EUIUtils.map(loadout.cardData, l -> l.ID);
         if (value)
         {
-            bannedCards.removeAll(cardIds);
+            cardIds.forEach(bannedCards::remove);
         }
         else
         {
@@ -125,12 +117,7 @@ public class PCLLoadoutsContainer
         return cardIds;
     }
 
-    public ArrayList<AbstractCard> getAllCardsInPool()
-    {
-        return EUIUtils.flattenList(EUIUtils.map(loadoutMap.values(), loadout -> loadout.getCardPoolInPlay().values()));
-    }
-
-    public boolean selectCard(AbstractCard card)
+    public boolean selectCard(PCLCard card)
     {
         if (loadoutMap.containsKey(card) && card.type != AbstractCard.CardType.CURSE)
         {
@@ -169,26 +156,32 @@ public class PCLLoadoutsContainer
         return MINIMUM_CARDS;
     }
 
+    // Calculate the number of cards in each set, then update the loadout representative with that amount
     public void calculateCardCounts()
     {
         rarityCount.clear();
         totalCardsInPool = 0;
-        for (AbstractCard card : getAllCardsInPool())
+
+        for (Map.Entry<PCLCard, PCLLoadout> entry : loadoutMap.entrySet())
         {
-            if (!bannedCards.contains(card.cardID))
+            for (PCLCardData data : entry.getValue().cardData)
             {
-                totalCardsInPool += 1;
-                rarityCount.merge(card.rarity, 1, Integer::sum);
+                if (!bannedCards.contains(data.ID))
+                {
+                    totalCardsInPool += 1;
+                    rarityCount.merge(data.cardRarity, 1, Integer::sum);
+                }
+            }
+
+            for (PSkill<?> s : entry.getKey().getFullEffects())
+            {
+                s.setAmount(bannedCards.size());
             }
         }
+
         if (data != null)
         {
             currentCardLimit = MathUtils.clamp(data.resources.config.cardsCount.get(), MINIMUM_CARDS, totalCardsInPool);
-        }
-
-        for (PCLRuntimeLoadout loadout : getAllLoadouts())
-        {
-            loadout.updateCounts(bannedCards);
         }
     }
 }

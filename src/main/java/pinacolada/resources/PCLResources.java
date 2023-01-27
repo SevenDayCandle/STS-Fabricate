@@ -23,7 +23,6 @@ import extendedui.patches.EUIKeyword;
 import extendedui.ui.tooltips.EUITooltip;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.augments.AugmentStrings;
-import pinacolada.ui.characterSelection.PCLLoadoutsContainer;
 import pinacolada.utilities.GameUtilities;
 
 import java.io.File;
@@ -277,7 +276,6 @@ public abstract class PCLResources<T extends AbstractConfig, U extends PCLImages
     {
         tooltips.initializeIcons();
         data.initialize();
-        PCLLoadoutsContainer.preloadResources(data);
         config.load(CardCrawlGame.saveSlot);
     }
 

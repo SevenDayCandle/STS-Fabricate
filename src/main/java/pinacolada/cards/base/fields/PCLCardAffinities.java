@@ -221,6 +221,11 @@ public class PCLCardAffinities
         return values;
     }
 
+    public ArrayList<PCLCardAffinity> getCardAffinities()
+    {
+        return getCardAffinities(true);
+    }
+
     public ArrayList<PCLCardAffinity> getCardAffinities(boolean filterLevelZero)
     {
         final ArrayList<PCLCardAffinity> list = new ArrayList<>();

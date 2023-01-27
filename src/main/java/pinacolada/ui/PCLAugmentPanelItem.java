@@ -18,7 +18,7 @@ import extendedui.utilities.EUIColors;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentData;
-import pinacolada.misc.PCLHotkeys;
+import pinacolada.resources.PCLHotkeys;
 import pinacolada.resources.PGR;
 import pinacolada.ui.cardView.PCLAugmentList;
 

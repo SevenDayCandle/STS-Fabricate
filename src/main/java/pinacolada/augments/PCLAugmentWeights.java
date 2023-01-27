@@ -37,7 +37,7 @@ public class PCLAugmentWeights
         PCLCardAffinities cAff = GameUtilities.getPCLCardAffinities(c);
         if (cAff != null)
         {
-            for (PCLCardAffinity aff : cAff.getCardAffinities(true))
+            for (PCLCardAffinity aff : cAff.getCardAffinities())
             {
                 int value = getAffinityBaseLevel(aff);
                 weights.put(aff.type, value);

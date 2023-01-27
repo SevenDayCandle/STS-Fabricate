@@ -14,7 +14,7 @@ import extendedui.ui.controls.EUIButton;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.actions.PCLActions;
-import pinacolada.misc.PCLHotkeys;
+import pinacolada.resources.PCLHotkeys;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 

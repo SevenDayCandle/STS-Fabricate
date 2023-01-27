@@ -10,6 +10,7 @@ import pinacolada.augments.PCLAugment;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.effects.AttackEffects;
 import pinacolada.effects.PCLEffekseerEFX;
+import pinacolada.misc.PCLDungeon;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
@@ -34,7 +35,7 @@ import pinacolada.ui.debug.PCLDebugCardPanel;
 public class PCLCoreResources extends PCLResources<PCLCoreConfig, PCLCoreImages, PCLCoreTooltips>
 {
     public static final String ID = PGR.BASE_PREFIX;
-    public final PCLDungeonData dungeon = PCLDungeonData.register(createID("Data"));
+    public final PCLDungeon dungeon = PCLDungeon.register(createID(PCLDungeon.class.getSimpleName()));
     public final PCLCoreStrings strings = new PCLCoreStrings(this);
     public AbstractScreen currentScreen;
     public PCLAugmentPanelItem augmentPanel;

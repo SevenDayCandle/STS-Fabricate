@@ -5,7 +5,6 @@ import basemod.abstracts.CustomUnlock;
 import basemod.abstracts.CustomUnlockBundle;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.unlock.AbstractUnlock;
 import extendedui.EUIUtils;
@@ -16,7 +15,6 @@ import pinacolada.blights.common.GlyphBlight2;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.loadout.PCLLoadoutData;
-import pinacolada.resources.loadout.PCLRuntimeLoadout;
 import pinacolada.resources.loadout.PCLTrophies;
 import pinacolada.utilities.RandomizedList;
 
@@ -34,16 +32,33 @@ public abstract class PCLAbstractPlayerData
     public static final int ASCENSION_GLYPH1_LEVEL_STEP = 2;
     public static final int ASCENSION_GLYPH1_UNLOCK = 16;
     public static final int MAX_UNLOCK_LEVEL = 8;
-    public static final ArrayList<AbstractGlyphBlight> Glyphs = new ArrayList<>();
+    public static final int DEFAULT_HP = 50;
+    public static final int DEFAULT_GOLD = 99;
+    public static final int DEFAULT_DRAW = 5;
+    public static final int DEFAULT_ENERGY = 3;
+    public static final ArrayList<AbstractGlyphBlight> GLYPHS = new ArrayList<>();
     public final HashMap<Integer, PCLLoadout> loadouts = new HashMap<>();
     public final HashMap<Integer, PCLTrophies> trophies = new HashMap<>();
     public final PCLResources<?,?,?> resources;
+    public final int baseHP;
+    public final int baseGold;
+    public final int baseDraw;
+    public final int baseEnergy;
     public PCLLoadout selectedLoadout;
 
     public PCLAbstractPlayerData(PCLResources<?,?,?> resources)
     {
+        this(resources, DEFAULT_HP, DEFAULT_GOLD, DEFAULT_DRAW, DEFAULT_ENERGY);
+    }
+
+    public PCLAbstractPlayerData(PCLResources<?,?,?> resources, int hp, int gold, int draw, int energy)
+    {
         this.resources = resources;
         this.selectedLoadout = getCoreLoadout();
+        this.baseHP = hp;
+        this.baseGold = gold;
+        this.baseDraw = draw;
+        this.baseEnergy = energy;
     }
 
     public static String getLoadoutPrefix(PCLResources<?,?,?> resources)
@@ -63,9 +78,9 @@ public abstract class PCLAbstractPlayerData
 
     public static void postInitialize()
     {
-        Glyphs.add(new GlyphBlight());
-        Glyphs.add(new GlyphBlight1());
-        Glyphs.add(new GlyphBlight2());
+        GLYPHS.add(new GlyphBlight());
+        GLYPHS.add(new GlyphBlight1());
+        GLYPHS.add(new GlyphBlight2());
     }
 
     protected final void addBaseLoadouts()
@@ -86,15 +101,18 @@ public abstract class PCLAbstractPlayerData
 
         for (PCLLoadout loadout : loadouts.values())
         {
-            if (loadout.unlockLevel <= 0)
-            {
-                continue;
-            }
+            addUnlockBundle(loadout);
+        }
+    }
 
+    protected void addUnlockBundle(PCLLoadout loadout)
+    {
+        if (loadout.unlockLevel > 0)
+        {
             final String cardID = loadout.cardData.get(0).ID;
             final CustomUnlock unlock = new CustomUnlock(AbstractUnlock.UnlockType.MISC, cardID);
             unlock.type = AbstractUnlock.UnlockType.CARD;
-            unlock.card = new PCLRuntimeLoadout(loadout).buildCard();
+            unlock.card = loadout.buildCard();
             unlock.key = unlock.card.cardID = PGR.core.createID("series:" + loadout.getName());
 
             CustomUnlockBundle bundle = BaseMod.getUnlockBundleFor(resources.playerClass, loadout.unlockLevel - 1);
@@ -205,18 +223,11 @@ public abstract class PCLAbstractPlayerData
 
         for (PCLLoadout loadout : getEveryLoadout())
         {
-            final PCLRuntimeLoadout rloadout = PCLRuntimeLoadout.tryCreate(loadout);
             // Series must be unlocked to be present in-game
-            if (rloadout != null && !rloadout.isLocked)
+            if (!loadout.isLocked())
             {
-                PGR.core.dungeon.addLoadout(rloadout);
+                PGR.core.dungeon.loadouts.add(loadout);
             }
-        }
-
-        if (Settings.isDebug)
-        {
-            EUIUtils.logInfo(this, "Starting Loadout: " + (selectedLoadout != null ? selectedLoadout.id : "N/A"));
-            EUIUtils.logInfo(this, "Starting Series: " + EUIUtils.joinStrings(",", EUIUtils.map(PGR.core.dungeon.loadouts, l -> l.loadout.getName())));
         }
 
         PGR.core.dungeon.bannedCards.addAll(resources.config.bannedCards.get());
@@ -313,6 +324,7 @@ public abstract class PCLAbstractPlayerData
     }
 
     // SelectedLoadout|Series_1,Trophy1,Trophy2,Trophy3|Series_2,Trophy1,Trophy2,Trophy3|...
+    // TODO rework
     private String serializeTrophies()
     {
         final StringJoiner sj = new StringJoiner("|");

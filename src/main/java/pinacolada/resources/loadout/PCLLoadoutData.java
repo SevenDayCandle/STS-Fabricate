@@ -99,9 +99,9 @@ public class PCLLoadoutData
         return relicSlots.size();
     }
 
-    public PCLLoadout.Validation validate()
+    public PCLLoadoutValidation validate()
     {
-        return PCLLoadout.Validation.For(this);
+        return PCLLoadoutValidation.For(this);
     }
 
     public static class LoadoutInfo implements Serializable

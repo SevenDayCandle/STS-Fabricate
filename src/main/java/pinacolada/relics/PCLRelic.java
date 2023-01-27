@@ -19,9 +19,9 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.actions.PCLActions;
+import pinacolada.misc.PCLDungeon;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
-import pinacolada.resources.pcl.PCLDungeonData;
 import pinacolada.utilities.GameUtilities;
 
 import java.lang.reflect.InvocationTargetException;
@@ -83,7 +83,7 @@ public abstract class PCLRelic extends CustomRelic implements TooltipProvider
     {
         if (isPCLCharacter)
         {
-            final PCLDungeonData data = PGR.core.dungeon;
+            final PCLDungeon data = PGR.core.dungeon;
 
             data.addRelic(MarkOfPain.ID, AbstractRelic.RelicTier.BOSS);
 

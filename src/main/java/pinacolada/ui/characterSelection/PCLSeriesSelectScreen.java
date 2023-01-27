@@ -21,19 +21,16 @@ import extendedui.ui.AbstractScreen;
 import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
-import pinacolada.cards.base.CardAffinityComparator;
+import pinacolada.cards.base.PCLCard;
+import pinacolada.cards.base.PCLCardData;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.card.ShowCardPileEffect;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PGR;
-import pinacolada.resources.loadout.PCLRuntimeLoadout;
-import pinacolada.utilities.GameUtilities;
-
-import java.util.Collection;
+import pinacolada.resources.loadout.PCLLoadout;
 
 import static pinacolada.ui.characterSelection.PCLLoadoutsContainer.MINIMUM_CARDS;
 
-// TODO Card amount selector
 // Copied and modified from STS-AnimatorMod
 public class PCLSeriesSelectScreen extends AbstractScreen
 {
@@ -51,7 +48,7 @@ public class PCLSeriesSelectScreen extends AbstractScreen
     public final EUITextBox previewCardsInfo;
     public final EUIContextMenu<ContextOption> contextMenu;
     public boolean isScreenDisabled;
-    protected AbstractCard selectedCard;
+    protected PCLCard selectedCard;
     protected ActionT0 onClose;
     protected ShowCardPileEffect previewCardsEffect;
     protected CharacterOption characterOption;
@@ -136,7 +133,7 @@ public class PCLSeriesSelectScreen extends AbstractScreen
 
     public void togglePool(AbstractCard card, boolean value)
     {
-        container.toggleCards(container.find(card), value);
+        container.toggleCards(container.find(EUIUtils.safeCast(card, PCLCard.class)), value);
     }
 
     public void cancel()
@@ -148,40 +145,30 @@ public class PCLSeriesSelectScreen extends AbstractScreen
 
     public void chooseSeries(AbstractCard card)
     {
-        if (container.selectCard(card))
+        if (container.selectCard(EUIUtils.safeCast(card, PCLCard.class)))
         {
             updateStartingDeckText();
         }
     }
 
-    public CardGroup getCardPool(PCLRuntimeLoadout loadout)
+    public CardGroup getCardPool(PCLLoadout loadout)
     {
         final CardGroup cards = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
         if (loadout != null)
         {
-            final Collection<AbstractCard> cardsSource = loadout.getCardPoolInPlay().values();
-            for (AbstractCard c : cardsSource)
+            for (PCLCardData data : loadout.cardData)
             {
-                AbstractCard nc = c.makeStatEquivalentCopy();
-                if (SingleCardViewPopup.isViewingUpgrade)
-                {
-                    nc.upgrade();
-                }
+                AbstractCard nc = data.makeCopy(SingleCardViewPopup.isViewingUpgrade);
                 cards.group.add(nc);
             }
         }
         else
         {
-            for (PCLRuntimeLoadout cs : container.getAllLoadouts())
+            for (PCLLoadout cs : container.getAllLoadouts())
             {
-                final Collection<AbstractCard> cardsSource = cs.getCardPoolInPlay().values();
-                for (AbstractCard c : cardsSource)
+                for (PCLCardData data : cs.cardData)
                 {
-                    AbstractCard nc = c.makeStatEquivalentCopy();
-                    if (SingleCardViewPopup.isViewingUpgrade)
-                    {
-                        nc.upgrade();
-                    }
+                    AbstractCard nc = data.makeCopy(SingleCardViewPopup.isViewingUpgrade);
                     cards.group.add(nc);
                 }
             }
@@ -201,8 +188,8 @@ public class PCLSeriesSelectScreen extends AbstractScreen
 
     public void onCardRightClicked(AbstractCard card)
     {
-        selectedCard = card;
-        PCLRuntimeLoadout c = container.find(card);
+        selectedCard = EUIUtils.safeCast(card, PCLCard.class);
+        PCLLoadout c = container.find(selectedCard);
 
         contextMenu.setPosition(InputHelper.mX, InputHelper.mY);
         contextMenu.openOrCloseMenu();
@@ -220,28 +207,19 @@ public class PCLSeriesSelectScreen extends AbstractScreen
         updateStartingDeckText();
 
         PGR.core.cardAffinities.setActive(true);
-        PGR.core.cardAffinities.open(container.getAllCardsInPool(),
+        PGR.core.cardAffinities.open(container.allCards,
                 false,
-                (c) -> {
-                    CardGroup group = GameUtilities.createCardGroup(c.affinityGroup.getCards());
-                    if (group.size() > 0 && previewCardsEffect == null)
-                    {
-                        group.sortByRarity(true);
-                        group.sortAlphabetically(true);
-                        group.group.sort(new CardAffinityComparator(c.type));
-                        previewCards(group, null);
-                    }
-                },
+                null,
                 true);
     }
 
     protected void openLoadoutEditor()
     {
-        PCLRuntimeLoadout current = container.find(container.currentSeriesCard);
+        PCLLoadout current = container.find(container.currentSeriesCard);
         if (characterOption != null && current != null && data != null)
         {
             proceed();
-            PGR.core.loadoutEditor.open(current.loadout, data, characterOption, this.onClose);
+            PGR.core.loadoutEditor.open(current, data, characterOption, this.onClose);
         }
     }
 
@@ -249,18 +227,18 @@ public class PCLSeriesSelectScreen extends AbstractScreen
     {
         if (container.totalCardsInPool > 0)
         {
-            PCLRuntimeLoadout loadout = null;
+            PCLLoadout loadout = null;
             if (source != null)
             {
                 source.unhover();
-                loadout = container.find(source);
+                loadout = container.find(EUIUtils.safeCast(source, PCLCard.class));
             }
             final CardGroup cards = getCardPool(loadout);
             previewCards(cards, loadout);
         }
     }
 
-    public void previewCards(CardGroup cards, PCLRuntimeLoadout loadout)
+    public void previewCards(CardGroup cards, PCLLoadout loadout)
     {
         previewCardsEffect = new ShowCardPileEffect(this, cards)
                 .setStartingPosition(InputHelper.mX, InputHelper.mY);
@@ -281,7 +259,7 @@ public class PCLSeriesSelectScreen extends AbstractScreen
 
     public void selectAll(boolean value)
     {
-        for (PCLRuntimeLoadout c : container.getAllLoadouts())
+        for (PCLLoadout c : container.getAllLoadouts())
         {
             container.toggleCards(c, value);
         }
@@ -296,18 +274,7 @@ public class PCLSeriesSelectScreen extends AbstractScreen
     {
         if (PGR.core.cardAffinities.isActive)
         {
-            PGR.core.cardAffinities.open(container.getAllCardsInPool(), false, c ->
-            {
-                CardGroup group = GameUtilities.createCardGroup(c.affinityGroup.getCards());
-                if (group.size() > 0 && previewCardsEffect == null)
-                {
-                    group.sortByRarity(true);
-                    group.sortAlphabetically(true);
-                    group.group.sort(new CardAffinityComparator(c.type));
-
-                    previewCards(group, null);
-                }
-            }, true);
+            PGR.core.cardAffinities.open(container.allCards, false, null, true);
         }
 
         typesAmount.setLabel(EUIUtils.joinStrings(" | ",

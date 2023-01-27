@@ -99,7 +99,7 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase
                 .setOnRightClick(this::changePreset)
                 .setOnClick(this::openLoadoutEditor);
 
-        for (AbstractGlyphBlight glyph : PCLAbstractPlayerData.Glyphs)
+        for (AbstractGlyphBlight glyph : PCLAbstractPlayerData.GLYPHS)
         {
             glyphEditors.add(new PCLGlyphEditor(glyph, new EUIHitbox(xOffset, POS_Y, glyph.hb.width, glyph.hb.height)));
             xOffset += ROW_OFFSET * 1.7f;

@@ -7,7 +7,7 @@ import com.megacrit.cardcrawl.helpers.input.InputActionSet;
 import com.megacrit.cardcrawl.screens.options.InputSettingsScreen;
 import com.megacrit.cardcrawl.screens.options.RemapInputElement;
 import javassist.CtBehavior;
-import pinacolada.misc.PCLHotkeys;
+import pinacolada.resources.PCLHotkeys;
 import pinacolada.resources.PGR;
 
 import java.util.ArrayList;

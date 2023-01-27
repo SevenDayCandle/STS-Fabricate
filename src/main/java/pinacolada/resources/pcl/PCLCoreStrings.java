@@ -35,7 +35,6 @@ public class PCLCoreStrings extends PCLStrings
     public CardPile cardPile;
     public CardType cardType;
     public Options options;
-    public Trophies trophies;
     public Tutorial tutorial;
     public CardEditorTutorial cardEditorTutorial;
     public Combat combat;
@@ -60,7 +59,6 @@ public class PCLCoreStrings extends PCLStrings
         conditions = new Conditions(subjects);
         cardPile = new CardPile();
         cardType = new CardType();
-        trophies = new Trophies();
         tutorial = new Tutorial();
         cardEditorTutorial = new CardEditorTutorial();
         seriesSelection = new SeriesSelection();
@@ -1140,36 +1138,6 @@ public class PCLCoreStrings extends PCLStrings
         public final String top = cardPile.TEXT[7];
         public final String bottom = cardPile.TEXT[8];
         public final String random = cardPile.TEXT[9];
-    }
-
-    public class Trophies
-    {
-        private final UIStrings trophies = getUIStrings("Trophies");
-
-        public final String trophy = trophies.TEXT[0];
-        public final String glyph = trophies.TEXT[1];
-        public final String gold = trophies.TEXT[2];
-        public final String bronzeDescription = trophies.TEXT[3];
-        public final String silverDescription = trophies.TEXT[4];
-        public final String goldDescription = trophies.TEXT[5];
-        public final String bronzeLocked = trophies.TEXT[6];
-        public final String silverLocked = trophies.TEXT[7];
-        public final String goldLocked = trophies.TEXT[8];
-
-        public final String bronzeFormatted(int ascension)
-        {
-            return EUIUtils.format(bronzeDescription, ascension);
-        }
-
-        public final String silverFormatted(int ascension)
-        {
-            return EUIUtils.format(silverDescription, ascension);
-        }
-
-        public final String goldFormatted(int ascension)
-        {
-            return EUIUtils.format(goldDescription, ascension);
-        }
     }
 
     public class Tutorial

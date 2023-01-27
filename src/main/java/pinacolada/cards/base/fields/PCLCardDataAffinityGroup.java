@@ -3,6 +3,7 @@ package pinacolada.cards.base.fields;
 import extendedui.EUIUtils;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import static pinacolada.cards.base.fields.PCLAffinity.TOTAL_AFFINITIES;
 
@@ -45,6 +46,28 @@ public class PCLCardDataAffinityGroup implements Serializable
         }
 
         return list[affinity.id];
+    }
+
+    public ArrayList<PCLCardDataAffinity> getCardAffinities()
+    {
+        return getCardAffinities(0, true);
+    }
+
+    public ArrayList<PCLCardDataAffinity> getCardAffinities(int form, boolean filterLevelZero)
+    {
+        final ArrayList<PCLCardDataAffinity> list = new ArrayList<>();
+        for (PCLCardDataAffinity item : this.list)
+        {
+            if (item != null && (!filterLevelZero || item.get(form) > 0))
+            {
+                list.add(item);
+            }
+        }
+        if (star != null && (!filterLevelZero || star.get(form) > 0))
+        {
+            list.add(star);
+        }
+        return list;
     }
 
     public int getLevel(PCLAffinity affinity)

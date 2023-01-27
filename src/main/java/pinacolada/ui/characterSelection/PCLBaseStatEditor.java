@@ -18,14 +18,16 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.resources.PGR;
+import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.loadout.PCLLoadoutData;
 
 // Copied and modified from STS-AnimatorMod
+// TODO reflect HP/Gold values for current character
 public class PCLBaseStatEditor extends EUIBase
 {
-
     public static final float ICON_SIZE = 64f * Settings.scale;
     public StatType type;
+    public PCLLoadout loadout;
     public PCLLoadoutData data;
     protected boolean interactable;
     protected Hitbox hb;
@@ -132,8 +134,9 @@ public class PCLBaseStatEditor extends EUIBase
         return this;
     }
 
-    public void setLoadout(PCLLoadoutData data)
+    public void setLoadout(PCLLoadout loadout, PCLLoadoutData data)
     {
+        this.loadout = loadout;
         this.data = data;
         valueDropdown.setSelection(data.values.getOrDefault(type, 0), true);
     }
@@ -143,7 +146,7 @@ public class PCLBaseStatEditor extends EUIBase
     {
         hb.update();
         image.updateImpl();
-        label.setLabel(type.getText(data)).updateImpl();
+        label.setLabel(type.getText(loadout, data)).updateImpl();
         decreaseButton.setInteractable(interactable && canDecrease()).updateImpl();
         increaseButton.setInteractable(interactable && canIncrease()).updateImpl();
         valueDropdown.tryUpdate();
@@ -161,60 +164,79 @@ public class PCLBaseStatEditor extends EUIBase
 
     public enum StatType
     {
-        // TODO configurable HP per character
-        HP(ImageMaster.TP_HP, Settings.RED_TEXT_COLOR, 46, 2, 1, -6, 6),
-        Gold(ImageMaster.TP_GOLD, Settings.GOLD_COLOR, 99, 15, 1, -6, 6),
-        OrbSlot(ImageMaster.ORB_SLOT_1, Settings.CREAM_COLOR, 3, 1, 3, -6, 3),
-        PotionSlot(ImageMaster.POTION_PLACEHOLDER, Settings.CREAM_COLOR, 0, 1, 3, -3, 3),
-        CommonUpgrade(ImageMaster.TP_ASCENSION, Settings.CREAM_COLOR, 0, 1, 2, 0, 4);
+        HP(ImageMaster.TP_HP, Settings.RED_TEXT_COLOR, 2, 1, -6, 6, 0),
+        Gold(ImageMaster.TP_GOLD, Settings.GOLD_COLOR, 15, 1, -6, 6, 0),
+        PotionSlot(ImageMaster.POTION_PLACEHOLDER, Settings.CREAM_COLOR, 1, 15, -2, 2, 12),
+        OrbSlot(ImageMaster.ORB_SLOT_1, Settings.CREAM_COLOR, 1, 20, -3, 1, 12),
+        CardDraw(ImageMaster.TINY_CARD_BACKGROUND, Settings.CREAM_COLOR, 1, 25, -1, 1, 12),
+        Energy(ImageMaster.ENERGY_RED_LAYER1, Settings.CREAM_COLOR, 1, 30, -1, 1, 12);
 
         public final Texture icon;
         public final Color labelColor;
-        public final int baseAmount;
         public final int amountPerStep;
         public final int valuePerStep;
         public final int minValue;
         public final int maxValue;
+        public final int unlockLevel;
 
-        StatType(Texture icon, Color labelColor, int baseAmount, int amountPerStep, int valuePerStep, int minValue, int maxValue)
+        StatType(Texture icon, Color labelColor, int amountPerStep, int valuePerStep, int minValue, int maxValue, int unlockLevel)
         {
             this.icon = icon;
             this.labelColor = labelColor;
-            this.baseAmount = baseAmount;
             this.amountPerStep = amountPerStep;
             this.valuePerStep = valuePerStep;
             this.minValue = minValue;
             this.maxValue = maxValue;
+            this.unlockLevel = unlockLevel;
         }
 
-        public int getAmount(PCLLoadoutData data)
+        public int getAmount(PCLLoadout loadout, PCLLoadoutData data)
         {
-            return getAmount(data != null ? data.values.getOrDefault(this, 0) : 0);
+            return getAmount(getBase(loadout) + (data != null ? data.values.getOrDefault(this, 0) : 0));
         }
 
         public int getAmount(int value)
         {
-            return baseAmount + (amountPerStep * value) / valuePerStep;
+            return (amountPerStep * value) / valuePerStep;
         }
 
-        public String getText(PCLLoadoutData data)
+        public int getBase(PCLLoadout loadout)
         {
-            if (data == null)
+            switch (this)
+            {
+                case Gold:
+                    return loadout.getBaseGold();
+                case HP:
+                    return loadout.getBaseHP();
+                case CardDraw:
+                    return loadout.getBaseDraw();
+                case PotionSlot:
+                    return 0;
+                case Energy:
+                    return loadout.getBaseEnergy();
+                default:
+                    return 0;
+            }
+        }
+
+        public String getText(PCLLoadout loadout, PCLLoadoutData data)
+        {
+            if (loadout == null || data == null)
             {
                 return "";
             }
             switch (this)
             {
                 case Gold:
-                    return CharacterOption.TEXT[5] + getAmount(data);
+                    return CharacterOption.TEXT[5] + getAmount(loadout, data);
                 case HP:
-                    return CharacterOption.TEXT[4] + getAmount(data);
-                case OrbSlot:
-                    return PGR.core.strings.rewards.orbSlot + ": " + getAmount(data);
+                    return CharacterOption.TEXT[4] + getAmount(loadout, data);
+                case CardDraw:
+                    return PGR.core.strings.rewards.orbSlot + ": " + getAmount(loadout, data);
                 case PotionSlot:
-                    return PGR.core.strings.rewards.potionSlot + ": " + getAmount(data);
-                case CommonUpgrade:
-                    return PGR.core.strings.rewards.commonUpgrade + ": " + getAmount(data);
+                    return PGR.core.strings.rewards.potionSlot + ": " + getAmount(loadout, data);
+                case Energy:
+                    return PGR.core.strings.rewards.commonUpgrade + ": " + getAmount(loadout, data);
                 default:
                     return "";
             }

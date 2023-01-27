@@ -1,4 +1,4 @@
-package pinacolada.resources.pcl;
+package pinacolada.misc;
 
 import basemod.BaseMod;
 import basemod.abstracts.CustomSavable;
@@ -28,18 +28,15 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.card.PermanentUpgradeEffect;
 import pinacolada.effects.vfx.SmokeEffect;
 import pinacolada.interfaces.listeners.OnAddToDeckListener;
 import pinacolada.interfaces.listeners.OnAddingToCardRewardListener;
 import pinacolada.interfaces.listeners.OnCardPoolChangedListener;
-import pinacolada.misc.CombatManager;
 import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.FakeLoadout;
 import pinacolada.resources.loadout.PCLLoadout;
-import pinacolada.resources.loadout.PCLRuntimeLoadout;
 import pinacolada.trials.PCLCustomTrial;
 import pinacolada.utilities.GameUtilities;
 
@@ -52,12 +49,11 @@ import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.player;
 
 // Copied and modified from STS-AnimatorMod
 // TODO Rework
-public class PCLDungeonData implements CustomSavable<PCLDungeonData>, PreStartGameSubscriber, StartGameSubscriber, StartActSubscriber, OnStartBattleSubscriber
+public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscriber, StartGameSubscriber, StartActSubscriber, OnStartBattleSubscriber
 {
-
     private transient boolean panelAdded;
     private transient int totalAugmentCount = 0;
-    protected ArrayList<PCLLoadoutProxy> proxies = new ArrayList<>();
+    protected ArrayList<Integer> loadoutIDs = new ArrayList<>();
     protected Integer longestMatchCombo = 0;
     protected Integer rNGCounter = 0;
     protected Map<String, String> eventLog = new HashMap<>();
@@ -76,11 +72,11 @@ public class PCLDungeonData implements CustomSavable<PCLDungeonData>, PreStartGa
     public String currentForm = null;
     public final ArrayList<Integer> ascensionGlyphCounters = new ArrayList<>();
     public transient PCLLoadout startingSeries = new FakeLoadout();
-    public transient final ArrayList<PCLRuntimeLoadout> loadouts = new ArrayList<>();
+    public transient final ArrayList<PCLLoadout> loadouts = new ArrayList<>();
 
-    public static PCLDungeonData register(String id)
+    public static PCLDungeon register(String id)
     {
-        final PCLDungeonData data = new PCLDungeonData();
+        final PCLDungeon data = new PCLDungeon();
         BaseMod.addSaveField(id, data);
         BaseMod.subscribe(data);
         return data;
@@ -91,13 +87,6 @@ public class PCLDungeonData implements CustomSavable<PCLDungeonData>, PreStartGa
         augments.merge(id, count, Integer::sum);
         totalAugmentCount = EUIUtils.sumInt(augments.values(), i -> i);
         PGR.core.augmentPanel.flash();
-    }
-
-    public void addLoadout(PCLRuntimeLoadout loadout)
-    {
-        loadouts.add(loadout);
-
-        log("Adding series: " + loadout.loadout.getName());
     }
 
     public void addRelic(String relicID, AbstractRelic.RelicTier tier)
@@ -186,19 +175,6 @@ public class PCLDungeonData implements CustomSavable<PCLDungeonData>, PreStartGa
     public int getAugmentTotal()
     {
         return totalAugmentCount;
-    }
-
-    public PCLRuntimeLoadout getLoadout(PCLLoadout series)
-    {
-        for (PCLRuntimeLoadout loadout : loadouts)
-        {
-            if (loadout.id == series.id)
-            {
-                return loadout;
-            }
-        }
-
-        return null;
     }
 
     public int getLongestMatchCombo()
@@ -294,7 +270,7 @@ public class PCLDungeonData implements CustomSavable<PCLDungeonData>, PreStartGa
         return null;
     }
 
-    protected void importBaseData(PCLDungeonData data)
+    protected void importBaseData(PCLDungeon data)
     {
         ascensionGlyphCounters.clear();
         if (data != null)
@@ -320,7 +296,7 @@ public class PCLDungeonData implements CustomSavable<PCLDungeonData>, PreStartGa
             longestMatchCombo = 0;
             rNGCounter = 0;
             currentForm = null;
-            for (AbstractGlyphBlight glyph : PCLAbstractPlayerData.Glyphs)
+            for (AbstractGlyphBlight glyph : PCLAbstractPlayerData.GLYPHS)
             {
                 ascensionGlyphCounters.add(glyph.counter);
             }
@@ -397,9 +373,9 @@ public class PCLDungeonData implements CustomSavable<PCLDungeonData>, PreStartGa
                 }
                 else if (!bannedCards.contains(card.cardID))
                 {
-                    for (PCLRuntimeLoadout loadout : loadouts)
+                    for (PCLLoadout loadout : loadouts)
                     {
-                        if (loadout.getCardPoolInPlay().containsKey(card.cardID))
+                        if (loadout.isCardFromLoadout(card.cardID))
                         {
                             return false;
                         }
@@ -416,11 +392,6 @@ public class PCLDungeonData implements CustomSavable<PCLDungeonData>, PreStartGa
         {
             if (data.selectedLoadout != null)
             {
-                for (int i = 0; i < data.selectedLoadout.getCommonUpgrades(); i++)
-                {
-                    PCLEffects.TopLevelQueue.add(new PermanentUpgradeEffect()).setFilter(c -> AbstractCard.CardRarity.COMMON.equals(c.rarity));
-                }
-
                 player.potionSlots += data.selectedLoadout.getPotionSlots();
                 while (player.potions.size() > player.potionSlots && player.potions.get(player.potions.size() - 1) instanceof PotionSlot)
                 {
@@ -434,12 +405,12 @@ public class PCLDungeonData implements CustomSavable<PCLDungeonData>, PreStartGa
             }
 
 
-            for (int i = 0; i < PCLAbstractPlayerData.Glyphs.size(); i++)
+            for (int i = 0; i < PCLAbstractPlayerData.GLYPHS.size(); i++)
             {
                 boolean shouldAdd = true;
                 for (AbstractBlight blight : player.blights)
                 {
-                    if (PCLAbstractPlayerData.Glyphs.get(i).getClass().equals(blight.getClass()))
+                    if (PCLAbstractPlayerData.GLYPHS.get(i).getClass().equals(blight.getClass()))
                     {
                         shouldAdd = false;
                         break;
@@ -448,7 +419,7 @@ public class PCLDungeonData implements CustomSavable<PCLDungeonData>, PreStartGa
                 int counter = PGR.core.dungeon.ascensionGlyphCounters.size() > i ? PGR.core.dungeon.ascensionGlyphCounters.get(i) : 0;
                 if (shouldAdd && counter > 0)
                 {
-                    AbstractBlight blight = PCLAbstractPlayerData.Glyphs.get(i).makeCopy();
+                    AbstractBlight blight = PCLAbstractPlayerData.GLYPHS.get(i).makeCopy();
                     blight.setCounter(counter);
                     GameUtilities.obtainBlightWithoutEffect(blight);
                 }
@@ -573,7 +544,7 @@ public class PCLDungeonData implements CustomSavable<PCLDungeonData>, PreStartGa
         augments.clear();
         fragments.clear();
         startingSeries = new FakeLoadout();
-        proxies.clear();
+        loadoutIDs.clear();
         startingLoadout = -1;
         valueDivisor = 1;
 
@@ -687,18 +658,15 @@ public class PCLDungeonData implements CustomSavable<PCLDungeonData>, PreStartGa
     }
 
     @Override
-    public PCLDungeonData onSave()
+    public PCLDungeon onSave()
     {
-        proxies.clear();
+        loadoutIDs.clear();
 
         if (data != null)
         {
-            for (PCLRuntimeLoadout loadout : loadouts)
+            for (PCLLoadout loadout : loadouts)
             {
-                final PCLLoadoutProxy proxy = new PCLLoadoutProxy();
-                proxy.id = loadout.id;
-                proxy.bonus = loadout.bonus;
-                proxies.add(proxy);
+                loadoutIDs.add(loadout.id);
             }
 
             if (startingSeries.id > 0)
@@ -720,9 +688,9 @@ public class PCLDungeonData implements CustomSavable<PCLDungeonData>, PreStartGa
     }
 
     @Override
-    public void onLoad(PCLDungeonData data)
+    public void onLoad(PCLDungeon loaded)
     {
-        importBaseData(data);
+        importBaseData(loaded);
         loadouts.clear();
         bannedCards.clear();
         bannedRelics.clear();
@@ -732,28 +700,26 @@ public class PCLDungeonData implements CustomSavable<PCLDungeonData>, PreStartGa
         AbstractPlayer player = CombatManager.refreshPlayer();
         this.data = PGR.getPlayerData(player != null ? player.chosenClass : null);
 
-        if (data != null)
+        if (loaded != null)
         {
-            bannedCards.addAll(data.bannedCards);
-            bannedRelics.addAll(data.bannedRelics);
-            augments.putAll(data.augments);
-            fragments.putAll(data.fragments);
+            bannedCards.addAll(loaded.bannedCards);
+            bannedRelics.addAll(loaded.bannedRelics);
+            augments.putAll(loaded.augments);
+            fragments.putAll(loaded.fragments);
             totalAugmentCount = EUIUtils.sumInt(augments.values(), i -> i);
-            if (data.currentForm != null)
+            if (loaded.currentForm != null)
             {
-                setCreature(data.currentForm);
+                setCreature(loaded.currentForm);
             }
 
             if (this.data != null)
             {
-                startingSeries = this.data.getLoadout(data.startingLoadout);
-                for (PCLLoadoutProxy proxy : data.proxies)
+                startingSeries = this.data.getLoadout(loaded.startingLoadout);
+                for (Integer proxy : loaded.loadoutIDs)
                 {
-                    final PCLRuntimeLoadout loadout = PCLRuntimeLoadout.tryCreate(this.data.getLoadout(proxy.id));
+                    PCLLoadout loadout = PCLLoadout.get(this.data.resources.cardColor, proxy);
                     if (loadout != null)
                     {
-                        loadout.bonus = proxy.bonus;
-                        loadout.buildCard();
                         loadouts.add(loadout);
                     }
                 }
@@ -799,11 +765,5 @@ public class PCLDungeonData implements CustomSavable<PCLDungeonData>, PreStartGa
         {
             GameUtilities.setCreatureAnimation(player, currentForm);
         }
-    }
-
-    protected static class PCLLoadoutProxy
-    {
-        public int id;
-        public int bonus;
     }
 }

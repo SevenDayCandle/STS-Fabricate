@@ -5,37 +5,37 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardAffinities;
+import pinacolada.cards.base.fields.PCLCardAffinity;
+import pinacolada.cards.base.fields.PCLCardDataAffinity;
+import pinacolada.utilities.GameUtilities;
 
 import java.util.*;
 
 public class PCLCardAffinityStatistics implements Iterable<PCLCardAffinityStatistics.Group>
 {
-    protected final ArrayList<PCLCardAffinities> cardsAffinities = new ArrayList<>();
     protected final ArrayList<Group> groups = new ArrayList<>();
-    protected int cards;
+    private int count;
 
     public PCLCardAffinityStatistics()
     {
 
     }
 
-    public PCLCardAffinityStatistics(Collection<AbstractCard> cards, boolean useStar)
+    public PCLCardAffinityStatistics(Collection<PCLCardData> count)
     {
-        addCards(cards);
-        refreshStatistics(useStar);
+        addCardDatas(count);
+        sortGroups();
     }
 
-    public static PCLCardAffinities getAffinitiesFromCard(AbstractCard card)
+    private void addInternal(PCLAffinity affinity, int count)
     {
-        return card instanceof PCLCard ? ((PCLCard) card).affinities : null;
+        getGroup(affinity).add(count);
     }
 
     public void addAugment(PCLAugmentData data, int count)
     {
-        final PCLCardAffinities a = new PCLCardAffinities(null);
-        a.set(data.affinity, count);
-        cardsAffinities.add(a);
-        cards += 1;
+        addInternal(data.affinity, count);
+        this.count += 1;
     }
 
     public void addAugments(HashMap<PCLAugmentData, Integer> augments)
@@ -48,36 +48,55 @@ public class PCLCardAffinityStatistics implements Iterable<PCLCardAffinityStatis
 
     public void addCard(AbstractCard card)
     {
-        final PCLCardAffinities a = getAffinitiesFromCard(card);
+        final PCLCardAffinities a = GameUtilities.getPCLCardAffinities(card);
         if (a != null)
         {
-            cardsAffinities.add(a);
+            for (PCLCardAffinity affinity : a.getCardAffinities())
+            {
+                addInternal(affinity.type, affinity.level);
+            }
         }
 
-        cards += 1;
+        this.count += 1;
     }
 
-    public void addCards(CardGroup group)
+    public void addCardData(PCLCardData data)
+    {
+        for (PCLCardDataAffinity affinity : data.affinities.getCardAffinities())
+        {
+            addInternal(affinity.type, affinity.get(0));
+        }
+
+        this.count += 1;
+    }
+
+    public PCLCardAffinityStatistics addCards(CardGroup group)
     {
         addCards(group.group);
+        return this;
     }
 
-    public void addCards(Collection<AbstractCard> cards)
+    public PCLCardAffinityStatistics addCards(Collection<AbstractCard> cards)
     {
         for (AbstractCard c : cards)
         {
             addCard(c);
         }
+        return this;
     }
 
-    public int cardsCount()
+    public PCLCardAffinityStatistics addCardDatas(Collection<PCLCardData> cards)
     {
-        return cards;
+        for (PCLCardData c : cards)
+        {
+            addCardData(c);
+        }
+        return this;
     }
 
-    public ArrayList<PCLCardAffinities> getAffinities()
+    public int size()
     {
-        return cardsAffinities;
+        return count;
     }
 
     public Group getGroup(int index)
@@ -100,31 +119,15 @@ public class PCLCardAffinityStatistics implements Iterable<PCLCardAffinityStatis
         return g;
     }
 
-    public ArrayList<Group> refreshStatistics(boolean useStar)
+    public ArrayList<Group> sortGroups()
     {
-        for (Group g : groups)
-        {
-            g.reset();
-        }
-
-        for (PCLCardAffinities a : cardsAffinities)
-        {
-            for (PCLAffinity t : PCLAffinity.all())
-            {
-                int level = a.getLevel(t, useStar);
-                getGroup(t).add(level);
-            }
-        }
-
-        groups.sort(Comparator.comparingInt(a -> -a.getTotal()));// descending
+        groups.sort(Comparator.comparingInt(a -> -a.getTotal()));
         return groups;
     }
 
     public void reset()
     {
-        cards = 0;
-        cardsAffinities.clear();
-
+        count = 0;
         for (Group g : groups)
         {
             g.reset();
@@ -162,20 +165,6 @@ public class PCLCardAffinityStatistics implements Iterable<PCLCardAffinityStatis
             {
                 totalLv2 += 1;
             }
-        }
-
-        public ArrayList<AbstractCard> getCards()
-        {
-            final ArrayList<AbstractCard> cards = new ArrayList<>();
-            for (PCLCardAffinities a : statistics.getAffinities())
-            {
-                if (a.getLevel(affinity) > 0)
-                {
-                    cards.add(a.card);
-                }
-            }
-
-            return cards;
         }
 
         public float getPercentage(int level)
