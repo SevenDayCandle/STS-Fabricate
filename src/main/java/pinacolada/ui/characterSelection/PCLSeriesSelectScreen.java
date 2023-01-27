@@ -24,7 +24,7 @@ import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.card.ShowCardPileEffect;
+import pinacolada.effects.card.PCLViewLoadoutPoolEffect;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
@@ -50,7 +50,7 @@ public class PCLSeriesSelectScreen extends AbstractScreen
     public boolean isScreenDisabled;
     protected PCLCard selectedCard;
     protected ActionT0 onClose;
-    protected ShowCardPileEffect previewCardsEffect;
+    protected PCLViewLoadoutPoolEffect previewCardsEffect;
     protected CharacterOption characterOption;
     protected PCLAbstractPlayerData data;
     protected int totalCardsCache = 0;
@@ -186,12 +186,14 @@ public class PCLSeriesSelectScreen extends AbstractScreen
         }
     }
 
+    // Since core sets cannot be toggled, only show the view card option for them
     public void onCardRightClicked(AbstractCard card)
     {
         selectedCard = EUIUtils.safeCast(card, PCLCard.class);
         PCLLoadout c = container.find(selectedCard);
 
         contextMenu.setPosition(InputHelper.mX, InputHelper.mY);
+        contextMenu.setItems(card.type == PCLLoadout.UNSELECTABLE_TYPE ? EUIUtils.array(ContextOption.ViewCards) : ContextOption.values());
         contextMenu.openOrCloseMenu();
     }
 
@@ -238,9 +240,11 @@ public class PCLSeriesSelectScreen extends AbstractScreen
         }
     }
 
+    // Core loadout cards cannot be toggled off
     public void previewCards(CardGroup cards, PCLLoadout loadout)
     {
-        previewCardsEffect = new ShowCardPileEffect(this, cards)
+        previewCardsEffect = new PCLViewLoadoutPoolEffect(this, cards)
+                .setCanToggle(loadout != null && !loadout.isCore())
                 .setStartingPosition(InputHelper.mX, InputHelper.mY);
         PCLEffects.Manual.add(previewCardsEffect);
     }

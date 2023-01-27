@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import static pinacolada.utilities.GameUtilities.scale;
 import static pinacolada.utilities.GameUtilities.screenW;
 
-public class ShowCardPileEffect extends PCLEffectWithCallback<CardGroup>
+public class PCLViewLoadoutPoolEffect extends PCLEffectWithCallback<CardGroup>
 {
     private static final float DUR = 1.5f;
     private CardGroup cards;
@@ -39,16 +39,17 @@ public class ShowCardPileEffect extends PCLEffectWithCallback<CardGroup>
     private EUILabel selectedCount;
     private EUIToggle upgradeToggle;
     private boolean draggingScreen;
+    private boolean canToggle = true;
     private boolean showTopPanelOnComplete;
     private final Color screenColor;
     private final PCLSeriesSelectScreen screen;
 
-    public ShowCardPileEffect(PCLSeriesSelectScreen screen, ArrayList<AbstractCard> cards)
+    public PCLViewLoadoutPoolEffect(PCLSeriesSelectScreen screen, ArrayList<AbstractCard> cards)
     {
         this(screen, GameUtilities.createCardGroup(cards));
     }
 
-    public ShowCardPileEffect(PCLSeriesSelectScreen screen, CardGroup cards)
+    public PCLViewLoadoutPoolEffect(PCLSeriesSelectScreen screen, CardGroup cards)
     {
         super(0.7f);
 
@@ -125,11 +126,14 @@ public class ShowCardPileEffect extends PCLEffectWithCallback<CardGroup>
 
     private void toggleCard(AbstractCard c)
     {
-        toggleCard(c, screen.container.bannedCards.contains(c.cardID));
-        refreshCountText();
+        if (canToggle)
+        {
+            toggleCardImpl(c, screen.container.bannedCards.contains(c.cardID));
+            refreshCountText();
+        }
     }
 
-    private void toggleCard(AbstractCard c, boolean value)
+    private void toggleCardImpl(AbstractCard c, boolean value)
     {
         if (value)
         {
@@ -145,7 +149,7 @@ public class ShowCardPileEffect extends PCLEffectWithCallback<CardGroup>
     {
         for (AbstractCard c : cards.group)
         {
-            toggleCard(c, value);
+            toggleCardImpl(c, value);
         }
         refreshCountText();
     }
@@ -170,7 +174,7 @@ public class ShowCardPileEffect extends PCLEffectWithCallback<CardGroup>
                 .addCards(cards.group);
     }
 
-    public ShowCardPileEffect setStartingPosition(float x, float y)
+    public PCLViewLoadoutPoolEffect setStartingPosition(float x, float y)
     {
         for (AbstractCard c : cards.group)
         {
@@ -181,6 +185,15 @@ public class ShowCardPileEffect extends PCLEffectWithCallback<CardGroup>
         return this;
     }
 
+    public PCLViewLoadoutPoolEffect setCanToggle(boolean canToggle)
+    {
+        this.canToggle = canToggle;
+        selectAllButton.setActive(canToggle);
+        deselectAllButton.setActive(canToggle);
+        selectedCount.setActive(canToggle);
+        return this;
+    }
+
     @Override
     public void render(SpriteBatch sb)
     {
@@ -188,9 +201,9 @@ public class ShowCardPileEffect extends PCLEffectWithCallback<CardGroup>
         sb.draw(ImageMaster.WHITE_SQUARE_IMG, 0f, 0f, (float) Settings.WIDTH, (float) Settings.HEIGHT);
         grid.tryRender(sb);
         upgradeToggle.renderImpl(sb);
-        selectAllButton.renderImpl(sb);
-        deselectAllButton.renderImpl(sb);
-        selectedCount.renderImpl(sb);
+        selectAllButton.tryRender(sb);
+        deselectAllButton.tryRender(sb);
+        selectedCount.tryRender(sb);
     }
 
     @Override
@@ -198,9 +211,9 @@ public class ShowCardPileEffect extends PCLEffectWithCallback<CardGroup>
     {
         grid.tryUpdate();
         upgradeToggle.updateImpl();
-        selectAllButton.updateImpl();
-        deselectAllButton.updateImpl();
-        selectedCount.updateImpl();
+        selectAllButton.tryUpdate();
+        deselectAllButton.tryUpdate();
+        selectedCount.tryUpdate();
 
         if (upgradeToggle.hb.hovered || selectAllButton.hb.hovered || deselectAllButton.hb.hovered || grid.hoveredCard != null)
         {

@@ -73,7 +73,7 @@ public class PCLBaseStatEditor extends EUIBase
                 })
                 .setCanAutosizeButton(false)
                 .setLabelFunctionForOption(
-                        value -> this.type.getAmount(value) + " (" + value + ")", false
+                        value -> this.type.getAmountForValue(value) + " (" + value + ")", false
                 )
                 .setLabelFunctionForButton(
                         (value, __) -> {
@@ -192,10 +192,10 @@ public class PCLBaseStatEditor extends EUIBase
 
         public int getAmount(PCLLoadout loadout, PCLLoadoutData data)
         {
-            return getAmount(getBase(loadout) + (data != null ? data.values.getOrDefault(this, 0) : 0));
+            return getBase(loadout) + getAmountForValue(data != null ? data.values.getOrDefault(this, 0) : 0);
         }
 
-        public int getAmount(int value)
+        public int getAmountForValue(int value)
         {
             return (amountPerStep * value) / valuePerStep;
         }

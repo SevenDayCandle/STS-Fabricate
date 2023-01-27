@@ -35,6 +35,7 @@ import static pinacolada.ui.characterSelection.PCLLoadoutEditor.MAX_RELIC_SLOTS;
 // TODO rework
 public abstract class PCLLoadout
 {
+    public static final AbstractCard.CardType UNSELECTABLE_TYPE = AbstractCard.CardType.CURSE;
     public static final int MAX_PRESETS = 5;
     public static final int MAX_VALUE = 40;
     public static final int MIN_CARDS = 10;
@@ -111,7 +112,7 @@ public abstract class PCLLoadout
                 return info.gold;
             }
         }
-        return PCLAbstractPlayerData.DEFAULT_HP;
+        return PCLAbstractPlayerData.DEFAULT_GOLD;
     }
 
     public static int getBaseHP(AbstractCard.CardColor color)
@@ -270,22 +271,22 @@ public abstract class PCLLoadout
 
     public int getDraw()
     {
-        return getBaseDraw(color) + PCLBaseStatEditor.StatType.CardDraw.getAmount(this, getPreset());
+        return PCLBaseStatEditor.StatType.CardDraw.getAmount(this, getPreset());
     }
 
     public int getEnergy()
     {
-        return getBaseEnergy(color) + PCLBaseStatEditor.StatType.Energy.getAmount(this, getPreset());
+        return PCLBaseStatEditor.StatType.Energy.getAmount(this, getPreset());
     }
 
     public int getGold()
     {
-        return getBaseGold(color) + PCLBaseStatEditor.StatType.Gold.getAmount(this, getPreset());
+        return PCLBaseStatEditor.StatType.Gold.getAmount(this, getPreset());
     }
 
     public int getHP()
     {
-        return getBaseHP(color) + PCLBaseStatEditor.StatType.HP.getAmount(this, getPreset());
+        return PCLBaseStatEditor.StatType.HP.getAmount(this, getPreset());
     }
 
     public CharSelectInfo getLoadout(String name, String description, PCLCharacter c)
@@ -543,8 +544,18 @@ public abstract class PCLLoadout
         else
         {
             card.addUseMove(new FakeSkill());
-            card.rarity = isCore() ? AbstractCard.CardRarity.CURSE : AbstractCard.CardRarity.COMMON;
-            card.type = isCore() ? AbstractCard.CardType.CURSE : AbstractCard.CardType.SKILL;
+            if (isCore())
+            {
+                card.color = AbstractCard.CardColor.COLORLESS;
+                card.rarity = AbstractCard.CardRarity.CURSE;
+                card.type = UNSELECTABLE_TYPE;
+            }
+            else
+            {
+                card.color = data.cardColor;
+                card.rarity = AbstractCard.CardRarity.COMMON;
+                card.type = AbstractCard.CardType.SKILL;
+            }
         }
 
         if (!isCore())

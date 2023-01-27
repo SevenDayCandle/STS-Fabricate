@@ -17,10 +17,10 @@ import java.util.stream.Collectors;
 // Copied and modified from STS-AnimatorMod
 public class PCLLoadoutsContainer
 {
-    public static final int MINIMUM_CARDS = 3; // 75
-    public static final int MINIMUM_COMMON = 3;  // 30
-    public static final int MINIMUM_UNCOMMON = 3;  // 25
-    public static final int MINIMUM_RARE = 3;  // 8
+    public static final int MINIMUM_CARDS = 75; // 75
+    public static final int MINIMUM_COMMON = 25;  // 30
+    public static final int MINIMUM_UNCOMMON = 20;  // 25
+    public static final int MINIMUM_RARE = 7;  // 8
     public static final int CHANCE_COMMON = 50;
     public static final int CHANCE_UNCOMMON = 40;
     public static final int CHANCE_RARE = 10;
@@ -82,6 +82,9 @@ public class PCLLoadoutsContainer
                 {
                     allCards.add(card);
                 }
+
+                // Ensure that banned cards are not banned
+                bannedCards.remove(cData.ID);
             }
         }
         calculateCardCounts();
@@ -117,9 +120,10 @@ public class PCLLoadoutsContainer
         return cardIds;
     }
 
+    // You cannot select core loadout cards
     public boolean selectCard(PCLCard card)
     {
-        if (loadoutMap.containsKey(card) && card.type != AbstractCard.CardType.CURSE)
+        if (loadoutMap.containsKey(card) && card.type != PCLLoadout.UNSELECTABLE_TYPE)
         {
             currentSeriesCard = card;
             for (AbstractCard c : loadoutMap.keySet())
@@ -164,10 +168,12 @@ public class PCLLoadoutsContainer
 
         for (Map.Entry<PCLCard, PCLLoadout> entry : loadoutMap.entrySet())
         {
+            int selectedAmount = 0;
             for (PCLCardData data : entry.getValue().cardData)
             {
                 if (!bannedCards.contains(data.ID))
                 {
+                    selectedAmount += 1;
                     totalCardsInPool += 1;
                     rarityCount.merge(data.cardRarity, 1, Integer::sum);
                 }
@@ -175,7 +181,7 @@ public class PCLLoadoutsContainer
 
             for (PSkill<?> s : entry.getKey().getFullEffects())
             {
-                s.setAmount(bannedCards.size());
+                s.setAmount(selectedAmount);
             }
         }
 
