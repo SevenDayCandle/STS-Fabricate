@@ -1,31 +1,31 @@
-package pinacolada.skills.skills.base.modifiers;
+package pinacolada.skills.skills.base.conditions;
 
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.misc.PCLUseInfo;
 import pinacolada.misc.CombatManager;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Affinity;
 
 @VisibleSkill
-public class PMod_HighestAffinityBranch extends PMod_Branch<PField_Affinity, PCLAffinity>
+public class PCond_HighestAffinityBranch extends PCond_Branch<PField_Affinity, PCLAffinity>
 {
-    public static final PSkillData<PField_Affinity> DATA = register(PMod_HighestAffinityBranch.class, PField_Affinity.class)
+    public static final PSkillData<PField_Affinity> DATA = register(PCond_HighestAffinityBranch.class, PField_Affinity.class)
             .pclOnly()
             .setExtra(-1, DEFAULT_MAX)
             .selfTarget();
 
-    public PMod_HighestAffinityBranch(PSkillSaveData content)
+    public PCond_HighestAffinityBranch(PSkillSaveData content)
     {
         super(DATA, content);
     }
 
-    public PMod_HighestAffinityBranch(PCLAffinity... affinities)
+    public PCond_HighestAffinityBranch(PCLAffinity... affinities)
     {
         super(DATA, PCLCardTarget.None, 1);
         fields.setAffinity(affinities);

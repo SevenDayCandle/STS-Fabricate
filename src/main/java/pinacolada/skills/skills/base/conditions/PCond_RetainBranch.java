@@ -1,11 +1,12 @@
-package pinacolada.skills.skills.base.modifiers;
+package pinacolada.skills.skills.base.conditions;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import extendedui.EUIRM;
 import extendedui.interfaces.delegates.FuncT5;
 import extendedui.ui.tooltips.EUITooltip;
-import pinacolada.actions.pileSelection.ScryCards;
+import pinacolada.actions.pileSelection.RetainCards;
 import pinacolada.actions.pileSelection.SelectFromPile;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
@@ -16,24 +17,25 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.utilities.ListSelection;
 
-@VisibleSkill
-public class PMod_ScryBranch extends PMod_DoBranch
-{
-    public static final PSkillData<PField_CardCategory> DATA = register(PMod_ScryBranch.class, PField_CardCategory.class)
-            .selfTarget()
-            .setGroups(PCLCardGroupHelper.DrawPile);
 
-    public PMod_ScryBranch(PSkillSaveData content)
+@VisibleSkill
+public class PCond_RetainBranch extends PCond_DoBranch
+{
+    public static final PSkillData<PField_CardCategory> DATA = register(PCond_RetainBranch.class, PField_CardCategory.class)
+            .selfTarget()
+            .setGroups(PCLCardGroupHelper.Hand);
+
+    public PCond_RetainBranch(PSkillSaveData content)
     {
         super(DATA, content);
     }
 
-    public PMod_ScryBranch()
+    public PCond_RetainBranch()
     {
         super(DATA);
     }
 
-    public PMod_ScryBranch(int amount)
+    public PCond_RetainBranch(int amount)
     {
         super(DATA, PCLCardTarget.None, amount);
     }
@@ -41,12 +43,18 @@ public class PMod_ScryBranch extends PMod_DoBranch
     @Override
     public EUITooltip getActionTooltip()
     {
-        return PGR.core.tooltips.scry;
+        return PGR.core.tooltips.retain;
     }
 
     @Override
     public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction()
     {
-        return (s, c, i, o, g) -> new ScryCards(s, i);
+        return RetainCards::new;
+    }
+
+    @Override
+    public String getSubText()
+    {
+        return EUIRM.strings.verbNoun(getActionTitle(), getAmountRawString());
     }
 }

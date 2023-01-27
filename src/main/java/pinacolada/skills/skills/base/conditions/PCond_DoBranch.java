@@ -1,4 +1,4 @@
-package pinacolada.skills.skills.base.modifiers;
+package pinacolada.skills.skills.base.conditions;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
@@ -9,36 +9,36 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT5;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.actions.pileSelection.SelectFromPile;
-import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.PCLCardGroupHelper;
+import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.misc.PCLUseInfo;
 import pinacolada.interfaces.markers.PMultiBase;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.ListSelection;
 
-public abstract class PMod_DoBranch extends PMod_Branch<PField_CardCategory, AbstractCard>
+public abstract class PCond_DoBranch extends PCond_Branch<PField_CardCategory, AbstractCard>
 {
 
-    public PMod_DoBranch(PSkillData<PField_CardCategory> data, PSkillSaveData content)
+    public PCond_DoBranch(PSkillData<PField_CardCategory> data, PSkillSaveData content)
     {
         super(data, content);
     }
 
-    public PMod_DoBranch(PSkillData<PField_CardCategory> data)
+    public PCond_DoBranch(PSkillData<PField_CardCategory> data)
     {
         super(data);
     }
 
-    public PMod_DoBranch(PSkillData<PField_CardCategory> data, PCLCardTarget target, int amount)
+    public PCond_DoBranch(PSkillData<PField_CardCategory> data, PCLCardTarget target, int amount)
     {
         super(data, target, amount);
     }
 
-    public PMod_DoBranch(PSkillData<PField_CardCategory> data, PCLCardTarget target, int amount, PCLCardGroupHelper... groups)
+    public PCond_DoBranch(PSkillData<PField_CardCategory> data, PCLCardTarget target, int amount, PCLCardGroupHelper... groups)
     {
         super(data, target, amount);
         fields.setCardGroup(groups);

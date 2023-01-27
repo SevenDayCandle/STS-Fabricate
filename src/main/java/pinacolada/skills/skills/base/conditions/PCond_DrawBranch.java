@@ -1,4 +1,4 @@
-package pinacolada.skills.skills.base.modifiers;
+package pinacolada.skills.skills.base.conditions;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
@@ -19,23 +19,23 @@ import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.utilities.ListSelection;
 
 @VisibleSkill
-public class PMod_DrawBranch extends PMod_DoBranch
+public class PCond_DrawBranch extends PCond_DoBranch
 {
-    public static final PSkillData<PField_CardCategory> DATA = register(PMod_DrawBranch.class, PField_CardCategory.class)
+    public static final PSkillData<PField_CardCategory> DATA = register(PCond_DrawBranch.class, PField_CardCategory.class)
             .selfTarget()
             .setGroups(PCLCardGroupHelper.DrawPile);
 
-    public PMod_DrawBranch(PSkillSaveData content)
+    public PCond_DrawBranch(PSkillSaveData content)
     {
         super(DATA, content);
     }
 
-    public PMod_DrawBranch()
+    public PCond_DrawBranch()
     {
         super(DATA);
     }
 
-    public PMod_DrawBranch(int amount)
+    public PCond_DrawBranch(int amount)
     {
         super(DATA, PCLCardTarget.None, amount);
     }

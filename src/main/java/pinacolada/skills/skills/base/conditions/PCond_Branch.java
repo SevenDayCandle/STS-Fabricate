@@ -1,69 +1,75 @@
-package pinacolada.skills.skills.base.modifiers;
+package pinacolada.skills.skills.base.conditions;
 
 import extendedui.EUIUtils;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.misc.PCLUseInfo;
 import pinacolada.interfaces.markers.PMultiBase;
-import pinacolada.skills.PMod;
+import pinacolada.misc.PCLUseInfo;
+import pinacolada.skills.PCond;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public abstract class PMod_Branch<T extends PField, U> extends PMod<T>
+public abstract class PCond_Branch<T extends PField, U> extends PCond<T>
 {
 
-    public PMod_Branch(PSkillData<T> data, PSkillSaveData content)
+    public PCond_Branch(PSkillData<T> data, PSkillSaveData content)
     {
         super(data, content);
     }
 
-    public PMod_Branch(PSkillData<T> data)
+    public PCond_Branch(PSkillData<T> data)
     {
         super(data);
     }
 
-    public PMod_Branch(PSkillData<T> data, PCLCardTarget target, int amount)
+    public PCond_Branch(PSkillData<T> data, PCLCardTarget target, int amount)
     {
         super(data, target, amount);
     }
 
-    public PMod_Branch(PSkillData<T> data, PCLCardTarget target, int amount, int extra)
+    public PCond_Branch(PSkillData<T> data, PCLCardTarget target, int amount, int extra)
     {
         super(data, target, amount, extra);
     }
 
     public final void branch(PCLUseInfo info, Iterable<U> items)
     {
-        if (this.childEffect instanceof PMultiBase)
+        for (U c : items)
         {
-            List<? extends PSkill> effects = ((PMultiBase<?>) this.childEffect).getSubEffects();
-            for (U c : items)
+            for (int i = 0; i < getEffectCount(); i++)
             {
-                for (int i = 0; i < effects.size(); i++)
+                if (matchesBranch(c, i, info))
                 {
-                    if (matchesBranch(c, i, info))
-                    {
-                        this.childEffect.use(info, i);
-                        break;
-                    }
+                    this.childEffect.use(info, i);
+                    break;
                 }
             }
         }
-        else
-        {
-            this.childEffect.use(info);
-        }
     }
 
+    // Obtain the number of total leaf nodes stemming out of this branch
+    protected final int getEffectCount()
+    {
+        PSkill<?> current = this.childEffect;
+        while (current != null)
+        {
+            if (current instanceof PMultiBase<?>)
+            {
+                return ((PMultiBase<?>) current).getSubEffects().size();
+            }
+            current = current.getChild();
+        }
+        return 1;
+    }
+
+    // TODO highlight matching branches with green
     protected String getEffectTexts(boolean addPeriod)
     {
-        List<? extends PSkill> effects = ((PMultiBase<?>) this.childEffect).getSubEffects();
         ArrayList<String> effectTexts = new ArrayList<>();
-        for (int i = 0; i < effects.size(); i++)
+        for (int i = 0; i < getEffectCount(); i++)
         {
             effectTexts.add(getQualifier(i) + " -> " + this.childEffect.getText(i, addPeriod));
         }
@@ -87,9 +93,10 @@ public abstract class PMod_Branch<T extends PField, U> extends PMod<T>
         use(info);
     }
 
-    public final int getModifiedAmount(PSkill<?> be, PCLUseInfo info)
+    @Override
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
     {
-        return be.baseAmount;
+        return false;
     }
 
     public abstract boolean matchesBranch(U c, int i, PCLUseInfo info);

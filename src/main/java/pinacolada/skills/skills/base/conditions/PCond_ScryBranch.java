@@ -1,11 +1,11 @@
-package pinacolada.skills.skills.base.modifiers;
+package pinacolada.skills.skills.base.conditions;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.interfaces.delegates.FuncT5;
 import extendedui.ui.tooltips.EUITooltip;
-import pinacolada.actions.pileSelection.DiscardFromPile;
+import pinacolada.actions.pileSelection.ScryCards;
 import pinacolada.actions.pileSelection.SelectFromPile;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
@@ -17,37 +17,36 @@ import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.utilities.ListSelection;
 
 @VisibleSkill
-public class PMod_DiscardBranch extends PMod_DoBranch
+public class PCond_ScryBranch extends PCond_DoBranch
 {
-
-    public static final PSkillData<PField_CardCategory> DATA = register(PMod_DiscardBranch.class, PField_CardCategory.class)
+    public static final PSkillData<PField_CardCategory> DATA = register(PCond_ScryBranch.class, PField_CardCategory.class)
             .selfTarget()
-            .setGroups(PCLCardGroupHelper.DrawPile, PCLCardGroupHelper.ExhaustPile, PCLCardGroupHelper.Hand);
+            .setGroups(PCLCardGroupHelper.DrawPile);
 
-    public PMod_DiscardBranch(PSkillSaveData content)
+    public PCond_ScryBranch(PSkillSaveData content)
     {
         super(DATA, content);
     }
 
-    public PMod_DiscardBranch()
+    public PCond_ScryBranch()
     {
         super(DATA);
     }
 
-    public PMod_DiscardBranch(int amount, PCLCardGroupHelper... groups)
+    public PCond_ScryBranch(int amount)
     {
-        super(DATA, PCLCardTarget.None, amount, groups);
+        super(DATA, PCLCardTarget.None, amount);
     }
 
     @Override
     public EUITooltip getActionTooltip()
     {
-        return PGR.core.tooltips.discard;
+        return PGR.core.tooltips.scry;
     }
 
     @Override
     public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction()
     {
-        return DiscardFromPile::new;
+        return (s, c, i, o, g) -> new ScryCards(s, i);
     }
 }

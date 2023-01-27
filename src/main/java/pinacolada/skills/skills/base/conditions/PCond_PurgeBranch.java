@@ -1,12 +1,11 @@
-package pinacolada.skills.skills.base.modifiers;
+package pinacolada.skills.skills.base.conditions;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import extendedui.EUIRM;
 import extendedui.interfaces.delegates.FuncT5;
 import extendedui.ui.tooltips.EUITooltip;
-import pinacolada.actions.pileSelection.RetainCards;
+import pinacolada.actions.pileSelection.PurgeFromPile;
 import pinacolada.actions.pileSelection.SelectFromPile;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
@@ -19,42 +18,36 @@ import pinacolada.utilities.ListSelection;
 
 
 @VisibleSkill
-public class PMod_RetainBranch extends PMod_DoBranch
+public class PCond_PurgeBranch extends PCond_DoBranch
 {
-    public static final PSkillData<PField_CardCategory> DATA = register(PMod_RetainBranch.class, PField_CardCategory.class)
-            .selfTarget()
-            .setGroups(PCLCardGroupHelper.Hand);
 
-    public PMod_RetainBranch(PSkillSaveData content)
+    public static final PSkillData<PField_CardCategory> DATA = register(PCond_PurgeBranch.class, PField_CardCategory.class)
+            .selfTarget();
+
+    public PCond_PurgeBranch(PSkillSaveData content)
     {
         super(DATA, content);
     }
 
-    public PMod_RetainBranch()
+    public PCond_PurgeBranch()
     {
         super(DATA);
     }
 
-    public PMod_RetainBranch(int amount)
+    public PCond_PurgeBranch(int amount, PCLCardGroupHelper... groups)
     {
-        super(DATA, PCLCardTarget.None, amount);
+        super(DATA, PCLCardTarget.None, amount, groups);
     }
 
     @Override
     public EUITooltip getActionTooltip()
     {
-        return PGR.core.tooltips.retain;
+        return PGR.core.tooltips.purge;
     }
 
     @Override
     public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction()
     {
-        return RetainCards::new;
-    }
-
-    @Override
-    public String getSubText()
-    {
-        return EUIRM.strings.verbNoun(getActionTitle(), getAmountRawString());
+        return PurgeFromPile::new;
     }
 }

@@ -5,8 +5,8 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.utilities.ColoredString;
-import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.PCLCardGroupHelper;
+import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.misc.PCLUseInfo;
@@ -85,11 +85,6 @@ public abstract class PMod<T extends PField> extends PSkill<T>
         return (PMod_CyclePerCard) new PMod_CyclePerCard(amount).edit(f -> f.setRandom());
     }
 
-    public static PMod_DiscardBranch discardBranch(int amount, PCLCardGroupHelper... groups)
-    {
-        return new PMod_DiscardBranch(amount, groups);
-    }
-
     public static PMod_DiscardPerCard discardPer(int amount, PCLCardGroupHelper... groups)
     {
         return new PMod_DiscardPerCard(amount, groups);
@@ -98,11 +93,6 @@ public abstract class PMod<T extends PField> extends PSkill<T>
     public static PMod_DiscardPerCard discardRandomPer(int amount, PCLCardGroupHelper... groups)
     {
         return (PMod_DiscardPerCard) new PMod_DiscardPerCard(amount, groups).edit(f -> f.setRandom());
-    }
-
-    public static PMod_DrawBranch drawBranch(int amount)
-    {
-        return new PMod_DrawBranch(amount);
     }
 
     public static PMod_DrawPerCard drawPer(int amount)
@@ -133,11 +123,6 @@ public abstract class PMod<T extends PField> extends PSkill<T>
     public static PMod_FetchPerCard fetchRandomPer(int amount, PCLCardGroupHelper... groups)
     {
         return (PMod_FetchPerCard) new PMod_FetchPerCard(amount, groups).edit(f -> f.setRandom());
-    }
-
-    public static PMod_HighestAffinityBranch highestAffinityBranch(PCLAffinity... groups)
-    {
-        return new PMod_HighestAffinityBranch(groups);
     }
 
     public static PMod_IncreaseOnUse increaseOnUse(int amount)
@@ -285,19 +270,9 @@ public abstract class PMod<T extends PField> extends PSkill<T>
         return (PMod_ReshufflePerCard) new PMod_ReshufflePerCard(amount, groups).edit(PField_CardGeneric::setRandom);
     }
 
-    public static PMod_ScoutBranch scoutBranch(int amount)
-    {
-        return new PMod_ScoutBranch(amount);
-    }
-
     public static PMod_ScoutPerCard scoutPer(int amount)
     {
         return new PMod_ScoutPerCard(amount);
-    }
-
-    public static PMod_ScryBranch scryBranch(int amount)
-    {
-        return new PMod_ScryBranch(amount);
     }
 
     public static PMod_ScryPerCard scryPer(int amount)

@@ -5,9 +5,9 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
-import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardGroupHelper;
+import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.markers.PointerProvider;
 import pinacolada.misc.CombatManager;
@@ -39,6 +39,11 @@ public abstract class PCond<T extends PField> extends PSkill<T>
     public PCond(PSkillData<T> data, PCLCardTarget target, int amount)
     {
         super(data, target, amount);
+    }
+
+    public PCond(PSkillData<T> data, PCLCardTarget target, int amount, int extra)
+    {
+        super(data, target, amount, extra);
     }
 
     public static PCond_CheckBlock block(int amount)
@@ -121,6 +126,11 @@ public abstract class PCond<T extends PField> extends PSkill<T>
         return new PCond_DiscardTo(amount, h);
     }
 
+    public static PCond_DiscardBranch discardBranch(int amount, PCLCardGroupHelper... groups)
+    {
+        return new PCond_DiscardBranch(amount, groups);
+    }
+
     public static PCond_DiscardTo discardRandom(int amount)
     {
         return discardRandom(amount, PCLCardGroupHelper.Hand);
@@ -129,6 +139,11 @@ public abstract class PCond<T extends PField> extends PSkill<T>
     public static PCond_DiscardTo discardRandom(int amount, PCLCardGroupHelper... h)
     {
         return (PCond_DiscardTo) new PCond_DiscardTo(amount, h).edit(r -> r.setRandom());
+    }
+
+    public static PCond_DrawBranch drawBranch(int amount)
+    {
+        return new PCond_DrawBranch(amount);
     }
 
     public static PCond_EvokeOrb evoke(int amount, PCLOrbHelper... h)
@@ -144,6 +159,11 @@ public abstract class PCond<T extends PField> extends PSkill<T>
     public static PCond_ExhaustTo exhaust(int amount, PCLCardGroupHelper... h)
     {
         return new PCond_ExhaustTo(amount, h);
+    }
+
+    public static PCond_ExhaustBranch exhaustBranch(int amount)
+    {
+        return new PCond_ExhaustBranch(amount);
     }
 
     public static PCond_ExhaustTo exhaustRandom(int amount)
@@ -199,6 +219,11 @@ public abstract class PCond<T extends PField> extends PSkill<T>
     public static PCond_HavePlayed havePlayed(int amount)
     {
         return new PCond_HavePlayed(amount);
+    }
+
+    public static PCond_HighestAffinityBranch highestAffinityBranch(PCLAffinity... groups)
+    {
+        return new PCond_HighestAffinityBranch(groups);
     }
 
     public static PCond_HP hp(int amount)
@@ -341,6 +366,11 @@ public abstract class PCond<T extends PField> extends PSkill<T>
         return new PCond_ReshuffleTo(amount, h);
     }
 
+    public static PCond_ReshuffleBranch reshuffleBranch(int amount)
+    {
+        return new PCond_ReshuffleBranch(amount);
+    }
+
     public static PCond_ReshuffleTo reshuffleRandom(int amount)
     {
         return reshuffleRandom(amount, PCLCardGroupHelper.Hand);
@@ -349,6 +379,16 @@ public abstract class PCond<T extends PField> extends PSkill<T>
     public static PCond_ReshuffleTo reshuffleRandom(int amount, PCLCardGroupHelper... h)
     {
         return (PCond_ReshuffleTo) new PCond_ReshuffleTo(amount, h).edit(r -> r.setRandom());
+    }
+
+    public static PCond_ScoutBranch scoutBranch(int amount)
+    {
+        return new PCond_ScoutBranch(amount);
+    }
+
+    public static PCond_ScryBranch scryBranch(int amount)
+    {
+        return new PCond_ScryBranch(amount);
     }
 
     public static PCond_Starter starter()
