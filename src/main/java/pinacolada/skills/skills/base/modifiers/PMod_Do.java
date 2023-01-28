@@ -15,16 +15,16 @@ import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.pcl.PCLCoreStrings;
-import pinacolada.skills.PMod;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
+import pinacolada.skills.skills.PActiveMod;
 import pinacolada.utilities.ListSelection;
 
 import java.util.ArrayList;
 
-public abstract class PMod_Do extends PMod<PField_CardCategory>
+public abstract class PMod_Do extends PActiveMod<PField_CardCategory>
 {
 
     public PMod_Do(PSkillData<PField_CardCategory> data, PSkillSaveData content)

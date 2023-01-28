@@ -6,16 +6,16 @@ import extendedui.EUIRM;
 import extendedui.utilities.ColoredString;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.misc.PCLUseInfo;
 import pinacolada.interfaces.markers.CooldownProvider;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
-import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
+import pinacolada.skills.skills.PPassiveCond;
 
 @VisibleSkill
-public class PCond_Cooldown extends PCond<PField_Empty> implements CooldownProvider
+public class PCond_Cooldown extends PPassiveCond<PField_Empty> implements CooldownProvider
 {
     public static final PSkillData<PField_Empty> DATA = register(PCond_Cooldown.class, PField_Empty.class)
             .selfTarget();

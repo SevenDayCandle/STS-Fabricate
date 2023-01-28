@@ -6,8 +6,8 @@ import pinacolada.cards.base.fields.PCLAttackType;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.PTrait;
-import pinacolada.skills.PTrigger;
 import pinacolada.skills.fields.PField_AttackType;
+import pinacolada.skills.skills.PTrigger;
 
 // Only used for augments
 public class PTrait_AttackType extends PTrait<PField_AttackType>

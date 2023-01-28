@@ -3,7 +3,7 @@ package pinacolada.cards.pcl.glyphs;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PMove;
-import pinacolada.skills.PTrigger;
+import pinacolada.skills.skills.PTrigger;
 
 public class Glyph07 extends Glyph
 {

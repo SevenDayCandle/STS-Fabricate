@@ -8,15 +8,15 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.orbs.PCLOrbHelper;
-import pinacolada.skills.PMod;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Orb;
+import pinacolada.skills.skills.PActiveMod;
 import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
-public class PMod_EvokePerOrb extends PMod<PField_Orb>
+public class PMod_EvokePerOrb extends PActiveMod<PField_Orb>
 {
 
     public static final PSkillData<PField_Orb> DATA = register(PMod_EvokePerOrb.class, PField_Orb.class).selfTarget();

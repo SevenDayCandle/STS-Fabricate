@@ -29,6 +29,8 @@ import pinacolada.utilities.GameUtilities;
 import java.util.Arrays;
 import java.util.List;
 
+import static pinacolada.ui.cardEditor.PCLCustomCardEditCardScreen.START_Y;
+
 public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
 {
     public static final int EFFECT_COUNT = 2;
@@ -69,7 +71,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
         this.effect = effect;
 
         this.header = new EUILabel(EUIFontHelper.cardtitlefontLarge,
-                new EUIHitbox(screenW(0.5f), screenH(0.93f), MENU_WIDTH, MENU_HEIGHT))
+                new EUIHitbox(screenW(0.5f), START_Y, MENU_WIDTH, MENU_HEIGHT))
                 .setAlignment(0.5f, 0.0f, false)
                 .setFontScale(0.8f).setColor(Color.LIGHT_GRAY)
                 .setLabel(PGR.core.strings.cardEditor.primaryInfo);

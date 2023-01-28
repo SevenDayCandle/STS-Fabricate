@@ -18,13 +18,13 @@ import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLCardBuilder;
 import pinacolada.resources.PGR;
 import pinacolada.skills.*;
+import pinacolada.skills.skills.PLimit;
 import pinacolada.skills.skills.PMultiCond;
 import pinacolada.skills.skills.PMultiSkill;
-import pinacolada.skills.skills.base.delay.PDelayStartOfTurnPostDraw;
+import pinacolada.skills.skills.base.delay.PDelay_StartOfTurnPostDraw;
 import pinacolada.ui.common.PCLValueEditor;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static pinacolada.ui.cardEditor.PCLCustomCardEditCardScreen.START_Y;
 
@@ -84,6 +84,16 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
                 .setFontScale(0.8f).setColor(Color.LIGHT_GRAY)
                 .setLabel(title);
 
+        setupComponents(screen);
+
+        conditionGroup.syncWithLower();
+        effectGroup.syncWithLower();
+        modifierGroup.syncWithLower();
+        refresh();
+    }
+
+    protected void setupComponents(PCLCustomCardEditCardScreen screen)
+    {
         primaryConditions = (EUISearchableDropdown<PPrimary<?>>) new EUISearchableDropdown<PPrimary<?>>(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, 0, 0)
                 , PSkill::getSampleText)
                 .setOnChange(conditions -> {
@@ -103,9 +113,9 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
                 .setItems(EUIUtils.map(PSkill.getEligibleEffects(builder.cardColor, PLimit.class), bc -> primaryCond != null && bc.effectID.equals(primaryCond.effectID) ? primaryCond : bc));
         delayEditor = new PCLValueEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 4, MENU_HEIGHT, MENU_WIDTH * 1.5f, 0)
                 , PGR.core.strings.cardEditor.turnDelay, (val) -> {
-                    delayMove.setAmount(val);
-                    constructEffect();
-                })
+            delayMove.setAmount(val);
+            constructEffect();
+        })
                 .setTooltip(PGR.core.strings.cardEditor.turnDelay, PGR.core.strings.cardEditorTutorial.effectTurnDelay)
                 .setLimits(0, PSkill.DEFAULT_MAX);
 
@@ -144,9 +154,9 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
                 .setClickDelay(0.02f);
         choicesEditor = new PCLValueEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 4, MENU_HEIGHT, MENU_WIDTH * 2.5f, 0)
                 , PGR.core.strings.cardEditor.choices, (val) -> {
-                    multiSkill.setAmount(val);
-                    constructEffect();
-                })
+            multiSkill.setAmount(val);
+            constructEffect();
+        })
                 .setTooltip(PGR.core.strings.cardEditor.choices, PGR.core.strings.cardEditorTutorial.effectChoices)
                 .setLimits(0, PSkill.DEFAULT_MAX);
         choicesEditor.header.hb.setOffset(-0.375f * MENU_WIDTH, MENU_HEIGHT * 0.5f);
@@ -159,11 +169,6 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
         addModifier = new EUIButton(EUIRM.images.plus.texture(), new OriginRelativeHitbox(hb, scale(48), scale(48), MENU_WIDTH, 0))
                 .setOnClick(() -> modifierGroup.addEffectSlot())
                 .setClickDelay(0.02f);
-
-        conditionGroup.syncWithLower();
-        effectGroup.syncWithLower();
-        modifierGroup.syncWithLower();
-        repositionItems();
     }
 
     // Updates the offsets of all editors to avoid overlap (e.g. from adding/removing effects, or adding additional dropdowns from effects)
@@ -199,20 +204,22 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
 
     protected void constructEffect()
     {
-        finalEffect = new PMultiSkill()
+        finalEffect = effectGroup.lowerEffects.size() > 0 ? new PMultiSkill()
                 .setEffects(EUIUtils.mapAsNonnull(effectGroup.lowerEffects, e -> e != null ? e.makeCopy() : null))
-                .setAmount(multiSkill.amount);
-        modifier = modifierGroup.lowerEffects.size() > 0 ? modifierGroup.lowerEffects.get(0) : null;
+                .setAmount(multiSkill.amount) : null;
 
+        modifier = modifierGroup.lowerEffects.size() > 0 ? modifierGroup.lowerEffects.get(0) : null;
         if (modifier != null)
         {
             finalEffect = (modifier.makeCopy())
                     .setChild(finalEffect);
         }
+
         if (delayMove != null && delayMove.amount > 0)
         {
             finalEffect = (delayMove.makeCopy()).setChild(finalEffect);
         }
+
         if (multiCond != null)
         {
             finalEffect = new PMultiCond().setEffects(EUIUtils.mapAsNonnull(conditionGroup.lowerEffects, e -> e != null ? (PCond<?>) e.makeCopy() : null))
@@ -220,11 +227,13 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
                     .setChild(finalEffect)
                     .setAmount(multiCond.amount);
         }
+
         if (primaryCond != null)
         {
             finalEffect = (primaryCond.makeCopy())
                     .setChild(finalEffect);
         }
+
         if (onUpdate != null)
         {
             onUpdate.invoke(finalEffect);
@@ -239,9 +248,9 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
             return;
         }
 
-        if (effect instanceof PLimit)
+        if (effect instanceof PPrimary)
         {
-            primaryCond = (PLimit) effect.makeCopy();
+            primaryCond = (PPrimary<?>) effect.makeCopy();
         }
         else if (effect instanceof PMultiCond)
         {
@@ -279,7 +288,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
         }
         if (delayMove == null)
         {
-            delayMove = new PDelayStartOfTurnPostDraw();
+            delayMove = new PDelay_StartOfTurnPostDraw();
         }
         delayEditor.setValue(delayMove.amount, false);
         choicesEditor.setValue(multiSkill.amount, false);
@@ -370,9 +379,9 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
         this.choicesEditor.tryUpdate();
         this.ifElseToggle.tryUpdate();
         this.orToggle.tryUpdate();
-        conditionGroup.update();
-        effectGroup.update();
-        modifierGroup.update();
+        conditionGroup.tryUpdate();
+        effectGroup.tryUpdate();
+        modifierGroup.tryUpdate();
 
         // Actions that involve changing the number of editors/components present must be executed after all other update actions to avoid concurrent modification
         for (ActionT0 action : toRemove)
@@ -398,104 +407,9 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
         this.choicesEditor.tryRender(sb);
         this.ifElseToggle.tryRender(sb);
         this.orToggle.tryRender(sb);
-        conditionGroup.render(sb);
-        effectGroup.render(sb);
-        modifierGroup.render(sb);
+        conditionGroup.tryRender(sb);
+        effectGroup.tryRender(sb);
+        modifierGroup.tryRender(sb);
     }
 
-    @SuppressWarnings("rawtypes")
-    public static class EffectEditorGroup<T extends PSkill<?>>
-    {
-        protected ArrayList<T> lowerEffects = new ArrayList<>();
-        protected ArrayList<PCLCustomCardEffectEditor<T>> editors = new ArrayList<>();
-        protected final Class<? extends PSkill> className;
-        protected final String title;
-        protected final PCLCustomCardEffectPage editor;
-
-        public EffectEditorGroup(PCLCustomCardEffectPage editor, Class<? extends PSkill> className, String title)
-        {
-            this.editor = editor;
-            this.className = className;
-            this.title = title;
-        }
-
-        // Ensure that an editor exists for every subeffect for this card. Should be called after deconstructing the card JSON effect
-        public void syncWithLower()
-        {
-            for (int i = 0; i < lowerEffects.size(); i++)
-            {
-                PCLCustomCardEffectEditor<T> effectEditor = new PCLCustomCardEffectEditor<T>(this, new OriginRelativeHitbox(editor.hb, MENU_WIDTH, MENU_HEIGHT, 0, 0), i);
-                editors.add(effectEditor);
-            }
-        }
-
-        // Add a subeffect to this joint effect, and select the first effect in the list to prevent the user from saving a null effect
-        public void addEffectSlot()
-        {
-            lowerEffects.add(null);
-            PCLCustomCardEffectEditor<T> effectEditor = new PCLCustomCardEffectEditor<T>(this, new OriginRelativeHitbox(editor.hb, MENU_WIDTH, MENU_HEIGHT, 0, 0), editors.size());
-            editors.add(effectEditor);
-            if (effectEditor.effects.size() > 0)
-            {
-                effectEditor.effects.setSelectedIndex(0);
-            }
-            editor.refresh();
-        }
-
-        public void removeEffectSlot(int index)
-        {
-            if (lowerEffects.size() > index && editors.size() > index)
-            {
-                lowerEffects.remove(index);
-                editors.remove(index);
-
-                // Update editor indexes to reflect changes in the effects
-                for (int i = 0; i < editors.size(); i++)
-                {
-                    editors.get(i).updateIndex(i);
-                }
-
-                editor.refresh();
-            }
-        }
-
-        public float reposition(float offsetY)
-        {
-            for (PCLCustomCardEffectEditor<T> editor : editors)
-            {
-                editor.hb.setOffsetY(offsetY);
-                offsetY += OFFSET_EFFECT * 2 + editor.getAdditionalHeight();
-            }
-            return offsetY;
-        }
-
-        public List<T> getEffects()
-        {
-            return (List<T>) PSkill.getEligibleEffects(editor.builder.cardColor, className);
-        }
-
-        public void refresh()
-        {
-            for (PCLCustomCardEffectEditor<T> ce : editors)
-            {
-                ce.refresh();
-            }
-        }
-
-        public void update()
-        {
-            for (PCLCustomCardEffectEditor<T> ce : editors)
-            {
-                ce.tryUpdate();
-            }
-        }
-
-        public void render(SpriteBatch sb)
-        {
-            for (PCLCustomCardEffectEditor<T> ce : editors)
-            {
-                ce.tryRender(sb);
-            }
-        }
-    }
 }

@@ -1,4 +1,4 @@
-package pinacolada.skills;
+package pinacolada.skills.skills;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
@@ -10,6 +10,10 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.powers.PSkillPower;
+import pinacolada.skills.PPrimary;
+import pinacolada.skills.PSkill;
+import pinacolada.skills.PSkillData;
+import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.base.primary.PTrigger_Interactable;
 import pinacolada.skills.skills.base.primary.PTrigger_Passive;
@@ -243,9 +247,9 @@ public abstract class PTrigger extends PPrimary<PField_Not>
         resetUses();
 
         // Only update child effects if uses per turn is infinite
-        if (rootAmount <= 0 && this.childEffect != null && other.childEffect != null)
+        if (rootAmount <= 0 && this.childEffect != null && other.getChild() != null)
         {
-            this.childEffect.stack(other.childEffect);
+            this.childEffect.stack(other.getChild());
         }
         return this;
     }

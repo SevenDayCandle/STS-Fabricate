@@ -33,9 +33,8 @@ public class PMod_BonusPerAffinityLevel extends PMod_BonusPer<PField_Affinity>
         fields.setAffinity(affinities);
     }
 
-
     @Override
-    public String getConditionSampleText()
+    public String getSubText()
     {
         return PGR.core.tooltips.level.title;
     }
@@ -47,7 +46,7 @@ public class PMod_BonusPerAffinityLevel extends PMod_BonusPer<PField_Affinity>
     }
 
     @Override
-    public int multiplier(PCLUseInfo info)
+    public int getMultiplier(PCLUseInfo info)
     {
         return EUIUtils.sumInt(fields.affinities, GameUtilities::getPCLAffinityLevel);
     }

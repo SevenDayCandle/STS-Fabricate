@@ -7,9 +7,9 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.PTrait;
-import pinacolada.skills.PTrigger;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.fields.PField_Tag;
+import pinacolada.skills.skills.PTrigger;
 
 @VisibleSkill
 public class PTrait_Tag extends PTrait<PField_Tag>

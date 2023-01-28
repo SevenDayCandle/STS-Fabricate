@@ -9,14 +9,14 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.pcl.PCLCoreStrings;
-import pinacolada.skills.PMod;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
+import pinacolada.skills.skills.PPassiveMod;
 
 @VisibleSkill
-public class PMod_IncreaseOnUse extends PMod<PField_Empty>
+public class PMod_IncreaseOnUse extends PPassiveMod<PField_Empty>
 {
 
     public static final PSkillData<PField_Empty> DATA = register(PMod_IncreaseOnUse.class, PField_Empty.class).selfTarget();

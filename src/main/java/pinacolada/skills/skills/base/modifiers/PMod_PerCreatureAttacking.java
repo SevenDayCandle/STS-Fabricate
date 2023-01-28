@@ -1,22 +1,17 @@
 package pinacolada.skills.skills.base.modifiers;
 
-import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
-import pinacolada.skills.PMod;
-import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
 import pinacolada.utilities.GameUtilities;
 
-import java.util.List;
-
 @VisibleSkill
-public class PMod_PerCreatureAttacking extends PMod<PField_Empty>
+public class PMod_PerCreatureAttacking extends PMod_Per<PField_Empty>
 {
 
     public static final PSkillData<PField_Empty> DATA = register(PMod_PerCreatureAttacking.class, PField_Empty.class);
@@ -42,20 +37,19 @@ public class PMod_PerCreatureAttacking extends PMod<PField_Empty>
     }
 
     @Override
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info)
+    public int getMultiplier(PCLUseInfo info)
     {
-        List<AbstractCreature> targetList = getTargetList(info);
-        return be.baseAmount * EUIUtils.count(targetList, GameUtilities::isAttacking);
-    }
-
-    @Override
-    public String getSampleText()
-    {
-        return TEXT.conditions.per(TEXT.subjects.x, EUIRM.strings.adjNoun(TEXT.subjects.attacking, TEXT.subjects.x));
+        return EUIUtils.count(getTargetList(info), GameUtilities::isAttacking);
     }
 
     @Override
     public String getSubText()
+    {
+        return EUIRM.strings.adjNoun(TEXT.subjects.attacking, TEXT.subjects.x);
+    }
+
+    @Override
+    public String getConditionText()
     {
         return EUIRM.strings.adjNoun(TEXT.subjects.attacking, target == PCLCardTarget.Any ? TEXT.subjects.character : TEXT.subjects.enemy);
     }

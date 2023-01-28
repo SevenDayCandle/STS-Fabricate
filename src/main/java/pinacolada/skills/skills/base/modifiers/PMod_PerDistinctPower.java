@@ -8,7 +8,6 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.resources.pcl.PCLCoreStrings;
-import pinacolada.skills.PMod;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -18,7 +17,7 @@ import pinacolada.utilities.GameUtilities;
 import java.util.List;
 
 @VisibleSkill
-public class PMod_PerDistinctPower extends PMod<PField_Power>
+public class PMod_PerDistinctPower extends PMod_Per<PField_Power>
 {
 
     public static final PSkillData<PField_Power> DATA = register(PMod_PerDistinctPower.class, PField_Power.class);
@@ -45,13 +44,13 @@ public class PMod_PerDistinctPower extends PMod<PField_Power>
     }
 
     @Override
-    public String getSampleText()
+    public String getSubText()
     {
-        return TEXT.conditions.per(TEXT.subjects.x, TEXT.cardEditor.powers);
+        return TEXT.cardEditor.powers;
     }
 
     @Override
-    public String getSubText()
+    public String getConditionText()
     {
         String baseString = fields.getPowerSubjectString();
         switch (target)
@@ -73,14 +72,20 @@ public class PMod_PerDistinctPower extends PMod<PField_Power>
     @Override
     public String getText(boolean addPeriod)
     {
-        return TEXT.conditions.perDistinct(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", getSubText() + getXRawString()) + PCLCoreStrings.period(addPeriod);
+        return TEXT.conditions.perDistinct(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", getConditionText() + getXRawString()) + PCLCoreStrings.period(addPeriod);
+    }
+
+    @Override
+    public int getMultiplier(PCLUseInfo info)
+    {
+        List<AbstractCreature> targetList = getTargetList(info);
+        return fields.powers.isEmpty() ? EUIUtils.sumInt(targetList, t -> EUIUtils.count(t.powers, po -> po.type == AbstractPower.PowerType.DEBUFF)) :
+                EUIUtils.sumInt(targetList, t -> EUIUtils.count(fields.powers, po -> GameUtilities.getPowerAmount(t, po.ID) >= this.amount));
     }
 
     @Override
     public int getModifiedAmount(PSkill<?> be, PCLUseInfo info)
     {
-        List<AbstractCreature> targetList = getTargetList(info);
-        return fields.powers.isEmpty() ? be.baseAmount * EUIUtils.sumInt(targetList, t -> EUIUtils.count(t.powers, po -> po.type == AbstractPower.PowerType.DEBUFF)) :
-                be.baseAmount * EUIUtils.sumInt(targetList, t -> EUIUtils.count(fields.powers, po -> GameUtilities.getPowerAmount(t, po.ID) >= this.amount));
+        return be.baseAmount * getMultiplier(info);
     }
 }

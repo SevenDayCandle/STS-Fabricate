@@ -4,16 +4,16 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.misc.PCLUseInfo;
 import pinacolada.interfaces.subscribers.OnStartOfTurnPostDrawSubscriber;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
-import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
+import pinacolada.skills.skills.PPassiveCond;
 
 @VisibleSkill
-public class PCond_AtTurnStart extends PCond<PField_Empty> implements OnStartOfTurnPostDrawSubscriber
+public class PCond_AtTurnStart extends PPassiveCond<PField_Empty> implements OnStartOfTurnPostDrawSubscriber
 {
 
     public static final PSkillData<PField_Empty> DATA = register(PCond_AtTurnStart.class, PField_Empty.class, 1, 1)

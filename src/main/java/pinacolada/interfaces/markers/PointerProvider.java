@@ -7,14 +7,10 @@ import extendedui.EUIUtils;
 import extendedui.text.EUISmartText;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PTrait;
-import pinacolada.skills.PTrigger;
 import pinacolada.skills.Skills;
-import pinacolada.skills.skills.base.traits.PTrait_Block;
-import pinacolada.skills.skills.base.traits.PTrait_BlockMultiplier;
-import pinacolada.skills.skills.base.traits.PTrait_Damage;
-import pinacolada.skills.skills.base.traits.PTrait_DamageMultiplier;
-import pinacolada.skills.skills.special.moves.PMove_DealCardDamage;
-import pinacolada.skills.skills.special.moves.PMove_GainCardBlock;
+import pinacolada.skills.skills.PTrigger;
+import pinacolada.skills.skills.special.primary.PCardPrimary_DealDamage;
+import pinacolada.skills.skills.special.primary.PCardPrimary_GainBlock;
 import pinacolada.utilities.UniqueList;
 
 import java.util.ArrayList;
@@ -61,35 +57,30 @@ public interface PointerProvider
     default String getEffectStrings()
     {
         ArrayList<PSkill<?>> tempEffects = EUIUtils.filter(getFullEffects(), ef -> ef != null && !(ef instanceof PTrait));
-        String effectString = EUIUtils.joinStrings(EUIUtils.DOUBLE_SPLIT_LINE, EUIUtils.mapAsNonnull(tempEffects, PSkill::getText));
+        StringBuilder sb = new StringBuilder();
 
-        PMove_DealCardDamage damageMove = getCardDamage();
-        if (damageMove != null)
+        PCardPrimary_DealDamage damageMove = getCardDamage();
+        PCardPrimary_GainBlock blockMove = getCardBlock();
+        if (damageMove != null && blockMove != null)
         {
-            if (tempEffects.size() > 0 && (tempEffects.get(0).getLowestChild() instanceof PTrait_Damage || tempEffects.get(0).getLowestChild() instanceof PTrait_DamageMultiplier))
-            {
-                effectString = damageMove.getText() + " " + effectString;
-            }
-            else
-            {
-                effectString = damageMove.getText() + EUIUtils.DOUBLE_SPLIT_LINE + effectString;
-            }
+            sb.append(damageMove.getText());
+            sb.append(blockMove.getText());
+            sb.append(EUIUtils.DOUBLE_SPLIT_LINE);
+        }
+        else if (damageMove != null)
+        {
+            sb.append(damageMove.getText());
+            sb.append(EUIUtils.DOUBLE_SPLIT_LINE);
+        }
+        else if (blockMove != null)
+        {
+            sb.append(blockMove.getText());
+            sb.append(EUIUtils.DOUBLE_SPLIT_LINE);
         }
 
-        PMove_GainCardBlock blockMove = getCardBlock();
-        if (blockMove != null)
-        {
-            if (tempEffects.size() > 0 && (tempEffects.get(0).getLowestChild() instanceof PTrait_Block || tempEffects.get(0).getLowestChild() instanceof PTrait_BlockMultiplier))
-            {
-                effectString = blockMove.getText() + " " + effectString;
-            }
-            else
-            {
-                effectString = blockMove.getText() + (damageMove == null ? EUIUtils.DOUBLE_SPLIT_LINE : " ") + effectString;
-            }
-        }
+        sb.append(EUIUtils.joinStrings(EUIUtils.DOUBLE_SPLIT_LINE, EUIUtils.mapAsNonnull(tempEffects, PSkill::getText)));
 
-        return effectString;
+        return sb.toString();
     }
 
     default ArrayList<PSkill<?>> getFullEffects()
@@ -97,12 +88,12 @@ public interface PointerProvider
         return getEffects();
     } // GetEffects plus any additional temporary effects not attached to Skills
 
-    default PMove_DealCardDamage getCardDamage()
+    default PCardPrimary_DealDamage getCardDamage()
     {
         return null;
     }
 
-    default PMove_GainCardBlock getCardBlock()
+    default PCardPrimary_GainBlock getCardBlock()
     {
         return null;
     }

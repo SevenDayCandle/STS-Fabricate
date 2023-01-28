@@ -12,7 +12,7 @@ public class STSLibPatches
     @SpirePatch(clz = FlavorText.FlavorIntoCardStrings.class, method = "postfix")
     public static class FlavorIntoCardStrings_Postfix
     {
-        // Custom cards do not have existing flavor text
+        // Custom cards do not have existing flavor text so this call will cause the card to fail to load altogether
         @SpirePrefixPatch
         public static SpireReturn<Void> prefix(AbstractCard c)
         {

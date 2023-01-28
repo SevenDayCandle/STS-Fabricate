@@ -4,13 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.MathUtils;
 import com.google.gson.reflect.TypeToken;
-import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIUtils;
 import pinacolada.cards.base.fields.PCLAttackType;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
-import pinacolada.skills.PTrigger;
+import pinacolada.skills.skills.PTrigger;
+import pinacolada.skills.skills.special.primary.PCardPrimary_DealDamage;
+import pinacolada.skills.skills.special.primary.PCardPrimary_GainBlock;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -251,7 +252,8 @@ public class PCLCustomCardSlot
             tags = EUIUtils.mapAsNonnull(builder.tags.values(), EUIUtils::serialize).toArray(new String[]{});
 
             f.attackType = builder.attackType.name();
-            f.attackEffect = builder.attackEffect.name();
+            f.damageEffect = builder.damageEffect != null ? builder.damageEffect.serialize() : null;
+            f.blockEffect = builder.blockEffect != null ? builder.blockEffect.serialize() : null;
             f.effects = EUIUtils.mapAsNonnull(builder.moves, b -> b != null ? b.serialize() : null).toArray(new String[]{});
             f.powerEffects = EUIUtils.mapAsNonnull(builder.powers, b -> b != null ? b.serialize() : null).toArray(new String[]{});
 
@@ -291,7 +293,8 @@ public class PCLCustomCardSlot
             CardForm f = EUIUtils.deserialize(fo, TTokenForm.getType());
             PCLCardBuilder builder = new PCLCardBuilder(this);
             builder.setAttackType(PCLAttackType.valueOf(f.attackType));
-            builder.setAttackEffect(AbstractGameAction.AttackEffect.valueOf(f.attackEffect));
+            builder.setAttackSkill(EUIUtils.safeCast(PSkill.get(f.damageEffect), PCardPrimary_DealDamage.class));
+            builder.setBlockSkill(EUIUtils.safeCast(PSkill.get(f.blockEffect), PCardPrimary_GainBlock.class));
             builder.setPSkill(EUIUtils.mapAsNonnull(f.effects, PSkill::get), true, true);
             builder.setPPower(EUIUtils.mapAsNonnull(f.powerEffects, pe -> EUIUtils.safeCast(PSkill.get(pe), PTrigger.class)));
 
@@ -322,7 +325,8 @@ public class PCLCustomCardSlot
     public static class CardForm
     {
         public String attackType;
-        public String attackEffect;
+        public String damageEffect;
+        public String blockEffect;
         public String[] effects;
         public String[] powerEffects;
 

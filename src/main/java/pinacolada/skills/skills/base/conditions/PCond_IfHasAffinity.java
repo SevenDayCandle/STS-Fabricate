@@ -5,15 +5,15 @@ import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.pcl.PCLCoreStrings;
-import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.skills.PTrigger;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.fields.PField_CardCategory;
+import pinacolada.skills.skills.PPassiveCond;
+import pinacolada.skills.skills.PTrigger;
 
 @VisibleSkill
-public class PCond_IfHasAffinity extends PCond<PField_CardCategory>
+public class PCond_IfHasAffinity extends PPassiveCond<PField_CardCategory>
 {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_IfHasAffinity.class, PField_CardCategory.class)
             .selfTarget();

@@ -1,4 +1,4 @@
-package pinacolada.skills.skills.special.moves;
+package pinacolada.skills.skills.special.primary;
 
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
@@ -6,7 +6,6 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUIUtils;
-import extendedui.interfaces.delegates.ActionT2;
 import extendedui.interfaces.delegates.FuncT2;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.ColoredString;
@@ -20,35 +19,45 @@ import pinacolada.effects.VFX;
 import pinacolada.interfaces.markers.PointerProvider;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
-import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.skills.fields.PField_AttackEffect;
+import pinacolada.skills.fields.PField_Attack;
+import pinacolada.skills.skills.PCardPrimary;
 
-import java.util.ArrayList;
-import java.util.Collections;
-
-public class PMove_DealCardDamage extends PMove<PField_AttackEffect>
+public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack>
 {
-    public static final PSkillData<PField_AttackEffect> DATA = register(PMove_DealCardDamage.class, PField_AttackEffect.class);
+    public static final PSkillData<PField_Attack> DATA = register(PCardPrimary_DealDamage.class, PField_Attack.class);
 
-    protected Color vfxColor;
-    protected Color vfxTargetColor;
+    // Damage effects are only customizable in code and cannot be saved in fields
     protected FuncT2<Float, AbstractCreature, AbstractCreature> damageEffect;
-    protected ActionT2<PCLUseInfo, ArrayList<AbstractCreature>> onCompletion;
 
-    public PMove_DealCardDamage(PSkillSaveData content)
+    public PCardPrimary_DealDamage(PSkillSaveData content)
     {
         super(DATA, content);
     }
 
-    public PMove_DealCardDamage(PointerProvider card, AbstractGameAction.AttackEffect attackEffect)
+    // Needed for effect editor initialization. PLEASE do not call this anywhere else without setting a card first
+    public PCardPrimary_DealDamage()
     {
-        super(DATA,
-                card instanceof PCLCard ? ((PCLCard) card).pclTarget : PCLCardTarget.Single,
-                0);
+        super(DATA, PCLCardTarget.Single, 0);
+    }
+
+    public PCardPrimary_DealDamage(PointerProvider card)
+    {
+        super(DATA, card);
+    }
+
+    public PCardPrimary_DealDamage(PointerProvider card, AbstractGameAction.AttackEffect attackEffect)
+    {
+        super(DATA, card);
         fields.attackEffect = attackEffect;
+    }
+
+    public PCardPrimary_DealDamage setProvider(PointerProvider card)
+    {
+        setTarget(card instanceof PCLCard ? ((PCLCard) card).pclTarget : PCLCardTarget.Single);
         setSource(card, PCLCardValueSource.Damage, PCLCardValueSource.HitCount);
+        return this;
     }
 
     @Override
@@ -62,16 +71,13 @@ public class PMove_DealCardDamage extends PMove<PField_AttackEffect>
     }
 
     @Override
-    public PMove_DealCardDamage makeCopy()
+    public PCardPrimary_DealDamage makeCopy()
     {
-        PMove_DealCardDamage copy = (PMove_DealCardDamage) super.makeCopy();
-        copy.setDamageEffect(this.damageEffect).setVFXColor(this.vfxColor, this.vfxTargetColor);
-        copy.onCompletion = this.onCompletion;
-        return copy;
+        return (PCardPrimary_DealDamage) super.makeCopy();
     }
 
     @Override
-    public void use(PCLUseInfo info)
+    public void useImpl(PCLUseInfo info)
     {
         PCLCard pCard = EUIUtils.safeCast(sourceCard, PCLCard.class);
         if (pCard != null)
@@ -90,7 +96,6 @@ public class PMove_DealCardDamage extends PMove<PField_AttackEffect>
                     break;
                 default:
                     getActions().dealCardDamage(pCard, info.source, info.target, fields.attackEffect).forEach(e -> setDamageOptions(e, info));
-
             }
         }
     }
@@ -112,41 +117,30 @@ public class PMove_DealCardDamage extends PMove<PField_AttackEffect>
         return TEXT.actions.dealTo(amountString, tooltip, getTargetString());
     }
 
-    public boolean hasCallback()
-    {
-        return this.onCompletion != null;
-    }
-
-    public PMove_DealCardDamage setCallback(ActionT2<PCLUseInfo, ArrayList<AbstractCreature>> onCompletion)
-    {
-        this.onCompletion = onCompletion;
-        return this;
-    }
-
-    public PMove_DealCardDamage setDamageEffect(PCLEffekseerEFX effekseerKey)
+    public PCardPrimary_DealDamage setDamageEffect(PCLEffekseerEFX effekseerKey)
     {
         this.damageEffect = (s, m) -> PCLEffects.Queue.add(VFX.eFX(effekseerKey, m.hb)).duration * 0.8f;
         return this;
     }
 
-    public PMove_DealCardDamage setDamageEffect(PCLEffekseerEFX effekseerKey, Color color)
+    public PCardPrimary_DealDamage setDamageEffect(PCLEffekseerEFX effekseerKey, Color color)
     {
         return setDamageEffect(effekseerKey, color, 0.8f);
     }
 
-    public PMove_DealCardDamage setDamageEffect(PCLEffekseerEFX effekseerKey, float durationMult)
+    public PCardPrimary_DealDamage setDamageEffect(PCLEffekseerEFX effekseerKey, float durationMult)
     {
         this.damageEffect = (s, m) -> PCLEffects.Queue.add(VFX.eFX(effekseerKey, m.hb)).duration * durationMult;
         return this;
     }
 
-    public PMove_DealCardDamage setDamageEffect(PCLEffekseerEFX effekseerKey, Color color, float durationMult)
+    public PCardPrimary_DealDamage setDamageEffect(PCLEffekseerEFX effekseerKey, Color color, float durationMult)
     {
         this.damageEffect = (s, m) -> PCLEffects.Queue.add(VFX.eFX(effekseerKey, m.hb).setColor(color)).duration * durationMult;
         return this;
     }
 
-    public PMove_DealCardDamage setDamageEffect(FuncT2<Float, AbstractCreature, AbstractCreature> damageEffect)
+    public PCardPrimary_DealDamage setDamageEffect(FuncT2<Float, AbstractCreature, AbstractCreature> damageEffect)
     {
         this.damageEffect = damageEffect;
         return this;
@@ -158,20 +152,16 @@ public class PMove_DealCardDamage extends PMove<PField_AttackEffect>
         {
             damageAction.setDamageEffect(damageEffect);
         }
-        if (vfxColor != null)
+        if (fields.vfxColor != null)
         {
-            if (vfxTargetColor != null)
+            if (fields.vfxTargetColor != null)
             {
-                damageAction.setVFXColor(vfxColor, vfxTargetColor);
+                damageAction.setVFXColor(fields.vfxColor, fields.vfxTargetColor);
             }
             else
             {
-                damageAction.setVFXColor(vfxColor);
+                damageAction.setVFXColor(fields.vfxColor);
             }
-        }
-        if (onCompletion != null)
-        {
-            damageAction.addCallback(info, (i, m) -> onCompletion.invoke(i, new ArrayList<>(Collections.singletonList(m))));
         }
     }
 
@@ -181,27 +171,22 @@ public class PMove_DealCardDamage extends PMove<PField_AttackEffect>
         {
             damageAction.setDamageEffect((enemy, __) -> damageEffect.invoke(info.source, enemy));
         }
-        if (vfxColor != null)
+        if (fields.vfxColor != null)
         {
-            if (vfxTargetColor != null)
+            if (fields.vfxTargetColor != null)
             {
-                damageAction.setVFXColor(vfxColor, vfxTargetColor);
+                damageAction.setVFXColor(fields.vfxColor, fields.vfxTargetColor);
             }
             else
             {
-                damageAction.setVFXColor(vfxColor);
+                damageAction.setVFXColor(fields.vfxColor);
             }
-        }
-        if (onCompletion != null)
-        {
-            damageAction.addCallback(info, (i, mo) -> onCompletion.invoke(i, mo));
         }
     }
 
-    public PMove_DealCardDamage setVFXColor(Color vfxColor, Color vfxTargetColor)
+    public PCardPrimary_DealDamage setVFXColor(Color vfxColor, Color vfxTargetColor)
     {
-        this.vfxColor = vfxColor;
-        this.vfxTargetColor = vfxTargetColor;
+        fields.setVFXColor(vfxColor, vfxTargetColor);
         return this;
     }
 }

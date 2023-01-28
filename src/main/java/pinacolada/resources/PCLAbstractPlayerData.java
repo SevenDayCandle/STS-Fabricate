@@ -36,6 +36,7 @@ public abstract class PCLAbstractPlayerData
     public static final int DEFAULT_GOLD = 99;
     public static final int DEFAULT_DRAW = 5;
     public static final int DEFAULT_ENERGY = 3;
+    public static final int DEFAULT_ORBS = 3;
     public static final ArrayList<AbstractGlyphBlight> GLYPHS = new ArrayList<>();
     public final HashMap<Integer, PCLLoadout> loadouts = new HashMap<>();
     public final HashMap<Integer, PCLTrophies> trophies = new HashMap<>();
@@ -44,14 +45,16 @@ public abstract class PCLAbstractPlayerData
     public final int baseGold;
     public final int baseDraw;
     public final int baseEnergy;
+    public final int baseOrbs;
+    public final boolean useSummons;
     public PCLLoadout selectedLoadout;
 
     public PCLAbstractPlayerData(PCLResources<?,?,?> resources)
     {
-        this(resources, DEFAULT_HP, DEFAULT_GOLD, DEFAULT_DRAW, DEFAULT_ENERGY);
+        this(resources, DEFAULT_HP, DEFAULT_GOLD, DEFAULT_DRAW, DEFAULT_ENERGY, DEFAULT_ORBS, true);
     }
 
-    public PCLAbstractPlayerData(PCLResources<?,?,?> resources, int hp, int gold, int draw, int energy)
+    public PCLAbstractPlayerData(PCLResources<?,?,?> resources, int hp, int gold, int draw, int energy, int orbs, boolean useSummons)
     {
         this.resources = resources;
         this.selectedLoadout = getCoreLoadout();
@@ -59,6 +62,8 @@ public abstract class PCLAbstractPlayerData
         this.baseGold = gold;
         this.baseDraw = draw;
         this.baseEnergy = energy;
+        this.baseOrbs = orbs;
+        this.useSummons = useSummons;
     }
 
     public static String getLoadoutPrefix(PCLResources<?,?,?> resources)

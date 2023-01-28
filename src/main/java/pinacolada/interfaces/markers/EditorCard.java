@@ -6,7 +6,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import extendedui.interfaces.markers.CacheableCard;
 import pinacolada.cards.base.fields.PCLAffinity;
-import pinacolada.skills.PTrigger;
+import pinacolada.skills.skills.PTrigger;
 
 import java.util.ArrayList;
 

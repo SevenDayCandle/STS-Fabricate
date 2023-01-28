@@ -10,11 +10,11 @@ import com.megacrit.cardcrawl.helpers.ImageMaster;
 import extendedui.utilities.ColoredString;
 import extendedui.utilities.ColoredTexture;
 import pinacolada.interfaces.markers.DynamicCard;
-import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
-import pinacolada.skills.PTrigger;
-import pinacolada.skills.skills.special.moves.PMove_DealCardDamage;
+import pinacolada.skills.skills.PTrigger;
+import pinacolada.skills.skills.special.primary.PCardPrimary_DealDamage;
+import pinacolada.skills.skills.special.primary.PCardPrimary_GainBlock;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
@@ -379,21 +379,15 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
 
         clearSkills();
         onDamageEffect = null;
+        onBlockEffect = null;
         final PCLCard source = builder.source != null ? builder.source : this;
-        for (PSkill effect : builder.moves)
+        for (PSkill<?> effect : builder.moves)
         {
             if (effect == null)
             {
                 continue;
             }
-            if (effect instanceof PMove_DealCardDamage)
-            {
-                onDamageEffect = (PMove_DealCardDamage) effect.makeCopy().setSource(source).onAddToCard(this);
-            }
-            else
-            {
-                addUseMove(effect);
-            }
+            addUseMove(effect);
         }
 
         for (PTrigger pe : builder.powers)
@@ -405,10 +399,14 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
             addGainPower(pe);
         }
 
-        // Automatically create Attack actions for Attacks that do not already have attack actions
-        if ((builder.cardType == CardType.ATTACK || builder.cardType == PCLEnum.CardType.SUMMON) && onDamageEffect == null)
+        // Add damage/block effects and set their source to this card
+        if (builder.damageEffect != null)
         {
-            this.addDamageMove(builder.attackEffect);
+            onDamageEffect = (PCardPrimary_DealDamage) builder.damageEffect.makeCopy().setProvider(this).onAddToCard(this);
+        }
+        if (builder.blockEffect != null)
+        {
+            onBlockEffect = (PCardPrimary_GainBlock) builder.blockEffect.makeCopy().setProvider(this).onAddToCard(this);
         }
 
         initializeDescription();

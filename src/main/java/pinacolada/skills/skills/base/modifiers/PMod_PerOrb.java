@@ -3,18 +3,16 @@ package pinacolada.skills.skills.base.modifiers;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
-import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.orbs.PCLOrbHelper;
-import pinacolada.skills.PMod;
-import pinacolada.skills.PSkill;
+import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Orb;
 import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
-public class PMod_PerOrb extends PMod<PField_Orb>
+public class PMod_PerOrb extends PMod_Per<PField_Orb>
 {
 
     public static final PSkillData<PField_Orb> DATA = register(PMod_PerOrb.class, PField_Orb.class).selfTarget();
@@ -31,24 +29,24 @@ public class PMod_PerOrb extends PMod<PField_Orb>
 
     public PMod_PerOrb(int amount, PCLOrbHelper... orbs)
     {
-        super(DATA, PCLCardTarget.None, amount);
+        super(DATA, amount);
         fields.setOrb(orbs);
     }
 
     @Override
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info)
+    public int getMultiplier(PCLUseInfo info)
     {
-        return be.baseAmount * (fields.orbs.isEmpty() ? GameUtilities.getOrbCount() : EUIUtils.sumInt(fields.orbs, GameUtilities::getOrbCount)) / Math.max(1, this.amount);
-    }
-
-    @Override
-    public String getSampleText()
-    {
-        return TEXT.conditions.per(TEXT.subjects.x, TEXT.cardEditor.orbs);
+        return (fields.orbs.isEmpty() ? GameUtilities.getOrbCount() : EUIUtils.sumInt(fields.orbs, GameUtilities::getOrbCount));
     }
 
     @Override
     public String getSubText()
+    {
+        return PGR.core.tooltips.orb.title;
+    }
+
+    @Override
+    public String getConditionText()
     {
         return this.amount <= 1 ? fields.getOrbAndString(1) : EUIRM.strings.numNoun(getAmountRawString(), fields.getOrbAndString());
     }

@@ -82,7 +82,7 @@ public abstract class PMod<T extends PField> extends PSkill<T>
 
     public static PMod_CyclePerCard cycleRandomPer(int amount)
     {
-        return (PMod_CyclePerCard) new PMod_CyclePerCard(amount).edit(f -> f.setRandom());
+        return (PMod_CyclePerCard) new PMod_CyclePerCard(amount).edit(PField_CardGeneric::setRandom);
     }
 
     public static PMod_DiscardPerCard discardPer(int amount, PCLCardGroupHelper... groups)
@@ -92,7 +92,7 @@ public abstract class PMod<T extends PField> extends PSkill<T>
 
     public static PMod_DiscardPerCard discardRandomPer(int amount, PCLCardGroupHelper... groups)
     {
-        return (PMod_DiscardPerCard) new PMod_DiscardPerCard(amount, groups).edit(f -> f.setRandom());
+        return (PMod_DiscardPerCard) new PMod_DiscardPerCard(amount, groups).edit(PField_CardGeneric::setRandom);
     }
 
     public static PMod_DrawPerCard drawPer(int amount)
@@ -107,7 +107,7 @@ public abstract class PMod<T extends PField> extends PSkill<T>
 
     public static PMod_ExhaustPerCard exhaustRandomPer(int amount, PCLCardGroupHelper... groups)
     {
-        return (PMod_ExhaustPerCard) new PMod_ExhaustPerCard(amount, groups).edit(f -> f.setRandom());
+        return (PMod_ExhaustPerCard) new PMod_ExhaustPerCard(amount, groups).edit(PField_CardGeneric::setRandom);
     }
 
     public static PMod_EvokePerOrb evokePerOrb(int amount, PCLOrbHelper... aff)
@@ -122,7 +122,7 @@ public abstract class PMod<T extends PField> extends PSkill<T>
 
     public static PMod_FetchPerCard fetchRandomPer(int amount, PCLCardGroupHelper... groups)
     {
-        return (PMod_FetchPerCard) new PMod_FetchPerCard(amount, groups).edit(f -> f.setRandom());
+        return (PMod_FetchPerCard) new PMod_FetchPerCard(amount, groups).edit(PField_CardGeneric::setRandom);
     }
 
     public static PMod_IncreaseOnUse increaseOnUse(int amount)

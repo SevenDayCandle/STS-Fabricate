@@ -1,24 +1,34 @@
-package pinacolada.skills.skills.special.moves;
+package pinacolada.skills.skills.special.primary;
 
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import extendedui.utilities.ColoredString;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.markers.PointerProvider;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
-import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.fields.PField_Empty;
+import pinacolada.skills.skills.PCardPrimary;
 
-public class PMove_GainCardBlock extends PMove<PField_Empty>
+public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty>
 {
-    public static final PSkillData<PField_Empty> DATA = register(PMove_GainCardBlock.class, PField_Empty.class);
+    public static final PSkillData<PField_Empty> DATA = register(PCardPrimary_GainBlock.class, PField_Empty.class);
 
-    public PMove_GainCardBlock(PointerProvider card)
+    public PCardPrimary_GainBlock()
     {
         super(DATA, PCLCardTarget.Self, 0);
+    }
+
+    public PCardPrimary_GainBlock(PointerProvider card)
+    {
+        super(DATA, card);
+    }
+
+    public PCardPrimary_GainBlock setProvider(PointerProvider card)
+    {
         setSource(card, PCLCardValueSource.Block, PCLCardValueSource.RightCount);
+        return this;
     }
 
     @Override
@@ -38,19 +48,22 @@ public class PMove_GainCardBlock extends PMove<PField_Empty>
     }
 
     @Override
-    public void use(PCLUseInfo info)
+    public void useImpl(PCLUseInfo info)
     {
-        if (sourceCard instanceof EditorCard)
+        // TODO card gain block action
+        for (AbstractCreature c : getTargetList(info))
         {
-            for (int i = 0; i < ((EditorCard) sourceCard).rightCount(); i++) {
+            // Extra has the value of right count
+            for (int i = 0; i < extra; i++) {
                 getActions().gainBlock(amount);
             }
         }
-        else
-        {
-            getActions().gainBlock(amount);
-        }
+    }
 
+    @Override
+    public PCardPrimary_GainBlock makeCopy()
+    {
+        return (PCardPrimary_GainBlock) super.makeCopy();
     }
 
     @Override

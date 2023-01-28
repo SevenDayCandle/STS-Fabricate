@@ -13,7 +13,7 @@ import extendedui.utilities.EUIFontHelper;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;
-import pinacolada.skills.PTrigger;
+import pinacolada.skills.skills.PTrigger;
 import pinacolada.skills.skills.base.moves.PMove_StackCustomPower;
 import pinacolada.ui.common.PCLValueEditor;
 
@@ -22,12 +22,16 @@ import java.util.ArrayList;
 public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
 {
     protected PCLValueEditor usesPerTurn;
-    protected ArrayList<EUIButton> quickAddButtons = new ArrayList<>();
-
+    protected ArrayList<EUIButton> quickAddButtons;
 
     public PCLCustomCardPowerPage(PCLCustomCardEditCardScreen screen, PSkill<?> effect, EUIHitbox hb, int index, String title, ActionT1<PSkill<?>> onUpdate)
     {
         super(screen, effect, hb, index, title, onUpdate);
+    }
+
+    protected void setupComponents(PCLCustomCardEditCardScreen screen)
+    {
+        super.setupComponents(screen);
         delayEditor.setActive(false);
         primaryConditions
                 .setItems(EUIUtils.map(PTrigger.getEligibleEffects(builder.cardColor, PTrigger.class), bc -> primaryCond != null && bc.effectID.equals(primaryCond.effectID) ? primaryCond : bc))
@@ -44,6 +48,7 @@ public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
                 .setValue(-1, false)
                 .setHasInfinite(true, true);
 
+        quickAddButtons = new ArrayList<>();
         for (int i = 0; i < screen.effectPages.size(); i++)
         {
             int finalI = i;
@@ -98,6 +103,8 @@ public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
         conditionGroup.refresh();
         modifierGroup.refresh();
         effectGroup.refresh();
+
+        repositionItems();
     }
 
     @Override

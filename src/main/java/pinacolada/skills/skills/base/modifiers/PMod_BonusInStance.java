@@ -5,6 +5,7 @@ import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Stance;
@@ -34,16 +35,16 @@ public class PMod_BonusInStance extends PMod_BonusOn<PField_Stance>
     }
 
     @Override
-    public String getConditionSampleText()
+    public String getSubText()
     {
         return PGR.core.tooltips.stance.title;
     }
 
     @Override
-    public String getSubText()
+    public String getText(boolean addPeriod)
     {
         String base = fields.getAnyStanceString();
-        return TEXT.conditions.numIf(getAmountRawString(), fields.random ? TEXT.conditions.not(base) : base);
+        return TEXT.conditions.genericConditional(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", TEXT.conditions.numIf(getAmountRawString(), fields.random ? TEXT.conditions.not(base) : base)) + PCLCoreStrings.period(addPeriod);
     }
 
     @Override

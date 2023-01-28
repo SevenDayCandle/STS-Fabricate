@@ -173,6 +173,7 @@ public class PCLCoreStrings extends PCLStrings
         public final String random = cardeditor.TEXT[59];
         public final String required = cardeditor.TEXT[60];
         public final String origins = cardeditor.TEXT[61];
+        public final String enable = cardeditor.TEXT[62];
     }
 
     public class Misc

@@ -23,7 +23,9 @@ import pinacolada.cards.base.PCLDynamicCard;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
-import pinacolada.skills.PTrigger;
+import pinacolada.skills.skills.PTrigger;
+import pinacolada.skills.skills.special.primary.PCardPrimary_DealDamage;
+import pinacolada.skills.skills.special.primary.PCardPrimary_GainBlock;
 
 import java.util.ArrayList;
 
@@ -38,7 +40,7 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
     protected static final float CARD_X = Settings.WIDTH * 0.11f;
     protected static final float CARD_Y = Settings.HEIGHT * 0.76f;
     protected static final float START_X = Settings.WIDTH * (0.24f);
-    protected static final float START_Y = Settings.HEIGHT * (0.84f);
+    protected static final float START_Y = Settings.HEIGHT * (0.93f);
     public ArrayList<PCLCardBuilder> prevBuilders;
     public ArrayList<PCLCardBuilder> tempBuilders;
     public int currentBuilder;
@@ -54,6 +56,8 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
     protected EUIButton saveButton;
     protected EUIButton undoButton;
     protected EUIToggle upgradeToggle;
+    protected PCardPrimary_DealDamage currentDamage;
+    protected PCardPrimary_GainBlock currentBlock;
     protected PCLDynamicCard previewCard;
     protected PCLCustomCardFormEditor formEditor;
     protected PCLCustomCardSlot currentSlot;
@@ -70,6 +74,8 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
         currentSlot = slot;
         tempBuilders = EUIUtils.map(currentSlot.builders, PCLCardBuilder::new);
 
+        currentDamage = getBuilder().damageEffect;
+        currentBlock = getBuilder().blockEffect;
         currentEffects.addAll(getBuilder().moves);
         while (currentEffects.size() < EFFECT_COUNT)
         {
@@ -124,6 +130,14 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
 
         pages.add(new PCLCustomCardPrimaryInfoPage(this));
         pages.add(new PCLCustomCardAttributesPage(this));
+        pages.add(new PCLCustomCardAttackPage(this, currentDamage, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), 0, PGR.core.strings.cardEditor.damage, be -> {
+            currentDamage = EUIUtils.safeCast(be, PCardPrimary_DealDamage.class);
+            modifyBuilder(e -> e.setAttackSkill(currentDamage));
+        }));
+        pages.add(new PCLCustomCardBlockPage(this, currentBlock, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), 0, PGR.core.strings.cardEditor.block, be -> {
+            currentBlock = EUIUtils.safeCast(be, PCardPrimary_GainBlock.class);
+            modifyBuilder(e -> e.setBlockSkill(currentBlock));
+        }));
         for (int i = 0; i < currentEffects.size(); i++)
         {
             int finalI = i;

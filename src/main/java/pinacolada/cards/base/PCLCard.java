@@ -67,17 +67,15 @@ import pinacolada.powers.replacement.PlayerFlightPower;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
-import pinacolada.skills.*;
+import pinacolada.skills.PSkill;
+import pinacolada.skills.Skills;
 import pinacolada.skills.skills.PSpecialCond;
 import pinacolada.skills.skills.PSpecialPowerSkill;
 import pinacolada.skills.skills.PSpecialSkill;
+import pinacolada.skills.skills.PTrigger;
 import pinacolada.skills.skills.base.moves.PMove_StackCustomPower;
-import pinacolada.skills.skills.base.traits.PTrait_Block;
-import pinacolada.skills.skills.base.traits.PTrait_BlockMultiplier;
-import pinacolada.skills.skills.base.traits.PTrait_Damage;
-import pinacolada.skills.skills.base.traits.PTrait_DamageMultiplier;
-import pinacolada.skills.skills.special.moves.PMove_DealCardDamage;
-import pinacolada.skills.skills.special.moves.PMove_GainCardBlock;
+import pinacolada.skills.skills.special.primary.PCardPrimary_DealDamage;
+import pinacolada.skills.skills.special.primary.PCardPrimary_GainBlock;
 import pinacolada.ui.combat.PowerFormulaDisplay;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
@@ -120,8 +118,8 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     public PCLAttackType attackType = PCLAttackType.Normal;
     public PCLCardSaveData auxiliaryData = new PCLCardSaveData();
     public PCLCardTarget pclTarget = PCLCardTarget.Single;
-    public PMove_DealCardDamage onDamageEffect;
-    public PMove_GainCardBlock onBlockEffect;
+    public PCardPrimary_DealDamage onDamageEffect;
+    public PCardPrimary_GainBlock onBlockEffect;
     public boolean cropPortrait;
     public boolean hovered;
     public boolean isHealModified = false;
@@ -211,7 +209,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
             int bonus = 0;
             for (int i = card.getEffects().size() - 1; i >= 1; i--)
             {
-                PSkill removed = card.tryRemove(i);
+                PSkill<?> removed = card.tryRemove(i);
                 if (removed != null)
                 {
                     bonus += (card.cost > 0 ? card.cost + 1 : 1) * (removed.isDetrimental() ? -1 : 1);
@@ -430,23 +428,28 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         refresh(null);
     }
 
-    protected PMove_DealCardDamage addDamageMove() {
-        onDamageEffect = PMove.dealCardDamage(this);
+    protected PCardPrimary_GainBlock addBlockMove() {
+        onBlockEffect = new PCardPrimary_GainBlock(this);
+        return onBlockEffect;
+    }
+
+    protected PCardPrimary_DealDamage addDamageMove() {
+        onDamageEffect = new PCardPrimary_DealDamage(this);
         return onDamageEffect;
     }
 
-    protected PMove_DealCardDamage addDamageMove(AbstractGameAction.AttackEffect attackEffect) {
-        onDamageEffect = PMove.dealCardDamage(this, attackEffect);
+    protected PCardPrimary_DealDamage addDamageMove(AbstractGameAction.AttackEffect attackEffect) {
+        onDamageEffect = new PCardPrimary_DealDamage(this, attackEffect);
         return onDamageEffect;
     }
 
-    protected PMove_DealCardDamage addDamageMove(PCLEffekseerEFX efx) {
-        onDamageEffect = PMove.dealCardDamage(this).setDamageEffect(efx);
+    protected PCardPrimary_DealDamage addDamageMove(PCLEffekseerEFX efx) {
+        onDamageEffect = new PCardPrimary_DealDamage(this).setDamageEffect(efx);
         return onDamageEffect;
     }
 
-    protected PMove_DealCardDamage addDamageMove(AbstractGameAction.AttackEffect attackEffect, PCLEffekseerEFX efx) {
-        onDamageEffect = PMove.dealCardDamage(this, attackEffect).setDamageEffect(efx);
+    protected PCardPrimary_DealDamage addDamageMove(AbstractGameAction.AttackEffect attackEffect, PCLEffekseerEFX efx) {
+        onDamageEffect = new PCardPrimary_DealDamage(this, attackEffect).setDamageEffect(efx);
         return onDamageEffect;
     }
 
@@ -683,12 +686,12 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         return upgrade;
     }
 
-    public PMove_GainCardBlock getCardBlock()
+    public PCardPrimary_GainBlock getCardBlock()
     {
         return onBlockEffect;
     }
 
-    public PMove_DealCardDamage getCardDamage()
+    public PCardPrimary_DealDamage getCardDamage()
     {
         return onDamageEffect;
     }
@@ -939,42 +942,6 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
 
     public ColoredString getSecondaryValueString() {
         return new ColoredString(heal, heal > baseHeal ? Settings.GREEN_TEXT_COLOR : heal < baseHeal ? Settings.RED_TEXT_COLOR : Settings.CREAM_COLOR);
-    }
-
-    public String getEffectStrings()
-    {
-        ArrayList<PSkill<?>> tempEffects = EUIUtils.filter(getFullEffects(), ef -> ef != null && !(ef instanceof PTrait));
-        String effectString = EUIUtils.joinStrings(EUIUtils.DOUBLE_SPLIT_LINE, EUIUtils.mapAsNonnull(tempEffects, PSkill::getText));
-        if (type != PCLEnum.CardType.SUMMON)
-        {
-            PMove_DealCardDamage damageMove = getCardDamage();
-            if (damageMove != null)
-            {
-                if (tempEffects.size() > 0 && (tempEffects.get(0).getLowestChild() instanceof PTrait_Damage || tempEffects.get(0).getLowestChild() instanceof PTrait_DamageMultiplier))
-                {
-                    effectString = damageMove.getText() + " " + effectString;
-                }
-                else
-                {
-                    effectString = damageMove.getText() + EUIUtils.DOUBLE_SPLIT_LINE + effectString;
-                }
-            }
-
-            PMove_GainCardBlock blockMove = getCardBlock();
-            if (blockMove != null)
-            {
-                if (tempEffects.size() > 0 && (tempEffects.get(0).getLowestChild() instanceof PTrait_Block || tempEffects.get(0).getLowestChild() instanceof PTrait_BlockMultiplier))
-                {
-                    effectString = blockMove.getText() + " " + effectString;
-                }
-                else
-                {
-                    effectString = blockMove.getText() + (damageMove == null ? EUIUtils.DOUBLE_SPLIT_LINE : " ") + effectString;
-                }
-            }
-        }
-
-        return effectString;
     }
 
     public String getTagTipString()
@@ -1604,8 +1571,8 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     }
 
     protected void setNumbers(int damage, int block, int magicNumber, int secondaryValue, int hitCount, int rightCount) {
-        this.baseDamage = this.damage = damage > 0 ? damage : -1;
-        this.baseBlock = this.block = block > 0 ? block : -1;
+        this.baseDamage = this.damage = damage;
+        this.baseBlock = this.block = block;
         this.baseMagicNumber = this.magicNumber = magicNumber;
         this.baseHeal = this.heal = secondaryValue;
         this.baseHitCount = this.hitCount = Math.max(1, hitCount);
@@ -1634,7 +1601,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
                 cardData.getHp(form) + cardData.getHpUpgrade(form) * timesUpgraded,
                 cardData.getHitCount(form) + cardData.getHitCountUpgrade(form) * timesUpgraded,
                 cardData.getRightCount(form) + cardData.getRightCountUpgrade(form) * timesUpgraded);
-        setMultiDamage(cardData.cardTarget == PCLCardTarget.AllEnemy || cardData.cardTarget == PCLCardTarget.All);
+        setMultiDamage(cardData.cardTarget.targetsMulti());
         setTarget(cardData.cardTarget);
         setAttackType(cardData.attackType);
 
@@ -1646,11 +1613,6 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
 
         if (!cardData.obtainableInCombat) {
             setObtainableInCombat(false);
-        }
-
-        if (baseBlock > 0)
-        {
-            this.onBlockEffect = new PMove_GainCardBlock(this);
         }
     }
 
@@ -1820,10 +1782,10 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
             heal = baseHeal;
         }
 
-        for (PSkill ef : getEffects()) {
+        for (PSkill<?> ef : getEffects()) {
             ef.displayUpgrades();
         }
-        for (PSkill ef : getPowerEffects()) {
+        for (PSkill<?> ef : getPowerEffects()) {
             ef.displayUpgrades();
         }
 

@@ -34,7 +34,7 @@ public class PMod_BonusPerOrb extends PMod_BonusPer<PField_Orb>
     }
 
     @Override
-    public String getConditionSampleText()
+    public String getSubText()
     {
         return PGR.core.tooltips.orb.title;
     }
@@ -46,7 +46,7 @@ public class PMod_BonusPerOrb extends PMod_BonusPer<PField_Orb>
     }
 
     @Override
-    public int multiplier(PCLUseInfo info)
+    public int getMultiplier(PCLUseInfo info)
     {
         return (fields.orbs.isEmpty() && AbstractDungeon.player != null ? AbstractDungeon.player.filledOrbCount() : EUIUtils.sumInt(fields.orbs, GameUtilities::getOrbCount));
     }

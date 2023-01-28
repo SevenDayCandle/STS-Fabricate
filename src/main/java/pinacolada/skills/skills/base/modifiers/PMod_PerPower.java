@@ -8,8 +8,6 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.powers.PCLPowerHelper;
-import pinacolada.skills.PMod;
-import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Power;
@@ -18,7 +16,7 @@ import pinacolada.utilities.GameUtilities;
 import java.util.List;
 
 @VisibleSkill
-public class PMod_PerPower extends PMod<PField_Power>
+public class PMod_PerPower extends PMod_Per<PField_Power>
 {
 
     public static final PSkillData<PField_Power> DATA = register(PMod_PerPower.class, PField_Power.class);
@@ -45,22 +43,22 @@ public class PMod_PerPower extends PMod<PField_Power>
     }
 
     @Override
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info)
+    public int getMultiplier(PCLUseInfo info)
     {
         List<AbstractCreature> targetList = getTargetList(info);
-        return fields.powers.isEmpty() ? be.baseAmount *
-                EUIUtils.sumInt(targetList, t -> t.powers != null ? EUIUtils.sumInt(t.powers, po -> po.type == AbstractPower.PowerType.DEBUFF ? po.amount : 0) : 0) / Math.max(1, this.amount) :
-                be.baseAmount * EUIUtils.sumInt(targetList, t -> EUIUtils.sumInt(fields.powers, po -> GameUtilities.getPowerAmount(t, po.ID))) / Math.max(1, this.amount);
-    }
-
-    @Override
-    public String getSampleText()
-    {
-        return TEXT.conditions.per(TEXT.subjects.x, TEXT.cardEditor.powers);
+        return fields.powers.isEmpty() ?
+                EUIUtils.sumInt(targetList, t -> t.powers != null ? EUIUtils.sumInt(t.powers, po -> po.type == AbstractPower.PowerType.DEBUFF ? po.amount : 0) : 0) :
+                EUIUtils.sumInt(targetList, t -> EUIUtils.sumInt(fields.powers, po -> GameUtilities.getPowerAmount(t, po.ID)));
     }
 
     @Override
     public String getSubText()
+    {
+        return TEXT.cardEditor.powers;
+    }
+
+    @Override
+    public String getConditionText()
     {
         String baseString = fields.getPowerSubjectString();
         if (amount > 1)

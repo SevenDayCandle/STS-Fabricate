@@ -5,13 +5,13 @@ import extendedui.utilities.ColoredString;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.pcl.PCLCoreStrings;
-import pinacolada.skills.PMod;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField;
+import pinacolada.skills.skills.PPassiveMod;
 
-public abstract class PMod_BonusPer<T extends PField> extends PMod<T>
+public abstract class PMod_BonusPer<T extends PField> extends PPassiveMod<T>
 {
 
     public PMod_BonusPer(PSkillData<T> data, PSkillSaveData content)
@@ -29,29 +29,21 @@ public abstract class PMod_BonusPer<T extends PField> extends PMod<T>
         super(data, PCLCardTarget.None, amount);
     }
 
-    public abstract String getConditionSampleText();
-
     public String getConditionText()
     {
-        return getConditionSampleText();
+        return getSubText();
     }
 
     @Override
     public String getSampleText()
     {
-        return TEXT.subjects.xBonus(TEXT.conditions.per(TEXT.subjects.x, getConditionSampleText()));
-    }
-
-    @Override
-    public String getSubText()
-    {
-        return TEXT.conditions.per(getAmountRawString(), getConditionText());
+        return TEXT.subjects.xBonus(TEXT.conditions.per(TEXT.subjects.x, getSubText()));
     }
 
     @Override
     public String getText(boolean addPeriod)
     {
-        return TEXT.conditions.genericConditional(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", getSubText()) + PCLCoreStrings.period(addPeriod);
+        return TEXT.conditions.genericConditional(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", TEXT.conditions.per(getAmountRawString(), getSubText())) + PCLCoreStrings.period(addPeriod);
     }
 
     @Override
@@ -68,8 +60,8 @@ public abstract class PMod_BonusPer<T extends PField> extends PMod<T>
     @Override
     public int getModifiedAmount(PSkill<?> be, PCLUseInfo info)
     {
-        return be.baseAmount + (multiplier(info) * amount);
+        return be.baseAmount + (getMultiplier(info) * amount);
     }
 
-    public abstract int multiplier(PCLUseInfo info);
+    public abstract int getMultiplier(PCLUseInfo info);
 }

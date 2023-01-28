@@ -6,10 +6,10 @@ import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.delay.DelayUse;
 import pinacolada.skills.fields.PField_Empty;
-import pinacolada.skills.skills.base.delay.PDelayEndOfTurnFirst;
-import pinacolada.skills.skills.base.delay.PDelayEndOfTurnLast;
-import pinacolada.skills.skills.base.delay.PDelayStartOfTurn;
-import pinacolada.skills.skills.base.delay.PDelayStartOfTurnPostDraw;
+import pinacolada.skills.skills.base.delay.PDelay_EndOfTurnFirst;
+import pinacolada.skills.skills.base.delay.PDelay_EndOfTurnLast;
+import pinacolada.skills.skills.base.delay.PDelay_StartOfTurn;
+import pinacolada.skills.skills.base.delay.PDelay_StartOfTurnPostDraw;
 
 public abstract class PDelay extends PSkill<PField_Empty>
 {
@@ -23,24 +23,24 @@ public abstract class PDelay extends PSkill<PField_Empty>
         return turnEndLast(0);
     }
 
-    public static PDelayEndOfTurnFirst turnEnd(int amount)
+    public static PDelay_EndOfTurnFirst turnEnd(int amount)
     {
-        return new PDelayEndOfTurnFirst(amount);
+        return new PDelay_EndOfTurnFirst(amount);
     }
 
-    public static PDelayEndOfTurnLast turnEndLast(int amount)
+    public static PDelay_EndOfTurnLast turnEndLast(int amount)
     {
-        return new PDelayEndOfTurnLast(amount);
+        return new PDelay_EndOfTurnLast(amount);
     }
 
-    public static PDelayStartOfTurn turnStart(int amount)
+    public static PDelay_StartOfTurn turnStart(int amount)
     {
-        return new PDelayStartOfTurn(amount);
+        return new PDelay_StartOfTurn(amount);
     }
 
-    public static PDelayStartOfTurnPostDraw turnStartLast(int amount)
+    public static PDelay_StartOfTurnPostDraw turnStartLast(int amount)
     {
-        return new PDelayStartOfTurnPostDraw(amount);
+        return new PDelay_StartOfTurnPostDraw(amount);
     }
 
     public PDelay(PSkillData<PField_Empty> data)

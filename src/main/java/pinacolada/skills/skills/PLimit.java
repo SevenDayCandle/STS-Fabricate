@@ -1,4 +1,4 @@
-package pinacolada.skills;
+package pinacolada.skills.skills;
 
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -8,8 +8,8 @@ import extendedui.utilities.EUIColors;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.pcl.PCLCoreStrings;
+import pinacolada.skills.*;
 import pinacolada.skills.fields.PField_Empty;
-import pinacolada.skills.skills.PActionCond;
 import pinacolada.skills.skills.base.primary.PLimit_Limited;
 import pinacolada.skills.skills.base.primary.PLimit_SemiLimited;
 import pinacolada.utilities.GameUtilities;
@@ -105,7 +105,7 @@ public abstract class PLimit extends PPrimary<PField_Empty>
     @Deprecated
     public final boolean checkChild(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
     {
-        return !(this.childEffect instanceof PCond) || this.childEffect instanceof PActionCond || ((PCond<?>) this.childEffect).checkCondition(info, isUsing, fromTrigger);
+        return !(this.childEffect instanceof PCond) || this.childEffect instanceof PActiveCond || ((PCond<?>) this.childEffect).checkCondition(info, isUsing, fromTrigger);
     }
 
     public boolean testTry(PCLUseInfo info, boolean isUsing)

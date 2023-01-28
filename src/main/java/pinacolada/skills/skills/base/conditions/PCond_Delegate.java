@@ -7,13 +7,13 @@ import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
-import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.skills.PTrigger;
 import pinacolada.skills.fields.PField_CardCategory;
+import pinacolada.skills.skills.PPassiveCond;
+import pinacolada.skills.skills.PTrigger;
 
-public abstract class PCond_Delegate extends PCond<PField_CardCategory>
+public abstract class PCond_Delegate extends PPassiveCond<PField_CardCategory>
 {
     public PCond_Delegate(PSkillData<PField_CardCategory> data)
     {

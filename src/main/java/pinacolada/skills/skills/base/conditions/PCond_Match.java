@@ -3,17 +3,17 @@ package pinacolada.skills.skills.base.conditions;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.misc.PCLUseInfo;
 import pinacolada.interfaces.subscribers.OnMatchSubscriber;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
-import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.skills.PTrigger;
 import pinacolada.skills.fields.PField_CardCategory;
+import pinacolada.skills.skills.PPassiveCond;
+import pinacolada.skills.skills.PTrigger;
 
 @VisibleSkill
-public class PCond_Match extends PCond<PField_CardCategory> implements OnMatchSubscriber
+public class PCond_Match extends PPassiveCond<PField_CardCategory> implements OnMatchSubscriber
 {
 
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_Match.class, PField_CardCategory.class, 1, 1)

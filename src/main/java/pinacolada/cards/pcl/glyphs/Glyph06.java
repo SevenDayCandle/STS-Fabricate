@@ -6,8 +6,8 @@ import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.skills.PCond;
-import pinacolada.skills.PTrigger;
 import pinacolada.skills.skills.PSpecialSkill;
+import pinacolada.skills.skills.PTrigger;
 import pinacolada.utilities.GameUtilities;
 
 public class Glyph06 extends Glyph

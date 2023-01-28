@@ -251,4 +251,17 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget>
         }
         return false;
     }
+
+    public final boolean targetsMulti()
+    {
+        switch (this)
+        {
+            case All:
+            case AllAlly:
+            case Team:
+            case AllEnemy:
+                return true;
+        }
+        return false;
+    }
 }

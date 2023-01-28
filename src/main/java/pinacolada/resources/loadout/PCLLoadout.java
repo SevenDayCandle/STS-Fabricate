@@ -22,7 +22,6 @@ import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.skills.skills.PSpecialSkill;
 import pinacolada.ui.characterSelection.PCLBaseStatEditor;
-import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -129,6 +128,24 @@ public abstract class PCLLoadout
             }
         }
         return PCLAbstractPlayerData.DEFAULT_HP;
+    }
+
+    public static int getBaseOrbs(AbstractCard.CardColor color)
+    {
+        PCLAbstractPlayerData data = PGR.getPlayerData(color);
+        if (data != null)
+        {
+            return data.baseOrbs;
+        }
+        CharSelectInfo info = getCharSelectInfo(color);
+        {
+            if (info != null)
+            {
+                return info.maxOrbs;
+            }
+        }
+        // Assume no orbs if player has no data
+        return 0;
     }
 
     private static CharSelectInfo getCharSelectInfo(AbstractCard.CardColor color)
@@ -301,7 +318,7 @@ public abstract class PCLLoadout
     // PCL characters use summons instead of orbs
     public int getOrbSlots()
     {
-        return GameUtilities.isPCLCardColor(color) ? 0 : PCLBaseStatEditor.StatType.Energy.getAmount(this, getPreset());
+        return getPlayerData().useSummons ? 0 : PCLBaseStatEditor.StatType.Energy.getAmount(this, getPreset());
     }
 
     public int getPotionSlots()

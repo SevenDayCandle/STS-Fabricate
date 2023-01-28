@@ -62,12 +62,12 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
     protected PCLCustomCardUpgradableEditor valueEditor;
     protected PCLCustomCardUpgradableEditor extraEditor;
     protected EUIHitbox hb;
-    protected PCLCustomCardEffectPage.EffectEditorGroup<T> group;
+    protected EffectEditorGroup<T> group;
     protected int index;
     private T lastEffect;
     private float additionalHeight;
 
-    public PCLCustomCardEffectEditor(PCLCustomCardEffectPage.EffectEditorGroup<T> group, EUIHitbox hb, int index)
+    public PCLCustomCardEffectEditor(EffectEditorGroup<T> group, EUIHitbox hb, int index)
     {
         this.group = group;
         this.editor = group.editor;
@@ -225,7 +225,7 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
 
     protected List<T> getEffects()
     {
-        return EUIUtils.map(group.getEffects(),
+        return EUIUtils.map(group.listFunc.invoke(),
                 bc -> getEffectAt() != null && bc.effectID.equals(getEffectAt().effectID) ? getEffectAt() : (T) bc.scanForTips());
     }
 

@@ -13,13 +13,13 @@ import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.pcl.PCLCoreStrings;
-import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
+import pinacolada.skills.skills.PPassiveCond;
 import pinacolada.utilities.ListSelection;
 
-public abstract class PCond_DoTo extends PCond<PField_CardCategory>
+public abstract class PCond_DoTo extends PPassiveCond<PField_CardCategory>
 {
     public PCond_DoTo(PSkillData<PField_CardCategory> data, PSkillSaveData content)
     {

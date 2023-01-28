@@ -14,7 +14,7 @@ import extendedui.utilities.ColoredString;
 import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
-import pinacolada.skills.PTrigger;
+import pinacolada.skills.skills.PTrigger;
 import pinacolada.skills.skills.base.primary.PTrigger_Interactable;
 import pinacolada.utilities.PCLRenderHelpers;
 

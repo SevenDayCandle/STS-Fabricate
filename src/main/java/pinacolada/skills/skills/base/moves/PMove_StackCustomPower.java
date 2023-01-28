@@ -4,16 +4,16 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.misc.PCLUseInfo;
 import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.markers.SummonOnlyMove;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.powers.PSkillPower;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.skills.PTrigger;
 import pinacolada.skills.fields.PField_CustomPower;
+import pinacolada.skills.skills.PTrigger;
 
 import java.util.Arrays;
 import java.util.List;

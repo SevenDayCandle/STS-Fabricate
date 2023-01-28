@@ -36,7 +36,7 @@ public abstract class PMod_BonusOnHas extends PMod_BonusOn<PField_CardCategory>
     }
 
     @Override
-    public String getConditionSampleText()
+    public String getSubText()
     {
         return TEXT.conditions.ifX(PCLCoreStrings.past(getActionTooltip()));
     }

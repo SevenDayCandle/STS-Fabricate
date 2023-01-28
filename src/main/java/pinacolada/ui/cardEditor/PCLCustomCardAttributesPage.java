@@ -2,7 +2,6 @@ package pinacolada.ui.cardEditor;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.screens.compendium.CardLibSortHeader;
@@ -12,19 +11,18 @@ import extendedui.ui.controls.EUIDropdown;
 import extendedui.ui.controls.EUILabel;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
-import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCardBuilder;
 import pinacolada.cards.base.fields.PCLAffinity;
-import pinacolada.cards.base.fields.PCLAttackType;
 import pinacolada.cards.base.fields.PCLCardTagInfo;
 import pinacolada.cards.base.tags.PCLCardTag;
-import pinacolada.effects.AttackEffects;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static pinacolada.ui.cardEditor.PCLCustomCardEditCardScreen.START_Y;
 
 public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
 {
@@ -41,8 +39,6 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
     protected PCLCustomCardEditCardScreen effect;
     protected EUILabel header;
     protected EUIDropdown<PCLCardTagInfo> tagsDropdown;
-    protected EUIDropdown<PCLAttackType> attackTypeDropdown;
-    protected EUIDropdown<AbstractGameAction.AttackEffect> attackEffectDropdown;
     protected PCLCustomCardUpgradableEditor costEditor;
     protected PCLCustomCardUpgradableEditor damageEditor;
     protected PCLCustomCardUpgradableEditor blockEditor;
@@ -64,35 +60,11 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
         }
 
         this.header = new EUILabel(EUIFontHelper.cardtitlefontSmall,
-                new EUIHitbox(screenW(0.5f), screenH(0.93f), MENU_WIDTH, MENU_HEIGHT))
+                new EUIHitbox(screenW(0.5f), START_Y, MENU_WIDTH, MENU_HEIGHT))
                 .setAlignment(0.5f, 0.0f, false)
                 .setFont(EUIFontHelper.cardtitlefontLarge, 0.8f).setColor(Color.LIGHT_GRAY)
                 .setLabel(PGR.core.strings.cardEditor.attributes);
 
-        attackTypeDropdown = new EUIDropdown<PCLAttackType>(new EUIHitbox(START_X, screenH(0.72f), MENU_WIDTH, MENU_HEIGHT)
-                , item -> StringUtils.capitalize(item.toString().toLowerCase()))
-                .setOnChange(targets -> {
-                    if (!targets.isEmpty())
-                    {
-                        effect.modifyBuilder(e -> e.setAttackType(targets.get(0)));
-                    }
-                })
-                .setLabelFunctionForOption(c -> c.getTooltip() != null ? c.getTooltip().title : "", false)
-                .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cardEditor.attackType)
-                .setCanAutosizeButton(true)
-                .setItems(EUIUtils.filter(PCLAttackType.values(), v -> v.getTooltip() != null));
-        attackEffectDropdown = new EUIDropdown<AbstractGameAction.AttackEffect>(new EUIHitbox(screenW(0.4f), screenH(0.72f), MENU_WIDTH, MENU_HEIGHT)
-                , item -> StringUtils.capitalize(item.toString().toLowerCase()))
-                .setOnChange(targets -> {
-                    if (!targets.isEmpty())
-                    {
-                        effect.modifyBuilder(e -> e.setAttackEffect(targets.get(0)));
-                    }
-                })
-                .setLabelFunctionForOption(Enum::name, false)
-                .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cardEditor.attackEffect)
-                .setCanAutosizeButton(true)
-                .setItems(AttackEffects.keys());
         tagsDropdown = new EUIDropdown<PCLCardTagInfo>(new EUIHitbox(START_X, screenH(0.6f), MENU_WIDTH * 1.2f, MENU_HEIGHT))
                 .setOnChange(tags -> effect.modifyBuilder(e -> e.setTags(tags)))
                 .setLabelFunctionForOption(item -> item.tag.getTip().getTitleOrIcon() + " " + item.tag.getTip().title, true)
@@ -182,8 +154,6 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
         hitCountEditor.setValue(builder.getHitCount(0), builder.getHitCountUpgrade(0));
         rightCountEditor.setValue(builder.getRightCount(0), builder.getRightCountUpgrade(0));
         tagsDropdown.setSelection(EUIUtils.filter(builder.tags.values(), i -> i.get(0) != 0 || i.getUpgrade(0) != 0), false);
-        attackTypeDropdown.setSelection(builder.attackType, false);
-        attackEffectDropdown.setSelection(builder.attackEffect, false);
         magicNumberEditor.setValue(builder.getMagicNumber(0), builder.getMagicNumberUpgrade(0)).setActive(isSummon);
         hpEditor.setValue(builder.getHp(0), builder.getHpUpgrade(0)).setActive(isSummon);
 
@@ -227,8 +197,6 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
         hitCountEditor.tryUpdate();
         rightCountEditor.tryUpdate();
         tagsDropdown.tryUpdate();
-        attackTypeDropdown.tryUpdate();
-        attackEffectDropdown.tryUpdate();
         for (PCLCustomCardAffinityValueEditor aEditor : affinityEditors)
         {
             aEditor.tryUpdate();
@@ -254,8 +222,6 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
         hpEditor.tryRender(sb);
         hitCountEditor.tryRender(sb);
         rightCountEditor.tryRender(sb);
-        attackTypeDropdown.tryRender(sb);
-        attackEffectDropdown.tryRender(sb);
         tagsDropdown.tryRender(sb);
     }
 }

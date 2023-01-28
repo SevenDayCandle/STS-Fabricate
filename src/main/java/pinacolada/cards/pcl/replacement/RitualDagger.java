@@ -10,7 +10,7 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.effects.PCLEffekseerEFX;
 import pinacolada.powers.PCLPowerHelper;
-import pinacolada.skills.PLimit;
+import pinacolada.skills.skills.PLimit;
 import pinacolada.skills.skills.base.conditions.PCond_Fatal;
 import pinacolada.skills.skills.base.moves.PMove_RemovePower;
 import pinacolada.skills.skills.special.moves.PMove_PermanentUpgrade;

@@ -6,15 +6,15 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
-import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
+import pinacolada.skills.skills.PPassiveCond;
 
 import java.util.List;
 
 @VisibleSkill
-public class PCond_HP extends PCond<PField_Not>
+public class PCond_HP extends PPassiveCond<PField_Not>
 {
     public static final PSkillData<PField_Not> DATA = register(PCond_HP.class, PField_Not.class)
             .selfTarget();

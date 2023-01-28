@@ -8,17 +8,17 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
-import pinacolada.skills.PLimit;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
-import pinacolada.skills.skills.PActionCond;
+import pinacolada.skills.skills.PActiveCond;
+import pinacolada.skills.skills.PLimit;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.List;
 
 @VisibleSkill
-public class PCond_Fatal extends PActionCond<PField_Not>
+public class PCond_Fatal extends PActiveCond<PField_Not>
 {
     public static final PSkillData<PField_Not> DATA = register(PCond_Fatal.class, PField_Not.class, 1, 1)
             .selfTarget();

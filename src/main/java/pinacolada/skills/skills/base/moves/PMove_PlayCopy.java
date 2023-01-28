@@ -13,8 +13,8 @@ import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.skills.PTrigger;
 import pinacolada.skills.fields.PField_CardID;
+import pinacolada.skills.skills.PTrigger;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RotatingList;
 

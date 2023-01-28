@@ -6,19 +6,19 @@ import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.misc.PCLUseInfo;
 import pinacolada.interfaces.subscribers.OnApplyPowerSubscriber;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.powers.PCLPowerHelper;
-import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Power;
+import pinacolada.skills.skills.PPassiveCond;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.List;
 
 @VisibleSkill
-public class PCond_CheckPower extends PCond<PField_Power> implements OnApplyPowerSubscriber
+public class PCond_CheckPower extends PPassiveCond<PField_Power> implements OnApplyPowerSubscriber
 {
     public static final PSkillData<PField_Power> DATA = register(PCond_CheckPower.class, PField_Power.class);
 

@@ -29,7 +29,7 @@ public class PMod_BonusOnMatch extends PMod_BonusOn<PField_Empty>
     }
 
     @Override
-    public String getConditionSampleText()
+    public String getSubText()
     {
         return PGR.core.tooltips.match.title;
     }

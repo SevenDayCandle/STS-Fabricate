@@ -451,7 +451,8 @@
 												"Export CSV",
 												"Random",
 												"Required",
-												"Selection"
+												"Selection",
+												"Enable"
 								]
 				},
 				"pcl:CardEditorTutorial": {

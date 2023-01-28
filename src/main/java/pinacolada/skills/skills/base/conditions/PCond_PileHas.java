@@ -6,13 +6,13 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
-import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
+import pinacolada.skills.skills.PPassiveCond;
 
 @VisibleSkill
-public class PCond_PileHas extends PCond<PField_CardCategory>
+public class PCond_PileHas extends PPassiveCond<PField_CardCategory>
 {
 
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_PileHas.class, PField_CardCategory.class)

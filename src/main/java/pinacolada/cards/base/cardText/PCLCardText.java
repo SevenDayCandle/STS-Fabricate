@@ -132,8 +132,9 @@ public class PCLCardText
     {
         if (card.type == PCLEnum.CardType.SUMMON)
         {
-            renderAttribute(sb, getDamageIcon(), card.getDamageString(), card.hitCount > 1 ? ("x" + card.hitCount) : null, card.pclTarget != null ? card.pclTarget.getTag() : null, 1f, true);
-            renderAttribute(sb, getHPIcon(), card.getSecondaryValueString(), "/" + card.baseHeal, null, 0.7f, false);
+            renderAttribute(sb, getHPIcon(), card.getSecondaryValueString(), "/" + card.baseHeal, null, 0.7f, true);
+            // TODO add priority attribute indicator
+            //renderAttribute(sb, getDamageIcon(), card.getDamageString(), card.hitCount > 1 ? ("x" + card.hitCount) : null, card.pclTarget != null ? card.pclTarget.getTag() : null, 1f, false);
         }
     }
 

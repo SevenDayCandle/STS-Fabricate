@@ -78,14 +78,6 @@ public class CardRewardScreenPatches
         public static void postfix(CardRewardScreen __instance, ArrayList<AbstractCard> cards, RewardItem rItem, String header)
         {
             screen.open(cards, rItem, header);
-
-/*            for (AbstractCard c : cards)
-            {
-                if (c instanceof FoolCard_UltraRare)
-                {
-                    FoolCard_UltraRare.MarkAsSeen(c.cardID);
-                }
-            }*/
         }
     }
 

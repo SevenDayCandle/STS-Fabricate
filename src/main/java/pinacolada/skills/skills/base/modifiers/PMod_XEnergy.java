@@ -5,15 +5,16 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
-import pinacolada.skills.PMod;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
+import pinacolada.skills.skills.PPassiveMod;
 import pinacolada.utilities.GameUtilities;
 
+// While paying X energy is active, the effect can be determined before you actually pay the power
 @VisibleSkill
-public class PMod_XEnergy extends PMod<PField_Empty>
+public class PMod_XEnergy extends PPassiveMod<PField_Empty>
 {
     public static final PSkillData<PField_Empty> DATA = register(PMod_XEnergy.class, PField_Empty.class)
             .setAmounts(-DEFAULT_MAX, DEFAULT_MAX)

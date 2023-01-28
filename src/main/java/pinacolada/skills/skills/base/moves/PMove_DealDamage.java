@@ -10,9 +10,9 @@ import pinacolada.actions.damage.DealDamage;
 import pinacolada.actions.damage.DealDamageToAll;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.misc.PCLUseInfo;
 import pinacolada.effects.PCLEffekseerEFX;
 import pinacolada.effects.VFX;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
@@ -65,13 +65,13 @@ public class PMove_DealDamage extends PMove<PField_Empty>
     @Override
     public boolean isDetrimental()
     {
-        return target == PCLCardTarget.None || target == PCLCardTarget.Self || target == PCLCardTarget.All;
+        return target.targetsSelf();
     }
 
     @Override
     public void use(PCLUseInfo info)
     {
-        if (target == PCLCardTarget.AllEnemy || target == PCLCardTarget.All)
+        if (target.targetsMulti())
         {
             int[] damage = DamageInfo.createDamageMatrix(amount, true, false);
             DealDamageToAll action = getActions().dealDamageToAll(damage, damageType, attackEffect);

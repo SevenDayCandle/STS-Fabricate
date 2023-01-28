@@ -5,13 +5,13 @@ import extendedui.utilities.ColoredString;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.pcl.PCLCoreStrings;
-import pinacolada.skills.PMod;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField;
+import pinacolada.skills.skills.PPassiveMod;
 
-public abstract class PMod_BonusOn<T extends PField> extends PMod<T>
+public abstract class PMod_BonusOn<T extends PField> extends PPassiveMod<T>
 {
 
     public PMod_BonusOn(PSkillData<T> data, PSkillSaveData content)
@@ -34,29 +34,21 @@ public abstract class PMod_BonusOn<T extends PField> extends PMod<T>
         super(data, PCLCardTarget.None, amount, extra);
     }
 
-    public abstract String getConditionSampleText();
-
     public String getConditionText()
     {
-        return getConditionSampleText();
+        return getSubText();
     }
 
     @Override
     public String getSampleText()
     {
-        return TEXT.conditions.numIf(TEXT.subjects.x, getConditionSampleText());
-    }
-
-    @Override
-    public String getSubText()
-    {
-        return TEXT.conditions.numIf(getAmountRawString(), getConditionText());
+        return TEXT.conditions.numIf(TEXT.subjects.x, getSubText());
     }
 
     @Override
     public String getText(boolean addPeriod)
     {
-        return TEXT.conditions.genericConditional(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", getSubText()) + PCLCoreStrings.period(addPeriod);
+        return TEXT.conditions.genericConditional(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", TEXT.conditions.numIf(getAmountRawString(), getConditionText())) + PCLCoreStrings.period(addPeriod);
     }
 
     @Override

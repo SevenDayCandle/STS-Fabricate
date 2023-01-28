@@ -7,13 +7,13 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.subscribers.OnLoseHPSubscriber;
 import pinacolada.misc.PCLUseInfo;
-import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
+import pinacolada.skills.skills.PPassiveCond;
 
 @VisibleSkill
-public class PCond_TakeDamage extends PCond<PField_Empty> implements OnLoseHPSubscriber
+public class PCond_TakeDamage extends PPassiveCond<PField_Empty> implements OnLoseHPSubscriber
 {
     public static final PSkillData<PField_Empty> DATA = register(PCond_TakeDamage.class, PField_Empty.class)
             .selfTarget();

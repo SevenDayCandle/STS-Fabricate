@@ -4,13 +4,13 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
-import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
+import pinacolada.skills.skills.PPassiveCond;
 
 @VisibleSkill
-public class PCond_Starter extends PCond<PField_Not>
+public class PCond_Starter extends PPassiveCond<PField_Not>
 {
 
     public static final PSkillData<PField_Not> DATA = register(PCond_Starter.class, PField_Not.class, 1, 1)

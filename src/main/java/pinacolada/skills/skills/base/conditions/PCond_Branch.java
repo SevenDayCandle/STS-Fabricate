@@ -4,15 +4,15 @@ import extendedui.EUIUtils;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.misc.PCLUseInfo;
-import pinacolada.skills.PCond;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField;
+import pinacolada.skills.skills.PPassiveCond;
 
 import java.util.ArrayList;
 
-public abstract class PCond_Branch<T extends PField, U> extends PCond<T>
+public abstract class PCond_Branch<T extends PField, U> extends PPassiveCond<T>
 {
 
     public PCond_Branch(PSkillData<T> data, PSkillSaveData content)

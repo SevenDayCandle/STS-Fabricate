@@ -69,6 +69,8 @@ public class PCLCoreImages extends PCLImages
     public final TextureCache edit = new TextureCache("images/pcl/ui/topPanel/Edit.png");
     public final TextureCache editorPrimary = new TextureCache("images/pcl/ui/topPanel/EditorPrimary.png");
     public final TextureCache editorAttribute = new TextureCache("images/pcl/ui/topPanel/EditorAttribute.png");
+    public final TextureCache editorAttack = new TextureCache("images/pcl/ui/topPanel/EditorAttack.png");
+    public final TextureCache editorBlock = new TextureCache("images/pcl/ui/topPanel/EditorBlock.png");
     public final TextureCache editorEffect = new TextureCache("images/pcl/ui/topPanel/EditorEffect.png");
     public final TextureCache editorPower = new TextureCache("images/pcl/ui/topPanel/EditorPower.png");
     public final TextureCache info = new TextureCache("images/pcl/ui/topPanel/Info.png");

@@ -5,14 +5,14 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.resources.PGR;
-import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Power;
+import pinacolada.skills.skills.PPassiveCond;
 import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
-public class PCond_PayPower extends PCond<PField_Power>
+public class PCond_PayPower extends PPassiveCond<PField_Power>
 {
     public static final PSkillData<PField_Power> DATA = register(PCond_PayPower.class, PField_Power.class)
             .selfTarget();

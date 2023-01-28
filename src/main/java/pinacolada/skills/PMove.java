@@ -14,7 +14,6 @@ import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.skills.base.moves.*;
-import pinacolada.skills.skills.special.moves.PMove_DealCardDamage;
 import pinacolada.skills.skills.special.moves.PMove_Stun;
 import pinacolada.stances.PCLStanceHelper;
 
@@ -137,16 +136,6 @@ public abstract class PMove<T extends PField> extends PSkill<T>
     public static PMove_Cycle cycleRandom(int amount)
     {
         return (PMove_Cycle) new PMove_Cycle(amount).edit(f -> f.setRandom());
-    }
-
-    public static PMove_DealCardDamage dealCardDamage(PCLCard card)
-    {
-        return dealCardDamage(card, AbstractGameAction.AttackEffect.NONE);
-    }
-
-    public static PMove_DealCardDamage dealCardDamage(PCLCard card, AbstractGameAction.AttackEffect attackEffect)
-    {
-        return new PMove_DealCardDamage(card, attackEffect);
     }
 
     public static PMove_DealDamage dealDamage(int amount)

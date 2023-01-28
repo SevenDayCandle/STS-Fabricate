@@ -5,8 +5,8 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.skills.PTrigger;
 import pinacolada.skills.fields.PField_Not;
+import pinacolada.skills.skills.PTrigger;
 
 @VisibleSkill
 public class PTrigger_Interactable extends PTrigger

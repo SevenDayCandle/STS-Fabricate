@@ -29,8 +29,8 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardSelection;
-import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.markers.PMultiBase;
@@ -44,6 +44,7 @@ import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.skills.PMultiSkill;
+import pinacolada.skills.skills.PTrigger;
 import pinacolada.skills.skills.base.primary.PTrigger_Interactable;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RotatingList;
@@ -1214,6 +1215,13 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return this;
     }
 
+    public PSkill<T> setChain(PSkill<?> effect, PSkill<?>... effects)
+    {
+        this.childEffect = PSkill.chain(effect, effects);
+        this.childEffect.parent = this;
+        return this;
+    }
+
     public PSkill<T> setChild(PSkill<?> effect)
     {
         this.childEffect = effect;
@@ -1276,10 +1284,6 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         this.baseAmount = getAmountBaseFromCard();
         this.extra = getExtraFromCard();
         this.baseExtra = getExtraBaseFromCard();
-        if (this.childEffect != null)
-        {
-            childEffect.setSource(card, valueSource, extraSource);
-        }
         return this;
     }
 

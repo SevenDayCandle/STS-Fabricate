@@ -6,8 +6,8 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.PTrait;
-import pinacolada.skills.PTrigger;
 import pinacolada.skills.fields.PField_CardTarget;
+import pinacolada.skills.skills.PTrigger;
 
 // Only used for augments
 public class PTrait_CardTarget extends PTrait<PField_CardTarget>

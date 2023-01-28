@@ -10,21 +10,21 @@ import pinacolada.skills.delay.DelayUse;
 import pinacolada.skills.fields.PField_Empty;
 
 @VisibleSkill
-public class PDelayStartOfTurn extends PDelay
+public class PDelay_StartOfTurnPostDraw extends PDelay
 {
-    public static final PSkillData<PField_Empty> DATA = register(PDelayStartOfTurn.class, PField_Empty.class, 0, DEFAULT_MAX);
+    public static final PSkillData<PField_Empty> DATA = register(PDelay_StartOfTurnPostDraw.class, PField_Empty.class, 0, DEFAULT_MAX);
 
-    public PDelayStartOfTurn()
+    public PDelay_StartOfTurnPostDraw()
     {
         super(DATA);
     }
 
-    public PDelayStartOfTurn(PSkillSaveData content)
+    public PDelay_StartOfTurnPostDraw(PSkillSaveData content)
     {
         super(DATA, content);
     }
 
-    public PDelayStartOfTurn(int amount)
+    public PDelay_StartOfTurnPostDraw(int amount)
     {
         super(DATA, amount);
     }
@@ -32,6 +32,6 @@ public class PDelayStartOfTurn extends PDelay
     @Override
     public DelayUse getDelayUse(PCLUseInfo info, ActionT1<PCLUseInfo> childAction)
     {
-        return DelayUse.turnStart(amount, info, childAction);
+        return DelayUse.turnStartLast(amount, info, childAction);
     }
 }

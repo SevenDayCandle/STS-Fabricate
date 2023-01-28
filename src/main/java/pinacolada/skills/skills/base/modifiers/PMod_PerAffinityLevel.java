@@ -4,18 +4,15 @@ import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLAffinity;
-import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
-import pinacolada.skills.PMod;
-import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Affinity;
 import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
-public class PMod_PerAffinityLevel extends PMod<PField_Affinity>
+public class PMod_PerAffinityLevel extends PMod_Per<PField_Affinity>
 {
     public static final PSkillData<PField_Affinity> DATA = register(PMod_PerAffinityLevel.class, PField_Affinity.class)
             .pclOnly()
@@ -33,26 +30,26 @@ public class PMod_PerAffinityLevel extends PMod<PField_Affinity>
 
     public PMod_PerAffinityLevel(int amount, PCLAffinity... affinities)
     {
-        super(DATA, PCLCardTarget.None, amount);
+        super(DATA, amount);
         fields.setAffinity(affinities);
     }
 
     @Override
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info)
+    public int getMultiplier(PCLUseInfo info)
     {
-        return be.baseAmount * EUIUtils.sumInt(fields.affinities, GameUtilities::getPCLAffinityLevel) / Math.max(1, this.amount);
+        return EUIUtils.sumInt(fields.affinities, GameUtilities::getPCLAffinityLevel);
     }
 
     @Override
-    public String getSampleText()
+    public String getConditionText()
     {
-        return TEXT.conditions.per(TEXT.subjects.x, PGR.core.tooltips.level.title);
+        return this.amount <= 1 ? EUIRM.strings.adjNoun(fields.getAffinityLevelAndOrString(), PGR.core.tooltips.level.title) :
+                EUIRM.strings.numAdjNoun(getAmountRawString(), fields.getAffinityLevelAndOrString(), PGR.core.tooltips.level.title);
     }
 
     @Override
     public String getSubText()
     {
-        return this.amount <= 1 ? EUIRM.strings.adjNoun(fields.getAffinityLevelAndOrString(), PGR.core.tooltips.level.title) :
-                EUIRM.strings.numAdjNoun(getAmountRawString(), fields.getAffinityLevelAndOrString(), PGR.core.tooltips.level.title);
+        return PGR.core.tooltips.level.title;
     }
 }

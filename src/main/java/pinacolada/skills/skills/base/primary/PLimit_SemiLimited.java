@@ -3,10 +3,10 @@ package pinacolada.skills.skills.base.primary;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
-import pinacolada.skills.PLimit;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
+import pinacolada.skills.skills.PLimit;
 
 @VisibleSkill
 public class PLimit_SemiLimited extends PLimit

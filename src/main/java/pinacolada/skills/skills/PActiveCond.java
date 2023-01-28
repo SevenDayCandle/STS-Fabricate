@@ -7,21 +7,27 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField;
 
-public abstract class PActionCond<T extends PField> extends PCond<T>
+// Conds where the use check must happen in the use action
+public abstract class PActiveCond<T extends PField> extends PCond<T>
 {
-    public PActionCond(PSkillData<T> data, PSkillSaveData content)
+    public PActiveCond(PSkillData<T> data, PSkillSaveData content)
     {
         super(data, content);
     }
 
-    public PActionCond(PSkillData<T> data)
+    public PActiveCond(PSkillData<T> data)
     {
         super(data);
     }
 
-    public PActionCond(PSkillData<T> data, PCLCardTarget target, int amount)
+    public PActiveCond(PSkillData<T> data, PCLCardTarget target, int amount)
     {
         super(data, target, amount);
+    }
+
+    public PActiveCond(PSkillData<T> data, PCLCardTarget target, int amount, int extra)
+    {
+        super(data, target, amount, extra);
     }
 
     // Use check is handled in use action

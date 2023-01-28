@@ -2,7 +2,6 @@ package pinacolada.cards.base;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.google.gson.reflect.TypeToken;
-import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.localization.CardStrings;
@@ -15,7 +14,9 @@ import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.skills.PSkill;
-import pinacolada.skills.PTrigger;
+import pinacolada.skills.skills.PTrigger;
+import pinacolada.skills.skills.special.primary.PCardPrimary_DealDamage;
+import pinacolada.skills.skills.special.primary.PCardPrimary_GainBlock;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,11 +29,12 @@ public class PCLCardBuilder extends PCLCardData
     public final HashMap<Settings.GameLanguage, CardStrings> languageMap = new HashMap<>();
     public final ArrayList<PSkill<?>> moves = new ArrayList<>();
     public final ArrayList<PTrigger> powers = new ArrayList<>();
-    public AbstractGameAction.AttackEffect attackEffect = AbstractGameAction.AttackEffect.NONE;
     public ColoredTexture portraitForeground;
     public ColoredTexture portraitImage;
     public List<CardTagItem> extraTags = new ArrayList<>();
     public PCLCard source;
+    public PCardPrimary_DealDamage damageEffect;
+    public PCardPrimary_GainBlock blockEffect;
     public TextureAtlas.AtlasRegion fakePortrait;
     public boolean showTypeText = true;
 
@@ -107,6 +109,14 @@ public class PCLCardBuilder extends PCLCardData
         setLanguageMap(original.languageMap);
         setPSkill(original.moves, true, true);
         setPPower(original.powers, true, true);
+        if (original.damageEffect != null)
+        {
+            setAttackSkill(original.damageEffect.makeCopy());
+        }
+        if (original.blockEffect != null)
+        {
+            setBlockSkill(original.blockEffect.makeCopy());
+        }
     }
 
     public PCLCardBuilder(PCLCustomCardSlot data)
@@ -204,13 +214,6 @@ public class PCLCardBuilder extends PCLCardData
         return this;
     }
 
-    public PCLCardBuilder setAttackEffect(AbstractGameAction.AttackEffect attackEffect)
-    {
-        this.attackEffect = attackEffect;
-
-        return this;
-    }
-
     public PCLCardBuilder setAttackType(PCLAttackType attackType)
     {
         this.attackType = attackType;
@@ -262,6 +265,20 @@ public class PCLCardBuilder extends PCLCardData
     public PCLCardBuilder setName(String name)
     {
         this.strings.NAME = name;
+
+        return this;
+    }
+
+    public PCLCardBuilder setAttackSkill(PCardPrimary_DealDamage damageEffect)
+    {
+        this.damageEffect = damageEffect;
+
+        return this;
+    }
+
+    public PCLCardBuilder setBlockSkill(PCardPrimary_GainBlock blockEffect)
+    {
+        this.blockEffect = blockEffect;
 
         return this;
     }

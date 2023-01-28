@@ -3,16 +3,16 @@ package pinacolada.skills.skills.base.modifiers;
 import extendedui.interfaces.delegates.ActionT0;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.misc.PCLUseInfo;
 import pinacolada.interfaces.markers.PMultiBase;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.pcl.PCLCoreStrings;
-import pinacolada.skills.PMod;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardGeneric;
+import pinacolada.skills.skills.PActiveMod;
 
-public abstract class PMod_ChangeGroup extends PMod<PField_CardGeneric>
+public abstract class PMod_ChangeGroup extends PActiveMod<PField_CardGeneric>
 {
 
     public PMod_ChangeGroup(PSkillData<PField_CardGeneric> data, PSkillSaveData content)
@@ -89,7 +89,7 @@ public abstract class PMod_ChangeGroup extends PMod<PField_CardGeneric>
         {
             if (this.childEffect instanceof PMultiBase)
             {
-                for (PSkill ce : ((PMultiBase<?>) this.childEffect).getSubEffects())
+                for (PSkill<?> ce : ((PMultiBase<?>) this.childEffect).getSubEffects())
                 {
                     if (ce.fields instanceof PField_CardGeneric)
                     {
@@ -97,7 +97,7 @@ public abstract class PMod_ChangeGroup extends PMod<PField_CardGeneric>
                     }
                 }
                 callback.invoke();
-                for (PSkill ce : ((PMultiBase<?>) this.childEffect).getSubEffects())
+                for (PSkill<?> ce : ((PMultiBase<?>) this.childEffect).getSubEffects())
                 {
                     if (ce.fields instanceof PField_CardGeneric)
                     {

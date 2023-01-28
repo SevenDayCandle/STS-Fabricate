@@ -6,17 +6,17 @@ import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.misc.PCLUseInfo;
 import pinacolada.interfaces.subscribers.OnOrbEvokeSubscriber;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.orbs.PCLOrbHelper;
-import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Orb;
+import pinacolada.skills.skills.PPassiveCond;
 import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
-public class PCond_EvokeOrb extends PCond<PField_Orb> implements OnOrbEvokeSubscriber
+public class PCond_EvokeOrb extends PPassiveCond<PField_Orb> implements OnOrbEvokeSubscriber
 {
     public static final PSkillData<PField_Orb> DATA = register(PCond_EvokeOrb.class, PField_Orb.class)
             .selfTarget();
