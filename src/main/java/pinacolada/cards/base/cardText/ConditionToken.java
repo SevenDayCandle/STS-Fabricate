@@ -7,22 +7,23 @@ import extendedui.EUI;
 import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.ColoredString;
+import pinacolada.cards.base.PCLDynamicCard;
 import pinacolada.skills.PSkill;
 
 public class ConditionToken extends PCLTextToken
 {
     public static final char CONDITION_TOKEN = '║';
     private static final PCLTextParser internalParser = new PCLTextParser(false);
-    private final PSkill move;
+    private final PSkill<?> move;
     private final ColoredString coloredString;
     private final Color originalColor;
 
-    private ConditionToken(PSkill move, String text)
+    private ConditionToken(PSkill<?> move, String text)
     {
         this(move, text, Settings.CREAM_COLOR);
     }
 
-    private ConditionToken(PSkill move, String text, Color originalColor)
+    private ConditionToken(PSkill<?> move, String text, Color originalColor)
     {
         super(PCLTextTokenType.Text, text);
 
@@ -35,7 +36,11 @@ public class ConditionToken extends PCLTextToken
     {
         if (parser.character == CONDITION_TOKEN && parser.compareNext(2, CONDITION_TOKEN))
         {
-            PSkill move = parser.card != null ? parser.card.getSubEffect(parser.nextCharacter(1)) : null;
+            PSkill<?> move = parser.card != null ? parser.card.getSubEffect(parser.nextCharacter(1)) : null;
+            if (parser.card instanceof PCLDynamicCard)
+            {
+                EUIUtils.logWarning(parser.card, "WTF");
+            }
 
             if (move != null)
             {

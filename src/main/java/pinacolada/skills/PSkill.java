@@ -1266,7 +1266,17 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
 
     public PSkill<T> setSource(PointerProvider card)
     {
-        return setSource(card, amountSource);
+        this.source = card;
+        this.sourceCard = EUIUtils.safeCast(card, AbstractCard.class);
+        this.amount = getAmountFromCard();
+        this.baseAmount = getAmountBaseFromCard();
+        this.extra = getExtraFromCard();
+        this.baseExtra = getExtraBaseFromCard();
+        if (this.childEffect != null)
+        {
+            this.childEffect.setSource(card);
+        }
+        return this;
     }
 
     public PSkill<T> setSource(PointerProvider card, PCLCardValueSource valueSource)
@@ -1276,15 +1286,9 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
 
     public PSkill<T> setSource(PointerProvider card, PCLCardValueSource valueSource, PCLCardValueSource extraSource)
     {
-        this.source = card;
-        this.sourceCard = EUIUtils.safeCast(card, AbstractCard.class);
         this.amountSource = valueSource;
         this.extraSource = extraSource;
-        this.amount = getAmountFromCard();
-        this.baseAmount = getAmountBaseFromCard();
-        this.extra = getExtraFromCard();
-        this.baseExtra = getExtraBaseFromCard();
-        return this;
+        return setSource(card);
     }
 
     public PSkill<T> setAmountSource(PCLCardValueSource valueSource)

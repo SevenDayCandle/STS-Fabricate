@@ -10,9 +10,9 @@ import extendedui.ui.tooltips.EUICardPreview;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.misc.PCLUseInfo;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.interfaces.markers.PointerProvider;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PCond;
@@ -197,29 +197,6 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         for (PSkill<?> effect : effects)
         {
             effect.setSource(card);
-        }
-        return this;
-    }
-
-    @Override
-    public PMultiCond setSource(PointerProvider card, PCLCardValueSource source)
-    {
-        super.setSource(card, source);
-        for (PSkill<?> effect : effects)
-        {
-            effect.setSource(card, source);
-        }
-        return this;
-    }
-
-
-    @Override
-    public PMultiCond setSource(PointerProvider card, PCLCardValueSource source, PCLCardValueSource extra)
-    {
-        super.setSource(card, source, extra);
-        for (PSkill<?> effect : effects)
-        {
-            effect.setSource(card, source, extra);
         }
         return this;
     }

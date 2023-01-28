@@ -775,6 +775,10 @@ public class PCLCoreStrings extends PCLStrings
         {
             return format(50, action, amount, object, target);
         }
+        public final String objectTo(Object action, Object object, Object target)
+        {
+            return format(51, action, object, target);
+        }
 
         public final String channelX(Object amount, Object subject)
         {

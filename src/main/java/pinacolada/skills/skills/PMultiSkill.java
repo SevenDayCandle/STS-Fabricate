@@ -9,10 +9,10 @@ import extendedui.ui.tooltips.EUICardPreview;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.misc.PCLUseInfo;
 import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.interfaces.markers.PointerProvider;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
@@ -139,7 +139,7 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     public boolean canPlay(AbstractCard card, AbstractMonster m)
     {
         boolean canPlay = true;
-        for (PSkill be : effects)
+        for (PSkill<?> be : effects)
         {
             canPlay = canPlay & be.canPlay(card, m);
         }
@@ -188,26 +188,27 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     public PMultiSkill makeCopy()
     {
         PMultiSkill copy = (PMultiSkill) super.makeCopy();
-        for (PSkill effect : effects)
+        for (PSkill<?> effect : effects)
         {
             copy.addEffect(effect.makeCopy());
         }
         return copy;
     }
 
-    public PSkill makePreviews(RotatingList<EUICardPreview> previews)
+    public PMultiSkill makePreviews(RotatingList<EUICardPreview> previews)
     {
-        for (PSkill effect : effects)
+        for (PSkill<?> effect : effects)
         {
             effect.makePreviews(previews);
         }
-        return super.makePreviews(previews);
+        super.makePreviews(previews);
+        return this;
     }
 
     @Override
     public float modifyBlock(AbstractCard card, AbstractMonster m, float amount)
     {
-        for (PSkill be : effects)
+        for (PSkill<?> be : effects)
         {
             amount = be.modifyBlock(card, m, amount);
         }
@@ -217,7 +218,7 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     @Override
     public float modifyDamage(AbstractCard card, AbstractMonster m, float amount)
     {
-        for (PSkill be : effects)
+        for (PSkill<?> be : effects)
         {
             amount = be.modifyDamage(card, m, amount);
         }
@@ -227,7 +228,7 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     @Override
     public float modifyHitCount(PCLCard card, AbstractMonster m, float amount)
     {
-        for (PSkill be : effects)
+        for (PSkill<?> be : effects)
         {
             amount = be.modifyHitCount(card, m, amount);
         }
@@ -237,7 +238,7 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     @Override
     public float modifyMagicNumber(AbstractCard card, AbstractMonster m, float amount)
     {
-        for (PSkill be : effects)
+        for (PSkill<?> be : effects)
         {
             amount = be.modifyMagicNumber(card, m, amount);
         }
@@ -247,7 +248,7 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     @Override
     public float modifyRightCount(PCLCard card, AbstractMonster m, float amount)
     {
-        for (PSkill be : effects)
+        for (PSkill<?> be : effects)
         {
             amount = be.modifyRightCount(card, m, amount);
         }
@@ -265,7 +266,7 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     @Override
     public void onDrag(AbstractMonster m)
     {
-        for (PSkill effect : effects)
+        for (PSkill<?> effect : effects)
         {
             effect.onDrag(m);
         }
@@ -282,7 +283,7 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     @Override
     public void refresh(AbstractCreature m, AbstractCard c, boolean conditionMet)
     {
-        for (PSkill effect : effects)
+        for (PSkill<?> effect : effects)
         {
             effect.refresh(m, c, conditionMet);
         }
@@ -302,7 +303,7 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     public PMultiSkill setAmountFromCard()
     {
         super.setAmountFromCard();
-        for (PSkill effect : effects)
+        for (PSkill<?> effect : effects)
         {
             effect.setAmountFromCard();
         }
@@ -313,7 +314,7 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     public PMultiSkill setSource(PointerProvider card)
     {
         super.setSource(card);
-        for (PSkill effect : effects)
+        for (PSkill<?> effect : effects)
         {
             effect.setSource(card);
         }
@@ -321,31 +322,9 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     }
 
     @Override
-    public PMultiSkill setSource(PointerProvider card, PCLCardValueSource source)
+    public PMultiSkill setTemporaryAmount(int amount)
     {
-        super.setSource(card, source);
-        for (PSkill effect : effects)
-        {
-            effect.setSource(card, source);
-        }
-        return this;
-    }
-
-    @Override
-    public PMultiSkill setSource(PointerProvider card, PCLCardValueSource source, PCLCardValueSource extra)
-    {
-        super.setSource(card, source, extra);
-        for (PSkill effect : effects)
-        {
-            effect.setSource(card, source, extra);
-        }
-        return this;
-    }
-
-    @Override
-    public PSkill setTemporaryAmount(int amount)
-    {
-        for (PSkill effect : effects)
+        for (PSkill<?> effect : effects)
         {
             effect.setTemporaryAmount(amount);
         }
@@ -353,9 +332,9 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     }
 
     @Override
-    public PSkill setTemporaryExtra(int extra)
+    public PMultiSkill setTemporaryExtra(int extra)
     {
-        for (PSkill effect : effects)
+        for (PSkill<?> effect : effects)
         {
             effect.setTemporaryExtra(extra);
         }
@@ -371,7 +350,7 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
         }
         else
         {
-            for (PSkill effect : effects)
+            for (PSkill<?> effect : effects)
             {
                 effect.use(info);
             }
@@ -403,7 +382,7 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
         }
         else
         {
-            for (PSkill effect : effects)
+            for (PSkill<?> effect : effects)
             {
                 effect.use(info, isUsing);
             }
@@ -473,7 +452,7 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
         super.stack(other);
         if (other instanceof PMultiBase)
         {
-            stackMulti((PMultiBase) other);
+            stackMulti((PMultiBase<?>) other);
         }
         return this;
     }

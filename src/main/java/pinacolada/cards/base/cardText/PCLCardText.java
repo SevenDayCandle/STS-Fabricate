@@ -132,7 +132,7 @@ public class PCLCardText
     {
         if (card.type == PCLEnum.CardType.SUMMON)
         {
-            renderAttribute(sb, getHPIcon(), card.getSecondaryValueString(), "/" + card.baseHeal, null, 0.7f, true);
+            renderAttribute(sb, getHPIcon(), card.getSecondaryValueString(), "/" + card.baseHeal, null, 0.9f, true);
             // TODO add priority attribute indicator
             //renderAttribute(sb, getDamageIcon(), card.getDamageString(), card.hitCount > 1 ? ("x" + card.hitCount) : null, card.pclTarget != null ? card.pclTarget.getTag() : null, 1f, false);
         }
@@ -140,7 +140,7 @@ public class PCLCardText
 
     protected void renderAttribute(SpriteBatch sb, TextureCache icon, ColoredString text, String suffix, String iconTag, float scaleMult, boolean leftAlign)
     {
-        final float suffix_scale = 0.66f;
+        final float suffix_scale = scaleMult * 0.7f;
         final float cw = AbstractCard.RAW_W;
         final float ch = AbstractCard.RAW_H;
         final float b_w = 126f;
@@ -165,7 +165,7 @@ public class PCLCardText
 
         final float sign = leftAlign ? -1 : +1;
         final float icon_x = sign * (cw * 0.45f);
-        float text_x = sign * cw * scaleMult * ((suffix != null || text.text.length() > 2) ? (0.35f - sign * 0.029f) : 0.35f);
+        float text_x = sign * cw * ((suffix != null || text.text.length() > 2) ? (0.35f - sign * 0.029f) : 0.35f);
 
         if (panel != null)
         {

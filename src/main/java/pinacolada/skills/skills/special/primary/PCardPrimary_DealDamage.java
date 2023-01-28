@@ -106,15 +106,7 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack>
         int count = source != null ? getExtraFromCard() : 1;
         EUITooltip tooltip = sourceCard instanceof PCLCard ? ((PCLCard) sourceCard).attackType.getTooltip() : PGR.core.tooltips.normalDamage;
         String amountString = count > 1 ? getAmountRawString() + "x" + getExtraRawString() : getAmountRawString();
-        if (target == PCLCardTarget.Self)
-        {
-            return TEXT.actions.takeDamage(amountString);
-        }
-        if (target == PCLCardTarget.Single)
-        {
-            return TEXT.actions.deal(amountString, tooltip);
-        }
-        return TEXT.actions.dealTo(amountString, tooltip, getTargetString());
+        return TEXT.actions.objectTo(amountString, tooltip, getTargetString());
     }
 
     public PCardPrimary_DealDamage setDamageEffect(PCLEffekseerEFX effekseerKey)
