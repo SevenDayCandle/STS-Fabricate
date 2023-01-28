@@ -141,7 +141,7 @@ public class PCLCoreStrings extends PCLStrings
         public final String editForm = cardeditor.TEXT[27];
         public final String turnDelay = cardeditor.TEXT[28];
         public final String extraValue = cardeditor.TEXT[29];
-        public final String useBaseValue = cardeditor.TEXT[30];
+        public final String maxCopies = cardeditor.TEXT[30];
         public final String loadImage = cardeditor.TEXT[31];
         public final String loadFile = cardeditor.TEXT[32];
         public final String paste = cardeditor.TEXT[33];
@@ -161,9 +161,9 @@ public class PCLCoreStrings extends PCLStrings
         public final String primaryInfoDesc = cardeditor.TEXT[47];
         public final String choices = cardeditor.TEXT[48];
         public final String ifElseCondition = cardeditor.TEXT[49];
-        public final String ifElseConditionDesc = cardeditor.TEXT[50];
-        public final String orCondition = cardeditor.TEXT[51];
-        public final String orConditionDesc = cardeditor.TEXT[52];
+        public final String orCondition = cardeditor.TEXT[50];
+        public final String idSuffix = cardeditor.TEXT[51];
+        public final String idSuffixWarning = cardeditor.TEXT[52];
         public final String duplicateToColor = cardeditor.TEXT[53];
         public final String duplicateToColorDesc = cardeditor.TEXT[54];
         public final String createRandom = cardeditor.TEXT[55];

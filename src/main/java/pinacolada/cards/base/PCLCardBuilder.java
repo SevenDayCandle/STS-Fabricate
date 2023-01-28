@@ -136,6 +136,9 @@ public class PCLCardBuilder extends PCLCardData
         rightCountUpgrade = data.rightCountUpgrade.clone();
         cost = data.cost.clone();
         costUpgrade = data.costUpgrade.clone();
+        setMaxUpgrades(data.maxUpgradeLevel);
+        setMaxCopies(data.maxCopies);
+        setUnique(data.unique);
         setLanguageMap(EUIUtils.deserialize(data.languageStrings, TStrings.getType()));
         setProperties(AbstractCard.CardType.valueOf(data.type), AbstractCard.CardRarity.valueOf(data.rarity));
         setTarget(PCLCardTarget.valueOf(data.target));

@@ -24,11 +24,18 @@ public class PCLCustomCardSlot
     public static final int ID_SIZE = 4;
     public static final String BASE_ID = "pclC";
     public static final String FOLDER = "PCLCustomCards";
-    private static final TypeToken<PCLCustomCardSlot> TToken = new TypeToken<PCLCustomCardSlot>() {};
-    private static final TypeToken<CardForm> TTokenForm = new TypeToken<CardForm>() {};
+    private static final TypeToken<PCLCustomCardSlot> TToken = new TypeToken<PCLCustomCardSlot>()
+    {
+    };
+    private static final TypeToken<CardForm> TTokenForm = new TypeToken<CardForm>()
+    {
+    };
     private static final HashMap<AbstractCard.CardColor, ArrayList<PCLCustomCardSlot>> CustomCards = new HashMap<>();
-    public final String ID;
+    public String ID;
     public Integer loadout;
+    public Integer maxUpgradeLevel;
+    public Integer maxCopies;
+    public Boolean unique;
     public String type;
     public String rarity;
     public String color;
@@ -59,8 +66,8 @@ public class PCLCustomCardSlot
     public PCLCustomCardSlot(AbstractCard.CardColor color)
     {
         ID = makeNewID(color);
-        filePath = FOLDER + "/" + ID + ".json";
-        imagePath = FOLDER + "/" + ID + ".png";
+        filePath = makeFilePath();
+        imagePath = makeImagePath();
         slotColor = color;
         PCLCardBuilder builder = new PCLCardBuilder(ID)
                 .setText("", "", "")
@@ -71,8 +78,8 @@ public class PCLCustomCardSlot
     public PCLCustomCardSlot(PCLCardData data)
     {
         ID = makeNewID(data.cardColor);
-        filePath = FOLDER + "/" + ID + ".json";
-        imagePath = FOLDER + "/" + ID + ".png";
+        filePath = makeFilePath();
+        imagePath = makeImagePath();
         slotColor = data.cardColor;
         builders.add(new PCLCardBuilder(data, true)
                 .setID(ID)
@@ -82,8 +89,8 @@ public class PCLCustomCardSlot
     public PCLCustomCardSlot(PCLCardBuilder builder)
     {
         ID = makeNewID(builder.cardColor);
-        filePath = FOLDER + "/" + ID + ".json";
-        imagePath = FOLDER + "/" + ID + ".png";
+        filePath = makeFilePath();
+        imagePath = makeImagePath();
         slotColor = builder.cardColor;
         builders.add(builder
                 .setID(ID)
@@ -93,8 +100,8 @@ public class PCLCustomCardSlot
     public PCLCustomCardSlot(PCLCustomCardSlot other)
     {
         ID = makeNewID(other.slotColor);
-        filePath = FOLDER + "/" + ID + ".json";
-        imagePath = FOLDER + "/" + ID + ".png";
+        filePath = makeFilePath();
+        imagePath = makeImagePath();
         slotColor = other.slotColor;
         for (PCLCardBuilder builder : other.builders)
         {
@@ -192,21 +199,25 @@ public class PCLCustomCardSlot
         PGR.core.debugCards.refreshCards();
     }
 
-    private static boolean isBuilderDuplicate(StringBuilder sb, AbstractCard.CardColor color)
+    public static boolean isIDDuplicate(String input, AbstractCard.CardColor color)
     {
-        String s = sb.toString();
-        return EUIUtils.any(getCards(color), c -> c.ID.equals(s));
+        return EUIUtils.any(getCards(color), c -> c.ID.equals(input));
+    }
+
+    public static String getBaseIDPrefix(AbstractCard.CardColor color)
+    {
+        return BASE_ID + "_" + color.name() + "_";
     }
 
     protected static String makeNewID(AbstractCard.CardColor color)
     {
-        StringBuilder sb = new StringBuilder(BASE_ID + "_" + color.name() + "_");
+        StringBuilder sb = new StringBuilder(getBaseIDPrefix(color));
         for (int i = 0; i < ID_SIZE; i++)
         {
             sb.append(makeRandomCharIndex());
         }
 
-        while (isBuilderDuplicate(sb, color))
+        while (isIDDuplicate(sb.toString(), color))
         {
             sb.append(makeRandomCharIndex());
         }
@@ -219,6 +230,16 @@ public class PCLCustomCardSlot
         return (char) (i > 90 ? i - 43 : i);
     }
 
+    private String makeFilePath()
+    {
+        return FOLDER + "/" + ID + ".json";
+    }
+
+    private String makeImagePath()
+    {
+        return FOLDER + "/" + ID + ".png";
+    }
+
     public void commitBuilder()
     {
 
@@ -228,6 +249,7 @@ public class PCLCustomCardSlot
         {
             CardForm f = new CardForm();
 
+            ID = builder.ID;
             languageStrings = EUIUtils.serialize(builder.languageMap);
             loadout = builder.loadout != null ? builder.loadout.id : null;
             type = builder.cardType.name();
@@ -248,6 +270,9 @@ public class PCLCustomCardSlot
             rightCountUpgrade = builder.rightCountUpgrade.clone();
             cost = builder.cost.clone();
             costUpgrade = builder.costUpgrade.clone();
+            maxUpgradeLevel = builder.maxUpgradeLevel;
+            maxCopies = builder.maxCopies;
+            unique = builder.unique;
             affinities = EUIUtils.serialize(builder.affinities);
             tags = EUIUtils.mapAsNonnull(builder.tags.values(), EUIUtils::serialize).toArray(new String[]{});
 
@@ -261,8 +286,28 @@ public class PCLCustomCardSlot
         }
 
         forms = tempForms.toArray(new String[]{});
+        String newFilePath = makeFilePath();
+        String newImagePath = makeImagePath();
 
+        // If the file path has changed and the original file exists, we should move the file and its image
         FileHandle writer = Gdx.files.local(filePath);
+        if (writer.exists() && !newFilePath.equals(filePath))
+        {
+            writer.moveTo(Gdx.files.local(newFilePath));
+            EUIUtils.logInfo(PCLCustomCardSlot.class, "Moved Custom Card: " + filePath + ", New: " + newFilePath);
+        }
+        writer = Gdx.files.local(newFilePath);
+
+        FileHandle imgWriter = Gdx.files.local(imagePath);
+        if (imgWriter.exists() && !newImagePath.equals(imagePath))
+        {
+            imgWriter.moveTo(Gdx.files.local(newImagePath));
+            EUIUtils.logInfo(PCLCustomCardSlot.class, "Moved Custom Card Image: " + imagePath + ", New: " + newImagePath);
+        }
+
+        filePath = newFilePath;
+        imagePath = newImagePath;
+
         writer.writeString(EUIUtils.serialize(this, TToken.getType()), false);
         EUIUtils.logInfo(PCLCustomCardSlot.class, "Saved Custom Card: " + filePath);
         PGR.core.debugCards.refreshCards();

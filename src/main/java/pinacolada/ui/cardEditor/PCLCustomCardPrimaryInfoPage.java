@@ -16,6 +16,7 @@ import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
+import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.CardTagItem;
 import pinacolada.resources.PCLEnum;
@@ -46,6 +47,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
 
     protected PCLCustomCardEditCardScreen effect;
     protected EUILabel header;
+    protected EUITextBoxInput idInput;
     protected EUITextBoxInput nameInput;
     protected EUISearchableDropdown<Settings.GameLanguage> languageDropdown;
     protected EUIDropdown<PCLCardTarget> targetDropdown;
@@ -53,7 +55,9 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
     protected EUIDropdown<AbstractCard.CardType> typesDropdown;
     protected EUIDropdown<PCLLoadout> loadoutDropdown;
     protected EUIDropdown<CardTagItem> flagsDropdown;
+    protected EUILabel idWarning;
     protected PCLValueEditor maxUpgrades;
+    protected PCLValueEditor maxCopies;
     protected EUIToggle uniqueToggle;
     protected Settings.GameLanguage activeLanguage = Settings.language;
 
@@ -76,8 +80,23 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
                 .setFontScale(0.8f).setColor(Color.LIGHT_GRAY)
                 .setLabel(PGR.core.strings.cardEditor.primaryInfo);
 
-        nameInput = (EUITextBoxInput) new EUITextBoxInput(EUIRM.images.panelRoundedHalfH.texture(),
+        idInput = (EUITextBoxInput) new EUITextBoxInput(EUIRM.images.panelRoundedHalfH.texture(),
                 new EUIHitbox(START_X, screenH(0.82f), MENU_WIDTH * 2.3f, MENU_HEIGHT * 1.65f))
+                .setOnComplete(this::validifyCardID)
+                .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cardEditor.idSuffix)
+                .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.05f)
+                .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
+                .setAlignment(0.5f, 0.1f)
+                .setFont(FontHelper.cardTitleFont, 0.7f);
+        idWarning = new EUILabel(EUIFontHelper.cardtitlefontSmall,
+                new EUIHitbox(START_X + MENU_WIDTH * 2.5f, screenH(0.82f), MENU_WIDTH, MENU_HEIGHT))
+                .setAlignment(0.5f, 0.0f, false)
+                .setFontScale(0.8f).setColor(Settings.RED_TEXT_COLOR)
+                .setLabel(PGR.core.strings.cardEditor.primaryInfo);
+        idWarning.setActive(false);
+
+        nameInput = (EUITextBoxInput) new EUITextBoxInput(EUIRM.images.panelRoundedHalfH.texture(),
+                new EUIHitbox(START_X, screenH(0.72f), MENU_WIDTH * 2.3f, MENU_HEIGHT * 1.65f))
                 .setOnComplete(s -> {
                     effect.modifyAllBuilders(e -> e.setName(s).setLanguageMapEntry(activeLanguage));
                 })
@@ -86,7 +105,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.1f)
                 .setFont(FontHelper.cardTitleFont, 0.7f);
-        languageDropdown = (EUISearchableDropdown<Settings.GameLanguage>) new EUISearchableDropdown<Settings.GameLanguage>(new EUIHitbox(screenW(0.55f), screenH(0.83f), MENU_WIDTH, MENU_HEIGHT)
+        languageDropdown = (EUISearchableDropdown<Settings.GameLanguage>) new EUISearchableDropdown<Settings.GameLanguage>(new EUIHitbox(screenW(0.55f), screenH(0.73f), MENU_WIDTH, MENU_HEIGHT)
                 , item -> StringUtils.capitalize(item.toString().toLowerCase()))
                 .setOnChange(languages -> {
                     if (!languages.isEmpty())
@@ -98,7 +117,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
                 .setItems(Settings.GameLanguage.values())
                 .setCanAutosizeButton(true)
                 .setSelection(activeLanguage, false);
-        raritiesDropdown = new EUIDropdown<AbstractCard.CardRarity>(new EUIHitbox(START_X, screenH(0.72f), MENU_WIDTH, MENU_HEIGHT)
+        raritiesDropdown = new EUIDropdown<AbstractCard.CardRarity>(new EUIHitbox(START_X, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT)
                 , item -> StringUtils.capitalize(item.toString().toLowerCase()))
                 .setOnChange(rarities -> {
                     if (!rarities.isEmpty())
@@ -108,7 +127,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
                 })
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[0])
                 .setItems(GameUtilities.getStandardRarities());
-        typesDropdown = new EUIDropdown<AbstractCard.CardType>(new EUIHitbox(raritiesDropdown.hb.x + raritiesDropdown.hb.width + SPACING_WIDTH, screenH(0.72f), MENU_WIDTH, MENU_HEIGHT)
+        typesDropdown = new EUIDropdown<AbstractCard.CardType>(new EUIHitbox(raritiesDropdown.hb.x + raritiesDropdown.hb.width + SPACING_WIDTH, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT)
                 , EUIGameUtils::textForType)
                 .setOnChange(types -> {
                     if (!types.isEmpty())
@@ -121,7 +140,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[1])
                 .setCanAutosizeButton(true)
                 .setItems(getEligibleTypes(effect.getBuilder().cardColor));
-        targetDropdown = new EUIDropdown<PCLCardTarget>(new EUIHitbox(typesDropdown.hb.x + typesDropdown.hb.width + SPACING_WIDTH, screenH(0.72f), MENU_WIDTH, MENU_HEIGHT)
+        targetDropdown = new EUIDropdown<PCLCardTarget>(new EUIHitbox(typesDropdown.hb.x + typesDropdown.hb.width + SPACING_WIDTH, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT)
                 , item -> StringUtils.capitalize(item.toString().toLowerCase()))
                 .setOnChange(targets -> {
                     if (!targets.isEmpty())
@@ -133,7 +152,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cardEditor.cardTarget)
                 .setCanAutosizeButton(true)
                 .setItems(PCLCardTarget.getAll());
-        flagsDropdown = new EUISearchableDropdown<CardTagItem>(new EUIHitbox(START_X, screenH(0.6f), MENU_WIDTH, MENU_HEIGHT), cs -> cs.getTip().title)
+        flagsDropdown = new EUISearchableDropdown<CardTagItem>(new EUIHitbox(START_X, screenH(0.5f), MENU_WIDTH, MENU_HEIGHT), cs -> cs.getTip().title)
                 .setOnChange(selectedSeries -> {
                     effect.modifyAllBuilders(e -> e.setExtraTags(selectedSeries));
                 })
@@ -143,7 +162,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
                 .setItems(CardTagItem.getCompatible(effect.currentSlot.slotColor))
                 .setTooltip(PGR.core.strings.cardEditor.flags, PGR.core.strings.cardEditorTutorial.primaryFlags);
 
-        loadoutDropdown = new EUISearchableDropdown<PCLLoadout>(new EUIHitbox(flagsDropdown.hb.x + flagsDropdown.hb.width + SPACING_WIDTH, screenH(0.6f), MENU_WIDTH, MENU_HEIGHT), PCLLoadout::getName)
+        loadoutDropdown = new EUISearchableDropdown<PCLLoadout>(new EUIHitbox(flagsDropdown.hb.x + flagsDropdown.hb.width + SPACING_WIDTH, screenH(0.5f), MENU_WIDTH, MENU_HEIGHT), PCLLoadout::getName)
                 .setOnChange(selectedSeries -> {
                     effect.modifyAllBuilders(e -> e.setLoadout(!selectedSeries.isEmpty() ? selectedSeries.get(0) : null));
                 })
@@ -154,10 +173,13 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
         loadoutDropdown
                 .setActive(GameUtilities.isPCLCardColor(effect.currentSlot.slotColor) && loadoutDropdown.size() > 0);
 
-        maxUpgrades = new PCLValueEditor(new EUIHitbox(START_X, screenH(0.5f), MENU_WIDTH / 4, MENU_HEIGHT)
+        maxUpgrades = new PCLValueEditor(new EUIHitbox(START_X, screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , PGR.core.strings.cardEditor.maxUpgrades, (val) -> effect.modifyAllBuilders(e -> e.setMaxUpgrades(val)))
                 .setLimits(-1, PSkill.DEFAULT_MAX);
-        uniqueToggle = (EUIToggle) new EUIToggle(new EUIHitbox(screenW(0.35f), screenH(0.5f), MENU_WIDTH, MENU_HEIGHT))
+        maxCopies = new PCLValueEditor(new EUIHitbox(screenW(0.35f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
+                , PGR.core.strings.cardEditor.maxCopies, (val) -> effect.modifyAllBuilders(e -> e.setMaxCopies(val)))
+                .setLimits(-1, PSkill.DEFAULT_MAX);
+        uniqueToggle = (EUIToggle) new EUIToggle(new EUIHitbox(screenW(0.45f), screenH(0.4f), MENU_WIDTH, MENU_HEIGHT))
                 .setFont(EUIFontHelper.carddescriptionfontNormal, 0.9f)
                 .setText(PGR.core.tooltips.unique.title)
                 .setOnToggle(val -> effect.modifyAllBuilders(e -> {
@@ -186,6 +208,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
     @Override
     public void refresh()
     {
+        idInput.setLabel(StringUtils.removeStart(effect.getBuilder().ID, PCLCustomCardSlot.getBaseIDPrefix(effect.getBuilder().cardColor)));
         nameInput.setLabel(effect.getBuilder().strings.NAME);
         raritiesDropdown.setSelection(effect.getBuilder().cardRarity, false);
         typesDropdown.setSelection(effect.getBuilder().cardType, false);
@@ -193,6 +216,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
         loadoutDropdown.setSelection(effect.getBuilder().loadout, false);
         flagsDropdown.setSelection(effect.getBuilder().extraTags, false);
         maxUpgrades.setValue(effect.getBuilder().maxUpgradeLevel, false);
+        maxCopies.setValue(effect.getBuilder().maxCopies, false);
         uniqueToggle.setToggle(effect.getBuilder().unique);
     }
 
@@ -206,7 +230,9 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
     public void updateImpl()
     {
         header.tryUpdate();
+        idWarning.tryUpdate();
         maxUpgrades.tryUpdate();
+        maxCopies.tryUpdate();
         loadoutDropdown.tryUpdate();
         flagsDropdown.tryUpdate();
         raritiesDropdown.tryUpdate();
@@ -214,6 +240,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
         targetDropdown.tryUpdate();
         languageDropdown.tryUpdate();
         nameInput.tryUpdate();
+        idInput.tryUpdate();
         uniqueToggle.tryUpdate();
     }
 
@@ -221,7 +248,9 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
     public void renderImpl(SpriteBatch sb)
     {
         header.tryRender(sb);
+        idWarning.tryRender(sb);
         maxUpgrades.tryRender(sb);
+        maxCopies.tryRender(sb);
         raritiesDropdown.tryRender(sb);
         typesDropdown.tryRender(sb);
         targetDropdown.tryRender(sb);
@@ -229,7 +258,24 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
         flagsDropdown.tryRender(sb);
         languageDropdown.tryRender(sb);
         nameInput.tryRender(sb);
+        idInput.tryRender(sb);
         uniqueToggle.tryRender(sb);
+    }
+
+    private void validifyCardID(String cardID)
+    {
+        String fullID = PCLCustomCardSlot.getBaseIDPrefix(effect.getBuilder().cardColor) + cardID;
+        if (PCLCustomCardSlot.isIDDuplicate(fullID, effect.getBuilder().cardColor))
+        {
+            idWarning.setActive(true);
+            effect.saveButton.setInteractable(false);
+        }
+        else
+        {
+            idWarning.setActive(false);
+            effect.modifyAllBuilders(e -> e.setID(fullID));
+            effect.saveButton.setInteractable(true);
+        }
     }
 
     private void updateLanguage(Settings.GameLanguage language)

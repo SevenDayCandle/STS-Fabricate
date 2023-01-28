@@ -1219,6 +1219,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
     {
         this.childEffect = PSkill.chain(effect, effects);
         this.childEffect.parent = this;
+        this.childEffect.setSource(this.source);
         return this;
     }
 
@@ -1228,6 +1229,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         if (effect != null)
         {
             effect.parent = this;
+            effect.setSource(this.source);
         }
         return this;
     }
@@ -1236,6 +1238,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
     {
         this.childEffect = new PMultiSkill(effects);
         this.childEffect.parent = this;
+        this.childEffect.setSource(this.source);
         return this;
     }
 
