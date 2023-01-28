@@ -7,7 +7,6 @@ import extendedui.EUI;
 import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.ColoredString;
-import pinacolada.cards.base.PCLDynamicCard;
 import pinacolada.skills.PSkill;
 
 public class ConditionToken extends PCLTextToken
@@ -37,10 +36,6 @@ public class ConditionToken extends PCLTextToken
         if (parser.character == CONDITION_TOKEN && parser.compareNext(2, CONDITION_TOKEN))
         {
             PSkill<?> move = parser.card != null ? parser.card.getSubEffect(parser.nextCharacter(1)) : null;
-            if (parser.card instanceof PCLDynamicCard)
-            {
-                EUIUtils.logWarning(parser.card, "WTF");
-            }
 
             if (move != null)
             {
