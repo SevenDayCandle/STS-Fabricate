@@ -725,16 +725,22 @@ public class PCLCardData implements CardObject
 
     public PCLCardData setLoadout(PCLLoadout loadout)
     {
+        return setLoadout(loadout, false);
+    }
+
+    public PCLCardData setLoadout(PCLLoadout loadout, boolean colorless)
+    {
         this.loadout = loadout;
         if (this.loadout != null)
         {
-            if (cardColor == resources.cardColor)
+            if (colorless)
             {
-                this.loadout.cardData.add(this);
+                setColorless();
+                this.loadout.colorlessData.add(this);
             }
             else
             {
-                this.loadout.colorlessData.add(this);
+                this.loadout.cardData.add(this);
             }
         }
 

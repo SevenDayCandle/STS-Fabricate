@@ -14,7 +14,7 @@ public class OInnateA2 extends PCLAugment
 {
 
     public static final PCLAugmentData DATA = register(OInnateA2.class, 3, PCLAffinity.Orange)
-            .setSkill(PMultiTrait.join(PTrait.hasTags(-1, PCLCardTag.Innate), PTrait.hasTags(1, PCLCardTag.Haste)))
+            .setSkill(PMultiTrait.join(PTrait.tags(-1, PCLCardTag.Innate), PTrait.tags(1, PCLCardTag.Haste)))
             .setReqs(setTagsNot(PCLCardTag.Delayed));
 
     public OInnateA2()

@@ -207,7 +207,7 @@ public class PCLCardText
         return 30; // y offset
     }
 
-    protected void renderIcons(SpriteBatch sb, boolean inHand)
+    protected void renderIcons(SpriteBatch sb)
     {
         final float alpha = updateBadgeAlpha();
 
@@ -217,11 +217,11 @@ public class PCLCardText
         offset_y = 0;
         if (card.isUnique())
         {
-            offset_y += renderFooter(sb, card.isPopup ? ICONS.uniqueL.texture() : ICONS.unique.texture(), offset_y, Color.WHITE, null);
+            offset_y += renderFooter(sb, card.isPopup ? ICONS.uniqueL.texture() : ICONS.unique.texture(), offset_y);
         }
         if (card.cardData.canToggleFromPopup && (card.upgraded || card.cardData.unUpgradedCanToggleForms))
         {
-            offset_y += renderFooter(sb, card.isPopup ? ICONS.multiformL.texture() : ICONS.multiform.texture(), offset_y, Color.WHITE, null);
+            offset_y += renderFooter(sb, card.isPopup ? ICONS.multiformL.texture() : ICONS.multiform.texture(), offset_y);
         }
 
         // Render augments
@@ -246,10 +246,9 @@ public class PCLCardText
         renderLines(sb);
         renderAttributes(sb);
 
-        final boolean inHand = PCLCard.player != null && PCLCard.player.hand.contains(card);
         if (card.drawScale > 0.3f)
         {
-            renderIcons(sb, inHand);
+            renderIcons(sb);
 
             ColoredString header = card.getHeaderText();
             if (header != null)
@@ -269,23 +268,14 @@ public class PCLCardText
         }
     }
 
-    private float renderFooter(SpriteBatch sb, Texture texture, float y, Color iconColor, String text)
+    private float renderFooter(SpriteBatch sb, Texture texture, float y)
     {
         final float offset_x = -AbstractCard.RAW_W * 0.4595f;
         final float offset_y = y - AbstractCard.RAW_H * 0.46f;
         final float alpha = card.transparency;
 
         PCLRenderHelpers.drawOnCardAuto(sb, card, PGR.core.images.core.controllableCardPile.texture(), new Vector2(offset_x, offset_y), 40, 40, Color.BLACK, alpha * 0.6f, 0.8f);
-        PCLRenderHelpers.drawOnCardAuto(sb, card, texture, new Vector2(offset_x, offset_y), 40, 40, iconColor, alpha, 0.8f);
-
-        if (text != null)
-        {
-            final BitmapFont font = EUIFontHelper.cardiconfontLarge;
-
-            font.getData().setScale(0.5f * card.drawScale);
-            PCLRenderHelpers.writeOnCard(sb, card, font, text, offset_x, offset_y, Settings.CREAM_COLOR, true);
-            PCLRenderHelpers.resetFont(font);
-        }
+        PCLRenderHelpers.drawOnCardAuto(sb, card, texture, new Vector2(offset_x, offset_y), 40, 40, Color.WHITE, alpha, 0.8f);
 
         return 38; // y offset
     }

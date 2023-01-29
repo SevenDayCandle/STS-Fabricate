@@ -17,14 +17,15 @@ import static pinacolada.skills.PSkill.EFFECT_CHAR;
 
 public class LogicToken extends PCLTextToken
 {
+    public static final char LOGIC_TOKEN = '$';
     private static final PCLTextParser internalParser = new PCLTextParser(false);
     private final List<LogicTokenBlock> blocks;
     private final char variableID;
-    private final PSkill move;
+    private final PSkill<?> move;
     private int cachedValue;
     private LogicTokenBlock cachedResult;
 
-    protected LogicToken(char variableID, PSkill move, List<LogicTokenBlock> blocks, int initialValue)
+    protected LogicToken(char variableID, PSkill<?> move, List<LogicTokenBlock> blocks, int initialValue)
     {
         super(PCLTextTokenType.Text, null);
         this.variableID = variableID;
@@ -49,7 +50,7 @@ public class LogicToken extends PCLTextToken
 
     public static int tryAdd(PCLTextParser parser)
     {
-        if (parser.character == '$' && parser.remaining > 1)
+        if (parser.character == LOGIC_TOKEN && parser.remaining > 1)
         {
             builder.setLength(0);
             ArrayList<LogicTokenBlock> blockConds = new ArrayList<>();

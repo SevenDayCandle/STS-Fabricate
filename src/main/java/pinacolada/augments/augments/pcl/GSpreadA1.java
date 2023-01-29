@@ -13,7 +13,7 @@ public class GSpreadA1 extends PCLAugment
 {
 
     public static final PCLAugmentData DATA = register(GSpreadA1.class, 2, PCLAffinity.Green)
-            .setSkill(PTrait.hasCardTarget(PCLCardTarget.AllEnemy), PTrait.hasCost(1))
+            .setSkill(PTrait.cardTarget(PCLCardTarget.AllEnemy), PTrait.cost(1))
             .setReqs(setTargets(PCLCardTarget.Single, PCLCardTarget.RandomEnemy));
 
     public GSpreadA1()

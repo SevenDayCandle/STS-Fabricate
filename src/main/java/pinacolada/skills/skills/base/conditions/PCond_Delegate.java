@@ -36,7 +36,7 @@ public abstract class PCond_Delegate extends PPassiveCond<PField_CardCategory>
     {
         if (hasParentType(PTrigger.class))
         {
-            return TEXT.conditions.whenObjectIs(fields.getFullCardString(), getDelegatePastText());
+            return TEXT.conditions.whenObjectIs(fields.getFullCardString(1), getDelegatePastText());
         }
         return TEXT.conditions.onGeneric(getDelegateText());
     }

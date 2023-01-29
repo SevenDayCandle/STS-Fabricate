@@ -487,6 +487,11 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return source != null ? EUIUtils.format(BOUND_FORMAT, "E" + getCardPointer()) : wrapAmountChild(amount);
     }
 
+    public EUITooltip getAttackTooltip()
+    {
+        return sourceCard instanceof PCLCard ? ((PCLCard) sourceCard).attackType.getTooltip() : PGR.core.tooltips.normalDamage;
+    }
+
     public final int getAttribute(char attributeID)
     {
         switch (attributeID)

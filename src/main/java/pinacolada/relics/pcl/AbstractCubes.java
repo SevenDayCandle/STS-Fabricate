@@ -5,28 +5,24 @@ import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.rewards.RewardItem;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import com.megacrit.cardcrawl.rooms.MonsterRoom;
-import com.megacrit.cardcrawl.rooms.MonsterRoomBoss;
-import com.megacrit.cardcrawl.rooms.MonsterRoomElite;
 import extendedui.EUIUtils;
 import pinacolada.interfaces.markers.CardRewardActionProvider;
 import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PGR;
+import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
 public abstract class AbstractCubes extends PCLRelic implements CardRewardActionProvider
 {
-
     public static final String ID = createFullID(AbstractCubes.class);
     public final int normalUses;
-    public final int eliteUses;
     public final int maxUses;
 
-    public AbstractCubes(String id, RelicTier tier, LandingSound sfx, int normalUses, int eliteUses, int maxUses)
+    public AbstractCubes(String id, RelicTier tier, LandingSound sfx, int normalUses, int maxUses)
     {
         super(id, tier, sfx);
         this.normalUses = normalUses;
-        this.eliteUses = eliteUses;
         this.maxUses = maxUses;
         this.updateDescription(null);
     }
@@ -50,7 +46,7 @@ public abstract class AbstractCubes extends PCLRelic implements CardRewardAction
     @Override
     public String getUpdatedDescription()
     {
-        return formatDescription(0, normalUses, eliteUses, maxUses);
+        return formatDescription(0, normalUses, maxUses);
     }
 
     @Override
@@ -66,14 +62,9 @@ public abstract class AbstractCubes extends PCLRelic implements CardRewardAction
     {
         super.onEnterRoom(room);
 
-        if (room instanceof MonsterRoomElite || room instanceof MonsterRoomBoss)
+        if (room instanceof MonsterRoom)
         {
-            setCounter(Math.min(maxUses, counter + eliteUses + normalUses));
-            flash();
-        }
-        else if (room instanceof MonsterRoom && normalUses > 0)
-        {
-            setCounter(Math.min(maxUses, counter + normalUses));
+            setCounter(Math.min(maxUses, counter + (GameUtilities.getTotalCardsInPlay() / normalUses)));
             flash();
         }
     }

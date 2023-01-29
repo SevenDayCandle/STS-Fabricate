@@ -13,7 +13,7 @@ public class RDamageA1 extends PCLAugment
 {
 
     public static final PCLAugmentData DATA = register(RDamageA1.class, 1, PCLAffinity.Red)
-            .setSkill(PTrait.hasDamage(1))
+            .setSkill(PTrait.damage(1))
             .setReqs(setTypes(AbstractCard.CardType.ATTACK));
 
     public RDamageA1()

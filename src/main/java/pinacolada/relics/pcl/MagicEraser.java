@@ -10,13 +10,12 @@ import pinacolada.interfaces.markers.CardRewardActionProvider;
 public class MagicEraser extends AbstractCubes implements CardRewardActionProvider
 {
     public static final String ID = createFullID(MagicEraser.class);
-    public static final int MAX_USES = 5;
-    public static final int USES_PER_ELITE = 1;
-    public static final int USES_PER_NORMAL = 0;
+    public static final int MAX_USES = 3;
+    public static final int USES_PER_NORMAL = 60;
 
     public MagicEraser()
     {
-        super(ID, RelicTier.STARTER, LandingSound.SOLID, USES_PER_NORMAL, USES_PER_ELITE, MAX_USES);
+        super(ID, RelicTier.STARTER, LandingSound.SOLID, USES_PER_NORMAL, MAX_USES);
     }
 
     @Override

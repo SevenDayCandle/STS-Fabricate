@@ -13,7 +13,7 @@ public class OLoyalA1 extends PCLAugment
 {
 
     public static final PCLAugmentData DATA = register(OLoyalA1.class, 3, PCLAffinity.Orange)
-            .setSkill(PTrait.hasTags(PCLCardTag.Loyal, PCLCardTag.Ethereal))
+            .setSkill(PTrait.tags(PCLCardTag.Loyal, PCLCardTag.Ethereal))
             .setReqs(setTagsNot(PCLCardTag.Loyal, PCLCardTag.Ethereal, PCLCardTag.Fragile));
 
     public OLoyalA1()

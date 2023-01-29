@@ -14,7 +14,7 @@ public class GPierceA1 extends PCLAugment
 {
 
     public static final PCLAugmentData DATA = register(GPierceA1.class, 2, PCLAffinity.Green)
-            .setSkill(PTrait.hasAttackType(PCLAttackType.Piercing), PTrait.hasCost(1))
+            .setSkill(PTrait.attackType(PCLAttackType.Piercing), PTrait.cost(1))
             .setReqs(setTypes(AbstractCard.CardType.ATTACK));
 
     public GPierceA1()

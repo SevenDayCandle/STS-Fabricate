@@ -14,7 +14,7 @@ public class GMagicA1 extends PCLAugment
 {
 
     public static final PCLAugmentData DATA = register(GMagicA1.class, 2, PCLAffinity.Green)
-            .setSkill(PTrait.hasAttackType(PCLAttackType.Magical))
+            .setSkill(PTrait.attackType(PCLAttackType.Magical))
             .setReqs(setTypes(AbstractCard.CardType.ATTACK));
 
     public GMagicA1()

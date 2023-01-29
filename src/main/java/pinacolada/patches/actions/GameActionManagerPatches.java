@@ -1,4 +1,4 @@
-package pinacolada.patches;
+package pinacolada.patches.actions;
 
 import com.evacipated.cardcrawl.modthespire.lib.*;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;

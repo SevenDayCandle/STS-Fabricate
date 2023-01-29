@@ -13,7 +13,7 @@ public class ODelayA1 extends PCLAugment
 {
 
     public static final PCLAugmentData DATA = register(ODelayA1.class, 1, PCLAffinity.Orange)
-            .setSkill(PTrait.hasTags(PCLCardTag.Delayed))
+            .setSkill(PTrait.tags(PCLCardTag.Delayed))
             .setReqs(setTagsNot(PCLCardTag.Delayed, PCLCardTag.Innate));
 
     public ODelayA1()

@@ -13,7 +13,7 @@ public class GAimA1 extends PCLAugment
 {
 
     public static final PCLAugmentData DATA = register(GAimA1.class, 1, PCLAffinity.Green)
-            .setSkill(PTrait.hasCardTarget(PCLCardTarget.Single))
+            .setSkill(PTrait.cardTarget(PCLCardTarget.Single))
             .setReqs(setTargets(PCLCardTarget.RandomEnemy, PCLCardTarget.Self));
 
     public GAimA1()

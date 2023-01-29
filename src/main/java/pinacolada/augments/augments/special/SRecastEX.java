@@ -11,7 +11,7 @@ public class SRecastEX extends PCLAugment
 {
 
     public static final PCLAugmentData DATA = register(SRecastEX.class, 5, PCLAffinity.Silver)
-            .setSkill(PTrait.hasTags(PCLCardTag.Recast))
+            .setSkill(PTrait.tags(PCLCardTag.Recast))
             .setSpecial(true);
 
     public SRecastEX()

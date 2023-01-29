@@ -1,5 +1,6 @@
 package pinacolada.actions.creature;
 
+import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import pinacolada.actions.PCLActionWithCallback;
@@ -18,6 +19,7 @@ public class WithdrawAllyAction extends PCLActionWithCallback<ArrayList<PCLCard>
     public final ArrayList<PCLCardAlly> allies = new ArrayList<>();
     public boolean trigger = true;
     public boolean showEffect = true;
+    public CardGroup destination = AbstractDungeon.player.discardPile;
 
     public WithdrawAllyAction(PCLCardAlly slot)
     {
@@ -33,10 +35,16 @@ public class WithdrawAllyAction extends PCLActionWithCallback<ArrayList<PCLCard>
         allies.addAll(slot);
     }
 
-    public WithdrawAllyAction setOptions(boolean trigger, boolean showEffect)
+    public WithdrawAllyAction setDestination(CardGroup destination)
     {
-        this.trigger = trigger;
+        this.destination = destination;
+        return this;
+    }
+
+    public WithdrawAllyAction setOptions(boolean showEffect, boolean trigger)
+    {
         this.showEffect = showEffect;
+        this.trigger = trigger;
         return this;
     }
 
@@ -70,7 +78,7 @@ public class WithdrawAllyAction extends PCLActionWithCallback<ArrayList<PCLCard>
         PCLCard returnedCard = ally.releaseCard();
         if (returnedCard != null)
         {
-            PCLActions.top.makeCard(returnedCard, AbstractDungeon.player.discardPile)
+            PCLActions.top.makeCard(returnedCard, destination)
                     .addCallback(returnedCard::unfadeOut);
         }
 

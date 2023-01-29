@@ -18,8 +18,10 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.daily.mods.Diverse;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
+import com.megacrit.cardcrawl.helpers.ModHelper;
 import com.megacrit.cardcrawl.helpers.Prefs;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
@@ -182,13 +184,12 @@ public class GameUtilities
 
     public static boolean canPlayTwice(AbstractCard card)
     {
-        return (!card.purgeOnUse && !PCLCardTag.Fleeting.has(card));
+        return (!card.purgeOnUse && card.type != PCLEnum.CardType.SUMMON && !PCLCardTag.Fleeting.has(card));
     }
 
-    // TODO Add more possible conditions
     public static boolean canReceiveAnyColorCard()
     {
-        return GameUtilities.hasRelicEffect(PrismaticShard.ID);
+        return GameUtilities.hasRelicEffect(PrismaticShard.ID) || ModHelper.isModEnabled(Diverse.ID);
     }
 
     public static boolean canReducePower(AbstractCreature source, AbstractCreature target, String powerID, AbstractGameAction action)

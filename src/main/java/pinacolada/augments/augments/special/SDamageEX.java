@@ -11,7 +11,7 @@ public class SDamageEX extends PCLAugment
 {
 
     public static final PCLAugmentData DATA = register(SDamageEX.class, 5, PCLAffinity.Silver)
-            .setSkill(PTrait.hasDamageMultiplier(100), PTrait.hasCost(1))
+            .setSkill(PTrait.damageMultiplier(100), PTrait.cost(1))
             .setReqs(setTypes(AbstractCard.CardType.ATTACK))
             .setSpecial(true);
 

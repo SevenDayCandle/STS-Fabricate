@@ -15,7 +15,7 @@ public class LCrippleA1 extends PCLAugment
 {
 
     public static final PCLAugmentData DATA = register(LCrippleA1.class, 2, PCLAffinity.Yellow)
-            .setSkill(PMove.applyToSingle(2, PCLPowerHelper.Weak), PTrait.hasCost(1))
+            .setSkill(PMove.applyToSingle(2, PCLPowerHelper.Weak), PTrait.cost(1))
             .setReqs(setTypes(AbstractCard.CardType.ATTACK, AbstractCard.CardType.SKILL));
 
     public LCrippleA1()

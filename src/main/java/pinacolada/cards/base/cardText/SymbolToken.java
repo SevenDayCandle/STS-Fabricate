@@ -98,7 +98,7 @@ public class SymbolToken extends PCLTextToken
     @Override
     public int getCharCount()
     {
-        return (EUIConfiguration.disableDescrptionIcons.get()) ? tooltip.title.length() : 1;
+        return (EUIConfiguration.disableDescrptionIcons.get()) ? rawText.length() : 1;
     }
 
     @Override

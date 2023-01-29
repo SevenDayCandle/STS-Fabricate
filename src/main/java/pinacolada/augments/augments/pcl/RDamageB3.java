@@ -13,7 +13,7 @@ public class RDamageB3 extends PCLAugment
 {
 
     public static final PCLAugmentData DATA = register(RDamageB3.class, 3, PCLAffinity.Red)
-            .setSkill(PTrait.hasDamageMultiplier(140), PTrait.hasCost(2))
+            .setSkill(PTrait.damageMultiplier(140), PTrait.cost(2))
             .setReqs(setTypes(AbstractCard.CardType.ATTACK));
 
     public RDamageB3()

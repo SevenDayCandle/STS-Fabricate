@@ -11,7 +11,7 @@ public class SEtherealEX extends PCLAugment
 {
 
     public static final PCLAugmentData DATA = register(SEtherealEX.class, 5, PCLAffinity.Silver)
-            .setSkill(PTrait.hasTags(PCLCardTag.Ethereal), PTrait.hasCost(-1))
+            .setSkill(PTrait.tags(PCLCardTag.Ethereal), PTrait.cost(-1))
             .setReqs(setTagsNot(PCLCardTag.Ethereal, PCLCardTag.Fragile, PCLCardTag.Fleeting))
             .setSpecial(true);
 

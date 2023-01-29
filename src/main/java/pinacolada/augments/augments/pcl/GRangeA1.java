@@ -14,7 +14,7 @@ public class GRangeA1 extends PCLAugment
 {
 
     public static final PCLAugmentData DATA = register(GRangeA1.class, 1, PCLAffinity.Green)
-            .setSkill(PTrait.hasAttackType(PCLAttackType.Ranged))
+            .setSkill(PTrait.attackType(PCLAttackType.Ranged))
             .setReqs(setTypes(AbstractCard.CardType.ATTACK));
 
     public GRangeA1()

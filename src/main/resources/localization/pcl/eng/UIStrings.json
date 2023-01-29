@@ -476,7 +476,9 @@
 												"If checked, only the first effect will be used if the conditions are met, and only the second effect will be used if it wasn't.",
 												"If checked, only one of the listed conditions is required to activate the effects. Otherwise, all listed conditions are required.",
 												"Select a file from your computer or paste an image from your clipboard.",
-												"The highlighted portion of the image will be saved. Drag the image to reposition it. Use the scrollbar to zoom in or out."
+												"The highlighted portion of the image will be saved. Drag the image to reposition it. Use the scrollbar to zoom in or out.",
+												"The maximum number of times this card can be upgraded at #yRest #ySites.",
+												"If you have reached or surpassed the maximum number of copies, this card will stop appearing in card rewards and shops."
 								]
 				},
 				"pcl:CardMods": {

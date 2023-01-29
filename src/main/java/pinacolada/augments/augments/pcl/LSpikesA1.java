@@ -15,7 +15,7 @@ public class LSpikesA1 extends PCLAugment
 {
 
     public static final PCLAugmentData DATA = register(LSpikesA1.class, 2, PCLAffinity.Yellow)
-            .setSkill(PMove.gainTemporary(3, PCLPowerHelper.Thorns), PTrait.hasCost(1))
+            .setSkill(PMove.gainTemporary(3, PCLPowerHelper.Thorns), PTrait.cost(1))
             .setReqs(setTypes(AbstractCard.CardType.ATTACK, AbstractCard.CardType.SKILL));
 
     public LSpikesA1()

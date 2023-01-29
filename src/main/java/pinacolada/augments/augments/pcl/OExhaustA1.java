@@ -13,7 +13,7 @@ public class OExhaustA1 extends PCLAugment
 {
 
     public static final PCLAugmentData DATA = register(OExhaustA1.class, 3, PCLAffinity.Orange)
-            .setSkill(PTrait.hasTags(PCLCardTag.Exhaust), PTrait.hasCost(-1))
+            .setSkill(PTrait.tags(PCLCardTag.Exhaust), PTrait.cost(-1))
             .setReqs(setTagsNot(PCLCardTag.Exhaust, PCLCardTag.Purge, PCLCardTag.Fleeting));
 
     public OExhaustA1()

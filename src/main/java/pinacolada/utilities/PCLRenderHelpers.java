@@ -77,12 +77,12 @@ public class PCLRenderHelpers extends EUIRenderHelpers
         BitmapFont result;
         if (card.isPopup)
         {
-            result = EUIFontHelper.cardiconfontVerylarge;
+            result = EUIFontHelper.energyFontLarge;
             result.getData().setScale(card.drawScale * 0.5f);
         }
         else
         {
-            result = EUIFontHelper.cardiconfontLarge;
+            result = EUIFontHelper.energyFont;
             result.getData().setScale(card.drawScale);
         }
 

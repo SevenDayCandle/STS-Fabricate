@@ -13,7 +13,7 @@ public class RHitsA2 extends PCLAugment
 {
 
     public static final PCLAugmentData DATA = register(RHitsA2.class, 2, PCLAffinity.Red)
-            .setSkill(PTrait.hasHits(2), PTrait.hasCost(1))
+            .setSkill(PTrait.hitCount(2), PTrait.cost(1))
             .setReqs(setTypes(AbstractCard.CardType.ATTACK).setMaxDamage(3));
 
     public RHitsA2()

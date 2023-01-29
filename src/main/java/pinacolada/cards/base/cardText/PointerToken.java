@@ -23,10 +23,10 @@ public class PointerToken extends PCLTextToken
     }
 
     protected final char variableID;
-    protected final PSkill move;
+    protected final PSkill<?> move;
     private ColoredString coloredString;
 
-    private PointerToken(char variableID, PSkill move)
+    private PointerToken(char variableID, PSkill<?> move)
     {
         super(PCLTextTokenType.Variable, null);
 

@@ -15,7 +15,7 @@ public class LVigorA1 extends PCLAugment
 {
 
     public static final PCLAugmentData DATA = register(LVigorA1.class, 2, PCLAffinity.Yellow)
-            .setSkill(PMove.gain(4, PCLPowerHelper.Vigor), PTrait.hasCost(1))
+            .setSkill(PMove.gain(4, PCLPowerHelper.Vigor), PTrait.cost(1))
             .setReqs(setTypes(AbstractCard.CardType.ATTACK, AbstractCard.CardType.SKILL));
 
     public LVigorA1()

@@ -13,6 +13,7 @@ import pinacolada.interfaces.markers.PointerProvider;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.skills.fields.PField;
+import pinacolada.skills.fields.PField_CardGeneric;
 import pinacolada.skills.skills.base.moves.*;
 import pinacolada.skills.skills.special.moves.PMove_Stun;
 import pinacolada.stances.PCLStanceHelper;
@@ -249,6 +250,11 @@ public abstract class PMove<T extends PField> extends PSkill<T>
     public static PMove_Fetch fetch(int amount, PCLCardGroupHelper... groups)
     {
         return new PMove_Fetch(amount, groups);
+    }
+
+    public static PMove_Fetch fetchRandom(int amount, PCLCardGroupHelper... groups)
+    {
+        return (PMove_Fetch) new PMove_Fetch(amount, groups).edit(PField_CardGeneric::setRandom);
     }
 
     public static PMove_StackPower gain(int amount, PCLPowerHelper... powers)
@@ -498,13 +504,13 @@ public abstract class PMove<T extends PField> extends PSkill<T>
 
     public static PMove_Retain retain(int amount, PCLAffinity... affinity)
     {
-        return (PMove_Retain) new PMove_Retain(amount)
+        return (PMove_Retain) new PMove_Retain(amount, PCLCardGroupHelper.Hand)
                 .edit(f -> f.setAffinity(affinity));
     }
 
     public static PMove_Retain retain(int amount, AbstractCard.CardType... t)
     {
-        return (PMove_Retain) new PMove_Retain(amount)
+        return (PMove_Retain) new PMove_Retain(amount, PCLCardGroupHelper.Hand)
                 .edit(f -> f.setType(t));
     }
 

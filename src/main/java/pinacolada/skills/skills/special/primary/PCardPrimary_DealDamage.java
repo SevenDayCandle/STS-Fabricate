@@ -7,7 +7,6 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT2;
-import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.ColoredString;
 import pinacolada.actions.damage.DealDamage;
 import pinacolada.actions.damage.DealDamageToAll;
@@ -18,7 +17,6 @@ import pinacolada.effects.PCLEffekseerEFX;
 import pinacolada.effects.VFX;
 import pinacolada.interfaces.markers.PointerProvider;
 import pinacolada.misc.PCLUseInfo;
-import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Attack;
@@ -104,9 +102,8 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack>
     public String getSubText()
     {
         int count = source != null ? getExtraFromCard() : 1;
-        EUITooltip tooltip = sourceCard instanceof PCLCard ? ((PCLCard) sourceCard).attackType.getTooltip() : PGR.core.tooltips.normalDamage;
         String amountString = count > 1 ? getAmountRawString() + "x" + getExtraRawString() : getAmountRawString();
-        return TEXT.actions.objectTo(amountString, tooltip, getTargetString());
+        return TEXT.actions.objectTo(amountString, getAttackTooltip(), getTargetString());
     }
 
     public PCardPrimary_DealDamage setDamageEffect(PCLEffekseerEFX effekseerKey)

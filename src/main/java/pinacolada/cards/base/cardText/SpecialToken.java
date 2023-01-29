@@ -61,32 +61,6 @@ public abstract class SpecialToken extends PCLTextToken
                         {
                             internalParser.initialize(parser.card, word.substring(1));
                         }
-                        else if (word.startsWith("+"))
-                        {
-                            if (!parser.card.upgraded)
-                            {
-                                return index + 1;
-                            }
-
-                            if (word.length() == 1)
-                            {
-                                final WordToken plus = new WordToken(word);
-                                plus.coloredString.setColor(Settings.GOLD_COLOR);
-                                parser.addToken(plus);
-                                return index + 1;
-                            }
-
-                            internalParser.initialize(parser.card, word.substring(1));
-                        }
-                        else if (word.startsWith("-"))
-                        {
-                            if (parser.card.upgraded)
-                            {
-                                return index + 1;
-                            }
-
-                            internalParser.initialize(parser.card, word.substring(1));
-                        }
                         else
                         {
                             internalParser.initialize(parser.card, word);
@@ -96,7 +70,7 @@ public abstract class SpecialToken extends PCLTextToken
                         {
                             if (token instanceof WordToken)
                             {
-                                ((WordToken) token).coloredString.setColor(Settings.GOLD_COLOR);
+                                ((WordToken) token).coloredString.setColor(color);
                                 ((WordToken) token).tooltip = tooltip;
                             }
 

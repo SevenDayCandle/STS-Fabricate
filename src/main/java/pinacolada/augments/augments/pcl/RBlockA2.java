@@ -13,7 +13,7 @@ public class RBlockA2 extends PCLAugment
 {
 
     public static final PCLAugmentData DATA = register(RBlockA2.class, 2, PCLAffinity.Red)
-            .setSkill(PTrait.hasBlock(8), PTrait.hasCost(1))
+            .setSkill(PTrait.block(8), PTrait.cost(1))
             .setReqs(setTypes(AbstractCard.CardType.SKILL).setMaxRight(1));
 
     public RBlockA2()

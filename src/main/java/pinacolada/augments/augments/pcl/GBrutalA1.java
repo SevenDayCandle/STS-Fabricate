@@ -14,7 +14,7 @@ public class GBrutalA1 extends PCLAugment
 {
 
     public static final PCLAugmentData DATA = register(GBrutalA1.class, 3, PCLAffinity.Green)
-            .setSkill(PTrait.hasAttackType(PCLAttackType.Brutal))
+            .setSkill(PTrait.attackType(PCLAttackType.Brutal))
             .setReqs(setTypes(AbstractCard.CardType.ATTACK));
 
     public GBrutalA1()

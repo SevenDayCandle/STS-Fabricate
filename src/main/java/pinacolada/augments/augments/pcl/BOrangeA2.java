@@ -13,7 +13,7 @@ public class BOrangeA2 extends PCLAugment
 {
 
     public static final PCLAugmentData DATA = register(BOrangeA2.class, 3, PCLAffinity.Blue)
-            .setSkill(PTrait.hasAffinity(2, PCLAffinity.Orange), PTrait.hasAffinityNot(PCLAffinity.Red, PCLAffinity.Green, PCLAffinity.Blue))
+            .setSkill(PTrait.affinity(2, PCLAffinity.Orange), PTrait.affinityNot(PCLAffinity.Red, PCLAffinity.Green, PCLAffinity.Blue))
             .setReqs(setAffinitiesNot(PCLAffinity.Orange));
 
     public BOrangeA2()

@@ -215,17 +215,8 @@ public class PCLViewLoadoutPoolEffect extends PCLEffectWithCallback<CardGroup>
         deselectAllButton.tryUpdate();
         selectedCount.tryUpdate();
 
-        if (upgradeToggle.hb.hovered || selectAllButton.hb.hovered || deselectAllButton.hb.hovered || grid.hoveredCard != null)
+        if (upgradeToggle.hb.hovered || selectAllButton.hb.hovered || deselectAllButton.hb.hovered || grid.isHovered())
         {
-            duration = startingDuration * 0.1f;
-            isDone = false;
-            return;
-        }
-
-        if (grid.scrollBar.isDragging)
-        {
-            duration = startingDuration;
-            isDone = false;
             return;
         }
 
@@ -234,10 +225,7 @@ public class PCLViewLoadoutPoolEffect extends PCLEffectWithCallback<CardGroup>
             if (EUIInputManager.leftClick.isJustReleased() || EUIInputManager.rightClick.isJustReleased())
             {
                 complete(this.cards);
-                return;
             }
-
-            isDone = false;
         }
     }
 

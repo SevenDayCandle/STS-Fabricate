@@ -14,7 +14,7 @@ public class GNormalizeA1 extends PCLAugment
 {
 
     public static final PCLAugmentData DATA = register(GNormalizeA1.class, 1, PCLAffinity.Green)
-            .setSkill(PTrait.hasAttackType(PCLAttackType.Normal))
+            .setSkill(PTrait.attackType(PCLAttackType.Normal))
             .setReqs(setTypes(AbstractCard.CardType.ATTACK));
 
     public GNormalizeA1()

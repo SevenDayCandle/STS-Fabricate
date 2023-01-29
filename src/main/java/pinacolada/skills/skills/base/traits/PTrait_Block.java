@@ -33,7 +33,7 @@ public class PTrait_Block extends PTrait<PField_Empty>
     @Override
     public String getSubDescText()
     {
-        return PGR.core.tooltips.block.toString();
+        return PGR.core.tooltips.block.getTitleOrIcon();
     }
 
     @Override

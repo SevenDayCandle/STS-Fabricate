@@ -5,8 +5,8 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIRM;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLAttackType;
-import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.skills.base.traits.*;
@@ -30,84 +30,84 @@ public abstract class PTrait<T extends PField> extends PMove<T>
                 .selfTarget();
     }
 
-    public static PTrait_Affinity hasAffinity(PCLAffinity... tags)
+    public static PTrait_Affinity affinity(PCLAffinity... tags)
     {
         return new PTrait_Affinity(tags);
     }
 
-    public static PTrait_Affinity hasAffinity(int amount, PCLAffinity... tags)
+    public static PTrait_Affinity affinity(int amount, PCLAffinity... tags)
     {
         return new PTrait_Affinity(amount, tags);
     }
 
-    public static PTrait_Affinity hasAffinityNot(PCLAffinity... tags)
+    public static PTrait_Affinity affinityNot(PCLAffinity... tags)
     {
         return new PTrait_Affinity(-1, tags);
     }
 
-    public static PTrait_AttackType hasAttackType(PCLAttackType type)
+    public static PTrait_AttackType attackType(PCLAttackType type)
     {
         return new PTrait_AttackType(type);
     }
 
-    public static PTrait_Block hasBlock(int amount)
+    public static PTrait_Block block(int amount)
     {
         return new PTrait_Block(amount);
     }
 
-    public static PTrait_BlockCount hasBlockCount(int amount)
+    public static PTrait_BlockCount blockCount(int amount)
     {
         return new PTrait_BlockCount(amount);
     }
 
-    public static PTrait_BlockMultiplier hasBlockMultiplier(int amount)
+    public static PTrait_BlockMultiplier blockMultiplier(int amount)
     {
         return new PTrait_BlockMultiplier(amount);
     }
 
-    public static PTrait_CardTarget hasCardTarget(PCLCardTarget type)
+    public static PTrait_CardTarget cardTarget(PCLCardTarget type)
     {
         return new PTrait_CardTarget(type);
     }
 
-    public static PTrait_Cost hasCost(int amount)
+    public static PTrait_Cost cost(int amount)
     {
         return new PTrait_Cost(amount);
     }
 
-    public static PTrait_Damage hasDamage(int amount)
+    public static PTrait_Damage damage(int amount)
     {
         return new PTrait_Damage(amount);
     }
 
-    public static PTrait_DamageMultiplier hasDamageMultiplier(int amount)
+    public static PTrait_DamageMultiplier damageMultiplier(int amount)
     {
         return new PTrait_DamageMultiplier(amount);
     }
 
-    public static PTrait_HitCount hasHits(int amount)
+    public static PTrait_HitCount hitCount(int amount)
     {
         return new PTrait_HitCount(amount);
     }
 
-    public static PTrait_Tag hasTags(PCLCardTag... tags)
+    public static PTrait_Priority priority(int amount)
+    {
+        return new PTrait_Priority(amount);
+    }
+
+    public static PTrait_Tag tags(PCLCardTag... tags)
     {
         return new PTrait_Tag(tags);
     }
 
-    public static PTrait_Tag hasTags(int amount, PCLCardTag... tags)
+    public static PTrait_Tag tags(int amount, PCLCardTag... tags)
     {
         return new PTrait_Tag(tags);
     }
 
-    public static PTrait_Tag hasTagsNot(PCLCardTag... tags)
+    public static PTrait_Tag tagsNot(PCLCardTag... tags)
     {
         return (PTrait_Tag) new PTrait_Tag(tags).edit(f -> f.setRandom(true));
-    }
-
-    public static PTrait_TempHP hasTempHP(int amount)
-    {
-        return new PTrait_TempHP(amount);
     }
 
     public PTrait(PSkillData<T> data, PSkillSaveData content)

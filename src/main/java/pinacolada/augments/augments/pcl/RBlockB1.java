@@ -13,7 +13,7 @@ public class RBlockB1 extends PCLAugment
 {
 
     public static final PCLAugmentData DATA = register(RBlockB1.class, 1, PCLAffinity.Red)
-            .setSkill(PTrait.hasBlockMultiplier(15))
+            .setSkill(PTrait.blockMultiplier(15))
             .setReqs(setTypes(AbstractCard.CardType.SKILL));
 
     public RBlockB1()

@@ -13,7 +13,7 @@ public class BGreenA1 extends PCLAugment
 {
 
     public static final PCLAugmentData DATA = register(BGreenA1.class, 1, PCLAffinity.Blue)
-            .setSkill(PTrait.hasAffinity(PCLAffinity.Green))
+            .setSkill(PTrait.affinity(PCLAffinity.Green))
             .setReqs(setAffinitiesNot(PCLAffinity.Green));
 
     public BGreenA1()

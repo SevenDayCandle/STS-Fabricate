@@ -13,7 +13,7 @@ public class BRedA1 extends PCLAugment
 {
 
     public static final PCLAugmentData DATA = register(BRedA1.class, 1, PCLAffinity.Blue)
-            .setSkill(PTrait.hasAffinity(PCLAffinity.Red))
+            .setSkill(PTrait.affinity(PCLAffinity.Red))
             .setReqs(setAffinitiesNot(PCLAffinity.Red));
 
     public BRedA1()

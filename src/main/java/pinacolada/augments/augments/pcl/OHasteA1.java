@@ -13,7 +13,7 @@ public class OHasteA1 extends PCLAugment
 {
 
     public static final PCLAugmentData DATA = register(OHasteA1.class, 2, PCLAffinity.Orange)
-            .setSkill(PTrait.hasTags(PCLCardTag.Haste, PCLCardTag.Ethereal))
+            .setSkill(PTrait.tags(PCLCardTag.Haste, PCLCardTag.Ethereal))
             .setReqs(setTagsNot(PCLCardTag.Haste, PCLCardTag.Ethereal));
 
     public OHasteA1()

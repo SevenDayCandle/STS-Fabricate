@@ -32,7 +32,7 @@ public class PTrait_Damage extends PTrait<PField_Empty>
     @Override
     public String getSubDescText()
     {
-        return TEXT.subjects.damage;
+        return getAttackTooltip().getTitleOrIcon();
     }
 
     @Override

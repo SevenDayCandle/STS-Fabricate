@@ -15,7 +15,7 @@ public class LCrushA1 extends PCLAugment
 {
 
     public static final PCLAugmentData DATA = register(LCrushA1.class, 2, PCLAffinity.Yellow)
-            .setSkill(PMove.applyToSingle(2, PCLPowerHelper.Vulnerable), PTrait.hasCost(1))
+            .setSkill(PMove.applyToSingle(2, PCLPowerHelper.Vulnerable), PTrait.cost(1))
             .setReqs(setTypes(AbstractCard.CardType.ATTACK, AbstractCard.CardType.SKILL));
 
     public LCrushA1()

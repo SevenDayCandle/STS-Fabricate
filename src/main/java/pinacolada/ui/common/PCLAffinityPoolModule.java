@@ -13,8 +13,8 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
-import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardAffinity;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
@@ -36,11 +36,10 @@ public class PCLAffinityPoolModule extends CustomCardFilterModule
     public final ArrayList<AffinityKeywordButton> affinityButtons = new ArrayList<>();
     public final EUILabel affinitiesSectionLabel;
     public final EUISearchableDropdown<PCLLoadout> seriesDropdown;
-    protected CardKeywordFilters filters;
 
     public PCLAffinityPoolModule(CardKeywordFilters filters)
     {
-        this.filters = filters;
+        super(filters);
         seriesDropdown = (EUISearchableDropdown<PCLLoadout>) new EUISearchableDropdown<PCLLoadout>(new EUIHitbox(0, 0, scale(240), scale(48)), PCLLoadout::getName)
                 .setOnOpenOrClose(isOpen -> {
                     CardCrawlGame.isPopupOpen = this.isActive;

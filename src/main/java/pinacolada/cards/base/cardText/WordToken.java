@@ -11,10 +11,12 @@ public class WordToken extends PCLTextToken
 {
     protected EUITooltip tooltip = null;
     protected ColoredString coloredString = new ColoredString(null, null);
+    protected int extraLength;
 
-    protected WordToken(String text)
+    protected WordToken(String text, int extraLength)
     {
         super(PCLTextTokenType.Text, text);
+        this.extraLength = extraLength;
     }
 
     protected static boolean isValidCharacter(Character character, boolean firstCharacter)
@@ -23,25 +25,38 @@ public class WordToken extends PCLTextToken
         {
             return false;
         }
-        else if (firstCharacter)
+
+        switch (character)
         {
-            return Character.isLetterOrDigit(character) || ("~<>".indexOf(character) >= 0);
-        }
-        else
-        {
-            return Character.isLetterOrDigit(character) || ("_+-".indexOf(character) >= 0);
+            case '~':
+            case '<':
+            case '>':
+                return firstCharacter;
+            case '_':
+            case '%':
+            case '+':
+            case '-':
+                return true;
+            default:
+                return Character.isLetterOrDigit(character);
         }
     }
+
+    protected static boolean isLonger(Character character)
+    {
+        return character == '%';
+    }
+
 
     public static int tryAdd(PCLTextParser parser)
     {
         if (isValidCharacter(parser.character, true))
         {
+            int additionalWidth = 0;
             builder.setLength(0);
             builder.append(parser.character);
 
             int i = 1;
-            boolean skip = false;
             while (true)
             {
                 Character next = parser.nextCharacter(i);
@@ -50,22 +65,12 @@ public class WordToken extends PCLTextToken
                 {
                     break;
                 }
-                else if (next == '|')
-                {
-                    if (parser.card.upgraded)
-                    {
-                        builder.setLength(0);
-                    }
-                    else
-                    {
-                        skip = true;
-                    }
-                }
                 else if (isValidCharacter(next, false))
                 {
-                    if (!skip)
+                    builder.append(next);
+                    if (isLonger(next))
                     {
-                        builder.append(next);
+                        additionalWidth += 1;
                     }
                 }
                 else
@@ -81,11 +86,11 @@ public class WordToken extends PCLTextToken
             WordToken token;
             if (word.charAt(0) == '~' && word.length() > 1)
             {
-                token = new WordToken(word.substring(1));
+                token = new WordToken(word.substring(1), additionalWidth);
             }
             else
             {
-                token = new WordToken(word);
+                token = new WordToken(word, additionalWidth);
             }
 
             if (!parser.ignoreKeywords)
@@ -108,6 +113,12 @@ public class WordToken extends PCLTextToken
         }
 
         return 0;
+    }
+
+    @Override
+    public float getAdditionalWidth(PCLCardText context)
+    {
+        return super.getAdditionalWidth(context) + extraLength;
     }
 
     @Override

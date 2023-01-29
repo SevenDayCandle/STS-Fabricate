@@ -11,7 +11,7 @@ import pinacolada.skills.PTrait;
 public class BBlueA1 extends PCLAugment
 {
     public static final PCLAugmentData DATA = register(BBlueA1.class, 1, PCLAffinity.Blue)
-            .setSkill(PTrait.hasAffinity(PCLAffinity.Blue))
+            .setSkill(PTrait.affinity(PCLAffinity.Blue))
             .setReqs(setAffinitiesNot(PCLAffinity.Blue));
 
     public BBlueA1()

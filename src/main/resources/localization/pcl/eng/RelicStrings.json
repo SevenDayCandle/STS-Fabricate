@@ -26,7 +26,7 @@
 	},
 	"pcl:FoolishCubes":
 	{
-		"DESCRIPTIONS": ["You may reroll cards from card rewards into random #yCommons or #yUncommons. | Gain #b{0} uses when you enter #yMonster rooms. Gain #b{1} more if it was an #yElite or #yBoss room. Store up to #b{2} uses."],
+		"DESCRIPTIONS": ["You may reroll cards from card rewards. | Entering #yMonster rooms gives #b1 use(s) per #b{0} cards in the pool. Store up to #b{1} uses."],
 		"FLAVOR": "A pair of simple rolling cubes.",
 		"NAME": "Foolish Cubes"
 	},
@@ -116,7 +116,7 @@
 	},
 	"pcl:SpitefulCubes":
 	{
-		"DESCRIPTIONS": ["Replaces #yFoolish #yCubes. You may reroll cards from card rewards into cards with any of its [A-W]. | Gain #b{0} uses when you enter #yMonster rooms. Gain #b{1} more if it was an #yElite or #yBoss room. Store up to #b{2} uses."],
+		"DESCRIPTIONS": ["Replaces #yFoolish #yCubes. You may reroll cards from card rewards. | Entering #yMonster rooms gives #b1 use(s) per #b{0} cards in the pool. Store up to #b{1} uses."],
 		"FLAVOR": "A pair of black cubes. You probably should not roll them.",
 		"NAME": "Spiteful Cubes"
 	},

@@ -3,6 +3,9 @@ package pinacolada.cards.base.cardText;
 import java.util.HashMap;
 import java.util.Map;
 
+import static pinacolada.cards.base.cardText.ConditionToken.CONDITION_TOKEN;
+import static pinacolada.cards.base.cardText.PointerToken.BOUND_TOKEN;
+
 // Copied and modified from STS-AnimatorMod
 public class PunctuationToken extends PCLTextToken
 {
@@ -13,25 +16,39 @@ public class PunctuationToken extends PCLTextToken
         super(PCLTextTokenType.Punctuation, text);
     }
 
-    protected static boolean isValidCharacter(Character character, boolean firstCharacter)
+    protected static boolean isValidCharacter(Character character)
     {
-        if (character == null)
+        if (character == null || Character.isLetterOrDigit(character) || Character.isWhitespace(character))
         {
             return false;
         }
-        else if (firstCharacter)
+
+        // Characters used by other tokens are not allowed
+        switch (character)
         {
-            return !Character.isLetterOrDigit(character) && !Character.isWhitespace(character) && "<>".indexOf(character) == -1;
+            case BOUND_TOKEN:
+            case CONDITION_TOKEN:
+            case '<':
+            case '>':
+            case '{':
+            case '[':
+            case '#':
+            case '*':
+            case '@':
+            case '$':
+            case ']':
+            case '}':
+            case '+':
+            case '-':
+            case '%':
+                return false;
         }
-        else
-        {
-            return ("{[!#<_*@$>]}¦║+-%".indexOf(character) == -1) && !Character.isLetterOrDigit(character) && !Character.isWhitespace(character);
-        }
+        return true;
     }
 
     public static int tryAdd(PCLTextParser parser)
     {
-        if (isValidCharacter(parser.character, true))
+        if (isValidCharacter(parser.character))
         {
             builder.setLength(0);
             builder.append(parser.character);
@@ -41,7 +58,7 @@ public class PunctuationToken extends PCLTextToken
             {
                 Character next = parser.nextCharacter(i);
 
-                if (isValidCharacter(next, false))
+                if (isValidCharacter(next))
                 {
                     builder.append(next);
                 }

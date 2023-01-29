@@ -13,7 +13,7 @@ public class ORetainA2 extends PCLAugment
 {
 
     public static final PCLAugmentData DATA = register(ORetainA2.class, 3, PCLAffinity.Orange)
-            .setSkill(PTrait.hasTags(-1, PCLCardTag.Retain, PCLCardTag.Grave))
+            .setSkill(PTrait.tags(-1, PCLCardTag.Retain, PCLCardTag.Grave))
             .setReqs(setTagsNot(PCLCardTag.Retain, PCLCardTag.Ethereal, PCLCardTag.Fragile));
 
     public ORetainA2()

@@ -15,7 +15,7 @@ public class LBlindA1 extends PCLAugment
 {
 
     public static final PCLAugmentData DATA = register(LBlindA1.class, 2, PCLAffinity.Yellow)
-            .setSkill(PMove.applyToSingle(2, PCLPowerHelper.Blinded), PTrait.hasCost(1))
+            .setSkill(PMove.applyToSingle(2, PCLPowerHelper.Blinded), PTrait.cost(1))
             .setReqs(setTypes(AbstractCard.CardType.ATTACK, AbstractCard.CardType.SKILL));
 
     public LBlindA1()

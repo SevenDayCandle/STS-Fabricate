@@ -15,7 +15,7 @@ public class LInvigorateA1 extends PCLAugment
 {
 
     public static final PCLAugmentData DATA = register(LInvigorateA1.class, 3, PCLAffinity.Yellow)
-            .setSkill(PMove.gain(2, PCLPowerHelper.Invigorated), PTrait.hasCost(2))
+            .setSkill(PMove.gain(2, PCLPowerHelper.Invigorated), PTrait.cost(2))
             .setReqs(setTypes(AbstractCard.CardType.ATTACK, AbstractCard.CardType.SKILL));
 
     public LInvigorateA1()
