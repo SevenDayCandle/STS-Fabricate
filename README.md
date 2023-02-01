@@ -11,4 +11,4 @@ This mods adds an in-game card editor to Slay the Spire. It will eventually have
 If you would like to give feedback on the current state of this mod or wish to follow it for updates, you can do so at this Discord server: https://discord.gg/he76RmsuYZ
 
 ## Credits
-- EatYourBeetS/The Animator for the initial framework: https://discord.gg/SmHMmJR
+- EatYourBeetS/The Animator for the initial framework. The original mod can be found here: https://steamcommunity.com/sharedfiles/filedetails/?id=1638308801, while their discord can be found here: https://discord.gg/SmHMmJR
