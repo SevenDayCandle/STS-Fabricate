@@ -3,14 +3,17 @@ package pinacolada.patches;
 import com.evacipated.cardcrawl.modthespire.lib.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.curses.AscendersBane;
+import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import javassist.CannotCompileException;
 import javassist.expr.ExprEditor;
 import javassist.expr.MethodCall;
-import pinacolada.cards.pcl.curse.Curse_AscendersBane;
+import pinacolada.cards.base.PCLCardData;
 import pinacolada.misc.CombatManager;
+import pinacolada.resources.PCLResources;
+import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -43,20 +46,25 @@ public class AbstractDungeonPatches
         @SpirePostfixPatch
         public static void postfix()
         {
-            if (!GameUtilities.isPCLPlayerClass())
+            AbstractPlayer.PlayerClass pClass = GameUtilities.getPlayerClass();
+            if (GameUtilities.isPCLPlayerClass(pClass))
             {
-                return;
-            }
-
-            final ArrayList<AbstractCard> cards = AbstractDungeon.player.masterDeck.group;
-            for (int i = 0; i < cards.size(); i++)
-            {
-                if (cards.get(i).cardID.equals(AscendersBane.ID))
+                PCLResources<?,?,?> resources = PGR.getResources(pClass);
+                PCLCardData bane = resources.getAscendersBane();
+                if (bane != null)
                 {
-                    cards.set(i, Curse_AscendersBane.DATA.makeCopy(false));
-                    UnlockTracker.markCardAsSeen(Curse_AscendersBane.DATA.ID);
+                    final ArrayList<AbstractCard> cards = AbstractDungeon.player.masterDeck.group;
+                    for (int i = 0; i < cards.size(); i++)
+                    {
+                        if (cards.get(i).cardID.equals(AscendersBane.ID))
+                        {
+                            cards.set(i, bane.makeCopy(false));
+                            UnlockTracker.markCardAsSeen(bane.ID);
+                        }
+                    }
                 }
             }
+
         }
     }
 

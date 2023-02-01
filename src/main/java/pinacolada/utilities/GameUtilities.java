@@ -52,7 +52,6 @@ import org.scannotation.AnnotationDB;
 import pinacolada.actions.PCLActions;
 import pinacolada.blights.common.UpgradedHand;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardAffinities;
 import pinacolada.cards.base.fields.PCLCardAffinity;
@@ -67,7 +66,6 @@ import pinacolada.monsters.PCLCardAlly;
 import pinacolada.monsters.PCLIntentInfo;
 import pinacolada.orbs.PCLOrb;
 import pinacolada.orbs.PCLOrbHelper;
-import pinacolada.patches.library.CardLibraryPatches;
 import pinacolada.powers.PCLPower;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.resources.PCLEnum;
@@ -918,12 +916,6 @@ public class GameUtilities
         return result;
     }
 
-    public static AbstractCard getCardReplacementOrDefault(String cardID, boolean upgraded)
-    {
-        PCLCardData data = getPCLCardReplacement(cardID);
-        return data == null ? CardLibrary.getCopy(cardID, upgraded ? 1 : 0, 0) : data.createNewInstance(upgraded);
-    }
-
     public static ArrayList<AbstractCard> getCardsInAnyPile()
     {
         return getCardsInPile(player.hand, player.discardPile, player.drawPile, player.exhaustPile);
@@ -1151,17 +1143,6 @@ public class GameUtilities
     {
         final PCLCardAffinities a = getPCLCardAffinities(card);
         return a != null ? a.getLevel(affinity, useStarLevel) : 0;
-    }
-
-    public static PCLCardData getPCLCardReplacement(String cardID)
-    {
-        return CardLibraryPatches.getStandardReplacement(cardID);
-    }
-
-    public static PCLCard getPCLCardReplacement(String cardID, boolean upgraded)
-    {
-        PCLCardData data = getPCLCardReplacement(cardID);
-        return data == null ? null : data.createNewInstance(upgraded);
     }
 
     public static EUITooltip getPCLOrbTooltip(AbstractOrb orb)

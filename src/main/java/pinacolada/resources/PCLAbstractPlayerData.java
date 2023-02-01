@@ -218,25 +218,8 @@ public abstract class PCLAbstractPlayerData
         reload();
     }
 
-    public void initializeCardPool()
+    public void updateRelicsForDungeon()
     {
-        // Always include the selected loadout. If for some reason none exists, assign one at random
-        if (selectedLoadout == null)
-        {
-            selectedLoadout = EUIUtils.random(EUIUtils.filter(getEveryLoadout(), loadout -> resources.getUnlockLevel() >= loadout.unlockLevel));
-        }
-
-        for (PCLLoadout loadout : getEveryLoadout())
-        {
-            // Series must be unlocked to be present in-game
-            if (!loadout.isLocked())
-            {
-                PGR.core.dungeon.loadouts.add(loadout);
-            }
-        }
-
-        PGR.core.dungeon.bannedCards.addAll(resources.config.bannedCards.get());
-        PGR.core.dungeon.bannedRelics.addAll(resources.config.bannedRelics.get());
     }
 
     public PCLLoadout prepareLoadout()

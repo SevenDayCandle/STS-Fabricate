@@ -6,11 +6,8 @@ import com.evacipated.cardcrawl.modthespire.lib.SpirePostfixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.cards.colorless.*;
-import com.megacrit.cardcrawl.cards.curses.*;
-import com.megacrit.cardcrawl.cards.status.*;
-import com.megacrit.cardcrawl.cards.tempCards.Insight;
-import com.megacrit.cardcrawl.cards.tempCards.Miracle;
+import com.megacrit.cardcrawl.cards.colorless.Madness;
+import com.megacrit.cardcrawl.cards.curses.AscendersBane;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
@@ -20,9 +17,8 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.cards.base.ReplacementCardBuilder;
-import pinacolada.cards.pcl.curse.*;
 import pinacolada.cards.pcl.special.QuestionMark;
-import pinacolada.cards.pcl.status.*;
+import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RandomizedList;
@@ -38,71 +34,29 @@ public class CardLibraryPatches
         return cardID.split(Pattern.quote(":"), 2);
     }
 
-    // TODO allow sub-mods to add their own replacements
-    public static PCLCardData getStandardReplacement(String cardID)
+    public static void tryReplace(AbstractCard[] card)
     {
-        // Base game card replacements
-        switch (cardID)
-        {
-            case Apparition.ID:
-                return pinacolada.cards.pcl.replacement.Apparition.DATA;
-            case AscendersBane.ID:
-                return Curse_AscendersBane.DATA;
-            case Bite.ID:
-                return pinacolada.cards.pcl.replacement.Bite.DATA;
-            case Burn.ID:
-                return Status_Burn.DATA;
-            case Clumsy.ID:
-                return Curse_Clumsy.DATA;
-            case Dazed.ID:
-                return Status_Dazed.DATA;
-            case Decay.ID:
-                return Curse_Decay.DATA;
-            case Doubt.ID:
-                return Curse_Doubt.DATA;
-            case Injury.ID:
-                return Curse_Injury.DATA;
-            case Insight.ID:
-                return pinacolada.cards.pcl.replacement.Insight.DATA;
-            case JAX.ID:
-                return pinacolada.cards.pcl.replacement.JAX.DATA;
-            case Madness.ID:
-                return pinacolada.cards.pcl.colorless.Madness.DATA;
-            case Miracle.ID:
-                return pinacolada.cards.pcl.replacement.Miracle.DATA;
-            case Normality.ID:
-                return Curse_Normality.DATA;
-            case Pain.ID:
-                return Curse_Pain.DATA;
-            case Parasite.ID:
-                return Curse_Parasite.DATA;
-            case Regret.ID:
-                return Curse_Regret.DATA;
-            case RitualDagger.ID:
-                return pinacolada.cards.pcl.replacement.RitualDagger.DATA;
-            case Shame.ID:
-                return Curse_Shame.DATA;
-            case Slimed.ID:
-                return Status_Slimed.DATA;
-            case VoidCard.ID:
-                return Status_Void.DATA;
-            case Wound.ID:
-                return Status_Wound.DATA;
-            case Writhe.ID:
-                return Curse_Writhe.DATA;
-
-            default:
-                return null;
-        }
+        card[0] = tryReplace(card[0]);
     }
 
-    protected static AbstractCard tryCreateReplacementForPCL(AbstractCard card)
+    public static AbstractCard tryReplace(AbstractCard card)
+    {
+        AbstractPlayer.PlayerClass playerClass = GameUtilities.getPlayerClass();
+        if (GameUtilities.isPCLPlayerClass(playerClass))
+        {
+            PCLResources<?,?,?> resources = PGR.getResources(playerClass);
+            return tryReplace(resources, card);
+        }
+        return card;
+    }
+
+    public static AbstractCard tryReplace(PCLResources<?,?,?> resources, AbstractCard card)
     {
         if (card instanceof PCLCard)
         {
             return card;
         }
-        PCLCardData data = getStandardReplacement(card.cardID);
+        PCLCardData data = resources.getReplacement(card.cardID);
         if (data != null)
         {
             return data.makeCopy(card.upgraded);
@@ -119,13 +73,15 @@ public class CardLibraryPatches
         return card;
     }
 
-    public static void tryReplace(AbstractCard[] card)
+    public static PCLCardData getStandardReplacement(String id)
     {
         AbstractPlayer.PlayerClass playerClass = GameUtilities.getPlayerClass();
         if (GameUtilities.isPCLPlayerClass(playerClass))
         {
-            card[0] = tryCreateReplacementForPCL(card[0]);
+            PCLResources<?,?,?> resources = PGR.getResources(playerClass);
+            return resources.getReplacement(id);
         }
+        return null;
     }
 
     @SpirePatch(clz = CardLibrary.class, method = "getCard", paramtypez = {String.class})
@@ -136,13 +92,10 @@ public class CardLibraryPatches
         {
             if (PGR.isLoaded())
             {
-                if (GameUtilities.isPCLPlayerClass())
+                final PCLCardData data = getStandardReplacement(key);
+                if (data != null)
                 {
-                    final PCLCardData data = getStandardReplacement(key);
-                    if (data != null)
-                    {
-                        return SpireReturn.Return(data.makeCopy(false));
-                    }
+                    return SpireReturn.Return(data.makeCopy(false));
                 }
 
                 PCLCustomCardSlot slot = PCLCustomCardSlot.get(key);
@@ -169,29 +122,30 @@ public class CardLibraryPatches
                 __result.name = __result.originalName = key;
                 EUIUtils.logError(CardLibrary.class, "Card not found: " + key);
             }
-            if (PGR.core.config.replaceCardsPCL.get() && GameUtilities.isPCLPlayerClass())
-            {
-                return tryCreateReplacementForPCL(__result);
-            }
-            return __result;
+            return CardLibraryPatches.tryReplace(__result);
         }
 
         @SpirePrefixPatch
         public static SpireReturn<AbstractCard> prefix(String key, int upgradeTime, int misc)
         {
-            if (key.equals(AscendersBane.ID) && GameUtilities.isPCLPlayerClass())
+            if (key.equals(AscendersBane.ID))
             {
-                return SpireReturn.Return(Curse_AscendersBane.DATA.makeCopy(false));
-            }
-            else if (GameUtilities.isPCLPlayerClass())
-            {
-                PCLCardData data = getStandardReplacement(key);
-                if (data != null)
+                AbstractPlayer.PlayerClass pClass = GameUtilities.getPlayerClass();
+                if (GameUtilities.isPCLPlayerClass(pClass))
                 {
-                    return SpireReturn.Return(data.makeCopy(upgradeTime > 0));
+                    PCLResources<?, ?, ?> resources = PGR.getResources(pClass);
+                    PCLCardData bane = resources.getAscendersBane();
+                    if (bane != null)
+                    {
+                        return SpireReturn.Return(bane.makeCopy(false));
+                    }
                 }
             }
-
+            final PCLCardData data = getStandardReplacement(key);
+            if (data != null)
+            {
+                return SpireReturn.Return(data.makeCopy(false));
+            }
             return SpireReturn.Continue();
         }
     }
@@ -217,8 +171,7 @@ public class CardLibraryPatches
             for (Map.Entry<String, AbstractCard> entry : curses.entrySet())
             {
                 final AbstractCard c = entry.getValue();
-                final PCLCardData replacement = (PGR.isLoaded() && GameUtilities.isPCLPlayerClass() && PGR.core.config.replaceCardsPCL.get()) ? getStandardReplacement(c.cardID) : null;
-                if (c.rarity != AbstractCard.CardRarity.SPECIAL && (ignore == null || !c.cardID.equals(ignore.cardID)) && replacement == null)
+                if (c.rarity != AbstractCard.CardRarity.SPECIAL && (ignore == null || !c.cardID.equals(ignore.cardID)) && getStandardReplacement(c.cardID) == null)
                 {
                     cards.add(entry.getKey());
                 }

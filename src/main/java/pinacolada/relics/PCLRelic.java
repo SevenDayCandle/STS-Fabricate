@@ -12,14 +12,13 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.random.Random;
-import com.megacrit.cardcrawl.relics.*;
+import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.actions.PCLActions;
-import pinacolada.misc.PCLDungeon;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
@@ -77,28 +76,6 @@ public abstract class PCLRelic extends CustomRelic implements TooltipProvider
     public static String createFullID(PCLResources<?,?,?> resources, Class<? extends PCLRelic> type)
     {
         return resources.createID(type.getSimpleName());
-    }
-
-    public static void updateRelics(boolean isPCLCharacter)
-    {
-        if (isPCLCharacter)
-        {
-            final PCLDungeon data = PGR.core.dungeon;
-
-            data.addRelic(MarkOfPain.ID, AbstractRelic.RelicTier.BOSS);
-
-            data.addRelic(RunicCapacitor.ID, AbstractRelic.RelicTier.SHOP);
-            data.addRelic(TwistedFunnel.ID, AbstractRelic.RelicTier.SHOP);
-            data.addRelic(Brimstone.ID, AbstractRelic.RelicTier.SHOP);
-            data.addRelic(DataDisk.ID, AbstractRelic.RelicTier.SHOP);
-            data.addRelic(SacredBark.ID, AbstractRelic.RelicTier.SHOP);
-            data.addRelic(CloakClasp.ID, AbstractRelic.RelicTier.RARE);
-            data.addRelic(CharonsAshes.ID, AbstractRelic.RelicTier.RARE);
-            data.addRelic(ChampionsBelt.ID, AbstractRelic.RelicTier.RARE);
-            data.addRelic(PaperCrane.ID, AbstractRelic.RelicTier.UNCOMMON);
-            data.addRelic(PaperFrog.ID, AbstractRelic.RelicTier.UNCOMMON);
-            data.addRelic(RedSkull.ID, AbstractRelic.RelicTier.COMMON);
-        }
     }
 
     protected void activateBattleEffect()

@@ -10,11 +10,10 @@ import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.markers.CardObject;
+import org.apache.commons.lang3.StringUtils;
 import pinacolada.annotations.VisibleCard;
 import pinacolada.cards.base.fields.*;
 import pinacolada.cards.base.tags.PCLCardTag;
-import pinacolada.monsters.PCLCardAlly;
-import pinacolada.monsters.animations.PCLAllyAnimation;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
@@ -26,12 +25,16 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static extendedui.EUIUtils.array;
 import static extendedui.EUIUtils.safeIndex;
 
 public class PCLCardData implements CardObject
 {
+    private static final Map<String, PCLCardData> staticData = new HashMap<>();
     public final Class<? extends PCLCard> type;
     public Integer[] damage = array(0);
     public Integer[] damageUpgrade = array(0);
@@ -56,7 +59,6 @@ public class PCLCardData implements CardObject
     public AbstractCard.CardType cardType = AbstractCard.CardType.SKILL;
     public AbstractCard.CardColor cardColor = AbstractCard.CardColor.COLORLESS;
     public AbstractCard.CardRarity cardRarity = AbstractCard.CardRarity.BASIC;
-    public FuncT1<PCLAllyAnimation, PCLCardAlly> customAnimation; // TODO use this
     public PCLResources<?,?,?> resources;
     public PCLAttackType attackType = PCLAttackType.Normal;
     public PCLCardDataAffinityGroup affinities = new PCLCardDataAffinityGroup();
@@ -99,6 +101,36 @@ public class PCLCardData implements CardObject
         this.type = type;
     }
 
+    public static Collection<PCLCardData> getAllData()
+    {
+        return getAllData(false, true, (FuncT1<Boolean, PCLCardData>) null);
+    }
+
+    public static Collection<PCLCardData> getAllData(boolean showHidden, boolean sort, AbstractCard.CardColor filterColor)
+    {
+        return getAllData(false, true, a -> a.cardColor == filterColor || a.resources.cardColor == filterColor || a.resources == PGR.core);
+    }
+
+    public static Collection<PCLCardData> getAllData(boolean showHidden, boolean sort, FuncT1<Boolean, PCLCardData> filterFunc)
+    {
+        Stream<PCLCardData> stream = staticData
+                .values()
+                .stream();
+        if (!showHidden)
+        {
+            stream = stream.filter(a -> a.type.isAnnotationPresent(VisibleCard.class) && !a.isNotSeen());
+        }
+        if (filterFunc != null)
+        {
+            stream = stream.filter(filterFunc::invoke);
+        }
+        if (sort)
+        {
+            stream = stream.sorted((a, b) -> StringUtils.compare(a.strings.NAME, b.strings.NAME));
+        }
+        return stream.collect(Collectors.toList());
+    }
+
     // Use our own mock strings because brackets will cause the card not to load
     private static CardStrings getMockCardString()
     {
@@ -108,6 +140,17 @@ public class PCLCardData implements CardObject
         retVal.UPGRADE_DESCRIPTION = "";
         retVal.EXTENDED_DESCRIPTION = new String[]{""};
         return retVal;
+    }
+
+    public static PCLCardData getStaticData(String cardID)
+    {
+        return staticData.get(cardID);
+    }
+
+    protected static PCLCardData registerCardData(PCLCardData cardData)
+    {
+        PCLCardData.staticData.put(cardData.ID, cardData);
+        return cardData;
     }
 
     public PCLCardData addTags(PCLCardTag... tags)
@@ -241,7 +284,8 @@ public class PCLCardData implements CardObject
 
     public String getLoadoutName()
     {
-        return loadout != null ? loadout.getName() : strings.DESCRIPTION;
+        String loadoutName = loadout != null ? loadout.getName() : null;
+        return loadoutName != null ? loadoutName : strings.DESCRIPTION;
     }
 
     public Integer[] getNumbers(int form)
@@ -461,7 +505,12 @@ public class PCLCardData implements CardObject
 
     public PCLCardData setCore()
     {
-        return setLoadout(PGR.getPlayerData(cardColor).getCoreLoadout());
+        return setCore(false);
+    }
+
+    public PCLCardData setCore(boolean colorless)
+    {
+        return setLoadout(PGR.getPlayerData(resources.cardColor).getCoreLoadout(), colorless);
     }
 
     public PCLCardData setColorless()
@@ -784,8 +833,7 @@ public class PCLCardData implements CardObject
     public PCLCardData setStatus(int cost, AbstractCard.CardRarity rarity, PCLCardTarget target, boolean playAtEndOfTurn)
     {
         setRarity(rarity);
-
-        cardColor = AbstractCard.CardColor.COLORLESS;
+        setColorless();
         cardType = AbstractCard.CardType.STATUS;
         cardTarget = target;
         this.cost = array(cost);

@@ -32,7 +32,6 @@ import pinacolada.effects.vfx.SmokeEffect;
 import pinacolada.interfaces.listeners.OnAddToDeckListener;
 import pinacolada.interfaces.listeners.OnAddingToCardRewardListener;
 import pinacolada.interfaces.listeners.OnCardPoolChangedListener;
-import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.FakeLoadout;
@@ -82,6 +81,12 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         return data;
     }
 
+    // When playing as a non-PCL character, remove any colorless cards that should be exclusive to a particular PCL character
+    private static boolean isColorlessCardExclusive(AbstractCard card)
+    {
+        return EUIUtils.any(PGR.getAllResources(), r -> r.filterColorless(card));
+    }
+
     public void addAugment(String id, int count)
     {
         augments.merge(id, count, Integer::sum);
@@ -103,6 +108,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
                 }
 
                 pool.add(rng.random(pool.size() - 1), relicID);
+                bannedRelics.remove(relicID);
             }
         }
     }
@@ -120,17 +126,22 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         log("Banned " + card.cardID + ", Total: " + bannedCards.size());
     }
 
-    // TODO Use this
     public void banRelic(String relicID)
+    {
+        removeRelic(relicID);
+        bannedRelics.add(relicID);
+        log("Banned " + relicID + ", Total: " + bannedRelics.size());
+    }
+
+    public void removeRelic(String relicID)
     {
         final ArrayList<String> pool = GameUtilities.getRelicPool(RelicLibrary.getRelic(relicID).tier);
         if (pool != null)
         {
             pool.remove(relicID);
-            bannedRelics.add(relicID);
-            log("Banned " + relicID + ", Total: " + bannedRelics.size());
         }
     }
+
 
     public boolean canJumpAnywhere()
     {
@@ -323,56 +334,113 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         final AbstractPlayer player = CombatManager.refreshPlayer();
         data = PGR.getPlayerData(player.chosenClass);
 
-        if (data != null)
-        {
-            data.initializeCardPool();
-            if (!panelAdded)
-            {
-                panelAdded = true;
-                BaseMod.addTopPanelItem(PGR.core.augmentPanel);
-            }
-        }
-        else
+        // When playing as a non-PCL character, remove the augment panel and any cards defined in a resource's custom colorless pool
+        if (data == null)
         {
             if (panelAdded)
             {
                 panelAdded = false;
                 BaseMod.removeTopPanelItem(PGR.core.augmentPanel);
             }
-            AbstractDungeon.srcCurseCardPool.group.removeIf(PCLCard.class::isInstance);
-            AbstractDungeon.curseCardPool.group.removeIf(PCLCard.class::isInstance);
-            AbstractDungeon.srcColorlessCardPool.group.removeIf(PCLCard.class::isInstance);
-            AbstractDungeon.colorlessCardPool.group.removeIf(PCLCard.class::isInstance);
-            PCLRelic.updateRelics(false);
+            AbstractDungeon.srcCurseCardPool.group.removeIf(PCLDungeon::isColorlessCardExclusive);
+            AbstractDungeon.curseCardPool.group.removeIf(PCLDungeon::isColorlessCardExclusive);
+            AbstractDungeon.srcColorlessCardPool.group.removeIf(PCLDungeon::isColorlessCardExclusive);
+            AbstractDungeon.colorlessCardPool.group.removeIf(PCLDungeon::isColorlessCardExclusive);
             loadCustomCards(player);
             return;
         }
 
-        PCLRelic.updateRelics(true);
+        loadCardsForData(data);
+        loadCustomCards(player);
+        updateCardCopies();
+        data.updateRelicsForDungeon();
+        if (!panelAdded)
+        {
+            panelAdded = true;
+            BaseMod.addTopPanelItem(PGR.core.augmentPanel);
+        }
 
         if (Settings.isStandardRun())
         {
             data.saveTrophies(true);
         }
 
+        // Modify starting potion slots
+        if (data.selectedLoadout != null)
+        {
+            player.potionSlots += data.selectedLoadout.getPotionSlots();
+            while (player.potions.size() > player.potionSlots && player.potions.get(player.potions.size() - 1) instanceof PotionSlot)
+            {
+                player.potions.remove(player.potions.size() - 1);
+            }
+            while (player.potionSlots > player.potions.size())
+            {
+                player.potions.add(new PotionSlot(player.potions.size() - 1));
+            }
+            player.adjustPotionPositions();
+        }
+
+        // Add glyphs
+        for (int i = 0; i < PCLAbstractPlayerData.GLYPHS.size(); i++)
+        {
+            boolean shouldAdd = true;
+            for (AbstractBlight blight : player.blights)
+            {
+                if (PCLAbstractPlayerData.GLYPHS.get(i).getClass().equals(blight.getClass()))
+                {
+                    shouldAdd = false;
+                    break;
+                }
+            }
+            int counter = PGR.core.dungeon.ascensionGlyphCounters.size() > i ? PGR.core.dungeon.ascensionGlyphCounters.get(i) : 0;
+            if (shouldAdd && counter > 0)
+            {
+                AbstractBlight blight = PCLAbstractPlayerData.GLYPHS.get(i).makeCopy();
+                blight.setCounter(counter);
+                GameUtilities.obtainBlightWithoutEffect(blight);
+            }
+        }
+
+        //PCLCard.ToggleSimpleMode(player.masterDeck.group, SimpleMode);
+    }
+
+    private void loadCardsForData(PCLAbstractPlayerData data)
+    {
+        // Always include the selected loadout. If for some reason none exists, assign one at random
+        if (data.selectedLoadout == null)
+        {
+            data.selectedLoadout = EUIUtils.random(EUIUtils.filter(data.getEveryLoadout(), loadout -> data.resources.getUnlockLevel() >= loadout.unlockLevel));
+        }
+
+        for (PCLLoadout loadout : data.getEveryLoadout())
+        {
+            // Series must be unlocked to be present in-game
+            if (!loadout.isLocked())
+            {
+                loadouts.add(loadout);
+            }
+        }
+
+        bannedCards.addAll(data.resources.config.bannedCards.get());
+        bannedRelics.addAll(data.resources.config.bannedRelics.get());
+
         final ArrayList<CardGroup> groups = new ArrayList<>();
-        final AbstractCard.CardColor cColor = player.getCardColor();
         groups.addAll(GameUtilities.getCardPools());
         groups.addAll(GameUtilities.getSourceCardPools());
         for (CardGroup group : groups)
         {
             group.group.removeIf(card ->
             {
-                if (card.color == AbstractCard.CardColor.COLORLESS || card.color == AbstractCard.CardColor.CURSE)
+                if (!bannedCards.contains(card.cardID))
                 {
-                    return !(card instanceof PCLCard);
-                }
-                else if (card.color != cColor || loadouts.isEmpty())
-                {
-                    return false;
-                }
-                else if (!bannedCards.contains(card.cardID))
-                {
+                    if (GameUtilities.isColorlessCardColor(card.color))
+                    {
+                        return !data.resources.containsColorless(card);
+                    }
+                    else if (card.color != data.resources.cardColor || loadouts.isEmpty())
+                    {
+                        return false;
+                    }
                     for (PCLLoadout loadout : loadouts)
                     {
                         if (loadout.isCardFromLoadout(card.cardID))
@@ -384,49 +452,6 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
                 return true;
             });
         }
-        loadCustomCards(player);
-
-        updateCardCopies();
-
-        if (data != null)
-        {
-            if (data.selectedLoadout != null)
-            {
-                player.potionSlots += data.selectedLoadout.getPotionSlots();
-                while (player.potions.size() > player.potionSlots && player.potions.get(player.potions.size() - 1) instanceof PotionSlot)
-                {
-                    player.potions.remove(player.potions.size() - 1);
-                }
-                while (player.potionSlots > player.potions.size())
-                {
-                    player.potions.add(new PotionSlot(player.potions.size() - 1));
-                }
-                player.adjustPotionPositions();
-            }
-
-
-            for (int i = 0; i < PCLAbstractPlayerData.GLYPHS.size(); i++)
-            {
-                boolean shouldAdd = true;
-                for (AbstractBlight blight : player.blights)
-                {
-                    if (PCLAbstractPlayerData.GLYPHS.get(i).getClass().equals(blight.getClass()))
-                    {
-                        shouldAdd = false;
-                        break;
-                    }
-                }
-                int counter = PGR.core.dungeon.ascensionGlyphCounters.size() > i ? PGR.core.dungeon.ascensionGlyphCounters.get(i) : 0;
-                if (shouldAdd && counter > 0)
-                {
-                    AbstractBlight blight = PCLAbstractPlayerData.GLYPHS.get(i).makeCopy();
-                    blight.setCounter(counter);
-                    GameUtilities.obtainBlightWithoutEffect(blight);
-                }
-            }
-        }
-
-        //PCLCard.ToggleSimpleMode(player.masterDeck.group, SimpleMode);
     }
 
     private void loadCustomCards(AbstractPlayer player)

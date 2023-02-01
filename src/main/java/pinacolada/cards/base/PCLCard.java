@@ -41,9 +41,7 @@ import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.ColoredString;
 import extendedui.utilities.ColoredTexture;
 import extendedui.utilities.EUIClassUtils;
-import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.PCLActions;
-import pinacolada.annotations.VisibleCard;
 import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.cards.base.cardText.PCLCardText;
@@ -82,13 +80,9 @@ import pinacolada.utilities.PCLRenderHelpers;
 
 import java.lang.reflect.Type;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public abstract class PCLCard extends AbstractCard implements TooltipProvider, EditorCard, OnRemovedFromDeckListener, CustomSavable<PCLCardSaveData>
 {
-    private static final Map<String, PCLCardData> staticData = new HashMap<>();
-
     private static final Color COLORLESS_ORB_COLOR = new Color(0.7f, 0.7f, 0.7f, 1);
     private static final Color CURSE_COLOR = new Color(0.22f, 0.22f, 0.22f, 1);
     protected static final Color COLOR_COMMON = new Color(0.65f, 0.65f, 0.65f, 1f);
@@ -115,6 +109,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     public final PCLCardAffinities affinities;
     public final PCLCardData cardData;
     public final PCLCardText cardText;
+    public ColoredString bottomText;
     public PCLAttackType attackType = PCLAttackType.Normal;
     public PCLCardSaveData auxiliaryData = new PCLCardSaveData();
     public PCLCardTarget pclTarget = PCLCardTarget.Single;
@@ -245,42 +240,6 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         return EUIUtils.safeCast(card, PCLCard.class);
     }
 
-    public static Collection<PCLCardData> getAllData()
-    {
-        return PCLCard.getAllData(false, true, (FuncT1<Boolean, PCLCardData>) null);
-    }
-
-    public static Collection<PCLCardData> getAllData(boolean showHidden, boolean sort, CardColor filterColor)
-    {
-        return PCLCard.getAllData(false, true, a -> a.cardColor == filterColor || a.resources.cardColor == filterColor || a.resources == PGR.core);
-    }
-
-    public static Collection<PCLCardData> getAllData(boolean showHidden, boolean sort, FuncT1<Boolean, PCLCardData> filterFunc)
-    {
-
-        Stream<PCLCardData> stream = staticData
-                .values()
-                .stream();
-        if (!showHidden)
-        {
-            stream = stream.filter(a -> a.type.isAnnotationPresent(VisibleCard.class) && !a.isNotSeen());
-        }
-        if (filterFunc != null)
-        {
-            stream = stream.filter(filterFunc::invoke);
-        }
-        if (sort)
-        {
-            stream = stream.sorted((a, b) -> StringUtils.compare(a.strings.NAME, b.strings.NAME));
-        }
-        return stream.collect(Collectors.toList());
-    }
-
-    public static PCLCardData getStaticData(String cardID)
-    {
-        return staticData.get(cardID);
-    }
-
     protected static int[] nums(int damage, int block)
     {
         return nums(damage, block, 0, 0);
@@ -314,7 +273,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
 
     protected static PCLCardData register(Class<? extends PCLCard> type)
     {
-        return PCLCard.register(type, PGR.core).setColorless();
+        return PCLCard.register(type, PGR.core);
     }
 
     protected static PCLCardData register(Class<? extends PCLCard> type, PCLResources<?,?,?> resources)
@@ -324,8 +283,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
 
     protected static PCLCardData registerCardData(PCLCardData cardData)
     {
-        staticData.put(cardData.ID, cardData);
-        return cardData;
+        return PCLCardData.registerCardData(cardData);
     }
 
     public static void toggleSimpleMode(Collection<AbstractCard> cards)
@@ -849,10 +807,6 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
             }
         }
         return -1;
-    }
-
-    public ColoredString getHeaderText() {
-        return null;
     }
 
     public ColoredString getMagicNumberString() {
@@ -1614,6 +1568,8 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         if (!cardData.obtainableInCombat) {
             setObtainableInCombat(false);
         }
+
+        bottomText = getBottomText();
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")

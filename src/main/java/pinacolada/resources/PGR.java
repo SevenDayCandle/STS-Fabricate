@@ -7,7 +7,6 @@ import basemod.helpers.RelicType;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
-import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.localization.*;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
 import com.megacrit.cardcrawl.powers.AbstractPower;
@@ -215,12 +214,6 @@ public class PGR
     public static boolean isLoaded()
     {
         return core != null && core.isLoaded && EUIUtils.all(getAllResources(), r -> r.isLoaded);
-    }
-
-    public static boolean isTranslationSupported(Settings.GameLanguage language)
-    {
-        // TODO update when needed
-        return false;
     }
 
     public static void loadCustomCards()

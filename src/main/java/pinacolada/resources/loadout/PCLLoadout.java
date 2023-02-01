@@ -197,7 +197,7 @@ public abstract class PCLLoadout
         }
 
         // Dynamically add non-special curses
-        for (PCLCardData data : PCLCard.getAllData(false, true, d -> d.cardType == AbstractCard.CardType.CURSE && d.cardRarity != AbstractCard.CardRarity.SPECIAL))
+        for (PCLCardData data : PCLCardData.getAllData(false, true, d -> d.cardType == AbstractCard.CardType.CURSE && d.cardRarity != AbstractCard.CardRarity.SPECIAL))
         {
             slot.addItem(data, -7);
         }
@@ -422,7 +422,6 @@ public abstract class PCLLoadout
             return cardData.get(0);
         }
         return QuestionMark.DATA;
-
     }
 
     public PCLTrophies getTrophies()
@@ -476,7 +475,7 @@ public abstract class PCLLoadout
 
     public boolean isCardFromLoadout(String cardID)
     {
-        PCLCardData data = PCLCard.getStaticData(cardID);
+        PCLCardData data = PCLCardData.getStaticData(cardID);
         return data != null && data.loadout == this;
     }
 

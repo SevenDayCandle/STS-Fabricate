@@ -73,29 +73,6 @@ public class PCLCardText
         initialize(card.rawDescription);
     }
 
-    protected TextureCache getBlockIcon()
-    {
-        return card.isPopup ? ICONS.blockL : ICONS.block;
-    }
-
-    protected TextureCache getDamageIcon()
-    {
-        switch (card.attackType)
-        {
-            case Brutal:
-                return card.isPopup ? ICONS.brutalL : ICONS.brutal;
-            case Magical:
-                return card.isPopup ? ICONS.magicL : ICONS.magic;
-            case Piercing:
-                return card.isPopup ? ICONS.piercingL : ICONS.piercing;
-            case Ranged:
-                return card.isPopup ? ICONS.rangedL : ICONS.ranged;
-            case Normal:
-            default:
-                return card.isPopup ? ICONS.damageL : ICONS.damage;
-        }
-    }
-
     protected TextureCache getHPIcon()
     {
         return card.isPopup ? ICONS.hpL : ICONS.hp;
@@ -250,15 +227,7 @@ public class PCLCardText
         {
             renderIcons(sb);
 
-            ColoredString header = card.getHeaderText();
-            if (header != null)
-            {
-                BitmapFont font = PCLRenderHelpers.getSmallTextFont(card, header.text);
-                PCLRenderHelpers.writeOnCard(sb, card, font, header.text, 0, AbstractCard.RAW_H * 0.48f, header.color, true);
-                PCLRenderHelpers.resetFont(font);
-            }
-
-            ColoredString bottom = card.getBottomText();
+            ColoredString bottom = card.bottomText;
             if (bottom != null)
             {
                 BitmapFont font = PCLRenderHelpers.getSmallTextFont(card, bottom.text);

@@ -1,70 +1,11 @@
 {
-				"COLORLESS": {
-								"pcl:Discovery": {"EXTENDED_DESCRIPTION": ["Obtain {0} of {1} cards that you haven't unlocked yet. It costs 0 this turn"], "NAME": "Discovery"},
-								"pcl:Madness": {
-												"EXTENDED_DESCRIPTION": ["Redistribute the costs of the cards in hand"],
-												"NAME": "Madness"
-								},
-								"pcl:PortableTrashCan": {
-												"EXTENDED_DESCRIPTION": ["Purge any number of cards in hand or discard pile. Remove {0} of them from your deck."],
-												"NAME": "Portable Trash Can"
-								},
-								"pcl:Present": {
-												"EXTENDED_DESCRIPTION": ["Play a random card. Add a copy of it to your discard pile"],
-												"NAME": "Present"
-								},
-								"pcl:SonarAnalysis": {
-												"EXTENDED_DESCRIPTION": ["Reveal the next {0} intents on the target", "Reveal its weakness"],
-												"NAME": "Sonar Analysis"}
-				},
-				"CURSE":	{
-								"pcl:Curse_AscendersBane": {
-												"NAME": "Ascender's Bane"
-								},
-								"pcl:Curse_Avarice": {"NAME": "Avarice"},
-								"pcl:Curse_Clumsy": {"NAME": "Clumsy"},
-								"pcl:Curse_Decay": {"NAME": "Decay"},
-								"pcl:Curse_Depression": {"NAME": "Depression"},
-								"pcl:Curse_Despair": {"NAME": "Despair"},
-								"pcl:Curse_Devastation": {"NAME": "Devastation"},
-								"pcl:Curse_Doubt": {"NAME": "Doubt"},
-								"pcl:Curse_GriefSeed": {
-												"NAME": "Grief Seed"
-								},
-								"pcl:Curse_Injury": {"NAME": "Injury"},
-								"pcl:Curse_Normality": {
-												"EXTENDED_DESCRIPTION": ["While in hand, Negate the {Buffs} and {Debuffs} of ALL characters (excluding those specific to cards or encounters)"],
-												"NAME": "Normality"
-								},
-								"pcl:Curse_Pain": {"NAME": "Pain"},
-								"pcl:Curse_Parasite": {"NAME": "Parasite"},
-								"pcl:Curse_Regret": {"NAME": "Regret"},
-								"pcl:Curse_Shame": {"NAME": "Shame"},
-								"pcl:Curse_Torment": {"NAME": "Torment"},
-								"pcl:Curse_Wither": {"NAME": "Wither"},
-								"pcl:Curse_Writhe": {"NAME": "Writhe"}
-				},
-				"ENCHANTMENTS":	{
-								"pcl:Glyph01": {
-												"NAME": "Glyph of the Magician"
-								},
-								"pcl:Glyph02": {
-												"NAME": "Glyph of the High Priestess"
-								},
-								"pcl:Glyph03": {
-												"NAME": "Glyph of the Empress"
-								},
-								"pcl:Glyph04": {
-												"NAME": "Glyph of the Emperor"
-								},
-								"pcl:Glyph05": {
-												"EXTENDED_DESCRIPTION": ["{0} is disabled this combat"],
-												"NAME": "Glyph of the Hierophant"
-								},
-								"pcl:Glyph06": {
-												"EXTENDED_DESCRIPTION": ["ALL enemies heal {0} [HP]"],
-												"NAME": "Glyph of the Lovers"
-								},
+				"ENCHANTMENTS": {
+								"pcl:Glyph01": {"NAME": "Glyph of the Magician"},
+								"pcl:Glyph02": {"NAME": "Glyph of the High Priestess"},
+								"pcl:Glyph03": {"NAME": "Glyph of the Empress"},
+								"pcl:Glyph04": {"NAME": "Glyph of the Emperor"},
+								"pcl:Glyph05": {"EXTENDED_DESCRIPTION": ["{0} is disabled this combat"], "NAME": "Glyph of the Hierophant"},
+								"pcl:Glyph06": {"EXTENDED_DESCRIPTION": ["ALL enemies heal {0} [HP]"], "NAME": "Glyph of the Lovers"},
 								"pcl:Glyph07": {
 												"DESCRIPTION": "Cycle the next !M! {0} card(s) drawn.",
 												"EXTENDED_DESCRIPTION": ["Cycle the next #b{0} {1} card(s) drawn."],
@@ -95,32 +36,7 @@
 												"NAME": "Glyph of Death"
 								}
 				},
-				"MISC":	{
-								"pcl:Apparition": {
-												"EXTENDED_DESCRIPTION": ["Cycle ALL {Apparitions} in hand"],
-												"NAME": "Apparition"
-								},
-								"pcl:Bite": {
-												"NAME": "Bite"
-								},
-								"pcl:Essence_Egnaro": {
-												"NAME": "Egnaro Essence"
-								},
-								"pcl:Essence_Eruza": {
-												"NAME": "Eruza Essence"
-								},
-								"pcl:Essence_Wolley": {
-												"NAME": "Wolley Essence"
-								},
-								"pcl:Insight": {
-												"NAME": "Insight"
-								},
-								"pcl:JAX": {
-												"NAME": "J.A.X."
-								},
-								"pcl:Miracle": {
-												"NAME": "Miracle"
-								},
+				"MISC": {
 								"pcl:MysteryCard": {
 												"EXTENDED_DESCRIPTION": [
 																"At the start of combat: Transforms into a random {0}-Cost {1} card",
@@ -129,20 +45,9 @@
 												],
 												"NAME": "? ? ?"
 								},
-								"pcl:Overheat": {
-												"NAME": "Overheat"
-								},
-								"pcl:QuestionMark": {
-												"NAME": "Question Mark"
-								},
-								"pcl:RitualDagger": {
-												"NAME": "Ritual Dagger"
-								},
-								"pcl:ThrowingKnife": {
-												"NAME": "Throwing Knife"
-								}
+								"pcl:QuestionMark": {"NAME": "Question Mark"}
 				},
-				"SPECIAL":	{
+				"SPECIAL": {
 								"pcl:AffinityToken": {"NAME": "Affinity Token"},
 								"pcl:AffinityToken_Red": {"NAME": "Red Affinity"},
 								"pcl:AffinityToken_Green": {"NAME": "Green Affinity"},
@@ -152,12 +57,5 @@
 								"pcl:AffinityToken_Purple": {"NAME": "Purple Affinity"},
 								"pcl:AffinityToken_Silver": {"NAME": "Silver Affinity"},
 								"pcl:AffinityToken_Star": {"NAME": "Star Affinity"}
-				},
-				"STATUS":	{
-								"pcl:Status_Burn": {"NAME": "Burn"},
-								"pcl:Status_Dazed": {"NAME": "Dazed"},
-								"pcl:Status_Slimed": {"NAME": "Slimed"},
-								"pcl:Status_Wound": {"NAME": "Wound"},
-								"pcl:Status_Void": {"NAME": "Void"}
 				}
 }

@@ -23,9 +23,10 @@ import extendedui.patches.EUIKeyword;
 import extendedui.ui.tooltips.EUITooltip;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.augments.AugmentStrings;
+import pinacolada.cards.base.PCLCard;
+import pinacolada.cards.base.PCLCardData;
 import pinacolada.utilities.GameUtilities;
 
-import java.io.File;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -46,9 +47,7 @@ public abstract class PCLResources<T extends AbstractConfig, U extends PCLImages
     public final U images;
     public V tooltips;
     protected CharacterStrings characterStrings;
-    protected final FileHandle testFolder;
     protected final String id;
-    protected String defaultLanguagePath;
     protected boolean isLoaded;
 
     protected PCLResources(String id, AbstractCard.CardColor color, AbstractPlayer.PlayerClass playerClass, T config, U images, FuncT1<PCLAbstractPlayerData, PCLResources<T, U, V>> dataFunc)
@@ -58,7 +57,6 @@ public abstract class PCLResources<T extends AbstractConfig, U extends PCLImages
         this.playerClass = playerClass;
         this.config = config;
         this.images = images;
-        this.testFolder = new FileHandle("c:/temp/" + id + "-localization/");
         this.data = dataFunc != null ? dataFunc.invoke(this) : null;
     }
 
@@ -132,19 +130,7 @@ public abstract class PCLResources<T extends AbstractConfig, U extends PCLImages
 
     public FileHandle getFile(Settings.GameLanguage language, String fileName)
     {
-        if (isBetaTranslation() && new File(testFolder.path() + "/" + fileName).isFile())
-        {
-            return Gdx.files.internal(testFolder.path() + "/" + fileName);
-        }
-        else
-        {
-            if (!PGR.isTranslationSupported(language))
-            {
-                language = Settings.GameLanguage.ENG;
-            }
-
-            return Gdx.files.internal("localization/" + id.toLowerCase() + "/" + language.name().toLowerCase() + "/" + fileName);
-        }
+        return Gdx.files.internal("localization/" + id.toLowerCase() + "/" + language.name().toLowerCase() + "/" + fileName);
     }
 
     public int getUnlockCost()
@@ -176,11 +162,6 @@ public abstract class PCLResources<T extends AbstractConfig, U extends PCLImages
     {
     }
 
-    public boolean isBetaTranslation()
-    {
-        return testFolder.isDirectory();
-    }
-
     public boolean isSelected()
     {
         return GameUtilities.isPlayerClass(playerClass);
@@ -201,25 +182,18 @@ public abstract class PCLResources<T extends AbstractConfig, U extends PCLImages
         String json = getFallbackFile(path).readString(StandardCharsets.UTF_8.name());
         loadFunc.invoke(json);
 
-        if (testFolder.isDirectory() || PGR.isTranslationSupported(Settings.language))
+        FileHandle file = getFile(Settings.language, path);
+        if (file.exists())
         {
-            FileHandle file = getFile(Settings.language, path);
-            if (file.exists())
-            {
-                String json2 = file.readString(StandardCharsets.UTF_8.name());
-                loadFunc.invoke(json);
-            }
+            String json2 = file.readString(StandardCharsets.UTF_8.name());
+            loadFunc.invoke(json);
         }
     }
 
     protected void loadCustomStrings(Class<?> type)
     {
         loadCustomStrings(type, getFallbackFile(type.getSimpleName() + ".json"));
-
-        if (isBetaTranslation() || PGR.isTranslationSupported(Settings.language))
-        {
-            loadCustomStrings(type, getFile(Settings.language, type.getSimpleName() + ".json"));
-        }
+        loadCustomStrings(type, getFile(Settings.language, type.getSimpleName() + ".json"));
     }
 
     protected void loadCustomStrings(Class<?> type, FileHandle file)
@@ -237,11 +211,7 @@ public abstract class PCLResources<T extends AbstractConfig, U extends PCLImages
     protected void loadKeywords()
     {
         loadKeywords(getFallbackFile(JSON_KEYWORDS));
-
-        if (isBetaTranslation() || PGR.isTranslationSupported(Settings.language))
-        {
-            loadKeywords(getFile(Settings.language, JSON_KEYWORDS));
-        }
+        loadKeywords(getFile(Settings.language, JSON_KEYWORDS));
     }
 
     protected void loadKeywords(FileHandle file)
@@ -307,6 +277,27 @@ public abstract class PCLResources<T extends AbstractConfig, U extends PCLImages
         postInitialize();
         this.isLoaded = true;
     }
+
+    // The colorless pool is filled with ALL colorless cards by default. This will determine whether a colorless card is allowed when playing as a PCL character
+    public boolean containsColorless(AbstractCard card)
+    {
+        return card instanceof PCLCard;
+    }
+
+    // The colorless pool is filled with ALL colorless cards by default. This will determine whether a colorless card should be removed when playing as a non-PCL character
+    public boolean filterColorless(AbstractCard card)
+    {
+        return card instanceof PCLCard;
+    }
+
+    // Intercepts CardLibrary's getCopy to return a different card
+    public PCLCardData getReplacement(String cardID)
+    {
+        return null;
+    }
+
+    // Intercepts the creation of Ascender's Bane upon starting a run
+    public PCLCardData getAscendersBane() {return null;}
 
     public void setupTooltips()
     {

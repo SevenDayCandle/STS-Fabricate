@@ -21,6 +21,7 @@ import extendedui.ui.hitboxes.OriginRelativeHitbox;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.PCLDynamicData;
 import pinacolada.cards.base.fields.PCLAffinity;
@@ -189,7 +190,7 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
                 .setCanAutosize(false, false)
                 .setIsMultiSelect(true)
                 .setShouldPositionClearAtTop(true)
-                .setItems(GameUtilities.isPCLCardColor(editor.builder.cardColor) ? EUIUtils.mapAsNonnull(PCLCard.getAllData(false, true, editor.builder.cardColor), cd -> cd.makeCopy(false))
+                .setItems(GameUtilities.isPCLCardColor(editor.builder.cardColor) ? EUIUtils.mapAsNonnull(PCLCardData.getAllData(false, true, editor.builder.cardColor), cd -> cd.makeCopy(false))
                          :
                         EUIUtils.filter(CardLibrary.getAllCards(),
                                 c -> !(c instanceof PCLCard) && (c.color == AbstractCard.CardColor.COLORLESS || c.color == AbstractCard.CardColor.CURSE || c.color == editor.builder.cardColor)));
@@ -400,7 +401,7 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
                     cardIDs.clear();
                     cardIDs.addAll(EUIUtils.mapAsNonnull(cards, t -> t.cardID));
                 },
-                GameUtilities.isPCLCardColor(editor.builder.cardColor) ? EUIUtils.mapAsNonnull(PCLCard.getAllData(false, true, editor.builder.cardColor), cd -> cd.makeCopy(false))
+                GameUtilities.isPCLCardColor(editor.builder.cardColor) ? EUIUtils.mapAsNonnull(PCLCardData.getAllData(false, true, editor.builder.cardColor), cd -> cd.makeCopy(false))
                         :
                         EUIUtils.filter(CardLibrary.getAllCards(),
                                 c -> !(c instanceof PCLCard) && (c.color == AbstractCard.CardColor.COLORLESS || c.color == AbstractCard.CardColor.CURSE || c.color == editor.builder.cardColor))

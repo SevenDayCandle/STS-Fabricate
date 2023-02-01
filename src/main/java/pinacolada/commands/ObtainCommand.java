@@ -23,13 +23,13 @@ public class ObtainCommand extends ConsoleCommand
 
     public static ArrayList<String> getPCLCards()
     {
-        return EUIUtils.mapAsNonnull(PCLCard.getAllData(), d -> d.ID);
+        return EUIUtils.mapAsNonnull(PCLCardData.getAllData(), d -> d.ID);
     }
 
     @Override
     protected void execute(String[] tokens, int depth)
     {
-        PCLCardData data = PCLCard.getStaticData(tokens[1]);
+        PCLCardData data = PCLCardData.getStaticData(tokens[1]);
 
         if (data != null)
         {
