@@ -21,8 +21,8 @@ import extendedui.ui.hitboxes.OriginRelativeHitbox;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.PCLCardBuilder;
 import pinacolada.cards.base.PCLCardGroupHelper;
+import pinacolada.cards.base.PCLDynamicData;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -201,7 +201,7 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
                 .setShouldPositionClearAtTop(true)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[0])
                 .setCanAutosize(true, true)
-                .setItems(AbstractCard.CardRarity.values());
+                .setItems(GameUtilities.getStandardRarities());
 
         types = new EUIDropdown<>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.35f, MENU_HEIGHT, AUX_OFFSET, 0)
                 , EUIGameUtils::textForType)
@@ -407,7 +407,7 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
         );
     }
 
-    public PCLCardBuilder getBuilder()
+    public PCLDynamicData getBuilder()
     {
         return editor.builder;
     }

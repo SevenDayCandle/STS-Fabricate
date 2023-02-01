@@ -3,7 +3,6 @@ package pinacolada.resources.loadout;
 import extendedui.EUIUtils;
 
 // Copied and modified from STS-AnimatorMod
-@Deprecated
 public class PCLTrophies
 {
     public static final int MAXIMUM_TROPHY = 25;
@@ -11,7 +10,6 @@ public class PCLTrophies
     public int highScore = 0;
     public int trophy1 = -1;
     public int trophy2 = -1;
-    public int trophy3 = -1;
     public int glyph0 = 0;
     public int glyph1 = 0;
     public int glyph2 = 0;
@@ -43,7 +41,6 @@ public class PCLTrophies
             this.highScore = EUIUtils.parseInt(values[1], 0);
             this.trophy1 = EUIUtils.parseInt(values[2], -1);
             this.trophy2 = EUIUtils.parseInt(values[3], -1);
-            this.trophy3 = EUIUtils.parseInt(values[4], -1);
             this.glyph0 = EUIUtils.parseInt(values[5], 0);
             this.glyph1 = EUIUtils.parseInt(values[6], 0);
             this.glyph2 = EUIUtils.parseInt(values[7], 0);
@@ -52,6 +49,6 @@ public class PCLTrophies
 
     public String serialize()
     {
-        return EUIUtils.joinStrings(",", ID, highScore, trophy1, trophy2, trophy3, glyph0, glyph1, glyph2);
+        return EUIUtils.joinStrings(",", ID, highScore, trophy1, trophy2, glyph0, glyph1, glyph2);
     }
 }

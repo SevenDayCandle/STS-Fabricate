@@ -9,4 +9,12 @@ public class ChoiceCard<T> extends PCLDynamicCard
         super(builder);
         this.value = builder.object;
     }
+
+    protected void initializeTextures()
+    {
+        if (((ChoiceBuilder<?>) builder).fromCustom)
+        {
+            super.initializeTextures();
+        }
+    }
 }

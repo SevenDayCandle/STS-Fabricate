@@ -15,7 +15,7 @@ import extendedui.ui.controls.EUIToggle;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.OriginRelativeHitbox;
 import extendedui.utilities.EUIFontHelper;
-import pinacolada.cards.base.PCLCardBuilder;
+import pinacolada.cards.base.PCLDynamicData;
 import pinacolada.resources.PGR;
 import pinacolada.skills.*;
 import pinacolada.skills.skills.PLimit;
@@ -35,7 +35,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
     public static final float OFFSET_EFFECT = -MENU_HEIGHT * 1.25f;
     public static final float OFFSET_AMOUNT = scale(10);
 
-    public final PCLCardBuilder builder;
+    public final PCLDynamicData builder;
     protected PPrimary<?> primaryCond;
     protected PMultiCond multiCond;
     protected PDelay delayMove;

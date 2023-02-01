@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class PCLCardBuilder extends PCLCardData
+public class PCLDynamicData extends PCLCardData
 {
     private static final TypeToken<HashMap<Settings.GameLanguage, CardStrings>> TStrings = new TypeToken<HashMap<Settings.GameLanguage, CardStrings>>() {};
     public final HashMap<Settings.GameLanguage, CardStrings> languageMap = new HashMap<>();
@@ -38,27 +38,27 @@ public class PCLCardBuilder extends PCLCardData
     public TextureAtlas.AtlasRegion fakePortrait;
     public boolean showTypeText = true;
 
-    public PCLCardBuilder(String id)
+    public PCLDynamicData(String id)
     {
         super(PCLDynamicCard.class, PGR.core, id, null);
     }
 
-    public PCLCardBuilder(String id, PCLResources<?,?,?> resources)
+    public PCLDynamicData(String id, PCLResources<?,?,?> resources)
     {
         super(PCLDynamicCard.class, resources, id, null);
     }
 
-    public PCLCardBuilder(PCLCard card, boolean copyProperties)
+    public PCLDynamicData(PCLCard card, boolean copyProperties)
     {
         this(card, card.name, "", copyProperties);
     }
 
-    public PCLCardBuilder(PCLCard card, String text, boolean copyProperties)
+    public PCLDynamicData(PCLCard card, String text, boolean copyProperties)
     {
         this(card, card.name, text, copyProperties);
     }
 
-    public PCLCardBuilder(PCLCard card, String name, String text, boolean copyProperties)
+    public PCLDynamicData(PCLCard card, String name, String text, boolean copyProperties)
     {
         this(card.cardData, name, text, copyProperties);
         this.source = card;
@@ -70,17 +70,17 @@ public class PCLCardBuilder extends PCLCardData
         }
     }
 
-    public PCLCardBuilder(PCLCardData card, boolean copyProperties)
+    public PCLDynamicData(PCLCardData card, boolean copyProperties)
     {
         this(card, card.strings.NAME, "", copyProperties);
     }
 
-    public PCLCardBuilder(PCLCardData card, String text, boolean copyProperties)
+    public PCLDynamicData(PCLCardData card, String text, boolean copyProperties)
     {
         this(card, card.strings.NAME, text, copyProperties);
     }
 
-    public PCLCardBuilder(PCLCardData original, String name, String text, boolean copyProperties)
+    public PCLDynamicData(PCLCardData original, String name, String text, boolean copyProperties)
     {
         this(original.ID, original.resources);
 
@@ -100,7 +100,7 @@ public class PCLCardBuilder extends PCLCardData
         setText(name, text, text);
     }
 
-    public PCLCardBuilder(PCLCardBuilder original)
+    public PCLDynamicData(PCLDynamicData original)
     {
         this(original, true);
         this.source = original.source;
@@ -119,7 +119,7 @@ public class PCLCardBuilder extends PCLCardData
         }
     }
 
-    public PCLCardBuilder(PCLCustomCardSlot data)
+    public PCLDynamicData(PCLCustomCardSlot data)
     {
         this(data.ID);
         damage = data.damage.clone();
@@ -191,47 +191,47 @@ public class PCLCardBuilder extends PCLCardData
         return build(true);
     }
 
-    public PCLCardBuilder setImagePath(String imagePath)
+    public PCLDynamicData setImagePath(String imagePath)
     {
         this.imagePath = imagePath;
 
         return this;
     }
 
-    public PCLCardBuilder removePMove(PSkill effect)
+    public PCLDynamicData removePMove(PSkill effect)
     {
         moves.remove(effect);
         return this;
     }
 
-    public PCLCardBuilder removePowerEffect(PTrigger effect)
+    public PCLDynamicData removePowerEffect(PTrigger effect)
     {
         powers.remove(effect);
         return this;
     }
 
-    public PCLCardBuilder setAffinity(PCLAffinity affinity, int level)
+    public PCLDynamicData setAffinity(PCLAffinity affinity, int level)
     {
         this.affinities.set(affinity, level);
 
         return this;
     }
 
-    public PCLCardBuilder setAttackType(PCLAttackType attackType)
+    public PCLDynamicData setAttackType(PCLAttackType attackType)
     {
         this.attackType = attackType;
 
         return this;
     }
 
-    public PCLCardBuilder setDescription(String description)
+    public PCLDynamicData setDescription(String description)
     {
         this.strings.DESCRIPTION = description;
 
         return this;
     }
 
-    public PCLCardBuilder setExtraTags(List<CardTagItem> extraTags)
+    public PCLDynamicData setExtraTags(List<CardTagItem> extraTags)
     {
         this.extraTags = extraTags;
 
@@ -239,13 +239,13 @@ public class PCLCardBuilder extends PCLCardData
     }
 
 
-    public PCLCardBuilder setID(String id)
+    public PCLDynamicData setID(String id)
     {
         this.ID = id;
         return this;
     }
 
-    public PCLCardBuilder setImage(ColoredTexture portraitImage, ColoredTexture portraitForeground)
+    public PCLDynamicData setImage(ColoredTexture portraitImage, ColoredTexture portraitForeground)
     {
         this.portraitImage = portraitImage;
         this.portraitForeground = portraitForeground;
@@ -253,45 +253,45 @@ public class PCLCardBuilder extends PCLCardData
         return this;
     }
 
-    public PCLCardBuilder setLanguageMap(HashMap<Settings.GameLanguage, CardStrings> languageMap)
+    public PCLDynamicData setLanguageMap(HashMap<Settings.GameLanguage, CardStrings> languageMap)
     {
         this.languageMap.putAll(languageMap);
         return setTextForLanguage();
     }
 
-    public PCLCardBuilder setLanguageMapEntry(Settings.GameLanguage language)
+    public PCLDynamicData setLanguageMapEntry(Settings.GameLanguage language)
     {
         this.languageMap.put(language, this.strings);
         return this;
     }
 
-    public PCLCardBuilder setName(String name)
+    public PCLDynamicData setName(String name)
     {
         this.strings.NAME = name;
 
         return this;
     }
 
-    public PCLCardBuilder setAttackSkill(PCardPrimary_DealDamage damageEffect)
+    public PCLDynamicData setAttackSkill(PCardPrimary_DealDamage damageEffect)
     {
         this.damageEffect = damageEffect;
 
         return this;
     }
 
-    public PCLCardBuilder setBlockSkill(PCardPrimary_GainBlock blockEffect)
+    public PCLDynamicData setBlockSkill(PCardPrimary_GainBlock blockEffect)
     {
         this.blockEffect = blockEffect;
 
         return this;
     }
 
-    public PCLCardBuilder setPSkill(Iterable<PSkill<?>> currentEffects)
+    public PCLDynamicData setPSkill(Iterable<PSkill<?>> currentEffects)
     {
         return setPSkill(currentEffects, false, true);
     }
 
-    public PCLCardBuilder setPSkill(Iterable<PSkill<?>> currentEffects, boolean makeCopy, boolean clear)
+    public PCLDynamicData setPSkill(Iterable<PSkill<?>> currentEffects, boolean makeCopy, boolean clear)
     {
         if (clear)
         {
@@ -304,17 +304,17 @@ public class PCLCardBuilder extends PCLCardData
         return this;
     }
 
-    public PCLCardBuilder setPSkill(PSkill<?>... effect)
+    public PCLDynamicData setPSkill(PSkill<?>... effect)
     {
         return setPSkill(Arrays.asList(effect));
     }
 
-    public PCLCardBuilder addPSkill(PSkill<?> effect)
+    public PCLDynamicData addPSkill(PSkill<?> effect)
     {
         return addPSkill(effect, false);
     }
 
-    public PCLCardBuilder addPSkill(PSkill<?> effect, boolean makeCopy)
+    public PCLDynamicData addPSkill(PSkill<?> effect, boolean makeCopy)
     {
         if (makeCopy && effect != null)
         {
@@ -325,12 +325,12 @@ public class PCLCardBuilder extends PCLCardData
         return this;
     }
 
-    public PCLCardBuilder setPPower(Iterable<PTrigger> currentEffects)
+    public PCLDynamicData setPPower(Iterable<PTrigger> currentEffects)
     {
         return setPPower(currentEffects, false, true);
     }
 
-    public PCLCardBuilder setPPower(Iterable<PTrigger> currentEffects, boolean makeCopy, boolean clear)
+    public PCLDynamicData setPPower(Iterable<PTrigger> currentEffects, boolean makeCopy, boolean clear)
     {
         if (clear)
         {
@@ -343,17 +343,17 @@ public class PCLCardBuilder extends PCLCardData
         return this;
     }
 
-    public PCLCardBuilder setPPower(PTrigger... effect)
+    public PCLDynamicData setPPower(PTrigger... effect)
     {
         return setPPower(Arrays.asList(effect));
     }
 
-    public PCLCardBuilder addPPower(PTrigger effect)
+    public PCLDynamicData addPPower(PTrigger effect)
     {
         return addPPower(effect, false);
     }
 
-    public PCLCardBuilder addPPower(PTrigger effect, boolean makeCopy)
+    public PCLDynamicData addPPower(PTrigger effect, boolean makeCopy)
     {
         if (makeCopy && effect != null)
         {
@@ -364,19 +364,19 @@ public class PCLCardBuilder extends PCLCardData
         return this;
     }
 
-    public PCLCardBuilder setPortrait(TextureAtlas.AtlasRegion portrait)
+    public PCLDynamicData setPortrait(TextureAtlas.AtlasRegion portrait)
     {
         this.fakePortrait = portrait;
 
         return this;
     }
 
-    public PCLCardBuilder setProperties(AbstractCard.CardType type, AbstractCard.CardRarity rarity)
+    public PCLDynamicData setProperties(AbstractCard.CardType type, AbstractCard.CardRarity rarity)
     {
         return setProperties(type, AbstractCard.CardColor.COLORLESS, rarity);
     }
 
-    public PCLCardBuilder setProperties(AbstractCard.CardType type, AbstractCard.CardColor color, AbstractCard.CardRarity rarity)
+    public PCLDynamicData setProperties(AbstractCard.CardType type, AbstractCard.CardColor color, AbstractCard.CardRarity rarity)
     {
         this.cardType = type;
         this.cardColor = color;
@@ -384,28 +384,28 @@ public class PCLCardBuilder extends PCLCardData
         return this;
     }
 
-    public PCLCardBuilder setColor(AbstractCard.CardColor color)
+    public PCLDynamicData setColor(AbstractCard.CardColor color)
     {
         super.setColor(color);
         return this;
     }
 
-    public PCLCardBuilder setText(CardStrings cardStrings)
+    public PCLDynamicData setText(CardStrings cardStrings)
     {
         return setText(cardStrings.NAME, cardStrings.DESCRIPTION, cardStrings.UPGRADE_DESCRIPTION);
     }
 
-    public PCLCardBuilder setText(String name)
+    public PCLDynamicData setText(String name)
     {
         return setText(name, "", "", new String[0]);
     }
 
-    public PCLCardBuilder setText(String name, String description, String upgradeDescription)
+    public PCLDynamicData setText(String name, String description, String upgradeDescription)
     {
         return setText(name, description, upgradeDescription != null ? upgradeDescription : description, new String[0]);
     }
 
-    public PCLCardBuilder setText(String name, String description, String upgradeDescription, String[] extendedDescription)
+    public PCLDynamicData setText(String name, String description, String upgradeDescription, String[] extendedDescription)
     {
         this.strings.NAME = name;
         this.strings.DESCRIPTION = description;
@@ -415,23 +415,23 @@ public class PCLCardBuilder extends PCLCardData
         return this;
     }
 
-    public PCLCardBuilder setTextForLanguage()
+    public PCLDynamicData setTextForLanguage()
     {
         return setTextForLanguage(Settings.language);
     }
 
-    public PCLCardBuilder setTextForLanguage(Settings.GameLanguage language)
+    public PCLDynamicData setTextForLanguage(Settings.GameLanguage language)
     {
         return setText(getStringsForLanguage(language));
     }
 
-    public PCLCardBuilder setType(AbstractCard.CardType type)
+    public PCLDynamicData setType(AbstractCard.CardType type)
     {
         this.cardType = type;
         return this;
     }
 
-    public PCLCardBuilder showTypeText(boolean showTypeText)
+    public PCLDynamicData showTypeText(boolean showTypeText)
     {
         this.showTypeText = showTypeText;
 

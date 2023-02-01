@@ -11,8 +11,8 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardAffinityStatistics;
-import pinacolada.cards.base.PCLCardBuilder;
 import pinacolada.cards.base.PCLCardData;
+import pinacolada.cards.base.PCLDynamicData;
 import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.characters.PCLCharacter;
 import pinacolada.relics.PCLRelic;
@@ -502,14 +502,9 @@ public abstract class PCLLoadout
         PCLAbstractPlayerData data = getPlayerData();
         if (data != null && data.selectedLoadout.id == id)
         {
-            switch (trophyLevel)
+            if (trophyLevel >= 2)
             {
-                case 2:
-                    trophies.trophy2 = Math.max(trophies.trophy2, ascensionLevel);
-                    break;
-                case 3:
-                    trophies.trophy3 = Math.max(trophies.trophy3, ascensionLevel);
-                    break;
+                trophies.trophy2 = Math.max(trophies.trophy2, ascensionLevel);
             }
             trophies.trophy1 = Math.max(trophies.trophy1, ascensionLevel);
 
@@ -534,7 +529,7 @@ public abstract class PCLLoadout
             return null;
         }
 
-        PCLCard card = ((PCLCardBuilder) new PCLCardBuilder(String.valueOf(id))
+        PCLCard card = ((PCLDynamicData) new PCLDynamicData(String.valueOf(id))
                 .setImagePath(data.imagePath)
                 .showTypeText(false)
                 .setMaxUpgrades(0))

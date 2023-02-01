@@ -42,10 +42,12 @@ public class PCLCustomCardBlockPage extends PCLCustomCardEffectPage
                 .setOnToggle(this::setMove);
         blockEditor = new PCLCustomCardUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 4, MENU_HEIGHT, MENU_WIDTH, OFFSET_EFFECT * 1.3f)
                 , PGR.core.strings.cardEditor.block, (val, upVal) -> screen.modifyBuilder(e -> e.setBlock(val, upVal, e.rightCount, e.rightCountUpgrade)))
-                .setLimits(0, PSkill.DEFAULT_MAX);
+                .setLimits(0, PSkill.DEFAULT_MAX)
+                .setTooltip(PGR.core.tooltips.block);
         rightCountEditor = new PCLCustomCardUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 4, MENU_HEIGHT, MENU_WIDTH * 1.5f, OFFSET_EFFECT * 1.3f)
                 , EUIUtils.format(PGR.core.strings.cardEditor.hitCount, PGR.core.strings.cardEditor.block), (val, upVal) -> screen.modifyBuilder(e -> e.setRightCount(val, upVal)))
                 .setLimits(1, PSkill.DEFAULT_MAX);
+        rightCountEditor.setTooltip(rightCountEditor.header.text, PGR.core.strings.cardEditorTutorial.blockCount);
     }
 
     public void refresh()

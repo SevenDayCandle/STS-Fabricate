@@ -68,6 +68,7 @@ public class PCLCoreTooltips extends PCLTooltips
     public EUITooltip fetch = EUITooltip.findByID("~Fetch").showText(false).canHighlight(false);
     public EUITooltip heal = EUITooltip.findByID("Heal").showText(false).canHighlight(false);
     public EUITooltip hp = EUITooltip.findByID("HP").showText(false).canHighlight(false);
+    public EUITooltip kill = EUITooltip.findByID("Kill").showText(false).canHighlight(false);
     public EUITooltip maxHP = EUITooltip.findByID("Max HP").showText(false).canHighlight(false);
     public EUITooltip normalDamage = EUITooltip.findByID("Normal Damage").showText(false).canHighlight(false);
     public EUITooltip orb = EUITooltip.findByID("Orb").showText(false).canHighlight(false);

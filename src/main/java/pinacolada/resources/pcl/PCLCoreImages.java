@@ -58,12 +58,6 @@ public class PCLCoreImages extends PCLImages
     public final TextureCache orbTopLayer3 = new TextureCache("images/pcl/ui/energy/TopLayer3.png");
     public final TextureCache orbTopLayer4 = new TextureCache("images/pcl/ui/energy/TopLayer4.png");
 
-    public final TextureCache bronzeTrophy = new TextureCache("images/pcl/ui/rewards/Bronze.png");
-    public final TextureCache silverTrophy = new TextureCache("images/pcl/ui/rewards/Silver.png");
-    public final TextureCache goldTrophy = new TextureCache("images/pcl/ui/rewards/Gold.png");
-    public final TextureCache lockedTrophy = new TextureCache("images/pcl/ui/rewards/Locked.png");
-    public final TextureCache bronzeTrophySlot = new TextureCache("images/pcl/ui/rewards/Slot1.png");
-    public final TextureCache goldTrophySlot = new TextureCache("images/pcl/ui/rewards/Slot2.png");
     public final TextureCache augmentPanel = new TextureCache("images/pcl/ui/topPanel/AugmentPanel.png");
     public final TextureCache customCards = new TextureCache("images/pcl/ui/topPanel/CustomCards.png");
     public final TextureCache edit = new TextureCache("images/pcl/ui/topPanel/Edit.png");
@@ -89,7 +83,6 @@ public class PCLCoreImages extends PCLImages
     public final PCLCoreImages.CardIcons icons = new PCLCoreImages.CardIcons();
     public final PCLCoreImages.Tooltips tooltips = new PCLCoreImages.Tooltips();
     public final PCLCoreImages.Effects effects = new PCLCoreImages.Effects();
-    public final PCLCoreImages.Events events = new PCLCoreImages.Events();
     public final PCLCoreImages.Core core = new PCLCoreImages.Core();
     public final PCLCoreImages.Monsters monsters = new PCLCoreImages.Monsters();
     public final PCLCoreImages.Types types = new PCLCoreImages.Types();
@@ -186,23 +179,14 @@ public class PCLCoreImages extends PCLImages
 
     public static class Tooltips
     {
-        public final TextureCache air = new TextureCache("images/pcl/cardui/tooltips/Air.png");
-        public final TextureCache chaos = new TextureCache("images/pcl/cardui/tooltips/Chaos.png");
         public final TextureCache dark = new TextureCache("images/pcl/cardui/tooltips/Dark.png");
-        public final TextureCache earth = new TextureCache("images/pcl/cardui/tooltips/Earth.png");
         public final TextureCache eternity = new TextureCache("images/pcl/cardui/tooltips/MusouIsshin.png");
-        public final TextureCache fire = new TextureCache("images/pcl/cardui/tooltips/Fire.png");
         public final TextureCache frost = new TextureCache("images/pcl/cardui/tooltips/Frost.png");
         public final TextureCache gold = new TextureCache("images/pcl/cardui/tooltips/Gold.png");
-        public final TextureCache griefSeed = new TextureCache("images/pcl/cardui/tooltips/GriefSeed.png");
         public final TextureCache lightning = new TextureCache("images/pcl/cardui/tooltips/Lightning.png");
-        public final TextureCache metal = new TextureCache("images/pcl/cardui/tooltips/Metal.png");
         public final TextureCache orbSlot = new TextureCache("images/pcl/cardui/tooltips/OrbSlot.png");
         public final TextureCache plasma = new TextureCache("images/pcl/cardui/tooltips/Plasma.png");
-        public final TextureCache randomOrb = new TextureCache("images/pcl/cardui/tooltips/RandomOrb.png");
         public final TextureCache regeneration = new TextureCache("images/pcl/cardui/tooltips/Regeneration.png");
-        public final TextureCache throwingKnife = new TextureCache("images/pcl/cardui/tooltips/ThrowingKnife.png");
-        public final TextureCache water = new TextureCache("images/pcl/cardui/tooltips/Water.png");
     }
 
     public static class Types
@@ -213,19 +197,6 @@ public class PCLCoreImages extends PCLImages
         public final TextureCache skill = new TextureCache("images/pcl/cardui/types/Skill.png", true);
         public final TextureCache status = new TextureCache("images/pcl/cardui/types/Status.png", true);
         public final TextureCache summon = new TextureCache("images/pcl/cardui/types/Summon.png", true);
-    }
-
-    public static class Events
-    {
-        public final TextureCache bubuPharmacy = new TextureCache("images/pcl/events/BubuPharmacy.png");
-        public final TextureCache cursedForest = new TextureCache("images/pcl/events/CursedForest.png");
-        public final TextureCache heroAssociation = new TextureCache("images/pcl/events/HeroAssociation.png");
-        public final TextureCache kyubey = new TextureCache("images/pcl/events/Kyubey.png");
-        public final TextureCache microwave = new TextureCache("images/pcl/events/Microwave.png");
-        public final TextureCache qingyunPeak = new TextureCache("images/pcl/events/QingyunPeak.png");
-        public final TextureCache paimonsBargains = new TextureCache("images/pcl/events/PaimonsBargains.png");
-        public final TextureCache placeholder = new TextureCache("images/pcl/events/Placeholder.png");
-        public final TextureCache secludedHarbor = new TextureCache("images/pcl/events/SecludedHarbor.png");
     }
 
     public static class Monsters

@@ -17,9 +17,9 @@ import extendedui.ui.controls.EUIToggle;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIFontHelper;
-import pinacolada.cards.base.PCLCardBuilder;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.cards.base.PCLDynamicCard;
+import pinacolada.cards.base.PCLDynamicData;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
@@ -41,8 +41,8 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
     protected static final float CARD_Y = Settings.HEIGHT * 0.76f;
     protected static final float START_X = Settings.WIDTH * (0.24f);
     protected static final float START_Y = Settings.HEIGHT * (0.93f);
-    public ArrayList<PCLCardBuilder> prevBuilders;
-    public ArrayList<PCLCardBuilder> tempBuilders;
+    public ArrayList<PCLDynamicData> prevBuilders;
+    public ArrayList<PCLDynamicData> tempBuilders;
     public int currentBuilder;
     protected ActionT0 onSave;
     protected ArrayList<PSkill<?>> currentEffects = new ArrayList<>();
@@ -72,7 +72,7 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
         final float labelWidth = Settings.WIDTH * (0.20f);
         final float button_cY = buttonHeight * 1.5f;
         currentSlot = slot;
-        tempBuilders = EUIUtils.map(currentSlot.builders, PCLCardBuilder::new);
+        tempBuilders = EUIUtils.map(currentSlot.builders, PCLDynamicData::new);
 
         currentDamage = getBuilder().damageEffect;
         currentBlock = getBuilder().blockEffect;
@@ -195,7 +195,7 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
     public void addBuilder()
     {
         modifyBuilder(__ -> {
-            tempBuilders.add(new PCLCardBuilder(getBuilder()));
+            tempBuilders.add(new PCLDynamicData(getBuilder()));
         });
         for (PCLCustomCardEditorPage b : pages)
         {
@@ -228,7 +228,7 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
         complete();
     }
 
-    public PCLCardBuilder getBuilder()
+    public PCLDynamicData getBuilder()
     {
         return tempBuilders.get(currentBuilder);
     }
@@ -247,19 +247,19 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
         previewCard.current_y = previewCard.target_y = CARD_Y;
     }
 
-    public void modifyAllBuilders(ActionT1<PCLCardBuilder> updateFunc)
+    public void modifyAllBuilders(ActionT1<PCLDynamicData> updateFunc)
     {
-        prevBuilders = EUIUtils.map(tempBuilders, PCLCardBuilder::new);
-        for (PCLCardBuilder b : tempBuilders)
+        prevBuilders = EUIUtils.map(tempBuilders, PCLDynamicData::new);
+        for (PCLDynamicData b : tempBuilders)
         {
             updateFunc.invoke(b);
         }
         rebuildCard();
     }
 
-    public void modifyBuilder(ActionT1<PCLCardBuilder> updateFunc)
+    public void modifyBuilder(ActionT1<PCLDynamicData> updateFunc)
     {
-        prevBuilders = EUIUtils.map(tempBuilders, PCLCardBuilder::new);
+        prevBuilders = EUIUtils.map(tempBuilders, PCLDynamicData::new);
         updateFunc.invoke(getBuilder());
         rebuildCard();
     }
@@ -312,7 +312,7 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
     {
         if (prevBuilders != null)
         {
-            ArrayList<PCLCardBuilder> backups = EUIUtils.map(prevBuilders, PCLCardBuilder::new);
+            ArrayList<PCLDynamicData> backups = EUIUtils.map(prevBuilders, PCLDynamicData::new);
             currentBuilder = MathUtils.clamp(currentBuilder, 0, backups.size() - 1);
             formEditor.refresh();
             modifyBuilder(__ -> {

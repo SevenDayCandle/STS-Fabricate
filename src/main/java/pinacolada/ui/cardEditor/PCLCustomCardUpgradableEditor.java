@@ -8,15 +8,16 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import extendedui.EUIRM;
 import extendedui.interfaces.delegates.ActionT2;
-import extendedui.ui.EUIBase;
+import extendedui.ui.EUIHoverable;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUILabel;
 import extendedui.ui.controls.EUITextBoxNumericalInput;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
+import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIFontHelper;
 
-public class PCLCustomCardUpgradableEditor extends EUIBase
+public class PCLCustomCardUpgradableEditor extends EUIHoverable
 {
     protected static final float ICON_SIZE = 36f * Settings.scale;
 
@@ -28,11 +29,10 @@ public class PCLCustomCardUpgradableEditor extends EUIBase
     protected EUILabel header;
     protected EUITextBoxNumericalInput displayValue;
     protected EUITextBoxNumericalInput displayValueSecondary;
-    protected EUIHitbox hb;
 
     public PCLCustomCardUpgradableEditor(EUIHitbox hb, String title, ActionT2<Integer, Integer> onUpdate)
     {
-        this.hb = hb;
+        super(hb);
 
         final float w = hb.width;
         final float h = hb.height;
@@ -134,6 +134,18 @@ public class PCLCustomCardUpgradableEditor extends EUIBase
         return setValue(displayValue.getCachedValue(), valueSecondary);
     }
 
+    public PCLCustomCardUpgradableEditor setTooltip(EUITooltip tip) {
+        super.setTooltip(tip);
+        header.setTooltip(tip);
+        return this;
+    }
+
+    public PCLCustomCardUpgradableEditor setTooltip(String name, String desc) {
+        super.setTooltip(name, desc);
+        header.setTooltip(this.tooltip);
+        return this;
+    }
+
     public PCLCustomCardUpgradableEditor setValue(int value)
     {
         return setValue(value, displayValueSecondary.getCachedValue());
@@ -159,7 +171,7 @@ public class PCLCustomCardUpgradableEditor extends EUIBase
     @Override
     public void updateImpl()
     {
-        this.hb.update();
+        super.updateImpl();
         decreaseButton.setInteractable(displayValue.getCachedValue() > displayValue.getMin()).tryUpdate();
         decreaseButton2.setInteractable(displayValue.getCachedValue() + displayValueSecondary.getCachedValue() > displayValue.getMin()).tryUpdate();
         increaseButton.setInteractable(displayValue.getCachedValue() < displayValue.getMax()).tryUpdate();

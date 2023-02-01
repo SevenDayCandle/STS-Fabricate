@@ -168,7 +168,7 @@ public class PCLSingleCardPopup extends EUIBase
         this.maxCopiesDescription = new EUILabel(EUIFontHelper.cardTooltipFont,
                 new RelativeHitbox(changeVariantHb, screenW(0.21f), screenH(0.07f), changeVariantHb.width / 2, changeVariantHb.height * 3.4f))
                 .setAlignment(0.9f, 0.1f, true)
-                .setLabel(buttonStrings.maxCopiesTooltip);
+                .setLabel(PGR.core.strings.cardEditorTutorial.maxCopies);
 
         this.artAuthorLabel = new EUILabel(EUIFontHelper.cardTooltipFont,
                 new RelativeHitbox(changeVariantHb, screenW(0.21f), screenH(0.07f), changeVariantHb.width / 2 - ICON_SIZE * 0.75f, changeVariantHb.height * 4.52f))

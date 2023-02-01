@@ -54,6 +54,7 @@ public class PCLCustomCardAttackPage extends PCLCustomCardEffectPage
         hitCountEditor = new PCLCustomCardUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 4, MENU_HEIGHT, MENU_WIDTH * 1.5f, OFFSET_EFFECT * 1.3f)
                 , EUIUtils.format(PGR.core.strings.cardEditor.hitCount, PGR.core.strings.cardEditor.damage), (val, upVal) -> screen.modifyBuilder(e -> e.setHitCount(val, upVal)))
                 .setLimits(1, PSkill.DEFAULT_MAX);
+        hitCountEditor.setTooltip(hitCountEditor.header.text, PGR.core.strings.cardEditorTutorial.hitCount);
         attackTypeDropdown = new EUIDropdown<PCLAttackType>(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, MENU_WIDTH * 2.1f, OFFSET_EFFECT * 1.5f)
                 , item -> StringUtils.capitalize(item.toString().toLowerCase()))
                 .setOnChange(targets -> {
@@ -65,7 +66,8 @@ public class PCLCustomCardAttackPage extends PCLCustomCardEffectPage
                 .setLabelFunctionForOption(c -> c.getTooltip() != null ? c.getTooltip().title : "", false)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cardEditor.attackType)
                 .setCanAutosizeButton(true)
-                .setItems(EUIUtils.filter(PCLAttackType.values(), v -> v.getTooltip() != null));
+                .setItems(EUIUtils.filter(PCLAttackType.values(), v -> v.getTooltip() != null))
+                .setTooltip(PGR.core.strings.cardEditor.attackType, PGR.core.strings.cardEditorTutorial.attackType);
         attackEffectDropdown = new EUIDropdown<AbstractGameAction.AttackEffect>(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, MENU_WIDTH * 3.1f, OFFSET_EFFECT * 1.5f)
                 , item -> StringUtils.capitalize(item.toString().toLowerCase()))
                 .setOnChange(targets -> {
@@ -78,7 +80,8 @@ public class PCLCustomCardAttackPage extends PCLCustomCardEffectPage
                 .setLabelFunctionForOption(Enum::name, false)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cardEditor.attackEffect)
                 .setCanAutosizeButton(true)
-                .setItems(AttackEffects.keys());
+                .setItems(AttackEffects.keys())
+                .setTooltip(PGR.core.strings.cardEditor.attackEffect, PGR.core.strings.cardEditorTutorial.attackEffect);
     }
 
     public void refresh()

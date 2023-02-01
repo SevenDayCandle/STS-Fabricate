@@ -118,14 +118,15 @@ public class PCLValueEditor extends EUIHoverable
 
     public PCLValueEditor setTooltip(EUITooltip tip) {
         super.setTooltip(tip);
+        header.setTooltip(tip);
         return this;
     }
 
     public PCLValueEditor setTooltip(String name, String desc) {
         super.setTooltip(name, desc);
+        header.setTooltip(this.tooltip);
         return this;
     }
-
 
     public PCLValueEditor setValue(int value)
     {

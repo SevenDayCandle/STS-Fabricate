@@ -58,7 +58,7 @@ public class PCLCustomCardSlot
     public Integer[] costUpgrade = array(0);
     public String[] tags;
     public String[] forms;
-    public transient ArrayList<PCLCardBuilder> builders = new ArrayList<>();
+    public transient ArrayList<PCLDynamicData> builders = new ArrayList<>();
     public transient AbstractCard.CardColor slotColor = AbstractCard.CardColor.COLORLESS;
     protected transient String filePath;
     protected transient String imagePath;
@@ -69,7 +69,7 @@ public class PCLCustomCardSlot
         filePath = makeFilePath();
         imagePath = makeImagePath();
         slotColor = color;
-        PCLCardBuilder builder = new PCLCardBuilder(ID)
+        PCLDynamicData builder = new PCLDynamicData(ID)
                 .setText("", "", "")
                 .setColor(color);
         builders.add(builder);
@@ -81,12 +81,12 @@ public class PCLCustomCardSlot
         filePath = makeFilePath();
         imagePath = makeImagePath();
         slotColor = data.cardColor;
-        builders.add(new PCLCardBuilder(data, true)
+        builders.add(new PCLDynamicData(data, true)
                 .setID(ID)
                 .setImagePath(imagePath));
     }
 
-    public PCLCustomCardSlot(PCLCardBuilder builder)
+    public PCLCustomCardSlot(PCLDynamicData builder)
     {
         ID = makeNewID(builder.cardColor);
         filePath = makeFilePath();
@@ -103,9 +103,9 @@ public class PCLCustomCardSlot
         filePath = makeFilePath();
         imagePath = makeImagePath();
         slotColor = other.slotColor;
-        for (PCLCardBuilder builder : other.builders)
+        for (PCLDynamicData builder : other.builders)
         {
-            builders.add(new PCLCardBuilder(builder)
+            builders.add(new PCLDynamicData(builder)
                     .setID(ID)
                     .setImagePath(imagePath));
         }
@@ -115,7 +115,7 @@ public class PCLCustomCardSlot
     {
         this(other);
         slotColor = color;
-        for (PCLCardBuilder builder : builders)
+        for (PCLDynamicData builder : builders)
         {
             builder.setColor(color);
         }
@@ -245,7 +245,7 @@ public class PCLCustomCardSlot
 
         ArrayList<String> tempForms = new ArrayList<>();
 
-        for (PCLCardBuilder builder : builders)
+        for (PCLDynamicData builder : builders)
         {
             CardForm f = new CardForm();
 
@@ -313,7 +313,7 @@ public class PCLCustomCardSlot
         PGR.core.debugCards.refreshCards();
     }
 
-    public PCLCardBuilder getBuilder(int i)
+    public PCLDynamicData getBuilder(int i)
     {
         return (builders.size() > i) ? builders.get(i) : null;
     }
@@ -336,7 +336,7 @@ public class PCLCustomCardSlot
         for (String fo : forms)
         {
             CardForm f = EUIUtils.deserialize(fo, TTokenForm.getType());
-            PCLCardBuilder builder = new PCLCardBuilder(this);
+            PCLDynamicData builder = new PCLDynamicData(this);
             builder.setAttackType(PCLAttackType.valueOf(f.attackType));
             builder.setAttackSkill(EUIUtils.safeCast(PSkill.get(f.damageEffect), PCardPrimary_DealDamage.class));
             builder.setBlockSkill(EUIUtils.safeCast(PSkill.get(f.blockEffect), PCardPrimary_GainBlock.class));
@@ -347,7 +347,7 @@ public class PCLCustomCardSlot
         }
 
         imagePath = FOLDER + "/" + ID + ".png";
-        for (PCLCardBuilder builder : builders)
+        for (PCLDynamicData builder : builders)
         {
             builder.setImagePath(imagePath);
         }

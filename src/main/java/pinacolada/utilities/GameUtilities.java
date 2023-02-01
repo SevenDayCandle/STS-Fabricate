@@ -1459,6 +1459,28 @@ public class GameUtilities
         return (cards.size() > 0 && (cards.get(cards.size() - 1) == ignoreLast)) ? (cards.size() - 1) : cards.size();
     }
 
+    public static EUITooltip getTooltipForType(AbstractCard.CardType type)
+    {
+        if (type == PCLEnum.CardType.SUMMON)
+        {
+            return PGR.core.tooltips.summon;
+        }
+        switch (type)
+        {
+            case ATTACK:
+                return PGR.core.tooltips.attack;
+            case SKILL:
+                return PGR.core.tooltips.skill;
+            case POWER:
+                return PGR.core.tooltips.power;
+            case CURSE:
+                return PGR.core.tooltips.curse;
+            case STATUS:
+                return PGR.core.tooltips.status;
+        }
+        return null;
+    }
+
     public static ArrayList<AbstractOrb> getUniqueOrbs(int count)
     {
         final ArrayList<AbstractOrb> orbs = new ArrayList<>();
@@ -1709,6 +1731,12 @@ public class GameUtilities
                 intent == AbstractMonster.Intent.ATTACK_DEFEND || intent == AbstractMonster.Intent.ATTACK);
     }
 
+    // Both colorless and curse are character-independent
+    public static boolean isColorlessCardColor(AbstractCard.CardColor cardColor)
+    {
+        return cardColor == AbstractCard.CardColor.COLORLESS || cardColor == AbstractCard.CardColor.CURSE;
+    }
+
     public static boolean isCommonBuff(AbstractPower power)
     {
         PCLPowerHelper helper = PCLPowerHelper.get(power.ID);
@@ -1848,9 +1876,16 @@ public class GameUtilities
         return isPCLCardColor(getActingColor());
     }
 
+    // PCL check that includes colorless/curse
     public static boolean isPCLCardColor(AbstractCard.CardColor cardColor)
     {
-        return EUIUtils.any(PGR.getAllResources(), r -> r.cardColor == cardColor) || cardColor == AbstractCard.CardColor.COLORLESS || cardColor == AbstractCard.CardColor.CURSE;
+        return isPCLOnlyCardColor(cardColor) || isColorlessCardColor(cardColor);
+    }
+
+    // PCL check that excludes colorless/curse
+    public static boolean isPCLOnlyCardColor(AbstractCard.CardColor cardColor)
+    {
+        return EUIUtils.any(PGR.getAllResources(), r -> r.cardColor == cardColor);
     }
 
     public static boolean isPCLPlayerClass()

@@ -61,9 +61,10 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
     protected EUIToggle uniqueToggle;
     protected Settings.GameLanguage activeLanguage = Settings.language;
 
+    // Colorless/Curse should not be able to see Summon in the card editor
     protected static List<AbstractCard.CardType> getEligibleTypes(AbstractCard.CardColor color)
     {
-        if (GameUtilities.isPCLCardColor(color))
+        if (GameUtilities.isPCLOnlyCardColor(color))
         {
             return Arrays.asList(AbstractCard.CardType.values());
         }
@@ -87,7 +88,8 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
                 .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.05f)
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.1f)
-                .setFont(FontHelper.cardTitleFont, 0.7f);
+                .setFont(FontHelper.cardTitleFont, 0.7f)
+                .setTooltip(PGR.core.strings.cardEditor.idSuffix, PGR.core.strings.cardEditorTutorial.idSuffix);
         idWarning = new EUILabel(EUIFontHelper.cardtitlefontSmall,
                 new EUIHitbox(START_X + MENU_WIDTH * 2.5f, screenH(0.82f), MENU_WIDTH, MENU_HEIGHT))
                 .setAlignment(0.5f, 0.0f, false)
@@ -104,7 +106,8 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
                 .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.05f)
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.1f)
-                .setFont(FontHelper.cardTitleFont, 0.7f);
+                .setFont(FontHelper.cardTitleFont, 0.7f)
+                .setTooltip(LeaderboardScreen.TEXT[7], PGR.core.strings.cardEditorTutorial.nameLanguage);
         languageDropdown = (EUISearchableDropdown<Settings.GameLanguage>) new EUISearchableDropdown<Settings.GameLanguage>(new EUIHitbox(screenW(0.55f), screenH(0.73f), MENU_WIDTH, MENU_HEIGHT)
                 , item -> StringUtils.capitalize(item.toString().toLowerCase()))
                 .setOnChange(languages -> {
@@ -116,7 +119,8 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, OptionsPanel.TEXT[13].replace(":", ""))
                 .setItems(Settings.GameLanguage.values())
                 .setCanAutosizeButton(true)
-                .setSelection(activeLanguage, false);
+                .setSelection(activeLanguage, false)
+                .setTooltip(LeaderboardScreen.TEXT[7], PGR.core.strings.cardEditorTutorial.nameLanguage);
         raritiesDropdown = new EUIDropdown<AbstractCard.CardRarity>(new EUIHitbox(START_X, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT)
                 , item -> StringUtils.capitalize(item.toString().toLowerCase()))
                 .setOnChange(rarities -> {
@@ -126,7 +130,8 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
                     }
                 })
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[0])
-                .setItems(GameUtilities.getStandardRarities());
+                .setItems(GameUtilities.getStandardRarities())
+                .setTooltip(CardLibSortHeader.TEXT[0], PGR.core.strings.cardEditorTutorial.rarity);
         typesDropdown = new EUIDropdown<AbstractCard.CardType>(new EUIHitbox(raritiesDropdown.hb.x + raritiesDropdown.hb.width + SPACING_WIDTH, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT)
                 , EUIGameUtils::textForType)
                 .setOnChange(types -> {
@@ -139,7 +144,8 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
                 })
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[1])
                 .setCanAutosizeButton(true)
-                .setItems(getEligibleTypes(effect.getBuilder().cardColor));
+                .setItems(getEligibleTypes(effect.getBuilder().cardColor))
+                .setTooltip(CardLibSortHeader.TEXT[1], PGR.core.strings.cardEditorTutorial.type);
         targetDropdown = new EUIDropdown<PCLCardTarget>(new EUIHitbox(typesDropdown.hb.x + typesDropdown.hb.width + SPACING_WIDTH, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT)
                 , item -> StringUtils.capitalize(item.toString().toLowerCase()))
                 .setOnChange(targets -> {
@@ -151,7 +157,8 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
                 .setLabelFunctionForOption(PCLCardTarget::getTitle, false)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cardEditor.cardTarget)
                 .setCanAutosizeButton(true)
-                .setItems(PCLCardTarget.getAll());
+                .setItems(PCLCardTarget.getAll())
+                .setTooltip(PGR.core.strings.cardEditor.cardTarget, PGR.core.strings.cardEditorTutorial.cardTarget);
         flagsDropdown = new EUISearchableDropdown<CardTagItem>(new EUIHitbox(START_X, screenH(0.5f), MENU_WIDTH, MENU_HEIGHT), cs -> cs.getTip().title)
                 .setOnChange(selectedSeries -> {
                     effect.modifyAllBuilders(e -> e.setExtraTags(selectedSeries));
@@ -175,10 +182,12 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
 
         maxUpgrades = new PCLValueEditor(new EUIHitbox(START_X, screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , PGR.core.strings.cardEditor.maxUpgrades, (val) -> effect.modifyAllBuilders(e -> e.setMaxUpgrades(val)))
-                .setLimits(-1, PSkill.DEFAULT_MAX);
+                .setLimits(-1, PSkill.DEFAULT_MAX)
+                .setTooltip(PGR.core.strings.cardEditor.maxUpgrades, PGR.core.strings.cardEditorTutorial.maxUpgrades);
         maxCopies = new PCLValueEditor(new EUIHitbox(screenW(0.35f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , PGR.core.strings.cardEditor.maxCopies, (val) -> effect.modifyAllBuilders(e -> e.setMaxCopies(val)))
-                .setLimits(-1, PSkill.DEFAULT_MAX);
+                .setLimits(-1, PSkill.DEFAULT_MAX)
+                .setTooltip(PGR.core.strings.cardEditor.maxCopies, PGR.core.strings.cardEditorTutorial.maxCopies);
         uniqueToggle = (EUIToggle) new EUIToggle(new EUIHitbox(screenW(0.45f), screenH(0.4f), MENU_WIDTH, MENU_HEIGHT))
                 .setFont(EUIFontHelper.carddescriptionfontNormal, 0.9f)
                 .setText(PGR.core.tooltips.unique.title)

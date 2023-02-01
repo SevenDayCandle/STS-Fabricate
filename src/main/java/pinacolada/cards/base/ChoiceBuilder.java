@@ -13,8 +13,9 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.List;
 
-public class ChoiceBuilder<T> extends PCLCardBuilder
+public class ChoiceBuilder<T> extends PCLDynamicData
 {
+    public final boolean fromCustom;
     public final T object;
 
     public static ChoiceBuilder<PCLAffinity> affinity(PCLAffinity affinity)
@@ -88,6 +89,7 @@ public class ChoiceBuilder<T> extends PCLCardBuilder
         super(card, false);
         this.object = object;
         this.showTypeText = false;
+        this.fromCustom = card instanceof PCLDynamicCard;
     }
 
     public ChoiceBuilder(PCLCardData card, T object)
@@ -95,9 +97,10 @@ public class ChoiceBuilder<T> extends PCLCardBuilder
         super(card, false);
         this.object = object;
         this.showTypeText = false;
+        this.fromCustom = card instanceof PCLDynamicData;
     }
 
-    public ChoiceBuilder<T> addPSkill(PSkill effect)
+    public ChoiceBuilder<T> addPSkill(PSkill<?> effect)
     {
         super.addPSkill(effect, false);
         return this;

@@ -40,7 +40,7 @@ public class PMove_ModifyCost extends PMove_Modify<PField_CardCategory>
     @Override
     public ActionT1<AbstractCard> getAction()
     {
-        return (c) -> getActions().modifyCost(c, extra, fields.forced, true);
+        return (c) -> getActions().modifyCost(c, extra, !fields.forced, true);
     }
 
     @Override
@@ -52,7 +52,8 @@ public class PMove_ModifyCost extends PMove_Modify<PField_CardCategory>
     @Override
     public String getObjectText()
     {
-        return EUIRM.strings.numNoun(getExtraRawString(), TEXT.subjects.cost);
+        String base = EUIRM.strings.numNoun(getExtraRawString(), TEXT.subjects.cost);
+        return fields.forced ? TEXT.subjects.thisTurn(base) : EUIRM.strings.numNoun(getExtraRawString(), TEXT.subjects.cost);
     }
 
     @Override

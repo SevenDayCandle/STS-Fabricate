@@ -244,7 +244,6 @@
 												"Change this card's variant to the currently-displayed variant. | #yThis #ycard #ycan #ychange #yforms #yany #ynumber #yof #ytimes.",
 												"Cur. Copies",
 												"Max. Copies",
-												"If you have reached or surpassed the maximum number of copies, this card will stop appearing in card rewards and shops.",
 												"Art Credits: ",
 												"Empty Augment",
 												"View Augments",
@@ -404,7 +403,7 @@
 												"Upgrade",
 												"Target",
 												"Attack Type",
-												"Attack Effect",
+												"Attack VFX",
 												"Condition",
 												"Main Condition",
 												"Effect",
@@ -478,7 +477,17 @@
 												"Select a file from your computer or paste an image from your clipboard.",
 												"The highlighted portion of the image will be saved. Drag the image to reposition it. Use the scrollbar to zoom in or out.",
 												"The maximum number of times this card can be upgraded at #yRest #ySites.",
-												"If you have reached or surpassed the maximum number of copies, this card will stop appearing in card rewards and shops."
+												"If you have reached or surpassed the maximum number of copies, this card will stop appearing in card rewards and shops.",
+												"This suffix will be used to construct file paths for this card, as well as its in-game ID (used when referencing the card in the console). | You cannot have two custom cards of the same color with the same suffix.",
+												"The name of the card as it appears in-game. Selecting another language under the language dropdown will let you modify the card's name for that language. | If a name is missing for a given language, it will fall back on the English name.",
+												"#yRarity determines how often the card appears in card rewards. #yBasic cards only appear in starting loadouts, while #ySpecial cards only appear in special events.",
+												"#yTypes categorize cards based on their effects.",
+												"Determines what creatures the card is allowed to be played against.",
+												"The upper value determines the base amount for this effect or attribute. The lower value determines how much this amount increases per upgrade.",
+												"#yAttack #yTypes affect an #yAttack's damage calculations as well as its interaction with powers on the target.",
+												"The visual effect that plays on the target.",
+												"The number of times this #yAttack will hit the target. Each hit is treated independently with regards to damage calculations and powers on the target.",
+												"The number of times that this card will grant #yBlock. Each #yBlock grant is treated independently with regards to #yBlock calculations and powers on the target."
 								]
 				},
 				"pcl:CardMods": {

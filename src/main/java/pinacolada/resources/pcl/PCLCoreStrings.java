@@ -334,14 +334,13 @@ public class PCLCoreStrings extends PCLStrings
         public final String changeVariantTooltipAlways = strings.TEXT[3];
         public final String currentCopies = strings.TEXT[4];
         public final String maxCopies = strings.TEXT[5];
-        public final String maxCopiesTooltip = strings.TEXT[6];
-        public final String artAuthor = strings.TEXT[7];
-        public final String emptyAugment = strings.TEXT[8];
-        public final String viewAugments = strings.TEXT[9];
-        public final String viewTooltips = strings.TEXT[10];
-        public final String clickToSlot = strings.TEXT[11];
-        public final String clickToRemove = strings.TEXT[12];
-        public final String cannotRemove = strings.TEXT[13];
+        public final String artAuthor = strings.TEXT[6];
+        public final String emptyAugment = strings.TEXT[7];
+        public final String viewAugments = strings.TEXT[8];
+        public final String viewTooltips = strings.TEXT[9];
+        public final String clickToSlot = strings.TEXT[10];
+        public final String clickToRemove = strings.TEXT[11];
+        public final String cannotRemove = strings.TEXT[12];
     }
 
     public class Hotkeys
@@ -836,6 +835,10 @@ public class PCLCoreStrings extends PCLStrings
         {
             return giveTargetAmount(subject, subjects.from(target), power);
         }
+        public final String kill(String targetString)
+        {
+            return generic2(PGR.core.tooltips.kill.title, targetString);
+        }
         public final String playFrom(Object amount, Object subject, Object target)
         {
             return genericFrom(PGR.core.tooltips.play.title, amount, subject, target);
@@ -1191,6 +1194,18 @@ public class PCLCoreStrings extends PCLStrings
         public final String effectConditionOr = cardeditortutorial.TEXT[16];
         public final String imageSelect = cardeditortutorial.TEXT[17];
         public final String imageCrop = cardeditortutorial.TEXT[18];
+        public final String maxUpgrades = cardeditortutorial.TEXT[19];
+        public final String maxCopies = cardeditortutorial.TEXT[20];
+        public final String idSuffix = cardeditortutorial.TEXT[21];
+        public final String nameLanguage = cardeditortutorial.TEXT[22];
+        public final String rarity = cardeditortutorial.TEXT[23];
+        public final String type = cardeditortutorial.TEXT[24];
+        public final String cardTarget = cardeditortutorial.TEXT[25];
+        public final String amount = cardeditortutorial.TEXT[26];
+        public final String attackType = cardeditortutorial.TEXT[27];
+        public final String attackEffect = cardeditortutorial.TEXT[28];
+        public final String hitCount = cardeditortutorial.TEXT[29];
+        public final String blockCount = cardeditortutorial.TEXT[30];
     }
 
     public class GridSelection

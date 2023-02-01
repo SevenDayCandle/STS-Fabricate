@@ -20,7 +20,7 @@ import extendedui.ui.controls.EUIVerticalScrollBar;
 import extendedui.ui.hitboxes.DraggableHitbox;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
-import pinacolada.cards.base.PCLCardBuilder;
+import pinacolada.cards.base.PCLDynamicData;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.PCLRenderHelpers;
@@ -63,7 +63,7 @@ public class PCLCustomCardImageEffect extends PCLEffectWithCallback<Pixmap>
     protected SpriteBatch sb;
     protected OrthographicCamera camera;
 
-    public PCLCustomCardImageEffect(PCLCardBuilder builder)
+    public PCLCustomCardImageEffect(PCLDynamicData builder)
     {
         final float buttonHeight = Settings.HEIGHT * (0.055f);
         final float labelHeight = Settings.HEIGHT * (0.04f);

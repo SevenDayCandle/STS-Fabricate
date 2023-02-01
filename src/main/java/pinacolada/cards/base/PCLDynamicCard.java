@@ -22,32 +22,23 @@ import java.util.ArrayList;
 
 public class PCLDynamicCard extends PCLCard implements DynamicCard
 {
-    private final TextureAtlas.AtlasRegion vanillaEnergyOrb;
-    private final TextureAtlas.AtlasRegion vanillaBg;
-    protected ArrayList<PCLCardBuilder> forms;
-    protected PCLCardBuilder builder;
+    private TextureAtlas.AtlasRegion vanillaEnergyOrb;
+    private TextureAtlas.AtlasRegion vanillaBg;
     private Texture customBg;
     private Texture customEnergyOrb;
+    protected ArrayList<PCLDynamicData> forms;
+    protected PCLDynamicData builder;
 
-    public PCLDynamicCard(PCLCardBuilder builder)
+    public PCLDynamicCard(PCLDynamicData builder)
     {
         this(builder, false);
     }
 
-    public PCLDynamicCard(PCLCardBuilder builder, boolean shouldFindForms)
+    public PCLDynamicCard(PCLDynamicData builder, boolean shouldFindForms)
     {
         super(builder, builder.ID, builder.imagePath,
                 builder.getCost(0), builder.cardType, builder.cardColor, builder.cardRarity, builder.cardTarget.cardTarget, 0, 0, new BuilderInfo(builder, shouldFindForms));
-        this.vanillaEnergyOrb = getVanillaEnergyOrb(builder.cardColor);
-        if (vanillaEnergyOrb == null)
-        {
-            this.customEnergyOrb = getEnergyOrb();
-        }
-        this.vanillaBg = getBaseGameCardBackground();
-        if (vanillaBg == null)
-        {
-            this.customBg = getCardBackground();
-        }
+        initializeTextures();
     }
 
     public PCLDynamicCard findForms()
@@ -58,6 +49,23 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
             this.forms = cSlot.builders;
         }
         return this;
+    }
+
+    protected void initializeTextures()
+    {
+        if (!GameUtilities.isPCLOnlyCardColor(builder.cardColor))
+        {
+            this.vanillaEnergyOrb = getVanillaEnergyOrb(builder.cardColor);
+            if (vanillaEnergyOrb == null)
+            {
+                this.customEnergyOrb = getEnergyOrb();
+            }
+            this.vanillaBg = getBaseGameCardBackground();
+            if (vanillaBg == null)
+            {
+                this.customBg = getCardBackground();
+            }
+        }
     }
 
     protected TextureAtlas.AtlasRegion getBaseGameCardBackground()
@@ -75,6 +83,8 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
                         return isPopup ? ImageMaster.CARD_POWER_BG_BLUE_L : ImageMaster.CARD_POWER_BG_BLUE;
                     case PURPLE:
                         return isPopup ? ImageMaster.CARD_POWER_BG_PURPLE_L : ImageMaster.CARD_POWER_BG_PURPLE;
+                    case COLORLESS:
+                        return isPopup ? ImageMaster.CARD_POWER_BG_GRAY_L : ImageMaster.CARD_POWER_BG_GRAY;
                     default:
                         return null;
                 }
@@ -89,6 +99,8 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
                         return isPopup ? ImageMaster.CARD_ATTACK_BG_BLUE_L : ImageMaster.CARD_ATTACK_BG_BLUE;
                     case PURPLE:
                         return isPopup ? ImageMaster.CARD_ATTACK_BG_PURPLE_L : ImageMaster.CARD_ATTACK_BG_PURPLE;
+                    case COLORLESS:
+                        return isPopup ? ImageMaster.CARD_ATTACK_BG_GRAY_L : ImageMaster.CARD_ATTACK_BG_GRAY;
                     default:
                         return null;
                 }
@@ -103,6 +115,8 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
                         return isPopup ? ImageMaster.CARD_SKILL_BG_BLUE_L : ImageMaster.CARD_SKILL_BG_BLUE;
                     case PURPLE:
                         return isPopup ? ImageMaster.CARD_SKILL_BG_PURPLE_L : ImageMaster.CARD_SKILL_BG_PURPLE;
+                    case COLORLESS:
+                        return isPopup ? ImageMaster.CARD_SKILL_BG_GRAY_L : ImageMaster.CARD_SKILL_BG_GRAY;
                     default:
                         return null;
                 }
@@ -112,7 +126,7 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
     @Override
     protected Texture getCardBackground()
     {
-        if (GameUtilities.isPCLCardColor(this.color))
+        if (GameUtilities.isPCLOnlyCardColor(this.color))
         {
             return super.getCardBackground();
         }
@@ -175,7 +189,7 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
     @Override
     protected ColoredTexture getCardBanner()
     {
-        if (GameUtilities.isPCLCardColor(this.color))
+        if (GameUtilities.isPCLOnlyCardColor(this.color))
         {
             return super.getCardBanner();
         }
@@ -185,7 +199,7 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
     @Override
     protected Texture getEnergyOrb()
     {
-        if (GameUtilities.isPCLCardColor(this.color))
+        if (GameUtilities.isPCLOnlyCardColor(this.color))
         {
             return super.getEnergyOrb();
         }
@@ -207,7 +221,7 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
     @Override
     protected ColoredTexture getPortraitFrame()
     {
-        if (GameUtilities.isPCLCardColor(this.color))
+        if (GameUtilities.isPCLOnlyCardColor(this.color))
         {
             return super.getPortraitFrame();
         }
@@ -254,9 +268,15 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
     }
 
     @Override
+    protected boolean shouldRenderTypeIcon()
+    {
+        return vanillaBg == null && customBg == null; // These are null when rendering PCL colors and colorless
+    }
+
+    @Override
     protected void renderCardBg(SpriteBatch sb, float x, float y)
     {
-        if (GameUtilities.isPCLCardColor(this.color))
+        if (vanillaBg == null && customBg == null)
         {
             super.renderCardBg(sb, x, y);
         }
@@ -273,7 +293,7 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
                         s -> PCLRenderHelpers.drawOnCardAuto(s, this, vanillaBg, new Vector2(0, 0), vanillaBg.packedWidth, vanillaBg.packedHeight, getRenderColor(), transparency, popUpMultiplier)
                 );
             }
-            else if (customBg != null)
+            else
             {
                 PCLRenderHelpers.drawWithMask(sb,
                         s -> PCLRenderHelpers.drawOnCardAuto(s, this, mask, new Vector2(0, 0), width, height, getRenderColor(), transparency, popUpMultiplier),
@@ -286,7 +306,7 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
     @Override
     protected void renderEnergy(SpriteBatch sb)
     {
-        if (GameUtilities.isPCLCardColor(this.color))
+        if (vanillaEnergyOrb == null && customEnergyOrb == null)
         {
             super.renderEnergy(sb);
         }
@@ -304,7 +324,7 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
                     PCLRenderHelpers.resetFont(font);
                 }
             }
-            else if (customEnergyOrb != null)
+            else
             {
                 float popUpMultiplier = isPopup ? 0.5f : 1f;
                 PCLRenderHelpers.drawOnCardAuto(sb, this, customEnergyOrb, new Vector2(0, 0), customEnergyOrb.getWidth(), customEnergyOrb.getHeight(), getRenderColor(), transparency, popUpMultiplier);
@@ -348,14 +368,14 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
         return null;
     }
 
-    public PCLDynamicCard setForms(ArrayList<PCLCardBuilder> builders)
+    public PCLDynamicCard setForms(ArrayList<PCLDynamicData> builders)
     {
         this.forms = builders;
         changeForm(this.auxiliaryData.form, timesUpgraded);
         return this;
     }
 
-    protected void setProperties(PCLCardBuilder builder, Integer form, int timesUpgraded)
+    protected void setProperties(PCLDynamicData builder, Integer form, int timesUpgraded)
     {
         super.setupProperties(builder, form, timesUpgraded);
 
@@ -414,10 +434,10 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
 
     private static class BuilderInfo
     {
-        protected final PCLCardBuilder builder;
+        protected final PCLDynamicData builder;
         protected final boolean shouldFindForms;
 
-        BuilderInfo(PCLCardBuilder builder, boolean shouldFindForms)
+        BuilderInfo(PCLDynamicData builder, boolean shouldFindForms)
         {
             this.builder = builder;
             this.shouldFindForms = shouldFindForms;

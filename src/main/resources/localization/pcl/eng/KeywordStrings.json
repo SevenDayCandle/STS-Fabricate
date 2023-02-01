@@ -256,6 +256,13 @@
 								"NAMES": ["juggernaut"],
 								"PROPER_NAME": "Juggernaut"
 				},
+				"Kill":	{
+								"DESCRIPTION": "Remove this creature from battle.",
+								"NAMES": ["kill", "kills", "killed"],
+								"PAST": "killed",
+								"PRESENT": "kills",
+								"PROPER_NAME": "Kill"
+				},
 				"Last Affinity":	{
 								"DESCRIPTION": "The #yAffinities of previously-played cards.",
 								"NAMES": ["last affinity"],

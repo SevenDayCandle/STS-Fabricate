@@ -2226,7 +2226,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     protected void renderCardBg(SpriteBatch sb, float x, float y) {
         Texture card = getCardBackground();
         float popUpMultiplier = isPopup ? 0.5f : 1f;
-        if (this.color == CardColor.COLORLESS || this.color == CardColor.CURSE) {
+        if (GameUtilities.isColorlessCardColor(this.color)) {
             PCLRenderHelpers.drawGrayscale(sb, (s) ->
                     PCLRenderHelpers.drawOnCardAuto(s, this, card,
                             new Vector2(0, 0), card.getWidth(), card.getHeight(),
@@ -2394,7 +2394,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     @SpireOverride
     protected void renderType(SpriteBatch sb) {
         if (showTypeText) {
-            if (GameUtilities.isPCLCardColor(this.color))
+            if (shouldRenderTypeIcon())
             {
                 Texture texture = getTypeIcon();
                 float height = texture.getHeight();
@@ -2405,6 +2405,11 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
                 SpireSuper.call(sb);
             }
         }
+    }
+
+    protected boolean shouldRenderTypeIcon()
+    {
+        return GameUtilities.isPCLCardColor(this.color);
     }
 
     public void setDrawScale(float scale)

@@ -247,6 +247,11 @@ public abstract class PMove<T extends PField> extends PSkill<T>
         return new PMove_Exhaust(amount, groups);
     }
 
+    public static PMove_Exhaust exhaustRandom(int amount, PCLCardGroupHelper... groups)
+    {
+        return (PMove_Exhaust) new PMove_Exhaust(amount, groups).edit(PField_CardGeneric::setRandom);
+    }
+
     public static PMove_Fetch fetch(int amount, PCLCardGroupHelper... groups)
     {
         return new PMove_Fetch(amount, groups);
@@ -387,14 +392,24 @@ public abstract class PMove<T extends PField> extends PSkill<T>
         return new PMove_ModifyBlock(amount, block, groups);
     }
 
-    public static PMove_ModifyCost modifyCost(int block)
+    public static PMove_ModifyCost modifyCost(int cost)
     {
-        return new PMove_ModifyCost(1, block);
+        return new PMove_ModifyCost(1, cost);
     }
 
     public static PMove_ModifyCost modifyCost(int amount, int cost, PCLCardGroupHelper... groups)
     {
         return new PMove_ModifyCost(amount, cost, groups);
+    }
+
+    public static PMove_ModifyCost modifyCostForTurn(int cost)
+    {
+        return (PMove_ModifyCost) new PMove_ModifyCost(1, cost).edit(f -> f.setForced(true));
+    }
+
+    public static PMove_ModifyCost modifyCostForTurn(int amount, int cost, PCLCardGroupHelper... groups)
+    {
+        return (PMove_ModifyCost) new PMove_ModifyCost(amount, cost, groups).edit(f -> f.setForced(true));
     }
 
     public static PMove_ModifyDamage modifyDamage(int damage)
