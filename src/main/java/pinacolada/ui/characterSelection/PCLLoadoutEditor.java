@@ -19,6 +19,8 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.effects.screen.PCLCardSlotSelectionEffect;
+import pinacolada.effects.screen.PCLRelicSlotSelectionEffect;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.*;

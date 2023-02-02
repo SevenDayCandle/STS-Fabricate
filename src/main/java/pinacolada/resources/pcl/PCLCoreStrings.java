@@ -174,6 +174,7 @@ public class PCLCoreStrings extends PCLStrings
         public final String required = cardeditor.TEXT[60];
         public final String origins = cardeditor.TEXT[61];
         public final String enable = cardeditor.TEXT[62];
+        public final String existingCardImage = cardeditor.TEXT[63];
     }
 
     public class Misc

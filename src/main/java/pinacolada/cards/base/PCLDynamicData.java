@@ -1,11 +1,11 @@
 package pinacolada.cards.base;
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import extendedui.EUIUtils;
+import extendedui.interfaces.delegates.ActionT0;
 import extendedui.utilities.ColoredTexture;
 import pinacolada.cards.base.fields.*;
 import pinacolada.cards.base.tags.CardTagItem;
@@ -35,7 +35,6 @@ public class PCLDynamicData extends PCLCardData
     public PCLCard source;
     public PCardPrimary_DealDamage damageEffect;
     public PCardPrimary_GainBlock blockEffect;
-    public TextureAtlas.AtlasRegion fakePortrait;
     public boolean showTypeText = true;
 
     public PCLDynamicData(String id)
@@ -122,33 +121,46 @@ public class PCLDynamicData extends PCLCardData
     public PCLDynamicData(PCLCustomCardSlot data)
     {
         this(data.ID);
-        damage = data.damage.clone();
-        damageUpgrade = data.damageUpgrade.clone();
-        block = data.block.clone();
-        blockUpgrade = data.blockUpgrade.clone();
-        magicNumber = data.tempHP.clone();
-        magicNumberUpgrade = data.tempHPUpgrade.clone();
-        hp = data.heal.clone();
-        hpUpgrade = data.healUpgrade.clone();
-        hitCount = data.hitCount.clone();
-        hitCountUpgrade = data.hitCountUpgrade.clone();
-        rightCount = data.rightCount.clone();
-        rightCountUpgrade = data.rightCountUpgrade.clone();
-        cost = data.cost.clone();
-        costUpgrade = data.costUpgrade.clone();
-        setMaxUpgrades(data.maxUpgradeLevel);
-        setMaxCopies(data.maxCopies);
-        setUnique(data.unique);
-        setLanguageMap(EUIUtils.deserialize(data.languageStrings, TStrings.getType()));
-        setProperties(AbstractCard.CardType.valueOf(data.type), AbstractCard.CardRarity.valueOf(data.rarity));
-        setTarget(PCLCardTarget.valueOf(data.target));
-        setTags(EUIUtils.map(data.tags, t -> EUIUtils.deserialize(t, PCLCardTagInfo.class)));
-        setColor(data.slotColor);
+        setColor(data.slotColor); // Color and ID are required to not be corrupted
+        safeLoadValue(() -> damage = data.damage.clone());
+        safeLoadValue(() -> damageUpgrade = data.damageUpgrade.clone());
+        safeLoadValue(() -> block = data.block.clone());
+        safeLoadValue(() -> blockUpgrade = data.blockUpgrade.clone());
+        safeLoadValue(() -> magicNumber = data.tempHP.clone());
+        safeLoadValue(() -> magicNumberUpgrade = data.tempHPUpgrade.clone());
+        safeLoadValue(() -> hp = data.heal.clone());
+        safeLoadValue(() -> hpUpgrade = data.healUpgrade.clone());
+        safeLoadValue(() -> hitCount = data.hitCount.clone());
+        safeLoadValue(() -> hitCountUpgrade = data.hitCountUpgrade.clone());
+        safeLoadValue(() -> rightCount = data.rightCount.clone());
+        safeLoadValue(() -> rightCountUpgrade = data.rightCountUpgrade.clone());
+        safeLoadValue(() -> cost = data.cost.clone());
+        safeLoadValue(() -> costUpgrade = data.costUpgrade.clone());
+        safeLoadValue(() -> setMaxUpgrades(data.maxUpgradeLevel));
+        safeLoadValue(() -> setMaxCopies(data.maxCopies));
+        safeLoadValue(() -> setUnique(data.unique));
+        safeLoadValue(() -> setLanguageMap(EUIUtils.deserialize(data.languageStrings, TStrings.getType())));
+        safeLoadValue(() -> setProperties(AbstractCard.CardType.valueOf(data.type), AbstractCard.CardRarity.valueOf(data.rarity)));
+        safeLoadValue(() -> setTarget(PCLCardTarget.valueOf(data.target)));
+        safeLoadValue(() -> setTags(EUIUtils.map(data.tags, t -> EUIUtils.deserialize(t, PCLCardTagInfo.class))));
         if (data.loadout != null)
         {
              setLoadout(PCLLoadout.get(data.slotColor, data.loadout));
         }
-        setAffinities(EUIUtils.deserialize(data.affinities, PCLCardDataAffinityGroup.class));
+        safeLoadValue(() -> setAffinities(EUIUtils.deserialize(data.affinities, PCLCardDataAffinityGroup.class)));
+    }
+
+    private void safeLoadValue(ActionT0 loadFunc)
+    {
+        try
+        {
+            loadFunc.invoke();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            EUIUtils.logError(this, "Failed to load field: " + e.getMessage());
+        }
     }
 
     public PCLDynamicCard build()
@@ -360,13 +372,6 @@ public class PCLDynamicData extends PCLCardData
             effect = effect.makeCopy();
         }
         powers.add(effect);
-
-        return this;
-    }
-
-    public PCLDynamicData setPortrait(TextureAtlas.AtlasRegion portrait)
-    {
-        this.fakePortrait = portrait;
 
         return this;
     }

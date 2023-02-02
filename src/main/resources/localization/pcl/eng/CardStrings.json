@@ -57,5 +57,12 @@
 								"pcl:AffinityToken_Purple": {"NAME": "Purple Affinity"},
 								"pcl:AffinityToken_Silver": {"NAME": "Silver Affinity"},
 								"pcl:AffinityToken_Star": {"NAME": "Star Affinity"}
+				},
+				"STATUS":	{
+								"pcl:Status_Burn": {"NAME": "Burn"},
+								"pcl:Status_Dazed": {"NAME": "Dazed"},
+								"pcl:Status_Slimed": {"NAME": "Slimed"},
+								"pcl:Status_Wound": {"NAME": "Wound"},
+								"pcl:Status_Void": {"NAME": "Void"}
 				}
 }

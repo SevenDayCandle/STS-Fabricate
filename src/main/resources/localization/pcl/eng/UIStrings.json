@@ -452,7 +452,8 @@
 												"Random",
 												"Required",
 												"Selection",
-												"Enable"
+												"Enable",
+												"Load From Card"
 								]
 				},
 				"pcl:CardEditorTutorial": {
@@ -474,7 +475,7 @@
 												"When Choices is above 0, the user will need to choose which of these sub-effects to use when playing this card.",
 												"If checked, only the first effect will be used if the conditions are met, and only the second effect will be used if it wasn't.",
 												"If checked, only one of the listed conditions is required to activate the effects. Otherwise, all listed conditions are required.",
-												"Select a file from your computer or paste an image from your clipboard.",
+												"#yLoad #yFile: Select a file from your computer | #yLoad #yFrom #yCard: Copy an image from an existing card | #yPaste or #pCtrl-V: Copy an image from your clipboard",
 												"The highlighted portion of the image will be saved. Drag the image to reposition it. Use the scrollbar to zoom in or out.",
 												"The maximum number of times this card can be upgraded at #yRest #ySites.",
 												"If you have reached or surpassed the maximum number of copies, this card will stop appearing in card rewards and shops.",

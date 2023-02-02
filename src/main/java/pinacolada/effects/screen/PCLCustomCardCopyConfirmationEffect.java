@@ -1,4 +1,4 @@
-package pinacolada.ui.cardEditor;
+package pinacolada.effects.screen;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;

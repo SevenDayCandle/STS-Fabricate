@@ -346,7 +346,7 @@ public class PCLCustomCardSlot
             builders.add(builder);
         }
 
-        imagePath = FOLDER + "/" + ID + ".png";
+        imagePath = makeImagePath();
         for (PCLDynamicData builder : builders)
         {
             builder.setImagePath(imagePath);

@@ -22,6 +22,8 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.effects.PCLEffectWithCallback;
+import pinacolada.effects.screen.PCLCustomCardCopyConfirmationEffect;
+import pinacolada.effects.screen.PCLCustomCardDeletionConfirmationEffect;
 import pinacolada.resources.PGR;
 
 import java.awt.*;

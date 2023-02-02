@@ -18,6 +18,7 @@ import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
+import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
 import java.lang.reflect.Constructor;
@@ -52,7 +53,6 @@ public class PCLCardData implements CardObject
     public Integer[] costUpgrade = array(0);
     public HashMap<PCLCardTag, PCLCardTagInfo> tags = new HashMap<>();
     public CardStrings strings;
-    public String atlasUrl;
     public String imagePath;
     public String ID;
     public PCLCardTarget cardTarget = PCLCardTarget.None;
@@ -430,13 +430,6 @@ public class PCLCardData implements CardObject
         return this;
     }
 
-    public PCLCardData setAtlasUrl(String atlasUrl)
-    {
-        this.atlasUrl = atlasUrl;
-
-        return this;
-    }
-
     public PCLCardData setAttack(int cost, AbstractCard.CardRarity rarity)
     {
         return setAttack(cost, rarity, PCLAttackType.Normal, PCLCardTarget.Single);
@@ -634,6 +627,21 @@ public class PCLCardData implements CardObject
     public PCLCardData setImagePath(String imagePath)
     {
         this.imagePath = imagePath;
+
+        return this;
+    }
+
+    // Loads the base game large portrait associated with this atlas path. Large portrait must be used to conform with the dynamic portraits setting
+    public PCLCardData setImagePathFromAtlasUrl(String imagePath)
+    {
+        this.imagePath = GameUtilities.toInternalAtlasPath(imagePath);
+
+        return this;
+    }
+
+    public PCLCardData setImagePathFromBetaAtlasUrl(String imagePath)
+    {
+        this.imagePath = GameUtilities.toInternalAtlasBetaPath(imagePath);
 
         return this;
     }

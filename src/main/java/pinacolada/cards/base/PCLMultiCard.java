@@ -190,6 +190,15 @@ public abstract class PCLMultiCard extends PCLCard
             this.cost = this.costForTurn = this.cost + card.cost;
         }
 
+        refreshCardType(card);
+
+        for (PCLCardTag tag : PCLCardTag.getAll()) {
+            tag.set(this, tag.getInt(card));
+        }
+    }
+
+    protected void refreshCardType(AbstractCard card)
+    {
         if (card.type == CardType.ATTACK) {
             if (this.type == CardType.POWER) {
                 PCLCardTag.Purge.set(this,1);
@@ -208,10 +217,6 @@ public abstract class PCLMultiCard extends PCLCard
                 setCardType(CardType.SKILL);
             }
             hasAttackOrSkill = true;
-        }
-
-        for (PCLCardTag tag : PCLCardTag.getAll()) {
-            tag.set(this, tag.getInt(card));
         }
     }
 

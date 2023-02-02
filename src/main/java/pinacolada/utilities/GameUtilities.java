@@ -84,6 +84,8 @@ import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.player;
 // Copied and modified from STS-AnimatorMod
 public class GameUtilities
 {
+    protected static final String PORTRAIT_PATH = "images/1024Portraits/";
+    protected static final String BETA_PATH = "images/1024PortraitsBeta/";
     private static final AbstractCard.CardRarity[] poolOrdering = AbstractCard.CardRarity.values();
     private static final RandomizedList<AbstractCard> fullCardPool = new RandomizedList<>();
     private static final RandomizedList<AbstractCard> characterCardPool = new RandomizedList<>();
@@ -2366,6 +2368,16 @@ public class GameUtilities
                 }
             }
         }
+    }
+
+    public static String toInternalAtlasPath(String path)
+    {
+        return PORTRAIT_PATH + path + ".png";
+    }
+
+    public static String toInternalAtlasBetaPath(String path)
+    {
+        return BETA_PATH + path + ".png";
     }
 
     public static EUITooltip tooltipForType(AbstractCard.CardType type)

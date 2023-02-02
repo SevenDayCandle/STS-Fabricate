@@ -14,10 +14,10 @@ import pinacolada.augments.PCLAugmentData;
 import pinacolada.augments.PCLAugmentWeights;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.effects.PCLEffects;
+import pinacolada.effects.screen.PCLAugmentSelectionEffect;
 import pinacolada.interfaces.listeners.OnReceiveRewardsListener;
 import pinacolada.resources.PGR;
 import pinacolada.rewards.pcl.AugmentReward;
-import pinacolada.ui.cardView.PCLAugmentSelectionEffect;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.WeightedList;
 

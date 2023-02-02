@@ -21,6 +21,7 @@ import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.cards.base.PCLDynamicCard;
 import pinacolada.cards.base.PCLDynamicData;
 import pinacolada.effects.PCLEffectWithCallback;
+import pinacolada.effects.screen.PCLCustomCardImageEffect;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PTrigger;
@@ -216,7 +217,7 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
                                         .setImagePath(currentSlot.getImagePath()));
                                 if (previewCard != null)
                                 {
-                                    previewCard.loadImage(null, true);
+                                    previewCard.loadImage(currentSlot.getImagePath(), true);
                                 }
                             }
                         }

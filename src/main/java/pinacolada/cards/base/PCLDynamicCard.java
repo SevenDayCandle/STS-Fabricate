@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import extendedui.utilities.ColoredString;
-import extendedui.utilities.ColoredTexture;
 import pinacolada.interfaces.markers.DynamicCard;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
@@ -36,7 +35,7 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
 
     public PCLDynamicCard(PCLDynamicData builder, boolean shouldFindForms)
     {
-        super(builder, builder.ID, builder.atlasUrl, builder.imagePath,
+        super(builder, builder.ID, builder.imagePath,
                 builder.getCost(0), builder.cardType, builder.cardColor, builder.cardRarity, builder.cardTarget.cardTarget, 0, 0, new BuilderInfo(builder, shouldFindForms));
         initializeTextures();
     }
@@ -190,16 +189,6 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
     }
 
     @Override
-    protected ColoredTexture getCardBanner()
-    {
-        if (GameUtilities.isPCLOnlyCardColor(this.color))
-        {
-            return super.getCardBanner();
-        }
-        return null;
-    }
-
-    @Override
     protected Texture getEnergyOrb()
     {
         if (GameUtilities.isPCLOnlyCardColor(this.color))
@@ -219,16 +208,6 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
     public int getMaxForms()
     {
         return forms != null ? forms.size() : 1;
-    }
-
-    @Override
-    protected ColoredTexture getPortraitFrame()
-    {
-        if (GameUtilities.isPCLOnlyCardColor(this.color))
-        {
-            return super.getPortraitFrame();
-        }
-        return null;
     }
 
     @Override
@@ -397,10 +376,6 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
         if (builder.portraitForeground != null)
         {
             this.portraitForeground = builder.portraitForeground;
-        }
-        if (builder.fakePortrait != null)
-        {
-            this.fakePortrait = builder.fakePortrait;
         }
 
         clearSkills();

@@ -1,4 +1,4 @@
-package pinacolada.effects.card;
+package pinacolada.effects.screen;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

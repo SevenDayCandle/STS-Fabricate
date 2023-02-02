@@ -136,10 +136,8 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     public transient AbstractCreature owner;
     public transient PCLCard parent;
     public transient PowerFormulaDisplay formulaDisplay;
-    protected ColoredTexture portraitFrame;
     protected ColoredTexture portraitForeground;
     protected ColoredTexture portraitImg;
-    protected TextureAtlas.AtlasRegion fakePortrait;
     protected boolean playAtEndOfTurn;
     protected final ArrayList<PCLCardGlowBorderEffect> glowList = new ArrayList<>();
     protected transient boolean simplified = false;
@@ -147,30 +145,30 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
 
     protected PCLCard(PCLCardData cardData)
     {
-        this(cardData, cardData.ID, cardData.atlasUrl, cardData.imagePath, cardData.getCost(0), cardData.cardType, cardData.cardColor, cardData.cardRarity, cardData.cardTarget.cardTarget, 0, 0, null);
+        this(cardData, cardData.ID, cardData.imagePath, cardData.getCost(0), cardData.cardType, cardData.cardColor, cardData.cardRarity, cardData.cardTarget.cardTarget, 0, 0, null);
     }
 
     protected PCLCard(PCLCardData cardData, Object input)
     {
-        this(cardData, cardData.ID, cardData.atlasUrl, cardData.imagePath, cardData.getCost(0), cardData.cardType, cardData.cardColor, cardData.cardRarity, cardData.cardTarget.cardTarget, 0, 0, input);
+        this(cardData, cardData.ID, cardData.imagePath, cardData.getCost(0), cardData.cardType, cardData.cardColor, cardData.cardRarity, cardData.cardTarget.cardTarget, 0, 0, input);
     }
 
     protected PCLCard(PCLCardData cardData, int form, int timesUpgraded)
     {
-        this(cardData, cardData.ID, cardData.atlasUrl, cardData.imagePath, cardData.getCost(0), cardData.cardType, cardData.cardColor, cardData.cardRarity, cardData.cardTarget.cardTarget, form, timesUpgraded, null);
+        this(cardData, cardData.ID, cardData.imagePath, cardData.getCost(0), cardData.cardType, cardData.cardColor, cardData.cardRarity, cardData.cardTarget.cardTarget, form, timesUpgraded, null);
     }
 
     protected PCLCard(PCLCardData cardData, int form, int timesUpgraded, Object input)
     {
-        this(cardData, cardData.ID, cardData.atlasUrl, cardData.imagePath, cardData.getCost(0), cardData.cardType, cardData.cardColor, cardData.cardRarity, cardData.cardTarget.cardTarget, form, timesUpgraded, input);
+        this(cardData, cardData.ID, cardData.imagePath, cardData.getCost(0), cardData.cardType, cardData.cardColor, cardData.cardRarity, cardData.cardTarget.cardTarget, form, timesUpgraded, input);
     }
 
-    protected PCLCard(PCLCardData cardData, String id, String atlasPath, String imagePath, int cost, CardType type, CardColor color, CardRarity rarity, CardTarget target)
+    protected PCLCard(PCLCardData cardData, String id, String imagePath, int cost, CardType type, CardColor color, CardRarity rarity, CardTarget target)
     {
-        this(cardData, id, atlasPath, imagePath, cost, type, color, rarity, target, 0, 0, null);
+        this(cardData, id, imagePath, cost, type, color, rarity, target, 0, 0, null);
     }
 
-    protected PCLCard(PCLCardData cardData, String id, String atlasPath, String imagePath, int cost, CardType type, CardColor color, CardRarity rarity, CardTarget target, int form, int timesUpgraded, Object input)
+    protected PCLCard(PCLCardData cardData, String id, String imagePath, int cost, CardType type, CardColor color, CardRarity rarity, CardTarget target, int form, int timesUpgraded, Object input)
     {
         super(id, cardData.strings.NAME, "status/beta", "status/beta", cost, "", type, color, rarity, target);
         this.cardData = cardData;
@@ -188,7 +186,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         setupProperties(cardData, form, timesUpgraded);
         setup(input);
         setForm(form, timesUpgraded);
-        setupImages(atlasPath, imagePath);
+        setupImages(imagePath);
     }
 
     public static void applySimpleMode(PCLCard card, boolean changeStats)
@@ -677,18 +675,22 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         }
     }
 
-    protected ColoredTexture getCardBanner() {
-        if (rarity == PCLEnum.CardRarity.LEGENDARY || rarity == PCLEnum.CardRarity.SECRET)
+    protected Texture getCardBanner() {
+        if (shouldUsePCLFrame())
         {
-            return new ColoredTexture((isPopup ? PGR.core.images.cardBanner2L : PGR.core.images.cardBanner2).texture(), getRarityColor());
+            if (rarity == PCLEnum.CardRarity.LEGENDARY || rarity == PCLEnum.CardRarity.SECRET)
+            {
+                return (isPopup ? PGR.core.images.cardBanner2L : PGR.core.images.cardBanner2).texture();
+            }
+            return (isPopup ? PGR.core.images.cardBannerL : PGR.core.images.cardBanner).texture();
         }
-        return new ColoredTexture((isPopup ? PGR.core.images.cardBannerL : PGR.core.images.cardBanner).texture(), getRarityColor());
+        return null;
     }
 
-    // Always use the skill silhouette because cards are all rectangular
+    // For PCL cards, always use the skill silhouette because its cards are all rectangular
     @Override
     public TextureAtlas.AtlasRegion getCardBgAtlas() {
-        return ImageMaster.CARD_SKILL_BG_SILHOUETTE;
+        return shouldUsePCLFrame() ? ImageMaster.CARD_SKILL_BG_SILHOUETTE : super.getCardBgAtlas();
     }
 
     public ColoredString getColoredAttributeString(char attributeID) {
@@ -756,11 +758,6 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         return baseRightCount;
     }
 
-    public void loadAtlas(String path)
-    {
-        fakePortrait = CARD_ATLAS.findRegion(path);
-    }
-
     public void loadImage(String path) {
        loadImage(path, false);
     }
@@ -821,25 +818,25 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         return cardData != null ? cardData.maxForms : 1;
     }
 
-    protected ColoredTexture getPortraitFrame() {
+    protected Texture getPortraitFrame() {
         if (shouldUsePCLFrame())
         {
             if (type == PCLEnum.CardType.SUMMON)
             {
-                return new ColoredTexture(isPopup ? PGR.core.images.cardFrameSummonL.texture() : PGR.core.images.cardFrameSummon.texture(), getRarityColor());
+                return isPopup ? PGR.core.images.cardFrameSummonL.texture() : PGR.core.images.cardFrameSummon.texture();
             }
             switch (type) {
                 case ATTACK:
-                    return new ColoredTexture(isPopup ? PGR.core.images.cardFrameAttackL.texture() : PGR.core.images.cardFrameAttack.texture(), getRarityColor());
+                    return isPopup ? PGR.core.images.cardFrameAttackL.texture() : PGR.core.images.cardFrameAttack.texture();
 
                 case POWER:
-                    return new ColoredTexture(isPopup ? PGR.core.images.cardFramePowerL.texture() : PGR.core.images.cardFramePower.texture(), getRarityColor());
+                    return isPopup ? PGR.core.images.cardFramePowerL.texture() : PGR.core.images.cardFramePower.texture();
 
                 case SKILL:
                 case CURSE:
                 case STATUS:
                 default:
-                    return new ColoredTexture(isPopup ? PGR.core.images.cardFrameSkillL.texture() : PGR.core.images.cardFrameSkill.texture(), getRarityColor());
+                    return isPopup ? PGR.core.images.cardFrameSkillL.texture() : PGR.core.images.cardFrameSkill.texture();
             }
         }
         return null;
@@ -1407,40 +1404,6 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         sb.draw(img, drawX + img.offsetX - (float) img.originalWidth / 2f, drawY + img.offsetY - (float) img.originalHeight / 2f, (float) img.originalWidth / 2f - img.offsetX, (float) img.originalHeight / 2f - img.offsetY, (float) img.packedWidth, (float) img.packedHeight, this.drawScale * Settings.scale * scale, this.drawScale * Settings.scale * scale, this.angle);
     }
 
-    protected void renderPortraitAtlas(SpriteBatch sb, TextureAtlas.AtlasRegion aRegion, Color color, float scale, boolean cropPortrait)
-    {
-        if (color == null) {
-            color = getRenderColor();
-        }
-
-        final float render_width = aRegion.getRegionWidth();
-        final float render_height = aRegion.getRegionHeight();
-
-        if (cropPortrait && drawScale > 0.6f && drawScale < 1) {
-            final int width = aRegion.getRegionWidth();
-            final int offset_x = (int) ((1 - drawScale) * (0.5f * width));
-            if (portrait == null || aRegion.getTexture() != portrait.getTexture() || (portrait.getRegionX() != offset_x) || EUI.elapsed50()) {
-                final int height = aRegion.getRegionHeight();
-                final int offset_y1 = 0;//(int) ((1-drawScale) * (0.5f * height));
-                final int offset_y2 = (int) ((1 - drawScale) * (height));
-                if (portrait == null) {
-                    portrait = new TextureAtlas.AtlasRegion(aRegion.getTexture(), offset_x, offset_y1, width - (2 * offset_x), height - offset_y1 - offset_y2);
-                } else {
-                    portrait.setRegion(aRegion.getTexture());
-                    portrait.setRegion(offset_x, offset_y1, width - (2 * offset_x), height - offset_y1 - offset_y2);
-                }
-            }
-
-            PCLRenderHelpers.drawOnCardAuto(sb, this, portrait, new Vector2(0, 72), render_width, render_height, color, transparency, scale);
-        } else if (isPopup) {
-            PCLRenderHelpers.drawOnCardAuto(sb, this, fakePortrait, new Vector2(0, 72), render_width * 2, render_height * 2, color, transparency, scale * 0.5f);
-        }
-        else {
-            PCLRenderHelpers.drawOnCardAuto(sb, this, fakePortrait, new Vector2(0, 72), fakePortrait.getRegionWidth(), fakePortrait.getRegionHeight(), color, transparency, 1f);
-        }
-
-    }
-
     protected void renderPortraitImage(SpriteBatch sb, Texture texture, Color color, float scale, boolean cropPortrait, boolean useTextureSize, boolean foreground)
     {
         if (color == null) {
@@ -1537,20 +1500,17 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     public void setCardRarity(CardRarity rarity)
     {
         this.rarity = rarity;
-        this.portraitFrame = getPortraitFrame();
     }
 
     public void setCardRarityType(CardRarity rarity, CardType type)
     {
         this.rarity = rarity;
         this.type = type;
-        this.portraitFrame = getPortraitFrame();
     }
 
     public void setCardType(CardType type)
     {
         this.type = type;
-        this.portraitFrame = getPortraitFrame();
     }
 
     public void setMultiDamage(boolean value) {
@@ -1597,18 +1557,10 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     public void setup(Object input) {
     }
 
-    public void setupImages(String atlasPath, String imagePath)
+    public void setupImages(String imagePath)
     {
         portrait = null;
-        portraitFrame = getPortraitFrame();
-        if (atlasPath != null)
-        {
-            loadAtlas(atlasPath);
-        }
-        else
-        {
-            loadImage(imagePath);
-        }
+        loadImage(imagePath);
     }
 
     protected void setupProperties(PCLCardData cardData, Integer form, int timesUpgraded) {
@@ -1680,14 +1632,19 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    protected boolean tryRenderCentered(SpriteBatch sb, Texture texture, float scale) {
+    protected boolean tryRenderCentered(SpriteBatch sb, Texture texture, Color color, float scale) {
         if (texture != null) {
-            PCLRenderHelpers.drawOnCardAuto(sb, this, texture, new Vector2(0, 0), texture.getWidth(), texture.getHeight(), getRenderColor(), transparency, scale);
+            PCLRenderHelpers.drawOnCardAuto(sb, this, texture, new Vector2(0, 0), texture.getWidth(), texture.getHeight(), color, transparency, scale);
 
             return true;
         }
 
         return false;
+    }
+
+    protected boolean tryRenderCentered(SpriteBatch sb, Texture texture, float scale)
+    {
+        return tryRenderCentered(sb, texture, getRenderColor(), scale);
     }
 
     protected boolean tryUpgrade() {
@@ -2232,7 +2189,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         if (isSeen && (!PGR.core.config.hideIrrelevantAffinities.get() || GameUtilities.isPCLActingCardColor(this))) {
             affinities.renderOnCard(sb, this, player != null && player.hand.contains(this));
         }
-        if (!tryRenderCentered(sb, getCardBanner(), isPopup ? 0.5f : 1f)) {
+        if (!tryRenderCentered(sb, getCardBanner(), getRarityColor(), isPopup ? 0.5f : 1f)) {
             SpireSuper.call(sb, drawX, drawY);
         }
     }
@@ -2367,11 +2324,6 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
 
         final boolean cropPortrait = canCropPortraits && PGR.core.config.cropCardImages.get();
 
-        if (fakePortrait != null) {
-            renderPortraitAtlas(sb, fakePortrait, getRenderColor(), 1f, cropPortrait);
-            return;
-        }
-
         // TODO support for animated pictures
         if (portraitImg != null) {
             renderPortraitImage(sb, portraitImg.texture, portraitImg.color, portraitImg.scale, cropPortrait, false, false);
@@ -2383,7 +2335,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
 
     @SpireOverride
     protected void renderPortraitFrame(SpriteBatch sb, float x, float y) {
-        if (!tryRenderCentered(sb, portraitFrame, isPopup ? 0.5f : 1f)) {
+        if (!tryRenderCentered(sb, getPortraitFrame(), getRarityColor(), isPopup ? 0.5f : 1f)) {
             SpireSuper.call(sb, x, y);
         }
     }

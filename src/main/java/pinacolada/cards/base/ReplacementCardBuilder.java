@@ -1,7 +1,9 @@
 package pinacolada.cards.base;
 
-import basemod.ReflectionHacks;
+import basemod.abstracts.CustomCard;
+import com.badlogic.gdx.graphics.Texture;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import extendedui.utilities.ColoredTexture;
 import pinacolada.cards.base.fields.PCLAttackType;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
@@ -56,7 +58,18 @@ public class ReplacementCardBuilder extends PCLDynamicData
             setCosts(-2).setCostUpgrades(0);
         }
 
-        setPortrait(ReflectionHacks.getPrivate(original, AbstractCard.class, "portrait"));
+        // Custom card paths are recorded in CustomCard.imgMap
+        String assetUrl = original.assetUrl;
+        Texture cardTexture = CustomCard.imgMap.get(assetUrl);
+        if (cardTexture != null)
+        {
+            setImage(new ColoredTexture(cardTexture), null);
+        }
+        else
+        {
+            setImagePathFromAtlasUrl(assetUrl);
+        }
+
         PCLCardTarget ct = PCLCardTarget.Single;
         switch (original.target)
         {
