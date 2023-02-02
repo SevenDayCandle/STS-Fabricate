@@ -65,7 +65,7 @@ public class PCLLoadoutsContainer
                 if (series.id == (data.selectedLoadout.id))
                 {
                     currentSeriesCard = gridCard;
-                    gridCard.rarity = AbstractCard.CardRarity.RARE;
+                    gridCard.setCardRarity(AbstractCard.CardRarity.RARE);
                     gridCard.beginGlowing();
                 }
             }
@@ -126,12 +126,12 @@ public class PCLLoadoutsContainer
         if (loadoutMap.containsKey(card) && card.type != PCLLoadout.UNSELECTABLE_TYPE)
         {
             currentSeriesCard = card;
-            for (AbstractCard c : loadoutMap.keySet())
+            for (PCLCard c : loadoutMap.keySet())
             {
                 c.stopGlowing();
-                c.rarity = AbstractCard.CardRarity.COMMON;
+                c.setCardRarity(AbstractCard.CardRarity.COMMON);
             }
-            card.rarity = AbstractCard.CardRarity.RARE;
+            card.setCardRarity(AbstractCard.CardRarity.RARE);
             card.beginGlowing();
             return true;
         }

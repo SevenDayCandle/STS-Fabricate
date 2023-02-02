@@ -36,7 +36,7 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
 
     public PCLDynamicCard(PCLDynamicData builder, boolean shouldFindForms)
     {
-        super(builder, builder.ID, builder.imagePath,
+        super(builder, builder.ID, builder.atlasUrl, builder.imagePath,
                 builder.getCost(0), builder.cardType, builder.cardColor, builder.cardRarity, builder.cardTarget.cardTarget, 0, 0, new BuilderInfo(builder, shouldFindForms));
         initializeTextures();
     }
@@ -84,6 +84,7 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
                     case PURPLE:
                         return isPopup ? ImageMaster.CARD_POWER_BG_PURPLE_L : ImageMaster.CARD_POWER_BG_PURPLE;
                     case COLORLESS:
+                    case CURSE:
                         return isPopup ? ImageMaster.CARD_POWER_BG_GRAY_L : ImageMaster.CARD_POWER_BG_GRAY;
                     default:
                         return null;
@@ -100,6 +101,7 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
                     case PURPLE:
                         return isPopup ? ImageMaster.CARD_ATTACK_BG_PURPLE_L : ImageMaster.CARD_ATTACK_BG_PURPLE;
                     case COLORLESS:
+                    case CURSE:
                         return isPopup ? ImageMaster.CARD_ATTACK_BG_GRAY_L : ImageMaster.CARD_ATTACK_BG_GRAY;
                     default:
                         return null;
@@ -116,6 +118,7 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
                     case PURPLE:
                         return isPopup ? ImageMaster.CARD_SKILL_BG_PURPLE_L : ImageMaster.CARD_SKILL_BG_PURPLE;
                     case COLORLESS:
+                    case CURSE:
                         return isPopup ? ImageMaster.CARD_SKILL_BG_GRAY_L : ImageMaster.CARD_SKILL_BG_GRAY;
                     default:
                         return null;
@@ -267,10 +270,11 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
         return copy;
     }
 
+    // These are null when rendering PCL colors
     @Override
-    protected boolean shouldRenderTypeIcon()
+    protected boolean shouldUsePCLFrame()
     {
-        return vanillaBg == null && customBg == null; // These are null when rendering PCL colors and colorless
+        return vanillaBg == null && customBg == null;
     }
 
     @Override
@@ -364,6 +368,9 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
                 return ImageMaster.CARD_BLUE_ORB;
             case PURPLE:
                 return ImageMaster.CARD_PURPLE_ORB;
+            case COLORLESS:
+            case CURSE:
+                return ImageMaster.CARD_COLORLESS_ORB;
         }
         return null;
     }
@@ -380,7 +387,6 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
         super.setupProperties(builder, form, timesUpgraded);
 
         this.builder = builder;
-        this.cropPortrait = false;
         this.showTypeText = builder.showTypeText;
         this.maxUpgradeLevel = builder.maxUpgradeLevel;
 

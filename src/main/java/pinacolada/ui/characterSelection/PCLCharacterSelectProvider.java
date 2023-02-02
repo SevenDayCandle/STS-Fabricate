@@ -5,17 +5,6 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterSelectScreen;
-import com.megacrit.cardcrawl.screens.leaderboards.LeaderboardScreen;
-import extendedui.EUIRM;
-import extendedui.EUIUtils;
-import extendedui.text.EUISmartText;
-import extendedui.ui.controls.EUILabel;
-import extendedui.ui.controls.EUITutorial;
-import extendedui.ui.hitboxes.EUIHitbox;
-import extendedui.ui.hitboxes.RelativeHitbox;
-import extendedui.utilities.EUIFontHelper;
-import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.pcl.replacement.RitualDagger;
 import pinacolada.interfaces.markers.RunAttributesProvider;
 import pinacolada.patches.UnlockTrackerPatches;
 import pinacolada.resources.PCLResources;
@@ -27,11 +16,6 @@ public class PCLCharacterSelectProvider implements RunAttributesProvider
     protected final PCLCharacterSelectOptionsRenderer loadoutRenderer = new PCLCharacterSelectOptionsRenderer();
     protected CharacterSelectScreen charScreen;
     protected CharacterOption selectedOption;
-    protected EUITutorial simpleModeInfo;
-    protected EUILabel simpleModeOn;
-    protected EUILabel simpleModeOff;
-    protected RitualDagger simplePreview;
-    protected RitualDagger complexPreview;
 
     @Override
     public int ascensionLevel()
@@ -65,42 +49,6 @@ public class PCLCharacterSelectProvider implements RunAttributesProvider
         {
             UnlockTrackerPatches.validate(resources);
         }
-    }
-
-    protected void openFtue()
-    {
-        simplePreview = new RitualDagger();
-        PCLCard.toggleSimpleMode(simplePreview, true);
-        complexPreview = new RitualDagger();
-        PCLCard.toggleSimpleMode(complexPreview, false);
-        simplePreview.current_x = simplePreview.target_x = Settings.WIDTH * 0.42f;
-        complexPreview.current_x = complexPreview.target_x = Settings.WIDTH * 0.58f;
-        simplePreview.current_y = simplePreview.target_y = complexPreview.current_y = complexPreview.target_y = Settings.HEIGHT * 0.22f;
-        simplePreview.hb.move(simplePreview.current_x, simplePreview.current_y);
-        complexPreview.hb.move(complexPreview.current_x, complexPreview.current_y);
-
-        simpleModeOn = new EUILabel(EUIFontHelper.cardtitlefontSmall, RelativeHitbox.fromPercentages(simplePreview.hb, 1, 0.5f, 0, -0.6f))
-                .setLabel(PGR.core.strings.misc.simpleMode)
-                .setColor(Settings.BLUE_TEXT_COLOR);
-        simpleModeOff = new EUILabel(EUIFontHelper.cardtitlefontSmall, RelativeHitbox.fromPercentages(complexPreview.hb, 1, 0.5f, 0, -0.6f))
-                .setLabel(PGR.core.strings.misc.complexMode)
-                .setColor(EUISmartText.ORANGE_TEXT_COLOR);
-        simpleModeOn.updateImpl();
-        simpleModeOff.updateImpl();
-
-        simpleModeInfo = new EUITutorial(
-                new EUIHitbox((float) Settings.WIDTH / 2.0F - 675.0F, Settings.OPTION_Y - 100.0F, 1350.0F, 720.0F), EUIRM.images.panelLarge.texture(),
-                LeaderboardScreen.TEXT[2], EUIUtils.list(PGR.core.strings.tutorial.characterTutorial1, PGR.core.strings.tutorial.characterTutorial2));
-        simpleModeInfo.setPostRenders(sb -> {
-            simplePreview.render(sb);
-            complexPreview.render(sb);
-            simpleModeOn.renderImpl(sb);
-            simpleModeOff.renderImpl(sb);
-        }, sb -> {
-            loadoutRenderer.loadoutEditorButton.background.renderCentered(sb, Settings.WIDTH * 0.5f, Settings.HEIGHT * 0.22f, loadoutRenderer.loadoutEditorButton.hb.width, loadoutRenderer.loadoutEditorButton.hb.height);
-        });
-        PGR.core.ftueScreen.open(simpleModeInfo);
-
     }
 
     public void randomizeLoadout()
@@ -151,12 +99,6 @@ public class PCLCharacterSelectProvider implements RunAttributesProvider
                 if (current != o)
                 {
                     loadoutRenderer.refresh(this, o);
-                    // TODO Re-enable when simple mode is implemented
-/*                    if (GameUtilities.isPCLPlayerClass(o.c.chosenClass) && !PGR.core.config.simpleModeFtueSeen.get())
-                    {
-                        PGR.core.config.simpleModeFtueSeen.set(true);
-                        openFtue();
-                    }*/
                 }
 
                 return;

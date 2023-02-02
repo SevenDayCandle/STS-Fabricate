@@ -20,7 +20,6 @@ public abstract class Glyph extends PCLCard
     {
         super(cardData);
 
-        this.cropPortrait = false;
         this.portraitForeground = portraitImg;
         this.portraitImg = new ColoredTexture(EUIRM.getTexture(PGR.getCardImage(ID), true));
         this.showTypeText = false;

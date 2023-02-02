@@ -30,11 +30,11 @@ public interface EditorCard extends PointerProvider, CacheableCard
 
     int rightCountBase();
 
-    void loadImage(String suffix, boolean refresh);
+    void loadImage(String path, boolean refresh);
 
-    default void loadImage(String suffix)
+    default void loadImage(String path)
     {
-        loadImage(suffix, false);
+        loadImage(path, false);
     }
 
     default void renderForPreview(SpriteBatch sb)

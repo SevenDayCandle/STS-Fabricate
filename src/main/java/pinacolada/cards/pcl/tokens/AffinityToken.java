@@ -26,7 +26,6 @@ public abstract class AffinityToken extends PCLCard
     {
         super(cardData);
 
-        this.cropPortrait = false;
         this.portraitForeground = portraitImg;
         this.portraitImg = new ColoredTexture(EUIRM.getTexture(PGR.getCardImage(ID), true), cardData.affinity.getAlternateColor(0.55f));
     }
@@ -47,39 +46,6 @@ public abstract class AffinityToken extends PCLCard
         }
 
         return group;
-    }
-
-    public static PCLAffinity getAffinityFromCardID(String ID)
-    {
-        if (AffinityToken_Red.DATA.ID.equals(ID))
-        {
-            return PCLAffinity.Red;
-        }
-        else if (AffinityToken_Green.DATA.ID.equals(ID))
-        {
-            return PCLAffinity.Green;
-        }
-        else if (AffinityToken_Blue.DATA.ID.equals(ID))
-        {
-            return PCLAffinity.Blue;
-        }
-        else if (AffinityToken_Orange.DATA.ID.equals(ID))
-        {
-            return PCLAffinity.Orange;
-        }
-        else if (AffinityToken_Yellow.DATA.ID.equals(ID))
-        {
-            return PCLAffinity.Yellow;
-        }
-        else if (AffinityToken_Purple.DATA.ID.equals(ID))
-        {
-            return PCLAffinity.Purple;
-        }
-        else if (AffinityToken_Silver.DATA.ID.equals(ID))
-        {
-            return PCLAffinity.Silver;
-        }
-        return PCLAffinity.Star;
     }
 
     public static AffinityToken getCard(PCLAffinity affinity)

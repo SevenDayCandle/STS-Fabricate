@@ -195,17 +195,17 @@ public abstract class PCLMultiCard extends PCLCard
                 PCLCardTag.Purge.set(this,1);
             }
             hasAttackOrSkill = true;
-            this.type = CardType.ATTACK;
+            setCardType(CardType.ATTACK);
         } else if (card.type == CardType.POWER) {
             if (hasAttackOrSkill) {
                 PCLCardTag.Purge.set(this,1);
             } else if (this.type == CardType.SKILL) {
-                this.type = CardType.POWER;
+                setCardType(CardType.POWER);
             }
         } else if (card.type == CardType.SKILL) {
             if (this.type == CardType.POWER) {
                 PCLCardTag.Purge.set(this,1);
-                this.type = CardType.SKILL;
+                setCardType(CardType.SKILL);
             }
             hasAttackOrSkill = true;
         }
@@ -220,7 +220,7 @@ public abstract class PCLMultiCard extends PCLCard
         for (PCLCardTag tag : PCLCardTag.getAll()) {
             tag.set(this, 0);
         }
-        this.type = CardType.SKILL;
+        setCardType(CardType.SKILL);
         for (AbstractCard card : inheritedCards.getCards()) {
             addCardProperties(card);
         }

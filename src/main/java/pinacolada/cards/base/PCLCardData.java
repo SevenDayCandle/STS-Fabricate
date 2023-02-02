@@ -52,6 +52,7 @@ public class PCLCardData implements CardObject
     public Integer[] costUpgrade = array(0);
     public HashMap<PCLCardTag, PCLCardTagInfo> tags = new HashMap<>();
     public CardStrings strings;
+    public String atlasUrl;
     public String imagePath;
     public String ID;
     public PCLCardTarget cardTarget = PCLCardTarget.None;
@@ -426,6 +427,13 @@ public class PCLCardData implements CardObject
     public PCLCardData setAffinities(PCLCardDataAffinity affinity)
     {
         affinities.set(affinity);
+        return this;
+    }
+
+    public PCLCardData setAtlasUrl(String atlasUrl)
+    {
+        this.atlasUrl = atlasUrl;
+
         return this;
     }
 

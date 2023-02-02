@@ -69,7 +69,7 @@ public class PCLCustomCardSlot
         filePath = makeFilePath();
         imagePath = makeImagePath();
         slotColor = color;
-        PCLDynamicData builder = new PCLDynamicData(ID)
+        PCLDynamicData builder = new PCLDynamicData(ID, PGR.getResources(slotColor))
                 .setText("", "", "")
                 .setColor(color);
         builders.add(builder);

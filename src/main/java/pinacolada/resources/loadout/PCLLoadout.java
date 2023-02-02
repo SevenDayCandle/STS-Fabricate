@@ -528,7 +528,7 @@ public abstract class PCLLoadout
             return null;
         }
 
-        PCLCard card = ((PCLDynamicData) new PCLDynamicData(String.valueOf(id))
+        PCLCard card = ((PCLDynamicData) new PCLDynamicData(String.valueOf(id), isCore() ? PGR.core : data.resources)
                 .setImagePath(data.imagePath)
                 .showTypeText(false)
                 .setMaxUpgrades(0))
@@ -541,8 +541,7 @@ public abstract class PCLLoadout
         {
             card.isSeen = false;
             card.cardText.overrideDescription(PGR.core.strings.charSelect.unlocksAtLevel(unlockLevel, data.resources.getUnlockLevel()), false);
-            card.rarity = AbstractCard.CardRarity.COMMON;
-            card.type = AbstractCard.CardType.STATUS;
+            card.setCardRarityType(AbstractCard.CardRarity.COMMON, AbstractCard.CardType.STATUS);
         }
         else
         {
@@ -550,14 +549,12 @@ public abstract class PCLLoadout
             if (isCore())
             {
                 card.color = AbstractCard.CardColor.COLORLESS;
-                card.rarity = AbstractCard.CardRarity.CURSE;
-                card.type = UNSELECTABLE_TYPE;
+                card.setCardRarityType(AbstractCard.CardRarity.CURSE, UNSELECTABLE_TYPE);
             }
             else
             {
                 card.color = data.cardColor;
-                card.rarity = AbstractCard.CardRarity.COMMON;
-                card.type = AbstractCard.CardType.SKILL;
+                card.setCardRarityType(AbstractCard.CardRarity.COMMON, AbstractCard.CardType.SKILL);
             }
         }
 

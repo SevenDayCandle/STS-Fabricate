@@ -23,13 +23,13 @@ public class FakeLoadout extends PCLLoadout
     @Override
     protected PCLCardData getDefend()
     {
-        return pinacolada.cards.pcl.replacement.Miracle.DATA;
+        return QuestionMark.DATA;
     }
 
     @Override
     protected PCLCardData getStrike()
     {
-        return pinacolada.cards.pcl.replacement.Miracle.DATA;
+        return QuestionMark.DATA;
     }
 
     @Override
