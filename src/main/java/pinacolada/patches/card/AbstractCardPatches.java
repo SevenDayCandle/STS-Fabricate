@@ -6,7 +6,6 @@ import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import pinacolada.actions.PCLActions;
-import pinacolada.cards.base.modifiers.OverrideSkillModifier;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.misc.CombatManager;
 
@@ -21,10 +20,6 @@ public class AbstractCardPatches
             if (PCLCardTag.Unplayable.has(__instance))
             {
                 return SpireReturn.Return(false);
-            }
-            if (!OverrideSkillModifier.getAll(__instance).isEmpty())
-            {
-                return SpireReturn.Return(true);
             }
             return SpireReturn.Continue();
         }
@@ -50,10 +45,6 @@ public class AbstractCardPatches
             if (PCLCardTag.Fragile.has(__instance))
             {
                 PCLActions.last.exhaust(__instance);
-            }
-            if (!OverrideSkillModifier.getAll(__instance).isEmpty())
-            {
-                return SpireReturn.Return();
             }
             return SpireReturn.Continue();
         }
