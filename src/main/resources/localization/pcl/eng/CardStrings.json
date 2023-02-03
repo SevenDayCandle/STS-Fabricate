@@ -1,4 +1,26 @@
 {
+				"COLORLESS":	{
+								"pcl:Insight": {"NAME": "Insight"},
+								"pcl:Miracle": {"NAME": "Miracle"}
+				},
+				"CURSE":	{
+								"pcl:Curse_AscendersBane": {
+												"NAME": "Ascender's Bane"
+								},
+								"pcl:Curse_Clumsy": {"NAME": "Clumsy"},
+								"pcl:Curse_Decay": {"NAME": "Decay"},
+								"pcl:Curse_Doubt": {"NAME": "Doubt"},
+								"pcl:Curse_Injury": {"NAME": "Injury"},
+								"pcl:Curse_Normality": {
+												"EXTENDED_DESCRIPTION": ["While in hand, Negate the {Buffs} and {Debuffs} of ALL characters (excluding those specific to cards or encounters)"],
+												"NAME": "Normality"
+								},
+								"pcl:Curse_Pain": {"NAME": "Pain"},
+								"pcl:Curse_Parasite": {"NAME": "Parasite"},
+								"pcl:Curse_Regret": {"NAME": "Regret"},
+								"pcl:Curse_Shame": {"NAME": "Shame"},
+								"pcl:Curse_Writhe": {"NAME": "Writhe"}
+				},
 				"ENCHANTMENTS": {
 								"pcl:Glyph01": {"NAME": "Glyph of the Magician"},
 								"pcl:Glyph02": {"NAME": "Glyph of the High Priestess"},
@@ -36,17 +58,6 @@
 												"NAME": "Glyph of Death"
 								}
 				},
-				"MISC": {
-								"pcl:MysteryCard": {
-												"EXTENDED_DESCRIPTION": [
-																"At the start of combat: Transforms into a random {0}-Cost {1} card",
-																"At the start of combat: Transforms into a random Upgraded {0}-Cost {1} card",
-																"Select this to fill this slot with a random 0-Cost Common card that changes every combat instead of removing a card from your deck"
-												],
-												"NAME": "? ? ?"
-								},
-								"pcl:QuestionMark": {"NAME": "Question Mark"}
-				},
 				"SPECIAL": {
 								"pcl:AffinityToken": {"NAME": "Affinity Token"},
 								"pcl:AffinityToken_Red": {"NAME": "Red Affinity"},
@@ -56,7 +67,16 @@
 								"pcl:AffinityToken_Yellow": {"NAME": "Yellow Affinity"},
 								"pcl:AffinityToken_Purple": {"NAME": "Purple Affinity"},
 								"pcl:AffinityToken_Silver": {"NAME": "Silver Affinity"},
-								"pcl:AffinityToken_Star": {"NAME": "Star Affinity"}
+								"pcl:AffinityToken_Star": {"NAME": "Star Affinity"},
+								"pcl:MysteryCard": {
+												"EXTENDED_DESCRIPTION": [
+																"At the start of combat: Transforms into a random {0}-Cost {1} card",
+																"At the start of combat: Transforms into a random Upgraded {0}-Cost {1} card",
+																"Select this to fill this slot with a random 0-Cost Common card that changes every combat instead of removing a card from your deck"
+												],
+												"NAME": "? ? ?"
+								},
+								"pcl:QuestionMark": {"NAME": "Question Mark"}
 				},
 				"STATUS":	{
 								"pcl:Status_Burn": {"NAME": "Burn"},

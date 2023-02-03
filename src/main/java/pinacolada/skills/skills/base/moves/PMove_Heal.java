@@ -66,7 +66,7 @@ public class PMove_Heal extends PMove<PField_Empty>
     @Override
     public String getSubText()
     {
-        if (target == PCLCardTarget.None || (target == PCLCardTarget.Self && isFromCreature()))
+        if (isSelfOnlyTarget())
         {
             return TEXT.actions.heal(getAmountRawString());
         }

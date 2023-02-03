@@ -452,14 +452,34 @@ public abstract class PMove<T extends PField> extends PSkill<T>
         return new PMove_Obtain(copies, EUIUtils.map(cardData, cd -> cd.ID));
     }
 
+    public static PMove_Obtain obtainDiscardPile(int copies)
+    {
+        return (PMove_Obtain) new PMove_Obtain(copies).edit(f -> f.setCardGroup(PCLCardGroupHelper.DiscardPile));
+    }
+
     public static PMove_Obtain obtainDiscardPile(int copies, PCLCardData... cardData)
     {
         return (PMove_Obtain) new PMove_Obtain(copies, EUIUtils.map(cardData, cd -> cd.ID)).edit(f -> f.setCardGroup(PCLCardGroupHelper.DiscardPile));
     }
 
+    public static PMove_Obtain obtainDiscardPile(int copies, String... ids)
+    {
+        return (PMove_Obtain) new PMove_Obtain(copies, ids).edit(f -> f.setCardGroup(PCLCardGroupHelper.DiscardPile));
+    }
+
+    public static PMove_Obtain obtainDrawPile(int copies)
+    {
+        return (PMove_Obtain) new PMove_Obtain(copies).edit(f -> f.setCardGroup(PCLCardGroupHelper.DrawPile));
+    }
+
     public static PMove_Obtain obtainDrawPile(int copies, PCLCardData... cardData)
     {
         return (PMove_Obtain) new PMove_Obtain(copies, EUIUtils.map(cardData, cd -> cd.ID)).edit(f -> f.setCardGroup(PCLCardGroupHelper.DrawPile));
+    }
+
+    public static PMove_Obtain obtainDrawPile(int copies, String... ids)
+    {
+        return (PMove_Obtain) new PMove_Obtain(copies, ids).edit(f -> f.setCardGroup(PCLCardGroupHelper.DrawPile));
     }
 
     public static PMove_ObtainRandomCard obtainRandom(int copies, int choices, PCLCardGroupHelper... cardgroup)
@@ -609,6 +629,28 @@ public abstract class PMove<T extends PField> extends PSkill<T>
     {
         return (PMove_TriggerOrb) new PMove_TriggerOrb(0, orb)
                 .setSource(card, valueSource);
+    }
+
+    public static PMove_Upgrade upgrade(int amount)
+    {
+        return new PMove_Upgrade(amount, PCLCardGroupHelper.Hand);
+    }
+
+    public static PMove_Upgrade upgrade(int amount, PCLCardGroupHelper... groups)
+    {
+        return new PMove_Upgrade(amount, groups);
+    }
+
+    public static PMove_Upgrade upgrade(int amount, PCLAffinity... affinity)
+    {
+        return (PMove_Upgrade) new PMove_Upgrade(amount, PCLCardGroupHelper.Hand)
+                .edit(f -> f.setAffinity(affinity));
+    }
+
+    public static PMove_Upgrade upgrade(int amount, AbstractCard.CardType... t)
+    {
+        return (PMove_Upgrade) new PMove_Upgrade(amount, PCLCardGroupHelper.Hand)
+                .edit(f -> f.setType(t));
     }
 
     public static PMove_WithdrawAlly withdrawAlly(int amount)

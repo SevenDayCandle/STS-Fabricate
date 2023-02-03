@@ -72,7 +72,7 @@ public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty>
         int count = source != null ? getExtraFromCard() : 1;
         String amountString = count > 1 ? getAmountRawString() + "x" + getExtraRawString() : getAmountRawString();
 
-        if (target == PCLCardTarget.None || (target == PCLCardTarget.Self && !isFromCreature()))
+        if (isSelfOnlyTarget())
         {
             return TEXT.actions.gainAmount(amountString, PGR.core.tooltips.block);
         }

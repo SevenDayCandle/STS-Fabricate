@@ -50,11 +50,13 @@ public class PCLCustomCardAttackPage extends PCLCustomCardEffectPage
                 .setOnToggle(this::setMove);
         damageEditor = new PCLCustomCardUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 4, MENU_HEIGHT, MENU_WIDTH, OFFSET_EFFECT * 1.3f)
                 , PGR.core.strings.cardEditor.damage, (val, upVal) -> screen.modifyBuilder(e -> e.setDamage(val, upVal, e.hitCount, e.hitCountUpgrade)))
-                .setLimits(0, PSkill.DEFAULT_MAX);
+                .setLimits(0, PSkill.DEFAULT_MAX)
+                .setTooltip(PGR.core.strings.cardEditor.upgrades, PGR.core.strings.cardEditorTutorial.amount);
         hitCountEditor = new PCLCustomCardUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 4, MENU_HEIGHT, MENU_WIDTH * 1.5f, OFFSET_EFFECT * 1.3f)
                 , EUIUtils.format(PGR.core.strings.cardEditor.hitCount, PGR.core.strings.cardEditor.damage), (val, upVal) -> screen.modifyBuilder(e -> e.setHitCount(val, upVal)))
                 .setLimits(1, PSkill.DEFAULT_MAX);
         hitCountEditor.setTooltip(hitCountEditor.header.text, PGR.core.strings.cardEditorTutorial.hitCount);
+        hitCountEditor.tooltip.setChild(damageEditor.tooltip);
         attackTypeDropdown = new EUIDropdown<PCLAttackType>(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, MENU_WIDTH * 2.1f, OFFSET_EFFECT * 1.5f)
                 , item -> StringUtils.capitalize(item.toString().toLowerCase()))
                 .setOnChange(targets -> {

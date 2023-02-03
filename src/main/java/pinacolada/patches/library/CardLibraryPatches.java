@@ -16,7 +16,7 @@ import extendedui.EUIUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLCustomCardSlot;
-import pinacolada.cards.base.ReplacementCardBuilder;
+import pinacolada.cards.base.ReplacementData;
 import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
@@ -63,7 +63,7 @@ public class CardLibraryPatches
         }
         else if (PGR.core.config.replaceCardsPCL.get())
         {
-            AbstractCard c = new ReplacementCardBuilder(card, true).build();
+            AbstractCard c = ReplacementData.makeReplacement(card, true);
             if (card.upgraded)
             {
                 c.upgrade();

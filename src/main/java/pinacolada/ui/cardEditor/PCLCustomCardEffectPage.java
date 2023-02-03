@@ -105,7 +105,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
                     {
                         primaryCond = null;
                     }
-                    constructEffect();
+                    scheduleConstruct();
                 })
                 .setClearButtonOptions(true, true)
                 .setCanAutosizeButton(true)
@@ -114,12 +114,12 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
         delayEditor = new PCLValueEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 4, MENU_HEIGHT, MENU_WIDTH * 1.5f, 0)
                 , PGR.core.strings.cardEditor.turnDelay, (val) -> {
             delayMove.setAmount(val);
-            constructEffect();
+            scheduleConstruct();
         })
                 .setTooltip(PGR.core.strings.cardEditor.turnDelay, PGR.core.strings.cardEditorTutorial.effectTurnDelay)
                 .setLimits(0, PSkill.DEFAULT_MAX);
 
-        conditionHeader = new EUILabel(EUIFontHelper.cardtitlefontSmall, new OriginRelativeHitbox(hb, MENU_WIDTH / 4, MENU_HEIGHT, 0, 0))
+        conditionHeader = new EUILabel(EUIFontHelper.cardtitlefontSmall, new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, 0, 0))
                 .setAlignment(0.5f, 0.0f, false)
                 .setColor(Settings.BLUE_TEXT_COLOR)
                 .setLabel(PGR.core.strings.cardEditor.condition)
@@ -127,12 +127,12 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
         addCondition = new EUIButton(EUIRM.images.plus.texture(), new OriginRelativeHitbox(hb, scale(48), scale(48), MENU_WIDTH, 0))
                 .setOnClick(() -> conditionGroup.addEffectSlot())
                 .setClickDelay(0.02f);
-        ifElseToggle = (EUIToggle) new EUIToggle(new OriginRelativeHitbox(hb, MENU_WIDTH / 2, MENU_HEIGHT, MENU_WIDTH * 1.9f, 0))
+        ifElseToggle = (EUIToggle) new EUIToggle(new OriginRelativeHitbox(hb, MENU_WIDTH / 1.7f, MENU_HEIGHT, MENU_WIDTH * 1.9f, 0))
                 .setFont(EUIFontHelper.carddescriptionfontNormal, 0.9f)
                 .setText(PGR.core.strings.cardEditor.ifElseCondition)
                 .setOnToggle(val -> {
                     multiCond.setAmount(val ? 1 : 0);
-                    constructEffect();
+                    scheduleConstruct();
                 })
                 .setTooltip(PGR.core.strings.cardEditor.ifElseCondition, PGR.core.strings.cardEditorTutorial.effectConditionIfElse);
         orToggle = (EUIToggle) new EUIToggle(new OriginRelativeHitbox(hb, MENU_WIDTH / 2, MENU_HEIGHT, MENU_WIDTH * 2.6f, 0))
@@ -140,11 +140,11 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
                 .setText(PGR.core.strings.cardEditor.orCondition)
                 .setOnToggle(val -> {
                     multiCond.edit(f -> f.setOr(val));
-                    constructEffect();
+                    scheduleConstruct();
                 })
                 .setTooltip(PGR.core.strings.cardEditor.orCondition, PGR.core.strings.cardEditorTutorial.effectConditionOr);
 
-        effectHeader = new EUILabel(EUIFontHelper.cardtitlefontSmall, new OriginRelativeHitbox(hb, MENU_WIDTH / 4, MENU_HEIGHT, 0, 0))
+        effectHeader = new EUILabel(EUIFontHelper.cardtitlefontSmall, new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, 0, 0))
                 .setAlignment(0.5f, 0.0f, false)
                 .setColor(Settings.BLUE_TEXT_COLOR)
                 .setLabel(PGR.core.strings.cardEditor.effect)
@@ -154,14 +154,14 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
                 .setClickDelay(0.02f);
         choicesEditor = new PCLValueEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 4, MENU_HEIGHT, MENU_WIDTH * 2.5f, 0)
                 , PGR.core.strings.cardEditor.choices, (val) -> {
-            multiSkill.setAmount(val);
-            constructEffect();
-        })
+                    multiSkill.setAmount(val);
+                    scheduleConstruct();
+                })
                 .setTooltip(PGR.core.strings.cardEditor.choices, PGR.core.strings.cardEditorTutorial.effectChoices)
                 .setLimits(0, PSkill.DEFAULT_MAX);
         choicesEditor.header.hb.setOffset(-0.375f * MENU_WIDTH, MENU_HEIGHT * 0.5f);
 
-        modifierHeader = new EUILabel(EUIFontHelper.cardtitlefontSmall, new OriginRelativeHitbox(hb, MENU_WIDTH / 4, MENU_HEIGHT, 0, 0))
+        modifierHeader = new EUILabel(EUIFontHelper.cardtitlefontSmall, new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, 0, 0))
                 .setAlignment(0.5f, 0.0f, false)
                 .setColor(Settings.BLUE_TEXT_COLOR)
                 .setTooltip(PGR.core.strings.cardEditor.modifier, PGR.core.strings.cardEditorTutorial.effectModifier)
@@ -248,6 +248,10 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
             return;
         }
 
+        // The recorded effect copies cannot have children (such children will cause glitches in previews and when saving effects)
+        PSkill<?> child = effect.getChild();
+        effect.setChild((PSkill<?>) null);
+
         if (effect instanceof PPrimary)
         {
             primaryCond = (PPrimary<?>) effect.makeCopy();
@@ -255,6 +259,10 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
         else if (effect instanceof PMultiCond)
         {
             multiCond = (PMultiCond) effect.makeCopy();
+        }
+        else if (effect instanceof PCond)
+        {
+            multiCond = new PMultiCond((PCond<?>) effect.makeCopy());
         }
         else if (effect instanceof PDelay)
         {
@@ -268,7 +276,14 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
         {
             multiSkill = (PMultiSkill) effect.makeCopy();
         }
-        deconstructEffect(effect.getChild());
+        else if (effect instanceof PMove)
+        {
+            multiSkill = new PMultiSkill(effect.makeCopy());
+        }
+
+        // Restore the effect's child for the initial preview
+        effect.setChild(child);
+        deconstructEffect(child);
     }
 
     public String getTitle()
@@ -349,6 +364,8 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
         {
             multiCond = new PMultiCond();
         }
+
+        scheduleConstruct();
     }
 
     // Schedule the editor to update its effect at the end of updateImpl. Use this instead of calling constructEffect directly to avoid concurrent modification errors when the visible UI changes

@@ -160,6 +160,16 @@ public abstract class PMod<T extends PField> extends PSkill<T>
         return new PMod_PerCreatureAttacking(amount);
     }
 
+    public static PMod_PerCreatureBlock perCreatureBlock(int amount)
+    {
+        return new PMod_PerCreatureBlock(amount);
+    }
+
+    public static PMod_PerCreatureBlock perCreatureBlock(PCLCardTarget target, int amount)
+    {
+        return new PMod_PerCreatureBlock(target, amount);
+    }
+
     public static PMod_PerCreatureWith perCreatureWith(int amount, PCLPowerHelper... powers)
     {
         return new PMod_PerCreatureWith(amount, powers);

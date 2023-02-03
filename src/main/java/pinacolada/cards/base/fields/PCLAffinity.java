@@ -124,7 +124,7 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>
 
     public static PCLAffinity[] getAvailableAffinities(AbstractCard.CardColor pc)
     {
-        if (pc == AbstractCard.CardColor.COLORLESS || pc == AbstractCard.CardColor.CURSE)
+        if (GameUtilities.isColorlessCardColor(pc))
         {
             return extended();
         }

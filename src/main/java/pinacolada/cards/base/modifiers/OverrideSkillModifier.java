@@ -28,7 +28,7 @@ public class OverrideSkillModifier extends SkillModifier
         super(effectString);
     }
 
-    public OverrideSkillModifier(PSkill effect)
+    public OverrideSkillModifier(PSkill<?> effect)
     {
         super(effect);
     }
@@ -87,6 +87,8 @@ public class OverrideSkillModifier extends SkillModifier
         return new OverrideSkillModifier(serialized);
     }
 
+    // For EditorCards, we can just clear their skills instead of having to rely on the patch to do things
+    // For unplayable cards like statuses, remove unplayable so the card can be played, and show a cost to make the energy requirement more clear
     public void onInitialApplication(AbstractCard card) {
         if (card instanceof EditorCard)
         {

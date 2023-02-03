@@ -33,8 +33,8 @@ public class PCLDynamicData extends PCLCardData
     public ColoredTexture portraitImage;
     public List<CardTagItem> extraTags = new ArrayList<>();
     public PCLCard source;
-    public PCardPrimary_DealDamage damageEffect;
-    public PCardPrimary_GainBlock blockEffect;
+    public PCardPrimary_DealDamage attackSkill;
+    public PCardPrimary_GainBlock blockSkill;
     public boolean showTypeText = true;
 
     public PCLDynamicData(String id)
@@ -108,13 +108,13 @@ public class PCLDynamicData extends PCLCardData
         setLanguageMap(original.languageMap);
         setPSkill(original.moves, true, true);
         setPPower(original.powers, true, true);
-        if (original.damageEffect != null)
+        if (original.attackSkill != null)
         {
-            setAttackSkill(original.damageEffect.makeCopy());
+            setAttackSkill(original.attackSkill.makeCopy());
         }
-        if (original.blockEffect != null)
+        if (original.blockSkill != null)
         {
-            setBlockSkill(original.blockEffect.makeCopy());
+            setBlockSkill(original.blockSkill.makeCopy());
         }
     }
 
@@ -210,7 +210,7 @@ public class PCLDynamicData extends PCLCardData
         return this;
     }
 
-    public PCLDynamicData removePMove(PSkill effect)
+    public PCLDynamicData removePMove(PSkill<?> effect)
     {
         moves.remove(effect);
         return this;
@@ -286,14 +286,14 @@ public class PCLDynamicData extends PCLCardData
 
     public PCLDynamicData setAttackSkill(PCardPrimary_DealDamage damageEffect)
     {
-        this.damageEffect = damageEffect;
+        this.attackSkill = damageEffect;
 
         return this;
     }
 
     public PCLDynamicData setBlockSkill(PCardPrimary_GainBlock blockEffect)
     {
-        this.blockEffect = blockEffect;
+        this.blockSkill = blockEffect;
 
         return this;
     }

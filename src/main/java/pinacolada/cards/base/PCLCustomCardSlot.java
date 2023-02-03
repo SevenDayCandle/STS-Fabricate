@@ -6,7 +6,9 @@ import com.badlogic.gdx.math.MathUtils;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIUtils;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLAttackType;
+import pinacolada.cards.base.tags.CardTagItem;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PTrigger;
@@ -75,26 +77,24 @@ public class PCLCustomCardSlot
         builders.add(builder);
     }
 
-    public PCLCustomCardSlot(PCLCardData data)
+    public PCLCustomCardSlot(PCLCard card, AbstractCard.CardColor color)
     {
-        ID = makeNewID(data.cardColor);
+        ID = makeNewID(color);
         filePath = makeFilePath();
         imagePath = makeImagePath();
-        slotColor = data.cardColor;
-        builders.add(new PCLDynamicData(data, true)
-                .setID(ID)
-                .setImagePath(imagePath));
-    }
-
-    public PCLCustomCardSlot(PCLDynamicData builder)
-    {
-        ID = makeNewID(builder.cardColor);
-        filePath = makeFilePath();
-        imagePath = makeImagePath();
-        slotColor = builder.cardColor;
-        builders.add(builder
-                .setID(ID)
-                .setImagePath(imagePath));
+        slotColor = color;
+        builders.add(new PCLDynamicData(card.cardData, true)
+                        .setColor(color)
+                        .setID(ID)
+                        .setImagePath(imagePath)
+                        .setPSkill(card.getEffects(), true, true)
+                        .setPPower(card.getPowerEffects(), true, true)
+                        .setAttackSkill(card.onDamageEffect)
+                        .setBlockSkill(card.onBlockEffect)
+                        .setExtraTags(CardTagItem.getFromCard(card)
+                        )
+        );
+        recordBuilder();
     }
 
     public PCLCustomCardSlot(PCLCustomCardSlot other)
@@ -109,6 +109,7 @@ public class PCLCustomCardSlot
                     .setID(ID)
                     .setImagePath(imagePath));
         }
+        recordBuilder();
     }
 
     public PCLCustomCardSlot(PCLCustomCardSlot other, AbstractCard.CardColor color)
@@ -119,6 +120,16 @@ public class PCLCustomCardSlot
         {
             builder.setColor(color);
         }
+    }
+
+    // Only allow a card to be copied into a custom card slot if it is a PCLCard, if it is seen, and if all of its skills are in AVAILABLE_SKILLS (i.e. selectable in the card editor)
+    public static boolean canFullyCopyCard(AbstractCard card)
+    {
+        if (card instanceof PCLCard && !card.isLocked && card.isSeen)
+        {
+            return EUIUtils.all(((PCLCard) card).getFullSubEffects(), skill -> skill != null && skill.getClass().isAnnotationPresent(VisibleSkill.class));
+        }
+        return false;
     }
 
     public static PCLCustomCardSlot get(String id)
@@ -240,9 +251,8 @@ public class PCLCustomCardSlot
         return FOLDER + "/" + ID + ".png";
     }
 
-    public void commitBuilder()
+    public void recordBuilder()
     {
-
         ArrayList<String> tempForms = new ArrayList<>();
 
         for (PCLDynamicData builder : builders)
@@ -277,8 +287,8 @@ public class PCLCustomCardSlot
             tags = EUIUtils.mapAsNonnull(builder.tags.values(), EUIUtils::serialize).toArray(new String[]{});
 
             f.attackType = builder.attackType.name();
-            f.damageEffect = builder.damageEffect != null ? builder.damageEffect.serialize() : null;
-            f.blockEffect = builder.blockEffect != null ? builder.blockEffect.serialize() : null;
+            f.damageEffect = builder.attackSkill != null ? builder.attackSkill.serialize() : null;
+            f.blockEffect = builder.blockSkill != null ? builder.blockSkill.serialize() : null;
             f.effects = EUIUtils.mapAsNonnull(builder.moves, b -> b != null ? b.serialize() : null).toArray(new String[]{});
             f.powerEffects = EUIUtils.mapAsNonnull(builder.powers, b -> b != null ? b.serialize() : null).toArray(new String[]{});
 
@@ -286,6 +296,11 @@ public class PCLCustomCardSlot
         }
 
         forms = tempForms.toArray(new String[]{});
+    }
+
+    public void commitBuilder()
+    {
+        recordBuilder();
         String newFilePath = makeFilePath();
         String newImagePath = makeImagePath();
 

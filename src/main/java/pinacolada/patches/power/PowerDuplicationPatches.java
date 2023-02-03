@@ -61,16 +61,18 @@ public class PowerDuplicationPatches
         }
     }
 
+    // Check for reading calls only because otherwise we'll end up overwriting the writing calls as well
     public static void doEdit(javassist.expr.FieldAccess m) throws CannotCompileException
     {
-        if (m.getClassName().equals(AbstractCard.class.getName()) && m.getFieldName().equals("purgeOnUse"))
+        if (m.getClassName().equals(AbstractCard.class.getName()) && m.getFieldName().equals("purgeOnUse") && m.isReader())
         {
             m.replace("{ $_ = pinacolada.patches.power.PowerDuplicationPatches.patch($0); }");
         }
     }
 
+    // Needs to be negated because these purgeOnUse checks were already negated
     public static boolean patch(AbstractCard card)
     {
-        return GameUtilities.canPlayTwice(card);
+        return !GameUtilities.canPlayTwice(card);
     }
 }

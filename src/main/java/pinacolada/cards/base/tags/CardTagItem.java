@@ -38,6 +38,11 @@ public enum CardTagItem implements TooltipProvider
         return get(EUIUtils.capitalize(tag.toString()));
     }
 
+    public static List<CardTagItem> getFromCard(AbstractCard card)
+    {
+        return EUIUtils.mapAsNonnull(card.tags, CardTagItem::get);
+    }
+
     public static List<CardTagItem> getAll()
     {
         CardTagItem[] values = CardTagItem.values();

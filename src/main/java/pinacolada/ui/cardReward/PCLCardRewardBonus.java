@@ -40,12 +40,11 @@ public class PCLCardRewardBonus extends EUIBase
 
     public void add(AbstractCard card)
     {
-
-        CardRewardBundle cardRewardBundle = getBundle(card);
-        if (cardRewardBundle != null)
-        {
-            bundles.add(cardRewardBundle);
-        }
+        //CardRewardBundle cardRewardBundle = getBundle(card);
+        //if (cardRewardBundle != null)
+        //{
+        //    bundles.add(cardRewardBundle);
+        //}
     }
 
     // TODO rework to prevent "rerolling" rewards
@@ -63,8 +62,6 @@ public class PCLCardRewardBonus extends EUIBase
             int value = GameUtilities.getRNG().random(0, 9);
             switch (value)
             {
-                case 0:
-                    return getUpgradeBundle(card);
                 case 1:
                 case 2:
                 case 3:
@@ -91,13 +88,6 @@ public class PCLCardRewardBonus extends EUIBase
                 .setText(REWARDS.maxHPBonus(maxHP), Color.WHITE, -AbstractCard.RAW_W * 0.165f, -AbstractCard.RAW_H * 0.54f);
     }
 
-    private CardRewardBundle getUpgradeBundle(AbstractCard card)
-    {
-        return new CardRewardBundle(card, this::receiveUpgrade).setAmount(1)
-                .setIcon(ImageMaster.TP_ASCENSION, -AbstractCard.RAW_W * 0.45f, -AbstractCard.RAW_H * 0.545f)
-                .setText(REWARDS.commonUpgrade, Color.WHITE, -AbstractCard.RAW_W * 0.01f, -AbstractCard.RAW_H * 0.54f);
-    }
-
     public void onCardObtained(AbstractCard hoveredCard)
     {
         for (CardRewardBundle cardRewardBundle : bundles)
@@ -120,10 +110,9 @@ public class PCLCardRewardBonus extends EUIBase
             if (card instanceof OnAddingToCardRewardListener && ((OnAddingToCardRewardListener) card).shouldCancel())
             {
                 toRemove.add(card);
-                continue;
             }
 
-            add(card);
+            //add(card);
         }
 
         for (AbstractCard card : toRemove)
@@ -140,18 +129,10 @@ public class PCLCardRewardBonus extends EUIBase
                     rewardItem.cards.add(replacement);
                 }
 
-                add(replacement);
+                //add(replacement);
             }
         }
     }
-
-/*    private CardRewardBundle GetCursedRelicBundle(AbstractCard card)
-    {
-        return new CardRewardBundle(card, c -> PCLGameEffects.Queue.ObtainRelic(new CursedGlyph()))
-                .SetIcon(CURSED_GLYPH.img, -AbstractCard.RAW_W * 0.45f, -AbstractCard.RAW_H * 0.52f)
-                .SetTooltip(CURSED_GLYPH.name, CURSED_GLYPH.description)
-                .SetText(REWARDS.CursedRelic, Settings.RED_TEXT_COLOR, -AbstractCard.RAW_W * 0.10f, -AbstractCard.RAW_H * 0.54f);
-    }*/
 
     private void receiveGold(CardRewardBundle bundle)
     {

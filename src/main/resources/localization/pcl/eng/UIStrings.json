@@ -488,7 +488,8 @@
 												"#yAttack #yTypes affect an #yAttack's damage calculations as well as its interaction with powers on the target.",
 												"The visual effect that plays on the target.",
 												"The number of times this #yAttack will hit the target. Each hit is treated independently with regards to damage calculations and powers on the target.",
-												"The number of times that this card will grant #yBlock. Each #yBlock grant is treated independently with regards to #yBlock calculations and powers on the target."
+												"The number of times that this card will grant #yBlock. Each #yBlock grant is treated independently with regards to #yBlock calculations and powers on the target.",
+												"Create a card from an example template."
 								]
 				},
 				"pcl:CardMods": {

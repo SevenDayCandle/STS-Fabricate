@@ -174,7 +174,7 @@ public class PCLCoreStrings extends PCLStrings
         public final String required = cardeditor.TEXT[60];
         public final String origins = cardeditor.TEXT[61];
         public final String enable = cardeditor.TEXT[62];
-        public final String existingCardImage = cardeditor.TEXT[63];
+        public final String loadFromCard = cardeditor.TEXT[63];
     }
 
     public class Misc
@@ -1207,6 +1207,7 @@ public class PCLCoreStrings extends PCLStrings
         public final String attackEffect = cardeditortutorial.TEXT[28];
         public final String hitCount = cardeditortutorial.TEXT[29];
         public final String blockCount = cardeditortutorial.TEXT[30];
+        public final String loadFromCardScreen = cardeditortutorial.TEXT[31];
     }
 
     public class GridSelection

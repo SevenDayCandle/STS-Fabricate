@@ -11,8 +11,8 @@ import extendedui.ui.GridCardSelectScreenHelper;
 import extendedui.utilities.GenericCallback;
 import pinacolada.actions.PCLActionWithCallback;
 import pinacolada.actions.PCLActions;
-import pinacolada.cards.base.ChoiceBuilder;
 import pinacolada.cards.base.ChoiceCard;
+import pinacolada.cards.base.ChoiceData;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardSelection;
@@ -33,7 +33,7 @@ public class TryChooseChoice<T> extends PCLActionWithCallback<ArrayList<ChoiceCa
     protected final CardGroup group = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
 
     protected ArrayList<GenericCallback<ArrayList<ChoiceCard<T>>>> conditionalCallbacks = new ArrayList<>();
-    protected ArrayList<ChoiceBuilder<T>> builders = new ArrayList<>();
+    protected ArrayList<ChoiceData<T>> builders = new ArrayList<>();
     protected FuncT1<String, ArrayList<AbstractCard>> dynamicString;
     protected ActionT3<CardGroup, ArrayList<AbstractCard>, AbstractCard> onClickCard;
     protected ListSelection<AbstractCard> origin;
@@ -51,7 +51,7 @@ public class TryChooseChoice<T> extends PCLActionWithCallback<ArrayList<ChoiceCa
     public static TryChooseChoice<PCLAffinity> chooseAffinity(String name, int choices, AbstractCreature source, AbstractCreature target, Collection<PCLAffinity> affinities)
     {
         return new TryChooseChoice<PCLAffinity>(ActionType.CARD_MANIPULATION, name, source, choices, -2,
-                EUIUtils.map(affinities, ChoiceBuilder::affinity));
+                EUIUtils.map(affinities, ChoiceData::affinity));
     }
 
     public static TryChooseChoice<PCLAffinity> useAffinitySkill(String name, int choices, AbstractCreature source, AbstractCreature target, Collection<PSkill<?>> skills)
@@ -62,7 +62,7 @@ public class TryChooseChoice<T> extends PCLActionWithCallback<ArrayList<ChoiceCa
     public static TryChooseChoice<PCLAffinity> useAffinitySkill(String name, int choices, int cost, AbstractCreature source, AbstractCreature target, Collection<PSkill<?>> skills)
     {
         return new TryChooseChoice<PCLAffinity>(ActionType.CARD_MANIPULATION, name, source, choices, cost,
-                EUIUtils.map(skills, ChoiceBuilder::skillAffinity))
+                EUIUtils.map(skills, ChoiceData::skillAffinity))
                 .addConditionalCallback(choiceCards -> {
                     for (ChoiceCard<PCLAffinity> card : choiceCards)
                     {
@@ -79,7 +79,7 @@ public class TryChooseChoice<T> extends PCLActionWithCallback<ArrayList<ChoiceCa
     public static TryChooseChoice<PSkill<?>> useSkill(PCLCardData sourceData, int choices, int cost, AbstractCreature source, AbstractCreature target, Collection<PSkill<?>> skills)
     {
         return new TryChooseChoice<PSkill<?>>(ActionType.CARD_MANIPULATION, sourceData.strings.NAME, source, choices, cost,
-                EUIUtils.map(skills, i -> ChoiceBuilder.skill(sourceData, i)))
+                EUIUtils.map(skills, i -> ChoiceData.skill(sourceData, i)))
                 .addConditionalCallback(choiceCards -> {
                     for (ChoiceCard<PSkill<?>> card : choiceCards)
                     {
@@ -96,7 +96,7 @@ public class TryChooseChoice<T> extends PCLActionWithCallback<ArrayList<ChoiceCa
     public static TryChooseChoice<PSkill<?>> useSkillWithTargeting(PCLCardData sourceData, int choices, int cost, AbstractCreature source, Collection<PSkill<?>> skills)
     {
         return new TryChooseChoice<PSkill<?>>(ActionType.CARD_MANIPULATION, sourceData.strings.NAME, source, choices, cost,
-                EUIUtils.map(skills, i -> ChoiceBuilder.skill(sourceData, i)))
+                EUIUtils.map(skills, i -> ChoiceData.skill(sourceData, i)))
                 .addConditionalCallback(choiceCards -> {
                     for (ChoiceCard<PSkill<?>> card : choiceCards)
                     {
@@ -121,21 +121,21 @@ public class TryChooseChoice<T> extends PCLActionWithCallback<ArrayList<ChoiceCa
     @SafeVarargs
     public TryChooseChoice(ActionType type, PCLCardData sourceData, AbstractCreature source, int amount, int cost, T... items)
     {
-        this(type, sourceData.strings.NAME, source, amount, cost, EUIUtils.map(items, i -> ChoiceBuilder.create(sourceData, i)));
+        this(type, sourceData.strings.NAME, source, amount, cost, EUIUtils.map(items, i -> ChoiceData.create(sourceData, i)));
     }
 
     public TryChooseChoice(ActionType type, PCLCardData sourceData, AbstractCreature source, int amount, int cost, Iterable<T> items)
     {
-        this(type, sourceData.strings.NAME, source, amount, cost, EUIUtils.map(items, i -> ChoiceBuilder.create(sourceData, i)));
+        this(type, sourceData.strings.NAME, source, amount, cost, EUIUtils.map(items, i -> ChoiceData.create(sourceData, i)));
     }
 
     @SafeVarargs
-    public TryChooseChoice(ActionType type, PCLCardData sourceData, AbstractCreature source, int amount, int cost, ChoiceBuilder<T>... items)
+    public TryChooseChoice(ActionType type, PCLCardData sourceData, AbstractCreature source, int amount, int cost, ChoiceData<T>... items)
     {
         this(type, sourceData.strings.NAME, source, amount, cost, Arrays.asList(items));
     }
 
-    public TryChooseChoice(ActionType type, String name, AbstractCreature source, int amount, int cost, Collection<ChoiceBuilder<T>> items)
+    public TryChooseChoice(ActionType type, String name, AbstractCreature source, int amount, int cost, Collection<ChoiceData<T>> items)
     {
         super(type);
 
@@ -202,9 +202,9 @@ public class TryChooseChoice<T> extends PCLActionWithCallback<ArrayList<ChoiceCa
         GridCardSelectScreenHelper.setDynamicLabel(dynamicString);
         GridCardSelectScreenHelper.setOnClickCard(onClickCard);
 
-        for (ChoiceBuilder<T> builder : builders)
+        for (ChoiceData<T> builder : builders)
         {
-            group.addToTop(builder.buildPCL());
+            group.addToTop(builder.build());
         }
 
         if (group.isEmpty())

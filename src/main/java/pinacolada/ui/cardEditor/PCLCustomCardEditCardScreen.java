@@ -75,8 +75,8 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
         currentSlot = slot;
         tempBuilders = EUIUtils.map(currentSlot.builders, PCLDynamicData::new);
 
-        currentDamage = getBuilder().damageEffect;
-        currentBlock = getBuilder().blockEffect;
+        currentDamage = getBuilder().attackSkill;
+        currentBlock = getBuilder().blockSkill;
         currentEffects.addAll(getBuilder().moves);
         while (currentEffects.size() < EFFECT_COUNT)
         {

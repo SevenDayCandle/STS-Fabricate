@@ -12,7 +12,7 @@ import extendedui.ui.controls.EUICardGrid;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.utilities.GameUtilities;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class PCLGenericSelectCardEffect extends PCLEffectWithCallback<AbstractCard>
 {
@@ -23,7 +23,7 @@ public class PCLGenericSelectCardEffect extends PCLEffectWithCallback<AbstractCa
     private boolean showTopPanelOnComplete;
     private final Color screenColor;
 
-    public PCLGenericSelectCardEffect(ArrayList<AbstractCard> cards)
+    public PCLGenericSelectCardEffect(List<? extends AbstractCard> cards)
     {
         this(GameUtilities.createCardGroup(cards));
     }

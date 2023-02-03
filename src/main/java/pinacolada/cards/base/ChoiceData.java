@@ -13,14 +13,14 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.List;
 
-public class ChoiceBuilder<T> extends PCLDynamicData
+public class ChoiceData<T> extends PCLDynamicData
 {
     public final boolean fromCustom;
     public final T object;
 
-    public static ChoiceBuilder<PCLAffinity> affinity(PCLAffinity affinity)
+    public static ChoiceData<PCLAffinity> affinity(PCLAffinity affinity)
     {
-        ChoiceBuilder<PCLAffinity> builder = new ChoiceBuilder<PCLAffinity>(AffinityToken.getCardData(affinity), affinity);
+        ChoiceData<PCLAffinity> builder = new ChoiceData<PCLAffinity>(AffinityToken.getCardData(affinity), affinity);
         String img = AffinityToken.getCardData(affinity).getImagePath(GameUtilities.getActingColor());
         if (img != null)
         {
@@ -31,15 +31,15 @@ public class ChoiceBuilder<T> extends PCLDynamicData
         return builder;
     }
 
-    public static ChoiceBuilder<PCLAffinity> skillAffinity(PSkill<?> skill, PCLAffinity affinity)
+    public static ChoiceData<PCLAffinity> skillAffinity(PSkill<?> skill, PCLAffinity affinity)
     {
-        return (ChoiceBuilder<PCLAffinity>) ChoiceBuilder.affinity(affinity)
+        return (ChoiceData<PCLAffinity>) ChoiceData.affinity(affinity)
                 .addPSkill(skill)
                 .setTarget(skill.target);
     }
 
 
-    public static ChoiceBuilder<PCLAffinity> skillAffinity(PSkill<?> skill)
+    public static ChoiceData<PCLAffinity> skillAffinity(PSkill<?> skill)
     {
         PCLAffinity affinity = PCLAffinity.Star;
         PField fields = skill.fields;
@@ -62,29 +62,29 @@ public class ChoiceBuilder<T> extends PCLDynamicData
         return skillAffinity(skill, affinity);
     }
 
-    public static ChoiceBuilder<PSkill<?>> skill(PCLCardData card, PSkill<?> skill)
+    public static ChoiceData<PSkill<?>> skill(PCLCardData card, PSkill<?> skill)
     {
-        return (ChoiceBuilder<PSkill<?>>) ChoiceBuilder.create(card, skill)
+        return (ChoiceData<PSkill<?>>) ChoiceData.create(card, skill)
                 .addPSkill(skill)
                 .setTarget(skill.target);
     }
 
-    public static <T> ChoiceBuilder<T> create(PCLCardData card, T object)
+    public static <T> ChoiceData<T> create(PCLCardData card, T object)
     {
-        return new ChoiceBuilder<T>(card, object);
+        return new ChoiceData<T>(card, object);
     }
 
     public static <T> ChoiceCard<T> generate(PCLCardData card, T object)
     {
-        return new ChoiceBuilder<T>(card, object).buildPCL();
+        return new ChoiceData<T>(card, object).build();
     }
 
     public static ChoiceCard<PCLAffinity> generateAffinity(PCLAffinity affinity)
     {
-        return affinity(affinity).buildPCL();
+        return affinity(affinity).build();
     }
 
-    public ChoiceBuilder(PCLCard card, T object)
+    public ChoiceData(PCLCard card, T object)
     {
         super(card, false);
         this.object = object;
@@ -92,7 +92,7 @@ public class ChoiceBuilder<T> extends PCLDynamicData
         this.fromCustom = card instanceof PCLDynamicCard;
     }
 
-    public ChoiceBuilder(PCLCardData card, T object)
+    public ChoiceData(PCLCardData card, T object)
     {
         super(card, false);
         this.object = object;
@@ -100,13 +100,13 @@ public class ChoiceBuilder<T> extends PCLDynamicData
         this.fromCustom = card instanceof PCLDynamicData;
     }
 
-    public ChoiceBuilder<T> addPSkill(PSkill<?> effect)
+    public ChoiceData<T> addPSkill(PSkill<?> effect)
     {
         super.addPSkill(effect, false);
         return this;
     }
 
-    public ChoiceCard<T> buildPCL()
+    public ChoiceCard<T> build()
     {
         if (strings == null)
         {

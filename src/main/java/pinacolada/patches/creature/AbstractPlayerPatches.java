@@ -60,6 +60,7 @@ public class AbstractPlayerPatches
         @SpireInsertPatch(rloc = 7)
         public static SpireReturn insertPre(AbstractPlayer __instance, AbstractCard c, AbstractMonster m, int energyOnUse)
         {
+            // TODO make this into an instrument once you have a patch for EYBCard's useCard patch and you can ensure conflicts don't occur
             // OverrideSkillModifier affects PCLCard skills directly so no need to invoke them below
             final PCLCard pCard = EUIUtils.safeCast(c, PCLCard.class);
             if (pCard != null)

@@ -9,6 +9,7 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
 import extendedui.EUI;
 import extendedui.EUIGameUtils;
@@ -20,10 +21,13 @@ import extendedui.ui.AbstractScreen;
 import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
+import pinacolada.cards.base.PCLCard;
+import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.effects.screen.PCLCustomCardCopyConfirmationEffect;
 import pinacolada.effects.screen.PCLCustomCardDeletionConfirmationEffect;
+import pinacolada.effects.screen.PCLGenericSelectCardEffect;
 import pinacolada.resources.PGR;
 
 import java.awt.*;
@@ -47,6 +51,7 @@ public class PCLCustomCardSelectorScreen extends AbstractScreen
     protected ActionT0 onClose;
     protected EUIButton addButton;
     protected EUIButton cancelButton;
+    protected EUIButton loadExistingButton;
     protected EUIButton openButton;
     protected EUIButton reloadButton;
     protected EUIButtonList colorButtons;
@@ -94,8 +99,15 @@ public class PCLCustomCardSelectorScreen extends AbstractScreen
                 .setText(PGR.core.strings.cardEditor.openFolder)
                 .setOnClick(PCLCustomCardSelectorScreen::openFolder);
 
-        reloadButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
+        loadExistingButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(openButton.hb.cX, openButton.hb.y + openButton.hb.height + labelHeight * 0.8f)
+                .setColor(Color.WHITE)
+                .setText(PGR.core.strings.cardEditor.loadFromCard)
+                .setTooltip(PGR.core.strings.cardEditor.loadFromCard, PGR.core.strings.cardEditorTutorial.loadFromCardScreen)
+                .setOnClick(this::loadFromExisting);
+
+        reloadButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
+                .setPosition(loadExistingButton.hb.cX, loadExistingButton.hb.y + loadExistingButton.hb.height + labelHeight * 0.8f)
                 .setColor(Color.WHITE)
                 .setText(PGR.core.strings.cardEditor.reloadCards)
                 .setTooltip(PGR.core.strings.cardEditor.reloadCards, PGR.core.strings.cardEditorTutorial.selectorReload)
@@ -152,6 +164,28 @@ public class PCLCustomCardSelectorScreen extends AbstractScreen
         }
     }
 
+    public void loadFromExisting()
+    {
+        if (currentEffect == null)
+        {
+            currentEffect = new PCLGenericSelectCardEffect(this.getAvailableCardsToCopy()).addCallback(card -> {
+                if (card instanceof PCLCard)
+                {
+                    PCLCustomCardSlot slot = new PCLCustomCardSlot((PCLCard) card, currentColor);
+                    currentEffect = new PCLCustomCardEditCardScreen(slot)
+                            .setOnSave(() -> {
+                                AbstractCard newCard = slot.getBuilder(0).build();
+                                currentSlots.put(newCard, slot);
+                                PCLCustomCardSlot.getCards(currentColor).add(slot);
+                                grid.addCard(newCard);
+                                slot.commitBuilder();
+                            });
+                }
+            });
+
+        }
+    }
+
     public void duplicate(AbstractCard card, PCLCustomCardSlot cardSlot)
     {
         if (currentEffect == null && cardSlot != null)
@@ -205,6 +239,16 @@ public class PCLCustomCardSelectorScreen extends AbstractScreen
                         cardSlot.commitBuilder();
                     });
         }
+    }
+
+    // TODO add replacement cards
+    private ArrayList<AbstractCard> getAvailableCardsToCopy()
+    {
+        return EUIUtils.mapAsNonnull(PCLCardData.getAllData(false, false, data -> data.resources == PGR.core),
+                data -> {
+                    AbstractCard card = CardLibrary.getCard(data.ID);
+                    return PCLCustomCardSlot.canFullyCopyCard(card) ? card : null;
+                });
     }
 
     private ArrayList<AbstractCard.CardColor> getAllColors()
@@ -302,6 +346,7 @@ public class PCLCustomCardSelectorScreen extends AbstractScreen
                 cancelButton.tryUpdate();
                 addButton.tryUpdate();
                 openButton.tryUpdate();
+                loadExistingButton.tryUpdate();
                 reloadButton.tryUpdate();
             }
         }
@@ -322,6 +367,7 @@ public class PCLCustomCardSelectorScreen extends AbstractScreen
             cancelButton.tryRender(sb);
             addButton.tryRender(sb);
             openButton.tryRender(sb);
+            loadExistingButton.tryRender(sb);
             reloadButton.tryRender(sb);
             contextMenu.tryRender(sb);
             colorButtons.tryRender(sb);

@@ -110,7 +110,7 @@ public class PCLCustomCardImageEffect extends PCLEffectWithCallback<Pixmap>
         selectExistingButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(cancelButton.hb.cX, pasteButton.hb.y + pasteButton.hb.height + labelHeight * 0.8f)
                 .setColor(Color.WHITE)
-                .setText(PGR.core.strings.cardEditor.existingCardImage)
+                .setText(PGR.core.strings.cardEditor.loadFromCard)
                 .setFont(EUIFontHelper.buttonFont, 0.85f)
                 .setOnClick(this::selectExistingCards);
 

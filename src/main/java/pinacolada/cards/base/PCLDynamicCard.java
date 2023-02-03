@@ -401,13 +401,13 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
         }
 
         // Add damage/block effects and set their source to this card
-        if (builder.damageEffect != null)
+        if (builder.attackSkill != null)
         {
-            onDamageEffect = (PCardPrimary_DealDamage) builder.damageEffect.makeCopy().setProvider(this).onAddToCard(this);
+            onDamageEffect = (PCardPrimary_DealDamage) builder.attackSkill.makeCopy().setProvider(this).onAddToCard(this);
         }
-        if (builder.blockEffect != null)
+        if (builder.blockSkill != null)
         {
-            onBlockEffect = (PCardPrimary_GainBlock) builder.blockEffect.makeCopy().setProvider(this).onAddToCard(this);
+            onBlockEffect = (PCardPrimary_GainBlock) builder.blockSkill.makeCopy().setProvider(this).onAddToCard(this);
         }
 
         initializeDescription();

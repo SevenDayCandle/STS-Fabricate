@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.AutoplayField;
 import com.evacipated.cardcrawl.modthespire.lib.SpireOverride;
 import com.evacipated.cardcrawl.modthespire.lib.SpireSuper;
 import com.google.gson.reflect.TypeToken;
@@ -1977,7 +1976,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     public void triggerWhenDrawn() {
         super.triggerWhenDrawn();
 
-        if (AutoplayField.autoplay.get(this)) {
+        if (PCLCardTag.Autoplay.tryProgress(this)) {
             PCLActions.last.playCard(this, player.hand, null)
                     .spendEnergy(true)
                     .addCondition(AbstractCard::hasEnoughEnergy);

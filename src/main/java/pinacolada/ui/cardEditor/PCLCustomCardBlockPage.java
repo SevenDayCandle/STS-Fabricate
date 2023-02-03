@@ -7,6 +7,7 @@ import extendedui.ui.TextureCache;
 import extendedui.ui.controls.EUIToggle;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.OriginRelativeHitbox;
+import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
@@ -44,10 +45,12 @@ public class PCLCustomCardBlockPage extends PCLCustomCardEffectPage
                 , PGR.core.strings.cardEditor.block, (val, upVal) -> screen.modifyBuilder(e -> e.setBlock(val, upVal, e.rightCount, e.rightCountUpgrade)))
                 .setLimits(0, PSkill.DEFAULT_MAX)
                 .setTooltip(PGR.core.tooltips.block);
+        blockEditor.tooltip.setChild(new EUITooltip(PGR.core.strings.cardEditor.upgrades, PGR.core.strings.cardEditorTutorial.amount));
         rightCountEditor = new PCLCustomCardUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 4, MENU_HEIGHT, MENU_WIDTH * 1.5f, OFFSET_EFFECT * 1.3f)
                 , EUIUtils.format(PGR.core.strings.cardEditor.hitCount, PGR.core.strings.cardEditor.block), (val, upVal) -> screen.modifyBuilder(e -> e.setRightCount(val, upVal)))
                 .setLimits(1, PSkill.DEFAULT_MAX);
         rightCountEditor.setTooltip(rightCountEditor.header.text, PGR.core.strings.cardEditorTutorial.blockCount);
+        rightCountEditor.tooltip.setChild(new EUITooltip(PGR.core.strings.cardEditor.upgrades, PGR.core.strings.cardEditorTutorial.amount));
     }
 
     public void refresh()

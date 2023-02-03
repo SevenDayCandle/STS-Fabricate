@@ -79,7 +79,6 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
                 .setTooltip(PGR.core.strings.cardEditor.tags, EUIUtils.joinStrings(EUIUtils.DOUBLE_SPLIT_LINE, PGR.core.strings.cardEditorTutorial.attrTags1, PGR.core.strings.cardEditorTutorial.attrTags2));
 
         // Number editors
-
         float curW = START_X;
         upgradeLabel = new EUILabel(EUIFontHelper.cardtitlefontSmall,
                 new EUIHitbox(curW, screenH(0.65f) - MENU_HEIGHT * 0.8f, MENU_WIDTH / 4, MENU_HEIGHT))
@@ -90,31 +89,38 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
         curW += SPACING_WIDTH;
         costEditor = new PCLCustomCardUpgradableEditor(new EUIHitbox(curW, screenH(0.65f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , CardLibSortHeader.TEXT[3], (val, upVal) -> effect.modifyBuilder(e -> e.setCosts(val).setCostUpgrades(upVal)))
-                .setLimits(-2, PSkill.DEFAULT_MAX);
+                .setLimits(-2, PSkill.DEFAULT_MAX)
+                .setTooltip(upgradeLabel.tooltip);
         curW += SPACING_WIDTH;
         damageEditor = new PCLCustomCardUpgradableEditor(new EUIHitbox(curW, screenH(0.65f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , PGR.core.strings.cardEditor.damage, (val, upVal) -> effect.modifyBuilder(e -> e.setDamage(val, upVal, e.hitCount, e.hitCountUpgrade)))
-                .setLimits(0, PSkill.DEFAULT_MAX);
+                .setLimits(0, PSkill.DEFAULT_MAX)
+                .setTooltip(upgradeLabel.tooltip);
         curW += SPACING_WIDTH;
         blockEditor = new PCLCustomCardUpgradableEditor(new EUIHitbox(curW, screenH(0.65f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , PGR.core.strings.cardEditor.block, (val, upVal) -> effect.modifyBuilder(e -> e.setBlock(val, upVal, e.rightCount, e.rightCountUpgrade)))
-                .setLimits(0, PSkill.DEFAULT_MAX);
+                .setLimits(0, PSkill.DEFAULT_MAX)
+                .setTooltip(upgradeLabel.tooltip);
         curW += SPACING_WIDTH;
         hitCountEditor = new PCLCustomCardUpgradableEditor(new EUIHitbox(curW, screenH(0.65f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , EUIUtils.format(PGR.core.strings.cardEditor.hitCount, PGR.core.strings.cardEditor.damage), (val, upVal) -> effect.modifyBuilder(e -> e.setHitCount(val, upVal)))
-                .setLimits(1, PSkill.DEFAULT_MAX);
+                .setLimits(1, PSkill.DEFAULT_MAX)
+                .setTooltip(upgradeLabel.tooltip);
         curW += SPACING_WIDTH;
         rightCountEditor = new PCLCustomCardUpgradableEditor(new EUIHitbox(curW, screenH(0.65f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , EUIUtils.format(PGR.core.strings.cardEditor.hitCount, PGR.core.strings.cardEditor.block), (val, upVal) -> effect.modifyBuilder(e -> e.setRightCount(val, upVal)))
-                .setLimits(1, PSkill.DEFAULT_MAX);
+                .setLimits(1, PSkill.DEFAULT_MAX)
+                .setTooltip(upgradeLabel.tooltip);
         curW += SPACING_WIDTH;
         magicNumberEditor = new PCLCustomCardUpgradableEditor(new EUIHitbox(curW, screenH(0.65f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , PGR.core.strings.cardEditor.magicNumber, (val, upVal) -> effect.modifyBuilder(e -> e.setMagicNumber(val, upVal)))
-                .setLimits(0, PSkill.DEFAULT_MAX);
+                .setLimits(0, PSkill.DEFAULT_MAX)
+                .setTooltip(upgradeLabel.tooltip);
         curW += SPACING_WIDTH;
         hpEditor = new PCLCustomCardUpgradableEditor(new EUIHitbox(curW, screenH(0.65f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , PGR.core.strings.cardEditor.secondaryNumber, (val, upVal) -> effect.modifyBuilder(e -> e.setHp(val, upVal)))
-                .setLimits(0, PSkill.DEFAULT_MAX);
+                .setLimits(0, PSkill.DEFAULT_MAX)
+                .setTooltip(upgradeLabel.tooltip);
 
         // Affinity editors
 
@@ -124,7 +130,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
                 .setAlignment(0.5f, 0.0f, false)
                 .setFont(EUIFontHelper.cardtitlefontSmall, 0.6f).setColor(Color.LIGHT_GRAY)
                 .setLabel(PGR.core.strings.cardEditor.upgrades)
-                .setTooltip(PGR.core.strings.cardEditor.upgrades, PGR.core.strings.cardEditorTutorial.amount);
+                .setTooltip(upgradeLabel.tooltip);
         boolean canShowLabels = availableAffinities.size() > 0;
         upgradeLabel2.setActive(canShowLabels);
 
@@ -167,8 +173,14 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
             if (builder.tags.containsKey(info.tag))
             {
                 PCLCardTagInfo other = builder.tags.get(info.tag);
-                info.set(0, other.get(0));
-                info.setUpgrade(0, other.getUpgrade(0));
+                Integer start = other.get(0);
+                Integer upgrade = other.getUpgrade(0);
+                if (upgrade == null)
+                {
+                    upgrade = start;
+                }
+                info.set(0, start);
+                info.setUpgrade(0, upgrade);
                 selection.add(i);
             }
         }

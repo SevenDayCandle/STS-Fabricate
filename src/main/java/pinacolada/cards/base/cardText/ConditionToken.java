@@ -35,7 +35,7 @@ public class ConditionToken extends PCLTextToken
     {
         if (parser.character == CONDITION_TOKEN && parser.compareNext(2, CONDITION_TOKEN))
         {
-            PSkill<?> move = parser.card != null ? parser.card.getSubEffect(parser.nextCharacter(1)) : null;
+            PSkill<?> move = parser.card != null ? parser.card.getEffectAt(parser.nextCharacter(1)) : null;
 
             if (move != null)
             {

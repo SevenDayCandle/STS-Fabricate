@@ -184,7 +184,7 @@ public class GameUtilities
 
     public static boolean canPlayTwice(AbstractCard card)
     {
-        return (!card.purgeOnUse && card.type != PCLEnum.CardType.SUMMON && !PCLCardTag.Fleeting.has(card));
+        return !card.purgeOnUse && card.type != PCLEnum.CardType.SUMMON && !PCLCardTag.Fleeting.has(card);
     }
 
     public static boolean canReceiveAnyColorCard()
@@ -279,12 +279,12 @@ public class GameUtilities
         copy.targetAngle = original.targetAngle;
     }
 
-    public static CardGroup createCardGroup(List<AbstractCard> cards)
+    public static CardGroup createCardGroup(List<? extends AbstractCard> cards)
     {
         return createCardGroup(cards, CardGroup.CardGroupType.UNSPECIFIED);
     }
 
-    public static CardGroup createCardGroup(List<AbstractCard> cards, CardGroup.CardGroupType type)
+    public static CardGroup createCardGroup(List<? extends AbstractCard> cards, CardGroup.CardGroupType type)
     {
         final CardGroup group = new CardGroup(type);
         group.group.addAll(cards);

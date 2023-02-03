@@ -56,7 +56,7 @@ public class PointerToken extends PCLTextToken
 
     private static PointerToken tryCreateToken(PCLCard card, Character c, Character i)
     {
-        PSkill<?> move = card != null ? card.getSubEffect(i) : null;
+        PSkill<?> move = card != null ? card.getEffectAt(i) : null;
         return VALID_TOKENS.contains(c) && move != null ? new PointerToken(c, move) : null;
     }
 

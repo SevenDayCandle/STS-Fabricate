@@ -21,7 +21,7 @@ import java.util.ArrayList;
 public class SkillModifier extends AbstractCardModifier
 {
     protected String serialized;
-    protected transient PSkill skill;
+    protected transient PSkill<?> skill;
 
     public static ArrayList<? extends SkillModifier> getAll(AbstractCard c)
     {
@@ -34,7 +34,7 @@ public class SkillModifier extends AbstractCardModifier
         this.skill = PSkill.get(serialized);
     }
 
-    public SkillModifier(PSkill skill)
+    public SkillModifier(PSkill<?> skill)
     {
         this.skill = skill;
         this.serialized = skill.serialize();

@@ -14,10 +14,10 @@ import java.util.ArrayList;
 
 public class ReplacementCard extends PCLDynamicCard
 {
-    protected final ReplacementCardBuilder builder;
+    protected final ReplacementData builder;
     protected AbstractCard original;
 
-    public ReplacementCard(ReplacementCardBuilder builder)
+    public ReplacementCard(ReplacementData builder)
     {
         super(builder);
         this.builder = builder;

@@ -983,6 +983,11 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return (sourceCard != null && sourceCard.type == PCLEnum.CardType.SUMMON) || (getSourceCreature() instanceof AbstractMonster);
     }
 
+    public final boolean isSelfOnlyTarget()
+    {
+        return (target == PCLCardTarget.None || (target == PCLCardTarget.Self && !isFromCreature()));
+    }
+
     public final boolean isTrigger()
     {
         return hasParentType(PTrigger.class) && !hasParentType(PTrigger_Interactable.class) && !(parent != null && parent.hasParentType(PCond.class));
