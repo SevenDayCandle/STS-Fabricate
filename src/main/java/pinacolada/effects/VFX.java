@@ -102,17 +102,17 @@ public class VFX
         return new DarknessEffect(cX, cY);
     }
 
-    public static EffekseerEffect eFX(PCLEffekseerEFX key)
+    public static EffekseerEffect eFX(EffekseerEFK key)
     {
         return eFX(key, Settings.WIDTH * 0.75f, AbstractDungeon.player != null ? AbstractDungeon.player.hb.cY : Settings.HEIGHT * 0.35f);
     }
 
-    public static EffekseerEffect eFX(PCLEffekseerEFX key, Hitbox hb)
+    public static EffekseerEffect eFX(EffekseerEFK key, Hitbox hb)
     {
         return eFX(key, hb.cX, hb.cY);
     }
 
-    public static EffekseerEffect eFX(PCLEffekseerEFX key, float x, float y)
+    public static EffekseerEffect eFX(EffekseerEFK key, float x, float y)
     {
         return new EffekseerEffect(key, x, y);
     }

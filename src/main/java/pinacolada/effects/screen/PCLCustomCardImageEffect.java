@@ -138,7 +138,7 @@ public class PCLCustomCardImageEffect extends PCLEffectWithCallback<Pixmap>
     {
         if (baseTexture == null)
         {
-            complete();
+            complete(null);
         }
         else
         {
@@ -416,6 +416,25 @@ public class PCLCustomCardImageEffect extends PCLEffectWithCallback<Pixmap>
         }
     }
 
+    public void complete(Pixmap pixmap)
+    {
+        super.complete(pixmap);
+        if (pixmap == null)
+        {
+            if (insideImage != null)
+            {
+                try
+                {
+                    insideImage.dispose();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     public void complete()
     {
         super.complete();
@@ -427,17 +446,6 @@ public class PCLCustomCardImageEffect extends PCLEffectWithCallback<Pixmap>
         if (insideImageRenderable != null)
         {
             insideImageRenderable.getTexture().dispose();
-        }
-        if (insideImage != null)
-        {
-            try
-            {
-                insideImage.dispose();
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
         }
     }
 }

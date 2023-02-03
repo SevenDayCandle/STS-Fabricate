@@ -257,6 +257,13 @@ public class PCLDynamicData extends PCLCardData
         return this;
     }
 
+    public PCLDynamicData setImage(ColoredTexture portraitImage)
+    {
+        this.portraitImage = portraitImage;
+
+        return this;
+    }
+
     public PCLDynamicData setImage(ColoredTexture portraitImage, ColoredTexture portraitForeground)
     {
         this.portraitImage = portraitImage;

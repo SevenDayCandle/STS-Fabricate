@@ -4,8 +4,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import extendedui.STSEffekseerManager;
+import pinacolada.effects.EffekseerEFK;
 import pinacolada.effects.PCLEffect;
-import pinacolada.effects.PCLEffekseerEFX;
 import pinacolada.effects.SFX;
 
 public class EffekseerEffect extends PCLEffect
@@ -13,7 +13,7 @@ public class EffekseerEffect extends PCLEffect
     protected Vector2 position;
     protected Vector3 rotation;
     protected String sfxKey;
-    protected PCLEffekseerEFX vfxKey;
+    protected EffekseerEFK vfxKey;
     protected float pitchMin = 1f;
     protected float pitchMax = 1f;
     protected float soundDelay = 0.5f;
@@ -24,7 +24,7 @@ public class EffekseerEffect extends PCLEffect
     protected boolean hasPlayed;
 
 
-    public EffekseerEffect(PCLEffekseerEFX key, float x, float y)
+    public EffekseerEffect(EffekseerEFK key, float x, float y)
     {
         super(0.5f, false);
         this.vfxKey = key;

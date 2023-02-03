@@ -9,7 +9,7 @@ import extendedui.ui.AbstractScreen;
 import pinacolada.augments.PCLAugment;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.effects.AttackEffects;
-import pinacolada.effects.PCLEffekseerEFX;
+import pinacolada.effects.EffekseerEFK;
 import pinacolada.misc.PCLDungeon;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PCLResources;
@@ -97,7 +97,7 @@ public class PCLCoreResources extends PCLResources<PCLCoreConfig, PCLCoreImages,
         PSkill.initialize();
         PCLAugment.initialize();
         PCLCustomCardSlot.initialize();
-        PCLEffekseerEFX.initialize();
+        EffekseerEFK.initialize();
     }
 
     protected void initializeUI()

@@ -2,6 +2,7 @@ package pinacolada.cards.base;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.math.MathUtils;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -251,40 +252,46 @@ public class PCLCustomCardSlot
         return FOLDER + "/" + ID + ".png";
     }
 
+    // Copy down the properties from all builders into this slot
     public void recordBuilder()
     {
         ArrayList<String> tempForms = new ArrayList<>();
 
+        // All builders should have identical sets of these properties
+        PCLDynamicData first = getBuilder(0);
+        if (first != null)
+        {
+            ID = first.ID;
+            languageStrings = EUIUtils.serialize(first.languageMap);
+            loadout = first.loadout != null ? first.loadout.id : null;
+            type = first.cardType.name();
+            rarity = first.cardRarity.name();
+            color = first.cardColor.name();
+            target = first.cardTarget.name();
+            damage = first.damage.clone();
+            damageUpgrade = first.damageUpgrade.clone();
+            block = first.block.clone();
+            blockUpgrade = first.blockUpgrade.clone();
+            tempHP = first.magicNumber.clone();
+            tempHPUpgrade = first.magicNumberUpgrade.clone();
+            heal = first.hp.clone();
+            healUpgrade = first.hpUpgrade.clone();
+            hitCount = first.hitCount.clone();
+            hitCountUpgrade = first.hitCountUpgrade.clone();
+            rightCount = first.rightCount.clone();
+            rightCountUpgrade = first.rightCountUpgrade.clone();
+            cost = first.cost.clone();
+            costUpgrade = first.costUpgrade.clone();
+            maxUpgradeLevel = first.maxUpgradeLevel;
+            maxCopies = first.maxCopies;
+            unique = first.unique;
+            affinities = EUIUtils.serialize(first.affinities);
+            tags = EUIUtils.mapAsNonnull(first.tags.values(), EUIUtils::serialize).toArray(new String[]{});
+        }
+
         for (PCLDynamicData builder : builders)
         {
             CardForm f = new CardForm();
-
-            ID = builder.ID;
-            languageStrings = EUIUtils.serialize(builder.languageMap);
-            loadout = builder.loadout != null ? builder.loadout.id : null;
-            type = builder.cardType.name();
-            rarity = builder.cardRarity.name();
-            color = builder.cardColor.name();
-            target = builder.cardTarget.name();
-            damage = builder.damage.clone();
-            damageUpgrade = builder.damageUpgrade.clone();
-            block = builder.block.clone();
-            blockUpgrade = builder.blockUpgrade.clone();
-            tempHP = builder.magicNumber.clone();
-            tempHPUpgrade = builder.magicNumberUpgrade.clone();
-            heal = builder.hp.clone();
-            healUpgrade = builder.hpUpgrade.clone();
-            hitCount = builder.hitCount.clone();
-            hitCountUpgrade = builder.hitCountUpgrade.clone();
-            rightCount = builder.rightCount.clone();
-            rightCountUpgrade = builder.rightCountUpgrade.clone();
-            cost = builder.cost.clone();
-            costUpgrade = builder.costUpgrade.clone();
-            maxUpgradeLevel = builder.maxUpgradeLevel;
-            maxCopies = builder.maxCopies;
-            unique = builder.unique;
-            affinities = EUIUtils.serialize(builder.affinities);
-            tags = EUIUtils.mapAsNonnull(builder.tags.values(), EUIUtils::serialize).toArray(new String[]{});
 
             f.attackType = builder.attackType.name();
             f.damageEffect = builder.attackSkill != null ? builder.attackSkill.serialize() : null;
@@ -313,11 +320,26 @@ public class PCLCustomCardSlot
         }
         writer = Gdx.files.local(newFilePath);
 
+        // The image should have the same file name as the file path
         FileHandle imgWriter = Gdx.files.local(imagePath);
         if (imgWriter.exists() && !newImagePath.equals(imagePath))
         {
             imgWriter.moveTo(Gdx.files.local(newImagePath));
             EUIUtils.logInfo(PCLCustomCardSlot.class, "Moved Custom Card Image: " + imagePath + ", New: " + newImagePath);
+        }
+
+        // If the image in the builder was updated, we need to overwrite the existing image
+        // All builders should have the same image
+        PCLDynamicData builder = getBuilder(0);
+        if (builder != null && builder.portraitImage != null)
+        {
+            PixmapIO.writePNG(imgWriter, builder.portraitImage.texture.getTextureData().consumePixmap());
+        }
+
+        // Unlink temporary portrait images to allow the new saved portrait image to be loaded
+        for (PCLDynamicData b : builders)
+        {
+            b.setImage(null);
         }
 
         filePath = newFilePath;

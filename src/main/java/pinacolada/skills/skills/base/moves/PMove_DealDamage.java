@@ -10,7 +10,7 @@ import pinacolada.actions.damage.DealDamage;
 import pinacolada.actions.damage.DealDamageToAll;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.effects.PCLEffekseerEFX;
+import pinacolada.effects.EffekseerEFK;
 import pinacolada.effects.VFX;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
@@ -116,7 +116,7 @@ public class PMove_DealDamage extends PMove<PField_Empty>
         return this;
     }
 
-    public PMove_DealDamage setDamageEffect(PCLEffekseerEFX effekseerKey)
+    public PMove_DealDamage setDamageEffect(EffekseerEFK effekseerKey)
     {
         this.damageEffect = (s, m) -> VFX.eFX(effekseerKey, m.hb).duration;
         return this;

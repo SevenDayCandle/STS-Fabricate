@@ -12,8 +12,8 @@ import extendedui.interfaces.delegates.FuncT2;
 import pinacolada.actions.PCLActionWithCallback;
 import pinacolada.actions.PCLActions;
 import pinacolada.effects.AttackEffects;
+import pinacolada.effects.EffekseerEFK;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.PCLEffekseerEFX;
 import pinacolada.effects.VFX;
 import pinacolada.misc.CombatManager;
 import pinacolada.powers.common.StolenGoldPower;
@@ -192,7 +192,7 @@ public class DealDamage extends PCLActionWithCallback<AbstractCreature>
         }
     }
 
-    public DealDamage setDamageEffect(PCLEffekseerEFX effekseerKey)
+    public DealDamage setDamageEffect(EffekseerEFK effekseerKey)
     {
         this.onDamageEffect = (s, m) -> VFX.eFX(effekseerKey, m.hb).duration;
         return this;

@@ -12,8 +12,8 @@ import pinacolada.actions.damage.DealDamage;
 import pinacolada.actions.damage.DealDamageToAll;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.effects.EffekseerEFK;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.PCLEffekseerEFX;
 import pinacolada.effects.VFX;
 import pinacolada.interfaces.markers.PointerProvider;
 import pinacolada.misc.PCLUseInfo;
@@ -106,24 +106,24 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack>
         return TEXT.actions.objectTo(amountString, getAttackTooltip(), getTargetString());
     }
 
-    public PCardPrimary_DealDamage setDamageEffect(PCLEffekseerEFX effekseerKey)
+    public PCardPrimary_DealDamage setDamageEffect(EffekseerEFK effekseerKey)
     {
         this.damageEffect = (s, m) -> PCLEffects.Queue.add(VFX.eFX(effekseerKey, m.hb)).duration * 0.8f;
         return this;
     }
 
-    public PCardPrimary_DealDamage setDamageEffect(PCLEffekseerEFX effekseerKey, Color color)
+    public PCardPrimary_DealDamage setDamageEffect(EffekseerEFK effekseerKey, Color color)
     {
         return setDamageEffect(effekseerKey, color, 0.8f);
     }
 
-    public PCardPrimary_DealDamage setDamageEffect(PCLEffekseerEFX effekseerKey, float durationMult)
+    public PCardPrimary_DealDamage setDamageEffect(EffekseerEFK effekseerKey, float durationMult)
     {
         this.damageEffect = (s, m) -> PCLEffects.Queue.add(VFX.eFX(effekseerKey, m.hb)).duration * durationMult;
         return this;
     }
 
-    public PCardPrimary_DealDamage setDamageEffect(PCLEffekseerEFX effekseerKey, Color color, float durationMult)
+    public PCardPrimary_DealDamage setDamageEffect(EffekseerEFK effekseerKey, Color color, float durationMult)
     {
         this.damageEffect = (s, m) -> PCLEffects.Queue.add(VFX.eFX(effekseerKey, m.hb).setColor(color)).duration * durationMult;
         return this;

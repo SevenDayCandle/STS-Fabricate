@@ -174,11 +174,11 @@ public class PCLCustomCardSelectorScreen extends AbstractScreen
                     PCLCustomCardSlot slot = new PCLCustomCardSlot((PCLCard) card, currentColor);
                     currentEffect = new PCLCustomCardEditCardScreen(slot)
                             .setOnSave(() -> {
+                                slot.commitBuilder();
                                 AbstractCard newCard = slot.getBuilder(0).build();
                                 currentSlots.put(newCard, slot);
                                 PCLCustomCardSlot.getCards(currentColor).add(slot);
                                 grid.addCard(newCard);
-                                slot.commitBuilder();
                             });
                 }
             });
@@ -193,11 +193,11 @@ public class PCLCustomCardSelectorScreen extends AbstractScreen
             PCLCustomCardSlot slot = new PCLCustomCardSlot(cardSlot);
             currentEffect = new PCLCustomCardEditCardScreen(slot)
                     .setOnSave(() -> {
+                        slot.commitBuilder();
                         AbstractCard newCard = slot.getBuilder(0).build();
                         currentSlots.put(newCard, slot);
                         PCLCustomCardSlot.getCards(currentColor).add(slot);
                         grid.addCard(newCard);
-                        slot.commitBuilder();
                     });
         }
     }
@@ -214,11 +214,11 @@ public class PCLCustomCardSelectorScreen extends AbstractScreen
                             open(null, co, this.onClose);
                             currentEffect = new PCLCustomCardEditCardScreen(slot)
                                     .setOnSave(() -> {
+                                        slot.commitBuilder();
                                         AbstractCard newCard = slot.getBuilder(0).build();
                                         currentSlots.put(newCard, slot);
                                         PCLCustomCardSlot.getCards(co).add(slot);
                                         grid.addCard(newCard);
-                                        slot.commitBuilder();
                                     });
                         }
                     });
@@ -231,12 +231,12 @@ public class PCLCustomCardSelectorScreen extends AbstractScreen
         {
             currentEffect = new PCLCustomCardEditCardScreen(cardSlot)
                     .setOnSave(() -> {
+                        cardSlot.commitBuilder();
                         AbstractCard newCard = cardSlot.getBuilder(0).build();
                         grid.removeCard(card);
                         currentSlots.remove(card);
                         currentSlots.put(newCard, cardSlot);
                         grid.addCard(newCard);
-                        cardSlot.commitBuilder();
                     });
         }
     }

@@ -175,12 +175,12 @@ public final class PCLEffects
         return getList().size();
     }
 
-    public EffekseerEffect playEFX(PCLEffekseerEFX key, float x, float y)
+    public EffekseerEffect playEFX(EffekseerEFK key, float x, float y)
     {
         return add(VFX.eFX(key, x, y));
     }
 
-    public EffekseerEffect playEFX(PCLEffekseerEFX key)
+    public EffekseerEffect playEFX(EffekseerEFK key)
     {
         return add(VFX.eFX(key));
     }

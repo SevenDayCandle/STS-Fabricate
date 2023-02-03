@@ -1,7 +1,7 @@
 package pinacolada.ui.cardEditor;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.PixmapIO;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -16,6 +16,7 @@ import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUIToggle;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITooltip;
+import extendedui.utilities.ColoredTexture;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.cards.base.PCLDynamicCard;
@@ -63,6 +64,7 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
     protected PCLCustomCardFormEditor formEditor;
     protected PCLCustomCardSlot currentSlot;
     protected PCLCustomCardImageEffect imageEditor;
+    protected Texture loadedImage;
     protected int currentPage;
 
     public PCLCustomCardEditCardScreen(PCLCustomCardSlot slot)
@@ -212,13 +214,7 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
                 .addCallback(pixmap -> {
                             if (pixmap != null)
                             {
-                                PixmapIO.writePNG(currentSlot.getImageHandle(), pixmap);
-                                modifyAllBuilders(e -> e
-                                        .setImagePath(currentSlot.getImagePath()));
-                                if (previewCard != null)
-                                {
-                                    previewCard.loadImage(currentSlot.getImagePath(), true);
-                                }
+                                setLoadedImage(new Texture(pixmap));
                             }
                         }
                 );
@@ -227,6 +223,23 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
     protected void end()
     {
         complete();
+    }
+
+    protected void complete()
+    {
+        super.complete();
+        if (loadedImage != null)
+        {
+            loadedImage.dispose();
+        }
+    }
+
+    public void setLoadedImage(Texture texture)
+    {
+        loadedImage = texture;
+        modifyAllBuilders(e -> e
+                .setImagePath(currentSlot.getImagePath())
+                .setImage(new ColoredTexture(loadedImage)));
     }
 
     public PCLDynamicData getBuilder()

@@ -5,9 +5,9 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.vfx.combat.LightFlareParticleEffect;
+import pinacolada.effects.EffekseerEFK;
 import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.PCLEffekseerEFX;
 
 public class FireBurstEffect extends PCLEffect
 {
@@ -59,7 +59,7 @@ public class FireBurstEffect extends PCLEffect
         if (tickDuration(deltaTime))
         {
             PCLEffects.Queue.add(new FireIgniteEffect(x, y).setColor(color)).setRealtime(isRealtime);
-            PCLEffects.Queue.playEFX(PCLEffekseerEFX.FIRE10, x, y);
+            PCLEffects.Queue.playEFX(EffekseerEFK.FIRE10, x, y);
             complete();
         }
     }

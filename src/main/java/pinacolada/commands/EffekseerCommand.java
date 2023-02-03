@@ -3,8 +3,8 @@ package pinacolada.commands;
 import basemod.DevConsole;
 import basemod.devcommands.ConsoleCommand;
 import extendedui.EUIUtils;
+import pinacolada.effects.EffekseerEFK;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.PCLEffekseerEFX;
 
 import java.util.ArrayList;
 
@@ -22,7 +22,7 @@ public class EffekseerCommand extends ConsoleCommand
     protected void execute(String[] tokens, int depth)
     {
         try {
-            PCLEffekseerEFX augment = PCLEffekseerEFX.get(tokens[1]);
+            EffekseerEFK augment = EffekseerEFK.get(tokens[1]);
             PCLEffects.Queue.playEFX(augment);
         }
         catch (IllegalArgumentException e)
@@ -33,6 +33,6 @@ public class EffekseerCommand extends ConsoleCommand
 
     public ArrayList<String> extraOptions(String[] tokens, int depth)
     {
-        return EUIUtils.map(PCLEffekseerEFX.sortedValues(), e -> e.ID);
+        return EUIUtils.map(EffekseerEFK.sortedValues(), e -> e.ID);
     }
 }

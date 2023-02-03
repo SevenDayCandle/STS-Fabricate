@@ -10,8 +10,8 @@ import com.megacrit.cardcrawl.powers.AbstractPower;
 import pinacolada.actions.PCLActionWithCallback;
 import pinacolada.actions.PCLActions;
 import pinacolada.effects.AttackEffects;
+import pinacolada.effects.EffekseerEFK;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.PCLEffekseerEFX;
 import pinacolada.effects.VFX;
 import pinacolada.misc.CombatManager;
 import pinacolada.utilities.GameUtilities;
@@ -144,7 +144,7 @@ public class DealDamageToAll extends PCLActionWithCallback<ArrayList<AbstractCre
         return targetAllies ? GameUtilities.getSummons(null) : GameUtilities.getEnemies(false);
     }
 
-    public DealDamageToAll setDamageEffect(PCLEffekseerEFX effekseerKey)
+    public DealDamageToAll setDamageEffect(EffekseerEFK effekseerKey)
     {
         this.onDamageEffect = (m, __) -> VFX.eFX(effekseerKey, m.hb);
         return this;
