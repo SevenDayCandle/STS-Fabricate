@@ -1,4 +1,4 @@
-package pinacolada.ui.common;
+package pinacolada.ui.menu;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.CardCrawlGame;

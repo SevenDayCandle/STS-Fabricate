@@ -15,7 +15,7 @@ import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PTrigger;
 import pinacolada.skills.skills.base.moves.PMove_StackCustomPower;
-import pinacolada.ui.common.PCLValueEditor;
+import pinacolada.ui.PCLValueEditor;
 
 import java.util.ArrayList;
 

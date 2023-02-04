@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Interpolation;
 import com.megacrit.cardcrawl.core.Settings;
 import pinacolada.effects.PCLEffect;
 import pinacolada.resources.PGR;
-import pinacolada.ui.common.AffinityKeywordButton;
+import pinacolada.ui.AffinityKeywordButton;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class AffinityGlowEffect extends PCLEffect

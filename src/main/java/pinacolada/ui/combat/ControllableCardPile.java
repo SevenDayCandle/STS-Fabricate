@@ -1,4 +1,4 @@
-package pinacolada.ui.common;
+package pinacolada.ui.combat;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -14,6 +14,7 @@ import extendedui.ui.controls.EUIButton;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.actions.PCLActions;
+import pinacolada.cards.base.CardController;
 import pinacolada.resources.PCLHotkeys;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
@@ -29,11 +30,11 @@ public class ControllableCardPile
     public static final float SCALE = 0.65f;
     public static final float HOVER_TIME_OUT = 0.4F;
     public static EUITooltip tooltip;
-    public final ArrayList<ControllableCard> subscribers = new ArrayList<>();
+    public final ArrayList<CardController> subscribers = new ArrayList<>();
     protected final EUIButton cardButton;
     private final EUIHitbox hb = new EUIHitbox(144f * Settings.scale, 288 * Settings.scale, 96 * Settings.scale, 96f * Settings.scale);
     public boolean isHidden = true;
-    protected ControllableCard currentCard;
+    protected CardController currentCard;
     protected boolean showPreview;
 
     public ControllableCardPile()
@@ -52,7 +53,7 @@ public class ControllableCardPile
                     if (GameUtilities.inBattle() && !AbstractDungeon.isScreenUp)
                     {
                         CardGroup cardGroup = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
-                        for (ControllableCard c : subscribers)
+                        for (CardController c : subscribers)
                         {
                             if (c.canUse())
                             {
@@ -67,7 +68,7 @@ public class ControllableCardPile
                                     .addCallback(cards -> {
                                         if (cards.size() > 0)
                                         {
-                                            ControllableCard co = EUIUtils.find(subscribers, c -> c.card == cards.get(0));
+                                            CardController co = EUIUtils.find(subscribers, c -> c.card == cards.get(0));
                                             if (co != null)
                                             {
                                                 setCurrentCard(co);
@@ -79,12 +80,12 @@ public class ControllableCardPile
                 });
     }
 
-    public ControllableCard add(AbstractCard card)
+    public CardController add(AbstractCard card)
     {
-        ControllableCard controller = find(card);
+        CardController controller = find(card);
         if (controller == null)
         {
-            controller = new ControllableCard(this, card);
+            controller = new CardController(this, card);
             subscribers.add(controller);
             refreshCard(controller);
         }
@@ -93,7 +94,7 @@ public class ControllableCardPile
 
     public boolean canUse(AbstractCard card)
     {
-        ControllableCard chosen = EUIUtils.find(subscribers, c -> c.card == card);
+        CardController chosen = EUIUtils.find(subscribers, c -> c.card == card);
         return chosen != null && chosen.canUse();
     }
 
@@ -108,14 +109,14 @@ public class ControllableCardPile
         return card != null && find(card) != null;
     }
 
-    public ControllableCard find(AbstractCard card)
+    public CardController find(AbstractCard card)
     {
         return EUIUtils.find(subscribers, c -> c.card == card);
     }
 
     public int getUsableCount()
     {
-        return EUIUtils.count(subscribers, ControllableCard::canUse);
+        return EUIUtils.count(subscribers, CardController::canUse);
     }
 
     public void postRender(SpriteBatch sb)
@@ -126,7 +127,7 @@ public class ControllableCardPile
         }
     }
 
-    protected boolean refreshCard(ControllableCard c)
+    protected boolean refreshCard(CardController c)
     {
         final AbstractCard card = c.card;
         if (card == null)
@@ -155,10 +156,10 @@ public class ControllableCardPile
 
     public void refreshCards()
     {
-        Iterator<ControllableCard> i = subscribers.iterator();
+        Iterator<CardController> i = subscribers.iterator();
         while (i.hasNext())
         {
-            ControllableCard controller = i.next();
+            CardController controller = i.next();
             if (!refreshCard(controller))
             {
                 if (currentCard == controller)
@@ -175,7 +176,7 @@ public class ControllableCardPile
 
         if (currentCard == null && subscribers.size() > 0)
         {
-            setCurrentCard(EUIUtils.find(subscribers, ControllableCard::canUse));
+            setCurrentCard(EUIUtils.find(subscribers, CardController::canUse));
         }
 
         if (currentCard != null && hb.hovered && !AbstractDungeon.isScreenUp)
@@ -187,7 +188,7 @@ public class ControllableCardPile
         }
     }
 
-    public void remove(ControllableCard controller)
+    public void remove(CardController controller)
     {
         subscribers.remove(controller);
         refreshCards();
@@ -217,7 +218,7 @@ public class ControllableCardPile
         }
     }
 
-    public boolean setCurrentCard(ControllableCard controller)
+    public boolean setCurrentCard(CardController controller)
     {
         if (controller != null && controller.canUse())
         {

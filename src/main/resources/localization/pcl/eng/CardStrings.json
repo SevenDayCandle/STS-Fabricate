@@ -12,7 +12,7 @@
 								"pcl:Curse_Doubt": {"NAME": "Doubt"},
 								"pcl:Curse_Injury": {"NAME": "Injury"},
 								"pcl:Curse_Normality": {
-												"EXTENDED_DESCRIPTION": ["While in hand, Negate the {Buffs} and {Debuffs} of ALL characters (excluding those specific to cards or encounters)"],
+												"EXTENDED_DESCRIPTION": ["While in hand: Negate the {Buffs} and {Debuffs} of ALL characters (excluding those specific to cards or encounters)"],
 												"NAME": "Normality"
 								},
 								"pcl:Curse_Pain": {"NAME": "Pain"},

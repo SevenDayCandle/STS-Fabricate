@@ -5,9 +5,23 @@ import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.rewards.RewardItem;
+import com.megacrit.cardcrawl.screens.mainMenu.MainMenuPanelButton;
+import com.megacrit.cardcrawl.screens.mainMenu.MenuButton;
 
 public class PCLEnum
 {
+    public static class Buttons
+    {
+        @SpireEnum
+        public static MenuButton.ClickResult CUSTOM;
+    }
+    
+    public static class Panels
+    {
+        @SpireEnum
+        public static MainMenuPanelButton.PanelClickResult CUSTOM_CARDS;
+    }
+
     public static class Rewards
     {
         @SpireEnum

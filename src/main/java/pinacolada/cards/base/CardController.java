@@ -1,4 +1,4 @@
-package pinacolada.ui.common;
+package pinacolada.cards.base;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -7,18 +7,19 @@ import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.ActionT2;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.utilities.GenericCallback;
+import pinacolada.ui.combat.ControllableCardPile;
 
-public class ControllableCard
+public class CardController
 {
     public final AbstractCard card;
     public ControllableCardPile sourcePile;
     protected boolean enabled;
-    protected FuncT1<Boolean, ControllableCard> useCondition;
-    protected GenericCallback<ControllableCard> onUpdate;
-    protected GenericCallback<ControllableCard> onSelect;
-    protected GenericCallback<ControllableCard> onDelete;
+    protected FuncT1<Boolean, CardController> useCondition;
+    protected GenericCallback<CardController> onUpdate;
+    protected GenericCallback<CardController> onSelect;
+    protected GenericCallback<CardController> onDelete;
 
-    public ControllableCard(ControllableCardPile sourcePile, AbstractCard card)
+    public CardController(ControllableCardPile sourcePile, AbstractCard card)
     {
         this.sourcePile = sourcePile;
         this.card = card;
@@ -45,42 +46,42 @@ public class ControllableCard
         return enabled;
     }
 
-    public <S> ControllableCard onDelete(S state, ActionT2<S, ControllableCard> onCompletion)
+    public <S> CardController onDelete(S state, ActionT2<S, CardController> onCompletion)
     {
         onDelete = GenericCallback.fromT2(onCompletion, state);
 
         return this;
     }
 
-    public ControllableCard onDelete(ActionT1<ControllableCard> onCompletion)
+    public CardController onDelete(ActionT1<CardController> onCompletion)
     {
         onDelete = GenericCallback.fromT1(onCompletion);
 
         return this;
     }
 
-    public <S> ControllableCard onSelect(S state, ActionT2<S, ControllableCard> onCompletion)
+    public <S> CardController onSelect(S state, ActionT2<S, CardController> onCompletion)
     {
         onSelect = GenericCallback.fromT2(onCompletion, state);
 
         return this;
     }
 
-    public ControllableCard onSelect(ActionT1<ControllableCard> onCompletion)
+    public CardController onSelect(ActionT1<CardController> onCompletion)
     {
         onSelect = GenericCallback.fromT1(onCompletion);
 
         return this;
     }
 
-    public <S> ControllableCard onUpdate(S state, ActionT2<S, ControllableCard> onCompletion)
+    public <S> CardController onUpdate(S state, ActionT2<S, CardController> onCompletion)
     {
         onUpdate = GenericCallback.fromT2(onCompletion, state);
 
         return this;
     }
 
-    public ControllableCard onUpdate(ActionT1<ControllableCard> onCompletion)
+    public CardController onUpdate(ActionT1<CardController> onCompletion)
     {
         onUpdate = GenericCallback.fromT1(onCompletion);
 
@@ -105,7 +106,7 @@ public class ControllableCard
         this.enabled = enabled;
     }
 
-    public ControllableCard setUseCondition(FuncT1<Boolean, ControllableCard> useCondition)
+    public CardController setUseCondition(FuncT1<Boolean, CardController> useCondition)
     {
         this.useCondition = useCondition;
 

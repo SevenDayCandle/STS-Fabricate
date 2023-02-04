@@ -24,7 +24,7 @@ import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.skills.PSkill;
-import pinacolada.ui.common.PCLValueEditor;
+import pinacolada.ui.PCLValueEditor;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.Arrays;

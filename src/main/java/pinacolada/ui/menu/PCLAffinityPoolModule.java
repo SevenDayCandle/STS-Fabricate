@@ -1,4 +1,4 @@
-package pinacolada.ui.common;
+package pinacolada.ui.menu;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -18,6 +18,7 @@ import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardAffinity;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
+import pinacolada.ui.AffinityKeywordButton;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ import java.util.Objects;
 
 import static extendedui.ui.cardFilter.CardKeywordFilters.DRAW_START_Y;
 import static extendedui.ui.cardFilter.CardKeywordFilters.SPACING;
-import static pinacolada.ui.common.AffinityKeywordButton.ICON_SIZE;
+import static pinacolada.ui.AffinityKeywordButton.ICON_SIZE;
 
 public class PCLAffinityPoolModule extends CustomCardFilterModule
 {

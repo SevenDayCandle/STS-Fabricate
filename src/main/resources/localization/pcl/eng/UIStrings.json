@@ -280,12 +280,7 @@
 												"Copy Current To Slot",
 												"Import From Slot",
 												"Export",
-												"Ascension Glyphs:",
-												"Custom Card Editor",
-												"#pLeft-Click to open the editor. | #pRight-Click to enable or disable #yCustom #yCards.",
-												"#gCustom #gCards #gare #genabled.",
-												"#rCustom #rCards #rare #rdisabled.",
-												"Enable Custom Cards"
+												"Ascension Glyphs:"
 								]
 				},
 				"pcl:Misc": {
@@ -490,6 +485,18 @@
 												"The number of times this #yAttack will hit the target. Each hit is treated independently with regards to damage calculations and powers on the target.",
 												"The number of times that this card will grant #yBlock. Each #yBlock grant is treated independently with regards to #yBlock calculations and powers on the target.",
 												"Create a card from an example template."
+								]
+				},
+				"pcl:Menu": {
+								"TEXT": [
+												"Editor",
+												"Card Editor",
+												"View, create, or edit custom cards to use in Custom Runs.",
+												"Coming Soon!",
+												"Relic Editor",
+												"View, create, or edit custom relics to use in Custom Runs.",
+												"Potion Editor",
+												"View, create, or edit custom potions to use in Custom Runs."
 								]
 				},
 				"pcl:CardMods": {

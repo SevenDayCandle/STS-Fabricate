@@ -24,9 +24,9 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIClassUtils;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.resources.PGR;
+import pinacolada.ui.PCLValueEditor;
 import pinacolada.ui.characterSelection.PCLCharacterSelectOptionsRenderer;
 import pinacolada.ui.characterSelection.PCLGlyphEditor;
-import pinacolada.ui.common.PCLValueEditor;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;

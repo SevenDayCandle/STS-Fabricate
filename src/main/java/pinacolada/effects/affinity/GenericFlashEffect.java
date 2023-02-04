@@ -9,7 +9,7 @@ import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import extendedui.ui.controls.EUIButton;
 import pinacolada.effects.PCLEffect;
-import pinacolada.ui.common.AffinityKeywordButton;
+import pinacolada.ui.AffinityKeywordButton;
 
 public class GenericFlashEffect extends PCLEffect
 {

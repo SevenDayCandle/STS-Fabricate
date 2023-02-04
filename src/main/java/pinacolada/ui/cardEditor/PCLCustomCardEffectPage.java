@@ -22,7 +22,7 @@ import pinacolada.skills.skills.PLimit;
 import pinacolada.skills.skills.PMultiCond;
 import pinacolada.skills.skills.PMultiSkill;
 import pinacolada.skills.skills.base.delay.PDelay_StartOfTurnPostDraw;
-import pinacolada.ui.common.PCLValueEditor;
+import pinacolada.ui.PCLValueEditor;
 
 import java.util.ArrayList;
 

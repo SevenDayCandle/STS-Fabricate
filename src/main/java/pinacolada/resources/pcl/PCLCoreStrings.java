@@ -233,11 +233,6 @@ public class PCLCoreStrings extends PCLStrings
         public final String copyFrom = charselect.TEXT[23];
         public final String export = charselect.TEXT[24];
         public final String ascensionGlyph = charselect.TEXT[25];
-        public final String cardEditor = charselect.TEXT[26];
-        public final String cardEditorInfo = charselect.TEXT[27];
-        public final String cardEditorEnabled = charselect.TEXT[28];
-        public final String cardEditorDisabled = charselect.TEXT[29];
-        public final String cardEditorToggle = charselect.TEXT[30];
 
         public final String unlocksAtLevel(int unlockLevel, int currentLevel)
         {
