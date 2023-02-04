@@ -9,8 +9,8 @@ import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import pinacolada.actions.PCLActionWithCallback;
 import pinacolada.actions.PCLActions;
-import pinacolada.effects.AttackEffects;
 import pinacolada.effects.EffekseerEFK;
+import pinacolada.effects.PCLAttackVFX;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.VFX;
 import pinacolada.misc.CombatManager;
@@ -65,18 +65,22 @@ public class DealDamageToAll extends PCLActionWithCallback<ArrayList<AbstractCre
     protected void firstUpdate()
     {
         boolean mute = pitchMin == 0;
+        PCLAttackVFX attackVFX = PCLAttackVFX.get(this.attackEffect);
         int i = 0;
         for (AbstractMonster enemy : getTargets())
         {
             if (!GameUtilities.isDeadOrEscaped(enemy))
             {
-                if (mute)
+                if (attackVFX != null)
                 {
-                    PCLEffects.List.attackWithoutSound(source, enemy, this.attackEffect, vfxColor, 0.15f);
-                }
-                else
-                {
-                    PCLEffects.List.attack(source, enemy, this.attackEffect, pitchMin, pitchMax, vfxColor, 0.15f);
+                    if (mute)
+                    {
+                        PCLEffects.List.attackWithoutSound(source, enemy, attackVFX, vfxColor, 0.15f);
+                    }
+                    else
+                    {
+                        PCLEffects.List.attack(source, enemy, attackVFX, pitchMin, pitchMax, vfxColor, 0.15f);
+                    }
                 }
 
                 if (onDamageEffect != null)
@@ -90,7 +94,10 @@ public class DealDamageToAll extends PCLActionWithCallback<ArrayList<AbstractCre
             i += 1;
         }
 
-        addDuration(AttackEffects.getDamageDelay(attackEffect));
+        if (attackVFX != null)
+        {
+            addDuration(attackVFX.damageDelay);
+        }
     }
 
     @Override
@@ -117,7 +124,7 @@ public class DealDamageToAll extends PCLActionWithCallback<ArrayList<AbstractCre
                     {
                         info.applyPowers(source, enemy);
                     }
-                    DamageHelper.applyTint(enemy, enemyTint, attackEffect);
+                    DamageHelper.applyTint(enemy, enemyTint, PCLAttackVFX.get(this.attackEffect));
                     DamageHelper.dealDamage(enemy, info, bypassBlock, bypassThorns);
                     targets.add(enemy);
                 }

@@ -4,11 +4,11 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import pinacolada.actions.PCLActions;
-import pinacolada.effects.AttackEffects;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
 import pinacolada.effects.VFX;
 import pinacolada.powers.PCLPower;
+import pinacolada.resources.PCLEnum;
 import pinacolada.utilities.GameUtilities;
 
 public class SelfImmolationPower extends PCLPower
@@ -43,7 +43,7 @@ public class SelfImmolationPower extends PCLPower
         {
             for (AbstractCreature cr : GameUtilities.getAllCharacters(true))
             {
-                PCLActions.bottom.dealDamageAtEndOfTurn(owner, cr, amount, AttackEffects.CLAW);
+                PCLActions.bottom.dealDamageAtEndOfTurn(owner, cr, amount, PCLEnum.AttackEffect.CLAW);
             }
         }
     }

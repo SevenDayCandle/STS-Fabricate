@@ -1,5 +1,6 @@
 package pinacolada.powers.special;
 
+import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
@@ -7,7 +8,6 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.monsters.EnemyMoveInfo;
 import extendedui.EUIUtils;
 import pinacolada.actions.PCLActions;
-import pinacolada.effects.AttackEffects;
 import pinacolada.interfaces.subscribers.OnMonsterMoveSubscriber;
 import pinacolada.misc.CombatManager;
 import pinacolada.powers.PCLPower;
@@ -101,11 +101,11 @@ public class ProvokedPower extends PCLPower implements OnMonsterMoveSubscriber
         ArrayList<DamageInfo> damages = m.damage;
         if (damages == null || damages.isEmpty())
         {
-            PCLActions.bottom.dealDamage(m, AbstractDungeon.player, 1, DamageInfo.DamageType.NORMAL, AttackEffects.BLUNT_HEAVY);
+            PCLActions.bottom.dealDamage(m, AbstractDungeon.player, 1, DamageInfo.DamageType.NORMAL, AbstractGameAction.AttackEffect.BLUNT_HEAVY);
         }
         else
         {
-            PCLActions.bottom.dealDamage(m, AbstractDungeon.player, m.damage.get(0).base, m.damage.get(0).type, AttackEffects.BLUNT_HEAVY);
+            PCLActions.bottom.dealDamage(m, AbstractDungeon.player, m.damage.get(0).base, m.damage.get(0).type, AbstractGameAction.AttackEffect.BLUNT_HEAVY);
         }
         return false;
     }

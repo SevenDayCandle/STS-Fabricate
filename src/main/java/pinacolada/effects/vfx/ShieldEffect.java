@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
 import com.megacrit.cardcrawl.core.Settings;
-import pinacolada.effects.AttackEffects;
+import pinacolada.effects.PCLAttackVFX;
 import pinacolada.effects.PCLEffect;
 import pinacolada.utilities.PCLRenderHelpers;
 
@@ -22,7 +22,7 @@ public class ShieldEffect extends PCLEffect
     {
         super(0.6f, true);
 
-        this.image = AttackEffects.getTextureRegion(AttackEffects.SHIELD);
+        this.image = PCLAttackVFX.SHIELD.texture;
         this.color = Color.WHITE.cpy();
         this.scale = 1;
         this.x = x;

@@ -8,7 +8,7 @@ import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import com.megacrit.cardcrawl.vfx.combat.OrbFlareEffect;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
-import pinacolada.effects.AttackEffects;
+import pinacolada.effects.PCLAttackVFX;
 import pinacolada.effects.SFX;
 import pinacolada.powers.common.PCLLockOnPower;
 import pinacolada.utilities.GameUtilities;
@@ -53,7 +53,7 @@ public class LightningOrbAction extends PCLAction
                 int actualDamage = AbstractOrb.applyLockOn(enemy, amount);
                 if (actualDamage > 0)
                 {
-                    PCLActions.top.dealDamage(source, enemy, actualDamage, DamageInfo.DamageType.THORNS, AttackEffects.LIGHTNING)
+                    PCLActions.top.dealDamage(source, enemy, actualDamage, DamageInfo.DamageType.THORNS, PCLAttackVFX.LIGHTNING)
                             .setVFX(Settings.FAST_MODE, false);
                 }
             }
@@ -61,7 +61,7 @@ public class LightningOrbAction extends PCLAction
         else
         {
             int[] damage = DamageInfo.createDamageMatrix(amount, true, true);
-            PCLActions.top.dealDamageToAll(damage, DamageInfo.DamageType.THORNS, AttackEffects.LIGHTNING)
+            PCLActions.top.dealDamageToAll(damage, DamageInfo.DamageType.THORNS, PCLAttackVFX.LIGHTNING)
                     .setVFX(Settings.FAST_MODE, true);
             PCLActions.top.playSFX(SFX.ORB_LIGHTNING_EVOKE);
         }

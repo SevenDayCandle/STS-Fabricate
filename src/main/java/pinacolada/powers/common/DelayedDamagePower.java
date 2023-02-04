@@ -5,7 +5,6 @@ import com.evacipated.cardcrawl.mod.stslib.powers.interfaces.HealthBarRenderPowe
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import pinacolada.actions.PCLActions;
-import pinacolada.effects.AttackEffects;
 import pinacolada.effects.SFX;
 import pinacolada.powers.PCLPower;
 import pinacolada.ui.combat.CombatHelper;
@@ -19,7 +18,7 @@ public class DelayedDamagePower extends PCLPower implements HealthBarRenderPower
 
     public DelayedDamagePower(AbstractCreature owner, int amount)
     {
-        this(owner, amount, AttackEffects.SLASH_VERTICAL);
+        this(owner, amount, AbstractGameAction.AttackEffect.SLASH_VERTICAL);
     }
 
     public DelayedDamagePower(AbstractCreature owner, int amount, AbstractGameAction.AttackEffect attackEffect)

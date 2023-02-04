@@ -61,7 +61,7 @@ public class PCLEnum
         @SpireEnum
         public static AbstractGameAction.AttackEffect CLAW;
         @SpireEnum
-        public static AbstractGameAction.AttackEffect DARK;
+        public static AbstractGameAction.AttackEffect GHOST;
         @SpireEnum
         public static AbstractGameAction.AttackEffect ICE;
         @SpireEnum

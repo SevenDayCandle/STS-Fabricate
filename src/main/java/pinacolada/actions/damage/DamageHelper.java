@@ -1,11 +1,10 @@
 package pinacolada.actions.damage;
 
 import com.badlogic.gdx.graphics.Color;
-import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.powers.*;
-import pinacolada.effects.AttackEffects;
+import pinacolada.effects.PCLAttackVFX;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -23,9 +22,9 @@ public class DamageHelper
         }
     }
 
-    public static void applyTint(AbstractCreature target, Color overrideColor, AbstractGameAction.AttackEffect attackEffect)
+    public static void applyTint(AbstractCreature target, Color overrideColor, PCLAttackVFX attackEffect)
     {
-        final Color tint = overrideColor != null ? overrideColor : AttackEffects.getDamageTint(attackEffect);
+        final Color tint = overrideColor != null ? overrideColor : attackEffect != null ? attackEffect.damageTint : null;
         if (tint != null)
         {
             target.tint.color.set(tint.cpy());

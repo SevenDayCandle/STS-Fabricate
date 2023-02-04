@@ -3,7 +3,7 @@ package pinacolada.actions.basic;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import pinacolada.actions.PCLActionWithCallback;
-import pinacolada.effects.AttackEffects;
+import pinacolada.effects.PCLAttackVFX;
 import pinacolada.effects.PCLEffects;
 
 // Copied and modified from STS-AnimatorMod
@@ -21,7 +21,6 @@ public class GainBlock extends PCLActionWithCallback<AbstractCreature>
     {
         super(ActionType.BLOCK, superFast ? Settings.ACTION_DUR_XFAST : Settings.ACTION_DUR_FAST);
 
-        this.attackEffect = AttackEffects.SHIELD;
         this.pitchMin = 0.95f;
         this.pitchMax = 1.05f;
 
@@ -38,7 +37,7 @@ public class GainBlock extends PCLActionWithCallback<AbstractCreature>
     {
         if (!target.isDying && !target.isDead && amount > 0)
         {
-            PCLEffects.List.attack(source, target, attackEffect, 0.95f, 1.05f, null);
+            PCLEffects.List.attack(source, target, PCLAttackVFX.SHIELD, 0.95f, 1.05f, null);
 
             target.addBlock(amount);
             player.hand.applyPowers();

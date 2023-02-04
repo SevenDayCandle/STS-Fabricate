@@ -7,7 +7,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
-import pinacolada.effects.AttackEffects;
+import pinacolada.effects.PCLAttackVFX;
 import pinacolada.effects.PCLEffects;
 import pinacolada.utilities.GameUtilities;
 
@@ -29,7 +29,7 @@ public class LoseHP extends PCLAction
         super(ActionType.DAMAGE, 0.33f);
 
         this.attackEffect = effect;
-        this.pitchMin = this.pitchMax = (attackEffect == AttackEffects.NONE) ? 0 : 1;
+        this.pitchMin = this.pitchMax = (attackEffect == AttackEffect.NONE) ? 0 : 1;
 
         initialize(source, target, amount);
     }
@@ -44,9 +44,10 @@ public class LoseHP extends PCLAction
     @Override
     protected void firstUpdate()
     {
-        if (this.target.currentHealth > 0)
+        PCLAttackVFX attackVFX = PCLAttackVFX.get(this.attackEffect);
+        if (attackVFX != null && this.target.currentHealth > 0)
         {
-            PCLEffects.List.attack(source, target, attackEffect, pitchMin, pitchMax, null);
+            PCLEffects.List.attack(source, target, attackVFX, pitchMin, pitchMax, null);
         }
     }
 

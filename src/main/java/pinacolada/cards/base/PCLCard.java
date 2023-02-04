@@ -48,6 +48,7 @@ import pinacolada.cards.base.fields.*;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.effects.EffekseerEFK;
+import pinacolada.effects.PCLAttackVFX;
 import pinacolada.effects.card.PCLCardGlowBorderEffect;
 import pinacolada.interfaces.listeners.OnRemovedFromDeckListener;
 import pinacolada.interfaces.listeners.OnSetFormListener;
@@ -385,6 +386,11 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
 
     protected PCardPrimary_DealDamage addDamageMove() {
         onDamageEffect = new PCardPrimary_DealDamage(this);
+        return onDamageEffect;
+    }
+
+    protected PCardPrimary_DealDamage addDamageMove(PCLAttackVFX attackEffect) {
+        onDamageEffect = new PCardPrimary_DealDamage(this, attackEffect.key);
         return onDamageEffect;
     }
 

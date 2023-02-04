@@ -12,7 +12,6 @@ import extendedui.interfaces.delegates.FuncT3;
 import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.ui.tooltips.EUITooltip;
 import org.apache.commons.lang3.StringUtils;
-import pinacolada.effects.AttackEffects;
 import pinacolada.powers.common.EnergizedPower;
 import pinacolada.powers.common.*;
 import pinacolada.powers.replacement.*;
@@ -20,6 +19,7 @@ import pinacolada.powers.special.SelfImmolationPower;
 import pinacolada.powers.special.SilencedPower;
 import pinacolada.powers.special.SuperchargedPower;
 import pinacolada.powers.special.ToxicologyPower;
+import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
@@ -39,7 +39,7 @@ public class PCLPowerHelper implements TooltipProvider
     public static final PCLPowerHelper Blasted = new PCLPowerHelper(BlastedPower.POWER_ID, PGR.core.tooltips.blasted, BlastedPower::new, Behavior.TurnBased, true, true, false);
     public static final PCLPowerHelper Blinded = new PCLPowerHelper(BlindedPower.POWER_ID, PGR.core.tooltips.blinded, BlindedPower::new, Behavior.TurnBased, true, true, false);
     public static final PCLPowerHelper Constricted = new PCLPowerHelper(ConstrictedPower.POWER_ID, PGR.core.tooltips.constricted, PCLConstrictedPower::new, Behavior.Permanent, true, true, false);
-    public static final PCLPowerHelper DelayedDamage = new PCLPowerHelper(DelayedDamagePower.POWER_ID, PGR.core.tooltips.delayedDamage, (o, s, a) -> new DelayedDamagePower(o, a, AttackEffects.CLAW), Behavior.SingleTurn, true, true, false);
+    public static final PCLPowerHelper DelayedDamage = new PCLPowerHelper(DelayedDamagePower.POWER_ID, PGR.core.tooltips.delayedDamage, (o, s, a) -> new DelayedDamagePower(o, a, PCLEnum.AttackEffect.CLAW), Behavior.SingleTurn, true, true, false);
     public static final PCLPowerHelper DrawLess = new PCLPowerHelper(DrawLessPower.POWER_ID, PGR.core.tooltips.nextTurnDrawLess, DrawLessPower::new, Behavior.SingleTurn, true, true, false);
     public static final PCLPowerHelper Frail = new PCLPowerHelper(FrailPower.POWER_ID, PGR.core.tooltips.frail, (o, s, a) -> new PCLFrailPower(o, a, shouldExtend(o, s)), Behavior.TurnBased, true, true, true);
     public static final PCLPowerHelper Impaired = new PCLPowerHelper(ImpairedPower.POWER_ID, PGR.core.tooltips.impaired, (o, s, a) -> new ImpairedPower(o, a, shouldExtend(o, s)), Behavior.TurnBased, true, true, true);

@@ -11,8 +11,8 @@ import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import extendedui.interfaces.delegates.FuncT2;
 import pinacolada.actions.PCLActionWithCallback;
 import pinacolada.actions.PCLActions;
-import pinacolada.effects.AttackEffects;
 import pinacolada.effects.EffekseerEFK;
+import pinacolada.effects.PCLAttackVFX;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.VFX;
 import pinacolada.misc.CombatManager;
@@ -144,10 +144,12 @@ public class DealDamage extends PCLActionWithCallback<AbstractCreature>
             return;
         }
 
-        if (!hasPlayedEffect && duration <= 0.1f)
+        PCLAttackVFX attackVFX = PCLAttackVFX.get(this.attackEffect);
+
+        if (attackVFX != null && !hasPlayedEffect && duration <= 0.1f)
         {
-            addDuration(AttackEffects.getDamageDelay(attackEffect));
-            PCLEffects.List.attack(source, target, attackEffect, pitchMin, pitchMax, vfxColor);
+            addDuration(attackVFX.damageDelay);
+            PCLEffects.List.attack(source, target, attackVFX, pitchMin, pitchMax, vfxColor);
             hasPlayedEffect = true;
         }
 
@@ -175,7 +177,7 @@ public class DealDamage extends PCLActionWithCallback<AbstractCreature>
             {
                 info.output = Math.max(0, Math.min(GameUtilities.getHP(target, true, true) - 1, info.output));
             }
-            DamageHelper.applyTint(target, enemyTint, attackEffect);
+            DamageHelper.applyTint(target, enemyTint, attackVFX);
             DamageHelper.dealDamage(target, info, bypassBlock, bypassThorns);
 
             if (AbstractDungeon.getCurrRoom().monsters.areMonstersBasicallyDead())

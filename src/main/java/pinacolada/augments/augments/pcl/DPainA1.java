@@ -5,7 +5,7 @@ import pinacolada.annotations.VisibleAugment;
 import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.cards.base.fields.PCLAffinity;
-import pinacolada.effects.AttackEffects;
+import pinacolada.resources.PCLEnum;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;
@@ -16,7 +16,7 @@ public class DPainA1 extends PCLAugment
 {
 
     public static final PCLAugmentData DATA = register(DPainA1.class, 4, PCLAffinity.Purple)
-            .setSkill(PCond.onOtherCardPlayed(), new PMove_LoseHP(1), PMove.dealDamageToAll(3, AttackEffects.DARK))
+            .setSkill(PCond.onOtherCardPlayed(), new PMove_LoseHP(1), PMove.dealDamageToAll(3, PCLEnum.AttackEffect.GHOST))
             .setReqs(setTypes(AbstractCard.CardType.ATTACK, AbstractCard.CardType.SKILL));
 
     public DPainA1()

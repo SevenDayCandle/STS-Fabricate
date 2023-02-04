@@ -72,23 +72,6 @@ public class VFX
         return new DaggerSprayEffect(flipHorizontally());
     }
 
-    public static CombinedEffect dark(Hitbox hb, int variance)
-    {
-        return dark(randomX(hb, variance), randomY(hb, variance));
-    }
-
-    public static CombinedEffect dark(float cX, float cY)
-    {
-        final CombinedEffect effect = new CombinedEffect();
-        effect.add(new OrbFlareEffect2(cX, cY).setColors(OrbFlareEffect.OrbFlareColor.DARK)).renderBehind = false;
-        for (int i = 0; i < 4; i++)
-        {
-            effect.add(new DarkOrbActivateParticle(cX, cY)).renderBehind = false;
-        }
-
-        return effect;
-    }
-
     public static DarknessEffect darkness(Hitbox target, float spread)
     {
         return darkness(randomX(target, spread), randomY(target, spread));
@@ -147,6 +130,23 @@ public class VFX
     public static boolean flipHorizontally()
     {
         return AbstractDungeon.player.flipHorizontal || AbstractDungeon.getMonsters().shouldFlipVfx();
+    }
+
+    public static CombinedEffect ghost(Hitbox hb, int variance)
+    {
+        return ghost(randomX(hb, variance), randomY(hb, variance));
+    }
+
+    public static CombinedEffect ghost(float cX, float cY)
+    {
+        final CombinedEffect effect = new CombinedEffect();
+        effect.add(new OrbFlareEffect2(cX, cY).setColors(OrbFlareEffect.OrbFlareColor.DARK)).renderBehind = false;
+        for (int i = 0; i < 4; i++)
+        {
+            effect.add(new DarkOrbActivateParticle(cX, cY)).renderBehind = false;
+        }
+
+        return effect;
     }
 
     public static AnimatedParticleEffect gunshot(Hitbox target, float spread)

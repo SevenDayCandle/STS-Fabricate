@@ -13,7 +13,7 @@ import extendedui.ui.hitboxes.OriginRelativeHitbox;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.fields.PCLAttackType;
-import pinacolada.effects.AttackEffects;
+import pinacolada.effects.PCLAttackVFX;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;
@@ -82,7 +82,7 @@ public class PCLCustomCardAttackPage extends PCLCustomCardEffectPage
                 .setLabelFunctionForOption(Enum::name, false)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_attackEffect)
                 .setCanAutosizeButton(true)
-                .setItems(AttackEffects.keys())
+                .setItems(PCLAttackVFX.keys())
                 .setTooltip(PGR.core.strings.cedit_attackEffect, PGR.core.strings.cetut_attackEffect);
     }
 

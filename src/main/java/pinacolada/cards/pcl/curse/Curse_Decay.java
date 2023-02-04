@@ -6,7 +6,7 @@ import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
-import pinacolada.effects.AttackEffects;
+import pinacolada.effects.PCLAttackVFX;
 import pinacolada.skills.PCond;
 import pinacolada.skills.skills.base.moves.PMove_DealDamage;
 
@@ -28,6 +28,6 @@ public class Curse_Decay extends PCLCard
     @Override
     public void setup(Object input)
     {
-        addUseMove(PCond.onTurnEnd(), new PMove_DealDamage(2, AttackEffects.POISON, PCLCardTarget.Self));
+        addUseMove(PCond.onTurnEnd(), new PMove_DealDamage(2, PCLAttackVFX.POISON, PCLCardTarget.Self));
     }
 }

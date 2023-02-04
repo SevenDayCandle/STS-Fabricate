@@ -142,7 +142,7 @@ public class EffekseerEFK
 
     public static void initialize()
     {
-        STSEffekseerManager.register(EUIUtils.map(ALL.values(), v -> v.path));
+        STSEffekseerManager.register(EUIUtils.map(sortedValues(), v -> v.path));
     }
 
     public static Collection<EffekseerEFK> sortedValues()

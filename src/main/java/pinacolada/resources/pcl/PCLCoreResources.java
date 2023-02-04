@@ -8,7 +8,6 @@ import extendedui.EUI;
 import extendedui.ui.AbstractScreen;
 import pinacolada.augments.PCLAugment;
 import pinacolada.cards.base.PCLCustomCardSlot;
-import pinacolada.effects.AttackEffects;
 import pinacolada.effects.EffekseerEFK;
 import pinacolada.misc.PCLDungeon;
 import pinacolada.resources.PCLAbstractPlayerData;
@@ -86,8 +85,6 @@ public class PCLCoreResources extends PCLResources<PCLCoreConfig, PCLCoreImages,
 
     protected void postInitialize()
     {
-
-        AttackEffects.initialize();
         PGR.registerCommands();
         PCLAbstractPlayerData.postInitialize();
         config.load(CardCrawlGame.saveSlot);

@@ -6,7 +6,7 @@ import com.evacipated.cardcrawl.mod.stslib.powers.interfaces.HealthBarRenderPowe
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import pinacolada.actions.PCLActions;
-import pinacolada.effects.AttackEffects;
+import pinacolada.effects.PCLAttackVFX;
 import pinacolada.effects.SFX;
 import pinacolada.powers.PCLPower;
 import pinacolada.ui.combat.CombatHelper;
@@ -40,7 +40,7 @@ public class BlastedPower extends PCLPower implements HealthBarRenderPower
     {
         this.flashWithoutSound();
 
-        PCLActions.bottom.loseHP(source, owner, getPassiveDamage(), AttackEffects.SMALL_EXPLOSION)
+        PCLActions.bottom.loseHP(source, owner, getPassiveDamage(), PCLAttackVFX.SMALL_EXPLOSION)
                 .canKill(owner == null || !owner.isPlayer);
         reducePower(1);
     }

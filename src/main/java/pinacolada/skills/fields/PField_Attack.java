@@ -3,7 +3,7 @@ package pinacolada.skills.fields;
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import extendedui.EUIUtils;
-import pinacolada.effects.AttackEffects;
+import pinacolada.effects.PCLAttackVFX;
 import pinacolada.resources.PGR;
 import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
 
@@ -31,7 +31,7 @@ public class PField_Attack extends PField
 
     public void setupEditor(PCLCustomCardEffectEditor<?> editor)
     {
-        editor.registerDropdown(AttackEffects.keys(), EUIUtils.list(attackEffect), Enum::name, PGR.core.strings.cedit_attackEffect, false);
+        editor.registerDropdown(PCLAttackVFX.keys(), EUIUtils.list(attackEffect), Enum::name, PGR.core.strings.cedit_attackEffect, false);
         super.setupEditor(editor);
     }
 

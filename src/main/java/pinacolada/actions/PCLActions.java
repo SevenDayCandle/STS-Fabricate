@@ -61,6 +61,7 @@ import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.cards.pcl.tokens.AffinityToken;
+import pinacolada.effects.PCLAttackVFX;
 import pinacolada.interfaces.subscribers.OnPhaseChangedSubscriber;
 import pinacolada.misc.CombatManager;
 import pinacolada.monsters.PCLCardAlly;
@@ -362,6 +363,11 @@ public final class PCLActions
         return add(new CycleCards(sourceName, amount));
     }
 
+    public ArrayList<DealDamage> dealCardDamage(PCLCard card, AbstractCreature source, AbstractCreature target, PCLAttackVFX effect)
+    {
+        return dealCardDamage(card, source, target, effect.key);
+    }
+
     public ArrayList<DealDamage> dealCardDamage(PCLCard card, AbstractCreature source, AbstractCreature target, AbstractGameAction.AttackEffect effect)
     {
         ArrayList<DealDamage> actions = new ArrayList<>();
@@ -372,6 +378,11 @@ public final class PCLActions
         }
 
         return actions;
+    }
+
+    public ArrayList<DealDamageToAll> dealCadealCardDamageToAll(PCLCard card, AbstractCreature source, PCLAttackVFX effect)
+    {
+        return dealCardDamageToAll(card, source, effect.key);
     }
 
     public ArrayList<DealDamageToAll> dealCardDamageToAll(PCLCard card, AbstractCreature source, AbstractGameAction.AttackEffect effect)
@@ -386,9 +397,19 @@ public final class PCLActions
         return actions;
     }
 
+    public DealDamage dealDamage(AbstractCreature source, AbstractCreature target, int baseDamage, DamageInfo.DamageType damageType, PCLAttackVFX effect)
+    {
+        return add(new DealDamage(target, new DamageInfo(source, baseDamage, damageType), effect.key));
+    }
+
     public DealDamage dealDamage(AbstractCreature source, AbstractCreature target, int baseDamage, DamageInfo.DamageType damageType, AbstractGameAction.AttackEffect effect)
     {
         return add(new DealDamage(target, new DamageInfo(source, baseDamage, damageType), effect));
+    }
+
+    public DealDamage dealDamage(AbstractCreature target, DamageInfo damageInfo, PCLAttackVFX effect)
+    {
+        return add(new DealDamage(target, damageInfo, effect.key));
     }
 
     public DealDamage dealDamage(AbstractCreature target, DamageInfo damageInfo, AbstractGameAction.AttackEffect effect)
@@ -406,9 +427,19 @@ public final class PCLActions
         return applyPower(source, new DelayedDamagePower(target, amount, effect));
     }
 
+    public DealDamageToAll dealDamageToAll(int[] damageMatrix, DamageInfo.DamageType damageType, PCLAttackVFX effect)
+    {
+        return add(new DealDamageToAll(player, damageMatrix, damageType, effect.key, false));
+    }
+
     public DealDamageToAll dealDamageToAll(int[] damageMatrix, DamageInfo.DamageType damageType, AbstractGameAction.AttackEffect effect)
     {
         return add(new DealDamageToAll(player, damageMatrix, damageType, effect, false));
+    }
+
+    public DealDamage dealDamageToRandomEnemy(int baseDamage, DamageInfo.DamageType damageType, PCLAttackVFX effect)
+    {
+        return dealDamage(player, null, baseDamage, damageType, effect);
     }
 
     public DealDamage dealDamageToRandomEnemy(int baseDamage, DamageInfo.DamageType damageType, AbstractGameAction.AttackEffect effect)
@@ -584,6 +615,11 @@ public final class PCLActions
     public LoseBlock loseBlock(AbstractCreature target, int amount)
     {
         return add(new LoseBlock(target, target, amount));
+    }
+
+    public LoseHP loseHP(AbstractCreature source, AbstractCreature target, int amount, PCLAttackVFX effect)
+    {
+        return add(new LoseHP(target, source, amount, effect.key));
     }
 
     public LoseHP loseHP(AbstractCreature source, AbstractCreature target, int amount, AbstractGameAction.AttackEffect effect)

@@ -1,9 +1,9 @@
 package pinacolada.powers.common;
 
+import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import pinacolada.actions.PCLActions;
-import pinacolada.effects.AttackEffects;
 import pinacolada.effects.SFX;
 import pinacolada.powers.PCLPower;
 
@@ -31,7 +31,7 @@ public class DeflectionPower extends PCLPower
         if (info.type == DamageInfo.DamageType.NORMAL && blockedAmount > 0 && info.owner != null)
         {
             int deflected = Math.min(amount, blockedAmount);
-            PCLActions.bottom.dealDamage(owner, info.owner, deflected, DamageInfo.DamageType.NORMAL, AttackEffects.BLUNT_HEAVY);
+            PCLActions.bottom.dealDamage(owner, info.owner, deflected, DamageInfo.DamageType.NORMAL, AbstractGameAction.AttackEffect.BLUNT_HEAVY);
             reducePower(deflected);
         }
 

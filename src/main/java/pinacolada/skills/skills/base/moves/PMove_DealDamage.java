@@ -11,6 +11,7 @@ import pinacolada.actions.damage.DealDamageToAll;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.effects.EffekseerEFK;
+import pinacolada.effects.PCLAttackVFX;
 import pinacolada.effects.VFX;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
@@ -45,9 +46,19 @@ public class PMove_DealDamage extends PMove<PField_Empty>
         this(1, AbstractGameAction.AttackEffect.NONE);
     }
 
+    public PMove_DealDamage(int amount, PCLAttackVFX attackEffect)
+    {
+        this(amount, attackEffect.key, PCLCardTarget.Single);
+    }
+
     public PMove_DealDamage(int amount, AbstractGameAction.AttackEffect attackEffect)
     {
         this(amount, attackEffect, PCLCardTarget.Single);
+    }
+
+    public PMove_DealDamage(int amount, PCLAttackVFX attackEffect, PCLCardTarget target)
+    {
+        this(amount, attackEffect.key, target);
     }
 
     public PMove_DealDamage(int amount, AbstractGameAction.AttackEffect attackEffect, PCLCardTarget target)

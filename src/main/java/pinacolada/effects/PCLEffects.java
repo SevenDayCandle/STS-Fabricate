@@ -88,25 +88,25 @@ public final class PCLEffects
         throw new RuntimeException("Enum value does not exist.");
     }
 
-    public PCLEffect attack(AbstractCreature source, AbstractCreature target, AbstractGameAction.AttackEffect attackEffect, float pitchMin, float pitchMax)
+    public PCLEffect attack(AbstractCreature source, AbstractCreature target, PCLAttackVFX attackEffect, float pitchMin, float pitchMax)
     {
         return attack(source, target, attackEffect, pitchMin, pitchMax, null, source == target ? 0 : 0.15f);
     }
 
-    public PCLEffect attack(AbstractCreature source, AbstractCreature target, AbstractGameAction.AttackEffect attackEffect, float pitchMin, float pitchMax, Color vfxColor)
+    public PCLEffect attack(AbstractCreature source, AbstractCreature target, PCLAttackVFX attackEffect, float pitchMin, float pitchMax, Color vfxColor)
     {
         return attack(source, target, attackEffect, pitchMin, pitchMax, vfxColor, source == target ? 0 : 0.15f);
     }
 
-    public PCLEffect attack(AbstractCreature source, AbstractCreature target, AbstractGameAction.AttackEffect attackEffect, float pitchMin, float pitchMax, Color vfxColor, float spread)
+    public PCLEffect attack(AbstractCreature source, AbstractCreature target, PCLAttackVFX attackEffect, float pitchMin, float pitchMax, Color vfxColor, float spread)
     {
-        AttackEffects.playSound(attackEffect, pitchMin, pitchMax);
+        attackEffect.playSound(pitchMin, pitchMax);
         return attackWithoutSound(source, target, attackEffect, vfxColor, spread);
     }
 
-    public PCLEffect attackWithoutSound(AbstractCreature source, AbstractCreature target, AbstractGameAction.AttackEffect attackEffect, Color vfxColor, float spread)
+    public PCLEffect attackWithoutSound(AbstractCreature source, AbstractCreature target, PCLAttackVFX attackEffect, Color vfxColor, float spread)
     {
-        final PCLEffect effect = add(AttackEffects.getVFX(attackEffect, source, VFX.randomX(target.hb, spread), VFX.randomY(target.hb, spread)));
+        final PCLEffect effect = add(attackEffect.getVFX(source, VFX.randomX(target.hb, spread), VFX.randomY(target.hb, spread)));
         if (vfxColor != null)
         {
             effect.setColor(vfxColor);
