@@ -11,15 +11,12 @@ import extendedui.utilities.EUIColors;
 import pinacolada.effects.utility.CombinedEffect;
 import pinacolada.effects.vfx.*;
 import pinacolada.effects.vfx.megacritCopy.*;
-import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.PCLRenderHelpers;
 
 // Copied and modified from STS-AnimatorMod
 public class VFX
 {
-    public static final PCLCoreImages.Effects IMAGES = PGR.core.images.effects;
-
     public static BiteEffect2 bite(Hitbox target)
     {
         return bite(target, Color.WHITE);
@@ -159,7 +156,7 @@ public class VFX
 
     public static AnimatedParticleEffect gunshot(float cX, float cY)
     {
-        return new AnimatedParticleEffect(PCLEffect.IMAGES.shot.texture(), cX, cY, 4, 4);
+        return new AnimatedParticleEffect(PCLCoreImages.Effects.shot.texture(), cX, cY, 4, 4);
     }
 
     public static HemokinesisEffect2 hemokinesis(Hitbox source, Hitbox target)
@@ -370,7 +367,7 @@ public class VFX
 
     public static FadingParticleEffect water(float cX, float cY)
     {
-        return (FadingParticleEffect) new FadingParticleEffect(IMAGES.waterSplash1.texture(), cX, cY).setColor(Color.WHITE)
+        return (FadingParticleEffect) new FadingParticleEffect(PCLCoreImages.Effects.waterSplash1.texture(), cX, cY).setColor(Color.WHITE)
                 .setBlendingMode(PCLRenderHelpers.BlendingMode.Glowing)
                 .setOpacity(MathUtils.random(0.7f, 1f))
                 .setDuration(1.3f, false);
@@ -383,7 +380,7 @@ public class VFX
 
     public static FadingParticleEffect water2(float cX, float cY)
     {
-        return (FadingParticleEffect) new FadingParticleEffect(IMAGES.waterSplash2.texture(), cX, cY).setColor(Color.WHITE)
+        return (FadingParticleEffect) new FadingParticleEffect(PCLCoreImages.Effects.waterSplash2.texture(), cX, cY).setColor(Color.WHITE)
                 .setBlendingMode(PCLRenderHelpers.BlendingMode.Glowing)
                 .setOpacity(MathUtils.random(0.7f, 1f))
                 .setDuration(1.3f, false);
@@ -406,7 +403,7 @@ public class VFX
 
     public static AnimatedParticleEffect whack(float cX, float cY)
     {
-        return new AnimatedParticleEffect(PCLEffect.IMAGES.whack.texture(), cX, cY, 4, 4);
+        return new AnimatedParticleEffect(PCLCoreImages.Effects.whack.texture(), cX, cY, 4, 4);
     }
 
     public static WhirlwindEffect whirlwind()

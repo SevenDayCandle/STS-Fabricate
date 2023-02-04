@@ -9,12 +9,12 @@ import com.megacrit.cardcrawl.vfx.combat.LightFlareParticleEffect;
 import extendedui.ui.TextureCache;
 import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.VFX;
+import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class RazorWindEffect extends PCLEffect
 {
-    public static final TextureCache image = VFX.IMAGES.airSlice;
+    public static final TextureCache image = PCLCoreImages.Effects.airSlice;
     protected static final Color PARTICLE_COLOR = Color.LIME.cpy();
 
     protected float x;

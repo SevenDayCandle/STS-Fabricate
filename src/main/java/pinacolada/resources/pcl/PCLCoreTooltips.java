@@ -221,23 +221,21 @@ public class PCLCoreTooltips extends PCLTooltips
 
     public void initializeIcons()
     {
-        PCLCoreImages.Badges badges = PGR.core.images.badges;
         for (PCLCardTag tag : PCLCardTag.values())
         {
             tag.getTip().setIcon(tag.getTextureCache().texture(), 6).setBadgeBackground(tag.color);
         }
 
-        PCLCoreImages.CardIcons icons = PGR.core.images.icons;
-        ranged.setIcon(icons.ranged.texture());
-        piercing.setIcon(icons.piercing.texture());
-        magicDamage.setIcon(icons.magic.texture());
-        brutal.setIcon(icons.brutal.texture());
-        tempHP.setIcon(icons.tempHP.texture());
-        hp.setIcon(icons.hp.texture());
-        block.setIcon(icons.block.texture());
-        normalDamage.setIcon(icons.damage.texture());
-        unique.setIcon(icons.unique.texture(), 6);
-        multiform.setIcon(icons.multiform.texture(), 6);
+        ranged.setIcon(PCLCoreImages.CardIcons.ranged.texture());
+        piercing.setIcon(PCLCoreImages.CardIcons.piercing.texture());
+        magicDamage.setIcon(PCLCoreImages.CardIcons.magic.texture());
+        brutal.setIcon(PCLCoreImages.CardIcons.brutal.texture());
+        tempHP.setIcon(PCLCoreImages.CardIcons.tempHP.texture());
+        hp.setIcon(PCLCoreImages.CardIcons.hp.texture());
+        block.setIcon(PCLCoreImages.CardIcons.block.texture());
+        normalDamage.setIcon(PCLCoreImages.CardIcons.damage.texture());
+        unique.setIcon(PCLCoreImages.CardIcons.unique.texture(), 6);
+        multiform.setIcon(PCLCoreImages.CardIcons.multiform.texture(), 6);
         energy.setIconFunc(EUI::getEnergyIcon);
 
         affinityRed.setIconFunc(PCLAffinity.Red::getTextureRegion).setIconSizeMulti(0.85f, 0.85f);
@@ -251,14 +249,13 @@ public class PCLCoreTooltips extends PCLTooltips
         affinityUnknown.setIcon(PCLAffinity.Unknown.getDefaultIcon().texture()).setIconSizeMulti(0.85f, 0.85f);
         multicolor.setIcon(PCLAffinity.Star.getDefaultIcon().texture()).setIconSizeMulti(0.85f, 0.85f);
 
-        PCLCoreImages.Tooltips tooltips = PGR.core.images.tooltips;
-        lightning.setIcon(tooltips.lightning.texture(), 6);
-        plasma.setIcon(tooltips.plasma.texture(), 6);
-        dark.setIcon(tooltips.dark.texture(), 6);
-        frost.setIcon(tooltips.frost.texture(), 6);
-        gold.setIcon(tooltips.gold.texture(), 6);
-        orbSlot.setIcon(tooltips.orbSlot.texture(), 6);
-        regeneration.setIcon(tooltips.regeneration.texture(), 6);
+        lightning.setIcon(PCLCoreImages.Tooltips.lightning.texture(), 6);
+        plasma.setIcon(PCLCoreImages.Tooltips.plasma.texture(), 6);
+        dark.setIcon(PCLCoreImages.Tooltips.dark.texture(), 6);
+        frost.setIcon(PCLCoreImages.Tooltips.frost.texture(), 6);
+        gold.setIcon(PCLCoreImages.Tooltips.gold.texture(), 6);
+        orbSlot.setIcon(PCLCoreImages.Tooltips.orbSlot.texture(), 6);
+        regeneration.setIcon(PCLCoreImages.Tooltips.regeneration.texture(), 6);
 
         afterImage.setIconFromPowerRegion(ICON_AFTER_IMAGE);
         artifact.setIconFromPowerRegion(ICON_ARTIFACT);

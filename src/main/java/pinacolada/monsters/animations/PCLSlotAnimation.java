@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
-import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class PCLSlotAnimation extends PCLAnimation
@@ -47,7 +47,7 @@ public class PCLSlotAnimation extends PCLAnimation
     public void renderSprite(SpriteBatch sb, float x, float y)
     {
         renderColor.a = alpha;
-        Texture t = PGR.core.images.monsters.emptyShadow.texture();
+        Texture t = PCLCoreImages.Monsters.emptyShadow.texture();
         PCLRenderHelpers.drawGlowing(sb, s -> PCLRenderHelpers.drawCentered(s, renderColor, t, x, y + t.getHeight() * 0.25f, t.getWidth(), t.getHeight(), 0.8f, 0f));
     }
 }

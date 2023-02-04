@@ -11,12 +11,12 @@ import extendedui.EUIUtils;
 import extendedui.ui.TextureCache;
 import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.VFX;
+import pinacolada.resources.pcl.PCLCoreImages;
 
 public class TornadoParticleEffect extends PCLEffect
 {
     protected static final int SIZE = 230;
-    protected static final TextureCache[] images = {VFX.IMAGES.airTornado1, VFX.IMAGES.airTornado2};
+    protected static final TextureCache[] images = {PCLCoreImages.Effects.airTornado1, PCLCoreImages.Effects.airTornado2};
     protected static final Color PARTICLE_COLOR = Color.LIME.cpy();
 
     protected float x;

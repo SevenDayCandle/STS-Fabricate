@@ -93,21 +93,21 @@ public class AffinityKeywordButton extends EUIBase
         switch (currentLevel)
         {
             case 1:
-                borderTexture = PGR.core.images.core.borderNormal.texture();
+                borderTexture = PGR.core.images.borderNormal.texture();
                 borderBGTexture = null;
                 borderFGTexture = null;
                 radiusBG = backgroundButton.hb.width;
                 break;
             case 2:
-                borderTexture = PGR.core.images.core.borderWeak.texture();
-                borderBGTexture = PGR.core.images.core.borderBG3.texture();
+                borderTexture = PGR.core.images.borderWeak.texture();
+                borderBGTexture = PGR.core.images.borderBG3.texture();
                 borderFGTexture = null;
                 radiusBG = backgroundButton.hb.width;
                 break;
             case 3:
-                borderTexture = PGR.core.images.core.borderHighlight.texture();
-                borderBGTexture = PGR.core.images.core.borderBG2.texture();
-                borderFGTexture = PGR.core.images.core.borderFG.texture();
+                borderTexture = PGR.core.images.borderHighlight.texture();
+                borderBGTexture = PGR.core.images.borderBG2.texture();
+                borderFGTexture = PGR.core.images.borderFG.texture();
                 radiusBG = backgroundButton.hb.width * 1.125f;
                 break;
             default:

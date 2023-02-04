@@ -11,14 +11,14 @@ import com.megacrit.cardcrawl.vfx.combat.LightFlareParticleEffect;
 import extendedui.ui.TextureCache;
 import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.VFX;
+import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.RandomizedList;
 
 public class SnowballParticleEffect extends PCLEffect
 {
     protected static final float GRAVITY = 180f * Settings.scale;
     protected static final int SIZE = 96;
-    private static final TextureCache[] images = {VFX.IMAGES.frostSnow1, VFX.IMAGES.frostSnow2, VFX.IMAGES.frostSnow3, VFX.IMAGES.frostSnow4};
+    private static final TextureCache[] images = {PCLCoreImages.Effects.frostSnow1, PCLCoreImages.Effects.frostSnow2, PCLCoreImages.Effects.frostSnow3, PCLCoreImages.Effects.frostSnow4};
     private static final RandomizedList<TextureCache> textures = new RandomizedList<>();
     protected float vfxFrequency = 0.75f;
     protected Texture img;

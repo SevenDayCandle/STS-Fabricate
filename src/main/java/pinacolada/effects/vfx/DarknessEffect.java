@@ -5,12 +5,12 @@ import com.badlogic.gdx.math.MathUtils;
 import extendedui.ui.TextureCache;
 import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.VFX;
+import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class DarknessEffect extends PCLEffect
 {
-    private static final TextureCache[] images = {VFX.IMAGES.dark1, VFX.IMAGES.dark2, VFX.IMAGES.dark3, VFX.IMAGES.dark4, VFX.IMAGES.dark5};
+    private static final TextureCache[] images = {PCLCoreImages.Effects.dark1, PCLCoreImages.Effects.dark2, PCLCoreImages.Effects.dark3, PCLCoreImages.Effects.dark4, PCLCoreImages.Effects.dark5};
 
     protected float x;
     protected float y;

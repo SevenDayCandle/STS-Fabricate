@@ -45,8 +45,6 @@ public class PCLCardText
     protected final static float DESC_BOX_WIDTH = Settings.BIG_TEXT_MODE ? IMG_WIDTH * 0.95f : IMG_WIDTH * 0.79f;
     protected static final GlyphLayout layout = new GlyphLayout();
     private static final ColoredString cs = new ColoredString("", Settings.CREAM_COLOR);
-    private static final PCLCoreImages.Badges BADGES = PGR.core.images.badges;
-    private static final PCLCoreImages.CardIcons ICONS = PGR.core.images.icons;
     private static final PCLTextParser internalParser = new PCLTextParser(false);
     public final ArrayList<PCLTextLine> lines = new ArrayList<>();
     public Color color;
@@ -75,7 +73,7 @@ public class PCLCardText
 
     protected TextureCache getHPIcon()
     {
-        return card.isPopup ? ICONS.hpL : ICONS.hp;
+        return card.isPopup ? PCLCoreImages.CardIcons.hpL : PCLCoreImages.CardIcons.hp;
     }
 
     protected ColoredTexture getPanelByRarity()
@@ -174,7 +172,7 @@ public class PCLCardText
         final float offset_y = AbstractCard.RAW_H * 0.08f;//+0.28f;
         final float alpha = card.transparency;
 
-        PCLRenderHelpers.drawOnCardAuto(sb, card, PGR.core.images.augments.augment.texture(), new Vector2(offset_x, offset_y + y), 28, 28, Color.WHITE, alpha, 1);
+        PCLRenderHelpers.drawOnCardAuto(sb, card, PCLCoreImages.augment.texture(), new Vector2(offset_x, offset_y + y), 28, 28, Color.WHITE, alpha, 1);
         if (augment != null)
         {
             PCLRenderHelpers.drawColorized(sb, augment.getColor(), s ->
@@ -194,11 +192,11 @@ public class PCLCardText
         offset_y = 0;
         if (card.isUnique())
         {
-            offset_y += renderFooter(sb, card.isPopup ? ICONS.uniqueL.texture() : ICONS.unique.texture(), offset_y);
+            offset_y += renderFooter(sb, card.isPopup ? PCLCoreImages.CardIcons.uniqueL.texture() : PCLCoreImages.CardIcons.unique.texture(), offset_y);
         }
         if (card.cardData.canToggleFromPopup && (card.upgraded || card.cardData.unUpgradedCanToggleForms))
         {
-            offset_y += renderFooter(sb, card.isPopup ? ICONS.multiformL.texture() : ICONS.multiform.texture(), offset_y);
+            offset_y += renderFooter(sb, card.isPopup ? PCLCoreImages.CardIcons.multiformL.texture() : PCLCoreImages.CardIcons.multiform.texture(), offset_y);
         }
 
         // Render augments
@@ -243,7 +241,7 @@ public class PCLCardText
         final float offset_y = y - AbstractCard.RAW_H * 0.46f;
         final float alpha = card.transparency;
 
-        PCLRenderHelpers.drawOnCardAuto(sb, card, PGR.core.images.core.controllableCardPile.texture(), new Vector2(offset_x, offset_y), 40, 40, Color.BLACK, alpha * 0.6f, 0.8f);
+        PCLRenderHelpers.drawOnCardAuto(sb, card, PGR.core.images.controllableCardPile.texture(), new Vector2(offset_x, offset_y), 40, 40, Color.BLACK, alpha * 0.6f, 0.8f);
         PCLRenderHelpers.drawOnCardAuto(sb, card, texture, new Vector2(offset_x, offset_y), 40, 40, Color.WHITE, alpha, 0.8f);
 
         return 38; // y offset

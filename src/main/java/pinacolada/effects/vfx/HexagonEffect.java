@@ -10,13 +10,13 @@ import com.megacrit.cardcrawl.core.Settings;
 import extendedui.ui.TextureCache;
 import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.VFX;
+import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class HexagonEffect extends PCLEffect
 {
     protected static final int SIZE = 96;
-    private static final TextureCache image = VFX.IMAGES.hexagon;
+    private static final TextureCache image = PCLCoreImages.Effects.hexagon;
     protected float vfxFrequency = 0.03f;
     protected Texture img;
     protected float x;

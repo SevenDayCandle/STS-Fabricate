@@ -8,12 +8,12 @@ import extendedui.ui.TextureCache;
 import extendedui.utilities.EUIColors;
 import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.VFX;
+import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class SparkImpactEffect extends PCLEffect
 {
-    private static final TextureCache[] images = {VFX.IMAGES.spark1, VFX.IMAGES.spark2};
+    private static final TextureCache[] images = {PCLCoreImages.Effects.spark1, PCLCoreImages.Effects.spark2};
     protected int particles = 60;
     protected float radius = 400;
     protected float x;

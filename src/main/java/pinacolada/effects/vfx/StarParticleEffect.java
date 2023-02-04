@@ -9,12 +9,12 @@ import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIUtils;
 import extendedui.ui.TextureCache;
 import pinacolada.effects.PCLEffect;
-import pinacolada.effects.VFX;
+import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class StarParticleEffect extends PCLEffect
 {
-    protected static final TextureCache[] images = {VFX.IMAGES.sparkle1, VFX.IMAGES.sparkle2, VFX.IMAGES.sparkle3, VFX.IMAGES.sparkle4};
+    protected static final TextureCache[] images = {PCLCoreImages.Effects.sparkle1, PCLCoreImages.Effects.sparkle2, PCLCoreImages.Effects.sparkle3, PCLCoreImages.Effects.sparkle4};
 
     protected float x;
     protected float y;

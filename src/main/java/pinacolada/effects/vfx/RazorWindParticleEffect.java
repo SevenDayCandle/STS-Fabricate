@@ -9,12 +9,12 @@ import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIUtils;
 import extendedui.ui.TextureCache;
 import pinacolada.effects.PCLEffect;
-import pinacolada.effects.VFX;
+import pinacolada.resources.pcl.PCLCoreImages;
 
 public class RazorWindParticleEffect extends PCLEffect
 {
     protected static final int SIZE = 96;
-    protected static final TextureCache[] images = {VFX.IMAGES.airTrail1, VFX.IMAGES.airTrail2, VFX.IMAGES.airTrail3};
+    protected static final TextureCache[] images = {PCLCoreImages.Effects.airTrail1, PCLCoreImages.Effects.airTrail2, PCLCoreImages.Effects.airTrail3};
 
     protected float x;
     protected float y;

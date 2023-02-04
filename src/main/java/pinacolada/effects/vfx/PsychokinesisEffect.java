@@ -6,7 +6,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import extendedui.utilities.EUIColors;
 import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.VFX;
+import pinacolada.resources.pcl.PCLCoreImages;
 
 public class PsychokinesisEffect extends PCLEffect
 {
@@ -70,14 +70,14 @@ public class PsychokinesisEffect extends PCLEffect
             final Color color = new Color(MathUtils.random(0.8f, 1f), MathUtils.random(0.7f, 1f), 1, 1);
             if (randomBoolean(0.2f))
             {
-                PCLEffects.Queue.add(new FadingParticleEffect(VFX.IMAGES.circle.texture(), x, y)
+                PCLEffects.Queue.add(new FadingParticleEffect(PCLCoreImages.Effects.circle.texture(), x, y)
                                 .setColor(EUIColors.random(0.83f, 1f, false))
                                 .setScale(this.scaleLower * 0.05f, scale * 2, 5f))
                         .setDuration(1.5f, true);
             }
             else
             {
-                PCLEffects.Queue.add(new AnimatedParticleEffect(VFX.IMAGES.psi.texture(), x, y, 5, 5, 0.01f)
+                PCLEffects.Queue.add(new AnimatedParticleEffect(PCLCoreImages.Effects.psi.texture(), x, y, 5, 5, 0.01f)
                         .setColor(EUIColors.random(0.83f, 1f, false))
                         .setScale(this.scaleLower * 0.05f, scale, 5f));
             }

@@ -16,6 +16,7 @@ import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
 import pinacolada.utilities.GameUtilities;
@@ -246,7 +247,7 @@ public abstract class PCLAugment implements TooltipProvider
     // TODO More textures
     public Texture getTexture()
     {
-        return PGR.core.images.augments.augmentBasic.texture();
+        return PCLCoreImages.augmentBasic.texture();
     }
 
     public EUITooltip getTip()

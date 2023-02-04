@@ -10,12 +10,12 @@ import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
 import pinacolada.effects.VFX;
-import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.RandomizedList;
 
 public class RockBurstEffect extends PCLEffect
 {
-    private static final TextureCache[] particles = {PGR.core.images.effects.earthParticle1, PGR.core.images.effects.earthParticle2, PGR.core.images.effects.earthParticle3};
+    private static final TextureCache[] particles = {PCLCoreImages.Effects.earthParticle1, PCLCoreImages.Effects.earthParticle2, PCLCoreImages.Effects.earthParticle3};
     private static final RandomizedList<TextureCache> textures = new RandomizedList<>();
     public static final int PROJECTILES = 68;
     public static final float RADIUS = 240;

@@ -64,6 +64,7 @@ import pinacolada.powers.replacement.PlayerFlightPower;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.Skills;
 import pinacolada.skills.skills.PSpecialCond;
@@ -866,19 +867,19 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     public Texture getTypeIcon() {
         if (type == PCLEnum.CardType.SUMMON)
         {
-            return PGR.core.images.types.summon.texture();
+            return PCLCoreImages.Types.summon.texture();
         }
         switch (type) {
             case ATTACK:
-                return PGR.core.images.types.attack.texture();
+                return PCLCoreImages.Types.attack.texture();
             case CURSE:
-                return PGR.core.images.types.curse.texture();
+                return PCLCoreImages.Types.curse.texture();
             case POWER:
-                return PGR.core.images.types.power.texture();
+                return PCLCoreImages.Types.power.texture();
             case SKILL:
-                return PGR.core.images.types.skill.texture();
+                return PCLCoreImages.Types.skill.texture();
             default:
-                return PGR.core.images.types.status.texture();
+                return PCLCoreImages.Types.status.texture();
         }
     }
 

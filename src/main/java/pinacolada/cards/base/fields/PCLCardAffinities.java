@@ -18,7 +18,7 @@ import static pinacolada.cards.base.fields.PCLAffinity.TOTAL_AFFINITIES;
 
 public class PCLCardAffinities
 {
-    private static final ColoredTexture upgradeCircle = new ColoredTexture(PGR.core.images.core.circle.texture(), Settings.GREEN_RELIC_COLOR);
+    private static final ColoredTexture upgradeCircle = new ColoredTexture(PGR.core.images.circle.texture(), Settings.GREEN_RELIC_COLOR);
     public final ArrayList<PCLCardAffinity> sorted = new ArrayList<>();
     public PCLCard card;
     public PCLCardAffinity star = null;

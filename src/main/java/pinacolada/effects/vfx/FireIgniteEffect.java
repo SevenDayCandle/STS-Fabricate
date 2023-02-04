@@ -6,13 +6,13 @@ import extendedui.ui.TextureCache;
 import extendedui.utilities.EUIColors;
 import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLEffects;
-import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.PCLRenderHelpers;
 import pinacolada.utilities.RandomizedList;
 
 public class FireIgniteEffect extends PCLEffect
 {
-    private static final TextureCache[] particles = {PGR.core.images.effects.fireParticle1, PGR.core.images.effects.fireParticle2, PGR.core.images.effects.fireParticle3};
+    private static final TextureCache[] particles = {PCLCoreImages.Effects.fireParticle1, PCLCoreImages.Effects.fireParticle2, PCLCoreImages.Effects.fireParticle3};
     private static final RandomizedList<TextureCache> textures = new RandomizedList<>();
     public static final float RADIUS = 320;
 
@@ -39,7 +39,7 @@ public class FireIgniteEffect extends PCLEffect
     protected void firstUpdate()
     {
         float r = MathUtils.random(0, 360);
-        PCLEffects.Queue.add(new FadingParticleEffect(PGR.core.images.effects.fireBurst.texture(), x + MathUtils.random(-16, 16), y + MathUtils.random(-16, 16))
+        PCLEffects.Queue.add(new FadingParticleEffect(PCLCoreImages.Effects.fireBurst.texture(), x + MathUtils.random(-16, 16), y + MathUtils.random(-16, 16))
                         .setBlendingMode(PCLRenderHelpers.BlendingMode.Glowing)
                         .setColor(EUIColors.white(MathUtils.random(0.5f, 1f)))
                         .setFlip(MathUtils.randomBoolean(), false)

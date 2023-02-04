@@ -9,7 +9,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIUtils;
 import extendedui.ui.TextureCache;
 import pinacolada.effects.PCLEffect;
-import pinacolada.effects.VFX;
+import pinacolada.resources.pcl.PCLCoreImages;
 
 import java.util.ArrayList;
 
@@ -17,13 +17,13 @@ public class ElectricityParticleEffect extends PCLEffect
 {
     protected static final int SIZE = 96;
     private static final TextureCache[] images = {
-            VFX.IMAGES.electric1,
-            VFX.IMAGES.electric2,
-            VFX.IMAGES.electric3,
-            VFX.IMAGES.electric4,
-            VFX.IMAGES.electric5,
-            VFX.IMAGES.electric6,
-            VFX.IMAGES.electric7
+            PCLCoreImages.Effects.electric1,
+            PCLCoreImages.Effects.electric2,
+            PCLCoreImages.Effects.electric3,
+            PCLCoreImages.Effects.electric4,
+            PCLCoreImages.Effects.electric5,
+            PCLCoreImages.Effects.electric6,
+            PCLCoreImages.Effects.electric7
     };
     private static final ArrayList<Texture> imageTextures = new ArrayList<>();
     protected float animFrequency = 0.005f;

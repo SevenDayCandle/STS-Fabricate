@@ -10,11 +10,11 @@ import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.core.Settings;
 import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.VFX;
+import pinacolada.resources.pcl.PCLCoreImages;
 
 public class BleedParticleEffect extends PCLEffect
 {
-    protected static final Texture image = VFX.IMAGES.droplet.texture();
+    protected static final Texture image = PCLCoreImages.Effects.droplet.texture();
     protected static final int SIZE = 72;
     protected static final float INTERVAL = 0.01F;
 

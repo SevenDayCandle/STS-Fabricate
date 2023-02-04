@@ -12,8 +12,6 @@ import extendedui.utilities.EUIColors;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.effects.vfx.GenericRenderEffect;
 import pinacolada.resources.PCLEnum;
-import pinacolada.resources.PGR;
-import pinacolada.resources.pcl.PCLCoreImages;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,13 +20,13 @@ import java.util.stream.Collectors;
 
 import static com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect;
 
+// TODO Remove melee/magic/otter
 public class AttackEffects
 {
     private static final HashMap<AttackEffect, AttackEffectData> map = new HashMap<>();
     private static final ArrayList<AttackEffect> melee = new ArrayList<>();
     private static final ArrayList<AttackEffect> magic = new ArrayList<>();
     private static final ArrayList<AttackEffect> other = new ArrayList<>();
-    private static final PCLCoreImages.Effects IMAGES = PGR.core.images.effects;
 
     public static final AttackEffect BLUNT_HEAVY = AttackEffect.BLUNT_HEAVY;
     public static final AttackEffect BLUNT_LIGHT = AttackEffect.BLUNT_LIGHT;

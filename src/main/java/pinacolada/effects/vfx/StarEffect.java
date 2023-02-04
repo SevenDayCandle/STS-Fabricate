@@ -8,14 +8,14 @@ import extendedui.ui.TextureCache;
 import extendedui.utilities.EUIColors;
 import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.VFX;
+import pinacolada.resources.pcl.PCLCoreImages;
 
 import java.util.ArrayList;
 
 public class StarEffect extends PCLEffect
 {
     protected static final ArrayList<Float> RGB = new ArrayList<>(3);
-    protected static final TextureCache image = VFX.IMAGES.star;
+    protected static final TextureCache image = PCLCoreImages.Effects.star;
 
     protected float vfxFrequency = 0.015f;
     protected float horizontalSpeed;

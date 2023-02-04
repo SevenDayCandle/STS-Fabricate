@@ -12,6 +12,7 @@ import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.augments.PCLAugmentWeights;
 import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreImages;
 
 // Copied and modified from STS-AnimatorMod
 public class PCLCardRewardActionButton extends EUIButton
@@ -30,7 +31,7 @@ public class PCLCardRewardActionButton extends EUIButton
     {
         super(buttonTexture, 0, 0);
 
-        this.augmentImage = new EUIImage(PGR.core.images.augments.augment.texture(), new RelativeHitbox(hb, SIZE, SIZE, hb.width * 0.7f, hb.height * 0.3f));
+        this.augmentImage = new EUIImage(PCLCoreImages.augment.texture(), new RelativeHitbox(hb, SIZE, SIZE, hb.width * 0.7f, hb.height * 0.3f));
         this.augmentImage.setActive(useAugment);
         this.useAugment = useAugment;
         this.container = container;

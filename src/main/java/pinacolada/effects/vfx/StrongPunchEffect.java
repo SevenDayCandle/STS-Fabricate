@@ -3,16 +3,14 @@ package pinacolada.effects.vfx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
-import extendedui.ui.TextureCache;
 import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
 import pinacolada.effects.VFX;
+import pinacolada.resources.pcl.PCLCoreImages;
 
 public class StrongPunchEffect extends PCLEffect
 {
-    public static final TextureCache image = VFX.IMAGES.punch;
-
     protected float x;
     protected float y;
     protected float rotationSpeed = 600f;
@@ -33,7 +31,7 @@ public class StrongPunchEffect extends PCLEffect
 
     public void render(SpriteBatch sb)
     {
-        renderImage(sb, image.texture(), x, y, false, false);
+        renderImage(sb, PCLCoreImages.Effects.punch.texture(), x, y, false, false);
     }
 
     @Override

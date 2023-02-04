@@ -16,6 +16,7 @@ import extendedui.ui.tooltips.EUITooltip;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.fields.PCLCardTagInfo;
 import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
@@ -172,37 +173,37 @@ public enum PCLCardTag implements TooltipProvider
         switch (this)
         {
             case Autoplay:
-                return PGR.core.images.badges.autoplay;
+                return PCLCoreImages.Badges.autoplay;
             case Delayed:
-                return PGR.core.images.badges.delayed;
+                return PCLCoreImages.Badges.delayed;
             case Ephemeral:
-                return PGR.core.images.badges.ephemeral;
+                return PCLCoreImages.Badges.ephemeral;
             case Ethereal:
-                return PGR.core.images.badges.ethereal;
+                return PCLCoreImages.Badges.ethereal;
             case Exhaust:
-                return PGR.core.images.badges.exhaust;
+                return PCLCoreImages.Badges.exhaust;
             case Fleeting:
-                return PGR.core.images.badges.fleeting;
+                return PCLCoreImages.Badges.fleeting;
             case Fragile:
-                return PGR.core.images.badges.fragile;
+                return PCLCoreImages.Badges.fragile;
             case Grave:
-                return PGR.core.images.badges.grave;
+                return PCLCoreImages.Badges.grave;
             case Haste:
-                return PGR.core.images.badges.haste;
+                return PCLCoreImages.Badges.haste;
             case Innate:
-                return PGR.core.images.badges.innate;
+                return PCLCoreImages.Badges.innate;
             case Loyal:
-                return PGR.core.images.badges.loyal;
+                return PCLCoreImages.Badges.loyal;
             case Purge:
-                return PGR.core.images.badges.purge;
+                return PCLCoreImages.Badges.purge;
             case Recast:
-                return PGR.core.images.badges.recast;
+                return PCLCoreImages.Badges.recast;
             case Retain:
-                return PGR.core.images.badges.retain;
+                return PCLCoreImages.Badges.retain;
             case Soulbound:
-                return PGR.core.images.badges.soulbound;
+                return PCLCoreImages.Badges.soulbound;
             case Unplayable:
-                return PGR.core.images.badges.unplayable;
+                return PCLCoreImages.Badges.unplayable;
         }
         throw new EnumConstantNotPresentException(PCLCardTag.class, this.name());
     }
@@ -325,11 +326,11 @@ public enum PCLCardTag implements TooltipProvider
         int tagCount = getInt(card);
         if (tagCount < 0)
         {
-            PCLRenderHelpers.drawOnCardAuto(sb, card, PGR.core.images.badges.baseInfinite.texture(), new Vector2(AbstractCard.RAW_W * 0.45f, AbstractCard.RAW_H * 0.45f + offset_y), 64, 64, Color.WHITE, alpha, 1);
+            PCLRenderHelpers.drawOnCardAuto(sb, card, PCLCoreImages.Badges.baseInfinite.texture(), new Vector2(AbstractCard.RAW_W * 0.45f, AbstractCard.RAW_H * 0.45f + offset_y), 64, 64, Color.WHITE, alpha, 1);
         }
         else if (tagCount > 1)
         {
-            PCLRenderHelpers.drawOnCardAuto(sb, card, PGR.core.images.badges.baseMulti.texture(), new Vector2(AbstractCard.RAW_W * 0.45f, AbstractCard.RAW_H * 0.45f + offset_y), 64, 64, Color.WHITE, alpha, 1);
+            PCLRenderHelpers.drawOnCardAuto(sb, card, PCLCoreImages.Badges.baseMulti.texture(), new Vector2(AbstractCard.RAW_W * 0.45f, AbstractCard.RAW_H * 0.45f + offset_y), 64, 64, Color.WHITE, alpha, 1);
         }
 
         return HEIGHT;

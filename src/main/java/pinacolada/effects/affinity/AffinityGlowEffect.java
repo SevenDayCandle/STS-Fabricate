@@ -30,7 +30,7 @@ public class AffinityGlowEffect extends PCLEffect
         this.color = gColor != null ? gColor : FALLBACK_COLOR.cpy();
         this.color.a = 0.45f;
         this.scale = 0.73f;
-        this.img = PGR.core.images.core.borderSilhouette.texture();
+        this.img = PGR.core.images.borderSilhouette.texture();
         this.source = source;
     }
 
