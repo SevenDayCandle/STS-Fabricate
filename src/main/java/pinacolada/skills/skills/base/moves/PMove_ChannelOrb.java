@@ -47,7 +47,7 @@ public class PMove_ChannelOrb extends PMove<PField_Orb>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.channelX(TEXT.subjects.x, TEXT.cardEditor.orbs);
+        return TEXT.act_channelX(TEXT.subjects_x, TEXT.cedit_orbs);
     }
 
     @Override
@@ -84,10 +84,10 @@ public class PMove_ChannelOrb extends PMove<PField_Orb>
         String base = fields.getOrbAmountString();
         if (extra > 0)
         {
-            base = TEXT.subjects.withX(base, EUIRM.strings.numNoun("+" + getExtraRawString(), PGR.core.tooltips.focus.title));
+            base = TEXT.subjects_withX(base, EUIRM.strings.numNoun("+" + getExtraRawString(), PGR.core.tooltips.focus.title));
         }
-        return fields.random ? TEXT.subjects.randomly(TEXT.actions.channelX(getAmountRawString(), base))
-                : TEXT.actions.channelX(getAmountRawString(), base);
+        return fields.random ? TEXT.subjects_randomly(TEXT.act_channelX(getAmountRawString(), base))
+                : TEXT.act_channelX(getAmountRawString(), base);
     }
 
     protected void modifyFocus(List<AbstractOrb> orbs)

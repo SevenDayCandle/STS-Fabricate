@@ -35,7 +35,7 @@ public class PField_Orb extends PField_Random
     public void setupEditor(PCLCustomCardEffectEditor<?> editor)
     {
         editor.registerOrb(orbs);
-        editor.registerBoolean(PGR.core.strings.cardEditor.random, v -> random = v, random);
+        editor.registerBoolean(PGR.core.strings.cedit_random, v -> random = v, random);
     }
 
     public PField_Orb addOrb(PCLOrbHelper... orbs)
@@ -64,7 +64,7 @@ public class PField_Orb extends PField_Random
     public String getOrbAmountString()
     {
         String efString = skill.getRawString(PSkill.EFFECT_CHAR);
-        return (!orbs.isEmpty() ? random ? getOrbOrString(orbs, efString) : getOrbAndString(orbs, efString) : TEXT.subjects.randomX(skill.plural(PGR.core.tooltips.orb)));
+        return (!orbs.isEmpty() ? random ? getOrbOrString(orbs, efString) : getOrbAndString(orbs, efString) : TEXT.subjects_randomX(skill.plural(PGR.core.tooltips.orb)));
     }
 
     public String getOrbExtraString()
@@ -72,7 +72,7 @@ public class PField_Orb extends PField_Random
         String orbStr = !orbs.isEmpty() ? getOrbAmountString() : skill.plural(PGR.core.tooltips.orb, EXTRA_CHAR);
         if (random)
         {
-            orbStr = EUIRM.strings.numNoun(skill.getExtraRawString(), TEXT.subjects.randomX(orbStr));
+            orbStr = EUIRM.strings.numNoun(skill.getExtraRawString(), TEXT.subjects_randomX(orbStr));
         }
         else
         {
@@ -80,7 +80,7 @@ public class PField_Orb extends PField_Random
             {
                 orbStr = EUIRM.strings.numNoun(skill.getExtraRawString(), orbStr);
             }
-            orbStr = skill.extra <= 0 ? TEXT.subjects.allX(orbStr) : TEXT.subjects.yourFirst(orbStr);
+            orbStr = skill.extra <= 0 ? TEXT.subjects_allX(orbStr) : TEXT.subjects_yourFirst(orbStr);
         }
         return orbStr;
     }

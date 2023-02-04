@@ -109,7 +109,7 @@ public class AfterLifeMod
     {
         final boolean[] required = getRequiredAffinities(currentCard, cards);
 
-        return booleanArrayMet(required) ? PGR.core.strings.cardMods.afterlifeMet : EUIUtils.format(PGR.core.strings.cardMods.afterlifeRequirement,
+        return booleanArrayMet(required) ? PGR.core.strings.combat_afterlifeMet : EUIUtils.format(PGR.core.strings.combat_afterlifeRequirement,
                 EUIUtils.joinStrings(", ",
                         EUIUtils.map(
                                 EUIUtils.filter(PCLAffinity.extended(), af -> required[af.id])

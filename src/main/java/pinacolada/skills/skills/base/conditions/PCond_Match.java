@@ -42,14 +42,14 @@ public class PCond_Match extends PPassiveCond<PField_CardCategory> implements On
         String name = PGR.core.tooltips.match.title;
         if (extendsMatch())
         {
-            name =  TEXT.subjects.withX(name, fields.getFullCardString());
+            name =  TEXT.subjects_withX(name, fields.getFullCardString());
         }
 
         if (hasParentType(PTrigger.class))
         {
-            return TEXT.conditions.wheneverYou(name);
+            return TEXT.cond_wheneverYou(name);
         }
-        return fields.forced ? TEXT.conditions.not(name) : name;
+        return fields.forced ? TEXT.cond_not(name) : name;
     }
 
     @Override

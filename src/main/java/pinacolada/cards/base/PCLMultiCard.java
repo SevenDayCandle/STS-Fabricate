@@ -440,7 +440,7 @@ public abstract class PCLMultiCard extends PCLCard
         public String getSubText()
         {
             return multicard.getCards().size() > 0 ?
-                    PGR.core.strings.actions.has(PCLCoreStrings.joinWithAnd(EUIUtils.map(multicard.getCards(), c -> c.name))) : EUIUtils.format(cardData.strings.EXTENDED_DESCRIPTION[0], COPIED_CARDS);
+                    PGR.core.strings.act_has(PCLCoreStrings.joinWithAnd(EUIUtils.map(multicard.getCards(), c -> c.name))) : EUIUtils.format(cardData.strings.EXTENDED_DESCRIPTION[0], COPIED_CARDS);
         }
 
 

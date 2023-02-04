@@ -45,7 +45,7 @@ public class PField_Stance extends PField_Random
 
     public String getAnyStanceString()
     {
-        return stances.isEmpty() ? TEXT.conditions.any(PGR.core.tooltips.stance.title) : getStanceString();
+        return stances.isEmpty() ? TEXT.cond_any(PGR.core.tooltips.stance.title) : getStanceString();
     }
 
     public String getStanceString()

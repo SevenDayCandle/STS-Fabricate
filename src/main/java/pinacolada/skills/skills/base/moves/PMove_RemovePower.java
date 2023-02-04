@@ -38,7 +38,7 @@ public class PMove_RemovePower extends PMove<PField_Power>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.remove(TEXT.cardEditor.powers);
+        return TEXT.act_remove(TEXT.cedit_powers);
     }
 
     @Override
@@ -77,8 +77,8 @@ public class PMove_RemovePower extends PMove<PField_Power>
     public String getSubText()
     {
         String powerString = fields.getPowerSubjectString();
-        powerString = target == PCLCardTarget.Self ? TEXT.actions.remove(TEXT.subjects.onYou(powerString)) : TEXT.actions.removeFrom(powerString, getTargetString());
-        return fields.random ? TEXT.subjects.randomly(powerString) : powerString;
+        powerString = target == PCLCardTarget.Self ? TEXT.act_remove(TEXT.subjects_onYou(powerString)) : TEXT.act_removeFrom(powerString, getTargetString());
+        return fields.random ? TEXT.subjects_randomly(powerString) : powerString;
     }
 
     protected void removePower(List<AbstractCreature> targets, PCLPowerHelper power)

@@ -56,7 +56,7 @@ public class PField_Affinity extends PField_Random
 
     public String getAffinityChoiceString()
     {
-        return affinities.isEmpty() ? TEXT.subjects.anyX(PGR.core.tooltips.affinityGeneral) : getAffinityLevelOrString(affinities);
+        return affinities.isEmpty() ? TEXT.subjects_anyX(PGR.core.tooltips.affinityGeneral) : getAffinityLevelOrString(affinities);
     }
 
     public String getAffinityAndString()

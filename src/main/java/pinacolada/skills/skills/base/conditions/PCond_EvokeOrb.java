@@ -49,7 +49,7 @@ public class PCond_EvokeOrb extends PPassiveCond<PField_Orb> implements OnOrbEvo
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.evoke(TEXT.subjects.x);
+        return TEXT.act_evoke(TEXT.subjects_x);
     }
 
     @Override
@@ -58,9 +58,9 @@ public class PCond_EvokeOrb extends PPassiveCond<PField_Orb> implements OnOrbEvo
         Object tt = fields.getOrbAndOrString();
         if (isTrigger())
         {
-            return TEXT.conditions.wheneverYou(TEXT.actions.evoke(tt));
+            return TEXT.cond_wheneverYou(TEXT.act_evoke(tt));
         }
-        return TEXT.actions.evoke(amount <= 1 ? TEXT.subjects.yourFirst(tt) : TEXT.subjects.yourFirst(EUIRM.strings.numNoun(getAmountRawString(), tt)));
+        return TEXT.act_evoke(amount <= 1 ? TEXT.subjects_yourFirst(tt) : TEXT.subjects_yourFirst(EUIRM.strings.numNoun(getAmountRawString(), tt)));
     }
 
     @Override

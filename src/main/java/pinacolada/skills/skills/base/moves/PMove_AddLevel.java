@@ -33,7 +33,7 @@ public class PMove_AddLevel extends PMove<PField_Affinity>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.gain(PGR.core.tooltips.level);
+        return TEXT.act_gain(PGR.core.tooltips.level);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class PMove_AddLevel extends PMove<PField_Affinity>
     @Override
     public String getSubText()
     {
-        String base = TEXT.actions.giveTargetAmount(fields.getAffinityChoiceString(), (amount > 0 ? ("+ " + getAmountRawString()) : getAmountRawString()), plural(PGR.core.tooltips.level));
-        return fields.random ? TEXT.subjects.randomly(base) : base;
+        String base = TEXT.act_giveTargetAmount(fields.getAffinityChoiceString(), (amount > 0 ? ("+ " + getAmountRawString()) : getAmountRawString()), plural(PGR.core.tooltips.level));
+        return fields.random ? TEXT.subjects_randomly(base) : base;
     }
 }

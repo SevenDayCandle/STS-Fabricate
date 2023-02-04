@@ -45,7 +45,7 @@ public class PMove_GainBlock extends PMove<PField_Empty>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.gainAmount(TEXT.subjects.x, PGR.core.tooltips.block.title);
+        return TEXT.act_gainAmount(TEXT.subjects_x, PGR.core.tooltips.block.title);
     }
 
     @Override
@@ -53,9 +53,9 @@ public class PMove_GainBlock extends PMove<PField_Empty>
     {
         if (isSelfOnlyTarget())
         {
-            return TEXT.actions.gainAmount(getAmountRawString(), PGR.core.tooltips.block);
+            return TEXT.act_gainAmount(getAmountRawString(), PGR.core.tooltips.block);
         }
-        return TEXT.actions.giveTargetAmount(getTargetString(), getAmountRawString(), PGR.core.tooltips.block);
+        return TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), PGR.core.tooltips.block);
     }
 
     @Override

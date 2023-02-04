@@ -51,7 +51,7 @@ public class PMove_EnterStance extends PMove<PField_Stance>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.enterStance(TEXT.subjects.x);
+        return TEXT.act_enterStance(TEXT.subjects_x);
     }
 
     @Override
@@ -81,12 +81,12 @@ public class PMove_EnterStance extends PMove<PField_Stance>
     {
         if (fields.stances.isEmpty())
         {
-            return TEXT.actions.exitStance();
+            return TEXT.act_exitStance();
         }
         if (extra > 0)
         {
-            return fields.random ? TEXT.subjects.randomly(TEXT.actions.enterStance(TEXT.subjects.anyX(PGR.core.tooltips.stance))) : TEXT.actions.enterStance(TEXT.subjects.anyX(PGR.core.tooltips.stance));
+            return fields.random ? TEXT.subjects_randomly(TEXT.act_enterStance(TEXT.subjects_anyX(PGR.core.tooltips.stance))) : TEXT.act_enterStance(TEXT.subjects_anyX(PGR.core.tooltips.stance));
         }
-        return fields.random ? TEXT.subjects.randomly(TEXT.actions.enterStance(fields.getStanceString())) : TEXT.actions.enterStance(fields.getStanceString());
+        return fields.random ? TEXT.subjects_randomly(TEXT.act_enterStance(fields.getStanceString())) : TEXT.act_enterStance(fields.getStanceString());
     }
 }

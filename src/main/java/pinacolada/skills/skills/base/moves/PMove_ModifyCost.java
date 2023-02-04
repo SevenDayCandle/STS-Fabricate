@@ -46,14 +46,14 @@ public class PMove_ModifyCost extends PMove_Modify<PField_CardCategory>
     @Override
     public String getObjectSampleText()
     {
-        return TEXT.subjects.cost;
+        return TEXT.subjects_cost;
     }
 
     @Override
     public String getObjectText()
     {
-        String base = EUIRM.strings.numNoun(getExtraRawString(), TEXT.subjects.cost);
-        return fields.forced ? TEXT.subjects.thisTurn(base) : EUIRM.strings.numNoun(getExtraRawString(), TEXT.subjects.cost);
+        String base = EUIRM.strings.numNoun(getExtraRawString(), TEXT.subjects_cost);
+        return fields.forced ? TEXT.subjects_thisTurn(base) : EUIRM.strings.numNoun(getExtraRawString(), TEXT.subjects_cost);
     }
 
     @Override

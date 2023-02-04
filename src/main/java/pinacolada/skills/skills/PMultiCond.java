@@ -218,7 +218,7 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         if (amount != 0)
         {
             return getSubText() + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : ": ") + childEffect.getText(0, true)) + " " +
-                    TEXT.conditions.otherwise(childEffect.getText(1, addPeriod)) : "");
+                    TEXT.cond_otherwise(childEffect.getText(1, addPeriod)) : "");
         }
         return effects.isEmpty() ? (childEffect != null ? childEffect.getText(addPeriod) : "")
                 : getSubText() + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : ": ") + childEffect.getText(addPeriod)) : PCLCoreStrings.period(addPeriod));

@@ -532,7 +532,7 @@ public class CombatManager
             AbstractDungeon.player.tint.color.a = 0;
             PCLActions.bottom.playSFX(SFX.NULLIFY_SFX, 1.6f, 1.6f);
             PCLActions.top.wait(0.15f);
-            PCLEffects.Queue.add(new DodgeEffect(target.hb.cX - target.animX, target.hb.cY + target.hb.height / 2f, PGR.core.strings.combat.dodged));
+            PCLEffects.Queue.add(new DodgeEffect(target.hb.cX - target.animX, target.hb.cY + target.hb.height / 2f, PGR.core.strings.combat_dodged));
             return 0;
         }
 

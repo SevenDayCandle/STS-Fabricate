@@ -18,11 +18,11 @@ public class ExtendedUIPatches
         {
             if (type == PCLEnum.CardRarity.SECRET)
             {
-                return SpireReturn.Return(PGR.core.strings.cardType.secretRare);
+                return SpireReturn.Return(PGR.core.strings.ctype_secretRare);
             }
             else if (type == PCLEnum.CardRarity.LEGENDARY)
             {
-                return SpireReturn.Return(PGR.core.strings.cardType.legendary);
+                return SpireReturn.Return(PGR.core.strings.ctype_legendary);
             }
             return SpireReturn.Continue();
         }

@@ -232,11 +232,11 @@ public class PCLBaseStatEditor extends EUIBase
                 case HP:
                     return CharacterOption.TEXT[4] + getAmount(loadout, data);
                 case CardDraw:
-                    return PGR.core.strings.rewards.orbSlot + ": " + getAmount(loadout, data);
+                    return PGR.core.strings.rewards_orbSlot + ": " + getAmount(loadout, data);
                 case PotionSlot:
-                    return PGR.core.strings.rewards.potionSlot + ": " + getAmount(loadout, data);
+                    return PGR.core.strings.rewards_potionSlot + ": " + getAmount(loadout, data);
                 case Energy:
-                    return PGR.core.strings.rewards.commonUpgrade + ": " + getAmount(loadout, data);
+                    return PGR.core.strings.rewards_commonUpgrade + ": " + getAmount(loadout, data);
                 default:
                     return "";
             }

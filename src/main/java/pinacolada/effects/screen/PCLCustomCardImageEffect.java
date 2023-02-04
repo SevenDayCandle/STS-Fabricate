@@ -83,7 +83,7 @@ public class PCLCustomCardImageEffect extends PCLEffectWithCallback<Pixmap>
                 new EUIHitbox(Settings.WIDTH * 0.35f, Settings.HEIGHT * 0.1f, buttonWidth * 2f, buttonHeight))
                 .setAlignment(0.5f, 0f, true)
                 .setFont(EUIFontHelper.cardtitlefontSmall, 0.8f)
-                .setLabel(PGR.core.strings.cardEditorTutorial.imageSelect);
+                .setLabel(PGR.core.strings.cetut_imageSelect);
 
         cancelButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(buttonWidth * 0.6f, button_cY)
@@ -103,21 +103,21 @@ public class PCLCustomCardImageEffect extends PCLEffectWithCallback<Pixmap>
         pasteButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(cancelButton.hb.cX, saveButton.hb.y + saveButton.hb.height + labelHeight * 0.8f)
                 .setColor(Color.WHITE)
-                .setText(PGR.core.strings.cardEditor.paste)
+                .setText(PGR.core.strings.cedit_paste)
                 .setFont(EUIFontHelper.buttonFont, 0.85f)
                 .setOnClick(this::getImageFromClipboard);
 
         selectExistingButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(cancelButton.hb.cX, pasteButton.hb.y + pasteButton.hb.height + labelHeight * 0.8f)
                 .setColor(Color.WHITE)
-                .setText(PGR.core.strings.cardEditor.loadFromCard)
+                .setText(PGR.core.strings.cedit_loadFromCard)
                 .setFont(EUIFontHelper.buttonFont, 0.85f)
                 .setOnClick(this::selectExistingCards);
 
         loadButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(cancelButton.hb.cX, selectExistingButton.hb.y + selectExistingButton.hb.height + labelHeight * 0.8f)
                 .setColor(Color.WHITE)
-                .setText(PGR.core.strings.cardEditor.loadFile)
+                .setText(PGR.core.strings.cedit_loadFile)
                 .setFont(EUIFontHelper.buttonFont, 0.85f)
                 .setOnClick(this::getImageFromFileDialog);
 
@@ -296,7 +296,7 @@ public class PCLCustomCardImageEffect extends PCLEffectWithCallback<Pixmap>
             minZoom = Math.max(IMG_WIDTH / baseTexture.getWidth(), IMG_HEIGHT / baseTexture.getHeight());
             zoomBar.setActive(true);
             updateZoom(1f);
-            instructionsLabel.setLabel(PGR.core.strings.cardEditorTutorial.imageCrop);
+            instructionsLabel.setLabel(PGR.core.strings.cetut_imageCrop);
             saveButton.setInteractable(true);
         }
     }

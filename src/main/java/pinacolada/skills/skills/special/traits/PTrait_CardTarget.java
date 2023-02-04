@@ -36,7 +36,7 @@ public class PTrait_CardTarget extends PTrait<PField_CardTarget>
     public String getSubText()
     {
         return hasParentType(PTrigger.class) ? getSubDescText() :
-                fields.random ? TEXT.actions.remove(getSubDescText()) : TEXT.actions.has(getSubDescText());
+                fields.random ? TEXT.act_remove(getSubDescText()) : TEXT.act_has(getSubDescText());
     }
 
     @Override
@@ -65,6 +65,6 @@ public class PTrait_CardTarget extends PTrait<PField_CardTarget>
     @Override
     public String getSubSampleText()
     {
-        return TEXT.cardEditor.cardTarget;
+        return TEXT.cedit_cardTarget;
     }
 }

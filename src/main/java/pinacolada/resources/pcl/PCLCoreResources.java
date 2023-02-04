@@ -36,7 +36,7 @@ public class PCLCoreResources extends PCLResources<PCLCoreConfig, PCLCoreImages,
 {
     public static final String ID = PGR.BASE_PREFIX;
     public final PCLDungeon dungeon = PCLDungeon.register(createID(PCLDungeon.class.getSimpleName()));
-    public final PCLCoreStrings strings = new PCLCoreStrings(this);
+    public PCLCoreStrings strings;
     public AbstractScreen currentScreen;
     public PCLAugmentPanelItem augmentPanel;
     public CardAffinityPanel cardAffinities;
@@ -81,7 +81,7 @@ public class PCLCoreResources extends PCLResources<PCLCoreConfig, PCLCoreImages,
     public void setupTooltips()
     {
         tooltips = new PCLCoreTooltips();
-        strings.initialize();
+        strings = new PCLCoreStrings(this);
     }
 
     protected void postInitialize()

@@ -50,7 +50,7 @@ public abstract class PCond_DoBranch extends PCond_Branch<PField_CardCategory, A
         AbstractCard.CardType type = i < fields.types.size() ? fields.types.get(i) : null;
         return affinity != null && type != null ? affinity.getTooltip().getTitleOrIcon() + " " + EUIGameUtils.textForType(type) :
                 affinity != null ? affinity.getTooltip().getTitleOrIcon() :
-                        type != null ? EUIGameUtils.textForType(type) : TEXT.subjects.other;
+                        type != null ? EUIGameUtils.textForType(type) : TEXT.subjects_other;
     }
 
     @Override
@@ -59,7 +59,7 @@ public abstract class PCond_DoBranch extends PCond_Branch<PField_CardCategory, A
         if (this.childEffect instanceof PMultiBase)
         {
             return getSubText() + EFFECT_SEPARATOR +
-                    TEXT.conditions.doForEach() + ": | " + getEffectTexts(addPeriod);
+                    TEXT.cond_doForEach() + ": | " + getEffectTexts(addPeriod);
         }
         return getSubText();
     }
@@ -84,13 +84,13 @@ public abstract class PCond_DoBranch extends PCond_Branch<PField_CardCategory, A
     @Override
     public String getSampleText()
     {
-        return EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects.x) + EFFECT_SEPARATOR + TEXT.conditions.doForEach();
+        return EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects_x) + EFFECT_SEPARATOR + TEXT.cond_doForEach();
     }
 
     @Override
     public String getSubText()
     {
-        return !fields.groupTypes.isEmpty() ? TEXT.actions.genericFrom(getActionTitle(), getAmountRawString(), fields.getShortCardString(), fields.getGroupString())
+        return !fields.groupTypes.isEmpty() ? TEXT.act_genericFrom(getActionTitle(), getAmountRawString(), fields.getShortCardString(), fields.getGroupString())
                 : EUIRM.strings.verbNoun(getActionTitle(), getAmountRawString());
     }
 

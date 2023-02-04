@@ -42,13 +42,13 @@ public abstract class PMod_BonusOn<T extends PField> extends PPassiveMod<T>
     @Override
     public String getSampleText()
     {
-        return TEXT.conditions.numIf(TEXT.subjects.x, getSubText());
+        return TEXT.cond_numIf(TEXT.subjects_x, getSubText());
     }
 
     @Override
     public String getText(boolean addPeriod)
     {
-        return TEXT.conditions.genericConditional(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", TEXT.conditions.numIf(getAmountRawString(), getConditionText())) + PCLCoreStrings.period(addPeriod);
+        return TEXT.cond_genericConditional(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", TEXT.cond_numIf(getAmountRawString(), getConditionText())) + PCLCoreStrings.period(addPeriod);
     }
 
     @Override

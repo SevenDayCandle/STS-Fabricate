@@ -33,7 +33,7 @@ public class PMove_RemoveBlock extends PMove<PField_Empty>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.remove(PGR.core.tooltips.block.title);
+        return TEXT.act_remove(PGR.core.tooltips.block.title);
     }
 
     @Override
@@ -52,6 +52,6 @@ public class PMove_RemoveBlock extends PMove<PField_Empty>
     @Override
     public String getSubText()
     {
-        return TEXT.actions.removeFrom(PGR.core.tooltips.block, getTargetString());
+        return TEXT.act_removeFrom(PGR.core.tooltips.block, getTargetString());
     }
 }

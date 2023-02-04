@@ -48,7 +48,7 @@ public class PMove_StealGold extends PMove<PField_Empty>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.stealAmount(TEXT.subjects.x, PGR.core.tooltips.gold.title);
+        return TEXT.act_stealAmount(TEXT.subjects_x, PGR.core.tooltips.gold.title);
     }
 
     @Override
@@ -69,6 +69,6 @@ public class PMove_StealGold extends PMove<PField_Empty>
     @Override
     public String getSubText()
     {
-        return TEXT.actions.stealFrom(getAmountRawString(), PGR.core.tooltips.gold, getTargetString());
+        return TEXT.act_stealFrom(getAmountRawString(), PGR.core.tooltips.gold, getTargetString());
     }
 }

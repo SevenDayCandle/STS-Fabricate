@@ -34,7 +34,7 @@ public class PCond_HighestAffinityBranch extends PCond_Branch<PField_Affinity, P
     public String getQualifier(int i)
     {
         PCLAffinity affinity = i < fields.affinities.size() ? fields.affinities.get(i) : null;
-        return affinity != null ? affinity.getLevelTooltip().getTitleOrIcon() : TEXT.subjects.other;
+        return affinity != null ? affinity.getLevelTooltip().getTitleOrIcon() : TEXT.subjects_other;
     }
 
     @Override
@@ -46,14 +46,14 @@ public class PCond_HighestAffinityBranch extends PCond_Branch<PField_Affinity, P
     @Override
     public String getSampleText()
     {
-        return TEXT.conditions.ifYourHighest(PGR.core.tooltips.affinityGeneral.title);
+        return TEXT.cond_ifYourHighest(PGR.core.tooltips.affinityGeneral.title);
     }
 
     @Override
     public String getSubText()
     {
-        String base = TEXT.conditions.ifYourHighest(EUIRM.strings.adjNoun(PGR.core.tooltips.level.title, PGR.core.tooltips.affinityGeneral.title));
-        return extra > 0 ? base + " (" + TEXT.subjects.min(extra) + ")" : base;
+        String base = TEXT.cond_ifYourHighest(EUIRM.strings.adjNoun(PGR.core.tooltips.level.title, PGR.core.tooltips.affinityGeneral.title));
+        return extra > 0 ? base + " (" + TEXT.subjects_min(extra) + ")" : base;
     }
 
     @Override

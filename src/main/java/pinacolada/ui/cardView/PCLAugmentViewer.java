@@ -57,14 +57,14 @@ public class PCLAugmentViewer extends EUIHoverable
                     .setBackground(augment.getTexture())
                     .setColor(augment.getColor())
                     .setShaderMode(EUIRenderHelpers.ShaderMode.Colorize);
-            augmentButton.tooltip.setTitle(augmentTitle.text).setDescription(augment.canRemove() ? PGR.core.strings.singleCardPopupButtons.clickToRemove : PGR.core.strings.singleCardPopupButtons.cannotRemove);
+            augmentButton.tooltip.setTitle(augmentTitle.text).setDescription(augment.canRemove() ? PGR.core.strings.scp_clickToRemove : PGR.core.strings.scp_cannotRemove);
             augmentDescription.setLabel(augment.getFullText());
         }
         else
         {
-            augmentTitle.setLabel(PGR.core.strings.singleCardPopupButtons.emptyAugment);
+            augmentTitle.setLabel(PGR.core.strings.scp_emptyAugment);
             augmentButton.setBackground(PGR.core.images.augments.augment.texture()).setColor(Color.WHITE).setShaderMode(EUIRenderHelpers.ShaderMode.Normal);
-            augmentButton.tooltip.setTitle(augmentTitle.text).setDescription(PGR.core.strings.singleCardPopupButtons.clickToSlot);
+            augmentButton.tooltip.setTitle(augmentTitle.text).setDescription(PGR.core.strings.scp_clickToSlot);
             augmentDescription.setLabel("");
         }
     }

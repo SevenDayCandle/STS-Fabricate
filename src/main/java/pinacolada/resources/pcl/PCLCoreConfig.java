@@ -122,24 +122,23 @@ public class PCLCoreConfig extends AbstractConfig
     public void initializeOptions()
     {
         final ModPanel panel = new ModPanel();
-        final PCLCoreStrings.Options misc = PGR.core.strings.options;
 
         int yPos = BASE_OPTION_OFFSET_Y;
 
-        yPos = addToggle(panel, cropCardImages, misc.cropCardImages, yPos);
-        yPos = addToggle(panel, displayCardTagDescription, misc.displayCardTagDescription, yPos);
-        yPos = addToggle(panel, enableEventsForOtherCharacters, misc.enableEventsForOtherCharacters, yPos);
-        yPos = addToggle(panel, enableRelicsForOtherCharacters, misc.enableRelicsForOtherCharacters, yPos);
-        yPos = addToggle(panel, showFormulaDisplay, misc.showFormulaDisplay, yPos);
-        yPos = addToggle(panel, hideIrrelevantAffinities, misc.hideIrrelevantAffinities, yPos);
-        yPos = addToggle(panel, replaceCardsPCL, misc.replaceCards, yPos);
+        yPos = addToggle(panel, cropCardImages, PGR.core.strings.options_cropCardImages, yPos);
+        yPos = addToggle(panel, displayCardTagDescription, PGR.core.strings.options_displayCardTagDescription, yPos);
+        yPos = addToggle(panel, enableEventsForOtherCharacters, PGR.core.strings.options_enableEventsForOtherCharacters, yPos);
+        yPos = addToggle(panel, enableRelicsForOtherCharacters, PGR.core.strings.options_enableRelicsForOtherCharacters, yPos);
+        yPos = addToggle(panel, showFormulaDisplay, PGR.core.strings.options_showFormulaDisplay, yPos);
+        yPos = addToggle(panel, hideIrrelevantAffinities, PGR.core.strings.options_hideIrrelevantAffinities, yPos);
+        yPos = addToggle(panel, replaceCardsPCL, PGR.core.strings.options_replaceCards, yPos);
 
         BaseMod.registerModBadge(ImageMaster.loadImage("images/pcl/modBadge.png"), MOD_ID, "PinaColada", "", panel);
 
-        addModToggle(cropCardImages, misc.cropCardImages);
-        addModToggle(displayCardTagDescription, misc.displayCardTagDescription);
-        addModToggle(showFormulaDisplay,  misc.showFormulaDisplay);
-        addModToggle(hideIrrelevantAffinities,  misc.hideIrrelevantAffinities);
+        addModToggle(cropCardImages, PGR.core.strings.options_cropCardImages);
+        addModToggle(displayCardTagDescription, PGR.core.strings.options_displayCardTagDescription);
+        addModToggle(showFormulaDisplay,  PGR.core.strings.options_showFormulaDisplay);
+        addModToggle(hideIrrelevantAffinities,  PGR.core.strings.options_hideIrrelevantAffinities);
 
         EUIConfiguration.disableDescrptionIcons.addListener(val -> this.updateCardDescriptions());
         displayCardTagDescription.addListener(val -> this.updateCardDescriptions());

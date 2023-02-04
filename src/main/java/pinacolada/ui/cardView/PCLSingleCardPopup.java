@@ -31,7 +31,6 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.effects.screen.PCLAugmentSelectionEffect;
 import pinacolada.resources.PGR;
-import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -68,7 +67,6 @@ public class PCLSingleCardPopup extends EUIBase
     private final EUIHitbox changeVariantNextHb;
     private final EUIHitbox changeVariantPrevHb;
     private final EUIHitbox changeVariantValueHb;
-    private final PCLCoreStrings.SingleCardPopupButtons buttonStrings = PGR.core.strings.singleCardPopupButtons;
     private final Color fadeColor;
     private PCLCard baseCard;
     private PCLCard card;
@@ -121,7 +119,7 @@ public class PCLSingleCardPopup extends EUIBase
                 .setBorder(EUIRM.images.hexagonalButtonBorder.texture(), Color.WHITE)
                 .setClickDelay(0.3f)
                 .setDimensions(screenW(0.18f), screenH(0.07f))
-                .setText(buttonStrings.changeVariant)
+                .setText(PGR.core.strings.scp_changeVariant)
                 .setOnClick(this::changeCardForm)
                 .setColor(Color.FIREBRICK);
 
@@ -139,7 +137,7 @@ public class PCLSingleCardPopup extends EUIBase
                 .setColor(Color.GRAY)
                 .setBorder(EUIRM.images.hexagonalButtonBorder.texture(), Color.GRAY)
                 .setOnClick(() -> toggleAugmentView(!showAugments))
-                .setText(PGR.core.strings.singleCardPopupButtons.viewTooltips);
+                .setText(PGR.core.strings.scp_viewTooltips);
 
         this.changeVariantNumber = new EUITextBox(EUIRM.images.panelRoundedHalfH.texture(), changeVariantValueHb)
                 .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.05f)
@@ -150,12 +148,12 @@ public class PCLSingleCardPopup extends EUIBase
         this.changeVariantLabel = new EUILabel(EUIFontHelper.carddescriptionfontLarge,
                 new RelativeHitbox(changeVariantHb, ICON_SIZE, ICON_SIZE, changeVariantHb.width / 2 - ICON_SIZE * 2, changeVariantHb.height * 1.6f))
                 .setAlignment(0.5f, 0.5f) // 0.1f
-                .setLabel(buttonStrings.variant + ":");
+                .setLabel(PGR.core.strings.scp_variant + ":");
 
         this.changeVariantDescription = new EUILabel(EUIFontHelper.cardTooltipFont,
                 new RelativeHitbox(changeVariantHb, screenW(0.21f), screenH(0.07f), changeVariantHb.width / 2, -changeVariantHb.height * 0.6f))
                 .setAlignment(0.9f, 0.1f, true)
-                .setLabel(buttonStrings.changeVariantTooltipAlways);
+                .setLabel(PGR.core.strings.scp_changeVariantTooltipAlways);
 
         this.maxCopiesLabel = new EUILabel(EUIFontHelper.carddescriptionfontLarge,
                 new RelativeHitbox(changeVariantHb, ICON_SIZE, ICON_SIZE, changeVariantHb.width / 2 - ICON_SIZE * 1.5f, changeVariantHb.height * 4.3f))
@@ -169,12 +167,12 @@ public class PCLSingleCardPopup extends EUIBase
         this.maxCopiesDescription = new EUILabel(EUIFontHelper.cardTooltipFont,
                 new RelativeHitbox(changeVariantHb, screenW(0.21f), screenH(0.07f), changeVariantHb.width / 2, changeVariantHb.height * 3.4f))
                 .setAlignment(0.9f, 0.1f, true)
-                .setLabel(PGR.core.strings.cardEditorTutorial.maxCopies);
+                .setLabel(PGR.core.strings.cetut_maxCopies);
 
         this.artAuthorLabel = new EUILabel(EUIFontHelper.cardTooltipFont,
                 new RelativeHitbox(changeVariantHb, screenW(0.21f), screenH(0.07f), changeVariantHb.width / 2 - ICON_SIZE * 0.75f, changeVariantHb.height * 4.52f))
                 .setAlignment(0.9f, 0.1f, true)
-                .setLabel(buttonStrings.artAuthor);
+                .setLabel(PGR.core.strings.scp_artAuthor);
     }
 
     private void applyAugment(PCLAugment augment)
@@ -343,13 +341,13 @@ public class PCLSingleCardPopup extends EUIBase
         {
             String author = FlavorText.CardStringsFlavorField.flavor.get(cardData.strings);
             viewChangeVariants = cardData.canToggleFromPopup && (baseCard.upgraded || cardData.unUpgradedCanToggleForms) && (baseCard.auxiliaryData.form == 0 || cardData.canToggleFromAlternateForm) && GameUtilities.inGame();
-            changeVariantDescription.setLabel(!cardData.canToggleFromAlternateForm ? buttonStrings.changeVariantTooltipPermanent : buttonStrings.changeVariantTooltipAlways);
-            artAuthorLabel.setLabel(author != null ? buttonStrings.artAuthor + EUIUtils.modifyString(author, w -> "#y" + w) : "");
+            changeVariantDescription.setLabel(!cardData.canToggleFromAlternateForm ? PGR.core.strings.scp_changeVariantTooltipPermanent : PGR.core.strings.scp_changeVariantTooltipAlways);
+            artAuthorLabel.setLabel(author != null ? PGR.core.strings.scp_artAuthor + EUIUtils.modifyString(author, w -> "#y" + w) : "");
         }
         else
         {
             viewChangeVariants = false;
-            changeVariantDescription.setLabel(buttonStrings.changeVariantTooltipAlways);
+            changeVariantDescription.setLabel(PGR.core.strings.scp_changeVariantTooltipAlways);
             artAuthorLabel.setLabel("");
         }
 
@@ -449,7 +447,7 @@ public class PCLSingleCardPopup extends EUIBase
     private void toggleAugmentView(boolean value)
     {
         showAugments = value;
-        toggleAugment.setText(showAugments ? PGR.core.strings.singleCardPopupButtons.viewTooltips : PGR.core.strings.singleCardPopupButtons.viewAugments);
+        toggleAugment.setText(showAugments ? PGR.core.strings.scp_viewTooltips : PGR.core.strings.scp_viewAugments);
     }
 
     private void toggleBetaArt(boolean value)
@@ -498,7 +496,7 @@ public class PCLSingleCardPopup extends EUIBase
         this.changeVariant.tryUpdate();
         this.changeVariantLabel.tryUpdate();
         this.changeVariantDescription.tryUpdate();
-        this.maxCopiesLabel.setLabel((AbstractDungeon.player != null ? buttonStrings.currentCopies : buttonStrings.maxCopies) + ":");
+        this.maxCopiesLabel.setLabel((AbstractDungeon.player != null ? PGR.core.strings.scp_currentCopies : PGR.core.strings.scp_maxCopies) + ":");
         this.maxCopiesLabel.tryUpdate();
         this.maxCopiesCount.setLabel(getCardCopiesText());
         this.maxCopiesCount.tryUpdate();

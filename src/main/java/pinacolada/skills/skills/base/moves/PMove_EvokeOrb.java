@@ -51,7 +51,7 @@ public class PMove_EvokeOrb extends PMove<PField_Orb>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.evoke(TEXT.subjects.x);
+        return TEXT.act_evoke(TEXT.subjects_x);
     }
 
     @Override
@@ -65,6 +65,6 @@ public class PMove_EvokeOrb extends PMove<PField_Orb>
     public String getSubText()
     {
         String orbStr = fields.getOrbExtraString();
-        return amount == 1 ? TEXT.actions.evoke(orbStr) : TEXT.actions.evokeXTimes(orbStr, getAmountRawString());
+        return amount == 1 ? TEXT.act_evoke(orbStr) : TEXT.act_evokeXTimes(orbStr, getAmountRawString());
     }
 }

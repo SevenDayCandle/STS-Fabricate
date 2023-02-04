@@ -39,18 +39,18 @@ public class PCLCustomCardBlockPage extends PCLCustomCardEffectPage
 
         enableToggle = (EUIToggle) new EUIToggle(new OriginRelativeHitbox(hb, MENU_WIDTH / 4, MENU_HEIGHT, 0, OFFSET_EFFECT))
                 .setFont(EUIFontHelper.carddescriptionfontNormal, 0.9f)
-                .setText(PGR.core.strings.cardEditor.enable)
+                .setText(PGR.core.strings.cedit_enable)
                 .setOnToggle(this::setMove);
         blockEditor = new PCLCustomCardUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 4, MENU_HEIGHT, MENU_WIDTH, OFFSET_EFFECT * 1.3f)
-                , PGR.core.strings.cardEditor.block, (val, upVal) -> screen.modifyBuilder(e -> e.setBlock(val, upVal, e.rightCount, e.rightCountUpgrade)))
+                , PGR.core.strings.cedit_block, (val, upVal) -> screen.modifyBuilder(e -> e.setBlock(val, upVal, e.rightCount, e.rightCountUpgrade)))
                 .setLimits(0, PSkill.DEFAULT_MAX)
                 .setTooltip(PGR.core.tooltips.block);
-        blockEditor.tooltip.setChild(new EUITooltip(PGR.core.strings.cardEditor.upgrades, PGR.core.strings.cardEditorTutorial.amount));
+        blockEditor.tooltip.setChild(new EUITooltip(PGR.core.strings.cedit_upgrades, PGR.core.strings.cetut_amount));
         rightCountEditor = new PCLCustomCardUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 4, MENU_HEIGHT, MENU_WIDTH * 1.5f, OFFSET_EFFECT * 1.3f)
-                , EUIUtils.format(PGR.core.strings.cardEditor.hitCount, PGR.core.strings.cardEditor.block), (val, upVal) -> screen.modifyBuilder(e -> e.setRightCount(val, upVal)))
+                , EUIUtils.format(PGR.core.strings.cedit_hitCount, PGR.core.strings.cedit_block), (val, upVal) -> screen.modifyBuilder(e -> e.setRightCount(val, upVal)))
                 .setLimits(1, PSkill.DEFAULT_MAX);
-        rightCountEditor.setTooltip(rightCountEditor.header.text, PGR.core.strings.cardEditorTutorial.blockCount);
-        rightCountEditor.tooltip.setChild(new EUITooltip(PGR.core.strings.cardEditor.upgrades, PGR.core.strings.cardEditorTutorial.amount));
+        rightCountEditor.setTooltip(rightCountEditor.header.text, PGR.core.strings.cetut_blockCount);
+        rightCountEditor.tooltip.setChild(new EUITooltip(PGR.core.strings.cedit_upgrades, PGR.core.strings.cetut_amount));
     }
 
     public void refresh()

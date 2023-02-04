@@ -41,7 +41,7 @@ public class PMove_TriggerAlly extends PMove<PField_Empty>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.trigger(PGR.core.tooltips.summon.title);
+        return TEXT.act_trigger(PGR.core.tooltips.summon.title);
     }
 
     @Override
@@ -60,6 +60,6 @@ public class PMove_TriggerAlly extends PMove<PField_Empty>
     @Override
     public String getSubText()
     {
-        return amount == 1 ? TEXT.actions.trigger(getTargetString()) : TEXT.actions.triggerXTimes(getTargetString(), getAmountRawString());
+        return amount == 1 ? TEXT.act_trigger(getTargetString()) : TEXT.act_triggerXTimes(getTargetString(), getAmountRawString());
     }
 }

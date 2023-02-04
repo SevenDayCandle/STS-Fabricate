@@ -48,13 +48,13 @@ public class PMove_StealTempHP extends PMove_DealDamage
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.stealAmount(TEXT.subjects.x, PGR.core.tooltips.tempHP.title);
+        return TEXT.act_stealAmount(TEXT.subjects_x, PGR.core.tooltips.tempHP.title);
     }
 
     @Override
     public String getSubText()
     {
-        return TEXT.actions.stealFrom(getAmountRawString(), PGR.core.tooltips.tempHP, getTargetString());
+        return TEXT.act_stealFrom(getAmountRawString(), PGR.core.tooltips.tempHP, getTargetString());
     }
 
     protected void setDamageOptions(DealDamage damageAction, PCLUseInfo info)

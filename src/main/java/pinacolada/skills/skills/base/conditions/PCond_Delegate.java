@@ -28,7 +28,7 @@ public abstract class PCond_Delegate extends PPassiveCond<PField_CardCategory>
     @Override
     public String getSampleText()
     {
-        return TEXT.conditions.onGeneric(getDelegateSampleText());
+        return TEXT.cond_onGeneric(getDelegateSampleText());
     }
 
     @Override
@@ -36,9 +36,9 @@ public abstract class PCond_Delegate extends PPassiveCond<PField_CardCategory>
     {
         if (hasParentType(PTrigger.class))
         {
-            return TEXT.conditions.whenObjectIs(fields.getFullCardString(1), getDelegatePastText());
+            return TEXT.cond_whenObjectIs(fields.getFullCardString(1), getDelegatePastText());
         }
-        return TEXT.conditions.onGeneric(getDelegateText());
+        return TEXT.cond_onGeneric(getDelegateText());
     }
 
     // This should not activate the child effect when played normally

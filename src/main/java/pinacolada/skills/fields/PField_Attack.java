@@ -31,7 +31,7 @@ public class PField_Attack extends PField
 
     public void setupEditor(PCLCustomCardEffectEditor<?> editor)
     {
-        editor.registerDropdown(AttackEffects.keys(), EUIUtils.list(attackEffect), Enum::name, PGR.core.strings.cardEditor.attackEffect, false);
+        editor.registerDropdown(AttackEffects.keys(), EUIUtils.list(attackEffect), Enum::name, PGR.core.strings.cedit_attackEffect, false);
         super.setupEditor(editor);
     }
 

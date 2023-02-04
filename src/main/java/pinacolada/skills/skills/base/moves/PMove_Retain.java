@@ -53,8 +53,8 @@ public class PMove_Retain extends PMove_Select
     @Override
     public String getSubText()
     {
-        return useParent ? TEXT.actions.retain(getInheritedString()) :
-                fields.hasGroups() ? TEXT.actions.retain(amount <= 0 ? TEXT.subjects.all : getAmountRawString(), fields.getFullCardString())
-                : TEXT.actions.retain(TEXT.subjects.thisObj);
+        return useParent ? TEXT.act_retain(getInheritedString()) :
+                fields.hasGroups() ? TEXT.act_retain(amount <= 0 ? TEXT.subjects_all : getAmountRawString(), fields.getFullCardString())
+                : TEXT.act_retain(TEXT.subjects_thisObj);
     }
 }

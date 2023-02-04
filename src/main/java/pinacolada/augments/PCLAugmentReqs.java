@@ -58,21 +58,21 @@ public class PCLAugmentReqs
         String base = EUIUtils.joinTrueStrings(", ",
                 colors.isEmpty() ? null : PCLCoreStrings.joinWithOr(EUIUtils.map(colors, EUIGameUtils::getColorName)),
                 affinities.isEmpty() ? null : PCLCoreStrings.joinWithOr(EUIUtils.map(affinities, a -> a.getTooltip().getTitleOrIcon())),
-                affinitiesNot.isEmpty() ? null : PGR.core.strings.conditions.not(PCLCoreStrings.joinWithOr(EUIUtils.map(affinitiesNot, a -> a.getTooltip().getTitleOrIcon()))),
+                affinitiesNot.isEmpty() ? null : PGR.core.strings.cond_not(PCLCoreStrings.joinWithOr(EUIUtils.map(affinitiesNot, a -> a.getTooltip().getTitleOrIcon()))),
                 cardTargets.isEmpty() ? null : PCLCoreStrings.joinWithOr(EUIUtils.map(cardTargets, PCLCardTarget::getTitle)),
                 tags.isEmpty() ? null : PCLCoreStrings.joinWithOr(EUIUtils.map(tags, a -> a.getTooltip().getTitleOrIcon())),
-                tagsNot.isEmpty() ? null : PGR.core.strings.conditions.not(PCLCoreStrings.joinWithOr(EUIUtils.map(tagsNot, a -> a.getTooltip().getTitleOrIcon()))),
+                tagsNot.isEmpty() ? null : PGR.core.strings.cond_not(PCLCoreStrings.joinWithOr(EUIUtils.map(tagsNot, a -> a.getTooltip().getTitleOrIcon()))),
                 rarities.isEmpty() ? null : PCLCoreStrings.joinWithOr(EUIUtils.map(rarities, EUIGameUtils::textForRarity)),
-                types.isEmpty() ? null : PCLCoreStrings.joinWithOr(EUIUtils.map(types, type -> EUIGameUtils.textForType(type))),
-                damageMax != Integer.MAX_VALUE ? PGR.core.strings.subjects.damage + " <= " + damageMax : null,
+                types.isEmpty() ? null : PCLCoreStrings.joinWithOr(EUIUtils.map(types, EUIGameUtils::textForType)),
+                damageMax != Integer.MAX_VALUE ? PGR.core.strings.subjects_damage + " <= " + damageMax : null,
                 blockMax != Integer.MAX_VALUE ? PGR.core.tooltips.block + " <= " + blockMax : null,
-                costMax != Integer.MAX_VALUE ? PGR.core.strings.subjects.cost + " <= " + costMax : null,
-                costMin != Integer.MIN_VALUE ? PGR.core.strings.subjects.cost + " >= " + costMin : null,
-                hitsMax != Integer.MAX_VALUE ? PGR.core.strings.subjects.hits + " <= " + hitsMax : null,
-                rightMax != Integer.MAX_VALUE ? PGR.core.strings.subjects.count(PGR.core.tooltips.block) + " <= " + rightMax : null,
-                maxEffects != Integer.MAX_VALUE ? PGR.core.strings.cardEditor.effects + " <= " + maxEffects : null
+                costMax != Integer.MAX_VALUE ? PGR.core.strings.subjects_cost + " <= " + costMax : null,
+                costMin != Integer.MIN_VALUE ? PGR.core.strings.subjects_cost + " >= " + costMin : null,
+                hitsMax != Integer.MAX_VALUE ? PGR.core.strings.subjects_hits + " <= " + hitsMax : null,
+                rightMax != Integer.MAX_VALUE ? PGR.core.strings.subjects_count(PGR.core.tooltips.block) + " <= " + rightMax : null,
+                maxEffects != Integer.MAX_VALUE ? PGR.core.strings.cedit_effects + " <= " + maxEffects : null
         );
-        return base.isEmpty() ? PGR.core.strings.combat.na : base;
+        return base.isEmpty() ? PGR.core.strings.combat_na : base;
     }
 
     public PCLAugmentReqs setAffinities(PCLAffinity... values)

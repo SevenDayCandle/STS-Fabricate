@@ -63,13 +63,13 @@ public class PMod_PerCreatureBlock extends PMod_Per<PField_Empty>
         {
             case All:
             case Any:
-                return TEXT.subjects.onAnyCharacter(baseString);
+                return TEXT.subjects_onAnyCharacter(baseString);
             case AllEnemy:
-                return TEXT.subjects.onAnyEnemy(baseString);
+                return TEXT.subjects_onAnyEnemy(baseString);
             case Single:
-                return TEXT.subjects.onTheEnemy(baseString);
+                return TEXT.subjects_onTheEnemy(baseString);
             case Self:
-                return TEXT.subjects.onYou(baseString);
+                return TEXT.subjects_onYou(baseString);
             default:
                 return baseString;
         }

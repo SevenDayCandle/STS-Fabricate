@@ -27,7 +27,7 @@ public class PCLCardGroupHelper implements Serializable
     public static final PCLCardGroupHelper DiscardPile = new PCLCardGroupHelper(CardGroup.CardGroupType.DISCARD_PILE, InputSettingsScreen.TEXT[12].toLowerCase());
     public static final PCLCardGroupHelper DrawPile = new PCLCardGroupHelper(CardGroup.CardGroupType.DRAW_PILE, InputSettingsScreen.TEXT[11].toLowerCase());
     public static final PCLCardGroupHelper ExhaustPile = new PCLCardGroupHelper(CardGroup.CardGroupType.EXHAUST_PILE, InputSettingsScreen.TEXT[13].toLowerCase());
-    public static final PCLCardGroupHelper Hand = new PCLCardGroupHelper(CardGroup.CardGroupType.HAND, PGR.core.strings.cardPile.hand);
+    public static final PCLCardGroupHelper Hand = new PCLCardGroupHelper(CardGroup.CardGroupType.HAND, PGR.core.strings.cpile_hand);
 
     public final CardGroup.CardGroupType pile;
     public final String name;

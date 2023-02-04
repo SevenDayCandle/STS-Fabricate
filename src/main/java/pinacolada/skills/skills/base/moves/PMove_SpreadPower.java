@@ -80,8 +80,8 @@ public class PMove_SpreadPower extends PMove<PField_Power>
     public String getSubText()
     {
         String powerString = fields.getPowerSubjectString();
-        String mainString = amount <= 0 ? TEXT.actions.spread(powerString, getTargetString()) : TEXT.actions.spreadAmount(getAmountRawString(), powerString, getTargetString());
-        return fields.random ? TEXT.subjects.randomly(mainString) : mainString;
+        String mainString = amount <= 0 ? TEXT.act_spread(powerString, getTargetString()) : TEXT.act_spreadAmount(getAmountRawString(), powerString, getTargetString());
+        return fields.random ? TEXT.subjects_randomly(mainString) : mainString;
     }
 
     protected void spreadPower(AbstractCreature p, List<AbstractCreature> targets, PCLPowerHelper power)

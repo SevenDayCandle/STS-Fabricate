@@ -37,7 +37,7 @@ public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
                 .setItems(EUIUtils.map(PTrigger.getEligibleEffects(builder.cardColor, PTrigger.class), bc -> primaryCond != null && bc.effectID.equals(primaryCond.effectID) ? primaryCond : bc))
                 .autosize();
         usesPerTurn = new PCLValueEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 4, MENU_HEIGHT, MENU_WIDTH * 3.2f, OFFSET_EFFECT * 2f)
-                , PGR.core.strings.combat.uses, (val) -> {
+                , PGR.core.strings.combat_uses, (val) -> {
             if (primaryCond != null)
             {
                 primaryCond.setAmount(val);
@@ -56,7 +56,7 @@ public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
                     .setColor(Color.GRAY)
                     .setBorder(EUIRM.images.hexagonalButtonBorder.texture(), Color.GRAY)
                     .setFont(EUIFontHelper.cardtitlefontSmall, 0.8f)
-                    .setText(EUIUtils.format(PGR.core.strings.cardEditor.addTo, EUIUtils.format(PGR.core.strings.cardEditor.effectX, i + 1)))
+                    .setText(EUIUtils.format(PGR.core.strings.cedit_addTo, EUIUtils.format(PGR.core.strings.cedit_effectX, i + 1)))
                     .setOnClick(() -> {
                         PCLCustomCardEffectPage effectPage = screen.effectPages.get(finalI);
                         PMove_StackCustomPower powerApplyEffect = null;

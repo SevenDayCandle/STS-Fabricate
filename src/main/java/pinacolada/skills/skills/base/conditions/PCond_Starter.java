@@ -35,6 +35,6 @@ public class PCond_Starter extends PPassiveCond<PField_Not>
     @Override
     public String getSubText()
     {
-        return fields.not ? TEXT.conditions.not(PGR.core.tooltips.starter.title) : PGR.core.tooltips.starter.title;
+        return fields.not ? TEXT.cond_not(PGR.core.tooltips.starter.title) : PGR.core.tooltips.starter.title;
     }
 }

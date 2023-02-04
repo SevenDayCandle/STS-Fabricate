@@ -58,7 +58,7 @@ public class PCond_Cooldown extends PPassiveCond<PField_Empty> implements Cooldo
     @Override
     public String getSampleText()
     {
-        return EUIRM.strings.generic2(PGR.core.tooltips.cooldown.title, TEXT.subjects.x);
+        return EUIRM.strings.generic2(PGR.core.tooltips.cooldown.title, TEXT.subjects_x);
     }
 
     @Override

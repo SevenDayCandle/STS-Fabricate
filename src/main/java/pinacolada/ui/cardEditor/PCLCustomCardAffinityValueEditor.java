@@ -81,7 +81,7 @@ public class PCLCustomCardAffinityValueEditor extends EUIHoverable
                 .setFont(EUIFontHelper.cardtitlefontSmall, 1f);
 
         this.affinityImage = new EUIImage(affinity.getIcon(), new EUIHitbox(hb.x, hb.y + hb.height * 0.8f, ICON_SIZE, ICON_SIZE))
-                .setTooltip(affinity.getTooltip().title, PGR.core.strings.cardEditorTutorial.attrAffinity);
+                .setTooltip(affinity.getTooltip().title, PGR.core.strings.cetut_attrAffinity);
     }
 
     public void decreasePrimary()

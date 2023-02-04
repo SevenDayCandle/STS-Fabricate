@@ -55,334 +55,6 @@
 												"{0} {1} to {2}"
 								]
 				},
-				"pcl:Conditions": {
-								"TEXT": [
-												"Any {0}",
-												"At turn end",
-												"At turn start",
-												"Do {0}",
-												"Do for each",
-												"For {0} ${0}@!1:turns@:turn$",
-												"If you {0} {1} this turn",
-												"If you have {0}",
-												"If your highest {0} is",
-												"If {0} has {1}",
-												"If {0}",
-												"In {0} at turn end",
-												"In {0} at turn start",
-												"In {0} ${0}@!1:turns@:turn$",
-												"L{0} {1}",
-												"Next turn",
-												"No {0}",
-												"Not {0}",
-												"On {0}",
-												"Else: {0}",
-												"${0}@?0?3:take@:takes$ damage",
-												"When {0} {1}",
-												"When {0}",
-												"When a {0} is {1}",
-												"{0} active",
-												"{0} and {1}",
-												"{0} if {1}",
-												"{0} is {1}",
-												"{0} or {1}",
-												"{0} per {1}",
-												"{0} per {1} {2} this combat{3}",
-												"{0} per {1} {2} this turn{3}",
-												"{0} per {1} in {2}",
-												"{0} per distinct {1}",
-												"{0} ${0}@!1:times@:time$ per combat",
-												"{0} ${0}@!1:times@:time$ per turn",
-												"{0} to {1}",
-												"{0}, then {1}",
-												"{0} ({1})",
-												"Modify Card(s)",
-												"Modify Creature(s)"
-								]
-				},
-				"pcl:Subjects": {
-								"TEXT": [
-												"${0}@!1:allies@:ally$",
-												"${0}@!1:cards@:card$",
-												"${0}@!1:characters@:character$",
-												"${0}@!1:enemies@:enemy$",
-												"Cost",
-												"Infinite",
-												"Max. {0}",
-												"Min. {0}",
-												"Other",
-												"{0} count",
-												"all {0}",
-												"all",
-												"ally",
-												"any pile",
-												"any {0}",
-												"anyone",
-												"attacking",
-												"buffing",
-												"card",
-												"character",
-												"copies of {0}",
-												"damage",
-												"debuffing",
-												"defending",
-												"effect bonus",
-												"enemy",
-												"from {0}",
-												"hits",
-												"in {0}",
-												"of {0}",
-												"permanently {0}",
-												"playing {0} with this in {0}",
-												"random {0}",
-												"randomly {0}",
-												"shuffle your deck",
-												"the bottom of {0}",
-												"the left-most {0}",
-												"the right-most {0}",
-												"the target",
-												"the top of {0}",
-												"their {0}",
-												"them",
-												"this card",
-												"this",
-												"X",
-												"you",
-												"your first {0}",
-												"your {0}",
-												"{0} of {1}",
-												"{0} on {1}",
-												"{0} this turn",
-												"{0} ${0}@!1:times@:time$",
-												"{0} with {1}",
-												"{0}-cost",
-												"{0} bonus"
-								]
-				},
-				"pcl:CardPile": {
-								"TEXT": [
-												"discard pile",
-												"draw pile",
-												"Exhaust pile",
-												"hand",
-												"master deck",
-												"Purged pile",
-												"Manual",
-												"Top",
-												"Bottom",
-												"Random"
-								]
-				},
-				"pcl:CardType": {
-								"TEXT": [
-												"None",
-												"All Allies",
-												"All Characters",
-												"All Enemies",
-												"Any Character",
-												"Random Ally",
-												"Random Enemy",
-												"Self",
-												"Single Ally",
-												"Single Target",
-												"Team",
-												"Legendary",
-												"Secret Rare"
-								],
-								"EXTRA_TEXT": [
-												"AoE",
-												"???"
-								]
-				},
-				"pcl:Rewards": {
-								"TEXT": [
-												"Break",
-												"{#o:Obtain this Augment instead of the above card.}",
-												"Reroll",
-												"{#o:Swap this card out for a different one.}",
-												"+{0} Max HP",
-												"+{0} Gold",
-												"Common Upgrade",
-												"#pRight-Click to preview.",
-												"Potion Slots",
-												"Orb Slots"
-								]
-				},
-				"pcl:SeriesSelection": {
-								"TEXT": [
-												"Selected: {0}/{1}",
-												"Unlocked: {0}/{1}",
-												"Deselect All",
-												"Select All",
-												"Show All",
-												"{0}/{1} total cards",
-												"#oLeft-Click a #ySeries to use it as your loadout. | #oRight-Click a #ySeries to add/remove its cards from the card pool. The card pool must meet the rarity thresholds shown below.",
-												"#oLeft-Click a card to add/remove it from the pool. Removed cards are faded out."
-								]
-				},
-				"pcl:SeriesSelectionButtons": {
-								"TEXT": [
-												"Cards in Pool",
-												"Add All",
-												"Remove All",
-												"Select Random",
-												"Show card pool",
-												"Save Changes",
-												"Enable Expansion",
-												"Disable Expansion",
-												"Enable Expansions",
-												"Disable Expansions",
-												"Cancel",
-												"Show Colorless"
-								]
-				},
-				"pcl:SingleCardPopupButtons": {
-								"TEXT": [
-												"Variant",
-												"Switch Variant",
-												"Permanently change this card's variant to the currently-displayed variant. | #rThis #rcan #ronly #rbe #rdone #ronce.",
-												"Change this card's variant to the currently-displayed variant. | #yThis #ycard #ycan #ychange #yforms #yany #ynumber #yof #ytimes.",
-												"Cur. Copies",
-												"Max. Copies",
-												"Art Credits: ",
-												"Empty Augment",
-												"View Augments",
-												"View Tooltips",
-												"{#g:Click this to place an Augment into this slot.}",
-												"{#o:Click this to retrieve this Augment.}",
-												"{#r:This Augment cannot be removed.}"
-								]
-				},
-				"pcl:CharacterSelect": {
-								"TEXT": [
-												"Current Loadout: ",
-												"Locked Series",
-												"Unlocks at Level {0} | (You are Level {1})",
-												"Invalid Loadout (Please Edit)",
-												"Unlocks at Ascension {0}",
-												"Loadout Editor",
-												"#pLeft-Click to open the editor. | #pRight-Click to change preset.",
-												"Obtain #yBronze #yTrophy at ascension #b{0} to unlock",
-												"Select Series",
-												"Choose which Series to start with as well as which Series will be present in your runs.",
-												"Deck",
-												"Relics",
-												"Attributes",
-												"Deck Value",
-												"Hindrance: {0}",
-												"Affinity: {0}",
-												"Cards: {0}",
-												"Value: {0}/{1}",
-												"Your Hindrance level is determined by the proportion of your deck made up of negative-valued cards. Cards valued less than -2 have a larger impact on this number.",
-												"Your Affinity level is determined by the sum of the frequency of each Affinity that occurs more than 2 times in your deck.",
-												"You have unsaved changes to your loadout that will be lost upon leaving. Are you sure you want to leave this menu?",
-												"Reset",
-												"Copy Current To Slot",
-												"Import From Slot",
-												"Export",
-												"Ascension Glyphs:"
-								]
-				},
-				"pcl:Misc": {
-								"TEXT": [
-												"Augments",
-												"View and manage your #yAugments.{0} || {#o:Right-Click to learn more.} ",
-												" (You do not have any #yAugments)",
-												"Current Series",
-												"Card Mode",
-												"Normal Mode",
-												"Most Attacks and Skills have a single unconditional effect.",
-												"Clown Mode",
-												"Most Attacks and Skills gain a secondary conditional effect alongside their original effect, but lose damage, [Block], or [THP] equal to their cost + 1.",
-												"Allow cards created in the Custom Card Editor to appear in runs",
-												"PCL",
-												"Left-Click",
-												"Right-Click"
-								]
-				},
-				"pcl:Hotkeys": {
-								"TEXT": [
-												"Change Control Pile",
-												"Select Control Pile",
-												"Skip Current Affinity",
-												"Toggle Formula Display",
-												"Open Augments Screen"
-								]
-				},
-				"pcl:Options": {
-								"TEXT": [
-												"Dynamic Portraits",
-												"Display Card Tags in Description",
-												"Enable certain PCL events for non-PCL characters",
-												"Enable certain PCL relics for non-PCL characters",
-												"Replace Non-PCL cards when playing as PCL characters (Warning: Unstable)",
-												"Use PCL power variants when playing as non-PCL characters (Warning: Unstable)",
-												"Hide Irrelevant Affinities for the current character",
-												"Show Formula Display"
-								]
-				},
-				"pcl:Combat": {
-								"TEXT": [
-												"Cur.",
-												"Next",
-												"Uses",
-												"Rerolls",
-												"Control Pile",
-												"#oLeft-Click to play the displayed card. | #oRight-Click to change this card. | Press #o{0} to cycle through playable cards.",
-												"{0} Count",
-												"Effect",
-												"Next Level Effect",
-												"Active",
-												"Inactive",
-												"Disabled",
-												"N/A",
-												"Polarity Meter",
-												"Last Affinity",
-												"Resolve",
-												"Match Resolve Gain",
-												"{#g:Left-Click to gain 1 Last Affinity and {0} {1} Attunement}",
-												"Debuff Effect",
-												"Level Price",
-												"{0} cards deal #b+{1}% damage on #yCombust and give #b+{1}% [Block] on #yRedox.",
-												"{#o:Click this to Morph this pair into {0}.}",
-												"{0} cards #yCombust {1} to deal #b+{2}% damage.",
-												"{0} cards #yRedox {1} to give #b+{2}% [Block].",
-												"#gNext #gLevel #gAvailable",
-												"Current Stacks",
-												"Next Level Stacks",
-												"Dodged"
-								]
-				},
-				"pcl:Tutorial": {
-								"TEXT": [
-												"{#o:Click this icon to learn more.}",
-												"Tags are shown on the top-right corner of a card.",
-												"A card's #yAffinities are shown above its name. [A-A] counts as #b1 of every #yAffinity. [A-W] counts as no #yAffinity. In tooltips, [A-W] is used as a shorthand for #yAffinities in general.",
-												"To play a #ySummon card, drag it onto a #ySummon #ySlot (shown by the flashing ovals that appear upon clicking on the card). ",
-												"The #yAffinities of a card are shown above its name. [A-A] signifies that the card has all #yAffinities. [A-W] signifies that the card does not have any #yAffinity. In tooltips, [A-W] is also used as a shorthand to refer to #yAffinities in general.",
-												"Whenever you play a card, the #yAuras matching its #yAffinities gain #b1 stack. This gain is doubled if any of its #yAffinities matches the #yPromoted #yAura. #yPromoted #yAuras are denoted by a green arrow next to them. Cards matching the #yPromoted #yAura will glow yellow.",
-												"Once per turn, you may click on the icon of an #yAura to activate its effect for the turn. Active #yAuras have a green border. Hover over the icons to show a tooltip explaining effects of each power.",
-												"#yAuras gain #b1 #yLevel for every #b10 stacks gained. Each #yLevel gives #b+1 damage and [Block] to cards matching its #yAffinity and boosts its activation effect (the effectiveness formulas are shown in the power's tooltip).",
-												"#yElemental #yDebuffs include [Burning], [Flowed], [Chilled], and [Stoned] and are removed at the end of each round. Each #yDebuff is associated with the #yAffinity that it shares an icon with. [Burning] -> [A-R], [Flowed] -> [A-G], [Chilled] -> [A-B], [Stoned] -> [A-O]. Hover over their buttons to see their effects.",
-												"The arrows show the two types of interactions between the #yElemental #yDebuffs that occur when a card with the former #yDebuff's #yAffinity targets a creature with the latter #yDebuff. Blue-gray arrows signify #yCombusts. Brown arrows signify #yRedoxes. | Once per turn, you can click on an arrow to change its interaction type for the turn.",
-												"#yCombusts and #yRedoxes grant #yReactions. #yCombusts provide a damage bonus to the card being played, while #yRedoxes provide a [Block] bonus to it. | Spend #yReactions by clicking on a #yDebuff's button to increase its #yLevel (signified by the blue number on each #yElemental #yDebuff). #yLevels increase a #yDebuff's passive effect as well as its #yCombust and #yRedox bonuses. Each #yLevel costs more than the last.",
-												"The #yLast #yAffinity is the #yAffinity of the last card played, and is signfied by the #yAffinity symbol with a silver border. The #yAffinities to the right of it signify previous #yLast #yAffinities.",
-												"The #yPolarity meter is the large circular button to the left of your #yLast #yAffinities. The value of this meter is equal to the number of [A-Y] #yLast #yAffinities minus the number of [A-P] #yLast #yAffinities. [A-S] #yLast #yAffinities do not affect this meter's value.",
-												"A #yMatch occurs when you play a card with the #yLast #yAffinity, granting #b1 #yResolve. | At maximum #yResolve, clicking on the #yPolarity meter will reset your #yResolve to gain #b1 #yLast #yAffinity and #b2 stacks of an #yAttunement #yPower dependent on your current #yPolarity. #yAttunement #yPowers increase the damage and [Block] of cards with its #yAffinity.",
-												"#yThe #yConjurer, #yThe #yDecider, and #yThe #yEternal have a #ySimple #yMode toggle that determines the effects of cards you encounter. || #bSimple #bMode #bOn: Most cards have a single unconditional effect and have higher damage and Block. Recommended for casual play. | #oSimple #oMode #oOff: Most cards gain a secondary conditional effect but lose some damage and Block. Recommended for experienced players. || You can check its effects on each card by using the #ySimple #yMode toggle in the Card Compendium screen.",
-												"#yThe #yConjurer and #yThe #yDecider's starting loadouts can be customized through the #yLoadouts menu. In this menu, you may customize your character's starting deck and relics. Upon reaching #yAscension 7, you may also customize your character's starting attributes.",
-												"#yConjurer and #yDecider cards can be slotted with #yAugments to alter their effects. #yAugments may be obtained at the end of boss fights, from breaking cards with the #yMagic #yEraser starting relic, and as rewards from certain events. | The available slots for #yAugments on a card are shown on the left-hand border of the card, underneath its energy cost.",
-												"To view your #yAugments, click on the #yAugment icon on the top bar. You may then click on individual #yAugments to apply them to a card in your deck. || You may also slot #yAugments onto a card by clicking on its #yAugment icons in its pop-up view mode in your master deck. Here, you can either click on an empty #yAugment slot to put an eligible #yAugment in that slot, or click on a filled #yAugment slot to retrieve that #yAugment. || You may insert and remove #yAugment as many times as you wish at any time, but changes will not be applied to cards in the current battle."
-								]
-				},
-				"pcl:SeriesUI": {
-								"TEXT": [
-												"Loadout",
-												"Affinities",
-												"Core Set",
-												"Scaling"
-								]
-				},
 				"pcl:CardEditor": {
 								"TEXT": [
 												"Attributes",
@@ -487,6 +159,174 @@
 												"Create a card from an example template."
 								]
 				},
+				"pcl:CardPile": {
+								"TEXT": [
+												"discard pile",
+												"draw pile",
+												"Exhaust pile",
+												"hand",
+												"master deck",
+												"Purged pile",
+												"Manual",
+												"Top",
+												"Bottom",
+												"Random"
+								]
+				},
+				"pcl:CardType": {
+								"EXTRA_TEXT": [
+												"AoE",
+												"???"
+								],
+								"TEXT": [
+												"None",
+												"All Allies",
+												"All Characters",
+												"All Enemies",
+												"Any Character",
+												"Random Ally",
+												"Random Enemy",
+												"Self",
+												"Single Ally",
+												"Single Target",
+												"Team",
+												"Legendary",
+												"Secret Rare"
+								]
+				},
+				"pcl:CharacterSelect": {
+								"TEXT": [
+												"Current Loadout: ",
+												"Locked Series",
+												"Unlocks at Level {0} | (You are Level {1})",
+												"Invalid Loadout (Please Edit)",
+												"Unlocks at Ascension {0}",
+												"Loadout Editor",
+												"#pLeft-Click to open the editor. | #pRight-Click to change preset.",
+												"Obtain #yBronze #yTrophy at ascension #b{0} to unlock",
+												"Select Series",
+												"Choose which Series to start with as well as which Series will be present in your runs.",
+												"Deck",
+												"Relics",
+												"Attributes",
+												"Deck Value",
+												"Hindrance: {0}",
+												"Affinity: {0}",
+												"Cards: {0}",
+												"Value: {0}/{1}",
+												"Your Hindrance level is determined by the proportion of your deck made up of negative-valued cards. Cards valued less than -2 have a larger impact on this number.",
+												"Your Affinity level is determined by the sum of the frequency of each Affinity that occurs more than 2 times in your deck.",
+												"You have unsaved changes to your loadout that will be lost upon leaving. Are you sure you want to leave this menu?",
+												"Reset",
+												"Copy Current To Slot",
+												"Import From Slot",
+												"Export",
+												"Ascension Glyphs:"
+								]
+				},
+				"pcl:Combat": {
+								"TEXT": [
+												"Cur.",
+												"Next",
+												"Uses",
+												"Rerolls",
+												"Control Pile",
+												"#oLeft-Click to play the displayed card. | #oRight-Click to change this card. | Press #o{0} to cycle through playable cards.",
+												"{0} Count",
+												"Effect",
+												"Next Level Effect",
+												"Active",
+												"Inactive",
+												"Disabled",
+												"N/A",
+												"Polarity Meter",
+												"Last Affinity",
+												"Resolve",
+												"Match Resolve Gain",
+												"{#g:Left-Click to gain 1 Last Affinity and {0} {1} Attunement}",
+												"Debuff Effect",
+												"Level Price",
+												"{0} cards deal #b+{1}% damage on #yCombust and give #b+{1}% [Block] on #yRedox.",
+												"{#o:Click this to Morph this pair into {0}.}",
+												"{0} cards #yCombust {1} to deal #b+{2}% damage.",
+												"{0} cards #yRedox {1} to give #b+{2}% [Block].",
+												"#gNext #gLevel #gAvailable",
+												"Current Stacks",
+												"Next Level Stacks",
+												"Dodged",
+												"[A-Gen] Requirement satisfied",
+												"Select cards with the following [A-Gen]: {0}"
+								]
+				},
+				"pcl:Conditions": {
+								"TEXT": [
+												"Any {0}",
+												"At turn end",
+												"At turn start",
+												"Do {0}",
+												"Do for each",
+												"For {0} ${0}@!1:turns@:turn$",
+												"If you {0} {1} this turn",
+												"If you have {0}",
+												"If your highest {0} is",
+												"If {0} has {1}",
+												"If {0}",
+												"In {0} at turn end",
+												"In {0} at turn start",
+												"In {0} ${0}@!1:turns@:turn$",
+												"L{0} {1}",
+												"Next turn",
+												"No {0}",
+												"Not {0}",
+												"On {0}",
+												"Else: {0}",
+												"${0}@?0?3:take@:takes$ damage",
+												"When {0} {1}",
+												"When {0}",
+												"When a {0} is {1}",
+												"{0} active",
+												"{0} and {1}",
+												"{0} if {1}",
+												"{0} is {1}",
+												"{0} or {1}",
+												"{0} per {1}",
+												"{0} per {1} {2} this combat{3}",
+												"{0} per {1} {2} this turn{3}",
+												"{0} per {1} in {2}",
+												"{0} per distinct {1}",
+												"{0} ${0}@!1:times@:time$ per combat",
+												"{0} ${0}@!1:times@:time$ per turn",
+												"{0} to {1}",
+												"{0}, then {1}",
+												"{0} ({1})",
+												"Modify Card(s)",
+												"Modify Creature(s)"
+								]
+				},
+				"pcl:GridSelection": {
+								"TEXT": [
+												"Choose {0} card(s).",
+												"{{0}} | ({1} cards in Draw Pile)",
+												"Scry (You draw from left to right)."
+								]
+				},
+				"pcl:HandSelection": {
+								"TEXT": [
+												"move to your draw pile.",
+												"buff.",
+												"copy.",
+												"activate:"
+								]
+				},
+				"pcl:Hotkeys": {
+								"TEXT": [
+												"Change Control Pile",
+												"Select Control Pile",
+												"Skip Current Affinity",
+												"Toggle Formula Display",
+												"Open Augments Screen"
+								]
+				},
 				"pcl:Menu": {
 								"TEXT": [
 												"Editor",
@@ -499,33 +339,175 @@
 												"View, create, or edit custom potions to use in Custom Runs."
 								]
 				},
-				"pcl:CardMods": {
+				"pcl:Misc": {
 								"TEXT": [
-												"Permanently increase your maximum hand size by 1. Can be obtained up to 3 times across all card effects.",
-												"[A-Gen] Requirement satisfied",
-												"Select cards with the following [A-Gen]: {0}",
-												"Respec [{0} Gold].",
-												"Respec [No Upgrades].",
-												"Respec Living Picture (Free option).",
-												"Spit Out",
-												"Retrieve cards from Kirby (Free option).",
+												"Augments",
+												"View and manage your #yAugments.{0} || {#o:Right-Click to learn more.} ",
+												" (You do not have any #yAugments)",
+												"Current Series",
+												"Card Mode",
+												"Normal Mode",
+												"Most Attacks and Skills have a single unconditional effect.",
+												"Clown Mode",
+												"Most Attacks and Skills gain a secondary conditional effect alongside their original effect, but lose damage, [Block], or [THP] equal to their cost + 1.",
+												"Allow cards created in the Custom Card Editor to appear in runs",
+												"PCL",
+												"Left-Click",
+												"Right-Click",
 												"Temp. {0}",
 												"Requirement"
 								]
 				},
-				"pcl:HandSelection": {
+				"pcl:Options": {
 								"TEXT": [
-												"move to your draw pile.",
-												"buff.",
-												"copy.",
-												"activate:"
+												"Dynamic Portraits",
+												"Display Card Tags in Description",
+												"Enable certain PCL events for non-PCL characters",
+												"Enable certain PCL relics for non-PCL characters",
+												"Replace Non-PCL cards when playing as PCL characters (Warning: Unstable)",
+												"Use PCL power variants when playing as non-PCL characters (Warning: Unstable)",
+												"Hide Irrelevant Affinities for the current character",
+												"Show Formula Display"
 								]
 				},
-				"pcl:GridSelection": {
+				"pcl:Rewards": {
 								"TEXT": [
-												"Choose {0} card(s).",
-												"{{0}} | ({1} cards in Draw Pile)",
-												"Scry (You draw from left to right)."
+												"Break",
+												"{#o:Obtain this Augment instead of the above card.}",
+												"Reroll",
+												"{#o:Swap this card out for a different one.}",
+												"+{0} Max HP",
+												"+{0} Gold",
+												"Common Upgrade",
+												"#pRight-Click to preview.",
+												"Potion Slots",
+												"Orb Slots"
+								]
+				},
+				"pcl:SeriesUI": {
+								"TEXT": [
+												"Loadout",
+												"Affinities",
+												"Core Set",
+												"Scaling",
+												"Selected: {0}/{1}",
+												"Unlocked: {0}/{1}",
+												"Deselect All",
+												"Select All",
+												"Show All",
+												"{0}/{1} total cards",
+												"#oLeft-Click a #ySeries to use it as your loadout. | #oRight-Click a #ySeries to add/remove its cards from the card pool. The card pool must meet the rarity thresholds shown below.",
+												"#oLeft-Click a card to add/remove it from the pool. Removed cards are faded out.",
+												"Cards in Pool",
+												"Add All",
+												"Remove All",
+												"Select Random",
+												"Show card pool",
+												"Save Changes",
+												"Enable Expansion",
+												"Disable Expansion",
+												"Enable Expansions",
+												"Disable Expansions",
+												"Cancel",
+												"Show Colorless"
+								]
+				},
+				"pcl:SingleCardPopupButtons": {
+								"TEXT": [
+												"Variant",
+												"Switch Variant",
+												"Permanently change this card's variant to the currently-displayed variant. | #rThis #rcan #ronly #rbe #rdone #ronce.",
+												"Change this card's variant to the currently-displayed variant. | #yThis #ycard #ycan #ychange #yforms #yany #ynumber #yof #ytimes.",
+												"Cur. Copies",
+												"Max. Copies",
+												"Art Credits: ",
+												"Empty Augment",
+												"View Augments",
+												"View Tooltips",
+												"{#g:Click this to place an Augment into this slot.}",
+												"{#o:Click this to retrieve this Augment.}",
+												"{#r:This Augment cannot be removed.}"
+								]
+				},
+				"pcl:Subjects": {
+								"TEXT": [
+												"${0}@!1:allies@:ally$",
+												"${0}@!1:cards@:card$",
+												"${0}@!1:characters@:character$",
+												"${0}@!1:enemies@:enemy$",
+												"Cost",
+												"Infinite",
+												"Max. {0}",
+												"Min. {0}",
+												"Other",
+												"{0} count",
+												"all {0}",
+												"all",
+												"ally",
+												"any pile",
+												"any {0}",
+												"anyone",
+												"attacking",
+												"buffing",
+												"card",
+												"character",
+												"copies of {0}",
+												"damage",
+												"debuffing",
+												"defending",
+												"effect bonus",
+												"enemy",
+												"from {0}",
+												"hits",
+												"in {0}",
+												"of {0}",
+												"permanently {0}",
+												"playing {0} with this in {0}",
+												"random {0}",
+												"randomly {0}",
+												"shuffle your deck",
+												"the bottom of {0}",
+												"the left-most {0}",
+												"the right-most {0}",
+												"the target",
+												"the top of {0}",
+												"their {0}",
+												"them",
+												"this card",
+												"this",
+												"X",
+												"you",
+												"your first {0}",
+												"your {0}",
+												"{0} of {1}",
+												"{0} on {1}",
+												"{0} this turn",
+												"{0} ${0}@!1:times@:time$",
+												"{0} with {1}",
+												"{0}-cost",
+												"{0} bonus"
+								]
+				},
+				"pcl:Tutorial": {
+								"TEXT": [
+												"{#o:Click this icon to learn more.}",
+												"Tags are shown on the top-right corner of a card.",
+												"A card's #yAffinities are shown above its name. [A-A] counts as #b1 of every #yAffinity. [A-W] counts as no #yAffinity. In tooltips, [A-W] is used as a shorthand for #yAffinities in general.",
+												"To play a #ySummon card, drag it onto a #ySummon #ySlot (shown by the flashing ovals that appear upon clicking on the card). ",
+												"The #yAffinities of a card are shown above its name. [A-A] signifies that the card has all #yAffinities. [A-W] signifies that the card does not have any #yAffinity. In tooltips, [A-W] is also used as a shorthand to refer to #yAffinities in general.",
+												"Whenever you play a card, the #yAuras matching its #yAffinities gain #b1 stack. This gain is doubled if any of its #yAffinities matches the #yPromoted #yAura. #yPromoted #yAuras are denoted by a green arrow next to them. Cards matching the #yPromoted #yAura will glow yellow.",
+												"Once per turn, you may click on the icon of an #yAura to activate its effect for the turn. Active #yAuras have a green border. Hover over the icons to show a tooltip explaining effects of each power.",
+												"#yAuras gain #b1 #yLevel for every #b10 stacks gained. Each #yLevel gives #b+1 damage and [Block] to cards matching its #yAffinity and boosts its activation effect (the effectiveness formulas are shown in the power's tooltip).",
+												"#yElemental #yDebuffs include [Burning], [Flowed], [Chilled], and [Stoned] and are removed at the end of each round. Each #yDebuff is associated with the #yAffinity that it shares an icon with. [Burning] -> [A-R], [Flowed] -> [A-G], [Chilled] -> [A-B], [Stoned] -> [A-O]. Hover over their buttons to see their effects.",
+												"The arrows show the two types of interactions between the #yElemental #yDebuffs that occur when a card with the former #yDebuff's #yAffinity targets a creature with the latter #yDebuff. Blue-gray arrows signify #yCombusts. Brown arrows signify #yRedoxes. | Once per turn, you can click on an arrow to change its interaction type for the turn.",
+												"#yCombusts and #yRedoxes grant #yReactions. #yCombusts provide a damage bonus to the card being played, while #yRedoxes provide a [Block] bonus to it. | Spend #yReactions by clicking on a #yDebuff's button to increase its #yLevel (signified by the blue number on each #yElemental #yDebuff). #yLevels increase a #yDebuff's passive effect as well as its #yCombust and #yRedox bonuses. Each #yLevel costs more than the last.",
+												"The #yLast #yAffinity is the #yAffinity of the last card played, and is signfied by the #yAffinity symbol with a silver border. The #yAffinities to the right of it signify previous #yLast #yAffinities.",
+												"The #yPolarity meter is the large circular button to the left of your #yLast #yAffinities. The value of this meter is equal to the number of [A-Y] #yLast #yAffinities minus the number of [A-P] #yLast #yAffinities. [A-S] #yLast #yAffinities do not affect this meter's value.",
+												"A #yMatch occurs when you play a card with the #yLast #yAffinity, granting #b1 #yResolve. | At maximum #yResolve, clicking on the #yPolarity meter will reset your #yResolve to gain #b1 #yLast #yAffinity and #b2 stacks of an #yAttunement #yPower dependent on your current #yPolarity. #yAttunement #yPowers increase the damage and [Block] of cards with its #yAffinity.",
+												"#yThe #yConjurer, #yThe #yDecider, and #yThe #yEternal have a #ySimple #yMode toggle that determines the effects of cards you encounter. || #bSimple #bMode #bOn: Most cards have a single unconditional effect and have higher damage and Block. Recommended for casual play. | #oSimple #oMode #oOff: Most cards gain a secondary conditional effect but lose some damage and Block. Recommended for experienced players. || You can check its effects on each card by using the #ySimple #yMode toggle in the Card Compendium screen.",
+												"#yThe #yConjurer and #yThe #yDecider's starting loadouts can be customized through the #yLoadouts menu. In this menu, you may customize your character's starting deck and relics. Upon reaching #yAscension 7, you may also customize your character's starting attributes.",
+												"#yConjurer and #yDecider cards can be slotted with #yAugments to alter their effects. #yAugments may be obtained at the end of boss fights, from breaking cards with the #yMagic #yEraser starting relic, and as rewards from certain events. | The available slots for #yAugments on a card are shown on the left-hand border of the card, underneath its energy cost.",
+												"To view your #yAugments, click on the #yAugment icon on the top bar. You may then click on individual #yAugments to apply them to a card in your deck. || You may also slot #yAugments onto a card by clicking on its #yAugment icons in its pop-up view mode in your master deck. Here, you can either click on an empty #yAugment slot to put an eligible #yAugment in that slot, or click on a filled #yAugment slot to retrieve that #yAugment. || You may insert and remove #yAugment as many times as you wish at any time, but changes will not be applied to cards in the current battle."
 								]
 				}
 }

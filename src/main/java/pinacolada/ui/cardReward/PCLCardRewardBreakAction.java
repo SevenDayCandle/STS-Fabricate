@@ -36,7 +36,7 @@ public class PCLCardRewardBreakAction extends PCLCardRewardAction
     PCLCardRewardActionButton getButton(int index)
     {
         return (PCLCardRewardActionButton) new PCLCardRewardActionButton(this,
-                EUIRM.images.hexagonalButton.texture(), PGR.core.strings.rewards.rewardBreak, PGR.core.strings.rewards.breakDescription, REWARD_INDEX, index, true)
+                EUIRM.images.hexagonalButton.texture(), PGR.core.strings.rewards_rewardBreak, PGR.core.strings.rewards_breakDescription, REWARD_INDEX, index, true)
                 .setFont(EUIFontHelper.buttonFont, 0.85f)
                 .setDimensions(AbstractCard.IMG_WIDTH * 0.75f, AbstractCard.IMG_HEIGHT * 0.14f)
                 .setColor(new Color(0.8f, 0.2f, 0.2f, 1f))

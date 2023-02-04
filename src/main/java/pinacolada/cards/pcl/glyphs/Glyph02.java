@@ -26,6 +26,6 @@ public class Glyph02 extends Glyph
 
     public void setup(Object input)
     {
-        addUseMove(getSpecialMove(ef -> PGR.core.strings.actions.gainAmount(ef.getAmountRawString(), PGR.core.tooltips.maxHP), this::action, 1).setUpgrade(1));
+        addUseMove(getSpecialMove(ef -> PGR.core.strings.act_gainAmount(ef.getAmountRawString(), PGR.core.tooltips.maxHP), this::action, 1).setUpgrade(1));
     }
 }

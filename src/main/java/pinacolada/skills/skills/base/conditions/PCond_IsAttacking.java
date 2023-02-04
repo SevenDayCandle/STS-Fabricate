@@ -43,13 +43,13 @@ public class PCond_IsAttacking extends PPassiveCond<PField_Not>
     @Override
     public String getSampleText()
     {
-        return TEXT.conditions.objIs(TEXT.subjects.target, TEXT.subjects.attacking);
+        return TEXT.cond_objIs(TEXT.subjects_target, TEXT.subjects_attacking);
     }
 
     @Override
     public String getSubText()
     {
-        String base = fields.not ? TEXT.conditions.not(TEXT.subjects.attacking) : TEXT.subjects.attacking;
-        return target == PCLCardTarget.Single ? TEXT.conditions.ifTheEnemyIs(base) : TEXT.conditions.ifAnyEnemyIs(base);
+        String base = fields.not ? TEXT.cond_not(TEXT.subjects_attacking) : TEXT.subjects_attacking;
+        return target == PCLCardTarget.Single ? TEXT.cond_ifTheEnemyIs(base) : TEXT.cond_ifAnyEnemyIs(base);
     }
 }

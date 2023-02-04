@@ -45,13 +45,13 @@ public abstract class PCond_DoTo extends PPassiveCond<PField_CardCategory>
     @Override
     public String getSampleText()
     {
-        return EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects.x);
+        return EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects_x);
     }
 
     @Override
     public String getSubText()
     {
-        return fields.hasGroups() ? TEXT.actions.genericFrom(getActionTitle(), getAmountRawString(), fields.getFullCardString(), fields.getGroupString())
+        return fields.hasGroups() ? TEXT.act_genericFrom(getActionTitle(), getAmountRawString(), fields.getFullCardString(), fields.getGroupString())
                 : EUIRM.strings.verbNoun(getActionTitle(), getAmountRawString());
     }
 
@@ -83,7 +83,7 @@ public abstract class PCond_DoTo extends PPassiveCond<PField_CardCategory>
     @Override
     public String getText(boolean addPeriod)
     {
-        return childEffect == null ? (getSubText() + PCLCoreStrings.period(addPeriod)) : TEXT.conditions.inOrderTo(getSubText(), capital(childEffect.getText(false), addPeriod)) + PCLCoreStrings.period(addPeriod);
+        return childEffect == null ? (getSubText() + PCLCoreStrings.period(addPeriod)) : TEXT.cond_inOrderTo(getSubText(), capital(childEffect.getText(false), addPeriod)) + PCLCoreStrings.period(addPeriod);
     }
 
     @Override

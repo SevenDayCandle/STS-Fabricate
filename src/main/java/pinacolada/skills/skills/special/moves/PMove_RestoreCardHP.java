@@ -50,9 +50,9 @@ public class PMove_RestoreCardHP extends PMove_Modify<PField_CardCategory>
     @Override
     public String getSubText()
     {
-        return TEXT.actions.healOn(getAmountRawString(),
+        return TEXT.act_healOn(getAmountRawString(),
                 useParent ? getInheritedString() :
-                        fields.hasGroups() ? fields.getFullCardString() : TEXT.subjects.thisX);
+                        fields.hasGroups() ? fields.getFullCardString() : TEXT.subjects_thisX);
     }
 
     @Override

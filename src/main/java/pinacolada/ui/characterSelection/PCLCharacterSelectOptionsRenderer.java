@@ -53,8 +53,8 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase
 
     public PCLCharacterSelectOptionsRenderer()
     {
-        final float leftTextWidth = FontHelper.getSmartWidth(FontHelper.cardTitleFont, PGR.core.strings.charSelect.leftText, 9999f, 0f); // Ascension
-        final float rightTextWidth = FontHelper.getSmartWidth(FontHelper.cardTitleFont, PGR.core.strings.charSelect.rightText, 9999f, 0f); // Level 22
+        final float leftTextWidth = FontHelper.getSmartWidth(FontHelper.cardTitleFont, PGR.core.strings.csel_leftText, 9999f, 0f); // Ascension
+        final float rightTextWidth = FontHelper.getSmartWidth(FontHelper.cardTitleFont, PGR.core.strings.csel_rightText, 9999f, 0f); // Level 22
 
         textScale = Settings.scale;
 
@@ -72,7 +72,7 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase
                 new EUIHitbox(POS_X, POS_Y, leftTextWidth, 50f * Settings.scale))
                 .setColor(Settings.GOLD_COLOR)
                 .setAlignment(0.5f, 0.5f, false)
-                .setLabel(PGR.core.strings.charSelect.leftText);
+                .setLabel(PGR.core.strings.csel_leftText);
 
         startingCardsListLabel = new EUITextBox(EUIRM.images.panelRounded.texture(),
                 new EUIHitbox(POS_X + ROW_OFFSET * 3.5f, POS_Y, leftTextWidth, 50f * Settings.scale))
@@ -84,18 +84,18 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase
                 new EUIHitbox(POS_X * 7, POS_Y, leftTextWidth, 50f * Settings.scale))
                 .setColor(Settings.GOLD_COLOR)
                 .setAlignment(0.5f, 0.5f, false)
-                .setLabel(PGR.core.strings.charSelect.ascensionGlyph);
+                .setLabel(PGR.core.strings.csel_ascensionGlyph);
 
         float xOffset = ascensionGlyphsLabel.hb.x + ROW_OFFSET * 4f;
 
         seriesButton = new EUIButton(PGR.core.images.edit.texture(), new EUIHitbox(0, 0, scale(64), scale(64)))
                 .setPosition(xOffset + ROW_OFFSET, startingCardsListLabel.hb.y + scale(192)).setText("")
-                .setTooltip(PGR.core.strings.charSelect.seriesEditor, PGR.core.strings.charSelect.seriesEditorInfo)
+                .setTooltip(PGR.core.strings.csel_seriesEditor, PGR.core.strings.csel_seriesEditorInfo)
                 .setOnClick(this::openSeriesSelect);
 
         loadoutEditorButton = new EUIButton(PGR.core.images.swapCards.texture(), new EUIHitbox(0, 0, scale(64), scale(64)))
                 .setPosition(seriesButton.hb.x + seriesButton.hb.width + scale(40), startingCardsListLabel.hb.y + scale(192)).setText("")
-                .setTooltip(PGR.core.strings.charSelect.deckEditor, PGR.core.strings.charSelect.deckEditorInfo)
+                .setTooltip(PGR.core.strings.csel_deckEditor, PGR.core.strings.csel_deckEditorInfo)
                 .setOnRightClick(this::changePreset)
                 .setOnClick(this::openLoadoutEditor);
 
@@ -108,9 +108,9 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase
         simpleModeToggle = (EUIToggle) new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 48f))
                 .setPosition(ascensionGlyphsLabel.hb.cX, ascensionGlyphsLabel.hb.y + scale(120))
                 .setFont(EUIFontHelper.carddescriptionfontLarge, 0.475f)
-                .setText(PGR.core.strings.misc.cardModeHeader)
+                .setText(PGR.core.strings.misc_cardModeHeader)
                 .setOnToggle(this::toggleSimpleMode)
-                .setTooltip(PGR.core.strings.misc.simpleMode, PGR.core.strings.misc.simpleModeDescription);
+                .setTooltip(PGR.core.strings.misc_simpleMode, PGR.core.strings.misc_simpleModeDescription);
     }
 
     private void changeLoadout(int index)
@@ -177,7 +177,7 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase
         if (characterOption != null && GameUtilities.isPCLPlayerClass(characterOption.c.chosenClass))
         {
             boolean isSimpleMode = PGR.core.config.simpleMode.get();
-            simpleModeToggle.tooltip.setText(isSimpleMode ? PGR.core.strings.misc.simpleMode : PGR.core.strings.misc.complexMode, isSimpleMode ? PGR.core.strings.misc.simpleModeDescription : PGR.core.strings.misc.complexModeDescription);
+            simpleModeToggle.tooltip.setText(isSimpleMode ? PGR.core.strings.misc_simpleMode : PGR.core.strings.misc_complexMode, isSimpleMode ? PGR.core.strings.misc_simpleModeDescription : PGR.core.strings.misc_complexModeDescription);
             EUI.actingColor = characterOption.c.getCardColor();
             this.data = PGR.getPlayerData(characterOption.c.chosenClass);
             this.loadouts.clear();
@@ -252,13 +252,13 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase
         int currentLevel = data.resources.getUnlockLevel();
         if (currentLevel < loadout.unlockLevel)
         {
-            startingCardsListLabel.setLabel(PGR.core.strings.charSelect.unlocksAtLevel(loadout.unlockLevel, currentLevel)).setFontColor(Settings.RED_TEXT_COLOR);
+            startingCardsListLabel.setLabel(PGR.core.strings.csel_unlocksAtLevel(loadout.unlockLevel, currentLevel)).setFontColor(Settings.RED_TEXT_COLOR);
             loadoutEditorButton.setInteractable(false);
             runProvider.disableConfirm(true);
         }
         else if (!loadout.validate().isValid)
         {
-            startingCardsListLabel.setLabel(PGR.core.strings.charSelect.invalidLoadout).setFontColor(Settings.RED_TEXT_COLOR);
+            startingCardsListLabel.setLabel(PGR.core.strings.csel_invalidLoadout).setFontColor(Settings.RED_TEXT_COLOR);
             loadoutEditorButton.setInteractable(true);
             runProvider.disableConfirm(true);
         }
@@ -279,7 +279,7 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase
     protected void toggleSimpleMode(boolean val)
     {
         PGR.core.config.simpleMode.set(val);
-        simpleModeToggle.tooltip.setText(val ? PGR.core.strings.misc.simpleMode : PGR.core.strings.misc.complexMode, val ? PGR.core.strings.misc.simpleModeDescription : PGR.core.strings.misc.complexModeDescription);
+        simpleModeToggle.tooltip.setText(val ? PGR.core.strings.misc_simpleMode : PGR.core.strings.misc_complexMode, val ? PGR.core.strings.misc_simpleModeDescription : PGR.core.strings.misc_complexModeDescription);
         PCLCard.refreshSimpleModePreview(val);
     }
 

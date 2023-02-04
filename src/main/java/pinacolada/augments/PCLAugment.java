@@ -13,8 +13,8 @@ import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.annotations.VisibleAugment;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLAffinity;
-import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
@@ -219,7 +219,7 @@ public abstract class PCLAugment implements TooltipProvider
         return EUIUtils.joinTrueStrings(EUIUtils.SPLIT_LINE,
                 EUIRM.strings.generic2(data.affinity.getTooltip(), PCLCoreStrings.headerString(PGR.core.tooltips.level.title, data.tier)),
                 data.isSpecial ? "{#r:" + PGR.core.tooltips.specialAugment + "}" : null,
-                PCLCoreStrings.headerString(PGR.core.strings.cardMods.requirement, getReqsString()),
+                PCLCoreStrings.headerString(PGR.core.strings.misc_requirement, getReqsString()),
                 getPowerText());
     }
 
@@ -235,7 +235,7 @@ public abstract class PCLAugment implements TooltipProvider
 
     public String getReqsString()
     {
-        return data.reqs == null ? PGR.core.strings.combat.na : data.reqs.getString();
+        return data.reqs == null ? PGR.core.strings.combat_na : data.reqs.getString();
     }
 
     public String getText()

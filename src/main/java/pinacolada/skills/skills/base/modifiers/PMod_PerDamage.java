@@ -36,6 +36,6 @@ public class PMod_PerDamage extends PMod_Per<PField_Empty>
     @Override
     public String getSubText()
     {
-        return TEXT.subjects.damage;
+        return TEXT.subjects_damage;
     }
 }

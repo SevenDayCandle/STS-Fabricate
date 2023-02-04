@@ -47,12 +47,12 @@ public class PCond_PayGold extends PPassiveCond<PField_Empty>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.pay(TEXT.subjects.x, PGR.core.tooltips.gold.title);
+        return TEXT.act_pay(TEXT.subjects_x, PGR.core.tooltips.gold.title);
     }
 
     @Override
     public String getSubText()
     {
-        return capital(TEXT.actions.pay(amount, PGR.core.tooltips.gold), true);
+        return capital(TEXT.act_pay(amount, PGR.core.tooltips.gold), true);
     }
 }

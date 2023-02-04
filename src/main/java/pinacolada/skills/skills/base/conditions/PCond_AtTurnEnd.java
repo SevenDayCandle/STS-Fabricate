@@ -33,13 +33,13 @@ public class PCond_AtTurnEnd extends PPassiveCond<PField_Empty> implements OnEnd
     @Override
     public String getSampleText()
     {
-        return TEXT.conditions.atEndOfTurn();
+        return TEXT.cond_atEndOfTurn();
     }
 
     @Override
     public String getSubText()
     {
-        return TEXT.conditions.atEndOfTurn();
+        return TEXT.cond_atEndOfTurn();
     }
 
     @Override

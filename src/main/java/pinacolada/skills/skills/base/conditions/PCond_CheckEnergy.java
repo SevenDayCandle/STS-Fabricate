@@ -41,12 +41,12 @@ public class PCond_CheckEnergy extends PPassiveCond<PField_Not>
     @Override
     public String getSampleText()
     {
-        return EUIRM.strings.numNoun(TEXT.subjects.x, PGR.core.tooltips.energy.title);
+        return EUIRM.strings.numNoun(TEXT.subjects_x, PGR.core.tooltips.energy.title);
     }
 
     @Override
     public String getSubText()
     {
-        return TEXT.conditions.ifYouHave(amount > 1 ? EUIRM.strings.numNoun(amount + "+", PGR.core.tooltips.energy) : PGR.core.tooltips.energy.toString());
+        return TEXT.cond_ifYouHave(amount > 1 ? EUIRM.strings.numNoun(amount + "+", PGR.core.tooltips.energy) : PGR.core.tooltips.energy.toString());
     }
 }

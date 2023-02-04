@@ -38,7 +38,7 @@ public class PMod_XEnergy extends PPassiveMod<PField_Empty>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.pay(TEXT.subjects.x, PGR.core.tooltips.energy.title);
+        return TEXT.act_pay(TEXT.subjects_x, PGR.core.tooltips.energy.title);
     }
 
     @Override
@@ -73,7 +73,7 @@ public class PMod_XEnergy extends PPassiveMod<PField_Empty>
         {
             input = "";
         }
-        input = this.amount > 0 ? input + TEXT.subjects.x + "+" + this.amount : input + TEXT.subjects.x;
+        input = this.amount > 0 ? input + TEXT.subjects_x + "+" + this.amount : input + TEXT.subjects_x;
         return parent != null ? parent.wrapAmountChild(input) : (input);
     }
 

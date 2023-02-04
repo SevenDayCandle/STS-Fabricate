@@ -53,7 +53,7 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.giveTarget(TEXT.subjects.card, getObjectSampleText());
+        return TEXT.act_giveTarget(TEXT.subjects_card, getObjectSampleText());
     }
 
     @Override
@@ -69,9 +69,9 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<
     public String getSubText()
     {
         String giveString = getObjectText();
-        return useParent ? TEXT.actions.giveTarget(getInheritedString(), giveString) :
+        return useParent ? TEXT.act_giveTarget(getInheritedString(), giveString) :
                 fields.hasGroups() ?
-                        TEXT.actions.giveFrom(EUIRM.strings.numNoun(amount <= 0 ? TEXT.subjects.all : getAmountRawString(), pluralCard()), fields.getGroupString(), giveString) :
-                        TEXT.actions.giveTarget(TEXT.subjects.thisX, giveString);
+                        TEXT.act_giveFrom(EUIRM.strings.numNoun(amount <= 0 ? TEXT.subjects_all : getAmountRawString(), pluralCard()), fields.getGroupString(), giveString) :
+                        TEXT.act_giveTarget(TEXT.subjects_thisX, giveString);
     }
 }

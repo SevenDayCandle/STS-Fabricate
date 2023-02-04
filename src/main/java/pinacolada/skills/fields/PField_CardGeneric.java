@@ -114,7 +114,7 @@ public class PField_CardGeneric extends PField
 
     public String getShortCardString()
     {
-        return isRandom() ? PSkill.TEXT.subjects.randomX(skill.pluralCard()) : skill.pluralCard();
+        return isRandom() ? PSkill.TEXT.subjects_randomX(skill.pluralCard()) : skill.pluralCard();
     }
 
     public final CardGroup[] getCardGroup(PCLUseInfo info)

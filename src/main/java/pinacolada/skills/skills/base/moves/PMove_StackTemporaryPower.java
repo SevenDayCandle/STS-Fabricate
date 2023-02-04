@@ -48,7 +48,7 @@ public class PMove_StackTemporaryPower extends PMove<PField_Power>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.applyAmount(EUIUtils.format(TEXT.cardMods.tempPowerPrefix, TEXT.subjects.x), TEXT.cardEditor.powers);
+        return TEXT.act_applyAmount(EUIUtils.format(TEXT.misc_tempPowerPrefix, TEXT.subjects_x), TEXT.cedit_powers);
     }
 
     @Override
@@ -64,17 +64,17 @@ public class PMove_StackTemporaryPower extends PMove<PField_Power>
     @Override
     public String getSubText()
     {
-        String joinedString = EUIUtils.format(TEXT.cardMods.tempPowerPrefix, fields.getPowerString());
+        String joinedString = EUIUtils.format(TEXT.misc_tempPowerPrefix, fields.getPowerString());
         switch (target)
         {
             case RandomEnemy:
             case AllEnemy:
-                return fields.powers.size() > 0 && fields.powers.get(0).isDebuff ? TEXT.actions.applyAmountToTarget(getAmountRawString(), joinedString, getTargetString()) : TEXT.actions.giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
+                return fields.powers.size() > 0 && fields.powers.get(0).isDebuff ? TEXT.act_applyAmountToTarget(getAmountRawString(), joinedString, getTargetString()) : TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
             case Single:
-                return fields.powers.size() > 0 && fields.powers.get(0).isDebuff ? TEXT.actions.applyAmount(getAmountRawString(), joinedString) : TEXT.actions.giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
+                return fields.powers.size() > 0 && fields.powers.get(0).isDebuff ? TEXT.act_applyAmount(getAmountRawString(), joinedString) : TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
             default:
-                return amount < 0 ? TEXT.actions.loseAmount(getAmountRawString(), joinedString)
-                        : TEXT.actions.gainAmount(getAmountRawString(), joinedString);
+                return amount < 0 ? TEXT.act_loseAmount(getAmountRawString(), joinedString)
+                        : TEXT.act_gainAmount(getAmountRawString(), joinedString);
         }
     }
 }

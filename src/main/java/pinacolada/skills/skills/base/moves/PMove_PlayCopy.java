@@ -55,7 +55,7 @@ public class PMove_PlayCopy extends PMove<PField_CardID>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.play(TEXT.subjects.x);
+        return TEXT.act_play(TEXT.subjects_x);
     }
 
     @Override
@@ -101,7 +101,7 @@ public class PMove_PlayCopy extends PMove<PField_CardID>
     @Override
     public String getSubText()
     {
-        return fields.cardIDs.isEmpty() ? EUIRM.strings.verbNounAdv(PGR.core.tooltips.play.title, hasParentType(PTrigger.class) ? getInheritedString() : TEXT.subjects.thisX, TEXT.subjects.times(amount))
-                : TEXT.actions.play(PCLCoreStrings.joinWithAnd(EUIUtils.map(fields.cardIDs, g -> "{" + PGR.getCardStrings(g).NAME + "}")));
+        return fields.cardIDs.isEmpty() ? EUIRM.strings.verbNounAdv(PGR.core.tooltips.play.title, hasParentType(PTrigger.class) ? getInheritedString() : TEXT.subjects_thisX, TEXT.subjects_times(amount))
+                : TEXT.act_play(PCLCoreStrings.joinWithAnd(EUIUtils.map(fields.cardIDs, g -> "{" + PGR.getCardStrings(g).NAME + "}")));
     }
 }

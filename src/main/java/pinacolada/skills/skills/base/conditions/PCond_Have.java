@@ -42,13 +42,13 @@ public abstract class PCond_Have extends PPassiveCond<PField_CardCategory>
     @Override
     public String getSampleText()
     {
-        return TEXT.conditions.ifX(PCLCoreStrings.past(getActionTooltip()));
+        return TEXT.cond_ifX(PCLCoreStrings.past(getActionTooltip()));
     }
 
     @Override
     public String getSubText()
     {
-        return TEXT.conditions.ifYouDidThisTurn(PCLCoreStrings.past(getActionTooltip()), EUIRM.strings.numNoun(getAmountRawString(), fields.getFullCardString()));
+        return TEXT.cond_ifYouDidThisTurn(PCLCoreStrings.past(getActionTooltip()), EUIRM.strings.numNoun(getAmountRawString(), fields.getFullCardString()));
     }
 
     @Override

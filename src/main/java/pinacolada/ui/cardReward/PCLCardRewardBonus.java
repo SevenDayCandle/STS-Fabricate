@@ -12,7 +12,6 @@ import pinacolada.effects.SFX;
 import pinacolada.effects.card.PermanentUpgradeEffect;
 import pinacolada.interfaces.listeners.OnAddingToCardRewardListener;
 import pinacolada.resources.PGR;
-import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -24,7 +23,6 @@ public class PCLCardRewardBonus extends EUIBase
     public static final float BASE_CHANCE = 0.3f;
     public static final int BASE_GOLD = 10;
     public static final int BASE_HP = 1;
-    private final PCLCoreStrings.Rewards REWARDS = PGR.core.strings.rewards;
     private final ArrayList<CardRewardBundle> bundles = new ArrayList<>();
     private RewardItem rewardItem;
 
@@ -78,14 +76,14 @@ public class PCLCardRewardBonus extends EUIBase
     {
         return new CardRewardBundle(card, this::receiveGold).setAmount(gold)
                 .setIcon(ImageMaster.UI_GOLD, -AbstractCard.RAW_W * 0.45f, -AbstractCard.RAW_H * 0.545f)
-                .setText(REWARDS.goldBonus(gold), Color.WHITE, -AbstractCard.RAW_W * 0.165f, -AbstractCard.RAW_H * 0.54f);
+                .setText(PGR.core.strings.rewards_goldBonus(gold), Color.WHITE, -AbstractCard.RAW_W * 0.165f, -AbstractCard.RAW_H * 0.54f);
     }
 
     private CardRewardBundle getMaxHPBundle(AbstractCard card, int maxHP)
     {
         return new CardRewardBundle(card, this::receiveMaxHP).setAmount(maxHP)
                 .setIcon(ImageMaster.TP_HP, -AbstractCard.RAW_W * 0.45f, -AbstractCard.RAW_H * 0.545f)
-                .setText(REWARDS.maxHPBonus(maxHP), Color.WHITE, -AbstractCard.RAW_W * 0.165f, -AbstractCard.RAW_H * 0.54f);
+                .setText(PGR.core.strings.rewards_maxHPBonus(maxHP), Color.WHITE, -AbstractCard.RAW_W * 0.165f, -AbstractCard.RAW_H * 0.54f);
     }
 
     public void onCardObtained(AbstractCard hoveredCard)

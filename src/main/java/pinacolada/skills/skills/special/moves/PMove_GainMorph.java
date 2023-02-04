@@ -35,7 +35,7 @@ public class PMove_GainMorph extends PMove<PField_Empty>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.gainAmount(TEXT.subjects.x, PGR.core.tooltips.reroll.title);
+        return TEXT.act_gainAmount(TEXT.subjects_x, PGR.core.tooltips.reroll.title);
     }
 
     @Override
@@ -48,6 +48,6 @@ public class PMove_GainMorph extends PMove<PField_Empty>
     @Override
     public String getSubText()
     {
-        return TEXT.actions.gainAmount(getAmountRawString(), plural(PGR.getResources(GameUtilities.getActingCardColor(sourceCard)).tooltips.getRerollTooltip()));
+        return TEXT.act_gainAmount(getAmountRawString(), plural(PGR.getResources(GameUtilities.getActingCardColor(sourceCard)).tooltips.getRerollTooltip()));
     }
 }

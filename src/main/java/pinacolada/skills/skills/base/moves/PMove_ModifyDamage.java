@@ -38,13 +38,13 @@ public class PMove_ModifyDamage extends PMove_Modify<PField_CardCategory>
     @Override
     public String getObjectSampleText()
     {
-        return TEXT.subjects.damage;
+        return TEXT.subjects_damage;
     }
 
     @Override
     public String getObjectText()
     {
-        return EUIRM.strings.numNoun(getExtraRawString(), TEXT.subjects.damage);
+        return EUIRM.strings.numNoun(getExtraRawString(), TEXT.subjects_damage);
     }
 
     @Override

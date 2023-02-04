@@ -34,7 +34,7 @@ public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.gainAmount(TEXT.subjects.x, PGR.core.tooltips.block);
+        return TEXT.act_gainAmount(TEXT.subjects_x, PGR.core.tooltips.block);
     }
 
     @Override
@@ -74,8 +74,8 @@ public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty>
 
         if (isSelfOnlyTarget())
         {
-            return TEXT.actions.gainAmount(amountString, PGR.core.tooltips.block);
+            return TEXT.act_gainAmount(amountString, PGR.core.tooltips.block);
         }
-        return TEXT.actions.objectTo(amountString, PGR.core.tooltips.block, getTargetString());
+        return TEXT.act_objectTo(amountString, PGR.core.tooltips.block, getTargetString());
     }
 }

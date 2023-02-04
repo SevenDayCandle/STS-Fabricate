@@ -31,7 +31,7 @@ public class PMove_Kill extends PMove<PField_Empty>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.stun(TEXT.subjects.x);
+        return TEXT.act_stun(TEXT.subjects_x);
     }
 
     @Override
@@ -47,6 +47,6 @@ public class PMove_Kill extends PMove<PField_Empty>
     @Override
     public String getSubText()
     {
-        return TEXT.actions.kill(getTargetString());
+        return TEXT.act_kill(getTargetString());
     }
 }

@@ -54,8 +54,8 @@ public class PCond_NextAffinity extends PPassiveCond<PField_Affinity>
     @Override
     public String getSubText()
     {
-        return TEXT.conditions.objIs(
+        return TEXT.cond_objIs(
                         amount <= 0 ? PGR.core.tooltips.currentAffinity : PGR.core.tooltips.lastAffinity,
-                fields.affinities.isEmpty() ? TEXT.subjects.anyX(PGR.core.tooltips.affinityGeneral) : (fields.getAffinityPowerOrString()));
+                fields.affinities.isEmpty() ? TEXT.subjects_anyX(PGR.core.tooltips.affinityGeneral) : (fields.getAffinityPowerOrString()));
     }
 }

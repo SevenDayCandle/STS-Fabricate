@@ -49,7 +49,7 @@ public class PCond_HP extends PPassiveCond<PField_Not>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.generic2(PGR.core.tooltips.hp.title, "X%");
+        return TEXT.act_generic2(PGR.core.tooltips.hp.title, "X%");
     }
 
     @Override
@@ -60,13 +60,13 @@ public class PCond_HP extends PPassiveCond<PField_Not>
         {
             case All:
             case Any:
-                return TEXT.conditions.ifAnyCharacterHas(baseString);
+                return TEXT.cond_ifAnyCharacterHas(baseString);
             case AllEnemy:
-                return TEXT.conditions.ifAnyEnemyHas(baseString);
+                return TEXT.cond_ifAnyEnemyHas(baseString);
             case Single:
-                return TEXT.conditions.ifTheEnemyHas(baseString);
+                return TEXT.cond_ifTheEnemyHas(baseString);
             case Self:
-                return TEXT.conditions.ifYouHave(baseString);
+                return TEXT.cond_ifYouHave(baseString);
             default:
                 return baseString;
         }

@@ -33,7 +33,7 @@ public class PMove_NoBlock extends PMove<PField_Empty>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.youCannotGain(PGR.core.tooltips.block.title);
+        return TEXT.act_youCannotGain(PGR.core.tooltips.block.title);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class PMove_NoBlock extends PMove<PField_Empty>
     @Override
     public String getSubText()
     {
-        String base = TEXT.actions.youCannotGain(PGR.core.tooltips.block);
-        return amount > 1 ? TEXT.conditions.forTurns(amount) + ", " + base : TEXT.subjects.thisTurn(base);
+        String base = TEXT.act_youCannotGain(PGR.core.tooltips.block);
+        return amount > 1 ? TEXT.cond_forTurns(amount) + ", " + base : TEXT.subjects_thisTurn(base);
     }
 }

@@ -40,7 +40,7 @@ public class PCond_TriggerOrb extends PPassiveCond<PField_Orb> implements OnOrbP
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.trigger(TEXT.subjects.x);
+        return TEXT.act_trigger(TEXT.subjects_x);
     }
 
     @Override
@@ -49,9 +49,9 @@ public class PCond_TriggerOrb extends PPassiveCond<PField_Orb> implements OnOrbP
         Object tt = fields.getOrbOrString();
         if (isTrigger())
         {
-            return TEXT.conditions.wheneverYou(TEXT.actions.trigger(tt));
+            return TEXT.cond_wheneverYou(TEXT.act_trigger(tt));
         }
-        return TEXT.actions.trigger(amount <= 1 ? TEXT.subjects.yourFirst(tt) : TEXT.subjects.yourFirst(EUIRM.strings.numNoun(getAmountRawString(), tt)));
+        return TEXT.act_trigger(amount <= 1 ? TEXT.subjects_yourFirst(tt) : TEXT.subjects_yourFirst(EUIRM.strings.numNoun(getAmountRawString(), tt)));
     }
 
     @Override

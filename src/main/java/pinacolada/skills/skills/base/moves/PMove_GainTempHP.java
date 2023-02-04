@@ -38,7 +38,7 @@ public class PMove_GainTempHP extends PMove<PField_Empty>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.gainAmount(TEXT.subjects.x, PGR.core.tooltips.tempHP.title);
+        return TEXT.act_gainAmount(TEXT.subjects_x, PGR.core.tooltips.tempHP.title);
     }
 
     @Override
@@ -56,8 +56,8 @@ public class PMove_GainTempHP extends PMove<PField_Empty>
     {
         if (isSelfOnlyTarget())
         {
-            return TEXT.actions.gainAmount(getAmountRawString(), PGR.core.tooltips.tempHP);
+            return TEXT.act_gainAmount(getAmountRawString(), PGR.core.tooltips.tempHP);
         }
-        return TEXT.actions.giveTargetAmount(getTargetString(), getAmountRawString(), PGR.core.tooltips.tempHP);
+        return TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), PGR.core.tooltips.tempHP);
     }
 }

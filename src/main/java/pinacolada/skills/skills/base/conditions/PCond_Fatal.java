@@ -36,7 +36,7 @@ public class PCond_Fatal extends PActiveCond<PField_Not>
     @Override
     public String getSubText()
     {
-        return fields.not ? TEXT.conditions.not(PGR.core.tooltips.fatal.title) : TEXT.conditions.ifX(PGR.core.tooltips.fatal.title);
+        return fields.not ? TEXT.cond_not(PGR.core.tooltips.fatal.title) : TEXT.cond_ifX(PGR.core.tooltips.fatal.title);
     }
 
     @Override

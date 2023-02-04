@@ -82,7 +82,7 @@ public class SelectFromPile extends PCLActionWithCallback<ArrayList<AbstractCard
         this.groups = groups;
         this.origin = origin;
         this.canPlayerCancel = false;
-        this.message = PGR.core.strings.gridSelection.chooseCards;
+        this.message = PGR.core.strings.grid_chooseCards;
 
         initialize(player, target, amount, sourceName);
     }
@@ -274,7 +274,7 @@ public class SelectFromPile extends PCLActionWithCallback<ArrayList<AbstractCard
     @Override
     public String updateMessage()
     {
-        return super.updateMessageInternal(PGR.core.strings.actions.generic2(getActionMessage(), EUISmartText.parseLogicString(EUIUtils.format(PGR.core.strings.subjects.cardN, amount))));
+        return super.updateMessageInternal(PGR.core.strings.act_generic2(getActionMessage(), EUISmartText.parseLogicString(EUIUtils.format(PGR.core.strings.subjects_cardN, amount))));
     }
 
     public String getActionMessage()

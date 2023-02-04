@@ -366,8 +366,8 @@ public abstract class PMod<T extends PField> extends PSkill<T>
     @Override
     public String getText(boolean addPeriod)
     {
-        String subText = extra > 0 ? getSubText() + " (" + TEXT.subjects.max(extra) + ")" : getSubText();
-        return TEXT.conditions.per(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "",
+        String subText = extra > 0 ? getSubText() + " (" + TEXT.subjects_max(extra) + ")" : getSubText();
+        return TEXT.cond_per(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "",
                 subText + getXRawString()) + PCLCoreStrings.period(addPeriod);
     }
 

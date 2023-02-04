@@ -82,25 +82,25 @@ public class PCLLoadoutEditor extends AbstractScreen
 
         deckText = new EUILabel(EUIFontHelper.cardtitlefontLarge,
                 new EUIHitbox(screenW(0.1f), screenH(0.8f), buttonHeight, buttonHeight))
-                .setLabel(PGR.core.strings.charSelect.deckHeader)
+                .setLabel(PGR.core.strings.csel_deckHeader)
                 .setFontScale(0.8f)
                 .setAlignment(0.5f, 0.5f);
 
         relicText = new EUILabel(EUIFontHelper.cardtitlefontLarge,
                 new EUIHitbox(screenW(0.1f), screenH(0.4f), buttonHeight, buttonHeight))
-                .setLabel(PGR.core.strings.charSelect.relicsHeader)
+                .setLabel(PGR.core.strings.csel_relicsHeader)
                 .setFontScale(0.8f)
                 .setAlignment(0.5f, 0.5f);
 
         attributesText = new EUILabel(EUIFontHelper.cardtitlefontLarge,
                 new EUIHitbox(screenW(0.57f), screenH(0.8f), buttonHeight, buttonHeight))
-                .setLabel(PGR.core.strings.charSelect.attributesHeader)
+                .setLabel(PGR.core.strings.csel_attributesHeader)
                 .setFontScale(0.8f)
                 .setAlignment(0.5f, 0.5f);
 
         seriesButton = new EUIButton(PGR.core.images.edit.texture(), new EUIHitbox(0, 0, scale(64), scale(64)))
                 .setPosition(startingDeck.hb.x + scale(80), startingDeck.hb.y - scale(48)).setText("")
-                .setTooltip(PGR.core.strings.charSelect.seriesEditor, PGR.core.strings.charSelect.seriesEditorInfo)
+                .setTooltip(PGR.core.strings.csel_seriesEditor, PGR.core.strings.csel_seriesEditorInfo)
                 .setOnClick(this::openSeriesSelect);
 
         presetButtons = new EUIButton[PCLLoadout.MAX_PRESETS];
@@ -130,7 +130,7 @@ public class PCLLoadoutEditor extends AbstractScreen
         clearButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(saveButton.hb.cX, saveButton.hb.y + saveButton.hb.height + labelHeight * 0.8f)
                 .setColor(Color.WHITE)
-                .setText(PGR.core.strings.charSelect.clear)
+                .setText(PGR.core.strings.csel_clear)
                 .setOnClick(this::clear);
 
         upgradeToggle = new EUIToggle(new EUIHitbox(0, 0, labelWidth * 0.75f, labelHeight))
@@ -156,7 +156,7 @@ public class PCLLoadoutEditor extends AbstractScreen
                 .setAlignment(0.5f, 0.5f)
                 .setPosition(saveButton.hb.cX, cardscountText.hb.y + cardscountText.hb.height + labelHeight * 0.5f)
                 .setFont(FontHelper.tipHeaderFont, 1)
-                .setTooltip(new EUITooltip("", PGR.core.strings.charSelect.hindranceDescription));
+                .setTooltip(new EUITooltip("", PGR.core.strings.csel_hindranceDescription));
 
         for (int i = 0; i < MAX_CARD_SLOTS; i++)
         {
@@ -282,10 +282,10 @@ public class PCLLoadoutEditor extends AbstractScreen
             }
         }
 
-        hindrancevalueText.setLabel(PGR.core.strings.charSelect.hindranceValue(val.hindranceLevel)).tryUpdate();
+        hindrancevalueText.setLabel(PGR.core.strings.csel_hindranceValue(val.hindranceLevel)).tryUpdate();
         hindrancevalueText.tooltip.setTitle(hindrancevalueText.label.text);
-        cardscountText.setLabel(PGR.core.strings.charSelect.cardsCount(val.cardsCount.v1)).setFontColor(val.cardsCount.v2 ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR).tryUpdate();
-        cardsvalueText.setLabel(PGR.core.strings.charSelect.totalValue(val.totalValue.v1, PCLLoadout.MAX_VALUE)).setFontColor(val.totalValue.v2 ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR).tryUpdate();
+        cardscountText.setLabel(PGR.core.strings.csel_cardsCount(val.cardsCount.v1)).setFontColor(val.cardsCount.v2 ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR).tryUpdate();
+        cardsvalueText.setLabel(PGR.core.strings.csel_totalValue(val.totalValue.v1, PCLLoadout.MAX_VALUE)).setFontColor(val.totalValue.v2 ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR).tryUpdate();
         saveButton.setInteractable(val.isValid).tryUpdate();
 
         contextMenu.tryUpdate();
@@ -377,7 +377,7 @@ public class PCLLoadoutEditor extends AbstractScreen
         this.characterOption = option;
         this.data = data;
 
-        startingDeck.setLabel(PGR.core.strings.charSelect.leftText + " | #y" + (loadout.getName().replace(" ", " #y")));
+        startingDeck.setLabel(PGR.core.strings.csel_leftText + " | #y" + (loadout.getName().replace(" ", " #y")));
 
         PCLCard.canCropPortraits = false;
         toggleViewUpgrades(false);
@@ -476,11 +476,11 @@ public class PCLLoadoutEditor extends AbstractScreen
 
     public enum ContextOption
     {
-        CopyTo(PGR.core.strings.charSelect.copyTo, (screen, index) -> {
+        CopyTo(PGR.core.strings.csel_copyTo, (screen, index) -> {
             screen.presets[index] = screen.presets[screen.preset];
             screen.changePreset(index);
         }),
-        CopyFrom(PGR.core.strings.charSelect.copyFrom, (screen, index) -> {
+        CopyFrom(PGR.core.strings.csel_copyFrom, (screen, index) -> {
             screen.presets[screen.preset] = screen.presets[index];
             screen.setSlotsActive(true);
         });

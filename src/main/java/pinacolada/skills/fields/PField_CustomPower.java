@@ -22,7 +22,7 @@ public class PField_CustomPower extends PField
     public void setupEditor(PCLCustomCardEffectEditor<?> editor)
     {
         List<Integer> range = Arrays.asList(EUIUtils.range(0, editor.getBuilder().powers.size()));
-        editor.registerDropdown(range, indexes, item -> String.valueOf(item + 1), PGR.core.strings.cardEditor.powers, false);
+        editor.registerDropdown(range, indexes, item -> String.valueOf(item + 1), PGR.core.strings.cedit_powers, false);
         super.setupEditor(editor);
     }
 

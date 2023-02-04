@@ -61,16 +61,16 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory>
 
     public String getMoveString(boolean addPeriod)
     {
-        String amString = amount <= 0 ? TEXT.subjects.all : getAmountRawString();
+        String amString = amount <= 0 ? TEXT.subjects_all : getAmountRawString();
         return !fields.groupTypes.isEmpty() ?
-                TEXT.actions.genericFrom(getActionTitle(), amString, fields.forced ? fields.getFullCardString() : fields.getShortCardString(), fields.getGroupString())
+                TEXT.act_genericFrom(getActionTitle(), amString, fields.forced ? fields.getFullCardString() : fields.getShortCardString(), fields.getGroupString())
                 : EUIRM.strings.verbNoun(getActionTitle(), amString);
     }
 
     @Override
     public String getSampleText()
     {
-        return EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects.x) + " " + TEXT.conditions.doX(TEXT.subjects.x);
+        return EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects_x) + " " + TEXT.cond_doX(TEXT.subjects_x);
     }
 
     @Override
@@ -84,7 +84,7 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory>
     {
         return getMoveString(addPeriod) + LocalizedStrings.PERIOD + (childEffect != null ? (" " +
                 (childEffect.useParent ? childEffect.getText(addPeriod) :
-                        (TEXT.conditions.per(capital(childEffect.getText(false), addPeriod), EUIRM.strings.nounVerb(getSubText(), getActionPast())) + PCLCoreStrings.period(addPeriod))
+                        (TEXT.cond_per(capital(childEffect.getText(false), addPeriod), EUIRM.strings.nounVerb(getSubText(), getActionPast())) + PCLCoreStrings.period(addPeriod))
                 )) : "");
     }
 

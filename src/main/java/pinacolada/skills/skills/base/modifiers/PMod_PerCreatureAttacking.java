@@ -45,12 +45,12 @@ public class PMod_PerCreatureAttacking extends PMod_Per<PField_Empty>
     @Override
     public String getSubText()
     {
-        return EUIRM.strings.adjNoun(TEXT.subjects.attacking, TEXT.subjects.x);
+        return EUIRM.strings.adjNoun(TEXT.subjects_attacking, TEXT.subjects_x);
     }
 
     @Override
     public String getConditionText()
     {
-        return EUIRM.strings.adjNoun(TEXT.subjects.attacking, target == PCLCardTarget.Any ? TEXT.subjects.character : TEXT.subjects.enemy);
+        return EUIRM.strings.adjNoun(TEXT.subjects_attacking, target == PCLCardTarget.Any ? TEXT.subjects_character : TEXT.subjects_enemy);
     }
 }

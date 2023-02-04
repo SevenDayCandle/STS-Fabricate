@@ -38,6 +38,6 @@ public class PTrigger_Interactable extends PTrigger
     @Override
     public String getSubText()
     {
-        return PGR.core.tooltips.interactable.title + ": " + (fields.not ? TEXT.conditions.timesPerCombat(amount) + ", " : amount > 1 ? TEXT.conditions.timesPerTurn(amount) + ", " : "");
+        return PGR.core.tooltips.interactable.title + ": " + (fields.not ? TEXT.cond_timesPerCombat(amount) + ", " : amount > 1 ? TEXT.cond_timesPerTurn(amount) + ", " : "");
     }
 }

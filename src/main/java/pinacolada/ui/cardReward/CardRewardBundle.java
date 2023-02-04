@@ -10,13 +10,10 @@ import com.megacrit.cardcrawl.helpers.Hitbox;
 import com.megacrit.cardcrawl.helpers.TipHelper;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.utilities.EUIFontHelper;
-import pinacolada.resources.PGR;
-import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class CardRewardBundle
 {
-    private static final PCLCoreStrings.Rewards text = PGR.core.strings.rewards;
     public final AbstractCard card;
     public final ActionT1<CardRewardBundle> onSelect;
     public float textOffsetX;

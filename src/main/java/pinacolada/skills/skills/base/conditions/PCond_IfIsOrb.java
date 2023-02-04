@@ -39,20 +39,20 @@ public class PCond_IfIsOrb extends PPassiveCond<PField_Orb>
     @Override
     public String getSampleText()
     {
-        return TEXT.conditions.ifX(TEXT.cardEditor.orbs);
+        return TEXT.cond_ifX(TEXT.cedit_orbs);
     }
 
     @Override
     public String getSubText()
     {
         return hasParentType(PTrigger.class) ? fields.getOrbAndString(0) :
-                TEXT.conditions.ifX(fields.getOrbAndString(1));
+                TEXT.cond_ifX(fields.getOrbAndString(1));
     }
 
     @Override
     public String getText(boolean addPeriod)
     {
-        return hasParentType(PTrigger.class) ? TEXT.actions.objectHas(getSubText(), childEffect != null ? childEffect.getText(addPeriod) : PCLCoreStrings.period(addPeriod)) : super.getText(addPeriod);
+        return hasParentType(PTrigger.class) ? TEXT.act_objectHas(getSubText(), childEffect != null ? childEffect.getText(addPeriod) : PCLCoreStrings.period(addPeriod)) : super.getText(addPeriod);
     }
 
     @Override

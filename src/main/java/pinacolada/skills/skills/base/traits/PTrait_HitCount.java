@@ -32,13 +32,13 @@ public class PTrait_HitCount extends PTrait<PField_Empty>
     @Override
     public String getSubDescText()
     {
-        return TEXT.subjects.hits;
+        return TEXT.subjects_hits;
     }
 
     @Override
     public String getSubSampleText()
     {
-        return TEXT.subjects.hits;
+        return TEXT.subjects_hits;
     }
 
     @Override

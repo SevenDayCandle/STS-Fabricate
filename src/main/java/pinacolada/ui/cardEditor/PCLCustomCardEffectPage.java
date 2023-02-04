@@ -73,9 +73,9 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
         this.hb = hb;
         this.scrollBar.setPosition(screenW(0.95f), screenH(0.5f));
         this.upperScrollBound = scale(550);
-        this.conditionGroup = new EffectEditorGroup<PCond<?>>(this, PCond.class, PGR.core.strings.cardEditor.condition);
-        this.effectGroup = new EffectEditorGroup<PMove<?>>(this, PMove.class, PGR.core.strings.cardEditor.effect);
-        this.modifierGroup = new EffectEditorGroup<PMod<?>>(this, PMod.class, PGR.core.strings.cardEditor.modifier);
+        this.conditionGroup = new EffectEditorGroup<PCond<?>>(this, PCond.class, PGR.core.strings.cedit_condition);
+        this.effectGroup = new EffectEditorGroup<PMove<?>>(this, PMove.class, PGR.core.strings.cedit_effect);
+        this.modifierGroup = new EffectEditorGroup<PMod<?>>(this, PMod.class, PGR.core.strings.cedit_modifier);
 
         initializeEffects(effect);
 
@@ -109,63 +109,63 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
                 })
                 .setClearButtonOptions(true, true)
                 .setCanAutosizeButton(true)
-                .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cardEditor.mainCondition)
+                .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_mainCondition)
                 .setItems(EUIUtils.map(PSkill.getEligibleEffects(builder.cardColor, PLimit.class), bc -> primaryCond != null && bc.effectID.equals(primaryCond.effectID) ? primaryCond : bc));
         delayEditor = new PCLValueEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 4, MENU_HEIGHT, MENU_WIDTH * 1.5f, 0)
-                , PGR.core.strings.cardEditor.turnDelay, (val) -> {
+                , PGR.core.strings.cedit_turnDelay, (val) -> {
             delayMove.setAmount(val);
             scheduleConstruct();
         })
-                .setTooltip(PGR.core.strings.cardEditor.turnDelay, PGR.core.strings.cardEditorTutorial.effectTurnDelay)
+                .setTooltip(PGR.core.strings.cedit_turnDelay, PGR.core.strings.cetut_effectTurnDelay)
                 .setLimits(0, PSkill.DEFAULT_MAX);
 
         conditionHeader = new EUILabel(EUIFontHelper.cardtitlefontSmall, new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, 0, 0))
                 .setAlignment(0.5f, 0.0f, false)
                 .setColor(Settings.BLUE_TEXT_COLOR)
-                .setLabel(PGR.core.strings.cardEditor.condition)
-                .setTooltip(PGR.core.strings.cardEditor.condition, PGR.core.strings.cardEditorTutorial.effectCondition);
+                .setLabel(PGR.core.strings.cedit_condition)
+                .setTooltip(PGR.core.strings.cedit_condition, PGR.core.strings.cetut_effectCondition);
         addCondition = new EUIButton(EUIRM.images.plus.texture(), new OriginRelativeHitbox(hb, scale(48), scale(48), MENU_WIDTH, 0))
                 .setOnClick(() -> conditionGroup.addEffectSlot())
                 .setClickDelay(0.02f);
         ifElseToggle = (EUIToggle) new EUIToggle(new OriginRelativeHitbox(hb, MENU_WIDTH / 1.7f, MENU_HEIGHT, MENU_WIDTH * 1.9f, 0))
                 .setFont(EUIFontHelper.carddescriptionfontNormal, 0.9f)
-                .setText(PGR.core.strings.cardEditor.ifElseCondition)
+                .setText(PGR.core.strings.cedit_ifElseCondition)
                 .setOnToggle(val -> {
                     multiCond.setAmount(val ? 1 : 0);
                     scheduleConstruct();
                 })
-                .setTooltip(PGR.core.strings.cardEditor.ifElseCondition, PGR.core.strings.cardEditorTutorial.effectConditionIfElse);
+                .setTooltip(PGR.core.strings.cedit_ifElseCondition, PGR.core.strings.cetut_effectConditionIfElse);
         orToggle = (EUIToggle) new EUIToggle(new OriginRelativeHitbox(hb, MENU_WIDTH / 2, MENU_HEIGHT, MENU_WIDTH * 2.6f, 0))
                 .setFont(EUIFontHelper.carddescriptionfontNormal, 0.9f)
-                .setText(PGR.core.strings.cardEditor.orCondition)
+                .setText(PGR.core.strings.cedit_orCondition)
                 .setOnToggle(val -> {
                     multiCond.edit(f -> f.setOr(val));
                     scheduleConstruct();
                 })
-                .setTooltip(PGR.core.strings.cardEditor.orCondition, PGR.core.strings.cardEditorTutorial.effectConditionOr);
+                .setTooltip(PGR.core.strings.cedit_orCondition, PGR.core.strings.cetut_effectConditionOr);
 
         effectHeader = new EUILabel(EUIFontHelper.cardtitlefontSmall, new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, 0, 0))
                 .setAlignment(0.5f, 0.0f, false)
                 .setColor(Settings.BLUE_TEXT_COLOR)
-                .setLabel(PGR.core.strings.cardEditor.effect)
-                .setTooltip(PGR.core.strings.cardEditor.effect, PGR.core.strings.cardEditorTutorial.effectEffect);
+                .setLabel(PGR.core.strings.cedit_effect)
+                .setTooltip(PGR.core.strings.cedit_effect, PGR.core.strings.cetut_effectEffect);
         addEffect = new EUIButton(EUIRM.images.plus.texture(), new OriginRelativeHitbox(hb, scale(48), scale(48), MENU_WIDTH, 0))
                 .setOnClick(() -> effectGroup.addEffectSlot())
                 .setClickDelay(0.02f);
         choicesEditor = new PCLValueEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 4, MENU_HEIGHT, MENU_WIDTH * 2.5f, 0)
-                , PGR.core.strings.cardEditor.choices, (val) -> {
+                , PGR.core.strings.cedit_choices, (val) -> {
                     multiSkill.setAmount(val);
                     scheduleConstruct();
                 })
-                .setTooltip(PGR.core.strings.cardEditor.choices, PGR.core.strings.cardEditorTutorial.effectChoices)
+                .setTooltip(PGR.core.strings.cedit_choices, PGR.core.strings.cetut_effectChoices)
                 .setLimits(0, PSkill.DEFAULT_MAX);
         choicesEditor.header.hb.setOffset(-0.375f * MENU_WIDTH, MENU_HEIGHT * 0.5f);
 
         modifierHeader = new EUILabel(EUIFontHelper.cardtitlefontSmall, new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, 0, 0))
                 .setAlignment(0.5f, 0.0f, false)
                 .setColor(Settings.BLUE_TEXT_COLOR)
-                .setTooltip(PGR.core.strings.cardEditor.modifier, PGR.core.strings.cardEditorTutorial.effectModifier)
-                .setLabel(PGR.core.strings.cardEditor.modifier);
+                .setTooltip(PGR.core.strings.cedit_modifier, PGR.core.strings.cetut_effectModifier)
+                .setLabel(PGR.core.strings.cedit_modifier);
         addModifier = new EUIButton(EUIRM.images.plus.texture(), new OriginRelativeHitbox(hb, scale(48), scale(48), MENU_WIDTH, 0))
                 .setOnClick(() -> modifierGroup.addEffectSlot())
                 .setClickDelay(0.02f);

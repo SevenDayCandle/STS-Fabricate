@@ -50,7 +50,7 @@ public class PMove_Heal extends PMove<PField_Empty>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.heal(TEXT.subjects.x);
+        return TEXT.act_heal(TEXT.subjects_x);
     }
 
     @Override
@@ -68,8 +68,8 @@ public class PMove_Heal extends PMove<PField_Empty>
     {
         if (isSelfOnlyTarget())
         {
-            return TEXT.actions.heal(getAmountRawString());
+            return TEXT.act_heal(getAmountRawString());
         }
-        return TEXT.actions.healOn(getAmountRawString(), getTargetString());
+        return TEXT.act_healOn(getAmountRawString(), getTargetString());
     }
 }

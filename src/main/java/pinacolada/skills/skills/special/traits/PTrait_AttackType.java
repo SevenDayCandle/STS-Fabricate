@@ -35,7 +35,7 @@ public class PTrait_AttackType extends PTrait<PField_AttackType>
     public String getSubText()
     {
         return hasParentType(PTrigger.class) ? getSubDescText() :
-                fields.random ? TEXT.actions.remove(getSubDescText()) : TEXT.actions.has(getSubDescText());
+                fields.random ? TEXT.act_remove(getSubDescText()) : TEXT.act_has(getSubDescText());
     }
 
     @Override
@@ -56,6 +56,6 @@ public class PTrait_AttackType extends PTrait<PField_AttackType>
     @Override
     public String getSubSampleText()
     {
-        return TEXT.cardEditor.attackType;
+        return TEXT.cedit_attackType;
     }
 }

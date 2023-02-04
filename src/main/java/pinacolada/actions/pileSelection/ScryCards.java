@@ -22,7 +22,7 @@ public class ScryCards extends DiscardFromPile
     @Override
     public String updateMessage()
     {
-        return super.updateMessageInternal(PGR.core.strings.gridSelection.scry);
+        return super.updateMessageInternal(PGR.core.strings.grid_scry);
     }
 
     @Override

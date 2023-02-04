@@ -53,7 +53,7 @@ public class PCond_CheckPower extends PPassiveCond<PField_Power> implements OnAp
     @Override
     public String getSampleText()
     {
-        return EUIRM.strings.numNoun(TEXT.subjects.x, TEXT.cardEditor.powers);
+        return EUIRM.strings.numNoun(TEXT.subjects_x, TEXT.cedit_powers);
     }
 
     @Override
@@ -63,20 +63,20 @@ public class PCond_CheckPower extends PPassiveCond<PField_Power> implements OnAp
         baseString = fields.random ? EUIRM.strings.numNoun("< " + amount, baseString) : this.amount == 1 ? baseString : EUIRM.strings.numNoun((this.amount == 0 ? this.amount : this.amount + "+"), baseString);
         if (isTrigger())
         {
-            return TEXT.conditions.wheneverYou(target == PCLCardTarget.Self ? TEXT.actions.gain(baseString) : TEXT.actions.apply(baseString));
+            return TEXT.cond_wheneverYou(target == PCLCardTarget.Self ? TEXT.act_gain(baseString) : TEXT.act_apply(baseString));
         }
 
         switch (target)
         {
             case All:
             case Any:
-                return TEXT.conditions.ifAnyCharacterHas(baseString);
+                return TEXT.cond_ifAnyCharacterHas(baseString);
             case AllEnemy:
-                return TEXT.conditions.ifAnyEnemyHas(baseString);
+                return TEXT.cond_ifAnyEnemyHas(baseString);
             case Single:
-                return TEXT.conditions.ifTheEnemyHas(baseString);
+                return TEXT.cond_ifTheEnemyHas(baseString);
             case Self:
-                return TEXT.conditions.ifYouHave(baseString);
+                return TEXT.cond_ifYouHave(baseString);
             default:
                 return baseString;
         }

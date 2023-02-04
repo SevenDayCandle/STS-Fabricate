@@ -40,7 +40,7 @@ public class PMod_EvokePerOrb extends PActiveMod<PField_Orb>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.evoke(TEXT.conditions.per(TEXT.subjects.x, TEXT.cardEditor.orbs));
+        return TEXT.act_evoke(TEXT.cond_per(TEXT.subjects_x, TEXT.cedit_orbs));
     }
 
     @Override
@@ -52,7 +52,7 @@ public class PMod_EvokePerOrb extends PActiveMod<PField_Orb>
     @Override
     public String getText(boolean addPeriod)
     {
-        return TEXT.actions.evoke(TEXT.subjects.allX(fields.getOrbString()) + EFFECT_SEPARATOR + super.getText(addPeriod));
+        return TEXT.act_evoke(TEXT.subjects_allX(fields.getOrbString()) + EFFECT_SEPARATOR + super.getText(addPeriod));
     }
 
     @Override

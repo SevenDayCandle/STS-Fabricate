@@ -771,7 +771,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
 
     public String getParentString()
     {
-        return TEXT.subjects.them;
+        return TEXT.subjects_them;
     }
 
     public PCLCard getPCLSource()
@@ -837,30 +837,30 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         switch (target)
         {
             case All:
-                return TEXT.subjects.allX(PCLCoreStrings.pluralForce(TEXT.subjects.characterN));
+                return TEXT.subjects_allX(PCLCoreStrings.pluralForce(TEXT.subjects_characterN));
             case AllAlly:
-                return TEXT.subjects.allX(PCLCoreStrings.pluralForce(TEXT.subjects.allyN));
+                return TEXT.subjects_allX(PCLCoreStrings.pluralForce(TEXT.subjects_allyN));
             case AllEnemy:
-                return TEXT.subjects.allX(PCLCoreStrings.pluralForce(TEXT.subjects.enemyN));
+                return TEXT.subjects_allX(PCLCoreStrings.pluralForce(TEXT.subjects_enemyN));
             case Any:
-                return TEXT.subjects.anyone;
+                return TEXT.subjects_anyone;
             case RandomAlly:
-                return EUIRM.strings.numNoun(count, TEXT.subjects.randomX(PCLCoreStrings.pluralEvaluated(TEXT.subjects.allyN, count)));
+                return EUIRM.strings.numNoun(count, TEXT.subjects_randomX(PCLCoreStrings.pluralEvaluated(TEXT.subjects_allyN, count)));
             case RandomEnemy:
-                return EUIRM.strings.numNoun(count, TEXT.subjects.randomX(PCLCoreStrings.pluralEvaluated(TEXT.subjects.enemyN, count)));
+                return EUIRM.strings.numNoun(count, TEXT.subjects_randomX(PCLCoreStrings.pluralEvaluated(TEXT.subjects_enemyN, count)));
             case Single:
-                return EUIRM.strings.numNoun(count, PCLCoreStrings.pluralEvaluated(TEXT.subjects.enemyN, count));
+                return EUIRM.strings.numNoun(count, PCLCoreStrings.pluralEvaluated(TEXT.subjects_enemyN, count));
             case SingleAlly:
-                return EUIRM.strings.numNoun(count, PCLCoreStrings.pluralEvaluated(TEXT.subjects.allyN, count));
+                return EUIRM.strings.numNoun(count, PCLCoreStrings.pluralEvaluated(TEXT.subjects_allyN, count));
             case Team:
-                return TEXT.subjects.your(target.getTitle());
+                return TEXT.subjects_your(target.getTitle());
             case Self:
                 if (isFromCreature())
                 {
-                    return TEXT.subjects.thisObj;
+                    return TEXT.subjects_thisObj;
                 }
             default:
-                return TEXT.subjects.you;
+                return TEXT.subjects_you;
         }
     }
 
@@ -919,15 +919,15 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         switch (target)
         {
             case Single:
-                return TEXT.conditions.whenMulti(TEXT.subjects.target, impl);
+                return TEXT.cond_whenMulti(TEXT.subjects_target, impl);
             case AllEnemy:
-                return TEXT.conditions.whenMulti(TEXT.subjects.anyEnemy(), impl);
+                return TEXT.cond_whenMulti(TEXT.subjects_anyEnemy(), impl);
             case AllAlly:
-                return TEXT.conditions.whenMulti(TEXT.subjects.anyAlly(), impl);
+                return TEXT.cond_whenMulti(TEXT.subjects_anyAlly(), impl);
             case All:
-                return TEXT.conditions.whenMulti(TEXT.subjects.anyone, impl);
+                return TEXT.cond_whenMulti(TEXT.subjects_anyone, impl);
             default:
-                return TEXT.conditions.wheneverYou(impl);
+                return TEXT.cond_wheneverYou(impl);
         }
     }
 
@@ -1166,7 +1166,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
 
     public final String pluralCard()
     {
-        return EUIRM.strings.numNoun(getAmountRawString(), PGR.core.strings.subjects.cardN);
+        return EUIRM.strings.numNoun(getAmountRawString(), PGR.core.strings.subjects_cardN);
     }
 
     public void refresh(AbstractCreature m, AbstractCard c, boolean conditionMet)

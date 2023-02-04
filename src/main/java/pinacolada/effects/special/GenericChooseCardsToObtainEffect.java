@@ -81,7 +81,7 @@ public class GenericChooseCardsToObtainEffect extends PCLEffectWithCallback<Gene
         }
 
         AbstractDungeon.getCurrRoom().phase = AbstractRoom.RoomPhase.INCOMPLETE;
-        AbstractDungeon.gridSelectScreen.open(cardGroup, cardsToAdd, PGR.core.strings.gridSelection.chooseCards(cardsToAdd), false, false, false, false);
+        AbstractDungeon.gridSelectScreen.open(cardGroup, cardsToAdd, PGR.core.strings.grid_chooseCards(cardsToAdd), false, false, false, false);
     }
 
     @Override

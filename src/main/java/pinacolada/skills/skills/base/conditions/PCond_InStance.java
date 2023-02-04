@@ -51,6 +51,6 @@ public class PCond_InStance extends PPassiveCond<PField_Stance>
     public String getSubText()
     {
         String base = fields.getAnyStanceString();
-        return fields.random ? TEXT.conditions.not(base) : base;
+        return fields.random ? TEXT.cond_not(base) : base;
     }
 }

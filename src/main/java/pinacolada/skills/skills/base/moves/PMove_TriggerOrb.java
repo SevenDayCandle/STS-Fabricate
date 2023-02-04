@@ -41,7 +41,7 @@ public class PMove_TriggerOrb extends PMove<PField_Orb>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.trigger(TEXT.subjects.x);
+        return TEXT.act_trigger(TEXT.subjects_x);
     }
 
     @Override
@@ -57,6 +57,6 @@ public class PMove_TriggerOrb extends PMove<PField_Orb>
     public String getSubText()
     {
         String orbStr = fields.getOrbExtraString();
-        return amount == 1 ? TEXT.actions.trigger(orbStr) : TEXT.actions.triggerXTimes(orbStr, getAmountRawString());
+        return amount == 1 ? TEXT.act_trigger(orbStr) : TEXT.act_triggerXTimes(orbStr, getAmountRawString());
     }
 }

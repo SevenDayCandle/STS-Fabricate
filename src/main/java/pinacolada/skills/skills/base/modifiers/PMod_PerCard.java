@@ -35,7 +35,7 @@ public class PMod_PerCard extends PMod_Per<PField_CardCategory>
     @Override
     public String getSubText()
     {
-        return TEXT.subjects.card;
+        return TEXT.subjects_card;
     }
 
     @Override
@@ -48,7 +48,7 @@ public class PMod_PerCard extends PMod_Per<PField_CardCategory>
     public String getText(boolean addPeriod)
     {
         return !fields.hasGroups() ? super.getText(addPeriod) :
-                TEXT.conditions.perIn(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", getConditionText(),
+                TEXT.cond_perIn(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", getConditionText(),
                         fields.getGroupString() + getXRawString()) + PCLCoreStrings.period(addPeriod);
     }
 

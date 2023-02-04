@@ -37,20 +37,20 @@ public class PCond_IfHasAffinity extends PPassiveCond<PField_CardCategory>
     @Override
     public String getSampleText()
     {
-        return TEXT.conditions.ifTargetHas(TEXT.subjects.x, TEXT.subjects.x);
+        return TEXT.cond_ifTargetHas(TEXT.subjects_x, TEXT.subjects_x);
     }
 
     @Override
     public String getSubText()
     {
         return hasParentType(PTrigger.class) ? fields.getFullCardAndString() :
-                TEXT.conditions.ifTargetHas(TEXT.subjects.thisObj, PField.getAffinityOrString(fields.affinities));
+                TEXT.cond_ifTargetHas(TEXT.subjects_thisObj, PField.getAffinityOrString(fields.affinities));
     }
 
     @Override
     public String getText(boolean addPeriod)
     {
-        return hasParentType(PTrigger.class) ? TEXT.actions.objectHas(getSubText(), childEffect != null ? childEffect.getText(addPeriod) : PCLCoreStrings.period(addPeriod)) : super.getText(addPeriod);
+        return hasParentType(PTrigger.class) ? TEXT.act_objectHas(getSubText(), childEffect != null ? childEffect.getText(addPeriod) : PCLCoreStrings.period(addPeriod)) : super.getText(addPeriod);
     }
 
     @Override

@@ -104,8 +104,8 @@ public abstract class PDelay extends PSkill<PField_Empty>
     @Override
     public String getSubText()
     {
-        return (amount <= 0 ? TEXT.conditions.atEndOfTurn() :
-                amount <= 1 ? TEXT.conditions.nextTurn() : TEXT.conditions.inTurns(amount));
+        return (amount <= 0 ? TEXT.cond_atEndOfTurn() :
+                amount <= 1 ? TEXT.cond_nextTurn() : TEXT.cond_inTurns(amount));
     }
 
     public abstract DelayUse getDelayUse(PCLUseInfo info, ActionT1<PCLUseInfo> childAction);

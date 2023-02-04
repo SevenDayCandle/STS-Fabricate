@@ -142,7 +142,7 @@ public class TryChooseChoice<T> extends PCLActionWithCallback<ArrayList<ChoiceCa
         this.builders.addAll(items);
         this.canPlayerCancel = false;
         this.cost = cost;
-        this.message = PGR.core.strings.gridSelection.chooseCards;
+        this.message = PGR.core.strings.grid_chooseCards;
         this.source = source;
 
         initialize(amount, name);

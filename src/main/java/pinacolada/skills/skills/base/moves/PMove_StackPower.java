@@ -56,7 +56,7 @@ public class PMove_StackPower extends PMove<PField_Power>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.applyAmount(TEXT.subjects.x, TEXT.cardEditor.powers);
+        return TEXT.act_applyAmount(TEXT.subjects_x, TEXT.cedit_powers);
     }
 
     @Override
@@ -109,39 +109,39 @@ public class PMove_StackPower extends PMove<PField_Power>
                 case AllEnemy:
                 case All:
                 case Team:
-                    return TEXT.subjects.randomly(fields.powers.size() > 0 && fields.powers.get(0).isDebuff ? TEXT.actions.applyAmountToTarget(getAmountRawString(), joinedString, getTargetString()) : TEXT.actions.giveTargetAmount(getTargetString(), getAmountRawString(), joinedString));
+                    return TEXT.subjects_randomly(fields.powers.size() > 0 && fields.powers.get(0).isDebuff ? TEXT.act_applyAmountToTarget(getAmountRawString(), joinedString, getTargetString()) : TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), joinedString));
                 case Single:
                 case SingleAlly:
-                    return TEXT.subjects.randomly(fields.powers.size() > 0 && fields.powers.get(0).isDebuff ? TEXT.actions.applyAmount(getAmountRawString(), joinedString) : TEXT.actions.giveTargetAmount(getTargetString(), getAmountRawString(), joinedString));
+                    return TEXT.subjects_randomly(fields.powers.size() > 0 && fields.powers.get(0).isDebuff ? TEXT.act_applyAmount(getAmountRawString(), joinedString) : TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), joinedString));
                 case Self:
                     if (isFromCreature())
                     {
-                        return TEXT.subjects.randomly(TEXT.actions.giveTargetAmount(getTargetString(), getAmountRawString(), joinedString));
+                        return TEXT.subjects_randomly(TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), joinedString));
                     }
                 default:
-                    return TEXT.subjects.randomly(amount < 0 ? TEXT.actions.loseAmount(getAmountRawString(), joinedString)
-                            : TEXT.actions.gainAmount(getAmountRawString(), joinedString));
+                    return TEXT.subjects_randomly(amount < 0 ? TEXT.act_loseAmount(getAmountRawString(), joinedString)
+                            : TEXT.act_gainAmount(getAmountRawString(), joinedString));
             }
         }
-        joinedString = fields.powers.isEmpty() ? TEXT.subjects.randomX(plural(fields.debuff ? PGR.core.tooltips.debuff : PGR.core.tooltips.buff)) : fields.getPowerString();
+        joinedString = fields.powers.isEmpty() ? TEXT.subjects_randomX(plural(fields.debuff ? PGR.core.tooltips.debuff : PGR.core.tooltips.buff)) : fields.getPowerString();
         switch (target)
         {
             case RandomEnemy:
             case AllEnemy:
             case All:
             case Team:
-                return fields.powers.size() > 0 && fields.powers.get(0).isDebuff ? TEXT.actions.applyAmountToTarget(getAmountRawString(), joinedString, getTargetString()) : TEXT.actions.giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
+                return fields.powers.size() > 0 && fields.powers.get(0).isDebuff ? TEXT.act_applyAmountToTarget(getAmountRawString(), joinedString, getTargetString()) : TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
             case Single:
             case SingleAlly:
-                return fields.powers.size() > 0 && fields.powers.get(0).isDebuff ? TEXT.actions.applyAmount(getAmountRawString(), joinedString) : TEXT.actions.giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
+                return fields.powers.size() > 0 && fields.powers.get(0).isDebuff ? TEXT.act_applyAmount(getAmountRawString(), joinedString) : TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
             case Self:
                 if (isFromCreature())
                 {
-                    return TEXT.actions.giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
+                    return TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
                 }
             default:
-                return amount < 0 ? TEXT.actions.loseAmount(getAmountRawString(), joinedString)
-                        : TEXT.actions.gainAmount(getAmountRawString(), joinedString);
+                return amount < 0 ? TEXT.act_loseAmount(getAmountRawString(), joinedString)
+                        : TEXT.act_gainAmount(getAmountRawString(), joinedString);
         }
     }
 }

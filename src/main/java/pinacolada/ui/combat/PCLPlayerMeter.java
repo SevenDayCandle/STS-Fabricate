@@ -14,8 +14,8 @@ import extendedui.ui.hitboxes.DraggableHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.ui.tooltips.FakeFtue;
-import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.interfaces.markers.ClickableProvider;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.powers.PCLClickableUse;
@@ -45,7 +45,7 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implement
         super(config, new DraggableHitbox(screenW(0.0366f), screenH(0.425f), iconSize, iconSize, true), iconSize);
         this.id = id;
         infoIcon = new EUIButton(ImageMaster.INTENT_UNKNOWN, new RelativeHitbox(hb, scale(40f), scale(40f), scale(100f), scale(20f)))
-                .setTooltip(getInfoTitle(), getInfoMainDescrption() + EUIUtils.DOUBLE_SPLIT_LINE + PGR.core.strings.tutorial.learnMore)
+                .setTooltip(getInfoTitle(), getInfoMainDescrption() + EUIUtils.DOUBLE_SPLIT_LINE + PGR.core.strings.tutorial_learnMore)
                 .setOnClick(() -> {
                     AbstractDungeon.ftue = new FakeFtue(getInfoTitle(), getInfoDescription());
                 });

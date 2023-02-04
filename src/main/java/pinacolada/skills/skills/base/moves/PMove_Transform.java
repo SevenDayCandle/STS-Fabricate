@@ -13,8 +13,8 @@ import pinacolada.actions.pileSelection.SelectFromPile;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardGroupHelper;
-import pinacolada.misc.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -84,7 +84,7 @@ public class PMove_Transform extends PMove_Select
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.transform(TEXT.subjects.x, TEXT.subjects.x);
+        return TEXT.act_transform(TEXT.subjects_x, TEXT.subjects_x);
     }
 
     @Override
@@ -110,8 +110,8 @@ public class PMove_Transform extends PMove_Select
     @Override
     public String getSubText()
     {
-        return TEXT.actions.transform(
-                useParent ? getInheritedString() : fields.groupTypes.size() > 0 ? EUIRM.strings.numNounPlace(getAmountRawString(), fields.getFullCardString(), TEXT.subjects.from(fields.getGroupString())) : TEXT.subjects.thisObj, fields.getCardIDOrString()
+        return TEXT.act_transform(
+                useParent ? getInheritedString() : fields.groupTypes.size() > 0 ? EUIRM.strings.numNounPlace(getAmountRawString(), fields.getFullCardString(), TEXT.subjects_from(fields.getGroupString())) : TEXT.subjects_thisObj, fields.getCardIDOrString()
         );
     }
 

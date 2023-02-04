@@ -12,7 +12,7 @@ import java.util.List;
 public class PCLCustomCardCopyConfirmationEffect extends PCLEffectWithCallback<AbstractCard.CardColor>
 {
 
-    protected EUIDialogDropdown<AbstractCard.CardColor> dialog = new EUIDialogDropdown<AbstractCard.CardColor>(PGR.core.strings.cardEditor.duplicateToColor, PGR.core.strings.cardEditor.duplicateToColorDesc);
+    protected EUIDialogDropdown<AbstractCard.CardColor> dialog = new EUIDialogDropdown<AbstractCard.CardColor>(PGR.core.strings.cedit_duplicateToColor, PGR.core.strings.cedit_duplicateToColorDesc);
 
     public PCLCustomCardCopyConfirmationEffect(List<AbstractCard.CardColor> colors)
     {

@@ -39,19 +39,19 @@ public class PMod_IncreaseOnUse extends PPassiveMod<PField_Empty>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.increaseBy(TEXT.subjects.x, TEXT.subjects.x);
+        return TEXT.act_increaseBy(TEXT.subjects_x, TEXT.subjects_x);
     }
 
     @Override
     public String getSubText()
     {
-        return amount < 0 ? TEXT.actions.reduceBy(TEXT.subjects.thisObj, getAmountRawString()) : TEXT.actions.increaseBy(TEXT.subjects.thisObj, getAmountRawString());
+        return amount < 0 ? TEXT.act_reduceBy(TEXT.subjects_thisObj, getAmountRawString()) : TEXT.act_increaseBy(TEXT.subjects_thisObj, getAmountRawString());
     }
 
     @Override
     public String getText(boolean addPeriod)
     {
-        return TEXT.conditions.doThen(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", getSubText()) + PCLCoreStrings.period(addPeriod);
+        return TEXT.cond_doThen(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", getSubText()) + PCLCoreStrings.period(addPeriod);
     }
 
     @Override

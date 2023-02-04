@@ -40,9 +40,9 @@ public class PTrait_Tag extends PTrait<PField_Tag>
     @Override
     public String getSubText()
     {
-        String tagAmount = amount > 1 ? EUIRM.strings.numNoun(getAmountRawString(), getSubDescText()) : amount < 0 ? EUIRM.strings.numNoun(TEXT.subjects.infinite, getSubDescText()) : getSubDescText();
+        String tagAmount = amount > 1 ? EUIRM.strings.numNoun(getAmountRawString(), getSubDescText()) : amount < 0 ? EUIRM.strings.numNoun(TEXT.subjects_infinite, getSubDescText()) : getSubDescText();
         return hasParentType(PTrigger.class) ? tagAmount :
-                fields.random ? TEXT.actions.remove(tagAmount) : TEXT.actions.has(tagAmount);
+                fields.random ? TEXT.act_remove(tagAmount) : TEXT.act_has(tagAmount);
     }
 
     @Override
@@ -63,6 +63,6 @@ public class PTrait_Tag extends PTrait<PField_Tag>
     @Override
     public String getSubSampleText()
     {
-        return TEXT.cardEditor.tags;
+        return TEXT.cedit_tags;
     }
 }

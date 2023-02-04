@@ -32,14 +32,14 @@ public class PCond_CheckOrb extends PPassiveCond<PField_Orb>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.evoke(TEXT.subjects.x);
+        return TEXT.act_evoke(TEXT.subjects_x);
     }
 
     @Override
     public String getSubText()
     {
         String tt = fields.getOrbAndOrString();
-        return TEXT.conditions.ifYouHave(amount == 1 ? tt : EUIRM.strings.numNoun(amount <= 0 ? amount : amount + "+", tt));
+        return TEXT.cond_ifYouHave(amount == 1 ? tt : EUIRM.strings.numNoun(amount <= 0 ? amount : amount + "+", tt));
     }
 
     @Override

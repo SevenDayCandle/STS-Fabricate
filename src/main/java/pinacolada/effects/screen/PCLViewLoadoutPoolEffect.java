@@ -97,13 +97,13 @@ public class PCLViewLoadoutPoolEffect extends PCLEffectWithCallback<CardGroup>
                 .setFont(FontHelper.tipHeaderFont, 1);
 
         selectAllButton = AbstractScreen.createHexagonalButton(xPos, Settings.HEIGHT * 0.65f, buttonWidth, buttonHeight)
-                .setText(PGR.core.strings.seriesSelectionButtons.selectAll)
+                .setText(PGR.core.strings.sui_selectAll)
                 .setPosition(xPos, Settings.HEIGHT * 0.65f)
                 .setOnClick(() -> this.toggleCards(true))
                 .setColor(Color.ROYAL);
 
         deselectAllButton =  AbstractScreen.createHexagonalButton(xPos, selectAllButton.hb.y - selectAllButton.hb.height, buttonWidth, buttonHeight)
-                .setText(PGR.core.strings.seriesSelectionButtons.deselectAll)
+                .setText(PGR.core.strings.sui_deselectAll)
                 .setPosition(xPos, selectAllButton.hb.y - selectAllButton.hb.height)
                 .setOnClick(() -> this.toggleCards(false))
                 .setColor(Color.FIREBRICK);
@@ -162,7 +162,7 @@ public class PCLViewLoadoutPoolEffect extends PCLEffectWithCallback<CardGroup>
 
     public void refreshCountText()
     {
-        selectedCount.setLabel(EUIUtils.format(PGR.core.strings.seriesSelection.selected, EUIUtils.count(cards.group, card -> !screen.container.bannedCards.contains(card.cardID)), cards.group.size()));
+        selectedCount.setLabel(EUIUtils.format(PGR.core.strings.sui_selected, EUIUtils.count(cards.group, card -> !screen.container.bannedCards.contains(card.cardID)), cards.group.size()));
         screen.forceUpdateText();
     }
 

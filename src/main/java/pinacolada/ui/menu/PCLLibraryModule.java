@@ -51,9 +51,9 @@ public class PCLLibraryModule extends CustomCardPoolModule
                 .setItems(ColorlessGroup.values());
         simpleModeToggle = (EUIToggle) new EUIToggle(new EUIHitbox(Settings.WIDTH * 0.7f, screen.quickSearch.hb.y, Settings.scale * 256f, Settings.scale * 48f))
                 .setFont(EUIFontHelper.carddescriptionfontLarge, 0.475f)
-                .setText(PGR.core.strings.misc.simpleMode)
+                .setText(PGR.core.strings.misc_simpleMode)
                 .setOnToggle(this::toggleSimpleMode)
-                .setTooltip(PGR.core.strings.misc.simpleMode, PGR.core.strings.misc.simpleModeDescription);
+                .setTooltip(PGR.core.strings.misc_simpleMode, PGR.core.strings.misc_simpleModeDescription);
         // TODO Re-enable when simple mode is re-implemented
         simpleModeToggle.setActive(false);
     }
@@ -69,7 +69,7 @@ public class PCLLibraryModule extends CustomCardPoolModule
 
         PCLCard.refreshSimpleModePreview(simpleModePreview);
         simpleModeToggle.setToggle(simpleModePreview);
-        simpleModeToggle.tooltip.setText(simpleModePreview ? PGR.core.strings.misc.simpleMode : PGR.core.strings.misc.complexMode, simpleModePreview ? PGR.core.strings.misc.simpleModeDescription : PGR.core.strings.misc.complexModeDescription);
+        simpleModeToggle.tooltip.setText(simpleModePreview ? PGR.core.strings.misc_simpleMode : PGR.core.strings.misc_complexMode, simpleModePreview ? PGR.core.strings.misc_simpleModeDescription : PGR.core.strings.misc_complexModeDescription);
         // LastColor check prevents infinite loops from Open
         if (CustomCardLibraryScreen.currentColor != lastColor)
         {
@@ -130,7 +130,7 @@ public class PCLLibraryModule extends CustomCardPoolModule
     {
         simpleModePreview = val;
         PCLCard.refreshSimpleModePreview(val);
-        simpleModeToggle.tooltip.setText(val ? PGR.core.strings.misc.simpleMode : PGR.core.strings.misc.complexMode, val ? PGR.core.strings.misc.simpleModeDescription : PGR.core.strings.misc.complexModeDescription);
+        simpleModeToggle.tooltip.setText(val ? PGR.core.strings.misc_simpleMode : PGR.core.strings.misc_complexMode, val ? PGR.core.strings.misc_simpleModeDescription : PGR.core.strings.misc_complexModeDescription);
         // Reset the upgrades to reflect simple mode
         screen.cardGrid.setCardGroup(screen.cardGrid.cards);
     }
@@ -176,7 +176,7 @@ public class PCLLibraryModule extends CustomCardPoolModule
         {
             if (this == ColorlessGroup.PCL)
             {
-                return PGR.core.strings.misc.pcl;
+                return PGR.core.strings.misc_pcl;
             }
             return EUIRM.strings.uiBasegame;
         }

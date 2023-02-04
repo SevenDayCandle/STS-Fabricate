@@ -39,7 +39,7 @@ public class PMod_PerCardPlayed extends PMod_Per<PField_CardCategory>
     @Override
     public String getSampleText()
     {
-        return TEXT.conditions.perThisTurn(TEXT.subjects.x, TEXT.subjects.x, PGR.core.tooltips.play.past(), "");
+        return TEXT.cond_perThisTurn(TEXT.subjects_x, TEXT.subjects_x, PGR.core.tooltips.play.past(), "");
     }
 
     @Override
@@ -57,7 +57,7 @@ public class PMod_PerCardPlayed extends PMod_Per<PField_CardCategory>
     @Override
     public String getText(boolean addPeriod)
     {
-        return TEXT.conditions.perThisTurn(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", getConditionText(), PGR.core.tooltips.play.past(), getXRawString()) + PCLCoreStrings.period(addPeriod);
+        return TEXT.cond_perThisTurn(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", getConditionText(), PGR.core.tooltips.play.past(), getXRawString()) + PCLCoreStrings.period(addPeriod);
     }
 
     @Override

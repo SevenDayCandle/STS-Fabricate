@@ -59,7 +59,7 @@ public class PMove_DealDamage extends PMove<PField_Empty>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.deal(TEXT.subjects.x, PGR.core.tooltips.normalDamage.title);
+        return TEXT.act_deal(TEXT.subjects_x, PGR.core.tooltips.normalDamage.title);
     }
 
     @Override
@@ -90,13 +90,13 @@ public class PMove_DealDamage extends PMove<PField_Empty>
     {
         if (target == PCLCardTarget.Self)
         {
-            return TEXT.actions.takeDamage(getAmountRawString());
+            return TEXT.act_takeDamage(getAmountRawString());
         }
         if (target == PCLCardTarget.Single)
         {
-            return TEXT.actions.deal(getAmountRawString(), PGR.core.strings.subjects.damage);
+            return TEXT.act_deal(getAmountRawString(), PGR.core.strings.subjects_damage);
         }
-        return TEXT.actions.dealTo(getAmountRawString(), PGR.core.strings.subjects.damage, getTargetString());
+        return TEXT.act_dealTo(getAmountRawString(), PGR.core.strings.subjects_damage, getTargetString());
     }
 
     public void serialize(PSkillSaveData data)

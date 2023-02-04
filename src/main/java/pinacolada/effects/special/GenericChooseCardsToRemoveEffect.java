@@ -65,7 +65,7 @@ public class GenericChooseCardsToRemoveEffect extends PCLEffectWithCallback<Gene
         }
 
         AbstractDungeon.getCurrRoom().phase = AbstractRoom.RoomPhase.INCOMPLETE;
-        AbstractDungeon.gridSelectScreen.open(cardGroup, cardsToRemove, PGR.core.strings.gridSelection.chooseCards(cardsToRemove), false, false, false, true);
+        AbstractDungeon.gridSelectScreen.open(cardGroup, cardsToRemove, PGR.core.strings.grid_chooseCards(cardsToRemove), false, false, false, true);
     }
 
     @Override

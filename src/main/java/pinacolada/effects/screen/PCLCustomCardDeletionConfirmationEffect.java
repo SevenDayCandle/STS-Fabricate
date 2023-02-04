@@ -9,7 +9,7 @@ import pinacolada.resources.PGR;
 public class PCLCustomCardDeletionConfirmationEffect extends PCLEffectWithCallback<PCLCustomCardSlot>
 {
 
-    protected EUIDialogYesNo dialog = new EUIDialogYesNo(PGR.core.strings.cardEditor.confirmDeletion, PGR.core.strings.cardEditor.confirmDeletionDesc);
+    protected EUIDialogYesNo dialog = new EUIDialogYesNo(PGR.core.strings.cedit_confirmDeletion, PGR.core.strings.cedit_confirmDeletionDesc);
 
     public PCLCustomCardDeletionConfirmationEffect(PCLCustomCardSlot slot)
     {

@@ -34,13 +34,13 @@ public class PCond_AtTurnStart extends PPassiveCond<PField_Empty> implements OnS
     @Override
     public String getSampleText()
     {
-        return TEXT.conditions.atStartOfTurn();
+        return TEXT.cond_atStartOfTurn();
     }
 
     @Override
     public String getSubText()
     {
-        return isTrigger() ? TEXT.conditions.atStartOfTurn() : TEXT.conditions.onGeneric(PGR.core.tooltips.retain.title);
+        return isTrigger() ? TEXT.cond_atStartOfTurn() : TEXT.cond_onGeneric(PGR.core.tooltips.retain.title);
     }
 
     @Override

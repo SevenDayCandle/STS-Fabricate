@@ -159,27 +159,27 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget>
         switch (this)
         {
             case None:
-                return PGR.core.strings.cardType.none;
+                return PGR.core.strings.ctype_none;
             case AllEnemy:
-                return PGR.core.strings.cardType.allEnemy;
+                return PGR.core.strings.ctype_allEnemy;
             case AllAlly:
-                return PGR.core.strings.cardType.allAlly;
+                return PGR.core.strings.ctype_allAlly;
             case Team:
-                return PGR.core.strings.cardType.team;
+                return PGR.core.strings.ctype_team;
             case All:
-                return PGR.core.strings.cardType.allCharacter;
+                return PGR.core.strings.ctype_allCharacter;
             case Self:
-                return PGR.core.strings.cardType.self;
+                return PGR.core.strings.ctype_self;
             case Single:
-                return PGR.core.strings.cardType.singleTarget;
+                return PGR.core.strings.ctype_singleTarget;
             case SingleAlly:
-                return PGR.core.strings.cardType.singleAlly;
+                return PGR.core.strings.ctype_singleAlly;
             case Any:
-                return PGR.core.strings.cardType.any;
+                return PGR.core.strings.ctype_any;
             case RandomEnemy:
-                return PGR.core.strings.cardType.randomEnemy;
+                return PGR.core.strings.ctype_randomEnemy;
             case RandomAlly:
-                return PGR.core.strings.cardType.randomAlly;
+                return PGR.core.strings.ctype_randomAlly;
         }
         return "";
     }
@@ -193,10 +193,10 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget>
             case AllEnemy:
             case AllAlly:
             case Team:
-                return PGR.core.strings.cardType.tagAoE;
+                return PGR.core.strings.ctype_tagAoE;
             case RandomEnemy:
             case RandomAlly:
-                return PGR.core.strings.cardType.tagRandom;
+                return PGR.core.strings.ctype_tagRandom;
         }
         return null;
     }

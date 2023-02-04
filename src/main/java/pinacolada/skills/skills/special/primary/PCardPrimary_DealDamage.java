@@ -103,7 +103,7 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack>
     {
         int count = source != null ? getExtraFromCard() : 1;
         String amountString = count > 1 ? getAmountRawString() + "x" + getExtraRawString() : getAmountRawString();
-        return TEXT.actions.objectTo(amountString, getAttackTooltip(), getTargetString());
+        return TEXT.act_objectTo(amountString, getAttackTooltip(), getTargetString());
     }
 
     public PCardPrimary_DealDamage setDamageEffect(EffekseerEFK effekseerKey)

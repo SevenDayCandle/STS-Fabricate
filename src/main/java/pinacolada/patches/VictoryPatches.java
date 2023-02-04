@@ -31,7 +31,7 @@ public class VictoryPatches
 
     private static GameOverStat getAscensionGlyphStats()
     {
-        return new GameOverStat(PGR.core.strings.charSelect.ascensionGlyph, null, String.valueOf(glyphBonus));
+        return new GameOverStat(PGR.core.strings.csel_ascensionGlyph, null, String.valueOf(glyphBonus));
     }
 
     // TODO Rework for individual pinacolada.characters or remove

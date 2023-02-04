@@ -32,7 +32,7 @@ public class PMove_Stun extends PMove<PField_Empty>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.stun(TEXT.subjects.x);
+        return TEXT.act_stun(TEXT.subjects_x);
     }
 
     @Override
@@ -52,6 +52,6 @@ public class PMove_Stun extends PMove<PField_Empty>
     @Override
     public String getSubText()
     {
-        return TEXT.actions.stun(getTargetString());
+        return TEXT.act_stun(getTargetString());
     }
 }

@@ -80,11 +80,11 @@ public class PCLSeriesSelectScreen extends AbstractScreen
 
         loadoutEditor = new EUIButton(PGR.core.images.swapCards.texture(), new EUIHitbox(0, 0, scale(64), scale(64)))
                 .setPosition(startingDeck.hb.x + scale(80), startingDeck.hb.y - scale(48)).setText("")
-                .setTooltip(PGR.core.strings.charSelect.deckEditor, PGR.core.strings.charSelect.deckEditorInfo)
+                .setTooltip(PGR.core.strings.csel_deckEditor, PGR.core.strings.csel_deckEditorInfo)
                 .setOnClick(this::openLoadoutEditor);
 
         previewCardsInfo = new EUITextBox(panelTexture, new EUIHitbox(xPos, getY.invoke(2.5f), buttonWidth, buttonHeight * 3.5f))
-                .setLabel(PGR.core.strings.seriesSelection.instructions1)
+                .setLabel(PGR.core.strings.sui_instructions1)
                 .setAlignment(0.9f, 0.1f, true)
                 .setColors(Color.DARK_GRAY, Settings.CREAM_COLOR)
                 .setFont(FontHelper.tipBodyFont, 1f);
@@ -95,27 +95,27 @@ public class PCLSeriesSelectScreen extends AbstractScreen
                 .setFont(FontHelper.tipHeaderFont, 1);
 
         previewCards = createHexagonalButton(xPos, getY.invoke(7f), buttonWidth, buttonHeight)
-                .setText(PGR.core.strings.seriesSelectionButtons.showCardPool)
+                .setText(PGR.core.strings.sui_showCardPool)
                 .setOnClick(() -> previewCardPool(null))
                 .setColor(Color.LIGHT_GRAY);
 
         selectAllButton = createHexagonalButton(xPos, getY.invoke(8f), buttonWidth, buttonHeight)
-                .setText(PGR.core.strings.seriesSelectionButtons.selectAll)
+                .setText(PGR.core.strings.sui_selectAll)
                 .setOnClick(() -> this.selectAll(true))
                 .setColor(Color.ROYAL);
 
         deselectAllButton = createHexagonalButton(xPos, getY.invoke(9f), buttonWidth, buttonHeight)
-                .setText(PGR.core.strings.seriesSelectionButtons.deselectAll)
+                .setText(PGR.core.strings.sui_deselectAll)
                 .setOnClick(() -> this.selectAll(false))
                 .setColor(Color.FIREBRICK);
 
         cancel = createHexagonalButton(xPos, getY.invoke(12f), buttonWidth, buttonHeight * 1.2f)
-                .setText(PGR.core.strings.seriesSelectionButtons.cancel)
+                .setText(PGR.core.strings.sui_cancel)
                 .setOnClick(this::cancel)
                 .setColor(Color.FIREBRICK);
 
         confirm = createHexagonalButton(xPos, getY.invoke(13f), buttonWidth, buttonHeight * 1.2f)
-                .setText(PGR.core.strings.seriesSelectionButtons.save)
+                .setText(PGR.core.strings.sui_save)
                 .setOnClick(this::proceed)
                 .setColor(Color.FOREST);
 
@@ -285,7 +285,7 @@ public class PCLSeriesSelectScreen extends AbstractScreen
                 stringForRarity(AbstractCard.CardRarity.COMMON),
                 stringForRarity(AbstractCard.CardRarity.UNCOMMON),
                 stringForRarity(AbstractCard.CardRarity.RARE),
-                "{#" + (totalCards >= MINIMUM_CARDS ? 'g' : 'r') + ":" + PGR.core.strings.seriesSelection.totalCards(totalCards, MINIMUM_CARDS) + "}"
+                "{#" + (totalCards >= MINIMUM_CARDS ? 'g' : 'r') + ":" + PGR.core.strings.sui_totalCards(totalCards, MINIMUM_CARDS) + "}"
         ));
 
         confirm.setInteractable(container.isValid());
@@ -381,14 +381,14 @@ public class PCLSeriesSelectScreen extends AbstractScreen
 
     protected void updateStartingDeckText()
     {
-        startingDeck.setLabel(PGR.core.strings.charSelect.leftText + " | {#y:" + ((container.currentSeriesCard != null) ? container.currentSeriesCard.name : "") + "}");
+        startingDeck.setLabel(PGR.core.strings.csel_leftText + " | {#y:" + ((container.currentSeriesCard != null) ? container.currentSeriesCard.name : "") + "}");
     }
 
     public enum ContextOption
     {
-        Deselect(PGR.core.strings.seriesSelection.removeFromPool, (s, c) -> s.togglePool(c, false)),
-        Select(PGR.core.strings.seriesSelection.addToPool, (s, c) -> s.togglePool(c, true)),
-        ViewCards(PGR.core.strings.seriesSelection.viewPool, (screen, card) -> {
+        Deselect(PGR.core.strings.sui_removeFromPool, (s, c) -> s.togglePool(c, false)),
+        Select(PGR.core.strings.sui_addToPool, (s, c) -> s.togglePool(c, true)),
+        ViewCards(PGR.core.strings.sui_viewPool, (screen, card) -> {
             if (screen.previewCardsEffect == null)
             {
                 screen.previewCardPool(card);

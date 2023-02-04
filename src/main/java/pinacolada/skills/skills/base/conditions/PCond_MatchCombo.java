@@ -44,6 +44,6 @@ public class PCond_MatchCombo extends PPassiveCond<PField_Not>
     public String getSubText()
     {
         String base = EUIRM.strings.numNoun(amount, PGR.core.tooltips.matchCombo.title);
-        return fields.not ? TEXT.conditions.not(base) : base;
+        return fields.not ? TEXT.cond_not(base) : base;
     }
 }

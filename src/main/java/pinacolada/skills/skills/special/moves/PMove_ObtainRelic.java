@@ -62,7 +62,7 @@ public class PMove_ObtainRelic extends PMove<PField_RelicID>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.obtain(TEXT.subjects.x);
+        return TEXT.act_obtain(TEXT.subjects_x);
     }
 
     @Override
@@ -83,6 +83,6 @@ public class PMove_ObtainRelic extends PMove<PField_RelicID>
     @Override
     public String getSubText()
     {
-        return TEXT.actions.obtain(fields.random ? fields.getRelicIDOrString() : fields.getRelicIDAndString());
+        return TEXT.act_obtain(fields.random ? fields.getRelicIDOrString() : fields.getRelicIDAndString());
     }
 }

@@ -36,7 +36,7 @@ public class PCond_TakeDamage extends PPassiveCond<PField_Empty> implements OnLo
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.takeDamage(TEXT.subjects.x);
+        return TEXT.act_takeDamage(TEXT.subjects_x);
     }
 
     @Override
@@ -44,9 +44,9 @@ public class PCond_TakeDamage extends PPassiveCond<PField_Empty> implements OnLo
     {
         if (isTrigger())
         {
-            return getWheneverString(TEXT.conditions.takeDamage(target.ordinal()));
+            return getWheneverString(TEXT.cond_takeDamage(target.ordinal()));
         }
-        return TEXT.actions.takeDamage(getAmountRawString());
+        return TEXT.act_takeDamage(getAmountRawString());
     }
 
     @Override

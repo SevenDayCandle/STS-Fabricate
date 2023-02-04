@@ -39,7 +39,7 @@ public class PMove_LoseHP extends PMove<PField_Empty>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.loseAmount(TEXT.subjects.x, PGR.core.tooltips.hp.title);
+        return TEXT.act_loseAmount(TEXT.subjects_x, PGR.core.tooltips.hp.title);
     }
 
     @Override
@@ -63,9 +63,9 @@ public class PMove_LoseHP extends PMove<PField_Empty>
     {
         if (target == PCLCardTarget.Self)
         {
-            return TEXT.actions.loseAmount(getAmountRawString(), PGR.core.tooltips.hp.title);
+            return TEXT.act_loseAmount(getAmountRawString(), PGR.core.tooltips.hp.title);
         }
-        return TEXT.actions.objectLoses(getTargetString(), getAmountRawString(), PGR.core.tooltips.hp.title);
+        return TEXT.act_objectLoses(getTargetString(), getAmountRawString(), PGR.core.tooltips.hp.title);
 
     }
 }

@@ -52,12 +52,12 @@ public class PCond_CheckLevel extends PPassiveCond<PField_Affinity>
     @Override
     public String getSampleText()
     {
-        return TEXT.conditions.levelItem(TEXT.subjects.x, PGR.core.tooltips.affinityGeneral.title);
+        return TEXT.cond_levelItem(TEXT.subjects_x, PGR.core.tooltips.affinityGeneral.title);
     }
 
     @Override
     public String getSubText()
     {
-        return TEXT.conditions.levelItem(amount, fields.getAffinityChoiceString());
+        return TEXT.cond_levelItem(amount, fields.getAffinityChoiceString());
     }
 }

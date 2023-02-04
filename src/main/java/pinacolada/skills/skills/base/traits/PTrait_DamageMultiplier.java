@@ -43,7 +43,7 @@ public class PTrait_DamageMultiplier extends PTrait<PField_Empty>
     @Override
     public String getSubSampleText()
     {
-        return TEXT.subjects.damage;
+        return TEXT.subjects_damage;
     }
 
     @Override

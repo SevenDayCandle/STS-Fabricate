@@ -107,15 +107,15 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
         undoButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(cancelButton.hb.cX, saveButton.hb.y + saveButton.hb.height + labelHeight * 0.8f)
                 .setColor(Color.WHITE)
-                .setText(PGR.core.strings.cardEditor.undo)
+                .setText(PGR.core.strings.cedit_undo)
                 .setFont(EUIFontHelper.buttonFont, 0.85f)
                 .setOnClick(this::undo);
 
         imageButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(cancelButton.hb.cX, undoButton.hb.y + undoButton.hb.height + labelHeight * 0.8f)
                 .setColor(Color.WHITE)
-                .setText(PGR.core.strings.cardEditor.loadImage)
-                .setTooltip(PGR.core.strings.cardEditor.loadImage, PGR.core.strings.cardEditorTutorial.primaryImage)
+                .setText(PGR.core.strings.cedit_loadImage)
+                .setTooltip(PGR.core.strings.cedit_loadImage, PGR.core.strings.cetut_primaryImage)
                 .setFont(EUIFontHelper.buttonFont, 0.85f)
                 .setOnClick(this::editImage);
 
@@ -133,11 +133,11 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
 
         pages.add(new PCLCustomCardPrimaryInfoPage(this));
         pages.add(new PCLCustomCardAttributesPage(this));
-        pages.add(new PCLCustomCardAttackPage(this, currentDamage, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), 0, PGR.core.strings.cardEditor.damage, be -> {
+        pages.add(new PCLCustomCardAttackPage(this, currentDamage, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), 0, PGR.core.strings.cedit_damage, be -> {
             currentDamage = EUIUtils.safeCast(be, PCardPrimary_DealDamage.class);
             modifyBuilder(e -> e.setAttackSkill(currentDamage));
         }));
-        pages.add(new PCLCustomCardBlockPage(this, currentBlock, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), 0, PGR.core.strings.cardEditor.block, be -> {
+        pages.add(new PCLCustomCardBlockPage(this, currentBlock, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), 0, PGR.core.strings.cedit_block, be -> {
             currentBlock = EUIUtils.safeCast(be, PCardPrimary_GainBlock.class);
             modifyBuilder(e -> e.setBlockSkill(currentBlock));
         }));
@@ -145,7 +145,7 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
         {
             int finalI = i;
             PCLCustomCardEffectPage page = new PCLCustomCardEffectPage(this, currentEffects.get(i), new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), i
-                    , EUIUtils.format(PGR.core.strings.cardEditor.effectX, i + 1), (be) -> {
+                    , EUIUtils.format(PGR.core.strings.cedit_effectX, i + 1), (be) -> {
                 currentEffects.set(finalI, be);
                 modifyBuilder(e -> e.setPSkill(currentEffects, true, true));
             });
@@ -157,7 +157,7 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
         {
             int finalI = i;
             PCLCustomCardPowerPage page = new PCLCustomCardPowerPage(this, currentPowers.get(i), new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), i
-                    , EUIUtils.format(PGR.core.strings.cardEditor.powerX, i + 1), (be) -> {
+                    , EUIUtils.format(PGR.core.strings.cedit_powerX, i + 1), (be) -> {
                 if (be instanceof PTrigger)
                 {
                     currentPowers.set(finalI, (PTrigger) be);
@@ -183,7 +183,7 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
                             pageButtons.get(j).setColor(j == finalI ? Color.WHITE : Color.GRAY);
                         }
                     })
-                    .setTooltip(title, pg instanceof PCLCustomCardPrimaryInfoPage ? PGR.core.strings.cardEditor.primaryInfoDesc : ""));
+                    .setTooltip(title, pg instanceof PCLCustomCardPrimaryInfoPage ? PGR.core.strings.cedit_primaryInfoDesc : ""));
         }
 
         modifyBuilder(__ -> {});

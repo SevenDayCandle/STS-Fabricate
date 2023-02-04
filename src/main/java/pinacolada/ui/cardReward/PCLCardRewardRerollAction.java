@@ -43,7 +43,7 @@ public class PCLCardRewardRerollAction extends PCLCardRewardAction
     PCLCardRewardActionButton getButton(int index)
     {
         return (PCLCardRewardActionButton) new PCLCardRewardActionButton(this,
-                EUIRM.images.hexagonalButton.texture(), PGR.core.strings.rewards.reroll, PGR.core.strings.rewards.rerollDescription, REWARD_INDEX, index, false)
+                EUIRM.images.hexagonalButton.texture(), PGR.core.strings.rewards_reroll, PGR.core.strings.rewards_rerollDescription, REWARD_INDEX, index, false)
                 .setFont(EUIFontHelper.buttonFont, 0.85f)
                 .setDimensions(AbstractCard.IMG_WIDTH * 0.75f, AbstractCard.IMG_HEIGHT * 0.14f)
                 .setColor(Color.TAN)

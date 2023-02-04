@@ -80,12 +80,12 @@ public class PMove_StabilizePower extends PMove<PField_Power>
     public String getSubText()
     {
         String powerString = fields.getPowerSubjectString();
-        String mainString = TEXT.actions.stabilize(powerString, getTargetString());
+        String mainString = TEXT.act_stabilize(powerString, getTargetString());
         if (amount != 1)
         {
-            mainString = (TEXT.conditions.forTurns(getAmountRawString()) + ", " + mainString);
+            mainString = (TEXT.cond_forTurns(getAmountRawString()) + ", " + mainString);
         }
-        return fields.random ? TEXT.subjects.randomly(mainString) : mainString;
+        return fields.random ? TEXT.subjects_randomly(mainString) : mainString;
     }
 
     protected void stabilizePower(AbstractCreature p, List<AbstractCreature> targets, PCLPowerHelper power)

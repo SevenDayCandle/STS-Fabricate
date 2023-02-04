@@ -120,7 +120,7 @@ public abstract class PField implements Serializable
 
     public static String getGroupString(List<PCLCardGroupHelper> groups)
     {
-        return groups.size() >= 3 ? PGR.core.strings.subjects.anyPile : PCLCoreStrings.joinWithOr(EUIUtils.mapAsNonnull(groups, g -> g.name));
+        return groups.size() >= 3 ? PGR.core.strings.subjects_anyPile : PCLCoreStrings.joinWithOr(EUIUtils.mapAsNonnull(groups, g -> g.name));
     }
 
     public static String getGeneralAffinityAndString(ArrayList<PCLAffinity> affinities)
@@ -141,7 +141,7 @@ public abstract class PField implements Serializable
     public static String getGroupString(ArrayList<PCLCardGroupHelper> groupTypes, PCLCardSelection origin)
     {
         String base = getGroupString(groupTypes);
-        return origin == PCLCardSelection.Top ? TEXT.subjects.topOf(base) : origin == PCLCardSelection.Bottom ? TEXT.subjects.bottomOf(base) : base;
+        return origin == PCLCardSelection.Top ? TEXT.subjects_topOf(base) : origin == PCLCardSelection.Bottom ? TEXT.subjects_bottomOf(base) : base;
     }
 
     public static String getOrbAndString(ArrayList<PCLOrbHelper> orbs, Object value)
@@ -204,7 +204,7 @@ public abstract class PField implements Serializable
 
     public static String getTagAndString(ArrayList<PCLCardTag> tags)
     {
-        return tags.isEmpty() ? TEXT.cardEditor.tags : PCLCoreStrings.joinWithAnd(EUIUtils.map(tags, a -> a.getTooltip().getTitleOrIcon()));
+        return tags.isEmpty() ? TEXT.cedit_tags : PCLCoreStrings.joinWithAnd(EUIUtils.map(tags, a -> a.getTooltip().getTitleOrIcon()));
     }
 
     public static String getTagAndOrString(ArrayList<PCLCardTag> tags, boolean or)
@@ -214,11 +214,11 @@ public abstract class PField implements Serializable
 
     public static String getTagOrString(ArrayList<PCLCardTag> tags)
     {
-        return tags.isEmpty() ? TEXT.cardEditor.tags : PCLCoreStrings.joinWithOr(EUIUtils.map(tags, a -> a.getTooltip().getTitleOrIcon()));
+        return tags.isEmpty() ? TEXT.cedit_tags : PCLCoreStrings.joinWithOr(EUIUtils.map(tags, a -> a.getTooltip().getTitleOrIcon()));
     }
 
     public static String getTagString(ArrayList<PCLCardTag> tags)
     {
-        return tags.isEmpty() ? TEXT.cardEditor.tags : (EUIUtils.joinStrings(" ", EUIUtils.map(tags, a -> a.getTooltip().getTitleOrIcon())));
+        return tags.isEmpty() ? TEXT.cedit_tags : (EUIUtils.joinStrings(" ", EUIUtils.map(tags, a -> a.getTooltip().getTitleOrIcon())));
     }
 }

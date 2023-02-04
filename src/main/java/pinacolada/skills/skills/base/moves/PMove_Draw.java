@@ -34,7 +34,7 @@ public class PMove_Draw extends PMove<PField_CardCategory>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.draw(TEXT.subjects.x);
+        return TEXT.act_draw(TEXT.subjects_x);
     }
 
     @Override
@@ -54,6 +54,6 @@ public class PMove_Draw extends PMove<PField_CardCategory>
     @Override
     public String getSubText()
     {
-        return TEXT.actions.drawType(getAmountRawString(), fields.getFullCardString());
+        return TEXT.act_drawType(getAmountRawString(), fields.getFullCardString());
     }
 }

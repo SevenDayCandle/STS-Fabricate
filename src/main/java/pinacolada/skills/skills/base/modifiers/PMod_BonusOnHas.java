@@ -32,13 +32,13 @@ public abstract class PMod_BonusOnHas extends PMod_BonusOn<PField_CardCategory>
     @Override
     public String getConditionText()
     {
-        return TEXT.conditions.ifYouDidThisTurn(PCLCoreStrings.past(getActionTooltip()), EUIRM.strings.numNoun(getAmountRawString(), fields.getFullCardString(getRawString(EXTRA_CHAR))));
+        return TEXT.cond_ifYouDidThisTurn(PCLCoreStrings.past(getActionTooltip()), EUIRM.strings.numNoun(getAmountRawString(), fields.getFullCardString(getRawString(EXTRA_CHAR))));
     }
 
     @Override
     public String getSubText()
     {
-        return TEXT.conditions.ifX(PCLCoreStrings.past(getActionTooltip()));
+        return TEXT.cond_ifX(PCLCoreStrings.past(getActionTooltip()));
     }
 
     @Override

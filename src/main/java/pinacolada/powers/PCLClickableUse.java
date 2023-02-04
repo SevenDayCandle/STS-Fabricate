@@ -12,9 +12,9 @@ import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.ColoredString;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.misc.PCLUseInfo;
 import pinacolada.interfaces.markers.ClickableProvider;
 import pinacolada.misc.CombatManager;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PSkill;
@@ -193,7 +193,7 @@ public class PCLClickableUse
                 tooltip.subHeader = new ColoredString();
             }
             tooltip.subHeader.color = pool.uses == 0 ? Settings.RED_TEXT_COLOR : Settings.GREEN_TEXT_COLOR;
-            tooltip.subHeader.text = (hasInfiniteUses() ? PGR.core.strings.subjects.infinite : (pool.uses + "/" + pool.baseUses)) + " " + PGR.core.strings.combat.uses;
+            tooltip.subHeader.text = (hasInfiniteUses() ? PGR.core.strings.subjects_infinite : (pool.uses + "/" + pool.baseUses)) + " " + PGR.core.strings.combat_uses;
         }
     }
 

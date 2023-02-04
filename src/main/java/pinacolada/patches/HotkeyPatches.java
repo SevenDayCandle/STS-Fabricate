@@ -30,11 +30,11 @@ public class HotkeyPatches
         {
             if (!Settings.isControllerMode)
             {
-                elements.add(new RemapInputElement(__instance, PGR.core.strings.hotkeys.controlPileChange, PCLHotkeys.controlPileChange));
-                elements.add(new RemapInputElement(__instance, PGR.core.strings.hotkeys.controlPileSelect, PCLHotkeys.controlPileSelect));
-                elements.add(new RemapInputElement(__instance, PGR.core.strings.hotkeys.rerollCurrent, PCLHotkeys.rerollCurrent));
-                elements.add(new RemapInputElement(__instance, PGR.core.strings.hotkeys.toggleFormulaDisplay, PCLHotkeys.toggleFormulaDisplay));
-                elements.add(new RemapInputElement(__instance, PGR.core.strings.hotkeys.viewAugments, PCLHotkeys.viewAugmentScreen));
+                elements.add(new RemapInputElement(__instance, PGR.core.strings.hotkeys_controlPileChange, PCLHotkeys.controlPileChange));
+                elements.add(new RemapInputElement(__instance, PGR.core.strings.hotkeys_controlPileSelect, PCLHotkeys.controlPileSelect));
+                elements.add(new RemapInputElement(__instance, PGR.core.strings.hotkeys_rerollCurrent, PCLHotkeys.rerollCurrent));
+                elements.add(new RemapInputElement(__instance, PGR.core.strings.hotkeys_toggleFormulaDisplay, PCLHotkeys.toggleFormulaDisplay));
+                elements.add(new RemapInputElement(__instance, PGR.core.strings.hotkeys_viewAugments, PCLHotkeys.viewAugmentScreen));
             }
         }
 

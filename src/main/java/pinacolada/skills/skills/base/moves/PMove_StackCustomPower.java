@@ -49,7 +49,7 @@ public class PMove_StackCustomPower extends PMove<PField_CustomPower> implements
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.applyAmount(TEXT.subjects.x, TEXT.cardEditor.custom);
+        return TEXT.act_applyAmount(TEXT.subjects_x, TEXT.cedit_custom);
     }
 
     @Override
@@ -78,6 +78,6 @@ public class PMove_StackCustomPower extends PMove<PField_CustomPower> implements
             }
             return null;
         }), amount > 0 ? " " : EUIUtils.DOUBLE_SPLIT_LINE, true);
-        return amount > 0 ? (TEXT.conditions.forTurns(amount) + ", " + base) : base;
+        return amount > 0 ? (TEXT.cond_forTurns(amount) + ", " + base) : base;
     }
 }

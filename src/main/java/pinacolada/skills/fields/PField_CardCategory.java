@@ -72,7 +72,7 @@ public class PField_CardCategory extends PField_CardID
         editor.registerType(types);
         editor.registerAffinity(affinities);
         editor.registerTag(tags);
-        editor.registerBoolean(PGR.core.strings.cardEditor.required, v -> forced = v, forced);
+        editor.registerBoolean(PGR.core.strings.cedit_required, v -> forced = v, forced);
     }
 
     public PField_CardCategory addAffinity(PCLAffinity... affinities)
@@ -171,7 +171,7 @@ public class PField_CardCategory extends PField_CardID
 
     public String getFullCardString(Object value)
     {
-        return !cardIDs.isEmpty() ? getCardIDOrString() : isRandom() ? PSkill.TEXT.subjects.randomX(getFullCardOrString(value)) : getFullCardOrString(value);
+        return !cardIDs.isEmpty() ? getCardIDOrString() : isRandom() ? PSkill.TEXT.subjects_randomX(getFullCardOrString(value)) : getFullCardOrString(value);
     }
 
     public final String getFullCardXString(FuncT1<String, ArrayList<PCLAffinity>> affinityFunc, FuncT1<String, ArrayList<String>> joinFunc, Object value)
@@ -195,7 +195,7 @@ public class PField_CardCategory extends PField_CardID
         }
         else
         {
-            stringsToJoin.add(EUIUtils.format(PSkill.TEXT.subjects.cardN, value));
+            stringsToJoin.add(EUIUtils.format(PSkill.TEXT.subjects_cardN, value));
         }
 
         return EUIUtils.joinStrings(" ", stringsToJoin);
@@ -205,8 +205,8 @@ public class PField_CardCategory extends PField_CardID
     {
         String tooltipTitle = tooltip.title;
         return skill.useParent ? EUIRM.strings.verbNoun(tooltipTitle, skill.getInheritedString()) :
-                !groupTypes.isEmpty() ? TEXT.actions.genericFrom(tooltipTitle, skill.amount <= 0 ? TEXT.subjects.all : skill.getAmountRawString(), !cardIDs.isEmpty() ? getCardIDOrString(cardIDs) : getFullCardString(), getGroupString())
-                        : EUIRM.strings.verbNoun(tooltipTitle, TEXT.subjects.thisObj);
+                !groupTypes.isEmpty() ? TEXT.act_genericFrom(tooltipTitle, skill.amount <= 0 ? TEXT.subjects_all : skill.getAmountRawString(), !cardIDs.isEmpty() ? getCardIDOrString(cardIDs) : getFullCardString(), getGroupString())
+                        : EUIRM.strings.verbNoun(tooltipTitle, TEXT.subjects_thisObj);
     }
 
     protected SelectFromPile createAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> action, PCLUseInfo info)

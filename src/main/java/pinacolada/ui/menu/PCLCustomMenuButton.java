@@ -19,7 +19,7 @@ public class PCLCustomMenuButton extends MenuButton
     protected void setLabel() {
         if (result == PCLEnum.Buttons.CUSTOM)
         {
-            ReflectionHacks.setPrivate(this, MenuButton.class, "label", PGR.core.strings.cardEditor.customCards);
+            ReflectionHacks.setPrivate(this, MenuButton.class, "label", PGR.core.strings.cedit_customCards);
         }
         else
         {

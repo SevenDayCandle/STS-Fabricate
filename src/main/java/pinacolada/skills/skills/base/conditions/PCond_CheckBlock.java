@@ -48,7 +48,7 @@ public class PCond_CheckBlock extends PPassiveCond<PField_Not>
     @Override
     public String getSampleText()
     {
-        return EUIRM.strings.numNoun(TEXT.subjects.x, PGR.core.tooltips.block.title);
+        return EUIRM.strings.numNoun(TEXT.subjects_x, PGR.core.tooltips.block.title);
     }
 
     @Override
@@ -59,13 +59,13 @@ public class PCond_CheckBlock extends PPassiveCond<PField_Not>
         {
             case All:
             case Any:
-                return TEXT.conditions.ifAnyCharacterHas(baseString);
+                return TEXT.cond_ifAnyCharacterHas(baseString);
             case AllEnemy:
-                return TEXT.conditions.ifAnyEnemyHas(baseString);
+                return TEXT.cond_ifAnyEnemyHas(baseString);
             case Single:
-                return TEXT.conditions.ifTheEnemyHas(baseString);
+                return TEXT.cond_ifTheEnemyHas(baseString);
             case Self:
-                return TEXT.conditions.ifYouHave(baseString);
+                return TEXT.cond_ifYouHave(baseString);
             default:
                 return baseString;
         }

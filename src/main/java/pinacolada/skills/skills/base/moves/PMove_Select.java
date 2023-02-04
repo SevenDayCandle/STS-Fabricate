@@ -38,7 +38,7 @@ public abstract class PMove_Select extends PMove<PField_CardCategory>
     @Override
     public String getSampleText()
     {
-        return EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects.x);
+        return EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects_x);
     }
 
     @Override
@@ -58,8 +58,8 @@ public abstract class PMove_Select extends PMove<PField_CardCategory>
     public String getSubText()
     {
         return useParent ? EUIRM.strings.verbNoun(getActionTitle(), getInheritedString()) :
-                !fields.groupTypes.isEmpty() ? TEXT.actions.genericFrom(getActionTitle(), amount <= 0 ? TEXT.subjects.all : getAmountRawString(), fields.getFullCardString(), fields.getGroupString())
-                        : EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects.thisObj);
+                !fields.groupTypes.isEmpty() ? TEXT.act_genericFrom(getActionTitle(), amount <= 0 ? TEXT.subjects_all : getAmountRawString(), fields.getFullCardString(), fields.getGroupString())
+                        : EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects_thisObj);
     }
 
     protected String getActionTitle()

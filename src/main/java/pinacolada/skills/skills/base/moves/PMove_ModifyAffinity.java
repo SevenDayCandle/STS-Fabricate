@@ -71,7 +71,7 @@ public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity
     @Override
     public String getObjectSampleText()
     {
-        return TEXT.seriesUI.affinities;
+        return TEXT.sui_affinities;
     }
 
     @Override
@@ -87,19 +87,19 @@ public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity
         String giveString = getObjectText();
         if (fields.forced)
         {
-            return useParent ? TEXT.actions.setTheOf(PGR.core.tooltips.affinityGeneral, getInheritedString(), giveString) :
+            return useParent ? TEXT.act_setTheOf(PGR.core.tooltips.affinityGeneral, getInheritedString(), giveString) :
                     fields.hasGroups() ?
-                            TEXT.actions.setTheOfFrom(PGR.core.tooltips.affinityGeneral, EUIRM.strings.numNoun(amount <= 0 ? TEXT.subjects.all : getAmountRawString(), pluralCard()), fields.getGroupString(), giveString) :
-                            TEXT.actions.setTheOf(PGR.core.tooltips.affinityGeneral, TEXT.subjects.thisObj, giveString);
+                            TEXT.act_setTheOfFrom(PGR.core.tooltips.affinityGeneral, EUIRM.strings.numNoun(amount <= 0 ? TEXT.subjects_all : getAmountRawString(), pluralCard()), fields.getGroupString(), giveString) :
+                            TEXT.act_setTheOf(PGR.core.tooltips.affinityGeneral, TEXT.subjects_thisObj, giveString);
         }
         if (extra >= 0)
         {
             return super.getSubText();
         }
-        return useParent ? TEXT.actions.removeFrom(giveString, getInheritedString()) :
+        return useParent ? TEXT.act_removeFrom(giveString, getInheritedString()) :
                 fields.hasGroups() ?
-                        TEXT.actions.removeFromPlace(giveString, EUIRM.strings.numNoun(amount <= 0 ? TEXT.subjects.all : getAmountRawString(), pluralCard()), fields.getGroupString()) :
-                        TEXT.actions.removeFrom(giveString, TEXT.subjects.thisObj);
+                        TEXT.act_removeFromPlace(giveString, EUIRM.strings.numNoun(amount <= 0 ? TEXT.subjects_all : getAmountRawString(), pluralCard()), fields.getGroupString()) :
+                        TEXT.act_removeFrom(giveString, TEXT.subjects_thisObj);
     }
 
     public void chooseEffect(List<AbstractCard> cards, List<PCLAffinity> choices)

@@ -69,7 +69,7 @@ public class PMove_Obtain extends PMove<PField_CardID>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.obtain(TEXT.subjects.x);
+        return TEXT.act_obtain(TEXT.subjects_x);
     }
 
     @Override
@@ -117,7 +117,7 @@ public class PMove_Obtain extends PMove<PField_CardID>
     @Override
     public String getSubText()
     {
-        String joinedString = useParent ? TEXT.subjects.copiesOf(getInheritedString()) : fields.cardIDs.isEmpty() ? TEXT.subjects.copiesOf(TEXT.subjects.thisObj) : fields.getCardIDAndString();
-        return fields.groupTypes.size() > 0 ? TEXT.actions.addToPile(getAmountRawString(), joinedString, fields.groupTypes.get(0).name) : TEXT.actions.obtainAmount(getAmountRawString(), joinedString);
+        String joinedString = useParent ? TEXT.subjects_copiesOf(getInheritedString()) : fields.cardIDs.isEmpty() ? TEXT.subjects_copiesOf(TEXT.subjects_thisObj) : fields.getCardIDAndString();
+        return fields.groupTypes.size() > 0 ? TEXT.act_addToPile(getAmountRawString(), joinedString, fields.groupTypes.get(0).name) : TEXT.act_obtainAmount(getAmountRawString(), joinedString);
     }
 }

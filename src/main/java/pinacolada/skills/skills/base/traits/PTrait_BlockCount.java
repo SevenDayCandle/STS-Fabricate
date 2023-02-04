@@ -33,13 +33,13 @@ public class PTrait_BlockCount extends PTrait<PField_Empty>
     @Override
     public String getSubDescText()
     {
-        return TEXT.subjects.count(PGR.core.tooltips.block);
+        return TEXT.subjects_count(PGR.core.tooltips.block);
     }
 
     @Override
     public String getSubSampleText()
     {
-        return TEXT.subjects.count(PGR.core.tooltips.block);
+        return TEXT.subjects_count(PGR.core.tooltips.block);
     }
 
     @Override

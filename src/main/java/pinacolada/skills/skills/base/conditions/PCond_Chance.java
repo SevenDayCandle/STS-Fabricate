@@ -48,12 +48,12 @@ public class PCond_Chance extends PPassiveCond<PField_Empty>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.generic2(PGR.core.tooltips.chance.title, "X%");
+        return TEXT.act_generic2(PGR.core.tooltips.chance.title, "X%");
     }
 
     @Override
     public String getSubText()
     {
-        return TEXT.actions.generic2(PGR.core.tooltips.chance.title, amount + "%");
+        return TEXT.act_generic2(PGR.core.tooltips.chance.title, amount + "%");
     }
 }

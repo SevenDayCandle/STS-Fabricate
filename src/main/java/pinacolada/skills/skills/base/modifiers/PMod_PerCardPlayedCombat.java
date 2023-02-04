@@ -9,11 +9,9 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
-import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
-import pinacolada.skills.skills.PPassiveMod;
 
 
 @VisibleSkill
@@ -41,7 +39,7 @@ public class PMod_PerCardPlayedCombat extends PMod_Per<PField_CardCategory>
     @Override
     public String getSampleText()
     {
-        return TEXT.conditions.perThisCombat(TEXT.subjects.x, TEXT.subjects.x, PGR.core.tooltips.play.past(), "");
+        return TEXT.cond_perThisCombat(TEXT.subjects_x, TEXT.subjects_x, PGR.core.tooltips.play.past(), "");
     }
 
     @Override
@@ -59,7 +57,7 @@ public class PMod_PerCardPlayedCombat extends PMod_Per<PField_CardCategory>
     @Override
     public String getText(boolean addPeriod)
     {
-        return TEXT.conditions.perThisCombat(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", getConditionText(), PGR.core.tooltips.play.past(), getXRawString()) + PCLCoreStrings.period(addPeriod);
+        return TEXT.cond_perThisCombat(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", getConditionText(), PGR.core.tooltips.play.past(), getXRawString()) + PCLCoreStrings.period(addPeriod);
     }
 
     @Override

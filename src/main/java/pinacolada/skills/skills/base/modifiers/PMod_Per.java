@@ -53,14 +53,14 @@ public abstract class PMod_Per<T extends PField> extends PPassiveMod<T>
     @Override
     public String getSampleText()
     {
-        return TEXT.conditions.per(TEXT.subjects.x, getSubText());
+        return TEXT.cond_per(TEXT.subjects_x, getSubText());
     }
 
     @Override
     public String getText(boolean addPeriod)
     {
-        String subText = extra > 0 ? getConditionText() + " (" + TEXT.subjects.max(extra) + ")" : getConditionText();
-        return TEXT.conditions.per(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "",
+        String subText = extra > 0 ? getConditionText() + " (" + TEXT.subjects_max(extra) + ")" : getConditionText();
+        return TEXT.cond_per(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "",
                 subText + getXRawString()) + PCLCoreStrings.period(addPeriod);
     }
 

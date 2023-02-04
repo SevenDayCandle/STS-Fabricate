@@ -43,7 +43,7 @@ public class PMove_WithdrawAlly extends PMove<PField_Empty>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.withdraw(PGR.core.tooltips.summon.title);
+        return TEXT.act_withdraw(PGR.core.tooltips.summon.title);
     }
 
     @Override
@@ -63,6 +63,6 @@ public class PMove_WithdrawAlly extends PMove<PField_Empty>
     @Override
     public String getSubText()
     {
-        return TEXT.actions.withdraw(getTargetString());
+        return TEXT.act_withdraw(getTargetString());
     }
 }

@@ -90,27 +90,27 @@ public class PCLCustomCardSelectorScreen extends AbstractScreen
         addButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(cancelButton.hb.cX, cancelButton.hb.y + cancelButton.hb.height + labelHeight * 0.8f)
                 .setColor(Color.FOREST)
-                .setText(PGR.core.strings.cardEditor.newCard)
+                .setText(PGR.core.strings.cedit_newCard)
                 .setOnClick(this::add);
 
         openButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(addButton.hb.cX, addButton.hb.y + addButton.hb.height + labelHeight * 0.8f)
                 .setColor(Color.WHITE)
-                .setText(PGR.core.strings.cardEditor.openFolder)
+                .setText(PGR.core.strings.cedit_openFolder)
                 .setOnClick(PCLCustomCardSelectorScreen::openFolder);
 
         loadExistingButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(openButton.hb.cX, openButton.hb.y + openButton.hb.height + labelHeight * 0.8f)
                 .setColor(Color.WHITE)
-                .setText(PGR.core.strings.cardEditor.loadFromCard)
-                .setTooltip(PGR.core.strings.cardEditor.loadFromCard, PGR.core.strings.cardEditorTutorial.loadFromCardScreen)
+                .setText(PGR.core.strings.cedit_loadFromCard)
+                .setTooltip(PGR.core.strings.cedit_loadFromCard, PGR.core.strings.cetut_loadFromCardScreen)
                 .setOnClick(this::loadFromExisting);
 
         reloadButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(loadExistingButton.hb.cX, loadExistingButton.hb.y + loadExistingButton.hb.height + labelHeight * 0.8f)
                 .setColor(Color.WHITE)
-                .setText(PGR.core.strings.cardEditor.reloadCards)
-                .setTooltip(PGR.core.strings.cardEditor.reloadCards, PGR.core.strings.cardEditorTutorial.selectorReload)
+                .setText(PGR.core.strings.cedit_reloadCards)
+                .setTooltip(PGR.core.strings.cedit_reloadCards, PGR.core.strings.cetut_selectorReload)
                 .setOnClick(PCLCustomCardSlot::initialize);
 
         contextMenu = (EUIContextMenu<ContextOption>) new EUIContextMenu<ContextOption>(new EUIHitbox(-500f, -500f, 0, 0), o -> o.name)
@@ -123,7 +123,7 @@ public class PCLCustomCardSelectorScreen extends AbstractScreen
                 })
                 .setCanAutosizeButton(true);
         info = new EUITextBox(EUIRM.images.panel.texture(), new EUIHitbox(screenW(0.25f), screenH(0.035f), screenW(0.5f), buttonHeight * 2.5f))
-                .setLabel(EUIUtils.joinStrings(EUIUtils.DOUBLE_SPLIT_LINE, PGR.core.strings.cardEditorTutorial.selector1, PGR.core.strings.cardEditorTutorial.selector2))
+                .setLabel(EUIUtils.joinStrings(EUIUtils.DOUBLE_SPLIT_LINE, PGR.core.strings.cetut_selector1, PGR.core.strings.cetut_selector2))
                 .setAlignment(0.75f, 0.1f, true)
                 .setColors(Color.DARK_GRAY, Settings.CREAM_COLOR)
                 .setFont(EUIFontHelper.cardTipBodyFont, 0.9f);
@@ -379,9 +379,9 @@ public class PCLCustomCardSelectorScreen extends AbstractScreen
 
     public enum ContextOption
     {
-        Duplicate(PGR.core.strings.cardEditor.duplicate, PCLCustomCardSelectorScreen::duplicate),
-        DuplicateToColor(PGR.core.strings.cardEditor.duplicateToColor, PCLCustomCardSelectorScreen::duplicateToColor),
-        Delete(PGR.core.strings.cardEditor.delete, PCLCustomCardSelectorScreen::remove);
+        Duplicate(PGR.core.strings.cedit_duplicate, PCLCustomCardSelectorScreen::duplicate),
+        DuplicateToColor(PGR.core.strings.cedit_duplicateToColor, PCLCustomCardSelectorScreen::duplicateToColor),
+        Delete(PGR.core.strings.cedit_delete, PCLCustomCardSelectorScreen::remove);
 
         public final String name;
         public final ActionT3<PCLCustomCardSelectorScreen, AbstractCard, PCLCustomCardSlot> onSelect;

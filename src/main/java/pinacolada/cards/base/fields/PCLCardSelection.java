@@ -32,13 +32,13 @@ public enum PCLCardSelection
         switch (this)
         {
             case Manual:
-                return PGR.core.strings.cardPile.manual;
+                return PGR.core.strings.cpile_manual;
             case Top:
-                return PGR.core.strings.cardPile.top;
+                return PGR.core.strings.cpile_top;
             case Bottom:
-                return PGR.core.strings.cardPile.bottom;
+                return PGR.core.strings.cpile_bottom;
             case Random:
-                return PGR.core.strings.cardPile.random;
+                return PGR.core.strings.cpile_random;
         }
         return "";
     }

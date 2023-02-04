@@ -48,14 +48,14 @@ public class PMove_ModifyTag extends PMove_Modify<PField_CardModifyTag>
     @Override
     public String getObjectSampleText()
     {
-        return TEXT.cardEditor.tags;
+        return TEXT.cedit_tags;
     }
 
     @Override
     public String getObjectText()
     {
         String base = fields.getAddTagChoiceString();
-        return extra > 1 ? EUIRM.strings.numNoun(getExtraRawString(), base) : extra < 0 ? EUIRM.strings.numNoun(TEXT.subjects.infinite, base) : base;
+        return extra > 1 ? EUIRM.strings.numNoun(getExtraRawString(), base) : extra < 0 ? EUIRM.strings.numNoun(TEXT.subjects_infinite, base) : base;
     }
 
     @Override
@@ -66,9 +66,9 @@ public class PMove_ModifyTag extends PMove_Modify<PField_CardModifyTag>
             return super.getSubText();
         }
         String giveString = getObjectText();
-        return useParent ? TEXT.actions.removeFrom(giveString, getInheritedString()) :
+        return useParent ? TEXT.act_removeFrom(giveString, getInheritedString()) :
                 fields.hasGroups() ?
-                        TEXT.actions.removeFromPlace(giveString, EUIRM.strings.numNoun(getAmountRawString(), pluralCard()), fields.getGroupString()) :
-                        TEXT.actions.removeFrom(giveString, TEXT.subjects.thisObj);
+                        TEXT.act_removeFromPlace(giveString, EUIRM.strings.numNoun(getAmountRawString(), pluralCard()), fields.getGroupString()) :
+                        TEXT.act_removeFrom(giveString, TEXT.subjects_thisObj);
     }
 }

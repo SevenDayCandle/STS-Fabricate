@@ -534,13 +534,13 @@ public abstract class PCLLoadout
                 .setMaxUpgrades(0))
                 .build();
 
-        card.name = isCore() ? PGR.core.strings.seriesUI.core : getName();
+        card.name = isCore() ? PGR.core.strings.sui_core : getName();
         card.clearSkills();
 
         if (isLocked())
         {
             card.isSeen = false;
-            card.cardText.overrideDescription(PGR.core.strings.charSelect.unlocksAtLevel(unlockLevel, data.resources.getUnlockLevel()), false);
+            card.cardText.overrideDescription(PGR.core.strings.csel_unlocksAtLevel(unlockLevel, data.resources.getUnlockLevel()), false);
             card.setCardRarityType(AbstractCard.CardRarity.COMMON, AbstractCard.CardType.STATUS);
         }
         else
@@ -598,7 +598,7 @@ public abstract class PCLLoadout
     {
         public FakeSkill()
         {
-            super("", PGR.core.strings.seriesSelection.selected, (a, b) -> {
+            super("", PGR.core.strings.sui_selected, (a, b) -> {
             }, 0, cardData.size());
         }
     }
@@ -607,7 +607,7 @@ public abstract class PCLLoadout
     {
         public FakeSkill2()
         {
-            super("", PGR.core.strings.seriesSelection.unlocked, (a, b) -> {
+            super("", PGR.core.strings.sui_unlocked, (a, b) -> {
             }, 0, cardData.size());
         }
     }

@@ -39,7 +39,7 @@ public class ControllableCardPile
 
     public ControllableCardPile()
     {
-        tooltip = new EUITooltip(PGR.core.strings.combat.controlPile, PGR.core.strings.combat.controlPileDescription);
+        tooltip = new EUITooltip(PGR.core.strings.combat_controlPile, PGR.core.strings.combat_controlPileDescription);
         cardButton = new EUIButton(PGR.core.images.core.controllableCardPile.texture(), hb)
                 .setBorder(PGR.core.images.core.controllableCardPileBorder.texture(), Color.WHITE)
                 .setFont(FontHelper.energyNumFontBlue, 1f)
@@ -252,7 +252,7 @@ public class ControllableCardPile
 
                 if (tooltip != null)
                 {
-                    tooltip.setDescription(PGR.core.strings.combat.controlPileDescriptionFull(EUIHotkeys.cycle.getKeyString()));
+                    tooltip.setDescription(PGR.core.strings.combat_controlPileDescriptionFull(EUIHotkeys.cycle.getKeyString()));
                     EUITooltip.queueTooltip(tooltip, hb.x, hb.y + TOOLTIP_OFFSET_Y);
                 }
             }

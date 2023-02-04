@@ -50,13 +50,13 @@ public class PCond_PileHas extends PPassiveCond<PField_CardCategory>
     @Override
     public String getSampleText()
     {
-        return TEXT.conditions.ifYouHave(TEXT.subjects.card);
+        return TEXT.cond_ifYouHave(TEXT.subjects_card);
     }
 
     @Override
     public String getSubText()
     {
-        return TEXT.conditions.ifTargetHas(fields.getGroupString(),
+        return TEXT.cond_ifTargetHas(fields.getGroupString(),
                 EUIRM.strings.numNoun(getAmountRawString(), fields.getFullCardString()));
     }
 

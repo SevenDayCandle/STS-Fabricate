@@ -34,7 +34,7 @@ public class PMove_AddPowerBonus extends PMove<PField_Power>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.objectGainsBonus(TEXT.subjects.x, TEXT.subjects.x, TEXT.subjects.effectBonus);
+        return TEXT.act_objectGainsBonus(TEXT.subjects_x, TEXT.subjects_x, TEXT.subjects_effectBonus);
     }
 
     @Override
@@ -50,6 +50,6 @@ public class PMove_AddPowerBonus extends PMove<PField_Power>
     @Override
     public String getSubText()
     {
-        return TEXT.actions.objectGainsBonus(PField.getPowerString(fields.powers), (amount > 0 ? ("+ " + getAmountRawString()) : getAmountRawString()), TEXT.subjects.effectBonus);
+        return TEXT.act_objectGainsBonus(PField.getPowerString(fields.powers), (amount > 0 ? ("+ " + getAmountRawString()) : getAmountRawString()), TEXT.subjects_effectBonus);
     }
 }

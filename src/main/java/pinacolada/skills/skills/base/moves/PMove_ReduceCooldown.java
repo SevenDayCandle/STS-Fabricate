@@ -39,7 +39,7 @@ public class PMove_ReduceCooldown extends PMove_Modify<PField_CardCategory>
     @Override
     public String getObjectSampleText()
     {
-        return TEXT.subjects.damage;
+        return TEXT.subjects_damage;
     }
 
     @Override
@@ -51,10 +51,10 @@ public class PMove_ReduceCooldown extends PMove_Modify<PField_CardCategory>
     @Override
     public String getSubText()
     {
-        return useParent ? TEXT.actions.reduceBy(TEXT.subjects.theirX(getObjectText()), getExtraRawString()) :
+        return useParent ? TEXT.act_reduceBy(TEXT.subjects_theirX(getObjectText()), getExtraRawString()) :
                 fields.hasGroups() ?
-                        TEXT.actions.reduceCooldown(EUIRM.strings.numNoun(getAmountRawString(), pluralCard()), getExtraRawString()) :
-                        TEXT.actions.reduceBy(getObjectText(), getExtraRawString());
+                        TEXT.act_reduceCooldown(EUIRM.strings.numNoun(getAmountRawString(), pluralCard()), getExtraRawString()) :
+                        TEXT.act_reduceBy(getObjectText(), getExtraRawString());
     }
 
     @Override

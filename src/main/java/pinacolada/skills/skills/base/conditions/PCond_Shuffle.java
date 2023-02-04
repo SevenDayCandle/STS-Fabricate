@@ -32,13 +32,13 @@ public class PCond_Shuffle extends PPassiveCond<PField_Empty> implements OnShuff
     @Override
     public String getSampleText()
     {
-        return TEXT.subjects.shuffleYourDeck;
+        return TEXT.subjects_shuffleYourDeck;
     }
 
     @Override
     public String getSubText()
     {
-        return TEXT.conditions.wheneverYou(TEXT.subjects.shuffleYourDeck);
+        return TEXT.cond_wheneverYou(TEXT.subjects_shuffleYourDeck);
     }
 
     @Override

@@ -54,14 +54,14 @@ public class PMod_PerCreatureWith extends PMod_Per<PField_Power>
     @Override
     public String getSubText()
     {
-        return TEXT.subjects.enemyWithX(TEXT.subjects.x);
+        return TEXT.subjects_enemyWithX(TEXT.subjects_x);
     }
 
     @Override
     public String getConditionText()
     {
         String baseString = (this.amount <= 1 ? "" : getAmountRawString() + " ") + (fields.powers.isEmpty() ? plural(PGR.core.tooltips.debuff) : fields.getPowerAndOrString());
-        return target == PCLCardTarget.Any ? TEXT.subjects.characterWithX(baseString) : TEXT.subjects.enemyWithX(baseString);
+        return target == PCLCardTarget.Any ? TEXT.subjects_characterWithX(baseString) : TEXT.subjects_enemyWithX(baseString);
     }
 
     @Override

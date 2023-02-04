@@ -30,12 +30,12 @@ public abstract class PMove_Gain extends PMove<PField_Empty>
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.gainAmount(TEXT.subjects.x, gainText());
+        return TEXT.act_gainAmount(TEXT.subjects_x, gainText());
     }
 
     @Override
     public String getSubText()
     {
-        return amount < 0 ? TEXT.actions.loseAmount(getAmountRawString(), gainText()) : TEXT.actions.gainAmount(getAmountRawString(), gainText());
+        return amount < 0 ? TEXT.act_loseAmount(getAmountRawString(), gainText()) : TEXT.act_gainAmount(getAmountRawString(), gainText());
     }
 }

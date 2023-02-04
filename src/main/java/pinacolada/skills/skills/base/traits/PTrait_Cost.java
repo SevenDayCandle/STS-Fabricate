@@ -33,13 +33,13 @@ public class PTrait_Cost extends PTrait<PField_Empty>
     @Override
     public String getSubText()
     {
-        return TEXT.actions.costs(getAmountRawString());
+        return TEXT.act_costs(getAmountRawString());
     }
 
     @Override
     public String getSampleText()
     {
-        return TEXT.actions.costs("+X");
+        return TEXT.act_costs("+X");
     }
 
     @Override
@@ -58,13 +58,13 @@ public class PTrait_Cost extends PTrait<PField_Empty>
     @Override
     public String getSubDescText()
     {
-        return TEXT.subjects.cost;
+        return TEXT.subjects_cost;
     }
 
     @Override
     public String getSubSampleText()
     {
-        return TEXT.subjects.cost;
+        return TEXT.subjects_cost;
     }
 
     @Override

@@ -33,7 +33,7 @@ public class PCLAugmentPanelItem extends PCLTopPanelItem
     public PCLAugmentPanelItem()
     {
         super(PGR.core.images.augmentPanel, ID);
-        this.setTooltip(new EUITooltip(PGR.core.strings.misc.viewAugments, EUIUtils.format(PGR.core.strings.misc.viewAugmentsDescription, "")));
+        this.setTooltip(new EUITooltip(PGR.core.strings.misc_viewAugments, EUIUtils.format(PGR.core.strings.misc_viewAugmentsDescription, "")));
     }
 
     protected HashMap<PCLAugmentData, Integer> getAugmentData()
@@ -60,7 +60,7 @@ public class PCLAugmentPanelItem extends PCLTopPanelItem
         super.onRightClick();
         this.getHitbox().unhover();
         EUITutorial tutorial = new EUITutorial(new EUIHitbox((float) Settings.WIDTH / 2.0F - 675.0F, Settings.OPTION_Y - 450.0F, 1350.0F, 900.0F), EUIRM.images.panelLarge.texture(),
-                PGR.core.strings.misc.viewAugments, EUIUtils.list(PGR.core.strings.tutorial.augmentTutorial1, PGR.core.strings.tutorial.augmentTutorial2));
+                PGR.core.strings.misc_viewAugments, EUIUtils.list(PGR.core.strings.tutorial_augmentTutorial1, PGR.core.strings.tutorial_augmentTutorial2));
         AbstractDungeon.ftue = new FakeFtue(tutorial);
     }
 
@@ -76,8 +76,8 @@ public class PCLAugmentPanelItem extends PCLTopPanelItem
         if (this.tooltip != null && this.getHitbox().hovered)
         {
             this.tooltip.setText(
-                    PGR.core.strings.misc.viewAugments + " (" + PCLHotkeys.viewAugmentScreen.getKeyString() + ")",
-                    EUIUtils.format(PGR.core.strings.misc.viewAugmentsDescription, PGR.core.dungeon.getAugmentTotal() == 0 ? PGR.core.strings.misc.viewAugmentsNone : "")
+                    PGR.core.strings.misc_viewAugments + " (" + PCLHotkeys.viewAugmentScreen.getKeyString() + ")",
+                    EUIUtils.format(PGR.core.strings.misc_viewAugmentsDescription, PGR.core.dungeon.getAugmentTotal() == 0 ? PGR.core.strings.misc_viewAugmentsNone : "")
             );
             EUITooltip.queueTooltip(this.tooltip);
         }

@@ -48,12 +48,12 @@ public class PCond_PayEnergy extends PPassiveCond<PField_Empty>
     @Override
     public String getSampleText()
     {
-        return capital(TEXT.actions.pay(TEXT.subjects.x, PGR.core.tooltips.energy.title), true);
+        return capital(TEXT.act_pay(TEXT.subjects_x, PGR.core.tooltips.energy.title), true);
     }
 
     @Override
     public String getSubText()
     {
-        return capital(TEXT.actions.pay(getAmountRawString(), PGR.core.tooltips.energy), true);
+        return capital(TEXT.act_pay(getAmountRawString(), PGR.core.tooltips.energy), true);
     }
 }
