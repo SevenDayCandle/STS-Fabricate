@@ -31,7 +31,6 @@ public class PCLDynamicData extends PCLCardData
     public final ArrayList<PTrigger> powers = new ArrayList<>();
     public ColoredTexture portraitForeground;
     public ColoredTexture portraitImage;
-    public List<CardTagItem> extraTags = new ArrayList<>();
     public PCLCard source;
     public PCardPrimary_DealDamage attackSkill;
     public PCardPrimary_GainBlock blockSkill;
@@ -249,7 +248,6 @@ public class PCLDynamicData extends PCLCardData
 
         return this;
     }
-
 
     public PCLDynamicData setID(String id)
     {

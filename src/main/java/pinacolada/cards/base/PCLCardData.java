@@ -13,6 +13,7 @@ import extendedui.interfaces.markers.CardObject;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.annotations.VisibleCard;
 import pinacolada.cards.base.fields.*;
+import pinacolada.cards.base.tags.CardTagItem;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLResources;
@@ -23,10 +24,7 @@ import pinacolada.utilities.PCLRenderHelpers;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -57,6 +55,7 @@ public class PCLCardData implements CardObject
     public String ID;
     public PCLCardTarget cardTarget = PCLCardTarget.None;
     public PCLCardTarget[] upgradeCardTarget;
+    public List<CardTagItem> extraTags;
     public AbstractCard.CardType cardType = AbstractCard.CardType.SKILL;
     public AbstractCard.CardColor cardColor = AbstractCard.CardColor.COLORLESS;
     public AbstractCard.CardRarity cardRarity = AbstractCard.CardRarity.BASIC;
@@ -603,6 +602,13 @@ public class PCLCardData implements CardObject
         return this;
     }
 
+    public PCLCardData setExtraTags(List<CardTagItem> extraTags)
+    {
+        this.extraTags = extraTags;
+
+        return this;
+    }
+
     public PCLCardData setHitCount(int heal, int healUpgrade)
     {
         hitCount[0] = heal;
@@ -816,6 +822,22 @@ public class PCLCardData implements CardObject
             slots = (cardType == AbstractCard.CardType.POWER ? 1 : 2) + (cardRarity == AbstractCard.CardRarity.COMMON ? 1 : 0);
         }
 
+        return this;
+    }
+
+    public PCLCardData setDefend()
+    {
+        this.loadout.defends.add(this);
+        this.loadout = PGR.getPlayerData(resources.cardColor).getCoreLoadout();
+        this.extraTags = EUIUtils.list(CardTagItem.Defend);
+        return this;
+    }
+
+    public PCLCardData setStrike()
+    {
+        this.loadout.strikes.add(this);
+        this.loadout = PGR.getPlayerData(resources.cardColor).getCoreLoadout();
+        this.extraTags = EUIUtils.list(CardTagItem.Strike);
         return this;
     }
 

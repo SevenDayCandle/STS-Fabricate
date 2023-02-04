@@ -92,8 +92,7 @@ public class PCLCustomCardSlot
                         .setPPower(card.getPowerEffects(), true, true)
                         .setAttackSkill(card.onDamageEffect)
                         .setBlockSkill(card.onBlockEffect)
-                        .setExtraTags(CardTagItem.getFromCard(card)
-                        )
+                        .setExtraTags(CardTagItem.getFromCard(card))
         );
         recordBuilder();
     }

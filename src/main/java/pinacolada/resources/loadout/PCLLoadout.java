@@ -30,12 +30,11 @@ import java.util.StringJoiner;
 import static pinacolada.ui.characterSelection.PCLLoadoutEditor.MAX_RELIC_SLOTS;
 
 // Copied and modified from STS-AnimatorMod
-// TODO rework
 public abstract class PCLLoadout
 {
     public static final AbstractCard.CardType UNSELECTABLE_TYPE = AbstractCard.CardType.CURSE;
     public static final int MAX_PRESETS = 5;
-    public static final int MAX_VALUE = 40;
+    public static final int MAX_VALUE = 50;
     public static final int MIN_CARDS = 10;
     public static final int CARD_SLOTS = 4;
     public static final HashMap<AbstractCard.CardColor, ArrayList<PCLLoadout>> LOADOUTS = new HashMap<>();
@@ -45,6 +44,8 @@ public abstract class PCLLoadout
     public int unlockLevel = 0;
     public ArrayList<PCLCardData> cardData = new ArrayList<>();
     public ArrayList<PCLCardData> colorlessData = new ArrayList<>();
+    public ArrayList<PCLCardData> defends = new ArrayList<>();
+    public ArrayList<PCLCardData> strikes = new ArrayList<>();
     public PCLLoadoutData[] presets = new PCLLoadoutData[PCLLoadout.MAX_PRESETS];
     protected ArrayList<String> startingDeck = new ArrayList<>();
     protected String shortDescription = "";
@@ -170,12 +171,18 @@ public abstract class PCLLoadout
 
     public void addBasicDefends(PCLCardSlot slot)
     {
-        slot.addItem(getDefend(), -2);
+        for (PCLCardData data : defends)
+        {
+            slot.addItem(data, 0);
+        }
     }
 
     public void addBasicStrikes(PCLCardSlot slot)
     {
-        slot.addItem(getStrike(), -2);
+        for (PCLCardData data : strikes)
+        {
+            slot.addItem(data, 0);
+        }
     }
 
     public void addLoadoutCards(PCLCardSlot slot)
@@ -276,8 +283,6 @@ public abstract class PCLLoadout
         return data;
     }
 
-    protected abstract PCLCardData getDefend();
-
     public int getDraw()
     {
         return PCLBaseStatEditor.StatType.CardDraw.getAmount(this, getPreset());
@@ -364,10 +369,16 @@ public abstract class PCLLoadout
         if (cards.isEmpty())
         {
             EUIUtils.logWarning(this, "Starting loadout was empty");
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 2; i++)
             {
-                cards.add(getStrike().ID);
-                cards.add(getDefend().ID);
+                for (PCLCardData data : strikes)
+                {
+                    cards.add(data.ID);
+                }
+                for (PCLCardData data : defends)
+                {
+                    cards.add(data.ID);
+                }
             }
         }
 
@@ -412,8 +423,6 @@ public abstract class PCLLoadout
         }
         return res;
     }
-
-    protected abstract PCLCardData getStrike();
 
     public PCLCardData getSymbolicCard()
     {

@@ -45,6 +45,7 @@ import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.cards.base.cardText.PCLCardText;
 import pinacolada.cards.base.fields.*;
+import pinacolada.cards.base.tags.CardTagItem;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.effects.EffekseerEFK;
@@ -184,6 +185,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
             augments.add(null);
         }
 
+        setupExtrTags();
         setupProperties(cardData, form, timesUpgraded);
         setup(input);
         setForm(form, timesUpgraded);
@@ -1567,6 +1569,22 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     {
         portrait = null;
         loadImage(imagePath);
+    }
+
+    protected  void setupExtrTags()
+    {
+        if (cardData.extraTags != null)
+        {
+            for (CardTagItem item : cardData.extraTags)
+            {
+                this.tags.add(item.tag);
+                // Starter Strike tags should automatically be added to Basic cards with the Strike, so they can be upgraded in Simplicity, etc.
+                if (item == CardTagItem.Strike && this.rarity == CardRarity.BASIC)
+                {
+                    this.tags.add(CardTags.STARTER_STRIKE);
+                }
+            }
+        }
     }
 
     protected void setupProperties(PCLCardData cardData, Integer form, int timesUpgraded) {
