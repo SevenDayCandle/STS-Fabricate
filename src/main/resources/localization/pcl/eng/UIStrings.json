@@ -214,7 +214,7 @@
 												"Affinity: {0}",
 												"Cards: {0}",
 												"Value: {0}/{1}",
-												"Your Hindrance level is the total number of negative-valued cards in your deck.",
+												"Your Hindrance level is equal to the percentage of negative-valued cards in your deck (as a decimal) times #b-{0}.",
 												"Your Affinity level is determined by the sum of the frequency of each Affinity that occurs more than 2 times in your deck.",
 												"You have unsaved changes to your loadout that will be lost upon leaving. Are you sure you want to leave this menu?",
 												"Reset",

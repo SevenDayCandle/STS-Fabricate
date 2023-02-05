@@ -441,10 +441,9 @@ public class PCLCardData implements CardObject
 
     public PCLCardData setAttack(int cost, AbstractCard.CardRarity rarity, PCLAttackType attackType, PCLCardTarget target)
     {
-        setRarity(rarity);
+        setRarityType(rarity, AbstractCard.CardType.ATTACK);
 
         cardTarget = target;
-        cardType = AbstractCard.CardType.ATTACK;
         this.attackType = attackType;
         this.cost = array(cost);
 
@@ -544,10 +543,9 @@ public class PCLCardData implements CardObject
 
     public PCLCardData setCurse(int cost, PCLCardTarget target, boolean special, boolean playAtEndOfTurn)
     {
-        setRarity(special ? AbstractCard.CardRarity.SPECIAL : AbstractCard.CardRarity.CURSE);
+        setRarityType(special ? AbstractCard.CardRarity.SPECIAL : AbstractCard.CardRarity.CURSE, AbstractCard.CardType.CURSE);
 
         cardColor = AbstractCard.CardColor.CURSE;
-        cardType = AbstractCard.CardType.CURSE;
         cardTarget = target;
         this.cost = array(cost);
         this.playAtEndOfTurn = playAtEndOfTurn;
@@ -722,10 +720,9 @@ public class PCLCardData implements CardObject
 
     public PCLCardData setPower(int cost, AbstractCard.CardRarity rarity)
     {
-        setRarity(rarity);
+        setRarityType(rarity, AbstractCard.CardType.POWER);
 
         cardTarget = PCLCardTarget.None;
-        cardType = AbstractCard.CardType.POWER;
         this.cost = array(cost);
 
         return this;
@@ -765,20 +762,21 @@ public class PCLCardData implements CardObject
         return setRTags(Arrays.asList(tags));
     }
 
-    public PCLCardData setRarity(AbstractCard.CardRarity rarity)
+    public PCLCardData setRarityType(AbstractCard.CardRarity rarity, AbstractCard.CardType type)
     {
         cardRarity = rarity;
+        cardType = type;
 
         if (maxCopies == -1)
         {
             switch (rarity)
             {
                 case COMMON:
-                    return setMaxCopies(5);
+                    return setMaxCopies(type == PCLEnum.CardType.SUMMON ? 3 : 6);
                 case UNCOMMON:
-                    return setMaxCopies(4);
+                    return setMaxCopies(type == PCLEnum.CardType.SUMMON ? 2 : 4);
                 case RARE:
-                    return setMaxCopies(3);
+                    return setMaxCopies(type == PCLEnum.CardType.SUMMON ? 2 : 3);
                 default:
                     return setMaxCopies(0);
             }
@@ -827,16 +825,16 @@ public class PCLCardData implements CardObject
 
     public PCLCardData setDefend()
     {
-        this.loadout.defends.add(this);
         this.loadout = PGR.getPlayerData(resources.cardColor).getCoreLoadout();
+        this.loadout.defends.add(this);
         this.extraTags = EUIUtils.list(CardTagItem.Defend);
         return this;
     }
 
     public PCLCardData setStrike()
     {
-        this.loadout.strikes.add(this);
         this.loadout = PGR.getPlayerData(resources.cardColor).getCoreLoadout();
+        this.loadout.strikes.add(this);
         this.extraTags = EUIUtils.list(CardTagItem.Strike);
         return this;
     }
@@ -848,10 +846,9 @@ public class PCLCardData implements CardObject
 
     public PCLCardData setSkill(int cost, AbstractCard.CardRarity rarity, PCLCardTarget target)
     {
-        setRarity(rarity);
+        setRarityType(rarity, AbstractCard.CardType.SKILL);
 
         cardTarget = target;
-        cardType = AbstractCard.CardType.SKILL;
         this.cost = array(cost);
 
         return this;
@@ -870,9 +867,8 @@ public class PCLCardData implements CardObject
 
     public PCLCardData setStatus(int cost, AbstractCard.CardRarity rarity, PCLCardTarget target, boolean playAtEndOfTurn)
     {
-        setRarity(rarity);
+        setRarityType(rarity, AbstractCard.CardType.STATUS);
         setColorless();
-        cardType = AbstractCard.CardType.STATUS;
         cardTarget = target;
         this.cost = array(cost);
         this.playAtEndOfTurn = playAtEndOfTurn;
@@ -893,10 +889,9 @@ public class PCLCardData implements CardObject
 
     public PCLCardData setSummon(int cost, AbstractCard.CardRarity rarity, PCLAttackType attackType, PCLCardTarget target)
     {
-        setRarity(rarity);
+        setRarityType(rarity, PCLEnum.CardType.SUMMON);
 
         cardTarget = target;
-        cardType = PCLEnum.CardType.SUMMON;
         this.attackType = attackType;
         this.cost = array(cost);
 

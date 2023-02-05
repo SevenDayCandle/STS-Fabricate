@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 public class PCLLoadoutValidation
 {
+    public static final int HINDRANCE_MULTIPLIER = 20;
     public final TupleT2<Integer, Boolean> cardsCount = new TupleT2<>();
     public final TupleT2<Integer, Boolean> totalValue = new TupleT2<>();
     public final HashMap<PCLBaseStatEditor.StatType, Integer> values = new HashMap<>();
@@ -41,7 +42,7 @@ public class PCLLoadoutValidation
         cardsCount.set(0, false);
         totalValue.set(PCLLoadout.MAX_VALUE, false);
         allCardsSeen = true;
-        hindranceLevel = 0;
+        int hindrances = 0;
         for (PCLCardSlot slot : data.cardSlots)
         {
             if (slot == null)
@@ -61,7 +62,7 @@ public class PCLLoadoutValidation
 
                 else if (slot.selected.estimatedValue < 0)
                 {
-                    hindranceLevel += slot.amount;
+                    hindrances += slot.amount;
                 }
             }
         }
@@ -73,6 +74,18 @@ public class PCLLoadoutValidation
             }
 
             totalValue.v1 += slot.getEstimatedValue();
+        }
+
+        // Hindrance level is determined by the proportion of your deck that is "bad"
+        // Strikes/Defends and harmless hindrances have a weaker influence
+        // Curses and damaging hindrances have a stronger influence
+        if (cardsCount.v1 > 0)
+        {
+            hindranceLevel = HINDRANCE_MULTIPLIER * hindrances / cardsCount.v1;
+        }
+        else
+        {
+            hindranceLevel = 0;
         }
 
         values.putAll(data.values);

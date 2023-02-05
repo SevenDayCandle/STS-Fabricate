@@ -435,12 +435,6 @@ public class PCLDynamicData extends PCLCardData
         return setText(getStringsForLanguage(language));
     }
 
-    public PCLDynamicData setType(AbstractCard.CardType type)
-    {
-        this.cardType = type;
-        return this;
-    }
-
     public PCLDynamicData showTypeText(boolean showTypeText)
     {
         this.showTypeText = showTypeText;

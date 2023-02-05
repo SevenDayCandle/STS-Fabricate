@@ -31,6 +31,7 @@ public class PCLCoreStrings extends PCLStrings
     private final UIStrings conditions = getUIStrings("Conditions");
     private final UIStrings gridselection = getUIStrings("GridSelection");
     private final UIStrings hotkeys = getUIStrings("Hotkeys");
+    private final UIStrings menu = getUIStrings("Menu");
     private final UIStrings misc = getUIStrings("Misc");
     private final UIStrings options = getUIStrings("Options");
     private final UIStrings rewards = getUIStrings("Rewards");
@@ -237,6 +238,12 @@ public class PCLCoreStrings extends PCLStrings
     public final String hotkeys_rerollCurrent = hotkeys.TEXT[2];
     public final String hotkeys_toggleFormulaDisplay = hotkeys.TEXT[3];
     public final String hotkeys_viewAugments = hotkeys.TEXT[4];
+
+    // Menu
+    public final String menu_editor = menu.TEXT[0];
+    public final String menu_card = menu.TEXT[1];
+    public final String menu_cardDesc = menu.TEXT[2];
+    public final String menu_comingsoon = menu.TEXT[3];
 
     // Misc
     public final String misc_viewAugments = misc.TEXT[0];

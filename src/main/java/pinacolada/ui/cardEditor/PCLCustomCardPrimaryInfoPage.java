@@ -126,7 +126,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
                 .setOnChange(rarities -> {
                     if (!rarities.isEmpty())
                     {
-                        effect.modifyAllBuilders(e -> e.setRarity(rarities.get(0)));
+                        effect.modifyAllBuilders(e -> e.setRarityType(rarities.get(0), e.cardType));
                     }
                 })
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[0])
@@ -138,7 +138,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
                     if (!types.isEmpty())
                     {
                         // Pages need to refresh because changing card type affects available skill options or attributes
-                        effect.modifyAllBuilders(e -> e.setType(types.get(0)));
+                        effect.modifyAllBuilders(e -> e.setRarityType(e.cardRarity, types.get(0)));
                         effect.refreshPages();
                     }
                 })

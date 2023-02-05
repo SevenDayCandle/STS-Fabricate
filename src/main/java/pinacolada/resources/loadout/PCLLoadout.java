@@ -171,7 +171,7 @@ public abstract class PCLLoadout
 
     public void addBasicDefends(PCLCardSlot slot)
     {
-        for (PCLCardData data : defends)
+        for (PCLCardData data : getPlayerData().getCoreLoadout().defends)
         {
             slot.addItem(data, 0);
         }
@@ -179,7 +179,7 @@ public abstract class PCLLoadout
 
     public void addBasicStrikes(PCLCardSlot slot)
     {
-        for (PCLCardData data : strikes)
+        for (PCLCardData data : getPlayerData().getCoreLoadout().strikes)
         {
             slot.addItem(data, 0);
         }
@@ -371,11 +371,11 @@ public abstract class PCLLoadout
             EUIUtils.logWarning(this, "Starting loadout was empty");
             for (int i = 0; i < 2; i++)
             {
-                for (PCLCardData data : strikes)
+                for (PCLCardData data : getPlayerData().getCoreLoadout().strikes)
                 {
                     cards.add(data.ID);
                 }
-                for (PCLCardData data : defends)
+                for (PCLCardData data : getPlayerData().getCoreLoadout().defends)
                 {
                     cards.add(data.ID);
                 }

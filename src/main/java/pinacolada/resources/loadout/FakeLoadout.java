@@ -21,18 +21,6 @@ public class FakeLoadout extends PCLLoadout
     }
 
     @Override
-    protected PCLCardData getDefend()
-    {
-        return QuestionMark.DATA;
-    }
-
-    @Override
-    protected PCLCardData getStrike()
-    {
-        return QuestionMark.DATA;
-    }
-
-    @Override
     public PCLCardData getSymbolicCard()
     {
         return QuestionMark.DATA;

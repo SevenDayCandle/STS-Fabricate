@@ -38,7 +38,6 @@ import java.util.stream.Collectors;
 
 public class PCLCustomCardSelectorScreen extends AbstractScreen
 {
-
     protected static final float ITEM_HEIGHT = AbstractCard.IMG_HEIGHT * 0.15f;
     private static final float DRAW_START_X = (Settings.WIDTH - (5f * AbstractCard.IMG_WIDTH * 0.75f) - (4f * Settings.CARD_VIEW_PAD_X) + AbstractCard.IMG_WIDTH * 0.75f);
     private static final float DRAW_START_Y = (float) Settings.HEIGHT * 0.7f;

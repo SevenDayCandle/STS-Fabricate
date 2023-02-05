@@ -7,7 +7,7 @@ import com.megacrit.cardcrawl.screens.mainMenu.MenuButton;
 import javassist.CannotCompileException;
 import javassist.CtBehavior;
 import pinacolada.resources.PCLEnum;
-import pinacolada.ui.menu.PCLCustomMenuButton;
+import pinacolada.ui.menu.CustomMenuButton;
 
 public class MainMenuScreenPatches
 {
@@ -21,7 +21,7 @@ public class MainMenuScreenPatches
         public static void Insert(Object __obj_instance, @ByRef int[] index)
         {
             MainMenuScreen __instance = (MainMenuScreen)__obj_instance;
-            __instance.buttons.add(new PCLCustomMenuButton(PCLEnum.Buttons.CUSTOM, index[0]++));
+            __instance.buttons.add(new CustomMenuButton(PCLEnum.Buttons.CUSTOM, index[0]++));
         }
 
         private static class Locator extends SpireInsertLocator

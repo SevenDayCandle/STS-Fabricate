@@ -7,6 +7,7 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.rewards.RewardItem;
 import com.megacrit.cardcrawl.screens.mainMenu.MainMenuPanelButton;
 import com.megacrit.cardcrawl.screens.mainMenu.MenuButton;
+import com.megacrit.cardcrawl.screens.mainMenu.MenuPanelScreen;
 
 public class PCLEnum
 {
@@ -15,11 +16,21 @@ public class PCLEnum
         @SpireEnum
         public static MenuButton.ClickResult CUSTOM;
     }
+
+    public static class Menus
+    {
+        @SpireEnum
+        public static MenuPanelScreen.PanelScreen CUSTOM;
+    }
     
     public static class Panels
     {
         @SpireEnum
         public static MainMenuPanelButton.PanelClickResult CUSTOM_CARDS;
+        @SpireEnum
+        public static MainMenuPanelButton.PanelClickResult CUSTOM_POTIONS;
+        @SpireEnum
+        public static MainMenuPanelButton.PanelClickResult CUSTOM_RELICS;
     }
 
     public static class Rewards

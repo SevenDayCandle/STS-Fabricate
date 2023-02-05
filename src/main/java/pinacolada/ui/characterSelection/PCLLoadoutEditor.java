@@ -11,6 +11,7 @@ import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
 import extendedui.EUI;
 import extendedui.EUIRM;
+import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT0;
 import extendedui.interfaces.delegates.ActionT2;
 import extendedui.ui.AbstractScreen;
@@ -24,6 +25,7 @@ import pinacolada.effects.screen.PCLRelicSlotSelectionEffect;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.*;
+import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -98,7 +100,7 @@ public class PCLLoadoutEditor extends AbstractScreen
                 .setFontScale(0.8f)
                 .setAlignment(0.5f, 0.5f);
 
-        seriesButton = new EUIButton(PGR.core.images.edit.texture(), new EUIHitbox(0, 0, scale(64), scale(64)))
+        seriesButton = new EUIButton(PCLCoreImages.edit.texture(), new EUIHitbox(0, 0, scale(64), scale(64)))
                 .setPosition(startingDeck.hb.x + scale(80), startingDeck.hb.y - scale(48)).setText("")
                 .setTooltip(PGR.core.strings.csel_seriesEditor, PGR.core.strings.csel_seriesEditorInfo)
                 .setOnClick(this::openSeriesSelect);
@@ -156,7 +158,7 @@ public class PCLLoadoutEditor extends AbstractScreen
                 .setAlignment(0.5f, 0.5f)
                 .setPosition(saveButton.hb.cX, cardscountText.hb.y + cardscountText.hb.height + labelHeight * 0.5f)
                 .setFont(FontHelper.tipHeaderFont, 1)
-                .setTooltip(new EUITooltip("", PGR.core.strings.csel_hindranceDescription));
+                .setTooltip(new EUITooltip("", EUIUtils.format(PGR.core.strings.csel_hindranceDescription, PCLLoadoutValidation.HINDRANCE_MULTIPLIER)));
 
         for (int i = 0; i < MAX_CARD_SLOTS; i++)
         {

@@ -3,14 +3,14 @@ package pinacolada.ui.menu;
 import basemod.ReflectionHacks;
 import com.evacipated.cardcrawl.modthespire.lib.SpireOverride;
 import com.evacipated.cardcrawl.modthespire.lib.SpireSuper;
+import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.screens.mainMenu.MenuButton;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
-import pinacolada.ui.cardEditor.PCLCustomCardSelectorScreen;
 
-public class PCLCustomMenuButton extends MenuButton
+public class CustomMenuButton extends MenuButton
 {
-    public PCLCustomMenuButton(ClickResult r, int index)
+    public CustomMenuButton(ClickResult r, int index)
     {
         super(r, index);
     }
@@ -30,7 +30,7 @@ public class PCLCustomMenuButton extends MenuButton
     public void buttonEffect() {
         if (result == PCLEnum.Buttons.CUSTOM)
         {
-            PGR.core.customCards.open(null, PCLCustomCardSelectorScreen.currentColor, () -> {});
+            CardCrawlGame.mainMenuScreen.panelScreen.open(PCLEnum.Menus.CUSTOM);
         }
     }
 }
