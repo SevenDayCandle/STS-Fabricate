@@ -106,7 +106,7 @@ public abstract class EUICardDraggable<T extends AbstractCard> extends EUIBase
         return this;
     }
 
-    public EUICardDraggable translate(float x, float y)
+    public EUICardDraggable<T> translate(float x, float y)
     {
         this.hb.translate(x, y);
         return this;

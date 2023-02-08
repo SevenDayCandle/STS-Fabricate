@@ -81,7 +81,7 @@ public class PCLCombatScreen extends EUIBase
 
         if (PGR.core.config.showFormulaDisplay.get())
         {
-            formulaDisplay.update(player.hoveredCard, target, draggingCard);
+            formulaDisplay.update(hoveredCard, target, draggingCard);
         }
         if (PCLHotkeys.toggleFormulaDisplay.isJustPressed())
         {

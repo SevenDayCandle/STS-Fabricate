@@ -73,7 +73,6 @@ public class CombatManager
     private static final ArrayList<AbstractCard> hasteInfinitesThisTurn = new ArrayList<>();
     private static final ArrayList<AbstractCard> matchesThisCombat = new ArrayList<>();
     private static final ArrayList<AbstractCard> matchesThisTurn = new ArrayList<>();
-    private static final ArrayList<AbstractGameAction> cachedActions = new ArrayList<>();
     private static final ArrayList<AbstractOrb> orbsEvokedThisCombat = new ArrayList<>();
     private static final ArrayList<AbstractOrb> orbsEvokedThisTurn = new ArrayList<>();
     private static final ArrayList<UUID> unplayableCards = new ArrayList<>();
@@ -676,6 +675,21 @@ public class CombatManager
         subscriberDo(OnAllyWithdrawSubscriber.class, s -> s.onAllyWithdraw(card, ally));
     }
 
+    public static void onCardPlayed(PCLCard card, PCLUseInfo info)
+    {
+        playerSystem.onCardPlayed(card, info, false);
+        if (info.isMatch)
+        {
+            playerSystem.onMatch(card);
+            CombatManager.onMatch(card, info);
+        }
+        else
+        {
+            playerSystem.onNotMatch(card);
+            CombatManager.onNotMatch(card, info);
+        }
+    }
+
     public static void onUsingCard(PCLCard card, AbstractPlayer p, AbstractMonster m)
     {
         if (card == null)
@@ -697,48 +711,11 @@ public class CombatManager
         }
         else
         {
-            card.onPreUse(info);
             card.onUse(info);
         }
         PCLAction.currentCard = null;
 
-        final ArrayList<AbstractGameAction> actions = PCLActions.getActions();
-
-        cachedActions.clear();
-        cachedActions.addAll(actions);
-
-        actions.clear();
-        if (card.type != PCLEnum.CardType.SUMMON)
-        {
-            PCLAction.currentCard = card;
-            card.onLateUse(info);
-            PCLAction.currentCard = null;
-        }
-
-        playerSystem.onCardPlayed(card, info, false);
-        if (info.isMatch)
-        {
-            playerSystem.onMatch(card);
-            CombatManager.onMatch(card, info);
-        }
-        else
-        {
-            playerSystem.onNotMatch(card);
-            CombatManager.onNotMatch(card, info);
-        }
-
-        if (actions.isEmpty())
-        {
-            actions.addAll(cachedActions);
-        }
-        else
-        {
-            for (int i = 0; i < cachedActions.size(); i++)
-            {
-                PCLActions.top.add(cachedActions.get(cachedActions.size() - 1 - i));
-            }
-        }
-
+        onCardPlayed(card, info);
         onUsingCardPostActions(card, p, m);
     }
 

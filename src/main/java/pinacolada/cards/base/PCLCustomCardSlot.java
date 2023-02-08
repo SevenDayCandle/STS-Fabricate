@@ -90,7 +90,7 @@ public class PCLCustomCardSlot
                         .setImagePath(imagePath)
                         .setPSkill(card.getEffects(), true, true)
                         .setPPower(card.getPowerEffects(), true, true)
-                        .setAttackSkill(card.onDamageEffect)
+                        .setAttackSkill(card.onAttackEffect)
                         .setBlockSkill(card.onBlockEffect)
                         .setExtraTags(CardTagItem.getFromCard(card))
         );

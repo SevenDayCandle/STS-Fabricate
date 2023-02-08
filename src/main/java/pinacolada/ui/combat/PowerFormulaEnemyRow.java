@@ -8,6 +8,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIRM;
 import extendedui.ui.hitboxes.EUIHitbox;
+import pinacolada.monsters.PCLCardAlly;
 import pinacolada.monsters.PCLIntentInfo;
 import pinacolada.utilities.PCLRenderHelpers;
 
@@ -34,16 +35,14 @@ public class PowerFormulaEnemyRow extends PowerFormulaRow
         if (shouldUpdateForCard || shouldUpdateForTarget)
         {
             powers.clear();
-            if (target instanceof AbstractMonster) {
+            if (target instanceof AbstractMonster && !(target instanceof PCLCardAlly)) {
                 PCLIntentInfo intent = PCLIntentInfo.get((AbstractMonster) target);
-                if (intent != null) {
-                    int input = intent.getBaseDamage(false);
-                    int fd = intent.getFinalDamage();
-                    icon = intent.getIntentImage();
-                    initial.setLabel(input);
-                    result.setColor(fd > input ? Settings.GREEN_TEXT_COLOR : fd < input ? Settings.RED_TEXT_COLOR : Color.WHITE).setLabel(fd);
-                    shouldRender = input > 0;
-                }
+                int input = intent.getBaseDamage(false);
+                int fd = intent.getFinalDamage();
+                icon = intent.getIntentImage();
+                initial.setLabel(input);
+                result.setColor(fd > input ? Settings.GREEN_TEXT_COLOR : fd < input ? Settings.RED_TEXT_COLOR : Color.WHITE).setLabel(fd);
+                shouldRender = input > 0;
             }
         }
         else

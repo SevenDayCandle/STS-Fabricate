@@ -420,6 +420,7 @@ public abstract class PMod<T extends PField> extends PSkill<T>
                     ce.setTemporaryAmount(updateAmount(ce, info));
                 }
             }
+            // PDelays should be ignored. PMods will directly affect their children instead
             else if (this.childEffect instanceof PDelay && this.childEffect.childEffect != null)
             {
                 this.childEffect.childEffect.setTemporaryAmount(updateAmount(this.childEffect.childEffect, info));

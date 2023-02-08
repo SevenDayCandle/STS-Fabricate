@@ -57,29 +57,7 @@ public interface PointerProvider
     default String getEffectStrings()
     {
         ArrayList<PSkill<?>> tempEffects = EUIUtils.filter(getFullEffects(), ef -> ef != null && !(ef instanceof PTrait));
-        String effectString = EUIUtils.joinStrings(EUIUtils.DOUBLE_SPLIT_LINE, EUIUtils.mapAsNonnull(tempEffects, PSkill::getText));
-        StringBuilder sb = new StringBuilder();
-
-        PCardPrimary_DealDamage damageMove = getCardDamage();
-        PCardPrimary_GainBlock blockMove = getCardBlock();
-        if (damageMove != null)
-        {
-            sb.append(damageMove.getText());
-        }
-        if (blockMove != null)
-        {
-            sb.append(blockMove.getText());
-        }
-        if (!effectString.isEmpty())
-        {
-            if (sb.length() > 0)
-            {
-                sb.append(EUIUtils.DOUBLE_SPLIT_LINE);
-            }
-            sb.append(effectString);
-        }
-
-        return sb.toString();
+        return EUIUtils.joinStrings(EUIUtils.DOUBLE_SPLIT_LINE, EUIUtils.mapAsNonnull(tempEffects, PSkill::getText));
     }
 
     // GetEffects plus any additional temporary effects not attached to Skills

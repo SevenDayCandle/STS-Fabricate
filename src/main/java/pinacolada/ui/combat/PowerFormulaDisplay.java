@@ -5,11 +5,13 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.powers.AbstractPower;
+import extendedui.EUIUtils;
 import extendedui.ui.controls.EUILabel;
 import extendedui.ui.hitboxes.DraggableHitbox;
+import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
-import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.PGR;
 import pinacolada.ui.EUICardDraggable;
@@ -20,9 +22,8 @@ public class PowerFormulaDisplay extends EUICardDraggable<AbstractCard>
     // TODO support for non-PCL cards
 
     public static final float ICON_SIZE = 32f;
-    public static final float OFFSET1 = -4.5f;
-    public static final float OFFSET2 = -8.5f;
-    public static final float OFFSET3 = -12.5f;
+    public static final float OFFSET_MULT_X = 0.3f;
+    public static final float OFFSET_MULT_Y = -4f;
     public final PowerFormulaRow attack;
     public final PowerFormulaRow defend;
     public final PowerFormulaEnemyRow enemyAttack;
@@ -34,9 +35,9 @@ public class PowerFormulaDisplay extends EUICardDraggable<AbstractCard>
     public PowerFormulaDisplay()
     {
         super(PGR.core.config.damageFormulaPosition, new DraggableHitbox(screenW(0.0366f), screenH(0.425f), ICON_SIZE, ICON_SIZE, true), ICON_SIZE);
-        attackHb = RelativeHitbox.fromPercentages(hb, 1, 1, 0.3f, OFFSET1);
-        defendHb = RelativeHitbox.fromPercentages(hb, 1, 1, 0.3f, OFFSET2);
-        enemyAttackHb = RelativeHitbox.fromPercentages(hb, 1, 1, 0.3f, OFFSET3);
+        attackHb = RelativeHitbox.fromPercentages(hb, 1, 1, OFFSET_MULT_X, -0.5f + OFFSET_MULT_Y);
+        defendHb = RelativeHitbox.fromPercentages(hb, 1, 1, OFFSET_MULT_X, -0.5f + OFFSET_MULT_Y * 2);
+        enemyAttackHb = RelativeHitbox.fromPercentages(hb, 1, 1, OFFSET_MULT_X, -0.5f + OFFSET_MULT_Y * 3);
 
         attack = new PowerFormulaRow(attackHb, PowerFormulaRow.Type.Attack);
         defend = new PowerFormulaRow(defendHb, PowerFormulaRow.Type.Defend);
@@ -127,14 +128,24 @@ public class PowerFormulaDisplay extends EUICardDraggable<AbstractCard>
     @Override
     public void updateImpl(AbstractCard card, AbstractCreature target, boolean draggingCard, boolean shouldUpdateForCard, boolean shouldUpdateForTarget)
     {
+        PCLCard pCard = EUIUtils.safeCast(card, PCLCard.class);
         if (shouldUpdateForCard || shouldUpdateForTarget)
         {
-            if (card instanceof PCLCard)
+            if (pCard != null)
             {
-                ((PCLCard) card).formulaDisplay = this;
+                pCard.formulaDisplay = this;
                 title.setLabel(target != null ? card.name + " >> " + target.name : card.name);
-                defendHb.setOffset(0.3f, card.baseDamage > 0 && card.baseBlock > 0 ? OFFSET2 : OFFSET1);
-                enemyAttackHb.setOffset(0.3f, (card.baseDamage > 0 && card.baseBlock > 0) ? OFFSET3 : (card.baseDamage > 0 || card.baseBlock > 0) ? OFFSET2 : OFFSET1);
+
+                float curOff = hb.height * -0.5f;
+                if (pCard.onAttackEffect != null)
+                {
+                    curOff = moveHitbox(attackHb, curOff);
+                }
+                if (pCard.onBlockEffect != null)
+                {
+                    curOff = moveHitbox(defendHb, curOff);
+                }
+                curOff = moveHitbox(enemyAttackHb, curOff);
             }
             else
             {
@@ -142,13 +153,13 @@ public class PowerFormulaDisplay extends EUICardDraggable<AbstractCard>
             }
         }
         title.updateImpl();
-        if (card != null)
+        if (pCard != null)
         {
-            if (card.baseDamage > 0)
+            if (pCard.onAttackEffect != null)
             {
                 attack.updateImpl(card, target, draggingCard, shouldUpdateForCard, shouldUpdateForTarget);
             }
-            if (card.baseBlock > 0)
+            if (pCard.onBlockEffect != null)
             {
                 defend.updateImpl(card, target, draggingCard, shouldUpdateForCard, shouldUpdateForTarget);
             }
@@ -156,7 +167,12 @@ public class PowerFormulaDisplay extends EUICardDraggable<AbstractCard>
         if (target != null) {
             enemyAttack.updateImpl(card, target, draggingCard, shouldUpdateForCard, shouldUpdateForTarget);
         }
+    }
 
+    protected float moveHitbox(EUIHitbox hitbox, float offset)
+    {
+        hitbox.setOffsetY(offset);
+        return offset + hb.height * OFFSET_MULT_Y;
     }
 
 }

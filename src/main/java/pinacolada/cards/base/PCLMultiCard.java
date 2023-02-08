@@ -320,7 +320,7 @@ public abstract class PCLMultiCard extends PCLCard
             }
             for (AbstractCard card : multicard.getCards()) {
                 if (card instanceof PCLCard) {
-                    ((PCLCard) card).useEffects(info);
+                    ((PCLCard) card).onUse(info);
                 } else {
                     card.use(AbstractDungeon.player, m);
                 }

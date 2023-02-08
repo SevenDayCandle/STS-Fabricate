@@ -2,6 +2,7 @@ package pinacolada.monsters;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.actions.animations.AnimateFastAttackAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -13,7 +14,6 @@ import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
-import com.megacrit.cardcrawl.vfx.BobEffect;
 import com.megacrit.cardcrawl.vfx.ExhaustBlurEffect;
 import extendedui.EUI;
 import extendedui.EUIInputManager;
@@ -23,16 +23,17 @@ import extendedui.ui.tooltips.EUICardPreview;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.misc.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
 import pinacolada.interfaces.markers.SummonOnlyMove;
 import pinacolada.misc.CombatManager;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.monsters.animations.PCLAllyAnimation;
 import pinacolada.monsters.animations.PCLAnimation;
 import pinacolada.monsters.animations.PCLSlotAnimation;
 import pinacolada.monsters.animations.pcl.PCLGeneralAllyAnimation;
 import pinacolada.powers.PSkillPower;
+import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.Skills;
 import pinacolada.utilities.GameUtilities;
@@ -145,13 +146,7 @@ public class PCLCardAlly extends PCLCreature
             {
                 target = GameUtilities.getRandomEnemy(true);
             }
-            if (this.card.isAoE()) {
-                this.card.calculateCardDamage(null);
-            }
-            else
-            {
-                this.card.refresh(GameUtilities.asMonster(target));
-            }
+            this.card.calculateCardDamage(GameUtilities.asMonster(target));
             // TODO base intent on card moves
             if (stunned)
             {
@@ -293,17 +288,11 @@ public class PCLCardAlly extends PCLCreature
                 {
                     powers.get(i).update(i);
                 }
-                if ((card.pclTarget.targetsSingle())
-                        && (hb.hovered || intentHb.hovered)
+                if ((hb.hovered || intentHb.hovered)
                         && EUIInputManager.rightClick.isJustPressed()
                         && !(AbstractDungeon.player.isDraggingCard || AbstractDungeon.player.inSingleTargetMode))
                 {
-                    PCLActions.bottom.selectCreature(card).addCallback(t -> {
-                        if (t != null)
-                        {
-                            target = t;
-                        }
-                    });
+                    tryTarget();
                 }
             }
         }
@@ -360,14 +349,23 @@ public class PCLCardAlly extends PCLCreature
         }
         else if (card != null)
         {
-            BobEffect bobEffect = getBobEffect();
-            PCLRenderHelpers.drawCentered(sb, Color.WHITE, card.attackType.getTooltip().icon, this.intentHb.cX - 40.0F * Settings.scale, this.intentHb.cY + bobEffect.y - 12.0F * Settings.scale, card.attackType.getTooltip().icon.getRegionWidth(), card.attackType.getTooltip().icon.getRegionHeight(), 0.9f, 0f);
-            if (card.hitCount > 1) {
-                FontHelper.renderFontLeftTopAligned(sb, FontHelper.topPanelInfoFont, card.damage + "x" + card.hitCount, this.intentHb.cX, this.intentHb.cY + bobEffect.y - 12.0F * Settings.scale, Settings.CREAM_COLOR);
-            } else {
-                FontHelper.renderFontLeftTopAligned(sb, FontHelper.topPanelInfoFont, Integer.toString(card.damage), this.intentHb.cX, this.intentHb.cY + bobEffect.y - 12.0F * Settings.scale, Settings.CREAM_COLOR);
+            float startY = this.intentHb.cY + getBobEffect().y  - 12.0F * Settings.scale;
+            if (card.onAttackEffect != null)
+            {
+                startY = renderIntentIcon(sb, card.attackType.getTooltip().icon, card.hitCount > 1 ? card.damage + "x" + card.hitCount : Integer.toString(card.damage), startY);
+            }
+            if (card.onBlockEffect != null)
+            {
+                startY = renderIntentIcon(sb, PGR.core.tooltips.block.icon, card.rightCount > 1 ? card.block + "x" + card.rightCount : Integer.toString(card.block), startY);
             }
         }
+    }
+
+    protected float renderIntentIcon(SpriteBatch sb, TextureRegion icon, String count, float startY)
+    {
+        PCLRenderHelpers.drawCentered(sb, Color.WHITE, icon, this.intentHb.cX - 40.0F * Settings.scale, startY, icon.getRegionWidth(), icon.getRegionHeight(), 0.9f, 0f);
+        FontHelper.renderFontLeftTopAligned(sb, FontHelper.topPanelInfoFont, count, this.intentHb.cX, startY, Settings.CREAM_COLOR);
+        return startY + icon.getRegionHeight() + Settings.scale * 10f;
     }
 
     public boolean isHovered()
@@ -375,11 +373,25 @@ public class PCLCardAlly extends PCLCreature
         return card != null && (hb.hovered || intentHb.hovered);
     }
 
+    public void tryTarget()
+    {
+        if (card.pclTarget.targetsSingle())
+        {
+            PCLActions.bottom.selectCreature(card).addCallback(t -> {
+                if (t != null)
+                {
+                    setTarget(t);
+                }
+            });
+        }
+    }
+
     public void setTarget(AbstractCreature target)
     {
         if (!GameUtilities.isDeadOrEscaped(target))
         {
             this.target = target;
+            refreshAction();
         }
     }
 }

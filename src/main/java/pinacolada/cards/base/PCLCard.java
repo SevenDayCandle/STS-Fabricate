@@ -116,7 +116,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     public PCLAttackType attackType = PCLAttackType.Normal;
     public PCLCardSaveData auxiliaryData = new PCLCardSaveData();
     public PCLCardTarget pclTarget = PCLCardTarget.Single;
-    public PCardPrimary_DealDamage onDamageEffect;
+    public PCardPrimary_DealDamage onAttackEffect;
     public PCardPrimary_GainBlock onBlockEffect;
     public boolean hovered;
     public boolean isHealModified = false;
@@ -387,28 +387,28 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     }
 
     protected PCardPrimary_DealDamage addDamageMove() {
-        onDamageEffect = new PCardPrimary_DealDamage(this);
-        return onDamageEffect;
+        onAttackEffect = new PCardPrimary_DealDamage(this);
+        return onAttackEffect;
     }
 
     protected PCardPrimary_DealDamage addDamageMove(PCLAttackVFX attackEffect) {
-        onDamageEffect = new PCardPrimary_DealDamage(this, attackEffect.key);
-        return onDamageEffect;
+        onAttackEffect = new PCardPrimary_DealDamage(this, attackEffect.key);
+        return onAttackEffect;
     }
 
     protected PCardPrimary_DealDamage addDamageMove(AbstractGameAction.AttackEffect attackEffect) {
-        onDamageEffect = new PCardPrimary_DealDamage(this, attackEffect);
-        return onDamageEffect;
+        onAttackEffect = new PCardPrimary_DealDamage(this, attackEffect);
+        return onAttackEffect;
     }
 
     protected PCardPrimary_DealDamage addDamageMove(EffekseerEFK efx) {
-        onDamageEffect = new PCardPrimary_DealDamage(this).setDamageEffect(efx);
-        return onDamageEffect;
+        onAttackEffect = new PCardPrimary_DealDamage(this).setDamageEffect(efx);
+        return onAttackEffect;
     }
 
     protected PCardPrimary_DealDamage addDamageMove(AbstractGameAction.AttackEffect attackEffect, EffekseerEFK efx) {
-        onDamageEffect = new PCardPrimary_DealDamage(this, attackEffect).setDamageEffect(efx);
-        return onDamageEffect;
+        onAttackEffect = new PCardPrimary_DealDamage(this, attackEffect).setDamageEffect(efx);
+        return onAttackEffect;
     }
 
     public void addDefendDisplay(AbstractPower p, float oldDamage, float tempDamage) {
@@ -568,7 +568,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
 
     public void fullReset() {
         this.clearSkills();
-        this.onDamageEffect = null;
+        this.onAttackEffect = null;
         this.onBlockEffect = null;
 
         setupProperties(cardData, this.auxiliaryData.form, timesUpgraded);
@@ -651,15 +651,15 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
 
     public PCardPrimary_DealDamage getCardDamage()
     {
-        return onDamageEffect;
+        return onAttackEffect;
     }
 
     public ColoredTexture getCardAttributeBanner() {
         if (rarity == PCLEnum.CardRarity.LEGENDARY || rarity == PCLEnum.CardRarity.SECRET)
         {
-            return new ColoredTexture((isPopup ? PGR.core.images.cardBanner : PGR.core.images.cardBannerAttribute2).texture(), getRarityColor());
+            return new ColoredTexture((isPopup ? PCLCoreImages.cardBanner : PCLCoreImages.cardBannerAttribute2).texture(), getRarityColor());
         }
-        return new ColoredTexture((isPopup ? PGR.core.images.cardBannerAttributeL : PGR.core.images.cardBannerAttribute).texture(), getRarityColor());
+        return new ColoredTexture((isPopup ? PCLCoreImages.cardBannerAttributeL : PCLCoreImages.cardBannerAttribute).texture(), getRarityColor());
     }
 
     protected Texture getCardBackground() {
@@ -930,7 +930,16 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     }
 
     public ArrayList<PSkill<?>> getFullEffects() {
-        ArrayList<PSkill<?>> result = new ArrayList<>(getEffects());
+        ArrayList<PSkill<?>> result = new ArrayList<>();
+        if (onAttackEffect != null)
+        {
+            result.add(onAttackEffect);
+        }
+        if (onBlockEffect != null)
+        {
+            result.add(onBlockEffect);
+        }
+        result.addAll(getEffects());
         result.addAll(getAugmentSkills());
         return result;
     }
@@ -1138,7 +1147,12 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         return makePowerString(rawDescription);
     }
 
+    // Block subeffects may affect the final block output (but they should not be triggering any other triggers)
     protected float modifyBlock(AbstractMonster enemy, float amount) {
+        if (onBlockEffect != null)
+        {
+            amount = onBlockEffect.modifyBlock(this, enemy, amount);
+        }
         for (PSkill<?> be : getFullEffects()) {
             amount = be.modifyBlock(this, enemy, amount);
         }
@@ -1177,13 +1191,6 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         doEffects(be -> be.onDrag(m));
     }
 
-    public void onLateUse(PCLUseInfo info) {
-
-    }
-
-    public void onPreUse(PCLUseInfo info) {
-    }
-
     @Override
     public void onRemovedFromDeck()
     {
@@ -1201,35 +1208,14 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         if (dontTriggerOnUseCard) {
             doEffects(be -> be.triggerOnEndOfTurn(true));
         } else {
-            if (onDamageEffect != null) {
-                onDamageEffect.use(info);
-            }
-            if (onBlockEffect != null) {
-                onBlockEffect.use(info);
-            }
             doEffects(be -> be.use(info));
         }
-    }
-
-    public void useEffects(PCLUseInfo info)
-    {
-        onPreUse(info);
-        onUse(info);
-        onLateUse(info);
     }
 
     // Used by summons when triggered, as power effects should only be cast when the summon is first summoned
     public void useEffectsWithoutPowers(PCLUseInfo info)
     {
-        onPreUse(info);
-        if (onDamageEffect != null) {
-            onDamageEffect.use(info);
-        }
-        if (onBlockEffect != null) {
-            onBlockEffect.use(info);
-        }
         doNonPowerEffects(be -> be.use(info));
-        onLateUse(info);
     }
 
     public AbstractCreature getSourceCreature()
@@ -1477,9 +1463,9 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         cardData.invokeTags(this, this.auxiliaryData.form);
         setTarget(cardData.getTargetUpgrade(this.auxiliaryData.form));
         this.name = getUpgradeName();
-        if (onDamageEffect != null)
+        if (onAttackEffect != null)
         {
-            onDamageEffect.setAmountFromCard().onUpgrade();
+            onAttackEffect.setAmountFromCard().onUpgrade();
         }
         if (onBlockEffect != null)
         {
@@ -1705,9 +1691,9 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     protected void updateDamage(float amount) {
         damage = Math.max(0, MathUtils.floor(amount));
         this.isDamageModified = (baseDamage != damage);
-        if (onDamageEffect != null)
+        if (onAttackEffect != null)
         {
-            onDamageEffect.setAmountFromCard();
+            onAttackEffect.setAmountFromCard();
         }
     }
 
@@ -1864,10 +1850,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     @Override
     public final void use(AbstractPlayer p1, AbstractMonster m1) {
         final PCLUseInfo info = CombatManager.playerSystem.generateInfo(this, p1, m1);
-
-        onPreUse(info);
         onUse(info);
-        onLateUse(info);
     }
 
     @Override
