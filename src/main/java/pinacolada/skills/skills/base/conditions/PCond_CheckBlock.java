@@ -5,6 +5,7 @@ import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.interfaces.subscribers.OnBlockGainedSubscriber;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
@@ -15,7 +16,7 @@ import pinacolada.skills.skills.PPassiveCond;
 import java.util.List;
 
 @VisibleSkill
-public class PCond_CheckBlock extends PPassiveCond<PField_Not>
+public class PCond_CheckBlock extends PPassiveCond<PField_Not> implements OnBlockGainedSubscriber
 {
     public static final PSkillData<PField_Not> DATA = register(PCond_CheckBlock.class, PField_Not.class);
 
@@ -55,6 +56,11 @@ public class PCond_CheckBlock extends PPassiveCond<PField_Not>
     public String getSubText()
     {
         String baseString = amount > 1 ? EUIRM.strings.numNoun(amount + "+", PGR.core.tooltips.block) : amount == 0 ? EUIRM.strings.numNoun(amount, PGR.core.tooltips.block) : PGR.core.tooltips.block.toString();
+        if (isTrigger())
+        {
+            return getWheneverString(TEXT.act_gain(baseString));
+        }
+
         switch (target)
         {
             case All:
@@ -68,6 +74,15 @@ public class PCond_CheckBlock extends PPassiveCond<PField_Not>
                 return TEXT.cond_ifYouHave(baseString);
             default:
                 return baseString;
+        }
+    }
+
+    @Override
+    public void onBlockGained(AbstractCreature t, int block)
+    {
+        if (this.childEffect != null && target.targetsSingle() ? t == getOwnerCreature() : target.getTargets(t, t).contains(t))
+        {
+            useFromTrigger(makeInfo(t));
         }
     }
 }

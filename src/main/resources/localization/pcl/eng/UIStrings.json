@@ -128,7 +128,7 @@
 												"{#o:Left-click} a card to edit it. {#o:Right-click} a card for more options.",
 												"Custom cards can be obtained in #yCustom #yRuns with the #yEnable #yCustom #yCards option selected or through the #oobtaincustom command in Basemod's console.",
 												"Update the custom card list to reflect the cards present in your custom cards folder. | This will remove any cards that have been moved out of the custom card folder.",
-												"You may change a card's form when you upgrade it at a campfire. All forms share the same #yPrimary #yAttributes, but their other attributes and effects may differ.",
+												"You may change a card's form when you upgrade it at a campfire. All forms share the same #yPrimary #yInfo, but their other attributes and effects may differ.",
 												"Choose the image to use for this card's portrait",
 												"Flags qualify cards for certain checks (e.g. counting as a #yStrike for {#y:Perfected Strike}).",
 												"Tags affect the way the player interacts with a card (e.g. what happens after they play it). Most tags are removed after activation.",
