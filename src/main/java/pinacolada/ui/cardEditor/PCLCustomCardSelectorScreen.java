@@ -11,13 +11,14 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
+import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUI;
 import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT0;
 import extendedui.interfaces.delegates.ActionT3;
-import extendedui.ui.AbstractScreen;
+import extendedui.ui.AbstractMenuScreen;
 import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
@@ -36,7 +37,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
-public class PCLCustomCardSelectorScreen extends AbstractScreen
+public class PCLCustomCardSelectorScreen extends AbstractMenuScreen
 {
     protected static final float ITEM_HEIGHT = AbstractCard.IMG_HEIGHT * 0.15f;
     private static final float DRAW_START_X = (Settings.WIDTH - (5f * AbstractCard.IMG_WIDTH * 0.75f) - (4f * Settings.CARD_VIEW_PAD_X) + AbstractCard.IMG_WIDTH * 0.75f);
@@ -58,7 +59,7 @@ public class PCLCustomCardSelectorScreen extends AbstractScreen
     protected EUIImage backgroundImage;
     protected EUITextBox info;
     protected HashMap<AbstractCard, PCLCustomCardSlot> currentSlots = new HashMap<>();
-    protected PCLEffectWithCallback currentEffect;
+    protected PCLEffectWithCallback<?> currentEffect;
     private AbstractCard clickedCard;
 
     public PCLCustomCardSelectorScreen()
@@ -246,6 +247,9 @@ public class PCLCustomCardSelectorScreen extends AbstractScreen
         return EUIUtils.mapAsNonnull(PCLCardData.getAllData(false, false, data -> data.resources == PGR.core),
                 data -> {
                     AbstractCard card = CardLibrary.getCard(data.ID);
+                    UnlockTracker.markCardAsSeen(data.ID);
+                    card.isSeen = true;
+                    card.isLocked = false;
                     return PCLCustomCardSlot.canFullyCopyCard(card) ? card : null;
                 });
     }
@@ -334,6 +338,8 @@ public class PCLCustomCardSelectorScreen extends AbstractScreen
         }
         else
         {
+            // Do not close the screen with esc if there is an effect going on
+            super.updateImpl();
             contextMenu.tryUpdate();
             boolean shouldDoStandardUpdate = !EUI.cardFilters.tryUpdate() && !CardCrawlGame.isPopupOpen;
             if (shouldDoStandardUpdate)

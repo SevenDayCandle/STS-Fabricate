@@ -132,8 +132,9 @@ public class PCLCoreStrings extends PCLStrings
     public final String ctype_team = cardtype.TEXT[10];
     public final String ctype_legendary = cardtype.TEXT[11];
     public final String ctype_secretRare = cardtype.TEXT[12];
-    public final String ctype_tagAoE = cardtype.EXTRA_TEXT[0];
-    public final String ctype_tagRandom = cardtype.EXTRA_TEXT[1];
+    public final String ctype_tagAll = cardtype.EXTRA_TEXT[0];
+    public final String ctype_tagAoE = cardtype.EXTRA_TEXT[1];
+    public final String ctype_tagRandom = cardtype.EXTRA_TEXT[2];
 
     // Card Editor Tutorial
     public final String cetut_selector1 = cetut.TEXT[0];

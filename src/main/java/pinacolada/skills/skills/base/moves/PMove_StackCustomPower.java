@@ -61,7 +61,7 @@ public class PMove_StackCustomPower extends PMove<PField_CustomPower> implements
         }
 
         List<PTrigger> triggers = EUIUtils.mapAsNonnull(fields.indexes, i -> ((EditorCard) sourceCard).getPowerEffect(i));
-        for (AbstractCreature c : target.getTargets(info.source, info.target))
+        for (AbstractCreature c : getTargetList(info))
         {
             getActions().applyPower(new PSkillPower(c, amount, triggers)).allowDuplicates(true);
         }

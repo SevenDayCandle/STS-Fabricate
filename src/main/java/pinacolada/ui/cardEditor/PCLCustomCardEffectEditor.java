@@ -31,6 +31,7 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.stances.PCLStanceHelper;
@@ -267,20 +268,19 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
         origins.setItems(PSkill.getEligibleOrigins(curEffect))
                 .setActive(origins.getAllItems().size() > 1);
 
-        float xOff = AUX_OFFSET;
-        additionalHeight = 0;
-        if (targets.isActive)
-        {
-            targets.setSelection(curEffect != null ? curEffect.target : PCLCardTarget.None, false);
-            xOff = position(targets, xOff);
-        }
-
         if (curEffect != null && lastEffect != curEffect)
         {
             lastEffect = curEffect;
             activeElements.clear();
             curEffect.fields.setupEditor(this);
 
+            float xOff = AUX_OFFSET;
+            additionalHeight = 0;
+            if (targets.isActive)
+            {
+                targets.setSelection(curEffect.target, false);
+                xOff = position(targets, xOff);
+            }
             for (EUIHoverable element : activeElements)
             {
                 xOff = position(element, xOff);
@@ -416,7 +416,7 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
     @Override
     public TextureCache getTextureCache()
     {
-        return PGR.core.images.editorEffect;
+        return PCLCoreImages.editorEffect;
     }
 
     protected String getTitleForPriority()

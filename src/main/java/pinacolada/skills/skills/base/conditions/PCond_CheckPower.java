@@ -44,6 +44,7 @@ public class PCond_CheckPower extends PPassiveCond<PField_Power> implements OnAp
         fields.setPower(powers);
     }
 
+    // fields.debuff is treated as a "not" condition if the amount is above 0
     private boolean checkPowers(PCLPowerHelper po, AbstractCreature t)
     {
         return amount == 0 ? GameUtilities.getPowerAmount(t, po.ID) == amount :
@@ -63,7 +64,7 @@ public class PCond_CheckPower extends PPassiveCond<PField_Power> implements OnAp
         baseString = fields.random ? EUIRM.strings.numNoun("< " + amount, baseString) : this.amount == 1 ? baseString : EUIRM.strings.numNoun((this.amount == 0 ? this.amount : this.amount + "+"), baseString);
         if (isTrigger())
         {
-            return TEXT.cond_wheneverYou(target == PCLCardTarget.Self ? TEXT.act_gain(baseString) : TEXT.act_apply(baseString));
+            return getWheneverString(TEXT.act_gain(baseString));
         }
 
         switch (target)
@@ -85,10 +86,11 @@ public class PCond_CheckPower extends PPassiveCond<PField_Power> implements OnAp
     @Override
     public void onApplyPower(AbstractPower power, AbstractCreature t, AbstractCreature source)
     {
+        // For single target powers, the power target needs to match the owner of this skill
         if (this.childEffect != null && fields.powers.isEmpty() ? power.type == (fields.debuff ? AbstractPower.PowerType.DEBUFF : AbstractPower.PowerType.BUFF)
-                : fields.getPowerFilter().invoke(power) && source == getSourceCreature() && target == PCLCardTarget.Self ^ !(source == t))
+                : fields.getPowerFilter().invoke(power) && target.targetsSingle() ? t == getOwnerCreature() : target.getTargets(source, t).contains(t))
         {
-            useFromTrigger(makeInfo(null).setData(power));
+            useFromTrigger(makeInfo(t).setData(power));
         }
     }
 

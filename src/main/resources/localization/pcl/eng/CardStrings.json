@@ -1,6 +1,9 @@
 {
 				"COLORLESS":	{
+								"pcl:Apotheosis": {"NAME": "Apotheosis"},
+								"pcl:Chrysalis": {"NAME": "Chrysalis"},
 								"pcl:Insight": {"NAME": "Insight"},
+								"pcl:Metamorphosis": {"NAME": "Metamorphosis"},
 								"pcl:Miracle": {"NAME": "Miracle"}
 				},
 				"CURSE":	{

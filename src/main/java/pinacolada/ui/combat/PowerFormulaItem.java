@@ -8,7 +8,7 @@ import com.megacrit.cardcrawl.helpers.FontHelper;
 import extendedui.ui.EUIHoverable;
 import extendedui.ui.controls.EUILabel;
 import extendedui.ui.hitboxes.EUIHitbox;
-import extendedui.ui.hitboxes.PercentageRelativeHitbox;
+import extendedui.ui.hitboxes.RelativeHitbox;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class PowerFormulaItem extends EUIHoverable
@@ -23,12 +23,12 @@ public class PowerFormulaItem extends EUIHoverable
     protected PowerFormulaItem(EUIHitbox hb, boolean isPlayer, float result)
     {
         super(hb);
-        this.owner = new EUILabel(FontHelper.powerAmountFont, new PercentageRelativeHitbox(hb, 1, 1, 0.2f, 1.1f))
+        this.owner = new EUILabel(FontHelper.powerAmountFont, RelativeHitbox.fromPercentages(hb, 1, 1, 0.2f, 1.1f))
                 .setLabel(isPlayer ? 'P' : 'E')
                 .setColor(isPlayer ? Color.ROYAL : Color.SALMON);
-        this.modifier = new EUILabel(FontHelper.powerAmountFont, new PercentageRelativeHitbox(hb, 1, 1, 0f, -1.2f))
+        this.modifier = new EUILabel(FontHelper.powerAmountFont, RelativeHitbox.fromPercentages(hb, 1, 1, 0f, -1.2f))
                 .setSmartText(false);
-        this.result = new EUILabel(FontHelper.powerAmountFont, new PercentageRelativeHitbox(hb, 1, 1, 0, -2f))
+        this.result = new EUILabel(FontHelper.powerAmountFont, RelativeHitbox.fromPercentages(hb, 1, 1, 0, -2f))
                 .setLabel((int) result)
                 .setSmartText(false);
     }
@@ -37,7 +37,6 @@ public class PowerFormulaItem extends EUIHoverable
     {
         this(hb, isPlayer, result);
         this.icon = icon;
-
     }
 
     public PowerFormulaItem(EUIHitbox hb, boolean isPlayer, TextureRegion icon, float result)

@@ -13,6 +13,7 @@ import pinacolada.utilities.RandomizedList;
 import java.util.ArrayList;
 
 // Copied and modified from STS-AnimatorMod
+// Wrapper for EvokeSpecificOrbAction with additional options
 public class EvokeOrb extends PCLActionWithCallback<ArrayList<AbstractOrb>>
 {
     protected final ArrayList<AbstractOrb> orbs = new ArrayList<>();

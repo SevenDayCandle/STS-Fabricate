@@ -68,12 +68,13 @@ public class EffectEditorGroup<T extends PSkill<?>> extends EUIBase
 
     public float reposition(float offsetY)
     {
+        float offset = offsetY;
         for (PCLCustomCardEffectEditor<T> editor : editors)
         {
-            editor.hb.setOffsetY(offsetY);
-            offsetY += PCLCustomCardEffectPage.OFFSET_EFFECT * 2 + editor.getAdditionalHeight();
+            editor.hb.setOffsetY(offset);
+            offset += PCLCustomCardEffectPage.OFFSET_EFFECT * 2 + editor.getAdditionalHeight();
         }
-        return offsetY;
+        return offset;
     }
 
     public List<T> getAllEffects()

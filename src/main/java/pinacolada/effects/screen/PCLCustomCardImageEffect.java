@@ -409,6 +409,7 @@ public class PCLCustomCardImageEffect extends PCLEffectWithCallback<Pixmap>
                 }
             }
 
+            // TODO see if there is a way to check for the "paste" function for different operating systems
             if ((Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT)) && Gdx.input.isKeyJustPressed(Input.Keys.V))
             {
                 getImageFromClipboard();

@@ -6,7 +6,7 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT2;
 import extendedui.interfaces.delegates.FuncT0;
-import extendedui.ui.AbstractScreen;
+import extendedui.ui.AbstractDungeonScreen;
 import pinacolada.actions.pileSelection.SelectFromPile;
 import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentData;
@@ -19,7 +19,7 @@ import pinacolada.ui.cardView.PCLAugmentList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PCLAugmentScreen extends AbstractScreen
+public class PCLAugmentScreen extends AbstractDungeonScreen
 {
     protected PCLAugmentList panel;
     protected PCLEffect curEffect;

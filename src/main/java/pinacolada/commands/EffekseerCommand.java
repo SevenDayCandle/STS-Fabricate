@@ -23,6 +23,7 @@ public class EffekseerCommand extends ConsoleCommand
     {
         try {
             EffekseerEFK augment = EffekseerEFK.get(tokens[1]);
+            // TODO play the EFX manually outside of the queue
             PCLEffects.Queue.playEFX(augment);
         }
         catch (IllegalArgumentException e)

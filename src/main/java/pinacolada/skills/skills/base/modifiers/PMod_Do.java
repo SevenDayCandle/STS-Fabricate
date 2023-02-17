@@ -76,7 +76,7 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory>
     @Override
     public String getSubText()
     {
-        return fields.getFullCardOrString(1);
+        return fields.getFullCardStringSingular();
     }
 
     @Override

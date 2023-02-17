@@ -17,7 +17,7 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT0;
 import extendedui.interfaces.delegates.ActionT2;
 import extendedui.interfaces.delegates.FuncT1;
-import extendedui.ui.AbstractScreen;
+import extendedui.ui.AbstractMenuScreen;
 import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
@@ -32,7 +32,7 @@ import pinacolada.resources.loadout.PCLLoadout;
 import static pinacolada.ui.characterSelection.PCLLoadoutsContainer.MINIMUM_CARDS;
 
 // Copied and modified from STS-AnimatorMod
-public class PCLSeriesSelectScreen extends AbstractScreen
+public class PCLSeriesSelectScreen extends AbstractMenuScreen
 {
     public final PCLLoadoutsContainer container = new PCLLoadoutsContainer();
     public final EUIImage backgroundImage;
@@ -316,6 +316,10 @@ public class PCLSeriesSelectScreen extends AbstractScreen
             {
                 return;
             }
+        }
+        else
+        {
+            super.updateImpl();
         }
 
         if (totalCardsCache != container.totalCardsInPool)

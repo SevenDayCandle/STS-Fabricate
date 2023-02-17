@@ -162,7 +162,7 @@ public class AbstractMonsterPatches
                 // null means aoe
                 if (c == null)
                 {
-                    FontHelper.renderFontCentered(sb, FontHelper.tipBodyFont, PCLCardTarget.AllEnemy.getTag(), __instance.intentHb.cX - 64.0F, __instance.intentHb.cY - 90.0F + GameUtilities.getBobEffect(__instance).y, Settings.CREAM_COLOR);
+                    FontHelper.renderFontCentered(sb, FontHelper.tipBodyFont, PCLCardTarget.AllEnemy.getShortString(), __instance.intentHb.cX - 64.0F, __instance.intentHb.cY - 90.0F + GameUtilities.getBobEffect(__instance).y, Settings.CREAM_COLOR);
                 }
                 else if (c != AbstractDungeon.player && (__instance.hb.hovered || __instance.intentHb.hovered))
                 {

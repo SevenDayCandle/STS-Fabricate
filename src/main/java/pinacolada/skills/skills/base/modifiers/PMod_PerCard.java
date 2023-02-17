@@ -41,7 +41,7 @@ public class PMod_PerCard extends PMod_Per<PField_CardCategory>
     @Override
     public String getConditionText()
     {
-        return this.amount <= 1 ? fields.getFullCardOrString(1) : EUIRM.strings.numNoun(getAmountRawString(), fields.getFullCardOrString(1));
+        return this.amount <= 1 ? fields.getFullCardStringSingular() : EUIRM.strings.numNoun(getAmountRawString(), fields.getFullCardStringSingular());
     }
 
     @Override

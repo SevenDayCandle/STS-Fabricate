@@ -122,10 +122,10 @@ public class PCLCustomCardSlot
         }
     }
 
-    // Only allow a card to be copied into a custom card slot if it is a PCLCard, if it is seen, and if all of its skills are in AVAILABLE_SKILLS (i.e. selectable in the card editor)
+    // Only allow a card to be copied into a custom card slot if it is a PCLCard and if all of its skills are in AVAILABLE_SKILLS (i.e. selectable in the card editor)
     public static boolean canFullyCopyCard(AbstractCard card)
     {
-        if (card instanceof PCLCard && !card.isLocked && card.isSeen)
+        if (card instanceof PCLCard)
         {
             return EUIUtils.all(((PCLCard) card).getFullSubEffects(), skill -> skill != null && skill.getClass().isAnnotationPresent(VisibleSkill.class));
         }

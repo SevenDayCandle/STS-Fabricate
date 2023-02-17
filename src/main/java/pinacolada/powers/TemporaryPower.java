@@ -116,6 +116,7 @@ public class TemporaryPower extends PCLPower
         }
         else
         {
+            // If a power was made with constructorT2, it means that the power is amount based
             if (amount < 0 && constructorT2 != null)
             {
                 PCLActions.top.applyPower(constructorT2.invoke(owner, -amount)).ignoreArtifact(true);

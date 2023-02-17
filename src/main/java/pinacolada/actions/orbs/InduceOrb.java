@@ -10,6 +10,7 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
+@Deprecated
 public class InduceOrb extends PCLActionWithCallback<ArrayList<AbstractOrb>>
 {
     protected final ArrayList<AbstractOrb> inducedOrbs = new ArrayList<>();

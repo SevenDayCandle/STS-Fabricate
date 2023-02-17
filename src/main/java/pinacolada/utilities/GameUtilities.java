@@ -1894,7 +1894,7 @@ public class GameUtilities
 
     public static boolean isTopPanelVisible()
     {
-        return AbstractDungeon.topPanel != null && !Settings.hideTopBar;
+        return GameUtilities.inGame() && AbstractDungeon.topPanel != null && !Settings.hideTopBar;
     }
 
     public static boolean isTurnBasedPower(AbstractPower power)

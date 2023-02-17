@@ -688,9 +688,9 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         {
             if (rarity == PCLEnum.CardRarity.LEGENDARY || rarity == PCLEnum.CardRarity.SECRET)
             {
-                return (isPopup ? PGR.core.images.cardBanner2L : PGR.core.images.cardBanner2).texture();
+                return (isPopup ? PCLCoreImages.cardBanner2L : PCLCoreImages.cardBanner2).texture();
             }
-            return (isPopup ? PGR.core.images.cardBannerL : PGR.core.images.cardBanner).texture();
+            return (isPopup ? PCLCoreImages.cardBannerL : PCLCoreImages.cardBanner).texture();
         }
         return null;
     }
@@ -744,10 +744,6 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
 
     public Texture getPortraitImageTexture() {
         return portraitImg.texture;
-    }
-
-    public int getAffinityValue(PCLAffinity requirement) {
-        return affinities.getLevel(requirement);
     }
 
     public int hitCount() {
@@ -831,20 +827,20 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         {
             if (type == PCLEnum.CardType.SUMMON)
             {
-                return isPopup ? PGR.core.images.cardFrameSummonL.texture() : PGR.core.images.cardFrameSummon.texture();
+                return isPopup ? PCLCoreImages.cardFrameSummonL.texture() : PCLCoreImages.cardFrameSummon.texture();
             }
             switch (type) {
                 case ATTACK:
-                    return isPopup ? PGR.core.images.cardFrameAttackL.texture() : PGR.core.images.cardFrameAttack.texture();
+                    return isPopup ? PCLCoreImages.cardFrameAttackL.texture() : PCLCoreImages.cardFrameAttack.texture();
 
                 case POWER:
-                    return isPopup ? PGR.core.images.cardFramePowerL.texture() : PGR.core.images.cardFramePower.texture();
+                    return isPopup ? PCLCoreImages.cardFramePowerL.texture() : PCLCoreImages.cardFramePower.texture();
 
                 case SKILL:
                 case CURSE:
                 case STATUS:
                 default:
-                    return isPopup ? PGR.core.images.cardFrameSkillL.texture() : PGR.core.images.cardFrameSkill.texture();
+                    return isPopup ? PCLCoreImages.cardFrameSkillL.texture() : PCLCoreImages.cardFrameSkill.texture();
             }
         }
         return null;

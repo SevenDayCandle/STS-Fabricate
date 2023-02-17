@@ -10,7 +10,7 @@ import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
 import com.megacrit.cardcrawl.screens.custom.CustomMod;
 import com.megacrit.cardcrawl.screens.custom.CustomModeScreen;
-import extendedui.ui.AbstractScreen;
+import extendedui.ui.AbstractMenuScreen;
 import pinacolada.interfaces.markers.RunAttributesProvider;
 import pinacolada.trials.PCLCustomTrial;
 
@@ -18,9 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 // TODO fix dropdown
-public class PCLCustomRunScreen extends AbstractScreen implements RunAttributesProvider
+public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttributesProvider
 {
-
     protected final PCLCustomRunCanvas canvas;
     public boolean isAscensionMode;
     public int ascensionLevel;
@@ -107,6 +106,7 @@ public class PCLCustomRunScreen extends AbstractScreen implements RunAttributesP
 
     public void updateImpl()
     {
+        super.updateImpl();
         canvas.updateImpl();
     }
 

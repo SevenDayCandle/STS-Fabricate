@@ -154,6 +154,11 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return can ? StringUtils.capitalize(base) : base;
     }
 
+    /**
+     * Establishes a parent child relationship from left to right
+     * The first skill in the argument will be the parent of the second, the second the parent of the third, and so on
+     * Returns the highest skill in the resulting chain
+     * */
     public static <V extends PSkill<?>> V chain(V first, PSkill<?>... next)
     {
         PSkill<?> current = first;
@@ -764,6 +769,11 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return source != null ? source.getName() : "";
     }
 
+    /**
+     * If this skill is on a power, get the creature that this power is attached to. Otherwise, acts the same as getSourceCreature
+     * */
+    public AbstractCreature getOwnerCreature() {return parent != null ? parent.getOwnerCreature() : getSourceCreature();}
+
     public final PSkill<?> getParent()
     {
         return parent;
@@ -813,6 +823,9 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return getSubText();
     }
 
+    /**
+     * Get the creature that owns this skill. Defaults to the player if no source was defined
+     */
     public AbstractCreature getSourceCreature()
     {
         return source != null ? source.getSourceCreature() : AbstractDungeon.player;
@@ -863,7 +876,6 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
                 return TEXT.subjects_you;
         }
     }
-
 
     public String getText(int index, boolean addPeriod)
     {
@@ -926,6 +938,8 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
                 return TEXT.cond_whenMulti(TEXT.subjects_anyAlly(), impl);
             case All:
                 return TEXT.cond_whenMulti(TEXT.subjects_anyone, impl);
+            case Self:
+                return TEXT.cond_whenMulti(TEXT.subjects_target, impl);
             default:
                 return TEXT.cond_wheneverYou(impl);
         }
@@ -1166,7 +1180,12 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
 
     public final String pluralCard()
     {
-        return EUIRM.strings.numNoun(getAmountRawString(), PGR.core.strings.subjects_cardN);
+        return EUIUtils.format(PGR.core.strings.subjects_cardN, baseAmount);
+    }
+
+    public final String pluralCardExtra()
+    {
+        return EUIUtils.format(PGR.core.strings.subjects_cardN, baseExtra);
     }
 
     public void refresh(AbstractCreature m, AbstractCard c, boolean conditionMet)

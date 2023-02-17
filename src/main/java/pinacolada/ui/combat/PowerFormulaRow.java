@@ -11,10 +11,9 @@ import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.ui.EUIHoverable;
 import extendedui.ui.controls.EUILabel;
 import extendedui.ui.hitboxes.EUIHitbox;
-import extendedui.ui.hitboxes.PercentageRelativeHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
-import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.interfaces.markers.MultiplicativePower;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.powers.PCLPowerHelper;
@@ -45,7 +44,7 @@ public class PowerFormulaRow extends EUIHoverable
         super(hb);
         this.type = type;
         this.resultHb = RelativeHitbox.fromPercentages(hb, 1, 1, getOffsetCx(0), -0.7f);
-        this.initial = new EUILabel(FontHelper.powerAmountFont, new PercentageRelativeHitbox(hb, 1, 1, 0, -0.7f))
+        this.initial = new EUILabel(FontHelper.powerAmountFont, RelativeHitbox.fromPercentages(hb, 1, 1, 0, -0.7f))
                 .setSmartText(false);
         this.result = new EUILabel(FontHelper.powerAmountFont, resultHb)
                 .setSmartText(false);
@@ -54,7 +53,7 @@ public class PowerFormulaRow extends EUIHoverable
     protected void addAffinity(PCLAffinity af, float input, float result)
     {
         powers.add(new PowerFormulaItem(RelativeHitbox.fromPercentages(hb, 1, 1, getOffsetCx(powers.size()), 1), true, af.getIcon(), result).setMultiplier(result / input));
-        resultHb.setOffset(getOffsetCx(powers.size() + 1),-0.5f);
+        resultHb.setOffset(resultHb.width * getOffsetCx(powers.size() + 1),resultHb.height * -0.5f);
     }
 
     protected void addPower(AbstractPower po, float input, float result)

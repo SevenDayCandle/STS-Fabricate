@@ -10,6 +10,7 @@ import pinacolada.powers.PCLPower;
 import pinacolada.resources.pcl.PCLCoreTooltips;
 import pinacolada.ui.combat.CombatHelper;
 
+@Deprecated
 public class PoisonPlayerPower extends PCLPower implements HealthBarRenderPower
 {
     public static final String POWER_ID = createFullID(PoisonPlayerPower.class);

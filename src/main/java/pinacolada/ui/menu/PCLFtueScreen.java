@@ -5,10 +5,10 @@ import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.screens.compendium.CardLibraryScreen;
 import com.megacrit.cardcrawl.screens.mainMenu.MenuCancelButton;
-import extendedui.ui.AbstractScreen;
+import extendedui.ui.AbstractDungeonScreen;
 import extendedui.ui.controls.EUITutorial;
 
-public class PCLFtueScreen extends AbstractScreen
+public class PCLFtueScreen extends AbstractDungeonScreen
 {
     public final MenuCancelButton button;
     protected EUITutorial current;

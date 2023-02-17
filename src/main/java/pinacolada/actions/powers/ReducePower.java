@@ -12,6 +12,8 @@ import pinacolada.powers.PCLPower;
 import pinacolada.utilities.GameUtilities;
 
 // Copied and modified from STS-AnimatorMod
+// TODO rework into patches; this may no longer be necessary due to PSkills existing
+@Deprecated
 public class ReducePower extends PCLActionWithCallback<AbstractPower>
 {
     private String powerID;

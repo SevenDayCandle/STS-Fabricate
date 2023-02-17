@@ -8,6 +8,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.effects.PCLAttackVFX;
 import pinacolada.utilities.GameUtilities;
 
+@Deprecated
 public class DarkOrbEvokeAction extends PCLAction
 {
 

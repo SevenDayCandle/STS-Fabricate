@@ -2,6 +2,7 @@ package pinacolada.skills.skills.special.primary;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
+import extendedui.EUIRM;
 import extendedui.utilities.ColoredString;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.markers.PointerProvider;
@@ -72,10 +73,11 @@ public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty>
         int count = source != null ? getExtraFromCard() : 1;
         String amountString = count > 1 ? getAmountRawString() + "x" + getExtraRawString() : getAmountRawString();
 
-        if (isSelfOnlyTarget())
+        String targetShortString = target.getShortString();
+        if (targetShortString != null)
         {
-            return TEXT.act_gainAmount(amountString, PGR.core.tooltips.block);
+            return EUIRM.strings.numAdjNoun(amountString, targetShortString, PGR.core.tooltips.block);
         }
-        return TEXT.act_objectTo(amountString, PGR.core.tooltips.block, getTargetString());
+        return EUIRM.strings.numNoun(amountString, PGR.core.tooltips.block);
     }
 }

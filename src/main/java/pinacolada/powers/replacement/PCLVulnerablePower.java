@@ -10,6 +10,7 @@ import pinacolada.misc.CombatManager;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
+// TODO use super damage receiving to check for other mods that may have modified this power
 public class PCLVulnerablePower extends VulnerablePower implements CloneablePowerInterface, MultiplicativePower
 {
     private boolean justApplied = false;

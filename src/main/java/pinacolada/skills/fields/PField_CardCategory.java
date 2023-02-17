@@ -174,6 +174,11 @@ public class PField_CardCategory extends PField_CardID
         return !cardIDs.isEmpty() ? getCardIDOrString() : isRandom() ? PSkill.TEXT.subjects_randomX(getFullCardOrString(value)) : getFullCardOrString(value);
     }
 
+    public String getFullCardStringSingular()
+    {
+        return !cardIDs.isEmpty() ? getCardIDOrString() : getFullCardOrString(1);
+    }
+
     public final String getFullCardXString(FuncT1<String, ArrayList<PCLAffinity>> affinityFunc, FuncT1<String, ArrayList<String>> joinFunc, Object value)
     {
         ArrayList<String> stringsToJoin = new ArrayList<>();

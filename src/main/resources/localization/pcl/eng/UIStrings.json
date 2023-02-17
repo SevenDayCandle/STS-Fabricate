@@ -175,8 +175,9 @@
 				},
 				"pcl:CardType": {
 								"EXTRA_TEXT": [
+												"ALL",
 												"AoE",
-												"???"
+												"Random"
 								],
 								"TEXT": [
 												"None",

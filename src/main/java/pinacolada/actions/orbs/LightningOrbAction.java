@@ -13,6 +13,7 @@ import pinacolada.effects.SFX;
 import pinacolada.powers.common.PCLLockOnPower;
 import pinacolada.utilities.GameUtilities;
 
+@Deprecated
 public class LightningOrbAction extends PCLAction
 {
     public static final int ELECTRIFIED_AMOUNT = 1;

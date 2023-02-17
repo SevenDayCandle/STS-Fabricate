@@ -5,6 +5,7 @@ import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT2;
 import extendedui.utilities.ColoredString;
@@ -103,7 +104,13 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack>
     {
         int count = source != null ? getExtraFromCard() : 1;
         String amountString = count > 1 ? getAmountRawString() + "x" + getExtraRawString() : getAmountRawString();
-        return TEXT.act_objectTo(amountString, getAttackTooltip(), getTargetString());
+
+        String targetShortString = target.getShortString();
+        if (targetShortString != null)
+        {
+            return EUIRM.strings.numAdjNoun(amountString, targetShortString, getAttackTooltip());
+        }
+        return EUIRM.strings.numNoun(amountString, getAttackTooltip());
     }
 
     public PCardPrimary_DealDamage setDamageEffect(EffekseerEFK effekseerKey)

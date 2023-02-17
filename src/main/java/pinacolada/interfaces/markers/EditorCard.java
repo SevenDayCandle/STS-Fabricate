@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import extendedui.interfaces.markers.CacheableCard;
-import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.skills.skills.PTrigger;
 
 import java.util.ArrayList;
@@ -13,14 +12,6 @@ import java.util.ArrayList;
 public interface EditorCard extends PointerProvider, CacheableCard
 {
     Texture getPortraitImageTexture();
-
-    default PTrigger getPowerEffect(int i)
-    {
-        ArrayList<PTrigger> effects = getPowerEffects();
-        return effects != null && effects.size() > i ? effects.get(i) : null;
-    }
-
-    int getAffinityValue(PCLAffinity affinity);
 
     int hitCount();
 
@@ -31,6 +22,12 @@ public interface EditorCard extends PointerProvider, CacheableCard
     int rightCountBase();
 
     void loadImage(String path, boolean refresh);
+
+    default PTrigger getPowerEffect(int i)
+    {
+        ArrayList<PTrigger> effects = getPowerEffects();
+        return effects != null && effects.size() > i ? effects.get(i) : null;
+    }
 
     default void loadImage(String path)
     {

@@ -14,7 +14,7 @@ import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT0;
 import extendedui.interfaces.delegates.ActionT2;
-import extendedui.ui.AbstractScreen;
+import extendedui.ui.AbstractMenuScreen;
 import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITooltip;
@@ -31,7 +31,7 @@ import pinacolada.utilities.GameUtilities;
 import java.util.ArrayList;
 
 // Copied and modified from STS-AnimatorMod
-public class PCLLoadoutEditor extends AbstractScreen
+public class PCLLoadoutEditor extends AbstractMenuScreen
 {
     public static final int MAX_CARD_SLOTS = 6;
     public static final int MAX_RELIC_SLOTS = 2;

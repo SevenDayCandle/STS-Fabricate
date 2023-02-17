@@ -27,6 +27,8 @@ import pinacolada.utilities.GameUtilities;
 import java.util.Collections;
 
 // Copied and modified from STS-AnimatorMod
+// TODO rework into patches; this may no longer be necessary due to PSkills existing
+@Deprecated
 public class ApplyPower extends PCLActionWithCallback<AbstractPower>
 {
     public static final String[] TEXT = ApplyPowerAction.TEXT;

@@ -719,7 +719,6 @@ public class CombatManager
         onUsingCardPostActions(card, p, m);
     }
 
-    // TODO Custom use card action
     public static void onUsingCardPostActions(AbstractCard card, AbstractPlayer p, AbstractMonster m)
     {
         PCLActions.bottom.add(new UseCardAction(card, m));
