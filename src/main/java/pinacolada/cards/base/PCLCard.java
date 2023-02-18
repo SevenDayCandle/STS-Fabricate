@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.SoulboundField;
 import com.evacipated.cardcrawl.modthespire.lib.SpireOverride;
 import com.evacipated.cardcrawl.modthespire.lib.SpireSuper;
 import com.google.gson.reflect.TypeToken;
@@ -185,7 +186,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
             augments.add(null);
         }
 
-        setupExtrTags();
+        setupExtraTags();
         setupProperties(cardData, form, timesUpgraded);
         setup(input);
         setForm(form, timesUpgraded);
@@ -1036,6 +1037,9 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     public void generateDynamicTooltips(ArrayList<EUITooltip> dynamicTooltips) {
         // Only show these tooltips outside of combat
         if (!GameUtilities.inBattle() || isPopup || (player != null && player.masterDeck.contains(this))) {
+            if (isSoulbound()) {
+                dynamicTooltips.add(PGR.core.tooltips.soulbound);
+            }
             if (cardData.canToggleFromPopup && (upgraded || cardData.unUpgradedCanToggleForms)) {
                 dynamicTooltips.add(PGR.core.tooltips.multiform);
             }
@@ -1120,6 +1124,10 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
 
     public boolean isOnScreen() {
         return current_y >= -200f * Settings.scale && current_y <= Settings.HEIGHT + 200f * Settings.scale;
+    }
+
+    public boolean isSoulbound() {
+        return SoulboundField.soulbound.get(this);
     }
 
     public boolean isStarter() {
@@ -1553,8 +1561,14 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         loadImage(imagePath);
     }
 
-    protected  void setupExtrTags()
+    protected void setupExtraTags()
     {
+        // Set Soulbound
+        if (!cardData.removableFromDeck)
+        {
+            SoulboundField.soulbound.set(this, true);
+        }
+
         if (cardData.extraTags != null)
         {
             for (CardTagItem item : cardData.extraTags)

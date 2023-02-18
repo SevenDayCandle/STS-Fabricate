@@ -45,7 +45,6 @@ import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.skills.PMultiSkill;
 import pinacolada.skills.skills.PTrigger;
-import pinacolada.skills.skills.base.primary.PTrigger_Interactable;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RotatingList;
 
@@ -1000,11 +999,6 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
     public final boolean isSelfOnlyTarget()
     {
         return (target == PCLCardTarget.None || (target == PCLCardTarget.Self && !isFromCreature()));
-    }
-
-    public final boolean isTrigger()
-    {
-        return hasParentType(PTrigger.class) && !hasParentType(PTrigger_Interactable.class) && !(parent != null && parent.hasParentType(PCond.class));
     }
 
     /*

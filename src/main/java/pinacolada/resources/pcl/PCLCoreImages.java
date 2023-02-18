@@ -105,8 +105,6 @@ public class PCLCoreImages extends PCLImages
     public static class CardIcons
     {
         public static final TextureCache block = new TextureCache("images/pcl/cardui/core/Block.png");
-        public static final TextureCache blockScaling = new TextureCache("images/pcl/cardui/core/BlockScaling.png");
-        public static final TextureCache blockscalingL = new TextureCache("images/pcl/cardui/core/1024/BlockScaling.png");
         public static final TextureCache blockL = new TextureCache("images/pcl/cardui/core/1024/Block.png");
         public static final TextureCache branchUpgrade = new TextureCache("images/pcl/cardui/core/BranchUpgrade.png");
         public static final TextureCache branchupgradeL = new TextureCache("images/pcl/cardui/core/1024/BranchUpgrade.png");
@@ -124,6 +122,8 @@ public class PCLCoreImages extends PCLImages
         public static final TextureCache piercingL = new TextureCache("images/pcl/cardui/core/1024/PiercingDamage.png");
         public static final TextureCache ranged = new TextureCache("images/pcl/cardui/core/RangedDamage.png");
         public static final TextureCache rangedL = new TextureCache("images/pcl/cardui/core/1024/RangedDamage.png");
+        public static final TextureCache soulbound = new TextureCache("images/pcl/cardui/core/Soulbound.png");
+        public static final TextureCache soulboundL = new TextureCache("images/pcl/cardui/core/1024/Soulbound.png");
         public static final TextureCache tempHP = new TextureCache("images/pcl/cardui/core/TempHP.png");
         public static final TextureCache temphpL = new TextureCache("images/pcl/cardui/core/1024/TempHP.png");
         public static final TextureCache ultraRare = new TextureCache("images/pcl/cardui/core/UltraRare.png");

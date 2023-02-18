@@ -56,7 +56,7 @@ public class PCond_CheckBlock extends PPassiveCond<PField_Not> implements OnBloc
     public String getSubText()
     {
         String baseString = amount > 1 ? EUIRM.strings.numNoun(amount + "+", PGR.core.tooltips.block) : amount == 0 ? EUIRM.strings.numNoun(amount, PGR.core.tooltips.block) : PGR.core.tooltips.block.toString();
-        if (isTrigger())
+        if (isWhenClause())
         {
             return getWheneverString(TEXT.act_gain(baseString));
         }

@@ -37,7 +37,7 @@ public class EffectEditorGroup<T extends PSkill<?>> extends EUIBase
     }
 
     // Add a subeffect to this joint effect, and select the first effect in the list to prevent the user from saving a null effect
-    public void addEffectSlot()
+    public PCLCustomCardEffectEditor<T> addEffectSlot()
     {
         lowerEffects.add(null);
         PCLCustomCardEffectEditor<T> effectEditor = new PCLCustomCardEffectEditor<T>(this, new OriginRelativeHitbox(editor.hb, PCLCustomCardEffectPage.MENU_WIDTH, PCLCustomCardEffectPage.MENU_HEIGHT, 0, 0), editors.size());
@@ -47,6 +47,7 @@ public class EffectEditorGroup<T extends PSkill<?>> extends EUIBase
             effectEditor.effects.setSelectedIndex(0);
         }
         editor.refresh();
+        return effectEditor;
     }
 
     public void removeEffectSlot(int index)

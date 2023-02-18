@@ -42,7 +42,7 @@ public class PCond_TakeDamage extends PPassiveCond<PField_Empty> implements OnLo
     @Override
     public String getSubText()
     {
-        if (isTrigger())
+        if (isWhenClause())
         {
             return getWheneverString(TEXT.cond_takeDamage(target.ordinal()));
         }

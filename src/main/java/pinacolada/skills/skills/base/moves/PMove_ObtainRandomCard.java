@@ -58,12 +58,16 @@ public class PMove_ObtainRandomCard extends PMove<PField_CardCategory>
         while (choice.size() < limit)
         {
             AbstractCard c = GameUtilities.getRandomCard(fields.rarities, fields.types, fields.affinities);
-            if (c != null && !EUIUtils.any(choice.group, ca -> ca.cardID.equals(c.cardID)))
+            if (c == null)
+            {
+                break;
+            }
+            if (!EUIUtils.any(choice.group, ca -> ca.cardID.equals(c.cardID)))
             {
                 choice.addToBottom(c.makeCopy());
             }
         }
-        boolean automatic = extra <= amount;
+        boolean automatic = choice.size() <= amount;
         getActions().selectFromPile(getName(), amount, choice)
                 .setOptions((automatic ? PCLCardSelection.Random : PCLCardSelection.Manual).toSelection(), automatic)
                 .addCallback(cards -> {

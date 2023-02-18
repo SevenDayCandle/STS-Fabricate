@@ -60,7 +60,7 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<
     public void use(PCLUseInfo info)
     {
         getActions().selectFromPile(getName(), amount <= 0 ? Integer.MAX_VALUE : amount, fields.getCardGroup(info))
-                .setOptions((amount <= 0 || fields.groupTypes.isEmpty() ? PCLCardSelection.Random : PCLCardSelection.Manual).toSelection(), true)
+                .setOptions((amount <= 0 || fields.groupTypes.isEmpty() || useParent ? PCLCardSelection.Random : PCLCardSelection.Manual).toSelection(), true)
                 .addCallback(this::cardAction);
         super.use(info);
     }

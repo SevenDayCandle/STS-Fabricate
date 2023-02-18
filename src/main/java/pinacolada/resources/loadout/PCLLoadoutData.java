@@ -101,7 +101,7 @@ public class PCLLoadoutData
 
     public PCLLoadoutValidation validate()
     {
-        return PCLLoadoutValidation.For(this);
+        return PCLLoadoutValidation.createFrom(this);
     }
 
     public static class LoadoutInfo implements Serializable

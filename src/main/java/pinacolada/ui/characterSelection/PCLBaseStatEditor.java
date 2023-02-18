@@ -192,7 +192,12 @@ public class PCLBaseStatEditor extends EUIBase
 
         public int getAmount(PCLLoadout loadout, PCLLoadoutData data)
         {
-            return getBase(loadout) + getAmountForValue(data != null ? data.values.getOrDefault(this, 0) : 0);
+            return getBase(loadout) + getAmountForValue(data);
+        }
+
+        public int getAmountForValue(PCLLoadoutData data)
+        {
+            return getAmountForValue(data != null ? data.values.getOrDefault(this, 0) : 0);
         }
 
         public int getAmountForValue(int value)

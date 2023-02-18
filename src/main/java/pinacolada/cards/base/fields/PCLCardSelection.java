@@ -20,7 +20,7 @@ public enum PCLCardSelection
             case Bottom:
                 return ListSelection.first(0);
             case Random:
-                ListSelection.random(null);
+                return ListSelection.random(null);
             default:
                 return null;
         }

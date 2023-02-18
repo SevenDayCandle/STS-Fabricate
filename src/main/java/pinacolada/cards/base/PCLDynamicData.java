@@ -138,6 +138,7 @@ public class PCLDynamicData extends PCLCardData
         safeLoadValue(() -> setMaxUpgrades(data.maxUpgradeLevel));
         safeLoadValue(() -> setMaxCopies(data.maxCopies));
         safeLoadValue(() -> setUnique(data.unique));
+        safeLoadValue(() -> setRemovableFromDeck(data.removableFromDeck));
         safeLoadValue(() -> setLanguageMap(EUIUtils.deserialize(data.languageStrings, TStrings.getType())));
         safeLoadValue(() -> setProperties(AbstractCard.CardType.valueOf(data.type), AbstractCard.CardRarity.valueOf(data.rarity)));
         safeLoadValue(() -> setTarget(PCLCardTarget.valueOf(data.target)));

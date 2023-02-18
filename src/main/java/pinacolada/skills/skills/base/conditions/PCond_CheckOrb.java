@@ -41,7 +41,7 @@ public class PCond_CheckOrb extends PPassiveCond<PField_Orb> implements OnOrbCha
     public String getSubText()
     {
         String tt = fields.getOrbAndOrString();
-        if (isTrigger())
+        if (isWhenClause())
         {
             return TEXT.cond_wheneverYou(TEXT.act_channel(tt));
         }

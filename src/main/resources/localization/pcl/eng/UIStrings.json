@@ -135,7 +135,7 @@
 												"In the dropdown, the left-hand number signfies the number of uses the tag has while un-upgraded, while the right-hand number determines the number of uses for the upgraded card.",
 												"Affinities and Series can be used for checks and effects from custom characters.",
 												"Conditions determine when the card's effects are allowed activate.",
-												"Effects are activated when the card is played, unless otherwise modified by a condition,",
+												"Effects are activated when the card is played, unless otherwise modified by a condition.",
 												"Modifiers affect the output of the card's effect. They do NOT affect conditions.",
 												"Triggers determine the times at which a power will activate. Conditions are applied after triggers.",
 												"Turn Delay determines the number of turns that will pass before this effect is actually used.",

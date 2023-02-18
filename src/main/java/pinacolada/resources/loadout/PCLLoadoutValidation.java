@@ -26,7 +26,7 @@ public class PCLLoadoutValidation
         refresh(data);
     }
 
-    public static PCLLoadoutValidation For(PCLLoadoutData data)
+    public static PCLLoadoutValidation createFrom(PCLLoadoutData data)
     {
         return new PCLLoadoutValidation(data);
     }
@@ -40,7 +40,7 @@ public class PCLLoadoutValidation
         }
 
         cardsCount.set(0, false);
-        totalValue.set(PCLLoadout.MAX_VALUE, false);
+        totalValue.set(0, false);
         allCardsSeen = true;
         int hindrances = 0;
         for (PCLCardSlot slot : data.cardSlots)
@@ -76,9 +76,7 @@ public class PCLLoadoutValidation
             totalValue.v1 += slot.getEstimatedValue();
         }
 
-        // Hindrance level is determined by the proportion of your deck that is "bad"
-        // Strikes/Defends and harmless hindrances have a weaker influence
-        // Curses and damaging hindrances have a stronger influence
+        // Hindrance level is determined by the proportion of your deck that is negative
         if (cardsCount.v1 > 0)
         {
             hindranceLevel = HINDRANCE_MULTIPLIER * hindrances / cardsCount.v1;

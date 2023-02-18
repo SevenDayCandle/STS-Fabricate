@@ -67,6 +67,8 @@ public class WithdrawAllyAction extends PCLActionWithCallback<ArrayList<PCLCard>
                     }
                     releaseCard(ally);
                 }
+
+                returned.add(returnedCard);
             }
         }
 

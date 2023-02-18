@@ -18,6 +18,7 @@ import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.skills.PMultiCond;
 import pinacolada.skills.skills.base.conditions.*;
+import pinacolada.skills.skills.base.primary.PTrigger_When;
 import pinacolada.utilities.GameUtilities;
 
 public abstract class PCond<T extends PField> extends PSkill<T>
@@ -527,6 +528,15 @@ public abstract class PCond<T extends PField> extends PSkill<T>
     public String getText(boolean addPeriod)
     {
         return getConditionRawString() + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : ": ") + childEffect.getText(addPeriod)) : PCLCoreStrings.period(addPeriod));
+    }
+
+    /*
+        Returns true if this is the skill that activates on a when trigger
+        i.e. this is either the first condition underneath a when trigger, or if this is part of a multicond that meets the first clause
+    */
+    public final boolean isWhenClause()
+    {
+        return (parent != null && parent.hasParentType(PTrigger_When.class) && (!(parent instanceof PCond) || (parent instanceof PMultiCond && ((PMultiCond) parent).isWhenClause())));
     }
 
     @Override

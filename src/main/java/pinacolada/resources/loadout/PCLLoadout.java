@@ -9,10 +9,12 @@ import com.megacrit.cardcrawl.screens.CharSelectInfo;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
+import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardAffinityStatistics;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLDynamicData;
+import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.characters.PCLCharacter;
 import pinacolada.relics.PCLRelic;
@@ -34,8 +36,11 @@ public abstract class PCLLoadout
 {
     public static final AbstractCard.CardType UNSELECTABLE_TYPE = AbstractCard.CardType.CURSE;
     public static final int MAX_PRESETS = 5;
-    public static final int MAX_VALUE = 50;
+    public static final int MAX_VALUE = 20;
     public static final int MIN_CARDS = 10;
+    public static final int COMMON_LOADOUT_VALUE = 7;
+    public static final int COMMON_CORE_VALUE = 5;
+    public static final int CURSE_VALUE = -7;
     public static final int CARD_SLOTS = 4;
     public static final HashMap<AbstractCard.CardColor, ArrayList<PCLLoadout>> LOADOUTS = new HashMap<>();
     public final AbstractCard.CardColor color;
@@ -191,7 +196,7 @@ public abstract class PCLLoadout
         {
             if (data.cardRarity == AbstractCard.CardRarity.COMMON)
             {
-                slot.addItem(data, 6);
+                slot.addItem(data, COMMON_LOADOUT_VALUE);
             }
         }
 
@@ -199,14 +204,14 @@ public abstract class PCLLoadout
         {
             if (data.cardRarity == AbstractCard.CardRarity.COMMON)
             {
-                slot.addItem(data, 4);
+                slot.addItem(data, COMMON_CORE_VALUE);
             }
         }
 
         // Dynamically add non-special curses
         for (PCLCardData data : PCLCardData.getAllData(false, true, d -> d.cardType == AbstractCard.CardType.CURSE && d.cardRarity != AbstractCard.CardRarity.SPECIAL))
         {
-            slot.addItem(data, -7);
+            slot.addItem(data, -CURSE_VALUE);
         }
     }
 
@@ -523,6 +528,14 @@ public abstract class PCLLoadout
         }
     }
 
+    public void sortItems()
+    {
+        strikes.sort((a, b) -> b.affinities.getLevel(PCLAffinity.General) - a.affinities.getLevel(PCLAffinity.General));
+        defends.sort((a, b) -> b.affinities.getLevel(PCLAffinity.General) - a.affinities.getLevel(PCLAffinity.General));
+        cardData.sort((a, b) -> StringUtils.compare(a.ID, b.ID));
+        colorlessData.sort((a, b) -> StringUtils.compare(a.ID, b.ID));
+    }
+
     public PCLLoadoutValidation validate()
     {
         return getPreset().validate();
@@ -537,7 +550,7 @@ public abstract class PCLLoadout
             return null;
         }
 
-        PCLCard card = ((PCLDynamicData) new PCLDynamicData(String.valueOf(id), isCore() ? PGR.core : data.resources)
+        PCLCard card = ((PCLDynamicData) new PCLDynamicData(String.valueOf(id), data.resources)
                 .setImagePath(data.imagePath)
                 .showTypeText(false)
                 .setMaxUpgrades(0))

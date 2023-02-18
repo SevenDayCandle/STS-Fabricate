@@ -397,7 +397,7 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
             {
                 continue;
             }
-            addGainPower(pe);
+            addPowerMove(pe);
         }
 
         // Add damage/block effects and set their source to this card

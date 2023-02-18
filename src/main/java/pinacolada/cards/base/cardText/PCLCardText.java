@@ -36,8 +36,11 @@ public class PCLCardText
     protected final static Color DEFAULT_COLOR = Settings.CREAM_COLOR.cpy();
     protected final static HashMap<AbstractCard.CardRarity, ColoredTexture> panels = new HashMap<>();
     protected final static HashMap<AbstractCard.CardRarity, ColoredTexture> panelsLarge = new HashMap<>();
+    protected final static float AUGMENT_OFFSET_X = -AbstractCard.RAW_W * 0.4695f;
+    protected final static float AUGMENT_OFFSET_Y = AbstractCard.RAW_H * 0.08f;
     protected final static float DESC_OFFSET_X = (AbstractCard.IMG_WIDTH * 0.5f);
     protected final static float DESC_OFFSET_Y = (AbstractCard.IMG_HEIGHT * 0.10f);
+    protected final static float FOOTER_SIZE = 52f;
     protected final static float IMG_HEIGHT = 420f * Settings.scale;
     protected final static float DESC_OFFSET_SUB_Y = Settings.BIG_TEXT_MODE ? IMG_HEIGHT * 0.24f : IMG_HEIGHT * 0.255f;
     protected final static float IMG_WIDTH = 300f * Settings.scale;
@@ -168,15 +171,11 @@ public class PCLCardText
 
     private float renderAugment(SpriteBatch sb, PCLAugment augment, float y)
     {
-        final float offset_x = -AbstractCard.RAW_W * 0.4695f;
-        final float offset_y = AbstractCard.RAW_H * 0.08f;//+0.28f;
-        final float alpha = card.transparency;
-
-        PCLRenderHelpers.drawOnCardAuto(sb, card, PCLCoreImages.augment.texture(), new Vector2(offset_x, offset_y + y), 28, 28, Color.WHITE, alpha, 1);
+        PCLRenderHelpers.drawOnCardAuto(sb, card, PCLCoreImages.augment.texture(), new Vector2(AUGMENT_OFFSET_X, AUGMENT_OFFSET_Y + y), 28, 28, Color.WHITE, card.transparency, 1);
         if (augment != null)
         {
             PCLRenderHelpers.drawColorized(sb, augment.getColor(), s ->
-                    PCLRenderHelpers.drawOnCardAuto(s, card, augment.getTexture(), new Vector2(offset_x, offset_y + y), 28, 28, augment.getColor(), alpha, 1));
+                    PCLRenderHelpers.drawOnCardAuto(s, card, augment.getTexture(), new Vector2(AUGMENT_OFFSET_X, AUGMENT_OFFSET_Y + y), 28, 28, augment.getColor(), card.transparency, 1));
         }
 
         return 30; // y offset
@@ -190,6 +189,10 @@ public class PCLCardText
 
         // Render card footers
         offset_y = 0;
+        if (card.isSoulbound())
+        {
+            offset_y += renderFooter(sb, card.isPopup ? PCLCoreImages.CardIcons.soulboundL.texture() : PCLCoreImages.CardIcons.soulbound.texture(), offset_y);
+        }
         if (card.isUnique())
         {
             offset_y += renderFooter(sb, card.isPopup ? PCLCoreImages.CardIcons.uniqueL.texture() : PCLCoreImages.CardIcons.unique.texture(), offset_y);
@@ -237,12 +240,11 @@ public class PCLCardText
 
     private float renderFooter(SpriteBatch sb, Texture texture, float y)
     {
-        final float offset_x = -AbstractCard.RAW_W * 0.4595f;
         final float offset_y = y - AbstractCard.RAW_H * 0.46f;
         final float alpha = card.transparency;
 
-        PCLRenderHelpers.drawOnCardAuto(sb, card, PGR.core.images.controllableCardPile.texture(), new Vector2(offset_x, offset_y), 40, 40, Color.BLACK, alpha * 0.6f, 0.8f);
-        PCLRenderHelpers.drawOnCardAuto(sb, card, texture, new Vector2(offset_x, offset_y), 40, 40, Color.WHITE, alpha, 0.8f);
+        PCLRenderHelpers.drawOnCardAuto(sb, card, PCLCoreImages.controllableCardPile.texture(), new Vector2(AUGMENT_OFFSET_X, offset_y), FOOTER_SIZE, FOOTER_SIZE, Color.BLACK, alpha * 0.6f, 0.8f);
+        PCLRenderHelpers.drawOnCardAuto(sb, card, texture, new Vector2(AUGMENT_OFFSET_X, offset_y), FOOTER_SIZE, FOOTER_SIZE, Color.WHITE, alpha, 0.8f);
 
         return 38; // y offset
     }

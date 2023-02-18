@@ -69,6 +69,7 @@ public class PCLCardData implements CardObject
     public boolean ignoreSimpleMode = false;
     public boolean obtainableInCombat = true;
     public boolean playAtEndOfTurn = false;
+    public boolean removableFromDeck = true;
     public boolean unique = false;
     public boolean unUpgradedCanToggleForms = false;
     public int maxCopies;
@@ -745,6 +746,13 @@ public class PCLCardData implements CardObject
     {
         this.magicNumber = heal;
         this.magicNumberUpgrade = healUpgrade;
+        return this;
+    }
+
+    public PCLCardData setRemovableFromDeck(boolean removableFromDeck)
+    {
+        this.removableFromDeck = removableFromDeck;
+
         return this;
     }
 

@@ -62,7 +62,7 @@ public class PCond_CheckPower extends PPassiveCond<PField_Power> implements OnAp
     {
         String baseString = fields.getPowerSubjectString();
         baseString = fields.random ? EUIRM.strings.numNoun("< " + amount, baseString) : this.amount == 1 ? baseString : EUIRM.strings.numNoun((this.amount == 0 ? this.amount : this.amount + "+"), baseString);
-        if (isTrigger())
+        if (isWhenClause())
         {
             return getWheneverString(TEXT.act_gain(baseString));
         }

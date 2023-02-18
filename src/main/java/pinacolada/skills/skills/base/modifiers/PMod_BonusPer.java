@@ -43,7 +43,7 @@ public abstract class PMod_BonusPer<T extends PField> extends PPassiveMod<T>
     @Override
     public String getText(boolean addPeriod)
     {
-        return TEXT.cond_genericConditional(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", TEXT.cond_per(getAmountRawString(), getSubText())) + PCLCoreStrings.period(addPeriod);
+        return TEXT.cond_genericConditional(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", TEXT.cond_per(getAmountRawString(), getConditionText())) + PCLCoreStrings.period(addPeriod);
     }
 
     @Override

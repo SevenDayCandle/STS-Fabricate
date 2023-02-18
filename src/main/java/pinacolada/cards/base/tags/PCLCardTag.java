@@ -3,7 +3,10 @@ package pinacolada.cards.base.tags;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.*;
+import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.AutoplayField;
+import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.ExhaustiveField;
+import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.FleetingField;
+import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.GraveField;
 import com.evacipated.cardcrawl.modthespire.lib.SpireField;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.relics.BlueCandle;
@@ -40,7 +43,6 @@ public enum PCLCardTag implements TooltipProvider
     Purge(false, new Color(0.71f, 0.3f, 0.55f, 1)),
     Recast(false, new Color(0.6f, 0.51f, 0.69f, 1)),
     Retain(true, new Color(0.49f, 0.78f, 0.35f, 1)),
-    Soulbound(false, new Color(0.70f, 0.6f, 0.5f, 1)),
     Unplayable(false, new Color(0.3f, 0.20f, 0.20f, 1));
 
     public static final float HEIGHT = 38f;
@@ -101,8 +103,6 @@ public enum PCLCardTag implements TooltipProvider
                 return FragileField.value;
             case Grave:
                 return GraveField.grave;
-            case Soulbound:
-                return SoulboundField.soulbound;
             case Unplayable:
                 return UnplayableField.value;
         }
@@ -200,8 +200,6 @@ public enum PCLCardTag implements TooltipProvider
                 return PCLCoreImages.Badges.recast;
             case Retain:
                 return PCLCoreImages.Badges.retain;
-            case Soulbound:
-                return PCLCoreImages.Badges.soulbound;
             case Unplayable:
                 return PCLCoreImages.Badges.unplayable;
         }
@@ -240,8 +238,6 @@ public enum PCLCardTag implements TooltipProvider
                 return PGR.core.tooltips.recast;
             case Retain:
                 return PGR.core.tooltips.retain;
-            case Soulbound:
-                return PGR.core.tooltips.soulbound;
             case Unplayable:
                 return PGR.core.tooltips.unplayable;
         }

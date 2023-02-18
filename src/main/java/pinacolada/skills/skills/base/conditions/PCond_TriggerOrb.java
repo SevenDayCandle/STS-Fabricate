@@ -47,7 +47,7 @@ public class PCond_TriggerOrb extends PPassiveCond<PField_Orb> implements OnOrbP
     public String getSubText()
     {
         Object tt = fields.getOrbOrString();
-        if (isTrigger())
+        if (isWhenClause())
         {
             return TEXT.cond_wheneverYou(TEXT.act_trigger(tt));
         }

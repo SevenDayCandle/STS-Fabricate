@@ -56,7 +56,7 @@ public class PCond_EvokeOrb extends PPassiveCond<PField_Orb> implements OnOrbEvo
     public String getSubText()
     {
         Object tt = fields.getOrbAndOrString();
-        if (isTrigger())
+        if (isWhenClause())
         {
             return TEXT.cond_wheneverYou(TEXT.act_evoke(tt));
         }

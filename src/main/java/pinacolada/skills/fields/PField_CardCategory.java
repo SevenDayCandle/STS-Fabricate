@@ -229,9 +229,14 @@ public class PField_CardCategory extends PField_CardID
         }
         else
         {
-            return skill.getActions().add(createAction(action, info))
+            SelectFromPile pileAction = skill.getActions().add(createAction(action, info))
                     .setFilter(getFullCardFilter())
                     .setAnyNumber(!forced);
+            if (forced)
+            {
+                pileAction.setOrigin(PCLCardSelection.Random);
+            }
+            return pileAction;
         }
     }
 }

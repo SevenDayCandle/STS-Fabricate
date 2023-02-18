@@ -51,39 +51,31 @@ public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
         quickAddButtons = new ArrayList<>();
         for (int i = 0; i < screen.effectPages.size(); i++)
         {
-            int finalI = i;
-            quickAddButtons.add(new EUIButton(EUIRM.images.hexagonalButton.texture(), new EUIHitbox(hb.x + MENU_WIDTH * 6f, hb.y + MENU_HEIGHT * (-finalI + 2.5f), MENU_WIDTH, MENU_HEIGHT))
+            quickAddButtons.add(new EUIButton(EUIRM.images.hexagonalButton.texture(), new EUIHitbox(hb.x + MENU_WIDTH * 6f, hb.y + MENU_HEIGHT * (-i - 0.5f), MENU_WIDTH, MENU_HEIGHT))
                     .setColor(Color.GRAY)
                     .setBorder(EUIRM.images.hexagonalButtonBorder.texture(), Color.GRAY)
                     .setFont(EUIFontHelper.cardtitlefontSmall, 0.8f)
                     .setText(EUIUtils.format(PGR.core.strings.cedit_addTo, EUIUtils.format(PGR.core.strings.cedit_effectX, i + 1)))
-                    .setOnClick(() -> {
-                        PCLCustomCardEffectPage effectPage = screen.effectPages.get(finalI);
-                        PMove_StackCustomPower powerApplyEffect = null;
-                        PCLCustomCardEffectEditor<PMove<?>> current = null;
-                        for (PCLCustomCardEffectEditor<PMove<?>> editor : effectPage.effectGroup.editors)
-                        {
-                            current = editor;
-                            powerApplyEffect = (PMove_StackCustomPower) EUIUtils.find(current.effects.getCurrentItems(), e -> e instanceof PMove_StackCustomPower);
-                            if (current.effects.getCurrentItems().isEmpty() || powerApplyEffect != null)
-                            {
-                                break;
-                            }
-                        }
-
-                        if (current != null)
-                        {
-                            if (powerApplyEffect == null)
-                            {
-                                powerApplyEffect = (PMove_StackCustomPower) EUIUtils.find(current.effects.getAllItems(), e -> e instanceof PMove_StackCustomPower);
-                            }
-                            if (powerApplyEffect != null)
-                            {
-                                powerApplyEffect.fields.setIndexes(screen.powerPages.indexOf(this));
-                                current.effects.setSelection(powerApplyEffect, true);
-                            }
-                        }
+                    .setOnClick(i, (index, __) -> {
+                        addPowerToEffect(screen, index);
                     }));
+        }
+    }
+
+    protected void addPowerToEffect(PCLCustomCardEditCardScreen screen, int index)
+    {
+        PCLCustomCardEffectPage effectPage = screen.effectPages.get(index);
+        PMove_StackCustomPower powerApplyEffect = null;
+        PCLCustomCardEffectEditor<PMove<?>> current = effectPage.effectGroup.addEffectSlot();
+        if (current != null)
+        {
+            powerApplyEffect = (PMove_StackCustomPower) EUIUtils.find(current.effects.getAllItems(), e -> e instanceof PMove_StackCustomPower);
+            if (powerApplyEffect != null)
+            {
+                powerApplyEffect.fields.setIndexes(screen.powerPages.indexOf(this));
+                current.effects.setSelection(powerApplyEffect, true);
+            }
+            current.refresh();
         }
     }
 

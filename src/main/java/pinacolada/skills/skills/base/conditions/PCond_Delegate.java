@@ -11,7 +11,6 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.skills.PPassiveCond;
-import pinacolada.skills.skills.PTrigger;
 
 public abstract class PCond_Delegate extends PPassiveCond<PField_CardCategory>
 {
@@ -34,7 +33,7 @@ public abstract class PCond_Delegate extends PPassiveCond<PField_CardCategory>
     @Override
     public String getSubText()
     {
-        if (hasParentType(PTrigger.class))
+        if (isWhenClause())
         {
             return TEXT.cond_whenObjectIs(fields.getFullCardStringSingular(), getDelegatePastText());
         }

@@ -23,6 +23,7 @@ import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
+import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
 import pinacolada.ui.PCLValueEditor;
 import pinacolada.utilities.GameUtilities;
@@ -59,6 +60,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
     protected PCLValueEditor maxUpgrades;
     protected PCLValueEditor maxCopies;
     protected EUIToggle uniqueToggle;
+    protected EUIToggle soulboundToggle;
     protected Settings.GameLanguage activeLanguage = Settings.language;
 
     // Colorless/Curse should not be able to see Summon in the card editor
@@ -195,6 +197,13 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
                     e.setUnique(val);
                 }))
                 .setTooltip(PGR.core.tooltips.unique);
+        soulboundToggle = (EUIToggle) new EUIToggle(new EUIHitbox(screenW(0.53f), screenH(0.4f), MENU_WIDTH, MENU_HEIGHT))
+                .setFont(EUIFontHelper.carddescriptionfontNormal, 0.9f)
+                .setText(PGR.core.tooltips.soulbound.title)
+                .setOnToggle(val -> effect.modifyAllBuilders(e -> {
+                    e.setRemovableFromDeck(!val);
+                }))
+                .setTooltip(PGR.core.tooltips.soulbound);
 
         PCLResources<?,?,?> resources = PGR.getResources(effect.currentSlot.slotColor);
         if (resources != null)
@@ -227,12 +236,13 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
         maxUpgrades.setValue(effect.getBuilder().maxUpgradeLevel, false);
         maxCopies.setValue(effect.getBuilder().maxCopies, false);
         uniqueToggle.setToggle(effect.getBuilder().unique);
+        soulboundToggle.setToggle(!effect.getBuilder().removableFromDeck);
     }
 
     @Override
     public TextureCache getTextureCache()
     {
-        return PGR.core.images.editorPrimary;
+        return PCLCoreImages.editorPrimary;
     }
 
     @Override
@@ -251,6 +261,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
         nameInput.tryUpdate();
         idInput.tryUpdate();
         uniqueToggle.tryUpdate();
+        soulboundToggle.tryUpdate();
     }
 
     @Override
@@ -269,6 +280,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
         nameInput.tryRender(sb);
         idInput.tryRender(sb);
         uniqueToggle.tryRender(sb);
+        soulboundToggle.tryRender(sb);
     }
 
     private void validifyCardID(String cardID)

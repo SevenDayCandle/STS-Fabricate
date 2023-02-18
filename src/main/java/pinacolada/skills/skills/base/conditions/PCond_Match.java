@@ -10,7 +10,6 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.skills.PPassiveCond;
-import pinacolada.skills.skills.PTrigger;
 
 @VisibleSkill
 public class PCond_Match extends PPassiveCond<PField_CardCategory> implements OnMatchSubscriber
@@ -45,7 +44,7 @@ public class PCond_Match extends PPassiveCond<PField_CardCategory> implements On
             name =  TEXT.subjects_withX(name, fields.getFullCardString());
         }
 
-        if (hasParentType(PTrigger.class))
+        if (isWhenClause())
         {
             return TEXT.cond_wheneverYou(name);
         }
