@@ -1,11 +1,14 @@
 package pinacolada.powers;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
+import pinacolada.utilities.PCLRenderHelpers;
 
 public class TemporaryPower extends PCLPower
 {
@@ -35,7 +38,6 @@ public class TemporaryPower extends PCLPower
         this.img = sourcePower.img;
         this.amount = sourcePower.amount;
         this.region48 = sourcePower.region128;
-        this.useTemporaryColoring = true;
         this.powerStrings = CardCrawlGame.languagePack.getPowerStrings(ID);
         if (sourcePower instanceof PCLPower)
         {
@@ -108,7 +110,20 @@ public class TemporaryPower extends PCLPower
         {
             PCLActions.top.applyPower(owner, owner, power, difference).ignoreArtifact(true).addCallback(this::removeSourcePower);
         }
+        // Change the power type when this power's sign changes
+        if (previousAmount < 0 ^ amount < 0)
+        {
+            type = getSourcePowerType();
+        }
         super.onAmountChanged(previousAmount, difference);
+    }
+
+    @Override
+    protected void renderIconsImpl(SpriteBatch sb, float x, float y, Color borderColor, Color imageColor)
+    {
+        PCLRenderHelpers.drawSepia(sb, (s) ->
+                super.renderIconsImpl(s, x, y, borderColor, imageColor)
+        );
     }
 
     protected void removeSourcePower()
@@ -117,6 +132,31 @@ public class TemporaryPower extends PCLPower
         {
             PCLActions.bottom.removePower(owner, owner, power.ID);
         }
+    }
+
+    // Obtain the original power's debuff/buff status, taking inverted stacks into account
+    protected PowerType getSourcePowerType()
+    {
+        PowerType originalType = power.type;
+        if (power.canGoNegative)
+        {
+            // Flip the value if either
+            // The power was originally negative but is no longer so
+            // The power was not negative but is now so
+            // However, we should be ignoring the case of 0 stacks and the case of neutral powers
+            if ((power.amount < 0 && amount > 0) || (power.amount > 0 && amount < 0))
+            {
+                if (originalType == PowerType.BUFF)
+                {
+                    originalType = PowerType.DEBUFF;
+                }
+                else if (originalType == PowerType.DEBUFF)
+                {
+                    originalType = PowerType.BUFF;
+                }
+            }
+        }
+        return originalType;
     }
 
     public void stabilize(int turns)

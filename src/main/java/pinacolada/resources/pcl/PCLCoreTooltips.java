@@ -7,7 +7,9 @@ import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.powers.common.*;
-import pinacolada.powers.special.*;
+import pinacolada.powers.special.ProvokedPower;
+import pinacolada.powers.special.SelfImmolationPower;
+import pinacolada.powers.special.SilencedPower;
 import pinacolada.resources.PCLTooltips;
 import pinacolada.resources.PGR;
 
@@ -57,7 +59,6 @@ public class PCLCoreTooltips extends PCLTooltips
     public EUITooltip block = EUITooltip.findByID("Block").showText(false).canHighlight(false);
     public EUITooltip buff = EUITooltip.findByID("Buff").showText(false).canHighlight(false);
     public EUITooltip burn = EUITooltip.findByID("Burn").showText(false);
-    public EUITooltip channel = EUITooltip.findByID("Channel").showText(false);
     public EUITooltip create = EUITooltip.findByID("Create").showText(false).canHighlight(false);
     public EUITooltip curse = EUITooltip.findByID("Curse").showText(false);
     public EUITooltip dazed = EUITooltip.findByID("Dazed").showText(false);
@@ -97,6 +98,7 @@ public class PCLCoreTooltips extends PCLTooltips
     public EUITooltip buffer = EUITooltip.findByID("Buffer");
     public EUITooltip calm = EUITooltip.findByID("Calm");
     public EUITooltip chance = EUITooltip.findByID("Chance");
+    public EUITooltip channel = EUITooltip.findByID("Channel");
     public EUITooltip constricted = EUITooltip.findByID("Constricted");
     public EUITooltip cooldown = EUITooltip.findByID("Cooldown");
     public EUITooltip critical = EUITooltip.findByID("Critical");

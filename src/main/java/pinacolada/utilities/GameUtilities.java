@@ -106,12 +106,12 @@ public class GameUtilities
 
     public static AbstractPower applyPowerInstantly(AbstractCreature target, AbstractPower power, int stacks)
     {
-        final PCLPower existingPower = getPower(target, power.ID);
+        final AbstractPower existingPower = getPower(target, power.ID);
         if (existingPower != null)
         {
             if ((stacks != -1 || power.canGoNegative) && ((existingPower.amount += stacks) == 0))
             {
-                if (!existingPower.canBeZero)
+                if (!(existingPower instanceof PCLPower) || !((PCLPower) existingPower).canBeZero)
                 {
                     target.powers.remove(existingPower);
                 }
@@ -128,7 +128,7 @@ public class GameUtilities
 
     public static boolean areMonstersBasicallyDead()
     {
-        final AbstractRoom room = getCurrentRoom(false);
+        final AbstractRoom room = getCurrentRoom();
         final MonsterGroup group = room != null ? room.monsters : null;
         return group == null || group.areMonstersBasicallyDead();
     }
@@ -725,18 +725,7 @@ public class GameUtilities
 
     public static AbstractRoom getCurrentRoom()
     {
-        return getCurrentRoom(false);
-    }
-
-    public static AbstractRoom getCurrentRoom(boolean notNull)
-    {
-        final AbstractRoom room = (AbstractDungeon.currMapNode == null) ? null : AbstractDungeon.currMapNode.getRoom();
-        if (room == null && notNull)
-        {
-            throw new NullPointerException("GetCurrentRoom() returned null");
-        }
-
-        return room;
+        return (AbstractDungeon.currMapNode == null) ? null : AbstractDungeon.currMapNode.getRoom();
     }
 
     public static ArrayList<AbstractPower> getDebuffs(AbstractCreature creature)
@@ -1670,7 +1659,8 @@ public class GameUtilities
                 return;
             }
         }
-        getCurrentRoom(true).spawnBlightAndObtain(player.hb.cX, player.hb.cY, new UpgradedHand());
+
+        obtainBlight(player.hb.cX, player.hb.cY, new UpgradedHand());
     }
 
     public static void increaseHitCount(PCLCard card, int amount, boolean temporary)
@@ -2222,7 +2212,11 @@ public class GameUtilities
 
     public static void obtainBlight(float cX, float cY, AbstractBlight blight)
     {
-        getCurrentRoom(true).spawnBlightAndObtain(cX, cY, blight);
+        AbstractRoom room = getCurrentRoom();
+        if (room != null)
+        {
+            room.spawnBlightAndObtain(cX, cY, blight);
+        }
     }
 
     public static void obtainBlightWithoutEffect(AbstractBlight blight)
@@ -2232,7 +2226,11 @@ public class GameUtilities
 
     public static void obtainRelic(float cX, float cY, AbstractRelic relic)
     {
-        getCurrentRoom(true).spawnRelicAndObtain(cX, cY, relic);
+        AbstractRoom room = getCurrentRoom();
+        if (room != null)
+        {
+            room.spawnRelicAndObtain(cX, cY, relic);
+        }
     }
 
     public static void obtainRelicFromEvent(AbstractRelic relic)

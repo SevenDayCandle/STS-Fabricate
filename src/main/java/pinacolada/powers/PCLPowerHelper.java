@@ -7,6 +7,7 @@ import com.google.gson.stream.JsonWriter;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.powers.*;
 import com.megacrit.cardcrawl.powers.watcher.VigorPower;
+import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT2;
 import extendedui.interfaces.delegates.FuncT3;
 import extendedui.interfaces.markers.TooltipProvider;
@@ -17,8 +18,6 @@ import pinacolada.powers.common.*;
 import pinacolada.powers.replacement.*;
 import pinacolada.powers.special.SelfImmolationPower;
 import pinacolada.powers.special.SilencedPower;
-import pinacolada.powers.special.SuperchargedPower;
-import pinacolada.powers.special.ToxicologyPower;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
@@ -206,7 +205,8 @@ public class PCLPowerHelper implements TooltipProvider
         }
         else
         {
-            throw new RuntimeException("Do not create a PowerHelper with a null constructor.");
+            EUIUtils.logError(this, "Do not create a PowerHelper with a null constructor.");
+            return null;
         }
 
         applyPriority(po);

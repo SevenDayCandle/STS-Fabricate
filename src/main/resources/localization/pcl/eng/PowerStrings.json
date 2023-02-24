@@ -100,11 +100,6 @@
 								"DESCRIPTIONS": ["At the start of turn: Gain #b{0} [Focus] and lose #b{1} [Strength] and [Dexterity]."],
 								"NAME": "Magus Form"
 				},
-				"pcl:PoisonPlayerPower":
-				{
-								"DESCRIPTIONS": ["At the start of turn, lose #b{0} HP and reduce [Poison] by #b1. If this effect would kill you, survive with #b1 HP."],
-								"NAME": "Poison"
-				},
 				"pcl:PCLLockOnPower":
 				{
 								"DESCRIPTIONS": ["Receive #b{0}% more damage from Orbs for #b{1} {2}. Orbs and [Support Damage] will prioritize this target.", "turn", "turns"],

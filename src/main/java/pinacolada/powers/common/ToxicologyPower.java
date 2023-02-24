@@ -1,4 +1,4 @@
-package pinacolada.powers.special;
+package pinacolada.powers.common;
 
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
@@ -9,8 +9,6 @@ import com.megacrit.cardcrawl.powers.PoisonPower;
 import extendedui.EUIUtils;
 import pinacolada.actions.powers.ApplyPower;
 import pinacolada.powers.PCLPower;
-import pinacolada.powers.common.BlastedPower;
-import pinacolada.powers.common.ShacklesPower;
 import pinacolada.utilities.GameUtilities;
 
 public class ToxicologyPower extends PCLPower

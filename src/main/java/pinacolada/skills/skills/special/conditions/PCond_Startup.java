@@ -3,11 +3,10 @@ package pinacolada.skills.skills.special.conditions;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.misc.PCLUseInfo;
 import pinacolada.interfaces.subscribers.OnBattleStartSubscriber;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PCond;
-import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
@@ -26,18 +25,6 @@ public class PCond_Startup extends PCond<PField_Empty> implements OnBattleStartS
     public PCond_Startup(PSkillSaveData content)
     {
         super(DATA, content);
-    }
-
-    public PCond_Startup(PSkill effect)
-    {
-        this();
-        setChild(effect);
-    }
-
-    public PCond_Startup(PSkill... effect)
-    {
-        this();
-        setChild(effect);
     }
 
     // This should not activate the child effect when played normally

@@ -1,4 +1,4 @@
-package pinacolada.powers.common;
+package pinacolada.powers.special;
 
 import basemod.BaseMod;
 import com.badlogic.gdx.graphics.Color;

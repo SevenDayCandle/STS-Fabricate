@@ -132,7 +132,7 @@ public class DealDamageToAll extends PCLActionWithCallback<ArrayList<AbstractCre
                 i += 1;
             }
 
-            if (GameUtilities.getCurrentRoom(true).monsters.areMonstersBasicallyDead())
+            if (GameUtilities.areMonstersBasicallyDead())
             {
                 GameUtilities.clearPostCombatActions();
             }

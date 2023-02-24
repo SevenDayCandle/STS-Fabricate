@@ -30,15 +30,16 @@ import pinacolada.actions.PCLActions;
 import pinacolada.actions.powers.IncreasePower;
 import pinacolada.actions.powers.ReducePower;
 import pinacolada.cards.base.PCLCardData;
-import pinacolada.misc.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
 import pinacolada.effects.powers.PCLFlashPowerEffect;
 import pinacolada.effects.powers.PCLGainPowerEffect;
 import pinacolada.interfaces.markers.ClickableProvider;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PSpecialSkill;
 import pinacolada.utilities.PCLRenderHelpers;
@@ -68,14 +69,11 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
     public boolean clickable;
     public boolean enabled = true;
     public boolean hideAmount = false;
-    public boolean useTemporaryColoring = false;
     public int baseAmount = 0;
     public int maxAmount = 9999;
     protected PowerStrings powerStrings;
 
-    /**
-     * cardData, relic and originalID are exclusive of one another
-     */
+    // Should not call this constructor without setting strings up through one of the setupStrings methods
     protected PCLPower(AbstractCreature owner, AbstractCreature source)
     {
         this.effects = ReflectionHacks.getPrivate(this, AbstractPower.class, "effect");
@@ -150,19 +148,19 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         return triggerCondition;
     }
 
-    public PCLClickableUse createTrigger(PSkill move)
+    public PCLClickableUse createTrigger(PSkill<?> move)
     {
         triggerCondition = new PCLClickableUse(this, move);
         return triggerCondition;
     }
 
-    public PCLClickableUse createTrigger(PSkill move, int uses, boolean refreshEachTurn, boolean stackAutomatically)
+    public PCLClickableUse createTrigger(PSkill<?>  move, int uses, boolean refreshEachTurn, boolean stackAutomatically)
     {
         triggerCondition = new PCLClickableUse(this, move, uses, refreshEachTurn, stackAutomatically);
         return triggerCondition;
     }
 
-    public PCLClickableUse createTrigger(PSkill move, PCLTriggerUsePool pool)
+    public PCLClickableUse createTrigger(PSkill<?>  move, PCLTriggerUsePool pool)
     {
         triggerCondition = new PCLClickableUse(this, move, pool);
         return triggerCondition;
@@ -202,7 +200,7 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
     {
         if (powerStrings == null || powerStrings.DESCRIPTIONS == null || powerStrings.DESCRIPTIONS.length <= index)
         {
-            EUIUtils.logError(this, "powerStrings.Description does not exist, " + this.name);
+            EUIUtils.logError(this, "powerStrings.DESCRIPTIONS does not exist, " + this.name);
             return "";
         }
         return EUIUtils.format(powerStrings.DESCRIPTIONS[index], args);
@@ -334,7 +332,7 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         }
         if (this.img == null)
         {
-            this.img = PGR.core.images.unknown.texture();
+            this.img = PCLCoreImages.unknown.texture();
         }
 
         this.ID = originalID;
@@ -416,7 +414,7 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         float scale = 1;
         if (triggerCondition != null)
         {
-            PCLRenderHelpers.drawCentered(sb, borderColor, PGR.core.images.squaredbuttonEmptycenter.texture(), x, y, ICON_SIZE2, ICON_SIZE2, 1f, 0);
+            PCLRenderHelpers.drawCentered(sb, borderColor, PCLCoreImages.squaredbuttonEmptycenter.texture(), x, y, ICON_SIZE2, ICON_SIZE2, 1f, 0);
             scale = 0.75f;
         }
 
@@ -532,16 +530,7 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         Color borderColor = (enabled && triggerCondition != null && triggerCondition.interactable()) ? c : disabledColor;
         Color imageColor = enabled ? c : disabledColor;
 
-        if (this.useTemporaryColoring)
-        {
-            PCLRenderHelpers.drawSepia(sb, (s) ->
-                    this.renderIconsImpl(s, x, y, borderColor, imageColor)
-            );
-        }
-        else
-        {
-            this.renderIconsImpl(sb, x, y, borderColor, imageColor);
-        }
+        this.renderIconsImpl(sb, x, y, borderColor, imageColor);
 
         for (AbstractGameEffect e : effects)
         {

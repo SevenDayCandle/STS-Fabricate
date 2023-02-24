@@ -7,6 +7,7 @@ import pinacolada.effects.PCLAttackVFX;
 import pinacolada.effects.PCLEffects;
 
 // Copied and modified from STS-AnimatorMod
+@Deprecated
 public class GainBlock extends PCLActionWithCallback<AbstractCreature>
 {
     protected float pitchMin;

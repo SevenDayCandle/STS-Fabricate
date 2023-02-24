@@ -73,7 +73,7 @@ public class PMove_ObtainRelic extends PMove<PField_RelicID>
             AbstractRelic relic = RelicLibrary.getRelic(r);
             if (relic != null)
             {
-                GameUtilities.getCurrentRoom(true).addRelicToRewards(relic.makeCopy());
+                GameUtilities.obtainRelicFromEvent(relic.makeCopy());
             }
         }
 

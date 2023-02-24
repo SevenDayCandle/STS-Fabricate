@@ -757,7 +757,7 @@ public class CombatManager
     {
         refreshPlayer();
 
-        room = GameUtilities.getCurrentRoom(false);
+        room = GameUtilities.getCurrentRoom();
 
         if (room == null || AbstractDungeon.player == null)
         {
@@ -1143,7 +1143,7 @@ public class CombatManager
 
     public static void refreshHandLayout()
     {
-        if (GameUtilities.getCurrentRoom(false) != null)
+        if (GameUtilities.getCurrentRoom() != null)
         {
             player.hand.refreshHandLayout();
             player.hand.applyPowers();
