@@ -30,7 +30,6 @@ import com.megacrit.cardcrawl.vfx.cardManip.CardFlashVfx;
 import extendedui.interfaces.delegates.ActionT0;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.ActionT2;
-import extendedui.interfaces.delegates.FuncT0;
 import pinacolada.actions.affinity.AddAffinityLevel;
 import pinacolada.actions.affinity.RerollAffinity;
 import pinacolada.actions.affinity.TryChooseChoice;
@@ -44,7 +43,6 @@ import pinacolada.actions.damage.DealDamageToAll;
 import pinacolada.actions.damage.LoseHP;
 import pinacolada.actions.orbs.ChannelOrb;
 import pinacolada.actions.orbs.EvokeOrb;
-import pinacolada.actions.orbs.InduceOrb;
 import pinacolada.actions.orbs.TriggerOrbPassiveAbility;
 import pinacolada.actions.pileSelection.*;
 import pinacolada.actions.player.ChangeStance;
@@ -595,16 +593,6 @@ public final class PCLActions
     public IncreasePower increasePower(AbstractPower power, int amount)
     {
         return add(new IncreasePower(power.owner, power.owner, power, amount));
-    }
-
-    public InduceOrb induceOrb(AbstractOrb orb, boolean shouldTriggerEvokeEffect)
-    {
-        return add(new InduceOrb(orb, shouldTriggerEvokeEffect));
-    }
-
-    public InduceOrb induceOrbs(FuncT0<AbstractOrb> orbConstructor, int amount, boolean shouldTriggerEvokeEffect)
-    {
-        return add(new InduceOrb(orbConstructor, amount, shouldTriggerEvokeEffect));
     }
 
     public LoseBlock loseBlock(int amount)

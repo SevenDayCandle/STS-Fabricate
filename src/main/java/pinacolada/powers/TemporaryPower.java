@@ -4,23 +4,15 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIUtils;
-import extendedui.interfaces.delegates.FuncT1;
-import extendedui.interfaces.delegates.FuncT2;
 import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
-
-import java.lang.reflect.Constructor;
 
 public class TemporaryPower extends PCLPower
 {
     public static final String ID = createFullID(TemporaryPower.class);
 
-    private final boolean sourcePowerCanBeNegative;
-    private final String targetName;
-    private final FuncT1<AbstractPower, AbstractCreature> constructorT1;
-    private final FuncT2<AbstractPower, AbstractCreature, Integer> constructorT2;
+    private final AbstractPower power;
     private int sourceMaxAmount = 9999;
-    public final String sourcePowerID;
     public int stabilizeTurns;
 
     public static TemporaryPower getFromCreature(AbstractCreature owner, String sourcePowerID)
@@ -28,7 +20,7 @@ public class TemporaryPower extends PCLPower
         for (AbstractPower po : owner.powers)
         {
             TemporaryPower tmp = EUIUtils.safeCast(po, TemporaryPower.class);
-            if (tmp != null && sourcePowerID.equals(tmp.sourcePowerID))
+            if (tmp != null && sourcePowerID.equals(tmp.power.ID))
             {
                 return tmp;
             }
@@ -39,47 +31,7 @@ public class TemporaryPower extends PCLPower
     public TemporaryPower(AbstractCreature owner, AbstractPower sourcePower)
     {
         super(owner, ID + sourcePower.ID);
-        Constructor<? extends AbstractPower> constructor = EUIUtils.tryGetConstructor(sourcePower.getClass(), AbstractCreature.class);
-        if (constructor != null)
-        {
-            this.constructorT1 = (c) -> {
-                try
-                {
-                    return constructor.newInstance(c);
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-                return null;
-            };
-        }
-        else
-        {
-            this.constructorT1 = null;
-        }
-        Constructor<? extends AbstractPower> constructor2 = EUIUtils.tryGetConstructor(sourcePower.getClass(), AbstractCreature.class, int.class);
-        if (constructor2 != null)
-        {
-            this.constructorT2 = (c, i) -> {
-                try
-                {
-                    return constructor2.newInstance(c, i);
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-                return null;
-            };
-        }
-        else
-        {
-            this.constructorT2 = null;
-        }
-        this.sourcePowerCanBeNegative = sourcePower.canGoNegative;
-        this.sourcePowerID = sourcePower.ID;
-        this.targetName = sourcePower.name;
+        power = sourcePower;
         this.img = sourcePower.img;
         this.amount = sourcePower.amount;
         this.region48 = sourcePower.region128;
@@ -91,14 +43,14 @@ public class TemporaryPower extends PCLPower
         }
         initialize(amount, sourcePower.type, true);
 
-        this.name = formatDescription(2, targetName);
+        this.name = formatDescription(2, sourcePower.name);
         updateDescription();
     }
 
     @Override
     public String getUpdatedDescription()
     {
-        return amount < 0 ? formatDescription(1, -amount, targetName) : formatDescription(0, amount, targetName);
+        return amount < 0 ? formatDescription(1, -amount, power.name) : formatDescription(0, amount, power.name);
     }
 
     @Override
@@ -117,9 +69,9 @@ public class TemporaryPower extends PCLPower
         else
         {
             // If a power was made with constructorT2, it means that the power is amount based
-            if (amount < 0 && constructorT2 != null)
+            if (amount < 0)
             {
-                PCLActions.top.applyPower(constructorT2.invoke(owner, -amount)).ignoreArtifact(true);
+                PCLActions.top.applyPower(owner, owner, power, -amount).ignoreArtifact(true);
             }
             removePower();
         }
@@ -128,7 +80,7 @@ public class TemporaryPower extends PCLPower
     @Override
     public void stackPower(int stackAmount, boolean updateBaseAmount)
     {
-        int sourceAmount = GameUtilities.getPowerAmount(owner, sourcePowerID);
+        int sourceAmount = GameUtilities.getPowerAmount(owner, power.ID);
         if (updateBaseAmount && (baseAmount += stackAmount) > maxAmount)
         {
             baseAmount = maxAmount;
@@ -152,23 +104,18 @@ public class TemporaryPower extends PCLPower
     @Override
     protected void onAmountChanged(int previousAmount, int difference)
     {
-        if (constructorT2 != null)
+        if (previousAmount + difference != 0)
         {
-            PCLActions.top.applyPower(constructorT2.invoke(owner, difference)).ignoreArtifact(true).addCallback(this::removeSourcePower);
+            PCLActions.top.applyPower(owner, owner, power, difference).ignoreArtifact(true).addCallback(this::removeSourcePower);
         }
-        else if (constructorT1 != null && previousAmount + difference != 0)
-        {
-            PCLActions.top.applyPower(constructorT1.invoke(owner)).ignoreArtifact(true).addCallback(this::removeSourcePower);
-        }
-
         super.onAmountChanged(previousAmount, difference);
     }
 
     protected void removeSourcePower()
     {
-        if (GameUtilities.getPowerAmount(sourcePowerID) <= 0 && !sourcePowerCanBeNegative)
+        if (GameUtilities.getPowerAmount(power.ID) <= 0 && !power.canGoNegative)
         {
-            PCLActions.bottom.removePower(owner, owner, sourcePowerID);
+            PCLActions.bottom.removePower(owner, owner, power.ID);
         }
     }
 

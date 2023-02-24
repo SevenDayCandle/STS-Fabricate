@@ -128,13 +128,13 @@
 	},
 	"pcl:UsefulBox":
 	{
-	  "DESCRIPTIONS": ["The first time each turn you #ySummon a #ySummon card, you and it gain {0} [Block]. | Once per combat, #oRight-Click: Target a creature to take on its form.", "#gCurrent #gBonus: {0}"],
+	  "DESCRIPTIONS": ["The first time each turn you #ySummon a #ySummon card, you and it gain {0} [Block]. | #oRight-Click: Target a creature to take on its form.", "#gCurrent #gBonus: {0}"],
 	  "FLAVOR": "A box that is useful.",
 	  "NAME": "Useful Box"
 	},
 	"pcl:VeryUsefulBox":
 	{
-	  "DESCRIPTIONS": ["At the start of combat, #ySummon a random #yCommon #ySummon and activate an effect based on your current form. | Once per combat, #oRight-Click: Target a creature to take on its form.", "#gCurrent #gBonus: {0}"],
+	  "DESCRIPTIONS": ["At the start of combat, #ySummon a random #yCommon #ySummon and activate an effect based on your current form. | #oRight-Click: Target a creature to take on its form.", "#gCurrent #gBonus: {0}"],
 	  "FLAVOR": "A box that is very useful.",
 	  "NAME": "Very-Useful Box"
 	}

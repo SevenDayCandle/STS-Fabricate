@@ -1,13 +1,14 @@
-package pinacolada.skills.skills.special.moves;
+package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
-import pinacolada.skills.skills.base.moves.PMove_Gain;
 
+@VisibleSkill
 public class PMove_GainMaxHP extends PMove_Gain
 {
     public static final PSkillData<PField_Empty> DATA = register(PMove_GainMaxHP.class, PField_Empty.class);

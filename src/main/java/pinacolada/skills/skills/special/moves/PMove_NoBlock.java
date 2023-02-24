@@ -1,7 +1,6 @@
-package pinacolada.skills.skills.base.moves;
+package pinacolada.skills.skills.special.moves;
 
 import com.megacrit.cardcrawl.powers.NoBlockPower;
-import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
@@ -10,7 +9,6 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
 
-@VisibleSkill
 public class PMove_NoBlock extends PMove<PField_Empty>
 {
     public static final PSkillData<PField_Empty> DATA = register(PMove_NoBlock.class, PField_Empty.class);

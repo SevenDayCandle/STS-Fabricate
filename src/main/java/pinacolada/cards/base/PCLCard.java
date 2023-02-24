@@ -174,8 +174,8 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     protected PCLCard(PCLCardData cardData, String id, String imagePath, int cost, CardType type, CardColor color, CardRarity rarity, CardTarget target, int form, int timesUpgraded, Object input)
     {
         super(id, cardData.strings.NAME, "status/beta", "status/beta", cost, "", type, color, rarity, target);
+        this.rawDescription = cardData.strings.NAME; // Only writing this to ensure mods that check for this at runtime don't crash; this gets overwritten anyways
         this.cardData = cardData;
-
         this.cardText = new PCLCardText(this);
         this.affinities = new PCLCardAffinities(this);
         this.playAtEndOfTurn = cardData.playAtEndOfTurn;
@@ -1689,7 +1689,25 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         return false;
     }
 
-    protected void updateBlock(float amount) {
+    public void updateMaxBlock(int amount) {
+        baseBlock = block = Math.max(0, amount);
+        this.isBlockModified = false;
+        if (onBlockEffect != null)
+        {
+            onBlockEffect.setAmountFromCard();
+        }
+    }
+
+    public void updateMaxDamage(int amount) {
+        baseDamage = damage = Math.max(0, amount);
+        this.isDamageModified = false;
+        if (onAttackEffect != null)
+        {
+            onAttackEffect.setAmountFromCard();
+        }
+    }
+
+    public void updateBlock(float amount) {
         block = Math.max(0, MathUtils.floor(amount));
         this.isBlockModified = (baseBlock != block);
         if (onBlockEffect != null)
@@ -1698,7 +1716,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         }
     }
 
-    protected void updateDamage(float amount) {
+    public void updateDamage(float amount) {
         damage = Math.max(0, MathUtils.floor(amount));
         this.isDamageModified = (baseDamage != damage);
         if (onAttackEffect != null)
@@ -1707,22 +1725,22 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         }
     }
 
-    protected void updateHitCount(float amount) {
+    public void updateHitCount(float amount) {
         hitCount = Math.max(1,MathUtils.floor(amount));
         this.isHitCountModified = (baseHitCount != hitCount);
     }
 
-    protected void updateMagicNumber(float amount) {
+    public void updateMagicNumber(float amount) {
         magicNumber = Math.max(0, MathUtils.floor(amount));
         this.isMagicNumberModified = (baseMagicNumber != magicNumber);
     }
 
-    protected void updateRightCount(float amount) {
+    public void updateRightCount(float amount) {
         rightCount = Math.max(1,MathUtils.floor(amount));
         this.isRightCountModified = (baseRightCount != rightCount);
     }
 
-    protected void updateSecondaryValue(float amount) {
+    public void updateSecondaryValue(float amount) {
         heal = Math.max(0,MathUtils.floor(amount));
         this.isHealModified = (baseHeal != heal);
     }

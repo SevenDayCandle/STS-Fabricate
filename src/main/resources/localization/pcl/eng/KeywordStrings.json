@@ -25,12 +25,12 @@
 								"PROPER_NAME": "Autoplay"
 				},
 				"Blasted":	{
-								"DESCRIPTION": "Take #b1 additional damage from #yAttacks, increased by #b1 per #b5 stacks. At the start of turn, lose HP equal to half of [Blasted] and reduce [Blasted] by #b1.",
+								"DESCRIPTION": "Take #b1 more damage per stack from #yAttacks. Reduced by #b1 at turn start.",
 								"NAMES": ["blasted"],
 								"PROPER_NAME": "Blasted"
 				},
 				"Blinded":	{
-								"DESCRIPTION": "Reduces #yAttack damage by #b3, or by #b4 if at least #b1 [~Dark] is #yChanneled. At the end of turn, reduce [Blinded] by #b1.",
+								"DESCRIPTION": "Deal #b1 less #yAttack damage per stack. Reduced by #b1 at turn end.",
 								"NAMES": ["blinded"],
 								"PROPER_NAME": "Blinded"
 				},

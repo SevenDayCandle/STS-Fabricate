@@ -16,7 +16,6 @@ import java.util.List;
 
 public class PCLGenericSelectCardEffect extends PCLEffectWithCallback<AbstractCard>
 {
-    private static final float DUR = 1.5f;
     private CardGroup cards;
     private EUICardGrid grid;
     private boolean draggingScreen;

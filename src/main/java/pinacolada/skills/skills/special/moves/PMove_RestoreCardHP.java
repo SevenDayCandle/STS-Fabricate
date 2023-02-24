@@ -36,6 +36,12 @@ public class PMove_RestoreCardHP extends PMove_Modify<PField_CardCategory>
     }
 
     @Override
+    public String wrapExtra(int input)
+    {
+        return String.valueOf(input);
+    }
+
+    @Override
     public String getObjectSampleText()
     {
         return PGR.core.tooltips.hp.title;
@@ -50,7 +56,7 @@ public class PMove_RestoreCardHP extends PMove_Modify<PField_CardCategory>
     @Override
     public String getSubText()
     {
-        return TEXT.act_healOn(getAmountRawString(),
+        return TEXT.act_healOn(getExtraRawString(),
                 useParent ? getInheritedString() :
                         fields.hasGroups() ? fields.getFullCardString() : TEXT.subjects_thisX);
     }

@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.evacipated.cardcrawl.mod.stslib.patches.core.AbstractCreature.TempHPField;
 import com.megacrit.cardcrawl.actions.animations.AnimateFastAttackAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
@@ -90,7 +91,8 @@ public class PCLCardAlly extends PCLCreature
         if (clearPowers)
         {
             this.powers.clear();
-            this.loseBlock();
+            this.currentBlock = 0;
+            TempHPField.tempHp.set(this, 0);
         }
         else
         {

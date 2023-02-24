@@ -18,7 +18,6 @@ import static pinacolada.skills.PSkill.EXTRA_CHAR;
 public class PField_Orb extends PField_Random
 {
     public ArrayList<PCLOrbHelper> orbs = new ArrayList<>();
-    public boolean random;
 
     @Override
     public boolean equals(PField other)

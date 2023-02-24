@@ -31,9 +31,8 @@ public abstract class AbstractBox extends PCLRelic
     {
         super.update();
 
-        if (GameUtilities.inBattle() && hb.hovered && EUIInputManager.rightClick.isJustPressed() && counter > 0)
+        if (GameUtilities.inBattle() && hb.hovered && EUIInputManager.rightClick.isJustPressed())
         {
-            addCounter(-1);
             PCLActions.bottom.selectCreature(PCLCardTarget.Any, name)
                     .addCallback(c -> {
                         if (c.id == null)

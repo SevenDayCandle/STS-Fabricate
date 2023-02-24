@@ -27,6 +27,7 @@ import pinacolada.ui.characterSelection.PCLBaseStatEditor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.StringJoiner;
 
 import static pinacolada.ui.characterSelection.PCLLoadoutEditor.MAX_RELIC_SLOTS;
@@ -397,14 +398,13 @@ public abstract class PCLLoadout
         PCLAbstractPlayerData data = getPlayerData();
         if (data != null)
         {
-            String starterRelic = data.getStartingRelicID();
-            if (starterRelic != null)
+            List<String> starterRelics = data.getStartingRelics();
+            for (String starterRelic : starterRelics)
             {
                 addStarterRelic(res, starterRelic);
             }
         }
 
-        addStarterRelic(res, UsefulBox.ID);
         addStarterRelic(res, FoolishCubes.ID);
 
         for (PCLRelicSlot rSlot : getPreset().relicSlots)
@@ -479,6 +479,7 @@ public abstract class PCLLoadout
             PCLRelicSlot r1 = data.addRelicSlot();
             r1.addItem(new Macroscope(), 2);
             r1.addItem(new SpitefulCubes(), 2);
+            r1.addItem(new UsefulBox(), 10);
         }
     }
 

@@ -1968,12 +1968,26 @@ public class GameUtilities
 
     public static void modifyBlock(AbstractCard card, int amount, boolean temporary)
     {
-        card.block = Math.max(0, amount);
-        if (!temporary)
+        if (card instanceof PCLCard)
         {
-            card.baseBlock = card.block;
+            if (temporary)
+            {
+                ((PCLCard) card).updateBlock(amount);
+            }
+            else
+            {
+                ((PCLCard) card).updateMaxBlock(amount);
+            }
         }
-        card.isBlockModified = (card.block != card.baseBlock);
+        else
+        {
+            card.block = Math.max(0, amount);
+            if (!temporary)
+            {
+                card.baseBlock = card.block;
+            }
+            card.isBlockModified = (card.block != card.baseBlock);
+        }
     }
 
     public static void modifyCardBaseCost(PCLCard card, int amount, boolean relative)
@@ -2035,12 +2049,26 @@ public class GameUtilities
 
     public static void modifyDamage(AbstractCard card, int amount, boolean temporary)
     {
-        card.damage = Math.max(0, amount);
-        if (!temporary)
+        if (card instanceof PCLCard)
         {
-            card.baseDamage = card.damage;
+            if (temporary)
+            {
+                ((PCLCard) card).updateDamage(amount);
+            }
+            else
+            {
+                ((PCLCard) card).updateMaxDamage(amount);
+            }
         }
-        card.isDamageModified = (card.damage != card.baseDamage);
+        else
+        {
+            card.damage = Math.max(0, amount);
+            if (!temporary)
+            {
+                card.baseDamage = card.damage;
+            }
+            card.isDamageModified = (card.damage != card.baseDamage);
+        }
     }
 
     public static int modifyEnergyGainPerTurn(int amount, int minimumEnergy)
@@ -2154,10 +2182,14 @@ public class GameUtilities
 
     public static void modifySecondaryValueRelative(PCLCard card, int amount, boolean temporary)
     {
-        card.heal += amount;
         if (!temporary)
         {
+            card.heal += amount;
             card.baseHeal += amount;
+        }
+        else
+        {
+            card.heal = Math.min(card.baseHeal, card.heal + amount);
         }
         card.isHealModified = (card.heal != card.baseHeal);
     }

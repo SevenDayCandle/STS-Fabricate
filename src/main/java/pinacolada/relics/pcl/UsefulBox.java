@@ -32,6 +32,7 @@ public class UsefulBox extends AbstractBox implements OnAllySummonSubscriber
             PCLActions.delayed.gainBlock(getValue());
             PCLActions.delayed.gainBlock(ally, getValue());
             addCounter(-1);
+            flash();
         }
     }
 

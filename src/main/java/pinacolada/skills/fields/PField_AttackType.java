@@ -11,7 +11,6 @@ import java.util.List;
 public class PField_AttackType extends PField_Random
 {
     public ArrayList<PCLAttackType> attackTypes = new ArrayList<>();
-    public boolean random;
 
     @Override
     public boolean equals(PField other)

@@ -31,7 +31,6 @@ import static pinacolada.utilities.GameUtilities.screenW;
 
 public class PCLViewLoadoutPoolEffect extends PCLEffectWithCallback<CardGroup>
 {
-    private static final float DUR = 1.5f;
     private CardGroup cards;
     private EUIButton deselectAllButton;
     private EUIButton selectAllButton;
@@ -220,12 +219,9 @@ public class PCLViewLoadoutPoolEffect extends PCLEffectWithCallback<CardGroup>
             return;
         }
 
-        if (tickDuration(deltaTime))
+        if (EUIInputManager.leftClick.isJustReleased() || EUIInputManager.rightClick.isJustReleased())
         {
-            if (EUIInputManager.leftClick.isJustReleased() || EUIInputManager.rightClick.isJustReleased())
-            {
-                complete(this.cards);
-            }
+            complete(this.cards);
         }
     }
 

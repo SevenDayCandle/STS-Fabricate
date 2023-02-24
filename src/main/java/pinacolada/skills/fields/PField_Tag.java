@@ -10,7 +10,6 @@ import java.util.List;
 public class PField_Tag extends PField_Random
 {
     public ArrayList<PCLCardTag> tags = new ArrayList<>();
-    public boolean random;
 
     @Override
     public boolean equals(PField other)

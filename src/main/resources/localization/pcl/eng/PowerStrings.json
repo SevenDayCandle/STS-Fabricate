@@ -5,194 +5,194 @@
 								"DESCRIPTIONS": ["When you #yWithdraw this #ySummon by #ySummoning another one in its place, transfer this #ySummon's powers to the new one."],
 								"NAME": "Baton Pass"
 				},
-	"pcl:BlastedPower":
-	{
-	  "DESCRIPTIONS": ["At the start of turn, lose #b{0} HP. Take #b{1} more damage from #yAttacks."],
-	  "NAME": "Blasted"
-	},
-	"pcl:BlindedPower":
-	{
-		"DESCRIPTIONS": ["Deal #b{0} less #yAttack damage."],
-		"NAME": "Blinded"
-	},
+				"pcl:BlastedPower":
+				{
+								"DESCRIPTIONS": ["Take #b{0} more #yAttack damage."],
+								"NAME": "Blasted"
+				},
+				"pcl:BlindedPower":
+				{
+								"DESCRIPTIONS": ["Deal #b{0} less #yAttack damage."],
+								"NAME": "Blinded"
+				},
 				"pcl:CriticalPower":
 				{
 								"DESCRIPTIONS": ["The next #yAttack played deals #b{0}% damage."],
 								"NAME": "Critical"
 				},
-	"pcl:DeflectionPower":
-	{
-		"DESCRIPTIONS": ["Reflect up to #b{0} blocked damage back at the attacker."],
-		"NAME": "Deflection"
-	},
-	"pcl:DelayedDamagePower":
-	{
-		"DESCRIPTIONS": ["Take #b{0} damage at the end of your turn.{1}", " If this effect would kill you, survive with #b1 HP."],
-		"NAME": "Delayed Damage"
-	},
-	"pcl:DrawLessPower":
-	{
-		"DESCRIPTIONS": ["Draw {0} fewer card(s) next turn."],
-		"NAME": "Draw Less"
-	},
-	"pcl:EnchantedArmorPower":
-	{
-		"DESCRIPTIONS": ["Take #b{0}% less #yAttack damage."],
-		"NAME": "Enchanted Armor"
-	},
-	"pcl:EnergizedPower":
-	{
-		"DESCRIPTIONS": ["Gain #b{0} additional [E] next turn."],
-		"NAME": "Energized"
-	},
-	"pcl:EnragePower":
-	{
-		"DESCRIPTIONS": ["For #b{0} turns, Whenever you play a #ySkill: Gain #b{1} [Vigor]."],
-		"NAME": "Enrage"
-	},
-	"pcl:EvasionPower":
-	{
-		"DESCRIPTIONS": ["You have a #b{0}% chance to dodge each attack.", " This chance starts decaying in #b{0} turn(s).", " Reduce this chance by #b{0}% each turn."],
-		"NAME": "Evasion"
-	},
-	"pcl:ExitStancePower":
-	{
-		"DESCRIPTIONS": ["Exit your Stance."],
-		"NAME": "Exit Stance"
-	},
-	"pcl:FortifiedPower":
-	{
-		"DESCRIPTIONS": ["Gain +#b{0}% [Block] from cards for #b{1} {2}.", "turn", "turns"],
-		"NAME": "Fortified"
-	},
-	"pcl:FrailPower":
-	{
-		"DESCRIPTIONS": ["Gain #b{0}% less [Block] from cards for #b{1} {2}.", "turn", "turns"],
-		"NAME": "Frail"
-	},
-	"pcl:HandSizePower":
-	{
-		"DESCRIPTIONS": ["Your current maximum hand size is #b{0}."],
-		"NAME": "Hand Size"
-	},
-	"pcl:ImpairedPower":
-	{
-		"DESCRIPTIONS": ["Orbs have #b{0}% #yFocus for #b{1} {2}.", "turn", "turns"],
-		"NAME": "Impaired"
-	},
-	"pcl:InnovationPower":
-	{
-		"DESCRIPTIONS": ["Ignore the costs of the next #b{0} #yInteractable #yPower(s) used."],
-		"NAME": "Innovation"
-	},
-	"pcl:InvigoratedPower":
-	{
-		"DESCRIPTIONS": ["Attacks deal +#b{0}% damage for #b{1} {2}.", "turn", "turns"],
-		"NAME": "Invigorated"
-	},
-	"pcl:MacroscopePower":
-	{
-	  "DESCRIPTIONS": ["HP, damage, [Block], and [THP] values are multiplied by {0}."],
-	  "NAME": "Macroscope"
-	},
-	"pcl:MagusFormPower":
-	{
-		"DESCRIPTIONS": ["At the start of turn: Gain #b{0} [Focus] and lose #b{1} [Strength] and [Dexterity]."],
-		"NAME": "Magus Form"
-	},
-	"pcl:PoisonPlayerPower":
-	{
-		"DESCRIPTIONS": ["At the start of turn, lose #b{0} HP and reduce [Poison] by #b1. If this effect would kill you, survive with #b1 HP."],
-		"NAME": "Poison"
-	},
-	"pcl:PCLLockOnPower":
-	{
-	  "DESCRIPTIONS": ["Receive #b{0}% more damage from Orbs for #b{1} {2}. Orbs and [Support Damage] will prioritize this target.", "turn", "turns"],
-	  "NAME": "Lock-On"
-	},
-	"pcl:ProvokedPower":
-	{
-		"DESCRIPTIONS": ["Takes #b{0}% more damage from #yAttacks. Will always #yAttack this turn."],
-		"NAME": "Provoked"
-	},
-	"pcl:RerollAffinityPower":
-	{
-		"DESCRIPTIONS": ["#pPromoted: {0}. | #pNext: {1} || #oLeft-Click/{2} to reroll.", "#pPromoted: {0} | {0} cards grant #b{2}X #y{1}.", "#pNext: {0} | When you activate an #yAura, the [A-W] of the #yAura below it becomes #yNext, and {0} is #yPromoted."],
-		"NAME": "Promoted Affinity"
-	},
-	"pcl:RerollAffinityEternalPower":
-	{
-		"DESCRIPTIONS": [" | #oLeft-Click/{0} to rewind the #yLast #yAffinities once, putting a random [A-W] at the end."],
-		"NAME": "Last Affinity"
-	},
-	"pcl:ResistancePower":
-	{
-		"DESCRIPTIONS": ["Reduce incoming #yAttack damage by #b{0}%. Reduce the effects of [Vulnerable] and [Impaired] by #b{1}% and of [Frail] and [Weak] by #b{2}%. (Max. #b{3} stacks)", "Increase incoming #yAttack damage by #b{0}%. Increase the effects of [Vulnerable] and [Impaired] by #b{1}% and of [Frail] and [Weak] by #b{2}%."],
-		"NAME": "Resistance"
-	},
-	"pcl:SelfImmolationPower":
-	{
-		"DESCRIPTIONS": ["When you play a card that gives [Block]: ALL characters take [DD] equal to #b{0} times its [Block]."],
-		"NAME": "Self-Immolation"
-	},
-	"pcl:ShacklesPower":
-	{
-		"DESCRIPTIONS": ["Lose #b{0} #yStrength until the end of this turn."],
-		"NAME": "Shackles"
-	},
-	"pcl:SilencedPower":
-	{
-		"DESCRIPTIONS": ["You cannot gain buffs (excluding powers specific to cards or monsters)."],
-		"NAME": "Silenced"
-	},
-	"pcl:SorceryPower":
-	{
-		"DESCRIPTIONS": ["The next #yOrb #yChanneled has #b{0} additional #yPassive and #yEvoke power."],
-		"NAME": "Sorcery"
-	},
-	"pcl:StabilizingPower":
-	{
-	  "DESCRIPTIONS": ["{0} will not decrease for #b{1} turn(s)."],
-	  "NAME": "Stabilized"
-	},
-	"pcl:StolenGoldPower":
-	{
-		"DESCRIPTIONS": ["You stole #b{0} Gold. You can steal #b{1} more Gold."],
-		"NAME": "Stolen Gold"
-	},
-	"pcl:SuperchargedPower":
-	{
-		"DESCRIPTIONS": ["Gain #b{0} additional [E] each turn."],
-		"NAME": "Supercharged"
-	},
-	"pcl:SupportDamagePower":
-	{
-		"DESCRIPTIONS": ["Deal #b{0} damage to the enemy with lowest HP at the end of your turn.{1}"," | Will deal #b{0} damage to {1}."],
-		"NAME": "Support Damage"
-	},
-	"pcl:TemporaryPower":
-	{
-		"DESCRIPTIONS": ["Lose #b{0} #b{1} at the start of your next turn.", "Gain #b{0} #b{1} at the start of your next turn.", "Temporary {0}", "Temp. {0}"],
-		"NAME": "Temporary Power"
-	},
-	"pcl:ToxicologyPower":
-	{
-		"DESCRIPTIONS": ["Whenever you apply [Poison], [Blasted], or [Shackles], apply #b{0} more."],
-		"NAME": "Toxicology"
-	},
-	"pcl:VitalityPower":
-	{
-		"DESCRIPTIONS": ["At the start of each turn, gain #b{0} #yTemporary #yHP (Max. #b{1})."],
-		"NAME": "Vitality"
-	},
-	"pcl:VulnerablePower":
-	{
-		"DESCRIPTIONS": ["Receive #b{0}% more damage from #yAttacks for #b{1} turn(s)."],
-		"NAME": "Vulnerable"
-	},
-	"pcl:WeakPower":
-	{
-		"DESCRIPTIONS": ["Attacks deal #b{0}% less damage for #b{1} turn(s)."],
-		"NAME": "Weakened"
-	}
+				"pcl:DeflectionPower":
+				{
+								"DESCRIPTIONS": ["Reflect up to #b{0} blocked damage back at the attacker."],
+								"NAME": "Deflection"
+				},
+				"pcl:DelayedDamagePower":
+				{
+								"DESCRIPTIONS": ["Take #b{0} damage at the end of your turn.{1}", " If this effect would kill you, survive with #b1 HP."],
+								"NAME": "Delayed Damage"
+				},
+				"pcl:DrawLessPower":
+				{
+								"DESCRIPTIONS": ["Draw {0} fewer card(s) next turn."],
+								"NAME": "Draw Less"
+				},
+				"pcl:EnchantedArmorPower":
+				{
+								"DESCRIPTIONS": ["Take #b{0}% less #yAttack damage."],
+								"NAME": "Enchanted Armor"
+				},
+				"pcl:EnergizedPower":
+				{
+								"DESCRIPTIONS": ["Gain #b{0} additional [E] next turn."],
+								"NAME": "Energized"
+				},
+				"pcl:EnragePower":
+				{
+								"DESCRIPTIONS": ["For #b{0} turns, Whenever you play a #ySkill: Gain #b{1} [Vigor]."],
+								"NAME": "Enrage"
+				},
+				"pcl:EvasionPower":
+				{
+								"DESCRIPTIONS": ["You have a #b{0}% chance to dodge each attack.", " This chance starts decaying in #b{0} turn(s).", " Reduce this chance by #b{0}% each turn."],
+								"NAME": "Evasion"
+				},
+				"pcl:ExitStancePower":
+				{
+								"DESCRIPTIONS": ["Exit your Stance."],
+								"NAME": "Exit Stance"
+				},
+				"pcl:FortifiedPower":
+				{
+								"DESCRIPTIONS": ["Gain +#b{0}% [Block] from cards for #b{1} {2}.", "turn", "turns"],
+								"NAME": "Fortified"
+				},
+				"pcl:FrailPower":
+				{
+								"DESCRIPTIONS": ["Gain #b{0}% less [Block] from cards for #b{1} {2}.", "turn", "turns"],
+								"NAME": "Frail"
+				},
+				"pcl:HandSizePower":
+				{
+								"DESCRIPTIONS": ["Your current maximum hand size is #b{0}."],
+								"NAME": "Hand Size"
+				},
+				"pcl:ImpairedPower":
+				{
+								"DESCRIPTIONS": ["Orbs have #b{0}% #yFocus for #b{1} {2}.", "turn", "turns"],
+								"NAME": "Impaired"
+				},
+				"pcl:InnovationPower":
+				{
+								"DESCRIPTIONS": ["Ignore the costs of the next #b{0} #yInteractable #yPower(s) used."],
+								"NAME": "Innovation"
+				},
+				"pcl:InvigoratedPower":
+				{
+								"DESCRIPTIONS": ["Attacks deal +#b{0}% damage for #b{1} {2}.", "turn", "turns"],
+								"NAME": "Invigorated"
+				},
+				"pcl:MacroscopePower":
+				{
+								"DESCRIPTIONS": ["HP, damage, [Block], and [THP] values are multiplied by {0}."],
+								"NAME": "Macroscope"
+				},
+				"pcl:MagusFormPower":
+				{
+								"DESCRIPTIONS": ["At the start of turn: Gain #b{0} [Focus] and lose #b{1} [Strength] and [Dexterity]."],
+								"NAME": "Magus Form"
+				},
+				"pcl:PoisonPlayerPower":
+				{
+								"DESCRIPTIONS": ["At the start of turn, lose #b{0} HP and reduce [Poison] by #b1. If this effect would kill you, survive with #b1 HP."],
+								"NAME": "Poison"
+				},
+				"pcl:PCLLockOnPower":
+				{
+								"DESCRIPTIONS": ["Receive #b{0}% more damage from Orbs for #b{1} {2}. Orbs and [Support Damage] will prioritize this target.", "turn", "turns"],
+								"NAME": "Lock-On"
+				},
+				"pcl:ProvokedPower":
+				{
+								"DESCRIPTIONS": ["Takes #b{0}% more damage from #yAttacks. Will always #yAttack this turn."],
+								"NAME": "Provoked"
+				},
+				"pcl:RerollAffinityPower":
+				{
+								"DESCRIPTIONS": ["#pPromoted: {0}. | #pNext: {1} || #oLeft-Click/{2} to reroll.", "#pPromoted: {0} | {0} cards grant #b{2}X #y{1}.", "#pNext: {0} | When you activate an #yAura, the [A-W] of the #yAura below it becomes #yNext, and {0} is #yPromoted."],
+								"NAME": "Promoted Affinity"
+				},
+				"pcl:RerollAffinityEternalPower":
+				{
+								"DESCRIPTIONS": [" | #oLeft-Click/{0} to rewind the #yLast #yAffinities once, putting a random [A-W] at the end."],
+								"NAME": "Last Affinity"
+				},
+				"pcl:ResistancePower":
+				{
+								"DESCRIPTIONS": ["Reduce incoming #yAttack damage by #b{0}%. Reduce the effects of [Vulnerable] and [Impaired] by #b{1}% and of [Frail] and [Weak] by #b{2}%. (Max. #b{3} stacks)", "Increase incoming #yAttack damage by #b{0}%. Increase the effects of [Vulnerable] and [Impaired] by #b{1}% and of [Frail] and [Weak] by #b{2}%."],
+								"NAME": "Resistance"
+				},
+				"pcl:SelfImmolationPower":
+				{
+								"DESCRIPTIONS": ["When you play a card that gives [Block]: ALL characters take [DD] equal to #b{0} times its [Block]."],
+								"NAME": "Self-Immolation"
+				},
+				"pcl:ShacklesPower":
+				{
+								"DESCRIPTIONS": ["Lose #b{0} #yStrength until the end of this turn."],
+								"NAME": "Shackles"
+				},
+				"pcl:SilencedPower":
+				{
+								"DESCRIPTIONS": ["You cannot gain buffs (excluding powers specific to cards or monsters)."],
+								"NAME": "Silenced"
+				},
+				"pcl:SorceryPower":
+				{
+								"DESCRIPTIONS": ["The next #yOrb #yChanneled has #b{0} additional #yPassive and #yEvoke power."],
+								"NAME": "Sorcery"
+				},
+				"pcl:StabilizingPower":
+				{
+								"DESCRIPTIONS": ["{0} will not decrease for #b{1} turn(s)."],
+								"NAME": "Stabilized"
+				},
+				"pcl:StolenGoldPower":
+				{
+								"DESCRIPTIONS": ["You stole #b{0} Gold. You can steal #b{1} more Gold."],
+								"NAME": "Stolen Gold"
+				},
+				"pcl:SuperchargedPower":
+				{
+								"DESCRIPTIONS": ["Gain #b{0} additional [E] each turn."],
+								"NAME": "Supercharged"
+				},
+				"pcl:SupportDamagePower":
+				{
+								"DESCRIPTIONS": ["Deal #b{0} damage to the enemy with lowest HP at the end of your turn.{1}"," | Will deal #b{0} damage to {1}."],
+								"NAME": "Support Damage"
+				},
+				"pcl:TemporaryPower":
+				{
+								"DESCRIPTIONS": ["Lose #b{0} #b{1} at the start of your next turn.", "Gain #b{0} #b{1} at the start of your next turn.", "Temporary {0}", "Temp. {0}"],
+								"NAME": "Temporary Power"
+				},
+				"pcl:ToxicologyPower":
+				{
+								"DESCRIPTIONS": ["Whenever you apply [Poison], [Blasted], or [Shackles], apply #b{0} more."],
+								"NAME": "Toxicology"
+				},
+				"pcl:VitalityPower":
+				{
+								"DESCRIPTIONS": ["At the start of each turn, gain #b{0} #yTemporary #yHP (Max. #b{1})."],
+								"NAME": "Vitality"
+				},
+				"pcl:VulnerablePower":
+				{
+								"DESCRIPTIONS": ["Receive #b{0}% more damage from #yAttacks for #b{1} turn(s)."],
+								"NAME": "Vulnerable"
+				},
+				"pcl:WeakPower":
+				{
+								"DESCRIPTIONS": ["Attacks deal #b{0}% less damage for #b{1} turn(s)."],
+								"NAME": "Weakened"
+				}
 }

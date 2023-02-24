@@ -11,7 +11,6 @@ import java.util.List;
 public class PField_Stance extends PField_Random
 {
     public ArrayList<PCLStanceHelper> stances = new ArrayList<>();
-    public boolean random;
 
     @Override
     public boolean equals(PField other)

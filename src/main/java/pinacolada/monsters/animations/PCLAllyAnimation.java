@@ -14,7 +14,7 @@ public class PCLAllyAnimation extends PCLIntervalAnimation
     public static final float RADIUS = 320;
     public PCLCreature owner;
     protected Color shineColor;
-    protected float scale = 0.4f;
+    protected float scale = 0.5f;
     protected float angle;
     protected float rate = 40f;
     protected float transitionAlpha;
@@ -50,7 +50,6 @@ public class PCLAllyAnimation extends PCLIntervalAnimation
         angle += deltaTime * rate;
         renderColor.a = transitionAlpha = MathUtils.lerp(transitionAlpha, targetTransitionAlpha, EUI.delta() * 12f);
     }
-
 
 
     public void playActAnimation(float x, float y)

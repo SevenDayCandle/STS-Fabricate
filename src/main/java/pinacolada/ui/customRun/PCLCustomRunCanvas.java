@@ -124,7 +124,7 @@ public class PCLCustomRunCanvas extends EUICanvas
         ascensionEditor.header.setAlignment(0.4f, 0f);
         loadoutRenderer.ascensionGlyphsLabel.setFont(EUIFontHelper.cardtitlefontSmall, 1f);
 
-        modifierDropdown = (EUISearchableDropdown<CustomMod>) new EUISearchableDropdown<CustomMod>(new EUIHitbox(scale(128), scale(48)))
+        modifierDropdown = (EUISearchableDropdown<CustomMod>) new EUISearchableDropdown<CustomMod>(new EUIHitbox(scale(128), scale(48)), mod -> mod.name)
                 .setRowFunction(PCLCustomModDropdownRow::new)
                 .setOnChange(items -> this.screen.activeMods = items)
                 .setIsMultiSelect(true)

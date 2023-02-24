@@ -196,6 +196,8 @@ public abstract class PCLAbstractPlayerData
 
     public abstract PCLLoadout getCoreLoadout();
 
+    public abstract List<String> getStartingRelics();
+
     public List<PCLLoadout> getEveryLoadout()
     {
         return new ArrayList<>(loadouts.values());
@@ -205,8 +207,6 @@ public abstract class PCLAbstractPlayerData
     {
         return loadouts.get(id);
     }
-
-    public String getStartingRelicID() {return null;}
 
     public PCLTrophies getTrophies(int id)
     {

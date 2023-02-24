@@ -8,7 +8,7 @@ import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.hitboxes.EUIHitbox;
-import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
@@ -24,7 +24,7 @@ public class PCLCustomRunCharacterButton extends EUIButton
     {
         super(p.getCustomModeCharacterButtonImage(), new EUIHitbox(scale(100), scale(100)));
         // Textures are dummies; we just need the info
-        this.character = new CharacterOption("", p, PGR.core.images.cardBannerL.texture(), PGR.core.images.cardBannerL.texture());
+        this.character = new CharacterOption("", p, PCLCoreImages.cardBannerL.texture(), PCLCoreImages.cardBannerL.texture());
         this.screen = screen;
         setTooltip(!this.character.locked ? p.getLocalizedCharacterName() : CharacterOption.TEXT[0], "");
         setOnClick(() -> screen.setCharacter(this.character));
