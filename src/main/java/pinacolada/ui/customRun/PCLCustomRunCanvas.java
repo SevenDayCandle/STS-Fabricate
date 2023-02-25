@@ -292,7 +292,6 @@ public class PCLCustomRunCanvas extends EUICanvas
         yPos = positionElement(endlessToggle, yPos, scale(35));
         yPos = positionElement(endingActToggle, yPos, scale(35));
         yPos = positionElement(customCardToggle, yPos, scale(35));
-        yPos = positionElement(loadoutRenderer.simpleModeToggle, yPos, scale(180));
         seedInput.setPosition(endlessToggle.hb.cX + seedInput.hb.width + scale(50), endingActToggle.hb.cY + scale(30));
         ascensionEditor.setPosition(seedInput.hb.cX + seedInput.hb.width, endlessToggle.hb.cY);
         loadoutRenderer.ascensionGlyphsLabel.setPosition(ascensionEditor.hb.cX + ascensionEditor.hb.width + scale(230), ascensionEditor.hb.cY + scale(40));

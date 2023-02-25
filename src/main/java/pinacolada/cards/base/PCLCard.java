@@ -24,7 +24,6 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
@@ -82,7 +81,10 @@ import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Objects;
 
 public abstract class PCLCard extends AbstractCard implements TooltipProvider, EditorCard, OnRemovedFromDeckListener, CustomSavable<PCLCardSaveData>
 {
@@ -143,8 +145,6 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     protected ColoredTexture portraitImg;
     protected boolean playAtEndOfTurn;
     protected final ArrayList<PCLCardGlowBorderEffect> glowList = new ArrayList<>();
-    protected transient boolean simplified = false;
-
 
     protected PCLCard(PCLCardData cardData)
     {
@@ -193,38 +193,6 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         setupImages(imagePath);
     }
 
-    public static void applySimpleMode(PCLCard card, boolean changeStats)
-    {
-        if ((card.type == PCLEnum.CardType.SUMMON) && card.getEffects().size() > 1)
-        {
-            int bonus = 0;
-            for (int i = card.getEffects().size() - 1; i >= 1; i--)
-            {
-                PSkill<?> removed = card.tryRemove(i);
-                if (removed != null)
-                {
-                    bonus += (card.cost > 0 ? card.cost + 1 : 1) * (removed.isDetrimental() ? -1 : 1);
-                }
-            }
-            bonus = Math.max(1, bonus);
-            if (changeStats)
-            {
-                GameUtilities.modifySecondaryValue(card, Math.max(1, card.baseHeal + bonus), false);
-                if (card.baseDamage > 0)
-                {
-                    GameUtilities.modifyDamage(card, Math.max(1, card.baseDamage + (bonus / Math.max(1, card.baseHitCount))), false);
-                }
-                else if (card.baseBlock > 0)
-                {
-                    GameUtilities.modifyBlock(card, Math.max(1, card.baseBlock + (bonus / Math.max(1, card.baseRightCount))), false);
-                }
-            }
-
-            card.cardText.forceRefresh();
-        }
-        card.simplified = true;
-    }
-
     @SafeVarargs
     public static <T> T[] array(T... items)
     {
@@ -261,12 +229,6 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         return new int[]{damage, block, magicNumber, secondaryValue, hitCount, rightCount};
     }
 
-    public static void refreshSimpleModePreview(boolean val)
-    {
-        PGR.simpleModePreview = val;
-        PCLCard.toggleSimpleMode(CardLibrary.getAllCards());
-    }
-
     protected static PCLCardData register(Class<? extends PCLCard> type)
     {
         return PCLCard.register(type, PGR.core);
@@ -280,39 +242,6 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     protected static PCLCardData registerCardData(PCLCardData cardData)
     {
         return PCLCardData.registerCardData(cardData);
-    }
-
-    public static void toggleSimpleMode(Collection<AbstractCard> cards)
-    {
-        toggleSimpleMode(cards, GameUtilities.isSimpleMode());
-    }
-
-    public static void toggleSimpleMode(Collection<AbstractCard> cards, boolean value)
-    {
-        PCLCardPreviews.invalidate();
-        for (AbstractCard c : cards)
-        {
-            if (c instanceof PCLCard)
-            {
-                toggleSimpleMode((PCLCard) c, value);
-            }
-        }
-    }
-
-    public static void toggleSimpleMode(PCLCard card, boolean value)
-    {
-        if (card.cardData != null && !card.cardData.ignoreSimpleMode)
-        {
-            if (value && !card.simplified)
-            {
-                applySimpleMode(card, true);
-            }
-            else if (!value && card.simplified)
-            {
-                card.simplified = false;
-                card.fullReset();
-            }
-        }
     }
 
     protected static int[] ups(int damage, int block)
@@ -634,7 +563,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     public PCLCard getCachedUpgrade() {
         PCLCard upgrade = cardData.tempCard;
 
-        if (upgrade == null || upgrade.uuid != this.uuid || (upgrade.timesUpgraded != (timesUpgraded + 1)) || upgrade.simplified != simplified) {
+        if (upgrade == null || upgrade.uuid != this.uuid || (upgrade.timesUpgraded != (timesUpgraded + 1))) {
             upgrade = cardData.tempCard = (PCLCard) this.makeSameInstanceOf();
             upgrade.changeForm(auxiliaryData.form, timesUpgraded);
             upgrade.isPreview = true;
@@ -1849,10 +1778,6 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         copy.originalName = originalName;
         copy.name = name;
 
-        if (simplified) {
-            applySimpleMode(copy, false);
-        }
-
         for (PCLAugment augment : getAugments()) {
             copy.addAugment(augment.makeCopy());
         }
@@ -2134,9 +2059,6 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         PCLCard card = cardData.createNewInstance();
         if (card != null) {
             card.changeForm(auxiliaryData.form, timesUpgraded);
-            if (simplified) {
-                applySimpleMode(card, true);
-            }
         }
         return card;
     }

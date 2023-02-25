@@ -1871,11 +1871,6 @@ public class GameUtilities
         return EUIUtils.any(PGR.getAllResources(), r -> r.playerClass == playerClass);
     }
 
-    public static boolean isSimpleMode()
-    {
-        return PGR.simpleModePreview || (GameUtilities.inGame() && PGR.core.dungeon.simpleMode);
-    }
-
     public static boolean isStarter(AbstractCard card)
     {
         final ArrayList<AbstractCard> played = AbstractDungeon.actionManager.cardsPlayedThisTurn;

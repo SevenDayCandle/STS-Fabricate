@@ -47,14 +47,15 @@ public abstract class PCLAbstractPlayerData
     public final int baseEnergy;
     public final int baseOrbs;
     public final boolean useSummons;
+    public final boolean useAugments;
     public PCLLoadout selectedLoadout;
 
     public PCLAbstractPlayerData(PCLResources<?,?,?> resources)
     {
-        this(resources, DEFAULT_HP, DEFAULT_GOLD, DEFAULT_DRAW, DEFAULT_ENERGY, DEFAULT_ORBS, true);
+        this(resources, DEFAULT_HP, DEFAULT_GOLD, DEFAULT_DRAW, DEFAULT_ENERGY, DEFAULT_ORBS, true, true);
     }
 
-    public PCLAbstractPlayerData(PCLResources<?,?,?> resources, int hp, int gold, int draw, int energy, int orbs, boolean useSummons)
+    public PCLAbstractPlayerData(PCLResources<?,?,?> resources, int hp, int gold, int draw, int energy, int orbs, boolean useSummons, boolean useAugments)
     {
         this.resources = resources;
         this.selectedLoadout = getCoreLoadout();
@@ -64,6 +65,7 @@ public abstract class PCLAbstractPlayerData
         this.baseEnergy = energy;
         this.baseOrbs = orbs;
         this.useSummons = useSummons;
+        this.useAugments = useAugments;
     }
 
     public static String getLoadoutPrefix(PCLResources<?,?,?> resources)

@@ -1118,7 +1118,11 @@ public final class PCLActions
         {
             if (phase == GameActionManager.Phase.WAITING_ON_USER)
             {
-                PCLActions.bottom.add(action);
+                // This may end up being executed during the middle of Quick Restart clearing and restarting the room
+                if (GameUtilities.getCurrentRoom() != null)
+                {
+                    PCLActions.bottom.add(action);
+                }
                 CombatManager.unsubscribe(OnPhaseChangedSubscriber.class, this);
             }
         }

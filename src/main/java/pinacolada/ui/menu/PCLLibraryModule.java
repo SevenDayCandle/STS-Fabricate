@@ -11,7 +11,6 @@ import extendedui.ui.cardFilter.CustomCardLibraryScreen;
 import extendedui.ui.cardFilter.CustomCardPoolModule;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUIContextMenu;
-import extendedui.ui.controls.EUIToggle;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLCard;
@@ -26,10 +25,8 @@ public class PCLLibraryModule extends CustomCardPoolModule
     private static final HashMap<ColorlessGroup, CardGroup> CurseGroupMapping = new HashMap<>();
     private static AbstractCard.CardColor lastColor;
     public static ColorlessGroup group = ColorlessGroup.Default;
-    public boolean simpleModePreview;
     public EUIButton groupButton;
     public EUIContextMenu<ColorlessGroup> groupMenu;
-    public EUIToggle simpleModeToggle;
     protected CustomCardLibraryScreen screen;
 
     public PCLLibraryModule(CustomCardLibraryScreen screen)
@@ -49,13 +46,6 @@ public class PCLLibraryModule extends CustomCardPoolModule
                 })
                 .setCanAutosizeButton(true)
                 .setItems(ColorlessGroup.values());
-        simpleModeToggle = (EUIToggle) new EUIToggle(new EUIHitbox(Settings.WIDTH * 0.7f, screen.quickSearch.hb.y, Settings.scale * 256f, Settings.scale * 48f))
-                .setFont(EUIFontHelper.carddescriptionfontLarge, 0.475f)
-                .setText(PGR.core.strings.misc_simpleMode)
-                .setOnToggle(this::toggleSimpleMode)
-                .setTooltip(PGR.core.strings.misc_simpleMode, PGR.core.strings.misc_simpleModeDescription);
-        // TODO Re-enable when simple mode is re-implemented
-        simpleModeToggle.setActive(false);
     }
 
     @Override
@@ -67,9 +57,6 @@ public class PCLLibraryModule extends CustomCardPoolModule
             c.initializeDescription();
         }
 
-        PCLCard.refreshSimpleModePreview(simpleModePreview);
-        simpleModeToggle.setToggle(simpleModePreview);
-        simpleModeToggle.tooltip.setText(simpleModePreview ? PGR.core.strings.misc_simpleMode : PGR.core.strings.misc_complexMode, simpleModePreview ? PGR.core.strings.misc_simpleModeDescription : PGR.core.strings.misc_complexModeDescription);
         // LastColor check prevents infinite loops from Open
         if (CustomCardLibraryScreen.currentColor != lastColor)
         {
@@ -126,15 +113,6 @@ public class PCLLibraryModule extends CustomCardPoolModule
         groupButton.setText(group.getTitle());
     }
 
-    protected void toggleSimpleMode(boolean val)
-    {
-        simpleModePreview = val;
-        PCLCard.refreshSimpleModePreview(val);
-        simpleModeToggle.tooltip.setText(val ? PGR.core.strings.misc_simpleMode : PGR.core.strings.misc_complexMode, val ? PGR.core.strings.misc_simpleModeDescription : PGR.core.strings.misc_complexModeDescription);
-        // Reset the upgrades to reflect simple mode
-        screen.cardGrid.setCardGroup(screen.cardGrid.cards);
-    }
-
     @Override
     public void update(boolean shouldDoStandardUpdate)
     {
@@ -142,7 +120,6 @@ public class PCLLibraryModule extends CustomCardPoolModule
         if (shouldDoStandardUpdate)
         {
             groupButton.tryUpdate();
-            simpleModeToggle.tryUpdate();
         }
     }
 
@@ -151,7 +128,6 @@ public class PCLLibraryModule extends CustomCardPoolModule
     {
         groupButton.tryRender(sb);
         groupMenu.tryRender(sb);
-        simpleModeToggle.tryRender(sb);
     }
 
     public enum ColorlessGroup

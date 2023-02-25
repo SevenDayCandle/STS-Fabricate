@@ -9,7 +9,6 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterSelectScreen;
 import extendedui.EUI;
 import extendedui.ui.AbstractScreen;
-import pinacolada.cards.base.PCLCard;
 import pinacolada.resources.PGR;
 
 public class CharacterSelectScreenPatches
@@ -24,25 +23,9 @@ public class CharacterSelectScreenPatches
         }
     }
 
-    @SpirePatch(clz = CharacterSelectScreen.class, method = "open")
-    public static class CharacterSelectScreen_Open
-    {
-        @SpirePostfixPatch
-        public static void open(CharacterSelectScreen __instance)
-        {
-            PCLCard.refreshSimpleModePreview(PGR.core.config.simpleMode.get());
-        }
-    }
-
     @SpirePatch(clz = CharacterSelectScreen.class, method = "render")
     public static class CharacterSelectScreen_Render
     {
-//        @SpirePrefixPatch
-//        public static SpireReturn prefix(CharacterSelectScreen __instance, SpriteBatch sb)
-//        {
-//            return AbstractDungeon.isScreenUp ? SpireReturn.Return() : SpireReturn.Continue();
-//        }
-
         @SpirePostfixPatch
         public static void postfix(CharacterSelectScreen __instance, SpriteBatch sb)
         {
@@ -60,7 +43,7 @@ public class CharacterSelectScreenPatches
         }
 
         @SpirePrefixPatch
-        public static SpireReturn prefix(CharacterSelectScreen __instance)
+        public static SpireReturn<Void> prefix(CharacterSelectScreen __instance)
         {
             return (EUI.currentScreen != null && AbstractDungeon.screen == AbstractScreen.EUI_SCREEN) ? SpireReturn.Return() : SpireReturn.Continue();
         }

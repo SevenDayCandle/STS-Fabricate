@@ -52,6 +52,10 @@ public class TemporaryPower extends PCLPower
     @Override
     public String getUpdatedDescription()
     {
+        if (power == null)
+        {
+            return super.getUpdatedDescription();
+        }
         return amount < 0 ? formatDescription(1, -amount, power.name) : formatDescription(0, amount, power.name);
     }
 
@@ -106,10 +110,7 @@ public class TemporaryPower extends PCLPower
     @Override
     protected void onAmountChanged(int previousAmount, int difference)
     {
-        if (previousAmount + difference != 0)
-        {
-            PCLActions.top.applyPower(owner, owner, power, difference).ignoreArtifact(true).addCallback(this::removeSourcePower);
-        }
+        PCLActions.top.applyPower(owner, owner, power, difference).ignoreArtifact(true).addCallback(this::removeSourcePower);
         // Change the power type when this power's sign changes
         if (previousAmount < 0 ^ amount < 0)
         {
@@ -128,7 +129,8 @@ public class TemporaryPower extends PCLPower
 
     protected void removeSourcePower()
     {
-        if (GameUtilities.getPowerAmount(power.ID) <= 0 && !power.canGoNegative)
+        int powerAmount = GameUtilities.getPowerAmount(owner, power.ID);
+        if ((powerAmount < 0 && !power.canGoNegative) || (powerAmount == 0 && (!(power instanceof PCLPower) || !((PCLPower) power).canBeZero)))
         {
             PCLActions.bottom.removePower(owner, owner, power.ID);
         }

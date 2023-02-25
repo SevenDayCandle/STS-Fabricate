@@ -12,12 +12,10 @@ import extendedui.ui.EUIBase;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUILabel;
 import extendedui.ui.controls.EUITextBox;
-import extendedui.ui.controls.EUIToggle;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIClassUtils;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.blights.common.AbstractGlyphBlight;
-import pinacolada.cards.base.PCLCard;
 import pinacolada.interfaces.markers.RunAttributesProvider;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PGR;
@@ -43,7 +41,6 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase
     public EUILabel startingCardsLabel;
     public EUILabel ascensionGlyphsLabel;
     public EUITextBox startingCardsListLabel;
-    public EUIToggle simpleModeToggle;
     protected RunAttributesProvider runProvider;
     protected CharacterOption characterOption;
     protected PCLAbstractPlayerData data;
@@ -105,13 +102,6 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase
             glyphEditors.add(new PCLGlyphEditor(glyph, new EUIHitbox(xOffset, POS_Y, glyph.hb.width, glyph.hb.height)));
             xOffset += ROW_OFFSET * 1.7f;
         }
-
-        simpleModeToggle = (EUIToggle) new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 48f))
-                .setPosition(ascensionGlyphsLabel.hb.cX, ascensionGlyphsLabel.hb.y + scale(120))
-                .setFont(EUIFontHelper.carddescriptionfontLarge, 0.475f)
-                .setText(PGR.core.strings.misc_cardModeHeader)
-                .setOnToggle(this::toggleSimpleMode)
-                .setTooltip(PGR.core.strings.misc_simpleMode, PGR.core.strings.misc_simpleModeDescription);
     }
 
     private void changeLoadout(int index)
@@ -172,18 +162,60 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase
 
     public void refresh(RunAttributesProvider provider, CharacterOption characterOption)
     {
+        refresh(provider, characterOption, GameUtilities.isPCLPlayerClass(characterOption.c.chosenClass));
+    }
+
+    public void refresh(RunAttributesProvider provider, CharacterOption characterOption, boolean canOpen)
+    {
         this.runProvider = provider;
         this.characterOption = characterOption;
 
-        if (characterOption != null && GameUtilities.isPCLPlayerClass(characterOption.c.chosenClass))
+        if (characterOption != null && canOpen)
         {
-            boolean isSimpleMode = PGR.core.config.simpleMode.get();
-            simpleModeToggle.tooltip.setText(isSimpleMode ? PGR.core.strings.misc_simpleMode : PGR.core.strings.misc_complexMode, isSimpleMode ? PGR.core.strings.misc_simpleModeDescription : PGR.core.strings.misc_complexModeDescription);
             EUI.actingColor = characterOption.c.getCardColor();
-            this.data = PGR.getPlayerData(characterOption.c.chosenClass);
-            this.loadouts.clear();
-            this.availableLoadouts.clear();
+            refreshPlayerData();
+            refreshInternal();
+        }
 
+        if (canOpen)
+        {
+            startingCardsLabel.setActive(provider instanceof PCLCharacterSelectProvider);
+            startingCardsListLabel.setActive(provider instanceof PCLCharacterSelectProvider);
+            seriesButton.setActive(true);
+
+            if (data != null)
+            {
+                loadoutEditorButton.setActive(true);
+                ascensionGlyphsLabel.setActive(true);
+                for (PCLGlyphEditor geditor : glyphEditors)
+                {
+                    geditor.refresh(provider.ascensionLevel());
+                    geditor.setActive(true);
+                }
+            }
+        }
+        else
+        {
+            seriesButton.setActive(false);
+            loadoutEditorButton.setActive(false);
+            startingCardsLabel.setActive(false);
+            startingCardsListLabel.setActive(false);
+            ascensionGlyphsLabel.setActive(false);
+            for (PCLGlyphEditor geditor : glyphEditors)
+            {
+                geditor.setActive(false);
+            }
+        }
+    }
+
+    protected void refreshPlayerData()
+    {
+        this.data = PGR.getPlayerData(characterOption.c.chosenClass);
+        this.loadouts.clear();
+        this.availableLoadouts.clear();
+
+        if (data != null)
+        {
             final int unlockLevel = data.resources.getUnlockLevel();
             for (PCLLoadout loadout : data.loadouts.values())
             {
@@ -213,33 +245,10 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase
             {
                 this.loadout = data.selectedLoadout = loadouts.get(0);
             }
-
-            refreshInternal();
-
-            seriesButton.setActive(loadouts.size() > 1);
-            loadoutEditorButton.setActive(true);
-            startingCardsLabel.setActive(provider instanceof PCLCharacterSelectProvider);
-            startingCardsListLabel.setActive(provider instanceof PCLCharacterSelectProvider);
-            ascensionGlyphsLabel.setActive(true);
-            simpleModeToggle.setToggle(PGR.core.config.simpleMode.get()).setActive(false); //TODO set to true once needed
-            for (PCLGlyphEditor geditor : glyphEditors)
-            {
-                geditor.refresh(provider.ascensionLevel());
-                geditor.setActive(true);
-            }
         }
         else
         {
-            seriesButton.setActive(false);
-            loadoutEditorButton.setActive(false);
-            startingCardsLabel.setActive(false);
-            startingCardsListLabel.setActive(false);
-            ascensionGlyphsLabel.setActive(false);
-            simpleModeToggle.setActive(false);
-            for (PCLGlyphEditor geditor : glyphEditors)
-            {
-                geditor.setActive(false);
-            }
+            this.loadout = null;
         }
     }
 
@@ -277,13 +286,6 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase
         this.runProvider.onRefresh();
     }
 
-    protected void toggleSimpleMode(boolean val)
-    {
-        PGR.core.config.simpleMode.set(val);
-        simpleModeToggle.tooltip.setText(val ? PGR.core.strings.misc_simpleMode : PGR.core.strings.misc_complexMode, val ? PGR.core.strings.misc_simpleModeDescription : PGR.core.strings.misc_complexModeDescription);
-        PCLCard.refreshSimpleModePreview(val);
-    }
-
     public void updateImpl()
     {
         seriesButton.tryUpdate();
@@ -291,7 +293,6 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase
         startingCardsLabel.tryUpdate();
         startingCardsListLabel.tryUpdate();
         ascensionGlyphsLabel.tryUpdate();
-        simpleModeToggle.tryUpdate();
         for (PCLGlyphEditor geditor : glyphEditors)
         {
             geditor.tryUpdate();
@@ -305,7 +306,6 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase
         startingCardsLabel.tryRender(sb);
         startingCardsListLabel.tryRender(sb);
         ascensionGlyphsLabel.tryRender(sb);
-        simpleModeToggle.tryRender(sb);
         for (PCLGlyphEditor geditor : glyphEditors)
         {
             geditor.tryRender(sb);

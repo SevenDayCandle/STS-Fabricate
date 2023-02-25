@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Locale;
 
+// TODO separate from AbstractConfig
 public class PCLCoreConfig extends AbstractConfig
 {
     public static final FilenameFilter JSON_FILTER = (dir, name) -> name.endsWith(".json");
@@ -37,6 +38,7 @@ public class PCLCoreConfig extends AbstractConfig
     private static final String DAMAGE_FORMULA_POSITION = PCLCoreConfig.createFullID("DamageFormulaPosition");
     private static final String DISPLAY_CARD_TAG_DESCRIPTION = PCLCoreConfig.createFullID("DisplayCardTagDescription");
     private static final String DISPLAY_CARD_TAG_TEXT = PCLCoreConfig.createFullID("DisplayCardTagText");
+    private static final String EDITOR_FTUE_SCREEN = PCLCoreConfig.createFullID("EditorFtueScreen");
     private static final String ENABLE_EVENTS_FOR_OTHER_CHARACTERS = PCLCoreConfig.createFullID("EnableEventsForOtherCharacters");
     private static final String ENABLE_RELICS_FOR_OTHER_CHARACTERS = PCLCoreConfig.createFullID("EnableRelicsForOtherCharacters");
     private static final String HIDE_IRRELEVANT_AFFINITIES = PCLCoreConfig.createFullID("HideIrrelevantAffinities");
@@ -45,8 +47,6 @@ public class PCLCoreConfig extends AbstractConfig
     private static final String LAST_IMAGE_PATH = PCLCoreConfig.createFullID("LastImagePath");
     private static final String REPLACE_CARDS_PCL = PCLCoreConfig.createFullID("ReplaceCards");
     private static final String SHOW_FORMULA_DISPLAY = PCLCoreConfig.createFullID("ShowFormulaDisplay");
-    private static final String SIMPLE_MODE = PCLCoreConfig.createFullID("SimpleMode");
-    private static final String SIMPLE_MODE_FTUE_SEEN = PCLCoreConfig.createFullID("SimpleModeFtueSeen");
     private static ModSettingsScreen.Category pclCategory;
     public STSConfigItem<Boolean> cropCardImages = new STSConfigItem<Boolean>(CROP_CARD_PORTRAIT, false);
     public STSConfigItem<Boolean> displayCardTagDescription = new STSConfigItem<Boolean>(DISPLAY_CARD_TAG_DESCRIPTION, false);
@@ -55,8 +55,7 @@ public class PCLCoreConfig extends AbstractConfig
     public STSConfigItem<Boolean> hideIrrelevantAffinities = new STSConfigItem<Boolean>(HIDE_IRRELEVANT_AFFINITIES, true);
     public STSConfigItem<Boolean> replaceCardsPCL = new STSConfigItem<Boolean>(REPLACE_CARDS_PCL, false);
     public STSConfigItem<Boolean> showFormulaDisplay = new STSConfigItem<Boolean>(SHOW_FORMULA_DISPLAY, false);
-    public STSConfigItem<Boolean> simpleMode = new STSConfigItem<Boolean>(SIMPLE_MODE, true);
-    public STSConfigItem<Boolean> simpleModeFtueSeen = new STSConfigItem<Boolean>(SIMPLE_MODE_FTUE_SEEN, false);
+    public STSConfigItem<Boolean> editorFtueScreen = new STSConfigItem<Boolean>(EDITOR_FTUE_SCREEN, false);
     public STSConfigItem<Integer> ascensionGlyph0 = new STSConfigItem<Integer>(ASCENSIONGLYPH0, 0);
     public STSConfigItem<Integer> ascensionGlyph1 = new STSConfigItem<Integer>(ASCENSIONGLYPH1, 0);
     public STSConfigItem<Integer> ascensionGlyph2 = new STSConfigItem<Integer>(ASCENSIONGLYPH2, 0);
@@ -161,8 +160,7 @@ public class PCLCoreConfig extends AbstractConfig
         lastImagePath.addConfig(config);
         lastSeed.addConfig(config);
         replaceCardsPCL.addConfig(config);
-        simpleMode.addConfig(config);
-        simpleModeFtueSeen.addConfig(config);
+        editorFtueScreen.addConfig(config);
     }
 
     // Whenever this setting is updated, we need to force all cards everywhere to refresh their descriptions

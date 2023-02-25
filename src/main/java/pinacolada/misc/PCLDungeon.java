@@ -63,7 +63,6 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
     protected transient boolean canJumpNextFloor;
     protected transient int valueDivisor;
     public Boolean allowCustomCards = false;
-    public Boolean simpleMode = false;
     public HashMap<PCLAffinity, Integer> fragments = new HashMap<>();
     public HashMap<String, Integer> augments = new HashMap<>();
     public HashSet<String> bannedCards = new HashSet<>();
@@ -288,7 +287,6 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         {
             eventLog = new HashMap<>(data.eventLog);
             allowCustomCards = data.allowCustomCards;
-            simpleMode = data.simpleMode;
             rNGCounter = data.rNGCounter;
             longestMatchCombo = data.longestMatchCombo;
             ascensionGlyphCounters.addAll(data.ascensionGlyphCounters);
@@ -303,7 +301,6 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         {
             eventLog = new HashMap<>();
             allowCustomCards = CardCrawlGame.trial instanceof PCLCustomTrial && ((PCLCustomTrial) CardCrawlGame.trial).allowCustomCards;
-            simpleMode = PGR.core.config.simpleMode.get();
             longestMatchCombo = 0;
             rNGCounter = 0;
             currentForm = null;
@@ -646,11 +643,6 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
             allowCustomCards = CardCrawlGame.trial instanceof PCLCustomTrial && ((PCLCustomTrial) CardCrawlGame.trial).allowCustomCards;
         }
 
-        if (simpleMode == null)
-        {
-            simpleMode = false;
-        }
-
         if (longestMatchCombo == null)
         {
             longestMatchCombo = 0;
@@ -764,8 +756,6 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
     @Override
     public void receivePreStartGame()
     {
-        PCLCard.toggleSimpleMode(CardLibrary.getAllCards(), simpleMode);
-        //PCLCard.ToggleSimpleMode(player.masterDeck.group, SimpleMode);
         fullLog("PRE START GAME");
     }
 

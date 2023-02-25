@@ -37,7 +37,6 @@ public class PGR
     protected static final HashMap<AbstractPlayer.PlayerClass, PCLResources<?,?,?>> playerResourceMap = new HashMap<>();
 
     public static PCLCoreResources core;
-    public static boolean simpleModePreview;
 
     public static void registerResource(PCLResources<?,?,?> resources)
     {
