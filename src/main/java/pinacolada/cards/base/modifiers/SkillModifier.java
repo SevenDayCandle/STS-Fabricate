@@ -109,17 +109,18 @@ public class SkillModifier extends AbstractCardModifier
     public boolean canPlayCard(AbstractCard card) {
         if (!(card instanceof EditorCard))
         {
-            return skill.canPlay(card, null);
+            return skill.canPlay(CombatManager.playerSystem.generateInfo(card, AbstractDungeon.player, null));
         }
         return true;
     }
 
+    // Generate infos manually because we cannot be able to attach the skill to the card if it is not an EditorCard
     public float modifyBlock(float block, AbstractCard card) {
-        return skill.modifyBlock(card, null, block);
+        return skill.modifyBlock(CombatManager.playerSystem.generateInfo(card, AbstractDungeon.player, null), block);
     }
 
     public float modifyDamage(float damage, DamageInfo.DamageType type, AbstractCard card, AbstractMonster target) {
-        return skill.modifyDamage(card, target, damage);
+        return skill.modifyDamage(CombatManager.playerSystem.generateInfo(card, AbstractDungeon.player, target), damage);
     }
 
     @Override
@@ -148,7 +149,7 @@ public class SkillModifier extends AbstractCardModifier
         return skill.effectID + skill.uuid;
     }
 
-    public PSkill getSkill()
+    public PSkill<?> getSkill()
     {
         return skill;
     }

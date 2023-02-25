@@ -3,7 +3,6 @@ package pinacolada.skills.skills;
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
-import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUICardPreview;
@@ -202,13 +201,13 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
     }
 
     @Override
-    public void refresh(AbstractCreature m, AbstractCard c, boolean conditionMet)
+    public void refresh(PCLUseInfo info, boolean conditionMet)
     {
-        conditionMetCache = checkCondition(makeInfo(m), false, false);
+        conditionMetCache = checkCondition(info, false, false);
         boolean refreshVal = conditionMetCache & conditionMet;
         for (PSkill<?> effect : effects)
         {
-            effect.refresh(m, c, refreshVal);
+            effect.refresh(info, refreshVal);
         }
     }
 

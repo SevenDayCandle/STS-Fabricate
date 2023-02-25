@@ -2,15 +2,14 @@ package pinacolada.skills.skills;
 
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUICardPreview;
 import pinacolada.annotations.VisibleSkill;
-import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.interfaces.markers.PointerProvider;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -88,12 +87,12 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
     }
 
     @Override
-    public boolean canPlay(AbstractCard card, AbstractMonster m)
+    public boolean canPlay(PCLUseInfo info)
     {
         boolean canPlay = true;
         for (PSkill<?> be : effects)
         {
-            canPlay = canPlay & be.canPlay(card, m);
+            canPlay = canPlay & be.canPlay(info);
         }
         return canPlay;
     }
@@ -163,51 +162,51 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
     }
 
     @Override
-    public float modifyBlock(AbstractCard card, AbstractMonster m, float amount)
+    public float modifyBlock(PCLUseInfo info, float amount)
     {
         for (PSkill<?> be : effects)
         {
-            amount = be.modifyBlock(card, m, amount);
+            amount = be.modifyBlock(info, amount);
         }
         return amount;
     }
 
     @Override
-    public float modifyDamage(AbstractCard card, AbstractMonster m, float amount)
+    public float modifyDamage(PCLUseInfo info, float amount)
     {
         for (PSkill<?> be : effects)
         {
-            amount = be.modifyDamage(card, m, amount);
+            amount = be.modifyDamage(info, amount);
         }
         return amount;
     }
 
     @Override
-    public float modifyHitCount(PCLCard card, AbstractMonster m, float amount)
+    public float modifyHitCount(PCLUseInfo info, float amount)
     {
         for (PSkill<?> be : effects)
         {
-            amount = be.modifyHitCount(card, m, amount);
+            amount = be.modifyHitCount(info, amount);
         }
         return amount;
     }
 
     @Override
-    public float modifyMagicNumber(AbstractCard card, AbstractMonster m, float amount)
+    public float modifyMagicNumber(PCLUseInfo info, float amount)
     {
         for (PSkill<?> be : effects)
         {
-            amount = be.modifyMagicNumber(card, m, amount);
+            amount = be.modifyMagicNumber(info, amount);
         }
         return amount;
     }
 
     @Override
-    public float modifyRightCount(PCLCard card, AbstractMonster m, float amount)
+    public float modifyRightCount(PCLUseInfo info, float amount)
     {
         for (PSkill<?> be : effects)
         {
-            amount = be.modifyRightCount(card, m, amount);
+            amount = be.modifyRightCount(info, amount);
         }
         return amount;
     }
@@ -319,11 +318,11 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
     }
 
     @Override
-    public void refresh(AbstractCreature m, AbstractCard c, boolean conditionMet)
+    public void refresh(PCLUseInfo info, boolean conditionMet)
     {
         for (PSkill<?> effect : effects)
         {
-            effect.refresh(m, c, conditionMet);
+            effect.refresh(info, conditionMet);
         }
     }
 

@@ -2,6 +2,7 @@ package pinacolada.powers;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.evacipated.cardcrawl.mod.stslib.patches.NeutralPowertypePatch;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.powers.AbstractPower;
@@ -15,7 +16,7 @@ public class TemporaryPower extends PCLPower
     public static final String ID = createFullID(TemporaryPower.class);
 
     private final AbstractPower power;
-    private int sourceMaxAmount = 9999;
+    private int sourceMaxAmount = Integer.MAX_VALUE;
     public int stabilizeTurns;
 
     public static TemporaryPower getFromCreature(AbstractCreature owner, String sourcePowerID)
@@ -110,12 +111,19 @@ public class TemporaryPower extends PCLPower
     @Override
     protected void onAmountChanged(int previousAmount, int difference)
     {
-        PCLActions.top.applyPower(owner, owner, power, difference).ignoreArtifact(true).addCallback(this::removeSourcePower);
-        // Change the power type when this power's sign changes
-        if (previousAmount < 0 ^ amount < 0)
+        int powerAmount = previousAmount + difference;
+        if (!amountBelowThreshold(powerAmount))
         {
-            type = getSourcePowerType();
+            PCLActions.top.applyPower(owner, owner, power, difference).ignoreArtifact(true).addCallback(this::removeSourcePower);
         }
+        else
+        {
+            PCLActions.bottom.removePower(owner, owner, power.ID);
+        }
+
+        // The type should be set to Neutral after the initial stacking occurs (i.e. after artifact checks) so that this power will not influence buff/debuff count checks
+        type = NeutralPowertypePatch.NEUTRAL;
+
         super.onAmountChanged(previousAmount, difference);
     }
 
@@ -130,35 +138,15 @@ public class TemporaryPower extends PCLPower
     protected void removeSourcePower()
     {
         int powerAmount = GameUtilities.getPowerAmount(owner, power.ID);
-        if ((powerAmount < 0 && !power.canGoNegative) || (powerAmount == 0 && (!(power instanceof PCLPower) || !((PCLPower) power).canBeZero)))
+        if (amountBelowThreshold(powerAmount))
         {
             PCLActions.bottom.removePower(owner, owner, power.ID);
         }
     }
 
-    // Obtain the original power's debuff/buff status, taking inverted stacks into account
-    protected PowerType getSourcePowerType()
+    protected boolean amountBelowThreshold(int powerAmount)
     {
-        PowerType originalType = power.type;
-        if (power.canGoNegative)
-        {
-            // Flip the value if either
-            // The power was originally negative but is no longer so
-            // The power was not negative but is now so
-            // However, we should be ignoring the case of 0 stacks and the case of neutral powers
-            if ((power.amount < 0 && amount > 0) || (power.amount > 0 && amount < 0))
-            {
-                if (originalType == PowerType.BUFF)
-                {
-                    originalType = PowerType.DEBUFF;
-                }
-                else if (originalType == PowerType.DEBUFF)
-                {
-                    originalType = PowerType.BUFF;
-                }
-            }
-        }
-        return originalType;
+        return (powerAmount < 0 && !power.canGoNegative) || (powerAmount == 0 && (!(power instanceof PCLPower) || !((PCLPower) power).canBeZero));
     }
 
     public void stabilize(int turns)

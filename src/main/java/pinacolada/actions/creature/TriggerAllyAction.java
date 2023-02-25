@@ -32,7 +32,7 @@ public class TriggerAllyAction extends PCLActionWithCallback<PCLCardAlly>
 
         for (int i = 0; i < amount; i++)
         {
-            ally.manualTrigger();
+            ally.takeTurn();
         }
         complete(ally);
     }

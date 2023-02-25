@@ -90,7 +90,6 @@ public final class PCLActions
     {
         TurnStart,
         NextCombat,
-
         Instant,
         Top,
         Bottom,
@@ -99,9 +98,7 @@ public final class PCLActions
         Last
     }
 
-    @Deprecated
     public static PCLActions nextCombat = new PCLActions(ActionOrder.NextCombat);
-    @Deprecated
     public static PCLActions turnStart = new PCLActions(ActionOrder.TurnStart);
     public static PCLActions instant = new PCLActions(ActionOrder.Instant);
     public static PCLActions top = new PCLActions(ActionOrder.Top);

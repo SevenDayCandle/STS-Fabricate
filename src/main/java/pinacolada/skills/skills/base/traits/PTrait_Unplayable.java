@@ -1,7 +1,5 @@
 package pinacolada.skills.skills.base.traits;
 
-import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
@@ -33,9 +31,9 @@ public class PTrait_Unplayable extends PMove<PField_Empty>
     }
 
     @Override
-    public boolean canPlay(AbstractCard card, AbstractMonster m)
+    public boolean canPlay(PCLUseInfo info)
     {
-        return card == sourceCard;
+        return info == null || info.card == sourceCard;
     }
 
     @Override

@@ -1,7 +1,6 @@
 package pinacolada.cards.base;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
@@ -83,9 +82,9 @@ public class ReplacementCard extends PCLDynamicCard
         }
 
         @Override
-        public boolean canPlay(AbstractCard c, AbstractMonster m)
+        public boolean canPlay(PCLUseInfo info)
         {
-            return card.original.cardPlayable(m);
+            return card.original.cardPlayable(GameUtilities.asMonster(info.target));
         }
 
         @Override
@@ -133,9 +132,9 @@ public class ReplacementCard extends PCLDynamicCard
         }
 
         @Override
-        public void refresh(AbstractCreature m, AbstractCard c, boolean conditionMet)
+        public void refresh(PCLUseInfo info, boolean conditionMet)
         {
-            card.original.calculateCardDamage(GameUtilities.asMonster(m));
+            card.original.calculateCardDamage(GameUtilities.asMonster(info.target));
         }
 
         @Override

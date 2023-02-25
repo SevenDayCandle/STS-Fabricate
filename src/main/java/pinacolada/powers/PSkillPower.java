@@ -2,16 +2,18 @@ package pinacolada.powers;
 
 import com.badlogic.gdx.graphics.Color;
 import com.evacipated.cardcrawl.mod.stslib.patches.NeutralPowertypePatch;
+import com.megacrit.cardcrawl.actions.utility.UseCardAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.localization.PowerStrings;
-import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.utilities.ColoredString;
 import pinacolada.interfaces.markers.EditorCard;
+import pinacolada.misc.CombatManager;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PTrigger;
@@ -158,37 +160,49 @@ public class PSkillPower extends PCLPower
 
     public float atDamageGive(float damage, DamageInfo.DamageType type, AbstractCard card)
     {
+        PCLUseInfo info = CombatManager.playerSystem.generateInfo(card, owner, owner);
+        refreshTriggers(info);
         for (PTrigger effect : ptriggers)
         {
-            damage = effect.atDamageGive(owner, damage, type, card);
+            damage = effect.atDamageGive(info, damage, type);
         }
         return super.atDamageGive(damage, type, card);
     }
 
     public float atDamageReceive(float damage, DamageInfo.DamageType type, AbstractCard card)
     {
+        PCLUseInfo info = CombatManager.playerSystem.generateInfo(card, owner, owner);
+        refreshTriggers(info);
         for (PTrigger effect : ptriggers)
         {
-            damage = effect.atDamageReceive(owner, damage, type, card);
+            damage = effect.atDamageReceive(info, damage, type);
         }
         return super.atDamageReceive(damage, type, card);
     }
 
     public float modifyBlock(float damage, AbstractCard card)
     {
+        PCLUseInfo info = CombatManager.playerSystem.generateInfo(card, owner, owner);
+        refreshTriggers(info);
         for (PTrigger effect : ptriggers)
         {
-            damage = effect.atBlockGain(owner, damage, card);
+            damage = effect.modifyBlock(info, damage);
         }
         return super.modifyBlock(damage, card);
     }
 
-    public boolean canPlayCard(AbstractCard card)
+    // Update this power's effects whenever you play a card
+    public void onAfterUseCard(AbstractCard card, UseCardAction act)
+    {
+        refreshTriggers(CombatManager.playerSystem.generateInfo(card, owner, owner));
+        super.onAfterUseCard(card, act);
+    }
+
+    public void refreshTriggers(PCLUseInfo info)
     {
         for (PTrigger effect : ptriggers)
         {
-            effect.refresh(EUIUtils.safeCast(owner, AbstractMonster.class), card, true);
+            effect.refresh(info, true);
         }
-        return super.canPlayCard(card);
     }
 }

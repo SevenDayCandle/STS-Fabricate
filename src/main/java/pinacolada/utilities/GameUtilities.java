@@ -410,9 +410,9 @@ public class GameUtilities
             }
         }
 
-        for (AbstractCreature summon : CombatManager.summons.summons)
+        for (PCLCardAlly summon : CombatManager.summons.summons)
         {
-            if (!aliveOnly || !isDeadOrEscaped(summon))
+            if (!aliveOnly || !summon.hasCard())
             {
                 characters.add(summon);
             }

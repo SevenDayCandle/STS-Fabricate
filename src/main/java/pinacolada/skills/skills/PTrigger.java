@@ -1,12 +1,7 @@
 package pinacolada.skills.skills;
 
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
-import com.megacrit.cardcrawl.core.AbstractCreature;
-import com.megacrit.cardcrawl.monsters.AbstractMonster;
-import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT0;
-import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.powers.PSkillPower;
@@ -77,19 +72,14 @@ public abstract class PTrigger extends PPrimary<PField_Not>
         return chain(new PTrigger_When().setAmount(perTurn), effects);
     }
 
-    public float atBlockGain(AbstractCreature owner, float block, AbstractCard card)
+    public float atDamageGive(PCLUseInfo info, float damage, DamageInfo.DamageType type)
     {
-        return modifyBlock(EUIUtils.safeCast(card, PCLCard.class), EUIUtils.safeCast(owner, AbstractMonster.class), block);
+        return modifyDamage(info, damage);
     }
 
-    public float atDamageGive(AbstractCreature owner, float damage, DamageInfo.DamageType type, AbstractCard card)
+    public float atDamageReceive(PCLUseInfo info, float damage, DamageInfo.DamageType type)
     {
-        return modifyDamage(EUIUtils.safeCast(card, PCLCard.class), EUIUtils.safeCast(owner, AbstractMonster.class), damage);
-    }
-
-    public float atDamageReceive(AbstractCreature owner, float damage, DamageInfo.DamageType type, AbstractCard card)
-    {
-        return modifyDamage(EUIUtils.safeCast(card, PCLCard.class), EUIUtils.safeCast(owner, AbstractMonster.class), damage);
+        return modifyDamage(info, damage);
     }
 
     public PTrigger chain(PSkill<?>... effects)

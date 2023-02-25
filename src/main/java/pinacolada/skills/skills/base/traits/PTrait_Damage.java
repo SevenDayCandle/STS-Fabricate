@@ -1,8 +1,7 @@
 package pinacolada.skills.skills.base.traits;
 
-import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.PTrait;
@@ -42,7 +41,7 @@ public class PTrait_Damage extends PTrait<PField_Empty>
     }
 
     @Override
-    public float modifyDamage(AbstractCard card, AbstractMonster m, float amount)
+    public float modifyDamage(PCLUseInfo info, float amount)
     {
         return amount + this.amount;
     }

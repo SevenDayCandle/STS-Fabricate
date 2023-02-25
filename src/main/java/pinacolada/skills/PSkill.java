@@ -383,9 +383,9 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return this.childEffect != null && this.childEffect.canMatch(card);
     }
 
-    public boolean canPlay(AbstractCard card, AbstractMonster m)
+    public boolean canPlay(PCLUseInfo info)
     {
-        return this.childEffect == null || this.childEffect.canPlay(card, m);
+        return this.childEffect == null || this.childEffect.canPlay(info);
     }
 
     public void displayUpgrades()
@@ -1056,7 +1056,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         }
     }
 
-    protected PCLUseInfo makeInfo(AbstractCreature target)
+    public PCLUseInfo makeInfo(AbstractCreature target)
     {
         return CombatManager.playerSystem.generateInfo(sourceCard, getSourceCreature(), target);
     }
@@ -1070,29 +1070,29 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return this;
     }
 
-    public float modifyBlock(AbstractCard card, AbstractMonster m, float amount)
+    public float modifyBlock(PCLUseInfo info, float amount)
     {
-        return this.childEffect != null ? this.childEffect.modifyBlock(card, m, amount) : amount;
+        return this.childEffect != null ? this.childEffect.modifyBlock(info, amount) : amount;
     }
 
-    public float modifyDamage(AbstractCard card, AbstractMonster m, float amount)
+    public float modifyDamage(PCLUseInfo info, float amount)
     {
-        return this.childEffect != null ? this.childEffect.modifyDamage(card, m, amount) : amount;
+        return this.childEffect != null ? this.childEffect.modifyDamage(info, amount) : amount;
     }
 
-    public float modifyHitCount(PCLCard card, AbstractMonster m, float amount)
+    public float modifyHitCount(PCLUseInfo info, float amount)
     {
-        return this.childEffect != null ? this.childEffect.modifyHitCount(card, m, amount) : amount;
+        return this.childEffect != null ? this.childEffect.modifyHitCount(info, amount) : amount;
     }
 
-    public float modifyMagicNumber(AbstractCard card, AbstractMonster m, float amount)
+    public float modifyMagicNumber(PCLUseInfo info, float amount)
     {
-        return this.childEffect != null ? this.childEffect.modifyMagicNumber(card, m, amount) : amount;
+        return this.childEffect != null ? this.childEffect.modifyMagicNumber(info, amount) : amount;
     }
 
-    public float modifyRightCount(PCLCard card, AbstractMonster m, float amount)
+    public float modifyRightCount(PCLUseInfo info, float amount)
     {
-        return this.childEffect != null ? this.childEffect.modifyRightCount(card, m, amount) : amount;
+        return this.childEffect != null ? this.childEffect.modifyRightCount(info, amount) : amount;
     }
 
     public PSkill<T> onAddToCard(AbstractCard card)
@@ -1182,11 +1182,11 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return EUIUtils.format(PGR.core.strings.subjects_cardN, baseExtra);
     }
 
-    public void refresh(AbstractCreature m, AbstractCard c, boolean conditionMet)
+    public void refresh(PCLUseInfo info, boolean conditionMet)
     {
         if (this.childEffect != null)
         {
-            this.childEffect.refresh(m, c, conditionMet);
+            this.childEffect.refresh(info, conditionMet);
         }
     }
 

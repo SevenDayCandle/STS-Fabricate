@@ -2,10 +2,7 @@ package pinacolada.skills;
 
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.monsters.AbstractMonster;
-import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -456,66 +453,66 @@ public abstract class PCond<T extends PField> extends PSkill<T>
     }
 
     @Override
-    public boolean canPlay(AbstractCard card, AbstractMonster m)
+    public boolean canPlay(PCLUseInfo info)
     {
-        return this.childEffect == null || !checkCondition(card != null ? CombatManager.playerSystem.generateInfo(card, getSourceCreature(), m) : null, false, false) || this.childEffect.canPlay(card, m);
+        return this.childEffect == null || !checkCondition(info, false, false) || this.childEffect.canPlay(info);
     }
 
     @Override
-    public float modifyBlock(AbstractCard card, AbstractMonster m, float amount)
+    public float modifyBlock(PCLUseInfo info, float amount)
     {
-        if (this.childEffect != null && sourceCard != null && checkCondition(card != null ? CombatManager.playerSystem.generateInfo(card, getSourceCreature(), m) : makeInfo(m), false, false))
+        if (this.childEffect != null && sourceCard != null && checkCondition(info, false, false))
         {
-            return this.childEffect.modifyBlock(card, m, amount);
+            return this.childEffect.modifyBlock(info, amount);
         }
         return amount;
     }
 
     @Override
-    public float modifyDamage(AbstractCard card, AbstractMonster m, float amount)
+    public float modifyDamage(PCLUseInfo info, float amount)
     {
-        if (this.childEffect != null && sourceCard != null && checkCondition(card != null ? CombatManager.playerSystem.generateInfo(card, getSourceCreature(), m) : makeInfo(m), false, false))
+        if (this.childEffect != null && sourceCard != null && checkCondition(info, false, false))
         {
-            return this.childEffect.modifyDamage(card, m, amount);
+            return this.childEffect.modifyDamage(info, amount);
         }
         return amount;
     }
 
     @Override
-    public float modifyMagicNumber(AbstractCard card, AbstractMonster m, float amount)
+    public float modifyMagicNumber(PCLUseInfo info, float amount)
     {
-        if (this.childEffect != null && sourceCard != null && checkCondition(card != null ? CombatManager.playerSystem.generateInfo(card, getSourceCreature(), m) : makeInfo(m), false, false))
+        if (this.childEffect != null && sourceCard != null && checkCondition(info, false, false))
         {
-            return this.childEffect.modifyMagicNumber(card, m, amount);
+            return this.childEffect.modifyMagicNumber(info, amount);
         }
         return amount;
     }
 
     @Override
-    public float modifyHitCount(PCLCard card, AbstractMonster m, float amount)
+    public float modifyHitCount(PCLUseInfo info, float amount)
     {
-        if (this.childEffect != null && sourceCard != null && checkCondition(card != null ? CombatManager.playerSystem.generateInfo(card, getSourceCreature(), m) : makeInfo(m), false, false))
+        if (this.childEffect != null && sourceCard != null && checkCondition(info, false, false))
         {
-            return this.childEffect.modifyHitCount(card, m, amount);
+            return this.childEffect.modifyHitCount(info, amount);
         }
         return amount;
     }
 
     @Override
-    public float modifyRightCount(PCLCard card, AbstractMonster m, float amount)
+    public float modifyRightCount(PCLUseInfo info, float amount)
     {
-        if (this.childEffect != null && sourceCard != null && checkCondition(card != null ? CombatManager.playerSystem.generateInfo(card, getSourceCreature(), m) : makeInfo(m), false, false))
+        if (this.childEffect != null && sourceCard != null && checkCondition(info, false, false))
         {
-            return this.childEffect.modifyRightCount(card, m, amount);
+            return this.childEffect.modifyRightCount(info, amount);
         }
         return amount;
     }
 
     @Override
-    public void refresh(AbstractCreature m, AbstractCard c, boolean conditionMet)
+    public void refresh(PCLUseInfo info, boolean conditionMet)
     {
-        conditionMetCache = checkCondition(makeInfo(m), false, false);
-        super.refresh(m, c, conditionMetCache & conditionMet);
+        conditionMetCache = checkCondition(info, false, false);
+        super.refresh(info, conditionMetCache & conditionMet);
     }
 
     @Override

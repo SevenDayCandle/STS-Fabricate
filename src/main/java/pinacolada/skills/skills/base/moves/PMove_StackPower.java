@@ -127,6 +127,7 @@ public class PMove_StackPower extends PMove<PField_Power>
         switch (target)
         {
             case RandomEnemy:
+            case AllAlly:
             case AllEnemy:
             case All:
             case Team:

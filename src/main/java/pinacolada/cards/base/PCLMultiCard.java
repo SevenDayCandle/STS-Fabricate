@@ -3,7 +3,6 @@ package pinacolada.cards.base;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
-import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
@@ -331,9 +330,9 @@ public abstract class PCLMultiCard extends PCLCard
         }
 
         @Override
-        public boolean canPlay(AbstractCard c, AbstractMonster m)
+        public boolean canPlay(PCLUseInfo info)
         {
-            return EUIUtils.find(multicard.getCards(), card -> !card.cardPlayable(m)) == null;
+            return EUIUtils.find(multicard.getCards(), card -> !card.cardPlayable(GameUtilities.asMonster(info.target))) == null;
         }
 
         @Override
@@ -423,15 +422,15 @@ public abstract class PCLMultiCard extends PCLCard
         }
 
         @Override
-        public void refresh(AbstractCreature m, AbstractCard c, boolean conditionMet)
+        public void refresh(PCLUseInfo info, boolean conditionMet)
         {
-            super.refresh(m, c, conditionMet);
+            super.refresh(info, conditionMet);
             for (AbstractCard card : multicard.getCards()) {
                 if (card instanceof PCLCard) {
-                    ((PCLCard) card).refresh(GameUtilities.asMonster(m));
+                    ((PCLCard) card).refresh(GameUtilities.asMonster(info.source));
                 }
                 else {
-                    card.calculateCardDamage(GameUtilities.asMonster(m));
+                    card.calculateCardDamage(GameUtilities.asMonster(info.source));
                 }
             }
         }

@@ -190,11 +190,6 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implement
         return damage;
     }
 
-    public float modifyMagicNumber(float magicNumber, PCLCard source, PCLCard card)
-    {
-        return magicNumber;
-    }
-
     public float modifyOrbOutput(float initial, AbstractCreature target, AbstractOrb orb)
     {
         return initial;

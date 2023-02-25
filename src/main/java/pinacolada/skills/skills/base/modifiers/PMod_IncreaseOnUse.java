@@ -1,7 +1,5 @@
 package pinacolada.skills.skills.base.modifiers;
 
-import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.utilities.ColoredString;
@@ -84,7 +82,7 @@ public class PMod_IncreaseOnUse extends PPassiveMod<PField_Empty>
     }
 
     @Override
-    public void refresh(AbstractCreature m, AbstractCard c, boolean conditionMet)
+    public void refresh(PCLUseInfo info, boolean conditionMet)
     {
     }
 

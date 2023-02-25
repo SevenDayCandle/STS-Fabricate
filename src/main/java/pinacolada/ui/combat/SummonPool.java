@@ -11,6 +11,7 @@ import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUI;
 import extendedui.EUIUtils;
 import extendedui.ui.EUIBase;
+import pinacolada.actions.PCLActions;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.monsters.PCLCreature;
 import pinacolada.utilities.GameUtilities;
@@ -136,8 +137,7 @@ public class SummonPool extends EUIBase
         }
         for (PCLCardAlly ally : sorted)
         {
-            ally.takeTurn();
-            ally.applyTurnPowers();
+            PCLActions.bottom.triggerAlly(ally);
         }
     }
 
@@ -148,8 +148,7 @@ public class SummonPool extends EUIBase
             ally.applyStartOfTurnPostDrawPowers();
             if (ally.priority == PCLCreature.PRIORITY_START_LAST)
             {
-                ally.takeTurn();
-                ally.applyTurnPowers();
+                PCLActions.bottom.triggerAlly(ally);
             }
         }
     }
@@ -158,11 +157,9 @@ public class SummonPool extends EUIBase
     {
         for (PCLCardAlly ally : summons)
         {
-            ally.applyEndOfTurnTriggers();
             if (ally.priority == PCLCreature.PRIORITY_END_FIRST)
             {
-                ally.takeTurn();
-                ally.applyTurnPowers();
+                PCLActions.bottom.triggerAlly(ally);
             }
         }
     }
@@ -172,10 +169,12 @@ public class SummonPool extends EUIBase
         List<PCLCardAlly> sorted = summons.stream().filter(a -> a.priority <= PCLCreature.PRIORITY_END_LAST).sorted((a, b) -> b.priority - a.priority).collect(Collectors.toList());
         for (PCLCardAlly ally : sorted)
         {
-            ally.takeTurn();
-            ally.applyTurnPowers();
-
+            PCLActions.bottom.triggerAlly(ally);
         }
+    }
+
+    public void onEndOfRound()
+    {
         for (PCLCardAlly ally : summons)
         {
             for (AbstractPower p : ally.powers)

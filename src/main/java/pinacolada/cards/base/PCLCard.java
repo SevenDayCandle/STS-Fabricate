@@ -1043,8 +1043,9 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     }
 
     protected boolean isEffectPlayable(AbstractMonster m) {
+        PCLUseInfo info = new PCLUseInfo(this, getSourceCreature(), m);
         for (PSkill<?> be : getFullEffects()) {
-            if (!be.canPlay(this, m)) {
+            if (!be.canPlay(info)) {
                 return false;
             }
         }
@@ -1081,41 +1082,41 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     }
 
     // Block subeffects may affect the final block output (but they should not be triggering any other triggers)
-    protected float modifyBlock(AbstractMonster enemy, float amount) {
+    protected float modifyBlock(PCLUseInfo info, float amount) {
         if (onBlockEffect != null)
         {
-            amount = onBlockEffect.modifyBlock(this, enemy, amount);
+            amount = onBlockEffect.modifyBlock(info, amount);
         }
         for (PSkill<?> be : getFullEffects()) {
-            amount = be.modifyBlock(this, enemy, amount);
-        }
-        return amount;
-    }
-
-    protected float modifyDamage(AbstractMonster enemy, float amount) {
-        for (PSkill<?> be : getFullEffects()) {
-            amount = be.modifyDamage(this, enemy, amount);
+            amount = be.modifyBlock(info, amount);
         }
         return amount;
     }
 
-    protected float modifyHitCount(AbstractMonster enemy, float amount) {
+    protected float modifyDamage(PCLUseInfo info, float amount) {
         for (PSkill<?> be : getFullEffects()) {
-            amount = be.modifyHitCount(this, enemy, amount);
+            amount = be.modifyDamage(info, amount);
         }
         return amount;
     }
 
-    protected float modifyMagicNumber(AbstractMonster enemy, float amount) {
+    protected float modifyHitCount(PCLUseInfo info, float amount) {
         for (PSkill<?> be : getFullEffects()) {
-            amount = be.modifyMagicNumber(this, enemy, amount);
+            amount = be.modifyHitCount(info, amount);
         }
         return amount;
     }
 
-    protected float modifyRightCount(AbstractMonster enemy, float amount) {
+    protected float modifyMagicNumber(PCLUseInfo info, float amount) {
         for (PSkill<?> be : getFullEffects()) {
-            amount = be.modifyRightCount(this, enemy, amount);
+            amount = be.modifyMagicNumber(info, amount);
+        }
+        return amount;
+    }
+
+    protected float modifyRightCount(PCLUseInfo info, float amount) {
+        for (PSkill<?> be : getFullEffects()) {
+            amount = be.modifyRightCount(info, amount);
         }
         return amount;
     }
@@ -1159,12 +1160,13 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     // Update damage, block, and magic number from the powers on a given target
     // Every step of the calculation is recorded for display in the damage formula widget
     public void refresh(AbstractMonster enemy) {
+        PCLUseInfo info = new PCLUseInfo(this, getSourceCreature(), enemy);
         boolean applyEnemyPowers = (enemy != null && !GameUtilities.isDeadOrEscaped(enemy));
         float tempBlock = baseBlock;
         float tempDamage = baseDamage;
         float tempMagicNumber = CombatManager.onModifyMagicNumber(baseMagicNumber, this);
-        tempDamage = modifyDamage(enemy, tempDamage);
-        tempBlock = modifyBlock(enemy, tempBlock);
+        tempDamage = modifyDamage(info, tempDamage);
+        tempBlock = modifyBlock(info, tempBlock);
 
         AbstractCreature owner = getSourceCreature();
         if (owner != null) {
@@ -1254,11 +1256,11 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
 
         updateBlock(tempBlock);
         updateDamage(tempDamage);
-        updateMagicNumber(modifyMagicNumber(enemy, CombatManager.playerSystem.modifyMagicNumber(tempMagicNumber, parent != null ? parent : this, this)));
-        updateHitCount(modifyHitCount(enemy, baseHitCount));
-        updateRightCount(modifyRightCount(enemy, baseRightCount));
+        updateMagicNumber(modifyMagicNumber(info, baseMagicNumber));
+        updateHitCount(modifyHitCount(info, baseHitCount));
+        updateRightCount(modifyRightCount(info, baseRightCount));
 
-        doEffects(be -> be.refresh(enemy, this, true));
+        doEffects(be -> be.refresh(info, true));
 
         addAttackResult(baseDamage, tempDamage);
         addDefendResult(baseBlock, tempBlock);
@@ -1802,7 +1804,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
 
     @Override
     public final void use(AbstractPlayer p1, AbstractMonster m1) {
-        final PCLUseInfo info = CombatManager.playerSystem.generateInfo(this, p1, m1);
+        PCLUseInfo info = CombatManager.playerSystem.generateInfo(this, p1, m1);
         onUse(info);
     }
 

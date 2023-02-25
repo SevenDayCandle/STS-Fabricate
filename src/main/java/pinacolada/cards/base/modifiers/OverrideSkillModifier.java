@@ -10,6 +10,7 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUIUtils;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.interfaces.markers.EditorCard;
+import pinacolada.misc.CombatManager;
 import pinacolada.skills.PSkill;
 import pinacolada.utilities.GameUtilities;
 
@@ -78,7 +79,7 @@ public class OverrideSkillModifier extends SkillModifier
     }
 
     public boolean canPlayCard(AbstractCard card) {
-        return skill.canPlay(card, null);
+        return skill.canPlay(CombatManager.playerSystem.generateInfo(card, AbstractDungeon.player, null));
     }
 
     @Override

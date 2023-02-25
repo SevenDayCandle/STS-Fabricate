@@ -1,7 +1,6 @@
 package pinacolada.skills;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIRM;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLAttackType;
@@ -166,12 +165,12 @@ public abstract class PTrait<T extends PField> extends PMove<T>
     }
 
     @Override
-    public void refresh(AbstractCreature m, AbstractCard c, boolean conditionMet)
+    public void refresh(PCLUseInfo info, boolean conditionMet)
     {
-        if (c != null && conditionMet != conditionMetCache)
+        if (info != null && conditionMet != conditionMetCache)
         {
             conditionMetCache = conditionMet;
-            applyToCard(c, conditionMet);
+            applyToCard(info.card, conditionMet);
         }
     }
 

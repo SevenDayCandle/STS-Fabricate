@@ -2,7 +2,6 @@ package pinacolada.skills.skills.base.conditions;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -53,7 +52,7 @@ public abstract class PCond_Delegate extends PPassiveCond<PField_CardCategory>
     }
 
     @Override
-    public boolean canPlay(AbstractCard card, AbstractMonster m)
+    public boolean canPlay(PCLUseInfo info)
     {
         return true;
     }

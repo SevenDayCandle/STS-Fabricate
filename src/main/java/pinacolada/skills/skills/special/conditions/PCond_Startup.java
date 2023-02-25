@@ -1,7 +1,5 @@
 package pinacolada.skills.skills.special.conditions;
 
-import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.subscribers.OnBattleStartSubscriber;
 import pinacolada.misc.PCLUseInfo;
@@ -58,7 +56,7 @@ public class PCond_Startup extends PCond<PField_Empty> implements OnBattleStartS
     }
 
     @Override
-    public boolean canPlay(AbstractCard card, AbstractMonster m)
+    public boolean canPlay(PCLUseInfo info)
     {
         return true;
     }

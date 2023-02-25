@@ -181,10 +181,10 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase
         {
             startingCardsLabel.setActive(provider instanceof PCLCharacterSelectProvider);
             startingCardsListLabel.setActive(provider instanceof PCLCharacterSelectProvider);
-            seriesButton.setActive(true);
 
             if (data != null)
             {
+                seriesButton.setActive(true);
                 loadoutEditorButton.setActive(true);
                 ascensionGlyphsLabel.setActive(true);
                 for (PCLGlyphEditor geditor : glyphEditors)

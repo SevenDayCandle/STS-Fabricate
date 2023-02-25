@@ -9,8 +9,8 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import extendedui.EUIUtils;
 import extendedui.ui.EUIBase;
-import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.misc.CombatManager;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.powers.common.PCLLockOnPower;
@@ -173,18 +173,6 @@ public class PCLPlayerSystem extends EUIBase
         }
 
         return damage;
-    }
-
-    public float modifyMagicNumber(float magicNumber, PCLCard source, PCLCard card)
-    {
-        if (card.baseMagicNumber > 0)
-        {
-            for (PCLPlayerMeter meter : getMeters())
-            {
-                magicNumber = meter.modifyMagicNumber(magicNumber, source, card);
-            }
-        }
-        return magicNumber;
     }
 
     public int modifyOrbOutput(float initial, AbstractCreature target, AbstractOrb orb)

@@ -118,12 +118,6 @@ public class PCLCardAlly extends PCLCreature
         return card != null;
     }
 
-    public void manualTrigger()
-    {
-        takeTurn();
-        CombatManager.onAllyTrigger(this.card, this);
-    }
-
     public PCLCard releaseCard()
     {
         PCLCard releasedCard = this.card;
@@ -203,6 +197,8 @@ public class PCLCardAlly extends PCLCreature
             card.useEffectsWithoutPowers(info);
             CombatManager.playerSystem.onCardPlayed(card, info, true);
             PCLActions.delayed.callback(() -> CombatManager.removeDamagePowers(this));
+            applyTurnPowers();
+            CombatManager.onAllyTrigger(this.card, this);
         }
     }
 

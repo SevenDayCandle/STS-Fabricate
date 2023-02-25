@@ -1,8 +1,6 @@
 package pinacolada.skills.skills;
 
 import com.badlogic.gdx.graphics.Color;
-import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import extendedui.utilities.EUIColors;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -52,10 +50,10 @@ public abstract class PLimit extends PPrimary<PField_Empty>
     }
 
     @Override
-    public void refresh(AbstractCreature m, AbstractCard c, boolean conditionMet)
+    public void refresh(PCLUseInfo info, boolean conditionMet)
     {
-        limitCache = checkLimit(makeInfo(m), false, false);
-        super.refresh(m, c, limitCache & conditionMet);
+        limitCache = checkLimit(info, false, false);
+        super.refresh(info, limitCache & conditionMet);
     }
 
     @Override

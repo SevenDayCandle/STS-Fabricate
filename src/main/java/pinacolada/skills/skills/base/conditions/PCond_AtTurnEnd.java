@@ -1,7 +1,5 @@
 package pinacolada.skills.skills.base.conditions;
 
-import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.subscribers.OnEndOfTurnFirstSubscriber;
@@ -59,7 +57,7 @@ public class PCond_AtTurnEnd extends PPassiveCond<PField_Empty> implements OnEnd
     }
 
     @Override
-    public boolean canPlay(AbstractCard card, AbstractMonster m)
+    public boolean canPlay(PCLUseInfo info)
     {
         return true;
     }

@@ -1,7 +1,6 @@
 package pinacolada.skills;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.utilities.ColoredString;
@@ -348,9 +347,9 @@ public abstract class PMod<T extends PField> extends PSkill<T>
     }
 
     @Override
-    public void refresh(AbstractCreature m, AbstractCard c, boolean conditionMet)
+    public void refresh(PCLUseInfo info, boolean conditionMet)
     {
-        updateChildAmount(makeInfo(m));
+        updateChildAmount(info);
     }
 
     public ColoredString getColoredValueString()
