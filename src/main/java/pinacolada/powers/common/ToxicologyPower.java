@@ -7,7 +7,6 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.powers.PoisonPower;
 import extendedui.EUIUtils;
-import pinacolada.actions.powers.ApplyPower;
 import pinacolada.powers.PCLPower;
 import pinacolada.utilities.GameUtilities;
 
@@ -32,7 +31,7 @@ public class ToxicologyPower extends PCLPower
             power.amount += this.amount;
 
             final AbstractGameAction action = AbstractDungeon.actionManager.currentAction;
-            if (action instanceof ApplyPower || action instanceof ApplyPowerAction)
+            if (action instanceof ApplyPowerAction)
             {
                 action.amount += this.amount;
             }

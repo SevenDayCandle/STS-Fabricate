@@ -8,7 +8,7 @@ import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT5;
 import extendedui.ui.tooltips.EUITooltip;
-import pinacolada.actions.PCLActionWithCallback;
+import pinacolada.actions.PCLAction;
 import pinacolada.actions.pileSelection.SelectFromPile;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardSelection;
@@ -48,7 +48,7 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory>
         fields.setCardGroup(groups);
     }
 
-    protected PCLActionWithCallback<ArrayList<AbstractCard>> createPileAction(PCLUseInfo info)
+    protected PCLAction<ArrayList<AbstractCard>> createPileAction(PCLUseInfo info)
     {
         SelectFromPile action = getAction().invoke(getName(), info.target, amount <= 0 ? Integer.MAX_VALUE : amount, fields.origin.toSelection(), fields.getCardGroup(info))
                 .setOptions((amount <= 0 ? PCLCardSelection.Random : fields.origin).toSelection(), true);

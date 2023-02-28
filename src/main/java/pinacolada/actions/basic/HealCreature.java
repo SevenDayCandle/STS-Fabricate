@@ -5,11 +5,11 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.vfx.combat.HealEffect;
-import pinacolada.actions.PCLActionWithCallback;
+import pinacolada.actions.PCLAction;
 import pinacolada.effects.PCLEffects;
 
 // Copied and modified from STS-AnimatorMod
-public class HealCreature extends PCLActionWithCallback<Integer>
+public class HealCreature extends PCLAction<Integer>
 {
     protected final int playerHpLastTurn;
     protected boolean showEffect = true;

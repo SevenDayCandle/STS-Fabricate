@@ -1,11 +1,11 @@
 package pinacolada.actions.special;
 
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
-import pinacolada.actions.PCLActionWithCallback;
+import pinacolada.actions.PCLAction;
 import pinacolada.effects.SFX;
 
 // Copied and modified from STS-AnimatorMod
-public class PlaySFX extends PCLActionWithCallback<PlaySFX>
+public class PlaySFX extends PCLAction<PlaySFX>
 {
     public final String key;
 

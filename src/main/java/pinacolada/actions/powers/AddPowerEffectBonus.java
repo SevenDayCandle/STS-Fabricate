@@ -3,10 +3,10 @@ package pinacolada.actions.powers;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.powers.AbstractPower;
-import pinacolada.actions.PCLActionWithCallback;
+import pinacolada.actions.PCLAction;
 import pinacolada.misc.CombatManager;
 
-public class AddPowerEffectBonus extends PCLActionWithCallback<AbstractPower>
+public class AddPowerEffectBonus extends PCLAction<AbstractPower>
 {
     private final CombatManager.Type effectType;
     private String powerID;

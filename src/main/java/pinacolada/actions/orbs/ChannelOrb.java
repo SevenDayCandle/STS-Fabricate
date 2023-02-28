@@ -4,13 +4,13 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import com.megacrit.cardcrawl.orbs.EmptyOrbSlot;
-import pinacolada.actions.PCLActionWithCallback;
+import pinacolada.actions.PCLAction;
 import pinacolada.orbs.PCLOrbHelper;
 
 import java.util.ArrayList;
 
 // Copied and modified from STS-AnimatorMod
-public class ChannelOrb extends PCLActionWithCallback<ArrayList<AbstractOrb>>
+public class ChannelOrb extends PCLAction<ArrayList<AbstractOrb>>
 {
     private final ArrayList<AbstractOrb> channeledOrbs = new ArrayList<>();
     private final PCLOrbHelper orbConstructor;

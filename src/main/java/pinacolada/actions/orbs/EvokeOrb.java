@@ -5,7 +5,7 @@ import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
 import extendedui.utilities.GenericCondition;
-import pinacolada.actions.PCLActionWithCallback;
+import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RandomizedList;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 // Copied and modified from STS-AnimatorMod
 // Wrapper for EvokeSpecificOrbAction with additional options
-public class EvokeOrb extends PCLActionWithCallback<ArrayList<AbstractOrb>>
+public class EvokeOrb extends PCLAction<ArrayList<AbstractOrb>>
 {
     protected final ArrayList<AbstractOrb> orbs = new ArrayList<>();
     protected GenericCondition<AbstractOrb> filter;
@@ -102,7 +102,7 @@ public class EvokeOrb extends PCLActionWithCallback<ArrayList<AbstractOrb>>
 
             for (int i = 0; i < limit; i++)
             {
-                doEvoke(randomOrbs.retrieve(rng, false), amount);
+                doEvoke(randomOrbs.retrieve(GameUtilities.getRNG(), false), amount);
             }
         }
         else

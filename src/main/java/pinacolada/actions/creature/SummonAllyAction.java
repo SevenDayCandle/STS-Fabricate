@@ -2,7 +2,7 @@ package pinacolada.actions.creature;
 
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import pinacolada.actions.PCLActionWithCallback;
+import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.effects.PCLEffects;
@@ -12,7 +12,7 @@ import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.PCLEnum;
 import pinacolada.utilities.GameUtilities;
 
-public class SummonAllyAction extends PCLActionWithCallback<PCLCard>
+public class SummonAllyAction extends PCLAction<PCLCard>
 {
     public final PCLCard card;
     public PCLCardAlly ally;

@@ -4,14 +4,14 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.AbstractPower;
-import pinacolada.actions.PCLActionWithCallback;
+import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
-public class SpreadPower extends PCLActionWithCallback<AbstractPower>
+public class SpreadPower extends PCLAction<AbstractPower>
 {
     public String powerID;
     public boolean showEffect = true;
@@ -42,7 +42,7 @@ public class SpreadPower extends PCLActionWithCallback<AbstractPower>
             {
                 if (enemy != target)
                 {
-                    PCLActions.top.applyPower(source, enemy, sourcePower, amount).showEffect(showEffect, isFast);
+                    PCLActions.top.applyPower(source, enemy, sourcePower, amount);//.showEffect(showEffect, isFast);
                 }
             }
         }

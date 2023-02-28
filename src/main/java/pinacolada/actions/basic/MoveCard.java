@@ -13,7 +13,7 @@ import com.megacrit.cardcrawl.vfx.cardManip.PurgeCardEffect;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT3;
 import extendedui.utilities.GenericCallback;
-import pinacolada.actions.PCLActionWithCallback;
+import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
@@ -26,7 +26,7 @@ import pinacolada.utilities.ListSelection;
 import java.util.List;
 
 // Copied and modified from STS-AnimatorMod
-public class MoveCard extends PCLActionWithCallback<AbstractCard>
+public class MoveCard extends PCLAction<AbstractCard>
 {
     public static final float DEFAULT_CARD_X_LEFT = Settings.WIDTH * 0.35f;
     public static final float DEFAULT_CARD_X_RIGHT = Settings.WIDTH * 0.65f;

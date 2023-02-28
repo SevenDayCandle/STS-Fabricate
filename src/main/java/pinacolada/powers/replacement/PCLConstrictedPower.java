@@ -8,6 +8,7 @@ import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.powers.ConstrictedPower;
 import pinacolada.ui.combat.CombatHelper;
 
+// Variant of Constricted that shows health being decreased and that is cloneable
 public class PCLConstrictedPower extends ConstrictedPower implements CloneablePowerInterface, HealthBarRenderPower
 {
     private static final Color healthBarColor = Color.PURPLE.cpy();

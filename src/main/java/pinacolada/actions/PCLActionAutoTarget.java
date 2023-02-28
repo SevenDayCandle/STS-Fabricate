@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 // Copied and modified from STS-AnimatorMod
-public class PCLActionAutoTarget<T> extends PCLActionWithCallback<T>
+public class PCLActionAutoTarget<T> extends PCLAction<T>
 {
     protected final List<AbstractCreature> targets = new ArrayList<>();
     protected PCLCardTarget targetHelper;

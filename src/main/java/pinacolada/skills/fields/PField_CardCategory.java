@@ -9,7 +9,7 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT5;
 import extendedui.ui.tooltips.EUITooltip;
-import pinacolada.actions.PCLActionWithCallback;
+import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.pileSelection.SelectFromPile;
 import pinacolada.cards.base.fields.PCLAffinity;
@@ -220,7 +220,7 @@ public class PField_CardCategory extends PField_CardID
         return action.invoke(skill.getName(), skill.target.getTarget(info.source, info.target), skill.useParent && g.length > 0 ? g[0].size() : skill.amount <= 0 ? Integer.MAX_VALUE : skill.amount, origin.toSelection(), g);
     }
 
-    public PCLActionWithCallback<ArrayList<AbstractCard>> getGenericPileAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> action, PCLUseInfo info)
+    public PCLAction<ArrayList<AbstractCard>> getGenericPileAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> action, PCLUseInfo info)
     {
         if (!skill.useParent && groupTypes.isEmpty())
         {

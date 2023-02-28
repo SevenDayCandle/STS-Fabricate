@@ -27,8 +27,6 @@ import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.ColoredString;
 import extendedui.utilities.EUIColors;
 import pinacolada.actions.PCLActions;
-import pinacolada.actions.powers.IncreasePower;
-import pinacolada.actions.powers.ReducePower;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
@@ -249,11 +247,6 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         return formatDescription(0, amount);
     }
 
-    public IncreasePower increasePower(int amount)
-    {
-        return (IncreasePower) PCLActions.bottom.increasePower(this, amount).setDuration(0.05f, false);
-    }
-
     public void initialize(int amount)
     {
         initialize(amount, PowerType.BUFF, false);
@@ -275,11 +268,6 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
     protected void onSamePowerApplied(AbstractPower power)
     {
 
-    }
-
-    public ReducePower reducePower(PCLActions order, int amount)
-    {
-        return PCLActions.bottom.reducePower(this, amount);
     }
 
     public RemoveSpecificPowerAction removePower()

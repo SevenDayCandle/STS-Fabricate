@@ -6,7 +6,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
 import extendedui.utilities.GenericCondition;
-import pinacolada.actions.PCLActionWithCallback;
+import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.utilities.ListSelection;
@@ -14,7 +14,7 @@ import pinacolada.utilities.ListSelection;
 import java.util.ArrayList;
 
 // Copied and modified from STS-AnimatorMod
-public class MoveCards extends PCLActionWithCallback<ArrayList<AbstractCard>>
+public class MoveCards extends PCLAction<ArrayList<AbstractCard>>
 {
     protected ArrayList<AbstractCard> selectedCards = new ArrayList<>();
     protected GenericCondition<AbstractCard> filter;

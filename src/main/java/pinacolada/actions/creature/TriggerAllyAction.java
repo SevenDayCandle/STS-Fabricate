@@ -2,10 +2,10 @@ package pinacolada.actions.creature;
 
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import pinacolada.actions.PCLActionWithCallback;
+import pinacolada.actions.PCLAction;
 import pinacolada.monsters.PCLCardAlly;
 
-public class TriggerAllyAction extends PCLActionWithCallback<PCLCardAlly>
+public class TriggerAllyAction extends PCLAction<PCLCardAlly>
 {
     public final PCLCardAlly ally;
 

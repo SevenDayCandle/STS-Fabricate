@@ -14,7 +14,7 @@ public class PCLAllyAnimation extends PCLIntervalAnimation
     public static final float RADIUS = 320;
     public PCLCreature owner;
     protected Color shineColor;
-    protected float scale = 0.5f;
+    protected float scale = 0.45f;
     protected float angle;
     protected float rate = 40f;
     protected float transitionAlpha;

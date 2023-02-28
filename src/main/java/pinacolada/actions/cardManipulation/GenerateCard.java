@@ -13,13 +13,13 @@ import com.megacrit.cardcrawl.vfx.cardManip.ShowCardAndAddToDiscardEffect;
 import com.megacrit.cardcrawl.vfx.cardManip.ShowCardAndAddToDrawPileEffect;
 import com.megacrit.cardcrawl.vfx.cardManip.ShowCardAndAddToHandEffect;
 import extendedui.EUIUtils;
-import pinacolada.actions.PCLActionWithCallback;
+import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.effects.PCLEffects;
 import pinacolada.utilities.ListSelection;
 
 // Copied and modified from STS-AnimatorMod
-public class GenerateCard extends PCLActionWithCallback<AbstractCard>
+public class GenerateCard extends PCLAction<AbstractCard>
 {
     protected final CardGroup cardGroup;
     protected boolean upgrade;

@@ -4,12 +4,12 @@ import com.evacipated.cardcrawl.mod.stslib.patches.core.AbstractCreature.TempHPF
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.vfx.combat.HealEffect;
-import pinacolada.actions.PCLActionWithCallback;
+import pinacolada.actions.PCLAction;
 import pinacolada.effects.PCLEffects;
 import pinacolada.misc.CombatManager;
 
 // Copied and modified from STS-AnimatorMod
-public class GainTemporaryHP extends PCLActionWithCallback<AbstractCreature>
+public class GainTemporaryHP extends PCLAction<AbstractCreature>
 {
     public GainTemporaryHP(AbstractCreature target, AbstractCreature source, int amount)
     {

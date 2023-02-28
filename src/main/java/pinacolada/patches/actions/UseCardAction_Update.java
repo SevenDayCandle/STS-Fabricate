@@ -1,5 +1,6 @@
 package pinacolada.patches.actions;
 
+import basemod.ReflectionHacks;
 import com.evacipated.cardcrawl.modthespire.lib.*;
 import com.evacipated.cardcrawl.modthespire.patcher.PatchingException;
 import com.megacrit.cardcrawl.actions.utility.ShowCardAndPoofAction;
@@ -7,7 +8,6 @@ import com.megacrit.cardcrawl.actions.utility.UseCardAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUIUtils;
-import extendedui.utilities.EUIClassUtils;
 import javassist.CannotCompileException;
 import javassist.CtBehavior;
 import javassist.expr.ExprEditor;
@@ -42,7 +42,7 @@ public class UseCardAction_Update
     @SpireInsertPatch(locator = Locator.class)
     public static SpireReturn<Void> insert(UseCardAction __instance)
     {
-        PCLCard c = EUIUtils.safeCast(EUIClassUtils.getField(__instance, "targetCard"), PCLCard.class);
+        PCLCard c = EUIUtils.safeCast(ReflectionHacks.getPrivate(__instance, UseCardAction.class, "targetCard"), PCLCard.class);
         if (c != null && c.type == PCLEnum.CardType.SUMMON)
         {
             PCLActions.top.add(new ShowCardAndPoofAction(c));

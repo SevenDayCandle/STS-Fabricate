@@ -4,8 +4,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.utilities.EUIColors;
 import pinacolada.actions.utility.GenericCardSelection;
-import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.List;

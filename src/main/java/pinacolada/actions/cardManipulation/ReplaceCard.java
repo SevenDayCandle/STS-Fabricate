@@ -1,11 +1,12 @@
 package pinacolada.actions.cardManipulation;
 
+import basemod.ReflectionHacks;
 import com.megacrit.cardcrawl.actions.utility.UseCardAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUIUtils;
 import extendedui.utilities.EUIClassUtils;
-import pinacolada.actions.PCLActionWithCallback;
+import pinacolada.actions.PCLAction;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.utilities.GameUtilities;
@@ -16,7 +17,7 @@ import java.util.Map;
 import java.util.UUID;
 
 // Copied and modified from STS-AnimatorMod
-public class ReplaceCard extends PCLActionWithCallback<Map<AbstractCard, AbstractCard>>
+public class ReplaceCard extends PCLAction<Map<AbstractCard, AbstractCard>>
 {
     protected final Map<AbstractCard, AbstractCard> newCards = new HashMap<>();
     protected boolean upgrade;
@@ -60,7 +61,7 @@ public class ReplaceCard extends PCLActionWithCallback<Map<AbstractCard, Abstrac
             UseCardAction action = EUIUtils.safeCast(AbstractDungeon.actionManager.actions.get(i), UseCardAction.class);
             if (action != null)
             {
-                AbstractCard card = EUIClassUtils.getField(action, "targetCard");
+                AbstractCard card = ReflectionHacks.getPrivate(action, UseCardAction.class, "targetCard");
                 if (newCards.containsKey(card) || cardUUID.equals(card.uuid))
                 {
                     EUIClassUtils.setField(action, "targetCard", replace(card));

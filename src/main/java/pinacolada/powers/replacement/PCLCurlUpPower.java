@@ -10,6 +10,7 @@ import com.megacrit.cardcrawl.powers.CurlUpPower;
 import pinacolada.actions.PCLActions;
 import pinacolada.resources.pcl.PCLCoreTooltips;
 
+// Variant of Curl Up that is cloneable and that can be applied on non-louses without crashing
 public class PCLCurlUpPower extends CurlUpPower implements CloneablePowerInterface
 {
     public static final String POWER_ID = CurlUpPower.POWER_ID;

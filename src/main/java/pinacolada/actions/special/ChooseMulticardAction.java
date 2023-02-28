@@ -5,7 +5,7 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.ui.GridCardSelectScreenHelper;
-import pinacolada.actions.PCLActionWithCallback;
+import pinacolada.actions.PCLAction;
 import pinacolada.cards.base.PCLMultiCard;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.cards.pcl.special.MysteryCard;
@@ -13,7 +13,7 @@ import pinacolada.resources.PGR;
 
 import java.util.ArrayList;
 
-public class ChooseMulticardAction extends PCLActionWithCallback<PCLMultiCard>
+public class ChooseMulticardAction extends PCLAction<PCLMultiCard>
 {
     protected final ArrayList<AbstractCard> selectedCards = new ArrayList<>();
     private final PCLMultiCard multicard;

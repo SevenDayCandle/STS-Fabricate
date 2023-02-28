@@ -4,7 +4,7 @@ import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
 import extendedui.utilities.GenericCondition;
-import pinacolada.actions.PCLActionWithCallback;
+import pinacolada.actions.PCLAction;
 import pinacolada.interfaces.subscribers.OnStartOfTurnPostDrawSubscriber;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RandomizedList;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 // TODO replace with TriggerPassiveAction
 @Deprecated
-public class TriggerOrbPassiveAbility extends PCLActionWithCallback<ArrayList<AbstractOrb>>
+public class TriggerOrbPassiveAbility extends PCLAction<ArrayList<AbstractOrb>>
 {
     protected final ArrayList<AbstractOrb> orbs = new ArrayList<>();
     protected GenericCondition<AbstractOrb> filter;
@@ -78,7 +78,7 @@ public class TriggerOrbPassiveAbility extends PCLActionWithCallback<ArrayList<Ab
 
             for (int i = 0; i < limit; i++)
             {
-                triggerPassiveEffect(randomOrbs.retrieve(rng, false), amount);
+                triggerPassiveEffect(randomOrbs.retrieve(GameUtilities.getRNG(), false), amount);
             }
         }
         else
@@ -95,6 +95,8 @@ public class TriggerOrbPassiveAbility extends PCLActionWithCallback<ArrayList<Ab
                 }
             }
         }
+
+
 
         complete(orbs);
     }

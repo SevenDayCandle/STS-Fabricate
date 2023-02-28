@@ -55,7 +55,6 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardAffinities;
 import pinacolada.cards.base.fields.PCLCardAffinity;
-import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.characters.PCLCharacter;
 import pinacolada.effects.SFX;
@@ -412,7 +411,7 @@ public class GameUtilities
 
         for (PCLCardAlly summon : CombatManager.summons.summons)
         {
-            if (!aliveOnly || !summon.hasCard())
+            if (!aliveOnly || summon.hasCard())
             {
                 characters.add(summon);
             }
@@ -870,10 +869,15 @@ public class GameUtilities
         return null;
     }
 
-    public static <T extends AbstractPower> ArrayList<T> getPowers(AbstractCreature target, PCLCardTarget targetHelper, String powerID)
+    public static <T extends AbstractPower> ArrayList<T> getPowers(String powerID)
+    {
+        return getPowers(GameUtilities.getAllCharacters(true), powerID);
+    }
+
+    public static <T extends AbstractPower> ArrayList<T> getPowers(List<AbstractCreature> creatures, String powerID)
     {
         final ArrayList<T> result = new ArrayList<>();
-        for (AbstractCreature c : targetHelper.getTargets(player, target))
+        for (AbstractCreature c : creatures)
         {
             final T t = getPower(c, powerID);
             if (t != null)

@@ -17,7 +17,7 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUI;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
-import pinacolada.actions.PCLActionWithCallback;
+import pinacolada.actions.PCLAction;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.utilities.GameUtilities;
@@ -25,7 +25,7 @@ import pinacolada.utilities.GameUtilities;
 import java.util.ArrayList;
 
 // Copied and modified from STS-AnimatorMod
-public class SelectCreature extends PCLActionWithCallback<AbstractCreature>
+public class SelectCreature extends PCLAction<AbstractCreature>
 {
     protected ActionT1<AbstractCreature> onHovering;
     protected AbstractCreature previous;

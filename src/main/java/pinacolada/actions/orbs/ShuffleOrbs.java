@@ -3,11 +3,12 @@ package pinacolada.actions.orbs;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
+import pinacolada.cards.base.PCLCard;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RandomizedList;
 
 // Copied and modified from STS-AnimatorMod
-public class ShuffleOrbs extends PCLAction
+public class ShuffleOrbs extends PCLAction<Void>
 {
     public ShuffleOrbs(int times)
     {
@@ -36,8 +37,8 @@ public class ShuffleOrbs extends PCLAction
 
         while (randomOrbs.size() >= 2)
         {
-            AbstractOrb orb1 = randomOrbs.retrieve(rng);
-            AbstractOrb orb2 = randomOrbs.retrieve(rng);
+            AbstractOrb orb1 = randomOrbs.retrieve(PCLCard.rng);
+            AbstractOrb orb2 = randomOrbs.retrieve(PCLCard.rng);
 
             int index1 = player.orbs.indexOf(orb1);
             int index2 = player.orbs.indexOf(orb2);

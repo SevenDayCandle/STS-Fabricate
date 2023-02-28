@@ -3,11 +3,11 @@ package pinacolada.actions.cardManipulation;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.ActionT2;
-import pinacolada.actions.PCLActionWithCallback;
+import pinacolada.actions.PCLAction;
 import pinacolada.utilities.GameUtilities;
 
 // Copied and modified from STS-AnimatorMod
-public class ModifyAllCopies extends PCLActionWithCallback<AbstractCard>
+public class ModifyAllCopies extends PCLAction<AbstractCard>
 {
     protected final String cardID;
     protected boolean includeMasterDeck;

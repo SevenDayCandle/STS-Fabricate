@@ -3,7 +3,7 @@ package pinacolada.actions.creature;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import pinacolada.actions.PCLActionWithCallback;
+import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.effects.PCLEffects;
@@ -14,7 +14,7 @@ import pinacolada.monsters.PCLCardAlly;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class WithdrawAllyAction extends PCLActionWithCallback<ArrayList<PCLCard>>
+public class WithdrawAllyAction extends PCLAction<ArrayList<PCLCard>>
 {
     public final ArrayList<PCLCardAlly> allies = new ArrayList<>();
     public boolean trigger = true;

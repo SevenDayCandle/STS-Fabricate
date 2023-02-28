@@ -7,7 +7,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import com.megacrit.cardcrawl.powers.AbstractPower;
-import pinacolada.actions.PCLActionWithCallback;
+import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.effects.EffekseerEFK;
 import pinacolada.effects.PCLAttackVFX;
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.function.BiConsumer;
 
 // Copied and modified from STS-AnimatorMod
-public class DealDamageToAll extends PCLActionWithCallback<ArrayList<AbstractCreature>>
+public class DealDamageToAll extends PCLAction<ArrayList<AbstractCreature>>
 {
     public final int[] damage;
 

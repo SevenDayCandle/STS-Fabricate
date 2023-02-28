@@ -8,7 +8,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.misc.CombatManager;
 
-public class PCLHasteAction extends PCLAction
+public class PCLHasteAction extends PCLAction<Void>
 {
     public PCLHasteAction(AbstractCard card)
     {
@@ -30,20 +30,19 @@ public class PCLHasteAction extends PCLAction
         }
         else
         {
-            isDone = true;
+            complete();
         }
     }
 
     @Override
     protected void complete()
     {
+        super.complete();
         if (PCLCardTag.Haste.has(card) && !CombatManager.hasteInfinitesThisTurn().contains(card))
         {
             CardCrawlGame.sound.playA("POWER_FLIGHT", MathUtils.random(0.3f, 0.4f));
             PCLCardTag.Haste.tryProgress(card);
             CombatManager.hasteInfinitesThisTurn().add(card);
         }
-
-        isDone = true;
     }
 }

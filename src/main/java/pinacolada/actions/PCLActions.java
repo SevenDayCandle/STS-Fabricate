@@ -4,9 +4,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.GameActionManager;
 import com.megacrit.cardcrawl.actions.animations.TalkAction;
+import com.megacrit.cardcrawl.actions.common.GainBlockAction;
 import com.megacrit.cardcrawl.actions.common.GainEnergyAction;
+import com.megacrit.cardcrawl.actions.common.GainGoldAction;
 import com.megacrit.cardcrawl.actions.common.RemoveSpecificPowerAction;
 import com.megacrit.cardcrawl.actions.defect.IncreaseMaxOrbAction;
+import com.megacrit.cardcrawl.actions.utility.LoseBlockAction;
 import com.megacrit.cardcrawl.actions.utility.ShakeScreenAction;
 import com.megacrit.cardcrawl.actions.utility.WaitAction;
 import com.megacrit.cardcrawl.actions.watcher.ChangeStanceAction;
@@ -33,7 +36,10 @@ import extendedui.interfaces.delegates.ActionT2;
 import pinacolada.actions.affinity.AddAffinityLevel;
 import pinacolada.actions.affinity.RerollAffinity;
 import pinacolada.actions.affinity.TryChooseChoice;
-import pinacolada.actions.basic.*;
+import pinacolada.actions.basic.GainTemporaryHP;
+import pinacolada.actions.basic.HealCreature;
+import pinacolada.actions.basic.MoveCard;
+import pinacolada.actions.basic.MoveCards;
 import pinacolada.actions.cardManipulation.*;
 import pinacolada.actions.creature.SummonAllyAction;
 import pinacolada.actions.creature.TriggerAllyAction;
@@ -45,8 +51,6 @@ import pinacolada.actions.orbs.ChannelOrb;
 import pinacolada.actions.orbs.EvokeOrb;
 import pinacolada.actions.orbs.TriggerOrbPassiveAbility;
 import pinacolada.actions.pileSelection.*;
-import pinacolada.actions.player.ChangeStance;
-import pinacolada.actions.player.GainGold;
 import pinacolada.actions.player.SpendEnergy;
 import pinacolada.actions.powers.*;
 import pinacolada.actions.special.*;
@@ -71,7 +75,6 @@ import pinacolada.powers.common.EnergizedPower;
 import pinacolada.skills.PSkill;
 import pinacolada.stances.PCLStanceHelper;
 import pinacolada.utilities.GameUtilities;
-import pinacolada.utilities.ListSelection;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -223,54 +226,54 @@ public final class PCLActions
         return add(new AddPowerEffectBonus(powerID, CombatManager.Type.PlayerEffect, amount));
     }
 
-    public ApplyPower applyPower(AbstractPower power)
+    public ApplyOrReducePowerAction applyPower(AbstractPower power)
     {
         return applyPower(power.owner, power.owner, power);
     }
 
-    public ApplyPowerAuto applyPower(PCLCardTarget targetHelper, PCLPowerHelper power, int amount)
+    public ApplyPowerAutoAction applyPower(PCLCardTarget targetHelper, PCLPowerHelper power, int amount)
     {
         return applyPower(player, targetHelper, power, amount);
     }
 
-    public ApplyPowerAuto applyPower(AbstractCreature target, PCLCardTarget targetHelper, PCLPowerHelper power)
+    public ApplyPowerAutoAction applyPower(AbstractCreature target, PCLCardTarget targetHelper, PCLPowerHelper power)
     {
-        return add(new ApplyPowerAuto(target, target, targetHelper, power, 1));
+        return add(new ApplyPowerAutoAction(target, target, targetHelper, power, 1));
     }
 
-    public ApplyPowerAuto applyPower(AbstractCreature target, PCLCardTarget targetHelper, PCLPowerHelper power, int amount)
+    public ApplyPowerAutoAction applyPower(AbstractCreature target, PCLCardTarget targetHelper, PCLPowerHelper power, int amount)
     {
-        return add(new ApplyPowerAuto(target, target, targetHelper, power, amount));
+        return add(new ApplyPowerAutoAction(target, target, targetHelper, power, amount));
     }
 
-    public ApplyPowerAuto applyPower(AbstractCreature source, AbstractCreature target, PCLCardTarget targetHelper, PCLPowerHelper power)
+    public ApplyPowerAutoAction applyPower(AbstractCreature source, AbstractCreature target, PCLCardTarget targetHelper, PCLPowerHelper power)
     {
-        return add(new ApplyPowerAuto(source, target, targetHelper, power, 1));
+        return add(new ApplyPowerAutoAction(source, target, targetHelper, power, 1));
     }
 
-    public ApplyPowerAuto applyPower(AbstractCreature source, AbstractCreature target, PCLCardTarget targetHelper, PCLPowerHelper power, int amount)
+    public ApplyPowerAutoAction applyPower(AbstractCreature source, AbstractCreature target, PCLCardTarget targetHelper, PCLPowerHelper power, int amount)
     {
-        return add(new ApplyPowerAuto(source, target, targetHelper, power, amount));
+        return add(new ApplyPowerAutoAction(source, target, targetHelper, power, amount));
     }
 
-    public ApplyPowerAuto applyPower(AbstractCreature source, AbstractCreature target, PCLCardTarget targetHelper, PCLPowerHelper power, int amount, boolean temporary)
+    public ApplyPowerAutoAction applyPower(AbstractCreature source, AbstractCreature target, PCLCardTarget targetHelper, PCLPowerHelper power, int amount, boolean temporary)
     {
-        return add(new ApplyPowerAuto(source, target, targetHelper, power, amount).setTemporary(temporary));
+        return add(new ApplyPowerAutoAction(source, target, targetHelper, power, amount).setTemporary(temporary));
     }
 
-    public ApplyPower applyPower(AbstractCreature source, AbstractPower power)
+    public ApplyOrReducePowerAction applyPower(AbstractCreature source, AbstractPower power)
     {
         return applyPower(source, power.owner, power);
     }
 
-    public ApplyPower applyPower(AbstractCreature source, AbstractCreature target, AbstractPower power)
+    public ApplyOrReducePowerAction applyPower(AbstractCreature source, AbstractCreature target, AbstractPower power)
     {
-        return add(new ApplyPower(source, target, power));
+        return add(new ApplyOrReducePowerAction(source, target, power));
     }
 
-    public ApplyPower applyPower(AbstractCreature source, AbstractCreature target, AbstractPower power, int amount)
+    public ApplyOrReducePowerAction applyPower(AbstractCreature source, AbstractCreature target, AbstractPower power, int amount)
     {
-        return add(new ApplyPower(source, target, power, amount));
+        return add(new ApplyOrReducePowerAction(source, target, power, amount));
     }
 
     public PlayVFX borderFlash(Color color)
@@ -323,14 +326,14 @@ public final class PCLActions
         return add(new ChangeStanceAction(stance));
     }
 
-    public ChangeStance changeStance(PCLStanceHelper stance)
+    public ChangeStanceAction changeStance(PCLStanceHelper stance)
     {
-        return add(new ChangeStance(stance));
+        return add(new ChangeStanceAction(stance.ID));
     }
 
-    public ChangeStance changeStance(String stanceName)
+    public ChangeStanceAction changeStance(String stanceName)
     {
-        return add(new ChangeStance(stanceName));
+        return add(new ChangeStanceAction(stanceName));
     }
 
     public ChannelOrb channelOrb(AbstractOrb orb)
@@ -412,12 +415,7 @@ public final class PCLActions
         return add(new DealDamage(target, damageInfo, effect));
     }
 
-    public ApplyPower dealDamageAtEndOfTurn(AbstractCreature source, AbstractCreature target, int amount)
-    {
-        return applyPower(source, new DelayedDamagePower(target, amount));
-    }
-
-    public ApplyPower dealDamageAtEndOfTurn(AbstractCreature source, AbstractCreature target, int amount, AbstractGameAction.AttackEffect effect)
+    public ApplyOrReducePowerAction dealDamageAtEndOfTurn(AbstractCreature source, AbstractCreature target, int amount, AbstractGameAction.AttackEffect effect)
     {
         return applyPower(source, new DelayedDamagePower(target, amount, effect));
     }
@@ -467,12 +465,12 @@ public final class PCLActions
                 .showEffect(true, false);
     }
 
-    public ApplyPower drawLessNextTurn(int amount)
+    public ApplyOrReducePowerAction drawLessNextTurn(int amount)
     {
         return applyPower(new DrawLessPower(player, amount));
     }
 
-    public ApplyPower drawNextTurn(int amount)
+    public ApplyOrReducePowerAction drawNextTurn(int amount)
     {
         return applyPower(new DrawCardNextTurnPower(player, amount));
     }
@@ -522,24 +520,24 @@ public final class PCLActions
         return playVFX(new CardFlashVfx(card, Color.ORANGE.cpy()));
     }
 
-    public ApplyPowerAuto gain(PCLPowerHelper po, int amount)
+    public ApplyPowerAutoAction gain(PCLPowerHelper po, int amount)
     {
         return gain(po, amount, false);
     }
 
-    public ApplyPowerAuto gain(PCLPowerHelper po, int amount, boolean temporary)
+    public ApplyPowerAutoAction gain(PCLPowerHelper po, int amount, boolean temporary)
     {
         return applyPower(AbstractDungeon.player, AbstractDungeon.player, PCLCardTarget.Self, po, amount, temporary);
     }
 
-    public GainBlock gainBlock(int amount)
+    public GainBlockAction gainBlock(int amount)
     {
         return gainBlock(player, amount);
     }
 
-    public GainBlock gainBlock(AbstractCreature target, int amount)
+    public GainBlockAction gainBlock(AbstractCreature target, int amount)
     {
-        return add(new GainBlock(target, target, amount));
+        return add(new GainBlockAction(target, target, amount));
     }
 
     public GainEnergyAction gainEnergy(int amount)
@@ -547,14 +545,14 @@ public final class PCLActions
         return add(new GainEnergyAction(amount));
     }
 
-    public ApplyPower gainEnergyNextTurn(int amount)
+    public ApplyOrReducePowerAction gainEnergyNextTurn(int amount)
     {
         return applyPower(new EnergizedPower(player, amount));
     }
 
-    public GainGold gainGold(int amount)
+    public GainGoldAction gainGold(int amount)
     {
-        return add(new GainGold(amount, true));
+        return add(new GainGoldAction(amount));
     }
 
     public IncreaseMaxOrbAction gainOrbSlots(int slots)
@@ -562,7 +560,7 @@ public final class PCLActions
         return add(new IncreaseMaxOrbAction(slots));
     }
 
-    public ApplyPower gainStrength(int amount)
+    public ApplyOrReducePowerAction gainStrength(int amount)
     {
         return applyPower(new StrengthPower(player, amount));
     }
@@ -587,19 +585,14 @@ public final class PCLActions
         return add(new HealCreature(player, player, amount));
     }
 
-    public IncreasePower increasePower(AbstractPower power, int amount)
-    {
-        return add(new IncreasePower(power.owner, power.owner, power, amount));
-    }
-
-    public LoseBlock loseBlock(int amount)
+    public LoseBlockAction loseBlock(int amount)
     {
         return loseBlock(player, amount);
     }
 
-    public LoseBlock loseBlock(AbstractCreature target, int amount)
+    public LoseBlockAction loseBlock(AbstractCreature target, int amount)
     {
-        return add(new LoseBlock(target, target, amount));
+        return add(new LoseBlockAction(target, target, amount));
     }
 
     public LoseHP loseHP(AbstractCreature source, AbstractCreature target, int amount, PCLAttackVFX effect)
@@ -783,47 +776,6 @@ public final class PCLActions
     public HealCreature recoverHP(int amount)
     {
         return add(new HealCreature(player, player, amount)).recover(true);
-    }
-
-    public ModifyPowers reduceCommonDebuffs(AbstractCreature target, int amount)
-    {
-        return add(new ModifyPowers(target, target, -amount, true))
-                .setFilter(GameUtilities::isCommonDebuff);
-    }
-
-    public ModifyPowers reduceDebuffs(AbstractCreature target, int amount)
-    {
-        return add(new ModifyPowers(target, target, -amount, true))
-                .setFilter(GameUtilities::isDebuff);
-    }
-
-    public ReducePower reducePower(AbstractCreature source, String powerID, int amount)
-    {
-        return add(new ReducePower(source, source, powerID, amount));
-    }
-
-    public ReducePower reducePower(AbstractCreature target, AbstractCreature source, String powerID, int amount)
-    {
-        return add(new ReducePower(target, source, powerID, amount));
-    }
-
-    public ReducePower reducePower(AbstractPower power, int amount)
-    {
-        return add(new ReducePower(power.owner, power.owner, power, amount));
-    }
-
-    public ModifyPowers removeCommonDebuffs(AbstractCreature target, ListSelection<AbstractPower> selection, int count)
-    {
-        return add(new ModifyPowers(target, target, 0, false))
-                .setFilter(GameUtilities::isCommonDebuff)
-                .setSelection(selection, count);
-    }
-
-    public ModifyPowers removeDebuffs(AbstractCreature target, ListSelection<AbstractPower> selection, int count)
-    {
-        return add(new ModifyPowers(target, target, 0, false))
-                .setFilter(GameUtilities::isDebuff)
-                .setSelection(selection, count);
     }
 
     public RemoveSpecificPowerAction removePower(AbstractCreature source, AbstractPower power)

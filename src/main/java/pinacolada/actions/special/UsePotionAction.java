@@ -3,10 +3,10 @@ package pinacolada.actions.special;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
 import com.megacrit.cardcrawl.potions.PotionSlot;
-import pinacolada.actions.PCLActionWithCallback;
+import pinacolada.actions.PCLAction;
 import pinacolada.utilities.GameUtilities;
 
-public class UsePotionAction extends PCLActionWithCallback<AbstractPotion>
+public class UsePotionAction extends PCLAction<AbstractPotion>
 {
     protected AbstractPotion potion;
     protected AbstractCreature target;

@@ -10,6 +10,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.interfaces.markers.MultiplicativePower;
 import pinacolada.resources.pcl.PCLCoreTooltips;
 
+@Deprecated
 public class PlayerFlightPower extends AbstractPower implements CloneablePowerInterface, MultiplicativePower
 {
     public static final String POWER_ID = "PlayerFlight";
@@ -76,7 +77,7 @@ public class PlayerFlightPower extends AbstractPower implements CloneablePowerIn
         if (info.owner != null && info.type != DamageInfo.DamageType.HP_LOSS && info.type != DamageInfo.DamageType.THORNS && damageAmount > 0 && willLive)
         {
             this.flash();
-            PCLActions.bottom.reducePower(this, 1);
+            PCLActions.bottom.applyPower(owner, owner, this, 1);
         }
 
         return damageAmount;

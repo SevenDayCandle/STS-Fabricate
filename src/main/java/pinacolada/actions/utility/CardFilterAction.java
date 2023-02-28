@@ -1,4 +1,4 @@
-package pinacolada.actions;
+package pinacolada.actions.utility;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
@@ -6,10 +6,11 @@ import extendedui.interfaces.delegates.ActionT3;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
 import extendedui.utilities.GenericCondition;
+import pinacolada.actions.PCLAction;
 
 import java.util.ArrayList;
 
-public abstract class CardFilterAction extends PCLActionWithCallback<ArrayList<AbstractCard>>
+public abstract class CardFilterAction extends PCLAction<ArrayList<AbstractCard>>
 {
     protected final ArrayList<AbstractCard> selectedCards = new ArrayList<>();
     protected boolean canPlayerCancel;

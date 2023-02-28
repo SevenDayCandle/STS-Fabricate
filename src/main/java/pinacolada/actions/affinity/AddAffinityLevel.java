@@ -3,12 +3,12 @@ package pinacolada.actions.affinity;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.vfx.combat.PowerBuffEffect;
-import pinacolada.actions.PCLActionWithCallback;
+import pinacolada.actions.PCLAction;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.effects.PCLEffects;
 import pinacolada.misc.CombatManager;
 
-public class AddAffinityLevel extends PCLActionWithCallback<PCLAffinity>
+public class AddAffinityLevel extends PCLAction<PCLAffinity>
 {
     public PCLAffinity affinity;
     public boolean showEffect;

@@ -538,11 +538,6 @@ public class CombatManager
         return damage;
     }
 
-    public static void onModifyDebuff(AbstractPower debuff, int initialAmount, int newAmount)
-    {
-        subscriberDo(OnModifyDebuffSubscriber.class, s -> s.onModifyDebuff(debuff, initialAmount, newAmount));
-    }
-
     public static int onEnergyRecharge(int previousEnergy, int currentEnergy)
     {
         return subscriberInout(OnEnergyRechargeSubscriber.class, currentEnergy, (s, d) -> s.onEnergyRecharge(previousEnergy, currentEnergy));
@@ -1154,9 +1149,10 @@ public class CombatManager
     // TODO add subscribers
     public static void removeDamagePowers(AbstractCreature creature)
     {
-        if (creature.hasPower(PenNibPower.POWER_ID))
+        PenNibPower penNib = GameUtilities.getPower(creature, PenNibPower.POWER_ID);
+        if (penNib != null)
         {
-            PCLActions.bottom.reducePower(creature, PenNibPower.POWER_ID, 1);
+            PCLActions.bottom.applyPower(creature, creature, penNib, -1);
 
             if (creature == player)
             {

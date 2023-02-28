@@ -16,7 +16,7 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.powers.PCLPowerHelper;
 
 // Copied and modified from STS-AnimatorMod
-public class ApplyPowerAuto extends PCLActionAutoTarget<AbstractPower>
+public class ApplyPowerAutoAction extends PCLActionAutoTarget<AbstractPower>
 {
     public static final String[] TEXT = ApplyPowerAction.TEXT;
 
@@ -32,12 +32,12 @@ public class ApplyPowerAuto extends PCLActionAutoTarget<AbstractPower>
     protected boolean temporary = false;
     protected boolean faster;
 
-    public ApplyPowerAuto(AbstractCreature source, AbstractCreature target, PCLCardTarget targetHelper, PCLPowerHelper powerHelper, int amount)
+    public ApplyPowerAutoAction(AbstractCreature source, AbstractCreature target, PCLCardTarget targetHelper, PCLPowerHelper powerHelper, int amount)
     {
         this(source, target, targetHelper, powerHelper, amount, 1);
     }
 
-    public ApplyPowerAuto(AbstractCreature source, AbstractCreature target, PCLCardTarget targetHelper, PCLPowerHelper powerHelper, int amount, int limit)
+    public ApplyPowerAutoAction(AbstractCreature source, AbstractCreature target, PCLCardTarget targetHelper, PCLPowerHelper powerHelper, int amount, int limit)
     {
         super(ActionType.POWER);
 
@@ -51,7 +51,7 @@ public class ApplyPowerAuto extends PCLActionAutoTarget<AbstractPower>
         }
     }
 
-    public ApplyPowerAuto canStack(boolean canStack)
+    public ApplyPowerAutoAction canStack(boolean canStack)
     {
         this.canStack = canStack;
 
@@ -63,12 +63,11 @@ public class ApplyPowerAuto extends PCLActionAutoTarget<AbstractPower>
     {
         for (AbstractCreature target : findTargets(true)) // Reverse because of GameActions.Top
         {
-            ApplyPower action = new ApplyPower(source, target, powerHelper.create(target, source, amount, temporary), amount);
+            ApplyOrReducePowerAction action = new ApplyOrReducePowerAction(source, target, powerHelper.create(target, source, amount, temporary), amount);
             action.ignoreArtifact(ignoreArtifact);
             action.setRealtime(isRealtime);
-            action.showEffect(showEffect, faster);
+            //action.showEffect(showEffect, faster);
             action.skipIfZero(skipIfZero);
-            action.skipIfNull(skipIfNull);
             action.canStack(canStack);
             action.isCancellable(canCancel);
             action.allowNegative(allowNegative);
@@ -79,21 +78,21 @@ public class ApplyPowerAuto extends PCLActionAutoTarget<AbstractPower>
         complete();
     }
 
-    public ApplyPowerAuto ignoreArtifact(boolean ignoreArtifact)
+    public ApplyPowerAutoAction ignoreArtifact(boolean ignoreArtifact)
     {
         this.ignoreArtifact = ignoreArtifact;
 
         return this;
     }
 
-    public ApplyPowerAuto setTemporary(boolean temporary)
+    public ApplyPowerAutoAction setTemporary(boolean temporary)
     {
         this.temporary = temporary;
 
         return this;
     }
 
-    public ApplyPowerAuto showEffect(boolean showEffect, boolean isFast)
+    public ApplyPowerAutoAction showEffect(boolean showEffect, boolean isFast)
     {
         this.showEffect = showEffect;
         this.faster = isFast;
@@ -101,21 +100,21 @@ public class ApplyPowerAuto extends PCLActionAutoTarget<AbstractPower>
         return this;
     }
 
-    public ApplyPowerAuto skipIfNull(boolean skipIfNull)
+    public ApplyPowerAutoAction skipIfNull(boolean skipIfNull)
     {
         this.skipIfNull = skipIfNull;
 
         return this;
     }
 
-    public ApplyPowerAuto skipIfZero(boolean skipIfZero)
+    public ApplyPowerAutoAction skipIfZero(boolean skipIfZero)
     {
         this.skipIfZero = skipIfZero;
 
         return this;
     }
 
-    public ApplyPowerAuto allowNegative(boolean allowNegative)
+    public ApplyPowerAutoAction allowNegative(boolean allowNegative)
     {
         this.allowNegative = allowNegative;
 

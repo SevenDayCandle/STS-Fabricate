@@ -14,7 +14,7 @@ import extendedui.interfaces.delegates.FuncT2;
 import extendedui.text.EUISmartText;
 import extendedui.ui.GridCardSelectScreenHelper;
 import extendedui.utilities.GenericCondition;
-import pinacolada.actions.PCLActionWithCallback;
+import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.resources.PGR;
@@ -26,7 +26,7 @@ import java.util.Collections;
 import java.util.List;
 
 // Copied and modified from STS-AnimatorMod
-public class SelectFromPile extends PCLActionWithCallback<ArrayList<AbstractCard>>
+public class SelectFromPile extends PCLAction<ArrayList<AbstractCard>>
 {
     protected final ArrayList<AbstractCard> selectedCards = new ArrayList<>();
     protected final CardGroup fakeHandGroup = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);

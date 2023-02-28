@@ -9,7 +9,7 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.*;
 import extendedui.ui.GridCardSelectScreenHelper;
 import extendedui.utilities.GenericCallback;
-import pinacolada.actions.PCLActionWithCallback;
+import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.ChoiceCard;
 import pinacolada.cards.base.ChoiceData;
@@ -27,7 +27,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-public class TryChooseChoice<T> extends PCLActionWithCallback<ArrayList<ChoiceCard<T>>>
+public class TryChooseChoice<T> extends PCLAction<ArrayList<ChoiceCard<T>>>
 {
     protected final ArrayList<ChoiceCard<T>> selectedCards = new ArrayList<>();
     protected final CardGroup group = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
@@ -148,7 +148,7 @@ public class TryChooseChoice<T> extends PCLActionWithCallback<ArrayList<ChoiceCa
         initialize(amount, name);
     }
 
-    public <S> PCLActionWithCallback<ArrayList<ChoiceCard<T>>> addConditionalCallback(S state, ActionT2<S, ArrayList<ChoiceCard<T>>> onCompletion)
+    public <S> PCLAction<ArrayList<ChoiceCard<T>>> addConditionalCallback(S state, ActionT2<S, ArrayList<ChoiceCard<T>>> onCompletion)
     {
         conditionalCallbacks.add(GenericCallback.fromT2(onCompletion, state));
 

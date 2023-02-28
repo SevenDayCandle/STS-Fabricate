@@ -7,12 +7,17 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.random.Random;
 import extendedui.EUIUtils;
+import extendedui.interfaces.delegates.ActionT0;
+import extendedui.interfaces.delegates.ActionT1;
+import extendedui.interfaces.delegates.ActionT2;
+import extendedui.utilities.GenericCallback;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
+
 // Copied and modified from STS-AnimatorMod
-public abstract class PCLAction extends AbstractGameAction
+public abstract class PCLAction<T> extends AbstractGameAction
 {
     public static AbstractCard currentCard;
 
@@ -22,11 +27,11 @@ public abstract class PCLAction extends AbstractGameAction
     public AbstractCard sourceCard;
 
     protected final AbstractPlayer player;
-    protected final Random rng;
     protected AbstractCard card;
     protected String message;
     protected String name;
     protected int ticks;
+    protected ArrayList<GenericCallback<T>> callbacks = new ArrayList<>();
 
     public PCLAction(ActionType type)
     {
@@ -35,7 +40,6 @@ public abstract class PCLAction extends AbstractGameAction
 
     public PCLAction(ActionType type, float duration)
     {
-        this.rng = AbstractDungeon.cardRandomRng;
         this.player = AbstractDungeon.player;
         this.sourceCard = currentCard;
         this.duration = this.startDuration = duration;
@@ -43,14 +47,14 @@ public abstract class PCLAction extends AbstractGameAction
         this.canCancel = true;
     }
 
-    public PCLAction setSourceCard(AbstractCard card)
+    public PCLAction<T> setSourceCard(AbstractCard card)
     {
         this.sourceCard = card;
 
         return this;
     }
 
-    public PCLAction setOriginalOrder(PCLActions.ActionOrder order)
+    public PCLAction<T> setOriginalOrder(PCLActions.ActionOrder order)
     {
         this.originalOrder = order;
 
@@ -58,21 +62,21 @@ public abstract class PCLAction extends AbstractGameAction
     }
 
     // Set this to false if an action needs to be executed even if all enemies are dead (e.g. Gain Gold or Heal)
-    public PCLAction isCancellable(boolean canCancel)
+    public PCLAction<T> isCancellable(boolean canCancel)
     {
         this.canCancel = canCancel;
 
         return this;
     }
 
-    public PCLAction setRealtime(boolean isRealtime)
+    public PCLAction<T> setRealtime(boolean isRealtime)
     {
         this.isRealtime = isRealtime;
 
         return this;
     }
 
-    public PCLAction setDuration(float duration, boolean isRealtime)
+    public PCLAction<T> setDuration(float duration, boolean isRealtime)
     {
         this.isRealtime = isRealtime;
         this.duration = this.startDuration = duration;
@@ -80,7 +84,7 @@ public abstract class PCLAction extends AbstractGameAction
         return this;
     }
 
-    public PCLAction addDuration(float duration)
+    public PCLAction<T> addDuration(float duration)
     {
         this.startDuration += duration;
         this.duration += duration;
@@ -191,7 +195,38 @@ public abstract class PCLAction extends AbstractGameAction
         tickDuration(getDeltaTime());
     }
 
-    protected void copySettings(PCLAction other)
+    public <S>  PCLAction<T>  addCallback(S state, ActionT2<S, T> onCompletion)
+    {
+        callbacks.add(GenericCallback.fromT2(onCompletion, state));
+
+        return this;
+    }
+
+    public  PCLAction<T>  addCallback(ActionT1<T> onCompletion)
+    {
+        callbacks.add(GenericCallback.fromT1(onCompletion));
+
+        return this;
+    }
+
+    public  PCLAction<T>  addCallback(ActionT0 onCompletion)
+    {
+        callbacks.add(GenericCallback.fromT0(onCompletion));
+
+        return this;
+    }
+
+    protected void complete(T result)
+    {
+        for (GenericCallback<T> callback : callbacks)
+        {
+            callback.complete(result);
+        }
+
+        complete();
+    }
+
+    protected void copySettings(PCLAction<T> other)
     {
         setDuration(other.startDuration, other.isRealtime);
         isCancellable(other.canCancel);
@@ -199,5 +234,6 @@ public abstract class PCLAction extends AbstractGameAction
         message = other.message;
         originalOrder = other.originalOrder;
         sourceCard = other.sourceCard;
+        callbacks.addAll(((PCLAction<T>) other).callbacks);
     }
 }

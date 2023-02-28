@@ -47,7 +47,7 @@ public class PCLPowerHelper implements TooltipProvider
     public static final PCLPowerHelper SelfImmolation = new PCLPowerHelper(SelfImmolationPower.POWER_ID, PGR.core.tooltips.selfImmolation, (o, s, a) -> new SelfImmolationPower(o, a, shouldExtend(o, s)), Behavior.TurnBased, false, true, false);
     public static final PCLPowerHelper Shackles = new PCLPowerHelper(ShacklesPower.POWER_ID, PGR.core.tooltips.shackles, ShacklesPower::new, Behavior.SingleTurn, true, true, false);
     public static final PCLPowerHelper Silenced = new PCLPowerHelper(SilencedPower.POWER_ID, PGR.core.tooltips.silenced, SilencedPower::new, Behavior.TurnBased, false, true, false);
-    public static final PCLPowerHelper Slow = new PCLPowerHelper(AntiArtifactSlowPower.POWER_ID, PGR.core.tooltips.slow, AntiArtifactSlowPower::new, Behavior.Permanent, false, true, true);
+    public static final PCLPowerHelper Slow = new PCLPowerHelper(SlowPower.POWER_ID, PGR.core.tooltips.slow, SlowPower::new, Behavior.Permanent, false, true, true);
     public static final PCLPowerHelper Vulnerable = new PCLPowerHelper(VulnerablePower.POWER_ID, PGR.core.tooltips.vulnerable, (o, s, a) -> new PCLVulnerablePower(o, a, shouldExtend(o, s)), Behavior.TurnBased, true, true, true);
     public static final PCLPowerHelper Weak = new PCLPowerHelper(WeakPower.POWER_ID, PGR.core.tooltips.weak, (o, s, a) -> new PCLWeakPower(o, a, shouldExtend(o, s)), Behavior.TurnBased, true, true, true);
 

@@ -5,7 +5,7 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.interfaces.delegates.FuncT5;
 import extendedui.ui.tooltips.EUITooltip;
-import pinacolada.actions.PCLActionWithCallback;
+import pinacolada.actions.PCLAction;
 import pinacolada.actions.pileSelection.DrawCards;
 import pinacolada.actions.pileSelection.FetchFromPile;
 import pinacolada.actions.pileSelection.SelectFromPile;
@@ -46,7 +46,7 @@ public class PMod_DrawPerCard extends PMod_Do
     }
 
     @Override
-    protected PCLActionWithCallback<ArrayList<AbstractCard>> createPileAction(PCLUseInfo info)
+    protected PCLAction<ArrayList<AbstractCard>> createPileAction(PCLUseInfo info)
     {
         return new DrawCards(amount);
     }

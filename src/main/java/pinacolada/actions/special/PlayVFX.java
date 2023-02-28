@@ -2,11 +2,11 @@ package pinacolada.actions.special;
 
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
-import pinacolada.actions.PCLActionWithCallback;
+import pinacolada.actions.PCLAction;
 import pinacolada.effects.PCLEffects;
 
 // Copied and modified from STS-AnimatorMod
-public class PlayVFX extends PCLActionWithCallback<AbstractGameEffect>
+public class PlayVFX extends PCLAction<AbstractGameEffect>
 {
     private AbstractGameEffect effect;
     private boolean isTopLevelEffect;

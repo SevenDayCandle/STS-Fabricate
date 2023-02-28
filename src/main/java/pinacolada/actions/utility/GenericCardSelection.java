@@ -1,7 +1,6 @@
 package pinacolada.actions.utility;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import pinacolada.actions.CardFilterAction;
 
 // Copied and modified from STS-AnimatorMod
 public class GenericCardSelection extends CardFilterAction

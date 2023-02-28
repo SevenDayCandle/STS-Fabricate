@@ -9,7 +9,7 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import extendedui.interfaces.delegates.FuncT2;
-import pinacolada.actions.PCLActionWithCallback;
+import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.effects.EffekseerEFK;
 import pinacolada.effects.PCLAttackVFX;
@@ -20,7 +20,7 @@ import pinacolada.powers.common.StolenGoldPower;
 import pinacolada.utilities.GameUtilities;
 
 // Copied and modified from STS-AnimatorMod
-public class DealDamage extends PCLActionWithCallback<AbstractCreature>
+public class DealDamage extends PCLAction<AbstractCreature>
 {
     protected final DamageInfo info;
 

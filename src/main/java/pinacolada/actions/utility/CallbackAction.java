@@ -4,10 +4,10 @@ import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import extendedui.interfaces.delegates.ActionT0;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.ActionT2;
-import pinacolada.actions.PCLActionWithCallback;
+import pinacolada.actions.PCLAction;
 
 // Copied and modified from STS-AnimatorMod
-public class CallbackAction extends PCLActionWithCallback<AbstractGameAction>
+public class CallbackAction extends PCLAction<AbstractGameAction>
 {
     private final AbstractGameAction action;
 

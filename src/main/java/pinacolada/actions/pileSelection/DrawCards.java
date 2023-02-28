@@ -8,8 +8,8 @@ import com.megacrit.cardcrawl.powers.NoDrawPower;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
 import extendedui.utilities.GenericCondition;
-import pinacolada.actions.CardFilterAction;
 import pinacolada.actions.PCLActions;
+import pinacolada.actions.utility.CardFilterAction;
 
 public class DrawCards extends CardFilterAction
 {
