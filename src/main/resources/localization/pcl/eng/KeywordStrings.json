@@ -24,11 +24,6 @@
 								"NAMES": ["autoplay", "autoplayed"],
 								"PROPER_NAME": "Autoplay"
 				},
-				"Blasted":	{
-								"DESCRIPTION": "Take #b1 more damage per stack from #yAttacks. Reduced by #b1 at turn start.",
-								"NAMES": ["blasted"],
-								"PROPER_NAME": "Blasted"
-				},
 				"Blinded":	{
 								"DESCRIPTION": "Deal #b1 less #yAttack damage per stack. Reduced by #b1 at turn end.",
 								"NAMES": ["blinded"],
@@ -43,6 +38,11 @@
 								"DESCRIPTION": "[Block] is conserved between turns.",
 								"NAMES": ["blur"],
 								"PROPER_NAME": "Blur"
+				},
+				"Bruised":	{
+								"DESCRIPTION": "Take #b1 more damage per stack from #yAttacks. Reduced by #b1 at turn start.",
+								"NAMES": ["bruised"],
+								"PROPER_NAME": "Bruised"
 				},
 				"Brutal Damage":	{
 								"DESCRIPTION": "Affected twice by powers that modify damage.",
@@ -551,7 +551,7 @@
 								"PROPER_NAME": "Thousand Cuts"
 				},
 				"Toxicology":	{
-								"DESCRIPTION": "Whenever you apply [Poison], [Blasted], or [Shackles], apply additional stacks.",
+								"DESCRIPTION": "Whenever you apply [Poison], [Bruised], [Blinded], or [Shackles], apply additional stacks.",
 								"NAMES": ["toxicology"],
 								"PROPER_NAME": "Toxicology"
 				},

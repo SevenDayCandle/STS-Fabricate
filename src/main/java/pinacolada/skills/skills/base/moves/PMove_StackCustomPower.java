@@ -61,9 +61,11 @@ public class PMove_StackCustomPower extends PMove<PField_CustomPower> implements
         }
 
         List<PTrigger> triggers = EUIUtils.mapAsNonnull(fields.indexes, i -> ((EditorCard) sourceCard).getPowerEffect(i));
+
+        // Deliberately allowing applyPower to work with negative values because infinite turn powers need to be negative
         for (AbstractCreature c : getTargetList(info))
         {
-            getActions().applyPower(new PSkillPower(c, amount, triggers));//.allowDuplicates(true);
+            getActions().applyPower(new PSkillPower(c, amount, triggers)).skipIfZero(false).allowNegative(true);
         }
         super.use(info);
     }

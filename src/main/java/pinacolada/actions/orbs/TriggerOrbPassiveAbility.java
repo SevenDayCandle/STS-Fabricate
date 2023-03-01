@@ -11,8 +11,6 @@ import pinacolada.utilities.RandomizedList;
 
 import java.util.ArrayList;
 
-// TODO replace with TriggerPassiveAction
-@Deprecated
 public class TriggerOrbPassiveAbility extends PCLAction<ArrayList<AbstractOrb>>
 {
     protected final ArrayList<AbstractOrb> orbs = new ArrayList<>();

@@ -91,9 +91,9 @@ public class PCLCoreTooltips extends PCLTooltips
     public EUITooltip afterlife = EUITooltip.findByID("Afterlife");
     public EUITooltip artifact = EUITooltip.findByID("Artifact");
     public EUITooltip autoplay = EUITooltip.findByID("Autoplay");
-    public EUITooltip blasted = EUITooltip.findByID("Blasted");
     public EUITooltip blinded = EUITooltip.findByID("Blinded");
     public EUITooltip blur = EUITooltip.findByID("Blur");
+    public EUITooltip bruised = EUITooltip.findByID("Bruised");
     public EUITooltip brutal = EUITooltip.findByID("Brutal Damage");
     public EUITooltip buffer = EUITooltip.findByID("Buffer");
     public EUITooltip calm = EUITooltip.findByID("Calm");
@@ -292,7 +292,7 @@ public class PCLCoreTooltips extends PCLTooltips
         weak.setIconFromPowerRegion(ICON_WEAK);
         vulnerable.setIconFromPowerRegion(ICON_VULNERABLE);
 
-        blasted.setIconFromPath(PGR.getPowerImage(BlastedPower.POWER_ID));
+        bruised.setIconFromPath(PGR.getPowerImage(BruisedPower.POWER_ID));
         blinded.setIconFromPath(PGR.getPowerImage(BlindedPower.POWER_ID));
         deflection.setIconFromPath(PGR.getPowerImage(DeflectionPower.POWER_ID));
         critical.setIconFromPath(PGR.getPowerImage(CriticalPower.POWER_ID));

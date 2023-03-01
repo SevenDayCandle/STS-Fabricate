@@ -8,13 +8,12 @@ import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.localization.PowerStrings;
 import com.megacrit.cardcrawl.powers.AbstractPower;
-import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.utilities.ColoredString;
 import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.misc.CombatManager;
 import pinacolada.misc.PCLUseInfo;
-import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PTrigger;
 import pinacolada.skills.skills.base.primary.PTrigger_Interactable;
@@ -54,8 +53,8 @@ public class PSkillPower extends PCLPower
                 }
                 else
                 {
-                    this.img = EUIRM.getTexture(PGR.core.createID("UnknownPower"));
-                    this.powerStrings.NAME = effect.source != null ? effect.source.getName() : effect.effectID != null ? effect.effectID : "UnknownPower";
+                    this.img = PCLCoreImages.unknown.texture();
+                    this.powerStrings.NAME = effect.source != null ? effect.source.getName() : effect.effectID != null ? effect.effectID : this.getClass().getSimpleName();
                 }
             }
 

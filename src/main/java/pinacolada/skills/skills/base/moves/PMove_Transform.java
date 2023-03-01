@@ -9,7 +9,7 @@ import extendedui.interfaces.delegates.FuncT5;
 import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.actions.PCLActions;
-import pinacolada.actions.pileSelection.SelectFromPile;
+import pinacolada.actions.piles.SelectFromPile;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardGroupHelper;

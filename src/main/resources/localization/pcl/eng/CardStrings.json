@@ -1,10 +1,16 @@
 {
 				"COLORLESS":	{
 								"pcl:Apotheosis": {"NAME": "Apotheosis"},
+								"pcl:CalculatedGamble": {"NAME": "Calculated Gamble"},
 								"pcl:Chrysalis": {"NAME": "Chrysalis"},
+								"pcl:DarkShackles": {"NAME": "Dark Shackles"},
+								"pcl:DeepBreath": {"NAME": "Deep Breath"},
 								"pcl:Insight": {"NAME": "Insight"},
+								"pcl:Madness": {"NAME": "Madness"},
 								"pcl:Metamorphosis": {"NAME": "Metamorphosis"},
-								"pcl:Miracle": {"NAME": "Miracle"}
+								"pcl:MindBlast": {"NAME": "Mind Blast"},
+								"pcl:Miracle": {"NAME": "Miracle"},
+								"pcl:Panacea": {"NAME": "Panacea"}
 				},
 				"CURSE":	{
 								"pcl:Curse_AscendersBane": {

@@ -1,6 +1,6 @@
 package pinacolada.skills.skills.base.moves;
 
-import pinacolada.actions.basic.RemoveBlock;
+import com.megacrit.cardcrawl.actions.common.RemoveAllBlockAction;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
@@ -45,7 +45,7 @@ public class PMove_RemoveBlock extends PMove<PField_Empty>
     @Override
     public void use(PCLUseInfo info)
     {
-        getActions().add(new RemoveBlock(info.target, info.source)).setVFX(true, true);
+        getActions().add(new RemoveAllBlockAction(info.target, info.source));
         super.use(info);
     }
 

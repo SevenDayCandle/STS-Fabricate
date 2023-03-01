@@ -12,6 +12,7 @@ import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import extendedui.EUIInputManager;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
+import extendedui.interfaces.delegates.ActionT0;
 import extendedui.ui.AbstractScreen;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUICardGrid;
@@ -21,38 +22,39 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.resources.PGR;
-import pinacolada.ui.characterSelection.PCLSeriesSelectScreen;
 import pinacolada.utilities.GameUtilities;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 
 import static pinacolada.utilities.GameUtilities.scale;
 import static pinacolada.utilities.GameUtilities.screenW;
 
 public class PCLViewLoadoutPoolEffect extends PCLEffectWithCallback<CardGroup>
 {
-    private CardGroup cards;
     private EUIButton deselectAllButton;
     private EUIButton selectAllButton;
-    private EUICardGrid grid;
     private EUILabel selectedCount;
     private EUIToggle upgradeToggle;
-    private boolean draggingScreen;
     private boolean canToggle = true;
+    private boolean draggingScreen;
     private boolean showTopPanelOnComplete;
+    private final ActionT0 onRefresh;
+    private final CardGroup cards;
     private final Color screenColor;
-    private final PCLSeriesSelectScreen screen;
+    private final EUICardGrid grid;
+    private final HashSet<String> bannedCards;
 
-    public PCLViewLoadoutPoolEffect(PCLSeriesSelectScreen screen, ArrayList<AbstractCard> cards)
+    public PCLViewLoadoutPoolEffect(CardGroup cards, HashSet<String> bannedCards)
     {
-        this(screen, GameUtilities.createCardGroup(cards));
+        this(cards, bannedCards, null);
     }
 
-    public PCLViewLoadoutPoolEffect(PCLSeriesSelectScreen screen, CardGroup cards)
+    public PCLViewLoadoutPoolEffect(CardGroup cards, HashSet<String> bannedCards, ActionT0 onRefresh)
     {
         super(0.7f);
 
-        this.screen = screen;
+        this.bannedCards = bannedCards;
+        this.onRefresh = onRefresh;
         this.cards = cards;
         this.isRealtime = true;
         this.screenColor = Color.BLACK.cpy();
@@ -120,14 +122,14 @@ public class PCLViewLoadoutPoolEffect extends PCLEffectWithCallback<CardGroup>
 
     private void updateCardAlpha(AbstractCard c)
     {
-        c.targetTransparency = screen.container.bannedCards.contains(c.cardID) ? 0.35f : 1f;
+        c.targetTransparency = bannedCards.contains(c.cardID) ? 0.35f : 1f;
     }
 
     private void toggleCard(AbstractCard c)
     {
         if (canToggle)
         {
-            toggleCardImpl(c, screen.container.bannedCards.contains(c.cardID));
+            toggleCardImpl(c, bannedCards.contains(c.cardID));
             refreshCountText();
         }
     }
@@ -136,10 +138,10 @@ public class PCLViewLoadoutPoolEffect extends PCLEffectWithCallback<CardGroup>
     {
         if (value)
         {
-            screen.container.bannedCards.remove(c.cardID);
+            bannedCards.remove(c.cardID);
         }
         else {
-            screen.container.bannedCards.add(c.cardID);
+            bannedCards.add(c.cardID);
         }
         updateCardAlpha(c);
     }
@@ -161,16 +163,11 @@ public class PCLViewLoadoutPoolEffect extends PCLEffectWithCallback<CardGroup>
 
     public void refreshCountText()
     {
-        selectedCount.setLabel(EUIUtils.format(PGR.core.strings.sui_selected, EUIUtils.count(cards.group, card -> !screen.container.bannedCards.contains(card.cardID)), cards.group.size()));
-        screen.forceUpdateText();
-    }
-
-    public void refresh(CardGroup cards)
-    {
-        this.cards = cards;
-        this.grid = new EUICardGrid()
-                .canDragScreen(false)
-                .addCards(cards.group);
+        selectedCount.setLabel(EUIUtils.format(PGR.core.strings.sui_selected, EUIUtils.count(cards.group, card -> !bannedCards.contains(card.cardID)), cards.group.size()));
+        if (onRefresh != null)
+        {
+            onRefresh.invoke();
+        }
     }
 
     public PCLViewLoadoutPoolEffect setStartingPosition(float x, float y)

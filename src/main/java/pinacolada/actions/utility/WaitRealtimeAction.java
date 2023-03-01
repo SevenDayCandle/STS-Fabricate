@@ -4,7 +4,7 @@ import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import pinacolada.actions.PCLAction;
 
 // Copied and modified from STS-AnimatorMod
-public class WaitRealtimeAction extends PCLAction
+public class WaitRealtimeAction extends PCLAction<Void>
 {
     public WaitRealtimeAction(float duration)
     {

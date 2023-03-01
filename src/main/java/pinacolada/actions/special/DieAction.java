@@ -14,7 +14,7 @@ import pinacolada.effects.PCLEffects;
 import pinacolada.utilities.GameUtilities;
 
 // Copied and modified from STS-AnimatorMod
-public class DieAction extends PCLAction
+public class DieAction extends PCLAction<Void>
 {
     public DieAction(AbstractCreature target)
     {

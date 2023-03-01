@@ -7,7 +7,7 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT2;
 import extendedui.interfaces.delegates.FuncT0;
 import extendedui.ui.AbstractDungeonScreen;
-import pinacolada.actions.pileSelection.SelectFromPile;
+import pinacolada.actions.piles.SelectFromPile;
 import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.cards.base.PCLCard;

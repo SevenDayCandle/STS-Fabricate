@@ -2,7 +2,6 @@ package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
@@ -58,7 +57,7 @@ public class PMove_Heal extends PMove<PField_Empty>
     {
         for (AbstractCreature t : getTargetList(info))
         {
-            getActions().heal(info.source, t, amount).isCancellable(t == AbstractDungeon.player);
+            getActions().heal(info.source, t, amount);
         }
         super.use(info);
     }

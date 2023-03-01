@@ -35,8 +35,8 @@ public class PCLPowerHelper implements TooltipProvider
     protected static final Map<String, PCLPowerHelper> CommonBuffs = new HashMap<>();
     protected static final Map<String, PCLPowerHelper> CommonDebuffs = new HashMap<>();
 
-    public static final PCLPowerHelper Blasted = new PCLPowerHelper(BlastedPower.POWER_ID, PGR.core.tooltips.blasted, BlastedPower::new, Behavior.TurnBased, true, true, false);
     public static final PCLPowerHelper Blinded = new PCLPowerHelper(BlindedPower.POWER_ID, PGR.core.tooltips.blinded, BlindedPower::new, Behavior.TurnBased, true, true, false);
+    public static final PCLPowerHelper Bruised = new PCLPowerHelper(BruisedPower.POWER_ID, PGR.core.tooltips.bruised, BruisedPower::new, Behavior.TurnBased, true, true, false);
     public static final PCLPowerHelper Constricted = new PCLPowerHelper(ConstrictedPower.POWER_ID, PGR.core.tooltips.constricted, PCLConstrictedPower::new, Behavior.Permanent, true, true, false);
     public static final PCLPowerHelper DelayedDamage = new PCLPowerHelper(DelayedDamagePower.POWER_ID, PGR.core.tooltips.delayedDamage, (o, s, a) -> new DelayedDamagePower(o, a, PCLEnum.AttackEffect.CLAW), Behavior.SingleTurn, true, true, false);
     public static final PCLPowerHelper DrawLess = new PCLPowerHelper(DrawLessPower.POWER_ID, PGR.core.tooltips.nextTurnDrawLess, DrawLessPower::new, Behavior.SingleTurn, true, true, false);

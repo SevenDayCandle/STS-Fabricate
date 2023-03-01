@@ -4,7 +4,7 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.random.Random;
 import extendedui.EUIRM;
 import extendedui.utilities.ColoredTexture;
-import pinacolada.actions.pileSelection.SelectFromPile;
+import pinacolada.actions.piles.SelectFromPile;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.fields.AffinityTokenData;

@@ -28,25 +28,30 @@ public class UsePotionAction extends PCLAction<AbstractPotion>
     @Override
     protected void firstUpdate()
     {
-        if (potion.canUse() && target != null && !GameUtilities.isDeadOrEscaped(target))
+        if (potion != null && potion.canUse() && (!potion.targetRequired || !GameUtilities.isDeadOrEscaped(target)))
         {
             for (int i = 0; i < amount; i++)
             {
                 potion.use(target);
             }
-        }
 
-        if (shouldRemove)
-        {
-            int index = player.potions != null ? player.potions.indexOf(potion) : -1;
-            if (index >= 0)
+            if (shouldRemove)
             {
-                player.potions.set(index, new PotionSlot(index));
-                player.adjustPotionPositions();
+                int index = player.potions != null ? player.potions.indexOf(potion) : -1;
+                if (index >= 0)
+                {
+                    player.potions.set(index, new PotionSlot(index));
+                    player.adjustPotionPositions();
+                }
             }
+
+            complete(potion);
+        }
+        else
+        {
+            complete();
         }
 
-        complete();
     }
 
     public UsePotionAction setShouldRemove(boolean shouldRemove)

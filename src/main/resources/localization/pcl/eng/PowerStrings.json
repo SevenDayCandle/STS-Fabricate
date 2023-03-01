@@ -5,15 +5,15 @@
 								"DESCRIPTIONS": ["When you #yWithdraw this #ySummon by #ySummoning another one in its place, transfer this #ySummon's powers to the new one."],
 								"NAME": "Baton Pass"
 				},
-				"pcl:BlastedPower":
-				{
-								"DESCRIPTIONS": ["Take #b{0} more #yAttack damage."],
-								"NAME": "Blasted"
-				},
 				"pcl:BlindedPower":
 				{
 								"DESCRIPTIONS": ["Deal #b{0} less #yAttack damage."],
 								"NAME": "Blinded"
+				},
+				"pcl:BruisedPower":
+				{
+								"DESCRIPTIONS": ["Take #b{0} more #yAttack damage."],
+								"NAME": "Bruised"
 				},
 				"pcl:CriticalPower":
 				{
@@ -95,11 +95,6 @@
 								"DESCRIPTIONS": ["HP, damage, [Block], and [THP] values are multiplied by {0}."],
 								"NAME": "Macroscope"
 				},
-				"pcl:MagusFormPower":
-				{
-								"DESCRIPTIONS": ["At the start of turn: Gain #b{0} [Focus] and lose #b{1} [Strength] and [Dexterity]."],
-								"NAME": "Magus Form"
-				},
 				"pcl:PCLLockOnPower":
 				{
 								"DESCRIPTIONS": ["Receive #b{0}% more damage from Orbs for #b{1} {2}. Orbs and [Support Damage] will prioritize this target.", "turn", "turns"],
@@ -172,7 +167,7 @@
 				},
 				"pcl:ToxicologyPower":
 				{
-								"DESCRIPTIONS": ["Whenever you apply [Poison], [Blasted], or [Shackles], apply #b{0} more."],
+								"DESCRIPTIONS": ["Whenever you apply [Poison], [Bruised], [Blinded], or [Shackles], apply #b{0} more."],
 								"NAME": "Toxicology"
 				},
 				"pcl:VitalityPower":

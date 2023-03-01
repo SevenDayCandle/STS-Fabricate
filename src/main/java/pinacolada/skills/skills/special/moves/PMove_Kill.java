@@ -1,7 +1,7 @@
 package pinacolada.skills.skills.special.moves;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import pinacolada.actions.special.KillCharacterAction;
+import pinacolada.actions.special.DieAction;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.skills.PMove;
@@ -39,7 +39,7 @@ public class PMove_Kill extends PMove<PField_Empty>
     {
         for (AbstractCreature target : getTargetList(info))
         {
-            getActions().add(new KillCharacterAction(info.source, target));
+            getActions().add(new DieAction(target));
         }
         super.use(info);
     }

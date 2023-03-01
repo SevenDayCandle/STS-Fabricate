@@ -4,10 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.GameActionManager;
 import com.megacrit.cardcrawl.actions.animations.TalkAction;
-import com.megacrit.cardcrawl.actions.common.GainBlockAction;
-import com.megacrit.cardcrawl.actions.common.GainEnergyAction;
-import com.megacrit.cardcrawl.actions.common.GainGoldAction;
-import com.megacrit.cardcrawl.actions.common.RemoveSpecificPowerAction;
+import com.megacrit.cardcrawl.actions.common.*;
 import com.megacrit.cardcrawl.actions.defect.IncreaseMaxOrbAction;
 import com.megacrit.cardcrawl.actions.utility.LoseBlockAction;
 import com.megacrit.cardcrawl.actions.utility.ShakeScreenAction;
@@ -36,27 +33,18 @@ import extendedui.interfaces.delegates.ActionT2;
 import pinacolada.actions.affinity.AddAffinityLevel;
 import pinacolada.actions.affinity.RerollAffinity;
 import pinacolada.actions.affinity.TryChooseChoice;
-import pinacolada.actions.basic.GainTemporaryHP;
-import pinacolada.actions.basic.HealCreature;
 import pinacolada.actions.basic.MoveCard;
 import pinacolada.actions.basic.MoveCards;
-import pinacolada.actions.cardManipulation.*;
-import pinacolada.actions.creature.SummonAllyAction;
-import pinacolada.actions.creature.TriggerAllyAction;
-import pinacolada.actions.creature.WithdrawAllyAction;
-import pinacolada.actions.damage.DealDamage;
-import pinacolada.actions.damage.DealDamageToAll;
-import pinacolada.actions.damage.LoseHP;
+import pinacolada.actions.cards.*;
+import pinacolada.actions.creature.*;
 import pinacolada.actions.orbs.ChannelOrb;
 import pinacolada.actions.orbs.EvokeOrb;
 import pinacolada.actions.orbs.TriggerOrbPassiveAbility;
-import pinacolada.actions.pileSelection.*;
+import pinacolada.actions.piles.*;
 import pinacolada.actions.player.SpendEnergy;
 import pinacolada.actions.powers.*;
-import pinacolada.actions.special.*;
-import pinacolada.actions.utility.CallbackAction;
-import pinacolada.actions.utility.SequentialAction;
-import pinacolada.actions.utility.WaitRealtimeAction;
+import pinacolada.actions.special.UsePotionAction;
+import pinacolada.actions.utility.*;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.fields.PCLAffinity;
@@ -575,14 +563,14 @@ public final class PCLActions
         return add(new GainTemporaryHP(source, target, amount));
     }
 
-    public HealCreature heal(AbstractCreature source, AbstractCreature target, int amount)
+    public HealAction heal(AbstractCreature source, AbstractCreature target, int amount)
     {
-        return add(new HealCreature(target, source, amount));
+        return add(new HealAction(target, source, amount));
     }
 
-    public HealCreature heal(int amount)
+    public HealAction heal(int amount)
     {
-        return add(new HealCreature(player, player, amount));
+        return add(new HealAction(player, player, amount));
     }
 
     public LoseBlockAction loseBlock(int amount)
@@ -771,11 +759,6 @@ public final class PCLActions
     public PurgeFromPile purgeFromPile(String sourceName, int amount, CardGroup... groups)
     {
         return add(new PurgeFromPile(sourceName, amount, groups));
-    }
-
-    public HealCreature recoverHP(int amount)
-    {
-        return add(new HealCreature(player, player, amount)).recover(true);
     }
 
     public RemoveSpecificPowerAction removePower(AbstractCreature source, AbstractPower power)

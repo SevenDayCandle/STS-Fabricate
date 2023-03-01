@@ -78,42 +78,6 @@
 		"FLAVOR": "You can't beat the heat!",
 		"NAME": "Recon Scanner"
 	},
-	"pcl:SoulGem1":
-	{
-		"DESCRIPTIONS": ["At the start of turn, if [Strength] is less than #b3, set it to #b3. Shuffle a #rCurse into your draw pile for every #b6 #yAttacks played."],
-		"FLAVOR": "Would you like to make a contract?",
-		"NAME": "Soul Gem of Rage"
-	},
-	"pcl:SoulGem2":
-	{
-		"DESCRIPTIONS": ["At the start of turn, if [Dexterity] is less than #b3, set it to #b3. Shuffle a #rCurse into your draw pile for every #b5 cards played that give #yBlock."],
-		"FLAVOR": "Would you like to make a contract?",
-		"NAME": "Soul Gem of Freedom"
-	},
-	"pcl:SoulGem3":
-	{
-		"DESCRIPTIONS": ["At the start of turn, if [Focus] is less than #b3, set it to #b3. Shuffle a #rCurse into your draw pile for every #b3 #yOrbs channeled."],
-		"FLAVOR": "Would you like to make a contract?",
-		"NAME": "Soul Gem of Contemplation"
-	},
-	"pcl:SoulGem4":
-	{
-		"DESCRIPTIONS": ["#At the start of turn, if [Resistance] is less than #b3, set it to #b3. Destroy this relic if you play #b16 cards in a single turn. Something very bad will happen if this relic is destroyed...", "This relic can no longer be used as you have broken the contract. You will surely face further repercussions for this..."],
-		"FLAVOR": "Would you like to make a contract?",
-		"NAME": "Soul Gem of Stoicism"
-	},
-	"pcl:SpiritPoop2":
-	{
-		"DESCRIPTIONS": ["It's unpleasant and rarer."],
-		"FLAVOR": "Just like Spirit Poop, except rarer.",
-		"NAME": "4-Star Spirit Poop"
-	},
-	"pcl:SpiritPoop3":
-	{
-		"DESCRIPTIONS": ["At the start of battle, gain #b2 #yInspiration."],
-		"FLAVOR": "Well, what do you know. It's actually pretty pleasant!",
-		"NAME": "5-Star Spirit Poop"
-	},
 	"pcl:SpitefulCubes":
 	{
 		"DESCRIPTIONS": ["Replaces #yFoolish #yCubes. You may reroll cards from card rewards. | Entering #yMonster rooms gives #b1 use(s) per #b{0} cards in the pool. Store up to #b{1} uses."],

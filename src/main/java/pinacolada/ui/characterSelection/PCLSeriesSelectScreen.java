@@ -243,7 +243,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen
     // Core loadout cards cannot be toggled off
     public void previewCards(CardGroup cards, PCLLoadout loadout)
     {
-        previewCardsEffect = new PCLViewLoadoutPoolEffect(this, cards)
+        previewCardsEffect = new PCLViewLoadoutPoolEffect(cards, container.bannedCards, this::forceUpdateText)
                 .setCanToggle(loadout != null && !loadout.isCore())
                 .setStartingPosition(InputHelper.mX, InputHelper.mY);
         PCLEffects.Manual.add(previewCardsEffect);

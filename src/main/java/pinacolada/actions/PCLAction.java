@@ -195,21 +195,21 @@ public abstract class PCLAction<T> extends AbstractGameAction
         tickDuration(getDeltaTime());
     }
 
-    public <S>  PCLAction<T>  addCallback(S state, ActionT2<S, T> onCompletion)
+    public <S> PCLAction<T> addCallback(S state, ActionT2<S, T> onCompletion)
     {
         callbacks.add(GenericCallback.fromT2(onCompletion, state));
 
         return this;
     }
 
-    public  PCLAction<T>  addCallback(ActionT1<T> onCompletion)
+    public PCLAction<T> addCallback(ActionT1<T> onCompletion)
     {
         callbacks.add(GenericCallback.fromT1(onCompletion));
 
         return this;
     }
 
-    public  PCLAction<T>  addCallback(ActionT0 onCompletion)
+    public PCLAction<T> addCallback(ActionT0 onCompletion)
     {
         callbacks.add(GenericCallback.fromT0(onCompletion));
 

@@ -6,8 +6,8 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIRM;
 import extendedui.interfaces.delegates.FuncT5;
 import extendedui.ui.tooltips.EUITooltip;
-import pinacolada.actions.pileSelection.CycleCards;
-import pinacolada.actions.pileSelection.SelectFromPile;
+import pinacolada.actions.piles.CycleCards;
+import pinacolada.actions.piles.SelectFromPile;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.resources.PGR;
@@ -54,6 +54,6 @@ public class PMove_Cycle extends PMove_Select
     public String getSubText()
     {
         return useParent ? EUIRM.strings.verbNoun(getActionTitle(), getInheritedString())
-                        : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawString(), fields.getFullCardString());
+                        : EUIRM.strings.verbNumNoun(getActionTitle(), amount <= 0 ? TEXT.subjects_all : getAmountRawString(), fields.getFullCardString());
     }
 }

@@ -63,6 +63,58 @@ public abstract class PMove<T extends PField> extends PSkill<T>
                 .setAmountFromCard();
     }
 
+    public static PMove_StackTemporaryPower applyTemporary(PCLCardTarget target, int amount, PCLPowerHelper... powers)
+    {
+        return new PMove_StackTemporaryPower(target, amount, powers);
+    }
+
+    public static PMove_StackTemporaryPower applyTemporary(PCLCardTarget target, PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers)
+    {
+        return (PMove_StackTemporaryPower) new PMove_StackTemporaryPower(target, 0, powers)
+                .setSource(card, valueSource)
+                .setAmountFromCard();
+    }
+
+    public static PMove_StackTemporaryPower applyTemporaryToEnemies(int amount, PCLPowerHelper... powers)
+    {
+        return applyTemporary(PCLCardTarget.AllEnemy, amount, powers);
+    }
+
+    public static PMove_StackTemporaryPower applyTemporaryToEnemies(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers)
+    {
+        return applyTemporary(PCLCardTarget.AllEnemy, card, valueSource, powers);
+    }
+
+    public static PMove_StackTemporaryPower applyTemporaryToEveryone(int amount, PCLPowerHelper... powers)
+    {
+        return applyTemporary(PCLCardTarget.All, amount, powers);
+    }
+
+    public static PMove_StackTemporaryPower applyTemporaryToEveryone(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers)
+    {
+        return applyTemporary(PCLCardTarget.All, card, valueSource, powers);
+    }
+
+    public static PMove_StackTemporaryPower applyTemporaryToRandom(int amount, PCLPowerHelper... powers)
+    {
+        return applyTemporary(PCLCardTarget.RandomEnemy, amount, powers);
+    }
+
+    public static PMove_StackTemporaryPower applyTemporaryToRandom(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers)
+    {
+        return applyTemporary(PCLCardTarget.RandomEnemy, card, valueSource, powers);
+    }
+
+    public static PMove_StackTemporaryPower applyTemporaryToSingle(int amount, PCLPowerHelper... powers)
+    {
+        return applyTemporary(PCLCardTarget.Single, amount, powers);
+    }
+
+    public static PMove_StackTemporaryPower applyTemporaryToSingle(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers)
+    {
+        return applyTemporary(PCLCardTarget.Single, card, valueSource, powers);
+    }
+
     public static PMove_StackPower applyToAllies(int amount, PCLPowerHelper... powers)
     {
         return apply(PCLCardTarget.AllAlly, amount, powers);

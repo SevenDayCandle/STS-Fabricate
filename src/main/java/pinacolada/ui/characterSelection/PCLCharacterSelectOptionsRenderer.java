@@ -34,8 +34,8 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase
 
     protected static final Random RNG = new Random();
     public final ArrayList<PCLGlyphEditor> glyphEditors;
-    protected final ArrayList<PCLLoadout> availableLoadouts;
-    protected final ArrayList<PCLLoadout> loadouts;
+    protected final ArrayList<PCLLoadout> availableLoadouts; // TODO move to PCLCharacterSelectProvider
+    protected final ArrayList<PCLLoadout> loadouts; // TODO move to PCLCharacterSelectProvider
     public EUIButton seriesButton;
     public EUIButton loadoutEditorButton;
     public EUILabel startingCardsLabel;
@@ -43,8 +43,8 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase
     public EUITextBox startingCardsListLabel;
     protected RunAttributesProvider runProvider;
     protected CharacterOption characterOption;
-    protected PCLAbstractPlayerData data;
-    protected PCLLoadout loadout;
+    protected PCLAbstractPlayerData data; // TODO move to PCLCharacterSelectProvider
+    protected PCLLoadout loadout; // TODO move to PCLCharacterSelectProvider
 
 
     protected float textScale;

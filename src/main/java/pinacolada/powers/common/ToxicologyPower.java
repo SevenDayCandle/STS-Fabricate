@@ -26,7 +26,7 @@ public class ToxicologyPower extends PCLPower
     {
         super.onApplyPower(power, target, source);
 
-        if (GameUtilities.isPlayer(source) && (power.ID.equals(PoisonPower.POWER_ID) || power.ID.equals(BlastedPower.POWER_ID) || power.ID.equals(ShacklesPower.POWER_ID)))
+        if (GameUtilities.isPlayer(source) && (power.ID.equals(PoisonPower.POWER_ID) || power.ID.equals(BruisedPower.POWER_ID) || power.ID.equals(BlindedPower.POWER_ID) || power.ID.equals(ShacklesPower.POWER_ID)))
         {
             power.amount += this.amount;
 

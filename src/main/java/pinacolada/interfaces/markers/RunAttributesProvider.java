@@ -9,4 +9,9 @@ public interface RunAttributesProvider
     default void onRefresh()
     {
     }
+
+    default void onSelectSeries()
+    {
+
+    }
 }
