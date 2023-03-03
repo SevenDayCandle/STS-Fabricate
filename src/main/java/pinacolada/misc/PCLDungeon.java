@@ -81,9 +81,10 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
     }
 
     // When playing as a non-PCL character, remove any colorless cards that should be exclusive to a particular PCL character
-    private static boolean isColorlessCardExclusive(AbstractCard card)
+    // This includes the example cards from the card editor
+    public static boolean isColorlessCardExclusive(AbstractCard card)
     {
-        return EUIUtils.any(PGR.getAllResources(), r -> r.filterColorless(card));
+        return PGR.core.filterColorless(card) || EUIUtils.any(PGR.getRegisteredResources(), r -> r.filterColorless(card));
     }
 
     public void addAugment(String id, int count)
@@ -344,11 +345,13 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
             AbstractDungeon.srcColorlessCardPool.group.removeIf(PCLDungeon::isColorlessCardExclusive);
             AbstractDungeon.colorlessCardPool.group.removeIf(PCLDungeon::isColorlessCardExclusive);
             loadCustomCards(player);
+            banCardsFromTrial();
             return;
         }
 
         loadCardsForData(data);
         loadCustomCards(player);
+        banCardsFromTrial();
         updateCardCopies();
         data.updateRelicsForDungeon();
         if (!panelAdded)
@@ -399,6 +402,15 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         }
 
         //PCLCard.ToggleSimpleMode(player.masterDeck.group, SimpleMode);
+    }
+
+    private void banCardsFromTrial()
+    {
+        if (CardCrawlGame.trial instanceof PCLCustomTrial)
+        {
+            bannedCards.addAll(((PCLCustomTrial) CardCrawlGame.trial).bannedCards);
+            bannedRelics.addAll(((PCLCustomTrial) CardCrawlGame.trial).bannedRelics);
+        }
     }
 
     private void loadCardsForData(PCLAbstractPlayerData data)

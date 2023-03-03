@@ -66,7 +66,6 @@ public class PCLCardData implements CardObject
     public boolean canToggleFromAlternateForm = false;
     public boolean canToggleFromPopup = false;
     public boolean canToggleOnUpgrade = false;
-    public boolean ignoreSimpleMode = false;
     public boolean obtainableInCombat = true;
     public boolean playAtEndOfTurn = false;
     public boolean removableFromDeck = true;
@@ -619,13 +618,6 @@ public class PCLCardData implements CardObject
     {
         this.hp[0] = heal;
         this.hpUpgrade[0] = healUpgrade;
-        return this;
-    }
-
-    public PCLCardData setIgnoreSimpleMode(boolean ignore)
-    {
-        this.ignoreSimpleMode = ignore;
-
         return this;
     }
 

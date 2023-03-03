@@ -1862,7 +1862,7 @@ public class GameUtilities
     // PCL check that excludes colorless/curse
     public static boolean isPCLOnlyCardColor(AbstractCard.CardColor cardColor)
     {
-        return EUIUtils.any(PGR.getAllResources(), r -> r.cardColor == cardColor);
+        return EUIUtils.any(PGR.getRegisteredResources(), r -> r.cardColor == cardColor);
     }
 
     public static boolean isPCLPlayerClass()
@@ -1872,7 +1872,7 @@ public class GameUtilities
 
     public static boolean isPCLPlayerClass(AbstractPlayer.PlayerClass playerClass)
     {
-        return EUIUtils.any(PGR.getAllResources(), r -> r.playerClass == playerClass);
+        return EUIUtils.any(PGR.getRegisteredResources(), r -> r.playerClass == playerClass);
     }
 
     public static boolean isStarter(AbstractCard card)

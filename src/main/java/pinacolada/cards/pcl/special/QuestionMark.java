@@ -10,7 +10,8 @@ public class QuestionMark extends PCLCard
 {
     public static final PCLCardData DATA = register(QuestionMark.class)
             .setSkill(-2, CardRarity.SPECIAL, PCLCardTarget.None)
-            .setTags(PCLCardTag.Haste, PCLCardTag.Purge)
+            .setTags(PCLCardTag.Haste.make(-1), PCLCardTag.Ephemeral.make())
+            .setMaxUpgrades(0)
             .setColorless();
 
     public QuestionMark()

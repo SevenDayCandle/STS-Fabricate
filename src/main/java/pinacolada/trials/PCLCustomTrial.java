@@ -11,9 +11,7 @@ import com.megacrit.cardcrawl.relics.UnceasingTop;
 import com.megacrit.cardcrawl.screens.custom.CustomMod;
 import com.megacrit.cardcrawl.trials.CustomTrial;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class PCLCustomTrial extends CustomTrial
 {
@@ -24,20 +22,22 @@ public class PCLCustomTrial extends CustomTrial
     protected static final String MOD_INCEPTION = "Inception";
     protected static final String MOD_MY_TRUE_FORM = "My True Form";
     protected static final String MOD_STARTER_DECK = "Starter Deck";
-    private final ArrayList<String> cardIds = new ArrayList<>();
-    private final ArrayList<String> modIds = new ArrayList<>();
-    private final ArrayList<String> relicIds = new ArrayList<>();
-    private Integer maxHpOverride = null;
-    private boolean finalActAvailable;
-    private boolean isEndless;
-    private boolean isKeepingStarterCards = true;
-    private boolean isKeepingStarterRelic = true;
+    public final ArrayList<String> cardIds = new ArrayList<>();
+    public final ArrayList<String> modIds = new ArrayList<>();
+    public final ArrayList<String> relicIds = new ArrayList<>();
+    public final HashSet<String> bannedCards;
+    public final HashSet<String> bannedRelics;
+    protected Integer maxHpOverride = null;
+    protected boolean isKeepingStarterCards = true;
+    protected boolean isKeepingStarterRelic = true;
     public boolean allowCustomCards;
 
 
-    public PCLCustomTrial()
+    public PCLCustomTrial(HashSet<String> bannedCards, HashSet<String> bannedRelics)
     {
         super();
+        this.bannedCards = bannedCards;
+        this.bannedRelics = bannedRelics;
     }
 
     // TODO Add custom mods
@@ -69,7 +69,7 @@ public class PCLCustomTrial extends CustomTrial
         modIds.add(mod.ID);
     }
 
-    public void addMods(List<CustomMod> mods)
+    public void addMods(Collection<CustomMod> mods)
     {
         for (CustomMod mod : mods)
         {

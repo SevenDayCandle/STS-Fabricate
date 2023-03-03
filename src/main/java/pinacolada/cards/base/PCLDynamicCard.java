@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import extendedui.utilities.ColoredString;
 import pinacolada.interfaces.markers.DynamicCard;
-import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PTrigger;
 import pinacolada.skills.skills.special.primary.PCardPrimary_DealDamage;
@@ -37,6 +37,7 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
     {
         super(builder, builder.ID, builder.imagePath,
                 builder.getCost(0), builder.cardType, builder.cardColor, builder.cardRarity, builder.cardTarget.cardTarget, 0, 0, new BuilderInfo(builder, shouldFindForms));
+        assignActualColor();
         initializeTextures();
     }
 
@@ -48,6 +49,15 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
             this.forms = cSlot.builders;
         }
         return this;
+    }
+
+    // Several in-game checks assume color = CURSE, so we need to have consistency
+    protected void assignActualColor()
+    {
+        if (builder.cardType == CardType.CURSE)
+        {
+            this.color = CardColor.CURSE;
+        }
     }
 
     protected void initializeTextures()
@@ -327,11 +337,11 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
         switch (type)
         {
             case ATTACK:
-                return isPopup ? PGR.core.images.cardBackgroundAttackReplL.texture() : PGR.core.images.cardBackgroundAttackRepl.texture();
+                return isPopup ? PCLCoreImages.cardBackgroundAttackReplL.texture() : PCLCoreImages.cardBackgroundAttackRepl.texture();
             case POWER:
-                return isPopup ? PGR.core.images.cardBackgroundPowerReplL.texture() : PGR.core.images.cardBackgroundPowerRepl.texture();
+                return isPopup ? PCLCoreImages.cardBackgroundPowerReplL.texture() : PCLCoreImages.cardBackgroundPowerRepl.texture();
             default:
-                return isPopup ? PGR.core.images.cardBackgroundSkillReplL.texture() : PGR.core.images.cardBackgroundSkillRepl.texture();
+                return isPopup ? PCLCoreImages.cardBackgroundSkillReplL.texture() : PCLCoreImages.cardBackgroundSkillRepl.texture();
         }
     }
 

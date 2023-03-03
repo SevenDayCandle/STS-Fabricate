@@ -136,7 +136,7 @@ public class PGR
         return getResources(playerClass).data;
     }
 
-    public static Collection<PCLResources<?,?,?>> getAllResources()
+    public static Collection<PCLResources<?,?,?>> getRegisteredResources()
     {
         return colorResourceMap.values();
     }
@@ -212,7 +212,7 @@ public class PGR
 
     public static boolean isLoaded()
     {
-        return core != null && core.isLoaded && EUIUtils.all(getAllResources(), r -> r.isLoaded);
+        return core != null && core.isLoaded && EUIUtils.all(getRegisteredResources(), r -> r.isLoaded);
     }
 
     public static void loadCustomCards()

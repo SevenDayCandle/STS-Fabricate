@@ -50,12 +50,6 @@ public class PMove_LoseHPPercent extends PMove<PField_Empty>
     }
 
     @Override
-    public String wrapAmount(int input)
-    {
-        return String.valueOf(input) + "%";
-    }
-
-    @Override
     public void use(PCLUseInfo info)
     {
         for (AbstractCreature t : getTargetList(info))
@@ -69,11 +63,12 @@ public class PMove_LoseHPPercent extends PMove<PField_Empty>
     @Override
     public String getSubText()
     {
+        String percentLoss = getAmountRawString() + "%";
         if (target == PCLCardTarget.Self)
         {
-            return TEXT.act_loseAmount(getAmountRawString(), PGR.core.tooltips.hp.title);
+            return TEXT.act_loseAmount(percentLoss, PGR.core.tooltips.hp.title);
         }
-        return TEXT.act_objectLoses(getTargetString(), getAmountRawString(), PGR.core.tooltips.hp.title);
+        return TEXT.act_objectLoses(getTargetString(), percentLoss, PGR.core.tooltips.hp.title);
 
     }
 }

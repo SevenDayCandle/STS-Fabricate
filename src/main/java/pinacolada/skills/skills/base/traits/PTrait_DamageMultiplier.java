@@ -1,5 +1,6 @@
 package pinacolada.skills.skills.base.traits;
 
+import extendedui.EUIRM;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.skills.PSkillData;
@@ -52,9 +53,9 @@ public class PTrait_DamageMultiplier extends PTrait<PField_Empty>
     }
 
     @Override
-    public String wrapAmount(int input)
+    public String getSubText()
     {
-        return (input > 0 ? "+" + input : String.valueOf(input)) + "%";
+        return EUIRM.strings.numNoun(getAmountRawString() + "%", getSubDescText());
     }
 
     @Override

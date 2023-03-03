@@ -18,15 +18,15 @@ import com.megacrit.cardcrawl.screens.mainMenu.MenuCancelButton;
 import com.megacrit.cardcrawl.ui.buttons.GridSelectConfirmButton;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
+import extendedui.ui.AbstractScreen;
 import extendedui.ui.EUIHoverable;
 import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIClassUtils;
 import extendedui.utilities.EUIFontHelper;
+import pinacolada.effects.screen.PCLViewLoadoutPoolEffect;
 import pinacolada.resources.PGR;
 import pinacolada.ui.PCLValueEditor;
-import pinacolada.ui.characterSelection.PCLCharacterSelectOptionsRenderer;
-import pinacolada.ui.characterSelection.PCLGlyphEditor;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -53,11 +53,12 @@ public class PCLCustomRunCanvas extends EUICanvas
     public final EUIToggle endlessToggle;
     public final EUIToggle endingActToggle;
     public final EUIToggle customCardToggle;
+    public final EUIButton editCardPoolButton;
     public final ArrayList<PCLCustomRunCharacterButton> characters = new ArrayList<>();
     public final EUISearchableDropdown<CustomMod> modifierDropdown;
     public final MenuCancelButton cancelButton = new MenuCancelButton();
     public final GridSelectConfirmButton confirmButton;
-    public final PCLCharacterSelectOptionsRenderer loadoutRenderer = new PCLCharacterSelectOptionsRenderer();
+    private PCLViewLoadoutPoolEffect cardEffect;
 
     public PCLCustomRunCanvas(PCLCustomRunScreen screen)
     {
@@ -122,7 +123,6 @@ public class PCLCustomRunCanvas extends EUICanvas
                 .setLimits(0, 20)
                 .setTooltip(CustomModeScreen.TEXT[3], "");
         ascensionEditor.header.setAlignment(0.4f, 0f);
-        loadoutRenderer.ascensionGlyphsLabel.setFont(EUIFontHelper.cardtitlefontSmall, 1f);
 
         modifierDropdown = (EUISearchableDropdown<CustomMod>) new EUISearchableDropdown<CustomMod>(new EUIHitbox(scale(128), scale(48)), mod -> mod.name)
                 .setRowFunction(PCLCustomModDropdownRow::new)
@@ -130,6 +130,10 @@ public class PCLCustomRunCanvas extends EUICanvas
                 .setIsMultiSelect(true)
                 .setHeader(FontHelper.panelNameFont, 1f, Settings.GOLD_COLOR, CustomModeScreen.TEXT[6])
                 .setCanAutosize(true, true);
+
+        editCardPoolButton = AbstractScreen.createHexagonalButton(0, 0, scale(230), scale( 70))
+                .setText(PGR.core.strings.csel_seriesEditor)
+                .setOnClick(this::openCardPool);
 
         this.confirmButton = new GridSelectConfirmButton(CharacterSelectScreen.TEXT[1]);
         this.confirmButton.isDisabled = false;
@@ -170,7 +174,6 @@ public class PCLCustomRunCanvas extends EUICanvas
         int value = ascensionEditor.getValue();
         ascensionEditor.tooltip.setTitle(EUIRM.strings.generic2(CustomModeScreen.TEXT[3], value));
         ascensionEditor.tooltip.setDescription(value > 0 ? CharacterSelectScreen.A_TEXT[value - 1] : "");
-        loadoutRenderer.updateForAscension();
     }
 
     public void setCharacter(CharacterOption c)
@@ -180,7 +183,6 @@ public class PCLCustomRunCanvas extends EUICanvas
         {
             button.glowing = (button.character == c);
         }
-        loadoutRenderer.refresh(screen, c);
         ascensionEditor.setLimits(0, GameUtilities.getMaxAscensionLevel(c.c)).setValue(screen.ascensionLevel);
     }
 
@@ -194,67 +196,88 @@ public class PCLCustomRunCanvas extends EUICanvas
         // Snag the modifiers from the original custom run screen, excluding endless/ending act because we handle this manually
         ArrayList<CustomMod> modList = EUIClassUtils.getField(original, "modList");
         modifierDropdown.setItems(EUIUtils.filter(modList, mod -> !MOD_ENDLESS.equals(mod.ID) && !MOD_THE_ENDING.equals(mod.ID)));
+    }
 
-        setCharacter(characters.get(0).character);
+    public void openCardPool()
+    {
+        cardEffect = new PCLViewLoadoutPoolEffect(screen.getAllPossibleCards(), screen.bannedCards);
     }
 
     public void updateImpl()
     {
-        super.updateImpl();
-        titleLabel.tryUpdate();
-        charTitleLabel.tryUpdate();
-        modifiersLabel.tryUpdate();
-        trophiesLabel.tryUpdate();
-        selectedCharacterLabel.tryUpdate();
-        endlessToggle.tryUpdate();
-        endingActToggle.tryUpdate();
-        customCardToggle.tryUpdate();
-        seedInput.tryUpdate();
-        ascensionEditor.tryUpdate();
-        modifierDropdown.tryUpdate();
-        loadoutRenderer.updateImpl();
-        confirmButton.update();
-        cancelButton.update();
-        for (PCLCustomRunCharacterButton b : characters)
+        if (cardEffect != null)
         {
-            b.tryUpdate();
+            cardEffect.update();
+            if (cardEffect.isDone)
+            {
+                cardEffect = null;
+            }
         }
+        else
+        {
+            super.updateImpl();
+            titleLabel.tryUpdate();
+            charTitleLabel.tryUpdate();
+            modifiersLabel.tryUpdate();
+            trophiesLabel.tryUpdate();
+            selectedCharacterLabel.tryUpdate();
+            endlessToggle.tryUpdate();
+            endingActToggle.tryUpdate();
+            customCardToggle.tryUpdate();
+            seedInput.tryUpdate();
+            ascensionEditor.tryUpdate();
+            modifierDropdown.tryUpdate();
+            editCardPoolButton.updateImpl();
+            confirmButton.update();
+            cancelButton.update();
+            for (PCLCustomRunCharacterButton b : characters)
+            {
+                b.tryUpdate();
+            }
 
-        if (this.cancelButton.hb.clicked || InputHelper.pressedEscape)
-        {
-            InputHelper.pressedEscape = false;
-            this.cancelButton.hb.clicked = false;
-            this.cancelButton.hide();
-            CardCrawlGame.mainMenuScreen.panelScreen.refresh();
-        }
-        else if (this.confirmButton.hb.clicked || CInputActionSet.proceed.isJustPressed())
-        {
-            this.confirmButton.hb.clicked = false;
-            this.screen.confirm();
+            if (this.cancelButton.hb.clicked || InputHelper.pressedEscape)
+            {
+                InputHelper.pressedEscape = false;
+                this.cancelButton.hb.clicked = false;
+                this.cancelButton.hide();
+                CardCrawlGame.mainMenuScreen.panelScreen.refresh();
+            }
+            else if (this.confirmButton.hb.clicked || CInputActionSet.proceed.isJustPressed())
+            {
+                this.confirmButton.hb.clicked = false;
+                this.screen.confirm();
+            }
         }
     }
 
     public void renderImpl(SpriteBatch sb)
     {
-        super.renderImpl(sb);
-        titleLabel.tryRender(sb);
-        charTitleLabel.tryRender(sb);
-        modifiersLabel.tryRender(sb);
-        trophiesLabel.tryRender(sb);
-        selectedCharacterLabel.tryRender(sb);
-        endlessToggle.tryRender(sb);
-        endingActToggle.tryRender(sb);
-        customCardToggle.tryRender(sb);
-        seedInput.tryRender(sb);
-        ascensionEditor.tryRender(sb);
-        modifierDropdown.tryRender(sb);
-        for (PCLCustomRunCharacterButton b : characters)
+        if (cardEffect != null)
         {
-            b.tryRenderCentered(sb);
+            cardEffect.render(sb);
         }
-        loadoutRenderer.renderImpl(sb);
-        confirmButton.render(sb);
-        cancelButton.render(sb);
+        else
+        {
+            super.renderImpl(sb);
+            titleLabel.tryRender(sb);
+            charTitleLabel.tryRender(sb);
+            modifiersLabel.tryRender(sb);
+            trophiesLabel.tryRender(sb);
+            selectedCharacterLabel.tryRender(sb);
+            endlessToggle.tryRender(sb);
+            endingActToggle.tryRender(sb);
+            customCardToggle.tryRender(sb);
+            seedInput.tryRender(sb);
+            ascensionEditor.tryRender(sb);
+            modifierDropdown.tryRender(sb);
+            for (PCLCustomRunCharacterButton b : characters)
+            {
+                b.tryRenderCentered(sb);
+            }
+            editCardPoolButton.renderImpl(sb);
+            confirmButton.render(sb);
+            cancelButton.render(sb);
+        }
     }
 
     protected void onScroll(float newPercent)
@@ -271,8 +294,7 @@ public class PCLCustomRunCanvas extends EUICanvas
         yPos = positionElement(trophiesLabel, titleLabel.hb.cX + titleLabel.getAutoWidth() + scale(160), yPos, scale(80));
         yPos = positionElement(charTitleLabel, yPos, scale(105));
         selectedCharacterLabel.setPosition(charTitleLabel.hb.cX + charTitleLabel.getAutoWidth() + scale(40), charTitleLabel.hb.cY - scale(10));
-        loadoutRenderer.loadoutEditorButton.setPosition(charTitleLabel.hb.cX + charTitleLabel.getAutoWidth() + scale(400), charTitleLabel.hb.cY);
-        loadoutRenderer.seriesButton.setPosition(loadoutRenderer.loadoutEditorButton.hb.cX + loadoutRenderer.loadoutEditorButton.hb.width, charTitleLabel.hb.cY);
+        editCardPoolButton.setPosition(charTitleLabel.hb.cX + charTitleLabel.getAutoWidth() + scale(400), charTitleLabel.hb.cY);
 
         int column = 0;
         for (PCLCustomRunCharacterButton character : characters)
@@ -291,18 +313,9 @@ public class PCLCustomRunCanvas extends EUICanvas
         yPos = positionElement(modifiersLabel, yPos, scale(70));
         yPos = positionElement(endlessToggle, yPos, scale(35));
         yPos = positionElement(endingActToggle, yPos, scale(35));
-        yPos = positionElement(customCardToggle, yPos, scale(35));
+        yPos = positionElement(customCardToggle, yPos, scale(125));
         seedInput.setPosition(endlessToggle.hb.cX + seedInput.hb.width + scale(50), endingActToggle.hb.cY + scale(30));
         ascensionEditor.setPosition(seedInput.hb.cX + seedInput.hb.width, endlessToggle.hb.cY);
-        loadoutRenderer.ascensionGlyphsLabel.setPosition(ascensionEditor.hb.cX + ascensionEditor.hb.width + scale(230), ascensionEditor.hb.cY + scale(40));
-
-        column = 0;
-        for (PCLGlyphEditor geditor : loadoutRenderer.glyphEditors)
-        {
-            geditor.setPosition(loadoutRenderer.ascensionGlyphsLabel.hb.cX + column * scale(105), endingActToggle.hb.cY);
-            column += 1;
-        }
-
 
         yPos = positionElement(modifierDropdown, SCREEN_X - scale(135), yPos, scale(80));
         lowerScrollBound = upperScrollBound * -1;

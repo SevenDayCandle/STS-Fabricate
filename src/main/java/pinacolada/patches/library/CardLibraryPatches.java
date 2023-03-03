@@ -52,16 +52,12 @@ public class CardLibraryPatches
 
     public static AbstractCard tryReplace(PCLResources<?,?,?> resources, AbstractCard card)
     {
-        if (card instanceof PCLCard)
-        {
-            return card;
-        }
         PCLCardData data = resources.getReplacement(card.cardID);
         if (data != null)
         {
             return data.makeCopy(card.upgraded);
         }
-        else if (PGR.core.config.replaceCardsPCL.get())
+        else if (!(card instanceof PCLCard) && PGR.core.config.replaceCardsPCL.get())
         {
             AbstractCard c = ReplacementData.makeReplacement(card, true);
             if (card.upgraded)
@@ -121,6 +117,7 @@ public class CardLibraryPatches
                 __result = new QuestionMark();
                 __result.name = __result.originalName = key;
                 EUIUtils.logError(CardLibrary.class, "Card not found: " + key);
+                return __result;
             }
             return CardLibraryPatches.tryReplace(__result);
         }

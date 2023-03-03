@@ -11,6 +11,8 @@ import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
+// TODO merge with PCLCharacterSelectOptionsRenderer
+@Deprecated
 public class PCLCharacterSelectProvider implements RunAttributesProvider
 {
     protected final PCLCharacterSelectOptionsRenderer loadoutRenderer = new PCLCharacterSelectOptionsRenderer();
@@ -45,7 +47,7 @@ public class PCLCharacterSelectProvider implements RunAttributesProvider
 
         final float size = Settings.scale * 36;
 
-        for (PCLResources<?,?,?> resources : PGR.getAllResources())
+        for (PCLResources<?,?,?> resources : PGR.getRegisteredResources())
         {
             UnlockTrackerPatches.validate(resources);
         }

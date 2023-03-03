@@ -28,13 +28,6 @@ import java.lang.reflect.InvocationTargetException;
 // TODO Make into a PointerProvider
 public abstract class PCLOrb extends AbstractOrb
 {
-    @Deprecated
-    public enum Timing
-    {
-        EndOfTurn,
-        StartOfTurn
-    }
-
     public static final int IMAGE_SIZE = 96;
     public final PCLAffinity affinity;
     public final boolean canOrbApplyFocusToEvoke;

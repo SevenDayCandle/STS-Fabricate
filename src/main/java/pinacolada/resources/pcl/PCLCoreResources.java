@@ -7,7 +7,9 @@ import com.megacrit.cardcrawl.localization.*;
 import extendedui.EUI;
 import extendedui.ui.AbstractScreen;
 import pinacolada.augments.PCLAugment;
+import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCustomCardSlot;
+import pinacolada.cards.base.PCLDynamicCard;
 import pinacolada.effects.EffekseerEFK;
 import pinacolada.misc.PCLDungeon;
 import pinacolada.resources.PCLAbstractPlayerData;
@@ -121,12 +123,18 @@ public class PCLCoreResources extends PCLResources<PCLCoreConfig, PCLCoreImages,
         EUI.setCustomCardFilter(AbstractCard.CardColor.CURSE, affinityFilters);
         EUI.setCustomCardLibraryModule(AbstractCard.CardColor.COLORLESS, libraryFilters);
         EUI.setCustomCardLibraryModule(AbstractCard.CardColor.CURSE, libraryFilters);
-        for (PCLResources<?,?,?> r : PGR.getAllResources())
+        for (PCLResources<?,?,?> r : PGR.getRegisteredResources())
         {
             EUI.setCustomCardFilter(r.cardColor, affinityFilters);
             EUI.setCustomCardPoolModule(r.cardColor, cardAffinities);
             EUI.setCustomCardLibraryModule(r.cardColor, libraryFilters);
         }
+    }
+
+    @Override
+    public boolean filterColorless(AbstractCard card)
+    {
+        return card instanceof PCLCard && !(card instanceof PCLDynamicCard) && ((PCLCard) card).cardData.resources == this;
     }
 
 }

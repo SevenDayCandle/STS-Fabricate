@@ -70,7 +70,7 @@ public class PCLGlyphEditor extends EUIHoverable
 
     public void refresh(int ascensionLevel)
     {
-        enabled = EUIUtils.any(PGR.getAllResources(), r -> r.getUnlockLevel() >= blight.ascensionRequirement);
+        enabled = EUIUtils.any(PGR.getRegisteredResources(), r -> r.getUnlockLevel() >= blight.ascensionRequirement);
         minimumLevel = blight.getMinimumLevel(ascensionLevel);
         if (blight.counter < minimumLevel)
         {
