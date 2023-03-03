@@ -1,5 +1,9 @@
 package pinacolada.stances;
 
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.stances.AbstractStance;
@@ -12,9 +16,11 @@ import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@JsonAdapter(PCLStanceHelper.PCLStanceHelperAdapter.class)
 public class PCLStanceHelper implements TooltipProvider
 {
     public static final Map<String, PCLStanceHelper> ALL = new HashMap<>();
@@ -93,17 +99,17 @@ public class PCLStanceHelper implements TooltipProvider
         return Collections.singletonList(tooltip);
     }
 
+    public static class PCLStanceHelperAdapter extends TypeAdapter<PCLStanceHelper>
+    {
+        @Override
+        public void write(JsonWriter writer, PCLStanceHelper value) throws IOException
+        {
+            writer.value(value.ID);
+        }
 
-
-
-
-
-
-
-
-
-
-
-
-
+        @Override
+        public PCLStanceHelper read(JsonReader in) throws IOException {
+            return get(in.nextString());
+        }
+    }
 }

@@ -10,6 +10,7 @@ import pinacolada.misc.CombatManager;
 public interface CooldownProvider
 {
     Color COOLDOWN_INCOMPLETE_COLOR = Settings.GREEN_TEXT_COLOR.cpy().lerp(Settings.CREAM_COLOR, 0.5f);
+    boolean isDisplayingUpgrade();
     int getCooldown();
     int getBaseCooldown();
     void setCooldown(int value);
@@ -40,6 +41,10 @@ public interface CooldownProvider
     default ColoredString getCooldownString()
     {
         int amount = getCooldown();
+        if (isDisplayingUpgrade())
+        {
+            return new ColoredString(amount, Settings.GREEN_TEXT_COLOR);
+        }
         if (amount < getBaseCooldown())
         {
             if (amount > 0)

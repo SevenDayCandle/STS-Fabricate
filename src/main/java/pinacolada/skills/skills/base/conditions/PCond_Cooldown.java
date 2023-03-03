@@ -80,6 +80,12 @@ public class PCond_Cooldown extends PPassiveCond<PField_Empty> implements Cooldo
     }
 
     @Override
+    public boolean isDisplayingUpgrade()
+    {
+        return displayUpgrades && getUpgrade() != 0;
+    }
+
+    @Override
     public int getCooldown()
     {
         return amount;

@@ -1,5 +1,9 @@
 package pinacolada.orbs;
 
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import extendedui.EUIUtils;
@@ -12,9 +16,11 @@ import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.WeightedList;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@JsonAdapter(PCLOrbHelper.PCLOrbHelperAdapter.class)
 public class PCLOrbHelper implements TooltipProvider
 {
     protected static final WeightedList<PCLOrbHelper> WEIGHTED = new WeightedList<>();
@@ -109,5 +115,19 @@ public class PCLOrbHelper implements TooltipProvider
     public final boolean isCommon()
     {
         return weight >= COMMON_THRESHOLD;
+    }
+
+    public static class PCLOrbHelperAdapter extends TypeAdapter<PCLOrbHelper>
+    {
+        @Override
+        public void write(JsonWriter writer, PCLOrbHelper value) throws IOException
+        {
+            writer.value(value.ID);
+        }
+
+        @Override
+        public PCLOrbHelper read(JsonReader in) throws IOException {
+            return get(in.nextString());
+        }
     }
 }

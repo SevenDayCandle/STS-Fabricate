@@ -818,7 +818,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     }
 
     public ColoredString getSecondaryValueString() {
-        return new ColoredString(heal, heal > baseHeal ? Settings.GREEN_TEXT_COLOR : heal < baseHeal ? Settings.RED_TEXT_COLOR : Settings.CREAM_COLOR);
+        return new ColoredString(heal, heal < baseHeal ? Settings.RED_TEXT_COLOR : isHealModified || heal > baseHeal ? Settings.GREEN_TEXT_COLOR : Settings.CREAM_COLOR);
     }
 
     public String getTagTipString()

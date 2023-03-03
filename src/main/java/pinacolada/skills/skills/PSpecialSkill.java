@@ -71,7 +71,7 @@ public class PSpecialSkill extends PSkill<PField_CardCategory>
     }
 
     @Override
-    public PSkill makeCopy()
+    public PSpecialSkill makeCopy()
     {
         return new PSpecialSkill(effectID, description, onUse, amount, extra);
     }
