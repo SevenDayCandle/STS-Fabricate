@@ -118,7 +118,7 @@ public class PCLCardData implements CardObject
                 .stream();
         if (!showHidden)
         {
-            stream = stream.filter(a -> a.type.isAnnotationPresent(VisibleCard.class) && !a.isNotSeen());
+            stream = stream.filter(a -> a.type.isAnnotationPresent(VisibleCard.class));
         }
         if (filterFunc != null)
         {

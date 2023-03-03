@@ -10,7 +10,6 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUIUtils;
 import javassist.CannotCompileException;
 import javassist.CtBehavior;
-import javassist.expr.ExprEditor;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.tags.PCLCardTag;
@@ -19,33 +18,21 @@ import pinacolada.resources.PCLEnum;
 @SpirePatch(clz = UseCardAction.class, method = "update", optional = true)
 public class UseCardAction_Update
 {
-    @SpireInstrumentPatch
-    public static ExprEditor instrument()
-    {
-        return new ExprEditor()
-        {
-            public void edit(javassist.expr.FieldAccess m) throws CannotCompileException
-            {
-                if (m.getClassName().equals(AbstractCard.class.getName()) && m.getFieldName().equals("purgeOnUse"))
-                {
-                    m.replace("{ $_ = pinacolada.patches.actions.UseCardAction_Update.patch($0); }");
-                }
-            }
-        };
-    }
-
-    public static boolean patch(AbstractCard card)
-    {
-        return card.purgeOnUse || PCLCardTag.Purge.has(card);
-    }
-
     @SpireInsertPatch(locator = Locator.class)
     public static SpireReturn<Void> insert(UseCardAction __instance)
     {
-        PCLCard c = EUIUtils.safeCast(ReflectionHacks.getPrivate(__instance, UseCardAction.class, "targetCard"), PCLCard.class);
+        AbstractCard targetCard = ReflectionHacks.getPrivate(__instance, UseCardAction.class, "targetCard");
+        PCLCard c = EUIUtils.safeCast(targetCard, PCLCard.class);
         if (c != null && c.type == PCLEnum.CardType.SUMMON)
         {
             PCLActions.top.add(new ShowCardAndPoofAction(c));
+            AbstractDungeon.player.cardInUse = null;
+            __instance.isDone = true;
+            return SpireReturn.Return();
+        }
+        else if (PCLCardTag.Purge.tryProgress(targetCard))
+        {
+            PCLActions.top.purge(targetCard);
             AbstractDungeon.player.cardInUse = null;
             __instance.isDone = true;
             return SpireReturn.Return();

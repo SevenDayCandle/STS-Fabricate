@@ -91,6 +91,7 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
         CustomModeScreen.finalActAvailable = isFinalActAvailable;
         CardCrawlGame.trial = trial;
         AbstractPlayer.customMods = CardCrawlGame.trial.dailyModIDs();
+        canvas.confirmButton.hide();
     }
 
     public void initialize(CustomModeScreen screen)

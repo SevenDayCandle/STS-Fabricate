@@ -9,6 +9,7 @@ import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
 )
 public class PurgeField
 {
+    // This version of purge activates after a certain number of uses, and moves the card to the PURGED_CARDS pile
     public static SpireField<Integer> value = new SpireField<>(() -> {
         return 0;
     });

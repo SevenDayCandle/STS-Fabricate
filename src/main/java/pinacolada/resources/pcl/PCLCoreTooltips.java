@@ -154,6 +154,7 @@ public class PCLCoreTooltips extends PCLTooltips
     public EUITooltip nextTurnDrawLess = EUITooltip.findByID("Draw Minus");
     public EUITooltip noxiousFumes = EUITooltip.findByID("Noxious Fumes");
     public EUITooltip orbSlot = EUITooltip.findByID("Orb Slot");
+    public EUITooltip persist = EUITooltip.findByID("Persist");
     public EUITooltip piercing = EUITooltip.findByID("Piercing Damage");
     public EUITooltip plasma = EUITooltip.findByID("Plasma");
     public EUITooltip platedArmor = EUITooltip.findByID("Plated Armor");
@@ -237,6 +238,7 @@ public class PCLCoreTooltips extends PCLTooltips
         block.setIcon(PCLCoreImages.CardIcons.block.texture());
         normalDamage.setIcon(PCLCoreImages.CardIcons.damage.texture());
         unique.setIcon(PCLCoreImages.CardIcons.unique.texture(), 6);
+        soulbound.setIcon(PCLCoreImages.CardIcons.soulbound.texture(), 6);
         multiform.setIcon(PCLCoreImages.CardIcons.multiform.texture(), 6);
         energy.setIconFunc(EUI::getEnergyIcon);
 

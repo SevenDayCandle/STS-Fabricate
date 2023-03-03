@@ -363,6 +363,11 @@
 								"NAMES": ["pay"],
 								"PROPER_NAME": "Pay"
 				},
+				"Persist":	{
+								"DESCRIPTION": "Only discards after a certain number of uses each turn.",
+								"NAMES": ["persist"],
+								"PROPER_NAME": "Persist"
+				},
 				"Piercing Damage":	{
 								"DESCRIPTION": "Ignores [Block] and #yPowers activating on contact.",
 								"NAMES": ["piercing damage"],

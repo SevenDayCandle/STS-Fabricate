@@ -149,10 +149,10 @@ public class PCLCoreImages extends PCLImages
         public static final TextureCache haste = new TextureCache("images/pcl/cardui/badges/Haste.png");
         public static final TextureCache innate = new TextureCache("images/pcl/cardui/badges/Innate.png");
         public static final TextureCache loyal = new TextureCache("images/pcl/cardui/badges/Loyal.png");
+        public static final TextureCache persist = new TextureCache("images/pcl/cardui/badges/Persist.png");
         public static final TextureCache purge = new TextureCache("images/pcl/cardui/badges/Purge.png");
         public static final TextureCache recast = new TextureCache("images/pcl/cardui/badges/Recast.png");
         public static final TextureCache retain = new TextureCache("images/pcl/cardui/badges/Retain.png");
-        public static final TextureCache soulbound = new TextureCache("images/pcl/cardui/badges/Soulbound.png");
         public static final TextureCache unplayable = new TextureCache("images/pcl/cardui/badges/Unplayable.png");
     }
 

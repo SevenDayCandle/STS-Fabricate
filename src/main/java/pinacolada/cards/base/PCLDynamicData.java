@@ -85,10 +85,13 @@ public class PCLDynamicData extends PCLCardData
         if (copyProperties)
         {
             setNumbers(original);
-            setMaxUpgrades(original.maxUpgradeLevel);
             setAttackType(original.attackType);
             setTarget(original.cardTarget);
             setTags(original.tags);
+            setMaxUpgrades(original.maxUpgradeLevel);
+            setMaxCopies(original.maxCopies);
+            setUnique(original.unique);
+            setRemovableFromDeck(original.removableFromDeck);
             affinities = new PCLCardDataAffinityGroup(original.affinities);
         }
 

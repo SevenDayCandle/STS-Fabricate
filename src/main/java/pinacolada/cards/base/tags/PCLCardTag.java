@@ -3,10 +3,7 @@ package pinacolada.cards.base.tags;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.AutoplayField;
-import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.ExhaustiveField;
-import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.FleetingField;
-import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.GraveField;
+import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.*;
 import com.evacipated.cardcrawl.modthespire.lib.SpireField;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.relics.BlueCandle;
@@ -34,12 +31,13 @@ public enum PCLCardTag implements TooltipProvider
     Ephemeral(false, new Color(0.7f, 0.7f, 0.7f, 1)),
     Ethereal(false, new Color(0.51f, 0.69f, 0.6f, 1)),
     Exhaust(false, new Color(0.81f, 0.35f, 0.35f, 1)),
-    Fleeting(false, new Color(0.6f, 0.66f, 0.33f, 1)),
+    Fleeting(false, new Color(0.5f, 0.37f, 0.3f, 1)),
     Fragile(false, new Color(0.80f, 0.46f, 0.7f, 1)),
     Grave(false, new Color(0.4f, 0.4f, 0.4f, 1)),
     Haste(true, new Color(0.35f, 0.5f, 0.79f, 1)),
     Innate(true, new Color(0.8f, 0.8f, 0.35f, 1)),
     Loyal(true, new Color(0.81f, 0.51f, 0.3f, 1)),
+    Persist(true, new Color(0.6f, 0.66f, 0.33f, 1)),
     Purge(false, new Color(0.71f, 0.3f, 0.55f, 1)),
     Recast(false, new Color(0.6f, 0.51f, 0.69f, 1)),
     Retain(true, new Color(0.49f, 0.78f, 0.35f, 1)),
@@ -123,6 +121,8 @@ public enum PCLCardTag implements TooltipProvider
                 return InnateField.value;
             case Loyal:
                 return LoyalField.value;
+            case Persist:
+                return PersistFields.basePersist;
             case Purge:
                 return PurgeField.value;
             case Retain:
@@ -194,6 +194,8 @@ public enum PCLCardTag implements TooltipProvider
                 return PCLCoreImages.Badges.innate;
             case Loyal:
                 return PCLCoreImages.Badges.loyal;
+            case Persist:
+                return PCLCoreImages.Badges.persist;
             case Purge:
                 return PCLCoreImages.Badges.purge;
             case Recast:
@@ -232,6 +234,8 @@ public enum PCLCardTag implements TooltipProvider
                 return PGR.core.tooltips.innate;
             case Loyal:
                 return PGR.core.tooltips.loyal;
+            case Persist:
+                return PGR.core.tooltips.persist;
             case Purge:
                 return PGR.core.tooltips.purge;
             case Recast:
