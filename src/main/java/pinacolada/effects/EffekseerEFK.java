@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-// TODO add audio paths
+// TODO add audio paths, define hit delays
 public class EffekseerEFK
 {
     protected static final Map<String, EffekseerEFK> ALL = new HashMap<>();

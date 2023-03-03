@@ -11,8 +11,8 @@ import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUITextBox;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
-import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLCardSlot;
+import pinacolada.resources.pcl.PCLCoreImages;
 
 // Copied and modified from STS-AnimatorMod
 public class PCLCardSlotEditor extends EUIBase
@@ -59,7 +59,7 @@ public class PCLCardSlotEditor extends EUIBase
                 .setClickDelay(0.02f);
         clearButton = new EUIButton(EUIRM.images.x.texture(), new EUIHitbox(addButton.hb.x + addButton.hb.width, cardnameText.hb.y, 64, 64))
                 .setClickDelay(0.02f);
-        changeButton = new EUIButton(PGR.core.images.edit.texture(), new EUIHitbox(clearButton.hb.x + clearButton.hb.width, cardnameText.hb.y, 64, 64))
+        changeButton = new EUIButton(PCLCoreImages.edit.texture(), new EUIHitbox(clearButton.hb.x + clearButton.hb.width, cardnameText.hb.y, 64, 64))
                 .setClickDelay(0.02f);
 
         setSlot(null);

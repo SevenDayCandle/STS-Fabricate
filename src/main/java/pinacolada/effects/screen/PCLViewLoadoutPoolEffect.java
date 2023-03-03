@@ -9,14 +9,15 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
+import extendedui.EUI;
 import extendedui.EUIInputManager;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT0;
 import extendedui.ui.AbstractScreen;
 import extendedui.ui.controls.EUIButton;
-import extendedui.ui.controls.EUICardGrid;
 import extendedui.ui.controls.EUILabel;
+import extendedui.ui.controls.EUIStaticCardGrid;
 import extendedui.ui.controls.EUIToggle;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
@@ -41,7 +42,7 @@ public class PCLViewLoadoutPoolEffect extends PCLEffectWithCallback<CardGroup>
     private final ActionT0 onRefresh;
     private final CardGroup cards;
     private final Color screenColor;
-    private final EUICardGrid grid;
+    private final EUIStaticCardGrid grid;
     private final HashSet<String> bannedCards;
 
     public PCLViewLoadoutPoolEffect(CardGroup cards, HashSet<String> bannedCards)
@@ -67,7 +68,7 @@ public class PCLViewLoadoutPoolEffect extends PCLEffectWithCallback<CardGroup>
 
         if (cards.isEmpty())
         {
-            this.grid = new EUICardGrid().canDragScreen(false);
+            this.grid = (EUIStaticCardGrid) new EUIStaticCardGrid().canDragScreen(false);
             complete(cards);
             return;
         }
@@ -78,7 +79,7 @@ public class PCLViewLoadoutPoolEffect extends PCLEffectWithCallback<CardGroup>
             GameUtilities.setTopPanelVisible(false);
         }
 
-        this.grid = new EUICardGrid()
+        this.grid = (EUIStaticCardGrid) new EUIStaticCardGrid()
                 .canDragScreen(false)
                 .addCards(cards.group)
                 .setOnCardClick(this::toggleCard);
@@ -118,6 +119,11 @@ public class PCLViewLoadoutPoolEffect extends PCLEffectWithCallback<CardGroup>
 
         upgradeToggle.setToggle(SingleCardViewPopup.isViewingUpgrade);
         refreshCountText();
+
+        EUI.cardFilters.initializeForCustomHeader(grid.cards, __ -> {
+            grid.moveToTop();
+            grid.forceUpdateCardPositions();
+        }, AbstractCard.CardColor.COLORLESS, false);
     }
 
     private void updateCardAlpha(AbstractCard c)
@@ -200,25 +206,35 @@ public class PCLViewLoadoutPoolEffect extends PCLEffectWithCallback<CardGroup>
         selectAllButton.tryRender(sb);
         deselectAllButton.tryRender(sb);
         selectedCount.tryRender(sb);
+        EUI.customHeader.render(sb);
+        if (!EUI.cardFilters.isActive) {
+            EUI.openCardFiltersButton.tryRender(sb);
+        }
     }
 
     @Override
     protected void updateInternal(float deltaTime)
     {
-        grid.tryUpdate();
-        upgradeToggle.updateImpl();
-        selectAllButton.tryUpdate();
-        deselectAllButton.tryUpdate();
-        selectedCount.tryUpdate();
-
-        if (upgradeToggle.hb.hovered || selectAllButton.hb.hovered || deselectAllButton.hb.hovered || grid.isHovered())
+        boolean shouldDoStandardUpdate = !EUI.cardFilters.tryUpdate();
+        if (shouldDoStandardUpdate)
         {
-            return;
-        }
+            EUI.openCardFiltersButton.tryUpdate();
+            EUI.customHeader.update();
+            grid.tryUpdate();
+            upgradeToggle.updateImpl();
+            selectAllButton.tryUpdate();
+            deselectAllButton.tryUpdate();
+            selectedCount.tryUpdate();
 
-        if (EUIInputManager.leftClick.isJustReleased() || EUIInputManager.rightClick.isJustReleased())
-        {
-            complete(this.cards);
+            if (upgradeToggle.hb.hovered || selectAllButton.hb.hovered || deselectAllButton.hb.hovered || grid.isHovered() || EUI.customHeader.isHovered() || EUI.openCardFiltersButton.hb.hovered)
+            {
+                return;
+            }
+
+            if (EUIInputManager.leftClick.isJustPressed() || EUIInputManager.rightClick.isJustPressed())
+            {
+                complete(this.cards);
+            }
         }
     }
 

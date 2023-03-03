@@ -13,6 +13,7 @@ import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
 import com.megacrit.cardcrawl.screens.custom.CustomMod;
 import com.megacrit.cardcrawl.screens.custom.CustomModeScreen;
+import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.AbstractMenuScreen;
 import extendedui.ui.cardFilter.CustomCardLibraryScreen;
 import pinacolada.cards.base.PCLCustomCardSlot;
@@ -180,7 +181,10 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
                 group.group.clear();
                 for (CardGroup cGroup : CustomCardLibraryScreen.CardLists.values())
                 {
-                    group.group.addAll(cGroup.group);
+                    for (AbstractCard c : cGroup.group)
+                    {
+                        group.group.add(c.makeCopy());
+                    }
                 }
                 break;
             }
@@ -201,56 +205,49 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
         PCLResources<?,?,?> resources = PGR.getResources(color);
         if (resources != PGR.core)
         {
-            for (AbstractCard c : CustomCardLibraryScreen.CardLists.get(AbstractCard.CardColor.COLORLESS).group)
-            {
-                if (resources.containsColorless(c))
-                {
-                    group.group.add(c);
-                }
-            }
-            for (AbstractCard c : CustomCardLibraryScreen.CardLists.get(AbstractCard.CardColor.CURSE).group)
-            {
-                if (resources.containsColorless(c))
-                {
-                    group.group.add(c);
-                }
-            }
+            addCardsFromGroup(group, AbstractCard.CardColor.COLORLESS, c -> resources.containsColorless(c) && c.rarity != AbstractCard.CardRarity.SPECIAL);
+            addCardsFromGroup(group, AbstractCard.CardColor.CURSE, c -> resources.containsColorless(c) && c.rarity != AbstractCard.CardRarity.SPECIAL);
         }
         else
         {
-            for (AbstractCard c : CustomCardLibraryScreen.CardLists.get(AbstractCard.CardColor.COLORLESS).group)
-            {
-                if (!PCLDungeon.isColorlessCardExclusive(c))
-                {
-                    group.group.add(c);
-                }
-            }
-            for (AbstractCard c : CustomCardLibraryScreen.CardLists.get(AbstractCard.CardColor.CURSE).group)
-            {
-                if (!PCLDungeon.isColorlessCardExclusive(c))
-                {
-                    group.group.add(c);
-                }
-            }
+            addCardsFromGroup(group, AbstractCard.CardColor.COLORLESS, c -> !PCLDungeon.isColorlessCardExclusive(c) && c.rarity != AbstractCard.CardRarity.SPECIAL);
+            addCardsFromGroup(group, AbstractCard.CardColor.CURSE, c -> !PCLDungeon.isColorlessCardExclusive(c) && c.rarity != AbstractCard.CardRarity.SPECIAL);
         }
 
         if (allowCustomCards)
         {
             for (PCLCustomCardSlot slot : PCLCustomCardSlot.getCards(AbstractCard.CardColor.COLORLESS))
             {
-                group.group.add(slot.getBuilder(0).build());
+                if (AbstractCard.CardRarity.valueOf(slot.rarity) != AbstractCard.CardRarity.SPECIAL)
+                {
+                    group.group.add(slot.getBuilder(0).build());
+                }
             }
         }
     }
 
     private void addCardsForGroup(CardGroup group, AbstractCard.CardColor color)
     {
-        group.group.addAll(CustomCardLibraryScreen.CardLists.get(color).group);
+        addCardsFromGroup(group, color, c -> c.rarity != AbstractCard.CardRarity.SPECIAL);
         if (allowCustomCards)
         {
             for (PCLCustomCardSlot slot : PCLCustomCardSlot.getCards(color))
             {
-                group.group.add(slot.getBuilder(0).build());
+                if (AbstractCard.CardRarity.valueOf(slot.rarity) != AbstractCard.CardRarity.SPECIAL)
+                {
+                    group.group.add(slot.getBuilder(0).build());
+                }
+            }
+        }
+    }
+
+    private void addCardsFromGroup(CardGroup group, AbstractCard.CardColor color, FuncT1<Boolean, AbstractCard> evalFunc)
+    {
+        for (AbstractCard c : CustomCardLibraryScreen.CardLists.get(color).group)
+        {
+            if (evalFunc.invoke(c))
+            {
+                group.group.add(c.makeCopy());
             }
         }
     }
