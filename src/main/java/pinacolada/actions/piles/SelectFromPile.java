@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+// TODO fix pile sorting bugs
 // Copied and modified from STS-AnimatorMod
 public class SelectFromPile extends PCLAction<ArrayList<AbstractCard>>
 {
@@ -135,7 +136,7 @@ public class SelectFromPile extends PCLAction<ArrayList<AbstractCard>>
                 }
             }
 
-            if (temp.type == CardGroup.CardGroupType.HAND && origin == null)
+            if (temp.type == CardGroup.CardGroupType.HAND && origin == null && maxChoicesOrigin == null)
             {
                 fakeHandGroup.group.addAll(temp.group);
 
@@ -149,7 +150,7 @@ public class SelectFromPile extends PCLAction<ArrayList<AbstractCard>>
             }
             else
             {
-                if (temp.type == CardGroup.CardGroupType.DRAW_PILE && origin == null)
+                if (temp.type == CardGroup.CardGroupType.DRAW_PILE && origin == null && maxChoicesOrigin == null)
                 {
                     if (GameUtilities.hasRelicEffect(FrozenEye.ID))
                     {

@@ -1,5 +1,6 @@
 package pinacolada.ui.combat;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import extendedui.EUIUtils;
 import pinacolada.resources.PGR;
 
@@ -32,5 +33,11 @@ public class PCLEmptyMeter extends PCLPlayerMeter
     public String getInfoTitle()
     {
         return "";
+    }
+
+    // RENDER NOTHIN
+    @Override
+    public void renderImpl(SpriteBatch sb)
+    {
     }
 }
