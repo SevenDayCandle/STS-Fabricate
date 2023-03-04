@@ -340,18 +340,14 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
                 panelAdded = false;
                 BaseMod.removeTopPanelItem(PGR.core.augmentPanel);
             }
-            AbstractDungeon.srcCurseCardPool.group.removeIf(PCLDungeon::isColorlessCardExclusive);
-            AbstractDungeon.curseCardPool.group.removeIf(PCLDungeon::isColorlessCardExclusive);
-            AbstractDungeon.srcColorlessCardPool.group.removeIf(PCLDungeon::isColorlessCardExclusive);
-            AbstractDungeon.colorlessCardPool.group.removeIf(PCLDungeon::isColorlessCardExclusive);
             loadCustomCards(player);
-            banCardsFromTrial();
+            banCards(data);
             return;
         }
 
         loadCardsForData(data);
         loadCustomCards(player);
-        banCardsFromTrial();
+        banCards(data);
         updateCardCopies();
         data.updateRelicsForDungeon();
         if (!panelAdded)
@@ -404,12 +400,57 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         //PCLCard.ToggleSimpleMode(player.masterDeck.group, SimpleMode);
     }
 
-    private void banCardsFromTrial()
+    private void banCards(PCLAbstractPlayerData data)
     {
+        final ArrayList<CardGroup> groups = new ArrayList<>();
+        groups.addAll(GameUtilities.getCardPools());
+        groups.addAll(GameUtilities.getSourceCardPools());
+
         if (CardCrawlGame.trial instanceof PCLCustomTrial)
         {
             bannedCards.addAll(((PCLCustomTrial) CardCrawlGame.trial).bannedCards);
             bannedRelics.addAll(((PCLCustomTrial) CardCrawlGame.trial).bannedRelics);
+        }
+        else if (data != null)
+        {
+            bannedCards.addAll(data.resources.config.bannedCards.get());
+            bannedRelics.addAll(data.resources.config.bannedRelics.get());
+        }
+
+        if (data != null)
+        {
+            for (CardGroup group : groups)
+            {
+                group.group.removeIf(card ->
+                {
+                    if (!bannedCards.contains(card.cardID))
+                    {
+                        if (GameUtilities.isColorlessCardColor(card.color))
+                        {
+                            return !data.resources.containsColorless(card);
+                        }
+                        else if (card.color != data.resources.cardColor || loadouts.isEmpty())
+                        {
+                            return false;
+                        }
+                        for (PCLLoadout loadout : loadouts)
+                        {
+                            if (loadout.isCardFromLoadout(card.cardID))
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                    return true;
+                });
+            }
+        }
+        else
+        {
+            for (CardGroup group : groups)
+            {
+                group.group.removeIf(card -> bannedCards.contains(card.cardID) || isColorlessCardExclusive(card));
+            }
         }
     }
 

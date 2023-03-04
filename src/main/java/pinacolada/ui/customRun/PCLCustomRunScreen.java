@@ -248,7 +248,7 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
         {
             if (evalFunc.invoke(c))
             {
-                group.group.add(c.makeCopy());
+                group.group.add(c.makeSameInstanceOf());
             }
         }
     }

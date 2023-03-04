@@ -24,7 +24,7 @@ import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.screen.PCLViewLoadoutPoolEffect;
+import pinacolada.effects.screen.ViewInGamePoolEffect;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
@@ -50,7 +50,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen
     public boolean isScreenDisabled;
     protected PCLCard selectedCard;
     protected ActionT0 onClose;
-    protected PCLViewLoadoutPoolEffect previewCardsEffect;
+    protected ViewInGamePoolEffect previewCardsEffect;
     protected CharacterOption characterOption;
     protected PCLAbstractPlayerData data;
     protected int totalCardsCache = 0;
@@ -243,7 +243,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen
     // Core loadout cards cannot be toggled off
     public void previewCards(CardGroup cards, PCLLoadout loadout)
     {
-        previewCardsEffect = new PCLViewLoadoutPoolEffect(cards, container.bannedCards, this::forceUpdateText)
+        previewCardsEffect = new ViewInGamePoolEffect(cards, container.bannedCards, this::forceUpdateText)
                 .setCanToggle(loadout != null && !loadout.isCore())
                 .setStartingPosition(InputHelper.mX, InputHelper.mY);
         PCLEffects.Manual.add(previewCardsEffect);

@@ -15,13 +15,14 @@ import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.affinity.GenericFlashEffect;
 import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class AffinityKeywordButton extends EUIBase
 {
     public static final float ICON_SIZE = scale(48);
     protected static final Color PANEL_COLOR = new Color(0.3f, 0.3f, 0.3f, 1f);
-    protected static final TextureCache STAR_TEXTURE = PGR.core.images.starFg;
+    protected static final TextureCache STAR_TEXTURE = PCLCoreImages.starFg;
     public PCLAffinity type;
     public EUIButton backgroundButton;
     public int currentLevel;

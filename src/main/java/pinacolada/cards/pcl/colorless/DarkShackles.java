@@ -12,7 +12,7 @@ import pinacolada.skills.PMove;
 @VisibleCard
 public class DarkShackles extends PCLCard
 {
-    public static final String ATLAS_URL = "colorless/skill/darkshackles";
+    public static final String ATLAS_URL = "colorless/skill/dark_shackles";
     public static final PCLCardData DATA = register(DarkShackles.class)
             .setImagePathFromAtlasUrl(ATLAS_URL)
             .setSkill(0, CardRarity.UNCOMMON, PCLCardTarget.Single)

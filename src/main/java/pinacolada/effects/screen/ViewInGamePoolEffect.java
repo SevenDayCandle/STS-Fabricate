@@ -30,7 +30,7 @@ import java.util.HashSet;
 import static pinacolada.utilities.GameUtilities.scale;
 import static pinacolada.utilities.GameUtilities.screenW;
 
-public class PCLViewLoadoutPoolEffect extends PCLEffectWithCallback<CardGroup>
+public class ViewInGamePoolEffect extends PCLEffectWithCallback<CardGroup>
 {
     private EUIButton deselectAllButton;
     private EUIButton selectAllButton;
@@ -45,12 +45,12 @@ public class PCLViewLoadoutPoolEffect extends PCLEffectWithCallback<CardGroup>
     private final EUIStaticCardGrid grid;
     private final HashSet<String> bannedCards;
 
-    public PCLViewLoadoutPoolEffect(CardGroup cards, HashSet<String> bannedCards)
+    public ViewInGamePoolEffect(CardGroup cards, HashSet<String> bannedCards)
     {
         this(cards, bannedCards, null);
     }
 
-    public PCLViewLoadoutPoolEffect(CardGroup cards, HashSet<String> bannedCards, ActionT0 onRefresh)
+    public ViewInGamePoolEffect(CardGroup cards, HashSet<String> bannedCards, ActionT0 onRefresh)
     {
         super(0.7f);
 
@@ -80,9 +80,10 @@ public class PCLViewLoadoutPoolEffect extends PCLEffectWithCallback<CardGroup>
         }
 
         this.grid = (EUIStaticCardGrid) new EUIStaticCardGrid()
+                .canRenderUpgrades(true)
                 .canDragScreen(false)
-                .addCards(cards.group)
                 .setOnCardClick(this::toggleCard);
+        this.grid.setCardGroup(cards);
         for (AbstractCard c : cards.group)
         {
             updateCardAlpha(c);
@@ -117,6 +118,7 @@ public class PCLViewLoadoutPoolEffect extends PCLEffectWithCallback<CardGroup>
                 .setText(SingleCardViewPopup.TEXT[6])
                 .setOnToggle(this::toggleViewUpgrades);
 
+        EUI.toggleViewUpgrades(false);
         upgradeToggle.setToggle(SingleCardViewPopup.isViewingUpgrade);
         refreshCountText();
 
@@ -128,7 +130,15 @@ public class PCLViewLoadoutPoolEffect extends PCLEffectWithCallback<CardGroup>
 
     private void updateCardAlpha(AbstractCard c)
     {
-        c.targetTransparency = bannedCards.contains(c.cardID) ? 0.35f : 1f;
+        c.transparency = c.targetTransparency = bannedCards.contains(c.cardID) ? 0.35f : 1f;
+        AbstractCard upgrade = grid.getUpgrade(c);
+        {
+            if (upgrade != null)
+            {
+                upgrade.transparency = upgrade.targetTransparency = c.targetTransparency;
+                upgrade.update();
+            }
+        }
     }
 
     private void toggleCard(AbstractCard c)
@@ -176,7 +186,7 @@ public class PCLViewLoadoutPoolEffect extends PCLEffectWithCallback<CardGroup>
         }
     }
 
-    public PCLViewLoadoutPoolEffect setStartingPosition(float x, float y)
+    public ViewInGamePoolEffect setStartingPosition(float x, float y)
     {
         for (AbstractCard c : cards.group)
         {
@@ -187,7 +197,7 @@ public class PCLViewLoadoutPoolEffect extends PCLEffectWithCallback<CardGroup>
         return this;
     }
 
-    public PCLViewLoadoutPoolEffect setCanToggle(boolean canToggle)
+    public ViewInGamePoolEffect setCanToggle(boolean canToggle)
     {
         this.canToggle = canToggle;
         selectAllButton.setActive(canToggle);

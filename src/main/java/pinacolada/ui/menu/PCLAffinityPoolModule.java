@@ -71,7 +71,7 @@ public class PCLAffinityPoolModule extends CustomCardFilterModule
         {
             PCLCardAffinity a = currentAffinities.get(i);
             affinityButtons.add(new AffinityKeywordButton(
-                    new RelativeHitbox(affinitiesSectionLabel.hb, ICON_SIZE, ICON_SIZE, ICON_SIZE * (0.5f + i * 1.05f), -(ICON_SIZE)).setIsPopupCompatible(true), a.type)
+                    new RelativeHitbox(affinitiesSectionLabel.hb, ICON_SIZE, ICON_SIZE, ICON_SIZE * (0.5f + i * 1.05f), -0.6f * (ICON_SIZE)).setIsPopupCompatible(true), a.type)
                     .setLevel(a.level)
                     .setOptions(false, true)
                     .setOnClick((button) -> {

@@ -30,9 +30,9 @@ public class UseCardAction_Update
             __instance.isDone = true;
             return SpireReturn.Return();
         }
-        else if (PCLCardTag.Purge.tryProgress(targetCard))
+        else if (PCLCardTag.Purge.has(targetCard) && PCLCardTag.Purge.tryProgress(targetCard))
         {
-            PCLActions.top.purge(targetCard);
+            PCLActions.top.purge(targetCard).showEffect(true, false);
             AbstractDungeon.player.cardInUse = null;
             __instance.isDone = true;
             return SpireReturn.Return();

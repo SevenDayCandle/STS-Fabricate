@@ -24,7 +24,7 @@ import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIClassUtils;
 import extendedui.utilities.EUIFontHelper;
-import pinacolada.effects.screen.PCLViewLoadoutPoolEffect;
+import pinacolada.effects.screen.ViewInGamePoolEffect;
 import pinacolada.resources.PGR;
 import pinacolada.ui.PCLValueEditor;
 import pinacolada.utilities.GameUtilities;
@@ -58,7 +58,7 @@ public class PCLCustomRunCanvas extends EUICanvas
     public final EUISearchableDropdown<CustomMod> modifierDropdown;
     public final MenuCancelButton cancelButton = new MenuCancelButton();
     public final GridSelectConfirmButton confirmButton;
-    private PCLViewLoadoutPoolEffect cardEffect;
+    private ViewInGamePoolEffect cardEffect;
 
     public PCLCustomRunCanvas(PCLCustomRunScreen screen)
     {
@@ -200,7 +200,7 @@ public class PCLCustomRunCanvas extends EUICanvas
 
     public void openCardPool()
     {
-        cardEffect = new PCLViewLoadoutPoolEffect(screen.getAllPossibleCards(), screen.bannedCards);
+        cardEffect = new ViewInGamePoolEffect(screen.getAllPossibleCards(), screen.bannedCards);
     }
 
     public void updateImpl()
