@@ -27,7 +27,7 @@ import java.util.List;
 public enum PCLCardTag implements TooltipProvider
 {
     Autoplay(false, new Color(0.33f, 0.33f, 0.45f, 1)),
-    Delayed(false, new Color(0.26f, 0.26f, 0.26f, 1)),
+    Delayed(true, new Color(0.26f, 0.26f, 0.26f, 1)),
     Ephemeral(false, new Color(0.7f, 0.7f, 0.7f, 1)),
     Ethereal(false, new Color(0.51f, 0.69f, 0.6f, 1)),
     Exhaust(false, new Color(0.81f, 0.35f, 0.35f, 1)),
@@ -37,19 +37,19 @@ public enum PCLCardTag implements TooltipProvider
     Haste(true, new Color(0.35f, 0.5f, 0.79f, 1)),
     Innate(true, new Color(0.8f, 0.8f, 0.35f, 1)),
     Loyal(true, new Color(0.81f, 0.51f, 0.3f, 1)),
-    Persist(true, new Color(0.6f, 0.66f, 0.33f, 1)),
+    Persist(false, new Color(0.6f, 0.66f, 0.33f, 1)),
     Purge(false, new Color(0.71f, 0.3f, 0.55f, 1)),
-    Recast(false, new Color(0.6f, 0.51f, 0.69f, 1)),
+    Recast(true, new Color(0.6f, 0.51f, 0.69f, 1)),
     Retain(true, new Color(0.49f, 0.78f, 0.35f, 1)),
     Unplayable(false, new Color(0.3f, 0.20f, 0.20f, 1));
 
     public static final float HEIGHT = 38f;
-    public final boolean isPositive;
+    public final boolean canBeInfinite;
     public final Color color;
 
-    PCLCardTag(boolean isPositive, Color color)
+    PCLCardTag(boolean canBeInfinite, Color color)
     {
-        this.isPositive = isPositive;
+        this.canBeInfinite = canBeInfinite;
         this.color = color;
     }
 
@@ -285,7 +285,8 @@ public enum PCLCardTag implements TooltipProvider
         SpireField<Integer> field2 = getFieldInteger();
         if (field2 != null)
         {
-            return field2.get(card) != 0;
+            int val = field2.get(card);
+            return val > 0 || (canBeInfinite && val < 0);
         }
         return false;
     }

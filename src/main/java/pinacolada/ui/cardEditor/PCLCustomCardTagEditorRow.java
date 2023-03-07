@@ -16,6 +16,7 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.fields.PCLCardTagInfo;
+import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.skills.PSkill;
 
 import static pinacolada.ui.cardEditor.PCLCustomCardAttributesPage.MENU_HEIGHT;
@@ -40,7 +41,7 @@ public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo>
         displayValue = (EUITextBoxNumericalInput) new EUITextBoxNumericalInput(EUIRM.images.panelRoundedHalfH.texture(),
                 new RelativeHitbox(hb, MENU_HEIGHT, MENU_HEIGHT, MENU_HEIGHT * 6, MENU_HEIGHT * 0.5f).setIsPopupCompatible(true).setParentElement(dr))
                 .showNegativeAsInfinity(true)
-                .setLimits(PSkill.DEFAULT_EXTRA_MIN, PSkill.DEFAULT_MAX)
+                .setLimits(getMinValue(item.tag), PSkill.DEFAULT_MAX)
                 .setOnComplete(v -> {
                     // TODO use stack for active elements in EUI
                     EUI.setActiveElement(dr);
@@ -55,7 +56,7 @@ public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo>
         displayValue2 = (EUITextBoxNumericalInput) new EUITextBoxNumericalInput(EUIRM.images.panelRoundedHalfH.texture(),
                 new RelativeHitbox(displayValue.hb, displayValue.hb.width, displayValue.hb.height, MENU_HEIGHT * 3.2f, MENU_HEIGHT * 0.5f).setIsPopupCompatible(true).setParentElement(dr))
                 .showNegativeAsInfinity(true)
-                .setLimits(PSkill.DEFAULT_EXTRA_MIN, PSkill.DEFAULT_MAX)
+                .setLimits(getMinValue(item.tag), PSkill.DEFAULT_MAX)
                 .setOnComplete(v -> {
                     EUI.setActiveElement(dr);
                     this.setSecondary(v, true);
@@ -81,6 +82,11 @@ public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo>
         increaseButton2 = new EUIButton(ImageMaster.CF_RIGHT_ARROW, new RelativeHitbox(displayValue.hb, ICON_SIZE, ICON_SIZE, 3.7f * MENU_HEIGHT + (ICON_SIZE * 0.4f), MENU_HEIGHT * 0.5f).setIsPopupCompatible(true).setParentElement(dr))
                 .setOnClick(this::increaseSecondary)
                 .setText(null);
+    }
+
+    protected int getMinValue(PCLCardTag tag)
+    {
+        return tag.canBeInfinite ? PSkill.DEFAULT_EXTRA_MIN : 0;
     }
 
     public void decreasePrimary()
@@ -152,10 +158,10 @@ public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo>
         this.isSelected = isSelected;
         if (isSelected)
         {
-            decreaseButton.setInteractable(displayValue.getCachedValue() > PSkill.DEFAULT_EXTRA_MIN).updateImpl();
-            decreaseButton2.setInteractable(displayValue2.getCachedValue() > PSkill.DEFAULT_EXTRA_MIN).updateImpl();
-            increaseButton.setInteractable(displayValue.getCachedValue() < PSkill.DEFAULT_MAX).updateImpl();
-            increaseButton2.setInteractable(displayValue2.getCachedValue() < PSkill.DEFAULT_MAX).updateImpl();
+            decreaseButton.setInteractable(displayValue.getCachedValue() > displayValue.getMin()).updateImpl();
+            decreaseButton2.setInteractable(displayValue2.getCachedValue() > displayValue.getMin()).updateImpl();
+            increaseButton.setInteractable(displayValue.getCachedValue() < displayValue.getMax()).updateImpl();
+            increaseButton2.setInteractable(displayValue2.getCachedValue() < displayValue.getMax()).updateImpl();
             displayValue.updateImpl();
             displayValue2.updateImpl();
         }
