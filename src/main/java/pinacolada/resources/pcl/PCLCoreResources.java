@@ -19,7 +19,6 @@ import pinacolada.skills.PSkill;
 import pinacolada.ui.cardEditor.PCLCustomCardSelectorScreen;
 import pinacolada.ui.cardReward.CardAffinityPanel;
 import pinacolada.ui.cardView.PCLSingleCardPopup;
-import pinacolada.ui.cards.PCLAugmentScreen;
 import pinacolada.ui.characterSelection.PCLCharacterSelectProvider;
 import pinacolada.ui.characterSelection.PCLLoadoutEditor;
 import pinacolada.ui.characterSelection.PCLSeriesSelectScreen;
@@ -27,10 +26,7 @@ import pinacolada.ui.combat.PCLCombatScreen;
 import pinacolada.ui.customRun.PCLCustomRunScreen;
 import pinacolada.ui.debug.PCLDebugAugmentPanel;
 import pinacolada.ui.debug.PCLDebugCardPanel;
-import pinacolada.ui.menu.PCLAffinityPoolModule;
-import pinacolada.ui.menu.PCLAugmentPanelItem;
-import pinacolada.ui.menu.PCLFtueScreen;
-import pinacolada.ui.menu.PCLLibraryModule;
+import pinacolada.ui.menu.*;
 
 // TODO Split from PCLResources
 public class PCLCoreResources extends PCLResources<PCLCoreConfig, PCLCoreImages, PCLCoreTooltips>

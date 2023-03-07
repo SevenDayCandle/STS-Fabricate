@@ -285,7 +285,7 @@ public enum PCLCardTag implements TooltipProvider
         SpireField<Integer> field2 = getFieldInteger();
         if (field2 != null)
         {
-            return field2.get(card) > 0;
+            return field2.get(card) != 0;
         }
         return false;
     }

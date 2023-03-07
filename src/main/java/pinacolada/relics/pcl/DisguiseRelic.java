@@ -1,8 +1,6 @@
 package pinacolada.relics.pcl;
 
-import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIInputManager;
-import extendedui.EUIUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.characters.CreatureAnimationInfo;
@@ -10,20 +8,11 @@ import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
-import java.util.ArrayList;
-
-public abstract class AbstractBox extends PCLRelic
+public abstract class DisguiseRelic extends PCLRelic
 {
-    public static final String ID = createFullID(AbstractBox.class);
-
-    public AbstractBox(String id, RelicTier tier, LandingSound sfx)
+    public DisguiseRelic(String id, RelicTier tier, LandingSound sfx)
     {
         super(id, tier, sfx);
-    }
-
-    protected void activateBattleEffect()
-    {
-        counter = 1;
     }
 
     @Override
@@ -49,23 +38,5 @@ public abstract class AbstractBox extends PCLRelic
                         }
                     });
         }
-    }
-
-    @Override
-    public void obtain()
-    {
-        ArrayList<AbstractRelic> relics = player.relics;
-        for (int i = 0; i < relics.size(); i++)
-        {
-            AbstractBox relic = EUIUtils.safeCast(relics.get(i), AbstractBox.class);
-            if (relic != null)
-            {
-                instantObtain(player, i, true);
-                setCounter(relic.counter);
-                return;
-            }
-        }
-
-        super.obtain();
     }
 }

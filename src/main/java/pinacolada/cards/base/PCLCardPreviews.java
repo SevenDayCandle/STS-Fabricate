@@ -7,7 +7,7 @@ import pinacolada.utilities.RotatingList;
 
 public class PCLCardPreviews
 {
-    private static final RotatingList<EUICardPreview> Previews = new RotatingList<>();
+    private static final RotatingList<EUICardPreview> PREVIEWS = new RotatingList<>();
     private static EUICardPreview lastPreview = null;
     private static PCLCard lastCard = null;
 
@@ -16,21 +16,21 @@ public class PCLCardPreviews
         setPreviews(card);
 
         EUICardPreview preview;
-        if (Previews.size() > 1)
+        if (PREVIEWS.size() > 1)
         {
             if (EUIHotkeys.cycle.isJustPressed())
             {
-                preview = Previews.next(true);
+                preview = PREVIEWS.next(true);
             }
             else
             {
-                preview = Previews.current();
+                preview = PREVIEWS.current();
             }
             preview.isMultiPreview = true;
         }
         else
         {
-            preview = Previews.current();
+            preview = PREVIEWS.current();
         }
 
         if (lastPreview != preview && preview != null)
@@ -54,7 +54,7 @@ public class PCLCardPreviews
 
     public static void invalidate()
     {
-        Previews.clear();
+        PREVIEWS.clear();
         lastCard = null;
         lastPreview = null;
     }
@@ -64,22 +64,22 @@ public class PCLCardPreviews
         if (card != null && lastCard != card)
         {
             lastCard = card;
-            Previews.clear();
-            for (PSkill effect : card.getEffects())
+            PREVIEWS.clear();
+            for (PSkill<?> effect : card.getEffects())
             {
                 if (effect == null)
                 {
                     continue;
                 }
-                effect.makePreviews(Previews);
+                effect.makePreviews(PREVIEWS);
             }
-            for (PSkill effect : card.getPowerEffects())
+            for (PSkill<?> effect : card.getPowerEffects())
             {
                 if (effect == null)
                 {
                     continue;
                 }
-                effect.makePreviews(Previews);
+                effect.makePreviews(PREVIEWS);
             }
         }
     }

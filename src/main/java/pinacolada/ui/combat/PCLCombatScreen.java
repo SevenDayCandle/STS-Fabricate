@@ -92,9 +92,15 @@ public class PCLCombatScreen extends EUIBase
     @Override
     public void renderImpl(SpriteBatch sb)
     {
+        if (player == null || player.hand == null || AbstractDungeon.overlayMenu.energyPanel.isHidden)
+        {
+            return;
+        }
+
         CombatManager.playerSystem.render(sb);
         CombatManager.summons.render(sb);
         CombatManager.controlPile.render(sb);
+        DrawPileCardPreview.updateAndRenderCurrent(sb);
         if (PGR.core.config.showFormulaDisplay.get())
         {
             formulaDisplay.renderImpl(sb);

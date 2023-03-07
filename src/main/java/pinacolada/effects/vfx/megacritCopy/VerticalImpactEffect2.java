@@ -13,6 +13,7 @@ import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 import com.megacrit.cardcrawl.vfx.GenericSmokeEffect;
 
+@Deprecated
 public class VerticalImpactEffect2 extends AbstractGameEffect
 {
     private static final float DUR = 0.6F;

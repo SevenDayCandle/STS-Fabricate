@@ -12,6 +12,7 @@ import com.megacrit.cardcrawl.helpers.ImageMaster;
 import pinacolada.effects.PCLEffect;
 
 @SuppressWarnings("FieldCanBeLocal")
+@Deprecated
 public class SmallLaserEffect2 extends PCLEffect
 {
     private static AtlasRegion img;

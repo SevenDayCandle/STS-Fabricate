@@ -15,6 +15,7 @@ import com.megacrit.cardcrawl.helpers.ScreenShake.ShakeIntensity;
 import com.megacrit.cardcrawl.vfx.combat.ImpactSparkEffect;
 import pinacolada.effects.PCLEffect;
 
+@Deprecated
 public class LightningEffect2 extends PCLEffect
 {
     private final float x;

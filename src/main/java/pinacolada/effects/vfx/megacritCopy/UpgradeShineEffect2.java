@@ -16,6 +16,7 @@ import com.megacrit.cardcrawl.vfx.UpgradeHammerImprintEffect;
 import com.megacrit.cardcrawl.vfx.UpgradeShineParticleEffect;
 import pinacolada.effects.SFX;
 
+@Deprecated
 public class UpgradeShineEffect2 extends AbstractGameEffect
 {
     private final float x;

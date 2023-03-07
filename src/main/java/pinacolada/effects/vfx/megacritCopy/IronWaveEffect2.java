@@ -8,6 +8,7 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.vfx.combat.IronWaveParticle;
 import pinacolada.effects.PCLEffect;
 
+@Deprecated
 public class IronWaveEffect2 extends PCLEffect
 {
     private static final float BASE_STEP_X = 160f * Settings.scale;

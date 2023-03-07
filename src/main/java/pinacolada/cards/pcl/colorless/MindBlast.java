@@ -29,6 +29,6 @@ public class MindBlast extends PCLCard
 
     public void setup(Object input)
     {
-        addDamageMove().setChain(PMod.perCard(1, PCLCardGroupHelper.DrawPile).setUpgrade(-1), PTrait.damage(1));
+        addDamageMove().setChain(PMod.perCard(1, PCLCardGroupHelper.DrawPile), PTrait.damage(1));
     }
 }

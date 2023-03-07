@@ -12,6 +12,7 @@ import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
 
+@Deprecated
 public class LaserBeamEffect2 extends PCLEffect
 {
     private static AtlasRegion img;

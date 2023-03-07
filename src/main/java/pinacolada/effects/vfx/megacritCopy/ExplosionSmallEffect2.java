@@ -9,6 +9,7 @@ import com.megacrit.cardcrawl.vfx.DarkSmokePuffEffect;
 import com.megacrit.cardcrawl.vfx.combat.SmokingEmberEffect;
 import pinacolada.effects.PCLEffect;
 
+@Deprecated
 public class ExplosionSmallEffect2 extends PCLEffect
 {
     private static final int EMBER_COUNT = 12;

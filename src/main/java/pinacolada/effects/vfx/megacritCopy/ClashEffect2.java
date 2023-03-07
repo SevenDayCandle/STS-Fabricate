@@ -9,6 +9,7 @@ import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
 
+@Deprecated
 public class ClashEffect2 extends PCLEffect
 {
     private final float x;

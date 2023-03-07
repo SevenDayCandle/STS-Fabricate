@@ -13,6 +13,7 @@ import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 import com.megacrit.cardcrawl.vfx.BorderLongFlashEffect;
 import pinacolada.effects.SFX;
 
+@Deprecated
 public class MindblastEffect2 extends AbstractGameEffect
 {
     private static final float DUR = 1.0F;

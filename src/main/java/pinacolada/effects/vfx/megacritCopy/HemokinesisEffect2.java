@@ -6,6 +6,7 @@ import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.vfx.HemokinesisParticleEffect;
 
+@Deprecated
 public class HemokinesisEffect2 extends PCLEffect
 {
     private final float x;

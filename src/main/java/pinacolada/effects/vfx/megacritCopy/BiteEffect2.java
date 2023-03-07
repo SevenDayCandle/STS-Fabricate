@@ -11,6 +11,7 @@ import com.megacrit.cardcrawl.helpers.ImageMaster;
 import pinacolada.effects.PCLEffect;
 import pinacolada.effects.SFX;
 
+@Deprecated
 public class BiteEffect2 extends PCLEffect
 {
     private static final float DUR = 1.0F;

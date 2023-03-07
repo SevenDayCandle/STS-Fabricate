@@ -15,6 +15,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import pinacolada.effects.PCLEffect;
 
+@Deprecated
 public class GiantFireEffect2 extends PCLEffect
 {
     private final float brightness;

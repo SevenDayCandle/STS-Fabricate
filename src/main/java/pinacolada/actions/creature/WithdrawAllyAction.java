@@ -84,7 +84,6 @@ public class WithdrawAllyAction extends PCLAction<ArrayList<PCLCard>>
                     .addCallback(returnedCard::unfadeOut);
         }
 
-        // TODO better effects
         if (showEffect)
         {
             PCLEffects.Queue.add(new SmokeEffect(ally.hb.cX, ally.hb.cY));

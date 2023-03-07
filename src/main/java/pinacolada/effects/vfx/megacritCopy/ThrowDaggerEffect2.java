@@ -11,6 +11,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 
+@Deprecated
 public class ThrowDaggerEffect2 extends AbstractGameEffect
 {
     private static final float DUR = 0.4F;

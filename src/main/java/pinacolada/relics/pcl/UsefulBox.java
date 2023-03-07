@@ -6,9 +6,10 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.interfaces.subscribers.OnAllySummonSubscriber;
 import pinacolada.misc.CombatManager;
 import pinacolada.monsters.PCLCardAlly;
+import pinacolada.relics.PCLRelic;
 
 @VisibleRelic
-public class UsefulBox extends AbstractBox implements OnAllySummonSubscriber
+public class UsefulBox extends PCLRelic implements OnAllySummonSubscriber
 {
     public static final String ID = createFullID(UsefulBox.class);
 
@@ -43,6 +44,6 @@ public class UsefulBox extends AbstractBox implements OnAllySummonSubscriber
 
     public int getValue()
     {
-        return 3;
+        return 2;
     }
 }

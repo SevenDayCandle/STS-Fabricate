@@ -8,6 +8,7 @@ import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
 
+@Deprecated
 public class ClawEffect2 extends PCLEffect
 {
     private final float x;

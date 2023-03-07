@@ -17,6 +17,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.CardController;
 import pinacolada.resources.PCLHotkeys;
 import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -40,8 +41,8 @@ public class ControllableCardPile
     public ControllableCardPile()
     {
         tooltip = new EUITooltip(PGR.core.strings.combat_controlPile, PGR.core.strings.combat_controlPileDescription);
-        cardButton = new EUIButton(PGR.core.images.controllableCardPile.texture(), hb)
-                .setBorder(PGR.core.images.controllableCardPileBorder.texture(), Color.WHITE)
+        cardButton = new EUIButton(PCLCoreImages.controllableCardPile.texture(), hb)
+                .setBorder(PCLCoreImages.controllableCardPileBorder.texture(), Color.WHITE)
                 .setFont(FontHelper.energyNumFontBlue, 1f)
                 .setOnClick(() -> {
                     if (!AbstractDungeon.isScreenUp && currentCard != null && currentCard.canUse())

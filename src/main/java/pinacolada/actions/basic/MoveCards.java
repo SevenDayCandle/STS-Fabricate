@@ -3,6 +3,7 @@ package pinacolada.actions.basic;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.Settings;
+import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
 import extendedui.utilities.GenericCondition;
@@ -46,14 +47,7 @@ public class MoveCards extends PCLAction<ArrayList<AbstractCard>>
     @Override
     protected void firstUpdate()
     {
-        ArrayList<AbstractCard> temp = new ArrayList<>();
-        for (AbstractCard card : sourcePile.group)
-        {
-            if (filter == null || filter.check(card))
-            {
-                temp.add(card);
-            }
-        }
+        ArrayList<AbstractCard> temp = filter != null ? EUIUtils.filter(sourcePile.group, filter::check) : new ArrayList<>(sourcePile.group);
 
         int max = amount;
         if (amount == -1 || temp.size() < amount)

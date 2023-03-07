@@ -21,6 +21,7 @@ public class SummonAllyAction extends PCLAction<PCLCard>
     public boolean stun = false;
     public boolean showEffect = true;
     public boolean summonCardOnly = true;
+    public boolean triggerOnSwap = true;
 
     public SummonAllyAction(PCLCard card, PCLCardAlly slot)
     {
@@ -75,26 +76,30 @@ public class SummonAllyAction extends PCLAction<PCLCard>
         // If ally is withdrawn, setting up the new card must come after the previous card is withdrawn
         if (returnedCard != null)
         {
-            PCLActions.top.withdrawAlly(ally).addCallback(this::initializeAlly);
+            PCLActions.top.withdrawAlly(ally).addCallback(() -> initializeAlly(true));
         }
         else
         {
-            initializeAlly();
+            initializeAlly(false);
         }
 
         CombatManager.onAllySummon(card, ally);
         complete(returnedCard);
     }
 
-    protected void initializeAlly()
+    protected void initializeAlly(boolean canTrigger)
     {
         PCLActions.bottom.callback(() -> {
             this.ally.initializeForCard(card, retainPowers, stun);
 
-            // TODO effects
             if (showEffect)
             {
                 PCLEffects.Queue.add(new SmokeEffect(ally.hb.cX, ally.hb.cY));
+            }
+
+            if (canTrigger && triggerOnSwap)
+            {
+                ally.takeTurn();
             }
         });
     }

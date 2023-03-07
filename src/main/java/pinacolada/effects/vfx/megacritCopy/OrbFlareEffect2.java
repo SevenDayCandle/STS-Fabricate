@@ -11,6 +11,7 @@ import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.vfx.combat.OrbFlareEffect;
 import pinacolada.effects.PCLEffect;
 
+@Deprecated
 public class OrbFlareEffect2 extends PCLEffect
 {
     private static AtlasRegion outer;

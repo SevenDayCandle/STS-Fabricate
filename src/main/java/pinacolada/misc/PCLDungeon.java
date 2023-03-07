@@ -470,38 +470,6 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
                 loadouts.add(loadout);
             }
         }
-
-        bannedCards.addAll(data.resources.config.bannedCards.get());
-        bannedRelics.addAll(data.resources.config.bannedRelics.get());
-
-        final ArrayList<CardGroup> groups = new ArrayList<>();
-        groups.addAll(GameUtilities.getCardPools());
-        groups.addAll(GameUtilities.getSourceCardPools());
-        for (CardGroup group : groups)
-        {
-            group.group.removeIf(card ->
-            {
-                if (!bannedCards.contains(card.cardID))
-                {
-                    if (GameUtilities.isColorlessCardColor(card.color))
-                    {
-                        return !data.resources.containsColorless(card);
-                    }
-                    else if (card.color != data.resources.cardColor || loadouts.isEmpty())
-                    {
-                        return false;
-                    }
-                    for (PCLLoadout loadout : loadouts)
-                    {
-                        if (loadout.isCardFromLoadout(card.cardID))
-                        {
-                            return false;
-                        }
-                    }
-                }
-                return true;
-            });
-        }
     }
 
     private void loadCustomCards(AbstractPlayer player)
