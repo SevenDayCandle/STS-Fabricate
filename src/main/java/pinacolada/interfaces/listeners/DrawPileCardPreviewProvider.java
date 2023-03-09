@@ -6,7 +6,6 @@ import pinacolada.ui.combat.DrawPileCardPreview;
 public interface DrawPileCardPreviewProvider
 {
     public abstract AbstractCard findCard();
-    public void highlight(DrawPileCardPreview preview);
     public void onClick(AbstractCard highlighted);
     default DrawPileCardPreview subscribe()
     {

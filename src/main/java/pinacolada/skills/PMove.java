@@ -419,6 +419,16 @@ public abstract class PMove<T extends PField> extends PSkill<T>
         return new PMove_LoseHP(target, amount);
     }
 
+    public static PMove_LoseHPPercent loseHpPercent(int amount)
+    {
+        return new PMove_LoseHPPercent(amount);
+    }
+
+    public static PMove_LoseHPPercent loseHpPercent(PCLCardTarget target, int amount)
+    {
+        return new PMove_LoseHPPercent(target, amount);
+    }
+
     public static PMove_ModifyAffinity modifyAffinity(PCLAffinity... tag)
     {
         return new PMove_ModifyAffinity(1, tag);

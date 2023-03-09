@@ -50,7 +50,6 @@ public class DrawPileCardPreview
             foundCard.render(sb);
             if (foundCard.hb.hovered) {
                 highlighted = true;
-                provider.highlight(this);
                 foundCard.renderCardTip(sb);
                 if (EUIInputManager.leftClick.isJustPressed())
                 {
@@ -106,6 +105,7 @@ public class DrawPileCardPreview
 
     public static void updatePreviews()
     {
+        // TODO show text prompting to cycle if multiple previews are present
         if (PREVIEWS.size() > 1)
         {
             if (EUIHotkeys.cycle.isJustPressed())
