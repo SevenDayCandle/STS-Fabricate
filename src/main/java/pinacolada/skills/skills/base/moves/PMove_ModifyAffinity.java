@@ -52,9 +52,9 @@ public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity
     @Override
     public void cardAction(List<AbstractCard> cards)
     {
-        if (fields.or && fields.affinities.size() > 1)
+        if (fields.or && fields.addAffinities.size() > 1)
         {
-            chooseEffect(cards, fields.affinities);
+            chooseEffect(cards, fields.addAffinities);
         }
         else
         {
@@ -65,7 +65,7 @@ public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity
     @Override
     public ActionT1<AbstractCard> getAction()
     {
-        return (c) -> getActions().modifyAffinityLevel(c, fields.affinities, extra, true, fields.forced);
+        return (c) -> getActions().modifyAffinityLevel(c, fields.addAffinities, extra, true, fields.forced);
     }
 
     @Override
