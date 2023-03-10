@@ -6,7 +6,8 @@ import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.powers.*;
+import com.megacrit.cardcrawl.powers.AbstractPower;
+import com.megacrit.cardcrawl.powers.ConstrictedPower;
 import extendedui.utilities.EUIClassUtils;
 import javassist.CannotCompileException;
 import javassist.CtBehavior;
@@ -14,9 +15,6 @@ import javassist.expr.ExprEditor;
 import pinacolada.misc.CombatManager;
 import pinacolada.powers.common.PCLLockOnPower;
 import pinacolada.powers.replacement.PCLConstrictedPower;
-import pinacolada.powers.replacement.PCLFrailPower;
-import pinacolada.powers.replacement.PCLVulnerablePower;
-import pinacolada.powers.replacement.PCLWeakPower;
 import pinacolada.utilities.GameUtilities;
 
 
@@ -118,21 +116,7 @@ public class ApplyPowerActionPatches
 
         if (GameUtilities.isPCLPlayerClass())
         {
-            if (power instanceof VulnerablePower && !(power instanceof PCLVulnerablePower))
-            {
-                boolean justApplied = ReflectionHacks.getPrivate(power, VulnerablePower.class, "justApplied");
-                return new PCLVulnerablePower(power.owner, power.amount, justApplied);
-            }
-            else if (power instanceof WeakPower && !(power instanceof PCLWeakPower))
-            {
-                boolean justApplied = ReflectionHacks.getPrivate(power, WeakPower.class, "justApplied");
-                return new PCLWeakPower(power.owner, power.amount, justApplied);
-            }
-            else if (power instanceof FrailPower && !(power instanceof PCLFrailPower))
-            {
-                return new PCLFrailPower(power.owner, power.amount, !GameUtilities.isPlayer(source));
-            }
-            else if (power instanceof com.megacrit.cardcrawl.powers.LockOnPower)
+            if (power instanceof com.megacrit.cardcrawl.powers.LockOnPower)
             {
                 return new PCLLockOnPower(power.owner, power.amount);
             }
@@ -140,21 +124,7 @@ public class ApplyPowerActionPatches
 
         else
         {
-            if (power instanceof PCLVulnerablePower)
-            {
-                boolean justApplied = ReflectionHacks.getPrivate(power, VulnerablePower.class, "justApplied");
-                return new VulnerablePower(power.owner, power.amount, justApplied);
-            }
-            else if (power instanceof PCLWeakPower)
-            {
-                boolean justApplied = ReflectionHacks.getPrivate(power, WeakPower.class, "justApplied");
-                return new WeakPower(power.owner, power.amount, justApplied);
-            }
-            else if (power instanceof PCLFrailPower)
-            {
-                return new PCLFrailPower(power.owner, power.amount, !GameUtilities.isPlayer(source));
-            }
-            else if (power instanceof PCLLockOnPower)
+            if (power instanceof PCLLockOnPower)
             {
                 return new com.megacrit.cardcrawl.powers.LockOnPower(power.owner, power.amount);
             }

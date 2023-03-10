@@ -8,6 +8,7 @@ import pinacolada.powers.PCLPower;
 import pinacolada.resources.pcl.PCLCoreTooltips;
 import pinacolada.utilities.PCLRenderHelpers;
 
+// TODO convert into dynamic patch
 public class PCLLockOnPower extends PCLPower implements OnOrbApplyLockOnSubscriber, MultiplicativePower
 {
     public static final String POWER_ID = createFullID(PCLLockOnPower.class);

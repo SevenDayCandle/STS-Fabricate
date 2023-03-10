@@ -16,7 +16,9 @@ import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import com.megacrit.cardcrawl.orbs.EmptyOrbSlot;
 import com.megacrit.cardcrawl.powers.*;
 import com.megacrit.cardcrawl.powers.watcher.VigorPower;
-import com.megacrit.cardcrawl.relics.*;
+import com.megacrit.cardcrawl.relics.AbstractRelic;
+import com.megacrit.cardcrawl.relics.Calipers;
+import com.megacrit.cardcrawl.relics.PenNib;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import com.megacrit.cardcrawl.stances.AbstractStance;
 import extendedui.EUIUtils;
@@ -45,8 +47,6 @@ import pinacolada.orbs.PCLOrb;
 import pinacolada.powers.PCLClickableUse;
 import pinacolada.powers.PCLPower;
 import pinacolada.powers.TemporaryPower;
-import pinacolada.powers.common.ImpairedPower;
-import pinacolada.powers.common.PCLLockOnPower;
 import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
@@ -230,15 +230,6 @@ public class CombatManager
 
         CardGlowBorderPatches.overrideColor = null;
         PURGED_CARDS.clear();
-
-        // Add effects for vanilla relics
-        addEffectBonus(VulnerablePower.POWER_ID, 50 + (GameUtilities.hasRelicEffect(PaperFrog.ID) ? 25 : 0));
-        addEffectBonus(WeakPower.POWER_ID, 25 + (GameUtilities.hasRelicEffect(PaperCrane.ID) ? 15 : 0));
-        addEffectBonus(PCLLockOnPower.POWER_ID, 50);
-        addPlayerEffectBonus(VulnerablePower.POWER_ID, 50 + (GameUtilities.hasRelicEffect(OddMushroom.ID) ? -25 : 0));
-        addPlayerEffectBonus(WeakPower.POWER_ID, 25);
-        addPlayerEffectBonus(FrailPower.POWER_ID, 25);
-        addPlayerEffectBonus(ImpairedPower.POWER_ID, 50);
     }
 
     public static Set<Map.Entry<String, Float>> getAllAmplifierBonuses()
@@ -274,6 +265,11 @@ public class CombatManager
     public static float getEffectBonus(String powerID)
     {
         return EFFECT_BONUSES.getOrDefault(powerID, 0f);
+    }
+
+    public static float getEffectBonusForPower(AbstractPower po)
+    {
+        return (GameUtilities.isPlayer(po.owner)) ? (CombatManager.getPlayerEffectBonus(po.ID)) : (CombatManager.getEffectBonus(po.ID));
     }
 
     public static HashMap<String, Float> getEffectBonusMapForType(Type effectType)

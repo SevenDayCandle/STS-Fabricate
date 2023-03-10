@@ -55,6 +55,7 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
     protected static final float ICON_SIZE2 = 48f;
     protected static final float CLICKABLE_SIZE = ICON_SIZE * Settings.scale * 1.5f;
     protected static final Color disabledColor = new Color(0.5f, 0.5f, 0.5f, 1);
+    public static final int DUMMY_MULT = 100;
     public static AbstractPlayer player = null;
     public static Random rng = null;
     public final ArrayList<EUITooltip> tooltips = new ArrayList<>();

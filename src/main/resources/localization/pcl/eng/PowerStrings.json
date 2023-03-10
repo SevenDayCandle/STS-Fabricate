@@ -65,11 +65,6 @@
 								"DESCRIPTIONS": ["Gain +#b{0}% [Block] from cards for #b{1} {2}.", "turn", "turns"],
 								"NAME": "Fortified"
 				},
-				"pcl:FrailPower":
-				{
-								"DESCRIPTIONS": ["Gain #b{0}% less [Block] from cards for #b{1} {2}.", "turn", "turns"],
-								"NAME": "Frail"
-				},
 				"pcl:HandSizePower":
 				{
 								"DESCRIPTIONS": ["Your current maximum hand size is #b{0}."],
@@ -97,7 +92,7 @@
 				},
 				"pcl:PCLLockOnPower":
 				{
-								"DESCRIPTIONS": ["Receive #b{0}% more damage from Orbs for #b{1} {2}. Orbs and [Support Damage] will prioritize this target.", "turn", "turns"],
+								"DESCRIPTIONS": ["Receive #b{0}% more damage from Orbs for #b{1} {2}. #ySummons with random targeting will prioritize this target.", "turn", "turns"],
 								"NAME": "Lock-On"
 				},
 				"pcl:ProvokedPower":
@@ -174,15 +169,5 @@
 				{
 								"DESCRIPTIONS": ["At the start of each turn, gain #b{0} #yTemporary #yHP (Max. #b{1})."],
 								"NAME": "Vitality"
-				},
-				"pcl:VulnerablePower":
-				{
-								"DESCRIPTIONS": ["Receive #b{0}% more damage from #yAttacks for #b{1} turn(s)."],
-								"NAME": "Vulnerable"
-				},
-				"pcl:WeakPower":
-				{
-								"DESCRIPTIONS": ["Attacks deal #b{0}% less damage for #b{1} turn(s)."],
-								"NAME": "Weakened"
 				}
 }
