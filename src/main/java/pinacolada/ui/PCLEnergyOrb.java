@@ -7,23 +7,23 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.ui.panels.energyorb.EnergyOrbInterface;
 import extendedui.ui.TextureCache;
 import extendedui.utilities.EUIColors;
-import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class PCLEnergyOrb implements EnergyOrbInterface
 {
     public static final TextureCache[] DEFAULT_TEXTURES =
             {
-                    PGR.core.images.orbBaseLayer,
-                    PGR.core.images.orbTopLayer1,
-                    PGR.core.images.orbTopLayer2,
-                    PGR.core.images.orbTopLayer3,
-                    PGR.core.images.orbTopLayer4,
-            };
-    protected static final TextureCache DEFAULT_FLASH = PGR.core.images.orbFlash;
+                    PCLCoreImages.CardFrames.orbBaseLayer,
+                    PCLCoreImages.CardFrames.orbTopLayer1,
+                    PCLCoreImages.CardFrames.orbTopLayer2,
+                    PCLCoreImages.CardFrames.orbTopLayer3,
+                    PCLCoreImages.CardFrames.orbTopLayer4,
+                    };
+    protected static final TextureCache DEFAULT_FLASH = PCLCoreImages.CardFrames.orbFlash;
     protected static final float BASE_MULT = 3f;
     protected static final float ORB_IMG_SCALE = 1.15F * Settings.scale;
-    protected static final TextureCache BASE_BORDER = PGR.core.images.orbBaseBorder;
+    protected static final TextureCache BASE_BORDER = PCLCoreImages.CardFrames.orbBaseBorder;
     protected TextureCache flash;
     protected TextureCache[] images;
     protected float[] angleMults;

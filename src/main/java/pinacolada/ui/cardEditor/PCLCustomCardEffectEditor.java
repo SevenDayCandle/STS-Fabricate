@@ -52,6 +52,7 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
     protected EUISearchableDropdown<T> effects;
     protected EUIDropdown<PCLAffinity> affinities;
     protected EUIDropdown<PCLCardTarget> targets;
+    protected EUIDropdown<AbstractCard.CardColor> colors;
     protected EUIDropdown<AbstractCard.CardRarity> rarities;
     protected EUIDropdown<AbstractCard.CardType> types;
     protected EUIDropdown<PCLCardGroupHelper> piles;
@@ -195,6 +196,15 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
                          :
                         EUIUtils.filter(CardLibrary.getAllCards(),
                                 c -> !(c instanceof PCLCard) && (c.color == AbstractCard.CardColor.COLORLESS || c.color == AbstractCard.CardColor.CURSE || c.color == editor.builder.cardColor)));
+
+        colors = new EUIDropdown<>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.35f, MENU_HEIGHT, AUX_OFFSET + MAIN_OFFSET * 2, 0)
+                , EUIGameUtils::getColorName)
+                .setLabelFunctionForOption(EUIGameUtils::getColorName, false)
+                .setIsMultiSelect(true)
+                .setShouldPositionClearAtTop(true)
+                .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, EUIRM.strings.uiColors)
+                .setCanAutosize(true, true)
+                .setItems(AbstractCard.CardColor.values());
 
         rarities = new EUIDropdown<>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.35f, MENU_HEIGHT, AUX_OFFSET + MAIN_OFFSET * 2, 0)
                 , EUIGameUtils::textForRarity)
@@ -357,6 +367,11 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
     public void registerAffinity(List<PCLAffinity> items)
     {
         registerDropdown(affinities, items);
+    }
+
+    public void registerColor(List<AbstractCard.CardColor> items)
+    {
+        registerDropdown(colors, items);
     }
 
     public void registerOrb(List<PCLOrbHelper> items)

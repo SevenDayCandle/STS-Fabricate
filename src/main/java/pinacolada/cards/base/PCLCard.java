@@ -587,9 +587,9 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     public ColoredTexture getCardAttributeBanner() {
         if (rarity == PCLEnum.CardRarity.LEGENDARY || rarity == PCLEnum.CardRarity.SECRET)
         {
-            return new ColoredTexture((isPopup ? PCLCoreImages.cardBanner : PCLCoreImages.cardBannerAttribute2).texture(), getRarityColor());
+            return new ColoredTexture((isPopup ? PCLCoreImages.CardFrames.cardBanner : PCLCoreImages.CardFrames.cardBannerAttribute2).texture(), getRarityColor());
         }
-        return new ColoredTexture((isPopup ? PCLCoreImages.cardBannerAttributeL : PCLCoreImages.cardBannerAttribute).texture(), getRarityColor());
+        return new ColoredTexture((isPopup ? PCLCoreImages.CardFrames.cardBannerAttributeL : PCLCoreImages.CardFrames.cardBannerAttribute).texture(), getRarityColor());
     }
 
     protected Texture getCardBackground() {
@@ -618,9 +618,9 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         {
             if (rarity == PCLEnum.CardRarity.LEGENDARY || rarity == PCLEnum.CardRarity.SECRET)
             {
-                return (isPopup ? PCLCoreImages.cardBanner2L : PCLCoreImages.cardBanner2).texture();
+                return (isPopup ? PCLCoreImages.CardFrames.cardBanner2L : PCLCoreImages.CardFrames.cardBanner2).texture();
             }
-            return (isPopup ? PCLCoreImages.cardBannerL : PCLCoreImages.cardBanner).texture();
+            return (isPopup ? PCLCoreImages.CardFrames.cardBannerL : PCLCoreImages.CardFrames.cardBanner).texture();
         }
         return null;
     }
@@ -757,20 +757,20 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         {
             if (type == PCLEnum.CardType.SUMMON)
             {
-                return isPopup ? PCLCoreImages.cardFrameSummonL.texture() : PCLCoreImages.cardFrameSummon.texture();
+                return isPopup ? PCLCoreImages.CardFrames.cardFrameSummonL.texture() : PCLCoreImages.CardFrames.cardFrameSummon.texture();
             }
             switch (type) {
                 case ATTACK:
-                    return isPopup ? PCLCoreImages.cardFrameAttackL.texture() : PCLCoreImages.cardFrameAttack.texture();
+                    return isPopup ? PCLCoreImages.CardFrames.cardFrameAttackL.texture() : PCLCoreImages.CardFrames.cardFrameAttack.texture();
 
                 case POWER:
-                    return isPopup ? PCLCoreImages.cardFramePowerL.texture() : PCLCoreImages.cardFramePower.texture();
+                    return isPopup ? PCLCoreImages.CardFrames.cardFramePowerL.texture() : PCLCoreImages.CardFrames.cardFramePower.texture();
 
                 case SKILL:
                 case CURSE:
                 case STATUS:
                 default:
-                    return isPopup ? PCLCoreImages.cardFrameSkillL.texture() : PCLCoreImages.cardFrameSkill.texture();
+                    return isPopup ? PCLCoreImages.CardFrames.cardFrameSkillL.texture() : PCLCoreImages.CardFrames.cardFrameSkill.texture();
             }
         }
         return null;

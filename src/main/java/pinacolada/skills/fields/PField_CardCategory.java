@@ -29,6 +29,7 @@ import java.util.List;
 
 public class PField_CardCategory extends PField_CardID
 {
+    public ArrayList<AbstractCard.CardColor> colors = new ArrayList<>();
     public ArrayList<AbstractCard.CardRarity> rarities = new ArrayList<>();
     public ArrayList<AbstractCard.CardType> types = new ArrayList<>();
     public ArrayList<PCLAffinity> affinities = new ArrayList<>();
@@ -43,6 +44,7 @@ public class PField_CardCategory extends PField_CardID
     {
         super(other);
         setAffinity(other.affinities);
+        setColor(other.colors);
         setRarity(other.rarities);
         setType(other.types);
         setTag(other.tags);
@@ -53,6 +55,7 @@ public class PField_CardCategory extends PField_CardID
     {
         return super.equals(other)
                 && affinities.equals(((PField_CardCategory) other).affinities)
+                && colors.equals(((PField_CardCategory) other).colors)
                 && rarities.equals(((PField_CardCategory) other).rarities)
                 && types.equals(((PField_CardCategory) other).types)
                 && tags.equals(((PField_CardCategory) other).tags);
@@ -71,6 +74,7 @@ public class PField_CardCategory extends PField_CardID
         editor.registerRarity(rarities);
         editor.registerType(types);
         editor.registerAffinity(affinities);
+        editor.registerColor(colors);
         editor.registerTag(tags);
         editor.registerBoolean(PGR.core.strings.cedit_required, v -> forced = v, forced);
     }
@@ -96,6 +100,18 @@ public class PField_CardCategory extends PField_CardID
     {
         this.affinities.clear();
         this.affinities.addAll(affinities);
+        return this;
+    }
+
+    public PField_CardCategory setColor(AbstractCard.CardColor... types)
+    {
+        return setColor(Arrays.asList(types));
+    }
+
+    public PField_CardCategory setColor(List<AbstractCard.CardColor> types)
+    {
+        this.colors.clear();
+        this.colors.addAll(types);
         return this;
     }
 
@@ -139,9 +155,10 @@ public class PField_CardCategory extends PField_CardID
     {
         return !cardIDs.isEmpty() ? c -> EUIUtils.any(cardIDs, id -> id.equals(c.cardID)) :
                 (c -> (affinities.isEmpty() || GameUtilities.hasAnyAffinity(c, affinities))
-                && (rarities.isEmpty() || rarities.contains(c.rarity))
-                && (tags.isEmpty() || EUIUtils.any(tags, t -> t.has(c)))
-                && (types.isEmpty() || types.contains(c.type)));
+                        && (colors.isEmpty() || colors.contains(c.color))
+                        && (rarities.isEmpty() || rarities.contains(c.rarity))
+                        && (tags.isEmpty() || EUIUtils.any(tags, t -> t.has(c)))
+                        && (types.isEmpty() || types.contains(c.type)));
     }
 
     public String getFullCardAndString(Object value)
@@ -189,6 +206,10 @@ public class PField_CardCategory extends PField_CardID
         if (!tags.isEmpty())
         {
             stringsToJoin.add(joinFunc.invoke(EUIUtils.map(tags, tag -> tag.getTip().getTitleOrIcon())));
+        }
+        if (!colors.isEmpty())
+        {
+            stringsToJoin.add(joinFunc.invoke(EUIUtils.map(colors, EUIGameUtils::getColorName)));
         }
         if (!rarities.isEmpty())
         {

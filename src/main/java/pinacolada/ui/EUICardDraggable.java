@@ -82,25 +82,25 @@ public abstract class EUICardDraggable<T extends AbstractCard> extends EUIBase
 
     }
 
-    public EUICardDraggable setDimensions(float width, float height)
+    public EUICardDraggable<T> setDimensions(float width, float height)
     {
         this.hb.resize(width, height);
         return this;
     }
 
-    public EUICardDraggable setHitbox(DraggableHitbox hb)
+    public EUICardDraggable<T> setHitbox(DraggableHitbox hb)
     {
         this.hb = hb;
         return this;
     }
 
-    public EUICardDraggable setPosition(float cX, float cY)
+    public EUICardDraggable<T> setPosition(float cX, float cY)
     {
         this.hb.move(cX, cY);
         return this;
     }
 
-    public EUICardDraggable setTargetPosition(float cX, float cY)
+    public EUICardDraggable<T> setTargetPosition(float cX, float cY)
     {
         this.hb.setTargetCenter(cX, cY);
         return this;

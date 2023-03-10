@@ -76,13 +76,12 @@ public class PCLCoreTooltips extends PCLTooltips
     public EUITooltip pay = EUITooltip.findByID("Pay").showText(false).canHighlight(false);
     public EUITooltip play = EUITooltip.findByID("Play").showText(false).canHighlight(false);
     public EUITooltip power = EUITooltip.findByID("Power").showText(false).canHighlight(false);
-    public EUITooltip reshuffle = EUITooltip.findByID("Reshuffle").showText(false);
+    public EUITooltip reshuffle = EUITooltip.findByID("Reshuffle").showText(false).canHighlight(false);
     public EUITooltip select = EUITooltip.findByID("Select").showText(false).canHighlight(false).canFilter(false);
     public EUITooltip skill = EUITooltip.findByID("Skill").showText(false).canHighlight(false);
-    public EUITooltip spread = EUITooltip.findByID("Spread").canHighlight(false);
+    public EUITooltip spread = EUITooltip.findByID("Spread").showText(false).canHighlight(false);
     public EUITooltip status = EUITooltip.findByID("Status").showText(false);
-    public EUITooltip trigger = EUITooltip.findByID("Trigger").showText(false);
-    public EUITooltip upgrade = EUITooltip.findByID("Upgrade").showText(false);
+    public EUITooltip upgrade = EUITooltip.findByID("Upgrade").showText(false).canHighlight(false);
     public EUITooltip voidCard = EUITooltip.findByID("Void").showText(false);
 
     public EUITooltip affinityGeneral = EUITooltip.findByID("Affinity");
@@ -193,6 +192,7 @@ public class PCLCoreTooltips extends PCLTooltips
     public EUITooltip thousandCuts = EUITooltip.findByID("Thousand Cuts");
     public EUITooltip toxicology = EUITooltip.findByID("Toxicology");
     public EUITooltip transform = EUITooltip.findByID("Transform");
+    public EUITooltip trigger = EUITooltip.findByID("Trigger");
     public EUITooltip unique = EUITooltip.findByID("Unique");
     public EUITooltip unplayable = EUITooltip.findByID("Unplayable");
     public EUITooltip vigor = EUITooltip.findByID("Vigor");

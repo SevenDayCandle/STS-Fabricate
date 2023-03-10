@@ -337,11 +337,11 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
         switch (type)
         {
             case ATTACK:
-                return isPopup ? PCLCoreImages.cardBackgroundAttackReplL.texture() : PCLCoreImages.cardBackgroundAttackRepl.texture();
+                return isPopup ? PCLCoreImages.CardFrames.cardBackgroundAttackReplL.texture() : PCLCoreImages.CardFrames.cardBackgroundAttackRepl.texture();
             case POWER:
-                return isPopup ? PCLCoreImages.cardBackgroundPowerReplL.texture() : PCLCoreImages.cardBackgroundPowerRepl.texture();
+                return isPopup ? PCLCoreImages.CardFrames.cardBackgroundPowerReplL.texture() : PCLCoreImages.CardFrames.cardBackgroundPowerRepl.texture();
             default:
-                return isPopup ? PCLCoreImages.cardBackgroundSkillReplL.texture() : PCLCoreImages.cardBackgroundSkillRepl.texture();
+                return isPopup ? PCLCoreImages.CardFrames.cardBackgroundSkillReplL.texture() : PCLCoreImages.CardFrames.cardBackgroundSkillRepl.texture();
         }
     }
 

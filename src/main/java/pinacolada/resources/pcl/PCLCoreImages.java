@@ -10,54 +10,6 @@ public class PCLCoreImages extends PCLImages
     public static final String ORB_VFX_PNG = "images/pcl/ui/topPanel/canvas/orbVfx.png";
     public static final String EMPTY_SHADOW = "images/pcl/monsters/EmptyShadow.png";
 
-    public static final TextureCache cardBackgroundAttack = new TextureCache(ATTACK_PNG);
-    public static final TextureCache cardBackgroundAttackL = new TextureCache(ATTACK_PNG_L);
-    public static final TextureCache cardBackgroundAttackRepl = new TextureCache("images/pcl/cardui/512/bg_attack_canvas_repl.png");
-    public static final TextureCache cardBackgroundAttackReplL = new TextureCache("images/pcl/cardui/1024/bg_attack_canvas_repl.png");
-    public static final TextureCache cardBackgroundPower = new TextureCache(POWER_PNG);
-    public static final TextureCache cardBackgroundPowerL = new TextureCache(POWER_PNG_L);
-    public static final TextureCache cardBackgroundPowerRepl = new TextureCache("images/pcl/cardui/512/bg_power_canvas_repl.png");
-    public static final TextureCache cardBackgroundPowerReplL = new TextureCache("images/pcl/cardui/1024/bg_power_canvas_repl.png");
-    public static final TextureCache cardBackgroundSkill = new TextureCache(SKILL_PNG);
-    public static final TextureCache cardBackgroundSkillL = new TextureCache(SKILL_PNG_L);
-    public static final TextureCache cardBackgroundSkillRepl = new TextureCache("images/pcl/cardui/512/bg_skill_canvas_repl.png");
-    public static final TextureCache cardBackgroundSkillReplL = new TextureCache("images/pcl/cardui/1024/bg_skill_canvas_repl.png");
-    public static final TextureCache cardBackgroundSummon = new TextureCache(SUMMON_PNG);
-    public static final TextureCache cardBackgroundSummonL = new TextureCache(SUMMON_PNG_L);
-    public static final TextureCache cardBanner = new TextureCache("images/pcl/cardui/512/banner.png");
-    public static final TextureCache cardBanner2 = new TextureCache("images/pcl/cardui/512/banner2.png");
-    public static final TextureCache cardBanner2L = new TextureCache("images/pcl/cardui/1024/banner2.png");
-    public static final TextureCache cardBannerAttribute = new TextureCache("images/pcl/cardui/512/banner_attribute.png");
-    public static final TextureCache cardBannerAttribute2 = new TextureCache("images/pcl/cardui/512/banner_attribute2.png");
-    public static final TextureCache cardBannerAttribute2L = new TextureCache("images/pcl/cardui/1024/banner_attribute2.png");
-    public static final TextureCache cardBannerAttributeL = new TextureCache("images/pcl/cardui/1024/banner_attribute.png");
-    public static final TextureCache cardBannerL = new TextureCache("images/pcl/cardui/1024/banner.png");
-    public static final TextureCache cardBannerRepl = new TextureCache("images/pcl/cardui/512/banner_repl.png");
-    public static final TextureCache cardBannerReplL = new TextureCache("images/pcl/cardui/1024/banner_repl.png");
-    public static final TextureCache cardEnergyOrb = new TextureCache(ORB_A_PNG);
-    public static final TextureCache cardEnergyOrbL = new TextureCache(ORB_B_PNG);
-    public static final TextureCache cardFrameAttack = new TextureCache("images/pcl/cardui/512/frame_attack.png");
-    public static final TextureCache cardFrameAttackL = new TextureCache("images/pcl/cardui/1024/frame_attack.png");
-    public static final TextureCache cardFrameAttackRepl = new TextureCache("images/pcl/cardui/512/frame_attack_repl.png");
-    public static final TextureCache cardFrameAttackReplL = new TextureCache("images/pcl/cardui/1024/frame_attack_repl.png");
-    public static final TextureCache cardFramePower = new TextureCache("images/pcl/cardui/512/frame_power.png");
-    public static final TextureCache cardFramePowerL = new TextureCache("images/pcl/cardui/1024/frame_power.png");
-    public static final TextureCache cardFramePowerRepl = new TextureCache("images/pcl/cardui/512/frame_power_repl.png");
-    public static final TextureCache cardFramePowerReplL = new TextureCache("images/pcl/cardui/1024/frame_power_repl.png");
-    public static final TextureCache cardFrameSkill = new TextureCache("images/pcl/cardui/512/frame_skill.png");
-    public static final TextureCache cardFrameSkillL = new TextureCache("images/pcl/cardui/1024/frame_skill.png");
-    public static final TextureCache cardFrameSkillRepl = new TextureCache("images/pcl/cardui/512/frame_skill_repl.png");
-    public static final TextureCache cardFrameSkillReplL = new TextureCache("images/pcl/cardui/1024/frame_skill_repl.png");
-    public static final TextureCache cardFrameSummon = new TextureCache("images/pcl/cardui/512/frame_summon.png");
-    public static final TextureCache cardFrameSummonL = new TextureCache("images/pcl/cardui/1024/frame_summon.png");
-    public static final TextureCache orbBaseBorder = new TextureCache("images/pcl/ui/energy/BaseBorder.png");
-    public static final TextureCache orbBaseLayer = new TextureCache("images/pcl/ui/energy/BaseLayer.png");
-    public static final TextureCache orbFlash = new TextureCache("images/pcl/ui/energy/OrbFlash.png");
-    public static final TextureCache orbTopLayer1 = new TextureCache("images/pcl/ui/energy/TopLayer1.png");
-    public static final TextureCache orbTopLayer2 = new TextureCache("images/pcl/ui/energy/TopLayer2.png");
-    public static final TextureCache orbTopLayer3 = new TextureCache("images/pcl/ui/energy/TopLayer3.png");
-    public static final TextureCache orbTopLayer4 = new TextureCache("images/pcl/ui/energy/TopLayer4.png");
-
     public static final TextureCache backArrow = new TextureCache("images/pcl/ui/core/BackArrow.png");
     public static final TextureCache borderBG = new TextureCache("images/pcl/ui/core/BG1.png", true);
     public static final TextureCache borderBG2 = new TextureCache("images/pcl/ui/core/BG2.png", true);
@@ -101,6 +53,58 @@ public class PCLCoreImages extends PCLImages
     public static final TextureCache unknown = new TextureCache("images/pcl/cardui/affinities/Unknown.png", true);
     public static final TextureCache augment = new TextureCache("images/pcl/cardui/augments/Augment.png", true);
     public static final TextureCache augmentBasic = new TextureCache("images/pcl/cardui/augments/Augment_Basic.png", true);
+
+    public static class CardFrames
+    {
+
+        public static final TextureCache cardBackgroundAttack = new TextureCache(ATTACK_PNG);
+        public static final TextureCache cardBackgroundAttackL = new TextureCache(ATTACK_PNG_L);
+        public static final TextureCache cardBackgroundAttackRepl = new TextureCache("images/pcl/cardui/512/bg_attack_canvas_repl.png");
+        public static final TextureCache cardBackgroundAttackReplL = new TextureCache("images/pcl/cardui/1024/bg_attack_canvas_repl.png");
+        public static final TextureCache cardBackgroundPower = new TextureCache(POWER_PNG);
+        public static final TextureCache cardBackgroundPowerL = new TextureCache(POWER_PNG_L);
+        public static final TextureCache cardBackgroundPowerRepl = new TextureCache("images/pcl/cardui/512/bg_power_canvas_repl.png");
+        public static final TextureCache cardBackgroundPowerReplL = new TextureCache("images/pcl/cardui/1024/bg_power_canvas_repl.png");
+        public static final TextureCache cardBackgroundSkill = new TextureCache(SKILL_PNG);
+        public static final TextureCache cardBackgroundSkillL = new TextureCache(SKILL_PNG_L);
+        public static final TextureCache cardBackgroundSkillRepl = new TextureCache("images/pcl/cardui/512/bg_skill_canvas_repl.png");
+        public static final TextureCache cardBackgroundSkillReplL = new TextureCache("images/pcl/cardui/1024/bg_skill_canvas_repl.png");
+        public static final TextureCache cardBackgroundSummon = new TextureCache(SUMMON_PNG);
+        public static final TextureCache cardBackgroundSummonL = new TextureCache(SUMMON_PNG_L);
+        public static final TextureCache cardBanner = new TextureCache("images/pcl/cardui/512/banner.png");
+        public static final TextureCache cardBanner2 = new TextureCache("images/pcl/cardui/512/banner2.png");
+        public static final TextureCache cardBanner2L = new TextureCache("images/pcl/cardui/1024/banner2.png");
+        public static final TextureCache cardBannerAttribute = new TextureCache("images/pcl/cardui/512/banner_attribute.png");
+        public static final TextureCache cardBannerAttribute2 = new TextureCache("images/pcl/cardui/512/banner_attribute2.png");
+        public static final TextureCache cardBannerAttribute2L = new TextureCache("images/pcl/cardui/1024/banner_attribute2.png");
+        public static final TextureCache cardBannerAttributeL = new TextureCache("images/pcl/cardui/1024/banner_attribute.png");
+        public static final TextureCache cardBannerL = new TextureCache("images/pcl/cardui/1024/banner.png");
+        public static final TextureCache cardBannerRepl = new TextureCache("images/pcl/cardui/512/banner_repl.png");
+        public static final TextureCache cardBannerReplL = new TextureCache("images/pcl/cardui/1024/banner_repl.png");
+        public static final TextureCache cardEnergyOrb = new TextureCache(ORB_A_PNG);
+        public static final TextureCache cardEnergyOrbL = new TextureCache(ORB_B_PNG);
+        public static final TextureCache cardFrameAttack = new TextureCache("images/pcl/cardui/512/frame_attack.png");
+        public static final TextureCache cardFrameAttackL = new TextureCache("images/pcl/cardui/1024/frame_attack.png");
+        public static final TextureCache cardFrameAttackRepl = new TextureCache("images/pcl/cardui/512/frame_attack_repl.png");
+        public static final TextureCache cardFrameAttackReplL = new TextureCache("images/pcl/cardui/1024/frame_attack_repl.png");
+        public static final TextureCache cardFramePower = new TextureCache("images/pcl/cardui/512/frame_power.png");
+        public static final TextureCache cardFramePowerL = new TextureCache("images/pcl/cardui/1024/frame_power.png");
+        public static final TextureCache cardFramePowerRepl = new TextureCache("images/pcl/cardui/512/frame_power_repl.png");
+        public static final TextureCache cardFramePowerReplL = new TextureCache("images/pcl/cardui/1024/frame_power_repl.png");
+        public static final TextureCache cardFrameSkill = new TextureCache("images/pcl/cardui/512/frame_skill.png");
+        public static final TextureCache cardFrameSkillL = new TextureCache("images/pcl/cardui/1024/frame_skill.png");
+        public static final TextureCache cardFrameSkillRepl = new TextureCache("images/pcl/cardui/512/frame_skill_repl.png");
+        public static final TextureCache cardFrameSkillReplL = new TextureCache("images/pcl/cardui/1024/frame_skill_repl.png");
+        public static final TextureCache cardFrameSummon = new TextureCache("images/pcl/cardui/512/frame_summon.png");
+        public static final TextureCache cardFrameSummonL = new TextureCache("images/pcl/cardui/1024/frame_summon.png");
+        public static final TextureCache orbBaseBorder = new TextureCache("images/pcl/ui/energy/BaseBorder.png");
+        public static final TextureCache orbBaseLayer = new TextureCache("images/pcl/ui/energy/BaseLayer.png");
+        public static final TextureCache orbFlash = new TextureCache("images/pcl/ui/energy/OrbFlash.png");
+        public static final TextureCache orbTopLayer1 = new TextureCache("images/pcl/ui/energy/TopLayer1.png");
+        public static final TextureCache orbTopLayer2 = new TextureCache("images/pcl/ui/energy/TopLayer2.png");
+        public static final TextureCache orbTopLayer3 = new TextureCache("images/pcl/ui/energy/TopLayer3.png");
+        public static final TextureCache orbTopLayer4 = new TextureCache("images/pcl/ui/energy/TopLayer4.png");
+    }
 
     public static class CardIcons
     {

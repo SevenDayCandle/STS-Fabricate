@@ -24,7 +24,7 @@ public class PCLCustomRunCharacterButton extends EUIButton
     {
         super(p.getCustomModeCharacterButtonImage(), new EUIHitbox(scale(100), scale(100)));
         // Textures are dummies; we just need the info
-        this.character = new CharacterOption("", p, PCLCoreImages.cardBannerL.texture(), PCLCoreImages.cardBannerL.texture());
+        this.character = new CharacterOption("", p, PCLCoreImages.CardFrames.cardBannerL.texture(), PCLCoreImages.CardFrames.cardBannerL.texture());
         this.screen = screen;
         setTooltip(!this.character.locked ? p.getLocalizedCharacterName() : CharacterOption.TEXT[0], "");
         setOnClick(() -> screen.setCharacter(this.character));
