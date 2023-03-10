@@ -5,7 +5,6 @@ import com.evacipated.cardcrawl.modthespire.lib.SpirePostfixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
 import com.megacrit.cardcrawl.cards.DamageInfo;
-import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.powers.WeakPower;
 import pinacolada.misc.CombatManager;
 import pinacolada.powers.PCLPower;
@@ -30,12 +29,12 @@ public class WeakPowerPatches
         @SpirePostfixPatch
         public static float postfix(float result, WeakPower __instance, float damage, DamageInfo.DamageType type)
         {
-            float bonus = CombatManager.getEffectBonusForPower(__instance) / 100f;
-            return bonus == 0 ? damage : damage * ((result / damage) - bonus);
+            float bonus = CombatManager.getEffectBonusForPower(__instance);
+            return bonus == 0 ? result : damage * ((result / damage) - bonus / 100f);
         }
     }
 
-    public static float estimateDamage(AbstractPower power)
+    public static float estimateDamage(WeakPower power)
     {
         float estimate = power.atDamageGive(PCLPower.DUMMY_MULT, DamageInfo.DamageType.NORMAL);
         return PCLPower.DUMMY_MULT - estimate;

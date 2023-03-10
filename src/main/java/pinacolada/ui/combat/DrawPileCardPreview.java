@@ -133,6 +133,12 @@ public class DrawPileCardPreview
         }
     }
 
+    public static void reset()
+    {
+        current = null;
+        PREVIEWS.clear();
+    }
+
     public boolean isHighlighted()
     {
         return highlighted;

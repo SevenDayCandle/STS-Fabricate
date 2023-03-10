@@ -52,6 +52,7 @@ import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.skills.delay.DelayUse;
 import pinacolada.ui.combat.ControllableCardPile;
+import pinacolada.ui.combat.DrawPileCardPreview;
 import pinacolada.ui.combat.PCLPlayerSystem;
 import pinacolada.ui.combat.SummonPool;
 import pinacolada.utilities.GameUtilities;
@@ -199,6 +200,7 @@ public class CombatManager
         PASSIVE_DAMAGE_BONUSES.clear();
         PLAYER_EFFECT_BONUSES.clear();
         PGR.combatScreen.formulaDisplay.initialize();
+        DrawPileCardPreview.reset();
         controlPile.clear();
         GridCardSelectScreenHelper.clear(true);
         playerSystem.initialize();
