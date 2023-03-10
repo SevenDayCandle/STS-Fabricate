@@ -340,7 +340,11 @@ public class PCLCardText
             text = (text != null && !text.isEmpty()) ? text : efStrings;
             if (PGR.config.displayCardTagDescription.get())
             {
-                text = text + EUIUtils.DOUBLE_SPLIT_LINE + card.getTagTipString();
+                String tagString = card.getTagTipString();
+                if (!tagString.isEmpty())
+                {
+                    text = text + EUIUtils.DOUBLE_SPLIT_LINE + tagString;
+                }
             }
             text = CardModifierManager.onCreateDescription(card, text);
         }

@@ -376,7 +376,7 @@
 				"pcl:OptionDescriptions": {
 								"TEXT": [
 												"Card portraits will be zoomed in when not hovering over them. Only works for Custom Cards, and has no effect in Single Card Popup View.",
-												"Tags normally appearing on the top-right corner of Custom Cards will be moved to their descriptions.",
+												"Tags normally appearing on the top-right corner of Custom Cards will instead appear as keywords in their descriptions.",
 												"Disables the replacement Custom Run Menu. To play with Custom Cards without using the Custom Run Menu, you will either need to use the console or toggle the \"Enable Custom Cards in normal Runs\" setting.",
 												"Enables a draggable widget that shows damage formula calculations for Custom Cards when dragging them over targets.",
 												"Hides Affinities on cards that are not used by your current character. For characters that do not use Affinities, this hides them altogether.",

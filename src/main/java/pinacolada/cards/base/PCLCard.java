@@ -26,6 +26,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
+import com.megacrit.cardcrawl.localization.LocalizedStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.powers.FlightPower;
@@ -829,17 +830,23 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
             switch (value)
             {
                 case 1:
-                    tagNames.add(tag.getTooltip().getTitleOrIcon());
+                    tagNames.add(tag.getTooltip().title);
                     break;
                 case -1:
-                    tagNames.add(EUIRM.strings.generic2(tag.getTooltip().getTitleOrIcon(), PGR.core.strings.subjects_infinite));
+                    // Only show the infinite label for cards that allow it
+                    if (tag.minValue == -1)
+                    {
+                        tagNames.add(EUIRM.strings.generic2(tag.getTooltip().title, PGR.core.strings.subjects_infinite));
+                    }
                     break;
-                case 2:
-                    tagNames.add(tag.getTooltip().getTitleOrIcon() + "+");
+                case 0:
+                    break;
+                default:
+                    tagNames.add(EUIRM.strings.generic2(tag.getTooltip().title, value));
                     break;
             }
         }
-        return EUIUtils.joinStrings(PSkill.EFFECT_SEPARATOR, tagNames);
+        return tagNames.size() > 0 ? EUIUtils.joinStrings(PSkill.EFFECT_SEPARATOR, tagNames) + LocalizedStrings.PERIOD : "";
     }
 
     public Skills getSkills() {

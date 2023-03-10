@@ -26,31 +26,33 @@ import java.util.List;
 
 public enum PCLCardTag implements TooltipProvider
 {
-    Autoplay(false, new Color(0.33f, 0.33f, 0.45f, 1)),
-    Delayed(true, new Color(0.26f, 0.26f, 0.26f, 1)),
-    Ephemeral(false, new Color(0.7f, 0.7f, 0.7f, 1)),
-    Ethereal(false, new Color(0.51f, 0.69f, 0.6f, 1)),
-    Exhaust(false, new Color(0.81f, 0.35f, 0.35f, 1)),
-    Fleeting(false, new Color(0.5f, 0.37f, 0.3f, 1)),
-    Fragile(false, new Color(0.80f, 0.46f, 0.7f, 1)),
-    Grave(false, new Color(0.4f, 0.4f, 0.4f, 1)),
-    Haste(true, new Color(0.35f, 0.5f, 0.79f, 1)),
-    Innate(true, new Color(0.8f, 0.8f, 0.35f, 1)),
-    Loyal(true, new Color(0.81f, 0.51f, 0.3f, 1)),
-    Persist(false, new Color(0.6f, 0.66f, 0.33f, 1)),
-    Purge(false, new Color(0.71f, 0.3f, 0.55f, 1)),
-    Recast(true, new Color(0.6f, 0.51f, 0.69f, 1)),
-    Retain(true, new Color(0.49f, 0.78f, 0.35f, 1)),
-    Unplayable(false, new Color(0.3f, 0.20f, 0.20f, 1));
+    Autoplay(new Color(0.33f, 0.33f, 0.45f, 1), 0, 1),
+    Delayed(new Color(0.26f, 0.26f, 0.26f, 1), -1, Integer.MAX_VALUE),
+    Ephemeral(new Color(0.7f, 0.7f, 0.7f, 1), 0, 1),
+    Ethereal(new Color(0.51f, 0.69f, 0.6f, 1), 0, 1),
+    Exhaust(new Color(0.81f, 0.35f, 0.35f, 1), 0, Integer.MAX_VALUE),
+    Fleeting(new Color(0.5f, 0.37f, 0.3f, 1), 0, 1),
+    Fragile(new Color(0.80f, 0.46f, 0.7f, 1), 0, 1),
+    Grave(new Color(0.4f, 0.4f, 0.4f, 1), 0, 1),
+    Haste(new Color(0.35f, 0.5f, 0.79f, 1), -1, Integer.MAX_VALUE),
+    Innate(new Color(0.8f, 0.8f, 0.35f, 1), -1, Integer.MAX_VALUE),
+    Loyal(new Color(0.81f, 0.51f, 0.3f, 1), -1, Integer.MAX_VALUE),
+    Persist(new Color(0.6f, 0.66f, 0.33f, 1), 0, 1),
+    Purge(new Color(0.71f, 0.3f, 0.55f, 1), 0, Integer.MAX_VALUE),
+    Recast(new Color(0.6f, 0.51f, 0.69f, 1), -1, Integer.MAX_VALUE),
+    Retain(new Color(0.49f, 0.78f, 0.35f, 1), -1, Integer.MAX_VALUE),
+    Unplayable(new Color(0.3f, 0.20f, 0.20f, 1), 0, 1);
 
     public static final float HEIGHT = 38f;
-    public final boolean canBeInfinite;
+    public final int minValue;
+    public final int maxValue;
     public final Color color;
 
-    PCLCardTag(boolean canBeInfinite, Color color)
+    PCLCardTag(Color color, int minValue, int maxValue)
     {
-        this.canBeInfinite = canBeInfinite;
         this.color = color;
+        this.minValue = minValue;
+        this.maxValue = maxValue;
     }
 
     public static PCLCardTag get(String name)
@@ -271,8 +273,12 @@ public enum PCLCardTag implements TooltipProvider
                 return card.exhaust || card.exhaustOnUseOnce || ExhaustiveField.ExhaustiveFields.exhaustive.get(card) > -1;
             case Innate:
                 return card.isInnate;
+            // Persist does nothing at 1
+            case Persist:
+                return PersistFields.persist.get(card) >= 2;
             case Retain:
                 return card.retain || card.selfRetain;
+            // Accounting for hardcoded base game relic checks
             case Unplayable:
                 return (UnplayableField.value.get(card) && !((GameUtilities.hasRelicEffect(BlueCandle.ID) && card.type == AbstractCard.CardType.CURSE) ||
                         (GameUtilities.hasRelicEffect(MedicalKit.ID) && card.type == AbstractCard.CardType.STATUS))) || GameUtilities.isUnplayableThisTurn(card);
@@ -286,7 +292,7 @@ public enum PCLCardTag implements TooltipProvider
         if (field2 != null)
         {
             int val = field2.get(card);
-            return val > 0 || (canBeInfinite && val < 0);
+            return val > 0 || (minValue < 0 && val < 0);
         }
         return false;
     }

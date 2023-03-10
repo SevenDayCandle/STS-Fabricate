@@ -28,7 +28,6 @@ import pinacolada.ui.debug.PCLDebugAugmentPanel;
 import pinacolada.ui.debug.PCLDebugCardPanel;
 import pinacolada.ui.menu.*;
 
-// TODO Split from PCLResources
 public class PCLCoreResources extends PCLResources<PCLAbstractPlayerData, PCLCoreImages, PCLCoreTooltips>
 {
     public static final String ID = PGR.BASE_PREFIX;
@@ -51,7 +50,6 @@ public class PCLCoreResources extends PCLResources<PCLAbstractPlayerData, PCLCor
     public PCLDebugAugmentPanel debugAugments;
     public PCLDebugCardPanel debugCards;
     protected String defaultLanguagePath;
-
 
     public PCLCoreResources()
     {
