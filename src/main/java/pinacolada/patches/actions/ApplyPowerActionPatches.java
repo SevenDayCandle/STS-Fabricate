@@ -13,8 +13,8 @@ import javassist.CannotCompileException;
 import javassist.CtBehavior;
 import javassist.expr.ExprEditor;
 import pinacolada.misc.CombatManager;
-import pinacolada.powers.common.PCLLockOnPower;
 import pinacolada.powers.replacement.PCLConstrictedPower;
+import pinacolada.powers.replacement.PCLLockOnPower;
 import pinacolada.utilities.GameUtilities;
 
 
@@ -107,6 +107,7 @@ public class ApplyPowerActionPatches
     }
 
 
+    // TODO configurable power replacements based on the character
     public static AbstractPower getReplacement(AbstractPower power, AbstractCreature target, AbstractCreature source)
     {
         if (power instanceof ConstrictedPower && !(power instanceof PCLConstrictedPower))
@@ -121,7 +122,6 @@ public class ApplyPowerActionPatches
                 return new PCLLockOnPower(power.owner, power.amount);
             }
         }
-
         else
         {
             if (power instanceof PCLLockOnPower)

@@ -11,7 +11,7 @@ public enum PCLAttackType implements TooltipProvider
 {
     Normal(false, false, false, false),
     Brutal(false, false, false, false),
-    Magical(false, true, false, true),
+    Immaterial(false, true, false, true),
     Piercing(true, true, false, false),
     Ranged(false, true, true, false);
 
@@ -35,8 +35,8 @@ public enum PCLAttackType implements TooltipProvider
         {
             case Brutal:
                 return PGR.core.tooltips.brutal;
-            case Magical:
-                return PGR.core.tooltips.magicDamage;
+            case Immaterial:
+                return PGR.core.tooltips.immaterialDamage;
             case Piercing:
                 return PGR.core.tooltips.piercing;
             case Ranged:

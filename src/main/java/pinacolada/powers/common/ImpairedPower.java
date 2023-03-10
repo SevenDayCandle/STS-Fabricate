@@ -55,7 +55,7 @@ public class ImpairedPower extends PCLPower implements OnOrbApplyFocusSubscriber
     }
 
     @Override
-    public float modifyOrbAmount(float initial)
+    public float modifyOrbOutgoing(float initial)
     {
         return initial * Math.max(0, getOrbMultiplier() / 100f);
     }
@@ -65,10 +65,10 @@ public class ImpairedPower extends PCLPower implements OnOrbApplyFocusSubscriber
     {
         if (GameUtilities.canOrbApplyFocus(orb))
         {
-            orb.passiveAmount = (int) modifyOrbAmount(orb.passiveAmount);
+            orb.passiveAmount = (int) modifyOrbOutgoing(orb.passiveAmount);
             if (GameUtilities.canOrbApplyFocusToEvoke(orb))
             {
-                orb.evokeAmount = (int) modifyOrbAmount(orb.evokeAmount);
+                orb.evokeAmount = (int) modifyOrbOutgoing(orb.evokeAmount);
             }
         }
     }

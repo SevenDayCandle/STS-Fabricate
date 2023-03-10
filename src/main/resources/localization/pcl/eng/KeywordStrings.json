@@ -185,7 +185,7 @@
 								"PROPER_NAME": "Fleeting"
 				},
 				"Flight":	{
-								"DESCRIPTION": "Take 50% less #yAttack damage. Lose #b1 stack until end of turn when taking damage, the power is cancelled at #b0 stacks.",
+								"DESCRIPTION": "Take 50% less #yAttack damage. Lose #b1 [Flight] after taking #yAttack damage. Restore [Flight] at the start of turn if it wasn't reduced to #b0.",
 								"NAMES": ["flight"],
 								"PROPER_NAME": "Flight"
 				},
@@ -230,6 +230,11 @@
 								"PAST": "Healed",
 								"PRESENT": "Heals",
 								"PROPER_NAME": "Heal"
+				},
+				"Immaterial Damage":	{
+								"DESCRIPTION": "Affected by #yPowers modifying #yOrb output. Ignores #yPowers that modify #yAttack damage or activate on contact.",
+								"NAMES": ["immaterial damage"],
+								"PROPER_NAME": "Immaterial Damage"
 				},
 				"Impaired":	{
 								"DESCRIPTION": "Reduces the effectiveness of your Orbs.",
@@ -282,11 +287,6 @@
 								"DESCRIPTION": "If this would enter your discard pile, move it to your draw pile instead.",
 								"NAMES": ["loyal"],
 								"PROPER_NAME": "Loyal"
-				},
-				"Magic Damage":	{
-								"DESCRIPTION": "Affected by #yPowers modifying #yOrb output. Ignores #yPowers that modify #yAttack damage or activate on contact.",
-								"NAMES": ["magic damage"],
-								"PROPER_NAME": "Magic Damage"
 				},
 				"Malleable":	{
 								"DESCRIPTION": "Upon receiving damage, gain #yBlock. #yBlock gain increases as this power is triggered. Resets at the start of turn.",
@@ -436,7 +436,7 @@
 								"PROPER_NAME": "Reshuffle"
 				},
 				"Resistance":	{
-								"DESCRIPTION": "Reduces incoming #yAttack damage and the effects of [Frail], [Weak], [Vulnerable], and [Impaired].",
+								"DESCRIPTION": "Reduces incoming #yAttack damage.",
 								"NAMES": ["resistance"],
 								"PROPER_NAME": "Resistance"
 				},

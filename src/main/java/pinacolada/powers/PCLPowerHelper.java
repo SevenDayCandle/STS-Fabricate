@@ -17,7 +17,7 @@ import pinacolada.powers.common.EnergizedPower;
 import pinacolada.powers.common.*;
 import pinacolada.powers.replacement.PCLConstrictedPower;
 import pinacolada.powers.replacement.PCLCurlUpPower;
-import pinacolada.powers.replacement.PlayerFlightPower;
+import pinacolada.powers.replacement.PCLLockOnPower;
 import pinacolada.powers.special.SelfImmolationPower;
 import pinacolada.powers.special.SilencedPower;
 import pinacolada.resources.PCLEnum;
@@ -63,7 +63,7 @@ public class PCLPowerHelper implements TooltipProvider
     public static final PCLPowerHelper Dexterity = new PCLPowerHelper(DexterityPower.POWER_ID, PGR.core.tooltips.dexterity, DexterityPower::new, Behavior.Permanent, true, false, false);
     public static final PCLPowerHelper Energized = new PCLPowerHelper(EnergizedPower.POWER_ID, PGR.core.tooltips.energized, EnergizedPower::new, Behavior.SingleTurn, true, false, false);
     public static final PCLPowerHelper Envenom = new PCLPowerHelper(EnvenomPower.POWER_ID, PGR.core.tooltips.envenom, EnvenomPower::new, Behavior.Permanent, false, false, false);
-    public static final PCLPowerHelper Flight = new PCLPowerHelper(PlayerFlightPower.POWER_ID, PGR.core.tooltips.flight, PlayerFlightPower::new, Behavior.Permanent, false, false, true);
+    public static final PCLPowerHelper Flight = new PCLPowerHelper(FlightPower.POWER_ID, PGR.core.tooltips.flight, FlightPower::new, Behavior.Permanent, false, false, true);
     public static final PCLPowerHelper Focus = new PCLPowerHelper(FocusPower.POWER_ID, PGR.core.tooltips.focus, FocusPower::new, Behavior.Permanent, true, false, false);
     public static final PCLPowerHelper Fortified = new PCLPowerHelper(FortifiedPower.POWER_ID, PGR.core.tooltips.fortified, FortifiedPower::new, Behavior.TurnBased, true, false, true);
     public static final PCLPowerHelper Innovation = new PCLPowerHelper(InnovationPower.POWER_ID, PGR.core.tooltips.innovation, InnovationPower::new, Behavior.Permanent, true, false, false);

@@ -41,7 +41,7 @@ public class SorceryPower extends PCLPower implements OnOrbChannelSubscriber
         CombatManager.unsubscribe(this);
     }
 
-    public float modifyOrbAmount(float initial)
+    public float modifyOrbOutgoing(float initial)
     {
         return initial + amount;
     }

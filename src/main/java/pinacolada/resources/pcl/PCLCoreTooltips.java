@@ -128,6 +128,7 @@ public class PCLCoreTooltips extends PCLTooltips
     public EUITooltip frost = EUITooltip.findByID("Frost");
     public EUITooltip grave = EUITooltip.findByID("Grave");
     public EUITooltip haste = EUITooltip.findByID("Haste");
+    public EUITooltip immaterialDamage = EUITooltip.findByID("Immaterial Damage");
     public EUITooltip impaired = EUITooltip.findByID("Impaired");
     public EUITooltip innate = EUITooltip.findByID("~Innate");
     public EUITooltip innovation = EUITooltip.findByID("Innovation");
@@ -140,7 +141,6 @@ public class PCLCoreTooltips extends PCLTooltips
     public EUITooltip limited = EUITooltip.findByID("Limited");
     public EUITooltip lockOn = EUITooltip.findByID("~Lock-On");
     public EUITooltip loyal = EUITooltip.findByID("Loyal");
-    public EUITooltip magicDamage = EUITooltip.findByID("Magic Damage");
     public EUITooltip malleable = EUITooltip.findByID("Malleable");
     public EUITooltip match = EUITooltip.findByID("Match");
     public EUITooltip matchCombo = EUITooltip.findByID("Match Combo");
@@ -231,7 +231,7 @@ public class PCLCoreTooltips extends PCLTooltips
 
         ranged.setIcon(PCLCoreImages.CardIcons.ranged.texture());
         piercing.setIcon(PCLCoreImages.CardIcons.piercing.texture());
-        magicDamage.setIcon(PCLCoreImages.CardIcons.magic.texture());
+        immaterialDamage.setIcon(PCLCoreImages.CardIcons.magic.texture());
         brutal.setIcon(PCLCoreImages.CardIcons.brutal.texture());
         tempHP.setIcon(PCLCoreImages.CardIcons.tempHP.texture());
         hp.setIcon(PCLCoreImages.CardIcons.hp.texture());

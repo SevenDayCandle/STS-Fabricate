@@ -8,7 +8,7 @@ import extendedui.EUIGameUtils;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 
-public class ExtendedUIPatches
+public class EUIPatches
 {
     @SpirePatch(clz = EUIGameUtils.class, method = "textForRarity")
     public static class ExtendedUIPatches_TextForRarity

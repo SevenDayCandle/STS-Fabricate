@@ -261,7 +261,12 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         updateDescription();
     }
 
-    public float modifyOrbAmount(float initial)
+    public float modifyOrbIncoming(float initial)
+    {
+        return initial;
+    }
+
+    public float modifyOrbOutgoing(float initial)
     {
         return initial;
     }

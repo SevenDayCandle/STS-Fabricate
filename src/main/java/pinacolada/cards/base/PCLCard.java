@@ -62,7 +62,7 @@ import pinacolada.misc.PCLUseInfo;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.patches.screens.GridCardSelectScreenMultiformPatches;
 import pinacolada.powers.PCLPower;
-import pinacolada.powers.common.PCLLockOnPower;
+import pinacolada.powers.replacement.PCLLockOnPower;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
@@ -1186,13 +1186,16 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
             }
 
             if (attackType.useFocus) {
-                tempDamage += GameUtilities.getPowerAmount(FocusPower.POWER_ID);
                 for (AbstractPower p : owner.powers) {
                     float oldBlock = tempBlock;
                     float oldDamage = tempDamage;
                     tempBlock = p.modifyBlock(tempBlock, this);
-                    if (p instanceof PCLPower) {
-                        tempDamage = ((PCLPower) p).modifyOrbAmount(tempDamage);
+                    if (FocusPower.POWER_ID.equals(p.ID))
+                    {
+                        tempDamage += p.amount;
+                    }
+                    else if (p instanceof PCLPower) {
+                        tempDamage = ((PCLPower) p).modifyOrbOutgoing(tempDamage);
                     }
                     addAttackDisplay(p, oldDamage, tempDamage);
                     addDefendDisplay(p, oldBlock, tempBlock);
@@ -1221,19 +1224,36 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
                 if (attackType.bypassFlight && EUIUtils.any(enemy.powers, po -> FlightPower.POWER_ID.equals(po.ID))) {
                     tempDamage *= 2f * applyCount;
                 }
-                if (attackType.useFocus && EUIUtils.any(enemy.powers, po -> LockOnPower.POWER_ID.equals(po.ID))) {
-                    tempDamage *= PCLLockOnPower.getOrbMultiplier();
-                }
 
-                for (AbstractPower p : enemy.powers) {
-                    float oldDamage = tempDamage;
-                    if (!attackType.useFocus) {
+                if (attackType.useFocus)
+                {
+                    for (AbstractPower p : enemy.powers) {
+                        float oldDamage = tempDamage;
+                        // Lock-on calculations are hardcoded in AbstractOrb so we are falling back on PCLLockOn's multiplier for now
+                        if (LockOnPower.POWER_ID.equals(p.ID))
+                        {
+                            tempDamage *= PCLLockOnPower.getOrbMultiplier();
+                        }
+                        else if (p instanceof PCLPower)
+                        {
+                            for (int i = 0; i < applyCount; i++) {
+                                tempDamage = ((PCLPower) p).modifyOrbIncoming(tempDamage);
+                            }
+                        }
+                        addAttackDisplay(p, oldDamage, tempDamage);
+                    }
+                }
+                else
+                {
+                    for (AbstractPower p : enemy.powers) {
+                        float oldDamage = tempDamage;
                         for (int i = 0; i < applyCount; i++) {
                             tempDamage = p.atDamageReceive(tempDamage, damageTypeForTurn, this);
                         }
+                        addAttackDisplay(p, oldDamage, tempDamage);
                     }
-                    addAttackDisplay(p, oldDamage, tempDamage);
                 }
+
             }
 
             if (owner instanceof AbstractPlayer)

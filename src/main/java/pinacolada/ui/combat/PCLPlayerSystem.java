@@ -13,7 +13,7 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.misc.CombatManager;
 import pinacolada.misc.PCLUseInfo;
-import pinacolada.powers.common.PCLLockOnPower;
+import pinacolada.powers.replacement.PCLLockOnPower;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.Collection;

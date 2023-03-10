@@ -112,7 +112,7 @@
 				},
 				"pcl:ResistancePower":
 				{
-								"DESCRIPTIONS": ["Reduce incoming #yAttack damage by #b{0}%. Reduce the effects of [Vulnerable] and [Impaired] by #b{1}% and of [Frail] and [Weak] by #b{2}%. (Max. #b{3} stacks)", "Increase incoming #yAttack damage by #b{0}%. Increase the effects of [Vulnerable] and [Impaired] by #b{1}% and of [Frail] and [Weak] by #b{2}%."],
+								"DESCRIPTIONS": ["Reduce incoming #yAttack damage by #b{0}%.", "Increase incoming #yAttack damage by #b{0}%."],
 								"NAME": "Resistance"
 				},
 				"pcl:SelfImmolationPower":

@@ -1,4 +1,4 @@
-package pinacolada.powers.common;
+package pinacolada.powers.replacement;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import pinacolada.interfaces.markers.MultiplicativePower;
@@ -8,10 +8,11 @@ import pinacolada.powers.PCLPower;
 import pinacolada.resources.pcl.PCLCoreTooltips;
 import pinacolada.utilities.PCLRenderHelpers;
 
-// TODO convert into dynamic patch
+// Deliberately not extending LockOnPower or inheriting its ID because this power behaves slightly differently and we also want to avoid this being used in hardcoded base game checks in AbstractOrb
 public class PCLLockOnPower extends PCLPower implements OnOrbApplyLockOnSubscriber, MultiplicativePower
 {
     public static final String POWER_ID = createFullID(PCLLockOnPower.class);
+    public static final int BASE = 50;
 
     public PCLLockOnPower(AbstractCreature owner, int amount)
     {
@@ -29,7 +30,7 @@ public class PCLLockOnPower extends PCLPower implements OnOrbApplyLockOnSubscrib
 
     public static float getOrbMultiplierForDescription()
     {
-        return (CombatManager.getEffectBonus(POWER_ID));
+        return BASE + (CombatManager.getEffectBonus(POWER_ID));
     }
 
     @Override
