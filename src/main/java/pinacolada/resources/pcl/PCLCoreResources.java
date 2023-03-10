@@ -13,7 +13,6 @@ import pinacolada.cards.base.PCLDynamicCard;
 import pinacolada.effects.EffekseerEFK;
 import pinacolada.misc.PCLDungeon;
 import pinacolada.resources.PCLAbstractPlayerData;
-import pinacolada.resources.PCLCharacterConfig;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
@@ -30,7 +29,7 @@ import pinacolada.ui.debug.PCLDebugCardPanel;
 import pinacolada.ui.menu.*;
 
 // TODO Split from PCLResources
-public class PCLCoreResources extends PCLResources<PCLCharacterConfig, PCLCoreImages, PCLCoreTooltips>
+public class PCLCoreResources extends PCLResources<PCLAbstractPlayerData, PCLCoreImages, PCLCoreTooltips>
 {
     public static final String ID = PGR.BASE_PREFIX;
     public final PCLDungeon dungeon = PCLDungeon.register(createID(PCLDungeon.class.getSimpleName()));
@@ -56,7 +55,7 @@ public class PCLCoreResources extends PCLResources<PCLCharacterConfig, PCLCoreIm
 
     public PCLCoreResources()
     {
-        super(ID, AbstractCard.CardColor.COLORLESS, AbstractPlayer.PlayerClass.IRONCLAD, null, new PCLCoreImages(ID), null);
+        super(ID, AbstractCard.CardColor.COLORLESS, AbstractPlayer.PlayerClass.IRONCLAD, new PCLCoreImages(ID));
     }
 
     public void receiveEditStrings()
@@ -82,12 +81,18 @@ public class PCLCoreResources extends PCLResources<PCLCharacterConfig, PCLCoreIm
         strings = new PCLCoreStrings(this);
     }
 
+    @Override
+    public PCLAbstractPlayerData getData()
+    {
+        return null;
+    }
+
     protected void postInitialize()
     {
         PGR.registerCommands();
         PCLAbstractPlayerData.postInitialize();
-        config.load(CardCrawlGame.saveSlot);
-        config.initializeOptions();
+        PGR.config.load(CardCrawlGame.saveSlot);
+        PGR.config.initializeOptions();
         tooltips.initializeIcons();
         initializeUI();
         PSkill.initialize();

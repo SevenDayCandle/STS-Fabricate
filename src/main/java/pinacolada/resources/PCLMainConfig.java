@@ -21,7 +21,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Locale;
 
-// TODO separate from AbstractConfig
 public class PCLMainConfig extends AbstractConfig
 {
     public static final FilenameFilter JSON_FILTER = (dir, name) -> name.endsWith(".json");

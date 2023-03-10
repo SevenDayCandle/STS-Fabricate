@@ -5,6 +5,7 @@ import basemod.abstracts.CustomUnlock;
 import basemod.abstracts.CustomUnlockBundle;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.unlock.AbstractUnlock;
 import extendedui.EUIUtils;
@@ -40,6 +41,7 @@ public abstract class PCLAbstractPlayerData
     public static final ArrayList<AbstractGlyphBlight> GLYPHS = new ArrayList<>();
     public final HashMap<Integer, PCLLoadout> loadouts = new HashMap<>();
     public final HashMap<Integer, PCLTrophies> trophies = new HashMap<>();
+    public final PCLCharacterConfig config;
     public final PCLResources<?,?,?> resources;
     public final int baseHP;
     public final int baseGold;
@@ -58,6 +60,7 @@ public abstract class PCLAbstractPlayerData
     public PCLAbstractPlayerData(PCLResources<?,?,?> resources, int hp, int gold, int draw, int energy, int orbs, boolean useSummons, boolean useAugments)
     {
         this.resources = resources;
+        this.config = getConfig();
         this.selectedLoadout = getCoreLoadout();
         this.baseHP = hp;
         this.baseGold = gold;
@@ -66,16 +69,6 @@ public abstract class PCLAbstractPlayerData
         this.baseOrbs = orbs;
         this.useSummons = useSummons;
         this.useAugments = useAugments;
-    }
-
-    public static String getLoadoutPrefix(PCLResources<?,?,?> resources)
-    {
-        return resources.config.getConfigPath() + resources.id + "_slot";
-    }
-
-    public static String getLoadoutPath(PCLResources<?,?,?> resources, int id, int slot)
-    {
-        return getLoadoutPrefix(resources) + "_" + id + "_" + slot + ".json";
     }
 
     public static Random getRNG()
@@ -145,7 +138,7 @@ public abstract class PCLAbstractPlayerData
 
     private void deserializeCustomLoadouts()
     {
-        for (FileHandle f : resources.config.getConfigFolder().list(JSON_FILTER))
+        for (FileHandle f : config.getConfigFolder().list(JSON_FILTER))
         {
             String path = f.path();
             try
@@ -194,7 +187,19 @@ public abstract class PCLAbstractPlayerData
         }
     }
 
+    public String getLoadoutPrefix()
+    {
+        return config.getConfigPath() + resources.id + "_slot";
+    }
+
+    public String getLoadoutPath(int id, int slot)
+    {
+        return getLoadoutPrefix() + "_" + id + "_" + slot + ".json";
+    }
+
     public abstract List<PCLLoadout> getAvailableLoadouts();
+
+    public abstract PCLCharacterConfig getConfig();
 
     public abstract PCLLoadout getCoreLoadout();
 
@@ -219,6 +224,7 @@ public abstract class PCLAbstractPlayerData
     {
         addBaseLoadouts();
         reload();
+        config.load(CardCrawlGame.saveSlot);
     }
 
     public void updateRelicsForDungeon()
@@ -277,9 +283,9 @@ public abstract class PCLAbstractPlayerData
 
     public void reload()
     {
-        if (resources.config != null)
+        if (config != null)
         {
-            deserializeTrophies(resources.config.trophies.get());
+            deserializeTrophies(config.trophies.get());
             deserializeCustomLoadouts();
 
             if (selectedLoadout == null)
@@ -293,7 +299,7 @@ public abstract class PCLAbstractPlayerData
     {
         EUIUtils.logInfoIfDebug(this, "Saving Trophies");
 
-        resources.config.trophies.set(serializeTrophies(), flush);
+        config.trophies.set(serializeTrophies(), flush);
     }
 
     public void saveLoadouts()
@@ -310,7 +316,7 @@ public abstract class PCLAbstractPlayerData
                         continue;
                     }
 
-                    FileHandle writer = Gdx.files.absolute(getLoadoutPath(resources, loadout.id, data.preset));
+                    FileHandle writer = Gdx.files.absolute(getLoadoutPath(loadout.id, data.preset));
                     writer.writeString(EUIUtils.serialize(new PCLLoadoutData.LoadoutInfo(loadout.id, data), TInfo.getType()), false);
                 }
             }

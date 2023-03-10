@@ -12,13 +12,11 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.localization.*;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
-import extendedui.interfaces.delegates.FuncT1;
 import extendedui.patches.EUIKeyword;
 import extendedui.ui.tooltips.EUITooltip;
 import org.apache.commons.lang3.StringUtils;
@@ -33,7 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 // Copied and modified from STS-AnimatorMod
-public abstract class PCLResources<T extends PCLCharacterConfig, U extends PCLImages, V extends PCLTooltips>
+public abstract class PCLResources<T extends PCLAbstractPlayerData, U extends PCLImages, V extends PCLTooltips>
         implements EditCharactersSubscriber, EditKeywordsSubscriber, EditStringsSubscriber, PostInitializeSubscriber
 {
     private static final Type GROUPED_CARD_TYPE = new TypeToken<Map<String, Map<String, CardStrings>>>() {}.getType();
@@ -42,22 +40,20 @@ public abstract class PCLResources<T extends PCLCharacterConfig, U extends PCLIm
     public static final String JSON_KEYWORDS = "KeywordStrings.json";
     public final AbstractCard.CardColor cardColor;
     public final AbstractPlayer.PlayerClass playerClass;
-    public final PCLAbstractPlayerData data;
-    public final T config;
+    public final T data;
     public final U images;
     public V tooltips;
     protected CharacterStrings characterStrings;
     protected final String id;
     protected boolean isLoaded;
 
-    protected PCLResources(String id, AbstractCard.CardColor color, AbstractPlayer.PlayerClass playerClass, T config, U images, FuncT1<PCLAbstractPlayerData, PCLResources<T, U, V>> dataFunc)
+    protected PCLResources(String id, AbstractCard.CardColor color, AbstractPlayer.PlayerClass playerClass, U images)
     {
         this.id = id;
         this.cardColor = color;
         this.playerClass = playerClass;
-        this.config = config;
         this.images = images;
-        this.data = dataFunc != null ? dataFunc.invoke(this) : null;
+        this.data = getData();
     }
 
     public static void loadAugmentStrings(String jsonString)
@@ -246,7 +242,6 @@ public abstract class PCLResources<T extends PCLCharacterConfig, U extends PCLIm
     {
         tooltips.initializeIcons();
         data.initialize();
-        config.load(CardCrawlGame.saveSlot);
     }
 
     @Override
@@ -303,4 +298,6 @@ public abstract class PCLResources<T extends PCLCharacterConfig, U extends PCLIm
     {
 
     }
+
+    public abstract T getData();
 }
