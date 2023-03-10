@@ -261,9 +261,9 @@ public abstract class PCLRelic extends CustomRelic implements TooltipProvider
         return counter;
     }
 
-    // Prevents duplicate relics from showing up for the Animator
+    // TODO move check to custom relic class
     public boolean canSpawn()
     {
-        return GameUtilities.isPCLPlayerClass() || (PGR.core.config.enableRelicsForOtherCharacters.get());
+        return GameUtilities.isPCLPlayerClass() || (PGR.config.enableCustomRelics.get());
     }
 }

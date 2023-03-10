@@ -13,6 +13,7 @@ import pinacolada.cards.base.PCLDynamicCard;
 import pinacolada.effects.EffekseerEFK;
 import pinacolada.misc.PCLDungeon;
 import pinacolada.resources.PCLAbstractPlayerData;
+import pinacolada.resources.PCLCharacterConfig;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
@@ -29,7 +30,7 @@ import pinacolada.ui.debug.PCLDebugCardPanel;
 import pinacolada.ui.menu.*;
 
 // TODO Split from PCLResources
-public class PCLCoreResources extends PCLResources<PCLCoreConfig, PCLCoreImages, PCLCoreTooltips>
+public class PCLCoreResources extends PCLResources<PCLCharacterConfig, PCLCoreImages, PCLCoreTooltips>
 {
     public static final String ID = PGR.BASE_PREFIX;
     public final PCLDungeon dungeon = PCLDungeon.register(createID(PCLDungeon.class.getSimpleName()));
@@ -55,7 +56,7 @@ public class PCLCoreResources extends PCLResources<PCLCoreConfig, PCLCoreImages,
 
     public PCLCoreResources()
     {
-        super(ID, AbstractCard.CardColor.COLORLESS, AbstractPlayer.PlayerClass.IRONCLAD, new PCLCoreConfig(), new PCLCoreImages(ID), null);
+        super(ID, AbstractCard.CardColor.COLORLESS, AbstractPlayer.PlayerClass.IRONCLAD, null, new PCLCoreImages(ID), null);
     }
 
     public void receiveEditStrings()

@@ -3,7 +3,6 @@ package pinacolada.resources;
 import com.badlogic.gdx.Input;
 import com.megacrit.cardcrawl.helpers.input.InputAction;
 import com.megacrit.cardcrawl.helpers.input.InputActionSet;
-import pinacolada.resources.pcl.PCLCoreConfig;
 
 import java.util.HashMap;
 
@@ -11,11 +10,11 @@ public class PCLHotkeys
 {
     public static final HashMap<Integer, Integer> EQUIVALENT_KEYS = new HashMap<>();
 
-    private static final String KEYMAP_CONTROL_PILE_CHANGE = PCLCoreConfig.createFullID("ControlPileChange");
-    private static final String KEYMAP_CONTROL_PILE_SELECT = PCLCoreConfig.createFullID("ControlPileSelect");
-    private static final String KEYMAP_VIEW_AUGMENT_SCREEN = PCLCoreConfig.createFullID("ViewAugmentScreen");
-    private static final String KEYMAP_REROLL_CURRENT = PCLCoreConfig.createFullID("RerollCurrent");
-    private static final String KEYMAP_TOGGLE_FORMULA_DISPLAY = PCLCoreConfig.createFullID("ToggleFormulaDisplay");
+    private static final String KEYMAP_CONTROL_PILE_CHANGE = PCLMainConfig.createFullID("ControlPileChange");
+    private static final String KEYMAP_CONTROL_PILE_SELECT = PCLMainConfig.createFullID("ControlPileSelect");
+    private static final String KEYMAP_VIEW_AUGMENT_SCREEN = PCLMainConfig.createFullID("ViewAugmentScreen");
+    private static final String KEYMAP_REROLL_CURRENT = PCLMainConfig.createFullID("RerollCurrent");
+    private static final String KEYMAP_TOGGLE_FORMULA_DISPLAY = PCLMainConfig.createFullID("ToggleFormulaDisplay");
     public static InputAction controlPileChange;
     public static InputAction controlPileSelect;
     public static InputAction viewAugmentScreen;

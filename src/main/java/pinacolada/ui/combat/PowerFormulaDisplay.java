@@ -34,7 +34,7 @@ public class PowerFormulaDisplay extends EUICardDraggable<AbstractCard>
 
     public PowerFormulaDisplay()
     {
-        super(PGR.core.config.damageFormulaPosition, new DraggableHitbox(screenW(0.0366f), screenH(0.425f), ICON_SIZE, ICON_SIZE, true), ICON_SIZE);
+        super(PGR.config.damageFormulaPosition, new DraggableHitbox(screenW(0.0366f), screenH(0.425f), ICON_SIZE, ICON_SIZE, true), ICON_SIZE);
         attackHb = RelativeHitbox.fromPercentages(hb, 1, 1, OFFSET_MULT_X, -0.5f + OFFSET_MULT_Y);
         defendHb = RelativeHitbox.fromPercentages(hb, 1, 1, OFFSET_MULT_X, -0.5f + OFFSET_MULT_Y * 2);
         enemyAttackHb = RelativeHitbox.fromPercentages(hb, 1, 1, OFFSET_MULT_X, -0.5f + OFFSET_MULT_Y * 3);

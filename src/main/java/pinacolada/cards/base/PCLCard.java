@@ -30,6 +30,7 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.powers.FlightPower;
 import com.megacrit.cardcrawl.powers.FocusPower;
+import com.megacrit.cardcrawl.powers.LockOnPower;
 import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.*;
@@ -61,8 +62,6 @@ import pinacolada.monsters.PCLCardAlly;
 import pinacolada.patches.screens.GridCardSelectScreenMultiformPatches;
 import pinacolada.powers.PCLPower;
 import pinacolada.powers.common.PCLLockOnPower;
-import pinacolada.powers.common.SorceryPower;
-import pinacolada.powers.replacement.PlayerFlightPower;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
@@ -1181,13 +1180,14 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
 
             if (attackType.useFocus) {
                 tempDamage += GameUtilities.getPowerAmount(FocusPower.POWER_ID);
-                tempDamage += GameUtilities.getPowerAmount(SorceryPower.POWER_ID);
                 for (AbstractPower p : owner.powers) {
                     float oldBlock = tempBlock;
+                    float oldDamage = tempDamage;
                     tempBlock = p.modifyBlock(tempBlock, this);
                     if (p instanceof PCLPower) {
                         tempDamage = ((PCLPower) p).modifyOrbAmount(tempDamage);
                     }
+                    addAttackDisplay(p, oldDamage, tempDamage);
                     addDefendDisplay(p, oldBlock, tempBlock);
                 }
             } else {
@@ -1211,10 +1211,10 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
             }
 
             if (applyEnemyPowers) {
-                if (attackType.bypassFlight && EUIUtils.any(enemy.powers, po -> FlightPower.POWER_ID.equals(po.ID) || PlayerFlightPower.POWER_ID.equals(po.ID))) {
+                if (attackType.bypassFlight && EUIUtils.any(enemy.powers, po -> FlightPower.POWER_ID.equals(po.ID))) {
                     tempDamage *= 2f * applyCount;
                 }
-                if (attackType.useFocus && EUIUtils.any(enemy.powers, po -> com.megacrit.cardcrawl.powers.LockOnPower.POWER_ID.equals(po.ID))) {
+                if (attackType.useFocus && EUIUtils.any(enemy.powers, po -> LockOnPower.POWER_ID.equals(po.ID))) {
                     tempDamage *= PCLLockOnPower.getOrbMultiplier();
                 }
 
@@ -2145,7 +2145,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
 
     @SpireOverride
     protected void renderBannerImage(SpriteBatch sb, float drawX, float drawY) {
-        if (isSeen && (!PGR.core.config.hideIrrelevantAffinities.get() || GameUtilities.isPCLActingCardColor(this))) {
+        if (isSeen && (!PGR.config.hideIrrelevantAffinities.get() || GameUtilities.isPCLActingCardColor(this))) {
             affinities.renderOnCard(sb, this, player != null && player.hand.contains(this));
         }
         if (!tryRenderCentered(sb, getCardBanner(), getRarityColor(), isPopup ? 0.5f : 1f)) {
@@ -2281,7 +2281,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
             return;
         }
 
-        final boolean cropPortrait = canCropPortraits && PGR.core.config.cropCardImages.get();
+        final boolean cropPortrait = canCropPortraits && PGR.config.cropCardImages.get();
 
         // TODO support for animated pictures
         if (portraitImg != null) {

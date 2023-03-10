@@ -4,22 +4,18 @@ import basemod.ModLabeledToggleButton;
 import basemod.ModPanel;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.math.Vector2;
 import com.evacipated.cardcrawl.modthespire.lib.ConfigUtils;
 import com.evacipated.cardcrawl.modthespire.lib.SpireConfig;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.helpers.FontHelper;
 import extendedui.EUIUtils;
 import extendedui.configuration.STSConfigItem;
-import extendedui.configuration.STSSerializedConfigItem;
-import extendedui.configuration.STSStringConfigItem;
 import extendedui.ui.settings.ModSettingsScreen;
 import extendedui.ui.settings.ModSettingsToggle;
+import extendedui.utilities.EUIFontHelper;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.HashSet;
 
 public abstract class AbstractConfig
 {
@@ -28,16 +24,11 @@ public abstract class AbstractConfig
     protected static final int BASE_OPTION_OFFSET_Y = 700;
     protected static final int BASE_OPTION_OPTION_HEIGHT = 50;
     protected static ModSettingsScreen.Category pclCategory;
-    public STSSerializedConfigItem<HashSet<String>> bannedCards;
-    public STSSerializedConfigItem<HashSet<String>> bannedRelics;
-    public STSConfigItem<Integer> cardsCount;
-    public STSSerializedConfigItem<Vector2> meterPosition;
-    public STSStringConfigItem trophies;
 
     protected final String id;
     protected SpireConfig config;
 
-    protected static ModSettingsToggle addModToggle(STSConfigItem<Boolean> option, String label)
+    protected static ModSettingsToggle makeModToggle(STSConfigItem<Boolean> option, String label)
     {
         // Must be initialized after Settings.scale is set, or the mod options will be in the wrong position
         if (pclCategory == null)
@@ -47,12 +38,24 @@ public abstract class AbstractConfig
         return ModSettingsScreen.addBoolean(pclCategory, option, label);
     }
 
-    protected static int addToggle(ModPanel panel, STSConfigItem<Boolean> option, String label, int ypos)
+    protected static ModSettingsToggle makeModToggle(STSConfigItem<Boolean> option, String label, String tip)
     {
-        panel.addUIElement(new ModLabeledToggleButton(label, BASE_OPTION_OFFSET_X, ypos, Settings.CREAM_COLOR.cpy(), FontHelper.charDescFont, option.get(), panel, (__) -> {
-        }, (c) -> {
-            option.set(c.enabled, true);
-        }));
+        ModSettingsToggle toggle = makeModToggle(option, label);
+        if (toggle != null)
+        {
+            toggle.setTooltip(label, tip);
+            toggle.tooltip.setAutoWidth();
+        }
+        return toggle;
+    }
+
+    protected static int addToggle(ModPanel panel, STSConfigItem<Boolean> option, String label, int ypos) {
+        return addToggle(panel, option, label, ypos, null);
+    }
+
+    protected static int addToggle(ModPanel panel, STSConfigItem<Boolean> option, String label, int ypos, String tip) {
+        panel.addUIElement(new ModLabeledToggleButton(label, tip, BASE_OPTION_OFFSET_X, ypos, Settings.CREAM_COLOR.cpy(), EUIFontHelper.carddescriptionfontNormal, option.get(), panel, (__) -> {
+        }, (c) -> option.set(c.enabled, true)));
         return ypos - BASE_OPTION_OPTION_HEIGHT;
     }
 

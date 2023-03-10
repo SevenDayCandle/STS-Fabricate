@@ -338,7 +338,7 @@ public class PCLCardText
             card.getPointers().clear();
             String efStrings = card.getEffectStrings();
             text = (text != null && !text.isEmpty()) ? text : efStrings;
-            if (PGR.core.config.displayCardTagDescription.get())
+            if (PGR.config.displayCardTagDescription.get())
             {
                 text = text + EUIUtils.DOUBLE_SPLIT_LINE + card.getTagTipString();
             }

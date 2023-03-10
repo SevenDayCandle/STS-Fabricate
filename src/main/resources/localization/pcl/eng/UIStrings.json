@@ -333,7 +333,7 @@
 												"Editor",
 												"Card Editor",
 												"View, create, or edit custom cards to use in Custom Runs.",
-												"Coming Soon!",
+												"Under Construction",
 												"Relic Editor",
 												"View, create, or edit custom relics to use in Custom Runs.",
 												"Potion Editor",
@@ -361,14 +361,26 @@
 				},
 				"pcl:Options": {
 								"TEXT": [
-												"Dynamic Portraits",
-												"Display Card Tags in Description",
-												"Enable certain PCL events for non-PCL characters",
-												"Enable certain PCL relics for non-PCL characters",
-												"Replace Non-PCL cards when playing as PCL characters (Warning: Unstable)",
-												"Use PCL power variants when playing as non-PCL characters (Warning: Unstable)",
-												"Hide Irrelevant Affinities for the current character",
-												"Show Formula Display"
+												"Dynamic card portraits",
+												"Display Card Tags in description",
+												"Use Vanilla Custom Run Menu",
+												"Show formula display",
+												"Hide irrelevant Affinities for the current character",
+												"Enable Custom Cards in normal runs",
+												"Enable Custom Relics in normal runs",
+												"Enable Custom Poitons in normal runs",
+												"Enable Custom Events in normal runs",
+												"Use Custom Card framework for all cards"
+								]
+				},
+				"pcl:OptionDescriptions": {
+								"TEXT": [
+												"Card portraits will be zoomed in when not hovering over them. Only works for Custom Cards, and has no effect in Single Card Popup View.",
+												"Tags normally appearing on the top-right corner of Custom Cards will be moved to their descriptions.",
+												"Disables the replacement Custom Run Menu. To play with Custom Cards without using the Custom Run Menu, you will either need to use the console or toggle the \"Enable Custom Cards in normal Runs\" setting.",
+												"Enables a draggable widget that shows damage formula calculations for Custom Cards when dragging them over targets.",
+												"Hides Affinities on cards that are not used by your current character. For characters that do not use Affinities, this hides them altogether.",
+												"Forces all cards encountered in a run to be built with this mod's card framework, which may improve compatibility between them and certain Custom Card effect. | WARNING: This setting will likely break the functionality other mods."
 								]
 				},
 				"pcl:Rewards": {

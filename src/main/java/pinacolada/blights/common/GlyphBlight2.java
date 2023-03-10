@@ -13,7 +13,7 @@ public class GlyphBlight2 extends AbstractGlyphBlight
 
     public GlyphBlight2()
     {
-        super(ID, PGR.core.config.ascensionGlyph2, PCLAbstractPlayerData.ASCENSION_GLYPH1_UNLOCK, PCLAbstractPlayerData.ASCENSION_GLYPH1_LEVEL_STEP, 10, 5);
+        super(ID, PGR.config.ascensionGlyph2, PCLAbstractPlayerData.ASCENSION_GLYPH1_UNLOCK, PCLAbstractPlayerData.ASCENSION_GLYPH1_LEVEL_STEP, 10, 5);
     }
 
     @Override

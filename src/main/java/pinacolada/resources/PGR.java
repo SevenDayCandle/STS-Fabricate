@@ -35,8 +35,8 @@ public class PGR
 
     protected static final HashMap<AbstractCard.CardColor, PCLResources<?,?,?>> colorResourceMap = new HashMap<>();
     protected static final HashMap<AbstractPlayer.PlayerClass, PCLResources<?,?,?>> playerResourceMap = new HashMap<>();
-
     public static PCLCoreResources core;
+    public static PCLMainConfig config;
 
     public static void registerResource(PCLResources<?,?,?> resources)
     {
@@ -199,6 +199,7 @@ public class PGR
             throw new RuntimeException("Already Initialized");
         }
 
+        config = new PCLMainConfig();
         core = new PCLCoreResources();
         initialize(core);
     }

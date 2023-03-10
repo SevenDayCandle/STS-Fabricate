@@ -74,7 +74,7 @@ public enum PCLCardTag implements TooltipProvider
     public static float renderTagsOnCard(SpriteBatch sb, AbstractCard card, float alpha)
     {
         int offset_y = 0;
-        if (!PGR.core.config.displayCardTagDescription.get())
+        if (!PGR.config.displayCardTagDescription.get())
         {
             for (PCLCardTag tag : PCLCardTag.getAll())
             {

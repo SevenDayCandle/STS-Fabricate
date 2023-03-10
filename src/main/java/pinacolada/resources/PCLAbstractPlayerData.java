@@ -23,8 +23,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.StringJoiner;
 
+import static pinacolada.resources.PCLMainConfig.JSON_FILTER;
 import static pinacolada.resources.loadout.PCLLoadoutData.TInfo;
-import static pinacolada.resources.pcl.PCLCoreConfig.JSON_FILTER;
 
 // Copied and modified from STS-AnimatorMod
 public abstract class PCLAbstractPlayerData
@@ -277,12 +277,15 @@ public abstract class PCLAbstractPlayerData
 
     public void reload()
     {
-        deserializeTrophies(resources.config.trophies.get());
-        deserializeCustomLoadouts();
-
-        if (selectedLoadout == null)
+        if (resources.config != null)
         {
-            selectedLoadout = getCoreLoadout();
+            deserializeTrophies(resources.config.trophies.get());
+            deserializeCustomLoadouts();
+
+            if (selectedLoadout == null)
+            {
+                selectedLoadout = getCoreLoadout();
+            }
         }
     }
 

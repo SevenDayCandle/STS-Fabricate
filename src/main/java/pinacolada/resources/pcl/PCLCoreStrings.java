@@ -18,7 +18,6 @@ import pinacolada.resources.PGR;
 import java.util.List;
 import java.util.StringJoiner;
 
-// TODO collapse classes
 public class PCLCoreStrings extends PCLStrings
 {
     private final UIStrings actions = getUIStrings("Actions");
@@ -34,6 +33,7 @@ public class PCLCoreStrings extends PCLStrings
     private final UIStrings menu = getUIStrings("Menu");
     private final UIStrings misc = getUIStrings("Misc");
     private final UIStrings options = getUIStrings("Options");
+    private final UIStrings optionDesc = getUIStrings("OptionDescriptions");
     private final UIStrings rewards = getUIStrings("Rewards");
     private final UIStrings seriesui = getUIStrings("SeriesUI");
     private final UIStrings scp = getUIStrings("SingleCardPopupButtons");
@@ -266,12 +266,22 @@ public class PCLCoreStrings extends PCLStrings
     // Options
     public final String options_cropCardImages = options.TEXT[0];
     public final String options_displayCardTagDescription = options.TEXT[1];
-    public final String options_enableEventsForOtherCharacters = options.TEXT[2];
-    public final String options_enableRelicsForOtherCharacters = options.TEXT[3];
-    public final String options_replaceCards = options.TEXT[4];
-    public final String options_usePCLPowersForAll = options.TEXT[5];
-    public final String options_hideIrrelevantAffinities = options.TEXT[6];
-    public final String options_showFormulaDisplay = options.TEXT[7];
+    public final String options_vanillaCustomRunMenu = options.TEXT[2];
+    public final String options_showFormulaDisplay = options.TEXT[3];
+    public final String options_hideIrrelevantAffinities = options.TEXT[4];
+    public final String options_enableCustomCards = options.TEXT[5];
+    public final String options_enableCustomRelics = options.TEXT[6];
+    public final String options_enableCustomPotions = options.TEXT[7];
+    public final String options_enableCustomEvents = options.TEXT[8];
+    public final String options_alwaysPCLCard = options.TEXT[9];
+
+    // Option Descriptions
+    public final String optionDesc_cropCardImages = optionDesc.TEXT[0];
+    public final String optionDesc_displayCardTagDescription = optionDesc.TEXT[1];
+    public final String optionDesc_vanillaCustomRunMenu = optionDesc.TEXT[2];
+    public final String optionDesc_showFormulaDisplay = optionDesc.TEXT[3];
+    public final String optionDesc_hideIrrelevantAffinities = optionDesc.TEXT[4];
+    public final String optionDesc_alwaysPCLCard = optionDesc.TEXT[5];
 
     // Reward
     public final String rewards_rewardBreak = rewards.TEXT[0];

@@ -200,7 +200,7 @@ public class PCLCustomCardImageEffect extends PCLEffectWithCallback<Pixmap>
                 }
             });
 
-            File cd = new File(PGR.core.config.lastImagePath.get());
+            File cd = new File(PGR.config.lastImagePath.get());
             if (cd.isDirectory())
             {
                 fc.setCurrentDirectory(cd);
@@ -220,7 +220,7 @@ public class PCLCustomCardImageEffect extends PCLEffectWithCallback<Pixmap>
             cd = fc.getCurrentDirectory();
             if (cd != null && cd.isDirectory())
             {
-                PGR.core.config.lastImagePath.set(cd.getAbsolutePath(), true);
+                PGR.config.lastImagePath.set(cd.getAbsolutePath(), true);
             }
 
             if (result == JFileChooser.APPROVE_OPTION)

@@ -31,7 +31,10 @@ public class CustomModeScreenPatches
         @SpirePrefixPatch
         public static void prefix(CustomModeScreen screen)
         {
-            PGR.core.customMode.open();
+            if (!PGR.config.vanillaLibraryScreen.get())
+            {
+                PGR.core.customMode.open();
+            }
         }
     }
 
@@ -42,8 +45,12 @@ public class CustomModeScreenPatches
         @SpirePrefixPatch
         public static SpireReturn<Void> prefix(CustomModeScreen screen)
         {
-            PGR.core.customMode.updateImpl();
-            return SpireReturn.Return();
+            if (!PGR.config.vanillaLibraryScreen.get())
+            {
+                PGR.core.customMode.updateImpl();
+                return SpireReturn.Return();
+            }
+            return SpireReturn.Continue();
         }
     }
 
@@ -54,8 +61,12 @@ public class CustomModeScreenPatches
         @SpirePrefixPatch
         public static SpireReturn<Void> prefix(CustomModeScreen screen, SpriteBatch sb)
         {
-            PGR.core.customMode.renderImpl(sb);
-            return SpireReturn.Return();
+            if (!PGR.config.vanillaLibraryScreen.get())
+            {
+                PGR.core.customMode.renderImpl(sb);
+                return SpireReturn.Return();
+            }
+            return SpireReturn.Continue();
         }
     }
 }

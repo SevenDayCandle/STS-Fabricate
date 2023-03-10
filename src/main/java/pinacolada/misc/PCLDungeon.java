@@ -411,7 +411,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
             bannedCards.addAll(((PCLCustomTrial) CardCrawlGame.trial).bannedCards);
             bannedRelics.addAll(((PCLCustomTrial) CardCrawlGame.trial).bannedRelics);
         }
-        else if (data != null)
+        else if (data != null && data.resources.config != null)
         {
             bannedCards.addAll(data.resources.config.bannedCards.get());
             bannedRelics.addAll(data.resources.config.bannedRelics.get());

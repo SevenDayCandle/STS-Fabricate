@@ -257,11 +257,14 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen
     private ArrayList<AbstractCard.CardColor> getAllColors()
     {
         ArrayList<AbstractCard.CardColor> list = new ArrayList<>();
+
+        // Base game colors are not tracked in getCardColors
         list.add(AbstractCard.CardColor.COLORLESS);
         list.add(AbstractCard.CardColor.RED);
         list.add(AbstractCard.CardColor.GREEN);
         list.add(AbstractCard.CardColor.BLUE);
         list.add(AbstractCard.CardColor.PURPLE);
+
         list.addAll(BaseMod.getCardColors().stream().sorted(Comparator.comparing(EUIGameUtils::getColorName)).collect(Collectors.toList()));
         return list;
     }

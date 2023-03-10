@@ -33,7 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 // Copied and modified from STS-AnimatorMod
-public abstract class PCLResources<T extends AbstractConfig, U extends PCLImages, V extends PCLTooltips>
+public abstract class PCLResources<T extends PCLCharacterConfig, U extends PCLImages, V extends PCLTooltips>
         implements EditCharactersSubscriber, EditKeywordsSubscriber, EditStringsSubscriber, PostInitializeSubscriber
 {
     private static final Type GROUPED_CARD_TYPE = new TypeToken<Map<String, Map<String, CardStrings>>>() {}.getType();

@@ -508,7 +508,7 @@ public class PCLCardAffinities
         sorted.clear();
         for (PCLCardAffinity a : list)
         {
-            if (a == null || a.level <= 0 || (PGR.core.config.hideIrrelevantAffinities.get() && card != null && !EUIUtils.any(PCLAffinity.getAvailableAffinities(), b -> b == a.type)))
+            if (a == null || a.level <= 0 || (PGR.config.hideIrrelevantAffinities.get() && card != null && !EUIUtils.any(PCLAffinity.getAvailableAffinities(), b -> b == a.type)))
             {
                 continue;
             }

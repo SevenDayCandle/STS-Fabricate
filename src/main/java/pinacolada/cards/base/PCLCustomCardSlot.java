@@ -20,13 +20,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static extendedui.EUIUtils.array;
-import static pinacolada.resources.pcl.PCLCoreConfig.JSON_FILTER;
+import static pinacolada.resources.PCLMainConfig.JSON_FILTER;
 
 public class PCLCustomCardSlot
 {
     public static final int ID_SIZE = 4;
-    public static final String BASE_ID = "pclC";
-    public static final String FOLDER = "PCLCustomCards";
+    public static final String BASE_CARD_ID = "PCLC";
+    public static final String FOLDER = "custom";
     private static final TypeToken<PCLCustomCardSlot> TToken = new TypeToken<PCLCustomCardSlot>()
     {
     };
@@ -218,7 +218,7 @@ public class PCLCustomCardSlot
 
     public static String getBaseIDPrefix(AbstractCard.CardColor color)
     {
-        return BASE_ID + "_" + color.name() + "_";
+        return BASE_CARD_ID + "_" + color.name() + "_";
     }
 
     protected static String makeNewID(AbstractCard.CardColor color)

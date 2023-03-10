@@ -47,6 +47,24 @@ public class CardLibraryPatches
             PCLResources<?,?,?> resources = PGR.getResources(playerClass);
             return tryReplace(resources, card);
         }
+        else if (PGR.config.replaceCardsPCL.get())
+        {
+            return tryMakeReplace(card);
+        }
+        return card;
+    }
+
+    public static AbstractCard tryMakeReplace(AbstractCard card)
+    {
+        if (!(card instanceof PCLCard))
+        {
+            AbstractCard c = ReplacementData.makeReplacement(card, true);
+            if (card.upgraded)
+            {
+                c.upgrade();
+            }
+            return c;
+        }
         return card;
     }
 
@@ -57,14 +75,9 @@ public class CardLibraryPatches
         {
             return data.makeCopy(card.upgraded);
         }
-        else if (!(card instanceof PCLCard) && PGR.core.config.replaceCardsPCL.get())
+        else if (PGR.config.replaceCardsPCL.get())
         {
-            AbstractCard c = ReplacementData.makeReplacement(card, true);
-            if (card.upgraded)
-            {
-                c.upgrade();
-            }
-            return c;
+            return tryMakeReplace(card);
         }
         return card;
     }

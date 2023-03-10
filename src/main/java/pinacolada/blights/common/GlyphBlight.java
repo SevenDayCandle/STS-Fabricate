@@ -26,7 +26,7 @@ public class GlyphBlight extends AbstractGlyphBlight
 
     public GlyphBlight()
     {
-        super(ID, PGR.core.config.ascensionGlyph0, PCLAbstractPlayerData.ASCENSION_GLYPH1_UNLOCK, PCLAbstractPlayerData.ASCENSION_GLYPH1_LEVEL_STEP, 0, 1);
+        super(ID, PGR.config.ascensionGlyph0, PCLAbstractPlayerData.ASCENSION_GLYPH1_UNLOCK, PCLAbstractPlayerData.ASCENSION_GLYPH1_LEVEL_STEP, 0, 1);
     }
 
     public CardGroup createGlyphGroup()

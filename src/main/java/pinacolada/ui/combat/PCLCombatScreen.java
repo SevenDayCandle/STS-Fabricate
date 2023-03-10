@@ -79,13 +79,13 @@ public class PCLCombatScreen extends EUIBase
         CombatManager.controlPile.update();
         helper.update();
 
-        if (PGR.core.config.showFormulaDisplay.get())
+        if (PGR.config.showFormulaDisplay.get())
         {
             formulaDisplay.update(hoveredCard, target, draggingCard);
         }
         if (PCLHotkeys.toggleFormulaDisplay.isJustPressed())
         {
-            PGR.core.config.showFormulaDisplay.set(!PGR.core.config.showFormulaDisplay.get(), true);
+            PGR.config.showFormulaDisplay.set(!PGR.config.showFormulaDisplay.get(), true);
         }
     }
 
@@ -101,7 +101,7 @@ public class PCLCombatScreen extends EUIBase
         CombatManager.summons.render(sb);
         CombatManager.controlPile.render(sb);
         DrawPileCardPreview.updateAndRenderCurrent(sb);
-        if (PGR.core.config.showFormulaDisplay.get())
+        if (PGR.config.showFormulaDisplay.get())
         {
             formulaDisplay.renderImpl(sb);
         }

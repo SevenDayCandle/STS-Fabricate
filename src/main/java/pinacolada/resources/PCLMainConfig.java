@@ -1,4 +1,4 @@
-package pinacolada.resources.pcl;
+package pinacolada.resources;
 
 import basemod.BaseMod;
 import basemod.ModPanel;
@@ -14,8 +14,6 @@ import extendedui.configuration.STSStringConfigItem;
 import extendedui.ui.settings.ModSettingsScreen;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardPreviews;
-import pinacolada.resources.AbstractConfig;
-import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
 import java.io.FilenameFilter;
@@ -24,37 +22,43 @@ import java.util.HashSet;
 import java.util.Locale;
 
 // TODO separate from AbstractConfig
-public class PCLCoreConfig extends AbstractConfig
+public class PCLMainConfig extends AbstractConfig
 {
     public static final FilenameFilter JSON_FILTER = (dir, name) -> name.endsWith(".json");
 
     private static final String LAST_SEED_KEY = "TSDL";
     private static final String MOD_ID = "PCL";
     private static final String CONFIG_ID = "PCLConfig";
-    private static final String ASCENSIONGLYPH0 = PCLCoreConfig.createFullID("AscensionGlyph0");
-    private static final String ASCENSIONGLYPH1 = PCLCoreConfig.createFullID("AscensionGlyph1");
-    private static final String ASCENSIONGLYPH2 = PCLCoreConfig.createFullID("AscensionGlyph2");
-    private static final String CROP_CARD_PORTRAIT = PCLCoreConfig.createFullID("UseCroppedPortrait");
-    private static final String DAMAGE_FORMULA_POSITION = PCLCoreConfig.createFullID("DamageFormulaPosition");
-    private static final String DISPLAY_CARD_TAG_DESCRIPTION = PCLCoreConfig.createFullID("DisplayCardTagDescription");
-    private static final String DISPLAY_CARD_TAG_TEXT = PCLCoreConfig.createFullID("DisplayCardTagText");
-    private static final String EDITOR_FTUE_SCREEN = PCLCoreConfig.createFullID("EditorFtueScreen");
-    private static final String ENABLE_EVENTS_FOR_OTHER_CHARACTERS = PCLCoreConfig.createFullID("EnableEventsForOtherCharacters");
-    private static final String ENABLE_RELICS_FOR_OTHER_CHARACTERS = PCLCoreConfig.createFullID("EnableRelicsForOtherCharacters");
-    private static final String HIDE_IRRELEVANT_AFFINITIES = PCLCoreConfig.createFullID("HideIrrelevantAffinities");
-    private static final String HIDE_TIP_DESCRIPTION = PCLCoreConfig.createFullID("HideTipDescription");
-    private static final String LAST_CSV_PATH = PCLCoreConfig.createFullID("LastCSVPath");
-    private static final String LAST_IMAGE_PATH = PCLCoreConfig.createFullID("LastImagePath");
-    private static final String REPLACE_CARDS_PCL = PCLCoreConfig.createFullID("ReplaceCards");
-    private static final String SHOW_FORMULA_DISPLAY = PCLCoreConfig.createFullID("ShowFormulaDisplay");
+    private static final String ASCENSIONGLYPH0 = PCLMainConfig.createFullID("AscensionGlyph0");
+    private static final String ASCENSIONGLYPH1 = PCLMainConfig.createFullID("AscensionGlyph1");
+    private static final String ASCENSIONGLYPH2 = PCLMainConfig.createFullID("AscensionGlyph2");
+    private static final String CROP_CARD_PORTRAIT = PCLMainConfig.createFullID("UseCroppedPortrait");
+    private static final String DAMAGE_FORMULA_POSITION = PCLMainConfig.createFullID("DamageFormulaPosition");
+    private static final String DISPLAY_CARD_TAG_DESCRIPTION = PCLMainConfig.createFullID("DisplayCardTagDescription");
+    private static final String DISPLAY_CARD_TAG_TEXT = PCLMainConfig.createFullID("DisplayCardTagText");
+    private static final String EDITOR_FTUE_SCREEN = PCLMainConfig.createFullID("EditorFtueScreen");
+    private static final String ENABLE_CUSTOM_CARDS = PCLMainConfig.createFullID("EnableCustomCards");
+    private static final String ENABLE_CUSTOM_EVENTS = PCLMainConfig.createFullID("EnableCustomEvents");
+    private static final String ENABLE_CUSTOM_POTIONS = PCLMainConfig.createFullID("EnableCustomPotions");
+    private static final String ENABLE_CUSTOM_RELICS = PCLMainConfig.createFullID("EnableCustomRelics");
+    private static final String HIDE_IRRELEVANT_AFFINITIES = PCLMainConfig.createFullID("HideIrrelevantAffinities");
+    private static final String HIDE_TIP_DESCRIPTION = PCLMainConfig.createFullID("HideTipDescription");
+    private static final String LAST_CSV_PATH = PCLMainConfig.createFullID("LastCSVPath");
+    private static final String LAST_IMAGE_PATH = PCLMainConfig.createFullID("LastImagePath");
+    private static final String REPLACE_CARDS_PCL = PCLMainConfig.createFullID("ReplaceCardsPCL");
+    private static final String SHOW_FORMULA_DISPLAY = PCLMainConfig.createFullID("ShowFormulaDisplay");
+    private static final String VANILLA_LIBRARY_SCREEN = PCLMainConfig.createFullID("VanillaLibraryScreen");
     private static ModSettingsScreen.Category pclCategory;
     public STSConfigItem<Boolean> cropCardImages = new STSConfigItem<Boolean>(CROP_CARD_PORTRAIT, false);
     public STSConfigItem<Boolean> displayCardTagDescription = new STSConfigItem<Boolean>(DISPLAY_CARD_TAG_DESCRIPTION, false);
-    public STSConfigItem<Boolean> enableEventsForOtherCharacters = new STSConfigItem<Boolean>(ENABLE_EVENTS_FOR_OTHER_CHARACTERS, false);
-    public STSConfigItem<Boolean> enableRelicsForOtherCharacters = new STSConfigItem<Boolean>(ENABLE_RELICS_FOR_OTHER_CHARACTERS, false);
+    public STSConfigItem<Boolean> enableCustomCards = new STSConfigItem<Boolean>(ENABLE_CUSTOM_CARDS, false);
+    public STSConfigItem<Boolean> enableCustomEvents = new STSConfigItem<Boolean>(ENABLE_CUSTOM_EVENTS, false);
+    public STSConfigItem<Boolean> enableCustomPotions = new STSConfigItem<Boolean>(ENABLE_CUSTOM_POTIONS, false);
+    public STSConfigItem<Boolean> enableCustomRelics = new STSConfigItem<Boolean>(ENABLE_CUSTOM_RELICS, false);
     public STSConfigItem<Boolean> hideIrrelevantAffinities = new STSConfigItem<Boolean>(HIDE_IRRELEVANT_AFFINITIES, true);
     public STSConfigItem<Boolean> replaceCardsPCL = new STSConfigItem<Boolean>(REPLACE_CARDS_PCL, false);
     public STSConfigItem<Boolean> showFormulaDisplay = new STSConfigItem<Boolean>(SHOW_FORMULA_DISPLAY, false);
+    public STSConfigItem<Boolean> vanillaLibraryScreen = new STSConfigItem<Boolean>(VANILLA_LIBRARY_SCREEN, false);
     public STSConfigItem<Boolean> editorFtueScreen = new STSConfigItem<Boolean>(EDITOR_FTUE_SCREEN, false);
     public STSConfigItem<Integer> ascensionGlyph0 = new STSConfigItem<Integer>(ASCENSIONGLYPH0, 0);
     public STSConfigItem<Integer> ascensionGlyph1 = new STSConfigItem<Integer>(ASCENSIONGLYPH1, 0);
@@ -71,7 +75,7 @@ public class PCLCoreConfig extends AbstractConfig
         return PGR.BASE_PREFIX.toUpperCase(Locale.ROOT) + "-" + name;
     }
 
-    public PCLCoreConfig()
+    public PCLMainConfig()
     {
         super(MOD_ID);
     }
@@ -124,20 +128,19 @@ public class PCLCoreConfig extends AbstractConfig
 
         int yPos = BASE_OPTION_OFFSET_Y;
 
-        yPos = addToggle(panel, cropCardImages, PGR.core.strings.options_cropCardImages, yPos);
-        yPos = addToggle(panel, displayCardTagDescription, PGR.core.strings.options_displayCardTagDescription, yPos);
-        yPos = addToggle(panel, enableEventsForOtherCharacters, PGR.core.strings.options_enableEventsForOtherCharacters, yPos);
-        yPos = addToggle(panel, enableRelicsForOtherCharacters, PGR.core.strings.options_enableRelicsForOtherCharacters, yPos);
-        yPos = addToggle(panel, showFormulaDisplay, PGR.core.strings.options_showFormulaDisplay, yPos);
-        yPos = addToggle(panel, hideIrrelevantAffinities, PGR.core.strings.options_hideIrrelevantAffinities, yPos);
-        yPos = addToggle(panel, replaceCardsPCL, PGR.core.strings.options_replaceCards, yPos);
+        yPos = addToggle(panel, cropCardImages, PGR.core.strings.options_cropCardImages, yPos, PGR.core.strings.optionDesc_cropCardImages);
+        yPos = addToggle(panel, displayCardTagDescription, PGR.core.strings.options_displayCardTagDescription, yPos, PGR.core.strings.optionDesc_displayCardTagDescription);
+        yPos = addToggle(panel, vanillaLibraryScreen, PGR.core.strings.options_vanillaCustomRunMenu, yPos, PGR.core.strings.optionDesc_vanillaCustomRunMenu);
+        yPos = addToggle(panel, showFormulaDisplay, PGR.core.strings.options_showFormulaDisplay, yPos, PGR.core.strings.optionDesc_showFormulaDisplay);
+        yPos = addToggle(panel, hideIrrelevantAffinities, PGR.core.strings.options_hideIrrelevantAffinities, yPos, PGR.core.strings.optionDesc_hideIrrelevantAffinities);
+        yPos = addToggle(panel, enableCustomCards, PGR.core.strings.options_enableCustomCards, yPos);
 
         BaseMod.registerModBadge(ImageMaster.loadImage("images/pcl/modBadge.png"), MOD_ID, "PinaColada", "", panel);
 
-        addModToggle(cropCardImages, PGR.core.strings.options_cropCardImages);
-        addModToggle(displayCardTagDescription, PGR.core.strings.options_displayCardTagDescription);
-        addModToggle(showFormulaDisplay,  PGR.core.strings.options_showFormulaDisplay);
-        addModToggle(hideIrrelevantAffinities,  PGR.core.strings.options_hideIrrelevantAffinities);
+        makeModToggle(cropCardImages, PGR.core.strings.options_cropCardImages, PGR.core.strings.optionDesc_cropCardImages);
+        makeModToggle(displayCardTagDescription, PGR.core.strings.options_displayCardTagDescription, PGR.core.strings.optionDesc_displayCardTagDescription);
+        makeModToggle(showFormulaDisplay,  PGR.core.strings.options_showFormulaDisplay, PGR.core.strings.optionDesc_showFormulaDisplay);
+        makeModToggle(hideIrrelevantAffinities,  PGR.core.strings.options_hideIrrelevantAffinities, PGR.core.strings.optionDesc_hideIrrelevantAffinities);
 
         EUIConfiguration.disableDescrptionIcons.addListener(val -> this.updateCardDescriptions());
         displayCardTagDescription.addListener(val -> this.updateCardDescriptions());
@@ -152,10 +155,13 @@ public class PCLCoreConfig extends AbstractConfig
         cropCardImages.addConfig(config);
         damageFormulaPosition.addConfig(config);
         displayCardTagDescription.addConfig(config);
-        enableEventsForOtherCharacters.addConfig(config);
-        enableRelicsForOtherCharacters.addConfig(config);
+        enableCustomCards.addConfig(config);
+        enableCustomEvents.addConfig(config);
+        enableCustomPotions.addConfig(config);
+        enableCustomRelics.addConfig(config);
         showFormulaDisplay.addConfig(config);
         hideIrrelevantAffinities.addConfig(config);
+        vanillaLibraryScreen.addConfig(config);
         lastCSVPath.addConfig(config);
         lastImagePath.addConfig(config);
         lastSeed.addConfig(config);
