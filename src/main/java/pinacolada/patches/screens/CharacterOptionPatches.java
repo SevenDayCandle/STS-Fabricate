@@ -22,7 +22,7 @@ public class CharacterOptionPatches
         {
             if (__instance.selected && __instance.c != null)
             {
-                PGR.core.charSelectProvider.renderOption(__instance, sb);
+                PGR.charSelectProvider.renderOption(__instance, sb);
             }
         }
     }
@@ -45,7 +45,7 @@ public class CharacterOptionPatches
         {
             if (__instance.selected && __instance.c != null)
             {
-                PGR.core.charSelectProvider.updateOption(__instance);
+                PGR.charSelectProvider.updateOption(__instance);
             }
         }
     }
@@ -56,7 +56,7 @@ public class CharacterOptionPatches
         @SpirePostfixPatch
         public static void postfix(CharacterOption __instance)
         {
-            PGR.core.charSelectProvider.updateForAscensionChange(CardCrawlGame.mainMenuScreen.charSelectScreen);
+            PGR.charSelectProvider.updateForAscensionChange(CardCrawlGame.mainMenuScreen.charSelectScreen);
         }
     }
 
@@ -66,7 +66,7 @@ public class CharacterOptionPatches
         @SpirePostfixPatch
         public static void postfix(CharacterOption __instance)
         {
-            PGR.core.charSelectProvider.updateForAscensionChange(CardCrawlGame.mainMenuScreen.charSelectScreen);
+            PGR.charSelectProvider.updateForAscensionChange(CardCrawlGame.mainMenuScreen.charSelectScreen);
         }
     }
 }

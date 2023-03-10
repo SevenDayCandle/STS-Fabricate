@@ -72,10 +72,10 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
     public transient PCLLoadout startingSeries = new FakeLoadout();
     public transient final ArrayList<PCLLoadout> loadouts = new ArrayList<>();
 
-    public static PCLDungeon register(String id)
+    public static PCLDungeon register()
     {
         final PCLDungeon data = new PCLDungeon();
-        BaseMod.addSaveField(id, data);
+        BaseMod.addSaveField(PCLDungeon.class.getSimpleName(), data);
         BaseMod.subscribe(data);
         return data;
     }
@@ -91,7 +91,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
     {
         augments.merge(id, count, Integer::sum);
         totalAugmentCount = EUIUtils.sumInt(augments.values(), i -> i);
-        PGR.core.augmentPanel.flash();
+        PGR.augmentPanel.flash();
     }
 
     public void addRelic(String relicID, AbstractRelic.RelicTier tier)
@@ -104,7 +104,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
                 Random rng = AbstractDungeon.relicRng;
                 if (rng == null)
                 {
-                    rng = PGR.core.dungeon.getRNG();
+                    rng = PGR.dungeon.getRNG();
                 }
 
                 pool.add(rng.random(pool.size() - 1), relicID);
@@ -338,7 +338,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
             if (panelAdded)
             {
                 panelAdded = false;
-                BaseMod.removeTopPanelItem(PGR.core.augmentPanel);
+                BaseMod.removeTopPanelItem(PGR.augmentPanel);
             }
             loadCustomCards(player);
             banCards(data);
@@ -353,7 +353,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         if (!panelAdded)
         {
             panelAdded = true;
-            BaseMod.addTopPanelItem(PGR.core.augmentPanel);
+            BaseMod.addTopPanelItem(PGR.augmentPanel);
         }
 
         if (Settings.isStandardRun())
@@ -388,7 +388,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
                     break;
                 }
             }
-            int counter = PGR.core.dungeon.ascensionGlyphCounters.size() > i ? PGR.core.dungeon.ascensionGlyphCounters.get(i) : 0;
+            int counter = PGR.dungeon.ascensionGlyphCounters.size() > i ? PGR.dungeon.ascensionGlyphCounters.get(i) : 0;
             if (shouldAdd && counter > 0)
             {
                 AbstractBlight blight = PCLAbstractPlayerData.GLYPHS.get(i).makeCopy();

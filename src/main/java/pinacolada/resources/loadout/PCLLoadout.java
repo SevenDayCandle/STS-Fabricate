@@ -522,9 +522,9 @@ public abstract class PCLLoadout
             }
             trophies.trophy1 = Math.max(trophies.trophy1, ascensionLevel);
 
-            trophies.glyph0 = Math.max(trophies.glyph0, PGR.core.dungeon.ascensionGlyphCounters.get(0));
-            trophies.glyph1 = Math.max(trophies.glyph1, PGR.core.dungeon.ascensionGlyphCounters.get(1));
-            trophies.glyph2 = Math.max(trophies.glyph2, PGR.core.dungeon.ascensionGlyphCounters.get(2));
+            trophies.glyph0 = Math.max(trophies.glyph0, PGR.dungeon.ascensionGlyphCounters.get(0));
+            trophies.glyph1 = Math.max(trophies.glyph1, PGR.dungeon.ascensionGlyphCounters.get(1));
+            trophies.glyph2 = Math.max(trophies.glyph2, PGR.dungeon.ascensionGlyphCounters.get(2));
             trophies.highScore = Math.max(trophies.highScore, score);
         }
     }

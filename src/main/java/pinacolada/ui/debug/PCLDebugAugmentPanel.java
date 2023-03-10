@@ -34,7 +34,7 @@ public class PCLDebugAugmentPanel
         PCLAugmentData chosen = augmentList.get();
         if (chosen != null)
         {
-            PGR.core.dungeon.addAugment(chosen.ID, augmentCount.get());
+            PGR.dungeon.addAugment(chosen.ID, augmentCount.get());
         }
     }
 

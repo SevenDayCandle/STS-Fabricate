@@ -176,7 +176,7 @@ public class PCLCustomCardSlot
     {
         CustomCards.clear();
         loadFolder(getBaseCustomCardFolder());
-        PGR.core.debugCards.refreshCards();
+        PGR.debugCards.refreshCards();
     }
 
     public static void loadFolder(FileHandle folder)
@@ -185,7 +185,7 @@ public class PCLCustomCardSlot
         {
             loadSingleCardImpl(f);
         }
-        PGR.core.debugCards.refreshCards();
+        PGR.debugCards.refreshCards();
     }
 
     private static void loadSingleCardImpl(FileHandle f)
@@ -208,7 +208,7 @@ public class PCLCustomCardSlot
     public static void loadSingleCard(FileHandle f)
     {
         loadSingleCardImpl(f);
-        PGR.core.debugCards.refreshCards();
+        PGR.debugCards.refreshCards();
     }
 
     public static boolean isIDDuplicate(String input, AbstractCard.CardColor color)
@@ -348,7 +348,7 @@ public class PCLCustomCardSlot
 
         writer.writeString(EUIUtils.serialize(this, TToken.getType()), false);
         EUIUtils.logInfo(PCLCustomCardSlot.class, "Saved Custom Card: " + filePath);
-        PGR.core.debugCards.refreshCards();
+        PGR.debugCards.refreshCards();
     }
 
     public PCLDynamicData getBuilder(int i)

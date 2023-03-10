@@ -102,7 +102,7 @@ public class PCLCardRewardActionButton extends EUIButton
     protected void updateAugment() {
         if (this.card != null) {
             PCLAugmentWeights weights = new PCLAugmentWeights(this.card);
-            PCLAugmentData data = PCLAugment.getWeighted(PGR.core.dungeon.getRNG(), weights);
+            PCLAugmentData data = PCLAugment.getWeighted(PGR.dungeon.getRNG(), weights);
             if (data != null) {
                 augment = data.create();
                 augmentImage.setTexture(augment.getTexture())

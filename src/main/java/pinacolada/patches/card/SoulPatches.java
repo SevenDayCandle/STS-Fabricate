@@ -40,7 +40,7 @@ public class SoulPatches
         @SpirePostfixPatch
         public static void postfix(Soul __instance, AbstractCard card)
         {
-            PGR.core.dungeon.onCardObtained(card);
+            PGR.dungeon.onCardObtained(card);
         }
     }
 
@@ -50,7 +50,7 @@ public class SoulPatches
         @SpirePrefixPatch
         public static SpireReturn<Void> prefix(SoulGroup __instance, AbstractCard card, boolean obtain)
         {
-            if (obtain && !PGR.core.dungeon.tryObtainCard(card))
+            if (obtain && !PGR.dungeon.tryObtainCard(card))
             {
                 SFX.play(SFX.CARD_BURN, 0.8f, 1.2f, 0.5f);
                 PCLEffects.TopLevelQueue.add(new CardPoofEffect(card.current_x, card.current_y));

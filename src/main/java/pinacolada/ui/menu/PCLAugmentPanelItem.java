@@ -39,9 +39,9 @@ public class PCLAugmentPanelItem extends PCLTopPanelItem
     protected HashMap<PCLAugmentData, Integer> getAugmentData()
     {
         HashMap<PCLAugmentData, Integer> map = new HashMap<>();
-        for (String key : PGR.core.dungeon.augments.keySet())
+        for (String key : PGR.dungeon.augments.keySet())
         {
-            map.put(PCLAugment.get(key), PGR.core.dungeon.augments.get(key));
+            map.put(PCLAugment.get(key), PGR.dungeon.augments.get(key));
         }
         return map;
     }
@@ -49,9 +49,9 @@ public class PCLAugmentPanelItem extends PCLTopPanelItem
     protected void onClick()
     {
         super.onClick();
-        if (PGR.core.dungeon.getAugmentTotal() > 0)
+        if (PGR.dungeon.getAugmentTotal() > 0)
         {
-            PGR.core.augmentScreen.open(this::getAugmentData, PCLAugmentList.DEFAULT,true);
+            PGR.augmentScreen.open(this::getAugmentData, PCLAugmentList.DEFAULT,true);
         }
     }
 
@@ -77,7 +77,7 @@ public class PCLAugmentPanelItem extends PCLTopPanelItem
         {
             this.tooltip.setText(
                     PGR.core.strings.misc_viewAugments + " (" + PCLHotkeys.viewAugmentScreen.getKeyString() + ")",
-                    EUIUtils.format(PGR.core.strings.misc_viewAugmentsDescription, PGR.core.dungeon.getAugmentTotal() == 0 ? PGR.core.strings.misc_viewAugmentsNone : "")
+                    EUIUtils.format(PGR.core.strings.misc_viewAugmentsDescription, PGR.dungeon.getAugmentTotal() == 0 ? PGR.core.strings.misc_viewAugmentsNone : "")
             );
             EUITooltip.queueTooltip(this.tooltip);
         }
@@ -96,6 +96,6 @@ public class PCLAugmentPanelItem extends PCLTopPanelItem
     public void render(SpriteBatch sb)
     {
         super.render(sb);
-        EUIRenderHelpers.writeCentered(sb, EUIFontHelper.cardtitlefontNormal, String.valueOf(PGR.core.dungeon.getAugmentTotal()), this.x + (this.hb_w * 0.75f), this.y + 16f * Settings.scale, currentColor);
+        EUIRenderHelpers.writeCentered(sb, EUIFontHelper.cardtitlefontNormal, String.valueOf(PGR.dungeon.getAugmentTotal()), this.x + (this.hb_w * 0.75f), this.y + 16f * Settings.scale, currentColor);
     }
 }

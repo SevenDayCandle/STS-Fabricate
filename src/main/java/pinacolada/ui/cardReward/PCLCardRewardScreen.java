@@ -22,7 +22,7 @@ public class PCLCardRewardScreen extends EUIBase
 
     public void close()
     {
-        PGR.core.cardAffinities.close();
+        PGR.cardAffinities.close();
         rewardInfo.close();
         rewardBundle.close();
         purgingStoneUI.close();
@@ -42,7 +42,7 @@ public class PCLCardRewardScreen extends EUIBase
             return;
         }
 
-        PGR.core.cardAffinities.open(AbstractDungeon.player.masterDeck.group);
+        PGR.cardAffinities.open(AbstractDungeon.player.masterDeck.group);
         rewardBundle.open(rItem, cards);
         breakUI.open(rItem, cards, true);
         purgingStoneUI.open(rItem, cards, !breakUI.isActive);
@@ -51,7 +51,7 @@ public class PCLCardRewardScreen extends EUIBase
 
     public void preRender(SpriteBatch sb)
     {
-        PGR.core.cardAffinities.tryRender(sb);
+        PGR.cardAffinities.tryRender(sb);
         rewardInfo.tryRender(sb);
         purgingStoneUI.tryRender(sb);
         breakUI.tryRender(sb);
@@ -59,7 +59,7 @@ public class PCLCardRewardScreen extends EUIBase
 
     public void updateImpl()
     {
-        PGR.core.cardAffinities.tryUpdate(true);
+        PGR.cardAffinities.tryUpdate(true);
         purgingStoneUI.tryUpdate();
         rewardBundle.tryUpdate();
         breakUI.tryUpdate();

@@ -25,7 +25,7 @@ public class PCLCardRewardBreakAction extends PCLCardRewardAction
         AbstractCard target = actionProvider.doAction(card, rewardItem, cardIndex);
         PCLAugment augment = button.getAugment();
         if (augment != null) {
-            PGR.core.dungeon.addAugment(augment.ID, 1);
+            PGR.dungeon.addAugment(augment.ID, 1);
         }
         takeReward();
 

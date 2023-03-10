@@ -390,7 +390,7 @@ public class PCLLoadoutEditor extends AbstractMenuScreen
     {
         if (characterOption != null && data != null)
         {
-            PGR.core.seriesSelection.open(characterOption, data, this.onClose);
+            PGR.seriesSelection.open(characterOption, data, this.onClose);
         }
     }
 

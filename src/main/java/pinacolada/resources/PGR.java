@@ -12,16 +12,32 @@ import com.megacrit.cardcrawl.potions.AbstractPotion;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
+import extendedui.EUI;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleCard;
 import pinacolada.annotations.VisiblePotion;
 import pinacolada.annotations.VisiblePower;
 import pinacolada.annotations.VisibleRelic;
 import pinacolada.augments.AugmentStrings;
+import pinacolada.augments.PCLAugment;
+import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.commands.*;
+import pinacolada.effects.EffekseerEFK;
+import pinacolada.misc.PCLDungeon;
 import pinacolada.resources.pcl.PCLCoreResources;
 import pinacolada.rewards.pcl.AugmentReward;
 import pinacolada.skills.PSkill;
+import pinacolada.ui.cardEditor.PCLCustomCardSelectorScreen;
+import pinacolada.ui.cardReward.CardAffinityPanel;
+import pinacolada.ui.cardView.PCLSingleCardPopup;
+import pinacolada.ui.characterSelection.PCLCharacterSelectProvider;
+import pinacolada.ui.characterSelection.PCLLoadoutEditor;
+import pinacolada.ui.characterSelection.PCLSeriesSelectScreen;
+import pinacolada.ui.combat.PCLCombatScreen;
+import pinacolada.ui.customRun.PCLCustomRunScreen;
+import pinacolada.ui.debug.PCLDebugAugmentPanel;
+import pinacolada.ui.debug.PCLDebugCardPanel;
+import pinacolada.ui.menu.*;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.Collection;
@@ -31,12 +47,27 @@ import java.util.regex.Pattern;
 // Copied and modified from STS-AnimatorMod
 public class PGR
 {
+    private static final HashMap<AbstractCard.CardColor, PCLResources<?,?,?>> colorResourceMap = new HashMap<>();
+    private static final HashMap<AbstractPlayer.PlayerClass, PCLResources<?,?,?>> playerResourceMap = new HashMap<>();
     public static final String BASE_PREFIX = "pcl";
-
-    protected static final HashMap<AbstractCard.CardColor, PCLResources<?,?,?>> colorResourceMap = new HashMap<>();
-    protected static final HashMap<AbstractPlayer.PlayerClass, PCLResources<?,?,?>> playerResourceMap = new HashMap<>();
+    public static final PCLDungeon dungeon = PCLDungeon.register();
     public static PCLCoreResources core;
     public static PCLMainConfig config;
+    public static PCLAugmentPanelItem augmentPanel;
+    public static CardAffinityPanel cardAffinities;
+    public static PCLAffinityPoolModule affinityFilters;
+    public static PCLAugmentScreen augmentScreen;
+    public static PCLCharacterSelectProvider charSelectProvider;
+    public static PCLCombatScreen combatScreen;
+    public static PCLCustomCardSelectorScreen customCards;
+    public static PCLCustomRunScreen customMode;
+    public static PCLFtueScreen ftueScreen;
+    public static PCLLibraryModule libraryFilters;
+    public static PCLLoadoutEditor loadoutEditor;
+    public static PCLSeriesSelectScreen seriesSelection;
+    public static PCLSingleCardPopup cardPopup;
+    public static PCLDebugAugmentPanel debugAugments;
+    public static PCLDebugCardPanel debugCards;
 
     public static void registerResource(PCLResources<?,?,?> resources)
     {
@@ -285,6 +316,51 @@ public class PGR
             {
                 EUIUtils.logError(PGR.class, "Failed to load relic " + ct.getName() + ": " + e.getLocalizedMessage());
             }
+        }
+    }
+
+    public static void postInitialize()
+    {
+        PGR.registerCommands();
+        PCLAbstractPlayerData.postInitialize();
+        PGR.config.load(CardCrawlGame.saveSlot);
+        PGR.config.initializeOptions();
+        initializeUI();
+        PSkill.initialize();
+        PCLAugment.initialize();
+        PCLCustomCardSlot.initialize();
+        EffekseerEFK.initialize();
+    }
+
+    protected static void initializeUI()
+    {
+        PGR.cardAffinities = new CardAffinityPanel();
+        PGR.combatScreen = new PCLCombatScreen();
+        PGR.cardPopup = new PCLSingleCardPopup();
+        PGR.seriesSelection = new PCLSeriesSelectScreen();
+        PGR.loadoutEditor = new PCLLoadoutEditor();
+        PGR.customCards = new PCLCustomCardSelectorScreen();
+        PGR.customMode = new PCLCustomRunScreen();
+        PGR.charSelectProvider = new PCLCharacterSelectProvider();
+        PGR.affinityFilters = new PCLAffinityPoolModule(EUI.cardFilters);
+        PGR.libraryFilters = new PCLLibraryModule(EUI.customLibraryScreen);
+        PGR.augmentScreen = new PCLAugmentScreen();
+        PGR.augmentPanel = new PCLAugmentPanelItem();
+        PGR.ftueScreen = new PCLFtueScreen();
+        PGR.debugAugments = new PCLDebugAugmentPanel();
+        PGR.debugCards = new PCLDebugCardPanel();
+
+        EUI.addBattleSubscriber(PGR.combatScreen);
+        EUI.addSubscriber(PGR.cardPopup);
+        EUI.setCustomCardFilter(AbstractCard.CardColor.COLORLESS, PGR.affinityFilters);
+        EUI.setCustomCardFilter(AbstractCard.CardColor.CURSE, PGR.affinityFilters);
+        EUI.setCustomCardLibraryModule(AbstractCard.CardColor.COLORLESS, PGR.libraryFilters);
+        EUI.setCustomCardLibraryModule(AbstractCard.CardColor.CURSE, PGR.libraryFilters);
+        for (PCLResources<?,?,?> r : PGR.getRegisteredResources())
+        {
+            EUI.setCustomCardFilter(r.cardColor, PGR.affinityFilters);
+            EUI.setCustomCardPoolModule(r.cardColor, PGR.cardAffinities);
+            EUI.setCustomCardLibraryModule(r.cardColor, PGR.libraryFilters);
         }
     }
 

@@ -32,7 +32,7 @@ public class AugmentReward extends PCLReward
     public boolean claimReward()
     {
         SFX.play(SFX.RELIC_DROP_MAGICAL);
-        PGR.core.dungeon.addAugment(augment.ID, 1);
+        PGR.dungeon.addAugment(augment.ID, 1);
         this.isDone = true;
         return true;
     }

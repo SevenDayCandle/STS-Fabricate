@@ -168,7 +168,7 @@ public class GameUtilities
 
     public static boolean canObtainCopy(AbstractCard card)
     {
-        return PGR.core.dungeon.canObtainCopy(card);
+        return PGR.dungeon.canObtainCopy(card);
     }
 
     public static boolean canOrbApplyFocus(AbstractOrb orb)
@@ -1559,7 +1559,7 @@ public class GameUtilities
 
     public static boolean hasEncounteredEvent(String eventID)
     {
-        return PGR.core.dungeon.getMapData(eventID) != null;
+        return PGR.dungeon.getMapData(eventID) != null;
     }
 
     public static boolean hasLightAffinity(AbstractCard card)

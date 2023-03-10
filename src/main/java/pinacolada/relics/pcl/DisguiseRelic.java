@@ -29,12 +29,12 @@ public abstract class DisguiseRelic extends PCLRelic
                             String p = CreatureAnimationInfo.getRandomKey();
                             if (p != null)
                             {
-                                PGR.core.dungeon.setCreature(p);
+                                PGR.dungeon.setCreature(p);
                             }
                         }
                         else
                         {
-                            PGR.core.dungeon.setCreature(CreatureAnimationInfo.getIdentifierString(c));
+                            PGR.dungeon.setCreature(CreatureAnimationInfo.getIdentifierString(c));
                         }
                     });
         }

@@ -51,7 +51,7 @@ public class CustomMainMenuPanelButton extends MainMenuPanelButton
         MainMenuPanelButton.PanelClickResult result = ReflectionHacks.getPrivate(this, MainMenuPanelButton.class, "result");
         if (result == PCLEnum.Panels.CUSTOM_CARDS)
         {
-            PGR.core.customCards.open(null, PCLCustomCardSelectorScreen.currentColor, () -> {});
+            PGR.customCards.open(null, PCLCustomCardSelectorScreen.currentColor, () -> {});
         }
     }
 }

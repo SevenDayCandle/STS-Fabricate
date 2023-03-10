@@ -26,7 +26,7 @@ public class SingleCardViewPopupPatches
             PCLCard c = EUIUtils.safeCast(card, PCLCard.class);
             if (c != null && !c.isFlipped)
             {
-                PGR.core.cardPopup.open(c, null);
+                PGR.cardPopup.open(c, null);
 
                 return SpireReturn.Return(null);
             }
@@ -44,7 +44,7 @@ public class SingleCardViewPopupPatches
             PCLCard c = EUIUtils.safeCast(card, PCLCard.class);
             if (c != null && !c.isFlipped)
             {
-                PGR.core.cardPopup.open(c, group);
+                PGR.cardPopup.open(c, group);
 
                 return SpireReturn.Return(null);
             }

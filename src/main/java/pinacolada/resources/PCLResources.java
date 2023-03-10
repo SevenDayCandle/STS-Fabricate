@@ -273,6 +273,11 @@ public abstract class PCLResources<T extends PCLAbstractPlayerData, U extends PC
         this.isLoaded = true;
     }
 
+    public void setupTooltips()
+    {
+        tooltips = getTooltips();
+    }
+
     // The colorless pool is filled with ALL colorless cards by default. This will determine whether a colorless card is allowed when playing as a PCL character
     public boolean containsColorless(AbstractCard card)
     {
@@ -294,10 +299,7 @@ public abstract class PCLResources<T extends PCLAbstractPlayerData, U extends PC
     // Intercepts the creation of Ascender's Bane upon starting a run
     public PCLCardData getAscendersBane() {return null;}
 
-    public void setupTooltips()
-    {
-
-    }
-
     public abstract T getData();
+
+    public abstract V getTooltips();
 }

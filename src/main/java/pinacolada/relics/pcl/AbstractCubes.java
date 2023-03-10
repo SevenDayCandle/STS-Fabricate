@@ -40,7 +40,7 @@ public abstract class AbstractCubes extends PCLRelic implements CardRewardAction
 
     public AbstractCard getReward(AbstractCard card, RewardItem rewardItem)
     {
-        return PGR.core.dungeon.getRandomRewardCard(rewardItem.cards, false, true);
+        return PGR.dungeon.getRandomRewardCard(rewardItem.cards, false, true);
     }
 
     @Override

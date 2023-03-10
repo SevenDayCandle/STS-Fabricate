@@ -41,7 +41,7 @@ public class ObtainAugmentEffect extends PCLEffectWithCallback<PCLAugment>
 
     protected void firstUpdate()
     {
-        PGR.core.dungeon.addAugment(augment.ID, 1);
+        PGR.dungeon.addAugment(augment.ID, 1);
     }
 
     @Override

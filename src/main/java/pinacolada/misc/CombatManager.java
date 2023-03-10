@@ -198,7 +198,7 @@ public class CombatManager
         EFFECT_BONUSES.clear();
         PASSIVE_DAMAGE_BONUSES.clear();
         PLAYER_EFFECT_BONUSES.clear();
-        PGR.core.combatScreen.formulaDisplay.initialize();
+        PGR.combatScreen.formulaDisplay.initialize();
         controlPile.clear();
         GridCardSelectScreenHelper.clear(true);
         playerSystem.initialize();
@@ -437,7 +437,7 @@ public class CombatManager
     {
         clearStats();
 
-        PGR.core.dungeon.reset();
+        PGR.dungeon.reset();
     }
 
     public static void onIncreaseAffinityLevel(PCLAffinity affinity)
@@ -501,7 +501,7 @@ public class CombatManager
     {
         clearStats();
 
-        PGR.core.dungeon.reset();
+        PGR.dungeon.reset();
     }
 
     public static void onStartup()
@@ -744,7 +744,7 @@ public class CombatManager
 
     public static void onVictory()
     {
-        PGR.core.dungeon.updateLongestMatchCombo(playerSystem.getActiveMeter().getLongestMatchCombo());
+        PGR.dungeon.updateLongestMatchCombo(playerSystem.getActiveMeter().getLongestMatchCombo());
         clearStats();
     }
 
@@ -770,7 +770,7 @@ public class CombatManager
             battleID = UUID.randomUUID();
         }
 
-        PGR.core.combatScreen.initialize();
+        PGR.combatScreen.initialize();
     }
 
 

@@ -135,7 +135,7 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase
     {
         if (loadout != null && characterOption != null && data != null)
         {
-            PGR.core.loadoutEditor.open(loadout, data, characterOption, () -> screenRefresh(runProvider, characterOption));
+            PGR.loadoutEditor.open(loadout, data, characterOption, () -> screenRefresh(runProvider, characterOption));
         }
     }
 
@@ -143,7 +143,7 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase
     {
         if (characterOption != null && data != null)
         {
-            PGR.core.seriesSelection.open(characterOption, data, () -> screenRefresh(runProvider, characterOption));
+            PGR.seriesSelection.open(characterOption, data, () -> screenRefresh(runProvider, characterOption));
         }
     }
 

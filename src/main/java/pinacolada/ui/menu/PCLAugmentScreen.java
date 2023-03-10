@@ -42,7 +42,7 @@ public class PCLAugmentScreen extends AbstractDungeonScreen
                     .addCallback(selection -> {
                         for (AbstractCard c : selection)
                         {
-                            PGR.core.dungeon.addAugment(augment.ID, -1);
+                            PGR.dungeon.addAugment(augment.ID, -1);
                             augment.addToCard((PCLCard) c);
                             refreshAugments();
                         }
@@ -78,7 +78,7 @@ public class PCLAugmentScreen extends AbstractDungeonScreen
                 addItem.invoke(augment, amount);
             }
         }
-        PGR.core.cardAffinities.open(entries, null, false);
+        PGR.cardAffinities.open(entries, null, false);
     }
 
     @Override
@@ -97,7 +97,7 @@ public class PCLAugmentScreen extends AbstractDungeonScreen
         {
             panel.updateImpl();
         }
-        PGR.core.cardAffinities.tryUpdate(true);
+        PGR.cardAffinities.tryUpdate(true);
 
     }
 
@@ -118,7 +118,7 @@ public class PCLAugmentScreen extends AbstractDungeonScreen
     public void renderImpl(SpriteBatch sb)
     {
         super.renderImpl(sb);
-        PGR.core.cardAffinities.tryRender(sb);
+        PGR.cardAffinities.tryRender(sb);
     }
 
 

@@ -73,7 +73,7 @@ public abstract class PCLAbstractPlayerData
 
     public static Random getRNG()
     {
-        return PGR.core.dungeon.getRNG();
+        return PGR.dungeon.getRNG();
     }
 
     public static void postInitialize()

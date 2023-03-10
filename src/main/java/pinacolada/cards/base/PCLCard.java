@@ -711,7 +711,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
 
     public ColoredString getDamageString() {
         if (isDamageModified) {
-            return new ColoredString(damage, damage >= baseDamage * PGR.core.dungeon.getDivisor() ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR);
+            return new ColoredString(damage, damage >= baseDamage * PGR.dungeon.getDivisor() ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR);
         }
 
         return new ColoredString(baseDamage, Settings.CREAM_COLOR);
@@ -1136,7 +1136,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     {
         for (PCLAugment augment : getAugments()) {
             if (augment.canRemove()) {
-                PGR.core.dungeon.addAugment(augment.ID, 1);
+                PGR.dungeon.addAugment(augment.ID, 1);
             }
         }
     }

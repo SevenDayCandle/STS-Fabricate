@@ -115,7 +115,7 @@ public class PCLCardRewardBonus extends EUIBase
 
         for (AbstractCard card : toRemove)
         {
-            final AbstractCard replacement = PGR.core.dungeon.getRandomRewardCard(cards, true, false);
+            final AbstractCard replacement = PGR.dungeon.getRandomRewardCard(cards, true, false);
             if (replacement != null)
             {
                 GameUtilities.copyVisualProperties(replacement, card);

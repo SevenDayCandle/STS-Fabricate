@@ -177,7 +177,7 @@ public class PCLSingleCardPopup extends EUIBase
 
     private void applyAugment(PCLAugment augment)
     {
-        PGR.core.dungeon.addAugment(augment.ID, -1);
+        PGR.dungeon.addAugment(augment.ID, -1);
         baseCard.addAugment(augment);
         this.card = baseCard.makePopupCopy();
         this.upgradedCard = getUpgradeCard();
@@ -418,7 +418,7 @@ public class PCLSingleCardPopup extends EUIBase
         {
             this.card = baseCard.makePopupCopy();
             this.upgradedCard = getUpgradeCard();
-            PGR.core.dungeon.addAugment(augment.ID, 1);
+            PGR.dungeon.addAugment(augment.ID, 1);
             refreshAugments();
         }
     }

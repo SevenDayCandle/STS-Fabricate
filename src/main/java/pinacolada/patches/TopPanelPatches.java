@@ -23,11 +23,11 @@ public class TopPanelPatches
                     {
                         if (m.getFieldName().equals("currentHealth"))
                         {
-                            m.replace("{ $_ = pinacolada.resources.PGR.core.dungeon.getCurrentHealth($0); }");
+                            m.replace("{ $_ = pinacolada.resources.PGR.dungeon.getCurrentHealth($0); }");
                         }
                         else if (m.getFieldName().equals("maxHealth"))
                         {
-                            m.replace("{ $_ = pinacolada.resources.PGR.core.dungeon.getMaxHealth($0); }");
+                            m.replace("{ $_ = pinacolada.resources.PGR.dungeon.getMaxHealth($0); }");
                         }
                     }
                 }

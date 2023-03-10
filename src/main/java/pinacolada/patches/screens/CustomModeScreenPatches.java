@@ -20,7 +20,7 @@ public class CustomModeScreenPatches
         public static void postfix(CustomModeScreen screen)
         {
             // Must perform initialization right after mods are first initialized
-            PGR.core.customMode.initialize(screen);
+            PGR.customMode.initialize(screen);
         }
     }
 
@@ -33,7 +33,7 @@ public class CustomModeScreenPatches
         {
             if (!PGR.config.vanillaLibraryScreen.get())
             {
-                PGR.core.customMode.open();
+                PGR.customMode.open();
             }
         }
     }
@@ -47,7 +47,7 @@ public class CustomModeScreenPatches
         {
             if (!PGR.config.vanillaLibraryScreen.get())
             {
-                PGR.core.customMode.updateImpl();
+                PGR.customMode.updateImpl();
                 return SpireReturn.Return();
             }
             return SpireReturn.Continue();
@@ -63,7 +63,7 @@ public class CustomModeScreenPatches
         {
             if (!PGR.config.vanillaLibraryScreen.get())
             {
-                PGR.core.customMode.renderImpl(sb);
+                PGR.customMode.renderImpl(sb);
                 return SpireReturn.Return();
             }
             return SpireReturn.Continue();

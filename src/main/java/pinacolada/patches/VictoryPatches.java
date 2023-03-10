@@ -26,7 +26,7 @@ public class VictoryPatches
 
     private static int getAscensionGlyphScoreBonus(int baseScore)
     {
-        return MathUtils.round((float) baseScore * 0.02F * EUIUtils.sum(PGR.core.dungeon.ascensionGlyphCounters, Integer::floatValue));
+        return MathUtils.round((float) baseScore * 0.02F * EUIUtils.sum(PGR.dungeon.ascensionGlyphCounters, Integer::floatValue));
     }
 
     private static GameOverStat getAscensionGlyphStats()
@@ -37,7 +37,7 @@ public class VictoryPatches
     // TODO Rework for individual pinacolada.characters or remove
     private static GameOverStat getLongestComboStats()
     {
-        return new GameOverStat(PGR.core.tooltips.matchCombo.title, null, String.valueOf(PGR.core.dungeon.getLongestMatchCombo()));
+        return new GameOverStat(PGR.core.tooltips.matchCombo.title, null, String.valueOf(PGR.dungeon.getLongestMatchCombo()));
     }
 
     @SpirePatch(clz = VictoryRoom.class, method = "onPlayerEntry")

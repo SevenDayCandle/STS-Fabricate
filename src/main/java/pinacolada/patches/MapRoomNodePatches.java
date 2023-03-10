@@ -20,11 +20,11 @@ public class MapRoomNodePatches
         @SpirePostfixPatch
         public static boolean postfix(boolean __result, MapRoomNode __instance, MapRoomNode node)
         {
-            if (PGR.core.dungeon.canJumpNextFloor())
+            if (PGR.dungeon.canJumpNextFloor())
             {
                 for (MapEdge edge : __instance.getEdges())
                 {
-                    if (node.y == edge.dstY || PGR.core.dungeon.canJumpAnywhere())
+                    if (node.y == edge.dstY || PGR.dungeon.canJumpAnywhere())
                     {
                         return true;
                     }
@@ -43,7 +43,7 @@ public class MapRoomNodePatches
         @SpirePostfixPatch
         public static void postfix(MapRoomNode __instance)
         {
-            PGR.core.dungeon.setJumpNextFloor(false);
+            PGR.dungeon.setJumpNextFloor(false);
         }
     }
 }

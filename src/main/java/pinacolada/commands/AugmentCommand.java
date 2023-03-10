@@ -31,7 +31,7 @@ public class AugmentCommand extends ConsoleCommand
         Integer amount = ConvertHelper.tryParseInt(tokens[2], 1);
         if (augment != null)
         {
-            PGR.core.dungeon.addAugment(augment.ID, amount);
+            PGR.dungeon.addAugment(augment.ID, amount);
             DevConsole.log("Obtained " + amount + " " + tokens[1]);
         }
         else

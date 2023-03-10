@@ -208,8 +208,8 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen
         cardGrid.addCards(container.getAllCards());
         updateStartingDeckText();
 
-        PGR.core.cardAffinities.setActive(true);
-        PGR.core.cardAffinities.open(container.allCards,
+        PGR.cardAffinities.setActive(true);
+        PGR.cardAffinities.open(container.allCards,
                 false,
                 null,
                 true);
@@ -221,7 +221,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen
         if (characterOption != null && current != null && data != null)
         {
             proceed();
-            PGR.core.loadoutEditor.open(current, data, characterOption, this.onClose);
+            PGR.loadoutEditor.open(current, data, characterOption, this.onClose);
         }
     }
 
@@ -276,9 +276,9 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen
 
     protected void totalCardsChanged(int totalCards)
     {
-        if (PGR.core.cardAffinities.isActive)
+        if (PGR.cardAffinities.isActive)
         {
-            PGR.core.cardAffinities.open(container.allCards, false, null, true);
+            PGR.cardAffinities.open(container.allCards, false, null, true);
         }
 
         typesAmount.setLabel(EUIUtils.joinStrings(" | ",
@@ -302,7 +302,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen
     public void updateImpl()
     {
         backgroundImage.updateImpl();
-        PGR.core.cardAffinities.tryUpdate(true);
+        PGR.cardAffinities.tryUpdate(true);
 
         if (previewCardsEffect != null)
         {
@@ -369,7 +369,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen
         }
         else
         {
-            PGR.core.cardAffinities.tryRender(sb);
+            PGR.cardAffinities.tryRender(sb);
         }
 
         contextMenu.tryRender(sb);

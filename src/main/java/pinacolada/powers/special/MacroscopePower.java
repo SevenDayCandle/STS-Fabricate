@@ -30,7 +30,7 @@ public class MacroscopePower extends PCLPower implements InvisiblePower, OnOrbAp
         if (owner instanceof AbstractPlayer)
         {
             CombatManager.subscribe(this);
-            PGR.core.dungeon.setDivisor(Macroscope.MULTIPLIER);
+            PGR.dungeon.setDivisor(Macroscope.MULTIPLIER);
         }
     }
 
@@ -57,14 +57,14 @@ public class MacroscopePower extends PCLPower implements InvisiblePower, OnOrbAp
     public void onRemove()
     {
         super.onRemove();
-        if (PGR.core.dungeon.getDivisor() > 1)
+        if (PGR.dungeon.getDivisor() > 1)
         {
             owner.maxHealth = Math.max(1, AbstractDungeon.player.maxHealth / Macroscope.MULTIPLIER);
             owner.currentHealth = Math.max(1, AbstractDungeon.player.currentHealth / Macroscope.MULTIPLIER);
             owner.healthBarUpdatedEvent();
             if (owner instanceof AbstractPlayer)
             {
-                PGR.core.dungeon.setDivisor(1);
+                PGR.dungeon.setDivisor(1);
             }
         }
     }

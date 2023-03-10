@@ -19,7 +19,7 @@ public class CharacterSelectScreenPatches
         @SpirePostfixPatch
         public static void initialize(CharacterSelectScreen __instance)
         {
-            PGR.core.charSelectProvider.initialize(__instance);
+            PGR.charSelectProvider.initialize(__instance);
         }
     }
 
@@ -29,7 +29,7 @@ public class CharacterSelectScreenPatches
         @SpirePostfixPatch
         public static void postfix(CharacterSelectScreen __instance, SpriteBatch sb)
         {
-            PGR.core.charSelectProvider.render(__instance, sb);
+            PGR.charSelectProvider.render(__instance, sb);
         }
     }
 
@@ -39,7 +39,7 @@ public class CharacterSelectScreenPatches
         @SpirePostfixPatch
         public static void postfix(CharacterSelectScreen __instance)
         {
-            PGR.core.charSelectProvider.update(__instance);
+            PGR.charSelectProvider.update(__instance);
         }
 
         @SpirePrefixPatch

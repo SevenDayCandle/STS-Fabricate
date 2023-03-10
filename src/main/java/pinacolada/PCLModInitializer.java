@@ -70,6 +70,7 @@ public class PCLModInitializer implements OnStartBattleSubscriber, PostBattleSub
         PGR.loadCustomPowers();
         PGR.registerRewards();
         CombatManager.initializeEvents();
+        PGR.postInitialize();
     }
 
     @Override
