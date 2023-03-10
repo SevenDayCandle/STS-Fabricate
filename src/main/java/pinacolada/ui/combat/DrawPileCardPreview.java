@@ -135,8 +135,8 @@ public class DrawPileCardPreview
 
     public static void reset()
     {
-        current = null;
         PREVIEWS.clear();
+        current = null;
     }
 
     public boolean isHighlighted()

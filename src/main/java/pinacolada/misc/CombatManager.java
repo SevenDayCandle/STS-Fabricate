@@ -1,5 +1,6 @@
 package pinacolada.misc;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.GameActionManager;
 import com.megacrit.cardcrawl.actions.utility.UnlimboAction;
@@ -1020,8 +1021,11 @@ public class CombatManager
         subscriberDo(OnAttackSubscriber.class, s -> s.onAttack(info, damageAmount, target));
     }
 
-    public static void update()
+    public static void update(PCLCard hoveredCard, AbstractCreature target, boolean draggingCard)
     {
+        summons.update();
+        controlPile.update();
+        playerSystem.update(hoveredCard, target, draggingCard);
         if (currentPhase != AbstractDungeon.actionManager.phase)
         {
             currentPhase = AbstractDungeon.actionManager.phase;
@@ -1033,6 +1037,13 @@ public class CombatManager
                 refreshHandLayout();
             }
         }
+    }
+
+    public static void render(SpriteBatch sb)
+    {
+        summons.render(sb);
+        controlPile.render(sb);
+        playerSystem.render(sb);
     }
 
     public static void onChangeStance(AbstractStance oldStance, AbstractStance newStance)

@@ -746,6 +746,28 @@ public class GameUtilities
         return creature.currentHealth + (addTempHP ? TempHPField.tempHp.get(creature) : 0) + (addBlock ? creature.currentBlock : 0);
     }
 
+    public static int getHealthBarAmount(AbstractCreature c, int amount, boolean subtractBlock, boolean subtractTempHP)
+    {
+        if (c == null || (!subtractBlock && !subtractTempHP))
+        {
+            return amount;
+        }
+        
+        if (amount > 0 && subtractBlock)
+        {
+            int blocked = Math.min(c.currentBlock, amount);
+            amount -= blocked;
+        }
+
+        if (amount > 0 && subtractTempHP)
+        {
+            int blocked = Math.min(TempHPField.tempHp.get(c), amount);
+            amount -= blocked;
+        }
+
+        return Math.max(amount, 0);
+    }
+
     public static float getHealthPercentage(AbstractCreature creature)
     {
         return creature.currentHealth / (float) creature.maxHealth;

@@ -19,11 +19,9 @@ import pinacolada.utilities.GameUtilities;
 import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.player;
 
 // Copied and modified from STS-AnimatorMod
-// TODO Merge with CombatStats or PlayerSystem
 public class PCLCombatScreen extends EUIBase
 {
     public final PowerFormulaDisplay formulaDisplay;
-    public final CombatHelper helper = new CombatHelper();
 
     public PCLCombatScreen()
     {
@@ -33,7 +31,6 @@ public class PCLCombatScreen extends EUIBase
 
     public void initialize() {
         setActive(GameUtilities.inBattle());
-        helper.clear();
     }
 
     @Override
@@ -73,11 +70,7 @@ public class PCLCombatScreen extends EUIBase
             }
         }
 
-        CombatManager.update();
-        CombatManager.playerSystem.update(hoveredCard, target, draggingCard);
-        CombatManager.summons.update();
-        CombatManager.controlPile.update();
-        helper.update();
+        CombatManager.update(hoveredCard, target, draggingCard);
 
         if (PGR.config.showFormulaDisplay.get())
         {
@@ -97,9 +90,7 @@ public class PCLCombatScreen extends EUIBase
             return;
         }
 
-        CombatManager.playerSystem.render(sb);
-        CombatManager.summons.render(sb);
-        CombatManager.controlPile.render(sb);
+        CombatManager.render(sb);
         DrawPileCardPreview.updateAndRenderCurrent(sb);
         if (PGR.config.showFormulaDisplay.get())
         {

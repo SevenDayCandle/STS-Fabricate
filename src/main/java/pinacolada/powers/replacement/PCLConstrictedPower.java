@@ -6,7 +6,7 @@ import com.evacipated.cardcrawl.mod.stslib.powers.interfaces.HealthBarRenderPowe
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.powers.ConstrictedPower;
-import pinacolada.ui.combat.CombatHelper;
+import pinacolada.utilities.GameUtilities;
 
 // Variant of Constricted that shows health being decreased and that is cloneable
 public class PCLConstrictedPower extends ConstrictedPower implements CloneablePowerInterface, HealthBarRenderPower
@@ -21,7 +21,7 @@ public class PCLConstrictedPower extends ConstrictedPower implements CloneablePo
     @Override
     public int getHealthBarAmount()
     {
-        return CombatHelper.getHealthBarAmount(owner, amount, true, true);
+        return GameUtilities.getHealthBarAmount(owner, amount, true, true);
     }
 
     @Override

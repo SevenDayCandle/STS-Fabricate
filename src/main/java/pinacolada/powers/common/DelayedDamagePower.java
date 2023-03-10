@@ -7,7 +7,6 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import pinacolada.actions.PCLActions;
 import pinacolada.effects.SFX;
 import pinacolada.powers.PCLPower;
-import pinacolada.ui.combat.CombatHelper;
 import pinacolada.utilities.GameUtilities;
 
 public class DelayedDamagePower extends PCLPower implements HealthBarRenderPower
@@ -40,7 +39,7 @@ public class DelayedDamagePower extends PCLPower implements HealthBarRenderPower
     @Override
     public int getHealthBarAmount()
     {
-        return CombatHelper.getHealthBarAmount(owner, amount, true, true);
+        return GameUtilities.getHealthBarAmount(owner, amount, true, true);
     }
 
     @Override
