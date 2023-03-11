@@ -24,6 +24,7 @@ import pinacolada.interfaces.markers.PointerProvider;
 import pinacolada.misc.CombatManager;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PCLResources;
+import pinacolada.resources.PCLStrings;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.Skills;
@@ -60,7 +61,7 @@ public abstract class PCLPotion extends AbstractPotion implements TooltipProvide
         return createFullID(PGR.core, type);
     }
 
-    public static String createFullID(PCLResources<?,?,?> resources, Class<? extends PCLPotion> type)
+    public static String createFullID(PCLResources<?,?,?,?> resources, Class<? extends PCLPotion> type)
     {
         return resources.createID(type.getSimpleName());
     }

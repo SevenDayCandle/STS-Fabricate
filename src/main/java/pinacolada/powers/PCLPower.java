@@ -36,6 +36,7 @@ import pinacolada.interfaces.markers.ClickableProvider;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PCLResources;
+import pinacolada.resources.PCLStrings;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
@@ -119,7 +120,7 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         return createFullID(PGR.core, type);
     }
 
-    public static String createFullID(PCLResources<?,?,?> resources, Class<? extends PCLPower> type)
+    public static String createFullID(PCLResources<?,?,?,?> resources, Class<? extends PCLPower> type)
     {
         return resources.createID(type.getSimpleName());
     }

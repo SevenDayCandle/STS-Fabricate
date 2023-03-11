@@ -21,6 +21,7 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.CardTagItem;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLResources;
+import pinacolada.resources.PCLStrings;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.pcl.PCLCoreImages;
@@ -205,7 +206,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
                 }))
                 .setTooltip(PGR.core.tooltips.soulbound);
 
-        PCLResources<?,?,?> resources = PGR.getResources(effect.currentSlot.slotColor);
+        PCLResources<?,?,?,?> resources = PGR.getResources(effect.currentSlot.slotColor);
         if (resources != null)
         {
             loadoutDropdown.setItems(PCLLoadout.getAll(effect.currentSlot.slotColor));

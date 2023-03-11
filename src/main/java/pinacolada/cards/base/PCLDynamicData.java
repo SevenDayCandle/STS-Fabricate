@@ -11,6 +11,7 @@ import pinacolada.cards.base.fields.*;
 import pinacolada.cards.base.tags.CardTagItem;
 import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.resources.PCLResources;
+import pinacolada.resources.PCLStrings;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.skills.PSkill;
@@ -41,7 +42,7 @@ public class PCLDynamicData extends PCLCardData
         super(PCLDynamicCard.class, PGR.core, id, null);
     }
 
-    public PCLDynamicData(String id, PCLResources<?,?,?> resources)
+    public PCLDynamicData(String id, PCLResources<?,?,?,?> resources)
     {
         super(PCLDynamicCard.class, resources, id, null);
     }

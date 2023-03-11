@@ -17,6 +17,7 @@ import pinacolada.cards.base.tags.CardTagItem;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLResources;
+import pinacolada.resources.PCLStrings;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.utilities.GameUtilities;
@@ -59,7 +60,7 @@ public class PCLCardData implements CardObject
     public AbstractCard.CardType cardType = AbstractCard.CardType.SKILL;
     public AbstractCard.CardColor cardColor = AbstractCard.CardColor.COLORLESS;
     public AbstractCard.CardRarity cardRarity = AbstractCard.CardRarity.BASIC;
-    public PCLResources<?,?,?> resources;
+    public PCLResources<?,?,?,?> resources;
     public PCLAttackType attackType = PCLAttackType.Normal;
     public PCLCardDataAffinityGroup affinities = new PCLCardDataAffinityGroup();
     public PCLLoadout loadout;
@@ -79,19 +80,19 @@ public class PCLCardData implements CardObject
     private Constructor<? extends PCLCard> constructor;
     private TextureAtlas.AtlasRegion cardIcon = null;
 
-    public PCLCardData(Class<? extends PCLCard> type, PCLResources<?,?,?> resources)
+    public PCLCardData(Class<? extends PCLCard> type, PCLResources<?,?,?,?> resources)
     {
         this(type, resources, resources.createID(type.getSimpleName()));
     }
 
-    public PCLCardData(Class<? extends PCLCard> type, PCLResources<?,?,?> resources, String cardID)
+    public PCLCardData(Class<? extends PCLCard> type, PCLResources<?,?,?,?> resources, String cardID)
     {
         this(type, resources, cardID, PGR.getCardStrings(cardID));
 
         this.imagePath = PGR.getCardImage(cardID);
     }
 
-    public PCLCardData(Class<? extends PCLCard> type, PCLResources<?,?,?> resources, String cardID, CardStrings strings)
+    public PCLCardData(Class<? extends PCLCard> type, PCLResources<?,?,?,?> resources, String cardID, CardStrings strings)
     {
         this.ID = cardID;
         this.resources = resources;

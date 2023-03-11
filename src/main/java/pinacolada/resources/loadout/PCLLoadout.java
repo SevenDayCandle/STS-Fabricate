@@ -21,6 +21,7 @@ import pinacolada.relics.PCLRelic;
 import pinacolada.relics.pcl.*;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PCLResources;
+import pinacolada.resources.PCLStrings;
 import pinacolada.resources.PGR;
 import pinacolada.skills.skills.PSpecialSkill;
 import pinacolada.ui.characterSelection.PCLBaseStatEditor;
@@ -355,7 +356,7 @@ public abstract class PCLLoadout
         return presets[preset] = getDefaultData(preset);
     }
 
-    public PCLResources<?,?,?> getResources() {return PGR.getResources(color);}
+    public PCLResources<?,?,?,?> getResources() {return PGR.getResources(color);}
 
     public ArrayList<String> getStartingDeck()
     {
@@ -506,7 +507,7 @@ public abstract class PCLLoadout
 
     public boolean isLocked()
     {
-        PCLResources<?,?,?> resources = getResources();
+        PCLResources<?,?,?,?> resources = getResources();
         return resources != null && resources.getUnlockLevel() < unlockLevel;
     }
 

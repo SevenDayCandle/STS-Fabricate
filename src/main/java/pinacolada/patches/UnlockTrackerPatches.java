@@ -11,6 +11,7 @@ import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUIUtils;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PCLResources;
+import pinacolada.resources.PCLStrings;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
@@ -22,12 +23,12 @@ public class UnlockTrackerPatches
     private static final String KEY_TOTAL_SCORE = "TotalScore";
     private static final String KEY_HIGH_SCORE = "HighScore";
 
-    private static String createFullID(PCLResources<?,?,?> resources, String name)
+    private static String createFullID(PCLResources<?,?,?,?> resources, String name)
     {
         return resources.createID(name);
     }
 
-    public static void validate(PCLResources<?,?,?> resources)
+    public static void validate(PCLResources<?,?,?,?> resources)
     {
         final float progress = UnlockTracker.getCurrentProgress(resources.playerClass);
         final int cost = UnlockTracker.getCurrentScoreCost(resources.playerClass);
@@ -61,7 +62,7 @@ public class UnlockTrackerPatches
                 return SpireReturn.Continue();
             }
 
-            PCLResources<?,?,?> r = PGR.getResources(c);
+            PCLResources<?,?,?,?> r = PGR.getResources(c);
             int p = UnlockTracker.unlockProgress.getInteger(KEY_PROGRESS, 0);
             p += scoreGained;
             int total;

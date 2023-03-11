@@ -44,7 +44,7 @@ public class CardLibraryPatches
         AbstractPlayer.PlayerClass playerClass = GameUtilities.getPlayerClass();
         if (GameUtilities.isPCLPlayerClass(playerClass))
         {
-            PCLResources<?,?,?> resources = PGR.getResources(playerClass);
+            PCLResources<?,?,?,?> resources = PGR.getResources(playerClass);
             return tryReplace(resources, card);
         }
         else if (PGR.config.replaceCardsPCL.get())
@@ -68,7 +68,7 @@ public class CardLibraryPatches
         return card;
     }
 
-    public static AbstractCard tryReplace(PCLResources<?,?,?> resources, AbstractCard card)
+    public static AbstractCard tryReplace(PCLResources<?,?,?,?> resources, AbstractCard card)
     {
         PCLCardData data = resources.getReplacement(card.cardID);
         if (data != null)
@@ -87,7 +87,7 @@ public class CardLibraryPatches
         AbstractPlayer.PlayerClass playerClass = GameUtilities.getPlayerClass();
         if (GameUtilities.isPCLPlayerClass(playerClass))
         {
-            PCLResources<?,?,?> resources = PGR.getResources(playerClass);
+            PCLResources<?,?,?,?> resources = PGR.getResources(playerClass);
             return resources.getReplacement(id);
         }
         return null;
@@ -143,7 +143,7 @@ public class CardLibraryPatches
                 AbstractPlayer.PlayerClass pClass = GameUtilities.getPlayerClass();
                 if (GameUtilities.isPCLPlayerClass(pClass))
                 {
-                    PCLResources<?, ?, ?> resources = PGR.getResources(pClass);
+                    PCLResources<?, ?, ?, ?> resources = PGR.getResources(pClass);
                     PCLCardData bane = resources.getAscendersBane();
                     if (bane != null)
                     {

@@ -13,6 +13,7 @@ import javassist.expr.MethodCall;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.misc.CombatManager;
 import pinacolada.resources.PCLResources;
+import pinacolada.resources.PCLStrings;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
@@ -49,7 +50,7 @@ public class AbstractDungeonPatches
             AbstractPlayer.PlayerClass pClass = GameUtilities.getPlayerClass();
             if (GameUtilities.isPCLPlayerClass(pClass))
             {
-                PCLResources<?,?,?> resources = PGR.getResources(pClass);
+                PCLResources<?,?,?,?> resources = PGR.getResources(pClass);
                 PCLCardData bane = resources.getAscendersBane();
                 if (bane != null)
                 {

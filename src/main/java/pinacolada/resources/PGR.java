@@ -47,8 +47,8 @@ import java.util.regex.Pattern;
 // Copied and modified from STS-AnimatorMod
 public class PGR
 {
-    private static final HashMap<AbstractCard.CardColor, PCLResources<?,?,?>> colorResourceMap = new HashMap<>();
-    private static final HashMap<AbstractPlayer.PlayerClass, PCLResources<?,?,?>> playerResourceMap = new HashMap<>();
+    private static final HashMap<AbstractCard.CardColor, PCLResources<?,?,?,?>> colorResourceMap = new HashMap<>();
+    private static final HashMap<AbstractPlayer.PlayerClass, PCLResources<?,?,?,?>> playerResourceMap = new HashMap<>();
     public static final String BASE_PREFIX = "pcl";
     public static final PCLDungeon dungeon = PCLDungeon.register();
     public static PCLCoreResources core;
@@ -69,7 +69,7 @@ public class PGR
     public static PCLDebugAugmentPanel debugAugments;
     public static PCLDebugCardPanel debugCards;
 
-    public static void registerResource(PCLResources<?,?,?> resources)
+    public static void registerResource(PCLResources<?,?,?,?> resources)
     {
         if (core == null)
         {
@@ -122,13 +122,13 @@ public class PGR
 
     public static CharacterStrings getCharacterStrings(AbstractCard.CardColor cardColor)
     {
-        PCLResources<?,?,?> resources = colorResourceMap.getOrDefault(cardColor, null);
+        PCLResources<?,?,?,?> resources = colorResourceMap.getOrDefault(cardColor, null);
         return resources != null ? resources.getCharacterStrings() : null;
     }
 
     public static CharacterStrings getCharacterStrings(AbstractPlayer.PlayerClass player)
     {
-        PCLResources<?,?,?> resources = playerResourceMap.getOrDefault(player, null);
+        PCLResources<?,?,?,?> resources = playerResourceMap.getOrDefault(player, null);
         return resources != null ? resources.getCharacterStrings() : null;
     }
 
@@ -167,17 +167,17 @@ public class PGR
         return getResources(playerClass).data;
     }
 
-    public static Collection<PCLResources<?,?,?>> getRegisteredResources()
+    public static Collection<PCLResources<?,?,?,?>> getRegisteredResources()
     {
         return colorResourceMap.values();
     }
 
-    public static PCLResources<?,?,?> getResources(AbstractCard.CardColor cardColor)
+    public static PCLResources<?,?,?,?> getResources(AbstractCard.CardColor cardColor)
     {
         return colorResourceMap.getOrDefault(cardColor, core);
     }
 
-    public static PCLResources<?,?,?> getResources(AbstractPlayer.PlayerClass playerClass)
+    public static PCLResources<?,?,?,?> getResources(AbstractPlayer.PlayerClass playerClass)
     {
         return playerResourceMap.getOrDefault(playerClass, core);
     }
@@ -235,7 +235,7 @@ public class PGR
         initialize(core);
     }
 
-    protected static void initialize(PCLResources<?,?,?> resources)
+    protected static void initialize(PCLResources<?,?,?,?> resources)
     {
         resources.initializeColor();
 
@@ -356,7 +356,7 @@ public class PGR
         EUI.setCustomCardFilter(AbstractCard.CardColor.CURSE, PGR.affinityFilters);
         EUI.setCustomCardLibraryModule(AbstractCard.CardColor.COLORLESS, PGR.libraryFilters);
         EUI.setCustomCardLibraryModule(AbstractCard.CardColor.CURSE, PGR.libraryFilters);
-        for (PCLResources<?,?,?> r : PGR.getRegisteredResources())
+        for (PCLResources<?,?,?,?> r : PGR.getRegisteredResources())
         {
             EUI.setCustomCardFilter(r.cardColor, PGR.affinityFilters);
             EUI.setCustomCardPoolModule(r.cardColor, PGR.cardAffinities);

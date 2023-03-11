@@ -42,7 +42,7 @@ public abstract class PCLAbstractPlayerData
     public final HashMap<Integer, PCLLoadout> loadouts = new HashMap<>();
     public final HashMap<Integer, PCLTrophies> trophies = new HashMap<>();
     public final PCLCharacterConfig config;
-    public final PCLResources<?,?,?> resources;
+    public final PCLResources<?,?,?,?> resources;
     public final int baseHP;
     public final int baseGold;
     public final int baseDraw;
@@ -52,12 +52,12 @@ public abstract class PCLAbstractPlayerData
     public final boolean useAugments;
     public PCLLoadout selectedLoadout;
 
-    public PCLAbstractPlayerData(PCLResources<?,?,?> resources)
+    public PCLAbstractPlayerData(PCLResources<?,?,?,?> resources)
     {
         this(resources, DEFAULT_HP, DEFAULT_GOLD, DEFAULT_DRAW, DEFAULT_ENERGY, DEFAULT_ORBS, true, true);
     }
 
-    public PCLAbstractPlayerData(PCLResources<?,?,?> resources, int hp, int gold, int draw, int energy, int orbs, boolean useSummons, boolean useAugments)
+    public PCLAbstractPlayerData(PCLResources<?,?,?,?> resources, int hp, int gold, int draw, int energy, int orbs, boolean useSummons, boolean useAugments)
     {
         this.resources = resources;
         this.config = getConfig();

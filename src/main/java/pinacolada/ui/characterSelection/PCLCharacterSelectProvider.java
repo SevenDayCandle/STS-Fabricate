@@ -8,6 +8,7 @@ import com.megacrit.cardcrawl.screens.charSelect.CharacterSelectScreen;
 import pinacolada.interfaces.markers.RunAttributesProvider;
 import pinacolada.patches.UnlockTrackerPatches;
 import pinacolada.resources.PCLResources;
+import pinacolada.resources.PCLStrings;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
@@ -47,7 +48,7 @@ public class PCLCharacterSelectProvider implements RunAttributesProvider
 
         final float size = Settings.scale * 36;
 
-        for (PCLResources<?,?,?> resources : PGR.getRegisteredResources())
+        for (PCLResources<?,?,?,?> resources : PGR.getRegisteredResources())
         {
             UnlockTrackerPatches.validate(resources);
         }

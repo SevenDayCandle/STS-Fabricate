@@ -20,6 +20,7 @@ import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.interfaces.markers.RunAttributesProvider;
 import pinacolada.misc.PCLDungeon;
 import pinacolada.resources.PCLResources;
+import pinacolada.resources.PCLStrings;
 import pinacolada.resources.PGR;
 import pinacolada.trials.PCLCustomTrial;
 
@@ -203,7 +204,7 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
 
     private void addColorlessCardsForGroup(CardGroup group, AbstractCard.CardColor color)
     {
-        PCLResources<?,?,?> resources = PGR.getResources(color);
+        PCLResources<?,?,?,?> resources = PGR.getResources(color);
         if (resources != PGR.core)
         {
             addCardsFromGroup(group, AbstractCard.CardColor.COLORLESS, c -> resources.containsColorless(c) && c.rarity != AbstractCard.CardRarity.SPECIAL);

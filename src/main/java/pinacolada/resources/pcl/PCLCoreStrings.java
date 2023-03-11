@@ -662,7 +662,7 @@ public class PCLCoreStrings extends PCLStrings
         return conditions.TEXT[index];
     }
 
-    public PCLCoreStrings(PCLResources<?,?,?> resources)
+    public PCLCoreStrings(PCLResources<?,?,?,?> resources)
     {
         super(resources);
     }

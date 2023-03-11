@@ -4,8 +4,8 @@ import com.megacrit.cardcrawl.localization.UIStrings;
 
 public class PCLStrings
 {
-    protected PCLResources<?,?,?> resources;
-    public PCLStrings(PCLResources<?,?,?> resources)
+    protected PCLResources<?,?,?,?> resources;
+    public PCLStrings(PCLResources<?,?,?,?> resources)
     {
         this.resources = resources;
     }

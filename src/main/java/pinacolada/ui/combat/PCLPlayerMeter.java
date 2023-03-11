@@ -20,12 +20,13 @@ import pinacolada.interfaces.markers.ClickableProvider;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.powers.PCLClickableUse;
 import pinacolada.resources.PCLResources;
+import pinacolada.resources.PCLStrings;
 import pinacolada.resources.PGR;
 import pinacolada.ui.EUICardDraggable;
 
 public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implements ClickableProvider
 {
-    public static String createFullID(PCLResources<?,?,?> resources, Class<? extends PCLPlayerMeter> type)
+    public static String createFullID(PCLResources<?,?,?,?> resources, Class<? extends PCLPlayerMeter> type)
     {
         return resources.createID(type.getSimpleName());
     }

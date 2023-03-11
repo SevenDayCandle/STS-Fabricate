@@ -31,7 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 // Copied and modified from STS-AnimatorMod
-public abstract class PCLResources<T extends PCLAbstractPlayerData, U extends PCLImages, V extends PCLTooltips>
+public abstract class PCLResources<T extends PCLAbstractPlayerData, U extends PCLImages, V extends PCLTooltips, W extends PCLStrings>
         implements EditCharactersSubscriber, EditKeywordsSubscriber, EditStringsSubscriber, PostInitializeSubscriber
 {
     private static final Type GROUPED_CARD_TYPE = new TypeToken<Map<String, Map<String, CardStrings>>>() {}.getType();
@@ -43,6 +43,7 @@ public abstract class PCLResources<T extends PCLAbstractPlayerData, U extends PC
     public final T data;
     public final U images;
     public V tooltips;
+    public W strings;
     protected CharacterStrings characterStrings;
     protected final String id;
     protected boolean isLoaded;
@@ -277,6 +278,7 @@ public abstract class PCLResources<T extends PCLAbstractPlayerData, U extends PC
     public void setupTooltips()
     {
         tooltips = getTooltips();
+        strings = getStrings();
     }
 
     // The colorless pool is filled with ALL colorless cards by default. This will determine whether a colorless card is allowed when playing as a PCL character
@@ -303,4 +305,6 @@ public abstract class PCLResources<T extends PCLAbstractPlayerData, U extends PC
     public abstract T getData();
 
     public abstract V getTooltips();
+
+    public abstract W getStrings();
 }

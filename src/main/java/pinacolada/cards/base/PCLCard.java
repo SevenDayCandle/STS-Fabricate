@@ -65,6 +65,7 @@ import pinacolada.powers.PCLPower;
 import pinacolada.powers.replacement.PCLLockOnPower;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLResources;
+import pinacolada.resources.PCLStrings;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
@@ -234,7 +235,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         return PCLCard.register(type, PGR.core);
     }
 
-    protected static PCLCardData register(Class<? extends PCLCard> type, PCLResources<?,?,?> resources)
+    protected static PCLCardData register(Class<? extends PCLCard> type, PCLResources<?,?,?,?> resources)
     {
         return PCLCard.registerCardData(new PCLCardData(type, resources));
     }
@@ -593,7 +594,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     }
 
     protected Texture getCardBackground() {
-        PCLResources<?,?,?> resources = PGR.getResources(color);
+        PCLResources<?,?,?,?> resources = PGR.getResources(color);
         if (resources == null || resources.images == null)
         {
             resources = PGR.core;
@@ -719,7 +720,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
 
     protected Texture getEnergyOrb() {
         // For non-custom cards, use the original resource card color so that colorless/curses have their resource's energy orb
-        PCLResources<?,?,?> resources = PGR.getResources(cardData.resources.cardColor);
+        PCLResources<?,?,?,?> resources = PGR.getResources(cardData.resources.cardColor);
         if (resources == null || resources.images == null)
         {
             resources = PGR.core;

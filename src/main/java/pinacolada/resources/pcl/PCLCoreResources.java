@@ -9,10 +9,9 @@ import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 
-public class PCLCoreResources extends PCLResources<PCLAbstractPlayerData, PCLCoreImages, PCLCoreTooltips>
+public class PCLCoreResources extends PCLResources<PCLAbstractPlayerData, PCLCoreImages, PCLCoreTooltips, PCLCoreStrings>
 {
     public static final String ID = PGR.BASE_PREFIX;
-    public PCLCoreStrings strings;
 
     public PCLCoreResources()
     {
@@ -37,13 +36,6 @@ public class PCLCoreResources extends PCLResources<PCLAbstractPlayerData, PCLCor
     }
 
     @Override
-    public void setupTooltips()
-    {
-        super.setupTooltips();
-        strings = new PCLCoreStrings(this);
-    }
-
-    @Override
     public PCLAbstractPlayerData getData()
     {
         return null;
@@ -53,6 +45,12 @@ public class PCLCoreResources extends PCLResources<PCLAbstractPlayerData, PCLCor
     public PCLCoreTooltips getTooltips()
     {
         return new PCLCoreTooltips();
+    }
+
+    @Override
+    public PCLCoreStrings getStrings()
+    {
+        return new PCLCoreStrings(this);
     }
 
     protected void postInitialize()
