@@ -274,7 +274,7 @@
 								"PROPER_NAME": "Last Affinity"
 				},
 				"Level":	{
-								"DESCRIPTION": "The #yLevel of an #yAura or #yElemental #yDebuff increases its effect.",
+								"DESCRIPTION": "The #yLevel of an #yAffinity increases its effect on cards and game mechanics that rely on them.",
 								"NAMES": ["level"],
 								"PROPER_NAME": "Level"
 				},
@@ -528,7 +528,7 @@
 								"PROPER_NAME": "Stun"
 				},
 				"Summon":	{
-								"DESCRIPTION": "#ySummon cards are placed onto the field and act every turn. If you would lose HP, your right-most #ySummon takes half of that loss.",
+								"DESCRIPTION": "#ySummon cards are placed onto the field and act every turn. If you would take unblocked damage, your right-most #ySummon takes half of that loss.",
 								"NAMES": ["summon","summoned","summons"],
 								"PAST": "Summoned",
 								"PLURAL": "Summons",

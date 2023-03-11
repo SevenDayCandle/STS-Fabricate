@@ -37,4 +37,14 @@ public class PCond_OnAllyDeath extends PCond_Delegate implements OnAllyDeathSubs
     {
         return PGR.core.tooltips.kill;
     }
+
+    @Override
+    public String getSubText()
+    {
+        if (isWhenClause())
+        {
+            return TEXT.cond_whenObjectIs(fields.getFullCardStringSingular(), getDelegatePastText());
+        }
+        return TEXT.cond_whenSingle(getDelegatePastText());
+    }
 }

@@ -264,6 +264,7 @@ public abstract class PCLResources<T extends PCLAbstractPlayerData, U extends PC
         loadCustomStrings(RelicStrings.class);
         loadCustomStrings(PowerStrings.class);
         loadCustomStrings(PotionStrings.class);
+        loadCustomStrings(UIStrings.class);
     }
 
     @Override

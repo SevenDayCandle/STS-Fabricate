@@ -1054,7 +1054,7 @@ public class CombatManager
     public static int onPlayerLoseHP(AbstractPlayer p, DamageInfo info, int damageAmount)
     {
         damageAmount = subscriberInout(OnLoseHPSubscriber.class, damageAmount, (s, d) -> s.onLoseHP(p, info, d));
-        if (damageAmount > 0)
+        if (damageAmount > 0 && info.type != DamageInfo.DamageType.HP_LOSS)
         {
             damageAmount = summons.tryDamage(info, damageAmount);
         }

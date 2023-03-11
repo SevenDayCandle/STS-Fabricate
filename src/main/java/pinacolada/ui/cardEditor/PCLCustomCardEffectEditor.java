@@ -222,7 +222,7 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
                 .setShouldPositionClearAtTop(true)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[1])
                 .setCanAutosize(true, true)
-                .setItems(AbstractCard.CardType.values());
+                .setItems(PCLCustomCardPrimaryInfoPage.getEligibleTypes(editor.builder.cardColor));
     }
 
     protected T getEffectAt()

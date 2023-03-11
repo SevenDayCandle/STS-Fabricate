@@ -246,6 +246,9 @@ public class PCLCardAlly extends PCLCreature
             {
                 releasedCard.heal = 1;
             }
+
+            // Killed summons are treated as being Purged
+            PCLActions.bottom.purge(releasedCard).showEffect(false, false);
         }
 
         // Health needs to be 1 so that the slot can be re-selected

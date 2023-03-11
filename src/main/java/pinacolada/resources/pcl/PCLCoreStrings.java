@@ -395,23 +395,16 @@ public class PCLCoreStrings extends PCLStrings
 
     // Tutorial
     public final String tutorial_learnMore = tutorial.TEXT[0];
-    public final String tutorial_deciderSimple = tutorial.TEXT[1];
-    public final String tutorial_conjurerSimple = tutorial.TEXT[2];
-    public final String tutorial_eternalSimple = tutorial.TEXT[3];
-    public final String tutorial_affinityTutorial = tutorial.TEXT[4];
-    public final String tutorial_deciderTutorial1 = tutorial.TEXT[5];
-    public final String tutorial_deciderTutorial2 = tutorial.TEXT[6];
-    public final String tutorial_deciderTutorial3 = tutorial.TEXT[7];
-    public final String tutorial_conjurerTutorial1 = tutorial.TEXT[8];
-    public final String tutorial_conjurerTutorial2 = tutorial.TEXT[9];
-    public final String tutorial_conjurerTutorial3 = tutorial.TEXT[10];
-    public final String tutorial_eternalTutorial1 = tutorial.TEXT[11];
-    public final String tutorial_eternalTutorial2 = tutorial.TEXT[12];
-    public final String tutorial_eternalTutorial3 = tutorial.TEXT[13];
-    public final String tutorial_characterTutorial1 = tutorial.TEXT[14];
-    public final String tutorial_characterTutorial2 = tutorial.TEXT[15];
-    public final String tutorial_augmentTutorial1 = tutorial.TEXT[16];
-    public final String tutorial_augmentTutorial2 = tutorial.TEXT[17];
+    public final String tutorial_tagTutorial = tutorial.TEXT[1];
+    public final String tutorial_affinityTutorial = tutorial.TEXT[2];
+    public final String tutorial_summonTutorial1 = tutorial.TEXT[3];
+    public final String tutorial_summonTutorial2 = tutorial.TEXT[4];
+    public final String tutorial_summonTutorial3 = tutorial.TEXT[5];
+    public final String tutorial_summonTutorial4 = tutorial.TEXT[6];
+    public final String tutorial_characterTutorial1 = tutorial.TEXT[7];
+    public final String tutorial_characterTutorial2 = tutorial.TEXT[8];
+    public final String tutorial_augmentTutorial1 = tutorial.TEXT[9];
+    public final String tutorial_augmentTutorial2 = tutorial.TEXT[10];
 
     // Actions functions
     public final String act_activate(Object desc1) {return actFmt(0, desc1);}

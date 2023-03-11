@@ -19,6 +19,7 @@ public class PCLCoreResources extends PCLResources<PCLAbstractPlayerData, PCLCor
         super(ID, AbstractCard.CardColor.COLORLESS, AbstractPlayer.PlayerClass.IRONCLAD, new PCLCoreImages(ID));
     }
 
+    @Override
     public void receiveEditStrings()
     {
         loadCustomStrings(OrbStrings.class);

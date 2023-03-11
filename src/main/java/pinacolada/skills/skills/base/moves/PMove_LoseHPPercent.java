@@ -64,7 +64,7 @@ public class PMove_LoseHPPercent extends PMove<PField_Empty>
     public String getSubText()
     {
         String percentLoss = getAmountRawString() + "%";
-        if (target == PCLCardTarget.Self)
+        if (target == PCLCardTarget.Self && !isFromCreature())
         {
             return TEXT.act_loseAmount(percentLoss, PGR.core.tooltips.hp.title);
         }

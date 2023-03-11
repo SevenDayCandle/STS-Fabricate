@@ -195,6 +195,7 @@ public class AbstractPlayerPatches
         }
     }
 
+    // TODO support for Friendly Minions
     protected static void replaceTargets(AbstractPlayer player)
     {
         final PCLCard card = EUIUtils.safeCast(player.hoveredCard, PCLCard.class);

@@ -861,11 +861,11 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
             case RandomEnemy:
                 return EUIRM.strings.numNoun(count, TEXT.subjects_randomX(PCLCoreStrings.pluralEvaluated(TEXT.subjects_enemyN, count)));
             case Single:
-                return EUIRM.strings.numNoun(count, PCLCoreStrings.pluralEvaluated(TEXT.subjects_enemyN, count));
+                return count > 1 ? EUIRM.strings.numNoun(count, PCLCoreStrings.pluralEvaluated(TEXT.subjects_enemyN, count)) : TEXT.subjects_enemy;
             case SingleAlly:
-                return EUIRM.strings.numNoun(count, PCLCoreStrings.pluralEvaluated(TEXT.subjects_allyN, count));
+                return count > 1 ? EUIRM.strings.numNoun(count, PCLCoreStrings.pluralEvaluated(TEXT.subjects_allyN, count)) : TEXT.subjects_ally;
             case Team:
-                return TEXT.subjects_your(target.getTitle());
+                return TEXT.subjects_your(target.getTitle().toLowerCase());
             case Self:
                 if (isFromCreature())
                 {
@@ -930,6 +930,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         switch (target)
         {
             case Single:
+            case Self:
                 return TEXT.cond_whenMulti(TEXT.subjects_target, impl);
             case AllEnemy:
                 return TEXT.cond_whenMulti(TEXT.subjects_anyEnemy(), impl);
@@ -937,8 +938,6 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
                 return TEXT.cond_whenMulti(TEXT.subjects_anyAlly(), impl);
             case All:
                 return TEXT.cond_whenMulti(TEXT.subjects_anyone, impl);
-            case Self:
-                return TEXT.cond_whenMulti(TEXT.subjects_target, impl);
             default:
                 return TEXT.cond_wheneverYou(impl);
         }

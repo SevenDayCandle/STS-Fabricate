@@ -21,7 +21,6 @@ import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.powers.DrawCardNextTurnPower;
-import com.megacrit.cardcrawl.powers.StrengthPower;
 import com.megacrit.cardcrawl.stances.AbstractStance;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 import com.megacrit.cardcrawl.vfx.BorderFlashEffect;
@@ -50,7 +49,6 @@ import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
-import pinacolada.cards.pcl.tokens.AffinityToken;
 import pinacolada.effects.PCLAttackVFX;
 import pinacolada.interfaces.subscribers.OnPhaseChangedSubscriber;
 import pinacolada.misc.CombatManager;
@@ -548,11 +546,6 @@ public final class PCLActions
         return add(new IncreaseMaxOrbAction(slots));
     }
 
-    public ApplyOrReducePowerAction gainStrength(int amount)
-    {
-        return applyPower(new StrengthPower(player, amount));
-    }
-
     public GainTemporaryHP gainTemporaryHP(int amount)
     {
         return add(new GainTemporaryHP(player, player, amount));
@@ -711,11 +704,6 @@ public final class PCLActions
     public MoveCards moveCards(CardGroup source, CardGroup destination, int amount)
     {
         return add(new MoveCards(destination, source, amount));
-    }
-
-    public GenerateCard obtainAffinityToken(PCLAffinity affinity, boolean upgraded)
-    {
-        return makeCardInHand(AffinityToken.getCard(affinity)).setUpgrade(upgraded, false);
     }
 
     public PlayCard playCard(AbstractCard card, CardGroup sourcePile, AbstractCreature target)
