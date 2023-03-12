@@ -1,8 +1,10 @@
 package pinacolada.skills.skills.base.conditions;
 
+import com.megacrit.cardcrawl.stances.AbstractStance;
 import com.megacrit.cardcrawl.stances.NeutralStance;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.interfaces.subscribers.OnStanceChangedSubscriber;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
@@ -13,7 +15,7 @@ import pinacolada.stances.PCLStanceHelper;
 import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
-public class PCond_InStance extends PPassiveCond<PField_Stance>
+public class PCond_InStance extends PPassiveCond<PField_Stance> implements OnStanceChangedSubscriber
 {
 
     public static final PSkillData<PField_Stance> DATA = register(PCond_InStance.class, PField_Stance.class, 1, 1)
@@ -51,6 +53,19 @@ public class PCond_InStance extends PPassiveCond<PField_Stance>
     public String getSubText()
     {
         String base = fields.getAnyStanceString();
+        if (isWhenClause())
+        {
+            return getWheneverString(TEXT.act_enterStance(base));
+        }
         return fields.random ? TEXT.cond_not(base) : base;
+    }
+
+    @Override
+    public void onStanceChanged(AbstractStance oldStance, AbstractStance newStance)
+    {
+        if (fields.stances.isEmpty() || fields.stances.contains(PCLStanceHelper.get(newStance.ID)))
+        {
+            useFromTrigger(makeInfo(null));
+        }
     }
 }

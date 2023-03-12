@@ -1,11 +1,13 @@
 package pinacolada.skills.skills.base.conditions;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT0;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.interfaces.subscribers.OnMonsterDeathSubscriber;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
@@ -18,7 +20,7 @@ import pinacolada.utilities.GameUtilities;
 import java.util.List;
 
 @VisibleSkill
-public class PCond_Fatal extends PActiveCond<PField_Not>
+public class PCond_Fatal extends PActiveCond<PField_Not> implements OnMonsterDeathSubscriber
 {
     public static final PSkillData<PField_Not> DATA = register(PCond_Fatal.class, PField_Not.class, 1, 1)
             .selfTarget();
@@ -36,7 +38,17 @@ public class PCond_Fatal extends PActiveCond<PField_Not>
     @Override
     public String getSubText()
     {
+        if (isWhenClause())
+        {
+            return TEXT.cond_whenMulti(TEXT.subjects_anyEnemy(), PGR.core.tooltips.kill.present());
+        }
         return fields.not ? TEXT.cond_not(PGR.core.tooltips.fatal.title) : TEXT.cond_ifX(PGR.core.tooltips.fatal.title);
+    }
+
+    @Override
+    public void onMonsterDeath(AbstractMonster monster, boolean triggerRelics)
+    {
+        useFromTrigger(makeInfo(monster));
     }
 
     @Override

@@ -64,7 +64,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.player;
 
 // Copied and modified from STS-AnimatorMod
-// TODO Merge with CombatScreen
 public class CombatManager
 {
     private static GameActionManager.Phase currentPhase;

@@ -9,9 +9,9 @@ import pinacolada.misc.PCLUseInfo;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
-import pinacolada.skills.skills.PPassiveCond;
+import pinacolada.skills.skills.PPassiveNonCheckCond;
 
-public abstract class PCond_Delegate extends PPassiveCond<PField_CardCategory>
+public abstract class PCond_Delegate extends PPassiveNonCheckCond<PField_CardCategory>
 {
     public PCond_Delegate(PSkillData<PField_CardCategory> data)
     {
@@ -55,12 +55,6 @@ public abstract class PCond_Delegate extends PPassiveCond<PField_CardCategory>
     public boolean canPlay(PCLUseInfo info)
     {
         return true;
-    }
-
-    @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
-    {
-        return fromTrigger;
     }
 
     public void triggerOnCard(AbstractCard c)

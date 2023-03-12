@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.math.MathUtils;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLAttackType;
@@ -335,6 +336,8 @@ public class PCLCustomCardSlot
         if (builder != null && builder.portraitImage != null)
         {
             PixmapIO.writePNG(imgWriter, builder.portraitImage.texture.getTextureData().consumePixmap());
+            // Forcibly reload the image
+            EUIRM.getLocalTexture(newImagePath, true, true, false);
         }
 
         // Unlink temporary portrait images to allow the new saved portrait image to be loaded

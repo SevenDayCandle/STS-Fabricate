@@ -7,10 +7,10 @@ import pinacolada.misc.PCLUseInfo;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
-import pinacolada.skills.skills.PPassiveCond;
+import pinacolada.skills.skills.PPassiveNonCheckCond;
 
 @VisibleSkill
-public class PCond_Shuffle extends PPassiveCond<PField_Empty> implements OnShuffleSubscriber
+public class PCond_Shuffle extends PPassiveNonCheckCond<PField_Empty> implements OnShuffleSubscriber
 {
     public static final PSkillData<PField_Empty> DATA = register(PCond_Shuffle.class, PField_Empty.class, 1, 1)
             .selfTarget();

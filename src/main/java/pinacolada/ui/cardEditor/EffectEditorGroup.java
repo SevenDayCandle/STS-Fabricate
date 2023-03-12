@@ -73,6 +73,7 @@ public class EffectEditorGroup<T extends PSkill<?>> extends EUIBase
         for (PCLCustomCardEffectEditor<T> editor : editors)
         {
             editor.hb.setOffsetY(offset);
+            editor.hb.update();
             offset += PCLCustomCardEffectPage.OFFSET_EFFECT * 2 + editor.getAdditionalHeight();
         }
         return offset;

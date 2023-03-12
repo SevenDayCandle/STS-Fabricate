@@ -44,7 +44,7 @@ import static pinacolada.ui.cardEditor.PCLCustomCardEffectPage.*;
 
 public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCardEditorPage
 {
-    public static final float CUTOFF = Settings.WIDTH * 0.75f;
+    public static final float CUTOFF = Settings.WIDTH * 0.7f;
     public static final float MAIN_OFFSET = MENU_WIDTH * 1.58f;
     public static final float AUX_OFFSET = MENU_WIDTH * 2.43f;
     protected final PCLCustomCardEffectPage editor;
@@ -148,7 +148,7 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
                 .setShouldPositionClearAtTop(true)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.sui_affinities)
                 .setCanAutosize(true, true)
-                .setItems(PCLAffinity.getAvailableAffinities(editor.builder.cardColor));
+                .setItems(PCLAffinity.getAvailableAffinities(editor.builder.cardColor, false));
         affinities.setLabelFunctionForButton((list, __) -> affinities.makeMultiSelectString(item -> item.getFormattedSymbol(editor.builder.cardColor)), null, true);
 
         powers = (EUISearchableDropdown<PCLPowerHelper>) new EUISearchableDropdown<PCLPowerHelper>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.35f, MENU_HEIGHT, AUX_OFFSET, 0))

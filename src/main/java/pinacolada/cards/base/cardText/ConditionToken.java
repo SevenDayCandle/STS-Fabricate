@@ -39,7 +39,7 @@ public class ConditionToken extends PCLTextToken
 
             if (move != null)
             {
-                String subText = move.getSubText();
+                String subText = move.getCapitalSubText(true);
                 if (subText != null)
                 {
                     internalParser.initialize(parser.card, subText);

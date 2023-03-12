@@ -7,6 +7,7 @@ import extendedui.utilities.ColoredString;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.markers.CooldownProvider;
+import pinacolada.interfaces.subscribers.OnCooldownTriggeredSubscriber;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
@@ -15,7 +16,7 @@ import pinacolada.skills.fields.PField_Empty;
 import pinacolada.skills.skills.PPassiveCond;
 
 @VisibleSkill
-public class PCond_Cooldown extends PPassiveCond<PField_Empty> implements CooldownProvider
+public class PCond_Cooldown extends PPassiveCond<PField_Empty> implements CooldownProvider, OnCooldownTriggeredSubscriber
 {
     public static final PSkillData<PField_Empty> DATA = register(PCond_Cooldown.class, PField_Empty.class)
             .selfTarget();
@@ -43,6 +44,16 @@ public class PCond_Cooldown extends PPassiveCond<PField_Empty> implements Cooldo
     }
 
     @Override
+    public boolean onCooldownTriggered(AbstractCard card, AbstractCreature m, CooldownProvider cooldown)
+    {
+        if (cooldown.canActivate())
+        {
+            useFromTrigger(makeInfo(m));
+        }
+        return true;
+    }
+
+    @Override
     public PCond_Cooldown onRemoveFromCard(AbstractCard card)
     {
         super.onRemoveFromCard(card);
@@ -64,6 +75,10 @@ public class PCond_Cooldown extends PPassiveCond<PField_Empty> implements Cooldo
     @Override
     public String getSubText()
     {
+        if (isWhenClause())
+        {
+            return getWheneverString(TEXT.act_trigger(PGR.core.tooltips.cooldown.title));
+        }
         return EUIRM.strings.generic2(PGR.core.tooltips.cooldown.title, getAmountRawString());
     }
 

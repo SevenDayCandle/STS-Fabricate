@@ -5,6 +5,7 @@ import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
+import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
@@ -45,12 +46,12 @@ public class PMod_PerCreatureAttacking extends PMod_Per<PField_Empty>
     @Override
     public String getSubText()
     {
-        return EUIRM.strings.adjNoun(TEXT.subjects_attacking, TEXT.subjects_x);
+        return EUIRM.strings.adjNoun(PGR.core.tooltips.attack.progressive(), TEXT.subjects_x);
     }
 
     @Override
     public String getConditionText()
     {
-        return EUIRM.strings.adjNoun(TEXT.subjects_attacking, target == PCLCardTarget.Any ? TEXT.subjects_character : TEXT.subjects_enemy);
+        return EUIRM.strings.adjNoun(PGR.core.tooltips.attack.progressive(), target == PCLCardTarget.Any ? TEXT.subjects_character : TEXT.subjects_enemy);
     }
 }

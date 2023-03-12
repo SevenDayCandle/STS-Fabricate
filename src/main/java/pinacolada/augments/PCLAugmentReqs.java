@@ -2,6 +2,7 @@ package pinacolada.augments;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIGameUtils;
+import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLAffinity;
@@ -72,7 +73,7 @@ public class PCLAugmentReqs
                 rightMax != Integer.MAX_VALUE ? PGR.core.strings.subjects_count(PGR.core.tooltips.block) + " <= " + rightMax : null,
                 maxEffects != Integer.MAX_VALUE ? PGR.core.strings.cedit_effects + " <= " + maxEffects : null
         );
-        return base.isEmpty() ? PGR.core.strings.combat_na : base;
+        return base.isEmpty() ? EUIRM.strings.na : base;
     }
 
     public PCLAugmentReqs setAffinities(PCLAffinity... values)

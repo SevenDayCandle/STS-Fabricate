@@ -21,7 +21,6 @@ import pinacolada.relics.PCLRelic;
 import pinacolada.relics.pcl.*;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PCLResources;
-import pinacolada.resources.PCLStrings;
 import pinacolada.resources.PGR;
 import pinacolada.skills.skills.PSpecialSkill;
 import pinacolada.ui.characterSelection.PCLBaseStatEditor;
@@ -325,6 +324,12 @@ public abstract class PCLLoadout
             options = cString.OPTIONS;
         }
         return id >= 0 && options != null && options.length > id ? options[id] : "";
+    }
+
+    public String getNameForFilter()
+    {
+        String base = getName();
+        return base.isEmpty() ? PGR.core.strings.sui_core : base;
     }
 
     // PCL characters use summons instead of orbs

@@ -108,7 +108,19 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
     @Override
     public String getSubText()
     {
-        return fields.or ? PCLCoreStrings.joinWithOr(EUIUtils.map(effects, e -> e.getText(false))) : PSkill.joinEffectTexts(effects, ". ", false);
+        return fields.or ? PCLCoreStrings.joinWithOr(getEffectTextsJoined(effects, true)) : PSkill.joinEffectTexts(effects, ". ", true);
+    }
+
+    @Override
+    public String getText(boolean addPeriod)
+    {
+        if (amount != 0)
+        {
+            return getCapitalSubText(addPeriod) + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : ": ") + childEffect.getText(0, true)) + " " +
+                    TEXT.cond_otherwise(childEffect.getText(1, addPeriod)) : "");
+        }
+        return effects.isEmpty() ? (childEffect != null ? childEffect.getText(addPeriod) : "")
+                : getCapitalSubText(addPeriod) + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : ": ") + childEffect.getText(addPeriod)) : PCLCoreStrings.period(addPeriod));
     }
 
     @Override
@@ -209,18 +221,6 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         {
             effect.refresh(info, refreshVal);
         }
-    }
-
-    @Override
-    public String getText(boolean addPeriod)
-    {
-        if (amount != 0)
-        {
-            return getSubText() + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : ": ") + childEffect.getText(0, true)) + " " +
-                    TEXT.cond_otherwise(childEffect.getText(1, addPeriod)) : "");
-        }
-        return effects.isEmpty() ? (childEffect != null ? childEffect.getText(addPeriod) : "")
-                : getSubText() + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : ": ") + childEffect.getText(addPeriod)) : PCLCoreStrings.period(addPeriod));
     }
 
     @Override

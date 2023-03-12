@@ -214,6 +214,16 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return EUIUtils.mapAsNonnull(effects, e -> e.getText(addPeriod));
     }
 
+    public static List<String> getEffectTextsJoined(Collection<? extends PSkill<?>> effects, boolean addPeriod)
+    {
+        List<String> efTexts = getEffectTexts(effects, false);
+        if (addPeriod && efTexts.size() > 0)
+        {
+            efTexts.set(0, capital(efTexts.get(0), true));
+        }
+        return efTexts;
+    }
+
     public static List<PSkillData<? extends PField>> getEligibleClasses(AbstractCard.CardColor co)
     {
         return EUIUtils.filter(AVAILABLE_SKILLS, d -> d.isColorCompatible(co));
@@ -524,6 +534,11 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
             default:
                 return "?";
         }
+    }
+
+    public String getCapitalSubText(boolean addPeriod)
+    {
+        return capital(getSubText(), addPeriod);
     }
 
     public final char getCardPointer()
@@ -883,7 +898,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
 
     public String getText(boolean addPeriod)
     {
-        return capital(getSubText(), addPeriod) + (childEffect != null ? PCLCoreStrings.period(true) + " " + childEffect.getText(addPeriod) : PCLCoreStrings.period(addPeriod));
+        return getCapitalSubText(addPeriod) + (childEffect != null ? PCLCoreStrings.period(true) + " " + childEffect.getText(addPeriod) : PCLCoreStrings.period(addPeriod));
     }
 
     public final String getText()

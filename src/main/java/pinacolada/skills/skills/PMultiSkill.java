@@ -173,8 +173,8 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     public String getText(boolean addPeriod)
     {
         return amount > 0 ? (capital(TEXT.act_choose(amount), addPeriod) + ": " +
-                (generated ? joinEffectTexts(effects) : PCLCoreStrings.joinWithOr(getEffectTextsImpl(addPeriod)))) :
-                generated ? joinEffectTexts(effects) : PCLCoreStrings.joinWithAnd(getEffectTextsImpl(addPeriod)) + PCLCoreStrings.period(addPeriod);
+                (generated ? joinEffectTexts(effects) : PCLCoreStrings.joinWithOr(getEffectTextsJoined(effects, addPeriod)))) :
+                generated ? joinEffectTexts(effects) : PCLCoreStrings.joinWithAnd(getEffectTextsJoined(effects, addPeriod)) + PCLCoreStrings.period(addPeriod);
     }
 
     @Override
@@ -397,16 +397,6 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
         }
 
         getActions().tryChooseSkill(choiceCard.cardData, amount, info.source, info.target, effects);
-    }
-
-    private List<String> getEffectTextsImpl(boolean addPeriod)
-    {
-        List<String> efTexts = getEffectTexts(effects, false);
-        if (addPeriod && efTexts.size() > 0)
-        {
-            efTexts.set(0, capital(efTexts.get(0), true));
-        }
-        return efTexts;
     }
 
     public List<PSkill<?>> getSubEffects()

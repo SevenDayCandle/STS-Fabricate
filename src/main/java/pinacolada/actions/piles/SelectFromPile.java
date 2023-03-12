@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-// TODO fix pile sorting bugs
 // Copied and modified from STS-AnimatorMod
 public class SelectFromPile extends PCLAction<ArrayList<AbstractCard>>
 {

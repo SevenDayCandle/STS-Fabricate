@@ -22,7 +22,6 @@ import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.loadout.PCLLoadoutData;
 
 // Copied and modified from STS-AnimatorMod
-// TODO reflect HP/Gold values for current character
 public class PCLBaseStatEditor extends EUIBase
 {
     public static final float ICON_SIZE = 64f * Settings.scale;

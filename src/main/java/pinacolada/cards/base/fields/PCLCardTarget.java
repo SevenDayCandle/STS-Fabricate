@@ -185,7 +185,6 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget>
     }
 
     // These strings cannot be put in as an enum variable because cards are initialized before these strings are
-    // TODO tags for other targeting types
     public final String getShortString()
     {
         switch (this)

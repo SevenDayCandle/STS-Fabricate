@@ -7,10 +7,10 @@ import pinacolada.misc.PCLUseInfo;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
-import pinacolada.skills.skills.PPassiveCond;
+import pinacolada.skills.skills.PPassiveNonCheckCond;
 
 @VisibleSkill
-public class PCond_AtTurnEnd extends PPassiveCond<PField_Empty> implements OnEndOfTurnFirstSubscriber
+public class PCond_AtTurnEnd extends PPassiveNonCheckCond<PField_Empty> implements OnEndOfTurnFirstSubscriber
 {
 
     public static final PSkillData<PField_Empty> DATA = register(PCond_AtTurnEnd.class, PField_Empty.class, 1, 1)
@@ -60,11 +60,5 @@ public class PCond_AtTurnEnd extends PPassiveCond<PField_Empty> implements OnEnd
     public boolean canPlay(PCLUseInfo info)
     {
         return true;
-    }
-
-    @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
-    {
-        return fromTrigger;
     }
 }

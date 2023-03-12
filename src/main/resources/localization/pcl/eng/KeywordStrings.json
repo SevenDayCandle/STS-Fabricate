@@ -1,646 +1,567 @@
 {
 				"Affinity":	{
 								"DESCRIPTION": "A card attribute appearing above the card's title. | [A-W] refers to any #yAffinity.",
-								"NAMES": ["affinity"],
-								"PROPER_NAME": "Affinity"
+								"NAME": "Affinity",
+								"PLURAL": "Affinities"
 				},
 				"After Image":	{
 								"DESCRIPTION": "Gain [Block] whenever you play a card.",
-								"NAMES": ["after image"],
-								"PROPER_NAME": "After Image"
+								"NAME": "After Image"
 				},
 				"Afterlife":	{
 								"DESCRIPTION": "Cards in #yAfterlife may be played by #yPurging any number of different cards from your hand or #yExhaust pile that collectively have all of its [A-Gen]. This does not use [E].",
-								"NAMES": ["afterlife"],
-								"PROPER_NAME": "Afterlife"
+								"NAME": "Afterlife"
 				},
 				"Augment":	{
 								"DESCRIPTION": "#yAugments modify the effect or properties of the card they are slotted into.",
-								"NAMES": ["augment", "augments"],
-								"PROPER_NAME": "Augment"
+								"NAME": "Augment",
+								"PLURAL": "Augments"
 				},
 				"Autoplay":	{
 								"DESCRIPTION": "Automatically played when in hand. Still uses [E].",
-								"NAMES": ["autoplay", "autoplayed"],
-								"PROPER_NAME": "Autoplay"
+								"NAME": "Autoplay",
+								"PAST": "autoplayed",
+								"PRESENT": "autoplays",
+								"PROGRESSIVE": "autoplaying"
 				},
 				"Blinded":	{
 								"DESCRIPTION": "Deal #b1 less #yAttack damage per stack. Reduced by #b1 at turn end.",
-								"NAMES": ["blinded"],
-								"PROPER_NAME": "Blinded"
+								"NAME": "Blinded"
 				},
 				"Blue Affinity":	{
 								"DESCRIPTION": "",
-								"NAMES": ["blue affinity"],
-								"PROPER_NAME": "Blue Affinity"
+								"NAME": "Blue Affinity"
 				},
 				"Blur":	{
 								"DESCRIPTION": "[Block] is conserved between turns.",
-								"NAMES": ["blur"],
-								"PROPER_NAME": "Blur"
+								"NAME": "Blur"
 				},
 				"Bruised":	{
 								"DESCRIPTION": "Take #b1 more damage per stack from #yAttacks. Reduced by #b1 at turn start.",
-								"NAMES": ["bruised"],
-								"PROPER_NAME": "Bruised"
+								"NAME": "Bruised"
 				},
 				"Brutal Damage":	{
 								"DESCRIPTION": "Affected twice by powers that modify damage.",
-								"NAMES": ["brutal damage"],
-								"PROPER_NAME": "Brutal Damage"
+								"NAME": "Brutal Damage"
 				},
 				"Buff":	{
 								"DESCRIPTION": "Powers with positive effects.",
-								"NAMES": ["buff", "buffs", "buffing", "buffed"],
+								"NAME": "Buff",
 								"PAST": "buffed",
 								"PLURAL": "buffs",
-								"PRESENT": "buffing",
-								"PROPER_NAME": "Buff"
+								"PRESENT": "buffs",
+								"PROGRESSIVE": "buffing"
 				},
 				"Buffer":	{
 								"DESCRIPTION": "Negate the next HP loss you receive, then reduce stacks by #b1.",
-								"NAMES": ["buffer"],
-								"PROPER_NAME": "Buffer"
+								"NAME": "Buffer"
 				},
 				"Chance":	{
 								"DESCRIPTION": "Activate an effect with a certain probability.",
-								"NAMES": ["chance"],
-								"PROPER_NAME": "Chance"
-				},
-				"Chaos":	{
-								"DESCRIPTION": "#yOrb. Effects vary depending on the current character and on the #yAffinities of the last card played.",
-								"NAMES": ["chaos", "chaos+"],
-								"PROPER_NAME": "Chaos"
+								"NAME": "Chance"
 				},
 				"Choked":	{
 								"DESCRIPTION": "Whenever you play a card this turn, the target loses 1 HP.",
-								"NAMES": ["choked"],
-								"PROPER_NAME": "Choked"
+								"NAME": "Choked"
 				},
 				"Constricted":	{
 								"DESCRIPTION": "Take damage at the end of each turn.",
-								"NAMES": ["constricted"],
-								"PROPER_NAME": "Constricted"
+								"NAME": "Constricted"
 				},
 				"Cooldown":	{
 								"DESCRIPTION": "Whenever this card is played, reduce #yCooldown by #b1. At #b0 #yCooldown, activate this effect and reset #yCooldown.",
-								"NAMES": ["cooldown", "cdn"],
-								"PROPER_NAME": "Cooldown"
+								"NAME": "Cooldown"
 				},
 				"Create":	{
 								"DESCRIPTION": "Add a new card in the specified pile.",
-								"NAMES": ["create", "created", "creates"],
 								"PAST": "created",
 								"PRESENT": "creates",
-								"PROPER_NAME": "Create"
+								"PROGRESSIVE": "creating",
+								"NAME": "Create"
 				},
 				"Critical":	{
 								"DESCRIPTION": "The next #yAttack played deals #b+100% damage per stack.",
-								"NAMES": ["critical"],
-								"PROPER_NAME": "Critical"
+								"NAME": "Critical"
 				},
 				"Curl Up":	{
 								"DESCRIPTION": "Gain [Block] when you receive unblocked attack damage, then remove this power.",
-								"NAMES": ["curl up"],
-								"PROPER_NAME": "Curl Up"
+								"NAME": "Curl Up"
 				},
 				"Current Affinity":	{
-								"DESCRIPTION": "Cards with the [A-Gen] of the #yCurrent #yAffinity will #yMatch when played.",
-								"NAMES": ["current affinity"],
-								"PROPER_NAME": "Current Affinity"
+								"DESCRIPTION": "Cards with the [A-W] of the #yCurrent #yAffinity will #yMatch when played.",
+								"NAME": "Current Affinity"
 				},
 				"Cycle":	{
 								"DESCRIPTION": "Discard a certain number of cards then draw that many cards.",
-								"NAMES": ["cycle", "cycled", "cycles"],
 								"PAST": "Cycled",
 								"PRESENT": "Cycles",
-								"PROPER_NAME": "Cycle"
+								"PROGRESSIVE": "Cycling",
+								"NAME": "Cycle"
 				},
 				"Debuff":	{
 								"DESCRIPTION": "Powers with negative effects.",
-								"NAMES": ["debuff", "debuffs", "debuffing", "debuffed"],
 								"PAST": "debuffed",
 								"PLURAL": "debuffs",
-								"PRESENT": "debuffing",
-								"PROPER_NAME": "Debuff"
+								"PRESENT": "debuffs",
+								"PROGRESSIVE": "debuffing",
+								"NAME": "Debuff"
 				},
 				"Deflection":	{
 								"DESCRIPTION": "Reflect blocked #yAttack damage back at the attacker. Final damage is affected by damage modifiers.",
-								"NAMES": ["deflection"],
-								"PROPER_NAME": "Deflection"
+								"NAME": "Deflection"
 				},
 				"Delayed":	{
 								"DESCRIPTION": "Start each combat with this card at the bottom of your deck.",
-								"NAMES": ["~delayed"],
-								"PROPER_NAME": "Delayed"
+								"NAME": "Delayed"
 				},
 				"Delayed Damage":	{
 								"DESCRIPTION": "Take damage at the end of your turn. Only enemies can die from this damage.",
-								"NAMES": ["delayed damage"],
-								"PROPER_NAME": "Delayed Damage"
+								"NAME": "Delayed Damage"
 				},
 				"Demon Form":	{
 								"DESCRIPTION": "Gain [Strength] at the start of each turn.",
-								"NAMES": ["demon form", "demon_form"],
-								"PROPER_NAME": "Demon Form"
+								"NAME": "Demon Form"
 				},
 				"Deva Form":	{
 								"DESCRIPTION": "Gain additional [E] each turn. Increases by #b1 each turn.",
-								"NAMES": ["deva form"],
-								"PROPER_NAME": "Deva Form"
+								"NAME": "Deva Form"
+				},
+				"Die":	{
+								"DESCRIPTION": "Remove this creature from battle.",
+								"PAST": "died",
+								"PRESENT": "dies",
+								"PROGRESSIVE": "dying",
+								"NAME": "Die"
 				},
 				"Draw Minus":	{
 								"DESCRIPTION": "Draw fewer cards at the start of next turn.",
-								"NAMES": ["draw minus", "next turn draw less"],
-								"PROPER_NAME": "Draw Minus"
+								"NAME": "Draw Minus"
 				},
 				"Draw Plus":	{
 								"DESCRIPTION": "Draw additional cards at the start of next turn.",
-								"NAMES": ["draw plus", "next turn draw"],
-								"PROPER_NAME": "Draw Plus"
+								"NAME": "Draw Plus"
 				},
 				"Energized":	{
 								"DESCRIPTION": "Gain [E] at the start of next turn.",
-								"NAMES": ["energized"],
-								"PROPER_NAME": "Energized"
+								"NAME": "Energized"
 				},
 				"Envenom":	{
 								"DESCRIPTION": "Whenever an attack deals unblocked damage, apply [Poison].",
-								"NAMES": ["envenom"],
-								"PROPER_NAME": "Envenom"
+								"NAME": "Envenom"
 				},
 				"Ephemeral":	{
 								"DESCRIPTION": "Purges at the end of turn or when played.",
-								"NAMES": ["ephemeral"],
-								"PROPER_NAME": "Ephemeral"
+								"NAME": "Ephemeral"
 				},
 				"Flame Barrier":	{
 								"DESCRIPTION": "Whenever you are attacked this turn, deal #b1 damage back.",
-								"NAMES": ["flame barrier", "flame_barrier"],
-								"PROPER_NAME": "Flame Barrier"
+								"NAME": "Flame Barrier"
 				},
 				"Fleeting":	{
 								"DESCRIPTION": "When used, remove this card from play and your deck.",
-								"NAMES": ["fleeting"],
-								"PROPER_NAME": "Fleeting"
+								"NAME": "Fleeting"
 				},
 				"Flight":	{
 								"DESCRIPTION": "Take 50% less #yAttack damage. Lose #b1 [Flight] after taking #yAttack damage. Restore [Flight] at the start of turn if it wasn't reduced to #b0.",
-								"NAMES": ["flight"],
-								"PROPER_NAME": "Flight"
+								"NAME": "Flight"
 				},
 				"Fortified":	{
 								"DESCRIPTION": "#yCards give #b+25% [Block].",
-								"NAMES": ["fortified"],
-								"PROPER_NAME": "Fortified"
+								"NAME": "Fortified"
 				},
 				"Fragile":	{
 								"DESCRIPTION": "Exhausts if you play another card while this is in hand.",
-								"NAMES": ["fragile"],
-								"PROPER_NAME": "Fragile"
-				},
-				"Fusion":	{
-								"DESCRIPTION": "Combine #yOrbs to create a new #yOrb dependent on the #yOrbs chosen.",
-								"NAMES": ["fuse", "fusion"],
-								"PROPER_NAME": "Fusion"
+								"NAME": "Fragile"
 				},
 				"Grave":	{
 								"DESCRIPTION": "Start each combat with this card in your discard pile.",
-								"NAMES": ["grave"],
-								"PROPER_NAME": "Grave"
+								"NAME": "Grave"
 				},
 				"Green Affinity":	{
 								"DESCRIPTION": "",
-								"NAMES": ["green affinity"],
-								"PROPER_NAME": "Green Affinity"
+								"NAME": "Green Affinity"
 				},
 				"HP":	{
-								"DESCRIPTION": "-",
-								"NAMES": ["~hp", "health", "~hp"],
-								"PROPER_NAME": "HP"
+								"DESCRIPTION": "",
+								"NAME": "HP"
 				},
 				"Haste":	{
 								"DESCRIPTION": "When drawn, draw 1 card.",
-								"NAMES": ["~haste"],
-								"PROPER_NAME": "Haste"
+								"NAME": "Haste"
 				},
 				"Heal":	{
 								"DESCRIPTION": "Restore HP",
-								"NAMES": ["heal", "heals", "healing"],
-								"PAST": "Healed",
-								"PRESENT": "Heals",
-								"PROPER_NAME": "Heal"
+								"PAST": "healed",
+								"PRESENT": "heals",
+								"PROGRESSIVE": "healing",
+								"NAME": "Heal"
 				},
 				"Immaterial Damage":	{
 								"DESCRIPTION": "Affected by #yPowers modifying #yOrb output. Ignores #yPowers that modify #yAttack damage or activate on contact.",
-								"NAMES": ["immaterial damage"],
-								"PROPER_NAME": "Immaterial Damage"
+								"NAME": "Immaterial Damage"
 				},
 				"Impaired":	{
 								"DESCRIPTION": "Reduces the effectiveness of your Orbs.",
-								"NAMES": ["impaired"],
-								"PROPER_NAME": "Impaired"
+								"NAME": "Impaired"
 				},
 				"Innovation":	{
 								"DESCRIPTION": "Ignore the costs of the next #yInteractable Power used.",
-								"NAMES": ["innovation"],
-								"PROPER_NAME": "Innovation"
+								"NAME": "Innovation"
 				},
 				"Interactable":	{
 								"DESCRIPTION": "Once per turn (unless specified otherwise), activate this effect by clicking this power's icon and paying its cost.",
-								"NAMES": ["interact", "interactable", "interactables"],
-								"PROPER_NAME": "Interactable"
+								"NAME": "Interactable",
+								"PLURAL": "Interactables"
 				},
 				"Invigorated":	{
 								"DESCRIPTION": "#yAttacks deal #b+25% damage.",
-								"NAMES": ["invigorated"],
-								"PROPER_NAME": "Invigorated"
+								"NAME": "Invigorated"
 				},
 				"Juggernaut":	{
 								"DESCRIPTION": "Whenever you gain #yBlock, deal damage to a random enemy.",
-								"NAMES": ["juggernaut"],
-								"PROPER_NAME": "Juggernaut"
+								"NAME": "Juggernaut"
 				},
 				"Kill":	{
 								"DESCRIPTION": "Remove this creature from battle.",
-								"NAMES": ["kill", "kills", "killed"],
 								"PAST": "killed",
 								"PRESENT": "kills",
-								"PROPER_NAME": "Kill"
+								"PROGRESSIVE": "killing",
+								"NAME": "Kill"
 				},
 				"Last Affinity":	{
 								"DESCRIPTION": "The #yAffinities of previously-played cards.",
-								"NAMES": ["last affinity"],
-								"PROPER_NAME": "Last Affinity"
+								"NAME": "Last Affinity"
 				},
 				"Level":	{
 								"DESCRIPTION": "The #yLevel of an #yAffinity increases its effect on cards and game mechanics that rely on them.",
-								"NAMES": ["level"],
-								"PROPER_NAME": "Level"
+								"NAME": "Level"
 				},
 				"Limited":	{
 								"DESCRIPTION": "This effect can only trigger once per combat, across all copies of this card.",
-								"NAMES": ["limited"],
-								"PROPER_NAME": "Limited"
+								"NAME": "Limited"
 				},
 				"Loyal":	{
 								"DESCRIPTION": "If this would enter your discard pile, move it to your draw pile instead.",
-								"NAMES": ["loyal"],
-								"PROPER_NAME": "Loyal"
+								"NAME": "Loyal"
 				},
 				"Malleable":	{
 								"DESCRIPTION": "Upon receiving damage, gain #yBlock. #yBlock gain increases as this power is triggered. Resets at the start of turn.",
-								"NAMES": ["malleable"],
-								"PROPER_NAME": "Malleable"
+								"NAME": "Malleable"
 				},
 				"Match":	{
 								"DESCRIPTION": "A card #yMatches if it has the #yLast #yAffinity.",
-								"NAMES": ["match", "matches", "matching", "matched"],
-								"PROPER_NAME": "Match"
+								"NAME": "Match",
+								"PAST": "Matched",
+								"PRESENT": "Matches",
+								"PROGRESSIVE": "Matching"
 				},
 				"Match Combo":	{
 								"DESCRIPTION": "The number of consecutive #yMatches made. [A-Gen] Cards do not affect your #yMatch #yCombo.",
-								"NAMES": ["match combo"],
-								"PROPER_NAME": "Match Combo"
+								"NAME": "Match Combo"
 				},
 				"Max HP":	{
 								"DESCRIPTION": "",
-								"NAMES": ["~max hp", "max hp", "max health"],
-								"PROPER_NAME": "Max Health"
+								"NAME": "Max Health"
 				},
 				"Metallicize":	{
 								"DESCRIPTION": "Gain #yBlock at the start of your turn.",
-								"NAMES": ["metallicize"],
-								"PROPER_NAME": "Metallicize"
+								"NAME": "Metallicize"
 				},
 				"Mismatch":	{
 								"DESCRIPTION": "A card #yMismatches if it does not have the #yLast #yAffinity, and if neither #yAffinity is [A-Gen].",
-								"NAMES": ["mismatch", "mismatches", "mismatching", "mismatched"],
-								"PROPER_NAME": "Mismatch"
+								"NAME": "Mismatch",
+								"PAST": "Mismatched",
+								"PRESENT": "Mismatches",
+								"PROGRESSIVE": "Mismatching"
 				},
 				"Multicolor":	{
 								"DESCRIPTION": "Cards with #yMulticolor always #yMatch. When the #yCurrent #yAffinity is #yMulticolor, all cards with [A-Gen] will #yMatch.",
-								"NAMES": ["multicolor"],
-								"PROPER_NAME": "Multicolor"
+								"NAME": "Multicolor"
 				},
 				"Multiform":	{
 								"DESCRIPTION": "You may change this card's form in the pop-up viewer from your master deck outside of combat.",
-								"NAMES": ["multiform"],
-								"PROPER_NAME": "Multiform"
+								"NAME": "Multiform"
 				},
 				"Neutral Stance":	{
 								"DESCRIPTION": "",
-								"NAMES": ["neutral stance"],
-								"PROPER_NAME": "Neutral Stance"
+								"NAME": "Neutral Stance"
 				},
 				"Next Turn Block":	{
 								"DESCRIPTION": "Gain [Block] at the start of next turn.",
-								"NAMES": ["next turn block"],
-								"PROPER_NAME": "Next Turn Block"
+								"NAME": "Next Turn Block"
 				},
 				"Normal Damage":	{
 								"DESCRIPTION": "Affected by [Thorns].",
-								"NAMES": ["normal damage"],
-								"PROPER_NAME": "Normal Damage"
+								"NAME": "Normal Damage"
 				},
 				"Noxious Fumes":	{
 								"DESCRIPTION": "At the start of each turn, apply [Poison] to ALL enemies.",
-								"NAMES": ["noxious fumes"],
-								"PROPER_NAME": "Noxious Fumes"
+								"NAME": "Noxious Fumes"
 				},
 				"Orange Affinity":	{
 								"DESCRIPTION": "",
-								"NAMES": ["orange affinity"],
-								"PROPER_NAME": "Orange Affinity"
+								"NAME": "Orange Affinity"
 				},
 				"Orb Slot":	{
 								"DESCRIPTION": "#yOrb #ySlots allow you to channel additional Orbs.",
-								"NAMES": ["orb slot"],
-								"PROPER_NAME": "Orb Slot"
+								"NAME": "Orb Slot"
 				},
 				"Pay":	{
 								"DESCRIPTION": "Lose the specified entity to activate an effect.",
-								"NAMES": ["pay"],
-								"PROPER_NAME": "Pay"
+								"NAME": "Pay",
+								"PAST": "paid",
+								"PRESENT": "pays",
+								"PROGRESSIVE": "paying"
 				},
 				"Persist":	{
 								"DESCRIPTION": "Only discards after a certain number of uses each turn.",
-								"NAMES": ["persist"],
-								"PROPER_NAME": "Persist"
+								"NAME": "Persist"
 				},
 				"Piercing Damage":	{
 								"DESCRIPTION": "Ignores [Block] and #yPowers activating on contact.",
-								"NAMES": ["piercing damage"],
-								"PROPER_NAME": "Piercing Damage"
+								"NAME": "Piercing Damage"
 				},
 				"Plated Armor":	{
 								"DESCRIPTION": "Gain #yBlock at the end of your turn. Reduced by #b1 when receiving damage.",
-								"NAMES": ["plated armor", "plat. armor"],
-								"PROPER_NAME": "Plated Armor"
+								"NAME": "Plated Armor"
 				},
 				"Play":	{
 								"DESCRIPTION": "Use a card without spending [E].",
-								"NAMES": ["play", "play"],
-								"PROPER_NAME": "Play"
+								"NAME": "Play",
+								"PAST": "played",
+								"PRESENT": "plays",
+								"PROGRESSIVE": "playing"
 				},
 				"Priority":	{
 								"DESCRIPTION": "Priority determines whether a #ySummon will act before or after your turn.",
-								"NAMES": ["priority"],
-								"PROPER_NAME": "Priority"
+								"NAME": "Priority"
 				},
 				"Provoked":	{
 								"DESCRIPTION": "The target receives #b50% more damage and must attack.",
-								"NAMES": ["Provoked"],
-								"PROPER_NAME": "Provoked"
+								"NAME": "Provoked"
 				},
 				"Purple Affinity":	{
 								"DESCRIPTION": "",
-								"NAMES": ["purple affinity"],
-								"PROPER_NAME": "Purple Affinity"
+								"NAME": "Purple Affinity"
 				},
 				"Ranged Damage":	{
 								"DESCRIPTION": "Ignores [Flight] and #yPowers activating on contact.",
-								"NAMES": ["ranged damage"],
-								"PROPER_NAME": "Ranged Damage"
+								"NAME": "Ranged Damage"
 				},
 				"Rebound":	{
 								"DESCRIPTION": "Put the next card you play this turn on top of your draw pile.",
-								"NAMES": ["rebound"],
-								"PROPER_NAME": "Rebound"
+								"NAME": "Rebound"
 				},
 				"Recast":	{
 								"DESCRIPTION": "Next turn, play a copy of this card. The copy #yPurges and does not #yRecast.",
-								"NAMES": ["recast"],
-								"PROPER_NAME": "Recast"
+								"NAME": "Recast"
 				},
 				"Red Affinity":	{
 								"DESCRIPTION": "",
-								"NAMES": ["red affinity"],
-								"PROPER_NAME": "Red Affinity"
+								"NAME": "Red Affinity"
 				},
 				"Regeneration":	{
 								"DESCRIPTION": "Heal HP at the end of the turn. Reduce by 1 each turn.",
-								"NAMES": ["regeneration"],
-								"PROPER_NAME": "Regeneration"
+								"NAME": "Regeneration"
 				},
 				"Reroll":	{
 								"DESCRIPTION": "Change the #yCurrent #yAffinity.",
-								"NAMES": ["reroll"],
-								"PROPER_NAME": "Reroll"
+								"NAME": "Reroll"
 				},
 				"Reshuffle":	{
 								"DESCRIPTION": "Reshuffling moves cards to your draw pile.",
-								"NAMES": ["reshuffle", "reshuffled", "reshuffles"],
 								"PAST": "Reshuffled",
 								"PRESENT": "Reshuffles",
-								"PROPER_NAME": "Reshuffle"
+								"PROGRESSIVE": "Reshuffling",
+								"NAME": "Reshuffle"
 				},
 				"Resistance":	{
 								"DESCRIPTION": "Reduces incoming #yAttack damage.",
-								"NAMES": ["resistance"],
-								"PROPER_NAME": "Resistance"
+								"NAME": "Resistance"
 				},
 				"Sanctuary":	{
 								"DESCRIPTION": "If you would die, set your HP to this power's stacks and remove this power.",
-								"NAMES": ["sanctuary"],
-								"PROPER_NAME": "Sanctuary"
+								"NAME": "Sanctuary"
 				},
 				"Scout":	{
 								"DESCRIPTION": "Draw cards, then move the same number of cards to the top of your draw pile.",
-								"NAMES": ["scout"],
-								"PROPER_NAME": "Scout"
+								"NAME": "Scout",
+								"PAST": "Scouted",
+								"PRESENT": "Scouts",
+								"PROGRESSIVE": "Scouting"
 				},
 				"Select":	{
 								"DESCRIPTION": "Perform an action on a card of your choice.",
-								"NAMES": ["select"],
 								"PAST": "selected",
 								"PRESENT": "selects",
-								"PROPER_NAME": "Select"
+								"PROGRESSIVE": "selecting",
+								"NAME": "Select"
 				},
 				"Self-Immolation":	{
 								"DESCRIPTION": "When you play a card with [Block], ALL characters take [DD] equal to its [Block] times this power's stacks.",
-								"NAMES": ["self-immolation"],
-								"PROPER_NAME": "Self-Immolation"
+								"NAME": "Self-Immolation"
 				},
 				"Semi-Limited":	{
 								"DESCRIPTION": "This effect can only trigger once per turn, across all copies of this card.",
-								"NAMES": ["semi-limited", "semi-lim"],
-								"PROPER_NAME": "Semi-Limited"
+								"NAME": "Semi-Limited"
 				},
 				"Shackles":	{
 								"DESCRIPTION": "Reduce [Strength] until end of turn.",
-								"NAMES": ["shackles"],
-								"PROPER_NAME": "Shackles"
+								"NAME": "Shackles"
 				},
 				"Silenced":	{
 								"DESCRIPTION": "Negate incoming buffs. Does not affect powers specific to cards or monsters.",
-								"NAMES": ["silenced"],
-								"PROPER_NAME": "Silenced"
+								"NAME": "Silenced"
 				},
 				"Silver Affinity":	{
 								"DESCRIPTION": "",
-								"NAMES": ["silver affinity"],
-								"PROPER_NAME": "Silver Affinity"
+								"NAME": "Silver Affinity"
 				},
 				"Slow":	{
 								"DESCRIPTION": "For every card you have played this turn, take #b10% more damage from #yAttacks.",
-								"NAMES": ["slow"],
-								"PROPER_NAME": "Slow"
+								"NAME": "Slow"
 				},
 				"Sorcery":	{
 								"DESCRIPTION": "The next Orb or Summon created has additional Focus or HP, respectively.",
-								"NAMES": ["sorcery"],
-								"PROPER_NAME": "Sorcery"
+								"NAME": "Sorcery"
 				},
 				"Soulbound":	{
 								"DESCRIPTION": "Cannot be removed from your deck.",
-								"NAMES": ["soulbound"],
-								"PROPER_NAME": "Soulbound"
+								"NAME": "Soulbound"
 				},
 				"Special Augment":	{
 								"DESCRIPTION": "#ySpecial #yAugments cannot be obtained from combat rewards, nor can they be removed from cards.",
-								"NAMES": ["special augment", "special augments"],
-								"PROPER_NAME": "Special Augment"
+								"NAME": "Special Augment",
+								"PLURAL": "Special Augments"
 				},
 				"Spread":	{
 								"DESCRIPTION": "Spread a target's power to ALL other enemies.",
-								"NAMES": ["spread", "spreads"],
-								"PROPER_NAME": "Spread"
+								"NAME": "Spread",
+								"PRESENT": "Spreads"
 				},
 				"Stabilize":	{
 								"DESCRIPTION": "Prevent a turn-based power from being reduced at the start of turn.",
-								"NAMES": ["stabilize"],
-								"PROPER_NAME": "Stabilize"
+								"NAME": "Stabilize",
+								"PAST": "Stabilized",
+								"PRESENT": "Stabilizes"
 				},
 				"Starter":	{
 								"DESCRIPTION": "Activates if played at the start of turn.",
-								"NAMES": ["starter"],
-								"PROPER_NAME": "Starter"
+								"NAME": "Starter"
 				},
 				"Startup":	{
 								"DESCRIPTION": "Play this effect at the start of combat.",
-								"NAMES": ["startup"],
-								"PROPER_NAME": "Startup"
+								"NAME": "Startup"
 				},
 				"Stun":	{
 								"DESCRIPTION": "Cannot act.",
-								"NAMES": ["stun", "stunned", "stslib:stunned"],
-								"PROPER_NAME": "Stun"
+								"NAME": "Stun",
+								"PAST": "stunned",
+								"PRESENT": "stuns"
 				},
 				"Summon":	{
 								"DESCRIPTION": "#ySummon cards are placed onto the field and act every turn. If you would take unblocked damage, your right-most #ySummon takes half of that loss.",
-								"NAMES": ["summon","summoned","summons"],
+								"NAME": "Summon",
 								"PAST": "Summoned",
 								"PLURAL": "Summons",
 								"PRESENT": "Summons",
-								"PROPER_NAME": "Summon"
+								"PROGRESSIVE": "Summoning"
 				},
 				"Supercharged":	{
 								"DESCRIPTION": "Gain additional [E] at the start of each turn.",
-								"NAMES": ["supercharged"],
-								"PROPER_NAME": "Supercharged"
-				},
-				"Support Damage":	{
-								"DESCRIPTION": "Deal damage to the enemy with the lowest HP at the end of each turn. Affected by damage modifiers.",
-								"NAMES": ["support damage", "supp. damage"],
-								"PROPER_NAME": "Support Damage"
+								"NAME": "Supercharged"
 				},
 				"Temporary HP":	{
 								"DESCRIPTION": "Temporary HP lasts until end of combat.",
-								"NAMES": ["temporary hp", "temp. hp"],
-								"PROPER_NAME": "Temporary HP"
+								"NAME": "Temporary HP"
 				},
 				"Thousand Cuts":	{
 								"DESCRIPTION": "Deal damage to ALL enemies whenever you play a card.",
-								"NAMES": ["thousand cuts"],
-								"PROPER_NAME": "Thousand Cuts"
+								"NAME": "Thousand Cuts"
 				},
 				"Toxicology":	{
 								"DESCRIPTION": "Whenever you apply [Poison], [Bruised], [Blinded], or [Shackles], apply additional stacks.",
-								"NAMES": ["toxicology"],
-								"PROPER_NAME": "Toxicology"
+								"NAME": "Toxicology"
 				},
 				"Transform":	{
 								"DESCRIPTION": "Replace a card with another.",
-								"NAMES": ["transform", "transforms", "transforming"],
-								"PROPER_NAME": "Transform"
+								"NAME": "Transform",
+								"PAST": "transformed",
+								"PRESENT": "transforms",
+								"PROGRESSIVE": "transforming"
 				},
 				"Trigger":	{
 								"DESCRIPTION": "Activate the passive effect of an #yOrb or #ySummon.",
-								"NAMES": ["trigger", "triggered", "triggers"],
-								"PROPER_NAME": "Trigger"
+								"NAME": "Trigger",
+								"PAST": "triggered",
+								"PRESENT": "triggers",
+								"PROGRESSIVE": "triggering"
 				},
 				"Unique":	{
 								"DESCRIPTION": "Can be #yUpgraded any number of times. You can only have 1 copy of this card in your deck. Additional copies will #yUpgrade this card instead.",
-								"NAMES": ["unique"],
-								"PROPER_NAME": "Unique"
+								"NAME": "Unique"
 				},
 				"Unknown Affinity":	{
 								"DESCRIPTION": "At the start of battle, this #yAffinity becomes another random #yAffinity.",
-								"NAMES": ["unknown affinity"],
-								"PROPER_NAME": "Unknown Affinity"
+								"NAME": "Unknown Affinity"
 				},
 				"Vigor":	{
 								"DESCRIPTION": "The next Attack played deals additional damage per hit.",
-								"NAMES": ["vigor"],
-								"PROPER_NAME": "Vigor"
+								"NAME": "Vigor"
 				},
 				"Vitality":	{
 								"DESCRIPTION": "At the start of each turn, gain [Temporary HP].",
-								"NAMES": ["vitality"],
-								"PROPER_NAME": "Vitality"
+								"NAME": "Vitality"
 				},
 				"Withdraw":	{
 								"DESCRIPTION": "#yWithdrawing a #ySummon #yTriggers it once and returns it to your discard pile.",
-								"NAMES": ["withdraw"],
+								"NAME": "Withdraw",
 								"PAST": "withdrew",
 								"PRESENT": "withdraws",
-								"PROPER_NAME": "Withdraw"
+								"PROGRESSIVE": "withdrawing"
 				},
 				"Yellow Affinity":	{
 								"DESCRIPTION": "",
-								"NAMES": ["yellow affinity"],
-								"PROPER_NAME": "Yellow Affinity"
+								"NAME": "Yellow Affinity"
 				},
 				"~Ethereal":	{
 								"DESCRIPTION": "#yExhausted if in hand at the end of turn.",
-								"NAMES": ["~ethereal"],
-								"PROPER_NAME": "Ethereal"
+								"NAME": "Ethereal"
 				},
 				"~Fetch":	{
 								"DESCRIPTION": "Move a card to your hand.",
-								"NAMES": ["fetch"],
-								"PAST": "Fetched",
-								"PRESENT": "Fetches",
-								"PROPER_NAME": "Fetch"
+								"NAME": "Fetch",
+								"PAST": "fetched",
+								"PRESENT": "fetches",
+								"PROGRESSIVE": "fetching"
 				},
 				"~Innate":	{
 								"DESCRIPTION": "Start each combat with this card in hand.",
-								"NAMES": ["~innate"],
-								"PROPER_NAME": "Innate"
+								"NAME": "Innate"
 				},
 				"~Lock-On":	{
 								"DESCRIPTION": "Receive #b+50% damage from #yOrbs. Prioritized by cards with random targeting.",
-								"NAMES": ["~lock-on"],
-								"PROPER_NAME": "Lock-On"
+								"NAME": "Lock-On"
 				},
 				"~Purge":	{
 								"DESCRIPTION": "Removed from combat.",
-								"NAMES": ["purge", "purged", "purges"],
+								"NAME": "Purge",
 								"PAST": "Purged",
 								"PRESENT": "Purges",
-								"PROPER_NAME": "Purge"
+								"PROGRESSIVE": "Purging"
 				},
 				"~Retain":	{
 								"DESCRIPTION": "Retained cards are not discarded at the end of turn.",
-								"NAMES": ["~retain"],
+								"NAME": "Retain",
 								"PAST": "Retained",
 								"PRESENT": "Retains",
-								"PROPER_NAME": "Retain"
+								"PROGRESSIVE": "Retaining"
 				},
 				"~Steal":	{
 								"DESCRIPTION": "You can steal up to #b50 #yGold from a boss, #b25 #yGold from an elite, or #b10 #yGold from other non-minion enemies.",
-								"NAMES": ["~steal"],
-								"PROPER_NAME": "Steal"
+								"NAME": "Steal",
+								"PAST": "stolen",
+								"PRESENT": "steals",
+								"PROGRESSIVE": "stealing"
 				}
 }

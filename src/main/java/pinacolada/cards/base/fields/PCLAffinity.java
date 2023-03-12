@@ -10,7 +10,6 @@ import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.ui.TextureCache;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.resources.PCLResources;
-import pinacolada.resources.PCLStrings;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.GameUtilities;
@@ -124,11 +123,21 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>
         REGISTERED_BORDERS.putIfAbsent(pc, cache);
     }
 
+    public static PCLAffinity[] getAvailableAffinities()
+    {
+        return getAvailableAffinities(GameUtilities.getActingColor());
+    }
+
     public static PCLAffinity[] getAvailableAffinities(AbstractCard.CardColor pc)
+    {
+        return getAvailableAffinities(pc, true);
+    }
+
+    public static PCLAffinity[] getAvailableAffinities(AbstractCard.CardColor pc, boolean allowColorless)
     {
         if (GameUtilities.isColorlessCardColor(pc))
         {
-            return extended();
+            return allowColorless ? extended() : new PCLAffinity[]{};
         }
         else
         {
@@ -136,9 +145,9 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>
         }
     }
 
-    public static PCLAffinity[] getAvailableAffinities()
+    public static List<PCLAffinity> getAvailableAffinitiesAsList()
     {
-        return getAvailableAffinities(GameUtilities.getActingColor());
+        return Arrays.asList(getAvailableAffinities());
     }
 
     public static List<PCLAffinity> getAvailableAffinitiesAsList(AbstractCard.CardColor pc)
@@ -146,9 +155,9 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>
         return Arrays.asList(getAvailableAffinities(pc));
     }
 
-    public static List<PCLAffinity> getAvailableAffinitiesAsList()
+    public static List<PCLAffinity> getAvailableAffinitiesAsList(AbstractCard.CardColor pc, boolean allowColorless)
     {
-        return Arrays.asList(getAvailableAffinities());
+        return Arrays.asList(getAvailableAffinities(pc, allowColorless));
     }
 
     public static PCLAffinity getRandomAvailableAffinity()

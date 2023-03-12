@@ -205,24 +205,9 @@ public class PCLCoreStrings extends PCLStrings
     public final String combat_active = combat.TEXT[9];
     public final String combat_inactive = combat.TEXT[10];
     public final String combat_disabled = combat.TEXT[11];
-    public final String combat_na = combat.TEXT[12];
-    public final String combat_eternalMeter = combat.TEXT[13];
-    public final String combat_eternalMeterAffinity = combat.TEXT[14];
-    public final String combat_eternalMeterCurrent = combat.TEXT[15];
-    public final String combat_eternalMeterGain = combat.TEXT[16];
-    public final String combat_eternalMeterSpend = combat.TEXT[17];
-    public final String combat_conjurerMeterDebuff = combat.TEXT[18];
-    public final String combat_conjurerMeterCost = combat.TEXT[19];
-    public final String combat_conjurerMeterDamage = combat.TEXT[20];
-    public final String combat_conjurerMeterSwitch = combat.TEXT[21];
-    public final String combat_conjurerMeterCombust = combat.TEXT[22];
-    public final String combat_conjurerMeterRedox = combat.TEXT[23];
-    public final String combat_conjurerMeterNextIntensity = combat.TEXT[24];
-    public final String combat_deciderMeterStacks = combat.TEXT[25];
-    public final String combat_deciderMeterStacksNextLevel = combat.TEXT[26];
-    public final String combat_dodged = combat.TEXT[27];
-    public final String combat_afterlifeMet = combat.TEXT[28];
-    public final String combat_afterlifeRequirement = combat.TEXT[29];
+    public final String combat_dodged = combat.TEXT[12];
+    public final String combat_afterlifeMet = combat.TEXT[13];
+    public final String combat_afterlifeRequirement = combat.TEXT[14];
 
     // Grid
     public final String grid_chooseCards = gridselection.TEXT[0];
@@ -251,17 +236,12 @@ public class PCLCoreStrings extends PCLStrings
     public final String misc_viewAugmentsDescription = misc.TEXT[1];
     public final String misc_viewAugmentsNone = misc.TEXT[2];
     public final String misc_viewCardPoolSeries = misc.TEXT[3];
-    public final String misc_cardModeHeader = misc.TEXT[4];
-    public final String misc_simpleMode = misc.TEXT[5];
-    public final String misc_simpleModeDescription = misc.TEXT[6];
-    public final String misc_complexMode = misc.TEXT[7];
-    public final String misc_complexModeDescription = misc.TEXT[8];
-    public final String misc_allowCustomCards = misc.TEXT[9];
-    public final String misc_pcl = misc.TEXT[10];
-    public final String misc_leftClick = misc.TEXT[11];
-    public final String misc_rightClick = misc.TEXT[12];
-    public final String misc_tempPowerPrefix = misc.TEXT[13];
-    public final String misc_requirement = misc.TEXT[14];
+    public final String misc_allowCustomCards = misc.TEXT[4];
+    public final String misc_pcl = misc.TEXT[5];
+    public final String misc_leftClick = misc.TEXT[6];
+    public final String misc_rightClick = misc.TEXT[7];
+    public final String misc_tempPowerPrefix = misc.TEXT[8];
+    public final String misc_requirement = misc.TEXT[9];
 
     // Options
     public final String options_cropCardImages = options.TEXT[0];
@@ -329,12 +309,7 @@ public class PCLCoreStrings extends PCLStrings
     public final String sui_selectRandom = seriesui.TEXT[15];
     public final String sui_showCardPool = seriesui.TEXT[16];
     public final String sui_save = seriesui.TEXT[17];
-    public final String sui_enableExpansion = seriesui.TEXT[18];
-    public final String sui_disableExpansion = seriesui.TEXT[19];
-    public final String sui_allExpansionEnable = seriesui.TEXT[20];
-    public final String sui_allExpansionDisable = seriesui.TEXT[21];
-    public final String sui_cancel = seriesui.TEXT[22];
-    public final String sui_showColorless = seriesui.TEXT[23];
+    public final String sui_cancel = seriesui.TEXT[18];
 
     // Subjects
     public final String subjects_allyN = subjects.TEXT[0];

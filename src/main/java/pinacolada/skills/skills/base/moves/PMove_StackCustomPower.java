@@ -43,7 +43,7 @@ public class PMove_StackCustomPower extends PMove<PField_CustomPower> implements
     @Override
     public String getText(boolean addPeriod)
     {
-        return capital(getSubText(), addPeriod) + (childEffect != null ? PCLCoreStrings.period(true) + " " + childEffect.getText(addPeriod) : "");
+        return getCapitalSubText(addPeriod) + (childEffect != null ? PCLCoreStrings.period(true) + " " + childEffect.getText(addPeriod) : "");
     }
 
     @Override

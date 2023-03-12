@@ -41,7 +41,7 @@ public class PCLAffinityPoolModule extends CustomCardFilterModule
     public PCLAffinityPoolModule(CardKeywordFilters filters)
     {
         super(filters);
-        seriesDropdown = (EUISearchableDropdown<PCLLoadout>) new EUISearchableDropdown<PCLLoadout>(new EUIHitbox(0, 0, scale(240), scale(48)), PCLLoadout::getName)
+        seriesDropdown = (EUISearchableDropdown<PCLLoadout>) new EUISearchableDropdown<PCLLoadout>(new EUIHitbox(0, 0, scale(240), scale(48)), PCLLoadout::getNameForFilter)
                 .setOnOpenOrClose(isOpen -> {
                     CardCrawlGame.isPopupOpen = this.isActive;
                 })

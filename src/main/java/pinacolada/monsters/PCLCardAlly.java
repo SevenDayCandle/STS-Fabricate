@@ -18,6 +18,7 @@ import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.vfx.ExhaustBlurEffect;
 import extendedui.EUI;
 import extendedui.EUIInputManager;
+import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.EUIBase;
 import extendedui.ui.tooltips.EUICardPreview;
@@ -140,7 +141,7 @@ public class PCLCardAlly extends PCLCreature
         {
             if (target == null || GameUtilities.isDeadOrEscaped(target))
             {
-                target = GameUtilities.getRandomEnemy(true);
+                target = EUIUtils.findMin(GameUtilities.getEnemies(true), e -> e.currentHealth);
             }
             this.card.calculateCardDamage(GameUtilities.asMonster(target));
             // TODO base intent on card moves

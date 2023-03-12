@@ -71,6 +71,7 @@ public class GridCardSelectScreenMultiformPatches
     }
 
     // TODO add patch for conditionals
+    // TODO buttons to switch forms if 4+ forms
     @SpirePatch(
             clz = GridCardSelectScreen.class,
             method = "update"

@@ -236,7 +236,7 @@ public abstract class PCLAugment implements TooltipProvider
 
     public String getReqsString()
     {
-        return data.reqs == null ? PGR.core.strings.combat_na : data.reqs.getString();
+        return data.reqs == null ? EUIRM.strings.na : data.reqs.getString();
     }
 
     public String getText()

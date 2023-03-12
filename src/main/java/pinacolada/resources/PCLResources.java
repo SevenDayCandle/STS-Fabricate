@@ -15,10 +15,9 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.localization.*;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
+import extendedui.EUI;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
-import extendedui.patches.EUIKeyword;
-import extendedui.ui.tooltips.EUITooltip;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.augments.AugmentStrings;
 import pinacolada.cards.base.PCLCard;
@@ -207,36 +206,8 @@ public abstract class PCLResources<T extends PCLAbstractPlayerData, U extends PC
 
     protected void loadKeywords()
     {
-        loadKeywords(getFallbackFile(JSON_KEYWORDS));
-        loadKeywords(getFile(Settings.language, JSON_KEYWORDS));
-    }
-
-    protected void loadKeywords(FileHandle file)
-    {
-        if (!file.exists())
-        {
-            EUIUtils.logWarning(this, "File not found: " + file.path());
-            return;
-        }
-
-        String json = file.readString(String.valueOf(StandardCharsets.UTF_8));
-        Map<String, EUIKeyword> items = EUIUtils.deserialize(json, new TypeToken<Map<String, EUIKeyword>>()
-        {
-        }.getType());
-
-        for (Map.Entry<String, EUIKeyword> pair : items.entrySet())
-        {
-            String id = pair.getKey();
-            EUIKeyword keyword = pair.getValue();
-            EUITooltip tooltip = new EUITooltip(keyword);
-
-            EUITooltip.registerID(id, tooltip);
-
-            for (String name : keyword.NAMES)
-            {
-                EUITooltip.registerName(name, tooltip);
-            }
-        }
+        EUI.registerKeywords(getFallbackFile(JSON_KEYWORDS));
+        EUI.registerKeywords(getFile(Settings.language, JSON_KEYWORDS));
     }
 
     protected void postInitialize()

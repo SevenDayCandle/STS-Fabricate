@@ -32,12 +32,14 @@ public interface CooldownProvider
             }
         }
     }
-
     default void reset()
     {
         setCooldown(getBaseCooldown());
     }
-
+    default boolean canActivate()
+    {
+        return getCooldown() <= 0;
+    }
     default ColoredString getCooldownString()
     {
         int amount = getCooldown();

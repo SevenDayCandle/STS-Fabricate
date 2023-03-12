@@ -53,7 +53,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
     public PCLCustomCardAttributesPage(PCLCustomCardEditCardScreen effect)
     {
         this.effect = effect;
-        availableAffinities = new ArrayList<>(PCLAffinity.getAvailableAffinitiesAsList(effect.currentSlot.slotColor));
+        availableAffinities = new ArrayList<>(PCLAffinity.getAvailableAffinitiesAsList(effect.currentSlot.slotColor, false));
         if (availableAffinities.size() > 0)
         {
             availableAffinities.add(PCLAffinity.Star);
