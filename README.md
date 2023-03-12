@@ -1,4 +1,4 @@
-# STS Card Editor (W.I.P. name)
+# Fabricate for Slay the Spire
 This mods adds an in-game card editor to Slay the Spire. It will eventually have relic and potion editors as well.
 
 ## Installation Instructions:
