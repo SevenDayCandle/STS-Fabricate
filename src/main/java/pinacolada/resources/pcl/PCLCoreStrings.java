@@ -261,7 +261,8 @@ public class PCLCoreStrings extends PCLStrings
     public final String optionDesc_vanillaCustomRunMenu = optionDesc.TEXT[2];
     public final String optionDesc_showFormulaDisplay = optionDesc.TEXT[3];
     public final String optionDesc_hideIrrelevantAffinities = optionDesc.TEXT[4];
-    public final String optionDesc_alwaysPCLCard = optionDesc.TEXT[5];
+    public final String optionDesc_onlyNewRuns = optionDesc.TEXT[5];
+    public final String optionDesc_alwaysPCLCard = optionDesc.TEXT[6];
 
     // Reward
     public final String rewards_rewardBreak = rewards.TEXT[0];

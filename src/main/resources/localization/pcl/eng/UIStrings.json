@@ -360,6 +360,7 @@
 												"Disables the replacement Custom Run Menu. To play with custom cards without using the Custom Run Menu, you will either need to use the console or toggle the \"Enable custom cards in normal runs\" setting.",
 												"Enables a draggable widget that shows damage formula calculations for custom cards when dragging them over targets.",
 												"Certain custom card properties (e.g. Affinities) are hidden by default for characters that don't use them. Check this option to always show these properties regardless of the character. | This setting also enables editing and interacting with these properties in the card editor for any card color.",
+												"This setting will only be applied to new runs.",
 												"Forces all cards encountered in a run to be built with this mod's card framework, which may improve compatibility between them and certain custom card effects. | WARNING: This setting will likely break functionality from other mods."
 								]
 				},
