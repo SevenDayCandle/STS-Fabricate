@@ -148,7 +148,7 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
                 .setShouldPositionClearAtTop(true)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.sui_affinities)
                 .setCanAutosize(true, true)
-                .setItems(PCLAffinity.getAvailableAffinities(editor.builder.cardColor, false));
+                .setItems(PCLAffinity.getAvailableAffinities(editor.builder.cardColor, PGR.config.showIrrelevantProperties.get()));
         affinities.setLabelFunctionForButton((list, __) -> affinities.makeMultiSelectString(item -> item.getFormattedSymbol(editor.builder.cardColor)), null, true);
 
         powers = (EUISearchableDropdown<PCLPowerHelper>) new EUISearchableDropdown<PCLPowerHelper>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.35f, MENU_HEIGHT, AUX_OFFSET, 0))
@@ -317,33 +317,42 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
 
     public <U> void registerDropdown(EUIDropdown<U> dropdown, ActionT1<List<U>> onChangeImpl, List<U> items)
     {
-        activeElements.add(dropdown);
-        dropdown.setOnChange(targets -> {
-            onChangeImpl.invoke(targets);
-            editor.scheduleConstruct();
-        });
-        dropdown.setSelection(items, false);
+        if (dropdown.size() > 0)
+        {
+            activeElements.add(dropdown);
+            dropdown.setOnChange(targets -> {
+                onChangeImpl.invoke(targets);
+                editor.scheduleConstruct();
+            });
+            dropdown.setSelection(items, false);
+        }
     }
 
     public <U> void registerDropdown(EUIDropdown<U> dropdown, ActionT1<List<U>> onChangeImpl, U item)
     {
-        activeElements.add(dropdown);
-        dropdown.setOnChange(targets -> {
-            onChangeImpl.invoke(targets);
-            editor.scheduleConstruct();
-        });
-        dropdown.setSelection(item, false);
+        if (dropdown.size() > 0)
+        {
+            activeElements.add(dropdown);
+            dropdown.setOnChange(targets -> {
+                onChangeImpl.invoke(targets);
+                editor.scheduleConstruct();
+            });
+            dropdown.setSelection(item, false);
+        }
     }
 
     public <U> void registerDropdown(EUIDropdown<U> dropdown, List<U> items)
     {
-        activeElements.add(dropdown);
-        dropdown.setOnChange(targets -> {
-            items.clear();
-            items.addAll(targets);
-            editor.scheduleConstruct();
-        });
-        dropdown.setSelection(items, false);
+        if (dropdown.size() > 0)
+        {
+            activeElements.add(dropdown);
+            dropdown.setOnChange(targets -> {
+                items.clear();
+                items.addAll(targets);
+                editor.scheduleConstruct();
+            });
+            dropdown.setSelection(items, false);
+        }
     }
 
     public <U> void registerDropdown(List<U> possibleItems, List<U> selectedItems, FuncT1<String, U> textFunc, String title, boolean smartText)

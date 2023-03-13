@@ -11,7 +11,6 @@ import pinacolada.cards.base.fields.*;
 import pinacolada.cards.base.tags.CardTagItem;
 import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.resources.PCLResources;
-import pinacolada.resources.PCLStrings;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.skills.PSkill;
@@ -97,7 +96,10 @@ public class PCLDynamicData extends PCLCardData
         }
 
         setImagePath(original.imagePath);
-        setProperties(original.cardType, original.cardColor, original.cardRarity);
+
+        setColor(original.cardColor);
+        setRarity(original.cardRarity);
+        setType(original.cardType);
         setLoadout(original.loadout);
         setText(name, text, text);
     }
@@ -124,7 +126,9 @@ public class PCLDynamicData extends PCLCardData
     public PCLDynamicData(PCLCustomCardSlot data)
     {
         this(data.ID);
-        setColor(data.slotColor); // Color and ID are required to not be corrupted
+        safeLoadValue(() -> setColor(data.slotColor));
+        safeLoadValue(() -> setRarity(AbstractCard.CardRarity.valueOf(data.rarity)));
+        safeLoadValue(() -> setType(AbstractCard.CardType.valueOf(data.type)));
         safeLoadValue(() -> damage = data.damage.clone());
         safeLoadValue(() -> damageUpgrade = data.damageUpgrade.clone());
         safeLoadValue(() -> block = data.block.clone());
@@ -144,7 +148,6 @@ public class PCLDynamicData extends PCLCardData
         safeLoadValue(() -> setUnique(data.unique));
         safeLoadValue(() -> setRemovableFromDeck(data.removableFromDeck));
         safeLoadValue(() -> setLanguageMap(EUIUtils.deserialize(data.languageStrings, TStrings.getType())));
-        safeLoadValue(() -> setProperties(AbstractCard.CardType.valueOf(data.type), AbstractCard.CardRarity.valueOf(data.rarity)));
         safeLoadValue(() -> setTarget(PCLCardTarget.valueOf(data.target)));
         safeLoadValue(() -> setTags(EUIUtils.map(data.tags, t -> EUIUtils.deserialize(t, PCLCardTagInfo.class))));
         if (data.loadout != null)
@@ -386,22 +389,21 @@ public class PCLDynamicData extends PCLCardData
         return this;
     }
 
-    public PCLDynamicData setProperties(AbstractCard.CardType type, AbstractCard.CardRarity rarity)
+    public PCLDynamicData setColor(AbstractCard.CardColor color)
     {
-        return setProperties(type, AbstractCard.CardColor.COLORLESS, rarity);
+        super.setColor(color);
+        return this;
     }
 
-    public PCLDynamicData setProperties(AbstractCard.CardType type, AbstractCard.CardColor color, AbstractCard.CardRarity rarity)
+    public PCLDynamicData setRarity(AbstractCard.CardRarity rarity)
     {
-        this.cardType = type;
-        this.cardColor = color;
         this.cardRarity = rarity;
         return this;
     }
 
-    public PCLDynamicData setColor(AbstractCard.CardColor color)
+    public PCLDynamicData setType(AbstractCard.CardType type)
     {
-        super.setColor(color);
+        this.cardType = type;
         return this;
     }
 

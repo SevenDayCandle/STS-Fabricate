@@ -54,7 +54,7 @@ public class PMod_PerCreatureWith extends PMod_Per<PField_Power>
     @Override
     public String getSubText()
     {
-        return TEXT.subjects_enemyWithX(TEXT.subjects_x);
+        return TEXT.subjects_characterWithX(TEXT.subjects_x);
     }
 
     @Override

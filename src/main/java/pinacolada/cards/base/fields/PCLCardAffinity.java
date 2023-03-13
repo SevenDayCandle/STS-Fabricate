@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUI;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class PCLCardAffinity implements Comparable<PCLCardAffinity>
@@ -44,7 +44,7 @@ public class PCLCardAffinity implements Comparable<PCLCardAffinity>
 
         if (type == PCLAffinity.Star)
         {
-            PCLRenderHelpers.drawCentered(sb, color, PGR.core.images.starFg.texture(), cX, cY, size, size, 1, 0);
+            PCLRenderHelpers.drawCentered(sb, color, PCLCoreImages.starFg.texture(), cX, cY, size, size, 1, 0);
         }
     }
 
@@ -77,7 +77,7 @@ public class PCLCardAffinity implements Comparable<PCLCardAffinity>
 
         if (type == PCLAffinity.Star)
         {
-            Texture star = PGR.core.images.starFg.texture();
+            Texture star = PCLCoreImages.starFg.texture();
             PCLRenderHelpers.drawOnCardAuto(sb, card, star, new Vector2(x, y), size, size, color, 1f, 1f, 0);
         }
     }

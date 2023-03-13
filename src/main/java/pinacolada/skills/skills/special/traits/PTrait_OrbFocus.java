@@ -1,7 +1,6 @@
-package pinacolada.skills.skills.base.traits;
+package pinacolada.skills.skills.special.traits;
 
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
-import pinacolada.annotations.VisibleSkill;
 import pinacolada.interfaces.subscribers.OnOrbApplyFocusSubscriber;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
@@ -10,7 +9,6 @@ import pinacolada.skills.PTrait;
 import pinacolada.skills.fields.PField_Empty;
 import pinacolada.utilities.GameUtilities;
 
-@VisibleSkill
 public class PTrait_OrbFocus extends PTrait<PField_Empty> implements OnOrbApplyFocusSubscriber
 {
 

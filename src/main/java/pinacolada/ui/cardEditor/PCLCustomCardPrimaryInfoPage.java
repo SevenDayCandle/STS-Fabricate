@@ -21,7 +21,6 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.CardTagItem;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLResources;
-import pinacolada.resources.PCLStrings;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.pcl.PCLCoreImages;
@@ -67,11 +66,21 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
     // Colorless/Curse should not be able to see Summon in the card editor
     protected static List<AbstractCard.CardType> getEligibleTypes(AbstractCard.CardColor color)
     {
-        if (GameUtilities.isPCLOnlyCardColor(color))
+        if (GameUtilities.isPCLOnlyCardColor(color) || PGR.config.showIrrelevantProperties.get())
         {
             return Arrays.asList(AbstractCard.CardType.values());
         }
         return EUIUtils.filter(AbstractCard.CardType.values(), v -> v != PCLEnum.CardType.SUMMON);
+    }
+
+    // Colorless/Curse should not be able to see Summon in the card editor
+    protected static List<PCLCardTarget> getEligibleTargets(AbstractCard.CardColor color)
+    {
+        if (GameUtilities.isPCLOnlyCardColor(color) || PGR.config.showIrrelevantProperties.get())
+        {
+            return PCLCardTarget.getAll();
+        }
+        return EUIUtils.filter(PCLCardTarget.getAll(), PCLCardTarget::vanillaCompatible);
     }
 
     public PCLCustomCardPrimaryInfoPage(PCLCustomCardEditCardScreen effect)
@@ -160,7 +169,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
                 .setLabelFunctionForOption(PCLCardTarget::getTitle, false)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_cardTarget)
                 .setCanAutosizeButton(true)
-                .setItems(PCLCardTarget.getAll())
+                .setItems(getEligibleTargets(effect.getBuilder().cardColor))
                 .setTooltip(PGR.core.strings.cedit_cardTarget, PGR.core.strings.cetut_cardTarget);
         flagsDropdown = new EUISearchableDropdown<CardTagItem>(new EUIHitbox(START_X, screenH(0.5f), MENU_WIDTH, MENU_HEIGHT), cs -> cs.getTip().title)
                 .setOnChange(selectedSeries -> {
@@ -169,7 +178,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_flags)
                 .setCanAutosizeButton(true)
                 .setIsMultiSelect(true)
-                .setItems(CardTagItem.getCompatible(effect.currentSlot.slotColor))
+                .setItems(PGR.config.showIrrelevantProperties.get() ? CardTagItem.getAll() : CardTagItem.getCompatible(effect.currentSlot.slotColor))
                 .setTooltip(PGR.core.strings.cedit_flags, PGR.core.strings.cetut_primaryFlags);
 
         loadoutDropdown = new EUISearchableDropdown<PCLLoadout>(new EUIHitbox(flagsDropdown.hb.x + flagsDropdown.hb.width + SPACING_WIDTH, screenH(0.5f), MENU_WIDTH, MENU_HEIGHT), PCLLoadout::getName)

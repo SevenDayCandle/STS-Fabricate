@@ -65,7 +65,6 @@ import pinacolada.powers.PCLPower;
 import pinacolada.powers.replacement.PCLLockOnPower;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLResources;
-import pinacolada.resources.PCLStrings;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
@@ -1554,7 +1553,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         setAttackType(cardData.attackType);
 
         if (timesUpgraded > 0) {
-            setCost(cardData.getCost(form + cardData.getCostUpgrade(form)));
+            setCost(cardData.getCost(form) + cardData.getCostUpgrade(form));
         }
 
         this.affinities.initialize(cardData.affinities, form);
@@ -2173,7 +2172,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
 
     @SpireOverride
     protected void renderBannerImage(SpriteBatch sb, float drawX, float drawY) {
-        if (isSeen && (!PGR.config.hideIrrelevantAffinities.get() || GameUtilities.isPCLActingCardColor(this))) {
+        if (isSeen && (PGR.config.showIrrelevantProperties.get() || GameUtilities.isPCLActingCardColor(this))) {
             affinities.renderOnCard(sb, this, player != null && player.hand.contains(this));
         }
         if (!tryRenderCentered(sb, getCardBanner(), getRarityColor(), isPopup ? 0.5f : 1f)) {

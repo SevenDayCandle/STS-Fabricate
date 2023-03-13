@@ -7,7 +7,10 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.utilities.ColoredTexture;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.cards.base.PCLDynamicCard;
 import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreImages;
+import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,7 +21,7 @@ import static pinacolada.cards.base.fields.PCLAffinity.TOTAL_AFFINITIES;
 
 public class PCLCardAffinities
 {
-    private static final ColoredTexture upgradeCircle = new ColoredTexture(PGR.core.images.circle.texture(), Settings.GREEN_RELIC_COLOR);
+    private static final ColoredTexture upgradeCircle = new ColoredTexture(PCLCoreImages.circle.texture(), Settings.GREEN_RELIC_COLOR);
     public final ArrayList<PCLCardAffinity> sorted = new ArrayList<>();
     public PCLCard card;
     public PCLCardAffinity star = null;
@@ -508,7 +511,7 @@ public class PCLCardAffinities
         sorted.clear();
         for (PCLCardAffinity a : list)
         {
-            if (a == null || a.level <= 0 || (PGR.config.hideIrrelevantAffinities.get() && card != null && !EUIUtils.any(PCLAffinity.getAvailableAffinities(), b -> b == a.type)))
+            if (a == null || a.level <= 0 || shouldHideAffinity(a.type))
             {
                 continue;
             }
@@ -540,11 +543,22 @@ public class PCLCardAffinities
             }
         }
 
-        if (sorted.isEmpty())
+        if (sorted.isEmpty() && (PGR.config.showIrrelevantProperties.get() || getAvailableAffinities().length > 0))
         {
             sorted.add(new PCLCardAffinity(General, 1));
         }
 
         sorted.sort(PCLCardAffinity::compareTo);
     }
+
+    protected boolean shouldHideAffinity(PCLAffinity a)
+    {
+        return (!PGR.config.showIrrelevantProperties.get() && card != null && !EUIUtils.any(getAvailableAffinities(), b -> b == a));
+    }
+
+    protected PCLAffinity[] getAvailableAffinities()
+    {
+        return PCLAffinity.getAvailableAffinities(GameUtilities.getActingColor(), !(card instanceof PCLDynamicCard));
+    }
+
 }

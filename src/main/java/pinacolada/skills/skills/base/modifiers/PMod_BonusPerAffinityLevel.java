@@ -15,7 +15,7 @@ import pinacolada.utilities.GameUtilities;
 public class PMod_BonusPerAffinityLevel extends PMod_BonusPer<PField_Affinity>
 {
 
-    public static final PSkillData<PField_Affinity> DATA = register(PMod_BonusPerAffinityLevel.class, PField_Affinity.class).selfTarget();
+    public static final PSkillData<PField_Affinity> DATA = register(PMod_BonusPerAffinityLevel.class, PField_Affinity.class).pclOnly().selfTarget();
 
     public PMod_BonusPerAffinityLevel(PSkillSaveData content)
     {

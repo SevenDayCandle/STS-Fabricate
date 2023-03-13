@@ -12,6 +12,7 @@ import pinacolada.skills.skills.base.traits.*;
 import pinacolada.skills.skills.special.traits.PTrait_Affinity;
 import pinacolada.skills.skills.special.traits.PTrait_AttackType;
 import pinacolada.skills.skills.special.traits.PTrait_CardTarget;
+import pinacolada.skills.skills.special.traits.PTrait_Priority;
 
 public abstract class PTrait<T extends PField> extends PMove<T>
 {

@@ -101,7 +101,7 @@
 												"Reload Cards",
 												"Confirm Deletion",
 												"Are you sure you want to delete this item? This action cannot be undone.",
-												"Custom Cards",
+												"Customize",
 												"Create new custom cards or edit ones that you've already created.",
 												"Primary Info",
 												"These properties apply to ALL forms of this card.",
@@ -345,22 +345,22 @@
 												"Display Card Tags in description",
 												"Use Vanilla Custom Run Menu",
 												"Show formula display",
-												"Hide irrelevant Affinities for the current character",
-												"Enable Custom Cards in normal runs",
-												"Enable Custom Relics in normal runs",
-												"Enable Custom Poitons in normal runs",
-												"Enable Custom Events in normal runs",
-												"Use Custom Card framework for all cards"
+												"Show irrelevant card properties",
+												"Enable custom cards in normal runs",
+												"Enable custom relics in normal runs",
+												"Enable custom poitons in normal runs",
+												"Enable custom events in normal runs",
+												"Use custom card framework for all cards"
 								]
 				},
 				"pcl:OptionDescriptions": {
 								"TEXT": [
-												"Card portraits will be zoomed in when not hovering over them. Only works for Custom Cards, and has no effect in Single Card Popup View.",
-												"Tags normally appearing on the top-right corner of Custom Cards will instead appear as keywords in their descriptions.",
-												"Disables the replacement Custom Run Menu. To play with Custom Cards without using the Custom Run Menu, you will either need to use the console or toggle the \"Enable Custom Cards in normal Runs\" setting.",
-												"Enables a draggable widget that shows damage formula calculations for Custom Cards when dragging them over targets.",
-												"Hides Affinities on cards that are not used by your current character. For characters that do not use Affinities, this hides them altogether.",
-												"Forces all cards encountered in a run to be built with this mod's card framework, which may improve compatibility between them and certain Custom Card effect. | WARNING: This setting will likely break the functionality other mods."
+												"Card portraits will be zoomed in when not hovering over them. Only works for custom cards, and has no effect in Single Card Popup View.",
+												"Tags normally appearing on the top-right corner of custom cards will instead appear as keywords in their descriptions.",
+												"Disables the replacement Custom Run Menu. To play with custom cards without using the Custom Run Menu, you will either need to use the console or toggle the \"Enable custom cards in normal runs\" setting.",
+												"Enables a draggable widget that shows damage formula calculations for custom cards when dragging them over targets.",
+												"Certain custom card properties (e.g. Affinities) are hidden by default for characters that don't use them. Check this option to always show these properties regardless of the character. | This setting also enables editing and interacting with these properties in the card editor for any card color.",
+												"Forces all cards encountered in a run to be built with this mod's card framework, which may improve compatibility between them and certain custom card effects. | WARNING: This setting will likely break functionality from other mods."
 								]
 				},
 				"pcl:Rewards": {

@@ -70,7 +70,7 @@ public class PCLCustomCardAttackPage extends PCLCustomCardEffectPage
                 .setCanAutosizeButton(true)
                 .setItems(EUIUtils.filter(PCLAttackType.values(), v -> v.getTooltip() != null))
                 .setTooltip(PGR.core.strings.cedit_attackType, PGR.core.strings.cetut_attackType);
-        attackEffectDropdown = new EUIDropdown<AbstractGameAction.AttackEffect>(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, MENU_WIDTH * 3.1f, OFFSET_EFFECT * 1.5f)
+        attackEffectDropdown = new EUIDropdown<AbstractGameAction.AttackEffect>(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, MENU_WIDTH * 3.3f, OFFSET_EFFECT * 1.5f)
                 , item -> StringUtils.capitalize(item.toString().toLowerCase()))
                 .setOnChange(targets -> {
                     if (!targets.isEmpty() && primaryCond instanceof PCardPrimary_DealDamage)

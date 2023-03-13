@@ -1272,7 +1272,7 @@ public class GameUtilities
             // Note that the basic and special rarities have no pools so we ignore them
             if (rarity != null)
             {
-                EUIUtils.logWarning(null, "No cards found for Rarity " + rarity + ", Type " + type);
+                EUIUtils.logInfo(null, "No cards found for Rarity " + rarity + ", Type " + type);
                 int nextRarityIndex = Math.max(0, rarity.ordinal() - 1);
                 return getRandomCard(nextRarityIndex > 1 ? poolOrdering[nextRarityIndex] : null, type, useRng, allowOtherRarities);
             }
@@ -1868,11 +1868,6 @@ public class GameUtilities
     public static boolean isPCLActingCardColor(AbstractCard card)
     {
         return isPCLCardColor(getActingCardColor(card));
-    }
-
-    public static boolean isPCLEYBActingColor()
-    {
-        return isPCLCardColor(getActingColor());
     }
 
     // PCL check that includes colorless/curse

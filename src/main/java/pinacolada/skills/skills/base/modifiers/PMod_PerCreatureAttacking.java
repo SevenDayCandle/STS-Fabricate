@@ -46,7 +46,7 @@ public class PMod_PerCreatureAttacking extends PMod_Per<PField_Empty>
     @Override
     public String getSubText()
     {
-        return EUIRM.strings.adjNoun(PGR.core.tooltips.attack.progressive(), TEXT.subjects_x);
+        return EUIRM.strings.adjNoun(PGR.core.tooltips.attack.progressive(), TEXT.subjects_character);
     }
 
     @Override

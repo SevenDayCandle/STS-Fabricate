@@ -1,6 +1,5 @@
-package pinacolada.skills.skills.base.traits;
+package pinacolada.skills.skills.special.traits;
 
-import pinacolada.annotations.VisibleSkill;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
@@ -8,10 +7,8 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.PTrait;
 import pinacolada.skills.fields.PField_Empty;
 
-@VisibleSkill
 public class PTrait_Priority extends PTrait<PField_Empty>
 {
-
     public static final PSkillData<PField_Empty> DATA = register(PTrait_Priority.class, PField_Empty.class);
 
     public PTrait_Priority()

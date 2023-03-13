@@ -99,7 +99,9 @@ public class ReplacementData extends PCLDynamicData
                 break;
         }
         setTarget(ct);
-        setProperties(original.type, original.rarity);
+        setColor(original.color);
+        setRarity(original.rarity);
+        setType(original.type);
         setText(name, text, null);
     }
 
