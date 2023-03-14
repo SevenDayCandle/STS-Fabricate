@@ -24,6 +24,7 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.localization.LocalizedStrings;
@@ -102,7 +103,9 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     protected static final String UNPLAYABLE_MESSAGE = CardCrawlGame.languagePack.getCardStrings(Tactician.ID).EXTENDED_DESCRIPTION[0];
     protected static final float SHADOW_OFFSET_X = 18f * Settings.scale;
     protected static final float SHADOW_OFFSET_Y = 14f * Settings.scale;
+    public static final Color CARD_TYPE_COLOR = new Color(0.35F, 0.35F, 0.35F, 1.0F);
     public static final Color REGULAR_GLOW_COLOR = new Color(0.2F, 0.9F, 1.0F, 0.25F);
+    public static final Color SHADOW_COLOR = new Color(0, 0, 0, 0.25f);
     public static final Color SYNERGY_GLOW_COLOR = new Color(1, 0.843f, 0, 0.25f);
     public static final int CHAR_OFFSET = 97;
     public static AbstractPlayer player = null;
@@ -625,6 +628,34 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         return null;
     }
 
+    protected TextureAtlas.AtlasRegion getCardBannerVanillaRegion()
+    {
+        if (isPopup)
+        {
+            switch (rarity)
+            {
+                case RARE:
+                    return ImageMaster.CARD_BANNER_RARE_L;
+                case UNCOMMON:
+                    return ImageMaster.CARD_BANNER_UNCOMMON_L;
+                default:
+                    return ImageMaster.CARD_BANNER_COMMON_L;
+            }
+        }
+        else
+        {
+            switch (rarity)
+            {
+                case RARE:
+                    return ImageMaster.CARD_BANNER_RARE;
+                case UNCOMMON:
+                    return ImageMaster.CARD_BANNER_UNCOMMON;
+                default:
+                    return ImageMaster.CARD_BANNER_COMMON;
+            }
+        }
+    }
+
     // For PCL cards, always use the skill silhouette because its cards are all rectangular
     @Override
     public TextureAtlas.AtlasRegion getCardBgAtlas() {
@@ -762,18 +793,89 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
             switch (type) {
                 case ATTACK:
                     return isPopup ? PCLCoreImages.CardFrames.cardFrameAttackL.texture() : PCLCoreImages.CardFrames.cardFrameAttack.texture();
-
                 case POWER:
                     return isPopup ? PCLCoreImages.CardFrames.cardFramePowerL.texture() : PCLCoreImages.CardFrames.cardFramePower.texture();
-
-                case SKILL:
-                case CURSE:
-                case STATUS:
                 default:
                     return isPopup ? PCLCoreImages.CardFrames.cardFrameSkillL.texture() : PCLCoreImages.CardFrames.cardFrameSkill.texture();
             }
         }
         return null;
+    }
+
+    protected TextureAtlas.AtlasRegion getPortraitFrameVanillaRegion()
+    {
+        if (isPopup)
+        {
+            switch (type)
+            {
+                case ATTACK:
+                    switch (rarity)
+                    {
+                        case RARE:
+                            return ImageMaster.CARD_FRAME_ATTACK_RARE_L;
+                        case UNCOMMON:
+                            return ImageMaster.CARD_FRAME_ATTACK_UNCOMMON_L;
+                        default:
+                            return ImageMaster.CARD_FRAME_ATTACK_COMMON_L;
+                    }
+                case POWER:
+                    switch (rarity)
+                    {
+                        case RARE:
+                            return ImageMaster.CARD_FRAME_POWER_RARE_L;
+                        case UNCOMMON:
+                            return ImageMaster.CARD_FRAME_POWER_UNCOMMON_L;
+                        default:
+                            return ImageMaster.CARD_FRAME_POWER_COMMON_L;
+                    }
+                default:
+                    switch (rarity)
+                    {
+                        case RARE:
+                            return ImageMaster.CARD_FRAME_SKILL_RARE_L;
+                        case UNCOMMON:
+                            return ImageMaster.CARD_FRAME_SKILL_UNCOMMON_L;
+                        default:
+                            return ImageMaster.CARD_FRAME_SKILL_COMMON_L;
+                    }
+            }
+        }
+        else
+        {
+            switch (type)
+            {
+                case ATTACK:
+                    switch (rarity)
+                    {
+                        case RARE:
+                            return ImageMaster.CARD_FRAME_ATTACK_RARE;
+                        case UNCOMMON:
+                            return ImageMaster.CARD_FRAME_ATTACK_UNCOMMON;
+                        default:
+                            return ImageMaster.CARD_FRAME_ATTACK_COMMON;
+                    }
+                case POWER:
+                    switch (rarity)
+                    {
+                        case RARE:
+                            return ImageMaster.CARD_FRAME_POWER_RARE;
+                        case UNCOMMON:
+                            return ImageMaster.CARD_FRAME_POWER_UNCOMMON;
+                        default:
+                            return ImageMaster.CARD_FRAME_POWER_COMMON;
+                    }
+                default:
+                    switch (rarity)
+                    {
+                        case RARE:
+                            return ImageMaster.CARD_FRAME_SKILL_RARE;
+                        case UNCOMMON:
+                            return ImageMaster.CARD_FRAME_SKILL_UNCOMMON;
+                        default:
+                            return ImageMaster.CARD_FRAME_SKILL_COMMON;
+                    }
+            }
+        }
     }
 
     public Color getRarityColor() {
@@ -2175,8 +2277,18 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         if (isSeen && (PGR.config.showIrrelevantProperties.get() || GameUtilities.isPCLActingCardColor(this))) {
             affinities.renderOnCard(sb, this, player != null && player.hand.contains(this));
         }
-        if (!tryRenderCentered(sb, getCardBanner(), getRarityColor(), isPopup ? 0.5f : 1f)) {
-            SpireSuper.call(sb, drawX, drawY);
+        float sc = isPopup ? 0.5f : 1f;
+        if (!tryRenderCentered(sb, getCardBanner(), getRarityColor(), sc))
+        {
+            // Copying base game behavior
+            if (isPopup)
+            {
+                renderAtlas(sb, Color.WHITE, getCardBannerVanillaRegion(), (float)Settings.WIDTH / 2.0F, (float)Settings.HEIGHT / 2.0F, sc);
+            }
+            else
+            {
+                renderAtlas(sb, Color.WHITE, getCardBannerVanillaRegion(), current_x, current_y, sc);
+            }
         }
     }
 
@@ -2218,12 +2330,22 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
             Texture energyOrb = getEnergyOrb();
             PCLRenderHelpers.drawOnCardAuto(sb, this, energyOrb, offset, energyOrb.getWidth(), energyOrb.getHeight(), getRenderColor(), transparency, popUpMultiplier);
 
-            ColoredString costString = getCostString();
-            if (costString != null) {
-                BitmapFont font = PCLRenderHelpers.getEnergyFont(this);
-                PCLRenderHelpers.writeOnCard(sb, this, font, costString.text, -132f, 192f, costString.color);
-                PCLRenderHelpers.resetFont(font);
-            }
+            renderEnergyText(sb);
+        }
+    }
+
+    protected void renderEnergyText(SpriteBatch sb)
+    {
+        renderEnergyText(sb, -132f, 192f);
+    }
+
+    protected void renderEnergyText(SpriteBatch sb, float xOffset, float yOffset)
+    {
+        ColoredString costString = getCostString();
+        if (costString != null) {
+            BitmapFont font = PCLRenderHelpers.getEnergyFont(this);
+            PCLRenderHelpers.writeOnCard(sb, this, font, costString.text, xOffset, yOffset, costString.color);
+            PCLRenderHelpers.resetFont(font);
         }
     }
 
@@ -2321,8 +2443,18 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
 
     @SpireOverride
     protected void renderPortraitFrame(SpriteBatch sb, float x, float y) {
-        if (!tryRenderCentered(sb, getPortraitFrame(), getRarityColor(), isPopup ? 0.5f : 1f)) {
-            SpireSuper.call(sb, x, y);
+        float sc = isPopup ? 0.5f : 1f;
+        if (!tryRenderCentered(sb, getPortraitFrame(), getRarityColor(), sc))
+        {
+            // Copying base game location behavior
+            if (isPopup)
+            {
+                renderAtlas(sb, Color.WHITE, getPortraitFrameVanillaRegion(), (float)Settings.WIDTH / 2.0F, (float)Settings.HEIGHT / 2.0F, sc);
+            }
+            else
+            {
+                renderAtlas(sb, Color.WHITE, getPortraitFrameVanillaRegion(), current_x, current_y, sc);
+            }
         }
     }
 
@@ -2360,7 +2492,14 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
             }
             else
             {
-                SpireSuper.call(sb);
+                if (isPopup)
+                {
+                    FontHelper.renderFontCentered(sb, FontHelper.panelNameFont, EUIGameUtils.textForType(type), (float)Settings.WIDTH / 2.0F + 3.0F * Settings.scale, (float)Settings.HEIGHT / 2.0F - 40.0F * Settings.scale, CARD_TYPE_COLOR);
+                }
+                else
+                {
+                    SpireSuper.call(sb);
+                }
             }
         }
     }

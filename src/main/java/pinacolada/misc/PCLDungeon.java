@@ -21,6 +21,7 @@ import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import com.megacrit.cardcrawl.rooms.MonsterRoomBoss;
 import com.megacrit.cardcrawl.vfx.UpgradeShineEffect;
+import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import pinacolada.augments.PCLAugment;
 import pinacolada.blights.common.AbstractGlyphBlight;
@@ -403,8 +404,8 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
     private void banCards(PCLAbstractPlayerData data)
     {
         final ArrayList<CardGroup> groups = new ArrayList<>();
-        groups.addAll(GameUtilities.getCardPools());
-        groups.addAll(GameUtilities.getSourceCardPools());
+        groups.addAll(EUIGameUtils.getGameCardPools());
+        groups.addAll(EUIGameUtils.getSourceCardPools());
 
         if (CardCrawlGame.trial instanceof PCLCustomTrial)
         {

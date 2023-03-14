@@ -16,6 +16,7 @@ import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
+import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.CardTagItem;
@@ -43,8 +44,6 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
     protected static final float START_X = screenW(0.25f);
     protected static final float PAD_X = AbstractCard.IMG_WIDTH * 0.75f + Settings.CARD_VIEW_PAD_X;
     protected static final float PAD_Y = scale(10);
-    protected static final Color bc1 = new Color(0.35F, 0.35F, 0.35F, 1.0F);
-    protected static final Color sc1 = new Color(0, 0, 0, 0.25f);
 
     protected PCLCustomCardEditCardScreen effect;
     protected EUILabel header;
@@ -195,11 +194,13 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
         maxUpgrades = new PCLValueEditor(new EUIHitbox(START_X, screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , PGR.core.strings.cedit_maxUpgrades, (val) -> effect.modifyAllBuilders(e -> e.setMaxUpgrades(val)))
                 .setLimits(-1, PSkill.DEFAULT_MAX)
-                .setTooltip(PGR.core.strings.cedit_maxUpgrades, PGR.core.strings.cetut_maxUpgrades);
+                .setTooltip(PGR.core.strings.cedit_maxUpgrades, PGR.core.strings.cetut_maxUpgrades)
+                .setHasInfinite(true, true);
         maxCopies = new PCLValueEditor(new EUIHitbox(screenW(0.35f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , PGR.core.strings.cedit_maxCopies, (val) -> effect.modifyAllBuilders(e -> e.setMaxCopies(val)))
                 .setLimits(-1, PSkill.DEFAULT_MAX)
-                .setTooltip(PGR.core.strings.cedit_maxCopies, PGR.core.strings.cetut_maxCopies);
+                .setTooltip(PGR.core.strings.cedit_maxCopies, PGR.core.strings.cetut_maxCopies)
+                .setHasInfinite(true, true);
         uniqueToggle = (EUIToggle) new EUIToggle(new EUIHitbox(screenW(0.45f), screenH(0.4f), MENU_WIDTH, MENU_HEIGHT))
                 .setFont(EUIFontHelper.carddescriptionfontNormal, 0.9f)
                 .setText(PGR.core.tooltips.unique.title)
@@ -312,7 +313,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
     private void updateLanguage(Settings.GameLanguage language)
     {
         activeLanguage = language;
-        nameInput.setFont(language == Settings.language ? EUIFontHelper.cardtitlefontNormal : EUIFontHelper.createBoldFont(language, true, 27.0F, 2f, bc1, 3f, sc1), 0.7f)
+        nameInput.setFont(language == Settings.language ? EUIFontHelper.cardtitlefontNormal : EUIFontHelper.createBoldFont(language, true, 27.0F, 2f, PCLCard.CARD_TYPE_COLOR, 3f, PCLCard.SHADOW_COLOR), 0.7f)
                 .setLabel(effect.getBuilder().getStringsForLanguage(activeLanguage).NAME);
     }
 }

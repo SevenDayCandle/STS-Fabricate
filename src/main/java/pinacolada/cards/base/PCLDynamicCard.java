@@ -2,12 +2,11 @@ package pinacolada.cards.base;
 
 import basemod.BaseMod;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
+import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
-import extendedui.utilities.ColoredString;
 import pinacolada.interfaces.markers.DynamicCard;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
@@ -22,9 +21,13 @@ import java.util.ArrayList;
 public class PCLDynamicCard extends PCLCard implements DynamicCard
 {
     private TextureAtlas.AtlasRegion vanillaEnergyOrb;
+    private TextureAtlas.AtlasRegion vanillaEnergyOrbLarge;
     private TextureAtlas.AtlasRegion vanillaBg;
+    private TextureAtlas.AtlasRegion vanillaBgLarge;
     private Texture customBg;
+    private Texture customBgLarge;
     private Texture customEnergyOrb;
+    private Texture customEnergyOrbLarge;
     protected ArrayList<PCLDynamicData> forms;
     protected PCLDynamicData builder;
 
@@ -65,14 +68,18 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
         if (!GameUtilities.isPCLOnlyCardColor(builder.cardColor))
         {
             this.vanillaEnergyOrb = getVanillaEnergyOrb(builder.cardColor);
+            this.vanillaEnergyOrbLarge = getVanillaEnergyPopupOrb(builder.cardColor);
             if (vanillaEnergyOrb == null)
             {
-                this.customEnergyOrb = getEnergyOrb();
+                this.customEnergyOrb = getCustomEnergyOrb();
+                this.customEnergyOrbLarge = getCustomEnergyPopupOrb();
             }
             this.vanillaBg = getBaseGameCardBackground();
+            this.vanillaBgLarge = getBaseGameCardPopupBackground();
             if (vanillaBg == null)
             {
-                this.customBg = getCardBackground();
+                this.customBg = getCustomCardBackground();
+                this.customBgLarge = getCustomCardPopupBackground();
             }
         }
     }
@@ -85,16 +92,16 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
                 switch (color)
                 {
                     case RED:
-                        return isPopup ? ImageMaster.CARD_POWER_BG_RED_L : ImageMaster.CARD_POWER_BG_RED;
+                        return ImageMaster.CARD_POWER_BG_RED;
                     case GREEN:
-                        return isPopup ? ImageMaster.CARD_POWER_BG_GREEN_L : ImageMaster.CARD_POWER_BG_GREEN;
+                        return ImageMaster.CARD_POWER_BG_GREEN;
                     case BLUE:
-                        return isPopup ? ImageMaster.CARD_POWER_BG_BLUE_L : ImageMaster.CARD_POWER_BG_BLUE;
+                        return ImageMaster.CARD_POWER_BG_BLUE;
                     case PURPLE:
-                        return isPopup ? ImageMaster.CARD_POWER_BG_PURPLE_L : ImageMaster.CARD_POWER_BG_PURPLE;
+                        return ImageMaster.CARD_POWER_BG_PURPLE;
                     case COLORLESS:
                     case CURSE:
-                        return isPopup ? ImageMaster.CARD_POWER_BG_GRAY_L : ImageMaster.CARD_POWER_BG_GRAY;
+                        return ImageMaster.CARD_POWER_BG_GRAY;
                     default:
                         return null;
                 }
@@ -102,16 +109,16 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
                 switch (color)
                 {
                     case RED:
-                        return isPopup ? ImageMaster.CARD_ATTACK_BG_RED_L : ImageMaster.CARD_ATTACK_BG_RED;
+                        return ImageMaster.CARD_ATTACK_BG_RED;
                     case GREEN:
-                        return isPopup ? ImageMaster.CARD_ATTACK_BG_GREEN_L : ImageMaster.CARD_ATTACK_BG_GREEN;
+                        return ImageMaster.CARD_ATTACK_BG_GREEN;
                     case BLUE:
-                        return isPopup ? ImageMaster.CARD_ATTACK_BG_BLUE_L : ImageMaster.CARD_ATTACK_BG_BLUE;
+                        return ImageMaster.CARD_ATTACK_BG_BLUE;
                     case PURPLE:
-                        return isPopup ? ImageMaster.CARD_ATTACK_BG_PURPLE_L : ImageMaster.CARD_ATTACK_BG_PURPLE;
+                        return ImageMaster.CARD_ATTACK_BG_PURPLE;
                     case COLORLESS:
                     case CURSE:
-                        return isPopup ? ImageMaster.CARD_ATTACK_BG_GRAY_L : ImageMaster.CARD_ATTACK_BG_GRAY;
+                        return ImageMaster.CARD_ATTACK_BG_GRAY;
                     default:
                         return null;
                 }
@@ -119,99 +126,196 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
                 switch (color)
                 {
                     case RED:
-                        return isPopup ? ImageMaster.CARD_SKILL_BG_RED_L : ImageMaster.CARD_SKILL_BG_RED;
+                        return ImageMaster.CARD_SKILL_BG_RED;
                     case GREEN:
-                        return isPopup ? ImageMaster.CARD_SKILL_BG_GREEN_L : ImageMaster.CARD_SKILL_BG_GREEN;
+                        return ImageMaster.CARD_SKILL_BG_GREEN;
                     case BLUE:
-                        return isPopup ? ImageMaster.CARD_SKILL_BG_BLUE_L : ImageMaster.CARD_SKILL_BG_BLUE;
+                        return ImageMaster.CARD_SKILL_BG_BLUE;
                     case PURPLE:
-                        return isPopup ? ImageMaster.CARD_SKILL_BG_PURPLE_L : ImageMaster.CARD_SKILL_BG_PURPLE;
+                        return ImageMaster.CARD_SKILL_BG_PURPLE;
                     case COLORLESS:
                     case CURSE:
-                        return isPopup ? ImageMaster.CARD_SKILL_BG_GRAY_L : ImageMaster.CARD_SKILL_BG_GRAY;
+                        return ImageMaster.CARD_SKILL_BG_GRAY;
                     default:
                         return null;
                 }
         }
     }
 
-    @Override
-    protected Texture getCardBackground()
+    protected TextureAtlas.AtlasRegion getBaseGameCardPopupBackground()
+    {
+        switch (type)
+        {
+            case POWER:
+                switch (color)
+                {
+                    case RED:
+                        return ImageMaster.CARD_POWER_BG_RED_L;
+                    case GREEN:
+                        return ImageMaster.CARD_POWER_BG_GREEN_L;
+                    case BLUE:
+                        return ImageMaster.CARD_POWER_BG_BLUE_L;
+                    case PURPLE:
+                        return ImageMaster.CARD_POWER_BG_PURPLE_L;
+                    case COLORLESS:
+                    case CURSE:
+                        return ImageMaster.CARD_POWER_BG_GRAY_L;
+                    default:
+                        return null;
+                }
+            case ATTACK:
+                switch (color)
+                {
+                    case RED:
+                        return ImageMaster.CARD_ATTACK_BG_RED_L;
+                    case GREEN:
+                        return ImageMaster.CARD_ATTACK_BG_GREEN_L;
+                    case BLUE:
+                        return ImageMaster.CARD_ATTACK_BG_BLUE_L;
+                    case PURPLE:
+                        return ImageMaster.CARD_ATTACK_BG_PURPLE_L;
+                    case COLORLESS:
+                    case CURSE:
+                        return ImageMaster.CARD_ATTACK_BG_GRAY_L;
+                    default:
+                        return null;
+                }
+            default:
+                switch (color)
+                {
+                    case RED:
+                        return ImageMaster.CARD_SKILL_BG_RED_L;
+                    case GREEN:
+                        return ImageMaster.CARD_SKILL_BG_GREEN_L;
+                    case BLUE:
+                        return ImageMaster.CARD_SKILL_BG_BLUE_L;
+                    case PURPLE:
+                        return ImageMaster.CARD_SKILL_BG_PURPLE_L;
+                    case COLORLESS:
+                    case CURSE:
+                        return ImageMaster.CARD_SKILL_BG_GRAY_L;
+                    default:
+                        return null;
+                }
+        }
+    }
+
+    protected Texture getCustomCardBackground()
     {
         if (GameUtilities.isPCLOnlyCardColor(this.color))
         {
             return super.getCardBackground();
         }
         Texture texture = null;
-        if (isPopup)
+        switch (type)
         {
-            switch (type)
-            {
-                case POWER:
-                    if (BaseMod.getPowerBgPortraitTexture(color) == null)
-                    {
-                        BaseMod.savePowerBgPortraitTexture(color, ImageMaster.loadImage(BaseMod.getPowerBgPortrait(color)));
-                    }
-                    texture = BaseMod.getPowerBgPortraitTexture(color);
-                    break;
-                case ATTACK:
-                    if (BaseMod.getAttackBgPortraitTexture(color) == null)
-                    {
-                        BaseMod.saveAttackBgPortraitTexture(color, ImageMaster.loadImage(BaseMod.getAttackBgPortrait(color)));
-                    }
-                    texture = BaseMod.getAttackBgPortraitTexture(color);
-                    break;
-                default:
-                    if (BaseMod.getSkillBgPortraitTexture(color) == null)
-                    {
-                        BaseMod.saveSkillBgPortraitTexture(color, ImageMaster.loadImage(BaseMod.getSkillBgPortrait(color)));
-                    }
-                    texture = BaseMod.getSkillBgPortraitTexture(color);
-            }
-        }
-        else
-        {
-            switch (type)
-            {
-                case POWER:
-                    if (BaseMod.getPowerBgTexture(color) == null)
-                    {
-                        BaseMod.savePowerBgTexture(color, ImageMaster.loadImage(BaseMod.getPowerBg(color)));
-                    }
-                    texture = BaseMod.getPowerBgTexture(color);
-                    break;
-                case ATTACK:
-                    if (BaseMod.getAttackBgTexture(color) == null)
-                    {
-                        BaseMod.saveAttackBgTexture(color, ImageMaster.loadImage(BaseMod.getAttackBg(color)));
-                    }
-                    texture = BaseMod.getAttackBgTexture(color);
-                    break;
-                default:
-                    if (BaseMod.getSkillBgTexture(color) == null)
-                    {
-                        BaseMod.saveSkillBgTexture(color, ImageMaster.loadImage(BaseMod.getSkillBg(color)));
-                    }
-                    texture = BaseMod.getSkillBgTexture(color);
-            }
+            case POWER:
+                if (BaseMod.getPowerBgTexture(color) == null)
+                {
+                    BaseMod.savePowerBgTexture(color, ImageMaster.loadImage(BaseMod.getPowerBg(color)));
+                }
+                texture = BaseMod.getPowerBgTexture(color);
+                break;
+            case ATTACK:
+                if (BaseMod.getAttackBgTexture(color) == null)
+                {
+                    BaseMod.saveAttackBgTexture(color, ImageMaster.loadImage(BaseMod.getAttackBg(color)));
+                }
+                texture = BaseMod.getAttackBgTexture(color);
+                break;
+            default:
+                if (BaseMod.getSkillBgTexture(color) == null)
+                {
+                    BaseMod.saveSkillBgTexture(color, ImageMaster.loadImage(BaseMod.getSkillBg(color)));
+                }
+                texture = BaseMod.getSkillBgTexture(color);
         }
         return texture != null ? texture : super.getCardBackground();
     }
 
-    @Override
-    protected Texture getEnergyOrb()
+    protected Texture getCustomCardPopupBackground()
+    {
+        if (GameUtilities.isPCLOnlyCardColor(this.color))
+        {
+            return super.getCardBackground();
+        }
+        Texture texture = null;
+        switch (type)
+        {
+            case POWER:
+                if (BaseMod.getPowerBgPortraitTexture(color) == null)
+                {
+                    BaseMod.savePowerBgPortraitTexture(color, ImageMaster.loadImage(BaseMod.getPowerBgPortrait(color)));
+                }
+                texture = BaseMod.getPowerBgPortraitTexture(color);
+                break;
+            case ATTACK:
+                if (BaseMod.getAttackBgPortraitTexture(color) == null)
+                {
+                    BaseMod.saveAttackBgPortraitTexture(color, ImageMaster.loadImage(BaseMod.getAttackBgPortrait(color)));
+                }
+                texture = BaseMod.getAttackBgPortraitTexture(color);
+                break;
+            default:
+                if (BaseMod.getSkillBgPortraitTexture(color) == null)
+                {
+                    BaseMod.saveSkillBgPortraitTexture(color, ImageMaster.loadImage(BaseMod.getSkillBgPortrait(color)));
+                }
+                texture = BaseMod.getSkillBgPortraitTexture(color);
+        }
+        return texture != null ? texture : super.getCardBackground();
+    }
+
+    protected Texture getCustomEnergyOrb()
     {
         if (GameUtilities.isPCLOnlyCardColor(this.color))
         {
             return super.getEnergyOrb();
         }
-        Texture t = isPopup ? BaseMod.getEnergyOrbPortraitTexture(this.color) : BaseMod.getEnergyOrbTexture(this.color);
+        Texture t = BaseMod.getEnergyOrbTexture(this.color);
         if (t == null)
         {
-            t = ImageMaster.loadImage(isPopup ? BaseMod.getEnergyOrbPortrait(color) : BaseMod.getEnergyOrb(color));
+            t = ImageMaster.loadImage(BaseMod.getEnergyOrb(color));
+            BaseMod.saveEnergyOrbTexture(color, t);
+        }
+        return t;
+    }
+
+    protected Texture getCustomEnergyPopupOrb()
+    {
+        if (GameUtilities.isPCLOnlyCardColor(this.color))
+        {
+            return super.getEnergyOrb();
+        }
+        Texture t = BaseMod.getEnergyOrbPortraitTexture(this.color);
+        if (t == null)
+        {
+            t = ImageMaster.loadImage(BaseMod.getEnergyOrbPortrait(color));
             BaseMod.saveEnergyOrbPortraitTexture(color, t);
         }
         return t;
+    }
+
+    @Override
+    protected Texture getCardBackground()
+    {
+        return customBg != null ? isPopup ? customBgLarge : customBg : super.getCardBackground();
+    }
+
+    @Override
+    protected Texture getEnergyOrb()
+    {
+        return customEnergyOrb != null ? isPopup ? customEnergyOrbLarge : customEnergyOrb : super.getEnergyOrb();
+    }
+
+    protected TextureAtlas.AtlasRegion getVanillaCardBackgroundForRender()
+    {
+        return isPopup ? vanillaBgLarge : vanillaBg;
+    }
+
+    protected TextureAtlas.AtlasRegion getVanillaEnergyOrbForRender()
+    {
+        return isPopup ? vanillaEnergyOrbLarge : vanillaEnergyOrb;
     }
 
     @Override
@@ -279,18 +383,20 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
             Texture mask = getCardBackgroundMask();
             float width = mask.getWidth();
             float height = mask.getHeight();
-            if (vanillaBg != null)
+            TextureAtlas.AtlasRegion vanilla = getVanillaCardBackgroundForRender();
+            if (vanilla != null)
             {
                 PCLRenderHelpers.drawWithMask(sb,
                         s -> PCLRenderHelpers.drawOnCardAuto(s, this, mask, new Vector2(0, 0), width, height, getRenderColor(), transparency, popUpMultiplier),
-                        s -> PCLRenderHelpers.drawOnCardAuto(s, this, vanillaBg, new Vector2(0, 0), vanillaBg.packedWidth, vanillaBg.packedHeight, getRenderColor(), transparency, popUpMultiplier)
+                        s -> PCLRenderHelpers.drawOnCardAuto(s, this, vanilla, new Vector2(0, 0), vanilla.packedWidth, vanilla.packedHeight, getRenderColor(), transparency, popUpMultiplier)
                 );
             }
             else
             {
+                Texture customBack = getCardBackground();
                 PCLRenderHelpers.drawWithMask(sb,
                         s -> PCLRenderHelpers.drawOnCardAuto(s, this, mask, new Vector2(0, 0), width, height, getRenderColor(), transparency, popUpMultiplier),
-                        s -> PCLRenderHelpers.drawOnCardAuto(s, this, customBg, new Vector2(0, 0), width, height, getRenderColor(), transparency, popUpMultiplier)
+                        s -> PCLRenderHelpers.drawOnCardAuto(s, this, customBack, new Vector2(0, 0), width, height, getRenderColor(), transparency, popUpMultiplier)
                 );
             }
         }
@@ -305,29 +411,27 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
         }
         else if (this.cost > -2 && !getDarken() && !this.isLocked && this.isSeen)
         {
-            if (this.vanillaEnergyOrb != null)
+            TextureAtlas.AtlasRegion vanilla = getVanillaEnergyOrbForRender();
+            if (vanilla != null)
             {
-                this.renderAtlas(sb, getRenderColor(), this.vanillaEnergyOrb, this.current_x, this.current_y);
-
-                ColoredString costString = getCostString();
-                if (costString != null)
+                // TODO better way of doing this instead of blindly copying vanilla SCV
+                if (isPopup)
                 {
-                    BitmapFont font = PCLRenderHelpers.getEnergyFont(this);
-                    PCLRenderHelpers.writeOnCard(sb, this, font, costString.text, -132f, 192f, costString.color);
-                    PCLRenderHelpers.resetFont(font);
+                    this.renderAtlas(sb, getRenderColor(), vanilla, (float) Settings.WIDTH / 2.0F - 270.0F * Settings.scale, (float)Settings.HEIGHT / 2.0F + 380.0F * Settings.scale, 0.5f);
                 }
+                else
+                {
+                    this.renderAtlas(sb, getRenderColor(), vanilla, this.current_x, this.current_y);
+                }
+
+                renderEnergyText(sb);
             }
             else
             {
+                Texture custom = getEnergyOrb();
                 float popUpMultiplier = isPopup ? 0.5f : 1f;
-                PCLRenderHelpers.drawOnCardAuto(sb, this, customEnergyOrb, new Vector2(0, 0), customEnergyOrb.getWidth(), customEnergyOrb.getHeight(), getRenderColor(), transparency, popUpMultiplier);
-                ColoredString costString = getCostString();
-                if (costString != null)
-                {
-                    BitmapFont font = PCLRenderHelpers.getEnergyFont(this);
-                    PCLRenderHelpers.writeOnCard(sb, this, font, costString.text, -132f, 192f, costString.color);
-                    PCLRenderHelpers.resetFont(font);
-                }
+                PCLRenderHelpers.drawOnCardAuto(sb, this, custom, new Vector2(0, 0), custom.getWidth(), custom.getHeight(), getRenderColor(), transparency, popUpMultiplier);
+                renderEnergyText(sb);
             }
         }
     }
@@ -360,6 +464,25 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
             case COLORLESS:
             case CURSE:
                 return ImageMaster.CARD_COLORLESS_ORB;
+        }
+        return null;
+    }
+
+    protected TextureAtlas.AtlasRegion getVanillaEnergyPopupOrb(CardColor color)
+    {
+        switch (color)
+        {
+            case RED:
+                return ImageMaster.CARD_RED_ORB_L;
+            case GREEN:
+                return ImageMaster.CARD_GREEN_ORB_L;
+            case BLUE:
+                return ImageMaster.CARD_BLUE_ORB_L;
+            case PURPLE:
+                return ImageMaster.CARD_PURPLE_ORB_L;
+            case COLORLESS:
+            case CURSE:
+                return ImageMaster.CARD_GRAY_ORB_L;
         }
         return null;
     }

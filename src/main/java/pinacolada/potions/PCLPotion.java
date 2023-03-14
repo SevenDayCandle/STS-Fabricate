@@ -24,7 +24,6 @@ import pinacolada.interfaces.markers.PointerProvider;
 import pinacolada.misc.CombatManager;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PCLResources;
-import pinacolada.resources.PCLStrings;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.Skills;
@@ -35,7 +34,7 @@ import java.util.List;
 
 public abstract class PCLPotion extends AbstractPotion implements TooltipProvider, PointerProvider
 {
-    public final ArrayList<EUITooltip> pCLTips = new ArrayList<>();
+    public final ArrayList<EUITooltip> pcltips = new ArrayList<>();
     public final Skills skills = new Skills();
     public final String[] extraDescriptions;
 
@@ -93,13 +92,13 @@ public abstract class PCLPotion extends AbstractPotion implements TooltipProvide
     @Override
     public List<EUITooltip> getTips()
     {
-        return pCLTips;
+        return pcltips;
     }
 
     @Override
     public List<EUITooltip> getTipsForFilters()
     {
-        return pCLTips.subList(1, tips.size());
+        return pcltips.subList(1, pcltips.size());
     }
 
     public void setup()
@@ -110,9 +109,9 @@ public abstract class PCLPotion extends AbstractPotion implements TooltipProvide
     {
         final ArrayList<String> effectStrings = EUIUtils.map(getEffects(), PSkill::getPowerText);
         this.description = effectStrings.size() > 0 ? effectStrings.get(0) : "";
-        pCLTips.clear();
-        pCLTips.add(playerClass != null ? new EUITooltip(name, playerClass, effectStrings) : new EUITooltip(name, effectStrings));
-        EUIGameUtils.scanForTips(description, pCLTips);
+        pcltips.clear();
+        pcltips.add(playerClass != null ? new EUITooltip(name, playerClass, effectStrings) : new EUITooltip(name, effectStrings));
+        EUIGameUtils.scanForTips(description, pcltips);
         this.isThrown = EUIUtils.any(getEffects(), e -> e.target == PCLCardTarget.Single);
         this.targetRequired = isThrown;
     }
@@ -122,7 +121,7 @@ public abstract class PCLPotion extends AbstractPotion implements TooltipProvide
         super.update();
         if (this.hb.justHovered)
         {
-            for (PSkill ef : getEffects())
+            for (PSkill<?> ef : getEffects())
             {
                 ef.setAmountFromCard();
             }

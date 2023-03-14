@@ -43,6 +43,7 @@ import com.megacrit.cardcrawl.ui.panels.EnergyPanel;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import com.megacrit.cardcrawl.vfx.BobEffect;
 import extendedui.EUI;
+import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.AbstractScreen;
@@ -547,7 +548,7 @@ public class GameUtilities
     public static ArrayList<AbstractCard> getAvailableCards(GenericCondition<AbstractCard> filter)
     {
         ArrayList<AbstractCard> result = new ArrayList<>();
-        for (CardGroup pool : getCardPools())
+        for (CardGroup pool : EUIGameUtils.getGameCardPools())
         {
             for (AbstractCard card : pool.group)
             {
@@ -569,7 +570,7 @@ public class GameUtilities
     public static RandomizedList<AbstractCard> getCardsInCombat(GenericCondition<AbstractCard> filter)
     {
         final RandomizedList<AbstractCard> cards = new RandomizedList<>();
-        for (CardGroup group : getCardPools())
+        for (CardGroup group : EUIGameUtils.getGameCardPools())
         {
             for (AbstractCard c : group.group)
             {
@@ -586,7 +587,7 @@ public class GameUtilities
     public static WeightedList<AbstractCard> getCardsInCombatWeighted(GenericCondition<AbstractCard> filter)
     {
         final WeightedList<AbstractCard> cards = new WeightedList<>();
-        for (CardGroup group : getCardPools())
+        for (CardGroup group : EUIGameUtils.getGameCardPools())
         {
             for (AbstractCard c : group.group)
             {
@@ -687,17 +688,6 @@ public class GameUtilities
             default:
                 return null;
         }
-    }
-
-    public static ArrayList<CardGroup> getCardPools()
-    {
-        final ArrayList<CardGroup> result = new ArrayList<>();
-        result.add(AbstractDungeon.colorlessCardPool);
-        result.add(AbstractDungeon.commonCardPool);
-        result.add(AbstractDungeon.uncommonCardPool);
-        result.add(AbstractDungeon.rareCardPool);
-        result.add(AbstractDungeon.curseCardPool);
-        return result;
     }
 
     public static List<Class<?>> getClassesWithAnnotation(Class<?> annotation)
@@ -919,17 +909,6 @@ public class GameUtilities
         result.add(AbstractDungeon.rareRelicPool);
         result.add(AbstractDungeon.bossRelicPool);
         result.add(AbstractDungeon.shopRelicPool);
-        return result;
-    }
-
-    public static ArrayList<CardGroup> getSourceCardPools()
-    {
-        final ArrayList<CardGroup> result = new ArrayList<>();
-        result.add(AbstractDungeon.srcColorlessCardPool);
-        result.add(AbstractDungeon.srcCommonCardPool);
-        result.add(AbstractDungeon.srcUncommonCardPool);
-        result.add(AbstractDungeon.srcRareCardPool);
-        result.add(AbstractDungeon.srcCurseCardPool);
         return result;
     }
 

@@ -69,7 +69,7 @@ public class AugmentSortButton extends EUIButton
                 case Affinity:
                     return PGR.core.tooltips.affinityGeneral.title;
                 case Count:
-                    return EUIRM.strings.miscSortbycount;
+                    return EUIRM.strings.misc_sortByCount;
                 case Level:
                     return PGR.core.tooltips.level.title;
                 default:

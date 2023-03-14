@@ -143,10 +143,6 @@ public class PCLDynamicData extends PCLCardData
         safeLoadValue(() -> rightCountUpgrade = data.rightCountUpgrade.clone());
         safeLoadValue(() -> cost = data.cost.clone());
         safeLoadValue(() -> costUpgrade = data.costUpgrade.clone());
-        safeLoadValue(() -> setMaxUpgrades(data.maxUpgradeLevel));
-        safeLoadValue(() -> setMaxCopies(data.maxCopies));
-        safeLoadValue(() -> setUnique(data.unique));
-        safeLoadValue(() -> setRemovableFromDeck(data.removableFromDeck));
         safeLoadValue(() -> setLanguageMap(EUIUtils.deserialize(data.languageStrings, TStrings.getType())));
         safeLoadValue(() -> setTarget(PCLCardTarget.valueOf(data.target)));
         safeLoadValue(() -> setTags(EUIUtils.map(data.tags, t -> EUIUtils.deserialize(t, PCLCardTagInfo.class))));
@@ -155,6 +151,10 @@ public class PCLDynamicData extends PCLCardData
              setLoadout(PCLLoadout.get(data.slotColor, data.loadout));
         }
         safeLoadValue(() -> setAffinities(EUIUtils.deserialize(data.affinities, PCLCardDataAffinityGroup.class)));
+        safeLoadValue(() -> setMaxUpgrades(data.maxUpgradeLevel));
+        safeLoadValue(() -> setMaxCopies(data.maxCopies));
+        safeLoadValue(() -> setUnique(data.unique));
+        safeLoadValue(() -> setRemovableFromDeck(data.removableFromDeck));
     }
 
     private void safeLoadValue(ActionT0 loadFunc)
