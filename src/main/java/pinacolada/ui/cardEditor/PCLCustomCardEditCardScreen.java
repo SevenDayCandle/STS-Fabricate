@@ -26,6 +26,7 @@ import pinacolada.effects.screen.PCLCustomCardImageEffect;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PTrigger;
+import pinacolada.skills.skills.base.primary.PTrigger_When;
 import pinacolada.skills.skills.special.primary.PCardPrimary_DealDamage;
 import pinacolada.skills.skills.special.primary.PCardPrimary_GainBlock;
 
@@ -161,8 +162,12 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
                 if (be instanceof PTrigger)
                 {
                     currentPowers.set(finalI, (PTrigger) be);
-                    modifyBuilder(e -> e.setPPower(currentPowers, true, true));
                 }
+                else
+                {
+                    currentPowers.set(finalI, new PTrigger_When());
+                }
+                modifyBuilder(e -> e.setPPower(currentPowers, true, true));
             });
             pages.add(page);
             powerPages.add(page);
@@ -176,17 +181,20 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
             pageButtons.add(new EUIButton(pg.getTextureCache().texture(), new EUIHitbox(0, 0, buttonHeight, buttonHeight))
                     .setPosition(Settings.WIDTH * (0.45f) + ((i - 1f) * buttonHeight), (buttonHeight * 0.85f))
                             .setColor(i == 0 ? Color.WHITE : Color.GRAY)
-                    .setOnClick(i, (finalI, __) -> {
-                        currentPage = finalI;
-                        for (int j = 0; j < pageButtons.size(); j++)
-                        {
-                            pageButtons.get(j).setColor(j == finalI ? Color.WHITE : Color.GRAY);
-                        }
-                    })
+                    .setOnClick(i, (finalI, __) -> openPageAtIndex(finalI))
                     .setTooltip(title, pg instanceof PCLCustomCardPrimaryInfoPage ? PGR.core.strings.cedit_primaryInfoDesc : ""));
         }
 
         modifyBuilder(__ -> {});
+    }
+
+    public void openPageAtIndex(int index)
+    {
+        currentPage = index;
+        for (int j = 0; j < pageButtons.size(); j++)
+        {
+            pageButtons.get(j).setColor(j == index ? Color.WHITE : Color.GRAY);
+        }
     }
 
     private void toggleViewUpgrades(boolean value)

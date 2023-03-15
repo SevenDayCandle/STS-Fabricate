@@ -11,6 +11,7 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.OriginRelativeHitbox;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PTrigger;
@@ -35,15 +36,19 @@ public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
         delayEditor.setActive(false);
         primaryConditions
                 .setItems(EUIUtils.map(PTrigger.getEligibleEffects(builder.cardColor, PTrigger.class), bc -> primaryCond != null && bc.effectID.equals(primaryCond.effectID) ? primaryCond : bc))
+                .setShowClearForSingle(false)
+                .setSelectionIndices(EUIUtils.list(0), false)
                 .autosize();
+        primaryCond = primaryConditions.getAllItems().get(0);
+
         usesPerTurn = new PCLValueEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 4, MENU_HEIGHT, MENU_WIDTH * 3.2f, OFFSET_EFFECT * 2f)
                 , PGR.core.strings.combat_uses, (val) -> {
-            if (primaryCond != null)
-            {
-                primaryCond.setAmount(val);
-                constructEffect();
-            }
-        })
+                    if (primaryCond != null)
+                    {
+                        primaryCond.setAmount(val);
+                        constructEffect();
+                    }
+                })
                 .setLimits(-1, PSkill.DEFAULT_MAX)
                 .setValue(-1, false)
                 .setHasInfinite(true, true);
@@ -76,6 +81,7 @@ public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
                 current.effects.setSelection(powerApplyEffect, true);
             }
             current.refresh();
+            screen.openPageAtIndex(screen.pages.indexOf(effectPage));
         }
     }
 
@@ -124,7 +130,7 @@ public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
     @Override
     public TextureCache getTextureCache()
     {
-        return PGR.core.images.editorPower;
+        return PCLCoreImages.editorPower;
     }
 
 }

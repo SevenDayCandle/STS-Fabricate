@@ -514,8 +514,7 @@ public class PCLCoreStrings extends PCLStrings
     public final String cond_inOrderTo(Object desc1, Object desc2) {return condFmt(36, desc1, desc2);}
     public final String cond_doThen(Object desc1, Object desc2) {return condFmt(37, desc1, desc2);}
     public final String cond_genericConditional(Object desc1, Object desc2) {return condFmt(38, desc1, desc2);}
-    public final String cond_modifyCards() {return condFmt(39);}
-    public final String cond_modifyCreatures() {return condFmt(40);}
+    public final String cond_passive() {return condFmt(39);}
 
     public final String cond_ifTheEnemyHas(Object desc1) {return cond_ifTargetHas(subjects_target, desc1);}
     public final String cond_ifAnyEnemyHas(Object desc1) {return cond_ifTargetHas(subjects_anyEnemy(), desc1);}

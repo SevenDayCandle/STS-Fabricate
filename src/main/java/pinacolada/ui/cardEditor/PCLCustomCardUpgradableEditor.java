@@ -158,8 +158,8 @@ public class PCLCustomCardUpgradableEditor extends EUIHoverable
 
     public PCLCustomCardUpgradableEditor setValue(int value, int valueSecondary, boolean invoke)
     {
-        displayValue.setValue(value);
-        displayValueSecondary.setValue(MathUtils.clamp(valueSecondary, displayValue.getMin() - displayValue.getCachedValue(), displayValue.getMax() - displayValue.getCachedValue()));
+        displayValue.forceSetValue(value, false);
+        displayValueSecondary.forceSetValue(MathUtils.clamp(valueSecondary, displayValue.getMin() - displayValue.getCachedValue(), displayValue.getMax() - displayValue.getCachedValue()), false);
         if (invoke)
         {
             onUpdate.invoke(displayValue.getCachedValue(), displayValueSecondary.getCachedValue());

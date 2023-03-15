@@ -135,7 +135,7 @@ public class PCLValueEditor extends EUIHoverable
 
     public PCLValueEditor setValue(int value, boolean invoke)
     {
-        displayValue.setValue(displayValue.showNegativeAsInfinity && (value < 0 || (value == 0 && !allowZero)) ? -1 : value);
+        displayValue.forceSetValue(displayValue.showNegativeAsInfinity && (value < 0 || (value == 0 && !allowZero)) ? -1 : value, false);
         if (invoke)
         {
             onUpdate.invoke(displayValue.getCachedValue());

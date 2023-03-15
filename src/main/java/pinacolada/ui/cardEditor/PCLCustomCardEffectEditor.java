@@ -357,11 +357,16 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
 
     public <U> void registerDropdown(List<U> possibleItems, List<U> selectedItems, FuncT1<String, U> textFunc, String title, boolean smartText)
     {
+        registerDropdown(possibleItems, selectedItems, textFunc, title, smartText, true, true);
+    }
+
+    public <U> void registerDropdown(List<U> possibleItems, List<U> selectedItems, FuncT1<String, U> textFunc, String title, boolean smartText, boolean multiSelect, boolean positionClearAtTop)
+    {
         EUIDropdown<U> dropdown = new EUIDropdown<>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.35f, MENU_HEIGHT, AUX_OFFSET, 0)
                 , textFunc)
                 .setLabelFunctionForOption(textFunc, smartText)
-                .setIsMultiSelect(true)
-                .setShouldPositionClearAtTop(true)
+                .setIsMultiSelect(multiSelect)
+                .setShouldPositionClearAtTop(positionClearAtTop)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, title)
                 .setCanAutosize(true, true)
                 .setItems(possibleItems);

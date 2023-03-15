@@ -83,7 +83,7 @@ public abstract class PCond_DoTo extends PPassiveNonCheckCond<PField_CardCategor
     @Override
     public String getText(boolean addPeriod)
     {
-        return capital(childEffect == null ? (getSubText() + PCLCoreStrings.period(addPeriod)) : TEXT.cond_inOrderTo(getSubText(), childEffect.getText(false)) + PCLCoreStrings.period(addPeriod), addPeriod);
+        return capital(childEffect == null ? (getSubText() + PCLCoreStrings.period(addPeriod)) : TEXT.cond_inOrderTo(getSubText(), childEffect.getText(false)), addPeriod);
     }
 
     @Override

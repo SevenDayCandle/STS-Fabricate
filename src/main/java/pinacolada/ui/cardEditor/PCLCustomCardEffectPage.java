@@ -17,6 +17,7 @@ import extendedui.ui.hitboxes.OriginRelativeHitbox;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLDynamicData;
 import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.*;
 import pinacolada.skills.skills.PLimit;
 import pinacolada.skills.skills.PMultiCond;
@@ -316,7 +317,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
     @Override
     public TextureCache getTextureCache()
     {
-        return PGR.core.images.editorEffect;
+        return PCLCoreImages.editorEffect;
     }
 
     @Override

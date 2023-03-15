@@ -3,6 +3,7 @@ package pinacolada.ui.cardEditor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import extendedui.interfaces.delegates.FuncT0;
 import extendedui.ui.EUIBase;
+import extendedui.ui.EUIHoverable;
 import extendedui.ui.hitboxes.OriginRelativeHitbox;
 import pinacolada.skills.PSkill;
 
@@ -75,6 +76,10 @@ public class EffectEditorGroup<T extends PSkill<?>> extends EUIBase
             editor.hb.setOffsetY(offset);
             editor.hb.update();
             offset += PCLCustomCardEffectPage.OFFSET_EFFECT * 2 + editor.getAdditionalHeight();
+            for (EUIHoverable element : editor.activeElements)
+            {
+                element.hb.update();
+            }
         }
         return offset;
     }

@@ -35,6 +35,6 @@ public class PTrigger_Passive extends PTrigger
     @Override
     public String getSampleText()
     {
-        return TEXT.cond_modifyCards();
+        return TEXT.cond_passive();
     }
 }
