@@ -80,7 +80,7 @@
 								"NAME": "Create"
 				},
 				"Critical":	{
-								"DESCRIPTION": "The next #yAttack played deals #b+100% damage per stack.",
+								"DESCRIPTION": "The next #yAttack played deals #b+{0}% damage per stack.",
 								"NAME": "Critical"
 				},
 				"Curl Up":	{
@@ -166,7 +166,7 @@
 								"NAME": "Flight"
 				},
 				"Fortified":	{
-								"DESCRIPTION": "#yCards give #b+25% [Block].",
+								"DESCRIPTION": "#yCards give #b+{0}% [Block].",
 								"NAME": "Fortified"
 				},
 				"Fragile":	{
@@ -201,7 +201,7 @@
 								"NAME": "Immaterial Damage"
 				},
 				"Impaired":	{
-								"DESCRIPTION": "Reduces the effectiveness of your Orbs.",
+								"DESCRIPTION": "Reduces the effectiveness of your Orbs by #b{0}%.",
 								"NAME": "Impaired"
 				},
 				"Innovation":	{
@@ -214,7 +214,7 @@
 								"PLURAL": "Interactables"
 				},
 				"Invigorated":	{
-								"DESCRIPTION": "#yAttacks deal #b+25% damage.",
+								"DESCRIPTION": "#yAttacks deal #b+{0}% damage.",
 								"NAME": "Invigorated"
 				},
 				"Juggernaut":	{
@@ -337,7 +337,7 @@
 								"NAME": "Priority"
 				},
 				"Provoked":	{
-								"DESCRIPTION": "The target receives #b50% more damage and must attack.",
+								"DESCRIPTION": "The target takes #b+{0}% damage from #yAttacks, and it must attack this turn.",
 								"NAME": "Provoked"
 				},
 				"Purple Affinity":	{
@@ -540,7 +540,7 @@
 								"NAME": "Innate"
 				},
 				"~Lock-On":	{
-								"DESCRIPTION": "Receive #b+50% damage from #yOrbs. Prioritized by cards with random targeting.",
+								"DESCRIPTION": "Receive #b+{0}% damage from #yOrbs. Prioritized by cards with random targeting.",
 								"NAME": "Lock-On"
 				},
 				"~Purge":	{
@@ -558,7 +558,7 @@
 								"PROGRESSIVE": "Retaining"
 				},
 				"~Steal":	{
-								"DESCRIPTION": "You can steal up to #b50 #yGold from a boss, #b25 #yGold from an elite, or #b10 #yGold from other non-minion enemies.",
+								"DESCRIPTION": "You can steal up to #b{0} #yGold from a boss, #b{1} #yGold from an elite, or #b{2} #yGold from other non-minion enemies.",
 								"NAME": "Steal",
 								"PAST": "stolen",
 								"PRESENT": "steals",

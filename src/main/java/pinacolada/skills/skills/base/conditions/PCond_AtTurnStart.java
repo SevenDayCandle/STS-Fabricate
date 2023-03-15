@@ -22,7 +22,7 @@ public class PCond_AtTurnStart extends PPassiveNonCheckCond<PField_Empty> implem
         super(DATA, PCLCardTarget.None, 0);
     }
 
-    public PCond_AtTurnStart(PSkillData<PField_Empty> data, PSkillSaveData content)
+    public PCond_AtTurnStart(PSkillSaveData content)
     {
         super(DATA, content);
     }

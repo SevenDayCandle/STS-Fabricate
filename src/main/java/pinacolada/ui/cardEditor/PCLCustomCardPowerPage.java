@@ -37,9 +37,12 @@ public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
         primaryConditions
                 .setItems(EUIUtils.map(PTrigger.getEligibleEffects(builder.cardColor, PTrigger.class), bc -> primaryCond != null && bc.effectID.equals(primaryCond.effectID) ? primaryCond : bc))
                 .setShowClearForSingle(false)
-                .setSelectionIndices(EUIUtils.list(0), false)
                 .autosize();
-        primaryCond = primaryConditions.getAllItems().get(0);
+        // Ensure that a primary cond is always selected
+        if (primaryCond == null)
+        {
+            primaryConditions.setSelectionIndices(EUIUtils.list(0), true);
+        }
 
         usesPerTurn = new PCLValueEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 4, MENU_HEIGHT, MENU_WIDTH * 3.2f, OFFSET_EFFECT * 2f)
                 , PGR.core.strings.combat_uses, (val) -> {
@@ -87,6 +90,11 @@ public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
 
     public void refresh()
     {
+        // TODO filter effects based on eligibility
+        conditionGroup.refresh();
+        modifierGroup.refresh();
+        effectGroup.refresh();
+
         if (primaryCond != null)
         {
             primaryConditions.setSelection(primaryCond, false);
@@ -96,11 +104,6 @@ public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
         {
             usesPerTurn.setValue(primaryCond.amount, false);
         }
-
-        // TODO filter effects based on eligibility
-        conditionGroup.refresh();
-        modifierGroup.refresh();
-        effectGroup.refresh();
 
         repositionItems();
     }

@@ -1,5 +1,6 @@
 package pinacolada.powers.common;
 
+import com.evacipated.cardcrawl.mod.stslib.patches.NeutralPowertypePatch;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.MinionPower;
@@ -11,6 +12,9 @@ import pinacolada.powers.PCLPower;
 public class StolenGoldPower extends PCLPower
 {
     public static final String POWER_ID = createFullID(StolenGoldPower.class);
+    public static final int GOLD_BOSS = 50;
+    public static final int GOLD_ELITE = 25;
+    public static final int GOLD_NORMAL = 50;
 
     public StolenGoldPower(AbstractCreature owner, int amount)
     {
@@ -23,18 +27,18 @@ public class StolenGoldPower extends PCLPower
         }
         else if (m.type == AbstractMonster.EnemyType.BOSS)
         {
-            maxAmount = 50;
+            maxAmount = GOLD_BOSS;
         }
         else if (m.type == AbstractMonster.EnemyType.ELITE)
         {
-            maxAmount = 25;
+            maxAmount = GOLD_ELITE;
         }
         else
         {
-            maxAmount = 10;
+            maxAmount = GOLD_NORMAL;
         }
 
-        initialize(amount, PowerType.DEBUFF, false);
+        initialize(amount, NeutralPowertypePatch.NEUTRAL, false);
     }
 
     @Override

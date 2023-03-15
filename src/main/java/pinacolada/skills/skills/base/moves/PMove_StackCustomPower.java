@@ -8,7 +8,6 @@ import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.markers.SummonOnlyMove;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.powers.PSkillPower;
-import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -43,7 +42,7 @@ public class PMove_StackCustomPower extends PMove<PField_CustomPower> implements
     @Override
     public String getText(boolean addPeriod)
     {
-        return getCapitalSubText(addPeriod) + (childEffect != null ? PCLCoreStrings.period(true) + " " + childEffect.getText(addPeriod) : "");
+        return getCapitalSubText(addPeriod) + (childEffect != null ? childEffect.getText(addPeriod) : "");
     }
 
     @Override

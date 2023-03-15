@@ -352,8 +352,8 @@ public class PCLSingleCardPopup extends EUIBase
         }
 
         currentAugments.clear();
-        // Do not show augments for cards not in your deck
-        if (AbstractDungeon.player != null && AbstractDungeon.player.masterDeck.contains(baseCard))
+        // Do not show augments for cards not in your deck, or if the card does not have augment slots
+        if (AbstractDungeon.player != null && AbstractDungeon.player.masterDeck.contains(baseCard) && baseCard.augments.size() > 0)
         {
             toggleAugment.setActive(true);
             float curY = AUGMENT_Y;

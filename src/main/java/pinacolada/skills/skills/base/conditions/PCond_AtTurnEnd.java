@@ -21,7 +21,7 @@ public class PCond_AtTurnEnd extends PPassiveNonCheckCond<PField_Empty> implemen
         super(DATA, PCLCardTarget.None, 0);
     }
 
-    public PCond_AtTurnEnd(PSkillData<PField_Empty> data, PSkillSaveData content)
+    public PCond_AtTurnEnd(PSkillSaveData content)
     {
         super(DATA, content);
     }

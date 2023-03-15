@@ -12,6 +12,7 @@ import pinacolada.utilities.PCLRenderHelpers;
 public class ImpairedPower extends PCLPower implements OnOrbApplyFocusSubscriber, MultiplicativePower
 {
     public static final String POWER_ID = createFullID(ImpairedPower.class);
+    public static final int MULTIPLIER = 50;
     public boolean justApplied;
 
     public ImpairedPower(AbstractCreature owner, int amount)
@@ -29,7 +30,7 @@ public class ImpairedPower extends PCLPower implements OnOrbApplyFocusSubscriber
 
     public static float getOrbMultiplier()
     {
-        return (CombatManager.getPlayerEffectBonus(POWER_ID));
+        return (MULTIPLIER + CombatManager.getPlayerEffectBonus(POWER_ID));
     }
 
     @Override

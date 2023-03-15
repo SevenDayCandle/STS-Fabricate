@@ -7,6 +7,7 @@ import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.powers.common.*;
+import pinacolada.powers.replacement.PCLLockOnPower;
 import pinacolada.powers.special.ProvokedPower;
 import pinacolada.powers.special.SelfImmolationPower;
 import pinacolada.powers.special.SilencedPower;
@@ -184,6 +185,7 @@ public class PCLCoreTooltips extends PCLTooltips
     public EUITooltip stance = EUITooltip.findByID("Stance");
     public EUITooltip starter = EUITooltip.findByID("Starter");
     public EUITooltip startup = EUITooltip.findByID("Startup");
+    public EUITooltip steal = EUITooltip.findByID("~Steal");
     public EUITooltip strength = EUITooltip.findByID("Strength");
     public EUITooltip summon = EUITooltip.findByID("Summon");
     public EUITooltip supercharged = EUITooltip.findByID("Supercharged");
@@ -313,6 +315,14 @@ public class PCLCoreTooltips extends PCLTooltips
         sorcery.setIconFromPath(PGR.getPowerImage(SorceryPower.POWER_ID));
         toxicology.setIconFromPath(PGR.getPowerImage(ToxicologyPower.POWER_ID));
         vitality.setIconFromPath(PGR.getPowerImage(VitalityPower.POWER_ID));
+
+        critical.formatDescription(CriticalPower.MULTIPLIER);
+        fortified.formatDescription(FortifiedPower.MULTIPLIER);
+        impaired.formatDescription(ImpairedPower.MULTIPLIER);
+        invigorated.formatDescription(InvigoratedPower.MULTIPLIER);
+        lockOn.formatDescription(PCLLockOnPower.BASE);
+        provoked.formatDescription(ProvokedPower.ATTACK_MULTIPLIER);
+        steal.formatDescription(StolenGoldPower.GOLD_BOSS, StolenGoldPower.GOLD_ELITE, StolenGoldPower.GOLD_NORMAL);
 
         EUITooltip.updateTooltipIcons();
     }

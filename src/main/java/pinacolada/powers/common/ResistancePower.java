@@ -11,13 +11,14 @@ public class ResistancePower extends PCLPower implements MultiplicativePower
 {
     public static final String POWER_ID = createFullID(ResistancePower.class);
     public static final float MULTIPLIER = 5;
+    public static final int MAX_AMOUNT = 10;
 
     public ResistancePower(AbstractCreature owner, int amount)
     {
         super(owner, POWER_ID);
         initialize(amount);
         this.canGoNegative = true;
-        this.maxAmount = 20;
+        this.maxAmount = MAX_AMOUNT;
     }
 
     public static float calculatePercentage(int amount)

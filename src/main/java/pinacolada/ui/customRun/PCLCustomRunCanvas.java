@@ -103,11 +103,11 @@ public class PCLCustomRunCanvas extends EUICanvas
 
         customCardToggle = (EUIToggle) new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 48f))
                 .setFont(EUIFontHelper.carddescriptionfontLarge, 0.475f)
-                .setText(PGR.core.strings.cedit_customCards)
+                .setText(PGR.core.strings.misc_customCards)
                 .setOnToggle(v -> {
                     screen.allowCustomCards = v;
                 })
-                .setTooltip(PGR.core.strings.cedit_customCards, PGR.core.strings.misc_allowCustomCards);
+                .setTooltip(PGR.core.strings.misc_customCards, PGR.core.strings.misc_customCardsDesc);
 
         seedInput = (EUITextBoxInput) new EUITextBoxInput(EUIRM.images.panel.texture(),
                 new EUIHitbox(scale(280), scale(48)))
