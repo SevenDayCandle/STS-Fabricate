@@ -1,5 +1,11 @@
 # Fabricate for Slay the Spire
-This mods adds an in-game card editor to Slay the Spire. It will eventually have relic and potion editors as well.
+This mod adds the following features:
+- A new main menu option called "Customize" allows you to access an editor for creating your own cards. For an overview of how this editor works, check out this page: https://github.com/SevenDayCandle/STS-CardEditor/wiki/Basic-Usage.
+- A custom run menu overhaul that has support for cards created through the editor mentioned above (this menu can be disabled in the mod settings). This overhaul includes a card filter that lets you filter out individual cards in your custom run.
+- Additional console commands to spawn custom cards, unlock cards, and export card information to CSV files.
+- Adjustments to Basemod's ImGui menu to allow spawning of custom cards and changing card forms.
+
+This mod also comes with a number of hooks for modders to use to leverage the Fabricate's custom card creation features in their own code.
 
 ## Installation Instructions:
 - Install StsLib, ModTheSpire, BaseMod, and EUI (these can be gotten from the Steam workshop. If you have the GOG version, follow these steps instead: https://reddit.com/r/slaythespire/comments/gj5kel/howto_add_mods_to_gog_version/)
@@ -12,3 +18,4 @@ If you would like to give feedback on the current state of this mod or wish to f
 
 ## Credits
 - EatYourBeetS/The Animator for the initial framework. The original mod can be found here: https://steamcommunity.com/sharedfiles/filedetails/?id=1638308801, while their discord can be found here: https://discord.gg/SmHMmJR
+- Several Effekseer effects are sourced from https://effekseer.github.io/en/contribute.html
