@@ -11,8 +11,8 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.base.primary.PTrigger_Interactable;
-import pinacolada.skills.skills.base.primary.PTrigger_Passive;
 import pinacolada.skills.skills.base.primary.PTrigger_When;
+import pinacolada.skills.skills.special.primary.PTrigger_Passive;
 
 public abstract class PTrigger extends PPrimary<PField_Not>
 {

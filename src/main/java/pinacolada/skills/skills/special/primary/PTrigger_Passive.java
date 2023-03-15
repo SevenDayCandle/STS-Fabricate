@@ -1,13 +1,12 @@
-package pinacolada.skills.skills.base.primary;
+package pinacolada.skills.skills.special.primary;
 
-import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.PTrigger;
 
-@VisibleSkill
+// TODO make this visible again when this is fixed
 public class PTrigger_Passive extends PTrigger
 {
     public static final PSkillData<PField_Not> DATA = register(PTrigger_Passive.class, PField_Not.class, -1, DEFAULT_MAX);

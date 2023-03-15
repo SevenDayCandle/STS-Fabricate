@@ -14,8 +14,8 @@ import pinacolada.powers.PCLPowerHelper;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.skills.PMultiCond;
 import pinacolada.skills.skills.base.conditions.*;
-import pinacolada.skills.skills.base.primary.PTrigger_Passive;
 import pinacolada.skills.skills.base.primary.PTrigger_When;
+import pinacolada.skills.skills.special.primary.PTrigger_Passive;
 import pinacolada.utilities.GameUtilities;
 
 public abstract class PCond<T extends PField> extends PSkill<T>

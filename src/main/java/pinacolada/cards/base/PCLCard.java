@@ -1948,16 +1948,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
 
         // For selecting separate forms on the upgrade screen
         if (AbstractDungeon.screen == AbstractDungeon.CurrentScreen.GRID && AbstractDungeon.gridSelectScreen.forUpgrade && hb.hovered && InputHelper.justClickedLeft) {
-            if (this.cardData.canToggleOnUpgrade) {
-                GridCardSelectScreenMultiformPatches.BranchSelectFields.branchUpgradeForm.set(AbstractDungeon.gridSelectScreen, auxiliaryData.form);
-                beginGlowing();
-                GridCardSelectScreenMultiformPatches.cardList.forEach((c) -> {
-                    if (c != this) {
-                        c.stopGlowing();
-                    }
-                });
-            }
-            GridCardSelectScreenMultiformPatches.BranchSelectFields.waitingForBranchUpgradeSelection.set(AbstractDungeon.gridSelectScreen, false);
+            GridCardSelectScreenMultiformPatches.selectPCLCardUpgrade(this);
         }
     }
 
