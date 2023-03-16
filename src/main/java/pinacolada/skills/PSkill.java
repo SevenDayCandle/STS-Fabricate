@@ -214,10 +214,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return EUIUtils.mapAsNonnull(effects, e -> e.getText(addPeriod));
     }
 
-    public static List<String> getEffectTextsJoined(Collection<? extends PSkill<?>> effects, boolean addPeriod)
+    public static List<String> getEffectTextsWithoutPeriod(Collection<? extends PSkill<?>> effects, boolean capitalize)
     {
         List<String> efTexts = getEffectTexts(effects, false);
-        if (addPeriod && efTexts.size() > 0)
+        if (capitalize && efTexts.size() > 0)
         {
             efTexts.set(0, capital(efTexts.get(0), true));
         }
@@ -337,6 +337,21 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
     public static String joinEffectTexts(Collection<? extends PSkill<?>> effects, String delimiter, boolean addPeriod)
     {
         return EUIUtils.joinStrings(delimiter, getEffectTexts(effects, addPeriod));
+    }
+
+    public static String joinEffectTextsWithoutPeriod(Collection<? extends PSkill<?>> effects)
+    {
+        return joinEffectTextsWithoutPeriod(effects, ", ", true);
+    }
+
+    public static String joinEffectTextsWithoutPeriod(Collection<? extends PSkill<?>> effects, boolean addPeriod)
+    {
+        return joinEffectTextsWithoutPeriod(effects, ", ", addPeriod);
+    }
+
+    public static String joinEffectTextsWithoutPeriod(Collection<? extends PSkill<?>> effects, String delimiter, boolean capitalize)
+    {
+        return EUIUtils.joinStrings(delimiter, getEffectTextsWithoutPeriod(effects, capitalize));
     }
 
     public static <T extends PField> PSkillData<T> register(Class<? extends PSkill<T>> type, Class<T> fieldType)

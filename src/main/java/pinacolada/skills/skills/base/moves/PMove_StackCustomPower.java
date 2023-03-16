@@ -1,6 +1,7 @@
 package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import com.megacrit.cardcrawl.localization.LocalizedStrings;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -8,6 +9,7 @@ import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.markers.SummonOnlyMove;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.powers.PSkillPower;
+import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -42,7 +44,9 @@ public class PMove_StackCustomPower extends PMove<PField_CustomPower> implements
     @Override
     public String getText(boolean addPeriod)
     {
-        return getCapitalSubText(addPeriod) + (childEffect != null ? childEffect.getText(addPeriod) : "");
+        String subtext = getCapitalSubText(addPeriod);
+        // Prevent the final period from showing when this is under another effect, since subtext takes the exact text from another effect
+        return (!addPeriod && subtext.endsWith(LocalizedStrings.PERIOD) ? subtext.substring(0, subtext.length() - 1) : subtext) + (childEffect != null ? PCLCoreStrings.period(true) + " " + childEffect.getText(addPeriod) : "");
     }
 
     @Override

@@ -217,12 +217,6 @@ public class PCLCustomCardSlot
         }
     }
 
-    public static void loadSingleCard(FileHandle f)
-    {
-        loadSingleCardImpl(f);
-        PGR.debugCards.refreshCards();
-    }
-
     public static boolean isIDDuplicate(String input, AbstractCard.CardColor color)
     {
         return EUIUtils.any(getCards(color), c -> c.ID.equals(input));
