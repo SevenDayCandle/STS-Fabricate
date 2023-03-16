@@ -12,6 +12,11 @@ This mod also comes with a number of hooks for modders to use to leverage the Fa
 - Download the mod from the link above and place it into your mods folder (usually {folder containing STS}\SlayTheSpire\mods; you will need to create this folder if it doesn't exist)
 - Run ModTheSpire. Ensure that StsLib, BaseMod, and EUI are checked and appear above this mod in the mod load order
 
+## Compatibility:
+- Certain custom characters may not interact properly with custom cards created for their card color.
+- Custom mechanics introduced by other mods will not be included in the editor by default. Such mechanics require explicit integrations with said mods.
+- Having other mods active that affect the cards available in the run (e.g. Card Filter) may interfere with this mod's card filtering function in custom runs.
+
 ## Links
 
 If you would like to give feedback on the current state of this mod or wish to follow it for updates, you can do so at this Discord server: https://discord.gg/he76RmsuYZ
