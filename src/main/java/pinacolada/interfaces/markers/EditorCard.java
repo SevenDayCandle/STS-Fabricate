@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import extendedui.interfaces.markers.CacheableCard;
+import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.skills.skills.PTrigger;
 
 import java.util.ArrayList;

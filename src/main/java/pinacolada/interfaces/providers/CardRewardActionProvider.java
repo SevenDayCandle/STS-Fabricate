@@ -1,4 +1,4 @@
-package pinacolada.interfaces.markers;
+package pinacolada.interfaces.providers;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.rewards.RewardItem;

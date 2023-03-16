@@ -16,7 +16,7 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIClassUtils;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.blights.common.AbstractGlyphBlight;
-import pinacolada.interfaces.markers.RunAttributesProvider;
+import pinacolada.interfaces.providers.RunAttributesProvider;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;

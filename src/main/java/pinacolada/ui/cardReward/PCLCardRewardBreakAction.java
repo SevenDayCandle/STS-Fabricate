@@ -7,7 +7,7 @@ import extendedui.EUIRM;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.augments.PCLAugment;
-import pinacolada.interfaces.markers.CardRewardActionProvider;
+import pinacolada.interfaces.providers.CardRewardActionProvider;
 import pinacolada.relics.pcl.MagicEraser;
 import pinacolada.resources.PGR;
 

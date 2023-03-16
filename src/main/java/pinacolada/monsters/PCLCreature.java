@@ -11,9 +11,8 @@ import com.megacrit.cardcrawl.vfx.BobEffect;
 import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.cards.base.fields.PCLAffinity;
-import pinacolada.interfaces.markers.PointerProvider;
+import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.resources.PCLResources;
-import pinacolada.resources.PCLStrings;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 

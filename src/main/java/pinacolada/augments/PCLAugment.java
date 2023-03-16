@@ -109,7 +109,8 @@ public abstract class PCLAugment implements TooltipProvider
         {
             try
             {
-                PCLAugmentData data = ReflectionHacks.getPrivateStatic(augmentClass, "DATA");
+                VisibleAugment a = augmentClass.getAnnotation(VisibleAugment.class);
+                PCLAugmentData data = ReflectionHacks.getPrivateStatic(augmentClass, a.data());
                 AVAILABLE_AUGMENTS.add(data);
                 EUIUtils.logInfoIfDebug(PCLAugment.class, "Adding augment " + data.ID);
             }

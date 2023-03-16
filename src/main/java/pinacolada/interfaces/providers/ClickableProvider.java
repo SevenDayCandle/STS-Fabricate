@@ -1,4 +1,4 @@
-package pinacolada.interfaces.markers;
+package pinacolada.interfaces.providers;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;

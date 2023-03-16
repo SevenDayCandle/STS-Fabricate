@@ -34,7 +34,7 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.markers.PMultiBase;
-import pinacolada.interfaces.markers.PointerProvider;
+import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.interfaces.subscribers.*;
 import pinacolada.misc.CombatManager;
 import pinacolada.misc.PCLUseInfo;
@@ -279,7 +279,8 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
             try
             {
                 // We purposely load the data for multibase classes even though they don't show up in the editor, because they need to be loaded for deserialization
-                PSkillData<?> data = ReflectionHacks.getPrivateStatic(ct, "DATA");
+                VisibleSkill a = ct.getAnnotation(VisibleSkill.class);
+                PSkillData<?> data = ReflectionHacks.getPrivateStatic(ct, a.data());
                 if (!PMultiBase.class.isAssignableFrom(ct))
                 {
                     AVAILABLE_SKILLS.add(data);

@@ -5,7 +5,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIRM;
 import extendedui.utilities.ColoredString;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.interfaces.markers.PointerProvider;
+import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;

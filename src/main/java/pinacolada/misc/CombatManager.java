@@ -41,7 +41,7 @@ import pinacolada.effects.SFX;
 import pinacolada.effects.combat.DodgeEffect;
 import pinacolada.interfaces.listeners.OnCardResetListener;
 import pinacolada.interfaces.listeners.OnRelicObtainedListener;
-import pinacolada.interfaces.markers.CooldownProvider;
+import pinacolada.interfaces.providers.CooldownProvider;
 import pinacolada.interfaces.subscribers.*;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.orbs.PCLOrb;

@@ -6,8 +6,8 @@ import extendedui.EUIUtils;
 import extendedui.utilities.EUIColors;
 import pinacolada.actions.utility.GenericCardSelection;
 import pinacolada.cards.base.modifiers.SkillModifier;
-import pinacolada.interfaces.markers.CooldownProvider;
 import pinacolada.interfaces.markers.EditorCard;
+import pinacolada.interfaces.providers.CooldownProvider;
 import pinacolada.skills.PSkill;
 import pinacolada.utilities.GameUtilities;
 

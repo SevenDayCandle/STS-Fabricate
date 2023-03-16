@@ -6,7 +6,7 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.rewards.RewardItem;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.ui.EUIBase;
-import pinacolada.interfaces.markers.CardRewardActionProvider;
+import pinacolada.interfaces.providers.CardRewardActionProvider;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package pinacolada.interfaces.markers;
+package pinacolada.interfaces.providers;
 
 public interface RunAttributesProvider
 {

@@ -6,7 +6,7 @@ import extendedui.EUIRM;
 import extendedui.utilities.ColoredString;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.interfaces.markers.CooldownProvider;
+import pinacolada.interfaces.providers.CooldownProvider;
 import pinacolada.interfaces.subscribers.OnCooldownTriggeredSubscriber;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;

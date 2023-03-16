@@ -8,7 +8,7 @@ import extendedui.ui.tooltips.EUICardPreview;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.markers.PMultiBase;
-import pinacolada.interfaces.markers.PointerProvider;
+import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;

@@ -4,7 +4,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.rewards.RewardItem;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleRelic;
-import pinacolada.interfaces.markers.CardRewardActionProvider;
+import pinacolada.interfaces.providers.CardRewardActionProvider;
 
 @VisibleRelic
 public class MagicEraser extends AbstractCubes implements CardRewardActionProvider

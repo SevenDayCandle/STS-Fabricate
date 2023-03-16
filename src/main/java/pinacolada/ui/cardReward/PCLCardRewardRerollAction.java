@@ -10,7 +10,7 @@ import extendedui.utilities.EUIFontHelper;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
 import pinacolada.effects.card.HideCardEffect;
-import pinacolada.interfaces.markers.CardRewardActionProvider;
+import pinacolada.interfaces.providers.CardRewardActionProvider;
 import pinacolada.relics.pcl.AbstractCubes;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;

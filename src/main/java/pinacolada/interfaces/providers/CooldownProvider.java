@@ -1,4 +1,4 @@
-package pinacolada.interfaces.markers;
+package pinacolada.interfaces.providers;
 
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.cards.AbstractCard;

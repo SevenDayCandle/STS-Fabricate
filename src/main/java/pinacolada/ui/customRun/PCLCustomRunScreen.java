@@ -17,10 +17,9 @@ import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.AbstractMenuScreen;
 import extendedui.ui.cardFilter.CustomCardLibraryScreen;
 import pinacolada.cards.base.PCLCustomCardSlot;
-import pinacolada.interfaces.markers.RunAttributesProvider;
+import pinacolada.interfaces.providers.RunAttributesProvider;
 import pinacolada.misc.PCLDungeon;
 import pinacolada.resources.PCLResources;
-import pinacolada.resources.PCLStrings;
 import pinacolada.resources.PGR;
 import pinacolada.trials.PCLCustomTrial;
 

@@ -16,11 +16,10 @@ import extendedui.ui.tooltips.EUITooltip;
 import extendedui.ui.tooltips.FakeFtue;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLAffinity;
-import pinacolada.interfaces.markers.ClickableProvider;
+import pinacolada.interfaces.providers.ClickableProvider;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.powers.PCLClickableUse;
 import pinacolada.resources.PCLResources;
-import pinacolada.resources.PCLStrings;
 import pinacolada.resources.PGR;
 import pinacolada.ui.EUICardDraggable;
 

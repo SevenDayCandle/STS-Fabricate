@@ -5,10 +5,9 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterSelectScreen;
-import pinacolada.interfaces.markers.RunAttributesProvider;
+import pinacolada.interfaces.providers.RunAttributesProvider;
 import pinacolada.patches.UnlockTrackerPatches;
 import pinacolada.resources.PCLResources;
-import pinacolada.resources.PCLStrings;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 

@@ -1,7 +1,7 @@
 package pinacolada.skills.skills;
 
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.interfaces.markers.PointerProvider;
+import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.skills.PPrimary;
 import pinacolada.skills.PSkillData;

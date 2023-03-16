@@ -16,7 +16,7 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.effects.EffekseerEFK;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.VFX;
-import pinacolada.interfaces.markers.PointerProvider;
+import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;

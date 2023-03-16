@@ -5,9 +5,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-// Denote an Augment to be registered. Such Augments MUST have an PCLAugmentData field called DATA. Augments not registered in this fashion cannot be spawned in the console or chosen in the loadout editor.
+// Denote an Augment to be registered. Such Augments MUST have an PCLAugmentData field whose name matches the value listed in data(). Augments not registered in this fashion cannot be spawned in the console or chosen in the loadout editor.
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface VisibleAugment
 {
+    String data() default DEFAULT;
+
+    public static final String DEFAULT = "DATA";
 }

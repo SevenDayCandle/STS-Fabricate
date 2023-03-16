@@ -1,10 +1,11 @@
-package pinacolada.interfaces.markers;
+package pinacolada.interfaces.providers;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUIRenderHelpers;
 import extendedui.EUIUtils;
 import extendedui.text.EUISmartText;
+import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PTrait;
 import pinacolada.skills.Skills;

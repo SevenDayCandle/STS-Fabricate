@@ -11,6 +11,7 @@ import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLAttackType;
 import pinacolada.cards.base.tags.CardTagItem;
+import pinacolada.interfaces.providers.CustomCardFileProvider;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PTrigger;
@@ -28,13 +29,14 @@ public class PCLCustomCardSlot
     public static final int ID_SIZE = 4;
     public static final String BASE_CARD_ID = "PCLC";
     public static final String FOLDER = "custom";
-    private static final TypeToken<PCLCustomCardSlot> TToken = new TypeToken<PCLCustomCardSlot>()
+    private static final TypeToken<PCLCustomCardSlot> TTOKEN = new TypeToken<PCLCustomCardSlot>()
     {
     };
-    private static final TypeToken<CardForm> TTokenForm = new TypeToken<CardForm>()
+    private static final TypeToken<CardForm> TTOKENFORM = new TypeToken<CardForm>()
     {
     };
-    private static final HashMap<AbstractCard.CardColor, ArrayList<PCLCustomCardSlot>> CustomCards = new HashMap<>();
+    private static final HashMap<AbstractCard.CardColor, ArrayList<PCLCustomCardSlot>> CUSTOM_CARDS = new HashMap<>();
+    private static final ArrayList<CustomCardFileProvider> PROVIDERS = new ArrayList<>();
     public String ID;
     public Integer loadout;
     public Integer maxUpgradeLevel;
@@ -124,6 +126,12 @@ public class PCLCustomCardSlot
         }
     }
 
+    /** Subscribe a provider that provides a folder to load custom cards from whenever the cards are reloaded */
+    public static void addProvider(CustomCardFileProvider provider)
+    {
+        PROVIDERS.add(provider);
+    }
+
     // Only allow a card to be copied into a custom card slot if it is a PCLCard and if all of its skills are in AVAILABLE_SKILLS (i.e. selectable in the card editor)
     public static boolean canFullyCopyCard(AbstractCard card)
     {
@@ -136,7 +144,7 @@ public class PCLCustomCardSlot
 
     public static PCLCustomCardSlot get(String id)
     {
-        for (ArrayList<PCLCustomCardSlot> slots : CustomCards.values())
+        for (ArrayList<PCLCustomCardSlot> slots : CUSTOM_CARDS.values())
         {
             for (PCLCustomCardSlot slot : slots)
             {
@@ -153,13 +161,13 @@ public class PCLCustomCardSlot
     {
         if (color == null)
         {
-            return EUIUtils.flattenList(CustomCards.values());
+            return EUIUtils.flattenList(CUSTOM_CARDS.values());
         }
-        if (!CustomCards.containsKey(color))
+        if (!CUSTOM_CARDS.containsKey(color))
         {
-            CustomCards.put(color, new ArrayList<>());
+            CUSTOM_CARDS.put(color, new ArrayList<>());
         }
-        return CustomCards.get(color);
+        return CUSTOM_CARDS.get(color);
     }
 
     private static FileHandle getBaseCustomCardFolder()
@@ -175,18 +183,21 @@ public class PCLCustomCardSlot
 
     public static void initialize()
     {
-        CustomCards.clear();
+        CUSTOM_CARDS.clear();
         loadFolder(getBaseCustomCardFolder());
+        for (CustomCardFileProvider provider : PROVIDERS)
+        {
+            loadFolder(provider.getCardFolder());
+        }
         PGR.debugCards.refreshCards();
     }
 
-    public static void loadFolder(FileHandle folder)
+    private static void loadFolder(FileHandle folder)
     {
         for (FileHandle f : folder.list(JSON_FILTER))
         {
             loadSingleCardImpl(f);
         }
-        PGR.debugCards.refreshCards();
     }
 
     private static void loadSingleCardImpl(FileHandle f)
@@ -195,7 +206,7 @@ public class PCLCustomCardSlot
         try
         {
             String jsonString = f.readString();
-            PCLCustomCardSlot slot = EUIUtils.deserialize(jsonString, TToken.getType());
+            PCLCustomCardSlot slot = EUIUtils.deserialize(jsonString, TTOKEN.getType());
             slot.setupBuilder(path);
             getCards(slot.slotColor).add(slot);
         }
@@ -301,7 +312,7 @@ public class PCLCustomCardSlot
             f.effects = EUIUtils.mapAsNonnull(builder.moves, b -> b != null ? b.serialize() : null).toArray(new String[]{});
             f.powerEffects = EUIUtils.mapAsNonnull(builder.powers, b -> b != null ? b.serialize() : null).toArray(new String[]{});
 
-            tempForms.add(EUIUtils.serialize(f, TTokenForm.getType()));
+            tempForms.add(EUIUtils.serialize(f, TTOKENFORM.getType()));
         }
 
         forms = tempForms.toArray(new String[]{});
@@ -349,7 +360,7 @@ public class PCLCustomCardSlot
         filePath = newFilePath;
         imagePath = newImagePath;
 
-        writer.writeString(EUIUtils.serialize(this, TToken.getType()), false);
+        writer.writeString(EUIUtils.serialize(this, TTOKEN.getType()), false);
         EUIUtils.logInfo(PCLCustomCardSlot.class, "Saved Custom Card: " + filePath);
         PGR.debugCards.refreshCards();
     }
@@ -376,7 +387,7 @@ public class PCLCustomCardSlot
 
         for (String fo : forms)
         {
-            CardForm f = EUIUtils.deserialize(fo, TTokenForm.getType());
+            CardForm f = EUIUtils.deserialize(fo, TTOKENFORM.getType());
             PCLDynamicData builder = new PCLDynamicData(this);
             builder.setAttackType(PCLAttackType.valueOf(f.attackType));
             builder.setAttackSkill(EUIUtils.safeCast(PSkill.get(f.damageEffect), PCardPrimary_DealDamage.class));
@@ -399,7 +410,7 @@ public class PCLCustomCardSlot
 
     public void wipeBuilder()
     {
-        CustomCards.get(slotColor).remove(this);
+        CUSTOM_CARDS.get(slotColor).remove(this);
         FileHandle writer = getImageHandle();
         writer.delete();
         EUIUtils.logInfo(PCLCustomCardSlot.class, "Deleted Custom Card Image: " + imagePath);

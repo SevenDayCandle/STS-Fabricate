@@ -3,7 +3,7 @@ package pinacolada.relics;
 import com.badlogic.gdx.graphics.Texture;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import extendedui.EUIUtils;
-import pinacolada.interfaces.markers.PointerProvider;
+import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.Skills;
 

@@ -6,7 +6,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.interfaces.markers.PointerProvider;
+import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.misc.CombatManager;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.orbs.PCLOrbHelper;

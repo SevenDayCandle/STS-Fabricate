@@ -6,7 +6,7 @@ import com.megacrit.cardcrawl.rewards.RewardItem;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import com.megacrit.cardcrawl.rooms.MonsterRoom;
 import extendedui.EUIUtils;
-import pinacolada.interfaces.markers.CardRewardActionProvider;
+import pinacolada.interfaces.providers.CardRewardActionProvider;
 import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
