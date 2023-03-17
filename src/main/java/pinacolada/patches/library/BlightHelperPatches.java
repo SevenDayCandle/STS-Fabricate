@@ -1,14 +1,15 @@
 package pinacolada.patches.library;
 
+import basemod.ReflectionHacks;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
 import com.megacrit.cardcrawl.blights.AbstractBlight;
 import com.megacrit.cardcrawl.helpers.BlightHelper;
-import pinacolada.blights.common.GlyphBlight;
-import pinacolada.blights.common.GlyphBlight1;
-import pinacolada.blights.common.GlyphBlight2;
-import pinacolada.blights.common.UpgradedHand;
+import extendedui.EUIUtils;
+import pinacolada.annotations.VisibleBlight;
+import pinacolada.resources.PGR;
+import pinacolada.utilities.GameUtilities;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -17,15 +18,6 @@ import java.util.HashMap;
 public class BlightHelperPatches
 {
     private static final HashMap<String, Class<? extends AbstractBlight>> customBlights = new HashMap<>();
-
-    static
-    {
-        //TODO make this automatic
-        customBlights.put(UpgradedHand.ID, UpgradedHand.class);
-        customBlights.put(GlyphBlight.ID, GlyphBlight.class);
-        customBlights.put(GlyphBlight1.ID, GlyphBlight1.class);
-        customBlights.put(GlyphBlight2.ID, GlyphBlight2.class);
-    }
 
     @SpirePrefixPatch
     public static SpireReturn<AbstractBlight> method(String id)
@@ -44,5 +36,23 @@ public class BlightHelperPatches
         }
 
         return SpireReturn.Continue();
+    }
+
+    public static void loadCustomBlights()
+    {
+        for (Class<?> ct : GameUtilities.getClassesWithAnnotation(VisibleBlight.class))
+        {
+            try
+            {
+                VisibleBlight a = ct.getAnnotation(VisibleBlight.class);
+                String id = ReflectionHacks.getPrivateStatic(ct, a.id());
+                customBlights.put(id, (Class<? extends AbstractBlight>) ct);
+                EUIUtils.logInfoIfDebug(BlightHelper.class, "Adding blight " + id);
+            }
+            catch (Exception e)
+            {
+                EUIUtils.logError(PGR.class, "Failed to load blight " + ct.getName() + ": " + e.getLocalizedMessage());
+            }
+        }
     }
 }

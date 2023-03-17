@@ -6,6 +6,7 @@ import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import pinacolada.effects.SFX;
 import pinacolada.misc.CombatManager;
+import pinacolada.patches.library.BlightHelperPatches;
 import pinacolada.resources.PGR;
 
 @SpireInitializer //
@@ -68,6 +69,7 @@ public class PCLModInitializer implements OnStartBattleSubscriber, PostBattleSub
     {
         PGR.loadCustomPotions();
         PGR.loadCustomPowers();
+        BlightHelperPatches.loadCustomBlights();
         PGR.registerRewards();
         CombatManager.initializeEvents();
         PGR.postInitialize();

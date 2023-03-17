@@ -6,7 +6,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 // Denote a card that can be viewed in the card compendium and the card editor. Replaces Basemod.addCard
-// TODO add optional condition for determining if the card can actually be loaded
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface VisibleCard
