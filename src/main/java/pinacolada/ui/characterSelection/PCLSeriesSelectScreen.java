@@ -157,7 +157,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen
         final CardGroup cards = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
         if (loadout != null)
         {
-            for (PCLCardData data : loadout.cardData)
+            for (PCLCardData data : loadout.cardDatas)
             {
                 AbstractCard nc = data.makeCopy(SingleCardViewPopup.isViewingUpgrade);
                 cards.group.add(nc);
@@ -167,7 +167,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen
         {
             for (PCLLoadout cs : container.getAllLoadouts())
             {
-                for (PCLCardData data : cs.cardData)
+                for (PCLCardData data : cs.cardDatas)
                 {
                     AbstractCard nc = data.makeCopy(SingleCardViewPopup.isViewingUpgrade);
                     cards.group.add(nc);
@@ -209,8 +209,8 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen
         cardGrid.addCards(container.getAllCards());
         updateStartingDeckText();
 
-        PGR.cardAffinities.setActive(true);
-        PGR.cardAffinities.open(container.allCards,
+        PGR.countingPanel.setActive(true);
+        PGR.countingPanel.open(container.allCards,
                 false,
                 null,
                 true);
@@ -277,9 +277,9 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen
 
     protected void totalCardsChanged(int totalCards)
     {
-        if (PGR.cardAffinities.isActive)
+        if (PGR.countingPanel.isActive)
         {
-            PGR.cardAffinities.open(container.allCards, false, null, true);
+            PGR.countingPanel.open(container.allCards, false, null, true);
         }
 
         typesAmount.setLabel(EUIUtils.joinStrings(" | ",
@@ -303,7 +303,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen
     public void updateImpl()
     {
         backgroundImage.updateImpl();
-        PGR.cardAffinities.tryUpdate(true);
+        PGR.countingPanel.tryUpdate(true);
 
         if (previewCardsEffect != null)
         {
@@ -370,7 +370,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen
         }
         else
         {
-            PGR.cardAffinities.tryRender(sb);
+            PGR.countingPanel.tryRender(sb);
         }
 
         contextMenu.tryRender(sb);

@@ -23,8 +23,11 @@ public class PCLCardRewardActionButton extends EUIButton
     public PCLCardRewardAction container;
     public boolean used;
     private AbstractCard card;
+    @Deprecated
     private PCLAugment augment;
+    @Deprecated
     private EUIImage augmentImage;
+    @Deprecated
     private boolean useAugment;
 
     public PCLCardRewardActionButton(PCLCardRewardAction container, Texture buttonTexture, String title, String description, float offsetY, int cardIndex, boolean useAugment)

@@ -2221,12 +2221,12 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
                 GameUtilities.modifyCostForCombat(this, data.modifiedCost, true);
             }
             if (data.modifiedAffinities != null) {
-                for (PCLAffinity affinity : PCLAffinity.extended()) {
+                for (PCLAffinity affinity : PCLAffinity.basic()) {
                     affinities.add(affinity, data.modifiedAffinities[affinity.id]);
                 }
             }
             if (data.modifiedScaling != null) {
-                for (PCLAffinity affinity : PCLAffinity.extended()) {
+                for (PCLAffinity affinity : PCLAffinity.basic()) {
                     affinities.add(affinity, data.modifiedScaling[affinity.id]);
                 }
             }

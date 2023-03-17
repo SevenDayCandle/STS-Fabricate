@@ -1,10 +1,7 @@
 package pinacolada.augments;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import pinacolada.cards.base.fields.PCLAffinity;
-import pinacolada.cards.base.fields.PCLCardAffinities;
 import pinacolada.cards.base.fields.PCLCardAffinity;
-import pinacolada.utilities.GameUtilities;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,18 +11,18 @@ import static pinacolada.augments.PCLAugment.WEIGHT_MODIFIER;
 
 public class PCLAugmentWeights
 {
-    protected final HashMap<PCLAffinity, Integer> weights = new HashMap<>();
+    protected final HashMap<PCLAugmentCategory, Integer> weights = new HashMap<>();
     protected int total;
     protected int rareModifier;
 
-    public PCLAugmentWeights(PCLAffinity... affinities)
+    public PCLAugmentWeights(PCLAugmentCategory... affinities)
     {
         this(WEIGHT_MODIFIER + 1, affinities);
     }
 
-    public PCLAugmentWeights(int amount, PCLAffinity... affinities)
+    public PCLAugmentWeights(int amount, PCLAugmentCategory... affinities)
     {
-        for (PCLAffinity aff : affinities)
+        for (PCLAugmentCategory aff : affinities)
         {
             weights.put(aff, amount);
             total += amount;
@@ -34,14 +31,12 @@ public class PCLAugmentWeights
 
     public PCLAugmentWeights(AbstractCard c)
     {
-        PCLCardAffinities cAff = GameUtilities.getPCLCardAffinities(c);
-        if (cAff != null)
+        for (PCLAugmentCategory category : PCLAugmentCategory.values())
         {
-            for (PCLCardAffinity aff : cAff.getCardAffinities())
+            if (category.isTypeValid(c.type))
             {
-                int value = getAffinityBaseLevel(aff);
-                weights.put(aff.type, value);
-                total += value;
+                weights.put(category, 1);
+                total += 1;
             }
         }
 
@@ -91,7 +86,7 @@ public class PCLAugmentWeights
         return dataMap;
     }
 
-    public float getPercentage(PCLAffinity affinity)
+    public float getPercentage(PCLAugmentCategory affinity)
     {
         return getWeight(affinity) * 100f / (float) Math.max(1, total);
     }
@@ -101,12 +96,12 @@ public class PCLAugmentWeights
         return rareModifier;
     }
 
-    public int getWeight(PCLAffinity affinity)
+    public int getWeight(PCLAugmentCategory affinity)
     {
         return weights.getOrDefault(affinity, 0);
     }
 
-    public List<PCLAffinity> sortedKeys()
+    public List<PCLAugmentCategory> sortedKeys()
     {
         return weights.keySet().stream().sorted((a, b) -> Float.compare(weights.getOrDefault(b, 0), weights.getOrDefault(a, 0))).collect(Collectors.toList());
     }

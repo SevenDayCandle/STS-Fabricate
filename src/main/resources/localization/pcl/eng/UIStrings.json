@@ -174,11 +174,6 @@
 								]
 				},
 				"pcl:CardType": {
-								"EXTRA_TEXT": [
-												"ALL",
-												"AoE",
-												"Random"
-								],
 								"TEXT": [
 												"None",
 												"All Allies",
@@ -192,7 +187,11 @@
 												"Single Target",
 												"Team",
 												"Legendary",
-												"Secret Rare"
+												"Secret Rare",
+												"General",
+												"ALL",
+												"AoE",
+												"Random"
 								]
 				},
 				"pcl:CharacterSelect": {

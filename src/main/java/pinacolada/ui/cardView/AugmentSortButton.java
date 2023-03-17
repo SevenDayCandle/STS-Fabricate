@@ -59,21 +59,21 @@ public class AugmentSortButton extends EUIButton
     {
         Name,
         Count,
-        Affinity,
+        Category,
         Level;
 
         public String getText()
         {
             switch (this)
             {
-                case Affinity:
-                    return PGR.core.tooltips.affinityGeneral.title;
+                case Name:
+                    return CardLibSortHeader.TEXT[2];
                 case Count:
                     return EUIRM.strings.misc_sortByCount;
                 case Level:
                     return PGR.core.tooltips.level.title;
                 default:
-                    return CardLibSortHeader.TEXT[2];
+                    return CardLibSortHeader.TEXT[1];
             }
         }
     }

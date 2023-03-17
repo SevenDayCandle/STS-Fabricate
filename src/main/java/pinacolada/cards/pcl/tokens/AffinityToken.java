@@ -85,7 +85,7 @@ public abstract class AffinityToken extends PCLCard
     {
         if (cards.isEmpty())
         {
-            for (PCLAffinity affinity : PCLAffinity.extended())
+            for (PCLAffinity affinity : PCLAffinity.basic())
             {
                 cards.add(getCardData(affinity));
             }

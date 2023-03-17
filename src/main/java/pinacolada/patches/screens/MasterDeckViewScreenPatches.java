@@ -16,7 +16,7 @@ public class MasterDeckViewScreenPatches
         @SpirePrefixPatch
         public static void prefix(MasterDeckViewScreen __instance)
         {
-            PGR.cardAffinities.tryUpdate(true);
+            PGR.countingPanel.tryUpdate(true);
         }
     }
 
@@ -32,7 +32,7 @@ public class MasterDeckViewScreenPatches
         @SpirePrefixPatch
         public static void prefix(MasterDeckViewScreen __instance, SpriteBatch sb)
         {
-            PGR.cardAffinities.tryRender(sb);
+            PGR.countingPanel.tryRender(sb);
         }
     }
 
@@ -45,7 +45,7 @@ public class MasterDeckViewScreenPatches
         public static void prefix(MasterDeckViewScreen __instance)
         {
             screen = __instance;
-            PGR.cardAffinities.open(AbstractDungeon.player.masterDeck.group, false, c -> screen.setSortOrder(new CardAffinityComparator(c.type)), false);
+            PGR.countingPanel.open(AbstractDungeon.player.masterDeck.group, false, c -> screen.setSortOrder(new CardAffinityComparator(c.type)), false);
         }
     }
 

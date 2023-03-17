@@ -2,7 +2,6 @@ package pinacolada.augments;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIUtils;
-import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
@@ -17,18 +16,18 @@ public class PCLAugmentData
     public final String ID;
     public final Class<? extends PCLAugment> augClass;
     public final int tier;
-    public final PCLAffinity affinity;
+    public final PCLAugmentCategory category;
     public AugmentStrings strings;
-    public PSkill skill;
+    public PSkill<?> skill;
     public PCLAugmentReqs reqs;
     public boolean isSpecial;
 
-    public PCLAugmentData(String id, Class<? extends PCLAugment> augClass, int tier, PCLAffinity affinity)
+    public PCLAugmentData(String id, Class<? extends PCLAugment> augClass, PCLAugmentCategory category, int tier)
     {
         this.ID = id;
         this.augClass = augClass;
         this.tier = tier;
-        this.affinity = affinity;
+        this.category = category;
         strings = PGR.getAugmentStrings(this.ID);
     }
 
@@ -66,19 +65,19 @@ public class PCLAugmentData
         return this;
     }
 
-    public PCLAugmentData setSkill(PSkill... skills)
+    public PCLAugmentData setSkill(PSkill<?>... skills)
     {
         this.skill = PMultiSkill.join(skills);
         return this;
     }
 
-    public PCLAugmentData setSkill(PSkill skill)
+    public PCLAugmentData setSkill(PSkill<?> skill)
     {
         this.skill = skill;
         return this;
     }
 
-    public PCLAugmentData setSkill(PTrait... traits)
+    public PCLAugmentData setSkill(PTrait<?>... traits)
     {
         this.skill = PMultiTrait.join(traits);
         return this;

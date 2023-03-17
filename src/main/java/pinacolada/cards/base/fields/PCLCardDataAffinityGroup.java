@@ -4,6 +4,8 @@ import extendedui.EUIUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 
 import static pinacolada.cards.base.fields.PCLAffinity.TOTAL_AFFINITIES;
 
@@ -46,6 +48,36 @@ public class PCLCardDataAffinityGroup implements Serializable
         }
 
         return list[affinity.id];
+    }
+
+    public ArrayList<PCLAffinity> getAffinities()
+    {
+        return getAffinities(true, false);
+    }
+
+    public ArrayList<PCLAffinity> getAffinities(boolean convertStar, boolean availableOnly)
+    {
+        HashSet<PCLAffinity> available = new HashSet<>(Arrays.asList(availableOnly ? PCLAffinity.getAvailableAffinities() : PCLAffinity.basic()));
+        final ArrayList<PCLAffinity> list = new ArrayList<>();
+        if (convertStar && hasStar())
+        {
+            list.addAll(available);
+        }
+        else
+        {
+            for (PCLCardDataAffinity item : this.list)
+            {
+                if (item != null && item.value.length > 0 && available.contains(item.type))
+                {
+                    list.add(item.type);
+                }
+            }
+            if (hasStar())
+            {
+                list.add(star.type);
+            }
+        }
+        return list;
     }
 
     public ArrayList<PCLCardDataAffinity> getCardAffinities()
@@ -126,6 +158,11 @@ public class PCLCardDataAffinityGroup implements Serializable
             final PCLCardDataAffinity a = get(affinity);
             return (a != null) ? a.getUpgrade(form) : 0;
         }
+    }
+
+    public boolean hasStar()
+    {
+        return star != null && star.value.length > 0;
     }
 
     public PCLCardDataAffinity set(PCLCardDataAffinity affinity)

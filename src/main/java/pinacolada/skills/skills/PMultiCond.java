@@ -187,7 +187,7 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
     {
-        return effects.isEmpty() || (fields.or) ? EUIUtils.any(effects, c -> c.checkCondition(info, isUsing, fromTrigger)) : EUIUtils.all(effects, c -> c.checkCondition(info, isUsing, fromTrigger));
+        return effects.isEmpty() || ((fields.or) ? EUIUtils.any(effects, c -> c.checkCondition(info, isUsing, fromTrigger)) : EUIUtils.all(effects, c -> c.checkCondition(info, isUsing, fromTrigger)));
     }
 
     @Override

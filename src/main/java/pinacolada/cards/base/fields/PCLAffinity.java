@@ -9,6 +9,7 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.ui.TextureCache;
 import extendedui.ui.tooltips.EUITooltip;
+import pinacolada.interfaces.markers.CountingPanelItem;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
@@ -19,7 +20,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>
+public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>, CountingPanelItem
 {
     Red(0, "Red", "R"),
     Green(1, "Green",  "G"),
@@ -37,19 +38,19 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>
     private static final HashMap<AbstractCard.CardColor, PCLAffinity[]> REGISTERED_TYPES = new HashMap<>();
     private static final HashMap<AbstractCard.CardColor, TextureCache> REGISTERED_BORDERS = new HashMap<>();
 
-    private static final PCLAffinity[] BASIC_TYPES = new PCLAffinity[6];
-    private static final PCLAffinity[] EXTENDED_TYPES = new PCLAffinity[TOTAL_AFFINITIES];
+    private static final PCLAffinity[] BASIC_TYPES = new PCLAffinity[TOTAL_AFFINITIES];
     private static final PCLAffinity[] ALL_TYPES = new PCLAffinity[8];
+    private static final PCLAffinity[] NO_TYPES = new PCLAffinity[]{};
 
     static
     {
-        ALL_TYPES[0] = EXTENDED_TYPES[0] = BASIC_TYPES[0] = Red;
-        ALL_TYPES[1] = EXTENDED_TYPES[1] = BASIC_TYPES[1] = Green;
-        ALL_TYPES[2] = EXTENDED_TYPES[2] = BASIC_TYPES[2] = Blue;
-        ALL_TYPES[3] = EXTENDED_TYPES[3] = BASIC_TYPES[3] = Orange;
-        ALL_TYPES[4] = EXTENDED_TYPES[4] = BASIC_TYPES[4] = Yellow;
-        ALL_TYPES[5] = EXTENDED_TYPES[5] = BASIC_TYPES[5] = Purple;
-        ALL_TYPES[6] = EXTENDED_TYPES[6] = Silver;
+        ALL_TYPES[0] = BASIC_TYPES[0] = Red;
+        ALL_TYPES[1] = BASIC_TYPES[1] = Green;
+        ALL_TYPES[2] = BASIC_TYPES[2] = Blue;
+        ALL_TYPES[3] = BASIC_TYPES[3] = Orange;
+        ALL_TYPES[4] = BASIC_TYPES[4] = Yellow;
+        ALL_TYPES[5] = BASIC_TYPES[5] = Purple;
+        ALL_TYPES[6] = BASIC_TYPES[6] = Silver;
         ALL_TYPES[7] = Star;
     }
 
@@ -72,11 +73,6 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>
     public static PCLAffinity[] basic()
     {
         return BASIC_TYPES;
-    }
-
-    public static PCLAffinity[] extended()
-    {
-        return EXTENDED_TYPES;
     }
 
     public static PCLAffinity fromTooltip(EUITooltip tooltip) {   //@Formatter: Off
@@ -137,11 +133,11 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>
     {
         if (GameUtilities.isColorlessCardColor(pc))
         {
-            return allowColorless ? extended() : new PCLAffinity[]{};
+            return allowColorless ? basic() : NO_TYPES;
         }
         else
         {
-            return REGISTERED_TYPES.getOrDefault(pc, new PCLAffinity[]{});
+            return REGISTERED_TYPES.getOrDefault(pc, NO_TYPES);
         }
     }
 

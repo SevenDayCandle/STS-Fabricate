@@ -81,8 +81,8 @@ public class PCLAugmentList extends EUICanvasGrid
                 return StringUtils.compare(a.augment.getName(), b.augment.getName());
             case Count:
                 return Float.compare(a.amount, b.amount);
-            case Affinity:
-                return a.augment.data.affinity.id - b.augment.data.affinity.id;
+            case Category:
+                return a.augment.data.category.ordinal() - b.augment.data.category.ordinal();
             case Level:
                 return a.augment.data.tier - b.augment.data.tier;
         }

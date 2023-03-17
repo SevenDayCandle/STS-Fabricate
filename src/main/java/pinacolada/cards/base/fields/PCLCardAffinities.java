@@ -14,6 +14,7 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 
 import static pinacolada.cards.base.fields.PCLAffinity.General;
 import static pinacolada.cards.base.fields.PCLAffinity.TOTAL_AFFINITIES;
@@ -187,21 +188,22 @@ public class PCLCardAffinities
 
     public ArrayList<PCLAffinity> getAffinities()
     {
-        return getAffinities(true);
+        return getAffinities(true, false);
     }
 
-    public ArrayList<PCLAffinity> getAffinities(boolean convertStar)
+    public ArrayList<PCLAffinity> getAffinities(boolean convertStar, boolean availableOnly)
     {
+        HashSet<PCLAffinity> available = new HashSet<>(Arrays.asList(availableOnly ? PCLAffinity.getAvailableAffinities() : PCLAffinity.basic()));
         final ArrayList<PCLAffinity> list = new ArrayList<>();
         if (convertStar && hasStar())
         {
-            list.addAll(Arrays.asList(PCLAffinity.basic()));
+            list.addAll(available);
         }
         else
         {
             for (PCLCardAffinity item : this.list)
             {
-                if (item != null && item.level > 0)
+                if (item != null && item.level > 0 && available.contains(item.type))
                 {
                     list.add(item.type);
                 }
@@ -314,7 +316,7 @@ public class PCLCardAffinities
         {
             return false;
         }
-        for (PCLAffinity af : PCLAffinity.extended())
+        for (PCLAffinity af : PCLAffinity.basic())
         {
             if (this.getLevel(af) != other.getLevel(af))
             {
@@ -393,7 +395,7 @@ public class PCLCardAffinities
     public PCLCardAffinities initialize(Integer[] base)
     {
         list = new PCLCardAffinity[TOTAL_AFFINITIES];
-        for (int i = 0; i < PCLAffinity.extended().length; i++)
+        for (int i = 0; i < PCLAffinity.basic().length; i++)
         {
             PCLCardAffinity t = new PCLCardAffinity(PCLAffinity.all()[i], base[i]);
             list[t.type.id] = t;

@@ -11,6 +11,7 @@ import pinacolada.interfaces.providers.CardRewardActionProvider;
 import pinacolada.relics.pcl.MagicEraser;
 import pinacolada.resources.PGR;
 
+@Deprecated
 public class PCLCardRewardBreakAction extends PCLCardRewardAction
 {
     protected static final float REWARD_INDEX = AbstractCard.IMG_HEIGHT * 0.515f;

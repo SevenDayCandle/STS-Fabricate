@@ -75,7 +75,7 @@ public abstract class PCLAugment implements TooltipProvider
 
     public static int getWeight(PCLAugmentWeights weights, PCLAugmentData data, boolean allowSpecial)
     {
-        return (data.isSpecial && !allowSpecial ? 0 : weights.getWeight(data.affinity) - Math.max(0, data.tier - weights.getRareModifier())) * WEIGHT_MODIFIER;
+        return (data.isSpecial && !allowSpecial ? 0 : weights.getWeight(data.category) - Math.max(0, data.tier - weights.getRareModifier())) * WEIGHT_MODIFIER;
     }
 
     public static PCLAugmentData getWeighted(Random rng, PCLAugmentWeights weights)
@@ -121,10 +121,10 @@ public abstract class PCLAugment implements TooltipProvider
         }
     }
 
-    public static PCLAugmentData register(Class<? extends PCLAugment> type, int tier, PCLAffinity affinity)
+    public static PCLAugmentData register(Class<? extends PCLAugment> type, PCLAugmentCategory category, int tier)
     {
         String id = PGR.core.createID(type.getSimpleName());
-        PCLAugmentData d = new PCLAugmentData(id, type, tier, affinity);
+        PCLAugmentData d = new PCLAugmentData(id, type, category, tier);
         AUGMENT_MAP.put(id, d);
         return d;
     }
@@ -184,7 +184,7 @@ public abstract class PCLAugment implements TooltipProvider
     */
     protected boolean canApplyImpl(PCLCard c)
     {
-        return c != null && (data.reqs == null || data.reqs.check(c)) && c.getFreeAugmentSlot() >= 0 && !EUIUtils.any(c.getAugments(), a -> a.data.affinity == data.affinity);
+        return c != null && (data.reqs == null || data.reqs.check(c)) && c.getFreeAugmentSlot() >= 0 && !EUIUtils.any(c.getAugments(), a -> a.data.category == data.category);
     }
 
     public boolean canRemove()
@@ -194,32 +194,13 @@ public abstract class PCLAugment implements TooltipProvider
 
     public Color getColor()
     {
-        switch (data.affinity)
-        {
-            case Red:
-                return Color.FIREBRICK;
-            case Green:
-                return Color.FOREST;
-            case Blue:
-                return Color.SKY;
-            case Orange:
-                return Color.GOLDENROD;
-            case Yellow:
-                return Color.CHARTREUSE;
-            case Purple:
-                return Color.VIOLET;
-            case Silver:
-                return Color.GRAY;
-            case Star:
-                return Color.PINK;
-        }
-        return Color.WHITE;
+        return data.category.color;
     }
 
     public String getFullText()
     {
         return EUIUtils.joinTrueStrings(EUIUtils.SPLIT_LINE,
-                EUIRM.strings.generic2(data.affinity.getTooltip(), PCLCoreStrings.headerString(PGR.core.tooltips.level.title, data.tier)),
+                EUIRM.strings.generic2(data.category.getName(), PCLCoreStrings.headerString(PGR.core.tooltips.level.title, data.tier)),
                 data.isSpecial ? "{#r:" + PGR.core.tooltips.specialAugment + "}" : null,
                 PCLCoreStrings.headerString(PGR.core.strings.misc_requirement, getReqsString()),
                 getPowerText());

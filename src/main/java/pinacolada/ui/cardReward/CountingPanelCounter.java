@@ -11,63 +11,48 @@ import extendedui.ui.controls.EUIImage;
 import extendedui.ui.controls.EUILabel;
 import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.utilities.EUIFontHelper;
-import pinacolada.cards.base.fields.PCLAffinity;
-import pinacolada.cards.base.PCLCardAffinityStatistics;
+import pinacolada.cards.base.CountingPanelStats;
 import pinacolada.effects.PCLEffects;
+import pinacolada.interfaces.markers.CountingPanelItem;
 
-public class CardAffinityCounter extends EUIBase
+public class CountingPanelCounter<T extends CountingPanelItem> extends EUIBase
 {
     private static final Color PANEL_COLOR = new Color(0.05f, 0.05f, 0.05f, 1f);
-    public final PCLAffinity type;
-    public PCLCardAffinityStatistics.Group affinityGroup;
+    public final T type;
     public EUIButton backgroundButton;
     public EUIImage affinityImage;
-    public EUILabel counterweakText;
+    public EUILabel counterText;
     public EUILabel counterpercentageText;
-    private ActionT1<CardAffinityCounter> onClick;
 
-    public CardAffinityCounter(Hitbox hb, PCLAffinity affinity)
+    public CountingPanelCounter(CountingPanelStats<T, ?, ?> panel, Hitbox hb, T type, ActionT1<CountingPanelCounter<T>> onClick)
     {
-        type = affinity;
+        this.type = type;
 
         backgroundButton = new EUIButton(EUIRM.images.panelRoundedHalfH.texture(), RelativeHitbox.fromPercentages(hb, 1, 1, 0.5f, 0))
-                .setColor(PANEL_COLOR);
+                .setColor(PANEL_COLOR)
+                .setOnClick(onClick == null ? null : () -> onClick.invoke(this));
 
-        affinityImage = new EUIImage(affinity.getIcon(), Color.WHITE)
-                .setHitbox(new RelativeHitbox(hb, CardAffinityPanel.ICON_SIZE, CardAffinityPanel.ICON_SIZE, -0.5f * (CardAffinityPanel.ICON_SIZE / hb.width), 0));
+        affinityImage = new EUIImage(type.getIcon(), Color.WHITE)
+                .setHitbox(new RelativeHitbox(hb, CountingPanel.ICON_SIZE, CountingPanel.ICON_SIZE, -0.5f * (CountingPanel.ICON_SIZE / hb.width), 0));
 
-        counterweakText = new EUILabel(EUIFontHelper.cardTooltipFont,
+        counterText = new EUILabel(EUIFontHelper.cardTooltipFont,
                 RelativeHitbox.fromPercentages(hb, 0.28f, 1, 0.3f, 0f))
                 .setAlignment(0.5f, 0.5f) // 0.1f
-                .setLabel("-");
+                .setLabel(panel.getAmount(type));
 
         counterpercentageText = new EUILabel(EUIFontHelper.carddescriptionfontNormal,
                 RelativeHitbox.fromPercentages(hb, 0.38f, 1, 0.8f, 0f))
                 .setAlignment(0.5f, 0.5f) // 0.1f
-                .setLabel("0%");
+                .setLabel(panel.getPercentageString(type));
     }
 
-    public void initialize(PCLCardAffinityStatistics statistics)
-    {
-        affinityGroup = statistics.getGroup(type);
-        affinityImage.setTexture(type.getIcon());
-    }
-
-    public CardAffinityCounter setIndex(int index)
+    public CountingPanelCounter<T> setIndex(int index)
     {
         float y = -index * backgroundButton.hb.height * 1.05f;
         backgroundButton.hb.setOffsetY(y);
-        counterweakText.hb.setOffsetY(y);
+        counterText.hb.setOffsetY(y);
         counterpercentageText.hb.setOffsetY(y);
         affinityImage.hb.setOffsetY(y);
-
-        return this;
-    }
-
-    public CardAffinityCounter setOnClick(ActionT1<CardAffinityCounter> onClick)
-    {
-        this.onClick = onClick;
-        this.backgroundButton.setOnClick(onClick == null ? null : () -> this.onClick.invoke(this));
 
         return this;
     }
@@ -75,12 +60,9 @@ public class CardAffinityCounter extends EUIBase
     @Override
     public void updateImpl()
     {
-        final int lv1 = affinityGroup.getTotal(1);
-        final int lv2 = affinityGroup.getTotal(2);
-
         backgroundButton.setInteractable(PCLEffects.isEmpty()).updateImpl();
-        counterweakText.setLabel(lv1 == 0 ? "-" : lv1).updateImpl();
-        counterpercentageText.setLabel(affinityGroup.getPercentageString(0)).updateImpl();
+        counterText.updateImpl();
+        counterpercentageText.updateImpl();
         affinityImage.updateImpl();
     }
 
@@ -89,7 +71,7 @@ public class CardAffinityCounter extends EUIBase
     {
         backgroundButton.renderImpl(sb);
         counterpercentageText.renderImpl(sb);
-        counterweakText.renderImpl(sb);
+        counterText.renderImpl(sb);
         affinityImage.renderImpl(sb);
     }
 }

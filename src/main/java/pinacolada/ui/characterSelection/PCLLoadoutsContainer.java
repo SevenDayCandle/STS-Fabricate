@@ -75,7 +75,7 @@ public class PCLLoadoutsContainer
             }
 
             // Add this series cards to the total list of available cards
-            for (PCLCardData cData : series.cardData)
+            for (PCLCardData cData : series.cardDatas)
             {
                 AbstractCard card = CardLibrary.getCard(cData.ID);
                 if (card != null)
@@ -107,7 +107,7 @@ public class PCLLoadoutsContainer
 
     public Collection<String> toggleCards(PCLLoadout loadout, boolean value)
     {
-        Collection<String> cardIds = EUIUtils.map(loadout.cardData, l -> l.ID);
+        Collection<String> cardIds = EUIUtils.map(loadout.cardDatas, l -> l.ID);
         if (value)
         {
             cardIds.forEach(bannedCards::remove);
@@ -169,7 +169,7 @@ public class PCLLoadoutsContainer
         for (Map.Entry<PCLCard, PCLLoadout> entry : loadoutMap.entrySet())
         {
             int selectedAmount = 0;
-            for (PCLCardData data : entry.getValue().cardData)
+            for (PCLCardData data : entry.getValue().cardDatas)
             {
                 if (!bannedCards.contains(data.ID))
                 {

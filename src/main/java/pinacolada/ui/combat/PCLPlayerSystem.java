@@ -143,7 +143,7 @@ public class PCLPlayerSystem extends EUIBase
     {
         if (card.baseBlock > 0)
         {
-            for (PCLAffinity p : PCLAffinity.extended())
+            for (PCLAffinity p : PCLAffinity.basic())
             {
                 card.addDefendDisplay(p, block, block);
             }
@@ -161,7 +161,7 @@ public class PCLPlayerSystem extends EUIBase
     {
         if (card.baseDamage > 0)
         {
-            for (PCLAffinity p : PCLAffinity.extended())
+            for (PCLAffinity p : PCLAffinity.basic())
             {
                 card.addAttackDisplay(p, damage, damage);
             }

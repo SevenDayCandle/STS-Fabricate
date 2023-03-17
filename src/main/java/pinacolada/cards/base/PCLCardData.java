@@ -17,7 +17,6 @@ import pinacolada.cards.base.tags.CardTagItem;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLResources;
-import pinacolada.resources.PCLStrings;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.utilities.GameUtilities;
@@ -810,7 +809,7 @@ public class PCLCardData implements CardObject
             }
             else
             {
-                this.loadout.cardData.add(this);
+                this.loadout.cardDatas.add(this);
             }
         }
 

@@ -78,7 +78,7 @@ public class PCLAugmentScreen extends AbstractDungeonScreen
                 addItem.invoke(augment, amount);
             }
         }
-        PGR.cardAffinities.open(entries, null, false);
+        PGR.countingPanel.open(entries, null, false);
     }
 
     @Override
@@ -97,7 +97,7 @@ public class PCLAugmentScreen extends AbstractDungeonScreen
         {
             panel.updateImpl();
         }
-        PGR.cardAffinities.tryUpdate(true);
+        PGR.countingPanel.tryUpdate(true);
 
     }
 
@@ -118,7 +118,7 @@ public class PCLAugmentScreen extends AbstractDungeonScreen
     public void renderImpl(SpriteBatch sb)
     {
         super.renderImpl(sb);
-        PGR.cardAffinities.tryRender(sb);
+        PGR.countingPanel.tryRender(sb);
     }
 
 

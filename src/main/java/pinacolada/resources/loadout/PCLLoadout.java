@@ -10,8 +10,8 @@ import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import org.apache.commons.lang3.StringUtils;
+import pinacolada.cards.base.CountingPanelStats;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.PCLCardAffinityStatistics;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLDynamicData;
 import pinacolada.cards.base.fields.PCLAffinity;
@@ -25,10 +25,7 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.skills.PSpecialSkill;
 import pinacolada.ui.characterSelection.PCLBaseStatEditor;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.StringJoiner;
+import java.util.*;
 
 import static pinacolada.ui.characterSelection.PCLLoadoutEditor.MAX_RELIC_SLOTS;
 
@@ -48,7 +45,7 @@ public abstract class PCLLoadout
     public final int id;
     public int preset;
     public int unlockLevel = 0;
-    public ArrayList<PCLCardData> cardData = new ArrayList<>();
+    public ArrayList<PCLCardData> cardDatas = new ArrayList<>();
     public ArrayList<PCLCardData> colorlessData = new ArrayList<>();
     public ArrayList<PCLCardData> defends = new ArrayList<>();
     public ArrayList<PCLCardData> strikes = new ArrayList<>();
@@ -193,7 +190,7 @@ public abstract class PCLLoadout
 
     public void addLoadoutCards(PCLCardSlot slot)
     {
-        for (PCLCardData data : cardData)
+        for (PCLCardData data : cardDatas)
         {
             if (data.cardRarity == AbstractCard.CardRarity.COMMON)
             {
@@ -201,7 +198,7 @@ public abstract class PCLLoadout
             }
         }
 
-        for (PCLCardData data : getPlayerData().getCoreLoadout().cardData)
+        for (PCLCardData data : getPlayerData().getCoreLoadout().cardDatas)
         {
             if (data.cardRarity == AbstractCard.CardRarity.COMMON)
             {
@@ -437,9 +434,9 @@ public abstract class PCLLoadout
 
     public PCLCardData getSymbolicCard()
     {
-        if (cardData.size() > 0)
+        if (cardDatas.size() > 0)
         {
-            return cardData.get(0);
+            return cardDatas.get(0);
         }
         return QuestionMark.DATA;
     }
@@ -539,7 +536,7 @@ public abstract class PCLLoadout
     {
         strikes.sort((a, b) -> b.affinities.getLevel(PCLAffinity.General) - a.affinities.getLevel(PCLAffinity.General));
         defends.sort((a, b) -> b.affinities.getLevel(PCLAffinity.General) - a.affinities.getLevel(PCLAffinity.General));
-        cardData.sort((a, b) -> StringUtils.compare(a.ID, b.ID));
+        cardDatas.sort((a, b) -> StringUtils.compare(a.ID, b.ID));
         colorlessData.sort((a, b) -> StringUtils.compare(a.ID, b.ID));
     }
 
@@ -592,10 +589,10 @@ public abstract class PCLLoadout
             int i = 0;
             int maxLevel = 2;
             float maxPercentage = 0;
-            PCLCardAffinityStatistics affinityStatistics = new PCLCardAffinityStatistics(cardData);
-            for (PCLCardAffinityStatistics.Group g : affinityStatistics)
+            CountingPanelStats<PCLAffinity, PCLAffinity, PCLCardData> affinityStatistics = CountingPanelStats.basic(d -> d.affinities.getAffinities(), cardDatas);
+            for (Map.Entry<PCLAffinity, Integer> g : affinityStatistics)
             {
-                float percentage = g.getPercentage(0);
+                float percentage = affinityStatistics.getPercentage(g.getKey());
                 if (percentage == 0 || i > 2)
                 {
                     break;
@@ -607,7 +604,7 @@ public abstract class PCLLoadout
                 }
                 if (maxLevel > 0)
                 {
-                    card.affinities.add(g.affinity, maxLevel);
+                    card.affinities.add(g.getKey(), maxLevel);
                 }
 
                 maxPercentage = percentage;
@@ -628,7 +625,7 @@ public abstract class PCLLoadout
         public FakeSkill()
         {
             super("", PGR.core.strings.sui_selected, (a, b) -> {
-            }, 0, cardData.size());
+            }, 0, cardDatas.size());
         }
     }
 
@@ -637,7 +634,7 @@ public abstract class PCLLoadout
         public FakeSkill2()
         {
             super("", PGR.core.strings.sui_unlocked, (a, b) -> {
-            }, 0, cardData.size());
+            }, 0, cardDatas.size());
         }
     }
 }

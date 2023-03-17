@@ -112,7 +112,7 @@ public class AfterLifeMod
         return booleanArrayMet(required) ? PGR.core.strings.combat_afterlifeMet : EUIUtils.format(PGR.core.strings.combat_afterlifeRequirement,
                 EUIUtils.joinStrings(", ",
                         EUIUtils.map(
-                                EUIUtils.filter(PCLAffinity.extended(), af -> required[af.id])
+                                EUIUtils.filter(PCLAffinity.basic(), af -> required[af.id])
                                 , PCLAffinity::getTooltip)));
     }
 

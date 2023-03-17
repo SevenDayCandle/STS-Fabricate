@@ -14,10 +14,7 @@ import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUI;
 import extendedui.EUIUtils;
-import pinacolada.annotations.VisibleCard;
-import pinacolada.annotations.VisiblePotion;
-import pinacolada.annotations.VisiblePower;
-import pinacolada.annotations.VisibleRelic;
+import pinacolada.annotations.*;
 import pinacolada.augments.AugmentStrings;
 import pinacolada.augments.PCLAugment;
 import pinacolada.cards.base.PCLCustomCardSlot;
@@ -28,7 +25,7 @@ import pinacolada.resources.pcl.PCLCoreResources;
 import pinacolada.rewards.pcl.AugmentReward;
 import pinacolada.skills.PSkill;
 import pinacolada.ui.cardEditor.PCLCustomCardSelectorScreen;
-import pinacolada.ui.cardReward.CardAffinityPanel;
+import pinacolada.ui.cardReward.CountingPanel;
 import pinacolada.ui.cardView.PCLSingleCardPopup;
 import pinacolada.ui.characterSelection.PCLCharacterSelectProvider;
 import pinacolada.ui.characterSelection.PCLLoadoutEditor;
@@ -54,7 +51,7 @@ public class PGR
     public static PCLCoreResources core;
     public static PCLMainConfig config;
     public static PCLAugmentPanelItem augmentPanel;
-    public static CardAffinityPanel cardAffinities;
+    public static CountingPanel countingPanel;
     public static PCLAffinityPoolModule affinityFilters;
     public static PCLAugmentScreen augmentScreen;
     public static PCLCharacterSelectProvider charSelectProvider;
@@ -292,8 +289,17 @@ public class PGR
         {
             try
             {
-                String id = ReflectionHacks.getPrivateStatic(ct, "POWER_ID");
-                BaseMod.addPower((Class<? extends AbstractPower>) ct, id != null ? id : PGR.core.createID(ct.getSimpleName()));
+                VisibleBlight a = ct.getAnnotation(VisibleBlight.class);
+                String field = a.id();
+                if (field != null)
+                {
+                    String id = ReflectionHacks.getPrivateStatic(ct, field);
+                    BaseMod.addPower((Class<? extends AbstractPower>) ct, id);
+                }
+                else
+                {
+                    BaseMod.addPower((Class<? extends AbstractPower>) ct, PGR.core.createID(ct.getSimpleName()));
+                }
             }
             catch (Exception e)
             {
@@ -334,7 +340,7 @@ public class PGR
 
     protected static void initializeUI()
     {
-        PGR.cardAffinities = new CardAffinityPanel();
+        PGR.countingPanel = new CountingPanel();
         PGR.combatScreen = new PCLCombatScreen();
         PGR.cardPopup = new PCLSingleCardPopup();
         PGR.seriesSelection = new PCLSeriesSelectScreen();
@@ -359,7 +365,7 @@ public class PGR
         for (PCLResources<?,?,?,?> r : PGR.getRegisteredResources())
         {
             EUI.setCustomCardFilter(r.cardColor, PGR.affinityFilters);
-            EUI.setCustomCardPoolModule(r.cardColor, PGR.cardAffinities);
+            EUI.setCustomCardPoolModule(r.cardColor, PGR.countingPanel);
             EUI.setCustomCardLibraryModule(r.cardColor, PGR.libraryFilters);
         }
     }

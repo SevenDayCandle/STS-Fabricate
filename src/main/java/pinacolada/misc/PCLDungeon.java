@@ -24,6 +24,7 @@ import com.megacrit.cardcrawl.vfx.UpgradeShineEffect;
 import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import pinacolada.augments.PCLAugment;
+import pinacolada.augments.PCLAugmentCategory;
 import pinacolada.blights.common.AbstractGlyphBlight;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCustomCardSlot;
@@ -174,12 +175,12 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         }
     }
 
-    public HashMap<PCLAffinity, Integer> getAffinityAugmentTotal()
+    public HashMap<PCLAugmentCategory, Integer> getAugmentTotals()
     {
-        HashMap<PCLAffinity, Integer> counts = new HashMap<>();
+        HashMap<PCLAugmentCategory, Integer> counts = new HashMap<>();
         for (String key : augments.keySet())
         {
-            counts.merge(PCLAugment.get(key).affinity, augments.get(key), Integer::sum);
+            counts.merge(PCLAugment.get(key).category, augments.get(key), Integer::sum);
         }
         return counts;
     }

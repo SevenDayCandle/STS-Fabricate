@@ -110,7 +110,7 @@ public abstract class PCLAbstractPlayerData
     {
         if (loadout.unlockLevel > 0)
         {
-            final String cardID = loadout.cardData.get(0).ID;
+            final String cardID = loadout.cardDatas.get(0).ID;
             final CustomUnlock unlock = new CustomUnlock(AbstractUnlock.UnlockType.MISC, cardID);
             unlock.type = AbstractUnlock.UnlockType.CARD;
             unlock.card = loadout.buildCard();
