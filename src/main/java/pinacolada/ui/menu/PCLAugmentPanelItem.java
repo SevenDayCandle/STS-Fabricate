@@ -20,6 +20,7 @@ import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.resources.PCLHotkeys;
 import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.ui.cardView.PCLAugmentList;
 
 import java.util.HashMap;
@@ -32,7 +33,7 @@ public class PCLAugmentPanelItem extends PCLTopPanelItem
 
     public PCLAugmentPanelItem()
     {
-        super(PGR.core.images.augmentPanel, ID);
+        super(PCLCoreImages.Menu.augmentPanel, ID);
         this.setTooltip(new EUITooltip(PGR.core.strings.misc_viewAugments, EUIUtils.format(PGR.core.strings.misc_viewAugmentsDescription, "")));
     }
 

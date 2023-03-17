@@ -133,7 +133,7 @@ public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
     @Override
     public TextureCache getTextureCache()
     {
-        return PCLCoreImages.editorPower;
+        return PCLCoreImages.Menu.editorPower;
     }
 
 }

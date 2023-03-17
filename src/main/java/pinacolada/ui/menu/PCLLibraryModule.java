@@ -66,6 +66,13 @@ public class PCLLibraryModule extends CustomCardPoolModule
         }
     }
 
+    @Override
+    public void onClose()
+    {
+        // Nullify lastColor so that the colorless check is run when the screen is reopened
+        lastColor = null;
+    }
+
     protected HashMap<ColorlessGroup, CardGroup> getMapping(AbstractCard.CardColor color)
     {
         switch (color)

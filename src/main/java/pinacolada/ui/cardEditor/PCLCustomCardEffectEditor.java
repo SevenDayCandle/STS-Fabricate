@@ -445,7 +445,7 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
     @Override
     public TextureCache getTextureCache()
     {
-        return PCLCoreImages.editorEffect;
+        return PCLCoreImages.Menu.editorEffect;
     }
 
     protected String getTitleForPriority()

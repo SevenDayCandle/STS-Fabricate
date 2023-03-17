@@ -100,7 +100,7 @@ public class PCLLoadoutEditor extends AbstractMenuScreen
                 .setFontScale(0.8f)
                 .setAlignment(0.5f, 0.5f);
 
-        seriesButton = new EUIButton(PCLCoreImages.edit.texture(), new EUIHitbox(0, 0, scale(64), scale(64)))
+        seriesButton = new EUIButton(PCLCoreImages.Menu.edit.texture(), new EUIHitbox(0, 0, scale(64), scale(64)))
                 .setPosition(startingDeck.hb.x + scale(80), startingDeck.hb.y - scale(48)).setText("")
                 .setTooltip(PGR.core.strings.csel_seriesEditor, PGR.core.strings.csel_seriesEditorInfo)
                 .setOnClick(this::openSeriesSelect);

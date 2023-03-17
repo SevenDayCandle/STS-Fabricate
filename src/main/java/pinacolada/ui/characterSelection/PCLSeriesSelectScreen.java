@@ -28,6 +28,7 @@ import pinacolada.effects.screen.ViewInGamePoolEffect;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
+import pinacolada.resources.pcl.PCLCoreImages;
 
 import static pinacolada.ui.characterSelection.PCLLoadoutsContainer.MINIMUM_CARDS;
 
@@ -78,7 +79,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen
                 .setSmartText(true)
                 .setColor(Settings.CREAM_COLOR);
 
-        loadoutEditor = new EUIButton(PGR.core.images.swapCards.texture(), new EUIHitbox(0, 0, scale(64), scale(64)))
+        loadoutEditor = new EUIButton(PCLCoreImages.Menu.swapCards.texture(), new EUIHitbox(0, 0, scale(64), scale(64)))
                 .setPosition(startingDeck.hb.x + scale(80), startingDeck.hb.y - scale(48)).setText("")
                 .setTooltip(PGR.core.strings.csel_deckEditor, PGR.core.strings.csel_deckEditorInfo)
                 .setOnClick(this::openLoadoutEditor);

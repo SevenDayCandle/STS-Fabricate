@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.fields.PCLAttackType;
 import pinacolada.effects.PCLAttackVFX;
 import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.base.traits.PTrait_Damage;
@@ -156,6 +157,6 @@ public class PCLCustomCardAttackPage extends PCLCustomCardEffectPage
     @Override
     public TextureCache getTextureCache()
     {
-        return PGR.core.images.editorAttack;
+        return PCLCoreImages.Menu.editorAttack;
     }
 }

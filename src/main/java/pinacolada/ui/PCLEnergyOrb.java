@@ -14,16 +14,16 @@ public class PCLEnergyOrb implements EnergyOrbInterface
 {
     public static final TextureCache[] DEFAULT_TEXTURES =
             {
-                    PCLCoreImages.CardFrames.orbBaseLayer,
-                    PCLCoreImages.CardFrames.orbTopLayer1,
-                    PCLCoreImages.CardFrames.orbTopLayer2,
-                    PCLCoreImages.CardFrames.orbTopLayer3,
-                    PCLCoreImages.CardFrames.orbTopLayer4,
+                    PCLCoreImages.CardUI.orbBaseLayer,
+                    PCLCoreImages.CardUI.orbTopLayer1,
+                    PCLCoreImages.CardUI.orbTopLayer2,
+                    PCLCoreImages.CardUI.orbTopLayer3,
+                    PCLCoreImages.CardUI.orbTopLayer4,
                     };
-    protected static final TextureCache DEFAULT_FLASH = PCLCoreImages.CardFrames.orbFlash;
+    protected static final TextureCache DEFAULT_FLASH = PCLCoreImages.CardUI.orbFlash;
     protected static final float BASE_MULT = 3f;
     protected static final float ORB_IMG_SCALE = 1.15F * Settings.scale;
-    protected static final TextureCache BASE_BORDER = PCLCoreImages.CardFrames.orbBaseBorder;
+    protected static final TextureCache BASE_BORDER = PCLCoreImages.CardUI.orbBaseBorder;
     protected TextureCache flash;
     protected TextureCache[] images;
     protected float[] angleMults;

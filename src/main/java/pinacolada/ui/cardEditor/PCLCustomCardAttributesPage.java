@@ -17,6 +17,7 @@ import pinacolada.cards.base.fields.PCLCardTagInfo;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
 
 import java.util.ArrayList;
@@ -196,7 +197,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
     @Override
     public TextureCache getTextureCache()
     {
-        return PGR.core.images.editorAttribute;
+        return PCLCoreImages.Menu.editorAttribute;
     }
 
     @Override

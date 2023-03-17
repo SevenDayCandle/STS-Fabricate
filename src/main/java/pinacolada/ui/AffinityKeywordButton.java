@@ -14,7 +14,6 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.affinity.GenericFlashEffect;
-import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.PCLRenderHelpers;
 
@@ -22,7 +21,7 @@ public class AffinityKeywordButton extends EUIBase
 {
     public static final float ICON_SIZE = scale(48);
     protected static final Color PANEL_COLOR = new Color(0.3f, 0.3f, 0.3f, 1f);
-    protected static final TextureCache STAR_TEXTURE = PCLCoreImages.starFg;
+    protected static final TextureCache STAR_TEXTURE = PCLCoreImages.CardAffinity.starFg;
     public PCLAffinity type;
     public EUIButton backgroundButton;
     public int currentLevel;
@@ -94,21 +93,21 @@ public class AffinityKeywordButton extends EUIBase
         switch (currentLevel)
         {
             case 1:
-                borderTexture = PGR.core.images.borderNormal.texture();
+                borderTexture = PCLCoreImages.Core.borderNormal.texture();
                 borderBGTexture = null;
                 borderFGTexture = null;
                 radiusBG = backgroundButton.hb.width;
                 break;
             case 2:
-                borderTexture = PGR.core.images.borderWeak.texture();
-                borderBGTexture = PGR.core.images.borderBG3.texture();
+                borderTexture = PCLCoreImages.Core.borderWeak.texture();
+                borderBGTexture = PCLCoreImages.Core.borderBG3.texture();
                 borderFGTexture = null;
                 radiusBG = backgroundButton.hb.width;
                 break;
             case 3:
-                borderTexture = PGR.core.images.borderHighlight.texture();
-                borderBGTexture = PGR.core.images.borderBG2.texture();
-                borderFGTexture = PGR.core.images.borderFG.texture();
+                borderTexture = PCLCoreImages.Core.borderHighlight.texture();
+                borderBGTexture = PCLCoreImages.Core.borderBG2.texture();
+                borderFGTexture = PCLCoreImages.Core.borderFG.texture();
                 radiusBG = backgroundButton.hb.width * 1.125f;
                 break;
             default:

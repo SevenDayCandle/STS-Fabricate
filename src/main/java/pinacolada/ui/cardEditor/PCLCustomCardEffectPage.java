@@ -317,7 +317,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
     @Override
     public TextureCache getTextureCache()
     {
-        return PCLCoreImages.editorEffect;
+        return PCLCoreImages.Menu.editorEffect;
     }
 
     @Override

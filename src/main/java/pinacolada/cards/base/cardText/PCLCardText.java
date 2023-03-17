@@ -171,7 +171,7 @@ public class PCLCardText
 
     private float renderAugment(SpriteBatch sb, PCLAugment augment, float y)
     {
-        PCLRenderHelpers.drawOnCardAuto(sb, card, PCLCoreImages.augment.texture(), new Vector2(AUGMENT_OFFSET_X, AUGMENT_OFFSET_Y + y), 28, 28, Color.WHITE, card.transparency, 1);
+        PCLRenderHelpers.drawOnCardAuto(sb, card, PCLCoreImages.CardUI.augment.texture(), new Vector2(AUGMENT_OFFSET_X, AUGMENT_OFFSET_Y + y), 28, 28, Color.WHITE, card.transparency, 1);
         if (augment != null)
         {
             PCLRenderHelpers.drawColorized(sb, augment.getColor(), s ->
@@ -243,7 +243,7 @@ public class PCLCardText
         final float offset_y = y - AbstractCard.RAW_H * 0.46f;
         final float alpha = card.transparency;
 
-        PCLRenderHelpers.drawOnCardAuto(sb, card, PCLCoreImages.controllableCardPile.texture(), new Vector2(AUGMENT_OFFSET_X, offset_y), FOOTER_SIZE, FOOTER_SIZE, Color.BLACK, alpha * 0.6f, 0.8f);
+        PCLRenderHelpers.drawOnCardAuto(sb, card, PCLCoreImages.Core.controllableCardPile.texture(), new Vector2(AUGMENT_OFFSET_X, offset_y), FOOTER_SIZE, FOOTER_SIZE, Color.BLACK, alpha * 0.6f, 0.8f);
         PCLRenderHelpers.drawOnCardAuto(sb, card, texture, new Vector2(AUGMENT_OFFSET_X, offset_y), FOOTER_SIZE, FOOTER_SIZE, Color.WHITE, alpha, 0.8f);
 
         return 38; // y offset

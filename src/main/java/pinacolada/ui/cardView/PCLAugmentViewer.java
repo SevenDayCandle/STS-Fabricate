@@ -30,7 +30,7 @@ public class PCLAugmentViewer extends EUIHoverable
     public PCLAugmentViewer(EUIHitbox hb, PCLCard card, int index)
     {
         super(hb);
-        augmentButton = new EUIButton(PCLCoreImages.augment.texture(), new RelativeHitbox(hb, AbstractRelic.PAD_X, AbstractRelic.PAD_X, 0, 0)).setTooltip("", "");
+        augmentButton = new EUIButton(PCLCoreImages.CardUI.augment.texture(), new RelativeHitbox(hb, AbstractRelic.PAD_X, AbstractRelic.PAD_X, 0, 0)).setTooltip("", "");
         augmentTitle = new EUILabel(FontHelper.cardTitleFont, new RelativeHitbox(hb, hb.width, scale(40), augmentButton.hb.width * 2.8f, 0))
                 .setFontScale(0.85f)
                 .setColor(Settings.GOLD_COLOR)
@@ -64,7 +64,7 @@ public class PCLAugmentViewer extends EUIHoverable
         else
         {
             augmentTitle.setLabel(PGR.core.strings.scp_emptyAugment);
-            augmentButton.setBackground(PCLCoreImages.augment.texture()).setColor(Color.WHITE).setShaderMode(EUIRenderHelpers.ShaderMode.Normal);
+            augmentButton.setBackground(PCLCoreImages.CardUI.augment.texture()).setColor(Color.WHITE).setShaderMode(EUIRenderHelpers.ShaderMode.Normal);
             augmentButton.tooltip.setTitle(augmentTitle.text).setDescription(PGR.core.strings.scp_clickToSlot);
             augmentDescription.setLabel("");
         }

@@ -367,7 +367,7 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
     @Override
     protected boolean shouldUsePCLFrame()
     {
-        return vanillaBg == null && customBg == null;
+        return vanillaBg == null && customBg == null && super.shouldUsePCLFrame();
     }
 
     @Override
@@ -441,11 +441,11 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
         switch (type)
         {
             case ATTACK:
-                return isPopup ? PCLCoreImages.CardFrames.cardBackgroundAttackReplL.texture() : PCLCoreImages.CardFrames.cardBackgroundAttackRepl.texture();
+                return isPopup ? PCLCoreImages.CardUI.cardBackgroundAttackReplL.texture() : PCLCoreImages.CardUI.cardBackgroundAttackRepl.texture();
             case POWER:
-                return isPopup ? PCLCoreImages.CardFrames.cardBackgroundPowerReplL.texture() : PCLCoreImages.CardFrames.cardBackgroundPowerRepl.texture();
+                return isPopup ? PCLCoreImages.CardUI.cardBackgroundPowerReplL.texture() : PCLCoreImages.CardUI.cardBackgroundPowerRepl.texture();
             default:
-                return isPopup ? PCLCoreImages.CardFrames.cardBackgroundSkillReplL.texture() : PCLCoreImages.CardFrames.cardBackgroundSkillRepl.texture();
+                return isPopup ? PCLCoreImages.CardUI.cardBackgroundSkillReplL.texture() : PCLCoreImages.CardUI.cardBackgroundSkillRepl.texture();
         }
     }
 

@@ -3,74 +3,64 @@ package pinacolada.resources.pcl;
 import extendedui.ui.TextureCache;
 import pinacolada.resources.PCLImages;
 
-//TODO remove unused images, organize this better
+//TODO remove unused images
 
 public class PCLCoreImages extends PCLImages
 {
     public static final String ORB_VFX_PNG = "images/pcl/ui/topPanel/canvas/orbVfx.png";
     public static final String EMPTY_SHADOW = "images/pcl/monsters/EmptyShadow.png";
 
-    public static final TextureCache backArrow = new TextureCache("images/pcl/ui/core/BackArrow.png");
-    public static final TextureCache borderBG = new TextureCache("images/pcl/ui/core/BG1.png", true);
-    public static final TextureCache borderBG2 = new TextureCache("images/pcl/ui/core/BG2.png", true);
-    public static final TextureCache borderBG3 = new TextureCache("images/pcl/ui/core/BG3.png", true);
-    public static final TextureCache borderBG4 = new TextureCache("images/pcl/ui/core/BG4.png", true);
-    public static final TextureCache borderFG = new TextureCache("images/pcl/ui/core/FG.png", false);
-    public static final TextureCache borderHighlight = new TextureCache("images/pcl/ui/core/Border_Highlight.png", false);
-    public static final TextureCache borderNormal = new TextureCache("images/pcl/ui/core/Border_Normal.png", true);
-    public static final TextureCache borderSilhouette = new TextureCache("images/pcl/ui/core/Border_Silhouette.png", true);
-    public static final TextureCache borderSpecial = new TextureCache("images/pcl/ui/core/Border_Special.png", true);
-    public static final TextureCache borderSpecial2 = new TextureCache("images/pcl/ui/core/Border_Special2.png", true);
-    public static final TextureCache borderWeak = new TextureCache("images/pcl/ui/core/Border_Weak.png", true);
-    public static final TextureCache circle = new TextureCache("images/pcl/ui/core/Circle.png");
-    public static final TextureCache controllableCardPile = new TextureCache("images/pcl/ui/core/ControllableCardPile.png");
-    public static final TextureCache controllableCardPileBorder = new TextureCache("images/pcl/ui/core/ControllableCardPileBorder.png");
-    public static final TextureCache leftArrow = new TextureCache("images/pcl/ui/core/LeftArrow.png");
-    public static final TextureCache rightArrow = new TextureCache("images/pcl/ui/core/RightArrow.png");
-    public static final TextureCache progressBar = new TextureCache("images/pcl/ui/core/ProgressBar.png");
-    public static final TextureCache progressBarPart = new TextureCache("images/pcl/ui/core/ProgressBarPart.png");
-    public static final TextureCache squareBG1 = new TextureCache("images/pcl/ui/core/SquareBG1.png", true);
-    public static final TextureCache squareBG2 = new TextureCache("images/pcl/ui/core/SquareBG2.png", true);
+    public static class Core
+    {
+        public static final TextureCache backArrow = new TextureCache("images/pcl/ui/core/BackArrow.png");
+        public static final TextureCache borderBG = new TextureCache("images/pcl/ui/core/BG1.png", true);
+        public static final TextureCache borderBG2 = new TextureCache("images/pcl/ui/core/BG2.png", true);
+        public static final TextureCache borderBG3 = new TextureCache("images/pcl/ui/core/BG3.png", true);
+        public static final TextureCache borderBG4 = new TextureCache("images/pcl/ui/core/BG4.png", true);
+        public static final TextureCache borderFG = new TextureCache("images/pcl/ui/core/FG.png", false);
+        public static final TextureCache borderHighlight = new TextureCache("images/pcl/ui/core/Border_Highlight.png", false);
+        public static final TextureCache borderNormal = new TextureCache("images/pcl/ui/core/Border_Normal.png", true);
+        public static final TextureCache borderSilhouette = new TextureCache("images/pcl/ui/core/Border_Silhouette.png", true);
+        public static final TextureCache borderSpecial = new TextureCache("images/pcl/ui/core/Border_Special.png", true);
+        public static final TextureCache borderSpecial2 = new TextureCache("images/pcl/ui/core/Border_Special2.png", true);
+        public static final TextureCache borderWeak = new TextureCache("images/pcl/ui/core/Border_Weak.png", true);
+        public static final TextureCache circle = new TextureCache("images/pcl/ui/core/Circle.png");
+        public static final TextureCache controllableCardPile = new TextureCache("images/pcl/ui/core/ControllableCardPile.png");
+        public static final TextureCache controllableCardPileBorder = new TextureCache("images/pcl/ui/core/ControllableCardPileBorder.png");
+        public static final TextureCache leftArrow = new TextureCache("images/pcl/ui/core/LeftArrow.png");
+        public static final TextureCache rightArrow = new TextureCache("images/pcl/ui/core/RightArrow.png");
+        public static final TextureCache progressBar = new TextureCache("images/pcl/ui/core/ProgressBar.png");
+        public static final TextureCache progressBarPart = new TextureCache("images/pcl/ui/core/ProgressBarPart.png");
+        public static final TextureCache squareBG1 = new TextureCache("images/pcl/ui/core/SquareBG1.png", true);
+        public static final TextureCache squareBG2 = new TextureCache("images/pcl/ui/core/SquareBG2.png", true);
+    }
 
-    public static final TextureCache augmentPanel = new TextureCache("images/pcl/ui/topPanel/AugmentPanel.png");
-    public static final TextureCache customCards = new TextureCache("images/pcl/ui/topPanel/CustomCards.png");
-    public static final TextureCache edit = new TextureCache("images/pcl/ui/topPanel/Edit.png");
-    public static final TextureCache editorPrimary = new TextureCache("images/pcl/ui/topPanel/EditorPrimary.png");
-    public static final TextureCache editorAttribute = new TextureCache("images/pcl/ui/topPanel/EditorAttribute.png");
-    public static final TextureCache editorAttack = new TextureCache("images/pcl/ui/topPanel/EditorAttack.png");
-    public static final TextureCache editorBlock = new TextureCache("images/pcl/ui/topPanel/EditorBlock.png");
-    public static final TextureCache editorEffect = new TextureCache("images/pcl/ui/topPanel/EditorEffect.png");
-    public static final TextureCache editorPower = new TextureCache("images/pcl/ui/topPanel/EditorPower.png");
-    public static final TextureCache info = new TextureCache("images/pcl/ui/topPanel/Info.png");
-    public static final TextureCache randomize = new TextureCache("images/pcl/ui/topPanel/Randomize.png");
-    public static final TextureCache squaredbuttonEmptycenter = new TextureCache("images/pcl/ui/topPanel/SquaredButton_EmptyCenter.png");
-    public static final TextureCache swapCards = new TextureCache("images/pcl/ui/topPanel/SwapCards.png");
-
-    public static final TextureCache general = new TextureCache("images/pcl/cardui/affinities/General.png", true);
-    public static final TextureCache star = new TextureCache("images/pcl/cardui/affinities/Star.png", true);
-    public static final TextureCache starBg = new TextureCache("images/pcl/cardui/affinities/Star_BG.png", true);
-    public static final TextureCache starFg = new TextureCache("images/pcl/cardui/affinities/Star_FG.png", true);
-    public static final TextureCache unknown = new TextureCache("images/pcl/cardui/affinities/Unknown.png", true);
-    public static final TextureCache augment = new TextureCache("images/pcl/cardui/augments/Augment.png", true);
-    public static final TextureCache augmentBasic = new TextureCache("images/pcl/cardui/augments/Augment_Basic.png", true);
-
-    public static class CardFrames
+    public static class Menu
     {
 
-        public static final TextureCache cardBackgroundAttack = new TextureCache(ATTACK_PNG);
-        public static final TextureCache cardBackgroundAttackL = new TextureCache(ATTACK_PNG_L);
+        public static final TextureCache augmentPanel = new TextureCache("images/pcl/ui/topPanel/AugmentPanel.png");
+        public static final TextureCache customCards = new TextureCache("images/pcl/ui/topPanel/CustomCards.png");
+        public static final TextureCache edit = new TextureCache("images/pcl/ui/topPanel/Edit.png");
+        public static final TextureCache editorPrimary = new TextureCache("images/pcl/ui/topPanel/EditorPrimary.png");
+        public static final TextureCache editorAttribute = new TextureCache("images/pcl/ui/topPanel/EditorAttribute.png");
+        public static final TextureCache editorAttack = new TextureCache("images/pcl/ui/topPanel/EditorAttack.png");
+        public static final TextureCache editorBlock = new TextureCache("images/pcl/ui/topPanel/EditorBlock.png");
+        public static final TextureCache editorEffect = new TextureCache("images/pcl/ui/topPanel/EditorEffect.png");
+        public static final TextureCache editorPower = new TextureCache("images/pcl/ui/topPanel/EditorPower.png");
+        public static final TextureCache info = new TextureCache("images/pcl/ui/topPanel/Info.png");
+        public static final TextureCache randomize = new TextureCache("images/pcl/ui/topPanel/Randomize.png");
+        public static final TextureCache squaredbuttonEmptycenter = new TextureCache("images/pcl/ui/topPanel/SquaredButton_EmptyCenter.png");
+        public static final TextureCache swapCards = new TextureCache("images/pcl/ui/topPanel/SwapCards.png");
+    }
+
+    public static class CardUI
+    {
         public static final TextureCache cardBackgroundAttackRepl = new TextureCache("images/pcl/cardui/512/bg_attack_canvas_repl.png");
         public static final TextureCache cardBackgroundAttackReplL = new TextureCache("images/pcl/cardui/1024/bg_attack_canvas_repl.png");
-        public static final TextureCache cardBackgroundPower = new TextureCache(POWER_PNG);
-        public static final TextureCache cardBackgroundPowerL = new TextureCache(POWER_PNG_L);
         public static final TextureCache cardBackgroundPowerRepl = new TextureCache("images/pcl/cardui/512/bg_power_canvas_repl.png");
         public static final TextureCache cardBackgroundPowerReplL = new TextureCache("images/pcl/cardui/1024/bg_power_canvas_repl.png");
-        public static final TextureCache cardBackgroundSkill = new TextureCache(SKILL_PNG);
-        public static final TextureCache cardBackgroundSkillL = new TextureCache(SKILL_PNG_L);
         public static final TextureCache cardBackgroundSkillRepl = new TextureCache("images/pcl/cardui/512/bg_skill_canvas_repl.png");
         public static final TextureCache cardBackgroundSkillReplL = new TextureCache("images/pcl/cardui/1024/bg_skill_canvas_repl.png");
-        public static final TextureCache cardBackgroundSummon = new TextureCache(SUMMON_PNG);
-        public static final TextureCache cardBackgroundSummonL = new TextureCache(SUMMON_PNG_L);
         public static final TextureCache cardBanner = new TextureCache("images/pcl/cardui/512/banner.png");
         public static final TextureCache cardBanner2 = new TextureCache("images/pcl/cardui/512/banner2.png");
         public static final TextureCache cardBanner2L = new TextureCache("images/pcl/cardui/1024/banner2.png");
@@ -79,8 +69,6 @@ public class PCLCoreImages extends PCLImages
         public static final TextureCache cardBannerAttribute2L = new TextureCache("images/pcl/cardui/1024/banner_attribute2.png");
         public static final TextureCache cardBannerAttributeL = new TextureCache("images/pcl/cardui/1024/banner_attribute.png");
         public static final TextureCache cardBannerL = new TextureCache("images/pcl/cardui/1024/banner.png");
-        public static final TextureCache cardEnergyOrb = new TextureCache(ORB_A_PNG);
-        public static final TextureCache cardEnergyOrbL = new TextureCache(ORB_B_PNG);
         public static final TextureCache cardFrameAttack = new TextureCache("images/pcl/cardui/512/frame_attack.png");
         public static final TextureCache cardFrameAttackL = new TextureCache("images/pcl/cardui/1024/frame_attack.png");
         public static final TextureCache cardFramePower = new TextureCache("images/pcl/cardui/512/frame_power.png");
@@ -96,14 +84,14 @@ public class PCLCoreImages extends PCLImages
         public static final TextureCache orbTopLayer2 = new TextureCache("images/pcl/ui/energy/TopLayer2.png");
         public static final TextureCache orbTopLayer3 = new TextureCache("images/pcl/ui/energy/TopLayer3.png");
         public static final TextureCache orbTopLayer4 = new TextureCache("images/pcl/ui/energy/TopLayer4.png");
+        public static final TextureCache augment = new TextureCache("images/pcl/cardui/augments/Augment.png", true);
+        public static final TextureCache augmentBasic = new TextureCache("images/pcl/cardui/augments/Augment_Basic.png", true);
     }
 
     public static class CardIcons
     {
         public static final TextureCache block = new TextureCache("images/pcl/cardui/core/Block.png");
         public static final TextureCache blockL = new TextureCache("images/pcl/cardui/core/1024/Block.png");
-        public static final TextureCache branchUpgrade = new TextureCache("images/pcl/cardui/core/BranchUpgrade.png");
-        public static final TextureCache branchupgradeL = new TextureCache("images/pcl/cardui/core/1024/BranchUpgrade.png");
         public static final TextureCache brutal = new TextureCache("images/pcl/cardui/core/BrutalDamage.png");
         public static final TextureCache brutalL = new TextureCache("images/pcl/cardui/core/1024/BrutalDamage.png");
         public static final TextureCache damage = new TextureCache("images/pcl/cardui/core/NormalDamage.png");
@@ -121,16 +109,23 @@ public class PCLCoreImages extends PCLImages
         public static final TextureCache soulbound = new TextureCache("images/pcl/cardui/core/Soulbound.png");
         public static final TextureCache soulboundL = new TextureCache("images/pcl/cardui/core/1024/Soulbound.png");
         public static final TextureCache tempHP = new TextureCache("images/pcl/cardui/core/TempHP.png");
-        public static final TextureCache temphpL = new TextureCache("images/pcl/cardui/core/1024/TempHP.png");
-        public static final TextureCache ultraRare = new TextureCache("images/pcl/cardui/core/UltraRare.png");
-        public static final TextureCache ultrarareL = new TextureCache("images/pcl/cardui/core/1024/UltraRare.png");
+        public static final TextureCache tempHPL = new TextureCache("images/pcl/cardui/core/1024/TempHP.png");
         public static final TextureCache unique = new TextureCache("images/pcl/cardui/core/Unique.png");
         public static final TextureCache uniqueL = new TextureCache("images/pcl/cardui/core/1024/Unique.png");
     }
 
+    public static class CardAffinity
+    {
+
+        public static final TextureCache general = new TextureCache("images/pcl/cardui/affinities/General.png", true);
+        public static final TextureCache star = new TextureCache("images/pcl/cardui/affinities/Star.png", true);
+        public static final TextureCache starBg = new TextureCache("images/pcl/cardui/affinities/Star_BG.png", true);
+        public static final TextureCache starFg = new TextureCache("images/pcl/cardui/affinities/Star_FG.png", true);
+        public static final TextureCache unknown = new TextureCache("images/pcl/cardui/affinities/Unknown.png", true);
+    }
+
     public static class Badges
     {
-        public static final TextureCache afterlife = new TextureCache("images/pcl/cardui/badges/Afterlife.png");
         public static final TextureCache autoplay = new TextureCache("images/pcl/cardui/badges/Autoplay.png");
         public static final TextureCache baseInfinite = new TextureCache("images/pcl/cardui/badges/Base_Infinite.png");
         public static final TextureCache baseMulti = new TextureCache("images/pcl/cardui/badges/Base_Multi.png");
@@ -141,7 +136,6 @@ public class PCLCoreImages extends PCLImages
         public static final TextureCache fleeting = new TextureCache("images/pcl/cardui/badges/Fleeting.png");
         public static final TextureCache fragile = new TextureCache("images/pcl/cardui/badges/Fragile.png");
         public static final TextureCache grave = new TextureCache("images/pcl/cardui/badges/Grave.png");
-        public static final TextureCache harmonic = new TextureCache("images/pcl/cardui/badges/Harmonic.png");
         public static final TextureCache haste = new TextureCache("images/pcl/cardui/badges/Haste.png");
         public static final TextureCache innate = new TextureCache("images/pcl/cardui/badges/Innate.png");
         public static final TextureCache loyal = new TextureCache("images/pcl/cardui/badges/Loyal.png");
@@ -155,13 +149,11 @@ public class PCLCoreImages extends PCLImages
     public static class Tooltips
     {
         public static final TextureCache dark = new TextureCache("images/pcl/cardui/tooltips/Dark.png");
-        public static final TextureCache eternity = new TextureCache("images/pcl/cardui/tooltips/MusouIsshin.png");
         public static final TextureCache frost = new TextureCache("images/pcl/cardui/tooltips/Frost.png");
         public static final TextureCache gold = new TextureCache("images/pcl/cardui/tooltips/Gold.png");
         public static final TextureCache lightning = new TextureCache("images/pcl/cardui/tooltips/Lightning.png");
         public static final TextureCache orbSlot = new TextureCache("images/pcl/cardui/tooltips/OrbSlot.png");
         public static final TextureCache plasma = new TextureCache("images/pcl/cardui/tooltips/Plasma.png");
-        public static final TextureCache regeneration = new TextureCache("images/pcl/cardui/tooltips/Regeneration.png");
     }
 
     public static class Types
@@ -206,7 +198,6 @@ public class PCLCoreImages extends PCLImages
         public static final TextureCache electric5 = new TextureCache("images/pcl/effects/Electric5.png");
         public static final TextureCache electric6 = new TextureCache("images/pcl/effects/Electric6.png");
         public static final TextureCache electric7 = new TextureCache("images/pcl/effects/Electric7.png");
-        public static final TextureCache electroSigil = new TextureCache("images/pcl/effects/ElectroSigil.png");
         public static final TextureCache fireBurst = new TextureCache("images/pcl/effects/FireBurst.png");
         public static final TextureCache fireParticle1 = new TextureCache("images/pcl/effects/FireParticle1.png");
         public static final TextureCache fireParticle2 = new TextureCache("images/pcl/effects/FireParticle2.png");

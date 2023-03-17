@@ -154,6 +154,16 @@ public abstract class PMod<T extends PField> extends PSkill<T>
         return new PMod_PerCardPlayedCombat(amount);
     }
 
+    public static PMod_PerCreature perCreature(int amount)
+    {
+        return new PMod_PerCreature(amount);
+    }
+
+    public static PMod_PerCreature perCreature(PCLCardTarget target, int amount)
+    {
+        return new PMod_PerCreature(target, amount);
+    }
+
     public static PMod_PerCreatureAttacking perCreatureAttacking(int amount)
     {
         return new PMod_PerCreatureAttacking(amount);

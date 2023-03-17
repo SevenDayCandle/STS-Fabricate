@@ -32,7 +32,7 @@ public class PCond_OnOtherCardPlayed extends PCond_Delegate implements OnCardPla
     }
 
     @Override
-    public String getDelegateSampleText() {return TEXT.subjects_playingXWith(TEXT.subjects_x, TEXT.cpile_hand);}
+    public String getDelegateSampleText() {return TEXT.act_play(TEXT.subjects_x);}
 
     @Override
     public String getDelegateText() {return TEXT.subjects_playingXWith(fields.getFullCardString(), TEXT.cpile_hand);}

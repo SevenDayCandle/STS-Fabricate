@@ -248,7 +248,7 @@ public abstract class PCLAugment implements TooltipProvider
     // TODO More textures
     public Texture getTexture()
     {
-        return PCLCoreImages.augmentBasic.texture();
+        return PCLCoreImages.CardUI.augmentBasic.texture();
     }
 
     public EUITooltip getTip()

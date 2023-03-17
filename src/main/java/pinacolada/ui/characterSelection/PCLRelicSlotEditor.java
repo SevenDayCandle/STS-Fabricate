@@ -13,8 +13,8 @@ import extendedui.ui.controls.EUITextBox;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.relics.PCLRelic;
-import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLRelicSlot;
+import pinacolada.resources.pcl.PCLCoreImages;
 
 // Copied and modified from STS-AnimatorMod
 public class PCLRelicSlotEditor extends EUIBase
@@ -49,7 +49,7 @@ public class PCLRelicSlotEditor extends EUIBase
 
         clearButton = new EUIButton(EUIRM.images.x.texture(), new EUIHitbox(relicnameText.hb.x + relicnameText.hb.width, relicnameText.hb.y, 64, 64))
                 .setClickDelay(0.02f);
-        changeButton = new EUIButton(PGR.core.images.edit.texture(), new EUIHitbox(clearButton.hb.x + clearButton.hb.width, relicnameText.hb.y, 64, 64))
+        changeButton = new EUIButton(PCLCoreImages.Menu.edit.texture(), new EUIHitbox(clearButton.hb.x + clearButton.hb.width, relicnameText.hb.y, 64, 64))
                 .setClickDelay(0.02f);
 
         setSlot(null);

@@ -59,7 +59,7 @@ public class PCLCardSlotEditor extends EUIBase
                 .setClickDelay(0.02f);
         clearButton = new EUIButton(EUIRM.images.x.texture(), new EUIHitbox(addButton.hb.x + addButton.hb.width, cardnameText.hb.y, 64, 64))
                 .setClickDelay(0.02f);
-        changeButton = new EUIButton(PCLCoreImages.edit.texture(), new EUIHitbox(clearButton.hb.x + clearButton.hb.width, cardnameText.hb.y, 64, 64))
+        changeButton = new EUIButton(PCLCoreImages.Menu.edit.texture(), new EUIHitbox(clearButton.hb.x + clearButton.hb.width, cardnameText.hb.y, 64, 64))
                 .setClickDelay(0.02f);
 
         setSlot(null);

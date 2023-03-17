@@ -10,6 +10,7 @@ import extendedui.ui.hitboxes.OriginRelativeHitbox;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.base.traits.PTrait_Block;
@@ -109,6 +110,6 @@ public class PCLCustomCardBlockPage extends PCLCustomCardEffectPage
     @Override
     public TextureCache getTextureCache()
     {
-        return PGR.core.images.editorBlock;
+        return PCLCoreImages.Menu.editorBlock;
     }
 }

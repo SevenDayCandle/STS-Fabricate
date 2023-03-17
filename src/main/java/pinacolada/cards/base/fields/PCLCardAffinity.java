@@ -44,7 +44,7 @@ public class PCLCardAffinity implements Comparable<PCLCardAffinity>
 
         if (type == PCLAffinity.Star)
         {
-            PCLRenderHelpers.drawCentered(sb, color, PCLCoreImages.starFg.texture(), cX, cY, size, size, 1, 0);
+            PCLRenderHelpers.drawCentered(sb, color, PCLCoreImages.CardAffinity.starFg.texture(), cX, cY, size, size, 1, 0);
         }
     }
 
@@ -64,21 +64,21 @@ public class PCLCardAffinity implements Comparable<PCLCardAffinity>
         Texture background = type.getBackground(allowAlternateBorder ? level : Math.min(1, level));
         if (background != null)
         {
-            PCLRenderHelpers.drawOnCardAuto(sb, card, background, new Vector2(x, y), size, size, Color.LIGHT_GRAY, 1f, 1f, 0);
+            PCLRenderHelpers.drawOnCardAuto(sb, card, background, new Vector2(x, y), size, size, Color.LIGHT_GRAY, card.transparency, 1f, 0);
         }
 
-        PCLRenderHelpers.drawOnCardAuto(sb, card, type.getIcon(), new Vector2(x, y), size, size, color, 1f, 1f, 0f);
+        PCLRenderHelpers.drawOnCardAuto(sb, card, type.getIcon(), new Vector2(x, y), size, size, color, card.transparency, 1f, 0f);
 
         Texture border = type.getBorder(allowAlternateBorder ? level : Math.min(1, level));
         if (border != null)
         {
-            PCLRenderHelpers.drawOnCardAuto(sb, card, border, new Vector2(x, y), size, size, borderColor, 1f, borderScale, 0f);
+            PCLRenderHelpers.drawOnCardAuto(sb, card, border, new Vector2(x, y), size, size, borderColor, card.transparency, borderScale, 0f);
         }
 
         if (type == PCLAffinity.Star)
         {
-            Texture star = PCLCoreImages.starFg.texture();
-            PCLRenderHelpers.drawOnCardAuto(sb, card, star, new Vector2(x, y), size, size, color, 1f, 1f, 0);
+            Texture star = PCLCoreImages.CardAffinity.starFg.texture();
+            PCLRenderHelpers.drawOnCardAuto(sb, card, star, new Vector2(x, y), size, size, color, card.transparency, 1f, 0);
         }
     }
 

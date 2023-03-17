@@ -209,7 +209,7 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>
 
     public Texture getBackground(int level)
     {
-        return (level ) > 1 ? PCLCoreImages.borderFG.texture() : null;
+        return (level ) > 1 ? PCLCoreImages.Core.borderFG.texture() : null;
     }
 
     public Texture getBorder(int level)
@@ -220,7 +220,7 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>
         {
             return cache.texture();
         }
-        return (level > 1 ? PCLCoreImages.borderWeak : PCLCoreImages.borderNormal).texture();
+        return (level > 1 ? PCLCoreImages.Core.borderWeak : PCLCoreImages.Core.borderNormal).texture();
     }
 
     public TextureCache getDefaultIcon()
@@ -242,16 +242,16 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>
             case Silver:
                 return PGR.core.images.affinities.silver;
             case Star:
-                return PCLCoreImages.star;
+                return PCLCoreImages.CardAffinity.star;
             case General:
-                return PCLCoreImages.general;
+                return PCLCoreImages.CardAffinity.general;
         }
-        return PCLCoreImages.unknown;
+        return PCLCoreImages.CardAffinity.unknown;
     }
 
     public Texture getForeground(int level)
     {
-        return /*this == Star ? null : */(level > 1 ? PCLCoreImages.borderFG.texture() : null);
+        return /*this == Star ? null : */(level > 1 ? PCLCoreImages.Core.borderFG.texture() : null);
     }
 
     public String getFormattedAffinitySymbol()

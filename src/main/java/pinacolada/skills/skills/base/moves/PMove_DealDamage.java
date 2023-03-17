@@ -70,7 +70,7 @@ public class PMove_DealDamage extends PMove<PField_Empty>
     @Override
     public String getSampleText()
     {
-        return TEXT.act_deal(TEXT.subjects_x, PGR.core.tooltips.normalDamage.title);
+        return TEXT.act_deal(TEXT.subjects_x, PGR.core.strings.subjects_damage);
     }
 
     @Override

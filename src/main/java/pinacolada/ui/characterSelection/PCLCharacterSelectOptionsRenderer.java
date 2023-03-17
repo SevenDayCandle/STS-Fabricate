@@ -86,12 +86,12 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase
 
         float xOffset = ascensionGlyphsLabel.hb.x + ROW_OFFSET * 4f;
 
-        seriesButton = new EUIButton(PCLCoreImages.edit.texture(), new EUIHitbox(0, 0, scale(64), scale(64)))
+        seriesButton = new EUIButton(PCLCoreImages.Menu.edit.texture(), new EUIHitbox(0, 0, scale(64), scale(64)))
                 .setPosition(xOffset + ROW_OFFSET, startingCardsListLabel.hb.y + scale(192)).setText("")
                 .setTooltip(PGR.core.strings.csel_seriesEditor, PGR.core.strings.csel_seriesEditorInfo)
                 .setOnClick(this::openSeriesSelect);
 
-        loadoutEditorButton = new EUIButton(PCLCoreImages.swapCards.texture(), new EUIHitbox(0, 0, scale(64), scale(64)))
+        loadoutEditorButton = new EUIButton(PCLCoreImages.Menu.swapCards.texture(), new EUIHitbox(0, 0, scale(64), scale(64)))
                 .setPosition(seriesButton.hb.x + seriesButton.hb.width + scale(40), startingCardsListLabel.hb.y + scale(192)).setText("")
                 .setTooltip(PGR.core.strings.csel_deckEditor, PGR.core.strings.csel_deckEditorInfo)
                 .setOnRightClick(this::changePreset)

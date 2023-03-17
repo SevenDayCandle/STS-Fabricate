@@ -39,6 +39,7 @@ public class PCLCoreTooltips extends PCLTooltips
     public static final String ICON_PLATEDARMOR = "platedarmor";
     public static final String ICON_POISON = "poison";
     public static final String ICON_REBOUND = "rebound";
+    public static final String ICON_REGEN = "regen";
     public static final String ICON_RITUAL = "ritual";
     public static final String ICON_SHACKLE = "shackle";
     public static final String ICON_SLOW = "slow";
@@ -239,9 +240,9 @@ public class PCLCoreTooltips extends PCLTooltips
         hp.setIcon(PCLCoreImages.CardIcons.hp.texture());
         block.setIcon(PCLCoreImages.CardIcons.block.texture());
         normalDamage.setIcon(PCLCoreImages.CardIcons.damage.texture());
-        unique.setIcon(PCLCoreImages.CardIcons.unique.texture(), 6);
-        soulbound.setIcon(PCLCoreImages.CardIcons.soulbound.texture(), 6);
-        multiform.setIcon(PCLCoreImages.CardIcons.multiform.texture(), 6);
+        unique.setIcon(PCLCoreImages.CardIcons.unique.texture()).setIconSizeMulti(0.85f, 0.85f);
+        soulbound.setIcon(PCLCoreImages.CardIcons.soulbound.texture()).setIconSizeMulti(0.85f, 0.85f);
+        multiform.setIcon(PCLCoreImages.CardIcons.multiform.texture()).setIconSizeMulti(0.85f, 0.85f);
         energy.setIconFunc(EUI::getEnergyIcon);
 
         affinityRed.setIconFunc(PCLAffinity.Red::getTextureRegion).setIconSizeMulti(0.85f, 0.85f);
@@ -261,7 +262,6 @@ public class PCLCoreTooltips extends PCLTooltips
         frost.setIcon(PCLCoreImages.Tooltips.frost.texture(), 6);
         gold.setIcon(PCLCoreImages.Tooltips.gold.texture(), 6);
         orbSlot.setIcon(PCLCoreImages.Tooltips.orbSlot.texture(), 6);
-        regeneration.setIcon(PCLCoreImages.Tooltips.regeneration.texture(), 6);
 
         afterImage.setIconFromPowerRegion(ICON_AFTER_IMAGE);
         artifact.setIconFromPowerRegion(ICON_ARTIFACT);
@@ -286,6 +286,7 @@ public class PCLCoreTooltips extends PCLTooltips
         platedArmor.setIconFromPowerRegion(ICON_PLATEDARMOR);
         poison.setIconFromPowerRegion(ICON_POISON);
         rebound.setIconFromPowerRegion(ICON_REBOUND);
+        regeneration.setIconFromPowerRegion(ICON_REGEN);
         ritual.setIconFromPowerRegion(ICON_RITUAL);
         shackles.setIconFromPowerRegion(ICON_SHACKLE);
         slow.setIconFromPowerRegion(ICON_SLOW);

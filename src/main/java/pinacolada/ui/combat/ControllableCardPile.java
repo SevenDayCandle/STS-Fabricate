@@ -41,8 +41,8 @@ public class ControllableCardPile
     public ControllableCardPile()
     {
         tooltip = new EUITooltip(PGR.core.strings.combat_controlPile, PGR.core.strings.combat_controlPileDescription);
-        cardButton = new EUIButton(PCLCoreImages.controllableCardPile.texture(), hb)
-                .setBorder(PCLCoreImages.controllableCardPileBorder.texture(), Color.WHITE)
+        cardButton = new EUIButton(PCLCoreImages.Core.controllableCardPile.texture(), hb)
+                .setBorder(PCLCoreImages.Core.controllableCardPileBorder.texture(), Color.WHITE)
                 .setFont(FontHelper.energyNumFontBlue, 1f)
                 .setOnClick(() -> {
                     if (!AbstractDungeon.isScreenUp && currentCard != null && currentCard.canUse())

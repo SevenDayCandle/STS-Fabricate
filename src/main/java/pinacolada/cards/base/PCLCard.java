@@ -590,9 +590,9 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     public ColoredTexture getCardAttributeBanner() {
         if (rarity == PCLEnum.CardRarity.LEGENDARY || rarity == PCLEnum.CardRarity.SECRET)
         {
-            return new ColoredTexture((isPopup ? PCLCoreImages.CardFrames.cardBanner : PCLCoreImages.CardFrames.cardBannerAttribute2).texture(), getRarityColor());
+            return new ColoredTexture((isPopup ? PCLCoreImages.CardUI.cardBannerAttribute2L : PCLCoreImages.CardUI.cardBannerAttribute2).texture(), getRarityColor());
         }
-        return new ColoredTexture((isPopup ? PCLCoreImages.CardFrames.cardBannerAttributeL : PCLCoreImages.CardFrames.cardBannerAttribute).texture(), getRarityColor());
+        return new ColoredTexture((isPopup ? PCLCoreImages.CardUI.cardBannerAttributeL : PCLCoreImages.CardUI.cardBannerAttribute).texture(), getRarityColor());
     }
 
     protected Texture getCardBackground() {
@@ -621,9 +621,9 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         {
             if (rarity == PCLEnum.CardRarity.LEGENDARY || rarity == PCLEnum.CardRarity.SECRET)
             {
-                return (isPopup ? PCLCoreImages.CardFrames.cardBanner2L : PCLCoreImages.CardFrames.cardBanner2).texture();
+                return (isPopup ? PCLCoreImages.CardUI.cardBanner2L : PCLCoreImages.CardUI.cardBanner2).texture();
             }
-            return (isPopup ? PCLCoreImages.CardFrames.cardBannerL : PCLCoreImages.CardFrames.cardBanner).texture();
+            return (isPopup ? PCLCoreImages.CardUI.cardBannerL : PCLCoreImages.CardUI.cardBanner).texture();
         }
         return null;
     }
@@ -788,15 +788,15 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         {
             if (type == PCLEnum.CardType.SUMMON)
             {
-                return isPopup ? PCLCoreImages.CardFrames.cardFrameSummonL.texture() : PCLCoreImages.CardFrames.cardFrameSummon.texture();
+                return isPopup ? PCLCoreImages.CardUI.cardFrameSummonL.texture() : PCLCoreImages.CardUI.cardFrameSummon.texture();
             }
             switch (type) {
                 case ATTACK:
-                    return isPopup ? PCLCoreImages.CardFrames.cardFrameAttackL.texture() : PCLCoreImages.CardFrames.cardFrameAttack.texture();
+                    return isPopup ? PCLCoreImages.CardUI.cardFrameAttackL.texture() : PCLCoreImages.CardUI.cardFrameAttack.texture();
                 case POWER:
-                    return isPopup ? PCLCoreImages.CardFrames.cardFramePowerL.texture() : PCLCoreImages.CardFrames.cardFramePower.texture();
+                    return isPopup ? PCLCoreImages.CardUI.cardFramePowerL.texture() : PCLCoreImages.CardUI.cardFramePower.texture();
                 default:
-                    return isPopup ? PCLCoreImages.CardFrames.cardFrameSkillL.texture() : PCLCoreImages.CardFrames.cardFrameSkill.texture();
+                    return isPopup ? PCLCoreImages.CardUI.cardFrameSkillL.texture() : PCLCoreImages.CardUI.cardFrameSkill.texture();
             }
         }
         return null;
@@ -2498,7 +2498,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     // Determines whether the card frame used will be the base game's or the PCL frame
     protected boolean shouldUsePCLFrame()
     {
-        return GameUtilities.isPCLCardColor(this.color);
+        return PGR.getResources(this.color).usePCLFrame;
     }
 
     public void setDrawScale(float scale)

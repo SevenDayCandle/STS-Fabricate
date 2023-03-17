@@ -253,7 +253,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
     @Override
     public TextureCache getTextureCache()
     {
-        return PCLCoreImages.editorPrimary;
+        return PCLCoreImages.Menu.editorPrimary;
     }
 
     @Override

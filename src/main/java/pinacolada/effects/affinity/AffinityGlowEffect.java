@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 import com.megacrit.cardcrawl.core.Settings;
 import pinacolada.effects.PCLEffect;
-import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.ui.AffinityKeywordButton;
 import pinacolada.utilities.PCLRenderHelpers;
 
@@ -30,7 +30,7 @@ public class AffinityGlowEffect extends PCLEffect
         this.color = gColor != null ? gColor : FALLBACK_COLOR.cpy();
         this.color.a = 0.45f;
         this.scale = 0.73f;
-        this.img = PGR.core.images.borderSilhouette.texture();
+        this.img = PCLCoreImages.Core.borderSilhouette.texture();
         this.source = source;
     }
 

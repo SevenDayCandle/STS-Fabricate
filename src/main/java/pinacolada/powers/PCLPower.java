@@ -326,7 +326,7 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         }
         if (this.img == null)
         {
-            this.img = PCLCoreImages.unknown.texture();
+            this.img = PCLCoreImages.CardAffinity.unknown.texture();
         }
 
         this.ID = originalID;
@@ -408,7 +408,7 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         float scale = 1;
         if (triggerCondition != null)
         {
-            PCLRenderHelpers.drawCentered(sb, borderColor, PCLCoreImages.squaredbuttonEmptycenter.texture(), x, y, ICON_SIZE2, ICON_SIZE2, 1f, 0);
+            PCLRenderHelpers.drawCentered(sb, borderColor, PCLCoreImages.Menu.squaredbuttonEmptycenter.texture(), x, y, ICON_SIZE2, ICON_SIZE2, 1f, 0);
             scale = 0.75f;
         }
 

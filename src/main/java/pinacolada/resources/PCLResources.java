@@ -39,6 +39,7 @@ public abstract class PCLResources<T extends PCLAbstractPlayerData, U extends PC
     public static final String JSON_KEYWORDS = "KeywordStrings.json";
     public final AbstractCard.CardColor cardColor;
     public final AbstractPlayer.PlayerClass playerClass;
+    public final boolean usePCLFrame;
     public final T data;
     public final U images;
     public V tooltips;
@@ -49,7 +50,13 @@ public abstract class PCLResources<T extends PCLAbstractPlayerData, U extends PC
 
     protected PCLResources(String id, AbstractCard.CardColor color, AbstractPlayer.PlayerClass playerClass, U images)
     {
+        this(id, color, playerClass, images, true);
+    }
+
+    protected PCLResources(String id, AbstractCard.CardColor color, AbstractPlayer.PlayerClass playerClass, U images, boolean usePCLFrame)
+    {
         this.id = id;
+        this.usePCLFrame = usePCLFrame;
         this.cardColor = color;
         this.playerClass = playerClass;
         this.images = images;

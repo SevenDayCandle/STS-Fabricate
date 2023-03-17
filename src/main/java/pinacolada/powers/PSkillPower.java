@@ -53,7 +53,7 @@ public class PSkillPower extends PCLPower
                 }
                 else
                 {
-                    this.img = PCLCoreImages.unknown.texture();
+                    this.img = PCLCoreImages.CardAffinity.unknown.texture();
                     this.powerStrings.NAME = effect.source != null ? effect.source.getName() : effect.effectID != null ? effect.effectID : this.getClass().getSimpleName();
                 }
             }
