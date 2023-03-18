@@ -92,12 +92,8 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     protected static final TextureAtlas CARD_ATLAS = ReflectionHacks.getPrivateStatic(AbstractCard.class, "cardAtlas");
     protected static final Color COLORLESS_ORB_COLOR = new Color(0.7f, 0.7f, 0.7f, 1);
     protected static final Color CURSE_COLOR = new Color(0.22f, 0.22f, 0.22f, 1);
-    protected static final Color COLOR_COMMON = new Color(0.65f, 0.65f, 0.65f, 1f);
-    protected static final Color COLOR_RARE = new Color(0.99f, 0.8f, 0.35f, 1f);
     protected static final Color COLOR_SECRET = new Color(0.2f, 0.99f, 0.6f, 1f);
-    protected static final Color COLOR_SPECIAL = new Color(1f, 1f, 1f, 1f);
     protected static final Color COLOR_ULTRA_RARE = new Color(0.99f, 0.3f, 0.2f, 1f);
-    protected static final Color COLOR_UNCOMMON = new Color(0.5f, 0.85f, 0.95f, 1f);
     protected static final Color HOVER_IMG_COLOR = new Color(1f, 0.815f, 0.314f, 0.8f);
     protected static final Color SELECTED_CARD_COLOR = new Color(0.5f, 0.9f, 0.9f, 1f);
     protected static final String UNPLAYABLE_MESSAGE = CardCrawlGame.languagePack.getCardStrings(Tactician.ID).EXTENDED_DESCRIPTION[0];
@@ -138,6 +134,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     public float hoverDuration;
     public int baseHitCount = 1;
     public int baseRightCount = 1;
+    public int currentHealth = 1; // Used for storing the card's current HP in battle
     public int hitCount = 1;
     public int maxUpgradeLevel;
     public int rightCount = 1;
@@ -470,6 +467,9 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         hitCount += tempHitCountDiff;
         rightCount += tempRightCountDiff;
 
+        // Ensure HP is set to the base health
+        currentHealth = heal;
+
         upgradedDamage = baseDamage > cardData.getDamage(form);
         upgradedBlock = baseBlock > cardData.getBlock(form);
         upgradedMagicNumber = baseMagicNumber > cardData.getMagicNumber(form);
@@ -671,7 +671,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
             case 'M':
                 return getMagicNumberString();
             case 'S':
-                return getSecondaryValueString();
+                return getHPString();
             case 'K':
                 return getSpecialVariableString();
             case 'X':
@@ -769,6 +769,10 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
             }
         }
         return -1;
+    }
+
+    public ColoredString getHPString() {
+        return new ColoredString(currentHealth, currentHealth < heal ? Settings.RED_TEXT_COLOR : isHealModified || heal > baseHeal ? Settings.GREEN_TEXT_COLOR : Settings.CREAM_COLOR);
     }
 
     public ColoredString getMagicNumberString() {
@@ -884,20 +888,12 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         {
             return COLOR_SECRET;
         }
-
-        switch (rarity) {
-            case SPECIAL:
-                return COLOR_SPECIAL;
-            case UNCOMMON:
-                return COLOR_UNCOMMON;
-            case RARE:
-                return COLOR_RARE;
-            case BASIC:
-            case COMMON:
-            case CURSE:
-            default:
-                return COLOR_COMMON;
+        else if (rarity == PCLEnum.CardRarity.LEGENDARY)
+        {
+            return COLOR_ULTRA_RARE;
         }
+
+        return EUIGameUtils.colorForRarity(rarity);
     }
 
     public Texture getTypeIcon() {
@@ -917,10 +913,6 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
             default:
                 return PCLCoreImages.Types.status.texture();
         }
-    }
-
-    public ColoredString getSecondaryValueString() {
-        return new ColoredString(heal, heal < baseHeal ? Settings.RED_TEXT_COLOR : isHealModified || heal > baseHeal ? Settings.GREEN_TEXT_COLOR : Settings.CREAM_COLOR);
     }
 
     public String getTagTipString()
@@ -1218,6 +1210,13 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     protected float modifyMagicNumber(PCLUseInfo info, float amount) {
         for (PSkill<?> be : getFullEffects()) {
             amount = be.modifyMagicNumber(info, amount);
+        }
+        return amount;
+    }
+
+    protected float modifyMagicHeal(PCLUseInfo info, float amount) {
+        for (PSkill<?> be : getFullEffects()) {
+            amount = be.modifyHeal(info, amount);
         }
         return amount;
     }
@@ -1595,7 +1594,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         this.baseDamage = this.damage = damage;
         this.baseBlock = this.block = block;
         this.baseMagicNumber = this.magicNumber = magicNumber;
-        this.baseHeal = this.heal = secondaryValue;
+        this.currentHealth = this.baseHeal = this.heal = secondaryValue;
         this.baseHitCount = this.hitCount = Math.max(1, hitCount);
         this.baseRightCount = this.rightCount = Math.max(1, rightCount);
     }
@@ -1785,6 +1784,16 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         }
     }
 
+    public void updateHeal(float amount) {
+        int prevHeal = heal;
+        heal = Math.max(0,MathUtils.floor(amount));
+        this.isHealModified = (baseHeal != heal);
+        if (prevHeal != heal)
+        {
+            currentHealth += (prevHeal - heal);
+        }
+    }
+
     public void updateHitCount(float amount) {
         hitCount = Math.max(1,MathUtils.floor(amount));
         this.isHitCountModified = (baseHitCount != hitCount);
@@ -1798,11 +1807,6 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     public void updateRightCount(float amount) {
         rightCount = Math.max(1,MathUtils.floor(amount));
         this.isRightCountModified = (baseRightCount != rightCount);
-    }
-
-    public void updateSecondaryValue(float amount) {
-        heal = Math.max(0,MathUtils.floor(amount));
-        this.isHealModified = (baseHeal != heal);
     }
 
     @Override
@@ -1883,7 +1887,6 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         copy.changeForm(auxiliaryData.form, timesUpgraded);
 
         copy.exhaustOnUseOnce = exhaustOnUseOnce;
-        copy.heal = heal;
         for (PCLCardTag tag : PCLCardTag.getAll()) {
             tag.set(copy, tag.getInt(this));
         }
@@ -1892,6 +1895,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         copy.magicNumber = magicNumber;
         copy.isMagicNumberModified = isMagicNumberModified;
 
+        copy.currentHealth = currentHealth;
         copy.heal = heal;
         copy.baseHeal = baseHeal;
         copy.isHealModified = isHealModified;
@@ -2590,7 +2594,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
 
     protected void upgradeSecondaryValue(int amount) {
         this.baseHeal += amount;
-        this.heal = this.baseHeal;
+        this.currentHealth = this.heal = this.baseHeal;
         this.upgradedHeal = true;
     }
 

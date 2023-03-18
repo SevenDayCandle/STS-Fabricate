@@ -14,18 +14,19 @@ import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUI;
 import extendedui.EUIUtils;
+import extendedui.ui.cardFilter.CountingPanel;
 import pinacolada.annotations.*;
 import pinacolada.augments.AugmentStrings;
 import pinacolada.augments.PCLAugment;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.commands.*;
 import pinacolada.effects.EffekseerEFK;
+import pinacolada.misc.PCLAffinityPanelFilter;
 import pinacolada.misc.PCLDungeon;
 import pinacolada.resources.pcl.PCLCoreResources;
 import pinacolada.rewards.pcl.AugmentReward;
 import pinacolada.skills.PSkill;
 import pinacolada.ui.cardEditor.PCLCustomCardSelectorScreen;
-import pinacolada.ui.cardReward.CountingPanel;
 import pinacolada.ui.cardView.PCLSingleCardPopup;
 import pinacolada.ui.characterSelection.PCLCharacterSelectProvider;
 import pinacolada.ui.characterSelection.PCLLoadoutEditor;
@@ -51,7 +52,6 @@ public class PGR
     public static PCLCoreResources core;
     public static PCLMainConfig config;
     public static PCLAugmentPanelItem augmentPanel;
-    public static CountingPanel countingPanel;
     public static PCLAffinityPoolModule affinityFilters;
     public static PCLAugmentScreen augmentScreen;
     public static PCLCharacterSelectProvider charSelectProvider;
@@ -336,11 +336,11 @@ public class PGR
         PCLAugment.initialize();
         PCLCustomCardSlot.initialize();
         EffekseerEFK.initialize();
+        CountingPanel.register(new PCLAffinityPanelFilter());
     }
 
     protected static void initializeUI()
     {
-        PGR.countingPanel = new CountingPanel();
         PGR.combatScreen = new PCLCombatScreen();
         PGR.cardPopup = new PCLSingleCardPopup();
         PGR.seriesSelection = new PCLSeriesSelectScreen();
@@ -365,7 +365,6 @@ public class PGR
         for (PCLResources<?,?,?,?> r : PGR.getRegisteredResources())
         {
             EUI.setCustomCardFilter(r.cardColor, PGR.affinityFilters);
-            EUI.setCustomCardPoolModule(r.cardColor, PGR.countingPanel);
             EUI.setCustomCardLibraryModule(r.cardColor, PGR.libraryFilters);
         }
     }

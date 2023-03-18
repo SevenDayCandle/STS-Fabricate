@@ -129,6 +129,14 @@ public abstract class PCLAugment implements TooltipProvider
         return d;
     }
 
+    public static PCLAugmentData register(Class<? extends PCLAugment> type, PCLAugmentCategorySub category, int tier)
+    {
+        String id = PGR.core.createID(type.getSimpleName());
+        PCLAugmentData d = new PCLAugmentData(id, type, category, tier);
+        AUGMENT_MAP.put(id, d);
+        return d;
+    }
+
     public static PCLAugmentReqs setAffinities(PCLAffinity... values)
     {
         return new PCLAugmentReqs().setAffinities(values);
@@ -180,11 +188,15 @@ public abstract class PCLAugment implements TooltipProvider
     /* An augment can only be applied if
     *   1. Card has free augment slots
     *   2. Augment requirements are passed
-    *   3. Card doesn't already have an augment of its color
+    *   3. Card doesn't already have an augment of its lineage
     */
     protected boolean canApplyImpl(PCLCard c)
     {
-        return c != null && (data.reqs == null || data.reqs.check(c)) && c.getFreeAugmentSlot() >= 0 && !EUIUtils.any(c.getAugments(), a -> a.data.category == data.category);
+        return c != null
+                && c.getFreeAugmentSlot() >= 0
+                && (data.category.isTypeValid(c.type))
+                && (data.reqs == null || data.reqs.check(c))
+                && (data.lineage == null || !EUIUtils.any(c.getAugments(), a -> a.data.lineage == data.lineage));
     }
 
     public boolean canRemove()
@@ -199,10 +211,11 @@ public abstract class PCLAugment implements TooltipProvider
 
     public String getFullText()
     {
+        String reqs = getReqsString();
         return EUIUtils.joinTrueStrings(EUIUtils.SPLIT_LINE,
-                EUIRM.strings.generic2(data.category.getName(), PCLCoreStrings.headerString(PGR.core.tooltips.level.title, data.tier)),
+                EUIRM.strings.generic2(PCLCoreStrings.headerString(PGR.core.tooltips.level.title, data.tier), data.category.getName()),
                 data.isSpecial ? "{#r:" + PGR.core.tooltips.specialAugment + "}" : null,
-                PCLCoreStrings.headerString(PGR.core.strings.misc_requirement, getReqsString()),
+                reqs != null ? PCLCoreStrings.headerString(PGR.core.strings.misc_requirement, getReqsString()) : reqs,
                 getPowerText());
     }
 
@@ -218,7 +231,7 @@ public abstract class PCLAugment implements TooltipProvider
 
     public String getReqsString()
     {
-        return data.reqs == null ? EUIRM.strings.na : data.reqs.getString();
+        return data.reqs == null ? null : data.reqs.getString();
     }
 
     public String getText()

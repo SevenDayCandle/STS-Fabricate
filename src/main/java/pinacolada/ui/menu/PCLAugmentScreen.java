@@ -3,6 +3,7 @@ package pinacolada.ui.menu;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import extendedui.EUI;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT2;
 import extendedui.interfaces.delegates.FuncT0;
@@ -15,6 +16,7 @@ import pinacolada.effects.PCLEffect;
 import pinacolada.effects.utility.CallbackEffect;
 import pinacolada.resources.PGR;
 import pinacolada.ui.cardView.PCLAugmentList;
+import pinacolada.utilities.GameUtilities;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -78,7 +80,7 @@ public class PCLAugmentScreen extends AbstractDungeonScreen
                 addItem.invoke(augment, amount);
             }
         }
-        PGR.countingPanel.open(entries, null, false);
+        EUI.countingPanel.openManual(GameUtilities.augmentStats(entries), null, false);
     }
 
     @Override
@@ -97,7 +99,7 @@ public class PCLAugmentScreen extends AbstractDungeonScreen
         {
             panel.updateImpl();
         }
-        PGR.countingPanel.tryUpdate(true);
+        EUI.countingPanel.tryUpdate();
 
     }
 
@@ -118,7 +120,7 @@ public class PCLAugmentScreen extends AbstractDungeonScreen
     public void renderImpl(SpriteBatch sb)
     {
         super.renderImpl(sb);
-        PGR.countingPanel.tryRender(sb);
+        EUI.countingPanel.tryRender(sb);
     }
 
 

@@ -225,6 +225,16 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     }
 
     @Override
+    public float modifyHeal(PCLUseInfo info, float amount)
+    {
+        for (PSkill<?> be : effects)
+        {
+            amount = be.modifyHeal(info, amount);
+        }
+        return amount;
+    }
+
+    @Override
     public float modifyHitCount(PCLUseInfo info, float amount)
     {
         for (PSkill<?> be : effects)

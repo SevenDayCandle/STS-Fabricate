@@ -17,6 +17,7 @@ public class PCLAugmentData
     public final Class<? extends PCLAugment> augClass;
     public final int tier;
     public final PCLAugmentCategory category;
+    public final PCLAugmentCategorySub lineage;
     public AugmentStrings strings;
     public PSkill<?> skill;
     public PCLAugmentReqs reqs;
@@ -27,7 +28,18 @@ public class PCLAugmentData
         this.ID = id;
         this.augClass = augClass;
         this.tier = tier;
+        this.lineage = null;
         this.category = category;
+        strings = PGR.getAugmentStrings(this.ID);
+    }
+
+    public PCLAugmentData(String id, Class<? extends PCLAugment> augClass, PCLAugmentCategorySub lineage, int tier)
+    {
+        this.ID = id;
+        this.augClass = augClass;
+        this.tier = tier;
+        this.lineage = lineage;
+        this.category = lineage.parent;
         strings = PGR.getAugmentStrings(this.ID);
     }
 

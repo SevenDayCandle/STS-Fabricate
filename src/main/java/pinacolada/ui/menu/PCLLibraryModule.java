@@ -7,8 +7,9 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import extendedui.EUIRM;
+import extendedui.interfaces.markers.CustomCardPoolModule;
+import extendedui.ui.EUIBase;
 import extendedui.ui.cardFilter.CustomCardLibraryScreen;
-import extendedui.ui.cardFilter.CustomCardPoolModule;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUIContextMenu;
 import extendedui.ui.hitboxes.EUIHitbox;
@@ -19,7 +20,7 @@ import pinacolada.resources.PGR;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class PCLLibraryModule extends CustomCardPoolModule
+public class PCLLibraryModule extends EUIBase implements CustomCardPoolModule
 {
     private static final HashMap<ColorlessGroup, CardGroup> ColorlessGroupMapping = new HashMap<>();
     private static final HashMap<ColorlessGroup, CardGroup> CurseGroupMapping = new HashMap<>();
@@ -121,13 +122,10 @@ public class PCLLibraryModule extends CustomCardPoolModule
     }
 
     @Override
-    public void update(boolean shouldDoStandardUpdate)
+    public void updateImpl()
     {
         groupMenu.tryUpdate();
-        if (shouldDoStandardUpdate)
-        {
-            groupButton.tryUpdate();
-        }
+        groupButton.tryUpdate();
     }
 
     @Override

@@ -47,10 +47,13 @@ import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.AbstractScreen;
+import extendedui.ui.cardFilter.CountingPanelStats;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.GenericCondition;
 import org.scannotation.AnnotationDB;
 import pinacolada.actions.PCLActions;
+import pinacolada.augments.PCLAugmentCategory;
+import pinacolada.augments.PCLAugmentData;
 import pinacolada.blights.common.UpgradedHand;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLAffinity;
@@ -136,6 +139,23 @@ public class GameUtilities
     public static AbstractMonster asMonster(AbstractCreature c)
     {
         return EUIUtils.safeCast(c, AbstractMonster.class);
+    }
+
+    public static CountingPanelStats<PCLAffinity, PCLAffinity, AbstractCard> affinityStats(Iterable<AbstractCard> cards)
+    {
+        return CountingPanelStats.basic(
+                card -> GameUtilities.getPCLCardAffinities(card).getAffinities(false, true),
+                cards);
+    }
+
+    public static CountingPanelStats<PCLAugmentCategory, Map.Entry<PCLAugmentData, Integer>, Map.Entry<PCLAugmentData, Integer>> augmentStats(HashMap<PCLAugmentData, Integer> augments)
+    {
+        return new CountingPanelStats<PCLAugmentCategory, Map.Entry<PCLAugmentData, Integer>, Map.Entry<PCLAugmentData, Integer>>(
+                Collections::singleton,
+                entry -> entry.getKey().category,
+                Map.Entry::getValue,
+                (entries, entry) -> entry.getValue(),
+                augments.entrySet());
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")

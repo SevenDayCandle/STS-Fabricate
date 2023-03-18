@@ -479,6 +479,16 @@ public abstract class PCond<T extends PField> extends PSkill<T>
     }
 
     @Override
+    public float modifyHeal(PCLUseInfo info, float amount)
+    {
+        if (this.childEffect != null && sourceCard != null && checkCondition(info, false, false))
+        {
+            return this.childEffect.modifyHeal(info, amount);
+        }
+        return amount;
+    }
+
+    @Override
     public float modifyMagicNumber(PCLUseInfo info, float amount)
     {
         if (this.childEffect != null && sourceCard != null && checkCondition(info, false, false))

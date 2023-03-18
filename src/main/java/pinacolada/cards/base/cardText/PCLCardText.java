@@ -110,7 +110,7 @@ public class PCLCardText
     {
         if (card.type == PCLEnum.CardType.SUMMON)
         {
-            renderAttribute(sb, getHPIcon(), card.getSecondaryValueString(), "/" + card.baseHeal, null, 0.9f, true);
+            renderAttribute(sb, getHPIcon(), card.getHPString(), "/" + card.heal, null, 0.9f, true);
             // TODO add priority attribute indicator
             //renderAttribute(sb, getDamageIcon(), card.getDamageString(), card.hitCount > 1 ? ("x" + card.hitCount) : null, card.pclTarget != null ? card.pclTarget.getTag() : null, 1f, false);
         }

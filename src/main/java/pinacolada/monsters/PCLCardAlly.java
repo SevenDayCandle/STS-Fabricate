@@ -72,8 +72,8 @@ public class PCLCardAlly extends PCLCreature
         this.card = card;
         this.preview = new EUICardPreview(card, card.upgraded);
         this.name = card.name;
-        this.maxHealth = Math.max(1, card.baseHeal);
-        this.currentHealth = MathUtils.clamp(card.heal, 1, this.maxHealth);
+        this.maxHealth = Math.max(1, card.heal);
+        this.currentHealth = MathUtils.clamp(card.currentHealth, 1, this.maxHealth);
         this.priority = card.magicNumber;
         this.showHealthBar();
         this.healthBarUpdatedEvent();
@@ -243,9 +243,9 @@ public class PCLCardAlly extends PCLCreature
             CombatManager.onAllyDeath(releasedCard, this);
 
             // Heal on summons should be at least 1
-            if (releasedCard.heal < 1)
+            if (releasedCard.currentHealth < 1)
             {
-                releasedCard.heal = 1;
+                releasedCard.currentHealth = 1;
             }
 
             // Killed summons are treated as being Purged
@@ -276,7 +276,7 @@ public class PCLCardAlly extends PCLCreature
         super.update();
         if (card != null)
         {
-            this.card.heal = this.currentHealth;
+            this.card.currentHealth = this.currentHealth;
             if (this.animation instanceof PCLAllyAnimation)
             {
                 ((PCLAllyAnimation) this.animation).update(EUI.delta(), hb.cX, hb.cY);

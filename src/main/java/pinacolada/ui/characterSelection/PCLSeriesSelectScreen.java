@@ -11,6 +11,7 @@ import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
+import extendedui.EUI;
 import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
@@ -209,11 +210,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen
         cardGrid.addCards(container.getAllCards());
         updateStartingDeckText();
 
-        PGR.countingPanel.setActive(true);
-        PGR.countingPanel.open(container.allCards,
-                false,
-                null,
-                true);
+        EUI.countingPanel.open(container.allCards);
     }
 
     protected void openLoadoutEditor()
@@ -277,9 +274,9 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen
 
     protected void totalCardsChanged(int totalCards)
     {
-        if (PGR.countingPanel.isActive)
+        if (EUI.countingPanel.isActive)
         {
-            PGR.countingPanel.open(container.allCards, false, null, true);
+            EUI.countingPanel.open(container.allCards);
         }
 
         typesAmount.setLabel(EUIUtils.joinStrings(" | ",
@@ -303,7 +300,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen
     public void updateImpl()
     {
         backgroundImage.updateImpl();
-        PGR.countingPanel.tryUpdate(true);
+        EUI.countingPanel.tryUpdate();
 
         if (previewCardsEffect != null)
         {
@@ -370,7 +367,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen
         }
         else
         {
-            PGR.countingPanel.tryRender(sb);
+            EUI.countingPanel.tryRender(sb);
         }
 
         contextMenu.tryRender(sb);

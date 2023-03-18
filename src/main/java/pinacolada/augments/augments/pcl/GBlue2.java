@@ -2,24 +2,24 @@ package pinacolada.augments.augments.pcl;
 
 import pinacolada.annotations.VisibleAugment;
 import pinacolada.augments.PCLAugment;
-import pinacolada.augments.PCLAugmentCategory;
+import pinacolada.augments.PCLAugmentCategorySub;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PTrait;
 
 @VisibleAugment
-public class BBlueA1 extends PCLAugment
+public class GBlue2 extends PCLAugment
 {
-    public static final PCLAugmentData DATA = register(BBlueA1.class, PCLAugmentCategory.General, 1)
-            .setSkill(PTrait.affinity(PCLAffinity.Blue));
+    public static final PCLAugmentData DATA = register(GBlue2.class, PCLAugmentCategorySub.AffinityBlue, 3)
+            .setSkill(PTrait.affinity(2, PCLAffinity.Blue));
 
-    public BBlueA1()
+    public GBlue2()
     {
         super(DATA);
     }
 
-    public BBlueA1(PSkill<?> skill)
+    public GBlue2(PSkill<?> skill)
     {
         super(DATA, skill);
     }

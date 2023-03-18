@@ -5,8 +5,9 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIUtils;
+import extendedui.interfaces.markers.CustomCardFilterModule;
+import extendedui.ui.EUIBase;
 import extendedui.ui.cardFilter.CardKeywordFilters;
-import extendedui.ui.cardFilter.CustomCardFilterModule;
 import extendedui.ui.controls.EUILabel;
 import extendedui.ui.controls.EUISearchableDropdown;
 import extendedui.ui.hitboxes.EUIHitbox;
@@ -30,17 +31,18 @@ import static extendedui.ui.cardFilter.CardKeywordFilters.DRAW_START_Y;
 import static extendedui.ui.cardFilter.CardKeywordFilters.SPACING;
 import static pinacolada.ui.AffinityKeywordButton.ICON_SIZE;
 
-public class PCLAffinityPoolModule extends CustomCardFilterModule
+public class PCLAffinityPoolModule extends EUIBase implements CustomCardFilterModule
 {
     public static HashSet<PCLLoadout> currentSeries = new HashSet<>();
     public static ArrayList<PCLCardAffinity> currentAffinities = EUIUtils.map(PCLAffinity.values(), PCLCardAffinity::new);
     public final ArrayList<AffinityKeywordButton> affinityButtons = new ArrayList<>();
     public final EUILabel affinitiesSectionLabel;
     public final EUISearchableDropdown<PCLLoadout> seriesDropdown;
+    public final CardKeywordFilters filters;
 
     public PCLAffinityPoolModule(CardKeywordFilters filters)
     {
-        super(filters);
+        this.filters = filters;
         seriesDropdown = (EUISearchableDropdown<PCLLoadout>) new EUISearchableDropdown<PCLLoadout>(new EUIHitbox(0, 0, scale(240), scale(48)), PCLLoadout::getNameForFilter)
                 .setOnOpenOrClose(isOpen -> {
                     CardCrawlGame.isPopupOpen = this.isActive;

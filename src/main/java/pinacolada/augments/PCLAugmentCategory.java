@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.screens.runHistory.RunHistoryScreen;
-import pinacolada.interfaces.markers.CountingPanelItem;
+import extendedui.interfaces.markers.CountingPanelItem;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
@@ -27,8 +27,13 @@ public enum PCLAugmentCategory implements CountingPanelItem
     @Override
     public Texture getIcon()
     {
-        // TODO recolored images
         return PCLCoreImages.CardUI.augment.texture();
+    }
+
+    @Override
+    public Color getColor()
+    {
+        return color;
     }
 
     public boolean isTypeValid(AbstractCard.CardType type)

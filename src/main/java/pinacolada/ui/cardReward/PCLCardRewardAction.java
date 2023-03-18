@@ -75,23 +75,20 @@ public abstract class PCLCardRewardAction extends EUIBase
         }
     }
 
-    public void open(RewardItem rItem, ArrayList<AbstractCard> cards, boolean canActivate)
+    public void open(RewardItem rItem, ArrayList<AbstractCard> cards)
     {
         buttons.clear();
         rewardItem = rItem;
         isActive = false;
 
-        if (canActivate)
+        actionProvider = GameUtilities.getRelic(getTargetClass());
+        if (actionProvider != null && actionProvider.canActivate(rItem))
         {
-            actionProvider = GameUtilities.getRelic(getTargetClass());
-            if (actionProvider != null && actionProvider.canActivate(rItem))
-            {
-                isActive = true;
+            isActive = true;
 
-                for (int i = 0; i < rItem.cards.size(); i++)
-                {
-                    buttons.add(getButton(i));
-                }
+            for (int i = 0; i < rItem.cards.size(); i++)
+            {
+                buttons.add(getButton(i));
             }
         }
     }

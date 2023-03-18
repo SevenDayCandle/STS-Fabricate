@@ -4,8 +4,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.rewards.RewardItem;
+import extendedui.EUI;
 import extendedui.ui.EUIBase;
-import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -17,16 +17,14 @@ public class PCLCardRewardScreen extends EUIBase
 
     public final PCLCardRewardBonus rewardBundle = new PCLCardRewardBonus();
     public final PCLCardRewardInfo rewardInfo = new PCLCardRewardInfo();
-    public final PCLCardRewardRerollAction purgingStoneUI = new PCLCardRewardRerollAction(rewardBundle::add, rewardBundle::remove);
-    public final PCLCardRewardBreakAction breakUI = new PCLCardRewardBreakAction(rewardBundle::add, rewardBundle::remove);
+    public final PCLCardRewardRerollAction rerollUI = new PCLCardRewardRerollAction(rewardBundle::add, rewardBundle::remove);
 
     public void close()
     {
-        PGR.countingPanel.close();
+        EUI.countingPanel.close();
         rewardInfo.close();
         rewardBundle.close();
-        purgingStoneUI.close();
-        breakUI.close();
+        rerollUI.close();
     }
 
     public void onCardObtained(AbstractCard hoveredCard)
@@ -42,27 +40,24 @@ public class PCLCardRewardScreen extends EUIBase
             return;
         }
 
-        PGR.countingPanel.open(AbstractDungeon.player.masterDeck.group);
+        EUI.countingPanel.open(AbstractDungeon.player.masterDeck.group);
         rewardBundle.open(rItem, cards);
-        breakUI.open(rItem, cards, true);
-        purgingStoneUI.open(rItem, cards, !breakUI.isActive);
+        rerollUI.open(rItem, cards);
         rewardInfo.open();
     }
 
     public void preRender(SpriteBatch sb)
     {
-        PGR.countingPanel.tryRender(sb);
+        EUI.countingPanel.tryRender(sb);
         rewardInfo.tryRender(sb);
-        purgingStoneUI.tryRender(sb);
-        breakUI.tryRender(sb);
+        rerollUI.tryRender(sb);
     }
 
     public void updateImpl()
     {
-        PGR.countingPanel.tryUpdate(true);
-        purgingStoneUI.tryUpdate();
+        EUI.countingPanel.tryUpdate();
+        rerollUI.tryUpdate();
         rewardBundle.tryUpdate();
-        breakUI.tryUpdate();
         rewardInfo.tryUpdate();
     }
 

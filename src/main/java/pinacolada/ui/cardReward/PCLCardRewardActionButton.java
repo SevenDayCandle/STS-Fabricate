@@ -3,16 +3,8 @@ package pinacolada.ui.cardReward;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import extendedui.EUIRenderHelpers;
 import extendedui.ui.controls.EUIButton;
-import extendedui.ui.controls.EUIImage;
-import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.ui.tooltips.EUITooltip;
-import pinacolada.augments.PCLAugment;
-import pinacolada.augments.PCLAugmentData;
-import pinacolada.augments.PCLAugmentWeights;
-import pinacolada.resources.PGR;
-import pinacolada.resources.pcl.PCLCoreImages;
 
 // Copied and modified from STS-AnimatorMod
 public class PCLCardRewardActionButton extends EUIButton
@@ -23,26 +15,14 @@ public class PCLCardRewardActionButton extends EUIButton
     public PCLCardRewardAction container;
     public boolean used;
     private AbstractCard card;
-    @Deprecated
-    private PCLAugment augment;
-    @Deprecated
-    private EUIImage augmentImage;
-    @Deprecated
-    private boolean useAugment;
 
     public PCLCardRewardActionButton(PCLCardRewardAction container, Texture buttonTexture, String title, String description, float offsetY, int cardIndex, boolean useAugment)
     {
         super(buttonTexture, 0, 0);
 
-        this.augmentImage = new EUIImage(PCLCoreImages.CardUI.augment.texture(), new RelativeHitbox(hb, SIZE, SIZE, hb.width * 0.7f, hb.height * 0.3f));
-        this.augmentImage.setActive(useAugment);
-        this.useAugment = useAugment;
         this.container = container;
         this.cardIndex = cardIndex;
         this.card = getCard(true);
-        if (useAugment) {
-            updateAugment();
-        }
         this.offsetY = offsetY;
 
         setOnClick(() -> this.container.action(this));
@@ -70,11 +50,7 @@ public class PCLCardRewardActionButton extends EUIButton
     @Override
     public void updateImpl()
     {
-        AbstractCard newCard = getCard(false);
-        if (card != newCard && useAugment) {
-            updateAugment();
-        }
-        card = newCard;
+        card = getCard(false);
 
         if (card != null)
         {
@@ -84,7 +60,6 @@ public class PCLCardRewardActionButton extends EUIButton
 
         setInteractable(card != null && !card.hb.hovered);
 
-        this.augmentImage.tryUpdate();
         super.updateImpl();
     }
 
@@ -94,26 +69,6 @@ public class PCLCardRewardActionButton extends EUIButton
         if (card != null)
         {
             super.renderImpl(sb);
-            this.augmentImage.tryRender(sb);
-        }
-    }
-
-    public PCLAugment getAugment() {
-        return augment;
-    }
-
-    protected void updateAugment() {
-        if (this.card != null) {
-            PCLAugmentWeights weights = new PCLAugmentWeights(this.card);
-            PCLAugmentData data = PCLAugment.getWeighted(PGR.dungeon.getRNG(), weights);
-            if (data != null) {
-                augment = data.create();
-                augmentImage.setTexture(augment.getTexture())
-                        .setColor(augment.getColor())
-                        .setShaderMode(EUIRenderHelpers.ShaderMode.Colorize)
-                        .setTooltip(augment.getTip())
-                        .setActive(true);
-            }
         }
     }
 }

@@ -1110,6 +1110,11 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return this.childEffect != null ? this.childEffect.modifyDamage(info, amount) : amount;
     }
 
+    public float modifyHeal(PCLUseInfo info, float amount)
+    {
+        return this.childEffect != null ? this.childEffect.modifyHeal(info, amount) : amount;
+    }
+
     public float modifyHitCount(PCLUseInfo info, float amount)
     {
         return this.childEffect != null ? this.childEffect.modifyHitCount(info, amount) : amount;

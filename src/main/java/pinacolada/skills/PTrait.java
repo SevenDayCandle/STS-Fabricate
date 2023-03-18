@@ -9,10 +9,7 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.skills.base.traits.*;
-import pinacolada.skills.skills.special.traits.PTrait_Affinity;
-import pinacolada.skills.skills.special.traits.PTrait_AttackType;
-import pinacolada.skills.skills.special.traits.PTrait_CardTarget;
-import pinacolada.skills.skills.special.traits.PTrait_Priority;
+import pinacolada.skills.skills.special.traits.*;
 
 public abstract class PTrait<T extends PField> extends PMove<T>
 {
@@ -88,6 +85,11 @@ public abstract class PTrait<T extends PField> extends PMove<T>
     public static PTrait_HitCount hitCount(int amount)
     {
         return new PTrait_HitCount(amount);
+    }
+
+    public static PTrait_HP hp(int amount)
+    {
+        return new PTrait_HP(amount);
     }
 
     public static PTrait_Priority priority(int amount)
