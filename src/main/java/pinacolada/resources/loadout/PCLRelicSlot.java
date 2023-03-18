@@ -1,7 +1,7 @@
 package pinacolada.resources.loadout;
 
+import extendedui.utilities.RotatingList;
 import pinacolada.relics.PCLRelic;
-import pinacolada.utilities.RotatingList;
 
 import java.util.ArrayList;
 

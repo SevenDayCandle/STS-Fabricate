@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import extendedui.ui.tooltips.EUICardPreview;
+import extendedui.utilities.RotatingList;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -12,7 +13,6 @@ import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardID;
-import pinacolada.utilities.RotatingList;
 
 import java.util.ArrayList;
 import java.util.Collection;

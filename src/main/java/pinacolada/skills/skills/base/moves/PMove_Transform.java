@@ -8,6 +8,7 @@ import extendedui.EUIRM;
 import extendedui.interfaces.delegates.FuncT5;
 import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.ui.tooltips.EUITooltip;
+import extendedui.utilities.RotatingList;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.piles.SelectFromPile;
 import pinacolada.annotations.VisibleSkill;
@@ -21,7 +22,6 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.ListSelection;
-import pinacolada.utilities.RotatingList;
 
 @VisibleSkill
 public class PMove_Transform extends PMove_Select

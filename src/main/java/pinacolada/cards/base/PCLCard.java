@@ -897,22 +897,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     }
 
     public Texture getTypeIcon() {
-        if (type == PCLEnum.CardType.SUMMON)
-        {
-            return PCLCoreImages.Types.summon.texture();
-        }
-        switch (type) {
-            case ATTACK:
-                return PCLCoreImages.Types.attack.texture();
-            case CURSE:
-                return PCLCoreImages.Types.curse.texture();
-            case POWER:
-                return PCLCoreImages.Types.power.texture();
-            case SKILL:
-                return PCLCoreImages.Types.skill.texture();
-            default:
-                return PCLCoreImages.Types.status.texture();
-        }
+        return EUIGameUtils.iconForType(type).texture();
     }
 
     public String getTagTipString()

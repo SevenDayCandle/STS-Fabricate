@@ -3,10 +3,10 @@ package pinacolada.resources.loadout;
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import extendedui.EUIUtils;
+import extendedui.utilities.RotatingList;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.fields.PCLCardAffinities;
 import pinacolada.cards.base.PCLCardData;
-import pinacolada.utilities.RotatingList;
+import pinacolada.cards.base.fields.PCLCardAffinities;
 
 import java.util.ArrayList;
 

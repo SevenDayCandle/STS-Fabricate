@@ -1,0 +1,33 @@
+package pinacolada.cards.pcl.colorless;
+
+import pinacolada.annotations.VisibleCard;
+import pinacolada.cards.base.PCLCard;
+import pinacolada.cards.base.PCLCardData;
+import pinacolada.cards.base.PCLCardGroupHelper;
+import pinacolada.cards.base.fields.PCLAffinity;
+import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.skills.PCond;
+import pinacolada.skills.PMove;
+import pinacolada.skills.skills.PTrigger;
+
+@VisibleCard
+public class Magnetism extends PCLCard
+{
+    public static final String ATLAS_URL = "colorless/power/magnetism";
+    public static final PCLCardData DATA = register(Magnetism.class)
+            .setImagePathFromAtlasUrl(ATLAS_URL)
+            .setSkill(2, CardRarity.RARE, PCLCardTarget.Self)
+            .setAffinities(PCLAffinity.Yellow)
+            .setCostUpgrades(-1)
+            .setColorless();
+
+    public Magnetism()
+    {
+        super(DATA);
+    }
+
+    public void setup(Object input)
+    {
+        addGainPower(PTrigger.when(PCond.onTurnStart(), PMove.obtainRandom(1, 1, PCLCardGroupHelper.Hand).edit(f -> f.setColor(CardColor.COLORLESS))));
+    }
+}

@@ -22,6 +22,7 @@ import extendedui.text.EUISmartText;
 import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.ColoredString;
+import extendedui.utilities.RotatingList;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
@@ -46,7 +47,6 @@ import pinacolada.skills.fields.PField;
 import pinacolada.skills.skills.PMultiSkill;
 import pinacolada.skills.skills.PTrigger;
 import pinacolada.utilities.GameUtilities;
-import pinacolada.utilities.RotatingList;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

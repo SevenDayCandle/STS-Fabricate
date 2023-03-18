@@ -7,8 +7,8 @@ import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIInputManager;
 import extendedui.configuration.EUIHotkeys;
 import extendedui.ui.EUIBase;
+import extendedui.utilities.RotatingList;
 import pinacolada.interfaces.listeners.DrawPileCardPreviewProvider;
-import pinacolada.utilities.RotatingList;
 
 public class DrawPileCardPreview
 {

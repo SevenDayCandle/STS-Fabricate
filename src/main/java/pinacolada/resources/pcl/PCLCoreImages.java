@@ -7,7 +7,7 @@ import pinacolada.resources.PCLImages;
 
 public class PCLCoreImages extends PCLImages
 {
-    public static final String ORB_VFX_PNG = "images/pcl/ui/topPanel/canvas/orbVfx.png";
+    public static final String ORB_VFX_PNG = "images/pcl/ui/menu/canvas/orbVfx.png";
     public static final String EMPTY_SHADOW = "images/pcl/monsters/EmptyShadow.png";
 
     public static class Core
@@ -38,19 +38,19 @@ public class PCLCoreImages extends PCLImages
     public static class Menu
     {
 
-        public static final TextureCache augmentPanel = new TextureCache("images/pcl/ui/topPanel/AugmentPanel.png");
-        public static final TextureCache customCards = new TextureCache("images/pcl/ui/topPanel/CustomCards.png");
-        public static final TextureCache edit = new TextureCache("images/pcl/ui/topPanel/Edit.png");
-        public static final TextureCache editorPrimary = new TextureCache("images/pcl/ui/topPanel/EditorPrimary.png");
-        public static final TextureCache editorAttribute = new TextureCache("images/pcl/ui/topPanel/EditorAttribute.png");
-        public static final TextureCache editorAttack = new TextureCache("images/pcl/ui/topPanel/EditorAttack.png");
-        public static final TextureCache editorBlock = new TextureCache("images/pcl/ui/topPanel/EditorBlock.png");
-        public static final TextureCache editorEffect = new TextureCache("images/pcl/ui/topPanel/EditorEffect.png");
-        public static final TextureCache editorPower = new TextureCache("images/pcl/ui/topPanel/EditorPower.png");
-        public static final TextureCache info = new TextureCache("images/pcl/ui/topPanel/Info.png");
-        public static final TextureCache randomize = new TextureCache("images/pcl/ui/topPanel/Randomize.png");
-        public static final TextureCache squaredbuttonEmptycenter = new TextureCache("images/pcl/ui/topPanel/SquaredButton_EmptyCenter.png");
-        public static final TextureCache swapCards = new TextureCache("images/pcl/ui/topPanel/SwapCards.png");
+        public static final TextureCache augmentPanel = new TextureCache("images/pcl/ui/menu/AugmentPanel.png");
+        public static final TextureCache customCards = new TextureCache("images/pcl/ui/menu/CustomCards.png");
+        public static final TextureCache edit = new TextureCache("images/pcl/ui/menu/Edit.png");
+        public static final TextureCache editorPrimary = new TextureCache("images/pcl/ui/menu/EditorPrimary.png");
+        public static final TextureCache editorAttribute = new TextureCache("images/pcl/ui/menu/EditorAttribute.png");
+        public static final TextureCache editorAttack = new TextureCache("images/pcl/ui/menu/EditorAttack.png");
+        public static final TextureCache editorBlock = new TextureCache("images/pcl/ui/menu/EditorBlock.png");
+        public static final TextureCache editorEffect = new TextureCache("images/pcl/ui/menu/EditorEffect.png");
+        public static final TextureCache editorPower = new TextureCache("images/pcl/ui/menu/EditorPower.png");
+        public static final TextureCache info = new TextureCache("images/pcl/ui/menu/Info.png");
+        public static final TextureCache randomize = new TextureCache("images/pcl/ui/menu/Randomize.png");
+        public static final TextureCache squaredbuttonEmptycenter = new TextureCache("images/pcl/ui/menu/SquaredButton_EmptyCenter.png");
+        public static final TextureCache swapCards = new TextureCache("images/pcl/ui/menu/SwapCards.png");
     }
 
     public static class CardUI
@@ -158,11 +158,6 @@ public class PCLCoreImages extends PCLImages
 
     public static class Types
     {
-        public static final TextureCache attack = new TextureCache("images/pcl/cardui/types/Attack.png", true);
-        public static final TextureCache curse = new TextureCache("images/pcl/cardui/types/Curse.png", true);
-        public static final TextureCache power = new TextureCache("images/pcl/cardui/types/Power.png", true);
-        public static final TextureCache skill = new TextureCache("images/pcl/cardui/types/Skill.png", true);
-        public static final TextureCache status = new TextureCache("images/pcl/cardui/types/Status.png", true);
         public static final TextureCache summon = new TextureCache("images/pcl/cardui/types/Summon.png", true);
     }
 

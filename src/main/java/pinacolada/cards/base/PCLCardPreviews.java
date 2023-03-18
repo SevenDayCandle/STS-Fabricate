@@ -2,8 +2,8 @@ package pinacolada.cards.base;
 
 import extendedui.configuration.EUIHotkeys;
 import extendedui.ui.tooltips.EUICardPreview;
+import extendedui.utilities.RotatingList;
 import pinacolada.skills.PSkill;
-import pinacolada.utilities.RotatingList;
 
 public class PCLCardPreviews
 {
