@@ -1,4 +1,10 @@
 # Fabricate for Slay the Spire
+
+NOTE: Please use the Steam link to get the latest updates! The version on Github may not always be up to date with the Steam release.
+https://steamcommunity.com/sharedfiles/filedetails/?id=2947433143
+
+-----
+
 This mod adds the following features:
 - A new main menu option called "Customize" allows you to access an editor for creating your own cards. For an overview of how this editor works, check out this page: https://github.com/SevenDayCandle/STS-CardEditor/wiki/Basic-Usage.
 - A custom run menu overhaul that has support for cards created through the editor mentioned above (this menu can be disabled in the mod settings). This overhaul includes a card filter that lets you filter out individual cards in your custom run.
