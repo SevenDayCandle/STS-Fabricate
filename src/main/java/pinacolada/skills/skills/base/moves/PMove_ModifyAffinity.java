@@ -19,7 +19,8 @@ import java.util.List;
 public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity>
 {
     public static final PSkillData<PField_CardModifyAffinity> DATA = PMove_Modify.register(PMove_ModifyAffinity.class, PField_CardModifyAffinity.class)
-            .setExtra(-PCLAffinity.MAX_LEVEL, PCLAffinity.MAX_LEVEL)
+            .setAmounts(-PCLAffinity.MAX_LEVEL, PCLAffinity.MAX_LEVEL)
+            .setExtra(0, DEFAULT_MAX)
             .selfTarget()
             .pclOnly();
 
@@ -38,14 +39,14 @@ public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity
         this(1, affinities);
     }
 
-    public PMove_ModifyAffinity(int level, PCLAffinity... affinities)
+    public PMove_ModifyAffinity(int amount, PCLAffinity... affinities)
     {
-        this(1, level, affinities);
+        this(amount, 1, affinities);
     }
 
-    public PMove_ModifyAffinity(int amount, int level, PCLAffinity... affinities)
+    public PMove_ModifyAffinity(int amount, int extra, PCLAffinity... affinities)
     {
-        super(DATA, amount, level);
+        super(DATA, amount, extra);
         fields.setAddAffinity(affinities);
     }
 
@@ -65,7 +66,7 @@ public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity
     @Override
     public ActionT1<AbstractCard> getAction()
     {
-        return (c) -> getActions().modifyAffinityLevel(c, fields.addAffinities, extra, true, fields.forced);
+        return (c) -> getActions().modifyAffinityLevel(c, fields.addAffinities, amount, true, fields.forced);
     }
 
     @Override
@@ -78,7 +79,7 @@ public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity
     public String getObjectText()
     {
         String base = fields.getAddAffinityChoiceString();
-        return extra > 1 ? EUIRM.strings.numNoun(getExtraRawString(), base) : base;
+        return extra > 1 ? EUIRM.strings.numNoun(getAmountRawString(), base) : base;
     }
 
     @Override
@@ -89,7 +90,7 @@ public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity
         {
             return useParent ? TEXT.act_setTheOf(PGR.core.tooltips.affinityGeneral, getInheritedString(), giveString) :
                     fields.hasGroups() ?
-                            TEXT.act_setTheOfFrom(PGR.core.tooltips.affinityGeneral, EUIRM.strings.numNoun(amount <= 0 ? TEXT.subjects_all : getAmountRawString(), pluralCard()), fields.getGroupString(), giveString) :
+                            TEXT.act_setTheOfFrom(PGR.core.tooltips.affinityGeneral, EUIRM.strings.numNoun(amount <= 0 ? TEXT.subjects_all : getExtraRawString(), pluralCard()), fields.getGroupString(), giveString) :
                             TEXT.act_setTheOf(PGR.core.tooltips.affinityGeneral, TEXT.subjects_thisObj, giveString);
         }
         if (extra >= 0)
@@ -98,7 +99,7 @@ public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity
         }
         return useParent ? TEXT.act_removeFrom(giveString, getInheritedString()) :
                 fields.hasGroups() ?
-                        TEXT.act_removeFromPlace(giveString, EUIRM.strings.numNoun(amount <= 0 ? TEXT.subjects_all : getAmountRawString(), pluralCard()), fields.getGroupString()) :
+                        TEXT.act_removeFromPlace(giveString, EUIRM.strings.numNoun(amount <= 0 ? TEXT.subjects_all : getExtraRawString(), pluralCard()), fields.getGroupString()) :
                         TEXT.act_removeFrom(giveString, TEXT.subjects_thisObj);
     }
 

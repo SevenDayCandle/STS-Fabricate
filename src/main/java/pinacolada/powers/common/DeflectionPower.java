@@ -30,11 +30,16 @@ public class DeflectionPower extends PCLPower
         int blockedAmount = info.output - damageAmount;
         if (info.type == DamageInfo.DamageType.NORMAL && blockedAmount > 0 && info.owner != null)
         {
-            int deflected = Math.min(amount, blockedAmount);
-            PCLActions.bottom.dealDamage(owner, info.owner, deflected, DamageInfo.DamageType.NORMAL, AbstractGameAction.AttackEffect.BLUNT_HEAVY);
-            reducePower(deflected);
+            PCLActions.bottom.dealDamage(owner, info.owner, blockedAmount, DamageInfo.DamageType.NORMAL, AbstractGameAction.AttackEffect.BLUNT_HEAVY);
         }
 
         return super.onAttacked(info, damageAmount);
+    }
+
+    @Override
+    public void atEndOfTurn(boolean isPlayer)
+    {
+        super.atEndOfTurn(isPlayer);
+        reducePower(1);
     }
 }

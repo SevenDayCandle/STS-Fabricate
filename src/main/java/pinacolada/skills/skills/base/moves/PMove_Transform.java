@@ -19,14 +19,14 @@ import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.skills.fields.PField_CardCategory;
+import pinacolada.skills.fields.PField_CardID;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.ListSelection;
 
 @VisibleSkill
-public class PMove_Transform extends PMove_Select
+public class PMove_Transform extends PMove_Select<PField_CardID>
 {
-    public static final PSkillData<PField_CardCategory> DATA = register(PMove_Transform.class, PField_CardCategory.class)
+    public static final PSkillData<PField_CardID> DATA = register(PMove_Transform.class, PField_CardID.class)
             .selfTarget();
 
     public PMove_Transform()

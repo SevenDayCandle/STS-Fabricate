@@ -1,7 +1,16 @@
 package pinacolada.skills.fields;
 
+import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.cards.CardGroup;
+import com.megacrit.cardcrawl.core.AbstractCreature;
+import extendedui.EUIUtils;
+import extendedui.interfaces.delegates.FuncT1;
+import extendedui.interfaces.delegates.FuncT5;
+import pinacolada.actions.piles.SelectFromPile;
 import pinacolada.cards.base.fields.PCLCardSelection;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
+import pinacolada.utilities.ListSelection;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,6 +50,28 @@ public class PField_CardID extends PField_CardGeneric
         editor.registerPile(groupTypes);
         editor.registerCard(cardIDs);
         editor.registerOrigin(origin, origins -> setOrigin(origins.size() > 0 ? origins.get(0) : PCLCardSelection.Manual));
+    }
+
+    public FuncT1<Boolean, AbstractCard> getFullCardFilter()
+    {
+        return c -> cardIDs.isEmpty() || EUIUtils.any(cardIDs, id -> id.equals(c.cardID));
+    }
+
+    public String getFullCardString()
+    {
+        return cardIDs.isEmpty() ? getCardIDOrString() : getShortCardString();
+    }
+
+    public String getFullCardStringSingular()
+    {
+        return getFullCardString();
+    }
+
+    protected SelectFromPile initializeBasicSelect(FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> action, PCLUseInfo info)
+    {
+        return skill.getActions().add(createAction(action, info))
+                .setFilter(getFullCardFilter())
+                .setAnyNumber(!forced);
     }
 
     public PField_CardID setCardIDs(String... cards)

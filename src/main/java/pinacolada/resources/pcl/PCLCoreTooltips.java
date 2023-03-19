@@ -22,13 +22,14 @@ public class PCLCoreTooltips extends PCLTooltips
     public static final String ICON_BUFFER = "buffer";
     public static final String ICON_CONSTRICTED = "constricted";
     public static final String ICON_CURLUP = "closeUp";
-    public static final String ICON_DEMON_FORM = "demonForm";
     public static final String ICON_DEXTERITY = "dexterity";
     public static final String ICON_ENVENOM = "envenom";
+    public static final String ICON_EQUILIBRIUM = "equilibrium";
     public static final String ICON_FLIGHT = "flight";
     public static final String ICON_FRAIL = "frail";
     public static final String ICON_FOCUS = "focus";
     public static final String ICON_INTANGIBLE = "intangible";
+    public static final String ICON_JUGGERNAUT = "juggernaut";
     public static final String ICON_LOCKON = "lockon";
     public static final String ICON_MALLEABLE = "malleable";
     public static final String ICON_METALLICIZE = "metallicize";
@@ -110,12 +111,12 @@ public class PCLCoreTooltips extends PCLTooltips
     public EUITooltip deflection = EUITooltip.findByID("Deflection");
     public EUITooltip delayed = EUITooltip.findByID("Delayed");
     public EUITooltip delayedDamage = EUITooltip.findByID("Delayed Damage");
-    public EUITooltip demonForm = EUITooltip.findByID("Demon Form");
     public EUITooltip dexterity = EUITooltip.findByID("Dexterity");
     public EUITooltip divinity = EUITooltip.findByID("Enlightenment");
     public EUITooltip energized = EUITooltip.findByID("Energized");
     public EUITooltip envenom = EUITooltip.findByID("Envenom");
     public EUITooltip ephemeral = EUITooltip.findByID("Ephemeral");
+    public EUITooltip equilibrium = EUITooltip.findByID("Equilibrium");
     public EUITooltip ethereal = EUITooltip.findByID("~Ethereal");
     public EUITooltip evoke = EUITooltip.findByID("Evoke");
     public EUITooltip exhaust = EUITooltip.findByID("Exhaust");
@@ -136,6 +137,7 @@ public class PCLCoreTooltips extends PCLTooltips
     public EUITooltip intangible = EUITooltip.findByID("Intangible");
     public EUITooltip interactable = EUITooltip.findByID("Interactable");
     public EUITooltip invigorated = EUITooltip.findByID("Invigorated");
+    public EUITooltip juggernaut = EUITooltip.findByID("Juggernaut");
     public EUITooltip lastAffinity = EUITooltip.findByID("Last Affinity");
     public EUITooltip level = EUITooltip.findByID("Level");
     public EUITooltip lightning = EUITooltip.findByID("Lightning");
@@ -201,6 +203,7 @@ public class PCLCoreTooltips extends PCLTooltips
     public EUITooltip vigor = EUITooltip.findByID("Vigor");
     public EUITooltip vitality = EUITooltip.findByID("Vitality");
     public EUITooltip vulnerable = EUITooltip.findByID("Vulnerable");
+    public EUITooltip warding = EUITooltip.findByID("Warding");
     public EUITooltip weak = EUITooltip.findByID("Weak");
     public EUITooltip withdraw = EUITooltip.findByID("Withdraw");
     public EUITooltip wrath = EUITooltip.findByID("Wrath");
@@ -269,13 +272,14 @@ public class PCLCoreTooltips extends PCLTooltips
         buffer.setIconFromPowerRegion(ICON_BUFFER);
         constricted.setIconFromPowerRegion(ICON_CONSTRICTED);
         curlUp.setIconFromPowerRegion(ICON_CURLUP);
-        demonForm.setIconFromPowerRegion(ICON_DEMON_FORM);
         dexterity.setIconFromPowerRegion(ICON_DEXTERITY);
         envenom.setIconFromPowerRegion(ICON_ENVENOM);
+        equilibrium.setIconFromPowerRegion(ICON_EQUILIBRIUM);
         flight.setIconFromPowerRegion(ICON_FLIGHT);
         frail.setIconFromPowerRegion(ICON_FRAIL);
         focus.setIconFromPowerRegion(ICON_FOCUS);
         intangible.setIconFromPowerRegion(ICON_INTANGIBLE);
+        juggernaut.setIconFromPowerRegion(ICON_JUGGERNAUT);
         lockOn.setIconFromPowerRegion(ICON_LOCKON);
         malleable.setIconFromPowerRegion(ICON_MALLEABLE);
         metallicize.setIconFromPowerRegion(ICON_METALLICIZE);
@@ -316,6 +320,7 @@ public class PCLCoreTooltips extends PCLTooltips
         sorcery.setIconFromPath(PGR.getPowerImage(SorceryPower.POWER_ID));
         toxicology.setIconFromPath(PGR.getPowerImage(ToxicologyPower.POWER_ID));
         vitality.setIconFromPath(PGR.getPowerImage(VitalityPower.POWER_ID));
+        warding.setIconFromPath(PGR.getPowerImage(WardingPower.POWER_ID));
 
         critical.formatDescription(CriticalPower.MULTIPLIER);
         fortified.formatDescription(FortifiedPower.MULTIPLIER);

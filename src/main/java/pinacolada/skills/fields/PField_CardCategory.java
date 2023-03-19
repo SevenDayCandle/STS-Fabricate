@@ -9,8 +9,6 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT5;
 import extendedui.ui.tooltips.EUITooltip;
-import pinacolada.actions.PCLAction;
-import pinacolada.actions.PCLActions;
 import pinacolada.actions.piles.SelectFromPile;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardSelection;
@@ -76,6 +74,7 @@ public class PField_CardCategory extends PField_CardID
         editor.registerAffinity(affinities);
         editor.registerColor(colors);
         editor.registerTag(tags);
+        editor.registerCard(cardIDs);
         editor.registerBoolean(PGR.core.strings.cedit_required, v -> forced = v, forced);
     }
 
@@ -235,29 +234,10 @@ public class PField_CardCategory extends PField_CardID
                         : EUIRM.strings.verbNoun(tooltipTitle, TEXT.subjects_thisObj);
     }
 
-    protected SelectFromPile createAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> action, PCLUseInfo info)
+    protected SelectFromPile initializeBasicSelect(FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> action, PCLUseInfo info)
     {
-        CardGroup[] g = getCardGroup(info);
-        return action.invoke(skill.getName(), skill.target.getTarget(info.source, info.target), skill.useParent && g.length > 0 ? g[0].size() : skill.amount <= 0 ? Integer.MAX_VALUE : skill.amount, origin.toSelection(), g);
-    }
-
-    public PCLAction<ArrayList<AbstractCard>> getGenericPileAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> action, PCLUseInfo info)
-    {
-        if (!skill.useParent && groupTypes.isEmpty())
-        {
-            return PCLActions.last.add(createAction(action, info))
-                    .setAnyNumber(!forced);
-        }
-        else
-        {
-            SelectFromPile pileAction = skill.getActions().add(createAction(action, info))
-                    .setFilter(getFullCardFilter())
-                    .setAnyNumber(!forced);
-            if (forced)
-            {
-                pileAction.setOrigin(PCLCardSelection.Random);
-            }
-            return pileAction;
-        }
+        return skill.getActions().add(createAction(action, info))
+                .setFilter(getFullCardFilter())
+                .setAnyNumber(!forced);
     }
 }

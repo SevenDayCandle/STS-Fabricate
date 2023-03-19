@@ -59,16 +59,17 @@ public class PCLPowerHelper implements TooltipProvider
     public static final PCLPowerHelper Critical = new PCLPowerHelper(CriticalPower.POWER_ID, PGR.core.tooltips.critical, CriticalPower::new, Behavior.Permanent, false, false, true);
     public static final PCLPowerHelper CurlUp = new PCLPowerHelper(PCLCurlUpPower.POWER_ID, PGR.core.tooltips.curlUp, PCLCurlUpPower::new, Behavior.Permanent, true, false, false);
     public static final PCLPowerHelper Deflection = new PCLPowerHelper(DeflectionPower.POWER_ID, PGR.core.tooltips.deflection, DeflectionPower::new, Behavior.SingleTurn, true, false, false);
-    public static final PCLPowerHelper DemonForm = new PCLPowerHelper(DemonFormPower.POWER_ID, PGR.core.tooltips.demonForm, DemonFormPower::new, Behavior.Permanent, false, false, false);
     public static final PCLPowerHelper Dexterity = new PCLPowerHelper(DexterityPower.POWER_ID, PGR.core.tooltips.dexterity, DexterityPower::new, Behavior.Permanent, true, false, false);
     public static final PCLPowerHelper Energized = new PCLPowerHelper(EnergizedPower.POWER_ID, PGR.core.tooltips.energized, EnergizedPower::new, Behavior.SingleTurn, true, false, false);
     public static final PCLPowerHelper Envenom = new PCLPowerHelper(EnvenomPower.POWER_ID, PGR.core.tooltips.envenom, EnvenomPower::new, Behavior.Permanent, false, false, false);
+    public static final PCLPowerHelper Equilibrium = new PCLPowerHelper(EquilibriumPower.POWER_ID, PGR.core.tooltips.equilibrium, EquilibriumPower::new, Behavior.TurnBased, false, false, false);
     public static final PCLPowerHelper Flight = new PCLPowerHelper(FlightPower.POWER_ID, PGR.core.tooltips.flight, FlightPower::new, Behavior.Permanent, false, false, true);
     public static final PCLPowerHelper Focus = new PCLPowerHelper(FocusPower.POWER_ID, PGR.core.tooltips.focus, FocusPower::new, Behavior.Permanent, true, false, false);
     public static final PCLPowerHelper Fortified = new PCLPowerHelper(FortifiedPower.POWER_ID, PGR.core.tooltips.fortified, FortifiedPower::new, Behavior.TurnBased, true, false, true);
     public static final PCLPowerHelper Innovation = new PCLPowerHelper(InnovationPower.POWER_ID, PGR.core.tooltips.innovation, InnovationPower::new, Behavior.Permanent, true, false, false);
     public static final PCLPowerHelper Intangible = new PCLPowerHelper(IntangiblePlayerPower.POWER_ID, PGR.core.tooltips.intangible, IntangiblePlayerPower::new, Behavior.TurnBased, false, false, false);
     public static final PCLPowerHelper Invigorated = new PCLPowerHelper(InvigoratedPower.POWER_ID, PGR.core.tooltips.invigorated, InvigoratedPower::new, Behavior.TurnBased, true, false, true);
+    public static final PCLPowerHelper Juggernaut = new PCLPowerHelper(JuggernautPower.POWER_ID, PGR.core.tooltips.juggernaut, DemonFormPower::new, Behavior.Permanent, false, false, false);
     public static final PCLPowerHelper Malleable = new PCLPowerHelper(MalleablePower.POWER_ID, PGR.core.tooltips.malleable, MalleablePower::new, Behavior.Permanent, true, false, false);
     public static final PCLPowerHelper Metallicize = new PCLPowerHelper(MetallicizePower.POWER_ID, PGR.core.tooltips.metallicize, MetallicizePower::new, Behavior.Permanent, true, false, false);
     public static final PCLPowerHelper NextTurnBlock = new PCLPowerHelper(NextTurnBlockPower.POWER_ID, PGR.core.tooltips.nextTurnBlock, (o, s, a) -> new NextTurnBlockPower(o, a), Behavior.SingleTurn, true, false, false);
@@ -87,6 +88,7 @@ public class PCLPowerHelper implements TooltipProvider
     public static final PCLPowerHelper Toxicology = new PCLPowerHelper(ToxicologyPower.POWER_ID, PGR.core.tooltips.toxicology, ToxicologyPower::new, Behavior.Permanent, false, false, false);
     public static final PCLPowerHelper Vigor = new PCLPowerHelper(VigorPower.POWER_ID, PGR.core.tooltips.vigor, VigorPower::new, Behavior.Permanent, true, false, false);
     public static final PCLPowerHelper Vitality = new PCLPowerHelper(VitalityPower.POWER_ID, PGR.core.tooltips.vitality, VitalityPower::new, Behavior.Permanent, true, false, false);
+    public static final PCLPowerHelper Warding = new PCLPowerHelper(WardingPower.POWER_ID, PGR.core.tooltips.warding, WardingPower::new, Behavior.Permanent, true, false, false);
     public final String ID;
     public final Behavior endTurnBehavior;
     public final boolean isCommon;

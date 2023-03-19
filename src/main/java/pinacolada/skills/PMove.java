@@ -15,6 +15,7 @@ import pinacolada.powers.PCLPowerHelper;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.fields.PField_CardGeneric;
 import pinacolada.skills.skills.base.moves.*;
+import pinacolada.skills.skills.special.moves.PMove_ReduceCooldown;
 import pinacolada.skills.skills.special.moves.PMove_Stun;
 import pinacolada.stances.PCLStanceHelper;
 
@@ -446,7 +447,7 @@ public abstract class PMove<T extends PField> extends PSkill<T>
 
     public static PMove_ModifyBlock modifyBlock(int block)
     {
-        return new PMove_ModifyBlock(1, block);
+        return new PMove_ModifyBlock(block, 1);
     }
 
     public static PMove_ModifyBlock modifyBlock(int amount, int block, PCLCardGroupHelper... groups)
@@ -456,7 +457,7 @@ public abstract class PMove<T extends PField> extends PSkill<T>
 
     public static PMove_ModifyCost modifyCost(int cost)
     {
-        return new PMove_ModifyCost(1, cost);
+        return new PMove_ModifyCost(cost, 1);
     }
 
     public static PMove_ModifyCost modifyCost(int amount, int cost, PCLCardGroupHelper... groups)
@@ -466,7 +467,7 @@ public abstract class PMove<T extends PField> extends PSkill<T>
 
     public static PMove_ModifyCost modifyCostForTurn(int cost)
     {
-        return (PMove_ModifyCost) new PMove_ModifyCost(1, cost).edit(f -> f.setForced(true));
+        return (PMove_ModifyCost) new PMove_ModifyCost(cost, 1).edit(f -> f.setForced(true));
     }
 
     public static PMove_ModifyCost modifyCostForTurn(int amount, int cost, PCLCardGroupHelper... groups)
@@ -476,7 +477,7 @@ public abstract class PMove<T extends PField> extends PSkill<T>
 
     public static PMove_ModifyDamage modifyDamage(int damage)
     {
-        return new PMove_ModifyDamage(1, damage);
+        return new PMove_ModifyDamage(damage, 1);
     }
 
     public static PMove_ModifyDamage modifyDamage(int amount, int damage, PCLCardGroupHelper... groups)

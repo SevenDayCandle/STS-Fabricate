@@ -22,7 +22,7 @@
 				},
 				"pcl:DeflectionPower":
 				{
-								"DESCRIPTIONS": ["Reflect up to #b{0} blocked damage back at the attacker."],
+								"DESCRIPTIONS": ["For #b{0} turns, reflect blocked #yAttack damage back at the attacker."],
 								"NAME": "Deflection"
 				},
 				"pcl:DelayedDamagePower":
@@ -35,25 +35,10 @@
 								"DESCRIPTIONS": ["Draw {0} fewer card(s) next turn."],
 								"NAME": "Draw Less"
 				},
-				"pcl:EnchantedArmorPower":
-				{
-								"DESCRIPTIONS": ["Take #b{0}% less #yAttack damage."],
-								"NAME": "Enchanted Armor"
-				},
 				"pcl:EnergizedPower":
 				{
 								"DESCRIPTIONS": ["Gain #b{0} additional [E] next turn."],
 								"NAME": "Energized"
-				},
-				"pcl:EnragePower":
-				{
-								"DESCRIPTIONS": ["For #b{0} turns, Whenever you play a #ySkill: Gain #b{1} [Vigor]."],
-								"NAME": "Enrage"
-				},
-				"pcl:EvasionPower":
-				{
-								"DESCRIPTIONS": ["You have a #b{0}% chance to dodge each attack.", " This chance starts decaying in #b{0} turn(s).", " Reduce this chance by #b{0}% each turn."],
-								"NAME": "Evasion"
 				},
 				"pcl:ExitStancePower":
 				{
@@ -169,5 +154,10 @@
 				{
 								"DESCRIPTIONS": ["At the start of each turn, gain #b{0} #yTemporary #yHP (Max. #b{1})."],
 								"NAME": "Vitality"
+				},
+				"pcl:WardingPower":
+				{
+								"DESCRIPTIONS": ["The next time you gain [Block] from a card, gain {0} more."],
+								"NAME": "Warding"
 				}
 }

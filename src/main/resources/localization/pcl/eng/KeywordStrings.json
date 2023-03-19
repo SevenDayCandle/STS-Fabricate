@@ -60,10 +60,6 @@
 								"DESCRIPTION": "Activate an effect with a certain probability.",
 								"NAME": "Chance"
 				},
-				"Choked":	{
-								"DESCRIPTION": "Whenever you play a card this turn, the target loses 1 HP.",
-								"NAME": "Choked"
-				},
 				"Constricted":	{
 								"DESCRIPTION": "Take damage at the end of each turn.",
 								"NAME": "Constricted"
@@ -107,7 +103,7 @@
 								"NAME": "Debuff"
 				},
 				"Deflection":	{
-								"DESCRIPTION": "Reflect blocked #yAttack damage back at the attacker. Final damage is affected by damage modifiers.",
+								"DESCRIPTION": "Reflect blocked #yAttack damage back at the attacker.",
 								"NAME": "Deflection"
 				},
 				"Delayed":	{
@@ -117,14 +113,6 @@
 				"Delayed Damage":	{
 								"DESCRIPTION": "Take damage at the end of your turn. Only enemies can die from this damage.",
 								"NAME": "Delayed Damage"
-				},
-				"Demon Form":	{
-								"DESCRIPTION": "Gain [Strength] at the start of each turn.",
-								"NAME": "Demon Form"
-				},
-				"Deva Form":	{
-								"DESCRIPTION": "Gain additional [E] each turn. Increases by #b1 each turn.",
-								"NAME": "Deva Form"
 				},
 				"Die":	{
 								"DESCRIPTION": "Remove this creature from battle.",
@@ -153,9 +141,9 @@
 								"DESCRIPTION": "Purges at the end of turn or when played.",
 								"NAME": "Ephemeral"
 				},
-				"Flame Barrier":	{
-								"DESCRIPTION": "Whenever you are attacked this turn, deal #b1 damage back.",
-								"NAME": "Flame Barrier"
+				"Equilibrium":	{
+								"DESCRIPTION": "Retain your hand this turn",
+								"NAME": "Equilibrium"
 				},
 				"Fleeting":	{
 								"DESCRIPTION": "When used, remove this card from play and your deck.",
@@ -422,7 +410,7 @@
 								"NAME": "Slow"
 				},
 				"Sorcery":	{
-								"DESCRIPTION": "The next Orb or Summon created has additional Focus or HP, respectively.",
+								"DESCRIPTION": "Increase the potency of the next Orb Channeled.",
 								"NAME": "Sorcery"
 				},
 				"Soulbound":	{
@@ -512,6 +500,10 @@
 				"Vitality":	{
 								"DESCRIPTION": "At the start of each turn, gain [Temporary HP].",
 								"NAME": "Vitality"
+				},
+				"Warding":	{
+								"DESCRIPTION": "The next [Block] card grants additional [Block].",
+								"NAME": "Warding"
 				},
 				"Withdraw":	{
 								"DESCRIPTION": "#yWithdrawing a #ySummon #yTriggers it once and returns it to your discard pile.",

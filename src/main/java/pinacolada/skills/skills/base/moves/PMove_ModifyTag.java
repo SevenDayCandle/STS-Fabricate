@@ -15,8 +15,8 @@ public class PMove_ModifyTag extends PMove_Modify<PField_CardModifyTag>
 {
     public static final PSkillData<PField_CardModifyTag> DATA = PMove_Modify.register(PMove_ModifyTag.class, PField_CardModifyTag.class)
             .setExtra(-PCLAffinity.MAX_LEVEL, PCLAffinity.MAX_LEVEL)
-            .selfTarget()
-            .pclOnly();
+            .setExtra(0, DEFAULT_MAX)
+            .selfTarget();
 
     public PMove_ModifyTag()
     {
@@ -40,7 +40,7 @@ public class PMove_ModifyTag extends PMove_Modify<PField_CardModifyTag>
         return (c) -> {
             for (PCLCardTag tag : fields.addTags)
             {
-                getActions().modifyTag(c, tag, extra, extra != 0);
+                getActions().modifyTag(c, tag, amount, amount != 0);
             }
         };
     }
@@ -55,7 +55,7 @@ public class PMove_ModifyTag extends PMove_Modify<PField_CardModifyTag>
     public String getObjectText()
     {
         String base = fields.getAddTagChoiceString();
-        return extra > 1 ? EUIRM.strings.numNoun(getExtraRawString(), base) : extra < 0 ? EUIRM.strings.numNoun(TEXT.subjects_infinite, base) : base;
+        return extra > 1 ? EUIRM.strings.numNoun(getAmountRawString(), base) : extra < 0 ? EUIRM.strings.numNoun(TEXT.subjects_infinite, base) : base;
     }
 
     @Override
@@ -68,7 +68,7 @@ public class PMove_ModifyTag extends PMove_Modify<PField_CardModifyTag>
         String giveString = getObjectText();
         return useParent ? TEXT.act_removeFrom(giveString, getInheritedString()) :
                 fields.hasGroups() ?
-                        TEXT.act_removeFromPlace(giveString, EUIRM.strings.numNoun(getAmountRawString(), pluralCard()), fields.getGroupString()) :
+                        TEXT.act_removeFromPlace(giveString, EUIRM.strings.numNoun(getExtraRawString(), pluralCard()), fields.getGroupString()) :
                         TEXT.act_removeFrom(giveString, TEXT.subjects_thisObj);
     }
 }

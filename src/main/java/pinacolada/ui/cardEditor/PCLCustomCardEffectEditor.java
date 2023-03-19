@@ -28,6 +28,7 @@ import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
+import pinacolada.misc.PCLDungeon;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.resources.PGR;
@@ -430,10 +431,10 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
                     cardIDs.clear();
                     cardIDs.addAll(EUIUtils.mapAsNonnull(cards, t -> t.cardID));
                 },
-                GameUtilities.isPCLCardColor(editor.builder.cardColor) ? EUIUtils.mapAsNonnull(PCLCardData.getAllData(false, true, editor.builder.cardColor), cd -> cd.makeCopy(false))
+                GameUtilities.isPCLOnlyCardColor(editor.builder.cardColor) ? EUIUtils.mapAsNonnull(PCLCardData.getAllData(false, true, editor.builder.cardColor), cd -> cd.makeCopy(false))
                         :
                         EUIUtils.filter(CardLibrary.getAllCards(),
-                                c -> !(c instanceof PCLCard) && (c.color == AbstractCard.CardColor.COLORLESS || c.color == AbstractCard.CardColor.CURSE || c.color == editor.builder.cardColor))
+                                c -> !PCLDungeon.isColorlessCardExclusive(c) && (c.color == AbstractCard.CardColor.COLORLESS || c.color == AbstractCard.CardColor.CURSE || c.color == editor.builder.cardColor))
         );
     }
 

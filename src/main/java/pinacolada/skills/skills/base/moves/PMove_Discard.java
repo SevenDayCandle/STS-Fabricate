@@ -16,7 +16,7 @@ import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.utilities.ListSelection;
 
 @VisibleSkill
-public class PMove_Discard extends PMove_Select
+public class PMove_Discard extends PMove_Select<PField_CardCategory>
 {
     public static final PSkillData<PField_CardCategory> DATA = register(PMove_Discard.class, PField_CardCategory.class)
             .selfTarget()

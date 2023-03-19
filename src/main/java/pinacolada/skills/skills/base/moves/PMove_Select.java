@@ -13,23 +13,23 @@ import pinacolada.misc.PCLUseInfo;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.skills.fields.PField_CardCategory;
+import pinacolada.skills.fields.PField_CardGeneric;
 import pinacolada.utilities.ListSelection;
 
-public abstract class PMove_Select extends PMove<PField_CardCategory>
+public abstract class PMove_Select<T extends PField_CardGeneric> extends PMove<T>
 {
-    public PMove_Select(PSkillData<PField_CardCategory> data, PSkillSaveData content)
+    public PMove_Select(PSkillData<T> data, PSkillSaveData content)
     {
         super(data, content);
     }
 
-    public PMove_Select(PSkillData<PField_CardCategory> data, int amount, PCLCardGroupHelper... h)
+    public PMove_Select(PSkillData<T> data, int amount, PCLCardGroupHelper... h)
     {
         super(data, PCLCardTarget.None, amount);
         fields.setCardGroup(h);
     }
 
-    public PMove_Select(PSkillData<PField_CardCategory> data, PCLCardTarget target, int amount, PCLCardGroupHelper... h)
+    public PMove_Select(PSkillData<T> data, PCLCardTarget target, int amount, PCLCardGroupHelper... h)
     {
         super(data, target, amount);
         fields.setCardGroup(h);

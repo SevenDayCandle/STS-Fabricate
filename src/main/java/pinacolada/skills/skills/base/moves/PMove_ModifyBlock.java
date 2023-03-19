@@ -14,9 +14,9 @@ import pinacolada.skills.fields.PField_CardCategory;
 public class PMove_ModifyBlock extends PMove_Modify<PField_CardCategory>
 {
     public static final PSkillData<PField_CardCategory> DATA = PMove_Modify.register(PMove_ModifyBlock.class, PField_CardCategory.class)
-            .setExtra(-DEFAULT_MAX, DEFAULT_MAX)
-            .selfTarget()
-            .pclOnly();
+            .setAmounts(-DEFAULT_MAX, DEFAULT_MAX)
+            .setExtra(0, DEFAULT_MAX)
+            .selfTarget();
 
     public PMove_ModifyBlock()
     {
@@ -28,20 +28,20 @@ public class PMove_ModifyBlock extends PMove_Modify<PField_CardCategory>
         super(DATA, content);
     }
 
-    public PMove_ModifyBlock(int amount, int block)
+    public PMove_ModifyBlock(int amount, int extra)
     {
-        super(DATA, amount, block);
+        super(DATA, amount, extra);
     }
 
-    public PMove_ModifyBlock(int amount, int damage, PCLCardGroupHelper... groups)
+    public PMove_ModifyBlock(int amount, int extra, PCLCardGroupHelper... groups)
     {
-        super(DATA, amount, damage, groups);
+        super(DATA, amount, extra, groups);
     }
 
     @Override
     public ActionT1<AbstractCard> getAction()
     {
-        return (c) -> getActions().modifyBlock(c, extra, true, true);
+        return (c) -> getActions().modifyBlock(c, amount, true, true);
     }
 
     @Override
@@ -53,7 +53,7 @@ public class PMove_ModifyBlock extends PMove_Modify<PField_CardCategory>
     @Override
     public String getObjectText()
     {
-        return EUIRM.strings.numNoun(getExtraRawString(), PGR.core.tooltips.block);
+        return EUIRM.strings.numNoun(getAmountRawString(), PGR.core.tooltips.block);
     }
 
     @Override

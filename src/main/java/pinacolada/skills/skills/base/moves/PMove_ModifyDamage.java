@@ -12,7 +12,9 @@ import pinacolada.skills.fields.PField_CardCategory;
 @VisibleSkill
 public class PMove_ModifyDamage extends PMove_Modify<PField_CardCategory>
 {
-    public static final PSkillData<PField_CardCategory> DATA = PMove_Modify.register(PMove_ModifyDamage.class, PField_CardCategory.class);
+    public static final PSkillData<PField_CardCategory> DATA = PMove_Modify.register(PMove_ModifyDamage.class, PField_CardCategory.class)
+            .setAmounts(-DEFAULT_MAX, DEFAULT_MAX)
+            .setExtra(0, DEFAULT_MAX);
 
     public PMove_ModifyDamage()
     {
@@ -24,15 +26,15 @@ public class PMove_ModifyDamage extends PMove_Modify<PField_CardCategory>
         super(DATA, content);
     }
 
-    public PMove_ModifyDamage(int amount, int damage, PCLCardGroupHelper... groups)
+    public PMove_ModifyDamage(int amount, int extra, PCLCardGroupHelper... groups)
     {
-        super(DATA, amount, damage, groups);
+        super(DATA, amount, extra, groups);
     }
 
     @Override
     public ActionT1<AbstractCard> getAction()
     {
-        return (c) -> getActions().modifyDamage(c, extra, true, true);
+        return (c) -> getActions().modifyDamage(c, amount, true, true);
     }
 
     @Override
@@ -44,7 +46,7 @@ public class PMove_ModifyDamage extends PMove_Modify<PField_CardCategory>
     @Override
     public String getObjectText()
     {
-        return EUIRM.strings.numNoun(getExtraRawString(), TEXT.subjects_damage);
+        return EUIRM.strings.numNoun(getAmountRawString(), TEXT.subjects_damage);
     }
 
     @Override
