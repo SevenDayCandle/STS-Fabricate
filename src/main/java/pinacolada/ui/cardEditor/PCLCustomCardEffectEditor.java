@@ -20,10 +20,7 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.OriginRelativeHitbox;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
-import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.PCLCardData;
-import pinacolada.cards.base.PCLCardGroupHelper;
-import pinacolada.cards.base.PCLDynamicData;
+import pinacolada.cards.base.*;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -45,6 +42,7 @@ import static pinacolada.ui.cardEditor.PCLCustomCardEffectPage.*;
 
 public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCardEditorPage
 {
+    protected static ArrayList<AbstractCard> availableCards;
     public static final float CUTOFF = Settings.WIDTH * 0.7f;
     public static final float MAIN_OFFSET = MENU_WIDTH * 1.58f;
     public static final float AUX_OFFSET = MENU_WIDTH * 2.43f;
@@ -77,6 +75,7 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
         this.editor = group.editor;
         this.index = index;
         this.hb = hb;
+        final AbstractCard.CardColor cardColor = getColor();
         effects = (EUISearchableDropdown<T>) new EUISearchableDropdown<T>(hb, skill -> StringUtils.capitalize(skill.getSampleText()))
                 .setOnChange(effects -> {
                     if (!effects.isEmpty())
@@ -126,7 +125,7 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
                 .setLabelFunctionForOption(PCLCardTarget::getTitle, false)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_cardTarget)
                 .setCanAutosizeButton(true)
-                .setItems(PCLCustomCardPrimaryInfoPage.getEligibleTargets(editor.builder.cardColor));
+                .setItems(PCLCustomCardPrimaryInfoPage.getEligibleTargets(cardColor));
         piles = new EUIDropdown<PCLCardGroupHelper>(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, AUX_OFFSET, 0)
                 , PCLCardGroupHelper::getCapitalTitle)
                 .setLabelFunctionForOption(PCLCardGroupHelper::getCapitalTitle, false)
@@ -144,13 +143,13 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
                 .setItems(PCLCardSelection.values());
 
         affinities = new EUIDropdown<PCLAffinity>(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, AUX_OFFSET, 0))
-                .setLabelFunctionForOption(item -> item.getFormattedSymbolForced(editor.builder.cardColor) + " " + item.getTooltip().title, true)
+                .setLabelFunctionForOption(item -> item.getFormattedSymbolForced(cardColor) + " " + item.getTooltip().title, true)
                 .setIsMultiSelect(true)
                 .setShouldPositionClearAtTop(true)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.sui_affinities)
                 .setCanAutosize(true, true)
-                .setItems(PCLAffinity.getAvailableAffinities(editor.builder.cardColor, PGR.config.showIrrelevantProperties.get()));
-        affinities.setLabelFunctionForButton((list, __) -> affinities.makeMultiSelectString(item -> item.getFormattedSymbol(editor.builder.cardColor)), null, true);
+                .setItems(PCLAffinity.getAvailableAffinities(cardColor, PGR.config.showIrrelevantProperties.get()));
+        affinities.setLabelFunctionForButton((list, __) -> affinities.makeMultiSelectString(item -> item.getFormattedSymbol(cardColor)), null, true);
 
         powers = (EUISearchableDropdown<PCLPowerHelper>) new EUISearchableDropdown<PCLPowerHelper>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.35f, MENU_HEIGHT, AUX_OFFSET, 0))
                 .setLabelFunctionForOption(item -> item.tooltip.getTitleOrIconForced() + " " + item.tooltip.title, true)
@@ -177,7 +176,7 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
                 .setIsMultiSelect(true)
                 .setCanAutosize(false, false)
                 .setClearButtonOptions(true, true)
-                .setItems(PCLStanceHelper.values(editor.builder.cardColor));
+                .setItems(PCLStanceHelper.values(cardColor));
 
         tags = (EUISearchableDropdown<PCLCardTag>) new EUISearchableDropdown<PCLCardTag>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.2f, MENU_HEIGHT, AUX_OFFSET, 0))
                 .setLabelFunctionForOption(item -> item.getTip().getTitleOrIconForced() + " " + item.getTip().title, true)
@@ -193,10 +192,10 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
                 .setCanAutosize(false, false)
                 .setIsMultiSelect(true)
                 .setShouldPositionClearAtTop(true)
-                .setItems(GameUtilities.isPCLCardColor(editor.builder.cardColor) ? EUIUtils.mapAsNonnull(PCLCardData.getAllData(false, true, editor.builder.cardColor), cd -> cd.makeCopy(false))
+                .setItems(GameUtilities.isPCLCardColor(cardColor) ? EUIUtils.mapAsNonnull(PCLCardData.getAllData(false, true, cardColor), cd -> cd.makeCopy(false))
                          :
                         EUIUtils.filter(CardLibrary.getAllCards(),
-                                c -> !(c instanceof PCLCard) && (c.color == AbstractCard.CardColor.COLORLESS || c.color == AbstractCard.CardColor.CURSE || c.color == editor.builder.cardColor)));
+                                c -> !(c instanceof PCLCard) && (c.color == AbstractCard.CardColor.COLORLESS || c.color == AbstractCard.CardColor.CURSE || c.color == cardColor)));
 
         colors = new EUIDropdown<>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.35f, MENU_HEIGHT, AUX_OFFSET + MAIN_OFFSET * 2, 0)
                 , EUIGameUtils::getColorName)
@@ -223,7 +222,17 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
                 .setShouldPositionClearAtTop(true)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[1])
                 .setCanAutosize(true, true)
-                .setItems(PCLCustomCardPrimaryInfoPage.getEligibleTypes(editor.builder.cardColor));
+                .setItems(PCLCustomCardPrimaryInfoPage.getEligibleTypes(cardColor));
+    }
+
+    public PCLDynamicData getBuilder()
+    {
+        return editor.screen.getBuilder();
+    }
+
+    protected AbstractCard.CardColor getColor()
+    {
+        return getBuilder().cardColor;
     }
 
     protected T getEffectAt()
@@ -431,16 +440,8 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
                     cardIDs.clear();
                     cardIDs.addAll(EUIUtils.mapAsNonnull(cards, t -> t.cardID));
                 },
-                GameUtilities.isPCLOnlyCardColor(editor.builder.cardColor) ? EUIUtils.mapAsNonnull(PCLCardData.getAllData(false, true, editor.builder.cardColor), cd -> cd.makeCopy(false))
-                        :
-                        EUIUtils.filter(CardLibrary.getAllCards(),
-                                c -> !PCLDungeon.isColorlessCardExclusive(c) && (c.color == AbstractCard.CardColor.COLORLESS || c.color == AbstractCard.CardColor.CURSE || c.color == editor.builder.cardColor))
+                getAvailableCards()
         );
-    }
-
-    public PCLDynamicData getBuilder()
-    {
-        return editor.builder;
     }
 
     @Override
@@ -506,5 +507,25 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
             element.tryRender(sb);
         }
 
+    }
+
+    protected ArrayList<AbstractCard> getAvailableCards()
+    {
+        if (availableCards == null)
+        {
+            AbstractCard.CardColor cardColor = getColor();
+            availableCards = GameUtilities.isPCLOnlyCardColor(cardColor) ? EUIUtils.mapAsNonnull(PCLCardData.getAllData(false, true, cardColor), cd -> cd.makeCopy(false))
+                    :
+                    EUIUtils.filter(CardLibrary.getAllCards(),
+                            c -> !PCLDungeon.isColorlessCardExclusive(c) && (c.color == AbstractCard.CardColor.COLORLESS || c.color == AbstractCard.CardColor.CURSE || c.color == cardColor));
+            availableCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(cardColor), c -> c.getBuilder(0).build()));
+            availableCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(AbstractCard.CardColor.COLORLESS), c -> c.getBuilder(0).build()));
+        }
+        return availableCards;
+    }
+
+    protected static void invalidateCards()
+    {
+        availableCards = null;
     }
 }

@@ -25,9 +25,9 @@ public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
     protected PCLValueEditor usesPerTurn;
     protected ArrayList<EUIButton> quickAddButtons;
 
-    public PCLCustomCardPowerPage(PCLCustomCardEditCardScreen screen, PSkill<?> effect, EUIHitbox hb, int index, String title, ActionT1<PSkill<?>> onUpdate)
+    public PCLCustomCardPowerPage(PCLCustomCardEditCardScreen screen, EUIHitbox hb, int index, String title, ActionT1<PSkill<?>> onUpdate)
     {
-        super(screen, effect, hb, index, title, onUpdate);
+        super(screen, hb, index, title, onUpdate);
     }
 
     protected void setupComponents(PCLCustomCardEditCardScreen screen)
@@ -35,7 +35,7 @@ public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
         super.setupComponents(screen);
         delayEditor.setActive(false);
         primaryConditions
-                .setItems(EUIUtils.map(PTrigger.getEligibleEffects(builder.cardColor, PTrigger.class), bc -> primaryCond != null && bc.effectID.equals(primaryCond.effectID) ? primaryCond : bc))
+                .setItems(EUIUtils.map(PTrigger.getEligibleEffects(screen.getBuilder().cardColor, PTrigger.class), bc -> primaryCond != null && bc.effectID.equals(primaryCond.effectID) ? primaryCond : bc))
                 .setShowClearForSingle(false)
                 .autosize();
         // Ensure that a primary cond is always selected
@@ -68,6 +68,11 @@ public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
                         addPowerToEffect(screen, index);
                     }));
         }
+    }
+
+    public PSkill<?> getSourceEffect()
+    {
+        return screen.currentPowers.get(editorIndex);
     }
 
     protected void addPowerToEffect(PCLCustomCardEditCardScreen screen, int index)

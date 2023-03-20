@@ -15,6 +15,8 @@ import pinacolada.skills.fields.PField;
 import pinacolada.skills.skills.PMultiCond;
 import pinacolada.skills.skills.base.conditions.*;
 import pinacolada.skills.skills.base.primary.PTrigger_When;
+import pinacolada.skills.skills.special.conditions.PCond_Match;
+import pinacolada.skills.skills.special.conditions.PCond_OnAllyDeath;
 import pinacolada.skills.skills.special.primary.PTrigger_Passive;
 import pinacolada.utilities.GameUtilities;
 
@@ -262,6 +264,11 @@ public abstract class PCond<T extends PField> extends PSkill<T>
     public static PCond_OnDiscard onDiscard()
     {
         return new PCond_OnDiscard();
+    }
+
+    public static PCond_OnAllyDeath onDeath()
+    {
+        return new PCond_OnAllyDeath();
     }
 
     public static PCond_OnDraw onDraw()

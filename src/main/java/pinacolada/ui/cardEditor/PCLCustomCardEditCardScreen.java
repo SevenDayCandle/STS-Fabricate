@@ -33,6 +33,7 @@ import pinacolada.skills.skills.special.primary.PCardPrimary_GainBlock;
 import java.util.ArrayList;
 
 import static extendedui.ui.AbstractScreen.createHexagonalButton;
+import static pinacolada.ui.cardEditor.PCLCustomCardEffectEditor.invalidateCards;
 import static pinacolada.ui.cardEditor.PCLCustomCardEffectPage.MENU_HEIGHT;
 import static pinacolada.ui.cardEditor.PCLCustomCardEffectPage.MENU_WIDTH;
 
@@ -40,6 +41,7 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
 {
 
     public static final int EFFECT_COUNT = 2;
+    protected static final float BUTTON_HEIGHT = Settings.HEIGHT * (0.055f);
     protected static final float CARD_X = Settings.WIDTH * 0.11f;
     protected static final float CARD_Y = Settings.HEIGHT * 0.76f;
     protected static final float START_X = Settings.WIDTH * (0.24f);
@@ -70,49 +72,35 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
 
     public PCLCustomCardEditCardScreen(PCLCustomCardSlot slot)
     {
-        final float buttonHeight = Settings.HEIGHT * (0.055f);
         final float labelHeight = Settings.HEIGHT * (0.04f);
         final float buttonWidth = Settings.WIDTH * (0.16f);
         final float labelWidth = Settings.WIDTH * (0.20f);
-        final float button_cY = buttonHeight * 1.5f;
+        final float button_cY = BUTTON_HEIGHT * 1.5f;
         currentSlot = slot;
         tempBuilders = EUIUtils.map(currentSlot.builders, PCLDynamicData::new);
 
-        currentDamage = getBuilder().attackSkill;
-        currentBlock = getBuilder().blockSkill;
-        currentEffects.addAll(getBuilder().moves);
-        while (currentEffects.size() < EFFECT_COUNT)
-        {
-            currentEffects.add(null);
-        }
-        currentPowers.addAll(getBuilder().powers);
-        while (currentPowers.size() < EFFECT_COUNT)
-        {
-            currentPowers.add(null);
-        }
-
-        cancelButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
+        cancelButton = createHexagonalButton(0, 0, buttonWidth, BUTTON_HEIGHT)
                 .setPosition(buttonWidth * 0.6f, button_cY)
                 .setColor(Color.FIREBRICK)
                 .setText(GridCardSelectScreen.TEXT[1])
                 .setFont(EUIFontHelper.buttonFont, 0.85f)
                 .setOnClick(this::end);
 
-        saveButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
+        saveButton = createHexagonalButton(0, 0, buttonWidth, BUTTON_HEIGHT)
                 .setPosition(cancelButton.hb.cX, cancelButton.hb.y + cancelButton.hb.height + labelHeight * 0.8f)
                 .setColor(Color.FOREST)
                 .setText(GridCardSelectScreen.TEXT[0])
                 .setFont(EUIFontHelper.buttonFont, 0.85f)
                 .setOnClick(this::save);
 
-        undoButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
+        undoButton = createHexagonalButton(0, 0, buttonWidth, BUTTON_HEIGHT)
                 .setPosition(cancelButton.hb.cX, saveButton.hb.y + saveButton.hb.height + labelHeight * 0.8f)
                 .setColor(Color.WHITE)
                 .setText(PGR.core.strings.cedit_undo)
                 .setFont(EUIFontHelper.buttonFont, 0.85f)
                 .setOnClick(this::undo);
 
-        imageButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
+        imageButton = createHexagonalButton(0, 0, buttonWidth, BUTTON_HEIGHT)
                 .setPosition(cancelButton.hb.cX, undoButton.hb.y + undoButton.hb.height + labelHeight * 0.8f)
                 .setColor(Color.WHITE)
                 .setText(PGR.core.strings.cedit_loadImage)
@@ -122,7 +110,7 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
 
         formEditor = new PCLCustomCardFormEditor(
                 new EUIHitbox(0, 0, Settings.scale * 256f, Settings.scale * 48f)
-                        .setCenter(Settings.WIDTH * 0.116f,  imageButton.hb.y + imageButton.hb.height + labelHeight * 3.2f), this);
+                        .setCenter(Settings.WIDTH * 0.116f, imageButton.hb.y + imageButton.hb.height + labelHeight * 3.2f), this);
 
         upgradeToggle = new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 48f))
                 .setPosition(Settings.WIDTH * 0.116f, CARD_Y - labelHeight - AbstractCard.IMG_HEIGHT / 2f)
@@ -132,20 +120,42 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
                 .setToggle(SingleCardViewPopup.isViewingUpgrade)
                 .setOnToggle(this::toggleViewUpgrades);
 
+        setupPages();
+    }
+
+    protected void setupPages()
+    {
+        invalidateCards();
+        currentDamage = getBuilder().attackSkill;
+        currentBlock = getBuilder().blockSkill;
+        currentEffects.clear();
+        currentEffects.addAll(getBuilder().moves);
+        while (currentEffects.size() < EFFECT_COUNT)
+        {
+            currentEffects.add(null);
+        }
+        currentPowers.clear();
+        currentPowers.addAll(getBuilder().powers);
+        while (currentPowers.size() < EFFECT_COUNT)
+        {
+            currentPowers.add(null);
+        }
+
+        pages.clear();
         pages.add(new PCLCustomCardPrimaryInfoPage(this));
         pages.add(new PCLCustomCardAttributesPage(this));
-        pages.add(new PCLCustomCardAttackPage(this, currentDamage, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), 0, PGR.core.strings.cedit_damage, be -> {
+        pages.add(new PCLCustomCardAttackPage(this, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), 0, PGR.core.strings.cedit_damage, be -> {
             currentDamage = EUIUtils.safeCast(be, PCardPrimary_DealDamage.class);
             modifyBuilder(e -> e.setAttackSkill(currentDamage));
         }));
-        pages.add(new PCLCustomCardBlockPage(this, currentBlock, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), 0, PGR.core.strings.cedit_block, be -> {
+        pages.add(new PCLCustomCardBlockPage(this, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), 0, PGR.core.strings.cedit_block, be -> {
             currentBlock = EUIUtils.safeCast(be, PCardPrimary_GainBlock.class);
             modifyBuilder(e -> e.setBlockSkill(currentBlock));
         }));
         for (int i = 0; i < currentEffects.size(); i++)
         {
             int finalI = i;
-            PCLCustomCardEffectPage page = new PCLCustomCardEffectPage(this, currentEffects.get(i), new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), i
+            PCLCustomCardEffectPage page = new PCLCustomCardEffectPage(this, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), i
                     , EUIUtils.format(PGR.core.strings.cedit_effectX, i + 1), (be) -> {
                 currentEffects.set(finalI, be);
                 modifyBuilder(e -> e.setPSkill(currentEffects, true, true));
@@ -157,7 +167,7 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
         for (int i = 0; i < currentPowers.size(); i++)
         {
             int finalI = i;
-            PCLCustomCardPowerPage page = new PCLCustomCardPowerPage(this, currentPowers.get(i), new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), i
+            PCLCustomCardPowerPage page = new PCLCustomCardPowerPage(this, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), i
                     , EUIUtils.format(PGR.core.strings.cedit_powerX, i + 1), (be) -> {
                 if (be instanceof PTrigger)
                 {
@@ -178,9 +188,9 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
         {
             PCLCustomCardEditorPage pg = pages.get(i);
             String title = pg.getTitle();
-            pageButtons.add(new EUIButton(pg.getTextureCache().texture(), new EUIHitbox(0, 0, buttonHeight, buttonHeight))
-                    .setPosition(Settings.WIDTH * (0.45f) + ((i - 1f) * buttonHeight), (buttonHeight * 0.85f))
-                            .setColor(i == 0 ? Color.WHITE : Color.GRAY)
+            pageButtons.add(new EUIButton(pg.getTextureCache().texture(), new EUIHitbox(0, 0, BUTTON_HEIGHT, BUTTON_HEIGHT))
+                    .setPosition(Settings.WIDTH * (0.45f) + ((i - 1f) * BUTTON_HEIGHT), (BUTTON_HEIGHT * 0.85f))
+                    .setColor(i == 0 ? Color.WHITE : Color.GRAY)
                     .setOnClick(i, (finalI, __) -> openPageAtIndex(finalI))
                     .setTooltip(title, pg instanceof PCLCustomCardPrimaryInfoPage ? PGR.core.strings.cedit_primaryInfoDesc : ""));
         }
@@ -205,15 +215,8 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
 
     public void addBuilder()
     {
-        modifyBuilder(__ -> {
-            tempBuilders.add(new PCLDynamicData(getBuilder()));
-        });
-        for (PCLCustomCardEditorPage b : pages)
-        {
-            b.refresh();
-        }
-        currentBuilder = tempBuilders.size() - 1;
-        formEditor.refresh();
+        tempBuilders.add(new PCLDynamicData(getBuilder()));
+        setCurrentBuilder(tempBuilders.size() - 1);
     }
 
     protected void editImage()
@@ -296,12 +299,8 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
 
     public void removeBuilder()
     {
-        currentBuilder = MathUtils.clamp(currentBuilder, 0, tempBuilders.size() - 2);
-        modifyBuilder(__ -> {
-            tempBuilders.remove(getBuilder());
-        });
-        refreshPages();
-        formEditor.refresh();
+        tempBuilders.remove(getBuilder());
+        setCurrentBuilder(currentBuilder);
     }
 
     protected void save()
@@ -319,7 +318,7 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
         currentBuilder = MathUtils.clamp(index, 0, tempBuilders.size() - 1);
         modifyBuilder(__ -> {
         });
-        refreshPages();
+        setupPages();
         formEditor.refresh();
     }
 

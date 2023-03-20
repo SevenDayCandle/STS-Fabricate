@@ -9,6 +9,7 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.OriginRelativeHitbox;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIFontHelper;
+import pinacolada.cards.base.PCLDynamicData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PMove;
@@ -26,9 +27,9 @@ public class PCLCustomCardBlockPage extends PCLCustomCardEffectPage
     protected PCLCustomCardUpgradableEditor rightCountEditor;
     protected EUIToggle enableToggle;
 
-    public PCLCustomCardBlockPage(PCLCustomCardEditCardScreen screen, PSkill<?> effect, EUIHitbox hb, int index, String title, ActionT1<PSkill<?>> onUpdate)
+    public PCLCustomCardBlockPage(PCLCustomCardEditCardScreen screen, EUIHitbox hb, int index, String title, ActionT1<PSkill<?>> onUpdate)
     {
-        super(screen, effect, hb, index, title, onUpdate);
+        super(screen, hb, index, title, onUpdate);
     }
 
     protected void setupComponents(PCLCustomCardEditCardScreen screen)
@@ -54,9 +55,15 @@ public class PCLCustomCardBlockPage extends PCLCustomCardEffectPage
         rightCountEditor.tooltip.setChild(new EUITooltip(PGR.core.strings.cedit_upgrades, PGR.core.strings.cetut_amount));
     }
 
+    public PSkill<?> getSourceEffect()
+    {
+        return screen.currentBlock;
+    }
+
     public void refresh()
     {
         super.refresh();
+        PCLDynamicData builder = screen.getBuilder();
         enableToggle.setToggle(primaryCond != null);
         blockEditor.setValue(builder.getBlock(0), builder.getBlockUpgrade(0));
         rightCountEditor.setValue(builder.getRightCount(0), builder.getRightCountUpgrade(0));

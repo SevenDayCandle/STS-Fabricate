@@ -12,6 +12,7 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.OriginRelativeHitbox;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
+import pinacolada.cards.base.PCLDynamicData;
 import pinacolada.cards.base.fields.PCLAttackType;
 import pinacolada.effects.PCLAttackVFX;
 import pinacolada.resources.PGR;
@@ -33,9 +34,9 @@ public class PCLCustomCardAttackPage extends PCLCustomCardEffectPage
     protected EUIDropdown<AbstractGameAction.AttackEffect> attackEffectDropdown;
     protected EUIToggle enableToggle;
 
-    public PCLCustomCardAttackPage(PCLCustomCardEditCardScreen screen, PSkill<?> effect, EUIHitbox hb, int index, String title, ActionT1<PSkill<?>> onUpdate)
+    public PCLCustomCardAttackPage(PCLCustomCardEditCardScreen screen, EUIHitbox hb, int index, String title, ActionT1<PSkill<?>> onUpdate)
     {
-        super(screen, effect, hb, index, title, onUpdate);
+        super(screen, hb, index, title, onUpdate);
     }
 
     protected void setupComponents(PCLCustomCardEditCardScreen screen)
@@ -87,8 +88,14 @@ public class PCLCustomCardAttackPage extends PCLCustomCardEffectPage
                 .setTooltip(PGR.core.strings.cedit_attackEffect, PGR.core.strings.cetut_attackEffect);
     }
 
+    public PSkill<?> getSourceEffect()
+    {
+        return screen.currentDamage;
+    }
+
     public void refresh()
     {
+        PCLDynamicData builder = screen.getBuilder();
         if (primaryCond instanceof PCardPrimary_DealDamage)
         {
             enableToggle.setToggle(true);
@@ -99,7 +106,6 @@ public class PCLCustomCardAttackPage extends PCLCustomCardEffectPage
             enableToggle.setToggle(false);
         }
         attackTypeDropdown.setSelection(builder.attackType, false);
-
         damageEditor.setValue(builder.getDamage(0), builder.getDamageUpgrade(0));
         hitCountEditor.setValue(builder.getHitCount(0), builder.getHitCountUpgrade(0));
         conditionGroup.refresh();

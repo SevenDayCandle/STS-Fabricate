@@ -44,6 +44,7 @@ import extendedui.utilities.ColoredString;
 import extendedui.utilities.ColoredTexture;
 import extendedui.utilities.EUIClassUtils;
 import pinacolada.actions.PCLActions;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.cards.base.cardText.PCLCardText;
@@ -173,8 +174,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
 
     protected PCLCard(PCLCardData cardData, String id, String imagePath, int cost, CardType type, CardColor color, CardRarity rarity, CardTarget target, int form, int timesUpgraded, Object input)
     {
-        super(id, cardData.strings.NAME, "status/beta", "status/beta", cost, "", type, color, rarity, target);
-        this.rawDescription = cardData.strings.NAME; // Only writing this to ensure mods that check for this at runtime don't crash; this gets overwritten anyways
+        super(id, cardData.strings.NAME, "status/beta", "status/beta", cost, VisibleSkill.DEFAULT, type, color, rarity, target);
         this.cardData = cardData;
         this.cardText = new PCLCardText(this);
         this.affinities = new PCLCardAffinities(this);
@@ -1231,9 +1231,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     }
 
     public void onUse(PCLUseInfo info) {
-        if (dontTriggerOnUseCard) {
-            doEffects(be -> be.triggerOnEndOfTurn(true));
-        } else {
+        if (!dontTriggerOnUseCard) {
             doEffects(be -> be.use(info));
         }
     }
@@ -2070,11 +2068,12 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
 
     @Override
     public void triggerOnEndOfTurnForPlayingCard() {
+        super.triggerOnEndOfTurnForPlayingCard();
         boolean shouldPlay = playAtEndOfTurn;
         for (PSkill<?> be : getFullEffects()) {
-            shouldPlay = shouldPlay | be.triggerOnEndOfTurn(false);
+            shouldPlay = shouldPlay | be.triggerOnEndOfTurn(true);
         }
-        if (playAtEndOfTurn) {
+        if (shouldPlay) {
             dontTriggerOnUseCard = true;
 
             AbstractDungeon.actionManager.cardQueue.add(new CardQueueItem(this, true));

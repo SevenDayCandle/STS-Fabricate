@@ -37,7 +37,7 @@ public class PCond_AtTurnEnd extends PPassiveNonCheckCond<PField_Empty> implemen
     @Override
     public String getSubText()
     {
-        return TEXT.cond_atEndOfTurn();
+        return isWhenClause() ? TEXT.cond_atEndOfTurn() : TEXT.cond_inXAtTurnEnd(TEXT.cpile_hand);
     }
 
     @Override

@@ -1,7 +1,6 @@
-package pinacolada.skills.skills.base.conditions;
+package pinacolada.skills.skills.special.conditions;
 
 import extendedui.EUIRM;
-import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
@@ -11,7 +10,6 @@ import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.PPassiveCond;
 import pinacolada.utilities.GameUtilities;
 
-@VisibleSkill
 public class PCond_MatchCombo extends PPassiveCond<PField_Not>
 {
 

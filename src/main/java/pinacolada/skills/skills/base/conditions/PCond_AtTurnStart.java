@@ -4,7 +4,6 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.subscribers.OnStartOfTurnPostDrawSubscriber;
 import pinacolada.misc.PCLUseInfo;
-import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
@@ -38,7 +37,7 @@ public class PCond_AtTurnStart extends PPassiveNonCheckCond<PField_Empty> implem
     @Override
     public String getSubText()
     {
-        return isWhenClause() ? TEXT.cond_atStartOfTurn() : TEXT.cond_onGeneric(PGR.core.tooltips.retain.title);
+        return isWhenClause() ? TEXT.cond_atStartOfTurn() : TEXT.cond_inXAtTurnStart(TEXT.cpile_hand);
     }
 
     @Override

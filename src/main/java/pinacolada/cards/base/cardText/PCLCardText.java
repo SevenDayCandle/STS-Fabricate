@@ -33,6 +33,7 @@ import java.util.List;
 // TODO Move generic logic into other classes
 public class PCLCardText
 {
+    protected final static String EMPTY = "";
     protected final static Color DEFAULT_COLOR = Settings.CREAM_COLOR.cpy();
     protected final static HashMap<AbstractCard.CardRarity, ColoredTexture> panels = new HashMap<>();
     protected final static HashMap<AbstractCard.CardRarity, ColoredTexture> panelsLarge = new HashMap<>();
@@ -59,7 +60,7 @@ public class PCLCardText
     protected int lineIndex;
 
     protected final PCLCard card;
-    protected String overrideDescription;
+    protected String overrideDescription = EMPTY;
     private float badgeAlphaTargetOffset = 1f;
     private float badgeAlphaOffset = -0.2f;
 
@@ -336,8 +337,7 @@ public class PCLCardText
         if (card != null)
         {
             card.getPointers().clear();
-            String efStrings = card.getEffectStrings();
-            text = (text != null && !text.isEmpty()) ? text : efStrings;
+            text = (text != null && !text.isEmpty()) ? text : card.getEffectStrings();
             if (PGR.config.displayCardTagDescription.get())
             {
                 String tagString = card.getTagTipString();

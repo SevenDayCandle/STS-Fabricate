@@ -1,7 +1,6 @@
-package pinacolada.skills.skills.base.conditions;
+package pinacolada.skills.skills.special.conditions;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.subscribers.OnMatchSubscriber;
 import pinacolada.misc.PCLUseInfo;
@@ -11,7 +10,6 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.skills.PPassiveCond;
 
-@VisibleSkill
 public class PCond_Match extends PPassiveCond<PField_CardCategory> implements OnMatchSubscriber
 {
 

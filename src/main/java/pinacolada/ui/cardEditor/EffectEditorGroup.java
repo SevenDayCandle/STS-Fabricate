@@ -86,7 +86,7 @@ public class EffectEditorGroup<T extends PSkill<?>> extends EUIBase
 
     public List<T> getAllEffects()
     {
-        return (List<T>) PSkill.getEligibleEffects(editor.builder.cardColor, className);
+        return (List<T>) PSkill.getEligibleEffects(editor.screen.getBuilder().cardColor, className);
     }
 
     public void setListFunc(FuncT0<List<? extends T>> listFunc)

@@ -1,6 +1,5 @@
-package pinacolada.skills.skills.base.conditions;
+package pinacolada.skills.skills.special.conditions;
 
-import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.CombatManager;
@@ -11,7 +10,6 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Affinity;
 import pinacolada.skills.skills.PPassiveCond;
 
-@VisibleSkill
 public class PCond_NextAffinity extends PPassiveCond<PField_Affinity>
 {
     public static final PSkillData<PField_Affinity> DATA = register(PCond_NextAffinity.class, PField_Affinity.class)

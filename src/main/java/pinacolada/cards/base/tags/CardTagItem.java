@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+// TODO do not make this an enum, to allow adding new items
 public enum CardTagItem implements TooltipProvider
 {
     Defend(AbstractCard.CardTags.STARTER_DEFEND),
