@@ -15,7 +15,6 @@ import extendedui.ui.controls.EUIToggle;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.OriginRelativeHitbox;
 import extendedui.utilities.EUIFontHelper;
-import pinacolada.cards.base.PCLDynamicData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.*;
@@ -36,7 +35,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
     public static final float OFFSET_EFFECT = -MENU_HEIGHT * 1.25f;
     public static final float OFFSET_AMOUNT = scale(10);
 
-    public final PCLDynamicData builder;
+    public final PCLCustomCardEditCardScreen screen;
     protected PPrimary<?> primaryCond;
     protected PMultiCond multiCond;
     protected PDelay delayMove;
@@ -66,9 +65,9 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
     protected PSkill.PCLCardValueSource currentEffectSource = PSkill.PCLCardValueSource.MagicNumber;
 
 
-    public PCLCustomCardEffectPage(PCLCustomCardEditCardScreen screen, PSkill<?> effect, EUIHitbox hb, int index, String title, ActionT1<PSkill<?>> onUpdate)
+    public PCLCustomCardEffectPage(PCLCustomCardEditCardScreen screen, EUIHitbox hb, int index, String title, ActionT1<PSkill<?>> onUpdate)
     {
-        this.builder = screen.getBuilder();
+        this.screen = screen;
         this.editorIndex = index;
         this.onUpdate = onUpdate;
         this.hb = hb;
@@ -77,20 +76,13 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
         this.conditionGroup = new EffectEditorGroup<PCond<?>>(this, PCond.class, PGR.core.strings.cedit_condition);
         this.effectGroup = new EffectEditorGroup<PMove<?>>(this, PMove.class, PGR.core.strings.cedit_effect);
         this.modifierGroup = new EffectEditorGroup<PMod<?>>(this, PMod.class, PGR.core.strings.cedit_modifier);
-
-        initializeEffects(effect);
-
         this.header = new EUILabel(EUIFontHelper.cardtitlefontLarge, hb)
                 .setAlignment(0.5f, 0.0f, false)
                 .setFontScale(0.8f).setColor(Color.LIGHT_GRAY)
                 .setLabel(title);
 
         setupComponents(screen);
-
-        conditionGroup.syncWithLower();
-        effectGroup.syncWithLower();
-        modifierGroup.syncWithLower();
-        refresh();
+        initializeEffects();
     }
 
     protected void setupComponents(PCLCustomCardEditCardScreen screen)
@@ -111,7 +103,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
                 .setClearButtonOptions(true, true)
                 .setCanAutosizeButton(true)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_mainCondition)
-                .setItems(EUIUtils.map(PSkill.getEligibleEffects(builder.cardColor, PLimit.class), bc -> primaryCond != null && bc.effectID.equals(primaryCond.effectID) ? primaryCond : bc));
+                .setItems(EUIUtils.map(PSkill.getEligibleEffects(screen.getBuilder().cardColor, PLimit.class), bc -> primaryCond != null && bc.effectID.equals(primaryCond.effectID) ? primaryCond : bc));
         delayEditor = new PCLValueEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 4, MENU_HEIGHT, MENU_WIDTH * 1.5f, 0)
                 , PGR.core.strings.cedit_turnDelay, (val) -> {
             delayMove.setAmount(val);
@@ -314,6 +306,11 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
         repositionItems();
     }
 
+    public PSkill<?> getSourceEffect()
+    {
+        return screen.currentEffects.get(editorIndex);
+    }
+
     @Override
     public TextureCache getTextureCache()
     {
@@ -323,9 +320,9 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
     @Override
     public String getIconText() {return String.valueOf(editorIndex + 1);}
 
-    protected void initializeEffects(PSkill<?> effect)
+    public void initializeEffects()
     {
-        deconstructEffect(effect);
+        deconstructEffect(getSourceEffect());
 
         effectGroup.lowerEffects.clear();
         if (multiSkill != null)
@@ -365,6 +362,11 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
         {
             multiCond = new PMultiCond();
         }
+
+        conditionGroup.syncWithLower();
+        effectGroup.syncWithLower();
+        modifierGroup.syncWithLower();
+        refresh();
 
         scheduleConstruct();
     }

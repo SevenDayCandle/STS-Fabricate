@@ -133,7 +133,7 @@
 												"Flags qualify cards for certain checks (e.g. counting as a #yStrike for {#y:Perfected Strike}).",
 												"Tags affect the way the player interacts with a card (e.g. what happens after they play it). Most tags are removed after activation.",
 												"In the dropdown, the left-hand number signfies the number of uses the tag has while un-upgraded, while the right-hand number determines the number of uses for the upgraded card.",
-												"Affinities can be used for checks and effects from custom characters.",
+												"Affinities are card properties that are used in different ways by different characters. They can also be used as a card filter for effects.",
 												"Conditions determine when the card's effects are allowed activate.",
 												"Effects are activated when the card is played, unless otherwise modified by a condition.",
 												"Modifiers affect the output of the card's effect. They do NOT affect conditions.",
