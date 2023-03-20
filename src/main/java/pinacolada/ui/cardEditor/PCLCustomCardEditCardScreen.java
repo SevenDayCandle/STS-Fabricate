@@ -120,12 +120,12 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
                 .setToggle(SingleCardViewPopup.isViewingUpgrade)
                 .setOnToggle(this::toggleViewUpgrades);
 
+        invalidateCards();
         setupPages();
     }
 
     protected void setupPages()
     {
-        invalidateCards();
         currentDamage = getBuilder().attackSkill;
         currentBlock = getBuilder().blockSkill;
         currentEffects.clear();
@@ -239,6 +239,7 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
     protected void complete()
     {
         super.complete();
+        invalidateCards();
         if (loadedImage != null)
         {
             loadedImage.dispose();

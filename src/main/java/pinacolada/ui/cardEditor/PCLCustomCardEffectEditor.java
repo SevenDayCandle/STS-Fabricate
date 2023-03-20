@@ -20,7 +20,10 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.OriginRelativeHitbox;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
-import pinacolada.cards.base.*;
+import pinacolada.cards.base.PCLCardData;
+import pinacolada.cards.base.PCLCardGroupHelper;
+import pinacolada.cards.base.PCLCustomCardSlot;
+import pinacolada.cards.base.PCLDynamicData;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -192,10 +195,7 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
                 .setCanAutosize(false, false)
                 .setIsMultiSelect(true)
                 .setShouldPositionClearAtTop(true)
-                .setItems(GameUtilities.isPCLCardColor(cardColor) ? EUIUtils.mapAsNonnull(PCLCardData.getAllData(false, true, cardColor), cd -> cd.makeCopy(false))
-                         :
-                        EUIUtils.filter(CardLibrary.getAllCards(),
-                                c -> !(c instanceof PCLCard) && (c.color == AbstractCard.CardColor.COLORLESS || c.color == AbstractCard.CardColor.CURSE || c.color == cardColor)));
+                .setItems(getAvailableCards());
 
         colors = new EUIDropdown<>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.35f, MENU_HEIGHT, AUX_OFFSET + MAIN_OFFSET * 2, 0)
                 , EUIGameUtils::getColorName)
@@ -325,6 +325,19 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
         });
     }
 
+    public <U, V> void registerDropdown(EUIDropdown<U> dropdown, ActionT1<List<U>> onChangeImpl, List<V> items, FuncT1<V, U> convertFunc)
+    {
+        if (dropdown.size() > 0)
+        {
+            activeElements.add(dropdown);
+            dropdown.setOnChange(targets -> {
+                onChangeImpl.invoke(targets);
+                editor.scheduleConstruct();
+            });
+            dropdown.setSelection(items, convertFunc, false);
+        }
+    }
+
     public <U> void registerDropdown(EUIDropdown<U> dropdown, ActionT1<List<U>> onChangeImpl, List<U> items)
     {
         if (dropdown.size() > 0)
@@ -440,7 +453,8 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
                     cardIDs.clear();
                     cardIDs.addAll(EUIUtils.mapAsNonnull(cards, t -> t.cardID));
                 },
-                getAvailableCards()
+                cardIDs,
+                card -> card.cardID
         );
     }
 
@@ -514,12 +528,16 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
         if (availableCards == null)
         {
             AbstractCard.CardColor cardColor = getColor();
-            availableCards = GameUtilities.isPCLOnlyCardColor(cardColor) ? EUIUtils.mapAsNonnull(PCLCardData.getAllData(false, true, cardColor), cd -> cd.makeCopy(false))
+            availableCards = GameUtilities.isPCLOnlyCardColor(cardColor) ? EUIUtils.mapAsNonnull(PCLCardData.getAllData(false, false, cardColor), cd -> cd.makeCopy(false))
                     :
                     EUIUtils.filter(CardLibrary.getAllCards(),
                             c -> !PCLDungeon.isColorlessCardExclusive(c) && (c.color == AbstractCard.CardColor.COLORLESS || c.color == AbstractCard.CardColor.CURSE || c.color == cardColor));
             availableCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(cardColor), c -> c.getBuilder(0).build()));
-            availableCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(AbstractCard.CardColor.COLORLESS), c -> c.getBuilder(0).build()));
+            if (cardColor != AbstractCard.CardColor.COLORLESS)
+            {
+                availableCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(AbstractCard.CardColor.COLORLESS), c -> c.getBuilder(0).build()));
+            }
+            availableCards.sort((a, b) -> StringUtils.compare(a.name, b.name));
         }
         return availableCards;
     }

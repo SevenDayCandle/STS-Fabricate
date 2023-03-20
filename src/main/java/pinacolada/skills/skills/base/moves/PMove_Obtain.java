@@ -75,10 +75,10 @@ public class PMove_Obtain extends PMove<PField_CardID>
     @Override
     public void use(PCLUseInfo info)
     {
-        ArrayList<AbstractCard> cards = info.getData(new ArrayList<>());
-        ArrayList<AbstractCard> created = new ArrayList<>();
+        ArrayList<AbstractCard> created = new ArrayList<AbstractCard>();
         if (useParent)
         {
+            ArrayList<AbstractCard> cards = info.getData(new ArrayList<AbstractCard>());
             for (AbstractCard card : cards)
             {
                 for (int i = 0; i < amount; i++)
