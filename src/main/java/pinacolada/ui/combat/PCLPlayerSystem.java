@@ -86,11 +86,6 @@ public class PCLPlayerSystem extends EUIBase
         return isMatch(c) && getActiveMeter().canGlow(c) ? PCLCard.SYNERGY_GLOW_COLOR : PCLCard.REGULAR_GLOW_COLOR;
     }
 
-    public int getLastAffinityLevel(PCLAffinity affinity)
-    {
-        return lastCardPlayed == null ? 0 : lastCardPlayed.affinities.getLevel(affinity);
-    }
-
     public PCLCard getLastCardPlayed()
     {
         return lastCardPlayed;
@@ -102,11 +97,6 @@ public class PCLPlayerSystem extends EUIBase
     }
 
     public Collection<PCLPlayerMeter> getMeters() {return meters.values();}
-
-    public int getPowerAmount(PCLAffinity affinity)
-    {
-        return getActiveMeter().getPowerAmount(affinity);
-    }
 
     public Object getRerollDescription()
     {
@@ -132,11 +122,6 @@ public class PCLPlayerSystem extends EUIBase
     public boolean isMatch(AbstractCard card)
     {
         return CombatManager.onMatchCheck(card) || getActiveMeter().isMatch(card);
-    }
-
-    public boolean isPowerActive(PCLAffinity affinity)
-    {
-        return getActiveMeter().isPowerActive(affinity);
     }
 
     public float modifyBlock(float block, PCLCard source, PCLCard card, AbstractCreature target)

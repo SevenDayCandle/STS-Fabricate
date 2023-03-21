@@ -22,8 +22,12 @@ public class BaseModPatches
         @SpirePrefixPatch
         public static SpireReturn<Void> prefix()
         {
-            PGR.debugCards.render();
-            return SpireReturn.Return();
+            if (PGR.debugCards != null)
+            {
+                PGR.debugCards.render();
+                return SpireReturn.Return();
+            }
+            return SpireReturn.Continue();
         }
     }
 
@@ -34,7 +38,10 @@ public class BaseModPatches
         @SpirePostfixPatch
         public static void postfix()
         {
-            PGR.debugAugments.render();
+            if (PGR.debugAugments != null)
+            {
+                PGR.debugAugments.render();
+            }
         }
     }
 

@@ -55,7 +55,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
     private transient boolean panelAdded;
     private transient int totalAugmentCount = 0;
     protected ArrayList<Integer> loadoutIDs = new ArrayList<>();
-    protected Integer longestMatchCombo = 0;
+    protected Integer highestScore = 0;
     protected Integer rNGCounter = 0;
     protected Map<String, String> eventLog = new HashMap<>();
     protected Random rng;
@@ -190,9 +190,9 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         return totalAugmentCount;
     }
 
-    public int getLongestMatchCombo()
+    public int getHighestScore()
     {
-        return longestMatchCombo;
+        return highestScore;
     }
 
     public String getMapData(String eventID)
@@ -291,7 +291,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
             eventLog = new HashMap<>(data.eventLog);
             allowCustomCards = data.allowCustomCards;
             rNGCounter = data.rNGCounter;
-            longestMatchCombo = data.longestMatchCombo;
+            highestScore = data.highestScore;
             ascensionGlyphCounters.addAll(data.ascensionGlyphCounters);
             rng = data.rng;
 
@@ -304,7 +304,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         {
             eventLog = new HashMap<>();
             allowCustomCards = PGR.config.enableCustomCards.get() || (CardCrawlGame.trial instanceof PCLCustomTrial && ((PCLCustomTrial) CardCrawlGame.trial).allowCustomCards);
-            longestMatchCombo = 0;
+            highestScore = 0;
             rNGCounter = 0;
             currentForm = null;
             for (AbstractGlyphBlight glyph : PCLAbstractPlayerData.GLYPHS)
@@ -639,10 +639,9 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         return canAdd;
     }
 
-    // TODO Use different score measurements for different pinacolada.characters
-    public void updateLongestMatchCombo(int newCombo)
+    public void updateHighestScore(int newCombo)
     {
-        longestMatchCombo = Math.max(longestMatchCombo, newCombo);
+        highestScore = Math.max(highestScore, newCombo);
     }
 
     protected void validate()
@@ -666,9 +665,9 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
             allowCustomCards = CardCrawlGame.trial instanceof PCLCustomTrial && ((PCLCustomTrial) CardCrawlGame.trial).allowCustomCards;
         }
 
-        if (longestMatchCombo == null)
+        if (highestScore == null)
         {
-            longestMatchCombo = 0;
+            highestScore = 0;
         }
     }
 

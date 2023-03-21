@@ -105,7 +105,6 @@ public class PCLCoreTooltips extends PCLTooltips
     public EUITooltip cooldown = EUITooltip.findByID("Cooldown");
     public EUITooltip critical = EUITooltip.findByID("Critical");
     public EUITooltip curlUp = EUITooltip.findByID("Curl Up");
-    public EUITooltip currentAffinity = EUITooltip.findByID("Current Affinity");
     public EUITooltip cycle = EUITooltip.findByID("Cycle");
     public EUITooltip dark = EUITooltip.findByID("Dark");
     public EUITooltip deflection = EUITooltip.findByID("Deflection");
@@ -138,15 +137,14 @@ public class PCLCoreTooltips extends PCLTooltips
     public EUITooltip interactable = EUITooltip.findByID("Interactable");
     public EUITooltip invigorated = EUITooltip.findByID("Invigorated");
     public EUITooltip juggernaut = EUITooltip.findByID("Juggernaut");
-    public EUITooltip lastAffinity = EUITooltip.findByID("Last Affinity");
     public EUITooltip level = EUITooltip.findByID("Level");
     public EUITooltip lightning = EUITooltip.findByID("Lightning");
     public EUITooltip limited = EUITooltip.findByID("Limited");
     public EUITooltip lockOn = EUITooltip.findByID("~Lock-On");
     public EUITooltip loyal = EUITooltip.findByID("Loyal");
     public EUITooltip malleable = EUITooltip.findByID("Malleable");
+    // TODO change description depending on the current character
     public EUITooltip match = EUITooltip.findByID("Match");
-    public EUITooltip matchCombo = EUITooltip.findByID("Match Combo");
     public EUITooltip metallicize = EUITooltip.findByID("Metallicize");
     public EUITooltip mismatch = EUITooltip.findByID("Mismatch");
     public EUITooltip multicolor = EUITooltip.findByID("Multicolor");

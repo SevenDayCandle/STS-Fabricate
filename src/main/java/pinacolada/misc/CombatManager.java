@@ -742,7 +742,7 @@ public class CombatManager
 
     public static void onVictory()
     {
-        PGR.dungeon.updateLongestMatchCombo(playerSystem.getActiveMeter().getLongestMatchCombo());
+        PGR.dungeon.updateHighestScore(playerSystem.getActiveMeter().getHighestScore());
         clearStats();
     }
 

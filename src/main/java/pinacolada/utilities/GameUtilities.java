@@ -954,7 +954,7 @@ public class GameUtilities
 
     public static int getCurrentMatchCombo()
     {
-        return CombatManager.playerSystem.getActiveMeter().getCurrentMatchCombo();
+        return CombatManager.playerSystem.getActiveMeter().getCurrentScore();
     }
 
     public static int getDebuffsCount(AbstractCreature creature)
@@ -1213,11 +1213,6 @@ public class GameUtilities
         }
 
         return null;
-    }
-
-    public static int getPowerAmount(PCLAffinity affinity)
-    {
-        return CombatManager.playerSystem.getPowerAmount(affinity);
     }
 
     public static int getPowerAmount(String powerID)
@@ -1712,11 +1707,6 @@ public class GameUtilities
     public static boolean isActingColor(AbstractCard.CardColor co)
     {
         return getActingColor() == co;
-    }
-
-    public static boolean isAffinityPowerActive(PCLAffinity affinity)
-    {
-        return CombatManager.playerSystem.isPowerActive(affinity);
     }
 
     public static boolean isAttacking(AbstractCreature monster)

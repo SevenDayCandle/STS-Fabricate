@@ -34,11 +34,10 @@ public class VictoryPatches
         return new GameOverStat(PGR.core.strings.csel_ascensionGlyph, null, String.valueOf(glyphBonus));
     }
 
-    // TODO Rework for individual pinacolada.characters or remove
-    private static GameOverStat getLongestComboStats()
+/*    private static GameOverStat getBonusScore()
     {
-        return new GameOverStat(PGR.core.tooltips.matchCombo.title, null, String.valueOf(PGR.dungeon.getLongestMatchCombo()));
-    }
+        return new GameOverStat(PGR.core.tooltips.matchCombo.title, null, String.valueOf(PGR.dungeon.getHighestScore()));
+    }*/
 
     @SpirePatch(clz = VictoryRoom.class, method = "onPlayerEntry")
     public static class VictoryRoomPatches_onEnterRoom

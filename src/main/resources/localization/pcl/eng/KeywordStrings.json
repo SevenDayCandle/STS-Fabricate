@@ -83,10 +83,6 @@
 								"DESCRIPTION": "Gain [Block] when you receive unblocked attack damage, then remove this power.",
 								"NAME": "Curl Up"
 				},
-				"Current Affinity":	{
-								"DESCRIPTION": "Cards with the [A-W] of the #yCurrent #yAffinity will #yMatch when played.",
-								"NAME": "Current Affinity"
-				},
 				"Cycle":	{
 								"DESCRIPTION": "Discard a certain number of cards then draw that many cards.",
 								"PAST": "Cycled",
@@ -216,10 +212,6 @@
 								"PROGRESSIVE": "killing",
 								"NAME": "Kill"
 				},
-				"Last Affinity":	{
-								"DESCRIPTION": "The #yAffinities of previously-played cards.",
-								"NAME": "Last Affinity"
-				},
 				"Level":	{
 								"DESCRIPTION": "The #yLevel of an #yAffinity increases its effect on cards and game mechanics that rely on them.",
 								"NAME": "Level"
@@ -237,15 +229,11 @@
 								"NAME": "Malleable"
 				},
 				"Match":	{
-								"DESCRIPTION": "A card #yMatches if it has the #yLast #yAffinity.",
+								"DESCRIPTION": "Whether a card #yMatches or not depends on the current character.",
 								"NAME": "Match",
 								"PAST": "Matched",
 								"PRESENT": "Matches",
 								"PROGRESSIVE": "Matching"
-				},
-				"Match Combo":	{
-								"DESCRIPTION": "The number of consecutive #yMatches made. [A-Gen] Cards do not affect your #yMatch #yCombo.",
-								"NAME": "Match Combo"
 				},
 				"Max HP":	{
 								"DESCRIPTION": "",

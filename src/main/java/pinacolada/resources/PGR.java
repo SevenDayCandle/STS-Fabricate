@@ -353,8 +353,16 @@ public class PGR
         PGR.augmentScreen = new PCLAugmentScreen();
         PGR.augmentPanel = new PCLAugmentPanelItem();
         PGR.ftueScreen = new PCLFtueScreen();
-        PGR.debugAugments = new PCLDebugAugmentPanel();
-        PGR.debugCards = new PCLDebugCardPanel();
+        try
+        {
+            PGR.debugAugments = new PCLDebugAugmentPanel();
+            PGR.debugCards = new PCLDebugCardPanel();
+        }
+        catch (Error | Exception e)
+        {
+            e.printStackTrace();
+            EUIUtils.logError(PGR.class, "Failed to load ImGUI elements. These elements will not be available in ImGUI.");
+        }
 
         EUI.addBattleSubscriber(PGR.combatScreen);
         EUI.addSubscriber(PGR.cardPopup);

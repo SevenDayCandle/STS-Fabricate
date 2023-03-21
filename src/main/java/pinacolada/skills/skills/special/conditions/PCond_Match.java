@@ -12,7 +12,6 @@ import pinacolada.skills.skills.PPassiveCond;
 
 public class PCond_Match extends PPassiveCond<PField_CardCategory> implements OnMatchSubscriber
 {
-
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_Match.class, PField_CardCategory.class, 1, 1)
             .pclOnly()
             .selfTarget();

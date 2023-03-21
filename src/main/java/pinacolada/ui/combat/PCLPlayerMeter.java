@@ -36,9 +36,8 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implement
     protected EUIButton infoIcon;
     protected PCLClickableUse skips;
     protected String id;
-    protected int matchesThisCombat;
-    protected int currentMatchCombo;
-    protected int longestMatchCombo;
+    protected int currentScore;
+    protected int highestScore;
 
     public PCLPlayerMeter(String id, STSConfigItem<Vector2> config, float iconSize)
     {
@@ -56,10 +55,6 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implement
     }
 
     public void addSkip(int amount)
-    {
-    }
-
-    public void advance(PCLAffinity affinity)
     {
     }
 
@@ -95,9 +90,9 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implement
         return get(0);
     }
 
-    public int getCurrentMatchCombo()
+    public int getCurrentScore()
     {
-        return currentMatchCombo;
+        return currentScore;
     }
 
     public abstract String[] getInfoDescription();
@@ -111,31 +106,19 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implement
         return 0;
     }
 
-    public int getLongestMatchCombo()
+    public int getHighestScore()
     {
-        return longestMatchCombo;
+        return highestScore;
     }
-
-    public int getMatchesThisCombat()
-    {
-        return matchesThisCombat;
-    }
-
-    public PCLAffinity getNextAffinity()
-    {
-        return get(1);
-    }
-
-    public int getPowerAmount(PCLAffinity affinity) {return 0;}
 
     public Object getRerollDescription() {return null;}
 
     public Object getRerollDescription2() {return null;}
 
-    public void increaseMatchCombo(int amount)
+    public void increaseScore(int amount)
     {
-        currentMatchCombo += amount;
-        longestMatchCombo = Math.max(longestMatchCombo, currentMatchCombo);
+        currentScore += amount;
+        highestScore = Math.max(highestScore, currentScore);
     }
 
     public boolean isHovered()
@@ -175,9 +158,8 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implement
     public void initialize()
     {
         super.initialize();
-        matchesThisCombat = 0;
-        currentMatchCombo = 0;
-        longestMatchCombo = 0;
+        currentScore = 0;
+        highestScore = 0;
     }
 
     public float modifyBlock(float block, PCLCard source, PCLCard card, AbstractCreature target)

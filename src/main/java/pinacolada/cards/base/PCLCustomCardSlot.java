@@ -190,7 +190,10 @@ public class PCLCustomCardSlot
         {
             loadFolder(provider.getCardFolder());
         }
-        PGR.debugCards.refreshCards();
+        if (PGR.debugCards != null)
+        {
+            PGR.debugCards.refreshCards();
+        }
     }
 
     private static void loadFolder(FileHandle folder)
@@ -358,7 +361,10 @@ public class PCLCustomCardSlot
 
         writer.writeString(EUIUtils.serialize(this, TTOKEN.getType()), false);
         EUIUtils.logInfo(PCLCustomCardSlot.class, "Saved Custom Card: " + filePath);
-        PGR.debugCards.refreshCards();
+        if (PGR.debugCards != null)
+        {
+            PGR.debugCards.refreshCards();
+        }
     }
 
     public PCLDynamicData getBuilder(int i)
