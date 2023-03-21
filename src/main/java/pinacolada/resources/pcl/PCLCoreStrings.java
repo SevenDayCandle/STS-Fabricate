@@ -254,7 +254,8 @@ public class PCLCoreStrings extends PCLStrings
     public final String options_enableCustomRelics = options.TEXT[6];
     public final String options_enableCustomPotions = options.TEXT[7];
     public final String options_enableCustomEvents = options.TEXT[8];
-    public final String options_alwaysPCLCard = options.TEXT[9];
+    public final String options_madnessReplacements = options.TEXT[9];
+    public final String options_alwaysPCLCard = options.TEXT[10];
 
     // Option Descriptions
     public final String optionDesc_cropCardImages = optionDesc.TEXT[0];
@@ -263,7 +264,8 @@ public class PCLCoreStrings extends PCLStrings
     public final String optionDesc_showFormulaDisplay = optionDesc.TEXT[3];
     public final String optionDesc_hideIrrelevantAffinities = optionDesc.TEXT[4];
     public final String optionDesc_onlyNewRuns = optionDesc.TEXT[5];
-    public final String optionDesc_alwaysPCLCard = optionDesc.TEXT[6];
+    public final String optionDesc_madnessReplacements = optionDesc.TEXT[6];
+    public final String optionDesc_alwaysPCLCard = optionDesc.TEXT[7];
 
     // Reward
     public final String rewards_rewardBreak = rewards.TEXT[0];

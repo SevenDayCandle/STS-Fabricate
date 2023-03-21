@@ -127,7 +127,10 @@ public class CardLibraryPatches
             // If a card is not found, the base game will put a Madness in its place. This change makes it easier for players to see what card is missing
             if (__result instanceof Madness && !Madness.ID.equals(key))
             {
-                __result = new QuestionMark();
+                if (!PGR.config.madnessReplacements.get())
+                {
+                    __result = new QuestionMark();
+                }
                 __result.name = __result.originalName = key;
                 EUIUtils.logError(CardLibrary.class, "Card not found: " + key);
                 return __result;
