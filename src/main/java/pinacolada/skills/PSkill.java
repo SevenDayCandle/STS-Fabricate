@@ -1016,6 +1016,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return EFFECT_MAP.get(effectID).isColorCompatible(co);
     }
 
+    // Used to determine whether the effect should actually be saved or rendered on the card
+    public boolean isBlank() {return this.childEffect != null && this.childEffect.isBlank();}
+
+    // Used to determine whether this effect is detrimental to the owner
     public boolean isDetrimental()
     {
         return false;

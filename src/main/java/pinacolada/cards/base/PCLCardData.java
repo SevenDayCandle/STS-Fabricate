@@ -31,6 +31,7 @@ import java.util.stream.Stream;
 import static extendedui.EUIUtils.array;
 import static extendedui.EUIUtils.safeIndex;
 
+// TODO create a non-dynamic-only subclass
 public class PCLCardData implements CardObject
 {
     private static final Map<String, PCLCardData> staticData = new HashMap<>();
@@ -70,7 +71,6 @@ public class PCLCardData implements CardObject
     public boolean playAtEndOfTurn = false;
     public boolean removableFromDeck = true;
     public boolean unique = false;
-    public boolean unUpgradedCanToggleForms = false;
     public int maxCopies;
     public int maxForms = 1;
     public int maxUpgradeLevel = 1;
@@ -659,21 +659,20 @@ public class PCLCardData implements CardObject
 
     public PCLCardData setMultiformData(int maxForms)
     {
-        return setMultiformData(maxForms, false, true, false, false);
+        return setMultiformData(maxForms, false, true, false);
     }
 
     public PCLCardData setMultiformData(int maxForms, boolean canToggleFromPopup)
     {
-        return setMultiformData(maxForms, canToggleFromPopup, !canToggleFromPopup, canToggleFromPopup, false);
+        return setMultiformData(maxForms, canToggleFromPopup, !canToggleFromPopup, canToggleFromPopup);
     }
 
-    public PCLCardData setMultiformData(int maxForms, boolean canToggleFromPopup, boolean canToggleOnUpgrade, boolean canToggleFromAlternateForm, boolean unUpgradedCanToggleForms)
+    public PCLCardData setMultiformData(int maxForms, boolean canToggleFromPopup, boolean canToggleOnUpgrade, boolean canToggleFromAlternateForm)
     {
         this.maxForms = maxForms;
         this.canToggleFromPopup = canToggleFromPopup;
         this.canToggleOnUpgrade = canToggleOnUpgrade;
         this.canToggleFromAlternateForm = canToggleFromAlternateForm;
-        this.unUpgradedCanToggleForms = unUpgradedCanToggleForms;
 
         return this;
     }

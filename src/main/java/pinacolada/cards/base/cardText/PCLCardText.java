@@ -198,7 +198,7 @@ public class PCLCardText
         {
             offset_y += renderFooter(sb, card.isPopup ? PCLCoreImages.CardIcons.uniqueL.texture() : PCLCoreImages.CardIcons.unique.texture(), offset_y);
         }
-        if (card.cardData.canToggleFromPopup && (card.upgraded || card.cardData.unUpgradedCanToggleForms))
+        if (card.cardData.canToggleFromPopup)
         {
             offset_y += renderFooter(sb, card.isPopup ? PCLCoreImages.CardIcons.multiformL.texture() : PCLCoreImages.CardIcons.multiform.texture(), offset_y);
         }

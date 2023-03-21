@@ -78,7 +78,7 @@ public class PCLCustomCardAttackPage extends PCLCustomCardEffectPage
                     if (!targets.isEmpty() && primaryCond instanceof PCardPrimary_DealDamage)
                     {
                         ((PCardPrimary_DealDamage) primaryCond).fields.setAttackEffect(targets.get(0));
-                        constructEffect();
+                        scheduleConstruct();
                     }
                 })
                 .setLabelFunctionForOption(Enum::name, false)

@@ -34,6 +34,7 @@ public class PCLDynamicData extends PCLCardData
     public PCLCard source;
     public PCardPrimary_DealDamage attackSkill;
     public PCardPrimary_GainBlock blockSkill;
+    public boolean linearUpgrade;
     public boolean showTypeText = true;
 
     public PCLDynamicData(String id)
@@ -155,6 +156,8 @@ public class PCLDynamicData extends PCLCardData
         safeLoadValue(() -> setMaxCopies(data.maxCopies));
         safeLoadValue(() -> setUnique(data.unique));
         safeLoadValue(() -> setRemovableFromDeck(data.removableFromDeck));
+        safeLoadValue(() -> setLinearUpgrade(data.linearUpgrade));
+        setMultiformData(data.builders.size());
     }
 
     private void safeLoadValue(ActionT0 loadFunc)
@@ -392,6 +395,13 @@ public class PCLDynamicData extends PCLCardData
     public PCLDynamicData setColor(AbstractCard.CardColor color)
     {
         super.setColor(color);
+        return this;
+    }
+
+    public PCLDynamicData setLinearUpgrade(boolean linearUpgrade)
+    {
+        this.linearUpgrade = linearUpgrade;
+
         return this;
     }
 

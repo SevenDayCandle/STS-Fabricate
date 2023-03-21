@@ -79,7 +79,7 @@ public class PCLCoreStrings extends PCLStrings
     public final String cedit_removeForm = cedit.TEXT[35];
     public final String cedit_undo = cedit.TEXT[36];
     public final String cedit_custom = cedit.TEXT[37];
-    public final String cedit_delegate = cedit.TEXT[38];
+    public final String cedit_linearUpgrade = cedit.TEXT[38];
     public final String cedit_duplicate = cedit.TEXT[39];
     public final String cedit_delete = cedit.TEXT[40];
     public final String cedit_reloadCards = cedit.TEXT[41];
@@ -97,45 +97,13 @@ public class PCLCoreStrings extends PCLStrings
     public final String cedit_duplicateToColor = cedit.TEXT[53];
     public final String cedit_duplicateToColorDesc = cedit.TEXT[54];
     public final String cedit_createRandom = cedit.TEXT[55];
-    public final String cedit_importExisting = cedit.TEXT[56];
+    public final String cedit_loadFromCard = cedit.TEXT[56];
     public final String cedit_openFolder = cedit.TEXT[57];
     public final String cedit_exportCSV = cedit.TEXT[58];
     public final String cedit_random = cedit.TEXT[59];
     public final String cedit_required = cedit.TEXT[60];
     public final String cedit_origins = cedit.TEXT[61];
     public final String cedit_enable = cedit.TEXT[62];
-    public final String cedit_loadFromCard = cedit.TEXT[63];
-
-    // Card Pile
-    public final String cpile_discardPile = cardPile.TEXT[0];
-    public final String cpile_drawPile = cardPile.TEXT[1];
-    public final String cpile_exhaustPile = cardPile.TEXT[2];
-    public final String cpile_hand = cardPile.TEXT[3];
-    public final String cpile_masterDeck = cardPile.TEXT[4];
-    public final String cpile_purgedPile = cardPile.TEXT[5];
-    public final String cpile_manual = cardPile.TEXT[6];
-    public final String cpile_top = cardPile.TEXT[7];
-    public final String cpile_bottom = cardPile.TEXT[8];
-    public final String cpile_random = cardPile.TEXT[9];
-
-    // Card Type
-    public final String ctype_none = cardtype.TEXT[0];
-    public final String ctype_allAlly = cardtype.TEXT[1];
-    public final String ctype_allCharacter = cardtype.TEXT[2];
-    public final String ctype_allEnemy = cardtype.TEXT[3];
-    public final String ctype_any = cardtype.TEXT[4];
-    public final String ctype_randomAlly = cardtype.TEXT[5];
-    public final String ctype_randomEnemy = cardtype.TEXT[6];
-    public final String ctype_self = cardtype.TEXT[7];
-    public final String ctype_singleAlly = cardtype.TEXT[8];
-    public final String ctype_singleTarget = cardtype.TEXT[9];
-    public final String ctype_team = cardtype.TEXT[10];
-    public final String ctype_legendary = cardtype.TEXT[11];
-    public final String ctype_secretRare = cardtype.TEXT[12];
-    public final String ctype_general = cardtype.TEXT[13];
-    public final String ctype_tagAll = cardtype.TEXT[14];
-    public final String ctype_tagAoE = cardtype.TEXT[15];
-    public final String ctype_tagRandom = cardtype.TEXT[16];
 
     // Card Editor Tutorial
     public final String cetut_selector1 = cetut.TEXT[0];
@@ -170,6 +138,38 @@ public class PCLCoreStrings extends PCLStrings
     public final String cetut_hitCount = cetut.TEXT[29];
     public final String cetut_blockCount = cetut.TEXT[30];
     public final String cetut_loadFromCardScreen = cetut.TEXT[31];
+    public final String cetut_linearUpgrade = cetut.TEXT[32];
+
+    // Card Pile
+    public final String cpile_discardPile = cardPile.TEXT[0];
+    public final String cpile_drawPile = cardPile.TEXT[1];
+    public final String cpile_exhaustPile = cardPile.TEXT[2];
+    public final String cpile_hand = cardPile.TEXT[3];
+    public final String cpile_masterDeck = cardPile.TEXT[4];
+    public final String cpile_purgedPile = cardPile.TEXT[5];
+    public final String cpile_manual = cardPile.TEXT[6];
+    public final String cpile_top = cardPile.TEXT[7];
+    public final String cpile_bottom = cardPile.TEXT[8];
+    public final String cpile_random = cardPile.TEXT[9];
+
+    // Card Type
+    public final String ctype_none = cardtype.TEXT[0];
+    public final String ctype_allAlly = cardtype.TEXT[1];
+    public final String ctype_allCharacter = cardtype.TEXT[2];
+    public final String ctype_allEnemy = cardtype.TEXT[3];
+    public final String ctype_any = cardtype.TEXT[4];
+    public final String ctype_randomAlly = cardtype.TEXT[5];
+    public final String ctype_randomEnemy = cardtype.TEXT[6];
+    public final String ctype_self = cardtype.TEXT[7];
+    public final String ctype_singleAlly = cardtype.TEXT[8];
+    public final String ctype_singleTarget = cardtype.TEXT[9];
+    public final String ctype_team = cardtype.TEXT[10];
+    public final String ctype_legendary = cardtype.TEXT[11];
+    public final String ctype_secretRare = cardtype.TEXT[12];
+    public final String ctype_general = cardtype.TEXT[13];
+    public final String ctype_tagAll = cardtype.TEXT[14];
+    public final String ctype_tagAoE = cardtype.TEXT[15];
+    public final String ctype_tagRandom = cardtype.TEXT[16];
 
     // Character
     public final String csel_leftText = charselect.TEXT[0];  // Starting Cards:

@@ -95,7 +95,7 @@
 												"Remove Form",
 												"Undo",
 												"Custom Power",
-												"Delegates",
+												"Linear Upgrade Path",
 												"Duplicate",
 												"Delete",
 												"Reload Cards",
@@ -113,14 +113,13 @@
 												"Duplicate to Color",
 												"Select the Color to copy this card to.",
 												"Create Random",
-												"Import Existing",
+												"Load From Card",
 												"Open Card Folder",
 												"Export CSV",
 												"Random",
 												"Required",
 												"Selection",
-												"Enable",
-												"Load From Card"
+												"Enable"
 								]
 				},
 				"pcl:CardEditorTutorial": {
@@ -156,7 +155,8 @@
 												"The visual effect that plays on the target.",
 												"The number of times this #yAttack will hit the target. Each hit is treated independently with regards to damage calculations and powers on the target.",
 												"The number of times that this card will grant #yBlock. Each #yBlock grant is treated independently with regards to #yBlock calculations and powers on the target.",
-												"Create a card from an example template."
+												"Create a card from an example template.",
+												"If checked, the card's form number will always match its upgrade value. You will not be able to choose the card's form when upgrading it."
 								]
 				},
 				"pcl:CardPile": {
@@ -348,6 +348,7 @@
 												"Enable custom relics in normal runs",
 												"Enable custom poitons in normal runs",
 												"Enable custom events in normal runs",
+												"Use Madness for missing cards",
 												"Use custom card framework for all cards"
 								]
 				},
@@ -359,6 +360,7 @@
 												"Enables a draggable widget that shows damage formula calculations for custom cards when dragging them over targets.",
 												"Certain custom card properties (e.g. Affinities) are hidden by default for characters that don't use them. Check this option to always show these properties regardless of the character. | This setting also enables editing and interacting with these properties in the card editor for any card color.",
 												"This setting will only be applied to new runs.",
+												"If a non-existent card is created, a placeholder card will be generated with that card's supposed ID. Check this option to have that card be a Madness instead, mimicking base-game behavior.",
 												"Forces all cards encountered in a run to be built with this mod's card framework, which may improve compatibility between them and certain custom card effects. | WARNING: This setting will likely break functionality from other mods."
 								]
 				},

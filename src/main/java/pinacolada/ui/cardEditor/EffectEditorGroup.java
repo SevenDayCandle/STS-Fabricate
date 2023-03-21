@@ -38,6 +38,7 @@ public class EffectEditorGroup<T extends PSkill<?>> extends EUIBase
     }
 
     // Add a subeffect to this joint effect, and select the first effect in the list to prevent the user from saving a null effect
+    // We can call construct effect directly here because this is itself called in a callback
     public PCLCustomCardEffectEditor<T> addEffectSlot()
     {
         lowerEffects.add(null);
@@ -47,10 +48,13 @@ public class EffectEditorGroup<T extends PSkill<?>> extends EUIBase
         {
             effectEditor.effects.setSelectedIndex(0);
         }
+        editor.constructEffect();
         editor.refresh();
         return effectEditor;
     }
 
+    // Remove a subeffect from this joint effect
+    // We can call construct effect directly here because this is itself called in a callback
     public void removeEffectSlot(int index)
     {
         if (lowerEffects.size() > index && editors.size() > index)
@@ -63,7 +67,7 @@ public class EffectEditorGroup<T extends PSkill<?>> extends EUIBase
             {
                 editors.get(i).updateIndex(i);
             }
-
+            editor.constructEffect();
             editor.refresh();
         }
     }

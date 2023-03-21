@@ -213,7 +213,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
             finalEffect = (delayMove.makeCopy()).setChild(finalEffect);
         }
 
-        if (multiCond != null)
+        if (conditionGroup.lowerEffects.size() > 0)
         {
             finalEffect = new PMultiCond().setEffects(EUIUtils.mapAsNonnull(conditionGroup.lowerEffects, e -> e != null ? (PCond<?>) e.makeCopy() : null))
                     .edit(f -> f.setOr(multiCond.fields.or))

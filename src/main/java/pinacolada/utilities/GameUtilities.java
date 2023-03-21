@@ -144,7 +144,7 @@ public class GameUtilities
     public static CountingPanelStats<PCLAffinity, PCLAffinity, AbstractCard> affinityStats(Iterable<AbstractCard> cards)
     {
         return CountingPanelStats.basic(
-                card -> GameUtilities.getPCLCardAffinities(card).getAffinities(false, true),
+                GameUtilities::getVisiblePCLAffinities,
                 cards);
     }
 
@@ -1524,6 +1524,12 @@ public class GameUtilities
         }
 
         return orbs.size();
+    }
+
+    public static List<PCLAffinity> getVisiblePCLAffinities(AbstractCard card)
+    {
+        PCLCardAffinities cardAffinities = getPCLCardAffinities(card);
+        return cardAffinities != null ? cardAffinities.getAffinities(false, true) : EUIUtils.list(PCLAffinity.General);
     }
 
     public static int getXCostEnergy(AbstractCard card)

@@ -340,7 +340,7 @@ public class PCLSingleCardPopup extends EUIBase
         if (cardData != null)
         {
             String author = FlavorText.CardStringsFlavorField.flavor.get(cardData.strings);
-            viewChangeVariants = cardData.canToggleFromPopup && (baseCard.upgraded || cardData.unUpgradedCanToggleForms) && (baseCard.auxiliaryData.form == 0 || cardData.canToggleFromAlternateForm) && GameUtilities.inGame();
+            viewChangeVariants = cardData.canToggleFromPopup && (baseCard.auxiliaryData.form == 0 || cardData.canToggleFromAlternateForm) && GameUtilities.inGame();
             changeVariantDescription.setLabel(!cardData.canToggleFromAlternateForm ? PGR.core.strings.scp_changeVariantTooltipPermanent : PGR.core.strings.scp_changeVariantTooltipAlways);
             artAuthorLabel.setLabel(author != null ? PGR.core.strings.scp_artAuthor + EUIUtils.modifyString(author, w -> "#y" + w) : "");
         }
@@ -504,7 +504,7 @@ public class PCLSingleCardPopup extends EUIBase
         this.artAuthorLabel.tryUpdate();
         this.toggleAugment.tryUpdate();
 
-        this.viewVariants = viewChangeVariants || baseCard != null && baseCard.cardData != null && (SingleCardViewPopup.isViewingUpgrade || baseCard.cardData.unUpgradedCanToggleForms) && baseCard.getMaxForms() > 1;
+        this.viewVariants = viewChangeVariants || baseCard != null && baseCard.cardData != null && baseCard.getMaxForms() > 1;
 
         if (showAugments)
         {

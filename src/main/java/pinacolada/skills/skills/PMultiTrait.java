@@ -146,6 +146,9 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
     }
 
     @Override
+    public boolean isBlank() {return effects.size() == 0 && !(childEffect != null && !childEffect.isBlank());}
+
+    @Override
     public boolean isDetrimental()
     {
         return EUIUtils.any(effects, PSkill::isDetrimental);

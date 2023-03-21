@@ -41,8 +41,9 @@ public class PCLCustomCardSlot
     public Integer loadout;
     public Integer maxUpgradeLevel;
     public Integer maxCopies;
-    public Boolean unique;
+    public Boolean linearUpgrade;
     public Boolean removableFromDeck;
+    public Boolean unique;
     public String type;
     public String rarity;
     public String color;
@@ -292,6 +293,7 @@ public class PCLCustomCardSlot
             maxCopies = first.maxCopies;
             unique = first.unique;
             removableFromDeck = first.removableFromDeck;
+            linearUpgrade = first.linearUpgrade;
             affinities = EUIUtils.serialize(first.affinities);
             tags = EUIUtils.mapAsNonnull(first.tags.values(), EUIUtils::serialize).toArray(new String[]{});
         }

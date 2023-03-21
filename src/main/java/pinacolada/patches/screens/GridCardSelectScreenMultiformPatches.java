@@ -23,6 +23,7 @@ import javassist.CtBehavior;
 import javassist.expr.ExprEditor;
 import javassist.expr.MethodCall;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.cards.base.PCLDynamicData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -386,21 +387,24 @@ public class GridCardSelectScreenMultiformPatches
         public static void insert(GridCardSelectScreen __instance)
         {
             AbstractCard c = GridCardSelectScreenMultiformPatches.getHoveredCard();
-            PCLCard pC = EUIUtils.safeCast(c, PCLCard.class);
-            if (pC != null && pC.cardData.canToggleOnUpgrade)
+            PCLCard base = EUIUtils.safeCast(c, PCLCard.class);
+            if (base != null && base.cardData.canToggleOnUpgrade)
             {
                 final ArrayList<AbstractCard> list = GridCardSelectScreenMultiformPatches.BranchSelectFields.branchUpgrades.get(__instance);
                 list.clear();
 
-                for (int i = 0; i < pC.getMaxForms(); i++)
+                if (base.cardData instanceof PCLDynamicData && ((PCLDynamicData) base.cardData).linearUpgrade)
                 {
-                    PCLCard previewCard = pC.makeStatEquivalentCopy();
-                    previewCard.changeForm(i, previewCard.timesUpgraded);
-                    previewCard.upgrade();
-                    previewCard.displayUpgrades();
-                    previewCard.initializeDescription();
-                    list.add(previewCard);
+                    list.add(getPreviewCard(base, base.timesUpgraded));
                 }
+                else
+                {
+                    for (int i = 0; i < base.getMaxForms(); i++)
+                    {
+                        list.add(getPreviewCard(base, i));
+                    }
+                }
+
 
                 cardList = list;
 
@@ -412,6 +416,16 @@ public class GridCardSelectScreenMultiformPatches
                 refreshButtons(__instance);
             }
 
+        }
+
+        protected static PCLCard getPreviewCard(PCLCard base, int i)
+        {
+            PCLCard previewCard = base.makeStatEquivalentCopy();
+            previewCard.changeForm(i, previewCard.timesUpgraded);
+            previewCard.upgrade();
+            previewCard.displayUpgrades();
+            previewCard.initializeDescription();
+            return previewCard;
         }
 
         private static class Locator extends SpireInsertLocator

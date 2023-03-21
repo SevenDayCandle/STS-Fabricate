@@ -24,7 +24,7 @@ import java.util.List;
 public abstract class PField implements Serializable
 {
     public static final PCLCoreStrings TEXT = PGR.core.strings;
-    public transient PSkill skill;
+    public transient PSkill<?> skill;
 
     public abstract PField makeCopy();
 
@@ -39,7 +39,7 @@ public abstract class PField implements Serializable
 
     }
 
-    public PField setSkill(PSkill skill)
+    public PField setSkill(PSkill<?> skill)
     {
         this.skill = skill;
         return this;

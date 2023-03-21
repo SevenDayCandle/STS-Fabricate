@@ -49,7 +49,7 @@ public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
                     if (primaryCond != null)
                     {
                         primaryCond.setAmount(val);
-                        constructEffect();
+                        scheduleConstruct();
                     }
                 })
                 .setLimits(-1, PSkill.DEFAULT_MAX)

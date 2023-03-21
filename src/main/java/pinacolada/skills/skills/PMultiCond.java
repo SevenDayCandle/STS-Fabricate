@@ -130,6 +130,9 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
     }
 
     @Override
+    public boolean isBlank() {return effects.size() == 0 && !(childEffect != null && !childEffect.isBlank());}
+
+    @Override
     public PMultiCond makeCopy()
     {
         PMultiCond copy = (PMultiCond) super.makeCopy();
@@ -220,6 +223,10 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         for (PSkill<?> effect : effects)
         {
             effect.refresh(info, refreshVal);
+        }
+        if (this.childEffect != null)
+        {
+            this.childEffect.refresh(info, refreshVal);
         }
     }
 
