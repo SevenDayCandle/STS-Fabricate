@@ -41,7 +41,7 @@ public abstract class AffinityToken extends PCLCard
         final RandomizedList<PCLCardData> temp = new RandomizedList<>(getCards());
         while (amount > 0 && temp.size() > 0)
         {
-            group.group.add(temp.retrieve(rng, true).makeCopy(upgrade));
+            group.group.add(temp.retrieve(rng, true).create(0));
             amount -= 1;
         }
 
@@ -50,7 +50,7 @@ public abstract class AffinityToken extends PCLCard
 
     public static AffinityToken getCard(PCLAffinity affinity)
     {
-        return (AffinityToken) getCardData(affinity).createNewInstance();
+        return (AffinityToken) getCardData(affinity).createImpl();
     }
 
     public static AffinityTokenData getCardData(PCLAffinity affinity)
@@ -96,7 +96,7 @@ public abstract class AffinityToken extends PCLCard
 
     public static AffinityToken getCopy(PCLAffinity affinity, boolean upgraded)
     {
-        return (AffinityToken) getCardData(affinity).makeCopy(upgraded);
+        return (AffinityToken) getCardData(affinity).create(0);
     }
 
     protected static AffinityTokenData registerAffinityToken(Class<? extends PCLCard> type, PCLAffinity affinity)

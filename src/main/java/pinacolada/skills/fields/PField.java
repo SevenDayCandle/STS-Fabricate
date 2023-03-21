@@ -1,11 +1,16 @@
 package pinacolada.skills.fields;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.helpers.RelicLibrary;
+import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIUtils;
+import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLCardGroupHelper;
+import pinacolada.cards.base.PCLCustomCardSlot;
+import pinacolada.cards.base.PCLDynamicData;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.tags.PCLCardTag;
@@ -19,6 +24,7 @@ import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public abstract class PField implements Serializable
@@ -99,11 +105,33 @@ public abstract class PField implements Serializable
     {
         if (cardID != null)
         {
-            AbstractCard c = CardLibrary.getCard(cardID);
+            // NOT using CardLibrary.getCard as the replacement patching on that method may cause text glitches or infinite loops in this method
+            AbstractCard c = CardLibrary.cards.get(cardID);
             if (c != null)
             {
                 return c.name;
             }
+
+            // Try to load data on cards not in the library
+            PCLCardData data = PCLCardData.getStaticData(cardID);
+            if (data != null)
+            {
+                return data.strings.NAME;
+            }
+
+            // Try to load data from slots. Do not actually create cards here to avoid infinite loops
+            PCLCustomCardSlot slot = PCLCustomCardSlot.get(cardID);
+            if (slot != null)
+            {
+                HashMap<Settings.GameLanguage, CardStrings> languageMap = PCLDynamicData.parseLanguageStrings(slot.languageStrings);
+                CardStrings language = languageMap != null ? PCLDynamicData.getStringsForLanguage(languageMap) : null;
+                if (language != null)
+                {
+                    return language.NAME;
+                }
+            }
+
+            return cardID;
         }
         return "";
     }

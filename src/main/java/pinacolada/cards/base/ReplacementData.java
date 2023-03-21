@@ -110,7 +110,7 @@ public class ReplacementData extends PCLDynamicData
         ReplacementData initial = getReplacementData(card, copyNumbers);
         if (initial != null)
         {
-            return initial.build();
+            return initial.createImpl();
         }
         else
         {

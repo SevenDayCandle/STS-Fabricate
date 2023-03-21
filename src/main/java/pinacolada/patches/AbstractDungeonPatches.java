@@ -13,7 +13,6 @@ import javassist.expr.MethodCall;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.misc.CombatManager;
 import pinacolada.resources.PCLResources;
-import pinacolada.resources.PCLStrings;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
@@ -59,7 +58,7 @@ public class AbstractDungeonPatches
                     {
                         if (cards.get(i).cardID.equals(AscendersBane.ID))
                         {
-                            cards.set(i, bane.makeCopy(false));
+                            cards.set(i, bane.makeCopyFromLibrary(0));
                             UnlockTracker.markCardAsSeen(bane.ID);
                         }
                     }

@@ -71,7 +71,7 @@ public class PMod_XEnergy extends PPassiveMod<PField_Empty>
         int value = EUIUtils.parseInt(input, 2);
         if (value == 1)
         {
-            input = "";
+            input = GameUtilities.EMPTY_STRING;
         }
         input = this.amount > 0 ? input + TEXT.subjects_x + "+" + this.amount : input + TEXT.subjects_x;
         return parent != null ? parent.wrapAmountChild(input) : (input);

@@ -24,6 +24,7 @@ import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.skills.skills.PSpecialSkill;
 import pinacolada.ui.characterSelection.PCLBaseStatEditor;
+import pinacolada.utilities.GameUtilities;
 
 import java.util.*;
 
@@ -51,7 +52,7 @@ public abstract class PCLLoadout
     public ArrayList<PCLCardData> strikes = new ArrayList<>();
     public PCLLoadoutData[] presets = new PCLLoadoutData[PCLLoadout.MAX_PRESETS];
     protected ArrayList<String> startingDeck = new ArrayList<>();
-    protected String shortDescription = "";
+    protected String shortDescription = GameUtilities.EMPTY_STRING;
 
     public static PCLLoadout register(AbstractCard.CardColor color, FuncT1<PCLLoadout, AbstractCard.CardColor> loadoutFunc)
     {
@@ -558,7 +559,7 @@ public abstract class PCLLoadout
                 .setImagePath(data.imagePath)
                 .showTypeText(false)
                 .setMaxUpgrades(0))
-                .build();
+                .createImplWithForms(false);
 
         card.name = isCore() ? PGR.core.strings.sui_core : getName();
         card.clearSkills();

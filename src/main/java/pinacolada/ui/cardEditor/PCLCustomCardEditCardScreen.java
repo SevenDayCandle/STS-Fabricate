@@ -274,7 +274,7 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
 
     protected void rebuildCard()
     {
-        previewCard = getBuilder().build();
+        previewCard = getBuilder().createImplWithForms(false);
         if (SingleCardViewPopup.isViewingUpgrade)
         {
             //previewCard.upgrade();

@@ -1,4 +1,4 @@
-package pinacolada.skills.skills.special;
+package pinacolada.skills.skills;
 
 import extendedui.EUIUtils;
 import pinacolada.cards.base.PCLCardData;

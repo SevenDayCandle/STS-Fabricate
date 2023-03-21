@@ -23,6 +23,7 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
+import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
 import java.util.ArrayList;
@@ -33,7 +34,6 @@ import java.util.List;
 // TODO Move generic logic into other classes
 public class PCLCardText
 {
-    protected final static String EMPTY = "";
     protected final static Color DEFAULT_COLOR = Settings.CREAM_COLOR.cpy();
     protected final static HashMap<AbstractCard.CardRarity, ColoredTexture> panels = new HashMap<>();
     protected final static HashMap<AbstractCard.CardRarity, ColoredTexture> panelsLarge = new HashMap<>();
@@ -60,7 +60,7 @@ public class PCLCardText
     protected int lineIndex;
 
     protected final PCLCard card;
-    protected String overrideDescription = EMPTY;
+    protected String overrideDescription = GameUtilities.EMPTY_STRING;
     private float badgeAlphaTargetOffset = 1f;
     private float badgeAlphaOffset = -0.2f;
 

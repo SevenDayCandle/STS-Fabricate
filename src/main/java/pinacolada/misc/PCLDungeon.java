@@ -485,20 +485,20 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
                 CardGroup pool = GameUtilities.getCardPool(rarity);
                 if (pool != null)
                 {
-                    pool.addToBottom(c.getBuilder(0).build());
+                    pool.addToBottom(c.getBuilder(0).createImpl());
                     EUIUtils.logInfoIfDebug(this, "Added Custom Card " + c.ID + " to pool " + rarity);
                 }
                 CardGroup spool = GameUtilities.getCardPoolSource(rarity);
                 if (spool != null)
                 {
-                    spool.addToBottom(c.getBuilder(0).build());
+                    spool.addToBottom(c.getBuilder(0).createImpl());
                     EUIUtils.logInfoIfDebug(this, "Added Custom Card " + c.ID + " to source pool " + rarity);
                 }
             }
             for (PCLCustomCardSlot c : PCLCustomCardSlot.getCards(AbstractCard.CardColor.COLORLESS))
             {
-                AbstractDungeon.srcColorlessCardPool.addToBottom(c.getBuilder(0).build());
-                AbstractDungeon.colorlessCardPool.addToBottom(c.getBuilder(0).build());
+                AbstractDungeon.srcColorlessCardPool.addToBottom(c.getBuilder(0).createImpl());
+                AbstractDungeon.colorlessCardPool.addToBottom(c.getBuilder(0).createImpl());
                 EUIUtils.logInfoIfDebug(this, "Added Custom Card " + c.ID + " to Colorless pool");
             }
         }

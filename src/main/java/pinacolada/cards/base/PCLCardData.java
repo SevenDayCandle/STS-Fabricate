@@ -136,9 +136,9 @@ public class PCLCardData implements CardObject
     {
         CardStrings retVal = new CardStrings();
         retVal.NAME = "NAN";
-        retVal.DESCRIPTION = "";
-        retVal.UPGRADE_DESCRIPTION = "";
-        retVal.EXTENDED_DESCRIPTION = new String[]{""};
+        retVal.DESCRIPTION = GameUtilities.EMPTY_STRING;
+        retVal.UPGRADE_DESCRIPTION = GameUtilities.EMPTY_STRING;
+        retVal.EXTENDED_DESCRIPTION = new String[]{GameUtilities.EMPTY_STRING};
         return retVal;
     }
 
@@ -172,14 +172,14 @@ public class PCLCardData implements CardObject
         return addTags(EUIUtils.map(tags, tag -> tag.make(0, 1)));
     }
 
-    public PCLCard createNewInstance(int form, boolean upgrade) throws RuntimeException
+    public PCLCard create(int form, int upgrade) throws RuntimeException
     {
-        PCLCard card = createNewInstance();
+        PCLCard card = createImpl();
         if (form > 0 && form < card.cardData.maxForms)
         {
             card.setForm(form, 0);
         }
-        if (upgrade && card.canUpgrade())
+        for (int i = 0; i < upgrade; i++)
         {
             card.upgrade();
         }
@@ -187,10 +187,10 @@ public class PCLCardData implements CardObject
         return card;
     }
 
-    public PCLCard createNewInstance(boolean upgrade) throws RuntimeException
+    public PCLCard create(int upgrade) throws RuntimeException
     {
-        PCLCard card = createNewInstance();
-        if (upgrade && card.canUpgrade())
+        PCLCard card = createImpl();
+        for (int i = 0; i < upgrade; i++)
         {
             card.upgrade();
         }
@@ -198,7 +198,7 @@ public class PCLCardData implements CardObject
         return card;
     }
 
-    public PCLCard createNewInstance() throws RuntimeException
+    public PCLCard createImpl() throws RuntimeException
     {
         try
         {
@@ -229,7 +229,7 @@ public class PCLCardData implements CardObject
     @Override
     public AbstractCard getCard()
     {
-        return makeCopy(false);
+        return makeCopyFromLibrary(0);
     }
 
     public TextureAtlas.AtlasRegion getCardIcon()
@@ -361,10 +361,9 @@ public class PCLCardData implements CardObject
         return UnlockTracker.isCardLocked(ID) || !UnlockTracker.isCardSeen(ID);
     }
 
-    // CardLibrary.getCopy may return an EYBCard if it determines a card should be replaced, so we cannot guarantee it is a PCLCard
-    public AbstractCard makeCopy(boolean upgraded)
+    public AbstractCard makeCopyFromLibrary(int upgrade)
     {
-        return (!type.isAnnotationPresent(VisibleCard.class) ? createNewInstance(upgraded) : CardLibrary.getCopy(ID, upgraded ? 1 : 0, 0));
+        return (!type.isAnnotationPresent(VisibleCard.class) ? create(upgrade) : CardLibrary.getCopy(ID, upgrade, 0));
     }
 
     public void markSeen()

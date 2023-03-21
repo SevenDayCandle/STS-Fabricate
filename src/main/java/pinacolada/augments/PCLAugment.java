@@ -63,6 +63,11 @@ public abstract class PCLAugment implements TooltipProvider
         return AUGMENT_MAP.keySet();
     }
 
+    public static Collection<PCLAugmentData> getAvailable()
+    {
+        return AVAILABLE_AUGMENTS;
+    }
+
     public static Collection<PCLAugmentData> getValues()
     {
         return AUGMENT_MAP.values();

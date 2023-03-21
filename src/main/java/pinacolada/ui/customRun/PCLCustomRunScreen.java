@@ -22,6 +22,7 @@ import pinacolada.misc.PCLDungeon;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.trials.PCLCustomTrial;
+import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,7 +33,7 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
 {
     public static final HashMap<String, AbstractCard.CardColor> COLOR_MOD_MAPPING = new HashMap<>();
     protected CharacterOption currentOption;
-    protected String currentSeed = "";
+    protected String currentSeed = GameUtilities.EMPTY_STRING;
     protected boolean initialized;
     protected final PCLCustomRunCanvas canvas;
     public HashSet<String> bannedCards = new HashSet<>();
@@ -221,7 +222,7 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
             {
                 if (AbstractCard.CardRarity.valueOf(slot.rarity) != AbstractCard.CardRarity.SPECIAL)
                 {
-                    group.group.add(slot.getBuilder(0).build());
+                    group.group.add(slot.getBuilder(0).createImplWithForms(false));
                 }
             }
         }
@@ -236,7 +237,7 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
             {
                 if (AbstractCard.CardRarity.valueOf(slot.rarity) != AbstractCard.CardRarity.SPECIAL)
                 {
-                    group.group.add(slot.getBuilder(0).build());
+                    group.group.add(slot.getBuilder(0).createImplWithForms(false));
                 }
             }
         }

@@ -2166,11 +2166,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
 
     @Override
     public AbstractCard makeCopy() {
-        PCLCard card = cardData.createNewInstance();
-        if (card != null) {
-            card.changeForm(auxiliaryData.form, timesUpgraded);
-        }
-        return card;
+        return cardData.create(auxiliaryData.form, timesUpgraded);
     }
 
     public boolean isMultiUpgrade() {

@@ -89,6 +89,7 @@ public class GameUtilities
 {
     protected static final String PORTRAIT_PATH = "images/1024Portraits/";
     protected static final String BETA_PATH = "images/1024PortraitsBeta/";
+    public final static String EMPTY_STRING = "";
     private static final AbstractCard.CardRarity[] poolOrdering = AbstractCard.CardRarity.values();
     private static final RandomizedList<AbstractCard> fullCardPool = new RandomizedList<>();
     private static final RandomizedList<AbstractCard> characterCardPool = new RandomizedList<>();
@@ -1943,8 +1944,8 @@ public class GameUtilities
     public static CardStrings mockCardStrings()
     {
         CardStrings s = new CardStrings();
-        s.NAME = "";
-        s.DESCRIPTION = "";
+        s.NAME = GameUtilities.EMPTY_STRING;
+        s.DESCRIPTION = GameUtilities.EMPTY_STRING;
         s.EXTENDED_DESCRIPTION = new String[]{};
         return s;
     }

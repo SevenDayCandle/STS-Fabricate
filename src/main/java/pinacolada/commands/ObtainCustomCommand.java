@@ -55,14 +55,14 @@ public class ObtainCustomCommand extends ConsoleCommand
 
             for (int i = 0; i < count; ++i)
             {
-                PCLCard copy = slot.builders.get(form).build(true);
+                PCLCard copy = slot.builders.get(form).createImplWithForms(true);
 
                 for (int j = 0; j < upgradeCount; ++j)
                 {
                     copy.upgrade();
                 }
 
-                PCLActions.bottom.makeCardInHand(copy);
+                doAction(copy);
             }
         }
         else
@@ -94,5 +94,10 @@ public class ObtainCustomCommand extends ConsoleCommand
         }
 
         return options;
+    }
+
+    protected void doAction(PCLCard copy)
+    {
+        PCLActions.bottom.makeCardInHand(copy);
     }
 }

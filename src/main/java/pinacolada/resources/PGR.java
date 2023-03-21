@@ -361,7 +361,7 @@ public class PGR
         catch (Error | Exception e)
         {
             e.printStackTrace();
-            EUIUtils.logError(PGR.class, "Failed to load ImGUI elements. These elements will not be available in ImGUI.");
+            EUIUtils.logError(PGR.class, "Failed to load ImGUI debug panels. These panels will not be available in ImGUI.");
         }
 
         EUI.addBattleSubscriber(PGR.combatScreen);
@@ -384,6 +384,7 @@ public class PGR
         ConsoleCommand.addCommand("exportcsv", ExportCSVCommand.class);
         ConsoleCommand.addCommand("obtain", ObtainCommand.class);
         ConsoleCommand.addCommand("obtaincustom", ObtainCustomCommand.class);
+        ConsoleCommand.addCommand("obtaindeckcustom", ObtainDeckCustomCommand.class);
         ConsoleCommand.addCommand("reloadcustom", ReloadCustomCommand.class);
         ConsoleCommand.addCommand("unlockall", UnlockAllCommand.class);
     }

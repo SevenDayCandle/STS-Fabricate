@@ -528,14 +528,14 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
         if (availableCards == null)
         {
             AbstractCard.CardColor cardColor = getColor();
-            availableCards = GameUtilities.isPCLOnlyCardColor(cardColor) ? EUIUtils.mapAsNonnull(PCLCardData.getAllData(false, false, cardColor), cd -> cd.makeCopy(false))
+            availableCards = GameUtilities.isPCLOnlyCardColor(cardColor) ? EUIUtils.mapAsNonnull(PCLCardData.getAllData(false, false, cardColor), cd -> cd.makeCopyFromLibrary(0))
                     :
                     EUIUtils.filter(CardLibrary.getAllCards(),
                             c -> !PCLDungeon.isColorlessCardExclusive(c) && (c.color == AbstractCard.CardColor.COLORLESS || c.color == AbstractCard.CardColor.CURSE || c.color == cardColor));
-            availableCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(cardColor), c -> c.getBuilder(0).build()));
+            availableCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(cardColor), c -> c.getBuilder(0).createImpl()));
             if (cardColor != AbstractCard.CardColor.COLORLESS)
             {
-                availableCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(AbstractCard.CardColor.COLORLESS), c -> c.getBuilder(0).build()));
+                availableCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(AbstractCard.CardColor.COLORLESS), c -> c.getBuilder(0).createImpl()));
             }
             availableCards.sort((a, b) -> StringUtils.compare(a.name, b.name));
         }

@@ -204,7 +204,7 @@ public class TryChooseChoice<T> extends PCLAction<ArrayList<ChoiceCard<T>>>
 
         for (ChoiceData<T> builder : builders)
         {
-            group.addToTop(builder.build());
+            group.addToTop(builder.createImplWithForms(false));
         }
 
         if (group.isEmpty())

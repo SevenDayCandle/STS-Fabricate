@@ -86,7 +86,7 @@ public class PCLDebugCardPanel
     public PCLDebugCardPanel()
     {
         originalSortedCards.addAll(CardLibrary.getAllCards());
-        originalSortedCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(null), slot -> slot.getBuilder(0).build()));
+        originalSortedCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(null), slot -> slot.getBuilder(0).createImplWithForms(false)));
         originalSortedCards.sort((a, b) -> StringUtils.compare(a.cardID, b.cardID));
         sortedModIDs.add(ALL);
         sortedModIDs.addAll(originalSortedCards.stream()
@@ -100,7 +100,7 @@ public class PCLDebugCardPanel
     {
         originalSortedCards.clear();
         originalSortedCards.addAll(CardLibrary.getAllCards());
-        originalSortedCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(null), slot -> slot.getBuilder(0).build()));
+        originalSortedCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(null), slot -> slot.getBuilder(0).createImplWithForms(false)));
         originalSortedCards.sort((a, b) -> StringUtils.compare(a.cardID, b.cardID));
     }
 

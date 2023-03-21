@@ -73,7 +73,7 @@ public class CardLibraryPatches
         PCLCardData data = resources.getReplacement(card.cardID);
         if (data != null)
         {
-            return data.makeCopy(card.upgraded);
+            return data.makeCopyFromLibrary(card.timesUpgraded);
         }
         else if (PGR.config.replaceCardsPCL.get())
         {
@@ -104,13 +104,13 @@ public class CardLibraryPatches
                 final PCLCardData data = getStandardReplacement(key);
                 if (data != null)
                 {
-                    return SpireReturn.Return(data.makeCopy(false));
+                    return SpireReturn.Return(data.makeCopyFromLibrary(0));
                 }
 
                 PCLCustomCardSlot slot = PCLCustomCardSlot.get(key);
                 if (slot != null)
                 {
-                    return SpireReturn.Return(slot.getBuilder(0).build(true));
+                    return SpireReturn.Return(slot.getBuilder(0).createImplWithForms(true));
                 }
             }
 
@@ -150,14 +150,14 @@ public class CardLibraryPatches
                     PCLCardData bane = resources.getAscendersBane();
                     if (bane != null)
                     {
-                        return SpireReturn.Return(bane.makeCopy(false));
+                        return SpireReturn.Return(bane.makeCopyFromLibrary(0));
                     }
                 }
             }
             final PCLCardData data = getStandardReplacement(key);
             if (data != null)
             {
-                return SpireReturn.Return(data.makeCopy(false));
+                return SpireReturn.Return(data.makeCopyFromLibrary(0));
             }
             return SpireReturn.Continue();
         }

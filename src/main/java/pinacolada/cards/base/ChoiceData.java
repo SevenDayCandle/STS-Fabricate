@@ -76,12 +76,12 @@ public class ChoiceData<T> extends PCLDynamicData
 
     public static <T> ChoiceCard<T> generate(PCLCardData card, T object)
     {
-        return new ChoiceData<T>(card, object).build();
+        return new ChoiceData<T>(card, object).createImpl();
     }
 
     public static ChoiceCard<PCLAffinity> generateAffinity(PCLAffinity affinity)
     {
-        return affinity(affinity).build();
+        return affinity(affinity).createImpl();
     }
 
     public ChoiceData(PCLCard card, T object)
@@ -106,7 +106,7 @@ public class ChoiceData<T> extends PCLDynamicData
         return this;
     }
 
-    public ChoiceCard<T> build()
+    public ChoiceCard<T> createImpl()
     {
         if (strings == null)
         {

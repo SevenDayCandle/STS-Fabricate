@@ -16,6 +16,7 @@ public class PCLAugmentCategorySub
     public static final PCLAugmentCategorySub TagDelayed = new PCLAugmentCategorySub(PCLAugmentCategory.Played);
     public static final PCLAugmentCategorySub TagHaste = new PCLAugmentCategorySub(PCLAugmentCategory.Played);
     public static final PCLAugmentCategorySub TagInnate = new PCLAugmentCategorySub(PCLAugmentCategory.Played);
+    public static final PCLAugmentCategorySub TagLoyal = new PCLAugmentCategorySub(PCLAugmentCategory.Played);
     public static final PCLAugmentCategorySub TagRetain = new PCLAugmentCategorySub(PCLAugmentCategory.Played);
 
     public final PCLAugmentCategory parent;

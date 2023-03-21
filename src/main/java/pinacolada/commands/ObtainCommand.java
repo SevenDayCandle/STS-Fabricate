@@ -12,7 +12,6 @@ import java.util.ArrayList;
 
 public class ObtainCommand extends ConsoleCommand
 {
-
     public ObtainCommand()
     {
         this.requiresPlayer = true;
@@ -53,19 +52,7 @@ public class ObtainCommand extends ConsoleCommand
 
             DevConsole.log("Obtained " + count + (count == 1 ? " copy of " : " copies of ") + tokens[1] + " with " + upgradeCount + " upgrade(s) and form " + form);
 
-            for (int i = 0; i < count; ++i)
-            {
-                PCLCard copy = (PCLCard) data.makeCopy(false);
-
-                for (int j = 0; j < upgradeCount; ++j)
-                {
-                    copy.upgrade();
-                }
-
-                copy.changeForm(form, upgradeCount);
-
-                PCLActions.bottom.makeCardInHand(copy);
-            }
+            createCards(data, count, upgradeCount, form);
         }
         else
         {
@@ -96,5 +83,19 @@ public class ObtainCommand extends ConsoleCommand
         }
 
         return options;
+    }
+
+    protected void createCards(PCLCardData data, int count, int upgradeCount, int form)
+    {
+        for (int i = 0; i < count; ++i)
+        {
+            PCLCard copy = data.create(form, upgradeCount);
+            doAction(copy);
+        }
+    }
+
+    protected void doAction(PCLCard copy)
+    {
+        PCLActions.bottom.makeCardInHand(copy);
     }
 }

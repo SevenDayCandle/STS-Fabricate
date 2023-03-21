@@ -17,6 +17,7 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PTrigger;
 import pinacolada.skills.skills.special.primary.PCardPrimary_DealDamage;
 import pinacolada.skills.skills.special.primary.PCardPrimary_GainBlock;
+import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,6 +37,33 @@ public class PCLDynamicData extends PCLCardData
     public PCardPrimary_GainBlock blockSkill;
     public boolean linearUpgrade;
     public boolean showTypeText = true;
+
+    public static HashMap<Settings.GameLanguage, CardStrings> parseLanguageStrings(String languageStrings)
+    {
+        return EUIUtils.deserialize(languageStrings, TStrings.getType());
+    }
+
+    public static CardStrings getStringsForLanguage(HashMap<Settings.GameLanguage, CardStrings> languageMap)
+    {
+        return getStringsForLanguage(languageMap, Settings.language);
+    }
+
+    public static CardStrings getStringsForLanguage(HashMap<Settings.GameLanguage, CardStrings> languageMap, Settings.GameLanguage language)
+    {
+        return languageMap.getOrDefault(language,
+                languageMap.getOrDefault(Settings.GameLanguage.ENG,
+                        languageMap.size() > 0 ? languageMap.entrySet().iterator().next().getValue() : getInitialStrings()));
+    }
+
+    protected static CardStrings getInitialStrings()
+    {
+        CardStrings retVal = new CardStrings();
+        retVal.NAME = GameUtilities.EMPTY_STRING;
+        retVal.DESCRIPTION = GameUtilities.EMPTY_STRING;
+        retVal.UPGRADE_DESCRIPTION = GameUtilities.EMPTY_STRING;
+        retVal.EXTENDED_DESCRIPTION = new String[]{};
+        return retVal;
+    }
 
     public PCLDynamicData(String id)
     {
@@ -144,7 +172,7 @@ public class PCLDynamicData extends PCLCardData
         safeLoadValue(() -> rightCountUpgrade = data.rightCountUpgrade.clone());
         safeLoadValue(() -> cost = data.cost.clone());
         safeLoadValue(() -> costUpgrade = data.costUpgrade.clone());
-        safeLoadValue(() -> setLanguageMap(EUIUtils.deserialize(data.languageStrings, TStrings.getType())));
+        safeLoadValue(() -> setLanguageMap(parseLanguageStrings(data.languageStrings)));
         safeLoadValue(() -> setTarget(PCLCardTarget.valueOf(data.target)));
         safeLoadValue(() -> setTags(EUIUtils.map(data.tags, t -> EUIUtils.deserialize(t, PCLCardTagInfo.class))));
         if (data.loadout != null)
@@ -173,12 +201,12 @@ public class PCLDynamicData extends PCLCardData
         }
     }
 
-    public PCLDynamicCard build()
+    public PCLDynamicCard createImpl()
     {
-        return build(false);
+        return createImplWithForms(true);
     }
 
-    public PCLDynamicCard build(boolean shouldFindForms)
+    public PCLDynamicCard createImplWithForms(boolean shouldFindForms)
     {
         setTextForLanguage();
 
@@ -190,16 +218,6 @@ public class PCLDynamicData extends PCLCardData
         return new PCLDynamicCard(this, shouldFindForms);
     }
 
-    protected CardStrings getInitialStrings()
-    {
-        CardStrings retVal = new CardStrings();
-        retVal.NAME = "";
-        retVal.DESCRIPTION = "";
-        retVal.UPGRADE_DESCRIPTION = "";
-        retVal.EXTENDED_DESCRIPTION = new String[]{};
-        return retVal;
-    }
-
     public CardStrings getStringsForLanguage(Settings.GameLanguage language)
     {
         return languageMap.getOrDefault(language,
@@ -208,9 +226,9 @@ public class PCLDynamicData extends PCLCardData
     }
 
     @Override
-    public AbstractCard makeCopy(boolean upgraded)
+    public AbstractCard makeCopyFromLibrary(int upgrade)
     {
-        return build(true);
+        return createImplWithForms(true);
     }
 
     public PCLDynamicData setImagePath(String imagePath)

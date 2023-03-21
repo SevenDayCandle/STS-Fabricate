@@ -112,11 +112,4 @@ public abstract class AbstractGlyphBlight extends PCLBlight
     {
         this.counter = amount;
     }
-
-    @Override
-    public void updateDescription()
-    {
-        description = getUpdatedDescription();
-        super.updateDescription();
-    }
 }

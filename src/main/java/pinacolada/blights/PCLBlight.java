@@ -10,6 +10,7 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.resources.PGR;
+import pinacolada.utilities.GameUtilities;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -34,17 +35,14 @@ public abstract class PCLBlight extends AbstractBlight implements TooltipProvide
 
     public PCLBlight(String id, BlightStrings strings, int amount)
     {
-        super(id, strings.NAME, EUIUtils.format(strings.DESCRIPTION[0], amount), "durian.png", true);
+        super(id, strings.NAME, GameUtilities.EMPTY_STRING, "durian.png", true);
 
         this.img = EUIRM.getTexture(PGR.getBlightImage(id));
         this.outlineImg = EUIRM.getTexture(PGR.getBlightOutlineImage(id));
         this.initialAmount = amount;
         this.counter = amount;
         this.strings = strings;
-        if (tips == null)
-        {
-            initializeTips();
-        }
+        updateDescription();
     }
 
     public static String createFullID(Class<? extends PCLBlight> type)
@@ -61,6 +59,11 @@ public abstract class PCLBlight extends AbstractBlight implements TooltipProvide
     public List<EUITooltip> getTips()
     {
         return tips;
+    }
+
+    public String getUpdatedDescription()
+    {
+        return formatDescription(0, counter);
     }
 
     public PCLBlight makeCopy()
@@ -102,7 +105,7 @@ public abstract class PCLBlight extends AbstractBlight implements TooltipProvide
     @Override
     public void updateDescription()
     {
-        super.updateDescription();
+        description = getUpdatedDescription();
         if (tips == null)
         {
             initializeTips();

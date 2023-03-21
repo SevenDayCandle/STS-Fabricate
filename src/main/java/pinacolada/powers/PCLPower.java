@@ -40,6 +40,7 @@ import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PSpecialSkill;
+import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
 import java.lang.reflect.Constructor;
@@ -485,7 +486,7 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
     {
         if (this instanceof InvisiblePower)
         {
-            this.description = "";
+            this.description = GameUtilities.EMPTY_STRING;
             return;
         }
 

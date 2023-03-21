@@ -160,7 +160,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen
         {
             for (PCLCardData data : loadout.cardDatas)
             {
-                AbstractCard nc = data.makeCopy(SingleCardViewPopup.isViewingUpgrade);
+                AbstractCard nc = data.makeCopyFromLibrary(SingleCardViewPopup.isViewingUpgrade ? 1 : 0);
                 cards.group.add(nc);
             }
         }
@@ -170,7 +170,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen
             {
                 for (PCLCardData data : cs.cardDatas)
                 {
-                    AbstractCard nc = data.makeCopy(SingleCardViewPopup.isViewingUpgrade);
+                    AbstractCard nc = data.makeCopyFromLibrary(SingleCardViewPopup.isViewingUpgrade ? 1 : 0);
                     cards.group.add(nc);
                 }
             }
