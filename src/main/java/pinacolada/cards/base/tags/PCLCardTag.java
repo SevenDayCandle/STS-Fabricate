@@ -3,7 +3,10 @@ package pinacolada.cards.base.tags;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.*;
+import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.AutoplayField;
+import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.ExhaustiveField;
+import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.FleetingField;
+import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.GraveField;
 import com.evacipated.cardcrawl.modthespire.lib.SpireField;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.relics.BlueCandle;
@@ -27,6 +30,7 @@ import java.util.List;
 public enum PCLCardTag implements TooltipProvider
 {
     Autoplay(new Color(0.33f, 0.33f, 0.45f, 1), 0, 1),
+    Bounce(new Color(0.6f, 0.66f, 0.33f, 1), -1, Integer.MAX_VALUE),
     Delayed(new Color(0.26f, 0.26f, 0.26f, 1), -1, Integer.MAX_VALUE),
     Ephemeral(new Color(0.7f, 0.7f, 0.7f, 1), 0, 1),
     Ethereal(new Color(0.51f, 0.69f, 0.6f, 1), 0, 1),
@@ -37,7 +41,6 @@ public enum PCLCardTag implements TooltipProvider
     Haste(new Color(0.35f, 0.5f, 0.79f, 1), -1, Integer.MAX_VALUE),
     Innate(new Color(0.8f, 0.8f, 0.35f, 1), -1, Integer.MAX_VALUE),
     Loyal(new Color(0.81f, 0.51f, 0.3f, 1), -1, Integer.MAX_VALUE),
-    Persist(new Color(0.6f, 0.66f, 0.33f, 1), 0, 1),
     Purge(new Color(0.71f, 0.3f, 0.55f, 1), 0, Integer.MAX_VALUE),
     Recast(new Color(0.6f, 0.51f, 0.69f, 1), -1, Integer.MAX_VALUE),
     Retain(new Color(0.49f, 0.78f, 0.35f, 1), -1, Integer.MAX_VALUE),
@@ -123,8 +126,6 @@ public enum PCLCardTag implements TooltipProvider
                 return InnateField.value;
             case Loyal:
                 return LoyalField.value;
-            case Persist:
-                return PersistFields.basePersist;
             case Purge:
                 return PurgeField.value;
             case Retain:
@@ -176,6 +177,8 @@ public enum PCLCardTag implements TooltipProvider
         {
             case Autoplay:
                 return PCLCoreImages.Badges.autoplay;
+            case Bounce:
+                return PCLCoreImages.Badges.bounce;
             case Delayed:
                 return PCLCoreImages.Badges.delayed;
             case Ephemeral:
@@ -196,8 +199,6 @@ public enum PCLCardTag implements TooltipProvider
                 return PCLCoreImages.Badges.innate;
             case Loyal:
                 return PCLCoreImages.Badges.loyal;
-            case Persist:
-                return PCLCoreImages.Badges.persist;
             case Purge:
                 return PCLCoreImages.Badges.purge;
             case Recast:
@@ -216,6 +217,8 @@ public enum PCLCardTag implements TooltipProvider
         {
             case Autoplay:
                 return PGR.core.tooltips.autoplay;
+            case Bounce:
+                return PGR.core.tooltips.bounce;
             case Delayed:
                 return PGR.core.tooltips.delayed;
             case Ephemeral:
@@ -236,8 +239,6 @@ public enum PCLCardTag implements TooltipProvider
                 return PGR.core.tooltips.innate;
             case Loyal:
                 return PGR.core.tooltips.loyal;
-            case Persist:
-                return PGR.core.tooltips.persist;
             case Purge:
                 return PGR.core.tooltips.purge;
             case Recast:
@@ -273,9 +274,6 @@ public enum PCLCardTag implements TooltipProvider
                 return card.exhaust || card.exhaustOnUseOnce || ExhaustiveField.ExhaustiveFields.exhaustive.get(card) > -1;
             case Innate:
                 return card.isInnate;
-            // Persist does nothing at 1
-            case Persist:
-                return PersistFields.persist.get(card) >= 2;
             case Retain:
                 return card.retain || card.selfRetain;
             // Accounting for hardcoded base game relic checks

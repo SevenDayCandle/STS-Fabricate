@@ -65,6 +65,13 @@ public class PCLDynamicData extends PCLCardData
         return retVal;
     }
 
+    // Prevent a tag info with an invalid tag from being loaded
+    protected static PCLCardTagInfo getSafeTag(String value)
+    {
+        PCLCardTagInfo info = EUIUtils.deserialize(value, PCLCardTagInfo.class);
+        return info.tag != null ? info : null;
+    }
+
     public PCLDynamicData(String id)
     {
         super(PCLDynamicCard.class, PGR.core, id, null);
@@ -174,7 +181,7 @@ public class PCLDynamicData extends PCLCardData
         safeLoadValue(() -> costUpgrade = data.costUpgrade.clone());
         safeLoadValue(() -> setLanguageMap(parseLanguageStrings(data.languageStrings)));
         safeLoadValue(() -> setTarget(PCLCardTarget.valueOf(data.target)));
-        safeLoadValue(() -> setTags(EUIUtils.map(data.tags, t -> EUIUtils.deserialize(t, PCLCardTagInfo.class))));
+        safeLoadValue(() -> setTags(EUIUtils.map(data.tags, PCLDynamicData::getSafeTag)));
         if (data.loadout != null)
         {
              setLoadout(PCLLoadout.get(data.slotColor, data.loadout));

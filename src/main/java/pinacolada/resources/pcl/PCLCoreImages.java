@@ -129,6 +129,7 @@ public class PCLCoreImages extends PCLImages
         public static final TextureCache autoplay = new TextureCache("images/pcl/cardui/badges/Autoplay.png");
         public static final TextureCache baseInfinite = new TextureCache("images/pcl/cardui/badges/Base_Infinite.png");
         public static final TextureCache baseMulti = new TextureCache("images/pcl/cardui/badges/Base_Multi.png");
+        public static final TextureCache bounce = new TextureCache("images/pcl/cardui/badges/Bounce.png");
         public static final TextureCache delayed = new TextureCache("images/pcl/cardui/badges/Delayed.png");
         public static final TextureCache ephemeral = new TextureCache("images/pcl/cardui/badges/Ephemeral.png");
         public static final TextureCache ethereal = new TextureCache("images/pcl/cardui/badges/Ethereal.png");
@@ -139,7 +140,6 @@ public class PCLCoreImages extends PCLImages
         public static final TextureCache haste = new TextureCache("images/pcl/cardui/badges/Haste.png");
         public static final TextureCache innate = new TextureCache("images/pcl/cardui/badges/Innate.png");
         public static final TextureCache loyal = new TextureCache("images/pcl/cardui/badges/Loyal.png");
-        public static final TextureCache persist = new TextureCache("images/pcl/cardui/badges/Persist.png");
         public static final TextureCache purge = new TextureCache("images/pcl/cardui/badges/Purge.png");
         public static final TextureCache recast = new TextureCache("images/pcl/cardui/badges/Recast.png");
         public static final TextureCache retain = new TextureCache("images/pcl/cardui/badges/Retain.png");

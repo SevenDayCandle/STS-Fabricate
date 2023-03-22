@@ -8,7 +8,7 @@ import extendedui.EUIInputManager;
 import extendedui.configuration.EUIHotkeys;
 import extendedui.ui.EUIBase;
 import extendedui.utilities.RotatingList;
-import pinacolada.interfaces.listeners.DrawPileCardPreviewProvider;
+import pinacolada.interfaces.providers.DrawPileCardPreviewProvider;
 
 public class DrawPileCardPreview
 {

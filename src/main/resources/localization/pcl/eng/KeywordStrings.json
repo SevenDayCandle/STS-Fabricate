@@ -36,6 +36,10 @@
 								"DESCRIPTION": "[Block] is conserved between turns.",
 								"NAME": "Blur"
 				},
+				"Bounce":	{
+								"DESCRIPTION": "Returns to your hand when played.",
+								"NAME": "Bounce"
+				},
 				"Bruised":	{
 								"DESCRIPTION": "Take #b1 more damage per stack from #yAttacks. Reduced by #b1 at turn start.",
 								"NAME": "Bruised"
@@ -227,6 +231,10 @@
 				"Malleable":	{
 								"DESCRIPTION": "Upon receiving damage, gain #yBlock. #yBlock gain increases as this power is triggered. Resets at the start of turn.",
 								"NAME": "Malleable"
+				},
+				"Mark":	{
+								"DESCRIPTION": "Used by #yPressure #yPoints and custom card effects.",
+								"NAME": "Mark"
 				},
 				"Match":	{
 								"DESCRIPTION": "Whether a card #yMatches or not depends on the current character.",

@@ -1,4 +1,4 @@
-package pinacolada.interfaces.listeners;
+package pinacolada.interfaces.providers;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.ui.combat.DrawPileCardPreview;

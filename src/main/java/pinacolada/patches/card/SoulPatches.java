@@ -12,11 +12,11 @@ import javassist.expr.MethodCall;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
-import pinacolada.interfaces.subscribers.OnAddedToDrawPileSubscriber;
+import pinacolada.interfaces.listeners.OnAddedToDrawPileListener;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.ListSelection;
 
-// Adapted from Animator
+// Copied and modified from STS-AnimatorMod
 public class SoulPatches
 {
     @SpirePatch(clz = Soul.class, method = "discard", paramtypez = {AbstractCard.class, boolean.class})
@@ -87,9 +87,9 @@ public class SoulPatches
         @SpirePostfixPatch
         public static void postfix(Soul soul, AbstractCard card)
         {
-            if (card instanceof OnAddedToDrawPileSubscriber)
+            if (card instanceof OnAddedToDrawPileListener)
             {
-                ((OnAddedToDrawPileSubscriber) card).onAddedToDrawPile(false, ListSelection.Mode.First);
+                ((OnAddedToDrawPileListener) card).onAddedToDrawPile(false, ListSelection.Mode.First);
             }
         }
     }
@@ -100,9 +100,9 @@ public class SoulPatches
         @SpirePostfixPatch
         public static void postfix(Soul soul, AbstractCard card, boolean randomSpot, boolean visualOnly)
         {
-            if (card instanceof OnAddedToDrawPileSubscriber)
+            if (card instanceof OnAddedToDrawPileListener)
             {
-                ((OnAddedToDrawPileSubscriber) card).onAddedToDrawPile(visualOnly, randomSpot ? ListSelection.Mode.Random : ListSelection.Mode.Last);
+                ((OnAddedToDrawPileListener) card).onAddedToDrawPile(visualOnly, randomSpot ? ListSelection.Mode.Random : ListSelection.Mode.Last);
             }
         }
     }

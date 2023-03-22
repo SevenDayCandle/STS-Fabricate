@@ -311,7 +311,7 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
                         }
                     });
         }
-        else if (index < effects.size())
+        else if (index < effects.size() - 1)
         {
             useCond(info, index + 1, successCallback);
         }
