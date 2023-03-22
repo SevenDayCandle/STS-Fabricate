@@ -116,6 +116,8 @@ public enum PCLCardTag implements TooltipProvider
     {
         switch (this)
         {
+            case Bounce:
+                return BounceField.value;
             case Delayed:
                 return DelayedField.value;
             case Exhaust:

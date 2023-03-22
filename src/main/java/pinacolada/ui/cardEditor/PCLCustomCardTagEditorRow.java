@@ -49,7 +49,6 @@ public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo>
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.5f)
                 .setFont(EUIFontHelper.cardtitlefontSmall, 1f);
-        displayValue.forceSetValue(1, false);
 
         displayValue2 = (EUITextBoxNumericalInput) new EUITextBoxNumericalInput(EUIRM.images.panelRoundedHalfH.texture(),
                 new RelativeHitbox(displayValue.hb, displayValue.hb.width, displayValue.hb.height, MENU_HEIGHT * 3.2f, MENU_HEIGHT * 0.5f).setIsPopupCompatible(true).setParentElement(dr))
@@ -63,7 +62,6 @@ public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo>
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.5f)
                 .setFont(EUIFontHelper.cardtitlefontSmall, 1f);
-        displayValue2.forceSetValue(1, false);
 
         decreaseButton = new EUIButton(ImageMaster.CF_LEFT_ARROW, new RelativeHitbox(displayValue.hb, ICON_SIZE, ICON_SIZE, ICON_SIZE * -0.4f, MENU_HEIGHT * 0.5f).setIsPopupCompatible(true).setParentElement(dr))
                 .setOnClick(this::decreasePrimary)
@@ -80,6 +78,14 @@ public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo>
         increaseButton2 = new EUIButton(ImageMaster.CF_RIGHT_ARROW, new RelativeHitbox(displayValue.hb, ICON_SIZE, ICON_SIZE, 3.7f * MENU_HEIGHT + (ICON_SIZE * 0.4f), MENU_HEIGHT * 0.5f).setIsPopupCompatible(true).setParentElement(dr))
                 .setOnClick(this::increaseSecondary)
                 .setText(null);
+
+        forceRefresh();
+    }
+
+    public void forceRefresh()
+    {
+        displayValue.forceSetValue(item.get(0), false);
+        displayValue2.forceSetValue(item.getUpgrade(0), false);
     }
 
     public void decreasePrimary()

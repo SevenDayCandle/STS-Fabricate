@@ -76,7 +76,7 @@ public class UseCardActionPatches
     // UseCardAction returnToHand is never actually read from properly...
     public static boolean patch(UseCardAction action, AbstractCard card)
     {
-        if (card.returnToHand)
+        if (card.returnToHand || action.returnToHand)
         {
             return true;
         }
@@ -85,7 +85,7 @@ public class UseCardActionPatches
             PCLCardTag.Bounce.tryProgress(card);
             return true;
         }
-        return action.returnToHand;
+        return false;
     }
 }
 

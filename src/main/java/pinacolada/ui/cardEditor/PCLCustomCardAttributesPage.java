@@ -8,6 +8,7 @@ import com.megacrit.cardcrawl.screens.compendium.CardLibSortHeader;
 import extendedui.EUIUtils;
 import extendedui.ui.TextureCache;
 import extendedui.ui.controls.EUIDropdown;
+import extendedui.ui.controls.EUIDropdownRow;
 import extendedui.ui.controls.EUILabel;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
@@ -162,7 +163,6 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
         blockEditor.setValue(builder.getBlock(0), builder.getBlockUpgrade(0));
         hitCountEditor.setValue(builder.getHitCount(0), builder.getHitCountUpgrade(0));
         rightCountEditor.setValue(builder.getRightCount(0), builder.getRightCountUpgrade(0));
-        tagsDropdown.setSelection(EUIUtils.filter(builder.tags.values(), i -> i.get(0) != 0 || i.getUpgrade(0) != 0), false);
         magicNumberEditor.setValue(builder.getMagicNumber(0), builder.getMagicNumberUpgrade(0)).setActive(isSummon);
         hpEditor.setValue(builder.getHp(0), builder.getHpUpgrade(0)).setActive(isSummon);
 
@@ -186,6 +186,13 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
             }
         }
         tagsDropdown.setSelectionIndices(selection, false);
+        for (EUIDropdownRow<?> row : tagsDropdown.rows)
+        {
+            if (row instanceof PCLCustomCardTagEditorRow)
+            {
+                ((PCLCustomCardTagEditorRow) row).forceRefresh();
+            }
+        }
 
         for (int i = 0; i < availableAffinities.size(); i++)
         {
