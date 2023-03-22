@@ -571,12 +571,9 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
     {
         super.onRemove();
 
-        if (amount > 0)
-        {
-            final int previous = amount;
-            amount = 0;
-            onAmountChanged(previous, -previous);
-        }
+        final int previous = amount;
+        amount = 0;
+        onAmountChanged(previous, -previous);
     }
 
     @Override

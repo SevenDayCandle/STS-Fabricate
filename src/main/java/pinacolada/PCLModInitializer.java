@@ -3,6 +3,7 @@ package pinacolada;
 import basemod.BaseMod;
 import basemod.interfaces.*;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import pinacolada.effects.SFX;
 import pinacolada.misc.CombatManager;
@@ -10,7 +11,7 @@ import pinacolada.patches.library.BlightHelperPatches;
 import pinacolada.resources.PGR;
 
 @SpireInitializer //
-public class PCLModInitializer implements OnStartBattleSubscriber, PostBattleSubscriber, PostDeathSubscriber,
+public class PCLModInitializer implements OnStartBattleSubscriber, PostBattleSubscriber, PostDeathSubscriber, PostDrawSubscriber,
                                           PreStartGameSubscriber, OnPlayerTurnStartPostDrawSubscriber, OnPlayerTurnStartSubscriber,
                                           EditCardsSubscriber, EditRelicsSubscriber, PostInitializeSubscriber, AddAudioSubscriber
 {
@@ -62,6 +63,12 @@ public class PCLModInitializer implements OnStartBattleSubscriber, PostBattleSub
     public void receivePostBattle(AbstractRoom abstractRoom)
     {
         CombatManager.onBattleEnd();
+    }
+
+    @Override
+    public void receivePostDraw(AbstractCard abstractCard)
+    {
+        CombatManager.onAfterDraw(abstractCard);
     }
 
     @Override

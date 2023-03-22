@@ -60,6 +60,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
     protected PCLValueEditor maxCopies;
     protected EUIToggle uniqueToggle;
     protected EUIToggle soulboundToggle;
+    protected EUIToggle linearToggle;
     protected Settings.GameLanguage activeLanguage = Settings.language;
 
     // Colorless/Curse should not be able to see Summon in the card editor
@@ -215,6 +216,13 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
                     e.setRemovableFromDeck(!val);
                 }))
                 .setTooltip(PGR.core.tooltips.soulbound);
+        linearToggle = (EUIToggle) new EUIToggle(new EUIHitbox(screenW(0.61f), screenH(0.4f), MENU_WIDTH, MENU_HEIGHT))
+                .setFont(EUIFontHelper.carddescriptionfontNormal, 0.9f)
+                .setText(PGR.core.strings.cedit_linearUpgrade)
+                .setOnToggle(val -> effect.modifyAllBuilders(e -> {
+                    e.setLinearUpgrade(val);
+                }))
+                .setTooltip(PGR.core.strings.cedit_linearUpgrade, PGR.core.strings.cetut_linearUpgrade);
 
         PCLResources<?,?,?,?> resources = PGR.getResources(effect.currentSlot.slotColor);
         if (resources != null)
@@ -248,6 +256,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
         maxCopies.setValue(effect.getBuilder().maxCopies, false);
         uniqueToggle.setToggle(effect.getBuilder().unique);
         soulboundToggle.setToggle(!effect.getBuilder().removableFromDeck);
+        linearToggle.setToggle(effect.getBuilder().linearUpgrade);
     }
 
     @Override
@@ -273,6 +282,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
         idInput.tryUpdate();
         uniqueToggle.tryUpdate();
         soulboundToggle.tryUpdate();
+        linearToggle.tryUpdate();
     }
 
     @Override
@@ -292,6 +302,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
         idInput.tryRender(sb);
         uniqueToggle.tryRender(sb);
         soulboundToggle.tryRender(sb);
+        linearToggle.tryRender(sb);
     }
 
     private void validifyCardID(String cardID)

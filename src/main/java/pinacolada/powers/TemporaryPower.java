@@ -44,6 +44,7 @@ public class TemporaryPower extends PCLPower
         {
             this.sourceMaxAmount = ((PCLPower) sourcePower).maxAmount;
         }
+        this.canGoNegative = true;
         initialize(amount, sourcePower.type, true);
 
         this.name = formatDescription(2, sourcePower.name);
@@ -75,11 +76,6 @@ public class TemporaryPower extends PCLPower
         }
         else
         {
-            // If a power was made with constructorT2, it means that the power is amount based
-            if (amount < 0)
-            {
-                PCLActions.top.applyPower(owner, owner, power, -amount).ignoreArtifact(true);
-            }
             removePower();
         }
     }
@@ -112,14 +108,7 @@ public class TemporaryPower extends PCLPower
     protected void onAmountChanged(int previousAmount, int difference)
     {
         int powerAmount = previousAmount + difference;
-        if (!amountBelowThreshold(powerAmount))
-        {
-            PCLActions.top.applyPower(owner, owner, power, difference).ignoreArtifact(true).addCallback(this::removeSourcePower);
-        }
-        else
-        {
-            PCLActions.bottom.removePower(owner, owner, power.ID);
-        }
+        PCLActions.top.applyPower(owner, owner, power, difference).ignoreArtifact(true).addCallback(this::tryRemoveSourcePower);
 
         // The type should be set to Neutral after the initial stacking occurs (i.e. after artifact checks) so that this power will not influence buff/debuff count checks
         type = NeutralPowertypePatch.NEUTRAL;
@@ -135,7 +124,7 @@ public class TemporaryPower extends PCLPower
         );
     }
 
-    protected void removeSourcePower()
+    protected void tryRemoveSourcePower()
     {
         int powerAmount = GameUtilities.getPowerAmount(owner, power.ID);
         if (amountBelowThreshold(powerAmount))

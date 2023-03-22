@@ -28,6 +28,6 @@ public class Madness extends PCLCard
 
     public void setup(Object input)
     {
-        addUseMove(PMove.modifyCost(1, -5, PCLCardGroupHelper.Hand).edit(PField_CardGeneric::setRandom));
+        addUseMove(PMove.modifyCost(-5, 1, PCLCardGroupHelper.Hand).edit(PField_CardGeneric::setRandom));
     }
 }

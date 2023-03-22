@@ -2,6 +2,7 @@ package pinacolada.ui.cardEditor;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
@@ -37,6 +38,7 @@ public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
         primaryConditions
                 .setItems(EUIUtils.map(PTrigger.getEligibleEffects(screen.getBuilder().cardColor, PTrigger.class), bc -> primaryCond != null && bc.effectID.equals(primaryCond.effectID) ? primaryCond : bc))
                 .setShowClearForSingle(false)
+                .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_trigger)
                 .autosize();
         // Ensure that a primary cond is always selected
         if (primaryCond == null)

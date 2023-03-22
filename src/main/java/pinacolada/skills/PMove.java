@@ -435,14 +435,14 @@ public abstract class PMove<T extends PField> extends PSkill<T>
         return new PMove_ModifyAffinity(1, tag);
     }
 
-    public static PMove_ModifyAffinity modifyAffinity(int amount, PCLAffinity... affinity)
+    public static PMove_ModifyAffinity modifyAffinity(int level, PCLAffinity... affinity)
     {
-        return new PMove_ModifyAffinity(amount, affinity);
+        return new PMove_ModifyAffinity(level, affinity);
     }
 
-    public static PMove_ModifyAffinity modifyAffinity(int amount, int level, PCLAffinity... affinity)
+    public static PMove_ModifyAffinity modifyAffinity(int level, int amount, PCLAffinity... affinity)
     {
-        return new PMove_ModifyAffinity(amount, level, affinity);
+        return new PMove_ModifyAffinity(level, amount, affinity);
     }
 
     public static PMove_ModifyBlock modifyBlock(int block)
@@ -450,9 +450,9 @@ public abstract class PMove<T extends PField> extends PSkill<T>
         return new PMove_ModifyBlock(block, 1);
     }
 
-    public static PMove_ModifyBlock modifyBlock(int amount, int block, PCLCardGroupHelper... groups)
+    public static PMove_ModifyBlock modifyBlock(int block, int amount, PCLCardGroupHelper... groups)
     {
-        return new PMove_ModifyBlock(amount, block, groups);
+        return new PMove_ModifyBlock(block, amount, groups);
     }
 
     public static PMove_ModifyCost modifyCost(int cost)
@@ -460,9 +460,9 @@ public abstract class PMove<T extends PField> extends PSkill<T>
         return new PMove_ModifyCost(cost, 1);
     }
 
-    public static PMove_ModifyCost modifyCost(int amount, int cost, PCLCardGroupHelper... groups)
+    public static PMove_ModifyCost modifyCost(int cost, int amount, PCLCardGroupHelper... groups)
     {
-        return new PMove_ModifyCost(amount, cost, groups);
+        return new PMove_ModifyCost(cost, amount, groups);
     }
 
     public static PMove_ModifyCost modifyCostForTurn(int cost)
@@ -470,9 +470,9 @@ public abstract class PMove<T extends PField> extends PSkill<T>
         return (PMove_ModifyCost) new PMove_ModifyCost(cost, 1).edit(f -> f.setForced(true));
     }
 
-    public static PMove_ModifyCost modifyCostForTurn(int amount, int cost, PCLCardGroupHelper... groups)
+    public static PMove_ModifyCost modifyCostForTurn(int cost, int amount, PCLCardGroupHelper... groups)
     {
-        return (PMove_ModifyCost) new PMove_ModifyCost(amount, cost, groups).edit(f -> f.setForced(true));
+        return (PMove_ModifyCost) new PMove_ModifyCost(cost, amount, groups).edit(f -> f.setForced(true));
     }
 
     public static PMove_ModifyDamage modifyDamage(int damage)
@@ -480,9 +480,9 @@ public abstract class PMove<T extends PField> extends PSkill<T>
         return new PMove_ModifyDamage(damage, 1);
     }
 
-    public static PMove_ModifyDamage modifyDamage(int amount, int damage, PCLCardGroupHelper... groups)
+    public static PMove_ModifyDamage modifyDamage(int damage, int amount, PCLCardGroupHelper... groups)
     {
-        return new PMove_ModifyDamage(amount, damage, groups);
+        return new PMove_ModifyDamage(damage, amount, groups);
     }
 
     public static PMove_ModifyTag modifyTag(PCLCardTag... tag)

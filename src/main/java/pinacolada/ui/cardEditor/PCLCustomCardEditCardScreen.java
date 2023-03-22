@@ -60,7 +60,6 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
     protected EUIButton saveButton;
     protected EUIButton undoButton;
     protected EUIToggle upgradeToggle;
-    protected EUIToggle linearToggle;
     protected PCardPrimary_DealDamage currentDamage;
     protected PCardPrimary_GainBlock currentBlock;
     protected PCLDynamicCard previewCard;
@@ -111,14 +110,6 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
         formEditor = new PCLCustomCardFormEditor(
                 new EUIHitbox(0, 0, Settings.scale * 256f, Settings.scale * 48f)
                         .setCenter(Settings.WIDTH * 0.116f, imageButton.hb.y + imageButton.hb.height + labelHeight * 3.2f), this);
-
-        linearToggle = (EUIToggle) new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 48f))
-                .setPosition(formEditor.hb.cX, formEditor.hb.y - labelHeight * 0.9f)
-                .setFont(EUIFontHelper.carddescriptionfontNormal, 0.9f)
-                .setText(PGR.core.strings.cedit_linearUpgrade)
-                .setToggle(getBuilder().linearUpgrade)
-                .setOnToggle(this::toggleLinear)
-                .setTooltip(PGR.core.strings.cedit_linearUpgrade, PGR.core.strings.cetut_linearUpgrade);
 
         upgradeToggle = new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 48f))
                 .setPosition(Settings.WIDTH * 0.116f, CARD_Y - labelHeight - AbstractCard.IMG_HEIGHT / 2f)
@@ -372,7 +363,6 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
             imageButton.tryRender(sb);
             pages.get(currentPage).tryRender(sb);
             formEditor.tryRender(sb);
-            linearToggle.tryRender(sb);
             upgradeToggle.tryRender(sb);
             for (EUIButton b : pageButtons)
             {
@@ -401,7 +391,6 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
             imageButton.tryUpdate();
             pages.get(currentPage).tryUpdate();
             formEditor.tryUpdate();
-            linearToggle.tryUpdate();
             upgradeToggle.tryUpdate();
             for (EUIButton b : pageButtons)
             {

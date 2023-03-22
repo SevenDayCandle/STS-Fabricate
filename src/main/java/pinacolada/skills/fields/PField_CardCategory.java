@@ -75,7 +75,8 @@ public class PField_CardCategory extends PField_CardID
         editor.registerColor(colors);
         editor.registerTag(tags);
         editor.registerCard(cardIDs);
-        editor.registerBoolean(PGR.core.strings.cedit_required, v -> forced = v, forced);
+        editor.registerBoolean(PGR.core.strings.cedit_required, PGR.core.strings.cetut_required1, v -> forced = v, forced);
+        registerUseParentBoolean(editor);
     }
 
     public PField_CardCategory addAffinity(PCLAffinity... affinities)

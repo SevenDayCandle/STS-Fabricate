@@ -18,6 +18,7 @@ import extendedui.ui.controls.EUISearchableDropdown;
 import extendedui.ui.controls.EUIToggle;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.OriginRelativeHitbox;
+import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCardData;
@@ -127,13 +128,13 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
                 })
                 .setLabelFunctionForOption(PCLCardTarget::getTitle, false)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_cardTarget)
-                .setCanAutosizeButton(true)
+                .setCanAutosize(true, true)
                 .setItems(PCLCustomCardPrimaryInfoPage.getEligibleTargets(cardColor));
         piles = new EUIDropdown<PCLCardGroupHelper>(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, AUX_OFFSET, 0)
                 , PCLCardGroupHelper::getCapitalTitle)
                 .setLabelFunctionForOption(PCLCardGroupHelper::getCapitalTitle, false)
-                .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_cardTarget)
-                .setCanAutosizeButton(true)
+                .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_pile)
+                .setCanAutosize(true, true)
                 .setIsMultiSelect(true)
                 .setShouldPositionClearAtTop(true)
                 .setItems(PCLCardGroupHelper.getAll());
@@ -159,7 +160,7 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
                 .setIsMultiSelect(true)
                 .setShouldPositionClearAtTop(true)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_powers)
-                .setCanAutosize(false, false)
+                .setCanAutosize(true, true)
                 .setItems(PCLPowerHelper.sortedValues());
         powers.setLabelFunctionForButton((list, __) -> powers.makeMultiSelectString(item -> item.getTooltip().getTitleOrIcon()), null, true);
 
@@ -168,7 +169,7 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
                 .setIsMultiSelect(true)
                 .setShouldPositionClearAtTop(true)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_orbs)
-                .setCanAutosize(false, false)
+                .setCanAutosize(true, true)
                 .setItems(PCLOrbHelper.visibleValues());
         orbs.setLabelFunctionForButton((list, __) -> orbs.makeMultiSelectString(item -> item.getTooltip().getTitleOrIcon()), null, true);
 
@@ -177,7 +178,7 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
                 .setLabelFunctionForOption(item -> item.tooltip.getTitleOrIconForced() + " " + item.tooltip.title, true)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.tooltips.stance.title)
                 .setIsMultiSelect(true)
-                .setCanAutosize(false, false)
+                .setCanAutosize(true, true)
                 .setClearButtonOptions(true, true)
                 .setItems(PCLStanceHelper.values(cardColor));
 
@@ -186,13 +187,13 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
                 .setIsMultiSelect(true)
                 .setShouldPositionClearAtTop(true)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_tags)
-                .setCanAutosize(false, false)
+                .setCanAutosize(true, true)
                 .setItems(PCLCardTag.getAll());
 
         cardData = (EUISearchableDropdown<AbstractCard>) new EUISearchableDropdown<AbstractCard>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.2f, MENU_HEIGHT, AUX_OFFSET, 0))
                 .setLabelFunctionForOption(item -> item.name, false)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, RunHistoryScreen.TEXT[9])
-                .setCanAutosize(false, false)
+                .setCanAutosize(true, true)
                 .setIsMultiSelect(true)
                 .setShouldPositionClearAtTop(true)
                 .setItems(getAvailableCards());
@@ -310,9 +311,15 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
 
     public void registerBoolean(String title, ActionT1<Boolean> onChange, boolean initial)
     {
-        registerBoolean(new EUIToggle(new OriginRelativeHitbox(hb, MENU_WIDTH * 0.62f, MENU_HEIGHT, MENU_WIDTH, 0))
+        registerBoolean(title, null, onChange, initial);
+    }
+
+    public void registerBoolean(String title, String desc, ActionT1<Boolean> onChange, boolean initial)
+    {
+        registerBoolean((EUIToggle) new EUIToggle(new OriginRelativeHitbox(hb, MENU_WIDTH * 0.62f, MENU_HEIGHT, MENU_WIDTH, 0))
                 .setFont(EUIFontHelper.carddescriptionfontNormal, 0.9f)
                 .setText(title)
+                .setTooltip(desc != null ? new EUITooltip(title, desc) : null)
                 , onChange, initial);
     }
     public void registerBoolean(EUIToggle toggle, ActionT1<Boolean> onChange, boolean initial)

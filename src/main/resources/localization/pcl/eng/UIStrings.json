@@ -112,14 +112,15 @@
 												"This ID suffix is already in use",
 												"Duplicate to Color",
 												"Select the Color to copy this card to.",
-												"Create Random",
+												"Use Parent",
 												"Load From Card",
 												"Open Card Folder",
 												"Export CSV",
 												"Random",
 												"Required",
 												"Selection",
-												"Enable"
+												"Enable",
+												"Pile"
 								]
 				},
 				"pcl:CardEditorTutorial": {
@@ -156,7 +157,10 @@
 												"The number of times this #yAttack will hit the target. Each hit is treated independently with regards to damage calculations and powers on the target.",
 												"The number of times that this card will grant #yBlock. Each #yBlock grant is treated independently with regards to #yBlock calculations and powers on the target.",
 												"Create a card from an example template.",
-												"If checked, the card's form number will always match its upgrade value. You will not be able to choose the card's form when upgrading it."
+												"If checked, the card's form number will always match its upgrade value. You will not be able to choose the card's form when upgrading it.",
+												"If checked, this effect will act on cards selected while executing conditions and modifiers.",
+												"If checked, the user will not be able to cancel this effect.",
+												"If checked, the user will only be able to select cards matching this filter."
 								]
 				},
 				"pcl:CardPile": {

@@ -58,6 +58,7 @@ public class PField_CardModifyAffinity extends PField_CardCategory
     {
         editor.registerPile(groupTypes);
         editor.registerAffinity(addAffinities);
+        registerUseParentBoolean(editor);
     }
 
     public String getAddAffinityChoiceString()

@@ -96,7 +96,7 @@ public class PCLCoreStrings extends PCLStrings
     public final String cedit_idSuffixWarning = cedit.TEXT[52];
     public final String cedit_duplicateToColor = cedit.TEXT[53];
     public final String cedit_duplicateToColorDesc = cedit.TEXT[54];
-    public final String cedit_createRandom = cedit.TEXT[55];
+    public final String cedit_useParent = cedit.TEXT[55];
     public final String cedit_loadFromCard = cedit.TEXT[56];
     public final String cedit_openFolder = cedit.TEXT[57];
     public final String cedit_exportCSV = cedit.TEXT[58];
@@ -104,6 +104,7 @@ public class PCLCoreStrings extends PCLStrings
     public final String cedit_required = cedit.TEXT[60];
     public final String cedit_origins = cedit.TEXT[61];
     public final String cedit_enable = cedit.TEXT[62];
+    public final String cedit_pile = cedit.TEXT[63];
 
     // Card Editor Tutorial
     public final String cetut_selector1 = cetut.TEXT[0];
@@ -139,6 +140,9 @@ public class PCLCoreStrings extends PCLStrings
     public final String cetut_blockCount = cetut.TEXT[30];
     public final String cetut_loadFromCardScreen = cetut.TEXT[31];
     public final String cetut_linearUpgrade = cetut.TEXT[32];
+    public final String cetut_useParent = cetut.TEXT[33];
+    public final String cetut_required1 = cetut.TEXT[34];
+    public final String cetut_required2 = cetut.TEXT[35];
 
     // Card Pile
     public final String cpile_discardPile = cardPile.TEXT[0];
