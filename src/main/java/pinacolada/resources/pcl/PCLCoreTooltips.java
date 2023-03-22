@@ -24,7 +24,7 @@ public class PCLCoreTooltips extends PCLTooltips
     public static final String ICON_CURLUP = "closeUp";
     public static final String ICON_DEXTERITY = "dexterity";
     public static final String ICON_ENVENOM = "envenom";
-    public static final String ICON_EQUILIBRIUM = "equilibrium";
+    public static final String ICON_EQUILIBRIUM = "retain";
     public static final String ICON_FLIGHT = "flight";
     public static final String ICON_FRAIL = "frail";
     public static final String ICON_FOCUS = "focus";
@@ -33,7 +33,7 @@ public class PCLCoreTooltips extends PCLTooltips
     public static final String ICON_LOCKON = "lockon";
     public static final String ICON_MALLEABLE = "malleable";
     public static final String ICON_MARKED = "pressure_points";
-    public static final String ICON_METALLICIZE = "metallicize";
+    public static final String ICON_METALLICIZE = "armor";
     public static final String ICON_NEXT_TURN_BLOCK = "defenseNext";
     public static final String ICON_NEXT_TURN_DRAW = "carddraw";
     public static final String ICON_NEXT_TURN_DRAW_LESS = "lessdraw";
