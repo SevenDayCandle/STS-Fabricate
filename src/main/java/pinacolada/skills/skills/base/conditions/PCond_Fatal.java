@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT0;
+import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -56,7 +57,7 @@ public class PCond_Fatal extends PActiveCond<PField_Not> implements OnMonsterDea
     {
         if (childEffect != null)
         {
-            useImpl(info, () -> childEffect.use(info));
+            useImpl(info, () -> childEffect.use(info), () -> {});
         }
     }
 
@@ -64,7 +65,7 @@ public class PCond_Fatal extends PActiveCond<PField_Not> implements OnMonsterDea
     {
         if (childEffect != null)
         {
-            useImpl(info, () -> childEffect.use(info, index));
+            useImpl(info, () -> childEffect.use(info, index), () -> {});
         }
     }
 
@@ -72,17 +73,21 @@ public class PCond_Fatal extends PActiveCond<PField_Not> implements OnMonsterDea
     {
         if (isUsing && childEffect != null)
         {
-            useImpl(info, () -> childEffect.use(info));
+            useImpl(info, () -> childEffect.use(info), () -> {});
         }
     }
 
-    protected void useImpl(PCLUseInfo info, ActionT0 callback)
+    protected PCLAction<?> useImpl(PCLUseInfo info, ActionT0 onComplete, ActionT0 onFail)
     {
         List<AbstractCreature> targetList = getTargetList(info);
-        PCLActions.last.callback(targetList, (targets, __) -> {
+        return PCLActions.last.callback(targetList, (targets, __) -> {
             if (targets.size() > 0 && EUIUtils.any(targets, GameUtilities::isDeadOrEscaped) && (!(parent instanceof PLimit) || ((PLimit) parent).tryActivate(info)))
             {
-                callback.invoke();
+                onComplete.invoke();
+            }
+            else
+            {
+                onFail.invoke();
             }
         }).isCancellable(false);
     }

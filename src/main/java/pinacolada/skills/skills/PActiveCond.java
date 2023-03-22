@@ -1,5 +1,7 @@
 package pinacolada.skills.skills;
 
+import extendedui.interfaces.delegates.ActionT0;
+import pinacolada.actions.PCLAction;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.skills.PCond;
@@ -30,10 +32,43 @@ public abstract class PActiveCond<T extends PField> extends PCond<T>
         super(data, target, amount, extra);
     }
 
-    // Use check is handled in use action
+    // Actual use check is handled in use action. This passes to allow the use effect to run
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
     {
-        return false;
+        return true;
     }
+
+    @Override
+    public String getText(boolean addPeriod)
+    {
+        return getCapitalSubText(addPeriod) + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : ": ") + childEffect.getText(addPeriod)) : "");
+    }
+
+    @Override
+    public void use(PCLUseInfo info)
+    {
+        if (childEffect != null)
+        {
+            useImpl(info, () -> childEffect.use(info), () -> {});
+        }
+    }
+
+    public void use(PCLUseInfo info, int index)
+    {
+        if (childEffect != null)
+        {
+            useImpl(info, () -> childEffect.use(info, index), () -> {});
+        }
+    }
+
+    public void use(PCLUseInfo info, boolean isUsing)
+    {
+        if (isUsing && childEffect != null)
+        {
+            useImpl(info, () -> childEffect.use(info), () -> {});
+        }
+    }
+
+    protected abstract PCLAction<?> useImpl(PCLUseInfo info, ActionT0 onComplete, ActionT0 onFail);
 }

@@ -242,7 +242,7 @@ public class SelectFromPile extends PCLAction<ArrayList<AbstractCard>>
         if (AbstractDungeon.screen != AbstractDungeon.CurrentScreen.GRID) // cancelled
         {
             player.hand.group.addAll(fakeHandGroup.group);
-            complete();
+            complete(new ArrayList<>());
         }
     }
 

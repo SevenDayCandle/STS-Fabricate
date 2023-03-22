@@ -350,10 +350,10 @@ public class PCLCustomCardSlot
             EUIRM.getLocalTexture(newImagePath, true, true, false);
         }
 
-        // Unlink temporary portrait images to allow the new saved portrait image to be loaded
+        // Unlink temporary portrait images to allow the new saved portrait image to be loaded, and set multiform data as necessary
         for (PCLDynamicData b : builders)
         {
-            b.setImage(null);
+            b.setImage(null).setMultiformData(forms.length, false, forms.length > 1, false);
         }
 
         filePath = newFilePath;

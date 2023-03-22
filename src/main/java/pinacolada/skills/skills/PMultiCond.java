@@ -5,6 +5,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
+import extendedui.interfaces.delegates.ActionT0;
 import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.utilities.RotatingList;
 import pinacolada.annotations.VisibleSkill;
@@ -108,7 +109,9 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
     @Override
     public String getSubText()
     {
-        return fields.or ? PCLCoreStrings.joinWithOr(getEffectTextsWithoutPeriod(effects, true)) : PSkill.joinEffectTexts(effects, ". ", true);
+        return EUIUtils.any(effects, effect -> effect instanceof PActiveCond) ?
+                fields.or ? PCLCoreStrings.joinWithOr(getEffectTextsWithoutPeriod(effects, true)) : PCLCoreStrings.joinWithAnd(getEffectTextsWithoutPeriod(effects, true)) :
+                fields.or ? PCLCoreStrings.joinWithOr(getEffectTextsWithoutPeriod(effects, true)) : PSkill.joinEffectTexts(effects, ". ", true);
     }
 
     @Override
@@ -237,18 +240,18 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         {
             if (checkCondition(info, true, false))
             {
-                childEffect.use(info, 0);
+                useCond(info, 0, () -> childEffect.use(info, 0));
             }
             else
             {
-                childEffect.use(info, 1);
+                useCond(info, 0, () -> childEffect.use(info, 1));
             }
         }
         else
         {
             if (checkCondition(info, true, false) && childEffect != null)
             {
-                childEffect.use(info);
+                useCond(info, 0, () -> childEffect.use(info));
             }
         }
     }
@@ -258,7 +261,7 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
     {
         if (checkCondition(info, true, false) && childEffect != null)
         {
-            childEffect.use(info, index);
+            useCond(info, 0, () -> childEffect.use(info, index));
         }
     }
 
@@ -269,19 +272,52 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         {
             if (checkCondition(info, isUsing, false))
             {
-                childEffect.use(info, 0);
+                useCond(info, 0, () -> childEffect.use(info, 0));
             }
             else
             {
-                childEffect.use(info, 1);
+                useCond(info, 0, () -> childEffect.use(info, 1));
             }
         }
         else
         {
             if (checkCondition(info, true, false) && childEffect != null)
             {
-                childEffect.use(info);
+                useCond(info, 0, () -> childEffect.use(info));
             }
+        }
+    }
+
+    public void useCond(PCLUseInfo info, int index, ActionT0 successCallback)
+    {
+        PCond<?> cond = getSubEffect(index);
+        if (cond instanceof PActiveCond)
+        {
+            ((PActiveCond<?>) cond).useImpl(info,
+                    () -> {
+                        if (fields.or)
+                        {
+                            successCallback.invoke();
+                        }
+                        else
+                        {
+                            useCond(info, index + 1, successCallback);
+                        }
+                    },
+                    () -> {
+                        if (fields.or)
+                        {
+                            useCond(info, index + 1, successCallback);
+                        }
+                    });
+        }
+        else if (index < effects.size())
+        {
+            useCond(info, index + 1, successCallback);
+        }
+        else
+        {
+            successCallback.invoke();
         }
     }
 

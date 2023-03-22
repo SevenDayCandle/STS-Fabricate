@@ -247,6 +247,7 @@ public abstract class PField implements Serializable
 
     public static String getTagString(ArrayList<PCLCardTag> tags)
     {
-        return tags.isEmpty() ? TEXT.cedit_tags : (EUIUtils.joinStrings(" ", EUIUtils.map(tags, a -> a.getTooltip().getTitleOrIcon())));
+        // If we are not displaying tags as card tag icons, we should not render them as icons in the description either even if the EUI setting is disabled
+        return tags.isEmpty() ? TEXT.cedit_tags : (EUIUtils.joinStrings(" ", EUIUtils.map(tags, a -> PGR.config.displayCardTagDescription.get() ? a.getTooltip().title : a.getTooltip().getTitleOrIcon())));
     }
 }

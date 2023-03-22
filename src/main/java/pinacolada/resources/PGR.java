@@ -384,6 +384,7 @@ public class PGR
         ConsoleCommand.addCommand("exportcsv", ExportCSVCommand.class);
         ConsoleCommand.addCommand("obtain", ObtainCommand.class);
         ConsoleCommand.addCommand("obtaincustom", ObtainCustomCommand.class);
+        ConsoleCommand.addCommand("obtaindeck", ObtainDeckCommand.class);
         ConsoleCommand.addCommand("obtaindeckcustom", ObtainDeckCustomCommand.class);
         ConsoleCommand.addCommand("reloadcustom", ReloadCustomCommand.class);
         ConsoleCommand.addCommand("unlockall", UnlockAllCommand.class);

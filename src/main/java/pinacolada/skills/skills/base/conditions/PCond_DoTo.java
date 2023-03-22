@@ -8,6 +8,7 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT0;
 import extendedui.interfaces.delegates.FuncT5;
 import extendedui.ui.tooltips.EUITooltip;
+import pinacolada.actions.PCLAction;
 import pinacolada.actions.piles.SelectFromPile;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -16,10 +17,10 @@ import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
-import pinacolada.skills.skills.PPassiveNonCheckCond;
+import pinacolada.skills.skills.PActiveCond;
 import pinacolada.utilities.ListSelection;
 
-public abstract class PCond_DoTo extends PPassiveNonCheckCond<PField_CardCategory>
+public abstract class PCond_DoTo extends PActiveCond<PField_CardCategory>
 {
     public PCond_DoTo(PSkillData<PField_CardCategory> data, PSkillSaveData content)
     {
@@ -56,31 +57,6 @@ public abstract class PCond_DoTo extends PPassiveNonCheckCond<PField_CardCategor
     }
 
     @Override
-    public void use(PCLUseInfo info)
-    {
-        if (childEffect != null)
-        {
-            useImpl(info, () -> childEffect.use(info));
-        }
-    }
-
-    public void use(PCLUseInfo info, int index)
-    {
-        if (childEffect != null)
-        {
-            useImpl(info, () -> childEffect.use(info, index));
-        }
-    }
-
-    public void use(PCLUseInfo info, boolean isUsing)
-    {
-        if (isUsing && childEffect != null)
-        {
-            useImpl(info, () -> childEffect.use(info));
-        }
-    }
-
-    @Override
     public String getText(boolean addPeriod)
     {
         return capital(childEffect == null ? (getSubText() + PCLCoreStrings.period(addPeriod)) : TEXT.cond_inOrderTo(getSubText(), childEffect.getText(false)), addPeriod);
@@ -99,14 +75,18 @@ public abstract class PCond_DoTo extends PPassiveNonCheckCond<PField_CardCategor
         return true;
     }
 
-    protected void useImpl(PCLUseInfo info, ActionT0 callback)
+    public PCLAction<?> useImpl(PCLUseInfo info, ActionT0 onComplete, ActionT0 onFail)
     {
-        getActions().add(fields.getGenericPileAction(getAction(), info))
+        return getActions().add(fields.getGenericPileAction(getAction(), info))
                 .addCallback(cards -> {
                     if (cards.size() >= amount)
                     {
                         info.setData(cards);
-                        callback.invoke();
+                        onComplete.invoke();
+                    }
+                    else
+                    {
+                        onFail.invoke();
                     }
                 });
     }

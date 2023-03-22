@@ -661,11 +661,6 @@ public class PCLCardData implements CardObject
         return setMultiformData(maxForms, false, true, false);
     }
 
-    public PCLCardData setMultiformData(int maxForms, boolean canToggleFromPopup)
-    {
-        return setMultiformData(maxForms, canToggleFromPopup, !canToggleFromPopup, canToggleFromPopup);
-    }
-
     public PCLCardData setMultiformData(int maxForms, boolean canToggleFromPopup, boolean canToggleOnUpgrade, boolean canToggleFromAlternateForm)
     {
         this.maxForms = maxForms;

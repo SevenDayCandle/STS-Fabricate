@@ -32,6 +32,7 @@ public class PCLCoreTooltips extends PCLTooltips
     public static final String ICON_JUGGERNAUT = "juggernaut";
     public static final String ICON_LOCKON = "lockon";
     public static final String ICON_MALLEABLE = "malleable";
+    public static final String ICON_MARKED = "marked";
     public static final String ICON_METALLICIZE = "metallicize";
     public static final String ICON_NEXT_TURN_BLOCK = "defenseNext";
     public static final String ICON_NEXT_TURN_DRAW = "carddraw";
@@ -143,6 +144,7 @@ public class PCLCoreTooltips extends PCLTooltips
     public EUITooltip lockOn = EUITooltip.findByID("~Lock-On");
     public EUITooltip loyal = EUITooltip.findByID("Loyal");
     public EUITooltip malleable = EUITooltip.findByID("Malleable");
+    public EUITooltip marked = EUITooltip.findByID("Marked");
     // TODO change description depending on the current character
     public EUITooltip match = EUITooltip.findByID("Match");
     public EUITooltip metallicize = EUITooltip.findByID("Metallicize");
@@ -280,6 +282,7 @@ public class PCLCoreTooltips extends PCLTooltips
         juggernaut.setIconFromPowerRegion(ICON_JUGGERNAUT);
         lockOn.setIconFromPowerRegion(ICON_LOCKON);
         malleable.setIconFromPowerRegion(ICON_MALLEABLE);
+        marked.setIconFromPowerRegion(ICON_MARKED);
         metallicize.setIconFromPowerRegion(ICON_METALLICIZE);
         nextTurnBlock.setIconFromPowerRegion(ICON_NEXT_TURN_BLOCK);
         nextTurnDraw.setIconFromPowerRegion(ICON_NEXT_TURN_DRAW);

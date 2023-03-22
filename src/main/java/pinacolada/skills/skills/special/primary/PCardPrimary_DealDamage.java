@@ -7,7 +7,9 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
+import extendedui.configuration.EUIConfiguration;
 import extendedui.interfaces.delegates.FuncT2;
+import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.ColoredString;
 import pinacolada.actions.creature.DealDamage;
 import pinacolada.actions.creature.DealDamageToAll;
@@ -18,6 +20,7 @@ import pinacolada.effects.PCLEffects;
 import pinacolada.effects.VFX;
 import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.misc.PCLUseInfo;
+import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Attack;
@@ -106,11 +109,16 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack>
         String amountString = count > 1 ? getAmountRawString() + "x" + getExtraRawString() : getAmountRawString();
 
         String targetShortString = target.getShortString();
+
+        // When displayed as text, we can just write normal damage down as "damage"
+        EUITooltip attackTooltip = getAttackTooltip();
+        String attackString = attackTooltip == PGR.core.tooltips.normalDamage && EUIConfiguration.disableDescrptionIcons.get() ? PGR.core.strings.subjects_damage : attackTooltip.toString();
+
         if (targetShortString != null)
         {
-            return EUIRM.strings.numAdjNoun(amountString, targetShortString, getAttackTooltip());
+            return EUIRM.strings.numAdjNoun(amountString, targetShortString, attackString);
         }
-        return EUIRM.strings.numNoun(amountString, getAttackTooltip());
+        return EUIRM.strings.numNoun(amountString, attackString);
     }
 
     public PCardPrimary_DealDamage setDamageEffect(EffekseerEFK effekseerKey)

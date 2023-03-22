@@ -6,6 +6,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.powers.*;
+import com.megacrit.cardcrawl.powers.watcher.MarkPower;
 import com.megacrit.cardcrawl.powers.watcher.VigorPower;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT2;
@@ -45,6 +46,7 @@ public class PCLPowerHelper implements TooltipProvider
     public static final PCLPowerHelper Frail = new PCLPowerHelper(FrailPower.POWER_ID, PGR.core.tooltips.frail, (o, s, a) -> new FrailPower(o, a, shouldExtend(o, s)), Behavior.TurnBased, true, true, true);
     public static final PCLPowerHelper Impaired = new PCLPowerHelper(ImpairedPower.POWER_ID, PGR.core.tooltips.impaired, (o, s, a) -> new ImpairedPower(o, a, shouldExtend(o, s)), Behavior.TurnBased, true, true, true);
     public static final PCLPowerHelper LockOn = new PCLPowerHelper(com.megacrit.cardcrawl.powers.LockOnPower.POWER_ID, PGR.core.tooltips.lockOn, PCLLockOnPower::new, Behavior.TurnBased, true, true, true);
+    public static final PCLPowerHelper Marked = new PCLPowerHelper(MarkPower.POWER_ID, PGR.core.tooltips.marked, MarkPower::new, Behavior.Permanent, false, true, false);
     public static final PCLPowerHelper Poison = new PCLPowerHelper(PoisonPower.POWER_ID, PGR.core.tooltips.poison, PoisonPower::new, Behavior.TurnBased, true, true, false);
     public static final PCLPowerHelper SelfImmolation = new PCLPowerHelper(SelfImmolationPower.POWER_ID, PGR.core.tooltips.selfImmolation, (o, s, a) -> new SelfImmolationPower(o, a, shouldExtend(o, s)), Behavior.TurnBased, false, true, false);
     public static final PCLPowerHelper Shackles = new PCLPowerHelper(ShacklesPower.POWER_ID, PGR.core.tooltips.shackles, ShacklesPower::new, Behavior.SingleTurn, true, true, false);

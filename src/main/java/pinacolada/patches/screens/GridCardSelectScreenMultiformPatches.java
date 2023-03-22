@@ -399,7 +399,8 @@ public class GridCardSelectScreenMultiformPatches
                 }
                 else
                 {
-                    for (int i = 0; i < base.getMaxForms(); i++)
+                    int formCount = base.getMaxForms();
+                    for (int i = 0; i < formCount; i++)
                     {
                         list.add(getPreviewCard(base, i));
                     }

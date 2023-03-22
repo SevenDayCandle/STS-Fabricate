@@ -319,12 +319,6 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
     }
 
     @Override
-    public int getMaxForms()
-    {
-        return forms != null ? forms.size() : 1;
-    }
-
-    @Override
     public int setForm(Integer form, int timesUpgraded)
     {
         super.setForm(form, timesUpgraded);

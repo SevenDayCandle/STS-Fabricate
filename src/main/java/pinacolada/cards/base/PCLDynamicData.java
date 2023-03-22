@@ -185,7 +185,7 @@ public class PCLDynamicData extends PCLCardData
         safeLoadValue(() -> setUnique(data.unique));
         safeLoadValue(() -> setRemovableFromDeck(data.removableFromDeck));
         safeLoadValue(() -> setLinearUpgrade(data.linearUpgrade));
-        setMultiformData(data.builders.size());
+        setMultiformData(data.forms.length);
     }
 
     private void safeLoadValue(ActionT0 loadFunc)
@@ -228,7 +228,7 @@ public class PCLDynamicData extends PCLCardData
     @Override
     public AbstractCard makeCopyFromLibrary(int upgrade)
     {
-        return createImplWithForms(true);
+        return create(upgrade);
     }
 
     public PCLDynamicData setImagePath(String imagePath)
