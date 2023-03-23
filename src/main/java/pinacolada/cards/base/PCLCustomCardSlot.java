@@ -39,8 +39,8 @@ public class PCLCustomCardSlot
     private static final ArrayList<CustomCardFileProvider> PROVIDERS = new ArrayList<>();
     public String ID;
     public Integer loadout;
-    public Integer maxUpgradeLevel;
-    public Integer maxCopies;
+    public Integer maxUpgradeLevel = 1;
+    public Integer maxCopies = -1;
     public Boolean linearUpgrade;
     public Boolean removableFromDeck;
     public Boolean unique;

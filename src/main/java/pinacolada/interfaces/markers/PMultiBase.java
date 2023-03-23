@@ -24,11 +24,11 @@ public interface PMultiBase<T extends PSkill<?>>
         }
     }
 
-    default void displayChildUpgrades()
+    default void displayChildUpgrades(boolean value)
     {
         for (PSkill<?> be : getSubEffects())
         {
-            be.displayUpgrades();
+            be.displayUpgrades(value);
         }
     }
 

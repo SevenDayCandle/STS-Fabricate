@@ -119,6 +119,8 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
                 .setToggle(SingleCardViewPopup.isViewingUpgrade)
                 .setOnToggle(this::toggleViewUpgrades);
 
+        upgradeToggle.setActive(slot.maxUpgradeLevel != 0);
+
         invalidateCards();
         setupPages();
     }
@@ -270,6 +272,10 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
         {
             //previewCard.upgrade();
             previewCard.displayUpgrades();
+        }
+        else
+        {
+            previewCard.displayUpgradesForSkills(false);
         }
 
         previewCard.drawScale = previewCard.targetDrawScale = 1f;

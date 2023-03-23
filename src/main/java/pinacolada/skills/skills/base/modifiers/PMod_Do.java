@@ -13,7 +13,9 @@ import pinacolada.actions.piles.SelectFromPile;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.misc.PCLUseInfo;
+import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
@@ -76,14 +78,14 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory>
     @Override
     public String getSubText()
     {
-        return fields.getFullCardStringSingular();
+        return fields.forced ? PGR.core.strings.subjects_card : fields.getFullCardStringSingular();
     }
 
     @Override
     public String getText(boolean addPeriod)
     {
         return getMoveString(addPeriod) + LocalizedStrings.PERIOD + (childEffect != null ? (" " +
-                (childEffect.useParent ? childEffect.getText(addPeriod) :
+                (isChildEffectUsingParent() ? childEffect.getText(addPeriod) :
                         (TEXT.cond_per(capital(childEffect.getText(false), addPeriod), EUIRM.strings.nounVerb(getSubText(), getActionPast())) + PCLCoreStrings.period(addPeriod))
                 )) : "");
     }
@@ -96,10 +98,7 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory>
                     if (this.childEffect != null)
                     {
                         info.setData(cards);
-                        if (!this.childEffect.useParent)
-                        {
-                            updateChildAmount(info);
-                        }
+                        updateChildAmount(info);
                         this.childEffect.use(info);
                     }
                 });
@@ -113,10 +112,7 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory>
                     if (this.childEffect != null)
                     {
                         info.setData(cards);
-                        if (!this.childEffect.useParent)
-                        {
-                            updateChildAmount(info);
-                        }
+                        updateChildAmount(info);
                         this.childEffect.use(info, index);
                     }
                 });
@@ -129,6 +125,11 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory>
         return cards == null || be == null ? 0 : be.baseAmount * (fields.forced ? cards.size() : (EUIUtils.count(cards,
                 c -> fields.getFullCardFilter().invoke(c)
         )));
+    }
+
+    protected boolean isChildEffectUsingParent()
+    {
+        return (childEffect.useParent || childEffect instanceof PMultiBase && EUIUtils.all(((PMultiBase<?>) childEffect).getSubEffects(), c -> c.useParent));
     }
 
     protected String getActionTitle()

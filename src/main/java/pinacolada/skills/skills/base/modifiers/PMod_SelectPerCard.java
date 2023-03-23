@@ -60,7 +60,7 @@ public class PMod_SelectPerCard extends PMod_Do
     @Override
     public String getText(boolean addPeriod)
     {
-        return childEffect != null && childEffect.useParent ? childEffect.getText(addPeriod) : super.getText(addPeriod);
+        return childEffect != null && isChildEffectUsingParent() ? childEffect.getText(addPeriod) : super.getText(addPeriod);
     }
 
     @Override

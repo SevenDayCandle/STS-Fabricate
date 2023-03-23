@@ -405,13 +405,13 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return this.childEffect == null || this.childEffect.canPlay(info);
     }
 
-    public void displayUpgrades()
+    public void displayUpgrades(boolean value)
     {
-        displayUpgrades = true;
+        displayUpgrades = value;
         setAmountFromCard();
         if (this.childEffect != null)
         {
-            childEffect.displayUpgrades();
+            childEffect.displayUpgrades(value);
         }
     }
 

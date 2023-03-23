@@ -83,6 +83,6 @@ public class PMove_StackCustomPower extends PMove<PField_CustomPower> implements
             }
             return null;
         }), amount > 0 ? " " : EUIUtils.DOUBLE_SPLIT_LINE, true);
-        return amount > 0 ? (TEXT.cond_forTurns(amount) + ", " + base) : base;
+        return amount > 0 ? (TEXT.cond_forTurns(getAmountRawString()) + ", " + base) : base;
     }
 }

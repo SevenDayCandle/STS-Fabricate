@@ -145,10 +145,10 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
         return canPlay;
     }
 
-    public void displayUpgrades()
+    public void displayUpgrades(boolean value)
     {
-        super.displayUpgrades();
-        displayChildUpgrades();
+        super.displayUpgrades(value);
+        displayChildUpgrades(value);
     }
 
     @Override

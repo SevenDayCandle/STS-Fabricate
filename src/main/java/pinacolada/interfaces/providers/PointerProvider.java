@@ -120,6 +120,7 @@ public interface PointerProvider
         return getPointers().get(c - CHAR_OFFSET);
     }
 
+    // TODO optimize with switch
     default String makeExportString(String baseString)
     {
         if (baseString == null)
@@ -176,6 +177,7 @@ public interface PointerProvider
         return sb.toString();
     }
 
+    // TODO optimize with switch
     default String makePowerString(String baseString)
     {
         if (baseString == null)
@@ -223,7 +225,7 @@ public interface PointerProvider
                 }
                 sb.append(EUISmartText.parseLogicString(sub.toString()));
             }
-            else if (!(c == '{' || c == '}' || c == '[' || c == ']') || !PGR.config.vanillaPowerRender.get())
+            else if (!PGR.config.vanillaPowerRender.get() || !(c == '{' || c == '}' || c == '[' || c == ']'))
             {
                 sb.append(c);
             }

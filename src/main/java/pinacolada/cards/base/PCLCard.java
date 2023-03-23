@@ -17,7 +17,6 @@ import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
-import com.megacrit.cardcrawl.cards.CardQueueItem;
 import com.megacrit.cardcrawl.cards.green.Tactician;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
@@ -1843,16 +1842,29 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
             heal = baseHeal;
         }
 
-        for (PSkill<?> ef : getEffects()) {
-            ef.displayUpgrades();
-        }
-        for (PSkill<?> ef : getPowerEffects()) {
-            ef.displayUpgrades();
-        }
+        displayUpgradesForSkills(true);
 
         // Force refresh the descriptions, affinities, and augments
         initializeDescription();
         affinities.updateSortedList();
+    }
+
+    public void displayUpgradesForSkills(boolean value)
+    {
+        if (onAttackEffect != null)
+        {
+            onAttackEffect.displayUpgrades(value);
+        }
+        if (onBlockEffect != null)
+        {
+            onBlockEffect.displayUpgrades(value);
+        }
+        for (PSkill<?> ef : getEffects()) {
+            ef.displayUpgrades(value);
+        }
+        for (PSkill<?> ef : getPowerEffects()) {
+            ef.displayUpgrades(value);
+        }
     }
 
     @Override
@@ -2073,9 +2085,9 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         for (PSkill<?> be : getFullEffects()) {
             shouldPlay = shouldPlay | be.triggerOnEndOfTurn(true);
         }
+        // TODO investigate why card queue item causes graphical glitches
         if (shouldPlay) {
-            dontTriggerOnUseCard = true;
-            AbstractDungeon.actionManager.cardQueue.add(new CardQueueItem(this, true));
+            flash();
         }
     }
 

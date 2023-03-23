@@ -58,6 +58,6 @@ public class PCond_CheckLevel extends PPassiveCond<PField_Affinity>
     @Override
     public String getSubText()
     {
-        return TEXT.cond_levelItem(amount, fields.getAffinityChoiceString());
+        return TEXT.cond_levelItem(getAmountRawString(), fields.getAffinityChoiceString());
     }
 }

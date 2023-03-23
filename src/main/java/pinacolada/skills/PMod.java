@@ -420,21 +420,24 @@ public abstract class PMod<T extends PField> extends PSkill<T>
 
     protected void updateChildAmount(PCLUseInfo info)
     {
-        if (this.childEffect != null && !this.childEffect.useParent)
+        if (this.childEffect != null)
         {
             if (this.childEffect instanceof PMultiBase)
             {
                 for (PSkill<?> ce : ((PMultiBase<?>) this.childEffect).getSubEffects())
                 {
-                    ce.setTemporaryAmount(updateAmount(ce, info));
+                    if (!ce.useParent)
+                    {
+                        ce.setTemporaryAmount(updateAmount(ce, info));
+                    }
                 }
             }
             // PDelays should be ignored. PMods will directly affect their children instead
-            else if (this.childEffect instanceof PDelay && this.childEffect.childEffect != null)
+            else if (this.childEffect instanceof PDelay && this.childEffect.childEffect != null && !this.childEffect.childEffect.useParent)
             {
                 this.childEffect.childEffect.setTemporaryAmount(updateAmount(this.childEffect.childEffect, info));
             }
-            else
+            else if (!this.childEffect.useParent)
             {
                 this.childEffect.setTemporaryAmount(updateAmount(this.childEffect, info));
             }

@@ -515,7 +515,7 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
             {
                 continue;
             }
-            addUseMove(effect);
+            addUseMove(effect.makeCopy());
         }
 
         for (PTrigger pe : builder.powers)
@@ -524,7 +524,7 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
             {
                 continue;
             }
-            addPowerMove(pe);
+            addPowerMove(pe.makeCopy());
         }
 
         // Add damage/block effects and set their source to this card

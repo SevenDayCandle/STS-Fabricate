@@ -257,6 +257,8 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
         uniqueToggle.setToggle(effect.getBuilder().unique);
         soulboundToggle.setToggle(!effect.getBuilder().removableFromDeck);
         linearToggle.setToggle(effect.getBuilder().linearUpgrade);
+
+        effect.upgradeToggle.setActive(effect.getBuilder().maxUpgradeLevel != 0);
     }
 
     @Override

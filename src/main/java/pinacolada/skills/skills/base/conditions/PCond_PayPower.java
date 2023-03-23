@@ -62,7 +62,7 @@ public class PCond_PayPower extends PPassiveCond<PField_Power>
     @Override
     public String getSubText()
     {
-        return capital(TEXT.act_pay(amount, fields.powers.isEmpty()
+        return capital(TEXT.act_pay(getAmountRawString(), fields.powers.isEmpty()
                 ? plural(PGR.core.tooltips.debuff) :
                 fields.getPowerAndString()), true);
     }

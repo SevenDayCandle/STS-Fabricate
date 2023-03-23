@@ -70,10 +70,10 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         return PSkill.joinDataAsJson(effects, PSkill::serialize);
     }
 
-    public void displayUpgrades()
+    public void displayUpgrades(boolean value)
     {
-        super.displayUpgrades();
-        displayChildUpgrades();
+        super.displayUpgrades(value);
+        displayChildUpgrades(value);
     }
 
     @Override

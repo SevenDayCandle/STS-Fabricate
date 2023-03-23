@@ -97,10 +97,10 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
         return canPlay;
     }
 
-    public void displayUpgrades()
+    public void displayUpgrades(boolean value)
     {
-        super.displayUpgrades();
-        displayChildUpgrades();
+        super.displayUpgrades(value);
+        displayChildUpgrades(value);
     }
 
     @Override

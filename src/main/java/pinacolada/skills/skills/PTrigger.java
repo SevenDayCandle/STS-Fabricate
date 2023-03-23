@@ -90,7 +90,7 @@ public abstract class PTrigger extends PPrimary<PField_Not>
     @Override
     public String getSubText()
     {
-        return fields.not ? TEXT.cond_timesPerCombat(amount) : amount > 0 ? TEXT.cond_timesPerTurn(amount) + ", " : "";
+        return fields.not ? TEXT.cond_timesPerCombat(getAmountRawString()) : amount > 0 ? TEXT.cond_timesPerTurn(getAmountRawString()) + ", " : "";
     }
 
     @Override
