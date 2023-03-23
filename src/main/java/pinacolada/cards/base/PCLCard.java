@@ -42,6 +42,7 @@ import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.ColoredString;
 import extendedui.utilities.ColoredTexture;
 import extendedui.utilities.EUIClassUtils;
+import extendedui.utilities.EUIFontHelper;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.augments.PCLAugment;
@@ -92,7 +93,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     protected static final TextureAtlas CARD_ATLAS = ReflectionHacks.getPrivateStatic(AbstractCard.class, "cardAtlas");
     protected static final Color COLORLESS_ORB_COLOR = new Color(0.7f, 0.7f, 0.7f, 1);
     protected static final Color CURSE_COLOR = new Color(0.22f, 0.22f, 0.22f, 1);
-    protected static final Color COLOR_SECRET = new Color(0.2f, 0.99f, 0.6f, 1f);
+    protected static final Color COLOR_SECRET = new Color(0.6f, 0.18f, 1f, 1f);
     protected static final Color COLOR_ULTRA_RARE = new Color(0.99f, 0.3f, 0.2f, 1f);
     protected static final Color HOVER_IMG_COLOR = new Color(1f, 0.815f, 0.314f, 0.8f);
     protected static final Color SELECTED_CARD_COLOR = new Color(0.5f, 0.9f, 0.9f, 1f);
@@ -658,7 +659,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     // For PCL cards, always use the skill silhouette because its cards are all rectangular
     @Override
     public TextureAtlas.AtlasRegion getCardBgAtlas() {
-        return shouldUsePCLFrame() ? ImageMaster.CARD_SKILL_BG_SILHOUETTE : super.getCardBgAtlas();
+        return shouldUsePCLFrame() || type == PCLEnum.CardType.SUMMON ? ImageMaster.CARD_SKILL_BG_SILHOUETTE : super.getCardBgAtlas();
     }
 
     public ColoredString getColoredAttributeString(char attributeID) {
@@ -2492,7 +2493,11 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
                 }
                 else
                 {
-                    SpireSuper.call(sb);
+                    BitmapFont font = EUIFontHelper.cardTypeFont;
+                    font.getData().setScale(this.drawScale);
+                    Color typeColor = getTypeColor();
+                    typeColor.a = getRenderColor().a;
+                    FontHelper.renderRotatedText(sb, font, EUIGameUtils.textForType(type), this.current_x, this.current_y - 22.0F * this.drawScale * Settings.scale, 0.0F, -1.0F * this.drawScale * Settings.scale, this.angle, false, typeColor);
                 }
             }
         }
@@ -2605,5 +2610,10 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     protected Color getRenderColor()
     {
         return ReflectionHacks.getPrivate(this, AbstractCard.class, "renderColor");
+    }
+
+    protected Color getTypeColor()
+    {
+        return ReflectionHacks.getPrivate(this, AbstractCard.class, "typeColor");
     }
 }

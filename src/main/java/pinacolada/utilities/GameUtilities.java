@@ -1407,6 +1407,7 @@ public class GameUtilities
                 AbstractCard.CardRarity.COMMON,
                 AbstractCard.CardRarity.UNCOMMON,
                 AbstractCard.CardRarity.RARE,
+                AbstractCard.CardRarity.CURSE,
                 AbstractCard.CardRarity.SPECIAL
         );
     }

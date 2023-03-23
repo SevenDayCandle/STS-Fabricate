@@ -64,9 +64,10 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory>
     public String getMoveString(boolean addPeriod)
     {
         String amString = amount <= 0 ? TEXT.subjects_all : getAmountRawString();
+        String cardString = fields.forced ? fields.getFullCardString() : fields.getShortCardString();
         return !fields.groupTypes.isEmpty() ?
-                TEXT.act_genericFrom(getActionTitle(), amString, fields.forced ? fields.getFullCardString() : fields.getShortCardString(), fields.getGroupString())
-                : EUIRM.strings.verbNoun(getActionTitle(), amString);
+                TEXT.act_genericFrom(getActionTitle(), amString, cardString, fields.getGroupString())
+                : EUIRM.strings.verbNumNoun(getActionTitle(), amString, cardString);
     }
 
     @Override

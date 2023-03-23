@@ -53,7 +53,7 @@ public abstract class PCond_DoTo extends PActiveCond<PField_CardCategory>
     public String getSubText()
     {
         return fields.hasGroups() ? TEXT.act_genericFrom(getActionTitle(), getAmountRawString(), fields.getFullCardString(), fields.getGroupString())
-                : EUIRM.strings.verbNoun(getActionTitle(), getAmountRawString());
+                : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawString(), fields.getFullCardString());
     }
 
     @Override

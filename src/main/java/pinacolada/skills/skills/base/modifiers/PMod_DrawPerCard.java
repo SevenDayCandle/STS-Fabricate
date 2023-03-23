@@ -48,7 +48,12 @@ public class PMod_DrawPerCard extends PMod_Do
     @Override
     protected PCLAction<ArrayList<AbstractCard>> createPileAction(PCLUseInfo info)
     {
-        return new DrawCards(amount);
+        DrawCards action = new DrawCards(amount);
+        if (fields.forced)
+        {
+            action = action.setFilter(c -> fields.getFullCardFilter().invoke(c), false);
+        }
+        return action;
     }
 
     @Override

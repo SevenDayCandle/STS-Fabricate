@@ -91,7 +91,7 @@ public abstract class PCond_DoBranch extends PCond_Branch<PField_CardCategory, A
     public String getSubText()
     {
         return !fields.groupTypes.isEmpty() ? TEXT.act_genericFrom(getActionTitle(), getAmountRawString(), fields.getShortCardString(), fields.getGroupString())
-                : EUIRM.strings.verbNoun(getActionTitle(), getAmountRawString());
+                : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawString(), fields.getShortCardString());
     }
 
     @Override

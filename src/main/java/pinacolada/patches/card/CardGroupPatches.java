@@ -12,7 +12,6 @@ import extendedui.EUIUtils;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.interfaces.listeners.OnRemovedFromDeckListener;
 import pinacolada.misc.CombatManager;
-import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
@@ -60,25 +59,6 @@ public class CardGroupPatches
                 innateIndex -= 1;
                 PCLCardTag.Innate.tryProgress(c);
             }
-        }
-    }
-
-    @SpirePatch(clz = CardGroup.class, method = "getPurgeableCards")
-    public static class CardGroupPatches_GetPurgeableCards
-    {
-        @SpirePrefixPatch
-        public static SpireReturn<CardGroup> postfix(CardGroup __instance)
-        {
-            final CardGroup result = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
-            for (AbstractCard c : __instance.group)
-            {
-                if (GameUtilities.canRemoveFromDeck(c))
-                {
-                    result.group.add(c);
-                }
-            }
-
-            return SpireReturn.Return(result);
         }
     }
 
