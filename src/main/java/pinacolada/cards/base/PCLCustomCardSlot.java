@@ -382,6 +382,11 @@ public class PCLCustomCardSlot
         return imagePath;
     }
 
+    public PCLDynamicCard makeFirstCard(boolean shouldFindForms)
+    {
+        return getBuilder(0).createImplWithForms(shouldFindForms);
+    }
+
     public void setupBuilder(String fp)
     {
         slotColor = AbstractCard.CardColor.valueOf(color);

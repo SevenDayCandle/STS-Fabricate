@@ -155,7 +155,7 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen
             PCLCustomCardSlot slot = new PCLCustomCardSlot(currentColor);
             currentEffect = new PCLCustomCardEditCardScreen(slot)
                     .setOnSave(() -> {
-                        AbstractCard newCard = slot.getBuilder(0).createImplWithForms(false);
+                        AbstractCard newCard = slot.makeFirstCard(false);
                         currentSlots.put(newCard, slot);
                         PCLCustomCardSlot.getCards(currentColor).add(slot);
                         grid.addCard(newCard);
@@ -175,7 +175,7 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen
                     currentEffect = new PCLCustomCardEditCardScreen(slot)
                             .setOnSave(() -> {
                                 slot.commitBuilder();
-                                AbstractCard newCard = slot.getBuilder(0).createImplWithForms(false);
+                                AbstractCard newCard = slot.makeFirstCard(false);
                                 currentSlots.put(newCard, slot);
                                 PCLCustomCardSlot.getCards(currentColor).add(slot);
                                 grid.addCard(newCard);

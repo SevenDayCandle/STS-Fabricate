@@ -64,11 +64,12 @@ public class PMove_Transform extends PMove_Select<PField_CardID>
 
     private AbstractCard getCard(String id)
     {
-        AbstractCard c = CardLibrary.getCopy(id);
+        AbstractCard c = CardLibrary.getCard(id);
         if (c == null)
         {
             c = GameUtilities.getRandomCard();
         }
+        c = c.makeCopy();
         // TODO custom variable
         if (fields.forced && c != null)
         {

@@ -110,7 +110,7 @@ public class CardLibraryPatches
                 PCLCustomCardSlot slot = PCLCustomCardSlot.get(key);
                 if (slot != null)
                 {
-                    return SpireReturn.Return(slot.getBuilder(0).createImplWithForms(true));
+                    return SpireReturn.Return(slot.makeFirstCard(true));
                 }
             }
 

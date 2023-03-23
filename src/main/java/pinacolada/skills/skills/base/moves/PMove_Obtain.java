@@ -47,12 +47,17 @@ public class PMove_Obtain extends PMove<PField_CardID>
 
     private AbstractCard getCard(String id)
     {
-        AbstractCard c = CardLibrary.getCopy(id);
-        if (extra > 0 && c instanceof PCLCard)
+        AbstractCard c = CardLibrary.getCard(id);
+        if (c != null)
         {
-            ((PCLCard) c).changeForm(extra, c.timesUpgraded);
+            c = c.makeCopy();
+            if (extra > 0 && c instanceof PCLCard)
+            {
+                ((PCLCard) c).changeForm(extra, c.timesUpgraded);
+            }
+            return c;
         }
-        return c;
+        return null;
     }
 
     @Override
@@ -60,7 +65,11 @@ public class PMove_Obtain extends PMove<PField_CardID>
     {
         for (String cd : fields.cardIDs)
         {
-            previews.add(EUICardPreview.generatePreviewCard(getCard(cd)));
+            AbstractCard c = getCard(cd);
+            if (c != null)
+            {
+                previews.add(EUICardPreview.generatePreviewCard(c));
+            }
         }
         super.makePreviews(previews);
         return this;
@@ -105,8 +114,11 @@ public class PMove_Obtain extends PMove<PField_CardID>
                 for (int i = 0; i < amount; i++)
                 {
                     AbstractCard c = getCard(cd);
-                    created.add(c);
-                    getActions().makeCard(c, fields.groupTypes.size() > 0 ? fields.groupTypes.get(0).getCardGroup() : AbstractDungeon.player.hand).setUpgrade(fields.forced, false);
+                    if (c != null)
+                    {
+                        created.add(c);
+                        getActions().makeCard(c, fields.groupTypes.size() > 0 ? fields.groupTypes.get(0).getCardGroup() : AbstractDungeon.player.hand).setUpgrade(fields.forced, false);
+                    }
                 }
             }
         }

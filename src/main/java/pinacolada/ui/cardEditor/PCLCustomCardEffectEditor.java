@@ -281,18 +281,17 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
                 .setLimits(eMin, eMax)
                 .setValue(curEffect != null ? curEffect.extra : 0, curEffect != null ? curEffect.getUpgradeExtra() : 0, false)
                 .setActive(eMin != eMax);
-        targets
-                .setItems(PSkill.getEligibleTargets(curEffect))
-                .setActive(targets.getAllItems().size() > 1);
-        piles.setItems(PSkill.getEligiblePiles(curEffect))
-                .setActive(piles.getAllItems().size() > 1);
-        origins.setItems(PSkill.getEligibleOrigins(curEffect))
-                .setActive(origins.getAllItems().size() > 1);
-
         if (curEffect != null && lastEffect != curEffect)
         {
             lastEffect = curEffect;
             activeElements.clear();
+            targets
+                    .setItems(PSkill.getEligibleTargets(curEffect))
+                    .setActive(targets.getAllItems().size() > 1);
+            piles.setItems(PSkill.getEligiblePiles(curEffect))
+                    .setActive(piles.getAllItems().size() > 1);
+            origins.setItems(PSkill.getEligibleOrigins(curEffect))
+                    .setActive(origins.getAllItems().size() > 1);
             curEffect.fields.setupEditor(this);
 
             float xOff = AUX_OFFSET;
