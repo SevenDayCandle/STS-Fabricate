@@ -63,7 +63,7 @@ public class PMove_PlayCopy extends PMove<PField_CardID>
     {
         if (fields.cardIDs.isEmpty())
         {
-            ArrayList<AbstractCard> cards = info.getData(new ArrayList<>());
+            ArrayList<AbstractCard> cards = info.getData(new ArrayList<AbstractCard>());
             if (!cards.isEmpty())
             {
                 for (AbstractCard c : cards)

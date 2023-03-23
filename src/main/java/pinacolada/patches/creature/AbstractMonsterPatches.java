@@ -20,6 +20,7 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.characters.CreatureAnimationInfo;
 import pinacolada.misc.CombatManager;
 import pinacolada.monsters.PCLIntentInfo;
+import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
@@ -31,7 +32,7 @@ public class AbstractMonsterPatches
         @SpirePrefixPatch
         public static SpireReturn prefix(AbstractMonster __instance, SpriteBatch sb)
         {
-            if (GameUtilities.isPCLPlayerClass())
+            if (!PGR.config.vanillaPowerRender.get())
             {
                 if (__instance.reticleAlpha == 0)
                 {

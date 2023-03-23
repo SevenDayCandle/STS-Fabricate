@@ -135,8 +135,8 @@ public class PField_CardGeneric extends PField
 
     public final CardGroup[] getCardGroup(PCLUseInfo info)
     {
-        ArrayList<AbstractCard> cards = info.getData(null);
-        if (skill.useParent && cards != null)
+        ArrayList<AbstractCard> cards = info.getData(new ArrayList<AbstractCard>());
+        if (skill.useParent)
         {
             CardGroup g = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
             for (AbstractCard c : cards)

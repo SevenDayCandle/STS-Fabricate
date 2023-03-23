@@ -9,6 +9,7 @@ import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
+import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
 import pinacolada.skills.skills.PCardPrimary;
 
@@ -19,6 +20,11 @@ public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty>
     public PCardPrimary_GainBlock()
     {
         super(DATA, PCLCardTarget.Self, 0);
+    }
+
+    public PCardPrimary_GainBlock(PSkillSaveData content)
+    {
+        super(DATA, content);
     }
 
     public PCardPrimary_GainBlock(PointerProvider card)

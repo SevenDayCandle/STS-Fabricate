@@ -48,6 +48,7 @@ public class PCLMainConfig extends AbstractConfig
     private static final String SHOW_FORMULA_DISPLAY = PCLMainConfig.createFullID("ShowFormulaDisplay");
     private static final String SHOW_IRRELEVANT_PROPERTIES = PCLMainConfig.createFullID("ShowIrrelevantProperties");
     private static final String VANILLA_LIBRARY_SCREEN = PCLMainConfig.createFullID("VanillaLibraryScreen");
+    private static final String VANILLA_POWER_RENDER = PCLMainConfig.createFullID("VanillaPowerRender");
     private static ModSettingsScreen.Category pclCategory;
     public STSConfigItem<Boolean> cropCardImages = new STSConfigItem<Boolean>(CROP_CARD_PORTRAIT, false);
     public STSConfigItem<Boolean> displayCardTagDescription = new STSConfigItem<Boolean>(DISPLAY_CARD_TAG_DESCRIPTION, false);
@@ -60,6 +61,7 @@ public class PCLMainConfig extends AbstractConfig
     public STSConfigItem<Boolean> showFormulaDisplay = new STSConfigItem<Boolean>(SHOW_FORMULA_DISPLAY, false);
     public STSConfigItem<Boolean> showIrrelevantProperties = new STSConfigItem<Boolean>(SHOW_IRRELEVANT_PROPERTIES, false);
     public STSConfigItem<Boolean> vanillaLibraryScreen = new STSConfigItem<Boolean>(VANILLA_LIBRARY_SCREEN, false);
+    public STSConfigItem<Boolean> vanillaPowerRender = new STSConfigItem<Boolean>(VANILLA_POWER_RENDER, false);
     public STSConfigItem<Boolean> editorFtueScreen = new STSConfigItem<Boolean>(EDITOR_FTUE_SCREEN, false);
     public STSConfigItem<Integer> ascensionGlyph0 = new STSConfigItem<Integer>(ASCENSIONGLYPH0, 0);
     public STSConfigItem<Integer> ascensionGlyph1 = new STSConfigItem<Integer>(ASCENSIONGLYPH1, 0);
@@ -132,6 +134,7 @@ public class PCLMainConfig extends AbstractConfig
         yPos = addToggle(panel, cropCardImages, PGR.core.strings.options_cropCardImages, yPos, PGR.core.strings.optionDesc_cropCardImages);
         yPos = addToggle(panel, displayCardTagDescription, PGR.core.strings.options_displayCardTagDescription, yPos, PGR.core.strings.optionDesc_displayCardTagDescription);
         yPos = addToggle(panel, vanillaLibraryScreen, PGR.core.strings.options_vanillaCustomRunMenu, yPos, PGR.core.strings.optionDesc_vanillaCustomRunMenu);
+        yPos = addToggle(panel, vanillaPowerRender, PGR.core.strings.options_vanillaPowerRender, yPos, PGR.core.strings.optionDesc_vanillaPowerRender);
         yPos = addToggle(panel, showFormulaDisplay, PGR.core.strings.options_showFormulaDisplay, yPos, PGR.core.strings.optionDesc_showFormulaDisplay);
         yPos = addToggle(panel, showIrrelevantProperties, PGR.core.strings.options_hideIrrelevantAffinities, yPos, PGR.core.strings.optionDesc_hideIrrelevantAffinities);
         yPos = addToggle(panel, madnessReplacements, PGR.core.strings.options_madnessReplacements, yPos, PGR.core.strings.optionDesc_madnessReplacements);
@@ -164,6 +167,7 @@ public class PCLMainConfig extends AbstractConfig
         showFormulaDisplay.addConfig(config);
         showIrrelevantProperties.addConfig(config);
         vanillaLibraryScreen.addConfig(config);
+        vanillaPowerRender.addConfig(config);
         lastCSVPath.addConfig(config);
         lastImagePath.addConfig(config);
         lastSeed.addConfig(config);

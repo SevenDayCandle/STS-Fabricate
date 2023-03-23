@@ -13,6 +13,7 @@ import extendedui.utilities.ColoredString;
 import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.misc.CombatManager;
 import pinacolada.misc.PCLUseInfo;
+import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PTrigger;
@@ -48,7 +49,15 @@ public class PSkillPower extends PCLPower
                 this.ID = createPowerID(effect);
                 if (effect.sourceCard instanceof EditorCard)
                 {
-                    this.region48 = PCLRenderHelpers.generateIcon(((EditorCard) effect.sourceCard).getPortraitImageTexture());
+                    // Vanilla rendering cannot render generated region48 properly
+                    if (PGR.config.vanillaPowerRender.get())
+                    {
+                        this.img = PCLCoreImages.CardAffinity.unknown.texture();
+                    }
+                    else
+                    {
+                        this.region48 = PCLRenderHelpers.generateIcon(((EditorCard) effect.sourceCard).getPortraitImageTexture());
+                    }
                     this.powerStrings.NAME = effect.sourceCard.name;
                 }
                 else

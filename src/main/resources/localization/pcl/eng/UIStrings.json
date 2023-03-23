@@ -126,7 +126,7 @@
 				"pcl:CardEditorTutorial": {
 								"TEXT": [
 												"{#o:Left-click} a card to edit it. {#o:Right-click} a card for more options.",
-												"Custom cards can be obtained in #yCustom #yRuns with the #yEnable #yCustom #yCards option selected or through the #oobtaincustom command in Basemod's console.",
+												"Custom cards can be obtained in #yCustom #yRuns with the #yEnable #yCustom #yCards option selected or through the #oobtaincustom or #oobtaindeckstuom commands in Basemod's console.",
 												"Update the custom card list to reflect the cards present in your custom cards folder. | This will remove any cards that have been moved out of the custom card folder.",
 												"You may change a card's form when you upgrade it at a campfire. All forms share the same #yPrimary #yInfo, but their other attributes and effects may differ.",
 												"Choose the image to use for this card's portrait",
@@ -353,6 +353,7 @@
 												"Enable custom poitons in normal runs",
 												"Enable custom events in normal runs",
 												"Use Madness for missing cards",
+												"Use Vanilla power tip rendering",
 												"Use custom card framework for all cards"
 								]
 				},
@@ -362,10 +363,11 @@
 												"Tags normally appearing on the top-right corner of custom cards will instead appear as keywords in their descriptions.",
 												"Disables the replacement Custom Run Menu. To play with custom cards without using the Custom Run Menu, you will either need to use the console or toggle the \"Enable custom cards in normal runs\" setting.",
 												"Enables a draggable widget that shows damage formula calculations for custom cards when dragging them over targets.",
-												"Certain custom card properties (e.g. Affinities) are hidden by default for characters that don't use them. Check this option to always show these properties regardless of the character. | This setting also enables editing and interacting with these properties in the card editor for any card color.",
+												"Certain custom card properties (e.g. Affinities) are hidden by default for characters that don't use them. Check this option to always show these properties regardless of the character. NL This setting also enables editing and interacting with these properties in the card editor for any card color.",
 												"This setting will only be applied to new runs.",
 												"If a non-existent card is created, a placeholder card will be generated with that card's supposed ID. Check this option to have that card be a Madness instead, mimicking base-game behavior.",
-												"Forces all cards encountered in a run to be built with this mod's card framework, which may improve compatibility between them and certain custom card effects. | WARNING: This setting will likely break functionality from other mods."
+												"If checked, power tip descriptions will be rendering with base game logic instead of custom logic from EUI. This setting may be necessary to turn on if you have mods installed that use their own power tip rendering logic, but Fabricate powers will not be able to render icons.",
+												"Forces all cards encountered in a run to be built with this mod's card framework, which may improve compatibility between them and certain custom card effects. NL WARNING: This setting will likely break functionality from other mods."
 								]
 				},
 				"pcl:Rewards": {

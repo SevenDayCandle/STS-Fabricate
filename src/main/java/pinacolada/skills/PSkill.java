@@ -102,26 +102,8 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
 
     public PSkill(PSkillData<T> data, PSkillSaveData saveData)
     {
-        this.effectID = saveData.effectID;
         this.data = data;
-        this.target = PCLCardTarget.valueOf(saveData.target);
-        this.amountSource = PCLCardValueSource.valueOf(saveData.valueSource);
-        this.rootAmount = this.baseAmount = this.amount = saveData.amount;
-        this.rootExtra = this.baseExtra = this.extra = saveData.extra;
-        this.upgrade = saveData.upgrade;
-        this.upgradeExtra = saveData.upgradeExtra;
-        this.fields = EUIUtils.deserialize(saveData.effectData, this.data.fieldType);
-        this.fields.skill = this;
-        this.useParent = saveData.useParent;
-
-        if (saveData.children != null)
-        {
-            this.childEffect = PSkill.get(saveData.children);
-            if (this.childEffect != null)
-            {
-                this.childEffect.parent = this;
-            }
-        }
+        initializeFromSaveData(saveData);
     }
 
     public PSkill(PSkillData<T> data)
@@ -183,11 +165,20 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         {
             PSkillSaveData saveData = EUIUtils.deserialize(serializedString, TToken.getType());
             PSkillData<?> skillData = EFFECT_MAP.get(saveData.effectID);
+            // First attempt to load the PSkillSaveData constructor
             Constructor<? extends PSkill<?>> c = EUIUtils.tryGetConstructor(skillData.effectClass, PSkillSaveData.class);
             if (c != null)
             {
                 return c.newInstance(saveData);
             }
+
+            // If this fails, load the empty constructor and try to apply the save data through that
+            c = EUIUtils.tryGetConstructor(skillData.effectClass);
+            if (c != null)
+            {
+                return c.newInstance().initializeFromSaveData(saveData);
+            }
+
             EUIUtils.logError(PSkill.class, "Unable to find constructor for skill " + saveData.effectID + " for effect class " + skillData.effectClass);
         }
         catch (Exception e)
@@ -1023,6 +1014,30 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
     public boolean isDetrimental()
     {
         return false;
+    }
+
+    protected PSkill<T> initializeFromSaveData(PSkillSaveData saveData)
+    {
+        this.effectID = saveData.effectID;
+        this.target = PCLCardTarget.valueOf(saveData.target);
+        this.amountSource = PCLCardValueSource.valueOf(saveData.valueSource);
+        this.rootAmount = this.baseAmount = this.amount = saveData.amount;
+        this.rootExtra = this.baseExtra = this.extra = saveData.extra;
+        this.upgrade = saveData.upgrade;
+        this.upgradeExtra = saveData.upgradeExtra;
+        this.fields = EUIUtils.deserialize(saveData.effectData, this.data.fieldType);
+        this.fields.skill = this;
+        this.useParent = saveData.useParent;
+
+        if (saveData.children != null)
+        {
+            this.childEffect = PSkill.get(saveData.children);
+            if (this.childEffect != null)
+            {
+                this.childEffect.parent = this;
+            }
+        }
+        return this;
     }
 
     public final boolean isFromCreature()

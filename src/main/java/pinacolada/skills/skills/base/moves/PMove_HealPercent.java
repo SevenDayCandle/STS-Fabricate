@@ -58,7 +58,7 @@ public class PMove_HealPercent extends PMove<PField_Empty>
     {
         for (AbstractCreature t : getTargetList(info))
         {
-            int heal = MathUtils.ceil(info.source.maxHealth * amount / 100f);
+            int heal = MathUtils.ceil(t.maxHealth * amount / 100f);
             getActions().heal(info.source, t, heal);
         }
         super.use(info);

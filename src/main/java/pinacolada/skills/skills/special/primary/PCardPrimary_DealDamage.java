@@ -33,15 +33,15 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack>
     // Damage effects are only customizable in code and cannot be saved in fields
     protected FuncT2<Float, AbstractCreature, AbstractCreature> damageEffect;
 
-    public PCardPrimary_DealDamage(PSkillSaveData content)
-    {
-        super(DATA, content);
-    }
-
     // Needed for effect editor initialization. PLEASE do not call this anywhere else without setting a card first
     public PCardPrimary_DealDamage()
     {
         super(DATA, PCLCardTarget.Single, 0);
+    }
+
+    public PCardPrimary_DealDamage(PSkillSaveData content)
+    {
+        super(DATA, content);
     }
 
     public PCardPrimary_DealDamage(PointerProvider card)

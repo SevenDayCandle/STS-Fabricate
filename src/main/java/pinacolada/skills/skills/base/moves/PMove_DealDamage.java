@@ -1,44 +1,25 @@
 package pinacolada.skills.skills.base.moves;
 
-import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.DamageInfo;
-import com.megacrit.cardcrawl.core.AbstractCreature;
-import extendedui.interfaces.delegates.ActionT2;
-import extendedui.interfaces.delegates.FuncT2;
-import pinacolada.actions.creature.DealDamage;
-import pinacolada.actions.creature.DealDamageToAll;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.effects.EffekseerEFK;
 import pinacolada.effects.PCLAttackVFX;
-import pinacolada.effects.VFX;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.skills.fields.PField_Empty;
-
-import java.util.ArrayList;
-import java.util.Collections;
+import pinacolada.skills.fields.PField_Attack;
 
 @VisibleSkill
-public class PMove_DealDamage extends PMove<PField_Empty>
+public class PMove_DealDamage extends PMove<PField_Attack>
 {
-    public static final PSkillData<PField_Empty> DATA = register(PMove_DealDamage.class, PField_Empty.class);
-
-    protected final AbstractGameAction.AttackEffect attackEffect;
-    protected Color vfxColor;
-    protected Color vfxTargetColor;
-    protected DamageInfo.DamageType damageType = DamageInfo.DamageType.THORNS;
-    protected FuncT2<Float, AbstractCreature, AbstractCreature> damageEffect;
-    protected ActionT2<PCLUseInfo, ArrayList<AbstractCreature>> onCompletion;
+    public static final PSkillData<PField_Attack> DATA = register(PMove_DealDamage.class, PField_Attack.class);
 
     public PMove_DealDamage(PSkillSaveData content)
     {
         super(DATA, content);
-        attackEffect = AbstractGameAction.AttackEffect.valueOf(content.effectData);
     }
 
     public PMove_DealDamage()
@@ -64,7 +45,7 @@ public class PMove_DealDamage extends PMove<PField_Empty>
     public PMove_DealDamage(int amount, AbstractGameAction.AttackEffect attackEffect, PCLCardTarget target)
     {
         super(DATA, target, amount);
-        this.attackEffect = attackEffect;
+        fields.setAttackEffect(attackEffect);
     }
 
     @Override
@@ -85,13 +66,11 @@ public class PMove_DealDamage extends PMove<PField_Empty>
         if (target.targetsMulti())
         {
             int[] damage = DamageInfo.createDamageMatrix(amount, true, false);
-            DealDamageToAll action = getActions().dealDamageToAll(damage, damageType, attackEffect);
-            setDamageOptions(action, info);
+            getActions().dealDamageToAll(damage, DamageInfo.DamageType.THORNS, fields.attackEffect);
         }
         else
         {
-            DealDamage action = (DealDamage) getActions().dealDamage(getSourceCreature(), target == PCLCardTarget.Self ? getSourceCreature() : info.target, amount, damageType, attackEffect).isCancellable(target != PCLCardTarget.Self);
-            setDamageOptions(action, info);
+            getActions().dealDamage(getSourceCreature(), target == PCLCardTarget.Self ? getSourceCreature() : info.target, amount, DamageInfo.DamageType.THORNS, fields.attackEffect).isCancellable(target != PCLCardTarget.Self);
         }
         super.use(info);
     }
@@ -108,87 +87,5 @@ public class PMove_DealDamage extends PMove<PField_Empty>
             return TEXT.act_deal(getAmountRawString(), PGR.core.strings.subjects_damage);
         }
         return TEXT.act_dealTo(getAmountRawString(), PGR.core.strings.subjects_damage, getTargetString());
-    }
-
-    public void serialize(PSkillSaveData data)
-    {
-        data.effectData = attackEffect.name();
-    }
-
-    public PMove_DealDamage setCallback(ActionT2<PCLUseInfo, ArrayList<AbstractCreature>> onCompletion)
-    {
-        this.onCompletion = onCompletion;
-        return this;
-    }
-
-    public PMove_DealDamage setDamageEffect(FuncT2<Float, AbstractCreature, AbstractCreature> damageEffect)
-    {
-        this.damageEffect = damageEffect;
-        return this;
-    }
-
-    public PMove_DealDamage setDamageEffect(EffekseerEFK effekseerKey)
-    {
-        this.damageEffect = (s, m) -> VFX.eFX(effekseerKey, m.hb).duration;
-        return this;
-    }
-
-    protected void setDamageOptions(DealDamage damageAction, PCLUseInfo info)
-    {
-        if (damageEffect != null)
-        {
-            damageAction.setDamageEffect(damageEffect);
-        }
-        if (vfxColor != null)
-        {
-            if (vfxTargetColor != null)
-            {
-                damageAction.setVFXColor(vfxColor, vfxTargetColor);
-            }
-            else
-            {
-                damageAction.setVFXColor(vfxColor);
-            }
-        }
-        if (onCompletion != null)
-        {
-            damageAction.addCallback(info, (i, m) -> onCompletion.invoke(i, new ArrayList<>(Collections.singletonList(m))));
-        }
-    }
-
-    protected void setDamageOptions(DealDamageToAll damageAction, PCLUseInfo info)
-    {
-        if (damageEffect != null)
-        {
-            damageAction.setDamageEffect((enemy, __) -> damageEffect.invoke(info.source, enemy));
-        }
-        if (vfxColor != null)
-        {
-            if (vfxTargetColor != null)
-            {
-                damageAction.setVFXColor(vfxColor, vfxTargetColor);
-            }
-            else
-            {
-                damageAction.setVFXColor(vfxColor);
-            }
-        }
-        if (onCompletion != null)
-        {
-            damageAction.addCallback(info, (i, mo) -> onCompletion.invoke(i, mo));
-        }
-    }
-
-    public PMove_DealDamage setDamageType(DamageInfo.DamageType damageType)
-    {
-        this.damageType = damageType;
-        return this;
-    }
-
-    public PMove_DealDamage setVFXColor(Color vfxColor, Color vfxTargetColor)
-    {
-        this.vfxColor = vfxColor;
-        this.vfxTargetColor = vfxTargetColor;
-        return this;
     }
 }

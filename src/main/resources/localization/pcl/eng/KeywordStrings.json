@@ -206,7 +206,7 @@
 								"NAME": "Invigorated"
 				},
 				"Juggernaut":	{
-								"DESCRIPTION": "Whenever you gain #yBlock, deal damage to a random enemy.",
+								"DESCRIPTION": "Whenever you gain [Block], deal damage to a random enemy.",
 								"NAME": "Juggernaut"
 				},
 				"Kill":	{
@@ -229,7 +229,7 @@
 								"NAME": "Loyal"
 				},
 				"Malleable":	{
-								"DESCRIPTION": "Upon receiving damage, gain #yBlock. #yBlock gain increases as this power is triggered. Resets at the start of turn.",
+								"DESCRIPTION": "Upon receiving damage, gain [Block], then increase this power by #b1. Resets at the start of turn.",
 								"NAME": "Malleable"
 				},
 				"Mark":	{
@@ -248,7 +248,7 @@
 								"NAME": "Max Health"
 				},
 				"Metallicize":	{
-								"DESCRIPTION": "Gain #yBlock at the start of your turn.",
+								"DESCRIPTION": "Gain [Block] at the start of your turn.",
 								"NAME": "Metallicize"
 				},
 				"Mismatch":	{
@@ -306,7 +306,7 @@
 								"NAME": "Piercing Damage"
 				},
 				"Plated Armor":	{
-								"DESCRIPTION": "Gain #yBlock at the end of your turn. Reduced by #b1 when receiving damage.",
+								"DESCRIPTION": "Gain [Block] at the end of your turn. Reduced by #b1 when receiving damage.",
 								"NAME": "Plated Armor"
 				},
 				"Play":	{

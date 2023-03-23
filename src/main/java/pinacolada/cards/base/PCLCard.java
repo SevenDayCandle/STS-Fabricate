@@ -2075,7 +2075,6 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         }
         if (shouldPlay) {
             dontTriggerOnUseCard = true;
-
             AbstractDungeon.actionManager.cardQueue.add(new CardQueueItem(this, true));
         }
     }
@@ -2452,7 +2451,15 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
             text = name;
         }
 
-        PCLRenderHelpers.writeOnCard(sb, this, font, text, 0, RAW_H * 0.416f, color, false);
+        // Base game text is SLIGHTLY off
+        if (isPopup && !shouldUsePCLFrame())
+        {
+            PCLRenderHelpers.writeOnCard(sb, this, font, text, 0, RAW_H * 0.4f, color, false);
+        }
+        else
+        {
+            PCLRenderHelpers.writeOnCard(sb, this, font, text, 0, RAW_H * 0.416f, color, false);
+        }
         PCLRenderHelpers.resetFont(font);
     }
 

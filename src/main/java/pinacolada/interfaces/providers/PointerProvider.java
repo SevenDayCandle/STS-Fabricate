@@ -6,6 +6,7 @@ import extendedui.EUIRenderHelpers;
 import extendedui.EUIUtils;
 import extendedui.text.EUISmartText;
 import pinacolada.interfaces.markers.PMultiBase;
+import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PTrait;
 import pinacolada.skills.Skills;
@@ -207,7 +208,22 @@ public interface PointerProvider
                 }
                 i += 3;
             }
-            else
+            else if (c == '$')
+            {
+                StringBuilder sub = new StringBuilder();
+                while (i + 1 < baseString.length())
+                {
+                    i += 1;
+                    c = baseString.charAt(i);
+                    sub.append(c);
+                    if (c == '$')
+                    {
+                        break;
+                    }
+                }
+                sb.append(EUISmartText.parseLogicString(sub.toString()));
+            }
+            else if (!(c == '{' || c == '}' || c == '[' || c == ']') || !PGR.config.vanillaPowerRender.get())
             {
                 sb.append(c);
             }

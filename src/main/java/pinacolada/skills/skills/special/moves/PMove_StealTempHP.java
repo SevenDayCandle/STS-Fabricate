@@ -6,22 +6,19 @@ import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import pinacolada.actions.PCLActions;
-import pinacolada.actions.creature.DealDamage;
-import pinacolada.actions.creature.DealDamageToAll;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.vfx.megacritCopy.HemokinesisEffect2;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
+import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.skills.fields.PField_Empty;
-import pinacolada.skills.skills.base.moves.PMove_DealDamage;
+import pinacolada.skills.fields.PField_Attack;
 
-// TODO move out of DealDamage
-public class PMove_StealTempHP extends PMove_DealDamage
+public class PMove_StealTempHP extends PMove<PField_Attack>
 {
-    public static final PSkillData<PField_Empty> DATA = register(PMove_StealTempHP.class, PField_Empty.class);
+    public static final PSkillData<PField_Attack> DATA = register(PMove_StealTempHP.class, PField_Attack.class);
 
     public PMove_StealTempHP()
     {
@@ -30,8 +27,7 @@ public class PMove_StealTempHP extends PMove_DealDamage
 
     public PMove_StealTempHP(PSkillSaveData content)
     {
-        super(content);
-        damageType = DamageInfo.DamageType.HP_LOSS;
+        super(DATA, content);
     }
 
     public PMove_StealTempHP(int amount, AbstractGameAction.AttackEffect attackEffect)
@@ -41,8 +37,8 @@ public class PMove_StealTempHP extends PMove_DealDamage
 
     public PMove_StealTempHP(int amount, AbstractGameAction.AttackEffect attackEffect, PCLCardTarget target)
     {
-        super(amount, attackEffect, target);
-        damageType = DamageInfo.DamageType.HP_LOSS;
+        super(DATA, target, amount);
+        fields.setAttackEffect(attackEffect);
     }
 
     @Override
@@ -57,24 +53,29 @@ public class PMove_StealTempHP extends PMove_DealDamage
         return TEXT.act_stealFrom(getAmountRawString(), PGR.core.tooltips.tempHP, getTargetString());
     }
 
-    protected void setDamageOptions(DealDamage damageAction, PCLUseInfo info)
+    @Override
+    public void use(PCLUseInfo info)
     {
-        super.setDamageOptions(damageAction, info);
-        damageAction.addCallback((enemy) -> {
-            PCLEffects.List.add(new HemokinesisEffect2(enemy.hb.cX, enemy.hb.cY, AbstractDungeon.player.hb.cX, AbstractDungeon.player.hb.cY).setColor(Color.GOLDENROD));
-            PCLActions.top.gainTemporaryHP(amount);
-        });
-    }
-
-    protected void setDamageOptions(DealDamageToAll damageAction, PCLUseInfo info)
-    {
-        super.setDamageOptions(damageAction, info);
-        damageAction.addCallback((enemy) -> {
-            for (AbstractCreature c : enemy)
-            {
-                PCLEffects.List.add(new HemokinesisEffect2(c.hb.cX, c.hb.cY, AbstractDungeon.player.hb.cX, AbstractDungeon.player.hb.cY).setColor(Color.GOLDENROD));
-                PCLActions.top.gainTemporaryHP(amount);
-            }
-        });
+        if (target.targetsMulti())
+        {
+            int[] damage = DamageInfo.createDamageMatrix(amount, true, false);
+            getActions().dealDamageToAll(damage, DamageInfo.DamageType.HP_LOSS, fields.attackEffect)
+                    .addCallback((enemy) -> {
+                        for (AbstractCreature c : enemy)
+                        {
+                            PCLEffects.List.add(new HemokinesisEffect2(c.hb.cX, c.hb.cY, AbstractDungeon.player.hb.cX, AbstractDungeon.player.hb.cY).setColor(Color.GOLDENROD));
+                            PCLActions.top.gainTemporaryHP(amount);
+                        }
+                    });
+        }
+        else
+        {
+            getActions().dealDamage(getSourceCreature(), target == PCLCardTarget.Self ? getSourceCreature() : info.target, amount, DamageInfo.DamageType.HP_LOSS, fields.attackEffect).isCancellable(target != PCLCardTarget.Self)
+                    .addCallback((enemy) -> {
+                        PCLEffects.List.add(new HemokinesisEffect2(enemy.hb.cX, enemy.hb.cY, AbstractDungeon.player.hb.cX, AbstractDungeon.player.hb.cY).setColor(Color.GOLDENROD));
+                        PCLActions.top.gainTemporaryHP(amount);
+                    });
+        }
+        super.use(info);
     }
 }

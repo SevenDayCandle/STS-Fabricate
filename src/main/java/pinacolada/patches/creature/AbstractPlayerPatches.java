@@ -18,7 +18,7 @@ import pinacolada.cards.base.modifiers.OverrideSkillModifier;
 import pinacolada.misc.CombatManager;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.PCLEnum;
-import pinacolada.utilities.GameUtilities;
+import pinacolada.resources.PGR;
 
 import java.util.ArrayList;
 
@@ -118,7 +118,7 @@ public class AbstractPlayerPatches
         @SpirePrefixPatch
         public static SpireReturn prefix(AbstractPlayer __instance, SpriteBatch sb)
         {
-            if (GameUtilities.isPCLPlayerClass())
+            if (!PGR.config.vanillaPowerRender.get())
             {
                 if (EUITooltip.canRenderTooltips())
                 {
