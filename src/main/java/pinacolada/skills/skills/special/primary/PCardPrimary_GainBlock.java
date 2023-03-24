@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIRM;
 import extendedui.utilities.ColoredString;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.misc.PCLUseInfo;
@@ -13,6 +14,7 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
 import pinacolada.skills.skills.PCardPrimary;
 
+@VisibleSkill
 public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty>
 {
     public static final PSkillData<PField_Empty> DATA = register(PCardPrimary_GainBlock.class, PField_Empty.class);
@@ -57,7 +59,6 @@ public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty>
     @Override
     public void useImpl(PCLUseInfo info)
     {
-        // TODO card gain block action
         for (AbstractCreature c : getTargetList(info))
         {
             // Extra has the value of right count

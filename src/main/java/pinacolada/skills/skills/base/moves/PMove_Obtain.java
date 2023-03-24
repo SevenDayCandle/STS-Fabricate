@@ -87,14 +87,17 @@ public class PMove_Obtain extends PMove<PField_CardID>
         ArrayList<AbstractCard> created = new ArrayList<AbstractCard>();
         if (useParent)
         {
-            ArrayList<AbstractCard> cards = info.getData(new ArrayList<AbstractCard>());
-            for (AbstractCard card : cards)
+            ArrayList<AbstractCard> cards = info.getData();
+            if (cards != null)
             {
-                for (int i = 0; i < amount; i++)
+                for (AbstractCard card : cards)
                 {
-                    AbstractCard c = card.makeStatEquivalentCopy();
-                    created.add(c);
-                    getActions().makeCard(c, fields.groupTypes.size() > 0 ? fields.groupTypes.get(0).getCardGroup() : AbstractDungeon.player.hand);
+                    for (int i = 0; i < amount; i++)
+                    {
+                        AbstractCard c = card.makeStatEquivalentCopy();
+                        created.add(c);
+                        getActions().makeCard(c, fields.groupTypes.size() > 0 ? fields.groupTypes.get(0).getCardGroup() : AbstractDungeon.player.hand);
+                    }
                 }
             }
         }

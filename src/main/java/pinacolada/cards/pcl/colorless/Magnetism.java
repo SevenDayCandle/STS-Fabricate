@@ -5,7 +5,6 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLAffinity;
-import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PMove;
 import pinacolada.skills.skills.PTrigger;
@@ -16,7 +15,7 @@ public class Magnetism extends PCLCard
     public static final String ATLAS_URL = "colorless/power/magnetism";
     public static final PCLCardData DATA = register(Magnetism.class)
             .setImagePathFromAtlasUrl(ATLAS_URL)
-            .setSkill(2, CardRarity.RARE, PCLCardTarget.Self)
+            .setPower(2, CardRarity.RARE)
             .setAffinities(PCLAffinity.Yellow)
             .setCostUpgrades(-1)
             .setColorless();

@@ -19,7 +19,7 @@ public class PSkillSaveData implements Serializable
     public int[] upgradeExtra;
     public boolean useParent;
 
-    public PSkillSaveData(PSkill effect)
+    public PSkillSaveData(PSkill<?> effect)
     {
         this.effectID = effect.effectID;
         this.target = effect.target.name();
@@ -31,7 +31,7 @@ public class PSkillSaveData implements Serializable
         this.useParent = effect.useParent;
         this.effectData = EUIUtils.serialize(effect.fields);
 
-        PSkill cEffect = effect.childEffect;
+        PSkill<?> cEffect = effect.childEffect;
         if (cEffect != null)
         {
             this.children = cEffect.serialize();

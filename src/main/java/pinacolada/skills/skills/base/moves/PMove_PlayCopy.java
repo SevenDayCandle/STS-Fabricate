@@ -63,16 +63,19 @@ public class PMove_PlayCopy extends PMove<PField_CardID>
     {
         if (fields.cardIDs.isEmpty())
         {
-            ArrayList<AbstractCard> cards = info.getData(new ArrayList<AbstractCard>());
-            if (!cards.isEmpty())
+            if (useParent)
             {
-                for (AbstractCard c : cards)
+                ArrayList<AbstractCard> cards = info.getData();
+                if (cards != null)
                 {
-                    if (GameUtilities.canPlayTwice(c))
+                    for (AbstractCard c : cards)
                     {
-                        for (int i = 0; i < amount; i++)
+                        if (GameUtilities.canPlayTwice(c))
                         {
-                            getActions().playCopy(c, target.getTarget(info.source, info.target));
+                            for (int i = 0; i < amount; i++)
+                            {
+                                getActions().playCopy(c, target.getTarget(info.source, info.target));
+                            }
                         }
                     }
                 }

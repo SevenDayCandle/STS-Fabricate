@@ -1,6 +1,7 @@
-package pinacolada.skills.skills.special.traits;
+package pinacolada.skills.skills.base.traits;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLAttackType;
 import pinacolada.skills.PSkillData;
@@ -9,10 +10,9 @@ import pinacolada.skills.PTrait;
 import pinacolada.skills.fields.PField_AttackType;
 import pinacolada.skills.skills.PTrigger;
 
-// Only used for augments
+@VisibleSkill
 public class PTrait_AttackType extends PTrait<PField_AttackType>
 {
-
     public static final PSkillData<PField_AttackType> DATA = register(PTrait_AttackType.class, PField_AttackType.class);
 
     public PTrait_AttackType()

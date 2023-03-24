@@ -7,6 +7,7 @@ import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIUtils;
+import extendedui.interfaces.markers.TooltipProvider;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.PCLCustomCardSlot;
@@ -63,7 +64,7 @@ public abstract class PField implements Serializable
 
     public static String getAffinityAndString(ArrayList<PCLAffinity> affinities)
     {
-        return PCLCoreStrings.joinWithAnd(EUIUtils.mapAsNonnull(affinities, a -> a.getTooltip().getTitleOrIcon()));
+        return PCLCoreStrings.joinWithAnd(EUIUtils.mapAsNonnull(affinities, PField::safeInvokeTip));
     }
 
     public static String getAffinityAndOrString(ArrayList<PCLAffinity> affinities, boolean or)
@@ -88,7 +89,7 @@ public abstract class PField implements Serializable
 
     public static String getAffinityOrString(ArrayList<PCLAffinity> affinities)
     {
-        return PCLCoreStrings.joinWithOr(EUIUtils.mapAsNonnull(affinities, a -> a.getTooltip().getTitleOrIcon()));
+        return PCLCoreStrings.joinWithOr(EUIUtils.mapAsNonnull(affinities, PField::safeInvokeTip));
     }
 
     public static String getAffinityPowerAndString(ArrayList<PCLAffinity> affinities)
@@ -108,7 +109,7 @@ public abstract class PField implements Serializable
 
     public static String getAffinityString(ArrayList<PCLAffinity> affinities)
     {
-        return EUIUtils.joinStrings(" ", EUIUtils.mapAsNonnull(affinities, a -> a.getTooltip().getTitleOrIcon()));
+        return EUIUtils.joinStrings(" ", EUIUtils.mapAsNonnull(affinities, PField::safeInvokeTip));
     }
 
     public static String getCardNameForID(String cardID)
@@ -184,32 +185,32 @@ public abstract class PField implements Serializable
 
     public static String getOrbAndString(ArrayList<PCLOrbHelper> orbs, Object value)
     {
-        return orbs.isEmpty() ? PCLCoreStrings.plural(PGR.core.tooltips.orb, value) : PCLCoreStrings.joinWithAnd(EUIUtils.mapAsNonnull(orbs, a -> a.getTooltip().getTitleOrIcon()));
+        return orbs.isEmpty() ? PCLCoreStrings.plural(PGR.core.tooltips.orb, value) : PCLCoreStrings.joinWithAnd(EUIUtils.mapAsNonnull(orbs, PField::safeInvokeTip));
     }
 
     public static String getOrbOrString(ArrayList<PCLOrbHelper> orbs, Object value)
     {
-        return orbs.isEmpty() ? PCLCoreStrings.plural(PGR.core.tooltips.orb, value) : PCLCoreStrings.joinWithOr(EUIUtils.mapAsNonnull(orbs, a -> a.getTooltip().getTitleOrIcon()));
+        return orbs.isEmpty() ? PCLCoreStrings.plural(PGR.core.tooltips.orb, value) : PCLCoreStrings.joinWithOr(EUIUtils.mapAsNonnull(orbs, PField::safeInvokeTip));
     }
 
     public static String getOrbString(ArrayList<PCLOrbHelper> orbs)
     {
-        return EUIUtils.joinStrings(" ", EUIUtils.mapAsNonnull(orbs, a -> a.getTooltip().getTitleOrIcon()));
+        return EUIUtils.joinStrings(" ", EUIUtils.mapAsNonnull(orbs, PField::safeInvokeTip));
     }
 
     public static String getPowerAndString(ArrayList<PCLPowerHelper> powers)
     {
-        return PCLCoreStrings.joinWithAnd(EUIUtils.mapAsNonnull(powers, a -> a.getTooltip().getTitleOrIcon()));
+        return PCLCoreStrings.joinWithAnd(EUIUtils.mapAsNonnull(powers, PField::safeInvokeTip));
     }
 
     public static String getPowerOrString(ArrayList<PCLPowerHelper> powers)
     {
-        return PCLCoreStrings.joinWithOr(EUIUtils.mapAsNonnull(powers, a -> a.getTooltip().getTitleOrIcon()));
+        return PCLCoreStrings.joinWithOr(EUIUtils.mapAsNonnull(powers, PField::safeInvokeTip));
     }
 
     public static String getPowerString(ArrayList<PCLPowerHelper> powers)
     {
-        return EUIUtils.joinStrings(" ", EUIUtils.mapAsNonnull(powers, a -> a.getTooltip().getTitleOrIcon()));
+        return EUIUtils.joinStrings(" ", EUIUtils.mapAsNonnull(powers, PField::safeInvokeTip));
     }
 
     public static String getRelicNameForID(String relicID)
@@ -242,7 +243,7 @@ public abstract class PField implements Serializable
 
     public static String getTagAndString(ArrayList<PCLCardTag> tags)
     {
-        return tags.isEmpty() ? TEXT.cedit_tags : PCLCoreStrings.joinWithAnd(EUIUtils.map(tags, a -> a.getTooltip().getTitleOrIcon()));
+        return tags.isEmpty() ? TEXT.cedit_tags : PCLCoreStrings.joinWithAnd(EUIUtils.map(tags, PField::safeInvokeTip));
     }
 
     public static String getTagAndOrString(ArrayList<PCLCardTag> tags, boolean or)
@@ -252,12 +253,17 @@ public abstract class PField implements Serializable
 
     public static String getTagOrString(ArrayList<PCLCardTag> tags)
     {
-        return tags.isEmpty() ? TEXT.cedit_tags : PCLCoreStrings.joinWithOr(EUIUtils.map(tags, a -> a.getTooltip().getTitleOrIcon()));
+        return tags.isEmpty() ? TEXT.cedit_tags : PCLCoreStrings.joinWithOr(EUIUtils.map(tags, PField::safeInvokeTip));
     }
 
     public static String getTagString(ArrayList<PCLCardTag> tags)
     {
         // If we are not displaying tags as card tag icons, we should not render them as icons in the description either even if the EUI setting is disabled
-        return tags.isEmpty() ? TEXT.cedit_tags : (EUIUtils.joinStrings(" ", EUIUtils.map(tags, a -> PGR.config.displayCardTagDescription.get() ? a.getTooltip().title : a.getTooltip().getTitleOrIcon())));
+        return tags.isEmpty() ? TEXT.cedit_tags : (EUIUtils.joinStrings(" ", EUIUtils.map(tags, a -> PGR.config.displayCardTagDescription.get() ? a.getTooltip().title : String.valueOf(a.getTooltip()))));
+    }
+    
+    protected static String safeInvokeTip(TooltipProvider provider)
+    {
+        return provider != null ? String.valueOf(provider.getTooltip()) : null;
     }
 }

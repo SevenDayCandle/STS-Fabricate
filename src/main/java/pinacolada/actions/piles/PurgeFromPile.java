@@ -14,21 +14,25 @@ public class PurgeFromPile extends SelectFromPile
     public PurgeFromPile(String sourceName, int amount, CardGroup... groups)
     {
         super(ActionType.EXHAUST, sourceName, null, amount, groups);
+        this.showEffect = true;
     }
 
     public PurgeFromPile(String sourceName, int amount, ListSelection<AbstractCard> origin, CardGroup... groups)
     {
         super(ActionType.EXHAUST, sourceName, null, amount, origin, groups);
+        this.showEffect = true;
     }
 
     public PurgeFromPile(String sourceName, AbstractCreature target, int amount, CardGroup... groups)
     {
         super(ActionType.EXHAUST, sourceName, target, amount, groups);
+        this.showEffect = true;
     }
 
     public PurgeFromPile(String sourceName, AbstractCreature target, int amount, ListSelection<AbstractCard> origin, CardGroup... groups)
     {
         super(ActionType.EXHAUST, sourceName, target, amount, origin, groups);
+        this.showEffect = true;
     }
 
     @Override

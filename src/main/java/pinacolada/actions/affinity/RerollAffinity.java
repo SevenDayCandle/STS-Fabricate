@@ -37,7 +37,7 @@ public class RerollAffinity extends PCLAction<PCLAffinity>
         }
         else
         {
-            PCLActions.top.tryChooseAffinity(name, 1, source, null, Arrays.asList(getAffinityChoices())).addConditionalCallback(choices -> {
+            PCLActions.top.tryChooseAffinity(name, 1, source, null, Arrays.asList(getAffinityChoices())).addCallback(choices -> {
                 if (choices.size() > 0)
                 {
                     complete(meter.set(choices.get(0).value, target));

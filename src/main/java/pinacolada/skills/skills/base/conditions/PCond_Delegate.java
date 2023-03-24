@@ -10,6 +10,7 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.skills.PPassiveNonCheckCond;
+import pinacolada.utilities.GameUtilities;
 
 public abstract class PCond_Delegate extends PPassiveNonCheckCond<PField_CardCategory>
 {
@@ -61,7 +62,7 @@ public abstract class PCond_Delegate extends PPassiveNonCheckCond<PField_CardCat
     {
         if (fields.getFullCardFilter().invoke(c))
         {
-            useFromTrigger(makeInfo(null).setData(EUIUtils.list(c)));
+            useFromTrigger(makeInfo(null).setData(GameUtilities.createCardGroup(EUIUtils.list(c))));
         }
     }
 

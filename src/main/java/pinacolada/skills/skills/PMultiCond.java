@@ -467,6 +467,12 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         }
     }
 
+    public boolean tryPassParent(PCLUseInfo info)
+    {
+        return checkCondition(info, true, true);
+    }
+
+
     public void subscribeChildren()
     {
         for (PSkill<?> effect : effects)

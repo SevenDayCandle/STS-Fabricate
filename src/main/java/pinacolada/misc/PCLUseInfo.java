@@ -48,7 +48,20 @@ public class PCLUseInfo
 
     }
 
-    public <T> T getData(T defaultValue)
+    public <T> T getData()
+    {
+        try
+        {
+            return data != null ? (T) data : null;
+        }
+        catch (Exception e)
+        {
+            EUIUtils.logWarning(this, e.getMessage());
+        }
+        return null;
+    }
+
+    public <T> T getDataOrDefault(T defaultValue)
     {
         try
         {

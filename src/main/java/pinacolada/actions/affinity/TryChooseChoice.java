@@ -8,7 +8,6 @@ import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.*;
 import extendedui.ui.GridCardSelectScreenHelper;
-import extendedui.utilities.GenericCallback;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.ChoiceCard;
@@ -32,8 +31,7 @@ public class TryChooseChoice<T> extends PCLAction<ArrayList<ChoiceCard<T>>>
     protected final ArrayList<ChoiceCard<T>> selectedCards = new ArrayList<>();
     protected final CardGroup group = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
 
-    protected ArrayList<GenericCallback<ArrayList<ChoiceCard<T>>>> conditionalCallbacks = new ArrayList<>();
-    protected ArrayList<ChoiceData<T>> builders = new ArrayList<>();
+    protected ArrayList<ChoiceData<T>> choices = new ArrayList<>();
     protected FuncT1<String, ArrayList<AbstractCard>> dynamicString;
     protected ActionT3<CardGroup, ArrayList<AbstractCard>, AbstractCard> onClickCard;
     protected ListSelection<AbstractCard> origin;
@@ -63,7 +61,7 @@ public class TryChooseChoice<T> extends PCLAction<ArrayList<ChoiceCard<T>>>
     {
         return new TryChooseChoice<PCLAffinity>(ActionType.CARD_MANIPULATION, name, source, choices, cost,
                 EUIUtils.map(skills, ChoiceData::skillAffinity))
-                .addConditionalCallback(choiceCards -> {
+                .addCallback(choiceCards -> {
                     for (ChoiceCard<PCLAffinity> card : choiceCards)
                     {
                         card.onUse(CombatManager.playerSystem.generateInfo(card, source, target));
@@ -80,7 +78,7 @@ public class TryChooseChoice<T> extends PCLAction<ArrayList<ChoiceCard<T>>>
     {
         return new TryChooseChoice<PSkill<?>>(ActionType.CARD_MANIPULATION, sourceData.strings.NAME, source, choices, cost,
                 EUIUtils.map(skills, i -> ChoiceData.skill(sourceData, i)))
-                .addConditionalCallback(choiceCards -> {
+                .addCallback(choiceCards -> {
                     for (ChoiceCard<PSkill<?>> card : choiceCards)
                     {
                         card.value.use(CombatManager.playerSystem.generateInfo(card, source, target));
@@ -97,7 +95,7 @@ public class TryChooseChoice<T> extends PCLAction<ArrayList<ChoiceCard<T>>>
     {
         return new TryChooseChoice<PSkill<?>>(ActionType.CARD_MANIPULATION, sourceData.strings.NAME, source, choices, cost,
                 EUIUtils.map(skills, i -> ChoiceData.skill(sourceData, i)))
-                .addConditionalCallback(choiceCards -> {
+                .addCallback(choiceCards -> {
                     for (ChoiceCard<PSkill<?>> card : choiceCards)
                     {
                         PCLActions.top.selectCreature(card).addCallback(target -> {
@@ -139,7 +137,7 @@ public class TryChooseChoice<T> extends PCLAction<ArrayList<ChoiceCard<T>>>
     {
         super(type);
 
-        this.builders.addAll(items);
+        this.choices.addAll(items);
         this.canPlayerCancel = false;
         this.cost = cost;
         this.message = PGR.core.strings.grid_chooseCards;
@@ -148,24 +146,21 @@ public class TryChooseChoice<T> extends PCLAction<ArrayList<ChoiceCard<T>>>
         initialize(amount, name);
     }
 
-    public <S> PCLAction<ArrayList<ChoiceCard<T>>> addConditionalCallback(S state, ActionT2<S, ArrayList<ChoiceCard<T>>> onCompletion)
+    public <S> PCLAction<ArrayList<ChoiceCard<T>>> addCallback(S state, ActionT2<S, ArrayList<ChoiceCard<T>>> onCompletion)
     {
-        conditionalCallbacks.add(GenericCallback.fromT2(onCompletion, state));
-
+        super.addCallback(state, onCompletion);
         return this;
     }
 
-    public TryChooseChoice<T> addConditionalCallback(ActionT1<ArrayList<ChoiceCard<T>>> onCompletion)
+    public TryChooseChoice<T> addCallback(ActionT1<ArrayList<ChoiceCard<T>>> onCompletion)
     {
-        conditionalCallbacks.add(GenericCallback.fromT1(onCompletion));
-
+        super.addCallback(onCompletion);
         return this;
     }
 
-    public TryChooseChoice<T> addConditionalCallback(ActionT0 onCompletion)
+    public TryChooseChoice<T> addCallback(ActionT0 onCompletion)
     {
-        conditionalCallbacks.add(GenericCallback.fromT0(onCompletion));
-
+        super.addCallback(onCompletion);
         return this;
     }
 
@@ -202,9 +197,9 @@ public class TryChooseChoice<T> extends PCLAction<ArrayList<ChoiceCard<T>>>
         GridCardSelectScreenHelper.setDynamicLabel(dynamicString);
         GridCardSelectScreenHelper.setOnClickCard(onClickCard);
 
-        for (ChoiceData<T> builder : builders)
+        for (ChoiceData<T> choice : choices)
         {
-            group.addToTop(builder.createImplWithForms(false));
+            group.addToTop(choice.createImpl());
         }
 
         if (group.isEmpty())
@@ -278,10 +273,6 @@ public class TryChooseChoice<T> extends PCLAction<ArrayList<ChoiceCard<T>>>
         {
             if (tickDuration(deltaTime))
             {
-                for (GenericCallback<ArrayList<ChoiceCard<T>>> callback : conditionalCallbacks)
-                {
-                    callback.complete(selectedCards);
-                }
                 complete(selectedCards);
             }
             return;

@@ -397,8 +397,14 @@ public class PCLCustomCardSlot
             CardForm f = EUIUtils.deserialize(fo, TTOKENFORM.getType());
             PCLDynamicData builder = new PCLDynamicData(this);
             builder.setAttackType(PCLAttackType.valueOf(f.attackType));
-            builder.setAttackSkill(EUIUtils.safeCast(PSkill.get(f.damageEffect), PCardPrimary_DealDamage.class));
-            builder.setBlockSkill(EUIUtils.safeCast(PSkill.get(f.blockEffect), PCardPrimary_GainBlock.class));
+            if (f.damageEffect != null)
+            {
+                builder.setAttackSkill(EUIUtils.safeCast(PSkill.get(f.damageEffect), PCardPrimary_DealDamage.class));
+            }
+            if (f.blockEffect != null)
+            {
+                builder.setBlockSkill(EUIUtils.safeCast(PSkill.get(f.blockEffect), PCardPrimary_GainBlock.class));
+            }
             builder.setPSkill(EUIUtils.mapAsNonnull(f.effects, PSkill::get), true, true);
             builder.setPPower(EUIUtils.mapAsNonnull(f.powerEffects, pe -> EUIUtils.safeCast(PSkill.get(pe), PTrigger.class)));
 

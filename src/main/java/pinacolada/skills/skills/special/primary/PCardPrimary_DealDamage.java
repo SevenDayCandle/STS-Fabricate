@@ -13,6 +13,7 @@ import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.ColoredString;
 import pinacolada.actions.creature.DealDamage;
 import pinacolada.actions.creature.DealDamageToAll;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.effects.EffekseerEFK;
@@ -26,6 +27,7 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Attack;
 import pinacolada.skills.skills.PCardPrimary;
 
+@VisibleSkill
 public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack>
 {
     public static final PSkillData<PField_Attack> DATA = register(PCardPrimary_DealDamage.class, PField_Attack.class);

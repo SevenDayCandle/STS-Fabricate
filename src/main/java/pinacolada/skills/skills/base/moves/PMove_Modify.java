@@ -45,9 +45,14 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<
     public abstract String getObjectText();
 
     @Override
-    public String wrapExtra(int input)
+    public String wrapAmount(int input)
     {
         return input > 0 ? "+" + input : String.valueOf(input);
+    }
+
+    public String wrapExtra(int input)
+    {
+        return String.valueOf(input);
     }
 
     @Override
@@ -60,7 +65,8 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<
     public void use(PCLUseInfo info)
     {
         getActions().selectFromPile(getName(), extra <= 0 ? Integer.MAX_VALUE : extra, fields.getCardGroup(info))
-                .setOptions((extra <= 0 || fields.groupTypes.isEmpty() || useParent ? PCLCardSelection.Random : PCLCardSelection.Manual).toSelection(), true)
+                .setFilter(fields.getFullCardFilter())
+                .setOptions((extra <= 0 || fields.groupTypes.isEmpty() || useParent ? PCLCardSelection.Random : PCLCardSelection.Manual).toSelection(), !fields.forced)
                 .addCallback(this::cardAction);
         super.use(info);
     }
