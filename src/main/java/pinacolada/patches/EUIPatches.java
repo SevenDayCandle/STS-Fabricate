@@ -1,15 +1,21 @@
 package pinacolada.patches;
 
 import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
+import com.evacipated.cardcrawl.modthespire.lib.SpirePostfixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIGameUtils;
 import extendedui.ui.TextureCache;
+import extendedui.ui.cardFilter.CardPoolScreen;
 import extendedui.ui.cardFilter.filters.CardTypePanelFilterItem;
+import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
+import pinacolada.utilities.GameUtilities;
+
+import java.util.ArrayList;
 
 public class EUIPatches
 {
@@ -26,6 +32,40 @@ public class EUIPatches
                 return SpireReturn.Return(SUMMON);
             }
             return SpireReturn.Continue();
+        }
+    }
+
+    @SpirePatch(clz = EUIGameUtils.class, method = "canSeeAnyColorCard")
+    public static class ExtendedUIPatches_CanSeeAnyColorCard
+    {
+        @SpirePostfixPatch
+        public static boolean postfix(boolean retVal, AbstractCard c)
+        {
+            return retVal
+                    && (c.color != AbstractCard.CardColor.COLORLESS || PGR.getResources(GameUtilities.getActingColor()).containsColorless(c))
+                    && !PGR.dungeon.bannedCards.contains(c.cardID);
+        }
+    }
+
+    @SpirePatch(clz = EUIGameUtils.class, method = "getEveryColorCard")
+    public static class ExtendedUIPatches_GetEveryColorCard
+    {
+        @SpirePostfixPatch
+        public static ArrayList<AbstractCard> postfix(ArrayList<AbstractCard> retVal)
+        {
+            AbstractCard.CardColor color = GameUtilities.getActingColor();
+            if (color != AbstractCard.CardColor.COLORLESS)
+            {
+                for (PCLCustomCardSlot c : PCLCustomCardSlot.getCards(color))
+                {
+                    retVal.add(c.makeFirstCard(true));
+                }
+            }
+            for (PCLCustomCardSlot c : PCLCustomCardSlot.getCards(AbstractCard.CardColor.COLORLESS))
+            {
+                retVal.add(c.makeFirstCard(true));
+            }
+            return retVal;
         }
     }
 
@@ -72,6 +112,16 @@ public class EUIPatches
                 return SpireReturn.Return(PGR.core.tooltips.summon.title);
             }
             return SpireReturn.Continue();
+        }
+    }
+
+    @SpirePatch(clz = CardPoolScreen.class, method = "removeCardFromPool")
+    public static class ExtendedUIPatches_RemoveCardFromPool
+    {
+        @SpirePostfixPatch
+        public static void postfix(CardPoolScreen __instance, AbstractCard c)
+        {
+            PGR.dungeon.ban(c.cardID);
         }
     }
 }

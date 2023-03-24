@@ -200,11 +200,7 @@ public class CardLibraryPatches
         @SpirePrefixPatch
         public static SpireReturn<AbstractCard> prefix(AbstractCard.CardType type, AbstractCard.CardRarity rarity)
         {
-            if (GameUtilities.isPCLPlayerClass())
-            {
-                return SpireReturn.Return(GameUtilities.getAnyColorCardFiltered(rarity, type, false));
-            }
-            return SpireReturn.Continue();
+            return SpireReturn.Return(GameUtilities.getAnyColorCardFiltered(rarity, type, true, false));
         }
     }
 
@@ -214,11 +210,7 @@ public class CardLibraryPatches
         @SpirePrefixPatch
         public static SpireReturn<AbstractCard> prefix(AbstractCard.CardRarity rarity)
         {
-            if (GameUtilities.isPCLPlayerClass())
-            {
-                return SpireReturn.Return(GameUtilities.getAnyColorCardFiltered(rarity, null, true));
-            }
-            return SpireReturn.Continue();
+            return SpireReturn.Return(GameUtilities.getAnyColorCardFiltered(rarity, null, true, true));
         }
     }
 }

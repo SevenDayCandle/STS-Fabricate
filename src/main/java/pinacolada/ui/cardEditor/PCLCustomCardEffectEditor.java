@@ -19,6 +19,7 @@ import extendedui.ui.controls.EUIToggle;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.OriginRelativeHitbox;
 import extendedui.ui.tooltips.EUITooltip;
+import extendedui.utilities.CostFilter;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCardData;
@@ -58,6 +59,7 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
     protected EUIDropdown<AbstractCard.CardColor> colors;
     protected EUIDropdown<AbstractCard.CardRarity> rarities;
     protected EUIDropdown<AbstractCard.CardType> types;
+    protected EUIDropdown<CostFilter> costs;
     protected EUIDropdown<PCLCardGroupHelper> piles;
     protected EUIDropdown<PCLCardSelection> origins;
     protected EUISearchableDropdown<PCLPowerHelper> powers;
@@ -224,6 +226,15 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[1])
                 .setCanAutosize(true, true)
                 .setItems(PCLCustomCardPrimaryInfoPage.getEligibleTypes(cardColor));
+
+        costs = new EUIDropdown<CostFilter>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.35f, MENU_HEIGHT, AUX_OFFSET, 0)
+                , c -> c.name)
+                .setLabelFunctionForOption(c -> c.name, false)
+                .setIsMultiSelect(true)
+                .setShouldPositionClearAtTop(true)
+                .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[3])
+                .setCanAutosize(true, true)
+                .setItems(CostFilter.values());
     }
 
     public PCLDynamicData getBuilder()
@@ -450,6 +461,11 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
     public void registerType(List<AbstractCard.CardType> items)
     {
         registerDropdown(types, items);
+    }
+
+    public void registerCost(List<CostFilter> items)
+    {
+        registerDropdown(costs, items);
     }
 
     public void registerCard(List<String> cardIDs)

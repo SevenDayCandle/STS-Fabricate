@@ -485,13 +485,13 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
                 CardGroup pool = GameUtilities.getCardPool(rarity);
                 if (pool != null)
                 {
-                    pool.addToBottom(c.getBuilder(0).createImpl());
+                    pool.addToBottom(c.makeFirstCard(true));
                     EUIUtils.logInfoIfDebug(this, "Added Custom Card " + c.ID + " to pool " + rarity);
                 }
                 CardGroup spool = GameUtilities.getCardPoolSource(rarity);
                 if (spool != null)
                 {
-                    spool.addToBottom(c.getBuilder(0).createImpl());
+                    spool.addToBottom(c.makeFirstCard(true));
                     EUIUtils.logInfoIfDebug(this, "Added Custom Card " + c.ID + " to source pool " + rarity);
                 }
             }
@@ -563,6 +563,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         {
             pool.removeCard(card.cardID);
         }
+        GameUtilities.removeCardFromCharacterList(card);
     }
 
     private void removeExtraCopies(AbstractCard card)

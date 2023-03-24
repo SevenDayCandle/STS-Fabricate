@@ -230,6 +230,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return EUIUtils.filter(AVAILABLE_SKILLS, d -> targetClass.isAssignableFrom(d.effectClass) && d.isColorCompatible(co));
     }
 
+    /** Returns a list of all available skills that the current card color can use in the card editor, and that fall under the specified PSkill superclass */
     public static <U extends PSkill<?>> List<U> getEligibleEffects(AbstractCard.CardColor co, Class<U> targetClass)
     {
         return EUIUtils.mapAsNonnull(getEligibleClasses(co, targetClass), cl -> {
@@ -267,14 +268,15 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return e != null ? e.getEligibleTargets() : new ArrayList<>();
     }
 
-    // Each ID must be called at least once for it to appear in the card editor
+    /** Load the data for all skills annotated with @VisibleSkill for usage in the card editor
+     * Note that even though they don't appear in the editor, PMultiBase and PCardPrimary skills still need to be loaded with this method to allow them to be deserialized in the editor
+     * */
     public static void initialize()
     {
         for (Class<?> ct : GameUtilities.getClassesWithAnnotation(VisibleSkill.class))
         {
             try
             {
-                // We purposely load the data for multibase classes even though they don't show up in the editor, because they need to be loaded for deserialization
                 VisibleSkill a = ct.getAnnotation(VisibleSkill.class);
                 PSkillData<?> data = ReflectionHacks.getPrivateStatic(ct, a.data());
                 if (!PMultiBase.class.isAssignableFrom(ct))
@@ -315,11 +317,13 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return items.length > 0 ? EUIUtils.serialize(EUIUtils.mapAsNonnull(items, stringFunction), TStringToken.getType()) : null;
     }
 
+    /** Used by multibase effects to join a list of PSkills into a single JSON object for saving in the special field of PSkillSaveData */
     public static <T> String joinDataAsJson(Collection<T> items, FuncT1<String, T> stringFunction)
     {
         return items.size() > 0 ? EUIUtils.serialize(EUIUtils.mapAsNonnull(items, stringFunction), TStringToken.getType()) : null;
     }
 
+    /** Creates a conglomerate string consisting of the text of all of the effects in the collection, in order */
     public static String joinEffectTexts(Collection<? extends PSkill<?>> effects)
     {
         return joinEffectTexts(effects, EUIUtils.SPLIT_LINE, true);

@@ -5,6 +5,7 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.localization.*;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLDynamicCard;
+import pinacolada.misc.PCLDungeon;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
@@ -56,6 +57,12 @@ public class PCLCoreResources extends PCLResources<PCLAbstractPlayerData, PCLCor
     protected void postInitialize()
     {
         tooltips.initializeIcons();
+    }
+
+    // Core resources are pulled when a non-PCL character is used, so it should accept all non-filtered colorless cards
+    public boolean containsColorless(AbstractCard card)
+    {
+        return !PCLDungeon.isColorlessCardExclusive(card);
     }
 
     @Override

@@ -18,7 +18,6 @@ import extendedui.ui.AbstractMenuScreen;
 import extendedui.ui.cardFilter.CustomCardLibraryScreen;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.interfaces.providers.RunAttributesProvider;
-import pinacolada.misc.PCLDungeon;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.trials.PCLCustomTrial;
@@ -205,16 +204,8 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
     private void addColorlessCardsForGroup(CardGroup group, AbstractCard.CardColor color)
     {
         PCLResources<?,?,?,?> resources = PGR.getResources(color);
-        if (resources != PGR.core)
-        {
-            addCardsFromGroup(group, AbstractCard.CardColor.COLORLESS, c -> resources.containsColorless(c) && c.rarity != AbstractCard.CardRarity.SPECIAL);
-            addCardsFromGroup(group, AbstractCard.CardColor.CURSE, c -> resources.containsColorless(c) && c.rarity != AbstractCard.CardRarity.SPECIAL);
-        }
-        else
-        {
-            addCardsFromGroup(group, AbstractCard.CardColor.COLORLESS, c -> !PCLDungeon.isColorlessCardExclusive(c) && c.rarity != AbstractCard.CardRarity.SPECIAL);
-            addCardsFromGroup(group, AbstractCard.CardColor.CURSE, c -> !PCLDungeon.isColorlessCardExclusive(c) && c.rarity != AbstractCard.CardRarity.SPECIAL);
-        }
+        addCardsFromGroup(group, AbstractCard.CardColor.COLORLESS, c -> resources.containsColorless(c) && c.rarity != AbstractCard.CardRarity.SPECIAL);
+        addCardsFromGroup(group, AbstractCard.CardColor.CURSE, c -> resources.containsColorless(c) && c.rarity != AbstractCard.CardRarity.SPECIAL);
 
         if (allowCustomCards)
         {

@@ -9,6 +9,7 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT5;
 import extendedui.ui.tooltips.EUITooltip;
+import extendedui.utilities.CostFilter;
 import pinacolada.actions.piles.SelectFromPile;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardSelection;
@@ -32,6 +33,7 @@ public class PField_CardCategory extends PField_CardID
     public ArrayList<AbstractCard.CardType> types = new ArrayList<>();
     public ArrayList<PCLAffinity> affinities = new ArrayList<>();
     public ArrayList<PCLCardTag> tags = new ArrayList<>();
+    public ArrayList<CostFilter> costs = new ArrayList<>();
 
     public PField_CardCategory()
     {
@@ -46,6 +48,7 @@ public class PField_CardCategory extends PField_CardID
         setRarity(other.rarities);
         setType(other.types);
         setTag(other.tags);
+        setCost(other.costs);
     }
 
     @Override
@@ -56,7 +59,8 @@ public class PField_CardCategory extends PField_CardID
                 && colors.equals(((PField_CardCategory) other).colors)
                 && rarities.equals(((PField_CardCategory) other).rarities)
                 && types.equals(((PField_CardCategory) other).types)
-                && tags.equals(((PField_CardCategory) other).tags);
+                && tags.equals(((PField_CardCategory) other).tags)
+                && costs.equals(((PField_CardCategory) other).costs);
     }
 
     @Override
@@ -71,8 +75,9 @@ public class PField_CardCategory extends PField_CardID
         editor.registerOrigin(origin, origins -> setOrigin(origins.size() > 0 ? origins.get(0) : PCLCardSelection.Manual));
         editor.registerRarity(rarities);
         editor.registerType(types);
-        editor.registerAffinity(affinities);
+        editor.registerCost(costs);
         editor.registerColor(colors);
+        editor.registerAffinity(affinities);
         editor.registerTag(tags);
         editor.registerCard(cardIDs);
         editor.registerBoolean(PGR.core.strings.cedit_required, PGR.core.strings.cetut_required1, v -> forced = v, forced);
@@ -112,6 +117,18 @@ public class PField_CardCategory extends PField_CardID
     {
         this.colors.clear();
         this.colors.addAll(types);
+        return this;
+    }
+
+    public PField_CardCategory setCost(CostFilter... types)
+    {
+        return setCost(Arrays.asList(types));
+    }
+
+    public PField_CardCategory setCost(List<CostFilter> types)
+    {
+        this.costs.clear();
+        this.costs.addAll(types);
         return this;
     }
 
@@ -156,6 +173,7 @@ public class PField_CardCategory extends PField_CardID
         return !cardIDs.isEmpty() ? c -> EUIUtils.any(cardIDs, id -> id.equals(c.cardID)) :
                 (c -> (affinities.isEmpty() || GameUtilities.hasAnyAffinity(c, affinities))
                         && (colors.isEmpty() || colors.contains(c.color))
+                        && (costs.isEmpty() || EUIUtils.any(costs, cost -> cost.check(c)))
                         && (rarities.isEmpty() || rarities.contains(c.rarity))
                         && (tags.isEmpty() || EUIUtils.any(tags, t -> t.has(c)))
                         && (types.isEmpty() || types.contains(c.type)));
@@ -199,6 +217,10 @@ public class PField_CardCategory extends PField_CardID
     public final String getFullCardXString(FuncT1<String, ArrayList<PCLAffinity>> affinityFunc, FuncT1<String, ArrayList<String>> joinFunc, Object value)
     {
         ArrayList<String> stringsToJoin = new ArrayList<>();
+        if (!costs.isEmpty())
+        {
+            stringsToJoin.add(PGR.core.strings.subjects_xCost(joinFunc.invoke(EUIUtils.map(costs, c -> c.name))));
+        }
         if (!affinities.isEmpty())
         {
             stringsToJoin.add(affinityFunc.invoke(affinities));

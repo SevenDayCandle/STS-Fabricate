@@ -208,6 +208,7 @@ public class GameUtilities
         return !card.purgeOnUse && card.type != PCLEnum.CardType.SUMMON && !PCLCardTag.Fleeting.has(card);
     }
 
+    // Does NOT patch card pool screen because this would cause the card pool screen to get messed up when you get a prismatic shard effect in battle
     public static boolean canReceiveAnyColorCard()
     {
         return GameUtilities.hasRelicEffect(PrismaticShard.ID) || ModHelper.isModEnabled(Diverse.ID);
@@ -534,26 +535,50 @@ public class GameUtilities
         return cards;
     }
 
-    public static AbstractCard getAnyColorCardFiltered(AbstractCard.CardRarity rarity, AbstractCard.CardType type, boolean allowHealing)
+    public static AbstractCard getAnyColorCardFiltered(AbstractCard.CardRarity rarity, AbstractCard.CardType type)
+    {
+        return getAnyColorCardFiltered(rarity, type, false, false);
+    }
+
+    public static AbstractCard getAnyColorCardFiltered(AbstractCard.CardRarity rarity, AbstractCard.CardType type,  boolean allowOtherRarities, boolean allowHealing)
+    {
+        ArrayList<AbstractCard> available = getAnyColorCardFilteredCards(rarity, type, allowHealing);
+        if (!available.isEmpty())
+        {
+            return getRandomElement(available);
+        }
+        else if (allowOtherRarities && rarity != null)
+        {
+            EUIUtils.logInfo(null, "No cards found for Rarity " + rarity + ", Type " + type);
+            int nextRarityIndex = Math.max(0, rarity.ordinal() - 1);
+            return getAnyColorCardFiltered(nextRarityIndex > 1 ? poolOrdering[nextRarityIndex] : null, type, allowOtherRarities, allowHealing);
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public static ArrayList<AbstractCard> getAnyColorCardFilteredCards(AbstractCard.CardRarity rarity, AbstractCard.CardType type, boolean allowHealing)
     {
         refreshCardLists();
         if (fullCardPool.size() == 0)
         {
-            boolean isPCL = GameUtilities.isPCLPlayerClass();
-            RandomizedList<AbstractCard> cardPool = new RandomizedList<>();
-            for (AbstractCard c : CardLibrary.cards.values())
+            fullCardPool.addAll(EUIGameUtils.getEveryColorCard());
+        }
+
+        ArrayList<AbstractCard> available = new ArrayList<>();
+        for (AbstractCard c : fullCardPool)
+        {
+            if ((allowHealing || GameUtilities.isObtainableInCombat(c)) &&
+                    (rarity == null || c.rarity == rarity) &&
+                    ((type == null && c.type == type)))
             {
-                if ((Settings.treatEverythingAsUnlocked() || !UnlockTracker.isCardLocked(c.cardID)) &&
-                        (allowHealing || GameUtilities.isObtainableInCombat(c)) &&
-                        (rarity == null || c.rarity == rarity) &&
-                        ((type == null && !GameUtilities.isHindrance(c)) || c.type == type))
-                {
-                    fullCardPool.add(c);
-                }
+                available.add(c);
             }
         }
 
-        return fullCardPool.retrieve(getRNG());
+        return available;
     }
 
     public static int getAscensionLevel()
@@ -1780,11 +1805,6 @@ public class GameUtilities
                 && (includeMinions || !enemy.hasPower(MinionPower.POWER_ID));
     }
 
-    public static boolean isHindrance(AbstractCard card)
-    {
-        return card.type == AbstractCard.CardType.CURSE || card.type == AbstractCard.CardType.STATUS;
-    }
-
     public static boolean isMonster(AbstractCreature c)
     {
         return c != null && !c.isPlayer;
@@ -2294,6 +2314,12 @@ public class GameUtilities
         return card.target == AbstractCard.CardTarget.ENEMY || card.target == AbstractCard.CardTarget.SELF_AND_ENEMY || card.type == PCLEnum.CardType.SUMMON;
     }
 
+    public static void removeCardFromCharacterList(AbstractCard card)
+    {
+        characterCardPool.removeIf(c -> c.cardID.equals(card.cardID));
+        fullCardPool.removeIf(c -> c.cardID.equals(card.cardID));
+    }
+
     public static void resetAffinityLevels(AbstractCard card)
     {
         PCLCard pC = EUIUtils.safeCast(card, PCLCard.class);
@@ -2405,7 +2431,7 @@ public class GameUtilities
         {
             for (AbstractCard c : GameUtilities.getAvailableCards())
             {
-                if (!GameUtilities.isHindrance(c) && GameUtilities.isObtainableInCombat(c) && c.rarity != AbstractCard.CardRarity.BASIC)
+                if (!(c.type == AbstractCard.CardType.CURSE || c.type == AbstractCard.CardType.STATUS) && GameUtilities.isObtainableInCombat(c) && c.rarity != AbstractCard.CardRarity.BASIC)
                 {
                     characterCardPool.add(c);
                 }
