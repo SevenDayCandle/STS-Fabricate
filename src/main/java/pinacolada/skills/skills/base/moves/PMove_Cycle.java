@@ -54,6 +54,6 @@ public class PMove_Cycle extends PMove_Select<PField_CardCategory>
     public String getSubText()
     {
         return useParent ? EUIRM.strings.verbNoun(getActionTitle(), getInheritedString())
-                        : EUIRM.strings.verbNumNoun(getActionTitle(), amount <= 0 ? TEXT.subjects_all : getAmountRawString(), fields.getFullCardString());
+                        : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), fields.getFullCardString());
     }
 }

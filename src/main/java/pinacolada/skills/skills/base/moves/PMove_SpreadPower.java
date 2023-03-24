@@ -80,22 +80,26 @@ public class PMove_SpreadPower extends PMove<PField_Power>
     public String getSubText()
     {
         String powerString = fields.getPowerSubjectString();
-        String mainString = amount <= 0 ? TEXT.act_spread(powerString, getTargetString()) : TEXT.act_spreadAmount(getAmountRawString(), powerString, getTargetString());
+        String mainString = baseAmount <= 0 ? TEXT.act_spread(powerString, getTargetString()) : TEXT.act_spreadAmount(getAmountRawString(), powerString, getTargetString());
         return fields.random ? TEXT.subjects_randomly(mainString) : mainString;
     }
 
     protected void spreadPower(AbstractCreature p, List<AbstractCreature> targets, PCLPowerHelper power)
     {
-        for (AbstractCreature t : targets)
-        {
-            getActions().spreadPower(p, t, power.ID, amount);
-        }
-        // Handle powers that are equivalent in terms of what the player sees but that have different IDs
-        if (power == PCLPowerHelper.Intangible)
+        // Spread amount 0 will spread the entire power
+        if (amount > 0 || baseAmount <= 0)
         {
             for (AbstractCreature t : targets)
             {
-                getActions().spreadPower(p, t, IntangiblePower.POWER_ID, amount);
+                getActions().spreadPower(p, t, power.ID, amount);
+            }
+            // Handle powers that are equivalent in terms of what the player sees but that have different IDs
+            if (power == PCLPowerHelper.Intangible)
+            {
+                for (AbstractCreature t : targets)
+                {
+                    getActions().spreadPower(p, t, IntangiblePower.POWER_ID, amount);
+                }
             }
         }
     }

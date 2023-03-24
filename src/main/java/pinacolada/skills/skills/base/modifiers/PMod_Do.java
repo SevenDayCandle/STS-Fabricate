@@ -52,9 +52,9 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory>
 
     protected PCLAction<ArrayList<AbstractCard>> createPileAction(PCLUseInfo info)
     {
-        SelectFromPile action = getAction().invoke(getName(), info.target, amount <= 0 ? Integer.MAX_VALUE : amount, fields.origin.toSelection(), fields.getCardGroup(info))
-                .setOptions((amount <= 0 ? PCLCardSelection.Random : fields.origin).toSelection(), true);
-        if (fields.forced)
+        SelectFromPile action = getAction().invoke(getName(), info.target, baseAmount <= 0 ? Integer.MAX_VALUE : amount, fields.origin.toSelection(), fields.getCardGroup(info))
+                .setOptions((baseAmount <= 0 ? PCLCardSelection.Random : fields.origin).toSelection(), true);
+        if (isForced())
         {
             action = action.setFilter(c -> fields.getFullCardFilter().invoke(c));
         }
@@ -63,11 +63,10 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory>
 
     public String getMoveString(boolean addPeriod)
     {
-        String amString = amount <= 0 ? TEXT.subjects_all : getAmountRawString();
-        String cardString = fields.forced ? fields.getFullCardString() : fields.getShortCardString();
+        String cardString = isForced() ? fields.getFullCardString() : fields.getShortCardString();
         return !fields.groupTypes.isEmpty() ?
-                TEXT.act_genericFrom(getActionTitle(), amString, cardString, fields.getGroupString())
-                : EUIRM.strings.verbNumNoun(getActionTitle(), amString, cardString);
+                TEXT.act_genericFrom(getActionTitle(), getAmountRawOrAllString(), cardString, fields.getGroupString())
+                : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), cardString);
     }
 
     @Override
@@ -79,7 +78,7 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory>
     @Override
     public String getSubText()
     {
-        return fields.forced ? PGR.core.strings.subjects_card : fields.getFullCardStringSingular();
+        return isForced() ? PGR.core.strings.subjects_card : fields.getFullCardStringSingular();
     }
 
     @Override
@@ -123,9 +122,15 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory>
     public int getModifiedAmount(PSkill<?> be, PCLUseInfo info)
     {
         ArrayList<AbstractCard> cards = info.getData();
-        return cards == null || be == null ? 0 : be.baseAmount * (fields.forced ? cards.size() : (EUIUtils.count(cards,
+        return cards == null || be == null ? 0 : be.baseAmount * (isForced() ? cards.size() : (EUIUtils.count(cards,
                 c -> fields.getFullCardFilter().invoke(c)
         )));
+    }
+
+    // Useparent on the child should also cause a "forced" filter
+    protected boolean isForced()
+    {
+        return fields.forced || isChildEffectUsingParent();
     }
 
     protected boolean isChildEffectUsingParent()

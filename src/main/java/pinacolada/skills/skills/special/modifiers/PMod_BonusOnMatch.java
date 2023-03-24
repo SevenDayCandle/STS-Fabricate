@@ -1,13 +1,12 @@
-package pinacolada.skills.skills.base.modifiers;
+package pinacolada.skills.skills.special.modifiers;
 
-import pinacolada.annotations.VisibleSkill;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
+import pinacolada.skills.skills.base.modifiers.PMod_BonusOn;
 
-@VisibleSkill
 public class PMod_BonusOnMatch extends PMod_BonusOn<PField_Empty>
 {
 

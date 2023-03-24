@@ -90,7 +90,7 @@ public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity
         {
             return useParent ? TEXT.act_setTheOf(PGR.core.tooltips.affinityGeneral, getInheritedString(), giveString) :
                     fields.hasGroups() ?
-                            TEXT.act_setTheOfFrom(PGR.core.tooltips.affinityGeneral, EUIRM.strings.numNoun(amount <= 0 ? TEXT.subjects_all : getExtraRawString(), pluralCard()), fields.getGroupString(), giveString) :
+                            TEXT.act_setTheOfFrom(PGR.core.tooltips.affinityGeneral, EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), pluralCard()), fields.getGroupString(), giveString) :
                             TEXT.act_setTheOf(PGR.core.tooltips.affinityGeneral, TEXT.subjects_thisObj, giveString);
         }
         if (extra >= 0)
@@ -99,7 +99,7 @@ public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity
         }
         return useParent ? TEXT.act_removeFrom(giveString, getInheritedString()) :
                 fields.hasGroups() ?
-                        TEXT.act_removeFromPlace(giveString, EUIRM.strings.numNoun(amount <= 0 ? TEXT.subjects_all : getExtraRawString(), pluralCard()), fields.getGroupString()) :
+                        TEXT.act_removeFromPlace(giveString, EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), pluralCard()), fields.getGroupString()) :
                         TEXT.act_removeFrom(giveString, TEXT.subjects_thisObj);
     }
 

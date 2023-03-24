@@ -6,6 +6,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.powers.*;
+import com.megacrit.cardcrawl.powers.watcher.MantraPower;
 import com.megacrit.cardcrawl.powers.watcher.MarkPower;
 import com.megacrit.cardcrawl.powers.watcher.VigorPower;
 import extendedui.EUIUtils;
@@ -73,6 +74,7 @@ public class PCLPowerHelper implements TooltipProvider
     public static final PCLPowerHelper Invigorated = new PCLPowerHelper(InvigoratedPower.POWER_ID, PGR.core.tooltips.invigorated, InvigoratedPower::new, Behavior.TurnBased, true, false, true);
     public static final PCLPowerHelper Juggernaut = new PCLPowerHelper(JuggernautPower.POWER_ID, PGR.core.tooltips.juggernaut, DemonFormPower::new, Behavior.Permanent, false, false, false);
     public static final PCLPowerHelper Malleable = new PCLPowerHelper(MalleablePower.POWER_ID, PGR.core.tooltips.malleable, MalleablePower::new, Behavior.Permanent, true, false, false);
+    public static final PCLPowerHelper Mantra = new PCLPowerHelper(MantraPower.POWER_ID, PGR.core.tooltips.mantra, MantraPower::new, Behavior.Permanent, false, false, false);
     public static final PCLPowerHelper Metallicize = new PCLPowerHelper(MetallicizePower.POWER_ID, PGR.core.tooltips.metallicize, MetallicizePower::new, Behavior.Permanent, true, false, false);
     public static final PCLPowerHelper NextTurnBlock = new PCLPowerHelper(NextTurnBlockPower.POWER_ID, PGR.core.tooltips.nextTurnBlock, (o, s, a) -> new NextTurnBlockPower(o, a), Behavior.SingleTurn, true, false, false);
     public static final PCLPowerHelper NextTurnDraw = new PCLPowerHelper(DrawCardNextTurnPower.POWER_ID, PGR.core.tooltips.nextTurnDraw, DrawCardNextTurnPower::new, Behavior.SingleTurn, true, false, false);

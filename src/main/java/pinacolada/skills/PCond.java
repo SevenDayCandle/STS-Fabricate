@@ -595,9 +595,10 @@ public abstract class PCond<T extends PField> extends PSkill<T>
             {
                 childEffect.use(info);
             }
+            // When a delegate (e.g. on draw) is triggered from an and multicond, it should only execute the effect if the other conditions would pass
             else if (parent instanceof PMultiCond && parent.childEffect != null)
             {
-                parent.childEffect.use(info);
+                ((PMultiCond) parent).useCond(info, 0, () -> parent.childEffect.use(info));
             }
         }
     }

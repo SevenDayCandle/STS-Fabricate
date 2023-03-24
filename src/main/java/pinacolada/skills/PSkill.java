@@ -130,6 +130,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         this.rootExtra = this.baseExtra = this.extra = extra;
     }
 
+    /** Try to capitalize the first letter in the entire effect text */
     public static String capital(String base, boolean can)
     {
         return can ? StringUtils.capitalize(base) : base;
@@ -154,11 +155,15 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return first;
     }
 
+    /** Establish an effectID for this effect based on its class name */
     public static String createFullID(Class<? extends PSkill<?>> type)
     {
         return PGR.core.createID(type.getSimpleName());
     }
 
+    /** Attempts to deserialize the saved data of an effect expressed as a JSON. This method fetches the skill data listed in the save data and tries to initialize it with the save data's parameters.
+     * Note that the "register" method of the DATA for a skill must have been called at some point for this method to work.
+     * Any skill that has the @VisibleSkill annotation will be available. Other skills will need to have been called in some other class first for the static register method to be invoked. */
     public static PSkill<?> get(String serializedString)
     {
         try
@@ -506,6 +511,12 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
     public final String getAmountRawString()
     {
         return source != null ? EUIUtils.format(BOUND_FORMAT, "E" + getCardPointer()) : wrapAmountChild(amount);
+    }
+
+    /** Effects whose BASE amount is set to 0 target any number of cards */
+    public String getAmountRawOrAllString()
+    {
+        return baseAmount <= 0 ? TEXT.subjects_all : getAmountRawString();
     }
 
     public EUITooltip getAttackTooltip()

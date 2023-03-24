@@ -54,7 +54,7 @@ public class PMove_Retain extends PMove_Select<PField_CardCategory>
     public String getSubText()
     {
         return useParent ? TEXT.act_retain(getInheritedString()) :
-                fields.hasGroups() ? TEXT.act_retain(amount <= 0 ? TEXT.subjects_all : getAmountRawString(), fields.getFullCardString())
+                fields.hasGroups() ? TEXT.act_retain(getAmountRawOrAllString(), fields.getFullCardString())
                 : TEXT.act_retain(TEXT.subjects_thisObj);
     }
 }

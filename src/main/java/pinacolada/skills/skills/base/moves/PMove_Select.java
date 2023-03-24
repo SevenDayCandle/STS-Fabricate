@@ -58,7 +58,7 @@ public abstract class PMove_Select<T extends PField_CardGeneric> extends PMove<T
     public String getSubText()
     {
         return useParent ? EUIRM.strings.verbNoun(getActionTitle(), getInheritedString()) :
-                !fields.groupTypes.isEmpty() ? TEXT.act_genericFrom(getActionTitle(), amount <= 0 ? TEXT.subjects_all : getAmountRawString(), fields.getFullCardString(), fields.getGroupString())
+                !fields.groupTypes.isEmpty() ? TEXT.act_genericFrom(getActionTitle(), getAmountRawOrAllString(), fields.getFullCardString(), fields.getGroupString())
                         : EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects_thisObj);
     }
 

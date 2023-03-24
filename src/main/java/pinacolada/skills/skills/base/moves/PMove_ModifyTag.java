@@ -55,7 +55,7 @@ public class PMove_ModifyTag extends PMove_Modify<PField_CardModifyTag>
     public String getObjectText()
     {
         String base = fields.getAddTagChoiceString();
-        return extra > 1 ? EUIRM.strings.numNoun(getAmountRawString(), base) : extra < 0 ? EUIRM.strings.numNoun(TEXT.subjects_infinite, base) : base;
+        return amount > 1 ? EUIRM.strings.numNoun(getAmountRawString(), base) : amount < 0 ? EUIRM.strings.numNoun(TEXT.subjects_infinite, base) : base;
     }
 
     @Override

@@ -84,6 +84,11 @@ public abstract class PMod<T extends PField> extends PSkill<T>
         return (PMod_CyclePerCard) new PMod_CyclePerCard(amount).edit(PField_CardGeneric::setRandom);
     }
 
+    public static PMod_DiscardPerCard discardPer(int amount)
+    {
+        return new PMod_DiscardPerCard(amount, PCLCardGroupHelper.Hand);
+    }
+
     public static PMod_DiscardPerCard discardPer(int amount, PCLCardGroupHelper... groups)
     {
         return new PMod_DiscardPerCard(amount, groups);
@@ -97,6 +102,11 @@ public abstract class PMod<T extends PField> extends PSkill<T>
     public static PMod_DrawPerCard drawPer(int amount)
     {
         return new PMod_DrawPerCard(amount);
+    }
+
+    public static PMod_ExhaustPerCard exhaustPer(int amount)
+    {
+        return new PMod_ExhaustPerCard(amount, PCLCardGroupHelper.Hand);
     }
 
     public static PMod_ExhaustPerCard exhaustPer(int amount, PCLCardGroupHelper... groups)
@@ -267,6 +277,11 @@ public abstract class PMod<T extends PField> extends PSkill<T>
     public static PMod_PerPower perPowerSingle(int amount, PCLPowerHelper... powers)
     {
         return (PMod_PerPower) new PMod_PerPower(amount, powers).setTarget(PCLCardTarget.Single);
+    }
+
+    public static PMod_PurgePerCard purgePer(int amount)
+    {
+        return new PMod_PurgePerCard(amount, PCLCardGroupHelper.Hand);
     }
 
     public static PMod_PurgePerCard purgePer(int amount, PCLCardGroupHelper... groups)

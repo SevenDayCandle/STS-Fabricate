@@ -467,6 +467,7 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         }
     }
 
+    // When a delegate (e.g. on draw) is triggered from an and multicond, it should only execute the effect if the other conditions would pass
     public boolean tryPassParent(PCLUseInfo info)
     {
         return checkCondition(info, true, true);

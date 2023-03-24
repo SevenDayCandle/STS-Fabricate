@@ -77,7 +77,7 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<
         String giveString = getObjectText();
         return useParent ? TEXT.act_giveTarget(getInheritedString(), giveString) :
                 fields.hasGroups() ?
-                        TEXT.act_giveFrom(EUIRM.strings.numNoun(extra <= 0 ? TEXT.subjects_all : getExtraRawString(), pluralCard()), fields.getGroupString(), giveString) :
+                        TEXT.act_giveFrom(EUIRM.strings.numNoun(extra <= 0 ? TEXT.subjects_all : getExtraRawString(), fields.getFullCardString()), fields.getGroupString(), giveString) :
                         TEXT.act_giveTarget(TEXT.subjects_thisX, giveString);
     }
 }

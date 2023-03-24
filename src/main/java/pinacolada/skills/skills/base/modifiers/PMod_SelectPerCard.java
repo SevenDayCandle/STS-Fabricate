@@ -66,6 +66,6 @@ public class PMod_SelectPerCard extends PMod_Do
     @Override
     public String getParentString()
     {
-        return EUIRM.strings.numNounPlace(amount <= 0 ? TEXT.subjects_all : getAmountRawString(), fields.getFullCardString(), TEXT.subjects_in(fields.getGroupString()));
+        return EUIRM.strings.numNounPlace(getAmountRawOrAllString(), fields.getFullCardString(), TEXT.subjects_in(fields.getGroupString()));
     }
 }
