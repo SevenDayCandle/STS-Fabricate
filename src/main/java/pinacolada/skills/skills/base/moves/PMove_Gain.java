@@ -38,4 +38,10 @@ public abstract class PMove_Gain extends PMove<PField_Empty>
     {
         return amount < 0 ? TEXT.act_loseAmount(getAmountRawString(), gainText()) : TEXT.act_gainAmount(getAmountRawString(), gainText());
     }
+
+    @Override
+    public boolean isDetrimental()
+    {
+        return amount < 0;
+    }
 }

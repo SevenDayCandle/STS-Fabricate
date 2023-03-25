@@ -257,10 +257,8 @@ public class PField_CardCategory extends PField_CardID
                         : EUIRM.strings.verbNoun(tooltipTitle, TEXT.subjects_thisObj);
     }
 
-    protected SelectFromPile initializeBasicSelect(FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> action, PCLUseInfo info)
+    protected SelectFromPile createAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> action, PCLUseInfo info)
     {
-        return skill.getActions().add(createAction(action, info))
-                .setFilter(getFullCardFilter())
-                .setAnyNumber(!forced);
+        return super.createAction(action, info).setFilter(getFullCardFilter());
     }
 }

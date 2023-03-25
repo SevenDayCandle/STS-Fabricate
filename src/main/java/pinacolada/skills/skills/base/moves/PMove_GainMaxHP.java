@@ -11,7 +11,8 @@ import pinacolada.skills.fields.PField_Empty;
 @VisibleSkill
 public class PMove_GainMaxHP extends PMove_Gain
 {
-    public static final PSkillData<PField_Empty> DATA = register(PMove_GainMaxHP.class, PField_Empty.class);
+    public static final PSkillData<PField_Empty> DATA = register(PMove_GainMaxHP.class, PField_Empty.class)
+            .setAmounts(-DEFAULT_MAX, DEFAULT_MAX);
 
     public PMove_GainMaxHP()
     {

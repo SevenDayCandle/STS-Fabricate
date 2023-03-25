@@ -11,7 +11,6 @@ import javassist.CannotCompileException;
 import javassist.expr.ExprEditor;
 import javassist.expr.MethodCall;
 import pinacolada.cards.base.PCLCardData;
-import pinacolada.misc.CombatManager;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
@@ -105,15 +104,6 @@ public class AbstractDungeonPatches
                     }
                 }
             };
-        }
-
-        @SpirePostfixPatch
-        public static void postfix()
-        {
-            if (GameUtilities.inBattle())
-            {
-                CombatManager.summons.applyPowers();
-            }
         }
     }
 

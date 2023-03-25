@@ -11,6 +11,7 @@ import pinacolada.skills.fields.PField_Empty;
 public class PMove_GainOrbSlots extends PMove_Gain
 {
     public static final PSkillData<PField_Empty> DATA = register(PMove_GainOrbSlots.class, PField_Empty.class)
+            .setAmounts(-DEFAULT_MAX, DEFAULT_MAX)
             .selfTarget();
 
     public PMove_GainOrbSlots()
@@ -38,12 +39,6 @@ public class PMove_GainOrbSlots extends PMove_Gain
     public String getSampleText()
     {
         return TEXT.act_gainAmount(TEXT.subjects_x, PGR.core.tooltips.orbSlot.title);
-    }
-
-    @Override
-    public boolean isDetrimental()
-    {
-        return amount < 0;
     }
 
     @Override

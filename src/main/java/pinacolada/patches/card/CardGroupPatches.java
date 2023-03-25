@@ -12,6 +12,7 @@ import extendedui.EUIUtils;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.interfaces.listeners.OnRemovedFromDeckListener;
 import pinacolada.misc.CombatManager;
+import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
@@ -180,6 +181,19 @@ public class CardGroupPatches
         public static void prefix(CardGroup __instance, AbstractCard card)
         {
             CombatManager.onExhaust(card);
+        }
+    }
+
+    @SpirePatch(clz = CardGroup.class, method = "applyPowers", paramtypez = {})
+    public static class CardGroupPatches_ApplyPowers
+    {
+        @SpirePostfixPatch
+        public static void postfix(CardGroup __instance)
+        {
+            if (GameUtilities.inBattle())
+            {
+                CombatManager.summons.applyPowers();
+            }
         }
     }
 }

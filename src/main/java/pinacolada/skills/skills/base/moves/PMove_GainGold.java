@@ -12,6 +12,7 @@ import pinacolada.skills.fields.PField_Empty;
 public class PMove_GainGold extends PMove_Gain
 {
     public static final PSkillData<PField_Empty> DATA = register(PMove_GainGold.class, PField_Empty.class)
+            .setAmounts(-DEFAULT_MAX, DEFAULT_MAX)
             .selfTarget();
 
     public PMove_GainGold()

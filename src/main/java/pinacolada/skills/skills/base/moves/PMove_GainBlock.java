@@ -14,7 +14,8 @@ import pinacolada.skills.fields.PField_Empty;
 @VisibleSkill
 public class PMove_GainBlock extends PMove<PField_Empty>
 {
-    public static final PSkillData<PField_Empty> DATA = register(PMove_GainBlock.class, PField_Empty.class);
+    public static final PSkillData<PField_Empty> DATA = register(PMove_GainBlock.class, PField_Empty.class)
+            .setAmounts(-DEFAULT_MAX, DEFAULT_MAX);
 
     public PMove_GainBlock()
     {
@@ -53,7 +54,7 @@ public class PMove_GainBlock extends PMove<PField_Empty>
     {
         if (isSelfOnlyTarget())
         {
-            return TEXT.act_gainAmount(getAmountRawString(), PGR.core.tooltips.block);
+            return amount < 0 ? TEXT.act_loseAmount(getAmountRawString(), PGR.core.tooltips.block) : TEXT.act_gainAmount(getAmountRawString(), PGR.core.tooltips.block);
         }
         return TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), PGR.core.tooltips.block);
     }
@@ -61,9 +62,19 @@ public class PMove_GainBlock extends PMove<PField_Empty>
     @Override
     public void use(PCLUseInfo info)
     {
-        for (AbstractCreature c : getTargetList(info))
+        if (amount < 0)
         {
-            getActions().gainBlock(c, amount);
+            for (AbstractCreature c : getTargetList(info))
+            {
+                getActions().loseBlock(c, -amount);
+            }
+        }
+        else
+        {
+            for (AbstractCreature c : getTargetList(info))
+            {
+                getActions().gainBlock(c, amount);
+            }
         }
 
         super.use(info);

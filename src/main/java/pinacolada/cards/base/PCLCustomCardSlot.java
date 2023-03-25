@@ -62,7 +62,7 @@ public class PCLCustomCardSlot
     public Integer[] hitCountUpgrade = array(0);
     public Integer[] rightCount = array(1);
     public Integer[] rightCountUpgrade = array(0);
-    public Integer[] cost = array(-2);
+    public Integer[] cost = array(0);
     public Integer[] costUpgrade = array(0);
     public String[] tags;
     public String[] forms;
@@ -77,9 +77,11 @@ public class PCLCustomCardSlot
         filePath = makeFilePath();
         imagePath = makeImagePath();
         slotColor = color;
-        PCLDynamicData builder = new PCLDynamicData(ID, PGR.getResources(slotColor))
+        PCLDynamicData builder = (PCLDynamicData) new PCLDynamicData(ID, PGR.getResources(slotColor))
                 .setText("", "", "")
-                .setColor(color);
+                .setColor(color)
+                .setRarity(AbstractCard.CardRarity.COMMON)
+                .setCosts(0);
         builders.add(builder);
     }
 

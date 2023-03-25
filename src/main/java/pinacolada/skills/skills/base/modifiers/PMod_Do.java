@@ -135,7 +135,7 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory>
 
     protected boolean isChildEffectUsingParent()
     {
-        return (childEffect.useParent || childEffect instanceof PMultiBase && EUIUtils.all(((PMultiBase<?>) childEffect).getSubEffects(), c -> c.useParent));
+        return childEffect != null && (childEffect.useParent || childEffect instanceof PMultiBase && EUIUtils.all(((PMultiBase<?>) childEffect).getSubEffects(), c -> c.useParent));
     }
 
     protected String getActionTitle()
