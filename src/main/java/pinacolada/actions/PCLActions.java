@@ -14,6 +14,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.ScreenShake;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
@@ -42,6 +43,7 @@ import pinacolada.actions.orbs.TriggerOrbPassiveAbility;
 import pinacolada.actions.piles.*;
 import pinacolada.actions.player.SpendEnergy;
 import pinacolada.actions.powers.*;
+import pinacolada.actions.special.ShowAndObtainCardAction;
 import pinacolada.actions.special.UsePotionAction;
 import pinacolada.actions.utility.*;
 import pinacolada.cards.base.PCLCard;
@@ -847,6 +849,16 @@ public final class PCLActions
     public ShakeScreenAction shakeScreen(float actionDuration, ScreenShake.ShakeDur shakeDuration, ScreenShake.ShakeIntensity intensity)
     {
         return add(new ShakeScreenAction(actionDuration, shakeDuration, intensity));
+    }
+
+    public ShowAndObtainCardAction showAndObtain(AbstractCard card)
+    {
+        return showAndObtain(card, Settings.WIDTH * 0.5f, Settings.HEIGHT * 0.5f);
+    }
+
+    public ShowAndObtainCardAction showAndObtain(AbstractCard card, float x, float y)
+    {
+        return add(new ShowAndObtainCardAction(card, x, y));
     }
 
     public SpendEnergy spendEnergy(AbstractCard card)

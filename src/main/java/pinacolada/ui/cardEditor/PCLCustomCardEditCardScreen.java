@@ -208,11 +208,6 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
         }
     }
 
-    private void toggleLinear(boolean value)
-    {
-        modifyBuilder(b -> b.setLinearUpgrade(value));
-    }
-
     private void toggleViewUpgrades(boolean value)
     {
         SingleCardViewPopup.isViewingUpgrade = !SingleCardViewPopup.isViewingUpgrade;

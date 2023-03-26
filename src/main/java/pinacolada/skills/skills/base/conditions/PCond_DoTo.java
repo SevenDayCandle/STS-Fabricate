@@ -52,14 +52,20 @@ public abstract class PCond_DoTo extends PActiveCond<PField_CardCategory>
     @Override
     public String getSubText()
     {
-        return fields.hasGroups() ? TEXT.act_genericFrom(getActionTitle(), getAmountRawString(), fields.getFullCardString(), fields.getGroupString())
-                : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawString(), fields.getFullCardString());
+        return fields.hasGroups() ? TEXT.act_genericFrom(getActionTitle(), getAmountRawOrAllString(), fields.getFullCardString(), fields.getGroupString())
+                : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), fields.getFullCardString());
     }
 
     @Override
     public String getText(boolean addPeriod)
     {
         return capital(childEffect == null ? (getSubText() + PCLCoreStrings.period(addPeriod)) : TEXT.cond_inOrderTo(getSubText(), childEffect.getText(false)), addPeriod);
+    }
+
+    @Override
+    public String getAmountRawOrAllString()
+    {
+        return baseAmount <= 0 ? TEXT.subjects_all : extra > 0 ? TEXT.subjects_xOfY(getExtraRawString(), getAmountRawString()) : getAmountRawString();
     }
 
     @Override
@@ -77,7 +83,7 @@ public abstract class PCond_DoTo extends PActiveCond<PField_CardCategory>
 
     public PCLAction<?> useImpl(PCLUseInfo info, ActionT0 onComplete, ActionT0 onFail)
     {
-        return getActions().add(fields.getGenericPileAction(getAction(), info))
+        return getActions().add(fields.getGenericPileAction(getAction(), info, extra))
                 .addCallback(cards -> {
                     if (cards.size() >= amount)
                     {

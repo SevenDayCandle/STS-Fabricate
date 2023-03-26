@@ -14,8 +14,8 @@ import extendedui.interfaces.delegates.FuncT2;
 import extendedui.text.EUISmartText;
 import extendedui.ui.GridCardSelectScreenHelper;
 import extendedui.utilities.GenericCondition;
-import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
+import pinacolada.actions.utility.CardFilterAction;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
@@ -26,16 +26,11 @@ import java.util.Collections;
 import java.util.List;
 
 // Copied and modified from STS-AnimatorMod
-public class SelectFromPile extends PCLAction<ArrayList<AbstractCard>>
+public class SelectFromPile extends CardFilterAction
 {
-    protected final ArrayList<AbstractCard> selectedCards = new ArrayList<>();
     protected final CardGroup fakeHandGroup = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
     protected final CardGroup[] groups;
 
-    protected GenericCondition<ArrayList<AbstractCard>> condition;
-    protected GenericCondition<AbstractCard> filter;
-    protected FuncT1<String, ArrayList<AbstractCard>> dynamicString;
-    protected ActionT3<CardGroup, ArrayList<AbstractCard>, AbstractCard> onClickCard;
     protected ListSelection<AbstractCard> origin;
     protected ListSelection<AbstractCard> destination;
     protected ListSelection<AbstractCard> maxChoicesOrigin;

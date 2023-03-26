@@ -44,7 +44,7 @@ public abstract class PMove_Select<T extends PField_CardGeneric> extends PMove<T
     @Override
     public void use(PCLUseInfo info)
     {
-        fields.getGenericPileAction(getAction(), info)
+        fields.getGenericPileAction(getAction(), info, extra)
                 .addCallback(cards -> {
                     if (this.childEffect != null)
                     {
@@ -60,6 +60,12 @@ public abstract class PMove_Select<T extends PField_CardGeneric> extends PMove<T
         return useParent ? EUIRM.strings.verbNoun(getActionTitle(), getInheritedString()) :
                 !fields.groupTypes.isEmpty() ? TEXT.act_genericFrom(getActionTitle(), getAmountRawOrAllString(), fields.getFullCardString(), fields.getGroupString())
                         : EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects_thisObj);
+    }
+
+    @Override
+    public String getAmountRawOrAllString()
+    {
+        return baseAmount <= 0 ? TEXT.subjects_all : extra > 0 ? TEXT.subjects_xOfY(getExtraRawString(), getAmountRawString()) : getAmountRawString();
     }
 
     protected String getActionTitle()

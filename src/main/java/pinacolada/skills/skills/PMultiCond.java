@@ -8,6 +8,7 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT0;
 import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.utilities.RotatingList;
+import org.apache.commons.lang3.StringUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -120,7 +121,7 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         if (amount != 0)
         {
             return getCapitalSubText(addPeriod) + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : ": ") + childEffect.getText(0, true)) + " " +
-                    TEXT.cond_otherwise(childEffect.getText(1, addPeriod)) : "");
+                    StringUtils.capitalize(TEXT.cond_otherwise(childEffect.getText(1, addPeriod))) : "");
         }
         return effects.isEmpty() ? (childEffect != null ? childEffect.getText(addPeriod) : "")
                 : getCapitalSubText(addPeriod) + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : ": ") + childEffect.getText(addPeriod)) : PCLCoreStrings.period(addPeriod));
@@ -240,18 +241,18 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         {
             if (checkCondition(info, true, false))
             {
-                useCond(info, 0, () -> childEffect.use(info, 0));
+                useCond(info, 0, () -> childEffect.use(info, 0), () -> childEffect.use(info, 1));
             }
             else
             {
-                useCond(info, 0, () -> childEffect.use(info, 1));
+                childEffect.use(info, 1);
             }
         }
         else
         {
             if (checkCondition(info, true, false) && childEffect != null)
             {
-                useCond(info, 0, () -> childEffect.use(info));
+                useCond(info, 0, () -> childEffect.use(info), () -> {});
             }
         }
     }
@@ -261,7 +262,7 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
     {
         if (checkCondition(info, true, false) && childEffect != null)
         {
-            useCond(info, 0, () -> childEffect.use(info, index));
+            useCond(info, 0, () -> childEffect.use(info, index), () -> {});
         }
     }
 
@@ -272,23 +273,23 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         {
             if (checkCondition(info, isUsing, false))
             {
-                useCond(info, 0, () -> childEffect.use(info, 0));
+                useCond(info, 0, () -> childEffect.use(info, 0), () -> childEffect.use(info, 1));
             }
             else
             {
-                useCond(info, 0, () -> childEffect.use(info, 1));
+                childEffect.use(info, 1);
             }
         }
         else
         {
             if (checkCondition(info, true, false) && childEffect != null)
             {
-                useCond(info, 0, () -> childEffect.use(info));
+                useCond(info, 0, () -> childEffect.use(info), () -> {});
             }
         }
     }
 
-    public void useCond(PCLUseInfo info, int index, ActionT0 successCallback)
+    public void useCond(PCLUseInfo info, int index, ActionT0 successCallback, ActionT0 failCallback)
     {
         PCond<?> cond = getSubEffect(index);
         if (cond instanceof PActiveCond)
@@ -301,19 +302,23 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
                         }
                         else
                         {
-                            useCond(info, index + 1, successCallback);
+                            useCond(info, index + 1, successCallback, failCallback);
                         }
                     },
                     () -> {
                         if (fields.or)
                         {
-                            useCond(info, index + 1, successCallback);
+                            useCond(info, index + 1, successCallback, failCallback);
+                        }
+                        else
+                        {
+                            failCallback.invoke();
                         }
                     });
         }
         else if (index < effects.size() - 1)
         {
-            useCond(info, index + 1, successCallback);
+            useCond(info, index + 1, successCallback, failCallback);
         }
         else
         {

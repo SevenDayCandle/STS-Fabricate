@@ -622,25 +622,19 @@ public abstract class PMove<T extends PField> extends PSkill<T>
         return new PMove_Scry(amount);
     }
 
-    public static PMove_Scry scry(PCLCard card, PSkill.PCLCardValueSource valueSource)
-    {
-        return (PMove_Scry) new PMove_Scry(0)
-                .setSource(card, valueSource);
-    }
-
     public static PMove_Exhaust selfExhaust()
     {
-        return new PMove_Exhaust();
+        return (PMove_Exhaust) new PMove_Exhaust().edit(f -> f.setForced(true));
     }
 
     public static PMove_Purge selfPurge()
     {
-        return new PMove_Purge();
+        return (PMove_Purge) new PMove_Purge().edit(f -> f.setForced(true));
     }
 
     public static PMove_Retain selfRetain()
     {
-        return new PMove_Retain();
+        return (PMove_Retain) new PMove_Retain().edit(f -> f.setForced(true));
     }
 
     public static PMove_Transform selfTransform(PCLCardData cardData)

@@ -147,6 +147,7 @@ public class PCLDynamicData extends PCLCardData
 
         setImage(original.portraitImage, original.portraitForeground);
         setLanguageMap(original.languageMap);
+        setLinearUpgrade(original.linearUpgrade);
         setPSkill(original.moves, true, true);
         setPPower(original.powers, true, true);
         if (original.attackSkill != null)

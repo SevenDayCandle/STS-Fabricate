@@ -1030,6 +1030,7 @@ public class CombatManager
             currentPhase = AbstractDungeon.actionManager.phase;
             subscriberDo(OnPhaseChangedSubscriber.class, s -> s.onPhaseChanged(currentPhase));
             controlPile.refreshCards();
+            summons.applyPowers();
             if (shouldRefreshHand)
             {
                 shouldRefreshHand = false;

@@ -47,7 +47,7 @@ public class PMove_ObtainRandomCard extends PMove<PField_CardCategory>
     @Override
     public String getSampleText()
     {
-        return TEXT.act_obtain(TEXT.subjects_randomX(TEXT.subjects_card));
+        return TEXT.act_addToPile(TEXT.subjects_x, TEXT.subjects_randomX(TEXT.subjects_card), TEXT.subjects_x);
     }
 
     @Override
@@ -88,6 +88,6 @@ public class PMove_ObtainRandomCard extends PMove<PField_CardCategory>
     {
         String amString = extra > amount ? TEXT.subjects_xOfY(getAmountRawString(), getExtraRawString()) : getAmountRawString();
         String cString = fields.getFullCardOrString(getRawString(EXTRA_CHAR));
-        return fields.groupTypes.size() > 0 ? TEXT.act_addToPile(amString, cString, fields.groupTypes.get(0).name) : TEXT.act_obtainAmount(amString, cString);
+        return fields.groupTypes.size() > 0 ? TEXT.act_addToPile(amString, cString, fields.groupTypes.get(0).name) : TEXT.act_addToPile(amString, cString, PCLCardGroupHelper.Hand.name);
     }
 }

@@ -117,7 +117,7 @@
 				},
 				"pcl:SorceryPower":
 				{
-								"DESCRIPTIONS": ["The next #yOrb #yChanneled has #b{0} additional #yPassive and #yEvoke power."],
+								"DESCRIPTIONS": ["The next #yOrb #yChanneled has +#b{0} effectiveness. While active, deal +{0} [Immaterial Damage]."],
 								"NAME": "Sorcery"
 				},
 				"pcl:StabilizingPower":

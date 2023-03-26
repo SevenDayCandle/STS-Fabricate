@@ -90,14 +90,14 @@ public abstract class PCond_DoBranch extends PCond_Branch<PField_CardCategory, A
     @Override
     public String getSubText()
     {
-        return !fields.groupTypes.isEmpty() ? TEXT.act_genericFrom(getActionTitle(), getAmountRawString(), fields.getShortCardString(), fields.getGroupString())
-                : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawString(), fields.getShortCardString());
+        return !fields.groupTypes.isEmpty() ? TEXT.act_genericFrom(getActionTitle(), getAmountRawOrAllString(), fields.getShortCardString(), fields.getGroupString())
+                : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), fields.getShortCardString());
     }
 
     @Override
     public void use(PCLUseInfo info)
     {
-        getActions().add(fields.getGenericPileAction(getAction(), info))
+        getActions().add(fields.getGenericPileAction(getAction(), info, extra))
                 .addCallback(cards -> {
                     if (this.childEffect != null)
                     {
@@ -105,6 +105,12 @@ public abstract class PCond_DoBranch extends PCond_Branch<PField_CardCategory, A
                         branch(info, cards);
                     }
                 });
+    }
+
+    @Override
+    public String getAmountRawOrAllString()
+    {
+        return baseAmount <= 0 ? TEXT.subjects_all : extra > 0 ? TEXT.subjects_xOfY(getExtraRawString(), getAmountRawString()) : getAmountRawString();
     }
 
     protected String getActionTitle()

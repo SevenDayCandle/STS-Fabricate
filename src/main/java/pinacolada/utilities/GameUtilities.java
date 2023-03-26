@@ -572,7 +572,7 @@ public class GameUtilities
         {
             if ((allowHealing || GameUtilities.isObtainableInCombat(c)) &&
                     (rarity == null || c.rarity == rarity) &&
-                    ((type == null && c.type == type)))
+                    ((type == null || c.type == type)))
             {
                 available.add(c);
             }

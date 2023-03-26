@@ -16,7 +16,6 @@ import pinacolada.skills.skills.PMultiCond;
 import pinacolada.skills.skills.base.conditions.*;
 import pinacolada.skills.skills.base.primary.PTrigger_When;
 import pinacolada.skills.skills.special.conditions.PCond_Match;
-import pinacolada.skills.skills.special.conditions.PCond_OnAllyDeath;
 import pinacolada.skills.skills.special.primary.PTrigger_Passive;
 import pinacolada.utilities.GameUtilities;
 
@@ -598,7 +597,7 @@ public abstract class PCond<T extends PField> extends PSkill<T>
             // When a delegate (e.g. on draw) is triggered from an and multicond, it should only execute the effect if the other conditions would pass
             else if (parent instanceof PMultiCond && parent.childEffect != null)
             {
-                ((PMultiCond) parent).useCond(info, 0, () -> parent.childEffect.use(info));
+                ((PMultiCond) parent).useCond(info, 0, () -> parent.childEffect.use(info), () -> {});
             }
         }
     }

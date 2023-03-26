@@ -1,7 +1,6 @@
-package pinacolada.skills.skills.base.moves;
+package pinacolada.skills.skills.special.moves;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.utilities.RotatingList;
@@ -19,31 +18,43 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @VisibleSkill
-public class PMove_Obtain extends PMove<PField_CardID>
+public class PMove_ObtainDeck extends PMove<PField_CardID>
 {
-    public static final PSkillData<PField_CardID> DATA = register(PMove_Obtain.class, PField_CardID.class)
+    public static final PSkillData<PField_CardID> DATA = register(PMove_ObtainDeck.class, PField_CardID.class)
+            .setGroups(PCLCardGroupHelper.Hand) // Groups just need to be singular to be hidden
             .selfTarget();
 
-    public PMove_Obtain()
+    public PMove_ObtainDeck()
     {
         this(1);
     }
 
-    public PMove_Obtain(PSkillSaveData content)
+    public PMove_ObtainDeck(PSkillSaveData content)
     {
         super(DATA, content);
     }
 
-    public PMove_Obtain(int copies, Collection<String> cards)
+    public PMove_ObtainDeck(int copies, Collection<String> cards)
     {
         super(DATA, PCLCardTarget.None, copies);
         fields.setCardIDs(cards);
     }
 
-    public PMove_Obtain(int copies, String... cards)
+    public PMove_ObtainDeck(int copies, String... cards)
     {
         super(DATA, PCLCardTarget.None, copies);
         fields.setCardIDs(cards);
+    }
+
+    @Override
+    public PMove_ObtainDeck onAddToCard(AbstractCard card)
+    {
+        super.onAddToCard(card);
+        if (card.tags.contains(AbstractCard.CardTags.HEALING))
+        {
+            card.tags.add(AbstractCard.CardTags.HEALING);
+        }
+        return this;
     }
 
     private AbstractCard getCard(String id)
@@ -62,7 +73,7 @@ public class PMove_Obtain extends PMove<PField_CardID>
     }
 
     @Override
-    public PMove_Obtain makePreviews(RotatingList<EUICardPreview> previews)
+    public PMove_ObtainDeck makePreviews(RotatingList<EUICardPreview> previews)
     {
         for (String cd : fields.cardIDs)
         {
@@ -79,7 +90,7 @@ public class PMove_Obtain extends PMove<PField_CardID>
     @Override
     public String getSampleText()
     {
-        return TEXT.act_addToPile(TEXT.subjects_x, TEXT.subjects_card, TEXT.subjects_x);
+        return TEXT.act_obtain(TEXT.subjects_card);
     }
 
     @Override
@@ -97,7 +108,7 @@ public class PMove_Obtain extends PMove<PField_CardID>
                     {
                         AbstractCard c = card.makeStatEquivalentCopy();
                         created.add(c);
-                        getActions().makeCard(c, fields.groupTypes.size() > 0 ? fields.groupTypes.get(0).getCardGroup() : AbstractDungeon.player.hand);
+                        getActions().showAndObtain(c);
                     }
                 }
             }
@@ -108,7 +119,7 @@ public class PMove_Obtain extends PMove<PField_CardID>
             {
                 AbstractCard c = sourceCard.makeStatEquivalentCopy();
                 created.add(c);
-                getActions().makeCard(c, fields.groupTypes.size() > 0 ? fields.groupTypes.get(0).getCardGroup() : AbstractDungeon.player.hand);
+                getActions().showAndObtain(c);
             }
         }
         else
@@ -121,7 +132,7 @@ public class PMove_Obtain extends PMove<PField_CardID>
                     if (c != null)
                     {
                         created.add(c);
-                        getActions().makeCard(c, fields.groupTypes.size() > 0 ? fields.groupTypes.get(0).getCardGroup() : AbstractDungeon.player.hand).setUpgrade(fields.forced, false);
+                        getActions().showAndObtain(c);
                     }
                 }
             }
@@ -134,6 +145,6 @@ public class PMove_Obtain extends PMove<PField_CardID>
     public String getSubText()
     {
         String joinedString = useParent ? TEXT.subjects_copiesOf(getInheritedString()) : fields.cardIDs.isEmpty() ? TEXT.subjects_copiesOf(TEXT.subjects_thisObj) : fields.getCardIDAndString();
-        return fields.groupTypes.size() > 0 ? TEXT.act_addToPile(getAmountRawString(), joinedString, fields.groupTypes.get(0).name) : TEXT.act_addToPile(getAmountRawString(), joinedString, PCLCardGroupHelper.Hand.name);
+        return TEXT.act_obtain(joinedString);
     }
 }

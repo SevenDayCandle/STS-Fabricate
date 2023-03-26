@@ -406,7 +406,7 @@
 								"NAME": "Slow"
 				},
 				"Sorcery":	{
-								"DESCRIPTION": "Increase the potency of the next Orb Channeled.",
+								"DESCRIPTION": "Increase the potency of the next Orb Channeled. Also increases [Immaterial Damage] while active.",
 								"NAME": "Sorcery"
 				},
 				"Soulbound":	{

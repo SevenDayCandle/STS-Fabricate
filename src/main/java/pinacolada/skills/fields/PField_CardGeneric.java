@@ -5,9 +5,9 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT5;
-import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.piles.SelectFromPile;
+import pinacolada.actions.utility.CardFilterAction;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.misc.PCLUseInfo;
@@ -168,7 +168,7 @@ public class PField_CardGeneric extends PField
         return action.invoke(skill.getName(), skill.target.getTarget(info.source, info.target), skill.useParent && g.length > 0 ? g[0].size() : skill.baseAmount <= 0 ? Integer.MAX_VALUE : skill.amount, origin.toSelection(), g);
     }
 
-    public PCLAction<ArrayList<AbstractCard>> getGenericPileAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> action, PCLUseInfo info)
+    public CardFilterAction getGenericPileAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> action, PCLUseInfo info, int subchoices)
     {
         if (!skill.useParent && groupTypes.isEmpty())
         {
@@ -178,7 +178,12 @@ public class PField_CardGeneric extends PField
         else
         {
             SelectFromPile pileAction = skill.getActions().add(createAction(action, info));
-            if (forced)
+            // Set automatic selection when self targeting
+            if (groupTypes.isEmpty())
+            {
+                pileAction.setOrigin(PCLCardSelection.Random).setAnyNumber(false);
+            }
+            else if (forced)
             {
                 // If the action is forced and we want to target every card possible, setting it to random will force this action automatically without needing user prompt
                 if (skill.baseAmount <= 0)
@@ -189,7 +194,15 @@ public class PField_CardGeneric extends PField
                 else
                 {
                     pileAction.setAnyNumber(false);
+                    if (subchoices > 0)
+                    {
+                        pileAction.setMaxChoices(subchoices, origin.toSelection()).setOrigin(PCLCardSelection.Manual);
+                    }
                 }
+            }
+            else if (subchoices > 0)
+            {
+                pileAction.setMaxChoices(subchoices, origin.toSelection()).setOrigin(PCLCardSelection.Manual);
             }
             return pileAction;
         }

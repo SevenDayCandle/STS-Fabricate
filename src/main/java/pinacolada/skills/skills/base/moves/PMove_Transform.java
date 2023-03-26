@@ -97,7 +97,8 @@ public class PMove_Transform extends PMove_Select<PField_CardID>
         }
         else
         {
-            fields.getGenericPileAction(getAction(), info)
+            // Extra is used for other purposes
+            fields.getGenericPileAction(getAction(), info, -1)
                     .addCallback(cards -> {
                         for (AbstractCard c : cards)
                         {

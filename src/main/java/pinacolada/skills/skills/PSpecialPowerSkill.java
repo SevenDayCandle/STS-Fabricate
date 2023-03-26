@@ -4,8 +4,8 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
 import pinacolada.actions.PCLActions;
-import pinacolada.misc.PCLUseInfo;
 import pinacolada.interfaces.markers.SummonOnlyMove;
+import pinacolada.misc.PCLUseInfo;
 import pinacolada.powers.PCLPower;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
@@ -74,7 +74,7 @@ public class PSpecialPowerSkill extends PSkill<PField_Empty> implements SummonOn
     }
 
     @Override
-    public PSkill makeCopy()
+    public PSpecialPowerSkill makeCopy()
     {
         return new PSpecialPowerSkill(effectID, description, powerFunc, amount, extra);
     }
@@ -82,6 +82,6 @@ public class PSpecialPowerSkill extends PSkill<PField_Empty> implements SummonOn
     @Override
     public void use(PCLUseInfo info)
     {
-        PCLActions.bottom.applyPower(powerFunc.invoke(this, info));
+        PCLActions.bottom.applyPower(powerFunc.invoke(this, info)).allowNegative(true);
     }
 }
