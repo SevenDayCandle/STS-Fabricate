@@ -165,6 +165,8 @@ public class PCLCoreTooltips extends PCLTooltips
     public EUITooltip platedArmor = EUITooltip.findByID("Plated Armor");
     public EUITooltip poison = EUITooltip.findByID("Poison");
     public EUITooltip priority = EUITooltip.findByID("Priority");
+    public EUITooltip priorityMinus = EUITooltip.findByID("Priority Minus");
+    public EUITooltip priorityPlus = EUITooltip.findByID("Priority Plus");
     public EUITooltip provoked = EUITooltip.findByID("Provoked");
     public EUITooltip purge = EUITooltip.findByID("~Purge");
     public EUITooltip ranged = EUITooltip.findByID("Ranged Damage");
@@ -237,17 +239,19 @@ public class PCLCoreTooltips extends PCLTooltips
             tag.getTip().setIcon(tag.getTextureCache().texture(), 6).setBadgeBackground(tag.color);
         }
 
-        ranged.setIcon(PCLCoreImages.CardIcons.ranged.texture());
-        piercing.setIcon(PCLCoreImages.CardIcons.piercing.texture());
-        immaterialDamage.setIcon(PCLCoreImages.CardIcons.magic.texture());
-        brutal.setIcon(PCLCoreImages.CardIcons.brutal.texture());
-        tempHP.setIcon(PCLCoreImages.CardIcons.tempHP.texture());
+        ranged.setIcon(PCLCoreImages.Tooltips.ranged.texture());
+        piercing.setIcon(PCLCoreImages.Tooltips.piercing.texture());
+        immaterialDamage.setIcon(PCLCoreImages.Tooltips.magic.texture());
+        brutal.setIcon(PCLCoreImages.Tooltips.brutal.texture());
+        tempHP.setIcon(PCLCoreImages.Tooltips.tempHP.texture());
         hp.setIcon(PCLCoreImages.CardIcons.hp.texture());
-        block.setIcon(PCLCoreImages.CardIcons.block.texture());
-        normalDamage.setIcon(PCLCoreImages.CardIcons.damage.texture());
+        block.setIcon(PCLCoreImages.Tooltips.block.texture());
+        normalDamage.setIcon(PCLCoreImages.Tooltips.damage.texture());
         unique.setIcon(PCLCoreImages.CardIcons.unique.texture()).setIconSizeMulti(0.85f, 0.85f);
         soulbound.setIcon(PCLCoreImages.CardIcons.soulbound.texture()).setIconSizeMulti(0.85f, 0.85f);
         multiform.setIcon(PCLCoreImages.CardIcons.multiform.texture()).setIconSizeMulti(0.85f, 0.85f);
+        priorityMinus.setIcon(PCLCoreImages.CardIcons.priorityMinus.texture()).setIconSizeMulti(0.85f, 0.85f);
+        priorityPlus.setIcon(PCLCoreImages.CardIcons.priorityPlus.texture()).setIconSizeMulti(0.85f, 0.85f);
         energy.setIconFunc(EUI::getEnergyIcon);
 
         affinityRed.setIconFunc(PCLAffinity.Red::getTextureRegion).setIconSizeMulti(0.85f, 0.85f);

@@ -1,9 +1,11 @@
 package pinacolada.monsters;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.evacipated.cardcrawl.mod.stslib.patches.core.AbstractCreature.TempHPField;
 import com.megacrit.cardcrawl.actions.animations.AnimateFastAttackAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -16,12 +18,11 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.vfx.ExhaustBlurEffect;
-import extendedui.EUI;
-import extendedui.EUIInputManager;
-import extendedui.EUIUtils;
+import extendedui.*;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.EUIBase;
 import extendedui.ui.tooltips.EUICardPreview;
+import extendedui.utilities.EUIFontHelper;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -320,6 +321,17 @@ public class PCLCardAlly extends PCLCreature
             else if (card.pclTarget.targetsSingle() && target != null)
             {
                 PCLRenderHelpers.drawCurve(sb, ImageMaster.TARGET_UI_ARROW, Color.SCARLET.cpy(), this.hb, target.hb, EUIBase.scale(100), 0.25f, 0.02f, 20);
+
+                AbstractCard card = preview != null ? preview.getCard() : null;
+                if (card != null)
+                {
+                    BitmapFont font = EUIFontHelper.carddescriptionfontNormal;
+                    font.getData().setScale(card.drawScale * 0.9f);
+                    EUIRenderHelpers.drawOnCardAuto(sb, preview.getCard(), EUIRM.images.panel.texture(), new Vector2(0, -AbstractCard.RAW_H * 0.55f),
+                            AbstractCard.IMG_WIDTH * 0.6f, font.getLineHeight() * 1.8f, Color.DARK_GRAY, 0.75f, 1);
+                    EUIRenderHelpers.writeOnCard(sb, card, font, PGR.core.strings.combat_rightClickRetarget, 0, -AbstractCard.RAW_H * 0.65f, Color.ORANGE);
+                    EUIRenderHelpers.resetFont(font);
+                }
             }
         }
     }

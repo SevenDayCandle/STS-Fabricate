@@ -213,6 +213,7 @@ public class PCLCoreStrings extends PCLStrings
     public final String combat_dodged = combat.TEXT[12];
     public final String combat_afterlifeMet = combat.TEXT[13];
     public final String combat_afterlifeRequirement = combat.TEXT[14];
+    public final String combat_rightClickRetarget = combat.TEXT[15];
 
     // Grid
     public final String grid_chooseCards = gridselection.TEXT[0];

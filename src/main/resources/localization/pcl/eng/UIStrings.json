@@ -244,7 +244,8 @@
 												"Disabled",
 												"Dodged",
 												"[A-Gen] Requirement satisfied",
-												"Select cards with the following [A-Gen]: {0}"
+												"Select cards with the following [A-Gen]: {0}",
+												"Right-Click to retarget"
 								]
 				},
 				"pcl:Conditions": {

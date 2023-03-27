@@ -90,26 +90,16 @@ public class PCLCoreImages extends PCLImages
 
     public static class CardIcons
     {
-        public static final TextureCache block = new TextureCache("images/pcl/cardui/core/Block.png");
-        public static final TextureCache blockL = new TextureCache("images/pcl/cardui/core/1024/Block.png");
-        public static final TextureCache brutal = new TextureCache("images/pcl/cardui/core/BrutalDamage.png");
-        public static final TextureCache brutalL = new TextureCache("images/pcl/cardui/core/1024/BrutalDamage.png");
-        public static final TextureCache damage = new TextureCache("images/pcl/cardui/core/NormalDamage.png");
-        public static final TextureCache damageL = new TextureCache("images/pcl/cardui/core/1024/NormalDamage.png");
         public static final TextureCache hp = new TextureCache("images/pcl/cardui/core/HP.png");
         public static final TextureCache hpL = new TextureCache("images/pcl/cardui/core/1024/HP.png");
-        public static final TextureCache magic = new TextureCache("images/pcl/cardui/core/MagicDamage.png");
-        public static final TextureCache magicL = new TextureCache("images/pcl/cardui/core/1024/MagicDamage.png");
         public static final TextureCache multiform = new TextureCache("images/pcl/cardui/core/Multiform.png");
         public static final TextureCache multiformL = new TextureCache("images/pcl/cardui/core/1024/Multiform.png");
-        public static final TextureCache piercing = new TextureCache("images/pcl/cardui/core/PiercingDamage.png");
-        public static final TextureCache piercingL = new TextureCache("images/pcl/cardui/core/1024/PiercingDamage.png");
-        public static final TextureCache ranged = new TextureCache("images/pcl/cardui/core/RangedDamage.png");
-        public static final TextureCache rangedL = new TextureCache("images/pcl/cardui/core/1024/RangedDamage.png");
+        public static final TextureCache priorityMinus = new TextureCache("images/pcl/cardui/core/PriorityMinus.png");
+        public static final TextureCache priorityMinusL = new TextureCache("images/pcl/cardui/core/1024/PriorityMinus.png");
+        public static final TextureCache priorityPlus = new TextureCache("images/pcl/cardui/core/PriorityPlus.png");
+        public static final TextureCache priorityPlusL = new TextureCache("images/pcl/cardui/core/1024/PriorityPlus.png");
         public static final TextureCache soulbound = new TextureCache("images/pcl/cardui/core/Soulbound.png");
         public static final TextureCache soulboundL = new TextureCache("images/pcl/cardui/core/1024/Soulbound.png");
-        public static final TextureCache tempHP = new TextureCache("images/pcl/cardui/core/TempHP.png");
-        public static final TextureCache tempHPL = new TextureCache("images/pcl/cardui/core/1024/TempHP.png");
         public static final TextureCache unique = new TextureCache("images/pcl/cardui/core/Unique.png");
         public static final TextureCache uniqueL = new TextureCache("images/pcl/cardui/core/1024/Unique.png");
     }
@@ -148,12 +138,19 @@ public class PCLCoreImages extends PCLImages
 
     public static class Tooltips
     {
+        public static final TextureCache block = new TextureCache("images/pcl/cardui/tooltips/Block.png");
+        public static final TextureCache brutal = new TextureCache("images/pcl/cardui/tooltips/BrutalDamage.png");
+        public static final TextureCache damage = new TextureCache("images/pcl/cardui/tooltips/NormalDamage.png");
         public static final TextureCache dark = new TextureCache("images/pcl/cardui/tooltips/Dark.png");
         public static final TextureCache frost = new TextureCache("images/pcl/cardui/tooltips/Frost.png");
         public static final TextureCache gold = new TextureCache("images/pcl/cardui/tooltips/Gold.png");
         public static final TextureCache lightning = new TextureCache("images/pcl/cardui/tooltips/Lightning.png");
+        public static final TextureCache magic = new TextureCache("images/pcl/cardui/tooltips/MagicDamage.png");
         public static final TextureCache orbSlot = new TextureCache("images/pcl/cardui/tooltips/OrbSlot.png");
+        public static final TextureCache piercing = new TextureCache("images/pcl/cardui/tooltips/PiercingDamage.png");
         public static final TextureCache plasma = new TextureCache("images/pcl/cardui/tooltips/Plasma.png");
+        public static final TextureCache ranged = new TextureCache("images/pcl/cardui/tooltips/RangedDamage.png");
+        public static final TextureCache tempHP = new TextureCache("images/pcl/cardui/tooltips/TempHP.png");
     }
 
     public static class Types

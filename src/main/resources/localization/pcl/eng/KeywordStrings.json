@@ -320,6 +320,14 @@
 								"DESCRIPTION": "Priority determines whether a #ySummon will act before or after your turn.",
 								"NAME": "Priority"
 				},
+				"Priority Minus":	{
+								"DESCRIPTION": "Acts at the end of your turn. Does not act on the turn it is #ySummoned.",
+								"NAME": "Priority Minus"
+				},
+				"Priority Plus":	{
+								"DESCRIPTION": "Acts at the start of your turn.",
+								"NAME": "Priority Plus"
+				},
 				"Provoked":	{
 								"DESCRIPTION": "The target takes #b+{0}% damage from #yAttacks, and it must attack this turn.",
 								"NAME": "Provoked"

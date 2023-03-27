@@ -80,6 +80,13 @@ public class PCLCardText
         return card.isPopup ? PCLCoreImages.CardIcons.hpL : PCLCoreImages.CardIcons.hp;
     }
 
+    protected TextureCache getPriorityIcon()
+    {
+        return card.isPopup ?
+                (card.magicNumber > 0 ? PCLCoreImages.CardIcons.priorityPlusL : PCLCoreImages.CardIcons.priorityMinusL)
+                : (card.magicNumber > 0 ? PCLCoreImages.CardIcons.priorityPlus : PCLCoreImages.CardIcons.priorityMinus);
+    }
+
     protected ColoredTexture getPanelByRarity()
     {
         HashMap<AbstractCard.CardRarity, ColoredTexture> map = card.isPopup ? panelsLarge : panels;
@@ -111,22 +118,42 @@ public class PCLCardText
     {
         if (card.type == PCLEnum.CardType.SUMMON)
         {
-            renderAttribute(sb, getHPIcon(), card.getHPString(), "/" + card.heal, null, 0.9f, true);
-            // TODO add priority attribute indicator
-            //renderAttribute(sb, getDamageIcon(), card.getDamageString(), card.hitCount > 1 ? ("x" + card.hitCount) : null, card.pclTarget != null ? card.pclTarget.getTag() : null, 1f, false);
+            renderAttributeWithText(sb, getHPIcon(), card.getHPString(), "/" + card.heal, null, 0.9f, true);
+            renderAttribute(sb, getPriorityIcon(), null, 1f, false);
         }
     }
 
-    protected void renderAttribute(SpriteBatch sb, TextureCache icon, ColoredString text, String suffix, String iconTag, float scaleMult, boolean leftAlign)
+    protected void renderAttribute(SpriteBatch sb, TextureCache icon, String iconTag, float scaleMult, boolean leftAlign)
     {
-        final float suffix_scale = scaleMult * 0.7f;
-        final float cw = AbstractCard.RAW_W;
-        final float ch = AbstractCard.RAW_H;
-        final float b_w = 126f;
-        final float b_h = 85f;
-        final float y = -ch * 0.04f;
+        final float y = -AbstractCard.RAW_H * 0.04f;
         final ColoredTexture panel = getPanelByRarity();
 
+        final float sign = leftAlign ? -1 : +1;
+        final float icon_x = sign * (AbstractCard.RAW_W * 0.35f);
+
+        if (panel != null)
+        {
+            PCLRenderHelpers.drawOnCardAuto(sb, card, panel.texture, new Vector2(sign * AbstractCard.RAW_W * 0.33f, y), 120f, 54f, panel.color, panel.color.a * card.transparency, 1, 0, leftAlign, false);
+        }
+
+        if (iconTag != null)
+        {
+            BitmapFont smallFont = PCLRenderHelpers.getSmallAttributeFont(card, scaleMult);
+            PCLRenderHelpers.writeOnCard(sb, card, smallFont, iconTag, icon_x, y - 12, Settings.CREAM_COLOR, true);
+            PCLRenderHelpers.resetFont(smallFont);
+        }
+
+        PCLRenderHelpers.drawOnCardAuto(sb, card, icon.texture(), icon_x, y, 64, 64);
+    }
+
+    protected void renderAttributeWithText(SpriteBatch sb, TextureCache icon, ColoredString text, String suffix, String iconTag, float scaleMult, boolean leftAlign)
+    {
+        final float suffix_scale = scaleMult * 0.7f;
+        final float y = -AbstractCard.RAW_H * 0.04f;
+        final ColoredTexture panel = getPanelByRarity();
+
+        final float sign = leftAlign ? -1 : +1;
+        final float icon_x = sign * (AbstractCard.RAW_W * 0.45f);
         BitmapFont largeFont = PCLRenderHelpers.getLargeAttributeFont(card, scaleMult);
         largeFont.getData().setScale(card.isPopup ? 0.5f : 1);
         layout.setText(largeFont, text.text);
@@ -141,14 +168,11 @@ public class PCLCardText
         }
 
         largeFont = PCLRenderHelpers.getLargeAttributeFont(card, scaleMult);
-
-        final float sign = leftAlign ? -1 : +1;
-        final float icon_x = sign * (cw * 0.45f);
-        float text_x = sign * cw * ((suffix != null || text.text.length() > 2) ? (0.35f - sign * 0.029f) : 0.35f);
+        float text_x = sign * AbstractCard.RAW_W * ((suffix != null || text.text.length() > 2) ? (0.35f - sign * 0.029f) : 0.35f);
 
         if (panel != null)
         {
-            PCLRenderHelpers.drawOnCardAuto(sb, card, panel.texture, new Vector2(sign * cw * 0.33f, y), b_w, b_h, panel.color, panel.color.a * card.transparency, 1, 0, leftAlign, false);
+            PCLRenderHelpers.drawOnCardAuto(sb, card, panel.texture, new Vector2(sign * AbstractCard.RAW_W * 0.33f, y), 120f, 54f, panel.color, panel.color.a * card.transparency, 1, 0, leftAlign, false);
         }
 
         PCLRenderHelpers.drawOnCardAuto(sb, card, icon.texture(), icon_x, y, 48, 48);

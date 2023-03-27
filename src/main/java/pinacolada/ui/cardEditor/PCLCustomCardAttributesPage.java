@@ -116,7 +116,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
         curW += SPACING_WIDTH;
         magicNumberEditor = new PCLCustomCardUpgradableEditor(new EUIHitbox(curW, screenH(0.65f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , PGR.core.strings.cedit_magicNumber, (val, upVal) -> screen.modifyBuilder(e -> e.setMagicNumber(val, upVal)))
-                .setLimits(0, PSkill.DEFAULT_MAX)
+                .setLimits(-PSkill.DEFAULT_MAX, PSkill.DEFAULT_MAX)
                 .setTooltip(upgradeLabel.tooltip);
         curW += SPACING_WIDTH;
         hpEditor = new PCLCustomCardUpgradableEditor(new EUIHitbox(curW, screenH(0.65f), MENU_WIDTH / 4, MENU_HEIGHT)
