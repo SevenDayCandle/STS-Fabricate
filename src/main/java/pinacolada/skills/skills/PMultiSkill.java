@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
-import extendedui.interfaces.delegates.ActionT0;
 import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.utilities.RotatingList;
 import pinacolada.annotations.VisibleSkill;
@@ -363,17 +362,6 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
         }
         else
         {
-            if (useParent)
-            {
-                for (PSkill<?> effect : effects)
-                {
-                    effect.use(info);
-                }
-            }
-            else
-            {
-
-            }
             for (PSkill<?> effect : effects)
             {
                 effect.use(info);
@@ -410,19 +398,6 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
             {
                 effect.use(info, isUsing);
             }
-        }
-    }
-
-    public void useSkill(PCLUseInfo info, int index, ActionT0 successCallback, ActionT0 failCallback)
-    {
-        PSkill<?> skill = getSubEffect(index);
-        if (skill != null)
-        {
-            skill.use(info);
-        }
-        else if (index < effects.size() - 1)
-        {
-            useSkill(info, index + 1, successCallback, failCallback);
         }
     }
 
