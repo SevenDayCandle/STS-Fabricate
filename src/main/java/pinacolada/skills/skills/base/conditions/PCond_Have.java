@@ -36,7 +36,7 @@ public abstract class PCond_Have extends PPassiveCond<PField_CardCategory>
     {
         int count = EUIUtils.count(getCardPile(),
                 c -> fields.getFullCardFilter().invoke(c));
-        return amount == 0 ? count == 0 : fields.forced ^ count >= amount;
+        return amount == 0 ? count == 0 : fields.not ^ count >= amount;
     }
 
     @Override
@@ -48,13 +48,14 @@ public abstract class PCond_Have extends PPassiveCond<PField_CardCategory>
     @Override
     public String getSubText()
     {
-        return TEXT.cond_ifYouDidThisTurn(PCLCoreStrings.past(getActionTooltip()), EUIRM.strings.numNoun(getAmountRawString(), fields.getFullCardString()));
+        return fields.forced ? TEXT.cond_ifYouDidThisCombat(PCLCoreStrings.past(getActionTooltip()), EUIRM.strings.numNoun(getAmountRawString(), fields.getFullCardString())) :
+                TEXT.cond_ifYouDidThisTurn(PCLCoreStrings.past(getActionTooltip()), EUIRM.strings.numNoun(getAmountRawString(), fields.getFullCardString()));
     }
 
     @Override
     public String wrapAmount(int input)
     {
-        return input == 0 ? String.valueOf(input) : (fields.forced ? (input + "-") : (input + "+"));
+        return input == 0 ? String.valueOf(input) : (fields.not ? (input + "-") : (input + "+"));
     }
 
     abstract public List<AbstractCard> getCardPile();

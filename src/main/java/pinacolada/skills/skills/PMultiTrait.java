@@ -392,6 +392,16 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
         return this;
     }
 
+    public PMultiTrait useParent(boolean value)
+    {
+        this.useParent = value;
+        for (PSkill<?> effect : effects)
+        {
+            effect.useParent(value);
+        }
+        return this;
+    }
+
     public void subscribeChildren()
     {
         for (PSkill<?> effect : effects)

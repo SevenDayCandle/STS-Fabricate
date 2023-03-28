@@ -35,7 +35,7 @@ public class PCond_HaveExhausted extends PCond_Have
     @Override
     public List<AbstractCard> getCardPile()
     {
-        return CombatManager.cardsExhaustedThisTurn();
+        return fields.forced ? CombatManager.cardsExhaustedThisCombat() : CombatManager.cardsExhaustedThisTurn();
     }
 
     @Override

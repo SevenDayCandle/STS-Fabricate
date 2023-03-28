@@ -40,7 +40,7 @@ public class PMod_BonusOnHasExhausted extends PMod_BonusOnHas
     @Override
     public List<AbstractCard> getCardPile()
     {
-        return CombatManager.cardsExhaustedThisTurn();
+        return fields.forced ? CombatManager.cardsExhaustedThisCombat() : CombatManager.cardsExhaustedThisTurn();
     }
 
     @Override

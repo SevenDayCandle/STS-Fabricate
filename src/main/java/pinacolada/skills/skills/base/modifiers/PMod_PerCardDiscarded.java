@@ -1,11 +1,11 @@
 package pinacolada.skills.skills.base.modifiers;
 
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.misc.CombatManager;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
@@ -15,22 +15,21 @@ import pinacolada.skills.fields.PField_CardCategory;
 
 
 @VisibleSkill
-public class PMod_PerCardPlayedCombat extends PMod_Per<PField_CardCategory>
+public class PMod_PerCardDiscarded extends PMod_Per<PField_CardCategory>
 {
+    public static final PSkillData<PField_CardCategory> DATA = register(PMod_PerCardDiscarded.class, PField_CardCategory.class).selfTarget();
 
-    public static final PSkillData<PField_CardCategory> DATA = register(PMod_PerCardPlayedCombat.class, PField_CardCategory.class).selfTarget();
-
-    public PMod_PerCardPlayedCombat(PSkillSaveData content)
+    public PMod_PerCardDiscarded(PSkillSaveData content)
     {
         super(DATA, content);
     }
 
-    public PMod_PerCardPlayedCombat()
+    public PMod_PerCardDiscarded()
     {
         super(DATA);
     }
 
-    public PMod_PerCardPlayedCombat(int amount, PCLCardGroupHelper... groups)
+    public PMod_PerCardDiscarded(int amount, PCLCardGroupHelper... groups)
     {
         super(DATA, PCLCardTarget.None, amount);
         fields.setCardGroup(groups);
@@ -39,7 +38,7 @@ public class PMod_PerCardPlayedCombat extends PMod_Per<PField_CardCategory>
     @Override
     public String getSampleText()
     {
-        return TEXT.cond_perThisCombat(TEXT.subjects_x, TEXT.subjects_x, PGR.core.tooltips.play.past(), "");
+        return TEXT.cond_perThisTurn(TEXT.subjects_x, TEXT.subjects_x, PGR.core.tooltips.discard.past(), "");
     }
 
     @Override
@@ -57,13 +56,15 @@ public class PMod_PerCardPlayedCombat extends PMod_Per<PField_CardCategory>
     @Override
     public String getText(boolean addPeriod)
     {
-        return TEXT.cond_perThisCombat(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", getConditionText(), PGR.core.tooltips.play.past(), getXRawString()) + PCLCoreStrings.period(addPeriod);
+        String childString = childEffect != null ? capital(childEffect.getText(false), addPeriod) : "";
+        return (fields.forced ? TEXT.cond_perThisCombat(childString, getConditionText(), PGR.core.tooltips.discard.past(), getXRawString()) : TEXT.cond_perThisTurn(childString, getConditionText(), PGR.core.tooltips.discard.past(), getXRawString()))
+                + PCLCoreStrings.period(addPeriod);
     }
 
     @Override
     public int getMultiplier(PCLUseInfo info)
     {
-        return EUIUtils.count(AbstractDungeon.actionManager.cardsPlayedThisCombat,
+        return EUIUtils.count(fields.forced ? CombatManager.cardsDiscardedThisCombat() : CombatManager.cardsDiscardedThisTurn(),
                 c -> fields.getFullCardFilter().invoke(c));
     }
 }

@@ -50,28 +50,16 @@ public class PCLUseInfo
 
     public <T> T getData()
     {
+        T item = null;
         try
         {
-            return data != null ? (T) data : null;
+            item = (T) data;
         }
         catch (Exception e)
         {
             EUIUtils.logWarning(this, e.getMessage());
         }
-        return null;
-    }
-
-    public <T> T getDataOrDefault(T defaultValue)
-    {
-        try
-        {
-            return data != null ? (T) data : defaultValue;
-        }
-        catch (Exception e)
-        {
-            EUIUtils.logWarning(this, e.getMessage());
-        }
-        return defaultValue;
+        return item;
     }
 
     public String getPreviousCardID()

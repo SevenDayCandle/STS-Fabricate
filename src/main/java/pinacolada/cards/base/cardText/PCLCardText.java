@@ -143,7 +143,7 @@ public class PCLCardText
             PCLRenderHelpers.resetFont(smallFont);
         }
 
-        PCLRenderHelpers.drawOnCardAuto(sb, card, icon.texture(), icon_x, y, 64, 64);
+        PCLRenderHelpers.drawOnCardAuto(sb, card, icon.texture(), icon_x, y, 54, 54);
     }
 
     protected void renderAttributeWithText(SpriteBatch sb, TextureCache icon, ColoredString text, String suffix, String iconTag, float scaleMult, boolean leftAlign)

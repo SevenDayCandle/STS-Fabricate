@@ -21,7 +21,6 @@ import pinacolada.stances.PCLStanceHelper;
 
 public abstract class PMove<T extends PField> extends PSkill<T>
 {
-
     public PMove(PSkillData<T> data, PSkillSaveData content)
     {
         super(data, content);
@@ -232,6 +231,10 @@ public abstract class PMove<T extends PField> extends PSkill<T>
         return (PMove_Create) new PMove_Create(copies, ids).edit(f -> f.setCardGroup(PCLCardGroupHelper.DrawPile));
     }
 
+    public static PMove_CreateRandom createRandom(int copies, int choices, PCLCardGroupHelper... cardgroup)
+    {
+        return new PMove_CreateRandom(copies, choices, cardgroup);
+    }
 
     public static PMove_Cycle cycle(int amount)
     {
@@ -301,12 +304,12 @@ public abstract class PMove<T extends PField> extends PSkill<T>
 
     public static PMove_Discard discardRandom(int amount)
     {
-        return (PMove_Discard) new PMove_Discard(amount, PCLCardGroupHelper.Hand).edit(f -> f.setRandom());
+        return (PMove_Discard) new PMove_Discard(amount, PCLCardGroupHelper.Hand).edit(PField_CardGeneric::setRandom);
     }
 
     public static PMove_Discard discardRandom(int amount, PCLCardGroupHelper... groups)
     {
-        return (PMove_Discard) new PMove_Discard(amount, groups).edit(f -> f.setRandom());
+        return (PMove_Discard) new PMove_Discard(amount, groups).edit(PField_CardGeneric::setRandom);
     }
 
     public static PMove_Draw draw(int amount)
@@ -544,11 +547,6 @@ public abstract class PMove<T extends PField> extends PSkill<T>
     public static PMove_ModifyTag modifyTag(int amount, int extra, PCLCardTag... tag)
     {
         return new PMove_ModifyTag(amount, extra, tag);
-    }
-
-    public static PMove_CreateRandom obtainRandom(int copies, int choices, PCLCardGroupHelper... cardgroup)
-    {
-        return new PMove_CreateRandom(copies, choices, cardgroup);
     }
 
     public static PMove_Play play(int copies, PCLCardTarget target, PCLCardGroupHelper... g)

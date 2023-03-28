@@ -1645,6 +1645,11 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         }
     }
 
+    public boolean tryPassParent(PCLUseInfo info)
+    {
+        return parent == null || parent.tryPassParent(info);
+    }
+
     public void use(PCLUseInfo info)
     {
         if (this.childEffect != null)
@@ -1667,11 +1672,6 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
     {
         this.useParent = value;
         return this;
-    }
-
-    public boolean tryPassParent(PCLUseInfo info)
-    {
-        return parent == null || parent.tryPassParent(info);
     }
 
     public String wrapAmount(int input)

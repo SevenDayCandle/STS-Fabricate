@@ -40,7 +40,7 @@ public class PMod_BonusOnHasDiscarded extends PMod_BonusOnHas
     @Override
     public List<AbstractCard> getCardPile()
     {
-        return CombatManager.cardsDiscardedThisTurn();
+        return fields.forced ? CombatManager.cardsDiscardedThisCombat() : CombatManager.cardsDiscardedThisTurn();
     }
 
     @Override

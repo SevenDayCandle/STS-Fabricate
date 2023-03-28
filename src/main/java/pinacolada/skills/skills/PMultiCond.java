@@ -478,6 +478,15 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         return checkCondition(info, true, true);
     }
 
+    public PMultiCond useParent(boolean value)
+    {
+        this.useParent = value;
+        for (PSkill<?> effect : effects)
+        {
+            effect.useParent(value);
+        }
+        return this;
+    }
 
     public void subscribeChildren()
     {

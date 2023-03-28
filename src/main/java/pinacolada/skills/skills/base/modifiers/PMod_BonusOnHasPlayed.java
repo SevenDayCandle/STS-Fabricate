@@ -1,4 +1,4 @@
-package pinacolada.skills.skills.base.conditions;
+package pinacolada.skills.skills.base.modifiers;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
@@ -12,24 +12,29 @@ import pinacolada.skills.fields.PField_CardCategory;
 import java.util.List;
 
 @VisibleSkill
-public class PCond_HavePlayed extends PCond_Have
+public class PMod_BonusOnHasPlayed extends PMod_BonusOnHas
 {
-    public static final PSkillData<PField_CardCategory> DATA = register(PCond_HavePlayed.class, PField_CardCategory.class)
+    public static final PSkillData<PField_CardCategory> DATA = register(PMod_BonusOnHasPlayed.class, PField_CardCategory.class)
             .selfTarget();
 
-    public PCond_HavePlayed()
+    public PMod_BonusOnHasPlayed()
     {
-        this(1);
+        this(1, 1);
     }
 
-    public PCond_HavePlayed(PSkillSaveData content)
+    public PMod_BonusOnHasPlayed(PSkillSaveData content)
     {
         super(DATA, content);
     }
 
-    public PCond_HavePlayed(int amount)
+    public PMod_BonusOnHasPlayed(int amount)
     {
-        super(DATA, amount);
+        super(DATA, amount, 1);
+    }
+
+    public PMod_BonusOnHasPlayed(int amount, int extra)
+    {
+        super(DATA, amount, extra);
     }
 
     @Override

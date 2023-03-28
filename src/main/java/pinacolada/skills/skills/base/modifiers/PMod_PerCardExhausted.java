@@ -56,13 +56,15 @@ public class PMod_PerCardExhausted extends PMod_Per<PField_CardCategory>
     @Override
     public String getText(boolean addPeriod)
     {
-        return TEXT.cond_perThisTurn(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", getConditionText(), PGR.core.tooltips.exhaust.past(), getXRawString()) + PCLCoreStrings.period(addPeriod);
+        String childString = childEffect != null ? capital(childEffect.getText(false), addPeriod) : "";
+        return (fields.forced ? TEXT.cond_perThisCombat(childString, getConditionText(), PGR.core.tooltips.exhaust.past(), getXRawString()) : TEXT.cond_perThisTurn(childString, getConditionText(), PGR.core.tooltips.exhaust.past(), getXRawString()))
+                + PCLCoreStrings.period(addPeriod);
     }
 
     @Override
     public int getMultiplier(PCLUseInfo info)
     {
-        return EUIUtils.count(CombatManager.cardsExhaustedThisTurn(),
+        return EUIUtils.count(fields.forced ? CombatManager.cardsExhaustedThisCombat() : CombatManager.cardsExhaustedThisTurn(),
                 c -> fields.getFullCardFilter().invoke(c));
     }
 }

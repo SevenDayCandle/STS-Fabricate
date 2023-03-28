@@ -492,40 +492,41 @@ public class PCLCoreStrings extends PCLStrings
     public final String cond_doX(Object desc1) {return condFmt( 3, desc1);}
     public final String cond_doForEach() {return condFmt(4);}
     public final String cond_forTurns(Object desc1) {return condFmt( 5, desc1);}
-    public final String cond_ifYouDidThisTurn(Object verb, Object obj) {return condFmt( 6, verb, obj);}
-    public final String cond_ifYouHave(Object desc1) {return condFmt( 7, desc1);}
-    public final String cond_ifYourHighest(Object desc1) {return condFmt( 8, desc1);}
-    public final String cond_ifTargetHas(Object desc1, Object desc2) {return condFmt(9, desc1, desc2);}
-    public final String cond_ifX(Object desc1) {return condFmt( 10, desc1);}
-    public final String cond_inXAtTurnEnd(Object desc1) {return condFmt( 11, desc1);}
-    public final String cond_inXAtTurnStart(Object desc1) {return condFmt( 12, desc1);}
-    public final String cond_inTurns(Object desc1) {return condFmt( 13, desc1);}
-    public final String cond_levelItem(Object level, Object desc1) {return condFmt(14, level, desc1);}
-    public final String cond_nextTurn() {return condFmt(15);}
-    public final String cond_no(Object desc1) {return condFmt( 16, desc1);}
-    public final String cond_not(Object desc1) {return condFmt( 17, desc1);}
-    public final String cond_onGeneric(Object desc1) {return condFmt( 18, desc1);}
-    public final String cond_otherwise(Object desc1) {return condFmt( 19, desc1);}
-    public final String cond_takeDamage(Object amount) {return condFmt(20, amount);}
-    public final String cond_whenMulti(Object desc1, Object desc2) {return condFmt(21, desc1, desc2);}
-    public final String cond_whenSingle(Object desc1) {return condFmt( 22, desc1);}
-    public final String cond_whenObjectIs(Object desc1, Object desc2) {return condFmt(23, desc1, desc2);}
-    public final String cond_activated(Object desc1) {return condFmt( 24, desc1);}
-    public final String cond_and(Object desc1, Object desc2) {return condFmt(25, desc1, desc2);}
-    public final String cond_numIf(Object desc1, Object desc2) {return condFmt(26, desc1, desc2);}
-    public final String cond_objIs(Object desc1, Object desc2) {return condFmt(27, desc1, desc2);}
-    public final String cond_or(Object desc1, Object desc2) {return condFmt(28, desc1, desc2);}
-    public final String cond_per(Object desc1, Object desc2) {return condFmt(29, desc1, desc2);}
-    public final String cond_perThisCombat(Object desc1, Object desc2, Object desc3, Object extra) {return condFmt(30, desc1, desc2, desc3, extra);}
-    public final String cond_perThisTurn(Object desc1, Object desc2, Object desc3, Object extra) {return condFmt(31, desc1, desc2, desc3, extra);}
-    public final String cond_perIn(Object desc1, Object desc2, Object desc3) {return condFmt(32, desc1, desc2, desc3);}
-    public final String cond_perDistinct(Object desc1, Object desc2) {return condFmt(33, desc1, desc2);}
-    public final String cond_timesPerCombat(Object desc1) {return condFmt( 34, desc1);}
-    public final String cond_timesPerTurn(Object desc1) {return condFmt( 35, desc1);}
-    public final String cond_inOrderTo(Object desc1, Object desc2) {return condFmt(36, desc1, desc2);}
-    public final String cond_doThen(Object desc1, Object desc2) {return condFmt(37, desc1, desc2);}
-    public final String cond_genericConditional(Object desc1, Object desc2) {return condFmt(38, desc1, desc2);}
-    public final String cond_passive() {return condFmt(39);}
+    public final String cond_ifYouDidThisCombat(Object verb, Object obj) {return condFmt( 6, verb, obj);}
+    public final String cond_ifYouDidThisTurn(Object verb, Object obj) {return condFmt( 7, verb, obj);}
+    public final String cond_ifYouHave(Object desc1) {return condFmt( 8, desc1);}
+    public final String cond_ifYourHighest(Object desc1) {return condFmt( 9, desc1);}
+    public final String cond_ifTargetHas(Object desc1, Object desc2) {return condFmt(10, desc1, desc2);}
+    public final String cond_ifX(Object desc1) {return condFmt( 11, desc1);}
+    public final String cond_inXAtTurnEnd(Object desc1) {return condFmt( 12, desc1);}
+    public final String cond_inXAtTurnStart(Object desc1) {return condFmt( 13, desc1);}
+    public final String cond_inTurns(Object desc1) {return condFmt( 14, desc1);}
+    public final String cond_levelItem(Object level, Object desc1) {return condFmt(15, level, desc1);}
+    public final String cond_nextTurn() {return condFmt(16);}
+    public final String cond_no(Object desc1) {return condFmt( 17, desc1);}
+    public final String cond_not(Object desc1) {return condFmt( 18, desc1);}
+    public final String cond_onGeneric(Object desc1) {return condFmt( 19, desc1);}
+    public final String cond_otherwise(Object desc1) {return condFmt( 20, desc1);}
+    public final String cond_takeDamage(Object amount) {return condFmt(21, amount);}
+    public final String cond_whenMulti(Object desc1, Object desc2) {return condFmt(22, desc1, desc2);}
+    public final String cond_whenSingle(Object desc1) {return condFmt( 23, desc1);}
+    public final String cond_whenObjectIs(Object desc1, Object desc2) {return condFmt(24, desc1, desc2);}
+    public final String cond_activated(Object desc1) {return condFmt( 25, desc1);}
+    public final String cond_and(Object desc1, Object desc2) {return condFmt(26, desc1, desc2);}
+    public final String cond_numIf(Object desc1, Object desc2) {return condFmt(27, desc1, desc2);}
+    public final String cond_objIs(Object desc1, Object desc2) {return condFmt(28, desc1, desc2);}
+    public final String cond_or(Object desc1, Object desc2) {return condFmt(29, desc1, desc2);}
+    public final String cond_per(Object desc1, Object desc2) {return condFmt(30, desc1, desc2);}
+    public final String cond_perThisCombat(Object desc1, Object desc2, Object desc3, Object extra) {return condFmt(31, desc1, desc2, desc3, extra);}
+    public final String cond_perThisTurn(Object desc1, Object desc2, Object desc3, Object extra) {return condFmt(32, desc1, desc2, desc3, extra);}
+    public final String cond_perIn(Object desc1, Object desc2, Object desc3) {return condFmt(33, desc1, desc2, desc3);}
+    public final String cond_perDistinct(Object desc1, Object desc2) {return condFmt(34, desc1, desc2);}
+    public final String cond_timesPerCombat(Object desc1) {return condFmt( 35, desc1);}
+    public final String cond_timesPerTurn(Object desc1) {return condFmt( 36, desc1);}
+    public final String cond_inOrderTo(Object desc1, Object desc2) {return condFmt(37, desc1, desc2);}
+    public final String cond_doThen(Object desc1, Object desc2) {return condFmt(38, desc1, desc2);}
+    public final String cond_genericConditional(Object desc1, Object desc2) {return condFmt(39, desc1, desc2);}
+    public final String cond_passive() {return condFmt(40);}
 
     public final String cond_ifTheEnemyHas(Object desc1) {return cond_ifTargetHas(subjects_target, desc1);}
     public final String cond_ifAnyEnemyHas(Object desc1) {return cond_ifTargetHas(subjects_anyEnemy(), desc1);}

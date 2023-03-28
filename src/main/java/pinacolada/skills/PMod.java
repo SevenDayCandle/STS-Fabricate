@@ -149,9 +149,24 @@ public abstract class PMod<T extends PField> extends PSkill<T>
         return new PMod_PerCard(amount, groups);
     }
 
+    public static PMod_PerCardDiscarded perCardDiscarded(int amount)
+    {
+        return new PMod_PerCardDiscarded(amount);
+    }
+
+    public static PMod_PerCardDiscarded perCardDiscardedCombat(int amount)
+    {
+        return (PMod_PerCardDiscarded) new PMod_PerCardDiscarded(amount).edit(f -> f.setForced(true));
+    }
+
     public static PMod_PerCardExhausted perCardExhausted(int amount)
     {
         return new PMod_PerCardExhausted(amount);
+    }
+
+    public static PMod_PerCardExhausted perCardExhaustedCombat(int amount)
+    {
+        return (PMod_PerCardExhausted) new PMod_PerCardExhausted(amount).edit(f -> f.setForced(true));
     }
 
     public static PMod_PerCardPlayed perCardPlayed(int amount)
@@ -159,9 +174,9 @@ public abstract class PMod<T extends PField> extends PSkill<T>
         return new PMod_PerCardPlayed(amount);
     }
 
-    public static PMod_PerCardPlayedCombat perCardPlayedCombat(int amount)
+    public static PMod_PerCardPlayed perCardPlayedCombat(int amount)
     {
-        return new PMod_PerCardPlayedCombat(amount);
+        return (PMod_PerCardPlayed) new PMod_PerCardPlayed(amount).edit(f -> f.setForced(true));
     }
 
     public static PMod_PerCreature perCreature(int amount)

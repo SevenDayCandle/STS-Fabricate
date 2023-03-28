@@ -27,6 +27,6 @@ public class Magnetism extends PCLCard
 
     public void setup(Object input)
     {
-        addGainPower(PTrigger.when(PCond.onTurnStart(), PMove.obtainRandom(1, 1, PCLCardGroupHelper.Hand).edit(f -> f.setColor(CardColor.COLORLESS))));
+        addGainPower(PTrigger.when(PCond.onTurnStart(), PMove.createRandom(1, 1, PCLCardGroupHelper.Hand).edit(f -> f.setColor(CardColor.COLORLESS))));
     }
 }

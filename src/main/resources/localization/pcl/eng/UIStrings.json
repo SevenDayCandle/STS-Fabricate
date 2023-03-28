@@ -256,6 +256,7 @@
 												"do {0}",
 												"do for each",
 												"for {0} ${0}@!1:turns@:turn$",
+												"if you {0} {1} this combat",
 												"if you {0} {1} this turn",
 												"if you have {0}",
 												"if your highest {0} is",

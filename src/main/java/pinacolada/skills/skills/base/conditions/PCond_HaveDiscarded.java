@@ -35,7 +35,7 @@ public class PCond_HaveDiscarded extends PCond_Have
     @Override
     public List<AbstractCard> getCardPile()
     {
-        return CombatManager.cardsDiscardedThisTurn();
+        return fields.forced ? CombatManager.cardsDiscardedThisCombat() : CombatManager.cardsDiscardedThisTurn();
     }
 
     @Override

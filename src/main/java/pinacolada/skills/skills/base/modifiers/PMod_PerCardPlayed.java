@@ -57,13 +57,15 @@ public class PMod_PerCardPlayed extends PMod_Per<PField_CardCategory>
     @Override
     public String getText(boolean addPeriod)
     {
-        return TEXT.cond_perThisTurn(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", getConditionText(), PGR.core.tooltips.play.past(), getXRawString()) + PCLCoreStrings.period(addPeriod);
+        String childString = childEffect != null ? capital(childEffect.getText(false), addPeriod) : "";
+        return (fields.forced ? TEXT.cond_perThisCombat(childString, getConditionText(), PGR.core.tooltips.play.past(), getXRawString()) : TEXT.cond_perThisTurn(childString, getConditionText(), PGR.core.tooltips.play.past(), getXRawString()))
+                + PCLCoreStrings.period(addPeriod);
     }
 
     @Override
     public int getMultiplier(PCLUseInfo info)
     {
-        return EUIUtils.count(AbstractDungeon.actionManager.cardsPlayedThisTurn,
+        return EUIUtils.count(fields.forced ? AbstractDungeon.actionManager.cardsPlayedThisCombat : AbstractDungeon.actionManager.cardsPlayedThisTurn,
                 c -> fields.getFullCardFilter().invoke(c));
     }
 }

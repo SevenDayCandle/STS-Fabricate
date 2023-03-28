@@ -71,7 +71,7 @@ public class PCLCardAlly extends PCLCreature
     {
         card.owner = this;
         this.card = card;
-        this.preview = new EUICardPreview(card, card.upgraded);
+        this.preview = new EUICardPreview(card.makeStatEquivalentCopy(), false);
         this.name = card.name;
         this.maxHealth = Math.max(1, card.heal);
         this.currentHealth = MathUtils.clamp(card.currentHealth, 1, this.maxHealth);
@@ -327,7 +327,7 @@ public class PCLCardAlly extends PCLCreature
                 {
                     BitmapFont font = EUIFontHelper.carddescriptionfontNormal;
                     font.getData().setScale(card.drawScale * 0.9f);
-                    EUIRenderHelpers.drawOnCardAuto(sb, preview.getCard(), EUIRM.images.panel.texture(), new Vector2(0, -AbstractCard.RAW_H * 0.55f),
+                    EUIRenderHelpers.drawOnCardAuto(sb, preview.getCard(), EUIRM.images.panel.texture(), new Vector2(0, -AbstractCard.RAW_H * 0.65f),
                             AbstractCard.IMG_WIDTH * 0.6f, font.getLineHeight() * 1.8f, Color.DARK_GRAY, 0.75f, 1);
                     EUIRenderHelpers.writeOnCard(sb, card, font, PGR.core.strings.combat_rightClickRetarget, 0, -AbstractCard.RAW_H * 0.65f, Color.ORANGE);
                     EUIRenderHelpers.resetFont(font);
@@ -372,6 +372,9 @@ public class PCLCardAlly extends PCLCreature
             {
                 startY = renderIntentIcon(sb, PGR.core.tooltips.block.icon, card.rightCount > 1 ? card.block + "x" + card.rightCount : Integer.toString(card.block), startY);
             }
+
+            TextureRegion icon = movesBeforePlayer() ? PGR.core.tooltips.priorityPlus.icon : PGR.core.tooltips.priorityMinus.icon;
+            PCLRenderHelpers.drawCentered(sb, Color.WHITE, icon, this.intentHb.cX - 40.0F * Settings.scale, startY, icon.getRegionWidth(), icon.getRegionHeight(), 0.9f, 0f);
         }
     }
 
@@ -407,5 +410,10 @@ public class PCLCardAlly extends PCLCreature
             this.target = target;
             refreshAction();
         }
+    }
+
+    public boolean movesBeforePlayer()
+    {
+        return priority >= PCLCreature.PRIORITY_START_LAST;
     }
 }
