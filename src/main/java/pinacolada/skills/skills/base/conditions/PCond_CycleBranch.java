@@ -23,6 +23,7 @@ public class PCond_CycleBranch extends PCond_DoBranch
 
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_CycleBranch.class, PField_CardCategory.class)
             .selfTarget()
+            .setExtra(0, DEFAULT_MAX)
             .setGroups(PCLCardGroupHelper.Hand);
 
     public PCond_CycleBranch(PSkillSaveData content)

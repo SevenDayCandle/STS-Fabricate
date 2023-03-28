@@ -21,7 +21,8 @@ public class PMove_Retain extends PMove_Select<PField_CardCategory>
     public static final PSkillData<PField_CardCategory> DATA =
             register(PMove_Retain.class, PField_CardCategory.class)
                     .setGroups(PCLCardGroupHelper.Hand)
-                    .selfTarget();
+                    .selfTarget()
+                    .setExtra(0, DEFAULT_MAX);
 
     public PMove_Retain()
     {

@@ -19,7 +19,8 @@ import pinacolada.utilities.ListSelection;
 @VisibleSkill
 public class PMove_Play extends PMove_Select<PField_CardCategory>
 {
-    public static final PSkillData<PField_CardCategory> DATA = register(PMove_Play.class, PField_CardCategory.class);
+    public static final PSkillData<PField_CardCategory> DATA = register(PMove_Play.class, PField_CardCategory.class)
+            .setExtra(0, DEFAULT_MAX);
 
     public PMove_Play()
     {

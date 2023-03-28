@@ -20,6 +20,7 @@ public class PMove_Reshuffle extends PMove_Select<PField_CardCategory>
 {
     public static final PSkillData<PField_CardCategory> DATA = register(PMove_Reshuffle.class, PField_CardCategory.class)
             .selfTarget()
+            .setExtra(0, DEFAULT_MAX)
             .setGroups(PCLCardGroupHelper.Hand, PCLCardGroupHelper.DiscardPile, PCLCardGroupHelper.ExhaustPile);
 
     public PMove_Reshuffle()

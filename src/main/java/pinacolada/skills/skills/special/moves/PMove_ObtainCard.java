@@ -4,7 +4,6 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.utilities.RotatingList;
-import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -17,37 +16,36 @@ import pinacolada.skills.fields.PField_CardID;
 import java.util.ArrayList;
 import java.util.Collection;
 
-@VisibleSkill
-public class PMove_ObtainDeck extends PMove<PField_CardID>
+public class PMove_ObtainCard extends PMove<PField_CardID>
 {
-    public static final PSkillData<PField_CardID> DATA = register(PMove_ObtainDeck.class, PField_CardID.class)
+    public static final PSkillData<PField_CardID> DATA = register(PMove_ObtainCard.class, PField_CardID.class)
             .setGroups(PCLCardGroupHelper.Hand) // Groups just need to be singular to be hidden
             .selfTarget();
 
-    public PMove_ObtainDeck()
+    public PMove_ObtainCard()
     {
         this(1);
     }
 
-    public PMove_ObtainDeck(PSkillSaveData content)
+    public PMove_ObtainCard(PSkillSaveData content)
     {
         super(DATA, content);
     }
 
-    public PMove_ObtainDeck(int copies, Collection<String> cards)
+    public PMove_ObtainCard(int copies, Collection<String> cards)
     {
         super(DATA, PCLCardTarget.None, copies);
         fields.setCardIDs(cards);
     }
 
-    public PMove_ObtainDeck(int copies, String... cards)
+    public PMove_ObtainCard(int copies, String... cards)
     {
         super(DATA, PCLCardTarget.None, copies);
         fields.setCardIDs(cards);
     }
 
     @Override
-    public PMove_ObtainDeck onAddToCard(AbstractCard card)
+    public PMove_ObtainCard onAddToCard(AbstractCard card)
     {
         super.onAddToCard(card);
         if (card.tags.contains(AbstractCard.CardTags.HEALING))
@@ -73,7 +71,7 @@ public class PMove_ObtainDeck extends PMove<PField_CardID>
     }
 
     @Override
-    public PMove_ObtainDeck makePreviews(RotatingList<EUICardPreview> previews)
+    public PMove_ObtainCard makePreviews(RotatingList<EUICardPreview> previews)
     {
         for (String cd : fields.cardIDs)
         {

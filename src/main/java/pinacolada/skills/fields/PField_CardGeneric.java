@@ -162,49 +162,35 @@ public class PField_CardGeneric extends PField
 
     /** Generates a generic SelectFromPile action on the groups specified by this effect.
      * If the skill's BASE amount is 0 or less, we will go for ALL cards in hand (skills that had their amounts set to 0 by mods still act on 0 cards) */
-    protected SelectFromPile createAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> action, PCLUseInfo info)
+    protected SelectFromPile createAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> action, PCLUseInfo info, int subchoices)
     {
         CardGroup[] g = getCardGroup(info);
-        return action.invoke(skill.getName(), skill.target.getTarget(info.source, info.target), skill.useParent && g.length > 0 ? g[0].size() : skill.baseAmount <= 0 ? Integer.MAX_VALUE : skill.amount, origin.toSelection(), g);
+        int choiceSize = skill.useParent && g.length > 0 ? g[0].size() : skill.baseAmount <= 0 ? Integer.MAX_VALUE : skill.amount;
+
+
+        // Set automatic selection when self targeting, or if the action is forced and we must select every available card
+        if ((!skill.useParent && groupTypes.isEmpty()) || (forced && skill.baseAmount <= 0))
+        {
+            return action.invoke(skill.getName(), skill.target.getTarget(info.source, info.target), choiceSize, PCLCardSelection.Random.toSelection(), g);
+        }
+        else if (subchoices > 0 && subchoices < choiceSize)
+        {
+            return action.invoke(skill.getName(), skill.target.getTarget(info.source, info.target), subchoices, PCLCardSelection.Manual.toSelection(), g)
+                    .setMaxChoices(choiceSize, origin.toSelection());
+        }
+
+        return action.invoke(skill.getName(), skill.target.getTarget(info.source, info.target), choiceSize, origin.toSelection(), g);
     }
 
     public CardFilterAction getGenericPileAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> action, PCLUseInfo info, int subchoices)
     {
         if (!skill.useParent && groupTypes.isEmpty())
         {
-            return PCLActions.last.add(createAction(action, info))
-                    .setAnyNumber(!forced);
+            return PCLActions.last.add(createAction(action, info, subchoices));
         }
         else
         {
-            SelectFromPile pileAction = skill.getActions().add(createAction(action, info));
-            // Set automatic selection when self targeting
-            if (groupTypes.isEmpty())
-            {
-                pileAction.setOrigin(PCLCardSelection.Random).setAnyNumber(false);
-            }
-            else if (forced)
-            {
-                // If the action is forced and we want to target every card possible, setting it to random will force this action automatically without needing user prompt
-                if (skill.baseAmount <= 0)
-                {
-                    pileAction.setOrigin(PCLCardSelection.Random);
-                }
-                // If we set anyNumber to false for the above scenario, it won't be chained to any effects because the callback conditions will fail to be met
-                else
-                {
-                    pileAction.setAnyNumber(false);
-                    if (subchoices > 0)
-                    {
-                        pileAction.setMaxChoices(subchoices, origin.toSelection()).setOrigin(PCLCardSelection.Manual);
-                    }
-                }
-            }
-            else if (subchoices > 0)
-            {
-                pileAction.setMaxChoices(subchoices, origin.toSelection()).setOrigin(PCLCardSelection.Manual);
-            }
-            return pileAction;
+            return skill.getActions().add(createAction(action, info, subchoices));
         }
     }
 

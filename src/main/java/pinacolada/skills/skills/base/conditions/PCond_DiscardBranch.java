@@ -22,6 +22,7 @@ public class PCond_DiscardBranch extends PCond_DoBranch
 
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_DiscardBranch.class, PField_CardCategory.class)
             .selfTarget()
+            .setExtra(0, DEFAULT_MAX)
             .setGroups(PCLCardGroupHelper.DrawPile, PCLCardGroupHelper.ExhaustPile, PCLCardGroupHelper.Hand);
 
     public PCond_DiscardBranch(PSkillSaveData content)

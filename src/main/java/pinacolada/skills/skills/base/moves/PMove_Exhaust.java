@@ -20,6 +20,7 @@ public class PMove_Exhaust extends PMove_Select<PField_CardCategory>
 {
     public static final PSkillData<PField_CardCategory> DATA = register(PMove_Exhaust.class, PField_CardCategory.class)
             .selfTarget()
+            .setExtra(0, DEFAULT_MAX)
             .setGroups(PCLCardGroupHelper.DrawPile, PCLCardGroupHelper.DiscardPile, PCLCardGroupHelper.Hand);
 
     public PMove_Exhaust()

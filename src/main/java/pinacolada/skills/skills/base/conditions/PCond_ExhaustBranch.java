@@ -25,6 +25,7 @@ public class PCond_ExhaustBranch extends PCond_DoBranch
 {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_ExhaustBranch.class, PField_CardCategory.class)
             .selfTarget()
+            .setExtra(0, DEFAULT_MAX)
             .setGroups(PCLCardGroupHelper.DrawPile, PCLCardGroupHelper.DiscardPile, PCLCardGroupHelper.Hand);
 
     public PCond_ExhaustBranch(PSkillSaveData content)

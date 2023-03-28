@@ -19,28 +19,28 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @VisibleSkill
-public class PMove_Obtain extends PMove<PField_CardID>
+public class PMove_Create extends PMove<PField_CardID>
 {
-    public static final PSkillData<PField_CardID> DATA = register(PMove_Obtain.class, PField_CardID.class)
+    public static final PSkillData<PField_CardID> DATA = register(PMove_Create.class, PField_CardID.class)
             .selfTarget();
 
-    public PMove_Obtain()
+    public PMove_Create()
     {
         this(1);
     }
 
-    public PMove_Obtain(PSkillSaveData content)
+    public PMove_Create(PSkillSaveData content)
     {
         super(DATA, content);
     }
 
-    public PMove_Obtain(int copies, Collection<String> cards)
+    public PMove_Create(int copies, Collection<String> cards)
     {
         super(DATA, PCLCardTarget.None, copies);
         fields.setCardIDs(cards);
     }
 
-    public PMove_Obtain(int copies, String... cards)
+    public PMove_Create(int copies, String... cards)
     {
         super(DATA, PCLCardTarget.None, copies);
         fields.setCardIDs(cards);
@@ -62,7 +62,7 @@ public class PMove_Obtain extends PMove<PField_CardID>
     }
 
     @Override
-    public PMove_Obtain makePreviews(RotatingList<EUICardPreview> previews)
+    public PMove_Create makePreviews(RotatingList<EUICardPreview> previews)
     {
         for (String cd : fields.cardIDs)
         {
@@ -79,7 +79,7 @@ public class PMove_Obtain extends PMove<PField_CardID>
     @Override
     public String getSampleText()
     {
-        return TEXT.act_addToPile(TEXT.subjects_x, TEXT.subjects_card, TEXT.subjects_x);
+        return TEXT.act_addToPile(TEXT.subjects_x, TEXT.subjects_card, TEXT.cedit_pile);
     }
 
     @Override

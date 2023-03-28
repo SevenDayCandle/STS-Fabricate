@@ -16,29 +16,29 @@ import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
-public class PMove_ObtainRandomCard extends PMove<PField_CardCategory>
+public class PMove_CreateRandom extends PMove<PField_CardCategory>
 {
-    public static final PSkillData<PField_CardCategory> DATA = register(PMove_ObtainRandomCard.class, PField_CardCategory.class)
+    public static final PSkillData<PField_CardCategory> DATA = register(PMove_CreateRandom.class, PField_CardCategory.class)
             .setExtra(1, DEFAULT_MAX)
             .selfTarget();
 
-    public PMove_ObtainRandomCard()
+    public PMove_CreateRandom()
     {
         this(1);
     }
 
-    public PMove_ObtainRandomCard(PSkillSaveData content)
+    public PMove_CreateRandom(PSkillSaveData content)
     {
         super(DATA, content);
     }
 
-    public PMove_ObtainRandomCard(int copies, PCLCardGroupHelper... gt)
+    public PMove_CreateRandom(int copies, PCLCardGroupHelper... gt)
     {
         super(DATA, PCLCardTarget.None, copies);
         fields.setCardGroup(gt);
     }
 
-    public PMove_ObtainRandomCard(int copies, int extra, PCLCardGroupHelper... gt)
+    public PMove_CreateRandom(int copies, int extra, PCLCardGroupHelper... gt)
     {
         super(DATA, PCLCardTarget.None, copies, extra);
         fields.setCardGroup(gt);
@@ -47,7 +47,7 @@ public class PMove_ObtainRandomCard extends PMove<PField_CardCategory>
     @Override
     public String getSampleText()
     {
-        return TEXT.act_addToPile(TEXT.subjects_x, TEXT.subjects_randomX(TEXT.subjects_card), TEXT.subjects_x);
+        return TEXT.act_addToPile(TEXT.subjects_x, TEXT.subjects_randomX(TEXT.subjects_card), TEXT.cedit_pile);
     }
 
     @Override

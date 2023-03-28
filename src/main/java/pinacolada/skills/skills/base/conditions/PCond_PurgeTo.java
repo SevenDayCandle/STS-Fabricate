@@ -20,7 +20,8 @@ import pinacolada.utilities.ListSelection;
 public class PCond_PurgeTo extends PCond_DoTo
 {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_PurgeTo.class, PField_CardCategory.class)
-            .selfTarget();
+            .selfTarget()
+            .setExtra(0, DEFAULT_MAX);
 
     public PCond_PurgeTo()
     {

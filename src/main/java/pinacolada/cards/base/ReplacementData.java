@@ -134,7 +134,7 @@ public class ReplacementData extends PCLDynamicData
             case Defend_Watcher.ID:
                 return blockData(card, copyNumbers);
             case Anger.ID:
-                return attackData(card, copyNumbers).setPSkill(PMove.obtainDrawPile(1, Anger.ID));
+                return attackData(card, copyNumbers).setPSkill(PMove.createDrawPile(1, Anger.ID));
             case Armaments.ID:
                 return blockData(card, copyNumbers).setPSkill(PMove.upgrade(0));
         }

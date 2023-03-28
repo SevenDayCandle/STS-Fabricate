@@ -21,6 +21,7 @@ public class PMove_Cycle extends PMove_Select<PField_CardCategory>
 {
     public static final PSkillData<PField_CardCategory> DATA = register(PMove_Cycle.class, PField_CardCategory.class)
             .selfTarget()
+            .setExtra(0, DEFAULT_MAX)
             .setGroups(PCLCardGroupHelper.DrawPile);
 
     public PMove_Cycle()

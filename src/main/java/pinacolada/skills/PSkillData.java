@@ -13,6 +13,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import static pinacolada.skills.PSkill.DEFAULT_MAX;
+
 public class PSkillData<T extends PField>
 {
     public final String ID;
@@ -30,7 +32,7 @@ public class PSkillData<T extends PField>
 
     public PSkillData(String id, Class<? extends PSkill<T>> effectClass, Class<T> effectType)
     {
-        this(id, effectClass, effectType, PSkill.DEFAULT_MAX, PSkill.DEFAULT_PRIORITY);
+        this(id, effectClass, effectType, 0, DEFAULT_MAX);
     }
 
     public PSkillData(String id, Class<? extends PSkill<T>> effectClass, Class<T> effectType, int minAmount, int maxAmount, AbstractCard.CardColor... cardColors)

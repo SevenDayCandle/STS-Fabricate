@@ -21,6 +21,7 @@ public class PCond_DiscardTo extends PCond_DoTo
 {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_DiscardTo.class, PField_CardCategory.class)
             .selfTarget()
+            .setExtra(0, DEFAULT_MAX)
             .setGroups(PCLCardGroupHelper.DrawPile, PCLCardGroupHelper.Hand);
 
     public PCond_DiscardTo()

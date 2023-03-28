@@ -1,26 +1,20 @@
 package pinacolada.skills.fields;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.cards.CardGroup;
-import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
-import extendedui.interfaces.delegates.FuncT5;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.CostFilter;
-import pinacolada.actions.piles.SelectFromPile;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.tags.PCLCardTag;
-import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
 import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
 import pinacolada.utilities.GameUtilities;
-import pinacolada.utilities.ListSelection;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -255,10 +249,5 @@ public class PField_CardCategory extends PField_CardID
         return skill.useParent ? EUIRM.strings.verbNoun(tooltipTitle, skill.getInheritedString()) :
                 !groupTypes.isEmpty() ? TEXT.act_genericFrom(tooltipTitle, skill.getAmountRawOrAllString(), !cardIDs.isEmpty() ? getCardIDOrString(cardIDs) : getFullCardString(), getGroupString())
                         : EUIRM.strings.verbNoun(tooltipTitle, TEXT.subjects_thisObj);
-    }
-
-    protected SelectFromPile createAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> action, PCLUseInfo info)
-    {
-        return super.createAction(action, info).setFilter(getFullCardFilter());
     }
 }

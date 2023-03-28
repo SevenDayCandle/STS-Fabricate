@@ -68,7 +68,6 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
     public static final int CHAR_OFFSET = 48;
     public static final int DEFAULT_MAX = Integer.MAX_VALUE / 2; // So that upgrade limits will not go out of bounds
     public static final int DEFAULT_EXTRA_MIN = -1; // Denotes infinity for tags and certain skills
-    public static final int DEFAULT_PRIORITY = 4;
     protected static final String CARD_SEPARATOR = "|";
     protected static final String SUB_SEPARATOR = "<";
     protected static final String BOUND_FORMAT = "¦{0}¦";

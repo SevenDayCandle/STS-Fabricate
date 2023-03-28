@@ -367,17 +367,18 @@ public class PCLCoreStrings extends PCLStrings
     public final String subjects_them = subjects.TEXT[41];
     public final String subjects_thisObj = subjects.TEXT[42];
     public final String subjects_thisX = subjects.TEXT[43];
-    public final String subjects_x = subjects.TEXT[44];
-    public final String subjects_you = subjects.TEXT[45];
-    public final String subjects_yourFirstX = subjects.TEXT[46];
-    public final String subjects_yourX = subjects.TEXT[47];
-    public final String subjects_xOfY = subjects.TEXT[48];
-    public final String subjects_xOnY = subjects.TEXT[49];
-    public final String subjects_xThisTurn = subjects.TEXT[50];
-    public final String subjects_xTimes = subjects.TEXT[51];
-    public final String subjects_xWithY = subjects.TEXT[52];
-    public final String subjects_xCost = subjects.TEXT[53];
-    public final String subjects_xBonus = subjects.TEXT[54];
+    public final String subjects_unblockedX = subjects.TEXT[44];
+    public final String subjects_x = subjects.TEXT[45];
+    public final String subjects_you = subjects.TEXT[46];
+    public final String subjects_yourFirstX = subjects.TEXT[47];
+    public final String subjects_yourX = subjects.TEXT[48];
+    public final String subjects_xOfY = subjects.TEXT[49];
+    public final String subjects_xOnY = subjects.TEXT[50];
+    public final String subjects_xThisTurn = subjects.TEXT[51];
+    public final String subjects_xTimes = subjects.TEXT[52];
+    public final String subjects_xWithY = subjects.TEXT[53];
+    public final String subjects_xCost = subjects.TEXT[54];
+    public final String subjects_xBonus = subjects.TEXT[55];
 
     // Tutorial
     public final String tutorial_learnMore = tutorial.TEXT[0];
@@ -563,6 +564,7 @@ public class PCLCoreStrings extends PCLStrings
     public final String subjects_thisTurn(String base) {return EUIUtils.format(subjects_xThisTurn, base);}
     public final String subjects_times(Object amount) {return EUIUtils.format(subjects_xTimes, amount);}
     public final String subjects_topOf(Object amount) {return EUIUtils.format(subjects_topOfX, amount);}
+    public final String subjects_unblocked(Object amount) {return EUIUtils.format(subjects_unblockedX, amount);}
     public final String subjects_xBonus(Object amount) {return EUIUtils.format(subjects_xBonus, amount);}
     public final String subjects_xCost(Object amount) {return EUIUtils.format(subjects_xCost, amount);}
     public final String subjects_xOfY(Object obj, Object t) {return EUIUtils.format(subjects_xOfY, obj, t);}

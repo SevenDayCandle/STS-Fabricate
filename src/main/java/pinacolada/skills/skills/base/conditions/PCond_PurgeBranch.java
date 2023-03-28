@@ -22,7 +22,8 @@ public class PCond_PurgeBranch extends PCond_DoBranch
 {
 
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_PurgeBranch.class, PField_CardCategory.class)
-            .selfTarget();
+            .selfTarget()
+            .setExtra(0, DEFAULT_MAX);
 
     public PCond_PurgeBranch(PSkillSaveData content)
     {

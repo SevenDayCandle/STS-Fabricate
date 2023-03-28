@@ -21,6 +21,7 @@ public class PCond_ReshuffleTo extends PCond_DoTo
 {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_ReshuffleTo.class, PField_CardCategory.class)
             .selfTarget()
+            .setExtra(0, DEFAULT_MAX)
             .setGroups(PCLCardGroupHelper.ExhaustPile, PCLCardGroupHelper.DiscardPile, PCLCardGroupHelper.Hand);
 
     public PCond_ReshuffleTo()

@@ -67,11 +67,9 @@ public class PField_CardID extends PField_CardGeneric
         return getFullCardString();
     }
 
-    protected SelectFromPile initializeBasicSelect(FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> action, PCLUseInfo info)
+    protected SelectFromPile createAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> action, PCLUseInfo info, int subchoices)
     {
-        return skill.getActions().add(createAction(action, info))
-                .setFilter(getFullCardFilter())
-                .setAnyNumber(!forced);
+        return super.createAction(action, info, subchoices).setFilter(getFullCardFilter());
     }
 
     public PField_CardID setCardIDs(String... cards)

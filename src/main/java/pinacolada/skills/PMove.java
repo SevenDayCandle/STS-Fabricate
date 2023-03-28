@@ -182,6 +182,57 @@ public abstract class PMove<T extends PField> extends PSkill<T>
                 .setSource(card, valueSource);
     }
 
+    public static PMove_Create create(String... cardData)
+    {
+        return new PMove_Create(1, cardData);
+    }
+
+    public static PMove_Create create(int copies, String... cardData)
+    {
+        return new PMove_Create(copies, cardData);
+    }
+
+    public static PMove_Create create(PCLCardData... cardData)
+    {
+        return create(1, cardData);
+    }
+
+    public static PMove_Create create(int copies, PCLCardData... cardData)
+    {
+        return new PMove_Create(copies, EUIUtils.map(cardData, cd -> cd.ID));
+    }
+
+    public static PMove_Create createDiscardPile(int copies)
+    {
+        return (PMove_Create) new PMove_Create(copies).edit(f -> f.setCardGroup(PCLCardGroupHelper.DiscardPile));
+    }
+
+    public static PMove_Create createDiscardPile(int copies, PCLCardData... cardData)
+    {
+        return (PMove_Create) new PMove_Create(copies, EUIUtils.map(cardData, cd -> cd.ID)).edit(f -> f.setCardGroup(PCLCardGroupHelper.DiscardPile));
+    }
+
+    public static PMove_Create createDiscardPile(int copies, String... ids)
+    {
+        return (PMove_Create) new PMove_Create(copies, ids).edit(f -> f.setCardGroup(PCLCardGroupHelper.DiscardPile));
+    }
+
+    public static PMove_Create createDrawPile(int copies)
+    {
+        return (PMove_Create) new PMove_Create(copies).edit(f -> f.setCardGroup(PCLCardGroupHelper.DrawPile));
+    }
+
+    public static PMove_Create createDrawPile(int copies, PCLCardData... cardData)
+    {
+        return (PMove_Create) new PMove_Create(copies, EUIUtils.map(cardData, cd -> cd.ID)).edit(f -> f.setCardGroup(PCLCardGroupHelper.DrawPile));
+    }
+
+    public static PMove_Create createDrawPile(int copies, String... ids)
+    {
+        return (PMove_Create) new PMove_Create(copies, ids).edit(f -> f.setCardGroup(PCLCardGroupHelper.DrawPile));
+    }
+
+
     public static PMove_Cycle cycle(int amount)
     {
         return new PMove_Cycle(amount);
@@ -495,59 +546,9 @@ public abstract class PMove<T extends PField> extends PSkill<T>
         return new PMove_ModifyTag(amount, extra, tag);
     }
 
-    public static PMove_Obtain obtain(String... cardData)
+    public static PMove_CreateRandom obtainRandom(int copies, int choices, PCLCardGroupHelper... cardgroup)
     {
-        return new PMove_Obtain(1, cardData);
-    }
-
-    public static PMove_Obtain obtain(int copies, String... cardData)
-    {
-        return new PMove_Obtain(copies, cardData);
-    }
-
-    public static PMove_Obtain obtain(PCLCardData... cardData)
-    {
-        return obtain(1, cardData);
-    }
-
-    public static PMove_Obtain obtain(int copies, PCLCardData... cardData)
-    {
-        return new PMove_Obtain(copies, EUIUtils.map(cardData, cd -> cd.ID));
-    }
-
-    public static PMove_Obtain obtainDiscardPile(int copies)
-    {
-        return (PMove_Obtain) new PMove_Obtain(copies).edit(f -> f.setCardGroup(PCLCardGroupHelper.DiscardPile));
-    }
-
-    public static PMove_Obtain obtainDiscardPile(int copies, PCLCardData... cardData)
-    {
-        return (PMove_Obtain) new PMove_Obtain(copies, EUIUtils.map(cardData, cd -> cd.ID)).edit(f -> f.setCardGroup(PCLCardGroupHelper.DiscardPile));
-    }
-
-    public static PMove_Obtain obtainDiscardPile(int copies, String... ids)
-    {
-        return (PMove_Obtain) new PMove_Obtain(copies, ids).edit(f -> f.setCardGroup(PCLCardGroupHelper.DiscardPile));
-    }
-
-    public static PMove_Obtain obtainDrawPile(int copies)
-    {
-        return (PMove_Obtain) new PMove_Obtain(copies).edit(f -> f.setCardGroup(PCLCardGroupHelper.DrawPile));
-    }
-
-    public static PMove_Obtain obtainDrawPile(int copies, PCLCardData... cardData)
-    {
-        return (PMove_Obtain) new PMove_Obtain(copies, EUIUtils.map(cardData, cd -> cd.ID)).edit(f -> f.setCardGroup(PCLCardGroupHelper.DrawPile));
-    }
-
-    public static PMove_Obtain obtainDrawPile(int copies, String... ids)
-    {
-        return (PMove_Obtain) new PMove_Obtain(copies, ids).edit(f -> f.setCardGroup(PCLCardGroupHelper.DrawPile));
-    }
-
-    public static PMove_ObtainRandomCard obtainRandom(int copies, int choices, PCLCardGroupHelper... cardgroup)
-    {
-        return new PMove_ObtainRandomCard(copies, choices, cardgroup);
+        return new PMove_CreateRandom(copies, choices, cardgroup);
     }
 
     public static PMove_Play play(int copies, PCLCardTarget target, PCLCardGroupHelper... g)

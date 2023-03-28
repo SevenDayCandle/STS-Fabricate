@@ -24,6 +24,7 @@ public class PCond_ReshuffleBranch extends PCond_DoBranch
 {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_ReshuffleBranch.class, PField_CardCategory.class)
             .selfTarget()
+            .setExtra(0, DEFAULT_MAX)
             .setGroups(PCLCardGroupHelper.ExhaustPile, PCLCardGroupHelper.DiscardPile, PCLCardGroupHelper.Hand);
 
     public PCond_ReshuffleBranch(PSkillSaveData content)
