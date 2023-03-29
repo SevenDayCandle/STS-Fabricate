@@ -1,9 +1,10 @@
-package pinacolada.skills.skills.special.moves;
+package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.utilities.RotatingList;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -16,6 +17,7 @@ import pinacolada.skills.fields.PField_CardID;
 import java.util.ArrayList;
 import java.util.Collection;
 
+@VisibleSkill
 public class PMove_ObtainCard extends PMove<PField_CardID>
 {
     public static final PSkillData<PField_CardID> DATA = register(PMove_ObtainCard.class, PField_CardID.class)

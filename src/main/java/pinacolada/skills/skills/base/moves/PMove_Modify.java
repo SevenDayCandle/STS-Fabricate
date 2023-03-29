@@ -64,9 +64,10 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<
     @Override
     public void use(PCLUseInfo info)
     {
-        getActions().selectFromPile(getName(), extra <= 0 ? Integer.MAX_VALUE : extra, fields.getCardGroup(info))
+        boolean selectAll = extra <= 0 || useParent;
+        getActions().selectFromPile(getName(), selectAll ? Integer.MAX_VALUE : extra, fields.getCardGroup(info))
                 .setFilter(fields.getFullCardFilter())
-                .setOptions((extra <= 0 || fields.groupTypes.isEmpty() || useParent ? PCLCardSelection.Random : PCLCardSelection.Manual).toSelection(), !fields.forced)
+                .setOptions((selectAll || fields.groupTypes.isEmpty() ? PCLCardSelection.Random : PCLCardSelection.Manual).toSelection(), !fields.forced)
                 .addCallback(this::cardAction);
         super.use(info);
     }

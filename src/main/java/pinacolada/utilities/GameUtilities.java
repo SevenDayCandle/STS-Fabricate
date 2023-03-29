@@ -52,6 +52,7 @@ import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.GenericCondition;
 import org.scannotation.AnnotationDB;
 import pinacolada.actions.PCLActions;
+import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentCategory;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.blights.common.UpgradedHand;
@@ -584,6 +585,11 @@ public class GameUtilities
     public static int getAscensionLevel()
     {
         return AbstractDungeon.isAscensionMode ? Math.max(0, Math.min(20, AbstractDungeon.ascensionLevel)) : 0;
+    }
+
+    public static ArrayList<PCLAugment> getAugments(AbstractCard c)
+    {
+        return c instanceof PCLCard ? ((PCLCard) c).getAugments() : null;
     }
 
     public static ArrayList<AbstractCard> getAvailableCards()
@@ -1427,7 +1433,7 @@ public class GameUtilities
 
     public static List<AbstractCard.CardRarity> getStandardRarities()
     {
-        return EUIUtils.list(
+        return Arrays.asList(
                 AbstractCard.CardRarity.BASIC,
                 AbstractCard.CardRarity.COMMON,
                 AbstractCard.CardRarity.UNCOMMON,
@@ -1551,7 +1557,7 @@ public class GameUtilities
     public static List<PCLAffinity> getVisiblePCLAffinities(AbstractCard card)
     {
         PCLCardAffinities cardAffinities = getPCLCardAffinities(card);
-        return cardAffinities != null ? cardAffinities.getAffinities(false, true) : EUIUtils.list(PCLAffinity.General);
+        return cardAffinities != null ? cardAffinities.getAffinities(false, true) : Collections.singletonList(PCLAffinity.General);
     }
 
     public static int getXCostEnergy(AbstractCard card)

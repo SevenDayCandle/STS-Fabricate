@@ -275,6 +275,12 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>, Cou
         return getTextureCache().texture();
     }
 
+    @Override
+    public int getRank(AbstractCard c)
+    {
+        return GameUtilities.getPCLCardAffinityLevel(c, this, false);
+    }
+
     public EUITooltip getLevelTooltip()
     {
         return getLevelTooltip(GameUtilities.getActingColor());

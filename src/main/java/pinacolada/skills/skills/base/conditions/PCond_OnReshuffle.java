@@ -9,9 +9,10 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
+import pinacolada.skills.skills.PDelegateCond;
 
 @VisibleSkill
-public class PCond_OnReshuffle extends PCond_Delegate implements OnCardReshuffledSubscriber
+public class PCond_OnReshuffle extends PDelegateCond implements OnCardReshuffledSubscriber
 {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_OnReshuffle.class, PField_CardCategory.class, 1, 1)
             .selfTarget();

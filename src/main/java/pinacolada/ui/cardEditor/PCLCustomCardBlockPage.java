@@ -19,6 +19,7 @@ import pinacolada.skills.skills.base.traits.PTrait_BlockCount;
 import pinacolada.skills.skills.base.traits.PTrait_BlockMultiplier;
 import pinacolada.skills.skills.special.primary.PCardPrimary_GainBlock;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class PCLCustomCardBlockPage extends PCLCustomCardEffectPage
@@ -89,7 +90,7 @@ public class PCLCustomCardBlockPage extends PCLCustomCardEffectPage
 
     protected static List<PMove<?>> getAvailableMoves()
     {
-        return EUIUtils.list(
+        return Arrays.asList(
                 new PTrait_Block(),
                 new PTrait_BlockMultiplier(),
                 new PTrait_BlockCount()

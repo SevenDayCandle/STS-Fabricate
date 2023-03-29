@@ -12,9 +12,9 @@ import pinacolada.powers.PCLPower;
 public class StolenGoldPower extends PCLPower
 {
     public static final String POWER_ID = createFullID(StolenGoldPower.class);
-    public static final int GOLD_BOSS = 50;
-    public static final int GOLD_ELITE = 25;
-    public static final int GOLD_NORMAL = 50;
+    public static final int GOLD_BOSS = 75;
+    public static final int GOLD_ELITE = 50;
+    public static final int GOLD_NORMAL = 25;
 
     public StolenGoldPower(AbstractCreature owner, int amount)
     {

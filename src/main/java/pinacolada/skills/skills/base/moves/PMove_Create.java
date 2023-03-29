@@ -3,6 +3,7 @@ package pinacolada.skills.skills.base.moves;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
+import extendedui.interfaces.delegates.ActionT1;
 import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.utilities.RotatingList;
 import pinacolada.annotations.VisibleSkill;
@@ -10,16 +11,16 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
-import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardID;
+import pinacolada.skills.skills.PCallbackMove;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 @VisibleSkill
-public class PMove_Create extends PMove<PField_CardID>
+public class PMove_Create extends PCallbackMove<PField_CardID>
 {
     public static final PSkillData<PField_CardID> DATA = register(PMove_Create.class, PField_CardID.class)
             .selfTarget();
@@ -83,7 +84,7 @@ public class PMove_Create extends PMove<PField_CardID>
     }
 
     @Override
-    public void use(PCLUseInfo info)
+    public void use(PCLUseInfo info, ActionT1<PCLUseInfo> callback)
     {
         ArrayList<AbstractCard> created = new ArrayList<AbstractCard>();
         if (useParent)
@@ -127,6 +128,7 @@ public class PMove_Create extends PMove<PField_CardID>
             }
         }
         info.setData(created);
+        callback.invoke(info);
         super.use(info);
     }
 

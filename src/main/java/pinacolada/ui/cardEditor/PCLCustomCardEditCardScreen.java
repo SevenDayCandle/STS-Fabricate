@@ -64,18 +64,25 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
     protected PCardPrimary_GainBlock currentBlock;
     protected PCLDynamicCard previewCard;
     protected PCLCustomCardFormEditor formEditor;
-    protected PCLCustomCardSlot currentSlot;
     protected PCLCustomCardImageEffect imageEditor;
     protected Texture loadedImage;
     protected int currentPage;
+    protected final PCLCustomCardSlot currentSlot;
+    protected final boolean fromInGame;
 
     public PCLCustomCardEditCardScreen(PCLCustomCardSlot slot)
+    {
+        this(slot, false);
+    }
+
+    public PCLCustomCardEditCardScreen(PCLCustomCardSlot slot, boolean fromInGame)
     {
         final float labelHeight = Settings.HEIGHT * (0.04f);
         final float buttonWidth = Settings.WIDTH * (0.16f);
         final float labelWidth = Settings.WIDTH * (0.20f);
         final float button_cY = BUTTON_HEIGHT * 1.5f;
-        currentSlot = slot;
+        this.currentSlot = slot;
+        this.fromInGame = fromInGame;
         tempBuilders = EUIUtils.map(currentSlot.builders, PCLDynamicData::new);
 
         cancelButton = createHexagonalButton(0, 0, buttonWidth, BUTTON_HEIGHT)
@@ -143,7 +150,10 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
         }
 
         pages.clear();
-        pages.add(new PCLCustomCardPrimaryInfoPage(this));
+        if (!fromInGame)
+        {
+            pages.add(new PCLCustomCardPrimaryInfoPage(this));
+        }
         pages.add(new PCLCustomCardAttributesPage(this));
         pages.add(new PCLCustomCardAttackPage(this, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), 0, PGR.core.strings.cedit_damage, be -> {
             currentDamage = EUIUtils.safeCast(be, PCardPrimary_DealDamage.class);
@@ -234,7 +244,7 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
 
     protected void end()
     {
-        complete();
+        complete(null);
     }
 
     protected void complete()

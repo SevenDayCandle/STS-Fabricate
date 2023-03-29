@@ -340,7 +340,8 @@
 												"Left-Click",
 												"Right-Click",
 												"Temp. {0}",
-												"Requirement"
+												"Requirement",
+												"Edit"
 								]
 				},
 				"pcl:Options": {

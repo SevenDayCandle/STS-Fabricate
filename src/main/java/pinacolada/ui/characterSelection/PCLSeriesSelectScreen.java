@@ -37,7 +37,6 @@ import static pinacolada.ui.characterSelection.PCLLoadoutsContainer.MINIMUM_CARD
 public class PCLSeriesSelectScreen extends AbstractMenuScreen
 {
     public final PCLLoadoutsContainer container = new PCLLoadoutsContainer();
-    public final EUIImage backgroundImage;
     public final EUICardGrid cardGrid;
     public final EUILabel startingDeck;
     public final EUIButton selectAllButton;
@@ -64,10 +63,6 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen
         final float buttonHeight = screenH(0.06f);
         final float buttonWidth = screenW(0.18f);
         final float xPos = screenW(0.82f);
-
-        backgroundImage = new EUIImage(EUIRM.images.fullSquare.texture(), new EUIHitbox(screenW(1), screenH(1)))
-                .setPosition(screenW(0.5f), screenH(0.5f))
-                .setColor(0, 0, 0, 0.85f);
 
         cardGrid = new EUICardGrid(0.41f, false)
                 .setOnCardClick(this::onCardClicked)
@@ -299,7 +294,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen
     @Override
     public void updateImpl()
     {
-        backgroundImage.updateImpl();
+        PGR.blackScreen.updateImpl();
         EUI.countingPanel.tryUpdate();
 
         if (previewCardsEffect != null)
@@ -346,7 +341,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen
     @Override
     public void renderImpl(SpriteBatch sb)
     {
-        backgroundImage.renderImpl(sb);
+        PGR.blackScreen.renderImpl(sb);
 
         cardGrid.tryRender(sb);
 

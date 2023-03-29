@@ -362,9 +362,16 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
         }
         else
         {
-            for (PSkill<?> effect : effects)
+            if (useParent)
             {
-                effect.use(info);
+                for (PSkill<?> effect : effects)
+                {
+                    effect.use(info);
+                }
+            }
+            else
+            {
+                useSkill(info, 0);
             }
         }
     }
@@ -388,15 +395,25 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     @Override
     public void use(PCLUseInfo info, boolean isUsing)
     {
-        if (amount > 0)
+        use(info);
+    }
+
+    public void useSkill(PCLUseInfo info, int index)
+    {
+        PSkill<?> skill = getSubEffect(index);
+        if (skill instanceof PCallbackMove)
         {
-            chooseEffect(info);
+            ((PCallbackMove<?>) skill).use(info, i -> useSkill(i, index + 1));
         }
         else
         {
-            for (PSkill<?> effect : effects)
+            if (skill != null)
             {
-                effect.use(info, isUsing);
+                skill.use(info);
+            }
+            if (index < effects.size() - 1)
+            {
+                useSkill(info, index + 1);
             }
         }
     }

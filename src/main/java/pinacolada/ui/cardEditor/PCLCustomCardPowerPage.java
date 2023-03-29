@@ -20,6 +20,7 @@ import pinacolada.skills.skills.base.moves.PMove_StackCustomPower;
 import pinacolada.ui.PCLValueEditor;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
 {
@@ -43,7 +44,7 @@ public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
         // Ensure that a primary cond is always selected
         if (primaryCond == null)
         {
-            primaryConditions.setSelectionIndices(EUIUtils.list(0), true);
+            primaryConditions.setSelectionIndices(Collections.singletonList(0), true);
         }
 
         usesPerTurn = new PCLValueEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 4, MENU_HEIGHT, MENU_WIDTH * 3.2f, OFFSET_EFFECT * 2f)

@@ -53,7 +53,6 @@ public class PCLLoadoutEditor extends AbstractMenuScreen
     protected EUILabel deckText;
     protected EUILabel relicText;
     protected EUILabel attributesText;
-    protected EUIImage backgroundImage;
     protected EUIButton seriesButton;
     protected EUIButton[] presetButtons;
     protected EUIButton cancelButton;
@@ -72,10 +71,6 @@ public class PCLLoadoutEditor extends AbstractMenuScreen
         final float buttonWidth = screenW(0.18f);
         final float labelWidth = screenW(0.20f);
         final float button_cY = buttonHeight * 1.5f;
-
-        backgroundImage = new EUIImage(EUIRM.images.fullSquare.texture(), new EUIHitbox(screenW(1), screenH(1)))
-                .setPosition(screenW(0.5f), screenH(0.5f))
-                .setColor(0, 0, 0, 0.9f);
 
         startingDeck = new EUILabel(null, new EUIHitbox(screenW(0.18f), screenH(0.05f))
                 .setCenter(screenW(0.08f), screenH(0.97f)))
@@ -219,7 +214,7 @@ public class PCLLoadoutEditor extends AbstractMenuScreen
         super.updateImpl();
 
         val.refresh(presets[preset]);
-        backgroundImage.updateImpl();
+        PGR.blackScreen.updateImpl();
         startingDeck.updateImpl();
         deckText.updateImpl();
         relicText.updateImpl();
@@ -298,7 +293,7 @@ public class PCLLoadoutEditor extends AbstractMenuScreen
     {
         super.renderImpl(sb);
 
-        backgroundImage.renderImpl(sb);
+        PGR.blackScreen.renderImpl(sb);
 
         if (relicSelectionEffect != null)
         {

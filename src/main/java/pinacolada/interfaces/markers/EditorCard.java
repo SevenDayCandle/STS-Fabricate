@@ -22,6 +22,8 @@ public interface EditorCard extends PointerProvider, CacheableCard
 
     int rightCountBase();
 
+    void fullReset();
+
     void loadImage(String path, boolean refresh);
 
     default PTrigger getPowerEffect(int i)

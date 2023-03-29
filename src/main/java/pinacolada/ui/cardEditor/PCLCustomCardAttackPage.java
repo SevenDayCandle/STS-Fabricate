@@ -24,6 +24,7 @@ import pinacolada.skills.skills.base.traits.PTrait_DamageMultiplier;
 import pinacolada.skills.skills.base.traits.PTrait_HitCount;
 import pinacolada.skills.skills.special.primary.PCardPrimary_DealDamage;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class PCLCustomCardAttackPage extends PCLCustomCardEffectPage
@@ -130,7 +131,7 @@ public class PCLCustomCardAttackPage extends PCLCustomCardEffectPage
 
     protected static List<PMove<?>> getAvailableMoves()
     {
-        return EUIUtils.list(
+        return Arrays.asList(
                 new PTrait_Damage(),
                 new PTrait_DamageMultiplier(),
                 new PTrait_HitCount()

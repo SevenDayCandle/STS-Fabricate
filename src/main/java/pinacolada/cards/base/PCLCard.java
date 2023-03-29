@@ -507,6 +507,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         setupProperties(cardData, this.auxiliaryData.form, timesUpgraded);
         setup(null);
         setForm(this.auxiliaryData.form, timesUpgraded);
+        refresh(null);
     }
 
     protected PMove_StackCustomPower getApplyPower(PCLCardTarget target, int amount, PTrigger... effects) {
@@ -541,11 +542,11 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         return augments.size() > index ? augments.get(index) : null;
     }
 
-    public List<PSkill<?>> getAugmentSkills() {
+    public ArrayList<PSkill<?>> getAugmentSkills() {
         return EUIUtils.mapAsNonnull(augments, aug -> aug != null ? aug.skill : null);
     }
 
-    public List<PCLAugment> getAugments() {
+    public ArrayList<PCLAugment> getAugments() {
         return EUIUtils.filter(augments, Objects::nonNull);
     }
 

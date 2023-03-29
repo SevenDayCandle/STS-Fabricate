@@ -56,7 +56,6 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen
     protected EUIButton reloadButton;
     protected EUIButtonList colorButtons;
     protected EUIContextMenu<ContextOption> contextMenu;
-    protected EUIImage backgroundImage;
     protected EUITextBox info;
     protected HashMap<AbstractCard, PCLCustomCardSlot> currentSlots = new HashMap<>();
     protected PCLEffectWithCallback<?> currentEffect;
@@ -68,10 +67,6 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen
         final float labelHeight = screenH(0.04f);
         final float buttonWidth = screenW(0.18f);
         final float labelWidth = screenW(0.20f);
-
-        backgroundImage = new EUIImage(EUIRM.images.fullSquare.texture(), new EUIHitbox(screenW(1), screenH(1)))
-                .setPosition(screenW(0.5f), screenH(0.5f))
-                .setColor(0, 0, 0, 0.9f);
 
         this.grid = (EUIStaticCardGrid) new EUIStaticCardGrid(1f)
                 .setEnlargeOnHover(false)
@@ -329,7 +324,7 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen
     @Override
     public void updateImpl()
     {
-        backgroundImage.updateImpl();
+        PGR.blackScreen.updateImpl();
         if (currentEffect != null)
         {
             currentEffect.update();
@@ -363,7 +358,7 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen
     @Override
     public void renderImpl(SpriteBatch sb)
     {
-        backgroundImage.renderImpl(sb);
+        PGR.blackScreen.renderImpl(sb);
         if (currentEffect != null)
         {
             currentEffect.render(sb);

@@ -820,7 +820,7 @@ public class PCLCardData implements CardObject
     {
         this.loadout = PGR.getPlayerData(resources.cardColor).getCoreLoadout();
         this.loadout.defends.add(this);
-        this.extraTags = EUIUtils.list(CardTagItem.Defend);
+        this.extraTags = Collections.singletonList(CardTagItem.Defend);
         return this;
     }
 
@@ -828,7 +828,7 @@ public class PCLCardData implements CardObject
     {
         this.loadout = PGR.getPlayerData(resources.cardColor).getCoreLoadout();
         this.loadout.strikes.add(this);
-        this.extraTags = EUIUtils.list(CardTagItem.Strike);
+        this.extraTags = Collections.singletonList(CardTagItem.Strike);
         return this;
     }
 

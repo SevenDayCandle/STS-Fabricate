@@ -14,6 +14,7 @@ public class PCLAugmentCategorySub
     public static final PCLAugmentCategorySub HP = new PCLAugmentCategorySub(PCLAugmentCategory.Summon);
     public static final PCLAugmentCategorySub Priority = new PCLAugmentCategorySub(PCLAugmentCategory.Summon);
     public static final PCLAugmentCategorySub TagDelayed = new PCLAugmentCategorySub(PCLAugmentCategory.Played);
+    public static final PCLAugmentCategorySub TagExhaust = new PCLAugmentCategorySub(PCLAugmentCategory.Played);
     public static final PCLAugmentCategorySub TagHaste = new PCLAugmentCategorySub(PCLAugmentCategory.Played);
     public static final PCLAugmentCategorySub TagInnate = new PCLAugmentCategorySub(PCLAugmentCategory.Played);
     public static final PCLAugmentCategorySub TagLoyal = new PCLAugmentCategorySub(PCLAugmentCategory.Played);

@@ -248,6 +248,7 @@ public class PCLCoreStrings extends PCLStrings
     public final String misc_rightClick = misc.TEXT[7];
     public final String misc_tempPowerPrefix = misc.TEXT[8];
     public final String misc_requirement = misc.TEXT[9];
+    public final String misc_edit = misc.TEXT[10];
 
     // Options
     public final String options_cropCardImages = options.TEXT[0];

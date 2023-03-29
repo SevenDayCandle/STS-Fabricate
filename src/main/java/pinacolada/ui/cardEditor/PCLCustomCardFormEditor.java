@@ -89,8 +89,8 @@ public class PCLCustomCardFormEditor extends EUIBase
     public void refresh()
     {
         formValues.setItems(EUIUtils.range(0, screen.tempBuilders.size() - 1)).setSelection(screen.currentBuilder, false);
-        remove.setInteractable(screen.tempBuilders.size() > 1);
-        add.setInteractable(screen.tempBuilders.size() < MAX_FORMS);
+        remove.setInteractable(screen.tempBuilders.size() > 1).setActive(!screen.fromInGame);
+        add.setInteractable(screen.tempBuilders.size() < MAX_FORMS).setActive(!screen.fromInGame);
     }
 
     @Override

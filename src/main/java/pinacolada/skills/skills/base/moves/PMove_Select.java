@@ -4,19 +4,20 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIRM;
+import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.FuncT5;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.actions.piles.SelectFromPile;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
-import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardGeneric;
+import pinacolada.skills.skills.PCallbackMove;
 import pinacolada.utilities.ListSelection;
 
-public abstract class PMove_Select<T extends PField_CardGeneric> extends PMove<T>
+public abstract class PMove_Select<T extends PField_CardGeneric> extends PCallbackMove<T>
 {
     public PMove_Select(PSkillData<T> data, PSkillSaveData content)
     {
@@ -42,13 +43,14 @@ public abstract class PMove_Select<T extends PField_CardGeneric> extends PMove<T
     }
 
     @Override
-    public void use(PCLUseInfo info)
+    public void use(PCLUseInfo info, ActionT1<PCLUseInfo> callback)
     {
         fields.getGenericPileAction(getAction(), info, extra)
                 .addCallback(cards -> {
+                    info.setData(cards);
+                    callback.invoke(info);
                     if (this.childEffect != null)
                     {
-                        info.setData(cards);
                         this.childEffect.use(info);
                     }
                 });

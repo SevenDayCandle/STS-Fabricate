@@ -11,7 +11,7 @@ public class ResistancePower extends PCLPower implements MultiplicativePower
 {
     public static final String POWER_ID = createFullID(ResistancePower.class);
     public static final float MULTIPLIER = 5;
-    public static final int MAX_AMOUNT = 10;
+    public static final int MAX_AMOUNT = 15;
 
     public ResistancePower(AbstractCreature owner, int amount)
     {

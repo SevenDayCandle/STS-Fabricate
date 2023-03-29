@@ -54,6 +54,11 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
         return this;
     }
 
+    public void fullReset() {
+        findForms();
+        super.fullReset();
+    }
+
     // Several in-game checks assume color = CURSE, so we need to have consistency
     protected void assignActualColor()
     {

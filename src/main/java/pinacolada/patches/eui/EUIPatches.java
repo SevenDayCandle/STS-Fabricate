@@ -1,4 +1,4 @@
-package pinacolada.patches;
+package pinacolada.patches.eui;
 
 import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePostfixPatch;
@@ -7,7 +7,6 @@ import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIGameUtils;
 import extendedui.ui.TextureCache;
-import extendedui.ui.cardFilter.CardPoolScreen;
 import extendedui.ui.cardFilter.filters.CardTypePanelFilterItem;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.resources.PCLEnum;
@@ -112,16 +111,6 @@ public class EUIPatches
                 return SpireReturn.Return(PGR.core.tooltips.summon.title);
             }
             return SpireReturn.Continue();
-        }
-    }
-
-    @SpirePatch(clz = CardPoolScreen.class, method = "removeCardFromPool")
-    public static class ExtendedUIPatches_RemoveCardFromPool
-    {
-        @SpirePostfixPatch
-        public static void postfix(CardPoolScreen __instance, AbstractCard c)
-        {
-            PGR.dungeon.ban(c.cardID);
         }
     }
 }

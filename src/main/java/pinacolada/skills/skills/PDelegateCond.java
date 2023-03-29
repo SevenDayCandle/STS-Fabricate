@@ -1,25 +1,25 @@
-package pinacolada.skills.skills.base.conditions;
+package pinacolada.skills.skills;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
-import pinacolada.skills.skills.PPassiveNonCheckCond;
 import pinacolada.utilities.GameUtilities;
 
-public abstract class PCond_Delegate extends PPassiveNonCheckCond<PField_CardCategory>
+import java.util.Collections;
+
+public abstract class PDelegateCond extends PPassiveNonCheckCond<PField_CardCategory>
 {
-    public PCond_Delegate(PSkillData<PField_CardCategory> data)
+    public PDelegateCond(PSkillData<PField_CardCategory> data)
     {
         super(data, PCLCardTarget.None, 0);
     }
 
-    public PCond_Delegate(PSkillData<PField_CardCategory> data, PSkillSaveData content)
+    public PDelegateCond(PSkillData<PField_CardCategory> data, PSkillSaveData content)
     {
         super(data, content);
     }
@@ -62,7 +62,7 @@ public abstract class PCond_Delegate extends PPassiveNonCheckCond<PField_CardCat
     {
         if (fields.getFullCardFilter().invoke(c))
         {
-            useFromTrigger(makeInfo(null).setData(GameUtilities.createCardGroup(EUIUtils.list(c))));
+            useFromTrigger(makeInfo(null).setData(GameUtilities.createCardGroup(Collections.singletonList(c))));
         }
     }
 
@@ -70,7 +70,7 @@ public abstract class PCond_Delegate extends PPassiveNonCheckCond<PField_CardCat
     {
         if (fields.getFullCardFilter().invoke(c))
         {
-            useFromTrigger(makeInfo(target).setData(EUIUtils.list(c)));
+            useFromTrigger(makeInfo(target).setData(Collections.singletonList(c)));
         }
     }
 

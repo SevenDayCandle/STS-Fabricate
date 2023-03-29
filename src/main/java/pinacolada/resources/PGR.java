@@ -13,8 +13,11 @@ import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUI;
+import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.ui.cardFilter.CountingPanel;
+import extendedui.ui.controls.EUIImage;
+import extendedui.ui.hitboxes.EUIHitbox;
 import pinacolada.annotations.*;
 import pinacolada.augments.AugmentStrings;
 import pinacolada.augments.PCLAugment;
@@ -42,6 +45,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
+import static pinacolada.utilities.GameUtilities.screenH;
+import static pinacolada.utilities.GameUtilities.screenW;
+
 // Copied and modified from STS-AnimatorMod
 public class PGR
 {
@@ -65,6 +71,7 @@ public class PGR
     public static PCLSingleCardPopup cardPopup;
     public static PCLDebugAugmentPanel debugAugments;
     public static PCLDebugCardPanel debugCards;
+    public static EUIImage blackScreen;
 
     public static void registerResource(PCLResources<?,?,?,?> resources)
     {
@@ -353,6 +360,9 @@ public class PGR
         PGR.augmentScreen = new PCLAugmentScreen();
         PGR.augmentPanel = new PCLAugmentPanelItem();
         PGR.ftueScreen = new PCLFtueScreen();
+        PGR.blackScreen = new EUIImage(EUIRM.images.fullSquare.texture(), new EUIHitbox(screenW(1), screenH(1)))
+                .setPosition(screenW(0.5f), screenH(0.5f))
+                .setColor(0, 0, 0, 0.9f);
         try
         {
             PGR.debugAugments = new PCLDebugAugmentPanel();

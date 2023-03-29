@@ -4,10 +4,14 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.screens.runHistory.RunHistoryScreen;
+import extendedui.EUIUtils;
 import extendedui.interfaces.markers.CountingPanelItem;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
+import pinacolada.utilities.GameUtilities;
+
+import java.util.ArrayList;
 
 public enum PCLAugmentCategory implements CountingPanelItem
 {
@@ -28,6 +32,13 @@ public enum PCLAugmentCategory implements CountingPanelItem
     public Texture getIcon()
     {
         return PCLCoreImages.CardUI.augment.texture();
+    }
+
+    @Override
+    public int getRank(AbstractCard c)
+    {
+        ArrayList<PCLAugment> augments = GameUtilities.getAugments(c);
+        return augments != null ? EUIUtils.count(augments, a -> a.data.category == this) : 0;
     }
 
     @Override
