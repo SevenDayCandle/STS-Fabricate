@@ -118,6 +118,12 @@ public class PCond_Cooldown extends PPassiveCond<PField_Empty> implements Cooldo
         setTemporaryAmount(value);
     }
 
+    public PCond_Cooldown setTemporaryAmount(int amount)
+    {
+        this.amount = amount;
+        return this;
+    }
+
     @Override
     public void activate(AbstractCard card, AbstractCreature m)
     {

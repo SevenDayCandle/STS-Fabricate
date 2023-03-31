@@ -1252,6 +1252,8 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     // Every step of the calculation is recorded for display in the damage formula widget
     public void refresh(AbstractMonster enemy) {
         PCLUseInfo info = new PCLUseInfo(this, getSourceCreature(), enemy);
+        doEffects(be -> be.refresh(info, true));
+
         boolean applyEnemyPowers = (enemy != null && !GameUtilities.isDeadOrEscaped(enemy));
         float tempBlock = baseBlock;
         float tempDamage = baseDamage;
@@ -1366,13 +1368,27 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
             }
         }
 
-        updateBlock(tempBlock);
-        updateDamage(tempDamage);
-        updateMagicNumber(modifyMagicNumber(info, baseMagicNumber));
-        updateHitCount(modifyHitCount(info, baseHitCount));
-        updateRightCount(modifyRightCount(info, baseRightCount));
+        // Do not use the regular update methods because those will refresh amounts from onAttack with the standard setAmount
+        block = Math.max(0, MathUtils.floor(tempBlock));
+        damage = Math.max(0, MathUtils.floor(tempDamage));
+        magicNumber = Math.max(0, MathUtils.floor(modifyMagicNumber(info, baseMagicNumber)));
+        hitCount = Math.max(1,MathUtils.floor(modifyHitCount(info, baseHitCount)));
+        rightCount = Math.max(1,MathUtils.floor(modifyRightCount(info, baseRightCount)));
 
-        doEffects(be -> be.refresh(info, true));
+        this.isBlockModified = (baseBlock != block);
+        this.isDamageModified = (baseDamage != damage);
+        this.isHitCountModified = (baseHitCount != hitCount);
+        this.isMagicNumberModified = (baseMagicNumber != magicNumber);
+        this.isRightCountModified = (baseRightCount != rightCount);
+
+        if (onAttackEffect != null)
+        {
+            onAttackEffect.setAmountFromCardForUpdateOnly();
+        }
+        if (onBlockEffect != null)
+        {
+            onBlockEffect.setAmountFromCardForUpdateOnly();
+        }
 
         addAttackResult(baseDamage, tempDamage);
         addDefendResult(baseBlock, tempBlock);
@@ -1640,6 +1656,10 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         if (timesUpgraded > 0) {
             setCost(cardData.getCost(form) + cardData.getCostUpgrade(form));
         }
+        else
+        {
+            setCost(cardData.getCost(form));
+        }
 
         this.affinities.initialize(cardData.affinities, form);
 
@@ -1781,6 +1801,10 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     public void updateHitCount(float amount) {
         hitCount = Math.max(1,MathUtils.floor(amount));
         this.isHitCountModified = (baseHitCount != hitCount);
+        if (onAttackEffect != null)
+        {
+            onAttackEffect.setAmountFromCard();
+        }
     }
 
     public void updateMagicNumber(float amount) {
@@ -1791,6 +1815,10 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     public void updateRightCount(float amount) {
         rightCount = Math.max(1,MathUtils.floor(amount));
         this.isRightCountModified = (baseRightCount != rightCount);
+        if (onBlockEffect != null)
+        {
+            onBlockEffect.setAmountFromCard();
+        }
     }
 
     @Override

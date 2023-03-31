@@ -11,7 +11,6 @@ import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.piles.SelectFromPile;
 import pinacolada.cards.base.PCLCardGroupHelper;
-import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.misc.PCLUseInfo;
@@ -52,8 +51,7 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory>
 
     protected PCLAction<ArrayList<AbstractCard>> createPileAction(PCLUseInfo info)
     {
-        SelectFromPile action = getAction().invoke(getName(), info.target, baseAmount <= 0 ? Integer.MAX_VALUE : amount, fields.origin.toSelection(), fields.getCardGroup(info))
-                .setOptions((baseAmount <= 0 ? PCLCardSelection.Random : fields.origin).toSelection(), true);
+        SelectFromPile action = fields.createAction(getAction(), info, extra).setAnyNumber(true);
         if (isForced())
         {
             action = action.setFilter(c -> fields.getFullCardFilter().invoke(c));
@@ -67,6 +65,12 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory>
         return !fields.groupTypes.isEmpty() ?
                 TEXT.act_genericFrom(getActionTitle(), getAmountRawOrAllString(), cardString, fields.getGroupString())
                 : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), cardString);
+    }
+
+    @Override
+    public String getAmountRawOrAllString()
+    {
+        return baseAmount <= 0 ? TEXT.subjects_all : extra > 0 ? TEXT.subjects_xOfY(getExtraRawString(), getAmountRawString()) : getAmountRawString();
     }
 
     @Override

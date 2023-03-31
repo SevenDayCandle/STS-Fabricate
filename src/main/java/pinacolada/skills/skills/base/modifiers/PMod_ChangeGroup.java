@@ -83,6 +83,7 @@ public abstract class PMod_ChangeGroup extends PActiveMod<PField_CardGeneric>
 
     public abstract boolean meetsCondition(PCLUseInfo info);
 
+    // TODO refactor
     protected void useImpl(PCLUseInfo info, ActionT0 callback)
     {
         if (meetsCondition(info))

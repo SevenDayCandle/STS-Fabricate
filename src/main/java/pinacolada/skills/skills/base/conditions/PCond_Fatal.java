@@ -52,31 +52,6 @@ public class PCond_Fatal extends PActiveCond<PField_Not> implements OnMonsterDea
         useFromTrigger(makeInfo(monster));
     }
 
-    @Override
-    public void use(PCLUseInfo info)
-    {
-        if (childEffect != null)
-        {
-            useImpl(info, () -> childEffect.use(info), () -> {});
-        }
-    }
-
-    public void use(PCLUseInfo info, int index)
-    {
-        if (childEffect != null)
-        {
-            useImpl(info, () -> childEffect.use(info, index), () -> {});
-        }
-    }
-
-    public void use(PCLUseInfo info, boolean isUsing)
-    {
-        if (isUsing && childEffect != null)
-        {
-            useImpl(info, () -> childEffect.use(info), () -> {});
-        }
-    }
-
     protected PCLAction<?> useImpl(PCLUseInfo info, ActionT0 onComplete, ActionT0 onFail)
     {
         List<AbstractCreature> targetList = getTargetList(info);

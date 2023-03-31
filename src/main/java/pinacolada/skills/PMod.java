@@ -413,29 +413,37 @@ public abstract class PMod<T extends PField> extends PSkill<T>
     @Override
     public void use(PCLUseInfo info)
     {
-        if (this.childEffect != null)
-        {
-            updateChildAmount(info);
-            this.childEffect.use(info);
-        }
+        getActions().callback(() -> {
+            if (this.childEffect != null)
+            {
+                updateChildAmount(info);
+                this.childEffect.use(info);
+            }
+        });
     }
 
+    @Override
     public void use(PCLUseInfo info, int index)
     {
-        if (this.childEffect != null)
-        {
-            updateChildAmount(info);
-            this.childEffect.use(info, index);
-        }
+        getActions().callback(() -> {
+            if (this.childEffect != null)
+            {
+                updateChildAmount(info);
+                this.childEffect.use(info, index);
+            }
+        });
     }
 
+    @Override
     public void use(PCLUseInfo info, boolean isUsing)
     {
-        if (this.childEffect != null)
-        {
-            updateChildAmount(info);
-            this.childEffect.use(info, isUsing);
-        }
+        getActions().callback(() -> {
+            if (this.childEffect != null)
+            {
+                updateChildAmount(info);
+                this.childEffect.use(info, isUsing);
+            }
+        });
     }
 
     public final int updateAmount(PSkill<?> be, PCLUseInfo info)

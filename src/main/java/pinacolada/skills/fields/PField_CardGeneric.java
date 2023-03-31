@@ -162,7 +162,7 @@ public class PField_CardGeneric extends PField
 
     /** Generates a generic SelectFromPile action on the groups specified by this effect.
      * If the skill's BASE amount is 0 or less, we will go for ALL cards in hand (skills that had their amounts set to 0 by mods still act on 0 cards) */
-    protected SelectFromPile createAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> action, PCLUseInfo info, int subchoices)
+    public SelectFromPile createAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> action, PCLUseInfo info, int subchoices)
     {
         CardGroup[] g = getCardGroup(info);
         int choiceSize = skill.useParent && g.length > 0 ? g[0].size() : skill.baseAmount <= 0 ? Integer.MAX_VALUE : skill.amount;
@@ -182,15 +182,20 @@ public class PField_CardGeneric extends PField
         return action.invoke(skill.getName(), skill.target.getTarget(info.source, info.target), choiceSize, origin.toSelection(), g);
     }
 
+    public SelectFromPile createFilteredAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> action, PCLUseInfo info, int subchoices)
+    {
+        return createAction(action, info, subchoices);
+    }
+
     public CardFilterAction getGenericPileAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> action, PCLUseInfo info, int subchoices)
     {
         if (!skill.useParent && groupTypes.isEmpty())
         {
-            return PCLActions.last.add(createAction(action, info, subchoices));
+            return PCLActions.last.add(createFilteredAction(action, info, subchoices));
         }
         else
         {
-            return skill.getActions().add(createAction(action, info, subchoices));
+            return skill.getActions().add(createFilteredAction(action, info, subchoices));
         }
     }
 

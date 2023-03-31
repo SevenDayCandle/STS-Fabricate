@@ -26,6 +26,7 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Attack;
 import pinacolada.skills.skills.PCardPrimary;
+import pinacolada.skills.skills.base.traits.PTrait_HitCount;
 
 @VisibleSkill
 public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack>
@@ -108,7 +109,9 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack>
     public String getSubText()
     {
         int count = source != null ? getExtraFromCard() : 1;
-        String amountString = count > 1 ? getAmountRawString() + "x" + getExtraRawString() : getAmountRawString();
+        // We can omit the hit count if there is only one hit and the hit count is never modified
+        // TODO dynamically check if a child effect overrides modifyHitCount
+        String amountString = count > 1 && hasChildType(PTrait_HitCount.class) ? getAmountRawString() + "x" + getExtraRawString() : getAmountRawString();
 
         String targetShortString = target.getShortString();
 

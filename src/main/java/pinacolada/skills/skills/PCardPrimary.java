@@ -53,6 +53,16 @@ public abstract class PCardPrimary<T extends PField> extends PPrimary<T>
         }
     }
 
+    // Only set the amount for this effect and not its children. Used in refresh to avoid refreshing chained children twice
+    public PCardPrimary<T> setAmountFromCardForUpdateOnly()
+    {
+        this.amount = getAmountFromCard();
+        this.baseAmount = getAmountBaseFromCard();
+        this.extra = getExtraFromCard();
+        this.baseExtra = getExtraBaseFromCard();
+        return this;
+    }
+
     public abstract PCardPrimary<T> setProvider(PointerProvider card);
     protected abstract void useImpl(PCLUseInfo info);
 }

@@ -10,7 +10,6 @@ import pinacolada.skills.fields.PField_Empty;
 @VisibleSkill
 public class PTrait_Damage extends PTrait<PField_Empty>
 {
-
     public static final PSkillData<PField_Empty> DATA = register(PTrait_Damage.class, PField_Empty.class);
 
     public PTrait_Damage()

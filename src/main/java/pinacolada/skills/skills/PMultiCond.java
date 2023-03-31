@@ -134,6 +134,12 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
     }
 
     @Override
+    public boolean hasChildType(Class<? extends PSkill> childType)
+    {
+        return super.hasChildType(childType) || EUIUtils.any(effects, child -> childType.isInstance(child) || (child != null && child.hasChildType(childType)));
+    }
+
+    @Override
     public boolean isBlank() {return effects.size() == 0 && !(childEffect != null && !childEffect.isBlank());}
 
     @Override
@@ -353,6 +359,26 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         this.effects.clear();
         this.effects.addAll(effects);
         setParentsForChildren();
+        return this;
+    }
+
+    @Override
+    public PMultiCond setTemporaryAmount(int amount)
+    {
+        if (childEffect != null)
+        {
+            childEffect.setTemporaryAmount(amount);
+        }
+        return this;
+    }
+
+    @Override
+    public PMultiCond setTemporaryExtra(int extra)
+    {
+        if (childEffect != null)
+        {
+            childEffect.setTemporaryExtra(extra);
+        }
         return this;
     }
 

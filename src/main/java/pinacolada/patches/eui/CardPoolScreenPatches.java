@@ -101,6 +101,7 @@ public class CardPoolScreenPatches
                         if (c instanceof EditorCard)
                         {
                             ((EditorCard) c).fullReset();
+                            ((EditorCard) pool.cardGrid.getUpgrade(c)).fullReset();
                         }
                         for (AbstractCard ca : GameUtilities.getAllCopies(c.cardID))
                         {

@@ -178,6 +178,12 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     }
 
     @Override
+    public boolean hasChildType(Class<? extends PSkill> childType)
+    {
+        return super.hasChildType(childType) || EUIUtils.any(effects, child -> childType.isInstance(child) || (child != null && child.hasChildType(childType)));
+    }
+
+    @Override
     public boolean isBlank() {return effects.size() == 0 && !(childEffect != null && !childEffect.isBlank());}
 
     @Override

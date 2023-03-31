@@ -10,7 +10,6 @@ import pinacolada.skills.fields.PField_Empty;
 @VisibleSkill
 public class PTrait_HitCount extends PTrait<PField_Empty>
 {
-
     public static final PSkillData<PField_Empty> DATA = register(PTrait_HitCount.class, PField_Empty.class);
 
     public PTrait_HitCount()

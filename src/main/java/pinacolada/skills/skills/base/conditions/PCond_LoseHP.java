@@ -7,28 +7,29 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.subscribers.OnLoseHPSubscriber;
 import pinacolada.misc.PCLUseInfo;
+import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
 import pinacolada.skills.skills.PPassiveCond;
 
 @VisibleSkill
-public class PCond_TakeDamage extends PPassiveCond<PField_Empty> implements OnLoseHPSubscriber
+public class PCond_LoseHP extends PPassiveCond<PField_Empty> implements OnLoseHPSubscriber
 {
-    public static final PSkillData<PField_Empty> DATA = register(PCond_TakeDamage.class, PField_Empty.class)
+    public static final PSkillData<PField_Empty> DATA = register(PCond_LoseHP.class, PField_Empty.class)
             .selfTarget();
 
-    public PCond_TakeDamage(PSkillSaveData content)
+    public PCond_LoseHP(PSkillSaveData content)
     {
         super(DATA, content);
     }
 
-    public PCond_TakeDamage()
+    public PCond_LoseHP()
     {
         super(DATA, PCLCardTarget.None, 1);
     }
 
-    public PCond_TakeDamage(int amount)
+    public PCond_LoseHP(int amount)
     {
         super(DATA, PCLCardTarget.None, amount);
     }
@@ -36,7 +37,7 @@ public class PCond_TakeDamage extends PPassiveCond<PField_Empty> implements OnLo
     @Override
     public String getSampleText()
     {
-        return TEXT.act_takeDamage(TEXT.subjects_x);
+        return TEXT.act_loseAmount(TEXT.subjects_x, PGR.core.tooltips.hp.title);
     }
 
     @Override
@@ -44,15 +45,15 @@ public class PCond_TakeDamage extends PPassiveCond<PField_Empty> implements OnLo
     {
         if (isWhenClause())
         {
-            return getWheneverString(TEXT.cond_takeDamage(target.ordinal()));
+            return getWheneverString(TEXT.act_lose(PGR.core.tooltips.hp.title));
         }
-        return TEXT.act_takeDamage(getAmountRawString());
+        return TEXT.act_loseAmount(getAmountRawString(), PGR.core.tooltips.hp.title);
     }
 
     @Override
     public int onLoseHP(AbstractPlayer p, DamageInfo info, int amount)
     {
-        if ((info.type == DamageInfo.DamageType.NORMAL || info.type == DamageInfo.DamageType.THORNS) && childEffect != null)
+        if (childEffect != null)
         {
             useFromTrigger(makeInfo(info.owner));
         }
@@ -62,13 +63,13 @@ public class PCond_TakeDamage extends PPassiveCond<PField_Empty> implements OnLo
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
     {
-        if (info.source.currentHealth + info.source.currentBlock <= amount)
+        if (info.source.currentHealth <= amount)
         {
             return false;
         }
         if (isUsing)
         {
-            getActions().takeDamage(amount, AbstractGameAction.AttackEffect.NONE);
+            getActions().loseHP(amount, AbstractGameAction.AttackEffect.NONE);
         }
         return true;
     }
