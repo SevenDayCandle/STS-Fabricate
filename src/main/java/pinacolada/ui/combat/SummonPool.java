@@ -7,7 +7,6 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
-import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUI;
 import extendedui.EUIUtils;
 import extendedui.ui.EUIBase;
@@ -177,10 +176,7 @@ public class SummonPool extends EUIBase
     {
         for (PCLCardAlly ally : summons)
         {
-            for (AbstractPower p : ally.powers)
-            {
-                p.atEndOfRound();
-            }
+            ally.atEndOfRound();
         }
     }
 

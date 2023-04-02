@@ -111,7 +111,7 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack>
         int count = source != null ? getExtraFromCard() : 1;
         // We can omit the hit count if there is only one hit and the hit count is never modified
         // TODO dynamically check if a child effect overrides modifyHitCount
-        String amountString = count > 1 && hasChildType(PTrait_HitCount.class) ? getAmountRawString() + "x" + getExtraRawString() : getAmountRawString();
+        String amountString = (count > 1 || hasChildType(PTrait_HitCount.class)) ? getAmountRawString() + "x" + getExtraRawString() : getAmountRawString();
 
         String targetShortString = target.getShortString();
 

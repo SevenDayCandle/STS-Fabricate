@@ -58,7 +58,7 @@ import pinacolada.monsters.PCLCardAlly;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.powers.common.DelayedDamagePower;
-import pinacolada.powers.common.DrawLessPower;
+import pinacolada.powers.common.DrawMinusPower;
 import pinacolada.powers.common.EnergizedPower;
 import pinacolada.skills.PSkill;
 import pinacolada.stances.PCLStanceHelper;
@@ -455,7 +455,7 @@ public final class PCLActions
 
     public ApplyOrReducePowerAction drawLessNextTurn(int amount)
     {
-        return applyPower(new DrawLessPower(player, amount));
+        return applyPower(new DrawMinusPower(player, amount));
     }
 
     public ApplyOrReducePowerAction drawNextTurn(int amount)

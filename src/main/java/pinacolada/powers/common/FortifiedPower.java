@@ -35,9 +35,9 @@ public class FortifiedPower extends PCLPower implements MultiplicativePower
     }
 
     @Override
-    public void atEndOfTurn(boolean isPlayer)
+    public void atEndOfRound()
     {
-        super.atEndOfTurn(isPlayer);
+        super.atEndOfRound();
 
         reducePower(1);
     }

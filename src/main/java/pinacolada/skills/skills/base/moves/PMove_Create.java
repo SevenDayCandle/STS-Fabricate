@@ -129,7 +129,10 @@ public class PMove_Create extends PCallbackMove<PField_CardID>
         }
         info.setData(created);
         callback.invoke(info);
-        super.use(info);
+        if (this.childEffect != null)
+        {
+            this.childEffect.use(info);
+        }
     }
 
     @Override

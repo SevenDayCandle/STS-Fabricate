@@ -36,7 +36,7 @@ public class PMod_CyclePerCard extends PMod_Do
 
     public PMod_CyclePerCard(int amount)
     {
-        super(DATA, PCLCardTarget.None, amount);
+        super(DATA, PCLCardTarget.None, amount, PCLCardGroupHelper.Hand);
     }
 
     @Override

@@ -243,7 +243,7 @@ public abstract class PMove<T extends PField> extends PSkill<T>
 
     public static PMove_Cycle cycleRandom(int amount)
     {
-        return (PMove_Cycle) new PMove_Cycle(amount).edit(f -> f.setRandom());
+        return (PMove_Cycle) new PMove_Cycle(amount).edit(PField_CardGeneric::setRandom);
     }
 
     public static PMove_DealDamage dealDamage(int amount)
@@ -621,14 +621,29 @@ public abstract class PMove<T extends PField> extends PSkill<T>
         return new PMove_Scry(amount);
     }
 
+    public static PMove_Discard selfDiscard()
+    {
+        return (PMove_Discard) new PMove_Discard().edit(f -> f.setForced(true));
+    }
+
     public static PMove_Exhaust selfExhaust()
     {
         return (PMove_Exhaust) new PMove_Exhaust().edit(f -> f.setForced(true));
     }
 
+    public static PMove_Fetch selfFetch()
+    {
+        return (PMove_Fetch) new PMove_Fetch().edit(f -> f.setForced(true));
+    }
+
     public static PMove_Purge selfPurge()
     {
         return (PMove_Purge) new PMove_Purge().edit(f -> f.setForced(true));
+    }
+
+    public static PMove_Reshuffle selfReshuffle()
+    {
+        return (PMove_Reshuffle) new PMove_Reshuffle().edit(f -> f.setForced(true));
     }
 
     public static PMove_Retain selfRetain()

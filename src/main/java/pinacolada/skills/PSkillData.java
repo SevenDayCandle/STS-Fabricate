@@ -8,10 +8,7 @@ import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.skills.fields.PField;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import static pinacolada.skills.PSkill.DEFAULT_MAX;
 
@@ -108,6 +105,12 @@ public class PSkillData<T extends PField>
     {
         this.minExtra = min;
         this.maxExtra = Math.max(min, max);
+        return this;
+    }
+
+    public PSkillData<T> setGroups(Collection<PCLCardGroupHelper> groups)
+    {
+        this.groups.addAll(groups);
         return this;
     }
 

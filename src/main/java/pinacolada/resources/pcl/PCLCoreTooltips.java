@@ -38,6 +38,8 @@ public class PCLCoreTooltips extends PCLTooltips
     public static final String ICON_NEXT_TURN_BLOCK = "defenseNext";
     public static final String ICON_NEXT_TURN_DRAW = "carddraw";
     public static final String ICON_NEXT_TURN_DRAW_LESS = "lessdraw";
+    public static final String ICON_NO_BLOCK = "noBlock";
+    public static final String ICON_NO_DRAW = "noDraw";
     public static final String ICON_NOXIOUSFUMES = "fumes";
     public static final String ICON_PLATEDARMOR = "platedarmor";
     public static final String ICON_POISON = "poison";
@@ -157,7 +159,9 @@ public class PCLCoreTooltips extends PCLTooltips
     public EUITooltip neutralStance = EUITooltip.findByID("Neutral Stance");
     public EUITooltip nextTurnBlock = EUITooltip.findByID("Next Turn Block");
     public EUITooltip nextTurnDraw = EUITooltip.findByID("Draw Plus");
-    public EUITooltip nextTurnDrawLess = EUITooltip.findByID("Draw Minus");
+    public EUITooltip nextTurnDrawMinus = EUITooltip.findByID("Draw Minus");
+    public EUITooltip noBlock = EUITooltip.findByID("No Block");
+    public EUITooltip noDraw = EUITooltip.findByID("No Draw");
     public EUITooltip noxiousFumes = EUITooltip.findByID("Noxious Fumes");
     public EUITooltip orbSlot = EUITooltip.findByID("Orb Slot");
     public EUITooltip piercing = EUITooltip.findByID("Piercing Damage");
@@ -293,7 +297,9 @@ public class PCLCoreTooltips extends PCLTooltips
         metallicize.setIconFromPowerRegion(ICON_METALLICIZE);
         nextTurnBlock.setIconFromPowerRegion(ICON_NEXT_TURN_BLOCK);
         nextTurnDraw.setIconFromPowerRegion(ICON_NEXT_TURN_DRAW);
-        nextTurnDrawLess.setIconFromPowerRegion(ICON_NEXT_TURN_DRAW_LESS);
+        nextTurnDrawMinus.setIconFromPowerRegion(ICON_NEXT_TURN_DRAW_LESS);
+        noBlock.setIconFromPowerRegion(ICON_NO_BLOCK);
+        noDraw.setIconFromPowerRegion(ICON_NO_DRAW);
         noxiousFumes.setIconFromPowerRegion(ICON_NOXIOUSFUMES);
         platedArmor.setIconFromPowerRegion(ICON_PLATEDARMOR);
         poison.setIconFromPowerRegion(ICON_POISON);

@@ -145,16 +145,13 @@ public class PCLCoreStrings extends PCLStrings
     public final String cetut_required2 = cetut.TEXT[35];
 
     // Card Pile
-    public final String cpile_discardPile = cardPile.TEXT[0];
-    public final String cpile_drawPile = cardPile.TEXT[1];
-    public final String cpile_exhaustPile = cardPile.TEXT[2];
-    public final String cpile_hand = cardPile.TEXT[3];
-    public final String cpile_masterDeck = cardPile.TEXT[4];
-    public final String cpile_purgedPile = cardPile.TEXT[5];
-    public final String cpile_manual = cardPile.TEXT[6];
-    public final String cpile_top = cardPile.TEXT[7];
-    public final String cpile_bottom = cardPile.TEXT[8];
-    public final String cpile_random = cardPile.TEXT[9];
+    public final String cpile_hand = cardPile.TEXT[0];
+    public final String cpile_deck = cardPile.TEXT[1];
+    public final String cpile_purgedPile = cardPile.TEXT[2];
+    public final String cpile_manual = cardPile.TEXT[3];
+    public final String cpile_top = cardPile.TEXT[4];
+    public final String cpile_bottom = cardPile.TEXT[5];
+    public final String cpile_random = cardPile.TEXT[6];
 
     // Card Type
     public final String ctype_none = cardtype.TEXT[0];

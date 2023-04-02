@@ -22,11 +22,11 @@ public class PMove_Cycle extends PMove_Select<PField_CardCategory>
     public static final PSkillData<PField_CardCategory> DATA = register(PMove_Cycle.class, PField_CardCategory.class)
             .selfTarget()
             .setExtra(0, DEFAULT_MAX)
-            .setGroups(PCLCardGroupHelper.DrawPile);
+            .setGroups(PCLCardGroupHelper.Hand);
 
     public PMove_Cycle()
     {
-        this(1);
+        this(1, PCLCardGroupHelper.Hand);
     }
 
     public PMove_Cycle(PSkillSaveData content)

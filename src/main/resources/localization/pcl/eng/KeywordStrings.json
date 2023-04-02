@@ -274,6 +274,14 @@
 								"DESCRIPTION": "Gain [Block] at the start of next turn.",
 								"NAME": "Next Turn Block"
 				},
+				"No Block":	{
+								"DESCRIPTION": "Nullify all [Block] gained from cards this turn.",
+								"NAME": "No Block"
+				},
+				"No Draw":	{
+								"DESCRIPTION": "You cannot draw cards this turn.",
+								"NAME": "No Draw"
+				},
 				"Normal Damage":	{
 								"DESCRIPTION": "Affected by [Thorns].",
 								"NAME": "Normal Damage"

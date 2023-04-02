@@ -7,11 +7,11 @@ import com.megacrit.cardcrawl.powers.DrawReductionPower;
 import pinacolada.powers.PCLPower;
 import pinacolada.resources.pcl.PCLCoreTooltips;
 
-public class DrawLessPower extends PCLPower
+public class DrawMinusPower extends PCLPower
 {
-    public static final String POWER_ID = createFullID(DrawLessPower.class);
+    public static final String POWER_ID = createFullID(DrawMinusPower.class);
 
-    public DrawLessPower(AbstractCreature owner, int amount)
+    public DrawMinusPower(AbstractCreature owner, int amount)
     {
         super(owner, POWER_ID);
         this.powerStrings = CardCrawlGame.languagePack.getPowerStrings(DrawReductionPower.POWER_ID);

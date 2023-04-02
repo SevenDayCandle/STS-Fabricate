@@ -65,7 +65,6 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
     public AbstractCreature source;
     public EUITooltip mainTip;
     public PCLClickableUse triggerCondition;
-    public boolean canBeZero = false;
     public boolean clickable;
     public boolean enabled = true;
     public boolean hideAmount = false;
@@ -208,9 +207,9 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
 
     protected ColoredString getPrimaryAmount(Color c)
     {
-        if (canBeZero || amount != 0)
+        if (amount != 0)
         {
-            if (isTurnBased || amount == 0)
+            if (isTurnBased)
             {
                 return new ColoredString(amount, Color.WHITE, c.a);
             }
@@ -521,6 +520,10 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
     {
         final int previous = amount;
         super.reducePower(reduceAmount);
+        if ((amount == 0) || (!canGoNegative && amount < 0))
+        {
+            removePower();
+        }
 
         onAmountChanged(previous, -Math.max(0, reduceAmount));
     }

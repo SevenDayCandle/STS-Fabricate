@@ -14,8 +14,8 @@ import pinacolada.skills.skills.PPassiveCond;
 @VisibleSkill
 public class PCond_PileHas extends PPassiveCond<PField_CardCategory>
 {
-
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_PileHas.class, PField_CardCategory.class)
+            .setGroups(PCLCardGroupHelper.getAll())
             .selfTarget();
 
     public PCond_PileHas()

@@ -59,6 +59,16 @@ public abstract class PMod<T extends PField> extends PSkill<T>
         return new PMod_BonusOnHasExhausted(amount, count);
     }
 
+    public static PMod_BonusOnHasPlayed bonusOnPlayed(int amount)
+    {
+        return new PMod_BonusOnHasPlayed(amount);
+    }
+
+    public static PMod_BonusOnHasPlayed bonusOnPlayed(int amount, int count)
+    {
+        return new PMod_BonusOnHasPlayed(amount, count);
+    }
+
     public static PMod_BonusOnStarter bonusOnStarter(int amount)
     {
         return new PMod_BonusOnStarter(amount);
@@ -202,6 +212,16 @@ public abstract class PMod<T extends PField> extends PSkill<T>
     public static PMod_PerCreatureBlock perCreatureBlock(PCLCardTarget target, int amount)
     {
         return new PMod_PerCreatureBlock(target, amount);
+    }
+
+    public static PMod_PerCreatureHP perCreatureHP(int amount)
+    {
+        return new PMod_PerCreatureHP(amount);
+    }
+
+    public static PMod_PerCreatureHP perCreatureHP(PCLCardTarget target, int amount)
+    {
+        return new PMod_PerCreatureHP(target, amount);
     }
 
     public static PMod_PerCreatureWith perCreatureWith(int amount, PCLPowerHelper... powers)

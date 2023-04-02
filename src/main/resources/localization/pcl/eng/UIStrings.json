@@ -165,11 +165,8 @@
 				},
 				"pcl:CardPile": {
 								"TEXT": [
-												"discard pile",
-												"draw pile",
-												"Exhaust pile",
 												"hand",
-												"master deck",
+												"deck",
 												"Purged pile",
 												"Manual",
 												"Top",

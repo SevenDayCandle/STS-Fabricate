@@ -139,7 +139,7 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
                 .setCanAutosize(true, true)
                 .setIsMultiSelect(true)
                 .setShouldPositionClearAtTop(true)
-                .setItems(PCLCardGroupHelper.getAll());
+                .setItems(PCLCardGroupHelper.getStandard());
         origins = new EUIDropdown<PCLCardSelection>(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, AUX_OFFSET, 0)
                 , PCLCardSelection::getTitle)
                 .setLabelFunctionForOption(PCLCardSelection::getTitle, false)

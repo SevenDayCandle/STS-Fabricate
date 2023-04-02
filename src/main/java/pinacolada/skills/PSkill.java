@@ -645,7 +645,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
 
     public final List<PCLCardGroupHelper> getEligiblePiles()
     {
-        return data != null && !data.groups.isEmpty() ? data.groups : PCLCardGroupHelper.getAll();
+        return data != null && !data.groups.isEmpty() ? data.groups : PCLCardGroupHelper.getStandard();
     }
 
     public final List<PCLCardTarget> getEligibleTargets()

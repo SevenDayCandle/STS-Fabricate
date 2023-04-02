@@ -70,7 +70,6 @@ import pinacolada.monsters.PCLCardAlly;
 import pinacolada.monsters.PCLIntentInfo;
 import pinacolada.orbs.PCLOrb;
 import pinacolada.orbs.PCLOrbHelper;
-import pinacolada.powers.PCLPower;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
@@ -116,10 +115,7 @@ public class GameUtilities
         {
             if ((stacks != -1 || power.canGoNegative) && ((existingPower.amount += stacks) == 0))
             {
-                if (!(existingPower instanceof PCLPower) || !((PCLPower) existingPower).canBeZero)
-                {
-                    target.powers.remove(existingPower);
-                }
+                target.powers.remove(existingPower);
             }
 
             return existingPower;
@@ -563,10 +559,7 @@ public class GameUtilities
     public static ArrayList<AbstractCard> getAnyColorCardFilteredCards(AbstractCard.CardRarity rarity, AbstractCard.CardType type, boolean allowHealing)
     {
         refreshCardLists();
-        if (fullCardPool.size() == 0)
-        {
-            fullCardPool.addAll(EUIGameUtils.getEveryColorCard());
-        }
+        setupFullCardPool();
 
         ArrayList<AbstractCard> available = new ArrayList<>();
         for (AbstractCard c : fullCardPool)
@@ -1258,18 +1251,26 @@ public class GameUtilities
         return power != null ? power.amount : 0;
     }
 
+    public static AbstractCard getRandomAnyColorCard(FuncT1<Boolean, AbstractCard> filter)
+    {
+        refreshCardLists();
+        setupFullCardPool();
+        return getRandomElement(EUIUtils.filter(fullCardPool, filter::invoke));
+    }
+
+    public static AbstractCard getRandomAnyColorCard()
+    {
+        refreshCardLists();
+        setupFullCardPool();
+        return fullCardPool.retrieve(getRNG());
+    }
+
     // Create a random card that matches the given parameters. Note that these random card methods poll from the in-combat card pool, so healing cards are already filtered out
-    public static AbstractCard getRandomCard(List<AbstractCard.CardRarity> rarity, List<AbstractCard.CardType> type, List<PCLAffinity> affinity)
+    public static AbstractCard getRandomCard(FuncT1<Boolean, AbstractCard> filter)
     {
         refreshCardLists();
         setupCharacterCardPool();
-        return getRandomElement(EUIUtils.filter(characterCardPool,
-                        c -> ((rarity.isEmpty() || EUIUtils.any(rarity, r -> c.rarity == r)) &&
-                                (type.isEmpty() || EUIUtils.any(type, t -> c.type == t)) &&
-                                (affinity.isEmpty() || EUIUtils.any(affinity, a -> GameUtilities.hasAffinity(c, a, true)))
-                        )
-                )
-        );
+        return getRandomElement(EUIUtils.filter(characterCardPool, filter::invoke));
     }
 
     public static AbstractCard getRandomCard()
@@ -2442,6 +2443,14 @@ public class GameUtilities
                     characterCardPool.add(c);
                 }
             }
+        }
+    }
+
+    protected static void setupFullCardPool()
+    {
+        if (fullCardPool.size() == 0)
+        {
+            fullCardPool.addAll(EUIGameUtils.getEveryColorCard());
         }
     }
 

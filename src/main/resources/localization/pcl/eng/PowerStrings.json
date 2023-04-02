@@ -30,10 +30,10 @@
 								"DESCRIPTIONS": ["Take #b{0} damage at the end of your turn.{1}", " If this effect would kill you, survive with #b1 HP."],
 								"NAME": "Delayed Damage"
 				},
-				"pcl:DrawLessPower":
+				"pcl:DrawMinusPower":
 				{
 								"DESCRIPTIONS": ["Draw {0} fewer card(s) next turn."],
-								"NAME": "Draw Less"
+								"NAME": "Draw Minus"
 				},
 				"pcl:EnergizedPower":
 				{

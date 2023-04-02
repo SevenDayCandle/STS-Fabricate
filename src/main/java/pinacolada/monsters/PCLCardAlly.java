@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.evacipated.cardcrawl.mod.stslib.patches.core.AbstractCreature.TempHPField;
-import com.megacrit.cardcrawl.actions.animations.AnimateFastAttackAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
@@ -24,6 +23,7 @@ import extendedui.ui.EUIBase;
 import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.actions.PCLActions;
+import pinacolada.actions.special.PCLCreatureAttackAnimationAction;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.effects.PCLEffects;
@@ -32,10 +32,10 @@ import pinacolada.interfaces.markers.SummonOnlyMove;
 import pinacolada.misc.CombatManager;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.monsters.animations.PCLAllyAnimation;
-import pinacolada.monsters.animations.PCLAnimation;
 import pinacolada.monsters.animations.PCLSlotAnimation;
 import pinacolada.monsters.animations.pcl.PCLGeneralAllyAnimation;
 import pinacolada.powers.PSkillPower;
+import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.Skills;
@@ -76,6 +76,7 @@ public class PCLCardAlly extends PCLCreature
         this.maxHealth = Math.max(1, card.heal);
         this.currentHealth = MathUtils.clamp(card.currentHealth, 1, this.maxHealth);
         this.priority = card.magicNumber;
+        this.hasTakenTurn = movesBeforePlayer();
         this.showHealthBar();
         this.healthBarUpdatedEvent();
         this.unhover();
@@ -100,10 +101,12 @@ public class PCLCardAlly extends PCLCreature
         {
             this.powers.removeIf(p -> p instanceof PSkillPower);
         }
+
         if (stun)
         {
             this.stunned = true;
         }
+
         for (PSkill<?> s : card.getFullEffects())
         {
             if (s instanceof SummonOnlyMove)
@@ -189,13 +192,7 @@ public class PCLCardAlly extends PCLCreature
         {
             refreshAction();
             final PCLUseInfo info = CombatManager.playerSystem.generateInfo(card, this, target);
-            if (animation instanceof PCLAnimation)
-            {
-                PCLActions.bottom.callback(() -> {
-                    ((PCLAnimation) animation).playActAnimation(hb.cX, hb.cY);
-                });
-            }
-            PCLActions.bottom.add(new AnimateFastAttackAction(this));
+            PCLActions.bottom.add(new PCLCreatureAttackAnimationAction(this));
             card.useEffectsWithoutPowers(info);
             CombatManager.playerSystem.onCardPlayed(card, info, true);
             PCLActions.delayed.callback(() -> CombatManager.removeDamagePowers(this));
@@ -372,15 +369,13 @@ public class PCLCardAlly extends PCLCreature
             {
                 startY = renderIntentIcon(sb, PGR.core.tooltips.block.icon, card.rightCount > 1 ? card.block + "x" + card.rightCount : Integer.toString(card.block), startY);
             }
-
-            TextureRegion icon = movesBeforePlayer() ? PGR.core.tooltips.priorityPlus.icon : PGR.core.tooltips.priorityMinus.icon;
-            PCLRenderHelpers.drawCentered(sb, Color.WHITE, icon, this.intentHb.cX - 40.0F * Settings.scale, startY, icon.getRegionWidth(), icon.getRegionHeight(), 0.9f, 0f);
         }
     }
 
     protected float renderIntentIcon(SpriteBatch sb, TextureRegion icon, String count, float startY)
     {
-        PCLRenderHelpers.drawCentered(sb, Color.WHITE, icon, this.intentHb.cX - 40.0F * Settings.scale, startY, icon.getRegionWidth(), icon.getRegionHeight(), 0.9f, 0f);
+        Color renderColor = hasTakenTurn && (!isHovered() || AbstractDungeon.player.hoveredCard == null || AbstractDungeon.player.hoveredCard.type != PCLEnum.CardType.SUMMON) ? TAKEN_TURN_COLOR : Color.WHITE;
+        PCLRenderHelpers.drawCentered(sb, renderColor, icon, this.intentHb.cX - 40.0F * Settings.scale, startY, icon.getRegionWidth(), icon.getRegionHeight(), 0.85f, 0f);
         FontHelper.renderFontLeftTopAligned(sb, FontHelper.topPanelInfoFont, count, this.intentHb.cX, startY, Settings.CREAM_COLOR);
         return startY + icon.getRegionHeight() + Settings.scale * 10f;
     }
@@ -409,6 +404,16 @@ public class PCLCardAlly extends PCLCreature
         {
             this.target = target;
             refreshAction();
+        }
+    }
+
+    @Override
+    public void atEndOfRound()
+    {
+        super.atEndOfRound();
+        for (AbstractPower p : powers)
+        {
+            p.atEndOfRound();
         }
     }
 

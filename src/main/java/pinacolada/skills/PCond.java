@@ -12,6 +12,7 @@ import pinacolada.misc.PCLUseInfo;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.skills.fields.PField;
+import pinacolada.skills.fields.PField_CardGeneric;
 import pinacolada.skills.skills.PMultiCond;
 import pinacolada.skills.skills.base.conditions.*;
 import pinacolada.skills.skills.base.primary.PTrigger_When;
@@ -97,22 +98,12 @@ public abstract class PCond<T extends PField> extends PSkill<T>
 
     public static PCond_CycleTo cycle(int amount)
     {
-        return new PCond_CycleTo(amount, PCLCardGroupHelper.Hand);
-    }
-
-    public static PCond_CycleTo cycle(int amount, PCLCardGroupHelper... h)
-    {
-        return new PCond_CycleTo(amount, h);
+        return new PCond_CycleTo(amount);
     }
 
     public static PCond_CycleTo cycleRandom(int amount)
     {
-        return cycleRandom(amount, PCLCardGroupHelper.Hand);
-    }
-
-    public static PCond_CycleTo cycleRandom(int amount, PCLCardGroupHelper... h)
-    {
-        return (PCond_CycleTo) new PCond_CycleTo(amount, h).edit(r -> r.setRandom());
+        return (PCond_CycleTo) new PCond_CycleTo(amount).edit(PField_CardGeneric::setRandom);
     }
 
     public static PCond_DiscardTo discard(int amount)
@@ -137,7 +128,7 @@ public abstract class PCond<T extends PField> extends PSkill<T>
 
     public static PCond_DiscardTo discardRandom(int amount, PCLCardGroupHelper... h)
     {
-        return (PCond_DiscardTo) new PCond_DiscardTo(amount, h).edit(r -> r.setRandom());
+        return (PCond_DiscardTo) new PCond_DiscardTo(amount, h).edit(PField_CardGeneric::setRandom);
     }
 
     public static PCond_DrawBranch drawBranch(int amount)

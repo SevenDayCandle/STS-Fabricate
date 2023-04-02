@@ -10,6 +10,7 @@ import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.vfx.BobEffect;
 import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.ui.tooltips.EUITooltip;
+import extendedui.utilities.EUIColors;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.resources.PCLResources;
@@ -24,6 +25,7 @@ import java.util.Map;
 public abstract class PCLCreature extends CustomMonster implements PointerProvider, TooltipProvider
 {
     private static final Map<String, PCLCreatureData> staticData = new HashMap<>();
+    protected static final Color TAKEN_TURN_COLOR = EUIColors.white(0.61f);
     public static final int PRIORITY_START_FIRST = 2;
     public static final int PRIORITY_START_LAST = 1;
     public static final int PRIORITY_END_FIRST = 0;
@@ -32,6 +34,7 @@ public abstract class PCLCreature extends CustomMonster implements PointerProvid
     public final PCLCreatureData creatureData;
     public PCLAffinity affinity = PCLAffinity.General;
     public boolean stunned;
+    public boolean hasTakenTurn;
     public int priority;
 
     public static PCLCreatureData getStaticData(String id)
@@ -142,6 +145,17 @@ public abstract class PCLCreature extends CustomMonster implements PointerProvid
     public void update()
     {
         super.update();
+    }
+
+    public void doActionAnimation()
+    {
+        useFastAttackAnimation();
+        hasTakenTurn = true;
+    }
+
+    public void atEndOfRound()
+    {
+        hasTakenTurn = false;
     }
 
     public void setAnimation(AbstractAnimation animation)

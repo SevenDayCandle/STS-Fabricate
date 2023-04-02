@@ -118,42 +118,19 @@ public class PCLCardText
     {
         if (card.type == PCLEnum.CardType.SUMMON)
         {
-            renderAttributeWithText(sb, getHPIcon(), card.getHPString(), "/" + card.heal, null, 0.9f, true);
-            renderAttribute(sb, getPriorityIcon(), null, 1f, false);
+            renderAttribute(sb, getHPIcon(), card.getHPString(), "/" + card.heal, 0.029f,0.85f, true);
+            renderAttribute(sb, getPriorityIcon(), card.getMagicNumberString(), null, 0.052f,0.55f, false);
         }
     }
 
-    protected void renderAttribute(SpriteBatch sb, TextureCache icon, String iconTag, float scaleMult, boolean leftAlign)
-    {
-        final float y = -AbstractCard.RAW_H * 0.04f;
-        final ColoredTexture panel = getPanelByRarity();
-
-        final float sign = leftAlign ? -1 : +1;
-        final float icon_x = sign * (AbstractCard.RAW_W * 0.35f);
-
-        if (panel != null)
-        {
-            PCLRenderHelpers.drawOnCardAuto(sb, card, panel.texture, new Vector2(sign * AbstractCard.RAW_W * 0.33f, y), 120f, 54f, panel.color, panel.color.a * card.transparency, 1, 0, leftAlign, false);
-        }
-
-        if (iconTag != null)
-        {
-            BitmapFont smallFont = PCLRenderHelpers.getSmallAttributeFont(card, scaleMult);
-            PCLRenderHelpers.writeOnCard(sb, card, smallFont, iconTag, icon_x, y - 12, Settings.CREAM_COLOR, true);
-            PCLRenderHelpers.resetFont(smallFont);
-        }
-
-        PCLRenderHelpers.drawOnCardAuto(sb, card, icon.texture(), icon_x, y, 54, 54);
-    }
-
-    protected void renderAttributeWithText(SpriteBatch sb, TextureCache icon, ColoredString text, String suffix, String iconTag, float scaleMult, boolean leftAlign)
+    protected void renderAttribute(SpriteBatch sb, TextureCache icon, ColoredString text, String suffix, float offsetMult, float scaleMult, boolean leftAlign)
     {
         final float suffix_scale = scaleMult * 0.7f;
         final float y = -AbstractCard.RAW_H * 0.04f;
         final ColoredTexture panel = getPanelByRarity();
 
         final float sign = leftAlign ? -1 : +1;
-        final float icon_x = sign * (AbstractCard.RAW_W * 0.45f);
+        final float icon_x = sign * (AbstractCard.RAW_W * 0.43f);
         BitmapFont largeFont = PCLRenderHelpers.getLargeAttributeFont(card, scaleMult);
         largeFont.getData().setScale(card.isPopup ? 0.5f : 1);
         layout.setText(largeFont, text.text);
@@ -168,7 +145,7 @@ public class PCLCardText
         }
 
         largeFont = PCLRenderHelpers.getLargeAttributeFont(card, scaleMult);
-        float text_x = sign * AbstractCard.RAW_W * ((suffix != null || text.text.length() > 2) ? (0.35f - sign * 0.029f) : 0.35f);
+        float text_x = sign * AbstractCard.RAW_W * (0.32f - sign * offsetMult);
 
         if (panel != null)
         {
@@ -182,13 +159,6 @@ public class PCLCardText
         {
             largeFont.getData().setScale(largeFont.getScaleX() * suffix_scale);
             PCLRenderHelpers.writeOnCard(sb, card, largeFont, suffix, text_x + (text_width * 0.81f) + (suffix_width * 0.55f * scaleMult), y, text.color, true);
-        }
-
-        if (iconTag != null)
-        {
-            BitmapFont smallFont = PCLRenderHelpers.getSmallAttributeFont(card, scaleMult);
-            PCLRenderHelpers.writeOnCard(sb, card, smallFont, iconTag, icon_x, y - 12, Settings.CREAM_COLOR, true);
-            PCLRenderHelpers.resetFont(smallFont);
         }
 
         PCLRenderHelpers.resetFont(largeFont);

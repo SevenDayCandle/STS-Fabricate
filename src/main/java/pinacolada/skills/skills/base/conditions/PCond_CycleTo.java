@@ -34,9 +34,9 @@ public class PCond_CycleTo extends PCond_DoTo
         super(DATA, content);
     }
 
-    public PCond_CycleTo(int amount, PCLCardGroupHelper... h)
+    public PCond_CycleTo(int amount)
     {
-        super(DATA, PCLCardTarget.None, amount, h);
+        super(DATA, PCLCardTarget.None, amount, PCLCardGroupHelper.Hand);
     }
 
     @Override

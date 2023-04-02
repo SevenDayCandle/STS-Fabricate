@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @JsonAdapter(PCLCardGroupHelper.PCLCardGroupHelperAdapter.class)
 public class PCLCardGroupHelper implements Serializable
@@ -28,6 +29,7 @@ public class PCLCardGroupHelper implements Serializable
     public static final PCLCardGroupHelper DrawPile = new PCLCardGroupHelper(CardGroup.CardGroupType.DRAW_PILE, InputSettingsScreen.TEXT[11].toLowerCase());
     public static final PCLCardGroupHelper ExhaustPile = new PCLCardGroupHelper(CardGroup.CardGroupType.EXHAUST_PILE, InputSettingsScreen.TEXT[13].toLowerCase());
     public static final PCLCardGroupHelper Hand = new PCLCardGroupHelper(CardGroup.CardGroupType.HAND, PGR.core.strings.cpile_hand);
+    public static final PCLCardGroupHelper MasterDeck = new PCLCardGroupHelper(CardGroup.CardGroupType.MASTER_DECK, PGR.core.strings.cpile_deck);
 
     public final CardGroup.CardGroupType pile;
     public final String name;
@@ -52,6 +54,11 @@ public class PCLCardGroupHelper implements Serializable
     public static List<PCLCardGroupHelper> getAll()
     {
         return ALL.values().stream().sorted((a, b) -> StringUtils.compare(a.name, b.name)).collect(Collectors.toList());
+    }
+
+    public static List<PCLCardGroupHelper> getStandard()
+    {
+        return Stream.of(DiscardPile, DrawPile, ExhaustPile, Hand).sorted((a, b) -> StringUtils.compare(a.name, b.name)).collect(Collectors.toList());
     }
 
     public final CardGroup getCardGroup()

@@ -135,7 +135,7 @@ public class TemporaryPower extends PCLPower
 
     protected boolean amountBelowThreshold(int powerAmount)
     {
-        return (powerAmount < 0 && !power.canGoNegative) || (powerAmount == 0 && (!(power instanceof PCLPower) || !((PCLPower) power).canBeZero));
+        return (powerAmount < 0 && !power.canGoNegative) || (powerAmount == 0);
     }
 
     public void stabilize(int turns)

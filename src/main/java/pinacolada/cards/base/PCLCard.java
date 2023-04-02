@@ -777,11 +777,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     }
 
     public ColoredString getMagicNumberString() {
-        if (isMagicNumberModified) {
-            return new ColoredString(magicNumber, magicNumber >= baseMagicNumber ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR);
-        }
-
-        return new ColoredString(baseMagicNumber, Settings.CREAM_COLOR);
+        return new ColoredString(magicNumber > 0 ? "+" + magicNumber : String.valueOf(magicNumber), Settings.CREAM_COLOR);
     }
 
     public int getMaxForms() {

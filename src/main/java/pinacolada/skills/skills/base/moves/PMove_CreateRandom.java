@@ -58,7 +58,7 @@ public class PMove_CreateRandom extends PCallbackMove<PField_CardCategory>
         final int limit = Math.max(extra, amount);
         while (choice.size() < limit)
         {
-            AbstractCard c = GameUtilities.getRandomCard(fields.rarities, fields.types, fields.affinities);
+            AbstractCard c = !fields.colors.isEmpty() ? GameUtilities.getRandomAnyColorCard(fields.getFullCardFilter()) : GameUtilities.getRandomCard(fields.getFullCardFilter());
             if (c == null)
             {
                 break;
@@ -80,7 +80,7 @@ public class PMove_CreateRandom extends PCallbackMove<PField_CardCategory>
                     callback.invoke(info);
                     if (this.childEffect != null)
                     {
-                        super.use(info);
+                        this.childEffect.use(info);
                     }
                 });
     }
