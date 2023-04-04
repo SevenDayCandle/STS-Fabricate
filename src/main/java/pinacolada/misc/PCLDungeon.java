@@ -4,7 +4,6 @@ import basemod.BaseMod;
 import basemod.abstracts.CustomSavable;
 import basemod.interfaces.OnStartBattleSubscriber;
 import basemod.interfaces.PreStartGameSubscriber;
-import basemod.interfaces.StartActSubscriber;
 import basemod.interfaces.StartGameSubscriber;
 import com.megacrit.cardcrawl.blights.AbstractBlight;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -19,10 +18,10 @@ import com.megacrit.cardcrawl.potions.PotionSlot;
 import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
-import com.megacrit.cardcrawl.rooms.MonsterRoomBoss;
 import com.megacrit.cardcrawl.vfx.UpgradeShineEffect;
 import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
+import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentCategory;
 import pinacolada.blights.common.AbstractGlyphBlight;
@@ -33,7 +32,6 @@ import pinacolada.effects.PCLEffects;
 import pinacolada.effects.vfx.SmokeEffect;
 import pinacolada.interfaces.listeners.OnAddToDeckListener;
 import pinacolada.interfaces.listeners.OnAddingToCardRewardListener;
-import pinacolada.interfaces.listeners.OnCardPoolChangedListener;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.FakeLoadout;
@@ -50,8 +48,9 @@ import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.player;
 
 // Copied and modified from STS-AnimatorMod
 // TODO Rework
-public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscriber, StartGameSubscriber, StartActSubscriber, OnStartBattleSubscriber
+public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscriber, StartGameSubscriber, OnStartBattleSubscriber
 {
+    public static final AbstractCard.CardRarity[] poolOrdering = AbstractCard.CardRarity.values();
     private transient boolean panelAdded;
     private transient int totalAugmentCount = 0;
     protected ArrayList<Integer> loadoutIDs = new ArrayList<>();
@@ -211,7 +210,60 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         return rng;
     }
 
-    public AbstractCard getRandomRewardCard(ArrayList<AbstractCard> ignore, boolean includeRares, boolean ignoreCurrentRoom)
+    public AbstractCard getRandomCard(AbstractCard.CardRarity rarity, AbstractCard.CardType type)
+    {
+        return getRandomCard(rarity, type, true, false);
+    }
+
+    public AbstractCard getRandomCard(AbstractCard.CardRarity rarity, AbstractCard.CardType type, boolean useRng, boolean allowOtherRarities)
+    {
+        return getRandomCard(rarity, c -> c.type == type && canObtainCopy(c), useRng, allowOtherRarities);
+    }
+
+    public AbstractCard getRandomCard(AbstractCard.CardRarity rarity, boolean useRng, boolean allowOtherRarities)
+    {
+        return getRandomCard(rarity, this::canObtainCopy, useRng, allowOtherRarities);
+    }
+
+    public AbstractCard getRandomCard(AbstractCard.CardRarity rarity, FuncT1<Boolean, AbstractCard> filterFunc, boolean useRng, boolean allowOtherRarities)
+    {
+        CardGroup pool = GameUtilities.getCardPool(rarity);
+        if (pool != null)
+        {
+            AbstractCard c = getRandomCardFromPool(pool, filterFunc, useRng);
+            if (!allowOtherRarities || c != null)
+            {
+                return c;
+            }
+            // Try to get a card from a different rarity pool. If you exhaust all the pools, fall back on the colorless pool
+            // Note that the basic and special rarities have no pools so we ignore them
+            if (rarity != null)
+            {
+                EUIUtils.logInfo(null, "No cards found for Rarity " + rarity);
+                int nextRarityIndex = Math.max(0, rarity.ordinal() - 1);
+                return getRandomCard(nextRarityIndex > 1 ? poolOrdering[nextRarityIndex] : null, filterFunc, useRng, allowOtherRarities);
+            }
+        }
+        return null;
+    }
+
+    public AbstractCard getRandomCardFromPool(CardGroup pool, boolean useRng)
+    {
+        return getRandomCardFromPool(pool, this::canObtainCopy, useRng);
+    }
+
+    public AbstractCard getRandomCardFromPool(CardGroup pool, AbstractCard.CardType type, boolean useRng)
+    {
+        return getRandomCardFromPool(pool, c -> c.type == type && canObtainCopy(c), useRng);
+    }
+
+    public AbstractCard getRandomCardFromPool(CardGroup pool, FuncT1<Boolean, AbstractCard> filterFunc, boolean useRng)
+    {
+        ArrayList<AbstractCard> choices = EUIUtils.filter(pool.group, filterFunc::invoke);
+        return GameUtilities.getRandomElement(choices, AbstractDungeon.cardRng);
+    }
+
+    public AbstractCard getRandomRewardReplacementCard(AbstractCard.CardRarity rarity, ArrayList<AbstractCard> ignore, boolean useRng, boolean allowOtherRarities)
     {
         AbstractCard replacement = null;
         boolean searchingCard = true;
@@ -220,22 +272,10 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         {
             searchingCard = false;
 
-            final AbstractCard temp = getRandomRewardCard(includeRares, ignoreCurrentRoom);
+            final AbstractCard temp = getRandomCard(rarity, c -> !(EUIUtils.any(ignore, i -> i.cardID.equals(c.cardID))) && canObtainCopy(c), useRng, allowOtherRarities);
             if (temp == null)
             {
                 break;
-            }
-
-            if (ignore != null)
-            {
-                for (AbstractCard c : ignore)
-                {
-                    if (temp.cardID.equals(c.cardID))
-                    {
-                        searchingCard = true;
-                        break;
-                    }
-                }
             }
 
             if (temp instanceof OnAddingToCardRewardListener && ((OnAddingToCardRewardListener) temp).shouldCancel())
@@ -255,32 +295,6 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         }
 
         return replacement;
-    }
-
-    private AbstractCard getRandomRewardCard(boolean includeRares, boolean ignoreCurrentRoom)
-    {
-        ArrayList<AbstractCard> list;
-
-        int roll = AbstractDungeon.cardRng.random(100);
-        if (includeRares && (roll <= 4 || (!ignoreCurrentRoom && GameUtilities.getCurrentRoom() instanceof MonsterRoomBoss)))
-        {
-            list = AbstractDungeon.srcRareCardPool.group;
-        }
-        else if (roll < 40)
-        {
-            list = AbstractDungeon.srcUncommonCardPool.group;
-        }
-        else
-        {
-            list = AbstractDungeon.srcCommonCardPool.group;
-        }
-
-        if (list != null && list.size() > 0)
-        {
-            return list.get(AbstractDungeon.cardRng.random(list.size() - 1));
-        }
-
-        return null;
     }
 
     protected void importBaseData(PCLDungeon data)
@@ -315,19 +329,6 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         }
     }
 
-    public void updateCardCopies()
-    {
-        for (AbstractCard card : player.masterDeck.group)
-        {
-            if (card instanceof OnCardPoolChangedListener)
-            {
-                ((OnCardPoolChangedListener) card).onCardPoolChanged();
-            }
-
-            removeExtraCopies(card);
-        }
-    }
-
     public void initializeCardPool()
     {
         loadouts.clear();
@@ -350,7 +351,6 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         loadCardsForData(data);
         loadCustomCards(player);
         banCards(data);
-        updateCardCopies();
         data.updateRelicsForDungeon();
         if (!panelAdded)
         {
@@ -511,8 +511,6 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
 
     public void onCardObtained(AbstractCard card)
     {
-        removeExtraCopies(card);
-
         if (card instanceof PCLCard && ((PCLCard) card).isUnique())
         {
             AbstractCard first = null;
@@ -687,6 +685,16 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         return player.maxHealth / valueDivisor;
     }
 
+    public boolean canObtainMoreCopies(AbstractCard c)
+    {
+        if (c instanceof PCLCard)
+        {
+            final int copies = GameUtilities.getAllCopies(c.cardID, AbstractDungeon.player.masterDeck).size();
+            return copies < ((PCLCard) c).cardData.maxCopies;
+        }
+        return true;
+    }
+
     public void addDivisor(int divisor)
     {
         valueDivisor = Math.max(1, valueDivisor + divisor);
@@ -780,13 +788,6 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
     public void receivePreStartGame()
     {
         fullLog("PRE START GAME");
-    }
-
-    @Override
-    public void receiveStartAct()
-    {
-        updateCardCopies();
-        fullLog("INITIALIZE ACT");
     }
 
     @Override

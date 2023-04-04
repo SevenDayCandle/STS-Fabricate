@@ -11,6 +11,7 @@ import javassist.CannotCompileException;
 import javassist.expr.ExprEditor;
 import javassist.expr.MethodCall;
 import pinacolada.cards.base.PCLCardData;
+import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
@@ -114,7 +115,19 @@ public class AbstractDungeonPatches
         @SpirePrefixPatch
         public static SpireReturn<AbstractCard> prefix(AbstractCard.CardRarity rarity, AbstractCard.CardType type, boolean useRng)
         {
-            return SpireReturn.Return(GameUtilities.getRandomCard(rarity, type, useRng, true));
+            return SpireReturn.Return(PGR.dungeon.getRandomCard(rarity, type, useRng, true));
+        }
+    }
+
+    @SpirePatch(clz = AbstractDungeon.class, method = "getCard", optional = true)
+    public static class AbstractDungeonPatches_GetRewardCards
+    {
+        @SpirePrefixPatch
+        public static SpireReturn<AbstractCard> prefix(AbstractCard.CardRarity rarity)
+        {
+            // If no suitable card is found, create a dummy card because the method will crash if no card is actually found
+            AbstractCard found = PGR.dungeon.getRandomCard(rarity, true, true);
+            return SpireReturn.Return(found != null ? found : new QuestionMark());
         }
     }
 }

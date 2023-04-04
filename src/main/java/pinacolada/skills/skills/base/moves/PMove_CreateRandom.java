@@ -3,7 +3,6 @@ package pinacolada.skills.skills.base.moves;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
@@ -56,18 +55,8 @@ public class PMove_CreateRandom extends PCallbackMove<PField_CardCategory>
     {
         final CardGroup choice = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
         final int limit = Math.max(extra, amount);
-        while (choice.size() < limit)
-        {
-            AbstractCard c = !fields.colors.isEmpty() ? GameUtilities.getRandomAnyColorCard(fields.getFullCardFilter()) : GameUtilities.getRandomCard(fields.getFullCardFilter());
-            if (c == null)
-            {
-                break;
-            }
-            if (!EUIUtils.any(choice.group, ca -> ca.cardID.equals(c.cardID)))
-            {
-                choice.addToBottom(c.makeCopy());
-            }
-        }
+        choice.group = !fields.colors.isEmpty() ? GameUtilities.getRandomAnyColorCards(fields.getFullCardFilter(), limit) : GameUtilities.getRandomCards(fields.getFullCardFilter(), limit);
+
         boolean automatic = choice.size() <= amount;
         getActions().selectFromPile(getName(), amount, choice)
                 .setOptions((automatic ? PCLCardSelection.Random : PCLCardSelection.Manual).toSelection(), automatic)

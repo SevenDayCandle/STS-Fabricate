@@ -66,6 +66,7 @@ import pinacolada.effects.SFX;
 import pinacolada.interfaces.listeners.OnTryApplyPowerListener;
 import pinacolada.interfaces.listeners.OnTryReducePowerListener;
 import pinacolada.misc.CombatManager;
+import pinacolada.misc.PCLDungeon;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.monsters.PCLIntentInfo;
 import pinacolada.orbs.PCLOrb;
@@ -90,7 +91,6 @@ public class GameUtilities
     protected static final String PORTRAIT_PATH = "images/1024Portraits/";
     protected static final String BETA_PATH = "images/1024PortraitsBeta/";
     public final static String EMPTY_STRING = "";
-    private static final AbstractCard.CardRarity[] poolOrdering = AbstractCard.CardRarity.values();
     private static final RandomizedList<AbstractCard> fullCardPool = new RandomizedList<>();
     private static final RandomizedList<AbstractCard> characterCardPool = new RandomizedList<>();
     private static AbstractPlayer.PlayerClass lastPlayerClass;
@@ -548,7 +548,7 @@ public class GameUtilities
         {
             EUIUtils.logInfo(null, "No cards found for Rarity " + rarity + ", Type " + type);
             int nextRarityIndex = Math.max(0, rarity.ordinal() - 1);
-            return getAnyColorCardFiltered(nextRarityIndex > 1 ? poolOrdering[nextRarityIndex] : null, type, allowOtherRarities, allowHealing);
+            return getAnyColorCardFiltered(nextRarityIndex > 1 ? PCLDungeon.poolOrdering[nextRarityIndex] : null, type, allowOtherRarities, allowHealing);
         }
         else
         {
@@ -1265,6 +1265,23 @@ public class GameUtilities
         return fullCardPool.retrieve(getRNG());
     }
 
+    public static ArrayList<AbstractCard> getRandomAnyColorCards(FuncT1<Boolean, AbstractCard> filter, int count)
+    {
+        refreshCardLists();
+        setupFullCardPool();
+        RandomizedList<AbstractCard> possible = new RandomizedList<>(EUIUtils.filter(fullCardPool, filter::invoke));
+        ArrayList<AbstractCard> returned = new ArrayList<>();
+        for (int i = 0; i < count; i++)
+        {
+            AbstractCard c = possible.retrieve(getRNG(), true);
+            if (c != null)
+            {
+                returned.add(c);
+            }
+        }
+        return returned;
+    }
+
     // Create a random card that matches the given parameters. Note that these random card methods poll from the in-combat card pool, so healing cards are already filtered out
     public static AbstractCard getRandomCard(FuncT1<Boolean, AbstractCard> filter)
     {
@@ -1280,31 +1297,21 @@ public class GameUtilities
         return characterCardPool.retrieve(getRNG());
     }
 
-    public static AbstractCard getRandomCard(AbstractCard.CardRarity rarity, AbstractCard.CardType type)
+    public static ArrayList<AbstractCard> getRandomCards(FuncT1<Boolean, AbstractCard> filter, int count)
     {
-        return getRandomCard(rarity, type, true, false);
-    }
-
-    public static AbstractCard getRandomCard(AbstractCard.CardRarity rarity, AbstractCard.CardType type, boolean useRng, boolean allowOtherRarities)
-    {
-        CardGroup pool = getCardPool(rarity);
-        if (pool != null)
+        refreshCardLists();
+        setupCharacterCardPool();
+        RandomizedList<AbstractCard> possible = new RandomizedList<>(EUIUtils.filter(characterCardPool, filter::invoke));
+        ArrayList<AbstractCard> returned = new ArrayList<>();
+        for (int i = 0; i < count; i++)
         {
-            AbstractCard c = type != null ? pool.getRandomCard(type, useRng) : pool.getRandomCard(useRng);
-            if (!allowOtherRarities || c != null)
+            AbstractCard c = possible.retrieve(getRNG(), true);
+            if (c != null)
             {
-                return c;
-            }
-            // Try to get a card from a different rarity pool. If you exhaust all the pools, fall back on the colorless pool
-            // Note that the basic and special rarities have no pools so we ignore them
-            if (rarity != null)
-            {
-                EUIUtils.logInfo(null, "No cards found for Rarity " + rarity + ", Type " + type);
-                int nextRarityIndex = Math.max(0, rarity.ordinal() - 1);
-                return getRandomCard(nextRarityIndex > 1 ? poolOrdering[nextRarityIndex] : null, type, useRng, allowOtherRarities);
+                returned.add(c);
             }
         }
-        return null;
+        return returned;
     }
 
     public static Random getRNG()
