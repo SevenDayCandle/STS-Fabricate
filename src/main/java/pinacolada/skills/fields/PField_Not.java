@@ -1,6 +1,7 @@
 package pinacolada.skills.fields;
 
 import pinacolada.resources.PGR;
+import pinacolada.skills.PCond;
 import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
 
 public class PField_Not extends PField
@@ -27,6 +28,9 @@ public class PField_Not extends PField
 
     public void setupEditor(PCLCustomCardEffectEditor<?> editor)
     {
-        editor.registerBoolean(PGR.core.strings.cedit_not, v -> not = v, not);
+        if (editor.getEffectAt() instanceof PCond)
+        {
+            editor.registerBoolean(PGR.core.strings.cedit_not, v -> not = v, not);
+        }
     }
 }

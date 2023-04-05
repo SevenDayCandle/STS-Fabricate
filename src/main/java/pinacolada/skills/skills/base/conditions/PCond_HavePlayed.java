@@ -12,7 +12,7 @@ import pinacolada.skills.fields.PField_CardCategory;
 import java.util.List;
 
 @VisibleSkill
-public class PCond_HavePlayed extends PCond_Have
+public class PCond_HavePlayed extends PCond_HaveCard
 {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_HavePlayed.class, PField_CardCategory.class)
             .selfTarget();

@@ -160,7 +160,7 @@ public class PCLDynamicData extends PCLCardData
         }
     }
 
-    public PCLDynamicData(PCLCustomCardSlot data)
+    public PCLDynamicData(PCLCustomCardSlot data, PCLCustomCardSlot.CardForm f)
     {
         this(data.ID);
         safeLoadValue(() -> setColor(data.slotColor));
@@ -181,7 +181,6 @@ public class PCLDynamicData extends PCLCardData
         safeLoadValue(() -> cost = data.cost.clone());
         safeLoadValue(() -> costUpgrade = data.costUpgrade.clone());
         safeLoadValue(() -> setLanguageMap(parseLanguageStrings(data.languageStrings)));
-        safeLoadValue(() -> setTarget(PCLCardTarget.valueOf(data.target)));
         safeLoadValue(() -> setTags(EUIUtils.map(data.tags, PCLDynamicData::getSafeTag)));
         if (data.loadout != null)
         {
@@ -193,6 +192,18 @@ public class PCLDynamicData extends PCLCardData
         safeLoadValue(() -> setUnique(data.unique));
         safeLoadValue(() -> setRemovableFromDeck(data.removableFromDeck));
         safeLoadValue(() -> setLinearUpgrade(data.linearUpgrade));
+        safeLoadValue(() -> setTarget(PCLCardTarget.valueOf(f.target)));
+        safeLoadValue(() -> setAttackType(PCLAttackType.valueOf(f.attackType)));
+        if (f.damageEffect != null)
+        {
+            safeLoadValue(() -> setAttackSkill(EUIUtils.safeCast(PSkill.get(f.damageEffect), PCardPrimary_DealDamage.class)));
+        }
+        if (f.blockEffect != null)
+        {
+            safeLoadValue(() -> setBlockSkill(EUIUtils.safeCast(PSkill.get(f.blockEffect), PCardPrimary_GainBlock.class)));
+        }
+        safeLoadValue(() -> setPSkill(EUIUtils.mapAsNonnull(f.effects, PSkill::get), true, true));
+        safeLoadValue(() -> setPPower(EUIUtils.mapAsNonnull(f.powerEffects, pe -> EUIUtils.safeCast(PSkill.get(pe), PTrigger.class))));
         setMultiformData(data.forms.length);
     }
 

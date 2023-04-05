@@ -14,13 +14,13 @@ public class PField_Tag extends PField_Random
     @Override
     public boolean equals(PField other)
     {
-        return other instanceof PField_Tag && tags.equals(((PField_Tag) other).tags) && ((PField_Tag) other).random == random;
+        return other instanceof PField_Tag && tags.equals(((PField_Tag) other).tags) && ((PField_Tag) other).random == random && ((PField_Tag) other).not == not;
     }
 
     @Override
     public PField_Tag makeCopy()
     {
-        return (PField_Tag) new PField_Tag().setTag(tags).setRandom(random);
+        return (PField_Tag) new PField_Tag().setTag(tags).setRandom(random).setNot(not);
     }
 
     public void setupEditor(PCLCustomCardEffectEditor<?> editor)

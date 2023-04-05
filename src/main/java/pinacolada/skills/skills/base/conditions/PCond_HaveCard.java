@@ -14,19 +14,19 @@ import pinacolada.skills.skills.PPassiveCond;
 
 import java.util.List;
 
-public abstract class PCond_Have extends PPassiveCond<PField_CardCategory>
+public abstract class PCond_HaveCard extends PPassiveCond<PField_CardCategory>
 {
-    public PCond_Have(PSkillData<PField_CardCategory> data, PSkillSaveData content)
+    public PCond_HaveCard(PSkillData<PField_CardCategory> data, PSkillSaveData content)
     {
         super(data, content);
     }
 
-    public PCond_Have(PSkillData<PField_CardCategory> data)
+    public PCond_HaveCard(PSkillData<PField_CardCategory> data)
     {
         super(data, PCLCardTarget.None, 1);
     }
 
-    public PCond_Have(PSkillData<PField_CardCategory> data, int amount)
+    public PCond_HaveCard(PSkillData<PField_CardCategory> data, int amount)
     {
         super(data, PCLCardTarget.None, amount);
     }

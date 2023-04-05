@@ -14,27 +14,27 @@ import pinacolada.skills.skills.PPassiveCond;
 import java.util.List;
 
 @VisibleSkill
-public class PCond_HP extends PPassiveCond<PField_Not>
+public class PCond_HPPercent extends PPassiveCond<PField_Not>
 {
-    public static final PSkillData<PField_Not> DATA = register(PCond_HP.class, PField_Not.class)
+    public static final PSkillData<PField_Not> DATA = register(PCond_HPPercent.class, PField_Not.class)
             .selfTarget();
 
-    public PCond_HP(PSkillSaveData content)
+    public PCond_HPPercent(PSkillSaveData content)
     {
         super(DATA, content);
     }
 
-    public PCond_HP()
+    public PCond_HPPercent()
     {
         super(DATA, PCLCardTarget.None, 1);
     }
 
-    public PCond_HP(int amount)
+    public PCond_HPPercent(int amount)
     {
         super(DATA, PCLCardTarget.Self, amount);
     }
 
-    public PCond_HP(PCLCardTarget target, int amount)
+    public PCond_HPPercent(PCLCardTarget target, int amount)
     {
         super(DATA, target, amount);
     }
@@ -43,19 +43,19 @@ public class PCond_HP extends PPassiveCond<PField_Not>
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
     {
         List<AbstractCreature> targetList = getTargetList(info);
-        return EUIUtils.any(targetList, t -> fields.not ? t.currentHealth <= amount : t.currentHealth >= amount);
+        return EUIUtils.any(targetList, t -> fields.not ? t.currentHealth * 100 / t.maxHealth <= amount : t.currentHealth * 100 / t.maxHealth >= amount);
     }
 
     @Override
     public String getSampleText()
     {
-        return TEXT.act_generic2(PGR.core.tooltips.hp.title, TEXT.subjects_x);
+        return TEXT.act_generic2(PGR.core.tooltips.hp.title, TEXT.subjects_x + "%");
     }
 
     @Override
     public String getSubText()
     {
-        String baseString = amount + (fields.not ? "- " : "+ ") + PGR.core.tooltips.hp.title;
+        String baseString = amount + (fields.not ? "%- " : "%+ ") + PGR.core.tooltips.hp.title;
         switch (target)
         {
             case All:

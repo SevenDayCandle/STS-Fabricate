@@ -12,14 +12,17 @@ import extendedui.ui.controls.EUIDropdownRow;
 import extendedui.ui.controls.EUILabel;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
+import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLDynamicData;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTagInfo;
+import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
+import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +44,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
     protected PCLCustomCardEditCardScreen screen;
     protected EUILabel header;
     protected EUIDropdown<PCLCardTagInfo> tagsDropdown;
+    protected EUIDropdown<PCLCardTarget> targetDropdown;
     protected PCLCustomCardUpgradableEditor costEditor;
     protected PCLCustomCardUpgradableEditor damageEditor;
     protected PCLCustomCardUpgradableEditor blockEditor;
@@ -51,6 +55,16 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
     protected ArrayList<PCLCustomCardAffinityValueEditor> affinityEditors = new ArrayList<>();
     protected EUILabel upgradeLabel;
     protected EUILabel upgradeLabel2;
+
+    // Colorless/Curse should not be able to see Summon in the card editor
+    protected static List<PCLCardTarget> getEligibleTargets(AbstractCard.CardColor color)
+    {
+        if (GameUtilities.isPCLOnlyCardColor(color) || PGR.config.showIrrelevantProperties.get())
+        {
+            return PCLCardTarget.getAll();
+        }
+        return EUIUtils.filter(PCLCardTarget.getAll(), PCLCardTarget::vanillaCompatible);
+    }
 
     public PCLCustomCardAttributesPage(PCLCustomCardEditCardScreen screen)
     {
@@ -67,7 +81,20 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
                 .setFont(EUIFontHelper.cardtitlefontLarge, 0.8f).setColor(Color.LIGHT_GRAY)
                 .setLabel(PGR.core.strings.cedit_attributes);
 
-        tagsDropdown = new EUIDropdown<PCLCardTagInfo>(new EUIHitbox(START_X, screenH(0.8f), MENU_WIDTH * 1.2f, MENU_HEIGHT))
+        targetDropdown = new EUIDropdown<PCLCardTarget>(new EUIHitbox(START_X, screenH(0.8f), MENU_WIDTH, MENU_HEIGHT)
+                , item -> StringUtils.capitalize(item.toString().toLowerCase()))
+                .setOnChange(targets -> {
+                    if (!targets.isEmpty())
+                    {
+                        screen.modifyBuilder(e -> e.setTarget(targets.get(0)));
+                    }
+                })
+                .setLabelFunctionForOption(PCLCardTarget::getTitle, false)
+                .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_cardTarget)
+                .setCanAutosizeButton(true)
+                .setItems(getEligibleTargets(screen.getBuilder().cardColor))
+                .setTooltip(PGR.core.strings.cedit_cardTarget, PGR.core.strings.cetut_cardTarget);
+        tagsDropdown = new EUIDropdown<PCLCardTagInfo>(new EUIHitbox(tagsDropdown.hb.x + tagsDropdown.hb.width + SPACING_WIDTH, screenH(0.8f), MENU_WIDTH * 1.2f, MENU_HEIGHT))
                 .setOnChange(tags -> screen.modifyBuilder(e -> e.setTags(tags)))
                 .setLabelFunctionForOption(item -> item.tag.getTip().getTitleOrIcon() + " " + item.tag.getTip().title, true)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_tags)
@@ -166,6 +193,8 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
         magicNumberEditor.setValue(builder.getMagicNumber(0), builder.getMagicNumberUpgrade(0)).setActive(isSummon);
         hpEditor.setValue(builder.getHp(0), builder.getHpUpgrade(0)).setActive(isSummon);
 
+        targetDropdown.setSelection(builder.cardTarget, false);
+
         List<PCLCardTagInfo> infos = tagsDropdown.getAllItems();
         ArrayList<Integer> selection = new ArrayList<>();
         for (int i = 0; i < infos.size(); i++)
@@ -218,6 +247,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
         hpEditor.tryUpdate();
         hitCountEditor.tryUpdate();
         rightCountEditor.tryUpdate();
+        targetDropdown.tryUpdate();
         tagsDropdown.tryUpdate();
         for (PCLCustomCardAffinityValueEditor aEditor : affinityEditors)
         {
@@ -244,6 +274,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
         hpEditor.tryRender(sb);
         hitCountEditor.tryRender(sb);
         rightCountEditor.tryRender(sb);
+        targetDropdown.tryRender(sb);
         tagsDropdown.tryRender(sb);
     }
 }

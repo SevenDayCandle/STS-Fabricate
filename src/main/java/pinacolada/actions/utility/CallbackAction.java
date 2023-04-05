@@ -7,29 +7,30 @@ import extendedui.interfaces.delegates.ActionT2;
 import pinacolada.actions.PCLAction;
 
 // Copied and modified from STS-AnimatorMod
-public class CallbackAction extends PCLAction<AbstractGameAction>
+// Variant of nestedAction that returns the action being called and that can accept arbitrary actions
+public class CallbackAction<T extends AbstractGameAction> extends PCLAction<T>
 {
-    private final AbstractGameAction action;
+    private final T action;
 
-    public CallbackAction(AbstractGameAction action, ActionT0 onCompletion)
+    public CallbackAction(T action, ActionT0 onCompletion)
     {
         this(action);
         this.addCallback(onCompletion);
     }
 
-    public CallbackAction(AbstractGameAction action, ActionT1<AbstractGameAction> onCompletion)
+    public CallbackAction(T action, ActionT1<T> onCompletion)
     {
         this(action);
         this.addCallback(onCompletion);
     }
 
-    public <T> CallbackAction(AbstractGameAction action, T state, ActionT2<T, AbstractGameAction> onCompletion)
+    public <U> CallbackAction(T action, U state, ActionT2<U, T> onCompletion)
     {
         this(action);
         this.addCallback(state, onCompletion);
     }
 
-    public CallbackAction(AbstractGameAction action)
+    public CallbackAction(T action)
     {
         super(action.actionType);
         this.action = action;
@@ -42,7 +43,6 @@ public class CallbackAction extends PCLAction<AbstractGameAction>
         {
             this.complete(this.action);
         }
-
     }
 
     private boolean updateAction()

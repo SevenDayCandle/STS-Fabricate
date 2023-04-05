@@ -1,44 +1,44 @@
 package pinacolada.skills.skills.base.conditions;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
+import extendedui.interfaces.delegates.ActionT0;
+import pinacolada.actions.PCLAction;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.interfaces.subscribers.OnOrbEvokeSubscriber;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Orb;
-import pinacolada.skills.skills.PPassiveCond;
+import pinacolada.skills.skills.PActiveCond;
 import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
-public class PCond_EvokeOrb extends PPassiveCond<PField_Orb> implements OnOrbEvokeSubscriber
+public class PCond_EvokeTo extends PActiveCond<PField_Orb>
 {
-    public static final PSkillData<PField_Orb> DATA = register(PCond_EvokeOrb.class, PField_Orb.class)
+    public static final PSkillData<PField_Orb> DATA = register(PCond_EvokeTo.class, PField_Orb.class)
             .selfTarget();
 
-    public PCond_EvokeOrb(PSkillSaveData content)
+    public PCond_EvokeTo(PSkillSaveData content)
     {
         super(DATA, content);
     }
 
-    public PCond_EvokeOrb()
+    public PCond_EvokeTo()
     {
         super(DATA, PCLCardTarget.None, 1);
     }
 
-    public PCond_EvokeOrb(int amount, PCLOrbHelper... orbs)
+    public PCond_EvokeTo(int amount, PCLOrbHelper... orbs)
     {
         super(DATA, PCLCardTarget.None, amount);
         fields.setOrb(orbs);
     }
 
     @Override
-    public PCond_EvokeOrb onAddToCard(AbstractCard card)
+    public PCond_EvokeTo onAddToCard(AbstractCard card)
     {
         super.onAddToCard(card);
         card.showEvokeValue = amount > 0;
@@ -56,33 +56,29 @@ public class PCond_EvokeOrb extends PPassiveCond<PField_Orb> implements OnOrbEvo
     public String getSubText()
     {
         Object tt = fields.getOrbAndOrString();
-        if (isWhenClause())
-        {
-            return TEXT.cond_wheneverYou(TEXT.act_evoke(tt));
-        }
         return TEXT.act_evoke(amount <= 1 ? TEXT.subjects_yourFirst(tt) : TEXT.subjects_yourFirst(EUIRM.strings.numNoun(getAmountRawString(), tt)));
-    }
-
-    @Override
-    public void onEvokeOrb(AbstractOrb orb)
-    {
-        if (fields.getOrbFilter().invoke(orb))
-        {
-            useFromTrigger(makeInfo(null).setData(orb));
-        }
     }
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
     {
-        if ((fields.orbs.isEmpty() && GameUtilities.getOrbCount() < amount) || EUIUtils.any(fields.orbs, o -> GameUtilities.getOrbCount(o.ID) < amount))
-        {
-            return false;
-        }
-        if (isUsing && !isWhenClause())
-        {
-            getActions().evokeOrb(1, amount).setFilter(fields.getOrbFilter());
-        }
-        return true;
+        return (!fields.orbs.isEmpty() || GameUtilities.getOrbCount() >= amount) && !EUIUtils.any(fields.orbs, o -> GameUtilities.getOrbCount(o.ID) < amount);
+    }
+
+    @Override
+    protected PCLAction<?> useImpl(PCLUseInfo info, ActionT0 onComplete, ActionT0 onFail)
+    {
+        return getActions().evokeOrb(1, amount).setFilter(fields.getOrbFilter())
+                .addCallback(orbs -> {
+                    if (orbs.size() >= amount)
+                    {
+                        info.setData(orbs);
+                        onComplete.invoke();
+                    }
+                    else
+                    {
+                        onFail.invoke();
+                    }
+                });
     }
 }

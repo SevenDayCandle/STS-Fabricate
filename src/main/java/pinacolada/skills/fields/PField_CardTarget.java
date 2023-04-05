@@ -16,13 +16,13 @@ public class PField_CardTarget extends PField_Random
     @Override
     public boolean equals(PField other)
     {
-        return other instanceof PField_CardTarget && cardTargets.equals(((PField_CardTarget) other).cardTargets) && ((PField_CardTarget) other).random == random;
+        return other instanceof PField_CardTarget && cardTargets.equals(((PField_CardTarget) other).cardTargets) && ((PField_CardTarget) other).random == random&& ((PField_CardTarget) other).not == not;
     }
 
     @Override
     public PField_CardTarget makeCopy()
     {
-        return (PField_CardTarget) new PField_CardTarget().setCardTarget(cardTargets).setRandom(random);
+        return (PField_CardTarget) new PField_CardTarget().setCardTarget(cardTargets).setRandom(random).setNot(not);
     }
 
     public void setupEditor(PCLCustomCardEffectEditor<?> editor)

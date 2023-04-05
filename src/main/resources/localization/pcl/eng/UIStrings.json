@@ -478,6 +478,7 @@
 												"your {0}",
 												"{0} of {1}",
 												"{0} on {1}",
+												"{0} this combat",
 												"{0} this turn",
 												"{0} ${0}@!1:times@:time$",
 												"{0} with {1}",

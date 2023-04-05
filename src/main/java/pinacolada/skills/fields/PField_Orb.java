@@ -34,7 +34,7 @@ public class PField_Orb extends PField_Random
     public void setupEditor(PCLCustomCardEffectEditor<?> editor)
     {
         editor.registerOrb(orbs);
-        editor.registerBoolean(PGR.core.strings.cedit_random, v -> random = v, random);
+        super.setupEditor(editor);
     }
 
     public PField_Orb addOrb(PCLOrbHelper... orbs)

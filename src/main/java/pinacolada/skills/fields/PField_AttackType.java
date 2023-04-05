@@ -15,13 +15,13 @@ public class PField_AttackType extends PField_Random
     @Override
     public boolean equals(PField other)
     {
-        return other instanceof PField_AttackType && attackTypes.equals(((PField_AttackType) other).attackTypes) && ((PField_AttackType) other).random == random;
+        return other instanceof PField_AttackType && attackTypes.equals(((PField_AttackType) other).attackTypes) && ((PField_AttackType) other).random == random && ((PField_AttackType) other).not == not;
     }
 
     @Override
     public PField_AttackType makeCopy()
     {
-        return (PField_AttackType) new PField_AttackType().setAttackType(attackTypes).setRandom(random);
+        return (PField_AttackType) new PField_AttackType().setAttackType(attackTypes).setRandom(random).setNot(not);
     }
 
     public void setupEditor(PCLCustomCardEffectEditor<?> editor)

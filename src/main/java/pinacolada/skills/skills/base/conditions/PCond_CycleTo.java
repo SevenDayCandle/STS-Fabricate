@@ -17,7 +17,7 @@ import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.utilities.ListSelection;
 
 @VisibleSkill
-public class PCond_CycleTo extends PCond_DoTo
+public class PCond_CycleTo extends PCond_DoToCard
 {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_CycleTo.class, PField_CardCategory.class)
             .selfTarget()

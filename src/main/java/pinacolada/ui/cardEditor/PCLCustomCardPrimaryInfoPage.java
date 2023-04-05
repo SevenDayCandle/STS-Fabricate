@@ -18,7 +18,6 @@ import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCustomCardSlot;
-import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.CardTagItem;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLResources;
@@ -50,7 +49,6 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
     protected EUITextBoxInput idInput;
     protected EUITextBoxInput nameInput;
     protected EUISearchableDropdown<Settings.GameLanguage> languageDropdown;
-    protected EUIDropdown<PCLCardTarget> targetDropdown;
     protected EUIDropdown<AbstractCard.CardRarity> raritiesDropdown;
     protected EUIDropdown<AbstractCard.CardType> typesDropdown;
     protected EUIDropdown<PCLLoadout> loadoutDropdown;
@@ -71,16 +69,6 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
             return Arrays.asList(AbstractCard.CardType.values());
         }
         return EUIUtils.filter(AbstractCard.CardType.values(), v -> v != PCLEnum.CardType.SUMMON);
-    }
-
-    // Colorless/Curse should not be able to see Summon in the card editor
-    protected static List<PCLCardTarget> getEligibleTargets(AbstractCard.CardColor color)
-    {
-        if (GameUtilities.isPCLOnlyCardColor(color) || PGR.config.showIrrelevantProperties.get())
-        {
-            return PCLCardTarget.getAll();
-        }
-        return EUIUtils.filter(PCLCardTarget.getAll(), PCLCardTarget::vanillaCompatible);
     }
 
     public PCLCustomCardPrimaryInfoPage(PCLCustomCardEditCardScreen effect)
@@ -158,19 +146,6 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
                 .setCanAutosizeButton(true)
                 .setItems(getEligibleTypes(effect.getBuilder().cardColor))
                 .setTooltip(CardLibSortHeader.TEXT[1], PGR.core.strings.cetut_type);
-        targetDropdown = new EUIDropdown<PCLCardTarget>(new EUIHitbox(typesDropdown.hb.x + typesDropdown.hb.width + SPACING_WIDTH, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT)
-                , item -> StringUtils.capitalize(item.toString().toLowerCase()))
-                .setOnChange(targets -> {
-                    if (!targets.isEmpty())
-                    {
-                        effect.modifyAllBuilders(e -> e.setTarget(targets.get(0)));
-                    }
-                })
-                .setLabelFunctionForOption(PCLCardTarget::getTitle, false)
-                .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_cardTarget)
-                .setCanAutosizeButton(true)
-                .setItems(getEligibleTargets(effect.getBuilder().cardColor))
-                .setTooltip(PGR.core.strings.cedit_cardTarget, PGR.core.strings.cetut_cardTarget);
         flagsDropdown = new EUISearchableDropdown<CardTagItem>(new EUIHitbox(START_X, screenH(0.5f), MENU_WIDTH, MENU_HEIGHT), cs -> cs.getTip().title)
                 .setOnChange(selectedSeries -> {
                     effect.modifyAllBuilders(e -> e.setExtraTags(selectedSeries));
@@ -249,7 +224,6 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
         nameInput.setLabel(effect.getBuilder().strings.NAME);
         raritiesDropdown.setSelection(effect.getBuilder().cardRarity, false);
         typesDropdown.setSelection(effect.getBuilder().cardType, false);
-        targetDropdown.setSelection(effect.getBuilder().cardTarget, false);
         loadoutDropdown.setSelection(effect.getBuilder().loadout, false);
         flagsDropdown.setSelection(effect.getBuilder().extraTags, false);
         maxUpgrades.setValue(effect.getBuilder().maxUpgradeLevel, false);
@@ -278,7 +252,6 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
         flagsDropdown.tryUpdate();
         raritiesDropdown.tryUpdate();
         typesDropdown.tryUpdate();
-        targetDropdown.tryUpdate();
         languageDropdown.tryUpdate();
         nameInput.tryUpdate();
         idInput.tryUpdate();
@@ -296,7 +269,6 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
         maxCopies.tryRender(sb);
         raritiesDropdown.tryRender(sb);
         typesDropdown.tryRender(sb);
-        targetDropdown.tryRender(sb);
         loadoutDropdown.tryRender(sb);
         flagsDropdown.tryRender(sb);
         languageDropdown.tryRender(sb);

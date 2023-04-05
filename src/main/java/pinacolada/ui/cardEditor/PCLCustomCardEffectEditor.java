@@ -131,7 +131,7 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
                 .setLabelFunctionForOption(PCLCardTarget::getTitle, false)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_cardTarget)
                 .setCanAutosize(true, true)
-                .setItems(PCLCustomCardPrimaryInfoPage.getEligibleTargets(cardColor));
+                .setItems(PCLCustomCardAttributesPage.getEligibleTargets(cardColor));
         piles = new EUIDropdown<PCLCardGroupHelper>(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, AUX_OFFSET, 0)
                 , PCLCardGroupHelper::getCapitalTitle)
                 .setLabelFunctionForOption(PCLCardGroupHelper::getCapitalTitle, false)
@@ -242,12 +242,12 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
         return editor.screen.getBuilder();
     }
 
-    protected AbstractCard.CardColor getColor()
+    public AbstractCard.CardColor getColor()
     {
         return getBuilder().cardColor;
     }
 
-    protected T getEffectAt()
+    public T getEffectAt()
     {
         return group.lowerEffects.get(index);
     }

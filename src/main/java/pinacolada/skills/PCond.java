@@ -136,9 +136,9 @@ public abstract class PCond<T extends PField> extends PSkill<T>
         return new PCond_DrawBranch(amount);
     }
 
-    public static PCond_EvokeOrb evoke(int amount, PCLOrbHelper... h)
+    public static PCond_EvokeTo evokeTo(int amount, PCLOrbHelper... h)
     {
-        return new PCond_EvokeOrb(amount, h);
+        return new PCond_EvokeTo(amount, h);
     }
 
     public static PCond_ExhaustTo exhaust(int amount)
@@ -216,14 +216,14 @@ public abstract class PCond<T extends PField> extends PSkill<T>
         return new PCond_HighestAffinityBranch(groups);
     }
 
-    public static PCond_HP hp(int amount)
+    public static PCond_HPPercent hpPercent(int amount)
     {
-        return new PCond_HP(PCLCardTarget.Self, amount);
+        return new PCond_HPPercent(PCLCardTarget.Self, amount);
     }
 
-    public static PCond_HP hp(PCLCardTarget target, int amount)
+    public static PCond_HPPercent hpPercent(PCLCardTarget target, int amount)
     {
-        return new PCond_HP(target, amount);
+        return new PCond_HPPercent(target, amount);
     }
 
     public static PMultiCond ifElse(PSkill<?> ef1, PSkill<?> ef2, PCond<?>... conds)

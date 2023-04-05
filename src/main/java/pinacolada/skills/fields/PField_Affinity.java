@@ -15,13 +15,16 @@ public class PField_Affinity extends PField_Random
     @Override
     public boolean equals(PField other)
     {
-        return super.equals(other) && affinities.equals(((PField_Affinity) other).affinities) && ((PField_Affinity) other).random == random;
+        return other instanceof PField_Affinity
+                && affinities.equals(((PField_Affinity) other).affinities)
+                && ((PField_Affinity) other).random == random
+                && ((PField_Affinity) other).not == not;
     }
 
     @Override
     public PField_Affinity makeCopy()
     {
-        return new PField_Affinity().setAffinity(affinities).setRandom(random);
+        return (PField_Affinity) new PField_Affinity().setAffinity(affinities).setRandom(random).setNot(not);
     }
 
     public void setupEditor(PCLCustomCardEffectEditor<?> editor)
@@ -45,12 +48,6 @@ public class PField_Affinity extends PField_Random
     {
         this.affinities.clear();
         this.affinities.addAll(affinities);
-        return this;
-    }
-
-    public PField_Affinity setRandom(boolean random)
-    {
-        this.random = random;
         return this;
     }
 

@@ -1,6 +1,7 @@
 package pinacolada.skills.skills.base.conditions;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -14,27 +15,21 @@ import pinacolada.skills.skills.PPassiveCond;
 import java.util.List;
 
 @VisibleSkill
-public class PCond_HP extends PPassiveCond<PField_Not>
+public class PCond_CheckGold extends PPassiveCond<PField_Not>
 {
-    public static final PSkillData<PField_Not> DATA = register(PCond_HP.class, PField_Not.class)
-            .selfTarget();
+    public static final PSkillData<PField_Not> DATA = register(PCond_CheckGold.class, PField_Not.class).selfTarget();
 
-    public PCond_HP(PSkillSaveData content)
+    public PCond_CheckGold(PSkillSaveData content)
     {
         super(DATA, content);
     }
 
-    public PCond_HP()
+    public PCond_CheckGold()
     {
-        super(DATA, PCLCardTarget.None, 1);
+        super(DATA, PCLCardTarget.Self, 1);
     }
 
-    public PCond_HP(int amount)
-    {
-        super(DATA, PCLCardTarget.Self, amount);
-    }
-
-    public PCond_HP(PCLCardTarget target, int amount)
+    public PCond_CheckGold(PCLCardTarget target, int amount)
     {
         super(DATA, target, amount);
     }
@@ -42,20 +37,29 @@ public class PCond_HP extends PPassiveCond<PField_Not>
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
     {
-        List<AbstractCreature> targetList = getTargetList(info);
-        return EUIUtils.any(targetList, t -> fields.not ? t.currentHealth <= amount : t.currentHealth >= amount);
+        List<AbstractCreature> targets = getTargetList(info);
+        if (target == PCLCardTarget.Single && info.target == null)
+        {
+            return false;
+        }
+        return EUIUtils.any(targets, m -> amount == 0 ? info.target.gold == 0 : info.target.gold >= amount);
     }
 
     @Override
     public String getSampleText()
     {
-        return TEXT.act_generic2(PGR.core.tooltips.hp.title, TEXT.subjects_x);
+        return EUIRM.strings.numNoun(TEXT.subjects_x, PGR.core.tooltips.gold.title);
     }
 
     @Override
     public String getSubText()
     {
-        String baseString = amount + (fields.not ? "- " : "+ ") + PGR.core.tooltips.hp.title;
+        String baseString = amount > 1 ? EUIRM.strings.numNoun(getAmountRawString() + "+", PGR.core.tooltips.gold) : amount == 0 ? EUIRM.strings.numNoun(getAmountRawString(), PGR.core.tooltips.gold) : PGR.core.tooltips.gold.toString();
+        if (isWhenClause())
+        {
+            return getWheneverString(TEXT.act_gain(baseString));
+        }
+
         switch (target)
         {
             case All:

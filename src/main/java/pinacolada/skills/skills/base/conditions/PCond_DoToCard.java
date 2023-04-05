@@ -20,24 +20,24 @@ import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.skills.PActiveNonCheckCond;
 import pinacolada.utilities.ListSelection;
 
-public abstract class PCond_DoTo extends PActiveNonCheckCond<PField_CardCategory>
+public abstract class PCond_DoToCard extends PActiveNonCheckCond<PField_CardCategory>
 {
-    public PCond_DoTo(PSkillData<PField_CardCategory> data, PSkillSaveData content)
+    public PCond_DoToCard(PSkillData<PField_CardCategory> data, PSkillSaveData content)
     {
         super(data, content);
     }
 
-    public PCond_DoTo(PSkillData<PField_CardCategory> data)
+    public PCond_DoToCard(PSkillData<PField_CardCategory> data)
     {
         super(data);
     }
 
-    public PCond_DoTo(PSkillData<PField_CardCategory> data, PCLCardTarget target, int amount)
+    public PCond_DoToCard(PSkillData<PField_CardCategory> data, PCLCardTarget target, int amount)
     {
         super(data, target, amount);
     }
 
-    public PCond_DoTo(PSkillData<PField_CardCategory> data, PCLCardTarget target, int amount, PCLCardGroupHelper... groups)
+    public PCond_DoToCard(PSkillData<PField_CardCategory> data, PCLCardTarget target, int amount, PCLCardGroupHelper... groups)
     {
         super(data, target, amount);
         fields.setCardGroup(groups);

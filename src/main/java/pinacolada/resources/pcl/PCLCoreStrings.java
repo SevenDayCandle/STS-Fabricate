@@ -372,11 +372,12 @@ public class PCLCoreStrings extends PCLStrings
     public final String subjects_yourX = subjects.TEXT[48];
     public final String subjects_xOfY = subjects.TEXT[49];
     public final String subjects_xOnY = subjects.TEXT[50];
-    public final String subjects_xThisTurn = subjects.TEXT[51];
-    public final String subjects_xTimes = subjects.TEXT[52];
-    public final String subjects_xWithY = subjects.TEXT[53];
-    public final String subjects_xCost = subjects.TEXT[54];
-    public final String subjects_xBonus = subjects.TEXT[55];
+    public final String subjects_xThisCombat = subjects.TEXT[51];
+    public final String subjects_xThisTurn = subjects.TEXT[52];
+    public final String subjects_xTimes = subjects.TEXT[53];
+    public final String subjects_xWithY = subjects.TEXT[54];
+    public final String subjects_xCost = subjects.TEXT[55];
+    public final String subjects_xBonus = subjects.TEXT[56];
 
     // Tutorial
     public final String tutorial_learnMore = tutorial.TEXT[0];
@@ -561,6 +562,7 @@ public class PCLCoreStrings extends PCLStrings
     public final String subjects_randomX(Object amount) {return EUIUtils.format(subjects_randomX, amount);}
     public final String subjects_randomly(Object amount) {return EUIUtils.format(subjects_randomlyX, amount);}
     public final String subjects_theirX(Object amount) {return EUIUtils.format(subjects_theirX, amount);}
+    public final String subjects_thisCombat(String base) {return EUIUtils.format(subjects_xThisCombat, base);}
     public final String subjects_thisTurn(String base) {return EUIUtils.format(subjects_xThisTurn, base);}
     public final String subjects_times(Object amount) {return EUIUtils.format(subjects_xTimes, amount);}
     public final String subjects_topOf(Object amount) {return EUIUtils.format(subjects_topOfX, amount);}

@@ -4,9 +4,9 @@ import pinacolada.cards.base.PCLCardData;
 import pinacolada.skills.PTrait;
 import pinacolada.skills.skills.PMultiTrait;
 import pinacolada.skills.skills.PTrigger;
-import pinacolada.skills.skills.base.conditions.PCond_IfHasAffinity;
 import pinacolada.skills.skills.base.traits.PTrait_BlockMultiplier;
 import pinacolada.skills.skills.base.traits.PTrait_DamageMultiplier;
+import pinacolada.skills.skills.special.conditions.PCond_IfHasAffinity;
 
 public class Glyph03 extends Glyph
 {

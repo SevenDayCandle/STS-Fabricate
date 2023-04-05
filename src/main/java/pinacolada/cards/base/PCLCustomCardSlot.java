@@ -9,14 +9,9 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
-import pinacolada.cards.base.fields.PCLAttackType;
 import pinacolada.cards.base.tags.CardTagItem;
 import pinacolada.interfaces.providers.CustomCardFileProvider;
 import pinacolada.resources.PGR;
-import pinacolada.skills.PSkill;
-import pinacolada.skills.skills.PTrigger;
-import pinacolada.skills.skills.special.primary.PCardPrimary_DealDamage;
-import pinacolada.skills.skills.special.primary.PCardPrimary_GainBlock;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,7 +42,6 @@ public class PCLCustomCardSlot
     public String type;
     public String rarity;
     public String color;
-    public String target;
     public String languageStrings;
     public String affinities;
     public Integer[] damage = array(0);
@@ -279,7 +273,6 @@ public class PCLCustomCardSlot
             type = first.cardType.name();
             rarity = first.cardRarity.name();
             color = first.cardColor.name();
-            target = first.cardTarget.name();
             damage = first.damage.clone();
             damageUpgrade = first.damageUpgrade.clone();
             block = first.block.clone();
@@ -306,7 +299,7 @@ public class PCLCustomCardSlot
         for (PCLDynamicData builder : builders)
         {
             CardForm f = new CardForm();
-
+            f.target = builder.cardTarget.name();
             f.attackType = builder.attackType.name();
             f.damageEffect = builder.attackSkill != null ? builder.attackSkill.serialize() : null;
             f.blockEffect = builder.blockSkill != null ? builder.blockSkill.serialize() : null;
@@ -397,19 +390,7 @@ public class PCLCustomCardSlot
         for (String fo : forms)
         {
             CardForm f = EUIUtils.deserialize(fo, TTOKENFORM.getType());
-            PCLDynamicData builder = new PCLDynamicData(this);
-            builder.setAttackType(PCLAttackType.valueOf(f.attackType));
-            if (f.damageEffect != null)
-            {
-                builder.setAttackSkill(EUIUtils.safeCast(PSkill.get(f.damageEffect), PCardPrimary_DealDamage.class));
-            }
-            if (f.blockEffect != null)
-            {
-                builder.setBlockSkill(EUIUtils.safeCast(PSkill.get(f.blockEffect), PCardPrimary_GainBlock.class));
-            }
-            builder.setPSkill(EUIUtils.mapAsNonnull(f.effects, PSkill::get), true, true);
-            builder.setPPower(EUIUtils.mapAsNonnull(f.powerEffects, pe -> EUIUtils.safeCast(PSkill.get(pe), PTrigger.class)));
-
+            PCLDynamicData builder = new PCLDynamicData(this, f);
             builders.add(builder);
         }
 
@@ -439,6 +420,7 @@ public class PCLCustomCardSlot
         public String attackType;
         public String damageEffect;
         public String blockEffect;
+        public String target;
         public String[] effects;
         public String[] powerEffects;
 

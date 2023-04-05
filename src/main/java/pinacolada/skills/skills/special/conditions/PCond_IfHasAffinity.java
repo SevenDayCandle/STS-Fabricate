@@ -1,52 +1,49 @@
-package pinacolada.skills.skills.base.conditions;
+package pinacolada.skills.skills.special.conditions;
 
-import com.megacrit.cardcrawl.orbs.AbstractOrb;
-import extendedui.EUIUtils;
-import pinacolada.annotations.VisibleSkill;
+import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
-import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.skills.fields.PField_Orb;
+import pinacolada.skills.fields.PField;
+import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.skills.PPassiveCond;
 import pinacolada.skills.skills.PTrigger;
 
-@VisibleSkill
-public class PCond_IfIsOrb extends PPassiveCond<PField_Orb>
+@Deprecated
+public class PCond_IfHasAffinity extends PPassiveCond<PField_CardCategory>
 {
-    public static final PSkillData<PField_Orb> DATA = register(PCond_IfIsOrb.class, PField_Orb.class)
+    public static final PSkillData<PField_CardCategory> DATA = register(PCond_IfHasAffinity.class, PField_CardCategory.class)
             .selfTarget();
 
-    public PCond_IfIsOrb(PSkillSaveData content)
+    public PCond_IfHasAffinity(PSkillSaveData content)
     {
         super(DATA, content);
     }
 
-    public PCond_IfIsOrb()
+    public PCond_IfHasAffinity()
     {
         super(DATA, PCLCardTarget.None, 0);
     }
 
-    public PCond_IfIsOrb(PCLOrbHelper... orbs)
+    public PCond_IfHasAffinity(PCLAffinity... affinities)
     {
         super(DATA, PCLCardTarget.None, 0);
-        fields.setOrb(orbs);
+        fields.setAffinity(affinities);
     }
-
 
     @Override
     public String getSampleText()
     {
-        return TEXT.cond_ifX(TEXT.cedit_orbs);
+        return TEXT.cond_ifTargetHas(TEXT.subjects_x, TEXT.subjects_x);
     }
 
     @Override
     public String getSubText()
     {
-        return hasParentType(PTrigger.class) ? fields.getOrbAndString(0) :
-                TEXT.cond_ifX(fields.getOrbAndString(1));
+        return hasParentType(PTrigger.class) ? fields.getFullCardAndString() :
+                TEXT.cond_ifTargetHas(TEXT.subjects_thisObj, PField.getAffinityOrString(fields.affinities));
     }
 
     @Override
@@ -60,8 +57,7 @@ public class PCond_IfIsOrb extends PPassiveCond<PField_Orb>
     {
         if (info != null)
         {
-            AbstractOrb orb = info.getData(AbstractOrb.class);
-            return orb != null && EUIUtils.any(fields.orbs, o -> o.ID.equals(orb.ID));
+            return fields.getFullCardFilter().invoke(info.card);
         }
         return false;
     }

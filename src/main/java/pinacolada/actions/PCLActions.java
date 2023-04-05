@@ -274,37 +274,37 @@ public final class PCLActions
         return playVFX(new BorderLongFlashEffect(color, true));
     }
 
-    public <T> CallbackAction callback(AbstractGameAction action, T state, ActionT2<T, AbstractGameAction> onCompletion)
+    public <T extends AbstractGameAction, U> CallbackAction<T> callback(T action, U state, ActionT2<U, T> onCompletion)
     {
-        return add(new CallbackAction(action, state, onCompletion));
+        return add(new CallbackAction<T>(action, state, onCompletion));
     }
 
-    public CallbackAction callback(AbstractGameAction action, ActionT1<AbstractGameAction> onCompletion)
+    public <T extends AbstractGameAction> CallbackAction<T> callback(T action, ActionT1<T> onCompletion)
     {
-        return add(new CallbackAction(action, onCompletion));
+        return add(new CallbackAction<T>(action, onCompletion));
     }
 
-    public CallbackAction callback(AbstractGameAction action, ActionT0 onCompletion)
+    public <T extends AbstractGameAction> CallbackAction<T> callback(T action, ActionT0 onCompletion)
     {
-        return add(new CallbackAction(action, onCompletion));
+        return add(new CallbackAction<T>(action, onCompletion));
     }
 
-    public CallbackAction callback(AbstractGameAction action)
+    public <T extends AbstractGameAction> CallbackAction<T> callback(T action)
     {
-        return add(new CallbackAction(action));
+        return add(new CallbackAction<T>(action));
     }
 
-    public CallbackAction callback(ActionT0 onCompletion)
-    {
-        return callback(new WaitAction(0.05f), onCompletion);
-    }
-
-    public CallbackAction callback(ActionT1<AbstractGameAction> onCompletion)
+    public CallbackAction<WaitAction> callback(ActionT0 onCompletion)
     {
         return callback(new WaitAction(0.05f), onCompletion);
     }
 
-    public <T> CallbackAction callback(T state, ActionT2<T, AbstractGameAction> onCompletion)
+    public CallbackAction<WaitAction> callback(ActionT1<WaitAction> onCompletion)
+    {
+        return callback(new WaitAction(0.05f), onCompletion);
+    }
+
+    public <U> CallbackAction<WaitAction> callback(U state, ActionT2<U, WaitAction> onCompletion)
     {
         return callback(new WaitAction(0.05f), state, onCompletion);
     }

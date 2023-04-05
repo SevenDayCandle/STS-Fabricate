@@ -3,8 +3,8 @@ package pinacolada.cards.pcl.glyphs;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.skills.skills.PTrigger;
-import pinacolada.skills.skills.base.conditions.PCond_IfHasAffinity;
 import pinacolada.skills.skills.base.traits.PTrait_Tag;
+import pinacolada.skills.skills.special.conditions.PCond_IfHasAffinity;
 
 public class Glyph04 extends Glyph
 {
