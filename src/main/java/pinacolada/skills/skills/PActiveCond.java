@@ -32,19 +32,6 @@ public abstract class PActiveCond<T extends PField> extends PCond<T>
         super(data, target, amount, extra);
     }
 
-    // Actual use check is handled in use action. This passes to allow the use effect to run
-    @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
-    {
-        return true;
-    }
-
-    @Override
-    public String getText(boolean addPeriod)
-    {
-        return getCapitalSubText(addPeriod) + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : ": ") + childEffect.getText(addPeriod)) : "");
-    }
-
     @Override
     public void use(PCLUseInfo info)
     {

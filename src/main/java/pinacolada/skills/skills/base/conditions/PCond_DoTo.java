@@ -17,10 +17,10 @@ import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
-import pinacolada.skills.skills.PActiveCond;
+import pinacolada.skills.skills.PActiveNonCheckCond;
 import pinacolada.utilities.ListSelection;
 
-public abstract class PCond_DoTo extends PActiveCond<PField_CardCategory>
+public abstract class PCond_DoTo extends PActiveNonCheckCond<PField_CardCategory>
 {
     public PCond_DoTo(PSkillData<PField_CardCategory> data, PSkillSaveData content)
     {

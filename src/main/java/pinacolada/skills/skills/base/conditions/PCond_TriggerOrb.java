@@ -70,7 +70,7 @@ public class PCond_TriggerOrb extends PPassiveCond<PField_Orb> implements OnOrbP
         {
             return false;
         }
-        if (isUsing)
+        if (isUsing && !isWhenClause())
         {
             getActions().triggerOrbPassive(1, amount, false).setFilter(fields.getOrbFilter());
         }

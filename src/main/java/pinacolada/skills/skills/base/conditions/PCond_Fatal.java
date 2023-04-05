@@ -14,14 +14,14 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
-import pinacolada.skills.skills.PActiveCond;
+import pinacolada.skills.skills.PActiveNonCheckCond;
 import pinacolada.skills.skills.PLimit;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.List;
 
 @VisibleSkill
-public class PCond_Fatal extends PActiveCond<PField_Not> implements OnMonsterDeathSubscriber
+public class PCond_Fatal extends PActiveNonCheckCond<PField_Not> implements OnMonsterDeathSubscriber
 {
     public static final PSkillData<PField_Not> DATA = register(PCond_Fatal.class, PField_Not.class, 1, 1)
             .selfTarget();

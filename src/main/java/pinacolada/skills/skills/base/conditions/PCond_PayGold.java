@@ -37,7 +37,7 @@ public class PCond_PayGold extends PPassiveCond<PField_Empty>
         {
             return false;
         }
-        if (isUsing)
+        if (isUsing && !isWhenClause())
         {
             getActions().gainGold(-amount);
         }

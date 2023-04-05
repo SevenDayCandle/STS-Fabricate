@@ -79,7 +79,7 @@ public class PCond_EvokeOrb extends PPassiveCond<PField_Orb> implements OnOrbEvo
         {
             return false;
         }
-        if (isUsing)
+        if (isUsing && !isWhenClause())
         {
             getActions().evokeOrb(1, amount).setFilter(fields.getOrbFilter());
         }

@@ -52,7 +52,7 @@ public class PCond_TakeDamage extends PPassiveCond<PField_Empty> implements OnLo
     @Override
     public int onLoseHP(AbstractPlayer p, DamageInfo info, int amount)
     {
-        if ((info.type == DamageInfo.DamageType.NORMAL || info.type == DamageInfo.DamageType.THORNS))
+        if (amount > 0 && (info.type == DamageInfo.DamageType.NORMAL || info.type == DamageInfo.DamageType.THORNS))
         {
             useFromTrigger(makeInfo(info.owner));
         }
@@ -66,7 +66,7 @@ public class PCond_TakeDamage extends PPassiveCond<PField_Empty> implements OnLo
         {
             return false;
         }
-        if (isUsing)
+        if (isUsing && !isWhenClause())
         {
             getActions().takeDamage(amount, AbstractGameAction.AttackEffect.NONE);
         }

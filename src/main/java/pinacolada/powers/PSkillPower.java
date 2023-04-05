@@ -10,6 +10,7 @@ import com.megacrit.cardcrawl.localization.PowerStrings;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIUtils;
 import extendedui.utilities.ColoredString;
+import org.apache.commons.lang3.StringUtils;
 import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.misc.CombatManager;
 import pinacolada.misc.PCLUseInfo;
@@ -107,7 +108,7 @@ public class PSkillPower extends PCLPower
     public String getUpdatedDescription()
     {
         this.powerStrings.DESCRIPTIONS = EUIUtils.mapAsNonnull(ptriggers, PSkill::getPowerText).toArray(new String[]{});
-        return EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, this.powerStrings.DESCRIPTIONS);
+        return StringUtils.capitalize(EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, this.powerStrings.DESCRIPTIONS));
     }
 
     @Override

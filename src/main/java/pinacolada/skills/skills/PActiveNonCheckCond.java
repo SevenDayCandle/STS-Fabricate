@@ -7,25 +7,25 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField;
 
-// Passive cond whose text should not be highlighted
-public abstract class PPassiveNonCheckCond<T extends PField> extends PPassiveCond<T>
+// Active cond whose text should not be highlighted
+public abstract class PActiveNonCheckCond<T extends PField> extends PActiveCond<T>
 {
-    public PPassiveNonCheckCond(PSkillData<T> data, PSkillSaveData content)
+    public PActiveNonCheckCond(PSkillData<T> data, PSkillSaveData content)
     {
         super(data, content);
     }
 
-    public PPassiveNonCheckCond(PSkillData<T> data)
+    public PActiveNonCheckCond(PSkillData<T> data)
     {
         super(data);
     }
 
-    public PPassiveNonCheckCond(PSkillData<T> data, PCLCardTarget target, int amount)
+    public PActiveNonCheckCond(PSkillData<T> data, PCLCardTarget target, int amount)
     {
         super(data, target, amount);
     }
 
-    public PPassiveNonCheckCond(PSkillData<T> data, PCLCardTarget target, int amount, int extra)
+    public PActiveNonCheckCond(PSkillData<T> data, PCLCardTarget target, int amount, int extra)
     {
         super(data, target, amount, extra);
     }
@@ -36,9 +36,10 @@ public abstract class PPassiveNonCheckCond<T extends PField> extends PPassiveCon
         return getCapitalSubText(addPeriod) + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : ": ") + childEffect.getText(addPeriod)) : "");
     }
 
+    // Actual use check is handled in use action. This passes to allow the use effect to run
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
     {
-        return fromTrigger;
+        return true;
     }
 }

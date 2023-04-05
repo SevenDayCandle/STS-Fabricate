@@ -43,7 +43,7 @@ public class PCond_PayPower extends PPassiveCond<PField_Power>
                 return false;
             }
         }
-        if (isUsing)
+        if (isUsing && !isWhenClause())
         {
             for (PCLPowerHelper power : fields.powers)
             {

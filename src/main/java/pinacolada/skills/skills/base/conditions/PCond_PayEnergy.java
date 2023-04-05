@@ -38,7 +38,7 @@ public class PCond_PayEnergy extends PPassiveCond<PField_Empty>
         {
             return false;
         }
-        if (isUsing)
+        if (isUsing && !isWhenClause())
         {
             getActions().spendEnergy(amount, false);
         }
