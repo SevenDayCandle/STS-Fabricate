@@ -60,7 +60,7 @@ public class PCond_IfIsOrb extends PPassiveCond<PField_Orb>
     {
         if (info != null)
         {
-            AbstractOrb orb = info.getData();
+            AbstractOrb orb = info.getData(AbstractOrb.class);
             return orb != null && EUIUtils.any(fields.orbs, o -> o.ID.equals(orb.ID));
         }
         return false;

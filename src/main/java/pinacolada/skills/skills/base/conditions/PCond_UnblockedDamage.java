@@ -62,7 +62,7 @@ public class PCond_UnblockedDamage extends PActiveCond<PField_Not> implements On
     @Override
     public void onBlockBroken(AbstractCreature t)
     {
-        if (this.childEffect != null && target.targetsSingle() ? t == getOwnerCreature() : target.getTargets(t, t).contains(t))
+        if (target.targetsSingle() ? t == getOwnerCreature() : target.getTargets(t, t).contains(t))
         {
             useFromTrigger(makeInfo(t));
         }

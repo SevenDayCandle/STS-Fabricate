@@ -18,6 +18,7 @@ import pinacolada.skills.skills.PCallbackMove;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @VisibleSkill
 public class PMove_Create extends PCallbackMove<PField_CardID>
@@ -89,7 +90,7 @@ public class PMove_Create extends PCallbackMove<PField_CardID>
         ArrayList<AbstractCard> created = new ArrayList<AbstractCard>();
         if (useParent)
         {
-            ArrayList<AbstractCard> cards = info.getData();
+            List<? extends AbstractCard> cards = info.getDataAsList(AbstractCard.class);
             if (cards != null)
             {
                 for (AbstractCard card : cards)

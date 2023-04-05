@@ -8,6 +8,7 @@ import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PCLUseInfo
 {
@@ -21,7 +22,7 @@ public class PCLUseInfo
     public final boolean canActivateLimited;
     public final boolean isMatch;
     public final boolean isStarter;
-    protected Object data;
+    public Object data;
 
     public PCLUseInfo(AbstractCard card, AbstractCreature source, AbstractCreature target)
     {
@@ -48,28 +49,24 @@ public class PCLUseInfo
 
     }
 
-    public <T> T getData()
+    public <T> T getData(Class<T> dataClass)
     {
-        T item = null;
-        try
+        return EUIUtils.safeCast(data, dataClass);
+    }
+
+    public <T> List<? extends T> getDataAsList(Class<T> dataClass)
+    {
+        List<?> list = EUIUtils.safeCast(data, List.class);
+        if (list.size() > 0 && dataClass.isInstance(list.get(0)))
         {
-            item = (T) data;
+            return (List<? extends T>) data;
         }
-        catch (Exception e)
-        {
-            EUIUtils.logWarning(this, e.getMessage());
-        }
-        return item;
+        return null;
     }
 
     public String getPreviousCardID()
     {
         return previousCard != null ? previousCard.cardID : "";
-    }
-
-    public boolean hasData()
-    {
-        return data != null;
     }
 
     public PCLUseInfo setData(Object data)

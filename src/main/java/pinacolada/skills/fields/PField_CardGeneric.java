@@ -137,8 +137,8 @@ public class PField_CardGeneric extends PField
     {
         if (skill.useParent)
         {
-            ArrayList<AbstractCard> cards = info.getData();
             CardGroup g = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
+            List<? extends AbstractCard> cards = info.getDataAsList(AbstractCard.class);
             if (cards != null)
             {
                 for (AbstractCard c : cards)

@@ -1,6 +1,7 @@
 package pinacolada.relics.pcl;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.rewards.RewardItem;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
@@ -40,7 +41,7 @@ public abstract class AbstractCubes extends PCLRelic implements CardRewardAction
 
     public AbstractCard getReward(AbstractCard card, RewardItem rewardItem)
     {
-        return PGR.dungeon.getRandomRewardReplacementCard(card.rarity, rewardItem.cards, true, true);
+        return PGR.dungeon.getRandomRewardReplacementCard(card.rarity, rewardItem.cards, AbstractDungeon.cardRng, true);
     }
 
     @Override

@@ -64,7 +64,7 @@ public class PCond_IsAttacking extends PPassiveCond<PField_Not> implements OnAtt
     @Override
     public void onAttack(DamageInfo info, int damageAmount, AbstractCreature t)
     {
-        if (this.childEffect != null && info.type == DamageInfo.DamageType.NORMAL && target.targetsSingle() ? info.owner == getOwnerCreature() : target.getTargets(info.owner, info.owner).contains(info.owner))
+        if (info.type == DamageInfo.DamageType.NORMAL && target.targetsSingle() ? info.owner == getOwnerCreature() : target.getTargets(info.owner, info.owner).contains(info.owner))
         {
             useFromTrigger(makeInfo(t));
         }

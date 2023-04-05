@@ -893,6 +893,17 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         return EUIGameUtils.colorForRarity(rarity);
     }
 
+    public Color getRarityVanillaColor() {
+        switch (rarity)
+        {
+            case COMMON:
+            case UNCOMMON:
+            case RARE:
+                return Color.WHITE;
+        }
+        return getRarityColor();
+    }
+
     public Texture getTypeIcon() {
         return EUIGameUtils.iconForType(type).texture();
     }
@@ -2295,11 +2306,11 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
             // Copying base game behavior
             if (isPopup)
             {
-                renderAtlas(sb, Color.WHITE, getCardBannerVanillaRegion(), (float)Settings.WIDTH / 2.0F, (float)Settings.HEIGHT / 2.0F, sc);
+                renderAtlas(sb, getRarityVanillaColor(), getCardBannerVanillaRegion(), (float)Settings.WIDTH / 2.0F, (float)Settings.HEIGHT / 2.0F, sc);
             }
             else
             {
-                renderAtlas(sb, Color.WHITE, getCardBannerVanillaRegion(), current_x, current_y, sc);
+                renderAtlas(sb, getRarityVanillaColor(), getCardBannerVanillaRegion(), current_x, current_y, sc);
             }
         }
     }

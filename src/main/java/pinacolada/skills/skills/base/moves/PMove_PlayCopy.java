@@ -18,7 +18,7 @@ import pinacolada.skills.fields.PField_CardID;
 import pinacolada.skills.skills.PTrigger;
 import pinacolada.utilities.GameUtilities;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @VisibleSkill
 public class PMove_PlayCopy extends PMove<PField_CardID>
@@ -65,7 +65,7 @@ public class PMove_PlayCopy extends PMove<PField_CardID>
         {
             if (useParent)
             {
-                ArrayList<AbstractCard> cards = info.getData();
+                List<? extends AbstractCard> cards = info.getDataAsList(AbstractCard.class);
                 if (cards != null)
                 {
                     for (AbstractCard c : cards)

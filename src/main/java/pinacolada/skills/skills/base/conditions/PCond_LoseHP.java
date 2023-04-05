@@ -53,7 +53,7 @@ public class PCond_LoseHP extends PPassiveCond<PField_Empty> implements OnLoseHP
     @Override
     public int onLoseHP(AbstractPlayer p, DamageInfo info, int amount)
     {
-        if (childEffect != null)
+        if (info.type == DamageInfo.DamageType.HP_LOSS)
         {
             useFromTrigger(makeInfo(info.owner));
         }

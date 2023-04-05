@@ -16,6 +16,7 @@ import pinacolada.skills.fields.PField_CardID;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @VisibleSkill
 public class PMove_ObtainCard extends PMove<PField_CardID>
@@ -99,7 +100,7 @@ public class PMove_ObtainCard extends PMove<PField_CardID>
         ArrayList<AbstractCard> created = new ArrayList<AbstractCard>();
         if (useParent)
         {
-            ArrayList<AbstractCard> cards = info.getData();
+            List<? extends AbstractCard> cards = info.getDataAsList(AbstractCard.class);
             if (cards != null)
             {
                 for (AbstractCard card : cards)

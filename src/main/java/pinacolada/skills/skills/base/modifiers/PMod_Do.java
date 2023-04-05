@@ -24,6 +24,7 @@ import pinacolada.skills.skills.PActiveMod;
 import pinacolada.utilities.ListSelection;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class PMod_Do extends PActiveMod<PField_CardCategory>
 {
@@ -125,7 +126,7 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory>
     @Override
     public int getModifiedAmount(PSkill<?> be, PCLUseInfo info)
     {
-        ArrayList<AbstractCard> cards = info.getData();
+        List<? extends AbstractCard> cards = info.getDataAsList(AbstractCard.class);
         return cards == null || be == null ? 0 : be.baseAmount * (isForced() ? cards.size() : (EUIUtils.count(cards,
                 c -> fields.getFullCardFilter().invoke(c)
         )));

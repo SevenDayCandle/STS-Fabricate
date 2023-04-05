@@ -6,6 +6,7 @@ import com.megacrit.cardcrawl.cards.curses.AscendersBane;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
+import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import javassist.CannotCompileException;
 import javassist.expr.ExprEditor;
@@ -115,18 +116,30 @@ public class AbstractDungeonPatches
         @SpirePrefixPatch
         public static SpireReturn<AbstractCard> prefix(AbstractCard.CardRarity rarity, AbstractCard.CardType type, boolean useRng)
         {
-            return SpireReturn.Return(PGR.dungeon.getRandomCard(rarity, type, useRng, true));
+            return SpireReturn.Return(PGR.dungeon.getRandomCard(rarity, type, useRng ? AbstractDungeon.cardRng : null, true));
         }
     }
 
-    @SpirePatch(clz = AbstractDungeon.class, method = "getCard", optional = true)
+    @SpirePatch(clz = AbstractDungeon.class, method = "getCard", paramtypez = {AbstractCard.CardRarity.class}, optional = true)
     public static class AbstractDungeonPatches_GetRewardCards
     {
         @SpirePrefixPatch
         public static SpireReturn<AbstractCard> prefix(AbstractCard.CardRarity rarity)
         {
             // If no suitable card is found, create a dummy card because the method will crash if no card is actually found
-            AbstractCard found = PGR.dungeon.getRandomCard(rarity, true, true);
+            AbstractCard found = PGR.dungeon.getRandomCard(rarity, AbstractDungeon.cardRng, true);
+            return SpireReturn.Return(found != null ? found : new QuestionMark());
+        }
+    }
+
+    @SpirePatch(clz = AbstractDungeon.class, method = "getCard", paramtypez = {AbstractCard.CardRarity.class, Random.class}, optional = true)
+    public static class AbstractDungeonPatches_GetRewardCards2
+    {
+        @SpirePrefixPatch
+        public static SpireReturn<AbstractCard> prefix(AbstractCard.CardRarity rarity, Random rng)
+        {
+            // If no suitable card is found, create a dummy card because the method will crash if no card is actually found
+            AbstractCard found = PGR.dungeon.getRandomCard(rarity, rng, true);
             return SpireReturn.Return(found != null ? found : new QuestionMark());
         }
     }

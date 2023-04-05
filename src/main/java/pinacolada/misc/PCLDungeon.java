@@ -212,25 +212,25 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
 
     public AbstractCard getRandomCard(AbstractCard.CardRarity rarity, AbstractCard.CardType type)
     {
-        return getRandomCard(rarity, type, true, false);
+        return getRandomCard(rarity, type, AbstractDungeon.cardRng, false);
     }
 
-    public AbstractCard getRandomCard(AbstractCard.CardRarity rarity, AbstractCard.CardType type, boolean useRng, boolean allowOtherRarities)
+    public AbstractCard getRandomCard(AbstractCard.CardRarity rarity, AbstractCard.CardType type, Random rng, boolean allowOtherRarities)
     {
-        return getRandomCard(rarity, c -> c.type == type && canObtainCopy(c), useRng, allowOtherRarities);
+        return getRandomCard(rarity, c -> c.type == type && canObtainCopy(c), rng, allowOtherRarities);
     }
 
-    public AbstractCard getRandomCard(AbstractCard.CardRarity rarity, boolean useRng, boolean allowOtherRarities)
+    public AbstractCard getRandomCard(AbstractCard.CardRarity rarity, Random rng, boolean allowOtherRarities)
     {
-        return getRandomCard(rarity, this::canObtainCopy, useRng, allowOtherRarities);
+        return getRandomCard(rarity, this::canObtainCopy, rng, allowOtherRarities);
     }
 
-    public AbstractCard getRandomCard(AbstractCard.CardRarity rarity, FuncT1<Boolean, AbstractCard> filterFunc, boolean useRng, boolean allowOtherRarities)
+    public AbstractCard getRandomCard(AbstractCard.CardRarity rarity, FuncT1<Boolean, AbstractCard> filterFunc, Random rng, boolean allowOtherRarities)
     {
         CardGroup pool = GameUtilities.getCardPool(rarity);
         if (pool != null)
         {
-            AbstractCard c = getRandomCardFromPool(pool, filterFunc, useRng);
+            AbstractCard c = getRandomCardFromPool(pool, filterFunc, rng);
             if (!allowOtherRarities || c != null)
             {
                 return c;
@@ -241,29 +241,29 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
             {
                 EUIUtils.logInfo(null, "No cards found for Rarity " + rarity);
                 int nextRarityIndex = Math.max(0, rarity.ordinal() - 1);
-                return getRandomCard(nextRarityIndex > 1 ? poolOrdering[nextRarityIndex] : null, filterFunc, useRng, allowOtherRarities);
+                return getRandomCard(nextRarityIndex > 1 ? poolOrdering[nextRarityIndex] : null, filterFunc, rng, allowOtherRarities);
             }
         }
         return null;
     }
 
-    public AbstractCard getRandomCardFromPool(CardGroup pool, boolean useRng)
+    public AbstractCard getRandomCardFromPool(CardGroup pool)
     {
-        return getRandomCardFromPool(pool, this::canObtainCopy, useRng);
+        return getRandomCardFromPool(pool, this::canObtainCopy, AbstractDungeon.cardRng);
     }
 
-    public AbstractCard getRandomCardFromPool(CardGroup pool, AbstractCard.CardType type, boolean useRng)
+    public AbstractCard getRandomCardFromPool(CardGroup pool, AbstractCard.CardType type)
     {
-        return getRandomCardFromPool(pool, c -> c.type == type && canObtainCopy(c), useRng);
+        return getRandomCardFromPool(pool, c -> c.type == type && canObtainCopy(c), AbstractDungeon.cardRng);
     }
 
-    public AbstractCard getRandomCardFromPool(CardGroup pool, FuncT1<Boolean, AbstractCard> filterFunc, boolean useRng)
+    public AbstractCard getRandomCardFromPool(CardGroup pool, FuncT1<Boolean, AbstractCard> filterFunc, Random rng)
     {
         ArrayList<AbstractCard> choices = EUIUtils.filter(pool.group, filterFunc::invoke);
-        return GameUtilities.getRandomElement(choices, AbstractDungeon.cardRng);
+        return rng != null ? GameUtilities.getRandomElement(choices, rng) : GameUtilities.getTrulyRandomElement(choices);
     }
 
-    public AbstractCard getRandomRewardReplacementCard(AbstractCard.CardRarity rarity, ArrayList<AbstractCard> ignore, boolean useRng, boolean allowOtherRarities)
+    public AbstractCard getRandomRewardReplacementCard(AbstractCard.CardRarity rarity, ArrayList<AbstractCard> ignore, Random rng, boolean allowOtherRarities)
     {
         AbstractCard replacement = null;
         boolean searchingCard = true;
@@ -272,7 +272,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         {
             searchingCard = false;
 
-            final AbstractCard temp = getRandomCard(rarity, c -> !(EUIUtils.any(ignore, i -> i.cardID.equals(c.cardID))) && canObtainCopy(c), useRng, allowOtherRarities);
+            final AbstractCard temp = getRandomCard(rarity, c -> !(EUIUtils.any(ignore, i -> i.cardID.equals(c.cardID))) && canObtainCopy(c), rng, allowOtherRarities);
             if (temp == null)
             {
                 break;
@@ -497,8 +497,13 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
             }
             for (PCLCustomCardSlot c : PCLCustomCardSlot.getCards(AbstractCard.CardColor.COLORLESS))
             {
-                AbstractDungeon.srcColorlessCardPool.addToBottom(c.getBuilder(0).createImpl());
-                AbstractDungeon.colorlessCardPool.addToBottom(c.getBuilder(0).createImpl());
+                AbstractCard.CardRarity rarity = c.getBuilder(0).cardRarity;
+                // Do not add basic/special/curse rarity items into the colorless pool
+                if (rarity == AbstractCard.CardRarity.COMMON || rarity == AbstractCard.CardRarity.UNCOMMON || rarity == AbstractCard.CardRarity.RARE)
+                {
+                    AbstractDungeon.srcColorlessCardPool.addToBottom(c.getBuilder(0).createImpl());
+                    AbstractDungeon.colorlessCardPool.addToBottom(c.getBuilder(0).createImpl());
+                }
                 EUIUtils.logInfoIfDebug(this, "Added Custom Card " + c.ID + " to Colorless pool");
             }
         }

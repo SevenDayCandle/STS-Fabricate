@@ -80,7 +80,7 @@ public class PCond_CheckBlock extends PPassiveCond<PField_Not> implements OnBloc
     @Override
     public void onBlockGained(AbstractCreature t, int block)
     {
-        if (this.childEffect != null && target.targetsSingle() ? t == getOwnerCreature() : target.getTargets(t, t).contains(t))
+        if (target.targetsSingle() ? t == getOwnerCreature() : target.getTargets(t, t).contains(t))
         {
             useFromTrigger(makeInfo(t));
         }

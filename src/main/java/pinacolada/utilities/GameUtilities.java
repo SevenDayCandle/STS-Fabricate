@@ -3,6 +3,7 @@ package pinacolada.utilities;
 import basemod.DevConsole;
 import basemod.ReflectionHacks;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.SoulboundField;
 import com.evacipated.cardcrawl.mod.stslib.patches.core.AbstractCreature.TempHPField;
@@ -1512,6 +1513,18 @@ public class GameUtilities
                 return PGR.core.tooltips.status;
         }
         return null;
+    }
+
+    public static <T> T getTrulyRandomElement(List<T> list)
+    {
+        int size = list.size();
+        return (size > 0) ? list.get(MathUtils.random(size - 1)) : null;
+    }
+
+    public static <T> T getTrulyRandomElement(T[] arr)
+    {
+        int size = arr.length;
+        return (size > 0) ? arr[MathUtils.random(size - 1)] : null;
     }
 
     public static ArrayList<AbstractOrb> getUniqueOrbs(int count)

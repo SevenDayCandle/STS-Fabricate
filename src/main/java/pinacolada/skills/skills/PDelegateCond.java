@@ -8,7 +8,6 @@ import pinacolada.misc.PCLUseInfo;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
-import pinacolada.utilities.GameUtilities;
 
 import java.util.Collections;
 
@@ -62,7 +61,7 @@ public abstract class PDelegateCond extends PPassiveNonCheckCond<PField_CardCate
     {
         if (fields.getFullCardFilter().invoke(c))
         {
-            useFromTrigger(makeInfo(null).setData(GameUtilities.createCardGroup(Collections.singletonList(c))));
+            useFromTrigger(makeInfo(null).setData(Collections.singletonList(c)));
         }
     }
 
