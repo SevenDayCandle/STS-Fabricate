@@ -24,4 +24,10 @@ public abstract class PPrimary<T extends PField> extends PSkill<T>
     {
         super(data, target, amount, extra);
     }
+
+    public boolean isCondAllowed(PCond<?> skill) {return true;}
+
+    public boolean isModAllowed(PMod<?> skill) {return true;}
+
+    public boolean isMoveAllowed(PMove<?> skill) {return true;}
 }

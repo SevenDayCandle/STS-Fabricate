@@ -47,9 +47,9 @@ public class PField_CardID extends PField_CardGeneric
 
     public void setupEditor(PCLCustomCardEffectEditor<?> editor)
     {
+        editor.registerOrigin(origin, origins -> setOrigin(origins.size() > 0 ? origins.get(0) : PCLCardSelection.Manual));
         editor.registerPile(groupTypes);
         editor.registerCard(cardIDs);
-        editor.registerOrigin(origin, origins -> setOrigin(origins.size() > 0 ? origins.get(0) : PCLCardSelection.Manual));
     }
 
     public FuncT1<Boolean, AbstractCard> getFullCardFilter()

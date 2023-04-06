@@ -868,7 +868,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
 
     public abstract String getSubText();
 
-    public final ArrayList<AbstractCreature> getTargetList(PCLUseInfo info) {return target.getTargets(info.source, info.target);}
+    public final ArrayList<AbstractCreature> getTargetList(PCLUseInfo info) {return info != null ? target.getTargets(info.source, info.target) : new ArrayList<>();}
 
     public String getTargetHasString(String desc)
     {

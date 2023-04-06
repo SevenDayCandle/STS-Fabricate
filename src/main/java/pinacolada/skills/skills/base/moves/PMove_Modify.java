@@ -64,7 +64,7 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<
     @Override
     public void use(PCLUseInfo info)
     {
-        boolean selectAll = extra <= 0 || useParent;
+        boolean selectAll = baseExtra <= 0 || useParent;
         getActions().selectFromPile(getName(), selectAll ? Integer.MAX_VALUE : extra, fields.getCardGroup(info))
                 .setFilter(fields.getFullCardFilter())
                 .setOptions((selectAll || fields.groupTypes.isEmpty() ? PCLCardSelection.Random : PCLCardSelection.Manual).toSelection(), !fields.forced)
@@ -78,7 +78,7 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<
         String giveString = getObjectText();
         return useParent ? TEXT.act_giveTarget(getInheritedString(), giveString) :
                 fields.hasGroups() ?
-                        TEXT.act_giveFrom(EUIRM.strings.numNoun(extra <= 0 ? TEXT.subjects_all : getExtraRawString(), fields.getFullCardString()), fields.getGroupString(), giveString) :
+                        TEXT.act_giveFrom(EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), fields.getFullCardString()), fields.getGroupString(), giveString) :
                         TEXT.act_giveTarget(TEXT.subjects_thisX, giveString);
     }
 }

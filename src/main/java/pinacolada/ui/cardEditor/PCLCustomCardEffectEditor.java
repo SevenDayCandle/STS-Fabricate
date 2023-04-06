@@ -132,6 +132,13 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_cardTarget)
                 .setCanAutosize(true, true)
                 .setItems(PCLCustomCardAttributesPage.getEligibleTargets(cardColor));
+        origins = new EUIDropdown<PCLCardSelection>(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, AUX_OFFSET, 0)
+                , PCLCardSelection::getTitle)
+                .setLabelFunctionForOption(PCLCardSelection::getTitle, false)
+                .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_origins)
+                .setCanAutosizeButton(true)
+                .setShouldPositionClearAtTop(true)
+                .setItems(PCLCardSelection.values());
         piles = new EUIDropdown<PCLCardGroupHelper>(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, AUX_OFFSET, 0)
                 , PCLCardGroupHelper::getCapitalTitle)
                 .setLabelFunctionForOption(PCLCardGroupHelper::getCapitalTitle, false)
@@ -140,13 +147,6 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
                 .setIsMultiSelect(true)
                 .setShouldPositionClearAtTop(true)
                 .setItems(PCLCardGroupHelper.getStandard());
-        origins = new EUIDropdown<PCLCardSelection>(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, AUX_OFFSET, 0)
-                , PCLCardSelection::getTitle)
-                .setLabelFunctionForOption(PCLCardSelection::getTitle, false)
-                .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_origins)
-                .setCanAutosizeButton(true)
-                .setShouldPositionClearAtTop(true)
-                .setItems(PCLCardSelection.values());
 
         affinities = new EUIDropdown<PCLAffinity>(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, AUX_OFFSET, 0))
                 .setLabelFunctionForOption(item -> item.getFormattedSymbolForced(cardColor) + " " + item.getTooltip().title, true)
@@ -302,7 +302,9 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
             piles.setItems(PSkill.getEligiblePiles(curEffect))
                     .setActive(piles.getAllItems().size() > 1);
             origins.setItems(PSkill.getEligibleOrigins(curEffect))
-                    .setActive(origins.getAllItems().size() > 1);
+                    .setActive(origins.getAllItems().size() >= 1);
+            piles.setItems(PSkill.getEligiblePiles(curEffect))
+                    .setActive(piles.getAllItems().size() >= 1);
             curEffect.fields.setupEditor(this);
 
             float xOff = AUX_OFFSET;

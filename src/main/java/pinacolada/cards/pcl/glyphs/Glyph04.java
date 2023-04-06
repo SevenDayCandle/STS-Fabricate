@@ -3,8 +3,8 @@ package pinacolada.cards.pcl.glyphs;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.skills.skills.PTrigger;
+import pinacolada.skills.skills.base.conditions.PCond_IfHasProperty;
 import pinacolada.skills.skills.base.traits.PTrait_Tag;
-import pinacolada.skills.skills.special.conditions.PCond_IfHasAffinity;
 
 public class Glyph04 extends Glyph
 {
@@ -17,7 +17,7 @@ public class Glyph04 extends Glyph
 
     public void setup(Object input)
     {
-        addGainPower(PTrigger.passive(new PCond_IfHasAffinity(randomAffinity()),
+        addGainPower(PTrigger.when(new PCond_IfHasProperty(randomAffinity()),
                 new PTrait_Tag(PCLCardTag.Ethereal).setCustomUpgrade((s, f, u) -> {
                     if (u >= 60 && !s.fields.tags.contains(PCLCardTag.Purge))
                     {

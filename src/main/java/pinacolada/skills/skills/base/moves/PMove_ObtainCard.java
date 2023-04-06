@@ -22,7 +22,7 @@ import java.util.List;
 public class PMove_ObtainCard extends PMove<PField_CardID>
 {
     public static final PSkillData<PField_CardID> DATA = register(PMove_ObtainCard.class, PField_CardID.class)
-            .setGroups(PCLCardGroupHelper.Hand) // Groups just need to be singular to be hidden
+            .setGroups(PCLCardGroupHelper.MasterDeck)
             .selfTarget();
 
     public PMove_ObtainCard()

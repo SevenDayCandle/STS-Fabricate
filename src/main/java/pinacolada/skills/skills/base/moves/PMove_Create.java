@@ -7,7 +7,6 @@ import extendedui.interfaces.delegates.ActionT1;
 import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.utilities.RotatingList;
 import pinacolada.annotations.VisibleSkill;
-import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
@@ -53,12 +52,7 @@ public class PMove_Create extends PCallbackMove<PField_CardID>
         AbstractCard c = CardLibrary.getCard(id);
         if (c != null)
         {
-            c = c.makeCopy();
-            if (extra > 0 && c instanceof PCLCard)
-            {
-                ((PCLCard) c).changeForm(extra, c.timesUpgraded);
-            }
-            return c;
+            return c.makeCopy();
         }
         return null;
     }

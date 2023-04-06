@@ -40,11 +40,7 @@ public class PCond_CheckBlock extends PPassiveCond<PField_Not> implements OnBloc
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource)
     {
         List<AbstractCreature> targets = getTargetList(info);
-        if (target == PCLCardTarget.Single && info.target == null)
-        {
-            return false;
-        }
-        return EUIUtils.any(targets, m -> amount == 0 ? info.target.currentBlock == 0 : info.target.currentBlock >= amount);
+        return EUIUtils.any(targets, m -> amount == 0 ? m.currentBlock == 0 : m.currentBlock >= amount);
     }
 
     @Override

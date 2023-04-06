@@ -17,7 +17,6 @@ import pinacolada.skills.skills.PMultiCond;
 import pinacolada.skills.skills.base.conditions.*;
 import pinacolada.skills.skills.base.primary.PTrigger_When;
 import pinacolada.skills.skills.special.conditions.PCond_Match;
-import pinacolada.skills.skills.special.primary.PTrigger_Passive;
 import pinacolada.utilities.GameUtilities;
 
 public abstract class PCond<T extends PField> extends PSkill<T>
@@ -541,15 +540,6 @@ public abstract class PCond<T extends PField> extends PSkill<T>
     public final boolean isWhenClause()
     {
         return (parent != null && parent.hasParentType(PTrigger_When.class) && (!(parent instanceof PCond) || (parent instanceof PMultiCond && ((PMultiCond) parent).isWhenClause())));
-    }
-
-    /*
-    Returns true if this is the skill that activates on a passive trigger
-    i.e. this is either the first condition underneath a passive trigger, or if this is part of a multicond that meets the first clause
-    */
-    public final boolean isPassiveClause()
-    {
-        return (parent != null && parent.hasParentType(PTrigger_Passive.class) && (!(parent instanceof PCond) || (parent instanceof PMultiCond && ((PMultiCond) parent).isPassiveClause())));
     }
 
     @Override

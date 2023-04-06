@@ -12,7 +12,6 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.base.primary.PTrigger_Interactable;
 import pinacolada.skills.skills.base.primary.PTrigger_When;
-import pinacolada.skills.skills.special.primary.PTrigger_Passive;
 
 public abstract class PTrigger extends PPrimary<PField_Not>
 {
@@ -55,11 +54,6 @@ public abstract class PTrigger extends PPrimary<PField_Not>
     public static PTrigger interactablePerCombat(int amount, PSkill<?>... effects)
     {
         return chain((PTrigger) new PTrigger_Interactable(amount).edit(f -> f.setNot(true)), effects);
-    }
-
-    public static PTrigger passive(PSkill<?>... effects)
-    {
-        return chain(new PTrigger_Passive(), effects);
     }
 
     public static PTrigger when(PSkill<?>... effects)

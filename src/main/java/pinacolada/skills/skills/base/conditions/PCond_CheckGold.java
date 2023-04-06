@@ -39,11 +39,7 @@ public class PCond_CheckGold extends PPassiveCond<PField_Not>
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource)
     {
         List<AbstractCreature> targets = getTargetList(info);
-        if (target == PCLCardTarget.Single && info.target == null)
-        {
-            return false;
-        }
-        return EUIUtils.any(targets, m -> amount == 0 ? info.target.gold == 0 : info.target.gold >= amount);
+        return EUIUtils.any(targets, m -> amount == 0 ? m.gold == 0 : m.gold >= amount);
     }
 
     @Override

@@ -65,8 +65,8 @@ public class PField_CardCategory extends PField_CardID
 
     public void setupEditor(PCLCustomCardEffectEditor<?> editor)
     {
-        editor.registerPile(groupTypes);
         editor.registerOrigin(origin, origins -> setOrigin(origins.size() > 0 ? origins.get(0) : PCLCardSelection.Manual));
+        editor.registerPile(groupTypes);
         editor.registerRarity(rarities);
         editor.registerType(types);
         editor.registerCost(costs);
