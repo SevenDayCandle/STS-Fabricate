@@ -391,17 +391,17 @@ public abstract class PCond<T extends PField> extends PSkill<T>
         return new PCond_Starter();
     }
 
-    public static PCond_TakeDamage takeDamage()
+    public static PCond_TakeDamageTo takeDamage()
     {
-        return new PCond_TakeDamage();
+        return new PCond_TakeDamageTo();
     }
 
-    public static PCond_TakeDamage takeDamage(int amount)
+    public static PCond_TakeDamageTo takeDamage(int amount)
     {
-        return new PCond_TakeDamage(amount);
+        return new PCond_TakeDamageTo(amount);
     }
 
-    public abstract boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger);
+    public abstract boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource);
 
     @Override
     public PCond<T> setAmountFromCard()
@@ -446,19 +446,19 @@ public abstract class PCond<T extends PField> extends PSkill<T>
     @Override
     public boolean canMatch(AbstractCard card)
     {
-        return this.childEffect != null && checkCondition(card != null ? CombatManager.playerSystem.generateInfo(card, getSourceCreature(), null) : null, false, false) && this.childEffect.canMatch(card);
+        return this.childEffect != null && checkCondition(card != null ? CombatManager.playerSystem.generateInfo(card, getSourceCreature(), null) : null, false, null) && this.childEffect.canMatch(card);
     }
 
     @Override
     public boolean canPlay(PCLUseInfo info)
     {
-        return this.childEffect == null || !checkCondition(info, false, false) || this.childEffect.canPlay(info);
+        return this.childEffect == null || !checkCondition(info, false, null) || this.childEffect.canPlay(info);
     }
 
     @Override
     public float modifyBlock(PCLUseInfo info, float amount)
     {
-        if (this.childEffect != null && sourceCard != null && checkCondition(info, false, false))
+        if (this.childEffect != null && sourceCard != null && checkCondition(info, false, null))
         {
             return this.childEffect.modifyBlock(info, amount);
         }
@@ -468,7 +468,7 @@ public abstract class PCond<T extends PField> extends PSkill<T>
     @Override
     public float modifyDamage(PCLUseInfo info, float amount)
     {
-        if (this.childEffect != null && sourceCard != null && checkCondition(info, false, false))
+        if (this.childEffect != null && sourceCard != null && checkCondition(info, false, null))
         {
             return this.childEffect.modifyDamage(info, amount);
         }
@@ -478,7 +478,7 @@ public abstract class PCond<T extends PField> extends PSkill<T>
     @Override
     public float modifyHeal(PCLUseInfo info, float amount)
     {
-        if (this.childEffect != null && sourceCard != null && checkCondition(info, false, false))
+        if (this.childEffect != null && sourceCard != null && checkCondition(info, false, null))
         {
             return this.childEffect.modifyHeal(info, amount);
         }
@@ -488,7 +488,7 @@ public abstract class PCond<T extends PField> extends PSkill<T>
     @Override
     public float modifyMagicNumber(PCLUseInfo info, float amount)
     {
-        if (this.childEffect != null && sourceCard != null && checkCondition(info, false, false))
+        if (this.childEffect != null && sourceCard != null && checkCondition(info, false, null))
         {
             return this.childEffect.modifyMagicNumber(info, amount);
         }
@@ -498,7 +498,7 @@ public abstract class PCond<T extends PField> extends PSkill<T>
     @Override
     public float modifyHitCount(PCLUseInfo info, float amount)
     {
-        if (this.childEffect != null && sourceCard != null && checkCondition(info, false, false))
+        if (this.childEffect != null && sourceCard != null && checkCondition(info, false, null))
         {
             return this.childEffect.modifyHitCount(info, amount);
         }
@@ -508,7 +508,7 @@ public abstract class PCond<T extends PField> extends PSkill<T>
     @Override
     public float modifyRightCount(PCLUseInfo info, float amount)
     {
-        if (this.childEffect != null && sourceCard != null && checkCondition(info, false, false))
+        if (this.childEffect != null && sourceCard != null && checkCondition(info, false, null))
         {
             return this.childEffect.modifyRightCount(info, amount);
         }
@@ -518,7 +518,7 @@ public abstract class PCond<T extends PField> extends PSkill<T>
     @Override
     public void refresh(PCLUseInfo info, boolean conditionMet)
     {
-        conditionMetCache = checkCondition(info, false, false);
+        conditionMetCache = checkCondition(info, false, null);
         super.refresh(info, conditionMetCache & conditionMet);
     }
 
@@ -555,7 +555,7 @@ public abstract class PCond<T extends PField> extends PSkill<T>
     @Override
     public void use(PCLUseInfo info)
     {
-        if (checkCondition(info, true, false) && childEffect != null)
+        if (checkCondition(info, true, null) && childEffect != null)
         {
             childEffect.use(info);
         }
@@ -563,7 +563,7 @@ public abstract class PCond<T extends PField> extends PSkill<T>
 
     public void use(PCLUseInfo info, int index)
     {
-        if (checkCondition(info, true, false) && childEffect != null)
+        if (checkCondition(info, true, null) && childEffect != null)
         {
             childEffect.use(info, index);
         }
@@ -571,7 +571,7 @@ public abstract class PCond<T extends PField> extends PSkill<T>
 
     public void use(PCLUseInfo info, boolean isUsing)
     {
-        if (checkCondition(info, isUsing, false) && childEffect != null)
+        if (checkCondition(info, isUsing, null) && childEffect != null)
         {
             childEffect.use(info);
         }
@@ -579,7 +579,7 @@ public abstract class PCond<T extends PField> extends PSkill<T>
 
     protected void useFromTrigger(PCLUseInfo info)
     {
-        if (tryPassParent(info))
+        if (tryPassParent(this, info))
         {
             if (childEffect != null)
             {
@@ -588,7 +588,7 @@ public abstract class PCond<T extends PField> extends PSkill<T>
             // When a delegate (e.g. on draw) is triggered from an and multicond, it should only execute the effect if the other conditions would pass
             else if (parent instanceof PMultiCond && parent.childEffect != null)
             {
-                ((PMultiCond) parent).useCond(info, 0, () -> parent.childEffect.use(info), () -> {});
+                ((PMultiCond) parent).useCond(this, info, 0, () -> parent.childEffect.use(info), () -> {});
             }
         }
     }

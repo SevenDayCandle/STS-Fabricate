@@ -870,6 +870,52 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
 
     public final ArrayList<AbstractCreature> getTargetList(PCLUseInfo info) {return target.getTargets(info.source, info.target);}
 
+    public String getTargetHasString(String desc)
+    {
+        return getTargetHasString(target, desc);
+    }
+
+    public String getTargetHasString(PCLCardTarget target, String desc)
+    {
+        return TEXT.cond_ifTargetHas(getTargetSubjectString(target), target.ordinal(), desc);
+    }
+
+    public String getTargetHasYouString(String desc)
+    {
+        return getTargetHasString(PCLCardTarget.None, desc);
+    }
+
+    public String getTargetSubjectString()
+    {
+        return getTargetSubjectString(target);
+    }
+
+    public String getTargetSubjectString(PCLCardTarget target)
+    {
+        switch (target)
+        {
+            case Single:
+                return PGR.core.strings.subjects_target;
+            case AllEnemy:
+            case RandomEnemy:
+                return PGR.core.strings.subjects_anyEnemy();
+            case AllAlly:
+            case RandomAlly:
+            case Team:
+                return PGR.core.strings.subjects_anyAlly();
+            case All:
+            case Any:
+                return PGR.core.strings.subjects_anyone;
+            case Self:
+                if (isFromCreature())
+                {
+                    return TEXT.subjects_thisObj;
+                }
+            default:
+                return PGR.core.strings.subjects_you;
+        }
+    }
+
     public String getTargetString()
     {
         return getTargetString(target);
@@ -963,20 +1009,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
 
     public final String getWheneverString(Object impl)
     {
-        switch (target)
-        {
-            case Single:
-            case Self:
-                return TEXT.cond_whenMulti(TEXT.subjects_target, impl);
-            case AllEnemy:
-                return TEXT.cond_whenMulti(TEXT.subjects_anyEnemy(), impl);
-            case AllAlly:
-                return TEXT.cond_whenMulti(TEXT.subjects_anyAlly(), impl);
-            case All:
-                return TEXT.cond_whenMulti(TEXT.subjects_anyone, impl);
-            default:
-                return TEXT.cond_wheneverYou(impl);
-        }
+        return TEXT.cond_whenMulti(getTargetSubjectString(), impl);
     }
 
     public final String getXRawString()
@@ -1652,9 +1685,9 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         }
     }
 
-    public boolean tryPassParent(PCLUseInfo info)
+    public boolean tryPassParent(PSkill<?> source, PCLUseInfo info)
     {
-        return parent == null || parent.tryPassParent(info);
+        return parent == null || parent.tryPassParent(source, info);
     }
 
     public void use(PCLUseInfo info)

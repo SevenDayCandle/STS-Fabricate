@@ -289,11 +289,6 @@ public final class PCLActions
         return add(new CallbackAction<T>(action, onCompletion));
     }
 
-    public <T extends AbstractGameAction> CallbackAction<T> callback(T action)
-    {
-        return add(new CallbackAction<T>(action));
-    }
-
     public CallbackAction<WaitAction> callback(ActionT0 onCompletion)
     {
         return callback(new WaitAction(0.05f), onCompletion);

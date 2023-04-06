@@ -6,6 +6,7 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
@@ -40,7 +41,7 @@ public class PCond_Chance extends PPassiveCond<PField_Empty>
     }
 
     @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource)
     {
         return GameUtilities.chance(amount);
     }

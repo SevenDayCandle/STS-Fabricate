@@ -3,6 +3,7 @@ package pinacolada.skills.skills;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.skills.PCond;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField;
@@ -38,7 +39,7 @@ public abstract class PActiveNonCheckCond<T extends PField> extends PActiveCond<
 
     // Actual use check is handled in use action. This passes to allow the use effect to run
     @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource)
     {
         return true;
     }

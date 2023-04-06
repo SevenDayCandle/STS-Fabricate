@@ -9,6 +9,7 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.subscribers.OnApplyPowerSubscriber;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.powers.PCLPowerHelper;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Power;
@@ -67,20 +68,7 @@ public class PCond_CheckPower extends PPassiveCond<PField_Power> implements OnAp
             return getWheneverString(TEXT.act_gain(baseString));
         }
 
-        switch (target)
-        {
-            case All:
-            case Any:
-                return TEXT.cond_ifAnyCharacterHas(baseString);
-            case AllEnemy:
-                return TEXT.cond_ifAnyEnemyHas(baseString);
-            case Single:
-                return TEXT.cond_ifTheEnemyHas(baseString);
-            case Self:
-                return TEXT.cond_ifYouHave(baseString);
-            default:
-                return baseString;
-        }
+        return getTargetHasString(baseString);
     }
 
     @Override
@@ -95,7 +83,7 @@ public class PCond_CheckPower extends PPassiveCond<PField_Power> implements OnAp
     }
 
     @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource)
     {
         AbstractPower.PowerType targetType = fields.debuff ? AbstractPower.PowerType.DEBUFF : AbstractPower.PowerType.BUFF;
         List<AbstractCreature> targetList = getTargetList(info);

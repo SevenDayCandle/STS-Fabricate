@@ -6,6 +6,7 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.CombatManager;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Affinity;
@@ -30,7 +31,7 @@ public class PCond_CheckLevel extends PPassiveCond<PField_Affinity>
     }
 
     @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource)
     {
         if (fields.affinities.isEmpty())
         {

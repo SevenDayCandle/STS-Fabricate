@@ -94,7 +94,7 @@ public abstract class PCond_Branch<T extends PField, U> extends PPassiveCond<T>
     }
 
     @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource)
     {
         return false;
     }

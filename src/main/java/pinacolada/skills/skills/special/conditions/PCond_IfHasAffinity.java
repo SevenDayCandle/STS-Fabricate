@@ -4,6 +4,7 @@ import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.pcl.PCLCoreStrings;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField;
@@ -36,14 +37,14 @@ public class PCond_IfHasAffinity extends PPassiveCond<PField_CardCategory>
     @Override
     public String getSampleText()
     {
-        return TEXT.cond_ifTargetHas(TEXT.subjects_x, TEXT.subjects_x);
+        return "";
     }
 
     @Override
     public String getSubText()
     {
         return hasParentType(PTrigger.class) ? fields.getFullCardAndString() :
-                TEXT.cond_ifTargetHas(TEXT.subjects_thisObj, PField.getAffinityOrString(fields.affinities));
+                getTargetHasString(PField.getAffinityOrString(fields.affinities));
     }
 
     @Override
@@ -53,7 +54,7 @@ public class PCond_IfHasAffinity extends PPassiveCond<PField_CardCategory>
     }
 
     @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource)
     {
         if (info != null)
         {

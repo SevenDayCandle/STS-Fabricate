@@ -3,6 +3,7 @@ package pinacolada.skills.skills;
 import extendedui.interfaces.delegates.FuncT3;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.misc.PCLUseInfo;
+import pinacolada.skills.PSkill;
 
 public class PSpecialCond extends PCustomCond
 {
@@ -30,7 +31,7 @@ public class PSpecialCond extends PCustomCond
     }
 
     @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource)
     {
         return onUse.invoke(this, info, isUsing);
     }

@@ -85,7 +85,7 @@ public class PCLClickableUse
 
     public boolean checkCondition()
     {
-        return (checkCondition == null || checkCondition.invoke(this)) && (!(move instanceof PCond) || ((PCond) move).checkCondition(null, false, false));
+        return (checkCondition == null || checkCondition.invoke(this)) && (!(move instanceof PCond) || ((PCond<?>) move).checkCondition(null, false, null));
     }
 
     public boolean hasInfiniteUses()

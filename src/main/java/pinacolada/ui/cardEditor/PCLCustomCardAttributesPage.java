@@ -94,7 +94,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
                 .setCanAutosizeButton(true)
                 .setItems(getEligibleTargets(screen.getBuilder().cardColor))
                 .setTooltip(PGR.core.strings.cedit_cardTarget, PGR.core.strings.cetut_cardTarget);
-        tagsDropdown = new EUIDropdown<PCLCardTagInfo>(new EUIHitbox(tagsDropdown.hb.x + tagsDropdown.hb.width + SPACING_WIDTH, screenH(0.8f), MENU_WIDTH * 1.2f, MENU_HEIGHT))
+        tagsDropdown = new EUIDropdown<PCLCardTagInfo>(new EUIHitbox(targetDropdown.hb.x + targetDropdown.hb.width + SPACING_WIDTH, screenH(0.8f), MENU_WIDTH * 1.2f, MENU_HEIGHT))
                 .setOnChange(tags -> screen.modifyBuilder(e -> e.setTags(tags)))
                 .setLabelFunctionForOption(item -> item.tag.getTip().getTitleOrIcon() + " " + item.tag.getTip().title, true)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_tags)

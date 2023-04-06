@@ -6,6 +6,7 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
@@ -32,7 +33,7 @@ public class PCond_CheckEnergy extends PPassiveCond<PField_Not>
     }
 
     @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource)
     {
         // Use the cache when played because this check will occur after you spent energy
         return isUsing ? conditionMetCache : EnergyPanel.getCurrentEnergy() >= amount;
@@ -47,6 +48,6 @@ public class PCond_CheckEnergy extends PPassiveCond<PField_Not>
     @Override
     public String getSubText()
     {
-        return TEXT.cond_ifYouHave(amount > 1 ? EUIRM.strings.numNoun(amount + "+", PGR.core.tooltips.energy) : PGR.core.tooltips.energy.toString());
+        return getTargetHasString(amount > 1 ? EUIRM.strings.numNoun(amount + "+", PGR.core.tooltips.energy) : PGR.core.tooltips.energy.toString());
     }
 }

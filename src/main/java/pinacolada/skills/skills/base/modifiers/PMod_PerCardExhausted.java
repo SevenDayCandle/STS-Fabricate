@@ -38,7 +38,7 @@ public class PMod_PerCardExhausted extends PMod_Per<PField_CardCategory>
     @Override
     public String getSampleText()
     {
-        return TEXT.cond_perThisTurn(TEXT.subjects_x, TEXT.subjects_x, PGR.core.tooltips.exhaust.past(), "");
+        return TEXT.cond_perXY(TEXT.subjects_x, TEXT.subjects_card, PGR.core.tooltips.exhaust.past());
     }
 
     @Override
@@ -57,8 +57,8 @@ public class PMod_PerCardExhausted extends PMod_Per<PField_CardCategory>
     public String getText(boolean addPeriod)
     {
         String childString = childEffect != null ? capital(childEffect.getText(false), addPeriod) : "";
-        return (fields.forced ? TEXT.cond_perThisCombat(childString, getConditionText(), PGR.core.tooltips.exhaust.past(), getXRawString()) : TEXT.cond_perThisTurn(childString, getConditionText(), PGR.core.tooltips.exhaust.past(), getXRawString()))
-                + PCLCoreStrings.period(addPeriod);
+        return (fields.forced ? TEXT.cond_perThisCombat(childString, getConditionText(), PGR.core.tooltips.exhaust.past()) : TEXT.cond_perThisTurn(childString, getConditionText(), PGR.core.tooltips.exhaust.past()))
+                + getXRawString() + PCLCoreStrings.period(addPeriod);
     }
 
     @Override

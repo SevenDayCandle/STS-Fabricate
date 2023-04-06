@@ -198,9 +198,9 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
     }
 
     @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource)
     {
-        return effects.isEmpty() || ((fields.or) ? EUIUtils.any(effects, c -> c.checkCondition(info, isUsing, fromTrigger)) : EUIUtils.all(effects, c -> c.checkCondition(info, isUsing, fromTrigger)));
+        return effects.isEmpty() || ((fields.or) ? EUIUtils.any(effects, c -> c == triggerSource || c.checkCondition(info, isUsing, triggerSource)) : EUIUtils.all(effects, c -> c == triggerSource || c.checkCondition(info, isUsing, triggerSource)));
     }
 
     @Override
@@ -228,7 +228,7 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
     @Override
     public void refresh(PCLUseInfo info, boolean conditionMet)
     {
-        conditionMetCache = checkCondition(info, false, false);
+        conditionMetCache = checkCondition(info, false, null);
         boolean refreshVal = conditionMetCache & conditionMet;
         for (PSkill<?> effect : effects)
         {
@@ -245,9 +245,9 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
     {
         if (amount != 0 && childEffect != null)
         {
-            if (checkCondition(info, true, false))
+            if (checkCondition(info, true, null))
             {
-                useCond(info, 0, () -> childEffect.use(info, 0), () -> childEffect.use(info, 1));
+                useCond(this, info, 0, () -> childEffect.use(info, 0), () -> childEffect.use(info, 1));
             }
             else
             {
@@ -256,9 +256,9 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         }
         else
         {
-            if (checkCondition(info, true, false) && childEffect != null)
+            if (checkCondition(info, true, null) && childEffect != null)
             {
-                useCond(info, 0, () -> childEffect.use(info), () -> {});
+                useCond(this, info, 0, () -> childEffect.use(info), () -> {});
             }
         }
     }
@@ -266,9 +266,9 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
     @Override
     public void use(PCLUseInfo info, int index)
     {
-        if (checkCondition(info, true, false) && childEffect != null)
+        if (checkCondition(info, true, null) && childEffect != null)
         {
-            useCond(info, 0, () -> childEffect.use(info, index), () -> {});
+            useCond(this, info, 0, () -> childEffect.use(info, index), () -> {});
         }
     }
 
@@ -277,9 +277,9 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
     {
         if (amount != 0 && childEffect != null)
         {
-            if (checkCondition(info, isUsing, false))
+            if (checkCondition(info, isUsing, null))
             {
-                useCond(info, 0, () -> childEffect.use(info, 0), () -> childEffect.use(info, 1));
+                useCond(this, info, 0, () -> childEffect.use(info, 0), () -> childEffect.use(info, 1));
             }
             else
             {
@@ -288,17 +288,17 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         }
         else
         {
-            if (checkCondition(info, true, false) && childEffect != null)
+            if (checkCondition(info, true, null) && childEffect != null)
             {
-                useCond(info, 0, () -> childEffect.use(info), () -> {});
+                useCond(this, info, 0, () -> childEffect.use(info), () -> {});
             }
         }
     }
 
-    public void useCond(PCLUseInfo info, int index, ActionT0 successCallback, ActionT0 failCallback)
+    public void useCond(PSkill<?> source, PCLUseInfo info, int index, ActionT0 successCallback, ActionT0 failCallback)
     {
         PCond<?> cond = getSubEffect(index);
-        if (cond instanceof PActiveCond)
+        if (cond instanceof PActiveCond && cond != source)
         {
             ((PActiveCond<?>) cond).useImpl(info,
                     () -> {
@@ -308,13 +308,13 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
                         }
                         else
                         {
-                            useCond(info, index + 1, successCallback, failCallback);
+                            useCond(source, info, index + 1, successCallback, failCallback);
                         }
                     },
                     () -> {
                         if (fields.or)
                         {
-                            useCond(info, index + 1, successCallback, failCallback);
+                            useCond(source, info, index + 1, successCallback, failCallback);
                         }
                         else
                         {
@@ -324,7 +324,7 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         }
         else if (index < effects.size() - 1)
         {
-            useCond(info, index + 1, successCallback, failCallback);
+            useCond(source, info, index + 1, successCallback, failCallback);
         }
         else
         {
@@ -499,9 +499,10 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
     }
 
     // When a delegate (e.g. on draw) is triggered from an and multicond, it should only execute the effect if the other conditions would pass
-    public boolean tryPassParent(PCLUseInfo info)
+    @Override
+    public boolean tryPassParent(PSkill<?> source, PCLUseInfo info)
     {
-        return checkCondition(info, true, true);
+        return checkCondition(info, true, source);
     }
 
     public PMultiCond useParent(boolean value)

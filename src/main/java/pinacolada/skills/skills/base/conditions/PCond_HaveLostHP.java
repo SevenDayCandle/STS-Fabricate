@@ -8,6 +8,7 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.subscribers.OnLoseHPSubscriber;
 import pinacolada.misc.PCLUseInfo;
+import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -15,21 +16,21 @@ import pinacolada.skills.fields.PField_Random;
 import pinacolada.skills.skills.PPassiveCond;
 
 @VisibleSkill
-public class PCond_HaveTakenDamage extends PPassiveCond<PField_Random> implements OnLoseHPSubscriber
+public class PCond_HaveLostHP extends PPassiveCond<PField_Random> implements OnLoseHPSubscriber
 {
-    public static final PSkillData<PField_Random> DATA = register(PCond_HaveTakenDamage.class, PField_Random.class);
+    public static final PSkillData<PField_Random> DATA = register(PCond_HaveLostHP.class, PField_Random.class);
 
-    public PCond_HaveTakenDamage()
+    public PCond_HaveLostHP()
     {
         this(1);
     }
 
-    public PCond_HaveTakenDamage(PSkillSaveData content)
+    public PCond_HaveLostHP(PSkillSaveData content)
     {
         super(DATA, content);
     }
 
-    public PCond_HaveTakenDamage(int amount)
+    public PCond_HaveLostHP(int amount)
     {
         super(DATA, PCLCardTarget.None, amount);
     }
@@ -37,14 +38,13 @@ public class PCond_HaveTakenDamage extends PPassiveCond<PField_Random> implement
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource)
     {
-        int count = fields.random ? GameActionManager.damageReceivedThisCombat : GameActionManager.damageReceivedThisTurn;
-        return amount == 0 ? count == 0 : fields.not ^ count >= amount;
+        return amount == 0 ? GameActionManager.hpLossThisCombat == 0 : fields.not ^ GameActionManager.hpLossThisCombat >= amount;
     }
 
     @Override
     public String getSampleText()
     {
-        return TEXT.cond_ifX(TEXT.act_takeDamage(TEXT.subjects_x));
+        return TEXT.cond_ifX(TEXT.act_loseAmount(TEXT.subjects_x, PGR.core.tooltips.hp.title));
     }
 
     @Override
@@ -52,16 +52,16 @@ public class PCond_HaveTakenDamage extends PPassiveCond<PField_Random> implement
     {
         if (isWhenClause())
         {
-            return getWheneverString(TEXT.cond_takeDamage(target.ordinal()));
+            return getWheneverString(TEXT.act_lose(PGR.core.tooltips.hp.title));
         }
-        String base = TEXT.cond_ifTargetTook(TEXT.subjects_you, EUIRM.strings.numNoun(getAmountRawString(), TEXT.subjects_damage));
+        String base = TEXT.cond_ifTargetTook(TEXT.subjects_you, EUIRM.strings.numNoun(getAmountRawString(), PGR.core.tooltips.hp.title));
         return fields.random ? TEXT.subjects_thisCombat(base) : TEXT.subjects_thisTurn(base);
     }
 
     @Override
     public int onLoseHP(AbstractPlayer p, DamageInfo info, int amount)
     {
-        if (amount > 0 && (info.type == DamageInfo.DamageType.NORMAL || info.type == DamageInfo.DamageType.THORNS))
+        if (amount > 0 && (info.type == DamageInfo.DamageType.HP_LOSS))
         {
             useFromTrigger(makeInfo(info.owner));
         }

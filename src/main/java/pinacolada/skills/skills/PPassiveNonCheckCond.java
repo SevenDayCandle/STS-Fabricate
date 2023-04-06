@@ -3,6 +3,7 @@ package pinacolada.skills.skills;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.skills.PCond;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField;
@@ -37,8 +38,8 @@ public abstract class PPassiveNonCheckCond<T extends PField> extends PPassiveCon
     }
 
     @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource)
     {
-        return fromTrigger;
+        return triggerSource != null;
     }
 }

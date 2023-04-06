@@ -4,6 +4,7 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.subscribers.OnShuffleSubscriber;
 import pinacolada.misc.PCLUseInfo;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
@@ -42,7 +43,7 @@ public class PCond_Shuffle extends PPassiveNonCheckCond<PField_Empty> implements
     @Override
     public void onShuffle(boolean triggerRelics)
     {
-        tryPassParent(makeInfo(null));
+        tryPassParent(this, makeInfo(null));
     }
 
     @Override
@@ -62,8 +63,8 @@ public class PCond_Shuffle extends PPassiveNonCheckCond<PField_Empty> implements
     }
 
     @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource)
     {
-        return fromTrigger;
+        return triggerSource != null;
     }
 }

@@ -266,7 +266,7 @@ public abstract class PTrigger extends PPrimary<PField_Not>
         return false;
     }
 
-    public boolean tryPassParent(PCLUseInfo info)
+    public boolean tryPassParent(PSkill<?> source, PCLUseInfo info)
     {
         if (usesThisTurn != 0)
         {
@@ -274,7 +274,7 @@ public abstract class PTrigger extends PPrimary<PField_Not>
             {
                 usesThisTurn -= 1;
             }
-            boolean result = super.tryPassParent(info);
+            boolean result = super.tryPassParent(source, info);
 
             if (result && power != null)
             {

@@ -5,9 +5,10 @@ import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.interfaces.subscribers.OnOrbChannelSubscriber;
+import pinacolada.interfaces.subscribers.OnOrbPassiveEffectSubscriber;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.orbs.PCLOrbHelper;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Orb;
@@ -15,7 +16,7 @@ import pinacolada.skills.skills.PPassiveCond;
 import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
-public class PCond_CheckOrb extends PPassiveCond<PField_Orb> implements OnOrbChannelSubscriber
+public class PCond_CheckOrb extends PPassiveCond<PField_Orb> implements OnOrbPassiveEffectSubscriber
 {
     public static final PSkillData<PField_Orb> DATA = register(PCond_CheckOrb.class, PField_Orb.class)
             .selfTarget();
@@ -43,13 +44,13 @@ public class PCond_CheckOrb extends PPassiveCond<PField_Orb> implements OnOrbCha
         String tt = fields.getOrbAndOrString();
         if (isWhenClause())
         {
-            return TEXT.cond_wheneverYou(TEXT.act_channel(tt));
+            return TEXT.cond_wheneverYou(TEXT.act_trigger(tt));
         }
-        return TEXT.cond_ifYouHave(amount == 1 ? tt : EUIRM.strings.numNoun(amount <= 0 ? amount : amount + "+", tt));
+        return getTargetHasString(amount == 1 ? tt : EUIRM.strings.numNoun(amount <= 0 ? amount : amount + "+", tt));
     }
 
     @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource)
     {
         if (fields.orbs.isEmpty())
         {
@@ -59,7 +60,7 @@ public class PCond_CheckOrb extends PPassiveCond<PField_Orb> implements OnOrbCha
     }
 
     @Override
-    public void onChannelOrb(AbstractOrb orb)
+    public void onOrbPassiveEffect(AbstractOrb orb)
     {
         if (fields.getOrbFilter().invoke(orb))
         {

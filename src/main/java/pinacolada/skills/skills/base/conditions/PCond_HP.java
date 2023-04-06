@@ -6,6 +6,7 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
@@ -40,7 +41,7 @@ public class PCond_HP extends PPassiveCond<PField_Not>
     }
 
     @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource)
     {
         List<AbstractCreature> targetList = getTargetList(info);
         return EUIUtils.any(targetList, t -> fields.not ? t.currentHealth <= amount : t.currentHealth >= amount);
@@ -56,19 +57,6 @@ public class PCond_HP extends PPassiveCond<PField_Not>
     public String getSubText()
     {
         String baseString = amount + (fields.not ? "- " : "+ ") + PGR.core.tooltips.hp.title;
-        switch (target)
-        {
-            case All:
-            case Any:
-                return TEXT.cond_ifAnyCharacterHas(baseString);
-            case AllEnemy:
-                return TEXT.cond_ifAnyEnemyHas(baseString);
-            case Single:
-                return TEXT.cond_ifTheEnemyHas(baseString);
-            case Self:
-                return TEXT.cond_ifYouHave(baseString);
-            default:
-                return baseString;
-        }
+        return getTargetHasString(baseString);
     }
 }

@@ -48,7 +48,7 @@ public class PMod_PerOrbTurn extends PMod_Per<PField_Orb>
     @Override
     public String getSampleText()
     {
-        return TEXT.cond_perThisTurn(TEXT.subjects_x, getSubText(), PGR.core.tooltips.channel.past(), "");
+        return TEXT.cond_perXY(TEXT.subjects_x, PGR.core.tooltips.orb.title, PGR.core.tooltips.channel.past());
     }
 
     @Override
@@ -61,9 +61,9 @@ public class PMod_PerOrbTurn extends PMod_Per<PField_Orb>
     public String getText(boolean addPeriod)
     {
         String childString = childEffect != null ? capital(childEffect.getText(false), addPeriod) : "";
-        return (fields.random ? TEXT.cond_perThisCombat(childString, getConditionText(), PGR.core.tooltips.channel.past(), getXRawString()) :
-                TEXT.cond_perThisTurn(childString, getConditionText(), PGR.core.tooltips.channel.past(), getXRawString())
-        ) + PCLCoreStrings.period(addPeriod);
+        return (fields.random ? TEXT.cond_perThisCombat(childString, getConditionText(), PGR.core.tooltips.channel.past()) :
+                TEXT.cond_perThisTurn(childString, getConditionText(), PGR.core.tooltips.channel.past())
+        ) + getXRawString() + PCLCoreStrings.period(addPeriod);
     }
 
     @Override

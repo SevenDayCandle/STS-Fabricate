@@ -6,6 +6,7 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
@@ -40,7 +41,7 @@ public class PCond_PileHas extends PPassiveCond<PField_CardCategory>
     }
 
     @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource)
     {
         int count = EUIUtils.sumInt(fields.groupTypes, g -> EUIUtils.count(g.getCards(),
                 c -> fields.getFullCardFilter().invoke(c)));
@@ -50,13 +51,14 @@ public class PCond_PileHas extends PPassiveCond<PField_CardCategory>
     @Override
     public String getSampleText()
     {
-        return TEXT.cond_ifYouHave(TEXT.subjects_card);
+        return TEXT.cond_ifX(TEXT.subjects_card);
     }
 
     @Override
     public String getSubText()
     {
-        return TEXT.cond_ifTargetHas(fields.getGroupString(),
+        // Set ordinal to 1 to treat as a singular target
+        return TEXT.cond_ifTargetHas(fields.getGroupString(), 1,
                 EUIRM.strings.numNoun(getAmountRawString(), fields.getFullCardString()));
     }
 

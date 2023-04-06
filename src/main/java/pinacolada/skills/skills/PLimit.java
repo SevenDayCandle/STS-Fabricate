@@ -12,7 +12,6 @@ import pinacolada.skills.skills.base.primary.PLimit_Limited;
 import pinacolada.skills.skills.base.primary.PLimit_SemiLimited;
 import pinacolada.utilities.GameUtilities;
 
-// TODO refactor to remove unnecessary elements
 public abstract class PLimit extends PPrimary<PField_Empty>
 {
     protected boolean limitCache = false;
@@ -52,7 +51,7 @@ public abstract class PLimit extends PPrimary<PField_Empty>
     @Override
     public void refresh(PCLUseInfo info, boolean conditionMet)
     {
-        limitCache = checkLimit(info, false, false);
+        limitCache = canActivate(info);
         super.refresh(info, limitCache & conditionMet);
     }
 
@@ -71,7 +70,7 @@ public abstract class PLimit extends PPrimary<PField_Empty>
     @Override
     public void use(PCLUseInfo info)
     {
-        if (checkLimit(info, true, false) && childEffect != null)
+        if (tryActivate(info) && childEffect != null)
         {
             childEffect.use(info);
         }
@@ -79,7 +78,7 @@ public abstract class PLimit extends PPrimary<PField_Empty>
 
     public void use(PCLUseInfo info, int index)
     {
-        if (checkLimit(info, true, false) && childEffect != null)
+        if (tryActivate(info) && childEffect != null)
         {
             childEffect.use(info, index);
         }
@@ -87,37 +86,15 @@ public abstract class PLimit extends PPrimary<PField_Empty>
 
     public void use(PCLUseInfo info, boolean isUsing)
     {
-        if (checkLimit(info, isUsing, false) && childEffect != null)
+        if ((isUsing ? tryActivate(info) : canActivate(info)) && childEffect != null)
         {
             childEffect.use(info);
         }
     }
 
-    // The try activation should not be triggered when the condition is not actually being used from a card effect or a power (i.e. when both isUsing and fromTrigger are false)
-    public boolean checkLimit(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
+    public boolean tryPassParent(PSkill<?> source, PCLUseInfo info)
     {
-        return canActivate(info) && checkChild(info, isUsing, fromTrigger) && testTry(info, isUsing);
-    }
-
-    // TODO ActionConds should be changed to use tryPassParent
-    @Deprecated
-    public final boolean checkChild(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
-    {
-        return !(this.childEffect instanceof PCond) || this.childEffect instanceof PActiveCond || ((PCond<?>) this.childEffect).checkCondition(info, isUsing, fromTrigger);
-    }
-
-    public boolean testTry(PCLUseInfo info, boolean isUsing)
-    {
-        if (!isUsing)
-        {
-            return true;
-        }
         return tryActivate(info);
-    }
-
-    public boolean tryPassParent(PCLUseInfo info)
-    {
-        return checkLimit(info, true, false);
     }
 
     abstract public boolean canActivate(PCLUseInfo info);

@@ -1,17 +1,20 @@
 package pinacolada.skills.skills.base.conditions;
 
 import com.megacrit.cardcrawl.ui.panels.EnergyPanel;
+import extendedui.interfaces.delegates.ActionT0;
+import pinacolada.actions.PCLAction;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
-import pinacolada.skills.skills.PPassiveCond;
+import pinacolada.skills.skills.PActiveCond;
 
 @VisibleSkill
-public class PCond_PayEnergy extends PPassiveCond<PField_Empty>
+public class PCond_PayEnergy extends PActiveCond<PField_Empty>
 {
     public static final PSkillData<PField_Empty> DATA = register(PCond_PayEnergy.class, PField_Empty.class)
             .selfTarget();
@@ -32,17 +35,9 @@ public class PCond_PayEnergy extends PPassiveCond<PField_Empty>
     }
 
     @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource)
     {
-        if (EnergyPanel.getCurrentEnergy() < amount)
-        {
-            return false;
-        }
-        if (isUsing && !isWhenClause())
-        {
-            getActions().spendEnergy(amount, false);
-        }
-        return true;
+        return EnergyPanel.getCurrentEnergy() >= amount;
     }
 
     @Override
@@ -55,5 +50,11 @@ public class PCond_PayEnergy extends PPassiveCond<PField_Empty>
     public String getSubText()
     {
         return capital(TEXT.act_pay(getAmountRawString(), PGR.core.tooltips.energy), true);
+    }
+
+    @Override
+    protected PCLAction<?> useImpl(PCLUseInfo info, ActionT0 onComplete, ActionT0 onFail)
+    {
+        return getActions().spendEnergy(amount, false);
     }
 }

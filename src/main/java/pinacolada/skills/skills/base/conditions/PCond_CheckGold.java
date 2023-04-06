@@ -7,6 +7,7 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
@@ -35,7 +36,7 @@ public class PCond_CheckGold extends PPassiveCond<PField_Not>
     }
 
     @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, boolean fromTrigger)
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource)
     {
         List<AbstractCreature> targets = getTargetList(info);
         if (target == PCLCardTarget.Single && info.target == null)
@@ -60,19 +61,6 @@ public class PCond_CheckGold extends PPassiveCond<PField_Not>
             return getWheneverString(TEXT.act_gain(baseString));
         }
 
-        switch (target)
-        {
-            case All:
-            case Any:
-                return TEXT.cond_ifAnyCharacterHas(baseString);
-            case AllEnemy:
-                return TEXT.cond_ifAnyEnemyHas(baseString);
-            case Single:
-                return TEXT.cond_ifTheEnemyHas(baseString);
-            case Self:
-                return TEXT.cond_ifYouHave(baseString);
-            default:
-                return baseString;
-        }
+        return getTargetHasString(baseString);
     }
 }
