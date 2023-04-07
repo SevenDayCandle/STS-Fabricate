@@ -74,6 +74,7 @@ public class PCLCardData implements CardObject
     public int maxCopies;
     public int maxForms = 1;
     public int maxUpgradeLevel = 1;
+    public int branchFactor = 0;
     public int slots;
     public transient PCLCard tempCard = null;
     private Constructor<? extends PCLCard> constructor;
@@ -445,6 +446,13 @@ public class PCLCardData implements CardObject
         cardTarget = target;
         this.attackType = attackType;
         this.cost = array(cost);
+
+        return this;
+    }
+
+    public PCLCardData setBranchFactor(int factor)
+    {
+        this.branchFactor = factor;
 
         return this;
     }

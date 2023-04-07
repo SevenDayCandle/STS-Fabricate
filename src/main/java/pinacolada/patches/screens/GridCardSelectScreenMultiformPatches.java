@@ -23,7 +23,6 @@ import javassist.CtBehavior;
 import javassist.expr.ExprEditor;
 import javassist.expr.MethodCall;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.PCLDynamicData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +45,14 @@ public class GridCardSelectScreenMultiformPatches
     protected static EUIButton downButton = new EUIButton(ImageMaster.UPGRADE_ARROW, new EUIHitbox(Settings.WIDTH * 0.75F, Settings.HEIGHT * 0.45F, ICON_SIZE, ICON_SIZE)).setColor(Color.PURPLE).setShaderMode(EUIRenderHelpers.ShaderMode.Colorize).setButtonRotation(-90);
     protected static int minIndex = 0;
     protected static int maxIndex = DEFAULT_MAX;
+
+    /** Number of possible forms with branch factor b and upgrading from upgrade level u can be expressed as geometric sum with a = 1
+     * Return 0 if u < 0 (because there are no forms before we have upgrades)
+     * */
+    public static int getFormSum(int b, int u)
+    {
+        return u >= 0 ? (int) ((1 - Math.pow(b, u)) / (1 - b)) : 0;
+    }
 
     public static void selectPCLCardUpgrade(PCLCard card)
     {
@@ -405,22 +412,51 @@ public class GridCardSelectScreenMultiformPatches
                 final ArrayList<AbstractCard> list = GridCardSelectScreenMultiformPatches.BranchSelectFields.branchUpgrades.get(__instance);
                 list.clear();
 
-                if (base.cardData instanceof PCLDynamicData && ((PCLDynamicData) base.cardData).linearUpgrade)
+                    /* Find the minimum possible upgrade form M at your current upgrade level and form
+                        Let B = branch factor, U = current upgrade, F = current form
+                        Let g(B,x) be the sum of the geometric series B^0 + ... + B^x if x >= 0, or 0 otherwise
+
+                        If B = 0, then this calculation is ignored and all forms are available
+                        If B = 1, M = U + 1
+                        Else, M = g(B,U) + B * (F - g(B,U - 1))
+
+                        See https://en.wikipedia.org/wiki/Geometric_series
+                    */
+                if (base.cardData.branchFactor <= 0)
                 {
-                    PCLCard only = getPreviewCard(base, base.timesUpgraded + 1);
-                    list.add(only);
-                    selectPCLCardUpgrade(only);
-                }
-                else
-                {
-                    int formCount = base.getMaxForms();
-                    for (int i = 0; i < formCount; i++)
+                    for (int i = 0; i < base.getMaxForms(); i++)
                     {
                         list.add(getPreviewCard(base, i));
                     }
-                    GridCardSelectScreenMultiformPatches.BranchSelectFields.waitingForBranchUpgradeSelection.set(__instance, true);
+                }
+                else
+                {
+                    int minForm = base.cardData.branchFactor != 1 ?
+                            getFormSum(base.cardData.branchFactor, base.timesUpgraded) + base.cardData.branchFactor * (base.getForm() - getFormSum(base.cardData.branchFactor, base.timesUpgraded - 1))
+                            : base.timesUpgraded + 1;
+
+                    for (int i = minForm; i < Math.min(base.getMaxForms(), minForm + base.cardData.branchFactor); i++)
+                    {
+                        list.add(getPreviewCard(base, i));
+                    }
                 }
 
+                // If you ran out of forms, do not change the card form
+                if (list.size() == 0)
+                {
+                    list.add(getPreviewCard(base, base.getForm()));
+                }
+
+                // If there is only one card, it should be auto-selected
+                if (list.size() == 1)
+                {
+                    selectPCLCardUpgrade((PCLCard) list.get(0));
+                }
+                else
+                {
+
+                    GridCardSelectScreenMultiformPatches.BranchSelectFields.waitingForBranchUpgradeSelection.set(__instance, true);
+                }
 
                 cardList = list;
                 minIndex = 0;
@@ -429,8 +465,9 @@ public class GridCardSelectScreenMultiformPatches
                 downButton.setOnClick(() -> addIndex(__instance));
                 refreshButtons(__instance);
             }
-
         }
+
+
 
         protected static PCLCard getPreviewCard(PCLCard base, int i)
         {

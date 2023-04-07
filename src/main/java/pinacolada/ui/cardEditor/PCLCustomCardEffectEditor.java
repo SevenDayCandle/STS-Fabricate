@@ -216,7 +216,7 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
                 .setShouldPositionClearAtTop(true)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[0])
                 .setCanAutosize(true, true)
-                .setItems(GameUtilities.getStandardRarities());
+                .setItems(PCLCustomCardPrimaryInfoPage.getEligibleRarities());
 
         types = new EUIDropdown<>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.35f, MENU_HEIGHT, AUX_OFFSET, 0)
                 , EUIGameUtils::textForType)

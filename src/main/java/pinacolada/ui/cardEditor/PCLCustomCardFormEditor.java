@@ -18,7 +18,6 @@ import pinacolada.resources.PGR;
 public class PCLCustomCardFormEditor extends EUIBase
 {
     protected static final float ICON_SIZE = scale(36f);
-    public static final int MAX_FORMS = 3;
 
     protected Hitbox hb;
     protected EUILabel header;
@@ -90,7 +89,7 @@ public class PCLCustomCardFormEditor extends EUIBase
     {
         formValues.setItems(EUIUtils.range(0, screen.tempBuilders.size() - 1)).setSelection(screen.currentBuilder, false);
         remove.setInteractable(screen.tempBuilders.size() > 1).setActive(!screen.fromInGame);
-        add.setInteractable(screen.tempBuilders.size() < MAX_FORMS).setActive(!screen.fromInGame);
+        add.setActive(!screen.fromInGame);
     }
 
     @Override

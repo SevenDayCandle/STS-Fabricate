@@ -56,10 +56,15 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
     protected EUILabel idWarning;
     protected PCLValueEditor maxUpgrades;
     protected PCLValueEditor maxCopies;
+    protected PCLValueEditor branchUpgrades;
     protected EUIToggle uniqueToggle;
     protected EUIToggle soulboundToggle;
-    protected EUIToggle linearToggle;
     protected Settings.GameLanguage activeLanguage = Settings.language;
+
+    protected static List<AbstractCard.CardRarity> getEligibleRarities()
+    {
+        return PGR.config.showIrrelevantProperties.get() ? Arrays.asList(AbstractCard.CardRarity.values()) : GameUtilities.getStandardRarities();
+    }
 
     // Colorless/Curse should not be able to see Summon in the card editor
     protected static List<AbstractCard.CardType> getEligibleTypes(AbstractCard.CardColor color)
@@ -130,7 +135,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
                     }
                 })
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[0])
-                .setItems(GameUtilities.getStandardRarities())
+                .setItems(getEligibleRarities())
                 .setTooltip(CardLibSortHeader.TEXT[0], PGR.core.strings.cetut_rarity);
         typesDropdown = new EUIDropdown<AbstractCard.CardType>(new EUIHitbox(raritiesDropdown.hb.x + raritiesDropdown.hb.width + SPACING_WIDTH, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT)
                 , EUIGameUtils::textForType)
@@ -177,27 +182,25 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
                 .setLimits(-1, PSkill.DEFAULT_MAX)
                 .setTooltip(PGR.core.strings.cedit_maxCopies, PGR.core.strings.cetut_maxCopies)
                 .setHasInfinite(true, true);
-        uniqueToggle = (EUIToggle) new EUIToggle(new EUIHitbox(screenW(0.45f), screenH(0.4f), MENU_WIDTH, MENU_HEIGHT))
+        branchUpgrades = new PCLValueEditor(new EUIHitbox(screenW(0.45f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
+                , PGR.core.strings.cedit_branchUpgrade, (val) -> effect.modifyAllBuilders(e -> e.setBranchFactor(val)))
+                .setLimits(0, PSkill.DEFAULT_MAX)
+                .setTooltip(PGR.core.strings.cedit_branchUpgrade, PGR.core.strings.cetut_branchUpgrade)
+                .setHasInfinite(true, true);
+        uniqueToggle = (EUIToggle) new EUIToggle(new EUIHitbox(screenW(0.53f), screenH(0.4f), MENU_WIDTH, MENU_HEIGHT))
                 .setFont(EUIFontHelper.carddescriptionfontNormal, 0.9f)
                 .setText(PGR.core.tooltips.unique.title)
                 .setOnToggle(val -> effect.modifyAllBuilders(e -> {
                     e.setUnique(val);
                 }))
                 .setTooltip(PGR.core.tooltips.unique);
-        soulboundToggle = (EUIToggle) new EUIToggle(new EUIHitbox(screenW(0.53f), screenH(0.4f), MENU_WIDTH, MENU_HEIGHT))
+        soulboundToggle = (EUIToggle) new EUIToggle(new EUIHitbox(screenW(0.61f), screenH(0.4f), MENU_WIDTH, MENU_HEIGHT))
                 .setFont(EUIFontHelper.carddescriptionfontNormal, 0.9f)
                 .setText(PGR.core.tooltips.soulbound.title)
                 .setOnToggle(val -> effect.modifyAllBuilders(e -> {
                     e.setRemovableFromDeck(!val);
                 }))
                 .setTooltip(PGR.core.tooltips.soulbound);
-        linearToggle = (EUIToggle) new EUIToggle(new EUIHitbox(screenW(0.61f), screenH(0.4f), MENU_WIDTH, MENU_HEIGHT))
-                .setFont(EUIFontHelper.carddescriptionfontNormal, 0.9f)
-                .setText(PGR.core.strings.cedit_linearUpgrade)
-                .setOnToggle(val -> effect.modifyAllBuilders(e -> {
-                    e.setLinearUpgrade(val);
-                }))
-                .setTooltip(PGR.core.strings.cedit_linearUpgrade, PGR.core.strings.cetut_linearUpgrade);
 
         PCLResources<?,?,?,?> resources = PGR.getResources(effect.currentSlot.slotColor);
         if (resources != null)
@@ -227,10 +230,10 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
         loadoutDropdown.setSelection(effect.getBuilder().loadout, false);
         flagsDropdown.setSelection(effect.getBuilder().extraTags, false);
         maxUpgrades.setValue(effect.getBuilder().maxUpgradeLevel, false);
+        branchUpgrades.setValue(effect.getBuilder().branchFactor, false);
         maxCopies.setValue(effect.getBuilder().maxCopies, false);
         uniqueToggle.setToggle(effect.getBuilder().unique);
         soulboundToggle.setToggle(!effect.getBuilder().removableFromDeck);
-        linearToggle.setToggle(effect.getBuilder().linearUpgrade);
 
         effect.upgradeToggle.setActive(effect.getBuilder().maxUpgradeLevel != 0);
     }
@@ -255,9 +258,9 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
         languageDropdown.tryUpdate();
         nameInput.tryUpdate();
         idInput.tryUpdate();
+        branchUpgrades.tryUpdate();
         uniqueToggle.tryUpdate();
         soulboundToggle.tryUpdate();
-        linearToggle.tryUpdate();
     }
 
     @Override
@@ -274,9 +277,9 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
         languageDropdown.tryRender(sb);
         nameInput.tryRender(sb);
         idInput.tryRender(sb);
+        branchUpgrades.tryRender(sb);
         uniqueToggle.tryRender(sb);
         soulboundToggle.tryRender(sb);
-        linearToggle.tryRender(sb);
     }
 
     private void validifyCardID(String cardID)

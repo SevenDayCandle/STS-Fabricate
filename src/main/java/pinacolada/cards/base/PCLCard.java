@@ -1108,7 +1108,8 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
             sb.append(this.timesUpgraded);
         }
 
-        if (this.cardData.maxForms > 1) {
+        // Do not show appended characters for non-multiform or linear upgrade path cards
+        if (this.cardData.maxForms > 1 && this.cardData.branchFactor != 1) {
             char appendix = (char) (auxiliaryData.form + CHAR_OFFSET);
             sb.append(appendix);
         }

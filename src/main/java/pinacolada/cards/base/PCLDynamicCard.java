@@ -313,15 +313,6 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard
         return customEnergyOrb != null ? isPopup ? customEnergyOrbLarge : customEnergyOrb : super.getEnergyOrb();
     }
 
-    @Override
-    protected String getUpgradeName() {
-        if (builder == null || !builder.linearUpgrade)
-        {
-            return super.getUpgradeName();
-        }
-        return upgraded ? cardData.strings.NAME + "+" : cardData.strings.NAME;
-    }
-
     protected TextureAtlas.AtlasRegion getVanillaCardBackgroundForRender()
     {
         return isPopup ? vanillaBgLarge : vanillaBg;

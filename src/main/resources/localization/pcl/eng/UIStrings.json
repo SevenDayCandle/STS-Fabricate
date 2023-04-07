@@ -95,7 +95,7 @@
 												"Remove Form",
 												"Undo",
 												"Custom Power",
-												"Linear Upgrade Path",
+												"Branch Choices",
 												"Duplicate",
 												"Delete",
 												"Reload Cards",
@@ -157,7 +157,7 @@
 												"The number of times this #yAttack will hit the target. Each hit is treated independently with regards to damage calculations and powers on the target.",
 												"The number of times that this card will grant #yBlock. Each #yBlock grant is treated independently with regards to #yBlock calculations and powers on the target.",
 												"Create a card from an example template.",
-												"If checked, the card's form number will always match its upgrade value. You will not be able to choose the card's form when upgrading it.",
+												"Determines the number of forms you can choose from when upgrading this card. If set to #b0, any form can be chosen when upgrading this card.",
 												"If checked, this effect will act on cards selected while executing conditions and modifiers.",
 												"If checked, the user will not be able to cancel this effect.",
 												"If checked, the user will only be able to select cards matching this filter."

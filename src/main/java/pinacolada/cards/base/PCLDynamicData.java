@@ -35,7 +35,6 @@ public class PCLDynamicData extends PCLCardData
     public PCLCard source;
     public PCardPrimary_DealDamage attackSkill;
     public PCardPrimary_GainBlock blockSkill;
-    public boolean linearUpgrade;
     public boolean showTypeText = true;
 
     public static HashMap<Settings.GameLanguage, CardStrings> parseLanguageStrings(String languageStrings)
@@ -127,12 +126,12 @@ public class PCLDynamicData extends PCLCardData
             setMaxUpgrades(original.maxUpgradeLevel);
             setMaxCopies(original.maxCopies);
             setUnique(original.unique);
+            setBranchFactor(original.branchFactor);
             setRemovableFromDeck(original.removableFromDeck);
             affinities = new PCLCardDataAffinityGroup(original.affinities);
         }
 
         setImagePath(original.imagePath);
-
         setColor(original.cardColor);
         setRarity(original.cardRarity);
         setType(original.cardType);
@@ -147,7 +146,6 @@ public class PCLDynamicData extends PCLCardData
 
         setImage(original.portraitImage, original.portraitForeground);
         setLanguageMap(original.languageMap);
-        setLinearUpgrade(original.linearUpgrade);
         setPSkill(original.moves, true, true);
         setPPower(original.powers, true, true);
         if (original.attackSkill != null)
@@ -191,7 +189,7 @@ public class PCLDynamicData extends PCLCardData
         safeLoadValue(() -> setMaxCopies(data.maxCopies));
         safeLoadValue(() -> setUnique(data.unique));
         safeLoadValue(() -> setRemovableFromDeck(data.removableFromDeck));
-        safeLoadValue(() -> setLinearUpgrade(data.linearUpgrade));
+        safeLoadValue(() -> setBranchFactor(data.branchUpgradeFactor));
         safeLoadValue(() -> setTarget(PCLCardTarget.valueOf(f.target)));
         safeLoadValue(() -> setAttackType(PCLAttackType.valueOf(f.attackType)));
         if (f.damageEffect != null)
@@ -215,7 +213,6 @@ public class PCLDynamicData extends PCLCardData
         }
         catch (Exception e)
         {
-            e.printStackTrace();
             EUIUtils.logError(this, "Failed to load field: " + e.getMessage());
         }
     }
@@ -432,13 +429,6 @@ public class PCLDynamicData extends PCLCardData
     public PCLDynamicData setColor(AbstractCard.CardColor color)
     {
         super.setColor(color);
-        return this;
-    }
-
-    public PCLDynamicData setLinearUpgrade(boolean linearUpgrade)
-    {
-        this.linearUpgrade = linearUpgrade;
-
         return this;
     }
 

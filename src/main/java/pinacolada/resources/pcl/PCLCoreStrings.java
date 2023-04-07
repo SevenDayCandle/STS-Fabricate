@@ -79,7 +79,7 @@ public class PCLCoreStrings extends PCLStrings
     public final String cedit_removeForm = cedit.TEXT[35];
     public final String cedit_undo = cedit.TEXT[36];
     public final String cedit_custom = cedit.TEXT[37];
-    public final String cedit_linearUpgrade = cedit.TEXT[38];
+    public final String cedit_branchUpgrade = cedit.TEXT[38];
     public final String cedit_duplicate = cedit.TEXT[39];
     public final String cedit_delete = cedit.TEXT[40];
     public final String cedit_reloadCards = cedit.TEXT[41];
@@ -139,7 +139,7 @@ public class PCLCoreStrings extends PCLStrings
     public final String cetut_hitCount = cetut.TEXT[29];
     public final String cetut_blockCount = cetut.TEXT[30];
     public final String cetut_loadFromCardScreen = cetut.TEXT[31];
-    public final String cetut_linearUpgrade = cetut.TEXT[32];
+    public final String cetut_branchUpgrade = cetut.TEXT[32];
     public final String cetut_useParent = cetut.TEXT[33];
     public final String cetut_required1 = cetut.TEXT[34];
     public final String cetut_required2 = cetut.TEXT[35];
