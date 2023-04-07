@@ -24,18 +24,18 @@ public class PCLCardAffinities
 {
     private static final ColoredTexture upgradeCircle = new ColoredTexture(PCLCoreImages.Core.circle.texture(), Settings.GREEN_RELIC_COLOR);
     public final ArrayList<PCLCardAffinity> sorted = new ArrayList<>();
-    public PCLCard card;
+    public AbstractCard card;
     public PCLCardAffinity star = null;
     public boolean collapseDuplicates = false;
     protected PCLCardAffinity[] list = new PCLCardAffinity[TOTAL_AFFINITIES];
 
-    public PCLCardAffinities(PCLCard card)
+    public PCLCardAffinities(AbstractCard card)
     {
         this.card = card;
         this.updateSortedList();
     }
 
-    public PCLCardAffinities(PCLCard card, PCLCardAffinities affinities)
+    public PCLCardAffinities(AbstractCard card, PCLCardAffinities affinities)
     {
         this.card = card;
         initialize(affinities);
@@ -406,7 +406,7 @@ public class PCLCardAffinities
         return this;
     }
 
-    public void render(SpriteBatch sb, PCLCard card, float x, float y, float size, float step)
+    public void render(SpriteBatch sb, AbstractCard card, float x, float y, float size, float step)
     {
         int max = sorted.size();
         final int half = max / 2;
@@ -432,7 +432,7 @@ public class PCLCardAffinities
         }
     }
 
-    public void renderOnCard(SpriteBatch sb, PCLCard card, boolean highlight)
+    public void renderOnCard(SpriteBatch sb, AbstractCard card, boolean highlight)
     {
         float size;
         float step;

@@ -219,20 +219,30 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return efTexts;
     }
 
-    public static List<PSkillData<? extends PField>> getEligibleClasses(AbstractCard.CardColor co)
+    public static <U extends PSkill<?>> List<PSkillData<?>> getEligibleClasses(Class<U> targetClass)
     {
-        return EUIUtils.filter(AVAILABLE_SKILLS, d -> d.isColorCompatible(co));
+        return EUIUtils.filter(AVAILABLE_SKILLS, d -> targetClass.isAssignableFrom(d.effectClass));
     }
 
-    public static <U extends PSkill<?>> List<PSkillData<?>> getEligibleClasses(AbstractCard.CardColor co, Class<U> targetClass)
+    public static <U extends PSkill<?>> List<PSkillData<?>> getEligibleClasses(Class<U> targetClass, AbstractCard.CardColor co)
     {
         return EUIUtils.filter(AVAILABLE_SKILLS, d -> targetClass.isAssignableFrom(d.effectClass) && d.isColorCompatible(co));
     }
 
-    /** Returns a list of all available skills that the current card color can use in the card editor, and that fall under the specified PSkill superclass */
-    public static <U extends PSkill<?>> List<U> getEligibleEffects(AbstractCard.CardColor co, Class<U> targetClass)
+    public static <U extends PSkill<?>> List<U> getEligibleEffects(Class<U> targetClass)
     {
-        return EUIUtils.mapAsNonnull(getEligibleClasses(co, targetClass), cl -> {
+        return getEligibleEffectsImpl(targetClass, getEligibleClasses(targetClass));
+    }
+
+    public static <U extends PSkill<?>> List<U> getEligibleEffects(Class<U> targetClass, AbstractCard.CardColor co)
+    {
+        return getEligibleEffectsImpl(targetClass, getEligibleClasses(targetClass, co));
+    }
+
+    /** Returns a list of all available skills that the current card color can use in the card editor, and that fall under the specified PSkill superclass */
+    private static <U extends PSkill<?>> List<U> getEligibleEffectsImpl(Class<U> targetClass, List<PSkillData<?>> effects)
+    {
+        return EUIUtils.mapAsNonnull(effects, cl -> {
             Constructor<? extends PSkill<?>> c = EUIUtils.tryGetConstructor(cl.effectClass);
             if (c != null)
             {
@@ -243,6 +253,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
                 catch (InstantiationException | IllegalAccessException | InvocationTargetException e)
                 {
                     e.printStackTrace();
+                    EUIUtils.logError(targetClass, "Failed to load effect class for " + String.valueOf(cl));
                 }
             }
             return null;

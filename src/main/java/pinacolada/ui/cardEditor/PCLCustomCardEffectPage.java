@@ -103,7 +103,10 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
                 .setClearButtonOptions(true, true)
                 .setCanAutosizeButton(true)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_mainCondition)
-                .setItems(EUIUtils.map(PSkill.getEligibleEffects(screen.getBuilder().cardColor, PLimit.class), bc -> primaryCond != null && bc.effectID.equals(primaryCond.effectID) ? primaryCond : bc));
+                .setItems(EUIUtils.map(
+                        PGR.config.showIrrelevantProperties.get() ? PSkill.getEligibleEffects(PLimit.class) : PSkill.getEligibleEffects(PLimit.class, screen.getBuilder().cardColor),
+                        bc -> primaryCond != null && bc.effectID.equals(primaryCond.effectID) ? primaryCond : bc)
+                );
         delayEditor = new PCLValueEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 4, MENU_HEIGHT, MENU_WIDTH * 1.5f, 0)
                 , PGR.core.strings.cedit_turnDelay, (val) -> {
             delayMove.setAmount(val);

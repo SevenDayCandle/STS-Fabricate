@@ -5,6 +5,7 @@ import extendedui.interfaces.delegates.FuncT0;
 import extendedui.ui.EUIBase;
 import extendedui.ui.EUIHoverable;
 import extendedui.ui.hitboxes.OriginRelativeHitbox;
+import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 
 import java.util.ArrayList;
@@ -90,7 +91,7 @@ public class EffectEditorGroup<T extends PSkill<?>> extends EUIBase
 
     public List<T> getAllEffects()
     {
-        return (List<T>) PSkill.getEligibleEffects(editor.screen.getBuilder().cardColor, className);
+        return (List<T>) (PGR.config.showIrrelevantProperties.get() ? PSkill.getEligibleEffects(className) : PSkill.getEligibleEffects(className, editor.screen.getBuilder().cardColor));
     }
 
     public void setListFunc(FuncT0<List<? extends T>> listFunc)

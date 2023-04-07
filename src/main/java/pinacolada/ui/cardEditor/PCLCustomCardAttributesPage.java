@@ -25,6 +25,7 @@ import pinacolada.skills.PSkill;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static pinacolada.ui.cardEditor.PCLCustomCardEditCardScreen.START_Y;
@@ -40,7 +41,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
     protected static final float PAD_X = AbstractCard.IMG_WIDTH * 0.75f + Settings.CARD_VIEW_PAD_X;
     protected static final float PAD_Y = scale(10);
 
-    protected List<PCLAffinity> availableAffinities;
+    protected ArrayList<PCLAffinity> availableAffinities;
     protected PCLCustomCardEditCardScreen screen;
     protected EUILabel header;
     protected EUIDropdown<PCLCardTagInfo> tagsDropdown;
@@ -66,14 +67,20 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
         return EUIUtils.filter(PCLCardTarget.getAll(), PCLCardTarget::vanillaCompatible);
     }
 
-    public PCLCustomCardAttributesPage(PCLCustomCardEditCardScreen screen)
+    protected static ArrayList<PCLAffinity> getEligibleAffinities(AbstractCard.CardColor color)
     {
-        this.screen = screen;
-        availableAffinities = new ArrayList<>(PCLAffinity.getAvailableAffinitiesAsList(screen.currentSlot.slotColor, PGR.config.showIrrelevantProperties.get()));
+        ArrayList<PCLAffinity> availableAffinities = new ArrayList<>(PGR.config.showIrrelevantProperties.get() ? Arrays.asList(PCLAffinity.basic()) : PCLAffinity.getAvailableAffinitiesAsList(color, false));
         if (availableAffinities.size() > 0)
         {
             availableAffinities.add(PCLAffinity.Star);
         }
+        return availableAffinities;
+    }
+
+    public PCLCustomCardAttributesPage(PCLCustomCardEditCardScreen screen)
+    {
+        this.screen = screen;
+        availableAffinities = getEligibleAffinities(screen.currentSlot.slotColor);
 
         this.header = new EUILabel(EUIFontHelper.cardtitlefontSmall,
                 new EUIHitbox(screenW(0.5f), START_Y, MENU_WIDTH, MENU_HEIGHT))

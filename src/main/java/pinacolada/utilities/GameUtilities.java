@@ -2,6 +2,7 @@ package pinacolada.utilities;
 
 import basemod.DevConsole;
 import basemod.ReflectionHacks;
+import basemod.helpers.CardModifierManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -61,6 +62,7 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardAffinities;
 import pinacolada.cards.base.fields.PCLCardAffinity;
+import pinacolada.cards.base.modifiers.AffinityDisplayModifier;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.characters.PCLCharacter;
 import pinacolada.effects.SFX;
@@ -1172,7 +1174,16 @@ public class GameUtilities
 
     public static PCLCardAffinities getPCLCardAffinities(AbstractCard card)
     {
-        return card instanceof PCLCard ? ((PCLCard) card).affinities : null;
+        if (card instanceof PCLCard)
+        {
+            return ((PCLCard) card).affinities;
+        }
+        AffinityDisplayModifier mod = AffinityDisplayModifier.get(card);
+        if (mod != null)
+        {
+            return mod.affinities;
+        }
+        return null;
     }
 
     public static PCLCardAffinity getPCLCardAffinity(AbstractCard card, PCLAffinity affinity)
@@ -2000,19 +2011,29 @@ public class GameUtilities
 
     public static void modifyAffinityLevel(AbstractCard card, PCLAffinity affinity, int level, boolean relative)
     {
-        PCLCard pC = EUIUtils.safeCast(card, PCLCard.class);
-        if (pC == null)
+        PCLCardAffinities affinities = null;
+        if (card instanceof PCLCard)
         {
-            return;
+            affinities = ((PCLCard) card).affinities;
+        }
+        else
+        {
+            AffinityDisplayModifier mod = AffinityDisplayModifier.get(card);
+            if (mod == null)
+            {
+                mod = new AffinityDisplayModifier();
+                CardModifierManager.addModifier(card, mod);
+            }
+            affinities = mod.affinities;
         }
 
         if (relative)
         {
-            pC.affinities.add(affinity, level);
+            affinities.add(affinity, level);
         }
         else
         {
-            pC.affinities.set(affinity, level);
+            affinities.set(affinity, level);
         }
     }
 
@@ -2349,13 +2370,18 @@ public class GameUtilities
 
     public static void resetAffinityLevels(AbstractCard card)
     {
-        PCLCard pC = EUIUtils.safeCast(card, PCLCard.class);
-        if (pC == null)
+        if (card instanceof PCLCard)
         {
-            return;
+            ((PCLCard) card).affinities.clearLevelsOnly();
         }
-
-        pC.affinities.clearLevelsOnly();
+        else
+        {
+            AffinityDisplayModifier mod = AffinityDisplayModifier.get(card);
+            if (mod != null)
+            {
+                CardModifierManager.removeSpecificModifier(card, mod, true);
+            }
+        }
     }
 
     public static void resetVisualProperties(AbstractCard card)

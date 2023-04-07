@@ -154,7 +154,7 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
                 .setShouldPositionClearAtTop(true)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.sui_affinities)
                 .setCanAutosize(true, true)
-                .setItems(PCLAffinity.getAvailableAffinities(cardColor, PGR.config.showIrrelevantProperties.get()));
+                .setItems(PCLCustomCardAttributesPage.getEligibleAffinities(cardColor));
         affinities.setLabelFunctionForButton((list, __) -> affinities.makeMultiSelectString(item -> item.getFormattedSymbol(cardColor)), null, true);
 
         powers = (EUISearchableDropdown<PCLPowerHelper>) new EUISearchableDropdown<PCLPowerHelper>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.35f, MENU_HEIGHT, AUX_OFFSET, 0))

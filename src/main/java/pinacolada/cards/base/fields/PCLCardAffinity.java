@@ -4,9 +4,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUI;
-import pinacolada.cards.base.PCLCard;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.PCLRenderHelpers;
 
@@ -48,7 +48,7 @@ public class PCLCardAffinity implements Comparable<PCLCardAffinity>
         }
     }
 
-    public void renderOnCard(SpriteBatch sb, PCLCard card, float x, float y, float size, boolean highlight, boolean allowAlternateBorder)
+    public void renderOnCard(SpriteBatch sb, AbstractCard card, float x, float y, float size, boolean highlight, boolean allowAlternateBorder)
     {
         float borderScale = 1f;
         final Color color = Color.WHITE.cpy();

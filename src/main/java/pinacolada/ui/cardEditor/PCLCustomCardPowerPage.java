@@ -37,7 +37,9 @@ public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
         super.setupComponents(screen);
         delayEditor.setActive(false);
         primaryConditions
-                .setItems(EUIUtils.map(PTrigger.getEligibleEffects(screen.getBuilder().cardColor, PTrigger.class), bc -> primaryCond != null && bc.effectID.equals(primaryCond.effectID) ? primaryCond : bc))
+                .setItems(EUIUtils.map(
+                        PGR.config.showIrrelevantProperties.get() ? PTrigger.getEligibleEffects(PTrigger.class) : PTrigger.getEligibleEffects(PTrigger.class, screen.getBuilder().cardColor),
+                        bc -> primaryCond != null && bc.effectID.equals(primaryCond.effectID) ? primaryCond : bc))
                 .setShowClearForSingle(false)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_trigger)
                 .autosize();

@@ -66,7 +66,6 @@ public class PSkillData<T extends PField>
     }
 
     // Only register colors registered with the PGR system. Ignores colorless because this needs to be used by other characters too
-    // TODO enable if PGR.config.showIrrelevantProperties.get() is enabled
     public PSkillData<T> pclOnly()
     {
         for (PCLResources<?,?,?,?> r : PGR.getRegisteredResources())
