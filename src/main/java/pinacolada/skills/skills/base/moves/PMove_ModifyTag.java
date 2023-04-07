@@ -69,6 +69,6 @@ public class PMove_ModifyTag extends PMove_Modify<PField_CardModifyTag>
         return useParent ? TEXT.act_removeFrom(giveString, getInheritedString()) :
                 fields.hasGroups() ?
                         TEXT.act_removeFromPlace(giveString, EUIRM.strings.numNoun(getExtraRawString(), pluralCard()), fields.getGroupString()) :
-                        TEXT.act_removeFrom(giveString, TEXT.subjects_thisObj);
+                        TEXT.act_removeFrom(giveString, TEXT.subjects_thisCard);
     }
 }

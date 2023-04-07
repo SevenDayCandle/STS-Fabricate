@@ -57,7 +57,7 @@ public class PCLUseInfo
     public <T> List<? extends T> getDataAsList(Class<T> dataClass)
     {
         List<?> list = EUIUtils.safeCast(data, List.class);
-        if (list.size() > 0 && dataClass.isInstance(list.get(0)))
+        if (list != null && list.size() > 0 && dataClass.isInstance(list.get(0)))
         {
             return (List<? extends T>) data;
         }

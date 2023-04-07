@@ -13,11 +13,11 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.fields.PField_CardCategory;
-import pinacolada.skills.skills.PPassiveCond;
+import pinacolada.skills.skills.PFacetCond;
 
 import java.util.ArrayList;
 @VisibleSkill
-public class PCond_IfHasProperty extends PPassiveCond<PField_CardCategory>
+public class PCond_IfHasProperty extends PFacetCond<PField_CardCategory>
 {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_IfHasProperty.class, PField_CardCategory.class)
             .selfTarget();
@@ -59,7 +59,7 @@ public class PCond_IfHasProperty extends PPassiveCond<PField_CardCategory>
     @Override
     public String getSampleText()
     {
-        return TEXT.cond_ifTargetHas(TEXT.subjects_thisObj, 1, TEXT.subjects_x);
+        return TEXT.cond_ifX(TEXT.subjects_card);
     }
 
     @Override
@@ -84,13 +84,7 @@ public class PCond_IfHasProperty extends PPassiveCond<PField_CardCategory>
             conditions.add(PCLCoreStrings.joinWithOr(EUIUtils.map(fields.costs, c -> c.name)));
         }
 
-        return TEXT.cond_ifTargetHas(TEXT.subjects_thisObj, 1, PCLCoreStrings.joinWithOr(conditions));
-    }
-
-    @Override
-    public String getText(boolean addPeriod)
-    {
-        return isWhenClause() ? TEXT.act_objectHas(getSubText(), childEffect != null ? childEffect.getText(addPeriod) : PCLCoreStrings.period(addPeriod)) : super.getText(addPeriod);
+        return TEXT.cond_ifTargetHas(TEXT.subjects_thisCard, 1, PCLCoreStrings.joinWithOr(conditions));
     }
 
     @Override

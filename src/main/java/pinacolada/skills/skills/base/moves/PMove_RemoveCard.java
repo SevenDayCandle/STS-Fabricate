@@ -10,6 +10,7 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.effects.PCLEffects;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -75,11 +76,12 @@ public class PMove_RemoveCard extends PCallbackMove<PField_CardCategory>
                         AbstractCard masterCopy = GameUtilities.getMasterDeckInstance(c.uuid);
                         if (masterCopy != null)
                         {
+                            PCLEffects.Queue.showCardBriefly(masterCopy);
                             AbstractDungeon.player.masterDeck.removeCard(masterCopy);
                         }
                         for (AbstractCard copy : GameUtilities.getAllInBattleInstances(c.uuid))
                         {
-                            PCLActions.bottom.purge(copy).showEffect(false, false);
+                            PCLActions.bottom.purge(copy).showEffect(true, false);
                         }
                     }
                     info.setData(cards);
@@ -96,7 +98,7 @@ public class PMove_RemoveCard extends PCallbackMove<PField_CardCategory>
     {
         String cString = useParent ? TEXT.subjects_them
                 : fields.groupTypes.size() > 0 ? EUIRM.strings.numNoun(extra > amount ? TEXT.subjects_xOfY(getAmountRawString(), getExtraRawString()) : getAmountRawString(), fields.getFullCardOrString(getRawString(EXTRA_CHAR)))
-                : TEXT.subjects_thisObj;
+                : TEXT.subjects_thisCard;
         return TEXT.act_removeFrom(cString, TEXT.cpile_deck);
     }
 }

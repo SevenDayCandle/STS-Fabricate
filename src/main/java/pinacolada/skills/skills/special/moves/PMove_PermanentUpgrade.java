@@ -49,6 +49,6 @@ public class PMove_PermanentUpgrade extends PMove<PField_CardCategory>
     @Override
     public String getSubText()
     {
-        return TEXT.subjects_permanentlyX(TEXT.act_upgrade(TEXT.subjects_thisObj));
+        return TEXT.subjects_permanentlyX(TEXT.act_upgrade(TEXT.subjects_thisCard));
     }
 }

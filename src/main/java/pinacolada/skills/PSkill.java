@@ -74,19 +74,19 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
     protected static final String CONDITION_FORMAT = "║{0}║";
     protected static final String SINGLE_FORMAT = "1";
     public static final PCLCoreStrings TEXT = PGR.core.strings;
-    public final UUID uuid = UUID.randomUUID();
     public final PSkillData<T> data;
-    public String effectID;
     public AbstractCard sourceCard;
-    public PointerProvider source;
+    public ActionT3<PSkill<T>, Integer, Integer> customUpgrade; // Callback for customizing upgrading properties
     public ArrayList<EUITooltip> tips = new ArrayList<>();
-    public T fields;
     public PCLActions.ActionOrder order = PCLActions.ActionOrder.Bottom;
     public PCLCardTarget target = PCLCardTarget.None;
     public PCLCardValueSource amountSource = PCLCardValueSource.None;
     public PCLCardValueSource extraSource = PCLCardValueSource.None;
     public PSkill<?> parent;
-    public ActionT3<PSkill<T>, Integer, Integer> customUpgrade; // Callback for customizing upgrading properties
+    public PointerProvider source;
+    public String effectID;
+    public T fields;
+    public UUID uuid = UUID.randomUUID();
     public boolean useParent;
     public boolean displayUpgrades;
     public int amount;
@@ -771,6 +771,15 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return childEffect != null ? childEffect.getGlowColor() : null;
     }
 
+    public final PSkill<?> getHighestParent()
+    {
+        if (this.parent != null)
+        {
+            return this.parent.getHighestParent();
+        }
+        return this;
+    }
+
     public final String getInheritedString()
     {
         return parent != null ? parent.getParentString() : this.getParentString();
@@ -909,7 +918,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
             case Self:
                 if (isFromCreature())
                 {
-                    return TEXT.subjects_thisObj;
+                    return TEXT.subjects_thisCard;
                 }
             default:
                 return PGR.core.strings.subjects_you;
@@ -951,7 +960,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
             case Self:
                 if (isFromCreature())
                 {
-                    return TEXT.subjects_thisObj;
+                    return TEXT.subjects_thisCard;
                 }
             default:
                 return TEXT.subjects_you;
@@ -1048,7 +1057,12 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
 
     public final boolean hasSameProperties(PSkill<?> other)
     {
-        return effectID.equals(other.effectID) && fields.equals(other.fields);
+        return other != null && effectID.equals(other.effectID) && fields.equals(other.fields);
+    }
+
+    public final boolean hasSameUUID(PSkill<?> other)
+    {
+        return other != null && other.uuid.equals(this.uuid);
     }
 
     public final boolean isCardColor(AbstractCard.CardColor co)
@@ -1146,6 +1160,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
             copy.useParent = useParent;
             copy.source = source;
             copy.sourceCard = sourceCard;
+            copy.uuid = uuid;
 
             // Copy children
             if (this.childEffect != null)

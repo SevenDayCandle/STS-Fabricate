@@ -133,7 +133,7 @@ public class PMove_Create extends PCallbackMove<PField_CardID>
     @Override
     public String getSubText()
     {
-        String joinedString = useParent ? TEXT.subjects_copiesOf(getInheritedString()) : fields.cardIDs.isEmpty() ? TEXT.subjects_copiesOf(TEXT.subjects_thisObj) : fields.getCardIDAndString();
+        String joinedString = useParent ? TEXT.subjects_copiesOf(getInheritedString()) : fields.cardIDs.isEmpty() ? TEXT.subjects_copiesOf(TEXT.subjects_thisCard) : fields.getCardIDAndString();
         return fields.groupTypes.size() > 0 ? TEXT.act_addToPile(getAmountRawString(), joinedString, fields.groupTypes.get(0).name) : TEXT.act_addToPile(getAmountRawString(), joinedString, PCLCardGroupHelper.Hand.name);
     }
 }

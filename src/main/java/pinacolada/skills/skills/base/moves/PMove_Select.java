@@ -61,7 +61,7 @@ public abstract class PMove_Select<T extends PField_CardGeneric> extends PCallba
     {
         return useParent ? EUIRM.strings.verbNoun(getActionTitle(), getInheritedString()) :
                 !fields.groupTypes.isEmpty() ? TEXT.act_genericFrom(getActionTitle(), getAmountRawOrAllString(), fields.getFullCardString(), fields.getGroupString())
-                        : EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects_thisObj);
+                        : EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects_thisCard);
     }
 
     @Override

@@ -9,13 +9,16 @@ import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.markers.SummonOnlyMove;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.powers.PSkillPower;
+import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PMove;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CustomPower;
 import pinacolada.skills.skills.PTrigger;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -60,29 +63,95 @@ public class PMove_StackCustomPower extends PMove<PField_CustomPower> implements
     {
         if (!(sourceCard instanceof EditorCard))
         {
+            super.use(info);
             return;
         }
 
         List<PTrigger> triggers = EUIUtils.mapAsNonnull(fields.indexes, i -> ((EditorCard) sourceCard).getPowerEffect(i));
-
-        // Deliberately allowing applyPower to work with negative values because infinite turn powers need to be negative
-        for (AbstractCreature c : getTargetList(info))
+        if (triggers.isEmpty())
         {
-            getActions().applyPower(new PSkillPower(c, amount, triggers)).skipIfZero(false).allowNegative(true);
+            super.use(info);
+            return;
         }
+
+        PSkill<?> highestParent = getHighestParent();
+        boolean referencesSelf = false;
+        for (Integer i : fields.indexes)
+        {
+            if (sourceCard instanceof EditorCard && ((EditorCard) sourceCard).getPowerEffects().size() > i)
+            {
+                PTrigger poEff = ((EditorCard) sourceCard).getPowerEffects().get(i);
+                referencesSelf = doesPowerReferenceSelf(poEff);
+                if (referencesSelf)
+                {
+                    break;
+                }
+            }
+        }
+
+        // If this skill is actually part of the power you are applying, we should be able to remove the power if it is an infinite power
+        if (referencesSelf && baseAmount <= 0)
+        {
+            String id = PSkillPower.createPowerID(triggers.get(triggers.size() - 1));
+            for (AbstractCreature c : getTargetList(info))
+            {
+                getActions().removePower(c, c, id);
+            }
+        }
+        else
+        {
+            // Deliberately allowing applyPower to work with negative values because infinite turn powers need to be negative, unless it references itself
+            for (AbstractCreature c : getTargetList(info))
+            {
+                getActions().applyPower(new PSkillPower(c, amount, triggers)).skipIfZero(referencesSelf).allowNegative(!referencesSelf);
+            }
+        }
+
         super.use(info);
     }
 
     @Override
     public String getSubText()
     {
-        String base = joinEffectTexts(EUIUtils.mapAsNonnull(fields.indexes, i -> {
+        // If this skill is under a PTrigger and this references that same PTrigger, the game will crash from a stack overflow
+        // In this instance, we should describe the power itself instead
+        ArrayList<PSkill<?>> powerEffects = new ArrayList<>();
+        PSkill<?> highestParent = getHighestParent();
+        boolean referencesSelf = false;
+        for (Integer i : fields.indexes)
+        {
             if (sourceCard instanceof EditorCard && ((EditorCard) sourceCard).getPowerEffects().size() > i)
             {
-                return ((EditorCard) sourceCard).getPowerEffects().get(i);
+                PTrigger poEff = ((EditorCard) sourceCard).getPowerEffects().get(i);
+                referencesSelf = doesPowerReferenceSelf(poEff);
+                if (referencesSelf)
+                {
+                    break;
+                }
+                else
+                {
+                    powerEffects.add(poEff);
+                }
             }
-            return null;
-        }), amount > 0 ? " " : EUIUtils.DOUBLE_SPLIT_LINE, true);
-        return amount > 0 ? (TEXT.cond_forTurns(getAmountRawString()) + ", " + base) : base;
+        }
+
+        if (referencesSelf)
+        {
+            return baseAmount > 0 ? TEXT.act_increaseBy(PGR.core.strings.combat_uses, getAmountRawString()) : TEXT.act_remove(TEXT.subjects_thisX);
+        }
+
+        String base = joinEffectTexts(powerEffects, baseAmount > 0 ? " " : EUIUtils.DOUBLE_SPLIT_LINE, true);
+        if (baseAmount > 0)
+        {
+            return (TEXT.cond_forTurns(getAmountRawString()) + ", " + base);
+        }
+
+        return base;
+    }
+
+    // Whether this skill is under a PTrigger and this skill references that same PTrigger
+    protected boolean doesPowerReferenceSelf(PSkill<?> poEff)
+    {
+        return getHighestParent().hasSameUUID(poEff);
     }
 }

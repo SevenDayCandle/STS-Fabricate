@@ -248,6 +248,6 @@ public class PField_CardCategory extends PField_CardID
         String tooltipTitle = tooltip.title;
         return skill.useParent ? EUIRM.strings.verbNoun(tooltipTitle, skill.getInheritedString()) :
                 !groupTypes.isEmpty() ? TEXT.act_genericFrom(tooltipTitle, skill.getAmountRawOrAllString(), !cardIDs.isEmpty() ? getCardIDOrString(cardIDs) : getFullCardString(), getGroupString())
-                        : EUIRM.strings.verbNoun(tooltipTitle, TEXT.subjects_thisObj);
+                        : EUIRM.strings.verbNoun(tooltipTitle, TEXT.subjects_thisCard);
     }
 }

@@ -145,7 +145,7 @@ public class PMove_ObtainCard extends PMove<PField_CardID>
     @Override
     public String getSubText()
     {
-        String joinedString = useParent ? TEXT.subjects_copiesOf(getInheritedString()) : fields.cardIDs.isEmpty() ? TEXT.subjects_copiesOf(TEXT.subjects_thisObj) : fields.getCardIDAndString();
+        String joinedString = useParent ? TEXT.subjects_copiesOf(getInheritedString()) : fields.cardIDs.isEmpty() ? TEXT.subjects_copiesOf(TEXT.subjects_thisCard) : fields.getCardIDAndString();
         return TEXT.act_obtain(joinedString);
     }
 }

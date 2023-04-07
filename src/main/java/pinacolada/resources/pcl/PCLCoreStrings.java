@@ -363,7 +363,7 @@ public class PCLCoreStrings extends PCLStrings
     public final String subjects_topOfX = subjects.TEXT[39];
     public final String subjects_theirX = subjects.TEXT[40];
     public final String subjects_them = subjects.TEXT[41];
-    public final String subjects_thisObj = subjects.TEXT[42];
+    public final String subjects_thisCard = subjects.TEXT[42];
     public final String subjects_thisX = subjects.TEXT[43];
     public final String subjects_unblockedX = subjects.TEXT[44];
     public final String subjects_x = subjects.TEXT[45];

@@ -51,7 +51,7 @@ public class PCond_PileHas extends PPassiveCond<PField_CardCategory>
     @Override
     public String getSampleText()
     {
-        return TEXT.cond_ifX(TEXT.subjects_card);
+        return TEXT.cond_ifX(TEXT.subjects_anyPile);
     }
 
     @Override

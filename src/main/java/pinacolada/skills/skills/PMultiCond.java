@@ -110,7 +110,7 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
     @Override
     public String getSubText()
     {
-        return EUIUtils.any(effects, effect -> effect instanceof PActiveCond) ?
+        return EUIUtils.any(effects, effect -> effect instanceof PActiveCond || effect instanceof PFacetCond) ?
                 fields.or ? PCLCoreStrings.joinWithOr(getEffectTextsWithoutPeriod(effects, true)) : PCLCoreStrings.joinWithAnd(getEffectTextsWithoutPeriod(effects, true)) :
                 fields.or ? PCLCoreStrings.joinWithOr(getEffectTextsWithoutPeriod(effects, true)) : PSkill.joinEffectTexts(effects, ". ", true);
     }
