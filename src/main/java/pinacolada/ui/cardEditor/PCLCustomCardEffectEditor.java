@@ -51,7 +51,7 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
     public static final float CUTOFF = Settings.WIDTH * 0.7f;
     public static final float MAIN_OFFSET = MENU_WIDTH * 1.58f;
     public static final float AUX_OFFSET = MENU_WIDTH * 2.43f;
-    protected final PCLCustomCardEffectPage editor;
+    public final PCLCustomCardEffectPage editor;
     protected ArrayList<EUIHoverable> activeElements = new ArrayList<>();
     protected EUISearchableDropdown<T> effects;
     protected EUIDropdown<PCLAffinity> affinities;

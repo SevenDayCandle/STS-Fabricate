@@ -10,6 +10,7 @@ import pinacolada.actions.piles.ScryCards;
 import pinacolada.actions.piles.SelectFromPile;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
+import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -21,7 +22,8 @@ public class PMove_Scry extends PMove_Select<PField_CardCategory>
 {
     public static final PSkillData<PField_CardCategory> DATA = register(PMove_Scry.class, PField_CardCategory.class)
             .selfTarget()
-            .setGroups(PCLCardGroupHelper.DrawPile);
+            .setGroups(PCLCardGroupHelper.DrawPile)
+            .setOrigins(PCLCardSelection.Top);
 
     public PMove_Scry()
     {

@@ -39,8 +39,8 @@ public abstract class PCLAbstractPlayerData
     public static final int DEFAULT_ENERGY = 3;
     public static final int DEFAULT_ORBS = 3;
     public static final ArrayList<AbstractGlyphBlight> GLYPHS = new ArrayList<>();
-    public final HashMap<Integer, PCLLoadout> loadouts = new HashMap<>();
-    public final HashMap<Integer, PCLTrophies> trophies = new HashMap<>();
+    public final HashMap<String, PCLLoadout> loadouts = new HashMap<>();
+    public final HashMap<String, PCLTrophies> trophies = new HashMap<>();
     public final PCLCharacterConfig config;
     public final PCLResources<?,?,?,?> resources;
     public final int baseHP;
@@ -87,14 +87,14 @@ public abstract class PCLAbstractPlayerData
     {
         loadouts.clear();
         PCLLoadout core = getCoreLoadout();
-        loadouts.put(core.id, core);
+        loadouts.put(core.ID, core);
         List<PCLLoadout> availableLoadouts = getAvailableLoadouts();
         if (availableLoadouts.size() > 0)
         {
             this.selectedLoadout = availableLoadouts.get(0);
             for (PCLLoadout loadout : getAvailableLoadouts())
             {
-                loadouts.put(loadout.id, loadout);
+                loadouts.put(loadout.ID, loadout);
             }
         }
 
@@ -172,29 +172,19 @@ public abstract class PCLAbstractPlayerData
 
             if (items.length > 0)
             {
-                int loadoutID = EUIUtils.parseInt(items[0], -1);
-                if (loadoutID >= 0)
-                {
-                    selectedLoadout = getLoadout(loadoutID);
-                }
-
+                selectedLoadout = getLoadout(items[0]);
                 for (int i = 1; i < items.length; i++)
                 {
                     final PCLTrophies trophies = new PCLTrophies(items[i]);
-                    this.trophies.put(trophies.ID, trophies);
+                    this.trophies.put(items[0], trophies);
                 }
             }
         }
     }
 
-    public String getLoadoutPrefix()
+    public String getLoadoutPath(String id, int slot)
     {
-        return config.getConfigPath() + resources.id + "_slot";
-    }
-
-    public String getLoadoutPath(int id, int slot)
-    {
-        return getLoadoutPrefix() + "_" + id + "_" + slot + ".json";
+        return config.getConfigPath() + "_" + (id != null ? id.replace(':','-') : resources.id) + "_" + slot + ".json";
     }
 
     public abstract List<PCLLoadout> getAvailableLoadouts();
@@ -210,12 +200,12 @@ public abstract class PCLAbstractPlayerData
         return new ArrayList<>(loadouts.values());
     }
 
-    public PCLLoadout getLoadout(int id)
+    public PCLLoadout getLoadout(String id)
     {
         return loadouts.get(id);
     }
 
-    public PCLTrophies getTrophies(int id)
+    public PCLTrophies getTrophies(String id)
     {
         return trophies.get(id);
     }
@@ -316,8 +306,8 @@ public abstract class PCLAbstractPlayerData
                         continue;
                     }
 
-                    FileHandle writer = Gdx.files.absolute(getLoadoutPath(loadout.id, data.preset));
-                    writer.writeString(EUIUtils.serialize(new PCLLoadoutData.LoadoutInfo(loadout.id, data), TInfo.getType()), false);
+                    FileHandle writer = Gdx.files.absolute(getLoadoutPath(loadout.ID, data.preset));
+                    writer.writeString(EUIUtils.serialize(new PCLLoadoutData.LoadoutInfo(loadout.ID, data), TInfo.getType()), false);
                 }
             }
         }
@@ -333,7 +323,7 @@ public abstract class PCLAbstractPlayerData
         {
             selectedLoadout = EUIUtils.random(EUIUtils.filter(getEveryLoadout(), loadout -> resources.getUnlockLevel() >= loadout.unlockLevel));
         }
-        sj.add(String.valueOf(selectedLoadout.id));
+        sj.add(String.valueOf(selectedLoadout.ID));
 
         for (PCLTrophies t : trophies.values())
         {

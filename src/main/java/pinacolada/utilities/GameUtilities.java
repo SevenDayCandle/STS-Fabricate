@@ -2276,15 +2276,25 @@ public class GameUtilities
         {
             int targetValue = tag.add(card, value);
             PCLCard pCard = EUIUtils.safeCast(card, PCLCard.class);
-            if (pCard != null && pCard.auxiliaryData != null)
+            if (pCard != null)
             {
-                if (targetValue != 0)
+                // Save the tag permanently on the card
+                if (pCard.auxiliaryData != null)
                 {
-                    pCard.auxiliaryData.addedTags.add(tag);
+                    if (targetValue != 0)
+                    {
+                        pCard.auxiliaryData.addedTags.add(tag);
+                    }
+                    else
+                    {
+                        pCard.auxiliaryData.removedTags.add(tag);
+                    }
                 }
-                else
+
+                // If tags are in the description, we need to update the card description to get it to show up
+                if (PGR.config.displayCardTagDescription.get())
                 {
-                    pCard.auxiliaryData.removedTags.add(tag);
+                    pCard.initializeDescription();
                 }
             }
             CombatManager.onTagChanged(card, tag, value);

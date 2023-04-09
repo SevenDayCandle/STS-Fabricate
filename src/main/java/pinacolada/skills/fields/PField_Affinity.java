@@ -1,8 +1,10 @@
 package pinacolada.skills.fields;
 
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.resources.PGR;
 import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
+import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,7 +55,7 @@ public class PField_Affinity extends PField_Random
 
     public String getAffinityChoiceString()
     {
-        return affinities.isEmpty() ? TEXT.subjects_anyX(PGR.core.tooltips.affinityGeneral) : getAffinityLevelOrString(affinities);
+        return affinities.isEmpty() ? TEXT.subjects_anyX(PGR.core.tooltips.affinityGeneral) : getAffinityLevelOrString(getColor(), affinities);
     }
 
     public String getAffinityAndString()
@@ -68,17 +70,17 @@ public class PField_Affinity extends PField_Random
 
     public String getAffinityLevelAndString()
     {
-        return getAffinityLevelAndString(affinities);
+        return getAffinityLevelAndString(getColor(), affinities);
     }
 
     public String getAffinityLevelOrString()
     {
-        return getAffinityLevelOrString(affinities);
+        return getAffinityLevelOrString(getColor(), affinities);
     }
 
     public String getAffinityLevelAndOrString()
     {
-        return getAffinityLevelAndOrString(affinities, random);
+        return getAffinityLevelAndOrString(getColor(), affinities, random);
     }
 
     public String getAffinityOrString()
@@ -104,5 +106,10 @@ public class PField_Affinity extends PField_Random
     public String getAffinityString()
     {
         return getAffinityString(affinities);
+    }
+
+    public AbstractCard.CardColor getColor()
+    {
+        return skill != null && skill.sourceCard != null ? skill.sourceCard.color : GameUtilities.getActingColor();
     }
 }

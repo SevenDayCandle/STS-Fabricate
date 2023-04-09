@@ -19,9 +19,10 @@ import extendedui.EUI;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import org.apache.commons.lang3.StringUtils;
-import pinacolada.augments.AugmentStrings;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
+import pinacolada.misc.AugmentStrings;
+import pinacolada.misc.LoadoutStrings;
 import pinacolada.utilities.GameUtilities;
 
 import java.lang.reflect.Type;
@@ -33,10 +34,13 @@ import java.util.Map;
 public abstract class PCLResources<T extends PCLAbstractPlayerData, U extends PCLImages, V extends PCLTooltips, W extends PCLStrings>
         implements EditCharactersSubscriber, EditKeywordsSubscriber, EditStringsSubscriber, PostInitializeSubscriber
 {
+    private static final Type AUGMENT_TYPE = new TypeToken<Map<String, Map<String, AugmentStrings>>>() {}.getType();
     private static final Type GROUPED_CARD_TYPE = new TypeToken<Map<String, Map<String, CardStrings>>>() {}.getType();
+    private static final Type LOADOUT_TYPE = new TypeToken<Map<String, Map<String, LoadoutStrings>>>() {}.getType();
     public static final String JSON_AUGMENTS = "AugmentStrings.json";
     public static final String JSON_CARDS = "CardStrings.json";
     public static final String JSON_KEYWORDS = "KeywordStrings.json";
+    public static final String JSON_LOADOUTS = "LoadoutStrings.json";
     public final AbstractCard.CardColor cardColor;
     public final AbstractPlayer.PlayerClass playerClass;
     public final boolean usePCLFrame;
@@ -97,6 +101,14 @@ public abstract class PCLResources<T extends PCLAbstractPlayerData, U extends PC
         }
 
         localizationStrings.putAll(cardStrings);
+    }
+
+    public static void loadLoadoutStrings(String jsonString)
+    {
+        final Type typeToken = new TypeToken<Map<String, LoadoutStrings>>()
+        {
+        }.getType();
+        LoadoutStrings.STRINGS.putAll(new HashMap<String, LoadoutStrings>(EUIUtils.deserialize(jsonString, typeToken)));
     }
 
     public String createID(String suffix)
@@ -180,6 +192,11 @@ public abstract class PCLResources<T extends PCLAbstractPlayerData, U extends PC
         loadCustomNonBaseStrings(JSON_CARDS, PCLResources::loadGroupedCardStrings);
     }
 
+    protected void loadLoadoutStrings()
+    {
+        loadCustomNonBaseStrings(JSON_LOADOUTS, PCLResources::loadLoadoutStrings);
+    }
+
     protected void loadCustomNonBaseStrings(String path, ActionT1<String> loadFunc)
     {
         String json = getFallbackFile(path).readString(StandardCharsets.UTF_8.name());
@@ -238,6 +255,7 @@ public abstract class PCLResources<T extends PCLAbstractPlayerData, U extends PC
     @Override
     public void receiveEditStrings()
     {
+        loadLoadoutStrings();
         loadCustomStrings(CharacterStrings.class);
         loadCustomCardStrings();
         loadCustomStrings(RelicStrings.class);

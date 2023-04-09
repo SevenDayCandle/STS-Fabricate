@@ -34,6 +34,8 @@ public class ViewInGamePoolEffect extends PCLEffectWithCallback<CardGroup>
 {
     private EUIButton deselectAllButton;
     private EUIButton selectAllButton;
+    private EUIButton selectCustomButton;
+    private EUIButton selectRandomButton;
     private EUILabel selectedCount;
     private EUIToggle upgradeToggle;
     private boolean canToggle = true;

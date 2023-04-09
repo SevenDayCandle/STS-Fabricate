@@ -293,7 +293,7 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>, Cou
         {
             return resources.tooltips.getLevelTooltip(this);
         }
-        return PGR.core.tooltips.level;
+        return PGR.core.tooltips.affinityGeneral;
     }
 
     public TextureRegion getPowerIcon()

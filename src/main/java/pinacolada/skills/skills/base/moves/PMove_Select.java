@@ -9,6 +9,7 @@ import extendedui.interfaces.delegates.FuncT5;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.actions.piles.SelectFromPile;
 import pinacolada.cards.base.PCLCardGroupHelper;
+import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.skills.PSkillData;
@@ -67,7 +68,9 @@ public abstract class PMove_Select<T extends PField_CardGeneric> extends PCallba
     @Override
     public String getAmountRawOrAllString()
     {
-        return baseAmount <= 0 ? TEXT.subjects_all : extra > 0 ? TEXT.subjects_xOfY(getExtraRawString(), getAmountRawString()) : getAmountRawString();
+        return baseAmount <= 0 ? fields.forced ? TEXT.subjects_all : TEXT.subjects_any
+                : extra > 0 ? TEXT.subjects_xOfY(getExtraRawString(), getAmountRawString())
+                : (fields.forced || fields.origin != PCLCardSelection.Manual) ? getAmountRawString() : getRangeToAmountRawString();
     }
 
     protected String getActionTitle()

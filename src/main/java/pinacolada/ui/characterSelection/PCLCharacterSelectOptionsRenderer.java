@@ -15,6 +15,7 @@ import extendedui.ui.controls.EUITextBox;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIClassUtils;
 import extendedui.utilities.EUIFontHelper;
+import org.apache.commons.lang3.StringUtils;
 import pinacolada.blights.common.AbstractGlyphBlight;
 import pinacolada.interfaces.providers.RunAttributesProvider;
 import pinacolada.resources.PCLAbstractPlayerData;
@@ -228,10 +229,19 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase
 
             this.loadouts.sort((a, b) ->
             {
-                final int diff = a.id - b.id;
+                if (a.isCore())
+                {
+                    return -1;
+                }
+                else if (b.isCore())
+                {
+                    return 1;
+                }
+                final int diff = StringUtils.compare(a.ID, b.ID);
                 final int level = data.resources.getUnlockLevel();
                 final int levelA = a.unlockLevel - level;
                 final int levelB = b.unlockLevel - level;
+
                 if (levelA > 0 || levelB > 0)
                 {
                     return diff + Integer.compare(levelA, levelB) * 1313;

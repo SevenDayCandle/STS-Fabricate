@@ -19,11 +19,12 @@ import extendedui.ui.cardFilter.CountingPanel;
 import extendedui.ui.controls.EUIImage;
 import extendedui.ui.hitboxes.EUIHitbox;
 import pinacolada.annotations.*;
-import pinacolada.augments.AugmentStrings;
 import pinacolada.augments.PCLAugment;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.commands.*;
 import pinacolada.effects.EffekseerEFK;
+import pinacolada.misc.AugmentStrings;
+import pinacolada.misc.LoadoutStrings;
 import pinacolada.misc.PCLAffinityPanelFilter;
 import pinacolada.misc.PCLDungeon;
 import pinacolada.resources.pcl.PCLCoreResources;
@@ -144,6 +145,11 @@ public class PGR
     public static LocalizedStrings getLanguagePack()
     {
         return CardCrawlGame.languagePack;
+    }
+
+    public static LoadoutStrings getLoadoutStrings(String stringID)
+    {
+        return LoadoutStrings.STRINGS.get(stringID);
     }
 
     public static String getMonsterImage(String id)
@@ -392,6 +398,7 @@ public class PGR
         ConsoleCommand.addCommand("augment", AugmentCommand.class);
         ConsoleCommand.addCommand("effekseer", EffekseerCommand.class);
         ConsoleCommand.addCommand("exportcsv", ExportCSVCommand.class);
+        ConsoleCommand.addCommand("jumpanywhere", JumpAnywhereCommand.class);
         ConsoleCommand.addCommand("obtain", ObtainCommand.class);
         ConsoleCommand.addCommand("obtaincustom", ObtainCustomCommand.class);
         ConsoleCommand.addCommand("obtaindeck", ObtainDeckCommand.class);

@@ -150,6 +150,9 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
         }
 
         pages.clear();
+        effectPages.clear();
+        powerPages.clear();
+        pageButtons.clear();
         if (!fromInGame)
         {
             pages.add(new PCLCustomCardPrimaryInfoPage(this));
@@ -269,6 +272,8 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object>
     {
         return tempBuilders.get(currentBuilder);
     }
+
+    public int getPowerCount() {return powerPages.size();}
 
     protected void rebuildCard()
     {

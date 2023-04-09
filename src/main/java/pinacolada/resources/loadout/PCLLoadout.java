@@ -4,7 +4,6 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
-import com.megacrit.cardcrawl.localization.CharacterStrings;
 import com.megacrit.cardcrawl.screens.CharSelectInfo;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUIUtils;
@@ -17,6 +16,7 @@ import pinacolada.cards.base.PCLDynamicData;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.characters.PCLCharacter;
+import pinacolada.misc.LoadoutStrings;
 import pinacolada.relics.PCLRelic;
 import pinacolada.relics.pcl.*;
 import pinacolada.resources.PCLAbstractPlayerData;
@@ -33,6 +33,9 @@ import static pinacolada.ui.characterSelection.PCLLoadoutEditor.MAX_RELIC_SLOTS;
 // Copied and modified from STS-AnimatorMod
 public abstract class PCLLoadout
 {
+    private static final HashMap<AbstractCard.CardColor, ArrayList<PCLLoadout>> COLOR_LOADOUTS = new HashMap<>();
+    private static final HashMap<String, PCLLoadout> LOADOUTS = new HashMap<>();
+
     public static final AbstractCard.CardType UNSELECTABLE_TYPE = AbstractCard.CardType.CURSE;
     public static final int MAX_PRESETS = 5;
     public static final int MAX_VALUE = 20;
@@ -41,9 +44,9 @@ public abstract class PCLLoadout
     public static final int COMMON_CORE_VALUE = 5;
     public static final int CURSE_VALUE = -7;
     public static final int CARD_SLOTS = 4;
-    public static final HashMap<AbstractCard.CardColor, ArrayList<PCLLoadout>> LOADOUTS = new HashMap<>();
     public final AbstractCard.CardColor color;
-    public final int id;
+    public final String ID;
+    public LoadoutStrings strings;
     public int preset;
     public int unlockLevel = 0;
     public ArrayList<PCLCardData> cardDatas = new ArrayList<>();
@@ -54,24 +57,34 @@ public abstract class PCLLoadout
     protected ArrayList<String> startingDeck = new ArrayList<>();
     protected String shortDescription = GameUtilities.EMPTY_STRING;
 
+    public static String createFullID(Class<? extends PCLLoadout> type)
+    {
+        return createFullID(PGR.core, type);
+    }
+
+    public static String createFullID(PCLResources<?,?,?,?> resources, Class<? extends PCLLoadout> type)
+    {
+        return resources.createID(type.getSimpleName());
+    }
+
     public static PCLLoadout register(AbstractCard.CardColor color, FuncT1<PCLLoadout, AbstractCard.CardColor> loadoutFunc)
     {
         PCLLoadout loadout = loadoutFunc.invoke(color);
-        ArrayList<PCLLoadout> l = LOADOUTS.getOrDefault(color, new ArrayList<>());
+        ArrayList<PCLLoadout> l = COLOR_LOADOUTS.getOrDefault(color, new ArrayList<>());
         l.add(loadout);
-        LOADOUTS.put(color, l);
+        COLOR_LOADOUTS.put(color, l);
+        LOADOUTS.put(loadout.ID, loadout);
         return loadout;
     }
 
     public static ArrayList<PCLLoadout> getAll(AbstractCard.CardColor cardColor)
     {
-        return LOADOUTS.getOrDefault(cardColor, new ArrayList<>());
+        return COLOR_LOADOUTS.getOrDefault(cardColor, new ArrayList<>());
     }
 
-    public static PCLLoadout get(AbstractCard.CardColor cardColor, int id)
+    public static PCLLoadout get(String id)
     {
-        ArrayList<PCLLoadout> loadouts = getAll(cardColor);
-        return EUIUtils.find(loadouts, l -> l.id == id);
+        return LOADOUTS.get(id);
     }
 
     public static int getBaseDraw(AbstractCard.CardColor color)
@@ -166,11 +179,12 @@ public abstract class PCLLoadout
         return null;
     }
 
-    public PCLLoadout(AbstractCard.CardColor data, int id, int unlockLevel)
+    public PCLLoadout(AbstractCard.CardColor color, String id, int unlockLevel)
     {
-        this.id = id;
+        this.ID = id;
         this.unlockLevel = unlockLevel;
-        this.color = data;
+        this.color = color;
+        this.strings = PGR.getLoadoutStrings(ID);
     }
 
     public void addBasicDefends(PCLCardSlot slot)
@@ -212,6 +226,13 @@ public abstract class PCLLoadout
         {
             slot.addItem(data, -CURSE_VALUE);
         }
+    }
+
+    public void addLoadoutRelics(PCLRelicSlot r1)
+    {
+        r1.addItem(new Macroscope(), 2);
+        r1.addItem(new SpitefulCubes(), 2);
+        r1.addItem(new UsefulBox(), 10);
     }
 
     public void addStarterRelic(ArrayList<String> res, String id)
@@ -310,18 +331,12 @@ public abstract class PCLLoadout
     public CharSelectInfo getLoadout(String name, String description, PCLCharacter c)
     {
         int hp = getHP();
-        return new CharSelectInfo(name + "-" + id, description, hp, hp, getOrbSlots(), getGold(), getDraw(), c, getStartingRelics(), getStartingDeck(), false);
+        return new CharSelectInfo(name + "-" + ID, description, hp, hp, getOrbSlots(), getGold(), getDraw(), c, getStartingRelics(), getStartingDeck(), false);
     }
 
     public String getName()
     {
-        String[] options = null;
-        CharacterStrings cString = PGR.getCharacterStrings(color);
-        if (cString != null)
-        {
-            options = cString.OPTIONS;
-        }
-        return id >= 0 && options != null && options.length > id ? options[id] : "";
+        return strings != null ? strings.NAME : "";
     }
 
     public String getNameForFilter()
@@ -411,6 +426,7 @@ public abstract class PCLLoadout
 
         addStarterRelic(res, FoolishCubes.ID);
 
+        // TODO don't hardcode this
         for (PCLRelicSlot rSlot : getPreset().relicSlots)
         {
             if (rSlot.selected != null && rSlot.selected.relic != null)
@@ -450,11 +466,11 @@ public abstract class PCLLoadout
             return null;
         }
 
-        PCLTrophies trophies = data.getTrophies(id);
+        PCLTrophies trophies = data.getTrophies(ID);
         if (trophies == null)
         {
-            trophies = new PCLTrophies(id);
-            data.trophies.put(id, trophies);
+            trophies = new PCLTrophies(ID);
+            data.trophies.put(ID, trophies);
         }
 
         return trophies;
@@ -478,12 +494,11 @@ public abstract class PCLLoadout
             addLoadoutCards(slot);
         }
 
+        // TODO get relics from loadout
         for (int i = 0; i < MAX_RELIC_SLOTS; i++)
         {
             PCLRelicSlot r1 = data.addRelicSlot();
-            r1.addItem(new Macroscope(), 2);
-            r1.addItem(new SpitefulCubes(), 2);
-            r1.addItem(new UsefulBox(), 10);
+            addLoadoutRelics(r1);
         }
     }
 
@@ -505,7 +520,7 @@ public abstract class PCLLoadout
     * */
     public boolean isCore()
     {
-        return id < 0;
+        return unlockLevel < 0;
     }
 
     public boolean isLocked()
@@ -518,7 +533,7 @@ public abstract class PCLLoadout
     {
         PCLTrophies trophies = getTrophies();
         PCLAbstractPlayerData data = getPlayerData();
-        if (data != null && data.selectedLoadout.id == id)
+        if (data != null && data.selectedLoadout.ID.equals(ID))
         {
             if (trophyLevel >= 2)
             {
@@ -555,7 +570,7 @@ public abstract class PCLLoadout
             return null;
         }
 
-        PCLCard card = ((PCLDynamicData) new PCLDynamicData(String.valueOf(id), data.resources)
+        PCLCard card = ((PCLDynamicData) new PCLDynamicData(String.valueOf(ID), data.resources)
                 .setImagePath(data.imagePath)
                 .showTypeText(false)
                 .setMaxUpgrades(0))

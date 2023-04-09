@@ -4,6 +4,7 @@ import basemod.BaseMod;
 import basemod.abstracts.CustomSavable;
 import basemod.interfaces.OnStartBattleSubscriber;
 import basemod.interfaces.PreStartGameSubscriber;
+import basemod.interfaces.StartActSubscriber;
 import basemod.interfaces.StartGameSubscriber;
 import com.megacrit.cardcrawl.blights.AbstractBlight;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -48,17 +49,17 @@ import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.player;
 
 // Copied and modified from STS-AnimatorMod
 // TODO Rework
-public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscriber, StartGameSubscriber, OnStartBattleSubscriber
+public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscriber, StartGameSubscriber, OnStartBattleSubscriber, StartActSubscriber
 {
     public static final AbstractCard.CardRarity[] poolOrdering = AbstractCard.CardRarity.values();
     private transient boolean panelAdded;
     private transient int totalAugmentCount = 0;
-    protected ArrayList<Integer> loadoutIDs = new ArrayList<>();
+    protected ArrayList<String> loadoutIDs = new ArrayList<>();
     protected Integer highestScore = 0;
     protected Integer rNGCounter = 0;
     protected Map<String, String> eventLog = new HashMap<>();
     protected Random rng;
-    protected int startingLoadout = -1;
+    protected String startingLoadout;
     protected transient PCLAbstractPlayerData data;
     protected transient boolean canJumpAnywhere;
     protected transient boolean canJumpNextFloor;
@@ -329,7 +330,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         }
     }
 
-    public void initializeCardPool()
+    public void initializeCardPool(boolean isActuallyStartingRun)
     {
         loadouts.clear();
         final AbstractPlayer player = CombatManager.refreshPlayer();
@@ -358,44 +359,47 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
             BaseMod.addTopPanelItem(PGR.augmentPanel);
         }
 
-        if (Settings.isStandardRun())
+        if (isActuallyStartingRun)
         {
-            data.saveTrophies(true);
-        }
-
-        // Modify starting potion slots
-        if (data.selectedLoadout != null)
-        {
-            player.potionSlots += data.selectedLoadout.getPotionSlots();
-            while (player.potions.size() > player.potionSlots && player.potions.get(player.potions.size() - 1) instanceof PotionSlot)
+            if (Settings.isStandardRun())
             {
-                player.potions.remove(player.potions.size() - 1);
+                data.saveTrophies(true);
             }
-            while (player.potionSlots > player.potions.size())
-            {
-                player.potions.add(new PotionSlot(player.potions.size() - 1));
-            }
-            player.adjustPotionPositions();
-        }
 
-        // Add glyphs
-        for (int i = 0; i < PCLAbstractPlayerData.GLYPHS.size(); i++)
-        {
-            boolean shouldAdd = true;
-            for (AbstractBlight blight : player.blights)
+            // Modify starting potion slots
+            if (data.selectedLoadout != null)
             {
-                if (PCLAbstractPlayerData.GLYPHS.get(i).getClass().equals(blight.getClass()))
+                player.potionSlots += data.selectedLoadout.getPotionSlots();
+                while (player.potions.size() > player.potionSlots && player.potions.get(player.potions.size() - 1) instanceof PotionSlot)
                 {
-                    shouldAdd = false;
-                    break;
+                    player.potions.remove(player.potions.size() - 1);
                 }
+                while (player.potionSlots > player.potions.size())
+                {
+                    player.potions.add(new PotionSlot(player.potions.size() - 1));
+                }
+                player.adjustPotionPositions();
             }
-            int counter = PGR.dungeon.ascensionGlyphCounters.size() > i ? PGR.dungeon.ascensionGlyphCounters.get(i) : 0;
-            if (shouldAdd && counter > 0)
+
+            // Add glyphs
+            for (int i = 0; i < PCLAbstractPlayerData.GLYPHS.size(); i++)
             {
-                AbstractBlight blight = PCLAbstractPlayerData.GLYPHS.get(i).makeCopy();
-                blight.setCounter(counter);
-                GameUtilities.obtainBlightWithoutEffect(blight);
+                boolean shouldAdd = true;
+                for (AbstractBlight blight : player.blights)
+                {
+                    if (PCLAbstractPlayerData.GLYPHS.get(i).getClass().equals(blight.getClass()))
+                    {
+                        shouldAdd = false;
+                        break;
+                    }
+                }
+                int counter = PGR.dungeon.ascensionGlyphCounters.size() > i ? PGR.dungeon.ascensionGlyphCounters.get(i) : 0;
+                if (shouldAdd && counter > 0)
+                {
+                    AbstractBlight blight = PCLAbstractPlayerData.GLYPHS.get(i).makeCopy();
+                    blight.setCounter(counter);
+                    GameUtilities.obtainBlightWithoutEffect(blight);
+                }
             }
         }
 
@@ -593,8 +597,8 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         augments.clear();
         fragments.clear();
         startingSeries = new FakeLoadout();
+        startingLoadout = startingSeries.ID;
         loadoutIDs.clear();
-        startingLoadout = -1;
         valueDivisor = 1;
 
         validate();
@@ -719,16 +723,16 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         {
             for (PCLLoadout loadout : loadouts)
             {
-                loadoutIDs.add(loadout.id);
+                loadoutIDs.add(loadout.ID);
             }
 
-            if (startingSeries.id > 0)
+            if (startingSeries != null)
             {
-                startingLoadout = startingSeries.id;
+                startingLoadout = startingSeries.ID;
             }
             else
             {
-                startingLoadout = data.selectedLoadout.id;
+                startingLoadout = data.selectedLoadout.ID;
             }
         }
 
@@ -767,10 +771,10 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
 
             if (this.data != null)
             {
-                startingSeries = this.data.getLoadout(loaded.startingLoadout);
-                for (Integer proxy : loaded.loadoutIDs)
+                startingSeries = PCLLoadout.get(loaded.startingLoadout);
+                for (String proxy : loaded.loadoutIDs)
                 {
-                    PCLLoadout loadout = PCLLoadout.get(this.data.resources.cardColor, proxy);
+                    PCLLoadout loadout = PCLLoadout.get(proxy);
                     if (loadout != null)
                     {
                         loadouts.add(loadout);
@@ -798,8 +802,14 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
     @Override
     public void receiveStartGame()
     {
-        initializeCardPool();
+        initializeCardPool(true);
         fullLog("INITIALIZE GAME");
+    }
+
+    @Override
+    public void receiveStartAct()
+    {
+        initializeCardPool(false);
     }
 
     @Override

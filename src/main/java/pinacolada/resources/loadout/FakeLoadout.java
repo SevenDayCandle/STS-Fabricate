@@ -3,6 +3,7 @@ package pinacolada.resources.loadout;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.pcl.special.QuestionMark;
+import pinacolada.resources.PGR;
 
 import java.util.ArrayList;
 
@@ -11,7 +12,7 @@ public class FakeLoadout extends PCLLoadout
 {
     public FakeLoadout()
     {
-        super(AbstractCard.CardColor.COLORLESS, -1, 0);
+        super(AbstractCard.CardColor.COLORLESS, PGR.BASE_PREFIX, 0);
     }
 
     @Override

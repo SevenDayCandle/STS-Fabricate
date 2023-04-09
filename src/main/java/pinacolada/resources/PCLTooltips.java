@@ -8,7 +8,7 @@ public abstract class PCLTooltips
     abstract public void initializeIcons();
     public EUITooltip getLevelTooltip(PCLAffinity affinity)
     {
-        return PGR.core.tooltips.level;
+        return affinity.getTooltip();
     }
     public EUITooltip getRerollTooltip()
     {

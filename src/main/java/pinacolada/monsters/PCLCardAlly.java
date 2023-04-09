@@ -35,6 +35,7 @@ import pinacolada.monsters.animations.PCLAllyAnimation;
 import pinacolada.monsters.animations.PCLSlotAnimation;
 import pinacolada.monsters.animations.pcl.PCLGeneralAllyAnimation;
 import pinacolada.powers.PSkillPower;
+import pinacolada.powers.PSpecialCardPower;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
@@ -93,13 +94,24 @@ public class PCLCardAlly extends PCLCreature
 
         if (clearPowers)
         {
+            for (AbstractPower po : powers)
+            {
+                po.onRemove();
+            }
             this.powers.clear();
             this.currentBlock = 0;
             TempHPField.tempHp.set(this, 0);
         }
         else
         {
-            this.powers.removeIf(p -> p instanceof PSkillPower);
+            for (AbstractPower p : powers)
+            {
+                if (p instanceof PSkillPower || p instanceof PSpecialCardPower)
+                {
+                    p.onRemove();
+                }
+            }
+            this.powers.removeIf(p -> p instanceof PSkillPower || p instanceof PSpecialCardPower);
         }
 
         if (stun)

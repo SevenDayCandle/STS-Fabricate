@@ -33,7 +33,7 @@ public class PCLCustomCardSlot
     private static final HashMap<AbstractCard.CardColor, ArrayList<PCLCustomCardSlot>> CUSTOM_CARDS = new HashMap<>();
     private static final ArrayList<CustomCardFileProvider> PROVIDERS = new ArrayList<>();
     public String ID;
-    public Integer loadout;
+    public String loadout;
     public Integer maxUpgradeLevel = 1;
     public Integer maxCopies = -1;
     public Integer branchUpgradeFactor = 0;
@@ -269,7 +269,7 @@ public class PCLCustomCardSlot
         {
             ID = first.ID;
             languageStrings = EUIUtils.serialize(first.languageMap);
-            loadout = first.loadout != null ? first.loadout.id : null;
+            loadout = first.loadout != null ? first.loadout.ID : null;
             type = first.cardType.name();
             rarity = first.cardRarity.name();
             color = first.cardColor.name();

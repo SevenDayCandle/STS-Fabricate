@@ -1,4 +1,4 @@
-package pinacolada.augments;
+package pinacolada.misc;
 
 import java.util.HashMap;
 

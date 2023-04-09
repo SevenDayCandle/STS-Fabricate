@@ -182,7 +182,7 @@ public class PCLDynamicData extends PCLCardData
         safeLoadValue(() -> setTags(EUIUtils.map(data.tags, PCLDynamicData::getSafeTag)));
         if (data.loadout != null)
         {
-             setLoadout(PCLLoadout.get(data.slotColor, data.loadout));
+             setLoadout(PCLLoadout.get(data.loadout));
         }
         safeLoadValue(() -> setAffinities(EUIUtils.deserialize(data.affinities, PCLCardDataAffinityGroup.class)));
         safeLoadValue(() -> setMaxUpgrades(data.maxUpgradeLevel));

@@ -3,6 +3,7 @@ package pinacolada.augments;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIUtils;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.misc.AugmentStrings;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PTrait;

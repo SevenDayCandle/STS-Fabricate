@@ -167,7 +167,7 @@
 								"TEXT": [
 												"hand",
 												"deck",
-												"Purged pile",
+												"pile",
 												"Manual",
 												"Top",
 												"Bottom",
@@ -437,7 +437,7 @@
 												"all {0}",
 												"all",
 												"ally",
-												"any pile",
+												"any",
 												"any {0}",
 												"anyone",
 												"attacking",

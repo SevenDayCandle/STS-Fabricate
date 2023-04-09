@@ -62,7 +62,7 @@ public class PCLLoadoutsContainer
                 loadoutMap.put(gridCard, series);
                 gridCard.targetTransparency = 1f;
 
-                if (series.id == (data.selectedLoadout.id))
+                if (series.ID == (data.selectedLoadout.ID))
                 {
                     currentSeriesCard = gridCard;
                     gridCard.setCardRarity(AbstractCard.CardRarity.RARE);

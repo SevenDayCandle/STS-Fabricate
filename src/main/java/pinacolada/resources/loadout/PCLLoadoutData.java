@@ -22,7 +22,6 @@ public class PCLLoadoutData
 
     protected PCLLoadoutData()
     {
-
     }
 
     public PCLLoadoutData(PCLLoadout loadout)
@@ -106,7 +105,7 @@ public class PCLLoadoutData
 
     public static class LoadoutInfo implements Serializable
     {
-        public int loadout;
+        public String loadout;
         public int preset;
         public String values;
         public String[] relics;
@@ -117,7 +116,7 @@ public class PCLLoadoutData
 
         }
 
-        public LoadoutInfo(int id, PCLLoadoutData data)
+        public LoadoutInfo(String id, PCLLoadoutData data)
         {
             loadout = id;
             preset = data.preset;

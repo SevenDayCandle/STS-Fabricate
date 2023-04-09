@@ -76,11 +76,12 @@ public class PMove_StackCustomPower extends PMove<PField_CustomPower> implements
 
         PSkill<?> highestParent = getHighestParent();
         boolean referencesSelf = false;
+        ArrayList<PTrigger> powerEffects = ((EditorCard) sourceCard).getPowerEffects();
         for (Integer i : fields.indexes)
         {
-            if (sourceCard instanceof EditorCard && ((EditorCard) sourceCard).getPowerEffects().size() > i)
+            if (i >= 0 && powerEffects.size() > i)
             {
-                PTrigger poEff = ((EditorCard) sourceCard).getPowerEffects().get(i);
+                PTrigger poEff = powerEffects.get(i);
                 referencesSelf = doesPowerReferenceSelf(poEff);
                 if (referencesSelf)
                 {
@@ -115,22 +116,26 @@ public class PMove_StackCustomPower extends PMove<PField_CustomPower> implements
     {
         // If this skill is under a PTrigger and this references that same PTrigger, the game will crash from a stack overflow
         // In this instance, we should describe the power itself instead
-        ArrayList<PSkill<?>> powerEffects = new ArrayList<>();
+        ArrayList<PSkill<?>> effectsForPower = new ArrayList<>();
         PSkill<?> highestParent = getHighestParent();
         boolean referencesSelf = false;
-        for (Integer i : fields.indexes)
+        if (sourceCard instanceof EditorCard)
         {
-            if (sourceCard instanceof EditorCard && ((EditorCard) sourceCard).getPowerEffects().size() > i)
+            ArrayList<PTrigger> powerEffects = ((EditorCard) sourceCard).getPowerEffects();
+            for (Integer i : fields.indexes)
             {
-                PTrigger poEff = ((EditorCard) sourceCard).getPowerEffects().get(i);
-                referencesSelf = doesPowerReferenceSelf(poEff);
-                if (referencesSelf)
+                if (i >= 0 && powerEffects.size() > i)
                 {
-                    break;
-                }
-                else
-                {
-                    powerEffects.add(poEff);
+                    PTrigger poEff = powerEffects.get(i);
+                    referencesSelf = doesPowerReferenceSelf(poEff);
+                    if (referencesSelf)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        effectsForPower.add(poEff);
+                    }
                 }
             }
         }
@@ -140,7 +145,7 @@ public class PMove_StackCustomPower extends PMove<PField_CustomPower> implements
             return baseAmount > 0 ? TEXT.act_increaseBy(PGR.core.strings.combat_uses, getAmountRawString()) : TEXT.act_remove(TEXT.subjects_thisX);
         }
 
-        String base = joinEffectTexts(powerEffects, baseAmount > 0 ? " " : EUIUtils.DOUBLE_SPLIT_LINE, true);
+        String base = joinEffectTexts(effectsForPower, baseAmount > 0 ? " " : EUIUtils.DOUBLE_SPLIT_LINE, true);
         if (baseAmount > 0)
         {
             return (TEXT.cond_forTurns(getAmountRawString()) + ", " + base);

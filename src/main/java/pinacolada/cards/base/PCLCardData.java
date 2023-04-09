@@ -808,14 +808,18 @@ public class PCLCardData implements CardObject
                 setColorless();
                 this.loadout.colorlessData.add(this);
             }
-            else
+            else if (cardRarity == AbstractCard.CardRarity.COMMON || cardRarity == AbstractCard.CardRarity.UNCOMMON || cardRarity == AbstractCard.CardRarity.RARE)
             {
                 this.loadout.cardDatas.add(this);
+            }
+            else
+            {
+                this.loadout.colorlessData.add(this);
             }
         }
 
         // Non-loadout cards, curses, statuses, and special cards cannot get slots
-        if (slots <= 0 && this.loadout != null && this.loadout.id >= 0 && cardType != AbstractCard.CardType.CURSE && cardType != AbstractCard.CardType.STATUS && cardRarity != AbstractCard.CardRarity.SPECIAL)
+        if (slots <= 0 && this.loadout != null && !this.loadout.isCore() && cardType != AbstractCard.CardType.CURSE && cardType != AbstractCard.CardType.STATUS && cardRarity != AbstractCard.CardRarity.SPECIAL)
         {
             // Commons and Attacks/Skills get an extra slot
             slots = (cardType == AbstractCard.CardType.POWER ? 1 : 2) + (cardRarity == AbstractCard.CardRarity.COMMON ? 1 : 0);

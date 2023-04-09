@@ -3,6 +3,7 @@ package pinacolada.skills.skills.base.moves;
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
+import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.skills.PSkillData;
@@ -15,7 +16,8 @@ public class PMove_Draw extends PCallbackMove<PField_CardCategory>
 {
     public static final PSkillData<PField_CardCategory> DATA = register(PMove_Draw.class, PField_CardCategory.class)
             .selfTarget()
-            .setGroups(PCLCardGroupHelper.DrawPile);
+            .setGroups(PCLCardGroupHelper.DrawPile)
+            .setOrigins(PCLCardSelection.Top);
 
     public PMove_Draw()
     {

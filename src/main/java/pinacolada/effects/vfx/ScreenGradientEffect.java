@@ -71,6 +71,19 @@ public class ScreenGradientEffect extends PCLEffect
     }
 
     @Override
+    protected void firstUpdate()
+    {
+        renderer.begin();
+    }
+
+    @Override
+    protected void complete()
+    {
+        super.complete();
+        renderer.end();
+    }
+
+    @Override
     protected void updateInternal(float deltaTime)
     {
         if (looping)

@@ -31,8 +31,8 @@ public abstract class PCLAugment implements TooltipProvider
     private static final ArrayList<PCLAugmentData> AVAILABLE_AUGMENTS = new ArrayList<>();
     public static final int WEIGHT_MODIFIER = 3;
 
-    public PCLAugmentData data;
-    public String ID;
+    public final PCLAugmentData data;
+    public final String ID;
     public PSkill<?> skill;
     public PCLCard card;
 

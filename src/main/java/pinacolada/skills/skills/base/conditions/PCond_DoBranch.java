@@ -11,6 +11,7 @@ import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.actions.piles.SelectFromPile;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLAffinity;
+import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.misc.PCLUseInfo;
@@ -110,7 +111,9 @@ public abstract class PCond_DoBranch extends PCond_Branch<PField_CardCategory, A
     @Override
     public String getAmountRawOrAllString()
     {
-        return baseAmount <= 0 ? TEXT.subjects_all : extra > 0 ? TEXT.subjects_xOfY(getExtraRawString(), getAmountRawString()) : getAmountRawString();
+        return baseAmount <= 0 ? fields.forced ? TEXT.subjects_all : TEXT.subjects_any
+                : extra > 0 ? TEXT.subjects_xOfY(getExtraRawString(), getAmountRawString())
+                : (fields.forced || fields.origin != PCLCardSelection.Manual) ? getAmountRawString() : getRangeToAmountRawString();
     }
 
     protected String getActionTitle()

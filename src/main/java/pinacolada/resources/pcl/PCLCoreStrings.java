@@ -147,7 +147,7 @@ public class PCLCoreStrings extends PCLStrings
     // Card Pile
     public final String cpile_hand = cardPile.TEXT[0];
     public final String cpile_deck = cardPile.TEXT[1];
-    public final String cpile_purgedPile = cardPile.TEXT[2];
+    public final String cpile_pile = cardPile.TEXT[2];
     public final String cpile_manual = cardPile.TEXT[3];
     public final String cpile_top = cardPile.TEXT[4];
     public final String cpile_bottom = cardPile.TEXT[5];
@@ -334,7 +334,7 @@ public class PCLCoreStrings extends PCLStrings
     public final String subjects_allX = subjects.TEXT[10];
     public final String subjects_all = subjects.TEXT[11];
     public final String subjects_ally = subjects.TEXT[12];
-    public final String subjects_anyPile = subjects.TEXT[13];
+    public final String subjects_any = subjects.TEXT[13];
     public final String subjects_anyX = subjects.TEXT[14];
     public final String subjects_anyone = subjects.TEXT[15];
     public final String subjects_attacking = subjects.TEXT[16];
@@ -540,6 +540,7 @@ public class PCLCoreStrings extends PCLStrings
     public final String subjects_anyX(Object amount) {return EUIUtils.format(subjects_anyX, amount);}
     public final String subjects_anyAlly() {return EUIUtils.format(subjects_anyX, subjects_ally);}
     public final String subjects_anyEnemy() {return EUIUtils.format(subjects_anyX, subjects_enemy);}
+    public final String subjects_anyPile() {return EUIUtils.format(subjects_anyX, cpile_pile);}
     public final String subjects_bottomOf(Object amount) {return EUIUtils.format(subjects_bottomOfX, amount);}
     public final String subjects_characterWithX(Object obj) {return subjects_withX(subjects_character, obj);}
     public final String subjects_copiesOf(Object obj) {return EUIUtils.format(subjects_copiesOfX, obj);}

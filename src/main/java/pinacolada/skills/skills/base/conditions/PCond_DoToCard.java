@@ -66,7 +66,9 @@ public abstract class PCond_DoToCard extends PActiveNonCheckCond<PField_CardCate
     @Override
     public String getAmountRawOrAllString()
     {
-        return baseAmount <= 0 ? TEXT.subjects_all : extra > 0 ? TEXT.subjects_xOfY(getExtraRawString(), getAmountRawString()) : getAmountRawString();
+        return baseAmount <= 0 ? TEXT.subjects_all
+                : extra > 0 ? TEXT.subjects_xOfY(getExtraRawString(), getAmountRawString())
+                : getAmountRawString();
     }
 
     @Override

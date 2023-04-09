@@ -858,6 +858,11 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return getText(true);
     }
 
+    public String getRangeToAmountRawString()
+    {
+        return "0-" + getAmountRawString();
+    }
+
     public final String getRawString(char attributeID)
     {
         switch (attributeID)
