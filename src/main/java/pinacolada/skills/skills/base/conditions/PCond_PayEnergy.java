@@ -41,7 +41,7 @@ public class PCond_PayEnergy extends PActiveCond<PField_Empty>
     }
 
     @Override
-    public String getSampleText()
+    public String getSampleText(PSkill<?> callingSkill)
     {
         return capital(TEXT.act_pay(TEXT.subjects_x, PGR.core.tooltips.energy.title), true);
     }

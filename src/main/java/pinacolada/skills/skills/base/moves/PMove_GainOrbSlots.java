@@ -3,6 +3,7 @@ package pinacolada.skills.skills.base.moves;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
@@ -36,7 +37,7 @@ public class PMove_GainOrbSlots extends PMove_Gain
     }
 
     @Override
-    public String getSampleText()
+    public String getSampleText(PSkill<?> callingSkill)
     {
         return TEXT.act_gainAmount(TEXT.subjects_x, PGR.core.tooltips.orbSlot.title);
     }

@@ -51,7 +51,7 @@ public class PCond_CheckLevel extends PPassiveCond<PField_Affinity>
     }
 
     @Override
-    public String getSampleText()
+    public String getSampleText(PSkill<?> callingSkill)
     {
         return TEXT.cond_levelItem(TEXT.subjects_x, PGR.core.tooltips.affinityGeneral.title);
     }

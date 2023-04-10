@@ -45,7 +45,7 @@ public abstract class PCond_DoToCard extends PActiveNonCheckCond<PField_CardCate
     }
 
     @Override
-    public String getSampleText()
+    public String getSampleText(PSkill<?> callingSkill)
     {
         return EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects_x);
     }

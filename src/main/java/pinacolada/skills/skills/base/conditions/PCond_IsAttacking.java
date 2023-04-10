@@ -13,6 +13,7 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.PPassiveCond;
+import pinacolada.skills.skills.base.primary.PTrigger_When;
 import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
@@ -46,9 +47,9 @@ public class PCond_IsAttacking extends PPassiveCond<PField_Not> implements OnAtt
     }
 
     @Override
-    public String getSampleText()
+    public String getSampleText(PSkill<?> callingSkill)
     {
-        return TEXT.cond_objIs(TEXT.subjects_target, PGR.core.tooltips.attack.progressive());
+        return callingSkill instanceof PTrigger_When ? getWheneverSampleString(PGR.core.tooltips.attack.present()) : TEXT.cond_objIs(TEXT.subjects_target, PGR.core.tooltips.attack.progressive());
     }
 
     @Override
@@ -56,7 +57,7 @@ public class PCond_IsAttacking extends PPassiveCond<PField_Not> implements OnAtt
     {
         if (isWhenClause())
         {
-            return getWheneverString(PGR.core.tooltips.attack);
+            return getWheneverString(PGR.core.tooltips.attack.present());
         }
         String base = fields.not ? TEXT.cond_not(PGR.core.tooltips.attack.progressive()) : PGR.core.tooltips.attack.progressive();
         return target == PCLCardTarget.Single ? TEXT.cond_ifTheEnemyIs(base) : TEXT.cond_ifAnyEnemyIs(base);
@@ -65,7 +66,7 @@ public class PCond_IsAttacking extends PPassiveCond<PField_Not> implements OnAtt
     @Override
     public void onAttack(DamageInfo info, int damageAmount, AbstractCreature t)
     {
-        if (info.type == DamageInfo.DamageType.NORMAL && target.targetsSingle() ? info.owner == getOwnerCreature() : target.getTargets(info.owner, info.owner).contains(info.owner))
+        if (info.type == DamageInfo.DamageType.NORMAL && target.targetsSelf() ? info.owner == getOwnerCreature() : target.getTargets(info.owner, info.owner).contains(info.owner))
         {
             useFromTrigger(makeInfo(t));
         }

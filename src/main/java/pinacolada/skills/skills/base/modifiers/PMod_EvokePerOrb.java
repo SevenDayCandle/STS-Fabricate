@@ -38,7 +38,7 @@ public class PMod_EvokePerOrb extends PActiveMod<PField_Orb>
     }
 
     @Override
-    public String getSampleText()
+    public String getSampleText(PSkill<?> callingSkill)
     {
         return TEXT.act_evoke(TEXT.cond_per(TEXT.subjects_x, TEXT.cedit_orbs));
     }

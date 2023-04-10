@@ -10,6 +10,7 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardID;
@@ -73,7 +74,7 @@ public class PMove_Create extends PCallbackMove<PField_CardID>
     }
 
     @Override
-    public String getSampleText()
+    public String getSampleText(PSkill<?> callingSkill)
     {
         return TEXT.act_addToPile(TEXT.subjects_x, TEXT.subjects_card, TEXT.cedit_pile);
     }

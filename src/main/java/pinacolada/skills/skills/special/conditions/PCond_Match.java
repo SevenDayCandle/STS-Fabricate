@@ -28,7 +28,7 @@ public class PCond_Match extends PPassiveCond<PField_CardCategory> implements On
     }
 
     @Override
-    public String getSampleText()
+    public String getSampleText(PSkill<?> callingSkill)
     {
         return PGR.core.tooltips.match.title;
     }

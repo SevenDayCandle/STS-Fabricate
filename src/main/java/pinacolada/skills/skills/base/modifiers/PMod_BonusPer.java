@@ -35,7 +35,7 @@ public abstract class PMod_BonusPer<T extends PField> extends PPassiveMod<T>
     }
 
     @Override
-    public String getSampleText()
+    public String getSampleText(PSkill<?> callingSkill)
     {
         return TEXT.subjects_xBonus(TEXT.cond_per(TEXT.subjects_x, getSubText()));
     }

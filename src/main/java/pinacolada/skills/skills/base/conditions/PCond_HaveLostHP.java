@@ -42,7 +42,7 @@ public class PCond_HaveLostHP extends PPassiveCond<PField_Random> implements OnL
     }
 
     @Override
-    public String getSampleText()
+    public String getSampleText(PSkill<?> callingSkill)
     {
         return TEXT.cond_ifX(TEXT.act_loseAmount(TEXT.subjects_x, PGR.core.tooltips.hp.title));
     }

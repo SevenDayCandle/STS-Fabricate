@@ -8,6 +8,7 @@ import pinacolada.misc.PCLUseInfo;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Orb;
@@ -45,7 +46,7 @@ public class PMove_ChannelOrb extends PMove<PField_Orb>
     }
 
     @Override
-    public String getSampleText()
+    public String getSampleText(PSkill<?> callingSkill)
     {
         return TEXT.act_channelX(TEXT.subjects_x, TEXT.cedit_orbs);
     }

@@ -57,7 +57,7 @@ public class PCond_IfHasProperty extends PFacetCond<PField_CardCategory>
     }
 
     @Override
-    public String getSampleText()
+    public String getSampleText(PSkill<?> callingSkill)
     {
         return TEXT.cond_ifX(TEXT.subjects_card);
     }

@@ -48,7 +48,7 @@ public class PCond_EvokeTo extends PActiveCond<PField_Orb>
     }
 
     @Override
-    public String getSampleText()
+    public String getSampleText(PSkill<?> callingSkill)
     {
         return TEXT.act_evoke(TEXT.subjects_x);
     }

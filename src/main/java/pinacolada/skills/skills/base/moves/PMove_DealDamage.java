@@ -8,6 +8,7 @@ import pinacolada.effects.PCLAttackVFX;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Attack;
@@ -49,7 +50,7 @@ public class PMove_DealDamage extends PMove<PField_Attack>
     }
 
     @Override
-    public String getSampleText()
+    public String getSampleText(PSkill<?> callingSkill)
     {
         return TEXT.act_deal(TEXT.subjects_x, PGR.core.strings.subjects_damage);
     }

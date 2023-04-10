@@ -12,6 +12,7 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Stance;
 import pinacolada.skills.skills.PPassiveCond;
+import pinacolada.skills.skills.base.primary.PTrigger_When;
 import pinacolada.stances.PCLStanceHelper;
 import pinacolada.utilities.GameUtilities;
 
@@ -45,9 +46,9 @@ public class PCond_InStance extends PPassiveCond<PField_Stance> implements OnSta
     }
 
     @Override
-    public String getSampleText()
+    public String getSampleText(PSkill<?> callingSkill)
     {
-        return PGR.core.tooltips.stance.title;
+        return callingSkill instanceof PTrigger_When ? TEXT.cond_wheneverYou(TEXT.act_enterStance(PGR.core.tooltips.stance.title)) : PGR.core.tooltips.stance.title;
     }
 
     @Override
@@ -56,7 +57,7 @@ public class PCond_InStance extends PPassiveCond<PField_Stance> implements OnSta
         String base = fields.getAnyStanceString();
         if (isWhenClause())
         {
-            return getWheneverString(TEXT.act_enterStance(base));
+            return TEXT.cond_wheneverYou(TEXT.act_enterStance(base));
         }
         return fields.random ? TEXT.cond_not(base) : base;
     }

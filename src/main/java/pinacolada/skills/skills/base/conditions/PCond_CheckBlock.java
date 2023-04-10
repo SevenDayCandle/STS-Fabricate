@@ -13,6 +13,7 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.PPassiveCond;
+import pinacolada.skills.skills.base.primary.PTrigger_When;
 
 import java.util.List;
 
@@ -44,9 +45,9 @@ public class PCond_CheckBlock extends PPassiveCond<PField_Not> implements OnBloc
     }
 
     @Override
-    public String getSampleText()
+    public String getSampleText(PSkill<?> callingSkill)
     {
-        return EUIRM.strings.numNoun(TEXT.subjects_x, PGR.core.tooltips.block.title);
+        return callingSkill instanceof PTrigger_When ? getWheneverSampleString(TEXT.act_gain(PGR.core.tooltips.block.title)) : EUIRM.strings.numNoun(TEXT.subjects_x, PGR.core.tooltips.block.title);
     }
 
     @Override

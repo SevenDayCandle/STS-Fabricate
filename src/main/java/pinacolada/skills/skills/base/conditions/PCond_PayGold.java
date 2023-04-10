@@ -41,7 +41,7 @@ public class PCond_PayGold extends PActiveCond<PField_Empty>
     }
 
     @Override
-    public String getSampleText()
+    public String getSampleText(PSkill<?> callingSkill)
     {
         return TEXT.act_pay(TEXT.subjects_x, PGR.core.tooltips.gold.title);
     }

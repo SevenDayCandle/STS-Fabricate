@@ -40,7 +40,7 @@ public abstract class PMod_BonusOn<T extends PField> extends PPassiveMod<T>
     }
 
     @Override
-    public String getSampleText()
+    public String getSampleText(PSkill<?> callingSkill)
     {
         return TEXT.cond_numIf(TEXT.subjects_x, getSubText());
     }

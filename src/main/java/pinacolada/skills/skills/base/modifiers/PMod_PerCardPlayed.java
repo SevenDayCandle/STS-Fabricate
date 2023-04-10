@@ -9,6 +9,7 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
@@ -37,7 +38,7 @@ public class PMod_PerCardPlayed extends PMod_Per<PField_CardCategory>
     }
 
     @Override
-    public String getSampleText()
+    public String getSampleText(PSkill<?> callingSkill)
     {
         return TEXT.cond_perXY(TEXT.subjects_x, TEXT.subjects_card, PGR.core.tooltips.play.past());
     }

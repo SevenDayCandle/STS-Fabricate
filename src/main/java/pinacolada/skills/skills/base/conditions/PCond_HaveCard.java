@@ -41,7 +41,7 @@ public abstract class PCond_HaveCard extends PPassiveCond<PField_CardCategory>
     }
 
     @Override
-    public String getSampleText()
+    public String getSampleText(PSkill<?> callingSkill)
     {
         return TEXT.cond_ifX(PCLCoreStrings.past(getActionTooltip()));
     }

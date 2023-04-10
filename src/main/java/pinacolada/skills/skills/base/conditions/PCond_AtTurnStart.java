@@ -4,10 +4,12 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.subscribers.OnStartOfTurnPostDrawSubscriber;
 import pinacolada.misc.PCLUseInfo;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
 import pinacolada.skills.skills.PPassiveNonCheckCond;
+import pinacolada.skills.skills.base.primary.PTrigger_When;
 
 @VisibleSkill
 public class PCond_AtTurnStart extends PPassiveNonCheckCond<PField_Empty> implements OnStartOfTurnPostDrawSubscriber
@@ -29,9 +31,9 @@ public class PCond_AtTurnStart extends PPassiveNonCheckCond<PField_Empty> implem
     // This should not activate the child effect when played normally
 
     @Override
-    public String getSampleText()
+    public String getSampleText(PSkill<?> callingSkill)
     {
-        return TEXT.cond_atStartOfTurn();
+        return callingSkill instanceof PTrigger_When ? TEXT.cond_atStartOfTurn() : TEXT.cond_inXAtTurnStart(TEXT.cpile_hand);
     }
 
     @Override

@@ -7,6 +7,7 @@ import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.skills.PMove;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.fields.PField_RelicID;
 import pinacolada.utilities.GameUtilities;
@@ -60,7 +61,7 @@ public class PMove_ObtainRelic extends PMove<PField_RelicID>
     }
 
     @Override
-    public String getSampleText()
+    public String getSampleText(PSkill<?> callingSkill)
     {
         return TEXT.act_obtain(TEXT.subjects_x);
     }

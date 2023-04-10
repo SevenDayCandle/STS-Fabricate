@@ -47,7 +47,7 @@ public class PCond_Chance extends PPassiveCond<PField_Empty>
     }
 
     @Override
-    public String getSampleText()
+    public String getSampleText(PSkill<?> callingSkill)
     {
         return TEXT.act_generic2(PGR.core.tooltips.chance.title, "X%");
     }

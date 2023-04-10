@@ -88,7 +88,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
     protected void setupComponents(PCLCustomCardEditCardScreen screen)
     {
         primaryConditions = (EUISearchableDropdown<PPrimary<?>>) new EUISearchableDropdown<PPrimary<?>>(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, 0, 0)
-                , PSkill::getSampleText)
+                , pPrimary -> pPrimary.getSampleText(null))
                 .setOnChange(conditions -> {
                     if (!conditions.isEmpty())
                     {

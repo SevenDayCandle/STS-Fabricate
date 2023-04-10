@@ -51,7 +51,7 @@ public abstract class PMod_Per<T extends PField> extends PPassiveMod<T>
     }
 
     @Override
-    public String getSampleText()
+    public String getSampleText(PSkill<?> callingSkill)
     {
         return TEXT.cond_per(TEXT.subjects_x, getSubText());
     }

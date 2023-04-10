@@ -9,6 +9,7 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
@@ -41,7 +42,7 @@ public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty>
     }
 
     @Override
-    public String getSampleText()
+    public String getSampleText(PSkill<?> callingSkill)
     {
         return TEXT.act_gainAmount(TEXT.subjects_x, PGR.core.tooltips.block);
     }

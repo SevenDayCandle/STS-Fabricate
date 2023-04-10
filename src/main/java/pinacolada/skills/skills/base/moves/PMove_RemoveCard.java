@@ -12,6 +12,7 @@ import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.effects.PCLEffects;
 import pinacolada.misc.PCLUseInfo;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
@@ -59,7 +60,7 @@ public class PMove_RemoveCard extends PCallbackMove<PField_CardCategory>
     }
 
     @Override
-    public String getSampleText()
+    public String getSampleText(PSkill<?> callingSkill)
     {
         return TEXT.act_removeFrom(TEXT.subjects_card, TEXT.cpile_deck);
     }

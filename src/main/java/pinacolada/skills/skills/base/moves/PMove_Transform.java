@@ -17,6 +17,7 @@ import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.effects.PCLEffects;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardID;
@@ -83,7 +84,7 @@ public class PMove_Transform extends PMove_Select<PField_CardID>
     }
 
     @Override
-    public String getSampleText()
+    public String getSampleText(PSkill<?> callingSkill)
     {
         return TEXT.act_transform(TEXT.subjects_x, TEXT.subjects_x);
     }

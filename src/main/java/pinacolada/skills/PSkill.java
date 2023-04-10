@@ -259,7 +259,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
             return null;
         })
                 .stream()
-                .sorted((a, b) -> StringUtils.compareIgnoreCase(a.getSampleText(), b.getSampleText()))
+                .sorted((a, b) -> StringUtils.compareIgnoreCase(a.getSampleText(null), b.getSampleText(null)))
                 .collect(Collectors.toList());
     }
 
@@ -878,7 +878,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         }
     }
 
-    public String getSampleText()
+    public String getSampleText(PSkill<?> callingSkill)
     {
         return getSubText();
     }
@@ -1030,6 +1030,11 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
     public final int getUpgradeLevel()
     {
         return sourceCard != null ? sourceCard.timesUpgraded : 0;
+    }
+
+    public final String getWheneverSampleString(Object impl)
+    {
+        return TEXT.cond_whenMulti(TEXT.subjects_x, impl);
     }
 
     public final String getWheneverString(Object impl)
@@ -1339,10 +1344,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return target == PCLCardTarget.Single || (this.childEffect != null && this.childEffect.requiresTarget());
     }
 
-    public final PSkill<T> scanForTips()
+    public final PSkill<T> scanForTips(String source)
     {
         tips.clear();
-        EUIGameUtils.scanForTips(getSampleText(), tips);
+        EUIGameUtils.scanForTips(source, tips);
         return this;
     }
 

@@ -43,7 +43,7 @@ public class PCond_CheckGold extends PPassiveCond<PField_Not>
     }
 
     @Override
-    public String getSampleText()
+    public String getSampleText(PSkill<?> callingSkill)
     {
         return EUIRM.strings.numNoun(TEXT.subjects_x, PGR.core.tooltips.gold.title);
     }

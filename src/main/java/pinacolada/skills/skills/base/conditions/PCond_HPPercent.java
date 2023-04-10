@@ -48,7 +48,7 @@ public class PCond_HPPercent extends PPassiveCond<PField_Not>
     }
 
     @Override
-    public String getSampleText()
+    public String getSampleText(PSkill<?> callingSkill)
     {
         return TEXT.act_generic2(PGR.core.tooltips.hp.title, TEXT.subjects_x + "%");
     }

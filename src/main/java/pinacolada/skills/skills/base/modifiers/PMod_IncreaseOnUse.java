@@ -35,7 +35,7 @@ public class PMod_IncreaseOnUse extends PPassiveMod<PField_Empty>
     }
 
     @Override
-    public String getSampleText()
+    public String getSampleText(PSkill<?> callingSkill)
     {
         return TEXT.act_increaseBy(TEXT.subjects_x, TEXT.subjects_x);
     }

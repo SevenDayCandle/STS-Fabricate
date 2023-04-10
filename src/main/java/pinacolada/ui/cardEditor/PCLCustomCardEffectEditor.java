@@ -82,7 +82,7 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
         this.index = index;
         this.hb = hb;
         final AbstractCard.CardColor cardColor = getColor();
-        effects = (EUISearchableDropdown<T>) new EUISearchableDropdown<T>(hb, skill -> StringUtils.capitalize(skill.getSampleText()))
+        effects = (EUISearchableDropdown<T>) new EUISearchableDropdown<T>(hb, skill -> StringUtils.capitalize(skill.getSampleText(editor.primaryCond)))
                 .setOnChange(effects -> {
                     if (!effects.isEmpty())
                     {
@@ -260,7 +260,7 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
     protected List<T> getEffects()
     {
         return EUIUtils.map(group.listFunc.invoke(),
-                bc -> getEffectAt() != null && bc.effectID.equals(getEffectAt().effectID) ? getEffectAt() : (T) bc.scanForTips());
+                bc -> getEffectAt() != null && bc.effectID.equals(getEffectAt().effectID) ? getEffectAt() : (T) bc.scanForTips(bc.getSampleText(editor.primaryCond)));
     }
 
     public float getAdditionalHeight()

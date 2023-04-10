@@ -13,6 +13,7 @@ import extendedui.ui.hitboxes.OriginRelativeHitbox;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
+import pinacolada.skills.PCond;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PTrigger;
@@ -40,6 +41,18 @@ public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
                 .setItems(EUIUtils.map(
                         PGR.config.showIrrelevantProperties.get() ? PTrigger.getEligibleEffects(PTrigger.class) : PTrigger.getEligibleEffects(PTrigger.class, screen.getBuilder().cardColor),
                         bc -> primaryCond != null && bc.effectID.equals(primaryCond.effectID) ? primaryCond : bc))
+                .setOnChange(conditions -> {
+                    if (!conditions.isEmpty())
+                    {
+                        primaryCond = conditions.get(0);
+                    }
+                    else
+                    {
+                        primaryCond = null;
+                    }
+                    updateEffectItemNames();
+                    scheduleConstruct();
+                })
                 .setShowClearForSingle(false)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_trigger)
                 .autosize();
@@ -72,6 +85,16 @@ public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
                     .setOnClick(i, (index, __) -> {
                         addPowerToEffect(screen, index);
                     }));
+        }
+    }
+
+    // Force refresh the row names
+    public void updateEffectItemNames()
+    {
+        for (PCLCustomCardEffectEditor<PCond<?>> e : conditionGroup.editors)
+        {
+            e.effects.refreshText();
+            e.effects.sortByLabel();
         }
     }
 

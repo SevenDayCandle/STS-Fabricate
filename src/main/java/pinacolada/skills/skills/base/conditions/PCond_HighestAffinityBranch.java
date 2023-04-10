@@ -9,6 +9,7 @@ import pinacolada.interfaces.subscribers.OnIntensifySubscriber;
 import pinacolada.misc.CombatManager;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Affinity;
@@ -47,7 +48,7 @@ public class PCond_HighestAffinityBranch extends PCond_Branch<PField_Affinity, P
     }
 
     @Override
-    public String getSampleText()
+    public String getSampleText(PSkill<?> callingSkill)
     {
         return TEXT.cond_ifYourHighest(PGR.core.tooltips.affinityGeneral.title);
     }

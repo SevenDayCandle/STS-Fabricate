@@ -15,6 +15,7 @@ import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.misc.PCLUseInfo;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
@@ -83,7 +84,7 @@ public abstract class PCond_DoBranch extends PCond_Branch<PField_CardCategory, A
     }
 
     @Override
-    public String getSampleText()
+    public String getSampleText(PSkill<?> callingSkill)
     {
         return EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects_x) + EFFECT_SEPARATOR + TEXT.cond_doForEach();
     }

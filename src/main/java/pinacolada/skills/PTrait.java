@@ -140,7 +140,7 @@ public abstract class PTrait<T extends PField> extends PMove<T>
     }
 
     @Override
-    public String getSampleText()
+    public String getSampleText(PSkill<?> callingSkill)
     {
         return TEXT.act_hasAmount(getSampleAmount(), getSubSampleText());
     }

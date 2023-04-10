@@ -13,6 +13,7 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Random;
 import pinacolada.skills.skills.PPassiveCond;
+import pinacolada.skills.skills.base.primary.PTrigger_When;
 
 @VisibleSkill
 public class PCond_HaveTakenDamage extends PPassiveCond<PField_Random> implements OnLoseHPSubscriber
@@ -42,9 +43,9 @@ public class PCond_HaveTakenDamage extends PPassiveCond<PField_Random> implement
     }
 
     @Override
-    public String getSampleText()
+    public String getSampleText(PSkill<?> callingSkill)
     {
-        return TEXT.cond_ifX(TEXT.act_takeDamage(TEXT.subjects_x));
+        return callingSkill instanceof PTrigger_When ? getWheneverSampleString(TEXT.cond_takeDamage(1)) : TEXT.cond_ifX(TEXT.act_takeDamage(TEXT.subjects_x));
     }
 
     @Override

@@ -9,6 +9,7 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
 import pinacolada.skills.skills.PPassiveNonCheckCond;
+import pinacolada.skills.skills.base.primary.PTrigger_When;
 
 @VisibleSkill
 public class PCond_Shuffle extends PPassiveNonCheckCond<PField_Empty> implements OnShuffleSubscriber
@@ -29,9 +30,9 @@ public class PCond_Shuffle extends PPassiveNonCheckCond<PField_Empty> implements
     // This should not activate the child effect when played normally
 
     @Override
-    public String getSampleText()
+    public String getSampleText(PSkill<?> callingSkill)
     {
-        return TEXT.subjects_shuffleYourDeck;
+        return callingSkill instanceof PTrigger_When ? TEXT.cond_wheneverYou(TEXT.subjects_shuffleYourDeck) : TEXT.subjects_shuffleYourDeck;
     }
 
     @Override

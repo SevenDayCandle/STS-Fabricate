@@ -12,6 +12,7 @@ import pinacolada.effects.vfx.megacritCopy.HemokinesisEffect2;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Attack;
@@ -42,7 +43,7 @@ public class PMove_StealTempHP extends PMove<PField_Attack>
     }
 
     @Override
-    public String getSampleText()
+    public String getSampleText(PSkill<?> callingSkill)
     {
         return TEXT.act_stealAmount(TEXT.subjects_x, PGR.core.tooltips.tempHP.title);
     }

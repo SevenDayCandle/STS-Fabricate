@@ -5,9 +5,11 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.misc.PCLUseInfo;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
+import pinacolada.skills.skills.base.primary.PTrigger_When;
 
 import java.util.Collections;
 
@@ -24,9 +26,9 @@ public abstract class PDelegateCond extends PPassiveNonCheckCond<PField_CardCate
     }
 
     @Override
-    public String getSampleText()
+    public String getSampleText(PSkill<?> callingSkill)
     {
-        return TEXT.cond_onGeneric(getDelegateSampleText());
+        return callingSkill instanceof PTrigger_When ? TEXT.cond_whenObjectIs(TEXT.subjects_x, getDelegateSampleText()) : TEXT.cond_onGeneric(getDelegateSampleText());
     }
 
     @Override

@@ -81,22 +81,33 @@ public class AbstractMonsterPatches
                 return LineFinder.findInOrder(ctBehavior, matcher);
             }
         }
-    }
 
-    @SpirePatch(clz = AbstractMonster.class, method = "damage", paramtypez = {DamageInfo.class})
-    public static class AbstractMonster_Damage2
-    {
-        @SpireInsertPatch(localvars = {"damageAmount"}, locator = Locator.class)
-        public static void insertPre(AbstractMonster __instance, DamageInfo info, @ByRef int[] damageAmount)
+        @SpireInsertPatch(localvars = {"damageAmount"}, locator = Locator2.class)
+        public static void insertPre2(AbstractMonster __instance, DamageInfo info, @ByRef int[] damageAmount)
         {
             damageAmount[0] = Math.max(0, CombatManager.onModifyDamageLast(__instance, info, damageAmount[0]));
         }
 
-        private static class Locator extends SpireInsertLocator
+        private static class Locator2 extends SpireInsertLocator
         {
             public int[] Locate(CtBehavior ctBehavior) throws Exception
             {
                 final Matcher matcher = new Matcher.MethodCallMatcher(Math.class, "min");
+                return LineFinder.findInOrder(ctBehavior, matcher);
+            }
+        }
+
+        @SpireInsertPatch(localvars = {"damageAmount"}, locator = Locator3.class)
+        public static void insertPre3(AbstractMonster __instance, DamageInfo info, @ByRef int[] damageAmount)
+        {
+            CombatManager.onAttack(info, damageAmount[0], __instance);
+        }
+
+        private static class Locator3 extends SpireInsertLocator
+        {
+            public int[] Locate(CtBehavior ctBehavior) throws Exception
+            {
+                final Matcher matcher = new Matcher.FieldAccessMatcher(AbstractMonster.class, "powers");
                 return LineFinder.findInOrder(ctBehavior, matcher);
             }
         }
