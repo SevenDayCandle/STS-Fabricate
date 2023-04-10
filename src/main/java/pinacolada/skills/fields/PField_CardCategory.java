@@ -195,10 +195,10 @@ public class PField_CardCategory extends PField_CardID
 
     public String getFullCardString()
     {
-        return getFullCardString(skill.getAmountRawString());
+        return getFullCardRandomOrString(skill.getAmountRawString());
     }
 
-    public String getFullCardString(Object value)
+    public String getFullCardRandomOrString(Object value)
     {
         return !cardIDs.isEmpty() ? getCardIDOrString() : isRandom() ? PSkill.TEXT.subjects_randomX(getFullCardOrString(value)) : getFullCardOrString(value);
     }

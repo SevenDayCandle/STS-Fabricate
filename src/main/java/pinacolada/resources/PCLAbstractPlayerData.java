@@ -184,7 +184,7 @@ public abstract class PCLAbstractPlayerData
 
     public String getLoadoutPath(String id, int slot)
     {
-        return config.getConfigPath() + "_" + (id != null ? id.replace(':','-') : resources.id) + "_" + slot + ".json";
+        return config.getConfigPath() + "_" + id.replace(':','-') + "_" + slot + ".json";
     }
 
     public abstract List<PCLLoadout> getAvailableLoadouts();

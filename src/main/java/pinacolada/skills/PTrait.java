@@ -9,7 +9,10 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.skills.base.traits.*;
-import pinacolada.skills.skills.special.traits.*;
+import pinacolada.skills.skills.special.traits.PTrait_Affinity;
+import pinacolada.skills.skills.special.traits.PTrait_CardTarget;
+import pinacolada.skills.skills.special.traits.PTrait_HP;
+import pinacolada.skills.skills.special.traits.PTrait_Priority;
 
 public abstract class PTrait<T extends PField> extends PMove<T>
 {
@@ -170,6 +173,7 @@ public abstract class PTrait<T extends PField> extends PMove<T>
     @Override
     public void refresh(PCLUseInfo info, boolean conditionMet)
     {
+        super.refresh(info, conditionMet);
         if (info != null && conditionMet != conditionMetCache)
         {
             conditionMetCache = conditionMet;

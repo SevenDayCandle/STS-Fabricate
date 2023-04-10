@@ -2179,7 +2179,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     @Override
     public void calculateCardDamage(AbstractMonster mo) {
         if (isMultiDamage) {
-            ArrayList<AbstractMonster> m = AbstractDungeon.getCurrRoom().monsters.monsters;
+            ArrayList<AbstractMonster> m = GameUtilities.getEnemies(false);
             multiDamage = new int[m.size()];
 
             int best = -PSkill.DEFAULT_MAX;

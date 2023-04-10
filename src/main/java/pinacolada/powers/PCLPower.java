@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.evacipated.cardcrawl.mod.stslib.powers.interfaces.InvisiblePower;
 import com.megacrit.cardcrawl.actions.common.RemoveSpecificPowerAction;
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
@@ -259,6 +260,11 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         this.type = type;
         this.isTurnBased = turnBased;
         updateDescription();
+    }
+
+    public int modifyCost(AbstractCard card, int cost)
+    {
+        return cost;
     }
 
     public float modifyOrbIncoming(float initial)

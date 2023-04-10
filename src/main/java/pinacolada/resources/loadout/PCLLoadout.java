@@ -46,7 +46,6 @@ public abstract class PCLLoadout
     public static final int CARD_SLOTS = 4;
     public final AbstractCard.CardColor color;
     public final String ID;
-    public LoadoutStrings strings;
     public int preset;
     public int unlockLevel = 0;
     public ArrayList<PCLCardData> cardDatas = new ArrayList<>();
@@ -57,14 +56,14 @@ public abstract class PCLLoadout
     protected ArrayList<String> startingDeck = new ArrayList<>();
     protected String shortDescription = GameUtilities.EMPTY_STRING;
 
-    public static String createFullID(Class<? extends PCLLoadout> type)
+    public static String createID(Class<? extends PCLLoadout> type)
     {
-        return createFullID(PGR.core, type);
+        return createID(PGR.BASE_PREFIX, type);
     }
 
-    public static String createFullID(PCLResources<?,?,?,?> resources, Class<? extends PCLLoadout> type)
+    public static String createID(String prefix, Class<? extends PCLLoadout> type)
     {
-        return resources.createID(type.getSimpleName());
+        return PGR.createID(prefix, type.getSimpleName());
     }
 
     public static PCLLoadout register(AbstractCard.CardColor color, FuncT1<PCLLoadout, AbstractCard.CardColor> loadoutFunc)
@@ -184,7 +183,6 @@ public abstract class PCLLoadout
         this.ID = id;
         this.unlockLevel = unlockLevel;
         this.color = color;
-        this.strings = PGR.getLoadoutStrings(ID);
     }
 
     public void addBasicDefends(PCLCardSlot slot)
@@ -336,6 +334,7 @@ public abstract class PCLLoadout
 
     public String getName()
     {
+        LoadoutStrings strings = PGR.getLoadoutStrings(ID);
         return strings != null ? strings.NAME : "";
     }
 
@@ -520,7 +519,8 @@ public abstract class PCLLoadout
     * */
     public boolean isCore()
     {
-        return unlockLevel < 0;
+        PCLResources<?,?,?,?> resources = getResources();
+        return resources.data == null || resources.data.getCoreLoadout() == this;
     }
 
     public boolean isLocked()

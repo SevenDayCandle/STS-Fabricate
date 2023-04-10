@@ -5,6 +5,7 @@ import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.interfaces.subscribers.OnIntensifySubscriber;
 import pinacolada.misc.CombatManager;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
@@ -12,8 +13,10 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Affinity;
 
+import java.util.Collections;
+
 @VisibleSkill
-public class PCond_HighestAffinityBranch extends PCond_Branch<PField_Affinity, PCLAffinity>
+public class PCond_HighestAffinityBranch extends PCond_Branch<PField_Affinity, PCLAffinity> implements OnIntensifySubscriber
 {
     public static final PSkillData<PField_Affinity> DATA = register(PCond_HighestAffinityBranch.class, PField_Affinity.class)
             .pclOnly()
@@ -52,8 +55,18 @@ public class PCond_HighestAffinityBranch extends PCond_Branch<PField_Affinity, P
     @Override
     public String getSubText()
     {
+        if (isWhenClause())
+        {
+            return TEXT.cond_wheneverYou(PGR.core.tooltips.level.title);
+        }
         String base = TEXT.cond_ifYourHighest(EUIRM.strings.adjNoun(PGR.core.tooltips.level.title, PGR.core.tooltips.affinityGeneral.title));
         return extra > 0 ? base + " (" + TEXT.subjects_min(extra) + ")" : base;
+    }
+
+    @Override
+    public void onIntensify(PCLAffinity button)
+    {
+        branch(makeInfo(null), Collections.singleton(button));
     }
 
     @Override

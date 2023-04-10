@@ -40,4 +40,10 @@ public class PTrigger_Interactable extends PTrigger
     {
         return PGR.core.tooltips.interactable.title + ": " + (fields.not ? TEXT.cond_timesPerCombat(amount) + ", " : amount > 1 ? TEXT.cond_timesPerTurn(amount) + ", " : "");
     }
+
+    // No-Op, should not subscribe children
+    @Override
+    public void subscribeChildren()
+    {
+    }
 }

@@ -231,11 +231,11 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase
             {
                 if (a.isCore())
                 {
-                    return -1;
+                    return 1;
                 }
                 else if (b.isCore())
                 {
-                    return 1;
+                    return -1;
                 }
                 final int diff = StringUtils.compare(a.ID, b.ID);
                 final int level = data.resources.getUnlockLevel();

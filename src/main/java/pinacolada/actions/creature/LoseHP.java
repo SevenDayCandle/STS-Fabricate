@@ -4,7 +4,6 @@ import com.evacipated.cardcrawl.mod.stslib.patches.core.AbstractCreature.TempHPF
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.effects.PCLAttackVFX;
@@ -70,7 +69,7 @@ public class LoseHP extends PCLAction<Void>
 
             this.target.damage(new DamageInfo(this.source, this.amount, DamageInfo.DamageType.HP_LOSS));
 
-            if (AbstractDungeon.getCurrRoom().monsters.areMonstersBasicallyDead())
+            if (GameUtilities.areMonstersBasicallyDead())
             {
                 GameUtilities.clearPostCombatActions();
             }

@@ -65,15 +65,15 @@ public class PCond_IfHasProperty extends PFacetCond<PField_CardCategory>
     @Override
     public String getSubText()
     {
-        if (isWhenClause())
+        if (isWhenClause() || isPassiveClause())
         {
-            return fields.getFullCardAndString();
+            return !fields.cardIDs.isEmpty() ? fields.getCardIDAndString() : fields.getFullCardAndString();
         }
 
         ArrayList<String> conditions = new ArrayList<>();
         if (!fields.affinities.isEmpty())
         {
-            conditions.add(PField.getAffinityOrString(fields.affinities));
+            conditions.add(fields.forced ? PField.getAffinityAndString(fields.affinities) : PField.getAffinityOrString(fields.affinities));
         }
         if (!fields.tags.isEmpty())
         {
