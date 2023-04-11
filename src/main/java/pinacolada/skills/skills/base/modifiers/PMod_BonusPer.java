@@ -29,6 +29,11 @@ public abstract class PMod_BonusPer<T extends PField> extends PPassiveMod<T>
         super(data, PCLCardTarget.None, amount);
     }
 
+    public PMod_BonusPer(PSkillData<T> data, PCLCardTarget target, int amount)
+    {
+        super(data, target, amount);
+    }
+
     public String getConditionText()
     {
         return getSubText();

@@ -5,7 +5,11 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.PTrait;
 import pinacolada.skills.fields.PField_Not;
+import pinacolada.skills.skills.PActiveMod;
+import pinacolada.skills.skills.PDelegateCond;
+import pinacolada.skills.skills.PPassiveCond;
 import pinacolada.skills.skills.PTrigger;
 
 @VisibleSkill
@@ -37,6 +41,24 @@ public class PTrigger_Passive extends PTrigger
     public String getSampleText(PSkill<?> callingSkill)
     {
         return TEXT.cond_passive();
+    }
+
+    @Override
+    public boolean isCondAllowed(PSkill<?> skill)
+    {
+        return skill instanceof PPassiveCond && !(skill instanceof PDelegateCond);
+    }
+
+    @Override
+    public boolean isModAllowed(PSkill<?> skill)
+    {
+        return (!(skill instanceof PActiveMod));
+    }
+
+    @Override
+    public boolean isMoveAllowed(PSkill<?> skill)
+    {
+        return skill instanceof PTrait;
     }
 
     // No-Op, should not subscribe children

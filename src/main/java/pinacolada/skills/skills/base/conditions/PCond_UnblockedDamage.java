@@ -23,8 +23,7 @@ import java.util.HashMap;
 @VisibleSkill
 public class PCond_UnblockedDamage extends PActiveNonCheckCond<PField_Not> implements OnAttackSubscriber
 {
-    public static final PSkillData<PField_Not> DATA = register(PCond_UnblockedDamage.class, PField_Not.class, 1, 1)
-            .selfTarget();
+    public static final PSkillData<PField_Not> DATA = register(PCond_UnblockedDamage.class, PField_Not.class, 1, 1);
 
     public PCond_UnblockedDamage()
     {
@@ -39,7 +38,7 @@ public class PCond_UnblockedDamage extends PActiveNonCheckCond<PField_Not> imple
     @Override
     public String getSampleText(PSkill<?> callingSkill)
     {
-        return callingSkill instanceof PTrigger_When ? getWheneverSampleString(TEXT.act_deal(TEXT.subjects_any, TEXT.subjects_unblocked(TEXT.subjects_damage))) : super.getSampleText(callingSkill);
+        return callingSkill instanceof PTrigger_When ? TEXT.cond_whenSingle(TEXT.act_deals(TEXT.subjects_unblocked(TEXT.subjects_x))) : super.getSampleText(callingSkill);
     }
 
     @Override

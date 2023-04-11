@@ -295,7 +295,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
 
         if (primaryCond != null)
         {
-            primaryConditions.setSelection(primaryCond, false);
+            primaryConditions.setSelection(e -> e.getClass().equals(primaryCond.getClass()), false);
         }
         if (delayMove == null)
         {

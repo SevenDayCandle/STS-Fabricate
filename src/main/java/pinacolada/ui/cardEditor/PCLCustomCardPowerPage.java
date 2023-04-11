@@ -10,17 +10,24 @@ import extendedui.ui.TextureCache;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.OriginRelativeHitbox;
+import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIFontHelper;
+import org.apache.commons.lang3.StringUtils;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PCond;
+import pinacolada.skills.PMod;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PTrigger;
 import pinacolada.skills.skills.base.moves.PMove_StackCustomPower;
+import pinacolada.skills.skills.base.primary.PTrigger_Interactable;
+import pinacolada.skills.skills.base.primary.PTrigger_Passive;
+import pinacolada.skills.skills.base.primary.PTrigger_When;
 import pinacolada.ui.PCLValueEditor;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 
 public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
@@ -31,6 +38,7 @@ public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
     public PCLCustomCardPowerPage(PCLCustomCardEditCardScreen screen, EUIHitbox hb, int index, String title, ActionT1<PSkill<?>> onUpdate)
     {
         super(screen, hb, index, title, onUpdate);
+        updateEffectItemNames();
     }
 
     protected void setupComponents(PCLCustomCardEditCardScreen screen)
@@ -41,6 +49,7 @@ public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
                 .setItems(EUIUtils.map(
                         PGR.config.showIrrelevantProperties.get() ? PTrigger.getEligibleEffects(PTrigger.class) : PTrigger.getEligibleEffects(PTrigger.class, screen.getBuilder().cardColor),
                         bc -> primaryCond != null && bc.effectID.equals(primaryCond.effectID) ? primaryCond : bc))
+                .setTooltipFunction(this::getTooltip)
                 .setOnChange(conditions -> {
                     if (!conditions.isEmpty())
                     {
@@ -88,10 +97,37 @@ public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
         }
     }
 
+    protected Collection<EUITooltip> getTooltip(PSkill<?> item)
+    {
+        if (item instanceof PTrigger_Interactable)
+        {
+            return Collections.singletonList(PGR.core.tooltips.interactable);
+        }
+        if (item instanceof PTrigger_Passive)
+        {
+            return Collections.singletonList(new EUITooltip(PGR.core.strings.cond_passive(), PGR.core.strings.cetut_passive));
+        }
+        if (item instanceof PTrigger_When)
+        {
+            return Collections.singletonList(new EUITooltip(StringUtils.capitalize(PGR.core.strings.cond_whenSingle(PGR.core.strings.subjects_x)), PGR.core.strings.cetut_when));
+        }
+        return Collections.emptyList();
+    }
+
     // Force refresh the row names
     public void updateEffectItemNames()
     {
         for (PCLCustomCardEffectEditor<PCond<?>> e : conditionGroup.editors)
+        {
+            e.effects.refreshText();
+            e.effects.sortByLabel();
+        }
+        for (PCLCustomCardEffectEditor<PMod<?>> e : modifierGroup.editors)
+        {
+            e.effects.refreshText();
+            e.effects.sortByLabel();
+        }
+        for (PCLCustomCardEffectEditor<PMove<?>> e : effectGroup.editors)
         {
             e.effects.refreshText();
             e.effects.sortByLabel();
@@ -130,7 +166,7 @@ public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage
 
         if (primaryCond != null)
         {
-            primaryConditions.setSelection(primaryCond, false);
+            primaryConditions.setSelection(e -> e.getClass().equals(primaryCond.getClass()), false);
         }
 
         if (primaryCond instanceof PTrigger)

@@ -5,11 +5,11 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.skills.PTrait;
 import pinacolada.skills.fields.PField_Empty;
+import pinacolada.skills.skills.PDamageTrait;
 
 @VisibleSkill
-public class PTrait_DamageMultiplier extends PTrait<PField_Empty>
+public class PTrait_DamageMultiplier extends PDamageTrait<PField_Empty>
 {
 
     public static final PSkillData<PField_Empty> DATA = register(PTrait_Damage.class, PField_Empty.class);

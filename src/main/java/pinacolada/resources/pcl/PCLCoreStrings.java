@@ -143,6 +143,8 @@ public class PCLCoreStrings extends PCLStrings
     public final String cetut_useParent = cetut.TEXT[33];
     public final String cetut_required1 = cetut.TEXT[34];
     public final String cetut_required2 = cetut.TEXT[35];
+    public final String cetut_passive = cetut.TEXT[36];
+    public final String cetut_when = cetut.TEXT[37];
 
     // Card Pile
     public final String cpile_hand = cardPile.TEXT[0];
@@ -398,11 +400,11 @@ public class PCLCoreStrings extends PCLStrings
     public final String act_applyToTarget(Object power, Object target) {return actFmt(2, power, target);}
     public final String act_applyAmountToTarget(Object amount, Object power, Object target) {return actFmt(3, amount, power, target);}
     public final String act_applyAmount(Object amount, Object power) {return actFmt(4, amount, power);}
-    public final String act_apply(Object power) {return actFmt(5, power);}
-    public final String act_choose(Object amount) {return actFmt(6, amount);}
-    public final String act_costs(Object amount) {return actFmt(7, amount);}
-    public final String act_dealTo(Object amount, Object damage, Object target) {return actFmt(8, amount, damage, target);}
-    public final String act_deal(Object amount, Object damage) {return actFmt(9, amount, damage);}
+    public final String act_choose(Object amount) {return actFmt(5, amount);}
+    public final String act_costs(Object amount) {return actFmt(6, amount);}
+    public final String act_dealTo(Object amount, Object damage, Object target) {return actFmt(7, amount, damage, target);}
+    public final String act_deal(Object amount, Object damage) {return actFmt(8, amount, damage);}
+    public final String act_deals(Object power) {return actFmt(9, power);}
     public final String act_enterStance(Object stance) {return actFmt(10, stance);}
     public final String act_exitStance() {return actFmt(11);}
     public final String act_gainAmount(Object amount, Object power) {return actFmt(12, amount, power);}

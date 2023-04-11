@@ -74,6 +74,14 @@ public class PCLBaseStatEditor extends EUIBase
                 .setLabelFunctionForOption(
                         value -> this.type.getAmountForValue(value) + " (" + value + ")", false
                 )
+                .setLabelColorFunctionForButton(value -> {
+                    if (value.isEmpty())
+                    {
+                        return Settings.CREAM_COLOR;
+                    }
+                    int first = value.get(0);
+                    return first == 0 ? Settings.CREAM_COLOR : first < 0 ? Settings.RED_TEXT_COLOR : Settings.GREEN_TEXT_COLOR;
+                })
                 .setLabelFunctionForButton(
                         (value, __) -> {
                             if (value.isEmpty())
@@ -82,14 +90,7 @@ public class PCLBaseStatEditor extends EUIBase
                             }
                             return String.valueOf(value.get(0));
                         },
-                        value -> {
-                            if (value.isEmpty())
-                            {
-                                return Settings.CREAM_COLOR;
-                            }
-                            int first = value.get(0);
-                            return first == 0 ? Settings.CREAM_COLOR : first < 0 ? Settings.RED_TEXT_COLOR : Settings.GREEN_TEXT_COLOR;
-                        },
+
                         false)
                 .setItems(EUIUtils.range(type.minValue, type.maxValue, type.valuePerStep));
     }

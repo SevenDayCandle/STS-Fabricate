@@ -107,7 +107,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_tags)
                 .setIsMultiSelect(true)
                 .setCanAutosize(true, true);
-        tagsDropdown.setLabelFunctionForButton((list, __) -> tagsDropdown.makeMultiSelectString(item -> item.tag.getTooltip().getTitleOrIcon()), null, true)
+        tagsDropdown.setLabelFunctionForButton((list, __) -> tagsDropdown.makeMultiSelectString(item -> item.tag.getTooltip().getTitleOrIcon()), true)
                 .setHeaderRow(new PCLCustomCardTagEditorHeaderRow(tagsDropdown))
                 .setRowFunction(PCLCustomCardTagEditorRow::new)
                 .setRowWidthFunction((a, b, c) -> a.calculateRowWidth() + MENU_HEIGHT * 6)

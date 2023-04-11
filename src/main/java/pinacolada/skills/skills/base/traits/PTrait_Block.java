@@ -5,11 +5,11 @@ import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.skills.PTrait;
 import pinacolada.skills.fields.PField_Empty;
+import pinacolada.skills.skills.PBlockTrait;
 
 @VisibleSkill
-public class PTrait_Block extends PTrait<PField_Empty>
+public class PTrait_Block extends PBlockTrait<PField_Empty>
 {
 
     public static final PSkillData<PField_Empty> DATA = register(PTrait_Block.class, PField_Empty.class);

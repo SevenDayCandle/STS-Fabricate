@@ -1,5 +1,6 @@
 package pinacolada.ui.cardEditor;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
@@ -35,8 +36,7 @@ import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
-import pinacolada.skills.PSkill;
-import pinacolada.skills.PSkillData;
+import pinacolada.skills.*;
 import pinacolada.stances.PCLStanceHelper;
 import pinacolada.utilities.GameUtilities;
 
@@ -94,6 +94,7 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
                     }
                     editor.scheduleConstruct();
                 })
+                .setLabelColorFunctionForOption(this::getColorForEffect)
                 .setClearButtonOptions(true, true)
                 .setCanAutosizeButton(true)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, getTitleForPriority())
@@ -155,7 +156,7 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.sui_affinities)
                 .setCanAutosize(true, true)
                 .setItems(PCLCustomCardAttributesPage.getEligibleAffinities(cardColor));
-        affinities.setLabelFunctionForButton((list, __) -> affinities.makeMultiSelectString(item -> item.getFormattedSymbol(cardColor)), null, true);
+        affinities.setLabelFunctionForButton((list, __) -> affinities.makeMultiSelectString(item -> item.getFormattedSymbol(cardColor)), true);
 
         powers = (EUISearchableDropdown<PCLPowerHelper>) new EUISearchableDropdown<PCLPowerHelper>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.35f, MENU_HEIGHT, AUX_OFFSET, 0))
                 .setLabelFunctionForOption(item -> item.tooltip.getTitleOrIconForced() + " " + item.tooltip.title, true)
@@ -164,7 +165,7 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_powers)
                 .setCanAutosize(true, true)
                 .setItems(PCLPowerHelper.sortedValues());
-        powers.setLabelFunctionForButton((list, __) -> powers.makeMultiSelectString(item -> item.getTooltip().getTitleOrIcon()), null, true);
+        powers.setLabelFunctionForButton((list, __) -> powers.makeMultiSelectString(item -> item.getTooltip().getTitleOrIcon()), true);
 
         orbs = (EUISearchableDropdown<PCLOrbHelper>) new EUISearchableDropdown<PCLOrbHelper>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.2f, MENU_HEIGHT, AUX_OFFSET, 0))
                 .setLabelFunctionForOption(item -> item.tooltip.getTitleOrIconForced() + " " + item.tooltip.title, true)
@@ -173,10 +174,10 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_orbs)
                 .setCanAutosize(true, true)
                 .setItems(PCLOrbHelper.visibleValues());
-        orbs.setLabelFunctionForButton((list, __) -> orbs.makeMultiSelectString(item -> item.getTooltip().getTitleOrIcon()), null, true);
+        orbs.setLabelFunctionForButton((list, __) -> orbs.makeMultiSelectString(item -> item.getTooltip().getTitleOrIcon()), true);
 
         stances = (EUISearchableDropdown<PCLStanceHelper>) new EUISearchableDropdown<PCLStanceHelper>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.2f, MENU_HEIGHT, AUX_OFFSET, 0))
-                .setLabelFunctionForButton((items, __) -> items.size() > 0 ? items.get(0).tooltip.title : PGR.core.tooltips.neutralStance.title, null, false)
+                .setLabelFunctionForButton((items, __) -> items.size() > 0 ? items.get(0).tooltip.title : PGR.core.tooltips.neutralStance.title, false)
                 .setLabelFunctionForOption(item -> item.tooltip.getTitleOrIconForced() + " " + item.tooltip.title, true)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.tooltips.stance.title)
                 .setIsMultiSelect(true)
@@ -235,6 +236,27 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[3])
                 .setCanAutosize(true, true)
                 .setItems(CostFilter.values());
+    }
+
+    public Color getColorForEffect(PSkill<?> effect)
+    {
+        if (editor.primaryCond == null)
+        {
+            return Color.WHITE;
+        }
+        if (effect instanceof PCond)
+        {
+            return editor.primaryCond.isCondAllowed(effect) ? Color.WHITE : Color.GRAY;
+        }
+        if (effect instanceof PMod)
+        {
+            return editor.primaryCond.isModAllowed(effect) ? Color.WHITE : Color.GRAY;
+        }
+        if (effect instanceof PMove)
+        {
+            return editor.primaryCond.isMoveAllowed(effect) ? Color.WHITE : Color.GRAY;
+        }
+        return Color.WHITE;
     }
 
     public PCLDynamicData getBuilder()

@@ -298,11 +298,10 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen
             currentSlots.put(card, slot);
             grid.addCard(card);
         }
-        EUI.customHeader.setGroup(grid.cards);
-        EUI.cardFilters.initialize(__ -> {
+        EUI.cardFilters.initializeForCustomHeader(grid.cards, __ -> {
             grid.moveToTop();
             grid.forceUpdateCardPositions();
-        }, EUI.customHeader.originalGroup, currentColor, false);
+        }, currentColor, false, true);
     }
 
     public void remove(AbstractCard card, PCLCustomCardSlot cardSlot)

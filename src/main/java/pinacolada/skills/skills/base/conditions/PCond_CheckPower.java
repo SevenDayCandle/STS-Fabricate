@@ -56,7 +56,7 @@ public class PCond_CheckPower extends PPassiveCond<PField_Power> implements OnAp
     @Override
     public String getSampleText(PSkill<?> callingSkill)
     {
-        return callingSkill instanceof PTrigger_When ? getWheneverSampleString(TEXT.act_gain(TEXT.cedit_powers)) : EUIRM.strings.numNoun(TEXT.subjects_x, TEXT.cedit_powers);
+        return callingSkill instanceof PTrigger_When ? TEXT.cond_whenSingle(TEXT.act_gain(TEXT.cedit_powers)) : EUIRM.strings.numNoun(TEXT.subjects_x, TEXT.cedit_powers);
     }
 
     @Override

@@ -74,6 +74,11 @@ public abstract class PMod<T extends PField> extends PSkill<T>
         return new PMod_BonusOnStarter(amount);
     }
 
+    public static PMod_BonusPerDamage bonusPerDamage(int amount)
+    {
+        return new PMod_BonusPerDamage(amount);
+    }
+
     public static PMod_BonusPerAffinityLevel bonusPerLevel(int amount, PCLAffinity... aff)
     {
         return new PMod_BonusPerAffinityLevel(amount, aff);
@@ -82,6 +87,56 @@ public abstract class PMod<T extends PField> extends PSkill<T>
     public static PMod_BonusPerOrb bonusPerOrb(int amount, PCLOrbHelper... aff)
     {
         return new PMod_BonusPerOrb(amount, aff);
+    }
+
+    public static PMod_BonusPerPower bonusPerPower(PCLPowerHelper... powers)
+    {
+        return bonusPerPower(1, powers);
+    }
+
+    public static PMod_BonusPerPower bonusPerPower(int amount, PCLPowerHelper... powers)
+    {
+        return new PMod_BonusPerPower(amount, powers);
+    }
+
+    public static PMod_BonusPerPower bonusPerPowerAny(PCLPowerHelper... powers)
+    {
+        return bonusPerPowerAny(1, powers);
+    }
+
+    public static PMod_BonusPerPower bonusPerPowerAny(int amount, PCLPowerHelper... powers)
+    {
+        return (PMod_BonusPerPower) new PMod_BonusPerPower(amount, powers).setTarget(PCLCardTarget.Any);
+    }
+
+    public static PMod_BonusPerPower bonusPerPowerAoe(PCLPowerHelper... powers)
+    {
+        return bonusPerPowerAoe(1, powers);
+    }
+
+    public static PMod_BonusPerPower bonusPerPowerAoe(int amount, PCLPowerHelper... powers)
+    {
+        return (PMod_BonusPerPower) new PMod_BonusPerPower(amount, powers).setTarget(PCLCardTarget.AllEnemy);
+    }
+
+    public static PMod_BonusPerPower bonusPerPowerSelf(PCLPowerHelper... powers)
+    {
+        return bonusPerPowerSelf(1, powers);
+    }
+
+    public static PMod_BonusPerPower bonusPerPowerSelf(int amount, PCLPowerHelper... powers)
+    {
+        return (PMod_BonusPerPower) new PMod_BonusPerPower(amount, powers).setTarget(PCLCardTarget.Self);
+    }
+
+    public static PMod_BonusPerPower bonusPerPowerSingle(PCLPowerHelper... powers)
+    {
+        return bonusPerPowerSingle(1, powers);
+    }
+
+    public static PMod_BonusPerPower bonusPerPowerSingle(int amount, PCLPowerHelper... powers)
+    {
+        return (PMod_BonusPerPower) new PMod_BonusPerPower(amount, powers).setTarget(PCLCardTarget.Single);
     }
 
     public static PMod_CyclePerCard cyclePer(int amount)

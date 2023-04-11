@@ -49,7 +49,7 @@ public class PCond_IsAttacking extends PPassiveCond<PField_Not> implements OnAtt
     @Override
     public String getSampleText(PSkill<?> callingSkill)
     {
-        return callingSkill instanceof PTrigger_When ? getWheneverSampleString(PGR.core.tooltips.attack.present()) : TEXT.cond_objIs(TEXT.subjects_target, PGR.core.tooltips.attack.progressive());
+        return callingSkill instanceof PTrigger_When ? TEXT.cond_whenSingle(PGR.core.tooltips.attack.present()) : TEXT.cond_objIs(TEXT.subjects_target, PGR.core.tooltips.attack.progressive());
     }
 
     @Override

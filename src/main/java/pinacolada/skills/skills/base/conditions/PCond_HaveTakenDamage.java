@@ -2,11 +2,11 @@ package pinacolada.skills.skills.base.conditions;
 
 import com.megacrit.cardcrawl.actions.GameActionManager;
 import com.megacrit.cardcrawl.cards.DamageInfo;
-import com.megacrit.cardcrawl.characters.AbstractPlayer;
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIRM;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.interfaces.subscribers.OnLoseHPSubscriber;
+import pinacolada.interfaces.subscribers.OnAttackSubscriber;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
@@ -16,7 +16,7 @@ import pinacolada.skills.skills.PPassiveCond;
 import pinacolada.skills.skills.base.primary.PTrigger_When;
 
 @VisibleSkill
-public class PCond_HaveTakenDamage extends PPassiveCond<PField_Random> implements OnLoseHPSubscriber
+public class PCond_HaveTakenDamage extends PPassiveCond<PField_Random> implements OnAttackSubscriber
 {
     public static final PSkillData<PField_Random> DATA = register(PCond_HaveTakenDamage.class, PField_Random.class);
 
@@ -45,7 +45,7 @@ public class PCond_HaveTakenDamage extends PPassiveCond<PField_Random> implement
     @Override
     public String getSampleText(PSkill<?> callingSkill)
     {
-        return callingSkill instanceof PTrigger_When ? getWheneverSampleString(TEXT.cond_takeDamage(1)) : TEXT.cond_ifX(TEXT.act_takeDamage(TEXT.subjects_x));
+        return callingSkill instanceof PTrigger_When ? TEXT.cond_whenSingle(TEXT.act_takeDamage(TEXT.subjects_x)) : TEXT.cond_ifX(TEXT.act_takeDamage(TEXT.subjects_x));
     }
 
     @Override
@@ -60,13 +60,12 @@ public class PCond_HaveTakenDamage extends PPassiveCond<PField_Random> implement
     }
 
     @Override
-    public int onLoseHP(AbstractPlayer p, DamageInfo info, int amount)
+    public void onAttack(DamageInfo info, int damageAmount, AbstractCreature t)
     {
-        if (amount > 0 && (info.type == DamageInfo.DamageType.NORMAL || info.type == DamageInfo.DamageType.THORNS))
+        if (info.type == DamageInfo.DamageType.NORMAL && target.targetsSelf() ? t == getOwnerCreature() : target.getTargets(t, t).contains(t))
         {
             useFromTrigger(makeInfo(info.owner));
         }
-        return amount;
     }
 
     @Override

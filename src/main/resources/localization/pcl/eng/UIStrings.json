@@ -6,11 +6,11 @@
 												"apply {0} to {1}",
 												"apply {0} {1} to {2}",
 												"apply {0} {1}",
-												"apply {0}",
 												"choose {0}",
 												"costs {0}",
 												"deal {0} {1} to {2}",
 												"deal {0} {1}",
+												"deals {0}",
 												"enter {0}",
 												"exit your Stance",
 												"gain {0} {1}",
@@ -33,7 +33,7 @@
 												"remove {0}",
 												"remove {0} from {1}",
 												"remove {0} from {1} in {2}",
-												"repeat {0} ${0}@!1:times@:time$",
+												"repeat {0}",
 												"Select {0}",
 												"set the {0} of {1} to {2}",
 												"set the {0} of {1} from {2} to {3}",
@@ -160,7 +160,9 @@
 												"Determines the number of forms you can choose from when upgrading this card. If set to #b0, any form can be chosen when upgrading this card.",
 												"If checked, this effect will act on cards selected while executing conditions and modifiers.",
 												"If checked, the user will not be able to cancel this effect.",
-												"If checked, the user will only be able to select cards matching this filter."
+												"If checked, the user will only be able to select cards matching this filter.",
+												"Passive powers modify the attributes of cards or #yOrbs while their condition is met. | Greyed-out effects will have no effect for this power.",
+												"When powers activate when the specified events occur. | Greyed-out conditions will have no effect for this power unless they are chained after a valid condition."
 								]
 				},
 				"pcl:CardPile": {

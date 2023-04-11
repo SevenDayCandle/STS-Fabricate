@@ -15,6 +15,7 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
 import pinacolada.skills.skills.PPassiveCond;
+import pinacolada.skills.skills.base.primary.PTrigger_When;
 
 @VisibleSkill
 public class PCond_Cooldown extends PPassiveCond<PField_Empty> implements CooldownProvider, OnCooldownTriggeredSubscriber
@@ -70,7 +71,7 @@ public class PCond_Cooldown extends PPassiveCond<PField_Empty> implements Cooldo
     @Override
     public String getSampleText(PSkill<?> callingSkill)
     {
-        return EUIRM.strings.generic2(PGR.core.tooltips.cooldown.title, TEXT.subjects_x);
+        return callingSkill instanceof PTrigger_When ? TEXT.cond_whenSingle(TEXT.act_trigger(PGR.core.tooltips.cooldown.title)) : EUIRM.strings.generic2(PGR.core.tooltips.cooldown.title, TEXT.subjects_x);
     }
 
     @Override

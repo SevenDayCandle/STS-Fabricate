@@ -13,6 +13,9 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
+import pinacolada.skills.skills.PActiveCond;
+import pinacolada.skills.skills.PActiveMod;
+import pinacolada.skills.skills.PBlockTrait;
 import pinacolada.skills.skills.PCardPrimary;
 
 @VisibleSkill
@@ -67,6 +70,24 @@ public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty>
                 getActions().gainBlock(amount);
             }
         }
+    }
+
+    @Override
+    public boolean isCondAllowed(PSkill<?> skill)
+    {
+        return (!(skill instanceof PActiveCond));
+    }
+
+    @Override
+    public boolean isModAllowed(PSkill<?> skill)
+    {
+        return (!(skill instanceof PActiveMod));
+    }
+
+    @Override
+    public boolean isMoveAllowed(PSkill<?> skill)
+    {
+        return skill instanceof PBlockTrait;
     }
 
     @Override

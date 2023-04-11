@@ -22,10 +22,14 @@ import pinacolada.effects.VFX;
 import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Attack;
+import pinacolada.skills.skills.PActiveCond;
+import pinacolada.skills.skills.PActiveMod;
 import pinacolada.skills.skills.PCardPrimary;
+import pinacolada.skills.skills.PDamageTrait;
 import pinacolada.skills.skills.base.traits.PTrait_HitCount;
 
 @VisibleSkill
@@ -124,6 +128,24 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack>
             return EUIRM.strings.numAdjNoun(amountString, targetShortString, attackString);
         }
         return EUIRM.strings.numNoun(amountString, attackString);
+    }
+
+    @Override
+    public boolean isCondAllowed(PSkill<?> skill)
+    {
+        return (!(skill instanceof PActiveCond));
+    }
+
+    @Override
+    public boolean isModAllowed(PSkill<?> skill)
+    {
+        return (!(skill instanceof PActiveMod));
+    }
+
+    @Override
+    public boolean isMoveAllowed(PSkill<?> skill)
+    {
+        return skill instanceof PDamageTrait;
     }
 
     public PCardPrimary_DealDamage setDamageEffect(EffekseerEFK effekseerKey)

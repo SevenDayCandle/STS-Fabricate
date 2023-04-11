@@ -127,7 +127,7 @@ public class ViewInGamePoolEffect extends PCLEffectWithCallback<CardGroup>
         EUI.cardFilters.initializeForCustomHeader(grid.cards, __ -> {
             grid.moveToTop();
             grid.forceUpdateCardPositions();
-        }, AbstractCard.CardColor.COLORLESS, false);
+        }, AbstractCard.CardColor.COLORLESS, false, false);
     }
 
     private void updateCardAlpha(AbstractCard c)

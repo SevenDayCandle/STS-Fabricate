@@ -11,11 +11,13 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.subscribers.OnMonsterDeathSubscriber;
 import pinacolada.misc.PCLUseInfo;
 import pinacolada.resources.PGR;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.PActiveNonCheckCond;
 import pinacolada.skills.skills.PLimit;
+import pinacolada.skills.skills.base.primary.PTrigger_When;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.List;
@@ -34,6 +36,12 @@ public class PCond_Fatal extends PActiveNonCheckCond<PField_Not> implements OnMo
     public PCond_Fatal(PSkillSaveData content)
     {
         super(DATA, content);
+    }
+
+    @Override
+    public String getSampleText(PSkill<?> callingSkill)
+    {
+        return callingSkill instanceof PTrigger_When ? TEXT.cond_whenSingle(PGR.core.tooltips.kill.present()) : super.getSampleText(callingSkill);
     }
 
     @Override

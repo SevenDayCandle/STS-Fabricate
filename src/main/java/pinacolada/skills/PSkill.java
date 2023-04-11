@@ -1032,11 +1032,6 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return sourceCard != null ? sourceCard.timesUpgraded : 0;
     }
 
-    public final String getWheneverSampleString(Object impl)
-    {
-        return TEXT.cond_whenMulti(TEXT.subjects_x, impl);
-    }
-
     public final String getWheneverString(Object impl)
     {
         return TEXT.cond_whenMulti(getTargetSubjectString(), impl);

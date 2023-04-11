@@ -8,6 +8,7 @@ import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT5;
 import extendedui.ui.tooltips.EUITooltip;
+import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.piles.SelectFromPile;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLAffinity;
@@ -86,7 +87,7 @@ public abstract class PCond_DoBranch extends PCond_Branch<PField_CardCategory, A
     @Override
     public String getSampleText(PSkill<?> callingSkill)
     {
-        return EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects_x) + EFFECT_SEPARATOR + TEXT.cond_doForEach();
+        return EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects_x) + EFFECT_SEPARATOR + StringUtils.capitalize(TEXT.cond_doForEach());
     }
 
     @Override
