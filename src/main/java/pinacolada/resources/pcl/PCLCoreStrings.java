@@ -507,10 +507,10 @@ public class PCLCoreStrings extends PCLStrings
     public final String cond_not(Object desc1) {return condFmt( 17, desc1);}
     public final String cond_onGeneric(Object desc1) {return condFmt( 18, desc1);}
     public final String cond_otherwise(Object desc1) {return condFmt( 19, desc1);}
-    public final String cond_takeDamage(Object amount) {return condFmt(20, amount);}
-    public final String cond_whenMulti(Object desc1, Object desc2) {return condFmt(21, desc1, desc2);}
-    public final String cond_whenSingle(Object desc1) {return condFmt( 22, desc1);}
-    public final String cond_whenObjectIs(Object desc1, Object desc2) {return condFmt(23, desc1, desc2);}
+    public final String cond_whenMulti(Object desc1, Object desc2) {return condFmt(20, desc1, desc2);}
+    public final String cond_whenSingle(Object desc1) {return condFmt( 21, desc1);}
+    public final String cond_whenObjectIs(Object subject, Object ord, Object desc) {return condFmt(22, subject, ord, desc);}
+    public final String cond_whenAObjectIs(Object desc1, Object desc2) {return condFmt(23, desc1, desc2);}
     public final String cond_activated(Object desc1) {return condFmt( 24, desc1);}
     public final String cond_and(Object desc1, Object desc2) {return condFmt(25, desc1, desc2);}
     public final String cond_numIf(Object desc1, Object desc2) {return condFmt(26, desc1, desc2);}

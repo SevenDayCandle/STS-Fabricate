@@ -8,6 +8,7 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.subscribers.OnAttackSubscriber;
 import pinacolada.misc.PCLUseInfo;
+import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -53,16 +54,17 @@ public class PCond_HaveTakenDamage extends PPassiveCond<PField_Random> implement
     {
         if (isWhenClause())
         {
-            return getWheneverString(TEXT.cond_takeDamage(target.ordinal()));
+            return getWheneverAreString(PGR.core.tooltips.attack.past());
         }
         String base = TEXT.cond_ifTargetTook(TEXT.subjects_you, EUIRM.strings.numNoun(getAmountRawString(), TEXT.subjects_damage));
         return fields.random ? TEXT.subjects_thisCombat(base) : TEXT.subjects_thisTurn(base);
     }
 
+    // When the owner receives damages, triggers the effect onto the attacker
     @Override
     public void onAttack(DamageInfo info, int damageAmount, AbstractCreature t)
     {
-        if (info.type == DamageInfo.DamageType.NORMAL && target.targetsSelf() ? t == getOwnerCreature() : target.getTargets(t, t).contains(t))
+        if (info.type == DamageInfo.DamageType.NORMAL && target.getTargets(getOwnerCreature(), t).contains(t))
         {
             useFromTrigger(makeInfo(info.owner));
         }

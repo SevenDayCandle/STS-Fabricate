@@ -28,7 +28,7 @@ public abstract class PDelegateCond extends PPassiveNonCheckCond<PField_CardCate
     @Override
     public String getSampleText(PSkill<?> callingSkill)
     {
-        return callingSkill instanceof PTrigger_When ? TEXT.cond_whenObjectIs(TEXT.subjects_x, getDelegateSampleText()) : TEXT.cond_onGeneric(getDelegateSampleText());
+        return callingSkill instanceof PTrigger_When ? TEXT.cond_whenAObjectIs(TEXT.subjects_x, getDelegateSampleText()) : TEXT.cond_onGeneric(getDelegateSampleText());
     }
 
     @Override
@@ -36,7 +36,7 @@ public abstract class PDelegateCond extends PPassiveNonCheckCond<PField_CardCate
     {
         if (isWhenClause())
         {
-            return TEXT.cond_whenObjectIs(fields.getFullCardStringSingular(), getDelegatePastText());
+            return TEXT.cond_whenAObjectIs(fields.getFullCardStringSingular(), getDelegatePastText());
         }
         return TEXT.cond_onGeneric(getDelegateText());
     }

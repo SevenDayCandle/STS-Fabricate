@@ -45,7 +45,7 @@ public class PCond_OnAllyDeath extends PDelegateCond implements OnAllyDeathSubsc
     {
         if (isWhenClause())
         {
-            return TEXT.cond_whenObjectIs(fields.getFullCardStringSingular(), getDelegatePastText());
+            return TEXT.cond_whenAObjectIs(fields.getFullCardStringSingular(), getDelegatePastText());
         }
         return TEXT.cond_whenSingle(getDelegatePastText());
     }

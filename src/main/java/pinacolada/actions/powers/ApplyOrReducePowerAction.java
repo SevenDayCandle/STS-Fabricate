@@ -57,7 +57,7 @@ public class ApplyOrReducePowerAction extends NestedAction<AbstractPower>
         // INVERT amount because reduce power expects a positive amount to remove
         else
         {
-            action = new ReducePowerAction(target, source, power, -amount);
+            action = new ReducePowerAction(target, source, power.ID, -amount);
         }
     }
 

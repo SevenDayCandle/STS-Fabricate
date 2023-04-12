@@ -63,10 +63,11 @@ public class PCond_IsAttacking extends PPassiveCond<PField_Not> implements OnAtt
         return target == PCLCardTarget.Single ? TEXT.cond_ifTheEnemyIs(base) : TEXT.cond_ifAnyEnemyIs(base);
     }
 
+    // When the owner attacks, triggers the effect on the target
     @Override
     public void onAttack(DamageInfo info, int damageAmount, AbstractCreature t)
     {
-        if (info.type == DamageInfo.DamageType.NORMAL && target.targetsSelf() ? info.owner == getOwnerCreature() : target.getTargets(info.owner, info.owner).contains(info.owner))
+        if (info.type == DamageInfo.DamageType.NORMAL && target.getTargets(getOwnerCreature(), t).contains(info.owner))
         {
             useFromTrigger(makeInfo(t));
         }

@@ -107,7 +107,6 @@ public class TemporaryPower extends PCLPower
     @Override
     protected void onAmountChanged(int previousAmount, int difference)
     {
-        int powerAmount = previousAmount + difference;
         PCLActions.top.applyPower(owner, owner, power, difference).ignoreArtifact(true).addCallback(this::tryRemoveSourcePower);
 
         // The type should be set to Neutral after the initial stacking occurs (i.e. after artifact checks) so that this power will not influence buff/debuff count checks

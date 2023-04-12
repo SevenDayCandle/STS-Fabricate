@@ -1037,6 +1037,11 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return TEXT.cond_whenMulti(getTargetSubjectString(), impl);
     }
 
+    public final String getWheneverAreString(Object impl)
+    {
+        return TEXT.cond_whenObjectIs(getTargetSubjectString(), target.ordinal(), impl);
+    }
+
     public final String getXRawString()
     {
         return EUIUtils.format(BOUND_FORMAT, "F" + getCardPointer());

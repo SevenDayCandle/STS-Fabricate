@@ -45,7 +45,7 @@ public class PMove_Draw extends PCallbackMove<PField_CardCategory>
     public void use(PCLUseInfo info, ActionT1<PCLUseInfo> callback)
     {
         getActions().draw(amount)
-                .setFilter(fields.getFullCardFilter(), true)
+                .setFilter(fields.getFullCardFilter(), false)
                 .addCallback(ca -> {
                     info.setData(ca);
                     callback.invoke(info);

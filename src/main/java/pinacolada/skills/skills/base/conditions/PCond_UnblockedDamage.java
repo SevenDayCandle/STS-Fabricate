@@ -66,10 +66,11 @@ public class PCond_UnblockedDamage extends PActiveNonCheckCond<PField_Not> imple
         }
     }
 
+    // When the owner deals unblocked damage, triggers the effect on the target
     @Override
     public void onAttack(DamageInfo info, int damageAmount, AbstractCreature t)
     {
-        if (damageAmount > 0 && info.type == DamageInfo.DamageType.NORMAL && target.targetsSelf() ? info.owner == getOwnerCreature() : target.getTargets(info.owner, info.owner).contains(info.owner))
+        if (damageAmount > 0 && info.type == DamageInfo.DamageType.NORMAL && target.getTargets(getOwnerCreature(), t).contains(info.owner))
         {
             useFromTrigger(makeInfo(t));
         }
