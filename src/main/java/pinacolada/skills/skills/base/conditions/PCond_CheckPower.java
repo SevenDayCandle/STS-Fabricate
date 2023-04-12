@@ -7,7 +7,7 @@ import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.subscribers.OnApplyPowerSubscriber;
-import pinacolada.misc.PCLUseInfo;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;

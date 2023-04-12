@@ -8,7 +8,7 @@ import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.subscribers.OnOrbChannelSubscriber;
-import pinacolada.misc.PCLUseInfo;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;

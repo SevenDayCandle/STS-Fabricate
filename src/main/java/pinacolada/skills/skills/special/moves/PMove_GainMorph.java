@@ -1,8 +1,8 @@
 package pinacolada.skills.skills.special.moves;
 
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.misc.CombatManager;
-import pinacolada.misc.PCLUseInfo;
+import pinacolada.dungeon.CombatManager;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;

@@ -17,7 +17,7 @@ import extendedui.ui.tooltips.FakeFtue;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.interfaces.providers.ClickableProvider;
-import pinacolada.misc.PCLUseInfo;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.powers.PCLClickableUse;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;

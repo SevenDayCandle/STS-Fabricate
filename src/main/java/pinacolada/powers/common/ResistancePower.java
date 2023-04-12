@@ -3,7 +3,7 @@ package pinacolada.powers.common;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import pinacolada.interfaces.markers.MultiplicativePower;
-import pinacolada.misc.CombatManager;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.powers.PCLPower;
 import pinacolada.utilities.PCLRenderHelpers;
 

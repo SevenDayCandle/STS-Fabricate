@@ -3,7 +3,7 @@ package pinacolada.skills.skills;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import extendedui.interfaces.delegates.FuncT0;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.misc.PCLUseInfo;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.powers.PSkillPower;
 import pinacolada.skills.PPrimary;
 import pinacolada.skills.PSkill;

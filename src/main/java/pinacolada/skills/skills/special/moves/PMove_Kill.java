@@ -3,7 +3,7 @@ package pinacolada.skills.skills.special.moves;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import pinacolada.actions.special.DieAction;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.misc.PCLUseInfo;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;

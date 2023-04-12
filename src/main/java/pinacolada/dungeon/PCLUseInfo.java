@@ -1,4 +1,4 @@
-package pinacolada.misc;
+package pinacolada.dungeon;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
@@ -46,7 +46,6 @@ public class PCLUseInfo
             this.isMatch = false;
             this.isStarter = false;
         }
-
     }
 
     public <T> T getData(Class<T> dataClass)

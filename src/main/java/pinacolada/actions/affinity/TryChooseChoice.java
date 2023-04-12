@@ -15,7 +15,7 @@ import pinacolada.cards.base.ChoiceData;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardSelection;
-import pinacolada.misc.CombatManager;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.utilities.GameUtilities;

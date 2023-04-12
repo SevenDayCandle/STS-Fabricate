@@ -26,7 +26,7 @@ import pinacolada.effects.EffekseerEFK;
 import pinacolada.misc.AugmentStrings;
 import pinacolada.misc.LoadoutStrings;
 import pinacolada.misc.PCLAffinityPanelFilter;
-import pinacolada.misc.PCLDungeon;
+import pinacolada.dungeon.PCLDungeon;
 import pinacolada.resources.pcl.PCLCoreResources;
 import pinacolada.rewards.pcl.AugmentReward;
 import pinacolada.skills.PSkill;

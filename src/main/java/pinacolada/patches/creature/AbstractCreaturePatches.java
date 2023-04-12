@@ -5,7 +5,7 @@ import com.evacipated.cardcrawl.modthespire.lib.SpirePostfixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import pinacolada.characters.CreatureAnimationInfo;
-import pinacolada.misc.CombatManager;
+import pinacolada.dungeon.CombatManager;
 
 public class AbstractCreaturePatches
 {

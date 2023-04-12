@@ -14,7 +14,7 @@ import pinacolada.effects.EffekseerEFK;
 import pinacolada.effects.PCLAttackVFX;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.VFX;
-import pinacolada.misc.CombatManager;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.utilities.GameUtilities;
 
 // Copied and modified from STS-AnimatorMod

@@ -7,7 +7,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.vfx.SmokeEffect;
-import pinacolada.misc.CombatManager;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.PCLEnum;
 import pinacolada.utilities.GameUtilities;

@@ -3,7 +3,7 @@ package pinacolada.actions.player;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.ui.panels.EnergyPanel;
 import pinacolada.actions.PCLActionWithCallbackT2;
-import pinacolada.misc.CombatManager;
+import pinacolada.dungeon.CombatManager;
 
 // Copied and modified from STS-AnimatorMod
 public class SpendEnergy extends PCLActionWithCallbackT2<Integer, Integer>

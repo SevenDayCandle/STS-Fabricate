@@ -14,7 +14,7 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.interfaces.providers.PointerProvider;
-import pinacolada.misc.PCLUseInfo;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PCond;

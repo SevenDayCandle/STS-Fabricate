@@ -15,7 +15,7 @@ import pinacolada.cards.base.fields.PCLCardSaveData;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.cards.pcl.special.MysteryCard;
 import pinacolada.effects.PCLEffects;
-import pinacolada.misc.PCLUseInfo;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;

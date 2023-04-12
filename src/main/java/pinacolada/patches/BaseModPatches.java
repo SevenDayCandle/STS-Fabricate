@@ -7,7 +7,7 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import com.megacrit.cardcrawl.screens.custom.CustomMod;
 import javassist.CtBehavior;
-import pinacolada.misc.CombatManager;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.resources.PGR;
 import pinacolada.ui.customRun.PCLCustomRunScreen;
 

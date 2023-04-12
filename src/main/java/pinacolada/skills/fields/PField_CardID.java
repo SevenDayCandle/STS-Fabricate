@@ -8,7 +8,7 @@ import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT5;
 import pinacolada.actions.piles.SelectFromPile;
 import pinacolada.cards.base.fields.PCLCardSelection;
-import pinacolada.misc.PCLUseInfo;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
 import pinacolada.utilities.ListSelection;
 

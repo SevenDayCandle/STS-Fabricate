@@ -9,7 +9,7 @@ import com.megacrit.cardcrawl.monsters.EnemyMoveInfo;
 import extendedui.EUIUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.interfaces.subscribers.OnMonsterMoveSubscriber;
-import pinacolada.misc.CombatManager;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.powers.PCLPower;
 
 import java.lang.reflect.Field;

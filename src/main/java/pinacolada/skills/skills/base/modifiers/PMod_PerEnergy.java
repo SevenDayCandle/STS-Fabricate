@@ -2,7 +2,7 @@ package pinacolada.skills.skills.base.modifiers;
 
 import com.megacrit.cardcrawl.ui.panels.EnergyPanel;
 import pinacolada.annotations.VisibleSkill;
-import pinacolada.misc.PCLUseInfo;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;

@@ -3,7 +3,7 @@ package pinacolada.patches;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
-import pinacolada.misc.CombatManager;
+import pinacolada.dungeon.CombatManager;
 
 public class AbstractRoomPatches
 {

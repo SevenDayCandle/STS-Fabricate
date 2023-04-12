@@ -1,10 +1,10 @@
 package pinacolada.skills.delay;
 
 import extendedui.interfaces.delegates.ActionT1;
-import pinacolada.misc.PCLUseInfo;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
 import pinacolada.interfaces.subscribers.PCLCombatSubscriber;
-import pinacolada.misc.CombatManager;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.utilities.GameUtilities;
 
 public abstract class DelayUse implements PCLCombatSubscriber

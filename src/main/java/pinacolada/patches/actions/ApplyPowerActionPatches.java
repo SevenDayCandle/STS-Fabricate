@@ -12,7 +12,7 @@ import extendedui.utilities.EUIClassUtils;
 import javassist.CannotCompileException;
 import javassist.CtBehavior;
 import javassist.expr.ExprEditor;
-import pinacolada.misc.CombatManager;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.powers.replacement.PCLConstrictedPower;
 import pinacolada.powers.replacement.PCLLockOnPower;
 import pinacolada.utilities.GameUtilities;

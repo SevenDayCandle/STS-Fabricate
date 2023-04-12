@@ -4,7 +4,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import pinacolada.actions.PCLAction;
-import pinacolada.misc.CombatManager;
+import pinacolada.dungeon.CombatManager;
 
 public class AddPowerEffectBonus extends PCLAction<AbstractPower>
 {

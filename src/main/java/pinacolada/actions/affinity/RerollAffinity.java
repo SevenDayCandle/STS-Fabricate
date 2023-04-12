@@ -5,7 +5,7 @@ import extendedui.EUIUtils;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLAffinity;
-import pinacolada.misc.CombatManager;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.ui.combat.PCLPlayerMeter;
 import pinacolada.utilities.GameUtilities;
 

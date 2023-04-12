@@ -15,7 +15,7 @@ import extendedui.ui.tooltips.EUITooltip;
 import javassist.CtBehavior;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.modifiers.OverrideSkillModifier;
-import pinacolada.misc.CombatManager;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;

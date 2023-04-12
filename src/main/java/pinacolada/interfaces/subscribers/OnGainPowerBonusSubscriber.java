@@ -1,7 +1,7 @@
 package pinacolada.interfaces.subscribers;
 
 import pinacolada.annotations.CombatSubscriber;
-import pinacolada.misc.CombatManager;
+import pinacolada.dungeon.CombatManager;
 
 @CombatSubscriber
 public interface OnGainPowerBonusSubscriber extends PCLCombatSubscriber

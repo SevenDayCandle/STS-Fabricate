@@ -3,7 +3,7 @@ package pinacolada.skills.skills.special.conditions;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.subscribers.OnMatchSubscriber;
-import pinacolada.misc.PCLUseInfo;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;

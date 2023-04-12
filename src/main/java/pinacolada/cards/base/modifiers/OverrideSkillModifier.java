@@ -10,7 +10,7 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUIUtils;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.interfaces.markers.EditorCard;
-import pinacolada.misc.CombatManager;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.skills.PSkill;
 import pinacolada.utilities.GameUtilities;
 

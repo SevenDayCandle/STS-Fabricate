@@ -1,7 +1,7 @@
 package pinacolada.skills.delay;
 
 import extendedui.interfaces.delegates.ActionT1;
-import pinacolada.misc.PCLUseInfo;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.subscribers.OnEndOfTurnFirstSubscriber;
 
 public class DelayUseEndOfTurnFirst extends DelayUse implements OnEndOfTurnFirstSubscriber

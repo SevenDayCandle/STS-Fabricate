@@ -9,7 +9,7 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUIUtils;
 import extendedui.ui.EUIBase;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.misc.CombatManager;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLHotkeys;

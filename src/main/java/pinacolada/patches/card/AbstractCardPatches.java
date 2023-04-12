@@ -8,7 +8,7 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.tags.EphemeralField;
 import pinacolada.cards.base.tags.PCLCardTag;
-import pinacolada.misc.CombatManager;
+import pinacolada.dungeon.CombatManager;
 
 public class AbstractCardPatches
 {

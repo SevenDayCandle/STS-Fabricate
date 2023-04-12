@@ -3,7 +3,7 @@ package pinacolada.skills.skills;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT2;
 import extendedui.interfaces.delegates.FuncT1;
-import pinacolada.misc.PCLUseInfo;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;

@@ -2,7 +2,7 @@ package pinacolada.skills.skills.base.delay;
 
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.annotations.VisibleSkill;
-import pinacolada.misc.PCLUseInfo;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.skills.PDelay;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;

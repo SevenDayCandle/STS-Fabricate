@@ -1,4 +1,4 @@
-package pinacolada.misc;
+package pinacolada.dungeon;
 
 import basemod.BaseMod;
 import basemod.abstracts.CustomSavable;

@@ -3,7 +3,7 @@ package pinacolada.skills.skills;
 import extendedui.interfaces.delegates.ActionT0;
 import pinacolada.actions.PCLAction;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.misc.PCLUseInfo;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;

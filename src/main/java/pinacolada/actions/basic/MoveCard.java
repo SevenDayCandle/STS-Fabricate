@@ -19,7 +19,7 @@ import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
 import pinacolada.effects.card.RenderCardEffect;
 import pinacolada.effects.card.UnfadeOutEffect;
-import pinacolada.misc.CombatManager;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.ListSelection;
 

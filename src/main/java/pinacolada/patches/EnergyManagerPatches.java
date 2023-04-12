@@ -4,7 +4,7 @@ import com.evacipated.cardcrawl.modthespire.lib.*;
 import com.megacrit.cardcrawl.core.EnergyManager;
 import com.megacrit.cardcrawl.ui.panels.EnergyPanel;
 import javassist.CtBehavior;
-import pinacolada.misc.CombatManager;
+import pinacolada.dungeon.CombatManager;
 
 // Copied and modified from STS-AnimatorMod
 public class EnergyManagerPatches

@@ -68,6 +68,8 @@ public class CSVExporter
         }
     }
 
+    // TODO allow for custom paths
+    // TODO don't delete unless user specifies they want to overwrite
     private static FileHandle getExportFile()
     {
         FileHandle handle = Gdx.files.local(DEFAULT_EXPORT_PATH);
@@ -119,28 +121,20 @@ public class CSVExporter
         public int costUpgrade;
         public int red;
         public int redUpgrade;
-        public int redScaling;
         public int green;
         public int greenUpgrade;
-        public int greenScaling;
         public int blue;
         public int blueUpgrade;
-        public int blueScaling;
         public int orange;
         public int orangeUpgrade;
-        public int orangeScaling;
         public int light;
         public int lightUpgrade;
-        public int lightScaling;
         public int dark;
         public int darkUpgrade;
-        public int darkScaling;
         public int silver;
         public int silverUpgrade;
-        public int silverScaling;
         public int star;
         public int starUpgrade;
-        public int starScaling;
         public String tags;
         public String effects;
 

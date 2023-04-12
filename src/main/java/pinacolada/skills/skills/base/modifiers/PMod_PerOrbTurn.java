@@ -5,7 +5,7 @@ import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
-import pinacolada.misc.PCLUseInfo;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;

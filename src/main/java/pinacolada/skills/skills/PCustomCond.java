@@ -2,7 +2,7 @@ package pinacolada.skills.skills;
 
 import extendedui.EUIUtils;
 import pinacolada.cards.base.PCLCardData;
-import pinacolada.misc.PCLUseInfo;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PSkill;

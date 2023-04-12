@@ -18,7 +18,7 @@ import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
 import pinacolada.effects.vfx.OrbEvokeParticle;
 import pinacolada.effects.vfx.megacritCopy.OrbFlareEffect2;
-import pinacolada.misc.CombatManager;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 

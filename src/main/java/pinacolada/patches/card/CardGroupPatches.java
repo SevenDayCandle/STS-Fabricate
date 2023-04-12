@@ -11,7 +11,7 @@ import com.megacrit.cardcrawl.random.Random;
 import extendedui.EUIUtils;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.interfaces.listeners.OnRemovedFromDeckListener;
-import pinacolada.misc.CombatManager;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;

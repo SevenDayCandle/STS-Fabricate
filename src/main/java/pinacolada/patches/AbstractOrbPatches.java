@@ -5,7 +5,7 @@ import com.evacipated.cardcrawl.modthespire.lib.SpirePostfixPatch;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.orbs.*;
 import com.megacrit.cardcrawl.powers.LockOnPower;
-import pinacolada.misc.CombatManager;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.utilities.GameUtilities;
 
 public class AbstractOrbPatches

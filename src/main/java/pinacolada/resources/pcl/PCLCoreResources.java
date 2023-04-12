@@ -5,7 +5,7 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.localization.*;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLDynamicCard;
-import pinacolada.misc.PCLDungeon;
+import pinacolada.dungeon.PCLDungeon;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;

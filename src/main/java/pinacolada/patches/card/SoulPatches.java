@@ -74,7 +74,7 @@ public class SoulPatches
                 {
                     if (m.getMethodName().equals("applyPowers"))
                     {
-                        m.replace("pinacolada.misc.CombatManager.refreshHandLayout();");
+                        m.replace("pinacolada.dungeon.CombatManager.refreshHandLayout();");
                     }
                 }
             };

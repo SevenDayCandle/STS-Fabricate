@@ -4,7 +4,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleRelic;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.interfaces.subscribers.OnAllySummonSubscriber;
-import pinacolada.misc.CombatManager;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.relics.PCLRelic;
 

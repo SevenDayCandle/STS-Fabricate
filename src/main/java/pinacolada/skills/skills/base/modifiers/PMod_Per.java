@@ -4,7 +4,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIRM;
 import extendedui.utilities.ColoredString;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.misc.PCLUseInfo;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;

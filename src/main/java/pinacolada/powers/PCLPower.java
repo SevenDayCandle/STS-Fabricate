@@ -34,7 +34,7 @@ import pinacolada.effects.SFX;
 import pinacolada.effects.powers.PCLFlashPowerEffect;
 import pinacolada.effects.powers.PCLGainPowerEffect;
 import pinacolada.interfaces.providers.ClickableProvider;
-import pinacolada.misc.PCLUseInfo;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;

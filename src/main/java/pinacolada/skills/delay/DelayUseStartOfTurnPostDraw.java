@@ -1,7 +1,7 @@
 package pinacolada.skills.delay;
 
 import extendedui.interfaces.delegates.ActionT1;
-import pinacolada.misc.PCLUseInfo;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.subscribers.OnStartOfTurnPostDrawSubscriber;
 
 public class DelayUseStartOfTurnPostDraw extends DelayUse implements OnStartOfTurnPostDrawSubscriber

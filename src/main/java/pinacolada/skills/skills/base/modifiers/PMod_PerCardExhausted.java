@@ -5,8 +5,8 @@ import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.misc.CombatManager;
-import pinacolada.misc.PCLUseInfo;
+import pinacolada.dungeon.CombatManager;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
@@ -45,7 +45,7 @@ public class PMod_PerCardExhausted extends PMod_Per<PField_CardCategory>
     @Override
     public String getSubText()
     {
-        return fields.getFullCardOrString();
+        return fields.getFullCardString();
     }
 
     @Override

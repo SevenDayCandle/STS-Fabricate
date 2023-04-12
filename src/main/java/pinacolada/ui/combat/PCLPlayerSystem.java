@@ -11,8 +11,8 @@ import extendedui.EUIUtils;
 import extendedui.ui.EUIBase;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLAffinity;
-import pinacolada.misc.CombatManager;
-import pinacolada.misc.PCLUseInfo;
+import pinacolada.dungeon.CombatManager;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.powers.replacement.PCLLockOnPower;
 import pinacolada.utilities.GameUtilities;
 

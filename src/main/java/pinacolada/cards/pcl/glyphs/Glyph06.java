@@ -4,7 +4,7 @@ import com.megacrit.cardcrawl.actions.common.HealAction;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCardData;
-import pinacolada.misc.PCLUseInfo;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.skills.PCond;
 import pinacolada.skills.skills.PSpecialSkill;
 import pinacolada.skills.skills.PTrigger;

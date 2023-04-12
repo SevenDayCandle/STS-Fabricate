@@ -18,7 +18,7 @@ import javassist.CtBehavior;
 import javassist.expr.ExprEditor;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.characters.CreatureAnimationInfo;
-import pinacolada.misc.CombatManager;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.monsters.PCLIntentInfo;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;

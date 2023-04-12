@@ -4,7 +4,7 @@ import com.evacipated.cardcrawl.mod.stslib.patches.NeutralPowertypePatch;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.stances.NeutralStance;
 import pinacolada.actions.PCLActions;
-import pinacolada.misc.PCLUseInfo;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.powers.PCLPower;
 import pinacolada.resources.PGR;
 import pinacolada.skills.skills.PSpecialSkill;

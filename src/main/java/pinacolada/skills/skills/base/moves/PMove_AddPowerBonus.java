@@ -2,7 +2,7 @@ package pinacolada.skills.skills.base.moves;
 
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.misc.PCLUseInfo;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;

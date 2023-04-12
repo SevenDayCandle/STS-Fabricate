@@ -9,7 +9,7 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import pinacolada.interfaces.markers.MultiplicativePower;
 import pinacolada.interfaces.subscribers.OnOrbApplyFocusSubscriber;
-import pinacolada.misc.CombatManager;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.powers.PCLPower;
 import pinacolada.relics.pcl.Macroscope;
 import pinacolada.resources.PGR;

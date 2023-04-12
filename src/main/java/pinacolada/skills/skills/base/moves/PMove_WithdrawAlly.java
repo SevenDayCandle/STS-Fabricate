@@ -4,7 +4,7 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.misc.PCLUseInfo;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;

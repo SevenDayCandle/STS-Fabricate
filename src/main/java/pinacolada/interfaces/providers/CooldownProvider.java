@@ -5,7 +5,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import extendedui.utilities.ColoredString;
-import pinacolada.misc.CombatManager;
+import pinacolada.dungeon.CombatManager;
 
 public interface CooldownProvider
 {

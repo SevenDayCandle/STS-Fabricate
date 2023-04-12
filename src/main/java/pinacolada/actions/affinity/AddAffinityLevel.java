@@ -6,7 +6,7 @@ import com.megacrit.cardcrawl.vfx.combat.PowerBuffEffect;
 import pinacolada.actions.PCLAction;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.effects.PCLEffects;
-import pinacolada.misc.CombatManager;
+import pinacolada.dungeon.CombatManager;
 
 public class AddAffinityLevel extends PCLAction<PCLAffinity>
 {

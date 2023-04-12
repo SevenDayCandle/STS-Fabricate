@@ -7,7 +7,7 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.markers.SummonOnlyMove;
-import pinacolada.misc.PCLUseInfo;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.powers.PSkillPower;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;

@@ -6,7 +6,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.vfx.combat.HealEffect;
 import pinacolada.actions.PCLAction;
 import pinacolada.effects.PCLEffects;
-import pinacolada.misc.CombatManager;
+import pinacolada.dungeon.CombatManager;
 
 // Copied and modified from STS-AnimatorMod
 public class GainTemporaryHP extends PCLAction<AbstractCreature>

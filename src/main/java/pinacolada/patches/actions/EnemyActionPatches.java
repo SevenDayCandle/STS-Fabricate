@@ -7,7 +7,7 @@ import com.megacrit.cardcrawl.actions.common.DamageAction;
 import com.megacrit.cardcrawl.actions.unique.VampireDamageAction;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import pinacolada.misc.CombatManager;
+import pinacolada.dungeon.CombatManager;
 
 // Make the enemy hit itself (Also VampireDamageAction because it obviously does not inherit from DamageAction)
 public class EnemyActionPatches

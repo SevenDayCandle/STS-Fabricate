@@ -18,7 +18,7 @@ import pinacolada.actions.PCLActionWithCallbackT2;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.utility.DelayAllActions;
 import pinacolada.effects.PCLEffects;
-import pinacolada.misc.CombatManager;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.resources.PCLEnum;
 import pinacolada.utilities.GameUtilities;
 

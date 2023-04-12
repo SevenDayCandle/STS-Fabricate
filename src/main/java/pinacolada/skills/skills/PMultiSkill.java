@@ -12,7 +12,7 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.interfaces.providers.PointerProvider;
-import pinacolada.misc.PCLUseInfo;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;

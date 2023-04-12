@@ -1,6 +1,6 @@
 package pinacolada.interfaces.subscribers;
 
-import pinacolada.misc.CombatManager;
+import pinacolada.dungeon.CombatManager;
 
 public interface PCLCombatSubscriber
 {

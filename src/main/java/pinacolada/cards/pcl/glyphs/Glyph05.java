@@ -2,8 +2,8 @@ package pinacolada.cards.pcl.glyphs;
 
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.PCLCardData;
-import pinacolada.misc.PCLUseInfo;
-import pinacolada.misc.CombatManager;
+import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.skills.skills.PSpecialSkill;
 import pinacolada.ui.combat.PCLPlayerMeter;
 

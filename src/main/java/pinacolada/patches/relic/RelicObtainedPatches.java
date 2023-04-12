@@ -7,7 +7,7 @@ import com.megacrit.cardcrawl.metrics.MetricData;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.screens.select.BossRelicSelectScreen;
 import pinacolada.interfaces.listeners.OnRelicObtainedListener;
-import pinacolada.misc.CombatManager;
+import pinacolada.dungeon.CombatManager;
 
 public class RelicObtainedPatches
 {

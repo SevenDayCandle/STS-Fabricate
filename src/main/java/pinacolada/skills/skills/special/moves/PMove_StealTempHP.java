@@ -9,7 +9,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.vfx.megacritCopy.HemokinesisEffect2;
-import pinacolada.misc.PCLUseInfo;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;

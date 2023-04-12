@@ -6,7 +6,7 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.vfx.megacritCopy.UpgradeShineEffect2;
-import pinacolada.misc.CombatManager;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.ListSelection;

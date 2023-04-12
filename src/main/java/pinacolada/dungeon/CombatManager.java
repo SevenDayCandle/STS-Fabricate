@@ -1,4 +1,4 @@
-package pinacolada.misc;
+package pinacolada.dungeon;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;

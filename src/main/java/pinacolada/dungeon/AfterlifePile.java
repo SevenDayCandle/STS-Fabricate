@@ -1,4 +1,4 @@
-package pinacolada.misc;
+package pinacolada.dungeon;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
@@ -16,7 +16,7 @@ import java.util.Arrays;
 
 import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.player;
 
-public class AfterLifeMod
+public class AfterlifePile
 {
     protected static AbstractCard currentCard;
 
@@ -36,8 +36,8 @@ public class AfterLifeMod
                             {
                                 PCLActions.bottom.purgeFromPile(control.card.name, 9999, player.exhaustPile, player.hand)
                                         .setFilter(c -> canPurge(control.card, c, pAffinities))
-                                        .setCompletionRequirement(AfterLifeMod::conditionMet)
-                                        .setDynamicMessage(AfterLifeMod::getDynamicLabel)
+                                        .setCompletionRequirement(AfterlifePile::conditionMet)
+                                        .setDynamicMessage(AfterlifePile::getDynamicLabel)
                                         .addCallback((c) -> {
                                             currentCard = null;
                                             if (c.size() > 0)

@@ -6,7 +6,7 @@ import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import pinacolada.effects.SFX;
-import pinacolada.misc.CombatManager;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.patches.library.BlightHelperPatches;
 import pinacolada.resources.PGR;
 

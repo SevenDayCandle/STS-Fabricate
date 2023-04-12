@@ -6,7 +6,7 @@ import com.megacrit.cardcrawl.actions.watcher.ChangeStanceAction;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.stances.AbstractStance;
 import javassist.CtBehavior;
-import pinacolada.misc.CombatManager;
+import pinacolada.dungeon.CombatManager;
 
 @SpirePatch(clz = ChangeStanceAction.class, method = "update")
 public class ChangeStanceActionPatches

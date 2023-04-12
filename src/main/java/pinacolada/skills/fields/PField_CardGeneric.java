@@ -10,7 +10,7 @@ import pinacolada.actions.piles.SelectFromPile;
 import pinacolada.actions.utility.CardFilterAction;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardSelection;
-import pinacolada.misc.PCLUseInfo;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.skills.PSkill;
 import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
 import pinacolada.utilities.ListSelection;

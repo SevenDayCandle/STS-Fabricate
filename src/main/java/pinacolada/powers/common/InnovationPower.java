@@ -3,7 +3,7 @@ package pinacolada.powers.common;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import pinacolada.interfaces.subscribers.OnPCLClickableUsedSubscriber;
-import pinacolada.misc.CombatManager;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.powers.PCLClickableUse;
 import pinacolada.powers.PCLPower;
 
