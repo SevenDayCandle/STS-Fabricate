@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
+// TODO Merge with PField_Generic
+@Deprecated
 public class PField_CardID extends PField_CardGeneric
 {
     public ArrayList<String> cardIDs = new ArrayList<>();

@@ -173,42 +173,42 @@ public class PField_CardCategory extends PField_CardID
                         && (types.isEmpty() || types.contains(c.type)));
     }
 
-    public String getFullCardAndString(Object value)
+    public String getCardAndString(Object value)
     {
-        return getFullCardXString(PField::getAffinityAndString, PCLCoreStrings::joinWithAnd, value);
+        return getCardXString(PField::getAffinityAndString, PCLCoreStrings::joinWithAnd, value);
     }
 
-    public String getFullCardAndString()
+    public String getCardAndString()
     {
-        return getFullCardAndString(skill.getAmountRawString());
+        return getCardAndString(skill.getAmountRawString());
     }
 
-    public String getFullCardOrString(Object value)
+    public String getCardOrString(Object value)
     {
-        return getFullCardXString(PField::getAffinityOrString, PCLCoreStrings::joinWithOr, value);
+        return getCardXString(PField::getAffinityOrString, PCLCoreStrings::joinWithOr, value);
     }
 
-    public String getFullCardOrString()
+    public String getCardOrString()
     {
-        return getFullCardOrString(skill.getAmountRawString());
+        return getCardOrString(skill.getAmountRawString());
     }
 
     public String getFullCardString()
     {
-        return getFullCardRandomOrString(skill.getAmountRawString());
+        return getFullCardString(skill.getAmountRawString());
     }
 
-    public String getFullCardRandomOrString(Object value)
+    public String getFullCardString(Object value)
     {
-        return !cardIDs.isEmpty() ? getCardIDOrString() : isRandom() ? PSkill.TEXT.subjects_randomX(getFullCardOrString(value)) : getFullCardOrString(value);
+        return !cardIDs.isEmpty() ? getCardIDOrString() : isRandom() ? PSkill.TEXT.subjects_randomX(getCardOrString(value)) : getCardOrString(value);
     }
 
     public String getFullCardStringSingular()
     {
-        return !cardIDs.isEmpty() ? getCardIDOrString() : getFullCardOrString(1);
+        return !cardIDs.isEmpty() ? getCardIDOrString() : getCardOrString(1);
     }
 
-    public final String getFullCardXString(FuncT1<String, ArrayList<PCLAffinity>> affinityFunc, FuncT1<String, ArrayList<String>> joinFunc, Object value)
+    public final String getCardXString(FuncT1<String, ArrayList<PCLAffinity>> affinityFunc, FuncT1<String, ArrayList<String>> joinFunc, Object value)
     {
         ArrayList<String> stringsToJoin = new ArrayList<>();
         if (!costs.isEmpty())

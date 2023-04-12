@@ -10,8 +10,8 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.effects.PCLEffects;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.effects.PCLEffects;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -98,7 +98,7 @@ public class PMove_RemoveCard extends PCallbackMove<PField_CardCategory>
     public String getSubText()
     {
         String cString = useParent ? TEXT.subjects_them
-                : fields.groupTypes.size() > 0 ? EUIRM.strings.numNoun(extra > amount ? TEXT.subjects_xOfY(getAmountRawString(), getExtraRawString()) : getAmountRawString(), fields.getFullCardOrString(getRawString(EXTRA_CHAR)))
+                : fields.groupTypes.size() > 0 ? EUIRM.strings.numNoun(extra > amount ? TEXT.subjects_xOfY(getAmountRawString(), getExtraRawString()) : getAmountRawString(), fields.getCardOrString(getRawString(EXTRA_CHAR)))
                 : TEXT.subjects_thisCard;
         return TEXT.act_removeFrom(cString, TEXT.cpile_deck);
     }

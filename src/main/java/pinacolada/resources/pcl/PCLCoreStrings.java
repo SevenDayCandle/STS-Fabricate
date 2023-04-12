@@ -465,6 +465,7 @@ public class PCLCoreStrings extends PCLStrings
     public final String act_kill(String targetString) {return act_generic2(PGR.core.tooltips.kill.title, targetString);}
     public final String act_playFrom(Object amount, Object subject, Object target) {return act_genericFrom(PGR.core.tooltips.play.title, amount, subject, target);}
     public final String act_play(Object amount) {return EUIRM.strings.verbNoun(PGR.core.tooltips.play.title, amount);}
+    public final String act_playXTimes(Object subject, Object amount) {return act_genericTimes(PGR.core.tooltips.play.title, subject, amount);}
     public final String act_purge(Object amount) {return act_generic2(PGR.core.tooltips.purge.title, amount);}
     public final String act_reduceCooldown(Object target, Object amount) {return act_reducePropertyBy(PGR.core.tooltips.cooldown.title, target, amount);}
     public final String act_reshuffle(Object amount) {return act_generic2(PGR.core.tooltips.reshuffle.title, amount);}

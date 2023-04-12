@@ -81,7 +81,7 @@ public class PMove_CreateRandom extends PCallbackMove<PField_CardCategory>
     public String getSubText()
     {
         String amString = extra > amount ? TEXT.subjects_xOfY(getAmountRawString(), getExtraRawString()) : getAmountRawString();
-        String cString = fields.getFullCardOrString(getRawString(EXTRA_CHAR));
+        String cString = fields.getCardOrString(getRawString(EXTRA_CHAR));
         return fields.groupTypes.size() > 0 ? TEXT.act_addToPile(amString, cString, fields.groupTypes.get(0).name) : TEXT.act_addToPile(amString, cString, PCLCardGroupHelper.Hand.name);
     }
 }

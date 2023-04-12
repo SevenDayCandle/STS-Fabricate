@@ -2,15 +2,11 @@ package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
-import extendedui.EUIRM;
-import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.utilities.RotatingList;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.resources.PGR;
-import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
@@ -48,7 +44,11 @@ public class PMove_PlayCopy extends PMove<PField_CardID>
     {
         for (String cd : fields.cardIDs)
         {
-            previews.add(EUICardPreview.generatePreviewCard(CardLibrary.getCopy(cd)));
+            AbstractCard c = CardLibrary.getCard(cd);
+            if (c != null)
+            {
+                previews.add(EUICardPreview.generatePreviewCard(c.makeCopy()));
+            }
         }
         return this;
     }
@@ -56,7 +56,7 @@ public class PMove_PlayCopy extends PMove<PField_CardID>
     @Override
     public String getSampleText(PSkill<?> callingSkill)
     {
-        return TEXT.act_play(TEXT.subjects_x);
+        return TEXT.act_play(TEXT.subjects_copiesOf(TEXT.subjects_x));
     }
 
     @Override
@@ -105,7 +105,6 @@ public class PMove_PlayCopy extends PMove<PField_CardID>
     @Override
     public String getSubText()
     {
-        return fields.cardIDs.isEmpty() ? EUIRM.strings.verbNounAdv(PGR.core.tooltips.play.title, hasParentType(PTrigger.class) ? getInheritedString() : TEXT.subjects_thisX, TEXT.subjects_times(amount))
-                : TEXT.act_play(PCLCoreStrings.joinWithAnd(EUIUtils.map(fields.cardIDs, g -> "{" + PGR.getCardStrings(g).NAME + "}")));
+        return TEXT.act_playXTimes(hasParentType(PTrigger.class) ? getInheritedString() : fields.cardIDs.isEmpty() ? TEXT.subjects_thisX : fields.getCardIDAndString(), getAmountRawString());
     }
 }

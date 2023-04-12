@@ -52,6 +52,8 @@ import pinacolada.cards.base.fields.*;
 import pinacolada.cards.base.tags.CardTagItem;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.cards.pcl.special.QuestionMark;
+import pinacolada.dungeon.CombatManager;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.EffekseerEFK;
 import pinacolada.effects.PCLAttackVFX;
 import pinacolada.effects.card.PCLCardGlowBorderEffect;
@@ -59,8 +61,6 @@ import pinacolada.interfaces.listeners.OnRemovedFromDeckListener;
 import pinacolada.interfaces.listeners.OnSetFormListener;
 import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.markers.SummonOnlyMove;
-import pinacolada.dungeon.CombatManager;
-import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.patches.screens.GridCardSelectScreenMultiformPatches;
 import pinacolada.powers.PCLPower;
@@ -1175,12 +1175,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         return makePowerString(rawDescription);
     }
 
-    // Block subeffects may affect the final block output (but they should not be triggering any other triggers)
     protected float modifyBlock(PCLUseInfo info, float amount) {
-        if (onBlockEffect != null)
-        {
-            amount = onBlockEffect.modifyBlock(info, amount);
-        }
         for (PSkill<?> be : getFullEffects()) {
             amount = be.modifyBlock(info, amount);
         }

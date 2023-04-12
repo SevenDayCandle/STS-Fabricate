@@ -44,6 +44,12 @@ public class PMod_PerDistinctPower extends PMod_Per<PField_Power>
     }
 
     @Override
+    public String getSampleText(PSkill<?> callingSkill)
+    {
+        return TEXT.cond_perDistinct(TEXT.subjects_x, getSubText());
+    }
+
+    @Override
     public String getSubText()
     {
         return TEXT.cedit_powers;

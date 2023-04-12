@@ -67,7 +67,7 @@ public class PCond_IfHasProperty extends PFacetCond<PField_CardCategory>
     {
         if (isWhenClause() || isPassiveClause())
         {
-            return !fields.cardIDs.isEmpty() ? fields.getCardIDAndString() : fields.getFullCardAndString();
+            return !fields.cardIDs.isEmpty() ? fields.getCardIDAndString() : fields.getCardAndString();
         }
 
         ArrayList<String> conditions = new ArrayList<>();
