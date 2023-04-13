@@ -3,7 +3,6 @@ package pinacolada.skills.skills.base.moves;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import com.megacrit.cardcrawl.helpers.CardLibrary;
 import extendedui.EUIRM;
 import extendedui.interfaces.delegates.FuncT5;
 import extendedui.ui.tooltips.EUICardPreview;
@@ -12,22 +11,20 @@ import extendedui.utilities.RotatingList;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.piles.SelectFromPile;
 import pinacolada.annotations.VisibleSkill;
-import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardGroupHelper;
-import pinacolada.effects.PCLEffects;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.effects.PCLEffects;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.skills.fields.PField_CardID;
-import pinacolada.utilities.GameUtilities;
+import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.utilities.ListSelection;
 
 @VisibleSkill
-public class PMove_Transform extends PMove_Select<PField_CardID>
+public class PMove_Transform extends PMove_Select<PField_CardCategory>
 {
-    public static final PSkillData<PField_CardID> DATA = register(PMove_Transform.class, PField_CardID.class)
+    public static final PSkillData<PField_CardCategory> DATA = register(PMove_Transform.class, PField_CardCategory.class)
             .selfTarget();
 
     public PMove_Transform()
@@ -63,26 +60,6 @@ public class PMove_Transform extends PMove_Select<PField_CardID>
         return SelectFromPile::new;
     }
 
-    private AbstractCard getCard(String id)
-    {
-        AbstractCard c = CardLibrary.getCard(id);
-        if (c == null)
-        {
-            c = GameUtilities.getRandomCard();
-        }
-        c = c.makeCopy();
-        // TODO custom variable
-        if (fields.forced && c != null)
-        {
-            c.upgrade();
-        }
-        if (extra > 0 && c instanceof PCLCard)
-        {
-            ((PCLCard) c).changeForm(extra, c.timesUpgraded);
-        }
-        return c;
-    }
-
     @Override
     public String getSampleText(PSkill<?> callingSkill)
     {
@@ -114,24 +91,21 @@ public class PMove_Transform extends PMove_Select<PField_CardID>
     public String getSubText()
     {
         return TEXT.act_transform(
-                useParent ? getInheritedString() : fields.groupTypes.size() > 0 ? EUIRM.strings.numNounPlace(getAmountRawString(), fields.getFullCardString(), TEXT.subjects_from(fields.getGroupString())) : TEXT.subjects_thisCard, fields.getCardIDOrString()
+                useParent ? getInheritedString() : fields.groupTypes.size() > 0 ? EUIRM.strings.numNounPlace(getAmountRawString(), fields.getFullCardString(), TEXT.subjects_from(fields.getGroupString())) : TEXT.subjects_thisCard, fields.getFullCardStringSingular()
         );
     }
 
     @Override
     public PMove_Transform makePreviews(RotatingList<EUICardPreview> previews)
     {
-        for (String cd : fields.cardIDs)
-        {
-            previews.add(EUICardPreview.generatePreviewCard(getCard(cd)));
-        }
+        fields.makePreviews(previews);
         super.makePreviews(previews);
         return this;
     }
 
     private void transformImpl(AbstractCard c)
     {
-        AbstractCard c2 = getCard(fields.cardIDs.isEmpty() ? null : fields.cardIDs.get(0));
+        AbstractCard c2 = PField_CardCategory.getCard(fields.cardIDs.isEmpty() ? null : fields.cardIDs.get(0));
         if (c2 != null)
         {
             PCLActions.last.replaceCard(c.uuid, c2);

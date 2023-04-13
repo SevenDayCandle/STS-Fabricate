@@ -163,6 +163,7 @@ public class PCLCoreTooltips extends PCLTooltips
     public EUITooltip noBlock = EUITooltip.findByID("No Block");
     public EUITooltip noDraw = EUITooltip.findByID("No Draw");
     public EUITooltip noxiousFumes = EUITooltip.findByID("Noxious Fumes");
+    public EUITooltip obtain = EUITooltip.findByID("Obtain");
     public EUITooltip orbSlot = EUITooltip.findByID("Orb Slot");
     public EUITooltip piercing = EUITooltip.findByID("Piercing Damage");
     public EUITooltip plasma = EUITooltip.findByID("Plasma");

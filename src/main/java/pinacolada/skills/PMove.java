@@ -2,7 +2,6 @@ package pinacolada.skills;
 
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import extendedui.EUIUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLCardGroupHelper;
@@ -191,24 +190,9 @@ public abstract class PMove<T extends PField> extends PSkill<T>
         return new PMove_Create(copies, cardData);
     }
 
-    public static PMove_Create create(PCLCardData... cardData)
-    {
-        return create(1, cardData);
-    }
-
-    public static PMove_Create create(int copies, PCLCardData... cardData)
-    {
-        return new PMove_Create(copies, EUIUtils.map(cardData, cd -> cd.ID));
-    }
-
     public static PMove_Create createDiscardPile(int copies)
     {
-        return (PMove_Create) new PMove_Create(copies).edit(f -> f.setCardGroup(PCLCardGroupHelper.DiscardPile));
-    }
-
-    public static PMove_Create createDiscardPile(int copies, PCLCardData... cardData)
-    {
-        return (PMove_Create) new PMove_Create(copies, EUIUtils.map(cardData, cd -> cd.ID)).edit(f -> f.setCardGroup(PCLCardGroupHelper.DiscardPile));
+        return (PMove_Create) new PMove_Create(copies, PCLCardGroupHelper.DiscardPile);
     }
 
     public static PMove_Create createDiscardPile(int copies, String... ids)
@@ -218,12 +202,7 @@ public abstract class PMove<T extends PField> extends PSkill<T>
 
     public static PMove_Create createDrawPile(int copies)
     {
-        return (PMove_Create) new PMove_Create(copies).edit(f -> f.setCardGroup(PCLCardGroupHelper.DrawPile));
-    }
-
-    public static PMove_Create createDrawPile(int copies, PCLCardData... cardData)
-    {
-        return (PMove_Create) new PMove_Create(copies, EUIUtils.map(cardData, cd -> cd.ID)).edit(f -> f.setCardGroup(PCLCardGroupHelper.DrawPile));
+        return (PMove_Create) new PMove_Create(copies, PCLCardGroupHelper.DrawPile);
     }
 
     public static PMove_Create createDrawPile(int copies, String... ids)
@@ -231,9 +210,9 @@ public abstract class PMove<T extends PField> extends PSkill<T>
         return (PMove_Create) new PMove_Create(copies, ids).edit(f -> f.setCardGroup(PCLCardGroupHelper.DrawPile));
     }
 
-    public static PMove_CreateRandom createRandom(int copies, int choices, PCLCardGroupHelper... cardgroup)
+    public static PMove_Create createRandom(int copies, int choices, PCLCardGroupHelper... cardgroup)
     {
-        return new PMove_CreateRandom(copies, choices, cardgroup);
+        return new PMove_Create(copies, choices, cardgroup);
     }
 
     public static PMove_Cycle cycle(int amount)

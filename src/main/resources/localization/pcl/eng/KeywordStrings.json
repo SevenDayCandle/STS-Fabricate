@@ -290,6 +290,13 @@
 								"DESCRIPTION": "At the start of each turn, apply [Poison] to ALL enemies.",
 								"NAME": "Noxious Fumes"
 				},
+				"Obtain":	{
+								"DESCRIPTION": "Add the specified card to your deck.",
+								"NAME": "Obtain",
+								"PAST": "obtained",
+								"PRESENT": "obtains",
+								"PROGRESSIVE": "obtaining"
+				},
 				"Orange Affinity":	{
 								"DESCRIPTION": "",
 								"NAME": "Orange Affinity"

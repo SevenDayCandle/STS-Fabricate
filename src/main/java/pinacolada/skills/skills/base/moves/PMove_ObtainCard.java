@@ -1,28 +1,21 @@
 package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.helpers.CardLibrary;
-import extendedui.ui.tooltips.EUICardPreview;
-import extendedui.utilities.RotatingList;
+import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.annotations.VisibleSkill;
-import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.skills.PMove;
-import pinacolada.skills.PSkill;
+import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.skills.fields.PField_CardID;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import pinacolada.skills.fields.PField_CardCategory;
 
 @VisibleSkill
-public class PMove_ObtainCard extends PMove<PField_CardID>
+public class PMove_ObtainCard extends PMove_GenerateCard
 {
-    public static final PSkillData<PField_CardID> DATA = register(PMove_ObtainCard.class, PField_CardID.class)
+    public static final PSkillData<PField_CardCategory> DATA = register(PMove_ObtainCard.class, PField_CardCategory.class)
+            .setExtra(1, DEFAULT_MAX)
             .setGroups(PCLCardGroupHelper.MasterDeck)
             .selfTarget();
 
@@ -36,16 +29,9 @@ public class PMove_ObtainCard extends PMove<PField_CardID>
         super(DATA, content);
     }
 
-    public PMove_ObtainCard(int copies, Collection<String> cards)
+    public PMove_ObtainCard(int copies, String... cardData)
     {
-        super(DATA, PCLCardTarget.None, copies);
-        fields.setCardIDs(cards);
-    }
-
-    public PMove_ObtainCard(int copies, String... cards)
-    {
-        super(DATA, PCLCardTarget.None, copies);
-        fields.setCardIDs(cards);
+        super(DATA, PCLCardTarget.None, copies, cardData);
     }
 
     @Override
@@ -59,94 +45,15 @@ public class PMove_ObtainCard extends PMove<PField_CardID>
         return this;
     }
 
-    private AbstractCard getCard(String id)
+    @Override
+    public EUITooltip getActionTooltip()
     {
-        AbstractCard c = CardLibrary.getCard(id);
-        if (c != null)
-        {
-            c = c.makeCopy();
-            if (extra > 0 && c instanceof PCLCard)
-            {
-                ((PCLCard) c).changeForm(extra, c.timesUpgraded);
-            }
-            return c;
-        }
-        return null;
+        return PGR.core.tooltips.obtain;
     }
 
     @Override
-    public PMove_ObtainCard makePreviews(RotatingList<EUICardPreview> previews)
+    public void performAction(PCLUseInfo info, AbstractCard c)
     {
-        for (String cd : fields.cardIDs)
-        {
-            AbstractCard c = getCard(cd);
-            if (c != null)
-            {
-                previews.add(EUICardPreview.generatePreviewCard(c));
-            }
-        }
-        super.makePreviews(previews);
-        return this;
-    }
-
-    @Override
-    public String getSampleText(PSkill<?> callingSkill)
-    {
-        return TEXT.act_obtain(TEXT.subjects_card);
-    }
-
-    @Override
-    public void use(PCLUseInfo info)
-    {
-        ArrayList<AbstractCard> created = new ArrayList<AbstractCard>();
-        if (useParent)
-        {
-            List<? extends AbstractCard> cards = info.getDataAsList(AbstractCard.class);
-            if (cards != null)
-            {
-                for (AbstractCard card : cards)
-                {
-                    for (int i = 0; i < amount; i++)
-                    {
-                        AbstractCard c = card.makeStatEquivalentCopy();
-                        created.add(c);
-                        getActions().showAndObtain(c);
-                    }
-                }
-            }
-        }
-        else if (fields.cardIDs.isEmpty())
-        {
-            for (int i = 0; i < amount; i++)
-            {
-                AbstractCard c = sourceCard.makeStatEquivalentCopy();
-                created.add(c);
-                getActions().showAndObtain(c);
-            }
-        }
-        else
-        {
-            for (String cd : fields.cardIDs)
-            {
-                for (int i = 0; i < amount; i++)
-                {
-                    AbstractCard c = getCard(cd);
-                    if (c != null)
-                    {
-                        created.add(c);
-                        getActions().showAndObtain(c);
-                    }
-                }
-            }
-        }
-        info.setData(created);
-        super.use(info);
-    }
-
-    @Override
-    public String getSubText()
-    {
-        String joinedString = useParent ? TEXT.subjects_copiesOf(getInheritedString()) : fields.cardIDs.isEmpty() ? TEXT.subjects_copiesOf(TEXT.subjects_thisCard) : fields.getCardIDAndString();
-        return TEXT.act_obtain(joinedString);
+        getActions().showAndObtain(c);
     }
 }

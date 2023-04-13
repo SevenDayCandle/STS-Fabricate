@@ -1,12 +1,15 @@
 package pinacolada.skills.fields;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.helpers.CardLibrary;
 import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
+import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.CostFilter;
+import extendedui.utilities.RotatingList;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.tags.PCLCardTag;
@@ -18,9 +21,10 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
-public class PField_CardCategory extends PField_CardID
+public class PField_CardCategory extends PField_CardGeneric
 {
     public ArrayList<AbstractCard.CardColor> colors = new ArrayList<>();
     public ArrayList<AbstractCard.CardRarity> rarities = new ArrayList<>();
@@ -28,6 +32,7 @@ public class PField_CardCategory extends PField_CardID
     public ArrayList<PCLAffinity> affinities = new ArrayList<>();
     public ArrayList<PCLCardTag> tags = new ArrayList<>();
     public ArrayList<CostFilter> costs = new ArrayList<>();
+    public ArrayList<String> cardIDs = new ArrayList<>();
 
     public PField_CardCategory()
     {
@@ -43,18 +48,30 @@ public class PField_CardCategory extends PField_CardID
         setType(other.types);
         setTag(other.tags);
         setCost(other.costs);
+        setCardIDs(other.cardIDs);
     }
 
     @Override
     public boolean equals(PField other)
     {
         return super.equals(other)
+                && cardIDs.equals(((PField_CardCategory) other).cardIDs)
                 && affinities.equals(((PField_CardCategory) other).affinities)
                 && colors.equals(((PField_CardCategory) other).colors)
                 && rarities.equals(((PField_CardCategory) other).rarities)
                 && types.equals(((PField_CardCategory) other).types)
                 && tags.equals(((PField_CardCategory) other).tags)
                 && costs.equals(((PField_CardCategory) other).costs);
+    }
+
+    public String getCardIDAndString()
+    {
+        return getCardIDAndString(cardIDs);
+    }
+
+    public String getCardIDOrString()
+    {
+        return getCardIDOrString(cardIDs);
     }
 
     @Override
@@ -99,6 +116,18 @@ public class PField_CardCategory extends PField_CardID
     {
         this.affinities.clear();
         this.affinities.addAll(affinities);
+        return this;
+    }
+
+    public PField_CardCategory setCardIDs(String... cards)
+    {
+        return setCardIDs(Arrays.asList(cards));
+    }
+
+    public PField_CardCategory setCardIDs(Collection<String> cards)
+    {
+        this.cardIDs.clear();
+        this.cardIDs.addAll(cards);
         return this;
     }
 
@@ -249,5 +278,27 @@ public class PField_CardCategory extends PField_CardID
         return skill.useParent ? EUIRM.strings.verbNoun(tooltipTitle, skill.getInheritedString()) :
                 !groupTypes.isEmpty() ? TEXT.act_genericFrom(tooltipTitle, skill.getAmountRawOrAllString(), !cardIDs.isEmpty() ? getCardIDOrString(cardIDs) : getFullCardString(), getGroupString())
                         : EUIRM.strings.verbNoun(tooltipTitle, TEXT.subjects_thisCard);
+    }
+
+    public void makePreviews(RotatingList<EUICardPreview> previews)
+    {
+        for (String cd : cardIDs)
+        {
+            AbstractCard c = getCard(cd);
+            if (c != null)
+            {
+                previews.add(EUICardPreview.generatePreviewCard(c));
+            }
+        }
+    }
+
+    public static AbstractCard getCard(String id)
+    {
+        AbstractCard c = CardLibrary.getCard(id);
+        if (c != null)
+        {
+            return c.makeCopy();
+        }
+        return null;
     }
 }
