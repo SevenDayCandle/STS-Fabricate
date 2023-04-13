@@ -58,7 +58,6 @@ public class PField_CardModifyTag extends PField_CardCategory
     {
         editor.registerPile(groupTypes);
         editor.registerTag(addTags);
-        registerUseParentBoolean(editor);
     }
 
     public String getAddTagChoiceString()

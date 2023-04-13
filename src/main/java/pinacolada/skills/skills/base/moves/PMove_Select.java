@@ -17,6 +17,7 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardGeneric;
 import pinacolada.skills.skills.PCallbackMove;
+import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
 import pinacolada.utilities.ListSelection;
 
 public abstract class PMove_Select<T extends PField_CardGeneric> extends PCallbackMove<T>
@@ -72,6 +73,14 @@ public abstract class PMove_Select<T extends PField_CardGeneric> extends PCallba
         return baseAmount <= 0 ? fields.forced ? TEXT.subjects_all : TEXT.subjects_any
                 : extra > 0 ? TEXT.subjects_xOfY(getExtraRawString(), getAmountRawString())
                 : (fields.forced || fields.origin != PCLCardSelection.Manual) ? getAmountRawString() : getRangeToAmountRawString();
+    }
+
+    @Override
+    public void setupEditor(PCLCustomCardEffectEditor<?> editor)
+    {
+        super.setupEditor(editor);
+        registerUseParentBoolean(editor);
+        fields.registerRequiredBoolean(editor);
     }
 
     protected String getActionTitle()

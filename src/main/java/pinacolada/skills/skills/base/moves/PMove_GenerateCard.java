@@ -17,6 +17,7 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.skills.PCallbackMove;
+import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -120,6 +121,14 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
     public String getAmountRawOrAllString()
     {
         return extra > amount ? TEXT.subjects_xOfY(getAmountRawString(), getExtraRawString()) : getAmountRawString();
+    }
+
+    @Override
+    public void setupEditor(PCLCustomCardEffectEditor<?> editor)
+    {
+        super.setupEditor(editor);
+        registerUseParentBoolean(editor);
+        fields.registerForcedBoolean(editor, TEXT.subjects_thisCard, null);
     }
 
     @Override

@@ -327,7 +327,7 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
                     .setActive(origins.getAllItems().size() >= 1);
             piles.setItems(PSkill.getEligiblePiles(curEffect))
                     .setActive(piles.getAllItems().size() >= 1);
-            curEffect.fields.setupEditor(this);
+            curEffect.setupEditor(this);
 
             float xOff = AUX_OFFSET;
             additionalHeight = 0;

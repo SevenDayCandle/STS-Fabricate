@@ -12,8 +12,8 @@ import pinacolada.actions.PCLAction;
 import pinacolada.actions.piles.SelectFromPile;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
@@ -21,6 +21,7 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.skills.PActiveMod;
+import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
 import pinacolada.utilities.ListSelection;
 
 import java.util.ArrayList;
@@ -130,6 +131,13 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory>
         return cards == null || be == null ? 0 : be.baseAmount * (isForced() ? cards.size() : (EUIUtils.count(cards,
                 c -> fields.getFullCardFilter().invoke(c)
         )));
+    }
+
+    @Override
+    public void setupEditor(PCLCustomCardEffectEditor<?> editor)
+    {
+        super.setupEditor(editor);
+        fields.registerRequiredBoolean(editor);
     }
 
     // Useparent on the child should also cause a "forced" filter

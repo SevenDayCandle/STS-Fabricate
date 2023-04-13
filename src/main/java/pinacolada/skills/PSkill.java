@@ -33,12 +33,12 @@ import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.cards.pcl.special.QuestionMark;
+import pinacolada.dungeon.CombatManager;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.interfaces.subscribers.*;
-import pinacolada.dungeon.CombatManager;
-import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
@@ -46,6 +46,7 @@ import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.skills.PMultiSkill;
 import pinacolada.skills.skills.PTrigger;
+import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
 import pinacolada.utilities.GameUtilities;
 
 import java.lang.reflect.Constructor;
@@ -1334,6 +1335,11 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         }
     }
 
+    public void registerUseParentBoolean(PCLCustomCardEffectEditor<?> editor)
+    {
+        editor.registerBoolean(PGR.core.strings.cedit_useParent, PGR.core.strings.cetut_useParent, v -> useParent = v, useParent);
+    }
+
     public boolean removable()
     {
         return this.childEffect == null || this.childEffect.removable();
@@ -1505,6 +1511,11 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
     {
         this.upgradeExtra = upgrade;
         return this;
+    }
+
+    public void setupEditor(PCLCustomCardEffectEditor<?> editor)
+    {
+        fields.setupEditor(editor);
     }
 
     public PSkill<T> stack(PSkill<?> other)

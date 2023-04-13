@@ -19,7 +19,6 @@ import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
-import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;
 import pinacolada.stances.PCLStanceHelper;
 import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
@@ -41,26 +40,14 @@ public abstract class PField implements Serializable
         return other != null && this.getClass().equals(other.getClass());
     }
 
-    // Enables selectors for modifying this objects fields to appear in the card editor
-    public void setupEditor(PCLCustomCardEffectEditor<?> editor)
-    {
-
-    }
-
     public PField setSkill(PSkill<?> skill)
     {
         this.skill = skill;
         return this;
     }
 
-    // Use Parent only makes sense on PMoves for now
-    public void registerUseParentBoolean(PCLCustomCardEffectEditor<?> editor)
-    {
-        if (skill instanceof PMove)
-        {
-            editor.registerBoolean(PGR.core.strings.cedit_useParent, PGR.core.strings.cetut_useParent, v -> skill.useParent = v, skill.useParent);
-        }
-    }
+    // Enables selectors for modifying this objects fields to appear in the card editor
+    public abstract void setupEditor(PCLCustomCardEffectEditor<?> editor);
 
     public static String getAffinityAndString(ArrayList<PCLAffinity> affinities)
     {

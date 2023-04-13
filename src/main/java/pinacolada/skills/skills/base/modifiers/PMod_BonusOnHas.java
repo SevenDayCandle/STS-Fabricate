@@ -9,6 +9,7 @@ import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
+import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
 
 import java.util.List;
 
@@ -48,6 +49,13 @@ public abstract class PMod_BonusOnHas extends PMod_BonusOn<PField_CardCategory>
         int count = EUIUtils.count(getCardPile(),
                 c -> fields.getFullCardFilter().invoke(c));
         return extra == 0 ? count == 0 : fields.not ^ count >= extra;
+    }
+
+    @Override
+    public void setupEditor(PCLCustomCardEffectEditor<?> editor)
+    {
+        super.setupEditor(editor);
+        fields.registerForcedBoolean(editor, TEXT.subjects_combat, null);
     }
 
     abstract public List<AbstractCard> getCardPile();

@@ -12,6 +12,7 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
+import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
 
 import java.util.List;
 
@@ -81,5 +82,12 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<
                 fields.hasGroups() ?
                         TEXT.act_giveFrom(EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), fields.getFullCardString()), fields.getGroupString(), giveString) :
                         TEXT.act_giveTarget(TEXT.subjects_thisX, giveString);
+    }
+
+    @Override
+    public void setupEditor(PCLCustomCardEffectEditor<?> editor)
+    {
+        super.setupEditor(editor);
+        registerUseParentBoolean(editor);
     }
 }
