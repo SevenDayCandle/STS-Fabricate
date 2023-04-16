@@ -6,12 +6,10 @@ import extendedui.EUIRM;
 import extendedui.utilities.ColoredString;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.resources.PGR;
-import pinacolada.skills.PSkill;
-import pinacolada.skills.PSkillData;
-import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.*;
 import pinacolada.skills.fields.PField_Empty;
 import pinacolada.skills.skills.PActiveCond;
 import pinacolada.skills.skills.PActiveMod;
@@ -108,5 +106,29 @@ public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty>
             return EUIRM.strings.numAdjNoun(amountString, targetShortString, PGR.core.tooltips.block);
         }
         return EUIRM.strings.numNoun(amountString, PGR.core.tooltips.block);
+    }
+
+    public PCardPrimary_GainBlock setBonus(PMod<?> mod, int amount)
+    {
+        setChain(mod, PTrait.block(amount));
+        return this;
+    }
+
+    public PCardPrimary_GainBlock setBonus(PMod<?> mod, int amount, int... upgrade)
+    {
+        setChain(mod, PTrait.block(amount).setUpgrade(upgrade));
+        return this;
+    }
+
+    public PCardPrimary_GainBlock setBonusPercent(PMod<?> mod, int amount)
+    {
+        setChain(mod, PTrait.blockMultiplier(amount));
+        return this;
+    }
+
+    public PCardPrimary_GainBlock setBonusPercent(PMod<?> mod, int amount, int... upgrade)
+    {
+        setChain(mod, PTrait.blockMultiplier(amount).setUpgrade(upgrade));
+        return this;
     }
 }

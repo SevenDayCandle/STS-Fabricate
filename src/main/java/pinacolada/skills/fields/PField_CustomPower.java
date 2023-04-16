@@ -29,7 +29,6 @@ public class PField_CustomPower extends PField
     {
         List<Integer> range = Arrays.asList(EUIUtils.range(0, editor.editor.screen.getPowerCount() - 1));
         editor.registerDropdown(range, indexes, item -> String.valueOf(item + 1), PGR.core.strings.cedit_powers, false, false, false);
-        super.setupEditor(editor);
     }
 
     public PField_CustomPower setIndexes(Integer... indexes)

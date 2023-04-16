@@ -16,15 +16,13 @@ import pinacolada.actions.creature.DealDamageToAll;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.EffekseerEFK;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.VFX;
 import pinacolada.interfaces.providers.PointerProvider;
-import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
-import pinacolada.skills.PSkill;
-import pinacolada.skills.PSkillData;
-import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.*;
 import pinacolada.skills.fields.PField_Attack;
 import pinacolada.skills.skills.PActiveCond;
 import pinacolada.skills.skills.PActiveMod;
@@ -146,6 +144,30 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack>
     public boolean isMoveAllowed(PSkill<?> skill)
     {
         return skill instanceof PDamageTrait;
+    }
+
+    public PCardPrimary_DealDamage setBonus(PMod<?> mod, int amount)
+    {
+        setChain(mod, PTrait.damage(amount));
+        return this;
+    }
+
+    public PCardPrimary_DealDamage setBonus(PMod<?> mod, int amount, int... upgrade)
+    {
+        setChain(mod, PTrait.damage(amount).setUpgrade(upgrade));
+        return this;
+    }
+
+    public PCardPrimary_DealDamage setBonusPercent(PMod<?> mod, int amount)
+    {
+        setChain(mod, PTrait.damageMultiplier(amount));
+        return this;
+    }
+
+    public PCardPrimary_DealDamage setBonusPercent(PMod<?> mod, int amount, int... upgrade)
+    {
+        setChain(mod, PTrait.damageMultiplier(amount).setUpgrade(upgrade));
+        return this;
     }
 
     public PCardPrimary_DealDamage setDamageEffect(EffekseerEFK effekseerKey)

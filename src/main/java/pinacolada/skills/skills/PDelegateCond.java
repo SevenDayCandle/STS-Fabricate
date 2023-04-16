@@ -1,85 +1,45 @@
 package pinacolada.skills.skills;
 
-import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.core.AbstractCreature;
-import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.skills.PCond;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.skills.fields.PField_CardCategory;
-import pinacolada.skills.skills.base.primary.PTrigger_When;
+import pinacolada.skills.fields.PField;
 
-import java.util.Collections;
-
-public abstract class PDelegateCond extends PPassiveNonCheckCond<PField_CardCategory>
+// Conditions that trigger on specific game events
+public abstract class PDelegateCond<T extends PField> extends PCond<T>
 {
-    public PDelegateCond(PSkillData<PField_CardCategory> data)
-    {
-        super(data, PCLCardTarget.None, 0);
-    }
-
-    public PDelegateCond(PSkillData<PField_CardCategory> data, PSkillSaveData content)
+    public PDelegateCond(PSkillData<T> data, PSkillSaveData content)
     {
         super(data, content);
     }
 
-    @Override
-    public String getSampleText(PSkill<?> callingSkill)
+    public PDelegateCond(PSkillData<T> data)
     {
-        return callingSkill instanceof PTrigger_When ? TEXT.cond_whenAObjectIs(TEXT.subjects_x, getDelegateSampleText()) : TEXT.cond_onGeneric(getDelegateSampleText());
+        super(data);
+    }
+
+    public PDelegateCond(PSkillData<T> data, PCLCardTarget target, int amount)
+    {
+        super(data, target, amount);
+    }
+
+    public PDelegateCond(PSkillData<T> data, PCLCardTarget target, int amount, int extra)
+    {
+        super(data, target, amount, extra);
     }
 
     @Override
-    public String getSubText()
+    public String getText(boolean addPeriod)
     {
-        if (isWhenClause())
-        {
-            return TEXT.cond_whenAObjectIs(fields.getFullCardStringSingular(), getDelegatePastText());
-        }
-        return TEXT.cond_onGeneric(getDelegateText());
-    }
-
-    // This should not activate the child effect when played normally
-
-    @Override
-    public void use(PCLUseInfo info)
-    {
+        return getCapitalSubText(addPeriod) + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : ": ") + childEffect.getText(addPeriod)) : "");
     }
 
     @Override
-    public void use(PCLUseInfo info, int index)
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource)
     {
+        return triggerSource != null;
     }
-
-    @Override
-    public boolean canPlay(PCLUseInfo info)
-    {
-        return true;
-    }
-
-    public void triggerOnCard(AbstractCard c)
-    {
-        if (fields.getFullCardFilter().invoke(c))
-        {
-            useFromTrigger(makeInfo(null).setData(Collections.singletonList(c)));
-        }
-    }
-
-    public void triggerOnCard(AbstractCard c, AbstractCreature target)
-    {
-        if (fields.getFullCardFilter().invoke(c))
-        {
-            useFromTrigger(makeInfo(target).setData(Collections.singletonList(c)));
-        }
-    }
-
-    public String getDelegatePastText() {return getDelegateTooltip().past();}
-
-    public String getDelegateSampleText() {return getDelegateText();}
-
-    public String getDelegateText() {return getDelegateTooltip().title;}
-
-    public abstract EUITooltip getDelegateTooltip();
 }

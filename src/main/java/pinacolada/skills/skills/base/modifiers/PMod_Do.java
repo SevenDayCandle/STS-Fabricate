@@ -137,7 +137,7 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory>
     public void setupEditor(PCLCustomCardEffectEditor<?> editor)
     {
         super.setupEditor(editor);
-        fields.registerRequiredBoolean(editor);
+        fields.registerRequired(editor);
     }
 
     // Useparent on the child should also cause a "forced" filter

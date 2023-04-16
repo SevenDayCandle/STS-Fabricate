@@ -8,10 +8,10 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
-import pinacolada.skills.skills.PDelegateCond;
+import pinacolada.skills.skills.PDelegateCardCond;
 
 @VisibleSkill
-public class PCond_OnDraw extends PDelegateCond implements OnCardDrawnSubscriber
+public class PCond_OnDraw extends PDelegateCardCond implements OnCardDrawnSubscriber
 {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_OnDraw.class, PField_CardCategory.class, 1, 1)
             .selfTarget();

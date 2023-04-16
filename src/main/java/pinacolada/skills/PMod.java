@@ -7,8 +7,8 @@ import extendedui.utilities.ColoredString;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.resources.pcl.PCLCoreStrings;
@@ -74,69 +74,69 @@ public abstract class PMod<T extends PField> extends PSkill<T>
         return new PMod_BonusOnStarter(amount);
     }
 
-    public static PMod_BonusPerDamage bonusPerDamage(int amount)
+    public static PMod_PerDamage bonusPerDamage(int amount)
     {
-        return new PMod_BonusPerDamage(amount);
+        return (PMod_PerDamage) new PMod_PerDamage(amount).edit(f -> f.setNot(true));
     }
 
-    public static PMod_BonusPerAffinityLevel bonusPerLevel(int amount, PCLAffinity... aff)
+    public static PMod_PerAffinityLevel bonusPerLevel(int amount, PCLAffinity... aff)
     {
-        return new PMod_BonusPerAffinityLevel(amount, aff);
+        return (PMod_PerAffinityLevel) new PMod_PerAffinityLevel(amount, aff).edit(f -> f.setNot(true));
     }
 
-    public static PMod_BonusPerOrb bonusPerOrb(int amount, PCLOrbHelper... aff)
+    public static PMod_PerOrb bonusPerOrb(int amount, PCLOrbHelper... aff)
     {
-        return new PMod_BonusPerOrb(amount, aff);
+        return new PMod_PerOrb(amount, aff);
     }
 
-    public static PMod_BonusPerPower bonusPerPower(PCLPowerHelper... powers)
+    public static PMod_PerPower bonusPerPower(PCLPowerHelper... powers)
     {
         return bonusPerPower(1, powers);
     }
 
-    public static PMod_BonusPerPower bonusPerPower(int amount, PCLPowerHelper... powers)
+    public static PMod_PerPower bonusPerPower(int amount, PCLPowerHelper... powers)
     {
-        return new PMod_BonusPerPower(amount, powers);
+        return (PMod_PerPower) new PMod_PerPower(amount, powers).edit(f -> f.setNot(true));
     }
 
-    public static PMod_BonusPerPower bonusPerPowerAny(PCLPowerHelper... powers)
+    public static PMod_PerPower bonusPerPowerAny(PCLPowerHelper... powers)
     {
         return bonusPerPowerAny(1, powers);
     }
 
-    public static PMod_BonusPerPower bonusPerPowerAny(int amount, PCLPowerHelper... powers)
+    public static PMod_PerPower bonusPerPowerAny(int amount, PCLPowerHelper... powers)
     {
-        return (PMod_BonusPerPower) new PMod_BonusPerPower(amount, powers).setTarget(PCLCardTarget.Any);
+        return (PMod_PerPower) new PMod_PerPower(amount, powers).setTarget(PCLCardTarget.Any).edit(f -> f.setNot(true));
     }
 
-    public static PMod_BonusPerPower bonusPerPowerAoe(PCLPowerHelper... powers)
+    public static PMod_PerPower bonusPerPowerAoe(PCLPowerHelper... powers)
     {
         return bonusPerPowerAoe(1, powers);
     }
 
-    public static PMod_BonusPerPower bonusPerPowerAoe(int amount, PCLPowerHelper... powers)
+    public static PMod_PerPower bonusPerPowerAoe(int amount, PCLPowerHelper... powers)
     {
-        return (PMod_BonusPerPower) new PMod_BonusPerPower(amount, powers).setTarget(PCLCardTarget.AllEnemy);
+        return (PMod_PerPower) new PMod_PerPower(amount, powers).setTarget(PCLCardTarget.AllEnemy).edit(f -> f.setNot(true));
     }
 
-    public static PMod_BonusPerPower bonusPerPowerSelf(PCLPowerHelper... powers)
+    public static PMod_PerPower bonusPerPowerSelf(PCLPowerHelper... powers)
     {
         return bonusPerPowerSelf(1, powers);
     }
 
-    public static PMod_BonusPerPower bonusPerPowerSelf(int amount, PCLPowerHelper... powers)
+    public static PMod_PerPower bonusPerPowerSelf(int amount, PCLPowerHelper... powers)
     {
-        return (PMod_BonusPerPower) new PMod_BonusPerPower(amount, powers).setTarget(PCLCardTarget.Self);
+        return (PMod_PerPower) new PMod_PerPower(amount, powers).setTarget(PCLCardTarget.Self).edit(f -> f.setNot(true));
     }
 
-    public static PMod_BonusPerPower bonusPerPowerSingle(PCLPowerHelper... powers)
+    public static PMod_PerPower bonusPerPowerSingle(PCLPowerHelper... powers)
     {
         return bonusPerPowerSingle(1, powers);
     }
 
-    public static PMod_BonusPerPower bonusPerPowerSingle(int amount, PCLPowerHelper... powers)
+    public static PMod_PerPower bonusPerPowerSingle(int amount, PCLPowerHelper... powers)
     {
-        return (PMod_BonusPerPower) new PMod_BonusPerPower(amount, powers).setTarget(PCLCardTarget.Single);
+        return (PMod_PerPower) new PMod_PerPower(amount, powers).setTarget(PCLCardTarget.Single).edit(f -> f.setNot(true));
     }
 
     public static PMod_CyclePerCard cyclePer(int amount)
@@ -483,6 +483,18 @@ public abstract class PMod<T extends PField> extends PSkill<T>
         String subText = extra > 0 ? getSubText() + " (" + TEXT.subjects_max(extra) + ")" : getSubText();
         return TEXT.cond_per(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "",
                 subText + getXRawString()) + PCLCoreStrings.period(addPeriod);
+    }
+
+    @Override
+    public PMod<T> setUpgrade(int... upgrade) {
+        this.upgrade = upgrade;
+        return this;
+    }
+
+    @Override
+    public PMod<T> setUpgradeExtra(int... upgrade) {
+        this.upgradeExtra = upgrade;
+        return this;
     }
 
     @Override

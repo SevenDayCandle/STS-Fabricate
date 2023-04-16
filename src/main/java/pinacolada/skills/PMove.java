@@ -180,19 +180,24 @@ public abstract class PMove<T extends PField> extends PSkill<T>
                 .setSource(card, valueSource);
     }
 
+    public static PMove_Create create(int amount)
+    {
+        return new PMove_Create(1, PCLCardGroupHelper.Hand);
+    }
+
     public static PMove_Create create(String... cardData)
     {
-        return new PMove_Create(1, cardData);
+        return (PMove_Create) new PMove_Create(1, cardData).edit(f -> f.setCardGroup(PCLCardGroupHelper.Hand));
     }
 
     public static PMove_Create create(int copies, String... cardData)
     {
-        return new PMove_Create(copies, cardData);
+        return (PMove_Create) new PMove_Create(copies, cardData).edit(f -> f.setCardGroup(PCLCardGroupHelper.Hand));
     }
 
     public static PMove_Create createDiscardPile(int copies)
     {
-        return (PMove_Create) new PMove_Create(copies, PCLCardGroupHelper.DiscardPile);
+        return new PMove_Create(copies, PCLCardGroupHelper.DiscardPile);
     }
 
     public static PMove_Create createDiscardPile(int copies, String... ids)
@@ -202,7 +207,7 @@ public abstract class PMove<T extends PField> extends PSkill<T>
 
     public static PMove_Create createDrawPile(int copies)
     {
-        return (PMove_Create) new PMove_Create(copies, PCLCardGroupHelper.DrawPile);
+        return new PMove_Create(copies, PCLCardGroupHelper.DrawPile);
     }
 
     public static PMove_Create createDrawPile(int copies, String... ids)
@@ -359,6 +364,17 @@ public abstract class PMove<T extends PField> extends PSkill<T>
                 .setSource(card, valueSource);
     }
 
+    public static PMove_StackPower gainPlayer(int amount, PCLPowerHelper... powers)
+    {
+        return apply(PCLCardTarget.None, amount, powers);
+    }
+
+    public static PMove_StackPower gainPlayer(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers)
+    {
+        return apply(PCLCardTarget.None, card, valueSource, powers);
+    }
+
+
     public static PMove_GainBlock gainBlock(int amount)
     {
         return new PMove_GainBlock(amount);
@@ -367,6 +383,11 @@ public abstract class PMove<T extends PField> extends PSkill<T>
     public static PMove_GainBlock gainBlock(PCLCardTarget target, int amount)
     {
         return new PMove_GainBlock(target, amount);
+    }
+
+    public static PMove_GainBlock gainBlockPlayer(int amount)
+    {
+        return new PMove_GainBlock(PCLCardTarget.None, amount);
     }
 
     public static PMove_GainBlock gainBlock(PCLCard card)
@@ -430,6 +451,17 @@ public abstract class PMove<T extends PField> extends PSkill<T>
     public static PMove_StackTemporaryPower gainTemporary(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers)
     {
         return (PMove_StackTemporaryPower) new PMove_StackTemporaryPower(PCLCardTarget.Self, 0, powers)
+                .setSource(card, valueSource);
+    }
+
+    public static PMove_StackTemporaryPower gainTemporaryPlayer(int amount, PCLPowerHelper... powers)
+    {
+        return new PMove_StackTemporaryPower(PCLCardTarget.None, amount, powers);
+    }
+
+    public static PMove_StackTemporaryPower gainTemporaryPlayer(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers)
+    {
+        return (PMove_StackTemporaryPower) new PMove_StackTemporaryPower(PCLCardTarget.None, 0, powers)
                 .setSource(card, valueSource);
     }
 

@@ -41,14 +41,13 @@ public class PMod_PerAffinityLevel extends PMod_Per<PField_Affinity>
     }
 
     @Override
-    public String getConditionText()
+    public String getSubText()
     {
-        return this.amount <= 1 ? EUIRM.strings.adjNoun(fields.getAffinityLevelAndOrString(), PGR.core.tooltips.level.title) :
-                EUIRM.strings.numAdjNoun(getAmountRawString(), fields.getAffinityLevelAndOrString(), PGR.core.tooltips.level.title);
+        return EUIRM.strings.adjNoun(fields.getAffinityLevelAndOrString(), PGR.core.tooltips.level.title);
     }
 
     @Override
-    public String getSubText()
+    public String getSubSampleText()
     {
         return PGR.core.tooltips.level.title;
     }

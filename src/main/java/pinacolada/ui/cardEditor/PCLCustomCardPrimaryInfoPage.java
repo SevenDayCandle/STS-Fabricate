@@ -86,11 +86,12 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
                 .setFontScale(0.8f).setColor(Color.LIGHT_GRAY)
                 .setLabel(PGR.core.strings.cedit_primaryInfo);
 
-        idInput = (EUITextBoxInput) new EUITextBoxInput(EUIRM.images.panelRoundedHalfH.texture(),
-                new EUIHitbox(START_X, screenH(0.82f), MENU_WIDTH * 2.3f, MENU_HEIGHT * 1.65f))
+        idInput = (EUITextBoxInput) new EUITextBoxInput(EUIRM.images.longInput.texture(),
+                new EUIHitbox(START_X, screenH(0.82f), MENU_WIDTH * 2.3f, MENU_HEIGHT * 1.15f))
                 .setOnComplete(this::validifyCardID)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_idSuffix)
-                .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.05f)
+                .setHeaderSpacing(1.1f)
+                .setBackgroundTexture(EUIRM.images.longInput.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.05f)
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.1f)
                 .setFont(FontHelper.cardTitleFont, 0.7f)
@@ -99,16 +100,17 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
                 new EUIHitbox(START_X + MENU_WIDTH * 2.5f, screenH(0.82f), MENU_WIDTH, MENU_HEIGHT))
                 .setAlignment(0.5f, 0.0f, false)
                 .setFontScale(0.8f).setColor(Settings.RED_TEXT_COLOR)
-                .setLabel(PGR.core.strings.cedit_primaryInfo);
+                .setLabel(PGR.core.strings.cedit_idSuffixWarning);
         idWarning.setActive(false);
 
-        nameInput = (EUITextBoxInput) new EUITextBoxInput(EUIRM.images.panelRoundedHalfH.texture(),
-                new EUIHitbox(START_X, screenH(0.72f), MENU_WIDTH * 2.3f, MENU_HEIGHT * 1.65f))
+        nameInput = (EUITextBoxInput) new EUITextBoxInput(EUIRM.images.longInput.texture(),
+                new EUIHitbox(START_X, screenH(0.72f), MENU_WIDTH * 2.3f, MENU_HEIGHT * 1.15f))
                 .setOnComplete(s -> {
                     effect.modifyAllBuilders(e -> e.setName(s).setLanguageMapEntry(activeLanguage));
                 })
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, LeaderboardScreen.TEXT[7])
-                .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.05f)
+                .setHeaderSpacing(1.1f)
+                .setBackgroundTexture(EUIRM.images.longInput.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.05f)
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.1f)
                 .setFont(FontHelper.cardTitleFont, 0.7f)
@@ -285,7 +287,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
     private void validifyCardID(String cardID)
     {
         String fullID = PCLCustomCardSlot.getBaseIDPrefix(effect.getBuilder().cardColor) + cardID;
-        if (PCLCustomCardSlot.isIDDuplicate(fullID, effect.getBuilder().cardColor))
+        if (!fullID.equals(effect.currentSlot.ID) && PCLCustomCardSlot.isIDDuplicate(fullID, effect.getBuilder().cardColor))
         {
             idWarning.setActive(true);
             effect.saveButton.setInteractable(false);

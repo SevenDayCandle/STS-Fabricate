@@ -52,13 +52,13 @@ public class PMod_PerPower extends PMod_Per<PField_Power>
     }
 
     @Override
-    public String getSubText()
+    public String getSubSampleText()
     {
         return TEXT.cedit_powers;
     }
 
     @Override
-    public String getConditionText()
+    public String getSubText()
     {
         String baseString = fields.getPowerSubjectString();
         if (amount > 1)

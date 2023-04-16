@@ -14,18 +14,15 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.spine.*;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.EnergyManager;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.daily.mods.BlueCards;
-import com.megacrit.cardcrawl.daily.mods.GreenCards;
-import com.megacrit.cardcrawl.daily.mods.PurpleCards;
-import com.megacrit.cardcrawl.daily.mods.RedCards;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.helpers.*;
+import com.megacrit.cardcrawl.helpers.FontHelper;
+import com.megacrit.cardcrawl.helpers.ImageMaster;
+import com.megacrit.cardcrawl.helpers.ScreenShake;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.screens.CharSelectInfo;
 import com.megacrit.cardcrawl.screens.stats.CharStat;
@@ -88,37 +85,12 @@ public abstract class PCLCharacter extends CustomPlayer
         initializeClass(null, shoulderImage2, shoulderImage1, corpseImage,
                 getLoadout(), 0f, -5f, 240f, 244f, new EnergyManager(3));
 
-        reloadAnimation(atlasUrl, skeletonUrl, 1f);
+        reloadDefaultAnimation();
     }
 
     protected PCLLoadout prepareLoadout()
     {
         return PGR.getPlayerData(chosenClass).prepareLoadout();
-    }
-
-    @Override
-    public ArrayList<AbstractCard> getCardPool(ArrayList<AbstractCard> arrayList)
-    {
-        arrayList = super.getCardPool(arrayList);
-
-        if (ModHelper.isModEnabled(RedCards.ID))
-        {
-            CardLibrary.addRedCards(arrayList);
-        }
-        if (ModHelper.isModEnabled(GreenCards.ID))
-        {
-            CardLibrary.addGreenCards(arrayList);
-        }
-        if (ModHelper.isModEnabled(BlueCards.ID))
-        {
-            CardLibrary.addBlueCards(arrayList);
-        }
-        if (ModHelper.isModEnabled(PurpleCards.ID))
-        {
-            CardLibrary.addPurpleCards(arrayList);
-        }
-
-        return arrayList;
     }
 
     @Override
@@ -154,7 +126,7 @@ public abstract class PCLCharacter extends CustomPlayer
     @Override
     public String getPortraitImageName()
     {
-        return null; // Updated in AnimatorCharacterSelectScreen
+        return null;
     }
 
     @Override
@@ -338,17 +310,22 @@ public abstract class PCLCharacter extends CustomPlayer
 
     public void setCreature(AbstractCreature creature)
     {
-        setCreature(CreatureAnimationInfo.getIdentifierString(creature));
+        setCreature(CreatureAnimationInfo.getIdentifierString(creature), DEFAULT_IDLE, DEFAULT_HIT);
     }
 
     public void setCreature(String id)
+    {
+        setCreature(id, DEFAULT_IDLE, DEFAULT_HIT);
+    }
+
+    public void setCreature(String id, String idleStr, String hitStr)
     {
         creatureID = id;
         CreatureAnimationInfo.tryLoadAnimations(id);
         CreatureAnimationInfo animation = CreatureAnimationInfo.getAnimationForID(creatureID);
         if (animation != null)
         {
-            reloadAnimation(animation.atlas, animation.skeleton, animation.scale);
+            reloadAnimation(animation.atlas, animation.skeleton, idleStr, hitStr, animation.scale);
         }
         else
         {
@@ -374,16 +351,26 @@ public abstract class PCLCharacter extends CustomPlayer
     public void resetCreature()
     {
         creatureID = null;
-        reloadAnimation(atlasUrl, skeletonUrl, 1f);
+        reloadDefaultAnimation();
         actualFlip = false;
     }
 
-    public void reloadAnimation(String atlasUrl, String skeletonUrl, float scale)
+    public void reloadDefaultAnimation()
+    {
+        reloadAnimation(1f);
+    }
+
+    public void reloadAnimation(float scale)
+    {
+        reloadAnimation(atlasUrl, skeletonUrl, DEFAULT_IDLE, DEFAULT_HIT, scale);
+    }
+
+    public void reloadAnimation(String atlasUrl, String skeletonUrl, String idleStr, String hitStr, float scale)
     {
         try
         {
             this.loadAnimationPCL(atlasUrl, skeletonUrl, scale);
-            tryFindAnimations();
+            tryFindAnimations(idleStr, hitStr);
             AnimationState.TrackEntry e = this.state.setAnimation(0, idleAnim, true);
             if (hitAnim != null)
             {
@@ -402,17 +389,7 @@ public abstract class PCLCharacter extends CustomPlayer
     {
         this.atlas = new TextureAtlas(Gdx.files.internal(atlasUrl));
         SkeletonJson json = new SkeletonJson(this.atlas);
-        if (CardCrawlGame.dungeon != null && AbstractDungeon.player != null) {
-            if (AbstractDungeon.player.hasRelic("PreservedInsect") && !this.isPlayer && AbstractDungeon.getCurrRoom().eliteTrigger) {
-                scale += 0.3F;
-            }
-
-            if (ModHelper.isModEnabled("MonsterHunter") && !this.isPlayer) {
-                scale -= 0.3F;
-            }
-        }
-
-        json.setScale(Settings.renderScale / scale);
+        json.setScale(Settings.renderScale * scale);
         SkeletonData skeletonData = json.readSkeletonData(Gdx.files.internal(skeletonUrl));
         this.skeleton = new Skeleton(skeletonData);
         this.skeleton.setColor(Color.WHITE);
@@ -435,12 +412,12 @@ public abstract class PCLCharacter extends CustomPlayer
         return this.state.getData().getSkeletonData().findAnimation(key);
     }
 
-    protected void tryFindAnimations()
+    protected void tryFindAnimations(String idleStr, String hitStr)
     {
-        Animation idle = getAnimation(DEFAULT_IDLE);
+        Animation idle = getAnimation(idleStr);
         if (idle == null)
         {
-            idle = getAnimation(StringUtils.capitalize(DEFAULT_IDLE));
+            idle = getAnimation(StringUtils.capitalize(idleStr));
         }
         if (idle == null)
         {
@@ -456,10 +433,10 @@ public abstract class PCLCharacter extends CustomPlayer
             idleAnim = null;
         }
 
-        Animation hit = getAnimation(DEFAULT_HIT);
+        Animation hit = getAnimation(hitStr);
         if (idle == null)
         {
-            idle = getAnimation(StringUtils.capitalize(DEFAULT_HIT));
+            idle = getAnimation(StringUtils.capitalize(hitStr));
         }
         if (hit == null)
         {

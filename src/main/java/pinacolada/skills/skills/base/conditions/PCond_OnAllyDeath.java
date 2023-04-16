@@ -9,10 +9,10 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
-import pinacolada.skills.skills.PDelegateCond;
+import pinacolada.skills.skills.PDelegateCardCond;
 
 @VisibleSkill
-public class PCond_OnAllyDeath extends PDelegateCond implements OnAllyDeathSubscriber
+public class PCond_OnAllyDeath extends PDelegateCardCond implements OnAllyDeathSubscriber
 {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_OnAllyDeath.class, PField_CardCategory.class, 1, 1)
             .pclOnly()

@@ -20,7 +20,7 @@ public class Curse_Parasite extends PCLCard
             .setImagePathFromAtlasUrl(ATLAS_URL)
             .setCurse(-2, PCLCardTarget.None, false, true)
             .setTags(PCLCardTag.Unplayable)
-            .setAffinities(PCLAffinity.Purple);
+            .setAffinities(PCLAffinity.Green, PCLAffinity.Purple);
 
     public Curse_Parasite()
     {

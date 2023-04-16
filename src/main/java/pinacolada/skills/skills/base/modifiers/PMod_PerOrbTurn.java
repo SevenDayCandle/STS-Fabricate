@@ -13,6 +13,7 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Orb;
+import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
 
 import java.util.List;
 
@@ -59,17 +60,21 @@ public class PMod_PerOrbTurn extends PMod_Per<PField_Orb>
     }
 
     @Override
-    public String getText(boolean addPeriod)
+    public String getConditionText(String childText)
     {
-        String childString = childEffect != null ? capital(childEffect.getText(false), addPeriod) : "";
-        return (fields.random ? TEXT.cond_perThisCombat(childString, getConditionText(), PGR.core.tooltips.channel.past()) :
-                TEXT.cond_perThisTurn(childString, getConditionText(), PGR.core.tooltips.channel.past())
-        ) + getXRawString() + PCLCoreStrings.period(addPeriod);
+        if (fields.not)
+        {
+            return TEXT.cond_genericConditional(childText,
+                    fields.random ? TEXT.cond_perThisCombat(getAmountRawString(), fields.getOrbAndString(1), PCLCoreStrings.past(PGR.core.tooltips.channel)) : TEXT.cond_perThisTurn(getAmountRawString(), fields.getOrbAndString(1), PCLCoreStrings.past(PGR.core.tooltips.evoke)));
+        }
+        String subjString = this.amount <= 1 ? fields.getOrbAndString(1) : EUIRM.strings.numNoun(getAmountRawString(), fields.getOrbAndString());
+        return fields.random ? TEXT.cond_perThisCombat(childText, subjString, PCLCoreStrings.past(PGR.core.tooltips.channel)) : TEXT.cond_perThisTurn(childText, subjString, PCLCoreStrings.past(PGR.core.tooltips.channel));
     }
 
     @Override
-    public String getConditionText()
+    public void setupEditor(PCLCustomCardEffectEditor<?> editor)
     {
-        return this.amount <= 1 ? fields.getOrbAndString(1) : EUIRM.strings.numNoun(getAmountRawString(), fields.getOrbAndString());
+        super.setupEditor(editor);
+        fields.registerRBoolean(editor, TEXT.cedit_combat, null);
     }
 }

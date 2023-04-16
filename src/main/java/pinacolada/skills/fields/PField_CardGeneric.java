@@ -20,12 +20,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class PField_CardGeneric extends PField
+public class PField_CardGeneric extends PField_Not
 {
     public ArrayList<PCLCardGroupHelper> groupTypes = new ArrayList<>();
     public ArrayList<PCLCardGroupHelper> baseGroupTypes = groupTypes;
     public PCLCardSelection origin = PCLCardSelection.Manual;
-    public boolean not;
     public boolean forced;
 
     public PField_CardGeneric()
@@ -209,12 +208,12 @@ public class PField_CardGeneric extends PField
         return origin == PCLCardSelection.Random;
     }
 
-    public void registerForcedBoolean(PCLCustomCardEffectEditor<?> editor, String name, String desc)
+    public void registerFBoolean(PCLCustomCardEffectEditor<?> editor, String name, String desc)
     {
         editor.registerBoolean(name, desc, v -> forced = v, forced);
     }
 
-    public void registerRequiredBoolean(PCLCustomCardEffectEditor<?> editor)
+    public void registerRequired(PCLCustomCardEffectEditor<?> editor)
     {
         editor.registerBoolean(PGR.core.strings.cedit_required, PGR.core.strings.cetut_required1, v -> forced = v, forced);
     }

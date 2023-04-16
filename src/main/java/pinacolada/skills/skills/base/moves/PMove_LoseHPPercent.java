@@ -56,7 +56,7 @@ public class PMove_LoseHPPercent extends PMove<PField_Empty>
         for (AbstractCreature t : getTargetList(info))
         {
             int reduction = MathUtils.ceil(t.maxHealth * amount / 100f);
-            getActions().loseHP(info.source, t, reduction, AbstractGameAction.AttackEffect.NONE).isCancellable(false);
+            getActions().loseHP(info.source, t, reduction, AbstractGameAction.AttackEffect.NONE).ignorePowers(true).isCancellable(false);
         }
         super.use(info);
     }

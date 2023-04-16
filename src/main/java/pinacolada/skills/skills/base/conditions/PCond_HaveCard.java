@@ -64,7 +64,7 @@ public abstract class PCond_HaveCard extends PPassiveCond<PField_CardCategory>
     public void setupEditor(PCLCustomCardEffectEditor<?> editor)
     {
         super.setupEditor(editor);
-        fields.registerForcedBoolean(editor, TEXT.subjects_combat, null);
+        fields.registerFBoolean(editor, TEXT.cedit_combat, null);
     }
 
     abstract public List<AbstractCard> getCardPile();

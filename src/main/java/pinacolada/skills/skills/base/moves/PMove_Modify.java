@@ -68,8 +68,8 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<
     {
         boolean selectAll = baseExtra <= 0 || useParent;
         getActions().selectFromPile(getName(), selectAll ? Integer.MAX_VALUE : extra, fields.getCardGroup(info))
-                .setFilter(fields.getFullCardFilter())
-                .setOptions((selectAll || fields.groupTypes.isEmpty() ? PCLCardSelection.Random : PCLCardSelection.Manual).toSelection(), !fields.forced)
+                .setFilter(this::canCardPass)
+                .setOptions((selectAll || fields.groupTypes.isEmpty() ? PCLCardSelection.Random : fields.origin).toSelection(), !fields.forced)
                 .addCallback(this::cardAction);
         super.use(info);
     }
@@ -89,5 +89,10 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<
     {
         super.setupEditor(editor);
         registerUseParentBoolean(editor);
+    }
+
+    public boolean canCardPass(AbstractCard c)
+    {
+        return fields.getFullCardFilter().invoke(c);
     }
 }

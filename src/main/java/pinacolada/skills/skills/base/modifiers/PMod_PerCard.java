@@ -6,7 +6,6 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
@@ -41,17 +40,14 @@ public class PMod_PerCard extends PMod_Per<PField_CardCategory>
     }
 
     @Override
-    public String getConditionText()
+    public String getConditionText(String childText)
     {
-        return this.amount <= 1 ? fields.getFullCardStringSingular() : EUIRM.strings.numNoun(getAmountRawString(), fields.getFullCardStringSingular());
-    }
-
-    @Override
-    public String getText(boolean addPeriod)
-    {
-        return !fields.hasGroups() ? super.getText(addPeriod) :
-                TEXT.cond_perIn(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", getConditionText(),
-                        fields.getGroupString() + getXRawString()) + PCLCoreStrings.period(addPeriod);
+        if (fields.not)
+        {
+            return TEXT.cond_genericConditional(childText, TEXT.cond_perIn(getAmountRawString(), fields.getFullCardStringSingular(), fields.getGroupString()));
+        }
+        return TEXT.cond_perIn(childText,
+                this.amount <= 1 ? fields.getFullCardStringSingular() : EUIRM.strings.numNoun(getAmountRawString(), fields.getFullCardString()), fields.getGroupString());
     }
 
     @Override

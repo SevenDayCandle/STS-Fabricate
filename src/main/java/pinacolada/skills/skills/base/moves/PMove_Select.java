@@ -80,7 +80,7 @@ public abstract class PMove_Select<T extends PField_CardGeneric> extends PCallba
     {
         super.setupEditor(editor);
         registerUseParentBoolean(editor);
-        fields.registerRequiredBoolean(editor);
+        fields.registerRequired(editor);
     }
 
     protected String getActionTitle()

@@ -8,6 +8,7 @@ import extendedui.interfaces.delegates.ActionT1;
 import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.RotatingList;
+import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -128,7 +129,7 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
     {
         super.setupEditor(editor);
         registerUseParentBoolean(editor);
-        fields.registerForcedBoolean(editor, TEXT.subjects_thisCard, null);
+        fields.registerFBoolean(editor, StringUtils.capitalize(TEXT.subjects_thisCard), null);
     }
 
     @Override

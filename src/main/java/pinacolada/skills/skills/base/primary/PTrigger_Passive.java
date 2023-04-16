@@ -8,7 +8,6 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.PTrait;
 import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.PActiveMod;
-import pinacolada.skills.skills.PDelegateCond;
 import pinacolada.skills.skills.PPassiveCond;
 import pinacolada.skills.skills.PTrigger;
 
@@ -46,7 +45,7 @@ public class PTrigger_Passive extends PTrigger
     @Override
     public boolean isCondAllowed(PSkill<?> skill)
     {
-        return skill instanceof PPassiveCond && !(skill instanceof PDelegateCond);
+        return skill instanceof PPassiveCond;
     }
 
     @Override

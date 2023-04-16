@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class PField_Power extends PField
+public class PField_Power extends PField_Not
 {
     public ArrayList<PCLPowerHelper> powers = new ArrayList<>();
     public boolean random;
@@ -26,13 +26,12 @@ public class PField_Power extends PField
     @Override
     public PField_Power makeCopy()
     {
-        return new PField_Power().setPower(powers).setRandom(random);
+        return (PField_Power) new PField_Power().setPower(powers).setRandom(random).setDebuff(debuff).setNot(not);
     }
 
     public void setupEditor(PCLCustomCardEffectEditor<?> editor)
     {
         editor.registerPower(powers);
-        super.setupEditor(editor);
         editor.registerBoolean(PGR.core.tooltips.debuff.title, PGR.core.tooltips.debuff.description(), v -> debuff = v, debuff);
     }
 

@@ -9,14 +9,14 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.skills.fields.PField_Empty;
+import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.PPassiveCond;
 import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
-public class PCond_Chance extends PPassiveCond<PField_Empty>
+public class PCond_Chance extends PPassiveCond<PField_Not>
 {
-    public static final PSkillData<PField_Empty> DATA = register(PCond_Chance.class, PField_Empty.class)
+    public static final PSkillData<PField_Not> DATA = register(PCond_Chance.class, PField_Not.class)
             .selfTarget();
 
     public PCond_Chance(PSkillSaveData content)

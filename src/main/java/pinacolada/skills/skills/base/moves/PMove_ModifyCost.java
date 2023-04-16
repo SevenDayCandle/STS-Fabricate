@@ -3,6 +3,7 @@ package pinacolada.skills.skills.base.moves;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
 import extendedui.interfaces.delegates.ActionT1;
+import pinacolada.actions.cards.ModifyCost;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.skills.PSkillData;
@@ -59,6 +60,12 @@ public class PMove_ModifyCost extends PMove_Modify<PField_CardCategory>
     @Override
     public boolean isDetrimental()
     {
-        return extra < 0;
+        return extra > 0;
+    }
+
+    @Override
+    public boolean canCardPass(AbstractCard c)
+    {
+        return fields.getFullCardFilter().invoke(c) && ModifyCost.canCardPass(c, amount);
     }
 }

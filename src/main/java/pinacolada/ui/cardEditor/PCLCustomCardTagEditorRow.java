@@ -45,7 +45,7 @@ public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo>
                     EUI.setActiveElement(dr);
                     this.setPrimary(v, true);
                 })
-                .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.05f)
+                .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.1f)
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.5f)
                 .setFont(EUIFontHelper.cardtitlefontSmall, 1f);
@@ -58,7 +58,7 @@ public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo>
                     EUI.setActiveElement(dr);
                     this.setSecondary(v, true);
                 })
-                .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.05f)
+                .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.1f)
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.5f)
                 .setFont(EUIFontHelper.cardtitlefontSmall, 1f);

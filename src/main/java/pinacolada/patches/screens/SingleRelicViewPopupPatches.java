@@ -22,7 +22,7 @@ public class SingleRelicViewPopupPatches
         public static SpireReturn<Void> insert(SingleRelicViewPopup __instance, SpriteBatch sb)
         {
             AbstractRelic temp = EUIClassUtils.getField(__instance, "relic");
-            if (temp.isSeen && temp instanceof PCLRelic)
+            if (temp instanceof PCLRelic && temp.isSeen)
             {
                 float width = ReflectionHacks.getPrivateStatic(SingleRelicViewPopup.class, "DESC_LINE_WIDTH");
                 float spacing = ReflectionHacks.getPrivateStatic(SingleRelicViewPopup.class, "DESC_LINE_SPACING");

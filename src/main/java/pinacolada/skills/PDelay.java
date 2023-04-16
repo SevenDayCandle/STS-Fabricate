@@ -61,7 +61,7 @@ public abstract class PDelay extends PSkill<PField_Empty>
     @Override
     public String getText(boolean addPeriod)
     {
-        return capital(getSubText(), false) + (childEffect != null ? ", " + childEffect.getText(addPeriod) : PCLCoreStrings.period(addPeriod));
+        return getCapitalSubText(addPeriod) + (childEffect != null ? ", " + childEffect.getText(addPeriod) : PCLCoreStrings.period(addPeriod));
     }
 
     @Override

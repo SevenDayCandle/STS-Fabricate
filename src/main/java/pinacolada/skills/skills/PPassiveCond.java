@@ -4,9 +4,11 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.skills.fields.PField;
+import pinacolada.skills.fields.PField_Not;
+import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
 
-public abstract class PPassiveCond<T extends PField> extends PCond<T>
+// Passive conditions that can be inverted
+public abstract class PPassiveCond<T extends PField_Not> extends PCond<T>
 {
     public PPassiveCond(PSkillData<T> data, PSkillSaveData content)
     {
@@ -26,5 +28,11 @@ public abstract class PPassiveCond<T extends PField> extends PCond<T>
     public PPassiveCond(PSkillData<T> data, PCLCardTarget target, int amount, int extra)
     {
         super(data, target, amount, extra);
+    }
+
+    public void setupEditor(PCLCustomCardEffectEditor<?> editor)
+    {
+        super.setupEditor(editor);
+        fields.registerNotBoolean(editor);
     }
 }

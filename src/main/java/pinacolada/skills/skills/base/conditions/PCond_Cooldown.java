@@ -6,19 +6,19 @@ import extendedui.EUIRM;
 import extendedui.utilities.ColoredString;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.providers.CooldownProvider;
 import pinacolada.interfaces.subscribers.OnCooldownTriggeredSubscriber;
-import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
+import pinacolada.skills.PCond;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
-import pinacolada.skills.skills.PPassiveCond;
 import pinacolada.skills.skills.base.primary.PTrigger_When;
 
 @VisibleSkill
-public class PCond_Cooldown extends PPassiveCond<PField_Empty> implements CooldownProvider, OnCooldownTriggeredSubscriber
+public class PCond_Cooldown extends PCond<PField_Empty> implements CooldownProvider, OnCooldownTriggeredSubscriber
 {
     public static final PSkillData<PField_Empty> DATA = register(PCond_Cooldown.class, PField_Empty.class)
             .selfTarget();

@@ -1,9 +1,11 @@
 package pinacolada.actions.creature;
 
 import com.badlogic.gdx.graphics.Color;
+import com.evacipated.cardcrawl.mod.stslib.patches.core.AbstractCreature.TempHPField;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.powers.*;
+import extendedui.EUIUtils;
 import pinacolada.effects.PCLAttackVFX;
 import pinacolada.utilities.GameUtilities;
 
@@ -12,16 +14,6 @@ import java.util.ArrayList;
 // Copied and modified from STS-AnimatorMod
 public class DamageHelper
 {
-    public static void addIgnoredPower(ArrayList<AbstractPower> powers, AbstractCreature target, String powerID)
-    {
-        AbstractPower power = target.getPower(powerID);
-        if (power != null)
-        {
-            powers.add(power);
-            target.powers.remove(power);
-        }
-    }
-
     public static void applyTint(AbstractCreature target, Color overrideColor, PCLAttackVFX attackEffect)
     {
         final Color tint = overrideColor != null ? overrideColor : attackEffect != null ? attackEffect.damageTint : null;
@@ -41,19 +33,20 @@ public class DamageHelper
             target.currentBlock = 0;
         }
 
-        ArrayList<AbstractPower> ignoredPowers = null;
+        ArrayList<AbstractPower> prevPowers = null;
         if (bypassThorns)
         {
-            ignoredPowers = removePowers(target);
+            prevPowers = target.powers;
+            target.powers = getContactPowers(target);
         }
 
         target.damage(info);
 
         if (!GameUtilities.isDeadOrEscaped(target))
         {
-            if (ignoredPowers != null)
+            if (prevPowers != null)
             {
-                reapplyPowers(ignoredPowers, target);
+                target.powers = prevPowers;
             }
 
             if (previousBlock > 0)
@@ -63,42 +56,55 @@ public class DamageHelper
         }
     }
 
-    public static void reapplyPowers(ArrayList<AbstractPower> powers, AbstractCreature target)
+    public static void dealDirectHPLoss(AbstractCreature source, AbstractCreature target, int amount, boolean bypassTempHP, boolean bypassPowers)
     {
-        for (AbstractPower p : powers)
+        int tempHP = 0;
+        if (bypassTempHP)
         {
-            AbstractPower current = target.getPower(p.ID);
-            if (current != null)
+            tempHP = TempHPField.tempHp.get(target);
+            TempHPField.tempHp.set(target, 0);
+        }
+
+        ArrayList<AbstractPower> prevPowers = null;
+        if (bypassPowers)
+        {
+            prevPowers = target.powers;
+            target.powers = new ArrayList<>();
+        }
+
+        target.damage(new DamageInfo(source, amount, DamageInfo.DamageType.HP_LOSS));
+
+        if (GameUtilities.areMonstersBasicallyDead())
+        {
+            GameUtilities.clearPostCombatActions();
+        }
+        else
+        {
+            if (tempHP > 0)
             {
-                current.amount += p.amount;
+                TempHPField.tempHp.set(target, tempHP);
             }
-            else
+            if (!GameUtilities.isDeadOrEscaped(target) && prevPowers != null)
             {
-                target.powers.add(p);
+                target.powers = prevPowers;
             }
         }
     }
 
-    public static ArrayList<AbstractPower> removePowers(AbstractCreature target)
+    public static ArrayList<AbstractPower> getContactPowers(AbstractCreature target)
     {
-        ArrayList<AbstractPower> toReAdd = new ArrayList<>();
-
-        addIgnoredPower(toReAdd, target, ThornsPower.POWER_ID);
-        addIgnoredPower(toReAdd, target, MalleablePower.POWER_ID);
-        addIgnoredPower(toReAdd, target, FlameBarrierPower.POWER_ID);
-        addIgnoredPower(toReAdd, target, CurlUpPower.POWER_ID);
-        addIgnoredPower(toReAdd, target, PlatedArmorPower.POWER_ID);
-        addIgnoredPower(toReAdd, target, ReactivePower.POWER_ID);
-
-        for (int i = target.powers.size() - 1; i >= 0; i--)
-        {
-            if (target.powers.get(i).ID.toLowerCase().contains("thorns"))
+        return EUIUtils.filter(target.powers, power -> {
+            switch (power.ID)
             {
-                toReAdd.add(target.powers.get(i));
-                target.powers.remove(i);
+                case ThornsPower.POWER_ID:
+                case MalleablePower.POWER_ID:
+                case FlameBarrierPower.POWER_ID:
+                case CurlUpPower.POWER_ID:
+                case PlatedArmorPower.POWER_ID:
+                case ReactivePower.POWER_ID:
+                    return true;
             }
-        }
-
-        return toReAdd;
+            return power.ID.toLowerCase().contains("thorns");
+        });
     }
 }

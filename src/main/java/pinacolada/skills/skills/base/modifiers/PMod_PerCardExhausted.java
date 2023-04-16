@@ -1,71 +1,51 @@
 package pinacolada.skills.skills.base.modifiers;
 
-import extendedui.EUIRM;
-import extendedui.EUIUtils;
+import com.megacrit.cardcrawl.cards.AbstractCard;
+import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.annotations.VisibleSkill;
-import pinacolada.cards.base.PCLCardGroupHelper;
-import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.CombatManager;
-import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
-import pinacolada.resources.pcl.PCLCoreStrings;
-import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 
+import java.util.List;
+
 
 @VisibleSkill
-public class PMod_PerCardExhausted extends PMod_Per<PField_CardCategory>
+public class PMod_PerCardExhausted extends PMod_PerCardHas
 {
     public static final PSkillData<PField_CardCategory> DATA = register(PMod_PerCardExhausted.class, PField_CardCategory.class).selfTarget();
+
+    public PMod_PerCardExhausted()
+    {
+        this(1, 1);
+    }
 
     public PMod_PerCardExhausted(PSkillSaveData content)
     {
         super(DATA, content);
     }
 
-    public PMod_PerCardExhausted()
+    public PMod_PerCardExhausted(int amount)
     {
-        super(DATA);
+        super(DATA, amount, 1);
     }
 
-    public PMod_PerCardExhausted(int amount, PCLCardGroupHelper... groups)
+    public PMod_PerCardExhausted(int amount, int extra)
     {
-        super(DATA, PCLCardTarget.None, amount);
-        fields.setCardGroup(groups);
-    }
-
-    @Override
-    public String getSampleText(PSkill<?> callingSkill)
-    {
-        return TEXT.cond_perXY(TEXT.subjects_x, TEXT.subjects_card, PGR.core.tooltips.exhaust.past());
+        super(DATA, amount, extra);
     }
 
     @Override
-    public String getSubText()
+    public List<AbstractCard> getCardPile()
     {
-        return fields.getFullCardString();
+        return fields.forced ? CombatManager.cardsExhaustedThisCombat() : CombatManager.cardsExhaustedThisTurn();
     }
 
     @Override
-    public String getConditionText()
+    public EUITooltip getActionTooltip()
     {
-        return this.amount <= 1 ? getSubText() : EUIRM.strings.numNoun(getAmountRawString(), getSubText());
-    }
-
-    @Override
-    public String getText(boolean addPeriod)
-    {
-        String childString = childEffect != null ? capital(childEffect.getText(false), addPeriod) : "";
-        return (fields.forced ? TEXT.cond_perThisCombat(childString, getConditionText(), PGR.core.tooltips.exhaust.past()) : TEXT.cond_perThisTurn(childString, getConditionText(), PGR.core.tooltips.exhaust.past()))
-                + getXRawString() + PCLCoreStrings.period(addPeriod);
-    }
-
-    @Override
-    public int getMultiplier(PCLUseInfo info)
-    {
-        return EUIUtils.count(fields.forced ? CombatManager.cardsExhaustedThisCombat() : CombatManager.cardsExhaustedThisTurn(),
-                c -> fields.getFullCardFilter().invoke(c));
+        return PGR.core.tooltips.exhaust;
     }
 }

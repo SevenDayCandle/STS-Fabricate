@@ -8,14 +8,13 @@ import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.skills.fields.PField_Empty;
+import pinacolada.skills.fields.PField_Not;
 import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
-public class PMod_PerCreatureAttacking extends PMod_Per<PField_Empty>
+public class PMod_PerCreatureAttacking extends PMod_Per<PField_Not>
 {
-
-    public static final PSkillData<PField_Empty> DATA = register(PMod_PerCreatureAttacking.class, PField_Empty.class);
+    public static final PSkillData<PField_Not> DATA = register(PMod_PerCreatureAttacking.class, PField_Not.class);
 
     public PMod_PerCreatureAttacking(PSkillSaveData content)
     {
@@ -44,13 +43,13 @@ public class PMod_PerCreatureAttacking extends PMod_Per<PField_Empty>
     }
 
     @Override
-    public String getSubText()
+    public String getSubSampleText()
     {
         return EUIRM.strings.adjNoun(PGR.core.tooltips.attack.progressive(), TEXT.subjects_character);
     }
 
     @Override
-    public String getConditionText()
+    public String getSubText()
     {
         return EUIRM.strings.adjNoun(PGR.core.tooltips.attack.progressive(), target == PCLCardTarget.Any ? TEXT.subjects_character : TEXT.subjects_enemy);
     }

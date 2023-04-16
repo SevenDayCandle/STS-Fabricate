@@ -10,14 +10,14 @@ import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.skills.fields.PField_Empty;
+import pinacolada.skills.fields.PField_Not;
 
 import java.util.List;
 
 @VisibleSkill
-public class PMod_PerCreatureHPPercent extends PMod_Per<PField_Empty>
+public class PMod_PerCreatureHPPercent extends PMod_Per<PField_Not>
 {
-    public static final PSkillData<PField_Empty> DATA = register(PMod_PerCreatureHPPercent.class, PField_Empty.class).selfTarget();
+    public static final PSkillData<PField_Not> DATA = register(PMod_PerCreatureHPPercent.class, PField_Not.class).selfTarget();
 
     public PMod_PerCreatureHPPercent(PSkillSaveData content)
     {
@@ -47,15 +47,15 @@ public class PMod_PerCreatureHPPercent extends PMod_Per<PField_Empty>
     }
 
     @Override
-    public String getSubText()
+    public String getSubSampleText()
     {
         return PGR.core.tooltips.hp.title + "%";
     }
 
     @Override
-    public String getConditionText()
+    public String getSubText()
     {
-        String baseString = getSubText();
+        String baseString = getSubSampleText();
         if (amount > 1)
         {
             baseString = EUIRM.strings.numNoun(getAmountRawString(), baseString);

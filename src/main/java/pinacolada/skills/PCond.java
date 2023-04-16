@@ -6,9 +6,9 @@ import com.megacrit.cardcrawl.core.Settings;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.skills.fields.PField;
@@ -211,6 +211,16 @@ public abstract class PCond<T extends PField> extends PSkill<T>
         return new PCond_HavePlayed(amount);
     }
 
+    public static PCond_HaveTakenDamage haveTakenDamage()
+    {
+        return new PCond_HaveTakenDamage();
+    }
+
+    public static PCond_HaveTakenDamage haveTakenDamage(int amount)
+    {
+        return new PCond_HaveTakenDamage(amount);
+    }
+
     public static PCond_HighestAffinityBranch highestAffinityBranch(PCLAffinity... groups)
     {
         return new PCond_HighestAffinityBranch(groups);
@@ -391,12 +401,12 @@ public abstract class PCond<T extends PField> extends PSkill<T>
         return new PCond_Starter();
     }
 
-    public static PCond_TakeDamageTo takeDamage()
+    public static PCond_TakeDamageTo takeDamageTo()
     {
         return new PCond_TakeDamageTo();
     }
 
-    public static PCond_TakeDamageTo takeDamage(int amount)
+    public static PCond_TakeDamageTo takeDamageTo(int amount)
     {
         return new PCond_TakeDamageTo(amount);
     }

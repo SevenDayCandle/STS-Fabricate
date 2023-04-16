@@ -65,11 +65,11 @@ import pinacolada.cards.base.fields.PCLCardAffinity;
 import pinacolada.cards.base.modifiers.AffinityDisplayModifier;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.characters.PCLCharacter;
+import pinacolada.dungeon.CombatManager;
+import pinacolada.dungeon.PCLDungeon;
 import pinacolada.effects.SFX;
 import pinacolada.interfaces.listeners.OnTryApplyPowerListener;
 import pinacolada.interfaces.listeners.OnTryReducePowerListener;
-import pinacolada.dungeon.CombatManager;
-import pinacolada.dungeon.PCLDungeon;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.monsters.PCLIntentInfo;
 import pinacolada.orbs.PCLOrb;
@@ -2452,6 +2452,14 @@ public class GameUtilities
         if (creature instanceof PCLCharacter)
         {
             ((PCLCharacter) creature).setCreature(id);
+        }
+    }
+
+    public static void setCreatureAnimation(AbstractCreature creature, String id, String idleStr, String hitStr)
+    {
+        if (creature instanceof PCLCharacter)
+        {
+            ((PCLCharacter) creature).setCreature(id, idleStr, hitStr);
         }
         // TODO implement a substitute creature for this because hit animations can cause crashes
 /*        else

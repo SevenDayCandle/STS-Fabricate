@@ -30,7 +30,7 @@ public class ModifyCost extends GenericCardSelection
     @Override
     protected boolean canSelect(AbstractCard card)
     {
-        return super.canSelect(card) && card.costForTurn >= 0;
+        return super.canSelect(card) && canCardPass(card, relative ? costChange : costChange - card.costForTurn);
     }
 
     @Override
@@ -58,5 +58,10 @@ public class ModifyCost extends GenericCardSelection
         this.flashColor = flashColor;
 
         return this;
+    }
+
+    public static boolean canCardPass(AbstractCard card, int change)
+    {
+        return card.costForTurn >= 0 && (card.costForTurn != 0 || change > 0);
     }
 }

@@ -120,7 +120,8 @@
 												"Required",
 												"Selection",
 												"Enable",
-												"Pile"
+												"Pile",
+												"Combat"
 								]
 				},
 				"pcl:CardEditorTutorial": {
@@ -162,7 +163,8 @@
 												"If checked, the user will not be able to cancel this effect.",
 												"If checked, the user will only be able to select cards matching this filter.",
 												"Passive powers modify the attributes of cards or #yOrbs while their condition is met. | Greyed-out effects will have no effect for this power.",
-												"When powers activate when the specified events occur. | Greyed-out conditions will have no effect for this power unless they are chained after a valid condition."
+												"When powers activate when the specified events occur. | Greyed-out conditions will have no effect for this power unless they are chained after a valid condition.",
+												"If checked, this modifier's amount will add itself onto the effect's base value instead of multiplying that value."
 								]
 				},
 				"pcl:CardPile": {
@@ -443,10 +445,10 @@
 												"any {0}",
 												"anyone",
 												"attacking",
+												"bonus",
 												"buffing",
 												"card",
 												"character",
-												"combat",
 												"copies of {0}",
 												"damage",
 												"debuffing",
@@ -482,8 +484,7 @@
 												"{0} this turn",
 												"{0} ${0}@!1:times@:time$",
 												"{0} with {1}",
-												"{0}-cost",
-												"{0} bonus"
+												"{0}-cost"
 								]
 				},
 				"pcl:Tutorial": {

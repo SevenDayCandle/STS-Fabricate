@@ -28,13 +28,12 @@ public class PField_Orb extends PField_Random
     @Override
     public PField_Orb makeCopy()
     {
-        return (PField_Orb) new PField_Orb().setOrb(orbs).setRandom(random);
+        return (PField_Orb) new PField_Orb().setOrb(orbs).setRandom(random).setNot(not);
     }
 
     public void setupEditor(PCLCustomCardEffectEditor<?> editor)
     {
         editor.registerOrb(orbs);
-        super.setupEditor(editor);
     }
 
     public PField_Orb addOrb(PCLOrbHelper... orbs)

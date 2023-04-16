@@ -25,9 +25,19 @@ public class PField_Random extends PField_Not
         return this;
     }
 
-    public void setupEditor(PCLCustomCardEffectEditor<?> editor)
+    public void registerRandom(PCLCustomCardEffectEditor<?> editor)
     {
         editor.registerBoolean(PGR.core.strings.cedit_random, v -> random = v, random);
+    }
+
+    public void registerRBoolean(PCLCustomCardEffectEditor<?> editor, String name, String desc)
+    {
+        editor.registerBoolean(name, desc, v -> random = v, random);
+    }
+
+    public void setupEditor(PCLCustomCardEffectEditor<?> editor)
+    {
+        registerRandom(editor);
         super.setupEditor(editor);
     }
 }

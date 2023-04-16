@@ -3,16 +3,18 @@ package pinacolada.skills.skills.base.modifiers;
 import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIRM;
 import extendedui.utilities.ColoredString;
+import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.skills.fields.PField;
+import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.PPassiveMod;
+import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
 
-public abstract class PMod_Per<T extends PField> extends PPassiveMod<T>
+public abstract class PMod_Per<T extends PField_Not> extends PPassiveMod<T>
 {
     public PMod_Per(PSkillData<T> data, PSkillSaveData content)
     {
@@ -45,40 +47,58 @@ public abstract class PMod_Per<T extends PField> extends PPassiveMod<T>
         super(data, target, amount, extra);
     }
 
-    public String getConditionText()
+    public String getConditionText(String childText)
     {
-        return this.amount <= 1 ? getSubText() : EUIRM.strings.numNoun(getAmountRawString(), getSubText());
+        if (fields.not)
+        {
+            return TEXT.cond_genericConditional(childText, TEXT.cond_per(getAmountRawString(), getSubText()));
+        }
+        return TEXT.cond_per(childText,
+                this.amount <= 1 ? getSubText() : EUIRM.strings.numNoun(getAmountRawString(), getSubText()));
+    }
+
+    public String getSubSampleText()
+    {
+        return getSubText();
     }
 
     @Override
     public String getSampleText(PSkill<?> callingSkill)
     {
-        return TEXT.cond_per(TEXT.subjects_x, getSubText());
+        return TEXT.cond_per(TEXT.subjects_x, getSubSampleText());
     }
 
     @Override
     public String getText(boolean addPeriod)
     {
-        String subText = extra > 0 ? getConditionText() + " (" + TEXT.subjects_max(extra) + ")" : getConditionText();
-        return TEXT.cond_per(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "",
-                subText + getXRawString()) + PCLCoreStrings.period(addPeriod);
+        String appendix = extra > 0 ? " (" + TEXT.subjects_max(extra) + ")" + getXRawString() : getXRawString();
+        String childText = childEffect != null ? capital(childEffect.getText(false), addPeriod) : "";
+        return getConditionText(childText) + appendix + PCLCoreStrings.period(addPeriod);
     }
 
     @Override
     public ColoredString getColoredValueString()
     {
+        String amString = fields.not && amount >= 0 ? "+" + amount : String.valueOf(amount);
         if (baseAmount != amount)
         {
-            return new ColoredString(amount, amount >= baseAmount ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR);
+            return new ColoredString(amString, amount >= baseAmount ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR);
         }
 
-        return new ColoredString(amount, Settings.CREAM_COLOR);
+        return new ColoredString(amString, Settings.CREAM_COLOR);
     }
 
     @Override
     public int getModifiedAmount(PSkill<?> be, PCLUseInfo info)
     {
-        return be.baseAmount * getMultiplier(info) / Math.max(1, this.amount);
+        return fields.not ? (be.baseAmount + (getMultiplier(info) * amount)) : be.baseAmount * getMultiplier(info) / Math.max(1, this.amount);
+    }
+
+    @Override
+    public void setupEditor(PCLCustomCardEffectEditor<?> editor)
+    {
+        super.setupEditor(editor);
+        fields.registerNotBoolean(editor, StringUtils.capitalize(TEXT.subjects_bonus), TEXT.cetut_bonus);
     }
 
     public abstract int getMultiplier(PCLUseInfo info);

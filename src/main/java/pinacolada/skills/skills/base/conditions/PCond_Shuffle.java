@@ -2,17 +2,17 @@ package pinacolada.skills.skills.base.conditions;
 
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.interfaces.subscribers.OnShuffleSubscriber;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.interfaces.subscribers.OnShuffleSubscriber;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
-import pinacolada.skills.skills.PPassiveNonCheckCond;
+import pinacolada.skills.skills.PDelegateCond;
 import pinacolada.skills.skills.base.primary.PTrigger_When;
 
 @VisibleSkill
-public class PCond_Shuffle extends PPassiveNonCheckCond<PField_Empty> implements OnShuffleSubscriber
+public class PCond_Shuffle extends PDelegateCond<PField_Empty> implements OnShuffleSubscriber
 {
     public static final PSkillData<PField_Empty> DATA = register(PCond_Shuffle.class, PField_Empty.class, 1, 1)
             .selfTarget();

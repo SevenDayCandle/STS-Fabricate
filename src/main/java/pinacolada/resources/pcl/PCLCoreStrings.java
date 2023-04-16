@@ -105,6 +105,7 @@ public class PCLCoreStrings extends PCLStrings
     public final String cedit_origins = cedit.TEXT[61];
     public final String cedit_enable = cedit.TEXT[62];
     public final String cedit_pile = cedit.TEXT[63];
+    public final String cedit_combat = cedit.TEXT[64];
 
     // Card Editor Tutorial
     public final String cetut_selector1 = cetut.TEXT[0];
@@ -145,6 +146,7 @@ public class PCLCoreStrings extends PCLStrings
     public final String cetut_required2 = cetut.TEXT[35];
     public final String cetut_passive = cetut.TEXT[36];
     public final String cetut_when = cetut.TEXT[37];
+    public final String cetut_bonus = cetut.TEXT[38];
 
     // Card Pile
     public final String cpile_hand = cardPile.TEXT[0];
@@ -340,10 +342,10 @@ public class PCLCoreStrings extends PCLStrings
     public final String subjects_anyX = subjects.TEXT[14];
     public final String subjects_anyone = subjects.TEXT[15];
     public final String subjects_attacking = subjects.TEXT[16];
-    public final String subjects_buffing = subjects.TEXT[17];
-    public final String subjects_card = subjects.TEXT[18];
-    public final String subjects_character = subjects.TEXT[19];
-    public final String subjects_combat = subjects.TEXT[20];
+    public final String subjects_bonus = subjects.TEXT[17];
+    public final String subjects_buffing = subjects.TEXT[18];
+    public final String subjects_card = subjects.TEXT[19];
+    public final String subjects_character = subjects.TEXT[20];
     public final String subjects_copiesOfX = subjects.TEXT[21];
     public final String subjects_damage = subjects.TEXT[22];
     public final String subjects_debuffing = subjects.TEXT[23];
@@ -380,7 +382,6 @@ public class PCLCoreStrings extends PCLStrings
     public final String subjects_xTimes = subjects.TEXT[54];
     public final String subjects_xWithY = subjects.TEXT[55];
     public final String subjects_xCost = subjects.TEXT[56];
-    public final String subjects_xBonus = subjects.TEXT[57];
 
     // Tutorial
     public final String tutorial_learnMore = tutorial.TEXT[0];
@@ -518,7 +519,7 @@ public class PCLCoreStrings extends PCLStrings
     public final String cond_numIf(Object desc1, Object desc2) {return condFmt(26, desc1, desc2);}
     public final String cond_objIs(Object desc1, Object desc2) {return condFmt(27, desc1, desc2);}
     public final String cond_or(Object desc1, Object desc2) {return condFmt(28, desc1, desc2);}
-    public final String cond_per(Object desc1, Object desc2) {return condFmt(29, desc1, desc2);}
+    public final String cond_per(Object subject, Object per) {return condFmt(29, subject, per);}
     public final String cond_perXY(Object desc1, Object desc2, Object desc3) {return condFmt(30, desc1, desc2, desc3);}
     public final String cond_perIn(Object desc1, Object desc2, Object desc3) {return condFmt(31, desc1, desc2, desc3);}
     public final String cond_perDistinct(Object desc1, Object desc2) {return condFmt(32, desc1, desc2);}
@@ -570,7 +571,6 @@ public class PCLCoreStrings extends PCLStrings
     public final String subjects_times(Object amount) {return EUIUtils.format(subjects_xTimes, amount);}
     public final String subjects_topOf(Object amount) {return EUIUtils.format(subjects_topOfX, amount);}
     public final String subjects_unblocked(Object amount) {return EUIUtils.format(subjects_unblockedX, amount);}
-    public final String subjects_xBonus(Object amount) {return EUIUtils.format(subjects_xBonus, amount);}
     public final String subjects_xCost(Object amount) {return EUIUtils.format(subjects_xCost, amount);}
     public final String subjects_xOfY(Object obj, Object t) {return EUIUtils.format(subjects_xOfY, obj, t);}
     public final String subjects_yourFirst(Object amount) {return EUIUtils.format(subjects_yourFirstX, amount);}

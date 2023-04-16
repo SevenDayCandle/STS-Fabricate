@@ -9,10 +9,10 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
-import pinacolada.skills.skills.PDelegateCond;
+import pinacolada.skills.skills.PDelegateCardCond;
 
 @VisibleSkill
-public class PCond_OnWithdraw extends PDelegateCond implements OnAllyWithdrawSubscriber
+public class PCond_OnWithdraw extends PDelegateCardCond implements OnAllyWithdrawSubscriber
 {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_OnWithdraw.class, PField_CardCategory.class, 1, 1)
             .pclOnly()

@@ -1,6 +1,5 @@
 package pinacolada.skills.skills.base.modifiers;
 
-import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.dungeon.PCLUseInfo;
@@ -9,12 +8,12 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Orb;
+import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
 import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
 public class PMod_PerOrb extends PMod_Per<PField_Orb>
 {
-
     public static final PSkillData<PField_Orb> DATA = register(PMod_PerOrb.class, PField_Orb.class).selfTarget();
 
     public PMod_PerOrb(PSkillSaveData content)
@@ -40,14 +39,20 @@ public class PMod_PerOrb extends PMod_Per<PField_Orb>
     }
 
     @Override
-    public String getSubText()
+    public String getSubSampleText()
     {
         return PGR.core.tooltips.orb.title;
     }
 
     @Override
-    public String getConditionText()
+    public String getSubText()
     {
-        return this.amount <= 1 ? fields.getOrbAndString(1) : EUIRM.strings.numNoun(getAmountRawString(), fields.getOrbAndString());
+        return this.amount <= 1 ? fields.getOrbAndString(1) : fields.getOrbAndString();
+    }
+
+    @Override
+    public void setupEditor(PCLCustomCardEffectEditor<?> editor)
+    {
+        super.setupEditor(editor);
     }
 }

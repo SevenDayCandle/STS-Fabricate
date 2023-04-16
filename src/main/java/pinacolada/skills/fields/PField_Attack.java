@@ -2,6 +2,7 @@ package pinacolada.skills.fields;
 
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
+import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
 
 // TODO allow saving of PCLEffekseerEFX
 public class PField_Attack extends PField
@@ -17,6 +18,11 @@ public class PField_Attack extends PField
                 && attackEffect.equals(((PField_Attack) other).attackEffect)
                 && vfxColor.equals(((PField_Attack) other).vfxColor)
                 && vfxTargetColor.equals(((PField_Attack) other).vfxTargetColor);
+    }
+
+    @Override
+    public void setupEditor(PCLCustomCardEffectEditor<?> editor)
+    {
     }
 
     @Override

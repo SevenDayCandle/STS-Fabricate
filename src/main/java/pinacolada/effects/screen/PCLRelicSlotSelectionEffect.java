@@ -28,7 +28,7 @@ public class PCLRelicSlotSelectionEffect extends PCLEffect
 
     private static final EUITextBox cardValue_text = new
             EUITextBox(EUIRM.images.panelRoundedHalfH.texture(), new EUIHitbox(AbstractCard.IMG_WIDTH * 0.15f, AbstractCard.IMG_HEIGHT * 0.15f))
-            .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.05f)
+            .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.1f)
             .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
             .setAlignment(0.5f, 0.5f)
             .setFont(EUIFontHelper.cardtitlefontSmall, 1f);

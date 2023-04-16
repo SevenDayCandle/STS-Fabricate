@@ -1,7 +1,5 @@
 package pinacolada.actions.creature;
 
-import com.evacipated.cardcrawl.mod.stslib.patches.core.AbstractCreature.TempHPField;
-import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import pinacolada.actions.PCLAction;
@@ -13,6 +11,7 @@ import pinacolada.utilities.GameUtilities;
 // Copied and modified from STS-AnimatorMod
 public class LoseHP extends PCLAction<Void>
 {
+    protected boolean ignorePowers = false;
     protected boolean ignoreTempHP = false;
     protected boolean canKill = true;
     protected float pitchMin;
@@ -55,34 +54,25 @@ public class LoseHP extends PCLAction<Void>
     {
         if (tickDuration(deltaTime))
         {
-            int tempHP = 0;
-            if (ignoreTempHP)
-            {
-                tempHP = TempHPField.tempHp.get(target);
-                TempHPField.tempHp.set(target, 0);
-            }
-
             if (!canKill)
             {
                 amount = Math.max(0, Math.min(GameUtilities.getHP(target, true, false) - 1, amount));
             }
 
-            this.target.damage(new DamageInfo(this.source, this.amount, DamageInfo.DamageType.HP_LOSS));
-
-            if (GameUtilities.areMonstersBasicallyDead())
-            {
-                GameUtilities.clearPostCombatActions();
-            }
-            else if (tempHP > 0)
-            {
-                TempHPField.tempHp.set(target, tempHP);
-            }
+            DamageHelper.dealDirectHPLoss(source, target, amount, ignoreTempHP, ignorePowers);
 
             if (!Settings.FAST_MODE)
             {
                 PCLActions.top.wait(0.1f);
             }
         }
+    }
+
+    public LoseHP ignorePowers(boolean ignorePowers)
+    {
+        this.ignorePowers = ignorePowers;
+
+        return this;
     }
 
     public LoseHP ignoreTempHP(boolean ignoreTempHP)

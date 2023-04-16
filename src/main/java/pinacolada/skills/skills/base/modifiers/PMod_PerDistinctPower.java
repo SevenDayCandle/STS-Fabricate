@@ -2,12 +2,12 @@ package pinacolada.skills.skills.base.modifiers;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.powers.AbstractPower;
+import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.powers.PCLPowerHelper;
-import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -46,17 +46,17 @@ public class PMod_PerDistinctPower extends PMod_Per<PField_Power>
     @Override
     public String getSampleText(PSkill<?> callingSkill)
     {
-        return TEXT.cond_perDistinct(TEXT.subjects_x, getSubText());
+        return TEXT.cond_perDistinct(TEXT.subjects_x, getSubSampleText());
     }
 
     @Override
-    public String getSubText()
+    public String getSubSampleText()
     {
         return TEXT.cedit_powers;
     }
 
     @Override
-    public String getConditionText()
+    public String getSubText()
     {
         String baseString = fields.getPowerSubjectString();
         switch (target)
@@ -75,10 +75,14 @@ public class PMod_PerDistinctPower extends PMod_Per<PField_Power>
         }
     }
 
-    @Override
-    public String getText(boolean addPeriod)
+    public String getConditionText(String childText)
     {
-        return TEXT.cond_perDistinct(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", getConditionText() + getXRawString()) + PCLCoreStrings.period(addPeriod);
+        if (fields.not)
+        {
+            return TEXT.cond_genericConditional(childText, TEXT.cond_perDistinct(getAmountRawString(), getSubText()));
+        }
+        return TEXT.cond_perDistinct(childText,
+                this.amount <= 1 ? getSubText() : EUIRM.strings.numNoun(getAmountRawString(), getSubText()));
     }
 
     @Override

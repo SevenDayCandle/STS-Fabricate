@@ -292,10 +292,13 @@ public class PField_CardCategory extends PField_CardGeneric
 
     public static AbstractCard getCard(String id)
     {
-        AbstractCard c = CardLibrary.getCard(id);
-        if (c != null)
+        if (id != null)
         {
-            return c.makeCopy();
+            AbstractCard c = CardLibrary.getCard(id);
+            if (c != null)
+            {
+                return c.makeCopy();
+            }
         }
         return null;
     }

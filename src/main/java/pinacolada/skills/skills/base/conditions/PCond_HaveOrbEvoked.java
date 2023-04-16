@@ -6,9 +6,9 @@ import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.interfaces.subscribers.OnOrbEvokeSubscriber;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.interfaces.subscribers.OnOrbEvokeSubscriber;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
@@ -18,6 +18,7 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Orb;
 import pinacolada.skills.skills.PPassiveCond;
 import pinacolada.skills.skills.base.primary.PTrigger_When;
+import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
 
 @VisibleSkill
 public class PCond_HaveOrbEvoked extends PPassiveCond<PField_Orb> implements OnOrbEvokeSubscriber
@@ -90,5 +91,12 @@ public class PCond_HaveOrbEvoked extends PPassiveCond<PField_Orb> implements OnO
     public String wrapAmount(int input)
     {
         return input == 0 ? String.valueOf(input) : (fields.not ? (input + "-") : (input + "+"));
+    }
+
+    @Override
+    public void setupEditor(PCLCustomCardEffectEditor<?> editor)
+    {
+        super.setupEditor(editor);
+        fields.registerRBoolean(editor, TEXT.cedit_combat, null);
     }
 }

@@ -5,13 +5,13 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.skills.fields.PField_Empty;
+import pinacolada.skills.fields.PField_Not;
 
 @VisibleSkill
-public class PMod_PerCreature extends PMod_Per<PField_Empty>
+public class PMod_PerCreature extends PMod_Per<PField_Not>
 {
 
-    public static final PSkillData<PField_Empty> DATA = register(PMod_PerCreature.class, PField_Empty.class);
+    public static final PSkillData<PField_Not> DATA = register(PMod_PerCreature.class, PField_Not.class);
 
     public PMod_PerCreature(PSkillSaveData content)
     {
@@ -39,14 +39,13 @@ public class PMod_PerCreature extends PMod_Per<PField_Empty>
         return getTargetList(info).size();
     }
 
-    @Override
-    public String getSubText()
+    public String getSubSampleText()
     {
         return TEXT.subjects_character;
     }
 
     @Override
-    public String getConditionText()
+    public String getSubText()
     {
         switch (target)
         {
