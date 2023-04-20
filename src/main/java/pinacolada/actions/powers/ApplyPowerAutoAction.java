@@ -47,7 +47,7 @@ public class ApplyPowerAutoAction extends PCLActionAutoTarget<AbstractPower>
 
         if (AbstractDungeon.getMonsters().areMonstersBasicallyDead() || this.powerHelper == null)
         {
-            complete();
+            completeImpl(); // Do not call callback
         }
     }
 
@@ -75,7 +75,7 @@ public class ApplyPowerAutoAction extends PCLActionAutoTarget<AbstractPower>
             PCLActions.top.add(action).addCallback((ActionT1<AbstractPower>) this::complete);
         }
 
-        complete();
+        completeImpl();
     }
 
     public ApplyPowerAutoAction ignoreArtifact(boolean ignoreArtifact)

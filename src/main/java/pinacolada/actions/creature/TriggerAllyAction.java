@@ -26,7 +26,7 @@ public class TriggerAllyAction extends PCLAction<PCLCardAlly>
     {
         if (this.ally == null || !this.ally.hasCard())
         {
-            complete();
+            complete(null);
             return;
         }
 

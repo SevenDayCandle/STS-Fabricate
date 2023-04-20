@@ -1,5 +1,7 @@
 package pinacolada.dungeon;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.GameActionManager;
@@ -12,6 +14,7 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import com.megacrit.cardcrawl.orbs.EmptyOrbSlot;
@@ -27,6 +30,7 @@ import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
 import extendedui.patches.game.CardGlowBorderPatches;
+import extendedui.ui.EUIBase;
 import extendedui.ui.GridCardSelectScreenHelper;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
@@ -39,11 +43,11 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
 import pinacolada.effects.combat.DodgeEffect;
-import pinacolada.interfaces.listeners.OnCardResetListener;
 import pinacolada.interfaces.listeners.OnRelicObtainedListener;
 import pinacolada.interfaces.providers.CooldownProvider;
 import pinacolada.interfaces.subscribers.*;
 import pinacolada.monsters.PCLCardAlly;
+import pinacolada.monsters.PCLIntentInfo;
 import pinacolada.orbs.PCLOrb;
 import pinacolada.powers.PCLClickableUse;
 import pinacolada.powers.PCLPower;
@@ -51,12 +55,14 @@ import pinacolada.powers.TemporaryPower;
 import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.delay.DelayUse;
 import pinacolada.ui.combat.ControllableCardPile;
 import pinacolada.ui.combat.DrawPileCardPreview;
 import pinacolada.ui.combat.PCLPlayerSystem;
 import pinacolada.ui.combat.SummonPool;
 import pinacolada.utilities.GameUtilities;
+import pinacolada.utilities.PCLRenderHelpers;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -87,6 +93,7 @@ public class CombatManager
     private static final Map<String, Integer> semiLimitedData = new HashMap<>();
     private static final Map<String, Object> combatData = new HashMap<>();
     private static final Map<String, Object> turnData = new HashMap<>();
+    private static HashMap<AbstractCreature, Integer> estimatedDamages;
     private static boolean shouldRefreshHand;
     private static int cardsDrawnThisTurn = 0;
     private static int turnCount = 0;
@@ -209,6 +216,7 @@ public class CombatManager
         maxHPSinceLastTurn = AbstractDungeon.player == null ? 0 : AbstractDungeon.player.currentHealth;
         blockRetained = 0;
         battleID = null;
+        estimatedDamages = null;
 
         shouldRefreshHand = false;
         turnCount = 0;
@@ -541,17 +549,6 @@ public class CombatManager
         return subscriberInout(OnEnergyRechargeSubscriber.class, currentEnergy, (s, d) -> s.onEnergyRecharge(previousEnergy, currentEnergy));
     }
 
-    public static void onCardReset(AbstractCard card)
-    {
-        final OnCardResetListener c = EUIUtils.safeCast(card, OnCardResetListener.class);
-        if (c != null)
-        {
-            c.onReset();
-        }
-
-        subscriberDo(OnCardResetSubscriber.class, s -> s.onCardReset(card));
-    }
-
     public static void onCardCreated(AbstractCard card, boolean startOfBattle)
     {
         final PCLCard c = EUIUtils.safeCast(card, PCLCard.class);
@@ -770,7 +767,6 @@ public class CombatManager
 
         PGR.combatScreen.initialize();
     }
-
 
     public static AbstractPlayer refreshPlayer()
     {
@@ -1031,6 +1027,7 @@ public class CombatManager
             subscriberDo(OnPhaseChangedSubscriber.class, s -> s.onPhaseChanged(currentPhase));
             controlPile.refreshCards();
             summons.applyPowers();
+            updateEstimatedDamage();
             if (shouldRefreshHand)
             {
                 shouldRefreshHand = false;
@@ -1039,11 +1036,48 @@ public class CombatManager
         }
     }
 
+    public static void updateEstimatedDamage()
+    {
+        ArrayList<PCLIntentInfo> intents = GameUtilities.getIntents();
+
+        int bufferCount = GameUtilities.getPowerAmount(BufferPower.POWER_ID);
+        int expectedDamage = 0;
+
+        for (PCLIntentInfo intent : intents)
+        {
+            int hits = intent.getDamageMulti();
+            while (bufferCount > 0 && hits > 0)
+            {
+                hits -= 1;
+                bufferCount -= 1;
+            }
+            expectedDamage += intent.getDamage(false) * hits;
+        }
+
+        expectedDamage = GameUtilities.getHealthBarAmount(player, expectedDamage, true, true);
+
+        estimatedDamages = summons.estimateDamage(expectedDamage);
+    }
+
     public static void render(SpriteBatch sb)
     {
         summons.render(sb);
         controlPile.render(sb);
         playerSystem.render(sb);
+        if (PGR.config.showEstimatedDamage.get() && estimatedDamages != null)
+        {
+            FontHelper.damageNumberFont.getData().setScale(0.5f);
+            for (AbstractCreature c : estimatedDamages.keySet())
+            {
+                int damage = estimatedDamages.get(c);
+                float startX = c.hb.cX + c.healthHb.width / 1.6f + EUIBase.scale(17);
+                float startY = c.hb.y - EUIBase.scale(23);
+                Texture texture = damage >= c.currentHealth ? PCLCoreImages.Core.dead.texture() : PCLCoreImages.CardIcons.hp.texture();
+                PCLRenderHelpers.drawCentered(sb, Color.WHITE, texture, startX, startY, texture.getWidth(), texture.getHeight(), 0.55f, 0f);
+                FontHelper.renderFontLeftTopAligned(sb, FontHelper.damageNumberFont, String.valueOf(-1 * damage), startX + EUIBase.scale(22), startY + EUIBase.scale(10), Color.SALMON);
+            }
+            PCLRenderHelpers.resetFont(FontHelper.damageNumberFont);
+        }
     }
 
     public static void onChangeStance(AbstractStance oldStance, AbstractStance newStance)

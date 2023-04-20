@@ -37,11 +37,11 @@ public class PCLGlyphEditor extends EUIHoverable
         final float w = hb.width;
         final float h = hb.height;
 
-        decreaseButton = new EUIButton(ImageMaster.CF_LEFT_ARROW, new RelativeHitbox(hb, ICON_SIZE * 0.9f, ICON_SIZE * 0.9f, (ICON_SIZE * 0.3f), h * -0.35f))
+        decreaseButton = new EUIButton(ImageMaster.CF_LEFT_ARROW, new RelativeHitbox(hb, ICON_SIZE * 0.9f, ICON_SIZE * 0.9f, (ICON_SIZE * 0.25f), h * -0.25f))
                 .setOnClick(this::decrease)
                 .setText(null);
 
-        increaseButton = new EUIButton(ImageMaster.CF_RIGHT_ARROW, new RelativeHitbox(hb, ICON_SIZE * 0.9f, ICON_SIZE * 0.9f, w - (ICON_SIZE * 0.3f), h * -0.35f))
+        increaseButton = new EUIButton(ImageMaster.CF_RIGHT_ARROW, new RelativeHitbox(hb, ICON_SIZE * 0.9f, ICON_SIZE * 0.9f, w - (ICON_SIZE * 0.25f), h * -0.25f))
                 .setOnClick(this::increase)
                 .setText(null);
 

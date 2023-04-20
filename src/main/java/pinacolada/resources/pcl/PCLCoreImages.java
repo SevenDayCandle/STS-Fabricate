@@ -25,6 +25,7 @@ public class PCLCoreImages extends PCLImages
         public static final TextureCache borderSpecial2 = new TextureCache("images/pcl/ui/core/Border_Special2.png", true);
         public static final TextureCache borderWeak = new TextureCache("images/pcl/ui/core/Border_Weak.png", true);
         public static final TextureCache circle = new TextureCache("images/pcl/ui/core/Circle.png");
+        public static final TextureCache dead = new TextureCache("images/pcl/ui/core/Dead.png");
         public static final TextureCache controllableCardPile = new TextureCache("images/pcl/ui/core/ControllableCardPile.png");
         public static final TextureCache controllableCardPileBorder = new TextureCache("images/pcl/ui/core/ControllableCardPileBorder.png");
         public static final TextureCache leftArrow = new TextureCache("images/pcl/ui/core/LeftArrow.png");

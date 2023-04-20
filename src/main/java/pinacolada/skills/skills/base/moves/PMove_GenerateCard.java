@@ -184,7 +184,7 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
                     {
                         for (int i = 0; i < amount; i++)
                         {
-                            created.add(c);
+                            created.add(c.makeCopy());
                         }
                     }
                 }

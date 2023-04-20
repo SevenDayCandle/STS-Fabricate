@@ -41,7 +41,7 @@ public class ApplyOrReducePowerAction extends NestedAction<AbstractPower>
     {
         if (shouldCancelAction() || (amount == 0 && skipIfZero))
         {
-            complete();
+            complete(null);
             return;
         }
 

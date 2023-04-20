@@ -30,14 +30,14 @@ public class PCLHasteAction extends PCLAction<Void>
         }
         else
         {
-            complete();
+            completeImpl();
         }
     }
 
     @Override
-    protected void complete()
+    protected void completeImpl()
     {
-        super.complete();
+        super.completeImpl();
         if (PCLCardTag.Haste.has(card) && !CombatManager.hasteInfinitesThisTurn().contains(card))
         {
             CardCrawlGame.sound.playA("POWER_FLIGHT", MathUtils.random(0.3f, 0.4f));

@@ -219,7 +219,7 @@ public abstract class PCLAugment implements TooltipProvider
         String reqs = getReqsString();
         return EUIUtils.joinTrueStrings(EUIUtils.SPLIT_LINE,
                 EUIRM.strings.generic2(PCLCoreStrings.headerString(PGR.core.tooltips.level.title, data.tier), data.category.getName()),
-                data.isSpecial ? "{#r:" + PGR.core.tooltips.specialAugment + "}" : null,
+                data.isSpecial ? PCLCoreStrings.colorString("r", PGR.core.tooltips.specialAugment.title) : null,
                 reqs != null ? PCLCoreStrings.headerString(PGR.core.strings.misc_requirement, getReqsString()) : reqs,
                 getPowerText());
     }

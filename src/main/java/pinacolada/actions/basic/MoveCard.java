@@ -15,11 +15,11 @@ import extendedui.interfaces.delegates.ActionT3;
 import extendedui.utilities.GenericCallback;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
 import pinacolada.effects.card.RenderCardEffect;
 import pinacolada.effects.card.UnfadeOutEffect;
-import pinacolada.dungeon.CombatManager;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.ListSelection;
 
@@ -77,21 +77,21 @@ public class MoveCard extends PCLAction<AbstractCard>
             if (sourcePile == null)
             {
                 EUIUtils.logWarning(this, "Could not find card source pile.");
-                complete();
+                completeImpl();
                 return;
             }
         }
 
         if (sourcePile == targetPile)
         {
-            complete();
+            completeImpl();
             return;
         }
 
         if (!sourcePile.contains(card))
         {
             EUIUtils.logWarning(this, "Could not find " + card.cardID + " in " + sourcePile.type.name().toLowerCase());
-            complete();
+            completeImpl();
             return;
         }
 

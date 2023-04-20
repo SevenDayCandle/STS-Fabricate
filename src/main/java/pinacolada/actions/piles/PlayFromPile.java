@@ -41,9 +41,9 @@ public class PlayFromPile extends SelectFromPile
     }
 
     @Override
-    protected void complete()
+    protected void completeImpl()
     {
-        super.complete();
+        super.completeImpl();
 
         for (CardGroup group : groups)
         {

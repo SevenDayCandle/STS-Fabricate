@@ -12,7 +12,6 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLAffinity;
-import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.PGR;
 import pinacolada.ui.EUICardDraggable;
 
@@ -86,16 +85,6 @@ public class PowerFormulaDisplay extends EUICardDraggable<AbstractCard>
             enemyAttack.addPower(po, input, result);
         }
     }
-
-    // TODO use this to show actual damage you will take
-    public void addAllyIntercept(PCLCardAlly ally, int input, int result)
-    {
-        if (input != result)
-        {
-            enemyAttack.addSummon(ally, input, result);
-        }
-    }
-
 
     public void setAttackResult(float input, float result)
     {

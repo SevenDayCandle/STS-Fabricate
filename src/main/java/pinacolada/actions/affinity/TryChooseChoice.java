@@ -204,7 +204,7 @@ public class TryChooseChoice<T> extends PCLAction<ArrayList<ChoiceCard<T>>>
 
         if (group.isEmpty())
         {
-            complete();
+            complete(new ArrayList<>());
             return;
         }
 
@@ -280,19 +280,19 @@ public class TryChooseChoice<T> extends PCLAction<ArrayList<ChoiceCard<T>>>
 
         if (AbstractDungeon.screen != AbstractDungeon.CurrentScreen.GRID) // cancelled
         {
-            complete();
+            completeImpl();
         }
     }
 
     @Override
-    protected void complete()
+    protected void completeImpl()
     {
         if (hideTopPanel)
         {
             GameUtilities.setTopPanelVisible(true);
         }
 
-        super.complete();
+        super.completeImpl();
     }
 
     public TryChooseChoice<T> hideTopPanel(boolean hideTopPanel)

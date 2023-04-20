@@ -17,8 +17,8 @@ import extendedui.EUIUtils;
 import pinacolada.actions.PCLActionWithCallbackT2;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.utility.DelayAllActions;
-import pinacolada.effects.PCLEffects;
 import pinacolada.dungeon.CombatManager;
+import pinacolada.effects.PCLEffects;
 import pinacolada.resources.PCLEnum;
 import pinacolada.utilities.GameUtilities;
 
@@ -88,7 +88,7 @@ public class PlayCard extends PCLActionWithCallbackT2<AbstractMonster, AbstractC
 
         if (!checkConditions(card))
         {
-            complete();
+            completeImpl();
             return;
         }
 
@@ -102,7 +102,7 @@ public class PlayCard extends PCLActionWithCallbackT2<AbstractMonster, AbstractC
             else
             {
                 EUIUtils.logWarning(this, "Could not find " + card.cardID + " in " + sourcePile.type.name().toLowerCase());
-                complete();
+                completeImpl(); // Do not call callback
                 return;
             }
         }

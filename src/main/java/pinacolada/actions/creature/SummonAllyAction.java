@@ -5,9 +5,9 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.vfx.SmokeEffect;
-import pinacolada.dungeon.CombatManager;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.PCLEnum;
 import pinacolada.utilities.GameUtilities;
@@ -46,7 +46,7 @@ public class SummonAllyAction extends PCLAction<PCLCard>
     {
         if ((this.card == null || summonCardOnly && this.card.type != PCLEnum.CardType.SUMMON))
         {
-            complete();
+            complete(null);
             return;
         }
         // If missing target, choose a random empty one, then a random filled one.
@@ -61,13 +61,13 @@ public class SummonAllyAction extends PCLAction<PCLCard>
                 }
                 if (this.ally == null)
                 {
-                    complete();
+                    complete(null);
                     return;
                 }
             }
             else
             {
-                complete();
+                complete(null);
                 return;
             }
         }

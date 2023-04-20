@@ -54,7 +54,7 @@ public class PlaySFX extends PCLAction<PlaySFX>
         }
         else
         {
-            complete();
+            completeImpl();
         }
     }
 }

@@ -166,7 +166,7 @@ public class SelectFromPile extends CardFilterAction
         {
             player.hand.group.addAll(fakeHandGroup.group);
             GridCardSelectScreenHelper.clear(true);
-            complete();
+            complete(new ArrayList<>());
             return;
         }
 
@@ -242,14 +242,14 @@ public class SelectFromPile extends CardFilterAction
     }
 
     @Override
-    protected void complete()
+    protected void completeImpl()
     {
         if (hideTopPanel)
         {
             GameUtilities.setTopPanelVisible(true);
         }
 
-        super.complete();
+        super.completeImpl();
     }
 
     protected void getCardSubset(List<AbstractCard> source, List<AbstractCard> dest, ListSelection<AbstractCard> o, int count)

@@ -119,7 +119,10 @@ public class PCLCardText
         if (card.type == PCLEnum.CardType.SUMMON)
         {
             renderAttribute(sb, getHPIcon(), card.getHPString(), "/" + card.heal, 0.029f,0.85f, true);
-            renderAttribute(sb, getPriorityIcon(), card.getMagicNumberString(), null, 0.052f,0.55f, false);
+            if (PGR.config.showIrrelevantProperties.get())
+            {
+                renderAttribute(sb, getPriorityIcon(), card.getMagicNumberString(), null, 0.052f,0.55f, false);
+            }
         }
     }
 

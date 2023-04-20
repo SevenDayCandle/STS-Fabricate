@@ -22,7 +22,7 @@ public class ShuffleOrbs extends PCLAction<Void>
     {
         if (player.orbs == null || player.orbs.size() < 2)
         {
-            complete();
+            completeImpl();
             return;
         }
 
@@ -55,6 +55,6 @@ public class ShuffleOrbs extends PCLAction<Void>
             PCLActions.bottom.add(new ShuffleOrbs(amount - 1));
         }
 
-        complete();
+        completeImpl();
     }
 }

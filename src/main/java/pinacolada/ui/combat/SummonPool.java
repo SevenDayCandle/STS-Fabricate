@@ -9,6 +9,7 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUI;
 import extendedui.EUIUtils;
+import extendedui.interfaces.delegates.ActionT2;
 import extendedui.ui.EUIBase;
 import pinacolada.actions.PCLActions;
 import pinacolada.monsters.PCLCardAlly;
@@ -136,7 +137,7 @@ public class SummonPool extends EUIBase
         }
         for (PCLCardAlly ally : sorted)
         {
-            PCLActions.bottom.triggerAlly(ally);
+            PCLActions.last.triggerAlly(ally);
         }
     }
 
@@ -147,7 +148,7 @@ public class SummonPool extends EUIBase
             ally.applyStartOfTurnPostDrawPowers();
             if (ally.priority == PCLCreature.PRIORITY_START_LAST)
             {
-                PCLActions.bottom.triggerAlly(ally);
+                PCLActions.last.triggerAlly(ally);
             }
         }
     }
@@ -158,7 +159,7 @@ public class SummonPool extends EUIBase
         {
             if (ally.priority == PCLCreature.PRIORITY_END_FIRST)
             {
-                PCLActions.bottom.triggerAlly(ally);
+                PCLActions.last.triggerAlly(ally);
             }
         }
     }
@@ -168,7 +169,7 @@ public class SummonPool extends EUIBase
         List<PCLCardAlly> sorted = summons.stream().filter(a -> a.priority <= PCLCreature.PRIORITY_END_LAST).sorted((a, b) -> b.priority - a.priority).collect(Collectors.toList());
         for (PCLCardAlly ally : sorted)
         {
-            PCLActions.bottom.triggerAlly(ally);
+            PCLActions.last.triggerAlly(ally);
         }
     }
 
@@ -189,7 +190,27 @@ public class SummonPool extends EUIBase
         }
     }
 
+    public HashMap<AbstractCreature, Integer> estimateDamage(int damageAmount)
+    {
+        final HashMap<AbstractCreature, Integer> estimatedMap = new HashMap<>();
+        int finalResult = countDamage(damageAmount, (ally, amount) -> {
+            if (amount > 0)
+            {
+                estimatedMap.put(ally, amount);
+            }
+        });
+        estimatedMap.put(AbstractDungeon.player, finalResult);
+
+        return estimatedMap;
+    }
+
     public int tryDamage(DamageInfo info, int damageAmount)
+    {
+        return countDamage(damageAmount, (ally, amount) -> ally.damage(new DamageInfo(info.owner, amount, info.type)));
+    }
+
+    /** Returns the amount of damage that the player should be receiving after factoring in allies */
+    public int countDamage(int damageAmount, ActionT2<PCLCardAlly, Integer> onAllyAction)
     {
         int leftover = damageAmount;
         int remainder = 0;
@@ -209,7 +230,7 @@ public class SummonPool extends EUIBase
                     if (leftover > 0 && ally.hasCard())
                     {
                         final int amount = Math.min(leftover, ally.currentHealth);
-                        ally.damage(new DamageInfo(info.owner, amount, info.type));
+                        onAllyAction.invoke(ally, amount);
                         leftover -= amount;
                     }
                 }
@@ -227,7 +248,7 @@ public class SummonPool extends EUIBase
                         {
                             leftover += amount;
                         }
-                        ally.damage(new DamageInfo(info.owner, cut, info.type));
+                        onAllyAction.invoke(ally, cut);
                     }
                 }
                 break;

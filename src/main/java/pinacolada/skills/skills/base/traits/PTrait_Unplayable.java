@@ -1,19 +1,17 @@
 package pinacolada.skills.skills.base.traits;
 
 import pinacolada.annotations.VisibleSkill;
-import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
-import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.PTrait;
 import pinacolada.skills.fields.PField_Empty;
 
 @VisibleSkill
-public class PTrait_Unplayable extends PMove<PField_Empty>
+public class PTrait_Unplayable extends PTrait<PField_Empty>
 {
-
     public static final PSkillData<PField_Empty> DATA = register(PTrait_Unplayable.class, PField_Empty.class, 1, 1);
 
     public PTrait_Unplayable()
@@ -28,7 +26,7 @@ public class PTrait_Unplayable extends PMove<PField_Empty>
 
     public PTrait_Unplayable(int amount)
     {
-        super(DATA, PCLCardTarget.Self, amount);
+        super(DATA, amount);
     }
 
     @Override
@@ -53,6 +51,18 @@ public class PTrait_Unplayable extends PMove<PField_Empty>
     public void use(PCLUseInfo info)
     {
 
+    }
+
+    @Override
+    public String getSubDescText()
+    {
+        return PGR.core.tooltips.unplayable.title;
+    }
+
+    @Override
+    public String getSubSampleText()
+    {
+        return PGR.core.tooltips.unplayable.title;
     }
 
     @Override

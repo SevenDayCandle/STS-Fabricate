@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
-import com.evacipated.cardcrawl.mod.stslib.patches.FlavorText;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
@@ -339,7 +338,7 @@ public class PCLSingleCardPopup extends EUIBase
         PCLCardData cardData = baseCard != null ? baseCard.cardData : null;
         if (cardData != null)
         {
-            String author = FlavorText.CardStringsFlavorField.flavor.get(cardData.strings);
+            String author = cardData.getAuthorString();
             viewChangeVariants = cardData.canToggleFromPopup && (baseCard.auxiliaryData.form == 0 || cardData.canToggleFromAlternateForm) && GameUtilities.inGame();
             changeVariantDescription.setLabel(!cardData.canToggleFromAlternateForm ? PGR.core.strings.scp_changeVariantTooltipPermanent : PGR.core.strings.scp_changeVariantTooltipAlways);
             artAuthorLabel.setLabel(author != null ? PGR.core.strings.scp_artAuthor + EUIUtils.modifyString(author, w -> "#y" + w) : "");

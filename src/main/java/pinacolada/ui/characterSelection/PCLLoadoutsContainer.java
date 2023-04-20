@@ -18,16 +18,12 @@ import java.util.stream.Collectors;
 public class PCLLoadoutsContainer
 {
     public static final int MINIMUM_CARDS = 75; // 75
-    public static final int MINIMUM_COMMON = 25;  // 30
-    public static final int MINIMUM_UNCOMMON = 20;  // 25
-    public static final int MINIMUM_RARE = 7;  // 8
     public static final int CHANCE_COMMON = 50;
     public static final int CHANCE_UNCOMMON = 40;
     public static final int CHANCE_RARE = 10;
 
     public final ArrayList<AbstractCard> allCards = new ArrayList<>();
     public final HashMap<PCLCard, PCLLoadout> loadoutMap = new HashMap<>();
-    public final HashMap<AbstractCard.CardRarity, Integer> rarityCount = new HashMap<>();
     public final HashSet<String> bannedCards = new HashSet<>();
     public int currentCardLimit;
     public int totalCardsInPool = 0;
@@ -140,30 +136,12 @@ public class PCLLoadoutsContainer
 
     public boolean isValid()
     {
-        return totalCardsInPool >= MINIMUM_CARDS
-                && rarityCount.getOrDefault(AbstractCard.CardRarity.COMMON, 0) >= MINIMUM_COMMON
-                && rarityCount.getOrDefault(AbstractCard.CardRarity.UNCOMMON, 0) >= MINIMUM_UNCOMMON
-                && rarityCount.getOrDefault(AbstractCard.CardRarity.RARE, 0) >= MINIMUM_RARE;
-    }
-
-    public int getMinimum(AbstractCard.CardRarity rarity)
-    {
-        switch (rarity)
-        {
-            case RARE:
-                return MINIMUM_RARE;
-            case UNCOMMON:
-                return MINIMUM_UNCOMMON;
-            case COMMON:
-                return MINIMUM_COMMON;
-        }
-        return MINIMUM_CARDS;
+        return totalCardsInPool >= MINIMUM_CARDS;
     }
 
     // Calculate the number of cards in each set, then update the loadout representative with that amount
     public void calculateCardCounts()
     {
-        rarityCount.clear();
         totalCardsInPool = 0;
 
         for (Map.Entry<PCLCard, PCLLoadout> entry : loadoutMap.entrySet())
@@ -175,7 +153,6 @@ public class PCLLoadoutsContainer
                 {
                     selectedAmount += 1;
                     totalCardsInPool += 1;
-                    rarityCount.merge(data.cardRarity, 1, Integer::sum);
                 }
             }
 

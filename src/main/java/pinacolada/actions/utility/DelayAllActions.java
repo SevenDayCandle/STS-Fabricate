@@ -51,7 +51,7 @@ public class DelayAllActions extends PCLAction<Void>
             PCLActions.last.callback(() -> AbstractDungeon.actionManager.actions.addAll(actions));
         }
 
-        complete();
+        completeImpl();
     }
 
     protected void createList()

@@ -5,8 +5,8 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.vfx.combat.PowerBuffEffect;
 import pinacolada.actions.PCLAction;
 import pinacolada.cards.base.fields.PCLAffinity;
-import pinacolada.effects.PCLEffects;
 import pinacolada.dungeon.CombatManager;
+import pinacolada.effects.PCLEffects;
 
 public class AddAffinityLevel extends PCLAction<PCLAffinity>
 {
@@ -21,7 +21,7 @@ public class AddAffinityLevel extends PCLAction<PCLAffinity>
 
         if (affinity == null || AbstractDungeon.getMonsters().areMonstersBasicallyDead())
         {
-            complete();
+            completeImpl();
             return;
         }
 

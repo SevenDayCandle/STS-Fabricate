@@ -903,7 +903,8 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
 
     public String getTargetHasString(PCLCardTarget target, String desc)
     {
-        return TEXT.cond_ifTargetHas(getTargetSubjectString(target), target.ordinal(), desc);
+        // For the case of self on the player, use ordinal 0 to get "have" in the description
+        return TEXT.cond_ifTargetHas(getTargetSubjectString(target), target == PCLCardTarget.Self && !isFromCreature() ? 0 : target.ordinal(), desc);
     }
 
     public String getTargetHasYouString(String desc)

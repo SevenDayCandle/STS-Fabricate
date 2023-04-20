@@ -222,7 +222,7 @@ public class SelectCreature extends PCLAction<AbstractCreature>
                 card.applyPowers();
             }
 
-            complete();
+            completeImpl();
             return;
         }
 
@@ -269,10 +269,10 @@ public class SelectCreature extends PCLAction<AbstractCreature>
     }
 
     @Override
-    protected void complete()
+    protected void completeImpl()
     {
         GameCursor.hidden = false;
-        super.complete();
+        super.completeImpl();
     }
 
     protected void updateTarget(boolean targetPlayer, boolean targetEnemy)

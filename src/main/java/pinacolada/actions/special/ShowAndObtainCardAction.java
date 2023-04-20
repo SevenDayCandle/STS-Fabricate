@@ -27,7 +27,7 @@ public class ShowAndObtainCardAction extends PCLAction<AbstractCard>
     {
         if (card == null)
         {
-            complete();
+            complete(null);
         }
         PCLEffects.Queue.showAndObtain(card, x, y, true);
         complete(card);

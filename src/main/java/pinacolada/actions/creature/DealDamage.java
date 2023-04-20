@@ -10,11 +10,11 @@ import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import extendedui.interfaces.delegates.FuncT2;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.effects.EffekseerEFK;
 import pinacolada.effects.PCLAttackVFX;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.VFX;
-import pinacolada.dungeon.CombatManager;
 import pinacolada.utilities.GameUtilities;
 
 // Copied and modified from STS-AnimatorMod
@@ -105,7 +105,7 @@ public class DealDamage extends PCLAction<AbstractCreature>
     {
         if (this.info.type != DamageInfo.DamageType.THORNS && this.shouldCancelAction())
         {
-            complete();
+            complete(null);
             return;
         }
 
@@ -116,7 +116,7 @@ public class DealDamage extends PCLAction<AbstractCreature>
                 PCLActions.top.add(new DealDamage(GameUtilities.getRandomEnemy(true), this));
             }
 
-            complete();
+            complete(null);
             return;
         }
 
@@ -131,7 +131,7 @@ public class DealDamage extends PCLAction<AbstractCreature>
     {
         if (this.info.type != DamageInfo.DamageType.THORNS && shouldCancelAction())
         {
-            complete();
+            complete(null);
             return;
         }
 

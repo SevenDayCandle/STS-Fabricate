@@ -58,7 +58,7 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen
     protected EUIContextMenu<ContextOption> contextMenu;
     protected EUITextBox info;
     protected HashMap<AbstractCard, PCLCustomCardSlot> currentSlots = new HashMap<>();
-    protected PCLEffectWithCallback<?> currentEffect;
+    protected PCLEffectWithCallback<?> currentDialog;
     private AbstractCard clickedCard;
 
     public PCLCustomCardSelectorScreen()
@@ -145,10 +145,10 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen
 
     public void add()
     {
-        if (currentEffect == null)
+        if (currentDialog == null)
         {
             PCLCustomCardSlot slot = new PCLCustomCardSlot(currentColor);
-            currentEffect = new PCLCustomCardEditCardScreen(slot)
+            currentDialog = new PCLCustomCardEditCardScreen(slot)
                     .setOnSave(() -> {
                         AbstractCard newCard = slot.makeFirstCard(false);
                         currentSlots.put(newCard, slot);
@@ -161,13 +161,13 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen
 
     public void loadFromExisting()
     {
-        if (currentEffect == null)
+        if (currentDialog == null)
         {
-            currentEffect = new PCLGenericSelectCardEffect(this.getAvailableCardsToCopy()).addCallback(card -> {
+            currentDialog = new PCLGenericSelectCardEffect(this.getAvailableCardsToCopy()).addCallback(card -> {
                 if (card instanceof PCLCard)
                 {
                     PCLCustomCardSlot slot = new PCLCustomCardSlot((PCLCard) card, currentColor);
-                    currentEffect = new PCLCustomCardEditCardScreen(slot)
+                    currentDialog = new PCLCustomCardEditCardScreen(slot)
                             .setOnSave(() -> {
                                 slot.commitBuilder();
                                 AbstractCard newCard = slot.makeFirstCard(false);
@@ -183,10 +183,10 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen
 
     public void duplicate(AbstractCard card, PCLCustomCardSlot cardSlot)
     {
-        if (currentEffect == null && cardSlot != null)
+        if (currentDialog == null && cardSlot != null)
         {
             PCLCustomCardSlot slot = new PCLCustomCardSlot(cardSlot);
-            currentEffect = new PCLCustomCardEditCardScreen(slot)
+            currentDialog = new PCLCustomCardEditCardScreen(slot)
                     .setOnSave(() -> {
                         slot.commitBuilder();
                         AbstractCard newCard = slot.getBuilder(0).createImplWithForms(false);
@@ -199,15 +199,15 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen
 
     public void duplicateToColor(AbstractCard card, PCLCustomCardSlot cardSlot)
     {
-        if (currentEffect == null && cardSlot != null)
+        if (currentDialog == null && cardSlot != null)
         {
-            currentEffect = new PCLCustomCardCopyConfirmationEffect(getAllColors())
+            currentDialog = new PCLCustomCardCopyConfirmationEffect(getAllColors())
                     .addCallback((co) -> {
                         if (co != null)
                         {
                             PCLCustomCardSlot slot = new PCLCustomCardSlot(cardSlot, co);
                             open(null, co, this.onClose);
-                            currentEffect = new PCLCustomCardEditCardScreen(slot)
+                            currentDialog = new PCLCustomCardEditCardScreen(slot)
                                     .setOnSave(() -> {
                                         slot.commitBuilder();
                                         AbstractCard newCard = slot.getBuilder(0).createImplWithForms(false);
@@ -222,9 +222,9 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen
 
     public void edit(AbstractCard card, PCLCustomCardSlot cardSlot)
     {
-        if (currentEffect == null && cardSlot != null)
+        if (currentDialog == null && cardSlot != null)
         {
-            currentEffect = new PCLCustomCardEditCardScreen(cardSlot)
+            currentDialog = new PCLCustomCardEditCardScreen(cardSlot)
                     .setOnSave(() -> {
                         cardSlot.commitBuilder();
                         AbstractCard newCard = cardSlot.getBuilder(0).createImplWithForms(false);
@@ -306,9 +306,9 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen
 
     public void remove(AbstractCard card, PCLCustomCardSlot cardSlot)
     {
-        if (currentEffect == null && cardSlot != null)
+        if (currentDialog == null && cardSlot != null)
         {
-            currentEffect = new PCLCustomCardDeletionConfirmationEffect(cardSlot)
+            currentDialog = new PCLCustomCardDeletionConfirmationEffect(cardSlot)
                     .addCallback((v) -> {
                         if (v != null)
                         {
@@ -324,13 +324,13 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen
     public void updateImpl()
     {
         PGR.blackScreen.updateImpl();
-        if (currentEffect != null)
+        if (currentDialog != null)
         {
-            currentEffect.update();
+            currentDialog.update();
 
-            if (currentEffect.isDone)
+            if (currentDialog.isDone)
             {
-                currentEffect = null;
+                currentDialog = null;
             }
         }
         else
@@ -358,9 +358,9 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen
     public void renderImpl(SpriteBatch sb)
     {
         PGR.blackScreen.renderImpl(sb);
-        if (currentEffect != null)
+        if (currentDialog != null)
         {
-            currentEffect.render(sb);
+            currentDialog.render(sb);
         }
         else
         {

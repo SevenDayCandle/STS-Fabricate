@@ -66,7 +66,7 @@ public class DrawCards extends CardFilterAction
                         new DrawCards(this, amount)
                 );
 
-                complete(); // Do not trigger callback
+                completeImpl(); // Do not trigger callback
             }
             else
             {
@@ -111,7 +111,7 @@ public class DrawCards extends CardFilterAction
                     new DrawCards(this, amount - 1)
             );
 
-            complete(); // Do not trigger callback
+            completeImpl(); // Do not trigger callback
         }
     }
 

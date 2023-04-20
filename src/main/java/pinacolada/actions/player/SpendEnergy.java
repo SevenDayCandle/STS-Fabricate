@@ -35,6 +35,6 @@ public class SpendEnergy extends PCLActionWithCallbackT2<Integer, Integer>
             }
         }
 
-        complete();
+        completeImpl();
     }
 }

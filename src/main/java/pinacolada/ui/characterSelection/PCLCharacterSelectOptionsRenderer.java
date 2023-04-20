@@ -29,8 +29,8 @@ import java.util.ArrayList;
 // Copied and modified from STS-AnimatorMod
 public class PCLCharacterSelectOptionsRenderer extends EUIBase
 {
-    protected static final float POS_X = 170f * Settings.scale;
-    protected static final float POS_Y = ((float) Settings.HEIGHT / 2f) - (20 * Settings.scale);
+    protected static final float POS_X = 1190f * Settings.scale;
+    protected static final float POS_Y = Settings.HEIGHT / 1.75f;
     protected static final float ROW_OFFSET = 60 * Settings.scale;
 
     protected static final Random RNG = new Random();
@@ -80,7 +80,7 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase
                 .setAlignment(0.5f, 0.5f, false);
 
         ascensionGlyphsLabel = new EUILabel(EUIFontHelper.cardtitlefontSmall,
-                new EUIHitbox(POS_X * 7, POS_Y, leftTextWidth, 50f * Settings.scale))
+                new EUIHitbox(POS_X, POS_Y - startingCardsLabel.hb.height * 1.5f, leftTextWidth, 50f * Settings.scale))
                 .setColor(Settings.GOLD_COLOR)
                 .setAlignment(0.5f, 0.5f, false)
                 .setLabel(PGR.core.strings.csel_ascensionGlyph);
@@ -88,19 +88,19 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase
         float xOffset = ascensionGlyphsLabel.hb.x + ROW_OFFSET * 4f;
 
         seriesButton = new EUIButton(PCLCoreImages.Menu.edit.texture(), new EUIHitbox(0, 0, scale(64), scale(64)))
-                .setPosition(xOffset + ROW_OFFSET, startingCardsListLabel.hb.y + scale(192)).setText("")
+                .setPosition(xOffset + ROW_OFFSET, startingCardsListLabel.hb.y + scale(128)).setText("")
                 .setTooltip(PGR.core.strings.csel_seriesEditor, PGR.core.strings.csel_seriesEditorInfo)
                 .setOnClick(this::openSeriesSelect);
 
         loadoutEditorButton = new EUIButton(PCLCoreImages.Menu.swapCards.texture(), new EUIHitbox(0, 0, scale(64), scale(64)))
-                .setPosition(seriesButton.hb.x + seriesButton.hb.width + scale(40), startingCardsListLabel.hb.y + scale(192)).setText("")
+                .setPosition(seriesButton.hb.x + seriesButton.hb.width + scale(40), startingCardsListLabel.hb.y + scale(128)).setText("")
                 .setTooltip(PGR.core.strings.csel_deckEditor, PGR.core.strings.csel_deckEditorInfo)
                 .setOnRightClick(this::changePreset)
                 .setOnClick(this::openLoadoutEditor);
 
         for (AbstractGlyphBlight glyph : PCLAbstractPlayerData.GLYPHS)
         {
-            glyphEditors.add(new PCLGlyphEditor(glyph, new EUIHitbox(xOffset, POS_Y, glyph.hb.width, glyph.hb.height)));
+            glyphEditors.add(new PCLGlyphEditor(glyph, new EUIHitbox(xOffset, ascensionGlyphsLabel.hb.y, glyph.hb.width, glyph.hb.height)));
             xOffset += ROW_OFFSET * 1.7f;
         }
     }

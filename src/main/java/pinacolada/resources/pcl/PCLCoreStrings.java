@@ -255,26 +255,28 @@ public class PCLCoreStrings extends PCLStrings
     public final String options_cropCardImages = options.TEXT[0];
     public final String options_displayCardTagDescription = options.TEXT[1];
     public final String options_vanillaCustomRunMenu = options.TEXT[2];
-    public final String options_showFormulaDisplay = options.TEXT[3];
-    public final String options_hideIrrelevantAffinities = options.TEXT[4];
-    public final String options_enableCustomCards = options.TEXT[5];
-    public final String options_enableCustomRelics = options.TEXT[6];
-    public final String options_enableCustomPotions = options.TEXT[7];
-    public final String options_enableCustomEvents = options.TEXT[8];
-    public final String options_madnessReplacements = options.TEXT[9];
-    public final String options_vanillaPowerRender = options.TEXT[10];
-    public final String options_alwaysPCLCard = options.TEXT[11];
+    public final String options_showEstimatedDamage = options.TEXT[3];
+    public final String options_showFormulaDisplay = options.TEXT[4];
+    public final String options_hideIrrelevantAffinities = options.TEXT[5];
+    public final String options_enableCustomCards = options.TEXT[6];
+    public final String options_enableCustomRelics = options.TEXT[7];
+    public final String options_enableCustomPotions = options.TEXT[8];
+    public final String options_enableCustomEvents = options.TEXT[9];
+    public final String options_madnessReplacements = options.TEXT[10];
+    public final String options_vanillaPowerRender = options.TEXT[11];
+    public final String options_alwaysPCLCard = options.TEXT[12];
 
     // Option Descriptions
     public final String optionDesc_cropCardImages = optionDesc.TEXT[0];
     public final String optionDesc_displayCardTagDescription = optionDesc.TEXT[1];
     public final String optionDesc_vanillaCustomRunMenu = optionDesc.TEXT[2];
-    public final String optionDesc_showFormulaDisplay = optionDesc.TEXT[3];
-    public final String optionDesc_hideIrrelevantAffinities = optionDesc.TEXT[4];
-    public final String optionDesc_onlyNewRuns = optionDesc.TEXT[5];
-    public final String optionDesc_madnessReplacements = optionDesc.TEXT[6];
-    public final String optionDesc_vanillaPowerRender = optionDesc.TEXT[7];
-    public final String optionDesc_alwaysPCLCard = optionDesc.TEXT[8];
+    public final String optionDesc_showEstimatedDamage = optionDesc.TEXT[3];
+    public final String optionDesc_showFormulaDisplay = optionDesc.TEXT[4];
+    public final String optionDesc_hideIrrelevantAffinities = optionDesc.TEXT[5];
+    public final String optionDesc_onlyNewRuns = optionDesc.TEXT[6];
+    public final String optionDesc_madnessReplacements = optionDesc.TEXT[7];
+    public final String optionDesc_vanillaPowerRender = optionDesc.TEXT[8];
+    public final String optionDesc_alwaysPCLCard = optionDesc.TEXT[9];
 
     // Reward
     public final String rewards_rewardBreak = rewards.TEXT[0];
@@ -307,22 +309,21 @@ public class PCLCoreStrings extends PCLStrings
     public final String sui_seriesUI = seriesui.TEXT[0];
     public final String sui_affinities = seriesui.TEXT[1];
     public final String sui_core = seriesui.TEXT[2];
-    public final String sui_scalings = seriesui.TEXT[3];
-    public final String sui_selected = seriesui.TEXT[4];
-    public final String sui_unlocked = seriesui.TEXT[5];
-    public final String sui_removeFromPool = seriesui.TEXT[6];
-    public final String sui_addToPool = seriesui.TEXT[7];
-    public final String sui_viewPool = seriesui.TEXT[8];
-    public final String sui_totalCards = seriesui.TEXT[9];
-    public final String sui_instructions1 = seriesui.TEXT[10];
-    public final String sui_instructions2 = seriesui.TEXT[11];
-    public final String sui_cardsInPool = seriesui.TEXT[12];
-    public final String sui_selectAll = seriesui.TEXT[13];
-    public final String sui_deselectAll = seriesui.TEXT[14];
-    public final String sui_selectRandom = seriesui.TEXT[15];
-    public final String sui_showCardPool = seriesui.TEXT[16];
-    public final String sui_save = seriesui.TEXT[17];
-    public final String sui_cancel = seriesui.TEXT[18];
+    public final String sui_selected = seriesui.TEXT[3];
+    public final String sui_unlocked = seriesui.TEXT[4];
+    public final String sui_removeFromPool = seriesui.TEXT[5];
+    public final String sui_addToPool = seriesui.TEXT[6];
+    public final String sui_viewPool = seriesui.TEXT[7];
+    public final String sui_totalCards = seriesui.TEXT[8];
+    public final String sui_instructions1 = seriesui.TEXT[9];
+    public final String sui_instructions2 = seriesui.TEXT[10];
+    public final String sui_characterCards = seriesui.TEXT[11];
+    public final String sui_selectAll = seriesui.TEXT[12];
+    public final String sui_deselectAll = seriesui.TEXT[13];
+    public final String sui_selectRandom = seriesui.TEXT[14];
+    public final String sui_showCardPool = seriesui.TEXT[15];
+    public final String sui_save = seriesui.TEXT[16];
+    public final String sui_cancel = seriesui.TEXT[17];
 
     // Subjects
     public final String subjects_allyN = subjects.TEXT[0];
@@ -663,7 +664,7 @@ public class PCLCoreStrings extends PCLStrings
         return addPeriod ? LocalizedStrings.PERIOD : "";
     }
 
-    public static String colorString(Object item, String colorHex) {
+    public static String colorString(String colorHex, Object item) {
         return "{#" + colorHex + ":" + item + "}";
     }
 

@@ -247,6 +247,12 @@ public abstract class PCLLoadout
         return preset >= 0 && preset < MAX_PRESETS;
     }
 
+    public String getAuthor()
+    {
+        LoadoutStrings strings = PGR.getLoadoutStrings(ID);
+        return strings != null ? strings.AUTHOR : "";
+    }
+
     public int getBaseGold()
     {
         return getBaseGold(color);

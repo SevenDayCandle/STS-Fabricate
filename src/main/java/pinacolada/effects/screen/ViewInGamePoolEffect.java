@@ -16,14 +16,16 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT0;
 import extendedui.ui.AbstractScreen;
 import extendedui.ui.controls.EUIButton;
+import extendedui.ui.controls.EUICardGrid;
 import extendedui.ui.controls.EUILabel;
-import extendedui.ui.controls.EUIStaticCardGrid;
 import extendedui.ui.controls.EUIToggle;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.resources.PGR;
+import pinacolada.ui.customRun.PCLRandomCardAmountDialog;
 import pinacolada.utilities.GameUtilities;
+import pinacolada.utilities.RandomizedList;
 
 import java.util.HashSet;
 
@@ -38,13 +40,14 @@ public class ViewInGamePoolEffect extends PCLEffectWithCallback<CardGroup>
     private EUIButton selectRandomButton;
     private EUILabel selectedCount;
     private EUIToggle upgradeToggle;
+    private PCLRandomCardAmountDialog randomSelection;
     private boolean canToggle = true;
     private boolean draggingScreen;
     private boolean showTopPanelOnComplete;
     private final ActionT0 onRefresh;
     private final CardGroup cards;
     private final Color screenColor;
-    private final EUIStaticCardGrid grid;
+    private final EUICardGrid grid;
     private final HashSet<String> bannedCards;
 
     public ViewInGamePoolEffect(CardGroup cards, HashSet<String> bannedCards)
@@ -70,7 +73,7 @@ public class ViewInGamePoolEffect extends PCLEffectWithCallback<CardGroup>
 
         if (cards.isEmpty())
         {
-            this.grid = (EUIStaticCardGrid) new EUIStaticCardGrid().canDragScreen(false);
+            this.grid = (EUICardGrid) new EUICardGrid().canDragScreen(false);
             complete(cards);
             return;
         }
@@ -81,7 +84,7 @@ public class ViewInGamePoolEffect extends PCLEffectWithCallback<CardGroup>
             GameUtilities.setTopPanelVisible(false);
         }
 
-        this.grid = (EUIStaticCardGrid) new EUIStaticCardGrid()
+        this.grid = (EUICardGrid) new EUICardGrid()
                 .canRenderUpgrades(true)
                 .canDragScreen(false)
                 .setOnCardClick(this::toggleCard);
@@ -91,34 +94,39 @@ public class ViewInGamePoolEffect extends PCLEffectWithCallback<CardGroup>
             updateCardAlpha(c);
         }
 
-        final float xPos = screenW(0.075f);
+        final float xPos = screenW(0.005f);
         final float buttonWidth = scale(256);
         final float buttonHeight = scale(48);
 
         selectedCount = new EUILabel(FontHelper.tipHeaderFont, new EUIHitbox(xPos, Settings.HEIGHT * 0.75f, buttonWidth, buttonHeight * 2f))
-                .setPosition(xPos, Settings.HEIGHT * 0.75f)
                 .setColor(Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.1f, true)
                 .setFont(FontHelper.tipHeaderFont, 1);
 
-        selectAllButton = AbstractScreen.createHexagonalButton(xPos, Settings.HEIGHT * 0.65f, buttonWidth, buttonHeight)
-                .setText(PGR.core.strings.sui_selectAll)
-                .setPosition(xPos, Settings.HEIGHT * 0.65f)
-                .setOnClick(() -> this.toggleCards(true))
-                .setColor(Color.ROYAL);
-
-        deselectAllButton =  AbstractScreen.createHexagonalButton(xPos, selectAllButton.hb.y - selectAllButton.hb.height, buttonWidth, buttonHeight)
+        deselectAllButton =  AbstractScreen.createHexagonalButton(xPos, Settings.HEIGHT * 0.65f, buttonWidth, buttonHeight)
                 .setText(PGR.core.strings.sui_deselectAll)
-                .setPosition(xPos, selectAllButton.hb.y - selectAllButton.hb.height)
                 .setOnClick(() -> this.toggleCards(false))
                 .setColor(Color.FIREBRICK);
 
-        upgradeToggle = new EUIToggle(new EUIHitbox(buttonWidth, buttonHeight))
+        selectAllButton = AbstractScreen.createHexagonalButton(xPos, deselectAllButton.hb.y - deselectAllButton.hb.height, buttonWidth, buttonHeight)
+                .setText(PGR.core.strings.sui_selectAll)
+                .setOnClick(() -> this.toggleCards(true))
+                .setColor(Color.ROYAL);
+
+        selectRandomButton = AbstractScreen.createHexagonalButton(xPos, selectAllButton.hb.y - selectAllButton.hb.height, buttonWidth, buttonHeight)
+                .setText(PGR.core.strings.sui_selectRandom)
+                .setOnClick(this::startSelectRandom)
+                .setColor(Color.ROYAL);
+
+        upgradeToggle = new EUIToggle(new EUIHitbox(xPos, selectRandomButton.hb.y - selectRandomButton.hb.height * 3, buttonWidth, buttonHeight))
                 .setBackground(EUIRM.images.panel.texture(), Color.DARK_GRAY)
-                .setPosition(xPos, deselectAllButton.hb.y - deselectAllButton.hb.height * 2)
                 .setFont(EUIFontHelper.carddescriptionfontLarge, 0.5f)
                 .setText(SingleCardViewPopup.TEXT[6])
                 .setOnToggle(this::toggleViewUpgrades);
+
+        randomSelection = (PCLRandomCardAmountDialog) new PCLRandomCardAmountDialog(PGR.core.strings.sui_selectRandom)
+                .setOnComplete((this::selectRandomCards))
+                .setActive(false);
 
         EUI.toggleViewUpgrades(false);
         upgradeToggle.setToggle(SingleCardViewPopup.isViewingUpgrade);
@@ -140,6 +148,72 @@ public class ViewInGamePoolEffect extends PCLEffectWithCallback<CardGroup>
                 upgrade.transparency = upgrade.targetTransparency = c.targetTransparency;
                 upgrade.update();
             }
+        }
+    }
+
+    private void selectRandomCards(PCLRandomCardAmountDialog dialog)
+    {
+        randomSelection.setActive(false);
+        if (dialog != null)
+        {
+            bannedCards.clear();
+            RandomizedList<AbstractCard> possibleCards = new RandomizedList<>();
+            RandomizedList<AbstractCard> possibleColorless = new RandomizedList<>();
+            RandomizedList<AbstractCard> possibleCurses = new RandomizedList<>();
+            for (AbstractCard c : cards.group)
+            {
+                if (c.color == AbstractCard.CardColor.COLORLESS)
+                {
+                    possibleColorless.add(c);
+                }
+                else if (c.color == AbstractCard.CardColor.CURSE)
+                {
+                    possibleCurses.add(c);
+                }
+                else
+                {
+                    possibleCards.add(c);
+                }
+            }
+
+            while (possibleCards.size() > dialog.getCardCount())
+            {
+                AbstractCard c = possibleCards.retrieveUnseeded(true);
+                if (c != null)
+                {
+                    toggleCardImpl(c, bannedCards.contains(c.cardID));
+                }
+            }
+            while (possibleColorless.size() > dialog.getColorlessCount())
+            {
+                AbstractCard c = possibleColorless.retrieveUnseeded(true);
+                if (c != null)
+                {
+                    toggleCardImpl(c, bannedCards.contains(c.cardID));
+                }
+            }
+            while (possibleCurses.size() > dialog.getCurseCount())
+            {
+                AbstractCard c = possibleCurses.retrieveUnseeded(true);
+                if (c != null)
+                {
+                    toggleCardImpl(c, bannedCards.contains(c.cardID));
+                }
+            }
+
+            for (AbstractCard c : possibleCards)
+            {
+                updateCardAlpha(c);
+            }
+            for (AbstractCard c : possibleColorless)
+            {
+                updateCardAlpha(c);
+            }
+            for (AbstractCard c : possibleCurses)
+            {
+                updateCardAlpha(c);
+            }
+            refreshCountText();
         }
     }
 
@@ -171,6 +245,11 @@ public class ViewInGamePoolEffect extends PCLEffectWithCallback<CardGroup>
             toggleCardImpl(c, value);
         }
         refreshCountText();
+    }
+
+    private void startSelectRandom()
+    {
+        randomSelection.open(cards.group);
     }
 
     private void toggleViewUpgrades(boolean value)
@@ -217,17 +296,24 @@ public class ViewInGamePoolEffect extends PCLEffectWithCallback<CardGroup>
         upgradeToggle.renderImpl(sb);
         selectAllButton.tryRender(sb);
         deselectAllButton.tryRender(sb);
+        selectRandomButton.tryRender(sb);
         selectedCount.tryRender(sb);
         EUI.customHeader.render(sb);
         if (!EUI.cardFilters.isActive) {
             EUI.openCardFiltersButton.tryRender(sb);
         }
+        if (randomSelection.isActive)
+        {
+            sb.setColor(this.screenColor);
+            sb.draw(ImageMaster.WHITE_SQUARE_IMG, 0f, 0f, (float) Settings.WIDTH, (float) Settings.HEIGHT);
+        }
+        randomSelection.tryRender(sb);
     }
 
     @Override
     protected void updateInternal(float deltaTime)
     {
-        boolean shouldDoStandardUpdate = !EUI.cardFilters.tryUpdate();
+        boolean shouldDoStandardUpdate = !EUI.cardFilters.tryUpdate() && !randomSelection.tryUpdate();
         if (shouldDoStandardUpdate)
         {
             EUI.openCardFiltersButton.tryUpdate();
@@ -236,9 +322,10 @@ public class ViewInGamePoolEffect extends PCLEffectWithCallback<CardGroup>
             upgradeToggle.updateImpl();
             selectAllButton.tryUpdate();
             deselectAllButton.tryUpdate();
+            selectRandomButton.tryUpdate();
             selectedCount.tryUpdate();
 
-            if (upgradeToggle.hb.hovered || selectAllButton.hb.hovered || deselectAllButton.hb.hovered || grid.isHovered() || EUI.customHeader.isHovered() || EUI.openCardFiltersButton.hb.hovered)
+            if (upgradeToggle.hb.hovered || selectAllButton.hb.hovered || deselectAllButton.hb.hovered || selectRandomButton.hb.hovered || grid.isHovered() || EUI.customHeader.isHovered() || EUI.openCardFiltersButton.hb.hovered)
             {
                 return;
             }

@@ -90,7 +90,7 @@ public class GenerateCard extends PCLAction<AbstractCard>
                 {
                     if (cancelIfFull)
                     {
-                        complete();
+                        completeImpl();
                         return;
                     }
 
@@ -140,7 +140,7 @@ public class GenerateCard extends PCLAction<AbstractCard>
             default:
             {
                 EUIUtils.logWarning(this, "Can't make temp card in " + cardGroup.type.name());
-                complete();
+                completeImpl();
                 break;
             }
         }

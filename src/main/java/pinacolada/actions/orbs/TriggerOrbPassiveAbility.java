@@ -55,7 +55,7 @@ public class TriggerOrbPassiveAbility extends PCLAction<ArrayList<AbstractOrb>>
     {
         if (player.orbs == null || player.orbs.isEmpty())
         {
-            complete();
+            complete(new ArrayList<>());
             return;
         }
 

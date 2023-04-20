@@ -2,6 +2,7 @@ package pinacolada.cards.base;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.MathUtils;
+import com.evacipated.cardcrawl.mod.stslib.patches.FlavorText;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.localization.CardStrings;
@@ -215,6 +216,20 @@ public class PCLCardData implements CardObject
         {
             throw new RuntimeException(ID, e);
         }
+    }
+
+    public String getAuthorString()
+    {
+        String author = FlavorText.CardStringsFlavorField.flavor.get(strings);
+        if (author != null)
+        {
+            return author;
+        }
+        if (loadout != null)
+        {
+            return loadout.getAuthor();
+        }
+        return null;
     }
 
     public int getBlock(int form)

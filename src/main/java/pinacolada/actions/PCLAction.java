@@ -162,13 +162,8 @@ public abstract class PCLAction<T> extends AbstractGameAction
     {
         if (tickDuration(deltaTime))
         {
-            complete();
+            completeImpl();
         }
-    }
-
-    protected void complete()
-    {
-        this.isDone = true;
     }
 
     protected float getDeltaTime()
@@ -223,7 +218,12 @@ public abstract class PCLAction<T> extends AbstractGameAction
             callback.complete(result);
         }
 
-        complete();
+        completeImpl();
+    }
+
+    protected void completeImpl()
+    {
+        this.isDone = true;
     }
 
     protected void copySettings(PCLAction<T> other)

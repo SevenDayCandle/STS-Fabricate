@@ -49,7 +49,7 @@ public class UsePotionAction extends PCLAction<AbstractPotion>
         }
         else
         {
-            complete();
+            complete(null);
         }
 
     }

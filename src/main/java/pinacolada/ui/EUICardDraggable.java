@@ -137,7 +137,6 @@ public abstract class EUICardDraggable<T extends AbstractCard> extends EUIBase
             updateImpl(card, target, draggingCard, lastCard != card, lastTarget != target);
             lastCard = card;
             lastTarget = target;
-
         }
     }
 

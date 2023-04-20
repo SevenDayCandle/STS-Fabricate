@@ -45,6 +45,7 @@ public class PCLMainConfig extends AbstractConfig
     private static final String LAST_IMAGE_PATH = PCLMainConfig.createFullID("LastImagePath");
     private static final String MADNESS_REPLACEMENTS = PCLMainConfig.createFullID("MadnessReplacements");
     private static final String REPLACE_CARDS_PCL = PCLMainConfig.createFullID("ReplaceCardsPCL");
+    private static final String SHOW_ESTIMATED_DAMAGE = PCLMainConfig.createFullID("ShowEstimatedDamage");
     private static final String SHOW_FORMULA_DISPLAY = PCLMainConfig.createFullID("ShowFormulaDisplay");
     private static final String SHOW_IRRELEVANT_PROPERTIES = PCLMainConfig.createFullID("ShowIrrelevantProperties");
     private static final String VANILLA_LIBRARY_SCREEN = PCLMainConfig.createFullID("VanillaLibraryScreen");
@@ -58,6 +59,7 @@ public class PCLMainConfig extends AbstractConfig
     public STSConfigItem<Boolean> enableCustomRelics = new STSConfigItem<Boolean>(ENABLE_CUSTOM_RELICS, false);
     public STSConfigItem<Boolean> madnessReplacements = new STSConfigItem<Boolean>(MADNESS_REPLACEMENTS, false);
     public STSConfigItem<Boolean> replaceCardsPCL = new STSConfigItem<Boolean>(REPLACE_CARDS_PCL, false);
+    public STSConfigItem<Boolean> showEstimatedDamage = new STSConfigItem<Boolean>(SHOW_ESTIMATED_DAMAGE, false);
     public STSConfigItem<Boolean> showFormulaDisplay = new STSConfigItem<Boolean>(SHOW_FORMULA_DISPLAY, false);
     public STSConfigItem<Boolean> showIrrelevantProperties = new STSConfigItem<Boolean>(SHOW_IRRELEVANT_PROPERTIES, false);
     public STSConfigItem<Boolean> vanillaLibraryScreen = new STSConfigItem<Boolean>(VANILLA_LIBRARY_SCREEN, false);
@@ -135,6 +137,7 @@ public class PCLMainConfig extends AbstractConfig
         yPos = addToggle(panel, displayCardTagDescription, PGR.core.strings.options_displayCardTagDescription, yPos, PGR.core.strings.optionDesc_displayCardTagDescription);
         yPos = addToggle(panel, vanillaLibraryScreen, PGR.core.strings.options_vanillaCustomRunMenu, yPos, PGR.core.strings.optionDesc_vanillaCustomRunMenu);
         yPos = addToggle(panel, vanillaPowerRender, PGR.core.strings.options_vanillaPowerRender, yPos, PGR.core.strings.optionDesc_vanillaPowerRender);
+        yPos = addToggle(panel, showEstimatedDamage, PGR.core.strings.options_showEstimatedDamage, yPos, PGR.core.strings.optionDesc_showEstimatedDamage);
         yPos = addToggle(panel, showFormulaDisplay, PGR.core.strings.options_showFormulaDisplay, yPos, PGR.core.strings.optionDesc_showFormulaDisplay);
         yPos = addToggle(panel, showIrrelevantProperties, PGR.core.strings.options_hideIrrelevantAffinities, yPos, PGR.core.strings.optionDesc_hideIrrelevantAffinities);
         yPos = addToggle(panel, madnessReplacements, PGR.core.strings.options_madnessReplacements, yPos, PGR.core.strings.optionDesc_madnessReplacements);
@@ -144,6 +147,7 @@ public class PCLMainConfig extends AbstractConfig
 
         makeModToggle(cropCardImages, PGR.core.strings.options_cropCardImages, PGR.core.strings.optionDesc_cropCardImages);
         makeModToggle(displayCardTagDescription, PGR.core.strings.options_displayCardTagDescription, PGR.core.strings.optionDesc_displayCardTagDescription);
+        makeModToggle(showEstimatedDamage,  PGR.core.strings.options_showEstimatedDamage, PGR.core.strings.optionDesc_showEstimatedDamage);
         makeModToggle(showFormulaDisplay,  PGR.core.strings.options_showFormulaDisplay, PGR.core.strings.optionDesc_showFormulaDisplay);
         makeModToggle(showIrrelevantProperties,  PGR.core.strings.options_hideIrrelevantAffinities, PGR.core.strings.optionDesc_hideIrrelevantAffinities);
 
@@ -151,7 +155,7 @@ public class PCLMainConfig extends AbstractConfig
         displayCardTagDescription.addListener(val -> this.updateCardDescriptions());
     }
 
-
+    // TODO automate
     public void loadImpl()
     {
         ascensionGlyph0.addConfig(config);
@@ -164,6 +168,7 @@ public class PCLMainConfig extends AbstractConfig
         enableCustomEvents.addConfig(config);
         enableCustomPotions.addConfig(config);
         enableCustomRelics.addConfig(config);
+        showEstimatedDamage.addConfig(config);
         showFormulaDisplay.addConfig(config);
         showIrrelevantProperties.addConfig(config);
         vanillaLibraryScreen.addConfig(config);

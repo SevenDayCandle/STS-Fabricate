@@ -5,7 +5,7 @@ import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 
 // Copied and modified from STS-AnimatorMod
-public class ReshuffleDiscardPile extends PCLAction
+public class ReshuffleDiscardPile extends PCLAction<Void>
 {
     protected boolean onlyIfEmpty;
 
@@ -26,6 +26,6 @@ public class ReshuffleDiscardPile extends PCLAction
             PCLActions.top.add(new EmptyDeckShuffleAction());
         }
 
-        complete();
+        completeImpl();
     }
 }

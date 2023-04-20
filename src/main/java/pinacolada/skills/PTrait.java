@@ -115,6 +115,11 @@ public abstract class PTrait<T extends PField> extends PMove<T>
         return (PTrait_Tag) new PTrait_Tag(tags).edit(f -> f.setRandom(true));
     }
 
+    public static PTrait_Unplayable unplayable()
+    {
+        return new PTrait_Unplayable();
+    }
+
     public PTrait(PSkillData<T> data, PSkillSaveData content)
     {
         super(data, content);

@@ -25,7 +25,7 @@ import java.util.Map;
 public abstract class PCLCreature extends CustomMonster implements PointerProvider, TooltipProvider
 {
     private static final Map<String, PCLCreatureData> staticData = new HashMap<>();
-    protected static final Color TAKEN_TURN_COLOR = EUIColors.white(0.61f);
+    protected static final Color TAKEN_TURN_COLOR = EUIColors.white(0.67f);
     public static final int PRIORITY_START_FIRST = 2;
     public static final int PRIORITY_START_LAST = 1;
     public static final int PRIORITY_END_FIRST = 0;

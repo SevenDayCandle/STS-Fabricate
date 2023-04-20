@@ -12,7 +12,6 @@ import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
 import extendedui.EUI;
-import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT0;
@@ -30,6 +29,7 @@ import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.pcl.PCLCoreImages;
+import pinacolada.resources.pcl.PCLCoreStrings;
 
 import static pinacolada.ui.characterSelection.PCLLoadoutsContainer.MINIMUM_CARDS;
 
@@ -86,7 +86,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen
                 .setColors(Color.DARK_GRAY, Settings.CREAM_COLOR)
                 .setFont(FontHelper.tipBodyFont, 1f);
 
-        typesAmount = new EUITextBox(panelTexture, new EUIHitbox(xPos, getY.invoke(5.3f), buttonWidth, buttonHeight * 2.4f))
+        typesAmount = new EUITextBox(panelTexture, new EUIHitbox(xPos, getY.invoke(5.3f), buttonWidth, buttonHeight))
                 .setColors(Color.DARK_GRAY, Settings.GOLD_COLOR)
                 .setAlignment(0.9f, 0.1f, true)
                 .setFont(FontHelper.tipHeaderFont, 1);
@@ -274,12 +274,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen
             EUI.countingPanel.open(container.allCards);
         }
 
-        typesAmount.setLabel(EUIUtils.joinStrings(" | ",
-                stringForRarity(AbstractCard.CardRarity.COMMON),
-                stringForRarity(AbstractCard.CardRarity.UNCOMMON),
-                stringForRarity(AbstractCard.CardRarity.RARE),
-                "{#" + (totalCards >= MINIMUM_CARDS ? 'g' : 'r') + ":" + PGR.core.strings.sui_totalCards(totalCards, MINIMUM_CARDS) + "}"
-        ));
+        typesAmount.setLabel(PCLCoreStrings.colorString(totalCards >= MINIMUM_CARDS ? "g" : "r", PGR.core.strings.sui_totalCards(totalCards, MINIMUM_CARDS)));
 
         confirm.setInteractable(container.isValid());
     }
@@ -368,17 +363,9 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen
         contextMenu.tryRender(sb);
     }
 
-    protected String stringForRarity(AbstractCard.CardRarity rarity)
-    {
-        int typeAmount = container.rarityCount.getOrDefault(rarity, 0);
-        return EUIGameUtils.textForRarity(rarity)
-                + ": {#" + (typeAmount >= container.getMinimum(rarity) ? 'g' : 'r') + ":"
-                + typeAmount + "/" + container.getMinimum(rarity) + "}";
-    }
-
     protected void updateStartingDeckText()
     {
-        startingDeck.setLabel(PGR.core.strings.csel_leftText + " | {#y:" + ((container.currentSeriesCard != null) ? container.currentSeriesCard.name : "") + "}");
+        startingDeck.setLabel(PGR.core.strings.csel_leftText + EUIUtils.SPLIT_LINE + PCLCoreStrings.colorString("y", (container.currentSeriesCard != null) ? container.currentSeriesCard.name : ""));
     }
 
     public enum ContextOption
