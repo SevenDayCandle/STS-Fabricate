@@ -17,6 +17,7 @@ import pinacolada.cards.base.PCLCardPreviews;
 import pinacolada.utilities.GameUtilities;
 
 import java.io.FilenameFilter;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Locale;
@@ -25,6 +26,7 @@ public class PCLMainConfig extends AbstractConfig
 {
     public static final FilenameFilter JSON_FILTER = (dir, name) -> name.endsWith(".json");
 
+    private static final ArrayList<STSConfigItem<?>> CONFIG_ITEMS = new ArrayList<>();
     private static final String LAST_SEED_KEY = "TSDL";
     private static final String MOD_ID = "PCL";
     private static final String CONFIG_ID = "PCLConfig";
@@ -40,10 +42,12 @@ public class PCLMainConfig extends AbstractConfig
     private static final String ENABLE_CUSTOM_EVENTS = PCLMainConfig.createFullID("EnableCustomEvents");
     private static final String ENABLE_CUSTOM_POTIONS = PCLMainConfig.createFullID("EnableCustomPotions");
     private static final String ENABLE_CUSTOM_RELICS = PCLMainConfig.createFullID("EnableCustomRelics");
+    private static final String EXPAND_ABBREVIATED_EFFECTS = PCLMainConfig.createFullID("ExpandAbbreviatedEffects");
     private static final String HIDE_TIP_DESCRIPTION = PCLMainConfig.createFullID("HideTipDescription");
     private static final String LAST_CSV_PATH = PCLMainConfig.createFullID("LastCSVPath");
     private static final String LAST_IMAGE_PATH = PCLMainConfig.createFullID("LastImagePath");
     private static final String MADNESS_REPLACEMENTS = PCLMainConfig.createFullID("MadnessReplacements");
+    private static final String REMOVE_LINE_BREAKS = PCLMainConfig.createFullID("RemoveLineBreaks");
     private static final String REPLACE_CARDS_PCL = PCLMainConfig.createFullID("ReplaceCardsPCL");
     private static final String SHOW_ESTIMATED_DAMAGE = PCLMainConfig.createFullID("ShowEstimatedDamage");
     private static final String SHOW_FORMULA_DISPLAY = PCLMainConfig.createFullID("ShowFormulaDisplay");
@@ -51,26 +55,28 @@ public class PCLMainConfig extends AbstractConfig
     private static final String VANILLA_LIBRARY_SCREEN = PCLMainConfig.createFullID("VanillaLibraryScreen");
     private static final String VANILLA_POWER_RENDER = PCLMainConfig.createFullID("VanillaPowerRender");
     private static ModSettingsScreen.Category pclCategory;
-    public STSConfigItem<Boolean> cropCardImages = new STSConfigItem<Boolean>(CROP_CARD_PORTRAIT, false);
-    public STSConfigItem<Boolean> displayCardTagDescription = new STSConfigItem<Boolean>(DISPLAY_CARD_TAG_DESCRIPTION, false);
-    public STSConfigItem<Boolean> enableCustomCards = new STSConfigItem<Boolean>(ENABLE_CUSTOM_CARDS, false);
-    public STSConfigItem<Boolean> enableCustomEvents = new STSConfigItem<Boolean>(ENABLE_CUSTOM_EVENTS, false);
-    public STSConfigItem<Boolean> enableCustomPotions = new STSConfigItem<Boolean>(ENABLE_CUSTOM_POTIONS, false);
-    public STSConfigItem<Boolean> enableCustomRelics = new STSConfigItem<Boolean>(ENABLE_CUSTOM_RELICS, false);
-    public STSConfigItem<Boolean> madnessReplacements = new STSConfigItem<Boolean>(MADNESS_REPLACEMENTS, false);
-    public STSConfigItem<Boolean> replaceCardsPCL = new STSConfigItem<Boolean>(REPLACE_CARDS_PCL, false);
-    public STSConfigItem<Boolean> showEstimatedDamage = new STSConfigItem<Boolean>(SHOW_ESTIMATED_DAMAGE, false);
-    public STSConfigItem<Boolean> showFormulaDisplay = new STSConfigItem<Boolean>(SHOW_FORMULA_DISPLAY, false);
-    public STSConfigItem<Boolean> showIrrelevantProperties = new STSConfigItem<Boolean>(SHOW_IRRELEVANT_PROPERTIES, false);
-    public STSConfigItem<Boolean> vanillaLibraryScreen = new STSConfigItem<Boolean>(VANILLA_LIBRARY_SCREEN, false);
-    public STSConfigItem<Boolean> vanillaPowerRender = new STSConfigItem<Boolean>(VANILLA_POWER_RENDER, false);
-    public STSConfigItem<Boolean> editorFtueScreen = new STSConfigItem<Boolean>(EDITOR_FTUE_SCREEN, false);
-    public STSConfigItem<Integer> ascensionGlyph0 = new STSConfigItem<Integer>(ASCENSIONGLYPH0, 0);
-    public STSConfigItem<Integer> ascensionGlyph1 = new STSConfigItem<Integer>(ASCENSIONGLYPH1, 0);
-    public STSConfigItem<Integer> ascensionGlyph2 = new STSConfigItem<Integer>(ASCENSIONGLYPH2, 0);
-    public STSStringConfigItem lastCSVPath = new STSStringConfigItem(LAST_CSV_PATH, "");
-    public STSStringConfigItem lastImagePath = new STSStringConfigItem(LAST_IMAGE_PATH, "");
-    public STSStringConfigItem lastSeed = new STSStringConfigItem(LAST_SEED_KEY, "");
+    public STSConfigItem<Boolean> cropCardImages = registerConfig(CROP_CARD_PORTRAIT, false);
+    public STSConfigItem<Boolean> displayCardTagDescription = registerConfig(DISPLAY_CARD_TAG_DESCRIPTION, false);
+    public STSConfigItem<Boolean> enableCustomCards = registerConfig(ENABLE_CUSTOM_CARDS, false);
+    public STSConfigItem<Boolean> enableCustomEvents = registerConfig(ENABLE_CUSTOM_EVENTS, false);
+    public STSConfigItem<Boolean> enableCustomPotions = registerConfig(ENABLE_CUSTOM_POTIONS, false);
+    public STSConfigItem<Boolean> enableCustomRelics = registerConfig(ENABLE_CUSTOM_RELICS, false);
+    public STSConfigItem<Boolean> expandAbbreviatedEffects = registerConfig(EXPAND_ABBREVIATED_EFFECTS, false);
+    public STSConfigItem<Boolean> madnessReplacements = registerConfig(MADNESS_REPLACEMENTS, false);
+    public STSConfigItem<Boolean> removeLineBreaks = registerConfig(REMOVE_LINE_BREAKS, false);
+    public STSConfigItem<Boolean> replaceCardsPCL = registerConfig(REPLACE_CARDS_PCL, false);
+    public STSConfigItem<Boolean> showEstimatedDamage = registerConfig(SHOW_ESTIMATED_DAMAGE, false);
+    public STSConfigItem<Boolean> showFormulaDisplay = registerConfig(SHOW_FORMULA_DISPLAY, false);
+    public STSConfigItem<Boolean> showIrrelevantProperties = registerConfig(SHOW_IRRELEVANT_PROPERTIES, false);
+    public STSConfigItem<Boolean> vanillaLibraryScreen = registerConfig(VANILLA_LIBRARY_SCREEN, false);
+    public STSConfigItem<Boolean> vanillaPowerRender = registerConfig(VANILLA_POWER_RENDER, false);
+    public STSConfigItem<Boolean> editorFtueScreen = registerConfig(EDITOR_FTUE_SCREEN, false);
+    public STSConfigItem<Integer> ascensionGlyph0 = registerConfig(ASCENSIONGLYPH0, 0);
+    public STSConfigItem<Integer> ascensionGlyph1 = registerConfig(ASCENSIONGLYPH1, 0);
+    public STSConfigItem<Integer> ascensionGlyph2 = registerConfig(ASCENSIONGLYPH2, 0);
+    public STSStringConfigItem lastCSVPath = registerStringConfig(LAST_CSV_PATH, "");
+    public STSStringConfigItem lastImagePath = registerStringConfig(LAST_IMAGE_PATH, "");
+    public STSStringConfigItem lastSeed = registerStringConfig(LAST_SEED_KEY, "");
 
     public STSSerializedConfigItem<Vector2> damageFormulaPosition = new STSSerializedConfigItem<Vector2>(DAMAGE_FORMULA_POSITION, new Vector2(0.6f, 0.8f));
     private HashSet<String> tips = null;
@@ -78,6 +84,20 @@ public class PCLMainConfig extends AbstractConfig
     public static String createFullID(String name)
     {
         return PGR.BASE_PREFIX.toUpperCase(Locale.ROOT) + "-" + name;
+    }
+
+    public static <T> STSConfigItem<T> registerConfig(String key, T defaultvalue)
+    {
+        STSConfigItem<T> item = new STSConfigItem<T>(key, defaultvalue);
+        CONFIG_ITEMS.add(item);
+        return item;
+    }
+
+    public static STSStringConfigItem registerStringConfig(String key, String defaultvalue)
+    {
+        STSStringConfigItem item = new STSStringConfigItem(key, defaultvalue);
+        CONFIG_ITEMS.add(item);
+        return item;
     }
 
     public PCLMainConfig()
@@ -135,6 +155,8 @@ public class PCLMainConfig extends AbstractConfig
 
         yPos = addToggle(panel, cropCardImages, PGR.core.strings.options_cropCardImages, yPos, PGR.core.strings.optionDesc_cropCardImages);
         yPos = addToggle(panel, displayCardTagDescription, PGR.core.strings.options_displayCardTagDescription, yPos, PGR.core.strings.optionDesc_displayCardTagDescription);
+        yPos = addToggle(panel, expandAbbreviatedEffects, PGR.core.strings.options_expandAbbreviatedEffects, yPos, PGR.core.strings.optionDesc_expandAbbreviatedEffects);
+        yPos = addToggle(panel, removeLineBreaks, PGR.core.strings.options_removeLineBreaks, yPos, PGR.core.strings.optionDesc_removeLineBreaks);
         yPos = addToggle(panel, vanillaLibraryScreen, PGR.core.strings.options_vanillaCustomRunMenu, yPos, PGR.core.strings.optionDesc_vanillaCustomRunMenu);
         yPos = addToggle(panel, vanillaPowerRender, PGR.core.strings.options_vanillaPowerRender, yPos, PGR.core.strings.optionDesc_vanillaPowerRender);
         yPos = addToggle(panel, showEstimatedDamage, PGR.core.strings.options_showEstimatedDamage, yPos, PGR.core.strings.optionDesc_showEstimatedDamage);
@@ -147,38 +169,24 @@ public class PCLMainConfig extends AbstractConfig
 
         makeModToggle(cropCardImages, PGR.core.strings.options_cropCardImages, PGR.core.strings.optionDesc_cropCardImages);
         makeModToggle(displayCardTagDescription, PGR.core.strings.options_displayCardTagDescription, PGR.core.strings.optionDesc_displayCardTagDescription);
+        makeModToggle(expandAbbreviatedEffects, PGR.core.strings.options_expandAbbreviatedEffects, PGR.core.strings.optionDesc_expandAbbreviatedEffects);
+        makeModToggle(removeLineBreaks, PGR.core.strings.options_removeLineBreaks, PGR.core.strings.optionDesc_removeLineBreaks);
         makeModToggle(showEstimatedDamage,  PGR.core.strings.options_showEstimatedDamage, PGR.core.strings.optionDesc_showEstimatedDamage);
         makeModToggle(showFormulaDisplay,  PGR.core.strings.options_showFormulaDisplay, PGR.core.strings.optionDesc_showFormulaDisplay);
         makeModToggle(showIrrelevantProperties,  PGR.core.strings.options_hideIrrelevantAffinities, PGR.core.strings.optionDesc_hideIrrelevantAffinities);
 
         EUIConfiguration.disableDescrptionIcons.addListener(val -> this.updateCardDescriptions());
         displayCardTagDescription.addListener(val -> this.updateCardDescriptions());
+        expandAbbreviatedEffects.addListener(val -> this.updateCardDescriptions());
+        removeLineBreaks.addListener(val -> this.updateCardDescriptions());
     }
 
-    // TODO automate
     public void loadImpl()
     {
-        ascensionGlyph0.addConfig(config);
-        ascensionGlyph1.addConfig(config);
-        ascensionGlyph2.addConfig(config);
-        cropCardImages.addConfig(config);
-        damageFormulaPosition.addConfig(config);
-        displayCardTagDescription.addConfig(config);
-        enableCustomCards.addConfig(config);
-        enableCustomEvents.addConfig(config);
-        enableCustomPotions.addConfig(config);
-        enableCustomRelics.addConfig(config);
-        showEstimatedDamage.addConfig(config);
-        showFormulaDisplay.addConfig(config);
-        showIrrelevantProperties.addConfig(config);
-        vanillaLibraryScreen.addConfig(config);
-        vanillaPowerRender.addConfig(config);
-        lastCSVPath.addConfig(config);
-        lastImagePath.addConfig(config);
-        lastSeed.addConfig(config);
-        madnessReplacements.addConfig(config);
-        replaceCardsPCL.addConfig(config);
-        editorFtueScreen.addConfig(config);
+        for (STSConfigItem<?> option : CONFIG_ITEMS)
+        {
+            option.addConfig(config);
+        }
     }
 
     // Whenever this setting is updated, we need to force all cards everywhere to refresh their descriptions

@@ -80,15 +80,15 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen
                 .setTooltip(PGR.core.strings.csel_deckEditor, PGR.core.strings.csel_deckEditorInfo)
                 .setOnClick(this::openLoadoutEditor);
 
-        previewCardsInfo = new EUITextBox(panelTexture, new EUIHitbox(xPos, getY.invoke(2.5f), buttonWidth, buttonHeight * 3.5f))
+        previewCardsInfo = new EUITextBox(panelTexture, new EUIHitbox(xPos, getY.invoke(2.5f), buttonWidth, buttonHeight * 3f))
                 .setLabel(PGR.core.strings.sui_instructions1)
                 .setAlignment(0.9f, 0.1f, true)
                 .setColors(Color.DARK_GRAY, Settings.CREAM_COLOR)
                 .setFont(FontHelper.tipBodyFont, 1f);
 
-        typesAmount = new EUITextBox(panelTexture, new EUIHitbox(xPos, getY.invoke(5.3f), buttonWidth, buttonHeight))
+        typesAmount = new EUITextBox(panelTexture, new EUIHitbox(xPos, getY.invoke(3.5f), buttonWidth, buttonHeight))
                 .setColors(Color.DARK_GRAY, Settings.GOLD_COLOR)
-                .setAlignment(0.9f, 0.1f, true)
+                .setAlignment(0.61f, 0.1f, true)
                 .setFont(FontHelper.tipHeaderFont, 1);
 
         previewCards = createHexagonalButton(xPos, getY.invoke(7f), buttonWidth, buttonHeight)

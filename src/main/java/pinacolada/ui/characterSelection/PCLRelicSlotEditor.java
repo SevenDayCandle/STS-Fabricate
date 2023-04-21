@@ -47,9 +47,9 @@ public class PCLRelicSlotEditor extends EUIBase
                 .setAlignment(0.5f, 0.5f)
                 .setFont(EUIFontHelper.cardtitlefontNormal, 1f);
 
-        clearButton = new EUIButton(EUIRM.images.x.texture(), new EUIHitbox(relicnameText.hb.x + relicnameText.hb.width, relicnameText.hb.y, 64, 64))
+        clearButton = new EUIButton(EUIRM.images.x.texture(), new EUIHitbox(relicnameText.hb.x + relicnameText.hb.width, relicnameText.hb.y + 12, 48, 48))
                 .setClickDelay(0.02f);
-        changeButton = new EUIButton(PCLCoreImages.Menu.edit.texture(), new EUIHitbox(clearButton.hb.x + clearButton.hb.width, relicnameText.hb.y, 64, 64))
+        changeButton = new EUIButton(PCLCoreImages.Menu.edit.texture(), new EUIHitbox(clearButton.hb.x + clearButton.hb.width + 16, relicnameText.hb.cY + 12, 48, 48))
                 .setClickDelay(0.02f);
 
         setSlot(null);
@@ -97,7 +97,7 @@ public class PCLRelicSlotEditor extends EUIBase
         relicvalueText.setPosition(cX, cY);
         relicnameText.setPosition(relicvalueText.hb.x + relicvalueText.hb.width + SPACING, cY);
         clearButton.setPosition(relicnameText.hb.x + relicnameText.hb.width, cY);
-        changeButton.setPosition(clearButton.hb.x + clearButton.hb.width, cY);
+        changeButton.setPosition(clearButton.hb.x + clearButton.hb.width + 8, cY);
         if (relic != null && this.relicImage != null)
         {
             this.relicImage.translate(relicvalueText.hb.x + relicvalueText.hb.width + SPACING / 2, relicvalueText.hb.y);

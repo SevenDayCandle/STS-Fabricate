@@ -487,13 +487,27 @@ public abstract class PMod<T extends PField> extends PSkill<T>
 
     @Override
     public PMod<T> setUpgrade(int... upgrade) {
-        this.upgrade = upgrade;
+        super.setUpgrade(upgrade);
         return this;
     }
 
     @Override
     public PMod<T> setUpgradeExtra(int... upgrade) {
-        this.upgradeExtra = upgrade;
+        super.setUpgradeExtra(upgrade);
+        return this;
+    }
+
+    @Override
+    public PMod<T> setExtra(int amount)
+    {
+        super.setExtra(amount);
+        return this;
+    }
+
+    @Override
+    public PMod<T> setExtra(int amount, int upgrade)
+    {
+        super.setExtra(amount, upgrade);
         return this;
     }
 

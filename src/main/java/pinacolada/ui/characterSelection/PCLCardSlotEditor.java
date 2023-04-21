@@ -53,13 +53,13 @@ public class PCLCardSlotEditor extends EUIBase
                 .setAlignment(0.5f, 0.5f)
                 .setFont(EUIFontHelper.cardtitlefontNormal, 1f);
 
-        decrementButton = new EUIButton(EUIRM.images.minus.texture(), new EUIHitbox(cardnameText.hb.x + cardnameText.hb.width, cardnameText.hb.y, 64, 64))
+        decrementButton = new EUIButton(EUIRM.images.minus.texture(), new EUIHitbox(cardnameText.hb.x + cardnameText.hb.width, cardnameText.hb.y + 12, 48, 48))
                 .setClickDelay(0.02f);
-        addButton = new EUIButton(EUIRM.images.plus.texture(), new EUIHitbox(decrementButton.hb.x + decrementButton.hb.width, cardnameText.hb.y, 64, 64))
+        addButton = new EUIButton(EUIRM.images.plus.texture(), new EUIHitbox(decrementButton.hb.x + decrementButton.hb.width + 16, cardnameText.hb.y + 12, 48, 48))
                 .setClickDelay(0.02f);
-        clearButton = new EUIButton(EUIRM.images.x.texture(), new EUIHitbox(addButton.hb.x + addButton.hb.width, cardnameText.hb.y, 64, 64))
+        clearButton = new EUIButton(EUIRM.images.x.texture(), new EUIHitbox(addButton.hb.x + addButton.hb.width + 16, cardnameText.hb.y + 12, 48, 48))
                 .setClickDelay(0.02f);
-        changeButton = new EUIButton(PCLCoreImages.Menu.edit.texture(), new EUIHitbox(clearButton.hb.x + clearButton.hb.width, cardnameText.hb.y, 64, 64))
+        changeButton = new EUIButton(PCLCoreImages.Menu.edit.texture(), new EUIHitbox(clearButton.hb.x + clearButton.hb.width + 16, cardnameText.hb.y + 12, 48, 48))
                 .setClickDelay(0.02f);
 
         setSlot(null);
@@ -106,10 +106,10 @@ public class PCLCardSlotEditor extends EUIBase
         cardvalueText.setPosition(cX, cY);
         cardamountText.setPosition(cardvalueText.hb.x + cardvalueText.hb.width, cY);
         cardnameText.setPosition(cardamountText.hb.x + cardamountText.hb.width, cY);
-        decrementButton.setPosition(cardnameText.hb.x + cardnameText.hb.width, cY);
-        addButton.setPosition(decrementButton.hb.x + decrementButton.hb.width, cY);
-        clearButton.setPosition(addButton.hb.x + addButton.hb.width, cY);
-        changeButton.setPosition(clearButton.hb.x + clearButton.hb.width, cY);
+        decrementButton.setPosition(cardnameText.hb.x + cardnameText.hb.width, cY + 12);
+        addButton.setPosition(decrementButton.hb.x + decrementButton.hb.width + 16, cY + 12);
+        clearButton.setPosition(addButton.hb.x + addButton.hb.width + 16, cY + 12);
+        changeButton.setPosition(clearButton.hb.x + clearButton.hb.width + 16, cY + 12);
 
         return this;
     }

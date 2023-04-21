@@ -347,6 +347,8 @@
 								"TEXT": [
 												"Dynamic card portraits",
 												"Display Card Tags in description",
+												"Expand abbreviated effects",
+												"Remove line breaks from effects",
 												"Use Vanilla Custom Run Menu",
 												"Show estimated damage",
 												"Show formula display",
@@ -364,6 +366,8 @@
 								"TEXT": [
 												"Card portraits will be zoomed in when not hovering over them. Only works for custom cards, and has no effect in Single Card Popup View.",
 												"Tags normally appearing on the top-right corner of custom cards will instead appear as keywords in their descriptions.",
+												"If checked, certain effects (e.g. card damage and Block effects) will have more verbose wording to make them more explicit, mirroring base game wording.",
+												"If checked, all of a card's effects will be displayed in the same paragraph instead of being separated by line breaks.",
 												"Disables the replacement Custom Run Menu. To play with custom cards without using the Custom Run Menu, you will either need to use the console or toggle the \"Enable custom cards in normal runs\" setting.",
 												"Enables a display that shows your expected HP loss by the end of turn.",
 												"Enables a draggable widget that shows damage formula calculations for custom cards when dragging them over targets.",

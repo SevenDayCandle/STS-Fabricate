@@ -115,12 +115,25 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack>
         // TODO dynamically check if a child effect overrides modifyHitCount
         String amountString = (count > 1 || hasChildType(PTrait_HitCount.class)) ? getAmountRawString() + "x" + getExtraRawString() : getAmountRawString();
 
-        String targetShortString = target.getShortString();
-
         // When displayed as text, we can just write normal damage down as "damage"
         EUITooltip attackTooltip = getAttackTooltip();
-        String attackString = attackTooltip == PGR.core.tooltips.normalDamage && EUIConfiguration.disableDescrptionIcons.get() ? PGR.core.strings.subjects_damage : attackTooltip.toString();
+        String attackString = attackTooltip == PGR.core.tooltips.normalDamage && (EUIConfiguration.disableDescrptionIcons.get() || PGR.config.expandAbbreviatedEffects.get()) ? PGR.core.strings.subjects_damage : attackTooltip.toString();
 
+        // Use expanded text like PMove_DealDamage if verbose mode is used
+        if (PGR.config.expandAbbreviatedEffects.get())
+        {
+            if (target == PCLCardTarget.Self)
+            {
+                return TEXT.act_takeDamage(getAmountRawString());
+            }
+            if (target == PCLCardTarget.Single)
+            {
+                return TEXT.act_deal(getAmountRawString(), attackString);
+            }
+            return TEXT.act_dealTo(getAmountRawString(), attackString, getTargetString());
+        }
+
+        String targetShortString = target.getShortString();
         if (targetShortString != null)
         {
             return EUIRM.strings.numAdjNoun(amountString, targetShortString, attackString);

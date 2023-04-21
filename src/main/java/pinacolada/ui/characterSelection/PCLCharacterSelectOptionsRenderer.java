@@ -74,7 +74,7 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase
                 .setLabel(PGR.core.strings.csel_leftText);
 
         startingCardsListLabel = new EUITextBox(EUIRM.images.panelRounded.texture(),
-                new EUIHitbox(POS_X + ROW_OFFSET * 3.5f, POS_Y, leftTextWidth, 50f * Settings.scale))
+                new EUIHitbox(POS_X + ROW_OFFSET * 4f, POS_Y, leftTextWidth, 50f * Settings.scale))
                 .setColors(Settings.HALF_TRANSPARENT_BLACK_COLOR, Settings.GREEN_TEXT_COLOR)
                 .setFont(EUIFontHelper.cardtitlefontSmall, 0.8f)
                 .setAlignment(0.5f, 0.5f, false);
@@ -87,7 +87,7 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase
 
         float xOffset = ascensionGlyphsLabel.hb.x + ROW_OFFSET * 4f;
 
-        seriesButton = new EUIButton(PCLCoreImages.Menu.edit.texture(), new EUIHitbox(0, 0, scale(64), scale(64)))
+        seriesButton = new EUIButton(PCLCoreImages.Menu.seriesSelect.texture(), new EUIHitbox(0, 0, scale(64), scale(64)))
                 .setPosition(xOffset + ROW_OFFSET, startingCardsListLabel.hb.y + scale(128)).setText("")
                 .setTooltip(PGR.core.strings.csel_seriesEditor, PGR.core.strings.csel_seriesEditorInfo)
                 .setOnClick(this::openSeriesSelect);

@@ -254,29 +254,33 @@ public class PCLCoreStrings extends PCLStrings
     // Options
     public final String options_cropCardImages = options.TEXT[0];
     public final String options_displayCardTagDescription = options.TEXT[1];
-    public final String options_vanillaCustomRunMenu = options.TEXT[2];
-    public final String options_showEstimatedDamage = options.TEXT[3];
-    public final String options_showFormulaDisplay = options.TEXT[4];
-    public final String options_hideIrrelevantAffinities = options.TEXT[5];
-    public final String options_enableCustomCards = options.TEXT[6];
-    public final String options_enableCustomRelics = options.TEXT[7];
-    public final String options_enableCustomPotions = options.TEXT[8];
-    public final String options_enableCustomEvents = options.TEXT[9];
-    public final String options_madnessReplacements = options.TEXT[10];
-    public final String options_vanillaPowerRender = options.TEXT[11];
-    public final String options_alwaysPCLCard = options.TEXT[12];
+    public final String options_expandAbbreviatedEffects = options.TEXT[2];
+    public final String options_removeLineBreaks = options.TEXT[3];
+    public final String options_vanillaCustomRunMenu = options.TEXT[4];
+    public final String options_showEstimatedDamage = options.TEXT[5];
+    public final String options_showFormulaDisplay = options.TEXT[6];
+    public final String options_hideIrrelevantAffinities = options.TEXT[7];
+    public final String options_enableCustomCards = options.TEXT[8];
+    public final String options_enableCustomRelics = options.TEXT[9];
+    public final String options_enableCustomPotions = options.TEXT[10];
+    public final String options_enableCustomEvents = options.TEXT[11];
+    public final String options_madnessReplacements = options.TEXT[12];
+    public final String options_vanillaPowerRender = options.TEXT[13];
+    public final String options_alwaysPCLCard = options.TEXT[14];
 
     // Option Descriptions
     public final String optionDesc_cropCardImages = optionDesc.TEXT[0];
     public final String optionDesc_displayCardTagDescription = optionDesc.TEXT[1];
-    public final String optionDesc_vanillaCustomRunMenu = optionDesc.TEXT[2];
-    public final String optionDesc_showEstimatedDamage = optionDesc.TEXT[3];
-    public final String optionDesc_showFormulaDisplay = optionDesc.TEXT[4];
-    public final String optionDesc_hideIrrelevantAffinities = optionDesc.TEXT[5];
-    public final String optionDesc_onlyNewRuns = optionDesc.TEXT[6];
-    public final String optionDesc_madnessReplacements = optionDesc.TEXT[7];
-    public final String optionDesc_vanillaPowerRender = optionDesc.TEXT[8];
-    public final String optionDesc_alwaysPCLCard = optionDesc.TEXT[9];
+    public final String optionDesc_expandAbbreviatedEffects = optionDesc.TEXT[2];
+    public final String optionDesc_removeLineBreaks = optionDesc.TEXT[3];
+    public final String optionDesc_vanillaCustomRunMenu = optionDesc.TEXT[4];
+    public final String optionDesc_showEstimatedDamage = optionDesc.TEXT[5];
+    public final String optionDesc_showFormulaDisplay = optionDesc.TEXT[6];
+    public final String optionDesc_hideIrrelevantAffinities = optionDesc.TEXT[7];
+    public final String optionDesc_onlyNewRuns = optionDesc.TEXT[8];
+    public final String optionDesc_madnessReplacements = optionDesc.TEXT[9];
+    public final String optionDesc_vanillaPowerRender = optionDesc.TEXT[10];
+    public final String optionDesc_alwaysPCLCard = optionDesc.TEXT[11];
 
     // Reward
     public final String rewards_rewardBreak = rewards.TEXT[0];
