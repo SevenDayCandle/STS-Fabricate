@@ -286,6 +286,11 @@ public abstract class PMove<T extends PField> extends PSkill<T>
         return new PMove_Discard(amount, groups);
     }
 
+    public static PMove_Discard discard(int amount, int extra, PCLCardGroupHelper... groups)
+    {
+        return new PMove_Discard(amount, extra, groups);
+    }
+
     public static PMove_Discard discardRandom(int amount)
     {
         return (PMove_Discard) new PMove_Discard(amount, PCLCardGroupHelper.Hand).edit(PField_CardGeneric::setRandom);
@@ -338,6 +343,11 @@ public abstract class PMove<T extends PField> extends PSkill<T>
         return new PMove_Exhaust(amount, groups);
     }
 
+    public static PMove_Exhaust exhaust(int amount, int extra, PCLCardGroupHelper... groups)
+    {
+        return new PMove_Exhaust(amount, extra, groups);
+    }
+
     public static PMove_Exhaust exhaustRandom(int amount, PCLCardGroupHelper... groups)
     {
         return (PMove_Exhaust) new PMove_Exhaust(amount, groups).edit(PField_CardGeneric::setRandom);
@@ -346,6 +356,11 @@ public abstract class PMove<T extends PField> extends PSkill<T>
     public static PMove_Fetch fetch(int amount, PCLCardGroupHelper... groups)
     {
         return new PMove_Fetch(amount, groups);
+    }
+
+    public static PMove_Fetch fetch(int amount, int extra, PCLCardGroupHelper... groups)
+    {
+        return new PMove_Fetch(amount, extra, groups);
     }
 
     public static PMove_Fetch fetchRandom(int amount, PCLCardGroupHelper... groups)

@@ -37,6 +37,11 @@ public class PMove_Purge extends PMove_Select<PField_CardCategory>
         super(DATA, amount, h);
     }
 
+    public PMove_Purge(int amount, int extra, PCLCardGroupHelper... h)
+    {
+        super(DATA, amount, extra, h);
+    }
+
     @Override
     public EUITooltip getActionTooltip()
     {

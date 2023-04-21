@@ -79,7 +79,7 @@ public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity
     public String getObjectText()
     {
         String base = fields.getAddAffinityChoiceString();
-        return extra > 1 ? EUIRM.strings.numNoun(getAmountRawString(), base) : base;
+        return amount > 1 ? EUIRM.strings.numNoun(getAmountRawString(), base) : base;
     }
 
     @Override

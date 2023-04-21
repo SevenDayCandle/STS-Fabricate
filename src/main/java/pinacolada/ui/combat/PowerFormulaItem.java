@@ -50,11 +50,11 @@ public class PowerFormulaItem extends EUIHoverable
     {
         if (this.iconRegion != null)
         {
-            PCLRenderHelpers.drawCentered(sb, Color.WHITE, this.iconRegion, hb.x, hb.y, ICON_SIZE, ICON_SIZE, 1f, 0);
+            PCLRenderHelpers.drawCentered(sb, Color.WHITE, this.iconRegion, hb.x, hb.y, ICON_SIZE, ICON_SIZE, 0.9f, 0);
         }
         else
         {
-            PCLRenderHelpers.drawCentered(sb, Color.WHITE, this.icon, hb.x, hb.y, ICON_SIZE, ICON_SIZE, 1f, 0);
+            PCLRenderHelpers.drawCentered(sb, Color.WHITE, this.icon, hb.x, hb.y, ICON_SIZE, ICON_SIZE, 0.9f, 0);
         }
         FontHelper.renderFontCentered(sb, FontHelper.powerAmountFont, ">>", hb.x - hb.width * 1.1f, hb.cY - hb.height, Color.WHITE);
         this.owner.renderImpl(sb);

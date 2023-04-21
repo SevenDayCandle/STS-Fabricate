@@ -94,13 +94,13 @@ public class PowerFormulaRow extends EUIHoverable
             }
         }
         powers.add(item);
-        resultHb.setOffset(getOffsetCx(powers.size()),-0.5f);
+        resultHb.setOffset(resultHb.width * getOffsetCx(powers.size()),-0.5f);
     }
 
     protected void addSummon(PCLCardAlly ally, int input, int result)
     {
         powers.add(new PowerFormulaItem(RelativeHitbox.fromPercentages(hb, 1, 1, getOffsetCx(powers.size()), 1), true, ally.card.getTypeIcon(), result).setAddition(result - input));
-        resultHb.setOffset(getOffsetCx(powers.size() + 1),-0.5f);
+        resultHb.setOffset(resultHb.width * getOffsetCx(powers.size() + 1),-0.5f);
     }
 
     protected void setResult(float base, float amount) {

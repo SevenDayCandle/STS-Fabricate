@@ -28,7 +28,7 @@ public class PMove_GainTempHP extends PMove<PField_Empty>
 
     public PMove_GainTempHP(int amount)
     {
-        super(DATA, PCLCardTarget.Self, amount);
+        super(DATA, PCLCardTarget.None, amount);
     }
 
     public PMove_GainTempHP(PCLCardTarget target, int amount)

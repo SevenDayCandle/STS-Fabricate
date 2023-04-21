@@ -38,6 +38,11 @@ public class PMove_Discard extends PMove_Select<PField_CardCategory>
         super(DATA, amount, h);
     }
 
+    public PMove_Discard(int amount, int extra, PCLCardGroupHelper... h)
+    {
+        super(DATA, amount, extra, h);
+    }
+
     @Override
     public EUITooltip getActionTooltip()
     {

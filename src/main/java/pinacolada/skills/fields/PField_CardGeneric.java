@@ -172,10 +172,11 @@ public class PField_CardGeneric extends PField_Not
         {
             return action.invoke(skill.getName(), skill.target.getTarget(info.source, info.target), choiceSize, PCLCardSelection.Random.toSelection(), g);
         }
-        else if (subchoices > 0 && subchoices < choiceSize)
+        else if (subchoices > 0 && subchoices <= choiceSize)
         {
+            ListSelection<AbstractCard> selection = origin.toSelection();
             return action.invoke(skill.getName(), skill.target.getTarget(info.source, info.target), subchoices, PCLCardSelection.Manual.toSelection(), g)
-                    .setMaxChoices(choiceSize, origin.toSelection());
+                    .setMaxChoices(choiceSize, selection != null ? selection : PCLCardSelection.Random.toSelection());
         }
 
         return action.invoke(skill.getName(), skill.target.getTarget(info.source, info.target), choiceSize, origin.toSelection(), g);

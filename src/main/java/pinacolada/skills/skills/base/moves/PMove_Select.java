@@ -33,9 +33,21 @@ public abstract class PMove_Select<T extends PField_CardGeneric> extends PCallba
         fields.setCardGroup(h);
     }
 
+    public PMove_Select(PSkillData<T> data, int amount, int extra, PCLCardGroupHelper... h)
+    {
+        super(data, PCLCardTarget.None, amount, extra);
+        fields.setCardGroup(h);
+    }
+
     public PMove_Select(PSkillData<T> data, PCLCardTarget target, int amount, PCLCardGroupHelper... h)
     {
         super(data, target, amount);
+        fields.setCardGroup(h);
+    }
+
+    public PMove_Select(PSkillData<T> data, PCLCardTarget target, int amount, int extra, PCLCardGroupHelper... h)
+    {
+        super(data, target, amount, extra);
         fields.setCardGroup(h);
     }
 

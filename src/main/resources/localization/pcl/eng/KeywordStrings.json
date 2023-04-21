@@ -69,7 +69,7 @@
 								"NAME": "Constricted"
 				},
 				"Cooldown":	{
-								"DESCRIPTION": "Whenever this card is played, reduce #yCooldown by #b1. At #b0 #yCooldown, activate this effect and reset #yCooldown.",
+								"DESCRIPTION": "Activates after a specified number of uses.",
 								"NAME": "Cooldown"
 				},
 				"Create":	{

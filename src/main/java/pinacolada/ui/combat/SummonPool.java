@@ -199,7 +199,10 @@ public class SummonPool extends EUIBase
                 estimatedMap.put(ally, amount);
             }
         });
-        estimatedMap.put(AbstractDungeon.player, finalResult);
+        if (finalResult > 0)
+        {
+            estimatedMap.put(AbstractDungeon.player, finalResult);
+        }
 
         return estimatedMap;
     }

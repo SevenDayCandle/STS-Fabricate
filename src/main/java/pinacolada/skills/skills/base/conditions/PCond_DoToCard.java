@@ -60,7 +60,7 @@ public abstract class PCond_DoToCard extends PActiveNonCheckCond<PField_CardCate
     @Override
     public String getText(boolean addPeriod)
     {
-        return capital(childEffect == null ? (getSubText() + PCLCoreStrings.period(addPeriod)) : TEXT.cond_inOrderTo(getSubText(), childEffect.getText(false)), addPeriod);
+        return capital(childEffect == null ? getSubText() : TEXT.cond_inOrderTo(getSubText(), childEffect.getText(false)), addPeriod) + PCLCoreStrings.period(addPeriod);
     }
 
     @Override

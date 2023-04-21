@@ -792,7 +792,6 @@ public class GameUtilities
         return result;
     }
 
-    // TODO less hardcoded approach to checking end of turn powers
     public static int getEndOfTurnBlock(AbstractCreature creature)
     {
         int amount = 0;
@@ -820,7 +819,7 @@ public class GameUtilities
                 // Check end of turn relics
                 for (AbstractRelic r : ((AbstractPlayer) creature).relics)
                 {
-                    if (Orichalcum.ID.equals(r.relicId))
+                    if (Orichalcum.ID.equals(r.relicId) && creature.currentBlock == 0)
                     {
                         amount += 6; // Hardcoded stuff, there's a constant but Orichalcum doesn't actually use it :(
                     }

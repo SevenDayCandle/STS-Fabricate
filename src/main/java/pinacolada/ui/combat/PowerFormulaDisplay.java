@@ -41,7 +41,7 @@ public class PowerFormulaDisplay extends EUICardDraggable<AbstractCard>
         attack = new PowerFormulaRow(attackHb, PowerFormulaRow.Type.Attack);
         defend = new PowerFormulaRow(defendHb, PowerFormulaRow.Type.Defend);
         enemyAttack = new PowerFormulaEnemyRow(enemyAttackHb);
-        title = new EUILabel(FontHelper.powerAmountFont, RelativeHitbox.fromPercentages(hb, 1, 1, 1f, -2f))
+        title = new EUILabel(FontHelper.powerAmountFont, RelativeHitbox.fromPercentages(hb, 1, 1, 1f, -OFFSET_MULT_Y * 0.59f))
                 .setAlignment(0.5f, 0.2f)
                 .setLabel("--");
     }
