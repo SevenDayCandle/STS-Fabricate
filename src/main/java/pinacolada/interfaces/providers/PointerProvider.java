@@ -27,6 +27,12 @@ public interface PointerProvider
     String getID();
     String getName();
 
+    default PTrigger addPowerMove(PTrigger effect) {
+        PTrigger added = (PTrigger) effect.setSource(this);
+        getPowerEffects().add(added);
+        return added;
+    }
+
     default PSkill<?> addUseMove(PSkill<?> effect)
     {
         PSkill<?> added = effect.setSource(this, PSkill.PCLCardValueSource.XValue);

@@ -724,11 +724,11 @@ public class PCLCoreStrings extends PCLStrings
     }
 
     public static String plural(EUITooltip tip, Object evaluated) {
-        return EUIUtils.format(tip.plural(), evaluated);
+        return plural(tip.plural(), evaluated);
     }
 
     public static String plural(String tip, Object evaluated) {
-        return EUIUtils.format(tip, evaluated);
+        return evaluated instanceof Integer ? pluralEvaluated(tip, evaluated) : EUIUtils.format(tip, evaluated);
     }
 
     public static String pluralEvaluated(String tip, Object evaluated) {
@@ -736,11 +736,11 @@ public class PCLCoreStrings extends PCLStrings
     }
 
     public static String pluralForce(String tip) {
-        return EUISmartText.parseLogicString(plural(tip, 2));
+        return EUISmartText.parseLogicString(EUIUtils.format(tip, 2));
     }
 
     public static String singularForce(String tip) {
-        return EUISmartText.parseLogicString(plural(tip, 1));
+        return EUISmartText.parseLogicString(EUIUtils.format(tip, 1));
     }
 
     public static String past(Object obj) {

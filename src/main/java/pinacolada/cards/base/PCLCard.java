@@ -1065,7 +1065,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
             if (cardData.canToggleFromPopup) {
                 dynamicTooltips.add(PGR.core.tooltips.multiform);
             }
-            else if (isUnique()) {
+            if (isUnique()) {
                 dynamicTooltips.add(PGR.core.tooltips.unique);
             }
         }

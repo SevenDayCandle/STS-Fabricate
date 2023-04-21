@@ -12,9 +12,9 @@ import org.apache.commons.lang3.StringUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.interfaces.providers.PointerProvider;
-import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PCond;
@@ -134,7 +134,7 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
     }
 
     @Override
-    public boolean hasChildType(Class<? extends PSkill> childType)
+    public boolean hasChildType(Class<?> childType)
     {
         return super.hasChildType(childType) || EUIUtils.any(effects, child -> childType.isInstance(child) || (child != null && child.hasChildType(childType)));
     }

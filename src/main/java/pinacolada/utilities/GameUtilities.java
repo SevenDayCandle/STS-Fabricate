@@ -29,12 +29,11 @@ import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.monsters.MonsterGroup;
 import com.megacrit.cardcrawl.orbs.*;
-import com.megacrit.cardcrawl.powers.AbstractPower;
-import com.megacrit.cardcrawl.powers.ArtifactPower;
-import com.megacrit.cardcrawl.powers.MinionPower;
-import com.megacrit.cardcrawl.powers.RegrowPower;
+import com.megacrit.cardcrawl.powers.*;
 import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
+import com.megacrit.cardcrawl.relics.CloakClasp;
+import com.megacrit.cardcrawl.relics.Orichalcum;
 import com.megacrit.cardcrawl.relics.PrismaticShard;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import com.megacrit.cardcrawl.rooms.MonsterRoomBoss;
@@ -70,15 +69,24 @@ import pinacolada.dungeon.PCLDungeon;
 import pinacolada.effects.SFX;
 import pinacolada.interfaces.listeners.OnTryApplyPowerListener;
 import pinacolada.interfaces.listeners.OnTryReducePowerListener;
+import pinacolada.interfaces.markers.PMultiBase;
+import pinacolada.interfaces.subscribers.OnEndOfTurnFirstSubscriber;
+import pinacolada.interfaces.subscribers.OnEndOfTurnLastSubscriber;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.monsters.PCLIntentInfo;
 import pinacolada.orbs.PCLOrb;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.powers.PCLPowerHelper;
+import pinacolada.powers.PSkillPower;
+import pinacolada.relics.PCLPointerRelic;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.pcl.PCLCoreResources;
+import pinacolada.skills.PSkill;
+import pinacolada.skills.skills.PTrigger;
+import pinacolada.skills.skills.base.moves.PMove_GainBlock;
+import pinacolada.skills.skills.base.primary.PTrigger_When;
 import pinacolada.stances.PCLStanceHelper;
 
 import java.lang.reflect.Field;
@@ -610,6 +618,11 @@ public class GameUtilities
         return result;
     }
 
+    public static int getBlockedHits(AbstractCreature creature)
+    {
+        return GameUtilities.getPowerAmount(creature, BufferPower.POWER_ID);
+    }
+
     public static BobEffect getBobEffect(AbstractMonster mo)
     {
         return ReflectionHacks.getPrivate(mo, AbstractMonster.class, "bobEffect");
@@ -779,6 +792,103 @@ public class GameUtilities
         return result;
     }
 
+    // TODO less hardcoded approach to checking end of turn powers
+    public static int getEndOfTurnBlock(AbstractCreature creature)
+    {
+        int amount = 0;
+        if (creature != null)
+        {
+            // Check end of turn powers (base game powers plus custom Fabricate powers)
+            if (creature.powers != null)
+            {
+                for (AbstractPower p : creature.powers)
+                {
+                    if (isPowerBlockGranting(p))
+                    {
+                        amount += p.amount;
+                    }
+                    else if (p instanceof PSkillPower)
+                    {
+                        amount += getEndOfTurnBlockFromTriggers(((PSkillPower) p).ptriggers);
+                    }
+                }
+            }
+
+
+            if (creature instanceof AbstractPlayer)
+            {
+                // Check end of turn relics
+                for (AbstractRelic r : ((AbstractPlayer) creature).relics)
+                {
+                    if (Orichalcum.ID.equals(r.relicId))
+                    {
+                        amount += 6; // Hardcoded stuff, there's a constant but Orichalcum doesn't actually use it :(
+                    }
+                    else if (CloakClasp.ID.equals(r.relicId))
+                    {
+                        amount += ((AbstractPlayer) creature).hand.size(); // Hardcoded logic in Cloak Clasp
+                    }
+                    // TODO correct this once pointer relics are fully implemented
+                    else if (r instanceof PCLPointerRelic)
+                    {
+                        amount += getEndOfTurnBlockFromTriggers(((PCLPointerRelic) r).getPowerEffects());
+                    }
+                }
+
+                // TODO check for custom pointer orbs
+                // Check end of turn orbs
+                for (AbstractOrb o : ((AbstractPlayer) creature).orbs)
+                {
+                    if (o != null && isOrbBlockGranting(o))
+                    {
+                        amount += o.passiveAmount;
+                    }
+                }
+            }
+
+        }
+        return amount;
+    }
+
+    protected static boolean isOrbBlockGranting(AbstractOrb o)
+    {
+        return Frost.ORB_ID.equals(o.ID);
+    }
+
+    protected static boolean isPowerBlockGranting(AbstractPower p)
+    {
+        return PlatedArmorPower.POWER_ID.equals(p.ID) || MetallicizePower.POWER_ID.equals(p.ID);
+    }
+
+    // TODO less naive approach that accounts for custom conds and out-of-order move hierarchies
+    protected static int getEndOfTurnBlockFromTriggers(Iterable<PTrigger> triggers)
+    {
+        int amount = 0;
+        for (PTrigger trigger : triggers)
+        {
+            if (trigger instanceof PTrigger_When
+                    && (trigger.hasChildType(OnEndOfTurnFirstSubscriber.class) || trigger.hasChildType(OnEndOfTurnLastSubscriber.class)))
+            {
+                PSkill<?> skill = trigger.getLowestChild();
+                if (skill instanceof PMove_GainBlock)
+                {
+                    amount += skill.amount;
+                }
+                else if (skill instanceof PMultiBase<?>)
+                {
+                    for (PSkill<?> subskill : ((PMultiBase<?>) skill).getSubEffects())
+                    {
+                        if (subskill instanceof PMove_GainBlock)
+                        {
+                            amount += subskill.amount;
+                        }
+                    }
+                }
+            }
+        }
+        return amount;
+    }
+
     public static int getHP(AbstractCreature creature, boolean addTempHP, boolean addBlock)
     {
         return creature.currentHealth + (addTempHP ? TempHPField.tempHp.get(creature) : 0) + (addBlock ? creature.currentBlock : 0);
@@ -793,7 +903,7 @@ public class GameUtilities
         
         if (amount > 0 && subtractBlock)
         {
-            int blocked = Math.min(c.currentBlock, amount);
+            int blocked = Math.min(c.currentBlock + GameUtilities.getEndOfTurnBlock(c), amount);
             amount -= blocked;
         }
 

@@ -66,6 +66,8 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider
         super.atPreBattle();
         for (PSkill<?> be : getEffects())
         {
+            // TODO use power effects, and create special skills for relics to distinguish at start of battle from perpetual effects
+            // TODO clickable relic when interactable
             be.subscribeChildren();
         }
     }

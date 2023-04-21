@@ -1065,15 +1065,13 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
     }
 
     // Necessary because we need to pass in class names, which are not reified
-    @SuppressWarnings("rawtypes")
-    public boolean hasChildType(Class<? extends PSkill> childType)
+    public boolean hasChildType(Class<?> childType)
     {
         return childType.isInstance(childEffect) || (childEffect != null && childEffect.hasChildType(childType));
     }
 
     // Necessary because we need to pass in class names, which are not reified
-    @SuppressWarnings("rawtypes")
-    public final boolean hasParentType(Class<? extends PSkill> parentType)
+    public final boolean hasParentType(Class<?> parentType)
     {
         return parentType.isInstance(this) || (parent != null && parent.hasParentType(parentType));
     }

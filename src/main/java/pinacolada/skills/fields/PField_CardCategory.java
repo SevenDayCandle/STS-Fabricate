@@ -202,7 +202,7 @@ public class PField_CardCategory extends PField_CardGeneric
 
     public String getCardAndString(Object value)
     {
-        return getCardXString(PField::getAffinityAndString, PCLCoreStrings::joinWithAnd, value);
+        return getCardXString(PField::getAffinityAndString, PCLCoreStrings::joinWithAnd, (s) -> EUIUtils.format(s, value));
     }
 
     public String getCardAndString()
@@ -212,7 +212,7 @@ public class PField_CardCategory extends PField_CardGeneric
 
     public String getCardOrString(Object value)
     {
-        return getCardXString(PField::getAffinityOrString, PCLCoreStrings::joinWithOr, value);
+        return getCardXString(PField::getAffinityOrString, PCLCoreStrings::joinWithOr, (s) -> EUIUtils.format(s, value));
     }
 
     public String getCardOrString()
@@ -232,10 +232,10 @@ public class PField_CardCategory extends PField_CardGeneric
 
     public String getFullCardStringSingular()
     {
-        return !cardIDs.isEmpty() ? getCardIDOrString() : getCardOrString(1);
+        return !cardIDs.isEmpty() ? getCardIDOrString() : getCardXString(PField::getAffinityOrString, PCLCoreStrings::joinWithOr, PCLCoreStrings::singularForce);
     }
 
-    public final String getCardXString(FuncT1<String, ArrayList<PCLAffinity>> affinityFunc, FuncT1<String, ArrayList<String>> joinFunc, Object value)
+    public final String getCardXString(FuncT1<String, ArrayList<PCLAffinity>> affinityFunc, FuncT1<String, ArrayList<String>> joinFunc, FuncT1<String, String> pluralFunc)
     {
         ArrayList<String> stringsToJoin = new ArrayList<>();
         if (!costs.isEmpty())
@@ -260,11 +260,11 @@ public class PField_CardCategory extends PField_CardGeneric
         }
         if (!types.isEmpty())
         {
-            stringsToJoin.add(joinFunc.invoke(EUIUtils.map(types, type -> PCLCoreStrings.plural(GameUtilities.tooltipForType(type), value))));
+            stringsToJoin.add(joinFunc.invoke(EUIUtils.map(types, type -> pluralFunc.invoke(GameUtilities.tooltipForType(type).plural()))));
         }
         else
         {
-            stringsToJoin.add(EUIUtils.format(PSkill.TEXT.subjects_cardN, value));
+            stringsToJoin.add(pluralFunc.invoke(PSkill.TEXT.subjects_cardN));
         }
 
         return EUIUtils.joinStrings(" ", stringsToJoin);

@@ -1027,7 +1027,10 @@ public class CombatManager
             subscriberDo(OnPhaseChangedSubscriber.class, s -> s.onPhaseChanged(currentPhase));
             controlPile.refreshCards();
             summons.applyPowers();
-            updateEstimatedDamage();
+            if (PGR.config.showEstimatedDamage.get())
+            {
+                updateEstimatedDamage();
+            }
             if (shouldRefreshHand)
             {
                 shouldRefreshHand = false;
@@ -1040,7 +1043,7 @@ public class CombatManager
     {
         ArrayList<PCLIntentInfo> intents = GameUtilities.getIntents();
 
-        int bufferCount = GameUtilities.getPowerAmount(BufferPower.POWER_ID);
+        int bufferCount = GameUtilities.getBlockedHits(player);
         int expectedDamage = 0;
 
         for (PCLIntentInfo intent : intents)
