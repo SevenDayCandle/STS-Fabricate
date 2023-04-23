@@ -54,14 +54,18 @@ public class PTrait_BlockMultiplier extends PBlockTrait<PField_Empty>
     }
 
     @Override
-    public String getSubText()
-    {
-        return EUIRM.strings.numNoun(getAmountRawString() + "%", getSubDescText());
-    }
-
-    @Override
     public boolean isDetrimental()
     {
         return amount < 0;
+    }
+
+    @Override
+    public String getSubText()
+    {
+        if (PGR.config.expandAbbreviatedEffects.get())
+        {
+            return TEXT.act_gainAmount(getAmountRawString() + "%", getSubDescText());
+        }
+        return EUIRM.strings.numNoun(getAmountRawString() + "%", getSubDescText());
     }
 }

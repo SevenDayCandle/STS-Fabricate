@@ -8,6 +8,7 @@ import pinacolada.monsters.PCLCardAlly;
 public class TriggerAllyAction extends PCLAction<PCLCardAlly>
 {
     public final PCLCardAlly ally;
+    public boolean manual = true;
 
     public TriggerAllyAction(PCLCardAlly slot)
     {
@@ -21,6 +22,12 @@ public class TriggerAllyAction extends PCLAction<PCLCardAlly>
         this.ally = slot;
     }
 
+    public TriggerAllyAction setManual(boolean value)
+    {
+        this.manual = value;
+        return this;
+    }
+
     @Override
     protected void firstUpdate()
     {
@@ -32,7 +39,7 @@ public class TriggerAllyAction extends PCLAction<PCLCardAlly>
 
         for (int i = 0; i < amount; i++)
         {
-            ally.takeTurn();
+            ally.takeTurn(manual);
         }
         complete(ally);
     }

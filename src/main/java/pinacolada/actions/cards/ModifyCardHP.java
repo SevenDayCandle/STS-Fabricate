@@ -29,6 +29,7 @@ public class ModifyCardHP extends GenericCardSelection
         this(card, 1, change, permanent, relative);
     }
 
+    // Only summons use heal
     @Override
     protected boolean canSelect(AbstractCard card)
     {

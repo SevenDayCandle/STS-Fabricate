@@ -9,6 +9,7 @@ import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.fields.PCLCardAffinities;
 
 import java.util.ArrayList;
+import java.util.function.Predicate;
 
 // Copied and modified from STS-AnimatorMod
 public class PCLCardSlot
@@ -80,6 +81,18 @@ public class PCLCardSlot
         {
             amount -= 1;
         }
+    }
+
+    public int findIndex(Predicate<Item> predicate)
+    {
+        for (int i = 0; i < cards.size(); i++)
+        {
+            if (predicate.test(cards.get(i)))
+            {
+                return i;
+            }
+        }
+        return -1;
     }
 
     public PCLCardAffinities getAffinities()

@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
+import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
@@ -37,9 +38,11 @@ import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.markers.PMultiBase;
+import pinacolada.interfaces.providers.ClickableProvider;
 import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.interfaces.subscribers.*;
 import pinacolada.monsters.PCLCardAlly;
+import pinacolada.powers.PCLClickableUse;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
@@ -798,7 +801,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
     }
 
     public AbstractMonster.Intent getIntent() {
-        return childEffect != null ? childEffect.getIntent() : AbstractMonster.Intent.MAGIC;
+        return childEffect != null ? childEffect.getIntent() : AbstractMonster.Intent.NONE;
     }
 
     public final PSkill<?> getLowestChild()
@@ -1219,6 +1222,11 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return this.childEffect != null ? this.childEffect.modifyDamage(info, amount) : amount;
     }
 
+    public float modifyDamageIncoming(PCLUseInfo info, float damage, DamageInfo.DamageType type)
+    {
+        return this.childEffect != null ? this.childEffect.modifyDamageIncoming(info, amount, type) : amount;
+    }
+
     public float modifyHeal(PCLUseInfo info, float amount)
     {
         return this.childEffect != null ? this.childEffect.modifyHeal(info, amount) : amount;
@@ -1232,6 +1240,16 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
     public float modifyMagicNumber(PCLUseInfo info, float amount)
     {
         return this.childEffect != null ? this.childEffect.modifyMagicNumber(info, amount) : amount;
+    }
+
+    public float modifyOrbIncoming(PCLUseInfo info, float amount)
+    {
+        return this.childEffect != null ? this.childEffect.modifyOrbIncoming(info, amount) : amount;
+    }
+
+    public float modifyOrbOutgoing(PCLUseInfo info, float amount)
+    {
+        return this.childEffect != null ? this.childEffect.modifyOrbOutgoing(info, amount) : amount;
     }
 
     public float modifyRightCount(PCLUseInfo info, float amount)
@@ -1535,6 +1553,11 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         }
 
         return this;
+    }
+
+    public PCLClickableUse getClickable(ClickableProvider provider)
+    {
+        return childEffect != null ? childEffect.getClickable(provider) : null;
     }
 
     public void subscribeChildren()

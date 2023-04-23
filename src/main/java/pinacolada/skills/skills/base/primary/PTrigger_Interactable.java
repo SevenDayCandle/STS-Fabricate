@@ -2,6 +2,8 @@ package pinacolada.skills.skills.base.primary;
 
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.interfaces.providers.ClickableProvider;
+import pinacolada.powers.PCLClickableUse;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
@@ -46,5 +48,11 @@ public class PTrigger_Interactable extends PTrigger
     @Override
     public void subscribeChildren()
     {
+    }
+
+    @Override
+    public PCLClickableUse getClickable(ClickableProvider provider)
+    {
+        return new PCLClickableUse(provider, getChild(), amount <= 0 ? -1 : amount, !fields.not, true);
     }
 }

@@ -120,7 +120,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
                 .setColor(Settings.BLUE_TEXT_COLOR)
                 .setLabel(PGR.core.strings.cedit_condition)
                 .setTooltip(PGR.core.strings.cedit_condition, PGR.core.strings.cetut_effectCondition);
-        addCondition = new EUIButton(EUIRM.images.plus.texture(), new OriginRelativeHitbox(hb, scale(48), scale(48), MENU_WIDTH, 0))
+        addCondition = new EUIButton(EUIRM.images.plus.texture(), new OriginRelativeHitbox(hb, scale(36), scale(36), MENU_WIDTH, 0))
                 .setOnClick(() -> conditionGroup.addEffectSlot())
                 .setClickDelay(0.02f);
         ifElseToggle = (EUIToggle) new EUIToggle(new OriginRelativeHitbox(hb, MENU_WIDTH / 1.7f, MENU_HEIGHT, MENU_WIDTH * 1.9f, 0))
@@ -145,7 +145,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
                 .setColor(Settings.BLUE_TEXT_COLOR)
                 .setLabel(PGR.core.strings.cedit_effect)
                 .setTooltip(PGR.core.strings.cedit_effect, PGR.core.strings.cetut_effectEffect);
-        addEffect = new EUIButton(EUIRM.images.plus.texture(), new OriginRelativeHitbox(hb, scale(48), scale(48), MENU_WIDTH, 0))
+        addEffect = new EUIButton(EUIRM.images.plus.texture(), new OriginRelativeHitbox(hb, scale(36), scale(36), MENU_WIDTH, 0))
                 .setOnClick(() -> effectGroup.addEffectSlot())
                 .setClickDelay(0.02f);
         choicesEditor = new PCLValueEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 4, MENU_HEIGHT, MENU_WIDTH * 2.5f, 0)
@@ -162,7 +162,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
                 .setColor(Settings.BLUE_TEXT_COLOR)
                 .setTooltip(PGR.core.strings.cedit_modifier, PGR.core.strings.cetut_effectModifier)
                 .setLabel(PGR.core.strings.cedit_modifier);
-        addModifier = new EUIButton(EUIRM.images.plus.texture(), new OriginRelativeHitbox(hb, scale(48), scale(48), MENU_WIDTH, 0))
+        addModifier = new EUIButton(EUIRM.images.plus.texture(), new OriginRelativeHitbox(hb, scale(36), scale(36), MENU_WIDTH, 0))
                 .setOnClick(() -> modifierGroup.addEffectSlot())
                 .setClickDelay(0.02f);
     }

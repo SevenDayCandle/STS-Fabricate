@@ -16,7 +16,7 @@ public class Curse_Shame extends PCLCard
     public static final String ATLAS_URL = "curse/shame";
     public static final PCLCardData DATA = register(Curse_Shame.class)
             .setImagePathFromAtlasUrl(ATLAS_URL)
-            .setCurse(-2, PCLCardTarget.None, false, true)
+            .setCurse(-2, PCLCardTarget.None, false)
             .setTags(PCLCardTag.Unplayable)
             .setAffinities(PCLAffinity.Purple);
 

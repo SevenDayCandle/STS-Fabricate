@@ -300,6 +300,7 @@ public class PCLCustomCardSlot
         {
             CardForm f = new CardForm();
             f.target = builder.cardTarget.name();
+            f.timing = builder.timing.name();
             f.attackType = builder.attackType.name();
             f.damageEffect = builder.attackSkill != null ? builder.attackSkill.serialize() : null;
             f.blockEffect = builder.blockSkill != null ? builder.blockSkill.serialize() : null;
@@ -421,6 +422,7 @@ public class PCLCustomCardSlot
         public String damageEffect;
         public String blockEffect;
         public String target;
+        public String timing;
         public String[] effects;
         public String[] powerEffects;
 

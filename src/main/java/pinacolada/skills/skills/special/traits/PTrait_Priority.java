@@ -29,13 +29,13 @@ public class PTrait_Priority extends PTrait<PField_Empty>
     @Override
     public String getSubDescText()
     {
-        return PGR.core.tooltips.priority.title;
+        return PGR.core.tooltips.timing.title;
     }
 
     @Override
     public String getSubSampleText()
     {
-        return PGR.core.tooltips.priority.title;
+        return PGR.core.tooltips.timing.title;
     }
 
     @Override

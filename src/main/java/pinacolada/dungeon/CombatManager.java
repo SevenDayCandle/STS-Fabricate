@@ -34,7 +34,7 @@ import extendedui.ui.EUIBase;
 import extendedui.ui.GridCardSelectScreenHelper;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
-import pinacolada.actions.special.PCLHasteAction;
+import pinacolada.actions.special.HasteAction;
 import pinacolada.annotations.CombatSubscriber;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLAffinity;
@@ -344,7 +344,10 @@ public class CombatManager
         {
             s.onCardMoved(card, source, destination);
         }
-        PCLActions.last.callback(controlPile::refreshCards);
+        PCLActions.last.callback(() -> {
+            controlPile.refreshCards();
+            DrawPileCardPreview.refreshAll();
+        });
     }
 
     public static void onCardPurged(AbstractCard card)
@@ -404,9 +407,9 @@ public class CombatManager
         return subscriberCanDeny(OnPCLClickableUsedSubscriber.class, s -> s.onClickablePowerUsed(condition, target, uses));
     }
 
-    public static boolean onCooldownTriggered(AbstractCard card, AbstractCreature m, CooldownProvider cooldown)
+    public static boolean onCooldownTriggered(AbstractCreature source, AbstractCreature m, CooldownProvider cooldown)
     {
-        return subscriberCanDeny(OnCooldownTriggeredSubscriber.class, s -> s.onCooldownTriggered(card, m, cooldown));
+        return subscriberCanDeny(OnCooldownTriggeredSubscriber.class, s -> s.onCooldownTriggered(cooldown, source, m));
     }
 
     public static void onDamageAction(AbstractGameAction action, AbstractCreature target, DamageInfo info, AbstractGameAction.AttackEffect effect)
@@ -875,7 +878,7 @@ public class CombatManager
 
         if (PCLCardTag.Haste.has(card))
         {
-            PCLActions.top.add(new PCLHasteAction(card));
+            PCLActions.top.add(new HasteAction(card));
         }
     }
 

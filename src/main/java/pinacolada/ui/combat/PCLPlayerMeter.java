@@ -4,20 +4,21 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
+import extendedui.EUI;
+import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.configuration.STSConfigItem;
 import extendedui.ui.controls.EUIButton;
+import extendedui.ui.controls.EUITutorial;
+import extendedui.ui.controls.EUITutorialPage;
 import extendedui.ui.hitboxes.DraggableHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.ui.tooltips.EUITooltip;
-import extendedui.ui.tooltips.FakeFtue;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLAffinity;
-import pinacolada.interfaces.providers.ClickableProvider;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.interfaces.providers.ClickableProvider;
 import pinacolada.powers.PCLClickableUse;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
@@ -30,6 +31,12 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implement
         return resources.createID(type.getSimpleName());
     }
 
+    public static EUITutorialPage AFFINITY_TUTORIAL = new EUITutorialPage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.tooltips.affinityGeneral.title), PGR.core.strings.tutorial_affinityTutorial);
+    public static EUITutorialPage TAG_TUTORIAL = new EUITutorialPage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.strings.cedit_tags), PGR.core.strings.tutorial_tagTutorial);
+    public static EUITutorialPage SUMMON_TUTORIAL1 = new EUITutorialPage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.tooltips.summon.title, 1), PGR.core.strings.tutorial_summonTutorial1);
+    public static EUITutorialPage SUMMON_TUTORIAL2 = new EUITutorialPage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.tooltips.summon.title, 2), PGR.core.strings.tutorial_summonTutorial2);
+    public static EUITutorialPage SUMMON_TUTORIAL3 = new EUITutorialPage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.tooltips.summon.title, 3), PGR.core.strings.tutorial_summonTutorial3);
+    public static EUITutorialPage SUMMON_TUTORIAL4 = new EUITutorialPage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.tooltips.summon.title, 4), PGR.core.strings.tutorial_summonTutorial4);
     public static final int TARGET_CURRENT = 0;
     public static final int TARGET_NEXT = 1;
     public static final int DEFAULT_REROLLS = 1;
@@ -39,14 +46,24 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implement
     protected int currentScore;
     protected int highestScore;
 
+    public static String makeTitle(String category, String addendum)
+    {
+        return category + ": " + addendum;
+    }
+
+    public static String makeTitle(String category, String addendum, int index)
+    {
+        return category + ": " + EUIRM.strings.generic2(addendum, index);
+    }
+
     public PCLPlayerMeter(String id, STSConfigItem<Vector2> config, float iconSize)
     {
         super(config, new DraggableHitbox(screenW(0.0366f), screenH(0.425f), iconSize, iconSize, true), iconSize);
         this.id = id;
-        infoIcon = new EUIButton(ImageMaster.INTENT_UNKNOWN, new RelativeHitbox(hb, scale(40f), scale(40f), scale(100f), scale(20f)))
+        infoIcon = new EUIButton(EUIRM.images.info.texture(), new RelativeHitbox(hb, scale(40f), scale(40f), scale(20), scale(-50f)))
                 .setTooltip(getInfoTitle(), getInfoMainDescrption() + EUIUtils.DOUBLE_SPLIT_LINE + PGR.core.strings.tutorial_learnMore)
                 .setOnClick(() -> {
-                    AbstractDungeon.ftue = new FakeFtue(getInfoTitle(), getInfoDescription());
+                    EUI.ftueScreen.open(new EUITutorial(getInfoPages()));
                 });
     }
 
@@ -95,7 +112,7 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implement
         return currentScore;
     }
 
-    public abstract String[] getInfoDescription();
+    public abstract EUITutorialPage[] getInfoPages();
 
     public abstract String getInfoMainDescrption();
 

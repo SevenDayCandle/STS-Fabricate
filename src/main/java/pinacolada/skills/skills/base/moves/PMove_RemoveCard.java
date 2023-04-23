@@ -1,23 +1,18 @@
 package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUIRM;
 import extendedui.interfaces.delegates.ActionT1;
-import pinacolada.actions.PCLActions;
-import pinacolada.actions.piles.SelectFromPile;
+import pinacolada.actions.piles.RemoveFromPile;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
-import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.effects.PCLEffects;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.skills.PCallbackMove;
-import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
 public class PMove_RemoveCard extends PCallbackMove<PField_CardCategory>
@@ -68,23 +63,10 @@ public class PMove_RemoveCard extends PCallbackMove<PField_CardCategory>
     @Override
     public void use(PCLUseInfo info, ActionT1<PCLUseInfo> callback)
     {
-        getActions().add(fields.createFilteredAction(SelectFromPile::new, info, extra))
-                .setOptions((useParent || fields.groupTypes.isEmpty() ? PCLCardSelection.Random : PCLCardSelection.Manual).toSelection(), !fields.forced, false, false, true)
+        getActions().add(fields.createAction(RemoveFromPile::new, info, extra))
+                .setFilter(c -> fields.getFullCardFilter().invoke(c))
+                .setAnyNumber(!fields.forced)
                 .addCallback(cards -> {
-                    // Remove all copies of the cards in play
-                    for (AbstractCard c : cards)
-                    {
-                        AbstractCard masterCopy = GameUtilities.getMasterDeckInstance(c.uuid);
-                        if (masterCopy != null)
-                        {
-                            PCLEffects.Queue.showCardBriefly(masterCopy);
-                            AbstractDungeon.player.masterDeck.removeCard(masterCopy);
-                        }
-                        for (AbstractCard copy : GameUtilities.getAllInBattleInstances(c.uuid))
-                        {
-                            PCLActions.bottom.purge(copy).showEffect(true, false);
-                        }
-                    }
                     info.setData(cards);
                     callback.invoke(info);
                     if (this.childEffect != null)
@@ -100,6 +82,6 @@ public class PMove_RemoveCard extends PCallbackMove<PField_CardCategory>
         String cString = useParent ? TEXT.subjects_them
                 : fields.groupTypes.size() > 0 ? EUIRM.strings.numNoun(extra > amount ? TEXT.subjects_xOfY(getAmountRawString(), getExtraRawString()) : getAmountRawString(), fields.getCardOrString(getRawString(EXTRA_CHAR)))
                 : TEXT.subjects_thisCard;
-        return TEXT.act_removeFrom(cString, TEXT.cpile_deck);
+        return TEXT.act_removeFrom(cString, fields.getGroupString());
     }
 }

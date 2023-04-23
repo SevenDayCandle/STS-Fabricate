@@ -95,6 +95,7 @@ public class CardPoolScreenPatches
                 AbstractDungeon.overlayMenu.cancelButton.hide();
             }
             GameUtilities.setTopPanelVisible(false);
+            c.unhover();
             currentEffect = new PCLCustomCardEditCardScreen(cardSlot, true)
                     .setOnSave(() -> {
                         cardSlot.commitBuilder();

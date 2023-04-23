@@ -96,6 +96,10 @@ public class PCLPlayerSystem extends EUIBase
         return getActiveMeter().getLevel(affinity);
     }
 
+    public PCLPlayerMeter getMeter(AbstractPlayer.PlayerClass playerClass) {
+        return meters.get(playerClass);
+    }
+
     public Collection<PCLPlayerMeter> getMeters() {return meters.values();}
 
     public Object getRerollDescription()

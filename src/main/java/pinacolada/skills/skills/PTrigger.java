@@ -1,6 +1,5 @@
 package pinacolada.skills.skills;
 
-import com.megacrit.cardcrawl.cards.DamageInfo;
 import extendedui.interfaces.delegates.FuncT0;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -64,16 +63,6 @@ public abstract class PTrigger extends PPrimary<PField_Not>
     public static PTrigger when(int perTurn, PSkill<?>... effects)
     {
         return chain(new PTrigger_When().setAmount(perTurn), effects);
-    }
-
-    public float atDamageGive(PCLUseInfo info, float damage, DamageInfo.DamageType type)
-    {
-        return modifyDamage(info, damage);
-    }
-
-    public float atDamageReceive(PCLUseInfo info, float damage, DamageInfo.DamageType type)
-    {
-        return modifyDamage(info, damage);
     }
 
     public PTrigger chain(PSkill<?>... effects)

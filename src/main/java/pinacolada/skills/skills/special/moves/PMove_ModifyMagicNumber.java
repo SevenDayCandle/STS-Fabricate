@@ -9,22 +9,22 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.skills.base.moves.PMove_Modify;
 
-public class PMove_ModifyPriority extends PMove_Modify<PField_CardCategory>
+public class PMove_ModifyMagicNumber extends PMove_Modify<PField_CardCategory>
 {
-    public static final PSkillData<PField_CardCategory> DATA = PMove_Modify.register(PMove_ModifyPriority.class, PField_CardCategory.class)
+    public static final PSkillData<PField_CardCategory> DATA = PMove_Modify.register(PMove_ModifyMagicNumber.class, PField_CardCategory.class)
             .pclOnly();
 
-    public PMove_ModifyPriority()
+    public PMove_ModifyMagicNumber()
     {
         this(1, 1);
     }
 
-    public PMove_ModifyPriority(PSkillSaveData content)
+    public PMove_ModifyMagicNumber(PSkillSaveData content)
     {
         super(DATA, content);
     }
 
-    public PMove_ModifyPriority(int amount, int priority)
+    public PMove_ModifyMagicNumber(int amount, int priority)
     {
         super(DATA, amount, priority);
     }
@@ -32,19 +32,19 @@ public class PMove_ModifyPriority extends PMove_Modify<PField_CardCategory>
     @Override
     public ActionT1<AbstractCard> getAction()
     {
-        return (c) -> getActions().modifyPriority(c, extra, true, true);
+        return (c) -> getActions().modifyMagicNumber(c, extra, true, true);
     }
 
     @Override
     public String getObjectSampleText()
     {
-        return PGR.core.tooltips.priority.title;
+        return PGR.core.tooltips.timing.title;
     }
 
     @Override
     public String getObjectText()
     {
-        return EUIRM.strings.numNoun(getExtraRawString(), PGR.core.tooltips.priority);
+        return EUIRM.strings.numNoun(getExtraRawString(), PGR.core.tooltips.timing);
     }
 
     @Override

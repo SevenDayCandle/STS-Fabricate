@@ -15,7 +15,7 @@ public class Curse_Writhe extends PCLCard
     public static final String ATLAS_URL = "curse/writhe";
     public static final PCLCardData DATA = register(Curse_Writhe.class)
             .setImagePathFromAtlasUrl(ATLAS_URL)
-            .setCurse(-2, PCLCardTarget.None, false, true)
+            .setCurse(-2, PCLCardTarget.None, false)
             .setTags(PCLCardTag.Unplayable.make(), PCLCardTag.Innate.make(-1))
             .setAffinities(PCLAffinity.Purple);
 

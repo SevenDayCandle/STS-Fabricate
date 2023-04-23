@@ -103,6 +103,14 @@ public class DrawPileCardPreview
         }
     }
 
+    public static void refreshAll()
+    {
+        for (DrawPileCardPreview p : PREVIEWS)
+        {
+            p.foundCard = p.provider.findCard();
+        }
+    }
+
     public static void updatePreviews()
     {
         // TODO show text prompting to cycle if multiple previews are present

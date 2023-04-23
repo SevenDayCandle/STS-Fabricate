@@ -18,7 +18,7 @@ public class SummonAllyAction extends PCLAction<PCLCard>
     public PCLCardAlly ally;
     public boolean requireTarget;
     public boolean retainPowers;
-    public boolean stun = false;
+    public boolean delayForTurn = true;
     public boolean showEffect = true;
     public boolean summonCardOnly = true;
     public boolean triggerOnSwap = true;
@@ -35,7 +35,7 @@ public class SummonAllyAction extends PCLAction<PCLCard>
     {
         this.requireTarget = requireTarget;
         this.retainPowers = retainPowers;
-        this.stun = stun;
+        this.delayForTurn = stun;
         this.showEffect = showEffect;
         this.summonCardOnly = summonCardOnly;
         return this;
@@ -90,7 +90,7 @@ public class SummonAllyAction extends PCLAction<PCLCard>
     protected void initializeAlly(boolean canTrigger)
     {
         PCLActions.bottom.callback(() -> {
-            this.ally.initializeForCard(card, retainPowers, stun);
+            this.ally.initializeForCard(card, retainPowers, delayForTurn);
 
             if (showEffect)
             {
@@ -99,7 +99,7 @@ public class SummonAllyAction extends PCLAction<PCLCard>
 
             if (canTrigger && triggerOnSwap)
             {
-                ally.takeTurn();
+                ally.takeTurn(true);
             }
         });
     }

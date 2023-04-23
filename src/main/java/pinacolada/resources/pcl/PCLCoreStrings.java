@@ -175,6 +175,10 @@ public class PCLCoreStrings extends PCLStrings
     public final String ctype_tagAll = cardtype.TEXT[14];
     public final String ctype_tagAoE = cardtype.TEXT[15];
     public final String ctype_tagRandom = cardtype.TEXT[16];
+    public final String ctype_turnStartFirst = cardtype.TEXT[17];
+    public final String ctype_turnStartLast = cardtype.TEXT[18];
+    public final String ctype_turnEndFirst = cardtype.TEXT[19];
+    public final String ctype_turnEndLast = cardtype.TEXT[20];
 
     // Character
     public final String csel_leftText = charselect.TEXT[0];  // Starting Cards:
@@ -190,7 +194,7 @@ public class PCLCoreStrings extends PCLStrings
     public final String csel_valueHeader = charselect.TEXT[13];
     public final String csel_hindranceValue = charselect.TEXT[14];
     public final String csel_hindranceDescription = charselect.TEXT[18];
-    public final String csel_affinityDescription = charselect.TEXT[19];
+    public final String csel_info = charselect.TEXT[19];
     public final String csel_unsavedChanges = charselect.TEXT[20];
     public final String csel_clear = charselect.TEXT[21];
     public final String csel_copyTo = charselect.TEXT[22];
@@ -244,7 +248,7 @@ public class PCLCoreStrings extends PCLStrings
     public final String misc_viewAugmentsNone = misc.TEXT[2];
     public final String misc_customCards = misc.TEXT[3];
     public final String misc_customCardsDesc = misc.TEXT[4];
-    public final String misc_pcl = misc.TEXT[5];
+    public final String misc_fabricate = misc.TEXT[5];
     public final String misc_leftClick = misc.TEXT[6];
     public final String misc_rightClick = misc.TEXT[7];
     public final String misc_tempPowerPrefix = misc.TEXT[8];

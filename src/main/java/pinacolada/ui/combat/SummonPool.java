@@ -13,13 +13,11 @@ import extendedui.interfaces.delegates.ActionT2;
 import extendedui.ui.EUIBase;
 import pinacolada.actions.PCLActions;
 import pinacolada.monsters.PCLCardAlly;
-import pinacolada.monsters.PCLCreature;
+import pinacolada.skills.skills.DelayTiming;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class SummonPool extends EUIBase
 {
@@ -129,15 +127,14 @@ public class SummonPool extends EUIBase
     public void onStartOfTurn()
     {
         assignedTargets.clear();
-        List<PCLCardAlly> sorted = summons.stream().filter(a -> a.priority >= PCLCreature.PRIORITY_START_FIRST).sorted((a, b) -> b.priority - a.priority).collect(Collectors.toList());
         for (PCLCardAlly ally : summons)
         {
             ally.loseBlock();
             ally.applyStartOfTurnPowers();
-        }
-        for (PCLCardAlly ally : sorted)
-        {
-            PCLActions.last.triggerAlly(ally);
+            if (ally.priority == DelayTiming.StartOfTurnFirst)
+            {
+                PCLActions.last.triggerAlly(ally, false);
+            }
         }
     }
 
@@ -146,9 +143,9 @@ public class SummonPool extends EUIBase
         for (PCLCardAlly ally : summons)
         {
             ally.applyStartOfTurnPostDrawPowers();
-            if (ally.priority == PCLCreature.PRIORITY_START_LAST)
+            if (ally.priority == DelayTiming.StartOfTurnLast)
             {
-                PCLActions.last.triggerAlly(ally);
+                PCLActions.last.triggerAlly(ally, false);
             }
         }
     }
@@ -157,19 +154,21 @@ public class SummonPool extends EUIBase
     {
         for (PCLCardAlly ally : summons)
         {
-            if (ally.priority == PCLCreature.PRIORITY_END_FIRST)
+            if (ally.priority == DelayTiming.EndOfTurnFirst)
             {
-                PCLActions.last.triggerAlly(ally);
+                PCLActions.last.triggerAlly(ally, false);
             }
         }
     }
 
     public void onEndOfTurnLast()
     {
-        List<PCLCardAlly> sorted = summons.stream().filter(a -> a.priority <= PCLCreature.PRIORITY_END_LAST).sorted((a, b) -> b.priority - a.priority).collect(Collectors.toList());
-        for (PCLCardAlly ally : sorted)
+        for (PCLCardAlly ally : summons)
         {
-            PCLActions.last.triggerAlly(ally);
+            if (ally.priority == DelayTiming.EndOfTurnLast)
+            {
+                PCLActions.last.triggerAlly(ally);
+            }
         }
     }
 

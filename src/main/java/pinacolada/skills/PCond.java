@@ -2,6 +2,7 @@ package pinacolada.skills;
 
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.Settings;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLAffinity;
@@ -526,6 +527,36 @@ public abstract class PCond<T extends PField> extends PSkill<T>
     }
 
     @Override
+    public float modifyDamageIncoming(PCLUseInfo info, float amount, DamageInfo.DamageType type)
+    {
+        if (this.childEffect != null && sourceCard != null && checkCondition(info, false, null))
+        {
+            return this.childEffect.modifyDamageIncoming(info, amount, type);
+        }
+        return amount;
+    }
+
+    @Override
+    public float modifyOrbIncoming(PCLUseInfo info, float amount)
+    {
+        if (this.childEffect != null && sourceCard != null && checkCondition(info, false, null))
+        {
+            return this.childEffect.modifyOrbIncoming(info, amount);
+        }
+        return amount;
+    }
+
+    @Override
+    public float modifyOrbOutgoing(PCLUseInfo info, float amount)
+    {
+        if (this.childEffect != null && sourceCard != null && checkCondition(info, false, null))
+        {
+            return this.childEffect.modifyOrbOutgoing(info, amount);
+        }
+        return amount;
+    }
+
+    @Override
     public void refresh(PCLUseInfo info, boolean conditionMet)
     {
         conditionMetCache = checkCondition(info, false, null);
@@ -568,6 +599,7 @@ public abstract class PCond<T extends PField> extends PSkill<T>
         }
     }
 
+    @Override
     public void use(PCLUseInfo info, int index)
     {
         if (checkCondition(info, true, null) && childEffect != null)
@@ -576,6 +608,7 @@ public abstract class PCond<T extends PField> extends PSkill<T>
         }
     }
 
+    @Override
     public void use(PCLUseInfo info, boolean isUsing)
     {
         if (checkCondition(info, isUsing, null) && childEffect != null)

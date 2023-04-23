@@ -222,7 +222,7 @@ public abstract class PCLLoadout
         // Dynamically add non-special curses
         for (PCLCardData data : PCLCardData.getAllData(false, true, d -> d.cardType == AbstractCard.CardType.CURSE && d.cardRarity != AbstractCard.CardRarity.SPECIAL))
         {
-            slot.addItem(data, -CURSE_VALUE);
+            slot.addItem(data, CURSE_VALUE);
         }
     }
 
@@ -301,11 +301,13 @@ public abstract class PCLLoadout
         {
             data.values.put(type, 0);
         }
-        data.getCardSlot(0).select(0, 5).markAllSeen();
-        data.getCardSlot(1).select(0, 5).markAllSeen();
+
+        int firstCommonIndex = Math.max(0, data.getCardSlot(3).findIndex(i -> i.estimatedValue == COMMON_CORE_VALUE));
+        data.getCardSlot(0).select(0, 4).markAllSeen();
+        data.getCardSlot(1).select(0, 4).markAllSeen();
         data.getCardSlot(2).select(0, 1).markCurrentSeen();
         data.getCardSlot(3).select(1, 1).markCurrentSeen();
-        data.getCardSlot(4).select(null);
+        data.getCardSlot(4).select(firstCommonIndex, 1).markCurrentSeen();
         data.getCardSlot(5).select(null);
         data.getRelicSlot(0).select((PCLRelic) null);
         data.getRelicSlot(1).select((PCLRelic) null);

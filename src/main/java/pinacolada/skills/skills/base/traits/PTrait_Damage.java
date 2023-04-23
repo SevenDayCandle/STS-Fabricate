@@ -2,6 +2,7 @@ package pinacolada.skills.skills.base.traits;
 
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
@@ -49,5 +50,15 @@ public class PTrait_Damage extends PDamageTrait<PField_Empty>
     public boolean isDetrimental()
     {
         return amount < 0;
+    }
+
+    @Override
+    public String getSubText()
+    {
+        if (PGR.config.expandAbbreviatedEffects.get())
+        {
+            return TEXT.act_deal(getAmountRawString(), getSubDescText());
+        }
+        return super.getSubText();
     }
 }

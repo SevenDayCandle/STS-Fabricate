@@ -147,6 +147,7 @@ public class PCLCoreTooltips extends PCLTooltips
     public EUITooltip limited = EUITooltip.findByID("Limited");
     public EUITooltip lockOn = EUITooltip.findByID("~Lock-On");
     public EUITooltip loyal = EUITooltip.findByID("Loyal");
+    public EUITooltip magic = EUITooltip.findByID("Magic");
     public EUITooltip malleable = EUITooltip.findByID("Malleable");
     public EUITooltip mantra = EUITooltip.findByID("Prayer"); // YES THIS THING IS CALLED PRAYER
     public EUITooltip mark = EUITooltip.findByID("Mark");
@@ -169,9 +170,6 @@ public class PCLCoreTooltips extends PCLTooltips
     public EUITooltip plasma = EUITooltip.findByID("Plasma");
     public EUITooltip platedArmor = EUITooltip.findByID("Plated Armor");
     public EUITooltip poison = EUITooltip.findByID("Poison");
-    public EUITooltip priority = EUITooltip.findByID("Priority");
-    public EUITooltip priorityMinus = EUITooltip.findByID("Priority Minus");
-    public EUITooltip priorityPlus = EUITooltip.findByID("Priority Plus");
     public EUITooltip provoked = EUITooltip.findByID("Provoked");
     public EUITooltip purge = EUITooltip.findByID("~Purge");
     public EUITooltip ranged = EUITooltip.findByID("Ranged Damage");
@@ -204,9 +202,12 @@ public class PCLCoreTooltips extends PCLTooltips
     public EUITooltip tempHP = EUITooltip.findByID("Temporary HP");
     public EUITooltip thorns = EUITooltip.findByID("Thorns");
     public EUITooltip thousandCuts = EUITooltip.findByID("Thousand Cuts");
+    public EUITooltip timing = EUITooltip.findByID("Timing");
     public EUITooltip toxicology = EUITooltip.findByID("Toxicology");
     public EUITooltip transform = EUITooltip.findByID("Transform");
     public EUITooltip trigger = EUITooltip.findByID("Trigger");
+    public EUITooltip turnEnd = EUITooltip.findByID("Turn End Timing");
+    public EUITooltip turnStart = EUITooltip.findByID("Turn Start Timing");
     public EUITooltip unique = EUITooltip.findByID("Unique");
     public EUITooltip unplayable = EUITooltip.findByID("Unplayable");
     public EUITooltip vigor = EUITooltip.findByID("Vigor");
@@ -251,12 +252,13 @@ public class PCLCoreTooltips extends PCLTooltips
         tempHP.setIcon(PCLCoreImages.Tooltips.tempHP.texture());
         hp.setIcon(PCLCoreImages.CardIcons.hp.texture());
         block.setIcon(PCLCoreImages.Tooltips.block.texture());
+        cooldown.setIcon(PCLCoreImages.Tooltips.cooldown.texture());
         normalDamage.setIcon(PCLCoreImages.Tooltips.damage.texture());
         unique.setIcon(PCLCoreImages.CardIcons.unique.texture()).setIconSizeMulti(0.85f, 0.85f);
         soulbound.setIcon(PCLCoreImages.CardIcons.soulbound.texture()).setIconSizeMulti(0.85f, 0.85f);
         multiform.setIcon(PCLCoreImages.CardIcons.multiform.texture()).setIconSizeMulti(0.85f, 0.85f);
-        priorityMinus.setIcon(PCLCoreImages.CardIcons.priorityMinus.texture()).setIconSizeMulti(0.85f, 0.85f);
-        priorityPlus.setIcon(PCLCoreImages.CardIcons.priorityPlus.texture()).setIconSizeMulti(0.85f, 0.85f);
+        turnEnd.setIcon(PCLCoreImages.CardIcons.priorityMinus.texture()).setIconSizeMulti(0.85f, 0.85f);
+        turnStart.setIcon(PCLCoreImages.CardIcons.priorityPlus.texture()).setIconSizeMulti(0.85f, 0.85f);
         energy.setIconFunc(EUI::getEnergyIcon);
 
         affinityRed.setIconFunc(PCLAffinity.Red::getTextureRegion).setIconSizeMulti(0.85f, 0.85f);

@@ -16,6 +16,9 @@ import com.megacrit.cardcrawl.blights.AbstractBlight;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.cards.DamageInfo;
+import com.megacrit.cardcrawl.cards.curses.AscendersBane;
+import com.megacrit.cardcrawl.cards.curses.CurseOfTheBell;
+import com.megacrit.cardcrawl.cards.curses.Necronomicurse;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
@@ -39,7 +42,6 @@ import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import com.megacrit.cardcrawl.rooms.MonsterRoomBoss;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import com.megacrit.cardcrawl.screens.stats.AchievementGrid;
-import com.megacrit.cardcrawl.ui.FtueTip;
 import com.megacrit.cardcrawl.ui.panels.EnergyPanel;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import com.megacrit.cardcrawl.vfx.BobEffect;
@@ -258,6 +260,14 @@ public class GameUtilities
 
     public static boolean canRemoveFromDeck(AbstractCard card)
     {
+        // Hardcoded checks from CardGroup -_-
+        switch (card.cardID)
+        {
+            case Necronomicurse.ID:
+            case AscendersBane.ID:
+            case CurseOfTheBell.ID:
+                return false;
+        }
         return !SoulboundField.soulbound.get(card);
     }
 
@@ -2579,11 +2589,6 @@ public class GameUtilities
                 ClassUtils.Invoke(creature, "loadAnimation", animation.V1, animation.V2, 1f);
             }
         }*/
-    }
-
-    public static void setFtueTip(String name, String message, FtueTip.TipType type)
-    {
-        AbstractDungeon.ftue = new FtueTip(name, "~" + message, Settings.WIDTH * 0.5f, Settings.HEIGHT * 0.5f, type);
     }
 
     public static void setTopPanelVisible(boolean visible)

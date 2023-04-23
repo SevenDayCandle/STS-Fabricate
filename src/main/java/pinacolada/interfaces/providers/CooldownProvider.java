@@ -1,7 +1,6 @@
 package pinacolada.interfaces.providers;
 
 import com.badlogic.gdx.graphics.Color;
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import extendedui.utilities.ColoredString;
@@ -14,23 +13,23 @@ public interface CooldownProvider
     int getCooldown();
     int getBaseCooldown();
     void setCooldown(int value);
-    void activate(AbstractCard card, AbstractCreature m);
-    default void progressCooldownAndTrigger(AbstractCard card, AbstractCreature m, int amount)
+    default boolean progressCooldownAndTrigger(AbstractCreature source, AbstractCreature m, int amount)
     {
-        boolean canProgress = CombatManager.onCooldownTriggered(card, m, this);
+        boolean canProgress = CombatManager.onCooldownTriggered(source, m, this);
         if (canProgress)
         {
             int value = getCooldown();
             if (value <= 0)
             {
                 reset();
-                activate(card, m);
+                return true;
             }
             else
             {
                 setCooldown(Math.max(0, value - amount));
             }
         }
+        return false;
     }
     default void reset()
     {

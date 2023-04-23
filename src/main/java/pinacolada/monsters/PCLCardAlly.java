@@ -26,11 +26,12 @@ import pinacolada.actions.PCLActions;
 import pinacolada.actions.special.PCLCreatureAttackAnimationAction;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.dungeon.CombatManager;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
 import pinacolada.interfaces.markers.SummonOnlyMove;
-import pinacolada.dungeon.CombatManager;
-import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.interfaces.providers.CooldownProvider;
 import pinacolada.monsters.animations.PCLAllyAnimation;
 import pinacolada.monsters.animations.PCLSlotAnimation;
 import pinacolada.monsters.animations.pcl.PCLGeneralAllyAnimation;
@@ -40,6 +41,7 @@ import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.Skills;
+import pinacolada.skills.skills.DelayTiming;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
@@ -56,6 +58,7 @@ public class PCLCardAlly extends PCLCreature
     protected EUICardPreview preview;
     public PCLCard card;
     public AbstractCreature target;
+    public DelayTiming priority;
 
     public static void registerAnimation(AbstractCard.CardColor color, FuncT1<PCLAllyAnimation, PCLCardAlly> animationFunc)
     {
@@ -68,19 +71,20 @@ public class PCLCardAlly extends PCLCreature
         this.animation = emptyAnimation;
     }
 
-    public void initializeForCard(PCLCard card, boolean clearPowers, boolean stun)
+    public void initializeForCard(PCLCard card, boolean clearPowers, boolean delayForTurn)
     {
         card.owner = this;
         this.card = card;
-        this.preview = new EUICardPreview(card.makeStatEquivalentCopy(), false);
+        this.preview = new EUICardPreview(card, false);
         this.name = card.name;
         this.maxHealth = Math.max(1, card.heal);
         this.currentHealth = MathUtils.clamp(card.currentHealth, 1, this.maxHealth);
-        this.priority = card.magicNumber;
-        this.hasTakenTurn = movesBeforePlayer();
+        this.priority = card.timing;
+        this.hasTakenTurn = delayForTurn;
         this.showHealthBar();
         this.healthBarUpdatedEvent();
         this.unhover();
+        card.stopFlash();
 
         FuncT1<PCLAllyAnimation, PCLCardAlly> animFunc = ANIMATION_MAP.get(card.color);
         if (animFunc != null)
@@ -112,11 +116,6 @@ public class PCLCardAlly extends PCLCreature
                 }
             }
             this.powers.removeIf(p -> p instanceof PSkillPower || p instanceof PSpecialCardPower);
-        }
-
-        if (stun)
-        {
-            this.stunned = true;
         }
 
         for (PSkill<?> s : card.getFullEffects())
@@ -198,13 +197,13 @@ public class PCLCardAlly extends PCLCreature
     }
 
     @Override
-    public void performActions()
+    public void performActions(boolean manual)
     {
         if (card != null)
         {
             refreshAction();
             final PCLUseInfo info = CombatManager.playerSystem.generateInfo(card, this, target);
-            PCLActions.bottom.add(new PCLCreatureAttackAnimationAction(this));
+            PCLActions.bottom.add(new PCLCreatureAttackAnimationAction(this, !manual));
             card.useEffectsWithoutPowers(info);
             CombatManager.playerSystem.onCardPlayed(card, info, true);
             PCLActions.delayed.callback(() -> CombatManager.removeDamagePowers(this));
@@ -356,8 +355,8 @@ public class PCLCardAlly extends PCLCreature
         {
             card.setPosition(this.hb.cX, this.hb.y + scale(60f) + getBobEffect().y * -0.5f);
             card.setDrawScale(0.2f);
-            card.updateGlow(3f);
-            card.renderGlow(sb);
+            card.updateGlow(1.5f);
+            card.renderGlowManual(sb);
             card.renderOuterGlow(sb);
             card.renderImage(sb, false, true);
         }
@@ -381,15 +380,55 @@ public class PCLCardAlly extends PCLCreature
             {
                 startY = renderIntentIcon(sb, PGR.core.tooltips.block.icon, card.rightCount > 1 ? card.block + "x" + card.rightCount : Integer.toString(card.block), startY);
             }
+            for (PSkill<?> skill : card.getEffects())
+            {
+                PSkill<?> cur = skill;
+                while (cur != null)
+                {
+                    if (cur instanceof CooldownProvider)
+                    {
+                        startY = renderCooldown(sb, ((CooldownProvider) cur), startY);
+                    }
+                    cur = cur.getChild();
+                }
+            }
         }
+    }
+
+    protected Color getHoveredTipColor()
+    {
+        return hasTakenTurn && (!isHovered() || AbstractDungeon.player.hoveredCard == null || AbstractDungeon.player.hoveredCard.type != PCLEnum.CardType.SUMMON) ? TAKEN_TURN_COLOR : Color.WHITE;
     }
 
     protected float renderIntentIcon(SpriteBatch sb, TextureRegion icon, String count, float startY)
     {
-        Color renderColor = hasTakenTurn && (!isHovered() || AbstractDungeon.player.hoveredCard == null || AbstractDungeon.player.hoveredCard.type != PCLEnum.CardType.SUMMON) ? TAKEN_TURN_COLOR : Color.WHITE;
+        Color renderColor = getHoveredTipColor();
         PCLRenderHelpers.drawCentered(sb, renderColor, icon, this.intentHb.cX - 40.0F * Settings.scale, startY, icon.getRegionWidth(), icon.getRegionHeight(), 0.85f, 0f);
         FontHelper.renderFontLeftTopAligned(sb, FontHelper.topPanelInfoFont, count, this.intentHb.cX, startY, Settings.CREAM_COLOR);
         return startY + icon.getRegionHeight() + Settings.scale * 10f;
+    }
+
+    protected float renderCooldown(SpriteBatch sb, CooldownProvider pr, float startY)
+    {
+        boolean canActivate = pr.canActivate();
+        Color renderColor = getHoveredTipColor();
+        if (canActivate)
+        {
+            renderCooldownIcon(sb, renderColor, startY);
+            FontHelper.renderFontLeftTopAligned(sb, FontHelper.topPanelInfoFont, Integer.toString(pr.getCooldown()), this.intentHb.cX, startY, Settings.GREEN_TEXT_COLOR);
+        }
+        else
+        {
+            PCLRenderHelpers.drawGrayscale(sb, s -> renderCooldownIcon(sb, renderColor, startY));
+            FontHelper.renderFontLeftTopAligned(sb, FontHelper.topPanelInfoFont, Integer.toString(pr.getCooldown()), this.intentHb.cX, startY, Settings.CREAM_COLOR);
+        }
+
+        return startY + PGR.core.tooltips.cooldown.icon.getRegionHeight() + Settings.scale * 10f;
+    }
+
+    private void renderCooldownIcon(SpriteBatch sb, Color renderColor, float startY)
+    {
+        PCLRenderHelpers.drawCentered(sb, renderColor, PGR.core.tooltips.cooldown.icon, this.intentHb.cX - 32.0F * Settings.scale, startY, PGR.core.tooltips.cooldown.icon.getRegionWidth(), PGR.core.tooltips.cooldown.icon.getRegionHeight(), 0.65f, 0f);
     }
 
     public boolean isHovered()
@@ -427,10 +466,5 @@ public class PCLCardAlly extends PCLCreature
         {
             p.atEndOfRound();
         }
-    }
-
-    public boolean movesBeforePlayer()
-    {
-        return priority >= PCLCreature.PRIORITY_START_LAST;
     }
 }

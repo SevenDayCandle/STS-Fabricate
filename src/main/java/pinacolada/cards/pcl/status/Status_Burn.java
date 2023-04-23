@@ -15,7 +15,7 @@ public class Status_Burn extends PCLCard
     public static final String ATLAS_URL = "status/burn";
     public static final PCLCardData DATA = register(Status_Burn.class)
             .setImagePathFromAtlasUrl(ATLAS_URL)
-            .setStatus(-2, CardRarity.COMMON, PCLCardTarget.Self, true)
+            .setStatus(-2, CardRarity.COMMON, PCLCardTarget.Self)
             .setTags(PCLCardTag.Unplayable)
             .setAffinities(PCLAffinity.Red);
 

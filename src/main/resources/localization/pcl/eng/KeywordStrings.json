@@ -228,6 +228,10 @@
 								"DESCRIPTION": "If this would enter your discard pile, move it to your draw pile instead.",
 								"NAME": "Loyal"
 				},
+				"Magic":	{
+								"DESCRIPTION": "Card property used for custom card effects.",
+								"NAME": "Magic"
+				},
 				"Malleable":	{
 								"DESCRIPTION": "Upon receiving damage, gain [Block], then increase this power by #b1. Resets at the start of turn.",
 								"NAME": "Malleable"
@@ -330,18 +334,6 @@
 								"PAST": "played",
 								"PRESENT": "plays",
 								"PROGRESSIVE": "playing"
-				},
-				"Priority":	{
-								"DESCRIPTION": "Priority determines whether a #ySummon will act before or after your turn.",
-								"NAME": "Priority"
-				},
-				"Priority Minus":	{
-								"DESCRIPTION": "Acts at the end of your turn. Does not act on the turn it is #ySummoned.",
-								"NAME": "Priority Minus"
-				},
-				"Priority Plus":	{
-								"DESCRIPTION": "Acts at the start of your turn.",
-								"NAME": "Priority Plus"
 				},
 				"Provoked":	{
 								"DESCRIPTION": "The target takes #b+{0}% damage from #yAttacks, and it must attack this turn.",
@@ -486,6 +478,10 @@
 								"DESCRIPTION": "Deal damage to ALL enemies whenever you play a card.",
 								"NAME": "Thousand Cuts"
 				},
+				"Timing":	{
+								"DESCRIPTION": "Determines whether a card or effect triggers before or after your turn.",
+								"NAME": "Timing"
+				},
 				"Toxicology":	{
 								"DESCRIPTION": "Whenever you apply [Poison], [Bruised], [Blinded], or [Shackles], apply additional stacks.",
 								"NAME": "Toxicology"
@@ -503,6 +499,14 @@
 								"PAST": "triggered",
 								"PRESENT": "triggers",
 								"PROGRESSIVE": "triggering"
+				},
+				"Turn End Timing":	{
+								"DESCRIPTION": "Acts at the end of your turn. Does not act on the turn it is #ySummoned.",
+								"NAME": "Turn End Timing"
+				},
+				"Turn Start Timing":	{
+								"DESCRIPTION": "Acts at the start of your turn.",
+								"NAME": "Turn Start Timing"
 				},
 				"Unique":	{
 								"DESCRIPTION": "Can be #yUpgraded any number of times. You can only have 1 copy of this card in your deck. Additional copies will #yUpgrade this card instead.",

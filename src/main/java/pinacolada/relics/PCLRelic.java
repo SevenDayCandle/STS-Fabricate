@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.megacrit.cardcrawl.actions.common.RelicAboveCreatureAction;
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
@@ -19,8 +20,8 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.actions.PCLActions;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PCLResources;
-import pinacolada.resources.PCLStrings;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
@@ -89,6 +90,34 @@ public abstract class PCLRelic extends CustomRelic implements TooltipProvider
         setCounter(counter + amount);
 
         return counter;
+    }
+
+    public float atBlockModify(float block, AbstractCard c) {
+        return block;
+    }
+
+    public float atBlockModify(PCLUseInfo info, float block, AbstractCard c) {
+        return atBlockModify(block, c);
+    }
+
+    public float atDamageModify(PCLUseInfo info, float block, AbstractCard c) {
+        return atDamageModify(block, c);
+    }
+
+    public float atMagicNumberModify(PCLUseInfo info, float block, AbstractCard c) {
+        return block;
+    }
+
+    public float atHitCountModify(PCLUseInfo info, float block, AbstractCard c) {
+        return block;
+    }
+
+    public float atRightCountModify(PCLUseInfo info, float block, AbstractCard c) {
+        return block;
+    }
+
+    public float atHealModify(PCLUseInfo info, float block, AbstractCard c) {
+        return block;
     }
 
     protected void deactivateBattleEffect()

@@ -51,9 +51,9 @@ import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.effects.PCLAttackVFX;
 import pinacolada.interfaces.subscribers.OnPhaseChangedSubscriber;
-import pinacolada.dungeon.CombatManager;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.powers.PCLPowerHelper;
@@ -668,9 +668,9 @@ public final class PCLActions
         return add(new ModifyDamage(card, costChange, permanent, relative));
     }
 
-    public ModifyPriority modifyPriority(AbstractCard card, int costChange, boolean permanent, boolean relative)
+    public ModifyMagicNumber modifyMagicNumber(AbstractCard card, int costChange, boolean permanent, boolean relative)
     {
-        return add(new ModifyPriority(card, costChange, permanent, relative));
+        return add(new ModifyMagicNumber(card, costChange, permanent, relative));
     }
 
     public ModifyTag modifyTag(AbstractCard card, PCLCardTag tag, int value, boolean relative)
@@ -726,9 +726,9 @@ public final class PCLActions
         return add(new PlayFromPile(sourceName, target, amount, groups));
     }
 
-    public ProgressCooldown progressCooldown(AbstractCard card, int change)
+    public ProgressCooldown progressCooldown(AbstractCreature source, AbstractCard card, int change)
     {
-        return add(new ProgressCooldown(card, change));
+        return add(new ProgressCooldown(source, card, change));
     }
 
     public MoveCard purge(AbstractCard card)
@@ -924,6 +924,16 @@ public final class PCLActions
     public TriggerAllyAction triggerAlly(PCLCardAlly ally, int amount)
     {
         return add(new TriggerAllyAction(ally, amount));
+    }
+
+    public TriggerAllyAction triggerAlly(PCLCardAlly ally, boolean manual)
+    {
+        return add(new TriggerAllyAction(ally).setManual(manual));
+    }
+
+    public TriggerAllyAction triggerAlly(PCLCardAlly ally, int amount, boolean manual)
+    {
+        return add(new TriggerAllyAction(ally, amount).setManual(manual));
     }
 
     public TriggerOrbPassiveAbility triggerOrbPassive(int times)

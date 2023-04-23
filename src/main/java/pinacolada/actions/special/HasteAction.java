@@ -8,9 +8,9 @@ import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.CombatManager;
 
-public class PCLHasteAction extends PCLAction<Void>
+public class HasteAction extends PCLAction<Void>
 {
-    public PCLHasteAction(AbstractCard card)
+    public HasteAction(AbstractCard card)
     {
         super(ActionType.SPECIAL);
 

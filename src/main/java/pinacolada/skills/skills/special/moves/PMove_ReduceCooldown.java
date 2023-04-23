@@ -32,7 +32,7 @@ public class PMove_ReduceCooldown extends PMove_Modify<PField_CardCategory>
     @Override
     public ActionT1<AbstractCard> getAction()
     {
-        return (c) -> getActions().progressCooldown(c, extra);
+        return (c) -> getActions().progressCooldown(getSourceCreature(), c, extra);
     }
 
     @Override

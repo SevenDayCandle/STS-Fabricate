@@ -2,6 +2,7 @@ package pinacolada.skills.skills;
 
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUICardPreview;
@@ -226,6 +227,36 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
         for (PSkill<?> be : effects)
         {
             amount = be.modifyRightCount(info, amount);
+        }
+        return amount;
+    }
+
+    @Override
+    public float modifyDamageIncoming(PCLUseInfo info, float amount, DamageInfo.DamageType type)
+    {
+        for (PSkill<?> be : effects)
+        {
+            amount = be.modifyDamageIncoming(info, amount, type);
+        }
+        return amount;
+    }
+
+    @Override
+    public float modifyOrbIncoming(PCLUseInfo info, float amount)
+    {
+        for (PSkill<?> be : effects)
+        {
+            amount = be.modifyOrbIncoming(info, amount);
+        }
+        return amount;
+    }
+
+    @Override
+    public float modifyOrbOutgoing(PCLUseInfo info, float amount)
+    {
+        for (PSkill<?> be : effects)
+        {
+            amount = be.modifyOrbOutgoing(info, amount);
         }
         return amount;
     }

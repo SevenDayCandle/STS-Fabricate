@@ -22,11 +22,11 @@ import pinacolada.annotations.*;
 import pinacolada.augments.PCLAugment;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.commands.*;
+import pinacolada.dungeon.PCLDungeon;
 import pinacolada.effects.EffekseerEFK;
 import pinacolada.misc.AugmentStrings;
 import pinacolada.misc.LoadoutStrings;
 import pinacolada.misc.PCLAffinityPanelFilter;
-import pinacolada.dungeon.PCLDungeon;
 import pinacolada.resources.pcl.PCLCoreResources;
 import pinacolada.rewards.pcl.AugmentReward;
 import pinacolada.skills.PSkill;
@@ -39,7 +39,10 @@ import pinacolada.ui.combat.PCLCombatScreen;
 import pinacolada.ui.customRun.PCLCustomRunScreen;
 import pinacolada.ui.debug.PCLDebugAugmentPanel;
 import pinacolada.ui.debug.PCLDebugCardPanel;
-import pinacolada.ui.menu.*;
+import pinacolada.ui.menu.PCLAffinityPoolModule;
+import pinacolada.ui.menu.PCLAugmentPanelItem;
+import pinacolada.ui.menu.PCLAugmentScreen;
+import pinacolada.ui.menu.PCLLibraryModule;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.Collection;
@@ -65,7 +68,6 @@ public class PGR
     public static PCLCombatScreen combatScreen;
     public static PCLCustomCardSelectorScreen customCards;
     public static PCLCustomRunScreen customMode;
-    public static PCLFtueScreen ftueScreen;
     public static PCLLibraryModule libraryFilters;
     public static PCLLoadoutEditor loadoutEditor;
     public static PCLSeriesSelectScreen seriesSelection;
@@ -365,7 +367,6 @@ public class PGR
         PGR.libraryFilters = new PCLLibraryModule(EUI.customLibraryScreen);
         PGR.augmentScreen = new PCLAugmentScreen();
         PGR.augmentPanel = new PCLAugmentPanelItem();
-        PGR.ftueScreen = new PCLFtueScreen();
         PGR.blackScreen = new EUIImage(EUIRM.images.fullSquare.texture(), new EUIHitbox(screenW(1), screenH(1)))
                 .setPosition(screenW(0.5f), screenH(0.5f))
                 .setColor(0, 0, 0, 0.9f);

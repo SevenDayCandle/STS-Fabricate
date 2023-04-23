@@ -141,6 +141,7 @@ public class PCLCoreImages extends PCLImages
     {
         public static final TextureCache block = new TextureCache("images/pcl/cardui/tooltips/Block.png");
         public static final TextureCache brutal = new TextureCache("images/pcl/cardui/tooltips/BrutalDamage.png");
+        public static final TextureCache cooldown = new TextureCache("images/pcl/cardui/tooltips/Cooldown.png");
         public static final TextureCache damage = new TextureCache("images/pcl/cardui/tooltips/NormalDamage.png");
         public static final TextureCache dark = new TextureCache("images/pcl/cardui/tooltips/Dark.png");
         public static final TextureCache frost = new TextureCache("images/pcl/cardui/tooltips/Frost.png");

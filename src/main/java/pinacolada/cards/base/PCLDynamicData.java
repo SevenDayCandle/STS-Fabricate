@@ -14,6 +14,7 @@ import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.skills.PSkill;
+import pinacolada.skills.skills.DelayTiming;
 import pinacolada.skills.skills.PTrigger;
 import pinacolada.skills.skills.special.primary.PCardPrimary_DealDamage;
 import pinacolada.skills.skills.special.primary.PCardPrimary_GainBlock;
@@ -191,6 +192,7 @@ public class PCLDynamicData extends PCLCardData
         safeLoadValue(() -> setRemovableFromDeck(data.removableFromDeck));
         safeLoadValue(() -> setBranchFactor(data.branchUpgradeFactor));
         safeLoadValue(() -> setTarget(PCLCardTarget.valueOf(f.target)));
+        safeLoadValue(() -> setTiming(DelayTiming.valueOf(f.timing)));
         safeLoadValue(() -> setAttackType(PCLAttackType.valueOf(f.attackType)));
         if (f.damageEffect != null)
         {

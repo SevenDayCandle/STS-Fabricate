@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.evacipated.cardcrawl.mod.stslib.powers.interfaces.InvisiblePower;
 import com.megacrit.cardcrawl.actions.common.RemoveSpecificPowerAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
@@ -29,12 +30,12 @@ import extendedui.utilities.ColoredString;
 import extendedui.utilities.EUIColors;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCardData;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
 import pinacolada.effects.powers.PCLFlashPowerEffect;
 import pinacolada.effects.powers.PCLGainPowerEffect;
 import pinacolada.interfaces.providers.ClickableProvider;
-import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
@@ -50,7 +51,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 // Copied and modified from STS-AnimatorMod
-public abstract class PCLPower extends AbstractPower implements CloneablePowerInterface, TooltipProvider, ClickableProvider
+public abstract class PCLPower extends AbstractPower implements CloneablePowerInterface, ClickableProvider, TooltipProvider
 {
     protected static final StringBuilder builder = new StringBuilder();
     protected static final float ICON_SIZE = 32f;
@@ -265,6 +266,30 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
     public int modifyCost(AbstractCard card, int cost)
     {
         return cost;
+    }
+
+    public float modifyBlock(PCLUseInfo info, float block, AbstractCard c) {
+        return modifyBlock(block, c);
+    }
+
+    public float atDamageGive(PCLUseInfo info, float block, DamageInfo.DamageType type, AbstractCard c) {
+        return atDamageGive(block, type, c);
+    }
+
+    public float modifyMagicNumber(PCLUseInfo info, float block, AbstractCard c) {
+        return block;
+    }
+
+    public float modifyHitCount(PCLUseInfo info, float block, AbstractCard c) {
+        return block;
+    }
+
+    public float modifyRightCount(PCLUseInfo info, float block, AbstractCard c) {
+        return block;
+    }
+
+    public float modifyHeal(PCLUseInfo info, float block, AbstractCard c) {
+        return block;
     }
 
     public float modifyOrbIncoming(float initial)

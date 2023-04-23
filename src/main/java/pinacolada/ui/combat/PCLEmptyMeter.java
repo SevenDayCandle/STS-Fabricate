@@ -2,6 +2,7 @@ package pinacolada.ui.combat;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import extendedui.EUIUtils;
+import extendedui.ui.controls.EUITutorialPage;
 import pinacolada.resources.PGR;
 
 // TODO add basic matching logic
@@ -18,9 +19,9 @@ public class PCLEmptyMeter extends PCLPlayerMeter
     }
 
     @Override
-    public String[] getInfoDescription()
+    public EUITutorialPage[] getInfoPages()
     {
-        return EUIUtils.array("");
+        return EUIUtils.array(AFFINITY_TUTORIAL, TAG_TUTORIAL);
     }
 
     @Override

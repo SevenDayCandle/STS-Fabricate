@@ -5,6 +5,7 @@ import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.configuration.EUIConfiguration;
@@ -139,6 +140,10 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack>
             return EUIRM.strings.numAdjNoun(amountString, targetShortString, attackString);
         }
         return EUIRM.strings.numNoun(amountString, attackString);
+    }
+
+    public AbstractMonster.Intent getIntent() {
+        return AbstractMonster.Intent.ATTACK;
     }
 
     @Override

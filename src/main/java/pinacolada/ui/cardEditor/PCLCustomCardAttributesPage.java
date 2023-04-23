@@ -22,6 +22,7 @@ import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
+import pinacolada.skills.skills.DelayTiming;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -46,6 +47,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
     protected EUILabel header;
     protected EUIDropdown<PCLCardTagInfo> tagsDropdown;
     protected EUIDropdown<PCLCardTarget> targetDropdown;
+    protected EUIDropdown<DelayTiming> timingDropdown;
     protected PCLCustomCardUpgradableEditor costEditor;
     protected PCLCustomCardUpgradableEditor damageEditor;
     protected PCLCustomCardUpgradableEditor blockEditor;
@@ -88,7 +90,13 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
                 .setFont(EUIFontHelper.cardtitlefontLarge, 0.8f).setColor(Color.LIGHT_GRAY)
                 .setLabel(PGR.core.strings.cedit_attributes);
 
-        targetDropdown = new EUIDropdown<PCLCardTarget>(new EUIHitbox(START_X, screenH(0.8f), MENU_WIDTH, MENU_HEIGHT)
+        tagsDropdown = new EUIDropdown<PCLCardTagInfo>(new EUIHitbox(START_X, screenH(0.8f), MENU_WIDTH * 1.2f, MENU_HEIGHT))
+                .setOnChange(tags -> screen.modifyBuilder(e -> e.setTags(tags)))
+                .setLabelFunctionForOption(item -> item.tag.getTip().getTitleOrIcon() + " " + item.tag.getTip().title, true)
+                .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_tags)
+                .setIsMultiSelect(true)
+                .setCanAutosize(true, true);
+        targetDropdown = new EUIDropdown<PCLCardTarget>(new EUIHitbox(tagsDropdown.hb.x + tagsDropdown.hb.width + SPACING_WIDTH, screenH(0.8f), MENU_WIDTH, MENU_HEIGHT)
                 , item -> StringUtils.capitalize(item.toString().toLowerCase()))
                 .setOnChange(targets -> {
                     if (!targets.isEmpty())
@@ -101,12 +109,19 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
                 .setCanAutosizeButton(true)
                 .setItems(getEligibleTargets(screen.getBuilder().cardColor))
                 .setTooltip(PGR.core.strings.cedit_cardTarget, PGR.core.strings.cetut_cardTarget);
-        tagsDropdown = new EUIDropdown<PCLCardTagInfo>(new EUIHitbox(targetDropdown.hb.x + targetDropdown.hb.width + SPACING_WIDTH, screenH(0.8f), MENU_WIDTH * 1.2f, MENU_HEIGHT))
-                .setOnChange(tags -> screen.modifyBuilder(e -> e.setTags(tags)))
-                .setLabelFunctionForOption(item -> item.tag.getTip().getTitleOrIcon() + " " + item.tag.getTip().title, true)
-                .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_tags)
-                .setIsMultiSelect(true)
-                .setCanAutosize(true, true);
+        timingDropdown = new EUIDropdown<DelayTiming>(new EUIHitbox(targetDropdown.hb.x + targetDropdown.hb.width + SPACING_WIDTH, screenH(0.8f), MENU_WIDTH, MENU_HEIGHT)
+                , item -> StringUtils.capitalize(item.toString().toLowerCase()))
+                .setOnChange(targets -> {
+                    if (!targets.isEmpty())
+                    {
+                        screen.modifyBuilder(e -> e.setTiming(targets.get(0)));
+                    }
+                })
+                .setLabelFunctionForOption(DelayTiming::getTitle, false)
+                .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.tooltips.timing.title)
+                .setCanAutosizeButton(true)
+                .setItems(DelayTiming.values())
+                .setTooltip(PGR.core.strings.cedit_cardTarget, PGR.core.strings.cetut_cardTarget);
         tagsDropdown.setLabelFunctionForButton((list, __) -> tagsDropdown.makeMultiSelectString(item -> item.tag.getTooltip().getTitleOrIcon()), true)
                 .setHeaderRow(new PCLCustomCardTagEditorHeaderRow(tagsDropdown))
                 .setRowFunction(PCLCustomCardTagEditorRow::new)
@@ -149,12 +164,12 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
                 .setTooltip(upgradeLabel.tooltip);
         curW += SPACING_WIDTH;
         magicNumberEditor = new PCLCustomCardUpgradableEditor(new EUIHitbox(curW, screenH(0.65f), MENU_WIDTH / 4, MENU_HEIGHT)
-                , PGR.core.strings.cedit_magicNumber, (val, upVal) -> screen.modifyBuilder(e -> e.setMagicNumber(val, upVal)))
+                , PGR.core.tooltips.magic.title, (val, upVal) -> screen.modifyBuilder(e -> e.setMagicNumber(val, upVal)))
                 .setLimits(-PSkill.DEFAULT_MAX, PSkill.DEFAULT_MAX)
                 .setTooltip(upgradeLabel.tooltip);
         curW += SPACING_WIDTH;
         hpEditor = new PCLCustomCardUpgradableEditor(new EUIHitbox(curW, screenH(0.65f), MENU_WIDTH / 4, MENU_HEIGHT)
-                , PGR.core.strings.cedit_secondaryNumber, (val, upVal) -> screen.modifyBuilder(e -> e.setHp(val, upVal)))
+                , PGR.core.tooltips.hp.title, (val, upVal) -> screen.modifyBuilder(e -> e.setHp(val, upVal)))
                 .setLimits(0, PSkill.DEFAULT_MAX)
                 .setTooltip(upgradeLabel.tooltip);
 
@@ -197,10 +212,11 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
         blockEditor.setValue(builder.getBlock(0), builder.getBlockUpgrade(0));
         hitCountEditor.setValue(builder.getHitCount(0), builder.getHitCountUpgrade(0));
         rightCountEditor.setValue(builder.getRightCount(0), builder.getRightCountUpgrade(0));
-        magicNumberEditor.setValue(builder.getMagicNumber(0), builder.getMagicNumberUpgrade(0)).setActive(isSummon);
+        magicNumberEditor.setValue(builder.getMagicNumber(0), builder.getMagicNumberUpgrade(0));
         hpEditor.setValue(builder.getHp(0), builder.getHpUpgrade(0)).setActive(isSummon);
 
         targetDropdown.setSelection(builder.cardTarget, false);
+        timingDropdown.setSelection(builder.timing, false).setActive(isSummon);
 
         List<PCLCardTagInfo> infos = tagsDropdown.getAllItems();
         ArrayList<Integer> selection = new ArrayList<>();
@@ -255,6 +271,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
         hitCountEditor.tryUpdate();
         rightCountEditor.tryUpdate();
         targetDropdown.tryUpdate();
+        timingDropdown.tryUpdate();
         tagsDropdown.tryUpdate();
         for (PCLCustomCardAffinityValueEditor aEditor : affinityEditors)
         {
@@ -282,6 +299,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
         hitCountEditor.tryRender(sb);
         rightCountEditor.tryRender(sb);
         targetDropdown.tryRender(sb);
+        timingDropdown.tryRender(sb);
         tagsDropdown.tryRender(sb);
     }
 }

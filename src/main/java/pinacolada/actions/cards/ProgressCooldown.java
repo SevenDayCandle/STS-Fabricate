@@ -2,6 +2,7 @@ package pinacolada.actions.cards;
 
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIUtils;
 import extendedui.utilities.EUIColors;
 import pinacolada.actions.utility.GenericCardSelection;
@@ -18,16 +19,17 @@ public class ProgressCooldown extends GenericCardSelection
     protected int change;
     protected Color flashColor = EUIColors.gold(1).cpy();
 
-    protected ProgressCooldown(AbstractCard card, int amount, int change)
+    protected ProgressCooldown(AbstractCreature source, AbstractCard card, int amount, int change)
     {
         super(card, amount);
 
         this.change = change;
+        this.source = source;
     }
 
-    public ProgressCooldown(AbstractCard card, int change)
+    public ProgressCooldown(AbstractCreature source, AbstractCard card, int change)
     {
-        this(card, 1, change);
+        this(source, card, 1, change);
     }
 
     @Override
@@ -48,7 +50,7 @@ public class ProgressCooldown extends GenericCardSelection
 
         for (CooldownProvider cooldown : getCooldowns(card))
         {
-            cooldown.progressCooldownAndTrigger(card, GameUtilities.getRandomEnemy(true), change);
+            cooldown.progressCooldownAndTrigger(source, null, change);
         }
     }
 
@@ -65,7 +67,7 @@ public class ProgressCooldown extends GenericCardSelection
         EditorCard eC = EUIUtils.safeCast(c, EditorCard.class);
         if (eC != null)
         {
-            for (PSkill s : eC.getEffects())
+            for (PSkill<?> s : eC.getEffects())
             {
                 if (s instanceof CooldownProvider)
                 {
@@ -75,7 +77,7 @@ public class ProgressCooldown extends GenericCardSelection
         }
         for (SkillModifier sk : SkillModifier.getAll(c))
         {
-            PSkill s = sk.getSkill();
+            PSkill<?> s = sk.getSkill();
             if (s instanceof CooldownProvider)
             {
                 cooldowns.add((CooldownProvider) s);

@@ -157,7 +157,7 @@ public class PCLLibraryModule extends EUIBase implements CustomCardPoolModule
         {
             if (this == ColorlessGroup.PCL)
             {
-                return PGR.core.strings.misc_pcl;
+                return PGR.core.strings.misc_fabricate;
             }
             return EUIRM.strings.uiBasegame;
         }

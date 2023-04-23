@@ -12,16 +12,19 @@ import extendedui.ui.EUIBase;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUILabel;
 import extendedui.ui.controls.EUITextBox;
+import extendedui.ui.controls.EUITutorial;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIClassUtils;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.blights.common.AbstractGlyphBlight;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.interfaces.providers.RunAttributesProvider;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.pcl.PCLCoreImages;
+import pinacolada.ui.combat.PCLPlayerMeter;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -39,6 +42,7 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase
     protected final ArrayList<PCLLoadout> loadouts;
     public EUIButton seriesButton;
     public EUIButton loadoutEditorButton;
+    public EUIButton infoButton;
     public EUILabel startingCardsLabel;
     public EUILabel ascensionGlyphsLabel;
     public EUITextBox startingCardsListLabel;
@@ -98,6 +102,11 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase
                 .setOnRightClick(this::changePreset)
                 .setOnClick(this::openLoadoutEditor);
 
+        infoButton = new EUIButton(EUIRM.images.info.texture(), new EUIHitbox(0, 0, scale(64), scale(64)))
+                .setPosition(loadoutEditorButton.hb.x + loadoutEditorButton.hb.width + scale(40), startingCardsListLabel.hb.y + scale(128)).setText("")
+                .setTooltip(PGR.core.strings.csel_info, PGR.core.strings.tutorial_learnMore)
+                .setOnClick(this::openInfo);
+
         for (AbstractGlyphBlight glyph : PCLAbstractPlayerData.GLYPHS)
         {
             glyphEditors.add(new PCLGlyphEditor(glyph, new EUIHitbox(xOffset, ascensionGlyphsLabel.hb.y, glyph.hb.width, glyph.hb.height)));
@@ -148,6 +157,18 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase
         }
     }
 
+    private void openInfo()
+    {
+        if (characterOption != null && data != null)
+        {
+            PCLPlayerMeter meter = CombatManager.playerSystem.getMeter(data.resources.playerClass);
+            if (meter != null)
+            {
+                EUI.ftueScreen.open(new EUITutorial(meter.getInfoPages()), () -> screenRefresh(runProvider, characterOption));
+            }
+        }
+    }
+
     public void randomizeLoadout()
     {
         if (availableLoadouts.size() > 1)
@@ -187,6 +208,7 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase
             {
                 seriesButton.setActive(true);
                 loadoutEditorButton.setActive(true);
+                infoButton.setActive(true);
                 ascensionGlyphsLabel.setActive(true);
                 for (PCLGlyphEditor geditor : glyphEditors)
                 {
@@ -199,6 +221,7 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase
         {
             seriesButton.setActive(false);
             loadoutEditorButton.setActive(false);
+            infoButton.setActive(false);
             startingCardsLabel.setActive(false);
             startingCardsListLabel.setActive(false);
             ascensionGlyphsLabel.setActive(false);
@@ -300,6 +323,7 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase
     {
         seriesButton.tryUpdate();
         loadoutEditorButton.tryUpdate();
+        infoButton.tryUpdate();
         startingCardsLabel.tryUpdate();
         startingCardsListLabel.tryUpdate();
         ascensionGlyphsLabel.tryUpdate();
@@ -313,6 +337,7 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase
     {
         seriesButton.tryRender(sb);
         loadoutEditorButton.tryRender(sb);
+        infoButton.tryRender(sb);
         startingCardsLabel.tryRender(sb);
         startingCardsListLabel.tryRender(sb);
         ascensionGlyphsLabel.tryRender(sb);

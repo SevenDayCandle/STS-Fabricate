@@ -49,7 +49,7 @@ public class PCLRelicSlotEditor extends EUIBase
 
         clearButton = new EUIButton(EUIRM.images.x.texture(), new EUIHitbox(relicnameText.hb.x + relicnameText.hb.width, relicnameText.hb.y + 12, 48, 48))
                 .setClickDelay(0.02f);
-        changeButton = new EUIButton(PCLCoreImages.Menu.edit.texture(), new EUIHitbox(clearButton.hb.x + clearButton.hb.width + 16, relicnameText.hb.cY + 12, 48, 48))
+        changeButton = new EUIButton(PCLCoreImages.Menu.edit.texture(), new EUIHitbox(clearButton.hb.x + clearButton.hb.width + 16, relicnameText.hb.y + 12, 48, 48))
                 .setClickDelay(0.02f);
 
         setSlot(null);

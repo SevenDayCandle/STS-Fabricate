@@ -22,6 +22,7 @@ import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.ListSelection;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -284,7 +285,7 @@ public class SelectFromPile extends CardFilterAction
         return this;
     }
 
-    public void moveToPile(ArrayList<AbstractCard> result, CardGroup group)
+    public void moveToPile(Collection<AbstractCard> result, CardGroup group)
     {
         for (AbstractCard card : result)
         {

@@ -20,7 +20,7 @@ public class BatonPassPower extends PCLPower
     public void onUseCard(AbstractCard card, UseCardAction action)
     {
         super.onUseCard(card, action);
-        PCLActions.bottom.progressCooldown(card, amount);
+        PCLActions.bottom.progressCooldown(owner, card, amount);
         removePower();
     }
 }

@@ -17,7 +17,7 @@ public class Curse_Pain extends PCLCard
     public static final String ATLAS_URL = "curse/pain";
     public static final PCLCardData DATA = register(Curse_Pain.class)
             .setImagePathFromAtlasUrl(ATLAS_URL)
-            .setCurse(-2, PCLCardTarget.None, false, true)
+            .setCurse(-2, PCLCardTarget.None, false)
             .setTags(PCLCardTag.Unplayable)
             .setAffinities(PCLAffinity.Purple);
 

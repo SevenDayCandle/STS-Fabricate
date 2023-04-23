@@ -11,9 +11,9 @@ import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIUtils;
 import extendedui.utilities.ColoredString;
 import org.apache.commons.lang3.StringUtils;
-import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
@@ -68,9 +68,10 @@ public class PSkillPower extends PCLPower
                 }
             }
 
-            if (effect instanceof PTrigger_Interactable)
+            PCLClickableUse use = effect.getClickable(this);
+            if (use != null)
             {
-                triggerCondition = new PCLClickableUse(this, effect.getChild(), effect.amount <= 0 ? -1 : effect.amount, !effect.fields.not, true);
+                triggerCondition = use;
             }
         }
 
@@ -167,37 +168,85 @@ public class PSkillPower extends PCLPower
         return new PSkillPower(m, amount, EUIUtils.map(ptriggers, PTrigger::makeCopy));
     }
 
-    public float atDamageGive(float damage, DamageInfo.DamageType type, AbstractCard card)
-    {
-        PCLUseInfo info = CombatManager.playerSystem.generateInfo(card, owner, owner);
-        refreshTriggers(info);
-        for (PTrigger effect : ptriggers)
-        {
-            damage = effect.atDamageGive(info, damage, type);
-        }
-        return super.atDamageGive(damage, type, card);
-    }
-
     public float atDamageReceive(float damage, DamageInfo.DamageType type, AbstractCard card)
     {
         PCLUseInfo info = CombatManager.playerSystem.generateInfo(card, owner, owner);
         refreshTriggers(info);
         for (PTrigger effect : ptriggers)
         {
-            damage = effect.atDamageReceive(info, damage, type);
+            damage = effect.modifyDamageIncoming(info, damage, type);
         }
         return super.atDamageReceive(damage, type, card);
     }
 
-    public float modifyBlock(float damage, AbstractCard card)
+    public float modifyBlock(float block, AbstractCard c)
     {
-        PCLUseInfo info = CombatManager.playerSystem.generateInfo(card, owner, owner);
+        return modifyBlock(CombatManager.playerSystem.generateInfo(c, owner, owner), block, c);
+    }
+
+    public float modifyBlock(PCLUseInfo info, float block, AbstractCard c)
+    {
         refreshTriggers(info);
         for (PTrigger effect : ptriggers)
         {
-            damage = effect.modifyBlock(info, damage);
+            block = effect.modifyBlock(info, block);
         }
-        return super.modifyBlock(damage, card);
+        return block;
+    }
+
+    public float atDamageGive(float block, DamageInfo.DamageType type, AbstractCard c)
+    {
+        return atDamageGive(CombatManager.playerSystem.generateInfo(c, owner, owner), block, type, c);
+    }
+
+    public float atDamageGive(PCLUseInfo info, float damage, DamageInfo.DamageType type, AbstractCard c)
+    {
+        refreshTriggers(info);
+        for (PTrigger effect : ptriggers)
+        {
+            damage = effect.modifyDamage(info, damage);
+        }
+        return damage;
+    }
+
+    public float modifyHitCount(PCLUseInfo info, float damage, AbstractCard c)
+    {
+        refreshTriggers(info);
+        for (PTrigger effect : ptriggers)
+        {
+            damage = effect.modifyHitCount(info, damage);
+        }
+        return damage;
+    }
+
+    public float modifyMagicNumber(PCLUseInfo info, float damage, AbstractCard c)
+    {
+        refreshTriggers(info);
+        for (PTrigger effect : ptriggers)
+        {
+            damage = effect.modifyMagicNumber(info, damage);
+        }
+        return damage;
+    }
+
+    public float modifyRightCount(PCLUseInfo info, float damage, AbstractCard c)
+    {
+        refreshTriggers(info);
+        for (PTrigger effect : ptriggers)
+        {
+            damage = effect.modifyRightCount(info, damage);
+        }
+        return damage;
+    }
+
+    public float modifyHeal(PCLUseInfo info, float damage, AbstractCard c)
+    {
+        refreshTriggers(info);
+        for (PTrigger effect : ptriggers)
+        {
+            damage = effect.modifyHeal(info, damage);
+        }
+        return damage;
     }
 
     // Update this power's effects whenever you play a card

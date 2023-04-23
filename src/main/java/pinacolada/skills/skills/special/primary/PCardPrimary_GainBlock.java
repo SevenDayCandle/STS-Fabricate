@@ -2,6 +2,7 @@ package pinacolada.skills.skills.special.primary;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIRM;
 import extendedui.utilities.ColoredString;
 import pinacolada.annotations.VisibleSkill;
@@ -68,6 +69,10 @@ public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty>
                 getActions().gainBlock(amount);
             }
         }
+    }
+
+    public AbstractMonster.Intent getIntent() {
+        return AbstractMonster.Intent.DEFEND;
     }
 
     @Override

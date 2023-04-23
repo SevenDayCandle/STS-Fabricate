@@ -1,17 +1,44 @@
 package pinacolada.patches.card;
 
-import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
-import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
-import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
+import com.badlogic.gdx.math.MathUtils;
+import com.evacipated.cardcrawl.modthespire.lib.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.relics.AbstractRelic;
+import javassist.CtBehavior;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.tags.EphemeralField;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.CombatManager;
+import pinacolada.relics.PCLRelic;
 
 public class AbstractCardPatches
 {
+    @SpirePatch(clz = AbstractCard.class, method = "applyPowersToBlock")
+    public static class AbstractCard_ApplyPowersToBlock
+    {
+        @SpireInsertPatch(localvars = {"tmp"}, locator = Locator.class)
+        public static void insertPre(AbstractCard __instance, @ByRef float[] tmp)
+        {
+            for (AbstractRelic r : AbstractDungeon.player.relics) {
+                if (r instanceof PCLRelic)
+                {
+                    tmp[0] = ((PCLRelic) r).atBlockModify(tmp[0], __instance);
+                }
+            }
+        }
+
+        private static class Locator extends SpireInsertLocator
+        {
+            public int[] Locate(CtBehavior ctBehavior) throws Exception
+            {
+                Matcher matcher = new Matcher.MethodCallMatcher(MathUtils.class, "floor");
+                return LineFinder.findInOrder(ctBehavior, matcher);
+            }
+        }
+    }
+
     @SpirePatch(clz = AbstractCard.class, method = "cardPlayable")
     public static class AbstractCard_CardPlayable
     {

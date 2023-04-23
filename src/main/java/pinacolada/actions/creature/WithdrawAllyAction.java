@@ -63,7 +63,7 @@ public class WithdrawAllyAction extends PCLAction<ArrayList<PCLCard>>
                 {
                     if (trigger)
                     {
-                        ally.takeTurn();
+                        ally.takeTurn(true);
                     }
                     releaseCard(ally);
                 }

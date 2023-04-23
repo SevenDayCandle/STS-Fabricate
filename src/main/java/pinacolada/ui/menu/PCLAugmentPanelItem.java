@@ -4,16 +4,15 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUI;
 import extendedui.EUIRM;
 import extendedui.EUIRenderHelpers;
 import extendedui.EUIUtils;
 import extendedui.ui.controls.EUITutorial;
+import extendedui.ui.controls.EUITutorialPage;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.panelitems.PCLTopPanelItem;
 import extendedui.ui.tooltips.EUITooltip;
-import extendedui.ui.tooltips.FakeFtue;
 import extendedui.utilities.EUIColors;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.augments.PCLAugment;
@@ -23,7 +22,6 @@ import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.ui.cardView.PCLAugmentList;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class PCLAugmentPanelItem extends PCLTopPanelItem
@@ -62,8 +60,8 @@ public class PCLAugmentPanelItem extends PCLTopPanelItem
         super.onRightClick();
         this.getHitbox().unhover();
         EUITutorial tutorial = new EUITutorial(new EUIHitbox((float) Settings.WIDTH / 2.0F - 675.0F, Settings.OPTION_Y - 450.0F, 1350.0F, 900.0F), EUIRM.images.panelLarge.texture(),
-                PGR.core.strings.misc_viewAugments, Arrays.asList(PGR.core.strings.tutorial_augmentTutorial1, PGR.core.strings.tutorial_augmentTutorial2));
-        AbstractDungeon.ftue = new FakeFtue(tutorial);
+                new EUITutorialPage(PGR.core.strings.misc_viewAugments, PGR.core.strings.tutorial_augmentTutorial1), new EUITutorialPage(PGR.core.strings.misc_viewAugments, PGR.core.strings.tutorial_augmentTutorial2));
+        EUI.ftueScreen.open(tutorial);
     }
 
     public void flash()

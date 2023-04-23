@@ -20,6 +20,7 @@ import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
+import pinacolada.skills.skills.DelayTiming;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
@@ -55,6 +56,8 @@ public class PCLCardData implements CardObject
     public CardStrings strings;
     public String imagePath;
     public String ID;
+    public DelayTiming timing = DelayTiming.StartOfTurnLast;
+    public DelayTiming[] upgradeTiming;
     public PCLCardTarget cardTarget = PCLCardTarget.None;
     public PCLCardTarget[] upgradeCardTarget;
     public List<CardTagItem> extraTags;
@@ -69,7 +72,6 @@ public class PCLCardData implements CardObject
     public boolean canToggleFromPopup = false;
     public boolean canToggleOnUpgrade = false;
     public boolean obtainableInCombat = true;
-    public boolean playAtEndOfTurn = false;
     public boolean removableFromDeck = true;
     public boolean unique = false;
     public int maxCopies;
@@ -341,6 +343,11 @@ public class PCLCardData implements CardObject
         return upgradeCardTarget == null || upgradeCardTarget.length == 0 ? cardTarget : upgradeCardTarget[Math.min(upgradeCardTarget.length - 1, form)];
     }
 
+    public DelayTiming getTimingUpgrade(int form)
+    {
+        return upgradeTiming == null || upgradeTiming.length == 0 ? timing : upgradeTiming[Math.min(upgradeTiming.length - 1, form)];
+    }
+
     public int getMagicNumber(int form)
     {
         return magicNumber[Math.min(magicNumber.length - 1, form)];
@@ -560,17 +567,11 @@ public class PCLCardData implements CardObject
 
     public PCLCardData setCurse(int cost, PCLCardTarget target, boolean special)
     {
-        return setCurse(cost, target, special, false);
-    }
-
-    public PCLCardData setCurse(int cost, PCLCardTarget target, boolean special, boolean playAtEndOfTurn)
-    {
         setRarityType(special ? AbstractCard.CardRarity.SPECIAL : AbstractCard.CardRarity.CURSE, AbstractCard.CardType.CURSE);
 
         cardColor = AbstractCard.CardColor.CURSE;
         cardTarget = target;
         this.cost = array(cost);
-        this.playAtEndOfTurn = playAtEndOfTurn;
         maxUpgradeLevel = 0;
 
         return this;
@@ -720,13 +721,6 @@ public class PCLCardData implements CardObject
         return this;
     }
 
-    public PCLCardData setPlayAtEndOfTurn(boolean playAtEndOfTurn)
-    {
-        this.playAtEndOfTurn = playAtEndOfTurn;
-
-        return this;
-    }
-
     public PCLCardData setPower(int cost, AbstractCard.CardRarity rarity)
     {
         setRarityType(rarity, AbstractCard.CardType.POWER);
@@ -737,20 +731,25 @@ public class PCLCardData implements CardObject
         return this;
     }
 
-    public PCLCardData setPriority(int heal)
+    public PCLCardData setMagicNumber(int heal)
     {
         this.magicNumber[0] = heal;
         return this;
     }
 
-    public PCLCardData setPriority(int heal, int healUpgrade)
+    public PCLCardData setMagicNumber(int heal, int healUpgrade)
     {
         this.magicNumber[0] = heal;
         this.magicNumberUpgrade[0] = healUpgrade;
         return this;
     }
 
-    public PCLCardData setPriority(Integer[] heal, Integer[] healUpgrade)
+    public PCLCardData setMagicNumber(int thp, Integer[] thpUpgrade)
+    {
+        return setMagicNumber(array(thp), thpUpgrade);
+    }
+
+    public PCLCardData setMagicNumber(Integer[] heal, Integer[] healUpgrade)
     {
         this.magicNumber = heal;
         this.magicNumberUpgrade = healUpgrade;
@@ -882,16 +881,10 @@ public class PCLCardData implements CardObject
 
     public PCLCardData setStatus(int cost, AbstractCard.CardRarity rarity, PCLCardTarget target)
     {
-        return setStatus(cost, rarity, target, false);
-    }
-
-    public PCLCardData setStatus(int cost, AbstractCard.CardRarity rarity, PCLCardTarget target, boolean playAtEndOfTurn)
-    {
         setRarityType(rarity, AbstractCard.CardType.STATUS);
         setColorless();
         cardTarget = target;
         this.cost = array(cost);
-        this.playAtEndOfTurn = playAtEndOfTurn;
         maxUpgradeLevel = 0;
 
         return this;
@@ -912,6 +905,17 @@ public class PCLCardData implements CardObject
         setRarityType(rarity, PCLEnum.CardType.SUMMON);
 
         cardTarget = target;
+        this.attackType = attackType;
+        this.cost = array(cost);
+
+        return this;
+    }
+
+    public PCLCardData setSummon(int cost, AbstractCard.CardRarity rarity, PCLAttackType attackType, PCLCardTarget target, DelayTiming timing)
+    {
+        setRarityType(rarity, PCLEnum.CardType.SUMMON);
+        this.timing = timing;
+        this.cardTarget = target;
         this.attackType = attackType;
         this.cost = array(cost);
 
@@ -954,20 +958,9 @@ public class PCLCardData implements CardObject
         return this;
     }
 
-    public PCLCardData setMagicNumber(int thp, int thpUpgrade)
+    public PCLCardData setTiming(DelayTiming timing)
     {
-        return setMagicNumber(array(thp), array(thpUpgrade));
-    }
-
-    public PCLCardData setMagicNumber(int thp, Integer[] thpUpgrade)
-    {
-        return setMagicNumber(array(thp), thpUpgrade);
-    }
-
-    public PCLCardData setMagicNumber(Integer[] thp, Integer[] thpUpgrade)
-    {
-        magicNumber = thp;
-        magicNumberUpgrade = thpUpgrade;
+        this.timing = timing;
         return this;
     }
 
@@ -988,6 +981,12 @@ public class PCLCardData implements CardObject
     public PCLCardData setUTarget(PCLCardTarget... target)
     {
         upgradeCardTarget = target;
+        return this;
+    }
+
+    public PCLCardData setUTiming(DelayTiming... timing)
+    {
+        upgradeTiming = timing;
         return this;
     }
 

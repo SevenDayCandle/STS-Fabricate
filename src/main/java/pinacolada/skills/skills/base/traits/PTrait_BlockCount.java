@@ -52,4 +52,14 @@ public class PTrait_BlockCount extends PBlockTrait<PField_Empty>
     {
         return amount < 0;
     }
+
+    @Override
+    public String getSubText()
+    {
+        if (PGR.config.expandAbbreviatedEffects.get())
+        {
+            return TEXT.act_hasAmount(getAmountRawString(), getSubDescText());
+        }
+        return super.getSubText();
+    }
 }

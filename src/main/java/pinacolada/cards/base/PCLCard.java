@@ -65,16 +65,14 @@ import pinacolada.monsters.PCLCardAlly;
 import pinacolada.patches.screens.GridCardSelectScreenMultiformPatches;
 import pinacolada.powers.PCLPower;
 import pinacolada.powers.replacement.PCLLockOnPower;
+import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.Skills;
-import pinacolada.skills.skills.PSpecialCond;
-import pinacolada.skills.skills.PSpecialPowerSkill;
-import pinacolada.skills.skills.PSpecialSkill;
-import pinacolada.skills.skills.PTrigger;
+import pinacolada.skills.skills.*;
 import pinacolada.skills.skills.base.moves.PMove_StackCustomPower;
 import pinacolada.skills.skills.special.primary.PCardPrimary_DealDamage;
 import pinacolada.skills.skills.special.primary.PCardPrimary_GainBlock;
@@ -116,6 +114,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     public final PCLCardData cardData;
     public final PCLCardText cardText;
     public ColoredString bottomText;
+    public DelayTiming timing = DelayTiming.StartOfTurnLast;
     public PCLAttackType attackType = PCLAttackType.Normal;
     public PCLCardSaveData auxiliaryData = new PCLCardSaveData();
     public PCLCardTarget pclTarget = PCLCardTarget.Single;
@@ -144,7 +143,6 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     public transient PowerFormulaDisplay formulaDisplay;
     protected ColoredTexture portraitForeground;
     protected ColoredTexture portraitImg;
-    protected boolean playAtEndOfTurn;
     protected final ArrayList<PCLCardGlowBorderEffect> glowList = new ArrayList<>();
 
     protected PCLCard(PCLCardData cardData)
@@ -178,7 +176,6 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         this.cardData = cardData;
         this.cardText = new PCLCardText(this);
         this.affinities = new PCLCardAffinities(this);
-        this.playAtEndOfTurn = cardData.playAtEndOfTurn;
         this.maxUpgradeLevel = cardData.maxUpgradeLevel;
 
         for (int i = 0; i < cardData.slots; i++)
@@ -425,6 +422,11 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         return move;
     }
 
+    public boolean canRenderGlow()
+    {
+        return transparency >= 0.7f && owner == null;
+    }
+
     public int changeForm(Integer form, int timesUpgraded) {
         return changeForm(form, timesUpgraded, timesUpgraded);
     }
@@ -501,6 +503,10 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
 
     public void fullReset() {
         this.clearSkills();
+        for (PCLCardTag tag : PCLCardTag.values())
+        {
+            tag.set(this, 0);
+        }
         this.onAttackEffect = null;
         this.onBlockEffect = null;
 
@@ -777,7 +783,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     }
 
     public ColoredString getMagicNumberString() {
-        return new ColoredString(magicNumber > 0 ? "+" + magicNumber : String.valueOf(magicNumber), Settings.CREAM_COLOR);
+        return new ColoredString(String.valueOf(magicNumber), Settings.CREAM_COLOR);
     }
 
     public int getMaxForms() {
@@ -1261,6 +1267,8 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         float tempBlock = baseBlock;
         float tempDamage = baseDamage;
         float tempMagicNumber = CombatManager.onModifyMagicNumber(baseMagicNumber, this);
+        float tempHitCount = baseHitCount;
+        float tempRightCount = baseRightCount;
         tempDamage = modifyDamage(info, tempDamage);
         tempBlock = modifyBlock(info, tempBlock);
 
@@ -1272,6 +1280,28 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
             {
                 for (AbstractRelic r : ((AbstractPlayer) owner).relics) {
                     tempDamage = r.atDamageModify(tempDamage, this);
+                    if (r instanceof PCLRelic)
+                    {
+                        tempBlock = ((PCLRelic) r).atBlockModify(tempBlock, this);
+                    }
+                }
+
+                for (AbstractRelic r : ((AbstractPlayer) owner).relics) {
+                    if (r instanceof PCLRelic)
+                    {
+                        tempMagicNumber = ((PCLRelic) r).atMagicNumberModify(info, tempMagicNumber, this);
+                        tempHitCount = ((PCLRelic) r).atHitCountModify(info, tempHitCount, this);
+                        tempRightCount = ((PCLRelic) r).atRightCountModify(info, tempRightCount, this);
+                    }
+                }
+            }
+
+            for (AbstractPower p : owner.powers) {
+                if (p instanceof PCLPower)
+                {
+                    tempMagicNumber = ((PCLPower) p).modifyMagicNumber(info, tempMagicNumber, this);
+                    tempHitCount = ((PCLPower) p).modifyHitCount(info, tempHitCount, this);
+                    tempRightCount = ((PCLPower) p).modifyRightCount(info, tempRightCount, this);
                 }
             }
 
@@ -1294,10 +1324,22 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
                 for (AbstractPower p : owner.powers) {
                     float oldBlock = tempBlock;
                     float oldDamage = tempDamage;
-                    tempBlock = p.modifyBlock(tempBlock, this);
-                    for (int i = 0; i < applyCount; i++) {
-                        tempDamage = p.atDamageGive(tempDamage, damageTypeForTurn, this);
+
+                    if (p instanceof PCLPower)
+                    {
+                        tempBlock = ((PCLPower)p).modifyBlock(info, tempBlock, this);
+                        for (int i = 0; i < applyCount; i++) {
+                            tempDamage = ((PCLPower)p).atDamageGive(info, tempDamage, damageTypeForTurn, this);
+                        }
                     }
+                    else
+                    {
+                        tempBlock = p.modifyBlock(tempBlock, this);
+                        for (int i = 0; i < applyCount; i++) {
+                            tempDamage = p.atDamageGive(tempDamage, damageTypeForTurn, this);
+                        }
+                    }
+
                     addAttackDisplay(p, oldDamage, tempDamage);
                     addDefendDisplay(p, oldBlock, tempBlock);
                 }
@@ -1372,11 +1414,12 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         }
 
         // Do not use the regular update methods because those will refresh amounts from onAttack with the standard setAmount
+        // TODO heal modify
         block = Math.max(0, MathUtils.floor(tempBlock));
         damage = Math.max(0, MathUtils.floor(tempDamage));
-        magicNumber = Math.max(0, MathUtils.floor(modifyMagicNumber(info, baseMagicNumber)));
-        hitCount = Math.max(1,MathUtils.floor(modifyHitCount(info, baseHitCount)));
-        rightCount = Math.max(1,MathUtils.floor(modifyRightCount(info, baseRightCount)));
+        magicNumber = MathUtils.floor(modifyMagicNumber(info, tempMagicNumber));
+        hitCount = Math.max(1,MathUtils.floor(modifyHitCount(info, tempHitCount)));
+        rightCount = Math.max(1,MathUtils.floor(modifyRightCount(info, tempRightCount)));
 
         this.isBlockModified = (baseBlock != block);
         this.isDamageModified = (baseDamage != damage);
@@ -2000,6 +2043,12 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     }
 
     @Override
+    public final void renderForPreview(SpriteBatch sb)
+    {
+        render(sb, hovered, false, false);
+    }
+
+    @Override
     public void renderUpgradePreview(SpriteBatch sb) {
         PCLCard upgrade = getCachedUpgrade();
 
@@ -2030,6 +2079,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
 
     @Override
     public void hover() {
+        super.hover();
         if (!this.hovered) {
             this.drawScale = 1.0F;
             this.targetDrawScale = 1.0F;
@@ -2114,7 +2164,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     @Override
     public void triggerOnEndOfTurnForPlayingCard() {
         super.triggerOnEndOfTurnForPlayingCard();
-        boolean shouldPlay = playAtEndOfTurn;
+        boolean shouldPlay = false;
         for (PSkill<?> be : getFullEffects()) {
             shouldPlay = shouldPlay | be.triggerOnEndOfTurn(true);
         }
@@ -2370,10 +2420,15 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
 
     @SpireOverride
     public void renderGlow(SpriteBatch sb) {
-        if (transparency < 0.7f) {
+        if (!canRenderGlow()) {
             return;
         }
 
+        renderGlowManual(sb);
+    }
+
+    public void renderGlowManual(SpriteBatch sb)
+    {
         renderMainBorder(sb);
 
         for (PCLCardGlowBorderEffect glowBorder : glowList) {
@@ -2551,6 +2606,11 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         this.current_x = this.target_x = x;
         this.current_y = this.target_y = y;
         this.hb.move(current_x, current_y);
+    }
+
+    public void stopFlash()
+    {
+        this.flashVfx = null;
     }
 
     public void stopGlowing(float delay) {

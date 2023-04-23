@@ -10,7 +10,6 @@ import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.vfx.BobEffect;
 import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.ui.tooltips.EUITooltip;
-import extendedui.utilities.EUIColors;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.resources.PCLResources;
@@ -25,17 +24,12 @@ import java.util.Map;
 public abstract class PCLCreature extends CustomMonster implements PointerProvider, TooltipProvider
 {
     private static final Map<String, PCLCreatureData> staticData = new HashMap<>();
-    protected static final Color TAKEN_TURN_COLOR = EUIColors.white(0.67f);
-    public static final int PRIORITY_START_FIRST = 2;
-    public static final int PRIORITY_START_LAST = 1;
-    public static final int PRIORITY_END_FIRST = 0;
-    public static final int PRIORITY_END_LAST = -1;
+    protected static final Color TAKEN_TURN_COLOR = new Color(0.85f, 0.85f, 0.85f, 0.7f);
 
     public final PCLCreatureData creatureData;
     public PCLAffinity affinity = PCLAffinity.General;
     public boolean stunned;
     public boolean hasTakenTurn;
-    public int priority;
 
     public static PCLCreatureData getStaticData(String id)
     {
@@ -131,13 +125,18 @@ public abstract class PCLCreature extends CustomMonster implements PointerProvid
     @Override
     public void takeTurn()
     {
+        takeTurn(false);
+    }
+
+    public void takeTurn(boolean manual)
+    {
         if (stunned)
         {
             stunned = false;
         }
         else
         {
-            performActions();
+            performActions(manual);
         }
     }
 
@@ -147,10 +146,13 @@ public abstract class PCLCreature extends CustomMonster implements PointerProvid
         super.update();
     }
 
-    public void doActionAnimation()
+    public void doActionAnimation(boolean takenTurn)
     {
         useFastAttackAnimation();
-        hasTakenTurn = true;
+        if (takenTurn)
+        {
+            hasTakenTurn = true;
+        }
     }
 
     public void atEndOfRound()
@@ -173,5 +175,5 @@ public abstract class PCLCreature extends CustomMonster implements PointerProvid
         return ReflectionHacks.getPrivate(this, AbstractMonster.class, "intentColor");
     }
 
-    public abstract void performActions();
+    public abstract void performActions(boolean manual);
 }

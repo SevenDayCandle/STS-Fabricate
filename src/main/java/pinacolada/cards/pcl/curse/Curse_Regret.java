@@ -18,7 +18,7 @@ public class Curse_Regret extends PCLCard
     public static final String ATLAS_URL = "curse/regret";
     public static final PCLCardData DATA = register(Curse_Regret.class)
             .setImagePathFromAtlasUrl(ATLAS_URL)
-            .setCurse(-2, PCLCardTarget.None, false, true)
+            .setCurse(-2, PCLCardTarget.None, false)
             .setTags(PCLCardTag.Unplayable)
             .setAffinities(PCLAffinity.Purple);
 

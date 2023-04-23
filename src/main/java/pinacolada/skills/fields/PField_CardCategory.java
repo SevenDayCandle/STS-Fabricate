@@ -1,23 +1,29 @@
 package pinacolada.skills.fields;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.cards.CardGroup;
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
+import extendedui.interfaces.delegates.FuncT5;
 import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.CostFilter;
 import extendedui.utilities.RotatingList;
+import pinacolada.actions.piles.SelectFromPile;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.tags.PCLCardTag;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
 import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
 import pinacolada.utilities.GameUtilities;
+import pinacolada.utilities.ListSelection;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -288,6 +294,11 @@ public class PField_CardCategory extends PField_CardGeneric
                 previews.add(EUICardPreview.generatePreviewCard(c));
             }
         }
+    }
+
+    public SelectFromPile createFilteredAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> action, PCLUseInfo info, int subchoices)
+    {
+        return super.createFilteredAction(action, info, subchoices).setFilter(getFullCardFilter());
     }
 
     public static AbstractCard getCard(String id)

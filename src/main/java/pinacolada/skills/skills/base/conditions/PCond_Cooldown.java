@@ -3,22 +3,25 @@ package pinacolada.skills.skills.base.conditions;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIRM;
+import extendedui.interfaces.delegates.ActionT0;
 import extendedui.utilities.ColoredString;
+import pinacolada.actions.PCLAction;
+import pinacolada.actions.special.CooldownProgressAction;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.providers.CooldownProvider;
 import pinacolada.interfaces.subscribers.OnCooldownTriggeredSubscriber;
 import pinacolada.resources.PGR;
-import pinacolada.skills.PCond;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
+import pinacolada.skills.skills.PActiveCond;
 import pinacolada.skills.skills.base.primary.PTrigger_When;
 
 @VisibleSkill
-public class PCond_Cooldown extends PCond<PField_Empty> implements CooldownProvider, OnCooldownTriggeredSubscriber
+public class PCond_Cooldown extends PActiveCond<PField_Empty> implements CooldownProvider, OnCooldownTriggeredSubscriber
 {
     public static final PSkillData<PField_Empty> DATA = register(PCond_Cooldown.class, PField_Empty.class)
             .selfTarget();
@@ -46,7 +49,7 @@ public class PCond_Cooldown extends PCond<PField_Empty> implements CooldownProvi
     }
 
     @Override
-    public boolean onCooldownTriggered(AbstractCard card, AbstractCreature m, CooldownProvider cooldown)
+    public boolean onCooldownTriggered(CooldownProvider cooldown, AbstractCreature s, AbstractCreature m)
     {
         if (cooldown.canActivate())
         {
@@ -85,15 +88,26 @@ public class PCond_Cooldown extends PCond<PField_Empty> implements CooldownProvi
     }
 
     @Override
-    public void use(PCLUseInfo info)
+    protected PCLAction<?> useImpl(PCLUseInfo info, ActionT0 onComplete, ActionT0 onFail)
     {
-        progressCooldownAndTrigger(sourceCard, info.target, 1);
+        return getActions().add(new CooldownProgressAction(this, info.source, info.target, 1))
+                .addCallback(result -> {
+                    if (result)
+                    {
+                        onComplete.invoke();
+                    }
+                    else
+                    {
+                        onFail.invoke();
+                    }
+        });
     }
 
+    // Must return true when using or cooldown will not progress in a multicond
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource)
     {
-        return getCooldown() <= 0;
+        return isUsing || getCooldown() <= 0;
     }
 
     @Override
@@ -117,21 +131,12 @@ public class PCond_Cooldown extends PCond<PField_Empty> implements CooldownProvi
     @Override
     public void setCooldown(int value)
     {
-        setTemporaryAmount(value);
+        this.amount = value;
     }
 
+    // No-op to avoid refreshing effects changing amount
     public PCond_Cooldown setTemporaryAmount(int amount)
     {
-        this.amount = amount;
         return this;
-    }
-
-    @Override
-    public void activate(AbstractCard card, AbstractCreature m)
-    {
-        if (this.childEffect != null)
-        {
-            this.childEffect.use(makeInfo(m));
-        }
     }
 }
