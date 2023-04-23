@@ -6,5 +6,5 @@ import com.megacrit.cardcrawl.powers.AbstractPower;
 
 public interface OnTryReducePowerListener
 {
-    boolean tryReducePower(AbstractPower var1, AbstractCreature var2, AbstractCreature var3, AbstractGameAction var4);
+    boolean tryReducePower(AbstractPower power, AbstractCreature target, AbstractCreature source, AbstractGameAction action);
 }

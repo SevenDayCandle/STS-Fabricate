@@ -6,6 +6,8 @@ import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
+import pinacolada.skills.PCond;
+import pinacolada.skills.PMove;
 
 @VisibleCard
 public class Curse_Parasite extends PCLCard
@@ -25,5 +27,6 @@ public class Curse_Parasite extends PCLCard
     @Override
     public void setup(Object input)
     {
+        addUseMove(PCond.onExhaust(), PMove.loseHp(2));
     }
 }

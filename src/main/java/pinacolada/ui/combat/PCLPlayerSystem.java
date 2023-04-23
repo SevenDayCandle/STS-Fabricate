@@ -11,7 +11,6 @@ import extendedui.EUIUtils;
 import extendedui.ui.EUIBase;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLAffinity;
-import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.powers.replacement.PCLLockOnPower;
 import pinacolada.utilities.GameUtilities;
@@ -83,7 +82,7 @@ public class PCLPlayerSystem extends EUIBase
 
     public Color getGlowColor(AbstractCard c)
     {
-        return isMatch(c) && getActiveMeter().canGlow(c) ? PCLCard.SYNERGY_GLOW_COLOR : PCLCard.REGULAR_GLOW_COLOR;
+        return getActiveMeter().canGlow(c) ? PCLCard.SYNERGY_GLOW_COLOR : PCLCard.REGULAR_GLOW_COLOR;
     }
 
     public PCLCard getLastCardPlayed()
@@ -121,11 +120,6 @@ public class PCLPlayerSystem extends EUIBase
         {
             meter.initialize();
         }
-    }
-
-    public boolean isMatch(AbstractCard card)
-    {
-        return CombatManager.onMatchCheck(card) || getActiveMeter().isMatch(card);
     }
 
     public float modifyBlock(float block, PCLCard source, PCLCard card, AbstractCreature target)
@@ -188,16 +182,6 @@ public class PCLPlayerSystem extends EUIBase
     {
         setLastCardPlayed(null);
         getActiveMeter().onEndOfTurn();
-    }
-
-    public void onMatch(PCLCard card)
-    {
-        getActiveMeter().onMatch(card);
-    }
-
-    public void onNotMatch(PCLCard card)
-    {
-        getActiveMeter().onNotMatch(card);
     }
 
     public void onStartOfTurn()

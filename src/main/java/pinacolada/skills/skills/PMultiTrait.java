@@ -82,12 +82,6 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
     }
 
     @Override
-    public boolean canMatch(AbstractCard card)
-    {
-        return EUIUtils.any(effects, effect -> effect.canMatch(card));
-    }
-
-    @Override
     public boolean canPlay(PCLUseInfo info)
     {
         boolean canPlay = true;

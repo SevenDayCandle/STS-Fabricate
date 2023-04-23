@@ -1099,7 +1099,7 @@ public class GameUtilities
         return CombatManager.playerSystem.getCurrentAffinity();
     }
 
-    public static int getCurrentMatchCombo()
+    public static int getCurrentScore()
     {
         return CombatManager.playerSystem.getActiveMeter().getCurrentScore();
     }

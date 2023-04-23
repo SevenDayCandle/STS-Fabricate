@@ -7,7 +7,6 @@ import com.megacrit.cardcrawl.core.Settings;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.orbs.PCLOrbHelper;
@@ -18,7 +17,6 @@ import pinacolada.skills.skills.PMultiCond;
 import pinacolada.skills.skills.base.conditions.*;
 import pinacolada.skills.skills.base.primary.PTrigger_Passive;
 import pinacolada.skills.skills.base.primary.PTrigger_When;
-import pinacolada.skills.skills.special.conditions.PCond_Match;
 import pinacolada.utilities.GameUtilities;
 
 public abstract class PCond<T extends PField> extends PSkill<T>
@@ -247,11 +245,6 @@ public abstract class PCond<T extends PField> extends PSkill<T>
         return new PCond_IsAttacking(target);
     }
 
-    public static PCond_Match match()
-    {
-        return new PCond_Match();
-    }
-
     public static PCond_OnAllyTrigger onAllyTrigger()
     {
         return new PCond_OnAllyTrigger();
@@ -452,12 +445,6 @@ public abstract class PCond<T extends PField> extends PSkill<T>
     {
         super.setChild(effects);
         return this;
-    }
-
-    @Override
-    public boolean canMatch(AbstractCard card)
-    {
-        return this.childEffect != null && checkCondition(card != null ? CombatManager.playerSystem.generateInfo(card, getSourceCreature(), null) : null, false, null) && this.childEffect.canMatch(card);
     }
 
     @Override

@@ -3,12 +3,14 @@ package pinacolada.ui.combat;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import extendedui.EUIUtils;
 import extendedui.ui.controls.EUITutorialPage;
+import pinacolada.powers.PCLClickableUse;
 import pinacolada.resources.PGR;
 
 // TODO add basic matching logic
 public class PCLEmptyMeter extends PCLPlayerMeter
 {
     public static final String ID = createFullID(PGR.core, PCLEmptyMeter.class);
+    protected PCLClickableUse skips;
 
     public PCLEmptyMeter()
     {

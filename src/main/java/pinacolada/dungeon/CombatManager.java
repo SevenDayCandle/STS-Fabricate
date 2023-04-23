@@ -78,8 +78,6 @@ public class CombatManager
     private static final ArrayList<AbstractCard> cardsExhaustedThisCombat = new ArrayList<>();
     private static final ArrayList<AbstractCard> cardsExhaustedThisTurn = new ArrayList<>();
     private static final ArrayList<AbstractCard> hasteInfinitesThisTurn = new ArrayList<>();
-    private static final ArrayList<AbstractCard> matchesThisCombat = new ArrayList<>();
-    private static final ArrayList<AbstractCard> matchesThisTurn = new ArrayList<>();
     private static final ArrayList<AbstractOrb> orbsEvokedThisCombat = new ArrayList<>();
     private static final ArrayList<AbstractOrb> orbsEvokedThisTurn = new ArrayList<>();
     private static final ArrayList<UUID> unplayableCards = new ArrayList<>();
@@ -228,8 +226,6 @@ public class CombatManager
         cardsPlayedThisCombat.clear();
         cardsExhaustedThisCombat.clear();
         cardsExhaustedThisTurn.clear();
-        matchesThisCombat.clear();
-        matchesThisTurn.clear();
         hasteInfinitesThisTurn.clear();
         unplayableCards.clear();
         currentPhase = null;
@@ -311,16 +307,6 @@ public class CombatManager
     public static List<AbstractCard> hasteInfinitesThisTurn()
     {
         return hasteInfinitesThisTurn;
-    }
-
-    public static List<AbstractCard> matchesThisCombat()
-    {
-        return matchesThisCombat;
-    }
-
-    public static List<AbstractCard> matchesThisTurn()
-    {
-        return matchesThisTurn;
     }
 
     public static void onCardDiscarded(AbstractCard card)
@@ -454,24 +440,6 @@ public class CombatManager
         subscriberDo(OnIntensifySubscriber.class, s -> s.onIntensify(affinity));
     }
 
-    public static void onMatch(AbstractCard card, PCLUseInfo info)
-    {
-        subscriberDo(OnMatchSubscriber.class, s -> s.onMatch(card, info));
-
-        matchesThisTurn.add(card);
-        matchesThisCombat.add(card);
-    }
-
-    public static void onMatchBonus(AbstractCard card, PCLAffinity affinity)
-    {
-        subscriberDo(OnMatchBonusSubscriber.class, s -> s.onMatchBonus(card, affinity));
-    }
-
-    public static boolean onMatchCheck(AbstractCard target)
-    {
-        return subscriberCanPass(OnMatchCheckSubscriber.class, s -> s.onMatchCheck(target));
-    }
-
     public static float onModifyMagicNumber(float amount, AbstractCard card)
     {
         return subscriberInout(OnModifyMagicNumberSubscriber.class, amount, (s, d) -> s.onModifyMagicNumber(d, card));
@@ -480,11 +448,6 @@ public class CombatManager
     public static boolean onMonsterMove(AbstractMonster target)
     {
         return subscriberCanDeny(OnMonsterMoveSubscriber.class, s -> s.onMonsterMove(target));
-    }
-
-    public static void onNotMatch(AbstractCard card, PCLUseInfo info)
-    {
-        subscriberDo(OnNotMatchSubscriber.class, s -> s.onNotMatch(card, info));
     }
 
     public static void onOrbApplyFocus(AbstractOrb orb)
@@ -589,6 +552,11 @@ public class CombatManager
         }
     }
 
+    public static boolean onSpecificPowerActivated(AbstractPower power, AbstractCreature source, boolean originalValue)
+    {
+        return subscriberInout(OnSpecificPowerActivatedSubscriber.class, originalValue, (s, d) -> s.onPowerActivated(power, source, d));
+    }
+
     public static void onBattleStart()
     {
         refresh();
@@ -671,16 +639,6 @@ public class CombatManager
     public static void onCardPlayed(PCLCard card, PCLUseInfo info)
     {
         playerSystem.onCardPlayed(card, info, false);
-        if (info.isMatch)
-        {
-            playerSystem.onMatch(card);
-            CombatManager.onMatch(card, info);
-        }
-        else
-        {
-            playerSystem.onNotMatch(card);
-            CombatManager.onNotMatch(card, info);
-        }
     }
 
     public static void onUsingCard(PCLCard card, AbstractPlayer p, AbstractMonster m)
@@ -1168,7 +1126,6 @@ public class CombatManager
         summons.onEndOfTurnLast();
         CombatManager.playerSystem.onEndOfTurn();
         cardsDiscardedThisTurn.clear();
-        matchesThisTurn.clear();
         hasteInfinitesThisTurn.clear();
         turnData.clear();
         cardsExhaustedThisTurn.clear();

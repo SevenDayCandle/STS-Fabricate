@@ -418,11 +418,6 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return this;
     }
 
-    public boolean canMatch(AbstractCard card)
-    {
-        return this.childEffect != null && this.childEffect.canMatch(card);
-    }
-
     public boolean canPlay(PCLUseInfo info)
     {
         return this.childEffect == null || this.childEffect.canPlay(info);

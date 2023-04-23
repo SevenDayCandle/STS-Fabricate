@@ -20,7 +20,6 @@ public class PCLUseInfo
     public final ArrayList<AbstractMonster> enemies;
     public final boolean canActivateSemiLimited;
     public final boolean canActivateLimited;
-    public final boolean isMatch;
     public final boolean isStarter;
     public Object data;
 
@@ -36,14 +35,12 @@ public class PCLUseInfo
         {
             this.canActivateSemiLimited = CombatManager.canActivateSemiLimited(card.cardID);
             this.canActivateLimited = CombatManager.canActivateLimited(card.cardID);
-            this.isMatch = CombatManager.playerSystem.isMatch(card);
             this.isStarter = GameUtilities.isStarter(card);
         }
         else
         {
             this.canActivateSemiLimited = false;
             this.canActivateLimited = false;
-            this.isMatch = false;
             this.isStarter = false;
         }
     }

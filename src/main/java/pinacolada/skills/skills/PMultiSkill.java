@@ -130,12 +130,6 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     }
 
     @Override
-    public boolean canMatch(AbstractCard card)
-    {
-        return EUIUtils.any(effects, effect -> effect.canMatch(card));
-    }
-
-    @Override
     public boolean canPlay(PCLUseInfo info)
     {
         boolean canPlay = true;

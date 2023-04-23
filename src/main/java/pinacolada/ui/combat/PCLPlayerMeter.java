@@ -19,7 +19,6 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.providers.ClickableProvider;
-import pinacolada.powers.PCLClickableUse;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.ui.EUICardDraggable;
@@ -37,11 +36,7 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implement
     public static EUITutorialPage SUMMON_TUTORIAL2 = new EUITutorialPage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.tooltips.summon.title, 2), PGR.core.strings.tutorial_summonTutorial2);
     public static EUITutorialPage SUMMON_TUTORIAL3 = new EUITutorialPage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.tooltips.summon.title, 3), PGR.core.strings.tutorial_summonTutorial3);
     public static EUITutorialPage SUMMON_TUTORIAL4 = new EUITutorialPage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.tooltips.summon.title, 4), PGR.core.strings.tutorial_summonTutorial4);
-    public static final int TARGET_CURRENT = 0;
-    public static final int TARGET_NEXT = 1;
-    public static final int DEFAULT_REROLLS = 1;
     protected EUIButton infoIcon;
-    protected PCLClickableUse skips;
     protected String id;
     protected int currentScore;
     protected int highestScore;
@@ -143,25 +138,6 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implement
         return super.isHovered() || infoIcon.hb.hovered;
     }
 
-    public boolean isMatch(AbstractCard card)
-    {
-        PCLAffinity current = getCurrentAffinity();
-        if (current == PCLAffinity.General)
-        {
-            return false;
-        }
-        PCLCard eCard = EUIUtils.safeCast(card, PCLCard.class);
-        if (eCard != null)
-        {
-            if (current.equals(PCLAffinity.Star))
-            {
-                return (eCard.affinities.getLevel(PCLAffinity.General, true) > 0);
-            }
-            return (eCard.affinities.getLevel(current, true) > 0);
-        }
-        return false;
-    }
-
     public boolean isPowerActive(PCLAffinity affinity) {return false;}
 
     public void renderImpl(SpriteBatch sb)
@@ -204,14 +180,6 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implement
     }
 
     public void onEndOfTurn()
-    {
-    }
-
-    public void onMatch(AbstractCard card)
-    {
-    }
-
-    public void onNotMatch(AbstractCard card)
     {
     }
 
