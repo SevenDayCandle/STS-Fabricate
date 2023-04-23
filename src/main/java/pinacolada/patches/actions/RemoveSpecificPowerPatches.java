@@ -5,7 +5,7 @@ import com.evacipated.cardcrawl.modthespire.lib.SpirePostfixPatch;
 import com.megacrit.cardcrawl.actions.common.RemoveSpecificPowerAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.powers.AbstractPower;
-import pinacolada.utilities.GameUtilities;
+import pinacolada.dungeon.CombatManager;
 
 public class RemoveSpecificPowerPatches
 {
@@ -18,7 +18,7 @@ public class RemoveSpecificPowerPatches
         public static void postfix(RemoveSpecificPowerAction __instance, AbstractCreature target, AbstractCreature source,
                                    String powerToRemove)
         {
-            if (!GameUtilities.canReducePower(source, target, powerToRemove, __instance))
+            if (!CombatManager.canReducePower(source, target, powerToRemove, __instance))
             {
                 __instance.isDone = true;
             }
@@ -33,7 +33,7 @@ public class RemoveSpecificPowerPatches
         public static void postfix(RemoveSpecificPowerAction __instance, AbstractCreature target, AbstractCreature source,
                                    AbstractPower powerInstance)
         {
-            if (!GameUtilities.canReducePower(source, target, powerInstance, __instance))
+            if (!CombatManager.canReducePower(source, target, powerInstance, __instance))
             {
                 __instance.isDone = true;
             }

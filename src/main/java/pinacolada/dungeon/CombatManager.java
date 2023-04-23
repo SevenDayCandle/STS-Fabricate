@@ -839,6 +839,21 @@ public class CombatManager
             PCLActions.top.add(new HasteAction(card));
         }
     }
+    public static boolean canApplyPower(AbstractCreature source, AbstractCreature target, AbstractPower powerToApply, AbstractGameAction action)
+    {
+        return target == null || subscriberCanDeny(OnTryApplyPowerSubscriber.class, s -> s.tryApplyPower(powerToApply, target, source, action));
+    }
+
+    public static boolean canReducePower(AbstractCreature source, AbstractCreature target, String powerID, AbstractGameAction action)
+    {
+        AbstractPower power = powerID != null ? target.getPower(powerID) : null;
+        return power == null || canReducePower(source, target, power, action);
+    }
+
+    public static boolean canReducePower(AbstractCreature source, AbstractCreature target, AbstractPower powerToApply, AbstractGameAction action)
+    {
+        return target == null || subscriberCanDeny(OnTryReducePowerSubscriber.class, s -> s.tryReducePower(powerToApply, target, source, action));
+    }
 
     public static <T> T setTurnData(String key, T data)
     {

@@ -37,7 +37,7 @@ public class ApplyPowerActionPatches
         public static void postfix(ApplyPowerAction __instance, AbstractCreature target, AbstractCreature source,
                                    AbstractPower powerToApply, int stackAmount, boolean isFast, AbstractGameAction.AttackEffect effect)
         {
-            if (!GameUtilities.canApplyPower(source, target, powerToApply, __instance))
+            if (!CombatManager.canApplyPower(source, target, powerToApply, __instance))
             {
                 __instance.isDone = true;
             }

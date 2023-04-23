@@ -5,7 +5,7 @@ import com.evacipated.cardcrawl.modthespire.lib.SpirePostfixPatch;
 import com.megacrit.cardcrawl.actions.common.ReducePowerAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.powers.AbstractPower;
-import pinacolada.utilities.GameUtilities;
+import pinacolada.dungeon.CombatManager;
 
 public class ReducePowerActionPatches
 {
@@ -18,7 +18,7 @@ public class ReducePowerActionPatches
         public static void postfix(ReducePowerAction __instance, AbstractCreature target, AbstractCreature source,
                                    String power, int amount)
         {
-            if (!GameUtilities.canReducePower(source, target, power, __instance))
+            if (!CombatManager.canReducePower(source, target, power, __instance))
             {
                 __instance.isDone = true;
             }
@@ -33,7 +33,7 @@ public class ReducePowerActionPatches
         public static void postfix(ReducePowerAction __instance, AbstractCreature target, AbstractCreature source,
                                    AbstractPower powerInstance, int amount)
         {
-            if (!GameUtilities.canReducePower(source, target, powerInstance, __instance))
+            if (!CombatManager.canReducePower(source, target, powerInstance, __instance))
             {
                 __instance.isDone = true;
             }

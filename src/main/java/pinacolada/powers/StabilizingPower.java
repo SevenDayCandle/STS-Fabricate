@@ -4,10 +4,10 @@ import com.evacipated.cardcrawl.mod.stslib.powers.interfaces.InvisiblePower;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.powers.AbstractPower;
-import pinacolada.interfaces.listeners.OnTryReducePowerListener;
+import pinacolada.interfaces.subscribers.OnTryReducePowerSubscriber;
 import pinacolada.resources.PGR;
 
-public class StabilizingPower extends PCLPower implements InvisiblePower, OnTryReducePowerListener
+public class StabilizingPower extends PCLSubscribingPower implements InvisiblePower, OnTryReducePowerSubscriber
 {
     public static final String POWER_ID = PGR.core.createID(StabilizingPower.class.getSimpleName());
     protected AbstractPower target;

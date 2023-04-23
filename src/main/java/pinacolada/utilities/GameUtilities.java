@@ -8,7 +8,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.SoulboundField;
 import com.evacipated.cardcrawl.mod.stslib.patches.core.AbstractCreature.TempHPField;
-import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.GameActionManager;
 import com.megacrit.cardcrawl.actions.common.ApplyPowerAction;
 import com.megacrit.cardcrawl.actions.utility.TextAboveCreatureAction;
@@ -69,8 +68,6 @@ import pinacolada.characters.PCLCharacter;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLDungeon;
 import pinacolada.effects.SFX;
-import pinacolada.interfaces.listeners.OnTryApplyPowerListener;
-import pinacolada.interfaces.listeners.OnTryReducePowerListener;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.interfaces.subscribers.OnEndOfTurnFirstSubscriber;
 import pinacolada.interfaces.subscribers.OnEndOfTurnLastSubscriber;
@@ -169,35 +166,6 @@ public class GameUtilities
                 augments.entrySet());
     }
 
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public static boolean canApplyPower(AbstractCreature source, AbstractCreature target, AbstractPower powerToApply, AbstractGameAction action)
-    {
-        boolean canApply = true;
-        if (target != null)
-        {
-            for (AbstractPower power : target.powers)
-            {
-                if (power instanceof OnTryApplyPowerListener)
-                {
-                    canApply &= ((OnTryApplyPowerListener) power).tryApplyPower(powerToApply, target, source, action);
-                }
-            }
-
-            if (canApply && target != source && source != null)
-            {
-                for (AbstractPower power : source.powers)
-                {
-                    if (power instanceof OnTryApplyPowerListener)
-                    {
-                        canApply &= ((OnTryApplyPowerListener) power).tryApplyPower(powerToApply, target, source, action);
-                    }
-                }
-            }
-        }
-
-        return canApply;
-    }
-
     public static boolean canObtainCopy(AbstractCard card)
     {
         return PGR.dungeon.canObtainCopy(card);
@@ -222,40 +190,6 @@ public class GameUtilities
     public static boolean canReceiveAnyColorCard()
     {
         return GameUtilities.hasRelicEffect(PrismaticShard.ID) || ModHelper.isModEnabled(Diverse.ID);
-    }
-
-    public static boolean canReducePower(AbstractCreature source, AbstractCreature target, String powerID, AbstractGameAction action)
-    {
-        AbstractPower power = powerID != null ? target.getPower(powerID) : null;
-        return power == null || canReducePower(source, target, power, action);
-    }
-
-    public static boolean canReducePower(AbstractCreature source, AbstractCreature target, AbstractPower powerToApply, AbstractGameAction action)
-    {
-        boolean canReduce = true;
-        if (target != null)
-        {
-            for (AbstractPower power : target.powers)
-            {
-                if (power instanceof OnTryReducePowerListener)
-                {
-                    canReduce &= ((OnTryReducePowerListener) power).tryReducePower(powerToApply, target, source, action);
-                }
-            }
-
-            if (canReduce && target != source && source != null)
-            {
-                for (AbstractPower power : source.powers)
-                {
-                    if (power instanceof OnTryReducePowerListener)
-                    {
-                        canReduce &= ((OnTryReducePowerListener) power).tryReducePower(powerToApply, target, source, action);
-                    }
-                }
-            }
-        }
-
-        return canReduce;
     }
 
     public static boolean canRemoveFromDeck(AbstractCard card)

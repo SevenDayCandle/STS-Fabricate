@@ -3,11 +3,11 @@ package pinacolada.powers.special;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.powers.AbstractPower;
-import pinacolada.interfaces.listeners.OnTryApplyPowerListener;
-import pinacolada.powers.PCLPower;
+import pinacolada.interfaces.subscribers.OnTryApplyPowerSubscriber;
+import pinacolada.powers.PCLSubscribingPower;
 import pinacolada.utilities.GameUtilities;
 
-public class SilencedPower extends PCLPower implements OnTryApplyPowerListener
+public class SilencedPower extends PCLSubscribingPower implements OnTryApplyPowerSubscriber
 {
     public static final String POWER_ID = createFullID(SilencedPower.class);
     public int secondaryAmount;
