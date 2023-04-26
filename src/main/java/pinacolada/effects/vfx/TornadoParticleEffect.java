@@ -13,8 +13,7 @@ import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLEffects;
 import pinacolada.resources.pcl.PCLCoreImages;
 
-public class TornadoParticleEffect extends PCLEffect
-{
+public class TornadoParticleEffect extends PCLEffect {
     protected static final int SIZE = 230;
     protected static final TextureCache[] images = {PCLCoreImages.Effects.airTornado1, PCLCoreImages.Effects.airTornado2};
     protected static final Color PARTICLE_COLOR = Color.LIME.cpy();
@@ -31,14 +30,12 @@ public class TornadoParticleEffect extends PCLEffect
     protected Color secondaryColor;
     protected Texture image;
 
-    public TornadoParticleEffect(float x, float y, float radiusSpeed)
-    {
+    public TornadoParticleEffect(float x, float y, float radiusSpeed) {
         super(MathUtils.random(0.4F, 0.8F));
 
         final float offsetX = MathUtils.random(-16.0F, 16.0F) * Settings.scale;
         final float offsetY = MathUtils.random(-16.0F, 16.0F) * Settings.scale;
-        if (offsetX > 0.0F)
-        {
+        if (offsetX > 0.0F) {
             this.renderBehind = true;
         }
 
@@ -55,20 +52,17 @@ public class TornadoParticleEffect extends PCLEffect
         this.duration = 0.75f;
         this.image = EUIUtils.random(images).texture();
 
-        if (randomBoolean())
-        {
+        if (randomBoolean()) {
             this.rotationSpeed *= -1;
         }
     }
 
-    public void render(SpriteBatch sb)
-    {
+    public void render(SpriteBatch sb) {
         renderImage(sb, image, tX, tY, false, false);
     }
 
     @Override
-    protected void updateInternal(float deltaTime)
-    {
+    protected void updateInternal(float deltaTime) {
         super.updateInternal(deltaTime);
 
         vfxTimer -= deltaTime;
@@ -78,13 +72,11 @@ public class TornadoParticleEffect extends PCLEffect
         tY = y + radius * MathUtils.sin(rotation);
 
         final float halfDuration = startingDuration * 0.5f;
-        if (this.duration < halfDuration)
-        {
+        if (this.duration < halfDuration) {
             this.color.a = Interpolation.exp5In.apply(0.0F, this.alpha, this.duration / halfDuration);
         }
 
-        if (vfxTimer < 0f)
-        {
+        if (vfxTimer < 0f) {
             PCLEffects.Queue.add(new RazorWindParticleEffect(tX, tY,
                     random(-300f, 300f), random(-300f, 300f)));
             PCLEffects.Queue.add(new LightFlareParticleEffect(this.x, this.y, PARTICLE_COLOR));

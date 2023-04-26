@@ -9,8 +9,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import pinacolada.effects.PCLEffect;
 
-public class StanceParticleHorizontal extends PCLEffect
-{
+public class StanceParticleHorizontal extends PCLEffect {
     private final float dvy;
     private final float dvx;
     private final Texture img;
@@ -19,8 +18,7 @@ public class StanceParticleHorizontal extends PCLEffect
     private float vX;
     private float vY;
 
-    public StanceParticleHorizontal(Color particleColor)
-    {
+    public StanceParticleHorizontal(Color particleColor) {
         super(random(0.6f, 1f), true);
 
         final float multi = Settings.scale;
@@ -37,8 +35,7 @@ public class StanceParticleHorizontal extends PCLEffect
     }
 
     @Override
-    public void render(SpriteBatch sb)
-    {
+    public void render(SpriteBatch sb) {
         sb.setColor(color);
         sb.setBlendFunction(770, 1);
         sb.draw(img, x, y, 32f, 32f, 25f,
@@ -48,8 +45,7 @@ public class StanceParticleHorizontal extends PCLEffect
     }
 
     @Override
-    protected void updateInternal(float deltaTime)
-    {
+    protected void updateInternal(float deltaTime) {
         x += vX * deltaTime;
         y += vY * deltaTime;
         vY += dvy * deltaTime;
@@ -59,12 +55,10 @@ public class StanceParticleHorizontal extends PCLEffect
         rotation = -(57.295776f * MathUtils.atan2(vX, vY));
 
         final float halfDuration = startingDuration * 0.5f;
-        if (duration > halfDuration)
-        {
+        if (duration > halfDuration) {
             color.a = Interpolation.fade.apply(1f, 0f, (duration - halfDuration) / halfDuration);
         }
-        else
-        {
+        else {
             color.a = Interpolation.fade.apply(0f, 1f, duration / halfDuration);
         }
 

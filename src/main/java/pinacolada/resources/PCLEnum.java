@@ -9,22 +9,18 @@ import com.megacrit.cardcrawl.screens.mainMenu.MainMenuPanelButton;
 import com.megacrit.cardcrawl.screens.mainMenu.MenuButton;
 import com.megacrit.cardcrawl.screens.mainMenu.MenuPanelScreen;
 
-public class PCLEnum
-{
-    public static class Buttons
-    {
+public class PCLEnum {
+    public static class Buttons {
         @SpireEnum
         public static MenuButton.ClickResult CUSTOM;
     }
 
-    public static class Menus
-    {
+    public static class Menus {
         @SpireEnum
         public static MenuPanelScreen.PanelScreen CUSTOM;
     }
-    
-    public static class Panels
-    {
+
+    public static class Panels {
         @SpireEnum
         public static MainMenuPanelButton.PanelClickResult CUSTOM_CARDS;
         @SpireEnum
@@ -33,34 +29,29 @@ public class PCLEnum
         public static MainMenuPanelButton.PanelClickResult CUSTOM_RELICS;
     }
 
-    public static class Rewards
-    {
+    public static class Rewards {
         @SpireEnum
         public static RewardItem.RewardType AUGMENT;
     }
 
-    public static class CardGroupType
-    {
+    public static class CardGroupType {
         @SpireEnum
         public static CardGroup.CardGroupType PURGED_CARDS;
     }
 
-    public static class CardRarity
-    {
+    public static class CardRarity {
         @SpireEnum
         public static AbstractCard.CardRarity LEGENDARY;
         @SpireEnum
         public static AbstractCard.CardRarity SECRET;
     }
 
-    public static class CardType
-    {
+    public static class CardType {
         @SpireEnum
         public static AbstractCard.CardType SUMMON;
     }
 
-    public static class AttackEffect
-    {
+    public static class AttackEffect {
         @SpireEnum
         public static AbstractGameAction.AttackEffect GUNSHOT;
         @SpireEnum

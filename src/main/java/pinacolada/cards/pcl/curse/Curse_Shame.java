@@ -11,8 +11,7 @@ import pinacolada.skills.PCond;
 import pinacolada.skills.PMove;
 
 @VisibleCard
-public class Curse_Shame extends PCLCard
-{
+public class Curse_Shame extends PCLCard {
     public static final String ATLAS_URL = "curse/shame";
     public static final PCLCardData DATA = register(Curse_Shame.class)
             .setImagePathFromAtlasUrl(ATLAS_URL)
@@ -20,14 +19,12 @@ public class Curse_Shame extends PCLCard
             .setTags(PCLCardTag.Unplayable)
             .setAffinities(PCLAffinity.Purple);
 
-    public Curse_Shame()
-    {
+    public Curse_Shame() {
         super(DATA);
     }
 
     @Override
-    public void setup(Object input)
-    {
+    public void setup(Object input) {
         addUseMove(PCond.onTurnEnd(), PMove.gain(1, PCLPowerHelper.Frail));
     }
 }

@@ -14,71 +14,49 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
-public abstract class AbstractCubes extends PCLRelic implements CardRewardActionProvider
-{
+public abstract class AbstractCubes extends PCLRelic implements CardRewardActionProvider {
     public static final String ID = createFullID(AbstractCubes.class);
     public final int normalUses;
     public final int maxUses;
 
-    public AbstractCubes(String id, RelicTier tier, LandingSound sfx, int normalUses, int maxUses)
-    {
+    public AbstractCubes(String id, RelicTier tier, LandingSound sfx, int normalUses, int maxUses) {
         super(id, tier, sfx);
         this.normalUses = normalUses;
         this.maxUses = maxUses;
         this.updateDescription(null);
     }
 
-    public boolean canAct()
-    {
+    public boolean canAct() {
         return counter > 0;
     }
 
-    public AbstractCard doAction(AbstractCard card, RewardItem rewardItem, int cardIndex)
-    {
+    public AbstractCard doAction(AbstractCard card, RewardItem rewardItem, int cardIndex) {
         setCounter(counter - 1);
         return getReward(card, rewardItem);
     }
 
-    public AbstractCard getReward(AbstractCard card, RewardItem rewardItem)
-    {
+    public AbstractCard getReward(AbstractCard card, RewardItem rewardItem) {
         return PGR.dungeon.getRandomRewardReplacementCard(card.rarity, rewardItem.cards, AbstractDungeon.cardRng, true);
     }
 
     @Override
-    public String getUpdatedDescription()
-    {
+    public String getUpdatedDescription() {
         return formatDescription(0, normalUses, maxUses);
     }
 
     @Override
-    public void onEquip()
-    {
+    public void onEquip() {
         super.onEquip();
 
         setCounter(1);
     }
 
     @Override
-    public void onEnterRoom(AbstractRoom room)
-    {
-        super.onEnterRoom(room);
-
-        if (room instanceof MonsterRoom)
-        {
-            setCounter(Math.min(maxUses, counter + (GameUtilities.getTotalCardsInPlay() / normalUses)));
-            flash();
-        }
-    }
-
-    @Override
-    public void obtain()
-    {
+    public void obtain() {
         ArrayList<AbstractRelic> relics = player.relics;
-        for (int i = 0; i < relics.size(); i++)
-        {
+        for (int i = 0; i < relics.size(); i++) {
             AbstractCubes relic = EUIUtils.safeCast(relics.get(i), AbstractCubes.class);
-            if (relic != null)
-            {
+            if (relic != null) {
                 instantObtain(player, i, true);
                 setCounter(relic.counter);
                 return;
@@ -86,5 +64,15 @@ public abstract class AbstractCubes extends PCLRelic implements CardRewardAction
         }
 
         super.obtain();
+    }
+
+    @Override
+    public void onEnterRoom(AbstractRoom room) {
+        super.onEnterRoom(room);
+
+        if (room instanceof MonsterRoom) {
+            setCounter(Math.min(maxUses, counter + (GameUtilities.getTotalCardsInPlay() / normalUses)));
+            flash();
+        }
     }
 }

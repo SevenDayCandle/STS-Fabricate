@@ -10,8 +10,7 @@ import com.esotericsoftware.spine.attachments.RegionAttachment;
 import com.esotericsoftware.spine.attachments.SkeletonAttachment;
 import extendedui.utilities.EUIClassUtils;
 
-public class BlendableSkeletonMeshRenderer extends SkeletonMeshRenderer
-{
+public class BlendableSkeletonMeshRenderer extends SkeletonMeshRenderer {
     private static final short[] quadTriangles = new short[]{0, 1, 2, 2, 3, 0};
 
     public BlendableSkeletonMeshRenderer() {
@@ -24,22 +23,24 @@ public class BlendableSkeletonMeshRenderer extends SkeletonMeshRenderer
         Array<Slot> drawOrder = EUIClassUtils.getField(skeleton, "drawOrder");
         int i = 0;
 
-        for(int n = drawOrder.size; i < n; ++i) {
+        for (int n = drawOrder.size; i < n; ++i) {
             Slot slot = drawOrder.get(i);
             Attachment attachment = EUIClassUtils.getField(slot, "attachment");
             Texture texture = null;
             if (attachment instanceof RegionAttachment) {
-                RegionAttachment region = (RegionAttachment)attachment;
+                RegionAttachment region = (RegionAttachment) attachment;
                 vertices = region.updateWorldVertices(slot, premultipliedAlpha);
                 triangles = quadTriangles;
                 texture = region.getRegion().getTexture();
-            } else if (attachment instanceof MeshAttachment) {
-                MeshAttachment mesh = (MeshAttachment)attachment;
+            }
+            else if (attachment instanceof MeshAttachment) {
+                MeshAttachment mesh = (MeshAttachment) attachment;
                 vertices = mesh.updateWorldVertices(slot, premultipliedAlpha);
                 triangles = mesh.getTriangles();
                 texture = mesh.getRegion().getTexture();
-            } else if (attachment instanceof SkeletonAttachment) {
-                Skeleton attachmentSkeleton = ((SkeletonAttachment)attachment).getSkeleton();
+            }
+            else if (attachment instanceof SkeletonAttachment) {
+                Skeleton attachmentSkeleton = ((SkeletonAttachment) attachment).getSkeleton();
                 if (attachmentSkeleton == null) {
                     continue;
                 }

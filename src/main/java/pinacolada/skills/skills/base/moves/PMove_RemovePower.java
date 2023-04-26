@@ -16,83 +16,65 @@ import pinacolada.utilities.GameUtilities;
 import java.util.List;
 
 @VisibleSkill
-public class PMove_RemovePower extends PMove<PField_Power>
-{
+public class PMove_RemovePower extends PMove<PField_Power> {
     public static final PSkillData<PField_Power> DATA = register(PMove_RemovePower.class, PField_Power.class);
 
-    public PMove_RemovePower()
-    {
+    public PMove_RemovePower() {
         this(PCLCardTarget.Self);
     }
 
-    public PMove_RemovePower(PSkillSaveData content)
-    {
-        super(DATA, content);
-    }
-
-    public PMove_RemovePower(PCLCardTarget target, PCLPowerHelper... powers)
-    {
+    public PMove_RemovePower(PCLCardTarget target, PCLPowerHelper... powers) {
         super(DATA, target, 1);
         fields.setPower(powers);
     }
 
+    public PMove_RemovePower(PSkillSaveData content) {
+        super(DATA, content);
+    }
+
     @Override
-    public String getSampleText(PSkill<?> callingSkill)
-    {
+    public String getSampleText(PSkill<?> callingSkill) {
         return TEXT.act_remove(TEXT.cedit_powers);
     }
 
     @Override
-    public void use(PCLUseInfo info)
-    {
+    public String getSubText() {
+        String powerString = fields.getPowerSubjectString();
+        powerString = target == PCLCardTarget.Self ? TEXT.act_remove(TEXT.subjects_onYou(powerString)) : TEXT.act_removeFrom(powerString, getTargetString());
+        return fields.random ? TEXT.subjects_randomly(powerString) : powerString;
+    }
+
+    @Override
+    public void use(PCLUseInfo info) {
         List<AbstractCreature> targets = getTargetList(info);
-        if (fields.powers.isEmpty())
-        {
-            for (PCLPowerHelper power : PCLPowerHelper.commonDebuffs())
-            {
-                for (AbstractCreature t : targets)
-                {
+        if (fields.powers.isEmpty()) {
+            for (PCLPowerHelper power : PCLPowerHelper.commonDebuffs()) {
+                for (AbstractCreature t : targets) {
                     getActions().removePower(t, t, power.ID);
                 }
             }
         }
-        else if (fields.random)
-        {
+        else if (fields.random) {
             PCLPowerHelper power = GameUtilities.getRandomElement(fields.powers);
-            if (power != null)
-            {
+            if (power != null) {
                 removePower(targets, power);
             }
         }
-        else
-        {
-            for (PCLPowerHelper power : fields.powers)
-            {
+        else {
+            for (PCLPowerHelper power : fields.powers) {
                 removePower(targets, power);
             }
         }
         super.use(info);
     }
 
-    @Override
-    public String getSubText()
-    {
-        String powerString = fields.getPowerSubjectString();
-        powerString = target == PCLCardTarget.Self ? TEXT.act_remove(TEXT.subjects_onYou(powerString)) : TEXT.act_removeFrom(powerString, getTargetString());
-        return fields.random ? TEXT.subjects_randomly(powerString) : powerString;
-    }
-
-    protected void removePower(List<AbstractCreature> targets, PCLPowerHelper power)
-    {
-        for (AbstractCreature t : targets)
-        {
+    protected void removePower(List<AbstractCreature> targets, PCLPowerHelper power) {
+        for (AbstractCreature t : targets) {
             getActions().removePower(t, t, power.ID);
         }
         // Handle powers that are equivalent in terms of what the player sees but that have different IDs
-        if (power == PCLPowerHelper.Intangible)
-        {
-            for (AbstractCreature t : targets)
-            {
+        if (power == PCLPowerHelper.Intangible) {
+            for (AbstractCreature t : targets) {
                 getActions().removePower(t, t, IntangiblePower.POWER_ID);
             }
         }

@@ -43,12 +43,16 @@ import pinacolada.utilities.PCLRenderHelpers;
 
 import java.util.ArrayList;
 
-public abstract class PCLCharacter extends CustomPlayer
-{
+public abstract class PCLCharacter extends CustomPlayer {
     protected static final String DEFAULT_HIT = "hit";
     protected static final String DEFAULT_IDLE = "idle";
 
     public static BlendableSkeletonMeshRenderer sr = new BlendableSkeletonMeshRenderer();
+
+    static {
+        sr.setPremultipliedAlpha(true);
+    }
+
     public String description;
     protected TextureCache charTexture;
     protected boolean actualFlip;
@@ -61,18 +65,11 @@ public abstract class PCLCharacter extends CustomPlayer
     private String hitAnim = null;
     private String idleAnim = null;
 
-    static
-    {
-        sr.setPremultipliedAlpha(true);
-    }
-
-    protected PCLCharacter(String name, PlayerClass playerClass)
-    {
+    protected PCLCharacter(String name, PlayerClass playerClass) {
         super(name, playerClass, new PCLEnergyOrb(), new G3DJAnimation(null, null));
     }
 
-    public PCLCharacter(String name, PlayerClass playerClass, PCLEnergyOrb orb, String atlasUrl, String skeletonUrl, String shoulderImage1, String shoulderImage2, String corpseImage, String description)
-    {
+    public PCLCharacter(String name, PlayerClass playerClass, PCLEnergyOrb orb, String atlasUrl, String skeletonUrl, String shoulderImage1, String shoulderImage2, String corpseImage, String description) {
         super(name, playerClass, orb, new G3DJAnimation(null, null));
         this.atlasUrl = atlasUrl;
         this.skeletonUrl = skeletonUrl;
@@ -88,62 +85,101 @@ public abstract class PCLCharacter extends CustomPlayer
         reloadDefaultAnimation();
     }
 
-    protected PCLLoadout prepareLoadout()
-    {
+    public void reloadDefaultAnimation() {
+        reloadAnimation(1f);
+    }
+
+    protected PCLLoadout prepareLoadout() {
         return PGR.getPlayerData(chosenClass).prepareLoadout();
     }
 
-    @Override
-    public Texture getEnergyImage()
-    {
-        if (this.energyOrb instanceof PCLEnergyOrb)
-        {
-            return ((PCLEnergyOrb) this.energyOrb).getEnergyImage();
+    public void reloadAnimation(float scale) {
+        reloadAnimation(atlasUrl, skeletonUrl, DEFAULT_IDLE, DEFAULT_HIT, scale);
+    }
+
+    public void reloadAnimation(String atlasUrl, String skeletonUrl, String idleStr, String hitStr, float scale) {
+        try {
+            this.loadAnimationPCL(atlasUrl, skeletonUrl, scale);
+            tryFindAnimations(idleStr, hitStr);
+            AnimationState.TrackEntry e = this.state.setAnimation(0, idleAnim, true);
+            if (hitAnim != null) {
+                this.stateData.setMix(hitAnim, idleAnim, 0.1f);
+            }
+            e.setTimeScale(0.9f);
         }
-        else
-        {
-            return super.getEnergyImage();
+        catch (Exception e) {
+            EUIUtils.logError(this, "Failed to reload animation with atlas " + atlasUrl + " and skeleton " + skeletonUrl);
         }
     }
 
-    @Override
-    public CharStat getCharStat()
-    {
-        // yes
-        return super.getCharStat();
+    // Intentionally avoid calling loadAnimation to avoid registering animations
+    protected void loadAnimationPCL(String atlasUrl, String skeletonUrl, float scale) {
+        this.atlas = new TextureAtlas(Gdx.files.internal(atlasUrl));
+        SkeletonJson json = new SkeletonJson(this.atlas);
+        json.setScale(Settings.renderScale * scale);
+        SkeletonData skeletonData = json.readSkeletonData(Gdx.files.internal(skeletonUrl));
+        this.skeleton = new Skeleton(skeletonData);
+        this.skeleton.setColor(Color.WHITE);
+        this.stateData = new AnimationStateData(skeletonData);
+        this.state = new AnimationState(this.stateData);
     }
 
-    @Override
-    public Texture getCustomModeCharacterButtonImage()
-    {
-        if (charTexture == null)
-        {
-            charTexture = new TextureCache(BaseMod.getPlayerButton(this.chosenClass));
+    protected void tryFindAnimations(String idleStr, String hitStr) {
+        Animation idle = getAnimation(idleStr);
+        if (idle == null) {
+            idle = getAnimation(StringUtils.capitalize(idleStr));
         }
-        return charTexture.texture();
+        if (idle == null) {
+            idle = getAnimation(0);
+        }
+
+        if (idle != null) {
+            idleAnim = idle.getName();
+        }
+        else {
+            idleAnim = null;
+        }
+
+        Animation hit = getAnimation(hitStr);
+        if (idle == null) {
+            idle = getAnimation(StringUtils.capitalize(hitStr));
+        }
+        if (hit == null) {
+            hit = getAnimation(1);
+        }
+
+        if (hit != null) {
+            hitAnim = hit.getName();
+        }
+        else {
+            hitAnim = null;
+        }
     }
 
-    @Override
-    public String getPortraitImageName()
-    {
+    protected Animation getAnimation(String key) {
+        return this.state.getData().getSkeletonData().findAnimation(key);
+    }
+
+    protected Animation getAnimation(int index) {
+        if (this.stateData != null) {
+            Array<Animation> animations = this.stateData.getSkeletonData().getAnimations();
+            return index < animations.size ? animations.get(index) : null;
+        }
         return null;
     }
 
     @Override
-    public ArrayList<String> getStartingDeck()
-    {
+    public ArrayList<String> getStartingDeck() {
         return prepareLoadout().getStartingDeck();
     }
 
     @Override
-    public ArrayList<String> getStartingRelics()
-    {
+    public ArrayList<String> getStartingRelics() {
         return prepareLoadout().getStartingRelics();
     }
 
     @Override
-    public CharSelectInfo getLoadout()
-    {
+    public CharSelectInfo getLoadout() {
         return prepareLoadout().getLoadout(name, description, this);
     }
 
@@ -154,51 +190,43 @@ public abstract class PCLCharacter extends CustomPlayer
     }
 
     @Override
-    public int getAscensionMaxHPLoss()
-    {
+    public int getAscensionMaxHPLoss() {
         return PCLAbstractPlayerData.DEFAULT_HP / 10;
     }
 
     @Override
-    public BitmapFont getEnergyNumFont()
-    {
+    public BitmapFont getEnergyNumFont() {
         return FontHelper.energyNumFontBlue;
     }
 
     @Override
-    public void doCharSelectScreenSelectEffect()
-    {
+    public void doCharSelectScreenSelectEffect() {
         CardCrawlGame.sound.playA(getCustomModeCharacterButtonSoundKey(), MathUtils.random(-0.1f, 0.2f));
         CardCrawlGame.screenShake.shake(ScreenShake.ShakeIntensity.MED, ScreenShake.ShakeDur.SHORT, false);
     }
 
     @Override
-    public String getCustomModeCharacterButtonSoundKey()
-    {
+    public String getCustomModeCharacterButtonSoundKey() {
         return SFX.TINGSHA;
     }
 
     @Override
-    public String getLocalizedCharacterName()
-    {
+    public String getLocalizedCharacterName() {
         return name;
     }
 
     @Override
-    public String getSpireHeartText()
-    {
+    public String getSpireHeartText() {
         return com.megacrit.cardcrawl.events.beyond.SpireHeart.DESCRIPTIONS[10];
     }
 
     @Override
-    public Color getSlashAttackColor()
-    {
+    public Color getSlashAttackColor() {
         return Color.SKY;
     }
 
     @Override
-    public AbstractGameAction.AttackEffect[] getSpireHeartSlashEffect()
-    {
+    public AbstractGameAction.AttackEffect[] getSpireHeartSlashEffect() {
         return new AbstractGameAction.AttackEffect[]
                 {
                         AbstractGameAction.AttackEffect.SLASH_HEAVY,
@@ -211,36 +239,25 @@ public abstract class PCLCharacter extends CustomPlayer
     }
 
     @Override
-    public String getVampireText()
-    {
+    public String getVampireText() {
         return com.megacrit.cardcrawl.events.city.Vampires.DESCRIPTIONS[5];
     }
 
     @Override
-    public ArrayList<String> getRelicNames()
-    {
-        final ArrayList<String> list = new ArrayList<>();
-        for (AbstractRelic r : relics)
-        {
-            RelicLibraryPatches.addRelic(list, r);
-        }
-
-        return list;
+    public void playDeathAnimation() {
+        PCLEffects.Manual.add(new SmokeEffect(hb.cX, hb.cY, getCardRenderColor()));
+        super.playDeathAnimation();
     }
 
     @Override
-    public void damage(DamageInfo info)
-    {
-        if (atlas != null && hitAnim != null && info.owner != null && info.type != DamageInfo.DamageType.THORNS && info.output - this.currentBlock > 0)
-        {
-            try
-            {
+    public void damage(DamageInfo info) {
+        if (atlas != null && hitAnim != null && info.owner != null && info.type != DamageInfo.DamageType.THORNS && info.output - this.currentBlock > 0) {
+            try {
                 AnimationState.TrackEntry e = this.state.setAnimation(0, hitAnim, false);
                 this.state.addAnimation(0, idleAnim, true, 0f);
                 e.setTimeScale(0.9f);
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 EUIUtils.logError(this, "Failed to load damage animation with atlas " + atlasUrl + " and skeleton " + skeletonUrl);
             }
         }
@@ -249,21 +266,57 @@ public abstract class PCLCharacter extends CustomPlayer
     }
 
     @Override
+    public ArrayList<String> getRelicNames() {
+        final ArrayList<String> list = new ArrayList<>();
+        for (AbstractRelic r : relics) {
+            RelicLibraryPatches.addRelic(list, r);
+        }
+
+        return list;
+    }
+
+    @Override
     public void renderPlayerImage(SpriteBatch sb) {
-        if (creatureID == null)
-        {
+        if (creatureID == null) {
             super.renderPlayerImage(sb);
         }
-        else
-        {
+        else {
             renderPlayerImageImpl(sb);
         }
     }
 
-    protected void renderPlayerImageImpl(SpriteBatch sb)
-    {
+    @Override
+    public Texture getEnergyImage() {
+        if (this.energyOrb instanceof PCLEnergyOrb) {
+            return ((PCLEnergyOrb) this.energyOrb).getEnergyImage();
+        }
+        else {
+            return super.getEnergyImage();
+        }
+    }
+
+    @Override
+    public CharStat getCharStat() {
+        // yes
+        return super.getCharStat();
+    }
+
+    @Override
+    public Texture getCustomModeCharacterButtonImage() {
+        if (charTexture == null) {
+            charTexture = new TextureCache(BaseMod.getPlayerButton(this.chosenClass));
+        }
+        return charTexture.texture();
+    }
+
+    @Override
+    public String getPortraitImageName() {
+        return null;
+    }
+
+    protected void renderPlayerImageImpl(SpriteBatch sb) {
         boolean shouldFlip = this.flipHorizontal ^ this.actualFlip;
-        switch(this.animation.type()) {
+        switch (this.animation.type()) {
             case NONE:
                 if (this.atlas != null) {
                     this.state.update(Gdx.graphics.getDeltaTime());
@@ -277,9 +330,10 @@ public abstract class PCLCharacter extends CustomPlayer
                     PCLRenderHelpers.drawWithShader(CardCrawlGame.psb, EUIRenderHelpers.getColorizeShader(), s -> sr.draw(CardCrawlGame.psb, this.skeleton, EUIRenderHelpers.BlendingMode.Glowing.srcFunc, EUIRenderHelpers.BlendingMode.Glowing.dstFunc));
                     CardCrawlGame.psb.end();
                     sb.begin();
-                } else {
+                }
+                else {
                     sb.setColor(Color.WHITE);
-                    sb.draw(this.img, this.drawX - (float)this.img.getWidth() * Settings.scale / 2.0F + this.animX, this.drawY, (float)this.img.getWidth() * Settings.scale, (float)this.img.getHeight() * Settings.scale, 0, 0, this.img.getWidth(), this.img.getHeight(), this.flipHorizontal, this.flipVertical);
+                    sb.draw(this.img, this.drawX - (float) this.img.getWidth() * Settings.scale / 2.0F + this.animX, this.drawY, (float) this.img.getWidth() * Settings.scale, (float) this.img.getHeight() * Settings.scale, 0, 0, this.img.getWidth(), this.img.getHeight(), this.flipHorizontal, this.flipVertical);
                 }
                 break;
             case MODEL:
@@ -287,169 +341,53 @@ public abstract class PCLCharacter extends CustomPlayer
                 break;
             case SPRITE:
                 this.animation.setFlip(shouldFlip, this.flipVertical);
-                PCLRenderHelpers.drawBlended(sb, EUIRenderHelpers.BlendingMode.Glowing, (s) -> {
-                    PCLRenderHelpers.drawColorized(s, this.getTransparentColor(), s2 -> {
-                        this.animation.renderSprite(s, this.drawX + this.animX, this.drawY + this.animY + AbstractDungeon.sceneOffsetY);
-                    });
-                });
+                PCLRenderHelpers.drawBlended(sb, EUIRenderHelpers.BlendingMode.Glowing, (s) ->
+                        PCLRenderHelpers.drawColorized(s, this.getTransparentColor(),
+                                s2 -> this.animation.renderSprite(s, this.drawX + this.animX, this.drawY + this.animY + AbstractDungeon.sceneOffsetY)));
         }
     }
 
-    @Override
-    public void playDeathAnimation() {
-        PCLEffects.Manual.add(new SmokeEffect(hb.cX, hb.cY, getCardRenderColor()));
-        super.playDeathAnimation();
-    }
-
-    public Color getTransparentColor()
-    {
+    public Color getTransparentColor() {
         Color c = getCardRenderColor();
         c.a = 0.7f;
         return c;
     }
 
-    public void setCreature(AbstractCreature creature)
-    {
-        setCreature(CreatureAnimationInfo.getIdentifierString(creature), DEFAULT_IDLE, DEFAULT_HIT);
+    public void resetCreature() {
+        creatureID = null;
+        reloadDefaultAnimation();
+        actualFlip = false;
     }
 
-    public void setCreature(String id)
-    {
+    public void setCreature(String id) {
         setCreature(id, DEFAULT_IDLE, DEFAULT_HIT);
     }
 
-    public void setCreature(String id, String idleStr, String hitStr)
-    {
+    public void setCreature(AbstractCreature creature) {
+        setCreature(CreatureAnimationInfo.getIdentifierString(creature), DEFAULT_IDLE, DEFAULT_HIT);
+    }
+
+    public void setCreature(String id, String idleStr, String hitStr) {
         creatureID = id;
         CreatureAnimationInfo.tryLoadAnimations(id);
         CreatureAnimationInfo animation = CreatureAnimationInfo.getAnimationForID(creatureID);
-        if (animation != null)
-        {
+        if (animation != null) {
             reloadAnimation(animation.atlas, animation.skeleton, idleStr, hitStr, animation.scale);
         }
-        else
-        {
+        else {
             String imgUrl = CreatureAnimationInfo.getImageForID(creatureID);
-            if (imgUrl != null)
-            {
+            if (imgUrl != null) {
                 this.img = ImageMaster.loadImage(imgUrl);
                 this.atlas = null;
             }
-            else
-            {
+            else {
                 AbstractAnimation spriter = CreatureAnimationInfo.getSpriterForID(creatureID);
-                if (spriter != null)
-                {
+                if (spriter != null) {
                     this.animation = spriter;
                 }
             }
         }
 
         actualFlip = !CreatureAnimationInfo.isPlayer(creatureID);
-    }
-
-    public void resetCreature()
-    {
-        creatureID = null;
-        reloadDefaultAnimation();
-        actualFlip = false;
-    }
-
-    public void reloadDefaultAnimation()
-    {
-        reloadAnimation(1f);
-    }
-
-    public void reloadAnimation(float scale)
-    {
-        reloadAnimation(atlasUrl, skeletonUrl, DEFAULT_IDLE, DEFAULT_HIT, scale);
-    }
-
-    public void reloadAnimation(String atlasUrl, String skeletonUrl, String idleStr, String hitStr, float scale)
-    {
-        try
-        {
-            this.loadAnimationPCL(atlasUrl, skeletonUrl, scale);
-            tryFindAnimations(idleStr, hitStr);
-            AnimationState.TrackEntry e = this.state.setAnimation(0, idleAnim, true);
-            if (hitAnim != null)
-            {
-                this.stateData.setMix(hitAnim, idleAnim, 0.1f);
-            }
-            e.setTimeScale(0.9f);
-        }
-        catch (Exception e)
-        {
-            EUIUtils.logError(this, "Failed to reload animation with atlas " + atlasUrl + " and skeleton " + skeletonUrl);
-        }
-    }
-
-    // Intentionally avoid calling loadAnimation to avoid registering animations
-    protected void loadAnimationPCL(String atlasUrl, String skeletonUrl, float scale)
-    {
-        this.atlas = new TextureAtlas(Gdx.files.internal(atlasUrl));
-        SkeletonJson json = new SkeletonJson(this.atlas);
-        json.setScale(Settings.renderScale * scale);
-        SkeletonData skeletonData = json.readSkeletonData(Gdx.files.internal(skeletonUrl));
-        this.skeleton = new Skeleton(skeletonData);
-        this.skeleton.setColor(Color.WHITE);
-        this.stateData = new AnimationStateData(skeletonData);
-        this.state = new AnimationState(this.stateData);
-    }
-
-    protected Animation getAnimation(int index)
-    {
-        if (this.stateData != null)
-        {
-            Array<Animation> animations = this.stateData.getSkeletonData().getAnimations();
-            return index < animations.size ? animations.get(index) : null;
-        }
-        return null;
-    }
-
-    protected Animation getAnimation(String key)
-    {
-        return this.state.getData().getSkeletonData().findAnimation(key);
-    }
-
-    protected void tryFindAnimations(String idleStr, String hitStr)
-    {
-        Animation idle = getAnimation(idleStr);
-        if (idle == null)
-        {
-            idle = getAnimation(StringUtils.capitalize(idleStr));
-        }
-        if (idle == null)
-        {
-            idle = getAnimation(0);
-        }
-
-        if (idle != null)
-        {
-            idleAnim = idle.getName();
-        }
-        else
-        {
-            idleAnim = null;
-        }
-
-        Animation hit = getAnimation(hitStr);
-        if (idle == null)
-        {
-            idle = getAnimation(StringUtils.capitalize(hitStr));
-        }
-        if (hit == null)
-        {
-            hit = getAnimation(1);
-        }
-
-        if (hit != null)
-        {
-            hitAnim = hit.getName();
-        }
-        else
-        {
-            hitAnim = null;
-        }
     }
 }

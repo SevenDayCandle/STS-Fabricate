@@ -11,40 +11,32 @@ import extendedui.EUI;
 import extendedui.ui.AbstractScreen;
 import pinacolada.resources.PGR;
 
-public class CharacterSelectScreenPatches
-{
+public class CharacterSelectScreenPatches {
     @SpirePatch(clz = CharacterSelectScreen.class, method = "initialize")
-    public static class CharacterSelectScreen_Initialize
-    {
+    public static class CharacterSelectScreen_Initialize {
         @SpirePostfixPatch
-        public static void initialize(CharacterSelectScreen __instance)
-        {
+        public static void initialize(CharacterSelectScreen __instance) {
             PGR.charSelectProvider.initialize(__instance);
         }
     }
 
     @SpirePatch(clz = CharacterSelectScreen.class, method = "render")
-    public static class CharacterSelectScreen_Render
-    {
+    public static class CharacterSelectScreen_Render {
         @SpirePostfixPatch
-        public static void postfix(CharacterSelectScreen __instance, SpriteBatch sb)
-        {
+        public static void postfix(CharacterSelectScreen __instance, SpriteBatch sb) {
             PGR.charSelectProvider.render(__instance, sb);
         }
     }
 
     @SpirePatch(clz = CharacterSelectScreen.class, method = "update")
-    public static class CharacterSelectScreen_Update
-    {
+    public static class CharacterSelectScreen_Update {
         @SpirePostfixPatch
-        public static void postfix(CharacterSelectScreen __instance)
-        {
+        public static void postfix(CharacterSelectScreen __instance) {
             PGR.charSelectProvider.update(__instance);
         }
 
         @SpirePrefixPatch
-        public static SpireReturn<Void> prefix(CharacterSelectScreen __instance)
-        {
+        public static SpireReturn<Void> prefix(CharacterSelectScreen __instance) {
             return (EUI.currentScreen != null && AbstractDungeon.screen == AbstractScreen.EUI_SCREEN) ? SpireReturn.Return() : SpireReturn.Continue();
         }
     }

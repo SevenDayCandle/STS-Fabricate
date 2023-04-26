@@ -13,8 +13,7 @@ import extendedui.ui.hitboxes.RelativeHitbox;
 import pinacolada.augments.PCLAugment;
 import pinacolada.utilities.PCLRenderHelpers;
 
-public class PCLAugmentListItem extends EUIHoverable
-{
+public class PCLAugmentListItem extends EUIHoverable {
 
     public final PCLAugment augment;
     public final EUIButton button;
@@ -23,13 +22,11 @@ public class PCLAugmentListItem extends EUIHoverable
     protected final PCLAugmentList panel;
     public float amount;
 
-    public PCLAugmentListItem(PCLAugmentList panel, PCLAugment augment, float amount)
-    {
+    public PCLAugmentListItem(PCLAugmentList panel, PCLAugment augment, float amount) {
         this(panel, augment, amount, 7f, 3.5f, true);
     }
 
-    public PCLAugmentListItem(PCLAugmentList panel, PCLAugment augment, float amount, float amountOffset, float titleOffset, boolean enabled)
-    {
+    public PCLAugmentListItem(PCLAugmentList panel, PCLAugment augment, float amount, float amountOffset, float titleOffset, boolean enabled) {
         super(new EUIHitbox(0, 0, AbstractRelic.PAD_X, AbstractRelic.PAD_X));
         this.augment = augment;
         this.panel = panel;
@@ -51,22 +48,19 @@ public class PCLAugmentListItem extends EUIHoverable
                 .setFontScale(0.75f);
     }
 
-    public String getAmountString(float amount)
-    {
+    public String getAmountString(float amount) {
         return PCLRenderHelpers.decimalFormat(amount) + "%";
     }
 
     @Override
-    public void renderImpl(SpriteBatch sb)
-    {
+    public void renderImpl(SpriteBatch sb) {
         button.renderImpl(sb);
         amountText.renderImpl(sb);
         title.renderImpl(sb);
     }
 
     @Override
-    public void updateImpl()
-    {
+    public void updateImpl() {
         button.updateImpl();
         amountText.updateImpl();
         title.updateImpl();

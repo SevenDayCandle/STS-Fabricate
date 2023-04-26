@@ -5,8 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import pinacolada.utilities.PCLRenderHelpers;
 
-public class AnimatedParticleEffect extends FadingParticleEffect
-{
+public class AnimatedParticleEffect extends FadingParticleEffect {
     protected final int columns;
     protected final int rows;
     protected final int width;
@@ -18,28 +17,15 @@ public class AnimatedParticleEffect extends FadingParticleEffect
     protected float frameTimer;
     protected float frameDelay;
 
-    public AnimatedParticleEffect(Texture texture, float x, float y, int rows, int columns)
-    {
+    public AnimatedParticleEffect(Texture texture, float x, float y, int rows, int columns) {
         this(texture, x, y, 0, 1, rows, columns, 0.03F);
     }
 
-    public AnimatedParticleEffect(Texture texture, float x, float y, int rows, int columns, float frameDuration)
-    {
-        this(texture, x, y, 0, 1, rows, columns, frameDuration);
-    }
-
-    public AnimatedParticleEffect(Texture texture, float x, float y, float rot, float scale, int rows, int columns)
-    {
-        this(texture, x, y, rot, scale, rows, columns, 0.03F);
-    }
-
-    public AnimatedParticleEffect(Texture texture, float x, float y, float rot, float scale, int rows, int columns, float frameDuration)
-    {
+    public AnimatedParticleEffect(Texture texture, float x, float y, float rot, float scale, int rows, int columns, float frameDuration) {
         this(texture, x, y, rot, scale, rows, columns, frameDuration, rows * columns);
     }
 
-    public AnimatedParticleEffect(Texture texture, float x, float y, float rot, float scale, int rows, int columns, float frameDuration, int maxFrames)
-    {
+    public AnimatedParticleEffect(Texture texture, float x, float y, float rot, float scale, int rows, int columns, float frameDuration, int maxFrames) {
         super(texture, x, y, rot, scale);
 
         this.width = getCellSize(texture.getWidth(), columns);
@@ -52,26 +38,38 @@ public class AnimatedParticleEffect extends FadingParticleEffect
         this.frame = 0;
     }
 
-    private static int getCellSize(int totalWidth, int cells)
-    {
-        if (totalWidth % cells != 0)
-        {
+    private static int getCellSize(int totalWidth, int cells) {
+        if (totalWidth % cells != 0) {
             throw new RuntimeException("The texture can't be evenly divided");
         }
 
         return totalWidth / cells;
     }
 
-    public TextureRegion getFrameRegion(int frame)
-    {
+    public AnimatedParticleEffect(Texture texture, float x, float y, int rows, int columns, float frameDuration) {
+        this(texture, x, y, 0, 1, rows, columns, frameDuration);
+    }
+
+    public AnimatedParticleEffect(Texture texture, float x, float y, float rot, float scale, int rows, int columns) {
+        this(texture, x, y, rot, scale, rows, columns, 0.03F);
+    }
+
+    @Override
+    public void render(SpriteBatch sb) {
+        if (region == null) {
+            this.region = getFrameRegion(frame);
+        }
+
+        PCLRenderHelpers.drawCentered(sb, color, region, x, y, width, height, scale, rot, flipX, flipY);
+    }
+
+    public TextureRegion getFrameRegion(int frame) {
         final int clampedFrame;
-        if (mode == AnimationMode.Reverse)
-        {
+        if (mode == AnimationMode.Reverse) {
             final int cycle = (frame / totalFrames) % 2;
             clampedFrame = Math.abs((frame % totalFrames) - ((totalFrames - 1) * cycle));
         }
-        else
-        {
+        else {
             clampedFrame = mode == AnimationMode.Loop ? (frame % totalFrames) : Math.min(frame, totalFrames - 1);
         }
 
@@ -80,32 +78,18 @@ public class AnimatedParticleEffect extends FadingParticleEffect
     }
 
     @Override
-    public void updateInternal(float delta)
-    {
+    public void updateInternal(float delta) {
         super.updateInternal(delta);
 
         this.frameTimer -= delta;
-        if (this.frameTimer < 0f)
-        {
+        if (this.frameTimer < 0f) {
             this.frame += 1;
             this.frameTimer = this.frameDelay;
             this.region = null;
         }
     }
 
-    @Override
-    public void render(SpriteBatch sb)
-    {
-        if (region == null)
-        {
-            this.region = getFrameRegion(frame);
-        }
-
-        PCLRenderHelpers.drawCentered(sb, color, region, x, y, width, height, scale, rot, flipX, flipY);
-    }
-
-    public enum AnimationMode
-    {
+    public enum AnimationMode {
         Loop,
         Remain,
         Reverse

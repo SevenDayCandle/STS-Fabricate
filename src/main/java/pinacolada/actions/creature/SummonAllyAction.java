@@ -12,8 +12,7 @@ import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.PCLEnum;
 import pinacolada.utilities.GameUtilities;
 
-public class SummonAllyAction extends PCLAction<PCLCard>
-{
+public class SummonAllyAction extends PCLAction<PCLCard> {
     public final PCLCard card;
     public PCLCardAlly ally;
     public boolean requireTarget;
@@ -23,50 +22,32 @@ public class SummonAllyAction extends PCLAction<PCLCard>
     public boolean summonCardOnly = true;
     public boolean triggerOnSwap = true;
 
-    public SummonAllyAction(PCLCard card, PCLCardAlly slot)
-    {
+    public SummonAllyAction(PCLCard card, PCLCardAlly slot) {
         super(ActionType.SPECIAL, Settings.FAST_MODE ? Settings.ACTION_DUR_XFAST : Settings.ACTION_DUR_FAST);
         initialize(AbstractDungeon.player, slot, 1);
         this.card = card;
         this.ally = slot;
     }
 
-    public SummonAllyAction setOptions(boolean requireTarget, boolean retainPowers, boolean stun, boolean showEffect, boolean summonCardOnly)
-    {
-        this.requireTarget = requireTarget;
-        this.retainPowers = retainPowers;
-        this.delayForTurn = stun;
-        this.showEffect = showEffect;
-        this.summonCardOnly = summonCardOnly;
-        return this;
-    }
-
     @Override
-    protected void firstUpdate()
-    {
-        if ((this.card == null || summonCardOnly && this.card.type != PCLEnum.CardType.SUMMON))
-        {
+    protected void firstUpdate() {
+        if ((this.card == null || summonCardOnly && this.card.type != PCLEnum.CardType.SUMMON)) {
             complete(null);
             return;
         }
         // If missing target, choose a random empty one, then a random filled one.
-        if (this.ally == null)
-        {
-            if (!requireTarget)
-            {
+        if (this.ally == null) {
+            if (!requireTarget) {
                 this.ally = GameUtilities.getRandomSummon(false);
-                if (this.ally == null)
-                {
+                if (this.ally == null) {
                     this.ally = GameUtilities.getRandomSummon(true);
                 }
-                if (this.ally == null)
-                {
+                if (this.ally == null) {
                     complete(null);
                     return;
                 }
             }
-            else
-            {
+            else {
                 complete(null);
                 return;
             }
@@ -74,12 +55,10 @@ public class SummonAllyAction extends PCLAction<PCLCard>
 
         PCLCard returnedCard = this.ally.card;
         // If ally is withdrawn, setting up the new card must come after the previous card is withdrawn
-        if (returnedCard != null)
-        {
+        if (returnedCard != null) {
             PCLActions.top.withdrawAlly(ally).addCallback(() -> initializeAlly(true));
         }
-        else
-        {
+        else {
             initializeAlly(false);
         }
 
@@ -87,20 +66,26 @@ public class SummonAllyAction extends PCLAction<PCLCard>
         complete(returnedCard);
     }
 
-    protected void initializeAlly(boolean canTrigger)
-    {
+    protected void initializeAlly(boolean canTrigger) {
         PCLActions.bottom.callback(() -> {
             this.ally.initializeForCard(card, retainPowers, delayForTurn);
 
-            if (showEffect)
-            {
+            if (showEffect) {
                 PCLEffects.Queue.add(new SmokeEffect(ally.hb.cX, ally.hb.cY));
             }
 
-            if (canTrigger && triggerOnSwap)
-            {
+            if (canTrigger && triggerOnSwap) {
                 ally.takeTurn(true);
             }
         });
+    }
+
+    public SummonAllyAction setOptions(boolean requireTarget, boolean retainPowers, boolean stun, boolean showEffect, boolean summonCardOnly) {
+        this.requireTarget = requireTarget;
+        this.retainPowers = retainPowers;
+        this.delayForTurn = stun;
+        this.showEffect = showEffect;
+        this.summonCardOnly = summonCardOnly;
+        return this;
     }
 }

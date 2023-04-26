@@ -20,14 +20,12 @@ import pinacolada.effects.PCLEffects;
 import java.util.Iterator;
 import java.util.function.Predicate;
 
-public class ChooseAndUpgradeEffect extends AbstractGameEffect
-{
+public class ChooseAndUpgradeEffect extends AbstractGameEffect {
     public static final String[] TEXT;
     private static final UIStrings uiStrings;
     private static final float DUR = 1.5f;
 
-    static
-    {
+    static {
         uiStrings = CardCrawlGame.languagePack.getUIString("CampfireSmithEffect");
         TEXT = uiStrings.TEXT;
     }
@@ -37,13 +35,11 @@ public class ChooseAndUpgradeEffect extends AbstractGameEffect
     Predicate<AbstractCard> filter;
     private boolean openedScreen = false;
 
-    public ChooseAndUpgradeEffect(Predicate<AbstractCard> filter)
-    {
+    public ChooseAndUpgradeEffect(Predicate<AbstractCard> filter) {
         this(filter, true);
     }
 
-    public ChooseAndUpgradeEffect(Predicate<AbstractCard> filter, boolean canCancel)
-    {
+    public ChooseAndUpgradeEffect(Predicate<AbstractCard> filter, boolean canCancel) {
         this.duration = 1.5f;
         this.screenColor = AbstractDungeon.fadeColor.cpy();
         this.screenColor.a = 0f;
@@ -53,18 +49,15 @@ public class ChooseAndUpgradeEffect extends AbstractGameEffect
         this.canCancel = canCancel;
     }
 
-    public void update()
-    {
+    public void update() {
         this.duration -= Gdx.graphics.getDeltaTime();
         this.updateBlackScreenColor();
 
         Iterator var1;
-        if (!AbstractDungeon.gridSelectScreen.selectedCards.isEmpty() && AbstractDungeon.gridSelectScreen.forUpgrade)
-        {
+        if (!AbstractDungeon.gridSelectScreen.selectedCards.isEmpty() && AbstractDungeon.gridSelectScreen.forUpgrade) {
             var1 = AbstractDungeon.gridSelectScreen.selectedCards.iterator();
 
-            while (var1.hasNext())
-            {
+            while (var1.hasNext()) {
                 AbstractCard c = (AbstractCard) var1.next();
                 PCLEffects.Queue.add(new UpgradeShineEffect((float) Settings.WIDTH / 2f, (float) Settings.HEIGHT / 2f));
                 ++CardCrawlGame.metricData.campfire_upgraded;
@@ -80,24 +73,20 @@ public class ChooseAndUpgradeEffect extends AbstractGameEffect
             //((RestRoom) AbstractDungeon.getCurrRoom()).fadeIn();
         }
 
-        if (this.duration < 1f && !this.openedScreen)
-        {
+        if (this.duration < 1f && !this.openedScreen) {
             this.openedScreen = true;
 
             CardGroup upgradeable = AbstractDungeon.player.masterDeck.getUpgradableCards();
 
             CardGroup filteredUpgradeable = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
 
-            for (AbstractCard card : upgradeable.group)
-            {
-                if (filter == null || filter.test(card))
-                {
+            for (AbstractCard card : upgradeable.group) {
+                if (filter == null || filter.test(card)) {
                     filteredUpgradeable.addToBottom(card);
                 }
             }
 
-            if (filteredUpgradeable.isEmpty())
-            {
+            if (filteredUpgradeable.isEmpty()) {
                 isDone = true;
                 return;
             }
@@ -106,36 +95,29 @@ public class ChooseAndUpgradeEffect extends AbstractGameEffect
                     , false);
             var1 = AbstractDungeon.player.relics.iterator();
 
-            while (var1.hasNext())
-            {
+            while (var1.hasNext()) {
                 AbstractRelic r = (AbstractRelic) var1.next();
                 r.onSmith();
             }
         }
     }
 
-    public void render(SpriteBatch sb)
-    {
+    public void render(SpriteBatch sb) {
         sb.setColor(this.screenColor);
         sb.draw(ImageMaster.WHITE_SQUARE_IMG, 0f, 0f, (float) Settings.WIDTH, (float) Settings.HEIGHT);
-        if (AbstractDungeon.screen == CurrentScreen.GRID)
-        {
+        if (AbstractDungeon.screen == CurrentScreen.GRID) {
             AbstractDungeon.gridSelectScreen.render(sb);
         }
     }
 
-    public void dispose()
-    {
+    public void dispose() {
     }
 
-    private void updateBlackScreenColor()
-    {
-        if (this.duration > 1f)
-        {
+    private void updateBlackScreenColor() {
+        if (this.duration > 1f) {
             this.screenColor.a = Interpolation.fade.apply(1f, 0f, (this.duration - 1f) * 2f);
         }
-        else
-        {
+        else {
             this.screenColor.a = Interpolation.fade.apply(0f, 1f, this.duration / 1.5f);
         }
 

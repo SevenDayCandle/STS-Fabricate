@@ -11,54 +11,45 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 
 @VisibleSkill
-public class PMove_ModifyBlock extends PMove_Modify<PField_CardCategory>
-{
+public class PMove_ModifyBlock extends PMove_Modify<PField_CardCategory> {
     public static final PSkillData<PField_CardCategory> DATA = PMove_Modify.register(PMove_ModifyBlock.class, PField_CardCategory.class)
             .setAmounts(-DEFAULT_MAX, DEFAULT_MAX)
             .setExtra(0, DEFAULT_MAX)
             .selfTarget();
 
-    public PMove_ModifyBlock()
-    {
+    public PMove_ModifyBlock() {
         this(1, 1);
     }
 
-    public PMove_ModifyBlock(PSkillSaveData content)
-    {
-        super(DATA, content);
-    }
-
-    public PMove_ModifyBlock(int amount, int extra)
-    {
+    public PMove_ModifyBlock(int amount, int extra) {
         super(DATA, amount, extra);
     }
 
-    public PMove_ModifyBlock(int amount, int extra, PCLCardGroupHelper... groups)
-    {
+    public PMove_ModifyBlock(PSkillSaveData content) {
+        super(DATA, content);
+    }
+
+    public PMove_ModifyBlock(int amount, int extra, PCLCardGroupHelper... groups) {
         super(DATA, amount, extra, groups);
     }
 
     @Override
-    public ActionT1<AbstractCard> getAction()
-    {
-        return (c) -> getActions().modifyBlock(c, amount, true, true);
-    }
-
-    @Override
-    public String getObjectSampleText()
-    {
+    public String getObjectSampleText() {
         return PGR.core.tooltips.block.title;
     }
 
     @Override
-    public String getObjectText()
-    {
+    public String getObjectText() {
         return EUIRM.strings.numNoun(getAmountRawString(), PGR.core.tooltips.block);
     }
 
     @Override
-    public boolean isDetrimental()
-    {
+    public ActionT1<AbstractCard> getAction() {
+        return (c) -> getActions().modifyBlock(c, amount, true, true);
+    }
+
+    @Override
+    public boolean isDetrimental() {
         return extra < 0;
     }
 }

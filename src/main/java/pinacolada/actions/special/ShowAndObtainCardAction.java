@@ -4,13 +4,11 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.actions.PCLAction;
 import pinacolada.effects.PCLEffects;
 
-public class ShowAndObtainCardAction extends PCLAction<AbstractCard>
-{
+public class ShowAndObtainCardAction extends PCLAction<AbstractCard> {
     protected final float x;
     protected final float y;
 
-    public ShowAndObtainCardAction(AbstractCard card, float x, float y)
-    {
+    public ShowAndObtainCardAction(AbstractCard card, float x, float y) {
         super(ActionType.SPECIAL);
 
         this.card = card;
@@ -23,10 +21,8 @@ public class ShowAndObtainCardAction extends PCLAction<AbstractCard>
     }
 
     @Override
-    protected void firstUpdate()
-    {
-        if (card == null)
-        {
+    protected void firstUpdate() {
+        if (card == null) {
             complete(null);
         }
         PCLEffects.Queue.showAndObtain(card, x, y, true);

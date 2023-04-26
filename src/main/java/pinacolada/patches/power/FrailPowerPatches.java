@@ -10,14 +10,16 @@ import pinacolada.dungeon.CombatManager;
 import pinacolada.powers.PCLPower;
 import pinacolada.utilities.PCLRenderHelpers;
 
-public class FrailPowerPatches
-{
+public class FrailPowerPatches {
+    public static float estimateDamage(AbstractPower power) {
+        float estimate = power.modifyBlock(PCLPower.DUMMY_MULT);
+        return PCLPower.DUMMY_MULT - estimate;
+    }
+
     @SpirePatch(clz = FrailPower.class, method = "updateDescription")
-    public static class FrailPowerPatches_UpdateDescription
-    {
+    public static class FrailPowerPatches_UpdateDescription {
         @SpirePrefixPatch
-        public static SpireReturn<Void> prefix(FrailPower __instance)
-        {
+        public static SpireReturn<Void> prefix(FrailPower __instance) {
             // HARD CODE IS HARD
             __instance.description = FrailPower.DESCRIPTIONS[0].replace("25", PCLRenderHelpers.decimalFormat(estimateDamage(__instance))) + __instance.amount + (__instance.amount == 1 ? FrailPower.DESCRIPTIONS[1] : FrailPower.DESCRIPTIONS[2]);
             return SpireReturn.Return();
@@ -25,19 +27,11 @@ public class FrailPowerPatches
     }
 
     @SpirePatch(clz = FrailPower.class, method = "modifyBlock", paramtypez = {float.class})
-    public static class FrailPowerPatches_AtDamageReceive
-    {
+    public static class FrailPowerPatches_AtDamageReceive {
         @SpirePostfixPatch
-        public static float postfix(float result, FrailPower __instance, float damage)
-        {
+        public static float postfix(float result, FrailPower __instance, float damage) {
             float bonus = CombatManager.getEffectBonusForPower(__instance);
             return bonus == 0 ? result : damage * ((result / damage) - bonus / 100f);
         }
-    }
-
-    public static float estimateDamage(AbstractPower power)
-    {
-        float estimate = power.modifyBlock(PCLPower.DUMMY_MULT);
-        return PCLPower.DUMMY_MULT - estimate;
     }
 }

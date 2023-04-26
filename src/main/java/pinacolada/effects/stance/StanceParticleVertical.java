@@ -8,8 +8,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import pinacolada.effects.PCLEffect;
 
-public class StanceParticleVertical extends PCLEffect
-{
+public class StanceParticleVertical extends PCLEffect {
     private final TextureAtlas.AtlasRegion img;
     private float x;
     private float y;
@@ -18,8 +17,7 @@ public class StanceParticleVertical extends PCLEffect
     private float dvy;
     private float dvx;
 
-    public StanceParticleVertical(Color particleColor)
-    {
+    public StanceParticleVertical(Color particleColor) {
         super(random(1.3f, 1.8f), true);
 
         final float multi = Settings.scale;
@@ -35,8 +33,7 @@ public class StanceParticleVertical extends PCLEffect
     }
 
     @Override
-    public void render(SpriteBatch sb)
-    {
+    public void render(SpriteBatch sb) {
         sb.setColor(color);
         sb.setBlendFunction(770, 1);
         sb.draw(img, x, y + vY, (float) img.packedWidth / 2f,
@@ -46,15 +43,12 @@ public class StanceParticleVertical extends PCLEffect
     }
 
     @Override
-    protected void updateInternal(float deltaTime)
-    {
+    protected void updateInternal(float deltaTime) {
         final float halfDuration = startingDuration * 0.5f;
-        if (duration > halfDuration)
-        {
+        if (duration > halfDuration) {
             color.a = Interpolation.fade.apply(1f, 0f, (duration - halfDuration) / halfDuration);
         }
-        else
-        {
+        else {
             color.a = Interpolation.fade.apply(0f, 1f, duration / halfDuration);
         }
 

@@ -7,8 +7,7 @@ import pinacolada.effects.PCLEffects;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.PCLRenderHelpers;
 
-public class CircularWaveEffect extends PCLEffect
-{
+public class CircularWaveEffect extends PCLEffect {
     protected float x;
     protected float y;
     protected float scaleLower = 0.2f;
@@ -17,8 +16,7 @@ public class CircularWaveEffect extends PCLEffect
     protected float vfxFrequency = 0.2f;
     protected Color endColor;
 
-    public CircularWaveEffect(float startX, float startY)
-    {
+    public CircularWaveEffect(float startX, float startY) {
         super(1.0f);
 
         this.x = startX;
@@ -27,22 +25,19 @@ public class CircularWaveEffect extends PCLEffect
         this.endColor = Color.LIME;
     }
 
-    public CircularWaveEffect setColors(Color startColor, Color endColor)
-    {
+    public CircularWaveEffect setColors(Color startColor, Color endColor) {
         this.color = startColor;
         this.endColor = endColor;
         return this;
     }
 
-    public CircularWaveEffect setFrequency(float frequency)
-    {
+    public CircularWaveEffect setFrequency(float frequency) {
         this.vfxFrequency = MathUtils.clamp(frequency, 0.01f, startingDuration / 5f);
 
         return this;
     }
 
-    public CircularWaveEffect setScale(float scaleLower, float scaleUpper)
-    {
+    public CircularWaveEffect setScale(float scaleLower, float scaleUpper) {
         this.scaleLower = scaleLower;
         this.scaleUpper = scaleUpper;
 
@@ -50,12 +45,10 @@ public class CircularWaveEffect extends PCLEffect
     }
 
     @Override
-    protected void updateInternal(float deltaTime)
-    {
+    protected void updateInternal(float deltaTime) {
         vfxTimer -= deltaTime;
 
-        if (vfxTimer < 0f)
-        {
+        if (vfxTimer < 0f) {
             PCLEffects.Queue.add(new FadingParticleEffect(PCLCoreImages.Effects.circle2.texture(), x, y)
                             .setBlendingMode(PCLRenderHelpers.BlendingMode.Glowing)
                             .setColor(color, endColor, 2f)

@@ -12,41 +12,34 @@ import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.skills.PDelegateCardCond;
 
 @VisibleSkill
-public class PCond_OnAllyDeath extends PDelegateCardCond implements OnAllyDeathSubscriber
-{
+public class PCond_OnAllyDeath extends PDelegateCardCond implements OnAllyDeathSubscriber {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_OnAllyDeath.class, PField_CardCategory.class, 1, 1)
             .pclOnly()
             .selfTarget();
 
-    public PCond_OnAllyDeath()
-    {
+    public PCond_OnAllyDeath() {
         super(DATA);
     }
 
-    public PCond_OnAllyDeath(PSkillSaveData content)
-    {
+    public PCond_OnAllyDeath(PSkillSaveData content) {
         super(DATA, content);
     }
 
     @Override
-    public void onAllyDeath(PCLCard card, PCLCardAlly ally)
-    {
-        triggerOnCard(card, ally);
+    public String getSubText() {
+        if (isWhenClause()) {
+            return TEXT.cond_whenAObjectIs(fields.getFullCardStringSingular(), getDelegatePastText());
+        }
+        return TEXT.cond_whenSingle(getDelegatePastText());
     }
 
     @Override
-    public EUITooltip getDelegateTooltip()
-    {
+    public EUITooltip getDelegateTooltip() {
         return PGR.core.tooltips.kill;
     }
 
     @Override
-    public String getSubText()
-    {
-        if (isWhenClause())
-        {
-            return TEXT.cond_whenAObjectIs(fields.getFullCardStringSingular(), getDelegatePastText());
-        }
-        return TEXT.cond_whenSingle(getDelegatePastText());
+    public void onAllyDeath(PCLCard card, PCLCardAlly ally) {
+        triggerOnCard(card, ally);
     }
 }

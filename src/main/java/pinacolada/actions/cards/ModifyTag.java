@@ -7,15 +7,17 @@ import pinacolada.actions.utility.GenericCardSelection;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.utilities.GameUtilities;
 
-public class ModifyTag extends GenericCardSelection
-{
+public class ModifyTag extends GenericCardSelection {
     protected PCLCardTag tag;
     protected int value;
     protected boolean relative;
     protected Color flashColor = EUIColors.gold(1).cpy();
 
-    protected ModifyTag(AbstractCard card, int amount, PCLCardTag tag, int value, boolean relative)
-    {
+    public ModifyTag(AbstractCard card, PCLCardTag tag, int value, boolean relative) {
+        this(card, 1, tag, value, relative);
+    }
+
+    protected ModifyTag(AbstractCard card, int amount, PCLCardTag tag, int value, boolean relative) {
         super(card, amount);
 
         this.tag = tag;
@@ -23,33 +25,24 @@ public class ModifyTag extends GenericCardSelection
         this.relative = relative;
     }
 
-    public ModifyTag(AbstractCard card, PCLCardTag tag, int value, boolean relative)
-    {
-        this(card, 1, tag, value, relative);
-    }
-
-    public ModifyTag(AbstractCard card, PCLCardTag tag, int value)
-    {
+    public ModifyTag(AbstractCard card, PCLCardTag tag, int value) {
         this(card, 1, tag, value, true);
     }
 
+    public ModifyTag flash(Color flashColor) {
+        this.flashColor = flashColor;
+
+        return this;
+    }
+
     @Override
-    protected void selectCard(AbstractCard card)
-    {
+    protected void selectCard(AbstractCard card) {
         super.selectCard(card);
 
-        if (flashColor != null)
-        {
+        if (flashColor != null) {
             GameUtilities.flash(card, flashColor, true);
         }
 
         GameUtilities.modifyTag(card, tag, value, relative);
-    }
-
-    public ModifyTag flash(Color flashColor)
-    {
-        this.flashColor = flashColor;
-
-        return this;
     }
 }

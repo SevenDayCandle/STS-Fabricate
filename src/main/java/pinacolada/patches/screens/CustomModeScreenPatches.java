@@ -8,45 +8,36 @@ import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
 import com.megacrit.cardcrawl.screens.custom.CustomModeScreen;
 import pinacolada.resources.PGR;
 
-public class CustomModeScreenPatches
-{
+public class CustomModeScreenPatches {
     @SpirePatch(
             clz = CustomModeScreen.class,
             method = "initializeCharacters"
     )
-    public static class CustomModeScreen_Initialize
-    {
+    public static class CustomModeScreen_Initialize {
         @SpirePostfixPatch
-        public static void postfix(CustomModeScreen screen)
-        {
+        public static void postfix(CustomModeScreen screen) {
             // Must perform initialization right after mods are first initialized
             PGR.customMode.initialize(screen);
         }
     }
 
     @SpirePatch(clz = CustomModeScreen.class, method = "open")
-    public static class CustomModeScreen_Open
-    {
+    public static class CustomModeScreen_Open {
 
         @SpirePrefixPatch
-        public static void prefix(CustomModeScreen screen)
-        {
-            if (!PGR.config.vanillaLibraryScreen.get())
-            {
+        public static void prefix(CustomModeScreen screen) {
+            if (!PGR.config.vanillaLibraryScreen.get()) {
                 PGR.customMode.open();
             }
         }
     }
 
     @SpirePatch(clz = CustomModeScreen.class, method = "update")
-    public static class CustomModeScreen_Update
-    {
+    public static class CustomModeScreen_Update {
 
         @SpirePrefixPatch
-        public static SpireReturn<Void> prefix(CustomModeScreen screen)
-        {
-            if (!PGR.config.vanillaLibraryScreen.get())
-            {
+        public static SpireReturn<Void> prefix(CustomModeScreen screen) {
+            if (!PGR.config.vanillaLibraryScreen.get()) {
                 PGR.customMode.updateImpl();
                 return SpireReturn.Return();
             }
@@ -55,14 +46,11 @@ public class CustomModeScreenPatches
     }
 
     @SpirePatch(clz = CustomModeScreen.class, method = "render")
-    public static class CustomModeScreen_Render
-    {
+    public static class CustomModeScreen_Render {
 
         @SpirePrefixPatch
-        public static SpireReturn<Void> prefix(CustomModeScreen screen, SpriteBatch sb)
-        {
-            if (!PGR.config.vanillaLibraryScreen.get())
-            {
+        public static SpireReturn<Void> prefix(CustomModeScreen screen, SpriteBatch sb) {
+            if (!PGR.config.vanillaLibraryScreen.get()) {
                 PGR.customMode.renderImpl(sb);
                 return SpireReturn.Return();
             }

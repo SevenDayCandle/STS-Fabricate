@@ -8,17 +8,14 @@ import pinacolada.monsters.PCLCreature;
 import pinacolada.monsters.animations.PCLAllyAnimation;
 import pinacolada.resources.pcl.PCLCoreImages;
 
-public class PCLGeneralAllyAnimation extends PCLAllyAnimation
-{
+public class PCLGeneralAllyAnimation extends PCLAllyAnimation {
     public static final float RADIUS = 320;
 
-    public PCLGeneralAllyAnimation(PCLCreature creature)
-    {
+    public PCLGeneralAllyAnimation(PCLCreature creature) {
         super(creature);
     }
 
-    public void renderSprite(SpriteBatch sb, float x, float y)
-    {
+    public void renderSprite(SpriteBatch sb, float x, float y) {
         Texture metal = PCLCoreImages.Monsters.metal.texture();
         sb.setColor(this.renderColor);
         float scaleExt = owner.getBobEffect().y / 535f;

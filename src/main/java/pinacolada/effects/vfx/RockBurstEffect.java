@@ -13,27 +13,15 @@ import pinacolada.effects.VFX;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.RandomizedList;
 
-public class RockBurstEffect extends PCLEffect
-{
-    private static final TextureCache[] particles = {PCLCoreImages.Effects.earthParticle1, PCLCoreImages.Effects.earthParticle2, PCLCoreImages.Effects.earthParticle3};
-    private static final RandomizedList<TextureCache> textures = new RandomizedList<>();
+public class RockBurstEffect extends PCLEffect {
     public static final int PROJECTILES = 68;
     public static final float RADIUS = 240;
+    private static final TextureCache[] particles = {PCLCoreImages.Effects.earthParticle1, PCLCoreImages.Effects.earthParticle2, PCLCoreImages.Effects.earthParticle3};
+    private static final RandomizedList<TextureCache> textures = new RandomizedList<>();
     protected float x;
     protected float y;
 
-    public static Texture getRandomTexture()
-    {
-        if (textures.size() <= 1) // Adds some randomness but still ensures all textures are cycled through
-        {
-            textures.addAll(particles);
-        }
-
-        return textures.retrieveUnseeded(true).texture();
-    }
-
-    public RockBurstEffect(float startX, float startY, float scale)
-    {
+    public RockBurstEffect(float startX, float startY, float scale) {
         super(1f, true);
 
         this.x = startX;
@@ -43,21 +31,28 @@ public class RockBurstEffect extends PCLEffect
     }
 
     @Override
-    protected void firstUpdate()
-    {
+    protected void firstUpdate() {
         SFX.play(scale > 1 ? SFX.BLUNT_HEAVY : SFX.BLUNT_FAST, 0.9f, 1.1f);
         PCLEffects.Queue.add(VFX.whack(x, y).setScale(0.25f * Settings.scale).setColor(Color.TAN));
 
-        for (int i = 0; i < PROJECTILES; ++i)
-        {
+        for (int i = 0; i < PROJECTILES; ++i) {
             float angle = random(-500f, 500f);
             PCLEffects.Queue.add(new FadingParticleEffect(getRandomTexture(), x, y)
-                            .setColor(EUIColors.random(0.7f, 1f, true))
-                            .setScale(scale * random(0.18f, 0.66f))
-                            .setRotation(0, random(500f, 800f))
-                            .setTargetPosition(x + RADIUS * MathUtils.cos(angle), y + RADIUS * MathUtils.sin(angle), random(220f, 330f)));
+                    .setColor(EUIColors.random(0.7f, 1f, true))
+                    .setScale(scale * random(0.18f, 0.66f))
+                    .setRotation(0, random(500f, 800f))
+                    .setTargetPosition(x + RADIUS * MathUtils.cos(angle), y + RADIUS * MathUtils.sin(angle), random(220f, 330f)));
         }
 
         complete();
+    }
+
+    public static Texture getRandomTexture() {
+        if (textures.size() <= 1) // Adds some randomness but still ensures all textures are cycled through
+        {
+            textures.addAll(particles);
+        }
+
+        return textures.retrieveUnseeded(true).texture();
     }
 }

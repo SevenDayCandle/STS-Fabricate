@@ -5,7 +5,6 @@ import pinacolada.annotations.CombatSubscriber;
 import pinacolada.interfaces.providers.CooldownProvider;
 
 @CombatSubscriber
-public interface OnCooldownTriggeredSubscriber extends PCLCombatSubscriber
-{
+public interface OnCooldownTriggeredSubscriber extends PCLCombatSubscriber {
     boolean onCooldownTriggered(CooldownProvider cooldown, AbstractCreature s, AbstractCreature m);
 }

@@ -1,6 +1,5 @@
 package pinacolada.interfaces.listeners;
 
-public interface OnRemovedFromDeckListener
-{
+public interface OnRemovedFromDeckListener {
     void onRemovedFromDeck();
 }

@@ -9,13 +9,11 @@ import pinacolada.resources.PGR;
 
 import java.util.List;
 
-public class PCLCustomCardCopyConfirmationEffect extends PCLEffectWithCallback<AbstractCard.CardColor>
-{
+public class PCLCustomCardCopyConfirmationEffect extends PCLEffectWithCallback<AbstractCard.CardColor> {
 
     protected EUIDialogDropdown<AbstractCard.CardColor> dialog = new EUIDialogDropdown<AbstractCard.CardColor>(PGR.core.strings.cedit_duplicateToColor, PGR.core.strings.cedit_duplicateToColorDesc);
 
-    public PCLCustomCardCopyConfirmationEffect(List<AbstractCard.CardColor> colors)
-    {
+    public PCLCustomCardCopyConfirmationEffect(List<AbstractCard.CardColor> colors) {
         this.dialog
                 .setItems(colors)
                 .setLabelFunctionForOption(e -> EUIUtils.capitalize(e.name().replace("_", " ")), false)
@@ -25,14 +23,12 @@ public class PCLCustomCardCopyConfirmationEffect extends PCLEffectWithCallback<A
     }
 
     @Override
-    public void render(SpriteBatch sb)
-    {
+    public void render(SpriteBatch sb) {
         dialog.tryRender(sb);
     }
 
     @Override
-    protected void updateInternal(float deltaTime)
-    {
+    protected void updateInternal(float deltaTime) {
         dialog.tryUpdate();
     }
 }

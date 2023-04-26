@@ -12,31 +12,26 @@ import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.skills.PDelegateCardCond;
 
 @VisibleSkill
-public class PCond_OnSummon extends PDelegateCardCond implements OnAllySummonSubscriber
-{
+public class PCond_OnSummon extends PDelegateCardCond implements OnAllySummonSubscriber {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_OnSummon.class, PField_CardCategory.class, 1, 1)
             .pclOnly()
             .selfTarget();
 
-    public PCond_OnSummon()
-    {
+    public PCond_OnSummon() {
         super(DATA);
     }
 
-    public PCond_OnSummon(PSkillSaveData content)
-    {
+    public PCond_OnSummon(PSkillSaveData content) {
         super(DATA, content);
     }
 
     @Override
-    public void onAllySummon(PCLCard card, PCLCardAlly ally)
-    {
-        triggerOnCard(card, ally);
+    public EUITooltip getDelegateTooltip() {
+        return PGR.core.tooltips.summon;
     }
 
     @Override
-    public EUITooltip getDelegateTooltip()
-    {
-        return PGR.core.tooltips.summon;
+    public void onAllySummon(PCLCard card, PCLCardAlly ally) {
+        triggerOnCard(card, ally);
     }
 }

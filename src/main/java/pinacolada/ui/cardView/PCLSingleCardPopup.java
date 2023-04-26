@@ -34,8 +34,7 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
-public class PCLSingleCardPopup extends EUIBase
-{
+public class PCLSingleCardPopup extends EUIBase {
     protected static final float AUGMENT_X = Settings.WIDTH * 0.77f;
     protected static final float AUGMENT_Y = Settings.HEIGHT * 0.8f;
     protected static final float ICON_SIZE = 64f * Settings.scale;
@@ -81,8 +80,7 @@ public class PCLSingleCardPopup extends EUIBase
     private int currentForm;
     private PCLAugmentSelectionEffect effect;
 
-    public PCLSingleCardPopup()
-    {
+    public PCLSingleCardPopup() {
         this.fadeColor = Color.BLACK.cpy();
         this.upgradeHb = new EUIHitbox(250f * Settings.scale, 80f * Settings.scale);
         this.betaArtHb = new EUIHitbox(250f * Settings.scale, 80f * Settings.scale);
@@ -174,28 +172,25 @@ public class PCLSingleCardPopup extends EUIBase
                 .setLabel(PGR.core.strings.scp_artAuthor);
     }
 
-    private void applyAugment(PCLAugment augment)
-    {
-        PGR.dungeon.addAugment(augment.ID, -1);
-        baseCard.addAugment(augment);
-        this.card = baseCard.makePopupCopy();
-        this.upgradedCard = getUpgradeCard();
-        refreshAugments();
+    private void toggleUpgrade(boolean value) {
+        SingleCardViewPopup.isViewingUpgrade = value;
     }
 
-    private void changeCardForm()
-    {
-        if (baseCard != null && baseCard.auxiliaryData.form != currentForm)
-        {
+    private void toggleBetaArt(boolean value) {
+        this.viewBetaArt = value;
+        UnlockTracker.betaCardPref.putBoolean(this.card.cardID, this.viewBetaArt);
+        UnlockTracker.betaCardPref.flush();
+    }
+
+    private void changeCardForm() {
+        if (baseCard != null && baseCard.auxiliaryData.form != currentForm) {
             baseCard.changeForm(currentForm, baseCard.timesUpgraded);
             //aCard.canBranch = false;
         }
     }
 
-    public void changePreviewForm(int newForm)
-    {
-        if (card != null && newForm >= 0 && newForm <= card.getMaxForms() - 1)
-        {
+    public void changePreviewForm(int newForm) {
+        if (card != null && newForm >= 0 && newForm <= card.getMaxForms() - 1) {
             this.currentForm = card.changeForm(newForm, card.timesUpgraded);
             upgradedCard = card.makePopupCopy();
             upgradedCard.changeForm(newForm, card.timesUpgraded);
@@ -205,10 +200,13 @@ public class PCLSingleCardPopup extends EUIBase
 
     }
 
-    public void close()
-    {
-        if (AbstractDungeon.player != null)
-        {
+    private void toggleAugmentView(boolean value) {
+        showAugments = value;
+        toggleAugment.setText(showAugments ? PGR.core.strings.scp_viewTooltips : PGR.core.strings.scp_viewAugments);
+    }
+
+    public void close() {
+        if (AbstractDungeon.player != null) {
             SingleCardViewPopup.isViewingUpgrade = false;
         }
 
@@ -221,56 +219,25 @@ public class PCLSingleCardPopup extends EUIBase
         this.currentForm = 0;
     }
 
-    public PCLCard getCard()
-    {
-        if (SingleCardViewPopup.isViewingUpgrade)
-        {
-            if (upgradedCard == null)
-            {
-                upgradedCard = getUpgradeCard();
-            }
-
-            return upgradedCard;
-        }
-        else
-        {
-            return card;
-        }
-    }
-
-    private String getCardCopiesText()
-    {
-        if (card == null)
-        {
+    private String getCardCopiesText() {
+        if (card == null) {
             return "";
         }
         int currentCopies = (AbstractDungeon.player != null ? EUIUtils.count(AbstractDungeon.player.masterDeck.group, c -> c.cardID.equals(card.cardID)) : -1);
         int maxCopies = card.cardData != null ? card.cardData.maxCopies : 0;
 
-        if (currentCopies >= 0 && maxCopies > 0)
-        {
+        if (currentCopies >= 0 && maxCopies > 0) {
             return currentCopies + "/" + maxCopies;
         }
-        else if (currentCopies >= 0)
-        {
+        else if (currentCopies >= 0) {
             return String.valueOf(currentCopies);
         }
-        else
-        {
+        else {
             return String.valueOf(maxCopies);
         }
     }
 
-    private PCLCard getUpgradeCard()
-    {
-        upgradedCard = card.makePopupCopy();
-        upgradedCard.upgrade();
-        upgradedCard.displayUpgrades();
-        return upgradedCard;
-    }
-
-    public void open(PCLCard card, CardGroup group)
-    {
+    public void open(PCLCard card, CardGroup group) {
         CardCrawlGame.isPopupOpen = true;
 
         this.baseCard = card;
@@ -282,19 +249,14 @@ public class PCLSingleCardPopup extends EUIBase
         this.group = group;
         this.currentForm = card.auxiliaryData.form;
 
-        if (group != null)
-        {
-            for (int i = 0; i < group.size(); ++i)
-            {
-                if (group.group.get(i) == card)
-                {
-                    if (i != 0)
-                    {
+        if (group != null) {
+            for (int i = 0; i < group.size(); ++i) {
+                if (group.group.get(i) == card) {
+                    if (i != 0) {
                         this.prevCard = group.group.get(i - 1);
                     }
 
-                    if (i != group.size() - 1)
-                    {
+                    if (i != group.size() - 1) {
                         this.nextCard = group.group.get(i + 1);
                     }
                     break;
@@ -313,22 +275,18 @@ public class PCLSingleCardPopup extends EUIBase
         this.betaArtToggle.setActive(false);// (boolean)_canToggleBetaArt.Invoke(CardCrawlGame.cardPopup));
         this.upgradeToggle.setActive(SingleCardViewPopup.enableUpgradeToggle && card.canUpgrade());
 
-        if (betaArtToggle.isActive)
-        {
+        if (betaArtToggle.isActive) {
             this.viewBetaArt = UnlockTracker.betaCardPref.getBoolean(card.cardID, false);
 
-            if (upgradeToggle.isActive)
-            {
+            if (upgradeToggle.isActive) {
                 this.betaArtHb.move((float) Settings.WIDTH / 2f + 270f * Settings.scale, 70f * Settings.scale);
                 this.upgradeHb.move((float) Settings.WIDTH / 2f - 180f * Settings.scale, 70f * Settings.scale);
             }
-            else
-            {
+            else {
                 this.betaArtHb.move((float) Settings.WIDTH / 2f, 70f * Settings.scale);
             }
         }
-        else
-        {
+        else {
             this.upgradeHb.move((float) Settings.WIDTH / 2f, 70f * Settings.scale);
         }
 
@@ -336,15 +294,13 @@ public class PCLSingleCardPopup extends EUIBase
 
 
         PCLCardData cardData = baseCard != null ? baseCard.cardData : null;
-        if (cardData != null)
-        {
+        if (cardData != null) {
             String author = cardData.getAuthorString();
             viewChangeVariants = cardData.canToggleFromPopup && (baseCard.auxiliaryData.form == 0 || cardData.canToggleFromAlternateForm) && GameUtilities.inGame();
             changeVariantDescription.setLabel(!cardData.canToggleFromAlternateForm ? PGR.core.strings.scp_changeVariantTooltipPermanent : PGR.core.strings.scp_changeVariantTooltipAlways);
             artAuthorLabel.setLabel(author != null ? PGR.core.strings.scp_artAuthor + EUIUtils.modifyString(author, w -> "#y" + w) : "");
         }
-        else
-        {
+        else {
             viewChangeVariants = false;
             changeVariantDescription.setLabel(PGR.core.strings.scp_changeVariantTooltipAlways);
             artAuthorLabel.setLabel("");
@@ -352,27 +308,22 @@ public class PCLSingleCardPopup extends EUIBase
 
         currentAugments.clear();
         // Do not show augments for cards not in your deck, or if the card does not have augment slots
-        if (AbstractDungeon.player != null && AbstractDungeon.player.masterDeck.contains(baseCard) && baseCard.augments.size() > 0)
-        {
+        if (AbstractDungeon.player != null && AbstractDungeon.player.masterDeck.contains(baseCard) && baseCard.augments.size() > 0) {
             toggleAugment.setActive(true);
             float curY = AUGMENT_Y;
-            for (int i = 0; i < baseCard.augments.size(); i++)
-            {
+            for (int i = 0; i < baseCard.augments.size(); i++) {
                 int finalI = i;
                 PCLAugmentViewer viewer = new PCLAugmentViewer(new EUIHitbox(AUGMENT_X, curY, scale(300), scale(360)), baseCard, i)
                         .setOnClick(() -> {
-                            if (baseCard.augments.get(finalI) == null)
-                            {
+                            if (baseCard.augments.get(finalI) == null) {
                                 this.effect = (PCLAugmentSelectionEffect) new PCLAugmentSelectionEffect(baseCard)
                                         .addCallback((augment -> {
-                                            if (augment != null)
-                                            {
+                                            if (augment != null) {
                                                 applyAugment(augment);
                                             }
                                         }));
                             }
-                            else
-                            {
+                            else {
                                 removeAugment(finalI);
                             }
                         });
@@ -380,8 +331,7 @@ public class PCLSingleCardPopup extends EUIBase
                 currentAugments.add(viewer);
             }
         }
-        else
-        {
+        else {
             toggleAugment.setActive(false);
             toggleAugmentView(false);
         }
@@ -389,8 +339,41 @@ public class PCLSingleCardPopup extends EUIBase
 
     }
 
-    private void openNext(AbstractCard card)
-    {
+    private void applyAugment(PCLAugment augment) {
+        PGR.dungeon.addAugment(augment.ID, -1);
+        baseCard.addAugment(augment);
+        this.card = baseCard.makePopupCopy();
+        this.upgradedCard = getUpgradeCard();
+        refreshAugments();
+    }
+
+    private void removeAugment(int index) {
+        PCLAugment augment = baseCard.removeAugment(index);
+        if (augment != null) {
+            this.card = baseCard.makePopupCopy();
+            this.upgradedCard = getUpgradeCard();
+            PGR.dungeon.addAugment(augment.ID, 1);
+            refreshAugments();
+        }
+    }
+
+    private PCLCard getUpgradeCard() {
+        upgradedCard = card.makePopupCopy();
+        upgradedCard.upgrade();
+        upgradedCard.displayUpgrades();
+        return upgradedCard;
+    }
+
+    private void refreshAugments() {
+        float curY = AUGMENT_Y;
+        for (PCLAugmentViewer viewer : currentAugments) {
+            viewer.refreshAugment();
+            viewer.translate(AUGMENT_X, curY);
+            curY += viewer.getHeight();
+        }
+    }
+
+    private void openNext(AbstractCard card) {
         boolean tmp = SingleCardViewPopup.isViewingUpgrade;
         this.close();
         CardCrawlGame.cardPopup.open(card, this.group);
@@ -399,40 +382,108 @@ public class PCLSingleCardPopup extends EUIBase
         this.fadeColor.a = 0.9f;
     }
 
-    private void refreshAugments()
-    {
-        float curY = AUGMENT_Y;
-        for (PCLAugmentViewer viewer : currentAugments)
-        {
-            viewer.refreshAugment();
-            viewer.translate(AUGMENT_X, curY);
-            curY += viewer.getHeight();
+    @Override
+    public void renderImpl(SpriteBatch sb) {
+        sb.setColor(this.fadeColor);
+        sb.draw(ImageMaster.WHITE_SQUARE_IMG, 0f, 0f, (float) Settings.WIDTH, (float) Settings.HEIGHT);
+        sb.setColor(Color.WHITE);
+
+        if (this.effect != null) {
+            this.effect.render(sb);
+            return;
+        }
+
+        PCLCard card = getCard();
+
+        card.renderInLibrary(sb);
+
+        if (showAugments) {
+            for (PCLAugmentViewer augment : currentAugments) {
+                augment.tryRender(sb);
+            }
+        }
+        else {
+            card.renderCardTip(sb);
+        }
+
+        if (this.prevCard != null) {
+            renderArrow(sb, prevHb, CInputActionSet.pageLeftViewDeck, false);
+        }
+
+        if (this.nextCard != null) {
+            renderArrow(sb, nextHb, CInputActionSet.pageRightViewExhaust, true);
+        }
+
+        this.cardHb.render(sb);
+
+        FontHelper.cardTitleFont.getData().setScale(1);
+        if (upgradeToggle.isActive) {
+            upgradeToggle.renderImpl(sb);
+
+            if (Settings.isControllerMode) {
+                sb.draw(CInputActionSet.proceed.getKeyImg(), this.upgradeHb.cX - 132f * Settings.scale - 32f, -32f + 67f * Settings.scale, 32f, 32f, 64f, 64f, Settings.scale, Settings.scale, 0f, 0, 0, 64, 64, false, false);
+            }
+        }
+        if (betaArtToggle.isActive) {
+            betaArtToggle.renderImpl(sb);
+
+            if (Settings.isControllerMode) {
+                sb.draw(CInputActionSet.topPanel.getKeyImg(), this.betaArtHb.cX - 132f * Settings.scale - 32f, -32f + 67f * Settings.scale, 32f, 32f, 64f, 64f, Settings.scale, Settings.scale, 0f, 0, 0, 64, 64, false, false);
+            }
+        }
+
+        if (viewVariants) {
+            changeVariant.setInteractable(baseCard.auxiliaryData.form != currentForm);
+            changeVariantHb.render(sb);
+            changeVariantValueHb.render(sb);
+            changeVariantNumber.renderImpl(sb);
+            changeVariantLabel.renderImpl(sb);
+            if (currentForm > 0) {
+                changeVariantPrevHb.render(sb);
+                changeVariantPrev.renderImpl(sb);
+            }
+            if (currentForm < card.getMaxForms() - 1) {
+                changeVariantNextHb.render(sb);
+                changeVariantNext.renderImpl(sb);
+            }
+            if (viewChangeVariants) {
+                changeVariant.renderImpl(sb);
+                changeVariantDescription.renderImpl(sb);
+            }
+        }
+
+        if (AbstractDungeon.player != null || card.cardData != null) {
+            maxCopiesLabel.renderImpl(sb);
+            maxCopiesCount.renderImpl(sb);
+            maxCopiesDescription.renderImpl(sb);
+        }
+
+        authorHb.render(sb);
+        artAuthorLabel.renderImpl(sb);
+        this.toggleAugment.tryRender(sb);
+    }
+
+    public PCLCard getCard() {
+        if (SingleCardViewPopup.isViewingUpgrade) {
+            if (upgradedCard == null) {
+                upgradedCard = getUpgradeCard();
+            }
+
+            return upgradedCard;
+        }
+        else {
+            return card;
         }
     }
 
-    private void removeAugment(int index)
-    {
-        PCLAugment augment = baseCard.removeAugment(index);
-        if (augment != null)
-        {
-            this.card = baseCard.makePopupCopy();
-            this.upgradedCard = getUpgradeCard();
-            PGR.dungeon.addAugment(augment.ID, 1);
-            refreshAugments();
-        }
-    }
-
-    private void renderArrow(SpriteBatch sb, Hitbox hb, CInputAction action, boolean flipX)
-    {
+    private void renderArrow(SpriteBatch sb, Hitbox hb, CInputAction action, boolean flipX) {
         sb.setColor(Color.WHITE);
         sb.draw(ImageMaster.POPUP_ARROW, hb.cX - 128f, hb.cY - 128f, 128f, 128f, 256f, 256f, Settings.scale, Settings.scale, 0f, 0, 0, 256, 256, flipX, false);
-        if (Settings.isControllerMode)
-        {
+        if (Settings.isControllerMode) {
             sb.draw(action.getKeyImg(), hb.cX - 32f, hb.cY - 32f + 100f * Settings.scale, 32f, 32f, 64f, 64f, Settings.scale, Settings.scale, 0f, 0, 0, 64, 64, false, false);
         }
 
-        if (hb.hovered)
-        {
+        if (hb.hovered) {
             sb.setBlendFunction(770, 1);
             sb.setColor(new Color(1f, 1f, 1f, 0.5f));
             sb.draw(ImageMaster.POPUP_ARROW, hb.cX - 128f, hb.cY - 128f, 128f, 128f, 256f, 256f, Settings.scale, Settings.scale, 0f, 0, 0, 256, 256, flipX, false);
@@ -443,32 +494,11 @@ public class PCLSingleCardPopup extends EUIBase
         hb.render(sb);
     }
 
-    private void toggleAugmentView(boolean value)
-    {
-        showAugments = value;
-        toggleAugment.setText(showAugments ? PGR.core.strings.scp_viewTooltips : PGR.core.strings.scp_viewAugments);
-    }
-
-    private void toggleBetaArt(boolean value)
-    {
-        this.viewBetaArt = value;
-        UnlockTracker.betaCardPref.putBoolean(this.card.cardID, this.viewBetaArt);
-        UnlockTracker.betaCardPref.flush();
-    }
-
-    private void toggleUpgrade(boolean value)
-    {
-        SingleCardViewPopup.isViewingUpgrade = value;
-    }
-
     @Override
-    public void updateImpl()
-    {
-        if (this.effect != null)
-        {
+    public void updateImpl() {
+        if (this.effect != null) {
             this.effect.update();
-            if (this.effect.isDone)
-            {
+            if (this.effect.isDone) {
                 this.effect = null;
             }
             return;
@@ -505,140 +535,34 @@ public class PCLSingleCardPopup extends EUIBase
 
         this.viewVariants = viewChangeVariants || baseCard != null && baseCard.cardData != null && baseCard.getMaxForms() > 1;
 
-        if (showAugments)
-        {
-            for (PCLAugmentViewer augment : currentAugments)
-            {
+        if (showAugments) {
+            for (PCLAugmentViewer augment : currentAugments) {
                 augment.tryUpdate();
             }
         }
     }
 
-    @Override
-    public void renderImpl(SpriteBatch sb)
-    {
-        sb.setColor(this.fadeColor);
-        sb.draw(ImageMaster.WHITE_SQUARE_IMG, 0f, 0f, (float) Settings.WIDTH, (float) Settings.HEIGHT);
-        sb.setColor(Color.WHITE);
-
-        if (this.effect != null)
-        {
-            this.effect.render(sb);
-            return;
-        }
-
-        PCLCard card = getCard();
-
-        card.renderInLibrary(sb);
-
-        if (showAugments)
-        {
-            for (PCLAugmentViewer augment : currentAugments)
-            {
-                augment.tryRender(sb);
-            }
-        }
-        else
-        {
-            card.renderCardTip(sb);
-        }
-
-        if (this.prevCard != null)
-        {
-            renderArrow(sb, prevHb, CInputActionSet.pageLeftViewDeck, false);
-        }
-
-        if (this.nextCard != null)
-        {
-            renderArrow(sb, nextHb, CInputActionSet.pageRightViewExhaust, true);
-        }
-
-        this.cardHb.render(sb);
-
-        FontHelper.cardTitleFont.getData().setScale(1);
-        if (upgradeToggle.isActive)
-        {
-            upgradeToggle.renderImpl(sb);
-
-            if (Settings.isControllerMode)
-            {
-                sb.draw(CInputActionSet.proceed.getKeyImg(), this.upgradeHb.cX - 132f * Settings.scale - 32f, -32f + 67f * Settings.scale, 32f, 32f, 64f, 64f, Settings.scale, Settings.scale, 0f, 0, 0, 64, 64, false, false);
-            }
-        }
-        if (betaArtToggle.isActive)
-        {
-            betaArtToggle.renderImpl(sb);
-
-            if (Settings.isControllerMode)
-            {
-                sb.draw(CInputActionSet.topPanel.getKeyImg(), this.betaArtHb.cX - 132f * Settings.scale - 32f, -32f + 67f * Settings.scale, 32f, 32f, 64f, 64f, Settings.scale, Settings.scale, 0f, 0, 0, 64, 64, false, false);
-            }
-        }
-
-        if (viewVariants)
-        {
-            changeVariant.setInteractable(baseCard.auxiliaryData.form != currentForm);
-            changeVariantHb.render(sb);
-            changeVariantValueHb.render(sb);
-            changeVariantNumber.renderImpl(sb);
-            changeVariantLabel.renderImpl(sb);
-            if (currentForm > 0)
-            {
-                changeVariantPrevHb.render(sb);
-                changeVariantPrev.renderImpl(sb);
-            }
-            if (currentForm < card.getMaxForms() - 1)
-            {
-                changeVariantNextHb.render(sb);
-                changeVariantNext.renderImpl(sb);
-            }
-            if (viewChangeVariants)
-            {
-                changeVariant.renderImpl(sb);
-                changeVariantDescription.renderImpl(sb);
-            }
-        }
-
-        if (AbstractDungeon.player != null || card.cardData != null)
-        {
-            maxCopiesLabel.renderImpl(sb);
-            maxCopiesCount.renderImpl(sb);
-            maxCopiesDescription.renderImpl(sb);
-        }
-
-        authorHb.render(sb);
-        artAuthorLabel.renderImpl(sb);
-        this.toggleAugment.tryRender(sb);
-    }
-
-    private void updateArrows()
-    {
-        if (this.prevCard != null)
-        {
+    private void updateArrows() {
+        if (this.prevCard != null) {
             this.prevHb.update();
-            if (this.prevHb.justHovered)
-            {
+            if (this.prevHb.justHovered) {
                 CardCrawlGame.sound.play("UI_HOVER");
             }
 
-            if (this.prevHb.clicked || this.prevCard != null && CInputActionSet.pageLeftViewDeck.isJustPressed())
-            {
+            if (this.prevHb.clicked || this.prevCard != null && CInputActionSet.pageLeftViewDeck.isJustPressed()) {
                 this.prevHb.clicked = false;
                 CInputActionSet.pageLeftViewDeck.unpress();
                 openNext(prevCard);
             }
         }
 
-        if (this.nextCard != null)
-        {
+        if (this.nextCard != null) {
             this.nextHb.update();
-            if (this.nextHb.justHovered)
-            {
+            if (this.nextHb.justHovered) {
                 CardCrawlGame.sound.play("UI_HOVER");
             }
 
-            if (this.nextHb.clicked || this.nextCard != null && CInputActionSet.pageRightViewExhaust.isJustPressed())
-            {
+            if (this.nextHb.clicked || this.nextCard != null && CInputActionSet.pageRightViewExhaust.isJustPressed()) {
                 this.nextHb.clicked = false;
                 CInputActionSet.pageRightViewExhaust.unpress();
                 openNext(nextCard);
@@ -646,50 +570,41 @@ public class PCLSingleCardPopup extends EUIBase
         }
     }
 
-    private void updateInput()
-    {
-        if (InputHelper.justClickedLeft)
-        {
-            if (this.prevCard != null && this.prevHb.hovered)
-            {
+    private void updateInput() {
+        if (InputHelper.justClickedLeft) {
+            if (this.prevCard != null && this.prevHb.hovered) {
                 this.prevHb.clickStarted = true;
                 CardCrawlGame.sound.play("UI_CLICK_1");
                 return;
             }
 
-            if (this.nextCard != null && this.nextHb.hovered)
-            {
+            if (this.nextCard != null && this.nextHb.hovered) {
                 this.nextHb.clickStarted = true;
                 CardCrawlGame.sound.play("UI_CLICK_1");
                 return;
             }
         }
 
-        if (InputHelper.justClickedLeft)
-        {
+        if (InputHelper.justClickedLeft) {
             if (!this.cardHb.hovered && !this.upgradeHb.hovered &&
                     !this.toggleAugment.hb.hovered &&
                     (!showAugments || EUIUtils.all(currentAugments, augment -> !augment.augmentButton.hb.hovered)) &&
                     (this.betaArtHb == null || !this.betaArtHb.hovered) &&
-                    (!this.viewVariants || (!this.changeVariantHb.hovered && !this.changeVariantNextHb.hovered && !this.changeVariantPrevHb.hovered && !this.changeVariantValueHb.hovered)))
-            {
+                    (!this.viewVariants || (!this.changeVariantHb.hovered && !this.changeVariantNextHb.hovered && !this.changeVariantPrevHb.hovered && !this.changeVariantValueHb.hovered))) {
                 close();
                 InputHelper.justClickedLeft = false;
             }
         }
-        else if (InputHelper.pressedEscape || CInputActionSet.cancel.isJustPressed())
-        {
+        else if (InputHelper.pressedEscape || CInputActionSet.cancel.isJustPressed()) {
             CInputActionSet.cancel.unpress();
             InputHelper.pressedEscape = false;
             close();
         }
 
-        if (this.prevCard != null && InputActionSet.left.isJustPressed())
-        {
+        if (this.prevCard != null && InputActionSet.left.isJustPressed()) {
             openNext(prevCard);
         }
-        else if (this.nextCard != null && InputActionSet.right.isJustPressed())
-        {
+        else if (this.nextCard != null && InputActionSet.right.isJustPressed()) {
             openNext(nextCard);
         }
     }

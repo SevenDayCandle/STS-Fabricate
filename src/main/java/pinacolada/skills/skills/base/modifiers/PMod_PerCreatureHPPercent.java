@@ -15,53 +15,43 @@ import pinacolada.skills.fields.PField_Not;
 import java.util.List;
 
 @VisibleSkill
-public class PMod_PerCreatureHPPercent extends PMod_Per<PField_Not>
-{
+public class PMod_PerCreatureHPPercent extends PMod_Per<PField_Not> {
     public static final PSkillData<PField_Not> DATA = register(PMod_PerCreatureHPPercent.class, PField_Not.class).selfTarget();
 
-    public PMod_PerCreatureHPPercent(PSkillSaveData content)
-    {
+    public PMod_PerCreatureHPPercent(PSkillSaveData content) {
         super(DATA, content);
     }
 
-    public PMod_PerCreatureHPPercent()
-    {
+    public PMod_PerCreatureHPPercent() {
         super(DATA);
     }
 
-    public PMod_PerCreatureHPPercent(int amount)
-    {
+    public PMod_PerCreatureHPPercent(int amount) {
         super(DATA, PCLCardTarget.Self, amount);
     }
 
-    public PMod_PerCreatureHPPercent(PCLCardTarget target, int amount)
-    {
+    public PMod_PerCreatureHPPercent(PCLCardTarget target, int amount) {
         super(DATA, target, amount);
     }
 
     @Override
-    public int getMultiplier(PCLUseInfo info)
-    {
+    public int getMultiplier(PCLUseInfo info) {
         List<AbstractCreature> targetList = getTargetList(info);
         return EUIUtils.sumInt(targetList, t -> MathUtils.ceil(t.currentHealth * 100f / t.maxHealth));
     }
 
     @Override
-    public String getSubSampleText()
-    {
+    public String getSubSampleText() {
         return PGR.core.tooltips.hp.title + "%";
     }
 
     @Override
-    public String getSubText()
-    {
+    public String getSubText() {
         String baseString = getSubSampleText();
-        if (amount > 1)
-        {
+        if (amount > 1) {
             baseString = EUIRM.strings.numNoun(getAmountRawString(), baseString);
         }
-        switch (target)
-        {
+        switch (target) {
             case All:
             case Any:
                 return TEXT.subjects_onAnyCharacter(baseString);

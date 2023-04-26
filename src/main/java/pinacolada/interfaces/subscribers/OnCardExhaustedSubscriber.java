@@ -4,7 +4,6 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.annotations.CombatSubscriber;
 
 @CombatSubscriber
-public interface OnCardExhaustedSubscriber extends PCLCombatSubscriber
-{
+public interface OnCardExhaustedSubscriber extends PCLCombatSubscriber {
     void onCardExhausted(AbstractCard card);
 }

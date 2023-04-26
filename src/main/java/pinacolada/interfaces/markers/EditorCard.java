@@ -10,47 +10,41 @@ import pinacolada.skills.skills.PTrigger;
 
 import java.util.ArrayList;
 
-public interface EditorCard extends PointerProvider, CacheableCard
-{
+public interface EditorCard extends PointerProvider, CacheableCard {
+    void fullReset();
+
     Texture getPortraitImageTexture();
+
+    default PTrigger getPowerEffect(int i) {
+        ArrayList<PTrigger> effects = getPowerEffects();
+        return effects != null && effects.size() > i ? effects.get(i) : null;
+    }
 
     int hitCount();
 
     int hitCountBase();
 
-    int rightCount();
-
-    int rightCountBase();
-
-    void fullReset();
-
-    void loadImage(String path, boolean refresh);
-
-    default PTrigger getPowerEffect(int i)
-    {
-        ArrayList<PTrigger> effects = getPowerEffects();
-        return effects != null && effects.size() > i ? effects.get(i) : null;
-    }
-
-    default void loadImage(String path)
-    {
+    default void loadImage(String path) {
         loadImage(path, false);
     }
 
-    default void renderForPreview(SpriteBatch sb)
-    {
-        if (this instanceof AbstractCard)
-        {
-            if (SingleCardViewPopup.isViewingUpgrade)
-            {
+    void loadImage(String path, boolean refresh);
+
+    default void renderForPreview(SpriteBatch sb) {
+        if (this instanceof AbstractCard) {
+            if (SingleCardViewPopup.isViewingUpgrade) {
                 ((AbstractCard) this).renderUpgradePreview(sb);
             }
-            else
-            {
+            else {
                 ((AbstractCard) this).render(sb);
             }
         }
     }
 
-    default void setup(Object input) {}
+    int rightCount();
+
+    int rightCountBase();
+
+    default void setup(Object input) {
+    }
 }

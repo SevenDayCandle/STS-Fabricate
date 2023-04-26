@@ -7,27 +7,21 @@ import pinacolada.cards.base.fields.PCLCardSelection;
 
 import java.util.ArrayList;
 
-public class ScoutCards extends FetchFromPile
-{
+public class ScoutCards extends FetchFromPile {
     public boolean reshuffleInstantly = false;
 
-    public ScoutCards(String sourceName, int amount)
-    {
+    public ScoutCards(String sourceName, int amount) {
         super(sourceName, amount, PCLCardSelection.Top.toSelection(), AbstractDungeon.player.drawPile);
     }
 
     @Override
-    protected void complete(ArrayList<AbstractCard> result)
-    {
-        if (result.size() > 0)
-        {
+    protected void complete(ArrayList<AbstractCard> result) {
+        if (result.size() > 0) {
             SelectFromPile action = new ReshuffleFromPile(name, result.size(), player.hand).setDestination(PCLCardSelection.Top.toSelection());
-            if (reshuffleInstantly)
-            {
+            if (reshuffleInstantly) {
                 PCLActions.top.add(action);
             }
-            else
-            {
+            else {
                 PCLActions.bottom.add(action);
             }
         }
@@ -35,8 +29,7 @@ public class ScoutCards extends FetchFromPile
         super.complete(result);
     }
 
-    public ScoutCards drawInstantly(boolean value)
-    {
+    public ScoutCards drawInstantly(boolean value) {
         reshuffleInstantly = value;
 
         return this;

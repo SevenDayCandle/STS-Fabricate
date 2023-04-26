@@ -13,33 +13,27 @@ import pinacolada.utilities.GameUtilities;
 import java.util.List;
 
 @VisibleSkill
-public class PMod_PerUnblockedDamage extends PMod_Per<PField_Not>
-{
+public class PMod_PerUnblockedDamage extends PMod_Per<PField_Not> {
 
     public static final PSkillData<PField_Not> DATA = register(PMod_PerUnblockedDamage.class, PField_Not.class).selfTarget();
 
-    public PMod_PerUnblockedDamage()
-    {
+    public PMod_PerUnblockedDamage() {
         this(1);
     }
 
-    public PMod_PerUnblockedDamage(PSkillSaveData content)
-    {
-        super(DATA, content);
-    }
-
-    public PMod_PerUnblockedDamage(int amount)
-    {
+    public PMod_PerUnblockedDamage(int amount) {
         super(DATA, amount);
     }
 
+    public PMod_PerUnblockedDamage(PSkillSaveData content) {
+        super(DATA, content);
+    }
+
     @Override
-    public int getMultiplier(PCLUseInfo info)
-    {
+    public int getMultiplier(PCLUseInfo info) {
 
         PCardPrimary_DealDamage damageEff = sourceCard != null ? source.getCardDamage() : null;
-        if (damageEff != null && damageEff.target != null)
-        {
+        if (damageEff != null && damageEff.target != null) {
             List<AbstractCreature> targetList = damageEff.getTargetList(info);
             return EUIUtils.sumInt(targetList, t -> damageEff.extra * GameUtilities.getHealthBarAmount(t, damageEff.amount, true, false));
         }
@@ -47,8 +41,7 @@ public class PMod_PerUnblockedDamage extends PMod_Per<PField_Not>
     }
 
     @Override
-    public String getSubText()
-    {
+    public String getSubText() {
         return TEXT.subjects_unblocked(TEXT.subjects_damage);
     }
 }

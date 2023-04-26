@@ -9,8 +9,7 @@ import pinacolada.effects.PCLAttackVFX;
 import pinacolada.effects.PCLEffect;
 import pinacolada.utilities.PCLRenderHelpers;
 
-public class ShieldEffect extends PCLEffect
-{
+public class ShieldEffect extends PCLEffect {
     public final TextureRegion image;
 
     private final float x;
@@ -18,8 +17,7 @@ public class ShieldEffect extends PCLEffect
     private final float tY;
     private float y;
 
-    public ShieldEffect(float x, float y)
-    {
+    public ShieldEffect(float x, float y) {
         super(0.6f, true);
 
         this.image = PCLAttackVFX.SHIELD.texture;
@@ -31,40 +29,32 @@ public class ShieldEffect extends PCLEffect
     }
 
     @Override
-    public void render(SpriteBatch sb)
-    {
-        if (this.image != null)
-        {
+    public void render(SpriteBatch sb) {
+        if (this.image != null) {
             PCLRenderHelpers.drawCentered(sb, color, image, x, y, image.getRegionWidth(), image.getRegionHeight(), scale, rotation);
         }
     }
 
     @Override
-    public void dispose()
-    {
+    public void dispose() {
     }
 
     @Override
-    protected void firstUpdate()
-    {
+    protected void firstUpdate() {
         updateInternal(getDeltaTime());
     }
 
     @Override
-    protected void updateInternal(float deltaTime)
-    {
+    protected void updateInternal(float deltaTime) {
         super.updateInternal(deltaTime);
 
-        if (isDone)
-        {
+        if (isDone) {
             this.color.a = 0.0f;
         }
-        else if (this.duration < 0.2f)
-        {
+        else if (this.duration < 0.2f) {
             this.color.a = this.duration * 5.0f;
         }
-        else
-        {
+        else {
             this.color.a = Interpolation.fade.apply(1.0f, 0.0f, duration * 0.75f / startingDuration);
         }
 

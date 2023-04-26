@@ -19,42 +19,35 @@ import pinacolada.utilities.ListSelection;
 
 
 @VisibleSkill
-public class PCond_ScoutBranch extends PCond_DoBranch
-{
+public class PCond_ScoutBranch extends PCond_DoBranch {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_ScoutBranch.class, PField_CardCategory.class)
             .selfTarget()
             .setGroups(PCLCardGroupHelper.DrawPile);
 
-    public PCond_ScoutBranch(PSkillSaveData content)
-    {
+    public PCond_ScoutBranch(PSkillSaveData content) {
         super(DATA, content);
     }
 
-    public PCond_ScoutBranch()
-    {
+    public PCond_ScoutBranch() {
         super(DATA);
     }
 
-    public PCond_ScoutBranch(int amount)
-    {
+    public PCond_ScoutBranch(int amount) {
         super(DATA, PCLCardTarget.None, amount);
     }
 
     @Override
-    public String getSubText()
-    {
+    public String getSubText() {
         return EUIRM.strings.verbNoun(getActionTitle(), getAmountRawString());
     }
 
     @Override
-    public EUITooltip getActionTooltip()
-    {
+    public EUITooltip getActionTooltip() {
         return PGR.core.tooltips.scout;
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction()
-    {
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
         return (s, c, i, o, g) -> new ScoutCards(s, i);
     }
 }

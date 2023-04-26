@@ -7,8 +7,7 @@ import extendedui.ui.controls.EUIButton;
 import extendedui.ui.tooltips.EUITooltip;
 
 // Copied and modified from STS-AnimatorMod
-public class PCLCardRewardActionButton extends EUIButton
-{
+public class PCLCardRewardActionButton extends EUIButton {
     private static final float SIZE = scale(50);
     private final float offsetY;
     private final int cardIndex;
@@ -16,8 +15,7 @@ public class PCLCardRewardActionButton extends EUIButton
     public boolean used;
     private AbstractCard card;
 
-    public PCLCardRewardActionButton(PCLCardRewardAction container, Texture buttonTexture, String title, String description, float offsetY, int cardIndex, boolean useAugment)
-    {
+    public PCLCardRewardActionButton(PCLCardRewardAction container, Texture buttonTexture, String title, String description, float offsetY, int cardIndex, boolean useAugment) {
         super(buttonTexture, 0, 0);
 
         this.container = container;
@@ -31,10 +29,8 @@ public class PCLCardRewardActionButton extends EUIButton
         setTooltip(new EUITooltip(title, description));
     }
 
-    public AbstractCard getCard(boolean includeColorless)
-    {
-        if (cardIndex < container.rewardItem.cards.size())
-        {
+    public AbstractCard getCard(boolean includeColorless) {
+        if (cardIndex < container.rewardItem.cards.size()) {
             final AbstractCard card = container.rewardItem.cards.get(cardIndex);
             return (!includeColorless && card.color == AbstractCard.CardColor.COLORLESS) ? null : card;
         }
@@ -42,18 +38,22 @@ public class PCLCardRewardActionButton extends EUIButton
         return null;
     }
 
-    public int getIndex()
-    {
+    public int getIndex() {
         return cardIndex;
     }
 
     @Override
-    public void updateImpl()
-    {
+    public void renderImpl(SpriteBatch sb) {
+        if (card != null) {
+            super.renderImpl(sb);
+        }
+    }
+
+    @Override
+    public void updateImpl() {
         card = getCard(false);
 
-        if (card != null)
-        {
+        if (card != null) {
             hb.targetCx = card.current_x;
             hb.targetCy = card.current_y + offsetY;
         }
@@ -61,14 +61,5 @@ public class PCLCardRewardActionButton extends EUIButton
         setInteractable(card != null && !card.hb.hovered);
 
         super.updateImpl();
-    }
-
-    @Override
-    public void renderImpl(SpriteBatch sb)
-    {
-        if (card != null)
-        {
-            super.renderImpl(sb);
-        }
     }
 }

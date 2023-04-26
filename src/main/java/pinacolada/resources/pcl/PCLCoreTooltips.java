@@ -14,8 +14,7 @@ import pinacolada.powers.special.SilencedPower;
 import pinacolada.resources.PCLTooltips;
 import pinacolada.resources.PGR;
 
-public class PCLCoreTooltips extends PCLTooltips
-{
+public class PCLCoreTooltips extends PCLTooltips {
     public static final String ICON_AFTER_IMAGE = "afterImage";
     public static final String ICON_ARTIFACT = "artifact";
     public static final String ICON_BLUR = "blur";
@@ -220,8 +219,7 @@ public class PCLCoreTooltips extends PCLTooltips
 
     public EUITooltip gold = new EUITooltip(RewardItem.TEXT[1].trim(), (AbstractPlayer.PlayerClass) null);
 
-    public PCLCoreTooltips()
-    {
+    public PCLCoreTooltips() {
         EUITooltip.registerID(PCLAffinity.Red.getAffinitySymbol(), affinityRed);
         EUITooltip.registerID(PCLAffinity.Green.getAffinitySymbol(), affinityGreen);
         EUITooltip.registerID(PCLAffinity.Blue.getAffinitySymbol(), affinityBlue);
@@ -238,10 +236,8 @@ public class PCLCoreTooltips extends PCLTooltips
         EUITooltip.registerID("Gold", gold);
     }
 
-    public void initializeIcons()
-    {
-        for (PCLCardTag tag : PCLCardTag.values())
-        {
+    public void initializeIcons() {
+        for (PCLCardTag tag : PCLCardTag.values()) {
             tag.getTip().setIcon(tag.getTextureCache().texture(), 6).setBadgeBackground(tag.color);
         }
 

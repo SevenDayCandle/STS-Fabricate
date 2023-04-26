@@ -19,44 +19,36 @@ import pinacolada.utilities.ListSelection;
 import java.util.List;
 
 
-
 @VisibleSkill
-public class PCond_ExhaustBranch extends PCond_DoBranch
-{
+public class PCond_ExhaustBranch extends PCond_DoBranch {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_ExhaustBranch.class, PField_CardCategory.class)
             .selfTarget()
             .setExtra(0, DEFAULT_MAX)
             .setGroups(PCLCardGroupHelper.DrawPile, PCLCardGroupHelper.DiscardPile, PCLCardGroupHelper.Hand);
 
-    public PCond_ExhaustBranch(PSkillSaveData content)
-    {
+    public PCond_ExhaustBranch(PSkillSaveData content) {
         super(DATA, content);
     }
 
-    public PCond_ExhaustBranch()
-    {
+    public PCond_ExhaustBranch() {
         super(DATA);
     }
 
-    public PCond_ExhaustBranch(int amount, PCLCardGroupHelper... groups)
-    {
+    public PCond_ExhaustBranch(int amount, PCLCardGroupHelper... groups) {
         super(DATA, PCLCardTarget.None, amount, groups);
     }
 
-    public PCond_ExhaustBranch(int amount, List<PCLCardGroupHelper> groups)
-    {
+    public PCond_ExhaustBranch(int amount, List<PCLCardGroupHelper> groups) {
         super(DATA, PCLCardTarget.None, amount, groups.toArray(new PCLCardGroupHelper[]{}));
     }
 
     @Override
-    public EUITooltip getActionTooltip()
-    {
+    public EUITooltip getActionTooltip() {
         return PGR.core.tooltips.exhaust;
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction()
-    {
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
         return ExhaustFromPile::new;
     }
 }

@@ -19,8 +19,7 @@ import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
-public class GameOverScreenPatches
-{
+public class GameOverScreenPatches {
     public static final int MAX_LEVEL = PCLAbstractPlayerData.MAX_UNLOCK_LEVEL;
     public static final UIStrings uiStrings = CardCrawlGame.languagePack.getUIString("DeathScreen");
     protected static final String SCORE = "score";
@@ -28,48 +27,39 @@ public class GameOverScreenPatches
     protected static final String UNLOCK_COST = "unlockCost";
     protected static final String NEXT_UNLOCK_COST = "nextUnlockCost";
 
-    protected static Color getColor(GameOverScreen __instance, String name)
-    {
+    protected static boolean getBool(GameOverScreen __instance, String name) {
         return ReflectionHacks.getPrivate(__instance, GameOverScreen.class, name);
     }
 
-    protected static boolean getBool(GameOverScreen __instance, String name)
-    {
+    protected static Color getColor(GameOverScreen __instance, String name) {
         return ReflectionHacks.getPrivate(__instance, GameOverScreen.class, name);
     }
 
-    protected static float getFloat(GameOverScreen __instance, String name)
-    {
+    protected static float getFloat(GameOverScreen __instance, String name) {
         return ReflectionHacks.getPrivate(__instance, GameOverScreen.class, name);
     }
 
-    protected static int getInt(GameOverScreen __instance, String name)
-    {
+    protected static int getInt(GameOverScreen __instance, String name) {
         return ReflectionHacks.getPrivate(__instance, GameOverScreen.class, name);
     }
 
     @SpirePatch(clz = GameOverScreen.class, method = "calculateUnlockProgress")
-    public static class GameOverScreen_calculateUnlockProgress
-    {
+    public static class GameOverScreen_calculateUnlockProgress {
         @SpirePrefixPatch
-        public static SpireReturn prefix(GameOverScreen __instance)
-        {
-            if (!GameUtilities.isPCLPlayerClass())
-            {
+        public static SpireReturn prefix(GameOverScreen __instance) {
+            if (!GameUtilities.isPCLPlayerClass()) {
                 return SpireReturn.Continue();
             }
 
             EUIClassUtils.setField(__instance, "score", GameOverScreen.calcScore(GameOverScreen.isVictory));
             EUIClassUtils.setField(__instance, "unlockLevel", UnlockTracker.getUnlockLevel(AbstractDungeon.player.chosenClass));
 
-            if (getInt(__instance, "unlockLevel") >= MAX_LEVEL)
-            {
+            if (getInt(__instance, "unlockLevel") >= MAX_LEVEL) {
                 EUIClassUtils.setField(__instance, "maxLevel", true);
                 return SpireReturn.Return(null);
             }
 
-            if (getInt(__instance, "score") == 0)
-            {
+            if (getInt(__instance, "score") == 0) {
                 EUIClassUtils.setField(__instance, "playedWhir", true);
             }
 
@@ -79,15 +69,12 @@ public class GameOverScreenPatches
             EUIClassUtils.setField(__instance, "unlockTargetProgress", getFloat(__instance, "unlockProgress") + getInt(__instance, "score"));
             EUIClassUtils.setField(__instance, "nextUnlockCost", PGR.getResources(AbstractDungeon.player.chosenClass).getUnlockCost(1, true));
 
-            if (getFloat(__instance,"unlockTargetProgress") >= getInt(__instance,"unlockCost"))
-            {
+            if (getFloat(__instance, "unlockTargetProgress") >= getInt(__instance, "unlockCost")) {
                 EUIClassUtils.setField(__instance, "unlockBundle", UnlockTracker.getUnlockBundle(AbstractDungeon.player.chosenClass, getInt(__instance, "unlockLevel")));
-                if (getInt(__instance, "unlockLevel") == (MAX_LEVEL - 1))
-                {
+                if (getInt(__instance, "unlockLevel") == (MAX_LEVEL - 1)) {
                     EUIClassUtils.setField(__instance, "unlockTargetProgress", (float) getInt(__instance, "unlockCost"));
                 }
-                else if (getFloat(__instance, "unlockTargetProgress") > (getInt(__instance, "unlockCost") - getFloat(__instance, "unlockProgress") + getInt(__instance, "nextUnlockCost") - 1.0F))
-                {
+                else if (getFloat(__instance, "unlockTargetProgress") > (getInt(__instance, "unlockCost") - getFloat(__instance, "unlockProgress") + getInt(__instance, "nextUnlockCost") - 1.0F)) {
                     EUIClassUtils.setField(__instance, "unlockTargetProgress", (getInt(__instance, "unlockCost") - getFloat(__instance, "unlockProgress") + getInt(__instance, "nextUnlockCost") - 1.0F));
                 }
             }
@@ -101,17 +88,13 @@ public class GameOverScreenPatches
     }
 
     @SpirePatch(clz = GameOverScreen.class, method = "renderProgressBar")
-    public static class GameOverScreen_renderProgressBar
-    {
+    public static class GameOverScreen_renderProgressBar {
         @SpirePrefixPatch
-        public static SpireReturn insert(GameOverScreen __instance, SpriteBatch sb)
-        {
-            if (!GameUtilities.isPCLPlayerClass())
-            {
+        public static SpireReturn insert(GameOverScreen __instance, SpriteBatch sb) {
+            if (!GameUtilities.isPCLPlayerClass()) {
                 return SpireReturn.Continue();
             }
-            if (getBool(__instance, "maxLevel"))
-            {
+            if (getBool(__instance, "maxLevel")) {
                 return SpireReturn.Return(null);
             }
 
@@ -131,12 +114,10 @@ public class GameOverScreenPatches
             FontHelper.renderFontLeftTopAligned(sb, FontHelper.topPanelInfoFont, text,
                     576.0F * Settings.xScale, Settings.HEIGHT * 0.2F - 12.0F * Settings.scale, getColor(__instance, "creamUiColor"));
 
-            if (getInt(__instance, "unlockLevel") == (MAX_LEVEL - 1))
-            {
+            if (getInt(__instance, "unlockLevel") == (MAX_LEVEL - 1)) {
                 text = uiStrings.TEXT[42] + (MAX_LEVEL - getInt(__instance, "unlockLevel"));
             }
-            else
-            {
+            else {
                 text = uiStrings.TEXT[41] + (MAX_LEVEL - getInt(__instance, "unlockLevel"));
             }
 

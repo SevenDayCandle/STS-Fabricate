@@ -7,13 +7,9 @@ import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
         cls = "com.megacrit.cardcrawl.cards.AbstractCard",
         method = "<class>"
 )
-public class FragileField
-{
-    public static SpireField<Boolean> value = new SpireField<>(() -> {
-        return false;
-    });
+public class FragileField {
+    public static SpireField<Boolean> value = new SpireField<>(() -> false);
 
-    public FragileField()
-    {
+    public FragileField() {
     }
 }

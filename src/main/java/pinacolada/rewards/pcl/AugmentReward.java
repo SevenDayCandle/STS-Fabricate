@@ -15,22 +15,19 @@ import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.rewards.PCLReward;
 
-public class AugmentReward extends PCLReward
-{
+public class AugmentReward extends PCLReward {
     public static final String ID = createFullID(AugmentReward.class);
 
     public final PCLAugment augment;
 
-    public AugmentReward(PCLAugment augment)
-    {
+    public AugmentReward(PCLAugment augment) {
         super(augment.getTexture(), augment.getName(), PCLEnum.Rewards.AUGMENT);
 
         this.augment = augment;
     }
 
     @Override
-    public boolean claimReward()
-    {
+    public boolean claimReward() {
         SFX.play(SFX.RELIC_DROP_MAGICAL);
         PGR.dungeon.addAugment(augment.ID, 1);
         this.isDone = true;
@@ -38,35 +35,28 @@ public class AugmentReward extends PCLReward
     }
 
     @Override
-    public void update()
-    {
+    public void update() {
         super.update();
-        if (this.hb.hovered)
-        {
+        if (this.hb.hovered) {
             EUITooltip.queueTooltip(augment.getTip());
         }
     }
 
     @Override
-    public void renderIcon(SpriteBatch sb)
-    {
+    public void renderIcon(SpriteBatch sb) {
         EUIRenderHelpers.drawColorized(sb, s -> EUIRenderHelpers.drawCentered(sb, augment.getColor(), this.icon, RewardItem.REWARD_ITEM_X, this.y - 2.0F * Settings.scale, 64f, 64f, 1f, 0));
     }
 
-    public static class Serializer implements BaseMod.LoadCustomReward, BaseMod.SaveCustomReward
-    {
+    public static class Serializer implements BaseMod.LoadCustomReward, BaseMod.SaveCustomReward {
         @Override
-        public CustomReward onLoad(RewardSave rewardSave)
-        {
+        public CustomReward onLoad(RewardSave rewardSave) {
             return new AugmentReward(PCLAugment.get(rewardSave.id).create());
         }
 
         @Override
-        public RewardSave onSave(CustomReward customReward)
-        {
+        public RewardSave onSave(CustomReward customReward) {
             AugmentReward reward = EUIUtils.safeCast(customReward, AugmentReward.class);
-            if (reward != null)
-            {
+            if (reward != null) {
                 return new RewardSave(reward.type.toString(), reward.augment.ID, 1, 0);
             }
 

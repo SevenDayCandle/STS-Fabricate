@@ -17,36 +17,30 @@ import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.utilities.ListSelection;
 
 @VisibleSkill
-public class PMod_ScryPerCard extends PMod_Do
-{
+public class PMod_ScryPerCard extends PMod_Do {
     public static final PSkillData<PField_CardCategory> DATA = register(PMod_ScryPerCard.class, PField_CardCategory.class)
             .selfTarget()
             .setGroups(PCLCardGroupHelper.DrawPile);
 
-    public PMod_ScryPerCard(PSkillSaveData content)
-    {
+    public PMod_ScryPerCard(PSkillSaveData content) {
         super(DATA, content);
     }
 
-    public PMod_ScryPerCard()
-    {
+    public PMod_ScryPerCard() {
         super(DATA);
     }
 
-    public PMod_ScryPerCard(int amount)
-    {
+    public PMod_ScryPerCard(int amount) {
         super(DATA, PCLCardTarget.None, amount);
     }
 
     @Override
-    public EUITooltip getActionTooltip()
-    {
+    public EUITooltip getActionTooltip() {
         return PGR.core.tooltips.scry;
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction()
-    {
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
         return (s, c, i, o, g) -> new ScryCards(s, i);
     }
 }

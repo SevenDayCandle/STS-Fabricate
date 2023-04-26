@@ -30,8 +30,7 @@ import pinacolada.utilities.GameUtilities;
 import java.util.ArrayList;
 
 // Copied and modified from STS-AnimatorMod
-public class PCLCharacterSelectOptionsRenderer extends EUIBase
-{
+public class PCLCharacterSelectOptionsRenderer extends EUIBase {
     protected static final float POS_X = 1190f * Settings.scale;
     protected static final float POS_Y = Settings.HEIGHT / 1.75f;
     protected static final float ROW_OFFSET = 60 * Settings.scale;
@@ -54,16 +53,14 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase
 
     protected float textScale;
 
-    public PCLCharacterSelectOptionsRenderer()
-    {
+    public PCLCharacterSelectOptionsRenderer() {
         final float leftTextWidth = FontHelper.getSmartWidth(FontHelper.cardTitleFont, PGR.core.strings.csel_leftText, 9999f, 0f); // Ascension
         final float rightTextWidth = FontHelper.getSmartWidth(FontHelper.cardTitleFont, PGR.core.strings.csel_rightText, 9999f, 0f); // Level 22
 
         textScale = Settings.scale;
 
         //Need to prevent text from disappearing from scaling too big on 4K resolutions
-        if (textScale > 1)
-        {
+        if (textScale > 1) {
             textScale = 1;
         }
 
@@ -107,157 +104,83 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase
                 .setTooltip(PGR.core.strings.csel_info, PGR.core.strings.tutorial_learnMore)
                 .setOnClick(this::openInfo);
 
-        for (AbstractGlyphBlight glyph : PCLAbstractPlayerData.GLYPHS)
-        {
+        for (AbstractGlyphBlight glyph : PCLAbstractPlayerData.GLYPHS) {
             glyphEditors.add(new PCLGlyphEditor(glyph, new EUIHitbox(xOffset, ascensionGlyphsLabel.hb.y, glyph.hb.width, glyph.hb.height)));
             xOffset += ROW_OFFSET * 1.7f;
         }
     }
 
-    private void changeLoadout(int index)
-    {
+    private void changeLoadout(int index) {
         int actualIndex = index % loadouts.size();
-        if (actualIndex < 0)
-        {
+        if (actualIndex < 0) {
             actualIndex = loadouts.size() - 1;
         }
         data.selectedLoadout = loadouts.get(actualIndex);
         refresh(runProvider, characterOption);
     }
 
-    private void changeLoadout(PCLLoadout loadout)
-    {
-        data.selectedLoadout = loadout;
-        refresh(runProvider, characterOption);
-    }
-
-    private void changePreset()
-    {
-        final int preset = loadout.canChangePreset(loadout.preset + 1) ? (loadout.preset + 1) : 0;
-        if (preset != loadout.preset)
-        {
-            loadout.preset = preset;
-            refreshInternal();
-        }
-    }
-
-    private void openLoadoutEditor()
-    {
-        if (loadout != null && characterOption != null && data != null)
-        {
-            PGR.loadoutEditor.open(loadout, data, characterOption, () -> screenRefresh(runProvider, characterOption));
-        }
-    }
-
-    private void openSeriesSelect()
-    {
-        if (characterOption != null && data != null)
-        {
-            PGR.seriesSelection.open(characterOption, data, () -> screenRefresh(runProvider, characterOption));
-        }
-    }
-
-    private void openInfo()
-    {
-        if (characterOption != null && data != null)
-        {
-            PCLPlayerMeter meter = CombatManager.playerSystem.getMeter(data.resources.playerClass);
-            if (meter != null)
-            {
-                EUI.ftueScreen.open(new EUITutorial(meter.getInfoPages()), () -> screenRefresh(runProvider, characterOption));
-            }
-        }
-    }
-
-    public void randomizeLoadout()
-    {
-        if (availableLoadouts.size() > 1)
-        {
-            while (loadout == data.selectedLoadout)
-            {
-                data.selectedLoadout = GameUtilities.getRandomElement(availableLoadouts, RNG);
-            }
-
-            refresh(runProvider, characterOption);
-        }
-    }
-
-    public void refresh(RunAttributesProvider provider, CharacterOption characterOption)
-    {
+    public void refresh(RunAttributesProvider provider, CharacterOption characterOption) {
         refresh(provider, characterOption, GameUtilities.isPCLPlayerClass(characterOption.c.chosenClass));
     }
 
-    public void refresh(RunAttributesProvider provider, CharacterOption characterOption, boolean canOpen)
-    {
+    public void refresh(RunAttributesProvider provider, CharacterOption characterOption, boolean canOpen) {
         this.runProvider = provider;
         this.characterOption = characterOption;
 
-        if (characterOption != null && canOpen)
-        {
+        if (characterOption != null && canOpen) {
             EUI.actingColor = characterOption.c.getCardColor();
             refreshPlayerData();
             refreshInternal();
         }
 
-        if (canOpen)
-        {
+        if (canOpen) {
             startingCardsLabel.setActive(provider instanceof PCLCharacterSelectProvider);
             startingCardsListLabel.setActive(provider instanceof PCLCharacterSelectProvider);
 
-            if (data != null)
-            {
+            if (data != null) {
                 seriesButton.setActive(true);
                 loadoutEditorButton.setActive(true);
                 infoButton.setActive(true);
                 ascensionGlyphsLabel.setActive(true);
-                for (PCLGlyphEditor geditor : glyphEditors)
-                {
+                for (PCLGlyphEditor geditor : glyphEditors) {
                     geditor.refresh(provider.ascensionLevel());
                     geditor.setActive(true);
                 }
             }
         }
-        else
-        {
+        else {
             seriesButton.setActive(false);
             loadoutEditorButton.setActive(false);
             infoButton.setActive(false);
             startingCardsLabel.setActive(false);
             startingCardsListLabel.setActive(false);
             ascensionGlyphsLabel.setActive(false);
-            for (PCLGlyphEditor geditor : glyphEditors)
-            {
+            for (PCLGlyphEditor geditor : glyphEditors) {
                 geditor.setActive(false);
             }
         }
     }
 
-    protected void refreshPlayerData()
-    {
+    protected void refreshPlayerData() {
         this.data = PGR.getPlayerData(characterOption.c.chosenClass);
         this.loadouts.clear();
         this.availableLoadouts.clear();
 
-        if (data != null)
-        {
+        if (data != null) {
             final int unlockLevel = data.resources.getUnlockLevel();
-            for (PCLLoadout loadout : data.loadouts.values())
-            {
+            for (PCLLoadout loadout : data.loadouts.values()) {
                 this.loadouts.add(loadout);
-                if (unlockLevel >= loadout.unlockLevel)
-                {
+                if (unlockLevel >= loadout.unlockLevel) {
                     this.availableLoadouts.add(loadout);
                 }
             }
 
             this.loadouts.sort((a, b) ->
             {
-                if (a.isCore())
-                {
+                if (a.isCore()) {
                     return 1;
                 }
-                else if (b.isCore())
-                {
+                else if (b.isCore()) {
                     return -1;
                 }
                 final int diff = StringUtils.compare(a.ID, b.ID);
@@ -265,8 +188,7 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase
                 final int levelA = a.unlockLevel - level;
                 final int levelB = b.unlockLevel - level;
 
-                if (levelA > 0 || levelB > 0)
-                {
+                if (levelA > 0 || levelB > 0) {
                     return diff + Integer.compare(levelA, levelB) * 1313;
                 }
 
@@ -274,85 +196,115 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase
             });
 
             this.loadout = data.selectedLoadout;
-            if (this.loadout == null || this.loadout.getStartingDeck().isEmpty() || !loadouts.contains(this.loadout))
-            {
+            if (this.loadout == null || this.loadout.getStartingDeck().isEmpty() || !loadouts.contains(this.loadout)) {
                 this.loadout = data.selectedLoadout = loadouts.get(0);
             }
         }
-        else
-        {
+        else {
             this.loadout = null;
         }
     }
 
-    public void refreshInternal()
-    {
+    public void refreshInternal() {
         EUIClassUtils.setField(characterOption, "gold", loadout.getGold());
         EUIClassUtils.setField(characterOption, "hp", String.valueOf(loadout.getHP()));
         ((CharSelectInfo) EUIClassUtils.getField(characterOption, "charInfo")).relics = loadout.getStartingRelics();
 
 
         int currentLevel = data.resources.getUnlockLevel();
-        if (currentLevel < loadout.unlockLevel)
-        {
+        if (currentLevel < loadout.unlockLevel) {
             startingCardsListLabel.setLabel(PGR.core.strings.csel_unlocksAtLevel(loadout.unlockLevel, currentLevel)).setFontColor(Settings.RED_TEXT_COLOR);
             loadoutEditorButton.setInteractable(false);
             runProvider.disableConfirm(true);
         }
-        else if (!loadout.validate().isValid)
-        {
+        else if (!loadout.validate().isValid) {
             startingCardsListLabel.setLabel(PGR.core.strings.csel_invalidLoadout).setFontColor(Settings.RED_TEXT_COLOR);
             loadoutEditorButton.setInteractable(true);
             runProvider.disableConfirm(true);
         }
-        else
-        {
+        else {
             startingCardsListLabel.setLabel(loadout.getDeckPreviewString(true)).setFontColor(Settings.GREEN_TEXT_COLOR);
             loadoutEditorButton.setInteractable(true);
             runProvider.disableConfirm(false);
         }
     }
 
-    public void screenRefresh(RunAttributesProvider provider, CharacterOption characterOption)
-    {
-        refresh(provider, characterOption);
-        this.runProvider.onRefresh();
+    private void changeLoadout(PCLLoadout loadout) {
+        data.selectedLoadout = loadout;
+        refresh(runProvider, characterOption);
     }
 
-    public void updateImpl()
-    {
-        seriesButton.tryUpdate();
-        loadoutEditorButton.tryUpdate();
-        infoButton.tryUpdate();
-        startingCardsLabel.tryUpdate();
-        startingCardsListLabel.tryUpdate();
-        ascensionGlyphsLabel.tryUpdate();
-        for (PCLGlyphEditor geditor : glyphEditors)
-        {
-            geditor.tryUpdate();
+    private void changePreset() {
+        final int preset = loadout.canChangePreset(loadout.preset + 1) ? (loadout.preset + 1) : 0;
+        if (preset != loadout.preset) {
+            loadout.preset = preset;
+            refreshInternal();
         }
     }
 
-    public void renderImpl(SpriteBatch sb)
-    {
+    private void openInfo() {
+        if (characterOption != null && data != null) {
+            PCLPlayerMeter meter = CombatManager.playerSystem.getMeter(data.resources.playerClass);
+            if (meter != null) {
+                EUI.ftueScreen.open(new EUITutorial(meter.getInfoPages()), () -> screenRefresh(runProvider, characterOption));
+            }
+        }
+    }
+
+    private void openLoadoutEditor() {
+        if (loadout != null && characterOption != null && data != null) {
+            PGR.loadoutEditor.open(loadout, data, characterOption, () -> screenRefresh(runProvider, characterOption));
+        }
+    }
+
+    private void openSeriesSelect() {
+        if (characterOption != null && data != null) {
+            PGR.seriesSelection.open(characterOption, data, () -> screenRefresh(runProvider, characterOption));
+        }
+    }
+
+    public void randomizeLoadout() {
+        if (availableLoadouts.size() > 1) {
+            while (loadout == data.selectedLoadout) {
+                data.selectedLoadout = GameUtilities.getRandomElement(availableLoadouts, RNG);
+            }
+
+            refresh(runProvider, characterOption);
+        }
+    }
+
+    public void renderImpl(SpriteBatch sb) {
         seriesButton.tryRender(sb);
         loadoutEditorButton.tryRender(sb);
         infoButton.tryRender(sb);
         startingCardsLabel.tryRender(sb);
         startingCardsListLabel.tryRender(sb);
         ascensionGlyphsLabel.tryRender(sb);
-        for (PCLGlyphEditor geditor : glyphEditors)
-        {
+        for (PCLGlyphEditor geditor : glyphEditors) {
             geditor.tryRender(sb);
         }
     }
 
-    public void updateForAscension()
-    {
-        if (runProvider != null)
-        {
-            for (PCLGlyphEditor glyphEditor : glyphEditors)
-            {
+    public void updateImpl() {
+        seriesButton.tryUpdate();
+        loadoutEditorButton.tryUpdate();
+        infoButton.tryUpdate();
+        startingCardsLabel.tryUpdate();
+        startingCardsListLabel.tryUpdate();
+        ascensionGlyphsLabel.tryUpdate();
+        for (PCLGlyphEditor geditor : glyphEditors) {
+            geditor.tryUpdate();
+        }
+    }
+
+    public void screenRefresh(RunAttributesProvider provider, CharacterOption characterOption) {
+        refresh(provider, characterOption);
+        this.runProvider.onRefresh();
+    }
+
+    public void updateForAscension() {
+        if (runProvider != null) {
+            for (PCLGlyphEditor glyphEditor : glyphEditors) {
                 glyphEditor.refresh(runProvider.ascensionLevel());
             }
         }

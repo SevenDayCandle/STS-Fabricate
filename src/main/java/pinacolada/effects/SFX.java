@@ -5,8 +5,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 
 // Copied and modified from STS-AnimatorMod
-public class SFX
-{
+public class SFX {
     public static final String PCL_SPRAY = "PCL_SPRAY";
     public static final String PCL_BOOST = "PCL_BOOST";
     public static final String PCL_DARKNESS = "PCL_DARKNESS";
@@ -400,71 +399,30 @@ public class SFX
     public static final String WATCHER_HEART_PUNCH = "WATCHER_HEART_PUNCH";
     public static final String WHEEL = "WHEEL";
     public static final String WIND = "WIND";
-
-    public static float play(String key)
-    {
-        return play(key, 1, 1);
-    }
-
-    public static float play(String key, float pitch)
-    {
-        return play(key, pitch, pitch, 1);
-    }
-
-    public static float play(String key, float pitchMin, float pitchMax)
-    {
-        return play(key, pitchMin, pitchMax, 1);
-    }
-
-    public static float play(String key, float pitchMin, float pitchMax, float volume)
-    {
-        if (key == null || pitchMin <= 0 || volume <= 0)
-        {
-            return 0f;
-        }
-        if (pitchMin > pitchMax)
-        {
-            pitchMin = pitchMax;
-        }
-
-        return CardCrawlGame.sound.playAV(key, ((pitchMin == pitchMax) ? pitchMin : MathUtils.random(pitchMin, pitchMax)) - 1, volume) / 1000f;
-    }
-
-    public static String getRandom(String... keys)
-    {
-        return keys[MathUtils.random(keys.length -1)];
-    }
-
     public final String key;
     public final float pitchMin;
     public final float pitchMax;
     public final float volume;
 
-    public SFX(String key)
-    {
+    public SFX(String key) {
         this(key, 1, 1, 1);
     }
 
-    public SFX(String key, float pitchMin, float pitchMax)
-    {
-        this(key, pitchMin, pitchMax, 1);
-    }
-
-    public SFX(String key, float pitchMin, float pitchMax, float volume)
-    {
+    public SFX(String key, float pitchMin, float pitchMax, float volume) {
         this.key = key;
         this.pitchMin = pitchMin;
         this.pitchMax = pitchMax;
         this.volume = volume;
     }
-
-    public void play()
-    {
-        play(key, pitchMin, pitchMax, volume);
+    public SFX(String key, float pitchMin, float pitchMax) {
+        this(key, pitchMin, pitchMax, 1);
     }
 
-    public static void initialize()
-    {
+    public static String getRandom(String... keys) {
+        return keys[MathUtils.random(keys.length - 1)];
+    }
+
+    public static void initialize() {
         BaseMod.addAudio(ATTACK_REAPER, "audio/sound/STS_SFX_Reaper_v1.ogg");
         BaseMod.addAudio(ATTACK_AXE, "audio/sound/STS_SFX_EnemyAtk_Axe_v1.ogg");
         BaseMod.addAudio(ATTACK_BUTCHER, "audio/sound/STS_SFX_EnemyAtk_Butcher_v1.ogg");
@@ -490,5 +448,32 @@ public class SFX
         BaseMod.addAudio(PCL_PING, "audio/pcl/sound/PING.ogg");
         BaseMod.addAudio(PCL_SUPPORT_DAMAGE, "audio/pcl/sound/EVFX02_11_QuickBlade.ogg");
         BaseMod.addAudio(PCL_STAR, "audio/pcl/sound/STAR.ogg");
+    }
+
+    public static float play(String key) {
+        return play(key, 1, 1);
+    }
+
+    public static float play(String key, float pitchMin, float pitchMax) {
+        return play(key, pitchMin, pitchMax, 1);
+    }
+
+    public static float play(String key, float pitchMin, float pitchMax, float volume) {
+        if (key == null || pitchMin <= 0 || volume <= 0) {
+            return 0f;
+        }
+        if (pitchMin > pitchMax) {
+            pitchMin = pitchMax;
+        }
+
+        return CardCrawlGame.sound.playAV(key, ((pitchMin == pitchMax) ? pitchMin : MathUtils.random(pitchMin, pitchMax)) - 1, volume) / 1000f;
+    }
+
+    public static float play(String key, float pitch) {
+        return play(key, pitch, pitch, 1);
+    }
+
+    public void play() {
+        play(key, pitchMin, pitchMax, volume);
     }
 }

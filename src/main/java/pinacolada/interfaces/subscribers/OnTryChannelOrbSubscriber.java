@@ -4,7 +4,6 @@ import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import pinacolada.annotations.CombatSubscriber;
 
 @CombatSubscriber
-public interface OnTryChannelOrbSubscriber extends PCLCombatSubscriber
-{
+public interface OnTryChannelOrbSubscriber extends PCLCombatSubscriber {
     AbstractOrb onTryChannelOrb(AbstractOrb orb);
 }

@@ -18,44 +18,37 @@ import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.utilities.ListSelection;
 
 @VisibleSkill
-public class PCond_CycleBranch extends PCond_DoBranch
-{
+public class PCond_CycleBranch extends PCond_DoBranch {
 
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_CycleBranch.class, PField_CardCategory.class)
             .selfTarget()
             .setExtra(0, DEFAULT_MAX)
             .setGroups(PCLCardGroupHelper.Hand);
 
-    public PCond_CycleBranch(PSkillSaveData content)
-    {
+    public PCond_CycleBranch(PSkillSaveData content) {
         super(DATA, content);
     }
 
-    public PCond_CycleBranch()
-    {
+    public PCond_CycleBranch() {
         super(DATA);
     }
 
-    public PCond_CycleBranch(int amount)
-    {
+    public PCond_CycleBranch(int amount) {
         super(DATA, PCLCardTarget.None, amount);
     }
 
     @Override
-    public String getSubText()
-    {
+    public String getSubText() {
         return EUIRM.strings.verbNoun(getActionTitle(), getAmountRawString());
     }
 
     @Override
-    public EUITooltip getActionTooltip()
-    {
+    public EUITooltip getActionTooltip() {
         return PGR.core.tooltips.cycle;
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction()
-    {
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
         return (s, c, i, o, g) -> new CycleCards(s, i, o);
     }
 }

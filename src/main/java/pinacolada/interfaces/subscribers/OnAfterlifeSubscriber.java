@@ -6,7 +6,6 @@ import pinacolada.annotations.CombatSubscriber;
 import java.util.ArrayList;
 
 @CombatSubscriber
-public interface OnAfterlifeSubscriber extends PCLCombatSubscriber
-{
+public interface OnAfterlifeSubscriber extends PCLCombatSubscriber {
     void onAfterlife(AbstractCard playedCard, ArrayList<AbstractCard> fuelCards);
 }

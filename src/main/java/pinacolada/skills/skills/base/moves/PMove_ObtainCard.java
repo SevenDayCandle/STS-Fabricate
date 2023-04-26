@@ -12,43 +12,36 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 
 @VisibleSkill
-public class PMove_ObtainCard extends PMove_GenerateCard
-{
+public class PMove_ObtainCard extends PMove_GenerateCard {
     public static final PSkillData<PField_CardCategory> DATA = register(PMove_ObtainCard.class, PField_CardCategory.class)
             .setExtra(1, DEFAULT_MAX)
             .setGroups(PCLCardGroupHelper.MasterDeck)
             .selfTarget();
 
-    public PMove_ObtainCard()
-    {
+    public PMove_ObtainCard() {
         this(1);
     }
 
-    public PMove_ObtainCard(PSkillSaveData content)
-    {
-        super(DATA, content);
-    }
-
-    public PMove_ObtainCard(int copies, String... cardData)
-    {
+    public PMove_ObtainCard(int copies, String... cardData) {
         super(DATA, PCLCardTarget.None, copies, cardData);
     }
 
+    public PMove_ObtainCard(PSkillSaveData content) {
+        super(DATA, content);
+    }
+
     @Override
-    public EUITooltip getActionTooltip()
-    {
+    public EUITooltip getActionTooltip() {
         return PGR.core.tooltips.obtain;
     }
 
     @Override
-    public void performAction(PCLUseInfo info, AbstractCard c)
-    {
+    public void performAction(PCLUseInfo info, AbstractCard c) {
         getActions().showAndObtain(c);
     }
 
     @Override
-    public boolean isMetascaling()
-    {
+    public boolean isMetascaling() {
         return true;
     }
 }

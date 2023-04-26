@@ -11,33 +11,32 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
-public class ReplacementCard extends PCLDynamicCard
-{
+public class ReplacementCard extends PCLDynamicCard {
     protected final ReplacementData builder;
     protected AbstractCard original;
 
-    public ReplacementCard(ReplacementData builder)
-    {
+    public ReplacementCard(ReplacementData builder) {
         super(builder);
         this.builder = builder;
         this.original = builder.original;
     }
 
     @Override
-    protected void onUpgrade()
-    {
+    public ReplacementCard makeCopy() {
+        return new ReplacementCard(builder);
+    }
+
+    public void setup(Object input) {
+        addUseMove(new ReplacementMove(builder, this));
+    }
+
+    @Override
+    protected void onUpgrade() {
         super.onUpgrade();
         original.upgrade();
     }
 
-    @Override
-    public ReplacementCard makeCopy()
-    {
-        return new ReplacementCard(builder);
-    }
-
-    protected void updateOriginal()
-    {
+    protected void updateOriginal() {
         original.baseDamage = this.baseDamage;
         original.baseBlock = this.baseBlock;
         original.baseMagicNumber = this.baseMagicNumber;
@@ -51,23 +50,30 @@ public class ReplacementCard extends PCLDynamicCard
         original.costForTurn = this.costForTurn;
     }
 
-    public void setup(Object input)
-    {
-        addUseMove(new ReplacementMove(builder, this));
-    }
-
-    public static class ReplacementMove extends PCustomCond
-    {
+    public static class ReplacementMove extends PCustomCond {
         protected ReplacementCard card;
 
-        public ReplacementMove(PCLCardData data, ReplacementCard card)
-        {
+        public ReplacementMove(PCLCardData data, ReplacementCard card) {
             super(data);
             this.card = card;
         }
 
-        protected void useImpl(PCLUseInfo info)
-        {
+        @Override
+        public boolean canPlay(PCLUseInfo info) {
+            return card.original.cardPlayable(GameUtilities.asMonster(info.target));
+        }
+
+        @Override
+        public void refresh(PCLUseInfo info, boolean conditionMet) {
+            card.original.calculateCardDamage(GameUtilities.asMonster(info.target));
+        }
+
+        @Override
+        public String getSubText() {
+            return card.original.rawDescription;
+        }
+
+        protected void useImpl(PCLUseInfo info) {
             AbstractMonster m = EUIUtils.safeCast(info.target, AbstractMonster.class);
             ArrayList<AbstractCard> played = AbstractDungeon.actionManager.cardsPlayedThisTurn;
             // Allow Starter effects on inherited cards to take effect
@@ -82,70 +88,43 @@ public class ReplacementCard extends PCLDynamicCard
         }
 
         @Override
-        public boolean canPlay(PCLUseInfo info)
-        {
-            return card.original.cardPlayable(GameUtilities.asMonster(info.target));
-        }
-
-        @Override
-        public void triggerOnDiscard(AbstractCard c)
-        {
+        public void triggerOnDiscard(AbstractCard c) {
             doCard(AbstractCard::triggerOnManualDiscard);
         }
 
         @Override
-        public void triggerOnDraw(AbstractCard c)
-        {
+        public void triggerOnDraw(AbstractCard c) {
             doCard(AbstractCard::triggerWhenDrawn);
         }
 
         @Override
-        public boolean triggerOnEndOfTurn(boolean isUsing)
-        {
+        public boolean triggerOnEndOfTurn(boolean isUsing) {
             boolean result = card.dontTriggerOnUseCard;
             doCard(AbstractCard::triggerOnEndOfTurnForPlayingCard);
             return result;
         }
 
         @Override
-        public void triggerOnExhaust(AbstractCard c)
-        {
+        public void triggerOnExhaust(AbstractCard c) {
             doCard(AbstractCard::triggerOnExhaust);
         }
 
         @Override
-        public void triggerOnOtherCardPlayed(AbstractCard c)
-        {
+        public void triggerOnOtherCardPlayed(AbstractCard c) {
             doCard(card -> card.triggerOnOtherCardPlayed(c));
         }
 
         @Override
-        public void triggerOnRetain(AbstractCard c)
-        {
+        public void triggerOnRetain(AbstractCard c) {
             doCard(AbstractCard::onRetained);
         }
 
         @Override
-        public void triggerOnScry(AbstractCard c)
-        {
+        public void triggerOnScry(AbstractCard c) {
             doCard(AbstractCard::triggerOnScry);
         }
 
-        @Override
-        public void refresh(PCLUseInfo info, boolean conditionMet)
-        {
-            card.original.calculateCardDamage(GameUtilities.asMonster(info.target));
-        }
-
-        @Override
-        public String getSubText()
-        {
-            return card.original.rawDescription;
-        }
-
-
-        protected boolean doCard(ActionT1<AbstractCard> childAction)
-        {
+        protected boolean doCard(ActionT1<AbstractCard> childAction) {
             childAction.invoke(card.original);
             return true;
         }

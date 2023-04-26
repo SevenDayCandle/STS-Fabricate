@@ -10,18 +10,19 @@ import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 
-public class PCLCoreResources extends PCLResources<PCLAbstractPlayerData, PCLCoreImages, PCLCoreTooltips, PCLCoreStrings>
-{
+public class PCLCoreResources extends PCLResources<PCLAbstractPlayerData, PCLCoreImages, PCLCoreTooltips, PCLCoreStrings> {
     public static final String ID = PGR.BASE_PREFIX;
 
-    public PCLCoreResources()
-    {
+    public PCLCoreResources() {
         super(ID, AbstractCard.CardColor.COLORLESS, AbstractPlayer.PlayerClass.IRONCLAD, new PCLCoreImages(ID));
     }
 
+    protected void postInitialize() {
+        tooltips.initializeIcons();
+    }
+
     @Override
-    public void receiveEditStrings()
-    {
+    public void receiveEditStrings() {
         loadCustomStrings(OrbStrings.class);
         loadCustomCardStrings();
         loadCustomStrings(RelicStrings.class);
@@ -36,38 +37,28 @@ public class PCLCoreResources extends PCLResources<PCLAbstractPlayerData, PCLCor
         loadAugmentStrings();
     }
 
-    @Override
-    public PCLAbstractPlayerData getData()
-    {
-        return null;
-    }
-
-    @Override
-    public PCLCoreTooltips getTooltips()
-    {
-        return new PCLCoreTooltips();
-    }
-
-    @Override
-    public PCLCoreStrings getStrings()
-    {
-        return new PCLCoreStrings(this);
-    }
-
-    protected void postInitialize()
-    {
-        tooltips.initializeIcons();
-    }
-
     // Core resources are pulled when a non-PCL character is used, so it should accept all non-filtered colorless cards
-    public boolean containsColorless(AbstractCard card)
-    {
+    public boolean containsColorless(AbstractCard card) {
         return !PCLDungeon.isColorlessCardExclusive(card);
     }
 
     @Override
-    public boolean filterColorless(AbstractCard card)
-    {
+    public boolean filterColorless(AbstractCard card) {
         return card instanceof PCLCard && !(card instanceof PCLDynamicCard) && ((PCLCard) card).cardData.resources == this;
+    }
+
+    @Override
+    public PCLAbstractPlayerData getData() {
+        return null;
+    }
+
+    @Override
+    public PCLCoreTooltips getTooltips() {
+        return new PCLCoreTooltips();
+    }
+
+    @Override
+    public PCLCoreStrings getStrings() {
+        return new PCLCoreStrings(this);
     }
 }

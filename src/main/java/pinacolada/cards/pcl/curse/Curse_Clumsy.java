@@ -8,8 +8,7 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
 
 @VisibleCard
-public class Curse_Clumsy extends PCLCard
-{
+public class Curse_Clumsy extends PCLCard {
     public static final String ATLAS_URL = "curse/clumsy";
     public static final PCLCardData DATA = register(Curse_Clumsy.class)
             .setImagePathFromAtlasUrl(ATLAS_URL)
@@ -17,8 +16,7 @@ public class Curse_Clumsy extends PCLCard
             .setTags(PCLCardTag.Unplayable, PCLCardTag.Ethereal)
             .setAffinities(PCLAffinity.Purple);
 
-    public Curse_Clumsy()
-    {
+    public Curse_Clumsy() {
         super(DATA);
     }
 }

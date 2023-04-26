@@ -6,7 +6,6 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import pinacolada.annotations.CombatSubscriber;
 
 @CombatSubscriber
-public interface OnTryUsingCardSubscriber extends PCLCombatSubscriber
-{
+public interface OnTryUsingCardSubscriber extends PCLCombatSubscriber {
     boolean onTryUsingCard(AbstractCard card, AbstractPlayer p, AbstractMonster m, boolean canUse);
 }

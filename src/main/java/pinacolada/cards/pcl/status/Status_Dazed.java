@@ -7,16 +7,14 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
 
 @VisibleCard
-public class Status_Dazed extends PCLCard
-{
+public class Status_Dazed extends PCLCard {
     public static final String ATLAS_URL = "status/dazed";
     public static final PCLCardData DATA = register(Status_Dazed.class)
             .setImagePathFromAtlasUrl(ATLAS_URL)
             .setStatus(-2, CardRarity.COMMON, PCLCardTarget.None)
             .setTags(PCLCardTag.Ethereal, PCLCardTag.Unplayable);
 
-    public Status_Dazed()
-    {
+    public Status_Dazed() {
         super(DATA);
     }
 

@@ -21,8 +21,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @JsonAdapter(PCLStanceHelper.PCLStanceHelperAdapter.class)
-public class PCLStanceHelper implements TooltipProvider
-{
+public class PCLStanceHelper implements TooltipProvider {
     public static final Map<String, PCLStanceHelper> ALL = new HashMap<>();
 
     public static final PCLStanceHelper CalmStance = new PCLStanceHelper(com.megacrit.cardcrawl.stances.CalmStance.STANCE_ID, PGR.core.tooltips.calm, PCLAffinity.General, com.megacrit.cardcrawl.stances.CalmStance::new);
@@ -33,8 +32,8 @@ public class PCLStanceHelper implements TooltipProvider
     public final String ID;
     public final AbstractCard.CardColor[] allowedColors;
     protected final FuncT0<AbstractStance> constructor;
-    public PCLStanceHelper(String stanceID, EUITooltip tooltip, PCLAffinity affinity, FuncT0<AbstractStance> constructor, AbstractCard.CardColor... allowedColors)
-    {
+
+    public PCLStanceHelper(String stanceID, EUITooltip tooltip, PCLAffinity affinity, FuncT0<AbstractStance> constructor, AbstractCard.CardColor... allowedColors) {
         this.ID = stanceID;
         this.tooltip = tooltip;
         this.affinity = affinity;
@@ -44,66 +43,53 @@ public class PCLStanceHelper implements TooltipProvider
         ALL.putIfAbsent(stanceID, this);
     }
 
-    public static PCLStanceHelper get(String stanceID)
-    {
+    public static PCLStanceHelper get(String stanceID) {
         return ALL.get(stanceID);
     }
 
-    public static PCLStanceHelper get(PCLAffinity affinity)
-    {
+    public static PCLStanceHelper get(PCLAffinity affinity) {
         return EUIUtils.find(ALL.values(), h -> affinity.equals(h.affinity));
     }
 
-    public static List<PCLStanceHelper> inGameValues(AbstractCard.CardColor targetColor)
-    {
-        return EUIUtils.filter(ALL.values(), s -> s.allowedColors == null || s.allowedColors.length == 0);
-    }
-
-    public static PCLStanceHelper randomHelper()
-    {
-        return GameUtilities.getRandomElement(inGameValues(AbstractDungeon.player != null ? AbstractDungeon.player.getCardColor() : null));
-    }
-
-    public static AbstractStance randomStance()
-    {
+    public static AbstractStance randomStance() {
         return randomHelper().create();
     }
 
-    public static Collection<PCLStanceHelper> values(AbstractCard.CardColor targetColor)
-    {
+    public AbstractStance create() {
+        if (constructor != null) {
+            return constructor.invoke();
+        }
+        else {
+            throw new RuntimeException("Do not create a PCLStanceHelper with a null constructor.");
+        }
+    }
+
+    public static PCLStanceHelper randomHelper() {
+        return GameUtilities.getRandomElement(inGameValues(AbstractDungeon.player != null ? AbstractDungeon.player.getCardColor() : null));
+    }
+
+    public static List<PCLStanceHelper> inGameValues(AbstractCard.CardColor targetColor) {
+        return EUIUtils.filter(ALL.values(), s -> s.allowedColors == null || s.allowedColors.length == 0);
+    }
+
+    public static Collection<PCLStanceHelper> values(AbstractCard.CardColor targetColor) {
         return targetColor == null ? values() : EUIUtils.filter(ALL.values(), s -> s.allowedColors == null || s.allowedColors.length == 0 || EUIUtils.any(s.allowedColors, t -> t == targetColor))
                 .stream()
                 .sorted((a, b) -> a.tooltip != null && b.tooltip != null ? StringUtils.compare(a.tooltip.title, b.tooltip.title) : 0).collect(Collectors.toList());
     }
 
-    public static Collection<PCLStanceHelper> values()
-    {
+    public static Collection<PCLStanceHelper> values() {
         return ALL.values().stream().sorted((a, b) -> StringUtils.compare(a.tooltip.title, b.tooltip.title)).collect(Collectors.toList());
     }
 
-    public AbstractStance create()
-    {
-        if (constructor != null)
-        {
-            return constructor.invoke();
-        }
-        else
-        {
-            throw new RuntimeException("Do not create a PCLStanceHelper with a null constructor.");
-        }
-    }
-
     @Override
-    public List<EUITooltip> getTips()
-    {
+    public List<EUITooltip> getTips() {
         return Collections.singletonList(tooltip);
     }
 
-    public static class PCLStanceHelperAdapter extends TypeAdapter<PCLStanceHelper>
-    {
+    public static class PCLStanceHelperAdapter extends TypeAdapter<PCLStanceHelper> {
         @Override
-        public void write(JsonWriter writer, PCLStanceHelper value) throws IOException
-        {
+        public void write(JsonWriter writer, PCLStanceHelper value) throws IOException {
             writer.value(value.ID);
         }
 

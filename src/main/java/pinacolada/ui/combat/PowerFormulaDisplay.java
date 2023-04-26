@@ -15,8 +15,7 @@ import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.resources.PGR;
 import pinacolada.ui.EUICardDraggable;
 
-public class PowerFormulaDisplay extends EUICardDraggable<AbstractCard>
-{
+public class PowerFormulaDisplay extends EUICardDraggable<AbstractCard> {
     // TODO Lock functionality to continue showing stats for a certain card
     // TODO support for non-PCL cards
 
@@ -31,8 +30,7 @@ public class PowerFormulaDisplay extends EUICardDraggable<AbstractCard>
     private final RelativeHitbox defendHb;
     private final RelativeHitbox enemyAttackHb;
 
-    public PowerFormulaDisplay()
-    {
+    public PowerFormulaDisplay() {
         super(PGR.config.damageFormulaPosition, new DraggableHitbox(screenW(0.0366f), screenH(0.425f), ICON_SIZE, ICON_SIZE, true), ICON_SIZE);
         attackHb = RelativeHitbox.fromPercentages(hb, 1, 1, OFFSET_MULT_X, -0.5f + OFFSET_MULT_Y);
         defendHb = RelativeHitbox.fromPercentages(hb, 1, 1, OFFSET_MULT_X, -0.5f + OFFSET_MULT_Y * 2);
@@ -46,59 +44,38 @@ public class PowerFormulaDisplay extends EUICardDraggable<AbstractCard>
                 .setLabel("--");
     }
 
-    public void addAttackAffinity(PCLAffinity po, float input, float result)
-    {
-        if (input != result)
-        {
+    public void addAttackAffinity(PCLAffinity po, float input, float result) {
+        if (input != result) {
             attack.addAffinity(po, input, result);
         }
     }
 
-    public void addAttackPower(AbstractPower po, float input, float result)
-    {
-        if (input != result)
-        {
+    public void addAttackPower(AbstractPower po, float input, float result) {
+        if (input != result) {
             attack.addPower(po, input, result);
         }
     }
 
-    public void addDefendAffinity(PCLAffinity po, float input, float result)
-    {
-        if (input != result)
-        {
+    public void addDefendAffinity(PCLAffinity po, float input, float result) {
+        if (input != result) {
             defend.addAffinity(po, input, result);
         }
     }
 
-    public void addDefendPower(AbstractPower po, float input, float result)
-    {
-        if (input != result)
-        {
+    public void addDefendPower(AbstractPower po, float input, float result) {
+        if (input != result) {
             defend.addPower(po, input, result);
         }
     }
 
-    public void addEnemyAttackPower(AbstractPower po, float input, float result)
-    {
-        if (input != result)
-        {
+    public void addEnemyAttackPower(AbstractPower po, float input, float result) {
+        if (input != result) {
             enemyAttack.addPower(po, input, result);
         }
     }
 
-    public void setAttackResult(float input, float result)
-    {
-        attack.setResult(input, result);
-    }
-
-    public void setDefendResult(float input, float result)
-    {
-        defend.setResult(input, result);
-    }
-
     @Override
-    public void renderImpl(SpriteBatch sb)
-    {
+    public void renderImpl(SpriteBatch sb) {
         super.renderImpl(sb);
         title.renderImpl(sb);
         if (getLastCard() != null) {
@@ -115,41 +92,32 @@ public class PowerFormulaDisplay extends EUICardDraggable<AbstractCard>
     }
 
     @Override
-    public void updateImpl(AbstractCard card, AbstractCreature target, boolean draggingCard, boolean shouldUpdateForCard, boolean shouldUpdateForTarget)
-    {
+    public void updateImpl(AbstractCard card, AbstractCreature target, boolean draggingCard, boolean shouldUpdateForCard, boolean shouldUpdateForTarget) {
         PCLCard pCard = EUIUtils.safeCast(card, PCLCard.class);
-        if (shouldUpdateForCard || shouldUpdateForTarget)
-        {
-            if (pCard != null)
-            {
+        if (shouldUpdateForCard || shouldUpdateForTarget) {
+            if (pCard != null) {
                 pCard.formulaDisplay = this;
                 title.setLabel(target != null ? card.name + " >> " + target.name : card.name);
 
                 float curOff = hb.height * -0.5f;
-                if (pCard.onAttackEffect != null)
-                {
+                if (pCard.onAttackEffect != null) {
                     curOff = moveHitbox(attackHb, curOff);
                 }
-                if (pCard.onBlockEffect != null)
-                {
+                if (pCard.onBlockEffect != null) {
                     curOff = moveHitbox(defendHb, curOff);
                 }
                 curOff = moveHitbox(enemyAttackHb, curOff);
             }
-            else
-            {
+            else {
                 title.setLabel("--");
             }
         }
         title.updateImpl();
-        if (pCard != null)
-        {
-            if (pCard.onAttackEffect != null)
-            {
+        if (pCard != null) {
+            if (pCard.onAttackEffect != null) {
                 attack.updateImpl(card, target, draggingCard, shouldUpdateForCard, shouldUpdateForTarget);
             }
-            if (pCard.onBlockEffect != null)
-            {
+            if (pCard.onBlockEffect != null) {
                 defend.updateImpl(card, target, draggingCard, shouldUpdateForCard, shouldUpdateForTarget);
             }
         }
@@ -158,10 +126,17 @@ public class PowerFormulaDisplay extends EUICardDraggable<AbstractCard>
         }
     }
 
-    protected float moveHitbox(EUIHitbox hitbox, float offset)
-    {
+    protected float moveHitbox(EUIHitbox hitbox, float offset) {
         hitbox.setOffsetY(offset);
         return offset + hb.height * OFFSET_MULT_Y;
+    }
+
+    public void setAttackResult(float input, float result) {
+        attack.setResult(input, result);
+    }
+
+    public void setDefendResult(float input, float result) {
+        defend.setResult(input, result);
     }
 
 }

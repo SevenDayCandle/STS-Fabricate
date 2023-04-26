@@ -9,8 +9,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 import pinacolada.powers.PCLPower;
 
-public class PCLFlashPowerEffect extends AbstractGameEffect
-{
+public class PCLFlashPowerEffect extends AbstractGameEffect {
     private static final int W = 32;
     private final Texture img;
     private final AtlasRegion region128;
@@ -18,12 +17,10 @@ public class PCLFlashPowerEffect extends AbstractGameEffect
     private float y;
     private float scale;
 
-    public PCLFlashPowerEffect(PCLPower power)
-    {
+    public PCLFlashPowerEffect(PCLPower power) {
         this.scale = Settings.scale;
 
-        if (power.owner != null && !power.owner.isDeadOrEscaped())
-        {
+        if (power.owner != null && !power.owner.isDeadOrEscaped()) {
             this.x = power.owner.hb.cX;
             this.y = power.owner.hb.cY;
         }
@@ -33,17 +30,14 @@ public class PCLFlashPowerEffect extends AbstractGameEffect
         }
 
         this.img = power.img;
-        if (power.region48 != null)
-        {
+        if (power.region48 != null) {
             this.region128 = power.region48;
         }
-        else
-        {
+        else {
             this.region128 = power.region128;
         }
 
-        if (this.region128 != null)
-        {
+        if (this.region128 != null) {
             this.x -= (float) (this.region128.packedWidth / 2);
             this.y -= (float) (this.region128.packedHeight / 2);
         }
@@ -53,40 +47,34 @@ public class PCLFlashPowerEffect extends AbstractGameEffect
         this.renderBehind = false;
     }
 
-    public void update()
-    {
+    public void update() {
         super.update();
         this.scale = Interpolation.exp5In.apply(Settings.scale, Settings.scale * 0.3f, this.duration / this.startingDuration);
     }
 
-    public void render(SpriteBatch sb)
-    {
+    public void render(SpriteBatch sb) {
         sb.setBlendFunction(770, 1);
         sb.setColor(this.color);
-        if (this.region128 != null)
-        {
+        if (this.region128 != null) {
             float half_w = region128.packedWidth / 2f;
             float half_h = region128.packedHeight / 2f;
 
             sb.draw(region128, x, y, half_w, half_h, region128.packedWidth, region128.packedHeight, scale, scale, 0f);
             //sb.draw(this.region128, this.x, this.y, 32f, 32f, 64f, 64f, this.scale * 3f, this.scale * 3f, 0f);
         }
-        else if (this.img != null && this.img.getWidth() >= 48)
-        {
+        else if (this.img != null && this.img.getWidth() >= 48) {
             sb.draw(img, x - 16f, y - 16f, 16f, 16f, 32f, 32f, scale * 12f, scale * 12f, 0f, 0, 0, 64, 64, false, false);
             sb.draw(img, x - 16f, y - 16f, 16f, 16f, 32f, 32f, scale * 10f, scale * 10f, 0f, 0, 0, 64, 64, false, false);
             sb.draw(img, x - 16f, y - 16f, 16f, 16f, 32f, 32f, scale * 8f, scale * 8f, 0f, 0, 0, 64, 64, false, false);
             sb.draw(img, x - 16f, y - 16f, 16f, 16f, 32f, 32f, scale * 7f, scale * 7f, 0f, 0, 0, 64, 64, false, false);
         }
-        else
-        {
+        else {
             this.isDone = true;
         }
         sb.setBlendFunction(770, 771);
     }
 
-    public void dispose()
-    {
+    public void dispose() {
 
     }
 }

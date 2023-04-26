@@ -17,36 +17,30 @@ import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.utilities.ListSelection;
 
 @VisibleSkill
-public class PCond_PurgeTo extends PCond_DoToCard
-{
+public class PCond_PurgeTo extends PCond_DoToCard {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_PurgeTo.class, PField_CardCategory.class)
             .selfTarget()
             .setExtra(0, DEFAULT_MAX);
 
-    public PCond_PurgeTo()
-    {
+    public PCond_PurgeTo() {
         this(1, PCLCardGroupHelper.Hand);
     }
 
-    public PCond_PurgeTo(PSkillSaveData content)
-    {
-        super(DATA, content);
-    }
-
-    public PCond_PurgeTo(int amount, PCLCardGroupHelper... h)
-    {
+    public PCond_PurgeTo(int amount, PCLCardGroupHelper... h) {
         super(DATA, PCLCardTarget.None, amount, h);
     }
 
+    public PCond_PurgeTo(PSkillSaveData content) {
+        super(DATA, content);
+    }
+
     @Override
-    public EUITooltip getActionTooltip()
-    {
+    public EUITooltip getActionTooltip() {
         return PGR.core.tooltips.purge;
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction()
-    {
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
         return PurgeFromPile::new;
     }
 }

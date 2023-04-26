@@ -10,8 +10,7 @@ import pinacolada.skills.PCond;
 import pinacolada.skills.PMove;
 
 @VisibleCard
-public class Status_Burn extends PCLCard
-{
+public class Status_Burn extends PCLCard {
     public static final String ATLAS_URL = "status/burn";
     public static final PCLCardData DATA = register(Status_Burn.class)
             .setImagePathFromAtlasUrl(ATLAS_URL)
@@ -19,13 +18,11 @@ public class Status_Burn extends PCLCard
             .setTags(PCLCardTag.Unplayable)
             .setAffinities(PCLAffinity.Red);
 
-    public Status_Burn()
-    {
+    public Status_Burn() {
         super(DATA);
     }
 
-    public void setup(Object input)
-    {
+    public void setup(Object input) {
         addUseMove(PCond.onTurnEnd(), PMove.takeDamage(2));
     }
 }

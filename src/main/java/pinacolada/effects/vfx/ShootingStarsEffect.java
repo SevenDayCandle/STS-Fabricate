@@ -5,8 +5,7 @@ import com.badlogic.gdx.math.MathUtils;
 import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLEffects;
 
-public class ShootingStarsEffect extends PCLEffect
-{
+public class ShootingStarsEffect extends PCLEffect {
     protected float x;
     protected float y;
     protected float spreadX;
@@ -19,8 +18,7 @@ public class ShootingStarsEffect extends PCLEffect
     protected float verticalSpeedMax;
     protected boolean flipHorizontally;
 
-    public ShootingStarsEffect(float startX, float startY)
-    {
+    public ShootingStarsEffect(float startX, float startY) {
         super(0.5f);
 
         this.x = startX;
@@ -28,23 +26,19 @@ public class ShootingStarsEffect extends PCLEffect
     }
 
     @Override
-    protected void firstUpdate()
-    {
+    protected void firstUpdate() {
         super.firstUpdate();
 
-        if (flipHorizontally)
-        {
+        if (flipHorizontally) {
             horizontalSpeedMin = -horizontalSpeedMin;
             horizontalSpeedMax = -horizontalSpeedMax;
         }
     }
 
     @Override
-    protected void updateInternal(float deltaTime)
-    {
+    protected void updateInternal(float deltaTime) {
         vfxTimer -= deltaTime;
-        if (vfxTimer < 0f)
-        {
+        if (vfxTimer < 0f) {
             final float x = this.x + random(-spreadX, spreadX);
             final float y = this.y + random(-spreadY, spreadY);
             final float h_speed = random(horizontalSpeedMin, horizontalSpeedMax);
@@ -56,38 +50,33 @@ public class ShootingStarsEffect extends PCLEffect
         super.updateInternal(deltaTime);
     }
 
-    public ShootingStarsEffect flipHorizontally(boolean flip)
-    {
+    public ShootingStarsEffect flipHorizontally(boolean flip) {
         this.flipHorizontally = flip;
 
         return this;
     }
 
-    public ShootingStarsEffect setFrequency(float frequency)
-    {
+    public ShootingStarsEffect setFrequency(float frequency) {
         this.vfxFrequency = MathUtils.clamp(frequency, 0.01f, startingDuration / 5f);
 
         return this;
     }
 
-    public ShootingStarsEffect setHorizontalSpeed(float min, float max)
-    {
+    public ShootingStarsEffect setHorizontalSpeed(float min, float max) {
         this.horizontalSpeedMin = min;
         this.horizontalSpeedMax = max;
 
         return this;
     }
 
-    public ShootingStarsEffect setSpread(float spreadX, float spreadY)
-    {
+    public ShootingStarsEffect setSpread(float spreadX, float spreadY) {
         this.spreadX = spreadX;
         this.spreadY = spreadY;
 
         return this;
     }
 
-    public ShootingStarsEffect setVerticalSpeed(float min, float max)
-    {
+    public ShootingStarsEffect setVerticalSpeed(float min, float max) {
         this.horizontalSpeedMin = min;
         this.horizontalSpeedMax = max;
 

@@ -12,53 +12,43 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
 
 @VisibleSkill
-public class PMove_GainTempHP extends PMove<PField_Empty>
-{
+public class PMove_GainTempHP extends PMove<PField_Empty> {
     public static final PSkillData<PField_Empty> DATA = register(PMove_GainTempHP.class, PField_Empty.class);
 
-    public PMove_GainTempHP()
-    {
+    public PMove_GainTempHP() {
         this(1);
     }
 
-    public PMove_GainTempHP(PSkillSaveData content)
-    {
-        super(DATA, content);
-    }
-
-    public PMove_GainTempHP(int amount)
-    {
+    public PMove_GainTempHP(int amount) {
         super(DATA, PCLCardTarget.None, amount);
     }
 
-    public PMove_GainTempHP(PCLCardTarget target, int amount)
-    {
+    public PMove_GainTempHP(PSkillSaveData content) {
+        super(DATA, content);
+    }
+
+    public PMove_GainTempHP(PCLCardTarget target, int amount) {
         super(DATA, target, amount);
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill)
-    {
+    public String getSampleText(PSkill<?> callingSkill) {
         return TEXT.act_gainAmount(TEXT.subjects_x, PGR.core.tooltips.tempHP.title);
     }
 
     @Override
-    public void use(PCLUseInfo info)
-    {
-        for (AbstractCreature c : getTargetList(info))
-        {
-            getActions().gainTemporaryHP(c, c, amount);
-        }
-        super.use(info);
-    }
-
-    @Override
-    public String getSubText()
-    {
-        if (isSelfOnlyTarget())
-        {
+    public String getSubText() {
+        if (isSelfOnlyTarget()) {
             return TEXT.act_gainAmount(getAmountRawString(), PGR.core.tooltips.tempHP);
         }
         return TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), PGR.core.tooltips.tempHP);
+    }
+
+    @Override
+    public void use(PCLUseInfo info) {
+        for (AbstractCreature c : getTargetList(info)) {
+            getActions().gainTemporaryHP(c, c, amount);
+        }
+        super.use(info);
     }
 }

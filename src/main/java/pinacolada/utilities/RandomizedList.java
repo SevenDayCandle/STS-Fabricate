@@ -8,52 +8,42 @@ import java.util.Collection;
 import java.util.Collections;
 
 // Copied and modified from STS-AnimatorMod
-public class RandomizedList<T> extends ArrayList<T>
-{
-    public RandomizedList()
-    {
+public class RandomizedList<T> extends ArrayList<T> {
+    public RandomizedList() {
         super();
     }
 
-    public RandomizedList(Collection<? extends T> collection)
-    {
+    public RandomizedList(Collection<? extends T> collection) {
         super(collection);
     }
 
     @SafeVarargs
-    public RandomizedList(T... array)
-    {
+    public RandomizedList(T... array) {
         super();
         addAll(array);
     }
 
     @SafeVarargs
-    public final boolean addAll(T... arr)
-    {
+    public final boolean addAll(T... arr) {
         return Collections.addAll(this, arr);
     }
 
-    public T retrieve(Random rng, boolean remove)
-    {
+    public T retrieve(Random rng) {
+        return retrieve(rng, true);
+    }
+
+    public T retrieve(Random rng, boolean remove) {
         T item = GameUtilities.getRandomElement(this, rng);
-        if (remove)
-        {
+        if (remove) {
             remove(item);
         }
 
         return item;
     }
 
-    public T retrieve(Random rng)
-    {
-        return retrieve(rng, true);
-    }
-
-    public T retrieveUnseeded(boolean remove)
-    {
+    public T retrieveUnseeded(boolean remove) {
         T item = EUIUtils.random(this);
-        if (remove)
-        {
+        if (remove) {
             remove(item);
         }
 

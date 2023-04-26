@@ -14,51 +14,37 @@ import pinacolada.utilities.GameUtilities;
 
 // While paying X energy is active, the effect can be determined before you actually pay the power
 @VisibleSkill
-public class PMod_XEnergy extends PPassiveMod<PField_Empty>
-{
+public class PMod_XEnergy extends PPassiveMod<PField_Empty> {
     public static final PSkillData<PField_Empty> DATA = register(PMod_XEnergy.class, PField_Empty.class)
             .setAmounts(-DEFAULT_MAX, DEFAULT_MAX)
             .selfTarget();
 
-    public PMod_XEnergy(PSkillSaveData content)
-    {
+    public PMod_XEnergy(PSkillSaveData content) {
         super(DATA, content);
     }
 
-    public PMod_XEnergy()
-    {
+    public PMod_XEnergy() {
         super(DATA, PCLCardTarget.None, 0);
     }
 
-    public PMod_XEnergy(int amount)
-    {
+    public PMod_XEnergy(int amount) {
         super(DATA, PCLCardTarget.None, amount);
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill)
-    {
-        return TEXT.act_pay(TEXT.subjects_x, PGR.core.tooltips.energy.title);
+    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info) {
+        return be.baseAmount * GameUtilities.getXCostEnergy(sourceCard, false) + this.amount;
     }
 
     @Override
-    public String getSubText()
-    {
-        return PGR.core.tooltips.energy.getTitleOrIcon();
-    }
-
-    @Override
-    public String getText(boolean addPeriod)
-    {
+    public String getText(boolean addPeriod) {
         return childEffect != null ? childEffect.getText(addPeriod) : "";
     }
 
     @Override
-    public void use(PCLUseInfo info)
-    {
+    public void use(PCLUseInfo info) {
         getActions().callback(() -> {
-            if (this.childEffect != null)
-            {
+            if (this.childEffect != null) {
                 updateChildAmount(info);
                 GameUtilities.useXCostEnergy(sourceCard);
                 this.childEffect.use(info);
@@ -67,11 +53,9 @@ public class PMod_XEnergy extends PPassiveMod<PField_Empty>
     }
 
     @Override
-    public void use(PCLUseInfo info, int index)
-    {
+    public void use(PCLUseInfo info, int index) {
         getActions().callback(() -> {
-            if (this.childEffect != null)
-            {
+            if (this.childEffect != null) {
                 updateChildAmount(info);
                 GameUtilities.useXCostEnergy(sourceCard);
                 this.childEffect.use(info, index);
@@ -80,11 +64,9 @@ public class PMod_XEnergy extends PPassiveMod<PField_Empty>
     }
 
     @Override
-    public void use(PCLUseInfo info, boolean isUsing)
-    {
+    public void use(PCLUseInfo info, boolean isUsing) {
         getActions().callback(() -> {
-            if (this.childEffect != null)
-            {
+            if (this.childEffect != null) {
                 updateChildAmount(info);
                 GameUtilities.useXCostEnergy(sourceCard);
                 this.childEffect.use(info, isUsing);
@@ -93,21 +75,23 @@ public class PMod_XEnergy extends PPassiveMod<PField_Empty>
     }
 
     @Override
-    public String wrapAmountChild(String input)
-    {
+    public String getSampleText(PSkill<?> callingSkill) {
+        return TEXT.act_pay(TEXT.subjects_x, PGR.core.tooltips.energy.title);
+    }
+
+    @Override
+    public String getSubText() {
+        return PGR.core.tooltips.energy.getTitleOrIcon();
+    }
+
+    @Override
+    public String wrapAmountChild(String input) {
         // If the value is not parseable, don't remove the numbers
         int value = EUIUtils.parseInt(input, 2);
-        if (value == 1)
-        {
+        if (value == 1) {
             input = GameUtilities.EMPTY_STRING;
         }
         input = this.amount > 0 ? input + TEXT.subjects_x + "+" + this.amount : input + TEXT.subjects_x;
         return parent != null ? parent.wrapAmountChild(input) : (input);
-    }
-
-    @Override
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info)
-    {
-        return be.baseAmount * GameUtilities.getXCostEnergy(sourceCard, false) + this.amount;
     }
 }

@@ -5,7 +5,6 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import pinacolada.annotations.CombatSubscriber;
 
 @CombatSubscriber
-public interface OnLoseHPSubscriber extends PCLCombatSubscriber
-{
+public interface OnLoseHPSubscriber extends PCLCombatSubscriber {
     int onLoseHP(AbstractPlayer p, DamageInfo info, int amount);
 }

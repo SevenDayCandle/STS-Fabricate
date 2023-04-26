@@ -21,29 +21,24 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
-public class PCLRandomCardAmountDialog extends EUIDialog<PCLRandomCardAmountDialog>
-{
+public class PCLRandomCardAmountDialog extends EUIDialog<PCLRandomCardAmountDialog> {
     protected EUITextBoxNumericalInput inputCards;
     protected EUITextBoxNumericalInput inputColorless;
     protected EUITextBoxNumericalInput inputCurse;
 
-    public PCLRandomCardAmountDialog(String headerText)
-    {
+    public PCLRandomCardAmountDialog(String headerText) {
         this(headerText, "");
     }
 
-    public PCLRandomCardAmountDialog(String headerText, String descriptionText)
-    {
+    public PCLRandomCardAmountDialog(String headerText, String descriptionText) {
         this(headerText, descriptionText, scale(300), scale(390));
     }
 
-    public PCLRandomCardAmountDialog(String headerText, String descriptionText, float w, float h)
-    {
+    public PCLRandomCardAmountDialog(String headerText, String descriptionText, float w, float h) {
         this(new EUIHitbox(Settings.WIDTH / 2.0F - w / 2f, Settings.HEIGHT / 2.0F - h / 2f, w, h), ImageMaster.OPTION_CONFIRM, headerText, descriptionText);
     }
 
-    public PCLRandomCardAmountDialog(EUIHitbox hb, Texture backgroundTexture, String headerText, String descriptionText)
-    {
+    public PCLRandomCardAmountDialog(EUIHitbox hb, Texture backgroundTexture, String headerText, String descriptionText) {
         super(hb, backgroundTexture, headerText, descriptionText);
         this.inputCards = (EUITextBoxNumericalInput) new EUITextBoxNumericalInput(EUIRM.images.panelRoundedHalfH.texture(), new EUIHitbox(hb.x + hb.width / 4, hb.y + hb.height / 1.8f, hb.width / 2, scale(54)))
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.sui_characterCards)
@@ -66,6 +61,14 @@ public class PCLRandomCardAmountDialog extends EUIDialog<PCLRandomCardAmountDial
         this.inputCards.forceSetValue(0, false);
         this.inputColorless.forceSetValue(0, false);
         this.inputCurse.forceSetValue(0, false);
+    }
+
+    public int getCardCount() {
+        return inputCards.getCachedValue();
+    }
+
+    public int getColorlessCount() {
+        return inputColorless.getCachedValue();
     }
 
     protected EUIButton getConfirmButton() {
@@ -93,52 +96,36 @@ public class PCLRandomCardAmountDialog extends EUIDialog<PCLRandomCardAmountDial
     }
 
     @Override
-    public PCLRandomCardAmountDialog getConfirmValue()
-    {
+    public PCLRandomCardAmountDialog getConfirmValue() {
         return this;
     }
 
     @Override
-    public PCLRandomCardAmountDialog getCancelValue()
-    {
+    public PCLRandomCardAmountDialog getCancelValue() {
         return null;
     }
 
     @Override
-    public void updateImpl()
-    {
-        super.updateImpl();
-        this.inputCards.tryUpdate();
-        this.inputColorless.tryUpdate();
-        this.inputCurse.tryUpdate();
-    }
-
-    @Override
-    public void renderImpl(SpriteBatch sb)
-    {
+    public void renderImpl(SpriteBatch sb) {
         super.renderImpl(sb);
         this.inputCards.tryRender(sb);
         this.inputColorless.tryRender(sb);
         this.inputCurse.tryRender(sb);
     }
 
-    public int getCardCount()
-    {
-        return inputCards.getCachedValue();
+    @Override
+    public void updateImpl() {
+        super.updateImpl();
+        this.inputCards.tryUpdate();
+        this.inputColorless.tryUpdate();
+        this.inputCurse.tryUpdate();
     }
 
-    public int getColorlessCount()
-    {
-        return inputColorless.getCachedValue();
-    }
-
-    public int getCurseCount()
-    {
+    public int getCurseCount() {
         return inputCurse.getCachedValue();
     }
 
-    public void open(ArrayList<AbstractCard> cards)
-    {
+    public void open(ArrayList<AbstractCard> cards) {
         setActive(true);
         inputCards.setLimits(0, EUIUtils.count(cards, c -> !GameUtilities.isColorlessCardColor(c.color)));
         inputColorless.setLimits(0, EUIUtils.count(cards, c -> c.color == AbstractCard.CardColor.COLORLESS));

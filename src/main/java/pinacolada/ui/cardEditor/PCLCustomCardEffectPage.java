@@ -28,8 +28,7 @@ import java.util.ArrayList;
 
 import static pinacolada.ui.cardEditor.PCLCustomCardEditCardScreen.START_Y;
 
-public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
-{
+public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage {
     public static final float MENU_WIDTH = scale(200);
     public static final float MENU_HEIGHT = scale(40);
     public static final float OFFSET_EFFECT = -MENU_HEIGHT * 1.25f;
@@ -65,8 +64,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
     protected PSkill.PCLCardValueSource currentEffectSource = PSkill.PCLCardValueSource.MagicNumber;
 
 
-    public PCLCustomCardEffectPage(PCLCustomCardEditCardScreen screen, EUIHitbox hb, int index, String title, ActionT1<PSkill<?>> onUpdate)
-    {
+    public PCLCustomCardEffectPage(PCLCustomCardEditCardScreen screen, EUIHitbox hb, int index, String title, ActionT1<PSkill<?>> onUpdate) {
         this.screen = screen;
         this.editorIndex = index;
         this.onUpdate = onUpdate;
@@ -85,17 +83,200 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
         initializeEffects();
     }
 
-    protected void setupComponents(PCLCustomCardEditCardScreen screen)
-    {
+    protected void constructEffect() {
+        finalEffect = effectGroup.lowerEffects.size() > 0 ? new PMultiSkill()
+                .setEffects(EUIUtils.mapAsNonnull(effectGroup.lowerEffects, e -> e != null ? e.makeCopy() : null))
+                .setAmount(multiSkill.amount) : null;
+
+        modifier = modifierGroup.lowerEffects.size() > 0 ? modifierGroup.lowerEffects.get(0) : null;
+        if (modifier != null) {
+            finalEffect = (modifier.makeCopy())
+                    .setChild(finalEffect);
+        }
+
+        if (delayMove != null && delayMove.amount > 0) {
+            finalEffect = (delayMove.makeCopy()).setChild(finalEffect);
+        }
+
+        if (conditionGroup.lowerEffects.size() > 0) {
+            finalEffect = new PMultiCond().setEffects(EUIUtils.mapAsNonnull(conditionGroup.lowerEffects, e -> e != null ? (PCond<?>) e.makeCopy() : null))
+                    .edit(f -> f.setOr(multiCond.fields.or))
+                    .setChild(finalEffect)
+                    .setAmount(multiCond.amount);
+        }
+
+        if (primaryCond != null) {
+            finalEffect = (primaryCond.makeCopy())
+                    .setChild(finalEffect);
+        }
+
+        if (onUpdate != null) {
+            onUpdate.invoke(finalEffect);
+        }
+        refresh();
+    }
+
+    protected void deconstructEffect(PSkill<?> effect) {
+        if (effect == null) {
+            return;
+        }
+
+        // The recorded effect copies cannot have children (such children will cause glitches in previews and when saving effects)
+        PSkill<?> child = effect.getChild();
+        effect.setChild((PSkill<?>) null);
+
+        if (effect instanceof PPrimary) {
+            primaryCond = (PPrimary<?>) effect.makeCopy();
+        }
+        else if (effect instanceof PMultiCond) {
+            multiCond = (PMultiCond) effect.makeCopy();
+        }
+        else if (effect instanceof PCond) {
+            multiCond = new PMultiCond((PCond<?>) effect.makeCopy());
+        }
+        else if (effect instanceof PDelay) {
+            delayMove = (PDelay) effect.makeCopy();
+        }
+        else if (effect instanceof PMod) {
+            modifier = (PMod<?>) effect.makeCopy();
+        }
+        else if (effect instanceof PMultiSkill) {
+            multiSkill = (PMultiSkill) effect.makeCopy();
+        }
+        else if (effect instanceof PMove) {
+            multiSkill = new PMultiSkill(effect.makeCopy());
+        }
+
+        // Restore the effect's child for the initial preview
+        effect.setChild(child);
+        deconstructEffect(child);
+    }
+
+    @Override
+    public String getIconText() {
+        return String.valueOf(editorIndex + 1);
+    }
+
+    @Override
+    public TextureCache getTextureCache() {
+        return PCLCoreImages.Menu.editorEffect;
+    }
+
+    public String getTitle() {
+        return header.text;
+    }
+
+    public void refresh() {
+        conditionGroup.refresh();
+        effectGroup.refresh();
+        modifierGroup.refresh();
+
+        if (primaryCond != null) {
+            primaryConditions.setSelection(e -> e.getClass().equals(primaryCond.getClass()), false);
+        }
+        if (delayMove == null) {
+            delayMove = new PDelay_StartOfTurnPostDraw();
+        }
+        delayEditor.setValue(delayMove.amount, false);
+        choicesEditor.setValue(multiSkill.amount, false);
+        ifElseToggle.setToggle(multiCond.amount == 1);
+        orToggle.setToggle(multiCond.fields.or);
+
+        repositionItems();
+    }
+
+    public PSkill<?> getSourceEffect() {
+        return screen.currentEffects.get(editorIndex);
+    }
+
+    public void initializeEffects() {
+        deconstructEffect(getSourceEffect());
+
+        effectGroup.lowerEffects.clear();
+        if (multiSkill != null) {
+            for (PSkill<?> skill : multiSkill.getSubEffects()) {
+                PMove<?> move = EUIUtils.safeCast(skill, PMove.class);
+                if (move != null) {
+                    effectGroup.lowerEffects.add(move);
+                }
+            }
+        }
+        else {
+            multiSkill = new PMultiSkill();
+        }
+
+        if (modifier != null) {
+            if (modifierGroup.lowerEffects.size() == 0) {
+                modifierGroup.lowerEffects.add(modifier);
+            }
+            else {
+                modifierGroup.lowerEffects.set(0, modifier);
+            }
+        }
+
+        conditionGroup.lowerEffects.clear();
+        if (multiCond != null) {
+            conditionGroup.lowerEffects.addAll(multiCond.getSubEffects());
+        }
+        else {
+            multiCond = new PMultiCond();
+        }
+
+        conditionGroup.syncWithLower();
+        effectGroup.syncWithLower();
+        modifierGroup.syncWithLower();
+        refresh();
+
+        scheduleConstruct();
+    }
+
+    // Updates the offsets of all editors to avoid overlap (e.g. from adding/removing effects, or adding additional dropdowns from effects)
+    protected void repositionItems() {
+        float offsetY = OFFSET_EFFECT * 2f;
+        primaryConditions.hb.setOffsetY(offsetY);
+        delayEditor.hb.setOffsetY(offsetY);
+        offsetY += OFFSET_EFFECT * 2;
+        conditionHeader.hb.setOffsetY(offsetY);
+        addCondition.hb.setOffsetY(offsetY);
+        ifElseToggle.hb.setOffsetY(offsetY);
+        orToggle.hb.setOffsetY(offsetY);
+
+        offsetY += OFFSET_EFFECT * 2f;
+        offsetY = conditionGroup.reposition(offsetY);
+
+        offsetY += OFFSET_EFFECT;
+        effectHeader.hb.setOffsetY(offsetY);
+        addEffect.hb.setOffsetY(offsetY);
+        choicesEditor.hb.setOffsetY(offsetY);
+
+        offsetY += OFFSET_EFFECT * 2f;
+        offsetY = effectGroup.reposition(offsetY);
+
+        offsetY += OFFSET_EFFECT;
+        modifierHeader.hb.setOffsetY(offsetY);
+        addModifier.hb.setOffsetY(offsetY);
+
+        offsetY += OFFSET_EFFECT * 2f;
+        offsetY = modifierGroup.reposition(offsetY);
+    }
+
+    // Schedule the editor to update its effect at the end of updateImpl. Use this instead of calling constructEffect directly to avoid concurrent modification errors when the visible UI changes
+    protected void scheduleConstruct() {
+        toRemove.add(this::constructEffect);
+    }
+
+    protected void scheduleUpdate(ActionT0 update) {
+        toRemove.add(update);
+    }
+
+    protected void setupComponents(PCLCustomCardEditCardScreen screen) {
         primaryConditions = (EUISearchableDropdown<PPrimary<?>>) new EUISearchableDropdown<PPrimary<?>>(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, 0, 0)
                 , pPrimary -> pPrimary.getSampleText(null))
                 .setOnChange(conditions -> {
-                    if (!conditions.isEmpty())
-                    {
+                    if (!conditions.isEmpty()) {
                         primaryCond = conditions.get(0);
                     }
-                    else
-                    {
+                    else {
                         primaryCond = null;
                     }
                     scheduleConstruct();
@@ -150,9 +331,9 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
                 .setClickDelay(0.02f);
         choicesEditor = new PCLValueEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 4, MENU_HEIGHT, MENU_WIDTH * 2.5f, 0)
                 , PGR.core.strings.cedit_choices, (val) -> {
-                    multiSkill.setAmount(val);
-                    scheduleConstruct();
-                })
+            multiSkill.setAmount(val);
+            scheduleConstruct();
+        })
                 .setTooltip(PGR.core.strings.cedit_choices, PGR.core.strings.cetut_effectChoices)
                 .setLimits(0, PSkill.DEFAULT_MAX);
         choicesEditor.header.hb.setOffset(-0.375f * MENU_WIDTH, MENU_HEIGHT * 0.5f);
@@ -167,227 +348,8 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
                 .setClickDelay(0.02f);
     }
 
-    // Updates the offsets of all editors to avoid overlap (e.g. from adding/removing effects, or adding additional dropdowns from effects)
-    protected void repositionItems()
-    {
-        float offsetY = OFFSET_EFFECT * 2f;
-        primaryConditions.hb.setOffsetY(offsetY);
-        delayEditor.hb.setOffsetY(offsetY);
-        offsetY += OFFSET_EFFECT * 2;
-        conditionHeader.hb.setOffsetY(offsetY);
-        addCondition.hb.setOffsetY(offsetY);
-        ifElseToggle.hb.setOffsetY(offsetY);
-        orToggle.hb.setOffsetY(offsetY);
-
-        offsetY += OFFSET_EFFECT * 2f;
-        offsetY = conditionGroup.reposition(offsetY);
-
-        offsetY += OFFSET_EFFECT;
-        effectHeader.hb.setOffsetY(offsetY);
-        addEffect.hb.setOffsetY(offsetY);
-        choicesEditor.hb.setOffsetY(offsetY);
-
-        offsetY += OFFSET_EFFECT * 2f;
-        offsetY = effectGroup.reposition(offsetY);
-
-        offsetY += OFFSET_EFFECT;
-        modifierHeader.hb.setOffsetY(offsetY);
-        addModifier.hb.setOffsetY(offsetY);
-
-        offsetY += OFFSET_EFFECT * 2f;
-        offsetY = modifierGroup.reposition(offsetY);
-    }
-
-    protected void constructEffect()
-    {
-        finalEffect = effectGroup.lowerEffects.size() > 0 ? new PMultiSkill()
-                .setEffects(EUIUtils.mapAsNonnull(effectGroup.lowerEffects, e -> e != null ? e.makeCopy() : null))
-                .setAmount(multiSkill.amount) : null;
-
-        modifier = modifierGroup.lowerEffects.size() > 0 ? modifierGroup.lowerEffects.get(0) : null;
-        if (modifier != null)
-        {
-            finalEffect = (modifier.makeCopy())
-                    .setChild(finalEffect);
-        }
-
-        if (delayMove != null && delayMove.amount > 0)
-        {
-            finalEffect = (delayMove.makeCopy()).setChild(finalEffect);
-        }
-
-        if (conditionGroup.lowerEffects.size() > 0)
-        {
-            finalEffect = new PMultiCond().setEffects(EUIUtils.mapAsNonnull(conditionGroup.lowerEffects, e -> e != null ? (PCond<?>) e.makeCopy() : null))
-                    .edit(f -> f.setOr(multiCond.fields.or))
-                    .setChild(finalEffect)
-                    .setAmount(multiCond.amount);
-        }
-
-        if (primaryCond != null)
-        {
-            finalEffect = (primaryCond.makeCopy())
-                    .setChild(finalEffect);
-        }
-
-        if (onUpdate != null)
-        {
-            onUpdate.invoke(finalEffect);
-        }
-        refresh();
-    }
-
-    protected void deconstructEffect(PSkill<?> effect)
-    {
-        if (effect == null)
-        {
-            return;
-        }
-
-        // The recorded effect copies cannot have children (such children will cause glitches in previews and when saving effects)
-        PSkill<?> child = effect.getChild();
-        effect.setChild((PSkill<?>) null);
-
-        if (effect instanceof PPrimary)
-        {
-            primaryCond = (PPrimary<?>) effect.makeCopy();
-        }
-        else if (effect instanceof PMultiCond)
-        {
-            multiCond = (PMultiCond) effect.makeCopy();
-        }
-        else if (effect instanceof PCond)
-        {
-            multiCond = new PMultiCond((PCond<?>) effect.makeCopy());
-        }
-        else if (effect instanceof PDelay)
-        {
-            delayMove = (PDelay) effect.makeCopy();
-        }
-        else if (effect instanceof PMod)
-        {
-            modifier = (PMod<?>) effect.makeCopy();
-        }
-        else if (effect instanceof PMultiSkill)
-        {
-            multiSkill = (PMultiSkill) effect.makeCopy();
-        }
-        else if (effect instanceof PMove)
-        {
-            multiSkill = new PMultiSkill(effect.makeCopy());
-        }
-
-        // Restore the effect's child for the initial preview
-        effect.setChild(child);
-        deconstructEffect(child);
-    }
-
-    public String getTitle()
-    {
-        return header.text;
-    }
-
-    public void refresh()
-    {
-        conditionGroup.refresh();
-        effectGroup.refresh();
-        modifierGroup.refresh();
-
-        if (primaryCond != null)
-        {
-            primaryConditions.setSelection(e -> e.getClass().equals(primaryCond.getClass()), false);
-        }
-        if (delayMove == null)
-        {
-            delayMove = new PDelay_StartOfTurnPostDraw();
-        }
-        delayEditor.setValue(delayMove.amount, false);
-        choicesEditor.setValue(multiSkill.amount, false);
-        ifElseToggle.setToggle(multiCond.amount == 1);
-        orToggle.setToggle(multiCond.fields.or);
-
-        repositionItems();
-    }
-
-    public PSkill<?> getSourceEffect()
-    {
-        return screen.currentEffects.get(editorIndex);
-    }
-
     @Override
-    public TextureCache getTextureCache()
-    {
-        return PCLCoreImages.Menu.editorEffect;
-    }
-
-    @Override
-    public String getIconText() {return String.valueOf(editorIndex + 1);}
-
-    public void initializeEffects()
-    {
-        deconstructEffect(getSourceEffect());
-
-        effectGroup.lowerEffects.clear();
-        if (multiSkill != null)
-        {
-            for (PSkill<?> skill : multiSkill.getSubEffects())
-            {
-                PMove<?> move = EUIUtils.safeCast(skill, PMove.class);
-                if (move != null)
-                {
-                    effectGroup.lowerEffects.add(move);
-                }
-            }
-        }
-        else
-        {
-            multiSkill = new PMultiSkill();
-        }
-
-        if (modifier != null)
-        {
-            if (modifierGroup.lowerEffects.size() == 0)
-            {
-                modifierGroup.lowerEffects.add(modifier);
-            }
-            else
-            {
-                modifierGroup.lowerEffects.set(0, modifier);
-            }
-        }
-
-        conditionGroup.lowerEffects.clear();
-        if (multiCond != null)
-        {
-            conditionGroup.lowerEffects.addAll(multiCond.getSubEffects());
-        }
-        else
-        {
-            multiCond = new PMultiCond();
-        }
-
-        conditionGroup.syncWithLower();
-        effectGroup.syncWithLower();
-        modifierGroup.syncWithLower();
-        refresh();
-
-        scheduleConstruct();
-    }
-
-    // Schedule the editor to update its effect at the end of updateImpl. Use this instead of calling constructEffect directly to avoid concurrent modification errors when the visible UI changes
-    protected void scheduleConstruct()
-    {
-        toRemove.add(this::constructEffect);
-    }
-
-    protected void scheduleUpdate(ActionT0 update)
-    {
-        toRemove.add(update);
-    }
-
-    @Override
-    public void updateImpl()
-    {
+    public void updateImpl() {
         super.updateImpl();
         this.hb.targetCy = START_Y + (scale(scrollDelta));
         this.header.tryUpdate();
@@ -407,16 +369,14 @@ public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage
         modifierGroup.tryUpdate();
 
         // Actions that involve changing the number of editors/components present must be executed after all other update actions to avoid concurrent modification
-        for (ActionT0 action : toRemove)
-        {
+        for (ActionT0 action : toRemove) {
             action.invoke();
         }
         toRemove.clear();
     }
 
     @Override
-    public void renderImpl(SpriteBatch sb)
-    {
+    public void renderImpl(SpriteBatch sb) {
         super.renderImpl(sb);
         this.header.tryRender(sb);
         this.conditionHeader.tryRender(sb);

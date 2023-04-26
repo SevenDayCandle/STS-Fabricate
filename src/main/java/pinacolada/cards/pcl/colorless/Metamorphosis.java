@@ -9,8 +9,7 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.skills.PMove;
 
 @VisibleCard
-public class Metamorphosis extends PCLCard
-{
+public class Metamorphosis extends PCLCard {
     public static final String ATLAS_URL = "colorless/skill/metamorphosis";
     public static final PCLCardData DATA = register(Metamorphosis.class)
             .setImagePathFromAtlasUrl(ATLAS_URL)
@@ -19,13 +18,11 @@ public class Metamorphosis extends PCLCard
             .setAffinities(PCLAffinity.Blue)
             .setColorless();
 
-    public Metamorphosis()
-    {
+    public Metamorphosis() {
         super(DATA);
     }
 
-    public void setup(Object input)
-    {
+    public void setup(Object input) {
         addUseMove(PMove.createRandom(3, 3, PCLCardGroupHelper.DrawPile).setUpgrade(2).setUpgradeExtra(2).edit(f -> f.setType(CardType.ATTACK)), PMove.modifyCost(-5, 99).useParent(true));
     }
 }

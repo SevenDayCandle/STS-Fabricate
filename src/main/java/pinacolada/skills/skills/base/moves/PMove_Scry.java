@@ -18,44 +18,37 @@ import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.utilities.ListSelection;
 
 @VisibleSkill
-public class PMove_Scry extends PMove_Select<PField_CardCategory>
-{
+public class PMove_Scry extends PMove_Select<PField_CardCategory> {
     public static final PSkillData<PField_CardCategory> DATA = register(PMove_Scry.class, PField_CardCategory.class)
             .selfTarget()
             .setGroups(PCLCardGroupHelper.DrawPile)
             .setOrigins(PCLCardSelection.Top);
 
-    public PMove_Scry()
-    {
+    public PMove_Scry() {
         this(1);
     }
 
-    public PMove_Scry(PSkillSaveData content)
-    {
-        super(DATA, content);
-    }
-
-    public PMove_Scry(int amount)
-    {
+    public PMove_Scry(int amount) {
         super(DATA, amount, PCLCardGroupHelper.DrawPile);
     }
 
+    public PMove_Scry(PSkillSaveData content) {
+        super(DATA, content);
+    }
+
     @Override
-    public EUITooltip getActionTooltip()
-    {
+    public String getSubText() {
+        return useParent ? EUIRM.strings.verbNoun(getActionTitle(), getInheritedString())
+                : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawString(), fields.getFullCardString());
+    }
+
+    @Override
+    public EUITooltip getActionTooltip() {
         return PGR.core.tooltips.scry;
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction()
-    {
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
         return (s, c, i, o, g) -> new ScryCards(s, i);
-    }
-
-    @Override
-    public String getSubText()
-    {
-        return useParent ? EUIRM.strings.verbNoun(getActionTitle(), getInheritedString())
-                : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawString(), fields.getFullCardString());
     }
 }

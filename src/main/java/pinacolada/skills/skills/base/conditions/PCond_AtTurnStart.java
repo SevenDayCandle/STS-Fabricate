@@ -12,55 +12,46 @@ import pinacolada.skills.skills.PDelegateCond;
 import pinacolada.skills.skills.base.primary.PTrigger_When;
 
 @VisibleSkill
-public class PCond_AtTurnStart extends PDelegateCond<PField_Empty> implements OnStartOfTurnPostDrawSubscriber
-{
+public class PCond_AtTurnStart extends PDelegateCond<PField_Empty> implements OnStartOfTurnPostDrawSubscriber {
 
     public static final PSkillData<PField_Empty> DATA = register(PCond_AtTurnStart.class, PField_Empty.class, 1, 1)
             .selfTarget();
 
-    public PCond_AtTurnStart()
-    {
+    public PCond_AtTurnStart() {
         super(DATA, PCLCardTarget.None, 0);
     }
 
-    public PCond_AtTurnStart(PSkillSaveData content)
-    {
+    public PCond_AtTurnStart(PSkillSaveData content) {
         super(DATA, content);
     }
 
     // This should not activate the child effect when played normally
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill)
-    {
+    public boolean canPlay(PCLUseInfo info) {
+        return true;
+    }
+
+    @Override
+    public void use(PCLUseInfo info) {
+    }
+
+    @Override
+    public void use(PCLUseInfo info, int index) {
+    }
+
+    @Override
+    public String getSampleText(PSkill<?> callingSkill) {
         return callingSkill instanceof PTrigger_When ? TEXT.cond_atStartOfTurn() : TEXT.cond_inXAtTurnStart(TEXT.cpile_hand);
     }
 
     @Override
-    public String getSubText()
-    {
+    public String getSubText() {
         return isWhenClause() ? TEXT.cond_atStartOfTurn() : TEXT.cond_inXAtTurnStart(TEXT.cpile_hand);
     }
 
     @Override
-    public void onStartOfTurnPostDraw()
-    {
+    public void onStartOfTurnPostDraw() {
         useFromTrigger(makeInfo(null));
-    }
-
-    @Override
-    public void use(PCLUseInfo info)
-    {
-    }
-
-    @Override
-    public void use(PCLUseInfo info, int index)
-    {
-    }
-
-    @Override
-    public boolean canPlay(PCLUseInfo info)
-    {
-        return true;
     }
 }

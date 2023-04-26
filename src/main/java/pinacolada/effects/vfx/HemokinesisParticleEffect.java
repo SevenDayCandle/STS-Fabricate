@@ -15,8 +15,7 @@ import pinacolada.effects.PCLEffects;
 
 import java.util.ArrayList;
 
-public class HemokinesisParticleEffect extends PCLEffect
-{
+public class HemokinesisParticleEffect extends PCLEffect {
     protected static final float MAX_VELOCITY = 4000f * Settings.scale;
     protected static final float VELOCITY_RAMP_RATE = 3000f * Settings.scale;
     protected static final float DST_THRESHOLD = 42f * Settings.scale;
@@ -35,18 +34,15 @@ public class HemokinesisParticleEffect extends PCLEffect
     protected boolean facingLeft;
     protected float rotationRate;
 
-    public HemokinesisParticleEffect(float sX, float sY, float tX, float tY, boolean facingLeft)
-    {
+    public HemokinesisParticleEffect(float sX, float sY, float tX, float tY, boolean facingLeft) {
         super(0.7f);
 
         this.img = ImageMaster.GLOW_SPARK_2;
         this.pos = new Vector2(sX, sY);
-        if (!facingLeft)
-        {
+        if (!facingLeft) {
             this.target = new Vector2(tX + DST_THRESHOLD, tY);
         }
-        else
-        {
+        else {
             this.target = new Vector2(tX - DST_THRESHOLD, tY);
         }
 
@@ -62,18 +58,14 @@ public class HemokinesisParticleEffect extends PCLEffect
         this.renderBehind = MathUtils.randomBoolean();
     }
 
-    public void render(SpriteBatch sb)
-    {
-        if (!this.isDone)
-        {
+    public void render(SpriteBatch sb) {
+        if (!this.isDone) {
             sb.setColor(Color.BLACK);
             float scaleCpy = this.scale;
 
             int i;
-            for (i = this.points.length - 1; i > 0; --i)
-            {
-                if (this.points[i] != null)
-                {
+            for (i = this.points.length - 1; i > 0; --i) {
+                if (this.points[i] != null) {
                     sb.draw(this.img, this.points[i].x - (float) (this.img.packedWidth / 2), this.points[i].y - (float) (this.img.packedHeight / 2), (float) this.img.packedWidth / 2f, (float) this.img.packedHeight / 2f, (float) this.img.packedWidth, (float) this.img.packedHeight, scaleCpy * 1.5f, scaleCpy * 1.5f, this.rotation);
                     scaleCpy *= 0.98f;
                 }
@@ -83,10 +75,8 @@ public class HemokinesisParticleEffect extends PCLEffect
             sb.setColor(this.color);
             scaleCpy = this.scale;
 
-            for (i = this.points.length - 1; i > 0; --i)
-            {
-                if (this.points[i] != null)
-                {
+            for (i = this.points.length - 1; i > 0; --i) {
+                if (this.points[i] != null) {
                     sb.draw(this.img, this.points[i].x - (float) (this.img.packedWidth / 2), this.points[i].y - (float) (this.img.packedHeight / 2), (float) this.img.packedWidth / 2f, (float) this.img.packedHeight / 2f, (float) this.img.packedWidth, (float) this.img.packedHeight, scaleCpy, scaleCpy, this.rotation);
                     scaleCpy *= 0.98f;
                 }
@@ -96,36 +86,29 @@ public class HemokinesisParticleEffect extends PCLEffect
         }
     }
 
-    public void update()
-    {
+    public void update() {
         this.updateMovement();
     }
 
-    private void updateMovement()
-    {
+    private void updateMovement() {
         Vector2 tmp = new Vector2(this.pos.x - this.target.x, this.pos.y - this.target.y);
         tmp.nor();
         float targetAngle = tmp.angle();
         this.rotationRate += Gdx.graphics.getDeltaTime() * 2000f;
         this.scale += Gdx.graphics.getDeltaTime() * 1f * Settings.scale;
-        if (!this.stopRotating)
-        {
-            if (this.rotateClockwise)
-            {
+        if (!this.stopRotating) {
+            if (this.rotateClockwise) {
                 this.rotation += Gdx.graphics.getDeltaTime() * this.rotationRate;
             }
-            else
-            {
+            else {
                 this.rotation -= Gdx.graphics.getDeltaTime() * this.rotationRate;
-                if (this.rotation < 0f)
-                {
+                if (this.rotation < 0f) {
                     this.rotation += 360f;
                 }
             }
 
             this.rotation %= 360f;
-            if (!this.stopRotating && Math.abs(this.rotation - targetAngle) < Gdx.graphics.getDeltaTime() * this.rotationRate)
-            {
+            if (!this.stopRotating && Math.abs(this.rotation - targetAngle) < Gdx.graphics.getDeltaTime() * this.rotationRate) {
                 this.rotation = targetAngle;
                 this.stopRotating = true;
             }
@@ -135,30 +118,23 @@ public class HemokinesisParticleEffect extends PCLEffect
         tmp.x *= Gdx.graphics.getDeltaTime() * this.currentSpeed;
         tmp.y *= Gdx.graphics.getDeltaTime() * this.currentSpeed;
         this.pos.sub(tmp);
-        if (this.stopRotating)
-        {
+        if (this.stopRotating) {
             this.currentSpeed += Gdx.graphics.getDeltaTime() * VELOCITY_RAMP_RATE * 3f;
         }
-        else
-        {
+        else {
             this.currentSpeed += Gdx.graphics.getDeltaTime() * VELOCITY_RAMP_RATE * 1.5f;
         }
 
-        if (this.currentSpeed > MAX_VELOCITY)
-        {
+        if (this.currentSpeed > MAX_VELOCITY) {
             this.currentSpeed = MAX_VELOCITY;
         }
 
-        if (this.target.dst(this.pos) < DST_THRESHOLD)
-        {
-            for (int i = 0; i < 5; ++i)
-            {
-                if (this.facingLeft)
-                {
+        if (this.target.dst(this.pos) < DST_THRESHOLD) {
+            for (int i = 0; i < 5; ++i) {
+                if (this.facingLeft) {
                     PCLEffects.Queue.add(new DamageImpactLineEffect(this.target.x + DST_THRESHOLD, this.target.y));
                 }
-                else
-                {
+                else {
                     PCLEffects.Queue.add(new DamageImpactLineEffect(this.target.x - DST_THRESHOLD, this.target.y));
                 }
             }
@@ -168,38 +144,31 @@ public class HemokinesisParticleEffect extends PCLEffect
             this.isDone = true;
         }
 
-        if (!this.controlPoints.isEmpty())
-        {
-            if (!this.controlPoints.get(0).equals(this.pos))
-            {
+        if (!this.controlPoints.isEmpty()) {
+            if (!this.controlPoints.get(0).equals(this.pos)) {
                 this.controlPoints.add(this.pos.cpy());
             }
         }
-        else
-        {
+        else {
             this.controlPoints.add(this.pos.cpy());
         }
 
-        if (this.controlPoints.size() > 3)
-        {
+        if (this.controlPoints.size() > 3) {
             Vector2[] vec2Array = new Vector2[0];
             this.crs.set(this.controlPoints.toArray(vec2Array), false);
 
-            for (int i = 0; i < 60; ++i)
-            {
+            for (int i = 0; i < 60; ++i) {
                 this.points[i] = new Vector2();
                 this.crs.valueAt(this.points[i], (float) i / 59f);
             }
         }
 
-        if (this.controlPoints.size() > 10)
-        {
+        if (this.controlPoints.size() > 10) {
             this.controlPoints.remove(0);
         }
 
         this.duration -= Gdx.graphics.getDeltaTime();
-        if (this.duration < 0f)
-        {
+        if (this.duration < 0f) {
             this.isDone = true;
         }
 

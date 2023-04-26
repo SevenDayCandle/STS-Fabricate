@@ -1,17 +1,14 @@
 package pinacolada.interfaces.providers;
 
-public interface RunAttributesProvider
-{
+public interface RunAttributesProvider {
     int ascensionLevel();
 
     void disableConfirm(boolean value);
 
-    default void onRefresh()
-    {
+    default void onRefresh() {
     }
 
-    default void onSelectSeries()
-    {
+    default void onSelectSeries() {
 
     }
 }

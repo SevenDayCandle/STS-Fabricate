@@ -15,8 +15,7 @@ import pinacolada.resources.loadout.PCLCardSlot;
 import pinacolada.resources.pcl.PCLCoreImages;
 
 // Copied and modified from STS-AnimatorMod
-public class PCLCardSlotEditor extends EUIBase
-{
+public class PCLCardSlotEditor extends EUIBase {
     public static final float PREVIEW_OFFSET_X = AbstractCard.IMG_WIDTH * 0.6f;
     public static final float PREVIEW_OFFSET_Y = -AbstractCard.IMG_HEIGHT * 0.57f;
     public static final float ITEM_HEIGHT = AbstractCard.IMG_HEIGHT * 0.15f;
@@ -33,8 +32,7 @@ public class PCLCardSlotEditor extends EUIBase
     protected EUIButton clearButton;
     protected AbstractCard card;
 
-    public PCLCardSlotEditor(PCLLoadoutEditor loadoutEditor, float cX, float cY)
-    {
+    public PCLCardSlotEditor(PCLLoadoutEditor loadoutEditor, float cX, float cY) {
         this.loadoutEditor = loadoutEditor;
 
         cardvalueText = new EUITextBox(EUIRM.images.panelRoundedHalfH.texture(), new EUIHitbox(cX, cY, AbstractCard.IMG_WIDTH * 0.2f, ITEM_HEIGHT))
@@ -65,10 +63,8 @@ public class PCLCardSlotEditor extends EUIBase
         setSlot(null);
     }
 
-    public PCLCardSlotEditor setSlot(PCLCardSlot slot)
-    {
-        if (slot == null)
-        {
+    public PCLCardSlotEditor setSlot(PCLCardSlot slot) {
+        if (slot == null) {
             this.slot = null;
             this.card = null;
             this.cardamountText.setActive(false);
@@ -101,8 +97,78 @@ public class PCLCardSlotEditor extends EUIBase
         return this;
     }
 
-    public PCLCardSlotEditor translate(float cX, float cY)
-    {
+    @Override
+    public void renderImpl(SpriteBatch sb) {
+        cardnameText.tryRender(sb);
+        cardvalueText.tryRender(sb);
+        cardamountText.tryRender(sb);
+        addButton.tryRender(sb);
+        decrementButton.tryRender(sb);
+        changeButton.tryRender(sb);
+        clearButton.tryRender(sb);
+        if (cardnameText.hb.hovered && card != null) {
+            card.renderInLibrary(sb);
+            card.renderCardTip(sb);
+        }
+    }
+
+    @Override
+    public void updateImpl() {
+        if (slot == null) {
+            return;
+        }
+        cardnameText.tryUpdate();
+
+        if (changeButton.isActive && cardnameText.hb.hovered) {
+            if (InputHelper.justClickedLeft) {
+                cardnameText.hb.clickStarted = true;
+            }
+
+            if (cardnameText.hb.clicked) {
+                cardnameText.hb.clicked = false;
+                loadoutEditor.trySelectCard(this.slot);
+                return;
+            }
+
+            cardnameText.setFontColor(Color.WHITE);
+        }
+        else {
+            cardnameText.setFontColor(Color.GOLD);
+        }
+
+        card = slot.getCard(false);
+        if (card != null) {
+            card.current_x = card.target_x = card.hb.x = InputHelper.mX + PREVIEW_OFFSET_X;
+            card.current_y = card.target_y = card.hb.y = InputHelper.mY + PREVIEW_OFFSET_Y;
+            card.update();
+            card.updateHoverLogic();
+            card.drawScale = card.targetDrawScale = CARD_SCALE * ((card.hb.hovered) ? 0.97f : 0.95f);
+            cardamountText.setLabel(slot.amount + "x ").updateImpl();
+        }
+        else {
+            cardamountText.setLabel("").updateImpl();
+        }
+
+        int value = slot.getEstimatedValue();
+        cardvalueText.setLabel(value)
+                .setFontColor(value == 0 ? Settings.CREAM_COLOR : value < 0 ? Settings.RED_TEXT_COLOR : Settings.GREEN_TEXT_COLOR)
+                .tryUpdate();
+
+        if (addButton.isActive) {
+            addButton.setInteractable(slot.canAdd()).updateImpl();
+        }
+        if (decrementButton.isActive) {
+            decrementButton.setInteractable(slot.canDecrement()).updateImpl();
+        }
+        if (changeButton.isActive) {
+            changeButton.updateImpl();
+        }
+        if (clearButton.isActive) {
+            clearButton.setInteractable(slot.canRemove()).updateImpl();
+        }
+    }
+
+    public PCLCardSlotEditor translate(float cX, float cY) {
         cardvalueText.setPosition(cX, cY);
         cardamountText.setPosition(cardvalueText.hb.x + cardvalueText.hb.width, cY);
         cardnameText.setPosition(cardamountText.hb.x + cardamountText.hb.width, cY);
@@ -112,90 +178,5 @@ public class PCLCardSlotEditor extends EUIBase
         changeButton.setPosition(clearButton.hb.x + clearButton.hb.width + 16, cY + 12);
 
         return this;
-    }
-
-    @Override
-    public void updateImpl()
-    {
-        if (slot == null)
-        {
-            return;
-        }
-        cardnameText.tryUpdate();
-
-        if (changeButton.isActive && cardnameText.hb.hovered)
-        {
-            if (InputHelper.justClickedLeft)
-            {
-                cardnameText.hb.clickStarted = true;
-            }
-
-            if (cardnameText.hb.clicked)
-            {
-                cardnameText.hb.clicked = false;
-                loadoutEditor.trySelectCard(this.slot);
-                return;
-            }
-
-            cardnameText.setFontColor(Color.WHITE);
-        }
-        else
-        {
-            cardnameText.setFontColor(Color.GOLD);
-        }
-
-        card = slot.getCard(false);
-        if (card != null)
-        {
-            card.current_x = card.target_x = card.hb.x = InputHelper.mX + PREVIEW_OFFSET_X;
-            card.current_y = card.target_y = card.hb.y = InputHelper.mY + PREVIEW_OFFSET_Y;
-            card.update();
-            card.updateHoverLogic();
-            card.drawScale = card.targetDrawScale = CARD_SCALE * ((card.hb.hovered) ? 0.97f : 0.95f);
-            cardamountText.setLabel(slot.amount + "x ").updateImpl();
-        }
-        else
-        {
-            cardamountText.setLabel("").updateImpl();
-        }
-
-        int value = slot.getEstimatedValue();
-        cardvalueText.setLabel(value)
-                .setFontColor(value == 0 ? Settings.CREAM_COLOR : value < 0 ? Settings.RED_TEXT_COLOR : Settings.GREEN_TEXT_COLOR)
-                .tryUpdate();
-
-        if (addButton.isActive)
-        {
-            addButton.setInteractable(slot.canAdd()).updateImpl();
-        }
-        if (decrementButton.isActive)
-        {
-            decrementButton.setInteractable(slot.canDecrement()).updateImpl();
-        }
-        if (changeButton.isActive)
-        {
-            changeButton.updateImpl();
-        }
-        if (clearButton.isActive)
-        {
-            clearButton.setInteractable(slot.canRemove()).updateImpl();
-        }
-    }
-
-    @Override
-    public void renderImpl(SpriteBatch sb)
-    {
-        cardnameText.tryRender(sb);
-        cardvalueText.tryRender(sb);
-        cardamountText.tryRender(sb);
-        addButton.tryRender(sb);
-        decrementButton.tryRender(sb);
-        changeButton.tryRender(sb);
-        clearButton.tryRender(sb);
-        if (cardnameText.hb.hovered && card != null)
-        {
-            card.renderInLibrary(sb);
-            card.renderCardTip(sb);
-        }
     }
 }

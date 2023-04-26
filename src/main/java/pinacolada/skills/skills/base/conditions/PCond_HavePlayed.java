@@ -12,35 +12,29 @@ import pinacolada.skills.fields.PField_CardCategory;
 import java.util.List;
 
 @VisibleSkill
-public class PCond_HavePlayed extends PCond_HaveCard
-{
+public class PCond_HavePlayed extends PCond_HaveCard {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_HavePlayed.class, PField_CardCategory.class)
             .selfTarget();
 
-    public PCond_HavePlayed()
-    {
+    public PCond_HavePlayed() {
         this(1);
     }
 
-    public PCond_HavePlayed(PSkillSaveData content)
-    {
-        super(DATA, content);
-    }
-
-    public PCond_HavePlayed(int amount)
-    {
+    public PCond_HavePlayed(int amount) {
         super(DATA, amount);
     }
 
+    public PCond_HavePlayed(PSkillSaveData content) {
+        super(DATA, content);
+    }
+
     @Override
-    public List<AbstractCard> getCardPile()
-    {
+    public List<AbstractCard> getCardPile() {
         return fields.forced ? AbstractDungeon.actionManager.cardsPlayedThisCombat : AbstractDungeon.actionManager.cardsPlayedThisTurn;
     }
 
     @Override
-    public EUITooltip getActionTooltip()
-    {
+    public EUITooltip getActionTooltip() {
         return PGR.core.tooltips.play;
     }
 }

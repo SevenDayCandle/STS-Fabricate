@@ -9,26 +9,21 @@ import javassist.CtBehavior;
 import pinacolada.resources.PCLEnum;
 import pinacolada.ui.menu.CustomMenuButton;
 
-public class MainMenuScreenPatches
-{
+public class MainMenuScreenPatches {
     @SpirePatch(clz = MainMenuScreen.class, method = "setMainMenuButtons")
-    public static class MainMenuScreenPatches_SetMainMenuButtons
-    {
+    public static class MainMenuScreenPatches_SetMainMenuButtons {
         @SpireInsertPatch(
-                locator=Locator.class,
-                localvars={"index"}
+                locator = Locator.class,
+                localvars = {"index"}
         )
-        public static void Insert(Object __obj_instance, @ByRef int[] index)
-        {
-            MainMenuScreen __instance = (MainMenuScreen)__obj_instance;
+        public static void Insert(Object __obj_instance, @ByRef int[] index) {
+            MainMenuScreen __instance = (MainMenuScreen) __obj_instance;
             __instance.buttons.add(new CustomMenuButton(PCLEnum.Buttons.CUSTOM, index[0]++));
         }
 
-        private static class Locator extends SpireInsertLocator
-        {
+        private static class Locator extends SpireInsertLocator {
             @Override
-            public int[] Locate(CtBehavior ctMethodToPatch) throws CannotCompileException, PatchingException
-            {
+            public int[] Locate(CtBehavior ctMethodToPatch) throws CannotCompileException, PatchingException {
                 Matcher finalMatcher = new Matcher.FieldAccessMatcher(MenuButton.ClickResult.class, "INFO");
                 return LineFinder.findInOrder(ctMethodToPatch, finalMatcher);
             }

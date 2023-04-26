@@ -13,39 +13,32 @@ import java.util.List;
 
 
 @VisibleSkill
-public class PMod_PerCardDiscarded extends PMod_PerCardHas
-{
+public class PMod_PerCardDiscarded extends PMod_PerCardHas {
     public static final PSkillData<PField_CardCategory> DATA = register(PMod_PerCardDiscarded.class, PField_CardCategory.class).selfTarget();
 
-    public PMod_PerCardDiscarded()
-    {
+    public PMod_PerCardDiscarded() {
         this(1, 1);
     }
 
-    public PMod_PerCardDiscarded(PSkillSaveData content)
-    {
-        super(DATA, content);
-    }
-
-    public PMod_PerCardDiscarded(int amount)
-    {
-        super(DATA, amount, 1);
-    }
-
-    public PMod_PerCardDiscarded(int amount, int extra)
-    {
+    public PMod_PerCardDiscarded(int amount, int extra) {
         super(DATA, amount, extra);
     }
 
+    public PMod_PerCardDiscarded(PSkillSaveData content) {
+        super(DATA, content);
+    }
+
+    public PMod_PerCardDiscarded(int amount) {
+        super(DATA, amount, 1);
+    }
+
     @Override
-    public List<AbstractCard> getCardPile()
-    {
+    public List<AbstractCard> getCardPile() {
         return fields.forced ? CombatManager.cardsDiscardedThisCombat() : CombatManager.cardsDiscardedThisTurn();
     }
 
     @Override
-    public EUITooltip getActionTooltip()
-    {
+    public EUITooltip getActionTooltip() {
         return PGR.core.tooltips.discard;
     }
 }

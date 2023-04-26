@@ -17,43 +17,36 @@ import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.utilities.ListSelection;
 
 @VisibleSkill
-public class PMove_Scout extends PMove_Select<PField_CardCategory>
-{
+public class PMove_Scout extends PMove_Select<PField_CardCategory> {
     public static final PSkillData<PField_CardCategory> DATA = register(PMove_Scout.class, PField_CardCategory.class)
             .selfTarget()
             .setGroups(PCLCardGroupHelper.DrawPile);
 
-    public PMove_Scout()
-    {
+    public PMove_Scout() {
         this(1);
     }
 
-    public PMove_Scout(PSkillSaveData content)
-    {
-        super(DATA, content);
-    }
-
-    public PMove_Scout(int amount)
-    {
+    public PMove_Scout(int amount) {
         super(DATA, amount, PCLCardGroupHelper.DrawPile);
     }
 
+    public PMove_Scout(PSkillSaveData content) {
+        super(DATA, content);
+    }
+
     @Override
-    public EUITooltip getActionTooltip()
-    {
+    public String getSubText() {
+        return useParent ? EUIRM.strings.verbNoun(getActionTitle(), getInheritedString())
+                : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawString(), fields.getFullCardString());
+    }
+
+    @Override
+    public EUITooltip getActionTooltip() {
         return PGR.core.tooltips.scout;
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction()
-    {
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
         return (s, c, i, o, g) -> new ScoutCards(s, i);
-    }
-
-    @Override
-    public String getSubText()
-    {
-        return useParent ? EUIRM.strings.verbNoun(getActionTitle(), getInheritedString())
-                : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawString(), fields.getFullCardString());
     }
 }

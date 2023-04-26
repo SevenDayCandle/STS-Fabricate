@@ -9,8 +9,7 @@ import pinacolada.effects.EffekseerEFK;
 import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLEffects;
 
-public class FireBurstEffect extends PCLEffect
-{
+public class FireBurstEffect extends PCLEffect {
     protected Color secondaryColor;
     protected float x;
     protected float y;
@@ -20,8 +19,7 @@ public class FireBurstEffect extends PCLEffect
     protected float targetY;
     protected float vfxTimer;
 
-    public FireBurstEffect(float startX, float startY, float targetX, float targetY)
-    {
+    public FireBurstEffect(float startX, float startY, float targetX, float targetY) {
         super(0.5f);
 
         this.color = Color.CHARTREUSE.cpy();
@@ -34,8 +32,7 @@ public class FireBurstEffect extends PCLEffect
         this.y = startY;
     }
 
-    public FireBurstEffect setColor(Color mainColor, Color secondaryColor)
-    {
+    public FireBurstEffect setColor(Color mainColor, Color secondaryColor) {
         this.color = mainColor.cpy();
         this.secondaryColor = secondaryColor.cpy();
 
@@ -43,21 +40,18 @@ public class FireBurstEffect extends PCLEffect
     }
 
     @Override
-    protected void updateInternal(float deltaTime)
-    {
+    protected void updateInternal(float deltaTime) {
         x = Interpolation.fade.apply(targetX, startX, duration / startingDuration);
         y = Interpolation.fade.apply(targetY, startY, duration / startingDuration);
 
         vfxTimer -= deltaTime;
-        if (vfxTimer < 0f)
-        {
+        if (vfxTimer < 0f) {
             vfxTimer = 0.016f;
             PCLEffects.Queue.add(new LightFlareParticleEffect(x, y, color));
             PCLEffects.Queue.add(new FireIgniteEffect(x, y).setColor(color)).setRealtime(isRealtime);
         }
 
-        if (tickDuration(deltaTime))
-        {
+        if (tickDuration(deltaTime)) {
             PCLEffects.Queue.add(new FireIgniteEffect(x, y).setColor(color)).setRealtime(isRealtime);
             PCLEffects.Queue.playEFX(EffekseerEFK.FIRE10, x, y);
             complete();

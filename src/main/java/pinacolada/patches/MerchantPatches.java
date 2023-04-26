@@ -12,40 +12,23 @@ import pinacolada.interfaces.listeners.OnAddingToCardRewardListener;
 import java.util.HashMap;
 
 // Copied and modified from STS-AnimatorMod
-public class MerchantPatches
-{
+public class MerchantPatches {
     @SpirePatch(clz = Merchant.class, method = SpirePatch.CONSTRUCTOR, paramtypez = {float.class, float.class, int.class})
-    public static class MerchantPatches_initCards
-    {
+    public static class MerchantPatches_initCards {
         private static final HashMap<Merchant, MerchantData> map = new HashMap<>();
 
-        public static class MerchantData
-        {
-            public CardGroup colorless;
-            public CardGroup common;
-            public CardGroup uncommon;
-            public CardGroup rare;
+        @SpirePostfixPatch
+        public static void postfix(Merchant __instance, float x, float y, int newShopScreen) {
+            final MerchantData data = map.remove(__instance);
 
-            protected CardGroup getReplacement(CardGroup group)
-            {
-                final CardGroup replacement = new CardGroup(CardGroup.CardGroupType.CARD_POOL);
-                for (AbstractCard c : group.group)
-                {
-                    if (c instanceof OnAddingToCardRewardListener && ((OnAddingToCardRewardListener)c).shouldCancel())
-                    {
-                        continue;
-                    }
-
-                    replacement.group.add(c);
-                }
-
-                return replacement;
-            }
+            AbstractDungeon.colorlessCardPool = data.colorless;
+            AbstractDungeon.commonCardPool = data.common;
+            AbstractDungeon.uncommonCardPool = data.uncommon;
+            AbstractDungeon.rareCardPool = data.rare;
         }
 
         @SpirePrefixPatch
-        public static void prefix(Merchant __instance, float x, float y, int newShopScreen)
-        {
+        public static void prefix(Merchant __instance, float x, float y, int newShopScreen) {
             final MerchantData data = new MerchantData();
             map.put(__instance, data);
 
@@ -62,15 +45,24 @@ public class MerchantPatches
             AbstractDungeon.rareCardPool = data.getReplacement(data.rare);
         }
 
-        @SpirePostfixPatch
-        public static void postfix(Merchant __instance, float x, float y, int newShopScreen)
-        {
-            final MerchantData data = map.remove(__instance);
+        public static class MerchantData {
+            public CardGroup colorless;
+            public CardGroup common;
+            public CardGroup uncommon;
+            public CardGroup rare;
 
-            AbstractDungeon.colorlessCardPool = data.colorless;
-            AbstractDungeon.commonCardPool = data.common;
-            AbstractDungeon.uncommonCardPool = data.uncommon;
-            AbstractDungeon.rareCardPool = data.rare;
+            protected CardGroup getReplacement(CardGroup group) {
+                final CardGroup replacement = new CardGroup(CardGroup.CardGroupType.CARD_POOL);
+                for (AbstractCard c : group.group) {
+                    if (c instanceof OnAddingToCardRewardListener && ((OnAddingToCardRewardListener) c).shouldCancel()) {
+                        continue;
+                    }
+
+                    replacement.group.add(c);
+                }
+
+                return replacement;
+            }
         }
     }
 }

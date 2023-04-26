@@ -16,42 +16,43 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-public class PMove_ObtainRelic extends PMove<PField_RelicID>
-{
+public class PMove_ObtainRelic extends PMove<PField_RelicID> {
     public static final PSkillData<PField_RelicID> DATA = register(PMove_ObtainRelic.class, PField_RelicID.class)
             .selfTarget();
 
-    public PMove_ObtainRelic()
-    {
+    public PMove_ObtainRelic() {
         super(DATA);
     }
 
-    public PMove_ObtainRelic(Collection<String> relics)
-    {
+    public PMove_ObtainRelic(Collection<String> relics) {
         super(DATA);
         fields.relicIDs.addAll(relics);
     }
 
-    public PMove_ObtainRelic(String... relics)
-    {
+    public PMove_ObtainRelic(String... relics) {
         super(DATA);
         fields.relicIDs.addAll(Arrays.asList(relics));
     }
 
     @Override
-    public PMove_ObtainRelic onAddToCard(AbstractCard card)
-    {
+    public String getSampleText(PSkill<?> callingSkill) {
+        return TEXT.act_obtain(TEXT.subjects_x);
+    }
+
+    @Override
+    public String getSubText() {
+        return TEXT.act_obtain(fields.random ? fields.getRelicIDOrString() : fields.getRelicIDAndString());
+    }
+
+    @Override
+    public PMove_ObtainRelic onAddToCard(AbstractCard card) {
         super.onAddToCard(card);
-        if (card instanceof TooltipProvider)
-        {
+        if (card instanceof TooltipProvider) {
             List<EUITooltip> tips = ((TooltipProvider) card).getTips();
-            if (tips != null)
-            {
-                for (String r : fields.relicIDs)
-                {
+            if (tips != null) {
+                for (String r : fields.relicIDs) {
                     AbstractRelic relic = RelicLibrary.getRelic(r);
-                    if (relic != null)
-                    {
+                    if (relic != null) {
                         tips.add(new EUITooltip(relic.name, relic.description));
                     }
                 }
@@ -61,29 +62,14 @@ public class PMove_ObtainRelic extends PMove<PField_RelicID>
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill)
-    {
-        return TEXT.act_obtain(TEXT.subjects_x);
-    }
-
-    @Override
-    public void use(PCLUseInfo info)
-    {
-        for (String r : fields.relicIDs)
-        {
+    public void use(PCLUseInfo info) {
+        for (String r : fields.relicIDs) {
             AbstractRelic relic = RelicLibrary.getRelic(r);
-            if (relic != null)
-            {
+            if (relic != null) {
                 GameUtilities.obtainRelicFromEvent(relic.makeCopy());
             }
         }
 
         super.use(info);
-    }
-
-    @Override
-    public String getSubText()
-    {
-        return TEXT.act_obtain(fields.random ? fields.getRelicIDOrString() : fields.getRelicIDAndString());
     }
 }

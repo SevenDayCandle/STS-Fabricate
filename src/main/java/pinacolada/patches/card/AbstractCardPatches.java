@@ -13,26 +13,20 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.relics.PCLRelic;
 
-public class AbstractCardPatches
-{
+public class AbstractCardPatches {
     @SpirePatch(clz = AbstractCard.class, method = "applyPowersToBlock")
-    public static class AbstractCard_ApplyPowersToBlock
-    {
+    public static class AbstractCard_ApplyPowersToBlock {
         @SpireInsertPatch(localvars = {"tmp"}, locator = Locator.class)
-        public static void insertPre(AbstractCard __instance, @ByRef float[] tmp)
-        {
+        public static void insertPre(AbstractCard __instance, @ByRef float[] tmp) {
             for (AbstractRelic r : AbstractDungeon.player.relics) {
-                if (r instanceof PCLRelic)
-                {
+                if (r instanceof PCLRelic) {
                     tmp[0] = ((PCLRelic) r).atBlockModify(tmp[0], __instance);
                 }
             }
         }
 
-        private static class Locator extends SpireInsertLocator
-        {
-            public int[] Locate(CtBehavior ctBehavior) throws Exception
-            {
+        private static class Locator extends SpireInsertLocator {
+            public int[] Locate(CtBehavior ctBehavior) throws Exception {
                 Matcher matcher = new Matcher.MethodCallMatcher(MathUtils.class, "floor");
                 return LineFinder.findInOrder(ctBehavior, matcher);
             }
@@ -40,13 +34,10 @@ public class AbstractCardPatches
     }
 
     @SpirePatch(clz = AbstractCard.class, method = "cardPlayable")
-    public static class AbstractCard_CardPlayable
-    {
+    public static class AbstractCard_CardPlayable {
         @SpirePrefixPatch
-        public static SpireReturn<Boolean> method(AbstractCard __instance, AbstractMonster m)
-        {
-            if (PCLCardTag.Unplayable.has(__instance))
-            {
+        public static SpireReturn<Boolean> method(AbstractCard __instance, AbstractMonster m) {
+            if (PCLCardTag.Unplayable.has(__instance)) {
                 return SpireReturn.Return(false);
             }
             return SpireReturn.Continue();
@@ -54,24 +45,19 @@ public class AbstractCardPatches
     }
 
     @SpirePatch(clz = AbstractCard.class, method = "triggerOnManualDiscard")
-    public static class AbstractCard_TriggerOnManualDiscard
-    {
+    public static class AbstractCard_TriggerOnManualDiscard {
         @SpirePrefixPatch
-        public static SpireReturn<Void> method(AbstractCard __instance)
-        {
+        public static SpireReturn<Void> method(AbstractCard __instance) {
             CombatManager.onCardDiscarded(__instance);
             return SpireReturn.Continue();
         }
     }
 
     @SpirePatch(clz = AbstractCard.class, method = "triggerOnOtherCardPlayed", paramtypez = {AbstractCard.class})
-    public static class CardGroupPatches_TriggerOnOtherCardPlayed
-    {
+    public static class CardGroupPatches_TriggerOnOtherCardPlayed {
         @SpirePrefixPatch
-        public static SpireReturn<Void> prefix(AbstractCard __instance, AbstractCard c)
-        {
-            if (PCLCardTag.Fragile.has(__instance))
-            {
+        public static SpireReturn<Void> prefix(AbstractCard __instance, AbstractCard c) {
+            if (PCLCardTag.Fragile.has(__instance)) {
                 PCLActions.last.exhaust(__instance);
             }
             return SpireReturn.Continue();
@@ -79,14 +65,11 @@ public class AbstractCardPatches
     }
 
     @SpirePatch(clz = AbstractCard.class, method = "triggerOnEndOfPlayerTurn")
-    public static class CardGroupPatches_TriggerOnEndOfPlayerTurn
-    {
+    public static class CardGroupPatches_TriggerOnEndOfPlayerTurn {
         @SpirePrefixPatch
-        public static SpireReturn<Void> prefix(AbstractCard __instance)
-        {
+        public static SpireReturn<Void> prefix(AbstractCard __instance) {
             // Call the field directly instead of querying card tag, because card tag also checks for purgeOnUse
-            if (EphemeralField.value.get(__instance))
-            {
+            if (EphemeralField.value.get(__instance)) {
                 PCLActions.last.purge(__instance);
                 return SpireReturn.Return();
             }

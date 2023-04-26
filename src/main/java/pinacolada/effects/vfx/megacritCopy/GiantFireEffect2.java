@@ -16,8 +16,7 @@ import com.megacrit.cardcrawl.helpers.ImageMaster;
 import pinacolada.effects.PCLEffect;
 
 @Deprecated
-public class GiantFireEffect2 extends PCLEffect
-{
+public class GiantFireEffect2 extends PCLEffect {
     private final float brightness;
     private final float vX;
     private final float vY;
@@ -28,8 +27,7 @@ public class GiantFireEffect2 extends PCLEffect
     private float y;
     private float delayTimer = MathUtils.random(0.1F);
 
-    public GiantFireEffect2()
-    {
+    public GiantFireEffect2() {
         this.setImg();
         this.startingDuration = 1.5F;
         this.duration = this.startingDuration;
@@ -43,16 +41,27 @@ public class GiantFireEffect2 extends PCLEffect
         this.brightness = MathUtils.random(0.2F, 0.6F);
     }
 
-    public void render(SpriteBatch sb)
-    {
+    private void setImg() {
+        int roll = MathUtils.random(2);
+        if (roll == 0) {
+            this.img = ImageMaster.FLAME_1;
+        }
+        else if (roll == 1) {
+            this.img = ImageMaster.FLAME_2;
+        }
+        else {
+            this.img = ImageMaster.FLAME_3;
+        }
+
+    }
+
+    public void render(SpriteBatch sb) {
         sb.setColor(this.color);
         sb.setBlendFunction(770, 1);
-        if (this.flipX && !this.img.isFlipX())
-        {
+        if (this.flipX && !this.img.isFlipX()) {
             this.img.flip(true, false);
         }
-        else if (!this.flipX && this.img.isFlipX())
-        {
+        else if (!this.flipX && this.img.isFlipX()) {
             this.img.flip(true, false);
         }
 
@@ -60,53 +69,28 @@ public class GiantFireEffect2 extends PCLEffect
         sb.setBlendFunction(770, 771);
     }
 
-    public void update()
-    {
-        if (this.delayTimer > 0.0F)
-        {
+    public void update() {
+        if (this.delayTimer > 0.0F) {
             this.delayTimer -= Gdx.graphics.getDeltaTime();
         }
-        else
-        {
+        else {
             this.x += this.vX * Gdx.graphics.getDeltaTime();
             this.y += this.vY * Gdx.graphics.getDeltaTime();
             this.scale *= MathUtils.random(0.95F, 1.05F);
             this.duration -= Gdx.graphics.getDeltaTime();
-            if (this.duration < 0.0F)
-            {
+            if (this.duration < 0.0F) {
                 this.isDone = true;
             }
-            else if (this.startingDuration - this.duration < 0.75F)
-            {
+            else if (this.startingDuration - this.duration < 0.75F) {
                 this.color.a = Interpolation.fade.apply(0.0F, this.brightness, (this.startingDuration - this.duration) / 0.75F);
             }
-            else if (this.duration < 1.0F)
-            {
+            else if (this.duration < 1.0F) {
                 this.color.a = Interpolation.fade.apply(0.0F, this.brightness, this.duration);
             }
 
         }
     }
 
-    public void dispose()
-    {
-    }
-
-    private void setImg()
-    {
-        int roll = MathUtils.random(2);
-        if (roll == 0)
-        {
-            this.img = ImageMaster.FLAME_1;
-        }
-        else if (roll == 1)
-        {
-            this.img = ImageMaster.FLAME_2;
-        }
-        else
-        {
-            this.img = ImageMaster.FLAME_3;
-        }
-
+    public void dispose() {
     }
 }

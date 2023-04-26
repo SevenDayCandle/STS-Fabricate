@@ -8,8 +8,7 @@ import com.megacrit.cardcrawl.helpers.ImageMaster;
 import extendedui.utilities.EUIColors;
 import pinacolada.effects.PCLEffect;
 
-public class OrbEvokeParticle extends PCLEffect
-{
+public class OrbEvokeParticle extends PCLEffect {
     private static final int W_HALF = 70;
     private static final int W = W_HALF * 2;
 
@@ -20,8 +19,7 @@ public class OrbEvokeParticle extends PCLEffect
     private final boolean flipVertical;
     private float scaleY;
 
-    public OrbEvokeParticle(float x, float y, Color color)
-    {
+    public OrbEvokeParticle(float x, float y, Color color) {
         super(0.25f, true);
 
         this.x = x;
@@ -37,8 +35,7 @@ public class OrbEvokeParticle extends PCLEffect
     }
 
     @Override
-    public void render(SpriteBatch sb)
-    {
+    public void render(SpriteBatch sb) {
         sb.setColor(this.color);
         sb.setBlendFunction(770, 1);
         sb.draw(ImageMaster.DARK_ORB_ACTIVATE_VFX, x - W_HALF, y - W_HALF, W_HALF, W_HALF, W, W, scale, scaleY, rotation, 0, 0, W, W, flipHorizontal, flipVertical);
@@ -46,14 +43,12 @@ public class OrbEvokeParticle extends PCLEffect
     }
 
     @Override
-    public void dispose()
-    {
+    public void dispose() {
 
     }
 
     @Override
-    protected void updateInternal(float deltaTime)
-    {
+    protected void updateInternal(float deltaTime) {
         this.rotation += deltaTime * this.rotationSpeed;
         this.scale = Interpolation.pow4Out.apply(5.0F, 1.0F, this.duration * 4.0F) * Settings.scale;
         this.scaleY = Interpolation.bounceOut.apply(0.2F, 2.0F, this.duration * 4.0F) * Settings.scale;

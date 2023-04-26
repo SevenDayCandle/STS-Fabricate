@@ -11,54 +11,44 @@ import pinacolada.skills.fields.PField_Affinity;
 import pinacolada.utilities.GameUtilities;
 
 // Only used for augments
-public class PTrait_Affinity extends PTrait<PField_Affinity>
-{
+public class PTrait_Affinity extends PTrait<PField_Affinity> {
 
     public static final PSkillData<PField_Affinity> DATA = register(PTrait_Affinity.class, PField_Affinity.class);
 
-    public PTrait_Affinity()
-    {
+    public PTrait_Affinity() {
         this(1);
     }
 
-    public PTrait_Affinity(PSkillSaveData content)
-    {
-        super(DATA, content);
-    }
-
-    public PTrait_Affinity(PCLAffinity... affinities)
-    {
-        this(1, affinities);
-    }
-
-    public PTrait_Affinity(int amount, PCLAffinity... affinities)
-    {
+    public PTrait_Affinity(int amount, PCLAffinity... affinities) {
         super(DATA, amount);
         fields.setAffinity(affinities);
     }
 
+    public PTrait_Affinity(PSkillSaveData content) {
+        super(DATA, content);
+    }
+
+    public PTrait_Affinity(PCLAffinity... affinities) {
+        this(1, affinities);
+    }
+
     @Override
-    public void applyToCard(AbstractCard c, boolean conditionMet)
-    {
-        for (PCLAffinity af : fields.affinities)
-        {
+    public void applyToCard(AbstractCard c, boolean conditionMet) {
+        for (PCLAffinity af : fields.affinities) {
             GameUtilities.modifyAffinityLevel(c, af, conditionMet ? amount : -amount, true);
         }
-        if (c instanceof PCLCard)
-        {
+        if (c instanceof PCLCard) {
             ((PCLCard) c).affinities.updateSortedList();
         }
     }
 
     @Override
-    public String getSubDescText()
-    {
+    public String getSubDescText() {
         return fields.getAffinityAndString();
     }
 
     @Override
-    public String getSubSampleText()
-    {
+    public String getSubSampleText() {
         return PGR.core.tooltips.affinityGeneral.title;
     }
 }

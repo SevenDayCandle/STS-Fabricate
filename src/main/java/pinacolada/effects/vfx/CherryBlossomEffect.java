@@ -6,38 +6,31 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.vfx.PetalEffect;
 import pinacolada.effects.PCLEffect;
 
-public class CherryBlossomEffect extends PCLEffect
-{
+public class CherryBlossomEffect extends PCLEffect {
     private float timer = 0.1F;
 
-    public CherryBlossomEffect()
-    {
+    public CherryBlossomEffect() {
         this.duration = 2.0F;
     }
 
-    public void render(SpriteBatch sb)
-    {
+    public void render(SpriteBatch sb) {
     }
 
     @Override
-    public void update()
-    {
+    public void update() {
         this.duration -= Gdx.graphics.getDeltaTime();
         this.timer -= Gdx.graphics.getDeltaTime();
-        if (this.timer < 0.0F)
-        {
+        if (this.timer < 0.0F) {
             this.timer += 0.1F;
             AbstractDungeon.effectsQueue.add(new PetalEffect());
             AbstractDungeon.effectsQueue.add(new PetalEffect());
         }
 
-        if (this.duration < 0.0F)
-        {
+        if (this.duration < 0.0F) {
             this.isDone = true;
         }
     }
 
-    public void dispose()
-    {
+    public void dispose() {
     }
 }

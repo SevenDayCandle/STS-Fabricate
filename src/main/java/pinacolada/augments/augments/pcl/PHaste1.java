@@ -9,18 +9,15 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.PTrait;
 
 @VisibleAugment
-public class PHaste1 extends PCLAugment
-{
+public class PHaste1 extends PCLAugment {
     public static final PCLAugmentData DATA = register(PHaste1.class, PCLAugmentCategorySub.TagHaste, 1)
             .setSkill(PTrait.tags(PCLCardTag.Haste));
 
-    public PHaste1()
-    {
+    public PHaste1() {
         super(DATA);
     }
 
-    public PHaste1(PSkill<?> skill)
-    {
+    public PHaste1(PSkill<?> skill) {
         super(DATA, skill);
     }
 }

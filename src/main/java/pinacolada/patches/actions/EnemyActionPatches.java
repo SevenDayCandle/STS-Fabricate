@@ -10,29 +10,22 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import pinacolada.dungeon.CombatManager;
 
 // Make the enemy hit itself (Also VampireDamageAction because it obviously does not inherit from DamageAction)
-public class EnemyActionPatches
-{
+public class EnemyActionPatches {
     @SpirePatch(clz = DamageAction.class, method = SpirePatch.CONSTRUCTOR, paramtypez = {AbstractCreature.class, DamageInfo.class, AbstractGameAction.AttackEffect.class})
-    public static class DamageAction_ctor
-    {
+    public static class DamageAction_ctor {
         @SpirePostfixPatch
-        public static void method(DamageAction action, AbstractCreature target, DamageInfo info, AbstractGameAction.AttackEffect effect)
-        {
-            if (action != null && action.source != null)
-            {
+        public static void method(DamageAction action, AbstractCreature target, DamageInfo info, AbstractGameAction.AttackEffect effect) {
+            if (action != null && action.source != null) {
                 CombatManager.onDamageAction(action, target, info, effect);
             }
         }
     }
 
     @SpirePatch(clz = VampireDamageAction.class, method = SpirePatch.CONSTRUCTOR, paramtypez = {AbstractCreature.class, DamageInfo.class, AbstractGameAction.AttackEffect.class})
-    public static class VampireDamageAction_ctor
-    {
+    public static class VampireDamageAction_ctor {
         @SpirePostfixPatch
-        public static void method(VampireDamageAction action, AbstractCreature target, DamageInfo info, AbstractGameAction.AttackEffect effect)
-        {
-            if (action != null && action.source != null)
-            {
+        public static void method(VampireDamageAction action, AbstractCreature target, DamageInfo info, AbstractGameAction.AttackEffect effect) {
+            if (action != null && action.source != null) {
                 CombatManager.onDamageAction(action, target, info, effect);
             }
         }

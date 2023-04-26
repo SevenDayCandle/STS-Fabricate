@@ -12,8 +12,7 @@ import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 
 @Deprecated
-public class ThrowDaggerEffect2 extends AbstractGameEffect
-{
+public class ThrowDaggerEffect2 extends AbstractGameEffect {
     private static final float DUR = 0.4F;
     private final float x;
     private final float y;
@@ -22,8 +21,7 @@ public class ThrowDaggerEffect2 extends AbstractGameEffect
     private boolean playedSound = false;
     private boolean forcedAngle = false;
 
-    public ThrowDaggerEffect2(float x, float y)
-    {
+    public ThrowDaggerEffect2(float x, float y) {
         this.img = ImageMaster.DAGGER_STREAK;
         this.x = x - MathUtils.random(320.0F, 360.0F) - (float) this.img.packedWidth / 2.0F;
         this.destY = y;
@@ -35,8 +33,7 @@ public class ThrowDaggerEffect2 extends AbstractGameEffect
         this.color = Color.CHARTREUSE.cpy();
     }
 
-    public ThrowDaggerEffect2(float x, float y, float fAngle)
-    {
+    public ThrowDaggerEffect2(float x, float y, float fAngle) {
         this.img = ImageMaster.DAGGER_STREAK;
         this.x = x - MathUtils.random(320.0F, 360.0F) - (float) this.img.packedWidth / 2.0F;
         this.destY = y;
@@ -49,18 +46,36 @@ public class ThrowDaggerEffect2 extends AbstractGameEffect
         this.forcedAngle = true;
     }
 
-    public ThrowDaggerEffect2 setColor(Color color)
-    {
+    public ThrowDaggerEffect2 setColor(Color color) {
         this.color.set(color);
 
         return this;
     }
 
-    private void playRandomSfX()
-    {
+    public void update() {
+        if (!this.playedSound) {
+            this.playRandomSfX();
+            this.playedSound = true;
+        }
+
+        this.duration -= Gdx.graphics.getDeltaTime();
+        if (this.duration < 0.0F) {
+            this.isDone = true;
+        }
+
+        if (this.duration > 0.2F) {
+            this.color.a = Interpolation.fade.apply(1.0F, 0.0F, (this.duration - 0.2F) * 5.0F);
+        }
+        else {
+            this.color.a = Interpolation.fade.apply(0.0F, 1.0F, this.duration * 5.0F);
+        }
+
+        this.scale = Interpolation.bounceIn.apply(Settings.scale * 0.5F, Settings.scale * 1.5F, this.duration / 0.4F);
+    }
+
+    private void playRandomSfX() {
         int roll = MathUtils.random(5);
-        switch (roll)
-        {
+        switch (roll) {
             case 0:
                 CardCrawlGame.sound.play("ATTACK_DAGGER_1");
                 break;
@@ -82,43 +97,14 @@ public class ThrowDaggerEffect2 extends AbstractGameEffect
 
     }
 
-    public void update()
-    {
-        if (!this.playedSound)
-        {
-            this.playRandomSfX();
-            this.playedSound = true;
-        }
-
-        this.duration -= Gdx.graphics.getDeltaTime();
-        if (this.duration < 0.0F)
-        {
-            this.isDone = true;
-        }
-
-        if (this.duration > 0.2F)
-        {
-            this.color.a = Interpolation.fade.apply(1.0F, 0.0F, (this.duration - 0.2F) * 5.0F);
-        }
-        else
-        {
-            this.color.a = Interpolation.fade.apply(0.0F, 1.0F, this.duration * 5.0F);
-        }
-
-        this.scale = Interpolation.bounceIn.apply(Settings.scale * 0.5F, Settings.scale * 1.5F, this.duration / 0.4F);
-    }
-
-    public void render(SpriteBatch sb)
-    {
+    public void render(SpriteBatch sb) {
         sb.setColor(this.color);
-        if (!this.forcedAngle)
-        {
+        if (!this.forcedAngle) {
             sb.draw(this.img, this.x, this.y, (float) this.img.packedWidth * 0.85F, (float) this.img.packedHeight / 2.0F, (float) this.img.packedWidth, (float) this.img.packedHeight, this.scale, this.scale * 1.5F, this.rotation);
             sb.setBlendFunction(770, 1);
             sb.draw(this.img, this.x, this.y, (float) this.img.packedWidth * 0.85F, (float) this.img.packedHeight / 2.0F, (float) this.img.packedWidth, (float) this.img.packedHeight, this.scale * 0.75F, this.scale * 0.75F, this.rotation);
         }
-        else
-        {
+        else {
             sb.draw(this.img, this.x, this.y, (float) this.img.packedWidth / 2.0F, (float) this.img.packedHeight / 2.0F, (float) this.img.packedWidth, (float) this.img.packedHeight, this.scale, this.scale * 1.5F, this.rotation);
             sb.setBlendFunction(770, 1);
             sb.draw(this.img, this.x, this.y, (float) this.img.packedWidth / 2.0F, (float) this.img.packedHeight / 2.0F, (float) this.img.packedWidth, (float) this.img.packedHeight, this.scale * 0.75F, this.scale * 0.75F, this.rotation);
@@ -127,7 +113,6 @@ public class ThrowDaggerEffect2 extends AbstractGameEffect
 
     }
 
-    public void dispose()
-    {
+    public void dispose() {
     }
 }

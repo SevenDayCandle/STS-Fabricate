@@ -15,8 +15,7 @@ import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.resources.PGR;
 
-public class PCLCustomCardFormEditor extends EUIBase
-{
+public class PCLCustomCardFormEditor extends EUIBase {
     protected static final float ICON_SIZE = scale(36f);
 
     protected Hitbox hb;
@@ -28,8 +27,7 @@ public class PCLCustomCardFormEditor extends EUIBase
     protected EUIButton add;
     protected EUIButton remove;
 
-    public PCLCustomCardFormEditor(Hitbox hb, PCLCustomCardEditCardScreen screen)
-    {
+    public PCLCustomCardFormEditor(Hitbox hb, PCLCustomCardEditCardScreen screen) {
         this.hb = hb;
         this.screen = screen;
 
@@ -42,8 +40,7 @@ public class PCLCustomCardFormEditor extends EUIBase
 
         formValues = new EUIDropdown<Integer>(new EUIHitbox(hb))
                 .setOnChange(types -> {
-                    if (types.size() > 0)
-                    {
+                    if (types.size() > 0) {
                         setValue(types.get(0));
                     }
                 })
@@ -69,44 +66,26 @@ public class PCLCustomCardFormEditor extends EUIBase
         refresh();
     }
 
-    public void decrease()
-    {
-        setValue(screen.currentBuilder - 1);
-    }
-
-
-    public void increase()
-    {
-        setValue(screen.currentBuilder + 1);
-    }
-
-    public void setValue(int value)
-    {
+    public void setValue(int value) {
         screen.setCurrentBuilder(value);
     }
 
-    public void refresh()
-    {
+    public void decrease() {
+        setValue(screen.currentBuilder - 1);
+    }
+
+    public void increase() {
+        setValue(screen.currentBuilder + 1);
+    }
+
+    public void refresh() {
         formValues.setItems(EUIUtils.range(0, screen.tempBuilders.size() - 1)).setSelection(screen.currentBuilder, false);
         remove.setInteractable(screen.tempBuilders.size() > 1).setActive(!screen.fromInGame);
         add.setActive(!screen.fromInGame);
     }
 
     @Override
-    public void updateImpl()
-    {
-        this.hb.update();
-        header.tryUpdate();
-        formValues.tryUpdate();
-        decreaseButton.setInteractable(screen.currentBuilder > 0).tryUpdate();
-        increaseButton.setInteractable(screen.currentBuilder < formValues.size() - 1).tryUpdate();
-        add.tryUpdate();
-        remove.tryUpdate();
-    }
-
-    @Override
-    public void renderImpl(SpriteBatch sb)
-    {
+    public void renderImpl(SpriteBatch sb) {
         this.hb.render(sb);
         header.tryRender(sb);
         formValues.tryRender(sb);
@@ -114,5 +93,16 @@ public class PCLCustomCardFormEditor extends EUIBase
         increaseButton.tryRender(sb);
         add.tryRender(sb);
         remove.tryRender(sb);
+    }
+
+    @Override
+    public void updateImpl() {
+        this.hb.update();
+        header.tryUpdate();
+        formValues.tryUpdate();
+        decreaseButton.setInteractable(screen.currentBuilder > 0).tryUpdate();
+        increaseButton.setInteractable(screen.currentBuilder < formValues.size() - 1).tryUpdate();
+        add.tryUpdate();
+        remove.tryUpdate();
     }
 }

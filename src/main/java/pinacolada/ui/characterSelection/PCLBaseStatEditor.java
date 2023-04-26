@@ -22,8 +22,7 @@ import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.loadout.PCLLoadoutData;
 
 // Copied and modified from STS-AnimatorMod
-public class PCLBaseStatEditor extends EUIBase
-{
+public class PCLBaseStatEditor extends EUIBase {
     public static final float ICON_SIZE = 64f * Settings.scale;
     public StatType type;
     public PCLLoadout loadout;
@@ -37,8 +36,7 @@ public class PCLBaseStatEditor extends EUIBase
     protected EUIDropdown<Integer> valueDropdown;
     protected PCLLoadoutEditor editor;
 
-    public PCLBaseStatEditor(StatType type, float cX, float cY, PCLLoadoutEditor editor)
-    {
+    public PCLBaseStatEditor(StatType type, float cX, float cY, PCLLoadoutEditor editor) {
         this.type = type;
         this.hb = new EUIHitbox(0, 0, ICON_SIZE * 2.5f, ICON_SIZE).setCenter(cX, cY);
         this.editor = editor;
@@ -65,8 +63,7 @@ public class PCLBaseStatEditor extends EUIBase
                     editor.activeEditor = isOpen ? this : null;
                 })
                 .setOnChange(value -> {
-                    if (value.size() > 0)
-                    {
+                    if (value.size() > 0) {
                         set(value.get(0));
                     }
                 })
@@ -75,8 +72,7 @@ public class PCLBaseStatEditor extends EUIBase
                         value -> this.type.getAmountForValue(value) + " (" + value + ")", false
                 )
                 .setLabelColorFunctionForButton(value -> {
-                    if (value.isEmpty())
-                    {
+                    if (value.isEmpty()) {
                         return Settings.CREAM_COLOR;
                     }
                     int first = value.get(0);
@@ -84,8 +80,7 @@ public class PCLBaseStatEditor extends EUIBase
                 })
                 .setLabelFunctionForButton(
                         (value, __) -> {
-                            if (value.isEmpty())
-                            {
+                            if (value.isEmpty()) {
                                 return String.valueOf(0);
                             }
                             return String.valueOf(value.get(0));
@@ -95,55 +90,29 @@ public class PCLBaseStatEditor extends EUIBase
                 .setItems(EUIUtils.range(type.minValue, type.maxValue, type.valuePerStep));
     }
 
-    public boolean canDecrease()
-    {
-        return valueDropdown.getCurrentIndex() > 0;
-    }
-
-    public boolean canIncrease()
-    {
-        return valueDropdown.getCurrentIndex() < valueDropdown.rows.size() - 1;
-    }
-
-    public void decrease()
-    {
+    public void decrease() {
         valueDropdown.setSelectionIndices(new int[]{valueDropdown.getCurrentIndex() - 1}, true);
     }
 
-    public void increase()
-    {
+    public void increase() {
         valueDropdown.setSelectionIndices(new int[]{valueDropdown.getCurrentIndex() + 1}, true);
     }
 
-    public void set(int amount)
-    {
+    public void set(int amount) {
         type.setAmount(data, amount);
     }
 
-    public PCLBaseStatEditor setEstimatedValue(int value)
-    {
-        valueDropdown.setSelection(value, true);
-
-        return this;
-    }
-
-    public PCLBaseStatEditor setInteractable(boolean interactable)
-    {
-        this.interactable = interactable;
-
-        return this;
-    }
-
-    public void setLoadout(PCLLoadout loadout, PCLLoadoutData data)
-    {
-        this.loadout = loadout;
-        this.data = data;
-        valueDropdown.setSelection(data.values.getOrDefault(type, 0), true);
+    @Override
+    public void renderImpl(SpriteBatch sb) {
+        image.renderImpl(sb);
+        label.renderImpl(sb);
+        decreaseButton.renderImpl(sb);
+        increaseButton.renderImpl(sb);
+        valueDropdown.tryRender(sb);
     }
 
     @Override
-    public void updateImpl()
-    {
+    public void updateImpl() {
         hb.update();
         image.updateImpl();
         label.setLabel(type.getText(loadout, data)).updateImpl();
@@ -152,18 +121,33 @@ public class PCLBaseStatEditor extends EUIBase
         valueDropdown.tryUpdate();
     }
 
-    @Override
-    public void renderImpl(SpriteBatch sb)
-    {
-        image.renderImpl(sb);
-        label.renderImpl(sb);
-        decreaseButton.renderImpl(sb);
-        increaseButton.renderImpl(sb);
-        valueDropdown.tryRender(sb);
+    public boolean canDecrease() {
+        return valueDropdown.getCurrentIndex() > 0;
     }
 
-    public enum StatType
-    {
+    public boolean canIncrease() {
+        return valueDropdown.getCurrentIndex() < valueDropdown.rows.size() - 1;
+    }
+
+    public PCLBaseStatEditor setEstimatedValue(int value) {
+        valueDropdown.setSelection(value, true);
+
+        return this;
+    }
+
+    public PCLBaseStatEditor setInteractable(boolean interactable) {
+        this.interactable = interactable;
+
+        return this;
+    }
+
+    public void setLoadout(PCLLoadout loadout, PCLLoadoutData data) {
+        this.loadout = loadout;
+        this.data = data;
+        valueDropdown.setSelection(data.values.getOrDefault(type, 0), true);
+    }
+
+    public enum StatType {
         HP(ImageMaster.TP_HP, Settings.RED_TEXT_COLOR, 2, 1, -6, 6, 0),
         Gold(ImageMaster.TP_GOLD, Settings.GOLD_COLOR, 15, 1, -6, 6, 0),
         PotionSlot(ImageMaster.POTION_PLACEHOLDER, Settings.CREAM_COLOR, 1, 15, -2, 2, 12),
@@ -179,8 +163,7 @@ public class PCLBaseStatEditor extends EUIBase
         public final int maxValue;
         public final int unlockLevel;
 
-        StatType(Texture icon, Color labelColor, int amountPerStep, int valuePerStep, int minValue, int maxValue, int unlockLevel)
-        {
+        StatType(Texture icon, Color labelColor, int amountPerStep, int valuePerStep, int minValue, int maxValue, int unlockLevel) {
             this.icon = icon;
             this.labelColor = labelColor;
             this.amountPerStep = amountPerStep;
@@ -190,48 +173,11 @@ public class PCLBaseStatEditor extends EUIBase
             this.unlockLevel = unlockLevel;
         }
 
-        public int getAmount(PCLLoadout loadout, PCLLoadoutData data)
-        {
-            return getBase(loadout) + getAmountForValue(data);
-        }
-
-        public int getAmountForValue(PCLLoadoutData data)
-        {
-            return getAmountForValue(data != null ? data.values.getOrDefault(this, 0) : 0);
-        }
-
-        public int getAmountForValue(int value)
-        {
-            return (amountPerStep * value) / valuePerStep;
-        }
-
-        public int getBase(PCLLoadout loadout)
-        {
-            switch (this)
-            {
-                case Gold:
-                    return loadout.getBaseGold();
-                case HP:
-                    return loadout.getBaseHP();
-                case CardDraw:
-                    return loadout.getBaseDraw();
-                case PotionSlot:
-                    return 0;
-                case Energy:
-                    return loadout.getBaseEnergy();
-                default:
-                    return 0;
-            }
-        }
-
-        public String getText(PCLLoadout loadout, PCLLoadoutData data)
-        {
-            if (loadout == null || data == null)
-            {
+        public String getText(PCLLoadout loadout, PCLLoadoutData data) {
+            if (loadout == null || data == null) {
                 return "";
             }
-            switch (this)
-            {
+            switch (this) {
                 case Gold:
                     return CharacterOption.TEXT[5] + getAmount(loadout, data);
                 case HP:
@@ -247,10 +193,37 @@ public class PCLBaseStatEditor extends EUIBase
             }
         }
 
-        public void setAmount(PCLLoadoutData data, int amount)
-        {
-            if (data != null)
-            {
+        public int getAmount(PCLLoadout loadout, PCLLoadoutData data) {
+            return getBase(loadout) + getAmountForValue(data);
+        }
+
+        public int getBase(PCLLoadout loadout) {
+            switch (this) {
+                case Gold:
+                    return loadout.getBaseGold();
+                case HP:
+                    return loadout.getBaseHP();
+                case CardDraw:
+                    return loadout.getBaseDraw();
+                case PotionSlot:
+                    return 0;
+                case Energy:
+                    return loadout.getBaseEnergy();
+                default:
+                    return 0;
+            }
+        }
+
+        public int getAmountForValue(PCLLoadoutData data) {
+            return getAmountForValue(data != null ? data.values.getOrDefault(this, 0) : 0);
+        }
+
+        public int getAmountForValue(int value) {
+            return (amountPerStep * value) / valuePerStep;
+        }
+
+        public void setAmount(PCLLoadoutData data, int amount) {
+            if (data != null) {
                 data.values.put(this, amount);
             }
         }

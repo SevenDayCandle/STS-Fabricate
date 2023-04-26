@@ -7,17 +7,13 @@ import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.interfaces.markers.DynamicCard;
 
-public class STSLibPatches
-{
+public class STSLibPatches {
     @SpirePatch(clz = FlavorText.FlavorIntoCardStrings.class, method = "postfix")
-    public static class FlavorIntoCardStrings_Postfix
-    {
+    public static class FlavorIntoCardStrings_Postfix {
         // Custom cards do not have existing flavor text so this call will cause the card to fail to load altogether
         @SpirePrefixPatch
-        public static SpireReturn<Void> prefix(AbstractCard c)
-        {
-            if (c instanceof DynamicCard)
-            {
+        public static SpireReturn<Void> prefix(AbstractCard c) {
+            if (c instanceof DynamicCard) {
                 return SpireReturn.Return();
             }
             return SpireReturn.Continue();

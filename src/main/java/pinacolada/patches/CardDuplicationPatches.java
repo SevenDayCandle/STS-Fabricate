@@ -13,17 +13,17 @@ import com.megacrit.cardcrawl.relics.DollysMirror;
 import pinacolada.utilities.GameUtilities;
 
 // Copied and modified from STS-AnimatorMod
-public class CardDuplicationPatches
-{
+public class CardDuplicationPatches {
     private static CardGroup masterDeckCache;
 
-    protected static void beforeUse()
-    {
+    protected static void afterUse() {
+        AbstractDungeon.player.masterDeck = masterDeckCache;
+    }
+
+    protected static void beforeUse() {
         final CardGroup temp = new CardGroup(CardGroup.CardGroupType.MASTER_DECK);
-        for (AbstractCard c : AbstractDungeon.player.masterDeck.group)
-        {
-            if (GameUtilities.canObtainCopy(c))
-            {
+        for (AbstractCard c : AbstractDungeon.player.masterDeck.group) {
+            if (GameUtilities.canObtainCopy(c)) {
                 temp.group.add(c);
             }
         }
@@ -32,72 +32,55 @@ public class CardDuplicationPatches
         AbstractDungeon.player.masterDeck = temp;
     }
 
-    protected static void afterUse()
-    {
-        AbstractDungeon.player.masterDeck = masterDeckCache;
-    }
-
     @SpirePatch(clz = DollysMirror.class, method = "onEquip")
-    public static class CardDuplicationPatches_DollysMirror_OnEquip
-    {
-        @SpirePrefixPatch
-        public static void prefix(DollysMirror __instance)
-        {
-            beforeUse();
+    public static class CardDuplicationPatches_DollysMirror_OnEquip {
+        @SpirePostfixPatch
+        public static void postfix(DollysMirror __instance) {
+            afterUse();
         }
 
-        @SpirePostfixPatch
-        public static void postfix(DollysMirror __instance)
-        {
-            afterUse();
+        @SpirePrefixPatch
+        public static void prefix(DollysMirror __instance) {
+            beforeUse();
         }
     }
 
     @SpirePatch(clz = Duplicator.class, method = "use")
-    public static class CardDuplicationPatches_Duplicator_Use
-    {
-        @SpirePrefixPatch
-        public static void prefix(Duplicator __instance)
-        {
-            beforeUse();
+    public static class CardDuplicationPatches_Duplicator_Use {
+        @SpirePostfixPatch
+        public static void postfix(Duplicator __instance) {
+            afterUse();
         }
 
-        @SpirePostfixPatch
-        public static void postfix(Duplicator __instance)
-        {
-            afterUse();
+        @SpirePrefixPatch
+        public static void prefix(Duplicator __instance) {
+            beforeUse();
         }
     }
 
     @SpirePatch(clz = WeMeetAgain.class, method = SpirePatch.CONSTRUCTOR)
-    public static class CardRemovalPatches_WeMeetAgain_Ctor
-    {
-        @SpirePrefixPatch
-        public static void prefix(WeMeetAgain __instance)
-        {
-            beforeUse();
+    public static class CardRemovalPatches_WeMeetAgain_Ctor {
+        @SpirePostfixPatch
+        public static void postfix(WeMeetAgain __instance) {
+            afterUse();
         }
 
-        @SpirePostfixPatch
-        public static void postfix(WeMeetAgain __instance)
-        {
-            afterUse();
+        @SpirePrefixPatch
+        public static void prefix(WeMeetAgain __instance) {
+            beforeUse();
         }
     }
 
     @SpirePatch(clz = Falling.class, method = SpirePatch.CONSTRUCTOR)
-    public static class CardRemovalPatches_FallingCtor
-    {
-        @SpirePrefixPatch
-        public static void prefix(Falling __instance)
-        {
-            beforeUse();
+    public static class CardRemovalPatches_FallingCtor {
+        @SpirePostfixPatch
+        public static void postfix(Falling __instance) {
+            afterUse();
         }
 
-        @SpirePostfixPatch
-        public static void postfix(Falling __instance)
-        {
-            afterUse();
+        @SpirePrefixPatch
+        public static void prefix(Falling __instance) {
+            beforeUse();
         }
     }
 }

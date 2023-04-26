@@ -11,58 +11,39 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardModifyTag;
 
 @VisibleSkill
-public class PMove_ModifyTag extends PMove_Modify<PField_CardModifyTag>
-{
+public class PMove_ModifyTag extends PMove_Modify<PField_CardModifyTag> {
     public static final PSkillData<PField_CardModifyTag> DATA = PMove_Modify.register(PMove_ModifyTag.class, PField_CardModifyTag.class)
             .setExtra(-PCLAffinity.MAX_LEVEL, PCLAffinity.MAX_LEVEL)
             .setExtra(0, DEFAULT_MAX)
             .selfTarget();
 
-    public PMove_ModifyTag()
-    {
+    public PMove_ModifyTag() {
         this(1, 1);
     }
 
-    public PMove_ModifyTag(PSkillSaveData content)
-    {
-        super(DATA, content);
-    }
-
-    public PMove_ModifyTag(int amount, int extra, PCLCardTag... tags)
-    {
+    public PMove_ModifyTag(int amount, int extra, PCLCardTag... tags) {
         super(DATA, amount, extra);
         fields.setAddTag(tags);
     }
 
-    @Override
-    public ActionT1<AbstractCard> getAction()
-    {
-        return (c) -> {
-            for (PCLCardTag tag : fields.addTags)
-            {
-                getActions().modifyTag(c, tag, amount, amount != 0);
-            }
-        };
+    public PMove_ModifyTag(PSkillSaveData content) {
+        super(DATA, content);
     }
 
     @Override
-    public String getObjectSampleText()
-    {
+    public String getObjectSampleText() {
         return TEXT.cedit_tags;
     }
 
     @Override
-    public String getObjectText()
-    {
+    public String getObjectText() {
         String base = fields.getAddTagChoiceString();
         return amount > 1 ? EUIRM.strings.numNoun(getAmountRawString(), base) : amount < 0 ? EUIRM.strings.numNoun(TEXT.subjects_infinite, base) : base;
     }
 
     @Override
-    public String getSubText()
-    {
-        if (extra != 0)
-        {
+    public String getSubText() {
+        if (extra != 0) {
             return super.getSubText();
         }
         String giveString = getObjectText();
@@ -70,5 +51,14 @@ public class PMove_ModifyTag extends PMove_Modify<PField_CardModifyTag>
                 fields.hasGroups() ?
                         TEXT.act_removeFromPlace(giveString, EUIRM.strings.numNoun(getExtraRawString(), pluralCard()), fields.getGroupString()) :
                         TEXT.act_removeFrom(giveString, TEXT.subjects_thisCard);
+    }
+
+    @Override
+    public ActionT1<AbstractCard> getAction() {
+        return (c) -> {
+            for (PCLCardTag tag : fields.addTags) {
+                getActions().modifyTag(c, tag, amount, amount != 0);
+            }
+        };
     }
 }

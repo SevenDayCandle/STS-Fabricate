@@ -11,39 +11,27 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 
 @VisibleSkill
-public class PMod_PerCard extends PMod_Per<PField_CardCategory>
-{
+public class PMod_PerCard extends PMod_Per<PField_CardCategory> {
     public static final PSkillData<PField_CardCategory> DATA = register(PMod_PerCard.class, PField_CardCategory.class)
             .setGroups(PCLCardGroupHelper.getAll())
             .selfTarget();
 
-    public PMod_PerCard(PSkillSaveData content)
-    {
+    public PMod_PerCard(PSkillSaveData content) {
         super(DATA, content);
     }
 
-    public PMod_PerCard()
-    {
+    public PMod_PerCard() {
         super(DATA);
     }
 
-    public PMod_PerCard(int amount, PCLCardGroupHelper... groups)
-    {
+    public PMod_PerCard(int amount, PCLCardGroupHelper... groups) {
         super(DATA, PCLCardTarget.None, amount);
         fields.setCardGroup(groups);
     }
 
     @Override
-    public String getSubText()
-    {
-        return TEXT.subjects_card;
-    }
-
-    @Override
-    public String getConditionText(String childText)
-    {
-        if (fields.not)
-        {
+    public String getConditionText(String childText) {
+        if (fields.not) {
             return TEXT.cond_genericConditional(childText, TEXT.cond_perIn(getAmountRawString(), fields.getFullCardStringSingular(), fields.getGroupString()));
         }
         return TEXT.cond_perIn(childText,
@@ -51,10 +39,14 @@ public class PMod_PerCard extends PMod_Per<PField_CardCategory>
     }
 
     @Override
-    public int getMultiplier(PCLUseInfo info)
-    {
+    public int getMultiplier(PCLUseInfo info) {
         return EUIUtils.sumInt(fields.groupTypes, g -> EUIUtils.count(g.getCards(),
-                        c -> fields.getFullCardFilter().invoke(c))
-                );
+                c -> fields.getFullCardFilter().invoke(c))
+        );
+    }
+
+    @Override
+    public String getSubText() {
+        return TEXT.subjects_card;
     }
 }

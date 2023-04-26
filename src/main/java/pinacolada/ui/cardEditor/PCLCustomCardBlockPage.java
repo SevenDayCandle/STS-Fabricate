@@ -22,25 +22,22 @@ import pinacolada.skills.skills.special.primary.PCardPrimary_GainBlock;
 import java.util.Arrays;
 import java.util.List;
 
-public class PCLCustomCardBlockPage extends PCLCustomCardEffectPage
-{
+public class PCLCustomCardBlockPage extends PCLCustomCardEffectPage {
     protected PCLCustomCardUpgradableEditor blockEditor;
     protected PCLCustomCardUpgradableEditor rightCountEditor;
     protected EUIToggle enableToggle;
 
-    public PCLCustomCardBlockPage(PCLCustomCardEditCardScreen screen, EUIHitbox hb, int index, String title, ActionT1<PSkill<?>> onUpdate)
-    {
+    public PCLCustomCardBlockPage(PCLCustomCardEditCardScreen screen, EUIHitbox hb, int index, String title, ActionT1<PSkill<?>> onUpdate) {
         super(screen, hb, index, title, onUpdate);
     }
 
-    protected void setupComponents(PCLCustomCardEditCardScreen screen)
-    {
+    protected void setupComponents(PCLCustomCardEditCardScreen screen) {
         super.setupComponents(screen);
         effectGroup.setListFunc(PCLCustomCardBlockPage::getAvailableMoves);
         primaryConditions.setItems(new PCardPrimary_GainBlock()).setActive(false);
         delayEditor.setActive(false);
 
-        enableToggle = (EUIToggle) new EUIToggle(new OriginRelativeHitbox(hb, MENU_WIDTH / 4, MENU_HEIGHT, 0, OFFSET_EFFECT))
+        enableToggle = new EUIToggle(new OriginRelativeHitbox(hb, MENU_WIDTH / 4, MENU_HEIGHT, 0, OFFSET_EFFECT))
                 .setFont(EUIFontHelper.carddescriptionfontNormal, 0.9f)
                 .setText(PGR.core.strings.cedit_enable)
                 .setOnToggle(this::setMove);
@@ -56,13 +53,7 @@ public class PCLCustomCardBlockPage extends PCLCustomCardEffectPage
         rightCountEditor.tooltip.setChild(new EUITooltip(PGR.core.strings.cedit_upgrades, PGR.core.strings.cetut_amount));
     }
 
-    public PSkill<?> getSourceEffect()
-    {
-        return screen.currentBlock;
-    }
-
-    public void refresh()
-    {
+    public void refresh() {
         super.refresh();
         PCLDynamicData builder = screen.getBuilder();
         enableToggle.setToggle(primaryCond != null);
@@ -75,31 +66,17 @@ public class PCLCustomCardBlockPage extends PCLCustomCardEffectPage
         repositionItems();
     }
 
-    protected void setMove(boolean add)
-    {
-        if (add)
-        {
-            primaryCond = primaryConditions.getAllItems().get(0);
-        }
-        else
-        {
-            primaryCond = null;
-        }
-        constructEffect();
-    }
-
-    protected static List<PMove<?>> getAvailableMoves()
-    {
-        return Arrays.asList(
-                new PTrait_Block(),
-                new PTrait_BlockMultiplier(),
-                new PTrait_BlockCount()
-        );
+    public PSkill<?> getSourceEffect() {
+        return screen.currentBlock;
     }
 
     @Override
-    public void updateImpl()
-    {
+    public TextureCache getTextureCache() {
+        return PCLCoreImages.Menu.editorBlock;
+    }
+
+    @Override
+    public void updateImpl() {
         super.updateImpl();
         blockEditor.tryUpdate();
         rightCountEditor.tryUpdate();
@@ -107,17 +84,28 @@ public class PCLCustomCardBlockPage extends PCLCustomCardEffectPage
     }
 
     @Override
-    public void renderImpl(SpriteBatch sb)
-    {
+    public void renderImpl(SpriteBatch sb) {
         super.renderImpl(sb);
         blockEditor.tryRender(sb);
         rightCountEditor.tryRender(sb);
         enableToggle.tryRender(sb);
     }
 
-    @Override
-    public TextureCache getTextureCache()
-    {
-        return PCLCoreImages.Menu.editorBlock;
+    protected static List<PMove<?>> getAvailableMoves() {
+        return Arrays.asList(
+                new PTrait_Block(),
+                new PTrait_BlockMultiplier(),
+                new PTrait_BlockCount()
+        );
+    }
+
+    protected void setMove(boolean add) {
+        if (add) {
+            primaryCond = primaryConditions.getAllItems().get(0);
+        }
+        else {
+            primaryCond = null;
+        }
+        constructEffect();
     }
 }

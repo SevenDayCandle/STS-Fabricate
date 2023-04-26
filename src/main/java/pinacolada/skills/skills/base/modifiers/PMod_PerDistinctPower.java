@@ -17,50 +17,44 @@ import pinacolada.utilities.GameUtilities;
 import java.util.List;
 
 @VisibleSkill
-public class PMod_PerDistinctPower extends PMod_Per<PField_Power>
-{
+public class PMod_PerDistinctPower extends PMod_Per<PField_Power> {
 
     public static final PSkillData<PField_Power> DATA = register(PMod_PerDistinctPower.class, PField_Power.class);
 
-    public PMod_PerDistinctPower(PSkillSaveData content)
-    {
+    public PMod_PerDistinctPower(PSkillSaveData content) {
         super(DATA, content);
     }
 
-    public PMod_PerDistinctPower()
-    {
+    public PMod_PerDistinctPower() {
         super(DATA);
     }
 
-    public PMod_PerDistinctPower(int amount, PCLPowerHelper... powerHelpers)
-    {
+    public PMod_PerDistinctPower(int amount, PCLPowerHelper... powerHelpers) {
         this(PCLCardTarget.AllEnemy, amount, powerHelpers);
     }
 
-    public PMod_PerDistinctPower(PCLCardTarget target, int amount, PCLPowerHelper... powerHelpers)
-    {
+    public PMod_PerDistinctPower(PCLCardTarget target, int amount, PCLPowerHelper... powerHelpers) {
         super(DATA, target, amount);
         fields.setPower(powerHelpers);
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill)
-    {
-        return TEXT.cond_perDistinct(TEXT.subjects_x, getSubSampleText());
+    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info) {
+        return be.baseAmount * getMultiplier(info);
+    }
+
+    public String getConditionText(String childText) {
+        if (fields.not) {
+            return TEXT.cond_genericConditional(childText, TEXT.cond_perDistinct(getAmountRawString(), getSubText()));
+        }
+        return TEXT.cond_perDistinct(childText,
+                this.amount <= 1 ? getSubText() : EUIRM.strings.numNoun(getAmountRawString(), getSubText()));
     }
 
     @Override
-    public String getSubSampleText()
-    {
-        return TEXT.cedit_powers;
-    }
-
-    @Override
-    public String getSubText()
-    {
+    public String getSubText() {
         String baseString = fields.getPowerSubjectString();
-        switch (target)
-        {
+        switch (target) {
             case All:
             case Any:
                 return TEXT.subjects_onAnyCharacter(baseString);
@@ -75,27 +69,20 @@ public class PMod_PerDistinctPower extends PMod_Per<PField_Power>
         }
     }
 
-    public String getConditionText(String childText)
-    {
-        if (fields.not)
-        {
-            return TEXT.cond_genericConditional(childText, TEXT.cond_perDistinct(getAmountRawString(), getSubText()));
-        }
-        return TEXT.cond_perDistinct(childText,
-                this.amount <= 1 ? getSubText() : EUIRM.strings.numNoun(getAmountRawString(), getSubText()));
-    }
-
     @Override
-    public int getMultiplier(PCLUseInfo info)
-    {
+    public int getMultiplier(PCLUseInfo info) {
         List<AbstractCreature> targetList = getTargetList(info);
         return fields.powers.isEmpty() ? EUIUtils.sumInt(targetList, t -> EUIUtils.count(t.powers, po -> po.type == AbstractPower.PowerType.DEBUFF)) :
                 EUIUtils.sumInt(targetList, t -> EUIUtils.count(fields.powers, po -> GameUtilities.getPowerAmount(t, po.ID) >= this.amount));
     }
 
     @Override
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info)
-    {
-        return be.baseAmount * getMultiplier(info);
+    public String getSampleText(PSkill<?> callingSkill) {
+        return TEXT.cond_perDistinct(TEXT.subjects_x, getSubSampleText());
+    }
+
+    @Override
+    public String getSubSampleText() {
+        return TEXT.cedit_powers;
     }
 }

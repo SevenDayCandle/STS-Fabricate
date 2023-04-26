@@ -6,7 +6,6 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import pinacolada.annotations.CombatSubscriber;
 
 @CombatSubscriber
-public interface OnDamageOverrideSubscriber extends PCLCombatSubscriber
-{
+public interface OnDamageOverrideSubscriber extends PCLCombatSubscriber {
     float onDamageOverride(AbstractCreature target, DamageInfo.DamageType type, float damage, AbstractCard card);
 } 

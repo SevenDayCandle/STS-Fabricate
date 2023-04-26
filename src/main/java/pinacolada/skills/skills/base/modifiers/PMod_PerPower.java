@@ -16,35 +16,29 @@ import pinacolada.utilities.GameUtilities;
 import java.util.List;
 
 @VisibleSkill
-public class PMod_PerPower extends PMod_Per<PField_Power>
-{
+public class PMod_PerPower extends PMod_Per<PField_Power> {
 
     public static final PSkillData<PField_Power> DATA = register(PMod_PerPower.class, PField_Power.class);
 
-    public PMod_PerPower(PSkillSaveData content)
-    {
+    public PMod_PerPower(PSkillSaveData content) {
         super(DATA, content);
     }
 
-    public PMod_PerPower()
-    {
+    public PMod_PerPower() {
         super(DATA);
     }
 
-    public PMod_PerPower(int amount, PCLPowerHelper... powerHelpers)
-    {
+    public PMod_PerPower(int amount, PCLPowerHelper... powerHelpers) {
         this(PCLCardTarget.AllEnemy, amount, powerHelpers);
     }
 
-    public PMod_PerPower(PCLCardTarget target, int amount, PCLPowerHelper... powerHelpers)
-    {
+    public PMod_PerPower(PCLCardTarget target, int amount, PCLPowerHelper... powerHelpers) {
         super(DATA, target, amount);
         fields.setPower(powerHelpers);
     }
 
     @Override
-    public int getMultiplier(PCLUseInfo info)
-    {
+    public int getMultiplier(PCLUseInfo info) {
         List<AbstractCreature> targetList = getTargetList(info);
         return fields.powers.isEmpty() ?
                 EUIUtils.sumInt(targetList, t -> t.powers != null ? EUIUtils.sumInt(t.powers, po -> po.type == AbstractPower.PowerType.DEBUFF ? po.amount : 0) : 0) :
@@ -52,21 +46,17 @@ public class PMod_PerPower extends PMod_Per<PField_Power>
     }
 
     @Override
-    public String getSubSampleText()
-    {
+    public String getSubSampleText() {
         return TEXT.cedit_powers;
     }
 
     @Override
-    public String getSubText()
-    {
+    public String getSubText() {
         String baseString = fields.getPowerSubjectString();
-        if (amount > 1)
-        {
+        if (amount > 1) {
             baseString = EUIRM.strings.numNoun(getAmountRawString(), baseString);
         }
-        switch (target)
-        {
+        switch (target) {
             case All:
             case Any:
                 return TEXT.subjects_onAnyCharacter(baseString);

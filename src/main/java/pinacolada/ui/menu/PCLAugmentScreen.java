@@ -21,43 +21,50 @@ import pinacolada.utilities.GameUtilities;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PCLAugmentScreen extends AbstractDungeonScreen
-{
+public class PCLAugmentScreen extends AbstractDungeonScreen {
     protected PCLAugmentList panel;
     protected PCLEffect curEffect;
     protected FuncT0<HashMap<PCLAugmentData, Integer>> getEntries;
     protected ActionT2<PCLAugment, Integer> addItem;
     protected boolean canSelect;
 
-    public PCLAugmentScreen()
-    {
+    public PCLAugmentScreen() {
         panel = new PCLAugmentList(this::doAction);
     }
 
-    public void doAction(PCLAugment augment)
-    {
-        if (canSelect && augment != null)
-        {
+    public void doAction(PCLAugment augment) {
+        if (canSelect && augment != null) {
             curEffect = new CallbackEffect(new SelectFromPile(augment.getName(), 1, AbstractDungeon.player.masterDeck)
                     .cancellableFromPlayer(true)
                     .setFilter(augment::canApply)
                     .addCallback(selection -> {
-                        for (AbstractCard c : selection)
-                        {
+                        for (AbstractCard c : selection) {
                             PGR.dungeon.addAugment(augment.ID, -1);
                             augment.addToCard((PCLCard) c);
                             refreshAugments();
                         }
                     }));
         }
-        else
-        {
+        else {
             AbstractDungeon.closeCurrentScreen();
         }
     }
 
-    public void open(FuncT0<HashMap<PCLAugmentData, Integer>> getEntries, int rows, boolean canSelect)
-    {
+    public void refreshAugments() {
+        panel.clear();
+        HashMap<PCLAugmentData, Integer> entries = getEntries != null ? getEntries.invoke() : new HashMap<>();
+        for (Map.Entry<PCLAugmentData, Integer> params : entries.entrySet()) {
+            PCLAugmentData data = params.getKey();
+            int amount = params.getValue();
+            if (data != null && amount > 0) {
+                PCLAugment augment = data.create();
+                addItem.invoke(augment, amount);
+            }
+        }
+        EUI.countingPanel.openManual(GameUtilities.augmentStats(entries), null, false);
+    }
+
+    public void open(FuncT0<HashMap<PCLAugmentData, Integer>> getEntries, int rows, boolean canSelect) {
         super.open(false, false);
         this.getEntries = getEntries;
         this.canSelect = canSelect;
@@ -66,61 +73,36 @@ public class PCLAugmentScreen extends AbstractDungeonScreen
         refreshAugments();
     }
 
-    public void refreshAugments()
-    {
-        panel.clear();
-        HashMap<PCLAugmentData, Integer> entries = getEntries != null ? getEntries.invoke() : new HashMap<>();
-        for (Map.Entry<PCLAugmentData, Integer> params : entries.entrySet())
-        {
-            PCLAugmentData data = params.getKey();
-            int amount = params.getValue();
-            if (data != null && amount > 0)
-            {
-                PCLAugment augment = data.create();
-                addItem.invoke(augment, amount);
-            }
-        }
-        EUI.countingPanel.openManual(GameUtilities.augmentStats(entries), null, false);
-    }
-
     @Override
-    public void updateImpl()
-    {
-        super.updateImpl();
-        if (curEffect != null)
-        {
-            curEffect.update();
-            if (curEffect.isDone)
-            {
-                curEffect = null;
-            }
-        }
-        else
-        {
-            panel.updateImpl();
-        }
-        EUI.countingPanel.tryUpdate();
-
-    }
-
-    @Override
-    public void preRender(SpriteBatch sb)
-    {
-        if (curEffect != null)
-        {
+    public void preRender(SpriteBatch sb) {
+        if (curEffect != null) {
             curEffect.render(sb);
         }
-        else
-        {
+        else {
             panel.renderImpl(sb);
         }
     }
 
     @Override
-    public void renderImpl(SpriteBatch sb)
-    {
+    public void renderImpl(SpriteBatch sb) {
         super.renderImpl(sb);
         EUI.countingPanel.tryRender(sb);
+    }
+
+    @Override
+    public void updateImpl() {
+        super.updateImpl();
+        if (curEffect != null) {
+            curEffect.update();
+            if (curEffect.isDone) {
+                curEffect = null;
+            }
+        }
+        else {
+            panel.updateImpl();
+        }
+        EUI.countingPanel.tryUpdate();
+
     }
 
 

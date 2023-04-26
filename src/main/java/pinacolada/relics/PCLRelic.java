@@ -29,82 +29,67 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class PCLRelic extends CustomRelic implements TooltipProvider
-{
+public abstract class PCLRelic extends CustomRelic implements TooltipProvider {
     public static AbstractPlayer player;
     public static Random rng;
     public ArrayList<EUITooltip> tips;
     public EUITooltip mainTooltip;
     public AbstractPlayer.PlayerClass playerClass;
 
-    public PCLRelic(String id, Texture texture, RelicTier tier, LandingSound sfx)
-    {
-        this(id, texture, tier, sfx, null);
-    }
-
-    public PCLRelic(String id, RelicTier tier, LandingSound sfx)
-    {
+    public PCLRelic(String id, RelicTier tier, LandingSound sfx) {
         this(id, EUIRM.getTexture(PGR.getRelicImage(id)), tier, sfx);
     }
 
-    public PCLRelic(String id, RelicTier tier, LandingSound sfx, AbstractPlayer.PlayerClass playerClass)
-    {
-        this(id, EUIRM.getTexture(PGR.getRelicImage(id)), tier, sfx, playerClass);
+    public PCLRelic(String id, Texture texture, RelicTier tier, LandingSound sfx) {
+        this(id, texture, tier, sfx, null);
     }
 
-    public PCLRelic(String id, Texture texture, RelicTier tier, LandingSound sfx, AbstractPlayer.PlayerClass playerClass)
-    {
+    public PCLRelic(String id, Texture texture, RelicTier tier, LandingSound sfx, AbstractPlayer.PlayerClass playerClass) {
         super(id, texture, tier, sfx);
         this.playerClass = playerClass;
     }
 
-    public PCLRelic(String id, Texture texture, Texture outline, RelicTier tier, LandingSound sfx, AbstractPlayer.PlayerClass playerClass)
-    {
+    public PCLRelic(String id, RelicTier tier, LandingSound sfx, AbstractPlayer.PlayerClass playerClass) {
+        this(id, EUIRM.getTexture(PGR.getRelicImage(id)), tier, sfx, playerClass);
+    }
+
+    public PCLRelic(String id, Texture texture, Texture outline, RelicTier tier, LandingSound sfx, AbstractPlayer.PlayerClass playerClass) {
         super(id, texture, outline, tier, sfx);
         this.playerClass = playerClass;
     }
 
-    public PCLRelic(String id, String imgName, RelicTier tier, LandingSound sfx, AbstractPlayer.PlayerClass playerClass)
-    {
+    public PCLRelic(String id, String imgName, RelicTier tier, LandingSound sfx, AbstractPlayer.PlayerClass playerClass) {
         super(id, imgName, tier, sfx);
         this.playerClass = playerClass;
     }
 
-    public static String createFullID(Class<? extends PCLRelic> type)
-    {
+    public static String createFullID(Class<? extends PCLRelic> type) {
         return createFullID(PGR.core, type);
     }
 
-    public static String createFullID(PCLResources<?,?,?,?> resources, Class<? extends PCLRelic> type)
-    {
+    public static String createFullID(PCLResources<?, ?, ?, ?> resources, Class<? extends PCLRelic> type) {
         return resources.createID(type.getSimpleName());
     }
 
-    protected void activateBattleEffect()
-    {
-
-    }
-
-    public int addCounter(int amount)
-    {
+    public int addCounter(int amount) {
         setCounter(counter + amount);
 
         return counter;
-    }
-
-    public float atBlockModify(float block, AbstractCard c) {
-        return block;
     }
 
     public float atBlockModify(PCLUseInfo info, float block, AbstractCard c) {
         return atBlockModify(block, c);
     }
 
+    public float atBlockModify(float block, AbstractCard c) {
+        return block;
+    }
+
     public float atDamageModify(PCLUseInfo info, float block, AbstractCard c) {
         return atDamageModify(block, c);
     }
 
-    public float atMagicNumberModify(PCLUseInfo info, float block, AbstractCard c) {
+    public float atHealModify(PCLUseInfo info, float block, AbstractCard c) {
         return block;
     }
 
@@ -112,36 +97,19 @@ public abstract class PCLRelic extends CustomRelic implements TooltipProvider
         return block;
     }
 
+    public float atMagicNumberModify(PCLUseInfo info, float block, AbstractCard c) {
+        return block;
+    }
+
     public float atRightCountModify(PCLUseInfo info, float block, AbstractCard c) {
         return block;
     }
 
-    public float atHealModify(PCLUseInfo info, float block, AbstractCard c) {
-        return block;
-    }
-
-    protected void deactivateBattleEffect()
-    {
-
-    }
-
-    protected void displayAboveCreature(AbstractCreature creature)
-    {
+    protected void displayAboveCreature(AbstractCreature creature) {
         PCLActions.top.add(new RelicAboveCreatureAction(creature, this));
     }
 
-    protected String formatDescription(int index, Object... args)
-    {
-        return EUIUtils.format(DESCRIPTIONS[index], args);
-    }
-
-    protected String getCounterString()
-    {
-        return String.valueOf(counter);
-    }
-
-    public TextureAtlas.AtlasRegion getPowerIcon()
-    {
+    public TextureAtlas.AtlasRegion getPowerIcon() {
         final Texture texture = img;
         final int h = texture.getHeight();
         final int w = texture.getWidth();
@@ -150,134 +118,130 @@ public abstract class PCLRelic extends CustomRelic implements TooltipProvider
     }
 
     @Override
-    public List<EUITooltip> getTips()
-    {
-        return tips;
-    }
-
-    @Override
-    public List<EUITooltip> getTipsForFilters()
-    {
+    public List<EUITooltip> getTipsForFilters() {
         return tips.subList(1, tips.size());
     }
 
-    public boolean isEnabled()
-    {
+    @Override
+    public List<EUITooltip> getTips() {
+        return tips;
+    }
+
+    public boolean isEnabled() {
         return !super.grayscale;
     }
 
-    public boolean setEnabled(boolean value)
-    {
-        super.grayscale = !value;
-        return value;
-    }
-
     @Override
-    public AbstractRelic makeCopy()
-    {
-        try
-        {
+    public AbstractRelic makeCopy() {
+        try {
             return getClass().getConstructor().newInstance();
         }
-        catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e)
-        {
+        catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             EUIUtils.logError(this, e.getMessage());
             return null;
         }
     }
 
+    public boolean setEnabled(boolean value) {
+        super.grayscale = !value;
+        return value;
+    }
+
     @Override
-    public final void updateDescription(AbstractPlayer.PlayerClass c)
-    {
+    public final void updateDescription(AbstractPlayer.PlayerClass c) {
         this.description = getUpdatedDescription();
         this.mainTooltip.setDescriptions(description);
     }
 
+    protected String formatDescription(int index, Object... args) {
+        return EUIUtils.format(DESCRIPTIONS[index], args);
+    }
+
+    public int getValue() {
+        return counter;
+    }
+
     @Override
-    public String getUpdatedDescription()
-    {
+    public String getUpdatedDescription() {
         return formatDescription(0, getValue());
     }
 
     @Override
-    public void onEquip()
-    {
+    public void onEquip() {
         super.onEquip();
 
-        if (GameUtilities.inBattle(true))
-        {
+        if (GameUtilities.inBattle(true)) {
             activateBattleEffect();
         }
     }
 
+    protected void activateBattleEffect() {
+
+    }
+
     @Override
-    public void onUnequip()
-    {
+    public void onUnequip() {
         super.onUnequip();
 
-        if (GameUtilities.inBattle(true))
-        {
+        if (GameUtilities.inBattle(true)) {
             deactivateBattleEffect();
         }
     }
 
+    protected void deactivateBattleEffect() {
+
+    }
+
     @Override
-    public void atPreBattle()
-    {
+    public void atPreBattle() {
         super.atPreBattle();
 
         activateBattleEffect();
     }
 
     @Override
-    public void onVictory()
-    {
+    public void onVictory() {
         super.onVictory();
 
         deactivateBattleEffect();
     }
 
     @Override
-    public void renderCounter(SpriteBatch sb, boolean inTopPanel)
-    {
-        if (this.counter >= 0)
-        {
+    public void renderCounter(SpriteBatch sb, boolean inTopPanel) {
+        if (this.counter >= 0) {
             final String text = getCounterString();
-            if (inTopPanel)
-            {
+            if (inTopPanel) {
                 float offsetX = ReflectionHacks.getPrivateStatic(AbstractRelic.class, "offsetX");
                 FontHelper.renderFontRightTopAligned(sb, FontHelper.topPanelInfoFont, text,
                         offsetX + this.currentX + 30.0F * Settings.scale, this.currentY - 7.0F * Settings.scale, Color.WHITE);
             }
-            else
-            {
+            else {
                 FontHelper.renderFontRightTopAligned(sb, FontHelper.topPanelInfoFont, text,
                         this.currentX + 30.0F * Settings.scale, this.currentY - 7.0F * Settings.scale, Color.WHITE);
             }
         }
     }
 
+    protected String getCounterString() {
+        return String.valueOf(counter);
+    }
+
     @Override
-    public void renderBossTip(SpriteBatch sb)
-    {
+    public void renderBossTip(SpriteBatch sb) {
         EUITooltip.queueTooltips(tips, Settings.WIDTH * 0.63F, Settings.HEIGHT * 0.63F);
     }
 
     @Override
-    public void renderTip(SpriteBatch sb)
-    {
+    public void renderTip(SpriteBatch sb) {
         EUITooltip.queueTooltips(this);
     }
 
     @Override
-    protected void initializeTips()
-    {
-        if (tips == null)
-        {
+    protected void initializeTips() {
+        if (tips == null) {
             tips = new ArrayList<>();
         }
-        else
-        {
+        else {
             tips.clear();
         }
 
@@ -286,14 +250,8 @@ public abstract class PCLRelic extends CustomRelic implements TooltipProvider
         EUIGameUtils.scanForTips(description, tips);
     }
 
-    public int getValue()
-    {
-        return counter;
-    }
-
     // TODO move check to custom relic class
-    public boolean canSpawn()
-    {
+    public boolean canSpawn() {
         return GameUtilities.isPCLPlayerClass() || (PGR.config.enableCustomRelics.get());
     }
 }

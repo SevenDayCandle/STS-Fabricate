@@ -19,8 +19,7 @@ import pinacolada.utilities.RandomizedList;
 
 import java.util.ArrayList;
 
-public class GenericChooseCardsToObtainEffect extends PCLEffectWithCallback<GenericChooseCardsToObtainEffect>
-{
+public class GenericChooseCardsToObtainEffect extends PCLEffectWithCallback<GenericChooseCardsToObtainEffect> {
     public final ArrayList<AbstractCard> cards = new ArrayList<>();
     private final CardGroup[] groups;
     private final GenericCondition<AbstractCard> filter;
@@ -29,18 +28,11 @@ public class GenericChooseCardsToObtainEffect extends PCLEffectWithCallback<Gene
     private final int groupSize;
     private int cardsToAdd;
 
-    public GenericChooseCardsToObtainEffect(int obtain, int groupSize)
-    {
+    public GenericChooseCardsToObtainEffect(int obtain, int groupSize) {
         this(obtain, groupSize, null, AbstractDungeon.commonCardPool, AbstractDungeon.uncommonCardPool, AbstractDungeon.rareCardPool);
     }
 
-    public GenericChooseCardsToObtainEffect(int obtain, int groupSize, FuncT1<Boolean, AbstractCard> filter)
-    {
-        this(obtain, groupSize, filter, AbstractDungeon.commonCardPool, AbstractDungeon.uncommonCardPool, AbstractDungeon.rareCardPool);
-    }
-
-    public GenericChooseCardsToObtainEffect(int obtain, int groupSize, FuncT1<Boolean, AbstractCard> filter, CardGroup... groups)
-    {
+    public GenericChooseCardsToObtainEffect(int obtain, int groupSize, FuncT1<Boolean, AbstractCard> filter, CardGroup... groups) {
         super(0.75f, true);
 
         this.cardsToAdd = obtain;
@@ -52,31 +44,49 @@ public class GenericChooseCardsToObtainEffect extends PCLEffectWithCallback<Gene
         AbstractDungeon.overlayMenu.proceedButton.hide();
     }
 
-    public void openpanelAdd()
-    {
+    public GenericChooseCardsToObtainEffect(int obtain, int groupSize, FuncT1<Boolean, AbstractCard> filter) {
+        this(obtain, groupSize, filter, AbstractDungeon.commonCardPool, AbstractDungeon.uncommonCardPool, AbstractDungeon.rareCardPool);
+    }
+
+    @Override
+    public void render(SpriteBatch sb) {
+        sb.setColor(this.screenColor);
+        sb.draw(ImageMaster.WHITE_SQUARE_IMG, 0f, 0f, (float) Settings.WIDTH, (float) Settings.HEIGHT);
+        if (AbstractDungeon.screen == CurrentScreen.GRID) {
+            AbstractDungeon.gridSelectScreen.render(sb);
+        }
+    }
+
+    @Override
+    protected void firstUpdate() {
+        super.firstUpdate();
+
+        if (cardsToAdd > 0) {
+            openpanelAdd();
+        }
+        else {
+            complete();
+        }
+    }
+
+    public void openpanelAdd() {
         final CardGroup cardGroup = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
-        if (offeredCards.size() == 0)
-        {
-            for (CardGroup cGroup : groups)
-            {
-                for (AbstractCard card : cGroup.group)
-                {
-                    if (filter == null || filter.check(card))
-                    {
+        if (offeredCards.size() == 0) {
+            for (CardGroup cGroup : groups) {
+                for (AbstractCard card : cGroup.group) {
+                    if (filter == null || filter.check(card)) {
                         offeredCards.add(card);
                     }
                 }
             }
-            if (offeredCards.size() < cardsToAdd)
-            {
+            if (offeredCards.size() < cardsToAdd) {
                 EUIUtils.logWarning(this, "Not enough cards");
                 complete(this);
                 return;
             }
         }
 
-        for (int i = 0; i < groupSize; i++)
-        {
+        for (int i = 0; i < groupSize; i++) {
             cardGroup.group.add(offeredCards.retrieve(AbstractDungeon.cardRandomRng, true).makeCopy());
         }
 
@@ -85,41 +95,11 @@ public class GenericChooseCardsToObtainEffect extends PCLEffectWithCallback<Gene
     }
 
     @Override
-    public void render(SpriteBatch sb)
-    {
-        sb.setColor(this.screenColor);
-        sb.draw(ImageMaster.WHITE_SQUARE_IMG, 0f, 0f, (float) Settings.WIDTH, (float) Settings.HEIGHT);
-        if (AbstractDungeon.screen == CurrentScreen.GRID)
-        {
-            AbstractDungeon.gridSelectScreen.render(sb);
-        }
-    }
-
-    @Override
-    protected void firstUpdate()
-    {
-        super.firstUpdate();
-
-        if (cardsToAdd > 0)
-        {
-            openpanelAdd();
-        }
-        else
-        {
-            complete();
-        }
-    }
-
-    @Override
-    protected void updateInternal(float deltaTime)
-    {
-        if (cardsToAdd > 0)
-        {
-            if (AbstractDungeon.gridSelectScreen.selectedCards.size() == cardsToAdd)
-            {
+    protected void updateInternal(float deltaTime) {
+        if (cardsToAdd > 0) {
+            if (AbstractDungeon.gridSelectScreen.selectedCards.size() == cardsToAdd) {
                 float displayCount = 0f;
-                for (AbstractCard card : AbstractDungeon.gridSelectScreen.selectedCards)
-                {
+                for (AbstractCard card : AbstractDungeon.gridSelectScreen.selectedCards) {
                     cards.add(card.makeCopy());
                     PCLEffects.Queue.showAndObtain(card.makeCopy(), (float) Settings.WIDTH / 3f + displayCount, (float) Settings.HEIGHT / 2f, false);
                     displayCount += (float) Settings.WIDTH / 6f;
@@ -129,8 +109,7 @@ public class GenericChooseCardsToObtainEffect extends PCLEffectWithCallback<Gene
                 AbstractDungeon.gridSelectScreen.targetGroup.clear();
             }
         }
-        else if (tickDuration(deltaTime))
-        {
+        else if (tickDuration(deltaTime)) {
             AbstractDungeon.getCurrRoom().phase = AbstractRoom.RoomPhase.COMPLETE;
             complete(this);
         }

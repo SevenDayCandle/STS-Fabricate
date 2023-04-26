@@ -8,63 +8,57 @@ import pinacolada.interfaces.subscribers.*;
 import pinacolada.skills.skills.DelayTiming;
 import pinacolada.utilities.GameUtilities;
 
-public class DelayUse implements PCLCombatSubscriber, OnStartOfTurnPostDrawSubscriber, OnStartOfTurnSubscriber, OnEndOfTurnLastSubscriber, OnEndOfTurnFirstSubscriber
-{
-    protected int baseTurns;
-    protected int turns;
+public class DelayUse
+        implements PCLCombatSubscriber, OnStartOfTurnPostDrawSubscriber, OnStartOfTurnSubscriber, OnEndOfTurnLastSubscriber, OnEndOfTurnFirstSubscriber {
     protected final DelayTiming timing;
     protected final ActionT1<PCLUseInfo> onUse;
+    protected int baseTurns;
+    protected int turns;
     protected PCLUseInfo capturedCardUseInfo;
 
-    public static DelayUse turnEnd(PCLUseInfo info, ActionT1<PCLUseInfo> action)
-    {
-        return turnEnd(0, info, action);
-    }
-
-    public static DelayUse turnEndLast(PCLUseInfo info, ActionT1<PCLUseInfo> action)
-    {
-        return turnEndLast(0, info, action);
-    }
-
-    public static DelayUse turnEnd(int amount, PCLUseInfo info, ActionT1<PCLUseInfo> action)
-    {
-        return new DelayUse(DelayTiming.EndOfTurnFirst, amount, info, action);
-    }
-
-    public static DelayUse turnEndLast(int amount, PCLUseInfo info, ActionT1<PCLUseInfo> action)
-    {
-        return new DelayUse(DelayTiming.EndOfTurnLast, amount, info, action);
-    }
-
-    public static DelayUse turnStart(int amount, PCLUseInfo info, ActionT1<PCLUseInfo> action)
-    {
-        return new DelayUse(DelayTiming.StartOfTurnFirst, amount, info, action);
-    }
-
-    public static DelayUse turnStartLast(int amount, PCLUseInfo info, ActionT1<PCLUseInfo> action)
-    {
-        return new DelayUse(DelayTiming.StartOfTurnLast, amount, info, action);
-    }
-
-    public DelayUse(DelayTiming timing, int turns, PCLUseInfo info, ActionT1<PCLUseInfo> action)
-    {
+    public DelayUse(DelayTiming timing, int turns, PCLUseInfo info, ActionT1<PCLUseInfo> action) {
         this.timing = timing;
         baseTurns = this.turns = turns;
         capturedCardUseInfo = info;
         onUse = action;
     }
 
-    protected void act()
-    {
+    public static DelayUse turnEnd(PCLUseInfo info, ActionT1<PCLUseInfo> action) {
+        return turnEnd(0, info, action);
+    }
+
+    public static DelayUse turnEnd(int amount, PCLUseInfo info, ActionT1<PCLUseInfo> action) {
+        return new DelayUse(DelayTiming.EndOfTurnFirst, amount, info, action);
+    }
+
+    public static DelayUse turnEndLast(PCLUseInfo info, ActionT1<PCLUseInfo> action) {
+        return turnEndLast(0, info, action);
+    }
+
+    public static DelayUse turnEndLast(int amount, PCLUseInfo info, ActionT1<PCLUseInfo> action) {
+        return new DelayUse(DelayTiming.EndOfTurnLast, amount, info, action);
+    }
+
+    public static DelayUse turnStart(int amount, PCLUseInfo info, ActionT1<PCLUseInfo> action) {
+        return new DelayUse(DelayTiming.StartOfTurnFirst, amount, info, action);
+    }
+
+    public static DelayUse turnStartLast(int amount, PCLUseInfo info, ActionT1<PCLUseInfo> action) {
+        return new DelayUse(DelayTiming.StartOfTurnLast, amount, info, action);
+    }
+
+    @Override
+    public void onEndOfTurnFirst(boolean b) {
+        act();
+    }
+
+    protected void act() {
         turns -= 1;
-        if (turns <= 0)
-        {
-            if (capturedCardUseInfo.card != null)
-            {
+        if (turns <= 0) {
+            if (capturedCardUseInfo.card != null) {
                 PCLEffects.Queue.showCardBriefly(capturedCardUseInfo.card.makeStatEquivalentCopy());
             }
-            if (capturedCardUseInfo.target == null || GameUtilities.isDeadOrEscaped(capturedCardUseInfo.target))
-            {
+            if (capturedCardUseInfo.target == null || GameUtilities.isDeadOrEscaped(capturedCardUseInfo.target)) {
                 capturedCardUseInfo = CombatManager.playerSystem.generateInfo(capturedCardUseInfo.card, capturedCardUseInfo.source, GameUtilities.getRandomEnemy(true));
             }
             onUse.invoke(capturedCardUseInfo);
@@ -73,34 +67,23 @@ public class DelayUse implements PCLCombatSubscriber, OnStartOfTurnPostDrawSubsc
     }
 
     @Override
-    public void onEndOfTurnFirst(boolean b)
-    {
+    public void onEndOfTurnLast(boolean b) {
         act();
     }
 
     @Override
-    public void onEndOfTurnLast(boolean b)
-    {
+    public void onStartOfTurn() {
         act();
     }
 
     @Override
-    public void onStartOfTurn()
-    {
+    public void onStartOfTurnPostDraw() {
         act();
     }
 
-    @Override
-    public void onStartOfTurnPostDraw()
-    {
-        act();
-    }
-
-    public void start()
-    {
+    public void start() {
         turns = baseTurns;
-        switch (timing)
-        {
+        switch (timing) {
             case EndOfTurnFirst:
                 CombatManager.subscribe(OnEndOfTurnLastSubscriber.class, this);
                 return;

@@ -7,13 +7,9 @@ import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
         cls = "com.megacrit.cardcrawl.cards.AbstractCard",
         method = "<class>"
 )
-public class HasteField
-{
-    public static SpireField<Integer> value = new SpireField<>(() -> {
-        return 0;
-    });
+public class HasteField {
+    public static SpireField<Integer> value = new SpireField<>(() -> 0);
 
-    public HasteField()
-    {
+    public HasteField() {
     }
 }

@@ -16,53 +16,44 @@ import pinacolada.skills.skills.PActiveCond;
 import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
-public class PCond_TriggerTo extends PActiveCond<PField_Orb>
-{
+public class PCond_TriggerTo extends PActiveCond<PField_Orb> {
     public static final PSkillData<PField_Orb> DATA = register(PCond_TriggerTo.class, PField_Orb.class)
             .selfTarget();
 
-    public PCond_TriggerTo(PSkillSaveData content)
-    {
+    public PCond_TriggerTo(PSkillSaveData content) {
         super(DATA, content);
     }
 
-    public PCond_TriggerTo()
-    {
+    public PCond_TriggerTo() {
         super(DATA, PCLCardTarget.None, 1);
     }
 
-    public PCond_TriggerTo(int amount, PCLOrbHelper... orbs)
-    {
+    public PCond_TriggerTo(int amount, PCLOrbHelper... orbs) {
         super(DATA, PCLCardTarget.None, amount);
         fields.setOrb(orbs);
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill)
-    {
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
+        return (!fields.orbs.isEmpty() || GameUtilities.getOrbCount() >= amount) && !EUIUtils.any(fields.orbs, o -> GameUtilities.getOrbCount(o.ID) < amount);
+    }
+
+    @Override
+    public String getSampleText(PSkill<?> callingSkill) {
         return TEXT.act_trigger(TEXT.subjects_x);
     }
 
     @Override
-    public String getSubText()
-    {
+    public String getSubText() {
         Object tt = fields.getOrbOrString();
-        if (isWhenClause())
-        {
+        if (isWhenClause()) {
             return TEXT.cond_wheneverYou(TEXT.act_trigger(tt));
         }
         return TEXT.act_trigger(amount <= 1 ? TEXT.subjects_yourFirst(tt) : TEXT.subjects_yourFirst(EUIRM.strings.numNoun(getAmountRawString(), tt)));
     }
 
     @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource)
-    {
-        return (!fields.orbs.isEmpty() || GameUtilities.getOrbCount() >= amount) && !EUIUtils.any(fields.orbs, o -> GameUtilities.getOrbCount(o.ID) < amount);
-    }
-
-    @Override
-    protected PCLAction<?> useImpl(PCLUseInfo info, ActionT0 onComplete, ActionT0 onFail)
-    {
+    protected PCLAction<?> useImpl(PCLUseInfo info, ActionT0 onComplete, ActionT0 onFail) {
         return getActions().triggerOrbPassive(1, amount, false).setFilter(fields.getOrbFilter());
     }
 }

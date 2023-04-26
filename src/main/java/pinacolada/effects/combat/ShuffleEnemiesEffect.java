@@ -8,8 +8,7 @@ import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RandomizedList;
 
-public class ShuffleEnemiesEffect extends AbstractGameEffect
-{
+public class ShuffleEnemiesEffect extends AbstractGameEffect {
     private AbstractMonster enemy1 = null;
     private AbstractMonster enemy2 = null;
 
@@ -18,19 +17,15 @@ public class ShuffleEnemiesEffect extends AbstractGameEffect
     private float drawX2;
     private float drawY2;
 
-    public ShuffleEnemiesEffect()
-    {
+    public ShuffleEnemiesEffect() {
         this.duration = 1f;
         this.isDone = false;
     }
 
-    public void update()
-    {
-        if (enemy1 == null)
-        {
+    public void update() {
+        if (enemy1 == null) {
             RandomizedList<AbstractMonster> enemies = new RandomizedList<>(GameUtilities.getEnemies(true));
-            if (enemies.size() > 1)
-            {
+            if (enemies.size() > 1) {
                 enemy1 = enemies.retrieve(AbstractDungeon.miscRng);
                 enemy2 = enemies.retrieve(AbstractDungeon.miscRng);
 
@@ -40,14 +35,12 @@ public class ShuffleEnemiesEffect extends AbstractGameEffect
                 drawX2 = enemy2.drawX;
                 drawY2 = enemy2.drawY;
 
-                if (Math.abs(drawY1 - drawY2) > 30)
-                {
+                if (Math.abs(drawY1 - drawY2) > 30) {
                     this.isDone = true;
                     return;
                 }
             }
-            else
-            {
+            else {
                 this.isDone = true;
             }
 
@@ -57,53 +50,45 @@ public class ShuffleEnemiesEffect extends AbstractGameEffect
         boolean targetReached = true;
         float delta = Gdx.graphics.getDeltaTime() * 500;
 
-        if (enemy1.drawY != drawY2)
-        {
+        if (enemy1.drawY != drawY2) {
             enemy1.drawY = translate(enemy1.drawY, drawY2, delta);
             targetReached = false;
         }
 
-        if (enemy1.drawX != drawX2)
-        {
+        if (enemy1.drawX != drawX2) {
             enemy1.drawX = translate(enemy1.drawX, drawX2, delta);
             targetReached = false;
         }
 
-        if (enemy2.drawY != drawY1)
-        {
+        if (enemy2.drawY != drawY1) {
             enemy2.drawY = translate(enemy2.drawY, drawY1, delta);
             targetReached = false;
         }
 
-        if (enemy2.drawX != drawX1)
-        {
+        if (enemy2.drawX != drawX1) {
             enemy2.drawX = translate(enemy2.drawX, drawX1, delta);
             targetReached = false;
         }
 
-        if (targetReached)
-        {
+        if (targetReached) {
             this.isDone = true;
         }
     }
 
-    public void render(SpriteBatch sb) { }
+    public void render(SpriteBatch sb) {
+    }
 
-    public void dispose()
-    {
+    public void dispose() {
 
     }
 
-    private float translate(float point1, float point2, float alpha)
-    {
-        if (point1 <= point2)
-        {
+    private float translate(float point1, float point2, float alpha) {
+        if (point1 <= point2) {
             float result = point1 + alpha;
 
             return Math.min(result, point2);
         }
-        else
-        {
+        else {
             float result = point1 - alpha;
 
             return Math.max(result, point2);

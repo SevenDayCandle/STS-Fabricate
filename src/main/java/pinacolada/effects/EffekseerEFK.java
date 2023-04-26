@@ -10,10 +10,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 // TODO add audio paths, define hit delays
-public class EffekseerEFK
-{
-    protected static final Map<String, EffekseerEFK> ALL = new HashMap<>();
-
+public class EffekseerEFK {
     public static final EffekseerEFK BLOW01 = new EffekseerEFK("effects/Blow01.efk");
     public static final EffekseerEFK BLOW02 = new EffekseerEFK("effects/Blow02.efk");
     public static final EffekseerEFK BLOW03 = new EffekseerEFK("effects/Blow03.efk");
@@ -119,40 +116,34 @@ public class EffekseerEFK
     public static final EffekseerEFK SWORD28 = new EffekseerEFK("effects/Sword28.efk");
     public static final EffekseerEFK WIND01 = new EffekseerEFK("effects/Wind01.efk");
     public static final EffekseerEFK WIND02 = new EffekseerEFK("effects/Wind02.efk");
-
+    protected static final Map<String, EffekseerEFK> ALL = new HashMap<>();
     public final String ID;
     public final String path;
 
-    public EffekseerEFK(String path)
-    {
+    public EffekseerEFK(String path) {
         this(makeID(path), path);
     }
 
-    public EffekseerEFK(String id, String path)
-    {
+    public EffekseerEFK(String id, String path) {
         this.path = path;
         this.ID = id;
         ALL.putIfAbsent(ID, this);
     }
 
-    public static EffekseerEFK get(String id)
-    {
+    private static String makeID(String path) {
+        String[] splitPath = path.split("/");
+        return splitPath[splitPath.length - 1].split("\\.")[0];
+    }
+
+    public static EffekseerEFK get(String id) {
         return ALL.get(id);
     }
 
-    public static void initialize()
-    {
+    public static void initialize() {
         STSEffekseerManager.register(EUIUtils.map(sortedValues(), v -> v.path));
     }
 
-    public static Collection<EffekseerEFK> sortedValues()
-    {
+    public static Collection<EffekseerEFK> sortedValues() {
         return ALL.values().stream().sorted((a, b) -> StringUtils.compare(a.ID, b.ID)).collect(Collectors.toList());
-    }
-
-    private static String makeID(String path)
-    {
-        String[] splitPath = path.split("/");
-        return splitPath[splitPath.length - 1].split("\\.")[0];
     }
 }

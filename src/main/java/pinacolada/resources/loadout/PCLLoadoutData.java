@@ -10,114 +10,98 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 // Copied and modified from STS-AnimatorMod
-public class PCLLoadoutData
-{
-    private static final TypeToken<HashMap<PCLBaseStatEditor.StatType, Integer>> TValue = new TypeToken<HashMap<PCLBaseStatEditor.StatType, Integer>>() {};
-    public static final TypeToken<TupleT2<String, Integer>> TTuple = new TypeToken<TupleT2<String, Integer>>(){};
-    public static final TypeToken<LoadoutInfo> TInfo = new TypeToken<LoadoutInfo>(){};
+public class PCLLoadoutData {
+    public static final TypeToken<TupleT2<String, Integer>> TTuple = new TypeToken<TupleT2<String, Integer>>() {
+    };
+    public static final TypeToken<LoadoutInfo> TInfo = new TypeToken<LoadoutInfo>() {
+    };
+    private static final TypeToken<HashMap<PCLBaseStatEditor.StatType, Integer>> TValue = new TypeToken<HashMap<PCLBaseStatEditor.StatType, Integer>>() {
+    };
     public final HashMap<PCLBaseStatEditor.StatType, Integer> values = new HashMap<>();
     public final ArrayList<PCLCardSlot> cardSlots = new ArrayList<>();
     public final ArrayList<PCLRelicSlot> relicSlots = new ArrayList<>();
     public int preset;
 
-    protected PCLLoadoutData()
-    {
+    protected PCLLoadoutData() {
     }
 
-    public PCLLoadoutData(PCLLoadout loadout)
-    {
+    public PCLLoadoutData(PCLLoadout loadout) {
         loadout.initializeData(this);
     }
 
-    public PCLLoadoutData(PCLLoadout loadout, LoadoutInfo info)
-    {
+    public PCLLoadoutData(PCLLoadout loadout, LoadoutInfo info) {
         loadout.initializeData(this);
         info.fill(this);
     }
 
-    public PCLCardSlot addCardSlot()
-    {
+    public PCLCardSlot addCardSlot() {
         return addCardSlot(0, PCLCardSlot.MAX_LIMIT);
     }
 
-    public PCLCardSlot addCardSlot(int min, int max)
-    {
+    public PCLCardSlot addCardSlot(int min, int max) {
         final PCLCardSlot slot = new PCLCardSlot(this, min, max);
         cardSlots.add(slot);
 
         return slot;
     }
 
-    public PCLRelicSlot addRelicSlot()
-    {
+    public PCLRelicSlot addRelicSlot() {
         final PCLRelicSlot slot = new PCLRelicSlot(this);
         relicSlots.add(slot);
 
         return slot;
     }
 
-    public int cardsSize()
-    {
+    public int cardsSize() {
         return cardSlots.size();
     }
 
-    public PCLCardSlot getCardSlot(int index)
-    {
+    public PCLCardSlot getCardSlot(int index) {
         return cardSlots.get(index);
     }
 
-    public PCLRelicSlot getRelicSlot(int index)
-    {
+    public PCLRelicSlot getRelicSlot(int index) {
         return relicSlots.get(index);
     }
 
-    public PCLLoadoutData makeCopy()
-    {
+    public PCLLoadoutData makeCopy() {
         return makeCopy(preset);
     }
 
-    public PCLLoadoutData makeCopy(int preset)
-    {
+    public PCLLoadoutData makeCopy(int preset) {
         final PCLLoadoutData copy = new PCLLoadoutData();
         copy.preset = preset;
         copy.values.putAll(values);
-        for (PCLCardSlot slot : cardSlots)
-        {
+        for (PCLCardSlot slot : cardSlots) {
             copy.cardSlots.add(slot.makeCopy(copy));
         }
-        for (PCLRelicSlot slot : relicSlots)
-        {
+        for (PCLRelicSlot slot : relicSlots) {
             copy.relicSlots.add(slot.makeCopy(copy));
         }
 
         return copy;
     }
 
-    public int relicsSize()
-    {
+    public int relicsSize() {
         return relicSlots.size();
     }
 
-    public PCLLoadoutValidation validate()
-    {
+    public PCLLoadoutValidation validate() {
         return PCLLoadoutValidation.createFrom(this);
     }
 
-    public static class LoadoutInfo implements Serializable
-    {
+    public static class LoadoutInfo implements Serializable {
         public String loadout;
         public int preset;
         public String values;
         public String[] relics;
         public LoadoutCardInfo[] cards;
 
-        public LoadoutInfo()
-        {
+        public LoadoutInfo() {
 
         }
 
-        public LoadoutInfo(String id, PCLLoadoutData data)
-        {
+        public LoadoutInfo(String id, PCLLoadoutData data) {
             loadout = id;
             preset = data.preset;
             values = EUIUtils.serialize(data.values);
@@ -125,34 +109,27 @@ public class PCLLoadoutData
             relics = EUIUtils.arrayMap(data.relicSlots, String.class, d -> d.selected != null ? d.selected.relic.relicId : null);
         }
 
-        public void fill(PCLLoadoutData data)
-        {
+        public void fill(PCLLoadoutData data) {
             data.preset = preset;
             data.values.putAll(EUIUtils.deserialize(values, TValue.getType()));
-            for (int i = 0; i < relics.length; i++)
-            {
+            for (int i = 0; i < relics.length; i++) {
                 data.getRelicSlot(i).select(relics[i]);
             }
-            for (int i = 0; i < cards.length; i++)
-            {
-                if (cards[i] != null)
-                {
+            for (int i = 0; i < cards.length; i++) {
+                if (cards[i] != null) {
                     data.getCardSlot(i).select(cards[i].id, cards[i].count);
                 }
-                else
-                {
+                else {
                     data.getCardSlot(i).select(null);
                 }
             }
         }
 
-        public static class LoadoutCardInfo implements Serializable
-        {
+        public static class LoadoutCardInfo implements Serializable {
             public String id;
             public Integer count;
 
-            public LoadoutCardInfo(String id, Integer count)
-            {
+            public LoadoutCardInfo(String id, Integer count) {
                 this.id = id;
                 this.count = count;
             }

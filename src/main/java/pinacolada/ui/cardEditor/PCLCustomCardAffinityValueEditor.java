@@ -20,8 +20,7 @@ import pinacolada.resources.PGR;
 
 import static pinacolada.cards.base.fields.PCLAffinity.MAX_LEVEL;
 
-public class PCLCustomCardAffinityValueEditor extends EUIHoverable
-{
+public class PCLCustomCardAffinityValueEditor extends EUIHoverable {
     protected static final float ICON_SIZE = 36f * Settings.scale;
 
     protected ActionT3<PCLAffinity, Integer, Integer> onUpdate;
@@ -36,8 +35,7 @@ public class PCLCustomCardAffinityValueEditor extends EUIHoverable
     protected EUIButton increaseButton2;
     protected EUIImage affinityImage;
 
-    public PCLCustomCardAffinityValueEditor(EUIHitbox hb, PCLAffinity affinity, ActionT3<PCLAffinity, Integer, Integer> onUpdate)
-    {
+    public PCLCustomCardAffinityValueEditor(EUIHitbox hb, PCLAffinity affinity, ActionT3<PCLAffinity, Integer, Integer> onUpdate) {
         super(hb);
         this.affinity = affinity;
         this.onUpdate = onUpdate;
@@ -84,71 +82,48 @@ public class PCLCustomCardAffinityValueEditor extends EUIHoverable
                 .setTooltip(affinity.getTooltip().title, PGR.core.strings.cetut_attrAffinity);
     }
 
-    public void decreasePrimary()
-    {
+    public void decreasePrimary() {
         setValue(value - 1, value2, true);
     }
 
-    public void decreaseSecondary()
-    {
+    public void decreaseSecondary() {
         setValue(value, value2 - 1, true);
     }
 
-    public int getValue()
-    {
-        return value;
-    }
-
-    public void increasePrimary()
-    {
+    public void increasePrimary() {
         setValue(value + 1, value2, true);
     }
 
-    public void increaseSecondary()
-    {
+    public void increaseSecondary() {
         setValue(value, value2 + 1, true);
     }
 
-    public PCLCustomCardAffinityValueEditor setSecondaryValue(int valueSecondary, boolean update)
-    {
-        return setValue(value, valueSecondary, update);
-    }
-
-    public PCLCustomCardAffinityValueEditor setValue(int value, boolean update)
-    {
+    public PCLCustomCardAffinityValueEditor setValue(int value, boolean update) {
         return setValue(value, value2, update);
     }
 
-    public PCLCustomCardAffinityValueEditor setValue(int value, int valueSecondary, boolean update)
-    {
+    public PCLCustomCardAffinityValueEditor setSecondaryValue(int valueSecondary, boolean update) {
+        return setValue(value, valueSecondary, update);
+    }
+
+    public PCLCustomCardAffinityValueEditor setValue(int value, int valueSecondary, boolean update) {
         this.value = MathUtils.clamp(value, 0, MAX_LEVEL);
         displayValue.setLabel(this.value);
         this.value2 = MathUtils.clamp(valueSecondary, -this.value, MAX_LEVEL - this.value);
         displayValue2.setLabel(this.value2);
-        if (update)
-        {
+        if (update) {
             onUpdate.invoke(affinity, this.value, this.value2);
         }
 
         return this;
     }
 
-    @Override
-    public void updateImpl()
-    {
-        super.updateImpl();
-        decreaseButton.setInteractable(value > 0).tryUpdate();
-        decreaseButton2.setInteractable(value + value2 > 0).tryUpdate();
-        increaseButton.setInteractable(value < MAX_LEVEL).tryUpdate();
-        increaseButton2.setInteractable(value + value2 < MAX_LEVEL).tryUpdate();
-        displayValue.tryUpdate();
-        displayValue2.tryUpdate();
-        affinityImage.tryUpdate();
+    public int getValue() {
+        return value;
     }
 
     @Override
-    public void renderImpl(SpriteBatch sb)
-    {
+    public void renderImpl(SpriteBatch sb) {
         this.hb.render(sb);
         decreaseButton2.tryRender(sb);
         increaseButton2.tryRender(sb);
@@ -157,5 +132,17 @@ public class PCLCustomCardAffinityValueEditor extends EUIHoverable
         displayValue2.tryRender(sb);
         displayValue.tryRender(sb);
         affinityImage.tryRender(sb);
+    }
+
+    @Override
+    public void updateImpl() {
+        super.updateImpl();
+        decreaseButton.setInteractable(value > 0).tryUpdate();
+        decreaseButton2.setInteractable(value + value2 > 0).tryUpdate();
+        increaseButton.setInteractable(value < MAX_LEVEL).tryUpdate();
+        increaseButton2.setInteractable(value + value2 < MAX_LEVEL).tryUpdate();
+        displayValue.tryUpdate();
+        displayValue2.tryUpdate();
+        affinityImage.tryUpdate();
     }
 }

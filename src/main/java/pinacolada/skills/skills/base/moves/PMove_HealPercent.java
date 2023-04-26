@@ -12,67 +12,55 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
 
 @VisibleSkill
-public class PMove_HealPercent extends PMove<PField_Empty>
-{
+public class PMove_HealPercent extends PMove<PField_Empty> {
     public static final PSkillData<PField_Empty> DATA = register(PMove_HealPercent.class, PField_Empty.class);
 
-    public PMove_HealPercent()
-    {
+    public PMove_HealPercent() {
         this(1);
     }
 
-    public PMove_HealPercent(PSkillSaveData content)
-    {
-        super(DATA, content);
-    }
-
-    public PMove_HealPercent(int amount)
-    {
+    public PMove_HealPercent(int amount) {
         super(DATA, PCLCardTarget.Self, amount);
     }
 
-    public PMove_HealPercent(PCLCardTarget target, int amount)
-    {
+    public PMove_HealPercent(PSkillSaveData content) {
+        super(DATA, content);
+    }
+
+    public PMove_HealPercent(PCLCardTarget target, int amount) {
         super(DATA, target, amount);
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill)
-    {
+    public String getSampleText(PSkill<?> callingSkill) {
         return TEXT.act_heal(TEXT.subjects_x + "%");
     }
 
     @Override
-    public void use(PCLUseInfo info)
-    {
-        for (AbstractCreature t : getTargetList(info))
-        {
-            int heal = MathUtils.ceil(t.maxHealth * amount / 100f);
-            getActions().heal(info.source, t, heal);
-        }
-        super.use(info);
-    }
-
-    @Override
-    public String getSubText()
-    {
+    public String getSubText() {
         String percentLoss = getAmountRawString() + "%";
-        if (isSelfOnlyTarget())
-        {
+        if (isSelfOnlyTarget()) {
             return TEXT.act_heal(percentLoss);
         }
         return TEXT.act_healOn(percentLoss, getTargetString());
     }
 
     @Override
-    public boolean isDetrimental()
-    {
+    public boolean isDetrimental() {
         return target.targetsEnemies();
     }
 
     @Override
-    public boolean isMetascaling()
-    {
+    public boolean isMetascaling() {
         return !isDetrimental();
+    }
+
+    @Override
+    public void use(PCLUseInfo info) {
+        for (AbstractCreature t : getTargetList(info)) {
+            int heal = MathUtils.ceil(t.maxHealth * amount / 100f);
+            getActions().heal(info.source, t, heal);
+        }
+        super.use(info);
     }
 }

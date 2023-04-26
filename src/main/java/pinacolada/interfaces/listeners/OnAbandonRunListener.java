@@ -1,6 +1,5 @@
 package pinacolada.interfaces.listeners;
 
-public interface OnAbandonRunListener
-{
+public interface OnAbandonRunListener {
     void onAbandonRun();
 }

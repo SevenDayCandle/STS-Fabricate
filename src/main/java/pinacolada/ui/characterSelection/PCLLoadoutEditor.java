@@ -31,8 +31,7 @@ import pinacolada.utilities.GameUtilities;
 import java.util.ArrayList;
 
 // Copied and modified from STS-AnimatorMod
-public class PCLLoadoutEditor extends AbstractMenuScreen
-{
+public class PCLLoadoutEditor extends AbstractMenuScreen {
     public static final int MAX_CARD_SLOTS = 6;
     public static final int MAX_RELIC_SLOTS = 2;
     protected final static PCLLoadoutValidation val = new PCLLoadoutValidation();
@@ -64,8 +63,7 @@ public class PCLLoadoutEditor extends AbstractMenuScreen
     protected EUITextBox hindrancevalueText;
     protected int rightClickedSlot;
 
-    public PCLLoadoutEditor()
-    {
+    public PCLLoadoutEditor() {
         final float buttonHeight = screenH(0.07f);
         final float labelHeight = screenH(0.04f);
         final float buttonWidth = screenW(0.18f);
@@ -101,8 +99,7 @@ public class PCLLoadoutEditor extends AbstractMenuScreen
                 .setOnClick(this::openSeriesSelect);
 
         presetButtons = new EUIButton[PCLLoadout.MAX_PRESETS];
-        for (int i = 0; i < presetButtons.length; i++)
-        {
+        for (int i = 0; i < presetButtons.length; i++) {
             //noinspection SuspiciousNameCombination
             presetButtons[i] = new EUIButton(EUIRM.images.squaredButton.texture(), new EUIHitbox(0, 0, buttonHeight, buttonHeight))
                     .setPosition(screenW(0.45f) + ((i - 1f) * buttonHeight), screenH(1f) - (buttonHeight * 0.85f))
@@ -155,62 +152,161 @@ public class PCLLoadoutEditor extends AbstractMenuScreen
                 .setFont(FontHelper.tipHeaderFont, 1)
                 .setTooltip(new EUITooltip("", EUIUtils.format(PGR.core.strings.csel_hindranceDescription, PCLLoadoutValidation.HINDRANCE_MULTIPLIER)));
 
-        for (int i = 0; i < MAX_CARD_SLOTS; i++)
-        {
+        for (int i = 0; i < MAX_CARD_SLOTS; i++) {
             slotsEditors.add(new PCLCardSlotEditor(this, screenW(0.1f), screenH(0.75f - (i * 0.05f))));
         }
 
-        for (int i = 0; i < MAX_RELIC_SLOTS; i++)
-        {
+        for (int i = 0; i < MAX_RELIC_SLOTS; i++) {
             relicsEditors.add(new PCLRelicSlotEditor(this, screenW(0.1f), screenH(0.35f - (i * 0.05f))));
         }
 
         final PCLBaseStatEditor.StatType[] statTypes = PCLBaseStatEditor.StatType.values();
-        for (int i = 0; i < statTypes.length; i++)
-        {
+        for (int i = 0; i < statTypes.length; i++) {
             baseStatEditors.add(new PCLBaseStatEditor(statTypes[i], screenW(0.6f), screenH(0.78f - i * 0.1f), this));
         }
 
         contextMenu = new EUIContextMenu<ContextOption>(new EUIHitbox(0, 0, 0, 0), o -> o.name)
                 .setOnChange(options -> {
-                    for (ContextOption o : options)
-                    {
+                    for (ContextOption o : options) {
                         o.onSelect.invoke(this, rightClickedSlot);
                     }
                 })
                 .setCanAutosizeButton(true);
     }
 
-    public void changePreset(int preset)
-    {
+    private void openSeriesSelect() {
+        if (characterOption != null && data != null) {
+            PGR.seriesSelection.open(characterOption, data, this.onClose);
+        }
+    }
+
+    public void changePreset(int preset) {
         this.preset = preset;
         setSlotsActive(true);
     }
 
-    public void clear()
-    {
+    public void rightClickPreset(int preset) {
+        rightClickedSlot = preset;
+        if (rightClickedSlot != this.preset) {
+            ArrayList<ContextOption> list = new ArrayList<>();
+            list.add(ContextOption.CopyFrom);
+            list.add(ContextOption.CopyTo);
+
+            contextMenu.setPosition(InputHelper.mX, InputHelper.mY);
+            contextMenu.setItems(list);
+            contextMenu.openOrCloseMenu();
+        }
+
+    }
+
+    public void save() {
+        for (int i = 0, presetsLength = presets.length; i < presetsLength; i++) {
+            loadout.presets[i] = presets[i];
+        }
+
+        loadout.preset = preset;
+        data.saveLoadouts();
+        AbstractDungeon.closeCurrentScreen();
+    }
+
+    public void clear() {
         PCLLoadoutData defaultData = loadout.getDefaultData(preset);
         presets[preset] = defaultData;
         setSlotsActive(true);
     }
 
+    public void toggleViewUpgrades(boolean value) {
+        SingleCardViewPopup.isViewingUpgrade = value;
+    }
+
+    public void setSlotsActive(boolean active) {
+        if (active) {
+            final PCLLoadoutData data = presets[preset];
+            for (int i = 0; i < slotsEditors.size(); i++) {
+                final PCLCardSlotEditor editor = slotsEditors.get(i);
+                editor.setActive(data.cardsSize() > i);
+                editor.setSlot(editor.isActive ? data.getCardSlot(i) : null);
+            }
+            for (int i = 0; i < relicsEditors.size(); i++) {
+                final PCLRelicSlotEditor reditor = relicsEditors.get(i);
+                reditor.setActive(data.relicsSize() > i);
+                reditor.setSlot(reditor.isActive ? data.getRelicSlot(i) : null);
+            }
+            for (PCLBaseStatEditor beditor : baseStatEditors) {
+                beditor.setLoadout(loadout, data);
+            }
+            val.refresh(presets[preset]);
+        }
+        else {
+            for (PCLCardSlotEditor editor : slotsEditors) {
+                editor.setActive(false);
+            }
+        }
+    }
+
     @Override
-    public void dispose()
-    {
+    public void dispose() {
         super.dispose();
 
         PCLCard.canCropPortraits = true;
         toggleViewUpgrades(false);
 
-        if (onClose != null)
-        {
+        if (onClose != null) {
             onClose.invoke();
         }
     }
 
     @Override
-    public void updateImpl()
-    {
+    public void renderImpl(SpriteBatch sb) {
+        super.renderImpl(sb);
+
+        PGR.blackScreen.renderImpl(sb);
+
+        if (relicSelectionEffect != null) {
+            relicSelectionEffect.render(sb);
+        }
+        else if (cardSelectionEffect != null) {
+            cardSelectionEffect.render(sb);
+        }
+        else {
+            seriesButton.tryRender(sb);
+
+            for (EUIButton button : presetButtons) {
+                button.tryRender(sb);
+            }
+
+            startingDeck.renderImpl(sb);
+            deckText.renderImpl(sb);
+            relicText.renderImpl(sb);
+            attributesText.renderImpl(sb);
+
+            // All editors must be rendered from top to bottom to prevent dropdowns from overlapping
+            for (int i = baseStatEditors.size() - 1; i >= 0; i--) {
+                baseStatEditors.get(i).tryRender(sb);
+            }
+
+            cancelButton.renderImpl(sb);
+            clearButton.renderImpl(sb);
+            saveButton.renderImpl(sb);
+            upgradeToggle.renderImpl(sb);
+            hindrancevalueText.tryRender(sb);
+            cardscountText.tryRender(sb);
+            cardsvalueText.tryRender(sb);
+
+            for (int i = relicsEditors.size() - 1; i >= 0; i--) {
+                relicsEditors.get(i).tryRender(sb);
+            }
+
+            for (int i = slotsEditors.size() - 1; i >= 0; i--) {
+                slotsEditors.get(i).tryRender(sb);
+            }
+        }
+
+        contextMenu.tryRender(sb);
+    }
+
+    @Override
+    public void updateImpl() {
         super.updateImpl();
 
         val.refresh(presets[preset]);
@@ -221,34 +317,27 @@ public class PCLLoadoutEditor extends AbstractMenuScreen
         attributesText.updateImpl();
         upgradeToggle.setToggle(SingleCardViewPopup.isViewingUpgrade).updateImpl();
 
-        if (cardSelectionEffect != null)
-        {
+        if (cardSelectionEffect != null) {
             cardSelectionEffect.update();
 
-            if (cardSelectionEffect.isDone)
-            {
+            if (cardSelectionEffect.isDone) {
                 cardSelectionEffect = null;
                 setSlotsActive(true);
             }
         }
-        else if (relicSelectionEffect != null)
-        {
+        else if (relicSelectionEffect != null) {
             relicSelectionEffect.update();
 
-            if (relicSelectionEffect.isDone)
-            {
+            if (relicSelectionEffect.isDone) {
                 relicSelectionEffect = null;
                 setSlotsActive(true);
             }
         }
-        else
-        {
+        else {
             seriesButton.tryUpdate();
 
-            if (!EUI.doesActiveElementExist())
-            {
-                for (int i = 0; i < presetButtons.length; i++)
-                {
+            if (!EUI.doesActiveElementExist()) {
+                for (int i = 0; i < presetButtons.length; i++) {
                     final EUIButton button = presetButtons[i];
                     button
                             .showTooltip(!button.interactable)
@@ -257,10 +346,8 @@ public class PCLLoadoutEditor extends AbstractMenuScreen
                 }
             }
 
-            for (PCLBaseStatEditor beditor : baseStatEditors)
-            {
-                if (activeEditor == null || activeEditor == beditor)
-                {
+            for (PCLBaseStatEditor beditor : baseStatEditors) {
+                if (activeEditor == null || activeEditor == beditor) {
                     beditor.setEstimatedValue(val.values.getOrDefault(beditor.type, 0)).tryUpdate();
                 }
             }
@@ -269,12 +356,10 @@ public class PCLLoadoutEditor extends AbstractMenuScreen
             clearButton.updateImpl();
             saveButton.updateImpl();
 
-            for (PCLCardSlotEditor editor : slotsEditors)
-            {
+            for (PCLCardSlotEditor editor : slotsEditors) {
                 editor.tryUpdate();
             }
-            for (PCLRelicSlotEditor editor : relicsEditors)
-            {
+            for (PCLRelicSlotEditor editor : relicsEditors) {
                 editor.tryUpdate();
             }
         }
@@ -288,82 +373,20 @@ public class PCLLoadoutEditor extends AbstractMenuScreen
         contextMenu.tryUpdate();
     }
 
-    @Override
-    public void renderImpl(SpriteBatch sb)
-    {
-        super.renderImpl(sb);
-
-        PGR.blackScreen.renderImpl(sb);
-
-        if (relicSelectionEffect != null)
-        {
-            relicSelectionEffect.render(sb);
-        }
-        else if (cardSelectionEffect != null)
-        {
-            cardSelectionEffect.render(sb);
-        }
-        else
-        {
-            seriesButton.tryRender(sb);
-
-            for (EUIButton button : presetButtons)
-            {
-                button.tryRender(sb);
-            }
-
-            startingDeck.renderImpl(sb);
-            deckText.renderImpl(sb);
-            relicText.renderImpl(sb);
-            attributesText.renderImpl(sb);
-
-            // All editors must be rendered from top to bottom to prevent dropdowns from overlapping
-            for (int i = baseStatEditors.size() - 1; i >= 0; i--)
-            {
-                baseStatEditors.get(i).tryRender(sb);
-            }
-
-            cancelButton.renderImpl(sb);
-            clearButton.renderImpl(sb);
-            saveButton.renderImpl(sb);
-            upgradeToggle.renderImpl(sb);
-            hindrancevalueText.tryRender(sb);
-            cardscountText.tryRender(sb);
-            cardsvalueText.tryRender(sb);
-
-            for (int i = relicsEditors.size() - 1; i >= 0; i--)
-            {
-                relicsEditors.get(i).tryRender(sb);
-            }
-
-            for (int i = slotsEditors.size() - 1; i >= 0; i--)
-            {
-                slotsEditors.get(i).tryRender(sb);
-            }
-        }
-
-        contextMenu.tryRender(sb);
-    }
-
-    public void open(PCLLoadout loadout, PCLAbstractPlayerData data, CharacterOption option, ActionT0 onClose)
-    {
+    public void open(PCLLoadout loadout, PCLAbstractPlayerData data, CharacterOption option, ActionT0 onClose) {
         super.open();
 
-        for (int i = 0; i < loadout.presets.length; i++)
-        {
+        for (int i = 0; i < loadout.presets.length; i++) {
             presets[i] = loadout.getPreset(i).makeCopy();
         }
 
-        for (PCLBaseStatEditor beditor : baseStatEditors)
-        {
+        for (PCLBaseStatEditor beditor : baseStatEditors) {
             final boolean available = GameUtilities.getMaxAscensionLevel(option.c) >= beditor.type.unlockLevel;
             // TODO show locked message for base stat editors that are not unlocked
             beditor.setActive(available);
             beditor.setInteractable(available);
-            if (!available)
-            {
-                for (int i = 0; i < loadout.presets.length; i++)
-                {
+            if (!available) {
+                for (int i = 0; i < loadout.presets.length; i++) {
                     presets[i].values.put(beditor.type, 0);
                 }
             }
@@ -381,98 +404,21 @@ public class PCLLoadoutEditor extends AbstractMenuScreen
         changePreset(loadout.preset);
     }
 
-    private void openSeriesSelect()
-    {
-        if (characterOption != null && data != null)
-        {
-            PGR.seriesSelection.open(characterOption, data, this.onClose);
-        }
-    }
-
-    public void repositionSlotEditor(PCLCardSlotEditor cardSlotEditor, int index)
-    {
+    public void repositionSlotEditor(PCLCardSlotEditor cardSlotEditor, int index) {
         cardSlotEditor.translate(screenW(0.1f), screenH(0.75f - (index * 0.05f)));
     }
 
-    public void rightClickPreset(int preset)
-    {
-        rightClickedSlot = preset;
-        if (rightClickedSlot != this.preset)
-        {
-            ArrayList<ContextOption> list = new ArrayList<>();
-            list.add(ContextOption.CopyFrom);
-            list.add(ContextOption.CopyTo);
-
-            contextMenu.setPosition(InputHelper.mX, InputHelper.mY);
-            contextMenu.setItems(list);
-            contextMenu.openOrCloseMenu();
-        }
-
-    }
-
-    public void save()
-    {
-        for (int i = 0, presetsLength = presets.length; i < presetsLength; i++)
-        {
-            loadout.presets[i] = presets[i];
-        }
-
-        loadout.preset = preset;
-        data.saveLoadouts();
-        AbstractDungeon.closeCurrentScreen();
-    }
-
-    public void setSlotsActive(boolean active)
-    {
-        if (active)
-        {
-            final PCLLoadoutData data = presets[preset];
-            for (int i = 0; i < slotsEditors.size(); i++)
-            {
-                final PCLCardSlotEditor editor = slotsEditors.get(i);
-                editor.setActive(data.cardsSize() > i);
-                editor.setSlot(editor.isActive ? data.getCardSlot(i) : null);
-            }
-            for (int i = 0; i < relicsEditors.size(); i++)
-            {
-                final PCLRelicSlotEditor reditor = relicsEditors.get(i);
-                reditor.setActive(data.relicsSize() > i);
-                reditor.setSlot(reditor.isActive ? data.getRelicSlot(i) : null);
-            }
-            for (PCLBaseStatEditor beditor : baseStatEditors)
-            {
-                beditor.setLoadout(loadout, data);
-            }
-            val.refresh(presets[preset]);
-        }
-        else
-        {
-            for (PCLCardSlotEditor editor : slotsEditors)
-            {
-                editor.setActive(false);
-            }
-        }
-    }
-
-    public void toggleViewUpgrades(boolean value)
-    {
-        SingleCardViewPopup.isViewingUpgrade = value;
-    }
-
-    public void trySelectCard(PCLCardSlot cardSlot)
-    {
+    public void trySelectCard(PCLCardSlot cardSlot) {
         cardSelectionEffect = new PCLCardSlotSelectionEffect(cardSlot);
         setSlotsActive(false);
     }
 
-    public void trySelectRelic(PCLRelicSlot relicSlot)
-    {
+    public void trySelectRelic(PCLRelicSlot relicSlot) {
         relicSelectionEffect = new PCLRelicSlotSelectionEffect(relicSlot);
         setSlotsActive(false);
     }
 
-    public enum ContextOption
-    {
+    public enum ContextOption {
         CopyTo(PGR.core.strings.csel_copyTo, (screen, index) -> {
             screen.presets[index] = screen.presets[screen.preset];
             screen.changePreset(index);
@@ -485,8 +431,7 @@ public class PCLLoadoutEditor extends AbstractMenuScreen
         public final String name;
         public final ActionT2<PCLLoadoutEditor, Integer> onSelect;
 
-        ContextOption(String name, ActionT2<PCLLoadoutEditor, Integer> onSelect)
-        {
+        ContextOption(String name, ActionT2<PCLLoadoutEditor, Integer> onSelect) {
             this.name = name;
             this.onSelect = onSelect;
         }

@@ -2,17 +2,14 @@ package pinacolada.skills.skills;
 
 import pinacolada.resources.PGR;
 
-public enum DelayTiming
-{
+public enum DelayTiming {
     EndOfTurnFirst,
     EndOfTurnLast,
     StartOfTurnFirst,
     StartOfTurnLast;
 
-    public String getTitle()
-    {
-        switch (this)
-        {
+    public String getTitle() {
+        switch (this) {
             case EndOfTurnFirst:
                 return PGR.core.strings.ctype_turnEndFirst;
             case EndOfTurnLast:
@@ -25,10 +22,8 @@ public enum DelayTiming
         return null;
     }
 
-    public boolean movesBeforePlayer()
-    {
-        switch (this)
-        {
+    public boolean movesBeforePlayer() {
+        switch (this) {
             case StartOfTurnFirst:
             case StartOfTurnLast:
                 return true;

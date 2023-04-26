@@ -18,36 +18,30 @@ import pinacolada.utilities.ListSelection;
 
 
 @VisibleSkill
-public class PMod_ExhaustPerCard extends PMod_Do
-{
+public class PMod_ExhaustPerCard extends PMod_Do {
     public static final PSkillData<PField_CardCategory> DATA = register(PMod_ExhaustPerCard.class, PField_CardCategory.class)
             .selfTarget()
             .setGroups(PCLCardGroupHelper.DrawPile, PCLCardGroupHelper.DiscardPile, PCLCardGroupHelper.Hand);
 
-    public PMod_ExhaustPerCard(PSkillSaveData content)
-    {
+    public PMod_ExhaustPerCard(PSkillSaveData content) {
         super(DATA, content);
     }
 
-    public PMod_ExhaustPerCard()
-    {
+    public PMod_ExhaustPerCard() {
         super(DATA);
     }
 
-    public PMod_ExhaustPerCard(int amount, PCLCardGroupHelper... groups)
-    {
+    public PMod_ExhaustPerCard(int amount, PCLCardGroupHelper... groups) {
         super(DATA, PCLCardTarget.None, amount, groups);
     }
 
     @Override
-    public EUITooltip getActionTooltip()
-    {
+    public EUITooltip getActionTooltip() {
         return PGR.core.tooltips.exhaust;
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction()
-    {
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
         return ExhaustFromPile::new;
     }
 }

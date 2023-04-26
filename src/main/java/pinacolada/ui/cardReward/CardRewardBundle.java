@@ -12,8 +12,7 @@ import extendedui.interfaces.delegates.ActionT1;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.utilities.PCLRenderHelpers;
 
-public class CardRewardBundle
-{
+public class CardRewardBundle {
     public final AbstractCard card;
     public final ActionT1<CardRewardBundle> onSelect;
     public float textOffsetX;
@@ -28,28 +27,23 @@ public class CardRewardBundle
     public Hitbox tooltipHB;
     public int amount;
 
-    public CardRewardBundle(AbstractCard card, ActionT1<CardRewardBundle> onSelect)
-    {
+    public CardRewardBundle(AbstractCard card, ActionT1<CardRewardBundle> onSelect) {
         this.card = card;
         this.onSelect = onSelect;
         this.tooltipHB = new Hitbox(0, 0, AbstractCard.RAW_W, AbstractCard.RAW_H);
     }
 
-    public void acquired()
-    {
-        if (onSelect != null)
-        {
+    public void acquired() {
+        if (onSelect != null) {
             onSelect.invoke(this);
         }
     }
 
-    public void open()
-    {
+    public void open() {
 
     }
 
-    public void render(SpriteBatch sb)
-    {
+    public void render(SpriteBatch sb) {
         BitmapFont font = EUIFontHelper.buttonFont;
         font.getData().setScale(card.drawScale * 0.8f);
         PCLRenderHelpers.drawOnCardAuto(sb, card, icon, iconOffsetX, iconOffsetY, icon.getWidth(), icon.getHeight());
@@ -58,15 +52,13 @@ public class CardRewardBundle
         tooltipHB.render(sb);
     }
 
-    public CardRewardBundle setAmount(int amount)
-    {
+    public CardRewardBundle setAmount(int amount) {
         this.amount = amount;
 
         return this;
     }
 
-    public CardRewardBundle setIcon(Texture icon, float iconOffsetX, float iconOffsetY)
-    {
+    public CardRewardBundle setIcon(Texture icon, float iconOffsetX, float iconOffsetY) {
         this.icon = icon;
         this.iconOffsetX = iconOffsetX;
         this.iconOffsetY = iconOffsetY;
@@ -74,8 +66,7 @@ public class CardRewardBundle
         return this;
     }
 
-    public CardRewardBundle setText(String text, Color textColor, float textOffsetX, float textOffsetY)
-    {
+    public CardRewardBundle setText(String text, Color textColor, float textOffsetX, float textOffsetY) {
         this.title = text;
         this.textColor = textColor.cpy();
         this.textOffsetX = textOffsetX;
@@ -84,24 +75,20 @@ public class CardRewardBundle
         return this;
     }
 
-    public CardRewardBundle setTooltip(String header, String body)
-    {
+    public CardRewardBundle setTooltip(String header, String body) {
         this.tooltipHeader = header;
         this.tooltipBody = body;
 
         return this;
     }
 
-    public void update()
-    {
-        if (tooltipBody != null)
-        {
+    public void update() {
+        if (tooltipBody != null) {
             tooltipHB.resize(card.drawScale * AbstractCard.IMG_WIDTH, card.drawScale * AbstractCard.IMG_HEIGHT * 0.15f);
             tooltipHB.move(card.current_x, card.current_y + (textOffsetY * card.drawScale * Settings.scale));
             tooltipHB.update();
 
-            if (tooltipHB.hovered)
-            {
+            if (tooltipHB.hovered) {
                 TipHelper.renderGenericTip(tooltipHB.x + tooltipHB.width * 0.7f, tooltipHB.cY, tooltipHeader, tooltipBody);
             }
         }

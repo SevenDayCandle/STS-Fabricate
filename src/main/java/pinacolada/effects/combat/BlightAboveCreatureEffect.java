@@ -11,24 +11,27 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 
-public class BlightAboveCreatureEffect extends AbstractGameEffect
-{
-    private final AbstractBlight blight;
-
+public class BlightAboveCreatureEffect extends AbstractGameEffect {
     private static final float DUR = 1f;
     private static final float TEXT_DURATION = 1.5f;
     private static final float STARTING_OFFSET_Y;
     private static final float TARGET_OFFSET_Y;
     private static final float LERP_RATE = 5f;
     private static final int W = 128;
+
+    static {
+        STARTING_OFFSET_Y = 0f * Settings.scale;
+        TARGET_OFFSET_Y = 60f * Settings.scale;
+    }
+
+    private final AbstractBlight blight;
     private final Color outlineColor = new Color(0f, 0f, 0f, 0f);
     private final Color shineColor = new Color(1f, 1f, 1f, 0f);
     private float offsetY;
-    private float x;
+    private final float x;
     private float y;
 
-    public BlightAboveCreatureEffect(float x, float y, AbstractBlight blight)
-    {
+    public BlightAboveCreatureEffect(float x, float y, AbstractBlight blight) {
         this.blight = blight;
         this.duration = 3f;
         this.startingDuration = 3f;
@@ -39,28 +42,23 @@ public class BlightAboveCreatureEffect extends AbstractGameEffect
         this.scale = Settings.scale;
     }
 
-    public void update()
-    {
-        if (this.duration > 1f)
-        {
+    public void update() {
+        if (this.duration > 1f) {
             this.color.a = Interpolation.exp5In.apply(1f, 0f, (this.duration - 1f) * 2f);
         }
 
         super.update();
-        if (AbstractDungeon.player.chosenClass == AbstractPlayer.PlayerClass.DEFECT)
-        {
+        if (AbstractDungeon.player.chosenClass == AbstractPlayer.PlayerClass.DEFECT) {
             this.offsetY = MathUtils.lerp(this.offsetY, TARGET_OFFSET_Y + 80f * Settings.scale, Gdx.graphics.getDeltaTime() * 5f);
         }
-        else
-        {
+        else {
             this.offsetY = MathUtils.lerp(this.offsetY, TARGET_OFFSET_Y, Gdx.graphics.getDeltaTime() * 5f);
         }
 
         this.y += Gdx.graphics.getDeltaTime() * 12f * Settings.scale;
     }
 
-    public void render(SpriteBatch sb)
-    {
+    public void render(SpriteBatch sb) {
         this.outlineColor.a = this.color.a / 2f;
         sb.setColor(this.outlineColor);
         sb.draw(blight.outlineImg, this.x - 64f, this.y - 64f + this.offsetY, 64f, 64f, 128f, 128f, this.scale * (2.5f - this.duration), this.scale * (2.5f - this.duration), this.rotation, 0, 0, 128, 128, false, false);
@@ -74,13 +72,6 @@ public class BlightAboveCreatureEffect extends AbstractGameEffect
         sb.setBlendFunction(770, 771);
     }
 
-    public void dispose()
-    {
-    }
-
-    static
-    {
-        STARTING_OFFSET_Y = 0f * Settings.scale;
-        TARGET_OFFSET_Y = 60f * Settings.scale;
+    public void dispose() {
     }
 }

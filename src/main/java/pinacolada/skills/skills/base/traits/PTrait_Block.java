@@ -9,57 +9,47 @@ import pinacolada.skills.fields.PField_Empty;
 import pinacolada.skills.skills.PBlockTrait;
 
 @VisibleSkill
-public class PTrait_Block extends PBlockTrait<PField_Empty>
-{
+public class PTrait_Block extends PBlockTrait<PField_Empty> {
 
     public static final PSkillData<PField_Empty> DATA = register(PTrait_Block.class, PField_Empty.class);
 
-    public PTrait_Block()
-    {
+    public PTrait_Block() {
         this(1);
     }
 
-    public PTrait_Block(PSkillSaveData content)
-    {
-        super(DATA, content);
-    }
-
-    public PTrait_Block(int amount)
-    {
+    public PTrait_Block(int amount) {
         super(DATA, amount);
     }
 
+    public PTrait_Block(PSkillSaveData content) {
+        super(DATA, content);
+    }
+
     @Override
-    public String getSubDescText()
-    {
+    public String getSubText() {
+        if (PGR.config.expandAbbreviatedEffects.get()) {
+            return TEXT.act_gainAmount(getAmountRawString(), getSubDescText());
+        }
+        return super.getSubText();
+    }
+
+    @Override
+    public String getSubDescText() {
         return PGR.core.tooltips.block.getTitleOrIcon();
     }
 
     @Override
-    public String getSubSampleText()
-    {
+    public String getSubSampleText() {
         return PGR.core.tooltips.block.title;
     }
 
     @Override
-    public float modifyBlock(PCLUseInfo info, float amount)
-    {
-        return amount + this.amount;
-    }
-
-    @Override
-    public boolean isDetrimental()
-    {
+    public boolean isDetrimental() {
         return amount < 0;
     }
 
     @Override
-    public String getSubText()
-    {
-        if (PGR.config.expandAbbreviatedEffects.get())
-        {
-            return TEXT.act_gainAmount(getAmountRawString(), getSubDescText());
-        }
-        return super.getSubText();
+    public float modifyBlock(PCLUseInfo info, float amount) {
+        return amount + this.amount;
     }
 }

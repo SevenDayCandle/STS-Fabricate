@@ -13,54 +13,44 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
 
 @VisibleSkill
-public class PMove_TriggerAlly extends PMove<PField_Empty>
-{
+public class PMove_TriggerAlly extends PMove<PField_Empty> {
     public static final PSkillData<PField_Empty> DATA = register(PMove_TriggerAlly.class, PField_Empty.class)
             .setTargets(PCLCardTarget.AllAlly, PCLCardTarget.RandomAlly, PCLCardTarget.SingleAlly)
             .pclOnly();
 
-    public PMove_TriggerAlly()
-    {
+    public PMove_TriggerAlly() {
         this(1);
     }
 
-    public PMove_TriggerAlly(PSkillSaveData content)
-    {
-        super(DATA, content);
-    }
-
-    public PMove_TriggerAlly(int amount)
-    {
+    public PMove_TriggerAlly(int amount) {
         super(DATA, PCLCardTarget.Self, amount);
     }
 
-    public PMove_TriggerAlly(PCLCardTarget target, int amount)
-    {
+    public PMove_TriggerAlly(PSkillSaveData content) {
+        super(DATA, content);
+    }
+
+    public PMove_TriggerAlly(PCLCardTarget target, int amount) {
         super(DATA, target, amount);
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill)
-    {
+    public String getSampleText(PSkill<?> callingSkill) {
         return TEXT.act_trigger(PGR.core.tooltips.summon.title);
     }
 
     @Override
-    public void use(PCLUseInfo info)
-    {
-        for (AbstractCreature t : getTargetList(info))
-        {
-            if (t instanceof PCLCardAlly)
-            {
+    public String getSubText() {
+        return amount == 1 ? TEXT.act_trigger(getTargetString()) : TEXT.act_triggerXTimes(getTargetString(), getAmountRawString());
+    }
+
+    @Override
+    public void use(PCLUseInfo info) {
+        for (AbstractCreature t : getTargetList(info)) {
+            if (t instanceof PCLCardAlly) {
                 getActions().triggerAlly((PCLCardAlly) t, amount);
             }
         }
         super.use(info);
-    }
-
-    @Override
-    public String getSubText()
-    {
-        return amount == 1 ? TEXT.act_trigger(getTargetString()) : TEXT.act_triggerXTimes(getTargetString(), getAmountRawString());
     }
 }

@@ -7,8 +7,7 @@ import pinacolada.resources.PGR;
 import java.util.Collections;
 import java.util.List;
 
-public enum PCLAttackType implements TooltipProvider
-{
+public enum PCLAttackType implements TooltipProvider {
     Normal(false, false, false, false),
     Brutal(false, false, false, false),
     Immaterial(false, true, false, true),
@@ -20,8 +19,7 @@ public enum PCLAttackType implements TooltipProvider
     public final boolean bypassFlight;
     public final boolean useFocus;
 
-    PCLAttackType(boolean bypassBlock, boolean bypassThorns, boolean bypassFlight, boolean useFocus)
-    {
+    PCLAttackType(boolean bypassBlock, boolean bypassThorns, boolean bypassFlight, boolean useFocus) {
         this.bypassThorns = bypassThorns;
         this.bypassBlock = bypassBlock;
         this.bypassFlight = bypassFlight;
@@ -29,10 +27,8 @@ public enum PCLAttackType implements TooltipProvider
     }
 
     // These strings cannot be put in as an enum variable because cards are initialized before these strings are
-    public final EUITooltip getTooltip()
-    {
-        switch (this)
-        {
+    public final EUITooltip getTooltip() {
+        switch (this) {
             case Brutal:
                 return PGR.core.tooltips.brutal;
             case Immaterial:
@@ -46,8 +42,7 @@ public enum PCLAttackType implements TooltipProvider
     }
 
     @Override
-    public List<EUITooltip> getTips()
-    {
+    public List<EUITooltip> getTips() {
         return Collections.singletonList(getTooltip());
     }
 }

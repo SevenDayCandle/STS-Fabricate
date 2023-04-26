@@ -17,36 +17,30 @@ import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.utilities.ListSelection;
 
 @VisibleSkill
-public class PCond_ScryBranch extends PCond_DoBranch
-{
+public class PCond_ScryBranch extends PCond_DoBranch {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_ScryBranch.class, PField_CardCategory.class)
             .selfTarget()
             .setGroups(PCLCardGroupHelper.DrawPile);
 
-    public PCond_ScryBranch(PSkillSaveData content)
-    {
+    public PCond_ScryBranch(PSkillSaveData content) {
         super(DATA, content);
     }
 
-    public PCond_ScryBranch()
-    {
+    public PCond_ScryBranch() {
         super(DATA);
     }
 
-    public PCond_ScryBranch(int amount)
-    {
+    public PCond_ScryBranch(int amount) {
         super(DATA, PCLCardTarget.None, amount);
     }
 
     @Override
-    public EUITooltip getActionTooltip()
-    {
+    public EUITooltip getActionTooltip() {
         return PGR.core.tooltips.scry;
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction()
-    {
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
         return (s, c, i, o, g) -> new ScryCards(s, i);
     }
 }

@@ -19,8 +19,7 @@ import pinacolada.cards.base.fields.PCLCardTagInfo;
 
 import static pinacolada.ui.cardEditor.PCLCustomCardAttributesPage.MENU_HEIGHT;
 
-public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo>
-{
+public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo> {
     public static final float ICON_SIZE = 22f * Settings.scale;
 
     protected int form;
@@ -31,8 +30,7 @@ public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo>
     protected EUIButton increaseButton;
     protected EUIButton increaseButton2;
 
-    public PCLCustomCardTagEditorRow(EUIDropdown<PCLCardTagInfo> dr, EUIHitbox hb, PCLCardTagInfo item, int index)
-    {
+    public PCLCustomCardTagEditorRow(EUIDropdown<PCLCardTagInfo> dr, EUIHitbox hb, PCLCardTagInfo item, int index) {
         super(dr, hb, item, index);
 
         // Tag limits are copied from the extra limits for PSkills
@@ -82,134 +80,52 @@ public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo>
         forceRefresh();
     }
 
-    public void forceRefresh()
-    {
+    public PCLCustomCardTagEditorRow setPrimary(int value, boolean update) {
+        displayValue.forceSetValue(value, false);
+        if (update) {
+            item.set(form, displayValue.getCachedValue());
+            dr.updateForSelection(true);
+        }
+        return this;
+    }
+
+    public PCLCustomCardTagEditorRow setSecondary(int value2, boolean update) {
+        displayValue2.forceSetValue(value2, false);
+        if (update) {
+            item.setUpgrade(form, displayValue2.getCachedValue());
+            dr.updateForSelection(true);
+        }
+        return this;
+    }
+
+    public void decreasePrimary() {
+        setPrimary(displayValue.getCachedValue() - 1, true);
+    }
+
+    public void decreaseSecondary() {
+        setSecondary(displayValue2.getCachedValue() - 1, true);
+    }
+
+    public void increasePrimary() {
+        setPrimary(displayValue.getCachedValue() + 1, true);
+    }
+
+    public void increaseSecondary() {
+        setSecondary(displayValue2.getCachedValue() + 1, true);
+    }
+
+    public void forceRefresh() {
         displayValue.forceSetValue(item.get(0), false);
         displayValue2.forceSetValue(item.getUpgrade(0), false);
     }
 
-    public void decreasePrimary()
-    {
-        setPrimary(displayValue.getCachedValue() - 1, true);
-    }
-
-    public void decreaseSecondary()
-    {
-        setSecondary( displayValue2.getCachedValue() - 1, true);
-    }
-
-    public int getValue()
-    {
+    public int getValue() {
         return displayValue.getCachedValue();
     }
 
-    public void increasePrimary()
-    {
-        setPrimary(displayValue.getCachedValue() + 1, true);
-    }
-
-    public void increaseSecondary()
-    {
-        setSecondary(displayValue2.getCachedValue() + 1, true);
-    }
-
-    public PCLCustomCardTagEditorRow setPrimary(int value, boolean update)
-    {
-        displayValue.forceSetValue(value, false);
-        if (update)
-        {
-            item.set(form, displayValue.getCachedValue());
-            dr.updateForSelection(true);
-        }
-        return this;
-    }
-
-    public PCLCustomCardTagEditorRow setSecondary(int value2, boolean update)
-    {
-        displayValue2.forceSetValue(value2, false);
-        if (update)
-        {
-            item.setUpgrade(form, displayValue2.getCachedValue());
-            dr.updateForSelection(true);
-        }
-        return this;
-    }
-
-    public PCLCustomCardTagEditorRow setValue(int value, int valueSecondary, boolean update)
-    {
-        displayValue.forceSetValue(value, false);
-        displayValue2.forceSetValue(valueSecondary, false);
-        if (update)
-        {
-            item.set(form, displayValue.getCachedValue());
-            item.setUpgrade(form, displayValue2.getCachedValue());
-            dr.updateForSelection(true);
-        }
-
-        return this;
-    }
-
-    public boolean update(boolean isInRange, boolean isSelected)
-    {
-        this.hb.update();
-        this.label.updateImpl();
-        this.checkbox.updateImpl();
-        this.isSelected = isSelected;
-        if (isSelected)
-        {
-            decreaseButton.setInteractable(displayValue.getCachedValue() > displayValue.getMin()).updateImpl();
-            decreaseButton2.setInteractable(displayValue2.getCachedValue() > displayValue.getMin()).updateImpl();
-            increaseButton.setInteractable(displayValue.getCachedValue() < displayValue.getMax()).updateImpl();
-            increaseButton2.setInteractable(displayValue2.getCachedValue() < displayValue.getMax()).updateImpl();
-            displayValue.updateImpl();
-            displayValue2.updateImpl();
-        }
-        if (!isInRange)
-        {
-            return false;
-        }
-        return tryHover(isSelected);
-    }
-
-    protected boolean tryHover(boolean isSelected)
-    {
-        if (!isComponentHovered() && this.hb.hovered)
-        {
-            this.label.setColor(Settings.GREEN_TEXT_COLOR);
-            if (InputHelper.justClickedLeft)
-            {
-                this.hb.clickStarted = true;
-            }
-            if (dr.showTooltipOnHover)
-            {
-                addTooltip();
-            }
-        }
-        else if (isSelected)
-        {
-            this.label.setColor(Settings.GOLD_COLOR);
-            this.checkbox.setTexture(ImageMaster.COLOR_TAB_BOX_TICKED);
-        }
-        else
-        {
-            this.label.setColor(Color.WHITE);
-            this.checkbox.setTexture(ImageMaster.COLOR_TAB_BOX_UNTICKED);
-        }
-
-        if (((this.hb.clicked) || (this.hb.hovered && CInputActionSet.select.isJustPressed()) && EUI.tryClick(this.hb)))
-        {
-            this.hb.clicked = false;
-            this.checkbox.setTexture(isSelected ? ImageMaster.COLOR_TAB_BOX_UNTICKED : ImageMaster.COLOR_TAB_BOX_TICKED);
-            return true;
-        }
-        return false;
-    }
-
-    public void renderRow(SpriteBatch sb)
-    {
+    public void renderRow(SpriteBatch sb) {
         super.renderRow(sb);
-        if (isSelected)
-        {
+        if (isSelected) {
             decreaseButton2.tryRenderCentered(sb);
             increaseButton2.tryRenderCentered(sb);
             decreaseButton.tryRenderCentered(sb);
@@ -219,8 +135,65 @@ public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo>
         }
     }
 
-    protected boolean isComponentHovered()
-    {
+    public boolean update(boolean isInRange, boolean isSelected) {
+        this.hb.update();
+        this.label.updateImpl();
+        this.checkbox.updateImpl();
+        this.isSelected = isSelected;
+        if (isSelected) {
+            decreaseButton.setInteractable(displayValue.getCachedValue() > displayValue.getMin()).updateImpl();
+            decreaseButton2.setInteractable(displayValue2.getCachedValue() > displayValue.getMin()).updateImpl();
+            increaseButton.setInteractable(displayValue.getCachedValue() < displayValue.getMax()).updateImpl();
+            increaseButton2.setInteractable(displayValue2.getCachedValue() < displayValue.getMax()).updateImpl();
+            displayValue.updateImpl();
+            displayValue2.updateImpl();
+        }
+        if (!isInRange) {
+            return false;
+        }
+        return tryHover(isSelected);
+    }
+
+    protected boolean tryHover(boolean isSelected) {
+        if (!isComponentHovered() && this.hb.hovered) {
+            this.label.setColor(Settings.GREEN_TEXT_COLOR);
+            if (InputHelper.justClickedLeft) {
+                this.hb.clickStarted = true;
+            }
+            if (dr.showTooltipOnHover) {
+                addTooltip();
+            }
+        }
+        else if (isSelected) {
+            this.label.setColor(Settings.GOLD_COLOR);
+            this.checkbox.setTexture(ImageMaster.COLOR_TAB_BOX_TICKED);
+        }
+        else {
+            this.label.setColor(Color.WHITE);
+            this.checkbox.setTexture(ImageMaster.COLOR_TAB_BOX_UNTICKED);
+        }
+
+        if (((this.hb.clicked) || (this.hb.hovered && CInputActionSet.select.isJustPressed()) && EUI.tryClick(this.hb))) {
+            this.hb.clicked = false;
+            this.checkbox.setTexture(isSelected ? ImageMaster.COLOR_TAB_BOX_UNTICKED : ImageMaster.COLOR_TAB_BOX_TICKED);
+            return true;
+        }
+        return false;
+    }
+
+    protected boolean isComponentHovered() {
         return decreaseButton2.hb.hovered || increaseButton2.hb.hovered || decreaseButton.hb.hovered || increaseButton.hb.hovered || displayValue2.hb.hovered || displayValue.hb.hovered;
+    }
+
+    public PCLCustomCardTagEditorRow setValue(int value, int valueSecondary, boolean update) {
+        displayValue.forceSetValue(value, false);
+        displayValue2.forceSetValue(valueSecondary, false);
+        if (update) {
+            item.set(form, displayValue.getCachedValue());
+            item.setUpgrade(form, displayValue2.getCachedValue());
+            dr.updateForSelection(true);
+        }
+
+        return this;
     }
 }

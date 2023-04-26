@@ -4,20 +4,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import extendedui.EUIUtils;
 
 // Copied and modified from STS-AnimatorMod
-public class NewLineToken extends PCLTextToken
-{
+public class NewLineToken extends PCLTextToken {
     public static final char NEWLINE = '|';
     protected static NewLineToken instance = new NewLineToken();
 
-    private NewLineToken()
-    {
+    private NewLineToken() {
         super(PCLTextTokenType.NewLine, EUIUtils.SPLIT_LINE);
     }
 
-    public static int tryAdd(PCLTextParser parser)
-    {
-        if (parser.character == NEWLINE)
-        {
+    public static int tryAdd(PCLTextParser parser) {
+        if (parser.character == NEWLINE) {
             parser.addToken(instance);
 
             return 1;
@@ -26,20 +22,17 @@ public class NewLineToken extends PCLTextToken
         return 0;
     }
 
-    public int getCharCount()
-    {
+    public int getCharCount() {
         return 15;
     } // Accounts for the reduced space available on the card with newlines present
 
     @Override
-    public float getWidth(PCLCardText context)
-    {
+    public float getWidth(PCLCardText context) {
         return 0;
     }
 
     @Override
-    public void render(SpriteBatch sb, PCLCardText context)
-    {
+    public void render(SpriteBatch sb, PCLCardText context) {
         throw new RuntimeException("New line token should not be rendered");
     }
 }

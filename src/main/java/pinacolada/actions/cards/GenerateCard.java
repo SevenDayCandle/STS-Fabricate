@@ -19,8 +19,7 @@ import pinacolada.effects.PCLEffects;
 import pinacolada.utilities.ListSelection;
 
 // Copied and modified from STS-AnimatorMod
-public class GenerateCard extends PCLAction<AbstractCard>
-{
+public class GenerateCard extends PCLAction<AbstractCard> {
     protected final CardGroup cardGroup;
     protected boolean upgrade;
     protected boolean makeCopy;
@@ -29,15 +28,13 @@ public class GenerateCard extends PCLAction<AbstractCard>
     protected AbstractCard actualCard;
     private transient AbstractGameEffect effect = null;
 
-    public GenerateCard(AbstractCard card, CardGroup group)
-    {
+    public GenerateCard(AbstractCard card, CardGroup group) {
         super(ActionType.CARD_MANIPULATION, Settings.ACTION_DUR_MED);
 
         this.card = card;
         this.cardGroup = group;
 
-        if (!UnlockTracker.isCardSeen(card.cardID) || !card.isSeen)
-        {
+        if (!UnlockTracker.isCardSeen(card.cardID) || !card.isSeen) {
             UnlockTracker.markCardAsSeen(card.cardID);
             card.isLocked = false;
             card.isSeen = true;
@@ -46,50 +43,40 @@ public class GenerateCard extends PCLAction<AbstractCard>
         initialize(1);
     }
 
-    public GenerateCard cancelIfFull(boolean cancelIfFull)
-    {
+    public GenerateCard cancelIfFull(boolean cancelIfFull) {
         this.cancelIfFull = cancelIfFull;
 
         return this;
     }
 
     @Override
-    protected void firstUpdate()
-    {
-        if (makeCopy)
-        {
+    protected void firstUpdate() {
+        if (makeCopy) {
             actualCard = card.makeStatEquivalentCopy();
         }
-        else
-        {
+        else {
             actualCard = card;
         }
 
-        if (upgrade && actualCard.canUpgrade())
-        {
+        if (upgrade && actualCard.canUpgrade()) {
             actualCard.upgrade();
         }
 
-        switch (cardGroup.type)
-        {
-            case DRAW_PILE:
-            {
+        switch (cardGroup.type) {
+            case DRAW_PILE: {
                 effect = PCLEffects.List.add(new ShowCardAndAddToDrawPileEffect(actualCard,
                         (float) Settings.WIDTH / 2f - ((25f * Settings.scale) + AbstractCard.IMG_WIDTH),
                         (float) Settings.HEIGHT / 2f, true, true, false));
 
                 // For reasons unknown ShowCardAndAddToDrawPileEffect creates a copy of the card...
-                actualCard = ReflectionHacks.getPrivate(effect,ShowCardAndAddToDrawPileEffect.class,"card");
+                actualCard = ReflectionHacks.getPrivate(effect, ShowCardAndAddToDrawPileEffect.class, "card");
 
                 break;
             }
 
-            case HAND:
-            {
-                if (player.hand.size() >= BaseMod.MAX_HAND_SIZE)
-                {
-                    if (cancelIfFull)
-                    {
+            case HAND: {
+                if (player.hand.size() >= BaseMod.MAX_HAND_SIZE) {
+                    if (cancelIfFull) {
                         completeImpl();
                         return;
                     }
@@ -97,8 +84,7 @@ public class GenerateCard extends PCLAction<AbstractCard>
                     player.createHandIsFullDialog();
                     effect = PCLEffects.List.add(new ShowCardAndAddToDiscardEffect(actualCard));
                 }
-                else
-                {
+                else {
                     // If you don't specify x and y it won't play the card obtain sfx
                     effect = PCLEffects.List.add(new ShowCardAndAddToHandEffect(actualCard,
                             (float) Settings.WIDTH / 2f - ((25f * Settings.scale) + AbstractCard.IMG_WIDTH),
@@ -108,26 +94,22 @@ public class GenerateCard extends PCLAction<AbstractCard>
                 break;
             }
 
-            case DISCARD_PILE:
-            {
+            case DISCARD_PILE: {
                 effect = PCLEffects.List.add(new ShowCardAndAddToDiscardEffect(actualCard));
 
                 break;
             }
 
-            case EXHAUST_PILE:
-            {
+            case EXHAUST_PILE: {
                 effect = PCLEffects.List.add(new ExhaustCardEffect(actualCard));
                 player.exhaustPile.addToTop(actualCard);
                 break;
             }
 
-            case MASTER_DECK:
-            {
+            case MASTER_DECK: {
                 PCLActions.top.add(new AddCardToDeckAction(actualCard));
 
-                if (destination != null)
-                {
+                if (destination != null) {
                     EUIUtils.logWarning(this, "Destination for the master deck will be ignored.");
                     destination = null;
                 }
@@ -137,8 +119,7 @@ public class GenerateCard extends PCLAction<AbstractCard>
 
             case CARD_POOL:
             case UNSPECIFIED:
-            default:
-            {
+            default: {
                 EUIUtils.logWarning(this, "Can't make temp card in " + cardGroup.type.name());
                 completeImpl();
                 break;
@@ -147,17 +128,13 @@ public class GenerateCard extends PCLAction<AbstractCard>
     }
 
     @Override
-    protected void updateInternal(float deltaTime)
-    {
-        if (effect != null && !effect.isDone)
-        {
+    protected void updateInternal(float deltaTime) {
+        if (effect != null && !effect.isDone) {
             effect.update();
         }
 
-        if (tickDuration(deltaTime))
-        {
-            if (amount > 1)
-            {
+        if (tickDuration(deltaTime)) {
+            if (amount > 1) {
                 GenerateCard copy = new GenerateCard(actualCard, cardGroup);
                 copy.copySettings(this);
                 copy.destination = destination;
@@ -170,50 +147,43 @@ public class GenerateCard extends PCLAction<AbstractCard>
 
             complete(actualCard);
 
-            if (destination != null && cardGroup.group.remove(actualCard))
-            {
+            if (destination != null && cardGroup.group.remove(actualCard)) {
                 destination.add(cardGroup.group, actualCard, 0);
             }
         }
     }
 
-    public GenerateCard repeat(int times)
-    {
+    public GenerateCard repeat(int times) {
         // Always makeCopy because repeating action with the same card will cause visual glitches
         this.makeCopy = true;
         this.amount = times;
 
-        if (times > 2)
-        {
+        if (times > 2) {
             setDuration(times > 3 ? Settings.ACTION_DUR_XFAST : Settings.ACTION_DUR_FASTER, isRealtime);
         }
 
         return this;
     }
 
-    public GenerateCard setDestination(ListSelection<AbstractCard> destination)
-    {
+    public GenerateCard setDestination(ListSelection<AbstractCard> destination) {
         this.destination = destination;
 
         return this;
     }
 
-    public GenerateCard setMakeCopy(boolean makeCopy)
-    {
+    public GenerateCard setMakeCopy(boolean makeCopy) {
         this.makeCopy = makeCopy;
 
         return this;
     }
 
-    public GenerateCard setUpgrade(boolean upgrade)
-    {
+    public GenerateCard setUpgrade(boolean upgrade) {
         this.upgrade = upgrade;
 
         return this;
     }
 
-    public GenerateCard setUpgrade(boolean upgrade, boolean makeCopy)
-    {
+    public GenerateCard setUpgrade(boolean upgrade, boolean makeCopy) {
         this.makeCopy = makeCopy;
         this.upgrade = upgrade;
 

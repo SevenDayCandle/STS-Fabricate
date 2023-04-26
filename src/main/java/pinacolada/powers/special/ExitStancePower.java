@@ -10,12 +10,10 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.skills.PSpecialSkill;
 import pinacolada.utilities.GameUtilities;
 
-public class ExitStancePower extends PCLPower
-{
+public class ExitStancePower extends PCLPower {
     public static final String POWER_ID = PGR.core.createID(ExitStancePower.class.getSimpleName());
 
-    public ExitStancePower(AbstractCreature owner, int amount)
-    {
+    public ExitStancePower(AbstractCreature owner, int amount) {
         super(owner, POWER_ID);
 
         createTrigger(this::onUse)
@@ -26,8 +24,7 @@ public class ExitStancePower extends PCLPower
         initialize(amount, NeutralPowertypePatch.NEUTRAL, false);
     }
 
-    public void onUse(PSpecialSkill move, PCLUseInfo info)
-    {
+    public void onUse(PSpecialSkill move, PCLUseInfo info) {
         PCLActions.bottom.changeStance(NeutralStance.STANCE_ID);
     }
 }

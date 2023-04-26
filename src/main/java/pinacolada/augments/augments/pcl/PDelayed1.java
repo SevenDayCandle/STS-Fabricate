@@ -9,18 +9,15 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.PTrait;
 
 @VisibleAugment
-public class PDelayed1 extends PCLAugment
-{
+public class PDelayed1 extends PCLAugment {
     public static final PCLAugmentData DATA = register(PDelayed1.class, PCLAugmentCategorySub.TagDelayed, 1)
             .setSkill(PTrait.tags(PCLCardTag.Delayed));
 
-    public PDelayed1()
-    {
+    public PDelayed1() {
         super(DATA);
     }
 
-    public PDelayed1(PSkill<?> skill)
-    {
+    public PDelayed1(PSkill<?> skill) {
         super(DATA, skill);
     }
 }

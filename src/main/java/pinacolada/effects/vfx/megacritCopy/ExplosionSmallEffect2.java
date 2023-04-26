@@ -10,28 +10,23 @@ import com.megacrit.cardcrawl.vfx.combat.SmokingEmberEffect;
 import pinacolada.effects.PCLEffect;
 
 @Deprecated
-public class ExplosionSmallEffect2 extends PCLEffect
-{
+public class ExplosionSmallEffect2 extends PCLEffect {
     private static final int EMBER_COUNT = 12;
     private final float x;
     private final float y;
 
-    public ExplosionSmallEffect2(float x, float y)
-    {
+    public ExplosionSmallEffect2(float x, float y) {
         this.x = x;
         this.y = y;
     }
 
-    public void render(SpriteBatch sb)
-    {
+    public void render(SpriteBatch sb) {
     }
 
-    public void update()
-    {
+    public void update() {
         AbstractDungeon.effectsQueue.add(new DarkSmokePuffEffect(this.x, this.y));
 
-        for (int i = 0; i < 12; ++i)
-        {
+        for (int i = 0; i < 12; ++i) {
             AbstractDungeon.effectsQueue.add(new SmokingEmberEffect(this.x + MathUtils.random(-50.0F, 50.0F) * Settings.scale, this.y + MathUtils.random(-50.0F, 50.0F) * Settings.scale));
         }
 
@@ -39,7 +34,6 @@ public class ExplosionSmallEffect2 extends PCLEffect
         this.isDone = true;
     }
 
-    public void dispose()
-    {
+    public void dispose() {
     }
 }

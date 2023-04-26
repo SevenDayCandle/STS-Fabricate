@@ -12,31 +12,26 @@ import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.skills.PDelegateCardCond;
 
 @VisibleSkill
-public class PCond_OnWithdraw extends PDelegateCardCond implements OnAllyWithdrawSubscriber
-{
+public class PCond_OnWithdraw extends PDelegateCardCond implements OnAllyWithdrawSubscriber {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_OnWithdraw.class, PField_CardCategory.class, 1, 1)
             .pclOnly()
             .selfTarget();
 
-    public PCond_OnWithdraw()
-    {
+    public PCond_OnWithdraw() {
         super(DATA);
     }
 
-    public PCond_OnWithdraw(PSkillSaveData content)
-    {
+    public PCond_OnWithdraw(PSkillSaveData content) {
         super(DATA, content);
     }
 
     @Override
-    public void onAllyWithdraw(PCLCard returned, PCLCardAlly ally)
-    {
-        triggerOnCard(returned, ally);
+    public EUITooltip getDelegateTooltip() {
+        return PGR.core.tooltips.withdraw;
     }
 
     @Override
-    public EUITooltip getDelegateTooltip()
-    {
-        return PGR.core.tooltips.withdraw;
+    public void onAllyWithdraw(PCLCard returned, PCLCardAlly ally) {
+        triggerOnCard(returned, ally);
     }
 }

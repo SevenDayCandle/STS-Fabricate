@@ -12,16 +12,14 @@ import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.resources.PGR;
 
-public class AugmentSortButton extends EUIButton
-{
+public class AugmentSortButton extends EUIButton {
 
     protected final EUIToggle sortDirectionToggle;
     protected ActionT2<Type, Boolean> onSort;
     protected Type sortType = Type.Name;
     protected boolean sortDesc;
 
-    public AugmentSortButton(EUIHitbox hitbox, ActionT2<Type, Boolean> onSort)
-    {
+    public AugmentSortButton(EUIHitbox hitbox, ActionT2<Type, Boolean> onSort) {
         super(EUIRM.images.rectangularButton.texture(), hitbox);
         this.onSort = onSort;
         setFont(EUIFontHelper.carddescriptionfontNormal, 0.7f);
@@ -36,36 +34,30 @@ public class AugmentSortButton extends EUIButton
                 });
     }
 
-    public void changeSorting()
-    {
+    public void changeSorting() {
         sortType = Type.values()[(sortType.ordinal() + 1) % Type.values().length];
         setText(sortType.getText());
         onSort.invoke(sortType, sortDesc);
     }
 
-    public void updateImpl()
-    {
-        super.updateImpl();
-        sortDirectionToggle.updateImpl();
-    }
-
-    public void renderImpl(SpriteBatch sb)
-    {
+    public void renderImpl(SpriteBatch sb) {
         super.renderImpl(sb);
         sortDirectionToggle.renderImpl(sb);
     }
 
-    public enum Type
-    {
+    public void updateImpl() {
+        super.updateImpl();
+        sortDirectionToggle.updateImpl();
+    }
+
+    public enum Type {
         Name,
         Count,
         Category,
         Level;
 
-        public String getText()
-        {
-            switch (this)
-            {
+        public String getText() {
+            switch (this) {
                 case Name:
                     return CardLibSortHeader.TEXT[2];
                 case Count:

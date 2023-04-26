@@ -32,8 +32,12 @@ import java.util.HashSet;
 import static pinacolada.utilities.GameUtilities.scale;
 import static pinacolada.utilities.GameUtilities.screenW;
 
-public class ViewInGamePoolEffect extends PCLEffectWithCallback<CardGroup>
-{
+public class ViewInGamePoolEffect extends PCLEffectWithCallback<CardGroup> {
+    private final ActionT0 onRefresh;
+    private final CardGroup cards;
+    private final Color screenColor;
+    private final EUICardGrid grid;
+    private final HashSet<String> bannedCards;
     private EUIButton deselectAllButton;
     private EUIButton selectAllButton;
     private EUIButton selectCustomButton;
@@ -44,19 +48,12 @@ public class ViewInGamePoolEffect extends PCLEffectWithCallback<CardGroup>
     private boolean canToggle = true;
     private boolean draggingScreen;
     private boolean showTopPanelOnComplete;
-    private final ActionT0 onRefresh;
-    private final CardGroup cards;
-    private final Color screenColor;
-    private final EUICardGrid grid;
-    private final HashSet<String> bannedCards;
 
-    public ViewInGamePoolEffect(CardGroup cards, HashSet<String> bannedCards)
-    {
+    public ViewInGamePoolEffect(CardGroup cards, HashSet<String> bannedCards) {
         this(cards, bannedCards, null);
     }
 
-    public ViewInGamePoolEffect(CardGroup cards, HashSet<String> bannedCards, ActionT0 onRefresh)
-    {
+    public ViewInGamePoolEffect(CardGroup cards, HashSet<String> bannedCards, ActionT0 onRefresh) {
         super(0.7f);
 
         this.bannedCards = bannedCards;
@@ -66,31 +63,27 @@ public class ViewInGamePoolEffect extends PCLEffectWithCallback<CardGroup>
         this.screenColor = Color.BLACK.cpy();
         this.screenColor.a = 0.8f;
 
-        if (GameUtilities.inGame())
-        {
+        if (GameUtilities.inGame()) {
             AbstractDungeon.overlayMenu.proceedButton.hide();
         }
 
-        if (cards.isEmpty())
-        {
-            this.grid = (EUICardGrid) new EUICardGrid().canDragScreen(false);
+        if (cards.isEmpty()) {
+            this.grid = new EUICardGrid().canDragScreen(false);
             complete(cards);
             return;
         }
 
-        if (GameUtilities.isTopPanelVisible())
-        {
+        if (GameUtilities.isTopPanelVisible()) {
             showTopPanelOnComplete = true;
             GameUtilities.setTopPanelVisible(false);
         }
 
-        this.grid = (EUICardGrid) new EUICardGrid()
+        this.grid = new EUICardGrid()
                 .canRenderUpgrades(true)
                 .canDragScreen(false)
                 .setOnCardClick(this::toggleCard);
         this.grid.setCardGroup(cards);
-        for (AbstractCard c : cards.group)
-        {
+        for (AbstractCard c : cards.group) {
             updateCardAlpha(c);
         }
 
@@ -103,7 +96,7 @@ public class ViewInGamePoolEffect extends PCLEffectWithCallback<CardGroup>
                 .setAlignment(0.5f, 0.1f, true)
                 .setFont(FontHelper.tipHeaderFont, 1);
 
-        deselectAllButton =  AbstractScreen.createHexagonalButton(xPos, Settings.HEIGHT * 0.65f, buttonWidth, buttonHeight)
+        deselectAllButton = AbstractScreen.createHexagonalButton(xPos, Settings.HEIGHT * 0.65f, buttonWidth, buttonHeight)
                 .setText(PGR.core.strings.sui_deselectAll)
                 .setOnClick(() -> this.toggleCards(false))
                 .setColor(Color.FIREBRICK);
@@ -138,158 +131,15 @@ public class ViewInGamePoolEffect extends PCLEffectWithCallback<CardGroup>
         }, AbstractCard.CardColor.COLORLESS, false, false);
     }
 
-    private void updateCardAlpha(AbstractCard c)
-    {
-        c.transparency = c.targetTransparency = bannedCards.contains(c.cardID) ? 0.35f : 1f;
-        AbstractCard upgrade = grid.getUpgrade(c);
-        {
-            if (upgrade != null)
-            {
-                upgrade.transparency = upgrade.targetTransparency = c.targetTransparency;
-                upgrade.update();
-            }
-        }
-    }
-
-    private void selectRandomCards(PCLRandomCardAmountDialog dialog)
-    {
-        randomSelection.setActive(false);
-        if (dialog != null)
-        {
-            bannedCards.clear();
-            RandomizedList<AbstractCard> possibleCards = new RandomizedList<>();
-            RandomizedList<AbstractCard> possibleColorless = new RandomizedList<>();
-            RandomizedList<AbstractCard> possibleCurses = new RandomizedList<>();
-            for (AbstractCard c : cards.group)
-            {
-                if (c.color == AbstractCard.CardColor.COLORLESS)
-                {
-                    possibleColorless.add(c);
-                }
-                else if (c.color == AbstractCard.CardColor.CURSE)
-                {
-                    possibleCurses.add(c);
-                }
-                else
-                {
-                    possibleCards.add(c);
-                }
-            }
-
-            while (possibleCards.size() > dialog.getCardCount())
-            {
-                AbstractCard c = possibleCards.retrieveUnseeded(true);
-                if (c != null)
-                {
-                    toggleCardImpl(c, bannedCards.contains(c.cardID));
-                }
-            }
-            while (possibleColorless.size() > dialog.getColorlessCount())
-            {
-                AbstractCard c = possibleColorless.retrieveUnseeded(true);
-                if (c != null)
-                {
-                    toggleCardImpl(c, bannedCards.contains(c.cardID));
-                }
-            }
-            while (possibleCurses.size() > dialog.getCurseCount())
-            {
-                AbstractCard c = possibleCurses.retrieveUnseeded(true);
-                if (c != null)
-                {
-                    toggleCardImpl(c, bannedCards.contains(c.cardID));
-                }
-            }
-
-            for (AbstractCard c : possibleCards)
-            {
-                updateCardAlpha(c);
-            }
-            for (AbstractCard c : possibleColorless)
-            {
-                updateCardAlpha(c);
-            }
-            for (AbstractCard c : possibleCurses)
-            {
-                updateCardAlpha(c);
-            }
-            refreshCountText();
-        }
-    }
-
-    private void toggleCard(AbstractCard c)
-    {
-        if (canToggle)
-        {
-            toggleCardImpl(c, bannedCards.contains(c.cardID));
-            refreshCountText();
-        }
-    }
-
-    private void toggleCardImpl(AbstractCard c, boolean value)
-    {
-        if (value)
-        {
-            bannedCards.remove(c.cardID);
-        }
-        else {
-            bannedCards.add(c.cardID);
-        }
-        updateCardAlpha(c);
-    }
-
-    private void toggleCards(boolean value)
-    {
-        for (AbstractCard c : cards.group)
-        {
-            toggleCardImpl(c, value);
-        }
-        refreshCountText();
-    }
-
-    private void startSelectRandom()
-    {
-        randomSelection.open(cards.group);
-    }
-
-    private void toggleViewUpgrades(boolean value)
-    {
-        SingleCardViewPopup.isViewingUpgrade = value;
-        upgradeToggle.setToggle(SingleCardViewPopup.isViewingUpgrade);
-    }
-
-    public void refreshCountText()
-    {
+    public void refreshCountText() {
         selectedCount.setLabel(EUIUtils.format(PGR.core.strings.sui_selected, EUIUtils.count(cards.group, card -> !bannedCards.contains(card.cardID)), cards.group.size()));
-        if (onRefresh != null)
-        {
+        if (onRefresh != null) {
             onRefresh.invoke();
         }
     }
 
-    public ViewInGamePoolEffect setStartingPosition(float x, float y)
-    {
-        for (AbstractCard c : cards.group)
-        {
-            c.current_x = x - (c.hb.width * 0.5f);
-            c.current_y = y - (c.hb.height * 0.5f);
-        }
-
-        return this;
-    }
-
-    public ViewInGamePoolEffect setCanToggle(boolean canToggle)
-    {
-        this.canToggle = canToggle;
-        selectAllButton.setActive(canToggle);
-        deselectAllButton.setActive(canToggle);
-        selectedCount.setActive(canToggle);
-        return this;
-    }
-
     @Override
-    public void render(SpriteBatch sb)
-    {
+    public void render(SpriteBatch sb) {
         sb.setColor(this.screenColor);
         sb.draw(ImageMaster.WHITE_SQUARE_IMG, 0f, 0f, (float) Settings.WIDTH, (float) Settings.HEIGHT);
         grid.tryRender(sb);
@@ -302,8 +152,7 @@ public class ViewInGamePoolEffect extends PCLEffectWithCallback<CardGroup>
         if (!EUI.cardFilters.isActive) {
             EUI.openCardFiltersButton.tryRender(sb);
         }
-        if (randomSelection.isActive)
-        {
+        if (randomSelection.isActive) {
             sb.setColor(this.screenColor);
             sb.draw(ImageMaster.WHITE_SQUARE_IMG, 0f, 0f, (float) Settings.WIDTH, (float) Settings.HEIGHT);
         }
@@ -311,11 +160,9 @@ public class ViewInGamePoolEffect extends PCLEffectWithCallback<CardGroup>
     }
 
     @Override
-    protected void updateInternal(float deltaTime)
-    {
+    protected void updateInternal(float deltaTime) {
         boolean shouldDoStandardUpdate = !EUI.cardFilters.tryUpdate() && !randomSelection.tryUpdate();
-        if (shouldDoStandardUpdate)
-        {
+        if (shouldDoStandardUpdate) {
             EUI.openCardFiltersButton.tryUpdate();
             EUI.customHeader.update();
             grid.tryUpdate();
@@ -325,27 +172,135 @@ public class ViewInGamePoolEffect extends PCLEffectWithCallback<CardGroup>
             selectRandomButton.tryUpdate();
             selectedCount.tryUpdate();
 
-            if (upgradeToggle.hb.hovered || selectAllButton.hb.hovered || deselectAllButton.hb.hovered || selectRandomButton.hb.hovered || grid.isHovered() || EUI.customHeader.isHovered() || EUI.openCardFiltersButton.hb.hovered)
-            {
+            if (upgradeToggle.hb.hovered || selectAllButton.hb.hovered || deselectAllButton.hb.hovered || selectRandomButton.hb.hovered || grid.isHovered() || EUI.customHeader.isHovered() || EUI.openCardFiltersButton.hb.hovered) {
                 return;
             }
 
-            if (EUIInputManager.leftClick.isJustPressed() || EUIInputManager.rightClick.isJustPressed())
-            {
+            if (EUIInputManager.leftClick.isJustPressed() || EUIInputManager.rightClick.isJustPressed()) {
                 complete(this.cards);
             }
         }
     }
 
     @Override
-    protected void complete()
-    {
+    protected void complete() {
         super.complete();
 
-        if (showTopPanelOnComplete)
-        {
+        if (showTopPanelOnComplete) {
             GameUtilities.setTopPanelVisible(true);
             showTopPanelOnComplete = false;
+        }
+    }
+
+    private void selectRandomCards(PCLRandomCardAmountDialog dialog) {
+        randomSelection.setActive(false);
+        if (dialog != null) {
+            bannedCards.clear();
+            RandomizedList<AbstractCard> possibleCards = new RandomizedList<>();
+            RandomizedList<AbstractCard> possibleColorless = new RandomizedList<>();
+            RandomizedList<AbstractCard> possibleCurses = new RandomizedList<>();
+            for (AbstractCard c : cards.group) {
+                if (c.color == AbstractCard.CardColor.COLORLESS) {
+                    possibleColorless.add(c);
+                }
+                else if (c.color == AbstractCard.CardColor.CURSE) {
+                    possibleCurses.add(c);
+                }
+                else {
+                    possibleCards.add(c);
+                }
+            }
+
+            while (possibleCards.size() > dialog.getCardCount()) {
+                AbstractCard c = possibleCards.retrieveUnseeded(true);
+                if (c != null) {
+                    toggleCardImpl(c, bannedCards.contains(c.cardID));
+                }
+            }
+            while (possibleColorless.size() > dialog.getColorlessCount()) {
+                AbstractCard c = possibleColorless.retrieveUnseeded(true);
+                if (c != null) {
+                    toggleCardImpl(c, bannedCards.contains(c.cardID));
+                }
+            }
+            while (possibleCurses.size() > dialog.getCurseCount()) {
+                AbstractCard c = possibleCurses.retrieveUnseeded(true);
+                if (c != null) {
+                    toggleCardImpl(c, bannedCards.contains(c.cardID));
+                }
+            }
+
+            for (AbstractCard c : possibleCards) {
+                updateCardAlpha(c);
+            }
+            for (AbstractCard c : possibleColorless) {
+                updateCardAlpha(c);
+            }
+            for (AbstractCard c : possibleCurses) {
+                updateCardAlpha(c);
+            }
+            refreshCountText();
+        }
+    }
+
+    public ViewInGamePoolEffect setCanToggle(boolean canToggle) {
+        this.canToggle = canToggle;
+        selectAllButton.setActive(canToggle);
+        deselectAllButton.setActive(canToggle);
+        selectedCount.setActive(canToggle);
+        return this;
+    }
+
+    public ViewInGamePoolEffect setStartingPosition(float x, float y) {
+        for (AbstractCard c : cards.group) {
+            c.current_x = x - (c.hb.width * 0.5f);
+            c.current_y = y - (c.hb.height * 0.5f);
+        }
+
+        return this;
+    }
+
+    private void startSelectRandom() {
+        randomSelection.open(cards.group);
+    }
+
+    private void toggleCard(AbstractCard c) {
+        if (canToggle) {
+            toggleCardImpl(c, bannedCards.contains(c.cardID));
+            refreshCountText();
+        }
+    }
+
+    private void toggleCardImpl(AbstractCard c, boolean value) {
+        if (value) {
+            bannedCards.remove(c.cardID);
+        }
+        else {
+            bannedCards.add(c.cardID);
+        }
+        updateCardAlpha(c);
+    }
+
+    private void toggleCards(boolean value) {
+        for (AbstractCard c : cards.group) {
+            toggleCardImpl(c, value);
+        }
+        refreshCountText();
+    }
+
+    private void toggleViewUpgrades(boolean value) {
+        SingleCardViewPopup.isViewingUpgrade = value;
+        upgradeToggle.setToggle(SingleCardViewPopup.isViewingUpgrade);
+    }
+
+    private void updateCardAlpha(AbstractCard c) {
+        c.transparency = c.targetTransparency = bannedCards.contains(c.cardID) ? 0.35f : 1f;
+        AbstractCard upgrade = grid.getUpgrade(c);
+        {
+            if (upgrade != null) {
+                upgrade.transparency = upgrade.targetTransparency = c.targetTransparency;
+                upgrade.update();
+            }
         }
     }
 }

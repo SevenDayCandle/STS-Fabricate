@@ -3,8 +3,7 @@ package pinacolada.resources;
 import extendedui.EUIUtils;
 import extendedui.ui.TextureCache;
 
-public abstract class PCLImages
-{
+public abstract class PCLImages {
     public static final String CHARACTER_PNG = "images/{0}/characters/idle/char.png";
     public static final String SKELETON_ATLAS = "images/{0}/characters/idle/char.atlas";
     public static final String SKELETON_JSON = "images/{0}/characters/idle/char.json";
@@ -80,16 +79,14 @@ public abstract class PCLImages
 
     public AffinityIcons affinities;
 
-    public PCLImages(String id)
-    {
+    public PCLImages(String id) {
         initializeCardImages(id);
         initializeCharacterImages(id);
         initializeAffinityTextures(id);
         initializeOrbTextures(id);
     }
 
-    protected void initializeCardImages(String id)
-    {
+    protected void initializeCardImages(String id) {
         attack = EUIUtils.format(ATTACK_PNG, id);
         skill = EUIUtils.format(SKILL_PNG, id);
         power = EUIUtils.format(POWER_PNG, id);
@@ -113,8 +110,7 @@ public abstract class PCLImages
         cardBackgroundSummonL = new TextureCache(summonL);
     }
 
-    protected void initializeCharacterImages(String id)
-    {
+    protected void initializeCharacterImages(String id) {
         character = EUIUtils.format(CHARACTER_PNG, id);
         skeletonAtlas = EUIUtils.format(SKELETON_ATLAS, id);
         skeletonJson = EUIUtils.format(SKELETON_JSON, id);
@@ -125,13 +121,11 @@ public abstract class PCLImages
         charBackground = EUIUtils.format(CHAR_BACKGROUND, id);
     }
 
-    protected void initializeAffinityTextures(String id)
-    {
+    protected void initializeAffinityTextures(String id) {
         affinities = new AffinityIcons(id);
     }
 
-    protected void initializeOrbTextures(String id)
-    {
+    protected void initializeOrbTextures(String id) {
         orbBaseLayer = new TextureCache(EUIUtils.format(ORB_BASE_LAYER, id));
         orbFlash = new TextureCache(EUIUtils.format(ORB_FLASH, id));
         orbTopLayer1 = new TextureCache(EUIUtils.format(ORB_TOP_LAYER1, id));
@@ -140,15 +134,13 @@ public abstract class PCLImages
         orbTopLayer4 = new TextureCache(EUIUtils.format(ORB_TOP_LAYER4, id));
     }
 
-    public TextureCache[] getOrbTextures()
-    {
-        return new TextureCache[] {
-                orbBaseLayer,orbTopLayer1,orbTopLayer2,orbTopLayer3,orbTopLayer4
+    public TextureCache[] getOrbTextures() {
+        return new TextureCache[]{
+                orbBaseLayer, orbTopLayer1, orbTopLayer2, orbTopLayer3, orbTopLayer4
         };
     }
 
-    public static class AffinityIcons
-    {
+    public static class AffinityIcons {
         public TextureCache red;
         public TextureCache green;
         public TextureCache blue;
@@ -157,8 +149,7 @@ public abstract class PCLImages
         public TextureCache dark;
         public TextureCache silver;
 
-        public AffinityIcons(String id)
-        {
+        public AffinityIcons(String id) {
             red = new TextureCache(EUIUtils.format(AFFINITY_RED, id), true);
             green = new TextureCache(EUIUtils.format(AFFINITY_GREEN, id), true);
             blue = new TextureCache(EUIUtils.format(AFFINITY_BLUE, id), true);

@@ -14,8 +14,7 @@ import com.megacrit.cardcrawl.vfx.BorderLongFlashEffect;
 import pinacolada.effects.SFX;
 
 @Deprecated
-public class MindblastEffect2 extends AbstractGameEffect
-{
+public class MindblastEffect2 extends AbstractGameEffect {
     private static final float DUR = 1.0F;
     private static AtlasRegion img;
     private final float x;
@@ -23,10 +22,8 @@ public class MindblastEffect2 extends AbstractGameEffect
     private boolean playedSfx = false;
     private boolean flipHorizontal = false;
 
-    public MindblastEffect2(float x, float y, boolean flipHorizontal)
-    {
-        if (img == null)
-        {
+    public MindblastEffect2(float x, float y, boolean flipHorizontal) {
+        if (img == null) {
             img = ImageMaster.vfxAtlas.findRegion("combat/laserThick");
         }
 
@@ -38,17 +35,14 @@ public class MindblastEffect2 extends AbstractGameEffect
         this.startingDuration = 1.0F;
     }
 
-    public MindblastEffect2 setColor(Color color)
-    {
+    public MindblastEffect2 setColor(Color color) {
         this.color.set(color);
 
         return this;
     }
 
-    public void update()
-    {
-        if (!this.playedSfx)
-        {
+    public void update() {
+        if (!this.playedSfx) {
             AbstractDungeon.effectsQueue.add(new BorderLongFlashEffect(color));
             this.playedSfx = true;
             CardCrawlGame.sound.play(SFX.ATTACK_MAGIC_BEAM_SHORT);
@@ -56,36 +50,30 @@ public class MindblastEffect2 extends AbstractGameEffect
         }
 
         this.duration -= Gdx.graphics.getDeltaTime();
-        if (this.duration > this.startingDuration / 2.0F)
-        {
+        if (this.duration > this.startingDuration / 2.0F) {
             this.color.a = Interpolation.pow2In.apply(1.0F, 0.0F, this.duration - 0.5F);
         }
-        else
-        {
+        else {
             this.color.a = Interpolation.pow2Out.apply(0.0F, 1.0F, this.duration);
         }
 
-        if (this.duration < 0.0F)
-        {
+        if (this.duration < 0.0F) {
             this.isDone = true;
         }
 
     }
 
-    public void render(SpriteBatch sb)
-    {
+    public void render(SpriteBatch sb) {
         sb.setBlendFunction(770, 1);
         sb.setColor(new Color(0.5F, 0.7F, 1.0F, this.color.a));
-        if (!this.flipHorizontal)
-        {
+        if (!this.flipHorizontal) {
             sb.draw(img, this.x, this.y - (float) (img.packedHeight / 2), 0.0F, (float) img.packedHeight / 2.0F, (float) img.packedWidth, (float) img.packedHeight, this.scale * 2.0F + MathUtils.random(-0.05F, 0.05F), this.scale * 1.5F + MathUtils.random(-0.1F, 0.1F), MathUtils.random(-4.0F, 4.0F));
             sb.draw(img, this.x, this.y - (float) (img.packedHeight / 2), 0.0F, (float) img.packedHeight / 2.0F, (float) img.packedWidth, (float) img.packedHeight, this.scale * 2.0F + MathUtils.random(-0.05F, 0.05F), this.scale * 1.5F + MathUtils.random(-0.1F, 0.1F), MathUtils.random(-4.0F, 4.0F));
             sb.setColor(this.color);
             sb.draw(img, this.x, this.y - (float) (img.packedHeight / 2), 0.0F, (float) img.packedHeight / 2.0F, (float) img.packedWidth, (float) img.packedHeight, this.scale * 2.0F, this.scale / 2.0F, MathUtils.random(-2.0F, 2.0F));
             sb.draw(img, this.x, this.y - (float) (img.packedHeight / 2), 0.0F, (float) img.packedHeight / 2.0F, (float) img.packedWidth, (float) img.packedHeight, this.scale * 2.0F, this.scale / 2.0F, MathUtils.random(-2.0F, 2.0F));
         }
-        else
-        {
+        else {
             sb.draw(img, this.x, this.y - (float) (img.packedHeight / 2), 0.0F, (float) img.packedHeight / 2.0F, (float) img.packedWidth, (float) img.packedHeight, this.scale * 2.0F + MathUtils.random(-0.05F, 0.05F), this.scale * 1.5F + MathUtils.random(-0.1F, 0.1F), MathUtils.random(186.0F, 189.0F));
             sb.draw(img, this.x, this.y - (float) (img.packedHeight / 2), 0.0F, (float) img.packedHeight / 2.0F, (float) img.packedWidth, (float) img.packedHeight, this.scale * 2.0F + MathUtils.random(-0.05F, 0.05F), this.scale * 1.5F + MathUtils.random(-0.1F, 0.1F), MathUtils.random(186.0F, 189.0F));
             sb.setColor(this.color);
@@ -96,7 +84,6 @@ public class MindblastEffect2 extends AbstractGameEffect
         sb.setBlendFunction(770, 771);
     }
 
-    public void dispose()
-    {
+    public void dispose() {
     }
 }

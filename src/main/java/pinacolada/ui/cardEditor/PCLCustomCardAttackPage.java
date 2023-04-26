@@ -27,27 +27,24 @@ import pinacolada.skills.skills.special.primary.PCardPrimary_DealDamage;
 import java.util.Arrays;
 import java.util.List;
 
-public class PCLCustomCardAttackPage extends PCLCustomCardEffectPage
-{
+public class PCLCustomCardAttackPage extends PCLCustomCardEffectPage {
     protected PCLCustomCardUpgradableEditor damageEditor;
     protected PCLCustomCardUpgradableEditor hitCountEditor;
     protected EUIDropdown<PCLAttackType> attackTypeDropdown;
     protected EUIDropdown<AbstractGameAction.AttackEffect> attackEffectDropdown;
     protected EUIToggle enableToggle;
 
-    public PCLCustomCardAttackPage(PCLCustomCardEditCardScreen screen, EUIHitbox hb, int index, String title, ActionT1<PSkill<?>> onUpdate)
-    {
+    public PCLCustomCardAttackPage(PCLCustomCardEditCardScreen screen, EUIHitbox hb, int index, String title, ActionT1<PSkill<?>> onUpdate) {
         super(screen, hb, index, title, onUpdate);
     }
 
-    protected void setupComponents(PCLCustomCardEditCardScreen screen)
-    {
+    protected void setupComponents(PCLCustomCardEditCardScreen screen) {
         super.setupComponents(screen);
         effectGroup.setListFunc(PCLCustomCardAttackPage::getAvailableMoves);
         primaryConditions.setItems(new PCardPrimary_DealDamage()).setActive(false);
         delayEditor.setActive(false);
 
-        enableToggle = (EUIToggle) new EUIToggle(new OriginRelativeHitbox(hb, MENU_WIDTH / 4, MENU_HEIGHT, 0, OFFSET_EFFECT))
+        enableToggle = new EUIToggle(new OriginRelativeHitbox(hb, MENU_WIDTH / 4, MENU_HEIGHT, 0, OFFSET_EFFECT))
                 .setFont(EUIFontHelper.carddescriptionfontNormal, 0.9f)
                 .setText(PGR.core.strings.cedit_enable)
                 .setOnToggle(this::setMove);
@@ -63,8 +60,7 @@ public class PCLCustomCardAttackPage extends PCLCustomCardEffectPage
         attackTypeDropdown = new EUIDropdown<PCLAttackType>(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, MENU_WIDTH * 2.1f, OFFSET_EFFECT * 1.5f)
                 , item -> StringUtils.capitalize(item.toString().toLowerCase()))
                 .setOnChange(targets -> {
-                    if (!targets.isEmpty())
-                    {
+                    if (!targets.isEmpty()) {
                         screen.modifyBuilder(e -> e.setAttackType(targets.get(0)));
                     }
                 })
@@ -76,8 +72,7 @@ public class PCLCustomCardAttackPage extends PCLCustomCardEffectPage
         attackEffectDropdown = new EUIDropdown<AbstractGameAction.AttackEffect>(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, MENU_WIDTH * 3.3f, OFFSET_EFFECT * 1.5f)
                 , item -> StringUtils.capitalize(item.toString().toLowerCase()))
                 .setOnChange(targets -> {
-                    if (!targets.isEmpty() && primaryCond instanceof PCardPrimary_DealDamage)
-                    {
+                    if (!targets.isEmpty() && primaryCond instanceof PCardPrimary_DealDamage) {
                         ((PCardPrimary_DealDamage) primaryCond).fields.setAttackEffect(targets.get(0));
                         scheduleConstruct();
                     }
@@ -89,21 +84,13 @@ public class PCLCustomCardAttackPage extends PCLCustomCardEffectPage
                 .setTooltip(PGR.core.strings.cedit_attackEffect, PGR.core.strings.cetut_attackEffect);
     }
 
-    public PSkill<?> getSourceEffect()
-    {
-        return screen.currentDamage;
-    }
-
-    public void refresh()
-    {
+    public void refresh() {
         PCLDynamicData builder = screen.getBuilder();
-        if (primaryCond instanceof PCardPrimary_DealDamage)
-        {
+        if (primaryCond instanceof PCardPrimary_DealDamage) {
             enableToggle.setToggle(true);
             attackEffectDropdown.setSelection(((PCardPrimary_DealDamage) primaryCond).fields.attackEffect, false);
         }
-        else
-        {
+        else {
             enableToggle.setToggle(false);
         }
         attackTypeDropdown.setSelection(builder.attackType, false);
@@ -116,31 +103,17 @@ public class PCLCustomCardAttackPage extends PCLCustomCardEffectPage
         repositionItems();
     }
 
-    protected void setMove(boolean add)
-    {
-        if (add)
-        {
-            primaryCond = primaryConditions.getAllItems().get(0);
-        }
-        else
-        {
-            primaryCond = null;
-        }
-        constructEffect();
-    }
-
-    protected static List<PMove<?>> getAvailableMoves()
-    {
-        return Arrays.asList(
-                new PTrait_Damage(),
-                new PTrait_DamageMultiplier(),
-                new PTrait_HitCount()
-        );
+    public PSkill<?> getSourceEffect() {
+        return screen.currentDamage;
     }
 
     @Override
-    public void updateImpl()
-    {
+    public TextureCache getTextureCache() {
+        return PCLCoreImages.Menu.editorAttack;
+    }
+
+    @Override
+    public void updateImpl() {
         super.updateImpl();
         damageEditor.tryUpdate();
         hitCountEditor.tryUpdate();
@@ -150,8 +123,7 @@ public class PCLCustomCardAttackPage extends PCLCustomCardEffectPage
     }
 
     @Override
-    public void renderImpl(SpriteBatch sb)
-    {
+    public void renderImpl(SpriteBatch sb) {
         super.renderImpl(sb);
         damageEditor.tryRender(sb);
         hitCountEditor.tryRender(sb);
@@ -160,10 +132,21 @@ public class PCLCustomCardAttackPage extends PCLCustomCardEffectPage
         attackEffectDropdown.tryRender(sb);
     }
 
+    protected static List<PMove<?>> getAvailableMoves() {
+        return Arrays.asList(
+                new PTrait_Damage(),
+                new PTrait_DamageMultiplier(),
+                new PTrait_HitCount()
+        );
+    }
 
-    @Override
-    public TextureCache getTextureCache()
-    {
-        return PCLCoreImages.Menu.editorAttack;
+    protected void setMove(boolean add) {
+        if (add) {
+            primaryCond = primaryConditions.getAllItems().get(0);
+        }
+        else {
+            primaryCond = null;
+        }
+        constructEffect();
     }
 }

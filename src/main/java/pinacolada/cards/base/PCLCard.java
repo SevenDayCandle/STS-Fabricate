@@ -85,8 +85,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class PCLCard extends AbstractCard implements TooltipProvider, EditorCard, OnRemovedFromDeckListener, CustomSavable<PCLCardSaveData>
-{
+public abstract class PCLCard extends AbstractCard implements TooltipProvider, EditorCard, OnRemovedFromDeckListener, CustomSavable<PCLCardSaveData> {
+    public static final Color CARD_TYPE_COLOR = new Color(0.35F, 0.35F, 0.35F, 1.0F);
+    public static final Color REGULAR_GLOW_COLOR = new Color(0.2F, 0.9F, 1.0F, 0.25F);
+    public static final Color SHADOW_COLOR = new Color(0, 0, 0, 0.25f);
+    public static final Color SYNERGY_GLOW_COLOR = new Color(1, 0.843f, 0, 0.25f);
+    public static final int CHAR_OFFSET = 97;
     protected static final TextureAtlas CARD_ATLAS = ReflectionHacks.getPrivateStatic(AbstractCard.class, "cardAtlas");
     protected static final Color COLORLESS_ORB_COLOR = new Color(0.7f, 0.7f, 0.7f, 1);
     protected static final Color CURSE_COLOR = new Color(0.22f, 0.22f, 0.22f, 1);
@@ -97,11 +101,6 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     protected static final String UNPLAYABLE_MESSAGE = CardCrawlGame.languagePack.getCardStrings(Tactician.ID).EXTENDED_DESCRIPTION[0];
     protected static final float SHADOW_OFFSET_X = 18f * Settings.scale;
     protected static final float SHADOW_OFFSET_Y = 14f * Settings.scale;
-    public static final Color CARD_TYPE_COLOR = new Color(0.35F, 0.35F, 0.35F, 1.0F);
-    public static final Color REGULAR_GLOW_COLOR = new Color(0.2F, 0.9F, 1.0F, 0.25F);
-    public static final Color SHADOW_COLOR = new Color(0, 0, 0, 0.25f);
-    public static final Color SYNERGY_GLOW_COLOR = new Color(1, 0.843f, 0, 0.25f);
-    public static final int CHAR_OFFSET = 97;
     public static AbstractPlayer player = null;
     public static Random rng = null;
     public static boolean canCropPortraits = true;
@@ -112,6 +111,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     public final PCLCardAffinities affinities;
     public final PCLCardData cardData;
     public final PCLCardText cardText;
+    protected final ArrayList<PCLCardGlowBorderEffect> glowList = new ArrayList<>();
     public ColoredString bottomText;
     public DelayTiming timing = DelayTiming.StartOfTurnLast;
     public PCLAttackType attackType = PCLAttackType.Normal;
@@ -142,43 +142,19 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     public transient PowerFormulaDisplay formulaDisplay;
     protected ColoredTexture portraitForeground;
     protected ColoredTexture portraitImg;
-    protected final ArrayList<PCLCardGlowBorderEffect> glowList = new ArrayList<>();
 
-    protected PCLCard(PCLCardData cardData)
-    {
+    protected PCLCard(PCLCardData cardData) {
         this(cardData, cardData.ID, cardData.imagePath, cardData.getCost(0), cardData.cardType, cardData.cardColor, cardData.cardRarity, cardData.cardTarget.cardTarget, 0, 0, null);
     }
 
-    protected PCLCard(PCLCardData cardData, Object input)
-    {
-        this(cardData, cardData.ID, cardData.imagePath, cardData.getCost(0), cardData.cardType, cardData.cardColor, cardData.cardRarity, cardData.cardTarget.cardTarget, 0, 0, input);
-    }
-
-    protected PCLCard(PCLCardData cardData, int form, int timesUpgraded)
-    {
-        this(cardData, cardData.ID, cardData.imagePath, cardData.getCost(0), cardData.cardType, cardData.cardColor, cardData.cardRarity, cardData.cardTarget.cardTarget, form, timesUpgraded, null);
-    }
-
-    protected PCLCard(PCLCardData cardData, int form, int timesUpgraded, Object input)
-    {
-        this(cardData, cardData.ID, cardData.imagePath, cardData.getCost(0), cardData.cardType, cardData.cardColor, cardData.cardRarity, cardData.cardTarget.cardTarget, form, timesUpgraded, input);
-    }
-
-    protected PCLCard(PCLCardData cardData, String id, String imagePath, int cost, CardType type, CardColor color, CardRarity rarity, CardTarget target)
-    {
-        this(cardData, id, imagePath, cost, type, color, rarity, target, 0, 0, null);
-    }
-
-    protected PCLCard(PCLCardData cardData, String id, String imagePath, int cost, CardType type, CardColor color, CardRarity rarity, CardTarget target, int form, int timesUpgraded, Object input)
-    {
+    protected PCLCard(PCLCardData cardData, String id, String imagePath, int cost, CardType type, CardColor color, CardRarity rarity, CardTarget target, int form, int timesUpgraded, Object input) {
         super(id, cardData.strings.NAME, "status/beta", "status/beta", cost, VisibleSkill.DEFAULT, type, color, rarity, target);
         this.cardData = cardData;
         this.cardText = new PCLCardText(this);
         this.affinities = new PCLCardAffinities(this);
         this.maxUpgradeLevel = cardData.maxUpgradeLevel;
 
-        for (int i = 0; i < cardData.slots; i++)
-        {
+        for (int i = 0; i < cardData.slots; i++) {
             augments.add(null);
         }
 
@@ -189,1356 +165,49 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         setupImages(imagePath);
     }
 
-    @SafeVarargs
-    public static <T> T[] array(T... items)
-    {
-        return EUIUtils.array(items);
-    }
-
-    public static PCLCard cast(AbstractCard card)
-    {
-        return EUIUtils.safeCast(card, PCLCard.class);
-    }
-
-    protected static int[] nums(int damage, int block)
-    {
-        return nums(damage, block, 0, 0);
-    }
-
-    protected static int[] nums(int damage, int block, int magicNumber)
-    {
-        return nums(damage, block, magicNumber, 0);
-    }
-
-    protected static int[] nums(int damage, int block, int magicNumber, int secondaryValue)
-    {
-        return nums(damage, block, magicNumber, secondaryValue, 1);
-    }
-
-    protected static int[] nums(int damage, int block, int magicNumber, int secondaryValue, int hitCount)
-    {
-        return nums(damage, block, magicNumber, secondaryValue, hitCount, 1);
-    }
-
-    protected static int[] nums(int damage, int block, int magicNumber, int secondaryValue, int hitCount, int rightCount)
-    {
-        return new int[]{damage, block, magicNumber, secondaryValue, hitCount, rightCount};
-    }
-
-    protected static PCLCardData register(Class<? extends PCLCard> type)
-    {
-        return PCLCard.register(type, PGR.core);
-    }
-
-    protected static PCLCardData register(Class<? extends PCLCard> type, PCLResources<?,?,?,?> resources)
-    {
-        return PCLCard.registerCardData(new PCLCardData(type, resources));
-    }
-
-    protected static PCLCardData registerCardData(PCLCardData cardData)
-    {
-        return PCLCardData.registerCardData(cardData);
-    }
-
-    protected static int[] ups(int damage, int block)
-    {
-        return ups(damage, block, 0, 0);
-    }
-
-    protected static int[] ups(int damage, int block, int magicNumber)
-    {
-        return ups(damage, block, magicNumber, 0);
-    }
-
-    protected static int[] ups(int damage, int block, int magicNumber, int secondaryValue)
-    {
-        return ups(damage, block, magicNumber, secondaryValue, 0);
-    }
-
-    protected static int[] ups(int damage, int block, int magicNumber, int secondaryValue, int hitCount)
-    {
-        return ups(damage, block, magicNumber, secondaryValue, hitCount, 0);
-    }
-
-    protected static int[] ups(int damage, int block, int magicNumber, int secondaryValue, int hitCount, int rightCount)
-    {
-        return new int[]{damage, block, magicNumber, secondaryValue, hitCount, rightCount};
-    }
-
-    protected PMove_StackCustomPower addApplyPower(PCLCardTarget target, int amount, PTrigger... effects) {
-        PMove_StackCustomPower added = getApplyPower(target, amount, effects);
-        getEffects().add(added);
-        return added;
-    }
-
-    public void addAttackDisplay(AbstractPower p, float oldDamage, float tempDamage) {
-        if (formulaDisplay != null && baseDamage > 0) {
-            formulaDisplay.addAttackPower(p, oldDamage, tempDamage);
-        }
-    }
-
-    public void addAttackDisplay(PCLAffinity p, float oldDamage, float tempDamage) {
-        if (formulaDisplay != null && baseDamage > 0) {
-            formulaDisplay.addAttackAffinity(p, oldDamage, tempDamage);
-        }
-    }
-
-    public void addAttackResult(float oldDamage, float tempDamage) {
-        if (formulaDisplay != null && baseDamage > 0) {
-            formulaDisplay.setAttackResult(oldDamage, tempDamage);
-        }
-    }
-
-    public void addAugment(PCLAugment augment) {
-        addAugment(augment, true);
-    }
-
-    public void addAugment(PCLAugment augment, boolean save) {
-        int slot = getFreeAugmentSlot();
-        if (slot >= 0) {
-            augments.set(slot, augment);
-        } else {
-            augments.add(augment);
-        }
-        if (save) {
-            auxiliaryData.augments.add(augment.ID);
-        }
-        augment.onAddToCard(this);
-        refresh(null);
-    }
-
-    protected PCardPrimary_GainBlock addBlockMove() {
-        onBlockEffect = new PCardPrimary_GainBlock(this);
-        return onBlockEffect;
-    }
-
-    protected PCardPrimary_DealDamage addDamageMove() {
-        onAttackEffect = new PCardPrimary_DealDamage(this);
-        return onAttackEffect;
-    }
-
-    protected PCardPrimary_DealDamage addDamageMove(PCLAttackVFX attackEffect) {
-        onAttackEffect = new PCardPrimary_DealDamage(this, attackEffect.key);
-        return onAttackEffect;
-    }
-
-    protected PCardPrimary_DealDamage addDamageMove(AbstractGameAction.AttackEffect attackEffect) {
-        onAttackEffect = new PCardPrimary_DealDamage(this, attackEffect);
-        return onAttackEffect;
-    }
-
-    protected PCardPrimary_DealDamage addDamageMove(EffekseerEFK efx) {
-        onAttackEffect = new PCardPrimary_DealDamage(this).setDamageEffect(efx);
-        return onAttackEffect;
-    }
-
-    protected PCardPrimary_DealDamage addDamageMove(AbstractGameAction.AttackEffect attackEffect, EffekseerEFK efx) {
-        onAttackEffect = new PCardPrimary_DealDamage(this, attackEffect).setDamageEffect(efx);
-        return onAttackEffect;
-    }
-
-    public void addDefendDisplay(AbstractPower p, float oldDamage, float tempDamage) {
-        if (formulaDisplay != null && baseBlock > 0) {
-            formulaDisplay.addDefendPower(p, oldDamage, tempDamage);
-        }
-    }
-
-    public void addDefendDisplay(PCLAffinity p, float oldDamage, float tempDamage) {
-        if (formulaDisplay != null && baseBlock > 0) {
-            formulaDisplay.addDefendAffinity(p, oldDamage, tempDamage);
-        }
-    }
-
-    public void addDefendResult(float oldDamage, float tempDamage) {
-        if (formulaDisplay != null && baseBlock > 0) {
-            formulaDisplay.setDefendResult(oldDamage, tempDamage);
-        }
-    }
-
-    protected PMove_StackCustomPower addGainPower(PTrigger... effect) {
-        return addApplyPower(PCLCardTarget.Self, -1, effect);
-    }
-
-    protected PMove_StackCustomPower addGainPower(int amount, PTrigger... effect) {
-        return addApplyPower(PCLCardTarget.Self, amount, effect);
-    }
-
-    protected PSpecialCond addSpecialCond(int descIndex, FuncT3<Boolean, PSpecialCond, PCLUseInfo, Boolean> onUse) {
-        return addSpecialCond(descIndex, onUse, 1, 0);
-    }
-
-    protected PSpecialCond addSpecialCond(int descIndex, FuncT3<Boolean, PSpecialCond, PCLUseInfo, Boolean> onUse, int amount) {
-        return addSpecialCond(descIndex, onUse, amount, 0);
-    }
-
-    protected PSpecialCond addSpecialCond(int descIndex, FuncT3<Boolean, PSpecialCond, PCLUseInfo, Boolean> onUse, int amount, int extra) {
-        PSpecialCond move = (PSpecialCond) getSpecialCond(descIndex, onUse, amount, extra).setSource(this).onAddToCard(this);
-        getEffects().add(move);
-        return move;
-    }
-
-    protected PSpecialSkill addSpecialMove(int descIndex, ActionT2<PSpecialSkill, PCLUseInfo> onUse) {
-        return addSpecialMove(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, 1, 0);
-    }
-
-    protected PSpecialSkill addSpecialMove(int descIndex, ActionT2<PSpecialSkill, PCLUseInfo> onUse, int amount) {
-        return addSpecialMove(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, amount, 0);
-    }
-
-    protected PSpecialSkill addSpecialMove(int descIndex, ActionT2<PSpecialSkill, PCLUseInfo> onUse, int amount, int extra) {
-        return addSpecialMove(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, amount, extra);
-    }
-
-    protected PSpecialSkill addSpecialMove(String description, ActionT2<PSpecialSkill, PCLUseInfo> onUse, int amount) {
-        return addSpecialMove(description, onUse, amount, 0);
-    }
-
-    protected PSpecialSkill addSpecialMove(String description, ActionT2<PSpecialSkill, PCLUseInfo> onUse, int amount, int extra) {
-        PSpecialSkill move = (PSpecialSkill) getSpecialMove(description, onUse, amount, extra).setSource(this).onAddToCard(this);
-        getEffects().add(move);
-        return move;
-    }
-
-    protected PSpecialPowerSkill addSpecialPower(int descIndex, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse) {
-        return addSpecialPower(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, 1, 0);
-    }
-
-    protected PSpecialPowerSkill addSpecialPower(int descIndex, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount) {
-        return addSpecialPower(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, amount, 0);
-    }
-
-    protected PSpecialPowerSkill addSpecialPower(int descIndex, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount, int extra) {
-        return addSpecialPower(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, amount, extra);
-    }
-
-    protected PSpecialPowerSkill addSpecialPower(String description, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount) {
-        return addSpecialPower(description, onUse, amount, 0);
-    }
-
-    protected PSpecialPowerSkill addSpecialPower(String description, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount, int extra) {
-        PSpecialPowerSkill move = (PSpecialPowerSkill) getSpecialPower(description, onUse, amount, extra).setSource(this).onAddToCard(this);
-        getEffects().add(move);
-        return move;
-    }
-
-    public boolean canRenderGlow()
-    {
-        return transparency >= 0.7f && owner == null;
-    }
-
-    public int changeForm(Integer form, int timesUpgraded) {
-        return changeForm(form, timesUpgraded, timesUpgraded);
-    }
-
-    public int changeForm(Integer form, int prevUpgrade, int timesUpgraded) {
-
-        // Preserve any changes made to the base numbers while in the original form
-        int baseDamageDiff = baseDamage - (cardData.getDamage(this.auxiliaryData.form) + cardData.getDamageUpgrade(this.auxiliaryData.form) * prevUpgrade);
-        int baseBlockDiff = baseBlock - (cardData.getBlock(this.auxiliaryData.form) + cardData.getBlockUpgrade(this.auxiliaryData.form) * prevUpgrade);
-        int baseMagicNumberDiff = baseMagicNumber - (cardData.getMagicNumber(this.auxiliaryData.form) + cardData.getMagicNumberUpgrade(this.auxiliaryData.form) * prevUpgrade);
-        int baseSecondaryValueDiff = baseHeal - (cardData.getHp(this.auxiliaryData.form) + cardData.getHpUpgrade(this.auxiliaryData.form) * prevUpgrade);
-        int baseHitCountDiff = baseHitCount - (cardData.getHitCount(this.auxiliaryData.form) + cardData.getHitCountUpgrade(this.auxiliaryData.form) * prevUpgrade);
-        int baseRightCountDiff = baseRightCount - (cardData.getRightCount(this.auxiliaryData.form) + cardData.getRightCountUpgrade(this.auxiliaryData.form) * prevUpgrade);
-
-        // Preserve any changes made to the numbers for this turn while in the original form
-        int tempDamageDiff = damage - baseDamage;
-        int tempBlockDiff = block - baseBlock;
-        int tempMagicNumberDiff = magicNumber - baseMagicNumber;
-        int tempSecondaryValueDiff = heal - baseHeal;
-        int tempHitCountDiff = hitCount - baseHitCount;
-        int tempRightCountDiff = rightCount - baseRightCount;
-
-        int baseCost = cardData.getCost(this.auxiliaryData.form);
-        int costDiff = cost - (prevUpgrade > 0 ? (baseCost + cardData.getCostUpgrade(this.auxiliaryData.form)) : baseCost);
-
-
-        form = MathUtils.clamp(form, 0, this.getMaxForms() - 1);
-
-        setNumbers(baseDamageDiff + cardData.getDamage(form) + cardData.getDamageUpgrade(form) * timesUpgraded,
-                baseBlockDiff + cardData.getBlock(form) + cardData.getBlockUpgrade(form) * timesUpgraded,
-                baseMagicNumberDiff + cardData.getMagicNumber(form) + cardData.getMagicNumberUpgrade(form) * timesUpgraded,
-                baseSecondaryValueDiff + cardData.getHp(form) + cardData.getHpUpgrade(form) * timesUpgraded,
-                baseHitCountDiff + cardData.getHitCount(form) + cardData.getHitCountUpgrade(form) * timesUpgraded,
-                baseRightCountDiff + cardData.getRightCount(form) + cardData.getRightCountUpgrade(form) * timesUpgraded);
-
-        damage += tempDamageDiff;
-        block += tempBlockDiff;
-        magicNumber += tempMagicNumberDiff;
-        heal += tempSecondaryValueDiff;
-        hitCount += tempHitCountDiff;
-        rightCount += tempRightCountDiff;
-
-        // Ensure HP is set to the base health
-        currentHealth = heal;
-
-        upgradedDamage = baseDamage > cardData.getDamage(form);
-        upgradedBlock = baseBlock > cardData.getBlock(form);
-        upgradedMagicNumber = baseMagicNumber > cardData.getMagicNumber(form);
-        upgradedHeal = baseHeal > cardData.getHp(form);
-        upgradedHitCount = baseHitCount > cardData.getHitCount(form);
-        upgradedRightCount = baseRightCount > cardData.getRightCount(form);
-
-        int newCost = timesUpgraded > 0 ? cardData.getCost(form) + cardData.getCostUpgrade(form) : cardData.getCost(form);
-        setCost(newCost + costDiff);
-        upgradedCost = cost != newCost;
-
-        return setForm(form, timesUpgraded);
-    }
-
-    protected void doEffects(ActionT1<PSkill<?>> action) {
-        for (PSkill<?> be : getFullEffects()) {
-            action.invoke(be);
-        }
-    }
-
-    protected void doNonPowerEffects(ActionT1<PSkill<?>> action) {
-        for (PSkill<?> be : getFullEffects()) {
-            if (!(be instanceof SummonOnlyMove))
-            {
-                action.invoke(be);
-            }
-        }
-    }
-
-    public void fullReset() {
-        this.clearSkills();
-        for (PCLCardTag tag : PCLCardTag.values())
-        {
-            tag.set(this, 0);
-        }
-        this.onAttackEffect = null;
-        this.onBlockEffect = null;
-
-        setupProperties(cardData, this.auxiliaryData.form, timesUpgraded);
-        setup(null);
-        setForm(this.auxiliaryData.form, timesUpgraded);
-        refresh(null);
-    }
-
-    protected PMove_StackCustomPower getApplyPower(PCLCardTarget target, int amount, PTrigger... effects) {
-        Integer[] powerIndexes = EUIUtils.range(getPowerEffects().size(), getPowerEffects().size() + effects.length - 1);
-        for (PTrigger effect : effects) {
-            addPowerMove(effect);
-        }
-        return (PMove_StackCustomPower) new PMove_StackCustomPower(target, amount, powerIndexes).setSource(this).onAddToCard(this);
-    }
-
-    @Deprecated
-    public String getAttributeString(char attributeID) {
-        switch (attributeID) {
-            case 'D':
-                return String.valueOf(damage);
-            case 'B':
-                return String.valueOf(block);
-            case 'M':
-                return String.valueOf(magicNumber);
-            case 'S':
-                return String.valueOf(heal);
-            case 'K':
-                return String.valueOf(misc);
-            case 'X':
-                return GameUtilities.inBattle() && player != null ? String.valueOf(getXValue()) : PGR.core.strings.subjects_x;
-            default:
-                return "?";
-        }
-    }
-
-    public PCLAugment getAugment(int index) {
-        return augments.size() > index ? augments.get(index) : null;
-    }
-
-    public ArrayList<PSkill<?>> getAugmentSkills() {
-        return EUIUtils.mapAsNonnull(augments, aug -> aug != null ? aug.skill : null);
-    }
-
-    public ArrayList<PCLAugment> getAugments() {
-        return EUIUtils.filter(augments, Objects::nonNull);
-    }
-
-    public ColoredString getBlockString() {
-        if (isBlockModified) {
-            return new ColoredString(block, block >= baseBlock ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR);
+    protected void setupExtraTags() {
+        // Set Soulbound
+        if (!cardData.removableFromDeck) {
+            SoulboundField.soulbound.set(this, true);
         }
 
-        return new ColoredString(baseBlock, Settings.CREAM_COLOR);
-    }
-
-    public ColoredString getBottomText() {
-        String loadoutName = cardData.getLoadoutName();
-        return (loadoutName == null || loadoutName.isEmpty()) ? null : new ColoredString(loadoutName, Settings.CREAM_COLOR);
-    }
-
-    @Override
-    public PCLCard getCachedUpgrade() {
-        PCLCard upgrade = cardData.tempCard;
-
-        if (upgrade == null || upgrade.uuid != this.uuid || (upgrade.timesUpgraded != (timesUpgraded + 1))) {
-            upgrade = cardData.tempCard = (PCLCard) this.makeSameInstanceOf();
-            upgrade.changeForm(auxiliaryData.form, timesUpgraded);
-            upgrade.isPreview = true;
-            upgrade.upgrade();
-            upgrade.displayUpgrades();
-        }
-
-        return upgrade;
-    }
-
-    public PCardPrimary_GainBlock getCardBlock()
-    {
-        return onBlockEffect;
-    }
-
-    public PCardPrimary_DealDamage getCardDamage()
-    {
-        return onAttackEffect;
-    }
-
-    public ColoredTexture getCardAttributeBanner() {
-        if (rarity == PCLEnum.CardRarity.LEGENDARY || rarity == PCLEnum.CardRarity.SECRET)
-        {
-            return new ColoredTexture((isPopup ? PCLCoreImages.CardUI.cardBannerAttribute2L : PCLCoreImages.CardUI.cardBannerAttribute2).texture(), getRarityColor());
-        }
-        return new ColoredTexture((isPopup ? PCLCoreImages.CardUI.cardBannerAttributeL : PCLCoreImages.CardUI.cardBannerAttribute).texture(), getRarityColor());
-    }
-
-    protected Texture getCardBackground() {
-        PCLResources<?,?,?,?> resources = PGR.getResources(color);
-        if (resources == null || resources.images == null)
-        {
-            resources = PGR.core;
-        }
-
-        if (type == PCLEnum.CardType.SUMMON)
-        {
-            return isPopup ? resources.images.cardBackgroundSummonL.texture() : resources.images.cardBackgroundSummon.texture();
-        }
-        switch (type) {
-            case ATTACK:
-                return isPopup ? resources.images.cardBackgroundAttackL.texture() : resources.images.cardBackgroundAttack.texture();
-            case POWER:
-                return isPopup ? resources.images.cardBackgroundPowerL.texture() : resources.images.cardBackgroundPower.texture();
-            default:
-                return isPopup ? resources.images.cardBackgroundSkillL.texture() : resources.images.cardBackgroundSkill.texture();
-        }
-    }
-
-    protected Texture getCardBanner() {
-        if (shouldUsePCLFrame())
-        {
-            if (rarity == PCLEnum.CardRarity.LEGENDARY || rarity == PCLEnum.CardRarity.SECRET)
-            {
-                return (isPopup ? PCLCoreImages.CardUI.cardBanner2L : PCLCoreImages.CardUI.cardBanner2).texture();
-            }
-            return (isPopup ? PCLCoreImages.CardUI.cardBannerL : PCLCoreImages.CardUI.cardBanner).texture();
-        }
-        return null;
-    }
-
-    protected TextureAtlas.AtlasRegion getCardBannerVanillaRegion()
-    {
-        if (isPopup)
-        {
-            switch (rarity)
-            {
-                case RARE:
-                    return ImageMaster.CARD_BANNER_RARE_L;
-                case UNCOMMON:
-                    return ImageMaster.CARD_BANNER_UNCOMMON_L;
-                default:
-                    return ImageMaster.CARD_BANNER_COMMON_L;
-            }
-        }
-        else
-        {
-            switch (rarity)
-            {
-                case RARE:
-                    return ImageMaster.CARD_BANNER_RARE;
-                case UNCOMMON:
-                    return ImageMaster.CARD_BANNER_UNCOMMON;
-                default:
-                    return ImageMaster.CARD_BANNER_COMMON;
-            }
-        }
-    }
-
-    // For PCL cards, always use the skill silhouette because its cards are all rectangular
-    @Override
-    public TextureAtlas.AtlasRegion getCardBgAtlas() {
-        return shouldUsePCLFrame() || type == PCLEnum.CardType.SUMMON ? ImageMaster.CARD_SKILL_BG_SILHOUETTE : super.getCardBgAtlas();
-    }
-
-    public ColoredString getColoredAttributeString(char attributeID) {
-        switch (attributeID) {
-            case 'D':
-                return getDamageString();
-            case 'B':
-                return getBlockString();
-            case 'M':
-                return getMagicNumberString();
-            case 'S':
-                return getHPString();
-            case 'K':
-                return getSpecialVariableString();
-            case 'X':
-                return getXString(false);
-            case 'x':
-                return getXString(true);
-            default:
-                return new ColoredString("?", Settings.RED_TEXT_COLOR);
-        }
-    }
-
-    protected ColoredString getCostString() {
-        final ColoredString result = new ColoredString();
-
-        if (cost == -1) {
-            result.text = PGR.core.strings.subjects_x;
-        } else {
-            result.text = freeToPlay() ? "0" : Integer.toString(Math.max(0, this.costForTurn));
-        }
-
-        if (player != null && player.hand.contains(this) && (!this.hasEnoughEnergy() || GameUtilities.isUnplayableThisTurn(this))) {
-            result.color = new Color(1f, 0.3f, 0.3f, transparency);
-        } else if ((upgradedCost && isCostModified) || costForTurn < cost || (cost > 0 && this.freeToPlay())) {
-            result.color = new Color(0.4f, 1f, 0.4f, transparency);
-        } else {
-            result.color = new Color(1f, 1f, 1f, transparency);
-        }
-
-        return result;
-    }
-
-    public Texture getPortraitImageTexture() {
-        return portraitImg.texture;
-    }
-
-    public int hitCount() {
-        return hitCount;
-    }
-
-    public int hitCountBase() {
-        return baseHitCount;
-    }
-
-    public int rightCount() {
-        return rightCount;
-    }
-
-    public int rightCountBase() {
-        return baseRightCount;
-    }
-
-    public void loadImage(String path) {
-       loadImage(path, false);
-    }
-
-    public void loadImage(String path, boolean refresh) {
-        Texture t = EUIRM.getTexture(path, true, refresh, true);
-        if (t == null) {
-            t = EUIRM.getLocalTexture(path, true, refresh, true);
-            if (t == null) {
-                path = QuestionMark.DATA.imagePath;
-                t = EUIRM.getTexture(path, true, false, true);
-            }
-        }
-        assetUrl = path;
-        portraitImg = new ColoredTexture(t, null);
-    }
-
-    public ColoredString getDamageString() {
-        if (isDamageModified) {
-            return new ColoredString(damage, damage >= baseDamage * PGR.dungeon.getDivisor() ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR);
-        }
-
-        return new ColoredString(baseDamage, Settings.CREAM_COLOR);
-    }
-
-    protected Texture getEnergyOrb() {
-        // For non-custom cards, use the original resource card color so that colorless/curses have their resource's energy orb
-        PCLResources<?,?,?,?> resources = PGR.getResources(cardData.resources.cardColor);
-        if (resources == null || resources.images == null)
-        {
-            resources = PGR.core;
-        }
-        return (isPopup ? resources.images.cardEnergyOrbL : resources.images.cardEnergyOrb).texture();
-    }
-
-    public int getForm() {
-        return auxiliaryData.form;
-    }
-
-    public int getFreeAugmentSlot() {
-        for (int i = 0; i < augments.size(); i++) {
-            if (augments.get(i) == null) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    public ColoredString getHPString() {
-        return new ColoredString(currentHealth, currentHealth < heal ? Settings.RED_TEXT_COLOR : isHealModified || heal > baseHeal ? Settings.GREEN_TEXT_COLOR : Settings.CREAM_COLOR);
-    }
-
-    public ColoredString getMagicNumberString() {
-        return new ColoredString(String.valueOf(magicNumber), Settings.CREAM_COLOR);
-    }
-
-    public int getMaxForms() {
-        return cardData != null ? cardData.maxForms : 1;
-    }
-
-    protected Texture getPortraitFrame() {
-        if (shouldUsePCLFrame())
-        {
-            if (type == PCLEnum.CardType.SUMMON)
-            {
-                return isPopup ? PCLCoreImages.CardUI.cardFrameSummonL.texture() : PCLCoreImages.CardUI.cardFrameSummon.texture();
-            }
-            switch (type) {
-                case ATTACK:
-                    return isPopup ? PCLCoreImages.CardUI.cardFrameAttackL.texture() : PCLCoreImages.CardUI.cardFrameAttack.texture();
-                case POWER:
-                    return isPopup ? PCLCoreImages.CardUI.cardFramePowerL.texture() : PCLCoreImages.CardUI.cardFramePower.texture();
-                default:
-                    return isPopup ? PCLCoreImages.CardUI.cardFrameSkillL.texture() : PCLCoreImages.CardUI.cardFrameSkill.texture();
-            }
-        }
-        return null;
-    }
-
-    protected TextureAtlas.AtlasRegion getPortraitFrameVanillaRegion()
-    {
-        if (isPopup)
-        {
-            switch (type)
-            {
-                case ATTACK:
-                    switch (rarity)
-                    {
-                        case RARE:
-                            return ImageMaster.CARD_FRAME_ATTACK_RARE_L;
-                        case UNCOMMON:
-                            return ImageMaster.CARD_FRAME_ATTACK_UNCOMMON_L;
-                        default:
-                            return ImageMaster.CARD_FRAME_ATTACK_COMMON_L;
-                    }
-                case POWER:
-                    switch (rarity)
-                    {
-                        case RARE:
-                            return ImageMaster.CARD_FRAME_POWER_RARE_L;
-                        case UNCOMMON:
-                            return ImageMaster.CARD_FRAME_POWER_UNCOMMON_L;
-                        default:
-                            return ImageMaster.CARD_FRAME_POWER_COMMON_L;
-                    }
-                default:
-                    switch (rarity)
-                    {
-                        case RARE:
-                            return ImageMaster.CARD_FRAME_SKILL_RARE_L;
-                        case UNCOMMON:
-                            return ImageMaster.CARD_FRAME_SKILL_UNCOMMON_L;
-                        default:
-                            return ImageMaster.CARD_FRAME_SKILL_COMMON_L;
-                    }
-            }
-        }
-        else
-        {
-            switch (type)
-            {
-                case ATTACK:
-                    switch (rarity)
-                    {
-                        case RARE:
-                            return ImageMaster.CARD_FRAME_ATTACK_RARE;
-                        case UNCOMMON:
-                            return ImageMaster.CARD_FRAME_ATTACK_UNCOMMON;
-                        default:
-                            return ImageMaster.CARD_FRAME_ATTACK_COMMON;
-                    }
-                case POWER:
-                    switch (rarity)
-                    {
-                        case RARE:
-                            return ImageMaster.CARD_FRAME_POWER_RARE;
-                        case UNCOMMON:
-                            return ImageMaster.CARD_FRAME_POWER_UNCOMMON;
-                        default:
-                            return ImageMaster.CARD_FRAME_POWER_COMMON;
-                    }
-                default:
-                    switch (rarity)
-                    {
-                        case RARE:
-                            return ImageMaster.CARD_FRAME_SKILL_RARE;
-                        case UNCOMMON:
-                            return ImageMaster.CARD_FRAME_SKILL_UNCOMMON;
-                        default:
-                            return ImageMaster.CARD_FRAME_SKILL_COMMON;
-                    }
-            }
-        }
-    }
-
-    public Color getRarityColor() {
-
-        if (rarity == PCLEnum.CardRarity.SECRET)
-        {
-            return COLOR_SECRET;
-        }
-        else if (rarity == PCLEnum.CardRarity.LEGENDARY)
-        {
-            return COLOR_ULTRA_RARE;
-        }
-
-        return EUIGameUtils.colorForRarity(rarity);
-    }
-
-    public Color getRarityVanillaColor() {
-        switch (rarity)
-        {
-            case COMMON:
-            case UNCOMMON:
-            case RARE:
-                return Color.WHITE;
-        }
-        return getRarityColor();
-    }
-
-    public Texture getTypeIcon() {
-        return EUIGameUtils.iconForType(type).texture();
-    }
-
-    public Skills getSkills() {
-        return skills;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getID() {
-        return cardID;
-    }
-
-    public ArrayList<PSkill<?>> getFullEffects() {
-        ArrayList<PSkill<?>> result = new ArrayList<>();
-        if (onAttackEffect != null)
-        {
-            result.add(onAttackEffect);
-        }
-        if (onBlockEffect != null)
-        {
-            result.add(onBlockEffect);
-        }
-        result.addAll(getEffects());
-        result.addAll(getAugmentSkills());
-        return result;
-    }
-
-    public PTrigger addPowerMove(PTrigger effect) {
-        PTrigger added = (PTrigger) effect.setSource(this).onAddToCard(this);
-        getPowerEffects().add(added);
-        return added;
-    }
-
-    public PSkill<?> addUseMove(PSkill<?> effect) {
-        PSkill<?> added = effect.setSource(this).onAddToCard(this);
-        getEffects().add(added);
-        return added;
-    }
-
-    public PSkill<?> addUseMove(PSkill<?> primary, PSkill<?>... effects) {
-        PSkill<?> added = PSkill.chain(primary, effects).setSource(this).onAddToCard(this);
-        getEffects().add(added);
-        return added;
-    }
-
-    protected PSpecialCond getSpecialCond(int descIndex, FuncT3<Boolean, PSpecialCond, PCLUseInfo, Boolean> onUse, int amount) {
-        return getSpecialCond(descIndex, onUse, amount, 0);
-    }
-
-    protected PSpecialCond getSpecialCond(int descIndex, FuncT3<Boolean, PSpecialCond, PCLUseInfo, Boolean> onUse, int amount, int extra) {
-        return new PSpecialCond(cardData, descIndex, onUse, amount, extra);
-    }
-
-    protected PSpecialSkill getSpecialMove(int descIndex, ActionT2<PSpecialSkill, PCLUseInfo> onUse) {
-        return getSpecialMove(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, 1, 0);
-    }
-
-    protected PSpecialSkill getSpecialMove(int descIndex, ActionT2<PSpecialSkill, PCLUseInfo> onUse, int amount) {
-        return getSpecialMove(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, amount, 0);
-    }
-
-    protected PSpecialSkill getSpecialMove(int descIndex, ActionT2<PSpecialSkill, PCLUseInfo> onUse, int amount, int extra) {
-        return getSpecialMove(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, amount, extra);
-    }
-
-    protected PSpecialSkill getSpecialMove(String description, ActionT2<PSpecialSkill, PCLUseInfo> onUse, int amount, int extra) {
-        return new PSpecialSkill(this.cardID + this.getEffects().size(), description, onUse, amount, extra);
-    }
-
-    protected PSpecialSkill getSpecialMove(FuncT1<String, PSpecialSkill> strFunc, ActionT2<PSpecialSkill, PCLUseInfo> onUse, int amount) {
-        return getSpecialMove(strFunc, onUse, amount, 0);
-    }
-
-    protected PSpecialSkill getSpecialMove(FuncT1<String, PSpecialSkill> strFunc, ActionT2<PSpecialSkill, PCLUseInfo> onUse, int amount, int extra) {
-        return new PSpecialSkill(this.cardID + this.getEffects().size(), strFunc, onUse, amount, extra);
-    }
-
-    protected PSpecialPowerSkill getSpecialPower(int descIndex, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse) {
-        return getSpecialPower(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, 1, 0);
-    }
-
-    protected PSpecialPowerSkill getSpecialPower(int descIndex, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount) {
-        return getSpecialPower(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, amount, 0);
-    }
-
-    protected PSpecialPowerSkill getSpecialPower(int descIndex, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount, int extra) {
-        return getSpecialPower(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, amount, extra);
-    }
-
-    protected PSpecialPowerSkill getSpecialPower(String description, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount, int extra) {
-        return new PSpecialPowerSkill(this.cardID + this.getEffects().size(), description, onUse, amount, extra);
-    }
-
-    protected PSpecialPowerSkill getSpecialPower(FuncT1<String, PSpecialPowerSkill> strFunc, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount) {
-        return getSpecialPower(strFunc, onUse, amount, 0);
-    }
-
-    protected PSpecialPowerSkill getSpecialPower(FuncT1<String, PSpecialPowerSkill> strFunc, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount, int extra) {
-        return new PSpecialPowerSkill(this.cardID + this.getEffects().size(), strFunc, onUse, amount, extra);
-    }
-
-    public ColoredString getSpecialVariableString() {
-        return new ColoredString(misc, misc > 0 ? Settings.GREEN_TEXT_COLOR : Settings.CREAM_COLOR);
-    }
-
-    @Override
-    public List<EUITooltip> getTips() {
-        return tooltips;
-    }
-
-    @Override
-    public EUICardPreview getPreview() {
-        return PCLCardPreviews.getCardPreview(this);
-    }
-
-    @Override
-    public boolean isPopup() {
-        return isPopup;
-    }
-
-    public void generateDynamicTooltips(ArrayList<EUITooltip> dynamicTooltips) {
-        // Only show these tooltips outside of combat
-        if (!GameUtilities.inBattle() || isPopup || (player != null && player.masterDeck.contains(this))) {
-            if (isSoulbound()) {
-                dynamicTooltips.add(PGR.core.tooltips.soulbound);
-            }
-            if (cardData.canToggleFromPopup) {
-                dynamicTooltips.add(PGR.core.tooltips.multiform);
-            }
-            if (isUnique()) {
-                dynamicTooltips.add(PGR.core.tooltips.unique);
-            }
-        }
-
-        // Add tips from tags
-        for (PCLCardTag tag : PCLCardTag.getAll()) {
-            if (tag.has(this)) {
-                dynamicTooltips.add(tag.getTip());
-            }
-        }
-
-        // Do not show the Normal damage tooltip for card tooltips
-        EUITooltip attackTooltip = attackType.getTooltip();
-        if (attackTooltip != PGR.core.tooltips.normalDamage) {
-            dynamicTooltips.add(attackTooltip);
-        }
-
-    }
-
-    @Override
-    public void setIsPreview(boolean value) {
-        isPreview = value;
-    }
-
-    protected String getTypeText() {
-        return EUIGameUtils.textForType(this.type);
-    }
-
-    // Upgrade name is determined by number of upgrades and the current form (if multiple exist)
-    // E.g. Form 0 -> +A, Form 1 -> +B, etc.
-    protected String getUpgradeName() {
-        if (!upgraded)
-        {
-            return cardData.strings.NAME;
-        }
-        StringBuilder sb = new StringBuilder(cardData.strings.NAME);
-        sb.append("+");
-
-        if (maxUpgradeLevel < 0 || maxUpgradeLevel > 1) {
-            sb.append(this.timesUpgraded);
-        }
-
-        // Do not show appended characters for non-multiform or linear upgrade path cards
-        if (this.cardData.maxForms > 1 && this.cardData.branchFactor != 1) {
-            char appendix = (char) (auxiliaryData.form + CHAR_OFFSET);
-            sb.append(appendix);
-        }
-
-        return sb.toString();
-    }
-
-    public ColoredString getXString(boolean onlyInBattle) {
-        if (GameUtilities.inBattle() && player != null) {
-            int value = getXValue();
-            if (value >= 0) {
-                return new ColoredString(onlyInBattle ? " (" + value + ")" : value, Settings.GREEN_TEXT_COLOR);
-            }
-        }
-
-        return new ColoredString(onlyInBattle ? "" : "X", Settings.CREAM_COLOR);
-    }
-
-    public int getXValue() {
-        return -1;
-    }
-
-    public boolean isAoE() {
-        return isMultiDamage;
-    }
-
-    protected boolean isEffectPlayable(AbstractMonster m) {
-        PCLUseInfo info = new PCLUseInfo(this, getSourceCreature(), m);
-        for (PSkill<?> be : getFullEffects()) {
-            if (!be.canPlay(info)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public boolean isOnScreen() {
-        return current_y >= -200f * Settings.scale && current_y <= Settings.HEIGHT + 200f * Settings.scale;
-    }
-
-    public boolean isSoulbound() {
-        return SoulboundField.soulbound.get(this);
-    }
-
-    public boolean isStarter() {
-        return GameUtilities.isStarter(this);
-    }
-
-    public boolean isUnique() {
-        return cardData.unique;
-    }
-
-    public PCLCard makePopupCopy() {
-        PCLCard copy = makeStatEquivalentCopy();
-        copy.current_x = (float) Settings.WIDTH / 2f;
-        copy.current_y = (float) Settings.HEIGHT / 2f;
-        copy.drawScale = copy.targetDrawScale = 2f;
-        copy.isPopup = true;
-        return copy;
-    }
-
-    public String makePowerString() {
-        return makePowerString(rawDescription);
-    }
-
-    protected float modifyBlock(PCLUseInfo info, float amount) {
-        for (PSkill<?> be : getFullEffects()) {
-            amount = be.modifyBlock(info, amount);
-        }
-        return amount;
-    }
-
-    protected float modifyDamage(PCLUseInfo info, float amount) {
-        for (PSkill<?> be : getFullEffects()) {
-            amount = be.modifyDamage(info, amount);
-        }
-        return amount;
-    }
-
-    protected float modifyHitCount(PCLUseInfo info, float amount) {
-        for (PSkill<?> be : getFullEffects()) {
-            amount = be.modifyHitCount(info, amount);
-        }
-        return amount;
-    }
-
-    protected float modifyMagicNumber(PCLUseInfo info, float amount) {
-        for (PSkill<?> be : getFullEffects()) {
-            amount = be.modifyMagicNumber(info, amount);
-        }
-        return amount;
-    }
-
-    protected float modifyMagicHeal(PCLUseInfo info, float amount) {
-        for (PSkill<?> be : getFullEffects()) {
-            amount = be.modifyHeal(info, amount);
-        }
-        return amount;
-    }
-
-    protected float modifyRightCount(PCLUseInfo info, float amount) {
-        for (PSkill<?> be : getFullEffects()) {
-            amount = be.modifyRightCount(info, amount);
-        }
-        return amount;
-    }
-
-    public void onDrag(AbstractMonster m) {
-        doEffects(be -> be.onDrag(m));
-    }
-
-    @Override
-    public void onRemovedFromDeck()
-    {
-        for (PCLAugment augment : getAugments()) {
-            if (augment.canRemove()) {
-                PGR.dungeon.addAugment(augment.ID, 1);
-            }
-        }
-    }
-
-    protected void onUpgrade() {
-    }
-
-    public void onUse(PCLUseInfo info) {
-        if (!dontTriggerOnUseCard) {
-            doEffects(be -> be.use(info));
-        }
-    }
-
-    // Used by summons when triggered, as power effects should only be cast when the summon is first summoned
-    public void useEffectsWithoutPowers(PCLUseInfo info)
-    {
-        doNonPowerEffects(be -> be.use(info));
-    }
-
-    public AbstractCreature getSourceCreature()
-    {
-        return owner != null ? owner : player;
-    }
-
-    // Update damage, block, and magic number from the powers on a given target
-    // Every step of the calculation is recorded for display in the damage formula widget
-    public void refresh(AbstractMonster enemy) {
-        PCLUseInfo info = new PCLUseInfo(this, getSourceCreature(), enemy);
-        doEffects(be -> be.refresh(info, true));
-
-        boolean applyEnemyPowers = (enemy != null && !GameUtilities.isDeadOrEscaped(enemy));
-        float tempBlock = baseBlock;
-        float tempDamage = baseDamage;
-        float tempMagicNumber = CombatManager.onModifyMagicNumber(baseMagicNumber, this);
-        float tempHitCount = baseHitCount;
-        float tempRightCount = baseRightCount;
-        tempDamage = modifyDamage(info, tempDamage);
-        tempBlock = modifyBlock(info, tempBlock);
-
-        AbstractCreature owner = getSourceCreature();
-        if (owner != null) {
-            int applyCount = attackType == PCLAttackType.Brutal ? 2 : 1;
-
-            if (owner instanceof AbstractPlayer)
-            {
-                for (AbstractRelic r : ((AbstractPlayer) owner).relics) {
-                    tempDamage = r.atDamageModify(tempDamage, this);
-                    if (r instanceof PCLRelic)
-                    {
-                        tempBlock = ((PCLRelic) r).atBlockModify(tempBlock, this);
-                    }
-                }
-
-                for (AbstractRelic r : ((AbstractPlayer) owner).relics) {
-                    if (r instanceof PCLRelic)
-                    {
-                        tempMagicNumber = ((PCLRelic) r).atMagicNumberModify(info, tempMagicNumber, this);
-                        tempHitCount = ((PCLRelic) r).atHitCountModify(info, tempHitCount, this);
-                        tempRightCount = ((PCLRelic) r).atRightCountModify(info, tempRightCount, this);
-                    }
+        if (cardData.extraTags != null) {
+            for (CardTagItem item : cardData.extraTags) {
+                this.tags.add(item.tag);
+                // Starter Strike tags should automatically be added to Basic cards with the Strike, so they can be upgraded in Simplicity, etc.
+                if (item == CardTagItem.Strike && this.rarity == CardRarity.BASIC) {
+                    this.tags.add(CardTags.STARTER_STRIKE);
                 }
             }
-
-            for (AbstractPower p : owner.powers) {
-                if (p instanceof PCLPower)
-                {
-                    tempMagicNumber = ((PCLPower) p).modifyMagicNumber(info, tempMagicNumber, this);
-                    tempHitCount = ((PCLPower) p).modifyHitCount(info, tempHitCount, this);
-                    tempRightCount = ((PCLPower) p).modifyRightCount(info, tempRightCount, this);
-                }
-            }
-
-            if (attackType.useFocus) {
-                for (AbstractPower p : owner.powers) {
-                    float oldBlock = tempBlock;
-                    float oldDamage = tempDamage;
-                    tempBlock = p.modifyBlock(tempBlock, this);
-                    if (FocusPower.POWER_ID.equals(p.ID))
-                    {
-                        tempDamage += p.amount;
-                    }
-                    else if (p instanceof PCLPower) {
-                        tempDamage = ((PCLPower) p).modifyOrbOutgoing(tempDamage);
-                    }
-                    addAttackDisplay(p, oldDamage, tempDamage);
-                    addDefendDisplay(p, oldBlock, tempBlock);
-                }
-            } else {
-                for (AbstractPower p : owner.powers) {
-                    float oldBlock = tempBlock;
-                    float oldDamage = tempDamage;
-
-                    if (p instanceof PCLPower)
-                    {
-                        tempBlock = ((PCLPower)p).modifyBlock(info, tempBlock, this);
-                        for (int i = 0; i < applyCount; i++) {
-                            tempDamage = ((PCLPower)p).atDamageGive(info, tempDamage, damageTypeForTurn, this);
-                        }
-                    }
-                    else
-                    {
-                        tempBlock = p.modifyBlock(tempBlock, this);
-                        for (int i = 0; i < applyCount; i++) {
-                            tempDamage = p.atDamageGive(tempDamage, damageTypeForTurn, this);
-                        }
-                    }
-
-                    addAttackDisplay(p, oldDamage, tempDamage);
-                    addDefendDisplay(p, oldBlock, tempBlock);
-                }
-            }
-
-            tempBlock = CombatManager.playerSystem.modifyBlock(tempBlock, parent != null ? parent : this, this, enemy != null ? enemy : owner);
-            tempDamage = CombatManager.playerSystem.modifyDamage(tempDamage, parent != null ? parent : this,this, enemy);
-
-            for (AbstractPower p : owner.powers) {
-                tempBlock = p.modifyBlockLast(tempBlock);
-            }
-
-            if (applyEnemyPowers) {
-                if (attackType.bypassFlight && EUIUtils.any(enemy.powers, po -> FlightPower.POWER_ID.equals(po.ID))) {
-                    tempDamage *= 2f * applyCount;
-                }
-
-                if (attackType.useFocus)
-                {
-                    for (AbstractPower p : enemy.powers) {
-                        float oldDamage = tempDamage;
-                        // Lock-on calculations are hardcoded in AbstractOrb so we are falling back on PCLLockOn's multiplier for now
-                        if (LockOnPower.POWER_ID.equals(p.ID))
-                        {
-                            tempDamage *= PCLLockOnPower.getOrbMultiplier();
-                        }
-                        else if (p instanceof PCLPower)
-                        {
-                            for (int i = 0; i < applyCount; i++) {
-                                tempDamage = ((PCLPower) p).modifyOrbIncoming(tempDamage);
-                            }
-                        }
-                        addAttackDisplay(p, oldDamage, tempDamage);
-                    }
-                }
-                else
-                {
-                    for (AbstractPower p : enemy.powers) {
-                        float oldDamage = tempDamage;
-                        for (int i = 0; i < applyCount; i++) {
-                            tempDamage = p.atDamageReceive(tempDamage, damageTypeForTurn, this);
-                        }
-                        addAttackDisplay(p, oldDamage, tempDamage);
-                    }
-                }
-
-            }
-
-            if (owner instanceof AbstractPlayer)
-            {
-                tempDamage = ((AbstractPlayer) owner).stance.atDamageGive(tempDamage, damageTypeForTurn, this);
-            }
-
-            for (AbstractPower p : owner.powers) {
-                float oldDamage = tempDamage;
-                for (int i = 0; i < applyCount; i++) {
-                    tempDamage = p.atDamageFinalGive(tempDamage, damageTypeForTurn, this);
-                }
-                addAttackDisplay(p, oldDamage, tempDamage);
-            }
-
-            if (applyEnemyPowers) {
-                for (AbstractPower p : enemy.powers) {
-                    float oldDamage = tempDamage;
-                    for (int i = 0; i < applyCount; i++) {
-                        tempDamage = p.atDamageFinalReceive(tempDamage, damageTypeForTurn, this);
-                    }
-                    addAttackDisplay(p, oldDamage, tempDamage);
-                }
-                tempDamage = CombatManager.onDamageOverride(enemy, damageTypeForTurn, tempDamage, this);
-            }
-        }
-
-        // Do not use the regular update methods because those will refresh amounts from onAttack with the standard setAmount
-        // TODO heal modify
-        block = Math.max(0, MathUtils.floor(tempBlock));
-        damage = Math.max(0, MathUtils.floor(tempDamage));
-        magicNumber = MathUtils.floor(modifyMagicNumber(info, tempMagicNumber));
-        hitCount = Math.max(1,MathUtils.floor(modifyHitCount(info, tempHitCount)));
-        rightCount = Math.max(1,MathUtils.floor(modifyRightCount(info, tempRightCount)));
-
-        this.isBlockModified = (baseBlock != block);
-        this.isDamageModified = (baseDamage != damage);
-        this.isHitCountModified = (baseHitCount != hitCount);
-        this.isMagicNumberModified = (baseMagicNumber != magicNumber);
-        this.isRightCountModified = (baseRightCount != rightCount);
-
-        if (onAttackEffect != null)
-        {
-            onAttackEffect.setAmountFromCardForUpdateOnly();
-        }
-        if (onBlockEffect != null)
-        {
-            onBlockEffect.setAmountFromCardForUpdateOnly();
-        }
-
-        addAttackResult(baseDamage, tempDamage);
-        addDefendResult(baseBlock, tempBlock);
-
-        // Release damage display for rendering
-        formulaDisplay = null;
-    }
-
-    public PCLAugment removeAugment(int index) {
-        return removeAugment(index, true);
-    }
-
-    public PCLAugment removeAugment(int index, boolean save) {
-        if (index >= 0 && index < augments.size()) {
-            PCLAugment augment = augments.get(index);
-            if (augment != null && augment.canRemove()) {
-                augments.set(index, null);
-                if (save) {
-                    auxiliaryData.augments.set(index, null);
-                }
-                augment.onRemoveFromCard(this);
-                refresh(null);
-                return augment;
-            }
-        }
-        return null;
-    }
-
-    public void render(SpriteBatch sb, boolean hovered, boolean selected, boolean library) {
-        if (Settings.hideCards || !isOnScreen()) {
-            return;
-        }
-
-        if (flashVfx != null) {
-            flashVfx.render(sb);
-        }
-
-        if (isFlipped) {
-            renderBack(sb, hovered, selected);
-            return;
-        }
-
-        if (GameUtilities.canShowUpgrades(library) && !isPreview && !isPopup && canUpgrade()) {
-            updateGlow();
-            renderGlow(sb);
-            renderUpgradePreview(sb);
-            return;
-        }
-
-        updateGlow();
-        renderGlow(sb);
-        renderImage(sb, hovered, selected);
-        renderTitle(sb);
-        renderType(sb);
-        renderDescription(sb);
-        renderTint(sb);
-        renderEnergy(sb);
-        hb.render(sb);
-    }
-
-    protected void renderAtlas(SpriteBatch sb, Color color, TextureAtlas.AtlasRegion img, float drawX, float drawY)
-    {
-        sb.setColor(color);
-        sb.draw(img, drawX + img.offsetX - (float) img.originalWidth / 2f, drawY + img.offsetY - (float) img.originalHeight / 2f, (float) img.originalWidth / 2f - img.offsetX, (float) img.originalHeight / 2f - img.offsetY, (float) img.packedWidth, (float) img.packedHeight, this.drawScale * Settings.scale, this.drawScale * Settings.scale, this.angle);
-    }
-
-    protected void renderAtlas(SpriteBatch sb, Color color, TextureAtlas.AtlasRegion img, float drawX, float drawY, float scale)
-    {
-        sb.setColor(color);
-        sb.draw(img, drawX + img.offsetX - (float) img.originalWidth / 2f, drawY + img.offsetY - (float) img.originalHeight / 2f, (float) img.originalWidth / 2f - img.offsetX, (float) img.originalHeight / 2f - img.offsetY, (float) img.packedWidth, (float) img.packedHeight, this.drawScale * Settings.scale * scale, this.drawScale * Settings.scale * scale, this.angle);
-    }
-
-    protected void renderPortraitImage(SpriteBatch sb, Texture texture, Color color, float scale, boolean cropPortrait, boolean useTextureSize, boolean foreground)
-    {
-        if (color == null) {
-            color = getRenderColor();
-        }
-
-        final float render_width = useTextureSize ? texture.getWidth() : 250;
-        final float render_height = useTextureSize ? texture.getWidth() : 190;
-        if (cropPortrait && drawScale > 0.6f && drawScale < 1) {
-            final int width = texture.getWidth();
-            final int offset_x = (int) ((1 - drawScale) * (0.5f * width));
-            TextureAtlas.AtlasRegion region = foreground ? jokePortrait : portrait;
-            if (region == null || texture != region.getTexture() || (region.getRegionX() != offset_x) || EUI.elapsed50()) {
-                final int height = texture.getHeight();
-                final int offset_y1 = 0;//(int) ((1-drawScale) * (0.5f * height));
-                final int offset_y2 = (int) ((1 - drawScale) * (height));
-                if (region == null) {
-                    region = new TextureAtlas.AtlasRegion(texture, offset_x, offset_y1, width - (2 * offset_x), height - offset_y1 - offset_y2);
-                    if (foreground) {
-                        jokePortrait = region; // let's just reuse this.
-                    } else {
-                        portrait = region;
-                    }
-                } else {
-                    region.setRegion(texture);
-                    region.setRegion(offset_x, offset_y1, width - (2 * offset_x), height - offset_y1 - offset_y2);
-                }
-            }
-
-            PCLRenderHelpers.drawOnCardAuto(sb, this, region, new Vector2(0, 72), render_width, render_height, color, transparency, scale);
-        } else if (isPopup) {
-            PCLRenderHelpers.drawOnCardAuto(sb, this, texture, new Vector2(0, 72), render_width * 2, render_height * 2, color, transparency, scale * 0.5f);
-        } else {
-            PCLRenderHelpers.drawOnCardAuto(sb, this, texture, new Vector2(0, 72), render_width, render_height, color, transparency, scale);
         }
     }
 
-    public void setAttackType(PCLAttackType attackType) {
-        this.attackType = attackType;
-    }
+    protected void setupProperties(PCLCardData cardData, Integer form, int timesUpgraded) {
+        setNumbers(cardData.getDamage(form) + cardData.getDamageUpgrade(form) * timesUpgraded,
+                cardData.getBlock(form) + cardData.getBlockUpgrade(form) * timesUpgraded,
+                cardData.getMagicNumber(form) + cardData.getMagicNumberUpgrade(form) * timesUpgraded,
+                cardData.getHp(form) + cardData.getHpUpgrade(form) * timesUpgraded,
+                cardData.getHitCount(form) + cardData.getHitCountUpgrade(form) * timesUpgraded,
+                cardData.getRightCount(form) + cardData.getRightCountUpgrade(form) * timesUpgraded);
+        setMultiDamage(cardData.cardTarget.targetsMulti());
+        setTarget(cardData.cardTarget);
+        setTiming(cardData.timing);
+        setAttackType(cardData.attackType);
 
-    public void setTarget(PCLCardTarget attackTarget) {
-        this.pclTarget = attackTarget;
-        this.target = attackTarget.cardTarget;
-    }
-
-    public void setTiming(DelayTiming timing) {
-        this.timing = timing;
-    }
-
-    protected void setCost(int value) {
-        if (this.cost >= 0) {
-            int previousDiff = costForTurn - cost;
-            this.cost = Math.max(0, value);
-            this.costForTurn = Math.max(0, cost + previousDiff);
+        if (timesUpgraded > 0) {
+            setCost(cardData.getCost(form) + cardData.getCostUpgrade(form));
         }
-    }
+        else {
+            setCost(cardData.getCost(form));
+        }
 
-    public void setEvokeOrbCount(int count) {
-        this.showEvokeValue = count > 0;
-        this.showEvokeOrbCount = count;
+        this.affinities.initialize(cardData.affinities, form);
+
+        if (!cardData.obtainableInCombat) {
+            setObtainableInCombat(false);
+        }
+
+        bottomText = getBottomText();
     }
 
     protected int setForm(Integer form, int timesUpgraded) {
@@ -1547,12 +216,10 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         cardData.invokeTags(this, this.auxiliaryData.form);
         setTarget(cardData.getTargetUpgrade(this.auxiliaryData.form));
         this.name = getUpgradeName();
-        if (onAttackEffect != null)
-        {
+        if (onAttackEffect != null) {
             onAttackEffect.setAmountFromCard().onUpgrade();
         }
-        if (onBlockEffect != null)
-        {
+        if (onBlockEffect != null) {
             onBlockEffect.setAmountFromCard().onUpgrade();
         }
         for (PSkill<?> ef : getEffects()) {
@@ -1575,40 +242,9 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         return this.auxiliaryData.form;
     }
 
-    public void setCardRarity(CardRarity rarity)
-    {
-        this.rarity = rarity;
-    }
-
-    public void setCardRarityType(CardRarity rarity, CardType type)
-    {
-        this.rarity = rarity;
-        this.type = type;
-    }
-
-    public void setCardType(CardType type)
-    {
-        this.type = type;
-    }
-
-    public void setMultiDamage(boolean value) {
-        this.isMultiDamage = value;
-    }
-
-    protected void setNumbers(int damage, int block) {
-        setNumbers(damage, block, 0, 0);
-    }
-
-    protected void setNumbers(int damage, int block, int magicNumber) {
-        setNumbers(damage, block, magicNumber, 0);
-    }
-
-    protected void setNumbers(int damage, int block, int magicNumber, int secondaryValue) {
-        setNumbers(damage, block, magicNumber, secondaryValue, 1);
-    }
-
-    protected void setNumbers(int damage, int block, int magicNumber, int secondaryValue, int hitCount) {
-        setNumbers(damage, block, magicNumber, secondaryValue, hitCount, 1);
+    public void setupImages(String imagePath) {
+        portrait = null;
+        loadImage(imagePath);
     }
 
     protected void setNumbers(int damage, int block, int magicNumber, int secondaryValue, int hitCount, int rightCount) {
@@ -1620,233 +256,79 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         this.baseRightCount = this.rightCount = Math.max(1, rightCount);
     }
 
+    public void setMultiDamage(boolean value) {
+        this.isMultiDamage = value;
+    }
+
+    public void setTarget(PCLCardTarget attackTarget) {
+        this.pclTarget = attackTarget;
+        this.target = attackTarget.cardTarget;
+    }
+
+    public void setTiming(DelayTiming timing) {
+        this.timing = timing;
+    }
+
+    public void setAttackType(PCLAttackType attackType) {
+        this.attackType = attackType;
+    }
+
+    protected void setCost(int value) {
+        if (this.cost >= 0) {
+            int previousDiff = costForTurn - cost;
+            this.cost = Math.max(0, value);
+            this.costForTurn = Math.max(0, cost + previousDiff);
+        }
+    }
+
     public void setObtainableInCombat(boolean value) {
         setTag(CardTags.HEALING, !value);
     }
 
-    protected void setTag(CardTags tag, boolean enable) {
-        if (!enable) {
-            tags.remove(tag);
-        } else if (!tags.contains(tag)) {
-            tags.add(tag);
+    public ColoredString getBottomText() {
+        String loadoutName = cardData.getLoadoutName();
+        return (loadoutName == null || loadoutName.isEmpty()) ? null : new ColoredString(loadoutName, Settings.CREAM_COLOR);
+    }
+
+    public int getMaxForms() {
+        return cardData != null ? cardData.maxForms : 1;
+    }
+
+    // Upgrade name is determined by number of upgrades and the current form (if multiple exist)
+    // E.g. Form 0 -> +A, Form 1 -> +B, etc.
+    protected String getUpgradeName() {
+        if (!upgraded) {
+            return cardData.strings.NAME;
         }
-    }
+        StringBuilder sb = new StringBuilder(cardData.strings.NAME);
+        sb.append("+");
 
-    public void setup(Object input) {
-    }
-
-    public void setupImages(String imagePath)
-    {
-        portrait = null;
-        loadImage(imagePath);
-    }
-
-    protected void setupExtraTags()
-    {
-        // Set Soulbound
-        if (!cardData.removableFromDeck)
-        {
-            SoulboundField.soulbound.set(this, true);
+        if (maxUpgradeLevel < 0 || maxUpgradeLevel > 1) {
+            sb.append(this.timesUpgraded);
         }
 
-        if (cardData.extraTags != null)
-        {
-            for (CardTagItem item : cardData.extraTags)
-            {
-                this.tags.add(item.tag);
-                // Starter Strike tags should automatically be added to Basic cards with the Strike, so they can be upgraded in Simplicity, etc.
-                if (item == CardTagItem.Strike && this.rarity == CardRarity.BASIC)
-                {
-                    this.tags.add(CardTags.STARTER_STRIKE);
-                }
-            }
-        }
-    }
-
-    protected void setupProperties(PCLCardData cardData, Integer form, int timesUpgraded) {
-        setNumbers(cardData.getDamage(form) + cardData.getDamageUpgrade(form) * timesUpgraded,
-                cardData.getBlock(form) + cardData.getBlockUpgrade(form) * timesUpgraded,
-                cardData.getMagicNumber(form) + cardData.getMagicNumberUpgrade(form) * timesUpgraded,
-                cardData.getHp(form) + cardData.getHpUpgrade(form) * timesUpgraded,
-                cardData.getHitCount(form) + cardData.getHitCountUpgrade(form) * timesUpgraded,
-                cardData.getRightCount(form) + cardData.getRightCountUpgrade(form) * timesUpgraded);
-        setMultiDamage(cardData.cardTarget.targetsMulti());
-        setTarget(cardData.cardTarget);
-        setTiming(cardData.timing);
-        setAttackType(cardData.attackType);
-
-        if (timesUpgraded > 0) {
-            setCost(cardData.getCost(form) + cardData.getCostUpgrade(form));
-        }
-        else
-        {
-            setCost(cardData.getCost(form));
+        // Do not show appended characters for non-multiform or linear upgrade path cards
+        if (this.cardData.maxForms > 1 && this.cardData.branchFactor != 1) {
+            char appendix = (char) (auxiliaryData.form + CHAR_OFFSET);
+            sb.append(appendix);
         }
 
-        this.affinities.initialize(cardData.affinities, form);
-
-        if (!cardData.obtainableInCombat) {
-            setObtainableInCombat(false);
-        }
-
-        bottomText = getBottomText();
-    }
-
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    protected boolean tryRender(SpriteBatch sb, Texture texture, float scale, Vector2 offset) {
-        if (texture != null) {
-            PCLRenderHelpers.drawOnCardAuto(sb, this, texture, offset, texture.getWidth(), texture.getHeight(), getRenderColor(), transparency, scale);
-
-            return true;
-        }
-
-        return false;
-    }
-
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    protected boolean tryRenderCentered(SpriteBatch sb, ColoredTexture texture) {
-        if (texture != null) {
-            PCLRenderHelpers.drawOnCardAuto(sb, this, texture, 0, 0, texture.getWidth(), texture.getHeight());
-
-            return true;
-        }
-
-        return false;
-    }
-
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    protected boolean tryRenderCentered(SpriteBatch sb, ColoredTexture texture, float scale) {
-        if (texture != null) {
-            PCLRenderHelpers.drawOnCardAuto(sb, this, texture, 0, 0, texture.getWidth(), texture.getHeight(), scale);
-
-            return true;
-        }
-
-        return false;
-    }
-
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    protected boolean tryRenderCentered(SpriteBatch sb, Texture texture) {
-        if (texture != null) {
-            PCLRenderHelpers.drawOnCardAuto(sb, this, texture, getRenderColor(), 0, 0, texture.getWidth(), texture.getHeight());
-
-            return true;
-        }
-
-        return false;
-    }
-
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    protected boolean tryRenderCentered(SpriteBatch sb, Texture texture, Color color, float scale) {
-        if (texture != null) {
-            PCLRenderHelpers.drawOnCardAuto(sb, this, texture, new Vector2(0, 0), texture.getWidth(), texture.getHeight(), color, transparency, scale);
-
-            return true;
-        }
-
-        return false;
-    }
-
-    protected boolean tryRenderCentered(SpriteBatch sb, Texture texture, float scale)
-    {
-        return tryRenderCentered(sb, texture, getRenderColor(), scale);
-    }
-
-    protected boolean tryUpgrade() {
-        return tryUpgrade(true);
-    }
-
-    protected boolean tryUpgrade(boolean updateDescription) {
-        if (this.canUpgrade()) {
-            this.timesUpgraded += 1;
-            this.upgraded = true;
-
-
-            initializeTitle();
-
-            if (updateDescription) {
-                initializeDescription();
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
-    public void updateMaxBlock(int amount) {
-        baseBlock = block = Math.max(0, amount);
-        this.isBlockModified = false;
-        if (onBlockEffect != null)
-        {
-            onBlockEffect.setAmountFromCard();
-        }
-    }
-
-    public void updateMaxDamage(int amount) {
-        baseDamage = damage = Math.max(0, amount);
-        this.isDamageModified = false;
-        if (onAttackEffect != null)
-        {
-            onAttackEffect.setAmountFromCard();
-        }
-    }
-
-    public void updateBlock(float amount) {
-        block = Math.max(0, MathUtils.floor(amount));
-        this.isBlockModified = (baseBlock != block);
-        if (onBlockEffect != null)
-        {
-            onBlockEffect.setAmountFromCard();
-        }
-    }
-
-    public void updateDamage(float amount) {
-        damage = Math.max(0, MathUtils.floor(amount));
-        this.isDamageModified = (baseDamage != damage);
-        if (onAttackEffect != null)
-        {
-            onAttackEffect.setAmountFromCard();
-        }
-    }
-
-    public void updateHeal(float amount) {
-        int prevHeal = heal;
-        heal = Math.max(0,MathUtils.floor(amount));
-        this.isHealModified = (baseHeal != heal);
-        if (prevHeal != heal)
-        {
-            currentHealth += (prevHeal - heal);
-        }
-    }
-
-    public void updateHitCount(float amount) {
-        hitCount = Math.max(1,MathUtils.floor(amount));
-        this.isHitCountModified = (baseHitCount != hitCount);
-        if (onAttackEffect != null)
-        {
-            onAttackEffect.setAmountFromCard();
-        }
-    }
-
-    public void updateMagicNumber(float amount) {
-        magicNumber = Math.max(0, MathUtils.floor(amount));
-        this.isMagicNumberModified = (baseMagicNumber != magicNumber);
-    }
-
-    public void updateRightCount(float amount) {
-        rightCount = Math.max(1,MathUtils.floor(amount));
-        this.isRightCountModified = (baseRightCount != rightCount);
-        if (onBlockEffect != null)
-        {
-            onBlockEffect.setAmountFromCard();
-        }
+        return sb.toString();
     }
 
     @Override
     public void initializeDescription() {
         if (cardText != null) {
             this.cardText.forceRefresh();
+        }
+    }
+
+    protected void setTag(CardTags tag, boolean enable) {
+        if (!enable) {
+            tags.remove(tag);
+        }
+        else if (!tags.contains(tag)) {
+            tags.add(tag);
         }
     }
 
@@ -1899,24 +381,6 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         // Force refresh the descriptions, affinities, and augments
         initializeDescription();
         affinities.updateSortedList();
-    }
-
-    public void displayUpgradesForSkills(boolean value)
-    {
-        if (onAttackEffect != null)
-        {
-            onAttackEffect.displayUpgrades(value);
-        }
-        if (onBlockEffect != null)
-        {
-            onBlockEffect.displayUpgrades(value);
-        }
-        for (PSkill<?> ef : getEffects()) {
-            ef.displayUpgrades(value);
-        }
-        for (PSkill<?> ef : getPowerEffects()) {
-            ef.displayUpgrades(value);
-        }
     }
 
     @Override
@@ -1982,10 +446,26 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         return cardPlayable(m) && this.hasEnoughEnergy();
     }
 
+    protected boolean isEffectPlayable(AbstractMonster m) {
+        PCLUseInfo info = new PCLUseInfo(this, getSourceCreature(), m);
+        for (PSkill<?> be : getFullEffects()) {
+            if (!be.canPlay(info)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Override
     public final void use(AbstractPlayer p1, AbstractMonster m1) {
         PCLUseInfo info = CombatManager.playerSystem.generateInfo(this, p1, m1);
         onUse(info);
+    }
+
+    public void onUse(PCLUseInfo info) {
+        if (!dontTriggerOnUseCard) {
+            doEffects(be -> be.use(info));
+        }
     }
 
     @Override
@@ -2019,12 +499,6 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     }
 
     @Override
-    public final void renderForPreview(SpriteBatch sb)
-    {
-        render(sb, hovered, false, false);
-    }
-
-    @Override
     public void renderUpgradePreview(SpriteBatch sb) {
         PCLCard upgrade = getCachedUpgrade();
 
@@ -2042,6 +516,12 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     @Override
     public final void renderOuterGlow(SpriteBatch sb) {
         super.renderOuterGlow(sb);
+    }
+
+    // For PCL cards, always use the skill silhouette because its cards are all rectangular
+    @Override
+    public TextureAtlas.AtlasRegion getCardBgAtlas() {
+        return shouldUsePCLFrame() || type == PCLEnum.CardType.SUMMON ? ImageMaster.CARD_SKILL_BG_SILHOUETTE : super.getCardBgAtlas();
     }
 
     @Override
@@ -2089,7 +569,8 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
             this.hover();
             this.hoverDuration += EUI.delta();
             this.renderTip = this.hoverDuration > 0.2F && !Settings.hideCards;
-        } else {
+        }
+        else {
             this.unhover();
         }
     }
@@ -2163,8 +644,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     }
 
     @Override
-    public void triggerOnScry()
-    {
+    public void triggerOnScry() {
         super.triggerOnScry();
         doEffects(be -> be.triggerOnScry(this));
     }
@@ -2184,7 +664,8 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     public void applyPowers() {
         if (isMultiDamage) {
             calculateCardDamage(null);
-        } else {
+        }
+        else {
             refresh(null);
         }
     }
@@ -2216,7 +697,8 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
             if (best > 0) {
                 updateDamage(best);
             }
-        } else {
+        }
+        else {
             refresh(mo);
         }
     }
@@ -2227,8 +709,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
 
         for (PSkill<?> be : getFullEffects()) {
             Color c = be.getGlowColor();
-            if (c != null)
-            {
+            if (c != null) {
                 this.glowColor = c;
             }
         }
@@ -2239,8 +720,976 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         return cardData.create(auxiliaryData.form, timesUpgraded);
     }
 
+    protected PCLCard(PCLCardData cardData, Object input) {
+        this(cardData, cardData.ID, cardData.imagePath, cardData.getCost(0), cardData.cardType, cardData.cardColor, cardData.cardRarity, cardData.cardTarget.cardTarget, 0, 0, input);
+    }
+
+    protected PCLCard(PCLCardData cardData, int form, int timesUpgraded) {
+        this(cardData, cardData.ID, cardData.imagePath, cardData.getCost(0), cardData.cardType, cardData.cardColor, cardData.cardRarity, cardData.cardTarget.cardTarget, form, timesUpgraded, null);
+    }
+
+    protected PCLCard(PCLCardData cardData, int form, int timesUpgraded, Object input) {
+        this(cardData, cardData.ID, cardData.imagePath, cardData.getCost(0), cardData.cardType, cardData.cardColor, cardData.cardRarity, cardData.cardTarget.cardTarget, form, timesUpgraded, input);
+    }
+
+    protected PCLCard(PCLCardData cardData, String id, String imagePath, int cost, CardType type, CardColor color, CardRarity rarity, CardTarget target) {
+        this(cardData, id, imagePath, cost, type, color, rarity, target, 0, 0, null);
+    }
+
+    @SafeVarargs
+    public static <T> T[] array(T... items) {
+        return EUIUtils.array(items);
+    }
+
+    public static PCLCard cast(AbstractCard card) {
+        return EUIUtils.safeCast(card, PCLCard.class);
+    }
+
+    protected static int[] nums(int damage, int block) {
+        return nums(damage, block, 0, 0);
+    }
+
+    protected static int[] nums(int damage, int block, int magicNumber, int secondaryValue) {
+        return nums(damage, block, magicNumber, secondaryValue, 1);
+    }
+
+    protected static int[] nums(int damage, int block, int magicNumber, int secondaryValue, int hitCount) {
+        return nums(damage, block, magicNumber, secondaryValue, hitCount, 1);
+    }
+
+    protected static int[] nums(int damage, int block, int magicNumber, int secondaryValue, int hitCount, int rightCount) {
+        return new int[]{damage, block, magicNumber, secondaryValue, hitCount, rightCount};
+    }
+
+    protected static int[] nums(int damage, int block, int magicNumber) {
+        return nums(damage, block, magicNumber, 0);
+    }
+
+    protected static PCLCardData register(Class<? extends PCLCard> type) {
+        return PCLCard.register(type, PGR.core);
+    }
+
+    protected static PCLCardData register(Class<? extends PCLCard> type, PCLResources<?, ?, ?, ?> resources) {
+        return PCLCard.registerCardData(new PCLCardData(type, resources));
+    }
+
+    protected static PCLCardData registerCardData(PCLCardData cardData) {
+        return PCLCardData.registerCardData(cardData);
+    }
+
+    protected static int[] ups(int damage, int block) {
+        return ups(damage, block, 0, 0);
+    }
+
+    protected static int[] ups(int damage, int block, int magicNumber, int secondaryValue) {
+        return ups(damage, block, magicNumber, secondaryValue, 0);
+    }
+
+    protected static int[] ups(int damage, int block, int magicNumber, int secondaryValue, int hitCount) {
+        return ups(damage, block, magicNumber, secondaryValue, hitCount, 0);
+    }
+
+    protected static int[] ups(int damage, int block, int magicNumber, int secondaryValue, int hitCount, int rightCount) {
+        return new int[]{damage, block, magicNumber, secondaryValue, hitCount, rightCount};
+    }
+
+    protected static int[] ups(int damage, int block, int magicNumber) {
+        return ups(damage, block, magicNumber, 0);
+    }
+
+    public void addAttackDisplay(AbstractPower p, float oldDamage, float tempDamage) {
+        if (formulaDisplay != null && baseDamage > 0) {
+            formulaDisplay.addAttackPower(p, oldDamage, tempDamage);
+        }
+    }
+
+    public void addAttackDisplay(PCLAffinity p, float oldDamage, float tempDamage) {
+        if (formulaDisplay != null && baseDamage > 0) {
+            formulaDisplay.addAttackAffinity(p, oldDamage, tempDamage);
+        }
+    }
+
+    public void addAttackResult(float oldDamage, float tempDamage) {
+        if (formulaDisplay != null && baseDamage > 0) {
+            formulaDisplay.setAttackResult(oldDamage, tempDamage);
+        }
+    }
+
+    public void addAugment(PCLAugment augment) {
+        addAugment(augment, true);
+    }
+
+    public void addAugment(PCLAugment augment, boolean save) {
+        int slot = getFreeAugmentSlot();
+        if (slot >= 0) {
+            augments.set(slot, augment);
+        }
+        else {
+            augments.add(augment);
+        }
+        if (save) {
+            auxiliaryData.augments.add(augment.ID);
+        }
+        augment.onAddToCard(this);
+        refresh(null);
+    }
+
+    protected PCardPrimary_GainBlock addBlockMove() {
+        onBlockEffect = new PCardPrimary_GainBlock(this);
+        return onBlockEffect;
+    }
+
+    protected PCardPrimary_DealDamage addDamageMove() {
+        onAttackEffect = new PCardPrimary_DealDamage(this);
+        return onAttackEffect;
+    }
+
+    protected PCardPrimary_DealDamage addDamageMove(PCLAttackVFX attackEffect) {
+        onAttackEffect = new PCardPrimary_DealDamage(this, attackEffect.key);
+        return onAttackEffect;
+    }
+
+    protected PCardPrimary_DealDamage addDamageMove(AbstractGameAction.AttackEffect attackEffect) {
+        onAttackEffect = new PCardPrimary_DealDamage(this, attackEffect);
+        return onAttackEffect;
+    }
+
+    protected PCardPrimary_DealDamage addDamageMove(EffekseerEFK efx) {
+        onAttackEffect = new PCardPrimary_DealDamage(this).setDamageEffect(efx);
+        return onAttackEffect;
+    }
+
+    protected PCardPrimary_DealDamage addDamageMove(AbstractGameAction.AttackEffect attackEffect, EffekseerEFK efx) {
+        onAttackEffect = new PCardPrimary_DealDamage(this, attackEffect).setDamageEffect(efx);
+        return onAttackEffect;
+    }
+
+    public void addDefendDisplay(AbstractPower p, float oldDamage, float tempDamage) {
+        if (formulaDisplay != null && baseBlock > 0) {
+            formulaDisplay.addDefendPower(p, oldDamage, tempDamage);
+        }
+    }
+
+    public void addDefendDisplay(PCLAffinity p, float oldDamage, float tempDamage) {
+        if (formulaDisplay != null && baseBlock > 0) {
+            formulaDisplay.addDefendAffinity(p, oldDamage, tempDamage);
+        }
+    }
+
+    public void addDefendResult(float oldDamage, float tempDamage) {
+        if (formulaDisplay != null && baseBlock > 0) {
+            formulaDisplay.setDefendResult(oldDamage, tempDamage);
+        }
+    }
+
+    protected PMove_StackCustomPower addGainPower(PTrigger... effect) {
+        return addApplyPower(PCLCardTarget.Self, -1, effect);
+    }
+
+    protected PMove_StackCustomPower addApplyPower(PCLCardTarget target, int amount, PTrigger... effects) {
+        PMove_StackCustomPower added = getApplyPower(target, amount, effects);
+        getEffects().add(added);
+        return added;
+    }
+
+    protected PMove_StackCustomPower getApplyPower(PCLCardTarget target, int amount, PTrigger... effects) {
+        Integer[] powerIndexes = EUIUtils.range(getPowerEffects().size(), getPowerEffects().size() + effects.length - 1);
+        for (PTrigger effect : effects) {
+            addPowerMove(effect);
+        }
+        return (PMove_StackCustomPower) new PMove_StackCustomPower(target, amount, powerIndexes).setSource(this).onAddToCard(this);
+    }
+
+    protected PMove_StackCustomPower addGainPower(int amount, PTrigger... effect) {
+        return addApplyPower(PCLCardTarget.Self, amount, effect);
+    }
+
+    protected PSpecialCond addSpecialCond(int descIndex, FuncT3<Boolean, PSpecialCond, PCLUseInfo, Boolean> onUse) {
+        return addSpecialCond(descIndex, onUse, 1, 0);
+    }
+
+    protected PSpecialCond addSpecialCond(int descIndex, FuncT3<Boolean, PSpecialCond, PCLUseInfo, Boolean> onUse, int amount, int extra) {
+        PSpecialCond move = (PSpecialCond) getSpecialCond(descIndex, onUse, amount, extra).setSource(this).onAddToCard(this);
+        getEffects().add(move);
+        return move;
+    }
+
+    protected PSpecialCond getSpecialCond(int descIndex, FuncT3<Boolean, PSpecialCond, PCLUseInfo, Boolean> onUse, int amount, int extra) {
+        return new PSpecialCond(cardData, descIndex, onUse, amount, extra);
+    }
+
+    protected PSpecialCond addSpecialCond(int descIndex, FuncT3<Boolean, PSpecialCond, PCLUseInfo, Boolean> onUse, int amount) {
+        return addSpecialCond(descIndex, onUse, amount, 0);
+    }
+
+    protected PSpecialSkill addSpecialMove(int descIndex, ActionT2<PSpecialSkill, PCLUseInfo> onUse) {
+        return addSpecialMove(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, 1, 0);
+    }
+
+    protected PSpecialSkill addSpecialMove(String description, ActionT2<PSpecialSkill, PCLUseInfo> onUse, int amount, int extra) {
+        PSpecialSkill move = (PSpecialSkill) getSpecialMove(description, onUse, amount, extra).setSource(this).onAddToCard(this);
+        getEffects().add(move);
+        return move;
+    }
+
+    protected PSpecialSkill getSpecialMove(String description, ActionT2<PSpecialSkill, PCLUseInfo> onUse, int amount, int extra) {
+        return new PSpecialSkill(this.cardID + this.getEffects().size(), description, onUse, amount, extra);
+    }
+
+    protected PSpecialSkill addSpecialMove(int descIndex, ActionT2<PSpecialSkill, PCLUseInfo> onUse, int amount) {
+        return addSpecialMove(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, amount, 0);
+    }
+
+    protected PSpecialSkill addSpecialMove(int descIndex, ActionT2<PSpecialSkill, PCLUseInfo> onUse, int amount, int extra) {
+        return addSpecialMove(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, amount, extra);
+    }
+
+    protected PSpecialSkill addSpecialMove(String description, ActionT2<PSpecialSkill, PCLUseInfo> onUse, int amount) {
+        return addSpecialMove(description, onUse, amount, 0);
+    }
+
+    protected PSpecialPowerSkill addSpecialPower(int descIndex, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse) {
+        return addSpecialPower(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, 1, 0);
+    }
+
+    protected PSpecialPowerSkill addSpecialPower(String description, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount, int extra) {
+        PSpecialPowerSkill move = (PSpecialPowerSkill) getSpecialPower(description, onUse, amount, extra).setSource(this).onAddToCard(this);
+        getEffects().add(move);
+        return move;
+    }
+
+    protected PSpecialPowerSkill getSpecialPower(String description, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount, int extra) {
+        return new PSpecialPowerSkill(this.cardID + this.getEffects().size(), description, onUse, amount, extra);
+    }
+
+    protected PSpecialPowerSkill addSpecialPower(int descIndex, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount) {
+        return addSpecialPower(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, amount, 0);
+    }
+
+    protected PSpecialPowerSkill addSpecialPower(int descIndex, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount, int extra) {
+        return addSpecialPower(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, amount, extra);
+    }
+
+    protected PSpecialPowerSkill addSpecialPower(String description, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount) {
+        return addSpecialPower(description, onUse, amount, 0);
+    }
+
+    public boolean canRenderGlow() {
+        return transparency >= 0.7f && owner == null;
+    }
+
+    public int changeForm(Integer form, int timesUpgraded) {
+        return changeForm(form, timesUpgraded, timesUpgraded);
+    }
+
+    public int changeForm(Integer form, int prevUpgrade, int timesUpgraded) {
+
+        // Preserve any changes made to the base numbers while in the original form
+        int baseDamageDiff = baseDamage - (cardData.getDamage(this.auxiliaryData.form) + cardData.getDamageUpgrade(this.auxiliaryData.form) * prevUpgrade);
+        int baseBlockDiff = baseBlock - (cardData.getBlock(this.auxiliaryData.form) + cardData.getBlockUpgrade(this.auxiliaryData.form) * prevUpgrade);
+        int baseMagicNumberDiff = baseMagicNumber - (cardData.getMagicNumber(this.auxiliaryData.form) + cardData.getMagicNumberUpgrade(this.auxiliaryData.form) * prevUpgrade);
+        int baseSecondaryValueDiff = baseHeal - (cardData.getHp(this.auxiliaryData.form) + cardData.getHpUpgrade(this.auxiliaryData.form) * prevUpgrade);
+        int baseHitCountDiff = baseHitCount - (cardData.getHitCount(this.auxiliaryData.form) + cardData.getHitCountUpgrade(this.auxiliaryData.form) * prevUpgrade);
+        int baseRightCountDiff = baseRightCount - (cardData.getRightCount(this.auxiliaryData.form) + cardData.getRightCountUpgrade(this.auxiliaryData.form) * prevUpgrade);
+
+        // Preserve any changes made to the numbers for this turn while in the original form
+        int tempDamageDiff = damage - baseDamage;
+        int tempBlockDiff = block - baseBlock;
+        int tempMagicNumberDiff = magicNumber - baseMagicNumber;
+        int tempSecondaryValueDiff = heal - baseHeal;
+        int tempHitCountDiff = hitCount - baseHitCount;
+        int tempRightCountDiff = rightCount - baseRightCount;
+
+        int baseCost = cardData.getCost(this.auxiliaryData.form);
+        int costDiff = cost - (prevUpgrade > 0 ? (baseCost + cardData.getCostUpgrade(this.auxiliaryData.form)) : baseCost);
+
+
+        form = MathUtils.clamp(form, 0, this.getMaxForms() - 1);
+
+        setNumbers(baseDamageDiff + cardData.getDamage(form) + cardData.getDamageUpgrade(form) * timesUpgraded,
+                baseBlockDiff + cardData.getBlock(form) + cardData.getBlockUpgrade(form) * timesUpgraded,
+                baseMagicNumberDiff + cardData.getMagicNumber(form) + cardData.getMagicNumberUpgrade(form) * timesUpgraded,
+                baseSecondaryValueDiff + cardData.getHp(form) + cardData.getHpUpgrade(form) * timesUpgraded,
+                baseHitCountDiff + cardData.getHitCount(form) + cardData.getHitCountUpgrade(form) * timesUpgraded,
+                baseRightCountDiff + cardData.getRightCount(form) + cardData.getRightCountUpgrade(form) * timesUpgraded);
+
+        damage += tempDamageDiff;
+        block += tempBlockDiff;
+        magicNumber += tempMagicNumberDiff;
+        heal += tempSecondaryValueDiff;
+        hitCount += tempHitCountDiff;
+        rightCount += tempRightCountDiff;
+
+        // Ensure HP is set to the base health
+        currentHealth = heal;
+
+        upgradedDamage = baseDamage > cardData.getDamage(form);
+        upgradedBlock = baseBlock > cardData.getBlock(form);
+        upgradedMagicNumber = baseMagicNumber > cardData.getMagicNumber(form);
+        upgradedHeal = baseHeal > cardData.getHp(form);
+        upgradedHitCount = baseHitCount > cardData.getHitCount(form);
+        upgradedRightCount = baseRightCount > cardData.getRightCount(form);
+
+        int newCost = timesUpgraded > 0 ? cardData.getCost(form) + cardData.getCostUpgrade(form) : cardData.getCost(form);
+        setCost(newCost + costDiff);
+        upgradedCost = cost != newCost;
+
+        return setForm(form, timesUpgraded);
+    }
+
+    public void displayUpgradesForSkills(boolean value) {
+        if (onAttackEffect != null) {
+            onAttackEffect.displayUpgrades(value);
+        }
+        if (onBlockEffect != null) {
+            onBlockEffect.displayUpgrades(value);
+        }
+        for (PSkill<?> ef : getEffects()) {
+            ef.displayUpgrades(value);
+        }
+        for (PSkill<?> ef : getPowerEffects()) {
+            ef.displayUpgrades(value);
+        }
+    }
+
+    public void generateDynamicTooltips(ArrayList<EUITooltip> dynamicTooltips) {
+        // Only show these tooltips outside of combat
+        if (!GameUtilities.inBattle() || isPopup || (player != null && player.masterDeck.contains(this))) {
+            if (isSoulbound()) {
+                dynamicTooltips.add(PGR.core.tooltips.soulbound);
+            }
+            if (cardData.canToggleFromPopup) {
+                dynamicTooltips.add(PGR.core.tooltips.multiform);
+            }
+            if (isUnique()) {
+                dynamicTooltips.add(PGR.core.tooltips.unique);
+            }
+        }
+
+        // Add tips from tags
+        for (PCLCardTag tag : PCLCardTag.getAll()) {
+            if (tag.has(this)) {
+                dynamicTooltips.add(tag.getTip());
+            }
+        }
+
+        // Do not show the Normal damage tooltip for card tooltips
+        EUITooltip attackTooltip = attackType.getTooltip();
+        if (attackTooltip != PGR.core.tooltips.normalDamage) {
+            dynamicTooltips.add(attackTooltip);
+        }
+
+    }
+
+    @Override
+    public EUICardPreview getPreview() {
+        return PCLCardPreviews.getCardPreview(this);
+    }
+
+    @Override
+    public List<EUITooltip> getTips() {
+        return tooltips;
+    }
+
+    @Override
+    public boolean isPopup() {
+        return isPopup;
+    }
+
+    @Override
+    public void setIsPreview(boolean value) {
+        isPreview = value;
+    }
+
+    public boolean isSoulbound() {
+        return SoulboundField.soulbound.get(this);
+    }
+
+    public boolean isUnique() {
+        return cardData.unique;
+    }
+
+    @Deprecated
+    public String getAttributeString(char attributeID) {
+        switch (attributeID) {
+            case 'D':
+                return String.valueOf(damage);
+            case 'B':
+                return String.valueOf(block);
+            case 'M':
+                return String.valueOf(magicNumber);
+            case 'S':
+                return String.valueOf(heal);
+            case 'K':
+                return String.valueOf(misc);
+            case 'X':
+                return GameUtilities.inBattle() && player != null ? String.valueOf(getXValue()) : PGR.core.strings.subjects_x;
+            default:
+                return "?";
+        }
+    }
+
+    public int getXValue() {
+        return -1;
+    }
+
+    public PCLAugment getAugment(int index) {
+        return augments.size() > index ? augments.get(index) : null;
+    }
+
+    @Override
+    public PCLCard getCachedUpgrade() {
+        PCLCard upgrade = cardData.tempCard;
+
+        if (upgrade == null || upgrade.uuid != this.uuid || (upgrade.timesUpgraded != (timesUpgraded + 1))) {
+            upgrade = cardData.tempCard = (PCLCard) this.makeSameInstanceOf();
+            upgrade.changeForm(auxiliaryData.form, timesUpgraded);
+            upgrade.isPreview = true;
+            upgrade.upgrade();
+            upgrade.displayUpgrades();
+        }
+
+        return upgrade;
+    }
+
+    public ColoredTexture getCardAttributeBanner() {
+        if (rarity == PCLEnum.CardRarity.LEGENDARY || rarity == PCLEnum.CardRarity.SECRET) {
+            return new ColoredTexture((isPopup ? PCLCoreImages.CardUI.cardBannerAttribute2L : PCLCoreImages.CardUI.cardBannerAttribute2).texture(), getRarityColor());
+        }
+        return new ColoredTexture((isPopup ? PCLCoreImages.CardUI.cardBannerAttributeL : PCLCoreImages.CardUI.cardBannerAttribute).texture(), getRarityColor());
+    }
+
+    public Color getRarityColor() {
+
+        if (rarity == PCLEnum.CardRarity.SECRET) {
+            return COLOR_SECRET;
+        }
+        else if (rarity == PCLEnum.CardRarity.LEGENDARY) {
+            return COLOR_ULTRA_RARE;
+        }
+
+        return EUIGameUtils.colorForRarity(rarity);
+    }
+
+    protected Texture getCardBackground() {
+        PCLResources<?, ?, ?, ?> resources = PGR.getResources(color);
+        if (resources == null || resources.images == null) {
+            resources = PGR.core;
+        }
+
+        if (type == PCLEnum.CardType.SUMMON) {
+            return isPopup ? resources.images.cardBackgroundSummonL.texture() : resources.images.cardBackgroundSummon.texture();
+        }
+        switch (type) {
+            case ATTACK:
+                return isPopup ? resources.images.cardBackgroundAttackL.texture() : resources.images.cardBackgroundAttack.texture();
+            case POWER:
+                return isPopup ? resources.images.cardBackgroundPowerL.texture() : resources.images.cardBackgroundPower.texture();
+            default:
+                return isPopup ? resources.images.cardBackgroundSkillL.texture() : resources.images.cardBackgroundSkill.texture();
+        }
+    }
+
+    protected Texture getCardBanner() {
+        if (shouldUsePCLFrame()) {
+            if (rarity == PCLEnum.CardRarity.LEGENDARY || rarity == PCLEnum.CardRarity.SECRET) {
+                return (isPopup ? PCLCoreImages.CardUI.cardBanner2L : PCLCoreImages.CardUI.cardBanner2).texture();
+            }
+            return (isPopup ? PCLCoreImages.CardUI.cardBannerL : PCLCoreImages.CardUI.cardBanner).texture();
+        }
+        return null;
+    }
+
+    protected TextureAtlas.AtlasRegion getCardBannerVanillaRegion() {
+        if (isPopup) {
+            switch (rarity) {
+                case RARE:
+                    return ImageMaster.CARD_BANNER_RARE_L;
+                case UNCOMMON:
+                    return ImageMaster.CARD_BANNER_UNCOMMON_L;
+                default:
+                    return ImageMaster.CARD_BANNER_COMMON_L;
+            }
+        }
+        else {
+            switch (rarity) {
+                case RARE:
+                    return ImageMaster.CARD_BANNER_RARE;
+                case UNCOMMON:
+                    return ImageMaster.CARD_BANNER_UNCOMMON;
+                default:
+                    return ImageMaster.CARD_BANNER_COMMON;
+            }
+        }
+    }
+
+    public ColoredString getColoredAttributeString(char attributeID) {
+        switch (attributeID) {
+            case 'D':
+                return getDamageString();
+            case 'B':
+                return getBlockString();
+            case 'M':
+                return getMagicNumberString();
+            case 'S':
+                return getHPString();
+            case 'K':
+                return getSpecialVariableString();
+            case 'X':
+                return getXString(false);
+            case 'x':
+                return getXString(true);
+            default:
+                return new ColoredString("?", Settings.RED_TEXT_COLOR);
+        }
+    }
+
+    public ColoredString getDamageString() {
+        if (isDamageModified) {
+            return new ColoredString(damage, damage >= baseDamage * PGR.dungeon.getDivisor() ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR);
+        }
+
+        return new ColoredString(baseDamage, Settings.CREAM_COLOR);
+    }
+
+    public ColoredString getBlockString() {
+        if (isBlockModified) {
+            return new ColoredString(block, block >= baseBlock ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR);
+        }
+
+        return new ColoredString(baseBlock, Settings.CREAM_COLOR);
+    }
+
+    public ColoredString getMagicNumberString() {
+        return new ColoredString(String.valueOf(magicNumber), Settings.CREAM_COLOR);
+    }
+
+    public ColoredString getHPString() {
+        return new ColoredString(currentHealth, currentHealth < heal ? Settings.RED_TEXT_COLOR : isHealModified || heal > baseHeal ? Settings.GREEN_TEXT_COLOR : Settings.CREAM_COLOR);
+    }
+
+    public ColoredString getSpecialVariableString() {
+        return new ColoredString(misc, misc > 0 ? Settings.GREEN_TEXT_COLOR : Settings.CREAM_COLOR);
+    }
+
+    public ColoredString getXString(boolean onlyInBattle) {
+        if (GameUtilities.inBattle() && player != null) {
+            int value = getXValue();
+            if (value >= 0) {
+                return new ColoredString(onlyInBattle ? " (" + value + ")" : value, Settings.GREEN_TEXT_COLOR);
+            }
+        }
+
+        return new ColoredString(onlyInBattle ? "" : "X", Settings.CREAM_COLOR);
+    }
+
+    protected ColoredString getCostString() {
+        final ColoredString result = new ColoredString();
+
+        if (cost == -1) {
+            result.text = PGR.core.strings.subjects_x;
+        }
+        else {
+            result.text = freeToPlay() ? "0" : Integer.toString(Math.max(0, this.costForTurn));
+        }
+
+        if (player != null && player.hand.contains(this) && (!this.hasEnoughEnergy() || GameUtilities.isUnplayableThisTurn(this))) {
+            result.color = new Color(1f, 0.3f, 0.3f, transparency);
+        }
+        else if ((upgradedCost && isCostModified) || costForTurn < cost || (cost > 0 && this.freeToPlay())) {
+            result.color = new Color(0.4f, 1f, 0.4f, transparency);
+        }
+        else {
+            result.color = new Color(1f, 1f, 1f, transparency);
+        }
+
+        return result;
+    }
+
+    protected boolean getDarken() {
+        return ReflectionHacks.getPrivate(this, AbstractCard.class, "darken");
+    }
+
+    protected Texture getEnergyOrb() {
+        // For non-custom cards, use the original resource card color so that colorless/curses have their resource's energy orb
+        PCLResources<?, ?, ?, ?> resources = PGR.getResources(cardData.resources.cardColor);
+        if (resources == null || resources.images == null) {
+            resources = PGR.core;
+        }
+        return (isPopup ? resources.images.cardEnergyOrbL : resources.images.cardEnergyOrb).texture();
+    }
+
+    public int getForm() {
+        return auxiliaryData.form;
+    }
+
+    public int getFreeAugmentSlot() {
+        for (int i = 0; i < augments.size(); i++) {
+            if (augments.get(i) == null) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    protected Texture getPortraitFrame() {
+        if (shouldUsePCLFrame()) {
+            if (type == PCLEnum.CardType.SUMMON) {
+                return isPopup ? PCLCoreImages.CardUI.cardFrameSummonL.texture() : PCLCoreImages.CardUI.cardFrameSummon.texture();
+            }
+            switch (type) {
+                case ATTACK:
+                    return isPopup ? PCLCoreImages.CardUI.cardFrameAttackL.texture() : PCLCoreImages.CardUI.cardFrameAttack.texture();
+                case POWER:
+                    return isPopup ? PCLCoreImages.CardUI.cardFramePowerL.texture() : PCLCoreImages.CardUI.cardFramePower.texture();
+                default:
+                    return isPopup ? PCLCoreImages.CardUI.cardFrameSkillL.texture() : PCLCoreImages.CardUI.cardFrameSkill.texture();
+            }
+        }
+        return null;
+    }
+
+    protected TextureAtlas.AtlasRegion getPortraitFrameVanillaRegion() {
+        if (isPopup) {
+            switch (type) {
+                case ATTACK:
+                    switch (rarity) {
+                        case RARE:
+                            return ImageMaster.CARD_FRAME_ATTACK_RARE_L;
+                        case UNCOMMON:
+                            return ImageMaster.CARD_FRAME_ATTACK_UNCOMMON_L;
+                        default:
+                            return ImageMaster.CARD_FRAME_ATTACK_COMMON_L;
+                    }
+                case POWER:
+                    switch (rarity) {
+                        case RARE:
+                            return ImageMaster.CARD_FRAME_POWER_RARE_L;
+                        case UNCOMMON:
+                            return ImageMaster.CARD_FRAME_POWER_UNCOMMON_L;
+                        default:
+                            return ImageMaster.CARD_FRAME_POWER_COMMON_L;
+                    }
+                default:
+                    switch (rarity) {
+                        case RARE:
+                            return ImageMaster.CARD_FRAME_SKILL_RARE_L;
+                        case UNCOMMON:
+                            return ImageMaster.CARD_FRAME_SKILL_UNCOMMON_L;
+                        default:
+                            return ImageMaster.CARD_FRAME_SKILL_COMMON_L;
+                    }
+            }
+        }
+        else {
+            switch (type) {
+                case ATTACK:
+                    switch (rarity) {
+                        case RARE:
+                            return ImageMaster.CARD_FRAME_ATTACK_RARE;
+                        case UNCOMMON:
+                            return ImageMaster.CARD_FRAME_ATTACK_UNCOMMON;
+                        default:
+                            return ImageMaster.CARD_FRAME_ATTACK_COMMON;
+                    }
+                case POWER:
+                    switch (rarity) {
+                        case RARE:
+                            return ImageMaster.CARD_FRAME_POWER_RARE;
+                        case UNCOMMON:
+                            return ImageMaster.CARD_FRAME_POWER_UNCOMMON;
+                        default:
+                            return ImageMaster.CARD_FRAME_POWER_COMMON;
+                    }
+                default:
+                    switch (rarity) {
+                        case RARE:
+                            return ImageMaster.CARD_FRAME_SKILL_RARE;
+                        case UNCOMMON:
+                            return ImageMaster.CARD_FRAME_SKILL_UNCOMMON;
+                        default:
+                            return ImageMaster.CARD_FRAME_SKILL_COMMON;
+                    }
+            }
+        }
+    }
+
+    public Texture getPortraitImageTexture() {
+        return portraitImg.texture;
+    }
+
+    public int hitCount() {
+        return hitCount;
+    }
+
+    public int hitCountBase() {
+        return baseHitCount;
+    }
+
+    public int rightCount() {
+        return rightCount;
+    }
+
+    public int rightCountBase() {
+        return baseRightCount;
+    }
+
+    public void fullReset() {
+        this.clearSkills();
+        for (PCLCardTag tag : PCLCardTag.values()) {
+            tag.set(this, 0);
+        }
+        this.onAttackEffect = null;
+        this.onBlockEffect = null;
+
+        setupProperties(cardData, this.auxiliaryData.form, timesUpgraded);
+        setup(null);
+        setForm(this.auxiliaryData.form, timesUpgraded);
+        refresh(null);
+    }
+
+    public void loadImage(String path, boolean refresh) {
+        Texture t = EUIRM.getTexture(path, true, refresh, true);
+        if (t == null) {
+            t = EUIRM.getLocalTexture(path, true, refresh, true);
+            if (t == null) {
+                path = QuestionMark.DATA.imagePath;
+                t = EUIRM.getTexture(path, true, false, true);
+            }
+        }
+        assetUrl = path;
+        portraitImg = new ColoredTexture(t, null);
+    }
+
+    public void loadImage(String path) {
+        loadImage(path, false);
+    }
+
+    @Override
+    public final void renderForPreview(SpriteBatch sb) {
+        render(sb, hovered, false, false);
+    }
+
+    public void setup(Object input) {
+    }
+
+    public Color getRarityVanillaColor() {
+        switch (rarity) {
+            case COMMON:
+            case UNCOMMON:
+            case RARE:
+                return Color.WHITE;
+        }
+        return getRarityColor();
+    }
+
+    public Skills getSkills() {
+        return skills;
+    }
+
+    public String getID() {
+        return cardID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public PTrigger addPowerMove(PTrigger effect) {
+        PTrigger added = (PTrigger) effect.setSource(this).onAddToCard(this);
+        getPowerEffects().add(added);
+        return added;
+    }
+
+    public PSkill<?> addUseMove(PSkill<?> effect) {
+        PSkill<?> added = effect.setSource(this).onAddToCard(this);
+        getEffects().add(added);
+        return added;
+    }
+
+    public PSkill<?> addUseMove(PSkill<?> primary, PSkill<?>... effects) {
+        PSkill<?> added = PSkill.chain(primary, effects).setSource(this).onAddToCard(this);
+        getEffects().add(added);
+        return added;
+    }
+
+    public ArrayList<PSkill<?>> getFullEffects() {
+        ArrayList<PSkill<?>> result = new ArrayList<>();
+        if (onAttackEffect != null) {
+            result.add(onAttackEffect);
+        }
+        if (onBlockEffect != null) {
+            result.add(onBlockEffect);
+        }
+        result.addAll(getEffects());
+        result.addAll(getAugmentSkills());
+        return result;
+    }
+
+    public PCardPrimary_DealDamage getCardDamage() {
+        return onAttackEffect;
+    }
+
+    public PCardPrimary_GainBlock getCardBlock() {
+        return onBlockEffect;
+    }
+
+    public AbstractCreature getSourceCreature() {
+        return owner != null ? owner : player;
+    }
+
+    protected PSpecialCond getSpecialCond(int descIndex, FuncT3<Boolean, PSpecialCond, PCLUseInfo, Boolean> onUse, int amount) {
+        return getSpecialCond(descIndex, onUse, amount, 0);
+    }
+
+    protected PSpecialSkill getSpecialMove(int descIndex, ActionT2<PSpecialSkill, PCLUseInfo> onUse) {
+        return getSpecialMove(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, 1, 0);
+    }
+
+    protected PSpecialSkill getSpecialMove(int descIndex, ActionT2<PSpecialSkill, PCLUseInfo> onUse, int amount) {
+        return getSpecialMove(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, amount, 0);
+    }
+
+    protected PSpecialSkill getSpecialMove(int descIndex, ActionT2<PSpecialSkill, PCLUseInfo> onUse, int amount, int extra) {
+        return getSpecialMove(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, amount, extra);
+    }
+
+    protected PSpecialSkill getSpecialMove(FuncT1<String, PSpecialSkill> strFunc, ActionT2<PSpecialSkill, PCLUseInfo> onUse, int amount) {
+        return getSpecialMove(strFunc, onUse, amount, 0);
+    }
+
+    protected PSpecialSkill getSpecialMove(FuncT1<String, PSpecialSkill> strFunc, ActionT2<PSpecialSkill, PCLUseInfo> onUse, int amount, int extra) {
+        return new PSpecialSkill(this.cardID + this.getEffects().size(), strFunc, onUse, amount, extra);
+    }
+
+    protected PSpecialPowerSkill getSpecialPower(int descIndex, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse) {
+        return getSpecialPower(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, 1, 0);
+    }
+
+    protected PSpecialPowerSkill getSpecialPower(int descIndex, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount) {
+        return getSpecialPower(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, amount, 0);
+    }
+
+    protected PSpecialPowerSkill getSpecialPower(int descIndex, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount, int extra) {
+        return getSpecialPower(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, amount, extra);
+    }
+
+    protected PSpecialPowerSkill getSpecialPower(FuncT1<String, PSpecialPowerSkill> strFunc, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount) {
+        return getSpecialPower(strFunc, onUse, amount, 0);
+    }
+
+    protected PSpecialPowerSkill getSpecialPower(FuncT1<String, PSpecialPowerSkill> strFunc, FuncT2<? extends PCLPower, PSpecialPowerSkill, PCLUseInfo> onUse, int amount, int extra) {
+        return new PSpecialPowerSkill(this.cardID + this.getEffects().size(), strFunc, onUse, amount, extra);
+    }
+
+    protected Color getTypeColor() {
+        return ReflectionHacks.getPrivate(this, AbstractCard.class, "typeColor");
+    }
+
+    public Texture getTypeIcon() {
+        return EUIGameUtils.iconForType(type).texture();
+    }
+
+    protected String getTypeText() {
+        return EUIGameUtils.textForType(this.type);
+    }
+
+    public boolean isAoE() {
+        return isMultiDamage;
+    }
+
     public boolean isMultiUpgrade() {
         return maxUpgradeLevel < 0 || maxUpgradeLevel > 1;
+    }
+
+    public boolean isOnScreen() {
+        return current_y >= -200f * Settings.scale && current_y <= Settings.HEIGHT + 200f * Settings.scale;
+    }
+
+    public boolean isStarter() {
+        return GameUtilities.isStarter(this);
+    }
+
+    public PCLCard makePopupCopy() {
+        PCLCard copy = makeStatEquivalentCopy();
+        copy.current_x = (float) Settings.WIDTH / 2f;
+        copy.current_y = (float) Settings.HEIGHT / 2f;
+        copy.drawScale = copy.targetDrawScale = 2f;
+        copy.isPopup = true;
+        return copy;
+    }
+
+    public String makePowerString() {
+        return makePowerString(rawDescription);
+    }
+
+    protected float modifyBlock(PCLUseInfo info, float amount) {
+        for (PSkill<?> be : getFullEffects()) {
+            amount = be.modifyBlock(info, amount);
+        }
+        return amount;
+    }
+
+    protected float modifyDamage(PCLUseInfo info, float amount) {
+        for (PSkill<?> be : getFullEffects()) {
+            amount = be.modifyDamage(info, amount);
+        }
+        return amount;
+    }
+
+    protected float modifyHitCount(PCLUseInfo info, float amount) {
+        for (PSkill<?> be : getFullEffects()) {
+            amount = be.modifyHitCount(info, amount);
+        }
+        return amount;
+    }
+
+    protected float modifyMagicHeal(PCLUseInfo info, float amount) {
+        for (PSkill<?> be : getFullEffects()) {
+            amount = be.modifyHeal(info, amount);
+        }
+        return amount;
+    }
+
+    public ArrayList<PSkill<?>> getAugmentSkills() {
+        return EUIUtils.mapAsNonnull(augments, aug -> aug != null ? aug.skill : null);
+    }
+
+    protected float modifyMagicNumber(PCLUseInfo info, float amount) {
+        for (PSkill<?> be : getFullEffects()) {
+            amount = be.modifyMagicNumber(info, amount);
+        }
+        return amount;
+    }
+
+    protected float modifyRightCount(PCLUseInfo info, float amount) {
+        for (PSkill<?> be : getFullEffects()) {
+            amount = be.modifyRightCount(info, amount);
+        }
+        return amount;
+    }
+
+    public void onDrag(AbstractMonster m) {
+        doEffects(be -> be.onDrag(m));
+    }
+
+    protected void doEffects(ActionT1<PSkill<?>> action) {
+        for (PSkill<?> be : getFullEffects()) {
+            action.invoke(be);
+        }
+    }
+
+    @Override
+    public void onRemovedFromDeck() {
+        for (PCLAugment augment : getAugments()) {
+            if (augment.canRemove()) {
+                PGR.dungeon.addAugment(augment.ID, 1);
+            }
+        }
+    }
+
+    public ArrayList<PCLAugment> getAugments() {
+        return EUIUtils.filter(augments, Objects::nonNull);
     }
 
     @Override
@@ -2311,9 +1760,246 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         }.getType();
     }
 
+    protected void onUpgrade() {
+    }
+
+    // Update damage, block, and magic number from the powers on a given target
+    // Every step of the calculation is recorded for display in the damage formula widget
+    public void refresh(AbstractMonster enemy) {
+        PCLUseInfo info = new PCLUseInfo(this, getSourceCreature(), enemy);
+        doEffects(be -> be.refresh(info, true));
+
+        boolean applyEnemyPowers = (enemy != null && !GameUtilities.isDeadOrEscaped(enemy));
+        float tempBlock = baseBlock;
+        float tempDamage = baseDamage;
+        float tempMagicNumber = CombatManager.onModifyMagicNumber(baseMagicNumber, this);
+        float tempHitCount = baseHitCount;
+        float tempRightCount = baseRightCount;
+        tempDamage = modifyDamage(info, tempDamage);
+        tempBlock = modifyBlock(info, tempBlock);
+
+        AbstractCreature owner = getSourceCreature();
+        if (owner != null) {
+            int applyCount = attackType == PCLAttackType.Brutal ? 2 : 1;
+
+            if (owner instanceof AbstractPlayer) {
+                for (AbstractRelic r : ((AbstractPlayer) owner).relics) {
+                    tempDamage = r.atDamageModify(tempDamage, this);
+                    if (r instanceof PCLRelic) {
+                        tempBlock = ((PCLRelic) r).atBlockModify(tempBlock, this);
+                    }
+                }
+
+                for (AbstractRelic r : ((AbstractPlayer) owner).relics) {
+                    if (r instanceof PCLRelic) {
+                        tempMagicNumber = ((PCLRelic) r).atMagicNumberModify(info, tempMagicNumber, this);
+                        tempHitCount = ((PCLRelic) r).atHitCountModify(info, tempHitCount, this);
+                        tempRightCount = ((PCLRelic) r).atRightCountModify(info, tempRightCount, this);
+                    }
+                }
+            }
+
+            for (AbstractPower p : owner.powers) {
+                if (p instanceof PCLPower) {
+                    tempMagicNumber = ((PCLPower) p).modifyMagicNumber(info, tempMagicNumber, this);
+                    tempHitCount = ((PCLPower) p).modifyHitCount(info, tempHitCount, this);
+                    tempRightCount = ((PCLPower) p).modifyRightCount(info, tempRightCount, this);
+                }
+            }
+
+            if (attackType.useFocus) {
+                for (AbstractPower p : owner.powers) {
+                    float oldBlock = tempBlock;
+                    float oldDamage = tempDamage;
+                    tempBlock = p.modifyBlock(tempBlock, this);
+                    if (FocusPower.POWER_ID.equals(p.ID)) {
+                        tempDamage += p.amount;
+                    }
+                    else if (p instanceof PCLPower) {
+                        tempDamage = ((PCLPower) p).modifyOrbOutgoing(tempDamage);
+                    }
+                    addAttackDisplay(p, oldDamage, tempDamage);
+                    addDefendDisplay(p, oldBlock, tempBlock);
+                }
+            }
+            else {
+                for (AbstractPower p : owner.powers) {
+                    float oldBlock = tempBlock;
+                    float oldDamage = tempDamage;
+
+                    if (p instanceof PCLPower) {
+                        tempBlock = ((PCLPower) p).modifyBlock(info, tempBlock, this);
+                        for (int i = 0; i < applyCount; i++) {
+                            tempDamage = ((PCLPower) p).atDamageGive(info, tempDamage, damageTypeForTurn, this);
+                        }
+                    }
+                    else {
+                        tempBlock = p.modifyBlock(tempBlock, this);
+                        for (int i = 0; i < applyCount; i++) {
+                            tempDamage = p.atDamageGive(tempDamage, damageTypeForTurn, this);
+                        }
+                    }
+
+                    addAttackDisplay(p, oldDamage, tempDamage);
+                    addDefendDisplay(p, oldBlock, tempBlock);
+                }
+            }
+
+            tempBlock = CombatManager.playerSystem.modifyBlock(tempBlock, parent != null ? parent : this, this, enemy != null ? enemy : owner);
+            tempDamage = CombatManager.playerSystem.modifyDamage(tempDamage, parent != null ? parent : this, this, enemy);
+
+            for (AbstractPower p : owner.powers) {
+                tempBlock = p.modifyBlockLast(tempBlock);
+            }
+
+            if (applyEnemyPowers) {
+                if (attackType.bypassFlight && EUIUtils.any(enemy.powers, po -> FlightPower.POWER_ID.equals(po.ID))) {
+                    tempDamage *= 2f * applyCount;
+                }
+
+                if (attackType.useFocus) {
+                    for (AbstractPower p : enemy.powers) {
+                        float oldDamage = tempDamage;
+                        // Lock-on calculations are hardcoded in AbstractOrb so we are falling back on PCLLockOn's multiplier for now
+                        if (LockOnPower.POWER_ID.equals(p.ID)) {
+                            tempDamage *= PCLLockOnPower.getOrbMultiplier();
+                        }
+                        else if (p instanceof PCLPower) {
+                            for (int i = 0; i < applyCount; i++) {
+                                tempDamage = ((PCLPower) p).modifyOrbIncoming(tempDamage);
+                            }
+                        }
+                        addAttackDisplay(p, oldDamage, tempDamage);
+                    }
+                }
+                else {
+                    for (AbstractPower p : enemy.powers) {
+                        float oldDamage = tempDamage;
+                        for (int i = 0; i < applyCount; i++) {
+                            tempDamage = p.atDamageReceive(tempDamage, damageTypeForTurn, this);
+                        }
+                        addAttackDisplay(p, oldDamage, tempDamage);
+                    }
+                }
+
+            }
+
+            if (owner instanceof AbstractPlayer) {
+                tempDamage = ((AbstractPlayer) owner).stance.atDamageGive(tempDamage, damageTypeForTurn, this);
+            }
+
+            for (AbstractPower p : owner.powers) {
+                float oldDamage = tempDamage;
+                for (int i = 0; i < applyCount; i++) {
+                    tempDamage = p.atDamageFinalGive(tempDamage, damageTypeForTurn, this);
+                }
+                addAttackDisplay(p, oldDamage, tempDamage);
+            }
+
+            if (applyEnemyPowers) {
+                for (AbstractPower p : enemy.powers) {
+                    float oldDamage = tempDamage;
+                    for (int i = 0; i < applyCount; i++) {
+                        tempDamage = p.atDamageFinalReceive(tempDamage, damageTypeForTurn, this);
+                    }
+                    addAttackDisplay(p, oldDamage, tempDamage);
+                }
+                tempDamage = CombatManager.onDamageOverride(enemy, damageTypeForTurn, tempDamage, this);
+            }
+        }
+
+        // Do not use the regular update methods because those will refresh amounts from onAttack with the standard setAmount
+        // TODO heal modify
+        block = Math.max(0, MathUtils.floor(tempBlock));
+        damage = Math.max(0, MathUtils.floor(tempDamage));
+        magicNumber = MathUtils.floor(modifyMagicNumber(info, tempMagicNumber));
+        hitCount = Math.max(1, MathUtils.floor(modifyHitCount(info, tempHitCount)));
+        rightCount = Math.max(1, MathUtils.floor(modifyRightCount(info, tempRightCount)));
+
+        this.isBlockModified = (baseBlock != block);
+        this.isDamageModified = (baseDamage != damage);
+        this.isHitCountModified = (baseHitCount != hitCount);
+        this.isMagicNumberModified = (baseMagicNumber != magicNumber);
+        this.isRightCountModified = (baseRightCount != rightCount);
+
+        if (onAttackEffect != null) {
+            onAttackEffect.setAmountFromCardForUpdateOnly();
+        }
+        if (onBlockEffect != null) {
+            onBlockEffect.setAmountFromCardForUpdateOnly();
+        }
+
+        addAttackResult(baseDamage, tempDamage);
+        addDefendResult(baseBlock, tempBlock);
+
+        // Release damage display for rendering
+        formulaDisplay = null;
+    }
+
+    public PCLAugment removeAugment(int index) {
+        return removeAugment(index, true);
+    }
+
+    public PCLAugment removeAugment(int index, boolean save) {
+        if (index >= 0 && index < augments.size()) {
+            PCLAugment augment = augments.get(index);
+            if (augment != null && augment.canRemove()) {
+                augments.set(index, null);
+                if (save) {
+                    auxiliaryData.augments.set(index, null);
+                }
+                augment.onRemoveFromCard(this);
+                refresh(null);
+                return augment;
+            }
+        }
+        return null;
+    }
+
+    public void render(SpriteBatch sb, boolean hovered, boolean selected, boolean library) {
+        if (Settings.hideCards || !isOnScreen()) {
+            return;
+        }
+
+        if (flashVfx != null) {
+            flashVfx.render(sb);
+        }
+
+        if (isFlipped) {
+            renderBack(sb, hovered, selected);
+            return;
+        }
+
+        if (GameUtilities.canShowUpgrades(library) && !isPreview && !isPopup && canUpgrade()) {
+            updateGlow();
+            renderGlow(sb);
+            renderUpgradePreview(sb);
+            return;
+        }
+
+        updateGlow();
+        renderGlow(sb);
+        renderImage(sb, hovered, selected);
+        renderTitle(sb);
+        renderType(sb);
+        renderDescription(sb);
+        renderTint(sb);
+        renderEnergy(sb);
+        hb.render(sb);
+    }
+
+    protected void renderAtlas(SpriteBatch sb, Color color, TextureAtlas.AtlasRegion img, float drawX, float drawY) {
+        sb.setColor(color);
+        sb.draw(img, drawX + img.offsetX - (float) img.originalWidth / 2f, drawY + img.offsetY - (float) img.originalHeight / 2f, (float) img.originalWidth / 2f - img.offsetX, (float) img.originalHeight / 2f - img.offsetY, (float) img.packedWidth, (float) img.packedHeight, this.drawScale * Settings.scale, this.drawScale * Settings.scale, this.angle);
+    }
+
+    protected void renderAtlas(SpriteBatch sb, Color color, TextureAtlas.AtlasRegion img, float drawX, float drawY, float scale) {
+        sb.setColor(color);
+        sb.draw(img, drawX + img.offsetX - (float) img.originalWidth / 2f, drawY + img.offsetY - (float) img.originalHeight / 2f, (float) img.originalWidth / 2f - img.offsetX, (float) img.originalHeight / 2f - img.offsetY, (float) img.packedWidth, (float) img.packedHeight, this.drawScale * Settings.scale * scale, this.drawScale * Settings.scale * scale, this.angle);
+    }
+
     @SpireOverride
-    protected void renderBack(SpriteBatch sb, boolean hovered, boolean selected)
-    {
+    protected void renderBack(SpriteBatch sb, boolean hovered, boolean selected) {
         SpireSuper.call(sb, hovered, selected);
     }
 
@@ -2323,15 +2009,12 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
             affinities.renderOnCard(sb, this, player != null && player.hand.contains(this));
         }
         float sc = isPopup ? 0.5f : 1f;
-        if (!tryRenderCentered(sb, getCardBanner(), getRarityColor(), sc))
-        {
+        if (!tryRenderCentered(sb, getCardBanner(), getRarityColor(), sc)) {
             // Copying base game behavior
-            if (isPopup)
-            {
-                renderAtlas(sb, getRarityVanillaColor(), getCardBannerVanillaRegion(), (float)Settings.WIDTH / 2.0F, (float)Settings.HEIGHT / 2.0F, sc);
+            if (isPopup) {
+                renderAtlas(sb, getRarityVanillaColor(), getCardBannerVanillaRegion(), (float) Settings.WIDTH / 2.0F, (float) Settings.HEIGHT / 2.0F, sc);
             }
-            else
-            {
+            else {
                 renderAtlas(sb, getRarityVanillaColor(), getCardBannerVanillaRegion(), current_x, current_y, sc);
             }
         }
@@ -2351,7 +2034,8 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
                     PCLRenderHelpers.drawOnCardAuto(s, this, card,
                             new Vector2(0, 0), card.getWidth(), card.getHeight(),
                             this.color == CardColor.CURSE ? PCLCard.CURSE_COLOR : PCLCard.COLORLESS_ORB_COLOR, transparency, popUpMultiplier));
-        } else {
+        }
+        else {
             PCLRenderHelpers.drawOnCardAuto(sb, this, card, new Vector2(0, 0), card.getWidth(), card.getHeight(), getRenderColor(), transparency, popUpMultiplier);
         }
     }
@@ -2379,13 +2063,11 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         }
     }
 
-    protected void renderEnergyText(SpriteBatch sb)
-    {
+    protected void renderEnergyText(SpriteBatch sb) {
         renderEnergyText(sb, -132f, 192f);
     }
 
-    protected void renderEnergyText(SpriteBatch sb, float xOffset, float yOffset)
-    {
+    protected void renderEnergyText(SpriteBatch sb, float xOffset, float yOffset) {
         ColoredString costString = getCostString();
         if (costString != null) {
             BitmapFont font = PCLRenderHelpers.getEnergyFont(this);
@@ -2403,8 +2085,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         renderGlowManual(sb);
     }
 
-    public void renderGlowManual(SpriteBatch sb)
-    {
+    public void renderGlowManual(SpriteBatch sb) {
         renderMainBorder(sb);
 
         for (PCLCardGlowBorderEffect glowBorder : glowList) {
@@ -2424,7 +2105,8 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
             renderAtlas(sb, new Color(0, 0, 0, transparency * 0.25f), getCardBgAtlas(), current_x + SHADOW_OFFSET_X * drawScale, current_y - SHADOW_OFFSET_Y * drawScale);
             if ((player.hoveredCard == this) && ((player.isDraggingCard && player.isHoveringDropZone) || player.inSingleTargetMode)) {
                 renderAtlas(sb, HOVER_IMG_COLOR, getCardBgAtlas(), current_x, current_y);
-            } else if (selected) {
+            }
+            else if (selected) {
                 renderAtlas(sb, SELECTED_CARD_COLOR, getCardBgAtlas(), current_x, current_y);
             }
         }
@@ -2438,6 +2120,64 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     @SpireOverride
     protected void renderJokePortrait(SpriteBatch sb) {
         renderPortrait(sb);
+    }
+
+    @SpireOverride
+    protected void renderPortrait(SpriteBatch sb) {
+        if (!isSeen || isLocked) {
+            renderPortraitImage(sb, EUIRM.getTexture(QuestionMark.DATA.imagePath), getRenderColor(), 1, false, false, false);
+            return;
+        }
+
+        final boolean cropPortrait = canCropPortraits && PGR.config.cropCardImages.get();
+
+        // TODO support for animated pictures
+        if (portraitImg != null) {
+            renderPortraitImage(sb, portraitImg.texture, portraitImg.color, portraitImg.scale, cropPortrait, false, false);
+        }
+        if (portraitForeground != null) {
+            renderPortraitImage(sb, portraitForeground.texture, portraitForeground.color, portraitForeground.scale, cropPortrait, portraitForeground.scale != 1, true);
+        }
+    }
+
+    protected void renderPortraitImage(SpriteBatch sb, Texture texture, Color color, float scale, boolean cropPortrait, boolean useTextureSize, boolean foreground) {
+        if (color == null) {
+            color = getRenderColor();
+        }
+
+        final float render_width = useTextureSize ? texture.getWidth() : 250;
+        final float render_height = useTextureSize ? texture.getWidth() : 190;
+        if (cropPortrait && drawScale > 0.6f && drawScale < 1) {
+            final int width = texture.getWidth();
+            final int offset_x = (int) ((1 - drawScale) * (0.5f * width));
+            TextureAtlas.AtlasRegion region = foreground ? jokePortrait : portrait;
+            if (region == null || texture != region.getTexture() || (region.getRegionX() != offset_x) || EUI.elapsed50()) {
+                final int height = texture.getHeight();
+                final int offset_y1 = 0;//(int) ((1-drawScale) * (0.5f * height));
+                final int offset_y2 = (int) ((1 - drawScale) * (height));
+                if (region == null) {
+                    region = new TextureAtlas.AtlasRegion(texture, offset_x, offset_y1, width - (2 * offset_x), height - offset_y1 - offset_y2);
+                    if (foreground) {
+                        jokePortrait = region; // let's just reuse this.
+                    }
+                    else {
+                        portrait = region;
+                    }
+                }
+                else {
+                    region.setRegion(texture);
+                    region.setRegion(offset_x, offset_y1, width - (2 * offset_x), height - offset_y1 - offset_y2);
+                }
+            }
+
+            PCLRenderHelpers.drawOnCardAuto(sb, this, region, new Vector2(0, 72), render_width, render_height, color, transparency, scale);
+        }
+        else if (isPopup) {
+            PCLRenderHelpers.drawOnCardAuto(sb, this, texture, new Vector2(0, 72), render_width * 2, render_height * 2, color, transparency, scale * 0.5f);
+        }
+        else {
+            PCLRenderHelpers.drawOnCardAuto(sb, this, texture, new Vector2(0, 72), render_width, render_height, color, transparency, scale);
+        }
     }
 
     @SpireOverride
@@ -2463,7 +2203,8 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
 
         if (GameUtilities.inBattle(false)) {
             sb.setColor(this.glowColor);
-        } else {
+        }
+        else {
             sb.setColor(GREEN_BORDER_GLOW_COLOR);
         }
 
@@ -2474,35 +2215,14 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     }
 
     @SpireOverride
-    protected void renderPortrait(SpriteBatch sb) {
-        if (!isSeen || isLocked) {
-            renderPortraitImage(sb, EUIRM.getTexture(QuestionMark.DATA.imagePath), getRenderColor(), 1, false, false, false);
-            return;
-        }
-
-        final boolean cropPortrait = canCropPortraits && PGR.config.cropCardImages.get();
-
-        // TODO support for animated pictures
-        if (portraitImg != null) {
-            renderPortraitImage(sb, portraitImg.texture, portraitImg.color, portraitImg.scale, cropPortrait, false, false);
-        }
-        if (portraitForeground != null) {
-            renderPortraitImage(sb, portraitForeground.texture, portraitForeground.color, portraitForeground.scale, cropPortrait, portraitForeground.scale != 1, true);
-        }
-    }
-
-    @SpireOverride
     protected void renderPortraitFrame(SpriteBatch sb, float x, float y) {
         float sc = isPopup ? 0.5f : 1f;
-        if (!tryRenderCentered(sb, getPortraitFrame(), getRarityColor(), sc))
-        {
+        if (!tryRenderCentered(sb, getPortraitFrame(), getRarityColor(), sc)) {
             // Copying base game location behavior
-            if (isPopup)
-            {
-                renderAtlas(sb, Color.WHITE, getPortraitFrameVanillaRegion(), (float)Settings.WIDTH / 2.0F, (float)Settings.HEIGHT / 2.0F, sc);
+            if (isPopup) {
+                renderAtlas(sb, Color.WHITE, getPortraitFrameVanillaRegion(), (float) Settings.WIDTH / 2.0F, (float) Settings.HEIGHT / 2.0F, sc);
             }
-            else
-            {
+            else {
                 renderAtlas(sb, Color.WHITE, getPortraitFrameVanillaRegion(), current_x, current_y, sc);
             }
         }
@@ -2522,18 +2242,17 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         if (isLocked || !isSeen) {
             color = Color.WHITE;
             text = isLocked ? LOCKED_STRING : UNKNOWN_STRING;
-        } else {
+        }
+        else {
             color = upgraded ? Settings.GREEN_TEXT_COLOR : Color.WHITE;
             text = name;
         }
 
         // Base game text is SLIGHTLY off
-        if (isPopup && !shouldUsePCLFrame())
-        {
+        if (isPopup && !shouldUsePCLFrame()) {
             PCLRenderHelpers.writeOnCard(sb, this, font, text, 0, RAW_H * 0.4f, color, false);
         }
-        else
-        {
+        else {
             PCLRenderHelpers.writeOnCard(sb, this, font, text, 0, RAW_H * 0.416f, color, false);
         }
         PCLRenderHelpers.resetFont(font);
@@ -2542,20 +2261,16 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     @SpireOverride
     protected void renderType(SpriteBatch sb) {
         if (showTypeText) {
-            if (shouldUsePCLFrame())
-            {
+            if (shouldUsePCLFrame()) {
                 Texture texture = getTypeIcon();
                 float height = texture.getHeight();
                 PCLRenderHelpers.drawOnCardAuto(sb, this, texture, new Vector2(0, -height * 0.2f), texture.getWidth(), height, Color.WHITE, transparency, Settings.scale * 0.24f);
             }
-            else
-            {
-                if (isPopup)
-                {
-                    FontHelper.renderFontCentered(sb, FontHelper.panelNameFont, EUIGameUtils.textForType(type), (float)Settings.WIDTH / 2.0F + 3.0F * Settings.scale, (float)Settings.HEIGHT / 2.0F - 40.0F * Settings.scale, CARD_TYPE_COLOR);
+            else {
+                if (isPopup) {
+                    FontHelper.renderFontCentered(sb, FontHelper.panelNameFont, EUIGameUtils.textForType(type), (float) Settings.WIDTH / 2.0F + 3.0F * Settings.scale, (float) Settings.HEIGHT / 2.0F - 40.0F * Settings.scale, CARD_TYPE_COLOR);
                 }
-                else
-                {
+                else {
                     BitmapFont font = EUIFontHelper.cardTypeFont;
                     font.getData().setScale(this.drawScale);
                     Color typeColor = getTypeColor();
@@ -2566,26 +2281,56 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         }
     }
 
-    // Determines whether the card frame used will be the base game's or the PCL frame
-    protected boolean shouldUsePCLFrame()
-    {
-        return PGR.getResources(this.color).usePCLFrame;
+    public void setCardRarity(CardRarity rarity) {
+        this.rarity = rarity;
     }
 
-    public void setDrawScale(float scale)
-    {
+    public void setCardRarityType(CardRarity rarity, CardType type) {
+        this.rarity = rarity;
+        this.type = type;
+    }
+
+    public void setCardType(CardType type) {
+        this.type = type;
+    }
+
+    public void setDrawScale(float scale) {
         this.drawScale = this.targetDrawScale = scale;
     }
 
-    public void setPosition(float x, float y)
-    {
+    public void setEvokeOrbCount(int count) {
+        this.showEvokeValue = count > 0;
+        this.showEvokeOrbCount = count;
+    }
+
+    protected void setNumbers(int damage, int block) {
+        setNumbers(damage, block, 0, 0);
+    }
+
+    protected void setNumbers(int damage, int block, int magicNumber, int secondaryValue) {
+        setNumbers(damage, block, magicNumber, secondaryValue, 1);
+    }
+
+    protected void setNumbers(int damage, int block, int magicNumber, int secondaryValue, int hitCount) {
+        setNumbers(damage, block, magicNumber, secondaryValue, hitCount, 1);
+    }
+
+    protected void setNumbers(int damage, int block, int magicNumber) {
+        setNumbers(damage, block, magicNumber, 0);
+    }
+
+    public void setPosition(float x, float y) {
         this.current_x = this.target_x = x;
         this.current_y = this.target_y = y;
         this.hb.move(current_x, current_y);
     }
 
-    public void stopFlash()
-    {
+    // Determines whether the card frame used will be the base game's or the PCL frame
+    protected boolean shouldUsePCLFrame() {
+        return PGR.getResources(this.color).usePCLFrame;
+    }
+
+    public void stopFlash() {
         this.flashVfx = null;
     }
 
@@ -2624,6 +2369,107 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         doEffects(be -> be.triggerOnAllyWithdraw(this, ally));
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    protected boolean tryRender(SpriteBatch sb, Texture texture, float scale, Vector2 offset) {
+        if (texture != null) {
+            PCLRenderHelpers.drawOnCardAuto(sb, this, texture, offset, texture.getWidth(), texture.getHeight(), getRenderColor(), transparency, scale);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    protected Color getRenderColor() {
+        return ReflectionHacks.getPrivate(this, AbstractCard.class, "renderColor");
+    }
+
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    protected boolean tryRenderCentered(SpriteBatch sb, ColoredTexture texture) {
+        if (texture != null) {
+            PCLRenderHelpers.drawOnCardAuto(sb, this, texture, 0, 0, texture.getWidth(), texture.getHeight());
+
+            return true;
+        }
+
+        return false;
+    }
+
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    protected boolean tryRenderCentered(SpriteBatch sb, ColoredTexture texture, float scale) {
+        if (texture != null) {
+            PCLRenderHelpers.drawOnCardAuto(sb, this, texture, 0, 0, texture.getWidth(), texture.getHeight(), scale);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    protected boolean tryRenderCentered(SpriteBatch sb, Texture texture) {
+        if (texture != null) {
+            PCLRenderHelpers.drawOnCardAuto(sb, this, texture, getRenderColor(), 0, 0, texture.getWidth(), texture.getHeight());
+
+            return true;
+        }
+
+        return false;
+    }
+
+    protected boolean tryRenderCentered(SpriteBatch sb, Texture texture, float scale) {
+        return tryRenderCentered(sb, texture, getRenderColor(), scale);
+    }
+
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    protected boolean tryRenderCentered(SpriteBatch sb, Texture texture, Color color, float scale) {
+        if (texture != null) {
+            PCLRenderHelpers.drawOnCardAuto(sb, this, texture, new Vector2(0, 0), texture.getWidth(), texture.getHeight(), color, transparency, scale);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    protected boolean tryUpgrade() {
+        return tryUpgrade(true);
+    }
+
+    protected boolean tryUpgrade(boolean updateDescription) {
+        if (this.canUpgrade()) {
+            this.timesUpgraded += 1;
+            this.upgraded = true;
+
+
+            initializeTitle();
+
+            if (updateDescription) {
+                initializeDescription();
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public void updateBlock(float amount) {
+        block = Math.max(0, MathUtils.floor(amount));
+        this.isBlockModified = (baseBlock != block);
+        if (onBlockEffect != null) {
+            onBlockEffect.setAmountFromCard();
+        }
+    }
+
+    public void updateDamage(float amount) {
+        damage = Math.max(0, MathUtils.floor(amount));
+        this.isDamageModified = (baseDamage != damage);
+        if (onAttackEffect != null) {
+            onAttackEffect.setAmountFromCard();
+        }
+    }
+
     @SpireOverride
     public void updateGlow() {
         updateGlow(1f);
@@ -2652,6 +2498,52 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         }
     }
 
+    public void updateHeal(float amount) {
+        int prevHeal = heal;
+        heal = Math.max(0, MathUtils.floor(amount));
+        this.isHealModified = (baseHeal != heal);
+        if (prevHeal != heal) {
+            currentHealth += (prevHeal - heal);
+        }
+    }
+
+    public void updateHitCount(float amount) {
+        hitCount = Math.max(1, MathUtils.floor(amount));
+        this.isHitCountModified = (baseHitCount != hitCount);
+        if (onAttackEffect != null) {
+            onAttackEffect.setAmountFromCard();
+        }
+    }
+
+    public void updateMagicNumber(float amount) {
+        magicNumber = Math.max(0, MathUtils.floor(amount));
+        this.isMagicNumberModified = (baseMagicNumber != magicNumber);
+    }
+
+    public void updateMaxBlock(int amount) {
+        baseBlock = block = Math.max(0, amount);
+        this.isBlockModified = false;
+        if (onBlockEffect != null) {
+            onBlockEffect.setAmountFromCard();
+        }
+    }
+
+    public void updateMaxDamage(int amount) {
+        baseDamage = damage = Math.max(0, amount);
+        this.isDamageModified = false;
+        if (onAttackEffect != null) {
+            onAttackEffect.setAmountFromCard();
+        }
+    }
+
+    public void updateRightCount(float amount) {
+        rightCount = Math.max(1, MathUtils.floor(amount));
+        this.isRightCountModified = (baseRightCount != rightCount);
+        if (onBlockEffect != null) {
+            onBlockEffect.setAmountFromCard();
+        }
+    }
+
     protected void upgradeHitCount(int amount) {
         this.baseHitCount += amount;
         this.hitCount = this.baseHitCount;
@@ -2670,18 +2562,16 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         this.upgradedHeal = true;
     }
 
-    protected boolean getDarken()
-    {
-        return ReflectionHacks.getPrivate(this, AbstractCard.class, "darken");
+    // Used by summons when triggered, as power effects should only be cast when the summon is first summoned
+    public void useEffectsWithoutPowers(PCLUseInfo info) {
+        doNonPowerEffects(be -> be.use(info));
     }
 
-    protected Color getRenderColor()
-    {
-        return ReflectionHacks.getPrivate(this, AbstractCard.class, "renderColor");
-    }
-
-    protected Color getTypeColor()
-    {
-        return ReflectionHacks.getPrivate(this, AbstractCard.class, "typeColor");
+    protected void doNonPowerEffects(ActionT1<PSkill<?>> action) {
+        for (PSkill<?> be : getFullEffects()) {
+            if (!(be instanceof SummonOnlyMove)) {
+                action.invoke(be);
+            }
+        }
     }
 }

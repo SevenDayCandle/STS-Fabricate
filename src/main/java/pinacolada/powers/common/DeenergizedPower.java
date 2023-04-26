@@ -4,12 +4,10 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import pinacolada.actions.PCLActions;
 import pinacolada.powers.PCLPower;
 
-public class DeenergizedPower extends PCLPower
-{
+public class DeenergizedPower extends PCLPower {
     public static final String POWER_ID = createFullID(DeenergizedPower.class);
 
-    public DeenergizedPower(AbstractCreature owner, int amount)
-    {
+    public DeenergizedPower(AbstractCreature owner, int amount) {
         super(owner, POWER_ID);
 
         this.amount = amount;
@@ -18,10 +16,8 @@ public class DeenergizedPower extends PCLPower
         updateDescription();
     }
 
-    public void onEnergyRecharge()
-    {
-        if (owner.isPlayer)
-        {
+    public void onEnergyRecharge() {
+        if (owner.isPlayer) {
             PCLActions.bottom.spendEnergy(amount, true);
             flash();
             PCLActions.bottom.removePower(owner, owner, this);

@@ -1,7 +1,6 @@
 package pinacolada.cards.base.cardText;
 
-public enum PCLTextTokenType
-{
+public enum PCLTextTokenType {
     Text,
     Whitespace,
     Punctuation,

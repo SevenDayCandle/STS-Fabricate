@@ -17,15 +17,13 @@ import java.util.Map;
 import java.util.UUID;
 
 // Copied and modified from STS-AnimatorMod
-public class ReplaceCard extends PCLAction<Map<AbstractCard, AbstractCard>>
-{
+public class ReplaceCard extends PCLAction<Map<AbstractCard, AbstractCard>> {
     protected final Map<AbstractCard, AbstractCard> newCards = new HashMap<>();
     protected boolean upgrade;
     protected boolean preserveStats;
     protected UUID cardUUID;
 
-    public ReplaceCard(UUID cardUUID, AbstractCard replacement)
-    {
+    public ReplaceCard(UUID cardUUID, AbstractCard replacement) {
         super(ActionType.CARD_MANIPULATION);
 
         this.cardUUID = cardUUID;
@@ -35,81 +33,59 @@ public class ReplaceCard extends PCLAction<Map<AbstractCard, AbstractCard>>
     }
 
     @Override
-    protected void firstUpdate()
-    {
+    protected void firstUpdate() {
         replace(player.limbo.group);
         replace(player.exhaustPile.group);
         replace(player.discardPile.group);
         replace(player.drawPile.group);
         replace(player.hand.group);
 
-        for (PCLCardAlly summon : GameUtilities.getSummons(false))
-        {
+        for (PCLCardAlly summon : GameUtilities.getSummons(false)) {
             PCLCard summonCard = summon.card;
-            if (summonCard != null && cardUUID.equals(summonCard.uuid))
-            {
+            if (summonCard != null && cardUUID.equals(summonCard.uuid)) {
                 AbstractCard copy = replace(summonCard);
-                if (copy instanceof PCLCard)
-                {
+                if (copy instanceof PCLCard) {
                     summon.initializeForCard((PCLCard) copy, false, false);
                 }
             }
         }
 
-        for (int i = 0; i < AbstractDungeon.actionManager.actions.size(); i++)
-        {
+        for (int i = 0; i < AbstractDungeon.actionManager.actions.size(); i++) {
             UseCardAction action = EUIUtils.safeCast(AbstractDungeon.actionManager.actions.get(i), UseCardAction.class);
-            if (action != null)
-            {
+            if (action != null) {
                 AbstractCard card = ReflectionHacks.getPrivate(action, UseCardAction.class, "targetCard");
-                if (newCards.containsKey(card) || cardUUID.equals(card.uuid))
-                {
+                if (newCards.containsKey(card) || cardUUID.equals(card.uuid)) {
                     EUIClassUtils.setField(action, "targetCard", replace(card));
                 }
             }
         }
 
-        if (player.cardInUse != null && (newCards.containsKey(player.cardInUse) || cardUUID.equals(player.cardInUse.uuid)))
-        {
+        if (player.cardInUse != null && (newCards.containsKey(player.cardInUse) || cardUUID.equals(player.cardInUse.uuid))) {
             player.cardInUse = replace(player.cardInUse);
         }
 
         complete(newCards);
     }
 
-    public ReplaceCard preserveStats(boolean preserveStats)
-    {
-        this.preserveStats = preserveStats;
-
-        return this;
-    }
-
-    protected void replace(ArrayList<AbstractCard> cards)
-    {
-        for (int i = 0; i < cards.size(); i++)
-        {
+    protected void replace(ArrayList<AbstractCard> cards) {
+        for (int i = 0; i < cards.size(); i++) {
             AbstractCard original = cards.get(i);
-            if (cardUUID.equals(original.uuid))
-            {
+            if (cardUUID.equals(original.uuid)) {
                 cards.set(i, replace(original));
             }
         }
     }
 
-    protected AbstractCard replace(AbstractCard original)
-    {
+    protected AbstractCard replace(AbstractCard original) {
         AbstractCard replacement;
-        if (newCards.containsKey(original))
-        {
+        if (newCards.containsKey(original)) {
             replacement = newCards.get(original);
         }
-        else
-        {
+        else {
             replacement = card.makeStatEquivalentCopy();
             replacement.uuid = original.uuid;
 
-            if (upgrade)
-            {
+            if (upgrade) {
                 replacement.upgrade();
             }
 
@@ -120,8 +96,13 @@ public class ReplaceCard extends PCLAction<Map<AbstractCard, AbstractCard>>
         return replacement;
     }
 
-    public ReplaceCard setUpgrade(boolean upgrade)
-    {
+    public ReplaceCard preserveStats(boolean preserveStats) {
+        this.preserveStats = preserveStats;
+
+        return this;
+    }
+
+    public ReplaceCard setUpgrade(boolean upgrade) {
         this.upgrade = upgrade;
 
         return this;

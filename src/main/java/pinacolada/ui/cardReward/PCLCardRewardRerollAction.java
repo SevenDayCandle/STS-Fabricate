@@ -16,20 +16,16 @@ import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
 // Copied and modified from STS-AnimatorMod
-public class PCLCardRewardRerollAction extends PCLCardRewardAction
-{
+public class PCLCardRewardRerollAction extends PCLCardRewardAction {
     protected static final float REWARD_INDEX = AbstractCard.IMG_HEIGHT * 0.515f;
 
-    public PCLCardRewardRerollAction(ActionT1<AbstractCard> onCardAdded, ActionT1<AbstractCard> onCardReroll)
-    {
+    public PCLCardRewardRerollAction(ActionT1<AbstractCard> onCardAdded, ActionT1<AbstractCard> onCardReroll) {
         super(onCardAdded, onCardReroll);
     }
 
-    public AbstractCard actionImpl(PCLCardRewardActionButton button, AbstractCard card, int cardIndex)
-    {
+    public AbstractCard actionImpl(PCLCardRewardActionButton button, AbstractCard card, int cardIndex) {
         final AbstractCard replacement = actionProvider.doAction(card, rewardItem, cardIndex);
-        if (replacement != null)
-        {
+        if (replacement != null) {
             SFX.play(SFX.CARD_SELECT);
             PCLEffects.TopLevelList.add(new ExhaustCardEffect(card));
             PCLEffects.TopLevelList.add(new HideCardEffect(card));
@@ -40,19 +36,17 @@ public class PCLCardRewardRerollAction extends PCLCardRewardAction
     }
 
     @Override
-    PCLCardRewardActionButton getButton(int index)
-    {
+    Class<? extends CardRewardActionProvider> getTargetClass() {
+        return AbstractCubes.class;
+    }
+
+    @Override
+    PCLCardRewardActionButton getButton(int index) {
         return (PCLCardRewardActionButton) new PCLCardRewardActionButton(this,
                 EUIRM.images.hexagonalButton.texture(), PGR.core.strings.rewards_reroll, PGR.core.strings.rewards_rerollDescription, REWARD_INDEX, index, false)
                 .setFont(EUIFontHelper.buttonFont, 0.85f)
                 .setDimensions(AbstractCard.IMG_WIDTH * 0.75f, AbstractCard.IMG_HEIGHT * 0.14f)
                 .setColor(Color.TAN)
                 .setBorder(EUIRM.images.hexagonalButtonBorder.texture(), Settings.GOLD_COLOR);
-    }
-
-    @Override
-    Class<? extends CardRewardActionProvider> getTargetClass()
-    {
-        return AbstractCubes.class;
     }
 }

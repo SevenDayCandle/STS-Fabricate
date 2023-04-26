@@ -28,8 +28,7 @@ import static pinacolada.resources.PCLMainConfig.JSON_FILTER;
 import static pinacolada.resources.loadout.PCLLoadoutData.TInfo;
 
 // Copied and modified from STS-AnimatorMod
-public abstract class PCLAbstractPlayerData
-{
+public abstract class PCLAbstractPlayerData {
     public static final int ASCENSION_GLYPH1_LEVEL_STEP = 2;
     public static final int ASCENSION_GLYPH1_UNLOCK = 16;
     public static final int MAX_UNLOCK_LEVEL = 8;
@@ -42,7 +41,7 @@ public abstract class PCLAbstractPlayerData
     public final HashMap<String, PCLLoadout> loadouts = new HashMap<>();
     public final HashMap<String, PCLTrophies> trophies = new HashMap<>();
     public final PCLCharacterConfig config;
-    public final PCLResources<?,?,?,?> resources;
+    public final PCLResources<?, ?, ?, ?> resources;
     public final int baseHP;
     public final int baseGold;
     public final int baseDraw;
@@ -52,13 +51,11 @@ public abstract class PCLAbstractPlayerData
     public final boolean useAugments;
     public PCLLoadout selectedLoadout;
 
-    public PCLAbstractPlayerData(PCLResources<?,?,?,?> resources)
-    {
+    public PCLAbstractPlayerData(PCLResources<?, ?, ?, ?> resources) {
         this(resources, DEFAULT_HP, DEFAULT_GOLD, DEFAULT_DRAW, DEFAULT_ENERGY, DEFAULT_ORBS, true, true);
     }
 
-    public PCLAbstractPlayerData(PCLResources<?,?,?,?> resources, int hp, int gold, int draw, int energy, int orbs, boolean useSummons, boolean useAugments)
-    {
+    public PCLAbstractPlayerData(PCLResources<?, ?, ?, ?> resources, int hp, int gold, int draw, int energy, int orbs, boolean useSummons, boolean useAugments) {
         this.resources = resources;
         this.config = getConfig();
         this.selectedLoadout = getCoreLoadout();
@@ -71,45 +68,66 @@ public abstract class PCLAbstractPlayerData
         this.useAugments = useAugments;
     }
 
-    public static Random getRNG()
-    {
+    public abstract PCLCharacterConfig getConfig();
+
+    public abstract PCLLoadout getCoreLoadout();
+
+    public static Random getRNG() {
         return PGR.dungeon.getRNG();
     }
 
-    public static void postInitialize()
-    {
+    public static void postInitialize() {
         GLYPHS.add(new GlyphBlight());
         GLYPHS.add(new GlyphBlight1());
         GLYPHS.add(new GlyphBlight2());
     }
 
-    protected final void addBaseLoadouts()
-    {
+    public abstract List<String> getStartingRelics();
+
+    public PCLTrophies getTrophies(String id) {
+        return trophies.get(id);
+    }
+
+    public void initialize() {
+        addBaseLoadouts();
+        reload();
+        config.load(CardCrawlGame.saveSlot);
+    }
+
+    protected final void addBaseLoadouts() {
         loadouts.clear();
         PCLLoadout core = getCoreLoadout();
         loadouts.put(core.ID, core);
         List<PCLLoadout> availableLoadouts = getAvailableLoadouts();
-        if (availableLoadouts.size() > 0)
-        {
+        if (availableLoadouts.size() > 0) {
             this.selectedLoadout = availableLoadouts.get(0);
-            for (PCLLoadout loadout : getAvailableLoadouts())
-            {
+            for (PCLLoadout loadout : getAvailableLoadouts()) {
                 loadouts.put(loadout.ID, loadout);
             }
         }
 
 
-        for (PCLLoadout loadout : loadouts.values())
-        {
+        for (PCLLoadout loadout : loadouts.values()) {
             addUnlockBundle(loadout);
             loadout.sortItems();
         }
     }
 
-    protected void addUnlockBundle(PCLLoadout loadout)
-    {
-        if (loadout.unlockLevel > 0)
-        {
+    public void reload() {
+        if (config != null) {
+            deserializeTrophies(config.trophies.get());
+            deserializeCustomLoadouts();
+
+            if (selectedLoadout == null) {
+                selectedLoadout = getCoreLoadout();
+            }
+        }
+    }
+
+    public abstract List<PCLLoadout> getAvailableLoadouts();
+
+    protected void addUnlockBundle(PCLLoadout loadout) {
+        if (loadout.unlockLevel > 0) {
             final String cardID = loadout.cardDatas.get(0).ID;
             final CustomUnlock unlock = new CustomUnlock(AbstractUnlock.UnlockType.MISC, cardID);
             unlock.type = AbstractUnlock.UnlockType.CARD;
@@ -117,8 +135,7 @@ public abstract class PCLAbstractPlayerData
             unlock.key = unlock.card.cardID = PGR.core.createID("series:" + loadout.getName());
 
             CustomUnlockBundle bundle = BaseMod.getUnlockBundleFor(resources.playerClass, loadout.unlockLevel - 1);
-            if (bundle == null)
-            {
+            if (bundle == null) {
                 bundle = new CustomUnlockBundle(AbstractUnlock.UnlockType.MISC, "", "", "");
                 bundle.getUnlocks().clear();
                 bundle.getUnlockIDs().clear();
@@ -126,8 +143,7 @@ public abstract class PCLAbstractPlayerData
                 bundle.getUnlocks().add(unlock);
                 bundle.unlockType = AbstractUnlock.UnlockType.CARD;
             }
-            else
-            {
+            else {
                 bundle.getUnlockIDs().add(unlock.key);
                 bundle.getUnlocks().add(unlock);
             }
@@ -136,45 +152,16 @@ public abstract class PCLAbstractPlayerData
         }
     }
 
-    private void deserializeCustomLoadouts()
-    {
-        for (FileHandle f : config.getConfigFolder().list(JSON_FILTER))
-        {
-            String path = f.path();
-            try
-            {
-                String jsonString = f.readString();
-                PCLLoadoutData.LoadoutInfo loadoutInfo = EUIUtils.deserialize(jsonString, TInfo.getType());
-                final PCLLoadout loadout = getLoadout(loadoutInfo.loadout);
-                final PCLLoadoutData loadoutData = new PCLLoadoutData(loadout, loadoutInfo);
-
-                if (loadoutData.validate().isValid)
-                {
-                    loadout.presets[loadoutInfo.preset] = loadoutData;
-                }
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-                EUIUtils.logError(PCLCustomCardSlot.class, "Could not load loadout : " + path);
-            }
-        }
-    }
-
-    private void deserializeTrophies(String data)
-    {
+    private void deserializeTrophies(String data) {
         trophies.clear();
 
-        if (data != null && data.length() > 0)
-        {
+        if (data != null && data.length() > 0) {
             //final String decoded = Base64Coder.decodeString(data);
             final String[] items = EUIUtils.splitString("|", data);
 
-            if (items.length > 0)
-            {
+            if (items.length > 0) {
                 selectedLoadout = getLoadout(items[0]);
-                for (int i = 1; i < items.length; i++)
-                {
+                for (int i = 1; i < items.length; i++) {
                     final PCLTrophies trophies = new PCLTrophies(items[i]);
                     this.trophies.put(items[0], trophies);
                 }
@@ -182,55 +169,36 @@ public abstract class PCLAbstractPlayerData
         }
     }
 
-    public String getLoadoutPath(String id, int slot)
-    {
-        return config.getConfigPath() + "_" + id.replace(':','-') + "_" + slot + ".json";
+    private void deserializeCustomLoadouts() {
+        for (FileHandle f : config.getConfigFolder().list(JSON_FILTER)) {
+            String path = f.path();
+            try {
+                String jsonString = f.readString();
+                PCLLoadoutData.LoadoutInfo loadoutInfo = EUIUtils.deserialize(jsonString, TInfo.getType());
+                final PCLLoadout loadout = getLoadout(loadoutInfo.loadout);
+                final PCLLoadoutData loadoutData = new PCLLoadoutData(loadout, loadoutInfo);
+
+                if (loadoutData.validate().isValid) {
+                    loadout.presets[loadoutInfo.preset] = loadoutData;
+                }
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+                EUIUtils.logError(PCLCustomCardSlot.class, "Could not load loadout : " + path);
+            }
+        }
     }
 
-    public abstract List<PCLLoadout> getAvailableLoadouts();
-
-    public abstract PCLCharacterConfig getConfig();
-
-    public abstract PCLLoadout getCoreLoadout();
-
-    public abstract List<String> getStartingRelics();
-
-    public List<PCLLoadout> getEveryLoadout()
-    {
-        return new ArrayList<>(loadouts.values());
-    }
-
-    public PCLLoadout getLoadout(String id)
-    {
+    public PCLLoadout getLoadout(String id) {
         return loadouts.get(id);
     }
 
-    public PCLTrophies getTrophies(String id)
-    {
-        return trophies.get(id);
-    }
-
-    public void initialize()
-    {
-        addBaseLoadouts();
-        reload();
-        config.load(CardCrawlGame.saveSlot);
-    }
-
-    public void updateRelicsForDungeon()
-    {
-    }
-
-    public PCLLoadout prepareLoadout()
-    {
+    public PCLLoadout prepareLoadout() {
         int unlockLevel = resources.getUnlockLevel();
-        if (selectedLoadout == null || unlockLevel < selectedLoadout.unlockLevel)
-        {
+        if (selectedLoadout == null || unlockLevel < selectedLoadout.unlockLevel) {
             RandomizedList<PCLLoadout> list = new RandomizedList<>();
-            for (PCLLoadout loadout : loadouts.values())
-            {
-                if (unlockLevel >= loadout.unlockLevel)
-                {
+            for (PCLLoadout loadout : loadouts.values()) {
+                if (unlockLevel >= loadout.unlockLevel) {
                     list.add(loadout);
                 }
             }
@@ -241,68 +209,65 @@ public abstract class PCLAbstractPlayerData
         return selectedLoadout;
     }
 
-    public void recordTrueVictory(int ascensionLevel, int trophyLevel, int score)
-    {
+    public void recordTrueVictory(int ascensionLevel, int trophyLevel, int score) {
         if (ascensionLevel < 0) // Ascension reborn mod adds negative ascension levels
         {
             return;
         }
 
-        if (selectedLoadout != null)
-        {
+        if (selectedLoadout != null) {
             selectedLoadout.onVictory(ascensionLevel, trophyLevel, score);
         }
 
         saveTrophies(true);
     }
 
-    public void recordVictory(int ascensionLevel)
-    {
+    public void saveTrophies(boolean flush) {
+        EUIUtils.logInfoIfDebug(this, "Saving Trophies");
+
+        config.trophies.set(serializeTrophies(), flush);
+    }
+
+    // SelectedLoadout|Series_1,Trophy1,Trophy2,Trophy3|Series_2,Trophy1,Trophy2,Trophy3|...
+    // TODO rework
+    private String serializeTrophies() {
+        final StringJoiner sj = new StringJoiner("|");
+
+        if (selectedLoadout == null) {
+            selectedLoadout = EUIUtils.random(EUIUtils.filter(getEveryLoadout(), loadout -> resources.getUnlockLevel() >= loadout.unlockLevel));
+        }
+        sj.add(String.valueOf(selectedLoadout.ID));
+
+        for (PCLTrophies t : trophies.values()) {
+            sj.add(t.serialize());
+        }
+
+        return sj.toString();
+    }
+
+    public List<PCLLoadout> getEveryLoadout() {
+        return new ArrayList<>(loadouts.values());
+    }
+
+    public void recordVictory(int ascensionLevel) {
         if (ascensionLevel < 0) // Ascension reborn mod adds negative ascension levels
         {
             return;
         }
 
-        if (selectedLoadout != null)
-        {
+        if (selectedLoadout != null) {
             selectedLoadout.onVictory(ascensionLevel, 1, 0); // Do not record score unless you are actually at the gameover screen
         }
 
         saveTrophies(true);
     }
 
-    public void reload()
-    {
-        if (config != null)
-        {
-            deserializeTrophies(config.trophies.get());
-            deserializeCustomLoadouts();
-
-            if (selectedLoadout == null)
-            {
-                selectedLoadout = getCoreLoadout();
-            }
-        }
-    }
-
-    public void saveTrophies(boolean flush)
-    {
-        EUIUtils.logInfoIfDebug(this, "Saving Trophies");
-
-        config.trophies.set(serializeTrophies(), flush);
-    }
-
-    public void saveLoadouts()
-    {
+    public void saveLoadouts() {
         final int level = resources.getUnlockLevel();
-        for (PCLLoadout loadout : loadouts.values())
-        {
-            if (loadout.unlockLevel <= level)
-            {
-                for (PCLLoadoutData data : loadout.presets)
-                {
-                    if (data == null)
-                    {
+        for (PCLLoadout loadout : loadouts.values()) {
+            if (loadout.unlockLevel <= level) {
+                for (PCLLoadoutData data : loadout.presets) {
+                    if (data == null) {
                         continue;
                     }
 
@@ -313,23 +278,10 @@ public abstract class PCLAbstractPlayerData
         }
     }
 
-    // SelectedLoadout|Series_1,Trophy1,Trophy2,Trophy3|Series_2,Trophy1,Trophy2,Trophy3|...
-    // TODO rework
-    private String serializeTrophies()
-    {
-        final StringJoiner sj = new StringJoiner("|");
+    public String getLoadoutPath(String id, int slot) {
+        return config.getConfigPath() + "_" + id.replace(':', '-') + "_" + slot + ".json";
+    }
 
-        if (selectedLoadout == null)
-        {
-            selectedLoadout = EUIUtils.random(EUIUtils.filter(getEveryLoadout(), loadout -> resources.getUnlockLevel() >= loadout.unlockLevel));
-        }
-        sj.add(String.valueOf(selectedLoadout.ID));
-
-        for (PCLTrophies t : trophies.values())
-        {
-            sj.add(t.serialize());
-        }
-
-        return sj.toString();
+    public void updateRelicsForDungeon() {
     }
 }

@@ -12,57 +12,47 @@ import pinacolada.skills.fields.PField_Tag;
 import pinacolada.skills.skills.PTrigger;
 
 @VisibleSkill
-public class PTrait_Tag extends PTrait<PField_Tag>
-{
+public class PTrait_Tag extends PTrait<PField_Tag> {
     public static final PSkillData<PField_Tag> DATA = register(PTrait_Tag.class, PField_Tag.class);
 
-    public PTrait_Tag()
-    {
+    public PTrait_Tag() {
         this(1);
     }
 
-    public PTrait_Tag(PSkillSaveData content)
-    {
-        super(DATA, content);
-    }
-
-    public PTrait_Tag(PCLCardTag... tags)
-    {
-        this(1, tags);
-    }
-
-    public PTrait_Tag(int amount, PCLCardTag... tags)
-    {
+    public PTrait_Tag(int amount, PCLCardTag... tags) {
         super(DATA, amount);
         fields.setTag(tags);
     }
 
+    public PTrait_Tag(PSkillSaveData content) {
+        super(DATA, content);
+    }
+
+    public PTrait_Tag(PCLCardTag... tags) {
+        this(1, tags);
+    }
+
     @Override
-    public String getSubText()
-    {
+    public void applyToCard(AbstractCard c, boolean conditionMet) {
+        for (PCLCardTag tag : fields.tags) {
+            tag.set(sourceCard, (fields.random ^ conditionMet ? 1 : 0) * amount);
+        }
+    }
+
+    @Override
+    public String getSubText() {
         String tagAmount = amount > 1 ? EUIRM.strings.numNoun(getAmountRawString(), getSubDescText()) : amount < 0 ? EUIRM.strings.numNoun(TEXT.subjects_infinite, getSubDescText()) : getSubDescText();
         return hasParentType(PTrigger.class) ? tagAmount :
                 fields.random ? TEXT.act_remove(tagAmount) : TEXT.act_has(tagAmount);
     }
 
     @Override
-    public void applyToCard(AbstractCard c, boolean conditionMet)
-    {
-        for (PCLCardTag tag : fields.tags)
-        {
-            tag.set(sourceCard, (fields.random ^ conditionMet ? 1 : 0) * amount);
-        }
-    }
-
-    @Override
-    public String getSubDescText()
-    {
+    public String getSubDescText() {
         return PField.getTagAndString(fields.tags);
     }
 
     @Override
-    public String getSubSampleText()
-    {
+    public String getSubSampleText() {
         return TEXT.cedit_tags;
     }
 }

@@ -8,35 +8,28 @@ import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RandomizedList;
 
 // Copied and modified from STS-AnimatorMod
-public class ShuffleOrbs extends PCLAction<Void>
-{
-    public ShuffleOrbs(int times)
-    {
+public class ShuffleOrbs extends PCLAction<Void> {
+    public ShuffleOrbs(int times) {
         super(ActionType.WAIT);
 
         initialize(times);
     }
 
     @Override
-    protected void firstUpdate()
-    {
-        if (player.orbs == null || player.orbs.size() < 2)
-        {
+    protected void firstUpdate() {
+        if (player.orbs == null || player.orbs.size() < 2) {
             completeImpl();
             return;
         }
 
         RandomizedList<AbstractOrb> randomOrbs = new RandomizedList<>();
-        for (int i = 0; i < player.orbs.size(); i++)
-        {
-            if (GameUtilities.isValidOrb(player.orbs.get(i)))
-            {
+        for (int i = 0; i < player.orbs.size(); i++) {
+            if (GameUtilities.isValidOrb(player.orbs.get(i))) {
                 randomOrbs.add(player.orbs.get(i));
             }
         }
 
-        while (randomOrbs.size() >= 2)
-        {
+        while (randomOrbs.size() >= 2) {
             AbstractOrb orb1 = randomOrbs.retrieve(PCLCard.rng);
             AbstractOrb orb2 = randomOrbs.retrieve(PCLCard.rng);
 
@@ -50,8 +43,7 @@ public class ShuffleOrbs extends PCLAction<Void>
             orb2.setSlot(index1, player.maxOrbs);
         }
 
-        if (amount > 1)
-        {
+        if (amount > 1) {
             PCLActions.bottom.add(new ShuffleOrbs(amount - 1));
         }
 

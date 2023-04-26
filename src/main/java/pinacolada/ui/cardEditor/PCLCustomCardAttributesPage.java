@@ -31,8 +31,7 @@ import java.util.List;
 
 import static pinacolada.ui.cardEditor.PCLCustomCardEditCardScreen.START_Y;
 
-public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
-{
+public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage {
     public static final int EFFECT_COUNT = 2;
 
     public static final float MENU_WIDTH = scale(160);
@@ -59,28 +58,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
     protected EUILabel upgradeLabel;
     protected EUILabel upgradeLabel2;
 
-    // Colorless/Curse should not be able to see Summon in the card editor
-    protected static List<PCLCardTarget> getEligibleTargets(AbstractCard.CardColor color)
-    {
-        if (GameUtilities.isPCLOnlyCardColor(color) || PGR.config.showIrrelevantProperties.get())
-        {
-            return PCLCardTarget.getAll();
-        }
-        return EUIUtils.filter(PCLCardTarget.getAll(), PCLCardTarget::vanillaCompatible);
-    }
-
-    protected static ArrayList<PCLAffinity> getEligibleAffinities(AbstractCard.CardColor color)
-    {
-        ArrayList<PCLAffinity> availableAffinities = new ArrayList<>(PGR.config.showIrrelevantProperties.get() ? Arrays.asList(PCLAffinity.basic()) : PCLAffinity.getAvailableAffinitiesAsList(color, false));
-        if (availableAffinities.size() > 0)
-        {
-            availableAffinities.add(PCLAffinity.Star);
-        }
-        return availableAffinities;
-    }
-
-    public PCLCustomCardAttributesPage(PCLCustomCardEditCardScreen screen)
-    {
+    public PCLCustomCardAttributesPage(PCLCustomCardEditCardScreen screen) {
         this.screen = screen;
         availableAffinities = getEligibleAffinities(screen.currentSlot.slotColor);
 
@@ -105,8 +83,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
         targetDropdown = new EUIDropdown<PCLCardTarget>(new EUIHitbox(tagsDropdown.hb.x + tagsDropdown.hb.width + SPACING_WIDTH / 1.5f, screenH(0.8f), MENU_WIDTH, MENU_HEIGHT)
                 , item -> StringUtils.capitalize(item.toString().toLowerCase()))
                 .setOnChange(targets -> {
-                    if (!targets.isEmpty())
-                    {
+                    if (!targets.isEmpty()) {
                         screen.modifyBuilder(e -> e.setTarget(targets.get(0)));
                     }
                 })
@@ -118,8 +95,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
         timingDropdown = new EUIDropdown<DelayTiming>(new EUIHitbox(targetDropdown.hb.x + targetDropdown.hb.width + SPACING_WIDTH / 1.5f, screenH(0.8f), MENU_WIDTH, MENU_HEIGHT)
                 , item -> StringUtils.capitalize(item.toString().toLowerCase()))
                 .setOnChange(targets -> {
-                    if (!targets.isEmpty())
-                    {
+                    if (!targets.isEmpty()) {
                         screen.modifyBuilder(e -> e.setTiming(targets.get(0)));
                     }
                 })
@@ -188,8 +164,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
         upgradeLabel2.setActive(canShowLabels);
 
         curW += SPACING_WIDTH;
-        for (PCLAffinity affinity : availableAffinities)
-        {
+        for (PCLAffinity affinity : availableAffinities) {
             affinityEditors.add(new PCLCustomCardAffinityValueEditor(new EUIHitbox(curW, screenH(0.52f), MENU_WIDTH / 4, MENU_HEIGHT)
                     , affinity, (af, val, upVal) -> screen.modifyBuilder(e -> e.setAffinities(af, val, upVal))));
             curW += SPACING_WIDTH;
@@ -198,14 +173,33 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
         refresh();
     }
 
-    public String getTitle()
-    {
+    protected static ArrayList<PCLAffinity> getEligibleAffinities(AbstractCard.CardColor color) {
+        ArrayList<PCLAffinity> availableAffinities = new ArrayList<>(PGR.config.showIrrelevantProperties.get() ? Arrays.asList(PCLAffinity.basic()) : PCLAffinity.getAvailableAffinitiesAsList(color, false));
+        if (availableAffinities.size() > 0) {
+            availableAffinities.add(PCLAffinity.Star);
+        }
+        return availableAffinities;
+    }
+
+    // Colorless/Curse should not be able to see Summon in the card editor
+    protected static List<PCLCardTarget> getEligibleTargets(AbstractCard.CardColor color) {
+        if (GameUtilities.isPCLOnlyCardColor(color) || PGR.config.showIrrelevantProperties.get()) {
+            return PCLCardTarget.getAll();
+        }
+        return EUIUtils.filter(PCLCardTarget.getAll(), PCLCardTarget::vanillaCompatible);
+    }
+
+    @Override
+    public TextureCache getTextureCache() {
+        return PCLCoreImages.Menu.editorAttribute;
+    }
+
+    public String getTitle() {
         return header.text;
     }
 
     @Override
-    public void refresh()
-    {
+    public void refresh() {
         PCLDynamicData builder = screen.getBuilder();
         boolean isSummon = builder.cardType == PCLEnum.CardType.SUMMON;
 
@@ -222,16 +216,13 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
 
         List<PCLCardTagInfo> infos = tagsDropdown.getAllItems();
         ArrayList<Integer> selection = new ArrayList<>();
-        for (int i = 0; i < infos.size(); i++)
-        {
+        for (int i = 0; i < infos.size(); i++) {
             PCLCardTagInfo info = infos.get(i);
-            if (builder.tags.containsKey(info.tag))
-            {
+            if (builder.tags.containsKey(info.tag)) {
                 PCLCardTagInfo other = builder.tags.get(info.tag);
                 Integer start = other.get(0);
                 Integer upgrade = other.getUpgrade(0);
-                if (upgrade == null)
-                {
+                if (upgrade == null) {
                     upgrade = start;
                 }
                 info.set(0, start);
@@ -240,30 +231,20 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
             }
         }
         tagsDropdown.setSelectionIndices(selection, false);
-        for (EUIDropdownRow<?> row : tagsDropdown.rows)
-        {
-            if (row instanceof PCLCustomCardTagEditorRow)
-            {
+        for (EUIDropdownRow<?> row : tagsDropdown.rows) {
+            if (row instanceof PCLCustomCardTagEditorRow) {
                 ((PCLCustomCardTagEditorRow) row).forceRefresh();
             }
         }
 
-        for (int i = 0; i < availableAffinities.size(); i++)
-        {
+        for (int i = 0; i < availableAffinities.size(); i++) {
             PCLAffinity a = availableAffinities.get(i);
             affinityEditors.get(i).setValue(builder.affinities.getLevel(a), builder.affinities.getUpgrade(a), false);
         }
     }
 
     @Override
-    public TextureCache getTextureCache()
-    {
-        return PCLCoreImages.Menu.editorAttribute;
-    }
-
-    @Override
-    public void updateImpl()
-    {
+    public void updateImpl() {
         header.tryUpdate();
         costEditor.tryUpdate();
         damageEditor.tryUpdate();
@@ -275,8 +256,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
         targetDropdown.tryUpdate();
         timingDropdown.tryUpdate();
         tagsDropdown.tryUpdate();
-        for (PCLCustomCardAffinityValueEditor aEditor : affinityEditors)
-        {
+        for (PCLCustomCardAffinityValueEditor aEditor : affinityEditors) {
             aEditor.tryUpdate();
         }
         upgradeLabel.tryUpdate();
@@ -284,13 +264,11 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
     }
 
     @Override
-    public void renderImpl(SpriteBatch sb)
-    {
+    public void renderImpl(SpriteBatch sb) {
         header.tryRender(sb);
         upgradeLabel.tryRender(sb);
         upgradeLabel2.tryRender(sb);
-        for (PCLCustomCardAffinityValueEditor aEditor : affinityEditors)
-        {
+        for (PCLCustomCardAffinityValueEditor aEditor : affinityEditors) {
             aEditor.tryRender(sb);
         }
         costEditor.tryRender(sb);

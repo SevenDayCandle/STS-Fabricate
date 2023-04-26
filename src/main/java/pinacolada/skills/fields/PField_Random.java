@@ -3,41 +3,34 @@ package pinacolada.skills.fields;
 import pinacolada.resources.PGR;
 import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
 
-public class PField_Random extends PField_Not
-{
+public class PField_Random extends PField_Not {
     public boolean random;
 
     @Override
-    public boolean equals(PField other)
-    {
+    public boolean equals(PField other) {
         return other instanceof PField_Random && not == ((PField_Random) other).not && random == ((PField_Random) other).random;
     }
 
     @Override
-    public PField_Random makeCopy()
-    {
+    public PField_Random makeCopy() {
         return (PField_Random) new PField_Random().setRandom(random).setNot(not);
     }
 
-    public PField_Random setRandom(boolean value)
-    {
+    public PField_Random setRandom(boolean value) {
         this.random = value;
         return this;
     }
 
-    public void registerRandom(PCLCustomCardEffectEditor<?> editor)
-    {
+    public void setupEditor(PCLCustomCardEffectEditor<?> editor) {
+        registerRandom(editor);
+        super.setupEditor(editor);
+    }
+
+    public void registerRandom(PCLCustomCardEffectEditor<?> editor) {
         editor.registerBoolean(PGR.core.strings.cedit_random, v -> random = v, random);
     }
 
-    public void registerRBoolean(PCLCustomCardEffectEditor<?> editor, String name, String desc)
-    {
+    public void registerRBoolean(PCLCustomCardEffectEditor<?> editor, String name, String desc) {
         editor.registerBoolean(name, desc, v -> random = v, random);
-    }
-
-    public void setupEditor(PCLCustomCardEffectEditor<?> editor)
-    {
-        registerRandom(editor);
-        super.setupEditor(editor);
     }
 }

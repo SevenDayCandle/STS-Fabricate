@@ -8,8 +8,8 @@ import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.interfaces.subscribers.OnAttackSubscriber;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.interfaces.subscribers.OnAttackSubscriber;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -21,37 +21,30 @@ import pinacolada.skills.skills.base.primary.PTrigger_When;
 import java.util.HashMap;
 
 @VisibleSkill
-public class PCond_UnblockedDamage extends PActiveNonCheckCond<PField_Not> implements OnAttackSubscriber
-{
+public class PCond_UnblockedDamage extends PActiveNonCheckCond<PField_Not> implements OnAttackSubscriber {
     public static final PSkillData<PField_Not> DATA = register(PCond_UnblockedDamage.class, PField_Not.class, 1, 1);
 
-    public PCond_UnblockedDamage()
-    {
+    public PCond_UnblockedDamage() {
         super(DATA, PCLCardTarget.None, 0);
     }
 
-    public PCond_UnblockedDamage(PSkillSaveData content)
-    {
+    public PCond_UnblockedDamage(PSkillSaveData content) {
         super(DATA, content);
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill)
-    {
+    public String getSampleText(PSkill<?> callingSkill) {
         return callingSkill instanceof PTrigger_When ? TEXT.cond_whenSingle(TEXT.act_deals(TEXT.subjects_unblocked(TEXT.subjects_x))) : super.getSampleText(callingSkill);
     }
 
     @Override
-    public String getSubText()
-    {
+    public String getSubText() {
         String baseString = TEXT.subjects_unblocked(TEXT.subjects_damage);
-        if (isWhenClause())
-        {
+        if (isWhenClause()) {
             return getWheneverString(TEXT.act_deal(TEXT.subjects_any, baseString));
         }
 
-        switch (target)
-        {
+        switch (target) {
             case All:
             case Any:
                 return TEXT.cond_ifTargetTook(TEXT.subjects_anyone, baseString);
@@ -68,25 +61,20 @@ public class PCond_UnblockedDamage extends PActiveNonCheckCond<PField_Not> imple
 
     // When the owner deals unblocked damage, triggers the effect on the target
     @Override
-    public void onAttack(DamageInfo info, int damageAmount, AbstractCreature t)
-    {
-        if (damageAmount > 0 && info.type == DamageInfo.DamageType.NORMAL && target.getTargets(getOwnerCreature(), t).contains(info.owner))
-        {
+    public void onAttack(DamageInfo info, int damageAmount, AbstractCreature t) {
+        if (damageAmount > 0 && info.type == DamageInfo.DamageType.NORMAL && target.getTargets(getOwnerCreature(), t).contains(info.owner)) {
             useFromTrigger(makeInfo(t));
         }
     }
 
-    protected PCLAction<?> useImpl(PCLUseInfo info, ActionT0 onComplete, ActionT0 onFail)
-    {
+    protected PCLAction<?> useImpl(PCLUseInfo info, ActionT0 onComplete, ActionT0 onFail) {
         // Checks to see if any of the targets' health is decreased after this card is used
         HashMap<AbstractCreature, Integer> healthMap = EUIUtils.hashMap(getTargetList(info), c -> c.currentHealth);
         return PCLActions.last.callback(healthMap, (targets, __) -> {
-            if (targets.size() > 0 && EUIUtils.any(targets.keySet(), t -> t.currentHealth < targets.get(t)) && (!(parent instanceof PLimit) || ((PLimit) parent).tryActivate(info)))
-            {
+            if (targets.size() > 0 && EUIUtils.any(targets.keySet(), t -> t.currentHealth < targets.get(t)) && (!(parent instanceof PLimit) || ((PLimit) parent).tryActivate(info))) {
                 onComplete.invoke();
             }
-            else
-            {
+            else {
                 onFail.invoke();
             }
         });

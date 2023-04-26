@@ -16,58 +16,50 @@ import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
 
 import java.util.List;
 
-public abstract class PCond_HaveCard extends PPassiveCond<PField_CardCategory>
-{
-    public PCond_HaveCard(PSkillData<PField_CardCategory> data, PSkillSaveData content)
-    {
+public abstract class PCond_HaveCard extends PPassiveCond<PField_CardCategory> {
+    public PCond_HaveCard(PSkillData<PField_CardCategory> data, PSkillSaveData content) {
         super(data, content);
     }
 
-    public PCond_HaveCard(PSkillData<PField_CardCategory> data)
-    {
+    public PCond_HaveCard(PSkillData<PField_CardCategory> data) {
         super(data, PCLCardTarget.None, 1);
     }
 
-    public PCond_HaveCard(PSkillData<PField_CardCategory> data, int amount)
-    {
+    public PCond_HaveCard(PSkillData<PField_CardCategory> data, int amount) {
         super(data, PCLCardTarget.None, amount);
     }
 
     @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource)
-    {
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
         int count = EUIUtils.count(getCardPile(),
                 c -> fields.getFullCardFilter().invoke(c));
         return amount == 0 ? count == 0 : fields.not ^ count >= amount;
     }
 
+    abstract public List<AbstractCard> getCardPile();
+
     @Override
-    public String getSampleText(PSkill<?> callingSkill)
-    {
+    public String getSampleText(PSkill<?> callingSkill) {
         return TEXT.cond_ifX(PCLCoreStrings.past(getActionTooltip()));
     }
 
     @Override
-    public String getSubText()
-    {
+    public String getSubText() {
         return fields.forced ? TEXT.cond_ifYouDidThisCombat(PCLCoreStrings.past(getActionTooltip()), EUIRM.strings.numNoun(getAmountRawString(), fields.getFullCardString())) :
                 TEXT.cond_ifYouDidThisTurn(PCLCoreStrings.past(getActionTooltip()), EUIRM.strings.numNoun(getAmountRawString(), fields.getFullCardString()));
     }
 
     @Override
-    public String wrapAmount(int input)
-    {
+    public String wrapAmount(int input) {
         return input == 0 ? String.valueOf(input) : (fields.not ? (input + "-") : (input + "+"));
     }
 
+    abstract public EUITooltip getActionTooltip();
+
     @Override
-    public void setupEditor(PCLCustomCardEffectEditor<?> editor)
-    {
+    public void setupEditor(PCLCustomCardEffectEditor<?> editor) {
         super.setupEditor(editor);
         fields.registerFBoolean(editor, TEXT.cedit_combat, null);
     }
-
-    abstract public List<AbstractCard> getCardPile();
-    abstract public EUITooltip getActionTooltip();
 
 }

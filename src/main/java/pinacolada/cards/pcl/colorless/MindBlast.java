@@ -10,8 +10,7 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.skills.PMod;
 
 @VisibleCard
-public class MindBlast extends PCLCard
-{
+public class MindBlast extends PCLCard {
     public static final String ATLAS_URL = "colorless/attack/mind_blast";
     public static final PCLCardData DATA = register(MindBlast.class)
             .setImagePathFromAtlasUrl(ATLAS_URL)
@@ -21,13 +20,11 @@ public class MindBlast extends PCLCard
             .setCostUpgrades(-1)
             .setColorless();
 
-    public MindBlast()
-    {
+    public MindBlast() {
         super(DATA);
     }
 
-    public void setup(Object input)
-    {
+    public void setup(Object input) {
         addDamageMove().setBonus(PMod.perCard(1, PCLCardGroupHelper.DrawPile), 1);
     }
 }

@@ -8,41 +8,34 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
 
-public abstract class PMove_Gain extends PMove<PField_Empty>
-{
-    public PMove_Gain(PSkillData<PField_Empty> data, PSkillSaveData content)
-    {
+public abstract class PMove_Gain extends PMove<PField_Empty> {
+    public PMove_Gain(PSkillData<PField_Empty> data, PSkillSaveData content) {
         super(data, content);
     }
 
-    public PMove_Gain(PSkillData<PField_Empty> data, int amount)
-    {
+    public PMove_Gain(PSkillData<PField_Empty> data, int amount) {
         super(data, PCLCardTarget.Self, amount);
+    }
+
+    @Override
+    public ColoredString getColoredValueString() {
+        return getColoredValueString(Math.abs(baseAmount), Math.abs(amount));
+    }
+
+    @Override
+    public String getSampleText(PSkill<?> callingSkill) {
+        return TEXT.act_gainAmount(TEXT.subjects_x, gainText());
     }
 
     public abstract String gainText();
 
     @Override
-    public ColoredString getColoredValueString()
-    {
-        return getColoredValueString(Math.abs(baseAmount), Math.abs(amount));
-    }
-
-    @Override
-    public String getSampleText(PSkill<?> callingSkill)
-    {
-        return TEXT.act_gainAmount(TEXT.subjects_x, gainText());
-    }
-
-    @Override
-    public String getSubText()
-    {
+    public String getSubText() {
         return amount < 0 ? TEXT.act_loseAmount(getAmountRawString(), gainText()) : TEXT.act_gainAmount(getAmountRawString(), gainText());
     }
 
     @Override
-    public boolean isDetrimental()
-    {
+    public boolean isDetrimental() {
         return amount < 0;
     }
 }

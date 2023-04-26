@@ -44,15 +44,11 @@ import java.util.List;
 
 import static extendedui.ui.AbstractScreen.createHexagonalButton;
 
-public class PCLCustomCardImageEffect extends PCLEffectWithCallback<Pixmap>
-{
+public class PCLCustomCardImageEffect extends PCLEffectWithCallback<Pixmap> {
     protected static final int IMG_WIDTH = 500;
     protected static final int IMG_HEIGHT = 380;
     private static final FileNameExtensionFilter EXTENSIONS = new FileNameExtensionFilter("Image files (*.png, *.bmp, *.jpg, *.jpeg)", "png", "bmp", "jpg", "jpeg");
     private final DraggableHitbox hb;
-    protected float minZoom;
-    protected float maxZoom = 1f;
-    protected float scale = 1f;
     private final EUILabel instructionsLabel;
     private final EUIButton cancelButton;
     private final EUIButton loadButton;
@@ -61,16 +57,18 @@ public class PCLCustomCardImageEffect extends PCLEffectWithCallback<Pixmap>
     private final EUIButton selectExistingButton;
     private final EUIVerticalScrollBar zoomBar;
     private final SpriteBatch sb;
+    private final FrameBuffer imageBuffer;
+    private final OrthographicCamera camera;
+    protected float minZoom;
+    protected float maxZoom = 1f;
+    protected float scale = 1f;
     private Pixmap insideImage;
     private Texture baseTexture;
     private TextureRegion insideImageRenderable;
     private TextureRegion outsideImage;
     private PCLGenericSelectCardEffect existingCardSelection;
-    private final FrameBuffer imageBuffer;
-    private final OrthographicCamera camera;
 
-    public PCLCustomCardImageEffect(PCLDynamicData builder)
-    {
+    public PCLCustomCardImageEffect(PCLDynamicData builder) {
         final float buttonHeight = Settings.HEIGHT * (0.055f);
         final float labelHeight = Settings.HEIGHT * (0.04f);
         final float buttonWidth = Settings.WIDTH * (0.16f);
@@ -122,7 +120,6 @@ public class PCLCustomCardImageEffect extends PCLEffectWithCallback<Pixmap>
                 .setOnClick(this::getImageFromFileDialog);
 
 
-
         zoomBar = new EUIVerticalScrollBar(new EUIHitbox(Settings.WIDTH * 0.03f, Settings.HEIGHT * 0.7f))
                 .setPosition(Settings.WIDTH * 0.9f, Settings.HEIGHT * 0.5f)
                 .setOnScroll(this::updateZoom);
@@ -134,66 +131,64 @@ public class PCLCustomCardImageEffect extends PCLEffectWithCallback<Pixmap>
         sb.setProjectionMatrix(camera.combined.scl(1, -1, 1));
     }
 
-    protected void commit()
-    {
-        if (baseTexture == null)
-        {
+    protected void commit() {
+        if (baseTexture == null) {
             complete(null);
         }
-        else
-        {
+        else {
             updateBuffer(true);
             complete(insideImage);
         }
     }
 
-    private void getImageFromClipboard()
-    {
+    public void complete(Pixmap pixmap) {
+        super.complete(pixmap);
+        if (pixmap == null) {
+            if (insideImage != null) {
+                try {
+                    insideImage.dispose();
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void getImageFromClipboard() {
         Transferable transferable = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
-        if (transferable != null && transferable.isDataFlavorSupported(DataFlavor.imageFlavor))
-        {
-            try
-            {
+        if (transferable != null && transferable.isDataFlavorSupported(DataFlavor.imageFlavor)) {
+            try {
                 BufferedImage image = ((BufferedImage) transferable.getTransferData(DataFlavor.imageFlavor));
                 updateImage(new Texture(PCLRenderHelpers.getPixmapFromBufferedImage(image), true));
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
 
-    private void getImageFromFileDialog()
-    {
-        try
-        {
+    private void getImageFromFileDialog() {
+        try {
             JFileChooser fc = new JFileChooser();
             fc.setFileFilter(EXTENSIONS);
-            fc.setDropTarget(new DropTarget()
-            {
-                public synchronized void drop(DropTargetDropEvent evt)
-                {
-                    try
-                    {
+            fc.setDropTarget(new DropTarget() {
+                public synchronized void drop(DropTargetDropEvent evt) {
+                    try {
                         evt.acceptDrop(DnDConstants.ACTION_COPY);
                         Transferable t = evt.getTransferable();
-                        if (t != null && t.isDataFlavorSupported(DataFlavor.javaFileListFlavor))
-                        {
+                        if (t != null && t.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
                             List<File> droppedFiles = (List<File>) evt.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
-                            for (File file : droppedFiles)
-                            {
+                            for (File file : droppedFiles) {
                                 fc.setSelectedFiles(droppedFiles.toArray(new File[]{}));
                             }
                             evt.dropComplete(true);
                         }
-                        else
-                        {
+                        else {
                             evt.dropComplete(false);
                         }
                     }
-                    catch (Exception e)
-                    {
+                    catch (Exception e) {
                         e.printStackTrace();
                         evt.dropComplete(false);
                     }
@@ -201,8 +196,7 @@ public class PCLCustomCardImageEffect extends PCLEffectWithCallback<Pixmap>
             });
 
             File cd = new File(PGR.config.lastImagePath.get());
-            if (cd.isDirectory())
-            {
+            if (cd.isDirectory()) {
                 fc.setCurrentDirectory(cd);
             }
 
@@ -218,58 +212,134 @@ public class PCLCustomCardImageEffect extends PCLEffectWithCallback<Pixmap>
             f.dispose();
 
             cd = fc.getCurrentDirectory();
-            if (cd != null && cd.isDirectory())
-            {
+            if (cd != null && cd.isDirectory()) {
                 PGR.config.lastImagePath.set(cd.getAbsolutePath(), true);
             }
 
-            if (result == JFileChooser.APPROVE_OPTION)
-            {
+            if (result == JFileChooser.APPROVE_OPTION) {
                 File openedFile = fc.getSelectedFile();
                 updateImage(new Texture(new FileHandle(openedFile), true));
             }
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             e.printStackTrace();
             EUIUtils.logError(this, "Failed to load card image.");
         }
     }
 
-    private void updateBuffer(boolean forCommit)
-    {
+    @Override
+    public void render(SpriteBatch sb) {
+        if (existingCardSelection != null) {
+            existingCardSelection.render(sb);
+        }
+        else {
+            hb.render(sb);
+            cancelButton.tryRender(sb);
+            saveButton.tryRender(sb);
+            loadButton.tryRender(sb);
+            selectExistingButton.tryRender(sb);
+            pasteButton.tryRender(sb);
+            instructionsLabel.tryRender(sb);
+            zoomBar.tryRender(sb);
+
+            if (outsideImage != null) {
+                PCLRenderHelpers.drawCentered(sb, Color.GRAY.cpy(), outsideImage, Settings.WIDTH / 2f, Settings.HEIGHT / 2f, outsideImage.getRegionWidth(), outsideImage.getRegionHeight(), 1, 0);
+            }
+            if (insideImageRenderable != null) {
+                PCLRenderHelpers.drawCentered(sb, Color.WHITE.cpy(), insideImageRenderable, Settings.WIDTH / 2f, Settings.HEIGHT / 2f, insideImageRenderable.getRegionWidth(), insideImageRenderable.getRegionHeight(), 1, 0);
+            }
+        }
+    }
+
+    @Override
+    protected void updateInternal(float deltaTime) {
+        if (existingCardSelection != null) {
+            existingCardSelection.update();
+            if (existingCardSelection.isDone) {
+                existingCardSelection = null;
+            }
+        }
+        else {
+            cancelButton.tryUpdate();
+            saveButton.tryUpdate();
+            loadButton.tryUpdate();
+            selectExistingButton.tryUpdate();
+            pasteButton.tryUpdate();
+            instructionsLabel.tryUpdate();
+            camera.update();
+            if (baseTexture != null) {
+                if (!hb.isDragging()) {
+                    zoomBar.tryUpdate();
+                }
+                if (!zoomBar.isDragging) {
+                    hb.update();
+                    if (hb.isDragging()) {
+                        updatePictures();
+                    }
+                }
+            }
+
+            // TODO see if there is a way to check for the "paste" function for different operating systems
+            if ((Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT)) && Gdx.input.isKeyJustPressed(Input.Keys.V)) {
+                getImageFromClipboard();
+            }
+        }
+    }
+
+    public void complete() {
+        super.complete();
+        // Ensure textures are unloaded to avoid memory leaks
+        if (baseTexture != null) {
+            baseTexture.dispose();
+        }
+        if (insideImageRenderable != null) {
+            insideImageRenderable.getTexture().dispose();
+        }
+    }
+
+    private void selectExistingCards() {
+        CardGroup group = GameUtilities.createCardGroup(CardLibrary.getAllCards());
+        group.sortAlphabetically(true);
+        existingCardSelection = (PCLGenericSelectCardEffect) new PCLGenericSelectCardEffect(group)
+                .addCallback(card -> {
+                            if (card != null) {
+                                // TODO handle EYBCardBase with PCLCard check
+                                updateImage(
+                                        card instanceof PCLCard ? new Texture(Gdx.files.internal(card.assetUrl), true) :
+                                                card instanceof CustomCard ? CustomCard.getPortraitImage((CustomCard) card)
+                                                        : new Texture(Gdx.files.internal(GameUtilities.toInternalAtlasPath(card.assetUrl)), true));
+                            }
+                        }
+                );
+    }
+
+    private void updateBuffer(boolean forCommit) {
         imageBuffer.begin();
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glClearColor(0f, 0f, 0f, 0f);
         sb.begin();
 
-        if (forCommit)
-        {
+        if (forCommit) {
             // Generate a temporary resized image and capture it into the framebuffer
             Texture resized = new Texture(PCLRenderHelpers.scalrScaleAsPixmap(baseTexture, scale, scale));
             sb.draw(resized, hb.x - resized.getWidth() / 2f, hb.y - resized.getHeight() / 2f, resized.getWidth() / 2f, resized.getHeight() / 2f, resized.getWidth(), resized.getHeight(), 1f, 1f, 0f, 0, 0, resized.getWidth(), resized.getHeight(), false, false);
             updateBufferEnding();
             resized.dispose();
         }
-        else
-        {
+        else {
             sb.draw(baseTexture, hb.x - baseTexture.getWidth() / 2f, hb.y - baseTexture.getHeight() / 2f, baseTexture.getWidth() / 2f, baseTexture.getHeight() / 2f, baseTexture.getWidth(), baseTexture.getHeight(), scale, scale, 0f, 0, 0, baseTexture.getWidth(), baseTexture.getHeight(), false, false);
             updateBufferEnding();
         }
     }
 
-    private void updateBufferEnding()
-    {
+    private void updateBufferEnding() {
         sb.end();
         // Dispose the existing pixmap
-        if (insideImage != null)
-        {
-            try
-            {
+        if (insideImage != null) {
+            try {
                 insideImage.dispose();
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -278,13 +348,10 @@ public class PCLCustomCardImageEffect extends PCLEffectWithCallback<Pixmap>
     }
 
     // Update the images shown on the screen. Textures are explicitly not saved with EUI because we don't want to keep them after this effect is over
-    private void updateImage(Texture texture)
-    {
-        if (texture != null)
-        {
+    private void updateImage(Texture texture) {
+        if (texture != null) {
             // Flush the existing texture before dropping it
-            if (baseTexture != null)
-            {
+            if (baseTexture != null) {
                 baseTexture.dispose();
             }
 
@@ -301,13 +368,11 @@ public class PCLCustomCardImageEffect extends PCLEffectWithCallback<Pixmap>
         }
     }
 
-    private void updatePictures()
-    {
+    private void updatePictures() {
         updateBuffer(false);
 
         // Dispose the inner image texture. Outside image texture is handled by the image buffer
-        if (insideImageRenderable != null)
-        {
+        if (insideImageRenderable != null) {
             insideImageRenderable.getTexture().dispose();
         }
 
@@ -318,135 +383,10 @@ public class PCLCustomCardImageEffect extends PCLEffectWithCallback<Pixmap>
         insideImageRenderable.getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
     }
 
-    private void updateZoom(float scrollPercentage)
-    {
+    private void updateZoom(float scrollPercentage) {
         zoomBar.scroll(scrollPercentage, false);
         scale = MathUtils.lerp(minZoom, maxZoom, scrollPercentage);
 
         updatePictures();
-    }
-
-    private void selectExistingCards()
-    {
-        CardGroup group = GameUtilities.createCardGroup(CardLibrary.getAllCards());
-        group.sortAlphabetically(true);
-        existingCardSelection = (PCLGenericSelectCardEffect) new PCLGenericSelectCardEffect(group)
-                .addCallback(card -> {
-                            if (card != null)
-                            {
-                                // TODO handle EYBCardBase with PCLCard check
-                                updateImage(
-                                        card instanceof PCLCard ? new Texture(Gdx.files.internal(card.assetUrl), true) :
-                                        card instanceof CustomCard ? CustomCard.getPortraitImage((CustomCard) card)
-                                                : new Texture(Gdx.files.internal(GameUtilities.toInternalAtlasPath(card.assetUrl)), true));
-                            }
-                        }
-                );
-    }
-
-    @Override
-    public void render(SpriteBatch sb)
-    {
-        if (existingCardSelection != null)
-        {
-            existingCardSelection.render(sb);
-        }
-        else
-        {
-            hb.render(sb);
-            cancelButton.tryRender(sb);
-            saveButton.tryRender(sb);
-            loadButton.tryRender(sb);
-            selectExistingButton.tryRender(sb);
-            pasteButton.tryRender(sb);
-            instructionsLabel.tryRender(sb);
-            zoomBar.tryRender(sb);
-
-            if (outsideImage != null)
-            {
-                PCLRenderHelpers.drawCentered(sb, Color.GRAY.cpy(), outsideImage, Settings.WIDTH / 2f, Settings.HEIGHT / 2f, outsideImage.getRegionWidth(), outsideImage.getRegionHeight(), 1, 0);
-            }
-            if (insideImageRenderable != null)
-            {
-                PCLRenderHelpers.drawCentered(sb, Color.WHITE.cpy(), insideImageRenderable, Settings.WIDTH / 2f, Settings.HEIGHT / 2f, insideImageRenderable.getRegionWidth(), insideImageRenderable.getRegionHeight(), 1, 0);
-            }
-        }
-    }
-
-    @Override
-    protected void updateInternal(float deltaTime)
-    {
-        if (existingCardSelection != null)
-        {
-            existingCardSelection.update();
-            if (existingCardSelection.isDone)
-            {
-                existingCardSelection = null;
-            }
-        }
-        else
-        {
-            cancelButton.tryUpdate();
-            saveButton.tryUpdate();
-            loadButton.tryUpdate();
-            selectExistingButton.tryUpdate();
-            pasteButton.tryUpdate();
-            instructionsLabel.tryUpdate();
-            camera.update();
-            if (baseTexture != null)
-            {
-                if (!hb.isDragging())
-                {
-                    zoomBar.tryUpdate();
-                }
-                if (!zoomBar.isDragging)
-                {
-                    hb.update();
-                    if (hb.isDragging())
-                    {
-                        updatePictures();
-                    }
-                }
-            }
-
-            // TODO see if there is a way to check for the "paste" function for different operating systems
-            if ((Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT)) && Gdx.input.isKeyJustPressed(Input.Keys.V))
-            {
-                getImageFromClipboard();
-            }
-        }
-    }
-
-    public void complete(Pixmap pixmap)
-    {
-        super.complete(pixmap);
-        if (pixmap == null)
-        {
-            if (insideImage != null)
-            {
-                try
-                {
-                    insideImage.dispose();
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    public void complete()
-    {
-        super.complete();
-        // Ensure textures are unloaded to avoid memory leaks
-        if (baseTexture != null)
-        {
-            baseTexture.dispose();
-        }
-        if (insideImageRenderable != null)
-        {
-            insideImageRenderable.getTexture().dispose();
-        }
     }
 }

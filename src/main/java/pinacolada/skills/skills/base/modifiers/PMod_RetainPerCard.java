@@ -18,36 +18,30 @@ import pinacolada.utilities.ListSelection;
 
 
 @VisibleSkill
-public class PMod_RetainPerCard extends PMod_Do
-{
+public class PMod_RetainPerCard extends PMod_Do {
     public static final PSkillData<PField_CardCategory> DATA = register(PMod_RetainPerCard.class, PField_CardCategory.class)
             .selfTarget()
             .setGroups(PCLCardGroupHelper.Hand);
 
-    public PMod_RetainPerCard(PSkillSaveData content)
-    {
+    public PMod_RetainPerCard(PSkillSaveData content) {
         super(DATA, content);
     }
 
-    public PMod_RetainPerCard()
-    {
+    public PMod_RetainPerCard() {
         super(DATA);
     }
 
-    public PMod_RetainPerCard(int amount)
-    {
+    public PMod_RetainPerCard(int amount) {
         super(DATA, PCLCardTarget.None, amount);
     }
 
     @Override
-    public EUITooltip getActionTooltip()
-    {
+    public EUITooltip getActionTooltip() {
         return PGR.core.tooltips.retain;
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction()
-    {
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
         return RetainCards::new;
     }
 }

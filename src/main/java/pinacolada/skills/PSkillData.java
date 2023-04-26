@@ -12,8 +12,7 @@ import java.util.*;
 
 import static pinacolada.skills.PSkill.DEFAULT_MAX;
 
-public class PSkillData<T extends PField>
-{
+public class PSkillData<T extends PField> {
     public final String ID;
     public final Class<? extends PSkill<T>> effectClass;
     public final Class<T> fieldType;
@@ -27,106 +26,88 @@ public class PSkillData<T extends PField>
     public int maxExtra = PSkill.DEFAULT_EXTRA_MIN;
     public boolean excludeColors;
 
-    public PSkillData(String id, Class<? extends PSkill<T>> effectClass, Class<T> effectType)
-    {
+    public PSkillData(String id, Class<? extends PSkill<T>> effectClass, Class<T> effectType) {
         this(id, effectClass, effectType, 0, DEFAULT_MAX);
     }
 
-    public PSkillData(String id, Class<? extends PSkill<T>> effectClass, Class<T> effectType, int minAmount, int maxAmount, AbstractCard.CardColor... cardColors)
-    {
+    public PSkillData(String id, Class<? extends PSkill<T>> effectClass, Class<T> effectType, int minAmount, int maxAmount, AbstractCard.CardColor... cardColors) {
         this.ID = id;
         this.effectClass = effectClass;
         this.fieldType = effectType;
-        this.colors = new HashSet<AbstractCard.CardColor>(Arrays.asList(cardColors));
+        this.colors = new HashSet<>(Arrays.asList(cardColors));
         this.minAmount = minAmount;
         this.maxAmount = Math.max(minAmount, maxAmount);
     }
 
-    public final boolean amountViewable()
-    {
+    public final boolean amountViewable() {
         return minAmount < maxAmount;
     }
 
-    public final boolean isColorCompatible(AbstractCard.CardColor co)
-    {
-        return colors.isEmpty() || (excludeColors ^ colors.contains(co));
-    }
-
-    public final T instantiateField()
-    {
-        try
-        {
+    public final T instantiateField() {
+        try {
             return this.fieldType.newInstance();
         }
-        catch (InstantiationException | IllegalAccessException e)
-        {
+        catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
         return null;
     }
 
+    public final boolean isColorCompatible(AbstractCard.CardColor co) {
+        return colors.isEmpty() || (excludeColors ^ colors.contains(co));
+    }
+
     // Only register colors registered with the PGR system. Ignores colorless because this needs to be used by other characters too
-    public PSkillData<T> pclOnly()
-    {
-        for (PCLResources<?,?,?,?> r : PGR.getRegisteredResources())
-        {
+    public PSkillData<T> pclOnly() {
+        for (PCLResources<?, ?, ?, ?> r : PGR.getRegisteredResources()) {
             colors.add(r.cardColor);
         }
         return this;
     }
 
-    public PSkillData<T> selfTarget()
-    {
+    public PSkillData<T> selfTarget() {
         targets.add(PCLCardTarget.Self);
         return this;
     }
 
-    public PSkillData<T> setAmounts(int min, int max)
-    {
+    public PSkillData<T> setAmounts(int min, int max) {
         this.minAmount = min;
         this.maxAmount = Math.max(min, max);
         return this;
     }
 
-    public PSkillData<T> setColors(AbstractCard.CardColor... colors)
-    {
+    public PSkillData<T> setColors(AbstractCard.CardColor... colors) {
         this.colors.addAll(Arrays.asList(colors));
         return this;
     }
 
-    public PSkillData<T> setExcludeColors(boolean val)
-    {
+    public PSkillData<T> setExcludeColors(boolean val) {
         excludeColors = val;
         return this;
     }
 
-    public PSkillData<T> setExtra(int min, int max)
-    {
+    public PSkillData<T> setExtra(int min, int max) {
         this.minExtra = min;
         this.maxExtra = Math.max(min, max);
         return this;
     }
 
-    public PSkillData<T> setGroups(Collection<PCLCardGroupHelper> groups)
-    {
+    public PSkillData<T> setGroups(Collection<PCLCardGroupHelper> groups) {
         this.groups.addAll(groups);
         return this;
     }
 
-    public PSkillData<T> setGroups(PCLCardGroupHelper... groups)
-    {
+    public PSkillData<T> setGroups(PCLCardGroupHelper... groups) {
         this.groups.addAll(Arrays.asList(groups));
         return this;
     }
 
-    public PSkillData<T> setOrigins(PCLCardSelection... groups)
-    {
+    public PSkillData<T> setOrigins(PCLCardSelection... groups) {
         this.origins.addAll(Arrays.asList(groups));
         return this;
     }
 
-    public PSkillData<T> setTargets(PCLCardTarget... targets)
-    {
+    public PSkillData<T> setTargets(PCLCardTarget... targets) {
         this.targets.addAll(Arrays.asList(targets));
         return this;
     }

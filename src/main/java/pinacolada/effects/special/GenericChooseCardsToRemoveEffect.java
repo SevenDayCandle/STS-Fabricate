@@ -16,21 +16,18 @@ import pinacolada.resources.PGR;
 
 import java.util.ArrayList;
 
-public class GenericChooseCardsToRemoveEffect extends PCLEffectWithCallback<GenericChooseCardsToRemoveEffect>
-{
+public class GenericChooseCardsToRemoveEffect extends PCLEffectWithCallback<GenericChooseCardsToRemoveEffect> {
     private static final int GROUP_SIZE = 3;
     public final ArrayList<AbstractCard> cards = new ArrayList<>();
     private final GenericCondition<AbstractCard> filter;
     private final Color screenColor;
     private int cardsToRemove;
 
-    public GenericChooseCardsToRemoveEffect(int remove)
-    {
+    public GenericChooseCardsToRemoveEffect(int remove) {
         this(remove, null);
     }
 
-    public GenericChooseCardsToRemoveEffect(int remove, FuncT1<Boolean, AbstractCard> filter)
-    {
+    public GenericChooseCardsToRemoveEffect(int remove, FuncT1<Boolean, AbstractCard> filter) {
         super(0.75f, true);
 
         this.cardsToRemove = remove;
@@ -40,25 +37,41 @@ public class GenericChooseCardsToRemoveEffect extends PCLEffectWithCallback<Gene
         AbstractDungeon.overlayMenu.proceedButton.hide();
     }
 
-    public void openpanelRemove()
-    {
+    @Override
+    public void render(SpriteBatch sb) {
+        sb.setColor(this.screenColor);
+        sb.draw(ImageMaster.WHITE_SQUARE_IMG, 0f, 0f, (float) Settings.WIDTH, (float) Settings.HEIGHT);
+        if (AbstractDungeon.screen == CurrentScreen.GRID) {
+            AbstractDungeon.gridSelectScreen.render(sb);
+        }
+    }
+
+    @Override
+    protected void firstUpdate() {
+        super.firstUpdate();
+
+        if (cardsToRemove > 0) {
+            openpanelRemove();
+        }
+        else {
+            complete();
+        }
+    }
+
+    public void openpanelRemove() {
         CardGroup cardGroup = new CardGroup(player.masterDeck.type);
-        for (AbstractCard card : player.masterDeck.getPurgeableCards().group)
-        {
-            if (filter == null || filter.check(card))
-            {
+        for (AbstractCard card : player.masterDeck.getPurgeableCards().group) {
+            if (filter == null || filter.check(card)) {
                 cardGroup.addToBottom(card);
             }
         }
 
-        if (cardGroup.size() < cardsToRemove)
-        {
+        if (cardGroup.size() < cardsToRemove) {
             complete();
             return;
         }
 
-        if (AbstractDungeon.isScreenUp)
-        {
+        if (AbstractDungeon.isScreenUp) {
             AbstractDungeon.dynamicBanner.hide();
             AbstractDungeon.overlayMenu.cancelButton.hide();
             AbstractDungeon.previousScreen = AbstractDungeon.screen;
@@ -69,40 +82,10 @@ public class GenericChooseCardsToRemoveEffect extends PCLEffectWithCallback<Gene
     }
 
     @Override
-    public void render(SpriteBatch sb)
-    {
-        sb.setColor(this.screenColor);
-        sb.draw(ImageMaster.WHITE_SQUARE_IMG, 0f, 0f, (float) Settings.WIDTH, (float) Settings.HEIGHT);
-        if (AbstractDungeon.screen == CurrentScreen.GRID)
-        {
-            AbstractDungeon.gridSelectScreen.render(sb);
-        }
-    }
-
-    @Override
-    protected void firstUpdate()
-    {
-        super.firstUpdate();
-
-        if (cardsToRemove > 0)
-        {
-            openpanelRemove();
-        }
-        else
-        {
-            complete();
-        }
-    }
-
-    @Override
-    protected void updateInternal(float deltaTime)
-    {
-        if (cardsToRemove > 0)
-        {
-            if (AbstractDungeon.gridSelectScreen.selectedCards.size() == cardsToRemove)
-            {
-                for (AbstractCard card : AbstractDungeon.gridSelectScreen.selectedCards)
-                {
+    protected void updateInternal(float deltaTime) {
+        if (cardsToRemove > 0) {
+            if (AbstractDungeon.gridSelectScreen.selectedCards.size() == cardsToRemove) {
+                for (AbstractCard card : AbstractDungeon.gridSelectScreen.selectedCards) {
                     cards.add(card.makeCopy());
                     AbstractDungeon.player.masterDeck.removeCard(card);
                 }
@@ -112,8 +95,7 @@ public class GenericChooseCardsToRemoveEffect extends PCLEffectWithCallback<Gene
                 cardsToRemove = 0;
             }
         }
-        else if (tickDuration(deltaTime))
-        {
+        else if (tickDuration(deltaTime)) {
             AbstractDungeon.getCurrRoom().phase = AbstractRoom.RoomPhase.COMPLETE;
             complete(this);
         }

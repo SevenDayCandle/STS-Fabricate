@@ -9,35 +9,29 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardGeneric;
 
 @VisibleSkill
-public class PMod_ChangeGroupOnStarter extends PMod_ChangeGroup
-{
+public class PMod_ChangeGroupOnStarter extends PMod_ChangeGroup {
 
     public static final PSkillData<PField_CardGeneric> DATA = register(PMod_ChangeGroupOnStarter.class, PField_CardGeneric.class).selfTarget();
 
-    public PMod_ChangeGroupOnStarter(PSkillSaveData content)
-    {
+    public PMod_ChangeGroupOnStarter(PSkillSaveData content) {
         super(DATA, content);
     }
 
-    public PMod_ChangeGroupOnStarter()
-    {
+    public PMod_ChangeGroupOnStarter() {
         super(DATA);
     }
 
-    public PMod_ChangeGroupOnStarter(PCLCardGroupHelper... groups)
-    {
+    public PMod_ChangeGroupOnStarter(PCLCardGroupHelper... groups) {
         super(DATA, groups);
     }
 
     @Override
-    public String getConditionSampleText()
-    {
+    public String getConditionSampleText() {
         return PGR.core.tooltips.starter.title;
     }
 
     @Override
-    public boolean meetsCondition(PCLUseInfo info)
-    {
+    public boolean meetsCondition(PCLUseInfo info) {
         return info.isStarter;
     }
 }

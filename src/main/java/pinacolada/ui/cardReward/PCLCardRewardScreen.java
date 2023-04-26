@@ -11,31 +11,19 @@ import pinacolada.utilities.GameUtilities;
 import java.util.ArrayList;
 
 // Copied and modified from STS-AnimatorMod
-public class PCLCardRewardScreen extends EUIBase
-{
+public class PCLCardRewardScreen extends EUIBase {
     public static final PCLCardRewardScreen Instance = new PCLCardRewardScreen();
 
     public final PCLCardRewardBonus rewardBundle = new PCLCardRewardBonus();
     public final PCLCardRewardInfo rewardInfo = new PCLCardRewardInfo();
     public final PCLCardRewardRerollAction rerollUI = new PCLCardRewardRerollAction(rewardBundle::add, rewardBundle::remove);
 
-    public void close()
-    {
-        EUI.countingPanel.close();
-        rewardInfo.close();
-        rewardBundle.close();
-        rerollUI.close();
-    }
-
-    public void onCardObtained(AbstractCard hoveredCard)
-    {
+    public void onCardObtained(AbstractCard hoveredCard) {
         rewardBundle.onCardObtained(hoveredCard);
     }
 
-    public void open(ArrayList<AbstractCard> cards, RewardItem rItem, String header)
-    {
-        if (GameUtilities.inBattle(true) || cards == null || rItem == null)
-        {
+    public void open(ArrayList<AbstractCard> cards, RewardItem rItem, String header) {
+        if (GameUtilities.inBattle(true) || cards == null || rItem == null) {
             close();
             return;
         }
@@ -46,23 +34,27 @@ public class PCLCardRewardScreen extends EUIBase
         rewardInfo.open();
     }
 
-    public void preRender(SpriteBatch sb)
-    {
+    public void close() {
+        EUI.countingPanel.close();
+        rewardInfo.close();
+        rewardBundle.close();
+        rerollUI.close();
+    }
+
+    public void preRender(SpriteBatch sb) {
         EUI.countingPanel.tryRender(sb);
         rewardInfo.tryRender(sb);
         rerollUI.tryRender(sb);
     }
 
-    public void updateImpl()
-    {
+    public void renderImpl(SpriteBatch sb) {
+        rewardBundle.tryRender(sb);
+    }
+
+    public void updateImpl() {
         EUI.countingPanel.tryUpdate();
         rerollUI.tryUpdate();
         rewardBundle.tryUpdate();
         rewardInfo.tryUpdate();
-    }
-
-    public void renderImpl(SpriteBatch sb)
-    {
-        rewardBundle.tryRender(sb);
     }
 }

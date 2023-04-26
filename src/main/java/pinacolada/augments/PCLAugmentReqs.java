@@ -16,8 +16,7 @@ import pinacolada.utilities.GameUtilities;
 import java.util.Arrays;
 import java.util.HashSet;
 
-public class PCLAugmentReqs
-{
+public class PCLAugmentReqs {
     public HashSet<AbstractCard.CardColor> colors = new HashSet<>();
     public HashSet<AbstractCard.CardRarity> rarities = new HashSet<>();
     public HashSet<AbstractCard.CardType> types = new HashSet<>();
@@ -35,8 +34,7 @@ public class PCLAugmentReqs
     public int rightMax = Integer.MAX_VALUE;
     public int maxEffects = Integer.MAX_VALUE;
 
-    public boolean check(PCLCard c)
-    {
+    public boolean check(PCLCard c) {
         return c != null && (
                 (colors.isEmpty() || colors.contains(c.color))
                         && (rarities.isEmpty() || rarities.contains(c.rarity))
@@ -54,8 +52,7 @@ public class PCLAugmentReqs
                         && c.getEffects().size() <= maxEffects);
     }
 
-    public String getString()
-    {
+    public String getString() {
         String base = EUIUtils.joinTrueStrings(", ",
                 colors.isEmpty() ? null : PCLCoreStrings.joinWithOr(EUIUtils.map(colors, EUIGameUtils::getColorName)),
                 affinities.isEmpty() ? null : PCLCoreStrings.joinWithOr(EUIUtils.map(affinities, a -> a.getTooltip().getTitleOrIcon())),
@@ -76,74 +73,62 @@ public class PCLAugmentReqs
         return base.isEmpty() ? EUIRM.strings.na : base;
     }
 
-    public PCLAugmentReqs setAffinities(PCLAffinity... values)
-    {
+    public PCLAugmentReqs setAffinities(PCLAffinity... values) {
         this.affinities.addAll(Arrays.asList(values));
         return this;
     }
 
-    public PCLAugmentReqs setAffinitiesNot(PCLAffinity... values)
-    {
+    public PCLAugmentReqs setAffinitiesNot(PCLAffinity... values) {
         this.affinitiesNot.addAll(Arrays.asList(values));
         return this;
     }
 
-    public PCLAugmentReqs setMaxBlock(int value)
-    {
+    public PCLAugmentReqs setMaxBlock(int value) {
         this.blockMax = value;
         return this;
     }
 
-    public PCLAugmentReqs setMaxCost(int value)
-    {
+    public PCLAugmentReqs setMaxCost(int value) {
         this.costMax = value;
         return this;
     }
 
-    public PCLAugmentReqs setMaxDamage(int value)
-    {
+    public PCLAugmentReqs setMaxDamage(int value) {
         this.damageMax = value;
         return this;
     }
 
-    public PCLAugmentReqs setMaxHits(int value)
-    {
+    public PCLAugmentReqs setMaxHits(int value) {
         this.hitsMax = value;
         return this;
     }
 
-    public PCLAugmentReqs setMaxRight(int value)
-    {
+    public PCLAugmentReqs setMaxRight(int value) {
         this.rightMax = value;
         return this;
     }
 
-    public PCLAugmentReqs setRarities(AbstractCard.CardRarity... values)
-    {
+    public PCLAugmentReqs setRarities(AbstractCard.CardRarity... values) {
         this.rarities.addAll(Arrays.asList(values));
         return this;
     }
 
-    public PCLAugmentReqs setTags(PCLCardTag... values)
-    {
+    public PCLAugmentReqs setTags(PCLCardTag... values) {
         this.tags.addAll(Arrays.asList(values));
         return this;
     }
 
-    public PCLAugmentReqs setTagsNot(PCLCardTag... values)
-    {
+    public PCLAugmentReqs setTagsNot(PCLCardTag... values) {
         this.tagsNot.addAll(Arrays.asList(values));
         return this;
     }
 
-    public PCLAugmentReqs setTargets(PCLCardTarget... values)
-    {
+    public PCLAugmentReqs setTargets(PCLCardTarget... values) {
         this.cardTargets.addAll(Arrays.asList(values));
         return this;
     }
 
-    public PCLAugmentReqs setTypes(AbstractCard.CardType... values)
-    {
+    public PCLAugmentReqs setTypes(AbstractCard.CardType... values) {
         this.types.addAll(Arrays.asList(values));
         return this;
     }

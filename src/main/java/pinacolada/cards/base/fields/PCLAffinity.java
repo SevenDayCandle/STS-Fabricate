@@ -20,18 +20,17 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>, CountingPanelItem
-{
+public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>, CountingPanelItem {
     Red(0, "Red", "R"),
-    Green(1, "Green",  "G"),
-    Blue(2, "Blue",  "B"),
-    Orange(3, "Orange",  "O"),
-    Yellow(4, "Yellow",  "Y"),
-    Purple(5, "Purple",  "P"),
-    Silver(6, "Silver",  "S"),
-    Star(-1, "Star",  "A"),
-    General(-2, "Gen",  "W"),
-    Unknown(-3, "NA",  "U");
+    Green(1, "Green", "G"),
+    Blue(2, "Blue", "B"),
+    Orange(3, "Orange", "O"),
+    Yellow(4, "Yellow", "Y"),
+    Purple(5, "Purple", "P"),
+    Silver(6, "Silver", "S"),
+    Star(-1, "Star", "A"),
+    General(-2, "Gen", "W"),
+    Unknown(-3, "NA", "U");
 
     public static final int TOTAL_AFFINITIES = 7;
     public static final int MAX_LEVEL = 7;
@@ -42,8 +41,7 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>, Cou
     private static final PCLAffinity[] ALL_TYPES = new PCLAffinity[8];
     private static final PCLAffinity[] NO_TYPES = new PCLAffinity[]{};
 
-    static
-    {
+    static {
         ALL_TYPES[0] = BASIC_TYPES[0] = Red;
         ALL_TYPES[1] = BASIC_TYPES[1] = Green;
         ALL_TYPES[2] = BASIC_TYPES[2] = Blue;
@@ -58,21 +56,14 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>, Cou
     public final String name;
     public final String symbol;
 
-    PCLAffinity(int id, String name, String powerSymbol)
-    {
+    PCLAffinity(int id, String name, String powerSymbol) {
         this.id = id;
         this.name = name;
         this.symbol = powerSymbol;
     }
 
-    public static PCLAffinity[] all()
-    {
+    public static PCLAffinity[] all() {
         return ALL_TYPES;
-    }
-
-    public static PCLAffinity[] basic()
-    {
-        return BASIC_TYPES;
     }
 
     public static PCLAffinity fromTooltip(EUITooltip tooltip) {   //@Formatter: Off
@@ -109,73 +100,58 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>, Cou
         return null;
     }   //@Formatter: On
 
-    public static void registerAvailableAffinities(AbstractCard.CardColor pc, PCLAffinity... affinities)
-    {
-        REGISTERED_TYPES.putIfAbsent(pc, affinities);
+    public static List<PCLAffinity> getAvailableAffinitiesAsList() {
+        return Arrays.asList(getAvailableAffinities());
     }
 
-    public static void registerAffinityBorder(AbstractCard.CardColor pc, TextureCache cache)
-    {
-        REGISTERED_BORDERS.putIfAbsent(pc, cache);
-    }
-
-    public static PCLAffinity[] getAvailableAffinities()
-    {
+    public static PCLAffinity[] getAvailableAffinities() {
         return getAvailableAffinities(GameUtilities.getActingColor());
     }
 
-    public static PCLAffinity[] getAvailableAffinities(AbstractCard.CardColor pc)
-    {
+    public static PCLAffinity[] getAvailableAffinities(AbstractCard.CardColor pc) {
         return getAvailableAffinities(pc, true);
     }
 
-    public static PCLAffinity[] getAvailableAffinities(AbstractCard.CardColor pc, boolean allowColorless)
-    {
-        if (GameUtilities.isColorlessCardColor(pc))
-        {
+    public static PCLAffinity[] getAvailableAffinities(AbstractCard.CardColor pc, boolean allowColorless) {
+        if (GameUtilities.isColorlessCardColor(pc)) {
             return allowColorless ? basic() : NO_TYPES;
         }
-        else
-        {
+        else {
             return REGISTERED_TYPES.getOrDefault(pc, NO_TYPES);
         }
     }
 
-    public static List<PCLAffinity> getAvailableAffinitiesAsList()
-    {
-        return Arrays.asList(getAvailableAffinities());
+    public static PCLAffinity[] basic() {
+        return BASIC_TYPES;
     }
 
-    public static List<PCLAffinity> getAvailableAffinitiesAsList(AbstractCard.CardColor pc)
-    {
+    public static List<PCLAffinity> getAvailableAffinitiesAsList(AbstractCard.CardColor pc) {
         return Arrays.asList(getAvailableAffinities(pc));
     }
 
-    public static List<PCLAffinity> getAvailableAffinitiesAsList(AbstractCard.CardColor pc, boolean allowColorless)
-    {
+    public static List<PCLAffinity> getAvailableAffinitiesAsList(AbstractCard.CardColor pc, boolean allowColorless) {
         return Arrays.asList(getAvailableAffinities(pc, allowColorless));
     }
 
-    public static PCLAffinity getRandomAvailableAffinity()
-    {
+    public static PCLAffinity getRandomAvailableAffinity() {
         PCLAffinity affinity = GameUtilities.getRandomElement(getAvailableAffinities());
         return affinity != null ? affinity : General;
     }
 
-    public String getAffinitySymbol()
-    {
-        return EUIUtils.format("A-{0}", symbol);
+    public static void registerAffinityBorder(AbstractCard.CardColor pc, TextureCache cache) {
+        REGISTERED_BORDERS.putIfAbsent(pc, cache);
     }
 
-    public Color getAlternateColor(float lerp)
-    {
+    public static void registerAvailableAffinities(AbstractCard.CardColor pc, PCLAffinity... affinities) {
+        REGISTERED_TYPES.putIfAbsent(pc, affinities);
+    }
+
+    public Color getAlternateColor(float lerp) {
         return Color.WHITE.cpy().lerp(getAlternateColor(), lerp);
     }
 
-    public Color getAlternateColor()
-    {
-        switch (this)
-        {
+    public Color getAlternateColor() {
+        switch (this) {
             case Red:
                 return new Color(0.8f, 0.5f, 0.5f, 1f);
 
@@ -203,148 +179,45 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>, Cou
         }
     }
 
-    public Texture getBackground(int level)
-    {
-        return (level ) > 1 ? PCLCoreImages.Core.borderFG.texture() : null;
+    public Texture getBackground(int level) {
+        return (level) > 1 ? PCLCoreImages.Core.borderFG.texture() : null;
     }
 
-    public Texture getBorder(int level)
-    {
+    public Texture getBorder(int level) {
         AbstractCard.CardColor color = GameUtilities.getActingColor();
         TextureCache cache = REGISTERED_BORDERS.get(color);
-        if (cache != null)
-        {
+        if (cache != null) {
             return cache.texture();
         }
         return (level > 1 ? PCLCoreImages.Core.borderWeak : PCLCoreImages.Core.borderNormal).texture();
     }
 
-    public TextureCache getDefaultIcon()
-    {
-        switch (this)
-        {
-            case Red:
-                return PGR.core.images.affinities.red;
-            case Green:
-                return PGR.core.images.affinities.green;
-            case Blue:
-                return PGR.core.images.affinities.blue;
-            case Orange:
-                return PGR.core.images.affinities.orange;
-            case Yellow:
-                return PGR.core.images.affinities.light;
-            case Purple:
-                return PGR.core.images.affinities.dark;
-            case Silver:
-                return PGR.core.images.affinities.silver;
-            case Star:
-                return PCLCoreImages.CardAffinity.star;
-            case General:
-                return PCLCoreImages.CardAffinity.general;
-        }
-        return PCLCoreImages.CardAffinity.unknown;
-    }
-
-    public Texture getForeground(int level)
-    {
+    public Texture getForeground(int level) {
         return /*this == Star ? null : */(level > 1 ? PCLCoreImages.Core.borderFG.texture() : null);
     }
 
-    public String getFormattedAffinitySymbol()
-    {
+    public String getFormattedAffinitySymbol() {
         return EUIUtils.format("[{0}]", getAffinitySymbol());
     }
 
-    public String getFormattedPowerSymbol()
-    {
+    public String getAffinitySymbol() {
+        return EUIUtils.format("A-{0}", symbol);
+    }
+
+    public String getFormattedPowerSymbol() {
         return EUIUtils.format("[{0}]", getPowerSymbol());
     }
 
-    public String getFormattedSymbol(AbstractCard.CardColor pc)
-    {
-        return getTooltip().getTitleOrIcon();
-    }
-
-    public String getFormattedSymbolForced(AbstractCard.CardColor pc)
-    {
-        return getTooltip().getTitleOrIconForced();
-    }
-
-    public Texture getIcon()
-    {
-        return getTextureCache().texture();
-    }
-
-    @Override
-    public int getRank(AbstractCard c)
-    {
-        return GameUtilities.getPCLCardAffinityLevel(c, this, false);
-    }
-
-    public EUITooltip getLevelTooltip()
-    {
-        return getLevelTooltip(GameUtilities.getActingColor());
-    }
-
-    public EUITooltip getLevelTooltip(AbstractCard.CardColor pc)
-    {
-        PCLResources<?,?,?,?> resources = PGR.getResources(pc);
-        if (pc != null)
-        {
-            return resources.tooltips.getLevelTooltip(this);
-        }
-        return PGR.core.tooltips.affinityGeneral;
-    }
-
-    public TextureRegion getPowerIcon()
-    {
-        return getLevelTooltip().icon;
-    }
-
-    public String getPowerSymbol()
-    {
+    public String getPowerSymbol() {
         return EUIUtils.format("P-{0}", symbol);
     }
 
-    public TextureCache getTextureCache()
-    {
-        AbstractCard.CardColor color = GameUtilities.getActingColor();
-        PCLResources<?,?,?,?> resources = PGR.getResources(color);
-        switch (this)
-        {
-            case Red:
-                return resources.images.affinities.red;
-            case Green:
-                return resources.images.affinities.green;
-            case Blue:
-                return resources.images.affinities.blue;
-            case Orange:
-                return resources.images.affinities.orange;
-            case Yellow:
-                return resources.images.affinities.light;
-            case Purple:
-                return resources.images.affinities.dark;
-            case Silver:
-                return resources.images.affinities.silver;
-        }
-        return getDefaultIcon();
+    public String getFormattedSymbol(AbstractCard.CardColor pc) {
+        return getTooltip().getTitleOrIcon();
     }
 
-    public TextureRegion getTextureRegion()
-    {
-        return EUIRenderHelpers.getCroppedRegion(getIcon(), 10);
-    }
-
-    @Override
-    public List<EUITooltip> getTips()
-    {
-        return Collections.singletonList(getTooltip());
-    }
-
-    public EUITooltip getTooltip()
-    {
-        switch (this)
-        {
+    public EUITooltip getTooltip() {
+        switch (this) {
             case Red:
                 return PGR.core.tooltips.affinityRed;
             case Green:
@@ -370,10 +243,17 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>, Cou
         }
     }
 
-    public int getPolarity()
-    {
-        switch (this)
-        {
+    @Override
+    public List<EUITooltip> getTips() {
+        return Collections.singletonList(getTooltip());
+    }
+
+    public String getFormattedSymbolForced(AbstractCard.CardColor pc) {
+        return getTooltip().getTitleOrIconForced();
+    }
+
+    public int getPolarity() {
+        switch (this) {
             case Yellow:
                 return 1;
             case Purple:
@@ -382,28 +262,98 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>, Cou
         return 0;
     }
 
-    public PCLCardDataAffinity make()
-    {
+    public TextureRegion getPowerIcon() {
+        return getLevelTooltip().icon;
+    }
+
+    public EUITooltip getLevelTooltip() {
+        return getLevelTooltip(GameUtilities.getActingColor());
+    }
+
+    public EUITooltip getLevelTooltip(AbstractCard.CardColor pc) {
+        PCLResources<?, ?, ?, ?> resources = PGR.getResources(pc);
+        if (pc != null) {
+            return resources.tooltips.getLevelTooltip(this);
+        }
+        return PGR.core.tooltips.affinityGeneral;
+    }
+
+    @Override
+    public int getRank(AbstractCard c) {
+        return GameUtilities.getPCLCardAffinityLevel(c, this, false);
+    }
+
+    public Texture getIcon() {
+        return getTextureCache().texture();
+    }
+
+    public TextureRegion getTextureRegion() {
+        return EUIRenderHelpers.getCroppedRegion(getIcon(), 10);
+    }
+
+    public TextureCache getTextureCache() {
+        AbstractCard.CardColor color = GameUtilities.getActingColor();
+        PCLResources<?, ?, ?, ?> resources = PGR.getResources(color);
+        switch (this) {
+            case Red:
+                return resources.images.affinities.red;
+            case Green:
+                return resources.images.affinities.green;
+            case Blue:
+                return resources.images.affinities.blue;
+            case Orange:
+                return resources.images.affinities.orange;
+            case Yellow:
+                return resources.images.affinities.light;
+            case Purple:
+                return resources.images.affinities.dark;
+            case Silver:
+                return resources.images.affinities.silver;
+        }
+        return getDefaultIcon();
+    }
+
+    public TextureCache getDefaultIcon() {
+        switch (this) {
+            case Red:
+                return PGR.core.images.affinities.red;
+            case Green:
+                return PGR.core.images.affinities.green;
+            case Blue:
+                return PGR.core.images.affinities.blue;
+            case Orange:
+                return PGR.core.images.affinities.orange;
+            case Yellow:
+                return PGR.core.images.affinities.light;
+            case Purple:
+                return PGR.core.images.affinities.dark;
+            case Silver:
+                return PGR.core.images.affinities.silver;
+            case Star:
+                return PCLCoreImages.CardAffinity.star;
+            case General:
+                return PCLCoreImages.CardAffinity.general;
+        }
+        return PCLCoreImages.CardAffinity.unknown;
+    }
+
+    public PCLCardDataAffinity make() {
         return make(1);
     }
 
-    public PCLCardDataAffinity make(int level)
-    {
+    public PCLCardDataAffinity make(int level) {
         return new PCLCardDataAffinity(this, level);
     }
 
-    public PCLCardDataAffinity make(int level, int upgrade)
-    {
+    public PCLCardDataAffinity make(int level, int upgrade) {
         return new PCLCardDataAffinity(this, level, upgrade);
     }
 
-    public PCLCardDataAffinity make(int level, Integer[] upgrade)
-    {
+    public PCLCardDataAffinity make(int level, Integer[] upgrade) {
         return new PCLCardDataAffinity(this, level, upgrade);
     }
 
-    public PCLCardDataAffinity make(Integer[] level, Integer[] upgrade)
-    {
+    public PCLCardDataAffinity make(Integer[] level, Integer[] upgrade) {
         return new PCLCardDataAffinity(this, level, upgrade);
     }
 }

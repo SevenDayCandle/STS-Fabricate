@@ -22,49 +22,40 @@ import pinacolada.utilities.ListSelection;
 import java.util.ArrayList;
 
 
-
 @VisibleSkill
-public class PMod_DrawPerCard extends PMod_Do
-{
+public class PMod_DrawPerCard extends PMod_Do {
     public static final PSkillData<PField_CardCategory> DATA = register(PMod_DrawPerCard.class, PField_CardCategory.class)
             .selfTarget()
             .setGroups(PCLCardGroupHelper.DrawPile);
 
-    public PMod_DrawPerCard(PSkillSaveData content)
-    {
+    public PMod_DrawPerCard(PSkillSaveData content) {
         super(DATA, content);
     }
 
-    public PMod_DrawPerCard()
-    {
+    public PMod_DrawPerCard() {
         super(DATA);
     }
 
-    public PMod_DrawPerCard(int amount)
-    {
+    public PMod_DrawPerCard(int amount) {
         super(DATA, PCLCardTarget.None, amount);
     }
 
     @Override
-    protected PCLAction<ArrayList<AbstractCard>> createPileAction(PCLUseInfo info)
-    {
+    public EUITooltip getActionTooltip() {
+        return PGR.core.tooltips.draw;
+    }
+
+    @Override
+    protected PCLAction<ArrayList<AbstractCard>> createPileAction(PCLUseInfo info) {
         DrawCards action = new DrawCards(amount);
-        if (isForced())
-        {
+        if (isForced()) {
             action = action.setFilter(c -> fields.getFullCardFilter().invoke(c), false);
         }
         return action;
     }
 
     @Override
-    public EUITooltip getActionTooltip()
-    {
-        return PGR.core.tooltips.draw;
-    }
-
-    @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction()
-    {
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
         return FetchFromPile::new;
     }
 }

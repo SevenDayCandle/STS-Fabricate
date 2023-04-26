@@ -9,18 +9,15 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.PTrait;
 
 @VisibleAugment
-public class PInnate1 extends PCLAugment
-{
+public class PInnate1 extends PCLAugment {
     public static final PCLAugmentData DATA = register(PInnate1.class, PCLAugmentCategorySub.TagInnate, 1)
             .setSkill(PTrait.tags(PCLCardTag.Innate));
 
-    public PInnate1()
-    {
+    public PInnate1() {
         super(DATA);
     }
 
-    public PInnate1(PSkill<?> skill)
-    {
+    public PInnate1(PSkill<?> skill) {
         super(DATA, skill);
     }
 }

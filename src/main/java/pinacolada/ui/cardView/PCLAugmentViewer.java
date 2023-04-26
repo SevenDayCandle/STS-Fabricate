@@ -18,8 +18,7 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 
-public class PCLAugmentViewer extends EUIHoverable
-{
+public class PCLAugmentViewer extends EUIHoverable {
 
     protected EUIButton augmentButton;
     protected EUILabel augmentTitle;
@@ -27,8 +26,7 @@ public class PCLAugmentViewer extends EUIHoverable
     protected PCLCard card;
     protected int index;
 
-    public PCLAugmentViewer(EUIHitbox hb, PCLCard card, int index)
-    {
+    public PCLAugmentViewer(EUIHitbox hb, PCLCard card, int index) {
         super(hb);
         augmentButton = new EUIButton(PCLCoreImages.CardUI.augment.texture(), new RelativeHitbox(hb, AbstractRelic.PAD_X, AbstractRelic.PAD_X, 0, 0)).setTooltip("", "");
         augmentTitle = new EUILabel(FontHelper.cardTitleFont, new RelativeHitbox(hb, hb.width, scale(40), augmentButton.hb.width * 2.8f, 0))
@@ -43,16 +41,9 @@ public class PCLAugmentViewer extends EUIHoverable
         refreshAugment();
     }
 
-    public float getHeight()
-    {
-        return (-augmentButton.hb.height + augmentDescription.getAutoHeight()) * 1.2f;
-    }
-
-    public void refreshAugment()
-    {
+    public void refreshAugment() {
         PCLAugment augment = card.getAugment(index);
-        if (augment != null)
-        {
+        if (augment != null) {
             augmentTitle.setLabel(augment.getName());
             augmentButton
                     .setBackground(augment.getTexture())
@@ -61,8 +52,7 @@ public class PCLAugmentViewer extends EUIHoverable
             augmentButton.tooltip.setTitle(augmentTitle.text).setDescription(augment.canRemove() ? PGR.core.strings.scp_clickToRemove : PGR.core.strings.scp_cannotRemove);
             augmentDescription.setLabel(augment.getFullText());
         }
-        else
-        {
+        else {
             augmentTitle.setLabel(PGR.core.strings.scp_emptyAugment);
             augmentButton.setBackground(PCLCoreImages.CardUI.augment.texture()).setColor(Color.WHITE).setShaderMode(EUIRenderHelpers.ShaderMode.Normal);
             augmentButton.tooltip.setTitle(augmentTitle.text).setDescription(PGR.core.strings.scp_clickToSlot);
@@ -70,23 +60,24 @@ public class PCLAugmentViewer extends EUIHoverable
         }
     }
 
+    public float getHeight() {
+        return (-augmentButton.hb.height + augmentDescription.getAutoHeight()) * 1.2f;
+    }
+
     @Override
-    public void renderImpl(SpriteBatch sb)
-    {
+    public void renderImpl(SpriteBatch sb) {
         augmentButton.tryRender(sb);
         augmentTitle.tryRender(sb);
         augmentDescription.tryRender(sb);
     }
 
-    public PCLAugmentViewer setOnClick(ActionT0 action)
-    {
+    public PCLAugmentViewer setOnClick(ActionT0 action) {
         augmentButton.setOnClick(action);
         return this;
     }
 
     @Override
-    public void updateImpl()
-    {
+    public void updateImpl() {
         augmentButton.tryUpdate();
         augmentTitle.tryUpdate();
         augmentDescription.tryUpdate();

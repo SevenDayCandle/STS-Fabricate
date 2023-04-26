@@ -31,8 +31,7 @@ import static extendedui.ui.cardFilter.CardKeywordFilters.DRAW_START_Y;
 import static extendedui.ui.cardFilter.CardKeywordFilters.SPACING;
 import static pinacolada.ui.AffinityKeywordButton.ICON_SIZE;
 
-public class PCLAffinityPoolModule extends EUIBase implements CustomCardFilterModule
-{
+public class PCLAffinityPoolModule extends EUIBase implements CustomCardFilterModule {
     public static HashSet<PCLLoadout> currentSeries = new HashSet<>();
     public static ArrayList<PCLCardAffinity> currentAffinities = EUIUtils.map(PCLAffinity.values(), PCLCardAffinity::new);
     public final ArrayList<AffinityKeywordButton> affinityButtons = new ArrayList<>();
@@ -40,13 +39,10 @@ public class PCLAffinityPoolModule extends EUIBase implements CustomCardFilterMo
     public final EUISearchableDropdown<PCLLoadout> seriesDropdown;
     public final CardKeywordFilters filters;
 
-    public PCLAffinityPoolModule(CardKeywordFilters filters)
-    {
+    public PCLAffinityPoolModule(CardKeywordFilters filters) {
         this.filters = filters;
-        seriesDropdown = (EUISearchableDropdown<PCLLoadout>) new EUISearchableDropdown<PCLLoadout>(new EUIHitbox(0, 0, scale(240), scale(48)), PCLLoadout::getNameForFilter)
-                .setOnOpenOrClose(isOpen -> {
-                    CardCrawlGame.isPopupOpen = this.isActive;
-                })
+        seriesDropdown = (EUISearchableDropdown<PCLLoadout>) new EUISearchableDropdown<>(new EUIHitbox(0, 0, scale(240), scale(48)), PCLLoadout::getNameForFilter)
+                .setOnOpenOrClose(isOpen -> CardCrawlGame.isPopupOpen = this.isActive)
                 .setOnChange(selectedSeries -> {
                     currentSeries.clear();
                     currentSeries.addAll(selectedSeries);
@@ -66,11 +62,9 @@ public class PCLAffinityPoolModule extends EUIBase implements CustomCardFilterMo
         initializeAffinities();
     }
 
-    protected void initializeAffinities()
-    {
+    protected void initializeAffinities() {
         affinityButtons.clear();
-        for (int i = 0; i < currentAffinities.size(); i++)
-        {
+        for (int i = 0; i < currentAffinities.size(); i++) {
             PCLCardAffinity a = currentAffinities.get(i);
             affinityButtons.add(new AffinityKeywordButton(
                     new RelativeHitbox(affinitiesSectionLabel.hb, ICON_SIZE, ICON_SIZE, ICON_SIZE * (0.5f + i * 1.05f), -0.6f * (ICON_SIZE)).setIsPopupCompatible(true), a.type)
@@ -90,43 +84,11 @@ public class PCLAffinityPoolModule extends EUIBase implements CustomCardFilterMo
     }
 
     @Override
-    public boolean isCardValid(AbstractCard c)
-    {
-        if (!currentSeries.isEmpty() && !currentSeries.contains(GameUtilities.getPCLSeries(c)))
-        {
-            return false;
-        }
-        for (PCLCardAffinity cAffinity : currentAffinities)
-        {
-            if (GameUtilities.getPCLCardAffinityLevel(c, cAffinity.type, true) < cAffinity.level)
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    @Override
-    public boolean isEmpty()
-    {
-        return currentSeries.isEmpty() && currentAffinities.isEmpty();
-    }
-
-    @Override
-    public boolean isHovered()
-    {
-        return seriesDropdown.hb.hovered || EUIUtils.any(affinityButtons, b -> b.backgroundButton.hb.hovered);
-    }
-
-    @Override
-    public void initializeSelection(Collection<AbstractCard> cards)
-    {
+    public void initializeSelection(Collection<AbstractCard> cards) {
         HashSet<PCLLoadout> availableSeries = new HashSet<>();
-        for (AbstractCard card : cards)
-        {
+        for (AbstractCard card : cards) {
             availableSeries.add(GameUtilities.getPCLSeries(card));
-            if (card instanceof PCLCard)
-            {
+            if (card instanceof PCLCard) {
                 ((PCLCard) card).affinities.updateSortedList();
             }
         }
@@ -141,39 +103,55 @@ public class PCLAffinityPoolModule extends EUIBase implements CustomCardFilterMo
     }
 
     @Override
-    public void reset()
-    {
+    public boolean isCardValid(AbstractCard c) {
+        if (!currentSeries.isEmpty() && !currentSeries.contains(GameUtilities.getPCLSeries(c))) {
+            return false;
+        }
+        for (PCLCardAffinity cAffinity : currentAffinities) {
+            if (GameUtilities.getPCLCardAffinityLevel(c, cAffinity.type, true) < cAffinity.level) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return currentSeries.isEmpty() && currentAffinities.isEmpty();
+    }
+
+    @Override
+    public boolean isHovered() {
+        return seriesDropdown.hb.hovered || EUIUtils.any(affinityButtons, b -> b.backgroundButton.hb.hovered);
+    }
+
+    @Override
+    public void reset() {
         currentSeries.clear();
         seriesDropdown.setSelectionIndices((int[]) null, false);
-        for (PCLCardAffinity c : currentAffinities)
-        {
+        for (PCLCardAffinity c : currentAffinities) {
             c.level = 0;
         }
-        for (AffinityKeywordButton c : affinityButtons)
-        {
+        for (AffinityKeywordButton c : affinityButtons) {
             c.setLevel(0);
         }
     }
 
     @Override
-    public void updateImpl()
-    {
-        this.seriesDropdown.setPosition(filters.typesDropdown.hb.x + filters.typesDropdown.hb.width + SPACING * 2, DRAW_START_Y + filters.getScrollDelta()).tryUpdate();
-        this.affinitiesSectionLabel.setPosition(filters.descriptionInput.hb.x + filters.descriptionInput.hb.width + SPACING * 6, DRAW_START_Y + filters.getScrollDelta() - SPACING * 2f).tryUpdate();
-        for (AffinityKeywordButton c : affinityButtons)
-        {
-            c.tryUpdate();
+    public void renderImpl(SpriteBatch sb) {
+        this.seriesDropdown.tryRender(sb);
+        this.affinitiesSectionLabel.tryRender(sb);
+        for (AffinityKeywordButton c : affinityButtons) {
+            c.tryRender(sb);
         }
     }
 
     @Override
-    public void renderImpl(SpriteBatch sb)
-    {
-        this.seriesDropdown.tryRender(sb);
-        this.affinitiesSectionLabel.tryRender(sb);
-        for (AffinityKeywordButton c : affinityButtons)
-        {
-            c.tryRender(sb);
+    public void updateImpl() {
+        this.seriesDropdown.setPosition(filters.typesDropdown.hb.x + filters.typesDropdown.hb.width + SPACING * 2, DRAW_START_Y + filters.getScrollDelta()).tryUpdate();
+        this.affinitiesSectionLabel.setPosition(filters.descriptionInput.hb.x + filters.descriptionInput.hb.width + SPACING * 6, DRAW_START_Y + filters.getScrollDelta() - SPACING * 2f).tryUpdate();
+        for (AffinityKeywordButton c : affinityButtons) {
+            c.tryUpdate();
         }
     }
 }

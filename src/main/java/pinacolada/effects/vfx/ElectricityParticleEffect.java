@@ -13,8 +13,7 @@ import pinacolada.resources.pcl.PCLCoreImages;
 
 import java.util.ArrayList;
 
-public class ElectricityParticleEffect extends PCLEffect
-{
+public class ElectricityParticleEffect extends PCLEffect {
     protected static final int SIZE = 96;
     private static final TextureCache[] images = {
             PCLCoreImages.Effects.electric1,
@@ -38,8 +37,7 @@ public class ElectricityParticleEffect extends PCLEffect
     protected float vR;
     protected boolean flip;
 
-    public ElectricityParticleEffect(float x, float y, float jitter, Color color)
-    {
+    public ElectricityParticleEffect(float x, float y, float jitter, Color color) {
         super(random(0.5f, 1f));
 
         this.img = getTexture(random(0, images.length - 1));
@@ -54,23 +52,19 @@ public class ElectricityParticleEffect extends PCLEffect
         setColor(color, 0.35f);
     }
 
-    protected Texture getTexture(int currentIndex)
-    {
-        if (imageTextures.size() == 0)
-        {
+    protected Texture getTexture(int currentIndex) {
+        if (imageTextures.size() == 0) {
             imageTextures.addAll(EUIUtils.map(images, TextureCache::texture));
         }
         imgIndex = (currentIndex + random(1, images.length - 1)) % images.length;
         return imageTextures.get(imgIndex);
     }
 
-    public ElectricityParticleEffect setColor(Color color, float variance)
-    {
+    public ElectricityParticleEffect setColor(Color color, float variance) {
         this.color = color.cpy();
         this.color.a = 0;
 
-        if (variance > 0)
-        {
+        if (variance > 0) {
             this.color.r = Math.max(0, color.r - random(0, variance));
             this.color.g = Math.max(0, color.g - random(0, variance));
             this.color.b = Math.max(0, color.b - random(0, variance));
@@ -79,15 +73,13 @@ public class ElectricityParticleEffect extends PCLEffect
         return this;
     }
 
-    public ElectricityParticleEffect setScale(float scale)
-    {
+    public ElectricityParticleEffect setScale(float scale) {
         this.scale = scale;
 
         return this;
     }
 
-    public void render(SpriteBatch sb)
-    {
+    public void render(SpriteBatch sb) {
         sb.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE);
         sb.setColor(this.color);
         sb.draw(this.img, x, y, SIZE * 0.5f, SIZE * 0.5f, SIZE, SIZE, scale, scale, rotation, 0, 0, SIZE, SIZE, flip, false);
@@ -95,25 +87,20 @@ public class ElectricityParticleEffect extends PCLEffect
     }
 
     @Override
-    protected void updateInternal(float deltaTime)
-    {
-        if (scale > 0.3f * Settings.scale)
-        {
+    protected void updateInternal(float deltaTime) {
+        if (scale > 0.3f * Settings.scale) {
             scale -= deltaTime * 2f;
         }
 
-        if ((1f - duration) < 0.1f)
-        {
+        if ((1f - duration) < 0.1f) {
             color.a = Interpolation.fade.apply(0f, 1f, (1f - duration) * 10f);
         }
-        else
-        {
+        else {
             color.a = Interpolation.pow2Out.apply(0f, 1f, duration);
         }
 
         animTimer -= deltaTime;
-        if (animTimer < 0)
-        {
+        if (animTimer < 0) {
             animTimer = animFrequency;
             this.img = getTexture(imgIndex);
             x = baseX + random(-jitter, jitter);

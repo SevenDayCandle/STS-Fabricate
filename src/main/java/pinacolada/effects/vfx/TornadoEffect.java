@@ -5,8 +5,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLEffects;
 
-public class TornadoEffect extends PCLEffect
-{
+public class TornadoEffect extends PCLEffect {
     protected float x;
     protected float y;
     protected float spreadX = 10f * Settings.scale;
@@ -16,31 +15,27 @@ public class TornadoEffect extends PCLEffect
     protected float vfxTimer;
     protected float vfxFrequency = 0.01f;
 
-    public TornadoEffect(float startX, float startY)
-    {
+    public TornadoEffect(float startX, float startY) {
         super(0.5f);
 
         this.x = startX;
         this.y = startY;
     }
 
-    public TornadoEffect setFrequency(float frequency)
-    {
+    public TornadoEffect setFrequency(float frequency) {
         this.vfxFrequency = MathUtils.clamp(frequency, 0.01f, startingDuration / 5f);
 
         return this;
     }
 
-    public TornadoEffect setScale(float scaleLower, float scaleUpper)
-    {
+    public TornadoEffect setScale(float scaleLower, float scaleUpper) {
         this.scaleLower = scaleLower;
         this.scaleUpper = scaleUpper;
 
         return this;
     }
 
-    public TornadoEffect setSpread(float spreadX, float spreadY)
-    {
+    public TornadoEffect setSpread(float spreadX, float spreadY) {
         this.spreadX = spreadX;
         this.spreadY = spreadY;
 
@@ -48,12 +43,10 @@ public class TornadoEffect extends PCLEffect
     }
 
     @Override
-    protected void updateInternal(float deltaTime)
-    {
+    protected void updateInternal(float deltaTime) {
         vfxTimer -= deltaTime;
 
-        if (vfxTimer < 0f)
-        {
+        if (vfxTimer < 0f) {
             final float x = this.x + random(-spreadX, spreadX);
             final float y = this.y + random(-spreadY, spreadY);
             PCLEffects.Queue.add(new TornadoParticleEffect(x, y,

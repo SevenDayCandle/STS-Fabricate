@@ -13,62 +13,53 @@ import pinacolada.utilities.ListSelection;
 
 import java.util.ArrayList;
 
-public class UpgradeFromPile extends SelectFromPile
-{
+public class UpgradeFromPile extends SelectFromPile {
     protected boolean permanent;
 
-    public UpgradeFromPile(String sourceName, int amount, CardGroup... groups)
-    {
+    public UpgradeFromPile(String sourceName, int amount, CardGroup... groups) {
         super(ActionType.CARD_MANIPULATION, sourceName, null, amount, groups);
     }
 
-    public UpgradeFromPile(String sourceName, int amount, ListSelection<AbstractCard> origin, CardGroup... groups)
-    {
+    public UpgradeFromPile(String sourceName, int amount, ListSelection<AbstractCard> origin, CardGroup... groups) {
         super(ActionType.CARD_MANIPULATION, sourceName, null, amount, origin, groups);
     }
 
-    public UpgradeFromPile(String sourceName, AbstractCreature target, int amount, CardGroup... groups)
-    {
+    public UpgradeFromPile(String sourceName, AbstractCreature target, int amount, CardGroup... groups) {
         super(ActionType.CARD_MANIPULATION, sourceName, target, amount, groups);
     }
 
-    public UpgradeFromPile(String sourceName, AbstractCreature target, int amount, ListSelection<AbstractCard> origin, CardGroup... groups)
-    {
+    public UpgradeFromPile(String sourceName, AbstractCreature target, int amount, ListSelection<AbstractCard> origin, CardGroup... groups) {
         super(ActionType.CARD_MANIPULATION, sourceName, target, amount, origin, groups);
     }
 
     @Override
-    protected boolean canSelect(AbstractCard card)
-    {
+    protected boolean canSelect(AbstractCard card) {
         return card.canUpgrade() && super.canSelect(card);
     }
 
     @Override
-    protected void complete(ArrayList<AbstractCard> result)
-    {
-        for (AbstractCard card : result)
-        {
+    public String getActionMessage() {
+        return PGR.core.tooltips.upgrade.title;
+    }
 
-            if (card.canUpgrade())
-            {
+    @Override
+    protected void complete(ArrayList<AbstractCard> result) {
+        for (AbstractCard card : result) {
+
+            if (card.canUpgrade()) {
                 card.upgrade();
             }
 
-            for (AbstractCard c : GameUtilities.getAllInBattleInstances(card.uuid))
-            {
-                if (c != card && c.canUpgrade())
-                {
+            for (AbstractCard c : GameUtilities.getAllInBattleInstances(card.uuid)) {
+                if (c != card && c.canUpgrade()) {
                     c.upgrade();
                 }
             }
 
-            if (permanent)
-            {
+            if (permanent) {
                 final AbstractCard c = GameUtilities.getMasterDeckInstance(card.uuid);
-                if (c != null)
-                {
-                    if (c != card && c.canUpgrade())
-                    {
+                if (c != null) {
+                    if (c != card && c.canUpgrade()) {
                         c.upgrade();
                     }
 
@@ -86,16 +77,9 @@ public class UpgradeFromPile extends SelectFromPile
         super.complete(result);
     }
 
-    public UpgradeFromPile isPermanent(boolean isPermanent)
-    {
+    public UpgradeFromPile isPermanent(boolean isPermanent) {
         this.permanent = isPermanent;
 
         return this;
-    }
-
-    @Override
-    public String getActionMessage()
-    {
-        return PGR.core.tooltips.upgrade.title;
     }
 }

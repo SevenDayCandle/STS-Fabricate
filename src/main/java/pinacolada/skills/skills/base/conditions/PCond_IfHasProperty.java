@@ -16,84 +16,70 @@ import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.skills.PFacetCond;
 
 import java.util.ArrayList;
+
 @VisibleSkill
-public class PCond_IfHasProperty extends PFacetCond<PField_CardCategory>
-{
+public class PCond_IfHasProperty extends PFacetCond<PField_CardCategory> {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_IfHasProperty.class, PField_CardCategory.class)
             .selfTarget();
 
-    public PCond_IfHasProperty(PSkillSaveData content)
-    {
+    public PCond_IfHasProperty(PSkillSaveData content) {
         super(DATA, content);
     }
 
-    public PCond_IfHasProperty()
-    {
+    public PCond_IfHasProperty() {
         super(DATA, PCLCardTarget.None, 0);
     }
 
-    public PCond_IfHasProperty(PCLAffinity... affinities)
-    {
+    public PCond_IfHasProperty(PCLAffinity... affinities) {
         super(DATA, PCLCardTarget.None, 0);
         fields.setAffinity(affinities);
     }
 
-    public PCond_IfHasProperty(PCLCardTag... affinities)
-    {
+    public PCond_IfHasProperty(PCLCardTag... affinities) {
         super(DATA, PCLCardTarget.None, 0);
         fields.setTag(affinities);
     }
 
-    public PCond_IfHasProperty(AbstractCard.CardRarity... affinities)
-    {
+    public PCond_IfHasProperty(AbstractCard.CardRarity... affinities) {
         super(DATA, PCLCardTarget.None, 0);
         fields.setRarity(affinities);
     }
 
-    public PCond_IfHasProperty(AbstractCard.CardType... affinities)
-    {
+    public PCond_IfHasProperty(AbstractCard.CardType... affinities) {
         super(DATA, PCLCardTarget.None, 0);
         fields.setType(affinities);
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill)
-    {
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
+        if (info != null) {
+            return fields.getFullCardFilter().invoke(info.card);
+        }
+        return false;
+    }
+
+    @Override
+    public String getSampleText(PSkill<?> callingSkill) {
         return TEXT.cond_ifX(TEXT.subjects_card);
     }
 
     @Override
-    public String getSubText()
-    {
-        if (isWhenClause() || isPassiveClause())
-        {
+    public String getSubText() {
+        if (isWhenClause() || isPassiveClause()) {
             return !fields.cardIDs.isEmpty() ? fields.getCardIDAndString() : fields.getCardAndString();
         }
 
         ArrayList<String> conditions = new ArrayList<>();
-        if (!fields.affinities.isEmpty())
-        {
+        if (!fields.affinities.isEmpty()) {
             conditions.add(fields.forced ? PField.getAffinityAndString(fields.affinities) : PField.getAffinityOrString(fields.affinities));
         }
-        if (!fields.tags.isEmpty())
-        {
+        if (!fields.tags.isEmpty()) {
             conditions.add(PField.getTagOrString(fields.tags));
         }
-        if (!fields.costs.isEmpty())
-        {
+        if (!fields.costs.isEmpty()) {
             conditions.add(PCLCoreStrings.joinWithOr(EUIUtils.map(fields.costs, c -> c.name)));
         }
 
         return TEXT.cond_ifTargetHas(TEXT.subjects_thisCard, 1, PCLCoreStrings.joinWithOr(conditions));
-    }
-
-    @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource)
-    {
-        if (info != null)
-        {
-            return fields.getFullCardFilter().invoke(info.card);
-        }
-        return false;
     }
 }

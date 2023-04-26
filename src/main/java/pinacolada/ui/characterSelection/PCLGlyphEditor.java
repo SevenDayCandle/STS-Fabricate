@@ -17,8 +17,7 @@ import extendedui.utilities.EUIColors;
 import pinacolada.blights.common.AbstractGlyphBlight;
 import pinacolada.resources.PGR;
 
-public class PCLGlyphEditor extends EUIHoverable
-{
+public class PCLGlyphEditor extends EUIHoverable {
     protected static final float ICON_SIZE = 48f * Settings.scale;
 
     private final AbstractGlyphBlight blight;
@@ -29,8 +28,7 @@ public class PCLGlyphEditor extends EUIHoverable
     protected int minimumLevel = 0;
     protected int maximumLevel = 99;
 
-    public PCLGlyphEditor(AbstractGlyphBlight blight, EUIHitbox hb)
-    {
+    public PCLGlyphEditor(AbstractGlyphBlight blight, EUIHitbox hb) {
         super(hb);
         this.blight = blight;
 
@@ -50,30 +48,24 @@ public class PCLGlyphEditor extends EUIHoverable
         tooltip = new EUITooltip(blight.strings.NAME, blight.getAscensionTooltipDescription(0));
     }
 
-    public void decrease()
-    {
-        if (enabled && blight.counter > minimumLevel)
-        {
+    public void decrease() {
+        if (enabled && blight.counter > minimumLevel) {
             blight.addAmount(-1);
             blight.configOption.set(blight.counter, true);
         }
     }
 
-    public void increase()
-    {
-        if (enabled && blight.counter < maximumLevel)
-        {
+    public void increase() {
+        if (enabled && blight.counter < maximumLevel) {
             blight.addAmount(1);
             blight.configOption.set(blight.counter, true);
         }
     }
 
-    public void refresh(int ascensionLevel)
-    {
+    public void refresh(int ascensionLevel) {
         enabled = EUIUtils.any(PGR.getRegisteredResources(), r -> r.getUnlockLevel() >= blight.ascensionRequirement);
         minimumLevel = blight.getMinimumLevel(ascensionLevel);
-        if (blight.counter < minimumLevel)
-        {
+        if (blight.counter < minimumLevel) {
             blight.setAmount(minimumLevel);
             blight.configOption.set(blight.counter, true);
         }
@@ -82,8 +74,7 @@ public class PCLGlyphEditor extends EUIHoverable
     }
 
     @Override
-    public void renderImpl(SpriteBatch sb)
-    {
+    public void renderImpl(SpriteBatch sb) {
         image.renderImpl(sb);
         FontHelper.renderFontRightTopAligned(sb, FontHelper.cardTitleFont, String.valueOf(blight.counter), image.hb.cX + image.hb.width / 4, image.hb.y, 1f, EUIColors.white(1f));
         decreaseButton.tryRender(sb);
@@ -91,8 +82,7 @@ public class PCLGlyphEditor extends EUIHoverable
     }
 
     @Override
-    public void updateImpl()
-    {
+    public void updateImpl() {
         this.hb.update();
         image.updateImpl();
         decreaseButton.setInteractable(enabled && blight.counter > minimumLevel).updateImpl();

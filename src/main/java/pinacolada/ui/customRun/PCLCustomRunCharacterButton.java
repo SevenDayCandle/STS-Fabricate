@@ -12,16 +12,14 @@ import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
-public class PCLCustomRunCharacterButton extends EUIButton
-{
+public class PCLCustomRunCharacterButton extends EUIButton {
 
     protected static Color highlightColor = new Color(1.0F, 0.8F, 0.2F, 0.0F);
     public final PCLCustomRunScreen screen;
     public final CharacterOption character;
     public boolean glowing;
 
-    public PCLCustomRunCharacterButton(PCLCustomRunScreen screen, AbstractPlayer p)
-    {
+    public PCLCustomRunCharacterButton(PCLCustomRunScreen screen, AbstractPlayer p) {
         super(p.getCustomModeCharacterButtonImage(), new EUIHitbox(scale(100), scale(100)));
         // Textures are dummies; we just need the info
         this.character = new CharacterOption("", p, PCLCoreImages.CardUI.cardBannerL.texture(), PCLCoreImages.CardUI.cardBannerL.texture());
@@ -30,17 +28,14 @@ public class PCLCustomRunCharacterButton extends EUIButton
         setOnClick(() -> screen.setCharacter(this.character));
 
         // PCL icons use a customized custom character texture method
-        if (GameUtilities.isPCLPlayerClass(p.chosenClass))
-        {
+        if (GameUtilities.isPCLPlayerClass(p.chosenClass)) {
             setButtonScale(0.7f, 0.7f);
         }
     }
 
     // This hardcoding is killing me...
-    public static String getCharacterUnlockID(AbstractPlayer.PlayerClass p)
-    {
-        switch (p)
-        {
+    public static String getCharacterUnlockID(AbstractPlayer.PlayerClass p) {
+        switch (p) {
             case THE_SILENT:
                 return "The Silent";
             case DEFECT:
@@ -51,10 +46,8 @@ public class PCLCustomRunCharacterButton extends EUIButton
         return "";
     }
 
-    public void renderCentered(SpriteBatch sb)
-    {
-        if (glowing)
-        {
+    public void renderCentered(SpriteBatch sb) {
+        if (glowing) {
             highlightColor.a = 0.25F + (MathUtils.cosDeg((float) (System.currentTimeMillis() / 4L % 360L)) + 1.25F) / 3.5F;
             PCLRenderHelpers.drawCentered(sb, highlightColor, ImageMaster.FILTER_GLOW_BG, this.hb.cX, this.hb.cY, this.hb.width, this.hb.height, this.background.scaleX, 0);
         }

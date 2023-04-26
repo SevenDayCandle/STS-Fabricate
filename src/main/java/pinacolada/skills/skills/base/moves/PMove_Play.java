@@ -17,35 +17,29 @@ import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.utilities.ListSelection;
 
 @VisibleSkill
-public class PMove_Play extends PMove_Select<PField_CardCategory>
-{
+public class PMove_Play extends PMove_Select<PField_CardCategory> {
     public static final PSkillData<PField_CardCategory> DATA = register(PMove_Play.class, PField_CardCategory.class)
             .setExtra(0, DEFAULT_MAX);
 
-    public PMove_Play()
-    {
+    public PMove_Play() {
         this(1, PCLCardTarget.None);
     }
 
-    public PMove_Play(PSkillSaveData content)
-    {
-        super(DATA, content);
-    }
-
-    public PMove_Play(int amount, PCLCardTarget target, PCLCardGroupHelper... h)
-    {
+    public PMove_Play(int amount, PCLCardTarget target, PCLCardGroupHelper... h) {
         super(DATA, target, amount, h);
     }
 
+    public PMove_Play(PSkillSaveData content) {
+        super(DATA, content);
+    }
+
     @Override
-    public EUITooltip getActionTooltip()
-    {
+    public EUITooltip getActionTooltip() {
         return PGR.core.tooltips.play;
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction()
-    {
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
         return PlayFromPile::new;
     }
 }

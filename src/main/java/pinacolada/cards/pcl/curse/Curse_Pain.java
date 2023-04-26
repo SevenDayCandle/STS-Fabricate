@@ -12,8 +12,7 @@ import pinacolada.skills.PMove;
 import pinacolada.skills.skills.base.moves.PMove_LoseHP;
 
 @VisibleCard
-public class Curse_Pain extends PCLCard
-{
+public class Curse_Pain extends PCLCard {
     public static final String ATLAS_URL = "curse/pain";
     public static final PCLCardData DATA = register(Curse_Pain.class)
             .setImagePathFromAtlasUrl(ATLAS_URL)
@@ -21,14 +20,12 @@ public class Curse_Pain extends PCLCard
             .setTags(PCLCardTag.Unplayable)
             .setAffinities(PCLAffinity.Purple);
 
-    public Curse_Pain()
-    {
+    public Curse_Pain() {
         super(DATA);
     }
 
     @Override
-    public void setup(Object input)
-    {
+    public void setup(Object input) {
         addUseMove(PCond.onOtherCardPlayed(), new PMove_LoseHP(1));
         addUseMove(PCond.onExhaust(), PMove.gainTemporary(1, PCLPowerHelper.Strength));
     }

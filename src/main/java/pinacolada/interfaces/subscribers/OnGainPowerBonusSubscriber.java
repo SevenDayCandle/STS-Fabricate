@@ -4,7 +4,6 @@ import pinacolada.annotations.CombatSubscriber;
 import pinacolada.dungeon.CombatManager;
 
 @CombatSubscriber
-public interface OnGainPowerBonusSubscriber extends PCLCombatSubscriber
-{
+public interface OnGainPowerBonusSubscriber extends PCLCombatSubscriber {
     float onGainPowerBonus(String powerID, CombatManager.Type gainType, float amount);
 }

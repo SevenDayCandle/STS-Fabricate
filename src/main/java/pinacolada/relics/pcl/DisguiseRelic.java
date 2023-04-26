@@ -8,32 +8,25 @@ import pinacolada.relics.PCLRelic;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
-public abstract class DisguiseRelic extends PCLRelic
-{
-    public DisguiseRelic(String id, RelicTier tier, LandingSound sfx)
-    {
+public abstract class DisguiseRelic extends PCLRelic {
+    public DisguiseRelic(String id, RelicTier tier, LandingSound sfx) {
         super(id, tier, sfx);
     }
 
     @Override
-    public void update()
-    {
+    public void update() {
         super.update();
 
-        if (GameUtilities.inBattle() && hb.hovered && EUIInputManager.rightClick.isJustPressed())
-        {
+        if (GameUtilities.inBattle() && hb.hovered && EUIInputManager.rightClick.isJustPressed()) {
             PCLActions.bottom.selectCreature(PCLCardTarget.Any, name)
                     .addCallback(c -> {
-                        if (c.id == null)
-                        {
+                        if (c.id == null) {
                             String p = CreatureAnimationInfo.getRandomKey();
-                            if (p != null)
-                            {
+                            if (p != null) {
                                 PGR.dungeon.setCreature(p);
                             }
                         }
-                        else
-                        {
+                        else {
                             PGR.dungeon.setCreature(CreatureAnimationInfo.getIdentifierString(c));
                         }
                     });

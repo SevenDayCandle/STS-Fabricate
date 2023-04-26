@@ -11,8 +11,7 @@ import pinacolada.powers.TemporaryPower;
 import pinacolada.utilities.GameUtilities;
 
 
-public class StabilizePower extends PCLAction<AbstractPower>
-{
+public class StabilizePower extends PCLAction<AbstractPower> {
     public String powerID;
     public boolean showEffect = true;
     public boolean isFast = true;
@@ -21,36 +20,30 @@ public class StabilizePower extends PCLAction<AbstractPower>
         this(source, target, ph.ID, amount);
     }
 
-    public StabilizePower(AbstractCreature source, AbstractCreature target, String powerID, int amount)
-    {
+    public StabilizePower(AbstractCreature source, AbstractCreature target, String powerID, int amount) {
         super(ActionType.POWER, Settings.ACTION_DUR_XFAST);
         initialize(source, target, amount);
         this.powerID = powerID;
     }
 
     @Override
-    protected void firstUpdate()
-    {
+    protected void firstUpdate() {
         final AbstractPower sourcePower = GameUtilities.getPower(target, powerID);
 
-        if (sourcePower instanceof StablizingPower)
-        {
+        if (sourcePower instanceof StablizingPower) {
             ((StablizingPower) sourcePower).stabilize(amount);
         }
-        else if (sourcePower instanceof TemporaryPower)
-        {
+        else if (sourcePower instanceof TemporaryPower) {
             ((TemporaryPower) sourcePower).stabilize(amount);
         }
-        else if (sourcePower != null && GameUtilities.isTurnBasedPower(sourcePower))
-        {
+        else if (sourcePower != null && GameUtilities.isTurnBasedPower(sourcePower)) {
             GameUtilities.applyPowerInstantly(target, new StabilizingPower(target, sourcePower), 1);
         }
 
         complete(sourcePower);
     }
 
-    public StabilizePower showEffect(boolean showEffect, boolean isFast)
-    {
+    public StabilizePower showEffect(boolean showEffect, boolean isFast) {
         this.showEffect = showEffect;
         this.isFast = isFast;
 

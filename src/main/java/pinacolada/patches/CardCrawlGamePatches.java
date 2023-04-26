@@ -5,14 +5,11 @@ import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import pinacolada.dungeon.CombatManager;
 
-public class CardCrawlGamePatches
-{
+public class CardCrawlGamePatches {
     @SpirePatch(clz = CardCrawlGame.class, method = "startOver")
-    public static class CardCrawlGame_StartOver
-    {
+    public static class CardCrawlGame_StartOver {
         @SpirePrefixPatch
-        public static void prefix()
-        {
+        public static void prefix() {
             CombatManager.onStartOver();
         }
     }

@@ -13,8 +13,7 @@ import pinacolada.effects.PCLEffect;
 
 @SuppressWarnings("FieldCanBeLocal")
 @Deprecated
-public class SmallLaserEffect2 extends PCLEffect
-{
+public class SmallLaserEffect2 extends PCLEffect {
     private static AtlasRegion img;
     private final float sX;
     private final float sY;
@@ -23,12 +22,10 @@ public class SmallLaserEffect2 extends PCLEffect
     private final float dst;
     private final Color color2;
 
-    public SmallLaserEffect2(float sX, float sY, float dX, float dY)
-    {
+    public SmallLaserEffect2(float sX, float sY, float dX, float dY) {
         super(0.5f);
 
-        if (img == null)
-        {
+        if (img == null) {
             img = ImageMaster.vfxAtlas.findRegion("combat/laserThin");
         }
 
@@ -44,16 +41,7 @@ public class SmallLaserEffect2 extends PCLEffect
         this.rotation = -this.rotation + 90f;
     }
 
-    public SmallLaserEffect2 setColors(Color color1, Color color2)
-    {
-        this.color.set(color1);
-        this.color2.set(color2);
-
-        return this;
-    }
-
-    public void render(SpriteBatch sb)
-    {
+    public void render(SpriteBatch sb) {
         sb.setBlendFunction(770, 1);
         sb.setColor(this.color);
         sb.draw(img, this.sX, this.sY - (float) img.packedHeight / 2f + 10f * Settings.scale, 0f, (float) img.packedHeight / 2f, this.dst, 50f, this.scale + random(-0.01f, 0.01f), this.scale, this.rotation);
@@ -63,21 +51,24 @@ public class SmallLaserEffect2 extends PCLEffect
         sb.setBlendFunction(770, 771);
     }
 
-    public void update()
-    {
+    public void update() {
         this.duration -= Gdx.graphics.getDeltaTime();
-        if (this.duration > this.startingDuration / 2f)
-        {
+        if (this.duration > this.startingDuration / 2f) {
             this.color.a = Interpolation.pow2In.apply(1f, 0f, (this.duration - 0.25f) * 4f);
         }
-        else
-        {
+        else {
             this.color.a = Interpolation.bounceIn.apply(0f, 1f, this.duration * 4f);
         }
 
-        if (this.duration < 0f)
-        {
+        if (this.duration < 0f) {
             this.isDone = true;
         }
+    }
+
+    public SmallLaserEffect2 setColors(Color color1, Color color2) {
+        this.color.set(color1);
+        this.color2.set(color2);
+
+        return this;
     }
 }

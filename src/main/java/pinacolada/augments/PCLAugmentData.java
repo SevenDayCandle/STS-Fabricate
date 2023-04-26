@@ -12,8 +12,7 @@ import pinacolada.skills.skills.PMultiTrait;
 
 import java.lang.reflect.Constructor;
 
-public class PCLAugmentData
-{
+public class PCLAugmentData {
     public final String ID;
     public final Class<? extends PCLAugment> augClass;
     public final int tier;
@@ -24,8 +23,7 @@ public class PCLAugmentData
     public PCLAugmentReqs reqs;
     public boolean isSpecial;
 
-    public PCLAugmentData(String id, Class<? extends PCLAugment> augClass, PCLAugmentCategory category, int tier)
-    {
+    public PCLAugmentData(String id, Class<? extends PCLAugment> augClass, PCLAugmentCategory category, int tier) {
         this.ID = id;
         this.augClass = augClass;
         this.tier = tier;
@@ -34,8 +32,7 @@ public class PCLAugmentData
         strings = PGR.getAugmentStrings(this.ID);
     }
 
-    public PCLAugmentData(String id, Class<? extends PCLAugment> augClass, PCLAugmentCategorySub lineage, int tier)
-    {
+    public PCLAugmentData(String id, Class<? extends PCLAugment> augClass, PCLAugmentCategorySub lineage, int tier) {
         this.ID = id;
         this.augClass = augClass;
         this.tier = tier;
@@ -44,60 +41,49 @@ public class PCLAugmentData
         strings = PGR.getAugmentStrings(this.ID);
     }
 
-    public boolean canApply(AbstractCard c)
-    {
+    public boolean canApply(AbstractCard c) {
         return c instanceof PCLCard && canApplyImpl((PCLCard) c);
     }
 
-    protected boolean canApplyImpl(PCLCard c)
-    {
+    protected boolean canApplyImpl(PCLCard c) {
         return c != null && (reqs == null || reqs.check(c)) && c.getFreeAugmentSlot() >= 0;
     }
 
-    public PCLAugment create()
-    {
-        try
-        {
+    public PCLAugment create() {
+        try {
             Constructor<? extends PCLAugment> c = EUIUtils.tryGetConstructor(augClass);
-            if (c != null)
-            {
+            if (c != null) {
                 return c.newInstance();
             }
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             e.printStackTrace();
             EUIUtils.logError(this, "Failed to create");
         }
         return null;
     }
 
-    public PCLAugmentData setReqs(PCLAugmentReqs reqs)
-    {
+    public PCLAugmentData setReqs(PCLAugmentReqs reqs) {
         this.reqs = reqs;
         return this;
     }
 
-    public PCLAugmentData setSkill(PSkill<?>... skills)
-    {
+    public PCLAugmentData setSkill(PSkill<?>... skills) {
         this.skill = PMultiSkill.join(skills);
         return this;
     }
 
-    public PCLAugmentData setSkill(PSkill<?> skill)
-    {
+    public PCLAugmentData setSkill(PSkill<?> skill) {
         this.skill = skill;
         return this;
     }
 
-    public PCLAugmentData setSkill(PTrait<?>... traits)
-    {
+    public PCLAugmentData setSkill(PTrait<?>... traits) {
         this.skill = PMultiTrait.join(traits);
         return this;
     }
 
-    public PCLAugmentData setSpecial(boolean value)
-    {
+    public PCLAugmentData setSpecial(boolean value) {
         this.isSpecial = value;
         return this;
     }

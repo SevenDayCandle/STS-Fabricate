@@ -8,30 +8,24 @@ import pinacolada.skills.fields.PField_Not;
 import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
 
 // Passive conditions that can be inverted
-public abstract class PPassiveCond<T extends PField_Not> extends PCond<T>
-{
-    public PPassiveCond(PSkillData<T> data, PSkillSaveData content)
-    {
+public abstract class PPassiveCond<T extends PField_Not> extends PCond<T> {
+    public PPassiveCond(PSkillData<T> data, PSkillSaveData content) {
         super(data, content);
     }
 
-    public PPassiveCond(PSkillData<T> data)
-    {
+    public PPassiveCond(PSkillData<T> data) {
         super(data);
     }
 
-    public PPassiveCond(PSkillData<T> data, PCLCardTarget target, int amount)
-    {
+    public PPassiveCond(PSkillData<T> data, PCLCardTarget target, int amount) {
         super(data, target, amount);
     }
 
-    public PPassiveCond(PSkillData<T> data, PCLCardTarget target, int amount, int extra)
-    {
+    public PPassiveCond(PSkillData<T> data, PCLCardTarget target, int amount, int extra) {
         super(data, target, amount, extra);
     }
 
-    public void setupEditor(PCLCustomCardEffectEditor<?> editor)
-    {
+    public void setupEditor(PCLCustomCardEffectEditor<?> editor) {
         super.setupEditor(editor);
         fields.registerNotBoolean(editor);
     }

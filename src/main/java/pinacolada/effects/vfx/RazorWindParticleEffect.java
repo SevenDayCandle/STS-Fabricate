@@ -11,8 +11,7 @@ import extendedui.ui.TextureCache;
 import pinacolada.effects.PCLEffect;
 import pinacolada.resources.pcl.PCLCoreImages;
 
-public class RazorWindParticleEffect extends PCLEffect
-{
+public class RazorWindParticleEffect extends PCLEffect {
     protected static final int SIZE = 96;
     protected static final TextureCache[] images = {PCLCoreImages.Effects.airTrail1, PCLCoreImages.Effects.airTrail2, PCLCoreImages.Effects.airTrail3};
 
@@ -24,14 +23,12 @@ public class RazorWindParticleEffect extends PCLEffect
     protected float alpha;
     protected Texture image;
 
-    public RazorWindParticleEffect(float x, float y, float horizontalSpeed, float verticalSpeed)
-    {
+    public RazorWindParticleEffect(float x, float y, float horizontalSpeed, float verticalSpeed) {
         super(MathUtils.random(0.4F, 0.8F));
 
         final float offsetX = MathUtils.random(-16.0F, 16.0F) * Settings.scale;
         final float offsetY = MathUtils.random(-16.0F, 16.0F) * Settings.scale;
-        if (offsetX > 0.0F)
-        {
+        if (offsetX > 0.0F) {
             this.renderBehind = true;
         }
 
@@ -47,20 +44,17 @@ public class RazorWindParticleEffect extends PCLEffect
         this.rotationSpeed = random(500f, 800f);
         this.image = EUIUtils.random(images).texture();
 
-        if (randomBoolean())
-        {
+        if (randomBoolean()) {
             this.rotationSpeed *= -1;
         }
     }
 
-    public void render(SpriteBatch sb)
-    {
+    public void render(SpriteBatch sb) {
         renderImage(sb, image, x, y, false, false);
     }
 
     @Override
-    protected void updateInternal(float deltaTime)
-    {
+    protected void updateInternal(float deltaTime) {
         super.updateInternal(deltaTime);
 
         x += horizontalSpeed * deltaTime;
@@ -68,8 +62,7 @@ public class RazorWindParticleEffect extends PCLEffect
         rotation += rotationSpeed * deltaTime;
 
         final float halfDuration = startingDuration * 0.5f;
-        if (this.duration < halfDuration)
-        {
+        if (this.duration < halfDuration) {
             this.color.a = Interpolation.exp5In.apply(0.0F, this.alpha, this.duration / halfDuration);
         }
     }

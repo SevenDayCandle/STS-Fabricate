@@ -7,48 +7,40 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class PField_Tag extends PField_Random
-{
+public class PField_Tag extends PField_Random {
     public ArrayList<PCLCardTag> tags = new ArrayList<>();
 
-    @Override
-    public boolean equals(PField other)
-    {
-        return other instanceof PField_Tag && tags.equals(((PField_Tag) other).tags) && ((PField_Tag) other).random == random && ((PField_Tag) other).not == not;
-    }
-
-    @Override
-    public PField_Tag makeCopy()
-    {
-        return (PField_Tag) new PField_Tag().setTag(tags).setRandom(random).setNot(not);
-    }
-
-    public void setupEditor(PCLCustomCardEffectEditor<?> editor)
-    {
-        editor.registerTag(tags);
-        super.setupEditor(editor);
-    }
-
-    public PField_Tag addTag(PCLCardTag... tags)
-    {
+    public PField_Tag addTag(PCLCardTag... tags) {
         this.tags.addAll(Arrays.asList(tags));
         return this;
     }
 
-    public PField_Tag setTag(PCLCardTag... tags)
-    {
-        return setTag(Arrays.asList(tags));
+    @Override
+    public boolean equals(PField other) {
+        return other instanceof PField_Tag && tags.equals(((PField_Tag) other).tags) && ((PField_Tag) other).random == random && ((PField_Tag) other).not == not;
     }
 
-    public PField_Tag setTag(List<PCLCardTag> tags)
-    {
+    @Override
+    public PField_Tag makeCopy() {
+        return (PField_Tag) new PField_Tag().setTag(tags).setRandom(random).setNot(not);
+    }
+
+    public void setupEditor(PCLCustomCardEffectEditor<?> editor) {
+        editor.registerTag(tags);
+        super.setupEditor(editor);
+    }
+
+    public PField_Tag setTag(List<PCLCardTag> tags) {
         this.tags.clear();
         this.tags.addAll(tags);
         return this;
     }
 
-    public String getTagString()
-    {
+    public String getTagString() {
         return getTagString(tags);
+    }
+
+    public PField_Tag setTag(PCLCardTag... tags) {
+        return setTag(Arrays.asList(tags));
     }
 }

@@ -11,8 +11,7 @@ import pinacolada.skills.PMod;
 import pinacolada.skills.PMove;
 
 @VisibleCard
-public class Transmutation extends PCLCard
-{
+public class Transmutation extends PCLCard {
     public static final String ATLAS_URL = "colorless/skill/transmutation";
     public static final PCLCardData DATA = register(Transmutation.class)
             .setImagePathFromAtlasUrl(ATLAS_URL)
@@ -21,13 +20,11 @@ public class Transmutation extends PCLCard
             .setAffinities(PCLAffinity.Blue, PCLAffinity.Yellow)
             .setColorless();
 
-    public Transmutation()
-    {
+    public Transmutation() {
         super(DATA);
     }
 
-    public void setup(Object input)
-    {
+    public void setup(Object input) {
         addUseMove(PMod.xEnergy(0).setUpgrade(1), PMove.createRandom(1, 1, PCLCardGroupHelper.Hand).edit(f -> f.setColor(CardColor.COLORLESS)), PMove.modifyCost(-5, 99).useParent(true));
     }
 }

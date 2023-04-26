@@ -13,98 +13,81 @@ import pinacolada.utilities.GameUtilities;
 
 // TODO merge with PCLCharacterSelectOptionsRenderer
 @Deprecated
-public class PCLCharacterSelectProvider implements RunAttributesProvider
-{
+public class PCLCharacterSelectProvider implements RunAttributesProvider {
     protected final PCLCharacterSelectOptionsRenderer loadoutRenderer = new PCLCharacterSelectOptionsRenderer();
     protected CharacterSelectScreen charScreen;
     protected CharacterOption selectedOption;
 
     @Override
-    public int ascensionLevel()
-    {
+    public int ascensionLevel() {
         return charScreen != null ? charScreen.ascensionLevel : 0;
     }
 
     @Override
-    public void disableConfirm(boolean value)
-    {
-        if (charScreen != null)
-        {
+    public void disableConfirm(boolean value) {
+        if (charScreen != null) {
             charScreen.confirmButton.isDisabled = value;
         }
     }
 
-    public AbstractPlayer.PlayerClass getCurrentClass(CharacterOption instance)
-    {
-        return selectedOption != null && selectedOption.c != null ? selectedOption.c.chosenClass : null;
-    }
-
-    public void initialize(CharacterSelectScreen selectScreen)
-    {
+    public void initialize(CharacterSelectScreen selectScreen) {
         GameUtilities.unlockAllKeys();
         charScreen = selectScreen;
         selectedOption = null;
 
         final float size = Settings.scale * 36;
 
-        for (PCLResources<?,?,?,?> resources : PGR.getRegisteredResources())
-        {
+        for (PCLResources<?, ?, ?, ?> resources : PGR.getRegisteredResources()) {
             UnlockTrackerPatches.validate(resources);
         }
     }
 
-    public void randomizeLoadout()
-    {
+    public void randomizeLoadout() {
         loadoutRenderer.randomizeLoadout();
     }
 
-    public void render(CharacterSelectScreen selectScreen, SpriteBatch sb)
-    {
+    public void render(CharacterSelectScreen selectScreen, SpriteBatch sb) {
         // RenderOption is being called instead
     }
 
-    public void renderOption(CharacterOption instance, SpriteBatch sb)
-    {
+    public void renderOption(CharacterOption instance, SpriteBatch sb) {
         AbstractPlayer.PlayerClass pc = getCurrentClass(instance);
         loadoutRenderer.renderImpl(sb);
     }
 
-    public void update(CharacterSelectScreen selectScreen)
-    {
+    public AbstractPlayer.PlayerClass getCurrentClass(CharacterOption instance) {
+        return selectedOption != null && selectedOption.c != null ? selectedOption.c.chosenClass : null;
+    }
+
+    public void update(CharacterSelectScreen selectScreen) {
         updateSelectedCharacter(selectScreen);
     }
 
-    public void updateForAscensionChange(CharacterSelectScreen selectScreen)
-    {
-        loadoutRenderer.updateForAscension();
-    }
-
-    public void updateOption(CharacterOption instance)
-    {
-        AbstractPlayer.PlayerClass pc = getCurrentClass(instance);
-        loadoutRenderer.updateImpl();
-    }
-
-    private void updateSelectedCharacter(CharacterSelectScreen selectScreen)
-    {
+    private void updateSelectedCharacter(CharacterSelectScreen selectScreen) {
         charScreen = selectScreen;
         final CharacterOption current = selectedOption;
 
         selectedOption = null;
 
-        for (CharacterOption o : selectScreen.options)
-        {
-            if (o.selected)
-            {
+        for (CharacterOption o : selectScreen.options) {
+            if (o.selected) {
                 selectedOption = o;
 
-                if (current != o)
-                {
+                if (current != o) {
                     loadoutRenderer.refresh(this, o);
                 }
 
                 return;
             }
         }
+    }
+
+    public void updateForAscensionChange(CharacterSelectScreen selectScreen) {
+        loadoutRenderer.updateForAscension();
+    }
+
+    public void updateOption(CharacterOption instance) {
+        AbstractPlayer.PlayerClass pc = getCurrentClass(instance);
+        loadoutRenderer.updateImpl();
     }
 }

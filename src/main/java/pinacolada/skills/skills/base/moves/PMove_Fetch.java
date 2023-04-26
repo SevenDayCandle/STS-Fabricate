@@ -16,42 +16,35 @@ import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.utilities.ListSelection;
 
 @VisibleSkill
-public class PMove_Fetch extends PMove_Select<PField_CardCategory>
-{
+public class PMove_Fetch extends PMove_Select<PField_CardCategory> {
     public static final PSkillData<PField_CardCategory> DATA = register(PMove_Fetch.class, PField_CardCategory.class)
             .selfTarget()
             .setExtra(0, DEFAULT_MAX)
             .setGroups(PCLCardGroupHelper.DrawPile, PCLCardGroupHelper.DiscardPile, PCLCardGroupHelper.ExhaustPile);
 
-    public PMove_Fetch()
-    {
+    public PMove_Fetch() {
         this(1);
     }
 
-    public PMove_Fetch(PSkillSaveData content)
-    {
-        super(DATA, content);
-    }
-
-    public PMove_Fetch(int amount, PCLCardGroupHelper... h)
-    {
+    public PMove_Fetch(int amount, PCLCardGroupHelper... h) {
         super(DATA, amount, h);
     }
 
-    public PMove_Fetch(int amount, int extra, PCLCardGroupHelper... h)
-    {
+    public PMove_Fetch(PSkillSaveData content) {
+        super(DATA, content);
+    }
+
+    public PMove_Fetch(int amount, int extra, PCLCardGroupHelper... h) {
         super(DATA, amount, extra, h);
     }
 
     @Override
-    public EUITooltip getActionTooltip()
-    {
+    public EUITooltip getActionTooltip() {
         return PGR.core.tooltips.fetch;
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction()
-    {
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
         return FetchFromPile::new;
     }
 }

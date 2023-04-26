@@ -18,52 +18,26 @@ import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
 import java.util.List;
 
 @VisibleSkill
-public class PMod_PerOrbEvokedTurn extends PMod_Per<PField_Orb>
-{
+public class PMod_PerOrbEvokedTurn extends PMod_Per<PField_Orb> {
 
     public static final PSkillData<PField_Orb> DATA = register(PMod_PerOrbEvokedTurn.class, PField_Orb.class).selfTarget();
 
-    public PMod_PerOrbEvokedTurn(PSkillSaveData content)
-    {
+    public PMod_PerOrbEvokedTurn(PSkillSaveData content) {
         super(DATA, content);
     }
 
-    public PMod_PerOrbEvokedTurn()
-    {
+    public PMod_PerOrbEvokedTurn() {
         super(DATA);
     }
 
-    public PMod_PerOrbEvokedTurn(int amount, PCLOrbHelper... orbs)
-    {
+    public PMod_PerOrbEvokedTurn(int amount, PCLOrbHelper... orbs) {
         super(DATA, amount);
         fields.setOrb(orbs);
     }
 
     @Override
-    public int getMultiplier(PCLUseInfo info)
-    {
-        List<AbstractOrb> orbs = fields.random ? CombatManager.orbsEvokedThisCombat() : CombatManager.orbsEvokedThisTurn();
-        return (fields.orbs.isEmpty() ? orbs.size() :
-                EUIUtils.count(orbs, o -> EUIUtils.any(fields.orbs, orb -> orb.ID.equals(o.ID))));
-    }
-
-    @Override
-    public String getSampleText(PSkill<?> callingSkill)
-    {
-        return TEXT.cond_perXY(TEXT.subjects_x, PGR.core.tooltips.orb.title, PGR.core.tooltips.evoke.past());
-    }
-
-    @Override
-    public String getSubText()
-    {
-        return PGR.core.tooltips.orb.title;
-    }
-
-    @Override
-    public String getConditionText(String childText)
-    {
-        if (fields.not)
-        {
+    public String getConditionText(String childText) {
+        if (fields.not) {
             return TEXT.cond_genericConditional(childText,
                     fields.random ? TEXT.cond_perThisCombat(getAmountRawString(), fields.getOrbAndString(1), PCLCoreStrings.past(PGR.core.tooltips.evoke)) : TEXT.cond_perThisTurn(getAmountRawString(), fields.getOrbAndString(1), PCLCoreStrings.past(PGR.core.tooltips.evoke)));
         }
@@ -72,9 +46,25 @@ public class PMod_PerOrbEvokedTurn extends PMod_Per<PField_Orb>
     }
 
     @Override
-    public void setupEditor(PCLCustomCardEffectEditor<?> editor)
-    {
+    public int getMultiplier(PCLUseInfo info) {
+        List<AbstractOrb> orbs = fields.random ? CombatManager.orbsEvokedThisCombat() : CombatManager.orbsEvokedThisTurn();
+        return (fields.orbs.isEmpty() ? orbs.size() :
+                EUIUtils.count(orbs, o -> EUIUtils.any(fields.orbs, orb -> orb.ID.equals(o.ID))));
+    }
+
+    @Override
+    public String getSampleText(PSkill<?> callingSkill) {
+        return TEXT.cond_perXY(TEXT.subjects_x, PGR.core.tooltips.orb.title, PGR.core.tooltips.evoke.past());
+    }
+
+    @Override
+    public void setupEditor(PCLCustomCardEffectEditor<?> editor) {
         super.setupEditor(editor);
         fields.registerRBoolean(editor, TEXT.cedit_combat, null);
+    }
+
+    @Override
+    public String getSubText() {
+        return PGR.core.tooltips.orb.title;
     }
 }

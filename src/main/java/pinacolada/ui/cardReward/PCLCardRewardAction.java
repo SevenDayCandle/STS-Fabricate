@@ -12,8 +12,7 @@ import pinacolada.utilities.GameUtilities;
 import java.util.ArrayList;
 
 // Copied and modified from STS-AnimatorMod
-public abstract class PCLCardRewardAction extends EUIBase
-{
+public abstract class PCLCardRewardAction extends EUIBase {
     protected final ArrayList<PCLCardRewardActionButton> buttons = new ArrayList<>();
 
     protected final ActionT1<AbstractCard> onCardAct;
@@ -24,18 +23,15 @@ public abstract class PCLCardRewardAction extends EUIBase
     private boolean shouldClose; // Needed to prevent comodification errors
 
     public PCLCardRewardAction(ActionT1<AbstractCard> onCardAdded,
-                               ActionT1<AbstractCard> onCardAct)
-    {
+                               ActionT1<AbstractCard> onCardAct) {
         this.onCardAct = onCardAct;
         this.onCardAdded = onCardAdded;
     }
 
-    public void action(PCLCardRewardActionButton button)
-    {
+    public void action(PCLCardRewardActionButton button) {
         final int cardIndex = button.getIndex();
         final AbstractCard targetCard = button.getCard(false);
-        if (targetCard == null || cardIndex > rewardItem.cards.size())
-        {
+        if (targetCard == null || cardIndex > rewardItem.cards.size()) {
             return;
         }
 
@@ -49,82 +45,67 @@ public abstract class PCLCardRewardAction extends EUIBase
 
     abstract AbstractCard actionImpl(PCLCardRewardActionButton button, AbstractCard card, int cardIndex);
 
-    public void close()
-    {
-        setActive(false);
-        buttons.clear();
-    }
-
-    abstract PCLCardRewardActionButton getButton(int index);
-
-    abstract Class<? extends CardRewardActionProvider> getTargetClass();
-
-    protected void onCardAdded(AbstractCard card)
-    {
-        if (onCardAdded != null)
-        {
-            onCardAdded.invoke(card);
-        }
-    }
-
-    protected void onCardReroll(AbstractCard card)
-    {
-        if (onCardAct != null)
-        {
+    protected void onCardReroll(AbstractCard card) {
+        if (onCardAct != null) {
             onCardAct.invoke(card);
         }
     }
 
-    public void open(RewardItem rItem, ArrayList<AbstractCard> cards)
-    {
+    protected void onCardAdded(AbstractCard card) {
+        if (onCardAdded != null) {
+            onCardAdded.invoke(card);
+        }
+    }
+
+    public void close() {
+        setActive(false);
+        buttons.clear();
+    }
+
+    public void open(RewardItem rItem, ArrayList<AbstractCard> cards) {
         buttons.clear();
         rewardItem = rItem;
         isActive = false;
 
         actionProvider = GameUtilities.getRelic(getTargetClass());
-        if (actionProvider != null && actionProvider.canActivate(rItem))
-        {
+        if (actionProvider != null && actionProvider.canActivate(rItem)) {
             isActive = true;
 
-            for (int i = 0; i < rItem.cards.size(); i++)
-            {
+            for (int i = 0; i < rItem.cards.size(); i++) {
                 buttons.add(getButton(i));
             }
         }
     }
 
-    protected void takeReward()
-    {
-        AbstractDungeon.combatRewardScreen.rewards.remove(rewardItem);
-        AbstractDungeon.combatRewardScreen.positionRewards();
-        if (AbstractDungeon.combatRewardScreen.rewards.isEmpty())
-        {
-            AbstractDungeon.combatRewardScreen.hasTakenAll = true;
-            AbstractDungeon.overlayMenu.proceedButton.show();
+    abstract Class<? extends CardRewardActionProvider> getTargetClass();
+
+    abstract PCLCardRewardActionButton getButton(int index);
+
+    @Override
+    public void renderImpl(SpriteBatch sb) {
+        for (PCLCardRewardActionButton banButton : buttons) {
+            banButton.tryRender(sb);
         }
-        shouldClose = true;
     }
 
     @Override
-    public void updateImpl()
-    {
-        for (PCLCardRewardActionButton banButton : buttons)
-        {
+    public void updateImpl() {
+        for (PCLCardRewardActionButton banButton : buttons) {
             banButton.tryUpdate();
         }
-        if (shouldClose)
-        {
+        if (shouldClose) {
             shouldClose = false;
             AbstractDungeon.closeCurrentScreen();
         }
     }
 
-    @Override
-    public void renderImpl(SpriteBatch sb)
-    {
-        for (PCLCardRewardActionButton banButton : buttons)
-        {
-            banButton.tryRender(sb);
+    protected void takeReward() {
+        AbstractDungeon.combatRewardScreen.rewards.remove(rewardItem);
+        AbstractDungeon.combatRewardScreen.positionRewards();
+        if (AbstractDungeon.combatRewardScreen.rewards.isEmpty()) {
+            AbstractDungeon.combatRewardScreen.hasTakenAll = true;
+            AbstractDungeon.overlayMenu.proceedButton.show();
         }
+        shouldClose = true;
     }
 }

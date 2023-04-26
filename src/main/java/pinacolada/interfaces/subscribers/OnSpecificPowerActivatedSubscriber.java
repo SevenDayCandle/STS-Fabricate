@@ -5,7 +5,6 @@ import com.megacrit.cardcrawl.powers.AbstractPower;
 import pinacolada.annotations.CombatSubscriber;
 
 @CombatSubscriber
-public interface OnSpecificPowerActivatedSubscriber extends PCLCombatSubscriber
-{
+public interface OnSpecificPowerActivatedSubscriber extends PCLCombatSubscriber {
     boolean onPowerActivated(AbstractPower power, AbstractCreature source, boolean originalValue);
 }

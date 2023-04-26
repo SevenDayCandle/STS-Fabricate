@@ -10,8 +10,7 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.skills.PMove;
 
 @VisibleCard
-public class Apotheosis extends PCLCard
-{
+public class Apotheosis extends PCLCard {
     public static final String ATLAS_URL = "colorless/skill/apotheosis";
     public static final PCLCardData DATA = register(Apotheosis.class)
             .setImagePathFromAtlasUrl(ATLAS_URL)
@@ -21,13 +20,11 @@ public class Apotheosis extends PCLCard
             .setCostUpgrades(-1)
             .setColorless();
 
-    public Apotheosis()
-    {
+    public Apotheosis() {
         super(DATA);
     }
 
-    public void setup(Object input)
-    {
+    public void setup(Object input) {
         addUseMove(PMove.upgrade(0, PCLCardGroupHelper.Hand, PCLCardGroupHelper.DiscardPile, PCLCardGroupHelper.DrawPile));
     }
 }

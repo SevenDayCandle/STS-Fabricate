@@ -9,31 +9,26 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField;
 
 // Moves that utilize callbacks and set the PCLUseInfo with that callback data
-public abstract class PCallbackMove<T extends PField> extends PMove<T>
-{
-    public PCallbackMove(PSkillData<T> data, PSkillSaveData content)
-    {
+public abstract class PCallbackMove<T extends PField> extends PMove<T> {
+    public PCallbackMove(PSkillData<T> data, PSkillSaveData content) {
         super(data, content);
     }
 
-    public PCallbackMove(PSkillData<T> data)
-    {
+    public PCallbackMove(PSkillData<T> data) {
         super(data);
     }
 
-    public PCallbackMove(PSkillData<T> data, PCLCardTarget target, int amount)
-    {
+    public PCallbackMove(PSkillData<T> data, PCLCardTarget target, int amount) {
         super(data, target, amount);
     }
 
-    public PCallbackMove(PSkillData<T> data, PCLCardTarget target, int amount, int extra)
-    {
+    public PCallbackMove(PSkillData<T> data, PCLCardTarget target, int amount, int extra) {
         super(data, target, amount, extra);
     }
 
-    public void use(PCLUseInfo info)
-    {
-        use(info, __ -> {});
+    public void use(PCLUseInfo info) {
+        use(info, __ -> {
+        });
     }
 
     public abstract void use(PCLUseInfo info, ActionT1<PCLUseInfo> callback);

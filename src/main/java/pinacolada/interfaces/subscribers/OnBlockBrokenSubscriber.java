@@ -4,7 +4,6 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import pinacolada.annotations.CombatSubscriber;
 
 @CombatSubscriber
-public interface OnBlockBrokenSubscriber extends PCLCombatSubscriber
-{
+public interface OnBlockBrokenSubscriber extends PCLCombatSubscriber {
     void onBlockBroken(AbstractCreature creature);
 }

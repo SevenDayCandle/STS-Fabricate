@@ -21,60 +21,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class PCLCreature extends CustomMonster implements PointerProvider, TooltipProvider
-{
-    private static final Map<String, PCLCreatureData> staticData = new HashMap<>();
+public abstract class PCLCreature extends CustomMonster implements PointerProvider, TooltipProvider {
     protected static final Color TAKEN_TURN_COLOR = new Color(0.85f, 0.85f, 0.85f, 0.7f);
-
+    private static final Map<String, PCLCreatureData> staticData = new HashMap<>();
     public final PCLCreatureData creatureData;
     public PCLAffinity affinity = PCLAffinity.General;
     public boolean stunned;
     public boolean hasTakenTurn;
 
-    public static PCLCreatureData getStaticData(String id)
-    {
-        return staticData.get(id);
-    }
-
-    protected static PCLCreatureData register(Class<? extends PCLCreature> type)
-    {
-        return PCLCreature.register(type, PGR.core);
-    }
-
-    protected static PCLCreatureData register(Class<? extends PCLCreature> type, PCLResources<?,?,?,?> resources)
-    {
-        return registerData(new PCLCreatureData(type, resources));
-    }
-
-    protected static PCLCreatureData registerData(PCLCreatureData creatureData)
-    {
-        staticData.put(creatureData.ID, creatureData);
-        return creatureData;
-    }
-
-    public PCLCreature(PCLCreatureData data)
-    {
+    public PCLCreature(PCLCreatureData data) {
         super(data.strings.NAME, data.ID, data.hp, data.hbX, data.hbY, data.hbW, data.hbH, data.imgUrl);
         this.creatureData = data;
     }
 
-    public PCLCreature(PCLCreatureData data, float offsetX, float offsetY)
-    {
+    public PCLCreature(PCLCreatureData data, float offsetX, float offsetY) {
         super(data.strings.NAME, data.ID, data.hp, data.hbX, data.hbY, data.hbW, data.hbH, data.imgUrl, offsetX, offsetY);
         this.creatureData = data;
         setupHitbox(offsetX, offsetY);
     }
 
-    public PCLCreature(PCLCreatureData data, float offsetX, float offsetY, boolean ignoreBlights)
-    {
-        super(data.strings.NAME, data.ID, data.hp, data.hbX, data.hbY, data.hbW, data.hbH, data.imgUrl, offsetX, offsetY, ignoreBlights);
-        this.creatureData = data;
-        setupHitbox(offsetX, offsetY);
-    }
-
     // Offset positions should be given with Settings.scaling already applied
-    protected void setupHitbox(float offsetX, float offsetY)
-    {
+    protected void setupHitbox(float offsetX, float offsetY) {
         this.drawX = offsetX;
         this.drawY = offsetY;
         updateHitbox(creatureData.hbX, creatureData.hbY, creatureData.hbW, creatureData.hbH);
@@ -82,97 +49,102 @@ public abstract class PCLCreature extends CustomMonster implements PointerProvid
         refreshIntentHbLocation();
     }
 
-    @Override
-    public String getID()
-    {
-        return id;
+    public PCLCreature(PCLCreatureData data, float offsetX, float offsetY, boolean ignoreBlights) {
+        super(data.strings.NAME, data.ID, data.hp, data.hbX, data.hbY, data.hbW, data.hbH, data.imgUrl, offsetX, offsetY, ignoreBlights);
+        this.creatureData = data;
+        setupHitbox(offsetX, offsetY);
     }
 
-    @Override
-    public String getName()
-    {
-        return name;
+    public static PCLCreatureData getStaticData(String id) {
+        return staticData.get(id);
     }
 
-    @Override
-    public void loadAnimation(String atlasUrl, String skeletonUrl, float scale)
-    {
-        super.loadAnimation(atlasUrl, skeletonUrl, scale);
+    protected static PCLCreatureData register(Class<? extends PCLCreature> type) {
+        return PCLCreature.register(type, PGR.core);
     }
 
-    @Override
-    public List<EUITooltip> getTips()
-    {
-        return new ArrayList<>();
+    protected static PCLCreatureData register(Class<? extends PCLCreature> type, PCLResources<?, ?, ?, ?> resources) {
+        return registerData(new PCLCreatureData(type, resources));
     }
 
-    @Override
-    public EUITooltip getIntentTip()
-    {
-        return null;
+    protected static PCLCreatureData registerData(PCLCreatureData creatureData) {
+        staticData.put(creatureData.ID, creatureData);
+        return creatureData;
     }
 
-    @Override
-    public void addPower(AbstractPower powerToApply)
-    {
-        super.addPower(powerToApply);
-        if (powerToApply instanceof StunMonsterPower)
-        {
-            stunned = true;
-        }
+    public void atEndOfRound() {
+        hasTakenTurn = false;
     }
 
-    @Override
-    public void takeTurn()
-    {
-        takeTurn(false);
-    }
-
-    public void takeTurn(boolean manual)
-    {
-        if (stunned)
-        {
-            stunned = false;
-        }
-        else
-        {
-            performActions(manual);
-        }
-    }
-
-    @Override
-    public void update()
-    {
-        super.update();
-    }
-
-    public void doActionAnimation(boolean takenTurn)
-    {
+    public void doActionAnimation(boolean takenTurn) {
         useFastAttackAnimation();
-        if (takenTurn)
-        {
+        if (takenTurn) {
             hasTakenTurn = true;
         }
     }
 
-    public void atEndOfRound()
-    {
-        hasTakenTurn = false;
-    }
-
-    public void setAnimation(AbstractAnimation animation)
-    {
-        this.animation = animation;
-    }
-
-    public BobEffect getBobEffect()
-    {
+    public BobEffect getBobEffect() {
         return GameUtilities.getBobEffect(this);
     }
 
-    public Color getIntentColor()
-    {
+    @Override
+    public String getID() {
+        return id;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    public Color getIntentColor() {
         return ReflectionHacks.getPrivate(this, AbstractMonster.class, "intentColor");
+    }
+
+    @Override
+    public EUITooltip getIntentTip() {
+        return null;
+    }
+
+    @Override
+    public List<EUITooltip> getTips() {
+        return new ArrayList<>();
+    }
+
+    @Override
+    public void loadAnimation(String atlasUrl, String skeletonUrl, float scale) {
+        super.loadAnimation(atlasUrl, skeletonUrl, scale);
+    }
+
+    @Override
+    public void addPower(AbstractPower powerToApply) {
+        super.addPower(powerToApply);
+        if (powerToApply instanceof StunMonsterPower) {
+            stunned = true;
+        }
+    }
+
+    public void setAnimation(AbstractAnimation animation) {
+        this.animation = animation;
+    }
+
+    @Override
+    public void update() {
+        super.update();
+    }
+
+    @Override
+    public void takeTurn() {
+        takeTurn(false);
+    }
+
+    public void takeTurn(boolean manual) {
+        if (stunned) {
+            stunned = false;
+        }
+        else {
+            performActions(manual);
+        }
     }
 
     public abstract void performActions(boolean manual);

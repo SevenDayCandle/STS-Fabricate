@@ -16,56 +16,44 @@ import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
 
 import java.util.List;
 
-public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<T>
-{
-    public PMove_Modify(PSkillData<T> data, PSkillSaveData content)
-    {
+public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<T> {
+    public PMove_Modify(PSkillData<T> data, PSkillSaveData content) {
         super(data, content);
     }
 
-    public PMove_Modify(PSkillData<T> data, int amount, int extraAmount, PCLCardGroupHelper... groups)
-    {
+    public PMove_Modify(PSkillData<T> data, int amount, int extraAmount, PCLCardGroupHelper... groups) {
         super(data, PCLCardTarget.None, amount, extraAmount);
         fields.setCardGroup(groups);
     }
 
-    public void cardAction(List<AbstractCard> cards)
-    {
-        for (AbstractCard c : cards)
-        {
-            getAction().invoke(c);
-        }
+    @Override
+    public String getSampleText(PSkill<?> callingSkill) {
+        return TEXT.act_giveTarget(TEXT.subjects_card, getObjectSampleText());
     }
 
-    public abstract ActionT1<AbstractCard> getAction();
-
-    public String getObjectSampleText()
-    {
+    public String getObjectSampleText() {
         return getObjectText();
     }
 
     public abstract String getObjectText();
 
     @Override
-    public String wrapAmount(int input)
-    {
-        return input > 0 ? "+" + input : String.valueOf(input);
-    }
-
-    public String wrapExtra(int input)
-    {
-        return String.valueOf(input);
-    }
-
-    @Override
-    public String getSampleText(PSkill<?> callingSkill)
-    {
-        return TEXT.act_giveTarget(TEXT.subjects_card, getObjectSampleText());
+    public String getSubText() {
+        String giveString = getObjectText();
+        return useParent ? TEXT.act_giveTarget(getInheritedString(), giveString) :
+                fields.hasGroups() ?
+                        TEXT.act_giveFrom(EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), fields.getFullCardString()), fields.getGroupString(), giveString) :
+                        TEXT.act_giveTarget(TEXT.subjects_this, giveString);
     }
 
     @Override
-    public void use(PCLUseInfo info)
-    {
+    public void setupEditor(PCLCustomCardEffectEditor<?> editor) {
+        super.setupEditor(editor);
+        registerUseParentBoolean(editor);
+    }
+
+    @Override
+    public void use(PCLUseInfo info) {
         boolean selectAll = baseExtra <= 0 || useParent;
         getActions().selectFromPile(getName(), selectAll ? Integer.MAX_VALUE : extra, fields.getCardGroup(info))
                 .setFilter(this::canCardPass)
@@ -75,24 +63,23 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<
     }
 
     @Override
-    public String getSubText()
-    {
-        String giveString = getObjectText();
-        return useParent ? TEXT.act_giveTarget(getInheritedString(), giveString) :
-                fields.hasGroups() ?
-                        TEXT.act_giveFrom(EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), fields.getFullCardString()), fields.getGroupString(), giveString) :
-                        TEXT.act_giveTarget(TEXT.subjects_this, giveString);
+    public String wrapAmount(int input) {
+        return input > 0 ? "+" + input : String.valueOf(input);
     }
 
-    @Override
-    public void setupEditor(PCLCustomCardEffectEditor<?> editor)
-    {
-        super.setupEditor(editor);
-        registerUseParentBoolean(editor);
+    public String wrapExtra(int input) {
+        return String.valueOf(input);
     }
 
-    public boolean canCardPass(AbstractCard c)
-    {
+    public boolean canCardPass(AbstractCard c) {
         return fields.getFullCardFilter().invoke(c);
     }
+
+    public void cardAction(List<AbstractCard> cards) {
+        for (AbstractCard c : cards) {
+            getAction().invoke(c);
+        }
+    }
+
+    public abstract ActionT1<AbstractCard> getAction();
 }

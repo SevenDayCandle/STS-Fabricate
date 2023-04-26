@@ -9,8 +9,7 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.effects.PCLEffect;
 
-public class FlashAffinityEffect extends PCLEffect
-{
+public class FlashAffinityEffect extends PCLEffect {
     private static final int W = 32;
     private final Texture img;
     private float x;
@@ -18,12 +17,10 @@ public class FlashAffinityEffect extends PCLEffect
     private float scale;
     private float baseScale;
 
-    public FlashAffinityEffect(PCLAffinity affinity)
-    {
+    public FlashAffinityEffect(PCLAffinity affinity) {
         this.baseScale = this.scale = Settings.scale;
 
-        if (AbstractDungeon.player != null)
-        {
+        if (AbstractDungeon.player != null) {
             this.x = AbstractDungeon.player.hb.cX;
             this.y = AbstractDungeon.player.hb.cY;
         }
@@ -35,41 +32,35 @@ public class FlashAffinityEffect extends PCLEffect
         this.renderBehind = false;
     }
 
-    public FlashAffinityEffect setScale(float scale)
-    {
+    public FlashAffinityEffect setScale(float scale) {
         this.baseScale = this.scale = scale;
 
         return this;
     }
 
     @Override
-    public void render(SpriteBatch sb)
-    {
+    public void render(SpriteBatch sb) {
         sb.setBlendFunction(770, 1);
         sb.setColor(this.color);
-        if (this.img != null && this.img.getWidth() >= 48)
-        {
+        if (this.img != null && this.img.getWidth() >= 48) {
             sb.draw(img, x - 16f, y - 16f, 16f, 16f, 32f, 32f, scale * 12f, scale * 12f, 0f, 0, 0, 64, 64, false, false);
             sb.draw(img, x - 16f, y - 16f, 16f, 16f, 32f, 32f, scale * 10f, scale * 10f, 0f, 0, 0, 64, 64, false, false);
             sb.draw(img, x - 16f, y - 16f, 16f, 16f, 32f, 32f, scale * 8f, scale * 8f, 0f, 0, 0, 64, 64, false, false);
             sb.draw(img, x - 16f, y - 16f, 16f, 16f, 32f, 32f, scale * 7f, scale * 7f, 0f, 0, 0, 64, 64, false, false);
         }
-        else
-        {
+        else {
             this.isDone = true;
         }
         sb.setBlendFunction(770, 771);
     }
 
     @Override
-    public void update()
-    {
+    public void update() {
         super.update();
         this.scale = Interpolation.exp5In.apply(baseScale, baseScale * 0.3f, this.duration / this.startingDuration);
     }
 
-    public void dispose()
-    {
+    public void dispose() {
 
     }
 }

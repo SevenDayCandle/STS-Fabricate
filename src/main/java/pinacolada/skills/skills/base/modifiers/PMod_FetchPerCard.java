@@ -18,36 +18,30 @@ import pinacolada.utilities.ListSelection;
 
 
 @VisibleSkill
-public class PMod_FetchPerCard extends PMod_Do
-{
+public class PMod_FetchPerCard extends PMod_Do {
     public static final PSkillData<PField_CardCategory> DATA = register(PMod_FetchPerCard.class, PField_CardCategory.class)
             .selfTarget()
             .setGroups(PCLCardGroupHelper.DrawPile, PCLCardGroupHelper.ExhaustPile, PCLCardGroupHelper.Hand);
 
-    public PMod_FetchPerCard(PSkillSaveData content)
-    {
+    public PMod_FetchPerCard(PSkillSaveData content) {
         super(DATA, content);
     }
 
-    public PMod_FetchPerCard()
-    {
+    public PMod_FetchPerCard() {
         super(DATA);
     }
 
-    public PMod_FetchPerCard(int amount, PCLCardGroupHelper... groups)
-    {
+    public PMod_FetchPerCard(int amount, PCLCardGroupHelper... groups) {
         super(DATA, PCLCardTarget.None, amount, groups);
     }
 
     @Override
-    public EUITooltip getActionTooltip()
-    {
+    public EUITooltip getActionTooltip() {
         return PGR.core.tooltips.fetch;
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction()
-    {
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
         return FetchFromPile::new;
     }
 }

@@ -12,8 +12,7 @@ import com.megacrit.cardcrawl.helpers.ImageMaster;
 import pinacolada.effects.PCLEffect;
 
 @SuppressWarnings("FieldCanBeLocal")
-public class ColoredSweepingBeamEffect extends PCLEffect
-{
+public class ColoredSweepingBeamEffect extends PCLEffect {
     private static AtlasRegion img;
     private final float sX;
     private final float sY;
@@ -23,21 +22,17 @@ public class ColoredSweepingBeamEffect extends PCLEffect
     private float dY;
     private float dst;
 
-    public ColoredSweepingBeamEffect(float sX, float sY, boolean isFlipped, Color color)
-    {
-        if (img == null)
-        {
+    public ColoredSweepingBeamEffect(float sX, float sY, boolean isFlipped, Color color) {
+        if (img == null) {
             img = ImageMaster.vfxAtlas.findRegion("combat/laserThin");
         }
 
         this.isFlipped = isFlipped;
-        if (isFlipped)
-        {
+        if (isFlipped) {
             this.sX = sX - 32f * Settings.scale;
             this.sY = sY + 20f * Settings.scale;
         }
-        else
-        {
+        else {
             this.sX = sX + 40f * Settings.scale;
             this.sY = sY + 50f * Settings.scale;
         }
@@ -47,8 +42,7 @@ public class ColoredSweepingBeamEffect extends PCLEffect
         this.startingDuration = dUR;
     }
 
-    public void render(SpriteBatch sb)
-    {
+    public void render(SpriteBatch sb) {
         sb.setBlendFunction(770, 1);
         sb.setColor(this.color);
         sb.draw(img, this.sX, this.sY - (float) img.packedHeight / 2f + 10f * Settings.scale, 0f, (float) img.packedHeight / 2f, this.dst, 50f, this.scale + random(-0.01f, 0.01f), this.scale, this.rotation);
@@ -58,15 +52,12 @@ public class ColoredSweepingBeamEffect extends PCLEffect
     }
 
     @Override
-    protected void updateInternal(float deltaTime)
-    {
-        if (this.isFlipped)
-        {
+    protected void updateInternal(float deltaTime) {
+        if (this.isFlipped) {
             this.dX = (float) Settings.WIDTH / 2f * Interpolation.pow3Out.apply(this.duration);
             this.dY = AbstractDungeon.floorY + 10f * Settings.scale;
         }
-        else
-        {
+        else {
             this.dX = (float) Settings.WIDTH + (float) (-Settings.WIDTH) / 2f * Interpolation.pow3Out.apply(this.duration);
             this.dY = AbstractDungeon.floorY + 30f * Settings.scale;
         }
@@ -75,12 +66,10 @@ public class ColoredSweepingBeamEffect extends PCLEffect
         this.rotation = MathUtils.atan2(this.dX - this.sX, this.dY - this.sY);
         this.rotation *= 57.295776f;
         this.rotation = -this.rotation + 90f;
-        if (this.duration > this.startingDuration / 2f)
-        {
+        if (this.duration > this.startingDuration / 2f) {
             this.color.a = Interpolation.pow2In.apply(1f, 0f, (this.duration - 0.25f) * 4f);
         }
-        else
-        {
+        else {
             this.color.a = Interpolation.pow2Out.apply(0f, 1f, this.duration * 4f);
         }
 

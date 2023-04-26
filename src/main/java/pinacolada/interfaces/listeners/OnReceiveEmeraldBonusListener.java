@@ -1,7 +1,6 @@
 package pinacolada.interfaces.listeners;
 
-public interface OnReceiveEmeraldBonusListener
-{
+public interface OnReceiveEmeraldBonusListener {
     float getEmeraldMaxHPBonus(float bonus);
 
     int getEmeraldMetallicizeBonus(int bonus);

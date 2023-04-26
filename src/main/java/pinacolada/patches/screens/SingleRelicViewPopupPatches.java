@@ -13,17 +13,13 @@ import extendedui.text.EUISmartText;
 import extendedui.utilities.EUIClassUtils;
 import pinacolada.relics.PCLRelic;
 
-public class SingleRelicViewPopupPatches
-{
+public class SingleRelicViewPopupPatches {
     @SpirePatch(clz = SingleRelicViewPopup.class, method = "renderDescription", paramtypez = {SpriteBatch.class})
-    public static class SingleRelicViewPopup_Open
-    {
+    public static class SingleRelicViewPopup_Open {
         @SpireInsertPatch(rloc = 0)
-        public static SpireReturn<Void> insert(SingleRelicViewPopup __instance, SpriteBatch sb)
-        {
+        public static SpireReturn<Void> insert(SingleRelicViewPopup __instance, SpriteBatch sb) {
             AbstractRelic temp = EUIClassUtils.getField(__instance, "relic");
-            if (temp instanceof PCLRelic && temp.isSeen)
-            {
+            if (temp instanceof PCLRelic && temp.isSeen) {
                 float width = ReflectionHacks.getPrivateStatic(SingleRelicViewPopup.class, "DESC_LINE_WIDTH");
                 float spacing = ReflectionHacks.getPrivateStatic(SingleRelicViewPopup.class, "DESC_LINE_SPACING");
                 float height = FontHelper.getSmartHeight(FontHelper.cardDescFont_N, temp.description, width, spacing) / 2.0F;

@@ -33,8 +33,7 @@ import java.util.List;
 
 import static pinacolada.ui.cardEditor.PCLCustomCardEditCardScreen.START_Y;
 
-public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
-{
+public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage {
     public static final int EFFECT_COUNT = 2;
 
     public static final float MENU_WIDTH = scale(160);
@@ -61,23 +60,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
     protected EUIToggle soulboundToggle;
     protected Settings.GameLanguage activeLanguage = Settings.language;
 
-    protected static List<AbstractCard.CardRarity> getEligibleRarities()
-    {
-        return PGR.config.showIrrelevantProperties.get() ? Arrays.asList(AbstractCard.CardRarity.values()) : GameUtilities.getStandardRarities();
-    }
-
-    // Colorless/Curse should not be able to see Summon in the card editor
-    protected static List<AbstractCard.CardType> getEligibleTypes(AbstractCard.CardColor color)
-    {
-        if (GameUtilities.isPCLOnlyCardColor(color) || PGR.config.showIrrelevantProperties.get())
-        {
-            return Arrays.asList(AbstractCard.CardType.values());
-        }
-        return EUIUtils.filter(AbstractCard.CardType.values(), v -> v != PCLEnum.CardType.SUMMON);
-    }
-
-    public PCLCustomCardPrimaryInfoPage(PCLCustomCardEditCardScreen effect)
-    {
+    public PCLCustomCardPrimaryInfoPage(PCLCustomCardEditCardScreen effect) {
         this.effect = effect;
 
         this.header = new EUILabel(EUIFontHelper.cardtitlefontLarge,
@@ -118,8 +101,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
         languageDropdown = (EUISearchableDropdown<Settings.GameLanguage>) new EUISearchableDropdown<Settings.GameLanguage>(new EUIHitbox(screenW(0.55f), screenH(0.73f), MENU_WIDTH, MENU_HEIGHT)
                 , item -> StringUtils.capitalize(item.toString().toLowerCase()))
                 .setOnChange(languages -> {
-                    if (!languages.isEmpty())
-                    {
+                    if (!languages.isEmpty()) {
                         this.updateLanguage(languages.get(0));
                     }
                 })
@@ -131,8 +113,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
         raritiesDropdown = new EUIDropdown<AbstractCard.CardRarity>(new EUIHitbox(START_X, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT)
                 , item -> StringUtils.capitalize(item.toString().toLowerCase()))
                 .setOnChange(rarities -> {
-                    if (!rarities.isEmpty())
-                    {
+                    if (!rarities.isEmpty()) {
                         effect.modifyAllBuilders(e -> e.setRarityType(rarities.get(0), e.cardType));
                     }
                 })
@@ -142,8 +123,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
         typesDropdown = new EUIDropdown<AbstractCard.CardType>(new EUIHitbox(raritiesDropdown.hb.x + raritiesDropdown.hb.width + SPACING_WIDTH, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT)
                 , EUIGameUtils::textForType)
                 .setOnChange(types -> {
-                    if (!types.isEmpty())
-                    {
+                    if (!types.isEmpty()) {
                         // Pages need to refresh because changing card type affects available skill options or attributes
                         effect.modifyAllBuilders(e -> e.setRarityType(e.cardRarity, types.get(0)));
                         effect.refreshPages();
@@ -189,14 +169,14 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
                 .setLimits(0, PSkill.DEFAULT_MAX)
                 .setTooltip(PGR.core.strings.cedit_branchUpgrade, PGR.core.strings.cetut_branchUpgrade)
                 .setHasInfinite(true, true);
-        uniqueToggle = (EUIToggle) new EUIToggle(new EUIHitbox(screenW(0.53f), screenH(0.4f), MENU_WIDTH, MENU_HEIGHT))
+        uniqueToggle = new EUIToggle(new EUIHitbox(screenW(0.53f), screenH(0.4f), MENU_WIDTH, MENU_HEIGHT))
                 .setFont(EUIFontHelper.carddescriptionfontNormal, 0.9f)
                 .setText(PGR.core.tooltips.unique.title)
                 .setOnToggle(val -> effect.modifyAllBuilders(e -> {
                     e.setUnique(val);
                 }))
                 .setTooltip(PGR.core.tooltips.unique);
-        soulboundToggle = (EUIToggle) new EUIToggle(new EUIHitbox(screenW(0.61f), screenH(0.4f), MENU_WIDTH, MENU_HEIGHT))
+        soulboundToggle = new EUIToggle(new EUIHitbox(screenW(0.61f), screenH(0.4f), MENU_WIDTH, MENU_HEIGHT))
                 .setFont(EUIFontHelper.carddescriptionfontNormal, 0.9f)
                 .setText(PGR.core.tooltips.soulbound.title)
                 .setOnToggle(val -> effect.modifyAllBuilders(e -> {
@@ -204,27 +184,59 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
                 }))
                 .setTooltip(PGR.core.tooltips.soulbound);
 
-        PCLResources<?,?,?,?> resources = PGR.getResources(effect.currentSlot.slotColor);
-        if (resources != null)
-        {
+        PCLResources<?, ?, ?, ?> resources = PGR.getResources(effect.currentSlot.slotColor);
+        if (resources != null) {
             loadoutDropdown.setItems(PCLLoadout.getAll(effect.currentSlot.slotColor));
         }
-        else
-        {
+        else {
             loadoutDropdown.setActive(false);
         }
 
         refresh();
     }
 
-    public String getTitle()
-    {
+    private void validifyCardID(String cardID) {
+        String fullID = PCLCustomCardSlot.getBaseIDPrefix(effect.getBuilder().cardColor) + cardID;
+        if (!fullID.equals(effect.currentSlot.ID) && PCLCustomCardSlot.isIDDuplicate(fullID, effect.getBuilder().cardColor)) {
+            idWarning.setActive(true);
+            effect.saveButton.setInteractable(false);
+        }
+        else {
+            idWarning.setActive(false);
+            effect.modifyAllBuilders(e -> e.setID(fullID));
+            effect.saveButton.setInteractable(true);
+        }
+    }
+
+    private void updateLanguage(Settings.GameLanguage language) {
+        activeLanguage = language;
+        nameInput.setFont(language == Settings.language ? EUIFontHelper.cardtitlefontNormal : EUIFontHelper.createBoldFont(language, true, 27.0F, 2f, PCLCard.CARD_TYPE_COLOR, 3f, PCLCard.SHADOW_COLOR), 0.7f)
+                .setLabel(effect.getBuilder().getStringsForLanguage(activeLanguage).NAME);
+    }
+
+    protected static List<AbstractCard.CardRarity> getEligibleRarities() {
+        return PGR.config.showIrrelevantProperties.get() ? Arrays.asList(AbstractCard.CardRarity.values()) : GameUtilities.getStandardRarities();
+    }
+
+    // Colorless/Curse should not be able to see Summon in the card editor
+    protected static List<AbstractCard.CardType> getEligibleTypes(AbstractCard.CardColor color) {
+        if (GameUtilities.isPCLOnlyCardColor(color) || PGR.config.showIrrelevantProperties.get()) {
+            return Arrays.asList(AbstractCard.CardType.values());
+        }
+        return EUIUtils.filter(AbstractCard.CardType.values(), v -> v != PCLEnum.CardType.SUMMON);
+    }
+
+    @Override
+    public TextureCache getTextureCache() {
+        return PCLCoreImages.Menu.editorPrimary;
+    }
+
+    public String getTitle() {
         return header.text;
     }
 
     @Override
-    public void refresh()
-    {
+    public void refresh() {
         idInput.setLabel(StringUtils.removeStart(effect.getBuilder().ID, PCLCustomCardSlot.getBaseIDPrefix(effect.getBuilder().cardColor)));
         nameInput.setLabel(effect.getBuilder().strings.NAME);
         raritiesDropdown.setSelection(effect.getBuilder().cardRarity, false);
@@ -241,14 +253,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
     }
 
     @Override
-    public TextureCache getTextureCache()
-    {
-        return PCLCoreImages.Menu.editorPrimary;
-    }
-
-    @Override
-    public void updateImpl()
-    {
+    public void updateImpl() {
         header.tryUpdate();
         idWarning.tryUpdate();
         maxUpgrades.tryUpdate();
@@ -266,8 +271,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
     }
 
     @Override
-    public void renderImpl(SpriteBatch sb)
-    {
+    public void renderImpl(SpriteBatch sb) {
         header.tryRender(sb);
         idWarning.tryRender(sb);
         maxUpgrades.tryRender(sb);
@@ -282,28 +286,5 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardEditorPage
         branchUpgrades.tryRender(sb);
         uniqueToggle.tryRender(sb);
         soulboundToggle.tryRender(sb);
-    }
-
-    private void validifyCardID(String cardID)
-    {
-        String fullID = PCLCustomCardSlot.getBaseIDPrefix(effect.getBuilder().cardColor) + cardID;
-        if (!fullID.equals(effect.currentSlot.ID) && PCLCustomCardSlot.isIDDuplicate(fullID, effect.getBuilder().cardColor))
-        {
-            idWarning.setActive(true);
-            effect.saveButton.setInteractable(false);
-        }
-        else
-        {
-            idWarning.setActive(false);
-            effect.modifyAllBuilders(e -> e.setID(fullID));
-            effect.saveButton.setInteractable(true);
-        }
-    }
-
-    private void updateLanguage(Settings.GameLanguage language)
-    {
-        activeLanguage = language;
-        nameInput.setFont(language == Settings.language ? EUIFontHelper.cardtitlefontNormal : EUIFontHelper.createBoldFont(language, true, 27.0F, 2f, PCLCard.CARD_TYPE_COLOR, 3f, PCLCard.SHADOW_COLOR), 0.7f)
-                .setLabel(effect.getBuilder().getStringsForLanguage(activeLanguage).NAME);
     }
 }

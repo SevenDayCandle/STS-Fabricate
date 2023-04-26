@@ -10,12 +10,10 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.utilities.GameUtilities;
 
-public class PCLCardRewardInfo extends EUIBase
-{
+public class PCLCardRewardInfo extends EUIBase {
     public final EUIToggle upgradeToggle;
 
-    public PCLCardRewardInfo()
-    {
+    public PCLCardRewardInfo() {
         upgradeToggle = new EUIToggle(new EUIHitbox(scale(256), scale(48f)))
                 .setBackground(EUIRM.images.panel.texture(), Color.DARK_GRAY)
                 .setPosition(screenW(0.9f), screenH(0.65f))
@@ -24,33 +22,28 @@ public class PCLCardRewardInfo extends EUIBase
                 .setOnToggle(this::toggleViewUpgrades);
     }
 
-    public void close()
-    {
-        isActive = false;
-        upgradeToggle.toggle(false);
-    }
-
-    public void open()
-    {
-        isActive = GameUtilities.isPCLPlayerClass();
-        upgradeToggle.toggle(false);
-    }
-
-    private void toggleViewUpgrades(boolean value)
-    {
+    private void toggleViewUpgrades(boolean value) {
         SingleCardViewPopup.isViewingUpgrade = value;
         upgradeToggle.setToggle(SingleCardViewPopup.isViewingUpgrade);
     }
 
-    @Override
-    public void updateImpl()
-    {
-        upgradeToggle.updateImpl();
+    public void close() {
+        isActive = false;
+        upgradeToggle.toggle(false);
+    }
+
+    public void open() {
+        isActive = GameUtilities.isPCLPlayerClass();
+        upgradeToggle.toggle(false);
     }
 
     @Override
-    public void renderImpl(SpriteBatch sb)
-    {
+    public void renderImpl(SpriteBatch sb) {
         upgradeToggle.renderImpl(sb);
+    }
+
+    @Override
+    public void updateImpl() {
+        upgradeToggle.updateImpl();
     }
 }

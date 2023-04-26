@@ -13,8 +13,7 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
-public enum PCLAugmentCategory implements CountingPanelItem
-{
+public enum PCLAugmentCategory implements CountingPanelItem {
     General(Color.WHITE),
     Summon(Color.FIREBRICK),
     Played(Color.VIOLET),
@@ -23,57 +22,12 @@ public enum PCLAugmentCategory implements CountingPanelItem
 
     public final Color color;
 
-    PCLAugmentCategory(Color color)
-    {
+    PCLAugmentCategory(Color color) {
         this.color = color;
     }
 
-    @Override
-    public Texture getIcon()
-    {
-        return PCLCoreImages.CardUI.augment.texture();
-    }
-
-    @Override
-    public int getRank(AbstractCard c)
-    {
-        ArrayList<PCLAugment> augments = GameUtilities.getAugments(c);
-        return augments != null ? EUIUtils.count(augments, a -> a.data.category == this) : 0;
-    }
-
-    @Override
-    public Color getColor()
-    {
-        return color;
-    }
-
-    public boolean isTypeValid(AbstractCard.CardType type)
-    {
-        switch (this)
-        {
-            case Summon:
-                return type == PCLEnum.CardType.SUMMON;
-            case Played:
-                switch (type)
-                {
-                    case ATTACK:
-                    case SKILL:
-                    case STATUS:
-                    case CURSE:
-                        return true;
-                    default:
-                        return false;
-                }
-            case Power:
-                return type == AbstractCard.CardType.POWER;
-        }
-        return true;
-    }
-
-    public String getName()
-    {
-        switch (this)
-        {
+    public String getName() {
+        switch (this) {
             case Summon:
                 return PGR.core.tooltips.summon.title;
             case Played:
@@ -86,5 +40,41 @@ public enum PCLAugmentCategory implements CountingPanelItem
                 return RunHistoryScreen.TEXT[15];
         }
         return AbstractCard.TEXT[5];
+    }
+
+    @Override
+    public int getRank(AbstractCard c) {
+        ArrayList<PCLAugment> augments = GameUtilities.getAugments(c);
+        return augments != null ? EUIUtils.count(augments, a -> a.data.category == this) : 0;
+    }
+
+    @Override
+    public Color getColor() {
+        return color;
+    }
+
+    @Override
+    public Texture getIcon() {
+        return PCLCoreImages.CardUI.augment.texture();
+    }
+
+    public boolean isTypeValid(AbstractCard.CardType type) {
+        switch (this) {
+            case Summon:
+                return type == PCLEnum.CardType.SUMMON;
+            case Played:
+                switch (type) {
+                    case ATTACK:
+                    case SKILL:
+                    case STATUS:
+                    case CURSE:
+                        return true;
+                    default:
+                        return false;
+                }
+            case Power:
+                return type == AbstractCard.CardType.POWER;
+        }
+        return true;
     }
 }

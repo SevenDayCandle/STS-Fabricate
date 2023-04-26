@@ -1,6 +1,5 @@
 package pinacolada.interfaces.listeners;
 
-public interface OnExitRunListener
-{
+public interface OnExitRunListener {
     void onExitRun();
 }

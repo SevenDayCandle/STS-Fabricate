@@ -11,30 +11,25 @@ import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.skills.PDelegateCardCond;
 
 @VisibleSkill
-public class PCond_OnDiscard extends PDelegateCardCond implements OnCardDiscardedSubscriber
-{
+public class PCond_OnDiscard extends PDelegateCardCond implements OnCardDiscardedSubscriber {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_OnDiscard.class, PField_CardCategory.class, 1, 1)
             .selfTarget();
 
-    public PCond_OnDiscard()
-    {
+    public PCond_OnDiscard() {
         super(DATA);
     }
 
-    public PCond_OnDiscard(PSkillSaveData content)
-    {
+    public PCond_OnDiscard(PSkillSaveData content) {
         super(DATA, content);
     }
 
     @Override
-    public void onCardDiscarded(AbstractCard card)
-    {
-        triggerOnCard(card);
+    public EUITooltip getDelegateTooltip() {
+        return PGR.core.tooltips.discard;
     }
 
     @Override
-    public EUITooltip getDelegateTooltip()
-    {
-        return PGR.core.tooltips.discard;
+    public void onCardDiscarded(AbstractCard card) {
+        triggerOnCard(card);
     }
 }

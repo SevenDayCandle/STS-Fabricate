@@ -12,40 +12,33 @@ import pinacolada.skills.fields.PField_CardCategory;
 import java.util.List;
 
 @VisibleSkill
-public class PMod_BonusOnHasExhausted extends PMod_BonusOnHas
-{
+public class PMod_BonusOnHasExhausted extends PMod_BonusOnHas {
     public static final PSkillData<PField_CardCategory> DATA = register(PMod_BonusOnHasExhausted.class, PField_CardCategory.class)
             .selfTarget();
 
-    public PMod_BonusOnHasExhausted()
-    {
+    public PMod_BonusOnHasExhausted() {
         this(1, 1);
     }
 
-    public PMod_BonusOnHasExhausted(PSkillSaveData content)
-    {
-        super(DATA, content);
-    }
-
-    public PMod_BonusOnHasExhausted(int amount)
-    {
-        super(DATA, amount, 1);
-    }
-
-    public PMod_BonusOnHasExhausted(int amount, int extra)
-    {
+    public PMod_BonusOnHasExhausted(int amount, int extra) {
         super(DATA, amount, extra);
     }
 
+    public PMod_BonusOnHasExhausted(PSkillSaveData content) {
+        super(DATA, content);
+    }
+
+    public PMod_BonusOnHasExhausted(int amount) {
+        super(DATA, amount, 1);
+    }
+
     @Override
-    public List<AbstractCard> getCardPile()
-    {
+    public List<AbstractCard> getCardPile() {
         return fields.forced ? CombatManager.cardsExhaustedThisCombat() : CombatManager.cardsExhaustedThisTurn();
     }
 
     @Override
-    public EUITooltip getActionTooltip()
-    {
+    public EUITooltip getActionTooltip() {
         return PGR.core.tooltips.exhaust;
     }
 }

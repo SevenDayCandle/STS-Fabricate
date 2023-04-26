@@ -13,52 +13,44 @@ import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.skills.PCallbackMove;
 
 @VisibleSkill
-public class PMove_Draw extends PCallbackMove<PField_CardCategory>
-{
+public class PMove_Draw extends PCallbackMove<PField_CardCategory> {
     public static final PSkillData<PField_CardCategory> DATA = register(PMove_Draw.class, PField_CardCategory.class)
             .selfTarget()
             .setGroups(PCLCardGroupHelper.DrawPile)
             .setOrigins(PCLCardSelection.Top);
 
-    public PMove_Draw()
-    {
+    public PMove_Draw() {
         this(1);
     }
 
-    public PMove_Draw(PSkillSaveData content)
-    {
-        super(DATA, content);
-    }
-
-    public PMove_Draw(int amount)
-    {
+    public PMove_Draw(int amount) {
         super(DATA, PCLCardTarget.None, amount);
     }
 
+    public PMove_Draw(PSkillSaveData content) {
+        super(DATA, content);
+    }
+
     @Override
-    public String getSampleText(PSkill<?> callingSkill)
-    {
+    public String getSampleText(PSkill<?> callingSkill) {
         return TEXT.act_draw(TEXT.subjects_x);
     }
 
     @Override
-    public void use(PCLUseInfo info, ActionT1<PCLUseInfo> callback)
-    {
+    public String getSubText() {
+        return TEXT.act_drawType(getAmountRawString(), fields.getFullCardString());
+    }
+
+    @Override
+    public void use(PCLUseInfo info, ActionT1<PCLUseInfo> callback) {
         getActions().draw(amount)
                 .setFilter(fields.getFullCardFilter(), false)
                 .addCallback(ca -> {
                     info.setData(ca);
                     callback.invoke(info);
-                    if (this.childEffect != null)
-                    {
+                    if (this.childEffect != null) {
                         this.childEffect.use(info);
                     }
                 });
-    }
-
-    @Override
-    public String getSubText()
-    {
-        return TEXT.act_drawType(getAmountRawString(), fields.getFullCardString());
     }
 }

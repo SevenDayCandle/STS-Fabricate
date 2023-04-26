@@ -8,14 +8,11 @@ import pinacolada.stances.PCLStanceHelper;
 
 // Copied and modified from STS-AnimatorMod
 @SpirePatch(clz = AbstractStance.class, method = "getStanceFromName", paramtypez = {String.class})
-public class AbstractStancePatches
-{
+public class AbstractStancePatches {
     @SpirePrefixPatch
-    public static SpireReturn<AbstractStance> prefix(String name)
-    {
+    public static SpireReturn<AbstractStance> prefix(String name) {
         PCLStanceHelper stance = PCLStanceHelper.get(name);
-        if (stance != null)
-        {
+        if (stance != null) {
             return SpireReturn.Return(stance.create());
         }
 

@@ -11,8 +11,7 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
-public class SpreadPower extends PCLAction<AbstractPower>
-{
+public class SpreadPower extends PCLAction<AbstractPower> {
     public String powerID;
     public boolean showEffect = true;
     public boolean isFast = true;
@@ -21,27 +20,22 @@ public class SpreadPower extends PCLAction<AbstractPower>
         this(source, target, ph.ID, amount);
     }
 
-    public SpreadPower(AbstractCreature source, AbstractCreature target, String powerID, int amount)
-    {
+    public SpreadPower(AbstractCreature source, AbstractCreature target, String powerID, int amount) {
         super(ActionType.POWER, Settings.ACTION_DUR_XFAST);
         initialize(source, target, amount);
         this.powerID = powerID;
     }
 
     @Override
-    protected void firstUpdate()
-    {
+    protected void firstUpdate() {
         final ArrayList<AbstractMonster> enemies = GameUtilities.getEnemies(true);
         final AbstractPower sourcePower = GameUtilities.getPower(target, powerID);
         int sourceAmount = sourcePower != null ? sourcePower.amount : 0;
         int spreadAmount = amount <= 0 ? sourceAmount : Math.min(amount, sourceAmount);
 
-        if (spreadAmount > 0)
-        {
-            for (AbstractMonster enemy : enemies)
-            {
-                if (enemy != target)
-                {
+        if (spreadAmount > 0) {
+            for (AbstractMonster enemy : enemies) {
+                if (enemy != target) {
                     PCLActions.top.applyPower(source, enemy, sourcePower, amount);//.showEffect(showEffect, isFast);
                 }
             }
@@ -50,8 +44,7 @@ public class SpreadPower extends PCLAction<AbstractPower>
         complete(sourcePower);
     }
 
-    public SpreadPower showEffect(boolean showEffect, boolean isFast)
-    {
+    public SpreadPower showEffect(boolean showEffect, boolean isFast) {
         this.showEffect = showEffect;
         this.isFast = isFast;
 

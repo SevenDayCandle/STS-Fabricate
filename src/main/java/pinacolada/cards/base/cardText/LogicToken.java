@@ -15,8 +15,7 @@ import java.util.List;
 
 import static pinacolada.skills.PSkill.EFFECT_CHAR;
 
-public class LogicToken extends PCLTextToken
-{
+public class LogicToken extends PCLTextToken {
     public static final char LOGIC_TOKEN = '$';
     private static final PCLTextParser internalParser = new PCLTextParser(false);
     private final List<LogicTokenBlock> blocks;
@@ -25,33 +24,27 @@ public class LogicToken extends PCLTextToken
     private int cachedValue;
     private LogicTokenBlock cachedResult;
 
-    protected LogicToken(char variableID, PSkill<?> move, List<LogicTokenBlock> blocks, int initialValue)
-    {
+    protected LogicToken(char variableID, PSkill<?> move, List<LogicTokenBlock> blocks, int initialValue) {
         super(PCLTextTokenType.Text, null);
         this.variableID = variableID;
         this.blocks = blocks;
         this.move = move;
         cachedValue = initialValue;
-        for (LogicTokenBlock block : blocks)
-        {
-            if (block.evaluate(cachedValue))
-            {
+        for (LogicTokenBlock block : blocks) {
+            if (block.evaluate(cachedValue)) {
                 cachedResult = block;
                 break;
             }
         }
     }
 
-    protected static String getMinString(Collection<LogicTokenBlock> blocks)
-    {
+    protected static String getMinString(Collection<LogicTokenBlock> blocks) {
         LogicTokenBlock min = EUIUtils.findMin(blocks, block -> block.token.rawText.length());
         return min != null && min.token.rawText != null ? min.token.rawText : "";
     }
 
-    public static int tryAdd(PCLTextParser parser)
-    {
-        if (parser.character == LOGIC_TOKEN && parser.remaining > 1)
-        {
+    public static int tryAdd(PCLTextParser parser) {
+        if (parser.character == LOGIC_TOKEN && parser.remaining > 1) {
             builder.setLength(0);
             ArrayList<LogicTokenBlock> blockConds = new ArrayList<>();
             PointerToken pointer = null;
@@ -60,17 +53,13 @@ public class LogicToken extends PCLTextToken
             int staticValue = 0;
 
             int i = 1;
-            while (true)
-            {
+            while (true) {
                 final Character next = parser.nextCharacter(i);
-                if (next == null)
-                {
+                if (next == null) {
                     break;
                 }
-                else
-                {
-                    switch (next)
-                    {
+                else {
+                    switch (next) {
                         // < > signals start of condition. If there already was one, add it to the block and make a new one
                         case '<':
                         case '>':
@@ -78,12 +67,10 @@ public class LogicToken extends PCLTextToken
                         case '&':
                         case '!':
                         case '?':
-                            if (currentBlock == null)
-                            {
+                            if (currentBlock == null) {
                                 currentBlock = new LogicTokenBlock();
                             }
-                            else
-                            {
+                            else {
                                 String condOutput = EUIUtils.popBuilder(builder);
                                 current.value = StringUtils.isNumeric(condOutput) ? Integer.parseInt(condOutput) : 0;
                                 currentBlock.conditions.add(current);
@@ -92,12 +79,10 @@ public class LogicToken extends PCLTextToken
                             break;
                         // : signals end of condition definition. An empty condition means that this block always returns
                         case ':':
-                            if (currentBlock == null)
-                            {
+                            if (currentBlock == null) {
                                 currentBlock = new LogicTokenBlock();
                             }
-                            if (current == null)
-                            {
+                            if (current == null) {
                                 current = new EUISmartText.LogicCondition(EUISmartText.LogicComparison.True);
                             }
                             String condOutput = EUIUtils.popBuilder(builder);
@@ -110,18 +95,15 @@ public class LogicToken extends PCLTextToken
                             PCLTextToken token = null;
                             internalParser.initialize(parser.card, EUIUtils.popBuilder(builder));
                             List<PCLTextToken> tokens = internalParser.getTokens();
-                            if (tokens.size() > 0)
-                            {
+                            if (tokens.size() > 0) {
                                 token = tokens.get(0);
                             }
 
                             // Only word tokens are allowed in blocks
-                            if (currentBlock != null && token instanceof WordToken)
-                            {
+                            if (currentBlock != null && token instanceof WordToken) {
                                 currentBlock.token = (WordToken) token;
                                 EUITooltip tooltip = currentBlock.token.tooltip;
-                                if (tooltip != null)
-                                {
+                                if (tooltip != null) {
                                     parser.addTooltip(tooltip);
                                 }
                                 blockConds.add(currentBlock);
@@ -138,12 +120,10 @@ public class LogicToken extends PCLTextToken
                                 currentBlock = null;
                                 current = null;
                             }
-                            else if (token instanceof PointerToken)
-                            {
+                            else if (token instanceof PointerToken) {
                                 pointer = (PointerToken) token;
                             }
-                            else if (token != null && StringUtils.isNumeric(token.rawText))
-                            {
+                            else if (token != null && StringUtils.isNumeric(token.rawText)) {
                                 staticValue = Integer.parseInt(token.rawText);
                             }
                             break;
@@ -153,8 +133,7 @@ public class LogicToken extends PCLTextToken
                 }
                 i += 1;
                 // $ signals both the end of the block and end of parsing
-                if (next == '$')
-                {
+                if (next == '$') {
                     break;
                 }
             }
@@ -166,60 +145,48 @@ public class LogicToken extends PCLTextToken
         return 0;
     }
 
-    private static LogicToken makeToken(PCLCard card, PointerToken pointer, List<LogicTokenBlock> blocks, int initialValue)
-    {
+    private static LogicToken makeToken(PCLCard card, PointerToken pointer, List<LogicTokenBlock> blocks, int initialValue) {
         return pointer != null && pointer.move != null ?
                 new LogicToken(pointer.variableID, pointer.move, blocks, pointer.move.getAttribute(pointer.variableID)) :
                 new LogicToken(EFFECT_CHAR, null, blocks, initialValue);
     }
 
     @Override
-    protected float getWidth(BitmapFont font, String text)
-    {
-        if (cachedResult != null)
-        {
+    protected float getWidth(BitmapFont font, String text) {
+        if (cachedResult != null) {
             return super.getWidth(font, cachedResult.token.rawText);
         }
         return super.getWidth(font, "_.");
     }
 
     @Override
-    public void render(SpriteBatch sb, PCLCardText context)
-    {
-        if (move != null)
-        {
+    public void render(SpriteBatch sb, PCLCardText context) {
+        if (move != null) {
             int value = move.getAttribute(variableID);
-            if (cachedValue != value)
-            {
+            if (cachedValue != value) {
                 cachedValue = value;
-                for (LogicTokenBlock block : blocks)
-                {
-                    if (block.evaluate(value))
-                    {
+                for (LogicTokenBlock block : blocks) {
+                    if (block.evaluate(value)) {
                         cachedResult = block;
                         break;
                     }
                 }
             }
         }
-        if (cachedResult != null)
-        {
+        if (cachedResult != null) {
             cachedResult.token.render(sb, context);
         }
     }
 
-    protected static class LogicTokenBlock
-    {
+    protected static class LogicTokenBlock {
         final public ArrayList<EUISmartText.LogicCondition> conditions;
         public WordToken token;
 
-        LogicTokenBlock()
-        {
+        LogicTokenBlock() {
             conditions = new ArrayList<>();
         }
 
-        public boolean evaluate(int input)
-        {
+        public boolean evaluate(int input) {
             return EUIUtils.any(conditions, block -> block.evaluate(input));
         }
     }

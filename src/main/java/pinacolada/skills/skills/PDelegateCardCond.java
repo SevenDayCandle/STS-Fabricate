@@ -14,78 +14,70 @@ import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
 
 import java.util.Collections;
 
-public abstract class PDelegateCardCond extends PDelegateCond<PField_CardCategory>
-{
-    public PDelegateCardCond(PSkillData<PField_CardCategory> data)
-    {
+public abstract class PDelegateCardCond extends PDelegateCond<PField_CardCategory> {
+    public PDelegateCardCond(PSkillData<PField_CardCategory> data) {
         super(data, PCLCardTarget.None, 0);
     }
 
-    public PDelegateCardCond(PSkillData<PField_CardCategory> data, PSkillSaveData content)
-    {
+    public PDelegateCardCond(PSkillData<PField_CardCategory> data, PSkillSaveData content) {
         super(data, content);
     }
 
-    public void setupEditor(PCLCustomCardEffectEditor<?> editor)
-    {
-        fields.setupEditor(editor);
+    @Override
+    public boolean canPlay(PCLUseInfo info) {
+        return true;
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill)
-    {
-        return callingSkill instanceof PTrigger_When ? TEXT.cond_whenAObjectIs(TEXT.subjects_x, getDelegateSampleText()) : TEXT.cond_onGeneric(getDelegateSampleText());
+    public void use(PCLUseInfo info) {
     }
 
     @Override
-    public String getSubText()
-    {
-        if (isWhenClause())
-        {
-            return TEXT.cond_whenAObjectIs(fields.getFullCardStringSingular(), getDelegatePastText());
-        }
-        return TEXT.cond_onGeneric(getDelegateText());
+    public void use(PCLUseInfo info, int index) {
     }
 
     // This should not activate the child effect when played normally
 
     @Override
-    public void use(PCLUseInfo info)
-    {
+    public String getSampleText(PSkill<?> callingSkill) {
+        return callingSkill instanceof PTrigger_When ? TEXT.cond_whenAObjectIs(TEXT.subjects_x, getDelegateSampleText()) : TEXT.cond_onGeneric(getDelegateSampleText());
     }
 
     @Override
-    public void use(PCLUseInfo info, int index)
-    {
+    public String getSubText() {
+        if (isWhenClause()) {
+            return TEXT.cond_whenAObjectIs(fields.getFullCardStringSingular(), getDelegatePastText());
+        }
+        return TEXT.cond_onGeneric(getDelegateText());
     }
 
-    @Override
-    public boolean canPlay(PCLUseInfo info)
-    {
-        return true;
+    public void setupEditor(PCLCustomCardEffectEditor<?> editor) {
+        fields.setupEditor(editor);
     }
 
-    public void triggerOnCard(AbstractCard c)
-    {
-        if (fields.getFullCardFilter().invoke(c))
-        {
+    public String getDelegatePastText() {
+        return getDelegateTooltip().past();
+    }
+
+    public String getDelegateSampleText() {
+        return getDelegateText();
+    }
+
+    public String getDelegateText() {
+        return getDelegateTooltip().title;
+    }
+
+    public abstract EUITooltip getDelegateTooltip();
+
+    public void triggerOnCard(AbstractCard c) {
+        if (fields.getFullCardFilter().invoke(c)) {
             useFromTrigger(makeInfo(null).setData(Collections.singletonList(c)));
         }
     }
 
-    public void triggerOnCard(AbstractCard c, AbstractCreature target)
-    {
-        if (fields.getFullCardFilter().invoke(c))
-        {
+    public void triggerOnCard(AbstractCard c, AbstractCreature target) {
+        if (fields.getFullCardFilter().invoke(c)) {
             useFromTrigger(makeInfo(target).setData(Collections.singletonList(c)));
         }
     }
-
-    public String getDelegatePastText() {return getDelegateTooltip().past();}
-
-    public String getDelegateSampleText() {return getDelegateText();}
-
-    public String getDelegateText() {return getDelegateTooltip().title;}
-
-    public abstract EUITooltip getDelegateTooltip();
 }

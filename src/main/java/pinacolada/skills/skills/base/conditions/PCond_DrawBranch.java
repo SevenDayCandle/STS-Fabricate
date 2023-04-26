@@ -19,34 +19,33 @@ import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.utilities.ListSelection;
 
 @VisibleSkill
-public class PCond_DrawBranch extends PCond_DoBranch
-{
+public class PCond_DrawBranch extends PCond_DoBranch {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_DrawBranch.class, PField_CardCategory.class)
             .selfTarget()
             .setGroups(PCLCardGroupHelper.DrawPile);
 
-    public PCond_DrawBranch(PSkillSaveData content)
-    {
+    public PCond_DrawBranch(PSkillSaveData content) {
         super(DATA, content);
     }
 
-    public PCond_DrawBranch()
-    {
+    public PCond_DrawBranch() {
         super(DATA);
     }
 
-    public PCond_DrawBranch(int amount)
-    {
+    public PCond_DrawBranch(int amount) {
         super(DATA, PCLCardTarget.None, amount);
     }
 
     @Override
-    public void use(PCLUseInfo info)
-    {
+    public EUITooltip getActionTooltip() {
+        return PGR.core.tooltips.draw;
+    }
+
+    @Override
+    public void use(PCLUseInfo info) {
         getActions().add(new DrawCards(amount))
                 .addCallback(cards -> {
-                    if (this.childEffect != null)
-                    {
+                    if (this.childEffect != null) {
                         info.setData(cards);
                         branch(info, cards);
                     }
@@ -54,14 +53,7 @@ public class PCond_DrawBranch extends PCond_DoBranch
     }
 
     @Override
-    public EUITooltip getActionTooltip()
-    {
-        return PGR.core.tooltips.draw;
-    }
-
-    @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction()
-    {
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
         return FetchFromPile::new;
     }
 }

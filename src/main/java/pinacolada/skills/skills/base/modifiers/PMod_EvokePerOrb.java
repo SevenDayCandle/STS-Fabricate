@@ -16,80 +16,65 @@ import pinacolada.skills.skills.PActiveMod;
 import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
-public class PMod_EvokePerOrb extends PActiveMod<PField_Orb>
-{
+public class PMod_EvokePerOrb extends PActiveMod<PField_Orb> {
 
     public static final PSkillData<PField_Orb> DATA = register(PMod_EvokePerOrb.class, PField_Orb.class).selfTarget();
 
-    public PMod_EvokePerOrb(PSkillSaveData content)
-    {
+    public PMod_EvokePerOrb(PSkillSaveData content) {
         super(DATA, content);
     }
 
-    public PMod_EvokePerOrb()
-    {
+    public PMod_EvokePerOrb() {
         super(DATA);
     }
 
-    public PMod_EvokePerOrb(int amount, PCLOrbHelper... orbs)
-    {
+    public PMod_EvokePerOrb(int amount, PCLOrbHelper... orbs) {
         super(DATA, PCLCardTarget.None, amount);
         fields.setOrb(orbs);
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill)
-    {
-        return TEXT.act_evoke(TEXT.cond_per(TEXT.subjects_x, TEXT.cedit_orbs));
+    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info) {
+        return AbstractDungeon.player == null ? 0 : be.baseAmount * (fields.orbs.isEmpty() ? GameUtilities.getOrbCount() : EUIUtils.sumInt(fields.orbs, GameUtilities::getOrbCount)) / Math.max(1, this.amount);
     }
 
     @Override
-    public String getSubText()
-    {
-        return this.amount <= 1 ? fields.getOrbAndString() : EUIRM.strings.numNoun(getAmountRawString(), fields.getOrbAndString());
-    }
-
-    @Override
-    public String getText(boolean addPeriod)
-    {
+    public String getText(boolean addPeriod) {
         return TEXT.act_evoke(TEXT.subjects_allX(fields.getOrbString()) + EFFECT_SEPARATOR + super.getText(addPeriod));
     }
 
     @Override
-    public void use(PCLUseInfo info)
-    {
-        if (childEffect != null)
-        {
+    public void use(PCLUseInfo info) {
+        if (childEffect != null) {
             useImpl(info, () -> childEffect.use(info));
         }
     }
 
-    public void use(PCLUseInfo info, int index)
-    {
-        if (childEffect != null)
-        {
+    public void use(PCLUseInfo info, int index) {
+        if (childEffect != null) {
             useImpl(info, () -> childEffect.use(info, index));
         }
     }
 
-    public void use(PCLUseInfo info, boolean isUsing)
-    {
-        if (isUsing && childEffect != null)
-        {
+    public void use(PCLUseInfo info, boolean isUsing) {
+        if (isUsing && childEffect != null) {
             useImpl(info, () -> childEffect.use(info));
         }
     }
 
-    @Override
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info)
-    {
-        return AbstractDungeon.player == null ? 0 : be.baseAmount * (fields.orbs.isEmpty() ? GameUtilities.getOrbCount() : EUIUtils.sumInt(fields.orbs, GameUtilities::getOrbCount)) / Math.max(1, this.amount);
-    }
-
-    protected void useImpl(PCLUseInfo info, ActionT0 callback)
-    {
+    protected void useImpl(PCLUseInfo info, ActionT0 callback) {
         getActions().evokeOrb(1, GameUtilities.getOrbCount()).setFilter(fields.getOrbFilter())
                 .addCallback(callback);
+    }
+
+    @Override
+    public String getSampleText(PSkill<?> callingSkill) {
+        return TEXT.act_evoke(TEXT.cond_per(TEXT.subjects_x, TEXT.cedit_orbs));
+    }
+
+    @Override
+    public String getSubText() {
+        return this.amount <= 1 ? fields.getOrbAndString() : EUIRM.strings.numNoun(getAmountRawString(), fields.getOrbAndString());
     }
 
 }

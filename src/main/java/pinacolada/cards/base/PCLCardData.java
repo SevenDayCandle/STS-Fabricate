@@ -34,8 +34,7 @@ import static extendedui.EUIUtils.array;
 import static extendedui.EUIUtils.safeIndex;
 
 // TODO create a non-dynamic-only subclass
-public class PCLCardData implements CardObject
-{
+public class PCLCardData implements CardObject {
     private static final Map<String, PCLCardData> staticData = new HashMap<>();
     public final Class<? extends PCLCard> type;
     public Integer[] damage = array(0);
@@ -64,7 +63,7 @@ public class PCLCardData implements CardObject
     public AbstractCard.CardType cardType = AbstractCard.CardType.SKILL;
     public AbstractCard.CardColor cardColor = AbstractCard.CardColor.COLORLESS;
     public AbstractCard.CardRarity cardRarity = AbstractCard.CardRarity.BASIC;
-    public PCLResources<?,?,?,?> resources;
+    public PCLResources<?, ?, ?, ?> resources;
     public PCLAttackType attackType = PCLAttackType.Normal;
     public PCLCardDataAffinityGroup affinities = new PCLCardDataAffinityGroup();
     public PCLLoadout loadout;
@@ -83,20 +82,17 @@ public class PCLCardData implements CardObject
     private Constructor<? extends PCLCard> constructor;
     private TextureAtlas.AtlasRegion cardIcon = null;
 
-    public PCLCardData(Class<? extends PCLCard> type, PCLResources<?,?,?,?> resources)
-    {
+    public PCLCardData(Class<? extends PCLCard> type, PCLResources<?, ?, ?, ?> resources) {
         this(type, resources, resources.createID(type.getSimpleName()));
     }
 
-    public PCLCardData(Class<? extends PCLCard> type, PCLResources<?,?,?,?> resources, String cardID)
-    {
+    public PCLCardData(Class<? extends PCLCard> type, PCLResources<?, ?, ?, ?> resources, String cardID) {
         this(type, resources, cardID, PGR.getCardStrings(cardID));
 
         this.imagePath = PGR.getCardImage(cardID);
     }
 
-    public PCLCardData(Class<? extends PCLCard> type, PCLResources<?,?,?,?> resources, String cardID, CardStrings strings)
-    {
+    public PCLCardData(Class<? extends PCLCard> type, PCLResources<?, ?, ?, ?> resources, String cardID, CardStrings strings) {
         this.ID = cardID;
         this.resources = resources;
         this.cardColor = resources.cardColor;
@@ -105,39 +101,32 @@ public class PCLCardData implements CardObject
         this.type = type;
     }
 
-    public static Collection<PCLCardData> getAllData()
-    {
+    public static Collection<PCLCardData> getAllData() {
         return getAllData(false, true, (FuncT1<Boolean, PCLCardData>) null);
     }
 
-    public static Collection<PCLCardData> getAllData(boolean showHidden, boolean sort, AbstractCard.CardColor filterColor)
-    {
-        return getAllData(false, true, a -> a.cardColor == filterColor || a.resources.cardColor == filterColor || a.resources == PGR.core);
-    }
-
-    public static Collection<PCLCardData> getAllData(boolean showHidden, boolean sort, FuncT1<Boolean, PCLCardData> filterFunc)
-    {
+    public static Collection<PCLCardData> getAllData(boolean showHidden, boolean sort, FuncT1<Boolean, PCLCardData> filterFunc) {
         Stream<PCLCardData> stream = staticData
                 .values()
                 .stream();
-        if (!showHidden)
-        {
+        if (!showHidden) {
             stream = stream.filter(a -> a.type.isAnnotationPresent(VisibleCard.class));
         }
-        if (filterFunc != null)
-        {
+        if (filterFunc != null) {
             stream = stream.filter(filterFunc::invoke);
         }
-        if (sort)
-        {
+        if (sort) {
             stream = stream.sorted((a, b) -> StringUtils.compare(a.strings.NAME, b.strings.NAME));
         }
         return stream.collect(Collectors.toList());
     }
 
+    public static Collection<PCLCardData> getAllData(boolean showHidden, boolean sort, AbstractCard.CardColor filterColor) {
+        return getAllData(false, true, a -> a.cardColor == filterColor || a.resources.cardColor == filterColor || a.resources == PGR.core);
+    }
+
     // Use our own mock strings because brackets will cause the card not to load
-    private static CardStrings getMockCardString()
-    {
+    private static CardStrings getMockCardString() {
         CardStrings retVal = new CardStrings();
         retVal.NAME = "NAN";
         retVal.DESCRIPTION = GameUtilities.EMPTY_STRING;
@@ -146,168 +135,147 @@ public class PCLCardData implements CardObject
         return retVal;
     }
 
-    public static PCLCardData getStaticData(String cardID)
-    {
+    public static PCLCardData getStaticData(String cardID) {
         return staticData.get(cardID);
     }
 
-    protected static PCLCardData registerCardData(PCLCardData cardData)
-    {
+    protected static PCLCardData registerCardData(PCLCardData cardData) {
         PCLCardData.staticData.put(cardData.ID, cardData);
         return cardData;
     }
 
-    public PCLCardData addTags(PCLCardTag... tags)
-    {
+    public PCLCardData addTags(PCLCardTag... tags) {
         return addTags(EUIUtils.map(tags, PCLCardTag::make));
     }
 
-    public PCLCardData addTags(Iterable<PCLCardTagInfo> tags)
-    {
-        for (PCLCardTagInfo tag : tags)
-        {
+    public PCLCardData addTags(Iterable<PCLCardTagInfo> tags) {
+        for (PCLCardTagInfo tag : tags) {
             this.tags.put(tag.tag, tag);
         }
         return this;
     }
 
-    public PCLCardData addUpgrades(PCLCardTag... tags)
-    {
+    public PCLCardData addUpgrades(PCLCardTag... tags) {
         return addTags(EUIUtils.map(tags, tag -> tag.make(0, 1)));
     }
 
-    public PCLCard create(int form, int upgrade) throws RuntimeException
-    {
+    public PCLCard create(int form, int upgrade) throws RuntimeException {
         PCLCard card = createImpl();
-        if (form > 0 && form < card.cardData.maxForms)
-        {
+        if (form > 0 && form < card.cardData.maxForms) {
             card.setForm(form, 0);
         }
-        for (int i = 0; i < upgrade; i++)
-        {
+        for (int i = 0; i < upgrade; i++) {
             card.upgrade();
         }
 
         return card;
     }
 
-    public PCLCard create(int upgrade) throws RuntimeException
-    {
-        PCLCard card = createImpl();
-        for (int i = 0; i < upgrade; i++)
-        {
-            card.upgrade();
-        }
-
-        return card;
-    }
-
-    public PCLCard createImpl() throws RuntimeException
-    {
-        try
-        {
-            if (constructor == null)
-            {
+    public PCLCard createImpl() throws RuntimeException {
+        try {
+            if (constructor == null) {
                 constructor = type.getConstructor();
                 constructor.setAccessible(true);
             }
 
             return constructor.newInstance();
         }
-        catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e)
-        {
+        catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             throw new RuntimeException(ID, e);
         }
     }
 
-    public String getAuthorString()
-    {
+    public String getAuthorString() {
         String author = FlavorText.CardStringsFlavorField.flavor.get(strings);
-        if (author != null)
-        {
+        if (author != null) {
             return author;
         }
-        if (loadout != null)
-        {
+        if (loadout != null) {
             return loadout.getAuthor();
         }
         return null;
     }
 
-    public int getBlock(int form)
-    {
+    public int getBlock(int form) {
         return block[Math.min(block.length - 1, form)];
     }
 
-    public int getBlockUpgrade(int form)
-    {
+    public int getBlockUpgrade(int form) {
         return blockUpgrade[Math.min(blockUpgrade.length - 1, form)];
     }
 
     @Override
-    public AbstractCard getCard()
-    {
+    public AbstractCard getCard() {
         return makeCopyFromLibrary(0);
     }
 
-    public TextureAtlas.AtlasRegion getCardIcon()
-    {
-        if (cardIcon == null)
-        {
+    public AbstractCard makeCopyFromLibrary(int upgrade) {
+        return (!type.isAnnotationPresent(VisibleCard.class) ? create(upgrade) : CardLibrary.getCopy(ID, upgrade, 0));
+    }
+
+    public PCLCard create(int upgrade) throws RuntimeException {
+        PCLCard card = createImpl();
+        for (int i = 0; i < upgrade; i++) {
+            card.upgrade();
+        }
+
+        return card;
+    }
+
+    public TextureAtlas.AtlasRegion getCardIcon() {
+        if (cardIcon == null) {
             cardIcon = PCLRenderHelpers.generateIcon(EUIRM.getTexture(imagePath));
         }
 
         return cardIcon;
     }
 
-    public int getCost(int form)
-    {
+    public int getCost(int form) {
         return cost[Math.min(cost.length - 1, form)];
     }
 
-    public int getCostUpgrade(int form)
-    {
+    public int getCostUpgrade(int form) {
         return costUpgrade[Math.min(costUpgrade.length - 1, form)];
     }
 
-    public int getDamage(int form)
-    {
+    public int getDamage(int form) {
         return damage[Math.min(damage.length - 1, form)];
     }
 
-    public int getDamageUpgrade(int form)
-    {
+    public int getDamageUpgrade(int form) {
         return damageUpgrade[Math.min(damageUpgrade.length - 1, form)];
     }
 
-    public int getHp(int form)
-    {
-        return hp[Math.min(hp.length - 1, form)];
-    }
-
-    public int getHpUpgrade(int form)
-    {
-        return hpUpgrade[Math.min(hpUpgrade.length - 1, form)];
-    }
-
-    public int getHitCount(int form)
-    {
+    public int getHitCount(int form) {
         return hitCount[Math.min(hitCount.length - 1, form)];
     }
 
-    public int getHitCountUpgrade(int form)
-    {
+    public int getHitCountUpgrade(int form) {
         return hitCountUpgrade[Math.min(hitCountUpgrade.length - 1, form)];
     }
 
-    public String getLoadoutName()
-    {
+    public int getHp(int form) {
+        return hp[Math.min(hp.length - 1, form)];
+    }
+
+    public int getHpUpgrade(int form) {
+        return hpUpgrade[Math.min(hpUpgrade.length - 1, form)];
+    }
+
+    public String getLoadoutName() {
         String loadoutName = loadout != null ? loadout.getName() : null;
         return loadoutName != null ? loadoutName : strings.DESCRIPTION;
     }
 
-    public Integer[] getNumbers(int form)
-    {
+    public int getMagicNumber(int form) {
+        return magicNumber[Math.min(magicNumber.length - 1, form)];
+    }
+
+    public int getMagicNumberUpgrade(int form) {
+        return magicNumberUpgrade[Math.min(magicNumberUpgrade.length - 1, form)];
+    }
+
+    public Integer[] getNumbers(int form) {
         return array(
                 safeIndex(damage, form),
                 safeIndex(block, form),
@@ -318,151 +286,105 @@ public class PCLCardData implements CardObject
         );
     }
 
-    public int getRightCount(int form)
-    {
+    public int getRightCount(int form) {
         return rightCount[Math.min(rightCount.length - 1, form)];
     }
 
-    public int getRightCountUpgrade(int form)
-    {
+    public int getRightCountUpgrade(int form) {
         return rightCountUpgrade[Math.min(rightCountUpgrade.length - 1, form)];
     }
 
-    public PCLCardTagInfo getTagInfo(PCLCardTag tag)
-    {
+    public PCLCardTagInfo getTagInfo(PCLCardTag tag) {
         return tags.get(tag);
     }
 
-    public Collection<PCLCardTagInfo> getTagInfos()
-    {
-        return tags.values();
-    }
-
-    public PCLCardTarget getTargetUpgrade(int form)
-    {
+    public PCLCardTarget getTargetUpgrade(int form) {
         return upgradeCardTarget == null || upgradeCardTarget.length == 0 ? cardTarget : upgradeCardTarget[Math.min(upgradeCardTarget.length - 1, form)];
     }
 
-    public DelayTiming getTimingUpgrade(int form)
-    {
+    public DelayTiming getTimingUpgrade(int form) {
         return upgradeTiming == null || upgradeTiming.length == 0 ? timing : upgradeTiming[Math.min(upgradeTiming.length - 1, form)];
     }
 
-    public int getMagicNumber(int form)
-    {
-        return magicNumber[Math.min(magicNumber.length - 1, form)];
-    }
-
-    public int getMagicNumberUpgrade(int form)
-    {
-        return magicNumberUpgrade[Math.min(magicNumberUpgrade.length - 1, form)];
-    }
-
-    public boolean hasColor(AbstractCard.CardColor color)
-    {
+    public boolean hasColor(AbstractCard.CardColor color) {
         return cardColor == color || resources.cardColor == color;
     }
 
-    public void invokeTags(AbstractCard card)
-    {
-        for (PCLCardTagInfo i : getTagInfos())
-        {
+    public void invokeTags(AbstractCard card) {
+        for (PCLCardTagInfo i : getTagInfos()) {
             i.invoke(card);
         }
     }
 
-    public void invokeTags(AbstractCard card, int form)
-    {
-        for (PCLCardTagInfo i : getTagInfos())
-        {
+    public Collection<PCLCardTagInfo> getTagInfos() {
+        return tags.values();
+    }
+
+    public void invokeTags(AbstractCard card, int form) {
+        for (PCLCardTagInfo i : getTagInfos()) {
             i.invoke(card, form);
         }
     }
 
-    public boolean isNotSeen()
-    {
+    public boolean isNotSeen() {
         return UnlockTracker.isCardLocked(ID) || !UnlockTracker.isCardSeen(ID);
     }
 
-    public AbstractCard makeCopyFromLibrary(int upgrade)
-    {
-        return (!type.isAnnotationPresent(VisibleCard.class) ? create(upgrade) : CardLibrary.getCopy(ID, upgrade, 0));
-    }
-
-    public void markSeen()
-    {
-        if (!UnlockTracker.isCardSeen(ID))
-        {
+    public void markSeen() {
+        if (!UnlockTracker.isCardSeen(ID)) {
             UnlockTracker.markCardAsSeen(ID);
         }
     }
 
-    public PCLCardData removeTags(Iterable<PCLCardTag> tags)
-    {
+    public PCLCardData removeTags(PCLCardTag... tags) {
+        return removeTags(Arrays.asList(tags));
+    }
+
+    public PCLCardData removeTags(Iterable<PCLCardTag> tags) {
         tags.forEach(this.tags::remove);
 
         return this;
     }
 
-    public PCLCardData removeTags(PCLCardTag... tags)
-    {
-        return removeTags(Arrays.asList(tags));
-    }
-
-    public PCLCardData setAffinities(PCLAffinity... affinity)
-    {
+    public PCLCardData setAffinities(PCLAffinity... affinity) {
         return setAffinities(1, affinity);
     }
 
-    public PCLCardData setAffinities(int amount, PCLAffinity... affinity)
-    {
-        for (PCLAffinity af : affinity)
-        {
+    public PCLCardData setAffinities(int amount, PCLAffinity... affinity) {
+        for (PCLAffinity af : affinity) {
             setAffinities(af, amount, 0);
         }
         return this;
     }
 
-    public PCLCardData setAffinities(PCLCardDataAffinity... affinity)
-    {
-        for (PCLCardDataAffinity af : affinity)
-        {
+    public PCLCardData setAffinities(PCLAffinity affinity, int base, int upgrade) {
+        affinities.set(affinity, base, upgrade);
+        return this;
+    }
+
+    public PCLCardData setAffinities(PCLCardDataAffinity... affinity) {
+        for (PCLCardDataAffinity af : affinity) {
             setAffinities(af);
         }
         return this;
     }
 
-    public PCLCardData setAffinities(PCLCardDataAffinityGroup group)
-    {
+    public PCLCardData setAffinities(PCLCardDataAffinity affinity) {
+        affinities.set(affinity);
+        return this;
+    }
+
+    public PCLCardData setAffinities(PCLCardDataAffinityGroup group) {
         this.affinities = group;
 
         return this;
     }
 
-    public PCLCardData setAffinities(PCLAffinity affinity, int base, int upgrade)
-    {
-        affinities.set(affinity, base, upgrade);
-        return this;
-    }
-
-    public PCLCardData setAffinities(PCLCardDataAffinity affinity)
-    {
-        affinities.set(affinity);
-        return this;
-    }
-
-    public PCLCardData setAttack(int cost, AbstractCard.CardRarity rarity)
-    {
+    public PCLCardData setAttack(int cost, AbstractCard.CardRarity rarity) {
         return setAttack(cost, rarity, PCLAttackType.Normal, PCLCardTarget.Single);
     }
 
-    public PCLCardData setAttack(int cost, AbstractCard.CardRarity rarity, PCLAttackType attackType)
-    {
-        return setAttack(cost, rarity, attackType, PCLCardTarget.Single);
-    }
-
-    public PCLCardData setAttack(int cost, AbstractCard.CardRarity rarity, PCLAttackType attackType, PCLCardTarget target)
-    {
+    public PCLCardData setAttack(int cost, AbstractCard.CardRarity rarity, PCLAttackType attackType, PCLCardTarget target) {
         setRarityType(rarity, AbstractCard.CardType.ATTACK);
 
         cardTarget = target;
@@ -472,52 +394,59 @@ public class PCLCardData implements CardObject
         return this;
     }
 
-    public PCLCardData setBranchFactor(int factor)
-    {
-        this.branchFactor = factor;
+    public PCLCardData setRarityType(AbstractCard.CardRarity rarity, AbstractCard.CardType type) {
+        cardRarity = rarity;
+        cardType = type;
+
+        if (maxCopies == -1) {
+            switch (rarity) {
+                case COMMON:
+                    return setMaxCopies(type == PCLEnum.CardType.SUMMON ? 3 : 6);
+                case UNCOMMON:
+                    return setMaxCopies(type == PCLEnum.CardType.SUMMON ? 2 : 4);
+                case RARE:
+                    return setMaxCopies(type == PCLEnum.CardType.SUMMON ? 2 : 3);
+                default:
+                    return setMaxCopies(0);
+            }
+        }
 
         return this;
     }
 
-    public PCLCardData setBlock(int block, int blockUpgrade)
-    {
+    public PCLCardData setMaxCopies(int maxCopies) {
+        this.maxCopies = maxCopies;
+
+        return this;
+    }
+
+    public PCLCardData setAttack(int cost, AbstractCard.CardRarity rarity, PCLAttackType attackType) {
+        return setAttack(cost, rarity, attackType, PCLCardTarget.Single);
+    }
+
+    public PCLCardData setBlock(int block, int blockUpgrade) {
         return setBlock(array(block), array(blockUpgrade));
     }
 
-    public PCLCardData setBlock(int block, Integer[] blockUpgrade)
-    {
-        return setBlock(array(block), blockUpgrade);
-    }
-
-    public PCLCardData setBlock(Integer[] block, Integer[] blockUpgrade)
-    {
+    public PCLCardData setBlock(Integer[] block, Integer[] blockUpgrade) {
         this.block = block;
         this.blockUpgrade = blockUpgrade;
         return this;
     }
 
-    public PCLCardData setBlock(int block, int blockUpgrade, int rightCount)
-    {
+    public PCLCardData setBlock(int block, Integer[] blockUpgrade) {
+        return setBlock(array(block), blockUpgrade);
+    }
+
+    public PCLCardData setBlock(int block, int blockUpgrade, int rightCount) {
         return setBlock(block, blockUpgrade, rightCount, 0);
     }
 
-    public PCLCardData setBlock(int block, int blockUpgrade, int rightCount, int rightCountUpgrade)
-    {
+    public PCLCardData setBlock(int block, int blockUpgrade, int rightCount, int rightCountUpgrade) {
         return setBlock(array(block), array(blockUpgrade), array(rightCount), array(rightCountUpgrade));
     }
 
-    public PCLCardData setBlock(int block, int blockUpgrade, Integer[] rightCount, Integer[] rightCountUpgrade)
-    {
-        return setBlock(array(block), array(blockUpgrade), rightCount, rightCountUpgrade);
-    }
-
-    public PCLCardData setBlock(int block, Integer[] blockUpgrade, int rightCount, Integer[] rightCountUpgrade)
-    {
-        return setBlock(array(block), blockUpgrade, array(rightCount), rightCountUpgrade);
-    }
-
-    public PCLCardData setBlock(Integer[] block, Integer[] blockUpgrade, Integer[] rightCount, Integer[] rightCountUpgrade)
-    {
+    public PCLCardData setBlock(Integer[] block, Integer[] blockUpgrade, Integer[] rightCount, Integer[] rightCountUpgrade) {
         this.block = block;
         this.blockUpgrade = blockUpgrade;
         this.rightCount = rightCount;
@@ -525,48 +454,82 @@ public class PCLCardData implements CardObject
         return this;
     }
 
-    public PCLCardData setColor(AbstractCard.CardColor color)
-    {
+    public PCLCardData setBlock(int block, int blockUpgrade, Integer[] rightCount, Integer[] rightCountUpgrade) {
+        return setBlock(array(block), array(blockUpgrade), rightCount, rightCountUpgrade);
+    }
+
+    public PCLCardData setBlock(int block, Integer[] blockUpgrade, int rightCount, Integer[] rightCountUpgrade) {
+        return setBlock(array(block), blockUpgrade, array(rightCount), rightCountUpgrade);
+    }
+
+    public PCLCardData setBranchFactor(int factor) {
+        this.branchFactor = factor;
+
+        return this;
+    }
+
+    public PCLCardData setColor(AbstractCard.CardColor color) {
         cardColor = color;
         return this;
     }
 
-    public PCLCardData setCore()
-    {
-        return setCore(false);
-    }
-
-    public PCLCardData setCore(boolean colorless)
-    {
-        return setLoadout(PGR.getPlayerData(resources.cardColor).getCoreLoadout(), colorless);
-    }
-
-    public PCLCardData setColorless()
-    {
-        cardColor = AbstractCard.CardColor.COLORLESS;
-        return this;
-    }
-
-    public PCLCardData setColorless(PCLLoadout loadout)
-    {
+    public PCLCardData setColorless(PCLLoadout loadout) {
         cardColor = AbstractCard.CardColor.COLORLESS;
         return setLoadout(loadout);
     }
 
-    public PCLCardData setCostUpgrades(Integer... costUpgrades)
-    {
+    public PCLCardData setLoadout(PCLLoadout loadout) {
+        return setLoadout(loadout, false);
+    }
+
+    public PCLCardData setCore() {
+        return setCore(false);
+    }
+
+    public PCLCardData setCore(boolean colorless) {
+        return setLoadout(PGR.getPlayerData(resources.cardColor).getCoreLoadout(), colorless);
+    }
+
+    public PCLCardData setLoadout(PCLLoadout loadout, boolean colorless) {
+        this.loadout = loadout;
+        if (this.loadout != null) {
+            if (colorless) {
+                setColorless();
+                this.loadout.colorlessData.add(this);
+            }
+            else if (cardRarity == AbstractCard.CardRarity.COMMON || cardRarity == AbstractCard.CardRarity.UNCOMMON || cardRarity == AbstractCard.CardRarity.RARE) {
+                this.loadout.cardDatas.add(this);
+            }
+            else {
+                this.loadout.colorlessData.add(this);
+            }
+        }
+
+        // Non-loadout cards, curses, statuses, and special cards cannot get slots
+        if (slots <= 0 && this.loadout != null && !this.loadout.isCore() && cardType != AbstractCard.CardType.CURSE && cardType != AbstractCard.CardType.STATUS && cardRarity != AbstractCard.CardRarity.SPECIAL) {
+            // Commons and Attacks/Skills get an extra slot
+            slots = (cardType == AbstractCard.CardType.POWER ? 1 : 2) + (cardRarity == AbstractCard.CardRarity.COMMON ? 1 : 0);
+        }
+
+        return this;
+    }
+
+    public PCLCardData setColorless() {
+        cardColor = AbstractCard.CardColor.COLORLESS;
+        return this;
+    }
+
+    public PCLCardData setCostUpgrades(Integer... costUpgrades) {
         costUpgrade = costUpgrades;
         return this;
     }
 
-    public PCLCardData setCosts(Integer... costs)
-    {
+    public PCLCardData setCosts(Integer... costs) {
         cost = costs;
         return this;
     }
 
-    public PCLCardData setCurse(int cost, PCLCardTarget target, boolean special)
-    {
+    public PCLCardData setCurse(int cost, PCLCardTarget target, boolean special) {
         setRarityType(special ? AbstractCard.CardRarity.SPECIAL : AbstractCard.CardRarity.CURSE, AbstractCard.CardType.CURSE);
 
         cardColor = AbstractCard.CardColor.CURSE;
@@ -577,45 +540,29 @@ public class PCLCardData implements CardObject
         return this;
     }
 
-    public PCLCardData setDamage(int damage, int damageUpgrade)
-    {
+    public PCLCardData setDamage(int damage, int damageUpgrade) {
         return setDamage(array(damage), array(damageUpgrade));
     }
 
-    public PCLCardData setDamage(int damage, Integer[] damageUpgrade)
-    {
-        return setDamage(array(damage), damageUpgrade);
-    }
-
-    public PCLCardData setDamage(Integer[] damage, Integer[] damageUpgrade)
-    {
+    public PCLCardData setDamage(Integer[] damage, Integer[] damageUpgrade) {
         this.damage = damage;
         this.damageUpgrade = damageUpgrade;
         return this;
     }
 
-    public PCLCardData setDamage(int damage, int damageUpgrade, int hitCount)
-    {
+    public PCLCardData setDamage(int damage, Integer[] damageUpgrade) {
+        return setDamage(array(damage), damageUpgrade);
+    }
+
+    public PCLCardData setDamage(int damage, int damageUpgrade, int hitCount) {
         return setDamage(damage, damageUpgrade, hitCount, 0);
     }
 
-    public PCLCardData setDamage(int damage, int damageUpgrade, int hitCount, int hitCountUpgrade)
-    {
+    public PCLCardData setDamage(int damage, int damageUpgrade, int hitCount, int hitCountUpgrade) {
         return setDamage(array(damage), array(damageUpgrade), array(hitCount), array(hitCountUpgrade));
     }
 
-    public PCLCardData setDamage(int damage, int damageUpgrade, Integer[] hitCount, Integer[] hitCountUpgrade)
-    {
-        return setDamage(array(damage), array(damageUpgrade), hitCount, hitCountUpgrade);
-    }
-
-    public PCLCardData setDamage(int damage, Integer[] damageUpgrade, int hitCount, Integer[] hitCountUpgrade)
-    {
-        return setDamage(array(damage), damageUpgrade, array(hitCount), hitCountUpgrade);
-    }
-
-    public PCLCardData setDamage(Integer[] damage, Integer[] damageUpgrade, Integer[] hitCount, Integer[] hitCountUpgrade)
-    {
+    public PCLCardData setDamage(Integer[] damage, Integer[] damageUpgrade, Integer[] hitCount, Integer[] hitCountUpgrade) {
         this.damage = damage;
         this.damageUpgrade = damageUpgrade;
         this.hitCount = hitCount;
@@ -623,70 +570,90 @@ public class PCLCardData implements CardObject
         return this;
     }
 
-    public PCLCardData setExtraTags(List<CardTagItem> extraTags)
-    {
+    public PCLCardData setDamage(int damage, int damageUpgrade, Integer[] hitCount, Integer[] hitCountUpgrade) {
+        return setDamage(array(damage), array(damageUpgrade), hitCount, hitCountUpgrade);
+    }
+
+    public PCLCardData setDamage(int damage, Integer[] damageUpgrade, int hitCount, Integer[] hitCountUpgrade) {
+        return setDamage(array(damage), damageUpgrade, array(hitCount), hitCountUpgrade);
+    }
+
+    public PCLCardData setDefend() {
+        this.loadout = PGR.getPlayerData(resources.cardColor).getCoreLoadout();
+        this.loadout.defends.add(this);
+        this.extraTags = Collections.singletonList(CardTagItem.Defend);
+        return this;
+    }
+
+    public PCLCardData setExtraTags(List<CardTagItem> extraTags) {
         this.extraTags = extraTags;
 
         return this;
     }
 
-    public PCLCardData setHitCount(int heal, int healUpgrade)
-    {
+    public PCLCardData setHitCount(int heal, int healUpgrade) {
         hitCount[0] = heal;
         hitCountUpgrade[0] = healUpgrade;
         return this;
     }
 
-    public PCLCardData setHp(int heal, int healUpgrade)
-    {
+    public PCLCardData setHp(int heal, int healUpgrade) {
         this.hp[0] = heal;
         this.hpUpgrade[0] = healUpgrade;
         return this;
     }
 
-    public PCLCardData setImagePath(String imagePath)
-    {
+    public PCLCardData setImagePath(String imagePath) {
         this.imagePath = imagePath;
 
         return this;
     }
 
     // Loads the base game large portrait associated with this atlas path. Large portrait must be used to conform with the dynamic portraits setting
-    public PCLCardData setImagePathFromAtlasUrl(String imagePath)
-    {
+    public PCLCardData setImagePathFromAtlasUrl(String imagePath) {
         this.imagePath = GameUtilities.toInternalAtlasPath(imagePath);
 
         return this;
     }
 
-    public PCLCardData setImagePathFromBetaAtlasUrl(String imagePath)
-    {
+    public PCLCardData setImagePathFromBetaAtlasUrl(String imagePath) {
         this.imagePath = GameUtilities.toInternalAtlasBetaPath(imagePath);
 
         return this;
     }
 
-    public PCLCardData setMaxCopies(int maxCopies)
-    {
-        this.maxCopies = maxCopies;
-
+    public PCLCardData setMagicNumber(int heal) {
+        this.magicNumber[0] = heal;
         return this;
     }
 
-    public PCLCardData setMaxUpgrades(int maxUpgradeLevel)
-    {
+    public PCLCardData setMagicNumber(int heal, int healUpgrade) {
+        this.magicNumber[0] = heal;
+        this.magicNumberUpgrade[0] = healUpgrade;
+        return this;
+    }
+
+    public PCLCardData setMagicNumber(int thp, Integer[] thpUpgrade) {
+        return setMagicNumber(array(thp), thpUpgrade);
+    }
+
+    public PCLCardData setMagicNumber(Integer[] heal, Integer[] healUpgrade) {
+        this.magicNumber = heal;
+        this.magicNumberUpgrade = healUpgrade;
+        return this;
+    }
+
+    public PCLCardData setMaxUpgrades(int maxUpgradeLevel) {
         this.maxUpgradeLevel = MathUtils.clamp(maxUpgradeLevel, -1, Integer.MAX_VALUE);
 
         return this;
     }
 
-    public PCLCardData setMultiformData(int maxForms)
-    {
+    public PCLCardData setMultiformData(int maxForms) {
         return setMultiformData(maxForms, false, true, false);
     }
 
-    public PCLCardData setMultiformData(int maxForms, boolean canToggleFromPopup, boolean canToggleOnUpgrade, boolean canToggleFromAlternateForm)
-    {
+    public PCLCardData setMultiformData(int maxForms, boolean canToggleFromPopup, boolean canToggleOnUpgrade, boolean canToggleFromAlternateForm) {
         this.maxForms = maxForms;
         this.canToggleFromPopup = canToggleFromPopup;
         this.canToggleOnUpgrade = canToggleOnUpgrade;
@@ -695,8 +662,7 @@ public class PCLCardData implements CardObject
         return this;
     }
 
-    public PCLCardData setNumbers(PCLCardData data)
-    {
+    public PCLCardData setNumbers(PCLCardData data) {
         damage = data.damage.clone();
         damageUpgrade = data.damageUpgrade.clone();
         block = data.block.clone();
@@ -714,15 +680,13 @@ public class PCLCardData implements CardObject
         return this;
     }
 
-    public PCLCardData setObtainableInCombat(boolean obtainable)
-    {
+    public PCLCardData setObtainableInCombat(boolean obtainable) {
         this.obtainableInCombat = obtainable;
 
         return this;
     }
 
-    public PCLCardData setPower(int cost, AbstractCard.CardRarity rarity)
-    {
+    public PCLCardData setPower(int cost, AbstractCard.CardRarity rarity) {
         setRarityType(rarity, AbstractCard.CardType.POWER);
 
         cardTarget = PCLCardTarget.None;
@@ -731,140 +695,34 @@ public class PCLCardData implements CardObject
         return this;
     }
 
-    public PCLCardData setMagicNumber(int heal)
-    {
-        this.magicNumber[0] = heal;
-        return this;
+    public PCLCardData setRTags(PCLCardTag... tags) {
+        return setRTags(Arrays.asList(tags));
     }
 
-    public PCLCardData setMagicNumber(int heal, int healUpgrade)
-    {
-        this.magicNumber[0] = heal;
-        this.magicNumberUpgrade[0] = healUpgrade;
-        return this;
-    }
-
-    public PCLCardData setMagicNumber(int thp, Integer[] thpUpgrade)
-    {
-        return setMagicNumber(array(thp), thpUpgrade);
-    }
-
-    public PCLCardData setMagicNumber(Integer[] heal, Integer[] healUpgrade)
-    {
-        this.magicNumber = heal;
-        this.magicNumberUpgrade = healUpgrade;
-        return this;
-    }
-
-    public PCLCardData setRemovableFromDeck(boolean removableFromDeck)
-    {
-        this.removableFromDeck = removableFromDeck;
-
-        return this;
-    }
-
-    public PCLCardData setRTags(Collection<PCLCardTag> tags)
-    {
-        for (PCLCardTag tag : tags)
-        {
+    public PCLCardData setRTags(Collection<PCLCardTag> tags) {
+        for (PCLCardTag tag : tags) {
             this.tags.put(tag, tag.make(1, 0));
         }
         return this;
     }
 
-    public PCLCardData setRTags(PCLCardTag... tags)
-    {
-        return setRTags(Arrays.asList(tags));
-    }
-
-    public PCLCardData setRarityType(AbstractCard.CardRarity rarity, AbstractCard.CardType type)
-    {
-        cardRarity = rarity;
-        cardType = type;
-
-        if (maxCopies == -1)
-        {
-            switch (rarity)
-            {
-                case COMMON:
-                    return setMaxCopies(type == PCLEnum.CardType.SUMMON ? 3 : 6);
-                case UNCOMMON:
-                    return setMaxCopies(type == PCLEnum.CardType.SUMMON ? 2 : 4);
-                case RARE:
-                    return setMaxCopies(type == PCLEnum.CardType.SUMMON ? 2 : 3);
-                default:
-                    return setMaxCopies(0);
-            }
-        }
+    public PCLCardData setRemovableFromDeck(boolean removableFromDeck) {
+        this.removableFromDeck = removableFromDeck;
 
         return this;
     }
 
-    public PCLCardData setRightCount(int heal, int healUpgrade)
-    {
+    public PCLCardData setRightCount(int heal, int healUpgrade) {
         rightCount[0] = heal;
         rightCountUpgrade[0] = healUpgrade;
         return this;
     }
 
-    public PCLCardData setLoadout(PCLLoadout loadout)
-    {
-        return setLoadout(loadout, false);
-    }
-
-    public PCLCardData setLoadout(PCLLoadout loadout, boolean colorless)
-    {
-        this.loadout = loadout;
-        if (this.loadout != null)
-        {
-            if (colorless)
-            {
-                setColorless();
-                this.loadout.colorlessData.add(this);
-            }
-            else if (cardRarity == AbstractCard.CardRarity.COMMON || cardRarity == AbstractCard.CardRarity.UNCOMMON || cardRarity == AbstractCard.CardRarity.RARE)
-            {
-                this.loadout.cardDatas.add(this);
-            }
-            else
-            {
-                this.loadout.colorlessData.add(this);
-            }
-        }
-
-        // Non-loadout cards, curses, statuses, and special cards cannot get slots
-        if (slots <= 0 && this.loadout != null && !this.loadout.isCore() && cardType != AbstractCard.CardType.CURSE && cardType != AbstractCard.CardType.STATUS && cardRarity != AbstractCard.CardRarity.SPECIAL)
-        {
-            // Commons and Attacks/Skills get an extra slot
-            slots = (cardType == AbstractCard.CardType.POWER ? 1 : 2) + (cardRarity == AbstractCard.CardRarity.COMMON ? 1 : 0);
-        }
-
-        return this;
-    }
-
-    public PCLCardData setDefend()
-    {
-        this.loadout = PGR.getPlayerData(resources.cardColor).getCoreLoadout();
-        this.loadout.defends.add(this);
-        this.extraTags = Collections.singletonList(CardTagItem.Defend);
-        return this;
-    }
-
-    public PCLCardData setStrike()
-    {
-        this.loadout = PGR.getPlayerData(resources.cardColor).getCoreLoadout();
-        this.loadout.strikes.add(this);
-        this.extraTags = Collections.singletonList(CardTagItem.Strike);
-        return this;
-    }
-
-    public PCLCardData setSkill(int cost, AbstractCard.CardRarity rarity)
-    {
+    public PCLCardData setSkill(int cost, AbstractCard.CardRarity rarity) {
         return setSkill(cost, rarity, PCLCardTarget.Single);
     }
 
-    public PCLCardData setSkill(int cost, AbstractCard.CardRarity rarity, PCLCardTarget target)
-    {
+    public PCLCardData setSkill(int cost, AbstractCard.CardRarity rarity, PCLCardTarget target) {
         setRarityType(rarity, AbstractCard.CardType.SKILL);
 
         cardTarget = target;
@@ -873,14 +731,12 @@ public class PCLCardData implements CardObject
         return this;
     }
 
-    public PCLCardData setSlots(int slots)
-    {
+    public PCLCardData setSlots(int slots) {
         this.slots = slots;
         return this;
     }
 
-    public PCLCardData setStatus(int cost, AbstractCard.CardRarity rarity, PCLCardTarget target)
-    {
+    public PCLCardData setStatus(int cost, AbstractCard.CardRarity rarity, PCLCardTarget target) {
         setRarityType(rarity, AbstractCard.CardType.STATUS);
         setColorless();
         cardTarget = target;
@@ -890,18 +746,18 @@ public class PCLCardData implements CardObject
         return this;
     }
 
-    public PCLCardData setSummon(int cost, AbstractCard.CardRarity rarity)
-    {
+    public PCLCardData setStrike() {
+        this.loadout = PGR.getPlayerData(resources.cardColor).getCoreLoadout();
+        this.loadout.strikes.add(this);
+        this.extraTags = Collections.singletonList(CardTagItem.Strike);
+        return this;
+    }
+
+    public PCLCardData setSummon(int cost, AbstractCard.CardRarity rarity) {
         return setSummon(cost, rarity, PCLAttackType.Normal, PCLCardTarget.Single);
     }
 
-    public PCLCardData setSummon(int cost, AbstractCard.CardRarity rarity, PCLAttackType attackType)
-    {
-        return setSummon(cost, rarity, attackType, PCLCardTarget.Single);
-    }
-
-    public PCLCardData setSummon(int cost, AbstractCard.CardRarity rarity, PCLAttackType attackType, PCLCardTarget target)
-    {
+    public PCLCardData setSummon(int cost, AbstractCard.CardRarity rarity, PCLAttackType attackType, PCLCardTarget target) {
         setRarityType(rarity, PCLEnum.CardType.SUMMON);
 
         cardTarget = target;
@@ -911,8 +767,11 @@ public class PCLCardData implements CardObject
         return this;
     }
 
-    public PCLCardData setSummon(int cost, AbstractCard.CardRarity rarity, PCLAttackType attackType, PCLCardTarget target, DelayTiming timing)
-    {
+    public PCLCardData setSummon(int cost, AbstractCard.CardRarity rarity, PCLAttackType attackType) {
+        return setSummon(cost, rarity, attackType, PCLCardTarget.Single);
+    }
+
+    public PCLCardData setSummon(int cost, AbstractCard.CardRarity rarity, PCLAttackType attackType, PCLCardTarget target, DelayTiming timing) {
         setRarityType(rarity, PCLEnum.CardType.SUMMON);
         this.timing = timing;
         this.cardTarget = target;
@@ -922,83 +781,68 @@ public class PCLCardData implements CardObject
         return this;
     }
 
-    public PCLCardData setTags(HashMap<PCLCardTag, PCLCardTagInfo> other)
-    {
+    public PCLCardData setTags(HashMap<PCLCardTag, PCLCardTagInfo> other) {
         tags.clear();
-        for (PCLCardTag tag : other.keySet())
-        {
+        for (PCLCardTag tag : other.keySet()) {
             tags.put(tag, other.get(tag));
         }
         return this;
     }
 
-    public PCLCardData setTags(Iterable<PCLCardTagInfo> tags)
-    {
+    public PCLCardData setTags(PCLCardTagInfo... tags) {
+        return setTags(Arrays.asList(tags));
+    }
+
+    public PCLCardData setTags(Iterable<PCLCardTagInfo> tags) {
         this.tags.clear();
-        for (PCLCardTagInfo tag : tags)
-        {
+        for (PCLCardTagInfo tag : tags) {
             this.tags.put(tag.tag, tag);
         }
         return this;
     }
 
-    public PCLCardData setTags(PCLCardTagInfo... tags)
-    {
-        return setTags(Arrays.asList(tags));
-    }
-
-    public PCLCardData setTags(PCLCardTag... tags)
-    {
+    public PCLCardData setTags(PCLCardTag... tags) {
         return setTags(EUIUtils.map(tags, PCLCardTag::make));
     }
 
-    public PCLCardData setTarget(PCLCardTarget target)
-    {
+    public PCLCardData setTarget(PCLCardTarget target) {
         cardTarget = target;
         return this;
     }
 
-    public PCLCardData setTiming(DelayTiming timing)
-    {
+    public PCLCardData setTiming(DelayTiming timing) {
         this.timing = timing;
         return this;
     }
 
-    public PCLCardData setUTags(Collection<PCLCardTag> tags)
-    {
-        for (PCLCardTag tag : tags)
-        {
+    public PCLCardData setUTags(PCLCardTag... tags) {
+        return setUTags(Arrays.asList(tags));
+    }
+
+    public PCLCardData setUTags(Collection<PCLCardTag> tags) {
+        for (PCLCardTag tag : tags) {
             this.tags.put(tag, tag.make(0, 1));
         }
         return this;
     }
 
-    public PCLCardData setUTags(PCLCardTag... tags)
-    {
-        return setUTags(Arrays.asList(tags));
-    }
-
-    public PCLCardData setUTarget(PCLCardTarget... target)
-    {
+    public PCLCardData setUTarget(PCLCardTarget... target) {
         upgradeCardTarget = target;
         return this;
     }
 
-    public PCLCardData setUTiming(DelayTiming... timing)
-    {
+    public PCLCardData setUTiming(DelayTiming... timing) {
         upgradeTiming = timing;
         return this;
     }
 
-    public PCLCardData setUnique(boolean unique)
-    {
+    public PCLCardData setUnique(boolean unique) {
         this.unique = unique;
 
         return this;
     }
 
-    public PCLCardData setUnique(boolean unique, int maxUpgradeLevel)
-    {
+    public PCLCardData setUnique(boolean unique, int maxUpgradeLevel) {
         this.unique = unique;
         this.maxUpgradeLevel = maxUpgradeLevel;
 

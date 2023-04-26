@@ -15,8 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public enum PCLCardTarget implements Comparable<PCLCardTarget>
-{
+public enum PCLCardTarget implements Comparable<PCLCardTarget> {
     // The ordering of this enum determines which targeting system takes priority
     None(AbstractCard.CardTarget.NONE),
     All(AbstractCard.CardTarget.ALL),
@@ -34,130 +33,17 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget>
     public static AbstractCreature target;
     public final AbstractCard.CardTarget cardTarget;
 
-    PCLCardTarget(AbstractCard.CardTarget cardTarget)
-    {
+    PCLCardTarget(AbstractCard.CardTarget cardTarget) {
         this.cardTarget = cardTarget;
     }
 
-    public static List<PCLCardTarget> getAll()
-    {
-        return Arrays.stream(PCLCardTarget.values()).sorted((a,b) -> StringUtils.compare(a.getTitle(), b.getTitle())).collect(Collectors.toList());
-    }
-
-    public final AbstractMonster getTarget(AbstractCreature m)
-    {
-        return getTarget(AbstractDungeon.player, m);
-    }
-
-    public final AbstractMonster getTarget(AbstractCreature p, AbstractCreature m)
-    {
-        List<AbstractCreature> mons = getTargets(p, m);
-        return mons.size() > 0 ? EUIUtils.safeCast(mons.get(0), AbstractMonster.class) : null;
-    }
-
-    public final ArrayList<AbstractCreature> getTargets(AbstractCreature source, AbstractCreature target)
-    {
-        return getTargets(source, target, 1);
-    }
-
-    public final ArrayList<AbstractCreature> getTargets(AbstractCreature source, AbstractCreature target, int autoAmount)
-    {
-        ArrayList<AbstractCreature> targets = new ArrayList<>();
-        switch (this)
-        {
-            case None:
-            {
-                targets.add(AbstractDungeon.player);
-                break;
-            }
-
-            case Single:
-            case SingleAlly:
-            {
-                if (target != null)
-                {
-                    targets.add(target);
-                }
-                break;
-            }
-
-            case AllEnemy:
-            {
-                targets.addAll(GameUtilities.getEnemies(true));
-                break;
-            }
-
-            case Self:
-            {
-                targets.add(source);
-                break;
-            }
-
-            case Any:
-            {
-                if (target != null)
-                {
-                    targets.add(target);
-                }
-                else
-                {
-                    final RandomizedList<AbstractCreature> list = new RandomizedList<>(GameUtilities.getAllCharacters(true));
-                    while (list.size() > 0 && targets.size() < autoAmount)
-                    {
-                        targets.add(list.retrieve(GameUtilities.getRNG()));
-                    }
-                }
-                break;
-            }
-
-            case RandomEnemy:
-            {
-                final RandomizedList<AbstractCreature> list = new RandomizedList<>(GameUtilities.getEnemies(true));
-                while (list.size() > 0 && targets.size() < autoAmount)
-                {
-                    targets.add(list.retrieve(GameUtilities.getRNG()));
-                }
-                break;
-            }
-
-            case All:
-            {
-                targets.addAll(GameUtilities.getAllCharacters(true));
-                break;
-            }
-
-            case AllAlly:
-            {
-                targets.addAll(GameUtilities.getSummons(true));
-                break;
-            }
-
-            case Team:
-            {
-                targets.addAll(GameUtilities.getSummons(true));
-                targets.add(AbstractDungeon.player);
-                break;
-            }
-
-            case RandomAlly:
-            {
-                final RandomizedList<AbstractCreature> list = new RandomizedList<>(GameUtilities.getSummons(true));
-                while (list.size() > 0 && targets.size() < autoAmount)
-                {
-                    targets.add(list.retrieve(GameUtilities.getRNG()));
-                }
-                break;
-            }
-        }
-
-        return targets;
+    public static List<PCLCardTarget> getAll() {
+        return Arrays.stream(PCLCardTarget.values()).sorted((a, b) -> StringUtils.compare(a.getTitle(), b.getTitle())).collect(Collectors.toList());
     }
 
     // These strings cannot be put in as an enum variable because cards are initialized before these strings are
-    public final String getTitle()
-    {
-        switch (this)
-        {
+    public final String getTitle() {
+        switch (this) {
             case None:
                 return PGR.core.strings.ctype_none;
             case AllEnemy:
@@ -185,10 +71,8 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget>
     }
 
     // These strings cannot be put in as an enum variable because cards are initialized before these strings are
-    public final String getShortString()
-    {
-        switch (this)
-        {
+    public final String getShortString() {
+        switch (this) {
             case All:
                 return PGR.core.strings.ctype_tagAll;
             case AllEnemy:
@@ -202,10 +86,96 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget>
         return null;
     }
 
-    public final boolean targetsAllies()
-    {
-        switch (this)
-        {
+    public final AbstractMonster getTarget(AbstractCreature m) {
+        return getTarget(AbstractDungeon.player, m);
+    }
+
+    public final AbstractMonster getTarget(AbstractCreature p, AbstractCreature m) {
+        List<AbstractCreature> mons = getTargets(p, m);
+        return mons.size() > 0 ? EUIUtils.safeCast(mons.get(0), AbstractMonster.class) : null;
+    }
+
+    public final ArrayList<AbstractCreature> getTargets(AbstractCreature source, AbstractCreature target) {
+        return getTargets(source, target, 1);
+    }
+
+    public final ArrayList<AbstractCreature> getTargets(AbstractCreature source, AbstractCreature target, int autoAmount) {
+        ArrayList<AbstractCreature> targets = new ArrayList<>();
+        switch (this) {
+            case None: {
+                targets.add(AbstractDungeon.player);
+                break;
+            }
+
+            case Single:
+            case SingleAlly: {
+                if (target != null) {
+                    targets.add(target);
+                }
+                break;
+            }
+
+            case AllEnemy: {
+                targets.addAll(GameUtilities.getEnemies(true));
+                break;
+            }
+
+            case Self: {
+                targets.add(source);
+                break;
+            }
+
+            case Any: {
+                if (target != null) {
+                    targets.add(target);
+                }
+                else {
+                    final RandomizedList<AbstractCreature> list = new RandomizedList<>(GameUtilities.getAllCharacters(true));
+                    while (list.size() > 0 && targets.size() < autoAmount) {
+                        targets.add(list.retrieve(GameUtilities.getRNG()));
+                    }
+                }
+                break;
+            }
+
+            case RandomEnemy: {
+                final RandomizedList<AbstractCreature> list = new RandomizedList<>(GameUtilities.getEnemies(true));
+                while (list.size() > 0 && targets.size() < autoAmount) {
+                    targets.add(list.retrieve(GameUtilities.getRNG()));
+                }
+                break;
+            }
+
+            case All: {
+                targets.addAll(GameUtilities.getAllCharacters(true));
+                break;
+            }
+
+            case AllAlly: {
+                targets.addAll(GameUtilities.getSummons(true));
+                break;
+            }
+
+            case Team: {
+                targets.addAll(GameUtilities.getSummons(true));
+                targets.add(AbstractDungeon.player);
+                break;
+            }
+
+            case RandomAlly: {
+                final RandomizedList<AbstractCreature> list = new RandomizedList<>(GameUtilities.getSummons(true));
+                while (list.size() > 0 && targets.size() < autoAmount) {
+                    targets.add(list.retrieve(GameUtilities.getRNG()));
+                }
+                break;
+            }
+        }
+
+        return targets;
+    }
+
+    public final boolean targetsAllies() {
+        switch (this) {
             case Single:
             case SingleAlly:
             case AllAlly:
@@ -217,10 +187,8 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget>
         return false;
     }
 
-    public final boolean targetsEnemies()
-    {
-        switch (this)
-        {
+    public final boolean targetsEnemies() {
+        switch (this) {
             case Single:
             case AllEnemy:
             case All:
@@ -230,33 +198,8 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget>
         return false;
     }
 
-    public final boolean targetsSelf()
-    {
-        switch (this)
-        {
-            case Self:
-            case Any:
-            case Team:
-                return true;
-        }
-        return false;
-    }
-
-    public final boolean targetsSingle()
-    {
-        switch (this)
-        {
-            case Single:
-            case SingleAlly:
-                return true;
-        }
-        return false;
-    }
-
-    public final boolean targetsMulti()
-    {
-        switch (this)
-        {
+    public final boolean targetsMulti() {
+        switch (this) {
             case All:
             case AllAlly:
             case Team:
@@ -266,10 +209,27 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget>
         return false;
     }
 
-    public final boolean vanillaCompatible()
-    {
-        switch (this)
-        {
+    public final boolean targetsSelf() {
+        switch (this) {
+            case Self:
+            case Any:
+            case Team:
+                return true;
+        }
+        return false;
+    }
+
+    public final boolean targetsSingle() {
+        switch (this) {
+            case Single:
+            case SingleAlly:
+                return true;
+        }
+        return false;
+    }
+
+    public final boolean vanillaCompatible() {
+        switch (this) {
             case SingleAlly:
             case AllAlly:
             case Team:

@@ -6,60 +6,55 @@ import com.megacrit.cardcrawl.core.Settings;
 import extendedui.utilities.ColoredString;
 import pinacolada.dungeon.CombatManager;
 
-public interface CooldownProvider
-{
+public interface CooldownProvider {
     Color COOLDOWN_INCOMPLETE_COLOR = Settings.GREEN_TEXT_COLOR.cpy().lerp(Settings.CREAM_COLOR, 0.5f);
+
+    default boolean canActivate() {
+        return getCooldown() <= 0;
+    }
+
+    default ColoredString getCooldownString() {
+        int amount = getCooldown();
+        if (isDisplayingUpgrade()) {
+            return new ColoredString(amount, Settings.GREEN_TEXT_COLOR);
+        }
+        if (amount < getBaseCooldown()) {
+            if (amount > 0) {
+                return new ColoredString(amount, COOLDOWN_INCOMPLETE_COLOR);
+            }
+            else {
+                return new ColoredString(amount, Settings.GREEN_TEXT_COLOR);
+            }
+        }
+        else {
+            return new ColoredString(amount, Settings.CREAM_COLOR);
+        }
+    }
+
     boolean isDisplayingUpgrade();
-    int getCooldown();
-    int getBaseCooldown();
-    void setCooldown(int value);
-    default boolean progressCooldownAndTrigger(AbstractCreature source, AbstractCreature m, int amount)
-    {
+
+    default boolean progressCooldownAndTrigger(AbstractCreature source, AbstractCreature m, int amount) {
         boolean canProgress = CombatManager.onCooldownTriggered(source, m, this);
-        if (canProgress)
-        {
+        if (canProgress) {
             int value = getCooldown();
-            if (value <= 0)
-            {
+            if (value <= 0) {
                 reset();
                 return true;
             }
-            else
-            {
+            else {
                 setCooldown(Math.max(0, value - amount));
             }
         }
         return false;
     }
-    default void reset()
-    {
+
+    int getCooldown();
+
+    void setCooldown(int value);
+
+    default void reset() {
         setCooldown(getBaseCooldown());
     }
-    default boolean canActivate()
-    {
-        return getCooldown() <= 0;
-    }
-    default ColoredString getCooldownString()
-    {
-        int amount = getCooldown();
-        if (isDisplayingUpgrade())
-        {
-            return new ColoredString(amount, Settings.GREEN_TEXT_COLOR);
-        }
-        if (amount < getBaseCooldown())
-        {
-            if (amount > 0)
-            {
-                return new ColoredString(amount, COOLDOWN_INCOMPLETE_COLOR);
-            }
-            else
-            {
-                return new ColoredString(amount, Settings.GREEN_TEXT_COLOR);
-            }
-        }
-        else
-        {
-            return new ColoredString(amount, Settings.CREAM_COLOR);
-        }
-    }
+
+    int getBaseCooldown();
 }

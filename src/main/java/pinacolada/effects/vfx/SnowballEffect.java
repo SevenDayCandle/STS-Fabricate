@@ -8,8 +8,7 @@ import com.megacrit.cardcrawl.vfx.combat.LightFlareParticleEffect;
 import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLEffects;
 
-public class SnowballEffect extends PCLEffect
-{
+public class SnowballEffect extends PCLEffect {
     public static final int SIZE = 128;
     protected Color secondaryColor;
     protected float x;
@@ -20,8 +19,7 @@ public class SnowballEffect extends PCLEffect
     protected float targetY;
     protected float vfxTimer;
 
-    public SnowballEffect(float startX, float startY, float targetX, float targetY)
-    {
+    public SnowballEffect(float startX, float startY, float targetX, float targetY) {
         super(0.5f);
 
         this.color = Color.SKY.cpy();
@@ -34,8 +32,7 @@ public class SnowballEffect extends PCLEffect
         this.y = startY;
     }
 
-    public SnowballEffect setColor(Color mainColor, Color secondaryColor)
-    {
+    public SnowballEffect setColor(Color mainColor, Color secondaryColor) {
         this.color = mainColor.cpy();
         this.secondaryColor = secondaryColor.cpy();
 
@@ -43,21 +40,18 @@ public class SnowballEffect extends PCLEffect
     }
 
     @Override
-    protected void updateInternal(float deltaTime)
-    {
+    protected void updateInternal(float deltaTime) {
         x = Interpolation.fade.apply(targetX, startX, duration / startingDuration);
         y = Interpolation.fade.apply(targetY, startY, duration / startingDuration);
 
         vfxTimer -= deltaTime;
-        if (vfxTimer < 0f)
-        {
+        if (vfxTimer < 0f) {
             vfxTimer = 0.016f;
             PCLEffects.Queue.add(new LightFlareParticleEffect(x, y, secondaryColor));
             PCLEffects.Queue.add(new SnowBurstEffect(x, y));
         }
 
-        if (tickDuration(deltaTime))
-        {
+        if (tickDuration(deltaTime)) {
             PCLEffects.Queue.add(new SnowballImpactEffect(x, y).setColor(color)).setRealtime(isRealtime);
             complete();
         }

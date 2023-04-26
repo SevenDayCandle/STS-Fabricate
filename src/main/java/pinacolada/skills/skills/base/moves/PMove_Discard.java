@@ -16,42 +16,35 @@ import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.utilities.ListSelection;
 
 @VisibleSkill
-public class PMove_Discard extends PMove_Select<PField_CardCategory>
-{
+public class PMove_Discard extends PMove_Select<PField_CardCategory> {
     public static final PSkillData<PField_CardCategory> DATA = register(PMove_Discard.class, PField_CardCategory.class)
             .selfTarget()
             .setExtra(0, DEFAULT_MAX)
             .setGroups(PCLCardGroupHelper.DrawPile, PCLCardGroupHelper.Hand);
 
-    public PMove_Discard()
-    {
+    public PMove_Discard() {
         this(1);
     }
 
-    public PMove_Discard(PSkillSaveData content)
-    {
-        super(DATA, content);
-    }
-
-    public PMove_Discard(int amount, PCLCardGroupHelper... h)
-    {
+    public PMove_Discard(int amount, PCLCardGroupHelper... h) {
         super(DATA, amount, h);
     }
 
-    public PMove_Discard(int amount, int extra, PCLCardGroupHelper... h)
-    {
+    public PMove_Discard(PSkillSaveData content) {
+        super(DATA, content);
+    }
+
+    public PMove_Discard(int amount, int extra, PCLCardGroupHelper... h) {
         super(DATA, amount, extra, h);
     }
 
     @Override
-    public EUITooltip getActionTooltip()
-    {
-        return PGR.core.tooltips.discard;
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
+        return DiscardFromPile::new;
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction()
-    {
-        return DiscardFromPile::new;
+    public EUITooltip getActionTooltip() {
+        return PGR.core.tooltips.discard;
     }
 }

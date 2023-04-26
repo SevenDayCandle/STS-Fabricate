@@ -9,59 +9,48 @@ import pinacolada.actions.PCLActions;
 import java.util.ArrayList;
 
 // Copied and modified from STS-AnimatorMod
-public class DelayAllActions extends PCLAction<Void>
-{
+public class DelayAllActions extends PCLAction<Void> {
     protected final ArrayList<AbstractGameAction> actions = new ArrayList<>();
     protected FuncT1<Boolean, AbstractGameAction> except;
     protected boolean currentOnly = false;
 
-    public DelayAllActions()
-    {
+    public DelayAllActions() {
         this(false);
     }
 
-    public DelayAllActions(boolean currentOnly)
-    {
+    public DelayAllActions(boolean currentOnly) {
         super(AbstractGameAction.ActionType.SPECIAL, 0.01f);
 
-        if (currentOnly)
-        {
+        if (currentOnly) {
             createList();
         }
     }
 
-    public DelayAllActions except(FuncT1<Boolean, AbstractGameAction> except)
-    {
+    protected void createList() {
+        for (AbstractGameAction action : AbstractDungeon.actionManager.actions) {
+            if (action != this && (except == null || !except.invoke(action))) {
+                actions.add(action);
+            }
+        }
+    }
+
+    public DelayAllActions except(FuncT1<Boolean, AbstractGameAction> except) {
         this.except = except;
 
         return this;
     }
 
     @Override
-    protected void firstUpdate()
-    {
-        if (!currentOnly)
-        {
+    protected void firstUpdate() {
+        if (!currentOnly) {
             createList();
         }
 
         AbstractDungeon.actionManager.actions.removeAll(actions);
-        if (actions.size() > 0)
-        {
+        if (actions.size() > 0) {
             PCLActions.last.callback(() -> AbstractDungeon.actionManager.actions.addAll(actions));
         }
 
         completeImpl();
-    }
-
-    protected void createList()
-    {
-        for (AbstractGameAction action : AbstractDungeon.actionManager.actions)
-        {
-            if (action != this && (except == null || !except.invoke(action)))
-            {
-                actions.add(action);
-            }
-        }
     }
 }

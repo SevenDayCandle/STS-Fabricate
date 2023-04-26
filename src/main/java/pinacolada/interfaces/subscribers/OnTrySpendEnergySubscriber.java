@@ -5,7 +5,6 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import pinacolada.annotations.CombatSubscriber;
 
 @CombatSubscriber
-public interface OnTrySpendEnergySubscriber extends PCLCombatSubscriber
-{
+public interface OnTrySpendEnergySubscriber extends PCLCombatSubscriber {
     int onTrySpendEnergy(AbstractCard card, AbstractPlayer p, int originalCost);
 }

@@ -11,18 +11,25 @@ import javassist.expr.ExprEditor;
 import pinacolada.utilities.GameUtilities;
 
 // Use canPlayTwice for all powers that play cards twice
-public class PowerDuplicationPatches
-{
+public class PowerDuplicationPatches {
+    // Check for reading calls only because otherwise we'll end up overwriting the writing calls as well
+    public static void doEdit(javassist.expr.FieldAccess m) throws CannotCompileException {
+        if (m.getClassName().equals(AbstractCard.class.getName()) && m.getFieldName().equals("purgeOnUse") && m.isReader()) {
+            m.replace("{ $_ = pinacolada.patches.power.PowerDuplicationPatches.patch($0); }");
+        }
+    }
+
+    // Needs to be negated because these purgeOnUse checks were already negated
+    public static boolean patch(AbstractCard card) {
+        return !GameUtilities.canPlayTwice(card);
+    }
+
     @SpirePatch(clz = DuplicationPower.class, method = "onUseCard")
-    public static class DuplicationPatches_DuplicationPower
-    {
+    public static class DuplicationPatches_DuplicationPower {
         @SpireInstrumentPatch
-        public static ExprEditor instrument()
-        {
-            return new ExprEditor()
-            {
-                public void edit(javassist.expr.FieldAccess m) throws CannotCompileException
-                {
+        public static ExprEditor instrument() {
+            return new ExprEditor() {
+                public void edit(javassist.expr.FieldAccess m) throws CannotCompileException {
                     doEdit(m);
                 }
             };
@@ -30,15 +37,11 @@ public class PowerDuplicationPatches
     }
 
     @SpirePatch(clz = EchoPower.class, method = "onUseCard")
-    public static class DuplicationPatches_EchoPower
-    {
+    public static class DuplicationPatches_EchoPower {
         @SpireInstrumentPatch
-        public static ExprEditor instrument()
-        {
-            return new ExprEditor()
-            {
-                public void edit(javassist.expr.FieldAccess m) throws CannotCompileException
-                {
+        public static ExprEditor instrument() {
+            return new ExprEditor() {
+                public void edit(javassist.expr.FieldAccess m) throws CannotCompileException {
                     doEdit(m);
                 }
             };
@@ -46,33 +49,14 @@ public class PowerDuplicationPatches
     }
 
     @SpirePatch(clz = DoubleTapPower.class, method = "onUseCard")
-    public static class DuplicationPatches_DoubleTapPower
-    {
+    public static class DuplicationPatches_DoubleTapPower {
         @SpireInstrumentPatch
-        public static ExprEditor instrument()
-        {
-            return new ExprEditor()
-            {
-                public void edit(javassist.expr.FieldAccess m) throws CannotCompileException
-                {
+        public static ExprEditor instrument() {
+            return new ExprEditor() {
+                public void edit(javassist.expr.FieldAccess m) throws CannotCompileException {
                     doEdit(m);
                 }
             };
         }
-    }
-
-    // Check for reading calls only because otherwise we'll end up overwriting the writing calls as well
-    public static void doEdit(javassist.expr.FieldAccess m) throws CannotCompileException
-    {
-        if (m.getClassName().equals(AbstractCard.class.getName()) && m.getFieldName().equals("purgeOnUse") && m.isReader())
-        {
-            m.replace("{ $_ = pinacolada.patches.power.PowerDuplicationPatches.patch($0); }");
-        }
-    }
-
-    // Needs to be negated because these purgeOnUse checks were already negated
-    public static boolean patch(AbstractCard card)
-    {
-        return !GameUtilities.canPlayTwice(card);
     }
 }

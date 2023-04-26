@@ -7,37 +7,30 @@ import javassist.CtBehavior;
 import pinacolada.dungeon.CombatManager;
 
 // Copied and modified from STS-AnimatorMod
-public class EnergyManagerPatches
-{
+public class EnergyManagerPatches {
     @SpirePatch(clz = EnergyManager.class, method = "recharge")
-    public static class EnergyManagerPatches_recharge
-    {
+    public static class EnergyManagerPatches_recharge {
         private static int previousEnergy;
 
-        @SpirePrefixPatch
-        public static void prefix(EnergyManager __instance)
-        {
-            previousEnergy = EnergyPanel.getCurrentEnergy();
-        }
-
         @SpireInsertPatch(locator = Locator.class)
-        public static void insert(EnergyManager __instance)
-        {
+        public static void insert(EnergyManager __instance) {
             final int currentEnergy = EnergyPanel.getCurrentEnergy();
             final int newEnergyCount = CombatManager.onEnergyRecharge(previousEnergy, currentEnergy);
-            if (newEnergyCount != currentEnergy)
-            {
+            if (newEnergyCount != currentEnergy) {
                 EnergyPanel.setEnergy(newEnergyCount);
             }
         }
+
+        @SpirePrefixPatch
+        public static void prefix(EnergyManager __instance) {
+            previousEnergy = EnergyPanel.getCurrentEnergy();
+        }
     }
 
-    private static class Locator extends SpireInsertLocator
-    {
-        public int[] Locate(CtBehavior ctMethodToPatch) throws Exception
-        {
+    private static class Locator extends SpireInsertLocator {
+        public int[] Locate(CtBehavior ctMethodToPatch) throws Exception {
             final Matcher finalMatcher = new Matcher.MethodCallMatcher(EnergyPanel.class, "setEnergy");
-            return new int[]{ LineFinder.findInOrder(ctMethodToPatch, finalMatcher)[0] + 1 };
+            return new int[]{LineFinder.findInOrder(ctMethodToPatch, finalMatcher)[0] + 1};
         }
     }
 }

@@ -7,8 +7,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLEffects;
 
-public class BleedEffect extends PCLEffect
-{
+public class BleedEffect extends PCLEffect {
     private static final float RADIUS = 500 * Settings.scale;
 
     private final float sX;
@@ -16,34 +15,28 @@ public class BleedEffect extends PCLEffect
     private int count = 0;
     private float timer = 0.0F;
 
-    public BleedEffect(float sX, float sY, int count)
-    {
+    public BleedEffect(float sX, float sY, int count) {
         this.sX = sX - 20.0F * Settings.scale;
         this.sY = sY + 80.0F * Settings.scale;
         this.count = count;
     }
 
-    public void render(SpriteBatch sb)
-    {
+    public void render(SpriteBatch sb) {
 
     }
 
-    public void dispose()
-    {
+    public void dispose() {
     }
 
     @Override
-    protected void updateInternal(float deltaTime)
-    {
+    protected void updateInternal(float deltaTime) {
         this.timer -= Gdx.graphics.getDeltaTime();
-        if (this.timer < 0.0F)
-        {
+        if (this.timer < 0.0F) {
             this.timer += MathUtils.random(0.001F, 0.02F);
             float degrees = MathUtils.random(0f, 360f);
             PCLEffects.Queue.add(new BleedParticleEffect(sX, sY));
             --this.count;
-            if (this.count == 0)
-            {
+            if (this.count == 0) {
                 this.isDone = true;
             }
         }

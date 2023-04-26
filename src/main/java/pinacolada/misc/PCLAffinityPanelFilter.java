@@ -8,11 +8,9 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
-public class PCLAffinityPanelFilter implements CountingPanelCardFilter
-{
+public class PCLAffinityPanelFilter implements CountingPanelCardFilter {
     @Override
-    public ArrayList<? extends CountingPanelCounter<?>> generateCounters(ArrayList<AbstractCard> cards, Hitbox hb)
-    {
+    public ArrayList<? extends CountingPanelCounter<?>> generateCounters(ArrayList<AbstractCard> cards, Hitbox hb) {
         return GameUtilities.affinityStats(cards).generateCounters(hb, panel -> cards.sort(panel.type));
     }
 }

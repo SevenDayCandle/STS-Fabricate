@@ -10,61 +10,51 @@ import pinacolada.skills.fields.PField_CardTarget;
 import pinacolada.skills.skills.PTrigger;
 
 // Only used for augments
-public class PTrait_CardTarget extends PTrait<PField_CardTarget>
-{
+public class PTrait_CardTarget extends PTrait<PField_CardTarget> {
     public static final PSkillData<PField_CardTarget> DATA = register(PTrait_CardTarget.class, PField_CardTarget.class);
 
     protected PCLCardTarget newTarget = PCLCardTarget.Single;
 
-    public PTrait_CardTarget()
-    {
+    public PTrait_CardTarget() {
         this(PCLCardTarget.Single);
     }
 
-    public PTrait_CardTarget(PSkillSaveData content)
-    {
-        super(DATA, content);
-    }
-
-    public PTrait_CardTarget(PCLCardTarget type)
-    {
+    public PTrait_CardTarget(PCLCardTarget type) {
         super(DATA);
         this.newTarget = type;
     }
 
+    public PTrait_CardTarget(PSkillSaveData content) {
+        super(DATA, content);
+    }
+
     @Override
-    public String getSubText()
-    {
+    public void applyToCard(AbstractCard c, boolean conditionMet) {
+        if (c instanceof PCLCard) {
+            ((PCLCard) c).setTarget(conditionMet ? newTarget : ((PCLCard) c).cardData.cardTarget);
+        }
+    }
+
+    @Override
+    public String getSubText() {
         return hasParentType(PTrigger.class) ? getSubDescText() :
                 fields.random ? TEXT.act_remove(getSubDescText()) : TEXT.act_has(getSubDescText());
     }
 
     @Override
-    public PTrait_CardTarget makeCopy()
-    {
+    public PTrait_CardTarget makeCopy() {
         PTrait_CardTarget other = (PTrait_CardTarget) super.makeCopy();
         other.newTarget = this.newTarget;
         return other;
     }
 
     @Override
-    public void applyToCard(AbstractCard c, boolean conditionMet)
-    {
-        if (c instanceof PCLCard)
-        {
-            ((PCLCard) c).setTarget(conditionMet ? newTarget : ((PCLCard) c).cardData.cardTarget);
-        }
-    }
-
-    @Override
-    public String getSubDescText()
-    {
+    public String getSubDescText() {
         return newTarget.getTitle();
     }
 
     @Override
-    public String getSubSampleText()
-    {
+    public String getSubSampleText() {
         return TEXT.cedit_cardTarget;
     }
 }

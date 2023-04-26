@@ -21,8 +21,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Locale;
 
-public class PCLMainConfig extends AbstractConfig
-{
+public class PCLMainConfig extends AbstractConfig {
     public static final FilenameFilter JSON_FILTER = (dir, name) -> name.endsWith(".json");
 
     private static final String LAST_SEED_KEY = "TSDL";
@@ -79,24 +78,19 @@ public class PCLMainConfig extends AbstractConfig
     public STSSerializedConfigItem<Vector2> damageFormulaPosition = new STSSerializedConfigItem<Vector2>(DAMAGE_FORMULA_POSITION, new Vector2(0.6f, 0.8f));
     private HashSet<String> tips = null;
 
-    public static String createFullID(String name)
-    {
-        return PGR.BASE_PREFIX.toUpperCase(Locale.ROOT) + "-" + name;
-    }
-
-    public PCLMainConfig()
-    {
+    public PCLMainConfig() {
         super(MOD_ID);
     }
 
-    public boolean hideTipDescription(String id)
-    {
-        if (tips == null)
-        {
+    public static String createFullID(String name) {
+        return PGR.BASE_PREFIX.toUpperCase(Locale.ROOT) + "-" + name;
+    }
+
+    public boolean hideTipDescription(String id) {
+        if (tips == null) {
             tips = new HashSet<>();
 
-            if (config.has(HIDE_TIP_DESCRIPTION))
-            {
+            if (config.has(HIDE_TIP_DESCRIPTION)) {
                 Collections.addAll(tips, config.getString(HIDE_TIP_DESCRIPTION).split("\\|"));
             }
         }
@@ -104,35 +98,28 @@ public class PCLMainConfig extends AbstractConfig
         return tips.contains(id);
     }
 
-    public void hideTipDescription(String id, boolean value, boolean flush)
-    {
-        if (tips == null)
-        {
+    public void hideTipDescription(String id, boolean value, boolean flush) {
+        if (tips == null) {
             tips = new HashSet<>();
         }
 
-        if (value)
-        {
-            if (id != null)
-            {
+        if (value) {
+            if (id != null) {
                 tips.add(id);
             }
         }
-        else
-        {
+        else {
             tips.remove(id);
         }
 
         config.setString(HIDE_TIP_DESCRIPTION, EUIUtils.joinStrings("|", tips));
 
-        if (flush)
-        {
+        if (flush) {
             save();
         }
     }
 
-    public void initializeOptions()
-    {
+    public void initializeOptions() {
         final ModPanel panel = new ModPanel();
 
         int yPos = BASE_OPTION_OFFSET_Y;
@@ -155,9 +142,9 @@ public class PCLMainConfig extends AbstractConfig
         makeModToggle(displayCardTagDescription, PGR.core.strings.options_displayCardTagDescription, PGR.core.strings.optionDesc_displayCardTagDescription);
         makeModToggle(expandAbbreviatedEffects, PGR.core.strings.options_expandAbbreviatedEffects, PGR.core.strings.optionDesc_expandAbbreviatedEffects);
         makeModToggle(removeLineBreaks, PGR.core.strings.options_removeLineBreaks, PGR.core.strings.optionDesc_removeLineBreaks);
-        makeModToggle(showEstimatedDamage,  PGR.core.strings.options_showEstimatedDamage, PGR.core.strings.optionDesc_showEstimatedDamage);
-        makeModToggle(showFormulaDisplay,  PGR.core.strings.options_showFormulaDisplay, PGR.core.strings.optionDesc_showFormulaDisplay);
-        makeModToggle(showIrrelevantProperties,  PGR.core.strings.options_hideIrrelevantAffinities, PGR.core.strings.optionDesc_hideIrrelevantAffinities);
+        makeModToggle(showEstimatedDamage, PGR.core.strings.options_showEstimatedDamage, PGR.core.strings.optionDesc_showEstimatedDamage);
+        makeModToggle(showFormulaDisplay, PGR.core.strings.options_showFormulaDisplay, PGR.core.strings.optionDesc_showFormulaDisplay);
+        makeModToggle(showIrrelevantProperties, PGR.core.strings.options_hideIrrelevantAffinities, PGR.core.strings.optionDesc_hideIrrelevantAffinities);
 
         EUIConfiguration.disableDescrptionIcons.addListener(val -> this.updateCardDescriptions());
         displayCardTagDescription.addListener(val -> this.updateCardDescriptions());
@@ -165,8 +152,7 @@ public class PCLMainConfig extends AbstractConfig
         removeLineBreaks.addListener(val -> this.updateCardDescriptions());
     }
 
-    public void loadImpl()
-    {
+    public void loadImpl() {
         ascensionGlyph0.addConfig(config);
         ascensionGlyph1.addConfig(config);
         ascensionGlyph2.addConfig(config);
@@ -193,23 +179,17 @@ public class PCLMainConfig extends AbstractConfig
     }
 
     // Whenever this setting is updated, we need to force all cards everywhere to refresh their descriptions
-    private void updateCardDescriptions()
-    {
+    private void updateCardDescriptions() {
         PCLCardPreviews.invalidate();
-        for (AbstractCard c : CardLibrary.getAllCards())
-        {
-            if (c instanceof PCLCard)
-            {
+        for (AbstractCard c : CardLibrary.getAllCards()) {
+            if (c instanceof PCLCard) {
                 c.initializeDescription();
             }
         }
 
-        if (GameUtilities.inGame())
-        {
-            for (AbstractCard c : GameUtilities.getCardsInGame())
-            {
-                if (c instanceof PCLCard)
-                {
+        if (GameUtilities.inGame()) {
+            for (AbstractCard c : GameUtilities.getCardsInGame()) {
+                if (c instanceof PCLCard) {
                     c.initializeDescription();
                 }
             }

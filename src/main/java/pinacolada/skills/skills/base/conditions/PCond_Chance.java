@@ -14,47 +14,39 @@ import pinacolada.skills.skills.PPassiveCond;
 import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
-public class PCond_Chance extends PPassiveCond<PField_Not>
-{
+public class PCond_Chance extends PPassiveCond<PField_Not> {
     public static final PSkillData<PField_Not> DATA = register(PCond_Chance.class, PField_Not.class)
             .selfTarget();
 
-    public PCond_Chance(PSkillSaveData content)
-    {
+    public PCond_Chance(PSkillSaveData content) {
         super(DATA, content);
     }
 
-    public PCond_Chance()
-    {
+    public PCond_Chance() {
         super(DATA, PCLCardTarget.None, 1);
     }
 
-    public PCond_Chance(int amount)
-    {
+    public PCond_Chance(int amount) {
         super(DATA, PCLCardTarget.None, amount);
     }
 
     @Override
-    public Color getConditionColor()
-    {
-        return Settings.GOLD_COLOR;
-    }
-
-    @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource)
-    {
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
         return GameUtilities.chance(amount);
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill)
-    {
+    public Color getConditionColor() {
+        return Settings.GOLD_COLOR;
+    }
+
+    @Override
+    public String getSampleText(PSkill<?> callingSkill) {
         return TEXT.act_generic2(PGR.core.tooltips.chance.title, "X%");
     }
 
     @Override
-    public String getSubText()
-    {
+    public String getSubText() {
         return TEXT.act_generic2(PGR.core.tooltips.chance.title, amount + "%");
     }
 }

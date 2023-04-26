@@ -9,18 +9,15 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.PTrait;
 
 @VisibleAugment
-public class GGreen2 extends PCLAugment
-{
+public class GGreen2 extends PCLAugment {
     public static final PCLAugmentData DATA = register(GGreen2.class, PCLAugmentCategorySub.AffinityGreen, 3)
             .setSkill(PTrait.affinity(2, PCLAffinity.Green));
 
-    public GGreen2()
-    {
+    public GGreen2() {
         super(DATA);
     }
 
-    public GGreen2(PSkill<?> skill)
-    {
+    public GGreen2(PSkill<?> skill) {
         super(DATA, skill);
     }
 }

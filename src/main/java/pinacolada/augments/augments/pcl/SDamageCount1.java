@@ -8,18 +8,15 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.PTrait;
 
 @VisibleAugment
-public class SDamageCount1 extends PCLAugment
-{
+public class SDamageCount1 extends PCLAugment {
     public static final PCLAugmentData DATA = register(SDamageCount1.class, PCLAugmentCategorySub.DamageCount, 1)
             .setSkill(PTrait.hitCount(1), PTrait.damageMultiplier(-45));
 
-    public SDamageCount1()
-    {
+    public SDamageCount1() {
         super(DATA);
     }
 
-    public SDamageCount1(PSkill<?> skill)
-    {
+    public SDamageCount1(PSkill<?> skill) {
         super(DATA, skill);
     }
 }

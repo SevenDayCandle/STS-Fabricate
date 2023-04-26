@@ -5,7 +5,6 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import pinacolada.annotations.CombatSubscriber;
 
 @CombatSubscriber
-public interface OnCardReshuffledSubscriber extends PCLCombatSubscriber
-{
+public interface OnCardReshuffledSubscriber extends PCLCombatSubscriber {
     void onCardReshuffled(AbstractCard card, CardGroup sourcePile);
 }

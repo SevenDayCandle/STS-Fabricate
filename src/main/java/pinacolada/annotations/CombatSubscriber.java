@@ -8,6 +8,5 @@ import java.lang.annotation.Target;
 // Denote an interface class to be registered with CombatManager
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface CombatSubscriber
-{
+public @interface CombatSubscriber {
 }

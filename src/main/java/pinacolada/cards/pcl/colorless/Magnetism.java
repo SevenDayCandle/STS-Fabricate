@@ -10,8 +10,7 @@ import pinacolada.skills.PMove;
 import pinacolada.skills.skills.PTrigger;
 
 @VisibleCard
-public class Magnetism extends PCLCard
-{
+public class Magnetism extends PCLCard {
     public static final String ATLAS_URL = "colorless/power/magnetism";
     public static final PCLCardData DATA = register(Magnetism.class)
             .setImagePathFromAtlasUrl(ATLAS_URL)
@@ -20,13 +19,11 @@ public class Magnetism extends PCLCard
             .setCostUpgrades(-1)
             .setColorless();
 
-    public Magnetism()
-    {
+    public Magnetism() {
         super(DATA);
     }
 
-    public void setup(Object input)
-    {
+    public void setup(Object input) {
         addGainPower(PTrigger.when(PCond.onTurnStart(), PMove.createRandom(1, 1, PCLCardGroupHelper.Hand).edit(f -> f.setColor(CardColor.COLORLESS))));
     }
 }

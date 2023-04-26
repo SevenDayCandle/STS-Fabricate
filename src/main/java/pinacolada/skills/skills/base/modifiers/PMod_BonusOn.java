@@ -11,51 +11,32 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.skills.PPassiveMod;
 
-public abstract class PMod_BonusOn<T extends PField> extends PPassiveMod<T>
-{
+public abstract class PMod_BonusOn<T extends PField> extends PPassiveMod<T> {
 
-    public PMod_BonusOn(PSkillData<T> data, PSkillSaveData content)
-    {
+    public PMod_BonusOn(PSkillData<T> data, PSkillSaveData content) {
         super(data, content);
     }
 
-    public PMod_BonusOn(PSkillData<T> data)
-    {
+    public PMod_BonusOn(PSkillData<T> data) {
         super(data);
     }
 
-    public PMod_BonusOn(PSkillData<T> data, int amount)
-    {
+    public PMod_BonusOn(PSkillData<T> data, int amount) {
         super(data, PCLCardTarget.None, amount);
     }
 
-    public PMod_BonusOn(PSkillData<T> data, int amount, int extra)
-    {
+    public PMod_BonusOn(PSkillData<T> data, int amount, int extra) {
         super(data, PCLCardTarget.None, amount, extra);
     }
 
-    public String getConditionText()
-    {
-        return getSubText();
+    @Override
+    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info) {
+        return be.baseAmount + (meetsCondition(info) ? amount : 0);
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill)
-    {
-        return TEXT.cond_numIf(TEXT.subjects_x, getSubText());
-    }
-
-    @Override
-    public String getText(boolean addPeriod)
-    {
-        return TEXT.cond_genericConditional(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", TEXT.cond_numIf(getAmountRawString(), getConditionText())) + PCLCoreStrings.period(addPeriod);
-    }
-
-    @Override
-    public final ColoredString getColoredValueString()
-    {
-        if (baseAmount != amount)
-        {
+    public final ColoredString getColoredValueString() {
+        if (baseAmount != amount) {
             return new ColoredString(amount >= 0 ? "+" + amount : amount, amount >= baseAmount ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR);
         }
 
@@ -63,10 +44,18 @@ public abstract class PMod_BonusOn<T extends PField> extends PPassiveMod<T>
     }
 
     @Override
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info)
-    {
-        return be.baseAmount + (meetsCondition(info) ? amount : 0);
+    public String getText(boolean addPeriod) {
+        return TEXT.cond_genericConditional(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", TEXT.cond_numIf(getAmountRawString(), getConditionText())) + PCLCoreStrings.period(addPeriod);
+    }
+
+    public String getConditionText() {
+        return getSubText();
     }
 
     public abstract boolean meetsCondition(PCLUseInfo info);
+
+    @Override
+    public String getSampleText(PSkill<?> callingSkill) {
+        return TEXT.cond_numIf(TEXT.subjects_x, getSubText());
+    }
 }

@@ -17,8 +17,7 @@ import pinacolada.utilities.PCLRenderHelpers;
 import pinacolada.utilities.RandomizedList;
 
 // Copied and modified from STS-AnimatorMod
-public abstract class PCLEffect extends AbstractGameEffect
-{
+public abstract class PCLEffect extends AbstractGameEffect {
     public final static Hitbox SKY_HB_L = new Hitbox(Settings.WIDTH * 0.48f, Settings.HEIGHT * 0.7f, 2, 2);
     public final static Hitbox SKY_HB_R = new Hitbox(Settings.WIDTH * 0.52f, Settings.HEIGHT * 0.7f, 2, 2);
     public final static Hitbox SKY_HB_LOW_L = new Hitbox(Settings.WIDTH * 0.48f, Settings.HEIGHT * 0.5f, 2, 2);
@@ -28,56 +27,82 @@ public abstract class PCLEffect extends AbstractGameEffect
     public boolean isRealtime;
     public int ticks;
 
-    public PCLEffect()
-    {
+    public PCLEffect() {
         this(Settings.ACTION_DUR_FAST);
     }
 
-    public PCLEffect(float duration)
-    {
+    public PCLEffect(float duration) {
         this(duration, false);
     }
 
-    public PCLEffect(float duration, boolean isRealtime)
-    {
+    public PCLEffect(float duration, boolean isRealtime) {
         this.isRealtime = isRealtime;
         this.duration = this.startingDuration = duration;
         this.player = AbstractDungeon.player;
     }
 
-    public PCLEffect setRealtime(boolean isRealtime)
-    {
-        this.isRealtime = isRealtime;
-
-        return this;
+    protected static int random(int min, int max) {
+        return MathUtils.random(min, max);
     }
 
-    public PCLEffect setDuration(float duration, boolean isRealtime)
-    {
-        this.isRealtime = isRealtime;
-        this.duration = this.startingDuration = duration;
-
-        return this;
+    protected static float random(float min, float max) {
+        return MathUtils.random(min, max);
     }
 
-    public PCLEffect addDuration(float duration, boolean isRealtime)
-    {
+    protected static boolean randomBoolean(float chance) {
+        return MathUtils.randomBoolean(chance);
+    }
+
+    protected static boolean randomBoolean() {
+        return MathUtils.randomBoolean();
+    }
+
+    @SafeVarargs
+    protected static <T> T randomElement(RandomizedList<T> container, T... source) {
+        if (container.size() <= 1) {
+            container.addAll(source);
+        }
+
+        return container.retrieveUnseeded(true);
+    }
+
+    public PCLEffect addDuration(float duration, boolean isRealtime) {
         this.isRealtime = isRealtime;
         this.duration = (this.startingDuration += duration);
 
         return this;
     }
 
-    public PCLEffect setColor(Color color)
-    {
-        if (color != null)
-        {
-            if (this.color == null)
-            {
+    public PCLEffect renderBehind(boolean value) {
+        renderBehind = value;
+
+        return this;
+    }
+
+    protected void renderImage(SpriteBatch sb, TextureAtlas.AtlasRegion img, float x, float y) {
+        sb.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE);
+        PCLRenderHelpers.drawCentered(sb, color, img, x, y, img.packedWidth, img.packedHeight, scale, rotation);
+        sb.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+    }
+
+    protected void renderImage(SpriteBatch sb, Texture img, float x, float y, boolean flipX, boolean flipY) {
+        sb.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE);
+        PCLRenderHelpers.drawCentered(sb, color, img, x, y, img.getWidth(), img.getHeight(), scale, rotation, flipX, flipY);
+        sb.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+    }
+
+    protected void renderImage(SpriteBatch sb, Texture img, float x, float y, boolean flipX, boolean flipY, PCLRenderHelpers.BlendingMode blendingMode) {
+        sb.setBlendFunction(blendingMode.srcFunc, blendingMode.dstFunc);
+        PCLRenderHelpers.drawCentered(sb, color, img, x, y, img.getWidth(), img.getHeight(), scale, rotation, flipX, flipY);
+        sb.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+    }
+
+    public PCLEffect setColor(Color color) {
+        if (color != null) {
+            if (this.color == null) {
                 this.color = new Color(color.r, color.g, color.b, 1f);
             }
-            else
-            {
+            else {
                 this.color.r = color.r;
                 this.color.g = color.g;
                 this.color.b = color.b;
@@ -88,71 +113,60 @@ public abstract class PCLEffect extends AbstractGameEffect
         return this;
     }
 
-    public PCLEffect setScale(float scale)
-    {
-        this.scale = scale;
+    public PCLEffect setDuration(float duration, boolean isRealtime) {
+        this.isRealtime = isRealtime;
+        this.duration = this.startingDuration = duration;
 
         return this;
     }
 
-    public PCLEffect setRotation(float degrees)
-    {
+    public PCLEffect setRealtime(boolean isRealtime) {
+        this.isRealtime = isRealtime;
+
+        return this;
+    }
+
+    public PCLEffect setRotation(float degrees) {
         this.rotation = degrees;
 
         return this;
     }
 
-    @Override
-    public void render(SpriteBatch sb)
-    {
+    public PCLEffect setScale(float scale) {
+        this.scale = scale;
 
+        return this;
     }
 
     @Override
-    public void update()
-    {
-        if (duration == startingDuration)
-        {
+    public void update() {
+        if (duration == startingDuration) {
             firstUpdate();
 
-            if (!this.isDone)
-            {
+            if (!this.isDone) {
                 tickDuration(getDeltaTime());
             }
         }
-        else
-        {
+        else {
             updateInternal(getDeltaTime());
         }
     }
 
     @Override
-    public void dispose()
-    {
+    public void render(SpriteBatch sb) {
 
     }
 
-    protected void firstUpdate()
-    {
+    @Override
+    public void dispose() {
 
     }
 
-    protected void updateInternal(float deltaTime)
-    {
-        if (tickDuration(deltaTime))
-        {
-            complete();
-        }
+    protected void firstUpdate() {
+
     }
 
-    protected void complete()
-    {
-        PCLEffects.UnlistedEffects.remove(this);
-        this.isDone = true;
-    }
-
-    protected boolean tickDuration(float deltaTime)
-    {
+    protected boolean tickDuration(float deltaTime) {
         this.ticks += 1;
         this.duration -= deltaTime;
 
@@ -164,67 +178,18 @@ public abstract class PCLEffect extends AbstractGameEffect
         return isDone;
     }
 
-    protected float getDeltaTime()
-    {
+    protected float getDeltaTime() {
         return isRealtime ? Gdx.graphics.getRawDeltaTime() : Gdx.graphics.getDeltaTime();
     }
 
-    @SafeVarargs
-    protected static <T> T randomElement(RandomizedList<T> container, T... source)
-    {
-        if (container.size() <= 1)
-        {
-            container.addAll(source);
+    protected void updateInternal(float deltaTime) {
+        if (tickDuration(deltaTime)) {
+            complete();
         }
-
-        return container.retrieveUnseeded(true);
     }
 
-    protected static int random(int min, int max)
-    {
-        return MathUtils.random(min, max);
-    }
-
-    protected static float random(float min, float max)
-    {
-        return MathUtils.random(min, max);
-    }
-
-    protected static boolean randomBoolean(float chance)
-    {
-        return MathUtils.randomBoolean(chance);
-    }
-
-    protected static boolean randomBoolean()
-    {
-        return MathUtils.randomBoolean();
-    }
-
-    public PCLEffect renderBehind(boolean value)
-    {
-        renderBehind = value;
-
-        return this;
-    }
-
-    protected void renderImage(SpriteBatch sb, TextureAtlas.AtlasRegion img, float x, float y)
-    {
-        sb.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE);
-        PCLRenderHelpers.drawCentered(sb, color, img, x, y, img.packedWidth, img.packedHeight, scale, rotation);
-        sb.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-    }
-
-    protected void renderImage(SpriteBatch sb, Texture img, float x, float y, boolean flipX, boolean flipY)
-    {
-        sb.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE);
-        PCLRenderHelpers.drawCentered(sb, color, img, x, y, img.getWidth(), img.getHeight(), scale, rotation, flipX, flipY);
-        sb.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-    }
-
-    protected void renderImage(SpriteBatch sb, Texture img, float x, float y, boolean flipX, boolean flipY, PCLRenderHelpers.BlendingMode blendingMode)
-    {
-        sb.setBlendFunction(blendingMode.srcFunc, blendingMode.dstFunc);
-        PCLRenderHelpers.drawCentered(sb, color, img, x, y, img.getWidth(), img.getHeight(), scale, rotation, flipX, flipY);
-        sb.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+    protected void complete() {
+        PCLEffects.UnlistedEffects.remove(this);
+        this.isDone = true;
     }
 }

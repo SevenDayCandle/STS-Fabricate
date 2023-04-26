@@ -9,8 +9,7 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.skills.PMove;
 
 @VisibleCard
-public class CalculatedGamble extends PCLCard
-{
+public class CalculatedGamble extends PCLCard {
     public static final String ATLAS_URL = "green/skill/calculated_gamble";
     public static final PCLCardData DATA = register(CalculatedGamble.class)
             .setImagePathFromAtlasUrl(ATLAS_URL)
@@ -19,13 +18,11 @@ public class CalculatedGamble extends PCLCard
             .setRTags(PCLCardTag.Exhaust)
             .setColorless();
 
-    public CalculatedGamble()
-    {
+    public CalculatedGamble() {
         super(DATA);
     }
 
-    public void setup(Object input)
-    {
+    public void setup(Object input) {
         addUseMove(PMove.cycle(0));
     }
 }

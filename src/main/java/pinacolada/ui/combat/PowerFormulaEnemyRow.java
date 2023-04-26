@@ -12,28 +12,24 @@ import pinacolada.monsters.PCLCardAlly;
 import pinacolada.monsters.PCLIntentInfo;
 import pinacolada.utilities.PCLRenderHelpers;
 
-public class PowerFormulaEnemyRow extends PowerFormulaRow
-{
+public class PowerFormulaEnemyRow extends PowerFormulaRow {
     public boolean shouldRender;
-    public PowerFormulaEnemyRow(EUIHitbox hb)
-    {
+
+    public PowerFormulaEnemyRow(EUIHitbox hb) {
         super(hb, Type.EnemyAttack);
     }
 
     @Override
-    public void renderImpl(SpriteBatch sb)
-    {
+    public void renderImpl(SpriteBatch sb) {
         super.renderImpl(sb);
         if (card != null && (card.baseDamage > 0 || card.baseBlock > 0)) {
             PCLRenderHelpers.drawCentered(sb, Color.WHITE, EUIRM.images.border.texture(), hb.cX + hb.width * getOffsetCx(powers.size() / 2), hb.cY, ICON_SIZE, 16f, 1f, 0);
         }
     }
 
-    public void updateImpl(AbstractCard card, AbstractCreature target, boolean draggingCard, boolean shouldUpdateForCard, boolean shouldUpdateForTarget)
-    {
+    public void updateImpl(AbstractCard card, AbstractCreature target, boolean draggingCard, boolean shouldUpdateForCard, boolean shouldUpdateForTarget) {
         super.updateImpl();
-        if (shouldUpdateForCard || shouldUpdateForTarget)
-        {
+        if (shouldUpdateForCard || shouldUpdateForTarget) {
             powers.clear();
             if (target instanceof AbstractMonster && !(target instanceof PCLCardAlly)) {
                 PCLIntentInfo intent = PCLIntentInfo.get((AbstractMonster) target);
@@ -45,10 +41,8 @@ public class PowerFormulaEnemyRow extends PowerFormulaRow
                 shouldRender = input > 0;
             }
         }
-        else
-        {
-            for (PowerFormulaItem item : powers)
-            {
+        else {
+            for (PowerFormulaItem item : powers) {
                 item.updateImpl();
             }
         }

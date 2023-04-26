@@ -17,8 +17,7 @@ import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIFontHelper;
 
-public class PCLCustomCardUpgradableEditor extends EUIHoverable
-{
+public class PCLCustomCardUpgradableEditor extends EUIHoverable {
     protected static final float ICON_SIZE = 36f * Settings.scale;
 
     protected ActionT2<Integer, Integer> onUpdate;
@@ -30,8 +29,7 @@ public class PCLCustomCardUpgradableEditor extends EUIHoverable
     protected EUITextBoxNumericalInput displayValue;
     protected EUITextBoxNumericalInput displayValueSecondary;
 
-    public PCLCustomCardUpgradableEditor(EUIHitbox hb, String title, ActionT2<Integer, Integer> onUpdate)
-    {
+    public PCLCustomCardUpgradableEditor(EUIHitbox hb, String title, ActionT2<Integer, Integer> onUpdate) {
         super(hb);
 
         final float w = hb.width;
@@ -77,67 +75,67 @@ public class PCLCustomCardUpgradableEditor extends EUIHoverable
         this.onUpdate = onUpdate;
     }
 
-    public void decreasePrimary()
-    {
+    public void decreasePrimary() {
         setValue(displayValue.getCachedValue() - 1, displayValueSecondary.getCachedValue());
     }
 
-    public void decreaseSecondary()
-    {
+    public void decreaseSecondary() {
         setValue(displayValue.getCachedValue(), displayValueSecondary.getCachedValue() - 1);
     }
 
-    public int getValue()
-    {
+    public int getValue() {
         return displayValue.getCachedValue();
     }
 
-    public void increasePrimary()
-    {
+    public PCLCustomCardUpgradableEditor setValue(int value) {
+        return setValue(value, displayValueSecondary.getCachedValue());
+    }
+
+    public void increasePrimary() {
         setValue(displayValue.getCachedValue() + 1, displayValueSecondary.getCachedValue());
     }
 
-    public void increaseSecondary()
-    {
+    public void increaseSecondary() {
         setValue(displayValue.getCachedValue(), displayValueSecondary.getCachedValue() + 1);
     }
 
-    public PCLCustomCardUpgradableEditor setHeader(BitmapFont font, float fontScale, Color textColor, String text)
-    {
+    @Override
+    public void renderImpl(SpriteBatch sb) {
+        this.hb.render(sb);
+        decreaseButton2.tryRender(sb);
+        increaseButton2.tryRender(sb);
+        decreaseButton.tryRender(sb);
+        increaseButton.tryRender(sb);
+        displayValueSecondary.tryRender(sb);
+        displayValue.tryRender(sb);
+        header.tryRender(sb);
+    }
+
+    public PCLCustomCardUpgradableEditor setHeader(BitmapFont font, float fontScale, Color textColor, String text) {
         return setHeader(font, fontScale, textColor, text, false);
     }
 
-    public PCLCustomCardUpgradableEditor setHeader(BitmapFont font, float fontScale, Color textColor, String text, boolean smartText)
-    {
+    public PCLCustomCardUpgradableEditor setHeader(BitmapFont font, float fontScale, Color textColor, String text, boolean smartText) {
         this.header.setFont(font, fontScale).setColor(textColor).setLabel(text).setSmartText(smartText).setActive(true);
 
         return this;
     }
 
-    public PCLCustomCardUpgradableEditor setHeader(float x, float y, BitmapFont font, float fontScale, Color textColor, String text, boolean smartText)
-    {
+    public PCLCustomCardUpgradableEditor setHeader(float x, float y, BitmapFont font, float fontScale, Color textColor, String text, boolean smartText) {
         this.header.setPosition(x, y)
                 .setFont(font, fontScale).setColor(textColor).setLabel(text).setSmartText(smartText).setActive(true);
 
         return this;
     }
 
-    public PCLCustomCardUpgradableEditor setLimits(int minimum, int maximum)
-    {
+    public PCLCustomCardUpgradableEditor setLimits(int minimum, int maximum) {
         displayValue.setLimits(minimum, maximum);
 
         return this;
     }
 
-    public PCLCustomCardUpgradableEditor setSecondaryValue(int valueSecondary)
-    {
+    public PCLCustomCardUpgradableEditor setSecondaryValue(int valueSecondary) {
         return setValue(displayValue.getCachedValue(), valueSecondary);
-    }
-
-    public PCLCustomCardUpgradableEditor setTooltip(EUITooltip tip) {
-        super.setTooltip(tip);
-        header.setTooltip(tip);
-        return this;
     }
 
     public PCLCustomCardUpgradableEditor setTooltip(String name, String desc) {
@@ -146,31 +144,14 @@ public class PCLCustomCardUpgradableEditor extends EUIHoverable
         return this;
     }
 
-    public PCLCustomCardUpgradableEditor setValue(int value)
-    {
-        return setValue(value, displayValueSecondary.getCachedValue());
-    }
-
-    public PCLCustomCardUpgradableEditor setValue(int value, int valueSecondary)
-    {
-        return setValue(value, valueSecondary, true);
-    }
-
-    public PCLCustomCardUpgradableEditor setValue(int value, int valueSecondary, boolean invoke)
-    {
-        displayValue.forceSetValue(value, false);
-        displayValueSecondary.forceSetValue(MathUtils.clamp(valueSecondary, displayValue.getMin() - displayValue.getCachedValue(), displayValue.getMax() - displayValue.getCachedValue()), false);
-        if (invoke)
-        {
-            onUpdate.invoke(displayValue.getCachedValue(), displayValueSecondary.getCachedValue());
-        }
-
+    public PCLCustomCardUpgradableEditor setTooltip(EUITooltip tip) {
+        super.setTooltip(tip);
+        header.setTooltip(tip);
         return this;
     }
 
     @Override
-    public void updateImpl()
-    {
+    public void updateImpl() {
         super.updateImpl();
         decreaseButton.setInteractable(displayValue.getCachedValue() > displayValue.getMin()).tryUpdate();
         decreaseButton2.setInteractable(displayValue.getCachedValue() + displayValueSecondary.getCachedValue() > displayValue.getMin()).tryUpdate();
@@ -181,16 +162,17 @@ public class PCLCustomCardUpgradableEditor extends EUIHoverable
         header.tryUpdate();
     }
 
-    @Override
-    public void renderImpl(SpriteBatch sb)
-    {
-        this.hb.render(sb);
-        decreaseButton2.tryRender(sb);
-        increaseButton2.tryRender(sb);
-        decreaseButton.tryRender(sb);
-        increaseButton.tryRender(sb);
-        displayValueSecondary.tryRender(sb);
-        displayValue.tryRender(sb);
-        header.tryRender(sb);
+    public PCLCustomCardUpgradableEditor setValue(int value, int valueSecondary) {
+        return setValue(value, valueSecondary, true);
+    }
+
+    public PCLCustomCardUpgradableEditor setValue(int value, int valueSecondary, boolean invoke) {
+        displayValue.forceSetValue(value, false);
+        displayValueSecondary.forceSetValue(MathUtils.clamp(valueSecondary, displayValue.getMin() - displayValue.getCachedValue(), displayValue.getMax() - displayValue.getCachedValue()), false);
+        if (invoke) {
+            onUpdate.invoke(displayValue.getCachedValue(), displayValueSecondary.getCachedValue());
+        }
+
+        return this;
     }
 }

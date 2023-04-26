@@ -5,27 +5,23 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.ui.tooltips.EUITooltip;
 
 // Denotes object that can hold a PCLClickableUse, used in onClickableUsed
-public interface ClickableProvider
-{
-    String getID();
-    EUITooltip getTooltip();
+public interface ClickableProvider {
+    default String getDescription() {
+        return "";
+    }
 
-    default AbstractCreature getSource()
-    {
+    String getID();
+
+    default String getName() {
+        return "";
+    }
+
+    default AbstractCreature getSource() {
         return AbstractDungeon.player;
     }
 
-    default String getDescription()
-    {
-        return "";
-    }
+    EUITooltip getTooltip();
 
-    default String getName()
-    {
-        return "";
-    }
-
-    default void onClicked()
-    {
+    default void onClicked() {
     }
 }

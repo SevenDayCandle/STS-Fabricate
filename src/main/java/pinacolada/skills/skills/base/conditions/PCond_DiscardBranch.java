@@ -17,38 +17,32 @@ import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.utilities.ListSelection;
 
 @VisibleSkill
-public class PCond_DiscardBranch extends PCond_DoBranch
-{
+public class PCond_DiscardBranch extends PCond_DoBranch {
 
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_DiscardBranch.class, PField_CardCategory.class)
             .selfTarget()
             .setExtra(0, DEFAULT_MAX)
             .setGroups(PCLCardGroupHelper.DrawPile, PCLCardGroupHelper.ExhaustPile, PCLCardGroupHelper.Hand);
 
-    public PCond_DiscardBranch(PSkillSaveData content)
-    {
+    public PCond_DiscardBranch(PSkillSaveData content) {
         super(DATA, content);
     }
 
-    public PCond_DiscardBranch()
-    {
+    public PCond_DiscardBranch() {
         super(DATA);
     }
 
-    public PCond_DiscardBranch(int amount, PCLCardGroupHelper... groups)
-    {
+    public PCond_DiscardBranch(int amount, PCLCardGroupHelper... groups) {
         super(DATA, PCLCardTarget.None, amount, groups);
     }
 
     @Override
-    public EUITooltip getActionTooltip()
-    {
+    public EUITooltip getActionTooltip() {
         return PGR.core.tooltips.discard;
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction()
-    {
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
         return DiscardFromPile::new;
     }
 }

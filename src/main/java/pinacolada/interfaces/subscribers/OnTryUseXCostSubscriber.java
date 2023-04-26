@@ -4,7 +4,6 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.annotations.CombatSubscriber;
 
 @CombatSubscriber
-public interface OnTryUseXCostSubscriber extends PCLCombatSubscriber
-{
+public interface OnTryUseXCostSubscriber extends PCLCombatSubscriber {
     int onTryUseXCost(int original, AbstractCard card);
 }

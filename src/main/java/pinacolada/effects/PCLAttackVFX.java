@@ -18,10 +18,7 @@ import java.util.stream.Collectors;
 import static com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect;
 
 // TODO Refactor
-public class PCLAttackVFX
-{
-    private static final HashMap<AttackEffect, PCLAttackVFX> ALL = new HashMap<>();
-
+public class PCLAttackVFX {
     // Custom:
     public static final PCLAttackVFX BITE = new PCLAttackVFX(PCLEnum.AttackEffect.BITE, null, (t, cx, cy) -> VFX.bite(cx, cy, Color.WHITE), SFX.EVENT_VAMP_BITE);
     public static final PCLAttackVFX BLUNT_HEAVY = new PCLAttackVFX(AttackEffect.BLUNT_HEAVY, ImageMaster.ATK_BLUNT_HEAVY, SFX.BLUNT_FAST);
@@ -34,7 +31,6 @@ public class PCLAttackVFX
     public static final PCLAttackVFX ELECTRIC = new PCLAttackVFX(PCLEnum.AttackEffect.ELECTRIC, null, Color.YELLOW, (t, cx, cy) -> VFX.electric(cx, cy), SFX.ORB_LIGHTNING_CHANNEL);
     public static final PCLAttackVFX FIRE = new PCLAttackVFX(AttackEffect.FIRE, ImageMaster.ATK_FIRE, Color.RED, SFX.ATTACK_FIRE);
     public static final PCLAttackVFX GHOST = new PCLAttackVFX(PCLEnum.AttackEffect.GHOST, null, Color.VIOLET, (t, cx, cy) -> VFX.ghost(cx, cy), SFX.ORB_DARK_CHANNEL);
-
     public static final PCLAttackVFX GUNSHOT = new PCLAttackVFX(PCLEnum.AttackEffect.GUNSHOT, null, (t, cx, cy) -> VFX.gunshot(cx, cy));
     public static final PCLAttackVFX ICE = new PCLAttackVFX(PCLEnum.AttackEffect.ICE, null, Color.SKY, (t, cx, cy) -> VFX.snowballImpact(cx, cy), SFX.ORB_FROST_CHANNEL);
     public static final PCLAttackVFX LIGHTNING = new PCLAttackVFX(AttackEffect.LIGHTNING, null, Color.YELLOW, (t, cx, cy) -> VFX.lightning(cx, cy), SFX.ORB_LIGHTNING_EVOKE);
@@ -51,7 +47,7 @@ public class PCLAttackVFX
     public static final PCLAttackVFX SPARK = new PCLAttackVFX(PCLEnum.AttackEffect.SPARK, null, Color.YELLOW, (t, cx, cy) -> VFX.sparkImpact(cx, cy), SFX.ORB_LIGHTNING_CHANNEL);
     public static final PCLAttackVFX WATER = new PCLAttackVFX(PCLEnum.AttackEffect.WATER, null, Color.BLUE, (t, cx, cy) -> VFX.water(cx, cy), SFX.PCL_ORB_WATER_EVOKE);
     public static final PCLAttackVFX WIND = new PCLAttackVFX(PCLEnum.AttackEffect.WIND, null, Color.FOREST, (t, cx, cy) -> VFX.tornado(cx, cy), SFX.POWER_FLIGHT);
-
+    private static final HashMap<AttackEffect, PCLAttackVFX> ALL = new HashMap<>();
     public final AttackEffect key;
     public final TextureRegion texture;
     public final float damageDelay;
@@ -59,38 +55,15 @@ public class PCLAttackVFX
     protected final String[] sounds;
     protected final FuncT3<PCLEffect, AbstractCreature, Float, Float> createVFX;
 
-    public PCLAttackVFX(AttackEffect key)
-    {
+    public PCLAttackVFX(AttackEffect key) {
         this(key, null);
     }
 
-    public PCLAttackVFX(AttackEffect key, TextureRegion texture, String... sfx)
-    {
+    public PCLAttackVFX(AttackEffect key, TextureRegion texture, String... sfx) {
         this(key, texture, null, 0, null, sfx);
     }
 
-    public PCLAttackVFX(AttackEffect key, TextureRegion texture, Color damageTint, String... sfx)
-    {
-        this(key, texture, damageTint, 0, null, sfx);
-    }
-
-    public PCLAttackVFX(AttackEffect key, TextureRegion texture, float damageDelay, String... sfx)
-    {
-        this(key, texture, null, damageDelay, null, sfx);
-    }
-
-    public PCLAttackVFX(AttackEffect key, TextureRegion texture, FuncT3<PCLEffect, AbstractCreature, Float, Float> createVFX, String... sfx)
-    {
-        this(key, texture, null, 0, createVFX, sfx);
-    }
-
-    public PCLAttackVFX(AttackEffect key, TextureRegion texture, Color damageTint, FuncT3<PCLEffect, AbstractCreature, Float, Float> createVFX, String... sfx)
-    {
-        this(key, texture, damageTint, 0, createVFX, sfx);
-    }
-
-    public PCLAttackVFX(AttackEffect key, TextureRegion texture, Color damageTint, float damageDelay, FuncT3<PCLEffect, AbstractCreature, Float, Float> createVFX, String... sfx)
-    {
+    public PCLAttackVFX(AttackEffect key, TextureRegion texture, Color damageTint, float damageDelay, FuncT3<PCLEffect, AbstractCreature, Float, Float> createVFX, String... sfx) {
         ALL.put(key, this);
         this.key = key;
         this.texture = texture;
@@ -100,30 +73,36 @@ public class PCLAttackVFX
         this.sounds = sfx;
     }
 
-    public static PCLAttackVFX get(AttackEffect key)
-    {
+    public PCLAttackVFX(AttackEffect key, TextureRegion texture, Color damageTint, String... sfx) {
+        this(key, texture, damageTint, 0, null, sfx);
+    }
+
+    public PCLAttackVFX(AttackEffect key, TextureRegion texture, float damageDelay, String... sfx) {
+        this(key, texture, null, damageDelay, null, sfx);
+    }
+
+    public PCLAttackVFX(AttackEffect key, TextureRegion texture, FuncT3<PCLEffect, AbstractCreature, Float, Float> createVFX, String... sfx) {
+        this(key, texture, null, 0, createVFX, sfx);
+    }
+
+    public PCLAttackVFX(AttackEffect key, TextureRegion texture, Color damageTint, FuncT3<PCLEffect, AbstractCreature, Float, Float> createVFX, String... sfx) {
+        this(key, texture, damageTint, 0, createVFX, sfx);
+    }
+
+    public static PCLAttackVFX get(AttackEffect key) {
         return ALL.get(key);
     }
 
-    public static List<AttackEffect> keys()
-    {
+    public static List<AttackEffect> keys() {
         return ALL.keySet().stream().sorted((a, b) -> StringUtils.compare(a.name(), b.name())).collect(Collectors.toList());
     }
 
-    public String getSound()
-    {
-        return sounds.length == 0 ? null : sounds.length == 1 ? sounds[0] : EUIUtils.random(sounds);
-    }
-
-    public PCLEffect getVFX(AbstractCreature source, float t_cX, float t_cY)
-    {
-        if (createVFX != null)
-        {
+    public PCLEffect getVFX(AbstractCreature source, float t_cX, float t_cY) {
+        if (createVFX != null) {
             return createVFX.invoke(source, t_cX, t_cY);
         }
 
-        if (texture != null)
-        {
+        if (texture != null) {
             return new GenericRenderEffect(texture, t_cX, t_cY)
                     .setRotation(key == AttackEffect.BLUNT_HEAVY ? MathUtils.random(0, 360) : MathUtils.random(-12f, 12f));
         }
@@ -131,8 +110,11 @@ public class PCLAttackVFX
         return new GenericRenderEffect((TextureRegion) null, t_cX, t_cY);
     }
 
-    public void playSound(float pitchMin, float pitchMax)
-    {
+    public void playSound(float pitchMin, float pitchMax) {
         SFX.play(getSound(), pitchMin, pitchMax);
+    }
+
+    public String getSound() {
+        return sounds.length == 0 ? null : sounds.length == 1 ? sounds[0] : EUIUtils.random(sounds);
     }
 }

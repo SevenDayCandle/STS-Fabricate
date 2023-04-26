@@ -3,39 +3,32 @@ package pinacolada.skills.fields;
 import pinacolada.resources.PGR;
 import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
 
-public class PField_Not extends PField
-{
+public class PField_Not extends PField {
     public boolean not;
 
     @Override
-    public boolean equals(PField other)
-    {
+    public boolean equals(PField other) {
         return other instanceof PField_Not && not == ((PField_Not) other).not;
     }
 
     @Override
-    public PField_Not makeCopy()
-    {
+    public PField_Not makeCopy() {
         return new PField_Not().setNot(not);
     }
 
-    public PField_Not setNot(boolean value)
-    {
+    public PField_Not setNot(boolean value) {
         this.not = value;
         return this;
     }
 
-    public void registerNotBoolean(PCLCustomCardEffectEditor<?> editor)
-    {
+    public void setupEditor(PCLCustomCardEffectEditor<?> editor) {
+    }
+
+    public void registerNotBoolean(PCLCustomCardEffectEditor<?> editor) {
         editor.registerBoolean(PGR.core.strings.cedit_not, v -> not = v, not);
     }
 
-    public void registerNotBoolean(PCLCustomCardEffectEditor<?> editor, String name, String desc)
-    {
+    public void registerNotBoolean(PCLCustomCardEffectEditor<?> editor, String name, String desc) {
         editor.registerBoolean(name, desc, v -> not = v, not);
-    }
-
-    public void setupEditor(PCLCustomCardEffectEditor<?> editor)
-    {
     }
 }

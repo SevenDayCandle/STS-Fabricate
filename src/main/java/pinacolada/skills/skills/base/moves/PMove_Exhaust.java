@@ -16,42 +16,35 @@ import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.utilities.ListSelection;
 
 @VisibleSkill
-public class PMove_Exhaust extends PMove_Select<PField_CardCategory>
-{
+public class PMove_Exhaust extends PMove_Select<PField_CardCategory> {
     public static final PSkillData<PField_CardCategory> DATA = register(PMove_Exhaust.class, PField_CardCategory.class)
             .selfTarget()
             .setExtra(0, DEFAULT_MAX)
             .setGroups(PCLCardGroupHelper.DrawPile, PCLCardGroupHelper.DiscardPile, PCLCardGroupHelper.Hand);
 
-    public PMove_Exhaust()
-    {
+    public PMove_Exhaust() {
         this(1);
     }
 
-    public PMove_Exhaust(PSkillSaveData content)
-    {
-        super(DATA, content);
-    }
-
-    public PMove_Exhaust(int amount, PCLCardGroupHelper... h)
-    {
+    public PMove_Exhaust(int amount, PCLCardGroupHelper... h) {
         super(DATA, amount, h);
     }
 
-    public PMove_Exhaust(int amount, int extra, PCLCardGroupHelper... h)
-    {
+    public PMove_Exhaust(PSkillSaveData content) {
+        super(DATA, content);
+    }
+
+    public PMove_Exhaust(int amount, int extra, PCLCardGroupHelper... h) {
         super(DATA, amount, extra, h);
     }
 
     @Override
-    public EUITooltip getActionTooltip()
-    {
-        return PGR.core.tooltips.exhaust;
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
+        return ExhaustFromPile::new;
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction()
-    {
-        return ExhaustFromPile::new;
+    public EUITooltip getActionTooltip() {
+        return PGR.core.tooltips.exhaust;
     }
 }

@@ -10,8 +10,7 @@ import pinacolada.skills.PCond;
 import pinacolada.skills.skills.base.moves.PMove_GainEnergy;
 
 @VisibleCard
-public class Status_Void extends PCLCard
-{
+public class Status_Void extends PCLCard {
     public static final String ATLAS_URL = "status/void";
     public static final PCLCardData DATA = register(Status_Void.class)
             .setImagePathFromAtlasUrl(ATLAS_URL)
@@ -19,14 +18,12 @@ public class Status_Void extends PCLCard
             .setTags(PCLCardTag.Ethereal, PCLCardTag.Unplayable)
             .setAffinities(PCLAffinity.Purple);
 
-    public Status_Void()
-    {
+    public Status_Void() {
         super(DATA);
     }
 
     @Override
-    public void setup(Object input)
-    {
+    public void setup(Object input) {
         addUseMove(PCond.onDraw(), new PMove_GainEnergy(-1));
     }
 }

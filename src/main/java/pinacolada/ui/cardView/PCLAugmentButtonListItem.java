@@ -9,13 +9,11 @@ import extendedui.ui.hitboxes.RelativeHitbox;
 import pinacolada.augments.PCLAugment;
 import pinacolada.utilities.PCLRenderHelpers;
 
-public class PCLAugmentButtonListItem extends PCLAugmentListItem
-{
+public class PCLAugmentButtonListItem extends PCLAugmentListItem {
 
     public final EUIImage background;
 
-    public PCLAugmentButtonListItem(PCLAugmentList panel, PCLAugment augment, int count, boolean enabled)
-    {
+    public PCLAugmentButtonListItem(PCLAugmentList panel, PCLAugment augment, int count, boolean enabled) {
         super(panel, augment, count, 1.4f, 4.2f, enabled);
         this.amount = count;
         amountText.setColor(Settings.BLUE_TEXT_COLOR);
@@ -24,21 +22,18 @@ public class PCLAugmentButtonListItem extends PCLAugmentListItem
                 .setColor(new Color(0.45f, 0.6f, 0.6f, 1f));
     }
 
-    public String getAmountString(float amount)
-    {
+    public String getAmountString(float amount) {
         return PCLRenderHelpers.decimalFormat(amount) + "x";
     }
 
     @Override
-    public void renderImpl(SpriteBatch sb)
-    {
+    public void renderImpl(SpriteBatch sb) {
         background.renderImpl(sb);
         super.renderImpl(sb);
     }
 
     @Override
-    public void updateImpl()
-    {
+    public void updateImpl() {
         background.updateImpl();
         super.updateImpl();
     }

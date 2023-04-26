@@ -4,38 +4,30 @@ import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import pinacolada.actions.PCLAction;
 
 // Copied and modified from STS-AnimatorMod
-public abstract class NestedAction<T> extends PCLAction<T>
-{
+public abstract class NestedAction<T> extends PCLAction<T> {
     protected AbstractGameAction action;
 
-    public NestedAction(AbstractGameAction.ActionType type)
-    {
+    public NestedAction(AbstractGameAction.ActionType type) {
         super(type);
     }
 
-    public NestedAction(AbstractGameAction.ActionType type, float duration)
-    {
+    public NestedAction(AbstractGameAction.ActionType type, float duration) {
         super(type, duration);
     }
 
     @Override
-    public void updateInternal(float deltaTime)
-    {
-        if (updateAction())
-        {
+    public void updateInternal(float deltaTime) {
+        if (updateAction()) {
             onNestCompleted();
         }
     }
 
-    protected boolean updateAction()
-    {
-        if (action == null)
-        {
+    protected boolean updateAction() {
+        if (action == null) {
             return true;
         }
 
-        if (!action.isDone)
-        {
+        if (!action.isDone) {
             action.update();
         }
 

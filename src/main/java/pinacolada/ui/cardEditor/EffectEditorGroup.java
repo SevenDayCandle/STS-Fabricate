@@ -12,41 +12,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("rawtypes")
-public class EffectEditorGroup<T extends PSkill<?>> extends EUIBase
-{
-    protected ArrayList<T> lowerEffects = new ArrayList<>();
-    protected ArrayList<PCLCustomCardEffectEditor<T>> editors = new ArrayList<>();
-    protected FuncT0<List<? extends T>> listFunc = this::getAllEffects;
+public class EffectEditorGroup<T extends PSkill<?>> extends EUIBase {
     protected final Class<? extends PSkill> className;
     protected final String title;
     protected final PCLCustomCardEffectPage editor;
+    protected ArrayList<T> lowerEffects = new ArrayList<>();
+    protected ArrayList<PCLCustomCardEffectEditor<T>> editors = new ArrayList<>();
+    protected FuncT0<List<? extends T>> listFunc = this::getAllEffects;
 
-    public EffectEditorGroup(PCLCustomCardEffectPage editor, Class<? extends PSkill> className, String title)
-    {
+    public EffectEditorGroup(PCLCustomCardEffectPage editor, Class<? extends PSkill> className, String title) {
         this.editor = editor;
         this.className = className;
         this.title = title;
     }
 
-    // Ensure that an editor exists for every subeffect for this card. Should be called after deconstructing the card JSON effect
-    public void syncWithLower()
-    {
-        for (int i = 0; i < lowerEffects.size(); i++)
-        {
-            PCLCustomCardEffectEditor<T> effectEditor = new PCLCustomCardEffectEditor<T>(this, new OriginRelativeHitbox(editor.hb, PCLCustomCardEffectPage.MENU_WIDTH, PCLCustomCardEffectPage.MENU_HEIGHT, 0, 0), i);
-            editors.add(effectEditor);
-        }
-    }
-
     // Add a subeffect to this joint effect, and select the first effect in the list to prevent the user from saving a null effect
     // We can call construct effect directly here because this is itself called in a callback
-    public PCLCustomCardEffectEditor<T> addEffectSlot()
-    {
+    public PCLCustomCardEffectEditor<T> addEffectSlot() {
         lowerEffects.add(null);
         PCLCustomCardEffectEditor<T> effectEditor = new PCLCustomCardEffectEditor<T>(this, new OriginRelativeHitbox(editor.hb, PCLCustomCardEffectPage.MENU_WIDTH, PCLCustomCardEffectPage.MENU_HEIGHT, 0, 0), editors.size());
         editors.add(effectEditor);
-        if (effectEditor.effects.size() > 0)
-        {
+        if (effectEditor.effects.size() > 0) {
             effectEditor.effects.setSelectedIndex(0);
         }
         editor.constructEffect();
@@ -54,18 +40,25 @@ public class EffectEditorGroup<T extends PSkill<?>> extends EUIBase
         return effectEditor;
     }
 
+    public List<T> getAllEffects() {
+        return (List<T>) (PGR.config.showIrrelevantProperties.get() ? PSkill.getEligibleEffects(className) : PSkill.getEligibleEffects(className, editor.screen.getBuilder().cardColor));
+    }
+
+    public void refresh() {
+        for (PCLCustomCardEffectEditor<T> ce : editors) {
+            ce.refresh();
+        }
+    }
+
     // Remove a subeffect from this joint effect
     // We can call construct effect directly here because this is itself called in a callback
-    public void removeEffectSlot(int index)
-    {
-        if (lowerEffects.size() > index && editors.size() > index)
-        {
+    public void removeEffectSlot(int index) {
+        if (lowerEffects.size() > index && editors.size() > index) {
             lowerEffects.remove(index);
             editors.remove(index);
 
             // Update editor indexes to reflect changes in the effects
-            for (int i = 0; i < editors.size(); i++)
-            {
+            for (int i = 0; i < editors.size(); i++) {
                 editors.get(i).updateIndex(i);
             }
             editor.constructEffect();
@@ -73,58 +66,44 @@ public class EffectEditorGroup<T extends PSkill<?>> extends EUIBase
         }
     }
 
-    public float reposition(float offsetY)
-    {
+    public void renderImpl(SpriteBatch sb) {
+        for (PCLCustomCardEffectEditor<T> ce : editors) {
+            ce.render(sb);
+        }
+    }
+
+    public void updateImpl() {
+        for (PCLCustomCardEffectEditor<T> ce : editors) {
+            ce.update();
+        }
+    }
+
+    public float reposition(float offsetY) {
         float offset = offsetY;
-        for (PCLCustomCardEffectEditor<T> editor : editors)
-        {
+        for (PCLCustomCardEffectEditor<T> editor : editors) {
             editor.hb.setOffsetY(offset);
             editor.hb.update();
             offset += PCLCustomCardEffectPage.OFFSET_EFFECT * 2 + editor.getAdditionalHeight();
-            for (EUIHoverable element : editor.activeElements)
-            {
+            for (EUIHoverable element : editor.activeElements) {
                 element.hb.update();
             }
         }
         return offset;
     }
 
-    public List<T> getAllEffects()
-    {
-        return (List<T>) (PGR.config.showIrrelevantProperties.get() ? PSkill.getEligibleEffects(className) : PSkill.getEligibleEffects(className, editor.screen.getBuilder().cardColor));
-    }
-
-    public void setListFunc(FuncT0<List<? extends T>> listFunc)
-    {
+    public void setListFunc(FuncT0<List<? extends T>> listFunc) {
         this.listFunc = listFunc;
-        for (PCLCustomCardEffectEditor<T> ce : editors)
-        {
+        for (PCLCustomCardEffectEditor<T> ce : editors) {
             ce.effects.setItems(ce.getEffects());
             ce.refresh();
         }
     }
 
-    public void refresh()
-    {
-        for (PCLCustomCardEffectEditor<T> ce : editors)
-        {
-            ce.refresh();
-        }
-    }
-
-    public void updateImpl()
-    {
-        for (PCLCustomCardEffectEditor<T> ce : editors)
-        {
-            ce.update();
-        }
-    }
-
-    public void renderImpl(SpriteBatch sb)
-    {
-        for (PCLCustomCardEffectEditor<T> ce : editors)
-        {
-            ce.render(sb);
+    // Ensure that an editor exists for every subeffect for this card. Should be called after deconstructing the card JSON effect
+    public void syncWithLower() {
+        for (int i = 0; i < lowerEffects.size(); i++) {
+            PCLCustomCardEffectEditor<T> effectEditor = new PCLCustomCardEffectEditor<T>(this, new OriginRelativeHitbox(editor.hb, PCLCustomCardEffectPage.MENU_WIDTH, PCLCustomCardEffectPage.MENU_HEIGHT, 0, 0), i);
+            editors.add(effectEditor);
         }
     }
 }

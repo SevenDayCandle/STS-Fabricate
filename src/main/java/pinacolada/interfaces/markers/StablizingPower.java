@@ -1,6 +1,5 @@
 package pinacolada.interfaces.markers;
 
-public interface StablizingPower
-{
+public interface StablizingPower {
     void stabilize(int amount);
 }

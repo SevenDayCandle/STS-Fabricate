@@ -8,47 +8,38 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
 
 @VisibleSkill
-public class PMod_PerCreature extends PMod_Per<PField_Not>
-{
+public class PMod_PerCreature extends PMod_Per<PField_Not> {
 
     public static final PSkillData<PField_Not> DATA = register(PMod_PerCreature.class, PField_Not.class);
 
-    public PMod_PerCreature(PSkillSaveData content)
-    {
+    public PMod_PerCreature(PSkillSaveData content) {
         super(DATA, content);
     }
 
-    public PMod_PerCreature()
-    {
+    public PMod_PerCreature() {
         super(DATA);
     }
 
-    public PMod_PerCreature(int amount)
-    {
+    public PMod_PerCreature(int amount) {
         super(DATA, PCLCardTarget.AllEnemy, amount);
     }
 
-    public PMod_PerCreature(PCLCardTarget target, int amount)
-    {
+    public PMod_PerCreature(PCLCardTarget target, int amount) {
         super(DATA, target, amount);
     }
 
     @Override
-    public int getMultiplier(PCLUseInfo info)
-    {
+    public int getMultiplier(PCLUseInfo info) {
         return getTargetList(info).size();
     }
 
-    public String getSubSampleText()
-    {
+    public String getSubSampleText() {
         return TEXT.subjects_character;
     }
 
     @Override
-    public String getSubText()
-    {
-        switch (target)
-        {
+    public String getSubText() {
+        switch (target) {
             case AllAlly:
             case RandomAlly:
             case SingleAlly:

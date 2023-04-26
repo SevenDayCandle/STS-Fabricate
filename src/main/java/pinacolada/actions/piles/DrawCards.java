@@ -11,13 +11,11 @@ import extendedui.utilities.GenericCondition;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.utility.CardFilterAction;
 
-public class DrawCards extends CardFilterAction
-{
+public class DrawCards extends CardFilterAction {
     protected boolean canDrawUnfiltered;
     protected boolean shuffleIfEmpty = true;
 
-    protected DrawCards(DrawCards other, int amount)
-    {
+    protected DrawCards(DrawCards other, int amount) {
         this(amount);
 
         shuffleIfEmpty = other.shuffleIfEmpty;
@@ -27,40 +25,33 @@ public class DrawCards extends CardFilterAction
         selectedCards.addAll(other.selectedCards);
     }
 
-    public DrawCards(int amount)
-    {
+    public DrawCards(int amount) {
         super(ActionType.DRAW);
 
         initialize(amount);
     }
 
-    public DrawCards(String name, int amount)
-    {
+    public DrawCards(String name, int amount) {
         super(ActionType.DRAW);
 
         initialize(amount, name);
     }
 
     @Override
-    protected void firstUpdate()
-    {
-        if (player.hasPower(NoDrawPower.POWER_ID))
-        {
+    protected void firstUpdate() {
+        if (player.hasPower(NoDrawPower.POWER_ID)) {
             player.getPower(NoDrawPower.POWER_ID).flash();
             complete(selectedCards);
             return;
         }
 
-        if (amount <= 0)
-        {
+        if (amount <= 0) {
             complete(selectedCards);
             return;
         }
 
-        if (player.drawPile.isEmpty())
-        {
-            if (shuffleIfEmpty && !player.discardPile.isEmpty())
-            {
+        if (player.drawPile.isEmpty()) {
+            if (shuffleIfEmpty && !player.discardPile.isEmpty()) {
                 PCLActions.top.sequential(
                         new EmptyDeckShuffleAction(),
                         new DrawCards(this, amount)
@@ -68,37 +59,29 @@ public class DrawCards extends CardFilterAction
 
                 completeImpl(); // Do not trigger callback
             }
-            else
-            {
+            else {
                 complete(selectedCards);
             }
         }
-        else if (player.hand.size() >= BaseMod.MAX_HAND_SIZE)
-        {
+        else if (player.hand.size() >= BaseMod.MAX_HAND_SIZE) {
             player.createHandIsFullDialog();
             complete(selectedCards);
         }
-        else
-        {
-            if (filter != null)
-            {
+        else {
+            if (filter != null) {
                 AbstractCard filtered = null;
-                for (AbstractCard card : player.drawPile.group)
-                {
-                    if (filter.check(card))
-                    {
+                for (AbstractCard card : player.drawPile.group) {
+                    if (filter.check(card)) {
                         filtered = card;
                         break;
                     }
                 }
 
-                if (filtered != null)
-                {
+                if (filtered != null) {
                     player.drawPile.removeCard(filtered);
                     player.drawPile.addToTop(filtered);
                 }
-                else if (!canDrawUnfiltered)
-                {
+                else if (!canDrawUnfiltered) {
                     complete(selectedCards);
                     return;
                 }
@@ -115,24 +98,21 @@ public class DrawCards extends CardFilterAction
         }
     }
 
-    public <S> DrawCards setFilter(S state, FuncT2<Boolean, S, AbstractCard> filter, boolean canDrawUnfiltered)
-    {
+    public <S> DrawCards setFilter(S state, FuncT2<Boolean, S, AbstractCard> filter, boolean canDrawUnfiltered) {
         this.filter = GenericCondition.fromT2(filter, state);
         this.canDrawUnfiltered = canDrawUnfiltered;
 
         return this;
     }
 
-    public DrawCards setFilter(FuncT1<Boolean, AbstractCard> filter, boolean canDrawUnfiltered)
-    {
+    public DrawCards setFilter(FuncT1<Boolean, AbstractCard> filter, boolean canDrawUnfiltered) {
         this.filter = GenericCondition.fromT1(filter);
         this.canDrawUnfiltered = canDrawUnfiltered;
 
         return this;
     }
 
-    public DrawCards shuffleIfEmpty(boolean shuffleIfEmpty)
-    {
+    public DrawCards shuffleIfEmpty(boolean shuffleIfEmpty) {
         this.shuffleIfEmpty = shuffleIfEmpty;
 
         return this;

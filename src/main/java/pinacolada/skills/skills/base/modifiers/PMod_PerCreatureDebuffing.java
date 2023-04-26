@@ -12,45 +12,37 @@ import pinacolada.skills.fields.PField_Not;
 import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
-public class PMod_PerCreatureDebuffing extends PMod_Per<PField_Not>
-{
+public class PMod_PerCreatureDebuffing extends PMod_Per<PField_Not> {
     public static final PSkillData<PField_Not> DATA = register(PMod_PerCreatureDebuffing.class, PField_Not.class);
 
-    public PMod_PerCreatureDebuffing(PSkillSaveData content)
-    {
+    public PMod_PerCreatureDebuffing(PSkillSaveData content) {
         super(DATA, content);
     }
 
-    public PMod_PerCreatureDebuffing()
-    {
+    public PMod_PerCreatureDebuffing() {
         super(DATA);
     }
 
-    public PMod_PerCreatureDebuffing(int amount)
-    {
+    public PMod_PerCreatureDebuffing(int amount) {
         super(DATA, PCLCardTarget.AllEnemy, amount);
     }
 
-    public PMod_PerCreatureDebuffing(PCLCardTarget target, int amount)
-    {
+    public PMod_PerCreatureDebuffing(PCLCardTarget target, int amount) {
         super(DATA, target, amount);
     }
 
     @Override
-    public int getMultiplier(PCLUseInfo info)
-    {
+    public int getMultiplier(PCLUseInfo info) {
         return EUIUtils.count(getTargetList(info), GameUtilities::isDebuffing);
     }
 
     @Override
-    public String getSubSampleText()
-    {
+    public String getSubSampleText() {
         return EUIRM.strings.adjNoun(PGR.core.tooltips.debuff.progressive(), TEXT.subjects_character);
     }
 
     @Override
-    public String getSubText()
-    {
+    public String getSubText() {
         return EUIRM.strings.adjNoun(PGR.core.tooltips.debuff.progressive(), target == PCLCardTarget.Any ? TEXT.subjects_character : TEXT.subjects_enemy);
     }
 }

@@ -15,27 +15,24 @@ import java.util.ArrayList;
 
 import static extendedui.ui.AbstractScreen.createHexagonalButton;
 
-public class PCLAugmentList extends EUICanvasGrid
-{
+public class PCLAugmentList extends EUICanvasGrid {
 
+    public static final int DEFAULT = 3;
     protected static final float X_START = Settings.WIDTH * 0.22f;
     protected static final float Y_START = Settings.HEIGHT * 0.77f;
     protected static final float X_PAD = Settings.WIDTH * 0.19f;
     protected static final float Y_PAD = scale(80);
-    public static final int DEFAULT = 3;
     public ArrayList<PCLAugmentListItem> augments = new ArrayList<>();
     protected int hoveredIndex;
     protected EUIButton cancel;
     protected AugmentSortButton sortButton;
     protected ActionT1<PCLAugment> onComplete;
 
-    public PCLAugmentList(ActionT1<PCLAugment> onComplete)
-    {
+    public PCLAugmentList(ActionT1<PCLAugment> onComplete) {
         this(onComplete, DEFAULT);
     }
 
-    public PCLAugmentList(ActionT1<PCLAugment> onComplete, int rowSize)
-    {
+    public PCLAugmentList(ActionT1<PCLAugment> onComplete, int rowSize) {
         super(rowSize, Y_PAD);
 
         this.onComplete = onComplete;
@@ -46,37 +43,13 @@ public class PCLAugmentList extends EUICanvasGrid
         sortButton = new AugmentSortButton(new EUIHitbox(0, 0, scale(170), scale(32)), this::sortAugments);
     }
 
-    public void addListItem(PCLAugment augment, float amount)
-    {
-        this.augments.add(new PCLAugmentListItem(this, augment, amount));
-    }
-
-    public void addPanelItem(PCLAugment augment, int count, boolean enabled)
-    {
-        this.augments.add(new PCLAugmentButtonListItem(this, augment, count, enabled));
-    }
-
-    public void clear()
-    {
-        augments.clear();
-    }
-
-    @Override
-    public int currentSize()
-    {
-        return augments.size();
-    }
-
-    protected void sortAugments(AugmentSortButton.Type sortType, boolean sortDesc)
-    {
+    protected void sortAugments(AugmentSortButton.Type sortType, boolean sortDesc) {
         int multiplier = sortDesc ? -1 : 1;
         augments.sort((a, b) -> sortImpl(a, b, sortType) * multiplier);
     }
 
-    protected int sortImpl(PCLAugmentListItem a, PCLAugmentListItem b, AugmentSortButton.Type sortType)
-    {
-        switch (sortType)
-        {
+    protected int sortImpl(PCLAugmentListItem a, PCLAugmentListItem b, AugmentSortButton.Type sortType) {
+        switch (sortType) {
             case Name:
                 return StringUtils.compare(a.augment.getName(), b.augment.getName());
             case Count:
@@ -89,29 +62,42 @@ public class PCLAugmentList extends EUICanvasGrid
         return 0;
     }
 
+    public void addListItem(PCLAugment augment, float amount) {
+        this.augments.add(new PCLAugmentListItem(this, augment, amount));
+    }
+
+    public void addPanelItem(PCLAugment augment, int count, boolean enabled) {
+        this.augments.add(new PCLAugmentButtonListItem(this, augment, count, enabled));
+    }
+
+    public void clear() {
+        augments.clear();
+    }
+
     @Override
-    public void updateImpl()
-    {
+    public int currentSize() {
+        return augments.size();
+    }
+
+    @Override
+    public void updateImpl() {
         super.updateImpl();
         int row = 0;
         int column = 0;
 
         sortButton.setTargetPosition(X_START, Y_START + scrollDelta + yPadding).updateImpl();
 
-        for (int i = 0; i < augments.size(); i++)
-        {
+        for (int i = 0; i < augments.size(); i++) {
             PCLAugmentListItem item = augments.get(i);
             item.hb.setTargetCenter((X_START) + (column * X_PAD), Y_START + scrollDelta - (row * yPadding));
             item.updateImpl();
 
-            if (item.hb.hovered)
-            {
+            if (item.hb.hovered) {
                 hoveredIndex = i;
             }
 
             column += 1;
-            if (column >= rowSize)
-            {
+            if (column >= rowSize) {
                 column = 0;
                 row += 1;
             }
@@ -120,14 +106,11 @@ public class PCLAugmentList extends EUICanvasGrid
     }
 
     @Override
-    public void renderImpl(SpriteBatch sb)
-    {
+    public void renderImpl(SpriteBatch sb) {
         super.renderImpl(sb);
         sortButton.renderImpl(sb);
-        for (PCLAugmentListItem item : augments)
-        {
-            if (item.hb.y >= -100f * Settings.scale && item.hb.y <= Settings.HEIGHT + 100f * Settings.scale)
-            {
+        for (PCLAugmentListItem item : augments) {
+            if (item.hb.y >= -100f * Settings.scale && item.hb.y <= Settings.HEIGHT + 100f * Settings.scale) {
                 item.renderImpl(sb);
             }
         }

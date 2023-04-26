@@ -11,23 +11,19 @@ import pinacolada.powers.PCLPower;
 import pinacolada.resources.PCLEnum;
 import pinacolada.utilities.GameUtilities;
 
-public class SelfImmolationPower extends PCLPower
-{
+public class SelfImmolationPower extends PCLPower {
     public static final String POWER_ID = createFullID(SelfImmolationPower.class);
     public boolean justApplied;
 
-    public SelfImmolationPower(AbstractCreature owner, int amount)
-    {
+    public SelfImmolationPower(AbstractCreature owner, int amount) {
         this(owner, amount, false);
     }
 
-    public SelfImmolationPower(AbstractCreature owner, int amount, boolean justApplied)
-    {
+    public SelfImmolationPower(AbstractCreature owner, int amount, boolean justApplied) {
         super(owner, POWER_ID);
 
         this.amount = amount;
-        if (this.amount >= 9999)
-        {
+        if (this.amount >= 9999) {
             this.amount = 9999;
         }
         initialize(amount, PowerType.DEBUFF, true);
@@ -37,20 +33,8 @@ public class SelfImmolationPower extends PCLPower
         updateDescription();
     }
 
-    private void applyDebuff(int amount)
-    {
-        if (amount > 0)
-        {
-            for (AbstractCreature cr : GameUtilities.getAllCharacters(true))
-            {
-                PCLActions.bottom.dealDamageAtEndOfTurn(owner, cr, amount, PCLEnum.AttackEffect.CLAW);
-            }
-        }
-    }
-
     @Override
-    public void onInitialApplication()
-    {
+    public void onInitialApplication() {
         super.onInitialApplication();
 
         PCLEffects.Queue.add(VFX.bleed(owner.hb));
@@ -58,34 +42,36 @@ public class SelfImmolationPower extends PCLPower
     }
 
     @Override
-    public void playApplyPowerSfx()
-    {
+    public void playApplyPowerSfx() {
         SFX.play(SFX.HEART_BEAT, 1f, 1.15f, 0.95f);
     }
 
     @Override
-    public void atStartOfTurnPostDraw()
-    {
+    public void atStartOfTurnPostDraw() {
         super.atStartOfTurnPostDraw();
-        if (justApplied)
-        {
+        if (justApplied) {
             justApplied = false;
         }
-        else
-        {
+        else {
             reducePower(1);
         }
 
     }
 
     @Override
-    public void onPlayCard(AbstractCard card, AbstractMonster m)
-    {
+    public void onPlayCard(AbstractCard card, AbstractMonster m) {
         super.onPlayCard(card, m);
-        if (card.block > 0)
-        {
+        if (card.block > 0) {
             applyDebuff(card.block * amount);
             this.flash();
+        }
+    }
+
+    private void applyDebuff(int amount) {
+        if (amount > 0) {
+            for (AbstractCreature cr : GameUtilities.getAllCharacters(true)) {
+                PCLActions.bottom.dealDamageAtEndOfTurn(owner, cr, amount, PCLEnum.AttackEffect.CLAW);
+            }
         }
     }
 }

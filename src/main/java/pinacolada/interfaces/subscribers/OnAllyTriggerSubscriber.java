@@ -5,7 +5,6 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.monsters.PCLCardAlly;
 
 @CombatSubscriber
-public interface OnAllyTriggerSubscriber extends PCLCombatSubscriber
-{
+public interface OnAllyTriggerSubscriber extends PCLCombatSubscriber {
     void onAllyTrigger(PCLCard card, PCLCardAlly ally);
 }

@@ -17,8 +17,7 @@ import pinacolada.resources.loadout.PCLRelicSlot;
 import pinacolada.resources.pcl.PCLCoreImages;
 
 // Copied and modified from STS-AnimatorMod
-public class PCLRelicSlotEditor extends EUIBase
-{
+public class PCLRelicSlotEditor extends EUIBase {
     public static final float SPACING = 64f * Settings.scale;
     public static final float ITEM_HEIGHT = AbstractCard.IMG_HEIGHT * 0.15f;
     protected static final float CARD_SCALE = 0.75f;
@@ -32,8 +31,7 @@ public class PCLRelicSlotEditor extends EUIBase
     protected EUIRelic relicImage;
     protected PCLRelic relic;
 
-    public PCLRelicSlotEditor(PCLLoadoutEditor loadoutEditor, float cX, float cY)
-    {
+    public PCLRelicSlotEditor(PCLLoadoutEditor loadoutEditor, float cX, float cY) {
         this.loadoutEditor = loadoutEditor;
 
         relicvalueText = new EUITextBox(EUIRM.images.panelRoundedHalfH.texture(), new EUIHitbox(cX, cY, AbstractCard.IMG_WIDTH * 0.2f, ITEM_HEIGHT))
@@ -55,10 +53,8 @@ public class PCLRelicSlotEditor extends EUIBase
         setSlot(null);
     }
 
-    public PCLRelicSlotEditor setSlot(PCLRelicSlot slot)
-    {
-        if (slot == null)
-        {
+    public PCLRelicSlotEditor setSlot(PCLRelicSlot slot) {
+        if (slot == null) {
             this.slot = null;
             this.relic = null;
             this.relicnameText.setActive(false);
@@ -80,50 +76,40 @@ public class PCLRelicSlotEditor extends EUIBase
             this.relicImage = null;
         }).setInteractable(slot.canRemove()).setActive(relic != null);
         this.changeButton.setOnClick(() -> loadoutEditor.trySelectRelic(this.slot)).setActive(change);
-        if (relic != null)
-        {
+        if (relic != null) {
             this.relicImage = new EUIRelic(relic, new EUIHitbox(relicvalueText.hb.x + relicvalueText.hb.width + SPACING / 2, relicvalueText.hb.y, relic.hb.width, relic.hb.height));
         }
-        else
-        {
+        else {
             this.relicImage = null;
         }
 
         return this;
     }
 
-    public PCLRelicSlotEditor translate(float cX, float cY)
-    {
-        relicvalueText.setPosition(cX, cY);
-        relicnameText.setPosition(relicvalueText.hb.x + relicvalueText.hb.width + SPACING, cY);
-        clearButton.setPosition(relicnameText.hb.x + relicnameText.hb.width, cY);
-        changeButton.setPosition(clearButton.hb.x + clearButton.hb.width + 8, cY);
-        if (relic != null && this.relicImage != null)
-        {
-            this.relicImage.translate(relicvalueText.hb.x + relicvalueText.hb.width + SPACING / 2, relicvalueText.hb.y);
+    @Override
+    public void renderImpl(SpriteBatch sb) {
+        relicnameText.tryRender(sb);
+        if (this.relicImage != null) {
+            relicImage.renderImpl(sb);
         }
-
-        return this;
+        relicvalueText.tryRender(sb);
+        changeButton.tryRender(sb);
+        clearButton.tryRender(sb);
     }
 
     @Override
-    public void updateImpl()
-    {
-        if (slot == null)
-        {
+    public void updateImpl() {
+        if (slot == null) {
             return;
         }
         relicnameText.tryUpdate();
 
-        if (changeButton.isActive && relicnameText.hb.hovered)
-        {
-            if (InputHelper.justClickedLeft)
-            {
+        if (changeButton.isActive && relicnameText.hb.hovered) {
+            if (InputHelper.justClickedLeft) {
                 relicnameText.hb.clickStarted = true;
             }
 
-            if (relicnameText.hb.clicked)
-            {
+            if (relicnameText.hb.clicked) {
                 relicnameText.hb.clicked = false;
                 loadoutEditor.trySelectRelic(this.slot);
                 return;
@@ -131,14 +117,12 @@ public class PCLRelicSlotEditor extends EUIBase
 
             relicnameText.setFontColor(Color.WHITE);
         }
-        else
-        {
+        else {
             relicnameText.setFontColor(Color.GOLD);
         }
 
         relic = slot.getRelic();
-        if (relic != null && this.relicImage != null)
-        {
+        if (relic != null && this.relicImage != null) {
             relicImage.translate(relicvalueText.hb.x + relicvalueText.hb.width, relicvalueText.hb.y);
             relicImage.updateImpl();
         }
@@ -148,26 +132,23 @@ public class PCLRelicSlotEditor extends EUIBase
                 .setFontColor(value == 0 ? Settings.CREAM_COLOR : value < 0 ? Settings.RED_TEXT_COLOR : Settings.GREEN_TEXT_COLOR)
                 .tryUpdate();
 
-        if (changeButton.isActive)
-        {
+        if (changeButton.isActive) {
             changeButton.updateImpl();
         }
-        if (clearButton.isActive)
-        {
+        if (clearButton.isActive) {
             clearButton.setInteractable(slot.canRemove()).updateImpl();
         }
     }
 
-    @Override
-    public void renderImpl(SpriteBatch sb)
-    {
-        relicnameText.tryRender(sb);
-        if (this.relicImage != null)
-        {
-            relicImage.renderImpl(sb);
+    public PCLRelicSlotEditor translate(float cX, float cY) {
+        relicvalueText.setPosition(cX, cY);
+        relicnameText.setPosition(relicvalueText.hb.x + relicvalueText.hb.width + SPACING, cY);
+        clearButton.setPosition(relicnameText.hb.x + relicnameText.hb.width, cY);
+        changeButton.setPosition(clearButton.hb.x + clearButton.hb.width + 8, cY);
+        if (relic != null && this.relicImage != null) {
+            this.relicImage.translate(relicvalueText.hb.x + relicvalueText.hb.width + SPACING / 2, relicvalueText.hb.y);
         }
-        relicvalueText.tryRender(sb);
-        changeButton.tryRender(sb);
-        clearButton.tryRender(sb);
+
+        return this;
     }
 }

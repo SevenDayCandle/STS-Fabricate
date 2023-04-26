@@ -15,18 +15,14 @@ import pinacolada.ui.menu.CustomMainMenuPanelButton;
 import static extendedui.ui.AbstractScreen.EUI_MENU;
 import static pinacolada.resources.PCLEnum.Menus.CUSTOM;
 
-public class MenuPanelScreenPatches
-{
+public class MenuPanelScreenPatches {
 
     @SpirePatch(clz = MenuPanelScreen.class, method = "initializePanels")
-    public static class MenuPanelScreen_InitializePanels
-    {
+    public static class MenuPanelScreen_InitializePanels {
         @SpirePrefixPatch
-        public static SpireReturn<Void> prefix(MenuPanelScreen __instance)
-        {
+        public static SpireReturn<Void> prefix(MenuPanelScreen __instance) {
             MenuPanelScreen.PanelScreen screen = EUIClassUtils.getField(__instance, "screen");
-            if (screen == CUSTOM)
-            {
+            if (screen == CUSTOM) {
                 __instance.panels.clear();
                 __instance.panels.add(new CustomMainMenuPanelButton(PCLEnum.Panels.CUSTOM_CARDS, MainMenuPanelButton.PanelColor.BEIGE, (float) Settings.WIDTH / 2.0F - 450F * Settings.scale, Settings.HEIGHT * 0.5f));
                 __instance.panels.add(new CustomMainMenuPanelButton(PCLEnum.Panels.CUSTOM_RELICS, MainMenuPanelButton.PanelColor.GRAY, (float) Settings.WIDTH / 2.0F, Settings.HEIGHT * 0.5f));
@@ -38,11 +34,9 @@ public class MenuPanelScreenPatches
     }
 
     @SpirePatch(clz = MenuPanelScreen.class, method = "update")
-    public static class MenuPanelScreen_Update
-    {
+    public static class MenuPanelScreen_Update {
         @SpirePostfixPatch
-        public static SpireReturn<Void> postfix(MenuPanelScreen __instance)
-        {
+        public static SpireReturn<Void> postfix(MenuPanelScreen __instance) {
             return (CardCrawlGame.mainMenuScreen.screen == EUI_MENU) ? SpireReturn.Return() : SpireReturn.Continue();
         }
     }

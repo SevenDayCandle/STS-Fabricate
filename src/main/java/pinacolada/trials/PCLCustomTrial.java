@@ -13,8 +13,7 @@ import com.megacrit.cardcrawl.trials.CustomTrial;
 
 import java.util.*;
 
-public class PCLCustomTrial extends CustomTrial
-{
+public class PCLCustomTrial extends CustomTrial {
     protected static final String DAILY_MODS = "Daily Mods";
     protected static final String MOD_BINARY = "Binary";
     protected static final String MOD_ONE_HIT_WONDER = "One Hit Wonder";
@@ -27,25 +26,28 @@ public class PCLCustomTrial extends CustomTrial
     public final ArrayList<String> relicIds = new ArrayList<>();
     public final HashSet<String> bannedCards;
     public final HashSet<String> bannedRelics;
+    public boolean allowCustomCards;
     protected Integer maxHpOverride = null;
     protected boolean isKeepingStarterCards = true;
     protected boolean isKeepingStarterRelic = true;
-    public boolean allowCustomCards;
 
 
-    public PCLCustomTrial(HashSet<String> bannedCards, HashSet<String> bannedRelics)
-    {
+    public PCLCustomTrial(HashSet<String> bannedCards, HashSet<String> bannedRelics) {
         super();
         this.bannedCards = bannedCards;
         this.bannedRelics = bannedRelics;
     }
 
+    public void addMods(Collection<CustomMod> mods) {
+        for (CustomMod mod : mods) {
+            addMod(mod);
+        }
+    }
+
     // TODO Add custom mods
-    public void addMod(CustomMod mod)
-    {
+    public void addMod(CustomMod mod) {
         // Handle non daily mods. Ignoring Blight Chests BECAUSE IT IS ALREADY A DAILY MOD WTF
-        switch (mod.ID)
-        {
+        switch (mod.ID) {
             case DAILY_MODS:
                 setRandomDailyMods();
                 return;
@@ -69,58 +71,45 @@ public class PCLCustomTrial extends CustomTrial
         modIds.add(mod.ID);
     }
 
-    public void addMods(Collection<CustomMod> mods)
-    {
-        for (CustomMod mod : mods)
-        {
-            addMod(mod);
-        }
+    public void setStarterRelics(String... starterRelics) {
+        setStarterRelics(Arrays.asList(starterRelics));
     }
 
-    public void addStarterCards(String... moreCardIds)
-    {
+    public void addStarterCards(String... moreCardIds) {
         addStarterCards(Arrays.asList(moreCardIds));
     }
 
-    public void addStarterRelics(String... relicIds)
-    {
+    public void addStarterRelics(String... relicIds) {
         addStarterRelics(Arrays.asList(relicIds));
     }
 
-    public void setMaxHpOverride(int maxHp)
-    {
+    public void setMaxHpOverride(int maxHp) {
         this.maxHpOverride = maxHp;
     }
 
-    public void addStarterCards(List<String> moreCardIds)
-    {
+    public void addStarterCards(List<String> moreCardIds) {
         this.cardIds.addAll(moreCardIds);
     }
 
-    public void setStarterCards(List<String> starterCards)
-    {
+    public void setStarterCards(List<String> starterCards) {
         this.cardIds.clear();
         this.cardIds.addAll(starterCards);
         this.isKeepingStarterCards = false;
     }
 
-    public void addStarterRelics(List<String> moreRelics)
-    {
+    public void addStarterRelics(List<String> moreRelics) {
         this.relicIds.addAll(moreRelics);
     }
 
-    public void setStarterRelics(List<String> starterRelics)
-    {
+    public void setStarterRelics(List<String> starterRelics) {
         this.relicIds.clear();
         this.relicIds.addAll(starterRelics);
         this.isKeepingStarterRelic = false;
     }
 
     // TODO Use custom stuff (i.e. glyphs)
-    public AbstractPlayer setupPlayer(AbstractPlayer player)
-    {
-        if (this.maxHpOverride != null)
-        {
+    public AbstractPlayer setupPlayer(AbstractPlayer player) {
+        if (this.maxHpOverride != null) {
             player.maxHealth = this.maxHpOverride;
             player.currentHealth = this.maxHpOverride;
         }
@@ -129,43 +118,32 @@ public class PCLCustomTrial extends CustomTrial
     }
 
     @Override
-    public boolean keepStarterRelic()
-    {
+    public boolean keepStarterRelic() {
         return this.isKeepingStarterRelic;
     }
 
     @Override
-    public List<String> extraStartingRelicIDs()
-    {
+    public List<String> extraStartingRelicIDs() {
         return this.relicIds;
     }
 
     @Override
-    public boolean keepsStarterCards()
-    {
+    public boolean keepsStarterCards() {
         return this.isKeepingStarterCards;
     }
 
     @Override
-    public List<String> extraStartingCardIDs()
-    {
+    public List<String> extraStartingCardIDs() {
         return this.cardIds;
     }
 
     @Override
-    public ArrayList<String> dailyModIDs()
-    {
+    public ArrayList<String> dailyModIDs() {
         return this.modIds;
     }
 
-    public void setStarterCards(String... moreCardIds)
-    {
+    public void setStarterCards(String... moreCardIds) {
         setStarterCards(Arrays.asList(moreCardIds));
-    }
-
-    public void setStarterRelics(String... starterRelics)
-    {
-        setStarterRelics(Arrays.asList(starterRelics));
     }
 
 }

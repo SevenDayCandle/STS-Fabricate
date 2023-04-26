@@ -23,57 +23,46 @@ import pinacolada.utilities.GameUtilities;
 import java.util.List;
 
 @VisibleSkill
-public class PCond_Fatal extends PActiveNonCheckCond<PField_Random> implements OnMonsterDeathSubscriber
-{
+public class PCond_Fatal extends PActiveNonCheckCond<PField_Random> implements OnMonsterDeathSubscriber {
     public static final PSkillData<PField_Random> DATA = register(PCond_Fatal.class, PField_Random.class, 1, 1)
             .selfTarget();
 
-    public PCond_Fatal()
-    {
+    public PCond_Fatal() {
         super(DATA, PCLCardTarget.None, 0);
     }
 
-    public PCond_Fatal(PSkillSaveData content)
-    {
+    public PCond_Fatal(PSkillSaveData content) {
         super(DATA, content);
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill)
-    {
+    public String getSampleText(PSkill<?> callingSkill) {
         return callingSkill instanceof PTrigger_When ? TEXT.cond_whenSingle(PGR.core.tooltips.kill.present()) : super.getSampleText(callingSkill);
     }
 
     @Override
-    public String getSubText()
-    {
-        if (isWhenClause())
-        {
+    public String getSubText() {
+        if (isWhenClause()) {
             return TEXT.cond_whenMulti(TEXT.subjects_anyEnemy(), PGR.core.tooltips.kill.present());
         }
-        if (fields.random)
-        {
+        if (fields.random) {
             return fields.not ? getTargetIsString(TEXT.cond_not(PGR.core.tooltips.kill.past())) : getTargetIsString(PGR.core.tooltips.kill.past());
         }
         return fields.not ? TEXT.cond_not(PGR.core.tooltips.fatal.title) : TEXT.cond_ifX(PGR.core.tooltips.fatal.title);
     }
 
     @Override
-    public void onMonsterDeath(AbstractMonster monster, boolean triggerRelics)
-    {
+    public void onMonsterDeath(AbstractMonster monster, boolean triggerRelics) {
         useFromTrigger(makeInfo(monster));
     }
 
-    protected PCLAction<?> useImpl(PCLUseInfo info, ActionT0 onComplete, ActionT0 onFail)
-    {
+    protected PCLAction<?> useImpl(PCLUseInfo info, ActionT0 onComplete, ActionT0 onFail) {
         List<AbstractCreature> targetList = getTargetList(info);
         return PCLActions.last.callback(targetList, (targets, __) -> {
-            if (targets.size() > 0 && EUIUtils.any(targets, t -> GameUtilities.isFatal(t, fields.random)) && (!(parent instanceof PLimit) || ((PLimit) parent).tryActivate(info)))
-            {
+            if (targets.size() > 0 && EUIUtils.any(targets, t -> GameUtilities.isFatal(t, fields.random)) && (!(parent instanceof PLimit) || ((PLimit) parent).tryActivate(info))) {
                 onComplete.invoke();
             }
-            else
-            {
+            else {
                 onFail.invoke();
             }
         }).isCancellable(false);

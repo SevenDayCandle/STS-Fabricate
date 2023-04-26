@@ -7,32 +7,14 @@ import extendedui.utilities.RotatingList;
 
 import java.util.ArrayList;
 
-public class PCLPreviewList extends RotatingList<EUICardPreview>
-{
+public class PCLPreviewList extends RotatingList<EUICardPreview> {
 
     public PCLPreviewList() {
         super();
     }
 
-    public AbstractCard getCard(int index) {
-        return get(index).defaultPreview;
-    }
-
-    public AbstractCard getUpgrade(int index) {
-        return get(index).upgradedPreview;
-    }
-
     public void add(AbstractCard card) {
         add(EUICardPreview.generatePreviewCard(card));
-    }
-
-    public EUICardPreview set(int index, AbstractCard card) {
-        return set(index, EUICardPreview.generatePreviewCard(card));
-    }
-
-    public EUICardPreview set(int index, EUICardPreview card) {
-        super.set(index, card);
-        return card;
     }
 
     public ArrayList<AbstractCard> getCards() {
@@ -48,5 +30,22 @@ public class PCLPreviewList extends RotatingList<EUICardPreview>
             }
         }
         return -1;
+    }
+
+    public AbstractCard getCard(int index) {
+        return get(index).defaultPreview;
+    }
+
+    public AbstractCard getUpgrade(int index) {
+        return get(index).upgradedPreview;
+    }
+
+    public EUICardPreview set(int index, AbstractCard card) {
+        return set(index, EUICardPreview.generatePreviewCard(card));
+    }
+
+    public EUICardPreview set(int index, EUICardPreview card) {
+        super.set(index, card);
+        return card;
     }
 }

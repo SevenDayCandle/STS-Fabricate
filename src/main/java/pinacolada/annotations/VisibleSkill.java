@@ -8,9 +8,8 @@ import java.lang.annotation.Target;
 // Denote a PSkill that can be selected in the card editor. This class MUST define a static field whose name matches the value listed in data() that holds this skill's PSkillData
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface VisibleSkill
-{
-    String data() default DEFAULT;
+public @interface VisibleSkill {
+    String DEFAULT = "DATA";
 
-    public static final String DEFAULT = "DATA";
+    String data() default DEFAULT;
 }

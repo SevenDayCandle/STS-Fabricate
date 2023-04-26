@@ -11,24 +11,19 @@ import pinacolada.ui.cardView.PCLAugmentList;
 
 import java.util.Map;
 
-public class PCLAugmentSelectionEffect extends PCLEffectWithCallback<PCLAugment>
-{
+public class PCLAugmentSelectionEffect extends PCLEffectWithCallback<PCLAugment> {
     protected PCLAugmentList panel;
 
-    public PCLAugmentSelectionEffect(PCLCard card)
-    {
+    public PCLAugmentSelectionEffect(PCLCard card) {
         this(augment -> card == null || augment.canApply(card));
     }
 
-    public PCLAugmentSelectionEffect(FuncT1<Boolean, PCLAugment> evalFunc)
-    {
+    public PCLAugmentSelectionEffect(FuncT1<Boolean, PCLAugment> evalFunc) {
         panel = new PCLAugmentList(this::complete);
-        for (Map.Entry<String, Integer> params : PGR.dungeon.augments.entrySet())
-        {
+        for (Map.Entry<String, Integer> params : PGR.dungeon.augments.entrySet()) {
             PCLAugmentData data = PCLAugment.get(params.getKey());
             int amount = params.getValue();
-            if (data != null && amount > 0)
-            {
+            if (data != null && amount > 0) {
                 PCLAugment augment = data.create();
                 panel.addPanelItem(augment, amount, evalFunc.invoke(augment));
             }
@@ -36,14 +31,12 @@ public class PCLAugmentSelectionEffect extends PCLEffectWithCallback<PCLAugment>
     }
 
     @Override
-    public void render(SpriteBatch sb)
-    {
+    public void render(SpriteBatch sb) {
         panel.renderImpl(sb);
     }
 
     @Override
-    protected void updateInternal(float deltaTime)
-    {
+    protected void updateInternal(float deltaTime) {
         panel.updateImpl();
     }
 

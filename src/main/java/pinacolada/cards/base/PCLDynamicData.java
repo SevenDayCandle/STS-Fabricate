@@ -25,9 +25,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class PCLDynamicData extends PCLCardData
-{
-    private static final TypeToken<HashMap<Settings.GameLanguage, CardStrings>> TStrings = new TypeToken<HashMap<Settings.GameLanguage, CardStrings>>() {};
+public class PCLDynamicData extends PCLCardData {
+    private static final TypeToken<HashMap<Settings.GameLanguage, CardStrings>> TStrings = new TypeToken<HashMap<Settings.GameLanguage, CardStrings>>() {
+    };
     public final HashMap<Settings.GameLanguage, CardStrings> languageMap = new HashMap<>();
     public final ArrayList<PSkill<?>> moves = new ArrayList<>();
     public final ArrayList<PTrigger> powers = new ArrayList<>();
@@ -38,88 +38,24 @@ public class PCLDynamicData extends PCLCardData
     public PCardPrimary_GainBlock blockSkill;
     public boolean showTypeText = true;
 
-    public static HashMap<Settings.GameLanguage, CardStrings> parseLanguageStrings(String languageStrings)
-    {
-        return EUIUtils.deserialize(languageStrings, TStrings.getType());
-    }
-
-    public static CardStrings getStringsForLanguage(HashMap<Settings.GameLanguage, CardStrings> languageMap)
-    {
-        return getStringsForLanguage(languageMap, Settings.language);
-    }
-
-    public static CardStrings getStringsForLanguage(HashMap<Settings.GameLanguage, CardStrings> languageMap, Settings.GameLanguage language)
-    {
-        return languageMap.getOrDefault(language,
-                languageMap.getOrDefault(Settings.GameLanguage.ENG,
-                        languageMap.size() > 0 ? languageMap.entrySet().iterator().next().getValue() : getInitialStrings()));
-    }
-
-    protected static CardStrings getInitialStrings()
-    {
-        CardStrings retVal = new CardStrings();
-        retVal.NAME = GameUtilities.EMPTY_STRING;
-        retVal.DESCRIPTION = GameUtilities.EMPTY_STRING;
-        retVal.UPGRADE_DESCRIPTION = GameUtilities.EMPTY_STRING;
-        retVal.EXTENDED_DESCRIPTION = new String[]{};
-        return retVal;
-    }
-
-    // Prevent a tag info with an invalid tag from being loaded
-    protected static PCLCardTagInfo getSafeTag(String value)
-    {
-        PCLCardTagInfo info = EUIUtils.deserialize(value, PCLCardTagInfo.class);
-        return info.tag != null ? info : null;
-    }
-
-    public PCLDynamicData(String id)
-    {
-        super(PCLDynamicCard.class, PGR.core, id, null);
-    }
-
-    public PCLDynamicData(String id, PCLResources<?,?,?,?> resources)
-    {
-        super(PCLDynamicCard.class, resources, id, null);
-    }
-
-    public PCLDynamicData(PCLCard card, boolean copyProperties)
-    {
+    public PCLDynamicData(PCLCard card, boolean copyProperties) {
         this(card, card.name, "", copyProperties);
     }
 
-    public PCLDynamicData(PCLCard card, String text, boolean copyProperties)
-    {
-        this(card, card.name, text, copyProperties);
-    }
-
-    public PCLDynamicData(PCLCard card, String name, String text, boolean copyProperties)
-    {
+    public PCLDynamicData(PCLCard card, String name, String text, boolean copyProperties) {
         this(card.cardData, name, text, copyProperties);
         this.source = card;
         setImage(card.portraitImg, card.portraitForeground);
-        if (copyProperties)
-        {
+        if (copyProperties) {
             setPSkill(card.getEffects(), true, true);
             setPPower(card.getPowerEffects(), true, true);
         }
     }
 
-    public PCLDynamicData(PCLCardData card, boolean copyProperties)
-    {
-        this(card, card.strings.NAME, "", copyProperties);
-    }
-
-    public PCLDynamicData(PCLCardData card, String text, boolean copyProperties)
-    {
-        this(card, card.strings.NAME, text, copyProperties);
-    }
-
-    public PCLDynamicData(PCLCardData original, String name, String text, boolean copyProperties)
-    {
+    public PCLDynamicData(PCLCardData original, String name, String text, boolean copyProperties) {
         this(original.ID, original.resources);
 
-        if (copyProperties)
-        {
+        if (copyProperties) {
             setNumbers(original);
             setAttackType(original.attackType);
             setTarget(original.cardTarget);
@@ -141,8 +77,97 @@ public class PCLDynamicData extends PCLCardData
         setText(name, text, text);
     }
 
-    public PCLDynamicData(PCLDynamicData original)
-    {
+    public PCLDynamicData setImage(ColoredTexture portraitImage, ColoredTexture portraitForeground) {
+        this.portraitImage = portraitImage;
+        this.portraitForeground = portraitForeground;
+
+        return this;
+    }
+
+    public PCLDynamicData setPSkill(Iterable<PSkill<?>> currentEffects, boolean makeCopy, boolean clear) {
+        if (clear) {
+            moves.clear();
+        }
+        for (PSkill<?> be : currentEffects) {
+            addPSkill(be, makeCopy);
+        }
+        return this;
+    }
+
+    public PCLDynamicData setPPower(Iterable<PTrigger> currentEffects, boolean makeCopy, boolean clear) {
+        if (clear) {
+            powers.clear();
+        }
+        for (PTrigger be : currentEffects) {
+            addPPower(be, makeCopy);
+        }
+        return this;
+    }
+
+    public PCLDynamicData(String id, PCLResources<?, ?, ?, ?> resources) {
+        super(PCLDynamicCard.class, resources, id, null);
+    }
+
+    public PCLDynamicData setAttackType(PCLAttackType attackType) {
+        this.attackType = attackType;
+
+        return this;
+    }
+
+    public PCLDynamicData setRarity(AbstractCard.CardRarity rarity) {
+        this.cardRarity = rarity;
+        return this;
+    }
+
+    public PCLDynamicData setType(AbstractCard.CardType type) {
+        this.cardType = type;
+        return this;
+    }
+
+    public PCLDynamicData setText(String name, String description, String upgradeDescription) {
+        return setText(name, description, upgradeDescription != null ? upgradeDescription : description, new String[0]);
+    }
+
+    public PCLDynamicData addPSkill(PSkill<?> effect, boolean makeCopy) {
+        if (makeCopy && effect != null) {
+            effect = effect.makeCopy();
+        }
+        moves.add(effect);
+
+        return this;
+    }
+
+    public PCLDynamicData addPPower(PTrigger effect, boolean makeCopy) {
+        if (makeCopy && effect != null) {
+            effect = effect.makeCopy();
+        }
+        powers.add(effect);
+
+        return this;
+    }
+
+    public PCLDynamicData setText(String name, String description, String upgradeDescription, String[] extendedDescription) {
+        this.strings.NAME = name;
+        this.strings.DESCRIPTION = description;
+        this.strings.UPGRADE_DESCRIPTION = upgradeDescription;
+        this.strings.EXTENDED_DESCRIPTION = extendedDescription;
+
+        return this;
+    }
+
+    public PCLDynamicData(PCLCard card, String text, boolean copyProperties) {
+        this(card, card.name, text, copyProperties);
+    }
+
+    public PCLDynamicData(PCLCardData card, boolean copyProperties) {
+        this(card, card.strings.NAME, "", copyProperties);
+    }
+
+    public PCLDynamicData(PCLCardData card, String text, boolean copyProperties) {
+        this(card, card.strings.NAME, text, copyProperties);
+    }
+
+    public PCLDynamicData(PCLDynamicData original) {
         this(original, true);
         this.source = original.source;
 
@@ -150,18 +175,15 @@ public class PCLDynamicData extends PCLCardData
         setLanguageMap(original.languageMap);
         setPSkill(original.moves, true, true);
         setPPower(original.powers, true, true);
-        if (original.attackSkill != null)
-        {
+        if (original.attackSkill != null) {
             setAttackSkill(original.attackSkill.makeCopy());
         }
-        if (original.blockSkill != null)
-        {
+        if (original.blockSkill != null) {
             setBlockSkill(original.blockSkill.makeCopy());
         }
     }
 
-    public PCLDynamicData(PCLCustomCardSlot data, PCLCustomCardSlot.CardForm f)
-    {
+    public PCLDynamicData(PCLCustomCardSlot data, PCLCustomCardSlot.CardForm f) {
         this(data.ID);
         safeLoadValue(() -> setColor(data.slotColor));
         safeLoadValue(() -> setRarity(AbstractCard.CardRarity.valueOf(data.rarity)));
@@ -182,9 +204,8 @@ public class PCLDynamicData extends PCLCardData
         safeLoadValue(() -> costUpgrade = data.costUpgrade.clone());
         safeLoadValue(() -> setLanguageMap(parseLanguageStrings(data.languageStrings)));
         safeLoadValue(() -> setTags(EUIUtils.map(data.tags, PCLDynamicData::getSafeTag)));
-        if (data.loadout != null)
-        {
-             setLoadout(PCLLoadout.get(data.loadout));
+        if (data.loadout != null) {
+            setLoadout(PCLLoadout.get(data.loadout));
         }
         safeLoadValue(() -> setAffinities(EUIUtils.deserialize(data.affinities, PCLCardDataAffinityGroup.class)));
         safeLoadValue(() -> setMaxUpgrades(data.maxUpgradeLevel));
@@ -195,12 +216,10 @@ public class PCLDynamicData extends PCLCardData
         safeLoadValue(() -> setTarget(PCLCardTarget.valueOf(f.target)));
         safeLoadValue(() -> setTiming(DelayTiming.valueOf(f.timing)));
         safeLoadValue(() -> setAttackType(PCLAttackType.valueOf(f.attackType)));
-        if (f.damageEffect != null)
-        {
+        if (f.damageEffect != null) {
             safeLoadValue(() -> setAttackSkill(EUIUtils.safeCast(PSkill.get(f.damageEffect), PCardPrimary_DealDamage.class)));
         }
-        if (f.blockEffect != null)
-        {
+        if (f.blockEffect != null) {
             safeLoadValue(() -> setBlockSkill(EUIUtils.safeCast(PSkill.get(f.blockEffect), PCardPrimary_GainBlock.class)));
         }
         safeLoadValue(() -> setPSkill(EUIUtils.mapAsNonnull(f.effects, PSkill::get), true, true));
@@ -208,282 +227,192 @@ public class PCLDynamicData extends PCLCardData
         setMultiformData(data.forms.length);
     }
 
-    private void safeLoadValue(ActionT0 loadFunc)
-    {
-        try
-        {
+    public PCLDynamicData(String id) {
+        super(PCLDynamicCard.class, PGR.core, id, null);
+    }
+
+    private void safeLoadValue(ActionT0 loadFunc) {
+        try {
             loadFunc.invoke();
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             EUIUtils.logError(this, "Failed to load field: " + e.getMessage());
         }
     }
 
-    public PCLDynamicCard createImpl()
-    {
+    public PCLDynamicData setLanguageMap(HashMap<Settings.GameLanguage, CardStrings> languageMap) {
+        this.languageMap.putAll(languageMap);
+        return setTextForLanguage();
+    }
+
+    public static HashMap<Settings.GameLanguage, CardStrings> parseLanguageStrings(String languageStrings) {
+        return EUIUtils.deserialize(languageStrings, TStrings.getType());
+    }
+
+    // Prevent a tag info with an invalid tag from being loaded
+    protected static PCLCardTagInfo getSafeTag(String value) {
+        PCLCardTagInfo info = EUIUtils.deserialize(value, PCLCardTagInfo.class);
+        return info.tag != null ? info : null;
+    }
+
+    public PCLDynamicData setAttackSkill(PCardPrimary_DealDamage damageEffect) {
+        this.attackSkill = damageEffect;
+
+        return this;
+    }
+
+    public PCLDynamicData setBlockSkill(PCardPrimary_GainBlock blockEffect) {
+        this.blockSkill = blockEffect;
+
+        return this;
+    }
+
+    public PCLDynamicData setPPower(Iterable<PTrigger> currentEffects) {
+        return setPPower(currentEffects, false, true);
+    }
+
+    public PCLDynamicData setTextForLanguage() {
+        return setTextForLanguage(Settings.language);
+    }
+
+    public PCLDynamicData setTextForLanguage(Settings.GameLanguage language) {
+        return setText(getStringsForLanguage(language));
+    }
+
+    public PCLDynamicData setText(CardStrings cardStrings) {
+        return setText(cardStrings.NAME, cardStrings.DESCRIPTION, cardStrings.UPGRADE_DESCRIPTION);
+    }
+
+    public CardStrings getStringsForLanguage(Settings.GameLanguage language) {
+        return languageMap.getOrDefault(language,
+                languageMap.getOrDefault(Settings.GameLanguage.ENG,
+                        languageMap.size() > 0 ? languageMap.entrySet().iterator().next().getValue() : getInitialStrings()));
+    }
+
+    public static CardStrings getStringsForLanguage(HashMap<Settings.GameLanguage, CardStrings> languageMap) {
+        return getStringsForLanguage(languageMap, Settings.language);
+    }
+
+    public static CardStrings getStringsForLanguage(HashMap<Settings.GameLanguage, CardStrings> languageMap, Settings.GameLanguage language) {
+        return languageMap.getOrDefault(language,
+                languageMap.getOrDefault(Settings.GameLanguage.ENG,
+                        languageMap.size() > 0 ? languageMap.entrySet().iterator().next().getValue() : getInitialStrings()));
+    }
+
+    protected static CardStrings getInitialStrings() {
+        CardStrings retVal = new CardStrings();
+        retVal.NAME = GameUtilities.EMPTY_STRING;
+        retVal.DESCRIPTION = GameUtilities.EMPTY_STRING;
+        retVal.UPGRADE_DESCRIPTION = GameUtilities.EMPTY_STRING;
+        retVal.EXTENDED_DESCRIPTION = new String[]{};
+        return retVal;
+    }
+
+    public PCLDynamicData addPPower(PTrigger effect) {
+        return addPPower(effect, false);
+    }
+
+    public PCLDynamicData addPSkill(PSkill<?> effect) {
+        return addPSkill(effect, false);
+    }
+
+    public PCLDynamicCard createImpl() {
         return createImplWithForms(true);
     }
 
-    public PCLDynamicCard createImplWithForms(boolean shouldFindForms)
-    {
+    public PCLDynamicCard createImplWithForms(boolean shouldFindForms) {
         setTextForLanguage();
 
-        if (imagePath == null)
-        {
+        if (imagePath == null) {
             imagePath = QuestionMark.DATA.imagePath;
         }
 
         return new PCLDynamicCard(this, shouldFindForms);
     }
 
-    public CardStrings getStringsForLanguage(Settings.GameLanguage language)
-    {
-        return languageMap.getOrDefault(language,
-                languageMap.getOrDefault(Settings.GameLanguage.ENG,
-                        languageMap.size() > 0 ? languageMap.entrySet().iterator().next().getValue() : getInitialStrings()));
-    }
-
     @Override
-    public AbstractCard makeCopyFromLibrary(int upgrade)
-    {
+    public AbstractCard makeCopyFromLibrary(int upgrade) {
         return create(upgrade);
     }
 
-    public PCLDynamicData setImagePath(String imagePath)
-    {
-        this.imagePath = imagePath;
-
+    public PCLDynamicData setColor(AbstractCard.CardColor color) {
+        super.setColor(color);
         return this;
     }
 
-    public PCLDynamicData removePMove(PSkill<?> effect)
-    {
-        moves.remove(effect);
-        return this;
-    }
-
-    public PCLDynamicData removePowerEffect(PTrigger effect)
-    {
-        powers.remove(effect);
-        return this;
-    }
-
-    public PCLDynamicData setAffinity(PCLAffinity affinity, int level)
-    {
-        this.affinities.set(affinity, level);
-
-        return this;
-    }
-
-    public PCLDynamicData setAttackType(PCLAttackType attackType)
-    {
-        this.attackType = attackType;
-
-        return this;
-    }
-
-    public PCLDynamicData setDescription(String description)
-    {
-        this.strings.DESCRIPTION = description;
-
-        return this;
-    }
-
-    public PCLDynamicData setExtraTags(List<CardTagItem> extraTags)
-    {
+    public PCLDynamicData setExtraTags(List<CardTagItem> extraTags) {
         this.extraTags = extraTags;
 
         return this;
     }
 
-    public PCLDynamicData setID(String id)
-    {
+    public PCLDynamicData setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+
+        return this;
+    }
+
+    public PCLDynamicData removePMove(PSkill<?> effect) {
+        moves.remove(effect);
+        return this;
+    }
+
+    public PCLDynamicData removePowerEffect(PTrigger effect) {
+        powers.remove(effect);
+        return this;
+    }
+
+    public PCLDynamicData setAffinity(PCLAffinity affinity, int level) {
+        this.affinities.set(affinity, level);
+
+        return this;
+    }
+
+    public PCLDynamicData setDescription(String description) {
+        this.strings.DESCRIPTION = description;
+
+        return this;
+    }
+
+    public PCLDynamicData setID(String id) {
         this.ID = id;
         return this;
     }
 
-    public PCLDynamicData setImage(ColoredTexture portraitImage)
-    {
+    public PCLDynamicData setImage(ColoredTexture portraitImage) {
         this.portraitImage = portraitImage;
 
         return this;
     }
 
-    public PCLDynamicData setImage(ColoredTexture portraitImage, ColoredTexture portraitForeground)
-    {
-        this.portraitImage = portraitImage;
-        this.portraitForeground = portraitForeground;
-
-        return this;
-    }
-
-    public PCLDynamicData setLanguageMap(HashMap<Settings.GameLanguage, CardStrings> languageMap)
-    {
-        this.languageMap.putAll(languageMap);
-        return setTextForLanguage();
-    }
-
-    public PCLDynamicData setLanguageMapEntry(Settings.GameLanguage language)
-    {
+    public PCLDynamicData setLanguageMapEntry(Settings.GameLanguage language) {
         this.languageMap.put(language, this.strings);
         return this;
     }
 
-    public PCLDynamicData setName(String name)
-    {
+    public PCLDynamicData setName(String name) {
         this.strings.NAME = name;
 
         return this;
     }
 
-    public PCLDynamicData setAttackSkill(PCardPrimary_DealDamage damageEffect)
-    {
-        this.attackSkill = damageEffect;
-
-        return this;
-    }
-
-    public PCLDynamicData setBlockSkill(PCardPrimary_GainBlock blockEffect)
-    {
-        this.blockSkill = blockEffect;
-
-        return this;
-    }
-
-    public PCLDynamicData setPSkill(Iterable<PSkill<?>> currentEffects)
-    {
-        return setPSkill(currentEffects, false, true);
-    }
-
-    public PCLDynamicData setPSkill(Iterable<PSkill<?>> currentEffects, boolean makeCopy, boolean clear)
-    {
-        if (clear)
-        {
-            moves.clear();
-        }
-        for (PSkill<?> be : currentEffects)
-        {
-            addPSkill(be, makeCopy);
-        }
-        return this;
-    }
-
-    public PCLDynamicData setPSkill(PSkill<?>... effect)
-    {
-        return setPSkill(Arrays.asList(effect));
-    }
-
-    public PCLDynamicData addPSkill(PSkill<?> effect)
-    {
-        return addPSkill(effect, false);
-    }
-
-    public PCLDynamicData addPSkill(PSkill<?> effect, boolean makeCopy)
-    {
-        if (makeCopy && effect != null)
-        {
-            effect = effect.makeCopy();
-        }
-        moves.add(effect);
-
-        return this;
-    }
-
-    public PCLDynamicData setPPower(Iterable<PTrigger> currentEffects)
-    {
-        return setPPower(currentEffects, false, true);
-    }
-
-    public PCLDynamicData setPPower(Iterable<PTrigger> currentEffects, boolean makeCopy, boolean clear)
-    {
-        if (clear)
-        {
-            powers.clear();
-        }
-        for (PTrigger be : currentEffects)
-        {
-            addPPower(be, makeCopy);
-        }
-        return this;
-    }
-
-    public PCLDynamicData setPPower(PTrigger... effect)
-    {
+    public PCLDynamicData setPPower(PTrigger... effect) {
         return setPPower(Arrays.asList(effect));
     }
 
-    public PCLDynamicData addPPower(PTrigger effect)
-    {
-        return addPPower(effect, false);
+    public PCLDynamicData setPSkill(PSkill<?>... effect) {
+        return setPSkill(Arrays.asList(effect));
     }
 
-    public PCLDynamicData addPPower(PTrigger effect, boolean makeCopy)
-    {
-        if (makeCopy && effect != null)
-        {
-            effect = effect.makeCopy();
-        }
-        powers.add(effect);
-
-        return this;
+    public PCLDynamicData setPSkill(Iterable<PSkill<?>> currentEffects) {
+        return setPSkill(currentEffects, false, true);
     }
 
-    public PCLDynamicData setColor(AbstractCard.CardColor color)
-    {
-        super.setColor(color);
-        return this;
-    }
-
-    public PCLDynamicData setRarity(AbstractCard.CardRarity rarity)
-    {
-        this.cardRarity = rarity;
-        return this;
-    }
-
-    public PCLDynamicData setType(AbstractCard.CardType type)
-    {
-        this.cardType = type;
-        return this;
-    }
-
-    public PCLDynamicData setText(CardStrings cardStrings)
-    {
-        return setText(cardStrings.NAME, cardStrings.DESCRIPTION, cardStrings.UPGRADE_DESCRIPTION);
-    }
-
-    public PCLDynamicData setText(String name)
-    {
+    public PCLDynamicData setText(String name) {
         return setText(name, "", "", new String[0]);
     }
 
-    public PCLDynamicData setText(String name, String description, String upgradeDescription)
-    {
-        return setText(name, description, upgradeDescription != null ? upgradeDescription : description, new String[0]);
-    }
-
-    public PCLDynamicData setText(String name, String description, String upgradeDescription, String[] extendedDescription)
-    {
-        this.strings.NAME = name;
-        this.strings.DESCRIPTION = description;
-        this.strings.UPGRADE_DESCRIPTION = upgradeDescription;
-        this.strings.EXTENDED_DESCRIPTION = extendedDescription;
-
-        return this;
-    }
-
-    public PCLDynamicData setTextForLanguage()
-    {
-        return setTextForLanguage(Settings.language);
-    }
-
-    public PCLDynamicData setTextForLanguage(Settings.GameLanguage language)
-    {
-        return setText(getStringsForLanguage(language));
-    }
-
-    public PCLDynamicData showTypeText(boolean showTypeText)
-    {
+    public PCLDynamicData showTypeText(boolean showTypeText) {
         this.showTypeText = showTypeText;
 
         return this;

@@ -22,14 +22,7 @@ import pinacolada.utilities.PCLRenderHelpers;
 
 import java.util.ArrayList;
 
-public class PowerFormulaRow extends EUIHoverable
-{
-    public enum Type {
-        Attack,
-        Defend,
-        EnemyAttack
-    }
-
+public class PowerFormulaRow extends EUIHoverable {
     public static final float ICON_SIZE = 32f;
     public final Type type;
     protected final ArrayList<PowerFormulaItem> powers = new ArrayList<>();
@@ -38,9 +31,7 @@ public class PowerFormulaRow extends EUIHoverable
     protected EUILabel initial;
     protected EUILabel result;
     protected Texture icon;
-
-    public PowerFormulaRow(EUIHitbox hb, Type type)
-    {
+    public PowerFormulaRow(EUIHitbox hb, Type type) {
         super(hb);
         this.type = type;
         this.resultHb = RelativeHitbox.fromPercentages(hb, 1, 1, getOffsetCx(0), -0.7f);
@@ -50,57 +41,65 @@ public class PowerFormulaRow extends EUIHoverable
                 .setSmartText(false);
     }
 
-    protected void addAffinity(PCLAffinity af, float input, float result)
-    {
-        powers.add(new PowerFormulaItem(RelativeHitbox.fromPercentages(hb, 1, 1, getOffsetCx(powers.size()), 1), true, af.getIcon(), result).setMultiplier(result / input));
-        resultHb.setOffset(resultHb.width * getOffsetCx(powers.size() + 1),resultHb.height * -0.5f);
+    protected float getOffsetCx(int size) {
+        return (size + 1.2f) * 2.5f;
     }
 
-    protected void addPower(AbstractPower po, float input, float result)
-    {
+    protected void addAffinity(PCLAffinity af, float input, float result) {
+        powers.add(new PowerFormulaItem(RelativeHitbox.fromPercentages(hb, 1, 1, getOffsetCx(powers.size()), 1), true, af.getIcon(), result).setMultiplier(result / input));
+        resultHb.setOffset(resultHb.width * getOffsetCx(powers.size() + 1), resultHb.height * -0.5f);
+    }
+
+    protected void addPower(AbstractPower po, float input, float result) {
         RelativeHitbox hitbox = RelativeHitbox.fromPercentages(hb, 1, 1, getOffsetCx(powers.size()), 1);
         PowerFormulaItem item;
-        if (po.region48 != null)
-        {
+        if (po.region48 != null) {
             item = new PowerFormulaItem(hitbox, po.owner instanceof AbstractPlayer, po.region48, result);
         }
-        else
-        {
+        else {
             item = new PowerFormulaItem(hitbox, po.owner instanceof AbstractPlayer, po.img, result);
         }
 
 
         PCLPowerHelper helper = PCLPowerHelper.get(po.ID);
         if (helper != null) {
-            if (helper.isPercentageBonus)
-            {
+            if (helper.isPercentageBonus) {
                 item.setMultiplier(result / input);
             }
-            else
-            {
+            else {
                 item.setAddition(result - input);
             }
         }
         else {
             // Assume that powers that have % relate to power multipliers
             // Only do string searching if absolutely necessary.
-            if (po instanceof MultiplicativePower || po.description.contains("%"))
-            {
+            if (po instanceof MultiplicativePower || po.description.contains("%")) {
                 item.setMultiplier(result / input);
             }
-            else
-            {
+            else {
                 item.setAddition(result - input);
             }
         }
         powers.add(item);
-        resultHb.setOffset(resultHb.width * getOffsetCx(powers.size()),-0.5f);
+        resultHb.setOffset(resultHb.width * getOffsetCx(powers.size()), -0.5f);
     }
 
-    protected void addSummon(PCLCardAlly ally, int input, int result)
-    {
+    protected void addSummon(PCLCardAlly ally, int input, int result) {
         powers.add(new PowerFormulaItem(RelativeHitbox.fromPercentages(hb, 1, 1, getOffsetCx(powers.size()), 1), true, ally.card.getTypeIcon(), result).setAddition(result - input));
-        resultHb.setOffset(resultHb.width * getOffsetCx(powers.size() + 1),-0.5f);
+        resultHb.setOffset(resultHb.width * getOffsetCx(powers.size() + 1), -0.5f);
+    }
+
+    @Override
+    public void renderImpl(SpriteBatch sb) {
+        if (icon != null) {
+            PCLRenderHelpers.drawCentered(sb, Color.WHITE, icon, hb.x, hb.cY, ICON_SIZE, ICON_SIZE, 1f, 0);
+            initial.renderImpl(sb);
+            FontHelper.renderFontCentered(sb, FontHelper.powerAmountFont, ">>", resultHb.cX - resultHb.width * 1.1f, hb.cY - hb.height * 0.25f, Color.WHITE);
+            result.renderImpl(sb);
+        }
+        for (PowerFormulaItem power : powers) {
+            power.renderImpl(sb);
+        }
     }
 
     protected void setResult(float base, float amount) {
@@ -108,35 +107,11 @@ public class PowerFormulaRow extends EUIHoverable
                 .setLabel(PCLRenderHelpers.decimalFormat(amount));
     }
 
-    protected float getOffsetCx(int size)
-    {
-        return (size + 1.2f) * 2.5f;
-    }
-
-    @Override
-    public void renderImpl(SpriteBatch sb)
-    {
-        if (icon != null)
-        {
-            PCLRenderHelpers.drawCentered(sb, Color.WHITE, icon, hb.x, hb.cY, ICON_SIZE, ICON_SIZE, 1f, 0);
-            initial.renderImpl(sb);
-            FontHelper.renderFontCentered(sb, FontHelper.powerAmountFont, ">>", resultHb.cX - resultHb.width * 1.1f, hb.cY - hb.height * 0.25f, Color.WHITE);
-            result.renderImpl(sb);
-        }
-        for (PowerFormulaItem power : powers)
-        {
-            power.renderImpl(sb);
-        }
-    }
-
-    public void updateImpl(AbstractCard card, AbstractCreature target, boolean draggingCard, boolean shouldUpdateForCard, boolean shouldUpdateForTarget)
-    {
+    public void updateImpl(AbstractCard card, AbstractCreature target, boolean draggingCard, boolean shouldUpdateForCard, boolean shouldUpdateForTarget) {
         super.updateImpl();
-        if (shouldUpdateForCard || shouldUpdateForTarget)
-        {
+        if (shouldUpdateForCard || shouldUpdateForTarget) {
             powers.clear();
-            if (card != null)
-            {
+            if (card != null) {
                 switch (type) {
                     case Attack:
                         icon = (card instanceof PCLCard ? ((PCLCard) card).attackType.getTooltip().icon : PGR.core.tooltips.normalDamage.icon).getTexture();
@@ -153,15 +128,19 @@ public class PowerFormulaRow extends EUIHoverable
                 }
             }
         }
-        else
-        {
-            for (PowerFormulaItem item : powers)
-            {
+        else {
+            for (PowerFormulaItem item : powers) {
                 item.updateImpl();
             }
         }
         this.card = card;
         initial.updateImpl();
         result.updateImpl();
+    }
+
+    public enum Type {
+        Attack,
+        Defend,
+        EnemyAttack
     }
 }

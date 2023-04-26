@@ -2,11 +2,9 @@ package pinacolada.monsters;
 
 import com.megacrit.cardcrawl.localization.MonsterStrings;
 import pinacolada.resources.PCLResources;
-import pinacolada.resources.PCLStrings;
 import pinacolada.resources.PGR;
 
-public class PCLCreatureData
-{
+public class PCLCreatureData {
     public final Class<? extends PCLCreature> type;
     public final String ID;
     public final MonsterStrings strings;
@@ -17,15 +15,13 @@ public class PCLCreatureData
     public int hp = 1;
     public String imgUrl;
 
-    public PCLCreatureData(Class<? extends PCLCreature> type, PCLResources<?,?,?,?> resources)
-    {
+    public PCLCreatureData(Class<? extends PCLCreature> type, PCLResources<?, ?, ?, ?> resources) {
         this.ID = resources.createID(type.getSimpleName());
         this.strings = PGR.getMonsterStrings(ID);
         this.type = type;
     }
 
-    public PCLCreatureData setHb(float hbX, float hbY, float hbW, float hbH)
-    {
+    public PCLCreatureData setHb(float hbX, float hbY, float hbW, float hbH) {
         this.hbX = hbX;
         this.hbY = hbY;
         this.hbW = hbW;
@@ -33,8 +29,7 @@ public class PCLCreatureData
         return this;
     }
 
-    public PCLCreatureData setImage(String imgUrl)
-    {
+    public PCLCreatureData setImage(String imgUrl) {
         this.imgUrl = imgUrl;
         return this;
     }

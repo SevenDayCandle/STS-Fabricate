@@ -9,19 +9,16 @@ import pinacolada.effects.SFX;
 import pinacolada.powers.PCLPower;
 import pinacolada.utilities.GameUtilities;
 
-public class DelayedDamagePower extends PCLPower implements HealthBarRenderPower
-{
+public class DelayedDamagePower extends PCLPower implements HealthBarRenderPower {
     public static final String POWER_ID = createFullID(DelayedDamagePower.class);
     private static final Color healthBarColor = Color.PURPLE.cpy();
     private final AbstractGameAction.AttackEffect attackEffect;
 
-    public DelayedDamagePower(AbstractCreature owner, int amount)
-    {
+    public DelayedDamagePower(AbstractCreature owner, int amount) {
         this(owner, amount, AbstractGameAction.AttackEffect.SLASH_VERTICAL);
     }
 
-    public DelayedDamagePower(AbstractCreature owner, int amount, AbstractGameAction.AttackEffect attackEffect)
-    {
+    public DelayedDamagePower(AbstractCreature owner, int amount, AbstractGameAction.AttackEffect attackEffect) {
         super(owner, POWER_ID);
 
         this.priority = 97;
@@ -31,32 +28,27 @@ public class DelayedDamagePower extends PCLPower implements HealthBarRenderPower
     }
 
     @Override
-    public String getUpdatedDescription()
-    {
-        return formatDescription(0, amount, owner.isPlayer ? powerStrings.DESCRIPTIONS[1] : "");
-    }
-
-    @Override
-    public int getHealthBarAmount()
-    {
+    public int getHealthBarAmount() {
         return GameUtilities.getHealthBarAmount(owner, amount, true, true);
     }
 
     @Override
-    public Color getColor()
-    {
+    public Color getColor() {
         return healthBarColor;
     }
 
     @Override
-    public void playApplyPowerSfx()
-    {
+    public String getUpdatedDescription() {
+        return formatDescription(0, amount, owner.isPlayer ? powerStrings.DESCRIPTIONS[1] : "");
+    }
+
+    @Override
+    public void playApplyPowerSfx() {
         SFX.play(SFX.HEART_BEAT, 1.25f, 1.35f, 0.9f);
     }
 
     @Override
-    public void atEndOfTurn(boolean isPlayer)
-    {
+    public void atEndOfTurn(boolean isPlayer) {
         int damageAmount = owner.isPlayer ? Math.max(0, Math.min(GameUtilities.getHP(owner, true, true) - 1, amount)) : amount;
         PCLActions.bottom.takeDamage(owner, damageAmount, attackEffect);
         removePower();

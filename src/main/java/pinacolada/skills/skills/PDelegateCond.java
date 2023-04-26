@@ -9,37 +9,30 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField;
 
 // Conditions that trigger on specific game events
-public abstract class PDelegateCond<T extends PField> extends PCond<T>
-{
-    public PDelegateCond(PSkillData<T> data, PSkillSaveData content)
-    {
+public abstract class PDelegateCond<T extends PField> extends PCond<T> {
+    public PDelegateCond(PSkillData<T> data, PSkillSaveData content) {
         super(data, content);
     }
 
-    public PDelegateCond(PSkillData<T> data)
-    {
+    public PDelegateCond(PSkillData<T> data) {
         super(data);
     }
 
-    public PDelegateCond(PSkillData<T> data, PCLCardTarget target, int amount)
-    {
+    public PDelegateCond(PSkillData<T> data, PCLCardTarget target, int amount) {
         super(data, target, amount);
     }
 
-    public PDelegateCond(PSkillData<T> data, PCLCardTarget target, int amount, int extra)
-    {
+    public PDelegateCond(PSkillData<T> data, PCLCardTarget target, int amount, int extra) {
         super(data, target, amount, extra);
     }
 
     @Override
-    public String getText(boolean addPeriod)
-    {
-        return getCapitalSubText(addPeriod) + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : ": ") + childEffect.getText(addPeriod)) : "");
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
+        return triggerSource != null;
     }
 
     @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource)
-    {
-        return triggerSource != null;
+    public String getText(boolean addPeriod) {
+        return getCapitalSubText(addPeriod) + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : ": ") + childEffect.getText(addPeriod)) : "");
     }
 }

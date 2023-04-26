@@ -9,7 +9,6 @@ import java.lang.annotation.Target;
 // If this power has a field matching the value of id, it will be used as the ID to be used in Basemod. Otherwise, a new ID will be generated from its name
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface VisiblePower
-{
+public @interface VisiblePower {
     String id();
 }

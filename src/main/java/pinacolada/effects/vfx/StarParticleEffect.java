@@ -12,8 +12,7 @@ import pinacolada.effects.PCLEffect;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.PCLRenderHelpers;
 
-public class StarParticleEffect extends PCLEffect
-{
+public class StarParticleEffect extends PCLEffect {
     protected static final TextureCache[] images = {PCLCoreImages.Effects.sparkle1, PCLCoreImages.Effects.sparkle2, PCLCoreImages.Effects.sparkle3, PCLCoreImages.Effects.sparkle4};
 
     protected float x;
@@ -27,14 +26,12 @@ public class StarParticleEffect extends PCLEffect
     protected boolean translucent;
     protected Texture image;
 
-    public StarParticleEffect(float x, float y, float horizontalSpeed, float verticalSpeed, float scale, Color mainColor)
-    {
+    public StarParticleEffect(float x, float y, float horizontalSpeed, float verticalSpeed, float scale, Color mainColor) {
         super(MathUtils.random(0.4F, 0.8F));
 
         final float offsetX = MathUtils.random(-12.0F, 12.0F) * Settings.scale;
         final float offsetY = MathUtils.random(-12.0F, 12.0F) * Settings.scale;
-        if (offsetX > 0.0F)
-        {
+        if (offsetX > 0.0F) {
             this.renderBehind = true;
         }
 
@@ -53,19 +50,16 @@ public class StarParticleEffect extends PCLEffect
         this.halfDuration = startingDuration * 0.5f;
     }
 
-    public void render(SpriteBatch sb)
-    {
+    public void render(SpriteBatch sb) {
         renderImage(sb, image, x, y, flipX, false, this.translucent ? PCLRenderHelpers.BlendingMode.Glowing : PCLRenderHelpers.BlendingMode.Normal);
     }
 
     @Override
-    protected void updateInternal(float deltaTime)
-    {
+    protected void updateInternal(float deltaTime) {
         super.updateInternal(deltaTime);
 
         this.rotation += this.rotationSpeed;
-        if (this.duration < halfDuration)
-        {
+        if (this.duration < halfDuration) {
             this.color.a = Interpolation.exp5In.apply(0.0F, this.alpha, this.duration / halfDuration);
         }
     }

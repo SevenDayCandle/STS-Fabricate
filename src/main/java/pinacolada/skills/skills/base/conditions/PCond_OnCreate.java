@@ -11,30 +11,25 @@ import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.skills.PDelegateCardCond;
 
 @VisibleSkill
-public class PCond_OnCreate extends PDelegateCardCond implements OnCardCreatedSubscriber
-{
+public class PCond_OnCreate extends PDelegateCardCond implements OnCardCreatedSubscriber {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_OnCreate.class, PField_CardCategory.class, 1, 1)
             .selfTarget();
 
-    public PCond_OnCreate()
-    {
+    public PCond_OnCreate() {
         super(DATA);
     }
 
-    public PCond_OnCreate(PSkillSaveData content)
-    {
+    public PCond_OnCreate(PSkillSaveData content) {
         super(DATA, content);
     }
 
     @Override
-    public void onCardCreated(AbstractCard card, boolean startOfBattle)
-    {
-        triggerOnCard(card);
+    public EUITooltip getDelegateTooltip() {
+        return PGR.core.tooltips.create;
     }
 
     @Override
-    public EUITooltip getDelegateTooltip()
-    {
-        return PGR.core.tooltips.create;
+    public void onCardCreated(AbstractCard card, boolean startOfBattle) {
+        triggerOnCard(card);
     }
 }

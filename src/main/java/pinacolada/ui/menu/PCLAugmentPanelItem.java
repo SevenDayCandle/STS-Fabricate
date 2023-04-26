@@ -24,78 +24,65 @@ import pinacolada.ui.cardView.PCLAugmentList;
 
 import java.util.HashMap;
 
-public class PCLAugmentPanelItem extends PCLTopPanelItem
-{
+public class PCLAugmentPanelItem extends PCLTopPanelItem {
     public static final String ID = createFullID(PCLAugmentPanelItem.class);
     protected Color currentColor = Color.WHITE;
     protected float lerpAmount = 1;
 
-    public PCLAugmentPanelItem()
-    {
+    public PCLAugmentPanelItem() {
         super(PCLCoreImages.Menu.augmentPanel, ID);
         this.setTooltip(new EUITooltip(PGR.core.strings.misc_viewAugments, EUIUtils.format(PGR.core.strings.misc_viewAugmentsDescription, "")));
     }
 
-    protected HashMap<PCLAugmentData, Integer> getAugmentData()
-    {
-        HashMap<PCLAugmentData, Integer> map = new HashMap<>();
-        for (String key : PGR.dungeon.augments.keySet())
-        {
-            map.put(PCLAugment.get(key), PGR.dungeon.augments.get(key));
-        }
-        return map;
-    }
-
-    protected void onClick()
-    {
-        super.onClick();
-        if (PGR.dungeon.getAugmentTotal() > 0)
-        {
-            PGR.augmentScreen.open(this::getAugmentData, PCLAugmentList.DEFAULT,true);
-        }
-    }
-
-    protected void onRightClick()
-    {
-        super.onRightClick();
-        this.getHitbox().unhover();
-        EUITutorial tutorial = new EUITutorial(new EUIHitbox((float) Settings.WIDTH / 2.0F - 675.0F, Settings.OPTION_Y - 450.0F, 1350.0F, 900.0F), EUIRM.images.panelLarge.texture(),
-                new EUITutorialPage(PGR.core.strings.misc_viewAugments, PGR.core.strings.tutorial_augmentTutorial1), new EUITutorialPage(PGR.core.strings.misc_viewAugments, PGR.core.strings.tutorial_augmentTutorial2));
-        EUI.ftueScreen.open(tutorial);
-    }
-
-    public void flash()
-    {
+    public void flash() {
         currentColor = Settings.GREEN_TEXT_COLOR;
         lerpAmount = 0;
     }
 
-    public void update()
-    {
+    @Override
+    public void render(SpriteBatch sb) {
+        super.render(sb);
+        EUIRenderHelpers.writeCentered(sb, EUIFontHelper.cardtitlefontNormal, String.valueOf(PGR.dungeon.getAugmentTotal()), this.x + (this.hb_w * 0.75f), this.y + 16f * Settings.scale, currentColor);
+    }
+
+    public void update() {
         super.update();
-        if (this.tooltip != null && this.getHitbox().hovered)
-        {
+        if (this.tooltip != null && this.getHitbox().hovered) {
             this.tooltip.setText(
                     PGR.core.strings.misc_viewAugments + " (" + PCLHotkeys.viewAugmentScreen.getKeyString() + ")",
                     EUIUtils.format(PGR.core.strings.misc_viewAugmentsDescription, PGR.dungeon.getAugmentTotal() == 0 ? PGR.core.strings.misc_viewAugmentsNone : "")
             );
             EUITooltip.queueTooltip(this.tooltip);
         }
-        if (PCLHotkeys.viewAugmentScreen.isJustPressed() && EUI.currentScreen != EUI.cardsScreen)
-        {
+        if (PCLHotkeys.viewAugmentScreen.isJustPressed() && EUI.currentScreen != EUI.cardsScreen) {
             onClick();
         }
-        if (lerpAmount < 1)
-        {
+        if (lerpAmount < 1) {
             currentColor = EUIColors.lerp(Settings.GREEN_TEXT_COLOR, Color.WHITE, lerpAmount);
             lerpAmount += Gdx.graphics.getDeltaTime();
         }
     }
 
-    @Override
-    public void render(SpriteBatch sb)
-    {
-        super.render(sb);
-        EUIRenderHelpers.writeCentered(sb, EUIFontHelper.cardtitlefontNormal, String.valueOf(PGR.dungeon.getAugmentTotal()), this.x + (this.hb_w * 0.75f), this.y + 16f * Settings.scale, currentColor);
+    protected HashMap<PCLAugmentData, Integer> getAugmentData() {
+        HashMap<PCLAugmentData, Integer> map = new HashMap<>();
+        for (String key : PGR.dungeon.augments.keySet()) {
+            map.put(PCLAugment.get(key), PGR.dungeon.augments.get(key));
+        }
+        return map;
+    }
+
+    protected void onClick() {
+        super.onClick();
+        if (PGR.dungeon.getAugmentTotal() > 0) {
+            PGR.augmentScreen.open(this::getAugmentData, PCLAugmentList.DEFAULT, true);
+        }
+    }
+
+    protected void onRightClick() {
+        super.onRightClick();
+        this.getHitbox().unhover();
+        EUITutorial tutorial = new EUITutorial(new EUIHitbox((float) Settings.WIDTH / 2.0F - 675.0F, Settings.OPTION_Y - 450.0F, 1350.0F, 900.0F), EUIRM.images.panelLarge.texture(),
+                new EUITutorialPage(PGR.core.strings.misc_viewAugments, PGR.core.strings.tutorial_augmentTutorial1), new EUITutorialPage(PGR.core.strings.misc_viewAugments, PGR.core.strings.tutorial_augmentTutorial2));
+        EUI.ftueScreen.open(tutorial);
     }
 }

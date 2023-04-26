@@ -9,8 +9,7 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.skills.PMove;
 
 @VisibleCard
-public class Insight extends PCLCard
-{
+public class Insight extends PCLCard {
     public static final String ATLAS_URL = "colorless/skill/insight";
     public static final PCLCardData DATA = register(Insight.class)
             .setImagePathFromAtlasUrl(ATLAS_URL)
@@ -19,13 +18,11 @@ public class Insight extends PCLCard
             .setTags(PCLCardTag.Purge.make(), PCLCardTag.Retain.make(-1))
             .setColorless();
 
-    public Insight()
-    {
+    public Insight() {
         super(DATA);
     }
 
-    public void setup(Object input)
-    {
+    public void setup(Object input) {
         addUseMove(PMove.draw(2).setUpgrade(1));
     }
 }

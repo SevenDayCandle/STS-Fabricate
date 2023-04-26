@@ -10,64 +10,53 @@ import pinacolada.skills.PTrait;
 import pinacolada.skills.fields.PField_Empty;
 
 @VisibleSkill
-public class PTrait_Unplayable extends PTrait<PField_Empty>
-{
+public class PTrait_Unplayable extends PTrait<PField_Empty> {
     public static final PSkillData<PField_Empty> DATA = register(PTrait_Unplayable.class, PField_Empty.class, 1, 1);
 
-    public PTrait_Unplayable()
-    {
+    public PTrait_Unplayable() {
         this(1);
     }
 
-    public PTrait_Unplayable(PSkillSaveData content)
-    {
-        super(DATA, content);
-    }
-
-    public PTrait_Unplayable(int amount)
-    {
+    public PTrait_Unplayable(int amount) {
         super(DATA, amount);
     }
 
+    public PTrait_Unplayable(PSkillSaveData content) {
+        super(DATA, content);
+    }
+
     @Override
-    public boolean canPlay(PCLUseInfo info)
-    {
+    public boolean canPlay(PCLUseInfo info) {
         return info == null || info.card == sourceCard;
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill)
-    {
-        return PGR.core.tooltips.unplayable.title;
-    }
-
-    @Override
-    public boolean isDetrimental()
-    {
+    public boolean isDetrimental() {
         return true;
     }
 
     @Override
-    public void use(PCLUseInfo info)
-    {
-
-    }
-
-    @Override
-    public String getSubDescText()
-    {
+    public String getSampleText(PSkill<?> callingSkill) {
         return PGR.core.tooltips.unplayable.title;
     }
 
     @Override
-    public String getSubSampleText()
-    {
+    public String getSubText() {
         return PGR.core.tooltips.unplayable.title;
     }
 
     @Override
-    public String getSubText()
-    {
+    public void use(PCLUseInfo info) {
+
+    }
+
+    @Override
+    public String getSubDescText() {
+        return PGR.core.tooltips.unplayable.title;
+    }
+
+    @Override
+    public String getSubSampleText() {
         return PGR.core.tooltips.unplayable.title;
     }
 }

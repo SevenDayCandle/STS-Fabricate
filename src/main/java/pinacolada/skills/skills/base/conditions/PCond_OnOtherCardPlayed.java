@@ -11,36 +11,35 @@ import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.skills.PDelegateCardCond;
 
 @VisibleSkill
-public class PCond_OnOtherCardPlayed extends PDelegateCardCond implements OnCardPlayedSubscriber
-{
+public class PCond_OnOtherCardPlayed extends PDelegateCardCond implements OnCardPlayedSubscriber {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_OnOtherCardPlayed.class, PField_CardCategory.class, 1, 1)
             .selfTarget();
 
-    public PCond_OnOtherCardPlayed()
-    {
+    public PCond_OnOtherCardPlayed() {
         super(DATA);
     }
 
-    public PCond_OnOtherCardPlayed(PSkillSaveData content)
-    {
+    public PCond_OnOtherCardPlayed(PSkillSaveData content) {
         super(DATA, content);
     }
 
     @Override
-    public void onCardPlayed(AbstractCard card)
-    {
-        triggerOnCard(card);
+    public String getDelegateSampleText() {
+        return TEXT.act_play(TEXT.subjects_x);
     }
 
     @Override
-    public String getDelegateSampleText() {return TEXT.act_play(TEXT.subjects_x);}
+    public String getDelegateText() {
+        return TEXT.subjects_playingXWith(fields.getFullCardString(), TEXT.cpile_hand);
+    }
 
     @Override
-    public String getDelegateText() {return TEXT.subjects_playingXWith(fields.getFullCardString(), TEXT.cpile_hand);}
-
-    @Override
-    public EUITooltip getDelegateTooltip()
-    {
+    public EUITooltip getDelegateTooltip() {
         return PGR.core.tooltips.play;
+    }
+
+    @Override
+    public void onCardPlayed(AbstractCard card) {
+        triggerOnCard(card);
     }
 }

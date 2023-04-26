@@ -9,36 +9,30 @@ import pinacolada.skills.fields.PField_Empty;
 import pinacolada.skills.skills.PLimit;
 
 @VisibleSkill
-public class PLimit_Limited extends PLimit
-{
+public class PLimit_Limited extends PLimit {
     public static final PSkillData<PField_Empty> DATA = register(PLimit_Limited.class, PField_Empty.class, 1, 1)
             .selfTarget();
 
-    public PLimit_Limited()
-    {
+    public PLimit_Limited() {
         super(DATA);
     }
 
-    public PLimit_Limited(PSkillSaveData content)
-    {
+    public PLimit_Limited(PSkillSaveData content) {
         super(DATA, content);
     }
 
     @Override
-    public boolean canActivate(PCLUseInfo info)
-    {
+    public boolean canActivate(PCLUseInfo info) {
         return info.canActivateLimited;
     }
 
     @Override
-    public boolean tryActivate(PCLUseInfo info)
-    {
+    public boolean tryActivate(PCLUseInfo info) {
         return info.tryActivateLimited();
     }
 
     @Override
-    public String getSubText()
-    {
+    public String getSubText() {
         return PGR.core.tooltips.limited.title;
     }
 }

@@ -16,24 +16,18 @@ import pinacolada.monsters.PCLCardAlly;
 import java.util.ArrayList;
 
 // Copied and modified from STS-AnimatorMod
-public class GameActionManagerPatches
-{
+public class GameActionManagerPatches {
 
     // Allow actions that can result in permanent changes to your character to continue running after battle ends
     @SpirePatch(clz = GameActionManager.class, method = "clearPostCombatActions")
-    public static class GameActionManager_ClearPostCombatActions
-    {
+    public static class GameActionManager_ClearPostCombatActions {
         @SpirePrefixPatch
-        public static SpireReturn<Void> prefix(GameActionManager __instance)
-        {
+        public static SpireReturn<Void> prefix(GameActionManager __instance) {
             final ArrayList<AbstractGameAction> actions = __instance.actions;
-            for (int i = actions.size() - 1; i >= 0; i--)
-            {
+            for (int i = actions.size() - 1; i >= 0; i--) {
                 AbstractGameAction action = actions.get(i);
-                if (action instanceof PCLAction)
-                {
-                    if (((PCLAction<?>) action).canCancel)
-                    {
+                if (action instanceof PCLAction) {
+                    if (((PCLAction<?>) action).canCancel) {
                         actions.remove(i);
                     }
                 }
@@ -41,8 +35,7 @@ public class GameActionManagerPatches
                         || action instanceof GainGoldAction
                         || action instanceof GainBlockAction
                         || action instanceof UseCardAction
-                        || action.actionType == AbstractGameAction.ActionType.DAMAGE))
-                {
+                        || action.actionType == AbstractGameAction.ActionType.DAMAGE)) {
                     actions.remove(i);
                 }
             }
@@ -55,25 +48,20 @@ public class GameActionManagerPatches
             clz = GameActionManager.class,
             method = "getNextAction"
     )
-    public static class GameActionManager_GetNextAction
-    {
+    public static class GameActionManager_GetNextAction {
         @SpireInsertPatch(
                 locator = Locator.class,
                 localvars = {"m"}
         )
-        public static void insert(GameActionManager __instance, AbstractMonster m)
-        {
-            if (!(m instanceof PCLCardAlly))
-            {
+        public static void insert(GameActionManager __instance, AbstractMonster m) {
+            if (!(m instanceof PCLCardAlly)) {
                 CombatManager.removeDamagePowers(m);
             }
         }
 
-        private static class Locator extends SpireInsertLocator
-        {
+        private static class Locator extends SpireInsertLocator {
             @Override
-            public int[] Locate(CtBehavior ctMethodToPatch) throws Exception
-            {
+            public int[] Locate(CtBehavior ctMethodToPatch) throws Exception {
                 Matcher finalMatcher = new Matcher.MethodCallMatcher(AbstractMonster.class, "applyTurnPowers");
                 return LineFinder.findInOrder(ctMethodToPatch, finalMatcher);
             }

@@ -4,12 +4,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.effects.PCLEffect;
 
-public class RenderCardEffect extends PCLEffect
-{
+public class RenderCardEffect extends PCLEffect {
     private final AbstractCard card;
 
-    public RenderCardEffect(AbstractCard card, float duration, boolean isRealtime)
-    {
+    public RenderCardEffect(AbstractCard card, float duration, boolean isRealtime) {
         super(duration, isRealtime);
 
         this.card = card;
@@ -20,13 +18,11 @@ public class RenderCardEffect extends PCLEffect
         card.lighten(true);
     }
 
-    public void render(SpriteBatch sb)
-    {
+    public void render(SpriteBatch sb) {
         card.render(sb);
     }
 
-    public void dispose()
-    {
+    public void dispose() {
 
     }
 }

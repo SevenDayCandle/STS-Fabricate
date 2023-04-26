@@ -8,34 +8,28 @@ import pinacolada.resources.PGR;
 import java.util.ArrayList;
 
 // Copied and modified from STS-AnimatorMod
-public class FakeLoadout extends PCLLoadout
-{
-    public FakeLoadout()
-    {
+public class FakeLoadout extends PCLLoadout {
+    public FakeLoadout() {
         super(AbstractCard.CardColor.COLORLESS, PGR.BASE_PREFIX, 0);
     }
 
     @Override
-    public ArrayList<String> getStartingDeck()
-    {
-        return startingDeck;
-    }
-
-    @Override
-    public PCLCardData getSymbolicCard()
-    {
+    public PCLCardData getSymbolicCard() {
         return QuestionMark.DATA;
     }
 
     @Override
-    public PCLTrophies getTrophies()
-    {
-        return null;
+    public ArrayList<String> getStartingDeck() {
+        return startingDeck;
     }
 
     @Override
-    public void onVictory(int ascensionLevel, int trophyLevel, int score)
-    {
+    public void onVictory(int ascensionLevel, int trophyLevel, int score) {
         //
+    }
+
+    @Override
+    public PCLTrophies getTrophies() {
+        return null;
     }
 }

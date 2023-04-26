@@ -15,8 +15,7 @@ import pinacolada.utilities.ListSelection;
 import java.util.ArrayList;
 
 // Copied and modified from STS-AnimatorMod
-public class MoveCards extends PCLAction<ArrayList<AbstractCard>>
-{
+public class MoveCards extends PCLAction<ArrayList<AbstractCard>> {
     protected ArrayList<AbstractCard> selectedCards = new ArrayList<>();
     protected GenericCondition<AbstractCard> filter;
     protected ListSelection<AbstractCard> destination;
@@ -27,13 +26,11 @@ public class MoveCards extends PCLAction<ArrayList<AbstractCard>>
     protected boolean realtime;
     protected float effectDuration;
 
-    public MoveCards(CardGroup targetPile, CardGroup sourcePile)
-    {
+    public MoveCards(CardGroup targetPile, CardGroup sourcePile) {
         this(targetPile, sourcePile, -1);
     }
 
-    public MoveCards(CardGroup targetPile, CardGroup sourcePile, int amount)
-    {
+    public MoveCards(CardGroup targetPile, CardGroup sourcePile, int amount) {
         super(ActionType.CARD_MANIPULATION);
 
         this.destination = null;
@@ -45,22 +42,18 @@ public class MoveCards extends PCLAction<ArrayList<AbstractCard>>
     }
 
     @Override
-    protected void firstUpdate()
-    {
+    protected void firstUpdate() {
         ArrayList<AbstractCard> temp = filter != null ? EUIUtils.filter(sourcePile.group, filter::check) : new ArrayList<>(sourcePile.group);
 
         int max = amount;
-        if (amount == -1 || temp.size() < amount)
-        {
+        if (amount == -1 || temp.size() < amount) {
             max = temp.size();
         }
 
         boolean remove = origin.mode.isRandom();
-        for (int i = 0; i < max; i++)
-        {
+        for (int i = 0; i < max; i++) {
             final AbstractCard card = origin.get(temp, i, remove);
-            if (card != null)
-            {
+            if (card != null) {
                 moveCard(card);
             }
         }
@@ -68,56 +61,48 @@ public class MoveCards extends PCLAction<ArrayList<AbstractCard>>
         complete(selectedCards);
     }
 
-    private void moveCard(AbstractCard card)
-    {
+    private void moveCard(AbstractCard card) {
         selectedCards.add(card);
         PCLActions.top.moveCard(card, sourcePile, targetPile)
                 .showEffect(showEffect, realtime, effectDuration)
                 .setDestination(destination);
     }
 
-    public MoveCards setDestination(ListSelection<AbstractCard> destination)
-    {
+    public MoveCards setDestination(ListSelection<AbstractCard> destination) {
         this.destination = destination;
 
         return this;
     }
 
-    public MoveCards setFilter(FuncT1<Boolean, AbstractCard> filter)
-    {
+    public MoveCards setFilter(FuncT1<Boolean, AbstractCard> filter) {
         this.filter = GenericCondition.fromT1(filter);
 
         return this;
     }
 
-    public <S> MoveCards setFilter(S state, FuncT2<Boolean, S, AbstractCard> filter)
-    {
+    public <S> MoveCards setFilter(S state, FuncT2<Boolean, S, AbstractCard> filter) {
         this.filter = GenericCondition.fromT2(filter, state);
 
         return this;
     }
 
-    public MoveCards setOrigin(ListSelection<AbstractCard> origin)
-    {
+    public MoveCards setOrigin(ListSelection<AbstractCard> origin) {
         this.origin = (origin != null ? origin : PCLCardSelection.Top.toSelection());
 
         return this;
     }
 
-    public MoveCards showEffect(boolean showEffect, boolean isRealtime)
-    {
+    public MoveCards showEffect(boolean showEffect, boolean isRealtime) {
         float duration = showEffect ? Settings.ACTION_DUR_MED : Settings.ACTION_DUR_FAST;
 
-        if (Settings.FAST_MODE)
-        {
+        if (Settings.FAST_MODE) {
             duration *= 0.7f;
         }
 
         return showEffect(showEffect, isRealtime, duration);
     }
 
-    public MoveCards showEffect(boolean showEffect, boolean isRealtime, float effectDuration)
-    {
+    public MoveCards showEffect(boolean showEffect, boolean isRealtime, float effectDuration) {
         this.showEffect = showEffect;
         this.realtime = isRealtime;
         this.effectDuration = effectDuration;

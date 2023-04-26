@@ -12,37 +12,28 @@ import pinacolada.skills.skills.PPassiveCond;
 
 import java.util.ArrayList;
 
-public abstract class PCond_Branch<T extends PField_Not, U> extends PPassiveCond<T>
-{
+public abstract class PCond_Branch<T extends PField_Not, U> extends PPassiveCond<T> {
 
-    public PCond_Branch(PSkillData<T> data, PSkillSaveData content)
-    {
+    public PCond_Branch(PSkillData<T> data, PSkillSaveData content) {
         super(data, content);
     }
 
-    public PCond_Branch(PSkillData<T> data)
-    {
+    public PCond_Branch(PSkillData<T> data) {
         super(data);
     }
 
-    public PCond_Branch(PSkillData<T> data, PCLCardTarget target, int amount)
-    {
+    public PCond_Branch(PSkillData<T> data, PCLCardTarget target, int amount) {
         super(data, target, amount);
     }
 
-    public PCond_Branch(PSkillData<T> data, PCLCardTarget target, int amount, int extra)
-    {
+    public PCond_Branch(PSkillData<T> data, PCLCardTarget target, int amount, int extra) {
         super(data, target, amount, extra);
     }
 
-    public final void branch(PCLUseInfo info, Iterable<U> items)
-    {
-        for (U c : items)
-        {
-            for (int i = 0; i < getEffectCount(); i++)
-            {
-                if (matchesBranch(c, i, info))
-                {
+    public final void branch(PCLUseInfo info, Iterable<U> items) {
+        for (U c : items) {
+            for (int i = 0; i < getEffectCount(); i++) {
+                if (matchesBranch(c, i, info)) {
                     this.childEffect.use(info, i);
                     break;
                 }
@@ -51,13 +42,10 @@ public abstract class PCond_Branch<T extends PField_Not, U> extends PPassiveCond
     }
 
     // Obtain the number of total leaf nodes stemming out of this branch
-    protected final int getEffectCount()
-    {
+    protected final int getEffectCount() {
         PSkill<?> current = this.childEffect;
-        while (current != null)
-        {
-            if (current instanceof PMultiBase<?>)
-            {
+        while (current != null) {
+            if (current instanceof PMultiBase<?>) {
                 return ((PMultiBase<?>) current).getSubEffects().size();
             }
             current = current.getChild();
@@ -65,12 +53,25 @@ public abstract class PCond_Branch<T extends PField_Not, U> extends PPassiveCond
         return 1;
     }
 
+    public abstract boolean matchesBranch(U c, int i, PCLUseInfo info);
+
+    @Override
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
+        return false;
+    }
+
+    @Override
+    public String getText(boolean addPeriod) {
+        if (this.childEffect instanceof PMultiBase) {
+            return getSubText() + ": | " + getEffectTexts(addPeriod);
+        }
+        return getSubText();
+    }
+
     // TODO highlight matching branches with green
-    protected String getEffectTexts(boolean addPeriod)
-    {
+    protected String getEffectTexts(boolean addPeriod) {
         ArrayList<String> effectTexts = new ArrayList<>();
-        for (int i = 0; i < getEffectCount(); i++)
-        {
+        for (int i = 0; i < getEffectCount(); i++) {
             effectTexts.add(getQualifier(i) + " -> " + this.childEffect.getText(i, addPeriod));
         }
         return EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, effectTexts);
@@ -78,26 +79,7 @@ public abstract class PCond_Branch<T extends PField_Not, U> extends PPassiveCond
 
     public abstract String getQualifier(int i);
 
-    @Override
-    public String getText(boolean addPeriod)
-    {
-        if (this.childEffect instanceof PMultiBase)
-        {
-            return getSubText() + ": | " + getEffectTexts(addPeriod);
-        }
-        return getSubText();
-    }
-
-    public final void use(PCLUseInfo info, int index)
-    {
+    public final void use(PCLUseInfo info, int index) {
         use(info);
     }
-
-    @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource)
-    {
-        return false;
-    }
-
-    public abstract boolean matchesBranch(U c, int i, PCLUseInfo info);
 }

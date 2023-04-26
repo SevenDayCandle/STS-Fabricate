@@ -37,8 +37,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
-public class PCLCustomCardSelectorScreen extends AbstractMenuScreen
-{
+public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
     protected static final float ITEM_HEIGHT = AbstractCard.IMG_HEIGHT * 0.15f;
     private static final float DRAW_START_X = (Settings.WIDTH - (5f * AbstractCard.IMG_WIDTH * 0.75f) - (4f * Settings.CARD_VIEW_PAD_X) + AbstractCard.IMG_WIDTH * 0.75f);
     private static final float DRAW_START_Y = (float) Settings.HEIGHT * 0.7f;
@@ -61,8 +60,7 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen
     protected PCLEffectWithCallback<?> currentDialog;
     private AbstractCard clickedCard;
 
-    public PCLCustomCardSelectorScreen()
-    {
+    public PCLCustomCardSelectorScreen() {
         final float buttonHeight = screenH(0.06f);
         final float labelHeight = screenH(0.04f);
         final float buttonWidth = screenW(0.18f);
@@ -111,8 +109,7 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen
         contextMenu = (EUIContextMenu<ContextOption>) new EUIContextMenu<ContextOption>(new EUIHitbox(-500f, -500f, 0, 0), o -> o.name)
                 .setItems(ContextOption.values())
                 .setOnChange(options -> {
-                    for (ContextOption o : options)
-                    {
+                    for (ContextOption o : options) {
                         o.onSelect.invoke(this, clickedCard, currentSlots.get(clickedCard));
                     }
                 })
@@ -125,28 +122,25 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen
 
         colorButtons = new EUIButtonList(14, screenW(0.09f), screenH(0.95f), EUIButtonList.BUTTON_W, scale(47));
 
-        for (AbstractCard.CardColor color : getAllColors())
-        {
+        for (AbstractCard.CardColor color : getAllColors()) {
             makeColorButton(color);
         }
     }
 
-    public static void openFolder()
-    {
-        try
-        {
-            Desktop.getDesktop().open(Gdx.files.local(PCLCustomCardSlot.FOLDER).file());
-        }
-        catch (Exception e)
-        {
-            EUIUtils.logError(null, "Failed to open card folder.");
+    private void onCardClicked(AbstractCard card) {
+        PCLCustomCardSlot slot = currentSlots.get(card);
+        if (slot != null) {
+            edit(card, slot);
         }
     }
 
-    public void add()
-    {
-        if (currentDialog == null)
-        {
+    private void onCardRightClicked(AbstractCard card) {
+        clickedCard = card;
+        contextMenu.positionToOpen();
+    }
+
+    public void add() {
+        if (currentDialog == null) {
             PCLCustomCardSlot slot = new PCLCustomCardSlot(currentColor);
             currentDialog = new PCLCustomCardEditCardScreen(slot)
                     .setOnSave(() -> {
@@ -159,13 +153,19 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen
         }
     }
 
-    public void loadFromExisting()
-    {
-        if (currentDialog == null)
-        {
+    public static void openFolder() {
+        try {
+            Desktop.getDesktop().open(Gdx.files.local(PCLCustomCardSlot.FOLDER).file());
+        }
+        catch (Exception e) {
+            EUIUtils.logError(null, "Failed to open card folder.");
+        }
+    }
+
+    public void loadFromExisting() {
+        if (currentDialog == null) {
             currentDialog = new PCLGenericSelectCardEffect(this.getAvailableCardsToCopy()).addCallback(card -> {
-                if (card instanceof PCLCard)
-                {
+                if (card instanceof PCLCard) {
                     PCLCustomCardSlot slot = new PCLCustomCardSlot((PCLCard) card, currentColor);
                     currentDialog = new PCLCustomCardEditCardScreen(slot)
                             .setOnSave(() -> {
@@ -181,76 +181,7 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen
         }
     }
 
-    public void duplicate(AbstractCard card, PCLCustomCardSlot cardSlot)
-    {
-        if (currentDialog == null && cardSlot != null)
-        {
-            PCLCustomCardSlot slot = new PCLCustomCardSlot(cardSlot);
-            currentDialog = new PCLCustomCardEditCardScreen(slot)
-                    .setOnSave(() -> {
-                        slot.commitBuilder();
-                        AbstractCard newCard = slot.getBuilder(0).createImplWithForms(false);
-                        currentSlots.put(newCard, slot);
-                        PCLCustomCardSlot.getCards(currentColor).add(slot);
-                        grid.addCard(newCard);
-                    });
-        }
-    }
-
-    public void duplicateToColor(AbstractCard card, PCLCustomCardSlot cardSlot)
-    {
-        if (currentDialog == null && cardSlot != null)
-        {
-            currentDialog = new PCLCustomCardCopyConfirmationEffect(getAllColors())
-                    .addCallback((co) -> {
-                        if (co != null)
-                        {
-                            PCLCustomCardSlot slot = new PCLCustomCardSlot(cardSlot, co);
-                            open(null, co, this.onClose);
-                            currentDialog = new PCLCustomCardEditCardScreen(slot)
-                                    .setOnSave(() -> {
-                                        slot.commitBuilder();
-                                        AbstractCard newCard = slot.getBuilder(0).createImplWithForms(false);
-                                        currentSlots.put(newCard, slot);
-                                        PCLCustomCardSlot.getCards(co).add(slot);
-                                        grid.addCard(newCard);
-                                    });
-                        }
-                    });
-        }
-    }
-
-    public void edit(AbstractCard card, PCLCustomCardSlot cardSlot)
-    {
-        if (currentDialog == null && cardSlot != null)
-        {
-            currentDialog = new PCLCustomCardEditCardScreen(cardSlot)
-                    .setOnSave(() -> {
-                        cardSlot.commitBuilder();
-                        AbstractCard newCard = cardSlot.getBuilder(0).createImplWithForms(false);
-                        grid.removeCard(card);
-                        currentSlots.remove(card);
-                        currentSlots.put(newCard, cardSlot);
-                        grid.addCard(newCard);
-                    });
-        }
-    }
-
-    // TODO add replacement cards
-    private ArrayList<AbstractCard> getAvailableCardsToCopy()
-    {
-        return EUIUtils.mapAsNonnull(PCLCardData.getAllData(false, false, data -> data.resources == PGR.core),
-                data -> {
-                    AbstractCard card = CardLibrary.getCard(data.ID);
-                    UnlockTracker.markCardAsSeen(data.ID);
-                    card.isSeen = true;
-                    card.isLocked = false;
-                    return PCLCustomCardSlot.canFullyCopyCard(card) ? card : null;
-                });
-    }
-
-    private ArrayList<AbstractCard.CardColor> getAllColors()
-    {
+    private ArrayList<AbstractCard.CardColor> getAllColors() {
         ArrayList<AbstractCard.CardColor> list = new ArrayList<>();
 
         // Base game colors are not tracked in getCardColors
@@ -269,31 +200,40 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen
                 .setColor(EUIGameUtils.getColorColor(co));
     }
 
-    private void onCardClicked(AbstractCard card)
-    {
-        PCLCustomCardSlot slot = currentSlots.get(card);
-        if (slot != null)
-        {
-            edit(card, slot);
+    public void edit(AbstractCard card, PCLCustomCardSlot cardSlot) {
+        if (currentDialog == null && cardSlot != null) {
+            currentDialog = new PCLCustomCardEditCardScreen(cardSlot)
+                    .setOnSave(() -> {
+                        cardSlot.commitBuilder();
+                        AbstractCard newCard = cardSlot.getBuilder(0).createImplWithForms(false);
+                        grid.removeCard(card);
+                        currentSlots.remove(card);
+                        currentSlots.put(newCard, cardSlot);
+                        grid.addCard(newCard);
+                    });
         }
     }
 
-    private void onCardRightClicked(AbstractCard card)
-    {
-        clickedCard = card;
-        contextMenu.positionToOpen();
+    // TODO add replacement cards
+    private ArrayList<AbstractCard> getAvailableCardsToCopy() {
+        return EUIUtils.mapAsNonnull(PCLCardData.getAllData(false, false, data -> data.resources == PGR.core),
+                data -> {
+                    AbstractCard card = CardLibrary.getCard(data.ID);
+                    UnlockTracker.markCardAsSeen(data.ID);
+                    card.isSeen = true;
+                    card.isLocked = false;
+                    return PCLCustomCardSlot.canFullyCopyCard(card) ? card : null;
+                });
     }
 
-    public void open(AbstractPlayer.PlayerClass playerClass, AbstractCard.CardColor cardColor, ActionT0 onClose)
-    {
+    public void open(AbstractPlayer.PlayerClass playerClass, AbstractCard.CardColor cardColor, ActionT0 onClose) {
         super.open();
 
         currentClass = playerClass;
         currentColor = EUI.actingColor = cardColor;
         currentSlots.clear();
         grid.clear();
-        for (PCLCustomCardSlot slot : PCLCustomCardSlot.getCards(currentColor))
-        {
+        for (PCLCustomCardSlot slot : PCLCustomCardSlot.getCards(currentColor)) {
             AbstractCard card = slot.getBuilder(0).createImplWithForms(false);
             currentSlots.put(card, slot);
             grid.addCard(card);
@@ -304,14 +244,45 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen
         }, currentColor, false, true);
     }
 
-    public void remove(AbstractCard card, PCLCustomCardSlot cardSlot)
-    {
-        if (currentDialog == null && cardSlot != null)
-        {
+    public void duplicate(AbstractCard card, PCLCustomCardSlot cardSlot) {
+        if (currentDialog == null && cardSlot != null) {
+            PCLCustomCardSlot slot = new PCLCustomCardSlot(cardSlot);
+            currentDialog = new PCLCustomCardEditCardScreen(slot)
+                    .setOnSave(() -> {
+                        slot.commitBuilder();
+                        AbstractCard newCard = slot.getBuilder(0).createImplWithForms(false);
+                        currentSlots.put(newCard, slot);
+                        PCLCustomCardSlot.getCards(currentColor).add(slot);
+                        grid.addCard(newCard);
+                    });
+        }
+    }
+
+    public void duplicateToColor(AbstractCard card, PCLCustomCardSlot cardSlot) {
+        if (currentDialog == null && cardSlot != null) {
+            currentDialog = new PCLCustomCardCopyConfirmationEffect(getAllColors())
+                    .addCallback((co) -> {
+                        if (co != null) {
+                            PCLCustomCardSlot slot = new PCLCustomCardSlot(cardSlot, co);
+                            open(null, co, this.onClose);
+                            currentDialog = new PCLCustomCardEditCardScreen(slot)
+                                    .setOnSave(() -> {
+                                        slot.commitBuilder();
+                                        AbstractCard newCard = slot.getBuilder(0).createImplWithForms(false);
+                                        currentSlots.put(newCard, slot);
+                                        PCLCustomCardSlot.getCards(co).add(slot);
+                                        grid.addCard(newCard);
+                                    });
+                        }
+                    });
+        }
+    }
+
+    public void remove(AbstractCard card, PCLCustomCardSlot cardSlot) {
+        if (currentDialog == null && cardSlot != null) {
             currentDialog = new PCLCustomCardDeletionConfirmationEffect(cardSlot)
                     .addCallback((v) -> {
-                        if (v != null)
-                        {
+                        if (v != null) {
                             grid.removeCard(card);
                             currentSlots.remove(card);
                             v.wipeBuilder();
@@ -321,49 +292,12 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen
     }
 
     @Override
-    public void updateImpl()
-    {
-        PGR.blackScreen.updateImpl();
-        if (currentDialog != null)
-        {
-            currentDialog.update();
-
-            if (currentDialog.isDone)
-            {
-                currentDialog = null;
-            }
-        }
-        else
-        {
-            // Do not close the screen with esc if there is an effect going on
-            super.updateImpl();
-            contextMenu.tryUpdate();
-            boolean shouldDoStandardUpdate = !EUI.cardFilters.tryUpdate() && !CardCrawlGame.isPopupOpen;
-            if (shouldDoStandardUpdate)
-            {
-                EUI.openCardFiltersButton.tryUpdate();
-                info.tryUpdate();
-                colorButtons.tryUpdate();
-                grid.tryUpdate();
-                cancelButton.tryUpdate();
-                addButton.tryUpdate();
-                openButton.tryUpdate();
-                loadExistingButton.tryUpdate();
-                reloadButton.tryUpdate();
-            }
-        }
-    }
-
-    @Override
-    public void renderImpl(SpriteBatch sb)
-    {
+    public void renderImpl(SpriteBatch sb) {
         PGR.blackScreen.renderImpl(sb);
-        if (currentDialog != null)
-        {
+        if (currentDialog != null) {
             currentDialog.render(sb);
         }
-        else
-        {
+        else {
             info.tryRender(sb);
             grid.tryRender(sb);
             cancelButton.tryRender(sb);
@@ -379,8 +313,36 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen
         }
     }
 
-    public enum ContextOption
-    {
+    @Override
+    public void updateImpl() {
+        PGR.blackScreen.updateImpl();
+        if (currentDialog != null) {
+            currentDialog.update();
+
+            if (currentDialog.isDone) {
+                currentDialog = null;
+            }
+        }
+        else {
+            // Do not close the screen with esc if there is an effect going on
+            super.updateImpl();
+            contextMenu.tryUpdate();
+            boolean shouldDoStandardUpdate = !EUI.cardFilters.tryUpdate() && !CardCrawlGame.isPopupOpen;
+            if (shouldDoStandardUpdate) {
+                EUI.openCardFiltersButton.tryUpdate();
+                info.tryUpdate();
+                colorButtons.tryUpdate();
+                grid.tryUpdate();
+                cancelButton.tryUpdate();
+                addButton.tryUpdate();
+                openButton.tryUpdate();
+                loadExistingButton.tryUpdate();
+                reloadButton.tryUpdate();
+            }
+        }
+    }
+
+    public enum ContextOption {
         Duplicate(PGR.core.strings.cedit_duplicate, PCLCustomCardSelectorScreen::duplicate),
         DuplicateToColor(PGR.core.strings.cedit_duplicateToColor, PCLCustomCardSelectorScreen::duplicateToColor),
         Delete(PGR.core.strings.cedit_delete, PCLCustomCardSelectorScreen::remove);
@@ -388,8 +350,7 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen
         public final String name;
         public final ActionT3<PCLCustomCardSelectorScreen, AbstractCard, PCLCustomCardSlot> onSelect;
 
-        ContextOption(String name, ActionT3<PCLCustomCardSelectorScreen, AbstractCard, PCLCustomCardSlot> onSelect)
-        {
+        ContextOption(String name, ActionT3<PCLCustomCardSelectorScreen, AbstractCard, PCLCustomCardSlot> onSelect) {
             this.name = name;
             this.onSelect = onSelect;
         }

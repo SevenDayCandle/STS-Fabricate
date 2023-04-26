@@ -5,13 +5,11 @@ import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 
 // Copied and modified from STS-AnimatorMod
-public class SequentialAction extends PCLAction
-{
+public class SequentialAction extends PCLAction<Void> {
     private final AbstractGameAction action;
     private final AbstractGameAction action2;
 
-    public SequentialAction(AbstractGameAction action, AbstractGameAction action2)
-    {
+    public SequentialAction(AbstractGameAction action, AbstractGameAction action2) {
         super(action.actionType);
 
         this.action = action;
@@ -21,20 +19,16 @@ public class SequentialAction extends PCLAction
     }
 
     @Override
-    public void update()
-    {
-        if (updateAction())
-        {
+    public void update() {
+        if (updateAction()) {
             PCLActions.top.add(action2);
 
             this.isDone = true;
         }
     }
 
-    private boolean updateAction()
-    {
-        if (!action.isDone)
-        {
+    private boolean updateAction() {
+        if (!action.isDone) {
             action.update();
         }
 

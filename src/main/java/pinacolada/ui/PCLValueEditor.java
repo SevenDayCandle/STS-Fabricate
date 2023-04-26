@@ -16,8 +16,7 @@ import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIFontHelper;
 
-public class PCLValueEditor extends EUIHoverable
-{
+public class PCLValueEditor extends EUIHoverable {
     protected static final float ICON_SIZE = scale(36f);
     public EUILabel header;
     protected ActionT1<Integer> onUpdate;
@@ -26,8 +25,7 @@ public class PCLValueEditor extends EUIHoverable
     protected EUITextBoxNumericalInput displayValue;
     protected boolean allowZero = true;
 
-    public PCLValueEditor(EUIHitbox hb, String title, ActionT1<Integer> onUpdate)
-    {
+    public PCLValueEditor(EUIHitbox hb, String title, ActionT1<Integer> onUpdate) {
         super(hb);
 
         final float w = hb.width;
@@ -57,24 +55,24 @@ public class PCLValueEditor extends EUIHoverable
         this.onUpdate = onUpdate;
     }
 
-    public void decrease()
-    {
+    public void decrease() {
         setValue(displayValue.getCachedValue() - 1);
     }
 
-    public int getValue()
-    {
+    public int getValue() {
         return displayValue.getCachedValue();
     }
 
-    public void increase()
-    {
+    public PCLValueEditor setValue(int value) {
+        return setValue(value, true);
+    }
+
+    public void increase() {
         setValue(displayValue.getCachedValue() + 1);
     }
 
     @Override
-    public void renderImpl(SpriteBatch sb)
-    {
+    public void renderImpl(SpriteBatch sb) {
         this.hb.render(sb);
         decreaseButton.tryRender(sb);
         increaseButton.tryRender(sb);
@@ -82,43 +80,32 @@ public class PCLValueEditor extends EUIHoverable
         header.tryRender(sb);
     }
 
-    public PCLValueEditor setHasInfinite(boolean isInfinite, boolean allowZero)
-    {
+    public PCLValueEditor setHasInfinite(boolean isInfinite, boolean allowZero) {
         this.displayValue.showNegativeAsInfinity(isInfinite);
         this.allowZero = allowZero;
         return this;
     }
 
-    public PCLValueEditor setHeader(BitmapFont font, float fontScale, Color textColor, String text)
-    {
+    public PCLValueEditor setHeader(BitmapFont font, float fontScale, Color textColor, String text) {
         return setHeader(font, fontScale, textColor, text, false);
     }
 
-    public PCLValueEditor setHeader(BitmapFont font, float fontScale, Color textColor, String text, boolean smartText)
-    {
+    public PCLValueEditor setHeader(BitmapFont font, float fontScale, Color textColor, String text, boolean smartText) {
         this.header.setFont(font, fontScale).setColor(textColor).setLabel(text).setSmartText(smartText).setActive(true);
 
         return this;
     }
 
-    public PCLValueEditor setHeader(float x, float y, BitmapFont font, float fontScale, Color textColor, String text, boolean smartText)
-    {
+    public PCLValueEditor setHeader(float x, float y, BitmapFont font, float fontScale, Color textColor, String text, boolean smartText) {
         this.header.setPosition(x, y)
                 .setFont(font, fontScale).setColor(textColor).setLabel(text).setSmartText(smartText).setActive(true);
 
         return this;
     }
 
-    public PCLValueEditor setLimits(int minimum, int maximum)
-    {
+    public PCLValueEditor setLimits(int minimum, int maximum) {
         displayValue.setLimits(minimum, maximum);
 
-        return this;
-    }
-
-    public PCLValueEditor setTooltip(EUITooltip tip) {
-        super.setTooltip(tip);
-        header.setTooltip(tip);
         return this;
     }
 
@@ -128,29 +115,27 @@ public class PCLValueEditor extends EUIHoverable
         return this;
     }
 
-    public PCLValueEditor setValue(int value)
-    {
-        return setValue(value, true);
-    }
-
-    public PCLValueEditor setValue(int value, boolean invoke)
-    {
-        displayValue.forceSetValue(displayValue.showNegativeAsInfinity && (value < 0 || (value == 0 && !allowZero)) ? -1 : value, false);
-        if (invoke)
-        {
-            onUpdate.invoke(displayValue.getCachedValue());
-        }
-
+    public PCLValueEditor setTooltip(EUITooltip tip) {
+        super.setTooltip(tip);
+        header.setTooltip(tip);
         return this;
     }
 
     @Override
-    public void updateImpl()
-    {
+    public void updateImpl() {
         super.updateImpl();
         decreaseButton.setInteractable(displayValue.getCachedValue() > displayValue.getMin()).tryUpdate();
         increaseButton.setInteractable(displayValue.getCachedValue() < displayValue.getMax()).tryUpdate();
         displayValue.tryUpdate();
         header.tryUpdate();
+    }
+
+    public PCLValueEditor setValue(int value, boolean invoke) {
+        displayValue.forceSetValue(displayValue.showNegativeAsInfinity && (value < 0 || (value == 0 && !allowZero)) ? -1 : value, false);
+        if (invoke) {
+            onUpdate.invoke(displayValue.getCachedValue());
+        }
+
+        return this;
     }
 }

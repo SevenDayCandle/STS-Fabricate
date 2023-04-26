@@ -29,8 +29,7 @@ import pinacolada.effects.vfx.EffekseerEffect;
 import java.util.ArrayList;
 
 // Copied and modified from STS-AnimatorMod
-public final class PCLEffects
-{
+public final class PCLEffects {
     public final static ArrayList<AbstractGameEffect> UnlistedEffects = new ArrayList<>();
     public final static PCLEffects List = new PCLEffects(EffectType.List);
     public final static PCLEffects Queue = new PCLEffects(EffectType.Queue);
@@ -40,17 +39,13 @@ public final class PCLEffects
 
     private final EffectType effectType;
 
-    private PCLEffects(EffectType effectType)
-    {
+    private PCLEffects(EffectType effectType) {
         this.effectType = effectType;
     }
 
-    public static boolean isEmpty()
-    {
-        for (AbstractGameEffect effect : AbstractDungeon.topLevelEffects)
-        {
-            if (effect instanceof PCLEffect)
-            {
+    public static boolean isEmpty() {
+        for (AbstractGameEffect effect : AbstractDungeon.topLevelEffects) {
+            if (effect instanceof PCLEffect) {
                 return false;
             }
         }
@@ -58,17 +53,32 @@ public final class PCLEffects
         return UnlistedEffects.isEmpty();
     }
 
-    public <T extends AbstractGameEffect> T add(T effect)
-    {
+    public PCLEffect attack(AbstractCreature source, AbstractCreature target, PCLAttackVFX attackEffect, float pitchMin, float pitchMax) {
+        return attack(source, target, attackEffect, pitchMin, pitchMax, null, source == target ? 0 : 0.15f);
+    }
+
+    public PCLEffect attack(AbstractCreature source, AbstractCreature target, PCLAttackVFX attackEffect, float pitchMin, float pitchMax, Color vfxColor, float spread) {
+        attackEffect.playSound(pitchMin, pitchMax);
+        return attackWithoutSound(source, target, attackEffect, vfxColor, spread);
+    }
+
+    public PCLEffect attackWithoutSound(AbstractCreature source, AbstractCreature target, PCLAttackVFX attackEffect, Color vfxColor, float spread) {
+        final PCLEffect effect = add(attackEffect.getVFX(source, VFX.randomX(target.hb, spread), VFX.randomY(target.hb, spread)));
+        if (vfxColor != null) {
+            effect.setColor(vfxColor);
+        }
+
+        return effect;
+    }
+
+    public <T extends AbstractGameEffect> T add(T effect) {
         getList().add(effect);
 
         return effect;
     }
 
-    public ArrayList<AbstractGameEffect> getList()
-    {
-        switch (effectType)
-        {
+    public ArrayList<AbstractGameEffect> getList() {
+        switch (effectType) {
             case List:
                 return AbstractDungeon.effectList;
 
@@ -88,170 +98,119 @@ public final class PCLEffects
         throw new RuntimeException("Enum value does not exist.");
     }
 
-    public PCLEffect attack(AbstractCreature source, AbstractCreature target, PCLAttackVFX attackEffect, float pitchMin, float pitchMax)
-    {
-        return attack(source, target, attackEffect, pitchMin, pitchMax, null, source == target ? 0 : 0.15f);
-    }
-
-    public PCLEffect attack(AbstractCreature source, AbstractCreature target, PCLAttackVFX attackEffect, float pitchMin, float pitchMax, Color vfxColor)
-    {
+    public PCLEffect attack(AbstractCreature source, AbstractCreature target, PCLAttackVFX attackEffect, float pitchMin, float pitchMax, Color vfxColor) {
         return attack(source, target, attackEffect, pitchMin, pitchMax, vfxColor, source == target ? 0 : 0.15f);
     }
 
-    public PCLEffect attack(AbstractCreature source, AbstractCreature target, PCLAttackVFX attackEffect, float pitchMin, float pitchMax, Color vfxColor, float spread)
-    {
-        attackEffect.playSound(pitchMin, pitchMax);
-        return attackWithoutSound(source, target, attackEffect, vfxColor, spread);
-    }
-
-    public PCLEffect attackWithoutSound(AbstractCreature source, AbstractCreature target, PCLAttackVFX attackEffect, Color vfxColor, float spread)
-    {
-        final PCLEffect effect = add(attackEffect.getVFX(source, VFX.randomX(target.hb, spread), VFX.randomY(target.hb, spread)));
-        if (vfxColor != null)
-        {
-            effect.setColor(vfxColor);
-        }
-
-        return effect;
-    }
-
-    public BorderFlashEffect borderFlash(Color color)
-    {
+    public BorderFlashEffect borderFlash(Color color) {
         return add(new BorderFlashEffect(color, true));
     }
 
-    public BorderLongFlashEffect borderLongFlash(Color color)
-    {
+    public BorderLongFlashEffect borderLongFlash(Color color) {
         return add(new BorderLongFlashEffect(color, true));
     }
 
-    public CallbackEffect2 callback(AbstractGameEffect effect)
-    {
+    public CallbackEffect2 callback(AbstractGameEffect effect) {
         return add(new CallbackEffect2(effect));
     }
 
-    public CallbackEffect2 callback(AbstractGameEffect effect, ActionT0 onCompletion)
-    {
+    public CallbackEffect2 callback(AbstractGameEffect effect, ActionT0 onCompletion) {
         return add(new CallbackEffect2(effect, onCompletion));
     }
 
-    public CallbackEffect2 callback(AbstractGameEffect effect, ActionT1<AbstractGameEffect> onCompletion)
-    {
+    public CallbackEffect2 callback(AbstractGameEffect effect, ActionT1<AbstractGameEffect> onCompletion) {
         return add(new CallbackEffect2(effect, onCompletion));
     }
 
-    public CallbackEffect2 callback(AbstractGameEffect effect, Object state, ActionT2<Object, AbstractGameEffect> onCompletion)
-    {
+    public CallbackEffect2 callback(AbstractGameEffect effect, Object state, ActionT2<Object, AbstractGameEffect> onCompletion) {
         return add(new CallbackEffect2(effect, state, onCompletion));
     }
 
-    public CallbackEffect callback(ActionT0 onCompletion)
-    {
+    public CallbackEffect callback(ActionT0 onCompletion) {
         return add(new CallbackEffect(new WaitAction(0.01f), onCompletion));
     }
 
-    public CallbackEffect callback(AbstractGameAction action)
-    {
+    public CallbackEffect callback(AbstractGameAction action) {
         return add(new CallbackEffect(action));
     }
 
-    public CallbackEffect callback(AbstractGameAction effect, ActionT0 onCompletion)
-    {
+    public CallbackEffect callback(AbstractGameAction effect, ActionT0 onCompletion) {
         return add(new CallbackEffect(effect, onCompletion));
     }
 
-    public CallbackEffect callback(AbstractGameAction action, ActionT1<AbstractGameAction> onCompletion)
-    {
+    public CallbackEffect callback(AbstractGameAction action, ActionT1<AbstractGameAction> onCompletion) {
         return add(new CallbackEffect(action, onCompletion));
     }
 
-    public CallbackEffect callback(AbstractGameAction action, Object state, ActionT2<Object, AbstractGameAction> onCompletion)
-    {
+    public CallbackEffect callback(AbstractGameAction action, Object state, ActionT2<Object, AbstractGameAction> onCompletion) {
         return add(new CallbackEffect(action, state, onCompletion));
     }
 
-    public int count()
-    {
+    public int count() {
         return getList().size();
     }
 
-    public EffekseerEffect playEFX(EffekseerEFK key, float x, float y)
-    {
-        return add(VFX.eFX(key, x, y));
-    }
-
-    public EffekseerEffect playEFX(EffekseerEFK key)
-    {
-        return add(VFX.eFX(key));
-    }
-
-    public ObtainRelicEffect obtainRelic(AbstractRelic relic)
-    {
+    public ObtainRelicEffect obtainRelic(AbstractRelic relic) {
         return add(new ObtainRelicEffect(relic));
     }
 
-    public RemoveRelicEffect removeRelic(AbstractRelic relic)
-    {
+    public EffekseerEffect playEFX(EffekseerEFK key, float x, float y) {
+        return add(VFX.eFX(key, x, y));
+    }
+
+    public EffekseerEffect playEFX(EffekseerEFK key) {
+        return add(VFX.eFX(key));
+    }
+
+    public RemoveRelicEffect removeRelic(AbstractRelic relic) {
         return add(new RemoveRelicEffect(relic));
     }
 
-    public RoomTintEffect roomTint(Color color, float transparency)
-    {
+    public RoomTintEffect roomTint(Color color, float transparency) {
         return add(new RoomTintEffect(color.cpy(), transparency));
     }
 
-    public RoomTintEffect roomTint(Color color, float transparency, float setDuration, boolean renderBehind)
-    {
+    public RoomTintEffect roomTint(Color color, float transparency, float setDuration, boolean renderBehind) {
         return add(new RoomTintEffect(color.cpy(), transparency, setDuration, renderBehind));
     }
 
-    public ShowCardAndObtainEffect showAndObtain(AbstractCard card)
-    {
+    public ShowCardAndObtainEffect showAndObtain(AbstractCard card) {
         return showAndObtain(card, Settings.WIDTH * 0.5f, Settings.HEIGHT * 0.5f, true);
     }
 
-    public ShowCardAndObtainEffect showAndObtain(AbstractCard card, float x, float y, boolean converge)
-    {
+    public ShowCardAndObtainEffect showAndObtain(AbstractCard card, float x, float y, boolean converge) {
         return add(new ShowCardAndObtainEffect(card, x, y, converge));
     }
 
-    public ShowCardBrieflyEffect showCardBriefly(AbstractCard card)
-    {
-        return add(new ShowCardBrieflyEffect(card));
-    }
-
-    public ShowCardBrieflyEffect showCardBriefly(AbstractCard card, float x, float y)
-    {
+    public ShowCardBrieflyEffect showCardBriefly(AbstractCard card, float x, float y) {
         return add(new ShowCardBrieflyEffect(card, x, y));
     }
 
-    public ShowCardBrieflyEffect showCopy(AbstractCard card)
-    {
+    public ShowCardBrieflyEffect showCopy(AbstractCard card) {
         return showCardBriefly(card.makeStatEquivalentCopy());
     }
 
-    public SpawnRelicEffect spawnRelic(AbstractRelic relic, float x, float y)
-    {
+    public ShowCardBrieflyEffect showCardBriefly(AbstractCard card) {
+        return add(new ShowCardBrieflyEffect(card));
+    }
+
+    public SpawnRelicEffect spawnRelic(AbstractRelic relic, float x, float y) {
         return add(new SpawnRelicEffect(relic, x, y));
     }
 
-    public TalkEffect talk(AbstractCreature source, String message)
-    {
+    public TalkEffect talk(AbstractCreature source, String message) {
         return add(new TalkEffect(source, message));
     }
 
-    public TalkEffect talk(AbstractCreature source, String message, float duration)
-    {
+    public TalkEffect talk(AbstractCreature source, String message, float duration) {
         return add(new TalkEffect(source, message, duration));
     }
 
-    public CallbackEffect waitRealtime(float duration)
-    {
+    public CallbackEffect waitRealtime(float duration) {
         return add(new CallbackEffect(new WaitRealtimeAction(duration)));
     }
 
-    public enum EffectType
-    {
+    public enum EffectType {
         List,
         Queue,
         TopLevelList,

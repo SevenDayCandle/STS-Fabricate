@@ -25,183 +25,157 @@ import java.util.Arrays;
 import java.util.List;
 
 @VisibleSkill
-public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSkill<?>>
-{
+public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSkill<?>> {
     public static final PSkillData<PField_Empty> DATA = register(PMultiSkill.class, PField_Empty.class, 0, DEFAULT_MAX);
     public boolean generated = false;
     protected ArrayList<PSkill<?>> effects = new ArrayList<>();
 
-    public PMultiSkill()
-    {
+    public PMultiSkill() {
         super(DATA, PCLCardTarget.None, 0);
     }
 
-    public PMultiSkill(PSkillSaveData content)
-    {
+    public PMultiSkill(PSkillSaveData content) {
         super(DATA, content);
         effects = EUIUtils.mapAsNonnull(splitJson(content.special), PSkill::get);
         setParentsForChildren();
     }
 
-    public PMultiSkill(PSkill<?>... effects)
-    {
+    public PMultiSkill(PSkill<?>... effects) {
         super(DATA, EUIUtils.max(effects, effect -> effect.target), 0);
-        if (target == null)
-        {
+        if (target == null) {
             target = PCLCardTarget.None;
         }
         this.effects.addAll(Arrays.asList(effects));
         setParentsForChildren();
     }
 
-    public static PMultiSkill choose(int amount, PSkill<?>... effects)
-    {
-        return (PMultiSkill) new PMultiSkill(effects).setAmount(amount);
-    }
-
-    public static PMultiSkill choose(PSkill<?>... effects)
-    {
+    public static PMultiSkill choose(PSkill<?>... effects) {
         return choose(1, effects);
     }
 
-    public static PMultiSkill join(PSkill<?>... effects)
-    {
+    public static PMultiSkill choose(int amount, PSkill<?>... effects) {
+        return (PMultiSkill) new PMultiSkill(effects).setAmount(amount);
+    }
+
+    public static PMultiSkill join(PSkill<?>... effects) {
         return new PMultiSkill(effects);
     }
 
-    public static PMultiSkill joinGen(PSkill<?>... effects)
-    {
+    public static PMultiSkill joinGen(PSkill<?>... effects) {
         return new PMultiSkill(effects).setGenerated(true);
     }
 
-    @Override
-    public Color getGlowColor()
-    {
-        Color c = super.getGlowColor();
-        for (PSkill<?> effect : effects)
-        {
-            Color c2 = effect.getGlowColor();
-            if (c2 != null)
-            {
-                c = c2;
-            }
-        }
-        return c;
+    public PMultiSkill setGenerated(boolean val) {
+        generated = val;
+        return this;
     }
 
-    @Override
-    public AbstractMonster.Intent getIntent()
-    {
-        AbstractMonster.Intent c = super.getIntent();
-        for (PSkill<?> effect : effects)
-        {
-            AbstractMonster.Intent c2 = effect.getIntent();
-            if (c2 != null)
-            {
-                c = c2;
-            }
-        }
-        return c;
-    }
-
-    public String getSpecialData()
-    {
+    public String getSpecialData() {
         return PSkill.joinDataAsJson(effects, PSkill::serialize);
     }
 
     @Override
-    public PSkill<PField_Empty> addAmountForCombat(int amount)
-    {
-        for (PSkill<?> effect : effects)
-        {
+    public PSkill<PField_Empty> addAmountForCombat(int amount) {
+        for (PSkill<?> effect : effects) {
             effect.addAmountForCombat(amount);
         }
         return this;
     }
 
     @Override
-    public PSkill<PField_Empty> addExtraForCombat(int extra)
-    {
-        for (PSkill<?> effect : effects)
-        {
+    public PSkill<PField_Empty> addExtraForCombat(int extra) {
+        for (PSkill<?> effect : effects) {
             effect.addExtraForCombat(extra);
         }
         return this;
     }
 
     @Override
-    public boolean canPlay(PCLUseInfo info)
-    {
+    public boolean canPlay(PCLUseInfo info) {
         boolean canPlay = true;
-        for (PSkill<?> be : effects)
-        {
+        for (PSkill<?> be : effects) {
             canPlay = canPlay & be.canPlay(info);
         }
         return canPlay;
     }
 
-    public void displayUpgrades(boolean value)
-    {
+    public void displayUpgrades(boolean value) {
         super.displayUpgrades(value);
         displayChildUpgrades(value);
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill)
-    {
+    public Color getGlowColor() {
+        Color c = super.getGlowColor();
+        for (PSkill<?> effect : effects) {
+            Color c2 = effect.getGlowColor();
+            if (c2 != null) {
+                c = c2;
+            }
+        }
+        return c;
+    }
+
+    @Override
+    public AbstractMonster.Intent getIntent() {
+        AbstractMonster.Intent c = super.getIntent();
+        for (PSkill<?> effect : effects) {
+            AbstractMonster.Intent c2 = effect.getIntent();
+            if (c2 != null) {
+                c = c2;
+            }
+        }
+        return c;
+    }
+
+    @Override
+    public String getSampleText(PSkill<?> callingSkill) {
         return null;
     }
 
     @Override
-    public String getSubText()
-    {
+    public String getSubText() {
         return null;
     }
 
     @Override
-    public String getText(int index, boolean addPeriod)
-    {
+    public String getText(int index, boolean addPeriod) {
         return effects.size() > index ? effects.get(index).getText(addPeriod) : "";
     }
 
     @Override
-    public String getText(boolean addPeriod)
-    {
+    public String getText(boolean addPeriod) {
         return amount > 0 ? (capital(TEXT.act_choose(amount), addPeriod) + ": " +
                 (generated ? joinEffectTexts(effects) : PCLCoreStrings.joinWithOr(getEffectTextsWithoutPeriod(effects, addPeriod)))) :
                 generated ? joinEffectTexts(effects) : PCLCoreStrings.joinWithAnd(getEffectTextsWithoutPeriod(effects, addPeriod)) + PCLCoreStrings.period(addPeriod);
     }
 
     @Override
-    public boolean hasChildType(Class<?> childType)
-    {
+    public boolean hasChildType(Class<?> childType) {
         return super.hasChildType(childType) || EUIUtils.any(effects, child -> childType.isInstance(child) || (child != null && child.hasChildType(childType)));
     }
 
     @Override
-    public boolean isBlank() {return effects.size() == 0 && !(childEffect != null && !childEffect.isBlank());}
+    public boolean isBlank() {
+        return effects.size() == 0 && !(childEffect != null && !childEffect.isBlank());
+    }
 
     @Override
-    public boolean isDetrimental()
-    {
+    public boolean isDetrimental() {
         return EUIUtils.any(effects, PSkill::isDetrimental);
     }
 
     @Override
-    public PMultiSkill makeCopy()
-    {
+    public PMultiSkill makeCopy() {
         PMultiSkill copy = (PMultiSkill) super.makeCopy();
-        for (PSkill<?> effect : effects)
-        {
+        for (PSkill<?> effect : effects) {
             copy.addEffect(effect.makeCopy());
         }
         return copy;
     }
 
-    public PMultiSkill makePreviews(RotatingList<EUICardPreview> previews)
-    {
-        for (PSkill<?> effect : effects)
-        {
+    public PMultiSkill makePreviews(RotatingList<EUICardPreview> previews) {
+        for (PSkill<?> effect : effects) {
             effect.makePreviews(previews);
         }
         super.makePreviews(previews);
@@ -209,281 +183,239 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     }
 
     @Override
-    public float modifyBlock(PCLUseInfo info, float amount)
-    {
-        for (PSkill<?> be : effects)
-        {
+    public float modifyBlock(PCLUseInfo info, float amount) {
+        for (PSkill<?> be : effects) {
             amount = be.modifyBlock(info, amount);
         }
         return amount;
     }
 
     @Override
-    public float modifyDamage(PCLUseInfo info, float amount)
-    {
-        for (PSkill<?> be : effects)
-        {
+    public float modifyDamage(PCLUseInfo info, float amount) {
+        for (PSkill<?> be : effects) {
             amount = be.modifyDamage(info, amount);
         }
         return amount;
     }
 
     @Override
-    public float modifyHeal(PCLUseInfo info, float amount)
-    {
-        for (PSkill<?> be : effects)
-        {
-            amount = be.modifyHeal(info, amount);
-        }
-        return amount;
-    }
-
-    @Override
-    public float modifyHitCount(PCLUseInfo info, float amount)
-    {
-        for (PSkill<?> be : effects)
-        {
-            amount = be.modifyHitCount(info, amount);
-        }
-        return amount;
-    }
-
-    @Override
-    public float modifyMagicNumber(PCLUseInfo info, float amount)
-    {
-        for (PSkill<?> be : effects)
-        {
-            amount = be.modifyMagicNumber(info, amount);
-        }
-        return amount;
-    }
-
-    @Override
-    public float modifyRightCount(PCLUseInfo info, float amount)
-    {
-        for (PSkill<?> be : effects)
-        {
-            amount = be.modifyRightCount(info, amount);
-        }
-        return amount;
-    }
-
-    @Override
-    public float modifyDamageIncoming(PCLUseInfo info, float amount, DamageInfo.DamageType type)
-    {
-        for (PSkill<?> be : effects)
-        {
+    public float modifyDamageIncoming(PCLUseInfo info, float amount, DamageInfo.DamageType type) {
+        for (PSkill<?> be : effects) {
             amount = be.modifyDamageIncoming(info, amount, type);
         }
         return amount;
     }
 
     @Override
-    public float modifyOrbIncoming(PCLUseInfo info, float amount)
-    {
-        for (PSkill<?> be : effects)
-        {
+    public float modifyHeal(PCLUseInfo info, float amount) {
+        for (PSkill<?> be : effects) {
+            amount = be.modifyHeal(info, amount);
+        }
+        return amount;
+    }
+
+    @Override
+    public float modifyHitCount(PCLUseInfo info, float amount) {
+        for (PSkill<?> be : effects) {
+            amount = be.modifyHitCount(info, amount);
+        }
+        return amount;
+    }
+
+    @Override
+    public float modifyMagicNumber(PCLUseInfo info, float amount) {
+        for (PSkill<?> be : effects) {
+            amount = be.modifyMagicNumber(info, amount);
+        }
+        return amount;
+    }
+
+    @Override
+    public float modifyOrbIncoming(PCLUseInfo info, float amount) {
+        for (PSkill<?> be : effects) {
             amount = be.modifyOrbIncoming(info, amount);
         }
         return amount;
     }
 
     @Override
-    public float modifyOrbOutgoing(PCLUseInfo info, float amount)
-    {
-        for (PSkill<?> be : effects)
-        {
+    public float modifyOrbOutgoing(PCLUseInfo info, float amount) {
+        for (PSkill<?> be : effects) {
             amount = be.modifyOrbOutgoing(info, amount);
         }
         return amount;
     }
 
     @Override
-    public PMultiSkill onAddToCard(AbstractCard card)
-    {
+    public float modifyRightCount(PCLUseInfo info, float amount) {
+        for (PSkill<?> be : effects) {
+            amount = be.modifyRightCount(info, amount);
+        }
+        return amount;
+    }
+
+    @Override
+    public PMultiSkill onAddToCard(AbstractCard card) {
         addSubs(card);
         super.onAddToCard(card);
         return this;
     }
 
     @Override
-    public void onDrag(AbstractMonster m)
-    {
-        for (PSkill<?> effect : effects)
-        {
+    public void onDrag(AbstractMonster m) {
+        for (PSkill<?> effect : effects) {
             effect.onDrag(m);
         }
     }
 
     @Override
-    public PMultiSkill onRemoveFromCard(AbstractCard card)
-    {
+    public PMultiSkill onRemoveFromCard(AbstractCard card) {
         removeSubs(card);
         super.onRemoveFromCard(card);
         return this;
     }
 
     @Override
-    public void refresh(PCLUseInfo info, boolean conditionMet)
-    {
-        for (PSkill<?> effect : effects)
-        {
+    public void refresh(PCLUseInfo info, boolean conditionMet) {
+        for (PSkill<?> effect : effects) {
             effect.refresh(info, conditionMet);
         }
     }
 
-    public boolean removable()
-    {
+    public boolean removable() {
         return effects.isEmpty() || EUIUtils.all(effects, PSkill::removable);
     }
 
-    public boolean requiresTarget()
-    {
+    public boolean requiresTarget() {
         return target == PCLCardTarget.Single || EUIUtils.any(effects, PSkill::requiresTarget);
     }
 
     @Override
-    public PMultiSkill setAmountFromCard()
-    {
+    public PMultiSkill setAmountFromCard() {
         super.setAmountFromCard();
-        for (PSkill<?> effect : effects)
-        {
+        for (PSkill<?> effect : effects) {
             effect.setAmountFromCard();
         }
         return this;
     }
 
     @Override
-    public PMultiSkill setSource(PointerProvider card)
-    {
+    public PMultiSkill setSource(PointerProvider card) {
         super.setSource(card);
-        for (PSkill<?> effect : effects)
-        {
+        for (PSkill<?> effect : effects) {
             effect.setSource(card);
         }
         return this;
     }
 
     @Override
-    public PMultiSkill setTemporaryAmount(int amount)
-    {
-        for (PSkill<?> effect : effects)
-        {
+    public PMultiSkill setTemporaryAmount(int amount) {
+        for (PSkill<?> effect : effects) {
             effect.setTemporaryAmount(amount);
         }
         return this;
     }
 
     @Override
-    public PMultiSkill setTemporaryExtra(int extra)
-    {
-        for (PSkill<?> effect : effects)
-        {
+    public PMultiSkill setTemporaryExtra(int extra) {
+        for (PSkill<?> effect : effects) {
             effect.setTemporaryExtra(extra);
         }
         return this;
     }
 
+    public PMultiSkill stack(PSkill<?> other) {
+        super.stack(other);
+        if (other instanceof PMultiBase) {
+            stackMulti((PMultiBase<?>) other);
+        }
+        return this;
+    }
+
+    public void subscribeChildren() {
+        for (PSkill<?> effect : effects) {
+            effect.subscribeChildren();
+        }
+        if (this.childEffect != null) {
+            this.childEffect.subscribeChildren();
+        }
+    }
+
+    public void unsubscribeChildren() {
+        for (PSkill<?> effect : effects) {
+            effect.unsubscribeChildren();
+        }
+        if (this.childEffect != null) {
+            this.childEffect.unsubscribeChildren();
+        }
+    }
+
     @Override
-    public void use(PCLUseInfo info)
-    {
-        if (amount > 0)
-        {
+    public void use(PCLUseInfo info) {
+        if (amount > 0) {
             chooseEffect(info);
         }
-        else
-        {
-            if (useParent)
-            {
-                for (PSkill<?> effect : effects)
-                {
+        else {
+            if (useParent) {
+                for (PSkill<?> effect : effects) {
                     effect.use(info);
                 }
             }
-            else
-            {
+            else {
                 useSkill(info, 0);
             }
         }
     }
 
     @Override
-    public void use(PCLUseInfo info, int index)
-    {
-        if (amount > 0)
-        {
+    public void use(PCLUseInfo info, int index) {
+        if (amount > 0) {
             chooseEffect(info);
         }
-        else
-        {
-            if (index < effects.size() && index >= 0)
-            {
+        else {
+            if (index < effects.size() && index >= 0) {
                 effects.get(index).use(info, index);
             }
         }
     }
 
     @Override
-    public void use(PCLUseInfo info, boolean isUsing)
-    {
+    public void use(PCLUseInfo info, boolean isUsing) {
         use(info);
     }
 
-    public void useSkill(PCLUseInfo info, int index)
-    {
-        PSkill<?> skill = getSubEffect(index);
-        if (skill instanceof PCallbackMove)
-        {
-            ((PCallbackMove<?>) skill).use(info, i -> useSkill(i, index + 1));
+    public PMultiSkill useParent(boolean value) {
+        this.useParent = value;
+        for (PSkill<?> effect : effects) {
+            effect.useParent(value);
         }
-        else
-        {
-            if (skill != null)
-            {
-                skill.use(info);
-            }
-            if (index < effects.size() - 1)
-            {
-                useSkill(info, index + 1);
-            }
-        }
+        return this;
     }
 
-    public void chooseEffect(PCLUseInfo info)
-    {
+    public void chooseEffect(PCLUseInfo info) {
         PCLCard choiceCard = EUIUtils.safeCast(sourceCard, PCLCard.class);
-        if (choiceCard == null)
-        {
+        if (choiceCard == null) {
             choiceCard = new QuestionMark();
         }
 
         getActions().tryChooseSkill(choiceCard.cardData, amount, info.source, info.target, effects);
     }
 
-    public List<PSkill<?>> getSubEffects()
-    {
-        return effects;
-    }
-
-    public PSkill<?> getSubEffect(int index)
-    {
-        return index < effects.size() ? effects.get(index) : null;
-    }
-
-    public PMultiSkill addEffect(PSkill<?> newEffect)
-    {
+    public PMultiSkill addEffect(PSkill<?> newEffect) {
         this.effects.add(newEffect);
         setParentsForChildren();
         return this;
     }
 
-    public PMultiSkill setEffects(PSkill<?>... effects)
-    {
-        return setEffects(Arrays.asList(effects));
+    public PSkill<?> getSubEffect(int index) {
+        return index < effects.size() ? effects.get(index) : null;
     }
 
-    public PMultiSkill setEffects(List<PSkill<?>> effects)
-    {
+    public List<PSkill<?>> getSubEffects() {
+        return effects;
+    }
+
+    public PMultiSkill setEffects(List<PSkill<?>> effects) {
         this.effects.clear();
         this.effects.addAll(effects);
         setParentsForChildren();
@@ -491,53 +423,22 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
         return this;
     }
 
-    public PMultiSkill setGenerated(boolean val)
-    {
-        generated = val;
-        return this;
+    public PMultiSkill setEffects(PSkill<?>... effects) {
+        return setEffects(Arrays.asList(effects));
     }
 
-    public PMultiSkill stack(PSkill<?> other)
-    {
-        super.stack(other);
-        if (other instanceof PMultiBase)
-        {
-            stackMulti((PMultiBase<?>) other);
+    public void useSkill(PCLUseInfo info, int index) {
+        PSkill<?> skill = getSubEffect(index);
+        if (skill instanceof PCallbackMove) {
+            ((PCallbackMove<?>) skill).use(info, i -> useSkill(i, index + 1));
         }
-        return this;
-    }
-
-    public PMultiSkill useParent(boolean value)
-    {
-        this.useParent = value;
-        for (PSkill<?> effect : effects)
-        {
-            effect.useParent(value);
-        }
-        return this;
-    }
-
-    public void subscribeChildren()
-    {
-        for (PSkill<?> effect : effects)
-        {
-            effect.subscribeChildren();
-        }
-        if (this.childEffect != null)
-        {
-            this.childEffect.subscribeChildren();
-        }
-    }
-
-    public void unsubscribeChildren()
-    {
-        for (PSkill<?> effect : effects)
-        {
-            effect.unsubscribeChildren();
-        }
-        if (this.childEffect != null)
-        {
-            this.childEffect.unsubscribeChildren();
+        else {
+            if (skill != null) {
+                skill.use(info);
+            }
+            if (index < effects.size() - 1) {
+                useSkill(info, index + 1);
+            }
         }
     }
 }

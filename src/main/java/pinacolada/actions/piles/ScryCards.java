@@ -9,10 +9,8 @@ import pinacolada.resources.PGR;
 
 import java.util.ArrayList;
 
-public class ScryCards extends DiscardFromPile
-{
-    public ScryCards(String sourceName, int amount)
-    {
+public class ScryCards extends DiscardFromPile {
+    public ScryCards(String sourceName, int amount) {
         super(sourceName, amount, AbstractDungeon.player.drawPile);
         setMaxChoices(amount, PCLCardSelection.Top.toSelection());
 
@@ -20,24 +18,20 @@ public class ScryCards extends DiscardFromPile
     }
 
     @Override
-    public String updateMessage()
-    {
-        return super.updateMessageInternal(PGR.core.strings.grid_scry);
-    }
-
-    @Override
-    protected void complete(ArrayList<AbstractCard> result)
-    {
-        for (AbstractPower p : player.powers)
-        {
+    protected void complete(ArrayList<AbstractCard> result) {
+        for (AbstractPower p : player.powers) {
             p.onScry();
         }
-        for (AbstractCard c : result)
-        {
+        for (AbstractCard c : result) {
             CombatManager.onCardScry(c);
         }
 
         super.complete(result);
+    }
+
+    @Override
+    public String updateMessage() {
+        return super.updateMessageInternal(PGR.core.strings.grid_scry);
     }
 }
 

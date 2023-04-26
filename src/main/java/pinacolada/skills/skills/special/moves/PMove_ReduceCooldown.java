@@ -10,46 +10,33 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.skills.base.moves.PMove_Modify;
 
-public class PMove_ReduceCooldown extends PMove_Modify<PField_CardCategory>
-{
+public class PMove_ReduceCooldown extends PMove_Modify<PField_CardCategory> {
     public static final PSkillData<PField_CardCategory> DATA = PMove_Modify.register(PMove_ReduceCooldown.class, PField_CardCategory.class);
 
-    public PMove_ReduceCooldown()
-    {
+    public PMove_ReduceCooldown() {
         this(1, 1);
     }
 
-    public PMove_ReduceCooldown(PSkillSaveData content)
-    {
-        super(DATA, content);
-    }
-
-    public PMove_ReduceCooldown(int amount, int cooldown, PCLCardGroupHelper... groups)
-    {
+    public PMove_ReduceCooldown(int amount, int cooldown, PCLCardGroupHelper... groups) {
         super(DATA, amount, cooldown, groups);
     }
 
-    @Override
-    public ActionT1<AbstractCard> getAction()
-    {
-        return (c) -> getActions().progressCooldown(getSourceCreature(), c, extra);
+    public PMove_ReduceCooldown(PSkillSaveData content) {
+        super(DATA, content);
     }
 
     @Override
-    public String getObjectSampleText()
-    {
+    public String getObjectSampleText() {
         return PGR.core.tooltips.cooldown.title;
     }
 
     @Override
-    public String getObjectText()
-    {
+    public String getObjectText() {
         return PGR.core.tooltips.cooldown.title;
     }
 
     @Override
-    public String getSubText()
-    {
+    public String getSubText() {
         return useParent ? TEXT.act_reduceBy(TEXT.subjects_theirX(getObjectText()), getExtraRawString()) :
                 fields.hasGroups() ?
                         TEXT.act_reduceCooldown(EUIRM.strings.numNoun(getAmountRawString(), pluralCard()), getExtraRawString()) :
@@ -57,14 +44,17 @@ public class PMove_ReduceCooldown extends PMove_Modify<PField_CardCategory>
     }
 
     @Override
-    public String wrapExtra(int input)
-    {
+    public String wrapExtra(int input) {
         return String.valueOf(input);
     }
 
     @Override
-    public boolean isDetrimental()
-    {
+    public ActionT1<AbstractCard> getAction() {
+        return (c) -> getActions().progressCooldown(getSourceCreature(), c, extra);
+    }
+
+    @Override
+    public boolean isDetrimental() {
         return extra < 0;
     }
 }

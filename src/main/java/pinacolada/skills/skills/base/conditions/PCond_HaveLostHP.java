@@ -6,8 +6,8 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import extendedui.EUIRM;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.interfaces.subscribers.OnLoseHPSubscriber;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.interfaces.subscribers.OnLoseHPSubscriber;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
@@ -16,42 +16,34 @@ import pinacolada.skills.fields.PField_Random;
 import pinacolada.skills.skills.PPassiveCond;
 
 @VisibleSkill
-public class PCond_HaveLostHP extends PPassiveCond<PField_Random> implements OnLoseHPSubscriber
-{
+public class PCond_HaveLostHP extends PPassiveCond<PField_Random> implements OnLoseHPSubscriber {
     public static final PSkillData<PField_Random> DATA = register(PCond_HaveLostHP.class, PField_Random.class);
 
-    public PCond_HaveLostHP()
-    {
+    public PCond_HaveLostHP() {
         this(1);
     }
 
-    public PCond_HaveLostHP(PSkillSaveData content)
-    {
-        super(DATA, content);
-    }
-
-    public PCond_HaveLostHP(int amount)
-    {
+    public PCond_HaveLostHP(int amount) {
         super(DATA, PCLCardTarget.None, amount);
     }
 
+    public PCond_HaveLostHP(PSkillSaveData content) {
+        super(DATA, content);
+    }
+
     @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource)
-    {
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
         return amount == 0 ? GameActionManager.hpLossThisCombat == 0 : fields.not ^ GameActionManager.hpLossThisCombat >= amount;
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill)
-    {
+    public String getSampleText(PSkill<?> callingSkill) {
         return TEXT.cond_ifX(TEXT.act_loseAmount(TEXT.subjects_x, PGR.core.tooltips.hp.title));
     }
 
     @Override
-    public String getSubText()
-    {
-        if (isWhenClause())
-        {
+    public String getSubText() {
+        if (isWhenClause()) {
             return getWheneverString(TEXT.act_lose(PGR.core.tooltips.hp.title));
         }
         String base = TEXT.cond_ifTargetTook(TEXT.subjects_you, EUIRM.strings.numNoun(getAmountRawString(), PGR.core.tooltips.hp.title));
@@ -59,18 +51,15 @@ public class PCond_HaveLostHP extends PPassiveCond<PField_Random> implements OnL
     }
 
     @Override
-    public int onLoseHP(AbstractPlayer p, DamageInfo info, int amount)
-    {
-        if (amount > 0)
-        {
-            useFromTrigger(makeInfo(info.owner));
-        }
-        return amount;
+    public String wrapAmount(int input) {
+        return input == 0 ? String.valueOf(input) : (fields.not ? (input + "-") : (input + "+"));
     }
 
     @Override
-    public String wrapAmount(int input)
-    {
-        return input == 0 ? String.valueOf(input) : (fields.not ? (input + "-") : (input + "+"));
+    public int onLoseHP(AbstractPlayer p, DamageInfo info, int amount) {
+        if (amount > 0) {
+            useFromTrigger(makeInfo(info.owner));
+        }
+        return amount;
     }
 }

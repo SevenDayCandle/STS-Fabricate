@@ -6,7 +6,6 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import pinacolada.annotations.CombatSubscriber;
 
 @CombatSubscriber
-public interface OnDamageActionSubscriber extends PCLCombatSubscriber
-{
+public interface OnDamageActionSubscriber extends PCLCombatSubscriber {
     void onDamageAction(AbstractGameAction action, AbstractCreature target, DamageInfo info, AbstractGameAction.AttackEffect effect);
 }

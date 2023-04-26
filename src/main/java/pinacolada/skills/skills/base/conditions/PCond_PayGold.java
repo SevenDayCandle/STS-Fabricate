@@ -14,47 +14,39 @@ import pinacolada.skills.fields.PField_Empty;
 import pinacolada.skills.skills.PActiveCond;
 
 @VisibleSkill
-public class PCond_PayGold extends PActiveCond<PField_Empty>
-{
+public class PCond_PayGold extends PActiveCond<PField_Empty> {
     public static final PSkillData<PField_Empty> DATA = register(PCond_PayGold.class, PField_Empty.class)
             .selfTarget();
 
-    public PCond_PayGold(PSkillSaveData content)
-    {
+    public PCond_PayGold(PSkillSaveData content) {
         super(DATA, content);
     }
 
-    public PCond_PayGold()
-    {
+    public PCond_PayGold() {
         super(DATA, PCLCardTarget.None, 1);
     }
 
-    public PCond_PayGold(int amount)
-    {
+    public PCond_PayGold(int amount) {
         super(DATA, PCLCardTarget.None, amount);
     }
 
     @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource)
-    {
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
         return info.source.gold >= amount;
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill)
-    {
+    public String getSampleText(PSkill<?> callingSkill) {
         return TEXT.act_pay(TEXT.subjects_x, PGR.core.tooltips.gold.title);
     }
 
     @Override
-    public String getSubText()
-    {
+    public String getSubText() {
         return capital(TEXT.act_pay(getAmountRawString(), PGR.core.tooltips.gold), true);
     }
 
     @Override
-    protected PCLAction<?> useImpl(PCLUseInfo info, ActionT0 onComplete, ActionT0 onFail)
-    {
+    protected PCLAction<?> useImpl(PCLUseInfo info, ActionT0 onComplete, ActionT0 onFail) {
         return getActions().callback(new GainGoldAction(-amount), action -> {
             onComplete.invoke();
         });

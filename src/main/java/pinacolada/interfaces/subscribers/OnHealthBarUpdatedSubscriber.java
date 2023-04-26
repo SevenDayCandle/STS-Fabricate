@@ -4,7 +4,6 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import pinacolada.annotations.CombatSubscriber;
 
 @CombatSubscriber
-public interface OnHealthBarUpdatedSubscriber extends PCLCombatSubscriber
-{
+public interface OnHealthBarUpdatedSubscriber extends PCLCombatSubscriber {
     void onHealthBarUpdated(AbstractCreature creature);
 }

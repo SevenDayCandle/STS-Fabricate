@@ -13,8 +13,7 @@ import pinacolada.effects.PCLEffects;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.PCLRenderHelpers;
 
-public class HexagonEffect extends PCLEffect
-{
+public class HexagonEffect extends PCLEffect {
     protected static final int SIZE = 96;
     private static final TextureCache image = PCLCoreImages.Effects.hexagon;
     protected float vfxFrequency = 0.03f;
@@ -28,8 +27,7 @@ public class HexagonEffect extends PCLEffect
     protected float vfxTimer;
     protected boolean flip;
 
-    public HexagonEffect(float x, float y, Color color)
-    {
+    public HexagonEffect(float x, float y, Color color) {
         super(random(0.5f, 1f));
 
         this.img = image.texture();
@@ -43,13 +41,11 @@ public class HexagonEffect extends PCLEffect
         setColor(color, 0.28f);
     }
 
-    public HexagonEffect setColor(Color color, float variance)
-    {
+    public HexagonEffect setColor(Color color, float variance) {
         this.color = color.cpy();
         this.color.a = 0;
 
-        if (variance > 0)
-        {
+        if (variance > 0) {
             this.color.r = Math.max(0, color.r - random(0, variance));
             this.color.g = Math.max(0, color.g - random(0, variance));
             this.color.b = Math.max(0, color.b - random(0, variance));
@@ -58,22 +54,19 @@ public class HexagonEffect extends PCLEffect
         return this;
     }
 
-    public HexagonEffect setFlashFrequency(float flashFrequency)
-    {
+    public HexagonEffect setFlashFrequency(float flashFrequency) {
         this.flashFrequency = flashFrequency;
 
         return this;
     }
 
-    public HexagonEffect setScale(float scale)
-    {
+    public HexagonEffect setScale(float scale) {
         this.scale = scale;
 
         return this;
     }
 
-    public void render(SpriteBatch sb)
-    {
+    public void render(SpriteBatch sb) {
         sb.setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE);
         sb.setColor(this.color);
         sb.draw(this.img, x, y, 0, 0, SIZE, SIZE, scale, scale, rotation, 0, 0, SIZE, SIZE, flip, false);
@@ -81,26 +74,22 @@ public class HexagonEffect extends PCLEffect
     }
 
     @Override
-    protected void updateInternal(float deltaTime)
-    {
+    protected void updateInternal(float deltaTime) {
         x += vX * deltaTime;
         y += vY * deltaTime;
         rotation += vR * deltaTime;
 
-        if ((1f - duration) < 0.1f)
-        {
+        if ((1f - duration) < 0.1f) {
             color.a = Interpolation.fade.apply(0f, 1f, (1f - duration) * 10f);
         }
-        else
-        {
+        else {
             color.a = Interpolation.sine.apply(0.8f, 1f, this.flashFrequency);
             vfxTimer -= deltaTime;
-            if (vfxTimer < 0f)
-            {
+            if (vfxTimer < 0f) {
                 PCLEffects.Queue.add(new FadingParticleEffect(this.img, this.x + SIZE * MathUtils.cos(rotation), this.y + SIZE * MathUtils.sin(rotation))
-                        .setOpacity(0.75f)
-                        .setBlendingMode(PCLRenderHelpers.BlendingMode.Glowing)
-                        .setColor(this.color.cpy())
+                                .setOpacity(0.75f)
+                                .setBlendingMode(PCLRenderHelpers.BlendingMode.Glowing)
+                                .setColor(this.color.cpy())
                                 .setRotation(36000f, vR)
                                 .setScale(scale * 0.75f, 0f, 3f))
                         .setDuration(1f, true);
@@ -111,8 +100,7 @@ public class HexagonEffect extends PCLEffect
         super.updateInternal(deltaTime);
     }
 
-    public HexagonEffect setSpeed(float vX, float vY, float vR)
-    {
+    public HexagonEffect setSpeed(float vX, float vY, float vR) {
         this.vX = vX;
         this.vY = vY;
         this.vR = vR;

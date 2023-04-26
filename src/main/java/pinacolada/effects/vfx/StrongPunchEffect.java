@@ -9,8 +9,7 @@ import pinacolada.effects.SFX;
 import pinacolada.effects.VFX;
 import pinacolada.resources.pcl.PCLCoreImages;
 
-public class StrongPunchEffect extends PCLEffect
-{
+public class StrongPunchEffect extends PCLEffect {
     protected float x;
     protected float y;
     protected float rotationSpeed = 600f;
@@ -18,8 +17,7 @@ public class StrongPunchEffect extends PCLEffect
     protected float baseScale;
     protected boolean triggered = false;
 
-    public StrongPunchEffect(float x, float y, float baseScale)
-    {
+    public StrongPunchEffect(float x, float y, float baseScale) {
         super(1f);
 
         this.x = x;
@@ -29,41 +27,33 @@ public class StrongPunchEffect extends PCLEffect
         this.color = Color.WHITE.cpy();
     }
 
-    public void render(SpriteBatch sb)
-    {
+    public void render(SpriteBatch sb) {
         renderImage(sb, PCLCoreImages.Effects.punch.texture(), x, y, false, false);
     }
 
     @Override
-    protected void updateInternal(float deltaTime)
-    {
+    protected void updateInternal(float deltaTime) {
 
-        if ((1f - duration) < 0.1f)
-        {
+        if ((1f - duration) < 0.1f) {
             color.a = Interpolation.fade.apply(0.1f, 1f, (1f - duration) * 7f);
         }
-        else
-        {
+        else {
             color.a = Interpolation.pow2Out.apply(0.1f, 1f, duration);
         }
 
         vfxTimer -= deltaTime / duration;
-        if (vfxTimer < 0f)
-        {
-            if (!triggered)
-            {
+        if (vfxTimer < 0f) {
+            if (!triggered) {
                 PCLEffects.Queue.add(VFX.whack(x, y).setColor(Color.SCARLET)).setScale(2);
                 SFX.play(SFX.PCL_PUNCH, 0.7f, 0.8f);
                 triggered = true;
             }
-            else
-            {
+            else {
                 x += Interpolation.sine.apply(-25f, 25f, this.duration * 50);
                 y += Interpolation.sine.apply(-25f, 25f, this.duration * 50);
             }
         }
-        else
-        {
+        else {
             this.rotation += rotationSpeed * deltaTime / duration;
             this.scale = Interpolation.linear.apply(1, this.baseScale, duration);
         }

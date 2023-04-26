@@ -17,37 +17,31 @@ import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.utilities.ListSelection;
 
 @VisibleSkill
-public class PCond_ReshuffleTo extends PCond_DoToCard
-{
+public class PCond_ReshuffleTo extends PCond_DoToCard {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_ReshuffleTo.class, PField_CardCategory.class)
             .selfTarget()
             .setExtra(0, DEFAULT_MAX)
             .setGroups(PCLCardGroupHelper.ExhaustPile, PCLCardGroupHelper.DiscardPile, PCLCardGroupHelper.Hand);
 
-    public PCond_ReshuffleTo()
-    {
+    public PCond_ReshuffleTo() {
         this(1, PCLCardGroupHelper.Hand);
     }
 
-    public PCond_ReshuffleTo(PSkillSaveData content)
-    {
-        super(DATA, content);
-    }
-
-    public PCond_ReshuffleTo(int amount, PCLCardGroupHelper... h)
-    {
+    public PCond_ReshuffleTo(int amount, PCLCardGroupHelper... h) {
         super(DATA, PCLCardTarget.None, amount, h);
     }
 
+    public PCond_ReshuffleTo(PSkillSaveData content) {
+        super(DATA, content);
+    }
+
     @Override
-    public EUITooltip getActionTooltip()
-    {
+    public EUITooltip getActionTooltip() {
         return PGR.core.tooltips.reshuffle;
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction()
-    {
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
         return ReshuffleFromPile::new;
     }
 }

@@ -9,8 +9,7 @@ import com.megacrit.cardcrawl.vfx.combat.IronWaveParticle;
 import pinacolada.effects.PCLEffect;
 
 @Deprecated
-public class IronWaveEffect2 extends PCLEffect
-{
+public class IronWaveEffect2 extends PCLEffect {
     private static final float BASE_STEP_X = 160f * Settings.scale;
     private static final float BASE_STEP_Y = 15f * Settings.scale;
     private static final float WAVE_DELAY = 0.03f;
@@ -21,8 +20,7 @@ public class IronWaveEffect2 extends PCLEffect
     private float x;
     private float y;
 
-    public IronWaveEffect2(float x, float y, float targetX)
-    {
+    public IronWaveEffect2(float x, float y, float targetX) {
         this.x = x + 120.0F * Settings.scale;
         this.y = y - 20.0F * Settings.scale;
         this.targetX = targetX;
@@ -32,28 +30,23 @@ public class IronWaveEffect2 extends PCLEffect
         setDuration(WAVE_DELAY * Math.abs(targetX - x) / BASE_STEP_X, isRealtime);
     }
 
-    public void render(SpriteBatch sb)
-    {
+    public void render(SpriteBatch sb) {
     }
 
-    public void update()
-    {
+    public void update() {
         this.waveTimer -= Gdx.graphics.getDeltaTime();
-        if (this.waveTimer < 0.0F)
-        {
+        if (this.waveTimer < 0.0F) {
             this.waveTimer = WAVE_DELAY;
             this.x += stepX;
             this.y -= stepY;
             AbstractDungeon.effectsQueue.add(new IronWaveParticle(this.x, this.y));
-            if (Math.abs(x - targetX) < stepX)
-            {
+            if (Math.abs(x - targetX) < stepX) {
                 this.isDone = true;
                 CardCrawlGame.sound.playA("ATTACK_DAGGER_6", -0.3F);
             }
         }
     }
 
-    public void dispose()
-    {
+    public void dispose() {
     }
 }

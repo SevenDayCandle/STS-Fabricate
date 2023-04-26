@@ -19,50 +19,40 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CSVExporter
-{
+public class CSVExporter {
     private static final String NEWLINE = System.getProperty("line.separator");
     private static final String DEFAULT_EXPORT_PATH = "exported.csv";
 
-    public static void export(List<? extends AbstractCard> cards)
-    {
+    public static void export(AbstractCard.CardColor color) {
+        CardGroup group = CustomCardLibraryScreen.CardLists.get(color);
+        if (group != null) {
+            export(group.group);
+        }
+    }
+
+    public static void export(List<? extends AbstractCard> cards) {
         ArrayList<CardRow> rows = EUIUtils.map(cards, c -> {
-            if (c instanceof PCLCard)
-            {
+            if (c instanceof PCLCard) {
                 return new CardRow((PCLCard) c);
             }
-            else
-            {
+            else {
                 return new CardRow(c);
             }
         });
         exportRows(rows);
     }
 
-    public static void export(AbstractCard.CardColor color)
-    {
-        CardGroup group = CustomCardLibraryScreen.CardLists.get(color);
-        if (group != null)
-        {
-            export(group.group);
-        }
-    }
-
-    public static void exportRows(List<CardRow> cards)
-    {
+    public static void exportRows(List<CardRow> cards) {
         cards.sort(CardRow::compareTo);
-        try
-        {
+        try {
             FileHandle handle = getExportFile();
             handle.writeString(getHeaderRow(), true);
-            for (CardRow row : cards)
-            {
+            for (CardRow row : cards) {
                 handle.writeString(row.toString(), true);
             }
             EUIUtils.logInfo(PCLCustomCardSlot.class, "Exported " + cards.size() + " cards to " + handle.path());
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             e.printStackTrace();
             EUIUtils.logError(CSVExporter.class, "Failed to export cards.");
         }
@@ -70,23 +60,19 @@ public class CSVExporter
 
     // TODO allow for custom paths
     // TODO don't delete unless user specifies they want to overwrite
-    private static FileHandle getExportFile()
-    {
+    private static FileHandle getExportFile() {
         FileHandle handle = Gdx.files.local(DEFAULT_EXPORT_PATH);
-        if (handle.exists())
-        {
+        if (handle.exists()) {
             handle.delete();
         }
         return handle;
     }
 
-    private static String getHeaderRow()
-    {
+    private static String getHeaderRow() {
         return EUIUtils.joinStrings(",", EUIUtils.map(CardRow.class.getDeclaredFields(), Field::getName)) + NEWLINE;
     }
 
-    private static String parseCardString(AbstractCard card)
-    {
+    private static String parseCardString(AbstractCard card) {
         return card.rawDescription
                 .replace("!D!", String.valueOf(card.baseDamage))
                 .replace("!B!", String.valueOf(card.baseBlock))
@@ -94,8 +80,7 @@ public class CSVExporter
                 .replace(" NL ", " ");
     }
 
-    public static class CardRow implements Comparable<CardRow>
-    {
+    public static class CardRow implements Comparable<CardRow> {
         public String ID;
         public String name;
         public int form;
@@ -138,8 +123,7 @@ public class CSVExporter
         public String tags;
         public String effects;
 
-        public CardRow(PCLCard card)
-        {
+        public CardRow(PCLCard card) {
             PCLCardData data = card.cardData;
             int form = card.getForm();
             this.form = form;
@@ -188,8 +172,7 @@ public class CSVExporter
             effects = EUIUtils.joinStrings(PSkill.EFFECT_SEPARATOR, EUIUtils.map(card.getFullEffects(), PSkill::getExportText));
         }
 
-        public CardRow(AbstractCard card)
-        {
+        public CardRow(AbstractCard card) {
             form = 0;
             ID = card.cardID;
             name = card.name;
@@ -218,22 +201,18 @@ public class CSVExporter
         }
 
         @Override
-        public int compareTo(CardRow o)
-        {
+        public int compareTo(CardRow o) {
             int value = ID.compareTo(o.ID);
             return value == 0 ? form - o.form : value;
         }
 
         @Override
-        public final String toString()
-        {
+        public final String toString() {
             return EUIUtils.joinStrings(",", EUIUtils.map(CardRow.class.getDeclaredFields(), field -> {
-                try
-                {
+                try {
                     return field.get(this);
                 }
-                catch (IllegalAccessException e)
-                {
+                catch (IllegalAccessException e) {
                     return "";
                 }
             })) + NEWLINE;

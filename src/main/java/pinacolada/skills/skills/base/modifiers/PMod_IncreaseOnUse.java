@@ -14,49 +14,52 @@ import pinacolada.skills.fields.PField_Empty;
 import pinacolada.skills.skills.PPassiveMod;
 
 @VisibleSkill
-public class PMod_IncreaseOnUse extends PPassiveMod<PField_Empty>
-{
+public class PMod_IncreaseOnUse extends PPassiveMod<PField_Empty> {
 
     public static final PSkillData<PField_Empty> DATA = register(PMod_IncreaseOnUse.class, PField_Empty.class).selfTarget();
 
-    public PMod_IncreaseOnUse(PSkillSaveData content)
-    {
+    public PMod_IncreaseOnUse(PSkillSaveData content) {
         super(DATA, content);
     }
 
-    public PMod_IncreaseOnUse()
-    {
+    public PMod_IncreaseOnUse() {
         this(0);
     }
 
-    public PMod_IncreaseOnUse(int amount)
-    {
+    public PMod_IncreaseOnUse(int amount) {
         super(DATA, PCLCardTarget.Self, amount);
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill)
-    {
-        return TEXT.act_increaseBy(TEXT.subjects_x, TEXT.subjects_x);
+    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info) {
+        return amount;
     }
 
     @Override
-    public String getSubText()
-    {
-        return amount < 0 ? TEXT.act_reduceBy(TEXT.subjects_this, getAmountRawString()) : TEXT.act_increaseBy(TEXT.subjects_this, getAmountRawString());
+    public void onDrag(AbstractMonster m) {
     }
 
     @Override
-    public String getText(boolean addPeriod)
-    {
+    public void refresh(PCLUseInfo info, boolean conditionMet) {
+    }
+
+    @Override
+    public final ColoredString getColoredValueString() {
+        if (baseAmount != amount) {
+            return new ColoredString(amount > 0 ? "+" + amount : amount, amount >= baseAmount ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR);
+        }
+
+        return new ColoredString(amount > 0 ? "+" + amount : amount, Settings.CREAM_COLOR);
+    }
+
+    @Override
+    public String getText(boolean addPeriod) {
         return TEXT.cond_doThen(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", getSubText()) + PCLCoreStrings.period(addPeriod);
     }
 
     @Override
-    public void use(PCLUseInfo info)
-    {
-        if (this.childEffect != null)
-        {
+    public void use(PCLUseInfo info) {
+        if (this.childEffect != null) {
             this.childEffect.use(info);
             getActions().callback(() -> {
                 this.childEffect.addAmountForCombat(amount);
@@ -65,10 +68,8 @@ public class PMod_IncreaseOnUse extends PPassiveMod<PField_Empty>
     }
 
     @Override
-    public void use(PCLUseInfo info, int index)
-    {
-        if (this.childEffect != null)
-        {
+    public void use(PCLUseInfo info, int index) {
+        if (this.childEffect != null) {
             this.childEffect.use(info, index);
             getActions().callback(() -> {
                 this.childEffect.addAmountForCombat(amount);
@@ -77,29 +78,12 @@ public class PMod_IncreaseOnUse extends PPassiveMod<PField_Empty>
     }
 
     @Override
-    public void onDrag(AbstractMonster m)
-    {
+    public String getSampleText(PSkill<?> callingSkill) {
+        return TEXT.act_increaseBy(TEXT.subjects_x, TEXT.subjects_x);
     }
 
     @Override
-    public void refresh(PCLUseInfo info, boolean conditionMet)
-    {
-    }
-
-    @Override
-    public final ColoredString getColoredValueString()
-    {
-        if (baseAmount != amount)
-        {
-            return new ColoredString(amount > 0 ? "+" + amount : amount, amount >= baseAmount ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR);
-        }
-
-        return new ColoredString(amount > 0 ? "+" + amount : amount, Settings.CREAM_COLOR);
-    }
-
-    @Override
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info)
-    {
-        return amount;
+    public String getSubText() {
+        return amount < 0 ? TEXT.act_reduceBy(TEXT.subjects_this, getAmountRawString()) : TEXT.act_increaseBy(TEXT.subjects_this, getAmountRawString());
     }
 }

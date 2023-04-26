@@ -7,13 +7,11 @@ import pinacolada.interfaces.subscribers.OnTryApplyPowerSubscriber;
 import pinacolada.powers.PCLSubscribingPower;
 import pinacolada.utilities.GameUtilities;
 
-public class SilencedPower extends PCLSubscribingPower implements OnTryApplyPowerSubscriber
-{
+public class SilencedPower extends PCLSubscribingPower implements OnTryApplyPowerSubscriber {
     public static final String POWER_ID = createFullID(SilencedPower.class);
     public int secondaryAmount;
 
-    public SilencedPower(AbstractCreature owner, int amount)
-    {
+    public SilencedPower(AbstractCreature owner, int amount) {
         super(owner, POWER_ID);
         this.priority = 99;
         initialize(amount, PowerType.DEBUFF, true);
@@ -21,15 +19,13 @@ public class SilencedPower extends PCLSubscribingPower implements OnTryApplyPowe
     }
 
     @Override
-    public boolean tryApplyPower(AbstractPower power, AbstractCreature target, AbstractCreature source, AbstractGameAction action)
-    {
-        return !GameUtilities.isPCLBuff(power) || (power.owner != owner && target != owner);
+    public void atEndOfRound() {
+        super.atEndOfRound();
+        reducePower(1);
     }
 
     @Override
-    public void atEndOfRound()
-    {
-        super.atEndOfRound();
-        reducePower(1);
+    public boolean tryApplyPower(AbstractPower power, AbstractCreature target, AbstractCreature source, AbstractGameAction action) {
+        return !GameUtilities.isPCLBuff(power) || (power.owner != owner && target != owner);
     }
 }

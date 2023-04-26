@@ -16,8 +16,7 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.powers.PCLPowerHelper;
 
 // Copied and modified from STS-AnimatorMod
-public class ApplyPowerAutoAction extends PCLActionAutoTarget<AbstractPower>
-{
+public class ApplyPowerAutoAction extends PCLActionAutoTarget<AbstractPower> {
     public static final String[] TEXT = ApplyPowerAction.TEXT;
 
     protected PCLPowerHelper powerHelper;
@@ -32,35 +31,36 @@ public class ApplyPowerAutoAction extends PCLActionAutoTarget<AbstractPower>
     protected boolean temporary = false;
     protected boolean faster;
 
-    public ApplyPowerAutoAction(AbstractCreature source, AbstractCreature target, PCLCardTarget targetHelper, PCLPowerHelper powerHelper, int amount)
-    {
+    public ApplyPowerAutoAction(AbstractCreature source, AbstractCreature target, PCLCardTarget targetHelper, PCLPowerHelper powerHelper, int amount) {
         this(source, target, targetHelper, powerHelper, amount, 1);
     }
 
-    public ApplyPowerAutoAction(AbstractCreature source, AbstractCreature target, PCLCardTarget targetHelper, PCLPowerHelper powerHelper, int amount, int limit)
-    {
+    public ApplyPowerAutoAction(AbstractCreature source, AbstractCreature target, PCLCardTarget targetHelper, PCLPowerHelper powerHelper, int amount, int limit) {
         super(ActionType.POWER);
 
         this.powerHelper = powerHelper;
 
         initialize(source, target, targetHelper, amount, limit);
 
-        if (AbstractDungeon.getMonsters().areMonstersBasicallyDead() || this.powerHelper == null)
-        {
+        if (AbstractDungeon.getMonsters().areMonstersBasicallyDead() || this.powerHelper == null) {
             completeImpl(); // Do not call callback
         }
     }
 
-    public ApplyPowerAutoAction canStack(boolean canStack)
-    {
+    public ApplyPowerAutoAction allowNegative(boolean allowNegative) {
+        this.allowNegative = allowNegative;
+
+        return this;
+    }
+
+    public ApplyPowerAutoAction canStack(boolean canStack) {
         this.canStack = canStack;
 
         return this;
     }
 
     @Override
-    protected void firstUpdate()
-    {
+    protected void firstUpdate() {
         for (AbstractCreature target : findTargets(true)) // Reverse because of GameActions.Top
         {
             ApplyOrReducePowerAction action = new ApplyOrReducePowerAction(source, target, powerHelper.create(target, source, amount, temporary), amount);
@@ -72,51 +72,39 @@ public class ApplyPowerAutoAction extends PCLActionAutoTarget<AbstractPower>
             action.isCancellable(canCancel);
             action.allowNegative(allowNegative);
 
-            PCLActions.top.add(action).addCallback((ActionT1<AbstractPower>) this::complete);
+            PCLActions.top.add(action).addCallback(this::complete);
         }
 
         completeImpl();
     }
 
-    public ApplyPowerAutoAction ignoreArtifact(boolean ignoreArtifact)
-    {
+    public ApplyPowerAutoAction ignoreArtifact(boolean ignoreArtifact) {
         this.ignoreArtifact = ignoreArtifact;
 
         return this;
     }
 
-    public ApplyPowerAutoAction setTemporary(boolean temporary)
-    {
+    public ApplyPowerAutoAction setTemporary(boolean temporary) {
         this.temporary = temporary;
 
         return this;
     }
 
-    public ApplyPowerAutoAction showEffect(boolean showEffect, boolean isFast)
-    {
+    public ApplyPowerAutoAction showEffect(boolean showEffect, boolean isFast) {
         this.showEffect = showEffect;
         this.faster = isFast;
 
         return this;
     }
 
-    public ApplyPowerAutoAction skipIfNull(boolean skipIfNull)
-    {
+    public ApplyPowerAutoAction skipIfNull(boolean skipIfNull) {
         this.skipIfNull = skipIfNull;
 
         return this;
     }
 
-    public ApplyPowerAutoAction skipIfZero(boolean skipIfZero)
-    {
+    public ApplyPowerAutoAction skipIfZero(boolean skipIfZero) {
         this.skipIfZero = skipIfZero;
-
-        return this;
-    }
-
-    public ApplyPowerAutoAction allowNegative(boolean allowNegative)
-    {
-        this.allowNegative = allowNegative;
 
         return this;
     }

@@ -14,47 +14,39 @@ import pinacolada.skills.fields.PField_Empty;
 import pinacolada.skills.skills.PActiveCond;
 
 @VisibleSkill
-public class PCond_PayEnergy extends PActiveCond<PField_Empty>
-{
+public class PCond_PayEnergy extends PActiveCond<PField_Empty> {
     public static final PSkillData<PField_Empty> DATA = register(PCond_PayEnergy.class, PField_Empty.class)
             .selfTarget();
 
-    public PCond_PayEnergy(PSkillSaveData content)
-    {
+    public PCond_PayEnergy(PSkillSaveData content) {
         super(DATA, content);
     }
 
-    public PCond_PayEnergy()
-    {
+    public PCond_PayEnergy() {
         super(DATA, PCLCardTarget.None, 1);
     }
 
-    public PCond_PayEnergy(int amount)
-    {
+    public PCond_PayEnergy(int amount) {
         super(DATA, PCLCardTarget.None, amount);
     }
 
     @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource)
-    {
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
         return EnergyPanel.getCurrentEnergy() >= amount;
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill)
-    {
+    public String getSampleText(PSkill<?> callingSkill) {
         return capital(TEXT.act_pay(TEXT.subjects_x, PGR.core.tooltips.energy.title), true);
     }
 
     @Override
-    public String getSubText()
-    {
+    public String getSubText() {
         return capital(TEXT.act_pay(getAmountRawString(), PGR.core.tooltips.energy), true);
     }
 
     @Override
-    protected PCLAction<?> useImpl(PCLUseInfo info, ActionT0 onComplete, ActionT0 onFail)
-    {
+    protected PCLAction<?> useImpl(PCLUseInfo info, ActionT0 onComplete, ActionT0 onFail) {
         return getActions().spendEnergy(amount, false);
     }
 }

@@ -5,13 +5,15 @@ import pinacolada.resources.PCLImages;
 
 //TODO remove unused images
 
-public class PCLCoreImages extends PCLImages
-{
+public class PCLCoreImages extends PCLImages {
     public static final String ORB_VFX_PNG = "images/pcl/ui/menu/canvas/orbVfx.png";
     public static final String EMPTY_SHADOW = "images/pcl/monsters/EmptyShadow.png";
 
-    public static class Core
-    {
+    public PCLCoreImages(String id) {
+        super(id);
+    }
+
+    public static class Core {
         public static final TextureCache backArrow = new TextureCache("images/pcl/ui/core/BackArrow.png");
         public static final TextureCache borderBG = new TextureCache("images/pcl/ui/core/BG1.png", true);
         public static final TextureCache borderBG2 = new TextureCache("images/pcl/ui/core/BG2.png", true);
@@ -36,8 +38,7 @@ public class PCLCoreImages extends PCLImages
         public static final TextureCache squareBG2 = new TextureCache("images/pcl/ui/core/SquareBG2.png", true);
     }
 
-    public static class Menu
-    {
+    public static class Menu {
 
         public static final TextureCache augmentPanel = new TextureCache("images/pcl/ui/menu/AugmentPanel.png");
         public static final TextureCache edit = new TextureCache("images/pcl/ui/menu/Edit.png");
@@ -54,8 +55,7 @@ public class PCLCoreImages extends PCLImages
         public static final TextureCache swapCards = new TextureCache("images/pcl/ui/menu/SwapCards.png");
     }
 
-    public static class CardUI
-    {
+    public static class CardUI {
         public static final TextureCache cardBackgroundAttackRepl = new TextureCache("images/pcl/cardui/512/bg_attack_canvas_repl.png");
         public static final TextureCache cardBackgroundAttackReplL = new TextureCache("images/pcl/cardui/1024/bg_attack_canvas_repl.png");
         public static final TextureCache cardBackgroundPowerRepl = new TextureCache("images/pcl/cardui/512/bg_power_canvas_repl.png");
@@ -89,8 +89,7 @@ public class PCLCoreImages extends PCLImages
         public static final TextureCache augmentBasic = new TextureCache("images/pcl/cardui/augments/Augment_Basic.png", true);
     }
 
-    public static class CardIcons
-    {
+    public static class CardIcons {
         public static final TextureCache hp = new TextureCache("images/pcl/cardui/core/HP.png");
         public static final TextureCache hpL = new TextureCache("images/pcl/cardui/core/1024/HP.png");
         public static final TextureCache multiform = new TextureCache("images/pcl/cardui/core/Multiform.png");
@@ -105,8 +104,7 @@ public class PCLCoreImages extends PCLImages
         public static final TextureCache uniqueL = new TextureCache("images/pcl/cardui/core/1024/Unique.png");
     }
 
-    public static class CardAffinity
-    {
+    public static class CardAffinity {
 
         public static final TextureCache general = new TextureCache("images/pcl/cardui/affinities/General.png", true);
         public static final TextureCache star = new TextureCache("images/pcl/cardui/affinities/Star.png", true);
@@ -115,8 +113,7 @@ public class PCLCoreImages extends PCLImages
         public static final TextureCache unknown = new TextureCache("images/pcl/cardui/affinities/Unknown.png", true);
     }
 
-    public static class Badges
-    {
+    public static class Badges {
         public static final TextureCache autoplay = new TextureCache("images/pcl/cardui/badges/Autoplay.png");
         public static final TextureCache baseInfinite = new TextureCache("images/pcl/cardui/badges/Base_Infinite.png");
         public static final TextureCache baseMulti = new TextureCache("images/pcl/cardui/badges/Base_Multi.png");
@@ -137,8 +134,7 @@ public class PCLCoreImages extends PCLImages
         public static final TextureCache unplayable = new TextureCache("images/pcl/cardui/badges/Unplayable.png");
     }
 
-    public static class Tooltips
-    {
+    public static class Tooltips {
         public static final TextureCache block = new TextureCache("images/pcl/cardui/tooltips/Block.png");
         public static final TextureCache brutal = new TextureCache("images/pcl/cardui/tooltips/BrutalDamage.png");
         public static final TextureCache cooldown = new TextureCache("images/pcl/cardui/tooltips/Cooldown.png");
@@ -155,19 +151,16 @@ public class PCLCoreImages extends PCLImages
         public static final TextureCache tempHP = new TextureCache("images/pcl/cardui/tooltips/TempHP.png");
     }
 
-    public static class Types
-    {
+    public static class Types {
         public static final TextureCache summon = new TextureCache("images/pcl/cardui/types/Summon.png", true);
     }
 
-    public static class Monsters
-    {
+    public static class Monsters {
         public static final TextureCache emptyShadow = new TextureCache(EMPTY_SHADOW);
         public static final TextureCache metal = new TextureCache("images/pcl/monsters/Metal.png");
     }
 
-    public static class Effects
-    {
+    public static class Effects {
         public static final TextureCache airSlice = new TextureCache("images/pcl/effects/AirSlice.png");
         public static final TextureCache airTornado1 = new TextureCache("images/pcl/effects/AirTornado1.png");
         public static final TextureCache airTornado2 = new TextureCache("images/pcl/effects/AirTornado2.png");
@@ -218,10 +211,5 @@ public class PCLCoreImages extends PCLImages
         public static final TextureCache waterSplash2 = new TextureCache("images/pcl/effects/WaterSplash2.png");
         public static final TextureCache waterSplash3 = new TextureCache("images/pcl/effects/WaterSplash3.png");
         public static final TextureCache whack = new TextureCache("images/pcl/effects/Whack.png");
-    }
-
-    public PCLCoreImages(String id)
-    {
-        super(id);
     }
 }

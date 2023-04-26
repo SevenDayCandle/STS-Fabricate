@@ -14,37 +14,30 @@ import pinacolada.effects.PCLEffects;
 import pinacolada.utilities.GameUtilities;
 
 // Copied and modified from STS-AnimatorMod
-public class DieAction extends PCLAction<Void>
-{
-    public DieAction(AbstractCreature target)
-    {
+public class DieAction extends PCLAction<Void> {
+    public DieAction(AbstractCreature target) {
         super(AbstractGameAction.ActionType.DAMAGE, Settings.FAST_MODE ? Settings.ACTION_DUR_XFAST : Settings.ACTION_DUR_FAST);
 
         initialize(target, target, 1);
     }
 
     @Override
-    protected void firstUpdate()
-    {
-        if (!GameUtilities.isDeadOrEscaped(target))
-        {
+    protected void firstUpdate() {
+        if (!GameUtilities.isDeadOrEscaped(target)) {
             AbstractMonster m = EUIUtils.safeCast(target, AbstractMonster.class);
-            if (m != null)
-            {
+            if (m != null) {
                 m.currentHealth = 0;
                 m.die();
                 m.hideHealthBar();
 
-                if (GameUtilities.areMonstersBasicallyDead())
-                {
+                if (GameUtilities.areMonstersBasicallyDead()) {
                     AbstractDungeon.actionManager.cleanCardQueue();
                     PCLEffects.List.add(new DeckPoofEffect(64f * Settings.scale, 64f * Settings.scale, true));
                     PCLEffects.List.add(new DeckPoofEffect((float) Settings.WIDTH - 64f * Settings.scale, 64f * Settings.scale, false));
                     AbstractDungeon.overlayMenu.hideCombatPanels();
                 }
             }
-            else if (target instanceof AbstractPlayer)
-            {
+            else if (target instanceof AbstractPlayer) {
                 player.isDead = true;
                 player.currentHealth = 0;
                 AbstractDungeon.deathScreen = new DeathScreen(AbstractDungeon.getMonsters());

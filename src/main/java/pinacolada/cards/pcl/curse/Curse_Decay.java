@@ -11,8 +11,7 @@ import pinacolada.skills.PCond;
 import pinacolada.skills.skills.base.moves.PMove_DealDamage;
 
 @VisibleCard
-public class Curse_Decay extends PCLCard
-{
+public class Curse_Decay extends PCLCard {
     public static final String ATLAS_URL = "curse/decay";
     public static final PCLCardData DATA = register(Curse_Decay.class)
             .setImagePathFromAtlasUrl(ATLAS_URL)
@@ -20,14 +19,12 @@ public class Curse_Decay extends PCLCard
             .setTags(PCLCardTag.Unplayable)
             .setAffinities(PCLAffinity.Purple);
 
-    public Curse_Decay()
-    {
+    public Curse_Decay() {
         super(DATA);
     }
 
     @Override
-    public void setup(Object input)
-    {
+    public void setup(Object input) {
         addUseMove(PCond.onTurnEnd(), new PMove_DealDamage(2, PCLAttackVFX.POISON, PCLCardTarget.Self));
     }
 }

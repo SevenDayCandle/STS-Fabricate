@@ -12,8 +12,7 @@ import com.megacrit.cardcrawl.vfx.combat.OrbFlareEffect;
 import pinacolada.effects.PCLEffect;
 
 @Deprecated
-public class OrbFlareEffect2 extends PCLEffect
-{
+public class OrbFlareEffect2 extends PCLEffect {
     private static AtlasRegion outer;
     private static AtlasRegion inner;
     private final float cX;
@@ -21,12 +20,10 @@ public class OrbFlareEffect2 extends PCLEffect
     private float scaleY;
     private Color color2;
 
-    public OrbFlareEffect2(float cX, float cY)
-    {
+    public OrbFlareEffect2(float cX, float cY) {
         super(0.5f);
 
-        if (outer == null)
-        {
+        if (outer == null) {
             outer = ImageMaster.vfxAtlas.findRegion("combat/orbFlareOuter");
             inner = ImageMaster.vfxAtlas.findRegion("combat/orbFlareInner");
         }
@@ -40,10 +37,8 @@ public class OrbFlareEffect2 extends PCLEffect
         setColors(OrbFlareEffect.OrbFlareColor.DARK);
     }
 
-    public OrbFlareEffect2 setColors(OrbFlareEffect.OrbFlareColor color)
-    {
-        switch (color)
-        {
+    public OrbFlareEffect2 setColors(OrbFlareEffect.OrbFlareColor color) {
+        switch (color) {
             case DARK:
                 this.color = Color.VIOLET.cpy();
                 this.color2 = Color.BLACK.cpy();
@@ -64,16 +59,7 @@ public class OrbFlareEffect2 extends PCLEffect
         return this;
     }
 
-    public OrbFlareEffect2 setColors(Color color1, Color color2)
-    {
-        this.color.set(color1);
-        this.color2.set(color2);
-
-        return this;
-    }
-
-    public void render(SpriteBatch sb)
-    {
+    public void render(SpriteBatch sb) {
         sb.setColor(this.color2);
         sb.draw(inner, this.cX - (float) inner.packedWidth / 2.0F, this.cY - (float) inner.packedHeight / 2.0F, (float) inner.packedWidth / 2.0F, (float) inner.packedHeight / 2.0F, (float) inner.packedWidth, (float) inner.packedHeight, this.scale * Settings.scale * 1.1F, this.scaleY * Settings.scale, MathUtils.random(-1.0F, 1.0F));
         sb.setBlendFunction(770, 1);
@@ -85,11 +71,9 @@ public class OrbFlareEffect2 extends PCLEffect
         sb.draw(inner, this.cX - (float) inner.packedWidth / 2.0F, this.cY - (float) inner.packedHeight / 2.0F, (float) inner.packedWidth / 2.0F, (float) inner.packedHeight / 2.0F, (float) inner.packedWidth, (float) inner.packedHeight, this.scale * Settings.scale * 1.1F, this.scaleY * Settings.scale, MathUtils.random(-1.0F, 1.0F));
     }
 
-    public void update()
-    {
+    public void update() {
         this.duration -= Gdx.graphics.getRawDeltaTime();
-        if (this.duration < 0.0F)
-        {
+        if (this.duration < 0.0F) {
             this.duration = 0.0F;
             this.isDone = true;
         }
@@ -100,8 +84,14 @@ public class OrbFlareEffect2 extends PCLEffect
         this.color2.a = this.color.a;
     }
 
-    public void dispose()
-    {
+    public void dispose() {
 
+    }
+
+    public OrbFlareEffect2 setColors(Color color1, Color color2) {
+        this.color.set(color1);
+        this.color2.set(color2);
+
+        return this;
     }
 }

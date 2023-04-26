@@ -8,8 +8,7 @@ import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLEffects;
 import pinacolada.resources.pcl.PCLCoreImages;
 
-public class PsychokinesisEffect extends PCLEffect
-{
+public class PsychokinesisEffect extends PCLEffect {
     protected float x;
     protected float y;
     protected float spreadX = 10f * Settings.scale;
@@ -22,31 +21,27 @@ public class PsychokinesisEffect extends PCLEffect
     protected float vfxFrequency = 0.04f;
     protected float vfxFrequencyGrowth = -0.006f;
 
-    public PsychokinesisEffect(float startX, float startY)
-    {
+    public PsychokinesisEffect(float startX, float startY) {
         super(0.5f);
 
         this.x = startX;
         this.y = startY;
     }
 
-    public PsychokinesisEffect setFrequency(float frequency)
-    {
+    public PsychokinesisEffect setFrequency(float frequency) {
         this.vfxFrequency = MathUtils.clamp(frequency, 0.01f, startingDuration / 5f);
 
         return this;
     }
 
-    public PsychokinesisEffect setScale(float scaleLower, float scaleUpper)
-    {
+    public PsychokinesisEffect setScale(float scaleLower, float scaleUpper) {
         this.scaleLower = scaleLower;
         this.scaleUpper = scaleUpper;
 
         return this;
     }
 
-    public PsychokinesisEffect setSpread(float spreadX, float spreadY)
-    {
+    public PsychokinesisEffect setSpread(float spreadX, float spreadY) {
         this.spreadX = spreadX;
         this.spreadY = spreadY;
 
@@ -54,29 +49,25 @@ public class PsychokinesisEffect extends PCLEffect
     }
 
     @Override
-    protected void updateInternal(float deltaTime)
-    {
+    protected void updateInternal(float deltaTime) {
         vfxTimer -= deltaTime;
         spreadX += spreadGrowth;
         spreadY += spreadGrowth;
         scaleLower += scaleGrowth;
         scaleUpper += scaleGrowth;
 
-        if (vfxTimer < 0f)
-        {
+        if (vfxTimer < 0f) {
             final float x = this.x + random(-spreadX, spreadX);
             final float y = this.y + random(-spreadY, spreadY);
             final float scale = random(Math.max(0.05f, this.scaleLower), this.scaleUpper);
             final Color color = new Color(MathUtils.random(0.8f, 1f), MathUtils.random(0.7f, 1f), 1, 1);
-            if (randomBoolean(0.2f))
-            {
+            if (randomBoolean(0.2f)) {
                 PCLEffects.Queue.add(new FadingParticleEffect(PCLCoreImages.Effects.circle.texture(), x, y)
                                 .setColor(EUIColors.random(0.83f, 1f, false))
                                 .setScale(this.scaleLower * 0.05f, scale * 2, 5f))
                         .setDuration(1.5f, true);
             }
-            else
-            {
+            else {
                 PCLEffects.Queue.add(new AnimatedParticleEffect(PCLCoreImages.Effects.psi.texture(), x, y, 5, 5, 0.01f)
                         .setColor(EUIColors.random(0.83f, 1f, false))
                         .setScale(this.scaleLower * 0.05f, scale, 5f));

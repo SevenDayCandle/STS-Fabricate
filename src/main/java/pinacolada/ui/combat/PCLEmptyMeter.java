@@ -7,13 +7,11 @@ import pinacolada.powers.PCLClickableUse;
 import pinacolada.resources.PGR;
 
 // TODO add basic matching logic
-public class PCLEmptyMeter extends PCLPlayerMeter
-{
+public class PCLEmptyMeter extends PCLPlayerMeter {
     public static final String ID = createFullID(PGR.core, PCLEmptyMeter.class);
     protected PCLClickableUse skips;
 
-    public PCLEmptyMeter()
-    {
+    public PCLEmptyMeter() {
         super(ID, null, 12);
         infoIcon.setActive(false);
         draggablePanel.setActive(false);
@@ -21,26 +19,22 @@ public class PCLEmptyMeter extends PCLPlayerMeter
     }
 
     @Override
-    public EUITutorialPage[] getInfoPages()
-    {
+    public EUITutorialPage[] getInfoPages() {
         return EUIUtils.array(AFFINITY_TUTORIAL, TAG_TUTORIAL);
     }
 
     @Override
-    public String getInfoMainDescrption()
-    {
+    public String getInfoMainDescrption() {
         return "";
     }
 
     @Override
-    public String getInfoTitle()
-    {
+    public String getInfoTitle() {
         return "";
     }
 
     // RENDER NOTHIN
     @Override
-    public void renderImpl(SpriteBatch sb)
-    {
+    public void renderImpl(SpriteBatch sb) {
     }
 }

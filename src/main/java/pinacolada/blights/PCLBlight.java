@@ -16,25 +16,17 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class PCLBlight extends AbstractBlight implements TooltipProvider
-{
+public abstract class PCLBlight extends AbstractBlight implements TooltipProvider {
     public final BlightStrings strings;
     protected final int initialAmount;
     public ArrayList<EUITooltip> tips;
     public EUITooltip mainTooltip;
 
-    public PCLBlight(String id)
-    {
+    public PCLBlight(String id) {
         this(id, PGR.getBlightStrings(id), -1);
     }
 
-    public PCLBlight(String id, int amount)
-    {
-        this(id, PGR.getBlightStrings(id), amount);
-    }
-
-    public PCLBlight(String id, BlightStrings strings, int amount)
-    {
+    public PCLBlight(String id, BlightStrings strings, int amount) {
         super(id, strings.NAME, GameUtilities.EMPTY_STRING, "durian.png", true);
 
         this.img = EUIRM.getTexture(PGR.getBlightImage(id));
@@ -45,55 +37,48 @@ public abstract class PCLBlight extends AbstractBlight implements TooltipProvide
         updateDescription();
     }
 
-    public static String createFullID(Class<? extends PCLBlight> type)
-    {
-        return PGR.core.createID(type.getSimpleName());
-    }
-
-    protected String formatDescription(int index, Object... args)
-    {
-        return EUIUtils.format(strings.DESCRIPTION[index], args);
-    }
-
-    @Override
-    public List<EUITooltip> getTips()
-    {
-        return tips;
-    }
-
-    public String getUpdatedDescription()
-    {
+    public String getUpdatedDescription() {
         return formatDescription(0, counter);
     }
 
-    public PCLBlight makeCopy()
-    {
-        try
-        {
+    protected String formatDescription(int index, Object... args) {
+        return EUIUtils.format(strings.DESCRIPTION[index], args);
+    }
+
+    public PCLBlight(String id, int amount) {
+        this(id, PGR.getBlightStrings(id), amount);
+    }
+
+    public static String createFullID(Class<? extends PCLBlight> type) {
+        return PGR.core.createID(type.getSimpleName());
+    }
+
+    @Override
+    public List<EUITooltip> getTips() {
+        return tips;
+    }
+
+    public PCLBlight makeCopy() {
+        try {
             return getClass().getConstructor().newInstance();
         }
-        catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e)
-        {
+        catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             EUIUtils.logError(this, e.getMessage());
             return null;
         }
     }
 
     @Override
-    public void renderTip(SpriteBatch sb)
-    {
+    public void renderTip(SpriteBatch sb) {
         EUITooltip.queueTooltips(this);
     }
 
     @Override
-    protected void initializeTips()
-    {
-        if (tips == null)
-        {
+    protected void initializeTips() {
+        if (tips == null) {
             tips = new ArrayList<>();
         }
-        else
-        {
+        else {
             tips.clear();
         }
 
@@ -103,15 +88,12 @@ public abstract class PCLBlight extends AbstractBlight implements TooltipProvide
     }
 
     @Override
-    public void updateDescription()
-    {
+    public void updateDescription() {
         description = getUpdatedDescription();
-        if (tips == null)
-        {
+        if (tips == null) {
             initializeTips();
         }
-        if (tips.size() > 0)
-        {
+        if (tips.size() > 0) {
             tips.get(0).setDescriptions(description);
         }
     }

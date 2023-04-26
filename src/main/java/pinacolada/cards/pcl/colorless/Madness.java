@@ -11,8 +11,7 @@ import pinacolada.skills.PMove;
 import pinacolada.skills.fields.PField_CardGeneric;
 
 @VisibleCard
-public class Madness extends PCLCard
-{
+public class Madness extends PCLCard {
     public static final String ATLAS_URL = "colorless/skill/madness";
     public static final PCLCardData DATA = register(Madness.class)
             .setImagePathFromAtlasUrl(ATLAS_URL)
@@ -22,13 +21,11 @@ public class Madness extends PCLCard
             .setTags(PCLCardTag.Exhaust)
             .setColorless();
 
-    public Madness()
-    {
+    public Madness() {
         super(DATA);
     }
 
-    public void setup(Object input)
-    {
+    public void setup(Object input) {
         addUseMove(PMove.modifyCost(-5, 1, PCLCardGroupHelper.Hand).edit(PField_CardGeneric::setRandom));
     }
 }

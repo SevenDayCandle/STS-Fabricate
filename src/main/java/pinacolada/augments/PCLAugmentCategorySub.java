@@ -1,7 +1,6 @@
 package pinacolada.augments;
 
-public class PCLAugmentCategorySub
-{
+public class PCLAugmentCategorySub {
     public static final PCLAugmentCategorySub AffinityBlue = new PCLAugmentCategorySub(PCLAugmentCategory.General);
     public static final PCLAugmentCategorySub AffinityGreen = new PCLAugmentCategorySub(PCLAugmentCategory.General);
     public static final PCLAugmentCategorySub AffinityOrange = new PCLAugmentCategorySub(PCLAugmentCategory.General);
@@ -22,8 +21,7 @@ public class PCLAugmentCategorySub
 
     public final PCLAugmentCategory parent;
 
-    public PCLAugmentCategorySub(PCLAugmentCategory parent)
-    {
+    public PCLAugmentCategorySub(PCLAugmentCategory parent) {
         this.parent = parent;
     }
 }

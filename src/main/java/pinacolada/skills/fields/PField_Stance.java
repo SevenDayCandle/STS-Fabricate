@@ -8,47 +8,39 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class PField_Stance extends PField_Random
-{
+public class PField_Stance extends PField_Random {
     public ArrayList<PCLStanceHelper> stances = new ArrayList<>();
 
     @Override
-    public boolean equals(PField other)
-    {
+    public boolean equals(PField other) {
         return other instanceof PField_Stance && stances.equals(((PField_Stance) other).stances) && ((PField_Stance) other).random == random && ((PField_Stance) other).not == not;
     }
 
     @Override
-    public PField_Stance makeCopy()
-    {
+    public PField_Stance makeCopy() {
         return (PField_Stance) new PField_Stance().setStance(stances).setRandom(random).setNot(not);
     }
 
-    public void setupEditor(PCLCustomCardEffectEditor<?> editor)
-    {
+    public void setupEditor(PCLCustomCardEffectEditor<?> editor) {
         editor.registerStance(stances);
         super.setupEditor(editor);
     }
 
-    public PField_Stance setStance(PCLStanceHelper... orbs)
-    {
-        return setStance(Arrays.asList(orbs));
-    }
-
-    public PField_Stance setStance(List<PCLStanceHelper> orbs)
-    {
+    public PField_Stance setStance(List<PCLStanceHelper> orbs) {
         this.stances.clear();
         this.stances.addAll(orbs);
         return this;
     }
 
-    public String getAnyStanceString()
-    {
+    public String getAnyStanceString() {
         return stances.isEmpty() ? TEXT.cond_any(PGR.core.tooltips.stance.title) : getStanceString();
     }
 
-    public String getStanceString()
-    {
+    public String getStanceString() {
         return getStanceString(stances);
+    }
+
+    public PField_Stance setStance(PCLStanceHelper... orbs) {
+        return setStance(Arrays.asList(orbs));
     }
 }

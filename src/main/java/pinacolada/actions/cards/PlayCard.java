@@ -23,8 +23,7 @@ import pinacolada.resources.PCLEnum;
 import pinacolada.utilities.GameUtilities;
 
 // Copied and modified from STS-AnimatorMod
-public class PlayCard extends PCLActionWithCallbackT2<AbstractMonster, AbstractCard>
-{
+public class PlayCard extends PCLActionWithCallbackT2<AbstractMonster, AbstractCard> {
     public static final float DEFAULT_TARGET_X_LEFT = (Settings.WIDTH / 2f) - (300f * Settings.scale);
     public static final float DEFAULT_TARGET_X_RIGHT = (Settings.WIDTH / 2f) + (200f * Settings.scale);
     public static final float DEFAULT_TARGET_Y = (Settings.HEIGHT / 2f);
@@ -38,19 +37,16 @@ public class PlayCard extends PCLActionWithCallbackT2<AbstractMonster, AbstractC
     protected Vector2 targetPosition;
     protected boolean renderLast;
 
-    public PlayCard(AbstractCard card, AbstractCreature target, boolean copy, boolean renderLast)
-    {
+    public PlayCard(AbstractCard card, AbstractCreature target, boolean copy, boolean renderLast) {
         super(ActionType.WAIT, Settings.ACTION_DUR_FAST);
 
         this.isRealtime = true;
 
-        if (copy)
-        {
+        if (copy) {
             this.card = card.makeSameInstanceOf();
             this.card.energyOnUse = card.energyOnUse;
         }
-        else
-        {
+        else {
             this.card = card;
         }
 
@@ -61,54 +57,39 @@ public class PlayCard extends PCLActionWithCallbackT2<AbstractMonster, AbstractC
         initialize(target, 1);
     }
 
-    protected void addToLimbo()
-    {
-        if (card != null && !player.limbo.contains(card))
-        {
-            if (renderLast)
-            {
+    protected void addToLimbo() {
+        if (card != null && !player.limbo.contains(card)) {
+            if (renderLast) {
                 player.limbo.addToTop(card);
             }
-            else
-            {
+            else {
                 player.limbo.addToBottom(card);
             }
         }
     }
 
-    protected boolean canUse()
-    {
-        return card.canUse(player, GameUtilities.asMonster(target)) || card.dontTriggerOnUseCard;
-    }
-
     @Override
-    protected void firstUpdate()
-    {
+    protected void firstUpdate() {
         super.firstUpdate();
 
-        if (!checkConditions(card))
-        {
+        if (!checkConditions(card)) {
             completeImpl();
             return;
         }
 
-        if (sourcePile != null)
-        {
+        if (sourcePile != null) {
             sourcePileIndex = sourcePile.group.indexOf(card);
-            if (sourcePileIndex >= 0)
-            {
+            if (sourcePileIndex >= 0) {
                 sourcePile.group.remove(sourcePileIndex);
             }
-            else
-            {
+            else {
                 EUIUtils.logWarning(this, "Could not find " + card.cardID + " in " + sourcePile.type.name().toLowerCase());
                 completeImpl(); // Do not call callback
                 return;
             }
         }
 
-        if (targetPosition == null)
-        {
+        if (targetPosition == null) {
             setTargetPosition(DEFAULT_TARGET_X_LEFT, DEFAULT_TARGET_Y);
         }
 
@@ -116,59 +97,46 @@ public class PlayCard extends PCLActionWithCallbackT2<AbstractMonster, AbstractC
     }
 
     @Override
-    protected void updateInternal(float deltaTime)
-    {
-        if (tickDuration(deltaTime))
-        {
+    protected void updateInternal(float deltaTime) {
+        if (tickDuration(deltaTime)) {
             AbstractMonster enemy = GameUtilities.asMonster(target);
-            if (GameUtilities.requiresTarget(card) && (enemy == null || GameUtilities.isDeadOrEscaped(enemy)))
-            {
-                if (card.type == PCLEnum.CardType.SUMMON)
-                {
+            if (GameUtilities.requiresTarget(card) && (enemy == null || GameUtilities.isDeadOrEscaped(enemy))) {
+                if (card.type == PCLEnum.CardType.SUMMON) {
                     enemy = GameUtilities.getRandomSummon(false);
-                    if (enemy == null)
-                    {
+                    if (enemy == null) {
                         enemy = GameUtilities.getRandomSummon(true);
                     }
                 }
-                else
-                {
+                else {
                     enemy = GameUtilities.getRandomEnemy(true);
                 }
             }
 
-            if (!spendEnergy)
-            {
+            if (!spendEnergy) {
                 card.freeToPlayOnce = true;
                 card.ignoreEnergyOnUse = false;
             }
 
-            if (canUse())
-            {
+            if (canUse()) {
                 queueCardItem(enemy);
                 return;
             }
-            else if (purge)
-            {
+            else if (purge) {
                 PCLActions.top.add(new UnlimboAction(card));
             }
-            else if (exhaust)
-            {
+            else if (exhaust) {
                 PCLActions.top.exhaust(card, player.limbo).setRealtime(true);
             }
-            else if (spendEnergy && sourcePile == player.hand)
-            {
+            else if (spendEnergy && sourcePile == player.hand) {
                 player.limbo.removeCard(card);
                 sourcePile.group.add(MathUtils.clamp(sourcePileIndex, 0, sourcePile.size()), card);
             }
-            else
-            {
+            else {
                 PCLActions.top.discard(card, player.limbo).setRealtime(true);
                 PCLActions.top.add(new WaitAction(Settings.ACTION_DUR_FAST));
             }
 
-            if (card.cantUseMessage != null)
-            {
+            if (card.cantUseMessage != null) {
                 PCLEffects.List.add(new ThoughtBubble(player.dialogX, player.dialogY, 3, card.cantUseMessage, true));
             }
 
@@ -176,12 +144,14 @@ public class PlayCard extends PCLActionWithCallbackT2<AbstractMonster, AbstractC
         }
     }
 
-    protected void queueCardItem(AbstractMonster enemy)
-    {
+    protected boolean canUse() {
+        return card.canUse(player, GameUtilities.asMonster(target)) || card.dontTriggerOnUseCard;
+    }
+
+    protected void queueCardItem(AbstractMonster enemy) {
         addToLimbo();
 
-        if (!spendEnergy)
-        {
+        if (!spendEnergy) {
             card.freeToPlayOnce = true;
         }
 
@@ -194,13 +164,11 @@ public class PlayCard extends PCLActionWithCallbackT2<AbstractMonster, AbstractC
 
         int energyOnUse = EnergyPanel.getCurrentEnergy();
 
-        if (spendEnergy)
-        {
+        if (spendEnergy) {
             PCLActions.top.add(new DelayAllActions()) // So the result of canUse() does not randomly change after queueing the card
                     .except(a -> a instanceof UnlimboAction || a instanceof WaitAction);
         }
-        else if (card.energyOnUse != -1)
-        {
+        else if (card.energyOnUse != -1) {
             energyOnUse = card.energyOnUse;
         }
 
@@ -209,63 +177,19 @@ public class PlayCard extends PCLActionWithCallbackT2<AbstractMonster, AbstractC
         complete(enemy);
     }
 
-    public PlayCard setCurrentPosition(float x, float y)
-    {
-        currentPosition = new Vector2(x, y);
-
-        return this;
-    }
-
-    public PlayCard setExhaust(boolean exhaust)
-    {
-        this.exhaust = exhaust;
-        if (exhaust)
-        {
-            this.purge = false;
-        }
-
-        return this;
-    }
-
-    public PlayCard setPurge(boolean purge)
-    {
-        this.purge = purge;
-        if (purge)
-        {
-            this.exhaust = false;
-        }
-
-        return this;
-    }
-
-    public PlayCard setSourcePile(CardGroup sourcePile)
-    {
-        this.sourcePile = sourcePile;
-
-        if (card != null)
-        {
-            GameUtilities.trySetPosition(sourcePile, card);
-        }
-
-        return this;
-    }
-
-    public PlayCard setTargetPosition(float x, float y)
-    {
+    public PlayCard setTargetPosition(float x, float y) {
         targetPosition = new Vector2(x, y);
 
         return this;
     }
 
-    protected void showCard()
-    {
+    protected void showCard() {
         addToLimbo();
 
         CombatManager.queueRefreshHandLayout();
         AbstractDungeon.getCurrRoom().souls.remove(card);
 
-        if (currentPosition != null)
-        {
+        if (currentPosition != null) {
             card.current_x = currentPosition.x;
             card.current_y = currentPosition.y;
         }
@@ -279,8 +203,41 @@ public class PlayCard extends PCLActionWithCallbackT2<AbstractMonster, AbstractC
         card.targetDrawScale = 0.75f;
     }
 
-    public PlayCard spendEnergy(boolean spendEnergy)
-    {
+    public PlayCard setCurrentPosition(float x, float y) {
+        currentPosition = new Vector2(x, y);
+
+        return this;
+    }
+
+    public PlayCard setExhaust(boolean exhaust) {
+        this.exhaust = exhaust;
+        if (exhaust) {
+            this.purge = false;
+        }
+
+        return this;
+    }
+
+    public PlayCard setPurge(boolean purge) {
+        this.purge = purge;
+        if (purge) {
+            this.exhaust = false;
+        }
+
+        return this;
+    }
+
+    public PlayCard setSourcePile(CardGroup sourcePile) {
+        this.sourcePile = sourcePile;
+
+        if (card != null) {
+            GameUtilities.trySetPosition(sourcePile, card);
+        }
+
+        return this;
+    }
+
+    public PlayCard spendEnergy(boolean spendEnergy) {
         this.spendEnergy = spendEnergy;
 
         return this;

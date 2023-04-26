@@ -14,74 +14,41 @@ import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.PPassiveMod;
 import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
 
-public abstract class PMod_Per<T extends PField_Not> extends PPassiveMod<T>
-{
-    public PMod_Per(PSkillData<T> data, PSkillSaveData content)
-    {
+public abstract class PMod_Per<T extends PField_Not> extends PPassiveMod<T> {
+    public PMod_Per(PSkillData<T> data, PSkillSaveData content) {
         super(data, content);
     }
 
-    public PMod_Per(PSkillData<T> data)
-    {
+    public PMod_Per(PSkillData<T> data) {
         super(data);
     }
 
-    public PMod_Per(PSkillData<T> data, int amount)
-    {
+    public PMod_Per(PSkillData<T> data, int amount) {
         super(data, PCLCardTarget.None, amount);
     }
 
 
-    public PMod_Per(PSkillData<T> data, int amount, int extra)
-    {
+    public PMod_Per(PSkillData<T> data, int amount, int extra) {
         super(data, PCLCardTarget.None, amount, extra);
     }
 
-    public PMod_Per(PSkillData<T> data, PCLCardTarget target, int amount)
-    {
+    public PMod_Per(PSkillData<T> data, PCLCardTarget target, int amount) {
         super(data, target, amount);
     }
 
-    public PMod_Per(PSkillData<T> data, PCLCardTarget target, int amount, int extra)
-    {
+    public PMod_Per(PSkillData<T> data, PCLCardTarget target, int amount, int extra) {
         super(data, target, amount, extra);
     }
 
-    public String getConditionText(String childText)
-    {
-        if (fields.not)
-        {
-            return TEXT.cond_genericConditional(childText, TEXT.cond_per(getAmountRawString(), getSubText()));
-        }
-        return TEXT.cond_per(childText,
-                this.amount <= 1 ? getSubText() : EUIRM.strings.numNoun(getAmountRawString(), getSubText()));
-    }
-
-    public String getSubSampleText()
-    {
-        return getSubText();
+    @Override
+    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info) {
+        return fields.not ? (be.baseAmount + (getMultiplier(info) * amount)) : be.baseAmount * getMultiplier(info) / Math.max(1, this.amount);
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill)
-    {
-        return TEXT.cond_per(TEXT.subjects_x, getSubSampleText());
-    }
-
-    @Override
-    public String getText(boolean addPeriod)
-    {
-        String appendix = extra > 0 ? " (" + TEXT.subjects_max(extra) + ")" + getXRawString() : getXRawString();
-        String childText = childEffect != null ? capital(childEffect.getText(false), addPeriod) : "";
-        return getConditionText(childText) + appendix + PCLCoreStrings.period(addPeriod);
-    }
-
-    @Override
-    public ColoredString getColoredValueString()
-    {
+    public ColoredString getColoredValueString() {
         String amString = fields.not && amount >= 0 ? "+" + amount : String.valueOf(amount);
-        if (baseAmount != amount)
-        {
+        if (baseAmount != amount) {
             return new ColoredString(amString, amount >= baseAmount ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR);
         }
 
@@ -89,17 +56,34 @@ public abstract class PMod_Per<T extends PField_Not> extends PPassiveMod<T>
     }
 
     @Override
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info)
-    {
-        return fields.not ? (be.baseAmount + (getMultiplier(info) * amount)) : be.baseAmount * getMultiplier(info) / Math.max(1, this.amount);
+    public String getText(boolean addPeriod) {
+        String appendix = extra > 0 ? " (" + TEXT.subjects_max(extra) + ")" + getXRawString() : getXRawString();
+        String childText = childEffect != null ? capital(childEffect.getText(false), addPeriod) : "";
+        return getConditionText(childText) + appendix + PCLCoreStrings.period(addPeriod);
     }
 
-    @Override
-    public void setupEditor(PCLCustomCardEffectEditor<?> editor)
-    {
-        super.setupEditor(editor);
-        fields.registerNotBoolean(editor, StringUtils.capitalize(TEXT.subjects_bonus), TEXT.cetut_bonus);
+    public String getConditionText(String childText) {
+        if (fields.not) {
+            return TEXT.cond_genericConditional(childText, TEXT.cond_per(getAmountRawString(), getSubText()));
+        }
+        return TEXT.cond_per(childText,
+                this.amount <= 1 ? getSubText() : EUIRM.strings.numNoun(getAmountRawString(), getSubText()));
     }
 
     public abstract int getMultiplier(PCLUseInfo info);
+
+    @Override
+    public String getSampleText(PSkill<?> callingSkill) {
+        return TEXT.cond_per(TEXT.subjects_x, getSubSampleText());
+    }
+
+    public String getSubSampleText() {
+        return getSubText();
+    }
+
+    @Override
+    public void setupEditor(PCLCustomCardEffectEditor<?> editor) {
+        super.setupEditor(editor);
+        fields.registerNotBoolean(editor, StringUtils.capitalize(TEXT.subjects_bonus), TEXT.cetut_bonus);
+    }
 }

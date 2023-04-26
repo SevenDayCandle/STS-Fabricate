@@ -9,8 +9,7 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.fields.PField_CardCategory;
 
-public class PSpecialSkill extends PSkill<PField_CardCategory>
-{
+public class PSpecialSkill extends PSkill<PField_CardCategory> {
     public static final PSkillData<PField_CardCategory> DATA = register(PSpecialSkill.class, PField_CardCategory.class)
             .setAmounts(-DEFAULT_MAX, DEFAULT_MAX)
             .setExtra(-DEFAULT_MAX, DEFAULT_MAX)
@@ -18,18 +17,11 @@ public class PSpecialSkill extends PSkill<PField_CardCategory>
     private final String description;
     private final ActionT2<PSpecialSkill, PCLUseInfo> onUse;
 
-    public PSpecialSkill(String effectID, String description, ActionT2<PSpecialSkill, PCLUseInfo> onUse)
-    {
+    public PSpecialSkill(String effectID, String description, ActionT2<PSpecialSkill, PCLUseInfo> onUse) {
         this(effectID, description, onUse, 1, 0);
     }
 
-    public PSpecialSkill(String effectID, String description, ActionT2<PSpecialSkill, PCLUseInfo> onUse, int amount)
-    {
-        this(effectID, description, onUse, amount, 0);
-    }
-
-    public PSpecialSkill(String effectID, String description, ActionT2<PSpecialSkill, PCLUseInfo> onUse, int amount, int extra)
-    {
+    public PSpecialSkill(String effectID, String description, ActionT2<PSpecialSkill, PCLUseInfo> onUse, int amount, int extra) {
         super(DATA);
         setAmount(amount);
         setExtra(extra);
@@ -38,18 +30,15 @@ public class PSpecialSkill extends PSkill<PField_CardCategory>
         this.onUse = onUse;
     }
 
-    public PSpecialSkill(String effectID, FuncT1<String, PSpecialSkill> strFunc, ActionT2<PSpecialSkill, PCLUseInfo> onUse)
-    {
+    public PSpecialSkill(String effectID, String description, ActionT2<PSpecialSkill, PCLUseInfo> onUse, int amount) {
+        this(effectID, description, onUse, amount, 0);
+    }
+
+    public PSpecialSkill(String effectID, FuncT1<String, PSpecialSkill> strFunc, ActionT2<PSpecialSkill, PCLUseInfo> onUse) {
         this(effectID, strFunc, onUse, 1, 0);
     }
 
-    public PSpecialSkill(String effectID, FuncT1<String, PSpecialSkill> strFunc, ActionT2<PSpecialSkill, PCLUseInfo> onUse, int amount)
-    {
-        this(effectID, strFunc, onUse, amount, 0);
-    }
-
-    public PSpecialSkill(String effectID, FuncT1<String, PSpecialSkill> strFunc, ActionT2<PSpecialSkill, PCLUseInfo> onUse, int amount, int extra)
-    {
+    public PSpecialSkill(String effectID, FuncT1<String, PSpecialSkill> strFunc, ActionT2<PSpecialSkill, PCLUseInfo> onUse, int amount, int extra) {
         super(DATA);
         setAmount(amount);
         setExtra(extra);
@@ -58,27 +47,27 @@ public class PSpecialSkill extends PSkill<PField_CardCategory>
         this.onUse = onUse;
     }
 
+    public PSpecialSkill(String effectID, FuncT1<String, PSpecialSkill> strFunc, ActionT2<PSpecialSkill, PCLUseInfo> onUse, int amount) {
+        this(effectID, strFunc, onUse, amount, 0);
+    }
+
     @Override
-    public String getSubText()
-    {
+    public String getSubText() {
         return description;
     }
 
     @Override
-    public String getText(boolean addPeriod)
-    {
+    public String getText(boolean addPeriod) {
         return EUIUtils.format(getSubText(), getAmountRawString(), getExtraRawString()) + PCLCoreStrings.period(addPeriod);
     }
 
     @Override
-    public PSpecialSkill makeCopy()
-    {
+    public PSpecialSkill makeCopy() {
         return new PSpecialSkill(effectID, description, onUse, amount, extra);
     }
 
     @Override
-    public void use(PCLUseInfo info)
-    {
+    public void use(PCLUseInfo info) {
         onUse.invoke(this, info);
     }
 }

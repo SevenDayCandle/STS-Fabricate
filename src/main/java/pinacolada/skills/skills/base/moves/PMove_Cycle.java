@@ -17,44 +17,37 @@ import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.utilities.ListSelection;
 
 @VisibleSkill
-public class PMove_Cycle extends PMove_Select<PField_CardCategory>
-{
+public class PMove_Cycle extends PMove_Select<PField_CardCategory> {
     public static final PSkillData<PField_CardCategory> DATA = register(PMove_Cycle.class, PField_CardCategory.class)
             .selfTarget()
             .setExtra(0, DEFAULT_MAX)
             .setGroups(PCLCardGroupHelper.Hand);
 
-    public PMove_Cycle()
-    {
+    public PMove_Cycle() {
         this(1, PCLCardGroupHelper.Hand);
     }
 
-    public PMove_Cycle(PSkillSaveData content)
-    {
-        super(DATA, content);
-    }
-
-    public PMove_Cycle(int amount, PCLCardGroupHelper... h)
-    {
+    public PMove_Cycle(int amount, PCLCardGroupHelper... h) {
         super(DATA, amount, h);
     }
 
+    public PMove_Cycle(PSkillSaveData content) {
+        super(DATA, content);
+    }
+
     @Override
-    public EUITooltip getActionTooltip()
-    {
+    public String getSubText() {
+        return useParent ? EUIRM.strings.verbNoun(getActionTitle(), getInheritedString())
+                : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), fields.getFullCardString());
+    }
+
+    @Override
+    public EUITooltip getActionTooltip() {
         return PGR.core.tooltips.cycle;
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction()
-    {
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
         return (s, c, i, o, g) -> new CycleCards(s, i, o);
-    }
-
-    @Override
-    public String getSubText()
-    {
-        return useParent ? EUIRM.strings.verbNoun(getActionTitle(), getInheritedString())
-                        : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), fields.getFullCardString());
     }
 }

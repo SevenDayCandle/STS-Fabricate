@@ -8,29 +8,24 @@ import com.megacrit.cardcrawl.helpers.ImageMaster;
 import pinacolada.effects.PCLEffect;
 
 // TODO Change image
-public class GhostlyWeakFireEffect extends PCLEffect
-{
+public class GhostlyWeakFireEffect extends PCLEffect {
     protected AtlasRegion img;
     protected float x;
     protected float y;
     protected float vX;
     protected float vY;
 
-    public GhostlyWeakFireEffect(float x, float y)
-    {
+    public GhostlyWeakFireEffect(float x, float y) {
         super(1f);
 
         int roll = random(0, 2);
-        if (roll == 0)
-        {
+        if (roll == 0) {
             this.img = ImageMaster.TORCH_FIRE_1;
         }
-        else if (roll == 1)
-        {
+        else if (roll == 1) {
             this.img = ImageMaster.TORCH_FIRE_2;
         }
-        else
-        {
+        else {
             this.img = ImageMaster.TORCH_FIRE_3;
         }
 
@@ -43,14 +38,12 @@ public class GhostlyWeakFireEffect extends PCLEffect
         this.scale = random(2f, 3f);
     }
 
-    public void render(SpriteBatch sb)
-    {
+    public void render(SpriteBatch sb) {
         renderImage(sb, img, x, y);
     }
 
     @Override
-    protected void updateInternal(float deltaTime)
-    {
+    protected void updateInternal(float deltaTime) {
         super.updateInternal(deltaTime);
 
         x += vX * deltaTime;

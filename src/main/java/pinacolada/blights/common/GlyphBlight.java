@@ -18,28 +18,53 @@ import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RandomizedList;
 
 @VisibleBlight
-public class GlyphBlight extends AbstractGlyphBlight
-{
+public class GlyphBlight extends AbstractGlyphBlight {
     public static final String ID = createFullID(GlyphBlight.class);
     public static final int MAX_CHOICES = 3;
     public Glyph glyph;
 
-    public GlyphBlight()
-    {
+    public GlyphBlight() {
         super(ID, PGR.config.ascensionGlyph0, PCLAbstractPlayerData.ASCENSION_GLYPH1_UNLOCK, PCLAbstractPlayerData.ASCENSION_GLYPH1_LEVEL_STEP, 0, 1);
     }
 
-    public CardGroup createGlyphGroup()
-    {
+    @Override
+    public String getUpdatedDescription() {
+        return formatDescription(0, GameUtilities.inGame() ? EUIUtils.format(strings.DESCRIPTION[1], getPotency()) : "");
+    }
+
+    @Override
+    public void onVictory() {
+        super.onVictory();
+
+        this.glyph = null;
+    }
+
+    @Override
+    public void atBattleStart() {
+        super.atBattleStart();
+
+        PCLActions.bottom.selectFromPile(name, 1, createGlyphGroup())
+                .addCallback(selection -> {
+                    if (selection.size() > 0) {
+                        Glyph e = (Glyph) selection.get(0);
+                        e.onUse(null);
+                        for (PSkill<?> skill : e.getEffects()) {
+                            skill.subscribeChildren();
+                        }
+                        this.glyph = e;
+                        flash();
+                    }
+                });
+    }
+
+    public CardGroup createGlyphGroup() {
         final CardGroup group = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
         final RandomizedList<AbstractCard> possiblePicks = new RandomizedList<>();
         possiblePicks.addAll(EUIUtils.map(Glyph.getCards(), Glyph::makeCopy));
 
-        for (int i = 0; i < MAX_CHOICES; i++)
-        {
+        for (int i = 0; i < MAX_CHOICES; i++) {
             AbstractCard pick = possiblePicks.retrieve(GameUtilities.getRNG());
-            for (int j = 0; j < getPotency(); j++)
-            {
+            for (int j = 0; j < getPotency(); j++) {
                 pick.upgrade();
             }
             group.group.add(pick);
@@ -49,47 +74,10 @@ public class GlyphBlight extends AbstractGlyphBlight
     }
 
     @Override
-    public String getUpdatedDescription()
-    {
-        return formatDescription(0, GameUtilities.inGame() ? EUIUtils.format(strings.DESCRIPTION[1], getPotency()) : "");
-    }
-
-    @Override
-    public void onVictory()
-    {
-        super.onVictory();
-
-        this.glyph = null;
-    }
-
-    @Override
-    public void atBattleStart()
-    {
-        super.atBattleStart();
-
-        PCLActions.bottom.selectFromPile(name, 1, createGlyphGroup())
-                .addCallback(selection -> {
-                    if (selection.size() > 0)
-                    {
-                        Glyph e = (Glyph) selection.get(0);
-                        e.onUse(null);
-                        for (PSkill<?> skill : e.getEffects())
-                        {
-                            skill.subscribeChildren();
-                        }
-                        this.glyph = e;
-                        flash();
-                    }
-                });
-    }
-
-    @Override
-    public void renderTip(SpriteBatch sb)
-    {
+    public void renderTip(SpriteBatch sb) {
         super.renderTip(sb);
 
-        if (glyph != null)
-        {
+        if (glyph != null) {
             glyph.drawScale = glyph.targetDrawScale = 0.8f;
             glyph.current_x = glyph.target_x = InputHelper.mX + (((InputHelper.mX > (Settings.WIDTH * 0.5f)) ? -1.505f : 1.505f) * EUITooltip.BOX_W);
             glyph.current_y = glyph.target_y = InputHelper.mY - (AbstractCard.IMG_HEIGHT * 0.5f);

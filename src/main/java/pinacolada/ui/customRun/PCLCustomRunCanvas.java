@@ -32,8 +32,7 @@ import pinacolada.utilities.GameUtilities;
 import java.util.ArrayList;
 
 
-public class PCLCustomRunCanvas extends EUICanvas
-{
+public class PCLCustomRunCanvas extends EUICanvas {
     protected static final float SCREEN_X = Settings.WIDTH * 0.25f;
     protected static final float SCREEN_Y = Settings.HEIGHT * 0.9f;
     protected static final float GAP_Y = scale(160);
@@ -60,8 +59,7 @@ public class PCLCustomRunCanvas extends EUICanvas
     public final GridSelectConfirmButton confirmButton;
     private ViewInGamePoolEffect cardEffect;
 
-    public PCLCustomRunCanvas(PCLCustomRunScreen screen)
-    {
+    public PCLCustomRunCanvas(PCLCustomRunScreen screen) {
         super();
         this.screen = screen;
 
@@ -131,7 +129,7 @@ public class PCLCustomRunCanvas extends EUICanvas
                 .setHeader(FontHelper.panelNameFont, 1f, Settings.GOLD_COLOR, CustomModeScreen.TEXT[6])
                 .setCanAutosize(true, true);
 
-        editCardPoolButton = AbstractScreen.createHexagonalButton(0, 0, scale(230), scale( 70))
+        editCardPoolButton = AbstractScreen.createHexagonalButton(0, 0, scale(230), scale(70))
                 .setText(PGR.core.strings.csel_seriesEditor)
                 .setOnClick(this::openCardPool);
 
@@ -141,80 +139,23 @@ public class PCLCustomRunCanvas extends EUICanvas
 
     }
 
-    public void open()
-    {
-        confirmButton.show();
-        cancelButton.show(CharacterSelectScreen.TEXT[5]);
-    }
-
-    protected float positionElement(EUIHoverable element, float yPos)
-    {
-        return positionElement(element, yPos, GAP_Y);
-    }
-
-    protected float positionElement(EUIHoverable element, float yPos, float diff)
-    {
-        return positionElement(element, SCREEN_X, yPos, diff);
-    }
-
-    protected float positionElement(EUIHoverable element, float xPos, float yPos, float diff)
-    {
-        element.setPosition(xPos, yPos);
-        return yPos - diff;
-    }
-
-    public void resetPositions()
-    {
-        scrollBar.scroll(0, true);
-    }
-
-    public void setAscension(int i)
-    {
-        ascensionEditor.setValue(i, false);
-        int value = ascensionEditor.getValue();
-        ascensionEditor.tooltip.setTitle(EUIRM.strings.generic2(CustomModeScreen.TEXT[3], value));
-        ascensionEditor.tooltip.setDescription(value > 0 ? CharacterSelectScreen.A_TEXT[value - 1] : "");
-    }
-
-    public void setCharacter(CharacterOption c)
-    {
-        selectedCharacterLabel.setLabel(c.c.getLocalizedCharacterName());
-        for (PCLCustomRunCharacterButton button : characters)
-        {
-            button.glowing = (button.character == c);
-        }
-        ascensionEditor.setLimits(0, GameUtilities.getMaxAscensionLevel(c.c)).setValue(screen.ascensionLevel);
-    }
-
-    public void setup(CustomModeScreen original)
-    {
-        for (AbstractPlayer p : CardCrawlGame.characterManager.getAllCharacters())
-        {
-            characters.add(new PCLCustomRunCharacterButton(screen, p));
-        }
-
-        // Snag the modifiers from the original custom run screen, excluding endless/ending act because we handle this manually
-        ArrayList<CustomMod> modList = EUIClassUtils.getField(original, "modList");
-        modifierDropdown.setItems(EUIUtils.filter(modList, mod -> !MOD_ENDLESS.equals(mod.ID) && !MOD_THE_ENDING.equals(mod.ID)));
-    }
-
-    public void openCardPool()
-    {
+    public void openCardPool() {
         cardEffect = new ViewInGamePoolEffect(screen.getAllPossibleCards(), screen.bannedCards);
     }
 
-    public void updateImpl()
-    {
-        if (cardEffect != null)
-        {
+    protected void onScroll(float newPercent) {
+        super.onScroll(newPercent);
+        updatePositions();
+    }
+
+    public void updateImpl() {
+        if (cardEffect != null) {
             cardEffect.update();
-            if (cardEffect.isDone)
-            {
+            if (cardEffect.isDone) {
                 cardEffect = null;
             }
         }
-        else
-        {
+        else {
             super.updateImpl();
             titleLabel.tryUpdate();
             charTitleLabel.tryUpdate();
@@ -230,34 +171,28 @@ public class PCLCustomRunCanvas extends EUICanvas
             editCardPoolButton.updateImpl();
             confirmButton.update();
             cancelButton.update();
-            for (PCLCustomRunCharacterButton b : characters)
-            {
+            for (PCLCustomRunCharacterButton b : characters) {
                 b.tryUpdate();
             }
 
-            if (this.cancelButton.hb.clicked || InputHelper.pressedEscape)
-            {
+            if (this.cancelButton.hb.clicked || InputHelper.pressedEscape) {
                 InputHelper.pressedEscape = false;
                 this.cancelButton.hb.clicked = false;
                 this.cancelButton.hide();
                 CardCrawlGame.mainMenuScreen.panelScreen.refresh();
             }
-            else if (this.confirmButton.hb.clicked || CInputActionSet.proceed.isJustPressed())
-            {
+            else if (this.confirmButton.hb.clicked || CInputActionSet.proceed.isJustPressed()) {
                 this.confirmButton.hb.clicked = false;
                 this.screen.confirm();
             }
         }
     }
 
-    public void renderImpl(SpriteBatch sb)
-    {
-        if (cardEffect != null)
-        {
+    public void renderImpl(SpriteBatch sb) {
+        if (cardEffect != null) {
             cardEffect.render(sb);
         }
-        else
-        {
+        else {
             super.renderImpl(sb);
             titleLabel.tryRender(sb);
             charTitleLabel.tryRender(sb);
@@ -270,8 +205,7 @@ public class PCLCustomRunCanvas extends EUICanvas
             seedInput.tryRender(sb);
             ascensionEditor.tryRender(sb);
             modifierDropdown.tryRender(sb);
-            for (PCLCustomRunCharacterButton b : characters)
-            {
+            for (PCLCustomRunCharacterButton b : characters) {
                 b.tryRenderCentered(sb);
             }
             editCardPoolButton.renderImpl(sb);
@@ -280,14 +214,7 @@ public class PCLCustomRunCanvas extends EUICanvas
         }
     }
 
-    protected void onScroll(float newPercent)
-    {
-        super.onScroll(newPercent);
-        updatePositions();
-    }
-
-    protected void updatePositions()
-    {
+    protected void updatePositions() {
         upperScrollBound = Settings.DEFAULT_SCROLL_LIMIT + scale(550);
         float yPos = SCREEN_Y;
         yPos = positionElement(titleLabel, SCREEN_X - scale(80), yPos, scale(10));
@@ -297,12 +224,10 @@ public class PCLCustomRunCanvas extends EUICanvas
         editCardPoolButton.setPosition(charTitleLabel.hb.cX + charTitleLabel.getAutoWidth() + scale(400), charTitleLabel.hb.cY);
 
         int column = 0;
-        for (PCLCustomRunCharacterButton character : characters)
-        {
+        for (PCLCustomRunCharacterButton character : characters) {
             character.setPosition(SCREEN_X + column * scale(105), yPos);
             column += 1;
-            if (column >= ROW_SIZE)
-            {
+            if (column >= ROW_SIZE) {
                 column = 0;
                 yPos -= scale(105);
                 upperScrollBound += scale(105);
@@ -319,5 +244,52 @@ public class PCLCustomRunCanvas extends EUICanvas
 
         yPos = positionElement(modifierDropdown, SCREEN_X - scale(135), yPos, scale(80));
         lowerScrollBound = upperScrollBound * -1;
+    }
+
+    protected float positionElement(EUIHoverable element, float xPos, float yPos, float diff) {
+        element.setPosition(xPos, yPos);
+        return yPos - diff;
+    }
+
+    protected float positionElement(EUIHoverable element, float yPos, float diff) {
+        return positionElement(element, SCREEN_X, yPos, diff);
+    }
+
+    public void open() {
+        confirmButton.show();
+        cancelButton.show(CharacterSelectScreen.TEXT[5]);
+    }
+
+    protected float positionElement(EUIHoverable element, float yPos) {
+        return positionElement(element, yPos, GAP_Y);
+    }
+
+    public void resetPositions() {
+        scrollBar.scroll(0, true);
+    }
+
+    public void setAscension(int i) {
+        ascensionEditor.setValue(i, false);
+        int value = ascensionEditor.getValue();
+        ascensionEditor.tooltip.setTitle(EUIRM.strings.generic2(CustomModeScreen.TEXT[3], value));
+        ascensionEditor.tooltip.setDescription(value > 0 ? CharacterSelectScreen.A_TEXT[value - 1] : "");
+    }
+
+    public void setCharacter(CharacterOption c) {
+        selectedCharacterLabel.setLabel(c.c.getLocalizedCharacterName());
+        for (PCLCustomRunCharacterButton button : characters) {
+            button.glowing = (button.character == c);
+        }
+        ascensionEditor.setLimits(0, GameUtilities.getMaxAscensionLevel(c.c)).setValue(screen.ascensionLevel);
+    }
+
+    public void setup(CustomModeScreen original) {
+        for (AbstractPlayer p : CardCrawlGame.characterManager.getAllCharacters()) {
+            characters.add(new PCLCustomRunCharacterButton(screen, p));
+        }
+
+        // Snag the modifiers from the original custom run screen, excluding endless/ending act because we handle this manually
+        ArrayList<CustomMod> modList = EUIClassUtils.getField(original, "modList");
+        modifierDropdown.setItems(EUIUtils.filter(modList, mod -> !MOD_ENDLESS.equals(mod.ID) && !MOD_THE_ENDING.equals(mod.ID)));
     }
 }

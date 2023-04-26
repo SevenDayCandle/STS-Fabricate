@@ -15,64 +15,34 @@ import pinacolada.utilities.ListSelection;
 
 import java.util.ArrayList;
 
-public class PermanentUpgradeEffect extends PCLEffectWithCallback<AbstractCard>
-{
+public class PermanentUpgradeEffect extends PCLEffectWithCallback<AbstractCard> {
     private GenericCondition<AbstractCard> filter;
     private ListSelection<AbstractCard> selection;
     private AbstractCard card;
 
-    public PermanentUpgradeEffect()
-    {
+    public PermanentUpgradeEffect() {
         super(0.2f, true);
     }
 
-    public PermanentUpgradeEffect setFilter(FuncT1<Boolean, AbstractCard> filter)
-    {
-        this.filter = GenericCondition.fromT1(filter);
-
-        return this;
-    }
-
-    public <S> PermanentUpgradeEffect setFilter(S state, FuncT2<Boolean, S, AbstractCard> filter)
-    {
-        this.filter = GenericCondition.fromT2(filter, state);
-
-        return this;
-    }
-
-    public PermanentUpgradeEffect setSelection(ListSelection<AbstractCard> selection)
-    {
-        this.selection = selection;
-
-        return this;
+    @Override
+    public void render(SpriteBatch sb) {
     }
 
     @Override
-    public void render(SpriteBatch sb)
-    {
+    public void dispose() {
     }
 
     @Override
-    public void dispose()
-    {
-    }
-
-    @Override
-    protected void firstUpdate()
-    {
+    protected void firstUpdate() {
         final ArrayList<AbstractCard> upgradableCards = new ArrayList<>();
-        for (AbstractCard c : player.masterDeck.group)
-        {
-            if (c.canUpgrade() && filter.check(c))
-            {
+        for (AbstractCard c : player.masterDeck.group) {
+            if (c.canUpgrade() && filter.check(c)) {
                 upgradableCards.add(c);
             }
         }
 
-        if (upgradableCards.size() > 0)
-        {
-            if (selection == null)
-            {
+        if (upgradableCards.size() > 0) {
+            if (selection == null) {
                 selection = ListSelection.random(AbstractDungeon.miscRng);
             }
 
@@ -89,11 +59,27 @@ public class PermanentUpgradeEffect extends PCLEffectWithCallback<AbstractCard>
     }
 
     @Override
-    protected void updateInternal(float deltaTime)
-    {
-        if (tickDuration(deltaTime))
-        {
+    protected void updateInternal(float deltaTime) {
+        if (tickDuration(deltaTime)) {
             complete(card);
         }
+    }
+
+    public <S> PermanentUpgradeEffect setFilter(S state, FuncT2<Boolean, S, AbstractCard> filter) {
+        this.filter = GenericCondition.fromT2(filter, state);
+
+        return this;
+    }
+
+    public PermanentUpgradeEffect setFilter(FuncT1<Boolean, AbstractCard> filter) {
+        this.filter = GenericCondition.fromT1(filter);
+
+        return this;
+    }
+
+    public PermanentUpgradeEffect setSelection(ListSelection<AbstractCard> selection) {
+        this.selection = selection;
+
+        return this;
     }
 }

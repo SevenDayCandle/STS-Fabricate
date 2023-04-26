@@ -21,8 +21,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 // Copied and modified from STS-AnimatorMod
-public class AbstractDungeonPatches
-{
+public class AbstractDungeonPatches {
 /*    @SpirePatch(clz = AbstractDungeon.class, method = "getEvent", paramtypez = Random.class)
     public static class AbstractDungeonPatches_GetEvent
     {
@@ -42,23 +41,17 @@ public class AbstractDungeonPatches
     }*/
 
     @SpirePatch(clz = AbstractDungeon.class, method = "dungeonTransitionSetup")
-    public static class AbstractDungeonPatches_DungeonTransitionSetup
-    {
+    public static class AbstractDungeonPatches_DungeonTransitionSetup {
         @SpirePostfixPatch
-        public static void postfix()
-        {
+        public static void postfix() {
             AbstractPlayer.PlayerClass pClass = GameUtilities.getPlayerClass();
-            if (GameUtilities.isPCLPlayerClass(pClass))
-            {
-                PCLResources<?,?,?,?> resources = PGR.getResources(pClass);
+            if (GameUtilities.isPCLPlayerClass(pClass)) {
+                PCLResources<?, ?, ?, ?> resources = PGR.getResources(pClass);
                 PCLCardData bane = resources.getAscendersBane();
-                if (bane != null)
-                {
+                if (bane != null) {
                     final ArrayList<AbstractCard> cards = AbstractDungeon.player.masterDeck.group;
-                    for (int i = 0; i < cards.size(); i++)
-                    {
-                        if (cards.get(i).cardID.equals(AscendersBane.ID))
-                        {
+                    for (int i = 0; i < cards.size(); i++) {
+                        if (cards.get(i).cardID.equals(AscendersBane.ID)) {
                             cards.set(i, bane.makeCopyFromLibrary(0));
                             UnlockTracker.markCardAsSeen(bane.ID);
                         }
@@ -70,16 +63,12 @@ public class AbstractDungeonPatches
     }
 
     @SpirePatch(clz = AbstractDungeon.class, method = "addCurseCards", optional = true)
-    public static class AbstractDungeonPatches_AddCurseCards
-    {
+    public static class AbstractDungeonPatches_AddCurseCards {
         @SpirePrefixPatch
-        public static SpireReturn prefix()
-        {
-            for (Map.Entry<String, AbstractCard> entry : CardLibrary.cards.entrySet())
-            {
+        public static SpireReturn prefix() {
+            for (Map.Entry<String, AbstractCard> entry : CardLibrary.cards.entrySet()) {
                 AbstractCard c = entry.getValue();
-                if (c.type == AbstractCard.CardType.CURSE && c.rarity != AbstractCard.CardRarity.SPECIAL)
-                {
+                if (c.type == AbstractCard.CardType.CURSE && c.rarity != AbstractCard.CardRarity.SPECIAL) {
                     AbstractDungeon.curseCardPool.addToTop(c);
                 }
             }
@@ -89,18 +78,13 @@ public class AbstractDungeonPatches
     }
 
     @SpirePatch(clz = AbstractDungeon.class, method = "onModifyPower", optional = true)
-    public static class AbstractDungeonPatches_OnModifyPower
-    {
+    public static class AbstractDungeonPatches_OnModifyPower {
         @SpireInstrumentPatch
-        public static ExprEditor instrument()
-        {
-            return new ExprEditor()
-            {
+        public static ExprEditor instrument() {
+            return new ExprEditor() {
                 @Override
-                public void edit(MethodCall m) throws CannotCompileException
-                {
-                    if (m.getMethodName().equals("hasPower"))
-                    {
+                public void edit(MethodCall m) throws CannotCompileException {
+                    if (m.getMethodName().equals("hasPower")) {
                         //onModifyPower checks if the player has focus to update orbs, it doesn't update them if focus is reduced to 0...
                         m.replace("$_ = true;");
                     }
@@ -111,21 +95,17 @@ public class AbstractDungeonPatches
 
     // The vanilla GetRandomCard from AbstractDungeon does an infinite loop (e.g. in the shop) if there are no uncommon and rare power cards in the pool...
     @SpirePatch(clz = AbstractDungeon.class, method = "getCardFromPool", optional = true)
-    public static class AbstractDungeonPatches_GetCardFromPool
-    {
+    public static class AbstractDungeonPatches_GetCardFromPool {
         @SpirePrefixPatch
-        public static SpireReturn<AbstractCard> prefix(AbstractCard.CardRarity rarity, AbstractCard.CardType type, boolean useRng)
-        {
+        public static SpireReturn<AbstractCard> prefix(AbstractCard.CardRarity rarity, AbstractCard.CardType type, boolean useRng) {
             return SpireReturn.Return(PGR.dungeon.getRandomCard(rarity, type, useRng ? AbstractDungeon.cardRng : null, true));
         }
     }
 
     @SpirePatch(clz = AbstractDungeon.class, method = "getCard", paramtypez = {AbstractCard.CardRarity.class}, optional = true)
-    public static class AbstractDungeonPatches_GetRewardCards
-    {
+    public static class AbstractDungeonPatches_GetRewardCards {
         @SpirePrefixPatch
-        public static SpireReturn<AbstractCard> prefix(AbstractCard.CardRarity rarity)
-        {
+        public static SpireReturn<AbstractCard> prefix(AbstractCard.CardRarity rarity) {
             // If no suitable card is found, create a dummy card because the method will crash if no card is actually found
             AbstractCard found = PGR.dungeon.getRandomCard(rarity, AbstractDungeon.cardRng, true);
             return SpireReturn.Return(found != null ? found : new QuestionMark());
@@ -133,11 +113,9 @@ public class AbstractDungeonPatches
     }
 
     @SpirePatch(clz = AbstractDungeon.class, method = "getCard", paramtypez = {AbstractCard.CardRarity.class, Random.class}, optional = true)
-    public static class AbstractDungeonPatches_GetRewardCards2
-    {
+    public static class AbstractDungeonPatches_GetRewardCards2 {
         @SpirePrefixPatch
-        public static SpireReturn<AbstractCard> prefix(AbstractCard.CardRarity rarity, Random rng)
-        {
+        public static SpireReturn<AbstractCard> prefix(AbstractCard.CardRarity rarity, Random rng) {
             // If no suitable card is found, create a dummy card because the method will crash if no card is actually found
             AbstractCard found = PGR.dungeon.getRandomCard(rarity, rng, true);
             return SpireReturn.Return(found != null ? found : new QuestionMark());

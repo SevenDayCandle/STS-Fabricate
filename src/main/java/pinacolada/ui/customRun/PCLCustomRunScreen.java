@@ -28,12 +28,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttributesProvider
-{
+public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttributesProvider {
     public static final HashMap<String, AbstractCard.CardColor> COLOR_MOD_MAPPING = new HashMap<>();
-    protected CharacterOption currentOption;
-    protected String currentSeed = GameUtilities.EMPTY_STRING;
-    protected boolean initialized;
     protected final PCLCustomRunCanvas canvas;
     public HashSet<String> bannedCards = new HashSet<>();
     public HashSet<String> bannedRelics = new HashSet<>();
@@ -43,29 +39,27 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
     public boolean isEndless;
     public boolean isFinalActAvailable;
     public int ascensionLevel;
+    protected CharacterOption currentOption;
+    protected String currentSeed = GameUtilities.EMPTY_STRING;
+    protected boolean initialized;
 
-    public PCLCustomRunScreen()
-    {
+    public PCLCustomRunScreen() {
         canvas = new PCLCustomRunCanvas(this);
     }
 
     @Override
-    public int ascensionLevel()
-    {
+    public int ascensionLevel() {
         return ascensionLevel;
     }
 
     @Override
-    public void disableConfirm(boolean value)
-    {
+    public void disableConfirm(boolean value) {
         canvas.confirmButton.isDisabled = value;
     }
 
-    public void confirm()
-    {
+    public void confirm() {
         CardCrawlGame.chosenCharacter = currentOption != null ? currentOption.c.chosenClass : null;
-        if (CardCrawlGame.chosenCharacter == null)
-        {
+        if (CardCrawlGame.chosenCharacter == null) {
             CardCrawlGame.chosenCharacter = AbstractPlayer.PlayerClass.IRONCLAD;
         }
 
@@ -76,8 +70,7 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
         AbstractDungeon.isAscensionMode = this.ascensionLevel == 0;
         AbstractDungeon.ascensionLevel = this.ascensionLevel;
 
-        if (this.currentSeed.isEmpty())
-        {
+        if (this.currentSeed.isEmpty()) {
             long sourceTime = System.nanoTime();
             Random rng = new Random(sourceTime);
             Settings.seed = SeedHelper.generateUnoffensiveSeed(rng);
@@ -94,10 +87,72 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
         canvas.confirmButton.hide();
     }
 
-    public void initialize(CustomModeScreen screen)
-    {
-        if (!initialized)
-        {
+    public CardGroup getAllPossibleCards() {
+        CardGroup group = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
+        AbstractCard.CardColor color = currentOption.c.getCardColor();
+        HashMap<String, AbstractPlayer> moddedChars = new HashMap<>();
+
+        // Always include the player's color and the colorless colors
+        // Using CustomCardLibraryScreen card lists because those are already grouped by color
+        addCardsForGroup(group, color);
+        addColorlessCardsForGroup(group, color);
+
+        for (CustomMod mod : activeMods) {
+            // Diverse means that we put all possible cards into the pool
+            if (Diverse.ID.equals(mod.ID)) {
+                group.group.clear();
+                for (CardGroup cGroup : CustomCardLibraryScreen.CardLists.values()) {
+                    for (AbstractCard c : cGroup.group) {
+                        group.group.add(c.makeCopy());
+                    }
+                }
+                break;
+            }
+            else {
+                AbstractCard.CardColor foundColor = COLOR_MOD_MAPPING.get(mod.ID);
+                if (foundColor != null && color != foundColor) {
+                    addCardsForGroup(group, foundColor);
+                }
+            }
+        }
+        return group;
+    }
+
+    private void addCardsForGroup(CardGroup group, AbstractCard.CardColor color) {
+        addCardsFromGroup(group, color, c -> c.rarity != AbstractCard.CardRarity.SPECIAL);
+        if (allowCustomCards) {
+            for (PCLCustomCardSlot slot : PCLCustomCardSlot.getCards(color)) {
+                if (AbstractCard.CardRarity.valueOf(slot.rarity) != AbstractCard.CardRarity.SPECIAL) {
+                    group.group.add(slot.getBuilder(0).createImplWithForms(false));
+                }
+            }
+        }
+    }
+
+    private void addColorlessCardsForGroup(CardGroup group, AbstractCard.CardColor color) {
+        PCLResources<?, ?, ?, ?> resources = PGR.getResources(color);
+        addCardsFromGroup(group, AbstractCard.CardColor.COLORLESS, c -> resources.containsColorless(c) && c.rarity != AbstractCard.CardRarity.SPECIAL);
+        addCardsFromGroup(group, AbstractCard.CardColor.CURSE, c -> resources.containsColorless(c) && c.rarity != AbstractCard.CardRarity.SPECIAL);
+
+        if (allowCustomCards) {
+            for (PCLCustomCardSlot slot : PCLCustomCardSlot.getCards(AbstractCard.CardColor.COLORLESS)) {
+                if (AbstractCard.CardRarity.valueOf(slot.rarity) != AbstractCard.CardRarity.SPECIAL) {
+                    group.group.add(slot.getBuilder(0).createImplWithForms(false));
+                }
+            }
+        }
+    }
+
+    private void addCardsFromGroup(CardGroup group, AbstractCard.CardColor color, FuncT1<Boolean, AbstractCard> evalFunc) {
+        for (AbstractCard c : CustomCardLibraryScreen.CardLists.get(color).group) {
+            if (evalFunc.invoke(c)) {
+                group.group.add(c.makeSameInstanceOf());
+            }
+        }
+    }
+
+    public void initialize(CustomModeScreen screen) {
+        if (!initialized) {
             canvas.setup(screen);
             // Custom color mappings need to be handled in BaseModPatches_PublishAddCustomModeMods
             COLOR_MOD_MAPPING.put(RedCards.ID, AbstractCard.CardColor.RED);
@@ -112,136 +167,44 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
         canvas.resetPositions();
     }
 
-    public void open()
-    {
+    public void setCharacter(CharacterOption c) {
+        this.currentOption = c;
+        canvas.setCharacter(c);
+    }
+
+    public void open() {
         canvas.open();
-        if (!currentSeed.isEmpty())
-        {
+        if (!currentSeed.isEmpty()) {
             canvas.seedInput.setTextAndCommit(currentSeed);
         }
-        else
-        {
+        else {
             Settings.seed = null;
             Settings.specialSeed = null;
         }
     }
 
-    public void updateImpl()
-    {
+    public void renderImpl(SpriteBatch sb) {
+        canvas.renderImpl(sb);
+    }
+
+    public void updateImpl() {
         super.updateImpl();
         canvas.updateImpl();
     }
 
-    public void renderImpl(SpriteBatch sb)
-    {
-        canvas.renderImpl(sb);
-    }
-
-    public void setAscension(int i)
-    {
+    public void setAscension(int i) {
         this.ascensionLevel = i;
         canvas.setAscension(i);
     }
 
-    public void setCharacter(CharacterOption c)
-    {
-        this.currentOption = c;
-        canvas.setCharacter(c);
-    }
-
-    public void setSeed(String s)
-    {
-        try
-        {
+    public void setSeed(String s) {
+        try {
             SeedHelper.setSeed(s);
         }
-        catch (NumberFormatException var2)
-        {
+        catch (NumberFormatException var2) {
             Settings.seed = 9223372036854775807L;
         }
         this.currentSeed = SeedHelper.getUserFacingSeedString();
         canvas.seedInput.setLabel(this.currentSeed);
-    }
-
-    public CardGroup getAllPossibleCards()
-    {
-        CardGroup group = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
-        AbstractCard.CardColor color = currentOption.c.getCardColor();
-        HashMap<String, AbstractPlayer> moddedChars = new HashMap<>();
-
-        // Always include the player's color and the colorless colors
-        // Using CustomCardLibraryScreen card lists because those are already grouped by color
-        addCardsForGroup(group, color);
-        addColorlessCardsForGroup(group, color);
-
-        for (CustomMod mod : activeMods)
-        {
-            // Diverse means that we put all possible cards into the pool
-            if (Diverse.ID.equals(mod.ID))
-            {
-                group.group.clear();
-                for (CardGroup cGroup : CustomCardLibraryScreen.CardLists.values())
-                {
-                    for (AbstractCard c : cGroup.group)
-                    {
-                        group.group.add(c.makeCopy());
-                    }
-                }
-                break;
-            }
-            else
-            {
-                AbstractCard.CardColor foundColor = COLOR_MOD_MAPPING.get(mod.ID);
-                if (foundColor != null && color != foundColor)
-                {
-                    addCardsForGroup(group, foundColor);
-                }
-            }
-        }
-        return group;
-    }
-
-    private void addColorlessCardsForGroup(CardGroup group, AbstractCard.CardColor color)
-    {
-        PCLResources<?,?,?,?> resources = PGR.getResources(color);
-        addCardsFromGroup(group, AbstractCard.CardColor.COLORLESS, c -> resources.containsColorless(c) && c.rarity != AbstractCard.CardRarity.SPECIAL);
-        addCardsFromGroup(group, AbstractCard.CardColor.CURSE, c -> resources.containsColorless(c) && c.rarity != AbstractCard.CardRarity.SPECIAL);
-
-        if (allowCustomCards)
-        {
-            for (PCLCustomCardSlot slot : PCLCustomCardSlot.getCards(AbstractCard.CardColor.COLORLESS))
-            {
-                if (AbstractCard.CardRarity.valueOf(slot.rarity) != AbstractCard.CardRarity.SPECIAL)
-                {
-                    group.group.add(slot.getBuilder(0).createImplWithForms(false));
-                }
-            }
-        }
-    }
-
-    private void addCardsForGroup(CardGroup group, AbstractCard.CardColor color)
-    {
-        addCardsFromGroup(group, color, c -> c.rarity != AbstractCard.CardRarity.SPECIAL);
-        if (allowCustomCards)
-        {
-            for (PCLCustomCardSlot slot : PCLCustomCardSlot.getCards(color))
-            {
-                if (AbstractCard.CardRarity.valueOf(slot.rarity) != AbstractCard.CardRarity.SPECIAL)
-                {
-                    group.group.add(slot.getBuilder(0).createImplWithForms(false));
-                }
-            }
-        }
-    }
-
-    private void addCardsFromGroup(CardGroup group, AbstractCard.CardColor color, FuncT1<Boolean, AbstractCard> evalFunc)
-    {
-        for (AbstractCard c : CustomCardLibraryScreen.CardLists.get(color).group)
-        {
-            if (evalFunc.invoke(c))
-            {
-                group.group.add(c.makeSameInstanceOf());
-            }
-        }
     }
 }

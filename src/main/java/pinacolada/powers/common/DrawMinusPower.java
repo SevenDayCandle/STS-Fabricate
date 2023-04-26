@@ -7,12 +7,10 @@ import com.megacrit.cardcrawl.powers.DrawReductionPower;
 import pinacolada.powers.PCLPower;
 import pinacolada.resources.pcl.PCLCoreTooltips;
 
-public class DrawMinusPower extends PCLPower
-{
+public class DrawMinusPower extends PCLPower {
     public static final String POWER_ID = createFullID(DrawMinusPower.class);
 
-    public DrawMinusPower(AbstractCreature owner, int amount)
-    {
+    public DrawMinusPower(AbstractCreature owner, int amount) {
         super(owner, POWER_ID);
         this.powerStrings = CardCrawlGame.languagePack.getPowerStrings(DrawReductionPower.POWER_ID);
         this.loadRegion(PCLCoreTooltips.ICON_NEXT_TURN_DRAW_LESS);
@@ -21,15 +19,13 @@ public class DrawMinusPower extends PCLPower
     }
 
     @Override
-    public void atStartOfTurnPostDraw()
-    {
+    public void atStartOfTurnPostDraw() {
         super.atStartOfTurnPostDraw();
         removePower();
     }
 
     @Override
-    protected void onAmountChanged(int previousAmount, int difference)
-    {
+    protected void onAmountChanged(int previousAmount, int difference) {
         AbstractDungeon.player.gameHandSize -= difference;
 
         super.onAmountChanged(previousAmount, difference);

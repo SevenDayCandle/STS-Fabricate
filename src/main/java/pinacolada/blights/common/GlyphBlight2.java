@@ -7,22 +7,18 @@ import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
 @VisibleBlight
-public class GlyphBlight2 extends AbstractGlyphBlight
-{
+public class GlyphBlight2 extends AbstractGlyphBlight {
     public static final String ID = createFullID(GlyphBlight2.class);
 
-    public GlyphBlight2()
-    {
+    public GlyphBlight2() {
         super(ID, PGR.config.ascensionGlyph2, PCLAbstractPlayerData.ASCENSION_GLYPH1_UNLOCK, PCLAbstractPlayerData.ASCENSION_GLYPH1_LEVEL_STEP, 10, 5);
     }
 
     @Override
-    public void atBattleStart()
-    {
+    public void atBattleStart() {
         super.atBattleStart();
 
-        for (AbstractMonster mo : GameUtilities.getEnemies(true))
-        {
+        for (AbstractMonster mo : GameUtilities.getEnemies(true)) {
             mo.increaseMaxHp(Math.max(1, mo.maxHealth * getPotency() / 100), true);
         }
     }

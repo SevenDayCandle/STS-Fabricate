@@ -19,218 +19,85 @@ import pinacolada.utilities.GameUtilities;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class SummonPool extends EUIBase
-{
+public class SummonPool extends EUIBase {
     public static int BASE_LIMIT = 3;
     public static float OFFSET = scale(120);
     public DamageMode damageMode = DamageMode.Half;
     public ArrayList<PCLCardAlly> summons = new ArrayList<>();
     public HashMap<AbstractCreature, AbstractCreature> assignedTargets = new HashMap<>();
 
-    public void initialize()
-    {
-        summons.clear();
-        assignedTargets.clear();
-
-        if (AbstractDungeon.player != null)
-        {
-            for (int i = 0; i < BASE_LIMIT; i++)
-            {
-                summons.add(addSummon(i));
-            }
-        }
-    }
-
-    protected PCLCardAlly addSummon(int i)
-    {
-        float dist = OFFSET + BASE_LIMIT * 10.0F * Settings.scale;
-        float angle = 100.0F + BASE_LIMIT * 12.0F;
-        float offsetAngle = angle / 2.0F;
-        angle *= i / (BASE_LIMIT - 1.0F);
-        angle += 90.0F - offsetAngle;
-        float x = dist * MathUtils.cosDeg(angle) + AbstractDungeon.player.drawX;
-        float y = dist * MathUtils.sinDeg(angle) + AbstractDungeon.player.drawY + AbstractDungeon.player.hb_h / 2.0F;
-        return new PCLCardAlly(x, y);
-    }
-
-    public void add(int times)
-    {
+    public void add(int times) {
         float baseX = 0;
         float baseY = 0;
-        if (AbstractDungeon.player != null)
-        {
+        if (AbstractDungeon.player != null) {
             baseX = AbstractDungeon.player.drawX;
             baseY = AbstractDungeon.player.drawY;
         }
-        for (int i = 0; i < times; i++)
-        {
+        for (int i = 0; i < times; i++) {
             summons.add(new PCLCardAlly(baseX + (times + 3 + summons.size()) * OFFSET, baseY));
         }
     }
 
-    public void applyPowers()
-    {
-        for (PCLCardAlly ally : summons)
-        {
-            if (ally.hasCard())
-            {
+    public void applyPowers() {
+        for (PCLCardAlly ally : summons) {
+            if (ally.hasCard()) {
                 ally.applyPowers();
             }
         }
     }
 
-    public void clear()
-    {
+    @Deprecated
+    public void assignMonsterTargets() {
+        for (AbstractMonster mo : GameUtilities.getEnemies(true)) {
+            assignedTargets.put(mo, getRightmostTarget());
+        }
+    }
+
+    public AbstractCreature getRightmostTarget() {
+        for (int i = summons.size() - 1; i >= 0; i--) {
+            PCLCardAlly summon = summons.get(i);
+            if (summon.hasCard()) {
+                return summon;
+            }
+        }
+        return AbstractDungeon.player;
+    }
+
+    public void clear() {
         summons.clear();
     }
 
-    public ArrayList<AbstractMonster> getSummons(boolean activeOnly)
-    {
-        ArrayList<AbstractMonster> returned = new ArrayList<>();
-        if (activeOnly)
-        {
-            for (PCLCardAlly a : summons)
-            {
-                if (a.hasCard())
-                {
-                    returned.add(a);
-                }
-            }
-        }
-        else
-        {
-            returned.addAll(summons);
-        }
-        return returned;
-    }
-
-    @Override
-    public void updateImpl()
-    {
-        // Update empty animation independently so alpha is the same for all slots
-        PCLCardAlly.emptyAnimation.update(EUI.delta(), 0, 0);
-        for (PCLCardAlly ally : summons)
-        {
-            ally.update();
-        }
-    }
-
-    @Override
-    public void renderImpl(SpriteBatch sb)
-    {
-        for (PCLCardAlly ally : summons)
-        {
-            ally.render(sb);
-        }
-    }
-
-    public void onStartOfTurn()
-    {
-        assignedTargets.clear();
-        for (PCLCardAlly ally : summons)
-        {
-            ally.loseBlock();
-            ally.applyStartOfTurnPowers();
-            if (ally.priority == DelayTiming.StartOfTurnFirst)
-            {
-                PCLActions.last.triggerAlly(ally, false);
-            }
-        }
-    }
-
-    public void onStartOfTurnPostDraw()
-    {
-        for (PCLCardAlly ally : summons)
-        {
-            ally.applyStartOfTurnPostDrawPowers();
-            if (ally.priority == DelayTiming.StartOfTurnLast)
-            {
-                PCLActions.last.triggerAlly(ally, false);
-            }
-        }
-    }
-
-    public void onEndOfTurnFirst()
-    {
-        for (PCLCardAlly ally : summons)
-        {
-            if (ally.priority == DelayTiming.EndOfTurnFirst)
-            {
-                PCLActions.last.triggerAlly(ally, false);
-            }
-        }
-    }
-
-    public void onEndOfTurnLast()
-    {
-        for (PCLCardAlly ally : summons)
-        {
-            if (ally.priority == DelayTiming.EndOfTurnLast)
-            {
-                PCLActions.last.triggerAlly(ally);
-            }
-        }
-    }
-
-    public void onEndOfRound()
-    {
-        for (PCLCardAlly ally : summons)
-        {
-            ally.atEndOfRound();
-        }
-    }
-
-    public void onBattleEnd()
-    {
-        // TODO end of battle checks for cards
-        for (PCLCardAlly ally : summons)
-        {
-            ally.releaseCard();
-        }
-    }
-
-    public HashMap<AbstractCreature, Integer> estimateDamage(int damageAmount)
-    {
+    public HashMap<AbstractCreature, Integer> estimateDamage(int damageAmount) {
         final HashMap<AbstractCreature, Integer> estimatedMap = new HashMap<>();
         int finalResult = countDamage(damageAmount, (ally, amount) -> {
-            if (amount > 0)
-            {
+            if (amount > 0) {
                 estimatedMap.put(ally, amount);
             }
         });
-        if (finalResult > 0)
-        {
+        if (finalResult > 0) {
             estimatedMap.put(AbstractDungeon.player, finalResult);
         }
 
         return estimatedMap;
     }
 
-    public int tryDamage(DamageInfo info, int damageAmount)
-    {
-        return countDamage(damageAmount, (ally, amount) -> ally.damage(new DamageInfo(info.owner, amount, info.type)));
-    }
-
-    /** Returns the amount of damage that the player should be receiving after factoring in allies */
-    public int countDamage(int damageAmount, ActionT2<PCLCardAlly, Integer> onAllyAction)
-    {
+    /**
+     * Returns the amount of damage that the player should be receiving after factoring in allies
+     */
+    public int countDamage(int damageAmount, ActionT2<PCLCardAlly, Integer> onAllyAction) {
         int leftover = damageAmount;
         int remainder = 0;
 
-        if (damageMode == DamageMode.Half)
-        {
+        if (damageMode == DamageMode.Half) {
             remainder = leftover / 2;
             leftover -= remainder;
         }
 
-        switch (damageMode)
-        {
+        switch (damageMode) {
             case Half:
             case Full:
-                for (PCLCardAlly ally : summons)
-                {
-                    if (leftover > 0 && ally.hasCard())
-                    {
+                for (PCLCardAlly ally : summons) {
+                    if (leftover > 0 && ally.hasCard()) {
                         final int amount = Math.min(leftover, ally.currentHealth);
                         onAllyAction.invoke(ally, amount);
                         leftover -= amount;
@@ -241,13 +108,10 @@ public class SummonPool extends EUIBase
                 int livingCount = 1 + EUIUtils.count(summons, PCLCardAlly::hasCard);
                 int cut = leftover / livingCount;
                 leftover = leftover - cut * (livingCount - 1);
-                for (PCLCardAlly ally : summons)
-                {
-                    if (ally.hasCard())
-                    {
+                for (PCLCardAlly ally : summons) {
+                    if (ally.hasCard()) {
                         int amount = cut - ally.currentHealth;
-                        if (amount > 0)
-                        {
+                        if (amount > 0) {
                             leftover += amount;
                         }
                         onAllyAction.invoke(ally, cut);
@@ -258,35 +122,117 @@ public class SummonPool extends EUIBase
         return leftover + remainder;
     }
 
-    public AbstractCreature getTarget(AbstractCreature mo)
-    {
+    public ArrayList<AbstractMonster> getSummons(boolean activeOnly) {
+        ArrayList<AbstractMonster> returned = new ArrayList<>();
+        if (activeOnly) {
+            for (PCLCardAlly a : summons) {
+                if (a.hasCard()) {
+                    returned.add(a);
+                }
+            }
+        }
+        else {
+            returned.addAll(summons);
+        }
+        return returned;
+    }
+
+    public AbstractCreature getTarget(AbstractCreature mo) {
         return assignedTargets.containsKey(mo) ? assignedTargets.get(mo) : AbstractDungeon.player;
     }
 
-    @Deprecated
-    public void assignMonsterTargets()
-    {
-        for (AbstractMonster mo : GameUtilities.getEnemies(true))
-        {
-            assignedTargets.put(mo, getRightmostTarget());
-        }
-    }
+    public void initialize() {
+        summons.clear();
+        assignedTargets.clear();
 
-    public AbstractCreature getRightmostTarget()
-    {
-        for (int i = summons.size() - 1; i >= 0; i--)
-        {
-            PCLCardAlly summon = summons.get(i);
-            if (summon.hasCard())
-            {
-                return summon;
+        if (AbstractDungeon.player != null) {
+            for (int i = 0; i < BASE_LIMIT; i++) {
+                summons.add(addSummon(i));
             }
         }
-        return AbstractDungeon.player;
     }
 
-    public enum DamageMode
-    {
+    protected PCLCardAlly addSummon(int i) {
+        float dist = OFFSET + BASE_LIMIT * 10.0F * Settings.scale;
+        float angle = 100.0F + BASE_LIMIT * 12.0F;
+        float offsetAngle = angle / 2.0F;
+        angle *= i / (BASE_LIMIT - 1.0F);
+        angle += 90.0F - offsetAngle;
+        float x = dist * MathUtils.cosDeg(angle) + AbstractDungeon.player.drawX;
+        float y = dist * MathUtils.sinDeg(angle) + AbstractDungeon.player.drawY + AbstractDungeon.player.hb_h / 2.0F;
+        return new PCLCardAlly(x, y);
+    }
+
+    public void onBattleEnd() {
+        // TODO end of battle checks for cards
+        for (PCLCardAlly ally : summons) {
+            ally.releaseCard();
+        }
+    }
+
+    public void onEndOfRound() {
+        for (PCLCardAlly ally : summons) {
+            ally.atEndOfRound();
+        }
+    }
+
+    public void onEndOfTurnFirst() {
+        for (PCLCardAlly ally : summons) {
+            if (ally.priority == DelayTiming.EndOfTurnFirst) {
+                PCLActions.last.triggerAlly(ally, false);
+            }
+        }
+    }
+
+    public void onEndOfTurnLast() {
+        for (PCLCardAlly ally : summons) {
+            if (ally.priority == DelayTiming.EndOfTurnLast) {
+                PCLActions.last.triggerAlly(ally);
+            }
+        }
+    }
+
+    public void onStartOfTurn() {
+        assignedTargets.clear();
+        for (PCLCardAlly ally : summons) {
+            ally.loseBlock();
+            ally.applyStartOfTurnPowers();
+            if (ally.priority == DelayTiming.StartOfTurnFirst) {
+                PCLActions.last.triggerAlly(ally, false);
+            }
+        }
+    }
+
+    public void onStartOfTurnPostDraw() {
+        for (PCLCardAlly ally : summons) {
+            ally.applyStartOfTurnPostDrawPowers();
+            if (ally.priority == DelayTiming.StartOfTurnLast) {
+                PCLActions.last.triggerAlly(ally, false);
+            }
+        }
+    }
+
+    @Override
+    public void renderImpl(SpriteBatch sb) {
+        for (PCLCardAlly ally : summons) {
+            ally.render(sb);
+        }
+    }
+
+    @Override
+    public void updateImpl() {
+        // Update empty animation independently so alpha is the same for all slots
+        PCLCardAlly.emptyAnimation.update(EUI.delta(), 0, 0);
+        for (PCLCardAlly ally : summons) {
+            ally.update();
+        }
+    }
+
+    public int tryDamage(DamageInfo info, int damageAmount) {
+        return countDamage(damageAmount, (ally, amount) -> ally.damage(new DamageInfo(info.owner, amount, info.type)));
+    }
+
+    public enum DamageMode {
         Full,
         Half,
         Distributed,

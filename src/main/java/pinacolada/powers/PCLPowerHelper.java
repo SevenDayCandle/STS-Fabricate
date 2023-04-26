@@ -33,12 +33,7 @@ import java.util.stream.Collectors;
 // Copied and modified from STS-AnimatorMod
 // TODO add color filtering
 @JsonAdapter(PCLPowerHelper.PCLPowerHelperAdapter.class)
-public class PCLPowerHelper implements TooltipProvider
-{
-    protected static final Map<String, PCLPowerHelper> ALL = new HashMap<>();
-    protected static final Map<String, PCLPowerHelper> CommonBuffs = new HashMap<>();
-    protected static final Map<String, PCLPowerHelper> CommonDebuffs = new HashMap<>();
-
+public class PCLPowerHelper implements TooltipProvider {
     public static final PCLPowerHelper Blinded = new PCLPowerHelper(BlindedPower.POWER_ID, PGR.core.tooltips.blinded, BlindedPower::new, Behavior.TurnBased, true, true, false);
     public static final PCLPowerHelper Bruised = new PCLPowerHelper(BruisedPower.POWER_ID, PGR.core.tooltips.bruised, BruisedPower::new, Behavior.TurnBased, true, true, false);
     public static final PCLPowerHelper Constricted = new PCLPowerHelper(ConstrictedPower.POWER_ID, PGR.core.tooltips.constricted, PCLConstrictedPower::new, Behavior.Permanent, true, true, false);
@@ -57,7 +52,6 @@ public class PCLPowerHelper implements TooltipProvider
     public static final PCLPowerHelper Slow = new PCLPowerHelper(SlowPower.POWER_ID, PGR.core.tooltips.slow, SlowPower::new, Behavior.Permanent, false, true, true);
     public static final PCLPowerHelper Vulnerable = new PCLPowerHelper(VulnerablePower.POWER_ID, PGR.core.tooltips.vulnerable, (o, s, a) -> new VulnerablePower(o, a, shouldExtend(o, s)), Behavior.TurnBased, true, true, true);
     public static final PCLPowerHelper Weak = new PCLPowerHelper(WeakPower.POWER_ID, PGR.core.tooltips.weak, (o, s, a) -> new WeakPower(o, a, shouldExtend(o, s)), Behavior.TurnBased, true, true, true);
-
     public static final PCLPowerHelper Artifact = new PCLPowerHelper(ArtifactPower.POWER_ID, PGR.core.tooltips.artifact, ArtifactPower::new, Behavior.Permanent, true, false, false);
     public static final PCLPowerHelper Blur = new PCLPowerHelper(BlurPower.POWER_ID, PGR.core.tooltips.blur, BlurPower::new, Behavior.TurnBased, true, false, false);
     public static final PCLPowerHelper Buffer = new PCLPowerHelper(BufferPower.POWER_ID, PGR.core.tooltips.buffer, BufferPower::new, Behavior.Permanent, true, false, false);
@@ -95,6 +89,9 @@ public class PCLPowerHelper implements TooltipProvider
     public static final PCLPowerHelper Vigor = new PCLPowerHelper(VigorPower.POWER_ID, PGR.core.tooltips.vigor, VigorPower::new, Behavior.Permanent, true, false, false);
     public static final PCLPowerHelper Vitality = new PCLPowerHelper(VitalityPower.POWER_ID, PGR.core.tooltips.vitality, VitalityPower::new, Behavior.Permanent, true, false, false);
     public static final PCLPowerHelper Warding = new PCLPowerHelper(WardingPower.POWER_ID, PGR.core.tooltips.warding, WardingPower::new, Behavior.Permanent, true, false, false);
+    protected static final Map<String, PCLPowerHelper> ALL = new HashMap<>();
+    protected static final Map<String, PCLPowerHelper> CommonBuffs = new HashMap<>();
+    protected static final Map<String, PCLPowerHelper> CommonDebuffs = new HashMap<>();
     public final String ID;
     public final Behavior endTurnBehavior;
     public final boolean isCommon;
@@ -104,8 +101,7 @@ public class PCLPowerHelper implements TooltipProvider
     protected final FuncT3<AbstractPower, AbstractCreature, AbstractCreature, Integer> constructorT3;
     public EUITooltip tooltip;
 
-    public PCLPowerHelper(String powerID, EUITooltip tooltip, FuncT2<AbstractPower, AbstractCreature, Integer> constructor, Behavior endTurnBehavior, boolean isCommon, boolean isDebuff, boolean isPercentageBonus)
-    {
+    public PCLPowerHelper(String powerID, EUITooltip tooltip, FuncT2<AbstractPower, AbstractCreature, Integer> constructor, Behavior endTurnBehavior, boolean isCommon, boolean isDebuff, boolean isPercentageBonus) {
         this.ID = powerID;
         this.tooltip = tooltip;
         this.constructorT2 = constructor;
@@ -118,8 +114,19 @@ public class PCLPowerHelper implements TooltipProvider
         registerHelper(powerID);
     }
 
-    public PCLPowerHelper(String powerID, EUITooltip tooltip, FuncT3<AbstractPower, AbstractCreature, AbstractCreature, Integer> constructor, Behavior endTurnBehavior, boolean isCommon, boolean isDebuff, boolean isPercentageBonus)
-    {
+    protected void registerHelper(String powerID) {
+        ALL.putIfAbsent(powerID, this);
+        if (isCommon) {
+            if (isDebuff) {
+                CommonDebuffs.putIfAbsent(powerID, this);
+            }
+            else {
+                CommonBuffs.putIfAbsent(powerID, this);
+            }
+        }
+    }
+
+    public PCLPowerHelper(String powerID, EUITooltip tooltip, FuncT3<AbstractPower, AbstractCreature, AbstractCreature, Integer> constructor, Behavior endTurnBehavior, boolean isCommon, boolean isDebuff, boolean isPercentageBonus) {
         this.ID = powerID;
         this.tooltip = tooltip;
         this.constructorT2 = null;
@@ -132,89 +139,56 @@ public class PCLPowerHelper implements TooltipProvider
         registerHelper(powerID);
     }
 
-    protected void registerHelper(String powerID)
-    {
-        ALL.putIfAbsent(powerID, this);
-        if (isCommon)
-        {
-            if (isDebuff)
-            {
-                CommonDebuffs.putIfAbsent(powerID, this);
-            }
-            else
-            {
-                CommonBuffs.putIfAbsent(powerID, this);
-            }
-        }
-    }
-
-    public static ArrayList<PCLPowerHelper> commonBuffs()
-    {
-        return new ArrayList<>(CommonBuffs.values());
-    }
-
-    public static ArrayList<PCLPowerHelper> commonDebuffs()
-    {
-        return new ArrayList<>(CommonDebuffs.values());
-    }
-
-    public static PCLPowerHelper get(String powerID)
-    {
+    public static PCLPowerHelper get(String powerID) {
         return ALL.get(powerID);
     }
 
-    public static PCLPowerHelper randomBuff()
-    {
+    public static PCLPowerHelper randomBuff() {
         return GameUtilities.getRandomElement(commonBuffs());
     }
 
-    public static PCLPowerHelper randomDebuff()
-    {
+    public static ArrayList<PCLPowerHelper> commonBuffs() {
+        return new ArrayList<>(CommonBuffs.values());
+    }
+
+    public static PCLPowerHelper randomDebuff() {
         return GameUtilities.getRandomElement(commonDebuffs());
     }
 
-    private static AbstractPower setAmount(AbstractPower original, Integer amount)
-    {
+    public static ArrayList<PCLPowerHelper> commonDebuffs() {
+        return new ArrayList<>(CommonDebuffs.values());
+    }
+
+    private static AbstractPower setAmount(AbstractPower original, Integer amount) {
         original.amount = amount;
         return original;
     }
 
-    public static boolean shouldExtend(AbstractCreature o, AbstractCreature s)
-    {
+    public static boolean shouldExtend(AbstractCreature o, AbstractCreature s) {
         return GameUtilities.isMonster(s) || GameUtilities.isPlayer(o);
     }
 
-    public static Collection<PCLPowerHelper> sortedCommons()
-    {
+    public static Collection<PCLPowerHelper> sortedCommons() {
         return ALL.values().stream().sorted((a, b) -> StringUtils.compare(a.tooltip.title, b.tooltip.title)).filter(p -> p.isCommon).collect(Collectors.toList());
     }
 
-    public static Collection<PCLPowerHelper> sortedValues()
-    {
+    public static Collection<PCLPowerHelper> sortedValues() {
         return ALL.values().stream().sorted((a, b) -> StringUtils.compare(a.tooltip.title, b.tooltip.title)).collect(Collectors.toList());
     }
 
-    protected void applyPriority(AbstractPower po)
-    {
-        if (isPercentageBonus)
-        {
-            po.priority += 1;
-        }
+    public AbstractPower create(AbstractCreature owner, AbstractCreature source, int amount) {
+        return create(owner, source, amount, false);
     }
 
-    public AbstractPower create(AbstractCreature owner, AbstractCreature source, int amount, boolean temporary)
-    {
+    public AbstractPower create(AbstractCreature owner, AbstractCreature source, int amount, boolean temporary) {
         AbstractPower po = null;
-        if (constructorT2 != null)
-        {
+        if (constructorT2 != null) {
             po = constructorT2.invoke(owner, amount);
         }
-        else if (constructorT3 != null)
-        {
+        else if (constructorT3 != null) {
             po = constructorT3.invoke(owner, source, amount);
         }
-        else
-        {
+        else {
             EUIUtils.logError(this, "Do not create a PowerHelper with a null constructor.");
             return null;
         }
@@ -224,29 +198,26 @@ public class PCLPowerHelper implements TooltipProvider
         return temporary ? new TemporaryPower(owner, po) : po;
     }
 
-    public AbstractPower create(AbstractCreature owner, AbstractCreature source, int amount)
-    {
-        return create(owner, source, amount, false);
+    protected void applyPriority(AbstractPower po) {
+        if (isPercentageBonus) {
+            po.priority += 1;
+        }
     }
 
     @Override
-    public List<EUITooltip> getTips()
-    {
+    public List<EUITooltip> getTips() {
         return Collections.singletonList(tooltip);
     }
 
-    public enum Behavior
-    {
+    public enum Behavior {
         Permanent,
         SingleTurn,
         TurnBased,
     }
 
-    public static class PCLPowerHelperAdapter extends TypeAdapter<PCLPowerHelper>
-    {
+    public static class PCLPowerHelperAdapter extends TypeAdapter<PCLPowerHelper> {
         @Override
-        public void write(JsonWriter writer, PCLPowerHelper value) throws IOException
-        {
+        public void write(JsonWriter writer, PCLPowerHelper value) throws IOException {
             writer.value(value.ID);
         }
 

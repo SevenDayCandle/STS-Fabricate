@@ -16,46 +16,39 @@ import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.utilities.ListSelection;
 
 @VisibleSkill
-public class PMove_Retain extends PMove_Select<PField_CardCategory>
-{
+public class PMove_Retain extends PMove_Select<PField_CardCategory> {
     public static final PSkillData<PField_CardCategory> DATA =
             register(PMove_Retain.class, PField_CardCategory.class)
                     .setGroups(PCLCardGroupHelper.Hand)
                     .selfTarget()
                     .setExtra(0, DEFAULT_MAX);
 
-    public PMove_Retain()
-    {
+    public PMove_Retain() {
         this(1);
     }
 
-    public PMove_Retain(PSkillSaveData content)
-    {
-        super(DATA, content);
-    }
-
-    public PMove_Retain(int amount, PCLCardGroupHelper... h)
-    {
+    public PMove_Retain(int amount, PCLCardGroupHelper... h) {
         super(DATA, amount, h);
     }
 
+    public PMove_Retain(PSkillSaveData content) {
+        super(DATA, content);
+    }
+
     @Override
-    public EUITooltip getActionTooltip()
-    {
+    public String getSubText() {
+        return useParent ? TEXT.act_retain(getInheritedString()) :
+                fields.hasGroups() ? TEXT.act_retain(getAmountRawOrAllString(), fields.getFullCardString())
+                        : TEXT.act_retain(TEXT.subjects_thisCard);
+    }
+
+    @Override
+    public EUITooltip getActionTooltip() {
         return PGR.core.tooltips.retain;
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction()
-    {
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
         return RetainCards::new;
-    }
-
-    @Override
-    public String getSubText()
-    {
-        return useParent ? TEXT.act_retain(getInheritedString()) :
-                fields.hasGroups() ? TEXT.act_retain(getAmountRawOrAllString(), fields.getFullCardString())
-                : TEXT.act_retain(TEXT.subjects_thisCard);
     }
 }

@@ -9,36 +9,30 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUIUtils;
 import pinacolada.cards.base.tags.PCLCardTag;
-import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.dungeon.CombatManager;
+import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.skills.PSkill;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
 @AbstractCardModifier.SaveIgnore
-public class OverrideSkillModifier extends SkillModifier
-{
-    public static ArrayList<OverrideSkillModifier> getAll(AbstractCard c)
-    {
-        return EUIUtils.mapAsNonnull(CardModifierManager.modifiers(c), mod -> EUIUtils.safeCast(mod, OverrideSkillModifier.class));
-    }
-
-    public OverrideSkillModifier(String effectString)
-    {
+public class OverrideSkillModifier extends SkillModifier {
+    public OverrideSkillModifier(String effectString) {
         super(effectString);
     }
 
-    public OverrideSkillModifier(PSkill<?> effect)
-    {
+    public OverrideSkillModifier(PSkill<?> effect) {
         super(effect);
     }
 
+    public static ArrayList<OverrideSkillModifier> getAll(AbstractCard c) {
+        return EUIUtils.mapAsNonnull(CardModifierManager.modifiers(c), mod -> EUIUtils.safeCast(mod, OverrideSkillModifier.class));
+    }
+
     @Override
-    public String modifyDescription(String rawDescription, AbstractCard card)
-    {
-        if (card instanceof EditorCard)
-        {
+    public String modifyDescription(String rawDescription, AbstractCard card) {
+        if (card instanceof EditorCard) {
             return rawDescription;
         }
         return skill.getExportText();
@@ -46,10 +40,8 @@ public class OverrideSkillModifier extends SkillModifier
 
     // Logic for handling override is handled in AbstractCardPatches
     @Override
-    public void onUse(AbstractCard card, AbstractCreature target, UseCardAction action)
-    {
-        if (!(card instanceof EditorCard))
-        {
+    public void onUse(AbstractCard card, AbstractCreature target, UseCardAction action) {
+        if (!(card instanceof EditorCard)) {
             this.manualUse(card, AbstractDungeon.player, target);
         }
     }
@@ -58,20 +50,27 @@ public class OverrideSkillModifier extends SkillModifier
         skill.triggerOnDraw(card);
     }
 
-    public void onDiscard(AbstractCard card) {
-        skill.triggerOnDiscard(card);
-    }
-
     public void onExhausted(AbstractCard card) {
         skill.triggerOnExhaust(card);
     }
 
-    public void onPurged(AbstractCard card) {
-        skill.triggerOnPurge(card);
+    // For EditorCards, we can just clear their skills instead of having to rely on the patch to do things
+    // For unplayable cards like statuses, remove unplayable so the card can be played, and show a cost to make the energy requirement more clear
+    public void onInitialApplication(AbstractCard card) {
+        if (card instanceof EditorCard) {
+            ((EditorCard) card).clearSkills();
+            ((EditorCard) card).addUseMove(this.skill);
+        }
+        PCLCardTag.Unplayable.set(card, 0);
+        if (card.cost <= -2) {
+            GameUtilities.modifyCostForCombat(card, 0, false);
+        }
     }
 
-    public void onReshuffled(AbstractCard card, CardGroup group) {
-        skill.triggerOnReshuffle(card, group);
+    public void onRemove(AbstractCard card) {
+        if (card instanceof EditorCard) {
+            ((EditorCard) card).setup(null);
+        }
     }
 
     public void onOtherCardPlayed(AbstractCard card, AbstractCard otherCard, CardGroup group) {
@@ -83,30 +82,19 @@ public class OverrideSkillModifier extends SkillModifier
     }
 
     @Override
-    public AbstractCardModifier makeCopy()
-    {
+    public AbstractCardModifier makeCopy() {
         return new OverrideSkillModifier(serialized);
     }
 
-    // For EditorCards, we can just clear their skills instead of having to rely on the patch to do things
-    // For unplayable cards like statuses, remove unplayable so the card can be played, and show a cost to make the energy requirement more clear
-    public void onInitialApplication(AbstractCard card) {
-        if (card instanceof EditorCard)
-        {
-            ((EditorCard) card).clearSkills();
-            ((EditorCard) card).addUseMove(this.skill);
-        }
-        PCLCardTag.Unplayable.set(card, 0);
-        if (card.cost <= -2)
-        {
-            GameUtilities.modifyCostForCombat(card, 0, false);
-        }
+    public void onDiscard(AbstractCard card) {
+        skill.triggerOnDiscard(card);
     }
 
-    public void onRemove(AbstractCard card) {
-        if (card instanceof EditorCard)
-        {
-            ((EditorCard) card).setup(null);
-        }
+    public void onPurged(AbstractCard card) {
+        skill.triggerOnPurge(card);
+    }
+
+    public void onReshuffled(AbstractCard card, CardGroup group) {
+        skill.triggerOnReshuffle(card, group);
     }
 }

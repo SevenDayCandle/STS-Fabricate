@@ -19,47 +19,39 @@ import pinacolada.utilities.ListSelection;
 import java.util.List;
 
 @VisibleSkill
-public class PMod_SelectPerCard extends PMod_Do
-{
+public class PMod_SelectPerCard extends PMod_Do {
 
     public static final PSkillData<PField_CardCategory> DATA = register(PMod_SelectPerCard.class, PField_CardCategory.class)
             .selfTarget();
 
-    public PMod_SelectPerCard(PSkillSaveData content)
-    {
+    public PMod_SelectPerCard(PSkillSaveData content) {
         super(DATA, content);
     }
 
-    public PMod_SelectPerCard()
-    {
+    public PMod_SelectPerCard() {
         super(DATA);
     }
 
-    public PMod_SelectPerCard(int amount, PCLCardGroupHelper... groups)
-    {
+    public PMod_SelectPerCard(int amount, PCLCardGroupHelper... groups) {
         super(DATA, PCLCardTarget.None, amount, groups);
     }
 
-    public PMod_SelectPerCard(int amount, List<PCLCardGroupHelper> groups)
-    {
+    public PMod_SelectPerCard(int amount, List<PCLCardGroupHelper> groups) {
         super(DATA, PCLCardTarget.None, amount, groups.toArray(new PCLCardGroupHelper[]{}));
     }
 
     @Override
-    public EUITooltip getActionTooltip()
-    {
+    public EUITooltip getActionTooltip() {
         return PGR.core.tooltips.select;
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction()
-    {
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
         return SelectFromPile::new;
     }
 
     @Override
-    public String getParentString()
-    {
+    public String getParentString() {
         return EUIRM.strings.numNounPlace(getAmountRawOrAllString(), fields.getFullCardString(), TEXT.subjects_in(fields.getGroupString()));
     }
 }

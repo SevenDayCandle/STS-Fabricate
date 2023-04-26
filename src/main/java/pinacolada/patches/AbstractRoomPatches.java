@@ -5,24 +5,19 @@ import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import pinacolada.dungeon.CombatManager;
 
-public class AbstractRoomPatches
-{
+public class AbstractRoomPatches {
     @SpirePatch(clz = AbstractRoom.class, method = "endTurn")
-    public static class AbstractRoomPatches_EndTurn
-    {
+    public static class AbstractRoomPatches_EndTurn {
         @SpirePrefixPatch
-        public static void prefix(AbstractRoom __instance)
-        {
+        public static void prefix(AbstractRoom __instance) {
             CombatManager.atEndOfTurn(true);
         }
     }
 
     @SpirePatch(clz = AbstractRoom.class, method = "applyEndOfTurnPreCardPowers")
-    public static class AbstractRoomPatches_ApplyEndOfTurnPreCardPowers
-    {
+    public static class AbstractRoomPatches_ApplyEndOfTurnPreCardPowers {
         @SpirePrefixPatch
-        public static void prefix(AbstractRoom __instance)
-        {
+        public static void prefix(AbstractRoom __instance) {
             CombatManager.atEndOfTurnPreEndTurnCards(true);
         }
     }

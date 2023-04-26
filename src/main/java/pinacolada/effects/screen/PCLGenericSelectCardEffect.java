@@ -14,21 +14,18 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.List;
 
-public class PCLGenericSelectCardEffect extends PCLEffectWithCallback<AbstractCard>
-{
+public class PCLGenericSelectCardEffect extends PCLEffectWithCallback<AbstractCard> {
+    private final Color screenColor;
     private CardGroup cards;
     private EUICardGrid grid;
     private boolean draggingScreen;
     private boolean showTopPanelOnComplete;
-    private final Color screenColor;
 
-    public PCLGenericSelectCardEffect(List<? extends AbstractCard> cards)
-    {
+    public PCLGenericSelectCardEffect(List<? extends AbstractCard> cards) {
         this(GameUtilities.createCardGroup(cards));
     }
 
-    public PCLGenericSelectCardEffect(CardGroup cards)
-    {
+    public PCLGenericSelectCardEffect(CardGroup cards) {
         super(0.7f);
 
         this.cards = cards;
@@ -36,20 +33,17 @@ public class PCLGenericSelectCardEffect extends PCLEffectWithCallback<AbstractCa
         this.screenColor = Color.BLACK.cpy();
         this.screenColor.a = 0.8f;
 
-        if (GameUtilities.inGame())
-        {
+        if (GameUtilities.inGame()) {
             AbstractDungeon.overlayMenu.proceedButton.hide();
         }
 
-        if (cards.isEmpty())
-        {
+        if (cards.isEmpty()) {
             this.grid = new EUICardGrid().canDragScreen(false);
             complete();
             return;
         }
 
-        if (GameUtilities.isTopPanelVisible())
-        {
+        if (GameUtilities.isTopPanelVisible()) {
             showTopPanelOnComplete = true;
             GameUtilities.setTopPanelVisible(false);
         }
@@ -60,58 +54,49 @@ public class PCLGenericSelectCardEffect extends PCLEffectWithCallback<AbstractCa
                 .setOnCardClick(this::complete);
     }
 
-    public void refresh(CardGroup cards)
-    {
+    public void refresh(CardGroup cards) {
         this.cards = cards;
         this.grid = new EUICardGrid()
                 .canDragScreen(false)
                 .addCards(cards.group);
     }
 
-    public PCLGenericSelectCardEffect setStartingPosition(float x, float y)
-    {
-        for (AbstractCard c : cards.group)
-        {
-            c.current_x = x - (c.hb.width * 0.5f);
-            c.current_y = y - (c.hb.height * 0.5f);
-        }
-
-        return this;
-    }
-
     @Override
-    public void render(SpriteBatch sb)
-    {
+    public void render(SpriteBatch sb) {
         sb.setColor(this.screenColor);
         sb.draw(ImageMaster.WHITE_SQUARE_IMG, 0f, 0f, (float) Settings.WIDTH, (float) Settings.HEIGHT);
         grid.tryRender(sb);
     }
 
     @Override
-    protected void updateInternal(float deltaTime)
-    {
+    protected void updateInternal(float deltaTime) {
         grid.tryUpdate();
 
-        if (grid.isHovered() || grid.scrollBar.isDragging)
-        {
+        if (grid.isHovered() || grid.scrollBar.isDragging) {
             return;
         }
 
-        if (EUIInputManager.leftClick.isJustReleased() || EUIInputManager.rightClick.isJustReleased())
-        {
+        if (EUIInputManager.leftClick.isJustReleased() || EUIInputManager.rightClick.isJustReleased()) {
             complete();
         }
     }
 
     @Override
-    protected void complete()
-    {
+    protected void complete() {
         super.complete();
 
-        if (showTopPanelOnComplete)
-        {
+        if (showTopPanelOnComplete) {
             GameUtilities.setTopPanelVisible(true);
             showTopPanelOnComplete = false;
         }
+    }
+
+    public PCLGenericSelectCardEffect setStartingPosition(float x, float y) {
+        for (AbstractCard c : cards.group) {
+            c.current_x = x - (c.hb.width * 0.5f);
+            c.current_y = y - (c.hb.height * 0.5f);
+        }
+
+        return this;
     }
 }

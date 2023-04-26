@@ -8,8 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 // Copied and modified from STS-AnimatorMod
-public class PCLTextParser
-{
+public class PCLTextParser {
 
     public final boolean ignoreKeywords;
     public final ArrayList<ArrayList<PCLTextToken>> tokenLines = new ArrayList<>();
@@ -21,60 +20,56 @@ public class PCLTextParser
     protected int lineIndex;
     protected float scaleModifier;
 
-    public PCLTextParser()
-    {
+    public PCLTextParser() {
         this(false);
     }
 
-    public PCLTextParser(boolean ignoreKeywords)
-    {
+    public PCLTextParser(boolean ignoreKeywords) {
         this.ignoreKeywords = ignoreKeywords;
     }
 
-    protected void addLine()
-    {
-        tokenLines.add(new ArrayList<>());
-        lineIndex += 1;
-    }
-
-    protected void addToken(PCLTextToken token)
-    {
-        if (token.type == PCLTextTokenType.NewLine)
-        {
+    protected void addToken(PCLTextToken token) {
+        if (token.type == PCLTextTokenType.NewLine) {
             addLine();
         }
-        else
-        {
+        else {
             tokenLines.get(lineIndex).add(token);
         }
     }
 
-    protected void addTooltip(EUITooltip tooltip)
-    {
-        if (card != null && tooltip != null && tooltip.title != null && !card.tooltips.contains(tooltip))
-        {
+    protected void addLine() {
+        tokenLines.add(new ArrayList<>());
+        lineIndex += 1;
+    }
+
+    protected void addTooltip(EUITooltip tooltip) {
+        if (card != null && tooltip != null && tooltip.title != null && !card.tooltips.contains(tooltip)) {
             card.tooltips.add(tooltip);
         }
     }
 
-    protected boolean compareNext(int amount, char character)
-    {
+    protected boolean compareNext(int amount, char character) {
         final Character other = nextCharacter(amount);
-        if (other != null)
-        {
+        if (other != null) {
             return other == character;
         }
 
         return false;
     }
 
-    public List<PCLTextToken> getTokens()
-    {
+    protected Character nextCharacter(int amount) {
+        if (amount > remaining) {
+            return null;
+        }
+
+        return text.charAt(characterIndex + amount);
+    }
+
+    public List<PCLTextToken> getTokens() {
         return EUIUtils.flattenList(tokenLines);
     }
 
-    public void initialize(PCLCard card, String text)
-    {
+    public void initialize(PCLCard card, String text) {
         this.card = card;
         this.text = text;
         this.tokenLines.clear();
@@ -86,8 +81,7 @@ public class PCLTextParser
         this.lineIndex = 0;
 
         int amount = 0;
-        while (moveIndex(amount))
-        {
+        while (moveIndex(amount)) {
             this.character = this.text.charAt(characterIndex);
 
             // The order matters
@@ -108,22 +102,11 @@ public class PCLTextParser
 
     }
 
-    protected boolean moveIndex(int amount)
-    {
+    protected boolean moveIndex(int amount) {
         characterIndex += amount;
         remaining = text.length() - characterIndex - 1;
 
         return remaining >= 0;
-    }
-
-    protected Character nextCharacter(int amount)
-    {
-        if (amount > remaining)
-        {
-            return null;
-        }
-
-        return text.charAt(characterIndex + amount);
     }
 
 }

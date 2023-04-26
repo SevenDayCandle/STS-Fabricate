@@ -17,16 +17,14 @@ import com.megacrit.cardcrawl.vfx.combat.SmokingEmberEffect;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.SFX;
 
-public class MeteorFallEffect extends AbstractGameEffect
-{
+public class MeteorFallEffect extends AbstractGameEffect {
     private static final float DUR = 0.5f;
     private final float x;
     private final float y;
     private final AtlasRegion img;
     private boolean playedSound = false;
 
-    public MeteorFallEffect(float x, float y)
-    {
+    public MeteorFallEffect(float x, float y) {
         this.img = ImageMaster.VERTICAL_IMPACT;
         this.x = x - (float) this.img.packedWidth / 2f;
         this.y = y - (float) this.img.packedHeight * 0.01f;
@@ -38,31 +36,20 @@ public class MeteorFallEffect extends AbstractGameEffect
         this.renderBehind = false;
     }
 
-    private void playRandomSfX()
-    {
-        SFX.play(SFX.ORB_LIGHTNING_EVOKE, 0.5f, 0.7f);
-    }
-
-    public void update()
-    {
-        if (duration == DUR)
-        {
-            for (int i = 0; i < 50; ++i)
-            {
+    public void update() {
+        if (duration == DUR) {
+            for (int i = 0; i < 50; ++i) {
                 PCLEffects.Queue.add(new GenericSmokeEffect(x + MathUtils.random(-280f, 250f) * Settings.scale, y - 80f * Settings.scale));
             }
         }
 
-        if (this.duration < 0f)
-        {
+        if (this.duration < 0f) {
             CardCrawlGame.screenShake.shake(ScreenShake.ShakeIntensity.HIGH, ScreenShake.ShakeDur.SHORT, false);
 
-            if (!Settings.DISABLE_EFFECTS)
-            {
+            if (!Settings.DISABLE_EFFECTS) {
                 PCLEffects.Queue.add(new DarkSmokePuffEffect(this.x, this.y));
 
-                for (int i = 0; i < 12; ++i)
-                {
+                for (int i = 0; i < 12; ++i) {
                     PCLEffects.Queue.add(new SmokingEmberEffect(this.x + MathUtils.random(-50f, 50f) * Settings.scale, this.y + MathUtils.random(-50f, 50f) * Settings.scale));
                 }
             }
@@ -70,18 +57,15 @@ public class MeteorFallEffect extends AbstractGameEffect
             this.isDone = true;
         }
 
-        if (this.duration < 0.5f && !this.playedSound)
-        {
+        if (this.duration < 0.5f && !this.playedSound) {
             this.playRandomSfX();
             this.playedSound = true;
         }
 
-        if (this.duration > 0.2f)
-        {
+        if (this.duration > 0.2f) {
             this.color.a = Interpolation.fade.apply(0.5f, 0f, (this.duration - 0.34f) * 5f);
         }
-        else
-        {
+        else {
             this.color.a = Interpolation.fade.apply(0f, 0.5f, this.duration * 5f);
         }
 
@@ -90,8 +74,11 @@ public class MeteorFallEffect extends AbstractGameEffect
         this.duration -= Gdx.graphics.getDeltaTime();
     }
 
-    public void render(SpriteBatch sb)
-    {
+    private void playRandomSfX() {
+        SFX.play(SFX.ORB_LIGHTNING_EVOKE, 0.5f, 0.7f);
+    }
+
+    public void render(SpriteBatch sb) {
         sb.setColor(this.color);
         sb.setBlendFunction(770, 1);
         sb.draw(this.img, this.x + MathUtils.random(-10f, 10f) * Settings.scale, this.y, (float) this.img.packedWidth / 2f, 0f, (float) this.img.packedWidth, (float) this.img.packedHeight, this.scale * 0.3f, this.scale * 0.8f, this.rotation - 18f);
@@ -108,7 +95,6 @@ public class MeteorFallEffect extends AbstractGameEffect
         sb.setBlendFunction(770, 771);
     }
 
-    public void dispose()
-    {
+    public void dispose() {
     }
 }

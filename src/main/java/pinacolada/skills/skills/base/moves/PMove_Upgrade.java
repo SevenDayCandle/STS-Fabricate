@@ -16,36 +16,30 @@ import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.utilities.ListSelection;
 
 @VisibleSkill
-public class PMove_Upgrade extends PMove_Select<PField_CardCategory>
-{
+public class PMove_Upgrade extends PMove_Select<PField_CardCategory> {
     public static final PSkillData<PField_CardCategory> DATA = register(PMove_Upgrade.class, PField_CardCategory.class)
             .selfTarget()
             .setExtra(0, DEFAULT_MAX);
 
-    public PMove_Upgrade()
-    {
+    public PMove_Upgrade() {
         this(1);
     }
 
-    public PMove_Upgrade(PSkillSaveData content)
-    {
-        super(DATA, content);
-    }
-
-    public PMove_Upgrade(int amount, PCLCardGroupHelper... h)
-    {
+    public PMove_Upgrade(int amount, PCLCardGroupHelper... h) {
         super(DATA, amount, h);
     }
 
-    @Override
-    public EUITooltip getActionTooltip()
-    {
-        return PGR.core.tooltips.upgrade;
+    public PMove_Upgrade(PSkillSaveData content) {
+        super(DATA, content);
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction()
-    {
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
         return UpgradeFromPile::new;
+    }
+
+    @Override
+    public EUITooltip getActionTooltip() {
+        return PGR.core.tooltips.upgrade;
     }
 }

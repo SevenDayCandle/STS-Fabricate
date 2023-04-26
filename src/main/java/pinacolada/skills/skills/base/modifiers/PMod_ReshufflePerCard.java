@@ -18,36 +18,30 @@ import pinacolada.utilities.ListSelection;
 
 
 @VisibleSkill
-public class PMod_ReshufflePerCard extends PMod_Do
-{
+public class PMod_ReshufflePerCard extends PMod_Do {
     public static final PSkillData<PField_CardCategory> DATA = register(PMod_ReshufflePerCard.class, PField_CardCategory.class)
             .selfTarget()
             .setGroups(PCLCardGroupHelper.DrawPile, PCLCardGroupHelper.DiscardPile, PCLCardGroupHelper.Hand);
 
-    public PMod_ReshufflePerCard(PSkillSaveData content)
-    {
+    public PMod_ReshufflePerCard(PSkillSaveData content) {
         super(DATA, content);
     }
 
-    public PMod_ReshufflePerCard()
-    {
+    public PMod_ReshufflePerCard() {
         super(DATA);
     }
 
-    public PMod_ReshufflePerCard(int amount, PCLCardGroupHelper... groups)
-    {
+    public PMod_ReshufflePerCard(int amount, PCLCardGroupHelper... groups) {
         super(DATA, PCLCardTarget.None, amount, groups);
     }
 
     @Override
-    public EUITooltip getActionTooltip()
-    {
+    public EUITooltip getActionTooltip() {
         return PGR.core.tooltips.reshuffle;
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction()
-    {
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
         return ReshuffleFromPile::new;
     }
 }

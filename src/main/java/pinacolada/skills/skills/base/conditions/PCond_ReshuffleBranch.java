@@ -20,42 +20,35 @@ import java.util.List;
 
 
 @VisibleSkill
-public class PCond_ReshuffleBranch extends PCond_DoBranch
-{
+public class PCond_ReshuffleBranch extends PCond_DoBranch {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_ReshuffleBranch.class, PField_CardCategory.class)
             .selfTarget()
             .setExtra(0, DEFAULT_MAX)
             .setGroups(PCLCardGroupHelper.ExhaustPile, PCLCardGroupHelper.DiscardPile, PCLCardGroupHelper.Hand);
 
-    public PCond_ReshuffleBranch(PSkillSaveData content)
-    {
+    public PCond_ReshuffleBranch(PSkillSaveData content) {
         super(DATA, content);
     }
 
-    public PCond_ReshuffleBranch()
-    {
+    public PCond_ReshuffleBranch() {
         super(DATA);
     }
 
-    public PCond_ReshuffleBranch(int amount, PCLCardGroupHelper... groups)
-    {
+    public PCond_ReshuffleBranch(int amount, PCLCardGroupHelper... groups) {
         super(DATA, PCLCardTarget.None, amount, groups);
     }
 
-    public PCond_ReshuffleBranch(int amount, List<PCLCardGroupHelper> groups)
-    {
+    public PCond_ReshuffleBranch(int amount, List<PCLCardGroupHelper> groups) {
         super(DATA, PCLCardTarget.None, amount, groups.toArray(new PCLCardGroupHelper[]{}));
     }
 
     @Override
-    public EUITooltip getActionTooltip()
-    {
+    public EUITooltip getActionTooltip() {
         return PGR.core.tooltips.reshuffle;
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction()
-    {
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
         return ReshuffleFromPile::new;
     }
 }

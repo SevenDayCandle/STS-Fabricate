@@ -27,40 +27,51 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public class CardLibraryPatches
-{
-    public static String[] splitCardID(String cardID)
-    {
+public class CardLibraryPatches {
+    public static PCLCardData getStandardReplacement(String id) {
+        AbstractPlayer.PlayerClass playerClass = GameUtilities.getPlayerClass();
+        if (GameUtilities.isPCLPlayerClass(playerClass)) {
+            PCLResources<?, ?, ?, ?> resources = PGR.getResources(playerClass);
+            return resources.getReplacement(id);
+        }
+        return null;
+    }
+
+    public static String[] splitCardID(String cardID) {
         return cardID.split(Pattern.quote(":"), 2);
     }
 
-    public static void tryReplace(AbstractCard[] card)
-    {
+    public static void tryReplace(AbstractCard[] card) {
         card[0] = tryReplace(card[0]);
     }
 
-    public static AbstractCard tryReplace(AbstractCard card)
-    {
+    public static AbstractCard tryReplace(AbstractCard card) {
         AbstractPlayer.PlayerClass playerClass = GameUtilities.getPlayerClass();
-        if (GameUtilities.isPCLPlayerClass(playerClass))
-        {
-            PCLResources<?,?,?,?> resources = PGR.getResources(playerClass);
+        if (GameUtilities.isPCLPlayerClass(playerClass)) {
+            PCLResources<?, ?, ?, ?> resources = PGR.getResources(playerClass);
             return tryReplace(resources, card);
         }
-        else if (PGR.config.replaceCardsPCL.get())
-        {
+        else if (PGR.config.replaceCardsPCL.get()) {
             return tryMakeReplace(card);
         }
         return card;
     }
 
-    public static AbstractCard tryMakeReplace(AbstractCard card)
-    {
-        if (!(card instanceof PCLCard))
-        {
+    public static AbstractCard tryReplace(PCLResources<?, ?, ?, ?> resources, AbstractCard card) {
+        PCLCardData data = resources.getReplacement(card.cardID);
+        if (data != null) {
+            return data.makeCopyFromLibrary(card.timesUpgraded);
+        }
+        else if (PGR.config.replaceCardsPCL.get()) {
+            return tryMakeReplace(card);
+        }
+        return card;
+    }
+
+    public static AbstractCard tryMakeReplace(AbstractCard card) {
+        if (!(card instanceof PCLCard)) {
             AbstractCard c = ReplacementData.makeReplacement(card, true);
-            if (card.upgraded)
-            {
+            if (card.upgraded) {
                 c.upgrade();
             }
             return c;
@@ -68,48 +79,18 @@ public class CardLibraryPatches
         return card;
     }
 
-    public static AbstractCard tryReplace(PCLResources<?,?,?,?> resources, AbstractCard card)
-    {
-        PCLCardData data = resources.getReplacement(card.cardID);
-        if (data != null)
-        {
-            return data.makeCopyFromLibrary(card.timesUpgraded);
-        }
-        else if (PGR.config.replaceCardsPCL.get())
-        {
-            return tryMakeReplace(card);
-        }
-        return card;
-    }
-
-    public static PCLCardData getStandardReplacement(String id)
-    {
-        AbstractPlayer.PlayerClass playerClass = GameUtilities.getPlayerClass();
-        if (GameUtilities.isPCLPlayerClass(playerClass))
-        {
-            PCLResources<?,?,?,?> resources = PGR.getResources(playerClass);
-            return resources.getReplacement(id);
-        }
-        return null;
-    }
-
     @SpirePatch(clz = CardLibrary.class, method = "getCard", paramtypez = {String.class})
-    public static class CardLibraryPatches_GetCard
-    {
+    public static class CardLibraryPatches_GetCard {
         @SpirePrefixPatch
-        public static SpireReturn<AbstractCard> prefix(String key)
-        {
-            if (PGR.isLoaded())
-            {
+        public static SpireReturn<AbstractCard> prefix(String key) {
+            if (PGR.isLoaded()) {
                 final PCLCardData data = getStandardReplacement(key);
-                if (data != null)
-                {
+                if (data != null) {
                     return SpireReturn.Return(data.makeCopyFromLibrary(0));
                 }
 
                 PCLCustomCardSlot slot = PCLCustomCardSlot.get(key);
-                if (slot != null)
-                {
+                if (slot != null) {
                     return SpireReturn.Return(slot.makeFirstCard(true));
                 }
             }
@@ -119,16 +100,12 @@ public class CardLibraryPatches
     }
 
     @SpirePatch(clz = CardLibrary.class, method = "getCopy", paramtypez = {String.class, int.class, int.class})
-    public static class CardLibraryPatches_GetCopy
-    {
+    public static class CardLibraryPatches_GetCopy {
         @SpirePostfixPatch
-        public static AbstractCard postfix(AbstractCard __result, String key, int upgradeTime, int misc)
-        {
+        public static AbstractCard postfix(AbstractCard __result, String key, int upgradeTime, int misc) {
             // If a card is not found, the base game will put a Madness in its place. This change makes it easier for players to see what card is missing
-            if (__result instanceof Madness && !Madness.ID.equals(key))
-            {
-                if (!PGR.config.madnessReplacements.get())
-                {
+            if (__result instanceof Madness && !Madness.ID.equals(key)) {
+                if (!PGR.config.madnessReplacements.get()) {
                     __result = new QuestionMark();
                 }
                 __result.name = __result.originalName = key;
@@ -139,24 +116,19 @@ public class CardLibraryPatches
         }
 
         @SpirePrefixPatch
-        public static SpireReturn<AbstractCard> prefix(String key, int upgradeTime, int misc)
-        {
-            if (key.equals(AscendersBane.ID))
-            {
+        public static SpireReturn<AbstractCard> prefix(String key, int upgradeTime, int misc) {
+            if (key.equals(AscendersBane.ID)) {
                 AbstractPlayer.PlayerClass pClass = GameUtilities.getPlayerClass();
-                if (GameUtilities.isPCLPlayerClass(pClass))
-                {
+                if (GameUtilities.isPCLPlayerClass(pClass)) {
                     PCLResources<?, ?, ?, ?> resources = PGR.getResources(pClass);
                     PCLCardData bane = resources.getAscendersBane();
-                    if (bane != null)
-                    {
+                    if (bane != null) {
                         return SpireReturn.Return(bane.makeCopyFromLibrary(0));
                     }
                 }
             }
             final PCLCardData data = getStandardReplacement(key);
-            if (data != null)
-            {
+            if (data != null) {
                 return SpireReturn.Return(data.makeCopyFromLibrary(0));
             }
             return SpireReturn.Continue();
@@ -164,28 +136,22 @@ public class CardLibraryPatches
     }
 
     @SpirePatch(clz = CardLibrary.class, method = "getCurse", paramtypez = {})
-    public static class CardLibraryPatches_GetCurse
-    {
+    public static class CardLibraryPatches_GetCurse {
         @SpirePrefixPatch
-        public static SpireReturn<AbstractCard> prefix()
-        {
+        public static SpireReturn<AbstractCard> prefix() {
             return CardLibraryPatches_GetCurse2.postfix(null, AbstractDungeon.cardRng);
         }
     }
 
     @SpirePatch(clz = CardLibrary.class, method = "getCurse", paramtypez = {AbstractCard.class, Random.class})
-    public static class CardLibraryPatches_GetCurse2
-    {
+    public static class CardLibraryPatches_GetCurse2 {
         @SpirePrefixPatch
-        public static SpireReturn<AbstractCard> postfix(AbstractCard ignore, Random rng)
-        {
+        public static SpireReturn<AbstractCard> postfix(AbstractCard ignore, Random rng) {
             final RandomizedList<String> cards = new RandomizedList<>();
             final HashMap<String, AbstractCard> curses = ReflectionHacks.getPrivateStatic(CardLibrary.class, "curses");
-            for (Map.Entry<String, AbstractCard> entry : curses.entrySet())
-            {
+            for (Map.Entry<String, AbstractCard> entry : curses.entrySet()) {
                 final AbstractCard c = entry.getValue();
-                if (c.rarity != AbstractCard.CardRarity.SPECIAL && (ignore == null || !c.cardID.equals(ignore.cardID)) && getStandardReplacement(c.cardID) == null)
-                {
+                if (c.rarity != AbstractCard.CardRarity.SPECIAL && (ignore == null || !c.cardID.equals(ignore.cardID)) && getStandardReplacement(c.cardID) == null) {
                     cards.add(entry.getKey());
                 }
             }
@@ -195,21 +161,17 @@ public class CardLibraryPatches
     }
 
     @SpirePatch(clz = CardLibrary.class, method = "getAnyColorCard", paramtypez = {AbstractCard.CardType.class, AbstractCard.CardRarity.class})
-    public static class CardLibraryPatches_GetAnyColorCard
-    {
+    public static class CardLibraryPatches_GetAnyColorCard {
         @SpirePrefixPatch
-        public static SpireReturn<AbstractCard> prefix(AbstractCard.CardType type, AbstractCard.CardRarity rarity)
-        {
+        public static SpireReturn<AbstractCard> prefix(AbstractCard.CardType type, AbstractCard.CardRarity rarity) {
             return SpireReturn.Return(GameUtilities.getAnyColorCardFiltered(rarity, type, true, false));
         }
     }
 
     @SpirePatch(clz = CardLibrary.class, method = "getAnyColorCard", paramtypez = {AbstractCard.CardRarity.class})
-    public static class CardLibraryPatches_GetAnyColorCard2
-    {
+    public static class CardLibraryPatches_GetAnyColorCard2 {
         @SpirePrefixPatch
-        public static SpireReturn<AbstractCard> prefix(AbstractCard.CardRarity rarity)
-        {
+        public static SpireReturn<AbstractCard> prefix(AbstractCard.CardRarity rarity) {
             return SpireReturn.Return(GameUtilities.getAnyColorCardFiltered(rarity, null, true, true));
         }
     }

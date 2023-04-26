@@ -20,17 +20,14 @@ import pinacolada.utilities.GameUtilities;
 import java.util.ArrayList;
 
 // Act 5 and Act 3 victory logic
-public class VictoryPatches
-{
+public class VictoryPatches {
     private static int glyphBonus = 0;
 
-    private static int getAscensionGlyphScoreBonus(int baseScore)
-    {
+    private static int getAscensionGlyphScoreBonus(int baseScore) {
         return MathUtils.round((float) baseScore * 0.02F * EUIUtils.sum(PGR.dungeon.ascensionGlyphCounters, Integer::floatValue));
     }
 
-    private static GameOverStat getAscensionGlyphStats()
-    {
+    private static GameOverStat getAscensionGlyphStats() {
         return new GameOverStat(PGR.core.strings.csel_ascensionGlyph, null, String.valueOf(glyphBonus));
     }
 
@@ -40,34 +37,27 @@ public class VictoryPatches
     }*/
 
     @SpirePatch(clz = VictoryRoom.class, method = "onPlayerEntry")
-    public static class VictoryRoomPatches_onEnterRoom
-    {
+    public static class VictoryRoomPatches_onEnterRoom {
         @SpirePrefixPatch
-        public static void method(VictoryRoom __instance)
-        {
+        public static void method(VictoryRoom __instance) {
             if (Settings.isStandardRun() && __instance.eType == VictoryRoom.EventType.HEART // this is the room you enter after defeating act 3 Boss
-                    && GameUtilities.isPCLPlayerClass(AbstractDungeon.player.chosenClass))
-            {
+                    && GameUtilities.isPCLPlayerClass(AbstractDungeon.player.chosenClass)) {
                 PGR.getPlayerData(AbstractDungeon.player.chosenClass).recordVictory(GameUtilities.getAscensionLevel());
             }
         }
     }
 
     @SpirePatch(clz = VictoryScreen.class, method = "createGameOverStats")
-    public static class VictoryScreenPatches_createGameOverStats
-    {
+    public static class VictoryScreenPatches_createGameOverStats {
         @SpirePostfixPatch
-        public static void method(VictoryScreen __instance)
-        {
+        public static void method(VictoryScreen __instance) {
             ArrayList<GameOverStat> stats = ReflectionHacks.getPrivate(__instance, GameOverScreen.class, "stats");
-            if (glyphBonus > 0)
-            {
+            if (glyphBonus > 0) {
                 stats.add(Math.max(0, stats.size() - 2), getAscensionGlyphStats());
             }
 
             // TODO Account for alternate acts by checking act number
-            if (Settings.isStandardRun() && GameUtilities.isPCLPlayerClass())
-            {
+            if (Settings.isStandardRun() && GameUtilities.isPCLPlayerClass()) {
                 PGR.getPlayerData(AbstractDungeon.player.chosenClass).recordTrueVictory(GameUtilities.getAscensionLevel(),
                         (CardCrawlGame.dungeon instanceof TheEnding ? 2 : 1),
                         ReflectionHacks.getPrivate(__instance, GameOverScreen.class, "score"));
@@ -76,11 +66,9 @@ public class VictoryPatches
     }
 
     @SpirePatch(clz = GameOverScreen.class, method = "calcScore", paramtypez = {boolean.class})
-    public static class GameOverScreenPatches_calcScore
-    {
+    public static class GameOverScreenPatches_calcScore {
         @SpirePostfixPatch
-        public static int method(int __result, boolean isVictory)
-        {
+        public static int method(int __result, boolean isVictory) {
             glyphBonus = getAscensionGlyphScoreBonus(__result);
             return __result + glyphBonus;
         }

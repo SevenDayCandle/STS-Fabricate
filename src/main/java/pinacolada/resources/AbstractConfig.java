@@ -17,36 +17,18 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-public abstract class AbstractConfig
-{
-    private static final String CONFIG_ID = "PCLConfig";
+public abstract class AbstractConfig {
     protected static final int BASE_OPTION_OFFSET_X = 400;
     protected static final int BASE_OPTION_OFFSET_Y = 700;
     protected static final int BASE_OPTION_OPTION_HEIGHT = 50;
+    private static final String CONFIG_ID = "PCLConfig";
     protected static ModSettingsScreen.Category pclCategory;
 
     protected final String id;
     protected SpireConfig config;
 
-    protected static ModSettingsToggle makeModToggle(STSConfigItem<Boolean> option, String label)
-    {
-        // Must be initialized after Settings.scale is set, or the mod options will be in the wrong position
-        if (pclCategory == null)
-        {
-            pclCategory = ModSettingsScreen.registerByClass(AbstractConfig.class);
-        }
-        return ModSettingsScreen.addBoolean(pclCategory, option, label);
-    }
-
-    protected static ModSettingsToggle makeModToggle(STSConfigItem<Boolean> option, String label, String tip)
-    {
-        ModSettingsToggle toggle = makeModToggle(option, label);
-        if (toggle != null)
-        {
-            toggle.setTooltip(label, tip);
-            toggle.tooltip.setAutoWidth();
-        }
-        return toggle;
+    public AbstractConfig(String id) {
+        this.id = id;
     }
 
     protected static int addToggle(ModPanel panel, STSConfigItem<Boolean> option, String label, int ypos) {
@@ -59,44 +41,47 @@ public abstract class AbstractConfig
         return ypos - BASE_OPTION_OPTION_HEIGHT;
     }
 
-    public AbstractConfig(String id)
-    {
-        this.id = id;
+    protected static ModSettingsToggle makeModToggle(STSConfigItem<Boolean> option, String label, String tip) {
+        ModSettingsToggle toggle = makeModToggle(option, label);
+        if (toggle != null) {
+            toggle.setTooltip(label, tip);
+            toggle.tooltip.setAutoWidth();
+        }
+        return toggle;
     }
 
-    public FileHandle getConfigFolder()
-    {
+    protected static ModSettingsToggle makeModToggle(STSConfigItem<Boolean> option, String label) {
+        // Must be initialized after Settings.scale is set, or the mod options will be in the wrong position
+        if (pclCategory == null) {
+            pclCategory = ModSettingsScreen.registerByClass(AbstractConfig.class);
+        }
+        return ModSettingsScreen.addBoolean(pclCategory, option, label);
+    }
+
+    public FileHandle getConfigFolder() {
         FileHandle folder = Gdx.files.absolute(getConfigPath());
-        if (!folder.exists())
-        {
+        if (!folder.exists()) {
             folder.mkdirs();
         }
         return folder;
     }
 
-    public String getConfigPath()
-    {
+    public String getConfigPath() {
         return ConfigUtils.CONFIG_DIR + File.separator + id + File.separator;
     }
 
-    public void initializeOptions()
-    {
+    public void initializeOptions() {
 
     }
 
-    public void load(int slot)
-    {
-        try
-        {
+    public void load(int slot) {
+        try {
             final String fileName = CONFIG_ID + slot;
-            if (slot == 0)
-            {
+            if (slot == 0) {
                 final File file = new File(SpireConfig.makeFilePath(id, fileName));
-                if (!file.exists())
-                {
+                if (!file.exists()) {
                     final File previousFile = new File(SpireConfig.makeFilePath(id, CONFIG_ID));
-                    if (previousFile.exists())
-                    {
+                    if (previousFile.exists()) {
                         Files.copy(previousFile.toPath(), file.toPath());
                     }
                 }
@@ -105,25 +90,21 @@ public abstract class AbstractConfig
             EUIUtils.logInfoIfDebug(this, "Loaded: " + fileName);
             loadImpl();
         }
-        catch (IOException e)
-        {
+        catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public boolean save()
-    {
-        try
-        {
+    abstract public void loadImpl();
+
+    public boolean save() {
+        try {
             config.save();
             return true;
         }
-        catch (IOException e)
-        {
+        catch (IOException e) {
             e.printStackTrace();
             return false;
         }
     }
-
-    abstract public void loadImpl();
 }

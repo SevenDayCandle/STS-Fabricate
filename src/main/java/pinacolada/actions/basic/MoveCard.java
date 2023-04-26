@@ -26,8 +26,7 @@ import pinacolada.utilities.ListSelection;
 import java.util.List;
 
 // Copied and modified from STS-AnimatorMod
-public class MoveCard extends PCLAction<AbstractCard>
-{
+public class MoveCard extends PCLAction<AbstractCard> {
     public static final float DEFAULT_CARD_X_LEFT = Settings.WIDTH * 0.35f;
     public static final float DEFAULT_CARD_X_RIGHT = Settings.WIDTH * 0.65f;
     public static final float DEFAULT_CARD_Y = Settings.HEIGHT * 0.5f;
@@ -38,13 +37,11 @@ public class MoveCard extends PCLAction<AbstractCard>
     protected boolean showEffect;
     protected Vector2 targetPosition;
 
-    public MoveCard(AbstractCard card, CardGroup targetPile)
-    {
+    public MoveCard(AbstractCard card, CardGroup targetPile) {
         this(card, targetPile, null);
     }
 
-    public MoveCard(AbstractCard card, CardGroup targetPile, CardGroup sourcePile)
-    {
+    public MoveCard(AbstractCard card, CardGroup targetPile, CardGroup sourcePile) {
         super(ActionType.CARD_MANIPULATION);
 
         this.card = card;
@@ -56,74 +53,50 @@ public class MoveCard extends PCLAction<AbstractCard>
     }
 
     @Override
-    protected void complete(AbstractCard result)
-    {
-        super.complete(result);
-
-        // Change card spot based on destination
-        if (destination != null && targetPile.group.remove(card))
-        {
-            destination.add(targetPile.group, card, 0);
-        }
-    }
-
-    @Override
-    protected void firstUpdate()
-    {
-        if (sourcePile == null)
-        {
+    protected void firstUpdate() {
+        if (sourcePile == null) {
             sourcePile = GameUtilities.findCardGroup(card, false);
 
-            if (sourcePile == null)
-            {
+            if (sourcePile == null) {
                 EUIUtils.logWarning(this, "Could not find card source pile.");
                 completeImpl();
                 return;
             }
         }
 
-        if (sourcePile == targetPile)
-        {
+        if (sourcePile == targetPile) {
             completeImpl();
             return;
         }
 
-        if (!sourcePile.contains(card))
-        {
+        if (!sourcePile.contains(card)) {
             EUIUtils.logWarning(this, "Could not find " + card.cardID + " in " + sourcePile.type.name().toLowerCase());
             completeImpl();
             return;
         }
 
-        if (GameUtilities.trySetPosition(sourcePile, card) && showEffect)
-        {
+        if (GameUtilities.trySetPosition(sourcePile, card) && showEffect) {
             PCLEffects.TopLevelList.add(new RenderCardEffect(card, duration, isRealtime));
         }
 
-        if (showEffect && targetPosition == null)
-        {
+        if (showEffect && targetPosition == null) {
             targetPosition = new Vector2();
 
-            if (card.current_x < Settings.WIDTH / 2f)
-            {
+            if (card.current_x < Settings.WIDTH / 2f) {
                 targetPosition.x = DEFAULT_CARD_X_LEFT;
             }
-            else
-            {
+            else {
                 targetPosition.x = DEFAULT_CARD_X_RIGHT;
             }
 
             targetPosition.y = DEFAULT_CARD_Y;
         }
 
-        if (targetPile.type == CombatManager.PURGED_CARDS.type)
-        {
+        if (targetPile.type == CombatManager.PURGED_CARDS.type) {
             purge();
         }
-        else
-        {
-            switch (targetPile.type)
-            {
+        else {
+            switch (targetPile.type) {
                 case DRAW_PILE:
                     moveToDrawPile();
                     break;
@@ -152,126 +125,123 @@ public class MoveCard extends PCLAction<AbstractCard>
     }
 
     @Override
-    protected void updateInternal(float deltaTime)
-    {
-        if (showEffect && targetPile.type != CombatManager.PURGED_CARDS.type)
-        {
+    protected void updateInternal(float deltaTime) {
+        if (showEffect && targetPile.type != CombatManager.PURGED_CARDS.type) {
             updateCard();
         }
 
-        if (tickDuration(deltaTime))
-        {
+        if (tickDuration(deltaTime)) {
             complete(card);
 
-            if (targetPile.type == CardGroup.CardGroupType.HAND || (sourcePile != null && sourcePile.type == CardGroup.CardGroupType.HAND))
-            {
+            if (targetPile.type == CardGroup.CardGroupType.HAND || (sourcePile != null && sourcePile.type == CardGroup.CardGroupType.HAND)) {
                 CombatManager.queueRefreshHandLayout();
             }
 
-            if (sourcePile != null && (sourcePile.type == CardGroup.CardGroupType.EXHAUST_PILE || sourcePile == CombatManager.PURGED_CARDS))
-            {
+            if (sourcePile != null && (sourcePile.type == CardGroup.CardGroupType.EXHAUST_PILE || sourcePile == CombatManager.PURGED_CARDS)) {
                 PCLEffects.Queue.add(new UnfadeOutEffect(card));
                 PCLActions.bottom.callback(() -> PCLEffects.Queue.add(new UnfadeOutEffect(card)));
             }
 
-            if (targetPile != player.limbo && player.limbo.contains(card))
-            {
+            if (targetPile != player.limbo && player.limbo.contains(card)) {
                 PCLActions.bottom.add(new UnlimboAction(card, false));
             }
         }
     }
 
-    protected void moveToDiscardPile()
-    {
-        if (showEffect)
-        {
+    @Override
+    protected void complete(AbstractCard result) {
+        super.complete(result);
+
+        // Change card spot based on destination
+        if (destination != null && targetPile.group.remove(card)) {
+            destination.add(targetPile.group, card, 0);
+        }
+    }
+
+    protected void updateCard() {
+        if (player.hoveredCard == card) {
+            player.releaseCard();
+        }
+
+        card.target_x = targetPosition.x;
+        card.target_y = targetPosition.y;
+        card.targetAngle = 0;
+        card.hoverTimer = 0.5f;
+        card.update();
+    }
+
+    protected void moveToDiscardPile() {
+        if (showEffect) {
             showCard();
 
             callbacks.add(0, GenericCallback.fromT1(this::moveToDiscardPile));
         }
-        else
-        {
+        else {
             moveToDiscardPile(card);
         }
     }
 
-    protected void moveToDiscardPile(AbstractCard card)
-    {
+    protected void moveToDiscardPile(AbstractCard card) {
         sourcePile.moveToDiscardPile(card);
 
-        if (sourcePile.type != CardGroup.CardGroupType.EXHAUST_PILE)
-        {
+        if (sourcePile.type != CardGroup.CardGroupType.EXHAUST_PILE) {
             player.onCardDrawOrDiscard();
             card.triggerOnManualDiscard();
             GameActionManager.incrementDiscard(false);
         }
     }
 
-    protected void moveToDrawPile()
-    {
-        if (showEffect)
-        {
+    protected void moveToDrawPile() {
+        if (showEffect) {
             showCard();
 
             callbacks.add(0, GenericCallback.fromT1(this::moveToDrawPile));
         }
-        else
-        {
+        else {
             moveToDrawPile(card);
         }
     }
 
-    protected void moveToDrawPile(AbstractCard card)
-    {
+    protected void moveToDrawPile(AbstractCard card) {
         sourcePile.moveToDeck(card, true);
         CombatManager.onCardReshuffled(card, sourcePile);
     }
 
-    protected void moveToExhaustPile()
-    {
-        if (showEffect)
-        {
+    protected void moveToExhaustPile() {
+        if (showEffect) {
             showCard();
 
             callbacks.add(0, GenericCallback.fromT1(this::moveToExhaustPile));
         }
-        else
-        {
+        else {
             moveToExhaustPile(card);
         }
     }
 
-    protected void moveToExhaustPile(AbstractCard card)
-    {
+    protected void moveToExhaustPile(AbstractCard card) {
         sourcePile.moveToExhaustPile(card);
         CardCrawlGame.dungeon.checkForPactAchievement();
         card.exhaustOnUseOnce = false;
         card.freeToPlayOnce = false;
     }
 
-    protected void moveToHand()
-    {
-        if (showEffect)
-        {
+    protected void moveToHand() {
+        if (showEffect) {
             showCard();
 
             callbacks.add(0, GenericCallback.fromT1(this::moveToHand));
         }
-        else
-        {
+        else {
             moveToHand(card);
         }
     }
 
-    protected void moveToHand(AbstractCard card)
-    {
-        if (player.hand.size() >= BaseMod.MAX_HAND_SIZE)
-        {
+    protected void moveToHand(AbstractCard card) {
+        if (player.hand.size() >= BaseMod.MAX_HAND_SIZE) {
             player.createHandIsFullDialog();
             sourcePile.moveToDiscardPile(card);
         }
-        else
-        {
+        else {
             card.triggerWhenDrawn();
             SFX.play(SFX.CARD_OBTAIN);
             sourcePile.moveToHand(card, sourcePile);
@@ -279,22 +249,18 @@ public class MoveCard extends PCLAction<AbstractCard>
         }
     }
 
-    protected void moveToPile()
-    {
-        if (showEffect)
-        {
+    protected void moveToPile() {
+        if (showEffect) {
             showCard();
 
             callbacks.add(0, GenericCallback.fromT1(this::moveToPile));
         }
-        else
-        {
+        else {
             moveToPile(card);
         }
     }
 
-    protected void moveToPile(AbstractCard card)
-    {
+    protected void moveToPile(AbstractCard card) {
         card.untip();
         card.unhover();
         card.unfadeOut();
@@ -303,24 +269,20 @@ public class MoveCard extends PCLAction<AbstractCard>
         targetPile.addToTop(card);
     }
 
-    protected void purge()
-    {
-        if (showEffect)
-        {
+    protected void purge() {
+        if (showEffect) {
             showCard();
 
             final Vector2 pos = GameUtilities.tryGetPosition(sourcePile, card);
             final AbstractGameEffect effect = PCLEffects.List.add(new PurgeCardEffect(card, pos.x, pos.y));
-            if (targetPosition != null)
-            {
+            if (targetPosition != null) {
                 card.target_x = targetPosition.x;
                 card.target_y = targetPosition.y;
             }
 
             this.startDuration = (this.duration = effect.startingDuration = effect.duration = Settings.ACTION_DUR_LONG) + 0.001f;
         }
-        else
-        {
+        else {
             SFX.play(SFX.CARD_BURN);
         }
 
@@ -328,31 +290,26 @@ public class MoveCard extends PCLAction<AbstractCard>
         CombatManager.onCardPurged(card);
     }
 
-    public MoveCard setCardPosition(float x, float y)
-    {
+    public MoveCard setCardPosition(float x, float y) {
         this.targetPosition = new Vector2(x, y);
 
         return this;
     }
 
-    public MoveCard setDestination(ActionT3<List<AbstractCard>, AbstractCard, Integer> addCard)
-    {
+    public MoveCard setDestination(ActionT3<List<AbstractCard>, AbstractCard, Integer> addCard) {
         this.destination = ListSelection.special(addCard, null);
 
         return this;
     }
 
-    public MoveCard setDestination(pinacolada.utilities.ListSelection<AbstractCard> destination)
-    {
+    public MoveCard setDestination(pinacolada.utilities.ListSelection<AbstractCard> destination) {
         this.destination = destination;
 
         return this;
     }
 
-    protected void showCard()
-    {
-        if (card.drawScale < 0.3f)
-        {
+    protected void showCard() {
+        if (card.drawScale < 0.3f) {
             card.targetDrawScale = 0.75f;
         }
 
@@ -365,38 +322,21 @@ public class MoveCard extends PCLAction<AbstractCard>
         updateCard();
     }
 
-    public MoveCard showEffect(boolean showEffect, boolean isRealtime)
-    {
+    public MoveCard showEffect(boolean showEffect, boolean isRealtime) {
         float duration = showEffect ? Settings.ACTION_DUR_MED : Settings.ACTION_DUR_FAST;
 
-        if (Settings.FAST_MODE)
-        {
+        if (Settings.FAST_MODE) {
             duration *= 0.7f;
         }
 
         return showEffect(showEffect, isRealtime, duration);
     }
 
-    public MoveCard showEffect(boolean showEffect, boolean isRealtime, float duration)
-    {
+    public MoveCard showEffect(boolean showEffect, boolean isRealtime, float duration) {
         setDuration(duration, isRealtime);
 
         this.showEffect = showEffect;
 
         return this;
-    }
-
-    protected void updateCard()
-    {
-        if (player.hoveredCard == card)
-        {
-            player.releaseCard();
-        }
-
-        card.target_x = targetPosition.x;
-        card.target_y = targetPosition.y;
-        card.targetAngle = 0;
-        card.hoverTimer = 0.5f;
-        card.update();
     }
 }

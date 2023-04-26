@@ -10,12 +10,10 @@ import pinacolada.powers.PCLPower;
 import pinacolada.resources.pcl.PCLCoreTooltips;
 import pinacolada.utilities.GameUtilities;
 
-public class ShacklesPower extends PCLPower
-{
+public class ShacklesPower extends PCLPower {
     public static final String POWER_ID = createFullID(ShacklesPower.class);
 
-    public ShacklesPower(AbstractCreature owner, int amount)
-    {
+    public ShacklesPower(AbstractCreature owner, int amount) {
         super(owner, POWER_ID);
 
         this.loadRegion(PCLCoreTooltips.ICON_SHACKLE);
@@ -24,34 +22,29 @@ public class ShacklesPower extends PCLPower
     }
 
     @Override
-    protected void onAmountChanged(int previousAmount, int difference)
-    {
+    protected void onAmountChanged(int previousAmount, int difference) {
         PCLActions.top.applyPower(new StrengthPower(owner, -difference));
 
         super.onAmountChanged(previousAmount, difference);
     }
 
     @Override
-    public void playApplyPowerSfx()
-    {
+    public void playApplyPowerSfx() {
         SFX.play(SFX.POWER_SHACKLE, 0.95F, 1.05f);
     }
 
     @Override
-    public void duringTurn()
-    {
+    public void duringTurn() {
         super.duringTurn();
 
         final AbstractMonster m = EUIUtils.safeCast(owner, AbstractMonster.class);
-        if (m != null && !GameUtilities.isAttacking(m.intent))
-        {
+        if (m != null && !GameUtilities.isAttacking(m.intent)) {
             PCLActions.top.removePower(owner, this);
         }
     }
 
     @Override
-    public void atEndOfTurn(boolean isPlayer)
-    {
+    public void atEndOfTurn(boolean isPlayer) {
         removePower();
     }
 }

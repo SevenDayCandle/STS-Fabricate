@@ -9,30 +9,25 @@ import com.megacrit.cardcrawl.powers.ConstrictedPower;
 import pinacolada.utilities.GameUtilities;
 
 // Variant of Constricted that shows health being decreased and that is cloneable
-public class PCLConstrictedPower extends ConstrictedPower implements CloneablePowerInterface, HealthBarRenderPower
-{
+public class PCLConstrictedPower extends ConstrictedPower implements CloneablePowerInterface, HealthBarRenderPower {
     private static final Color healthBarColor = Color.PURPLE.cpy();
 
-    public PCLConstrictedPower(AbstractCreature owner, AbstractCreature source, int amount)
-    {
+    public PCLConstrictedPower(AbstractCreature owner, AbstractCreature source, int amount) {
         super(owner, source, amount);
     }
 
     @Override
-    public int getHealthBarAmount()
-    {
+    public int getHealthBarAmount() {
         return GameUtilities.getHealthBarAmount(owner, amount, true, true);
     }
 
     @Override
-    public Color getColor()
-    {
+    public Color getColor() {
         return healthBarColor;
     }
 
     @Override
-    public AbstractPower makeCopy()
-    {
+    public AbstractPower makeCopy() {
         return new PCLConstrictedPower(owner, source, amount);
     }
 }

@@ -10,8 +10,7 @@ import pinacolada.powers.PCLPowerHelper;
 import pinacolada.skills.PMove;
 
 @VisibleCard
-public class Panacea extends PCLCard
-{
+public class Panacea extends PCLCard {
     public static final String ATLAS_URL = "colorless/skill/panacea";
     public static final PCLCardData DATA = register(Panacea.class)
             .setImagePathFromAtlasUrl(ATLAS_URL)
@@ -20,13 +19,11 @@ public class Panacea extends PCLCard
             .setTags(PCLCardTag.Exhaust)
             .setColorless();
 
-    public Panacea()
-    {
+    public Panacea() {
         super(DATA);
     }
 
-    public void setup(Object input)
-    {
+    public void setup(Object input) {
         addUseMove(PMove.gain(1, PCLPowerHelper.Artifact).setUpgrade(1));
     }
 }

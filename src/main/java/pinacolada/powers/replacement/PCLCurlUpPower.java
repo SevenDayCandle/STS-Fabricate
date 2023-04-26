@@ -8,26 +8,21 @@ import com.megacrit.cardcrawl.powers.CurlUpPower;
 import pinacolada.actions.PCLActions;
 
 // Variant of Curl Up that is cloneable and that can be applied on non-louses without crashing
-public class PCLCurlUpPower extends CurlUpPower implements CloneablePowerInterface
-{
+public class PCLCurlUpPower extends CurlUpPower implements CloneablePowerInterface {
     public static final String POWER_ID = CurlUpPower.POWER_ID;
     protected boolean triggered = false;
 
-    public PCLCurlUpPower(AbstractCreature owner, int amount)
-    {
+    public PCLCurlUpPower(AbstractCreature owner, int amount) {
         super(owner, amount);
     }
 
     @Override
-    public AbstractPower makeCopy()
-    {
+    public AbstractPower makeCopy() {
         return new PCLCurlUpPower(owner, amount);
     }
 
-    public int onAttacked(DamageInfo info, int damageAmount)
-    {
-        if (!this.triggered && damageAmount < this.owner.currentHealth && damageAmount > 0 && info.owner != null && info.type == DamageInfo.DamageType.NORMAL)
-        {
+    public int onAttacked(DamageInfo info, int damageAmount) {
+        if (!this.triggered && damageAmount < this.owner.currentHealth && damageAmount > 0 && info.owner != null && info.type == DamageInfo.DamageType.NORMAL) {
             this.flash();
             triggered = true;
             PCLActions.bottom.gainBlock(this.owner, this.amount);

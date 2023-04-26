@@ -9,18 +9,14 @@ import javassist.CtBehavior;
 import pinacolada.dungeon.CombatManager;
 
 @SpirePatch(clz = ChangeStanceAction.class, method = "update")
-public class ChangeStanceActionPatches
-{
+public class ChangeStanceActionPatches {
     @SpireInsertPatch(localvars = {"oldStance"}, locator = Locator.class)
-    public static void insertPre(ChangeStanceAction __instance, AbstractStance oldStance)
-    {
-        CombatManager.onChangeStance(oldStance, ReflectionHacks.getPrivate(__instance, ChangeStanceAction.class,"newStance"));
+    public static void insertPre(ChangeStanceAction __instance, AbstractStance oldStance) {
+        CombatManager.onChangeStance(oldStance, ReflectionHacks.getPrivate(__instance, ChangeStanceAction.class, "newStance"));
     }
 
-    private static class Locator extends SpireInsertLocator
-    {
-        public int[] Locate(CtBehavior ctBehavior) throws Exception
-        {
+    private static class Locator extends SpireInsertLocator {
+        public int[] Locate(CtBehavior ctBehavior) throws Exception {
             final Matcher matcher = new Matcher.FieldAccessMatcher(AbstractPlayer.class, "powers");
             return LineFinder.findInOrder(ctBehavior, matcher);
         }

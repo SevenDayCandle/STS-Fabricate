@@ -1,7 +1,6 @@
 package pinacolada.misc;
 
-public class CardJavaExporter
-{
+public class CardJavaExporter {
     public StringBuilder sb = new StringBuilder();
 
     // TODO writer for basic AbstractCard

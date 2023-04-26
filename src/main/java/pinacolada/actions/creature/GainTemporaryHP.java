@@ -9,32 +9,26 @@ import pinacolada.dungeon.CombatManager;
 import pinacolada.effects.PCLEffects;
 
 // Copied and modified from STS-AnimatorMod
-public class GainTemporaryHP extends PCLAction<AbstractCreature>
-{
-    public GainTemporaryHP(AbstractCreature target, AbstractCreature source, int amount)
-    {
+public class GainTemporaryHP extends PCLAction<AbstractCreature> {
+    public GainTemporaryHP(AbstractCreature target, AbstractCreature source, int amount) {
         super(ActionType.HEAL, Settings.ACTION_DUR_FAST);
 
         initialize(source, target, amount);
     }
 
-    public GainTemporaryHP(AbstractCreature target, AbstractCreature source, int amount, boolean superFast)
-    {
+    public GainTemporaryHP(AbstractCreature target, AbstractCreature source, int amount, boolean superFast) {
         super(ActionType.HEAL, superFast ? Settings.ACTION_DUR_XFAST : Settings.ACTION_DUR_FAST);
 
         initialize(source, target, amount);
     }
 
     @Override
-    protected void firstUpdate()
-    {
+    protected void firstUpdate() {
 
-        if (!target.isDying && !target.isDead)
-        {
+        if (!target.isDying && !target.isDead) {
             int gainAmount = CombatManager.onGainTempHP(amount);
             TempHPField.tempHp.set(target, TempHPField.tempHp.get(target) + gainAmount);
-            if (gainAmount > 0)
-            {
+            if (gainAmount > 0) {
                 PCLEffects.Queue.add(new HealEffect(target.hb.cX - target.animX, target.hb.cY, gainAmount));
                 target.healthBarUpdatedEvent();
             }
@@ -42,10 +36,8 @@ public class GainTemporaryHP extends PCLAction<AbstractCreature>
     }
 
     @Override
-    protected void updateInternal(float deltaTime)
-    {
-        if (tickDuration(deltaTime))
-        {
+    protected void updateInternal(float deltaTime) {
+        if (tickDuration(deltaTime)) {
             complete(target);
         }
     }

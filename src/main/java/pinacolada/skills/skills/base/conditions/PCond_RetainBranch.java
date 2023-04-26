@@ -19,43 +19,36 @@ import pinacolada.utilities.ListSelection;
 
 
 @VisibleSkill
-public class PCond_RetainBranch extends PCond_DoBranch
-{
+public class PCond_RetainBranch extends PCond_DoBranch {
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_RetainBranch.class, PField_CardCategory.class)
             .selfTarget()
             .setExtra(0, DEFAULT_MAX)
             .setGroups(PCLCardGroupHelper.Hand);
 
-    public PCond_RetainBranch(PSkillSaveData content)
-    {
+    public PCond_RetainBranch(PSkillSaveData content) {
         super(DATA, content);
     }
 
-    public PCond_RetainBranch()
-    {
+    public PCond_RetainBranch() {
         super(DATA);
     }
 
-    public PCond_RetainBranch(int amount)
-    {
+    public PCond_RetainBranch(int amount) {
         super(DATA, PCLCardTarget.None, amount);
     }
 
     @Override
-    public EUITooltip getActionTooltip()
-    {
+    public String getSubText() {
+        return EUIRM.strings.verbNoun(getActionTitle(), getAmountRawString());
+    }
+
+    @Override
+    public EUITooltip getActionTooltip() {
         return PGR.core.tooltips.retain;
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction()
-    {
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
         return RetainCards::new;
-    }
-
-    @Override
-    public String getSubText()
-    {
-        return EUIRM.strings.verbNoun(getActionTitle(), getAmountRawString());
     }
 }

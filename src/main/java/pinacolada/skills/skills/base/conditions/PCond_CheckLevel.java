@@ -13,36 +13,28 @@ import pinacolada.skills.fields.PField_Affinity;
 import pinacolada.skills.skills.PPassiveCond;
 
 @VisibleSkill
-public class PCond_CheckLevel extends PPassiveCond<PField_Affinity>
-{
+public class PCond_CheckLevel extends PPassiveCond<PField_Affinity> {
     public static final PSkillData<PField_Affinity> DATA = register(PCond_CheckLevel.class, PField_Affinity.class)
             .pclOnly()
             .selfTarget();
 
-    public PCond_CheckLevel(PSkillSaveData content)
-    {
+    public PCond_CheckLevel(PSkillSaveData content) {
         super(DATA, content);
     }
 
-    public PCond_CheckLevel(int amount, PCLAffinity... stance)
-    {
+    public PCond_CheckLevel(int amount, PCLAffinity... stance) {
         super(DATA, PCLCardTarget.None, amount);
         fields.setAffinity(stance);
     }
 
     @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource)
-    {
-        if (fields.affinities.isEmpty())
-        {
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
+        if (fields.affinities.isEmpty()) {
             return fields.random ^ CombatManager.playerSystem.getLevel(PCLAffinity.General) >= amount;
         }
-        else
-        {
-            for (PCLAffinity affinity : fields.affinities)
-            {
-                if (CombatManager.playerSystem.getLevel(affinity) < amount)
-                {
+        else {
+            for (PCLAffinity affinity : fields.affinities) {
+                if (CombatManager.playerSystem.getLevel(affinity) < amount) {
                     return fields.random;
                 }
             }
@@ -51,14 +43,12 @@ public class PCond_CheckLevel extends PPassiveCond<PField_Affinity>
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill)
-    {
+    public String getSampleText(PSkill<?> callingSkill) {
         return TEXT.cond_levelItem(TEXT.subjects_x, PGR.core.tooltips.affinityGeneral.title);
     }
 
     @Override
-    public String getSubText()
-    {
+    public String getSubText() {
         return TEXT.cond_levelItem(getAmountRawString(), fields.getAffinityChoiceString());
     }
 }

@@ -18,37 +18,31 @@ import pinacolada.utilities.ListSelection;
 
 
 @VisibleSkill
-public class PCond_PurgeBranch extends PCond_DoBranch
-{
+public class PCond_PurgeBranch extends PCond_DoBranch {
 
     public static final PSkillData<PField_CardCategory> DATA = register(PCond_PurgeBranch.class, PField_CardCategory.class)
             .selfTarget()
             .setExtra(0, DEFAULT_MAX);
 
-    public PCond_PurgeBranch(PSkillSaveData content)
-    {
+    public PCond_PurgeBranch(PSkillSaveData content) {
         super(DATA, content);
     }
 
-    public PCond_PurgeBranch()
-    {
+    public PCond_PurgeBranch() {
         super(DATA);
     }
 
-    public PCond_PurgeBranch(int amount, PCLCardGroupHelper... groups)
-    {
+    public PCond_PurgeBranch(int amount, PCLCardGroupHelper... groups) {
         super(DATA, PCLCardTarget.None, amount, groups);
     }
 
     @Override
-    public EUITooltip getActionTooltip()
-    {
+    public EUITooltip getActionTooltip() {
         return PGR.core.tooltips.purge;
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction()
-    {
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
         return PurgeFromPile::new;
     }
 }

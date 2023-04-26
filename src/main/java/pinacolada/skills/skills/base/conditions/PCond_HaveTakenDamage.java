@@ -17,62 +17,51 @@ import pinacolada.skills.skills.PPassiveCond;
 import pinacolada.skills.skills.base.primary.PTrigger_When;
 
 @VisibleSkill
-public class PCond_HaveTakenDamage extends PPassiveCond<PField_Random> implements OnAttackSubscriber
-{
+public class PCond_HaveTakenDamage extends PPassiveCond<PField_Random> implements OnAttackSubscriber {
     public static final PSkillData<PField_Random> DATA = register(PCond_HaveTakenDamage.class, PField_Random.class);
 
-    public PCond_HaveTakenDamage()
-    {
+    public PCond_HaveTakenDamage() {
         this(1);
     }
 
-    public PCond_HaveTakenDamage(PSkillSaveData content)
-    {
-        super(DATA, content);
-    }
-
-    public PCond_HaveTakenDamage(int amount)
-    {
+    public PCond_HaveTakenDamage(int amount) {
         super(DATA, PCLCardTarget.Self, amount);
     }
 
+    public PCond_HaveTakenDamage(PSkillSaveData content) {
+        super(DATA, content);
+    }
+
     @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource)
-    {
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
         int count = fields.random ? GameActionManager.damageReceivedThisCombat : GameActionManager.damageReceivedThisTurn;
         return amount == 0 ? count == 0 : fields.not ^ count >= amount;
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill)
-    {
+    public String getSampleText(PSkill<?> callingSkill) {
         return callingSkill instanceof PTrigger_When ? TEXT.cond_whenSingle(TEXT.act_takeDamage(TEXT.subjects_x)) : TEXT.cond_ifX(TEXT.act_takeDamage(TEXT.subjects_x));
     }
 
     @Override
-    public String getSubText()
-    {
-        if (isWhenClause())
-        {
+    public String getSubText() {
+        if (isWhenClause()) {
             return getWheneverAreString(PGR.core.tooltips.attack.past());
         }
         String base = TEXT.cond_ifTargetTook(TEXT.subjects_you, EUIRM.strings.numNoun(getAmountRawString(), TEXT.subjects_damage));
         return fields.random ? TEXT.subjects_thisCombat(base) : TEXT.subjects_thisTurn(base);
     }
 
-    // When the owner receives damage, triggers the effect onto the attacker
     @Override
-    public void onAttack(DamageInfo info, int damageAmount, AbstractCreature t)
-    {
-        if (info.type == DamageInfo.DamageType.NORMAL && target.getTargets(getOwnerCreature(), t).contains(t))
-        {
-            useFromTrigger(makeInfo(info.owner));
-        }
+    public String wrapAmount(int input) {
+        return input == 0 ? String.valueOf(input) : (fields.not ? (input + "-") : (input + "+"));
     }
 
+    // When the owner receives damage, triggers the effect onto the attacker
     @Override
-    public String wrapAmount(int input)
-    {
-        return input == 0 ? String.valueOf(input) : (fields.not ? (input + "-") : (input + "+"));
+    public void onAttack(DamageInfo info, int damageAmount, AbstractCreature t) {
+        if (info.type == DamageInfo.DamageType.NORMAL && target.getTargets(getOwnerCreature(), t).contains(t)) {
+            useFromTrigger(makeInfo(info.owner));
+        }
     }
 }

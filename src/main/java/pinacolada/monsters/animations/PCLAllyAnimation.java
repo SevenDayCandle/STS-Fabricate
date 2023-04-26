@@ -9,8 +9,7 @@ import pinacolada.effects.PCLEffects;
 import pinacolada.effects.VFX;
 import pinacolada.monsters.PCLCreature;
 
-public class PCLAllyAnimation extends PCLIntervalAnimation
-{
+public class PCLAllyAnimation extends PCLIntervalAnimation {
     public static final float RADIUS = 320;
     public PCLCreature owner;
     protected Color shineColor;
@@ -20,13 +19,7 @@ public class PCLAllyAnimation extends PCLIntervalAnimation
     protected float transitionAlpha;
     protected float targetTransitionAlpha = 1f;
 
-    public static Texture getRandomTexture()
-    {
-        return null;
-    }
-
-    public PCLAllyAnimation(PCLCreature owner)
-    {
+    public PCLAllyAnimation(PCLCreature owner) {
         super();
         renderColor = Color.WHITE.cpy();
         renderColor.a = transitionAlpha;
@@ -34,30 +27,28 @@ public class PCLAllyAnimation extends PCLIntervalAnimation
         this.owner = owner;
     }
 
-    public void highlight()
-    {
+    public static Texture getRandomTexture() {
+        return null;
+    }
+
+    public void highlight() {
         targetTransitionAlpha = 1f;
     }
 
-    public void unhighlight()
-    {
+    public void playActAnimation(float x, float y) {
+        PCLEffects.TopLevelQueue.add(VFX.circularWave(x, y).setScale(0.25f, 12f));
+    }
+
+    public void unhighlight() {
         targetTransitionAlpha = 0f;
     }
 
-    public void update(float deltaTime, float x, float y)
-    {
+    public void update(float deltaTime, float x, float y) {
         super.update(deltaTime, x, y);
         angle += deltaTime * rate;
         renderColor.a = transitionAlpha = MathUtils.lerp(transitionAlpha, targetTransitionAlpha, EUI.delta() * 12f);
     }
 
-
-    public void playActAnimation(float x, float y)
-    {
-        PCLEffects.TopLevelQueue.add(VFX.circularWave(x, y).setScale(0.25f, 12f));
-    }
-
-    public void renderSprite(SpriteBatch sb, float x, float y)
-    {
+    public void renderSprite(SpriteBatch sb, float x, float y) {
     }
 }

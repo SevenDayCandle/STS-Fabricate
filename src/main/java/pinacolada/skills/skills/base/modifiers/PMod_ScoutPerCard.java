@@ -17,38 +17,31 @@ import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.utilities.ListSelection;
 
 
-
 @VisibleSkill
-public class PMod_ScoutPerCard extends PMod_Do
-{
+public class PMod_ScoutPerCard extends PMod_Do {
     public static final PSkillData<PField_CardCategory> DATA = register(PMod_ScoutPerCard.class, PField_CardCategory.class)
             .selfTarget()
             .setGroups(PCLCardGroupHelper.DrawPile);
 
-    public PMod_ScoutPerCard(PSkillSaveData content)
-    {
+    public PMod_ScoutPerCard(PSkillSaveData content) {
         super(DATA, content);
     }
 
-    public PMod_ScoutPerCard()
-    {
+    public PMod_ScoutPerCard() {
         super(DATA);
     }
 
-    public PMod_ScoutPerCard(int amount)
-    {
+    public PMod_ScoutPerCard(int amount) {
         super(DATA, PCLCardTarget.None, amount);
     }
 
     @Override
-    public EUITooltip getActionTooltip()
-    {
+    public EUITooltip getActionTooltip() {
         return PGR.core.tooltips.scout;
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction()
-    {
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
         return (s, c, i, o, g) -> new ScoutCards(s, i);
     }
 }

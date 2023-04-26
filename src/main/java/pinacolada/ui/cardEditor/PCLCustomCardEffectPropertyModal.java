@@ -1,5 +1,4 @@
 package pinacolada.ui.cardEditor;
 
-public class PCLCustomCardEffectPropertyModal
-{
+public class PCLCustomCardEffectPropertyModal {
 }

@@ -18,42 +18,35 @@ import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.utilities.ListSelection;
 
 @VisibleSkill
-public class PMod_CyclePerCard extends PMod_Do
-{
+public class PMod_CyclePerCard extends PMod_Do {
     public static final PSkillData<PField_CardCategory> DATA = register(PMod_CyclePerCard.class, PField_CardCategory.class)
             .selfTarget()
             .setGroups(PCLCardGroupHelper.Hand);
 
-    public PMod_CyclePerCard(PSkillSaveData content)
-    {
+    public PMod_CyclePerCard(PSkillSaveData content) {
         super(DATA, content);
     }
 
-    public PMod_CyclePerCard()
-    {
+    public PMod_CyclePerCard() {
         super(DATA);
     }
 
-    public PMod_CyclePerCard(int amount)
-    {
+    public PMod_CyclePerCard(int amount) {
         super(DATA, PCLCardTarget.None, amount, PCLCardGroupHelper.Hand);
     }
 
     @Override
-    public String getMoveString(boolean addPeriod)
-    {
-        return fields.forced ? super.getMoveString(addPeriod) : EUIRM.strings.verbNoun(getActionTitle(), getAmountRawString());
-    }
-
-    @Override
-    public EUITooltip getActionTooltip()
-    {
+    public EUITooltip getActionTooltip() {
         return PGR.core.tooltips.cycle;
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction()
-    {
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
         return (s, c, i, o, g) -> new CycleCards(s, i, o);
+    }
+
+    @Override
+    public String getMoveString(boolean addPeriod) {
+        return fields.forced ? super.getMoveString(addPeriod) : EUIRM.strings.verbNoun(getActionTitle(), getAmountRawString());
     }
 }

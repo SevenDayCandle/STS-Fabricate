@@ -13,13 +13,11 @@ import pinacolada.resources.PGR;
 
 import java.util.ArrayList;
 
-public class ChooseMulticardAction extends PCLAction<PCLMultiCard>
-{
+public class ChooseMulticardAction extends PCLAction<PCLMultiCard> {
     protected final ArrayList<AbstractCard> selectedCards = new ArrayList<>();
     private final PCLMultiCard multicard;
 
-    public ChooseMulticardAction(PCLMultiCard multicard, int amount)
-    {
+    public ChooseMulticardAction(PCLMultiCard multicard, int amount) {
         super(ActionType.CARD_MANIPULATION, Settings.ACTION_DUR_FAST);
 
         this.multicard = multicard;
@@ -27,8 +25,7 @@ public class ChooseMulticardAction extends PCLAction<PCLMultiCard>
     }
 
     @Override
-    protected void firstUpdate()
-    {
+    protected void firstUpdate() {
         GridCardSelectScreenHelper.clear(true);
 
         CardGroup cardGroupPlaceholder = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
@@ -42,26 +39,21 @@ public class ChooseMulticardAction extends PCLAction<PCLMultiCard>
 
 
         CardGroup cardGroup = new CardGroup(CardGroup.CardGroupType.MASTER_DECK);
-        for (AbstractCard c : player.masterDeck.getPurgeableCards().group)
-        {
-            if (!isBanned(c))
-            {
+        for (AbstractCard c : player.masterDeck.getPurgeableCards().group) {
+            if (!isBanned(c)) {
                 cardGroup.addToBottom(c);
             }
         }
         GridCardSelectScreenHelper.addGroup(cardGroup);
         CardGroup mergedGroup = GridCardSelectScreenHelper.getCardGroup();
 
-        AbstractDungeon.gridSelectScreen.open(mergedGroup, amount, PGR.core.strings.grid_chooseCards(amount), false, false , false, true);
+        AbstractDungeon.gridSelectScreen.open(mergedGroup, amount, PGR.core.strings.grid_chooseCards(amount), false, false, false, true);
     }
 
     @Override
-    protected void updateInternal(float deltaTime)
-    {
-        if (AbstractDungeon.gridSelectScreen.selectedCards.size() >= 2)
-        {
-            for (AbstractCard card : AbstractDungeon.gridSelectScreen.selectedCards)
-            {
+    protected void updateInternal(float deltaTime) {
+        if (AbstractDungeon.gridSelectScreen.selectedCards.size() >= 2) {
+            for (AbstractCard card : AbstractDungeon.gridSelectScreen.selectedCards) {
                 AbstractDungeon.player.masterDeck.removeCard(card);
                 AbstractCard newCard = card.makeCopy();
                 multicard.addInheritedCard(newCard);

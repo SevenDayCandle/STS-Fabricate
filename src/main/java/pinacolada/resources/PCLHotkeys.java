@@ -6,8 +6,7 @@ import com.megacrit.cardcrawl.helpers.input.InputActionSet;
 
 import java.util.HashMap;
 
-public class PCLHotkeys
-{
+public class PCLHotkeys {
     public static final HashMap<Integer, Integer> EQUIVALENT_KEYS = new HashMap<>();
 
     private static final String KEYMAP_CONTROL_PILE_CHANGE = PCLMainConfig.createFullID("ControlPileChange");
@@ -21,8 +20,7 @@ public class PCLHotkeys
     public static InputAction rerollCurrent;
     public static InputAction toggleFormulaDisplay;
 
-    static
-    {
+    static {
         EQUIVALENT_KEYS.put(Input.Keys.ALT_LEFT, Input.Keys.ALT_RIGHT);
         EQUIVALENT_KEYS.put(Input.Keys.ALT_RIGHT, Input.Keys.ALT_LEFT);
         EQUIVALENT_KEYS.put(Input.Keys.CONTROL_LEFT, Input.Keys.CONTROL_RIGHT);
@@ -31,8 +29,7 @@ public class PCLHotkeys
         EQUIVALENT_KEYS.put(Input.Keys.SHIFT_RIGHT, Input.Keys.SHIFT_LEFT);
     }
 
-    public static void load()
-    {
+    public static void load() {
         controlPileChange = new InputAction(InputActionSet.prefs.getInteger(KEYMAP_CONTROL_PILE_CHANGE, Input.Keys.T));
         controlPileSelect = new InputAction(InputActionSet.prefs.getInteger(KEYMAP_CONTROL_PILE_SELECT, Input.Keys.Y));
         viewAugmentScreen = new InputAction(InputActionSet.prefs.getInteger(KEYMAP_VIEW_AUGMENT_SCREEN, Input.Keys.U));
@@ -40,8 +37,7 @@ public class PCLHotkeys
         toggleFormulaDisplay = new InputAction(InputActionSet.prefs.getInteger(KEYMAP_TOGGLE_FORMULA_DISPLAY, Input.Keys.F));
     }
 
-    public static void resetToDefaults()
-    {
+    public static void resetToDefaults() {
         controlPileChange.remap(Input.Keys.T);
         controlPileSelect.remap(Input.Keys.Y);
         viewAugmentScreen.remap(Input.Keys.U);
@@ -49,8 +45,7 @@ public class PCLHotkeys
         toggleFormulaDisplay.remap(Input.Keys.F);
     }
 
-    public static void save()
-    {
+    public static void save() {
         InputActionSet.prefs.putInteger(KEYMAP_CONTROL_PILE_CHANGE, controlPileChange.getKey());
         InputActionSet.prefs.putInteger(KEYMAP_CONTROL_PILE_SELECT, controlPileSelect.getKey());
         InputActionSet.prefs.putInteger(KEYMAP_VIEW_AUGMENT_SCREEN, viewAugmentScreen.getKey());

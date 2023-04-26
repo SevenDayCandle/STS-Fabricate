@@ -4,8 +4,7 @@ import extendedui.EUIUtils;
 
 import java.io.Serializable;
 
-public class PSkillSaveData implements Serializable
-{
+public class PSkillSaveData implements Serializable {
     public String effectID;
     public String effectData;
     public String target;
@@ -19,8 +18,7 @@ public class PSkillSaveData implements Serializable
     public int[] upgradeExtra;
     public boolean useParent;
 
-    public PSkillSaveData(PSkill<?> effect)
-    {
+    public PSkillSaveData(PSkill<?> effect) {
         this.effectID = effect.effectID;
         this.target = effect.target.name();
         this.valueSource = effect.amountSource.name();
@@ -32,8 +30,7 @@ public class PSkillSaveData implements Serializable
         this.effectData = EUIUtils.serialize(effect.fields);
 
         PSkill<?> cEffect = effect.childEffect;
-        if (cEffect != null)
-        {
+        if (cEffect != null) {
             this.children = cEffect.serialize();
         }
 

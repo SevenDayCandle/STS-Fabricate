@@ -13,42 +13,35 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 
 @VisibleSkill
-public class PMove_PlayCopy extends PMove_GenerateCard
-{
+public class PMove_PlayCopy extends PMove_GenerateCard {
     public static final PSkillData<PField_CardCategory> DATA = register(PMove_PlayCopy.class, PField_CardCategory.class)
             .setExtra(1, DEFAULT_MAX)
             .setGroups(PCLCardGroupHelper.Hand);
 
-    public PMove_PlayCopy()
-    {
+    public PMove_PlayCopy() {
         this(1, PCLCardTarget.RandomEnemy);
     }
 
-    public PMove_PlayCopy(PSkillSaveData content)
-    {
-        super(DATA, content);
-    }
-
-    public PMove_PlayCopy(int copies, PCLCardTarget target, String... cards)
-    {
+    public PMove_PlayCopy(int copies, PCLCardTarget target, String... cards) {
         super(DATA, target, copies, cards);
     }
 
+    public PMove_PlayCopy(PSkillSaveData content) {
+        super(DATA, content);
+    }
+
     @Override
-    public EUITooltip getActionTooltip()
-    {
+    public String getSampleText(PSkill<?> callingSkill) {
+        return TEXT.act_play(TEXT.subjects_copiesOf(TEXT.subjects_x));
+    }
+
+    @Override
+    public EUITooltip getActionTooltip() {
         return PGR.core.tooltips.play;
     }
 
     @Override
-    public void performAction(PCLUseInfo info, AbstractCard c)
-    {
+    public void performAction(PCLUseInfo info, AbstractCard c) {
         getActions().playCopy(c, target.getTarget(info.source, info.target));
-    }
-
-    @Override
-    public String getSampleText(PSkill<?> callingSkill)
-    {
-        return TEXT.act_play(TEXT.subjects_copiesOf(TEXT.subjects_x));
     }
 }

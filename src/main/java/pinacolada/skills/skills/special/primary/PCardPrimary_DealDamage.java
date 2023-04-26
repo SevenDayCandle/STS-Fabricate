@@ -32,66 +32,147 @@ import pinacolada.skills.skills.PDamageTrait;
 import pinacolada.skills.skills.base.traits.PTrait_HitCount;
 
 @VisibleSkill
-public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack>
-{
+public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
     public static final PSkillData<PField_Attack> DATA = register(PCardPrimary_DealDamage.class, PField_Attack.class);
 
     // Damage effects are only customizable in code and cannot be saved in fields
     protected FuncT2<Float, AbstractCreature, AbstractCreature> damageEffect;
 
     // Needed for effect editor initialization. PLEASE do not call this anywhere else without setting a card first
-    public PCardPrimary_DealDamage()
-    {
+    public PCardPrimary_DealDamage() {
         super(DATA, PCLCardTarget.Single, 0);
     }
 
-    public PCardPrimary_DealDamage(PSkillSaveData content)
-    {
+    public PCardPrimary_DealDamage(PSkillSaveData content) {
         super(DATA, content);
     }
 
-    public PCardPrimary_DealDamage(PointerProvider card)
-    {
+    public PCardPrimary_DealDamage(PointerProvider card) {
         super(DATA, card);
     }
 
-    public PCardPrimary_DealDamage(PointerProvider card, AbstractGameAction.AttackEffect attackEffect)
-    {
+    public PCardPrimary_DealDamage(PointerProvider card, AbstractGameAction.AttackEffect attackEffect) {
         super(DATA, card);
         fields.attackEffect = attackEffect;
     }
 
-    public PCardPrimary_DealDamage setProvider(PointerProvider card)
-    {
+    @Override
+    public ColoredString getColoredValueString(Object displayBase, Object displayAmount) {
+        return new ColoredString(displayAmount,
+                (sourceCard != null ?
+                        sourceCard.upgradedDamage ? Settings.GREEN_TEXT_COLOR :
+                                sourceCard.isDamageModified ? (amount > baseAmount ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR)
+                                        : Settings.CREAM_COLOR : Settings.CREAM_COLOR));
+    }
+
+    public AbstractMonster.Intent getIntent() {
+        return AbstractMonster.Intent.ATTACK;
+    }
+
+    @Override
+    public String getSubText() {
+        int count = source != null ? getExtraFromCard() : 1;
+        // We can omit the hit count if there is only one hit and the hit count is never modified
+        // TODO dynamically check if a child effect overrides modifyHitCount
+        String amountString = (count > 1 || hasChildType(PTrait_HitCount.class)) ? getAmountRawString() + "x" + getExtraRawString() : getAmountRawString();
+
+        // When displayed as text, we can just write normal damage down as "damage"
+        EUITooltip attackTooltip = getAttackTooltip();
+        String attackString = attackTooltip == PGR.core.tooltips.normalDamage && (EUIConfiguration.disableDescrptionIcons.get() || PGR.config.expandAbbreviatedEffects.get()) ? PGR.core.strings.subjects_damage : attackTooltip.toString();
+
+        // Use expanded text like PMove_DealDamage if verbose mode is used
+        if (PGR.config.expandAbbreviatedEffects.get()) {
+            if (target == PCLCardTarget.Self) {
+                return TEXT.act_takeDamage(getAmountRawString());
+            }
+            if (target == PCLCardTarget.Single) {
+                return TEXT.act_deal(getAmountRawString(), attackString);
+            }
+            return TEXT.act_dealTo(getAmountRawString(), attackString, getTargetString());
+        }
+
+        String targetShortString = target.getShortString();
+        if (targetShortString != null) {
+            return EUIRM.strings.numAdjNoun(amountString, targetShortString, attackString);
+        }
+        return EUIRM.strings.numNoun(amountString, attackString);
+    }
+
+    @Override
+    public PCardPrimary_DealDamage makeCopy() {
+        return (PCardPrimary_DealDamage) super.makeCopy();
+    }
+
+    @Override
+    public boolean isCondAllowed(PSkill<?> skill) {
+        return (!(skill instanceof PActiveCond));
+    }
+
+    @Override
+    public boolean isModAllowed(PSkill<?> skill) {
+        return (!(skill instanceof PActiveMod));
+    }
+
+    @Override
+    public boolean isMoveAllowed(PSkill<?> skill) {
+        return skill instanceof PDamageTrait;
+    }
+
+    public PCardPrimary_DealDamage setBonus(PMod<?> mod, int amount) {
+        setChain(mod, PTrait.damage(amount));
+        return this;
+    }
+
+    public PCardPrimary_DealDamage setBonus(PMod<?> mod, int amount, int... upgrade) {
+        setChain(mod, PTrait.damage(amount).setUpgrade(upgrade));
+        return this;
+    }
+
+    public PCardPrimary_DealDamage setBonusPercent(PMod<?> mod, int amount) {
+        setChain(mod, PTrait.damageMultiplier(amount));
+        return this;
+    }
+
+    public PCardPrimary_DealDamage setBonusPercent(PMod<?> mod, int amount, int... upgrade) {
+        setChain(mod, PTrait.damageMultiplier(amount).setUpgrade(upgrade));
+        return this;
+    }
+
+    public PCardPrimary_DealDamage setDamageEffect(EffekseerEFK effekseerKey) {
+        this.damageEffect = (s, m) -> PCLEffects.Queue.add(VFX.eFX(effekseerKey, m.hb)).duration * 0.8f;
+        return this;
+    }
+
+    public PCardPrimary_DealDamage setDamageEffect(EffekseerEFK effekseerKey, Color color) {
+        return setDamageEffect(effekseerKey, color, 0.8f);
+    }
+
+    public PCardPrimary_DealDamage setDamageEffect(EffekseerEFK effekseerKey, Color color, float durationMult) {
+        this.damageEffect = (s, m) -> PCLEffects.Queue.add(VFX.eFX(effekseerKey, m.hb).setColor(color)).duration * durationMult;
+        return this;
+    }
+
+    public PCardPrimary_DealDamage setDamageEffect(EffekseerEFK effekseerKey, float durationMult) {
+        this.damageEffect = (s, m) -> PCLEffects.Queue.add(VFX.eFX(effekseerKey, m.hb)).duration * durationMult;
+        return this;
+    }
+
+    public PCardPrimary_DealDamage setDamageEffect(FuncT2<Float, AbstractCreature, AbstractCreature> damageEffect) {
+        this.damageEffect = damageEffect;
+        return this;
+    }
+
+    public PCardPrimary_DealDamage setProvider(PointerProvider card) {
         setTarget(card instanceof PCLCard ? ((PCLCard) card).pclTarget : PCLCardTarget.Single);
         setSource(card, PCLCardValueSource.Damage, PCLCardValueSource.HitCount);
         return this;
     }
 
     @Override
-    public ColoredString getColoredValueString(Object displayBase, Object displayAmount)
-    {
-        return new ColoredString(displayAmount,
-                (sourceCard != null ?
-                        sourceCard.upgradedDamage ? Settings.GREEN_TEXT_COLOR :
-                        sourceCard.isDamageModified ? (amount > baseAmount ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR)
-                                : Settings.CREAM_COLOR : Settings.CREAM_COLOR));
-    }
-
-    @Override
-    public PCardPrimary_DealDamage makeCopy()
-    {
-        return (PCardPrimary_DealDamage) super.makeCopy();
-    }
-
-    @Override
-    public void useImpl(PCLUseInfo info)
-    {
+    public void useImpl(PCLUseInfo info) {
         PCLCard pCard = EUIUtils.safeCast(sourceCard, PCLCard.class);
-        if (pCard != null)
-        {
-            switch (target)
-            {
+        if (pCard != null) {
+            switch (target) {
                 case All:
                     getActions().dealCardDamageToAll(pCard, info.source, fields.attackEffect).forEach(e -> setDamageOptions(e, info));
                 case Team:
@@ -108,155 +189,35 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack>
         }
     }
 
-    @Override
-    public String getSubText()
-    {
-        int count = source != null ? getExtraFromCard() : 1;
-        // We can omit the hit count if there is only one hit and the hit count is never modified
-        // TODO dynamically check if a child effect overrides modifyHitCount
-        String amountString = (count > 1 || hasChildType(PTrait_HitCount.class)) ? getAmountRawString() + "x" + getExtraRawString() : getAmountRawString();
-
-        // When displayed as text, we can just write normal damage down as "damage"
-        EUITooltip attackTooltip = getAttackTooltip();
-        String attackString = attackTooltip == PGR.core.tooltips.normalDamage && (EUIConfiguration.disableDescrptionIcons.get() || PGR.config.expandAbbreviatedEffects.get()) ? PGR.core.strings.subjects_damage : attackTooltip.toString();
-
-        // Use expanded text like PMove_DealDamage if verbose mode is used
-        if (PGR.config.expandAbbreviatedEffects.get())
-        {
-            if (target == PCLCardTarget.Self)
-            {
-                return TEXT.act_takeDamage(getAmountRawString());
-            }
-            if (target == PCLCardTarget.Single)
-            {
-                return TEXT.act_deal(getAmountRawString(), attackString);
-            }
-            return TEXT.act_dealTo(getAmountRawString(), attackString, getTargetString());
-        }
-
-        String targetShortString = target.getShortString();
-        if (targetShortString != null)
-        {
-            return EUIRM.strings.numAdjNoun(amountString, targetShortString, attackString);
-        }
-        return EUIRM.strings.numNoun(amountString, attackString);
-    }
-
-    public AbstractMonster.Intent getIntent() {
-        return AbstractMonster.Intent.ATTACK;
-    }
-
-    @Override
-    public boolean isCondAllowed(PSkill<?> skill)
-    {
-        return (!(skill instanceof PActiveCond));
-    }
-
-    @Override
-    public boolean isModAllowed(PSkill<?> skill)
-    {
-        return (!(skill instanceof PActiveMod));
-    }
-
-    @Override
-    public boolean isMoveAllowed(PSkill<?> skill)
-    {
-        return skill instanceof PDamageTrait;
-    }
-
-    public PCardPrimary_DealDamage setBonus(PMod<?> mod, int amount)
-    {
-        setChain(mod, PTrait.damage(amount));
-        return this;
-    }
-
-    public PCardPrimary_DealDamage setBonus(PMod<?> mod, int amount, int... upgrade)
-    {
-        setChain(mod, PTrait.damage(amount).setUpgrade(upgrade));
-        return this;
-    }
-
-    public PCardPrimary_DealDamage setBonusPercent(PMod<?> mod, int amount)
-    {
-        setChain(mod, PTrait.damageMultiplier(amount));
-        return this;
-    }
-
-    public PCardPrimary_DealDamage setBonusPercent(PMod<?> mod, int amount, int... upgrade)
-    {
-        setChain(mod, PTrait.damageMultiplier(amount).setUpgrade(upgrade));
-        return this;
-    }
-
-    public PCardPrimary_DealDamage setDamageEffect(EffekseerEFK effekseerKey)
-    {
-        this.damageEffect = (s, m) -> PCLEffects.Queue.add(VFX.eFX(effekseerKey, m.hb)).duration * 0.8f;
-        return this;
-    }
-
-    public PCardPrimary_DealDamage setDamageEffect(EffekseerEFK effekseerKey, Color color)
-    {
-        return setDamageEffect(effekseerKey, color, 0.8f);
-    }
-
-    public PCardPrimary_DealDamage setDamageEffect(EffekseerEFK effekseerKey, float durationMult)
-    {
-        this.damageEffect = (s, m) -> PCLEffects.Queue.add(VFX.eFX(effekseerKey, m.hb)).duration * durationMult;
-        return this;
-    }
-
-    public PCardPrimary_DealDamage setDamageEffect(EffekseerEFK effekseerKey, Color color, float durationMult)
-    {
-        this.damageEffect = (s, m) -> PCLEffects.Queue.add(VFX.eFX(effekseerKey, m.hb).setColor(color)).duration * durationMult;
-        return this;
-    }
-
-    public PCardPrimary_DealDamage setDamageEffect(FuncT2<Float, AbstractCreature, AbstractCreature> damageEffect)
-    {
-        this.damageEffect = damageEffect;
-        return this;
-    }
-
-    protected void setDamageOptions(DealDamage damageAction, PCLUseInfo info)
-    {
-        if (damageEffect != null)
-        {
-            damageAction.setDamageEffect(damageEffect);
-        }
-        if (fields.vfxColor != null)
-        {
-            if (fields.vfxTargetColor != null)
-            {
-                damageAction.setVFXColor(fields.vfxColor, fields.vfxTargetColor);
-            }
-            else
-            {
-                damageAction.setVFXColor(fields.vfxColor);
-            }
-        }
-    }
-
-    protected void setDamageOptions(DealDamageToAll damageAction, PCLUseInfo info)
-    {
-        if (damageEffect != null)
-        {
+    protected void setDamageOptions(DealDamageToAll damageAction, PCLUseInfo info) {
+        if (damageEffect != null) {
             damageAction.setDamageEffect((enemy, __) -> damageEffect.invoke(info.source, enemy));
         }
-        if (fields.vfxColor != null)
-        {
-            if (fields.vfxTargetColor != null)
-            {
+        if (fields.vfxColor != null) {
+            if (fields.vfxTargetColor != null) {
                 damageAction.setVFXColor(fields.vfxColor, fields.vfxTargetColor);
             }
-            else
-            {
+            else {
                 damageAction.setVFXColor(fields.vfxColor);
             }
         }
     }
 
-    public PCardPrimary_DealDamage setVFXColor(Color vfxColor, Color vfxTargetColor)
-    {
+    protected void setDamageOptions(DealDamage damageAction, PCLUseInfo info) {
+        if (damageEffect != null) {
+            damageAction.setDamageEffect(damageEffect);
+        }
+        if (fields.vfxColor != null) {
+            if (fields.vfxTargetColor != null) {
+                damageAction.setVFXColor(fields.vfxColor, fields.vfxTargetColor);
+            }
+            else {
+                damageAction.setVFXColor(fields.vfxColor);
+            }
+        }
+    }
+
+    public PCardPrimary_DealDamage setVFXColor(Color vfxColor, Color vfxTargetColor) {
         fields.setVFXColor(vfxColor, vfxTargetColor);
         return this;
     }
