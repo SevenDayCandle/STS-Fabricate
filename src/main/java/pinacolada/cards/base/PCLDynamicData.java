@@ -123,6 +123,7 @@ public class PCLDynamicData extends PCLCardData
             setNumbers(original);
             setAttackType(original.attackType);
             setTarget(original.cardTarget);
+            setTiming(original.timing);
             setTags(original.tags);
             setMaxUpgrades(original.maxUpgradeLevel);
             setMaxCopies(original.maxCopies);

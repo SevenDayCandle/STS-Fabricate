@@ -60,7 +60,7 @@ public class PCond_HaveTakenDamage extends PPassiveCond<PField_Random> implement
         return fields.random ? TEXT.subjects_thisCombat(base) : TEXT.subjects_thisTurn(base);
     }
 
-    // When the owner receives damages, triggers the effect onto the attacker
+    // When the owner receives damage, triggers the effect onto the attacker
     @Override
     public void onAttack(DamageInfo info, int damageAmount, AbstractCreature t)
     {

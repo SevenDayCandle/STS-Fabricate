@@ -96,7 +96,13 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_tags)
                 .setIsMultiSelect(true)
                 .setCanAutosize(true, true);
-        targetDropdown = new EUIDropdown<PCLCardTarget>(new EUIHitbox(tagsDropdown.hb.x + tagsDropdown.hb.width + SPACING_WIDTH, screenH(0.8f), MENU_WIDTH, MENU_HEIGHT)
+        tagsDropdown.setLabelFunctionForButton((list, __) -> tagsDropdown.makeMultiSelectString(item -> item.tag.getTooltip().getTitleOrIcon()), true)
+                .setHeaderRow(new PCLCustomCardTagEditorHeaderRow(tagsDropdown))
+                .setRowFunction(PCLCustomCardTagEditorRow::new)
+                .setRowWidthFunction((a, b, c) -> a.calculateRowWidth() + MENU_HEIGHT * 6)
+                .setItems(EUIUtils.map(PCLCardTag.getAll(), t -> t.make(1, 1)))
+                .setTooltip(PGR.core.strings.cedit_tags, EUIUtils.joinStrings(EUIUtils.DOUBLE_SPLIT_LINE, PGR.core.strings.cetut_attrTags1, PGR.core.strings.cetut_attrTags2));
+        targetDropdown = new EUIDropdown<PCLCardTarget>(new EUIHitbox(tagsDropdown.hb.x + tagsDropdown.hb.width + SPACING_WIDTH / 1.5f, screenH(0.8f), MENU_WIDTH, MENU_HEIGHT)
                 , item -> StringUtils.capitalize(item.toString().toLowerCase()))
                 .setOnChange(targets -> {
                     if (!targets.isEmpty())
@@ -109,7 +115,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
                 .setCanAutosizeButton(true)
                 .setItems(getEligibleTargets(screen.getBuilder().cardColor))
                 .setTooltip(PGR.core.strings.cedit_cardTarget, PGR.core.strings.cetut_cardTarget);
-        timingDropdown = new EUIDropdown<DelayTiming>(new EUIHitbox(targetDropdown.hb.x + targetDropdown.hb.width + SPACING_WIDTH, screenH(0.8f), MENU_WIDTH, MENU_HEIGHT)
+        timingDropdown = new EUIDropdown<DelayTiming>(new EUIHitbox(targetDropdown.hb.x + targetDropdown.hb.width + SPACING_WIDTH / 1.5f, screenH(0.8f), MENU_WIDTH, MENU_HEIGHT)
                 , item -> StringUtils.capitalize(item.toString().toLowerCase()))
                 .setOnChange(targets -> {
                     if (!targets.isEmpty())
@@ -121,13 +127,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.tooltips.timing.title)
                 .setCanAutosizeButton(true)
                 .setItems(DelayTiming.values())
-                .setTooltip(PGR.core.strings.cedit_cardTarget, PGR.core.strings.cetut_cardTarget);
-        tagsDropdown.setLabelFunctionForButton((list, __) -> tagsDropdown.makeMultiSelectString(item -> item.tag.getTooltip().getTitleOrIcon()), true)
-                .setHeaderRow(new PCLCustomCardTagEditorHeaderRow(tagsDropdown))
-                .setRowFunction(PCLCustomCardTagEditorRow::new)
-                .setRowWidthFunction((a, b, c) -> a.calculateRowWidth() + MENU_HEIGHT * 6)
-                .setItems(EUIUtils.map(PCLCardTag.getAll(), t -> t.make(1, 1)))
-                .setTooltip(PGR.core.strings.cedit_tags, EUIUtils.joinStrings(EUIUtils.DOUBLE_SPLIT_LINE, PGR.core.strings.cetut_attrTags1, PGR.core.strings.cetut_attrTags2));
+                .setTooltip(PGR.core.tooltips.timing);
 
         // Number editors
         float curW = START_X;
@@ -166,12 +166,14 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage
         magicNumberEditor = new PCLCustomCardUpgradableEditor(new EUIHitbox(curW, screenH(0.65f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , PGR.core.tooltips.magic.title, (val, upVal) -> screen.modifyBuilder(e -> e.setMagicNumber(val, upVal)))
                 .setLimits(-PSkill.DEFAULT_MAX, PSkill.DEFAULT_MAX)
-                .setTooltip(upgradeLabel.tooltip);
+                .setTooltip(PGR.core.tooltips.magic.makeCopy());
         curW += SPACING_WIDTH;
         hpEditor = new PCLCustomCardUpgradableEditor(new EUIHitbox(curW, screenH(0.65f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , PGR.core.tooltips.hp.title, (val, upVal) -> screen.modifyBuilder(e -> e.setHp(val, upVal)))
                 .setLimits(0, PSkill.DEFAULT_MAX)
-                .setTooltip(upgradeLabel.tooltip);
+                .setTooltip(PGR.core.tooltips.hp.makeCopy());
+        magicNumberEditor.tooltip.setChild(upgradeLabel.tooltip);
+        hpEditor.tooltip.setChild(upgradeLabel.tooltip);
 
         // Affinity editors
 

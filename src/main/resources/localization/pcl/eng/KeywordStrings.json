@@ -170,7 +170,7 @@
 								"NAME": "Green Affinity"
 				},
 				"HP":	{
-								"DESCRIPTION": "",
+								"DESCRIPTION": "A creature dies when it runs out of HP.",
 								"NAME": "HP"
 				},
 				"Haste":	{

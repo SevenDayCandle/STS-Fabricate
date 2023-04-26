@@ -1524,6 +1524,10 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         this.target = attackTarget.cardTarget;
     }
 
+    public void setTiming(DelayTiming timing) {
+        this.timing = timing;
+    }
+
     protected void setCost(int value) {
         if (this.cost >= 0) {
             int previousDiff = costForTurn - cost;
@@ -1668,6 +1672,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
                 cardData.getRightCount(form) + cardData.getRightCountUpgrade(form) * timesUpgraded);
         setMultiDamage(cardData.cardTarget.targetsMulti());
         setTarget(cardData.cardTarget);
+        setTiming(cardData.timing);
         setAttackType(cardData.attackType);
 
         if (timesUpgraded > 0) {
