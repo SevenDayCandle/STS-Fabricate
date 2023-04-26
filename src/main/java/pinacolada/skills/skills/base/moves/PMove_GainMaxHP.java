@@ -1,6 +1,5 @@
 package pinacolada.skills.skills.base.moves;
 
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
@@ -36,17 +35,6 @@ public class PMove_GainMaxHP extends PMove_Gain
     }
 
     @Override
-    public PMove_GainMaxHP onAddToCard(AbstractCard card)
-    {
-        super.onAddToCard(card);
-        if (!card.tags.contains(AbstractCard.CardTags.HEALING))
-        {
-            card.tags.add(AbstractCard.CardTags.HEALING);
-        }
-        return this;
-    }
-
-    @Override
     public boolean isDetrimental()
     {
         return amount < 0;
@@ -64,5 +52,11 @@ public class PMove_GainMaxHP extends PMove_Gain
             info.source.increaseMaxHp(amount, true);
         }
         super.use(info);
+    }
+
+    @Override
+    public boolean isMetascaling()
+    {
+        return true;
     }
 }

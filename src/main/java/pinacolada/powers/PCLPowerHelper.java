@@ -63,7 +63,7 @@ public class PCLPowerHelper implements TooltipProvider
     public static final PCLPowerHelper Buffer = new PCLPowerHelper(BufferPower.POWER_ID, PGR.core.tooltips.buffer, BufferPower::new, Behavior.Permanent, true, false, false);
     public static final PCLPowerHelper Critical = new PCLPowerHelper(CriticalPower.POWER_ID, PGR.core.tooltips.critical, CriticalPower::new, Behavior.Permanent, false, false, true);
     public static final PCLPowerHelper CurlUp = new PCLPowerHelper(PCLCurlUpPower.POWER_ID, PGR.core.tooltips.curlUp, PCLCurlUpPower::new, Behavior.Permanent, true, false, false);
-    public static final PCLPowerHelper Deflection = new PCLPowerHelper(DeflectionPower.POWER_ID, PGR.core.tooltips.deflection, DeflectionPower::new, Behavior.SingleTurn, true, false, false);
+    public static final PCLPowerHelper Deflection = new PCLPowerHelper(DeflectionPower.POWER_ID, PGR.core.tooltips.deflection, DeflectionPower::new, Behavior.SingleTurn, false, false, false);
     public static final PCLPowerHelper Dexterity = new PCLPowerHelper(DexterityPower.POWER_ID, PGR.core.tooltips.dexterity, DexterityPower::new, Behavior.Permanent, true, false, false);
     public static final PCLPowerHelper Energized = new PCLPowerHelper(EnergizedPower.POWER_ID, PGR.core.tooltips.energized, EnergizedPower::new, Behavior.SingleTurn, true, false, false);
     public static final PCLPowerHelper Envenom = new PCLPowerHelper(EnvenomPower.POWER_ID, PGR.core.tooltips.envenom, EnvenomPower::new, Behavior.Permanent, false, false, false);

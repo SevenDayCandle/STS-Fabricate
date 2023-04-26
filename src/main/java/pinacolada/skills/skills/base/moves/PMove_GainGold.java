@@ -1,6 +1,5 @@
 package pinacolada.skills.skills.base.moves;
 
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
@@ -44,20 +43,15 @@ public class PMove_GainGold extends PMove_Gain
     }
 
     @Override
-    public PMove_GainGold onAddToCard(AbstractCard card)
-    {
-        super.onAddToCard(card);
-        if (!card.tags.contains(AbstractCard.CardTags.HEALING))
-        {
-            card.tags.add(AbstractCard.CardTags.HEALING);
-        }
-        return this;
-    }
-
-    @Override
     public void use(PCLUseInfo info)
     {
         getActions().gainGold(amount);
         super.use(info);
+    }
+
+    @Override
+    public boolean isMetascaling()
+    {
+        return true;
     }
 }

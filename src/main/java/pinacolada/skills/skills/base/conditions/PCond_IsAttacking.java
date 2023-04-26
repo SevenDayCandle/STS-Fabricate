@@ -5,8 +5,8 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.interfaces.subscribers.OnAttackSubscriber;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.interfaces.subscribers.OnAttackSubscriber;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
@@ -59,8 +59,7 @@ public class PCond_IsAttacking extends PPassiveCond<PField_Not> implements OnAtt
         {
             return getWheneverString(PGR.core.tooltips.attack.present());
         }
-        String base = fields.not ? TEXT.cond_not(PGR.core.tooltips.attack.progressive()) : PGR.core.tooltips.attack.progressive();
-        return target == PCLCardTarget.Single ? TEXT.cond_ifTheEnemyIs(base) : TEXT.cond_ifAnyEnemyIs(base);
+        return getTargetIsString(fields.not ? TEXT.cond_not(PGR.core.tooltips.attack.progressive()) : PGR.core.tooltips.attack.progressive());
     }
 
     // When the owner attacks, triggers the effect on the target

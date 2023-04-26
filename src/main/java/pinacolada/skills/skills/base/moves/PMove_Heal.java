@@ -1,6 +1,5 @@
 package pinacolada.skills.skills.base.moves;
 
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -37,17 +36,6 @@ public class PMove_Heal extends PMove<PField_Empty>
     }
 
     @Override
-    public PMove_Heal onAddToCard(AbstractCard card)
-    {
-        super.onAddToCard(card);
-        if (target.targetsSelf() && !card.tags.contains(AbstractCard.CardTags.HEALING))
-        {
-            card.tags.add(AbstractCard.CardTags.HEALING);
-        }
-        return this;
-    }
-
-    @Override
     public String getSampleText(PSkill<?> callingSkill)
     {
         return TEXT.act_heal(TEXT.subjects_x);
@@ -71,5 +59,17 @@ public class PMove_Heal extends PMove<PField_Empty>
             return TEXT.act_heal(getAmountRawString());
         }
         return TEXT.act_healOn(getAmountRawString(), getTargetString());
+    }
+
+    @Override
+    public boolean isDetrimental()
+    {
+        return target.targetsEnemies();
+    }
+
+    @Override
+    public boolean isMetascaling()
+    {
+        return !isDetrimental();
     }
 }

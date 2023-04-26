@@ -1,6 +1,5 @@
 package pinacolada.skills.skills.base.moves;
 
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.piles.RemoveFromPile;
@@ -44,17 +43,6 @@ public class PMove_RemoveCard extends PCallbackMove<PField_CardCategory>
     }
 
     @Override
-    public PMove_RemoveCard onAddToCard(AbstractCard card)
-    {
-        super.onAddToCard(card);
-        if (card.tags.contains(AbstractCard.CardTags.HEALING))
-        {
-            card.tags.add(AbstractCard.CardTags.HEALING);
-        }
-        return this;
-    }
-
-    @Override
     public String getSampleText(PSkill<?> callingSkill)
     {
         return TEXT.act_removeFrom(TEXT.subjects_card, TEXT.cpile_deck);
@@ -83,5 +71,11 @@ public class PMove_RemoveCard extends PCallbackMove<PField_CardCategory>
                 : fields.groupTypes.size() > 0 ? EUIRM.strings.numNoun(extra > amount ? TEXT.subjects_xOfY(getAmountRawString(), getExtraRawString()) : getAmountRawString(), fields.getCardOrString(getRawString(EXTRA_CHAR)))
                 : TEXT.subjects_thisCard;
         return TEXT.act_removeFrom(cString, fields.getGroupString());
+    }
+
+    @Override
+    public boolean isMetascaling()
+    {
+        return true;
     }
 }

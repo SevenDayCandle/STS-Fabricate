@@ -103,7 +103,7 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
                     {
                         performAction(info, c);
                     }
-                    info.setData(choice.group);
+                    info.setData(cards);
                     callback.invoke(info);
                     if (this.childEffect != null)
                     {

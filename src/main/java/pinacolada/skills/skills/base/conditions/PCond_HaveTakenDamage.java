@@ -6,8 +6,8 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIRM;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.interfaces.subscribers.OnAttackSubscriber;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.interfaces.subscribers.OnAttackSubscriber;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
@@ -33,7 +33,7 @@ public class PCond_HaveTakenDamage extends PPassiveCond<PField_Random> implement
 
     public PCond_HaveTakenDamage(int amount)
     {
-        super(DATA, PCLCardTarget.None, amount);
+        super(DATA, PCLCardTarget.Self, amount);
     }
 
     @Override

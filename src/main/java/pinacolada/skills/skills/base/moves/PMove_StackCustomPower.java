@@ -5,9 +5,9 @@ import com.megacrit.cardcrawl.localization.LocalizedStrings;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.markers.SummonOnlyMove;
-import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.powers.PSkillPower;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
@@ -142,7 +142,7 @@ public class PMove_StackCustomPower extends PMove<PField_CustomPower> implements
 
         if (referencesSelf)
         {
-            return baseAmount > 0 ? TEXT.act_increaseBy(PGR.core.strings.combat_uses, getAmountRawString()) : TEXT.act_remove(TEXT.subjects_thisX);
+            return baseAmount > 0 ? TEXT.act_increaseBy(PGR.core.strings.combat_uses, getAmountRawString()) : TEXT.act_remove(TEXT.subjects_this);
         }
 
         String base = joinEffectTexts(effectsForPower, baseAmount > 0 ? " " : EUIUtils.DOUBLE_SPLIT_LINE, true);

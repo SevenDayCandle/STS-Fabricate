@@ -43,7 +43,7 @@ public class PMod_IncreaseOnUse extends PPassiveMod<PField_Empty>
     @Override
     public String getSubText()
     {
-        return amount < 0 ? TEXT.act_reduceBy(TEXT.subjects_thisCard, getAmountRawString()) : TEXT.act_increaseBy(TEXT.subjects_thisCard, getAmountRawString());
+        return amount < 0 ? TEXT.act_reduceBy(TEXT.subjects_this, getAmountRawString()) : TEXT.act_increaseBy(TEXT.subjects_this, getAmountRawString());
     }
 
     @Override

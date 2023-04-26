@@ -38,13 +38,13 @@ public class PMove_ModifyMagicNumber extends PMove_Modify<PField_CardCategory>
     @Override
     public String getObjectSampleText()
     {
-        return PGR.core.tooltips.timing.title;
+        return PGR.core.tooltips.magic.title;
     }
 
     @Override
     public String getObjectText()
     {
-        return EUIRM.strings.numNoun(getExtraRawString(), PGR.core.tooltips.timing);
+        return EUIRM.strings.numNoun(getExtraRawString(), PGR.core.tooltips.magic);
     }
 
     @Override

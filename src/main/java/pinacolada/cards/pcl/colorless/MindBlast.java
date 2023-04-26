@@ -8,7 +8,6 @@ import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLAttackType;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.skills.PMod;
-import pinacolada.skills.PTrait;
 
 @VisibleCard
 public class MindBlast extends PCLCard
@@ -29,6 +28,6 @@ public class MindBlast extends PCLCard
 
     public void setup(Object input)
     {
-        addDamageMove().setChain(PMod.perCard(1, PCLCardGroupHelper.DrawPile), PTrait.damage(1));
+        addDamageMove().setBonus(PMod.perCard(1, PCLCardGroupHelper.DrawPile), 1);
     }
 }

@@ -8,13 +8,13 @@ import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
-import pinacolada.interfaces.subscribers.OnMonsterDeathSubscriber;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.interfaces.subscribers.OnMonsterDeathSubscriber;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.skills.fields.PField_Not;
+import pinacolada.skills.fields.PField_Random;
 import pinacolada.skills.skills.PActiveNonCheckCond;
 import pinacolada.skills.skills.PLimit;
 import pinacolada.skills.skills.base.primary.PTrigger_When;
@@ -23,9 +23,9 @@ import pinacolada.utilities.GameUtilities;
 import java.util.List;
 
 @VisibleSkill
-public class PCond_Fatal extends PActiveNonCheckCond<PField_Not> implements OnMonsterDeathSubscriber
+public class PCond_Fatal extends PActiveNonCheckCond<PField_Random> implements OnMonsterDeathSubscriber
 {
-    public static final PSkillData<PField_Not> DATA = register(PCond_Fatal.class, PField_Not.class, 1, 1)
+    public static final PSkillData<PField_Random> DATA = register(PCond_Fatal.class, PField_Random.class, 1, 1)
             .selfTarget();
 
     public PCond_Fatal()
@@ -51,6 +51,10 @@ public class PCond_Fatal extends PActiveNonCheckCond<PField_Not> implements OnMo
         {
             return TEXT.cond_whenMulti(TEXT.subjects_anyEnemy(), PGR.core.tooltips.kill.present());
         }
+        if (fields.random)
+        {
+            return fields.not ? getTargetIsString(TEXT.cond_not(PGR.core.tooltips.kill.past())) : getTargetIsString(PGR.core.tooltips.kill.past());
+        }
         return fields.not ? TEXT.cond_not(PGR.core.tooltips.fatal.title) : TEXT.cond_ifX(PGR.core.tooltips.fatal.title);
     }
 
@@ -64,7 +68,7 @@ public class PCond_Fatal extends PActiveNonCheckCond<PField_Not> implements OnMo
     {
         List<AbstractCreature> targetList = getTargetList(info);
         return PCLActions.last.callback(targetList, (targets, __) -> {
-            if (targets.size() > 0 && EUIUtils.any(targets, GameUtilities::isDeadOrEscaped) && (!(parent instanceof PLimit) || ((PLimit) parent).tryActivate(info)))
+            if (targets.size() > 0 && EUIUtils.any(targets, t -> GameUtilities.isFatal(t, fields.random)) && (!(parent instanceof PLimit) || ((PLimit) parent).tryActivate(info)))
             {
                 onComplete.invoke();
             }

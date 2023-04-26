@@ -28,6 +28,7 @@ import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.helpers.ModHelper;
 import com.megacrit.cardcrawl.helpers.Prefs;
 import com.megacrit.cardcrawl.localization.CardStrings;
+import com.megacrit.cardcrawl.localization.LocalizedStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.monsters.MonsterGroup;
 import com.megacrit.cardcrawl.orbs.*;
@@ -46,6 +47,7 @@ import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import com.megacrit.cardcrawl.vfx.BobEffect;
 import extendedui.EUI;
 import extendedui.EUIGameUtils;
+import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.AbstractScreen;
@@ -63,6 +65,7 @@ import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardAffinities;
 import pinacolada.cards.base.fields.PCLCardAffinity;
 import pinacolada.cards.base.modifiers.AffinityDisplayModifier;
+import pinacolada.cards.base.modifiers.TagDisplayModifier;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.characters.PCLCharacter;
 import pinacolada.dungeon.CombatManager;
@@ -1516,6 +1519,34 @@ public class GameUtilities
         );
     }
 
+    public static String getTagTipString(AbstractCard card)
+    {
+        ArrayList<String> tagNames = new ArrayList<>();
+        for (PCLCardTag tag : PCLCardTag.values())
+        {
+            int value = tag.getInt(card);
+            switch (value)
+            {
+                case 1:
+                    tagNames.add(tag.getTooltip().title);
+                    break;
+                case -1:
+                    // Only show the infinite label for cards that allow it
+                    if (tag.minValue == -1)
+                    {
+                        tagNames.add(EUIRM.strings.generic2(tag.getTooltip().title, PGR.core.strings.subjects_infinite));
+                    }
+                    break;
+                case 0:
+                    break;
+                default:
+                    tagNames.add(EUIRM.strings.generic2(tag.getTooltip().title, value));
+                    break;
+            }
+        }
+        return tagNames.size() > 0 ? EUIUtils.joinStrings(PSkill.EFFECT_SEPARATOR, tagNames) + LocalizedStrings.PERIOD : "";
+    }
+
     public static int getTempHP(AbstractCreature creature)
     {
         return creature != null ? TempHPField.tempHp.get(creature) : 0;
@@ -1843,6 +1874,22 @@ public class GameUtilities
                 intent == AbstractMonster.Intent.ATTACK_DEFEND || intent == AbstractMonster.Intent.ATTACK);
     }
 
+    public static boolean isBuffing(AbstractCreature monster)
+    {
+        return monster instanceof AbstractMonster && isBuffing(((AbstractMonster) monster).intent);
+    }
+
+    public static boolean isBuffing(AbstractMonster monster)
+    {
+        return isBuffing(monster.intent);
+    }
+
+    public static boolean isBuffing(AbstractMonster.Intent intent)
+    {
+        return (intent == AbstractMonster.Intent.BUFF || intent == AbstractMonster.Intent.ATTACK_BUFF ||
+                intent == AbstractMonster.Intent.DEFEND_BUFF);
+    }
+
     // Both colorless and curse are character-independent
     public static boolean isColorlessCardColor(AbstractCard.CardColor cardColor)
     {
@@ -1877,10 +1924,30 @@ public class GameUtilities
         return power != null && power.type == AbstractPower.PowerType.DEBUFF;
     }
 
+    public static boolean isDebuffing(AbstractCreature monster)
+    {
+        return monster instanceof AbstractMonster && isDebuffing(((AbstractMonster) monster).intent);
+    }
+
+    public static boolean isDebuffing(AbstractMonster monster)
+    {
+        return isDebuffing(monster.intent);
+    }
+
     public static boolean isDebuffing(AbstractMonster.Intent intent)
     {
         return (intent == AbstractMonster.Intent.ATTACK_DEBUFF || intent == AbstractMonster.Intent.DEBUFF ||
                 intent == AbstractMonster.Intent.DEFEND_DEBUFF || intent == AbstractMonster.Intent.STRONG_DEBUFF);
+    }
+
+    public static boolean isDefending(AbstractCreature monster)
+    {
+        return monster instanceof AbstractMonster && isDefending(((AbstractMonster) monster).intent);
+    }
+
+    public static boolean isDefending(AbstractMonster monster)
+    {
+        return isDefending(monster.intent);
     }
 
     public static boolean isDefending(AbstractMonster.Intent intent)
@@ -1893,7 +1960,7 @@ public class GameUtilities
     {
         return (enemy.isDead || enemy.isDying || enemy.currentHealth <= 0)
                 && !enemy.hasPower(RegrowPower.POWER_ID)
-                && (includeMinions || !enemy.hasPower(MinionPower.POWER_ID));
+                && (includeMinions || (!enemy.hasPower(MinionPower.POWER_ID) && !(enemy instanceof PCLCardAlly)));
     }
 
     public static boolean isMonster(AbstractCreature c)
@@ -1906,37 +1973,22 @@ public class GameUtilities
         return !c.hasTag(AbstractCard.CardTags.HEALING) && c.rarity != AbstractCard.CardRarity.SPECIAL && !PCLCardTag.Fleeting.has(c) && !c.isLocked;
     }
 
-    public static boolean isPlayable(AbstractCard card)
+    public static boolean isPCLBuff(AbstractPower power)
     {
-        final boolean temp = card.freeToPlayOnce;
-        card.freeToPlayOnce = true;
-        boolean canUse = card.canUse(player, null);
-
-        if (!canUse && (card.target == AbstractCard.CardTarget.ENEMY || card.target == AbstractCard.CardTarget.SELF_AND_ENEMY))
-        {
-            final ArrayList<AbstractMonster> enemies = getEnemies(true);
-            for (AbstractMonster m : enemies)
-            {
-                if (card.canUse(player, m))
-                {
-                    canUse = true;
-                    break;
-                }
-            }
-        }
-
-        card.freeToPlayOnce = temp;
-        return canUse;
+        PCLPowerHelper helper = PCLPowerHelper.get(power.ID);
+        return helper != null && !helper.isDebuff;
     }
 
-    public static boolean isPlayable(AbstractCard card, AbstractMonster target)
+    public static boolean isPCLDebuff(AbstractPower power)
     {
-        final boolean temp = card.freeToPlayOnce;
-        card.freeToPlayOnce = true;
-        boolean canUse = card.canUse(player, target);
-        card.freeToPlayOnce = temp;
+        PCLPowerHelper helper = PCLPowerHelper.get(power.ID);
+        return helper != null && helper.isDebuff;
+    }
 
-        return canUse;
+    public static boolean isPCLPower(AbstractPower power)
+    {
+        PCLPowerHelper helper = PCLPowerHelper.get(power.ID);
+        return helper != null;
     }
 
     public static boolean isPlayer(AbstractCreature c)
@@ -2348,6 +2400,16 @@ public class GameUtilities
                 if (PGR.config.displayCardTagDescription.get())
                 {
                     pCard.initializeDescription();
+                }
+            }
+            // For non-PCL cards, add modifier so they can show them in the description
+            else
+            {
+                TagDisplayModifier mod = TagDisplayModifier.get(card);
+                if (mod == null)
+                {
+                    mod = new TagDisplayModifier();
+                    CardModifierManager.addModifier(card, mod);
                 }
             }
             CombatManager.onTagChanged(card, tag, value);

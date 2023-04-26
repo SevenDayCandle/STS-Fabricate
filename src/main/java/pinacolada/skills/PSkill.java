@@ -983,6 +983,16 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         }
     }
 
+    public final String getTargetIsString(String subject)
+    {
+        return getTargetIsString(target, subject);
+    }
+
+    public final String getTargetIsString(PCLCardTarget target, String subject)
+    {
+        return TEXT.cond_ifX(TEXT.cond_objIs(getTargetSubjectString(target), subject));
+    }
+
     public String getText(int index, boolean addPeriod)
     {
         return childEffect != null ? childEffect.getText(index, addPeriod) : getText(addPeriod);
@@ -1132,6 +1142,12 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
         return (sourceCard != null && sourceCard.type == PCLEnum.CardType.SUMMON) || (getSourceCreature() instanceof AbstractMonster);
     }
 
+    /* Determines whether this effect should render cards unobtainable through card generation effects */
+    public boolean isMetascaling()
+    {
+        return false;
+    }
+
     public final boolean isSelfOnlyTarget()
     {
         return (target == PCLCardTarget.None || (target == PCLCardTarget.Self && !isFromCreature()));
@@ -1254,6 +1270,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider
 
     public PSkill<T> onAddToCard(AbstractCard card)
     {
+        if (isMetascaling() && !card.tags.contains(AbstractCard.CardTags.HEALING))
+        {
+            card.tags.add(AbstractCard.CardTags.HEALING);
+        }
         if (this.childEffect != null)
         {
             this.childEffect.onAddToCard(card);

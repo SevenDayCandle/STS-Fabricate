@@ -19,9 +19,9 @@ public class StabilizingPower extends PCLSubscribingPower implements InvisiblePo
     }
 
     @Override
-    public boolean tryReducePower(AbstractPower var1, AbstractCreature var2, AbstractCreature var3, AbstractGameAction var4)
+    public boolean tryReducePower(AbstractPower power, AbstractCreature a, AbstractCreature b, AbstractGameAction c)
     {
-        return var1 != target;
+        return power == null || !target.ID.equals(power.ID);
     }
 
     public void atStartOfTurnPostDraw()

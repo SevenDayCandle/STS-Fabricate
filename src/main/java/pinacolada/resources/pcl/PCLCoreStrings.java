@@ -378,7 +378,7 @@ public class PCLCoreStrings extends PCLStrings
     public final String subjects_theirX = subjects.TEXT[41];
     public final String subjects_them = subjects.TEXT[42];
     public final String subjects_thisCard = subjects.TEXT[43];
-    public final String subjects_thisX = subjects.TEXT[44];
+    public final String subjects_this = subjects.TEXT[44];
     public final String subjects_unblockedX = subjects.TEXT[45];
     public final String subjects_x = subjects.TEXT[46];
     public final String subjects_you = subjects.TEXT[47];
@@ -539,8 +539,7 @@ public class PCLCoreStrings extends PCLStrings
     public final String cond_genericConditional(Object desc1, Object desc2) {return condFmt(37, desc1, desc2);}
     public final String cond_passive() {return condFmt(38);}
 
-    public final String cond_ifTheEnemyIs(Object desc1) {return cond_ifX(cond_objIs(subjects_target, desc1));}
-    public final String cond_ifAnyEnemyIs(Object desc1) {return cond_ifX(cond_objIs(subjects_anyEnemy(), desc1));}
+    public final String cond_ifTargetIs(Object target, Object desc1) {return cond_ifX(cond_objIs(target, desc1));}
     public final String cond_ifYouDidThisCombat(Object verb, Object obj) {return subjects_thisCombat(cond_ifTargetDidX(subjects_you, verb, obj));}
     public final String cond_ifYouDidThisTurn(Object verb, Object obj) {return subjects_thisTurn(cond_ifTargetDidX(subjects_you, verb, obj));}
     public final String cond_perThisCombat(Object desc1, Object desc2, Object desc3) {return subjects_thisCombat(cond_perXY(desc1, desc2, desc3));}

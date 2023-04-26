@@ -11,7 +11,8 @@
 								"pcl:Metamorphosis": {"NAME": "Metamorphosis"},
 								"pcl:MindBlast": {"NAME": "Mind Blast"},
 								"pcl:Miracle": {"NAME": "Miracle"},
-								"pcl:Panacea": {"NAME": "Panacea"}
+								"pcl:Panacea": {"NAME": "Panacea"},
+								"pcl:Transmutation": {"NAME": "Transmutation"}
 				},
 				"CURSE":	{
 								"pcl:Curse_AscendersBane": {

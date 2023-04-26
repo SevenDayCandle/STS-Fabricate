@@ -23,7 +23,7 @@ public class SilencedPower extends PCLSubscribingPower implements OnTryApplyPowe
     @Override
     public boolean tryApplyPower(AbstractPower power, AbstractCreature target, AbstractCreature source, AbstractGameAction action)
     {
-        return !GameUtilities.isCommonBuff(power) || (power.owner != owner && target != owner);
+        return !GameUtilities.isPCLBuff(power) || (power.owner != owner && target != owner);
     }
 
     @Override

@@ -35,17 +35,6 @@ public class PMove_ObtainCard extends PMove_GenerateCard
     }
 
     @Override
-    public PMove_ObtainCard onAddToCard(AbstractCard card)
-    {
-        super.onAddToCard(card);
-        if (card.tags.contains(AbstractCard.CardTags.HEALING))
-        {
-            card.tags.add(AbstractCard.CardTags.HEALING);
-        }
-        return this;
-    }
-
-    @Override
     public EUITooltip getActionTooltip()
     {
         return PGR.core.tooltips.obtain;
@@ -55,5 +44,11 @@ public class PMove_ObtainCard extends PMove_GenerateCard
     public void performAction(PCLUseInfo info, AbstractCard c)
     {
         getActions().showAndObtain(c);
+    }
+
+    @Override
+    public boolean isMetascaling()
+    {
+        return true;
     }
 }
