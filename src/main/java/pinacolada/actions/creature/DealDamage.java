@@ -13,7 +13,6 @@ import pinacolada.actions.PCLActions;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.effects.EffekseerEFK;
 import pinacolada.effects.PCLAttackVFX;
-import pinacolada.effects.PCLEffects;
 import pinacolada.effects.VFX;
 import pinacolada.utilities.GameUtilities;
 
@@ -124,7 +123,7 @@ public class DealDamage extends PCLAction<AbstractCreature> {
 
         if (attackVFX != null && !hasPlayedEffect && duration <= 0.1f) {
             addDuration(attackVFX.damageDelay);
-            PCLEffects.List.attack(source, target, attackVFX, pitchMin, pitchMax, vfxColor);
+            attackVFX.attack(source, target, pitchMin, pitchMax, vfxColor);
             hasPlayedEffect = true;
         }
 

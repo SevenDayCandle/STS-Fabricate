@@ -1,4 +1,4 @@
-package pinacolada.effects.vfx.megacritCopy;
+package pinacolada.effects.vfx;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -11,8 +11,7 @@ import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.vfx.combat.OrbFlareEffect;
 import pinacolada.effects.PCLEffect;
 
-@Deprecated
-public class OrbFlareEffect2 extends PCLEffect {
+public class OrbFlareNotActuallyNeedingOrbEffect extends PCLEffect {
     private static AtlasRegion outer;
     private static AtlasRegion inner;
     private final float cX;
@@ -20,7 +19,7 @@ public class OrbFlareEffect2 extends PCLEffect {
     private float scaleY;
     private Color color2;
 
-    public OrbFlareEffect2(float cX, float cY) {
+    public OrbFlareNotActuallyNeedingOrbEffect(float cX, float cY) {
         super(0.5f);
 
         if (outer == null) {
@@ -37,7 +36,7 @@ public class OrbFlareEffect2 extends PCLEffect {
         setColors(OrbFlareEffect.OrbFlareColor.DARK);
     }
 
-    public OrbFlareEffect2 setColors(OrbFlareEffect.OrbFlareColor color) {
+    public OrbFlareNotActuallyNeedingOrbEffect setColors(OrbFlareEffect.OrbFlareColor color) {
         switch (color) {
             case DARK:
                 this.color = Color.VIOLET.cpy();
@@ -71,7 +70,7 @@ public class OrbFlareEffect2 extends PCLEffect {
         sb.draw(inner, this.cX - (float) inner.packedWidth / 2.0F, this.cY - (float) inner.packedHeight / 2.0F, (float) inner.packedWidth / 2.0F, (float) inner.packedHeight / 2.0F, (float) inner.packedWidth, (float) inner.packedHeight, this.scale * Settings.scale * 1.1F, this.scaleY * Settings.scale, MathUtils.random(-1.0F, 1.0F));
     }
 
-    public void update() {
+    public void updateInternal() {
         this.duration -= Gdx.graphics.getRawDeltaTime();
         if (this.duration < 0.0F) {
             this.duration = 0.0F;
@@ -88,7 +87,7 @@ public class OrbFlareEffect2 extends PCLEffect {
 
     }
 
-    public OrbFlareEffect2 setColors(Color color1, Color color2) {
+    public OrbFlareNotActuallyNeedingOrbEffect setColors(Color color1, Color color2) {
         this.color.set(color1);
         this.color2.set(color2);
 

@@ -11,7 +11,7 @@ import javassist.expr.ExprEditor;
 import javassist.expr.MethodCall;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.SFX;
+import pinacolada.effects.PCLSFX;
 import pinacolada.interfaces.listeners.OnAddedToDrawPileListener;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.ListSelection;
@@ -43,7 +43,7 @@ public class SoulPatches {
         @SpirePrefixPatch
         public static SpireReturn<Void> prefix(SoulGroup __instance, AbstractCard card, boolean obtain) {
             if (obtain && !PGR.dungeon.tryObtainCard(card)) {
-                SFX.play(SFX.CARD_BURN, 0.8f, 1.2f, 0.5f);
+                PCLSFX.play(PCLSFX.CARD_BURN, 0.8f, 1.2f, 0.5f);
                 PCLEffects.TopLevelQueue.add(new CardPoofEffect(card.current_x, card.current_y));
                 return SpireReturn.Return();
             }

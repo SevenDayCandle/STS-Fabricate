@@ -53,24 +53,6 @@ public final class PCLEffects {
         return UnlistedEffects.isEmpty();
     }
 
-    public PCLEffect attack(AbstractCreature source, AbstractCreature target, PCLAttackVFX attackEffect, float pitchMin, float pitchMax) {
-        return attack(source, target, attackEffect, pitchMin, pitchMax, null, source == target ? 0 : 0.15f);
-    }
-
-    public PCLEffect attack(AbstractCreature source, AbstractCreature target, PCLAttackVFX attackEffect, float pitchMin, float pitchMax, Color vfxColor, float spread) {
-        attackEffect.playSound(pitchMin, pitchMax);
-        return attackWithoutSound(source, target, attackEffect, vfxColor, spread);
-    }
-
-    public PCLEffect attackWithoutSound(AbstractCreature source, AbstractCreature target, PCLAttackVFX attackEffect, Color vfxColor, float spread) {
-        final PCLEffect effect = add(attackEffect.getVFX(source, VFX.randomX(target.hb, spread), VFX.randomY(target.hb, spread)));
-        if (vfxColor != null) {
-            effect.setColor(vfxColor);
-        }
-
-        return effect;
-    }
-
     public <T extends AbstractGameEffect> T add(T effect) {
         getList().add(effect);
 
@@ -96,10 +78,6 @@ public final class PCLEffects {
         }
 
         throw new RuntimeException("Enum value does not exist.");
-    }
-
-    public PCLEffect attack(AbstractCreature source, AbstractCreature target, PCLAttackVFX attackEffect, float pitchMin, float pitchMax, Color vfxColor) {
-        return attack(source, target, attackEffect, pitchMin, pitchMax, vfxColor, source == target ? 0 : 0.15f);
     }
 
     public BorderFlashEffect borderFlash(Color color) {

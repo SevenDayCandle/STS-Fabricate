@@ -5,7 +5,7 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.StrengthPower;
 import extendedui.EUIUtils;
 import pinacolada.actions.PCLActions;
-import pinacolada.effects.SFX;
+import pinacolada.effects.PCLSFX;
 import pinacolada.powers.PCLPower;
 import pinacolada.resources.pcl.PCLCoreTooltips;
 import pinacolada.utilities.GameUtilities;
@@ -30,7 +30,7 @@ public class ShacklesPower extends PCLPower {
 
     @Override
     public void playApplyPowerSfx() {
-        SFX.play(SFX.POWER_SHACKLE, 0.95F, 1.05f);
+        PCLSFX.play(PCLSFX.POWER_SHACKLE, 0.95F, 1.05f);
     }
 
     @Override

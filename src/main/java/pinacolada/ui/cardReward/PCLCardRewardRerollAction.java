@@ -8,7 +8,7 @@ import extendedui.EUIRM;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.SFX;
+import pinacolada.effects.PCLSFX;
 import pinacolada.effects.card.HideCardEffect;
 import pinacolada.interfaces.providers.CardRewardActionProvider;
 import pinacolada.relics.pcl.AbstractCubes;
@@ -26,7 +26,7 @@ public class PCLCardRewardRerollAction extends PCLCardRewardAction {
     public AbstractCard actionImpl(PCLCardRewardActionButton button, AbstractCard card, int cardIndex) {
         final AbstractCard replacement = actionProvider.doAction(card, rewardItem, cardIndex);
         if (replacement != null) {
-            SFX.play(SFX.CARD_SELECT);
+            PCLSFX.play(PCLSFX.CARD_SELECT);
             PCLEffects.TopLevelList.add(new ExhaustCardEffect(card));
             PCLEffects.TopLevelList.add(new HideCardEffect(card));
             GameUtilities.copyVisualProperties(replacement, card);

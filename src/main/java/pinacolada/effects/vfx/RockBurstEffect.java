@@ -8,7 +8,7 @@ import extendedui.ui.TextureCache;
 import extendedui.utilities.EUIColors;
 import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.SFX;
+import pinacolada.effects.PCLSFX;
 import pinacolada.effects.VFX;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.RandomizedList;
@@ -32,7 +32,7 @@ public class RockBurstEffect extends PCLEffect {
 
     @Override
     protected void firstUpdate() {
-        SFX.play(scale > 1 ? SFX.BLUNT_HEAVY : SFX.BLUNT_FAST, 0.9f, 1.1f);
+        PCLSFX.play(scale > 1 ? PCLSFX.BLUNT_HEAVY : PCLSFX.BLUNT_FAST, 0.9f, 1.1f);
         PCLEffects.Queue.add(VFX.whack(x, y).setScale(0.25f * Settings.scale).setColor(Color.TAN));
 
         for (int i = 0; i < PROJECTILES; ++i) {

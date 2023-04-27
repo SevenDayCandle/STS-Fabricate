@@ -17,7 +17,7 @@ import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.SFX;
+import pinacolada.effects.PCLSFX;
 import pinacolada.effects.card.RenderCardEffect;
 import pinacolada.effects.card.UnfadeOutEffect;
 import pinacolada.utilities.GameUtilities;
@@ -243,7 +243,7 @@ public class MoveCard extends PCLAction<AbstractCard> {
         }
         else {
             card.triggerWhenDrawn();
-            SFX.play(SFX.CARD_OBTAIN);
+            PCLSFX.play(PCLSFX.CARD_OBTAIN);
             sourcePile.moveToHand(card, sourcePile);
             CombatManager.onAfterDraw(card);
         }
@@ -283,7 +283,7 @@ public class MoveCard extends PCLAction<AbstractCard> {
             this.startDuration = (this.duration = effect.startingDuration = effect.duration = Settings.ACTION_DUR_LONG) + 0.001f;
         }
         else {
-            SFX.play(SFX.CARD_BURN);
+            PCLSFX.play(PCLSFX.CARD_BURN);
         }
 
         moveToPile(card);

@@ -5,8 +5,14 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
+import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
+import com.megacrit.cardcrawl.vfx.combat.BiteEffect;
+import com.megacrit.cardcrawl.vfx.combat.ClawEffect;
+import com.megacrit.cardcrawl.vfx.combat.ExplosionSmallEffect;
+import com.megacrit.cardcrawl.vfx.combat.LightningEffect;
 import extendedui.EUIUtils;
-import extendedui.interfaces.delegates.FuncT3;
+import extendedui.interfaces.delegates.FuncT4;
+import extendedui.utilities.EUIClassUtils;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.effects.vfx.GenericRenderEffect;
 import pinacolada.resources.PCLEnum;
@@ -20,40 +26,40 @@ import static com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect;
 // TODO Refactor
 public class PCLAttackVFX {
     // Custom:
-    public static final PCLAttackVFX BITE = new PCLAttackVFX(PCLEnum.AttackEffect.BITE, null, (t, cx, cy) -> VFX.bite(cx, cy, Color.WHITE), SFX.EVENT_VAMP_BITE);
-    public static final PCLAttackVFX BLUNT_HEAVY = new PCLAttackVFX(AttackEffect.BLUNT_HEAVY, ImageMaster.ATK_BLUNT_HEAVY, SFX.BLUNT_FAST);
-    public static final PCLAttackVFX BLUNT_LIGHT = new PCLAttackVFX(AttackEffect.BLUNT_LIGHT, ImageMaster.ATK_BLUNT_LIGHT, SFX.BLUNT_HEAVY);
-    public static final PCLAttackVFX BURN = new PCLAttackVFX(PCLEnum.AttackEffect.BURN, null, Color.RED, (t, cx, cy) -> VFX.fireBurstParticle(cx, cy), SFX.ATTACK_FIRE);
-    public static final PCLAttackVFX CLAW = new PCLAttackVFX(PCLEnum.AttackEffect.CLAW, null, (t, cx, cy) -> VFX.claw(cx, cy, Color.VIOLET, Color.WHITE), SFX.ATTACK_DAGGER_5, SFX.ATTACK_DAGGER_6);
-    public static final PCLAttackVFX DAGGER = new PCLAttackVFX(PCLEnum.AttackEffect.DAGGER, ImageMaster.ATK_SLASH_H, SFX.ATTACK_DAGGER_1, SFX.ATTACK_DAGGER_2);
-    public static final PCLAttackVFX DARKNESS = new PCLAttackVFX(PCLEnum.AttackEffect.DARKNESS, null, Color.VIOLET, (t, cx, cy) -> VFX.darkness(cx, cy), SFX.PCL_DARKNESS);
-    public static final PCLAttackVFX EARTH = new PCLAttackVFX(PCLEnum.AttackEffect.EARTH, null, Color.BROWN, (t, cx, cy) -> VFX.rockBurst(cx, cy).setDuration(1.5f, true), SFX.PCL_ORB_EARTH_CHANNEL);
-    public static final PCLAttackVFX ELECTRIC = new PCLAttackVFX(PCLEnum.AttackEffect.ELECTRIC, null, Color.YELLOW, (t, cx, cy) -> VFX.electric(cx, cy), SFX.ORB_LIGHTNING_CHANNEL);
-    public static final PCLAttackVFX FIRE = new PCLAttackVFX(AttackEffect.FIRE, ImageMaster.ATK_FIRE, Color.RED, SFX.ATTACK_FIRE);
-    public static final PCLAttackVFX GHOST = new PCLAttackVFX(PCLEnum.AttackEffect.GHOST, null, Color.VIOLET, (t, cx, cy) -> VFX.ghost(cx, cy), SFX.ORB_DARK_CHANNEL);
-    public static final PCLAttackVFX GUNSHOT = new PCLAttackVFX(PCLEnum.AttackEffect.GUNSHOT, null, (t, cx, cy) -> VFX.gunshot(cx, cy));
-    public static final PCLAttackVFX ICE = new PCLAttackVFX(PCLEnum.AttackEffect.ICE, null, Color.SKY, (t, cx, cy) -> VFX.snowballImpact(cx, cy), SFX.ORB_FROST_CHANNEL);
-    public static final PCLAttackVFX LIGHTNING = new PCLAttackVFX(AttackEffect.LIGHTNING, null, Color.YELLOW, (t, cx, cy) -> VFX.lightning(cx, cy), SFX.ORB_LIGHTNING_EVOKE);
-    public static final PCLAttackVFX POISON = new PCLAttackVFX(AttackEffect.POISON, ImageMaster.ATK_POISON, Color.CHARTREUSE, SFX.ATTACK_POISON, SFX.ATTACK_POISON2);
-    public static final PCLAttackVFX PSYCHOKINESIS = new PCLAttackVFX(PCLEnum.AttackEffect.PSYCHOKINESIS, null, Color.MAGENTA, (t, cx, cy) -> VFX.psychokinesis(cx, cy), SFX.PCL_PSI);
-    public static final PCLAttackVFX PUNCH = new PCLAttackVFX(PCLEnum.AttackEffect.PUNCH, null, null, 0.6f, (t, cx, cy) -> VFX.strongPunch(cx, cy), SFX.RAGE);
-    public static final PCLAttackVFX SHIELD = new PCLAttackVFX(AttackEffect.SHIELD, ImageMaster.ATK_SHIELD, (t, cx, cy) -> VFX.shield(cx, cy));
-    public static final PCLAttackVFX SLASH_DIAGONAL = new PCLAttackVFX(AttackEffect.SLASH_DIAGONAL, ImageMaster.ATK_SLASH_D, SFX.ATTACK_FAST);
-    public static final PCLAttackVFX SLASH_HEAVY = new PCLAttackVFX(AttackEffect.SLASH_HEAVY, ImageMaster.ATK_SLASH_HEAVY, SFX.ATTACK_HEAVY);
-    public static final PCLAttackVFX SLASH_HORIZONTAL = new PCLAttackVFX(AttackEffect.SLASH_HORIZONTAL, ImageMaster.ATK_SLASH_H, SFX.ATTACK_FAST);
-    public static final PCLAttackVFX SLASH_VERTICAL = new PCLAttackVFX(AttackEffect.SLASH_VERTICAL, ImageMaster.ATK_SLASH_V, SFX.ATTACK_FAST);
-    public static final PCLAttackVFX SMALL_EXPLOSION = new PCLAttackVFX(PCLEnum.AttackEffect.SMALL_EXPLOSION, null, Color.SCARLET, (t, cx, cy) -> VFX.smallExplosion(cx, cy), SFX.ATTACK_FLAME_BARRIER);
-    public static final PCLAttackVFX SMASH = new PCLAttackVFX(AttackEffect.SMASH, null, (t, cx, cy) -> VFX.whack(cx, cy), SFX.BLUNT_FAST);
-    public static final PCLAttackVFX SPARK = new PCLAttackVFX(PCLEnum.AttackEffect.SPARK, null, Color.YELLOW, (t, cx, cy) -> VFX.sparkImpact(cx, cy), SFX.ORB_LIGHTNING_CHANNEL);
-    public static final PCLAttackVFX WATER = new PCLAttackVFX(PCLEnum.AttackEffect.WATER, null, Color.BLUE, (t, cx, cy) -> VFX.water(cx, cy), SFX.PCL_ORB_WATER_EVOKE);
-    public static final PCLAttackVFX WIND = new PCLAttackVFX(PCLEnum.AttackEffect.WIND, null, Color.FOREST, (t, cx, cy) -> VFX.tornado(cx, cy), SFX.POWER_FLIGHT);
+    public static final PCLAttackVFX BITE = new PCLAttackVFX(PCLEnum.AttackEffect.BITE, null, (sx, sy, cx, cy) -> new BiteEffect(cx, cy, Color.WHITE), PCLSFX.EVENT_VAMP_BITE);
+    public static final PCLAttackVFX BLUNT_HEAVY = new PCLAttackVFX(AttackEffect.BLUNT_HEAVY, ImageMaster.ATK_BLUNT_HEAVY, PCLSFX.BLUNT_FAST);
+    public static final PCLAttackVFX BLUNT_LIGHT = new PCLAttackVFX(AttackEffect.BLUNT_LIGHT, ImageMaster.ATK_BLUNT_LIGHT, PCLSFX.BLUNT_HEAVY);
+    public static final PCLAttackVFX BURN = new PCLAttackVFX(PCLEnum.AttackEffect.BURN, null, Color.RED, (sx, sy, cx, cy) -> VFX.fireBurstParticle(cx, cy), PCLSFX.ATTACK_FIRE);
+    public static final PCLAttackVFX CLAW = new PCLAttackVFX(PCLEnum.AttackEffect.CLAW, null, (sx, sy, cx, cy) -> new ClawEffect(cx, cy, Color.VIOLET, Color.WHITE), PCLSFX.ATTACK_DAGGER_5, PCLSFX.ATTACK_DAGGER_6);
+    public static final PCLAttackVFX DAGGER = new PCLAttackVFX(PCLEnum.AttackEffect.DAGGER, ImageMaster.ATK_SLASH_H, PCLSFX.ATTACK_DAGGER_1, PCLSFX.ATTACK_DAGGER_2);
+    public static final PCLAttackVFX DARKNESS = new PCLAttackVFX(PCLEnum.AttackEffect.DARKNESS, null, Color.VIOLET, (sx, sy, cx, cy) -> VFX.darkness(cx, cy), PCLSFX.PCL_DARKNESS);
+    public static final PCLAttackVFX EARTH = new PCLAttackVFX(PCLEnum.AttackEffect.EARTH, null, Color.BROWN, (sx, sy, cx, cy) -> VFX.rockBurst(cx, cy).setDuration(1.5f, true), PCLSFX.PCL_ORB_EARTH_CHANNEL);
+    public static final PCLAttackVFX ELECTRIC = new PCLAttackVFX(PCLEnum.AttackEffect.ELECTRIC, null, Color.YELLOW, (sx, sy, cx, cy) -> VFX.electric(cx, cy), PCLSFX.ORB_LIGHTNING_CHANNEL);
+    public static final PCLAttackVFX FIRE = new PCLAttackVFX(AttackEffect.FIRE, ImageMaster.ATK_FIRE, Color.RED, PCLSFX.ATTACK_FIRE);
+    public static final PCLAttackVFX GHOST = new PCLAttackVFX(PCLEnum.AttackEffect.GHOST, null, Color.VIOLET, (sx, sy, cx, cy) -> VFX.ghost(cx, cy), PCLSFX.ORB_DARK_CHANNEL);
+    public static final PCLAttackVFX GUNSHOT = new PCLAttackVFX(PCLEnum.AttackEffect.GUNSHOT, null, (sx, sy, cx, cy) -> VFX.gunshot(cx, cy));
+    public static final PCLAttackVFX ICE = new PCLAttackVFX(PCLEnum.AttackEffect.ICE, null, Color.SKY, (sx, sy, cx, cy) -> VFX.snowballImpact(cx, cy), PCLSFX.ORB_FROST_CHANNEL);
+    public static final PCLAttackVFX LIGHTNING = new PCLAttackVFX(AttackEffect.LIGHTNING, null, Color.YELLOW, (sx, sy, cx, cy) -> new LightningEffect(cx, cy), PCLSFX.ORB_LIGHTNING_EVOKE);
+    public static final PCLAttackVFX POISON = new PCLAttackVFX(AttackEffect.POISON, ImageMaster.ATK_POISON, Color.CHARTREUSE, PCLSFX.ATTACK_POISON, PCLSFX.ATTACK_POISON2);
+    public static final PCLAttackVFX PSYCHOKINESIS = new PCLAttackVFX(PCLEnum.AttackEffect.PSYCHOKINESIS, null, Color.MAGENTA, (sx, sy, cx, cy) -> VFX.psychokinesis(cx, cy), PCLSFX.PCL_PSI);
+    public static final PCLAttackVFX PUNCH = new PCLAttackVFX(PCLEnum.AttackEffect.PUNCH, null, null, 0.6f, (sx, sy, cx, cy) -> VFX.strongPunch(cx, cy), PCLSFX.RAGE);
+    public static final PCLAttackVFX SHIELD = new PCLAttackVFX(AttackEffect.SHIELD, ImageMaster.ATK_SHIELD, (sx, sy, cx, cy) -> VFX.shield(cx, cy));
+    public static final PCLAttackVFX SLASH_DIAGONAL = new PCLAttackVFX(AttackEffect.SLASH_DIAGONAL, ImageMaster.ATK_SLASH_D, PCLSFX.ATTACK_FAST);
+    public static final PCLAttackVFX SLASH_HEAVY = new PCLAttackVFX(AttackEffect.SLASH_HEAVY, ImageMaster.ATK_SLASH_HEAVY, PCLSFX.ATTACK_HEAVY);
+    public static final PCLAttackVFX SLASH_HORIZONTAL = new PCLAttackVFX(AttackEffect.SLASH_HORIZONTAL, ImageMaster.ATK_SLASH_H, PCLSFX.ATTACK_FAST);
+    public static final PCLAttackVFX SLASH_VERTICAL = new PCLAttackVFX(AttackEffect.SLASH_VERTICAL, ImageMaster.ATK_SLASH_V, PCLSFX.ATTACK_FAST);
+    public static final PCLAttackVFX SMALL_EXPLOSION = new PCLAttackVFX(PCLEnum.AttackEffect.SMALL_EXPLOSION, null, Color.SCARLET, (sx, sy, cx, cy) -> new ExplosionSmallEffect(cx, cy), PCLSFX.ATTACK_FLAME_BARRIER);
+    public static final PCLAttackVFX SMASH = new PCLAttackVFX(AttackEffect.SMASH, null, (sx, sy, cx, cy) -> VFX.whack(cx, cy), PCLSFX.BLUNT_FAST);
+    public static final PCLAttackVFX SPARK = new PCLAttackVFX(PCLEnum.AttackEffect.SPARK, null, Color.YELLOW, (sx, sy, cx, cy) -> VFX.sparkImpact(cx, cy), PCLSFX.ORB_LIGHTNING_CHANNEL);
+    public static final PCLAttackVFX WATER = new PCLAttackVFX(PCLEnum.AttackEffect.WATER, null, Color.BLUE, (sx, sy, cx, cy) -> VFX.water(cx, cy), PCLSFX.PCL_ORB_WATER_EVOKE);
+    public static final PCLAttackVFX WIND = new PCLAttackVFX(PCLEnum.AttackEffect.WIND, null, Color.FOREST, (sx, sy, cx, cy) -> VFX.tornado(cx, cy), PCLSFX.POWER_FLIGHT);
     private static final HashMap<AttackEffect, PCLAttackVFX> ALL = new HashMap<>();
     public final AttackEffect key;
     public final TextureRegion texture;
     public final float damageDelay;
     public final Color damageTint;
     protected final String[] sounds;
-    protected final FuncT3<PCLEffect, AbstractCreature, Float, Float> createVFX;
+    protected final FuncT4<AbstractGameEffect, Float, Float, Float, Float> createVFX;
 
     public PCLAttackVFX(AttackEffect key) {
         this(key, null);
@@ -63,7 +69,7 @@ public class PCLAttackVFX {
         this(key, texture, null, 0, null, sfx);
     }
 
-    public PCLAttackVFX(AttackEffect key, TextureRegion texture, Color damageTint, float damageDelay, FuncT3<PCLEffect, AbstractCreature, Float, Float> createVFX, String... sfx) {
+    public PCLAttackVFX(AttackEffect key, TextureRegion texture, Color damageTint, float damageDelay, FuncT4<AbstractGameEffect, Float, Float, Float, Float> createVFX, String... sfx) {
         ALL.put(key, this);
         this.key = key;
         this.texture = texture;
@@ -81,11 +87,11 @@ public class PCLAttackVFX {
         this(key, texture, null, damageDelay, null, sfx);
     }
 
-    public PCLAttackVFX(AttackEffect key, TextureRegion texture, FuncT3<PCLEffect, AbstractCreature, Float, Float> createVFX, String... sfx) {
+    public PCLAttackVFX(AttackEffect key, TextureRegion texture, FuncT4<AbstractGameEffect, Float, Float, Float, Float> createVFX, String... sfx) {
         this(key, texture, null, 0, createVFX, sfx);
     }
 
-    public PCLAttackVFX(AttackEffect key, TextureRegion texture, Color damageTint, FuncT3<PCLEffect, AbstractCreature, Float, Float> createVFX, String... sfx) {
+    public PCLAttackVFX(AttackEffect key, TextureRegion texture, Color damageTint, FuncT4<AbstractGameEffect, Float, Float, Float, Float> createVFX, String... sfx) {
         this(key, texture, damageTint, 0, createVFX, sfx);
     }
 
@@ -97,24 +103,50 @@ public class PCLAttackVFX {
         return ALL.keySet().stream().sorted((a, b) -> StringUtils.compare(a.name(), b.name())).collect(Collectors.toList());
     }
 
-    public PCLEffect getVFX(AbstractCreature source, float t_cX, float t_cY) {
+    public AbstractGameEffect getVFX(float targetCx, float targetCy) {
+        return getVFX(0, 0, targetCx, targetCy);
+    }
+
+    public AbstractGameEffect getVFX(float sourceCx, float sourceCy, float targetCx, float targetCy) {
         if (createVFX != null) {
-            return createVFX.invoke(source, t_cX, t_cY);
+            return createVFX.invoke(sourceCx, sourceCy, targetCx, targetCy);
         }
 
         if (texture != null) {
-            return new GenericRenderEffect(texture, t_cX, t_cY)
+            return new GenericRenderEffect(texture, targetCx, targetCy)
                     .setRotation(key == AttackEffect.BLUNT_HEAVY ? MathUtils.random(0, 360) : MathUtils.random(-12f, 12f));
         }
 
-        return new GenericRenderEffect((TextureRegion) null, t_cX, t_cY);
+        return new GenericRenderEffect((TextureRegion) null, targetCx, targetCy);
     }
 
     public void playSound(float pitchMin, float pitchMax) {
-        SFX.play(getSound(), pitchMin, pitchMax);
+        PCLSFX.play(getSound(), pitchMin, pitchMax);
     }
 
     public String getSound() {
         return sounds.length == 0 ? null : sounds.length == 1 ? sounds[0] : EUIUtils.random(sounds);
+    }
+
+    public AbstractGameEffect attack(AbstractCreature source, AbstractCreature target, float pitchMin, float pitchMax) {
+        return attack(source, target, pitchMin, pitchMax, null);
+    }
+
+    public AbstractGameEffect attack(AbstractCreature source, AbstractCreature target, float pitchMin, float pitchMax, Color vfxColor) {
+        return attack(source, target, pitchMin, pitchMax, vfxColor, source == target ? 0 : 0.15f);
+    }
+
+    public AbstractGameEffect attack(AbstractCreature source, AbstractCreature target, float pitchMin, float pitchMax, Color vfxColor, float spread) {
+        playSound(pitchMin, pitchMax);
+        return attackWithoutSound(source, target, vfxColor, spread);
+    }
+
+    public AbstractGameEffect attackWithoutSound(AbstractCreature source, AbstractCreature target, Color vfxColor, float spread) {
+        final AbstractGameEffect effect = PCLEffects.List.add(getVFX(source.hb.cX, source.hb.cY, VFX.randomX(target.hb, spread), VFX.randomY(target.hb, spread)));
+        if (vfxColor != null) {
+            EUIClassUtils.setField(effect, "color", vfxColor);
+        }
+
+        return effect;
     }
 }

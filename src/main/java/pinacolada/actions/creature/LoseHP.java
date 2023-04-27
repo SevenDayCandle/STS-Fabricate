@@ -5,7 +5,6 @@ import com.megacrit.cardcrawl.core.Settings;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.effects.PCLAttackVFX;
-import pinacolada.effects.PCLEffects;
 import pinacolada.utilities.GameUtilities;
 
 // Copied and modified from STS-AnimatorMod
@@ -39,7 +38,7 @@ public class LoseHP extends PCLAction<Void> {
     protected void firstUpdate() {
         PCLAttackVFX attackVFX = PCLAttackVFX.get(this.attackEffect);
         if (attackVFX != null && this.target.currentHealth > 0) {
-            PCLEffects.List.attack(source, target, attackVFX, pitchMin, pitchMax, null);
+            attackVFX.attack(source, target, pitchMin, pitchMax, null);
         }
     }
 

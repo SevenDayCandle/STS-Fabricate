@@ -2,7 +2,7 @@ package pinacolada.actions.utility;
 
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import pinacolada.actions.PCLAction;
-import pinacolada.effects.SFX;
+import pinacolada.effects.PCLSFX;
 
 // Copied and modified from STS-AnimatorMod
 public class PlaySFX extends PCLAction<PlaySFX> {
@@ -39,7 +39,7 @@ public class PlaySFX extends PCLAction<PlaySFX> {
     }
 
     public void play() {
-        float seconds = SFX.play(key, pitchMin, pitchMax, volume);
+        float seconds = PCLSFX.play(key, pitchMin, pitchMax, volume);
         if (callbacks.size() > 0) {
             duration = seconds;
             startDuration = duration + 0.001f;

@@ -16,9 +16,9 @@ import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.SFX;
+import pinacolada.effects.PCLSFX;
 import pinacolada.effects.vfx.OrbEvokeParticle;
-import pinacolada.effects.vfx.megacritCopy.OrbFlareEffect2;
+import pinacolada.effects.vfx.OrbFlareNotActuallyNeedingOrbEffect;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
@@ -69,7 +69,7 @@ public abstract class PCLOrb extends AbstractOrb {
     }
 
     public void passive() {
-        final OrbFlareEffect2 effect = getOrbFlareEffect();
+        final OrbFlareNotActuallyNeedingOrbEffect effect = getOrbFlareEffect();
         if (effect != null) {
             PCLActions.bottom.playVFX(effect, Settings.FAST_MODE ? 0 : (0.6F / (float) AbstractDungeon.player.orbs.size()));
         }
@@ -77,8 +77,8 @@ public abstract class PCLOrb extends AbstractOrb {
         CombatManager.onOrbPassiveEffect(this);
     }
 
-    protected OrbFlareEffect2 getOrbFlareEffect() {
-        return new OrbFlareEffect2(this.cX, this.cY).setColors(getColor1(), getColor2());
+    protected OrbFlareNotActuallyNeedingOrbEffect getOrbFlareEffect() {
+        return new OrbFlareNotActuallyNeedingOrbEffect(this.cX, this.cY).setColors(getColor1(), getColor2());
     }
 
     public void setBaseEvokeAmount(int amount, boolean relative) {
@@ -154,7 +154,7 @@ public abstract class PCLOrb extends AbstractOrb {
         if (clickable) {
             if (InputHelper.justClickedLeft) {
                 hb.clickStarted = true;
-                SFX.play(SFX.UI_CLICK_1);
+                PCLSFX.play(PCLSFX.UI_CLICK_1);
             }
             else if (hb.clicked) {
                 hb.clicked = false;

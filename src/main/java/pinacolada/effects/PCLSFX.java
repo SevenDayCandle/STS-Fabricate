@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 
 // Copied and modified from STS-AnimatorMod
-public class SFX {
+public class PCLSFX {
     public static final String PCL_SPRAY = "PCL_SPRAY";
     public static final String PCL_BOOST = "PCL_BOOST";
     public static final String PCL_DARKNESS = "PCL_DARKNESS";
@@ -404,17 +404,17 @@ public class SFX {
     public final float pitchMax;
     public final float volume;
 
-    public SFX(String key) {
+    public PCLSFX(String key) {
         this(key, 1, 1, 1);
     }
 
-    public SFX(String key, float pitchMin, float pitchMax, float volume) {
+    public PCLSFX(String key, float pitchMin, float pitchMax, float volume) {
         this.key = key;
         this.pitchMin = pitchMin;
         this.pitchMax = pitchMax;
         this.volume = volume;
     }
-    public SFX(String key, float pitchMin, float pitchMax) {
+    public PCLSFX(String key, float pitchMin, float pitchMax) {
         this(key, pitchMin, pitchMax, 1);
     }
 

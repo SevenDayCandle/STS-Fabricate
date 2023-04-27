@@ -7,7 +7,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.vfx.BorderLongFlashEffect;
 import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.SFX;
+import pinacolada.effects.PCLSFX;
 
 public class ScreenHexagonEffect extends PCLEffect {
     private static final float INTERVAL = 0.05F;
@@ -25,8 +25,8 @@ public class ScreenHexagonEffect extends PCLEffect {
 
     public void update() {
         if (this.duration == this.startingDuration) {
-            SFX.play(SFX.PCL_BOOST, 0.5f, 0.5f);
-            SFX.play(SFX.ORB_LIGHTNING_CHANNEL, 0.7f, 0.7f);
+            PCLSFX.play(PCLSFX.PCL_BOOST, 0.5f, 0.5f);
+            PCLSFX.play(PCLSFX.ORB_LIGHTNING_CHANNEL, 0.7f, 0.7f);
             PCLEffects.Queue.add(new BorderLongFlashEffect(Color.GOLDENROD));
         }
 

@@ -32,7 +32,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.SFX;
+import pinacolada.effects.PCLSFX;
 import pinacolada.effects.powers.PCLFlashPowerEffect;
 import pinacolada.effects.powers.PCLGainPowerEffect;
 import pinacolada.interfaces.providers.ClickableProvider;
@@ -370,12 +370,12 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
             clickable = triggerCondition != null && triggerCondition.interactable();
             if (clickable) {
                 if (hb.justHovered) {
-                    SFX.play(SFX.UI_HOVER);
+                    PCLSFX.play(PCLSFX.UI_HOVER);
                 }
 
                 if (InputHelper.justClickedLeft) {
                     hb.clickStarted = true;
-                    SFX.play(SFX.UI_CLICK_1);
+                    PCLSFX.play(PCLSFX.UI_CLICK_1);
                 }
                 else if (hb.clicked) {
                     hb.clicked = false;

@@ -4,7 +4,7 @@ import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import pinacolada.actions.PCLActions;
-import pinacolada.effects.SFX;
+import pinacolada.effects.PCLSFX;
 import pinacolada.powers.PCLPower;
 
 public class DeflectionPower extends PCLPower {
@@ -18,7 +18,7 @@ public class DeflectionPower extends PCLPower {
 
     @Override
     public void playApplyPowerSfx() {
-        SFX.play(SFX.ATTACK_IRON_1, 1.25f, 1.35f, 0.7f);
+        PCLSFX.play(PCLSFX.ATTACK_IRON_1, 1.25f, 1.35f, 0.7f);
     }
 
     @Override

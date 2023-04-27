@@ -4,9 +4,9 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.vfx.UpgradeShineEffect;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.vfx.megacritCopy.UpgradeShineEffect2;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.ListSelection;
@@ -68,7 +68,7 @@ public class UpgradeFromPile extends SelectFromPile {
             }
 
             final float x = (Settings.WIDTH / 4f) + ((result.size() - 1) * (AbstractCard.IMG_WIDTH * 0.75f));
-            PCLEffects.TopLevelQueue.add(new UpgradeShineEffect2(x, Settings.HEIGHT / 2f));
+            PCLEffects.TopLevelQueue.add(new UpgradeShineEffect(x, Settings.HEIGHT / 2f));
             PCLEffects.TopLevelQueue.showCardBriefly(card.makeStatEquivalentCopy(), x, Settings.HEIGHT / 2f);
         }
 

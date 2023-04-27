@@ -15,7 +15,7 @@ import com.megacrit.cardcrawl.vfx.DarkSmokePuffEffect;
 import com.megacrit.cardcrawl.vfx.GenericSmokeEffect;
 import com.megacrit.cardcrawl.vfx.combat.SmokingEmberEffect;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.SFX;
+import pinacolada.effects.PCLSFX;
 
 public class MeteorFallEffect extends AbstractGameEffect {
     private static final float DUR = 0.5f;
@@ -75,7 +75,7 @@ public class MeteorFallEffect extends AbstractGameEffect {
     }
 
     private void playRandomSfX() {
-        SFX.play(SFX.ORB_LIGHTNING_EVOKE, 0.5f, 0.7f);
+        PCLSFX.play(PCLSFX.ORB_LIGHTNING_EVOKE, 0.5f, 0.7f);
     }
 
     public void render(SpriteBatch sb) {

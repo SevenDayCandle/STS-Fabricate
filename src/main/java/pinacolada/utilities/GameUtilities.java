@@ -70,7 +70,7 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.characters.PCLCharacter;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLDungeon;
-import pinacolada.effects.SFX;
+import pinacolada.effects.PCLSFX;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.interfaces.subscribers.OnEndOfTurnFirstSubscriber;
 import pinacolada.interfaces.subscribers.OnEndOfTurnLastSubscriber;
@@ -2234,7 +2234,7 @@ public class GameUtilities {
         final AbstractPower artifact = getPower(target, ArtifactPower.POWER_ID);
         if (artifact != null) {
             PCLActions.top.add(new TextAboveCreatureAction(target, ApplyPowerAction.TEXT[0]));
-            SFX.play(SFX.NULLIFY_SFX);
+            PCLSFX.play(PCLSFX.NULLIFY_SFX);
             artifact.flashWithoutSound();
             artifact.onSpecificTrigger();
 

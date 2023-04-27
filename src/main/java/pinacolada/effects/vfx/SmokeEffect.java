@@ -3,7 +3,7 @@ package pinacolada.effects.vfx;
 import com.badlogic.gdx.graphics.Color;
 import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.SFX;
+import pinacolada.effects.PCLSFX;
 
 public class SmokeEffect extends PCLEffect {
     protected int particles = 90;
@@ -26,7 +26,7 @@ public class SmokeEffect extends PCLEffect {
 
     @Override
     protected void firstUpdate() {
-        SFX.play(SFX.ATTACK_WHIFF_2);
+        PCLSFX.play(PCLSFX.ATTACK_WHIFF_2);
 
         for (int i = 0; i < particles; ++i) {
             PCLEffects.Queue.add(new SmokeParticleEffect(x, y, r, vXY, vR, s, color.cpy()));

@@ -41,7 +41,7 @@ import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.modifiers.SkillModifier;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.SFX;
+import pinacolada.effects.PCLSFX;
 import pinacolada.effects.combat.DodgeEffect;
 import pinacolada.interfaces.listeners.OnRelicObtainedListener;
 import pinacolada.interfaces.providers.CooldownProvider;
@@ -725,7 +725,7 @@ public class CombatManager {
 
         if (target == AbstractDungeon.player && info.type == DamageInfo.DamageType.NORMAL && GameUtilities.chance(dodgeChance)) {
             AbstractDungeon.player.tint.color.a = 0;
-            PCLActions.bottom.playSFX(SFX.NULLIFY_SFX, 1.6f, 1.6f);
+            PCLActions.bottom.playSFX(PCLSFX.NULLIFY_SFX, 1.6f, 1.6f);
             PCLActions.top.wait(0.15f);
             PCLEffects.Queue.add(new DodgeEffect(target.hb.cX - target.animX, target.hb.cY + target.hb.height / 2f, PGR.core.strings.combat_dodged));
             return 0;

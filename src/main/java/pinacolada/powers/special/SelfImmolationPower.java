@@ -5,7 +5,7 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import pinacolada.actions.PCLActions;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.SFX;
+import pinacolada.effects.PCLSFX;
 import pinacolada.effects.VFX;
 import pinacolada.powers.PCLPower;
 import pinacolada.resources.PCLEnum;
@@ -38,12 +38,12 @@ public class SelfImmolationPower extends PCLPower {
         super.onInitialApplication();
 
         PCLEffects.Queue.add(VFX.bleed(owner.hb));
-        SFX.play(SFX.PCL_SPRAY, 1f, 1.15f, 0.95f);
+        PCLSFX.play(PCLSFX.PCL_SPRAY, 1f, 1.15f, 0.95f);
     }
 
     @Override
     public void playApplyPowerSfx() {
-        SFX.play(SFX.HEART_BEAT, 1f, 1.15f, 0.95f);
+        PCLSFX.play(PCLSFX.HEART_BEAT, 1f, 1.15f, 0.95f);
     }
 
     @Override

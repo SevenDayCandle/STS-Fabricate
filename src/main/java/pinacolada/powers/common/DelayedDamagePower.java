@@ -5,7 +5,7 @@ import com.evacipated.cardcrawl.mod.stslib.powers.interfaces.HealthBarRenderPowe
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import pinacolada.actions.PCLActions;
-import pinacolada.effects.SFX;
+import pinacolada.effects.PCLSFX;
 import pinacolada.powers.PCLPower;
 import pinacolada.utilities.GameUtilities;
 
@@ -44,7 +44,7 @@ public class DelayedDamagePower extends PCLPower implements HealthBarRenderPower
 
     @Override
     public void playApplyPowerSfx() {
-        SFX.play(SFX.HEART_BEAT, 1.25f, 1.35f, 0.9f);
+        PCLSFX.play(PCLSFX.HEART_BEAT, 1.25f, 1.35f, 0.9f);
     }
 
     @Override

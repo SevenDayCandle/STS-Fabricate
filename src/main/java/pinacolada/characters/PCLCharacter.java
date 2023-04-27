@@ -31,7 +31,7 @@ import extendedui.EUIUtils;
 import extendedui.ui.TextureCache;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.SFX;
+import pinacolada.effects.PCLSFX;
 import pinacolada.effects.vfx.SmokeEffect;
 import pinacolada.patches.library.RelicLibraryPatches;
 import pinacolada.resources.PCLAbstractPlayerData;
@@ -207,7 +207,7 @@ public abstract class PCLCharacter extends CustomPlayer {
 
     @Override
     public String getCustomModeCharacterButtonSoundKey() {
-        return SFX.TINGSHA;
+        return PCLSFX.TINGSHA;
     }
 
     @Override

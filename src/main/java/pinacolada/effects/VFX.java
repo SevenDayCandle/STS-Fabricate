@@ -7,27 +7,14 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.Hitbox;
 import com.megacrit.cardcrawl.vfx.combat.*;
-import extendedui.utilities.EUIColors;
 import pinacolada.effects.utility.CombinedEffect;
 import pinacolada.effects.vfx.*;
-import pinacolada.effects.vfx.megacritCopy.*;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.PCLRenderHelpers;
 
 // Copied and modified from STS-AnimatorMod
+// TODO merge with PCLEffects
 public class VFX {
-    public static BiteEffect2 bite(Hitbox target) {
-        return bite(target, Color.WHITE);
-    }
-
-    public static BiteEffect2 bite(Hitbox target, Color color) {
-        return bite(target.cX, target.cY - (40.0F * Settings.scale), color);
-    }
-
-    public static BiteEffect2 bite(float cX, float cY, Color color) {
-        return new BiteEffect2(cX, cY - (40.0F * Settings.scale), color);
-    }
-
     public static BleedEffect bleed(Hitbox target) {
         return new BleedEffect(target.cX, target.cY - (50.0F * Settings.scale), 32);
     }
@@ -38,18 +25,6 @@ public class VFX {
 
     public static CircularWaveEffect circularWave(float cX, float cY) {
         return new CircularWaveEffect(cX, cY);
-    }
-
-    public static ClashEffect2 clash(Hitbox target) {
-        return new ClashEffect2(target.cX, target.cY);
-    }
-
-    public static ClawEffect2 claw(Hitbox target, Color color1, Color color2) {
-        return claw(randomX(target, 0.2f), randomY(target, 0.2f), color1, color2);
-    }
-
-    public static ClawEffect2 claw(float cX, float cY, Color color1, Color color2) {
-        return new ClawEffect2(cX, cY, color1, color2);
     }
 
     public static float randomX(Hitbox hb, float variance) {
@@ -122,7 +97,7 @@ public class VFX {
 
     public static CombinedEffect ghost(float cX, float cY) {
         final CombinedEffect effect = new CombinedEffect();
-        effect.add(new OrbFlareEffect2(cX, cY).setColors(OrbFlareEffect.OrbFlareColor.DARK)).renderBehind = false;
+        effect.add(new OrbFlareNotActuallyNeedingOrbEffect(cX, cY).setColors(OrbFlareEffect.OrbFlareColor.DARK)).renderBehind = false;
         for (int i = 0; i < 4; i++) {
             effect.add(new DarkOrbActivateParticle(cX, cY)).renderBehind = false;
         }
@@ -138,40 +113,24 @@ public class VFX {
         return new AnimatedParticleEffect(PCLCoreImages.Effects.shot.texture(), cX, cY, 4, 4);
     }
 
-    public static HemokinesisEffect2 hemokinesis(Hitbox source, Hitbox target) {
-        return new HemokinesisEffect2(target.cX, target.cY, source.cX, source.cY);
+    public static HemokinesisEffect hemokinesis(float tX, float tY, float sX, float sY) {
+        return new HemokinesisEffect(tX, tY, sX, sY);
     }
 
     public static IntimidateEffect intimidate(Hitbox source) {
         return new IntimidateEffect(source.cX, source.cY);
     }
 
-    public static IronWaveEffect2 ironWave(Hitbox source, Hitbox target) {
-        return ironWave(source.cX, source.cY, target.cX);
+    public static IronWaveEffect ironWave(float sX, float sY, float tX) {
+        return new IronWaveEffect(sX, sY, tX);
     }
 
-    public static IronWaveEffect2 ironWave(float cX, float cY, float targetX) {
-        return new IronWaveEffect2(cX, cY, targetX);
-    }
-
-    public static LaserBeamEffect2 laser(Hitbox source, Color color) {
-        return new LaserBeamEffect2(source.cX, source.cY).setColor(color);
-    }
-
-    public static LightningEffect2 lightning(Hitbox target) {
-        return lightning(target.cX, target.cY);
-    }
-
-    public static LightningEffect2 lightning(float cX, float cY) {
-        return new LightningEffect2(cX, cY);
+    public static LaserBeamEffect laser(float cX, float cY) {
+        return new LaserBeamEffect(cX, cY);
     }
 
     public static MeteorFallEffect meteorFall(Hitbox hb) {
         return new MeteorFallEffect(randomX(hb, 0.2f), randomY(hb, 0.2f));
-    }
-
-    public static MindblastEffect2 mindblast(float dialogX, float dialogY) {
-        return new MindblastEffect2(dialogX, dialogY, flipHorizontally());
     }
 
     public static PsychokinesisEffect psychokinesis(Hitbox target) {
@@ -218,25 +177,12 @@ public class VFX {
         return new ShootingStarsEffect(source.cX, source.cY).setSpread(0, spreadY).flipHorizontally(flipHorizontally());
     }
 
-    public static ExplosionSmallEffect2 smallExplosion(Hitbox source) {
-        return smallExplosion(source.cX, source.cY);
+    public static SmallLaserEffect smallLaser(Hitbox source, Hitbox target) {
+        return smallLaser(source, target, 0.2f);
     }
 
-    public static ExplosionSmallEffect2 smallExplosion(float cX, float cY) {
-        return new ExplosionSmallEffect2(cX, cY);
-    }
-
-    public static ExplosionSmallEffect2 smallExplosion(Hitbox source, float variance) {
-        return new ExplosionSmallEffect2(randomX(source, variance), randomY(source, variance));
-    }
-
-    public static SmallLaserEffect2 smallLaser(Hitbox source, Hitbox target, Color color) {
-        return smallLaser(source, target, color, 0.2f);
-    }
-
-    public static SmallLaserEffect2 smallLaser(Hitbox source, Hitbox target, Color color, float variance) {
-        return new SmallLaserEffect2(source.cX, source.cY, randomX(target, variance), randomY(target, variance))
-                .setColors(color, EUIColors.lerp(color, Color.BLACK, 0.3f));
+    public static SmallLaserEffect smallLaser(Hitbox source, Hitbox target, float variance) {
+        return new SmallLaserEffect(source.cX, source.cY, randomX(target, variance), randomY(target, variance));
     }
 
     public static SnowballEffect snowball(Hitbox source, Hitbox target) {
@@ -275,10 +221,6 @@ public class VFX {
         return new ColoredSweepingBeamEffect(source.cX, source.cY, flipHorizontal, color);
     }
 
-    public static ThrowDaggerEffect2 throwDagger(Hitbox target, float variance) {
-        return new ThrowDaggerEffect2(randomX(target, variance), randomY(target, variance));
-    }
-
     public static TornadoEffect tornado(Hitbox source) {
         return tornado(source.cX, source.cY);
     }
@@ -287,8 +229,8 @@ public class VFX {
         return new TornadoEffect(cX, cY);
     }
 
-    public static VerticalImpactEffect2 verticalImpact(Hitbox target) {
-        return new VerticalImpactEffect2(target.cX + target.width / 4f, target.cY - target.height / 4f);
+    public static VerticalImpactEffect verticalImpact(float cX, float cY) {
+        return new VerticalImpactEffect(cX , cY);
     }
 
     public static FadingParticleEffect water(Hitbox target, float spread) {

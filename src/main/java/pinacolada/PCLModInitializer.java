@@ -6,7 +6,7 @@ import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import pinacolada.dungeon.CombatManager;
-import pinacolada.effects.SFX;
+import pinacolada.effects.PCLSFX;
 import pinacolada.patches.library.BlightHelperPatches;
 import pinacolada.resources.PGR;
 
@@ -23,7 +23,7 @@ public class PCLModInitializer implements OnStartBattleSubscriber, PostBattleSub
 
     @Override
     public void receiveAddAudio() {
-        SFX.initialize();
+        PCLSFX.initialize();
     }
 
     @Override

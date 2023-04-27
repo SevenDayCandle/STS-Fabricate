@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Vector3;
 import extendedui.STSEffekseerManager;
 import pinacolada.effects.EffekseerEFK;
 import pinacolada.effects.PCLEffect;
-import pinacolada.effects.SFX;
+import pinacolada.effects.PCLSFX;
 
 public class EffekseerEffect extends PCLEffect {
     protected Vector2 position;
@@ -74,7 +74,7 @@ public class EffekseerEffect extends PCLEffect {
         this.duration -= deltaTime;
         this.soundDelay -= deltaTime;
         if (!hasPlayed && this.soundDelay < 0 && sfxKey != null) {
-            SFX.play(sfxKey, pitchMin, pitchMax, volume);
+            PCLSFX.play(sfxKey, pitchMin, pitchMax, volume);
             hasPlayed = true;
         }
         if (handle == null || !STSEffekseerManager.exists(handle)) {

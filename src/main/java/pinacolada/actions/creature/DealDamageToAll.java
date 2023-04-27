@@ -12,7 +12,6 @@ import pinacolada.actions.PCLActions;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.effects.EffekseerEFK;
 import pinacolada.effects.PCLAttackVFX;
-import pinacolada.effects.PCLEffects;
 import pinacolada.effects.VFX;
 import pinacolada.utilities.GameUtilities;
 
@@ -66,10 +65,10 @@ public class DealDamageToAll extends PCLAction<ArrayList<AbstractCreature>> {
             if (!GameUtilities.isDeadOrEscaped(enemy)) {
                 if (attackVFX != null) {
                     if (mute) {
-                        PCLEffects.List.attackWithoutSound(source, enemy, attackVFX, vfxColor, 0.15f);
+                        attackVFX.attackWithoutSound(source, enemy, vfxColor, 0.15f);
                     }
                     else {
-                        PCLEffects.List.attack(source, enemy, attackVFX, pitchMin, pitchMax, vfxColor, 0.15f);
+                        attackVFX.attack(source, enemy, pitchMin, pitchMax, vfxColor, 0.15f);
                     }
                 }
 

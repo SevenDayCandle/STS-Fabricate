@@ -53,19 +53,7 @@ public class PCLEnum {
 
     public static class AttackEffect {
         @SpireEnum
-        public static AbstractGameAction.AttackEffect GUNSHOT;
-        @SpireEnum
-        public static AbstractGameAction.AttackEffect DAGGER;
-        @SpireEnum
-        public static AbstractGameAction.AttackEffect PUNCH;
-        @SpireEnum
         public static AbstractGameAction.AttackEffect BITE;
-        @SpireEnum
-        public static AbstractGameAction.AttackEffect CLAW;
-        @SpireEnum
-        public static AbstractGameAction.AttackEffect GHOST;
-        @SpireEnum
-        public static AbstractGameAction.AttackEffect ICE;
         @SpireEnum
         public static AbstractGameAction.AttackEffect BLEED;
         @SpireEnum
@@ -73,13 +61,27 @@ public class PCLEnum {
         @SpireEnum
         public static AbstractGameAction.AttackEffect CLASH;
         @SpireEnum
+        public static AbstractGameAction.AttackEffect CLAW;
+        @SpireEnum
+        public static AbstractGameAction.AttackEffect DAGGER;
+        @SpireEnum
         public static AbstractGameAction.AttackEffect DARKNESS;
         @SpireEnum
         public static AbstractGameAction.AttackEffect EARTH;
         @SpireEnum
         public static AbstractGameAction.AttackEffect ELECTRIC;
         @SpireEnum
+        public static AbstractGameAction.AttackEffect GHOST;
+        @SpireEnum
+        public static AbstractGameAction.AttackEffect GUNSHOT;
+        @SpireEnum
+        public static AbstractGameAction.AttackEffect ICE;
+        @SpireEnum
+        public static AbstractGameAction.AttackEffect PUNCH;
+        @SpireEnum
         public static AbstractGameAction.AttackEffect PSYCHOKINESIS;
+        @SpireEnum
+        public static AbstractGameAction.AttackEffect SMALL_LASER;
         @SpireEnum
         public static AbstractGameAction.AttackEffect SMALL_EXPLOSION;
         @SpireEnum

@@ -29,7 +29,7 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.SFX;
+import pinacolada.effects.PCLSFX;
 import pinacolada.interfaces.markers.SummonOnlyMove;
 import pinacolada.interfaces.providers.CooldownProvider;
 import pinacolada.monsters.animations.PCLAllyAnimation;
@@ -101,7 +101,7 @@ public class PCLCardAlly extends PCLCreature {
         PCLCard releasedCard = releaseCard();
         if (releasedCard != null) {
             PCLEffects.Queue.callback(() -> {
-                SFX.play(SFX.CARD_EXHAUST, 0.2F);
+                PCLSFX.play(PCLSFX.CARD_EXHAUST, 0.2F);
                 for (int i = 0; i < 140; ++i) {
                     AbstractDungeon.effectsQueue.add(new ExhaustBlurEffect(this.hb.cX, this.hb.cY));
                 }

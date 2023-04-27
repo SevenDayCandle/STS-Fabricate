@@ -8,7 +8,7 @@ import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.rewards.RewardItem;
 import extendedui.ui.EUIBase;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.SFX;
+import pinacolada.effects.PCLSFX;
 import pinacolada.effects.card.PermanentUpgradeEffect;
 import pinacolada.interfaces.listeners.OnAddingToCardRewardListener;
 import pinacolada.resources.PGR;
@@ -81,7 +81,7 @@ public class PCLCardRewardBonus extends EUIBase {
     }
 
     private void receiveGold(CardRewardBundle bundle) {
-        SFX.play(SFX.GOLD_GAIN);
+        PCLSFX.play(PCLSFX.GOLD_GAIN);
         AbstractDungeon.player.gainGold(bundle.amount);
     }
 

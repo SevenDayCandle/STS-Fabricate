@@ -5,9 +5,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.vfx.BorderLongFlashEffect;
+import com.megacrit.cardcrawl.vfx.combat.GiantFireEffect;
 import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.vfx.megacritCopy.GiantFireEffect2;
 
 public class ScreenOnFireEffect3 extends PCLEffect {
     private static final float INTERVAL = 0.05F;
@@ -32,7 +32,7 @@ public class ScreenOnFireEffect3 extends PCLEffect {
         this.timer -= Gdx.graphics.getDeltaTime();
         if (this.timer < 0.0F) {
             for (int i = 0; i < times; i++) {
-                PCLEffects.Queue.add(new GiantFireEffect2());
+                PCLEffects.Queue.add(new GiantFireEffect());
             }
             this.timer = 0.05F;
         }

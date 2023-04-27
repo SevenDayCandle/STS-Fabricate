@@ -8,7 +8,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.vfx.BorderLongFlashEffect;
 import pinacolada.effects.PCLEffect;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.SFX;
+import pinacolada.effects.PCLSFX;
 
 public class ScreenFreezingEffect extends PCLEffect {
     private static final float INTERVAL = 0.05F;
@@ -26,7 +26,7 @@ public class ScreenFreezingEffect extends PCLEffect {
 
     public void update() {
         if (this.duration == this.startingDuration) {
-            SFX.play(SFX.HEAL_3);
+            PCLSFX.play(PCLSFX.HEAL_3);
             PCLEffects.Queue.add(new BorderLongFlashEffect(Color.NAVY));
         }
 

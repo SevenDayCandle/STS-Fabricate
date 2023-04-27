@@ -10,7 +10,7 @@ import extendedui.EUIRenderHelpers;
 import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.augments.PCLAugment;
-import pinacolada.effects.SFX;
+import pinacolada.effects.PCLSFX;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
 import pinacolada.rewards.PCLReward;
@@ -28,7 +28,7 @@ public class AugmentReward extends PCLReward {
 
     @Override
     public boolean claimReward() {
-        SFX.play(SFX.RELIC_DROP_MAGICAL);
+        PCLSFX.play(PCLSFX.RELIC_DROP_MAGICAL);
         PGR.dungeon.addAugment(augment.ID, 1);
         this.isDone = true;
         return true;
