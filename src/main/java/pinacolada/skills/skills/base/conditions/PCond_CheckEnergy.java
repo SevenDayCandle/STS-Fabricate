@@ -31,7 +31,8 @@ public class PCond_CheckEnergy extends PPassiveCond<PField_Not> {
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
         // Use the cache when played because this check will occur after you spent energy
-        return isUsing ? conditionMetCache : EnergyPanel.getCurrentEnergy() >= amount;
+        return isUsing ? conditionMetCache :
+                fields.doesValueMatchThreshold(EnergyPanel.getCurrentEnergy());
     }
 
     @Override
@@ -41,6 +42,6 @@ public class PCond_CheckEnergy extends PPassiveCond<PField_Not> {
 
     @Override
     public String getSubText() {
-        return getTargetHasString(amount > 1 ? EUIRM.strings.numNoun(amount + "+", PGR.core.tooltips.energy) : PGR.core.tooltips.energy.toString());
+        return getTargetHasString(fields.getThresholdString(PGR.core.tooltips.energy.toString()));
     }
 }

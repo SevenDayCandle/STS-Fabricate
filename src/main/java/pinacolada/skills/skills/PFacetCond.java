@@ -28,6 +28,6 @@ public abstract class PFacetCond<T extends PField> extends PCond<T> {
 
     @Override
     public String getText(boolean addPeriod) {
-        return isWhenClause() ? TEXT.act_objectHas(getSubText(), childEffect != null ? childEffect.getText(addPeriod) : PCLCoreStrings.period(addPeriod)) : super.getText(addPeriod);
+        return isWhenClause() || isPassiveClause() ? TEXT.act_objectHas(getSubText(), childEffect != null ? childEffect.getText(addPeriod) : PCLCoreStrings.period(addPeriod)) : super.getText(addPeriod);
     }
 }

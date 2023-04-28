@@ -25,6 +25,8 @@ import static com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect;
 
 // TODO Refactor
 public class PCLAttackVFX {
+    private static final HashMap<AttackEffect, PCLAttackVFX> ALL = new HashMap<>();
+
     // Custom:
     public static final PCLAttackVFX BITE = new PCLAttackVFX(PCLEnum.AttackEffect.BITE, null, (sx, sy, cx, cy) -> new BiteEffect(cx, cy, Color.WHITE), PCLSFX.EVENT_VAMP_BITE);
     public static final PCLAttackVFX BLUNT_HEAVY = new PCLAttackVFX(AttackEffect.BLUNT_HEAVY, ImageMaster.ATK_BLUNT_HEAVY, PCLSFX.BLUNT_FAST);
@@ -53,7 +55,6 @@ public class PCLAttackVFX {
     public static final PCLAttackVFX SPARK = new PCLAttackVFX(PCLEnum.AttackEffect.SPARK, null, Color.YELLOW, (sx, sy, cx, cy) -> VFX.sparkImpact(cx, cy), PCLSFX.ORB_LIGHTNING_CHANNEL);
     public static final PCLAttackVFX WATER = new PCLAttackVFX(PCLEnum.AttackEffect.WATER, null, Color.BLUE, (sx, sy, cx, cy) -> VFX.water(cx, cy), PCLSFX.PCL_ORB_WATER_EVOKE);
     public static final PCLAttackVFX WIND = new PCLAttackVFX(PCLEnum.AttackEffect.WIND, null, Color.FOREST, (sx, sy, cx, cy) -> VFX.tornado(cx, cy), PCLSFX.POWER_FLIGHT);
-    private static final HashMap<AttackEffect, PCLAttackVFX> ALL = new HashMap<>();
     public final AttackEffect key;
     public final TextureRegion texture;
     public final float damageDelay;

@@ -15,10 +15,8 @@ public class PCLCoreImages extends PCLImages {
 
     public static class Core {
         public static final TextureCache backArrow = new TextureCache("images/pcl/ui/core/BackArrow.png");
-        public static final TextureCache borderBG = new TextureCache("images/pcl/ui/core/BG1.png", true);
         public static final TextureCache borderBG2 = new TextureCache("images/pcl/ui/core/BG2.png", true);
         public static final TextureCache borderBG3 = new TextureCache("images/pcl/ui/core/BG3.png", true);
-        public static final TextureCache borderBG4 = new TextureCache("images/pcl/ui/core/BG4.png", true);
         public static final TextureCache borderFG = new TextureCache("images/pcl/ui/core/FG.png", false);
         public static final TextureCache borderHighlight = new TextureCache("images/pcl/ui/core/Border_Highlight.png", false);
         public static final TextureCache borderNormal = new TextureCache("images/pcl/ui/core/Border_Normal.png", true);
@@ -32,8 +30,6 @@ public class PCLCoreImages extends PCLImages {
         public static final TextureCache controllableCardPileBorder = new TextureCache("images/pcl/ui/core/ControllableCardPileBorder.png");
         public static final TextureCache leftArrow = new TextureCache("images/pcl/ui/core/LeftArrow.png");
         public static final TextureCache rightArrow = new TextureCache("images/pcl/ui/core/RightArrow.png");
-        public static final TextureCache progressBar = new TextureCache("images/pcl/ui/core/ProgressBar.png");
-        public static final TextureCache progressBarPart = new TextureCache("images/pcl/ui/core/ProgressBarPart.png");
         public static final TextureCache squareBG1 = new TextureCache("images/pcl/ui/core/SquareBG1.png", true);
         public static final TextureCache squareBG2 = new TextureCache("images/pcl/ui/core/SquareBG2.png", true);
     }

@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 
 // TODO add audio paths, define hit delays
 public class EffekseerEFK {
+    private static final Map<String, EffekseerEFK> ALL = new HashMap<>();
+
     public static final EffekseerEFK BLOW01 = new EffekseerEFK("effects/Blow01.efk");
     public static final EffekseerEFK BLOW02 = new EffekseerEFK("effects/Blow02.efk");
     public static final EffekseerEFK BLOW03 = new EffekseerEFK("effects/Blow03.efk");
@@ -116,7 +118,6 @@ public class EffekseerEFK {
     public static final EffekseerEFK SWORD28 = new EffekseerEFK("effects/Sword28.efk");
     public static final EffekseerEFK WIND01 = new EffekseerEFK("effects/Wind01.efk");
     public static final EffekseerEFK WIND02 = new EffekseerEFK("effects/Wind02.efk");
-    protected static final Map<String, EffekseerEFK> ALL = new HashMap<>();
     public final String ID;
     public final String path;
 

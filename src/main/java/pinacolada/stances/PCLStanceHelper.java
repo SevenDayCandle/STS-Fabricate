@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 @JsonAdapter(PCLStanceHelper.PCLStanceHelperAdapter.class)
 public class PCLStanceHelper implements TooltipProvider {
-    public static final Map<String, PCLStanceHelper> ALL = new HashMap<>();
+    private static final Map<String, PCLStanceHelper> ALL = new HashMap<>();
 
     public static final PCLStanceHelper CalmStance = new PCLStanceHelper(com.megacrit.cardcrawl.stances.CalmStance.STANCE_ID, PGR.core.tooltips.calm, PCLAffinity.General, com.megacrit.cardcrawl.stances.CalmStance::new);
     public static final PCLStanceHelper DivinityStance = new PCLStanceHelper(com.megacrit.cardcrawl.stances.DivinityStance.STANCE_ID, PGR.core.tooltips.divinity, PCLAffinity.General, com.megacrit.cardcrawl.stances.DivinityStance::new);

@@ -13,7 +13,8 @@ import pinacolada.skills.fields.PField_CardCategory;
 public class PMove_ModifyDamage extends PMove_Modify<PField_CardCategory> {
     public static final PSkillData<PField_CardCategory> DATA = PMove_Modify.register(PMove_ModifyDamage.class, PField_CardCategory.class)
             .setAmounts(-DEFAULT_MAX, DEFAULT_MAX)
-            .setExtra(0, DEFAULT_MAX);
+            .setExtra(0, DEFAULT_MAX)
+            .selfTarget();
 
     public PMove_ModifyDamage() {
         this(1, 1);

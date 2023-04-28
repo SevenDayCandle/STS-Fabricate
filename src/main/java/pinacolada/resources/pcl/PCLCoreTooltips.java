@@ -107,6 +107,7 @@ public class PCLCoreTooltips extends PCLTooltips {
     public EUITooltip channel = EUITooltip.findByID("Channel");
     public EUITooltip constricted = EUITooltip.findByID("Constricted");
     public EUITooltip cooldown = EUITooltip.findByID("Cooldown");
+    public EUITooltip counter = EUITooltip.findByID("Counter");
     public EUITooltip critical = EUITooltip.findByID("Critical");
     public EUITooltip curlUp = EUITooltip.findByID("Curl Up");
     public EUITooltip cycle = EUITooltip.findByID("Cycle");
@@ -146,7 +147,6 @@ public class PCLCoreTooltips extends PCLTooltips {
     public EUITooltip limited = EUITooltip.findByID("Limited");
     public EUITooltip lockOn = EUITooltip.findByID("~Lock-On");
     public EUITooltip loyal = EUITooltip.findByID("Loyal");
-    public EUITooltip magic = EUITooltip.findByID("Magic");
     public EUITooltip malleable = EUITooltip.findByID("Malleable");
     public EUITooltip mantra = EUITooltip.findByID("Prayer"); // YES THIS THING IS CALLED PRAYER
     public EUITooltip mark = EUITooltip.findByID("Mark");

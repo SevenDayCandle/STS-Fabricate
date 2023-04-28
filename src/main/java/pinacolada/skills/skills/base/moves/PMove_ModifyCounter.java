@@ -1,38 +1,41 @@
-package pinacolada.skills.skills.special.moves;
+package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
 import extendedui.interfaces.delegates.ActionT1;
+import pinacolada.annotations.VisibleSkill;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
-import pinacolada.skills.skills.base.moves.PMove_Modify;
 
-public class PMove_ModifyMagicNumber extends PMove_Modify<PField_CardCategory> {
-    public static final PSkillData<PField_CardCategory> DATA = PMove_Modify.register(PMove_ModifyMagicNumber.class, PField_CardCategory.class)
-            .pclOnly();
+@VisibleSkill
+public class PMove_ModifyCounter extends PMove_Modify<PField_CardCategory> {
+    public static final PSkillData<PField_CardCategory> DATA = PMove_Modify.register(PMove_ModifyCounter.class, PField_CardCategory.class)
+            .setAmounts(-DEFAULT_MAX, DEFAULT_MAX)
+            .setExtra(0, DEFAULT_MAX)
+            .selfTarget();
 
-    public PMove_ModifyMagicNumber() {
+    public PMove_ModifyCounter() {
         this(1, 1);
     }
 
-    public PMove_ModifyMagicNumber(int amount, int priority) {
+    public PMove_ModifyCounter(int amount, int priority) {
         super(DATA, amount, priority);
     }
 
-    public PMove_ModifyMagicNumber(PSkillSaveData content) {
+    public PMove_ModifyCounter(PSkillSaveData content) {
         super(DATA, content);
     }
 
     @Override
     public String getObjectSampleText() {
-        return PGR.core.tooltips.magic.title;
+        return PGR.core.tooltips.counter.title;
     }
 
     @Override
     public String getObjectText() {
-        return EUIRM.strings.numNoun(getExtraRawString(), PGR.core.tooltips.magic);
+        return EUIRM.strings.numNoun(getExtraRawString(), PGR.core.tooltips.counter);
     }
 
     @Override

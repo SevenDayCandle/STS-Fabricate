@@ -140,9 +140,9 @@ public class PCLCustomCardAttributesPage extends PCLCustomCardEditorPage {
                 .setTooltip(upgradeLabel.tooltip);
         curW += SPACING_WIDTH;
         magicNumberEditor = new PCLCustomCardUpgradableEditor(new EUIHitbox(curW, screenH(0.65f), MENU_WIDTH / 4, MENU_HEIGHT)
-                , PGR.core.tooltips.magic.title, (val, upVal) -> screen.modifyBuilder(e -> e.setMagicNumber(val, upVal)))
+                , PGR.core.tooltips.counter.title, (val, upVal) -> screen.modifyBuilder(e -> e.setMagicNumber(val, upVal)))
                 .setLimits(-PSkill.DEFAULT_MAX, PSkill.DEFAULT_MAX)
-                .setTooltip(PGR.core.tooltips.magic.makeCopy());
+                .setTooltip(PGR.core.tooltips.counter.makeCopy());
         curW += SPACING_WIDTH;
         hpEditor = new PCLCustomCardUpgradableEditor(new EUIHitbox(curW, screenH(0.65f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , PGR.core.tooltips.hp.title, (val, upVal) -> screen.modifyBuilder(e -> e.setHp(val, upVal)))

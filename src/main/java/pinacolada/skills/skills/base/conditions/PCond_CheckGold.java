@@ -34,7 +34,7 @@ public class PCond_CheckGold extends PPassiveCond<PField_Not> {
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
         List<AbstractCreature> targets = getTargetList(info);
-        return EUIUtils.any(targets, m -> amount == 0 ? m.gold == 0 : m.gold >= amount);
+        return EUIUtils.any(targets, m -> fields.doesValueMatchThreshold(m.gold));
     }
 
     @Override
@@ -44,7 +44,7 @@ public class PCond_CheckGold extends PPassiveCond<PField_Not> {
 
     @Override
     public String getSubText() {
-        String baseString = amount > 1 ? EUIRM.strings.numNoun(getAmountRawString() + "+", PGR.core.tooltips.gold) : amount == 0 ? EUIRM.strings.numNoun(getAmountRawString(), PGR.core.tooltips.gold) : PGR.core.tooltips.gold.toString();
+        String baseString = fields.getThresholdString(PGR.core.tooltips.gold.toString());
         if (isWhenClause()) {
             return getWheneverString(TEXT.act_gain(baseString));
         }

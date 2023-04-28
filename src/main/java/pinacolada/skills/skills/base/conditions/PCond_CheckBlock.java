@@ -36,7 +36,7 @@ public class PCond_CheckBlock extends PPassiveCond<PField_Not> implements OnBloc
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
         List<AbstractCreature> targets = getTargetList(info);
-        return EUIUtils.any(targets, m -> amount == 0 ? m.currentBlock == 0 : m.currentBlock >= amount);
+        return EUIUtils.any(targets, m -> fields.doesValueMatchThreshold(m.currentBlock, amount));
     }
 
     @Override
@@ -46,7 +46,7 @@ public class PCond_CheckBlock extends PPassiveCond<PField_Not> implements OnBloc
 
     @Override
     public String getSubText() {
-        String baseString = amount > 1 ? EUIRM.strings.numNoun(getAmountRawString() + "+", PGR.core.tooltips.block) : amount == 0 ? EUIRM.strings.numNoun(getAmountRawString(), PGR.core.tooltips.block) : PGR.core.tooltips.block.toString();
+        String baseString = fields.getThresholdString(PGR.core.tooltips.block.toString());
         if (isWhenClause()) {
             return getWheneverString(TEXT.act_gain(baseString));
         }
@@ -56,7 +56,7 @@ public class PCond_CheckBlock extends PPassiveCond<PField_Not> implements OnBloc
 
     @Override
     public void onBlockGained(AbstractCreature t, int block) {
-        if (target.getTargets(getOwnerCreature(), t).contains(t)) {
+        if (target.getTargets(getOwnerCreature(), t).contains(t) && fields.doesValueMatchThreshold(block, amount)) {
             useFromTrigger(makeInfo(t));
         }
     }

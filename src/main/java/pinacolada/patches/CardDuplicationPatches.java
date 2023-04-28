@@ -13,6 +13,7 @@ import com.megacrit.cardcrawl.relics.DollysMirror;
 import pinacolada.utilities.GameUtilities;
 
 // Copied and modified from STS-AnimatorMod
+// TODO rework to prevent people from even choosing cards at the copy limit
 public class CardDuplicationPatches {
     private static CardGroup masterDeckCache;
 

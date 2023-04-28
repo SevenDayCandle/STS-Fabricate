@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 @VisibleSkill
 public class PCond_IfHasProperty extends PFacetCond<PField_CardCategory> {
-    public static final PSkillData<PField_CardCategory> DATA = register(PCond_IfHasProperty.class, PField_CardCategory.class)
+    public static final PSkillData<PField_CardCategory> DATA = register(PCond_IfHasProperty.class, PField_CardCategory.class, 1, 1)
             .selfTarget();
 
     public PCond_IfHasProperty(PSkillSaveData content) {

@@ -33,7 +33,7 @@ public class AbstractMonsterPatches {
     @SpirePatch(clz = AbstractMonster.class, method = "renderTip", paramtypez = {SpriteBatch.class})
     public static class AbstractMonster_RenderTip {
         @SpirePrefixPatch
-        public static SpireReturn prefix(AbstractMonster __instance, SpriteBatch sb) {
+        public static SpireReturn<Void> prefix(AbstractMonster __instance, SpriteBatch sb) {
             if (!PGR.config.vanillaPowerRender.get()) {
                 if (__instance.reticleAlpha == 0) {
                     EUITooltip.queueTooltips(__instance);

@@ -34,6 +34,10 @@ import java.util.stream.Collectors;
 // TODO add color filtering
 @JsonAdapter(PCLPowerHelper.PCLPowerHelperAdapter.class)
 public class PCLPowerHelper implements TooltipProvider {
+    private static final Map<String, PCLPowerHelper> ALL = new HashMap<>();
+    private static final Map<String, PCLPowerHelper> COMMON_BUFFS = new HashMap<>();
+    private static final Map<String, PCLPowerHelper> COMMON_DEBUFFS = new HashMap<>();
+
     public static final PCLPowerHelper Blinded = new PCLPowerHelper(BlindedPower.POWER_ID, PGR.core.tooltips.blinded, BlindedPower::new, Behavior.TurnBased, true, true, false);
     public static final PCLPowerHelper Bruised = new PCLPowerHelper(BruisedPower.POWER_ID, PGR.core.tooltips.bruised, BruisedPower::new, Behavior.TurnBased, true, true, false);
     public static final PCLPowerHelper Constricted = new PCLPowerHelper(ConstrictedPower.POWER_ID, PGR.core.tooltips.constricted, PCLConstrictedPower::new, Behavior.Permanent, true, true, false);
@@ -89,9 +93,6 @@ public class PCLPowerHelper implements TooltipProvider {
     public static final PCLPowerHelper Vigor = new PCLPowerHelper(VigorPower.POWER_ID, PGR.core.tooltips.vigor, VigorPower::new, Behavior.Permanent, true, false, false);
     public static final PCLPowerHelper Vitality = new PCLPowerHelper(VitalityPower.POWER_ID, PGR.core.tooltips.vitality, VitalityPower::new, Behavior.Permanent, true, false, false);
     public static final PCLPowerHelper Warding = new PCLPowerHelper(WardingPower.POWER_ID, PGR.core.tooltips.warding, WardingPower::new, Behavior.Permanent, true, false, false);
-    protected static final Map<String, PCLPowerHelper> ALL = new HashMap<>();
-    protected static final Map<String, PCLPowerHelper> CommonBuffs = new HashMap<>();
-    protected static final Map<String, PCLPowerHelper> CommonDebuffs = new HashMap<>();
     public final String ID;
     public final Behavior endTurnBehavior;
     public final boolean isCommon;
@@ -118,10 +119,10 @@ public class PCLPowerHelper implements TooltipProvider {
         ALL.putIfAbsent(powerID, this);
         if (isCommon) {
             if (isDebuff) {
-                CommonDebuffs.putIfAbsent(powerID, this);
+                COMMON_DEBUFFS.putIfAbsent(powerID, this);
             }
             else {
-                CommonBuffs.putIfAbsent(powerID, this);
+                COMMON_BUFFS.putIfAbsent(powerID, this);
             }
         }
     }
@@ -148,7 +149,7 @@ public class PCLPowerHelper implements TooltipProvider {
     }
 
     public static ArrayList<PCLPowerHelper> commonBuffs() {
-        return new ArrayList<>(CommonBuffs.values());
+        return new ArrayList<>(COMMON_BUFFS.values());
     }
 
     public static PCLPowerHelper randomDebuff() {
@@ -156,7 +157,7 @@ public class PCLPowerHelper implements TooltipProvider {
     }
 
     public static ArrayList<PCLPowerHelper> commonDebuffs() {
-        return new ArrayList<>(CommonDebuffs.values());
+        return new ArrayList<>(COMMON_DEBUFFS.values());
     }
 
     private static AbstractPower setAmount(AbstractPower original, Integer amount) {

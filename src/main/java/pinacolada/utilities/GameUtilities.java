@@ -711,6 +711,12 @@ public class GameUtilities {
         }
     }
 
+    // Do not return magic number for non-PCLCard cards
+    public static int getCounter(AbstractCard card)
+    {
+        return card instanceof PCLCard ? card.magicNumber : 0;
+    }
+
     public static PCLAffinity getCurrentAffinity() {
         return CombatManager.playerSystem.getCurrentAffinity();
     }

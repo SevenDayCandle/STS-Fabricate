@@ -521,7 +521,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     // For PCL cards, always use the skill silhouette because its cards are all rectangular
     @Override
     public TextureAtlas.AtlasRegion getCardBgAtlas() {
-        return shouldUsePCLFrame() || type == PCLEnum.CardType.SUMMON ? ImageMaster.CARD_SKILL_BG_SILHOUETTE : super.getCardBgAtlas();
+        return shouldUsePCLFrame() || isSummon() ? ImageMaster.CARD_SKILL_BG_SILHOUETTE : super.getCardBgAtlas();
     }
 
     @Override
@@ -1066,6 +1066,19 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
             }
         }
 
+        // Add appropriate summon timing tooltip
+        if (isSummon())
+        {
+            if (timing.movesBeforePlayer())
+            {
+                dynamicTooltips.add(PGR.core.tooltips.turnStart);
+            }
+            else
+            {
+                dynamicTooltips.add(PGR.core.tooltips.turnEnd);
+            }
+        }
+
         // Add tips from tags
         for (PCLCardTag tag : PCLCardTag.getAll()) {
             if (tag.has(this)) {
@@ -1177,7 +1190,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
             resources = PGR.core;
         }
 
-        if (type == PCLEnum.CardType.SUMMON) {
+        if (isSummon()) {
             return isPopup ? resources.images.cardBackgroundSummonL.texture() : resources.images.cardBackgroundSummon.texture();
         }
         switch (type) {
@@ -1334,7 +1347,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
 
     protected Texture getPortraitFrame() {
         if (shouldUsePCLFrame()) {
-            if (type == PCLEnum.CardType.SUMMON) {
+            if (isSummon()) {
                 return isPopup ? PCLCoreImages.CardUI.cardFrameSummonL.texture() : PCLCoreImages.CardUI.cardFrameSummon.texture();
             }
             switch (type) {
@@ -1608,6 +1621,11 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
 
     public boolean isStarter() {
         return GameUtilities.isStarter(this);
+    }
+
+    public boolean isSummon()
+    {
+        return type == PCLEnum.CardType.SUMMON;
     }
 
     public PCLCard makePopupCopy() {

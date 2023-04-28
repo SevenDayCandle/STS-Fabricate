@@ -1,5 +1,6 @@
 package pinacolada.skills.fields;
 
+import extendedui.EUIRM;
 import pinacolada.resources.PGR;
 import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
 
@@ -30,5 +31,39 @@ public class PField_Not extends PField {
 
     public void registerNotBoolean(PCLCustomCardEffectEditor<?> editor, String name, String desc) {
         editor.registerBoolean(name, desc, v -> not = v, not);
+    }
+
+    public boolean doesValueMatchThreshold(int input)
+    {
+        return doesValueMatchThreshold(input, skill.amount);
+    }
+
+    public boolean doesValueMatchThreshold(int input, int threshold)
+    {
+        return not ? input <= threshold : input >= threshold;
+    }
+
+    public String getThresholdValString()
+    {
+        return getThresholdValString(skill.getAmountRawString(), skill.baseAmount);
+    }
+
+    public String getThresholdValString(String valueStr, int amount)
+    {
+        if (not && amount == 0)
+        {
+            return valueStr;
+        }
+        return valueStr + (not ? "-" : "+");
+    }
+
+    public String getThresholdString(String subject)
+    {
+        return getThresholdString(skill.getAmountRawString(), subject, skill.baseAmount);
+    }
+
+    public String getThresholdString(String valueStr, String subject, int amount)
+    {
+        return amount == 1 ? subject : EUIRM.strings.numNoun(getThresholdValString(valueStr, amount), subject);
     }
 }
