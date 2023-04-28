@@ -12,7 +12,6 @@ import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 import com.megacrit.cardcrawl.vfx.cardManip.PurgeCardEffect;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT3;
-import extendedui.utilities.GenericCallback;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.dungeon.CombatManager;
@@ -174,7 +173,7 @@ public class MoveCard extends PCLAction<AbstractCard> {
         if (showEffect) {
             showCard();
 
-            callbacks.add(0, GenericCallback.fromT1(this::moveToDiscardPile));
+            callbacks.add(0, this::moveToDiscardPile);
         }
         else {
             moveToDiscardPile(card);
@@ -195,7 +194,7 @@ public class MoveCard extends PCLAction<AbstractCard> {
         if (showEffect) {
             showCard();
 
-            callbacks.add(0, GenericCallback.fromT1(this::moveToDrawPile));
+            callbacks.add(0, this::moveToDrawPile);
         }
         else {
             moveToDrawPile(card);
@@ -211,7 +210,7 @@ public class MoveCard extends PCLAction<AbstractCard> {
         if (showEffect) {
             showCard();
 
-            callbacks.add(0, GenericCallback.fromT1(this::moveToExhaustPile));
+            callbacks.add(0, this::moveToExhaustPile);
         }
         else {
             moveToExhaustPile(card);
@@ -229,7 +228,7 @@ public class MoveCard extends PCLAction<AbstractCard> {
         if (showEffect) {
             showCard();
 
-            callbacks.add(0, GenericCallback.fromT1(this::moveToHand));
+            callbacks.add(0, this::moveToHand);
         }
         else {
             moveToHand(card);
@@ -253,7 +252,7 @@ public class MoveCard extends PCLAction<AbstractCard> {
         if (showEffect) {
             showCard();
 
-            callbacks.add(0, GenericCallback.fromT1(this::moveToPile));
+            callbacks.add(0, this::moveToPile);
         }
         else {
             moveToPile(card);

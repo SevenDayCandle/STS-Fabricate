@@ -504,10 +504,6 @@ public final class PCLActions {
         return add(new ModifyAffinityLevel(card, affinity, amount, relative));
     }
 
-    public <S> ModifyAllCopies modifyAllCopies(String cardID, S state, ActionT2<S, AbstractCard> onCompletion) {
-        return add(new ModifyAllCopies(cardID, state, onCompletion));
-    }
-
     public ModifyAllCopies modifyAllCopies(String cardID, ActionT1<AbstractCard> onCompletion) {
         return add(new ModifyAllCopies(cardID, onCompletion));
     }

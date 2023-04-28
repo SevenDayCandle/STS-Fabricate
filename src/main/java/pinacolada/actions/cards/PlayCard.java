@@ -14,8 +14,9 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.ui.panels.EnergyPanel;
 import com.megacrit.cardcrawl.vfx.ThoughtBubble;
 import extendedui.EUIUtils;
-import pinacolada.actions.PCLActionWithCallbackT2;
+import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.actions.PCLActions;
+import pinacolada.actions.PCLConditionalAction;
 import pinacolada.actions.utility.DelayAllActions;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.effects.PCLEffects;
@@ -23,7 +24,7 @@ import pinacolada.resources.PCLEnum;
 import pinacolada.utilities.GameUtilities;
 
 // Copied and modified from STS-AnimatorMod
-public class PlayCard extends PCLActionWithCallbackT2<AbstractMonster, AbstractCard> {
+public class PlayCard extends PCLConditionalAction<AbstractMonster, AbstractCard> {
     public static final float DEFAULT_TARGET_X_LEFT = (Settings.WIDTH / 2f) - (300f * Settings.scale);
     public static final float DEFAULT_TARGET_X_RIGHT = (Settings.WIDTH / 2f) + (200f * Settings.scale);
     public static final float DEFAULT_TARGET_Y = (Settings.HEIGHT / 2f);
@@ -72,7 +73,7 @@ public class PlayCard extends PCLActionWithCallbackT2<AbstractMonster, AbstractC
     protected void firstUpdate() {
         super.firstUpdate();
 
-        if (!checkConditions(card)) {
+        if (!checkCondition(card)) {
             completeImpl();
             return;
         }
@@ -201,6 +202,12 @@ public class PlayCard extends PCLActionWithCallbackT2<AbstractMonster, AbstractC
         card.lighten(true);
         card.drawScale = 0.5f;
         card.targetDrawScale = 0.75f;
+    }
+
+    public PlayCard setCondition(FuncT1<Boolean, AbstractCard> condition) {
+        super.setCondition(condition);
+
+        return this;
     }
 
     public PlayCard setCurrentPosition(float x, float y) {

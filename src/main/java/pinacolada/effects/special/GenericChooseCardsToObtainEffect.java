@@ -11,7 +11,6 @@ import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
-import extendedui.utilities.GenericCondition;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.effects.PCLEffects;
 import pinacolada.resources.PGR;
@@ -22,7 +21,7 @@ import java.util.ArrayList;
 public class GenericChooseCardsToObtainEffect extends PCLEffectWithCallback<GenericChooseCardsToObtainEffect> {
     public final ArrayList<AbstractCard> cards = new ArrayList<>();
     private final CardGroup[] groups;
-    private final GenericCondition<AbstractCard> filter;
+    private final FuncT1<Boolean, AbstractCard> filter;
     private final RandomizedList<AbstractCard> offeredCards = new RandomizedList<>();
     private final Color screenColor;
     private final int groupSize;
@@ -40,7 +39,7 @@ public class GenericChooseCardsToObtainEffect extends PCLEffectWithCallback<Gene
         this.screenColor = AbstractDungeon.fadeColor.cpy();
         this.screenColor.a = 0f;
         this.groups = groups;
-        this.filter = filter != null ? GenericCondition.fromT1(filter) : null;
+        this.filter = filter;
         AbstractDungeon.overlayMenu.proceedButton.hide();
     }
 
@@ -74,7 +73,7 @@ public class GenericChooseCardsToObtainEffect extends PCLEffectWithCallback<Gene
         if (offeredCards.size() == 0) {
             for (CardGroup cGroup : groups) {
                 for (AbstractCard card : cGroup.group) {
-                    if (filter == null || filter.check(card)) {
+                    if (filter == null || filter.invoke(card)) {
                         offeredCards.add(card);
                     }
                 }

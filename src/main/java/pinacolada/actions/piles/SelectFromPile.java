@@ -10,10 +10,8 @@ import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT3;
 import extendedui.interfaces.delegates.FuncT1;
-import extendedui.interfaces.delegates.FuncT2;
 import extendedui.text.EUISmartText;
 import extendedui.ui.GridCardSelectScreenHelper;
-import extendedui.utilities.GenericCondition;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.utility.CardFilterAction;
 import pinacolada.cards.base.fields.PCLCardSelection;
@@ -95,7 +93,7 @@ public class SelectFromPile extends CardFilterAction {
             PCLActions.top.moveCard(card, group).showEffect(showEffect, realtime);
         }
     }    protected boolean canSelect(AbstractCard card) {
-        return filter == null || filter.check(card);
+        return filter == null || filter.invoke(card);
     }
 
     public SelectFromPile setAnyNumber(boolean anyNumber) {
@@ -297,7 +295,7 @@ public class SelectFromPile extends CardFilterAction {
 
         return this;
     }    public SelectFromPile setCompletionRequirement(FuncT1<Boolean, ArrayList<AbstractCard>> condition) {
-        this.condition = GenericCondition.fromT1(condition);
+        this.condition = condition;
 
         return this;
     }
@@ -309,12 +307,6 @@ public class SelectFromPile extends CardFilterAction {
         return this;
     }
 
-
-
-
-
-
-
     public SelectFromPile setDynamicMessage(FuncT1<String, ArrayList<AbstractCard>> stringFunc) {
         this.dynamicString = stringFunc;
 
@@ -322,24 +314,10 @@ public class SelectFromPile extends CardFilterAction {
     }
 
     public SelectFromPile setFilter(FuncT1<Boolean, AbstractCard> filter) {
-        this.filter = GenericCondition.fromT1(filter);
+        this.filter = filter;
 
         return this;
     }
-
-    public <S> SelectFromPile setFilter(S state, FuncT2<Boolean, S, AbstractCard> filter) {
-        this.filter = GenericCondition.fromT2(filter, state);
-
-        return this;
-    }
-
-
-
-
-
-
-
-
 
     public SelectFromPile setOnClick(ActionT3<CardGroup, ArrayList<AbstractCard>, AbstractCard> onClickCard) {
         this.onClickCard = onClickCard;

@@ -53,7 +53,6 @@ import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.AbstractScreen;
 import extendedui.ui.cardFilter.CountingPanelStats;
 import extendedui.ui.tooltips.EUITooltip;
-import extendedui.utilities.GenericCondition;
 import org.scannotation.AnnotationDB;
 import pinacolada.actions.PCLActions;
 import pinacolada.augments.PCLAugment;
@@ -103,9 +102,6 @@ public class GameUtilities {
     public final static String EMPTY_STRING = "";
     protected static final String PORTRAIT_PATH = "images/1024Portraits/";
     protected static final String BETA_PATH = "images/1024PortraitsBeta/";
-    private static final RandomizedList<AbstractCard> fullCardPool = new RandomizedList<>();
-    private static final RandomizedList<AbstractCard> characterCardPool = new RandomizedList<>();
-    private static AbstractPlayer.PlayerClass lastPlayerClass;
 
     public static CountingPanelStats<PCLAffinity, PCLAffinity, AbstractCard> affinityStats(Iterable<AbstractCard> cards) {
         return CountingPanelStats.basic(
@@ -541,11 +537,8 @@ public class GameUtilities {
     }
 
     public static ArrayList<AbstractCard> getAnyColorCardFilteredCards(AbstractCard.CardRarity rarity, AbstractCard.CardType type, boolean allowHealing) {
-        refreshCardLists();
-        setupFullCardPool();
-
         ArrayList<AbstractCard> available = new ArrayList<>();
-        for (AbstractCard c : fullCardPool) {
+        for (AbstractCard c : EUIGameUtils.getEveryColorCard()) {
             if ((allowHealing || GameUtilities.isObtainableInCombat(c)) &&
                     (rarity == null || c.rarity == rarity) &&
                     ((type == null || c.type == type))) {
@@ -554,6 +547,41 @@ public class GameUtilities {
         }
 
         return available;
+    }
+
+    public static ArrayList<AbstractCard> getAvailableCards() {
+        return getAvailableCards(null);
+    }
+
+    public static ArrayList<AbstractCard> getAvailableCards(FuncT1<Boolean,AbstractCard> filter) {
+        ArrayList<AbstractCard> result = new ArrayList<>();
+        for (CardGroup pool : EUIGameUtils.getGameCardPools()) {
+            for (AbstractCard card : pool.group) {
+                if (filter == null || filter.invoke(card)) {
+                    result.add(card);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    public static ArrayList<AbstractCard> getAvailableCardsForAllColors(FuncT1<Boolean,AbstractCard> filter) {
+        return EUIUtils.filter(EUIGameUtils.getEveryColorCard(), filter::invoke);
+    }
+
+    // filter out curses/statuses/basics
+    public static ArrayList<AbstractCard> getAvailableCardsInGame(FuncT1<Boolean,AbstractCard> filter) {
+        ArrayList<AbstractCard> result = new ArrayList<>();
+        for (CardGroup pool : EUIGameUtils.getGameCardPools()) {
+            for (AbstractCard card : pool.group) {
+                if (filter == null || filter.invoke(card)) {
+                    result.add(card);
+                }
+            }
+        }
+
+        return result;
     }
 
     public static int getAscensionLevel() {
@@ -577,8 +605,8 @@ public class GameUtilities {
         return ReflectionHacks.getPrivate(mo, AbstractMonster.class, "bobEffect");
     }
 
-    public static RandomizedList<AbstractCard> getCardPoolInCombat(AbstractCard.CardRarity rarity) {
-        return getCardPoolInCombat(getCardPool(rarity), null);
+    public static RandomizedList<AbstractCard> getCardsFromCombatPool(AbstractCard.CardRarity rarity) {
+        return getCardsFromCombatPool(getCardPool(rarity), null);
     }
 
     public static CardGroup getCardPoolSource(AbstractCard.CardRarity rarity) {
@@ -608,11 +636,11 @@ public class GameUtilities {
         return EUIUtils.flattenList(EUIUtils.map(groups, group -> group.group));
     }
 
-    public static RandomizedList<AbstractCard> getCardsInCombat(GenericCondition<AbstractCard> filter) {
+    public static RandomizedList<AbstractCard> getCardsInCombat(FuncT1<Boolean,AbstractCard> filter) {
         final RandomizedList<AbstractCard> cards = new RandomizedList<>();
-        for (CardGroup group : EUIGameUtils.getGameCardPools()) {
+        for (CardGroup group : getCardPoolsInCombat()) {
             for (AbstractCard c : group.group) {
-                if (isObtainableInCombat(c) && (filter == null || filter.check(c))) {
+                if (isObtainableInCombat(c) && (filter == null || filter.invoke(c))) {
                     cards.add(c);
                 }
             }
@@ -621,15 +649,20 @@ public class GameUtilities {
         return cards;
     }
 
+    public static ArrayList<CardGroup> getCardPoolsInCombat()
+    {
+        return EUIUtils.arrayList(AbstractDungeon.colorlessCardPool, AbstractDungeon.commonCardPool, AbstractDungeon.uncommonCardPool, AbstractDungeon.rareCardPool);
+    }
+
     public static boolean isObtainableInCombat(AbstractCard c) {
         return !c.hasTag(AbstractCard.CardTags.HEALING) && c.rarity != AbstractCard.CardRarity.SPECIAL && !PCLCardTag.Fleeting.has(c) && !c.isLocked;
     }
 
-    public static WeightedList<AbstractCard> getCardsInCombatWeighted(GenericCondition<AbstractCard> filter) {
+    public static WeightedList<AbstractCard> getCardsInCombatWeighted(FuncT1<Boolean,AbstractCard> filter) {
         final WeightedList<AbstractCard> cards = new WeightedList<>();
         for (CardGroup group : EUIGameUtils.getGameCardPools()) {
             for (AbstractCard c : group.group) {
-                if (isObtainableInCombat(c) && (filter == null || filter.check(c))) {
+                if (isObtainableInCombat(c) && (filter == null || filter.invoke(c))) {
                     switch (c.rarity) {
                         case COMMON:
                             cards.add(c, 9);
@@ -671,11 +704,11 @@ public class GameUtilities {
         return names;
     }
 
-    public static RandomizedList<AbstractCard> getColorlessCardPoolInCombat() {
-        return getCardPoolInCombat(getColorlessCardPool(), null);
+    public static RandomizedList<AbstractCard> getColorlessCardsFromCombatPool() {
+        return getCardsFromCombatPool(getColorlessCardPool(), null);
     }
 
-    public static RandomizedList<AbstractCard> getCardPoolInCombat(CardGroup group, FuncT1<Boolean, AbstractCard> filter) {
+    public static RandomizedList<AbstractCard> getCardsFromCombatPool(CardGroup group, FuncT1<Boolean, AbstractCard> filter) {
         final RandomizedList<AbstractCard> cards = new RandomizedList<>();
         if (group != null) {
             for (AbstractCard c : group.group) {
@@ -1142,26 +1175,6 @@ public class GameUtilities {
         return characters;
     }
 
-    public static AbstractCard getRandomAnyColorCard(FuncT1<Boolean, AbstractCard> filter) {
-        refreshCardLists();
-        setupFullCardPool();
-        return getRandomElement(EUIUtils.filter(fullCardPool, filter::invoke));
-    }
-
-    protected static void refreshCardLists() {
-        if (lastPlayerClass == null || (AbstractDungeon.player != null && lastPlayerClass != AbstractDungeon.player.chosenClass)) {
-            lastPlayerClass = AbstractDungeon.player != null ? AbstractDungeon.player.chosenClass : null;
-            fullCardPool.clear();
-            characterCardPool.clear();
-        }
-    }
-
-    protected static void setupFullCardPool() {
-        if (fullCardPool.size() == 0) {
-            fullCardPool.addAll(EUIGameUtils.getEveryColorCard());
-        }
-    }
-
     public static <T> T getRandomElement(List<T> list) {
         return getRandomElement(list, getRNG());
     }
@@ -1172,15 +1185,15 @@ public class GameUtilities {
     }
 
     public static AbstractCard getRandomAnyColorCard() {
-        refreshCardLists();
-        setupFullCardPool();
-        return fullCardPool.retrieve(getRNG());
+        return GameUtilities.getRandomElement(EUIGameUtils.getEveryColorCard());
+    }
+
+    public static AbstractCard getRandomAnyColorCard(FuncT1<Boolean, AbstractCard> filter) {
+        return getRandomElement(EUIUtils.filter(EUIGameUtils.getEveryColorCard(), filter::invoke));
     }
 
     public static ArrayList<AbstractCard> getRandomAnyColorCards(FuncT1<Boolean, AbstractCard> filter, int count) {
-        refreshCardLists();
-        setupFullCardPool();
-        RandomizedList<AbstractCard> possible = new RandomizedList<>(EUIUtils.filter(fullCardPool, filter::invoke));
+        RandomizedList<AbstractCard> possible = new RandomizedList<>(EUIUtils.filter(EUIGameUtils.getEveryColorCard(), filter::invoke));
         ArrayList<AbstractCard> returned = new ArrayList<>();
         for (int i = 0; i < count; i++) {
             AbstractCard c = possible.retrieve(getRNG(), true);
@@ -1191,51 +1204,17 @@ public class GameUtilities {
         return returned;
     }
 
+    public static AbstractCard getRandomCombatCard() {
+        return getRandomElement(getCardsInCombat(null));
+    }
+
     // Create a random card that matches the given parameters. Note that these random card methods poll from the in-combat card pool, so healing cards are already filtered out
-    public static AbstractCard getRandomCard(FuncT1<Boolean, AbstractCard> filter) {
-        refreshCardLists();
-        setupCharacterCardPool();
-        return getRandomElement(EUIUtils.filter(characterCardPool, filter::invoke));
+    public static AbstractCard getRandomCombatCard(FuncT1<Boolean, AbstractCard> filter) {
+        return getRandomElement(getCardsInCombat(filter));
     }
 
-    // Sets up the available pool of generated cards in combat (so no curses/statuses, basics, or unobtainable cards)
-    protected static void setupCharacterCardPool() {
-        if (characterCardPool.size() == 0) {
-            for (AbstractCard c : GameUtilities.getAvailableCards()) {
-                if (!(c.type == AbstractCard.CardType.CURSE || c.type == AbstractCard.CardType.STATUS) && GameUtilities.isObtainableInCombat(c) && c.rarity != AbstractCard.CardRarity.BASIC) {
-                    characterCardPool.add(c);
-                }
-            }
-        }
-    }
-
-    public static ArrayList<AbstractCard> getAvailableCards() {
-        return getAvailableCards(null);
-    }
-
-    public static ArrayList<AbstractCard> getAvailableCards(GenericCondition<AbstractCard> filter) {
-        ArrayList<AbstractCard> result = new ArrayList<>();
-        for (CardGroup pool : EUIGameUtils.getGameCardPools()) {
-            for (AbstractCard card : pool.group) {
-                if (filter == null || filter.check(card)) {
-                    result.add(card);
-                }
-            }
-        }
-
-        return result;
-    }
-
-    public static AbstractCard getRandomCard() {
-        refreshCardLists();
-        setupCharacterCardPool();
-        return characterCardPool.retrieve(getRNG());
-    }
-
-    public static ArrayList<AbstractCard> getRandomCards(FuncT1<Boolean, AbstractCard> filter, int count) {
-        refreshCardLists();
-        setupCharacterCardPool();
-        RandomizedList<AbstractCard> possible = new RandomizedList<>(EUIUtils.filter(characterCardPool, filter::invoke));
+    public static ArrayList<AbstractCard> getRandomCombatCards(FuncT1<Boolean, AbstractCard> filter, int count) {
+        RandomizedList<AbstractCard> possible = new RandomizedList<>(getCardsInCombat(filter));
         ArrayList<AbstractCard> returned = new ArrayList<>();
         for (int i = 0; i < count; i++) {
             AbstractCard c = possible.retrieve(getRNG(), true);
@@ -2048,11 +2027,6 @@ public class GameUtilities {
     public static void removeBlock(AbstractCard card) {
         card.baseBlock = card.block = 0;
         card.isBlockModified = false;
-    }
-
-    public static void removeCardFromCharacterList(AbstractCard card) {
-        characterCardPool.removeIf(c -> c.cardID.equals(card.cardID));
-        fullCardPool.removeIf(c -> c.cardID.equals(card.cardID));
     }
 
     public static boolean requiresTarget(AbstractCard card) {

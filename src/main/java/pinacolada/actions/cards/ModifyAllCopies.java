@@ -2,7 +2,6 @@ package pinacolada.actions.cards;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.interfaces.delegates.ActionT1;
-import extendedui.interfaces.delegates.ActionT2;
 import pinacolada.actions.PCLAction;
 import pinacolada.utilities.GameUtilities;
 
@@ -23,12 +22,6 @@ public class ModifyAllCopies extends PCLAction<AbstractCard> {
         this.cardID = cardID;
 
         initialize(1);
-    }
-
-    public <S> ModifyAllCopies(String cardID, S state, ActionT2<S, AbstractCard> onCompletion) {
-        this(cardID);
-
-        addCallback(state, onCompletion);
     }
 
     @Override

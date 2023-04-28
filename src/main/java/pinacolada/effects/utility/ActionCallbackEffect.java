@@ -7,34 +7,34 @@ import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.ActionT2;
 import pinacolada.effects.PCLEffectWithCallback;
 
-public class CallbackEffect extends PCLEffectWithCallback<AbstractGameAction> {
+public class ActionCallbackEffect extends PCLEffectWithCallback<AbstractGameAction> {
     protected final AbstractGameAction action;
     protected float blackScreenAlpha;
     protected boolean updateIfScreenIsUp;
 
-    public CallbackEffect(AbstractGameAction action, ActionT0 onCompletion) {
+    public ActionCallbackEffect(AbstractGameAction action, ActionT0 onCompletion) {
         this(action);
         this.addCallback(onCompletion);
     }
 
-    public CallbackEffect(AbstractGameAction action) {
+    public ActionCallbackEffect(AbstractGameAction action) {
         super(1.0F);
         this.blackScreenAlpha = 0.0F;
         this.updateIfScreenIsUp = true;
         this.action = action;
     }
 
-    public CallbackEffect(AbstractGameAction action, ActionT1<AbstractGameAction> onCompletion) {
+    public ActionCallbackEffect(AbstractGameAction action, ActionT1<AbstractGameAction> onCompletion) {
         this(action);
         this.addCallback(onCompletion);
     }
 
-    public <S> CallbackEffect(AbstractGameAction action, S state, ActionT2<S, AbstractGameAction> onCompletion) {
+    public <S> ActionCallbackEffect(AbstractGameAction action, S state, ActionT2<S, AbstractGameAction> onCompletion) {
         this(action);
         this.addCallback(state, onCompletion);
     }
 
-    public CallbackEffect showBlackScreen(float alpha) {
+    public ActionCallbackEffect showBlackScreen(float alpha) {
         this.blackScreenAlpha = alpha;
         return this;
     }
@@ -55,7 +55,7 @@ public class CallbackEffect extends PCLEffectWithCallback<AbstractGameAction> {
 
     }
 
-    public CallbackEffect updateIfScreenIsUp(boolean value) {
+    public ActionCallbackEffect updateIfScreenIsUp(boolean value) {
         this.updateIfScreenIsUp = value;
         return this;
     }

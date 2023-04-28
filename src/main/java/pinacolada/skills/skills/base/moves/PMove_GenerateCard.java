@@ -98,13 +98,17 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
     protected ArrayList<AbstractCard> getBaseCards(PCLUseInfo info) {
         final int limit = Math.max(extra, amount);
         // When sourcing cards from the parent skill, make exact copies of the cards
+        // Skip ephemeral cards because this can cause infinite loops
         if (useParent) {
             List<? extends AbstractCard> cards = info.getDataAsList(AbstractCard.class);
             if (cards != null) {
                 ArrayList<AbstractCard> created = new ArrayList<>();
                 for (AbstractCard card : cards) {
-                    for (int i = 0; i < limit; i++) {
-                        created.add(card.makeStatEquivalentCopy());
+                    if (!card.purgeOnUse)
+                    {
+                        for (int i = 0; i < limit; i++) {
+                            created.add(card.makeStatEquivalentCopy());
+                        }
                     }
                 }
                 return created;
@@ -133,7 +137,7 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
                 }
                 return created;
             }
-            return EUIUtils.map(!fields.colors.isEmpty() ? GameUtilities.getRandomAnyColorCards(fields.getFullCardFilter(), limit) : GameUtilities.getRandomCards(fields.getFullCardFilter(), limit),
+            return EUIUtils.map((!fields.colors.isEmpty()) ? GameUtilities.getRandomAnyColorCards(fields.getFullCardFilter(), limit) : GameUtilities.getRandomCombatCards(fields.getFullCardFilter(), limit),
                     AbstractCard::makeCopy);
         }
 

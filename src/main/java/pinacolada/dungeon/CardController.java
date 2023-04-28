@@ -4,9 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.interfaces.delegates.ActionT1;
-import extendedui.interfaces.delegates.ActionT2;
 import extendedui.interfaces.delegates.FuncT1;
-import extendedui.utilities.GenericCallback;
 import pinacolada.ui.combat.ControllableCardPile;
 
 public class CardController {
@@ -14,9 +12,9 @@ public class CardController {
     public ControllableCardPile sourcePile;
     protected boolean enabled;
     protected FuncT1<Boolean, CardController> useCondition;
-    protected GenericCallback<CardController> onUpdate;
-    protected GenericCallback<CardController> onSelect;
-    protected GenericCallback<CardController> onDelete;
+    protected ActionT1<CardController> onUpdate;
+    protected ActionT1<CardController> onSelect;
+    protected ActionT1<CardController> onDelete;
 
     public CardController(ControllableCardPile sourcePile, AbstractCard card) {
         this.sourcePile = sourcePile;
@@ -32,7 +30,7 @@ public class CardController {
         sourcePile.remove(this);
 
         if (onDelete != null) {
-            onDelete.complete(this);
+            onDelete.invoke(this);
         }
     }
 
@@ -44,38 +42,20 @@ public class CardController {
         this.enabled = enabled;
     }
 
-    public <S> CardController onDelete(S state, ActionT2<S, CardController> onCompletion) {
-        onDelete = GenericCallback.fromT2(onCompletion, state);
-
-        return this;
-    }
-
     public CardController onDelete(ActionT1<CardController> onCompletion) {
-        onDelete = GenericCallback.fromT1(onCompletion);
-
-        return this;
-    }
-
-    public <S> CardController onSelect(S state, ActionT2<S, CardController> onCompletion) {
-        onSelect = GenericCallback.fromT2(onCompletion, state);
+        onDelete =onCompletion;
 
         return this;
     }
 
     public CardController onSelect(ActionT1<CardController> onCompletion) {
-        onSelect = GenericCallback.fromT1(onCompletion);
-
-        return this;
-    }
-
-    public <S> CardController onUpdate(S state, ActionT2<S, CardController> onCompletion) {
-        onUpdate = GenericCallback.fromT2(onCompletion, state);
+        onSelect = onCompletion;
 
         return this;
     }
 
     public CardController onUpdate(ActionT1<CardController> onCompletion) {
-        onUpdate = GenericCallback.fromT1(onCompletion);
+        onUpdate = onCompletion;
 
         return this;
     }
@@ -86,7 +66,7 @@ public class CardController {
 
     public void select() {
         if (onSelect != null) {
-            onSelect.complete(this);
+            onSelect.invoke(this);
         }
     }
 
@@ -98,7 +78,7 @@ public class CardController {
 
     public void update() {
         if (onUpdate != null) {
-            onUpdate.complete(this);
+            onUpdate.invoke(this);
         }
     }
 

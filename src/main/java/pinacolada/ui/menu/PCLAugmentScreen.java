@@ -13,7 +13,7 @@ import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.effects.PCLEffect;
-import pinacolada.effects.utility.CallbackEffect;
+import pinacolada.effects.utility.ActionCallbackEffect;
 import pinacolada.resources.PGR;
 import pinacolada.ui.cardView.PCLAugmentList;
 import pinacolada.utilities.GameUtilities;
@@ -34,7 +34,7 @@ public class PCLAugmentScreen extends AbstractDungeonScreen {
 
     public void doAction(PCLAugment augment) {
         if (canSelect && augment != null) {
-            curEffect = new CallbackEffect(new SelectFromPile(augment.getName(), 1, AbstractDungeon.player.masterDeck)
+            curEffect = new ActionCallbackEffect(new SelectFromPile(augment.getName(), 1, AbstractDungeon.player.masterDeck)
                     .cancellableFromPlayer(true)
                     .setFilter(augment::canApply)
                     .addCallback(selection -> {

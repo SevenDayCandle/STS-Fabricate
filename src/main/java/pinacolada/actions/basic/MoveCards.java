@@ -5,8 +5,6 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
-import extendedui.interfaces.delegates.FuncT2;
-import extendedui.utilities.GenericCondition;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLCardSelection;
@@ -17,7 +15,7 @@ import java.util.ArrayList;
 // Copied and modified from STS-AnimatorMod
 public class MoveCards extends PCLAction<ArrayList<AbstractCard>> {
     protected ArrayList<AbstractCard> selectedCards = new ArrayList<>();
-    protected GenericCondition<AbstractCard> filter;
+    protected FuncT1<Boolean, AbstractCard> filter;
     protected ListSelection<AbstractCard> destination;
     protected ListSelection<AbstractCard> origin;
     protected CardGroup targetPile;
@@ -43,7 +41,7 @@ public class MoveCards extends PCLAction<ArrayList<AbstractCard>> {
 
     @Override
     protected void firstUpdate() {
-        ArrayList<AbstractCard> temp = filter != null ? EUIUtils.filter(sourcePile.group, filter::check) : new ArrayList<>(sourcePile.group);
+        ArrayList<AbstractCard> temp = filter != null ? EUIUtils.filter(sourcePile.group, filter::invoke) : new ArrayList<>(sourcePile.group);
 
         int max = amount;
         if (amount == -1 || temp.size() < amount) {
@@ -75,13 +73,7 @@ public class MoveCards extends PCLAction<ArrayList<AbstractCard>> {
     }
 
     public MoveCards setFilter(FuncT1<Boolean, AbstractCard> filter) {
-        this.filter = GenericCondition.fromT1(filter);
-
-        return this;
-    }
-
-    public <S> MoveCards setFilter(S state, FuncT2<Boolean, S, AbstractCard> filter) {
-        this.filter = GenericCondition.fromT2(filter, state);
+        this.filter = filter;
 
         return this;
     }

@@ -11,7 +11,6 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT0;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.ActionT2;
-import extendedui.utilities.GenericCallback;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -19,16 +18,16 @@ import java.util.ArrayList;
 // Copied and modified from STS-AnimatorMod
 public abstract class PCLAction<T> extends AbstractGameAction {
     public static AbstractCard currentCard;
-    protected final AbstractPlayer player;
-    public boolean canCancel;
-    public boolean isRealtime;
-    public PCLActions.ActionOrder originalOrder;
-    public AbstractCard sourceCard;
     protected AbstractCard card;
+    protected ArrayList<ActionT1<T>> callbacks = new ArrayList<>();
     protected String message;
     protected String name;
+    protected final AbstractPlayer player;
     protected int ticks;
-    protected ArrayList<GenericCallback<T>> callbacks = new ArrayList<>();
+    public AbstractCard sourceCard;
+    public PCLActions.ActionOrder originalOrder;
+    public boolean canCancel;
+    public boolean isRealtime;
 
     public PCLAction(ActionType type) {
         this(type, Settings.ACTION_DUR_FAST);
@@ -42,20 +41,26 @@ public abstract class PCLAction<T> extends AbstractGameAction {
         this.canCancel = true;
     }
 
-    public <S> PCLAction<T> addCallback(S state, ActionT2<S, T> onCompletion) {
-        callbacks.add(GenericCallback.fromT2(onCompletion, state));
+    public PCLAction<T> addCallback(ActionT0 onCompletion) {
+        callbacks.add((__) -> onCompletion.invoke());
 
         return this;
     }
 
     public PCLAction<T> addCallback(ActionT1<T> onCompletion) {
-        callbacks.add(GenericCallback.fromT1(onCompletion));
+        callbacks.add(onCompletion);
 
         return this;
     }
 
-    public PCLAction<T> addCallback(ActionT0 onCompletion) {
-        callbacks.add(GenericCallback.fromT0(onCompletion));
+    public <S> PCLAction<T> addCallback(S item, ActionT1<S> onCompletion) {
+        callbacks.add((__) -> onCompletion.invoke(item));
+
+        return this;
+    }
+
+    public <S> PCLAction<T> addCallback(S item, ActionT2<S, T> onCompletion) {
+        callbacks.add((result) -> onCompletion.invoke(item, result));
 
         return this;
     }
@@ -68,8 +73,8 @@ public abstract class PCLAction<T> extends AbstractGameAction {
     }
 
     protected void complete(T result) {
-        for (GenericCallback<T> callback : callbacks) {
-            callback.complete(result);
+        for (ActionT1<T> callback : callbacks) {
+            callback.invoke(result);
         }
 
         completeImpl();

@@ -23,7 +23,6 @@ import java.util.Locale;
 
 public class PCLMainConfig extends AbstractConfig {
     public static final FilenameFilter JSON_FILTER = (dir, name) -> name.endsWith(".json");
-
     private static final String LAST_SEED_KEY = "TSDL";
     private static final String MOD_ID = "PCL";
     private static final String CONFIG_ID = "PCLConfig";
@@ -52,6 +51,7 @@ public class PCLMainConfig extends AbstractConfig {
     private static final String VANILLA_LIBRARY_SCREEN = PCLMainConfig.createFullID("VanillaLibraryScreen");
     private static final String VANILLA_POWER_RENDER = PCLMainConfig.createFullID("VanillaPowerRender");
     private static ModSettingsScreen.Category pclCategory;
+
     public STSConfigItem<Boolean> cropCardImages = new STSConfigItem<Boolean>(CROP_CARD_PORTRAIT, false);
     public STSConfigItem<Boolean> displayCardTagDescription = new STSConfigItem<Boolean>(DISPLAY_CARD_TAG_DESCRIPTION, false);
     public STSConfigItem<Boolean> enableCustomCards = new STSConfigItem<Boolean>(ENABLE_CUSTOM_CARDS, false);

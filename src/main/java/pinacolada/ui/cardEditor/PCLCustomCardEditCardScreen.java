@@ -351,7 +351,7 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object> {
             pageButtons.add(new EUIButton(pg.getTextureCache().texture(), new EUIHitbox(0, 0, BUTTON_HEIGHT, BUTTON_HEIGHT))
                     .setPosition(Settings.WIDTH * (0.45f) + ((i - 1f) * BUTTON_HEIGHT), (BUTTON_HEIGHT * 0.85f))
                     .setColor(i == 0 ? Color.WHITE : Color.GRAY)
-                    .setOnClick(i, (finalI, __) -> openPageAtIndex(finalI))
+                    .setOnClick(i, this::openPageAtIndex)
                     .setTooltip(title, pg instanceof PCLCustomCardPrimaryInfoPage ? PGR.core.strings.cedit_primaryInfoDesc : ""));
         }
 

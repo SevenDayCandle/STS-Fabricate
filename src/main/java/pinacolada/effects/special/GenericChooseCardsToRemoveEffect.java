@@ -10,7 +10,6 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon.CurrentScreen;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import extendedui.interfaces.delegates.FuncT1;
-import extendedui.utilities.GenericCondition;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.resources.PGR;
 
@@ -19,7 +18,7 @@ import java.util.ArrayList;
 public class GenericChooseCardsToRemoveEffect extends PCLEffectWithCallback<GenericChooseCardsToRemoveEffect> {
     private static final int GROUP_SIZE = 3;
     public final ArrayList<AbstractCard> cards = new ArrayList<>();
-    private final GenericCondition<AbstractCard> filter;
+    private final FuncT1<Boolean, AbstractCard> filter;
     private final Color screenColor;
     private int cardsToRemove;
 
@@ -31,7 +30,7 @@ public class GenericChooseCardsToRemoveEffect extends PCLEffectWithCallback<Gene
         super(0.75f, true);
 
         this.cardsToRemove = remove;
-        this.filter = filter != null ? GenericCondition.fromT1(filter) : null;
+        this.filter = filter;
         this.screenColor = AbstractDungeon.fadeColor.cpy();
         this.screenColor.a = 0f;
         AbstractDungeon.overlayMenu.proceedButton.hide();
@@ -61,7 +60,7 @@ public class GenericChooseCardsToRemoveEffect extends PCLEffectWithCallback<Gene
     public void openpanelRemove() {
         CardGroup cardGroup = new CardGroup(player.masterDeck.type);
         for (AbstractCard card : player.masterDeck.getPurgeableCards().group) {
-            if (filter == null || filter.check(card)) {
+            if (filter == null || filter.invoke(card)) {
                 cardGroup.addToBottom(card);
             }
         }

@@ -601,7 +601,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         if (PCLCardTag.Autoplay.tryProgress(this)) {
             PCLActions.last.playCard(this, player.hand, null)
                     .spendEnergy(true)
-                    .addCondition(AbstractCard::hasEnoughEnergy);
+                    .setCondition(AbstractCard::hasEnoughEnergy);
         }
 
         doEffects(be -> be.triggerOnDraw(this));

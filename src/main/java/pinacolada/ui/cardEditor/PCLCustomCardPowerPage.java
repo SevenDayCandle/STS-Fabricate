@@ -99,7 +99,7 @@ public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage {
                     .setBorder(EUIRM.images.hexagonalButtonBorder.texture(), Color.GRAY)
                     .setFont(EUIFontHelper.cardtitlefontSmall, 0.8f)
                     .setText(EUIUtils.format(PGR.core.strings.cedit_addTo, EUIUtils.format(PGR.core.strings.cedit_effectX, i + 1)))
-                    .setOnClick(i, (index, __) -> {
+                    .setOnClick(i, (index) -> {
                         addPowerToEffect(screen, index);
                     }));
         }

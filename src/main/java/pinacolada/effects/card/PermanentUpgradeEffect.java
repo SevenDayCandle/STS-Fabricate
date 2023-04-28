@@ -7,8 +7,6 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.vfx.UpgradeShineEffect;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
-import extendedui.interfaces.delegates.FuncT2;
-import extendedui.utilities.GenericCondition;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.effects.PCLEffects;
 import pinacolada.utilities.ListSelection;
@@ -16,7 +14,7 @@ import pinacolada.utilities.ListSelection;
 import java.util.ArrayList;
 
 public class PermanentUpgradeEffect extends PCLEffectWithCallback<AbstractCard> {
-    private GenericCondition<AbstractCard> filter;
+    private FuncT1<Boolean, AbstractCard> filter;
     private ListSelection<AbstractCard> selection;
     private AbstractCard card;
 
@@ -36,7 +34,7 @@ public class PermanentUpgradeEffect extends PCLEffectWithCallback<AbstractCard> 
     protected void firstUpdate() {
         final ArrayList<AbstractCard> upgradableCards = new ArrayList<>();
         for (AbstractCard c : player.masterDeck.group) {
-            if (c.canUpgrade() && filter.check(c)) {
+            if (c.canUpgrade() && filter.invoke(c)) {
                 upgradableCards.add(c);
             }
         }
@@ -65,14 +63,8 @@ public class PermanentUpgradeEffect extends PCLEffectWithCallback<AbstractCard> 
         }
     }
 
-    public <S> PermanentUpgradeEffect setFilter(S state, FuncT2<Boolean, S, AbstractCard> filter) {
-        this.filter = GenericCondition.fromT2(filter, state);
-
-        return this;
-    }
-
     public PermanentUpgradeEffect setFilter(FuncT1<Boolean, AbstractCard> filter) {
-        this.filter = GenericCondition.fromT1(filter);
+        this.filter = filter;
 
         return this;
     }

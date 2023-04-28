@@ -193,10 +193,10 @@ public class ControllableCardPile {
             }
 
             if (PCLHotkeys.controlPileSelect.isJustPressed()) {
-                cardButton.onLeftClick.complete(cardButton);
+                cardButton.onLeftClick.invoke(cardButton);
             }
             else if (PCLHotkeys.controlPileChange.isJustPressed()) {
-                cardButton.onRightClick.complete(cardButton);
+                cardButton.onRightClick.invoke(cardButton);
             }
         }
     }

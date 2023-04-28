@@ -6,7 +6,10 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
 import extendedui.EUIUtils;
-import extendedui.interfaces.delegates.*;
+import extendedui.interfaces.delegates.ActionT0;
+import extendedui.interfaces.delegates.ActionT1;
+import extendedui.interfaces.delegates.ActionT3;
+import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.GridCardSelectScreenHelper;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
@@ -213,11 +216,6 @@ public class TryChooseChoice<T> extends PCLAction<ArrayList<ChoiceCard<T>>> {
         {
             completeImpl();
         }
-    }
-
-    public <S> PCLAction<ArrayList<ChoiceCard<T>>> addCallback(S state, ActionT2<S, ArrayList<ChoiceCard<T>>> onCompletion) {
-        super.addCallback(state, onCompletion);
-        return this;
     }
 
     public TryChooseChoice<T> addCallback(ActionT1<ArrayList<ChoiceCard<T>>> onCompletion) {

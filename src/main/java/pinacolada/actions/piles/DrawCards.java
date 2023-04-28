@@ -6,8 +6,6 @@ import com.megacrit.cardcrawl.actions.common.EmptyDeckShuffleAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.powers.NoDrawPower;
 import extendedui.interfaces.delegates.FuncT1;
-import extendedui.interfaces.delegates.FuncT2;
-import extendedui.utilities.GenericCondition;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.utility.CardFilterAction;
 
@@ -71,7 +69,7 @@ public class DrawCards extends CardFilterAction {
             if (filter != null) {
                 AbstractCard filtered = null;
                 for (AbstractCard card : player.drawPile.group) {
-                    if (filter.check(card)) {
+                    if (filter.invoke(card)) {
                         filtered = card;
                         break;
                     }
@@ -98,15 +96,8 @@ public class DrawCards extends CardFilterAction {
         }
     }
 
-    public <S> DrawCards setFilter(S state, FuncT2<Boolean, S, AbstractCard> filter, boolean canDrawUnfiltered) {
-        this.filter = GenericCondition.fromT2(filter, state);
-        this.canDrawUnfiltered = canDrawUnfiltered;
-
-        return this;
-    }
-
     public DrawCards setFilter(FuncT1<Boolean, AbstractCard> filter, boolean canDrawUnfiltered) {
-        this.filter = GenericCondition.fromT1(filter);
+        setFilter(filter);
         this.canDrawUnfiltered = canDrawUnfiltered;
 
         return this;

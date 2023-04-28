@@ -104,8 +104,8 @@ public class PCLLoadoutEditor extends AbstractMenuScreen {
             presetButtons[i] = new EUIButton(EUIRM.images.squaredButton.texture(), new EUIHitbox(0, 0, buttonHeight, buttonHeight))
                     .setPosition(screenW(0.45f) + ((i - 1f) * buttonHeight), screenH(1f) - (buttonHeight * 0.85f))
                     .setText(String.valueOf(i + 1))
-                    .setOnClick(i, (preset, __) -> changePreset(preset))
-                    .setOnRightClick(i, (preset, __) -> rightClickPreset(preset));
+                    .setOnClick(i, this::changePreset)
+                    .setOnRightClick(i, this::rightClickPreset);
         }
 
         cancelButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)

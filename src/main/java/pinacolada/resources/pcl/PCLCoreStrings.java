@@ -25,6 +25,24 @@ public class PCLCoreStrings extends PCLStrings {
     public final String grid_chooseOneCard = CardRewardScreen.TEXT[1];
     private final UIStrings actions = getUIStrings("Actions");
     private final UIStrings cedit = getUIStrings("CardEditor");
+    private final UIStrings cetut = getUIStrings("CardEditorTutorial");
+    private final UIStrings cardPile = getUIStrings("CardPile");
+    private final UIStrings cardtype = getUIStrings("CardType");
+    private final UIStrings charselect = getUIStrings("CharacterSelect");
+    private final UIStrings combat = getUIStrings("Combat");
+    private final UIStrings conditions = getUIStrings("Conditions");
+    private final UIStrings gridselection = getUIStrings("GridSelection");
+    private final UIStrings hotkeys = getUIStrings("Hotkeys");
+    private final UIStrings menu = getUIStrings("Menu");
+    private final UIStrings misc = getUIStrings("Misc");
+    private final UIStrings options = getUIStrings("Options");
+    private final UIStrings optionDesc = getUIStrings("OptionDescriptions");
+    private final UIStrings rewards = getUIStrings("Rewards");
+    private final UIStrings seriesui = getUIStrings("SeriesUI");
+    private final UIStrings scp = getUIStrings("SingleCardPopupButtons");
+    private final UIStrings subjects = getUIStrings("Subjects");
+    private final UIStrings tutorial = getUIStrings("Tutorial");
+
     // Card Editor
     public final String cedit_attributes = cedit.TEXT[0];
     public final String cedit_effects = cedit.TEXT[1];
@@ -91,7 +109,7 @@ public class PCLCoreStrings extends PCLStrings {
     public final String cedit_enable = cedit.TEXT[62];
     public final String cedit_pile = cedit.TEXT[63];
     public final String cedit_combat = cedit.TEXT[64];
-    private final UIStrings cetut = getUIStrings("CardEditorTutorial");
+
     // Card Editor Tutorial
     public final String cetut_selector1 = cetut.TEXT[0];
     public final String cetut_selector2 = cetut.TEXT[1];
@@ -132,7 +150,7 @@ public class PCLCoreStrings extends PCLStrings {
     public final String cetut_passive = cetut.TEXT[36];
     public final String cetut_when = cetut.TEXT[37];
     public final String cetut_bonus = cetut.TEXT[38];
-    private final UIStrings cardPile = getUIStrings("CardPile");
+
     // Card Pile
     public final String cpile_hand = cardPile.TEXT[0];
     public final String cpile_deck = cardPile.TEXT[1];
@@ -141,7 +159,7 @@ public class PCLCoreStrings extends PCLStrings {
     public final String cpile_top = cardPile.TEXT[4];
     public final String cpile_bottom = cardPile.TEXT[5];
     public final String cpile_random = cardPile.TEXT[6];
-    private final UIStrings cardtype = getUIStrings("CardType");
+
     // Card Type
     public final String ctype_none = cardtype.TEXT[0];
     public final String ctype_allAlly = cardtype.TEXT[1];
@@ -164,7 +182,7 @@ public class PCLCoreStrings extends PCLStrings {
     public final String ctype_turnStartLast = cardtype.TEXT[18];
     public final String ctype_turnEndFirst = cardtype.TEXT[19];
     public final String ctype_turnEndLast = cardtype.TEXT[20];
-    private final UIStrings charselect = getUIStrings("CharacterSelect");
+
     // Character
     public final String csel_leftText = charselect.TEXT[0];  // Starting Cards:
     public final String csel_rightText = charselect.TEXT[1]; // Unlock
@@ -186,7 +204,7 @@ public class PCLCoreStrings extends PCLStrings {
     public final String csel_copyFrom = charselect.TEXT[23];
     public final String csel_export = charselect.TEXT[24];
     public final String csel_ascensionGlyph = charselect.TEXT[25];
-    private final UIStrings combat = getUIStrings("Combat");
+
     // Combat
     public final String combat_current = combat.TEXT[0];
     public final String combat_next = combat.TEXT[1];
@@ -204,26 +222,25 @@ public class PCLCoreStrings extends PCLStrings {
     public final String combat_afterlifeMet = combat.TEXT[13];
     public final String combat_afterlifeRequirement = combat.TEXT[14];
     public final String combat_rightClickRetarget = combat.TEXT[15];
-    private final UIStrings conditions = getUIStrings("Conditions");
-    private final UIStrings gridselection = getUIStrings("GridSelection");
+
     // Grid
     public final String grid_chooseCards = gridselection.TEXT[0];
     public final String grid_cardsInPile = gridselection.TEXT[1];
     public final String grid_scry = gridselection.TEXT[2];
-    private final UIStrings hotkeys = getUIStrings("Hotkeys");
+
     // Hotkeys
     public final String hotkeys_controlPileChange = hotkeys.TEXT[0];
     public final String hotkeys_controlPileSelect = hotkeys.TEXT[1];
     public final String hotkeys_rerollCurrent = hotkeys.TEXT[2];
     public final String hotkeys_toggleFormulaDisplay = hotkeys.TEXT[3];
     public final String hotkeys_viewAugments = hotkeys.TEXT[4];
-    private final UIStrings menu = getUIStrings("Menu");
+
     // Menu
     public final String menu_editor = menu.TEXT[0];
     public final String menu_card = menu.TEXT[1];
     public final String menu_cardDesc = menu.TEXT[2];
     public final String menu_comingsoon = menu.TEXT[3];
-    private final UIStrings misc = getUIStrings("Misc");
+
     // Misc
     public final String misc_viewAugments = misc.TEXT[0];
     public final String misc_viewAugmentsDescription = misc.TEXT[1];
@@ -236,7 +253,7 @@ public class PCLCoreStrings extends PCLStrings {
     public final String misc_tempPowerPrefix = misc.TEXT[8];
     public final String misc_requirement = misc.TEXT[9];
     public final String misc_edit = misc.TEXT[10];
-    private final UIStrings options = getUIStrings("Options");
+
     // Options
     public final String options_cropCardImages = options.TEXT[0];
     public final String options_displayCardTagDescription = options.TEXT[1];
@@ -253,7 +270,7 @@ public class PCLCoreStrings extends PCLStrings {
     public final String options_madnessReplacements = options.TEXT[12];
     public final String options_vanillaPowerRender = options.TEXT[13];
     public final String options_alwaysPCLCard = options.TEXT[14];
-    private final UIStrings optionDesc = getUIStrings("OptionDescriptions");
+
     // Option Descriptions
     public final String optionDesc_cropCardImages = optionDesc.TEXT[0];
     public final String optionDesc_displayCardTagDescription = optionDesc.TEXT[1];
@@ -267,7 +284,7 @@ public class PCLCoreStrings extends PCLStrings {
     public final String optionDesc_madnessReplacements = optionDesc.TEXT[9];
     public final String optionDesc_vanillaPowerRender = optionDesc.TEXT[10];
     public final String optionDesc_alwaysPCLCard = optionDesc.TEXT[11];
-    private final UIStrings rewards = getUIStrings("Rewards");
+
     // Reward
     public final String rewards_rewardBreak = rewards.TEXT[0];
     public final String rewards_breakDescription = rewards.TEXT[1];
@@ -279,7 +296,7 @@ public class PCLCoreStrings extends PCLStrings {
     public final String rewards_rightClickPreview = rewards.TEXT[7];
     public final String rewards_potionSlot = rewards.TEXT[8];
     public final String rewards_orbSlot = rewards.TEXT[9];
-    private final UIStrings seriesui = getUIStrings("SeriesUI");
+
     // Series
     public final String sui_seriesUI = seriesui.TEXT[0];
     public final String sui_affinities = seriesui.TEXT[1];
@@ -299,7 +316,7 @@ public class PCLCoreStrings extends PCLStrings {
     public final String sui_showCardPool = seriesui.TEXT[15];
     public final String sui_save = seriesui.TEXT[16];
     public final String sui_cancel = seriesui.TEXT[17];
-    private final UIStrings scp = getUIStrings("SingleCardPopupButtons");
+
     // Single View Card Popup
     public final String scp_variant = scp.TEXT[0];
     public final String scp_changeVariant = scp.TEXT[1];
@@ -314,7 +331,7 @@ public class PCLCoreStrings extends PCLStrings {
     public final String scp_clickToSlot = scp.TEXT[10];
     public final String scp_clickToRemove = scp.TEXT[11];
     public final String scp_cannotRemove = scp.TEXT[12];
-    private final UIStrings subjects = getUIStrings("Subjects");
+
     // Subjects
     public final String subjects_allyN = subjects.TEXT[0];
     public final String subjects_cardN = subjects.TEXT[1];
@@ -370,7 +387,7 @@ public class PCLCoreStrings extends PCLStrings {
     public final String subjects_xTimes = subjects.TEXT[51];
     public final String subjects_xWithY = subjects.TEXT[52];
     public final String subjects_xCost = subjects.TEXT[53];
-    private final UIStrings tutorial = getUIStrings("Tutorial");
+
     // Tutorial
     public final String tutorial_learnMore = tutorial.TEXT[0];
     public final String tutorial_tagTutorial = tutorial.TEXT[1];

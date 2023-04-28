@@ -135,7 +135,6 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         if (pool != null) {
             pool.removeCard(card.cardID);
         }
-        GameUtilities.removeCardFromCharacterList(card);
     }
 
     private void log(String message) {

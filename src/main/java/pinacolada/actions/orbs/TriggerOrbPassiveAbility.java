@@ -2,8 +2,6 @@ package pinacolada.actions.orbs;
 
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import extendedui.interfaces.delegates.FuncT1;
-import extendedui.interfaces.delegates.FuncT2;
-import extendedui.utilities.GenericCondition;
 import pinacolada.actions.PCLAction;
 import pinacolada.interfaces.subscribers.OnStartOfTurnPostDrawSubscriber;
 import pinacolada.utilities.GameUtilities;
@@ -13,7 +11,7 @@ import java.util.ArrayList;
 
 public class TriggerOrbPassiveAbility extends PCLAction<ArrayList<AbstractOrb>> {
     protected final ArrayList<AbstractOrb> orbs = new ArrayList<>();
-    protected GenericCondition<AbstractOrb> filter;
+    protected FuncT1<Boolean, AbstractOrb> filter;
     protected boolean isRandom;
     protected AbstractOrb orb;
     protected int limit = 1;
@@ -92,17 +90,11 @@ public class TriggerOrbPassiveAbility extends PCLAction<ArrayList<AbstractOrb>> 
     }
 
     protected boolean checkOrb(AbstractOrb orb) {
-        return GameUtilities.isValidOrb(orb) && (filter == null || filter.check(orb));
+        return GameUtilities.isValidOrb(orb) && (filter == null || filter.invoke(orb));
     }
 
     public TriggerOrbPassiveAbility setFilter(FuncT1<Boolean, AbstractOrb> filter) {
-        this.filter = GenericCondition.fromT1(filter);
-
-        return this;
-    }
-
-    public <S> TriggerOrbPassiveAbility setFilter(S state, FuncT2<Boolean, S, AbstractOrb> filter) {
-        this.filter = GenericCondition.fromT2(filter, state);
+        this.filter = filter;
 
         return this;
     }

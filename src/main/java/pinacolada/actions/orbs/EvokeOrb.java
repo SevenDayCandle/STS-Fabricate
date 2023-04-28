@@ -3,8 +3,6 @@ package pinacolada.actions.orbs;
 import com.evacipated.cardcrawl.mod.stslib.actions.defect.EvokeSpecificOrbAction;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import extendedui.interfaces.delegates.FuncT1;
-import extendedui.interfaces.delegates.FuncT2;
-import extendedui.utilities.GenericCondition;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.utilities.GameUtilities;
@@ -16,7 +14,7 @@ import java.util.ArrayList;
 // Wrapper for EvokeSpecificOrbAction with additional options
 public class EvokeOrb extends PCLAction<ArrayList<AbstractOrb>> {
     protected final ArrayList<AbstractOrb> orbs = new ArrayList<>();
-    protected GenericCondition<AbstractOrb> filter;
+    protected FuncT1<Boolean, AbstractOrb> filter;
     protected AbstractOrb orb;
     protected boolean isRandom;
     protected int limit = 1;
@@ -101,17 +99,11 @@ public class EvokeOrb extends PCLAction<ArrayList<AbstractOrb>> {
     }
 
     protected boolean checkOrb(AbstractOrb orb) {
-        return GameUtilities.isValidOrb(orb) && (filter == null || filter.check(orb));
+        return GameUtilities.isValidOrb(orb) && (filter == null || filter.invoke(orb));
     }
 
     public EvokeOrb setFilter(FuncT1<Boolean, AbstractOrb> filter) {
-        this.filter = GenericCondition.fromT1(filter);
-
-        return this;
-    }
-
-    public <S> EvokeOrb setFilter(S state, FuncT2<Boolean, S, AbstractOrb> filter) {
-        this.filter = GenericCondition.fromT2(filter, state);
+        this.filter = filter;
 
         return this;
     }

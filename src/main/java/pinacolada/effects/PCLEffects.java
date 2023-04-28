@@ -22,8 +22,8 @@ import pinacolada.effects.combat.TalkEffect;
 import pinacolada.effects.player.ObtainRelicEffect;
 import pinacolada.effects.player.RemoveRelicEffect;
 import pinacolada.effects.player.SpawnRelicEffect;
-import pinacolada.effects.utility.CallbackEffect;
-import pinacolada.effects.utility.CallbackEffect2;
+import pinacolada.effects.utility.ActionCallbackEffect;
+import pinacolada.effects.utility.EffectCallbackEffect;
 import pinacolada.effects.vfx.EffekseerEffect;
 
 import java.util.ArrayList;
@@ -88,40 +88,40 @@ public final class PCLEffects {
         return add(new BorderLongFlashEffect(color, true));
     }
 
-    public CallbackEffect2 callback(AbstractGameEffect effect) {
-        return add(new CallbackEffect2(effect));
+    public EffectCallbackEffect callback(AbstractGameEffect effect) {
+        return add(new EffectCallbackEffect(effect));
     }
 
-    public CallbackEffect2 callback(AbstractGameEffect effect, ActionT0 onCompletion) {
-        return add(new CallbackEffect2(effect, onCompletion));
+    public EffectCallbackEffect callback(AbstractGameEffect effect, ActionT0 onCompletion) {
+        return add(new EffectCallbackEffect(effect, onCompletion));
     }
 
-    public CallbackEffect2 callback(AbstractGameEffect effect, ActionT1<AbstractGameEffect> onCompletion) {
-        return add(new CallbackEffect2(effect, onCompletion));
+    public EffectCallbackEffect callback(AbstractGameEffect effect, ActionT1<AbstractGameEffect> onCompletion) {
+        return add(new EffectCallbackEffect(effect, onCompletion));
     }
 
-    public CallbackEffect2 callback(AbstractGameEffect effect, Object state, ActionT2<Object, AbstractGameEffect> onCompletion) {
-        return add(new CallbackEffect2(effect, state, onCompletion));
+    public EffectCallbackEffect callback(AbstractGameEffect effect, Object state, ActionT2<Object, AbstractGameEffect> onCompletion) {
+        return add(new EffectCallbackEffect(effect, state, onCompletion));
     }
 
-    public CallbackEffect callback(ActionT0 onCompletion) {
-        return add(new CallbackEffect(new WaitAction(0.01f), onCompletion));
+    public ActionCallbackEffect callback(ActionT0 onCompletion) {
+        return add(new ActionCallbackEffect(new WaitAction(0.01f), onCompletion));
     }
 
-    public CallbackEffect callback(AbstractGameAction action) {
-        return add(new CallbackEffect(action));
+    public ActionCallbackEffect callback(AbstractGameAction action) {
+        return add(new ActionCallbackEffect(action));
     }
 
-    public CallbackEffect callback(AbstractGameAction effect, ActionT0 onCompletion) {
-        return add(new CallbackEffect(effect, onCompletion));
+    public ActionCallbackEffect callback(AbstractGameAction effect, ActionT0 onCompletion) {
+        return add(new ActionCallbackEffect(effect, onCompletion));
     }
 
-    public CallbackEffect callback(AbstractGameAction action, ActionT1<AbstractGameAction> onCompletion) {
-        return add(new CallbackEffect(action, onCompletion));
+    public ActionCallbackEffect callback(AbstractGameAction action, ActionT1<AbstractGameAction> onCompletion) {
+        return add(new ActionCallbackEffect(action, onCompletion));
     }
 
-    public CallbackEffect callback(AbstractGameAction action, Object state, ActionT2<Object, AbstractGameAction> onCompletion) {
-        return add(new CallbackEffect(action, state, onCompletion));
+    public ActionCallbackEffect callback(AbstractGameAction action, Object state, ActionT2<Object, AbstractGameAction> onCompletion) {
+        return add(new ActionCallbackEffect(action, state, onCompletion));
     }
 
     public int count() {
@@ -184,8 +184,8 @@ public final class PCLEffects {
         return add(new TalkEffect(source, message, duration));
     }
 
-    public CallbackEffect waitRealtime(float duration) {
-        return add(new CallbackEffect(new WaitRealtimeAction(duration)));
+    public ActionCallbackEffect waitRealtime(float duration) {
+        return add(new ActionCallbackEffect(new WaitRealtimeAction(duration)));
     }
 
     public enum EffectType {

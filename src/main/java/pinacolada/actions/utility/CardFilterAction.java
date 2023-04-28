@@ -4,8 +4,6 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import extendedui.interfaces.delegates.ActionT3;
 import extendedui.interfaces.delegates.FuncT1;
-import extendedui.interfaces.delegates.FuncT2;
-import extendedui.utilities.GenericCondition;
 import pinacolada.actions.PCLAction;
 
 import java.util.ArrayList;
@@ -13,8 +11,8 @@ import java.util.ArrayList;
 public abstract class CardFilterAction extends PCLAction<ArrayList<AbstractCard>> {
     protected final ArrayList<AbstractCard> selectedCards = new ArrayList<>();
     protected boolean canPlayerCancel;
-    protected GenericCondition<ArrayList<AbstractCard>> condition;
-    protected GenericCondition<AbstractCard> filter;
+    protected FuncT1<Boolean, ArrayList<AbstractCard>> condition;
+    protected FuncT1<Boolean, AbstractCard> filter;
     protected FuncT1<String, ArrayList<AbstractCard>> dynamicString;
     protected ActionT3<CardGroup, ArrayList<AbstractCard>, AbstractCard> onClickCard;
 
@@ -27,7 +25,7 @@ public abstract class CardFilterAction extends PCLAction<ArrayList<AbstractCard>
     }
 
     protected boolean canSelect(AbstractCard card) {
-        return filter == null || filter.check(card);
+        return filter == null || filter.invoke(card);
     }
 
     public CardFilterAction cancellableFromPlayer(boolean value) {
@@ -37,7 +35,7 @@ public abstract class CardFilterAction extends PCLAction<ArrayList<AbstractCard>
     }
 
     public CardFilterAction setCompletionRequirement(FuncT1<Boolean, ArrayList<AbstractCard>> condition) {
-        this.condition = GenericCondition.fromT1(condition);
+        this.condition = condition;
 
         return this;
     }
@@ -49,13 +47,7 @@ public abstract class CardFilterAction extends PCLAction<ArrayList<AbstractCard>
     }
 
     public CardFilterAction setFilter(FuncT1<Boolean, AbstractCard> filter) {
-        this.filter = GenericCondition.fromT1(filter);
-
-        return this;
-    }
-
-    public <S> CardFilterAction setFilter(S state, FuncT2<Boolean, S, AbstractCard> filter) {
-        this.filter = GenericCondition.fromT2(filter, state);
+        this.filter = filter;
 
         return this;
     }

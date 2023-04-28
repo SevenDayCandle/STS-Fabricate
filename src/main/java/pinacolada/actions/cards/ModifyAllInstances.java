@@ -13,18 +13,18 @@ public class ModifyAllInstances extends PCLAction<AbstractCard> {
     protected final UUID uuid;
     protected boolean includeMasterDeck;
 
-    public ModifyAllInstances(UUID targetUUID, ActionT1<AbstractCard> onCompletion) {
-        this(targetUUID);
-
-        addCallback(onCompletion);
-    }
-
     public ModifyAllInstances(UUID targetUUID) {
         super(ActionType.CARD_MANIPULATION);
 
         this.uuid = targetUUID;
 
         initialize(1);
+    }
+
+    public ModifyAllInstances(UUID targetUUID, ActionT1<AbstractCard> onCompletion) {
+        this(targetUUID);
+
+        addCallback(onCompletion);
     }
 
     public <S> ModifyAllInstances(UUID targetUUID, S state, ActionT2<S, AbstractCard> onCompletion) {
