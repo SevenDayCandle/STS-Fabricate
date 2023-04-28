@@ -1,6 +1,5 @@
 package pinacolada.skills.skills.base.modifiers;
 
-import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
@@ -13,8 +12,6 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Power;
 import pinacolada.utilities.GameUtilities;
-
-import java.util.List;
 
 @VisibleSkill
 public class PMod_PerDistinctPower extends PMod_Per<PField_Power> {
@@ -71,9 +68,9 @@ public class PMod_PerDistinctPower extends PMod_Per<PField_Power> {
 
     @Override
     public int getMultiplier(PCLUseInfo info) {
-        List<AbstractCreature> targetList = getTargetList(info);
-        return fields.powers.isEmpty() ? EUIUtils.sumInt(targetList, t -> EUIUtils.count(t.powers, po -> po.type == AbstractPower.PowerType.DEBUFF)) :
-                EUIUtils.sumInt(targetList, t -> EUIUtils.count(fields.powers, po -> GameUtilities.getPowerAmount(t, po.ID) >= this.amount));
+        return fields.powers.isEmpty() ?
+                sumTargets(info, t -> EUIUtils.count(t.powers, po -> po.type == AbstractPower.PowerType.DEBUFF)) :
+                sumTargets(info, t -> EUIUtils.count(fields.powers, po -> GameUtilities.getPowerAmount(t, po.ID) >= this.amount));
     }
 
     @Override

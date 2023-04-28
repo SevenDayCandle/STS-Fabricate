@@ -1,9 +1,7 @@
 package pinacolada.skills.skills.base.modifiers;
 
 import com.badlogic.gdx.math.MathUtils;
-import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIRM;
-import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -11,8 +9,6 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
-
-import java.util.List;
 
 @VisibleSkill
 public class PMod_PerCreatureHPPercent extends PMod_Per<PField_Not> {
@@ -36,8 +32,7 @@ public class PMod_PerCreatureHPPercent extends PMod_Per<PField_Not> {
 
     @Override
     public int getMultiplier(PCLUseInfo info) {
-        List<AbstractCreature> targetList = getTargetList(info);
-        return EUIUtils.sumInt(targetList, t -> MathUtils.ceil(t.currentHealth * 100f / t.maxHealth));
+        return sumTargets(info, t -> MathUtils.ceil(t.currentHealth * 100f / t.maxHealth));
     }
 
     @Override

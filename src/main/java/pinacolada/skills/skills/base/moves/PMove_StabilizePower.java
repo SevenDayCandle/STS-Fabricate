@@ -54,7 +54,7 @@ public class PMove_StabilizePower extends PMove<PField_Power> {
 
     @Override
     public void use(PCLUseInfo info) {
-        List<AbstractCreature> targets = getTargetList(info);
+        List<? extends AbstractCreature> targets = getTargetList(info);
         if (fields.powers.isEmpty()) {
             for (PCLPowerHelper power : PCLPowerHelper.commonDebuffs()) {
                 stabilizePower(info.source, targets, power);
@@ -74,7 +74,7 @@ public class PMove_StabilizePower extends PMove<PField_Power> {
         super.use(info);
     }
 
-    protected void stabilizePower(AbstractCreature p, List<AbstractCreature> targets, PCLPowerHelper power) {
+    protected void stabilizePower(AbstractCreature p, List<? extends AbstractCreature> targets, PCLPowerHelper power) {
         for (AbstractCreature t : targets) {
             getActions().stabilizePower(p, t, power.ID, amount);
         }

@@ -44,10 +44,9 @@ public class PCond_CheckPower extends PPassiveCond<PField_Power> implements OnAp
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
         AbstractPower.PowerType targetType = fields.debuff ? AbstractPower.PowerType.DEBUFF : AbstractPower.PowerType.BUFF;
-        List<AbstractCreature> targetList = getTargetList(info);
         return ((fields.powers.isEmpty() ?
-                EUIUtils.any(targetList, t -> amount == 0 ? (t.powers == null || !EUIUtils.any(t.powers, po -> po.type == targetType)) : t.powers != null && EUIUtils.any(t.powers, po -> po.type == targetType && po.amount >= amount)) :
-                EUIUtils.any(targetList, t -> fields.debuff ? EUIUtils.any(fields.powers, po -> checkPowers(po, t)) : EUIUtils.all(fields.powers, po -> checkPowers(po, t)))));
+                evaluateTargets(info, t -> amount == 0 ? (t.powers == null || !EUIUtils.any(t.powers, po -> po.type == targetType)) : t.powers != null && EUIUtils.any(t.powers, po -> po.type == targetType && po.amount >= amount)) :
+                evaluateTargets(info, t -> fields.debuff ? EUIUtils.any(fields.powers, po -> checkPowers(po, t)) : EUIUtils.all(fields.powers, po -> checkPowers(po, t)))));
     }
 
     // fields.debuff is treated as a "not" condition if the amount is above 0
@@ -63,8 +62,7 @@ public class PCond_CheckPower extends PPassiveCond<PField_Power> implements OnAp
 
     @Override
     public String getSubText() {
-        String baseString = fields.getPowerSubjectString();
-        baseString = fields.not ? EUIRM.strings.numNoun("< " + amount, baseString) : this.amount == 1 ? baseString : EUIRM.strings.numNoun((this.amount == 0 ? this.amount : this.amount + "+"), baseString);
+        String baseString = fields.getThresholdString(fields.getPowerSubjectString());
         if (isWhenClause()) {
             return getWheneverString(TEXT.act_gain(baseString));
         }

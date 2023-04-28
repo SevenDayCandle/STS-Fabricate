@@ -13,21 +13,21 @@ import pinacolada.utilities.RandomizedList;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public enum PCLCardTarget implements Comparable<PCLCardTarget> {
-    // The ordering of this enum determines which targeting system takes priority
     None(AbstractCard.CardTarget.NONE),
     All(AbstractCard.CardTarget.ALL),
+    AllAlly(AbstractCard.CardTarget.ALL_ENEMY),
     AllEnemy(AbstractCard.CardTarget.ALL_ENEMY),
-    Team(AbstractCard.CardTarget.ALL_ENEMY),
+    Any(AbstractCard.CardTarget.SELF_AND_ENEMY),
+    RandomAlly(AbstractCard.CardTarget.ALL),
+    RandomEnemy(AbstractCard.CardTarget.ALL_ENEMY),
     Self(AbstractCard.CardTarget.SELF),
     Single(AbstractCard.CardTarget.ENEMY),
-    RandomEnemy(AbstractCard.CardTarget.ALL_ENEMY),
-    AllAlly(AbstractCard.CardTarget.ALL_ENEMY),
     SingleAlly(AbstractCard.CardTarget.ENEMY),
-    RandomAlly(AbstractCard.CardTarget.ALL),
-    Any(AbstractCard.CardTarget.SELF_AND_ENEMY);
+    Team(AbstractCard.CardTarget.ALL_ENEMY);
 
     public static AbstractCreature source;
     public static AbstractCreature target;
@@ -91,87 +91,104 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
     }
 
     public final AbstractMonster getTarget(AbstractCreature p, AbstractCreature m) {
-        List<AbstractCreature> mons = getTargets(p, m);
+        List<? extends AbstractCreature> mons = getTargets(p, m);
         return mons.size() > 0 ? EUIUtils.safeCast(mons.get(0), AbstractMonster.class) : null;
     }
 
-    public final ArrayList<AbstractCreature> getTargets(AbstractCreature source, AbstractCreature target) {
+    public final ArrayList<? extends AbstractCreature> getTargets(AbstractCreature source, AbstractCreature target) {
         return getTargets(source, target, 1);
     }
 
-    public final ArrayList<AbstractCreature> getTargets(AbstractCreature source, AbstractCreature target, int autoAmount) {
-        ArrayList<AbstractCreature> targets = new ArrayList<>();
+    public final ArrayList<? extends AbstractCreature> getTargets(AbstractCreature source, AbstractCreature target, int autoAmount) {
         switch (this) {
             case None: {
-                targets.add(AbstractDungeon.player);
-                break;
+                return EUIUtils.arrayList(AbstractDungeon.player);
             }
-
             case Single:
             case SingleAlly: {
                 if (target != null) {
-                    targets.add(target);
+                    return EUIUtils.arrayList(target);
                 }
-                break;
+                return EUIUtils.arrayList();
             }
-
             case AllEnemy: {
-                targets.addAll(GameUtilities.getEnemies(true));
-                break;
+                return GameUtilities.getEnemies(true);
             }
-
             case Self: {
-                targets.add(source);
-                break;
+                return EUIUtils.arrayList(source);
             }
-
             case Any: {
                 if (target != null) {
-                    targets.add(target);
+                    return EUIUtils.arrayList(target);
                 }
                 else {
                     final RandomizedList<AbstractCreature> list = new RandomizedList<>(GameUtilities.getAllCharacters(true));
+                    final ArrayList<AbstractCreature> targets = new ArrayList<>();
                     while (list.size() > 0 && targets.size() < autoAmount) {
                         targets.add(list.retrieve(GameUtilities.getRNG()));
                     }
+                    return targets;
                 }
-                break;
             }
-
             case RandomEnemy: {
                 final RandomizedList<AbstractCreature> list = new RandomizedList<>(GameUtilities.getEnemies(true));
+                final ArrayList<AbstractCreature> targets = new ArrayList<>();
                 while (list.size() > 0 && targets.size() < autoAmount) {
                     targets.add(list.retrieve(GameUtilities.getRNG()));
                 }
-                break;
+                return targets;
             }
-
             case All: {
-                targets.addAll(GameUtilities.getAllCharacters(true));
-                break;
+                return GameUtilities.getAllCharacters(true);
             }
-
             case AllAlly: {
-                targets.addAll(GameUtilities.getSummons(true));
-                break;
+                return GameUtilities.getSummons(true);
             }
-
             case Team: {
-                targets.addAll(GameUtilities.getSummons(true));
+                final ArrayList<AbstractCreature> targets = new ArrayList<AbstractCreature>(GameUtilities.getSummons(true));
                 targets.add(AbstractDungeon.player);
-                break;
+                return targets;
             }
-
             case RandomAlly: {
                 final RandomizedList<AbstractCreature> list = new RandomizedList<>(GameUtilities.getSummons(true));
+                final ArrayList<AbstractCreature> targets = new ArrayList<>();
                 while (list.size() > 0 && targets.size() < autoAmount) {
                     targets.add(list.retrieve(GameUtilities.getRNG()));
                 }
-                break;
+                return targets;
             }
         }
 
-        return targets;
+        return new ArrayList<>();
+    }
+
+    public final ArrayList<? extends AbstractCreature> getTargetsForEvaluation(AbstractCreature source, AbstractCreature target) {
+        switch (this)
+        {
+            case RandomAlly:
+                return GameUtilities.getSummons(true);
+            case RandomEnemy:
+                GameUtilities.getEnemies(true);
+            case Any:
+                return GameUtilities.getAllCharacters(true);
+        }
+        return getTargets(source, target);
+    }
+
+    public final boolean evaluateTargets(AbstractCreature source, AbstractCreature target, Predicate<AbstractCreature> tFunc)
+    {
+        return evaluateTargets(getTargetsForEvaluation(source, target), tFunc);
+    }
+
+    public final boolean evaluateTargets(Iterable<? extends AbstractCreature> targets, Predicate<AbstractCreature> tFunc)
+    {
+        switch (this) {
+            case AllAlly:
+            case All:
+            case AllEnemy:
+                return EUIUtils.all(targets, tFunc);
+        }
+        return EUIUtils.any(targets, tFunc);
     }
 
     public final boolean targetsAllies() {

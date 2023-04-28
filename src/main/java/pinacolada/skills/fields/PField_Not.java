@@ -64,6 +64,6 @@ public class PField_Not extends PField {
 
     public String getThresholdString(String valueStr, String subject, int amount)
     {
-        return amount == 1 ? subject : EUIRM.strings.numNoun(getThresholdValString(valueStr, amount), subject);
+        return amount == 1 && !not ? subject : EUIRM.strings.numNoun(getThresholdValString(valueStr, amount), subject);
     }
 }

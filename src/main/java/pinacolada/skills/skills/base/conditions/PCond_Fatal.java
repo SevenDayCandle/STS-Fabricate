@@ -1,6 +1,5 @@
 package pinacolada.skills.skills.base.conditions;
 
-import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT0;
@@ -19,8 +18,6 @@ import pinacolada.skills.skills.PActiveNonCheckCond;
 import pinacolada.skills.skills.PLimit;
 import pinacolada.skills.skills.base.primary.PTrigger_When;
 import pinacolada.utilities.GameUtilities;
-
-import java.util.List;
 
 @VisibleSkill
 public class PCond_Fatal extends PActiveNonCheckCond<PField_Random> implements OnMonsterDeathSubscriber {
@@ -57,8 +54,7 @@ public class PCond_Fatal extends PActiveNonCheckCond<PField_Random> implements O
     }
 
     protected PCLAction<?> useImpl(PCLUseInfo info, ActionT0 onComplete, ActionT0 onFail) {
-        List<AbstractCreature> targetList = getTargetList(info);
-        return PCLActions.last.callback(targetList, (targets, __) -> {
+        return PCLActions.last.callback(getTargetList(info), (targets, __) -> {
             if (targets.size() > 0 && EUIUtils.any(targets, t -> GameUtilities.isFatal(t, fields.random)) && (!(parent instanceof PLimit) || ((PLimit) parent).tryActivate(info))) {
                 onComplete.invoke();
             }

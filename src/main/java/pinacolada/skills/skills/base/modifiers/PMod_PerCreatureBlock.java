@@ -1,8 +1,6 @@
 package pinacolada.skills.skills.base.modifiers;
 
-import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIRM;
-import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -10,8 +8,6 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
-
-import java.util.List;
 
 @VisibleSkill
 public class PMod_PerCreatureBlock extends PMod_Per<PField_Not> {
@@ -35,8 +31,7 @@ public class PMod_PerCreatureBlock extends PMod_Per<PField_Not> {
 
     @Override
     public int getMultiplier(PCLUseInfo info) {
-        List<AbstractCreature> targetList = getTargetList(info);
-        return EUIUtils.sumInt(targetList, t -> t.currentBlock);
+        return sumTargets(info, t -> t.currentBlock);
     }
 
     @Override

@@ -46,7 +46,7 @@ public class PMove_RemovePower extends PMove<PField_Power> {
 
     @Override
     public void use(PCLUseInfo info) {
-        List<AbstractCreature> targets = getTargetList(info);
+        List<? extends AbstractCreature> targets = getTargetList(info);
         if (fields.powers.isEmpty()) {
             for (PCLPowerHelper power : PCLPowerHelper.commonDebuffs()) {
                 for (AbstractCreature t : targets) {
@@ -68,7 +68,7 @@ public class PMove_RemovePower extends PMove<PField_Power> {
         super.use(info);
     }
 
-    protected void removePower(List<AbstractCreature> targets, PCLPowerHelper power) {
+    protected void removePower(List<? extends AbstractCreature> targets, PCLPowerHelper power) {
         for (AbstractCreature t : targets) {
             getActions().removePower(t, t, power.ID);
         }

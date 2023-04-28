@@ -9,8 +9,6 @@ import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.special.primary.PCardPrimary_DealDamage;
 import pinacolada.utilities.GameUtilities;
 
-import java.util.List;
-
 @VisibleSkill
 public class PMod_PerUnblockedHit extends PMod_Per<PField_Not> {
 
@@ -33,8 +31,7 @@ public class PMod_PerUnblockedHit extends PMod_Per<PField_Not> {
         int total = 0;
         PCardPrimary_DealDamage damageEff = sourceCard != null ? source.getCardDamage() : null;
         if (damageEff != null && damageEff.target != null) {
-            List<AbstractCreature> targetList = damageEff.getTargetList(info);
-            for (AbstractCreature t : targetList) {
+            for (AbstractCreature t : damageEff.getTargetList(info)) {
                 int unblocked = GameUtilities.getHealthBarAmount(t, damageEff.amount, true, false);
                 for (int i = 0; i < damageEff.extra; i++) {
                     unblocked -= damageEff.amount;

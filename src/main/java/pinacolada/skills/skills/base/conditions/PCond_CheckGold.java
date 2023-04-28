@@ -1,8 +1,6 @@
 package pinacolada.skills.skills.base.conditions;
 
-import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIRM;
-import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -12,8 +10,6 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.PPassiveCond;
-
-import java.util.List;
 
 @VisibleSkill
 public class PCond_CheckGold extends PPassiveCond<PField_Not> {
@@ -33,8 +29,7 @@ public class PCond_CheckGold extends PPassiveCond<PField_Not> {
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        List<AbstractCreature> targets = getTargetList(info);
-        return EUIUtils.any(targets, m -> fields.doesValueMatchThreshold(m.gold));
+        return evaluateTargets(info, m -> fields.doesValueMatchThreshold(m.gold));
     }
 
     @Override

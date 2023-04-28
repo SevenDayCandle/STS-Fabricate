@@ -55,6 +55,7 @@ import pinacolada.utilities.GameUtilities;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public abstract class PSkill<T extends PField> implements TooltipProvider {
@@ -397,6 +398,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return this;
     }
 
+    public final boolean evaluateTargets(PCLUseInfo info, Predicate<AbstractCreature> evalFunc) {
+        return info != null && target.evaluateTargets(info.source, info.target, evalFunc);
+    }
+
     public final PCLActions getActions() {
         switch (order) {
             case Top:
@@ -735,14 +740,20 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         switch (target) {
             case Single:
                 return PGR.core.strings.subjects_target;
+            case SingleAlly:
+                return PGR.core.strings.subjects_ally;
             case AllEnemy:
+                return PGR.core.strings.subjects_allEnemies();
             case RandomEnemy:
                 return PGR.core.strings.subjects_anyEnemy();
             case AllAlly:
-            case RandomAlly:
+                return PGR.core.strings.subjects_allAllies();
             case Team:
+                return PGR.core.strings.ctype_team;
+            case RandomAlly:
                 return PGR.core.strings.subjects_anyAlly();
             case All:
+                return PGR.core.strings.subjects_everyone;
             case Any:
                 return PGR.core.strings.subjects_anyone;
             case Self:
@@ -754,7 +765,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         }
     }
 
-    public final ArrayList<AbstractCreature> getTargetList(PCLUseInfo info) {
+    public final ArrayList<? extends AbstractCreature> getTargetList(PCLUseInfo info) {
         return info != null ? target.getTargets(info.source, info.target) : new ArrayList<>();
     }
 
@@ -771,9 +782,9 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
             case All:
                 return TEXT.subjects_allX(PCLCoreStrings.pluralForce(TEXT.subjects_characterN));
             case AllAlly:
-                return TEXT.subjects_allX(PCLCoreStrings.pluralForce(TEXT.subjects_allyN));
+                return TEXT.subjects_allAllies();
             case AllEnemy:
-                return TEXT.subjects_allX(PCLCoreStrings.pluralForce(TEXT.subjects_enemyN));
+                return TEXT.subjects_allEnemies();
             case Any:
                 return TEXT.subjects_anyone;
             case RandomAlly:
@@ -1341,6 +1352,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         }
 
         return this;
+    }
+
+    public final int sumTargets(PCLUseInfo info, FuncT1<Integer, AbstractCreature> evalFunc) {
+        return info != null ? EUIUtils.sumInt(getTargetList(info), evalFunc) : 0;
     }
 
     public void subscribeChildren() {
