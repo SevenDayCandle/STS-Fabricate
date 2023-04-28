@@ -30,17 +30,15 @@ public class EUIPatches {
         }
     }
 
-    @SpirePatch(clz = EUIGameUtils.class, method = "canSeeAnyColorCard")
+    @SpirePatch(clz = EUIGameUtils.class, method = "canSeeAnyColorCardFromPool")
     public static class ExtendedUIPatches_CanSeeAnyColorCard {
         @SpirePostfixPatch
         public static boolean postfix(boolean retVal, AbstractCard c) {
-            return retVal
-                    && (c.color != AbstractCard.CardColor.COLORLESS || PGR.getResources(GameUtilities.getActingColor()).containsColorless(c))
-                    && !PGR.dungeon.bannedCards.contains(c.cardID);
+            return retVal && !PGR.dungeon.bannedCards.contains(c.cardID);
         }
     }
 
-    @SpirePatch(clz = EUIGameUtils.class, method = "getEveryColorCard")
+    @SpirePatch(clz = EUIGameUtils.class, method = "getEveryColorCardForPoolDisplay")
     public static class ExtendedUIPatches_GetEveryColorCard {
         @SpirePostfixPatch
         public static ArrayList<AbstractCard> postfix(ArrayList<AbstractCard> retVal) {

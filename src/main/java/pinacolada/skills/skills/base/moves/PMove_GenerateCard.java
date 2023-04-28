@@ -137,11 +137,29 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
                 }
                 return created;
             }
-            return EUIUtils.map((!fields.colors.isEmpty()) ? GameUtilities.getRandomAnyColorCards(fields.getFullCardFilter(), limit) : GameUtilities.getRandomCombatCards(fields.getFullCardFilter(), limit),
+            return EUIUtils.map(getSourceCards(limit),
                     AbstractCard::makeCopy);
         }
 
         return new ArrayList<>();
+    }
+
+    protected Iterable<AbstractCard> getSourceCards(int limit)
+    {
+        if (!fields.colors.isEmpty()
+                || EUIUtils.any(fields.types, f -> f == AbstractCard.CardType.STATUS)
+                || EUIUtils.any(fields.rarities, f -> f != AbstractCard.CardRarity.COMMON && f != AbstractCard.CardRarity.UNCOMMON && f != AbstractCard.CardRarity.RARE && f != AbstractCard.CardRarity.CURSE))
+        {
+            return GameUtilities.getCardsFromAllColorCombatPool(fields.getFullCardFilter(), limit);
+        }
+        else if (!fields.rarities.isEmpty() || !fields.types.isEmpty())
+        {
+            return GameUtilities.getCardsFromFullCombatPool(fields.getFullCardFilter(), limit);
+        }
+        else
+        {
+            return GameUtilities.getCardsFromStandardCombatPool(fields.getFullCardFilter(), limit);
+        }
     }
 
     public abstract void performAction(PCLUseInfo info, AbstractCard c);    @Override

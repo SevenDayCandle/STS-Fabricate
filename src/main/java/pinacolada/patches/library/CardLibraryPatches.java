@@ -164,7 +164,7 @@ public class CardLibraryPatches {
     public static class CardLibraryPatches_GetAnyColorCard {
         @SpirePrefixPatch
         public static SpireReturn<AbstractCard> prefix(AbstractCard.CardType type, AbstractCard.CardRarity rarity) {
-            return SpireReturn.Return(GameUtilities.getAnyColorCardFiltered(rarity, type, true, false));
+            return SpireReturn.Return(GameUtilities.getAnyColorRewardCard(rarity, type, true, false));
         }
     }
 
@@ -172,7 +172,7 @@ public class CardLibraryPatches {
     public static class CardLibraryPatches_GetAnyColorCard2 {
         @SpirePrefixPatch
         public static SpireReturn<AbstractCard> prefix(AbstractCard.CardRarity rarity) {
-            return SpireReturn.Return(GameUtilities.getAnyColorCardFiltered(rarity, null, true, true));
+            return SpireReturn.Return(GameUtilities.getAnyColorRewardCard(rarity, null, true, true));
         }
     }
 }

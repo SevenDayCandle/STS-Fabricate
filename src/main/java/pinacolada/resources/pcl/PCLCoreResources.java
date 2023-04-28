@@ -39,7 +39,8 @@ public class PCLCoreResources extends PCLResources<PCLAbstractPlayerData, PCLCor
 
     // Core resources are pulled when a non-PCL character is used, so it should accept all non-filtered colorless cards
     public boolean containsColorless(AbstractCard card) {
-        return !PCLDungeon.isColorlessCardExclusive(card);
+        boolean value = !PCLDungeon.isColorlessCardExclusive(card);
+        return value;
     }
 
     @Override
