@@ -4,7 +4,9 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.localization.*;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLDynamicCard;
+import pinacolada.cards.base.TemplateCardData;
 import pinacolada.dungeon.PCLDungeon;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PCLResources;
@@ -39,8 +41,7 @@ public class PCLCoreResources extends PCLResources<PCLAbstractPlayerData, PCLCor
 
     // Core resources are pulled when a non-PCL character is used, so it should accept all non-filtered colorless cards
     public boolean containsColorless(AbstractCard card) {
-        boolean value = !PCLDungeon.isColorlessCardExclusive(card);
-        return value;
+        return !PCLDungeon.isColorlessCardExclusive(card);
     }
 
     @Override
@@ -61,5 +62,12 @@ public class PCLCoreResources extends PCLResources<PCLAbstractPlayerData, PCLCor
     @Override
     public PCLCoreStrings getStrings() {
         return new PCLCoreStrings(this);
+    }
+
+    @Override
+    public String getReplacement(String cardID) {
+        // Prevent example templates from showing up for regular characters
+        PCLCardData data = PCLCardData.getStaticData(cardID);
+        return data instanceof TemplateCardData ? ((TemplateCardData) data).originalID : null;
     }
 }

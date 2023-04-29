@@ -16,6 +16,7 @@ import pinacolada.annotations.VisibleCard;
 import pinacolada.cards.base.fields.*;
 import pinacolada.cards.base.tags.CardTagItem;
 import pinacolada.cards.base.tags.PCLCardTag;
+import pinacolada.misc.PCLGenericData;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
@@ -25,7 +26,6 @@ import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -34,9 +34,9 @@ import static extendedui.EUIUtils.array;
 import static extendedui.EUIUtils.safeIndex;
 
 // TODO create a non-dynamic-only subclass
-public class PCLCardData implements CardObject {
-    private static final Map<String, PCLCardData> staticData = new HashMap<>();
-    public final Class<? extends PCLCard> type;
+public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
+    private static final Map<String, PCLCardData> STATIC_DATA = new HashMap<>();
+
     public Integer[] damage = array(0);
     public Integer[] damageUpgrade = array(0);
     public Integer[] block = array(0);
@@ -63,7 +63,6 @@ public class PCLCardData implements CardObject {
     public AbstractCard.CardType cardType = AbstractCard.CardType.SKILL;
     public AbstractCard.CardColor cardColor = AbstractCard.CardColor.COLORLESS;
     public AbstractCard.CardRarity cardRarity = AbstractCard.CardRarity.BASIC;
-    public PCLResources<?, ?, ?, ?> resources;
     public PCLAttackType attackType = PCLAttackType.Normal;
     public PCLCardDataAffinityGroup affinities = new PCLCardDataAffinityGroup();
     public PCLLoadout loadout;
@@ -82,23 +81,21 @@ public class PCLCardData implements CardObject {
     private Constructor<? extends PCLCard> constructor;
     private TextureAtlas.AtlasRegion cardIcon = null;
 
-    public PCLCardData(Class<? extends PCLCard> type, PCLResources<?, ?, ?, ?> resources) {
-        this(type, resources, resources.createID(type.getSimpleName()));
+    public PCLCardData(Class<? extends PCLCard> invokeClass, PCLResources<?, ?, ?, ?> resources) {
+        this(invokeClass, resources, resources.createID(invokeClass.getSimpleName()));
     }
 
-    public PCLCardData(Class<? extends PCLCard> type, PCLResources<?, ?, ?, ?> resources, String cardID) {
-        this(type, resources, cardID, PGR.getCardStrings(cardID));
+    public PCLCardData(Class<? extends PCLCard> invokeClass, PCLResources<?, ?, ?, ?> resources, String cardID) {
+        this(invokeClass, resources, cardID, PGR.getCardStrings(cardID));
 
         this.imagePath = PGR.getCardImage(cardID);
     }
 
-    public PCLCardData(Class<? extends PCLCard> type, PCLResources<?, ?, ?, ?> resources, String cardID, CardStrings strings) {
-        this.ID = cardID;
-        this.resources = resources;
+    public PCLCardData(Class<? extends PCLCard> invokeClass, PCLResources<?, ?, ?, ?> resources, String cardID, CardStrings strings) {
+        super(cardID, invokeClass, resources);
         this.cardColor = resources.cardColor;
         this.maxCopies = -1;
         this.strings = strings != null ? strings : new CardStrings();
-        this.type = type;
     }
 
     public static Collection<PCLCardData> getAllData() {
@@ -106,11 +103,11 @@ public class PCLCardData implements CardObject {
     }
 
     public static Collection<PCLCardData> getAllData(boolean showHidden, boolean sort, FuncT1<Boolean, PCLCardData> filterFunc) {
-        Stream<PCLCardData> stream = staticData
+        Stream<PCLCardData> stream = STATIC_DATA
                 .values()
                 .stream();
         if (!showHidden) {
-            stream = stream.filter(a -> a.type.isAnnotationPresent(VisibleCard.class));
+            stream = stream.filter(a -> a.invokeClass.isAnnotationPresent(VisibleCard.class));
         }
         if (filterFunc != null) {
             stream = stream.filter(filterFunc::invoke);
@@ -136,11 +133,11 @@ public class PCLCardData implements CardObject {
     }
 
     public static PCLCardData getStaticData(String cardID) {
-        return staticData.get(cardID);
+        return STATIC_DATA.get(cardID);
     }
 
-    protected static PCLCardData registerCardData(PCLCardData cardData) {
-        PCLCardData.staticData.put(cardData.ID, cardData);
+    protected static <T extends PCLCardData> T reigsterData(T cardData) {
+        PCLCardData.STATIC_DATA.put(cardData.ID, cardData);
         return cardData;
     }
 
@@ -160,7 +157,7 @@ public class PCLCardData implements CardObject {
     }
 
     public PCLCard create(int form, int upgrade) throws RuntimeException {
-        PCLCard card = createImpl();
+        PCLCard card = create();
         if (form > 0 && form < card.cardData.maxForms) {
             card.setForm(form, 0);
         }
@@ -169,20 +166,6 @@ public class PCLCardData implements CardObject {
         }
 
         return card;
-    }
-
-    public PCLCard createImpl() throws RuntimeException {
-        try {
-            if (constructor == null) {
-                constructor = type.getConstructor();
-                constructor.setAccessible(true);
-            }
-
-            return constructor.newInstance();
-        }
-        catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-            throw new RuntimeException(ID, e);
-        }
     }
 
     public String getAuthorString() {
@@ -210,11 +193,11 @@ public class PCLCardData implements CardObject {
     }
 
     public AbstractCard makeCopyFromLibrary(int upgrade) {
-        return (!type.isAnnotationPresent(VisibleCard.class) ? create(upgrade) : CardLibrary.getCopy(ID, upgrade, 0));
+        return (!invokeClass.isAnnotationPresent(VisibleCard.class) ? create(upgrade) : CardLibrary.getCopy(ID, upgrade, 0));
     }
 
     public PCLCard create(int upgrade) throws RuntimeException {
-        PCLCard card = createImpl();
+        PCLCard card = create();
         for (int i = 0; i < upgrade; i++) {
             card.upgrade();
         }

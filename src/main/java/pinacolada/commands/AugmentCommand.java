@@ -3,7 +3,6 @@ package pinacolada.commands;
 import basemod.DevConsole;
 import basemod.devcommands.ConsoleCommand;
 import basemod.helpers.ConvertHelper;
-import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.resources.PGR;
 
@@ -19,7 +18,7 @@ public class AugmentCommand extends ConsoleCommand {
 
     @Override
     protected void execute(String[] tokens, int depth) {
-        PCLAugmentData augment = PCLAugment.get(tokens[1]);
+        PCLAugmentData augment = PCLAugmentData.get(tokens[1]);
         Integer amount = ConvertHelper.tryParseInt(tokens[2], 1);
         if (augment != null) {
             PGR.dungeon.addAugment(augment.ID, amount);
@@ -42,6 +41,6 @@ public class AugmentCommand extends ConsoleCommand {
     }
 
     public static ArrayList<String> getCustoms() {
-        return new ArrayList<>(PCLAugment.getIDs());
+        return new ArrayList<>(PCLAugmentData.getIDs());
     }
 }

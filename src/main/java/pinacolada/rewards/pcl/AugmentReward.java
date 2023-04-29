@@ -10,6 +10,7 @@ import extendedui.EUIRenderHelpers;
 import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.augments.PCLAugment;
+import pinacolada.augments.PCLAugmentData;
 import pinacolada.effects.PCLSFX;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
@@ -50,7 +51,7 @@ public class AugmentReward extends PCLReward {
     public static class Serializer implements BaseMod.LoadCustomReward, BaseMod.SaveCustomReward {
         @Override
         public CustomReward onLoad(RewardSave rewardSave) {
-            return new AugmentReward(PCLAugment.get(rewardSave.id).create());
+            return new AugmentReward(PCLAugmentData.get(rewardSave.id).create());
         }
 
         @Override

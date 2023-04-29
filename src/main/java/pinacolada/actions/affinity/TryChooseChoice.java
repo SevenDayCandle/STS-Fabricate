@@ -148,7 +148,7 @@ public class TryChooseChoice<T> extends PCLAction<ArrayList<ChoiceCard<T>>> {
         GridCardSelectScreenHelper.setOnClickCard(onClickCard);
 
         for (ChoiceData<T> choice : choices) {
-            group.addToTop(choice.createImpl());
+            group.addToTop(choice.create());
         }
 
         if (group.isEmpty()) {

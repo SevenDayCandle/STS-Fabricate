@@ -33,7 +33,7 @@ public abstract class AffinityToken extends PCLCard {
     }
 
     public static AffinityToken getCard(PCLAffinity affinity) {
-        return (AffinityToken) getCardData(affinity).createImpl();
+        return (AffinityToken) getCardData(affinity).create();
     }
 
     public static AffinityTokenData getCardData(PCLAffinity affinity) {

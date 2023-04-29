@@ -36,6 +36,18 @@ public abstract class PCLRelic extends CustomRelic implements TooltipProvider {
     public EUITooltip mainTooltip;
     public AbstractPlayer.PlayerClass playerClass;
 
+    protected static PCLRelicData register(Class<? extends PCLRelic> type) {
+        return register(type, PGR.core);
+    }
+
+    protected static PCLRelicData register(Class<? extends PCLRelic> type, PCLResources<?, ?, ?, ?> resources) {
+        return registerRelicData(new PCLRelicData(type, resources));
+    }
+
+    protected static <T extends PCLRelicData> T registerRelicData(T cardData) {
+        return PCLRelicData.registerData(cardData);
+    }
+
     public PCLRelic(String id, RelicTier tier, LandingSound sfx) {
         this(id, EUIRM.getTexture(PGR.getRelicImage(id)), tier, sfx);
     }

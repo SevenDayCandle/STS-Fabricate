@@ -11,7 +11,7 @@ import pinacolada.skills.PMove;
 @VisibleCard
 public class CalculatedGamble extends PCLCard {
     public static final String ATLAS_URL = "green/skill/calculated_gamble";
-    public static final PCLCardData DATA = register(CalculatedGamble.class)
+    public static final PCLCardData DATA = registerTemplate(CalculatedGamble.class, com.megacrit.cardcrawl.cards.green.CalculatedGamble.ID)
             .setImagePathFromAtlasUrl(ATLAS_URL)
             .setSkill(0, CardRarity.UNCOMMON, PCLCardTarget.None)
             .setAffinities(PCLAffinity.Blue, PCLAffinity.Orange)

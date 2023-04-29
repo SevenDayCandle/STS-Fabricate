@@ -6,6 +6,7 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.patches.library.CardLibraryPatches;
 import pinacolada.skills.skills.PCustomCond;
 import pinacolada.utilities.GameUtilities;
 
@@ -18,7 +19,8 @@ public class ReplacementCard extends PCLDynamicCard {
     public ReplacementCard(ReplacementData builder) {
         super(builder);
         this.builder = builder;
-        this.original = builder.original;
+        // Intentionally bypassing getCard to avoid the original itself being replaced
+        this.original = CardLibraryPatches.getDirectCard(builder.originalID).makeStatEquivalentCopy();
     }
 
     @Override

@@ -69,7 +69,7 @@ public class PMod_PerDistinctPower extends PMod_Per<PField_Power> {
     @Override
     public int getMultiplier(PCLUseInfo info) {
         return fields.powers.isEmpty() ?
-                sumTargets(info, t -> EUIUtils.count(t.powers, po -> po.type == AbstractPower.PowerType.DEBUFF)) :
+                sumTargets(info, t -> EUIUtils.count(t.powers, fields.debuff ? po -> po.type == AbstractPower.PowerType.DEBUFF : po -> po.type == AbstractPower.PowerType.BUFF)) :
                 sumTargets(info, t -> EUIUtils.count(fields.powers, po -> GameUtilities.getPowerAmount(t, po.ID) >= this.amount));
     }
 

@@ -897,6 +897,8 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return this;
     }
 
+    public boolean isAffectedByMods() {return !useParent;}
+
     // Used to determine whether the effect should actually be saved or rendered on the card
     public boolean isBlank() {
         return this.childEffect != null && this.childEffect.isBlank();

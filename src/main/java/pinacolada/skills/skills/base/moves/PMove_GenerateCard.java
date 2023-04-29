@@ -162,7 +162,9 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
         }
     }
 
-    public abstract void performAction(PCLUseInfo info, AbstractCard c);    @Override
+    public abstract void performAction(PCLUseInfo info, AbstractCard c);
+
+    @Override
     public String getSubText() {
         return EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), getCopiesOfString());
     }

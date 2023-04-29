@@ -766,15 +766,23 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     }
 
     protected static PCLCardData register(Class<? extends PCLCard> type) {
-        return PCLCard.register(type, PGR.core);
+        return register(type, PGR.core);
     }
 
     protected static PCLCardData register(Class<? extends PCLCard> type, PCLResources<?, ?, ?, ?> resources) {
-        return PCLCard.registerCardData(new PCLCardData(type, resources));
+        return registerCardData(new PCLCardData(type, resources));
     }
 
-    protected static PCLCardData registerCardData(PCLCardData cardData) {
-        return PCLCardData.registerCardData(cardData);
+    protected static <T extends PCLCardData> T registerCardData(T cardData) {
+        return PCLCardData.reigsterData(cardData);
+    }
+
+    protected static TemplateCardData registerTemplate(Class<? extends PCLCard> type, String sourceID) {
+        return registerTemplate(type, PGR.core, sourceID);
+    }
+
+    protected static TemplateCardData registerTemplate(Class<? extends PCLCard> type, PCLResources<?, ?, ?, ?> resources, String sourceID) {
+        return PCLCardData.reigsterData(new TemplateCardData(type, resources, sourceID));
     }
 
     protected static int[] ups(int damage, int block) {
@@ -1763,7 +1771,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
             }
             if (data.augments != null) {
                 for (String id : data.augments) {
-                    PCLAugmentData augment = PCLAugment.get(id);
+                    PCLAugmentData augment = PCLAugmentData.get(id);
                     if (augment != null) {
                         addAugment(augment.create(), false);
                     }

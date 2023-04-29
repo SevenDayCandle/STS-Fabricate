@@ -109,6 +109,7 @@ public class PCLCoreStrings extends PCLStrings {
     public final String cedit_enable = cedit.TEXT[62];
     public final String cedit_pile = cedit.TEXT[63];
     public final String cedit_combat = cedit.TEXT[64];
+    public final String cedit_exact = cedit.TEXT[65];
 
     // Card Editor Tutorial
     public final String cetut_selector1 = cetut.TEXT[0];

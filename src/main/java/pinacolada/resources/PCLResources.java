@@ -140,7 +140,7 @@ public abstract class PCLResources<T extends PCLAbstractPlayerData, U extends PC
     }
 
     // Intercepts CardLibrary's getCopy to return a different card
-    public PCLCardData getReplacement(String cardID) {
+    public String getReplacement(String cardID) {
         return null;
     }
 

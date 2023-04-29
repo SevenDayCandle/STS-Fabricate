@@ -275,9 +275,9 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
                     :
                     EUIUtils.filter(CardLibrary.getAllCards(),
                             c -> !PCLDungeon.isColorlessCardExclusive(c) && (c.color == AbstractCard.CardColor.COLORLESS || c.color == AbstractCard.CardColor.CURSE || c.color == cardColor));
-            availableCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(cardColor), c -> c.getBuilder(0).createImpl()));
+            availableCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(cardColor), c -> c.getBuilder(0).create()));
             if (cardColor != AbstractCard.CardColor.COLORLESS) {
-                availableCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(AbstractCard.CardColor.COLORLESS), c -> c.getBuilder(0).createImpl()));
+                availableCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(AbstractCard.CardColor.COLORLESS), c -> c.getBuilder(0).create()));
             }
             availableCards.sort((a, b) -> StringUtils.compare(a.name, b.name));
         }

@@ -237,6 +237,18 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
         return new PMod_PerCreatureWith(amount, powers);
     }
 
+    public static PMod_PerDistinctPower perDistinctDebuff() {
+        return perDistinctDebuff(1);
+    }
+
+    public static PMod_PerDistinctPower perDistinctDebuff(int amount) {
+        return (PMod_PerDistinctPower) perDistinctPower(amount).edit(f -> f.debuff = true);
+    }
+
+    public static PMod_PerDistinctPower perDistinctDebuff(PCLCardTarget target, int amount) {
+        return (PMod_PerDistinctPower) perDistinctPower(target, amount).edit(f -> f.debuff = true);
+    }
+
     public static PMod_PerDistinctPower perDistinctPower(PCLPowerHelper... powers) {
         return perDistinctPower(1, powers);
     }
@@ -447,16 +459,16 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
         if (this.childEffect != null) {
             if (this.childEffect instanceof PMultiBase) {
                 for (PSkill<?> ce : ((PMultiBase<?>) this.childEffect).getSubEffects()) {
-                    if (!ce.useParent) {
+                    if (ce.isAffectedByMods()) {
                         ce.setTemporaryAmount(updateAmount(ce, info));
                     }
                 }
             }
             // PDelays should be ignored. PMods will directly affect their children instead
-            else if (this.childEffect instanceof PDelay && this.childEffect.childEffect != null && !this.childEffect.childEffect.useParent) {
+            else if (this.childEffect instanceof PDelay && this.childEffect.childEffect != null && this.childEffect.childEffect.isAffectedByMods()) {
                 this.childEffect.childEffect.setTemporaryAmount(updateAmount(this.childEffect.childEffect, info));
             }
-            else if (!this.childEffect.useParent) {
+            else if (this.childEffect.isAffectedByMods()) {
                 this.childEffect.setTemporaryAmount(updateAmount(this.childEffect, info));
             }
         }

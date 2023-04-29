@@ -12,7 +12,7 @@ import pinacolada.skills.skills.PTrigger;
 @VisibleCard
 public class Magnetism extends PCLCard {
     public static final String ATLAS_URL = "colorless/power/magnetism";
-    public static final PCLCardData DATA = register(Magnetism.class)
+    public static final PCLCardData DATA = registerTemplate(Magnetism.class, com.megacrit.cardcrawl.cards.colorless.Magnetism.ID)
             .setImagePathFromAtlasUrl(ATLAS_URL)
             .setPower(2, CardRarity.RARE)
             .setAffinities(PCLAffinity.Yellow)

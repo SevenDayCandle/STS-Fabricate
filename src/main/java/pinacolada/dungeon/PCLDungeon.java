@@ -23,8 +23,8 @@ import com.megacrit.cardcrawl.vfx.UpgradeShineEffect;
 import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
-import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentCategory;
+import pinacolada.augments.PCLAugmentData;
 import pinacolada.blights.common.AbstractGlyphBlight;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCustomCardSlot;
@@ -177,7 +177,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
     public HashMap<PCLAugmentCategory, Integer> getAugmentTotals() {
         HashMap<PCLAugmentCategory, Integer> counts = new HashMap<>();
         for (String key : augments.keySet()) {
-            counts.merge(PCLAugment.get(key).category, augments.get(key), Integer::sum);
+            counts.merge(PCLAugmentData.get(key).category, augments.get(key), Integer::sum);
         }
         return counts;
     }
@@ -488,8 +488,8 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
                 AbstractCard.CardRarity rarity = c.getBuilder(0).cardRarity;
                 // Do not add basic/special/curse rarity items into the colorless pool
                 if (rarity == AbstractCard.CardRarity.COMMON || rarity == AbstractCard.CardRarity.UNCOMMON || rarity == AbstractCard.CardRarity.RARE) {
-                    AbstractDungeon.srcColorlessCardPool.addToBottom(c.getBuilder(0).createImpl());
-                    AbstractDungeon.colorlessCardPool.addToBottom(c.getBuilder(0).createImpl());
+                    AbstractDungeon.srcColorlessCardPool.addToBottom(c.getBuilder(0).create());
+                    AbstractDungeon.colorlessCardPool.addToBottom(c.getBuilder(0).create());
                 }
                 EUIUtils.logInfoIfDebug(this, "Added Custom Card " + c.ID + " to Colorless pool");
             }

@@ -19,7 +19,7 @@ import extendedui.ui.cardFilter.CountingPanel;
 import extendedui.ui.controls.EUIImage;
 import extendedui.ui.hitboxes.EUIHitbox;
 import pinacolada.annotations.*;
-import pinacolada.augments.PCLAugment;
+import pinacolada.augments.PCLAugmentData;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.commands.*;
 import pinacolada.dungeon.PCLDungeon;
@@ -277,7 +277,7 @@ public class PGR {
         PGR.config.initializeOptions();
         initializeUI();
         PSkill.initialize();
-        PCLAugment.initialize();
+        PCLAugmentData.initialize();
         PCLCustomCardSlot.initialize();
         EffekseerEFK.initialize();
         CountingPanel.register(new PCLAffinityPanelFilter());

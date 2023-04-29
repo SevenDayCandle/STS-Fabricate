@@ -4,7 +4,6 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.debug.*;
 import imgui.ImGuiTextFilter;
 import org.apache.commons.lang3.StringUtils;
-import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.resources.PGR;
 
@@ -24,7 +23,7 @@ public class PCLDebugAugmentPanel {
 
 
     public PCLDebugAugmentPanel() {
-        originalSortedAugments.addAll(PCLAugment.getValues());
+        originalSortedAugments.addAll(PCLAugmentData.getValues());
         originalSortedAugments.sort((a, b) -> StringUtils.compare(a.ID, b.ID));
     }
 

@@ -12,7 +12,7 @@ import pinacolada.skills.PMove;
 @VisibleCard
 public class Apotheosis extends PCLCard {
     public static final String ATLAS_URL = "colorless/skill/apotheosis";
-    public static final PCLCardData DATA = register(Apotheosis.class)
+    public static final PCLCardData DATA = registerTemplate(Apotheosis.class, com.megacrit.cardcrawl.cards.colorless.Apotheosis.ID)
             .setImagePathFromAtlasUrl(ATLAS_URL)
             .setSkill(2, CardRarity.RARE, PCLCardTarget.None)
             .setTags(PCLCardTag.Exhaust)

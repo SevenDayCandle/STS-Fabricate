@@ -1,0 +1,31 @@
+package pinacolada.cards.base;
+
+import com.megacrit.cardcrawl.unlock.UnlockTracker;
+import org.apache.commons.lang3.StringUtils;
+import pinacolada.resources.PCLResources;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.stream.Collectors;
+
+public class TemplateCardData extends PCLCardData {
+    private static final HashMap<String, TemplateCardData> TEMPLATES = new HashMap<>();
+    public final String originalID;
+
+    public TemplateCardData(Class<? extends PCLCard> type, PCLResources<?, ?, ?, ?> resources, String sourceID) {
+        super(type, resources);
+        this.originalID = sourceID;
+        TEMPLATES.put(sourceID, this);
+        UnlockTracker.markCardAsSeen(ID);
+    }
+
+    public static Collection<TemplateCardData> getTemplates()
+    {
+        return TEMPLATES.values().stream().sorted((a, b) -> StringUtils.compare(a.ID, b.ID)).collect(Collectors.toList());
+    }
+
+    public static TemplateCardData getTemplate(String original)
+    {
+        return TEMPLATES.get(original);
+    }
+}

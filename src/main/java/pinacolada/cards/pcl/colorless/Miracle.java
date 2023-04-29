@@ -11,7 +11,7 @@ import pinacolada.skills.PMove;
 @VisibleCard
 public class Miracle extends PCLCard {
     public static final String ATLAS_URL = "colorless/skill/miracle";
-    public static final PCLCardData DATA = register(Miracle.class)
+    public static final PCLCardData DATA = registerTemplate(Miracle.class, com.megacrit.cardcrawl.cards.tempCards.Miracle.ID)
             .setImagePathFromAtlasUrl(ATLAS_URL)
             .setSkill(0, CardRarity.SPECIAL, PCLCardTarget.None)
             .setAffinities(PCLAffinity.Yellow)

@@ -13,10 +13,7 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.random.Random;
 import extendedui.EUIUtils;
-import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.PCLCardData;
-import pinacolada.cards.base.PCLCustomCardSlot;
-import pinacolada.cards.base.ReplacementData;
+import pinacolada.cards.base.*;
 import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
@@ -28,13 +25,15 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 public class CardLibraryPatches {
-    public static PCLCardData getStandardReplacement(String id) {
-        AbstractPlayer.PlayerClass playerClass = GameUtilities.getPlayerClass();
-        if (GameUtilities.isPCLPlayerClass(playerClass)) {
-            PCLResources<?, ?, ?, ?> resources = PGR.getResources(playerClass);
-            return resources.getReplacement(id);
-        }
-        return null;
+    /** Directly get a card from the card library, bypassing postfixes attached to getCard */
+    public static AbstractCard getDirectCard(String id)
+    {
+        return CardLibrary.cards.get(id);
+    }
+
+    public static String getStandardReplacementID(String id)
+    {
+        return PGR.getResources(GameUtilities.getPlayerClass()).getReplacement(id);
     }
 
     public static String[] splitCardID(String cardID) {
@@ -42,35 +41,70 @@ public class CardLibraryPatches {
     }
 
     public static void tryReplace(AbstractCard[] card) {
-        card[0] = tryReplace(card[0]);
+        AbstractCard c = getReplacement(card[0]);
+        if (c != null)
+        {
+            card[0] = c;
+        }
     }
 
-    public static AbstractCard tryReplace(AbstractCard card) {
+    public static AbstractCard getReplacement(String cardID)
+    {
+        return getReplacement(cardID, 0);
+    }
+
+    // When playing as a PCL class, always replace
+    // When playing as a non-PCL class:
+    //  - If a template card is found, replace it if replaceCardsPCL is not set
+    //  - If a non-template card is found, replace it if replaceCardsPCL is set
+    public static AbstractCard getReplacement(String cardID, int upgradeTimes) {
+        AbstractCard replacement = null;
         AbstractPlayer.PlayerClass playerClass = GameUtilities.getPlayerClass();
-        if (GameUtilities.isPCLPlayerClass(playerClass)) {
-            PCLResources<?, ?, ?, ?> resources = PGR.getResources(playerClass);
-            return tryReplace(resources, card);
+        boolean alwaysReplace = PGR.config.replaceCardsPCL.get();
+
+        String replacementID = getStandardReplacementID(cardID);
+        if (replacementID != null) {
+            PCLCardData data = PCLCardData.getStaticData(replacementID);
+            if (data != null)
+            {
+                replacement = data.makeCopyFromLibrary(upgradeTimes);
+            }
+            else if (!PGR.config.replaceCardsPCL.get())
+            {
+                replacement = getDirectCard(replacementID);
+                if (replacement != null)
+                {
+                    replacement = replacement.makeCopy();
+                    for (int i = 0; i < upgradeTimes; i++)
+                    {
+                        replacement.upgrade();
+                    }
+                }
+            }
         }
-        else if (PGR.config.replaceCardsPCL.get()) {
-            return tryMakeReplace(card);
-        }
-        return card;
+        return replacement;
     }
 
-    public static AbstractCard tryReplace(PCLResources<?, ?, ?, ?> resources, AbstractCard card) {
-        PCLCardData data = resources.getReplacement(card.cardID);
-        if (data != null) {
-            return data.makeCopyFromLibrary(card.timesUpgraded);
-        }
-        else if (PGR.config.replaceCardsPCL.get()) {
-            return tryMakeReplace(card);
-        }
-        return card;
+    public static AbstractCard getReplacement(AbstractCard card) {
+        return getReplacement(card, card.timesUpgraded);
     }
 
-    public static AbstractCard tryMakeReplace(AbstractCard card) {
+    public static AbstractCard getReplacement(AbstractCard card, int upgradeTimes) {
+        AbstractCard replacement = getReplacement(card.cardID, upgradeTimes);
+        if (replacement != null)
+        {
+            return replacement;
+        }
+        else if (PGR.config.replaceCardsPCL.get()) {
+            return makeReplacementCard(card);
+        }
+
+        return replacement;
+    }
+
+    public static AbstractCard makeReplacementCard(AbstractCard card) {
         if (!(card instanceof PCLCard)) {
-            AbstractCard c = ReplacementData.makeReplacement(card, true);
+            PCLDynamicCard c = ReplacementData.makeReplacement(card, true);
             if (card.upgraded) {
                 c.upgrade();
             }
@@ -84,9 +118,9 @@ public class CardLibraryPatches {
         @SpirePrefixPatch
         public static SpireReturn<AbstractCard> prefix(String key) {
             if (PGR.isLoaded()) {
-                final PCLCardData data = getStandardReplacement(key);
-                if (data != null) {
-                    return SpireReturn.Return(data.makeCopyFromLibrary(0));
+                AbstractCard res = getReplacement(key);
+                if (res != null) {
+                    return SpireReturn.Return(res);
                 }
 
                 PCLCustomCardSlot slot = PCLCustomCardSlot.get(key);
@@ -112,7 +146,7 @@ public class CardLibraryPatches {
                 EUIUtils.logError(CardLibrary.class, "Card not found: " + key);
                 return __result;
             }
-            return CardLibraryPatches.tryReplace(__result);
+            return __result;
         }
 
         @SpirePrefixPatch
@@ -127,9 +161,9 @@ public class CardLibraryPatches {
                     }
                 }
             }
-            final PCLCardData data = getStandardReplacement(key);
-            if (data != null) {
-                return SpireReturn.Return(data.makeCopyFromLibrary(0));
+            AbstractCard res = getReplacement(key, upgradeTime);
+            if (res != null) {
+                return SpireReturn.Return(res);
             }
             return SpireReturn.Continue();
         }
@@ -151,7 +185,7 @@ public class CardLibraryPatches {
             final HashMap<String, AbstractCard> curses = ReflectionHacks.getPrivateStatic(CardLibrary.class, "curses");
             for (Map.Entry<String, AbstractCard> entry : curses.entrySet()) {
                 final AbstractCard c = entry.getValue();
-                if (c.rarity != AbstractCard.CardRarity.SPECIAL && (ignore == null || !c.cardID.equals(ignore.cardID)) && getStandardReplacement(c.cardID) == null) {
+                if (c.rarity != AbstractCard.CardRarity.SPECIAL && (ignore == null || !c.cardID.equals(ignore.cardID)) && getStandardReplacementID(c.cardID) == null) {
                     cards.add(entry.getKey());
                 }
             }

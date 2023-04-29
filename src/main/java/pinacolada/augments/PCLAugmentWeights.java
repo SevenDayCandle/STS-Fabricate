@@ -63,9 +63,9 @@ public class PCLAugmentWeights {
 
     public HashMap<PCLAugmentData, Integer> getPerAugmentWeights() {
         HashMap<PCLAugmentData, Integer> dataMap = new HashMap<>();
-        for (PCLAugmentData data : PCLAugment.getValues()) {
+        for (PCLAugmentData data : PCLAugmentData.getValues()) {
             PCLAugment augment = data.create();
-            int weight = PCLAugment.getWeight(this, data);
+            int weight = PCLAugmentData.getWeight(this, data);
             if (weight > 0) {
                 dataMap.put(data, weight);
             }

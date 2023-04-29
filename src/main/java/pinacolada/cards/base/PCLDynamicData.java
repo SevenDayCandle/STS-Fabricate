@@ -316,7 +316,7 @@ public class PCLDynamicData extends PCLCardData {
         return addPSkill(effect, false);
     }
 
-    public PCLDynamicCard createImpl() {
+    public PCLDynamicCard create() {
         return createImplWithForms(true);
     }
 

@@ -50,6 +50,7 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<
     public void setupEditor(PCLCustomCardEffectEditor<?> editor) {
         super.setupEditor(editor);
         registerUseParentBoolean(editor);
+        fields.registerNotBoolean(editor, TEXT.cedit_exact, null);
     }
 
     @Override
@@ -64,7 +65,13 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<
 
     @Override
     public String wrapAmount(int input) {
-        return input > 0 ? "+" + input : String.valueOf(input);
+        return input > 0 && !fields.not ? "+" + input : String.valueOf(input);
+    }
+
+    @Override
+    public boolean isAffectedByMods()
+    {
+        return super.isAffectedByMods() && !fields.not;
     }
 
     public String wrapExtra(int input) {

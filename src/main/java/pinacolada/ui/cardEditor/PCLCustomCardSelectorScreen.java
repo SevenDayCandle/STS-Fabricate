@@ -11,7 +11,6 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
-import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUI;
 import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
@@ -23,8 +22,8 @@ import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLCustomCardSlot;
+import pinacolada.cards.base.TemplateCardData;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.effects.screen.PCLCustomCardCopyConfirmationEffect;
 import pinacolada.effects.screen.PCLCustomCardDeletionConfirmationEffect;
@@ -216,10 +215,9 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
 
     // TODO add replacement cards
     private ArrayList<AbstractCard> getAvailableCardsToCopy() {
-        return EUIUtils.mapAsNonnull(PCLCardData.getAllData(false, false, data -> data.resources == PGR.core),
+        return EUIUtils.mapAsNonnull(TemplateCardData.getTemplates(),
                 data -> {
                     AbstractCard card = CardLibrary.getCard(data.ID);
-                    UnlockTracker.markCardAsSeen(data.ID);
                     card.isSeen = true;
                     card.isLocked = false;
                     return PCLCustomCardSlot.canFullyCopyCard(card) ? card : null;

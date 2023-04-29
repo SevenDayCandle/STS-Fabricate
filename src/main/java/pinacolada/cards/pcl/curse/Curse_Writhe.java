@@ -1,5 +1,6 @@
 package pinacolada.cards.pcl.curse;
 
+import com.megacrit.cardcrawl.cards.curses.Writhe;
 import pinacolada.annotations.VisibleCard;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
@@ -12,7 +13,7 @@ import pinacolada.skills.skills.base.moves.PMove_Cycle;
 @VisibleCard
 public class Curse_Writhe extends PCLCard {
     public static final String ATLAS_URL = "curse/writhe";
-    public static final PCLCardData DATA = register(Curse_Writhe.class)
+    public static final PCLCardData DATA = registerTemplate(Curse_Writhe.class, Writhe.ID)
             .setImagePathFromAtlasUrl(ATLAS_URL)
             .setCurse(-2, PCLCardTarget.None, false)
             .setTags(PCLCardTag.Unplayable.make(), PCLCardTag.Innate.make(-1))

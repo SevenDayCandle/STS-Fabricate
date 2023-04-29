@@ -25,7 +25,7 @@ import pinacolada.skills.skills.special.primary.PCardPrimary_GainBlock;
 
 // TODO Try to construct effects from card description
 public class ReplacementData extends PCLDynamicData {
-    public final AbstractCard original;
+    public final String originalID;
 
     public ReplacementData(AbstractCard card, boolean copyNumbers) {
         this(card, card.name, card.rawDescription, copyNumbers);
@@ -33,7 +33,7 @@ public class ReplacementData extends PCLDynamicData {
 
     public ReplacementData(AbstractCard original, String name, String text, boolean copyNumbers) {
         super(original.cardID);
-        this.original = original.makeStatEquivalentCopy();
+        this.originalID = original.cardID;
 
         if (copyNumbers) {
             AbstractCard upgradedCopy = original.makeStatEquivalentCopy();
@@ -96,7 +96,7 @@ public class ReplacementData extends PCLDynamicData {
     public static PCLDynamicCard makeReplacement(AbstractCard card, boolean copyNumbers) {
         ReplacementData initial = getReplacementData(card, copyNumbers);
         if (initial != null) {
-            return initial.createImpl();
+            return initial.create();
         }
         else {
             return new ReplacementData(card, copyNumbers).buildAsReplacement();
@@ -124,6 +124,14 @@ public class ReplacementData extends PCLDynamicData {
         return null;
     }
 
+    protected static ReplacementData attackData(AbstractCard card, boolean copyNumbers) {
+        return (ReplacementData) new ReplacementData(card, copyNumbers).setAttackSkill(new PCardPrimary_DealDamage());
+    }
+
+    protected static ReplacementData blockData(AbstractCard card, boolean copyNumbers) {
+        return (ReplacementData) new ReplacementData(card, copyNumbers).setBlockSkill(new PCardPrimary_GainBlock());
+    }
+
     // Build a replacement card that invokes the source card directly
     public ReplacementCard buildAsReplacement() {
         if (strings == null) {
@@ -135,14 +143,6 @@ public class ReplacementData extends PCLDynamicData {
         }
 
         return new ReplacementCard(this);
-    }
-
-    protected static ReplacementData attackData(AbstractCard card, boolean copyNumbers) {
-        return (ReplacementData) new ReplacementData(card, copyNumbers).setAttackSkill(new PCardPrimary_DealDamage());
-    }
-
-    protected static ReplacementData blockData(AbstractCard card, boolean copyNumbers) {
-        return (ReplacementData) new ReplacementData(card, copyNumbers).setBlockSkill(new PCardPrimary_GainBlock());
     }
 
     public ReplacementData addPSkill(PSkill<?> effect) {

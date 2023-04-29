@@ -121,7 +121,8 @@
 												"Selection",
 												"Enable",
 												"Pile",
-												"Combat"
+												"Combat",
+												"Exact"
 								]
 				},
 				"pcl:CardEditorTutorial": {

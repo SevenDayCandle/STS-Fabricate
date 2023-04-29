@@ -21,7 +21,7 @@ public class PCLAugmentSelectionEffect extends PCLEffectWithCallback<PCLAugment>
     public PCLAugmentSelectionEffect(FuncT1<Boolean, PCLAugment> evalFunc) {
         panel = new PCLAugmentList(this::complete);
         for (Map.Entry<String, Integer> params : PGR.dungeon.augments.entrySet()) {
-            PCLAugmentData data = PCLAugment.get(params.getKey());
+            PCLAugmentData data = PCLAugmentData.get(params.getKey());
             int amount = params.getValue();
             if (data != null && amount > 0) {
                 PCLAugment augment = data.create();

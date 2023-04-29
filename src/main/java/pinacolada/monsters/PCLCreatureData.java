@@ -1,12 +1,11 @@
 package pinacolada.monsters;
 
 import com.megacrit.cardcrawl.localization.MonsterStrings;
+import pinacolada.misc.PCLGenericData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 
-public class PCLCreatureData {
-    public final Class<? extends PCLCreature> type;
-    public final String ID;
+public class PCLCreatureData extends PCLGenericData<PCLCreature> {
     public final MonsterStrings strings;
     public float hbX;
     public float hbY;
@@ -16,9 +15,8 @@ public class PCLCreatureData {
     public String imgUrl;
 
     public PCLCreatureData(Class<? extends PCLCreature> type, PCLResources<?, ?, ?, ?> resources) {
-        this.ID = resources.createID(type.getSimpleName());
+        super(resources.createID(type.getSimpleName()), type, resources);
         this.strings = PGR.getMonsterStrings(ID);
-        this.type = type;
     }
 
     public PCLCreatureData setHb(float hbX, float hbY, float hbW, float hbH) {

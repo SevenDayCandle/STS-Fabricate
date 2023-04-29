@@ -12,7 +12,7 @@ import pinacolada.skills.PMod;
 @VisibleCard
 public class MindBlast extends PCLCard {
     public static final String ATLAS_URL = "colorless/attack/mind_blast";
-    public static final PCLCardData DATA = register(MindBlast.class)
+    public static final PCLCardData DATA = registerTemplate(MindBlast.class, com.megacrit.cardcrawl.cards.colorless.MindBlast.ID)
             .setImagePathFromAtlasUrl(ATLAS_URL)
             .setAttack(2, CardRarity.UNCOMMON, PCLAttackType.Piercing, PCLCardTarget.Single)
             .setDamage(3, 0)

@@ -2,7 +2,6 @@ package pinacolada.skills.fields;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
@@ -16,6 +15,7 @@ import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.orbs.PCLOrbHelper;
+import pinacolada.patches.library.CardLibraryPatches;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
@@ -83,7 +83,7 @@ public abstract class PField implements Serializable {
     public static String getCardNameForID(String cardID) {
         if (cardID != null) {
             // NOT using CardLibrary.getCard as the replacement patching on that method may cause text glitches or infinite loops in this method
-            AbstractCard c = CardLibrary.cards.get(cardID);
+            AbstractCard c = CardLibraryPatches.getDirectCard(cardID);
             if (c != null) {
                 return c.name;
             }

@@ -21,7 +21,7 @@ public class AffinityTokenData extends PCLCardData {
     public String getImagePath(AbstractCard.CardColor color) {
         String path = pathMap.get(color);
         if (path == null) {
-            pathMap.put(color, PGR.getCardImage(PGR.getResources(color).createID(type.getSimpleName())));
+            pathMap.put(color, PGR.getCardImage(PGR.getResources(color).createID(invokeClass.getSimpleName())));
         }
         return pathMap.getOrDefault(color, imagePath);
     }

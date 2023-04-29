@@ -12,7 +12,7 @@ import pinacolada.skills.PMove;
 @VisibleCard
 public class Panacea extends PCLCard {
     public static final String ATLAS_URL = "colorless/skill/panacea";
-    public static final PCLCardData DATA = register(Panacea.class)
+    public static final PCLCardData DATA = registerTemplate(Panacea.class, com.megacrit.cardcrawl.cards.colorless.Panacea.ID)
             .setImagePathFromAtlasUrl(ATLAS_URL)
             .setSkill(0, CardRarity.UNCOMMON, PCLCardTarget.Self)
             .setAffinities(PCLAffinity.Blue, PCLAffinity.Yellow)

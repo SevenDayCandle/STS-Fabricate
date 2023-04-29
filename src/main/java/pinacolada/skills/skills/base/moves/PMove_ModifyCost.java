@@ -9,6 +9,7 @@ import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
+import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
 
 @VisibleSkill
 public class PMove_ModifyCost extends PMove_Modify<PField_CardCategory> {
@@ -41,7 +42,7 @@ public class PMove_ModifyCost extends PMove_Modify<PField_CardCategory> {
     @Override
     public String getObjectText() {
         String base = EUIRM.strings.numNoun(getAmountRawString(), TEXT.subjects_cost);
-        return fields.forced ? TEXT.subjects_thisTurn(base) : EUIRM.strings.numNoun(getAmountRawString(), TEXT.subjects_cost);
+        return !fields.forced ? TEXT.subjects_thisTurn(base) : EUIRM.strings.numNoun(getAmountRawString(), TEXT.subjects_cost);
     }
 
     @Override
@@ -51,11 +52,17 @@ public class PMove_ModifyCost extends PMove_Modify<PField_CardCategory> {
 
     @Override
     public ActionT1<AbstractCard> getAction() {
-        return (c) -> getActions().modifyCost(c, amount, !fields.forced, true);
+        return (c) -> getActions().modifyCost(c, amount, fields.forced, fields.not);
     }
 
     @Override
     public boolean isDetrimental() {
         return extra > 0;
+    }
+
+    @Override
+    public void setupEditor(PCLCustomCardEffectEditor<?> editor) {
+        super.setupEditor(editor);
+        fields.registerFBoolean(editor, TEXT.cedit_combat, null);
     }
 }

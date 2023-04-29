@@ -1,5 +1,6 @@
 package pinacolada.cards.pcl.curse;
 
+import com.megacrit.cardcrawl.cards.curses.Pain;
 import pinacolada.annotations.VisibleCard;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
@@ -14,7 +15,7 @@ import pinacolada.skills.skills.base.moves.PMove_LoseHP;
 @VisibleCard
 public class Curse_Pain extends PCLCard {
     public static final String ATLAS_URL = "curse/pain";
-    public static final PCLCardData DATA = register(Curse_Pain.class)
+    public static final PCLCardData DATA = registerTemplate(Curse_Pain.class, Pain.ID)
             .setImagePathFromAtlasUrl(ATLAS_URL)
             .setCurse(-2, PCLCardTarget.None, false)
             .setTags(PCLCardTag.Unplayable)

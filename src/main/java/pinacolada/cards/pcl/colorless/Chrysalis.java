@@ -11,7 +11,7 @@ import pinacolada.skills.PMove;
 @VisibleCard
 public class Chrysalis extends PCLCard {
     public static final String ATLAS_URL = "colorless/skill/chrysalis";
-    public static final PCLCardData DATA = register(Chrysalis.class)
+    public static final PCLCardData DATA = registerTemplate(Chrysalis.class, com.megacrit.cardcrawl.cards.colorless.Chrysalis.ID)
             .setImagePathFromAtlasUrl(ATLAS_URL)
             .setSkill(2, CardRarity.RARE)
             .setTags(PCLCardTag.Exhaust)

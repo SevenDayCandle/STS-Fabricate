@@ -11,7 +11,7 @@ import pinacolada.skills.PMove;
 @VisibleCard
 public class Metamorphosis extends PCLCard {
     public static final String ATLAS_URL = "colorless/skill/metamorphosis";
-    public static final PCLCardData DATA = register(Metamorphosis.class)
+    public static final PCLCardData DATA = registerTemplate(Metamorphosis.class, com.megacrit.cardcrawl.cards.colorless.Metamorphosis.ID)
             .setImagePathFromAtlasUrl(ATLAS_URL)
             .setSkill(2, CardRarity.RARE)
             .setTags(PCLCardTag.Exhaust)

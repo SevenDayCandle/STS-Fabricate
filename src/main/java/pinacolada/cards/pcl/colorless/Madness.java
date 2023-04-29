@@ -13,7 +13,7 @@ import pinacolada.skills.fields.PField_CardGeneric;
 @VisibleCard
 public class Madness extends PCLCard {
     public static final String ATLAS_URL = "colorless/skill/madness";
-    public static final PCLCardData DATA = register(Madness.class)
+    public static final PCLCardData DATA = registerTemplate(Madness.class, com.megacrit.cardcrawl.cards.colorless.Madness.ID)
             .setImagePathFromAtlasUrl(ATLAS_URL)
             .setSkill(1, CardRarity.UNCOMMON, PCLCardTarget.None)
             .setAffinities(PCLAffinity.Star)

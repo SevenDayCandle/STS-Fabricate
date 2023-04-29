@@ -15,7 +15,6 @@ import extendedui.ui.panelitems.PCLTopPanelItem;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIColors;
 import extendedui.utilities.EUIFontHelper;
-import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.resources.PCLHotkeys;
 import pinacolada.resources.PGR;
@@ -66,7 +65,7 @@ public class PCLAugmentPanelItem extends PCLTopPanelItem {
     protected HashMap<PCLAugmentData, Integer> getAugmentData() {
         HashMap<PCLAugmentData, Integer> map = new HashMap<>();
         for (String key : PGR.dungeon.augments.keySet()) {
-            map.put(PCLAugment.get(key), PGR.dungeon.augments.get(key));
+            map.put(PCLAugmentData.get(key), PGR.dungeon.augments.get(key));
         }
         return map;
     }

@@ -1,5 +1,6 @@
 package pinacolada.cards.pcl.curse;
 
+import com.megacrit.cardcrawl.cards.curses.Regret;
 import pinacolada.annotations.VisibleCard;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
@@ -15,7 +16,7 @@ import pinacolada.skills.skills.base.moves.PMove_LoseHP;
 @VisibleCard
 public class Curse_Regret extends PCLCard {
     public static final String ATLAS_URL = "curse/regret";
-    public static final PCLCardData DATA = register(Curse_Regret.class)
+    public static final PCLCardData DATA = registerTemplate(Curse_Regret.class, Regret.ID)
             .setImagePathFromAtlasUrl(ATLAS_URL)
             .setCurse(-2, PCLCardTarget.None, false)
             .setTags(PCLCardTag.Unplayable)
