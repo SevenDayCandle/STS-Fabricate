@@ -12,7 +12,7 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.PPassiveMod;
-import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
+import pinacolada.ui.cardEditor.PCLCustomEffectEditor;
 
 public abstract class PMod_Per<T extends PField_Not> extends PPassiveMod<T> {
     public PMod_Per(PSkillData<T> data, PSkillSaveData content) {
@@ -82,7 +82,7 @@ public abstract class PMod_Per<T extends PField_Not> extends PPassiveMod<T> {
     }
 
     @Override
-    public void setupEditor(PCLCustomCardEffectEditor<?> editor) {
+    public void setupEditor(PCLCustomEffectEditor<?> editor) {
         super.setupEditor(editor);
         fields.registerNotBoolean(editor, StringUtils.capitalize(TEXT.subjects_bonus), TEXT.cetut_bonus);
     }

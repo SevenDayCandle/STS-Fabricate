@@ -18,7 +18,7 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Orb;
 import pinacolada.skills.skills.PPassiveCond;
 import pinacolada.skills.skills.base.primary.PTrigger_When;
-import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
+import pinacolada.ui.cardEditor.PCLCustomEffectEditor;
 
 @VisibleSkill
 public class PCond_HaveOrbChanneled extends PPassiveCond<PField_Orb> implements OnOrbChannelSubscriber {
@@ -81,7 +81,7 @@ public class PCond_HaveOrbChanneled extends PPassiveCond<PField_Orb> implements 
     }
 
     @Override
-    public void setupEditor(PCLCustomCardEffectEditor<?> editor) {
+    public void setupEditor(PCLCustomEffectEditor<?> editor) {
         super.setupEditor(editor);
         fields.registerRBoolean(editor, TEXT.cedit_combat, null);
     }

@@ -17,7 +17,7 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardGeneric;
 import pinacolada.skills.skills.PCallbackMove;
-import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
+import pinacolada.ui.cardEditor.PCLCustomEffectEditor;
 import pinacolada.utilities.ListSelection;
 
 public abstract class PMove_Select<T extends PField_CardGeneric> extends PCallbackMove<T> {
@@ -77,7 +77,7 @@ public abstract class PMove_Select<T extends PField_CardGeneric> extends PCallba
     }
 
     @Override
-    public void setupEditor(PCLCustomCardEffectEditor<?> editor) {
+    public void setupEditor(PCLCustomEffectEditor<?> editor) {
         super.setupEditor(editor);
         registerUseParentBoolean(editor);
         fields.registerRequired(editor);

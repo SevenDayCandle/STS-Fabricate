@@ -43,14 +43,14 @@ import pinacolada.utilities.GameUtilities;
 import java.util.ArrayList;
 import java.util.List;
 
-import static pinacolada.ui.cardEditor.PCLCustomCardEffectPage.*;
+import static pinacolada.ui.cardEditor.PCLCustomEffectPage.*;
 
-public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCardGenericPage {
+public class PCLCustomEffectEditor<T extends PSkill<?>> extends PCLCustomGenericPage {
     public static final float CUTOFF = Settings.WIDTH * 0.7f;
     public static final float MAIN_OFFSET = MENU_WIDTH * 1.58f;
     public static final float AUX_OFFSET = MENU_WIDTH * 2.43f;
     protected static ArrayList<AbstractCard> availableCards;
-    public final PCLCustomCardEffectPage editor;
+    public final PCLCustomEffectPage editor;
     protected ArrayList<EUIHoverable> activeElements = new ArrayList<>();
     protected EUISearchableDropdown<T> effects;
     protected EUIDropdown<PCLAffinity> affinities;
@@ -74,7 +74,7 @@ public class PCLCustomCardEffectEditor<T extends PSkill<?>> extends PCLCustomCar
     private T lastEffect;
     private float additionalHeight;
 
-    public PCLCustomCardEffectEditor(EffectEditorGroup<T> group, EUIHitbox hb, int index) {
+    public PCLCustomEffectEditor(EffectEditorGroup<T> group, EUIHitbox hb, int index) {
         this.group = group;
         this.editor = group.editor;
         this.index = index;

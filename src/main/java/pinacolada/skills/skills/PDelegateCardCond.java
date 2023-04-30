@@ -10,7 +10,7 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.skills.base.primary.PTrigger_When;
-import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
+import pinacolada.ui.cardEditor.PCLCustomEffectEditor;
 
 import java.util.Collections;
 
@@ -51,7 +51,7 @@ public abstract class PDelegateCardCond extends PDelegateCond<PField_CardCategor
         return TEXT.cond_onGeneric(getDelegateText());
     }
 
-    public void setupEditor(PCLCustomCardEffectEditor<?> editor) {
+    public void setupEditor(PCLCustomEffectEditor<?> editor) {
         fields.setupEditor(editor);
     }
 

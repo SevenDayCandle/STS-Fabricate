@@ -21,7 +21,7 @@ import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
 import pinacolada.stances.PCLStanceHelper;
-import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
+import pinacolada.ui.cardEditor.PCLCustomEffectEditor;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -217,5 +217,5 @@ public abstract class PField implements Serializable {
     }
 
     // Enables selectors for modifying this objects fields to appear in the card editor
-    public abstract void setupEditor(PCLCustomCardEffectEditor<?> editor);
+    public abstract void setupEditor(PCLCustomEffectEditor<?> editor);
 }

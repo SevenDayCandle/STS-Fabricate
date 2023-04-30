@@ -7,7 +7,7 @@ import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
-import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
+import pinacolada.ui.cardEditor.PCLCustomEffectEditor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,7 +33,7 @@ public class PField_Orb extends PField_Random {
         return (PField_Orb) new PField_Orb().setOrb(orbs).setRandom(random).setNot(not);
     }
 
-    public void setupEditor(PCLCustomCardEffectEditor<?> editor) {
+    public void setupEditor(PCLCustomEffectEditor<?> editor) {
         editor.registerOrb(orbs);
     }
 

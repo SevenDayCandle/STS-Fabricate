@@ -49,7 +49,7 @@ import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.skills.PMultiSkill;
 import pinacolada.skills.skills.PTrigger;
-import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
+import pinacolada.ui.cardEditor.PCLCustomEffectEditor;
 import pinacolada.utilities.GameUtilities;
 
 import java.lang.reflect.Constructor;
@@ -1110,7 +1110,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         }
     }
 
-    public void registerUseParentBoolean(PCLCustomCardEffectEditor<?> editor) {
+    public void registerUseParentBoolean(PCLCustomEffectEditor<?> editor) {
         editor.registerBoolean(PGR.core.strings.cedit_useParent, PGR.core.strings.cetut_useParent, v -> useParent = v, useParent);
     }
 
@@ -1336,7 +1336,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return this;
     }
 
-    public void setupEditor(PCLCustomCardEffectEditor<?> editor) {
+    public void setupEditor(PCLCustomEffectEditor<?> editor) {
         fields.setupEditor(editor);
     }
 

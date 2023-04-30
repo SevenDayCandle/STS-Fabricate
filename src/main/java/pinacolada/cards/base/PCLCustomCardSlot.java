@@ -3,7 +3,6 @@ package pinacolada.cards.base;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.PixmapIO;
-import com.badlogic.gdx.math.MathUtils;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
@@ -11,6 +10,7 @@ import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.tags.CardTagItem;
 import pinacolada.interfaces.providers.CustomCardFileProvider;
+import pinacolada.misc.PCLCustomLoadable;
 import pinacolada.resources.PGR;
 
 import java.util.ArrayList;
@@ -19,10 +19,9 @@ import java.util.HashMap;
 import static extendedui.EUIUtils.array;
 import static pinacolada.resources.PCLMainConfig.JSON_FILTER;
 
-public class PCLCustomCardSlot {
-    public static final int ID_SIZE = 4;
+public class PCLCustomCardSlot extends PCLCustomLoadable {
     public static final String BASE_CARD_ID = "PCLC";
-    public static final String FOLDER = "custom";
+    public static final String SUBFOLDER = "cards";
     private static final TypeToken<PCLCustomCardSlot> TTOKEN = new TypeToken<PCLCustomCardSlot>() {
     };
     private static final TypeToken<CardForm> TTOKENFORM = new TypeToken<CardForm>() {
@@ -76,36 +75,15 @@ public class PCLCustomCardSlot {
     }
 
     protected static String makeNewID(AbstractCard.CardColor color) {
-        StringBuilder sb = new StringBuilder(getBaseIDPrefix(color));
-        for (int i = 0; i < ID_SIZE; i++) {
-            sb.append(makeRandomCharIndex());
-        }
-
-        while (isIDDuplicate(sb.toString(), color)) {
-            sb.append(makeRandomCharIndex());
-        }
-        return sb.toString();
-    }
-
-    private String makeFilePath() {
-        return FOLDER + "/" + ID + ".json";
-    }
-
-    private String makeImagePath() {
-        return FOLDER + "/" + ID + ".png";
+        return makeNewID(getBaseIDPrefix(color), getCards(color));
     }
 
     public static String getBaseIDPrefix(AbstractCard.CardColor color) {
-        return BASE_CARD_ID + "_" + color.name() + "_";
-    }
-
-    private static char makeRandomCharIndex() {
-        int i = MathUtils.random(65, 100);
-        return (char) (i > 90 ? i - 43 : i);
+        return getBaseIDPrefix(BASE_CARD_ID, color);
     }
 
     public static boolean isIDDuplicate(String input, AbstractCard.CardColor color) {
-        return EUIUtils.any(getCards(color), c -> c.ID.equals(input));
+        return isIDDuplicate(input, getCards(color));
     }
 
     public static ArrayList<PCLCustomCardSlot> getCards(AbstractCard.CardColor color) {
@@ -134,6 +112,11 @@ public class PCLCustomCardSlot {
                 .setExtraTags(CardTagItem.getFromCard(card))
         );
         recordBuilder();
+    }
+
+    @Override
+    protected String getSubfolderPath() {
+        return SUBFOLDER;
     }
 
     // Copy down the properties from all builders into this slot
@@ -241,7 +224,7 @@ public class PCLCustomCardSlot {
 
     public static void initialize() {
         CUSTOM_CARDS.clear();
-        loadFolder(getBaseCustomCardFolder());
+        loadFolder(getCustomFolder(SUBFOLDER));
         for (CustomCardFileProvider provider : PROVIDERS) {
             loadFolder(provider.getCardFolder());
         }
@@ -254,15 +237,6 @@ public class PCLCustomCardSlot {
         for (FileHandle f : folder.list(JSON_FILTER)) {
             loadSingleCardImpl(f);
         }
-    }
-
-    private static FileHandle getBaseCustomCardFolder() {
-        FileHandle folder = Gdx.files.local(FOLDER);
-        if (!folder.exists()) {
-            folder.mkdirs();
-            EUIUtils.logInfo(PCLCustomCardSlot.class, "Created Custom Card Folder: " + folder.path());
-        }
-        return folder;
     }
 
     private static void loadSingleCardImpl(FileHandle f) {

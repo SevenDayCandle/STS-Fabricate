@@ -28,7 +28,7 @@ import java.util.ArrayList;
 
 import static pinacolada.ui.cardEditor.PCLCustomCardEditCardScreen.START_Y;
 
-public class PCLCustomCardEffectPage extends PCLCustomCardGenericPage {
+public class PCLCustomEffectPage extends PCLCustomGenericPage {
     public static final float MENU_WIDTH = scale(200);
     public static final float MENU_HEIGHT = scale(40);
     public static final float OFFSET_EFFECT = -MENU_HEIGHT * 1.25f;
@@ -64,7 +64,7 @@ public class PCLCustomCardEffectPage extends PCLCustomCardGenericPage {
     protected PSkill.PCLCardValueSource currentEffectSource = PSkill.PCLCardValueSource.MagicNumber;
 
 
-    public PCLCustomCardEffectPage(PCLCustomCardEditCardScreen screen, EUIHitbox hb, int index, String title, ActionT1<PSkill<?>> onUpdate) {
+    public PCLCustomEffectPage(PCLCustomCardEditCardScreen screen, EUIHitbox hb, int index, String title, ActionT1<PSkill<?>> onUpdate) {
         this.screen = screen;
         this.editorIndex = index;
         this.onUpdate = onUpdate;

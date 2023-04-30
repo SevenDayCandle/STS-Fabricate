@@ -33,7 +33,7 @@ import java.util.List;
 
 import static pinacolada.ui.cardEditor.PCLCustomCardEditCardScreen.START_Y;
 
-public class PCLCustomCardPrimaryInfoPage extends PCLCustomCardGenericPage {
+public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
     public static final int EFFECT_COUNT = 2;
 
     public static final float MENU_WIDTH = scale(160);

@@ -9,7 +9,7 @@ import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
-import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
+import pinacolada.ui.cardEditor.PCLCustomEffectEditor;
 
 @VisibleSkill
 public class PMove_ModifyCost extends PMove_Modify<PField_CardCategory> {
@@ -61,7 +61,7 @@ public class PMove_ModifyCost extends PMove_Modify<PField_CardCategory> {
     }
 
     @Override
-    public void setupEditor(PCLCustomCardEffectEditor<?> editor) {
+    public void setupEditor(PCLCustomEffectEditor<?> editor) {
         super.setupEditor(editor);
         fields.registerFBoolean(editor, TEXT.cedit_combat, null);
     }

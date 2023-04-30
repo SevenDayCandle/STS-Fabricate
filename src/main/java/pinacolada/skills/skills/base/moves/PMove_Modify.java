@@ -12,7 +12,7 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
-import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
+import pinacolada.ui.cardEditor.PCLCustomEffectEditor;
 
 import java.util.List;
 
@@ -47,7 +47,7 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<
     }
 
     @Override
-    public void setupEditor(PCLCustomCardEffectEditor<?> editor) {
+    public void setupEditor(PCLCustomEffectEditor<?> editor) {
         super.setupEditor(editor);
         registerUseParentBoolean(editor);
         fields.registerNotBoolean(editor, TEXT.cedit_exact, null);

@@ -30,26 +30,26 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage {
+public class PCLCustomPowerEffectPage extends PCLCustomEffectPage {
     protected PCLValueEditor usesPerTurn;
     protected ArrayList<EUIButton> quickAddButtons;
 
-    public PCLCustomCardPowerPage(PCLCustomCardEditCardScreen screen, EUIHitbox hb, int index, String title, ActionT1<PSkill<?>> onUpdate) {
+    public PCLCustomPowerEffectPage(PCLCustomCardEditCardScreen screen, EUIHitbox hb, int index, String title, ActionT1<PSkill<?>> onUpdate) {
         super(screen, hb, index, title, onUpdate);
         updateEffectItemNames();
     }
 
     // Force refresh the row names
     public void updateEffectItemNames() {
-        for (PCLCustomCardEffectEditor<PCond<?>> e : conditionGroup.editors) {
+        for (PCLCustomEffectEditor<PCond<?>> e : conditionGroup.editors) {
             e.effects.refreshText();
             e.effects.sortByLabel();
         }
-        for (PCLCustomCardEffectEditor<PMod<?>> e : modifierGroup.editors) {
+        for (PCLCustomEffectEditor<PMod<?>> e : modifierGroup.editors) {
             e.effects.refreshText();
             e.effects.sortByLabel();
         }
-        for (PCLCustomCardEffectEditor<PMove<?>> e : effectGroup.editors) {
+        for (PCLCustomEffectEditor<PMove<?>> e : effectGroup.editors) {
             e.effects.refreshText();
             e.effects.sortByLabel();
         }
@@ -119,9 +119,9 @@ public class PCLCustomCardPowerPage extends PCLCustomCardEffectPage {
     }
 
     protected void addPowerToEffect(PCLCustomCardEditCardScreen screen, int index) {
-        PCLCustomCardEffectPage effectPage = screen.effectPages.get(index);
+        PCLCustomEffectPage effectPage = screen.effectPages.get(index);
         PMove_StackCustomPower powerApplyEffect = null;
-        PCLCustomCardEffectEditor<PMove<?>> current = effectPage.effectGroup.addEffectSlot();
+        PCLCustomEffectEditor<PMove<?>> current = effectPage.effectGroup.addEffectSlot();
         if (current != null) {
             powerApplyEffect = (PMove_StackCustomPower) EUIUtils.find(current.effects.getAllItems(), e -> e instanceof PMove_StackCustomPower);
             if (powerApplyEffect != null) {

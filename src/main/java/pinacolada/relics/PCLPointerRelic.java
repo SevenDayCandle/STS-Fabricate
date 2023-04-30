@@ -29,7 +29,9 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
     @Override
     public Skills getSkills() {
         return skills;
-    }    public void setup() {
+    }
+
+    public void setup() {
     }
 
     @Override

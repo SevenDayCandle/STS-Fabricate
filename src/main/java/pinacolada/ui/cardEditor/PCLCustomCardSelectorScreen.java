@@ -28,6 +28,7 @@ import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.effects.screen.PCLCustomCardCopyConfirmationEffect;
 import pinacolada.effects.screen.PCLCustomCardDeletionConfirmationEffect;
 import pinacolada.effects.screen.PCLGenericSelectCardEffect;
+import pinacolada.misc.PCLCustomLoadable;
 import pinacolada.resources.PGR;
 
 import java.awt.*;
@@ -154,7 +155,7 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
 
     public static void openFolder() {
         try {
-            Desktop.getDesktop().open(Gdx.files.local(PCLCustomCardSlot.FOLDER).file());
+            Desktop.getDesktop().open(Gdx.files.local(PCLCustomLoadable.FOLDER).file());
         }
         catch (Exception e) {
             EUIUtils.logError(null, "Failed to open card folder.");

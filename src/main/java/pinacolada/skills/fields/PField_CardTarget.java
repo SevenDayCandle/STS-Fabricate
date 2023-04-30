@@ -2,7 +2,7 @@ package pinacolada.skills.fields;
 
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.resources.PGR;
-import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
+import pinacolada.ui.cardEditor.PCLCustomEffectEditor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,7 +22,7 @@ public class PField_CardTarget extends PField_Random {
         return (PField_CardTarget) new PField_CardTarget().setCardTarget(cardTargets).setRandom(random).setNot(not);
     }
 
-    public void setupEditor(PCLCustomCardEffectEditor<?> editor) {
+    public void setupEditor(PCLCustomEffectEditor<?> editor) {
         editor.registerDropdown(Arrays.asList(PCLCardTarget.values()), cardTargets, PCLCardTarget::getTitle, PGR.core.strings.cedit_cardTarget, true);
         super.setupEditor(editor);
     }

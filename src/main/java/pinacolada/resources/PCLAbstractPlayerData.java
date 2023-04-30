@@ -89,12 +89,12 @@ public abstract class PCLAbstractPlayerData {
     }
 
     public void initialize() {
-        addBaseLoadouts();
+        initializeLoadouts();
         reload();
         config.load(CardCrawlGame.saveSlot);
     }
 
-    protected final void addBaseLoadouts() {
+    protected final void initializeLoadouts() {
         loadouts.clear();
         PCLLoadout core = getCoreLoadout();
         loadouts.put(core.ID, core);

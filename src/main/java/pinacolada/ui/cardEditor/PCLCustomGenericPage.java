@@ -3,7 +3,7 @@ package pinacolada.ui.cardEditor;
 import extendedui.ui.TextureCache;
 import extendedui.ui.controls.EUICanvas;
 
-public abstract class PCLCustomCardGenericPage extends EUICanvas {
+public abstract class PCLCustomGenericPage extends EUICanvas {
     public String getIconText() {
         return "";
     }

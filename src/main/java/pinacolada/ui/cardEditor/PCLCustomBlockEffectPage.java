@@ -22,18 +22,18 @@ import pinacolada.skills.skills.special.primary.PCardPrimary_GainBlock;
 import java.util.Arrays;
 import java.util.List;
 
-public class PCLCustomCardBlockPage extends PCLCustomCardEffectPage {
+public class PCLCustomBlockEffectPage extends PCLCustomEffectPage {
     protected PCLCustomCardUpgradableEditor blockEditor;
     protected PCLCustomCardUpgradableEditor rightCountEditor;
     protected EUIToggle enableToggle;
 
-    public PCLCustomCardBlockPage(PCLCustomCardEditCardScreen screen, EUIHitbox hb, int index, String title, ActionT1<PSkill<?>> onUpdate) {
+    public PCLCustomBlockEffectPage(PCLCustomCardEditCardScreen screen, EUIHitbox hb, int index, String title, ActionT1<PSkill<?>> onUpdate) {
         super(screen, hb, index, title, onUpdate);
     }
 
     protected void setupComponents(PCLCustomCardEditCardScreen screen) {
         super.setupComponents(screen);
-        effectGroup.setListFunc(PCLCustomCardBlockPage::getAvailableMoves);
+        effectGroup.setListFunc(PCLCustomBlockEffectPage::getAvailableMoves);
         primaryConditions.setItems(new PCardPrimary_GainBlock()).setActive(false);
         delayEditor.setActive(false);
 

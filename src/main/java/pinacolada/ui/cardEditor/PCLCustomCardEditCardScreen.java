@@ -33,9 +33,9 @@ import pinacolada.skills.skills.special.primary.PCardPrimary_GainBlock;
 import java.util.ArrayList;
 
 import static extendedui.ui.AbstractScreen.createHexagonalButton;
-import static pinacolada.ui.cardEditor.PCLCustomCardEffectEditor.invalidateCards;
-import static pinacolada.ui.cardEditor.PCLCustomCardEffectPage.MENU_HEIGHT;
-import static pinacolada.ui.cardEditor.PCLCustomCardEffectPage.MENU_WIDTH;
+import static pinacolada.ui.cardEditor.PCLCustomEffectEditor.invalidateCards;
+import static pinacolada.ui.cardEditor.PCLCustomEffectPage.MENU_HEIGHT;
+import static pinacolada.ui.cardEditor.PCLCustomEffectPage.MENU_WIDTH;
 
 public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object> {
     public static final int EFFECT_COUNT = 2;
@@ -53,9 +53,9 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object> {
     protected ArrayList<PSkill<?>> currentEffects = new ArrayList<>();
     protected ArrayList<PTrigger> currentPowers = new ArrayList<>();
     protected ArrayList<EUIButton> pageButtons = new ArrayList<>();
-    protected ArrayList<PCLCustomCardEffectPage> effectPages = new ArrayList<>();
-    protected ArrayList<PCLCustomCardPowerPage> powerPages = new ArrayList<>();
-    protected ArrayList<PCLCustomCardGenericPage> pages = new ArrayList<>();
+    protected ArrayList<PCLCustomEffectPage> effectPages = new ArrayList<>();
+    protected ArrayList<PCLCustomPowerEffectPage> powerPages = new ArrayList<>();
+    protected ArrayList<PCLCustomGenericPage> pages = new ArrayList<>();
     protected EUIButton cancelButton;
     protected EUIButton imageButton;
     protected EUIButton saveButton;
@@ -193,7 +193,7 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object> {
     }
 
     public void refreshPages() {
-        for (PCLCustomCardGenericPage b : pages) {
+        for (PCLCustomGenericPage b : pages) {
             b.refresh();
         }
     }
@@ -309,17 +309,17 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object> {
             pages.add(new PCLCustomCardPrimaryInfoPage(this));
         }
         pages.add(new PCLCustomCardAttributesPage(this));
-        pages.add(new PCLCustomCardAttackPage(this, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), 0, PGR.core.strings.cedit_damage, be -> {
+        pages.add(new PCLCustomAttackEffectPage(this, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), 0, PGR.core.strings.cedit_damage, be -> {
             currentDamage = EUIUtils.safeCast(be, PCardPrimary_DealDamage.class);
             modifyBuilder(e -> e.setAttackSkill(currentDamage));
         }));
-        pages.add(new PCLCustomCardBlockPage(this, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), 0, PGR.core.strings.cedit_block, be -> {
+        pages.add(new PCLCustomBlockEffectPage(this, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), 0, PGR.core.strings.cedit_block, be -> {
             currentBlock = EUIUtils.safeCast(be, PCardPrimary_GainBlock.class);
             modifyBuilder(e -> e.setBlockSkill(currentBlock));
         }));
         for (int i = 0; i < currentEffects.size(); i++) {
             int finalI = i;
-            PCLCustomCardEffectPage page = new PCLCustomCardEffectPage(this, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), i
+            PCLCustomEffectPage page = new PCLCustomEffectPage(this, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), i
                     , EUIUtils.format(PGR.core.strings.cedit_effectX, i + 1), (be) -> {
                 currentEffects.set(finalI, be);
                 modifyBuilder(e -> e.setPSkill(currentEffects, true, true));
@@ -330,7 +330,7 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object> {
         }
         for (int i = 0; i < currentPowers.size(); i++) {
             int finalI = i;
-            PCLCustomCardPowerPage page = new PCLCustomCardPowerPage(this, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), i
+            PCLCustomPowerEffectPage page = new PCLCustomPowerEffectPage(this, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), i
                     , EUIUtils.format(PGR.core.strings.cedit_powerX, i + 1), (be) -> {
                 if (be instanceof PTrigger) {
                     currentPowers.set(finalI, (PTrigger) be);
@@ -346,7 +346,7 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object> {
         }
 
         for (int i = 0; i < pages.size(); i++) {
-            PCLCustomCardGenericPage pg = pages.get(i);
+            PCLCustomGenericPage pg = pages.get(i);
             String title = pg.getTitle();
             pageButtons.add(new EUIButton(pg.getTextureCache().texture(), new EUIHitbox(0, 0, BUTTON_HEIGHT, BUTTON_HEIGHT))
                     .setPosition(Settings.WIDTH * (0.45f) + ((i - 1f) * BUTTON_HEIGHT), (BUTTON_HEIGHT * 0.85f))

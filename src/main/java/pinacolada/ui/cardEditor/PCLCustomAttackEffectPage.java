@@ -27,20 +27,20 @@ import pinacolada.skills.skills.special.primary.PCardPrimary_DealDamage;
 import java.util.Arrays;
 import java.util.List;
 
-public class PCLCustomCardAttackPage extends PCLCustomCardEffectPage {
+public class PCLCustomAttackEffectPage extends PCLCustomEffectPage {
     protected PCLCustomCardUpgradableEditor damageEditor;
     protected PCLCustomCardUpgradableEditor hitCountEditor;
     protected EUIDropdown<PCLAttackType> attackTypeDropdown;
     protected EUIDropdown<AbstractGameAction.AttackEffect> attackEffectDropdown;
     protected EUIToggle enableToggle;
 
-    public PCLCustomCardAttackPage(PCLCustomCardEditCardScreen screen, EUIHitbox hb, int index, String title, ActionT1<PSkill<?>> onUpdate) {
+    public PCLCustomAttackEffectPage(PCLCustomCardEditCardScreen screen, EUIHitbox hb, int index, String title, ActionT1<PSkill<?>> onUpdate) {
         super(screen, hb, index, title, onUpdate);
     }
 
     protected void setupComponents(PCLCustomCardEditCardScreen screen) {
         super.setupComponents(screen);
-        effectGroup.setListFunc(PCLCustomCardAttackPage::getAvailableMoves);
+        effectGroup.setListFunc(PCLCustomAttackEffectPage::getAvailableMoves);
         primaryConditions.setItems(new PCardPrimary_DealDamage()).setActive(false);
         delayEditor.setActive(false);
 

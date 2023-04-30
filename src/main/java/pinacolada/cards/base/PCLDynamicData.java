@@ -78,6 +78,11 @@ public class PCLDynamicData extends PCLCardData implements EditorMaker {
         setText(name, text, text);
     }
 
+    @Override
+    public AbstractCard.CardColor getCardColor() {
+        return cardColor;
+    }
+
     public PCLDynamicData setImage(ColoredTexture portraitImage, ColoredTexture portraitForeground) {
         this.portraitImage = portraitImage;
         this.portraitForeground = portraitForeground;

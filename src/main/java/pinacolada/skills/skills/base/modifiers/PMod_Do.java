@@ -21,7 +21,7 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.skills.PActiveMod;
-import pinacolada.ui.cardEditor.PCLCustomCardEffectEditor;
+import pinacolada.ui.cardEditor.PCLCustomEffectEditor;
 import pinacolada.utilities.ListSelection;
 
 import java.util.ArrayList;
@@ -66,7 +66,7 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory> {
     }
 
     @Override
-    public void setupEditor(PCLCustomCardEffectEditor<?> editor) {
+    public void setupEditor(PCLCustomEffectEditor<?> editor) {
         super.setupEditor(editor);
         fields.registerRequired(editor);
     }
