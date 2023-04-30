@@ -2,7 +2,6 @@ package pinacolada.relics;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import extendedui.EUIInputManager;
 import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUITooltip;
@@ -19,20 +18,12 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
     public Skills skills;
     public PCLClickableUse triggerCondition;
 
-    public PCLPointerRelic(String id, RelicTier tier, LandingSound sfx) {
-        super(id, tier, sfx);
+    public PCLPointerRelic(PCLRelicData data) {
+        super(data);
     }
 
-    public PCLPointerRelic(String id, RelicTier tier, LandingSound sfx, AbstractPlayer.PlayerClass pc) {
-        super(id, tier, sfx, pc);
-    }
-
-    public PCLPointerRelic(String id, Texture texture, RelicTier tier, LandingSound sfx) {
-        super(id, texture, tier, sfx);
-    }
-
-    public PCLPointerRelic(String id, Texture texture, RelicTier tier, LandingSound sfx, AbstractPlayer.PlayerClass pc) {
-        super(id, texture, tier, sfx, pc);
+    public PCLPointerRelic(PCLRelicData data, Texture texture, RelicTier tier, LandingSound sfx) {
+        super(data, texture, tier, sfx);
     }
 
     @Override
@@ -100,8 +91,6 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
         }
     }
 
-
-
     public float atBlockModify(float block, AbstractCard c) {
         return atBlockModify(CombatManager.playerSystem.generateInfo(c, player, player), block, c);
     }
@@ -113,8 +102,6 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
         }
         return block;
     }
-
-
 
     public float atDamageModify(PCLUseInfo info, float damage, AbstractCard c) {
         refresh(info);

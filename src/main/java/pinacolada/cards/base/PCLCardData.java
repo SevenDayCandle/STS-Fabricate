@@ -54,7 +54,6 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
     public HashMap<PCLCardTag, PCLCardTagInfo> tags = new HashMap<>();
     public CardStrings strings;
     public String imagePath;
-    public String ID;
     public DelayTiming timing = DelayTiming.StartOfTurnLast;
     public DelayTiming[] upgradeTiming;
     public PCLCardTarget cardTarget = PCLCardTarget.None;

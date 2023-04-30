@@ -18,7 +18,10 @@ import extendedui.EUIUtils;
 import extendedui.ui.cardFilter.CountingPanel;
 import extendedui.ui.controls.EUIImage;
 import extendedui.ui.hitboxes.EUIHitbox;
-import pinacolada.annotations.*;
+import pinacolada.annotations.VisibleCard;
+import pinacolada.annotations.VisiblePotion;
+import pinacolada.annotations.VisiblePower;
+import pinacolada.annotations.VisibleRelic;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.commands.*;
@@ -220,6 +223,7 @@ public class PGR {
                 BaseMod.addCard(card);
             }
             catch (Exception e) {
+                e.printStackTrace();
                 EUIUtils.logError(PGR.class, "Failed to load potion " + ct.getName() + ": " + e.getLocalizedMessage());
             }
         }
@@ -233,6 +237,7 @@ public class PGR {
                 BaseMod.addPotion(potion.getClass(), potion.liquidColor, potion.hybridColor, potion.spotsColor, potion.ID);
             }
             catch (Exception e) {
+                e.printStackTrace();
                 EUIUtils.logError(PGR.class, "Failed to load potion " + ct.getName() + ": " + e.getLocalizedMessage());
             }
         }
@@ -241,7 +246,7 @@ public class PGR {
     public static void loadCustomPowers() {
         for (Class<?> ct : GameUtilities.getClassesWithAnnotation(VisiblePower.class)) {
             try {
-                VisibleBlight a = ct.getAnnotation(VisibleBlight.class);
+                VisiblePower a = ct.getAnnotation(VisiblePower.class);
                 String field = a.id();
                 if (field != null) {
                     String id = ReflectionHacks.getPrivateStatic(ct, field);
@@ -252,6 +257,7 @@ public class PGR {
                 }
             }
             catch (Exception e) {
+                e.printStackTrace();
                 EUIUtils.logError(PSkill.class, "Failed to load power " + ct.getName() + ": " + e.getLocalizedMessage());
             }
         }
@@ -265,6 +271,7 @@ public class PGR {
                 BaseMod.addRelic(relic, RelicType.SHARED);
             }
             catch (Exception e) {
+                e.printStackTrace();
                 EUIUtils.logError(PGR.class, "Failed to load relic " + ct.getName() + ": " + e.getLocalizedMessage());
             }
         }

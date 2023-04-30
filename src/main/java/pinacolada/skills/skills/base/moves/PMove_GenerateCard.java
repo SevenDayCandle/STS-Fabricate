@@ -146,7 +146,7 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
 
     protected Iterable<AbstractCard> getSourceCards(int limit)
     {
-        if (!fields.colors.isEmpty()
+        if (EUIUtils.any(fields.colors, f -> f != AbstractCard.CardColor.COLORLESS && f != GameUtilities.getActingColor())
                 || EUIUtils.any(fields.types, f -> f == AbstractCard.CardType.STATUS)
                 || EUIUtils.any(fields.rarities, f -> f != AbstractCard.CardRarity.COMMON && f != AbstractCard.CardRarity.UNCOMMON && f != AbstractCard.CardRarity.RARE && f != AbstractCard.CardRarity.CURSE))
         {

@@ -7,15 +7,14 @@ import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.colorless.Madness;
-import com.megacrit.cardcrawl.cards.curses.AscendersBane;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.random.Random;
+import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
 import pinacolada.cards.base.*;
 import pinacolada.cards.pcl.special.QuestionMark;
-import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.RandomizedList;
@@ -118,11 +117,16 @@ public class CardLibraryPatches {
         @SpirePrefixPatch
         public static SpireReturn<AbstractCard> prefix(String key) {
             if (PGR.isLoaded()) {
-                AbstractCard res = getReplacement(key);
-                if (res != null) {
-                    return SpireReturn.Return(res);
+                // Only make replacements in game
+                if (EUIGameUtils.inGame())
+                {
+                    AbstractCard res = getReplacement(key);
+                    if (res != null) {
+                        return SpireReturn.Return(res);
+                    }
                 }
 
+                // Allow getCard to get custom cards too
                 PCLCustomCardSlot slot = PCLCustomCardSlot.get(key);
                 if (slot != null) {
                     return SpireReturn.Return(slot.makeFirstCard(true));
@@ -147,25 +151,6 @@ public class CardLibraryPatches {
                 return __result;
             }
             return __result;
-        }
-
-        @SpirePrefixPatch
-        public static SpireReturn<AbstractCard> prefix(String key, int upgradeTime, int misc) {
-            if (key.equals(AscendersBane.ID)) {
-                AbstractPlayer.PlayerClass pClass = GameUtilities.getPlayerClass();
-                if (GameUtilities.isPCLPlayerClass(pClass)) {
-                    PCLResources<?, ?, ?, ?> resources = PGR.getResources(pClass);
-                    PCLCardData bane = resources.getAscendersBane();
-                    if (bane != null) {
-                        return SpireReturn.Return(bane.makeCopyFromLibrary(0));
-                    }
-                }
-            }
-            AbstractCard res = getReplacement(key, upgradeTime);
-            if (res != null) {
-                return SpireReturn.Return(res);
-            }
-            return SpireReturn.Continue();
         }
     }
 

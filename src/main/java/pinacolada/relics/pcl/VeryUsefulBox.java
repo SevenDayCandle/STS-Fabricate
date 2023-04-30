@@ -4,15 +4,16 @@ import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleRelic;
 import pinacolada.relics.PCLRelic;
+import pinacolada.relics.PCLRelicData;
 
 import java.util.ArrayList;
 
 @VisibleRelic
 public class VeryUsefulBox extends PCLRelic {
-    public static final String ID = createFullID(VeryUsefulBox.class);
+    public static final PCLRelicData DATA = register(VeryUsefulBox.class).setTier(RelicTier.SPECIAL, LandingSound.SOLID);
 
     public VeryUsefulBox() {
-        super(ID, RelicTier.SPECIAL, LandingSound.SOLID);
+        super(DATA);
     }
 
     @Override

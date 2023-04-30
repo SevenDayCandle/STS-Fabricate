@@ -19,11 +19,12 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
+import pinacolada.skills.fields.PField_CardTransform;
 import pinacolada.utilities.ListSelection;
 
 @VisibleSkill
-public class PMove_Transform extends PMove_Select<PField_CardCategory> {
-    public static final PSkillData<PField_CardCategory> DATA = register(PMove_Transform.class, PField_CardCategory.class)
+public class PMove_Transform extends PMove_Select<PField_CardTransform> {
+    public static final PSkillData<PField_CardTransform> DATA = register(PMove_Transform.class, PField_CardTransform.class)
             .selfTarget();
 
     public PMove_Transform() {
@@ -38,9 +39,14 @@ public class PMove_Transform extends PMove_Select<PField_CardCategory> {
         super(DATA, content);
     }
 
-    public PMove_Transform(String... cards) {
+    public PMove_Transform(String cards) {
         super(DATA, 1);
-        fields.setCardIDs(cards);
+        fields.setResult(cards);
+    }
+
+    public PMove_Transform(String cards, int amount, PCLCardGroupHelper... groupHelpers) {
+        this(amount, groupHelpers);
+        fields.setResult(cards);
     }
 
     @Override
@@ -56,7 +62,7 @@ public class PMove_Transform extends PMove_Select<PField_CardCategory> {
     @Override
     public String getSubText() {
         return TEXT.act_transform(
-                useParent ? getInheritedString() : fields.groupTypes.size() > 0 ? EUIRM.strings.numNounPlace(getAmountRawString(), fields.getFullCardString(), TEXT.subjects_from(fields.getGroupString())) : TEXT.subjects_thisCard, fields.getFullCardStringSingular()
+                useParent ? getInheritedString() : fields.groupTypes.size() > 0 ? EUIRM.strings.numNounPlace(getAmountRawString(), fields.getFullCardString(), TEXT.subjects_from(fields.getGroupString())) : TEXT.subjects_thisCard, fields.getCardIDString()
         );
     }
 
@@ -90,7 +96,7 @@ public class PMove_Transform extends PMove_Select<PField_CardCategory> {
     }
 
     private void transformImpl(AbstractCard c) {
-        AbstractCard c2 = PField_CardCategory.getCard(fields.cardIDs.isEmpty() ? null : fields.cardIDs.get(0));
+        AbstractCard c2 = PField_CardCategory.getCard(fields.result);
         if (c2 != null) {
             PCLActions.last.replaceCard(c.uuid, c2);
             PCLEffects.Queue.showCardBriefly(c2.makeStatEquivalentCopy());

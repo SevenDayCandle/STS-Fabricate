@@ -2,6 +2,7 @@ package pinacolada.relics;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.localization.RelicStrings;
+import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.interfaces.delegates.FuncT1;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.annotations.VisibleRelic;
@@ -20,6 +21,9 @@ public class PCLRelicData extends PCLGenericData<PCLRelic> {
 
     public AbstractCard.CardColor cardColor = AbstractCard.CardColor.COLORLESS;
     public RelicStrings strings;
+    public String imagePath;
+    public AbstractRelic.RelicTier tier = AbstractRelic.RelicTier.DEPRECATED;
+    public AbstractRelic.LandingSound sfx = AbstractRelic.LandingSound.CLINK;
 
     protected static <T extends PCLRelicData> T registerData(T cardData) {
         STATIC_DATA.put(cardData.ID, cardData);
@@ -62,5 +66,31 @@ public class PCLRelicData extends PCLGenericData<PCLRelic> {
         super(cardID, invokeClass, resources);
         this.cardColor = resources.cardColor;
         this.strings = strings != null ? strings : new RelicStrings();
+        this.imagePath = PGR.getRelicImage(ID);
+    }
+
+    public PCLRelicData setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+
+        return this;
+    }
+
+    public PCLRelicData setSfx(AbstractRelic.LandingSound sfx)
+    {
+        this.sfx = sfx;
+        return this;
+    }
+
+    public PCLRelicData setTier(AbstractRelic.RelicTier tier)
+    {
+        this.tier = tier;
+        return this;
+    }
+
+    public PCLRelicData setTier(AbstractRelic.RelicTier tier, AbstractRelic.LandingSound sfx)
+    {
+        this.tier = tier;
+        this.sfx = sfx;
+        return this;
     }
 }

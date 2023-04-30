@@ -109,8 +109,12 @@ public abstract class PField implements Serializable {
         return "";
     }
 
+    public static String getCardIDString(String cardID) {
+        return "{" + getCardNameForID(cardID) + "}";
+    }
+
     public static String getCardIDOrString(ArrayList<String> cardIDs) {
-        return PCLCoreStrings.joinWithOr(EUIUtils.map(cardIDs, g -> "{" + getCardNameForID(g) + "}"));
+        return PCLCoreStrings.joinWithOr(EUIUtils.map(cardIDs, PField::getCardIDString));
     }
 
     public static String getGeneralAffinityAndString(ArrayList<PCLAffinity> affinities) {

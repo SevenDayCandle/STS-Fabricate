@@ -1,6 +1,6 @@
 package pinacolada.cards.base;
 
-import com.megacrit.cardcrawl.unlock.UnlockTracker;
+import extendedui.EUIUtils;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.resources.PCLResources;
 
@@ -10,13 +10,20 @@ import java.util.stream.Collectors;
 
 public class TemplateCardData extends PCLCardData {
     private static final HashMap<String, TemplateCardData> TEMPLATES = new HashMap<>();
-    public final String originalID;
+    public String originalID;
 
     public TemplateCardData(Class<? extends PCLCard> type, PCLResources<?, ?, ?, ?> resources, String sourceID) {
         super(type, resources);
         this.originalID = sourceID;
         TEMPLATES.put(sourceID, this);
-        UnlockTracker.markCardAsSeen(ID);
+        if (TEMPLATES.isEmpty())
+        {
+            EUIUtils.logInfo(this, "Templates was empty", TEMPLATES.size());
+        }
+        else
+        {
+            EUIUtils.logInfo(this, "Templates was not empty", TEMPLATES.size());
+        }
     }
 
     public static Collection<TemplateCardData> getTemplates()

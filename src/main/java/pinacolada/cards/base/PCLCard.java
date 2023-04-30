@@ -143,6 +143,75 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     protected ColoredTexture portraitForeground;
     protected ColoredTexture portraitImg;
 
+    @SafeVarargs
+    public static <T> T[] array(T... items) {
+        return EUIUtils.array(items);
+    }
+
+    public static PCLCard cast(AbstractCard card) {
+        return EUIUtils.safeCast(card, PCLCard.class);
+    }
+
+    protected static int[] nums(int damage, int block) {
+        return nums(damage, block, 0, 0);
+    }
+
+    protected static int[] nums(int damage, int block, int magicNumber, int secondaryValue) {
+        return nums(damage, block, magicNumber, secondaryValue, 1);
+    }
+
+    protected static int[] nums(int damage, int block, int magicNumber, int secondaryValue, int hitCount) {
+        return nums(damage, block, magicNumber, secondaryValue, hitCount, 1);
+    }
+
+    protected static int[] nums(int damage, int block, int magicNumber, int secondaryValue, int hitCount, int rightCount) {
+        return new int[]{damage, block, magicNumber, secondaryValue, hitCount, rightCount};
+    }
+
+    protected static int[] nums(int damage, int block, int magicNumber) {
+        return nums(damage, block, magicNumber, 0);
+    }
+
+    protected static PCLCardData register(Class<? extends PCLCard> type) {
+        return register(type, PGR.core);
+    }
+
+    protected static PCLCardData register(Class<? extends PCLCard> type, PCLResources<?, ?, ?, ?> resources) {
+        return registerCardData(new PCLCardData(type, resources));
+    }
+
+    protected static <T extends PCLCardData> T registerCardData(T cardData) {
+        return PCLCardData.reigsterData(cardData);
+    }
+
+    protected static TemplateCardData registerTemplate(Class<? extends PCLCard> type, String sourceID) {
+        return registerTemplate(type, PGR.core, sourceID);
+    }
+
+    protected static TemplateCardData registerTemplate(Class<? extends PCLCard> type, PCLResources<?, ?, ?, ?> resources, String sourceID) {
+        return PCLCardData.reigsterData(new TemplateCardData(type, resources, sourceID));
+    }
+
+    protected static int[] ups(int damage, int block) {
+        return ups(damage, block, 0, 0);
+    }
+
+    protected static int[] ups(int damage, int block, int magicNumber, int secondaryValue) {
+        return ups(damage, block, magicNumber, secondaryValue, 0);
+    }
+
+    protected static int[] ups(int damage, int block, int magicNumber, int secondaryValue, int hitCount) {
+        return ups(damage, block, magicNumber, secondaryValue, hitCount, 0);
+    }
+
+    protected static int[] ups(int damage, int block, int magicNumber, int secondaryValue, int hitCount, int rightCount) {
+        return new int[]{damage, block, magicNumber, secondaryValue, hitCount, rightCount};
+    }
+
+    protected static int[] ups(int damage, int block, int magicNumber) {
+        return ups(damage, block, magicNumber, 0);
+    }
+
     protected PCLCard(PCLCardData cardData) {
         this(cardData, cardData.ID, cardData.imagePath, cardData.getCost(0), cardData.cardType, cardData.cardColor, cardData.cardRarity, cardData.cardTarget.cardTarget, 0, 0, null);
     }
@@ -734,75 +803,6 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
 
     protected PCLCard(PCLCardData cardData, String id, String imagePath, int cost, CardType type, CardColor color, CardRarity rarity, CardTarget target) {
         this(cardData, id, imagePath, cost, type, color, rarity, target, 0, 0, null);
-    }
-
-    @SafeVarargs
-    public static <T> T[] array(T... items) {
-        return EUIUtils.array(items);
-    }
-
-    public static PCLCard cast(AbstractCard card) {
-        return EUIUtils.safeCast(card, PCLCard.class);
-    }
-
-    protected static int[] nums(int damage, int block) {
-        return nums(damage, block, 0, 0);
-    }
-
-    protected static int[] nums(int damage, int block, int magicNumber, int secondaryValue) {
-        return nums(damage, block, magicNumber, secondaryValue, 1);
-    }
-
-    protected static int[] nums(int damage, int block, int magicNumber, int secondaryValue, int hitCount) {
-        return nums(damage, block, magicNumber, secondaryValue, hitCount, 1);
-    }
-
-    protected static int[] nums(int damage, int block, int magicNumber, int secondaryValue, int hitCount, int rightCount) {
-        return new int[]{damage, block, magicNumber, secondaryValue, hitCount, rightCount};
-    }
-
-    protected static int[] nums(int damage, int block, int magicNumber) {
-        return nums(damage, block, magicNumber, 0);
-    }
-
-    protected static PCLCardData register(Class<? extends PCLCard> type) {
-        return register(type, PGR.core);
-    }
-
-    protected static PCLCardData register(Class<? extends PCLCard> type, PCLResources<?, ?, ?, ?> resources) {
-        return registerCardData(new PCLCardData(type, resources));
-    }
-
-    protected static <T extends PCLCardData> T registerCardData(T cardData) {
-        return PCLCardData.reigsterData(cardData);
-    }
-
-    protected static TemplateCardData registerTemplate(Class<? extends PCLCard> type, String sourceID) {
-        return registerTemplate(type, PGR.core, sourceID);
-    }
-
-    protected static TemplateCardData registerTemplate(Class<? extends PCLCard> type, PCLResources<?, ?, ?, ?> resources, String sourceID) {
-        return PCLCardData.reigsterData(new TemplateCardData(type, resources, sourceID));
-    }
-
-    protected static int[] ups(int damage, int block) {
-        return ups(damage, block, 0, 0);
-    }
-
-    protected static int[] ups(int damage, int block, int magicNumber, int secondaryValue) {
-        return ups(damage, block, magicNumber, secondaryValue, 0);
-    }
-
-    protected static int[] ups(int damage, int block, int magicNumber, int secondaryValue, int hitCount) {
-        return ups(damage, block, magicNumber, secondaryValue, hitCount, 0);
-    }
-
-    protected static int[] ups(int damage, int block, int magicNumber, int secondaryValue, int hitCount, int rightCount) {
-        return new int[]{damage, block, magicNumber, secondaryValue, hitCount, rightCount};
-    }
-
-    protected static int[] ups(int damage, int block, int magicNumber) {
-        return ups(damage, block, magicNumber, 0);
     }
 
     public void addAttackDisplay(AbstractPower p, float oldDamage, float tempDamage) {

@@ -28,7 +28,7 @@ import java.util.ArrayList;
 
 import static pinacolada.ui.cardEditor.PCLCustomCardEditCardScreen.START_Y;
 
-public class PCLCustomCardEffectPage extends PCLCustomCardEditorPage {
+public class PCLCustomCardEffectPage extends PCLCustomCardGenericPage {
     public static final float MENU_WIDTH = scale(200);
     public static final float MENU_HEIGHT = scale(40);
     public static final float OFFSET_EFFECT = -MENU_HEIGHT * 1.25f;

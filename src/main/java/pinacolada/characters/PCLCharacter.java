@@ -30,9 +30,7 @@ import extendedui.EUIRenderHelpers;
 import extendedui.EUIUtils;
 import extendedui.ui.TextureCache;
 import org.apache.commons.lang3.StringUtils;
-import pinacolada.effects.PCLEffects;
 import pinacolada.effects.PCLSFX;
-import pinacolada.effects.vfx.SmokeEffect;
 import pinacolada.patches.library.RelicLibraryPatches;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PGR;
@@ -241,12 +239,6 @@ public abstract class PCLCharacter extends CustomPlayer {
     @Override
     public String getVampireText() {
         return com.megacrit.cardcrawl.events.city.Vampires.DESCRIPTIONS[5];
-    }
-
-    @Override
-    public void playDeathAnimation() {
-        PCLEffects.Manual.add(new SmokeEffect(hb.cX, hb.cY, getCardRenderColor()));
-        super.playDeathAnimation();
     }
 
     @Override

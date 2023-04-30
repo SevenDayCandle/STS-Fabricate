@@ -10,6 +10,7 @@ import extendedui.utilities.ColoredTexture;
 import pinacolada.cards.base.fields.*;
 import pinacolada.cards.base.tags.CardTagItem;
 import pinacolada.cards.pcl.special.QuestionMark;
+import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
@@ -25,7 +26,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class PCLDynamicData extends PCLCardData {
+public class PCLDynamicData extends PCLCardData implements EditorMaker {
     private static final TypeToken<HashMap<Settings.GameLanguage, CardStrings>> TStrings = new TypeToken<HashMap<Settings.GameLanguage, CardStrings>>() {
     };
     public final HashMap<Settings.GameLanguage, CardStrings> languageMap = new HashMap<>();

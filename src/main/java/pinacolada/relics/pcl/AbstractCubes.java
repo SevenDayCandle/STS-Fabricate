@@ -9,18 +9,18 @@ import com.megacrit.cardcrawl.rooms.MonsterRoom;
 import extendedui.EUIUtils;
 import pinacolada.interfaces.providers.CardRewardActionProvider;
 import pinacolada.relics.PCLRelic;
+import pinacolada.relics.PCLRelicData;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
 public abstract class AbstractCubes extends PCLRelic implements CardRewardActionProvider {
-    public static final String ID = createFullID(AbstractCubes.class);
     public final int normalUses;
     public final int maxUses;
 
-    public AbstractCubes(String id, RelicTier tier, LandingSound sfx, int normalUses, int maxUses) {
-        super(id, tier, sfx);
+    public AbstractCubes(PCLRelicData data, int normalUses, int maxUses) {
+        super(data);
         this.normalUses = normalUses;
         this.maxUses = maxUses;
         this.updateDescription(null);

@@ -6,16 +6,18 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import pinacolada.annotations.VisibleRelic;
 import pinacolada.powers.special.MacroscopePower;
 import pinacolada.relics.PCLRelic;
+import pinacolada.relics.PCLRelicData;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
 @VisibleRelic
 public class Macroscope extends PCLRelic {
-    public static final String ID = createFullID(Macroscope.class);
+    public static final PCLRelicData DATA = register(Macroscope.class)
+            .setTier(RelicTier.SPECIAL);
     public static final int MULTIPLIER = 10;
 
     public Macroscope() {
-        super(ID, RelicTier.SPECIAL, LandingSound.CLINK);
+        super(DATA);
     }
 
     @Override

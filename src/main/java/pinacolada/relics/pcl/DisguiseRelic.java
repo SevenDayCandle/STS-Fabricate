@@ -5,12 +5,13 @@ import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.characters.CreatureAnimationInfo;
 import pinacolada.relics.PCLRelic;
+import pinacolada.relics.PCLRelicData;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
 public abstract class DisguiseRelic extends PCLRelic {
-    public DisguiseRelic(String id, RelicTier tier, LandingSound sfx) {
-        super(id, tier, sfx);
+    public DisguiseRelic(PCLRelicData data) {
+        super(data);
     }
 
     @Override

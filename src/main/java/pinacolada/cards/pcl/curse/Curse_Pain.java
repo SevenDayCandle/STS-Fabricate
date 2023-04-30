@@ -7,9 +7,7 @@ import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
-import pinacolada.powers.PCLPowerHelper;
 import pinacolada.skills.PCond;
-import pinacolada.skills.PMove;
 import pinacolada.skills.skills.base.moves.PMove_LoseHP;
 
 @VisibleCard
@@ -28,6 +26,5 @@ public class Curse_Pain extends PCLCard {
     @Override
     public void setup(Object input) {
         addUseMove(PCond.onOtherCardPlayed(), new PMove_LoseHP(1));
-        addUseMove(PCond.onExhaust(), PMove.gainTemporary(1, PCLPowerHelper.Strength));
     }
 }

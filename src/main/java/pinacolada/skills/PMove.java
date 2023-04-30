@@ -585,6 +585,10 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
         return new PMove_DealDamage(amount, attackEffect, PCLCardTarget.Self);
     }
 
+    public static PMove_Transform transform(PCLCardData cardData, int amount, PCLCardGroupHelper... groups) {
+        return new PMove_Transform(cardData.ID, amount, groups);
+    }
+
     public static PMove_TriggerAlly triggerAlly(int amount) {
         return new PMove_TriggerAlly(amount);
     }

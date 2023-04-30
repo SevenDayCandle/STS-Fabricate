@@ -25,16 +25,15 @@ import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class PCLRelic extends CustomRelic implements TooltipProvider {
     public static AbstractPlayer player;
     public static Random rng;
+    public final PCLRelicData relicData;
     public ArrayList<EUITooltip> tips;
     public EUITooltip mainTooltip;
-    public AbstractPlayer.PlayerClass playerClass;
 
     protected static PCLRelicData register(Class<? extends PCLRelic> type) {
         return register(type, PGR.core);
@@ -48,31 +47,15 @@ public abstract class PCLRelic extends CustomRelic implements TooltipProvider {
         return PCLRelicData.registerData(cardData);
     }
 
-    public PCLRelic(String id, RelicTier tier, LandingSound sfx) {
-        this(id, EUIRM.getTexture(PGR.getRelicImage(id)), tier, sfx);
+    public PCLRelic(PCLRelicData data) {
+        this(data, EUIRM.getTexture(data.imagePath), data.tier, data.sfx);
     }
 
-    public PCLRelic(String id, Texture texture, RelicTier tier, LandingSound sfx) {
-        this(id, texture, tier, sfx, null);
-    }
-
-    public PCLRelic(String id, Texture texture, RelicTier tier, LandingSound sfx, AbstractPlayer.PlayerClass playerClass) {
-        super(id, texture, tier, sfx);
-        this.playerClass = playerClass;
-    }
-
-    public PCLRelic(String id, RelicTier tier, LandingSound sfx, AbstractPlayer.PlayerClass playerClass) {
-        this(id, EUIRM.getTexture(PGR.getRelicImage(id)), tier, sfx, playerClass);
-    }
-
-    public PCLRelic(String id, Texture texture, Texture outline, RelicTier tier, LandingSound sfx, AbstractPlayer.PlayerClass playerClass) {
-        super(id, texture, outline, tier, sfx);
-        this.playerClass = playerClass;
-    }
-
-    public PCLRelic(String id, String imgName, RelicTier tier, LandingSound sfx, AbstractPlayer.PlayerClass playerClass) {
-        super(id, imgName, tier, sfx);
-        this.playerClass = playerClass;
+    // TODO outlines
+    public PCLRelic(PCLRelicData data, Texture texture, RelicTier tier, LandingSound sfx) {
+        super(data.ID, texture, tier, sfx);
+        this.relicData = data;
+        initializePCLTips();
     }
 
     public static String createFullID(Class<? extends PCLRelic> type) {
@@ -146,10 +129,10 @@ public abstract class PCLRelic extends CustomRelic implements TooltipProvider {
     @Override
     public AbstractRelic makeCopy() {
         try {
-            return getClass().getConstructor().newInstance();
+            return relicData.create();
         }
-        catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-            EUIUtils.logError(this, e.getMessage());
+        catch (Exception e)
+        {
             return null;
         }
     }
@@ -250,6 +233,12 @@ public abstract class PCLRelic extends CustomRelic implements TooltipProvider {
 
     @Override
     protected void initializeTips() {
+        // No-op, use initializePCLTips() instead
+    }
+
+    // Initialize later to ensure relicData is set
+    public void initializePCLTips()
+    {
         if (tips == null) {
             tips = new ArrayList<>();
         }
@@ -257,13 +246,13 @@ public abstract class PCLRelic extends CustomRelic implements TooltipProvider {
             tips.clear();
         }
 
-        mainTooltip = playerClass != null ? new EUITooltip(name, this.playerClass, description) : new EUITooltip(name, description);
+        AbstractPlayer.PlayerClass playerClass = EUIGameUtils.getPlayerClassForCardColor(relicData.cardColor);
+        mainTooltip = playerClass != null ? new EUITooltip(name, playerClass, description) : new EUITooltip(name, description);
         tips.add(mainTooltip);
         EUIGameUtils.scanForTips(description, tips);
     }
 
-    // TODO move check to custom relic class
     public boolean canSpawn() {
-        return GameUtilities.isPCLPlayerClass() || (PGR.config.enableCustomRelics.get());
+        return relicData.cardColor.equals(GameUtilities.getActingColor());
     }
 }

@@ -7,13 +7,14 @@ import pinacolada.dungeon.CombatManager;
 import pinacolada.interfaces.subscribers.OnAllySummonSubscriber;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.relics.PCLRelic;
+import pinacolada.relics.PCLRelicData;
 
 @VisibleRelic
 public class UsefulBox extends PCLRelic implements OnAllySummonSubscriber {
-    public static final String ID = createFullID(UsefulBox.class);
+    public static final PCLRelicData DATA = register(UsefulBox.class).setTier(RelicTier.SPECIAL, LandingSound.SOLID);
 
     public UsefulBox() {
-        super(ID, RelicTier.SPECIAL, LandingSound.SOLID);
+        super(DATA);
     }
 
     @Override

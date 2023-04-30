@@ -9,8 +9,8 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
+import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUI;
 import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
@@ -217,7 +217,8 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
     private ArrayList<AbstractCard> getAvailableCardsToCopy() {
         return EUIUtils.mapAsNonnull(TemplateCardData.getTemplates(),
                 data -> {
-                    AbstractCard card = CardLibrary.getCard(data.ID);
+                    PCLCard card = data.create();
+                    UnlockTracker.markCardAsSeen(data.ID);
                     card.isSeen = true;
                     card.isLocked = false;
                     return PCLCustomCardSlot.canFullyCopyCard(card) ? card : null;

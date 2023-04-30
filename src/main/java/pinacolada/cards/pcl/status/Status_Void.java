@@ -1,5 +1,6 @@
 package pinacolada.cards.pcl.status;
 
+import com.megacrit.cardcrawl.cards.status.VoidCard;
 import pinacolada.annotations.VisibleCard;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
@@ -12,7 +13,7 @@ import pinacolada.skills.skills.base.moves.PMove_GainEnergy;
 @VisibleCard
 public class Status_Void extends PCLCard {
     public static final String ATLAS_URL = "status/void";
-    public static final PCLCardData DATA = register(Status_Void.class)
+    public static final PCLCardData DATA = registerTemplate(Status_Void.class, VoidCard.ID)
             .setImagePathFromAtlasUrl(ATLAS_URL)
             .setStatus(-2, CardRarity.COMMON, PCLCardTarget.None)
             .setTags(PCLCardTag.Ethereal, PCLCardTag.Unplayable)

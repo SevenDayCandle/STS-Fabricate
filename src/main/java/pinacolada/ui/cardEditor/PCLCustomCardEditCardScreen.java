@@ -55,7 +55,7 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object> {
     protected ArrayList<EUIButton> pageButtons = new ArrayList<>();
     protected ArrayList<PCLCustomCardEffectPage> effectPages = new ArrayList<>();
     protected ArrayList<PCLCustomCardPowerPage> powerPages = new ArrayList<>();
-    protected ArrayList<PCLCustomCardEditorPage> pages = new ArrayList<>();
+    protected ArrayList<PCLCustomCardGenericPage> pages = new ArrayList<>();
     protected EUIButton cancelButton;
     protected EUIButton imageButton;
     protected EUIButton saveButton;
@@ -193,7 +193,7 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object> {
     }
 
     public void refreshPages() {
-        for (PCLCustomCardEditorPage b : pages) {
+        for (PCLCustomCardGenericPage b : pages) {
             b.refresh();
         }
     }
@@ -346,7 +346,7 @@ public class PCLCustomCardEditCardScreen extends PCLEffectWithCallback<Object> {
         }
 
         for (int i = 0; i < pages.size(); i++) {
-            PCLCustomCardEditorPage pg = pages.get(i);
+            PCLCustomCardGenericPage pg = pages.get(i);
             String title = pg.getTitle();
             pageButtons.add(new EUIButton(pg.getTextureCache().texture(), new EUIHitbox(0, 0, BUTTON_HEIGHT, BUTTON_HEIGHT))
                     .setPosition(Settings.WIDTH * (0.45f) + ((i - 1f) * BUTTON_HEIGHT), (BUTTON_HEIGHT * 0.85f))

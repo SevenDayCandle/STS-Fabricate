@@ -69,7 +69,7 @@
 		"NAME": "Constricted"
 	},
 	"Cooldown":	{
-		"DESCRIPTION": "Activates after a specified number of uses.",
+		"DESCRIPTION": "Executes after a certain number of uses.",
 		"NAME": "Cooldown"
 	},
 	"Counter":	{
@@ -460,7 +460,7 @@
 		"PRESENT": "stuns"
 	},
 	"Summon":	{
-		"DESCRIPTION": "#ySummon cards are placed onto the field and act every turn. If you would take unblocked damage, your right-most #ySummon takes half of that loss.",
+		"DESCRIPTION": "#ySummon cards act every turn and intercept unblocked damage.",
 		"NAME": "Summon",
 		"PAST": "Summoned",
 		"PLURAL": "Summons",

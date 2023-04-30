@@ -410,16 +410,16 @@ public abstract class PCLLoadout {
             }
         }
 
-        addStarterRelic(res, FoolishCubes.ID);
+        addStarterRelic(res, FoolishCubes.DATA.ID);
 
         // TODO don't hardcode this
         for (PCLRelicSlot rSlot : getPreset().relicSlots) {
             if (rSlot.selected != null && rSlot.selected.relic != null) {
                 String relicID = rSlot.selected.relic.relicId;
-                if (SpitefulCubes.ID.equals(relicID) || MagicEraser.ID.equals(relicID)) {
+                if (SpitefulCubes.DATA.ID.equals(relicID)) {
                     res.set(1, relicID);
                 }
-                else if (VeryUsefulBox.ID.equals(relicID)) {
+                else if (VeryUsefulBox.DATA.ID.equals(relicID)) {
                     res.set(2, relicID);
                 }
                 else {
