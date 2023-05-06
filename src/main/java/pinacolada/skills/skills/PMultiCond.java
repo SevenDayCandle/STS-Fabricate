@@ -5,7 +5,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
-import extendedui.interfaces.delegates.ActionT0;
+import extendedui.interfaces.delegates.ActionT1;
 import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.utilities.RotatingList;
 import org.apache.commons.lang3.StringUtils;
@@ -102,7 +102,9 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
     @Override
     public String getText(int index, boolean addPeriod) {
         return effects.size() > index ? effects.get(index).getText(index, addPeriod) : getText(addPeriod);
-    }    @Override
+    }
+
+    @Override
     public String getText(boolean addPeriod) {
         if (amount != 0) {
             return getCapitalSubText(addPeriod) + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : ": ") + childEffect.getText(0, true)) + " " +
@@ -208,7 +210,9 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         if (this.childEffect != null) {
             this.childEffect.subscribeChildren();
         }
-    }    @Override
+    }
+
+    @Override
     public PMultiCond setSource(PointerProvider card) {
         super.setSource(card);
         for (PSkill<?> effect : effects) {
@@ -224,7 +228,9 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         if (this.childEffect != null) {
             this.childEffect.unsubscribeChildren();
         }
-    }    @Override
+    }
+
+    @Override
     public void refresh(PCLUseInfo info, boolean conditionMet) {
         conditionMetCache = checkCondition(info, false, null);
         boolean refreshVal = conditionMetCache & conditionMet;
@@ -240,11 +246,13 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         for (PSkill<?> effect : effects) {
             effect.triggerOnAllyDeath(c, ally);
         }
-    }    @Override
+    }
+
+    @Override
     public void use(PCLUseInfo info) {
         if (amount != 0 && childEffect != null) {
             if (checkCondition(info, true, null)) {
-                useCond(this, info, 0, () -> childEffect.use(info, 0), () -> childEffect.use(info, 1));
+                useCond(this, info, 0, (i) -> childEffect.use(info, 0), (i) -> childEffect.use(info, 1));
             }
             else {
                 childEffect.use(info, 1);
@@ -252,7 +260,7 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         }
         else {
             if (checkCondition(info, true, null) && childEffect != null) {
-                useCond(this, info, 0, () -> childEffect.use(info), () -> {
+                useCond(this, info, 0, (i) -> childEffect.use(info), (i) -> {
                 });
             }
         }
@@ -262,10 +270,12 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         for (PSkill<?> effect : effects) {
             effect.triggerOnAllySummon(c, ally);
         }
-    }    @Override
+    }
+
+    @Override
     public void use(PCLUseInfo info, int index) {
         if (checkCondition(info, true, null) && childEffect != null) {
-            useCond(this, info, 0, () -> childEffect.use(info, index), () -> {
+            useCond(this, info, 0, (i) -> childEffect.use(info, index), (i) -> {
             });
         }
     }
@@ -274,11 +284,13 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         for (PSkill<?> effect : effects) {
             effect.triggerOnAllyTrigger(c, ally);
         }
-    }    @Override
+    }
+
+    @Override
     public void use(PCLUseInfo info, boolean isUsing) {
         if (amount != 0 && childEffect != null) {
             if (checkCondition(info, isUsing, null)) {
-                useCond(this, info, 0, () -> childEffect.use(info, 0), () -> childEffect.use(info, 1));
+                useCond(this, info, 0, (i) -> childEffect.use(info, 0), (i) -> childEffect.use(info, 1));
             }
             else {
                 childEffect.use(info, 1);
@@ -286,7 +298,7 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         }
         else {
             if (checkCondition(info, true, null) && childEffect != null) {
-                useCond(this, info, 0, () -> childEffect.use(info), () -> {
+                useCond(this, info, 0, (i) -> childEffect.use(info), (i) -> {
                 });
             }
         }
@@ -393,24 +405,24 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         return setEffects(Arrays.asList(effects));
     }
 
-    public void useCond(PSkill<?> source, PCLUseInfo info, int index, ActionT0 successCallback, ActionT0 failCallback) {
+    public void useCond(PSkill<?> source, PCLUseInfo info, int index, ActionT1<PCLUseInfo> successCallback, ActionT1 failCallback) {
         PCond<?> cond = getSubEffect(index);
         if (cond instanceof PActiveCond && cond != source) {
             ((PActiveCond<?>) cond).useImpl(info,
-                    () -> {
+                    (i) -> {
                         if (fields.or) {
-                            successCallback.invoke();
+                            successCallback.invoke(i);
                         }
                         else {
                             useCond(source, info, index + 1, successCallback, failCallback);
                         }
                     },
-                    () -> {
+                    (i) -> {
                         if (fields.or) {
                             useCond(source, info, index + 1, successCallback, failCallback);
                         }
                         else {
-                            failCallback.invoke();
+                            failCallback.invoke(i);
                         }
                     });
         }
@@ -418,7 +430,7 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
             useCond(source, info, index + 1, successCallback, failCallback);
         }
         else {
-            successCallback.invoke();
+            successCallback.invoke(info);
         }
     }
 

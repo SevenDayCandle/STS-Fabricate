@@ -193,14 +193,14 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         final CardGroup cards = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
         if (loadout != null) {
             for (PCLCardData data : loadout.cardDatas) {
-                AbstractCard nc = data.makeCopyFromLibrary(SingleCardViewPopup.isViewingUpgrade ? 1 : 0);
+                AbstractCard nc = data.makeCardFromLibrary(SingleCardViewPopup.isViewingUpgrade ? 1 : 0);
                 cards.group.add(nc);
             }
         }
         else {
             for (PCLLoadout cs : container.getAllLoadouts()) {
                 for (PCLCardData data : cs.cardDatas) {
-                    AbstractCard nc = data.makeCopyFromLibrary(SingleCardViewPopup.isViewingUpgrade ? 1 : 0);
+                    AbstractCard nc = data.makeCardFromLibrary(SingleCardViewPopup.isViewingUpgrade ? 1 : 0);
                     cards.group.add(nc);
                 }
             }

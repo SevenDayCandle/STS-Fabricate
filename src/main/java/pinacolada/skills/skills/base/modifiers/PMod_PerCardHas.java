@@ -11,7 +11,7 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
-import pinacolada.ui.cardEditor.PCLCustomEffectEditor;
+import pinacolada.ui.cardEditor.PCLCustomEffectEditingPane;
 
 import java.util.List;
 
@@ -53,7 +53,7 @@ public abstract class PMod_PerCardHas extends PMod_Per<PField_CardCategory> {
     }
 
     @Override
-    public void setupEditor(PCLCustomEffectEditor<?> editor) {
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
         super.setupEditor(editor);
         fields.registerFBoolean(editor, TEXT.cedit_combat, null);
     }

@@ -52,7 +52,7 @@ public class AbstractDungeonPatches {
                     final ArrayList<AbstractCard> cards = AbstractDungeon.player.masterDeck.group;
                     for (int i = 0; i < cards.size(); i++) {
                         if (cards.get(i).cardID.equals(AscendersBane.ID)) {
-                            cards.set(i, bane.makeCopyFromLibrary(0));
+                            cards.set(i, bane.makeCardFromLibrary(0));
                             UnlockTracker.markCardAsSeen(bane.ID);
                         }
                     }

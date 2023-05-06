@@ -2,7 +2,7 @@ package pinacolada.skills.fields;
 
 import pinacolada.resources.PGR;
 import pinacolada.stances.PCLStanceHelper;
-import pinacolada.ui.cardEditor.PCLCustomEffectEditor;
+import pinacolada.ui.cardEditor.PCLCustomEffectEditingPane;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,7 +21,7 @@ public class PField_Stance extends PField_Random {
         return (PField_Stance) new PField_Stance().setStance(stances).setRandom(random).setNot(not);
     }
 
-    public void setupEditor(PCLCustomEffectEditor<?> editor) {
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
         editor.registerStance(stances);
         super.setupEditor(editor);
     }

@@ -10,7 +10,7 @@ import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.tags.CardTagItem;
 import pinacolada.interfaces.providers.CustomCardFileProvider;
-import pinacolada.misc.PCLCustomLoadable;
+import pinacolada.misc.PCLCustomEditorLoadable;
 import pinacolada.resources.PGR;
 
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ import java.util.HashMap;
 import static extendedui.EUIUtils.array;
 import static pinacolada.resources.PCLMainConfig.JSON_FILTER;
 
-public class PCLCustomCardSlot extends PCLCustomLoadable {
+public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicData> {
     public static final String BASE_CARD_ID = "PCLC";
     public static final String SUBFOLDER = "cards";
     private static final TypeToken<PCLCustomCardSlot> TTOKEN = new TypeToken<PCLCustomCardSlot>() {
@@ -56,7 +56,6 @@ public class PCLCustomCardSlot extends PCLCustomLoadable {
     public Integer[] costUpgrade = array(0);
     public String[] tags;
     public String[] forms;
-    public transient ArrayList<PCLDynamicData> builders = new ArrayList<>();
     public transient AbstractCard.CardColor slotColor = AbstractCard.CardColor.COLORLESS;
     protected transient String filePath;
     protected transient String imagePath;
@@ -101,15 +100,15 @@ public class PCLCustomCardSlot extends PCLCustomLoadable {
         filePath = makeFilePath();
         imagePath = makeImagePath();
         slotColor = color;
-        builders.add(new PCLDynamicData(card.cardData, true)
+        builders.add((PCLDynamicData) new PCLDynamicData(card.cardData, true)
                 .setColor(color)
                 .setID(ID)
                 .setImagePath(imagePath)
-                .setPSkill(card.getEffects(), true, true)
-                .setPPower(card.getPowerEffects(), true, true)
                 .setAttackSkill(card.onAttackEffect)
                 .setBlockSkill(card.onBlockEffect)
                 .setExtraTags(CardTagItem.getFromCard(card))
+                .setPSkill(card.getEffects(), true, true)
+                .setPPower(card.getPowerEffects(), true, true)
         );
         recordBuilder();
     }

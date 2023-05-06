@@ -65,7 +65,7 @@ public abstract class PCond_DoBranch extends PCond_Branch<PField_CardCategory, A
         return getSubText();
     }
 
-    public String getQualifier(int i) {
+    public String getQualifierText(int i) {
         PCLAffinity affinity = i < fields.affinities.size() ? fields.affinities.get(i) : null;
         AbstractCard.CardType type = i < fields.types.size() ? fields.types.get(i) : null;
         return affinity != null && type != null ? affinity.getTooltip().getTitleOrIcon() + " " + EUIGameUtils.textForType(type) :

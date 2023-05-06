@@ -188,10 +188,10 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
 
     @Override
     public AbstractCard getCard() {
-        return makeCopyFromLibrary(0);
+        return makeCardFromLibrary(0);
     }
 
-    public AbstractCard makeCopyFromLibrary(int upgrade) {
+    public AbstractCard makeCardFromLibrary(int upgrade) {
         return (!invokeClass.isAnnotationPresent(VisibleCard.class) ? create(upgrade) : CardLibrary.getCopy(ID, upgrade, 0));
     }
 

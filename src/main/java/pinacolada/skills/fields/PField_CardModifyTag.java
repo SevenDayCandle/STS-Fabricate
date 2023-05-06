@@ -1,7 +1,7 @@
 package pinacolada.skills.fields;
 
 import pinacolada.cards.base.tags.PCLCardTag;
-import pinacolada.ui.cardEditor.PCLCustomEffectEditor;
+import pinacolada.ui.cardEditor.PCLCustomEffectEditingPane;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,7 +42,7 @@ public class PField_CardModifyTag extends PField_CardCategory {
         return new PField_CardModifyTag(this);
     }
 
-    public void setupEditor(PCLCustomEffectEditor<?> editor) {
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
         editor.registerPile(groupTypes);
         editor.registerTag(addTags);
     }

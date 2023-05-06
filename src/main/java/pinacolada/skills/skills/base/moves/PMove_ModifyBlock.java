@@ -50,6 +50,6 @@ public class PMove_ModifyBlock extends PMove_Modify<PField_CardCategory> {
 
     @Override
     public boolean isDetrimental() {
-        return extra < 0;
+        return amount < 0;
     }
 }

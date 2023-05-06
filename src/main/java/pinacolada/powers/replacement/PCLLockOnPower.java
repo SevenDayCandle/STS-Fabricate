@@ -45,6 +45,12 @@ public class PCLLockOnPower extends PCLPower implements OnOrbApplyLockOnSubscrib
     }
 
     @Override
+    public boolean isPriorityTarget()
+    {
+        return true;
+    }
+
+    @Override
     public float onOrbApplyLockOn(AbstractCreature target, float dmg) {
         return dmg * getOrbMultiplier();
     }

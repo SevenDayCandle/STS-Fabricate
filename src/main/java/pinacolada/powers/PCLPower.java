@@ -564,4 +564,9 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
     protected void onSamePowerApplied(AbstractPower power) {
 
     }
+
+    public boolean isPriorityTarget()
+    {
+        return false;
+    }
 }

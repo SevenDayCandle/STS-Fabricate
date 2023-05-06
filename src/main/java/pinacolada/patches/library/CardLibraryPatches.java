@@ -66,7 +66,7 @@ public class CardLibraryPatches {
             PCLCardData data = PCLCardData.getStaticData(replacementID);
             if (data != null)
             {
-                replacement = data.makeCopyFromLibrary(upgradeTimes);
+                replacement = data.makeCardFromLibrary(upgradeTimes);
             }
             else if (!PGR.config.replaceCardsPCL.get())
             {

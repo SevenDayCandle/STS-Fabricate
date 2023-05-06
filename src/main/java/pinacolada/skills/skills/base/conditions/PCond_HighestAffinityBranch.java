@@ -51,7 +51,7 @@ public class PCond_HighestAffinityBranch extends PCond_Branch<PField_Affinity, P
         return i < fields.affinities.size() ? fields.affinities.get(i) == c : EUIUtils.all(fields.affinities, af -> c != af);
     }
 
-    public String getQualifier(int i) {
+    public String getQualifierText(int i) {
         PCLAffinity affinity = i < fields.affinities.size() ? fields.affinities.get(i) : null;
         return affinity != null ? affinity.getLevelTooltip().getTitleOrIcon() : TEXT.subjects_other;
     }

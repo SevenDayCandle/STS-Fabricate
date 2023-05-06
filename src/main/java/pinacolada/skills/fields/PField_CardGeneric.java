@@ -13,7 +13,7 @@ import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
-import pinacolada.ui.cardEditor.PCLCustomEffectEditor;
+import pinacolada.ui.cardEditor.PCLCustomEffectEditingPane;
 import pinacolada.utilities.ListSelection;
 
 import java.util.ArrayList;
@@ -74,7 +74,7 @@ public class PField_CardGeneric extends PField_Not {
         return this;
     }
 
-    public void setupEditor(PCLCustomEffectEditor<?> editor) {
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
         editor.registerOrigin(origin, origins -> setOrigin(origins.size() > 0 ? origins.get(0) : PCLCardSelection.Manual));
         editor.registerPile(groupTypes);
     }
@@ -159,11 +159,11 @@ public class PField_CardGeneric extends PField_Not {
         return !EUIUtils.isNullOrEmpty(groupTypes);
     }
 
-    public void registerFBoolean(PCLCustomEffectEditor<?> editor, String name, String desc) {
+    public void registerFBoolean(PCLCustomEffectEditingPane editor, String name, String desc) {
         editor.registerBoolean(name, desc, v -> forced = v, forced);
     }
 
-    public void registerRequired(PCLCustomEffectEditor<?> editor) {
+    public void registerRequired(PCLCustomEffectEditingPane editor) {
         editor.registerBoolean(PGR.core.strings.cedit_required, PGR.core.strings.cetut_required1, v -> forced = v, forced);
     }
 

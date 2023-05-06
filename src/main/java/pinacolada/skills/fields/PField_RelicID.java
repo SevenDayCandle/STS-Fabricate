@@ -1,6 +1,6 @@
 package pinacolada.skills.fields;
 
-import pinacolada.ui.cardEditor.PCLCustomEffectEditor;
+import pinacolada.ui.cardEditor.PCLCustomEffectEditingPane;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,7 +20,7 @@ public class PField_RelicID extends PField_Random {
     }
 
     // TODO custom dropdown for relics
-    public void setupEditor(PCLCustomEffectEditor<?> editor) {
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
         super.setupEditor(editor);
     }
 

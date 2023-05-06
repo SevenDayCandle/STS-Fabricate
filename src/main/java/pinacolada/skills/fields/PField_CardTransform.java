@@ -1,6 +1,6 @@
 package pinacolada.skills.fields;
 
-import pinacolada.ui.cardEditor.PCLCustomEffectEditor;
+import pinacolada.ui.cardEditor.PCLCustomEffectEditingPane;
 
 import java.util.Collections;
 
@@ -33,7 +33,7 @@ public class PField_CardTransform extends PField_CardCategory {
         return new PField_CardTransform(this);
     }
 
-    public void setupEditor(PCLCustomEffectEditor<?> editor) {
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
         editor.registerPile(groupTypes);
         editor.registerCard(Collections.singletonList(result),
                 cards -> {

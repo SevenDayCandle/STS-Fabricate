@@ -72,12 +72,12 @@ public abstract class PCond_Branch<T extends PField_Not, U> extends PPassiveCond
     protected String getEffectTexts(boolean addPeriod) {
         ArrayList<String> effectTexts = new ArrayList<>();
         for (int i = 0; i < getEffectCount(); i++) {
-            effectTexts.add(getQualifier(i) + " -> " + this.childEffect.getText(i, addPeriod));
+            effectTexts.add(getQualifierText(i) + " -> " + this.childEffect.getText(i, addPeriod));
         }
         return EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, effectTexts);
     }
 
-    public abstract String getQualifier(int i);
+    public abstract String getQualifierText(int i);
 
     public final void use(PCLUseInfo info, int index) {
         use(info);

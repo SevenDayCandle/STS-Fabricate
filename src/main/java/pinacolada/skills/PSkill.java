@@ -49,7 +49,7 @@ import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.skills.PMultiSkill;
 import pinacolada.skills.skills.PTrigger;
-import pinacolada.ui.cardEditor.PCLCustomEffectEditor;
+import pinacolada.ui.cardEditor.PCLCustomEffectEditingPane;
 import pinacolada.utilities.GameUtilities;
 
 import java.lang.reflect.Constructor;
@@ -238,6 +238,15 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     public static <U extends PSkill<?>> List<PSkillData<?>> getEligibleClasses(Class<U> targetClass) {
         return EUIUtils.filter(AVAILABLE_SKILLS, d -> targetClass.isAssignableFrom(d.effectClass));
+    }
+
+    public ArrayList<Integer> getQualifiers(PCLUseInfo info)
+    {
+        return EUIUtils.arrayList(0);
+    }
+    public String getQualifierText(int i)
+    {
+        return "";
     }
 
     public String getSampleText(PSkill<?> callingSkill) {
@@ -1110,7 +1119,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         }
     }
 
-    public void registerUseParentBoolean(PCLCustomEffectEditor<?> editor) {
+    public void registerUseParentBoolean(PCLCustomEffectEditingPane editor) {
         editor.registerBoolean(PGR.core.strings.cedit_useParent, PGR.core.strings.cetut_useParent, v -> useParent = v, useParent);
     }
 
@@ -1336,7 +1345,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return this;
     }
 
-    public void setupEditor(PCLCustomEffectEditor<?> editor) {
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
         fields.setupEditor(editor);
     }
 

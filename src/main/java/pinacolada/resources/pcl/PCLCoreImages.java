@@ -45,6 +45,11 @@ public class PCLCoreImages extends PCLImages {
         public static final TextureCache editorEffect = new TextureCache("images/pcl/ui/menu/EditorEffect.png");
         public static final TextureCache editorPower = new TextureCache("images/pcl/ui/menu/EditorPower.png");
         public static final TextureCache info = new TextureCache("images/pcl/ui/menu/Info.png");
+        public static final TextureCache nodeCircle = new TextureCache("images/pcl/ui/menu/NodeCircle.png");
+        public static final TextureCache nodeHexagon = new TextureCache("images/pcl/ui/menu/NodeHexagon.png");
+        public static final TextureCache nodeOctagon = new TextureCache("images/pcl/ui/menu/NodeOctagon.png");
+        public static final TextureCache nodeSquare = new TextureCache("images/pcl/ui/menu/NodeSquare.png");
+        public static final TextureCache nodeTriangle = new TextureCache("images/pcl/ui/menu/NodeTriangle.png");
         public static final TextureCache randomize = new TextureCache("images/pcl/ui/menu/Randomize.png");
         public static final TextureCache seriesSelect = new TextureCache("images/pcl/ui/menu/SeriesSelect.png");
         public static final TextureCache squaredbuttonEmptycenter = new TextureCache("images/pcl/ui/menu/SquaredButton_EmptyCenter.png");

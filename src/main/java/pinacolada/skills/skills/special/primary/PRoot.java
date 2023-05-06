@@ -1,0 +1,41 @@
+package pinacolada.skills.skills.special.primary;
+
+import com.megacrit.cardcrawl.relics.AbstractRelic;
+import pinacolada.annotations.VisibleSkill;
+import pinacolada.resources.PGR;
+import pinacolada.skills.PPrimary;
+import pinacolada.skills.PSkillData;
+import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField_Empty;
+
+// Placeholder class used to ensure that the root of the effect editor is always a primary
+@VisibleSkill
+public class PRoot extends PPrimary<PField_Empty> {
+    public static final PSkillData<PField_Empty> DATA = register(PRoot.class, PField_Empty.class, 1, 1)
+            .selfTarget();
+
+    public PRoot(PSkillSaveData content) {
+        super(DATA, content);
+    }
+
+    public PRoot() {
+        super(DATA);
+    }
+
+    @Override
+    public String getSubText() {
+        return PGR.core.tooltips.startup.title;
+    }
+
+    // This is a no-op on cards
+    // For relics, this activates the effect at the start of battle
+    @Override
+    public String getText(boolean addPeriod)
+    {
+        if (source instanceof AbstractRelic)
+        {
+            return super.getText(addPeriod);
+        }
+        return childEffect != null ? childEffect.getText(addPeriod) : "";
+    }
+}

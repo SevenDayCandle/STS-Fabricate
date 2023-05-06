@@ -1,7 +1,7 @@
 package pinacolada.skills.fields;
 
 import pinacolada.cards.base.tags.PCLCardTag;
-import pinacolada.ui.cardEditor.PCLCustomEffectEditor;
+import pinacolada.ui.cardEditor.PCLCustomEffectEditingPane;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,7 +25,7 @@ public class PField_Tag extends PField_Random {
         return (PField_Tag) new PField_Tag().setTag(tags).setRandom(random).setNot(not);
     }
 
-    public void setupEditor(PCLCustomEffectEditor<?> editor) {
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
         editor.registerTag(tags);
         super.setupEditor(editor);
     }

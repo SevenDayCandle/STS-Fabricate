@@ -1,7 +1,7 @@
 package pinacolada.skills.fields;
 
 import pinacolada.resources.PGR;
-import pinacolada.ui.cardEditor.PCLCustomEffectEditor;
+import pinacolada.ui.cardEditor.PCLCustomEffectEditingPane;
 
 public class PField_Or extends PField_Not {
     public boolean or;
@@ -21,7 +21,7 @@ public class PField_Or extends PField_Not {
         return this;
     }
 
-    public void setupEditor(PCLCustomEffectEditor<?> editor) {
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
         super.setupEditor(editor);
         editor.registerBoolean(PGR.core.strings.cedit_orCondition, v -> or = v, or);
     }

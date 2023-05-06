@@ -1,7 +1,7 @@
 package pinacolada.skills.fields;
 
 import pinacolada.resources.PGR;
-import pinacolada.ui.cardEditor.PCLCustomEffectEditor;
+import pinacolada.ui.cardEditor.PCLCustomEffectEditingPane;
 
 public class PField_Random extends PField_Not {
     public boolean random;
@@ -21,16 +21,16 @@ public class PField_Random extends PField_Not {
         return this;
     }
 
-    public void setupEditor(PCLCustomEffectEditor<?> editor) {
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
         registerRandom(editor);
         super.setupEditor(editor);
     }
 
-    public void registerRandom(PCLCustomEffectEditor<?> editor) {
+    public void registerRandom(PCLCustomEffectEditingPane editor) {
         editor.registerBoolean(PGR.core.strings.cedit_random, v -> random = v, random);
     }
 
-    public void registerRBoolean(PCLCustomEffectEditor<?> editor, String name, String desc) {
+    public void registerRBoolean(PCLCustomEffectEditingPane editor, String name, String desc) {
         editor.registerBoolean(name, desc, v -> random = v, random);
     }
 }

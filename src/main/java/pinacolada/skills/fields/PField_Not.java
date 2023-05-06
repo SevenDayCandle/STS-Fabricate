@@ -2,7 +2,7 @@ package pinacolada.skills.fields;
 
 import extendedui.EUIRM;
 import pinacolada.resources.PGR;
-import pinacolada.ui.cardEditor.PCLCustomEffectEditor;
+import pinacolada.ui.cardEditor.PCLCustomEffectEditingPane;
 
 public class PField_Not extends PField {
     public boolean not;
@@ -22,14 +22,14 @@ public class PField_Not extends PField {
         return this;
     }
 
-    public void setupEditor(PCLCustomEffectEditor<?> editor) {
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
     }
 
-    public void registerNotBoolean(PCLCustomEffectEditor<?> editor) {
+    public void registerNotBoolean(PCLCustomEffectEditingPane editor) {
         editor.registerBoolean(PGR.core.strings.cedit_not, v -> not = v, not);
     }
 
-    public void registerNotBoolean(PCLCustomEffectEditor<?> editor, String name, String desc) {
+    public void registerNotBoolean(PCLCustomEffectEditingPane editor, String name, String desc) {
         editor.registerBoolean(name, desc, v -> not = v, not);
     }
 

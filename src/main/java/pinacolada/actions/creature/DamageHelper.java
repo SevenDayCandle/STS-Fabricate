@@ -31,7 +31,7 @@ public class DamageHelper {
         ArrayList<AbstractPower> prevPowers = null;
         if (bypassThorns) {
             prevPowers = target.powers;
-            target.powers = getContactPowers(target);
+            target.powers = getNonContactPowers(target);
         }
 
         target.damage(info);
@@ -47,7 +47,7 @@ public class DamageHelper {
         }
     }
 
-    public static ArrayList<AbstractPower> getContactPowers(AbstractCreature target) {
+    public static ArrayList<AbstractPower> getNonContactPowers(AbstractCreature target) {
         return EUIUtils.filter(target.powers, power -> {
             switch (power.ID) {
                 case ThornsPower.POWER_ID:
@@ -56,9 +56,9 @@ public class DamageHelper {
                 case CurlUpPower.POWER_ID:
                 case PlatedArmorPower.POWER_ID:
                 case ReactivePower.POWER_ID:
-                    return true;
+                    return false;
             }
-            return power.ID.toLowerCase().contains("thorns");
+            return true;
         });
     }
 

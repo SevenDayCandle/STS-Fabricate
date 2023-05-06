@@ -1,7 +1,7 @@
 package pinacolada.skills.fields;
 
 import pinacolada.cards.base.fields.PCLAffinity;
-import pinacolada.ui.cardEditor.PCLCustomEffectEditor;
+import pinacolada.ui.cardEditor.PCLCustomEffectEditingPane;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,7 +42,7 @@ public class PField_CardModifyAffinity extends PField_CardCategory {
         return new PField_CardModifyAffinity(this);
     }
 
-    public void setupEditor(PCLCustomEffectEditor<?> editor) {
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
         editor.registerPile(groupTypes);
         editor.registerAffinity(addAffinities);
     }

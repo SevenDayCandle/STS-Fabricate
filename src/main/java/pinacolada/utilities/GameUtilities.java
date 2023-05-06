@@ -77,6 +77,7 @@ import pinacolada.monsters.PCLCardAlly;
 import pinacolada.monsters.PCLIntentInfo;
 import pinacolada.orbs.PCLOrb;
 import pinacolada.orbs.PCLOrbHelper;
+import pinacolada.powers.PCLPower;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.powers.PSkillPower;
 import pinacolada.relics.PCLPointerRelic;
@@ -1696,6 +1697,11 @@ public class GameUtilities {
 
     public static boolean isPlayerClass(AbstractPlayer.PlayerClass playerClass) {
         return player != null && player.chosenClass == playerClass;
+    }
+
+    public static boolean isPriorityTarget(AbstractCreature c)
+    {
+        return c != null && c.powers != null && EUIUtils.any(c.powers, p -> p instanceof PCLPower && ((PCLPower) p).isPriorityTarget());
     }
 
     public static boolean isStarter(AbstractCard card) {

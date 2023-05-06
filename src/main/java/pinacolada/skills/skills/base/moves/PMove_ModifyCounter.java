@@ -35,16 +35,11 @@ public class PMove_ModifyCounter extends PMove_Modify<PField_CardCategory> {
 
     @Override
     public String getObjectText() {
-        return EUIRM.strings.numNoun(getExtraRawString(), PGR.core.tooltips.counter);
+        return EUIRM.strings.numNoun(getAmountRawString(), PGR.core.tooltips.counter);
     }
 
     @Override
     public ActionT1<AbstractCard> getAction() {
-        return (c) -> getActions().modifyMagicNumber(c, extra, true, true);
-    }
-
-    @Override
-    public boolean isDetrimental() {
-        return extra < 0;
+        return (c) -> getActions().modifyMagicNumber(c, amount, true, true);
     }
 }

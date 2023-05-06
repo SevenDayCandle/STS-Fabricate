@@ -21,7 +21,7 @@ import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
-import pinacolada.ui.cardEditor.PCLCustomEffectEditor;
+import pinacolada.ui.cardEditor.PCLCustomEffectEditingPane;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.ListSelection;
 
@@ -123,7 +123,7 @@ public class PField_CardCategory extends PField_CardGeneric {
         return new PField_CardCategory(this);
     }
 
-    public void setupEditor(PCLCustomEffectEditor<?> editor) {
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
         editor.registerOrigin(origin, origins -> setOrigin(origins.size() > 0 ? origins.get(0) : PCLCardSelection.Manual));
         editor.registerPile(groupTypes);
         editor.registerRarity(rarities);

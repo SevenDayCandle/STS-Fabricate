@@ -1,6 +1,6 @@
 package pinacolada.skills.fields;
 
-import pinacolada.ui.cardEditor.PCLCustomEffectEditor;
+import pinacolada.ui.cardEditor.PCLCustomEffectEditingPane;
 
 public class PField_Empty extends PField {
     @Override
@@ -14,6 +14,6 @@ public class PField_Empty extends PField {
     }
 
     @Override
-    public void setupEditor(PCLCustomEffectEditor<?> editor) {
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
     }
 }

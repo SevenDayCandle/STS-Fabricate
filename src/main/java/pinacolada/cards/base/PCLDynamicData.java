@@ -22,7 +22,6 @@ import pinacolada.skills.skills.special.primary.PCardPrimary_GainBlock;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -39,6 +38,33 @@ public class PCLDynamicData extends PCLCardData implements EditorMaker {
     public PCardPrimary_GainBlock blockSkill;
     public boolean showTypeText = true;
 
+    public static CardStrings getStringsForLanguage(HashMap<Settings.GameLanguage, CardStrings> languageMap) {
+        return getStringsForLanguage(languageMap, Settings.language);
+    }
+
+    public static CardStrings getStringsForLanguage(HashMap<Settings.GameLanguage, CardStrings> languageMap, Settings.GameLanguage language) {
+        return languageMap.getOrDefault(language,
+                languageMap.getOrDefault(Settings.GameLanguage.ENG,
+                        languageMap.size() > 0 ? languageMap.entrySet().iterator().next().getValue() : getInitialStrings()));
+    }
+
+    protected static CardStrings getInitialStrings() {
+        CardStrings retVal = new CardStrings();
+        retVal.NAME = GameUtilities.EMPTY_STRING;
+        retVal.DESCRIPTION = GameUtilities.EMPTY_STRING;
+        retVal.UPGRADE_DESCRIPTION = GameUtilities.EMPTY_STRING;
+        retVal.EXTENDED_DESCRIPTION = new String[]{};
+        return retVal;
+    }
+
+    public PCLDynamicData(String id) {
+        super(PCLDynamicCard.class, PGR.core, id, null);
+    }
+
+    public PCLDynamicData(String id, PCLResources<?, ?, ?, ?> resources) {
+        super(PCLDynamicCard.class, resources, id, null);
+    }
+
     public PCLDynamicData(PCLCard card, boolean copyProperties) {
         this(card, card.name, "", copyProperties);
     }
@@ -51,114 +77,6 @@ public class PCLDynamicData extends PCLCardData implements EditorMaker {
             setPSkill(card.getEffects(), true, true);
             setPPower(card.getPowerEffects(), true, true);
         }
-    }
-
-    public PCLDynamicData(PCLCardData original, String name, String text, boolean copyProperties) {
-        this(original.ID, original.resources);
-
-        if (copyProperties) {
-            setNumbers(original);
-            setAttackType(original.attackType);
-            setTarget(original.cardTarget);
-            setTiming(original.timing);
-            setTags(original.tags);
-            setMaxUpgrades(original.maxUpgradeLevel);
-            setMaxCopies(original.maxCopies);
-            setUnique(original.unique);
-            setBranchFactor(original.branchFactor);
-            setRemovableFromDeck(original.removableFromDeck);
-            affinities = new PCLCardDataAffinityGroup(original.affinities);
-        }
-
-        setImagePath(original.imagePath);
-        setColor(original.cardColor);
-        setRarity(original.cardRarity);
-        setType(original.cardType);
-        setLoadout(original.loadout);
-        setText(name, text, text);
-    }
-
-    @Override
-    public AbstractCard.CardColor getCardColor() {
-        return cardColor;
-    }
-
-    public PCLDynamicData setImage(ColoredTexture portraitImage, ColoredTexture portraitForeground) {
-        this.portraitImage = portraitImage;
-        this.portraitForeground = portraitForeground;
-
-        return this;
-    }
-
-    public PCLDynamicData setPSkill(Iterable<PSkill<?>> currentEffects, boolean makeCopy, boolean clear) {
-        if (clear) {
-            moves.clear();
-        }
-        for (PSkill<?> be : currentEffects) {
-            addPSkill(be, makeCopy);
-        }
-        return this;
-    }
-
-    public PCLDynamicData setPPower(Iterable<PTrigger> currentEffects, boolean makeCopy, boolean clear) {
-        if (clear) {
-            powers.clear();
-        }
-        for (PTrigger be : currentEffects) {
-            addPPower(be, makeCopy);
-        }
-        return this;
-    }
-
-    public PCLDynamicData(String id, PCLResources<?, ?, ?, ?> resources) {
-        super(PCLDynamicCard.class, resources, id, null);
-    }
-
-    public PCLDynamicData setAttackType(PCLAttackType attackType) {
-        this.attackType = attackType;
-
-        return this;
-    }
-
-    public PCLDynamicData setRarity(AbstractCard.CardRarity rarity) {
-        this.cardRarity = rarity;
-        return this;
-    }
-
-    public PCLDynamicData setType(AbstractCard.CardType type) {
-        this.cardType = type;
-        return this;
-    }
-
-    public PCLDynamicData setText(String name, String description, String upgradeDescription) {
-        return setText(name, description, upgradeDescription != null ? upgradeDescription : description, new String[0]);
-    }
-
-    public PCLDynamicData addPSkill(PSkill<?> effect, boolean makeCopy) {
-        if (makeCopy && effect != null) {
-            effect = effect.makeCopy();
-        }
-        moves.add(effect);
-
-        return this;
-    }
-
-    public PCLDynamicData addPPower(PTrigger effect, boolean makeCopy) {
-        if (makeCopy && effect != null) {
-            effect = effect.makeCopy();
-        }
-        powers.add(effect);
-
-        return this;
-    }
-
-    public PCLDynamicData setText(String name, String description, String upgradeDescription, String[] extendedDescription) {
-        this.strings.NAME = name;
-        this.strings.DESCRIPTION = description;
-        this.strings.UPGRADE_DESCRIPTION = upgradeDescription;
-        this.strings.EXTENDED_DESCRIPTION = extendedDescription;
-
-        return this;
     }
 
     public PCLDynamicData(PCLCard card, String text, boolean copyProperties) {
@@ -187,6 +105,31 @@ public class PCLDynamicData extends PCLCardData implements EditorMaker {
         if (original.blockSkill != null) {
             setBlockSkill(original.blockSkill.makeCopy());
         }
+    }
+
+    public PCLDynamicData(PCLCardData original, String name, String text, boolean copyProperties) {
+        this(original.ID, original.resources);
+
+        if (copyProperties) {
+            setNumbers(original);
+            setAttackType(original.attackType);
+            setTarget(original.cardTarget);
+            setTiming(original.timing);
+            setTags(original.tags);
+            setMaxUpgrades(original.maxUpgradeLevel);
+            setMaxCopies(original.maxCopies);
+            setUnique(original.unique);
+            setBranchFactor(original.branchFactor);
+            setRemovableFromDeck(original.removableFromDeck);
+            affinities = new PCLCardDataAffinityGroup(original.affinities);
+        }
+
+        setImagePath(original.imagePath);
+        setColor(original.cardColor);
+        setRarity(original.cardRarity);
+        setType(original.cardType);
+        setLoadout(original.loadout);
+        setText(name, text, text);
     }
 
     public PCLDynamicData(PCLCustomCardSlot data, PCLCustomCardSlot.CardForm f) {
@@ -233,8 +176,60 @@ public class PCLDynamicData extends PCLCardData implements EditorMaker {
         setMultiformData(data.forms.length);
     }
 
-    public PCLDynamicData(String id) {
-        super(PCLDynamicCard.class, PGR.core, id, null);
+    @Override
+    public AbstractCard.CardColor getCardColor() {
+        return cardColor;
+    }
+
+    @Override
+    public ArrayList<PSkill<?>> getMoves() {
+        return moves;
+    }
+
+    @Override
+    public ArrayList<PTrigger> getPowers() {
+        return powers;
+    }
+
+    @Override
+    public PCLDynamicData makeCopy() {
+        return new PCLDynamicData(this);
+    }
+
+    public PCLDynamicData setImage(ColoredTexture portraitImage, ColoredTexture portraitForeground) {
+        this.portraitImage = portraitImage;
+        this.portraitForeground = portraitForeground;
+
+        return this;
+    }
+
+    public PCLDynamicData setAttackType(PCLAttackType attackType) {
+        this.attackType = attackType;
+
+        return this;
+    }
+
+    public PCLDynamicData setRarity(AbstractCard.CardRarity rarity) {
+        this.cardRarity = rarity;
+        return this;
+    }
+
+    public PCLDynamicData setType(AbstractCard.CardType type) {
+        this.cardType = type;
+        return this;
+    }
+
+    public PCLDynamicData setText(String name, String description, String upgradeDescription) {
+        return setText(name, description, upgradeDescription != null ? upgradeDescription : description, new String[0]);
+    }
+
+    public PCLDynamicData setText(String name, String description, String upgradeDescription, String[] extendedDescription) {
+        this.strings.NAME = name;
+        this.strings.DESCRIPTION = description;
+        this.strings.UPGRADE_DESCRIPTION = upgradeDescription;
+        this.strings.EXTENDED_DESCRIPTION = extendedDescription;
+
+        return this;
     }
 
     private void safeLoadValue(ActionT0 loadFunc) {
@@ -273,10 +268,6 @@ public class PCLDynamicData extends PCLCardData implements EditorMaker {
         return this;
     }
 
-    public PCLDynamicData setPPower(Iterable<PTrigger> currentEffects) {
-        return setPPower(currentEffects, false, true);
-    }
-
     public PCLDynamicData setTextForLanguage() {
         return setTextForLanguage(Settings.language);
     }
@@ -295,33 +286,6 @@ public class PCLDynamicData extends PCLCardData implements EditorMaker {
                         languageMap.size() > 0 ? languageMap.entrySet().iterator().next().getValue() : getInitialStrings()));
     }
 
-    public static CardStrings getStringsForLanguage(HashMap<Settings.GameLanguage, CardStrings> languageMap) {
-        return getStringsForLanguage(languageMap, Settings.language);
-    }
-
-    public static CardStrings getStringsForLanguage(HashMap<Settings.GameLanguage, CardStrings> languageMap, Settings.GameLanguage language) {
-        return languageMap.getOrDefault(language,
-                languageMap.getOrDefault(Settings.GameLanguage.ENG,
-                        languageMap.size() > 0 ? languageMap.entrySet().iterator().next().getValue() : getInitialStrings()));
-    }
-
-    protected static CardStrings getInitialStrings() {
-        CardStrings retVal = new CardStrings();
-        retVal.NAME = GameUtilities.EMPTY_STRING;
-        retVal.DESCRIPTION = GameUtilities.EMPTY_STRING;
-        retVal.UPGRADE_DESCRIPTION = GameUtilities.EMPTY_STRING;
-        retVal.EXTENDED_DESCRIPTION = new String[]{};
-        return retVal;
-    }
-
-    public PCLDynamicData addPPower(PTrigger effect) {
-        return addPPower(effect, false);
-    }
-
-    public PCLDynamicData addPSkill(PSkill<?> effect) {
-        return addPSkill(effect, false);
-    }
-
     public PCLDynamicCard create() {
         return createImplWithForms(true);
     }
@@ -337,7 +301,7 @@ public class PCLDynamicData extends PCLCardData implements EditorMaker {
     }
 
     @Override
-    public AbstractCard makeCopyFromLibrary(int upgrade) {
+    public AbstractCard makeCardFromLibrary(int upgrade) {
         return create(upgrade);
     }
 
@@ -400,18 +364,6 @@ public class PCLDynamicData extends PCLCardData implements EditorMaker {
         this.strings.NAME = name;
 
         return this;
-    }
-
-    public PCLDynamicData setPPower(PTrigger... effect) {
-        return setPPower(Arrays.asList(effect));
-    }
-
-    public PCLDynamicData setPSkill(PSkill<?>... effect) {
-        return setPSkill(Arrays.asList(effect));
-    }
-
-    public PCLDynamicData setPSkill(Iterable<PSkill<?>> currentEffects) {
-        return setPSkill(currentEffects, false, true);
     }
 
     public PCLDynamicData setText(String name) {

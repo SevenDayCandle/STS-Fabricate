@@ -3,7 +3,7 @@ package pinacolada.skills.fields;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.resources.PGR;
-import pinacolada.ui.cardEditor.PCLCustomEffectEditor;
+import pinacolada.ui.cardEditor.PCLCustomEffectEditingPane;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ public class PField_Affinity extends PField_Random {
         return (PField_Affinity) new PField_Affinity().setAffinity(affinities).setRandom(random).setNot(not);
     }
 
-    public void setupEditor(PCLCustomEffectEditor<?> editor) {
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
         editor.registerAffinity(affinities);
         super.setupEditor(editor);
     }
