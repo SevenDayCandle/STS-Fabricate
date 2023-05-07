@@ -1,6 +1,6 @@
 package pinacolada.skills.skills;
 
-import extendedui.interfaces.delegates.ActionT0;
+import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLAction;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -8,6 +8,8 @@ import pinacolada.skills.PCond;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField;
+
+import java.util.ArrayList;
 
 // Conds where the use check must happen in the use action
 public abstract class PActiveCond<T extends PField> extends PCond<T> {
@@ -30,24 +32,36 @@ public abstract class PActiveCond<T extends PField> extends PCond<T> {
     @Override
     public void use(PCLUseInfo info) {
         if (childEffect != null) {
-            useImpl(info, () -> childEffect.use(info), () -> {
-            });
+            useImpl(info, (i) -> childEffect.use(info), (i) -> {});
         }
     }
 
     public void use(PCLUseInfo info, int index) {
         if (childEffect != null) {
-            useImpl(info, () -> childEffect.use(info, index), () -> {
-            });
+            useImpl(info, (i) -> childEffect.use(info, index), (i) -> {});
         }
     }
 
     public void use(PCLUseInfo info, boolean isUsing) {
         if (isUsing && childEffect != null) {
-            useImpl(info, () -> childEffect.use(info), () -> {
-            });
+            useImpl(info, (i) -> childEffect.use(i), (i) -> {});
         }
     }
 
-    protected abstract PCLAction<?> useImpl(PCLUseInfo info, ActionT0 onComplete, ActionT0 onFail);
+    public ArrayList<Integer> getQualifiers(PCLUseInfo info)
+    {
+        return fields.getQualifiers(info);
+    }
+
+    public String getQualifierText(int i)
+    {
+        return fields.getQualifierText(i);
+    }
+
+    public int getQualifierRange()
+    {
+        return fields.getQualiferRange();
+    }
+
+    protected abstract PCLAction<?> useImpl(PCLUseInfo info, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail);
 }

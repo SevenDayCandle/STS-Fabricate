@@ -14,6 +14,7 @@ import pinacolada.cards.base.PCLDynamicData;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.tags.PCLCardTag;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.patches.library.CardLibraryPatches;
 import pinacolada.powers.PCLPowerHelper;
@@ -209,12 +210,27 @@ public abstract class PField implements Serializable {
         return other != null && this.getClass().equals(other.getClass());
     }
 
-    public abstract PField makeCopy();
-
     public PField setSkill(PSkill<?> skill) {
         this.skill = skill;
         return this;
     }
+
+    public ArrayList<Integer> getQualifiers(PCLUseInfo info)
+    {
+        return new ArrayList<>();
+    }
+
+    public String getQualifierText(int i)
+    {
+        return "";
+    }
+
+    public int getQualiferRange()
+    {
+        return 0;
+    }
+
+    public abstract PField makeCopy();
 
     // Enables selectors for modifying this objects fields to appear in the card editor
     public abstract void setupEditor(PCLCustomEffectEditingPane editor);

@@ -3,7 +3,7 @@ package pinacolada.skills.skills.base.conditions;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIUtils;
-import extendedui.interfaces.delegates.ActionT0;
+import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
@@ -67,15 +67,15 @@ public class PCond_UnblockedDamage extends PActiveNonCheckCond<PField_Not> imple
         }
     }
 
-    protected PCLAction<?> useImpl(PCLUseInfo info, ActionT0 onComplete, ActionT0 onFail) {
+    protected PCLAction<?> useImpl(PCLUseInfo info, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {
         // Checks to see if any of the targets' health is decreased after this card is used
         HashMap<? extends AbstractCreature, Integer> healthMap = EUIUtils.hashMap(getTargetList(info), c -> c.currentHealth);
         return PCLActions.last.callback(healthMap, (targets, __) -> {
             if (targets.size() > 0 && EUIUtils.any(targets.keySet(), t -> t.currentHealth < targets.get(t)) && (!(parent instanceof PLimit) || ((PLimit) parent).tryActivate(info))) {
-                onComplete.invoke();
+                onComplete.invoke(info);
             }
             else {
-                onFail.invoke();
+                onFail.invoke(info);
             }
         });
     }

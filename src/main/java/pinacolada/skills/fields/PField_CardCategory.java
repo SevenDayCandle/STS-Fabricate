@@ -228,6 +228,104 @@ public class PField_CardCategory extends PField_CardGeneric {
         }
     }
 
+    public ArrayList<Integer> getQualifiers(PCLUseInfo info)
+    {
+        List<? extends AbstractCard> cards = info.getDataAsList(AbstractCard.class);
+        ArrayList<Integer> indexes = new ArrayList<>();
+        if (cards != null)
+        {
+            for (AbstractCard c : cards)
+            {
+                for (int i = 0; i < affinities.size(); i++)
+                {
+                    if (GameUtilities.hasAffinity(c, affinities.get(i)))
+                    {
+                        indexes.add(i);
+                    }
+                }
+                for (int i = 0; i < cardIDs.size(); i++)
+                {
+                    if (c.cardID.equals(cardIDs.get(i)))
+                    {
+                        indexes.add(i);
+                        break;
+                    }
+                }
+                for (int i = 0; i < costs.size(); i++)
+                {
+                    if (costs.get(i).check(c))
+                    {
+                        indexes.add(i);
+                        break;
+                    }
+                }
+                for (int i = 0; i < colors.size(); i++)
+                {
+                    if (c.color == colors.get(i))
+                    {
+                        indexes.add(i);
+                        break;
+                    }
+                }
+                for (int i = 0; i < rarities.size(); i++)
+                {
+                    if (c.rarity == rarities.get(i))
+                    {
+                        indexes.add(i);
+                        break;
+                    }
+                }
+                for (int i = 0; i < tags.size(); i++)
+                {
+                    if (tags.get(i).has(c))
+                    {
+                        indexes.add(i);
+                    }
+                }
+                for (int i = 0; i < types.size(); i++)
+                {
+                    if (c.type == types.get(i))
+                    {
+                        indexes.add(i);
+                        break;
+                    }
+                }
+            }
+        }
+
+        return indexes;
+    }
+
+    public String getQualifierText(int i)
+    {
+        ArrayList<String> stringsToJoin = new ArrayList<>();
+        if (costs.size() > i) {
+            stringsToJoin.add(PGR.core.strings.subjects_xCost(costs.get(i).name));
+        }
+        if (affinities.size() > i) {
+            stringsToJoin.add(affinities.get(i).getTooltip().toString());
+        }
+        if (tags.size() > i) {
+            stringsToJoin.add(tags.get(i).getTip().getTitleOrIcon());
+        }
+        if (colors.size() > i) {
+            stringsToJoin.add(EUIGameUtils.getColorName(colors.get(i)));
+        }
+        if (rarities.size() > i) {
+            stringsToJoin.add(EUIGameUtils.textForRarity(rarities.get(i)));
+        }
+        if (types.size() > i) {
+            stringsToJoin.add(EUIGameUtils.textForType(types.get(i)));
+        }
+
+        return stringsToJoin.isEmpty() ? TEXT.subjects_other : EUIUtils.joinStrings(" ", stringsToJoin);
+    }
+
+    public int getQualifierRange()
+    {
+        return EUIUtils.max(EUIUtils.array(costs, affinities, tags, colors, rarities, types, cardIDs), List::size);
+    }
+
     public static AbstractCard getCard(String id) {
         if (id != null) {
             AbstractCard c = CardLibrary.getCard(id);

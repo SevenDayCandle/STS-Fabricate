@@ -2,7 +2,7 @@ package pinacolada.skills.skills.base.conditions;
 
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
-import extendedui.interfaces.delegates.ActionT0;
+import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLAction;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -53,7 +53,7 @@ public class PCond_TriggerTo extends PActiveCond<PField_Orb> {
     }
 
     @Override
-    protected PCLAction<?> useImpl(PCLUseInfo info, ActionT0 onComplete, ActionT0 onFail) {
+    protected PCLAction<?> useImpl(PCLUseInfo info, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {
         return getActions().triggerOrbPassive(1, amount, false).setFilter(fields.getOrbFilter());
     }
 }

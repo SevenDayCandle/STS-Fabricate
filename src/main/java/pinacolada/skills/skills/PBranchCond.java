@@ -60,10 +60,10 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
         if (childEffect instanceof PActiveCond) {
             ((PActiveCond<?>) childEffect).useImpl(info, (i) -> useSubEffect(i, childEffect.getQualifiers(i)), (i) -> {});
         }
-        else if (childEffect instanceof PCallbackMove){
+        else if (childEffect instanceof PCallbackMove) {
             ((PCallbackMove<?>) childEffect).use(info, (i) -> useSubEffect(i, childEffect.getQualifiers(i)));
         }
-        else {
+        else if (childEffect != null) {
             useSubEffect(info, childEffect.getQualifiers(info));
         }
     }
@@ -81,9 +81,14 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
     {
         if (this.effects.size() > 0)
         {
+            boolean canGoOver = this.childEffect.getQualifierRange() < this.effects.size();
             for (int i : qualifiers)
             {
-                this.effects.get(Math.min(this.effects.size() -1, i)).use(info);
+                this.effects.get(i).use(info);
+            }
+            if (qualifiers.isEmpty() && canGoOver)
+            {
+                this.effects.get(this.childEffect.getQualifierRange()).use(info);
             }
         }
     }
@@ -96,8 +101,11 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
             case 1:
                 return this.effects.get(0).getText(addPeriod);
             case 2:
-                return getCapitalSubText(addPeriod) + (childEffect instanceof PCond ?  ": " : EFFECT_SEPARATOR) + this.effects.get(0).getText(addPeriod) + " " +
-                        StringUtils.capitalize(TEXT.cond_otherwise(this.effects.get(1).getText(addPeriod)));
+                if (childEffect instanceof PCond && this.childEffect.getQualifierRange() < this.effects.size())
+                {
+                    return getCapitalSubText(addPeriod) + ": " + this.effects.get(0).getText(addPeriod) + " " +
+                            StringUtils.capitalize(TEXT.cond_otherwise(this.effects.get(1).getText(addPeriod)));
+                }
             default:
                 ArrayList<String> effectTexts = new ArrayList<>();
                 for (int i = 0; i < effects.size(); i++) {

@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.Settings;
+import extendedui.EUIUtils;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -18,6 +19,8 @@ import pinacolada.skills.skills.base.conditions.*;
 import pinacolada.skills.skills.base.primary.PTrigger_Passive;
 import pinacolada.skills.skills.base.primary.PTrigger_When;
 import pinacolada.utilities.GameUtilities;
+
+import java.util.ArrayList;
 
 public abstract class PCond<T extends PField> extends PSkill<T> {
     public static final int CONDITION_PRIORITY = 1;
@@ -478,6 +481,18 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
         }
     }
 
+    public ArrayList<Integer> getQualifiers(PCLUseInfo info) {
+        return EUIUtils.arrayList(checkCondition(info, true, null) ? 1 : 0);
+    }
+
+    public String getQualifierText(int i) {
+        return "";
+    }
+
+    public int getQualifierRange() {
+        return 1;
+    }
+
     /* Same as above but for passive conditions */
     public final boolean isPassiveClause() {
         return (parent != null && parent.hasParentType(PTrigger_Passive.class) && (!(parent instanceof PCond) || (parent instanceof PMultiCond && ((PMultiCond) parent).isPassiveClause())));
@@ -498,8 +513,7 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
             }
             // When a delegate (e.g. on draw) is triggered from an and multicond, it should only execute the effect if the other conditions would pass
             else if (parent instanceof PMultiCond && parent.childEffect != null) {
-                ((PMultiCond) parent).useCond(this, info, 0, () -> parent.childEffect.use(info), () -> {
-                });
+                ((PMultiCond) parent).useCond(this, info, 0, (i) -> parent.childEffect.use(i), (i) -> {});
             }
         }
     }

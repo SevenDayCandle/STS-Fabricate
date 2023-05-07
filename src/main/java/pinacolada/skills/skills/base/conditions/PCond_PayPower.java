@@ -1,6 +1,6 @@
 package pinacolada.skills.skills.base.conditions;
 
-import extendedui.interfaces.delegates.ActionT0;
+import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLAction;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -55,7 +55,7 @@ public class PCond_PayPower extends PActiveCond<PField_Power> {
     }
 
     @Override
-    protected PCLAction<?> useImpl(PCLUseInfo info, ActionT0 onComplete, ActionT0 onFail) {
+    protected PCLAction<?> useImpl(PCLUseInfo info, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {
         return getActions().callback(() -> {
             for (PCLPowerHelper power : fields.powers) {
                 getActions().applyPower(PCLCardTarget.Self, power, -amount);

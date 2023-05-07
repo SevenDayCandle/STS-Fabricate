@@ -2,7 +2,7 @@ package pinacolada.skills.skills.base.conditions;
 
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
-import extendedui.interfaces.delegates.ActionT0;
+import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
@@ -53,13 +53,13 @@ public class PCond_Fatal extends PActiveNonCheckCond<PField_Random> implements O
         useFromTrigger(makeInfo(monster));
     }
 
-    protected PCLAction<?> useImpl(PCLUseInfo info, ActionT0 onComplete, ActionT0 onFail) {
+    protected PCLAction<?> useImpl(PCLUseInfo info, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {
         return PCLActions.last.callback(getTargetList(info), (targets, __) -> {
             if (targets.size() > 0 && EUIUtils.any(targets, t -> GameUtilities.isFatal(t, fields.random)) && (!(parent instanceof PLimit) || ((PLimit) parent).tryActivate(info))) {
-                onComplete.invoke();
+                onComplete.invoke(info);
             }
             else {
-                onFail.invoke();
+                onFail.invoke(info);
             }
         }).isCancellable(false);
     }

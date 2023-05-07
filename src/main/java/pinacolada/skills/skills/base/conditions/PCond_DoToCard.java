@@ -5,7 +5,7 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
-import extendedui.interfaces.delegates.ActionT0;
+import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.FuncT5;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.actions.PCLAction;
@@ -20,6 +20,8 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.skills.PActiveNonCheckCond;
 import pinacolada.utilities.ListSelection;
+
+import java.util.ArrayList;
 
 public abstract class PCond_DoToCard extends PActiveNonCheckCond<PField_CardCategory> {
     public PCond_DoToCard(PSkillData<PField_CardCategory> data, PSkillSaveData content) {
@@ -78,15 +80,23 @@ public abstract class PCond_DoToCard extends PActiveNonCheckCond<PField_CardCate
         return true;
     }
 
-    public PCLAction<?> useImpl(PCLUseInfo info, ActionT0 onComplete, ActionT0 onFail) {
+    public ArrayList<Integer> getQualifiers(PCLUseInfo info) {
+        return fields.getQualifiers(info);
+    }
+
+    public String getQualifierText(int i) {
+        return "";
+    }
+
+    public PCLAction<?> useImpl(PCLUseInfo info, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {
         return getActions().add(fields.getGenericPileAction(getAction(), info, extra))
                 .addCallback(cards -> {
                     if (cards.size() >= amount) {
                         info.setData(cards);
-                        onComplete.invoke();
+                        onComplete.invoke(info);
                     }
                     else {
-                        onFail.invoke();
+                        onFail.invoke(info);
                     }
                 });
     }

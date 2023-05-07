@@ -3,7 +3,7 @@ package pinacolada.skills.skills.base.conditions;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
-import extendedui.interfaces.delegates.ActionT0;
+import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLAction;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -59,15 +59,15 @@ public class PCond_EvokeTo extends PActiveCond<PField_Orb> {
     }
 
     @Override
-    protected PCLAction<?> useImpl(PCLUseInfo info, ActionT0 onComplete, ActionT0 onFail) {
+    protected PCLAction<?> useImpl(PCLUseInfo info, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {
         return getActions().evokeOrb(1, amount).setFilter(fields.getOrbFilter())
                 .addCallback(orbs -> {
                     if (orbs.size() >= amount) {
                         info.setData(orbs);
-                        onComplete.invoke();
+                        onComplete.invoke(info);
                     }
                     else {
-                        onFail.invoke();
+                        onFail.invoke(info);
                     }
                 });
     }

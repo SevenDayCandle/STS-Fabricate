@@ -242,11 +242,17 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     public ArrayList<Integer> getQualifiers(PCLUseInfo info)
     {
-        return EUIUtils.arrayList(0);
+        return fields.getQualifiers(info);
     }
+
     public String getQualifierText(int i)
     {
-        return "";
+        return fields.getQualifierText(i);
+    }
+
+    public int getQualifierRange()
+    {
+        return fields.getQualiferRange();
     }
 
     public String getSampleText(PSkill<?> callingSkill) {
