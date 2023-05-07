@@ -35,12 +35,12 @@ public class PMod_ScryPerCard extends PMod_Do {
     }
 
     @Override
-    public EUITooltip getActionTooltip() {
-        return PGR.core.tooltips.scry;
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
+        return (s, c, i, o, g) -> new ScryCards(s, i);
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
-        return (s, c, i, o, g) -> new ScryCards(s, i);
+    public EUITooltip getActionTooltip() {
+        return PGR.core.tooltips.scry;
     }
 }

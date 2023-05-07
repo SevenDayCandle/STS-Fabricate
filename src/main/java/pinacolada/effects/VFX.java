@@ -27,24 +27,12 @@ public class VFX {
         return new CircularWaveEffect(cX, cY);
     }
 
-    public static float randomX(Hitbox hb, float variance) {
-        return hb.cX + (variance == 0 ? 0 : (MathUtils.random(-variance, variance) * hb.width));
-    }
-
-    public static float randomY(Hitbox hb, float variance) {
-        return hb.cY + (variance == 0 ? 0 : (MathUtils.random(-variance, variance) * hb.height));
-    }
-
     public static CleaveEffect cleave(boolean fromPlayer) {
         return new CleaveEffect(fromPlayer);
     }
 
     public static DaggerSprayEffect daggerSpray() {
         return new DaggerSprayEffect(flipHorizontally());
-    }
-
-    public static boolean flipHorizontally() {
-        return AbstractDungeon.player.flipHorizontal || AbstractDungeon.getMonsters().shouldFlipVfx();
     }
 
     public static DarknessEffect darkness(Hitbox target, float spread) {
@@ -89,6 +77,10 @@ public class VFX {
 
     public static FlameBarrierEffect flameBarrier(Hitbox source) {
         return new FlameBarrierEffect(source.cX, source.cY);
+    }
+
+    public static boolean flipHorizontally() {
+        return AbstractDungeon.player.flipHorizontal || AbstractDungeon.getMonsters().shouldFlipVfx();
     }
 
     public static CombinedEffect ghost(Hitbox hb, int variance) {
@@ -139,6 +131,14 @@ public class VFX {
 
     public static PsychokinesisEffect psychokinesis(float cX, float cY) {
         return new PsychokinesisEffect(cX, cY);
+    }
+
+    public static float randomX(Hitbox hb, float variance) {
+        return hb.cX + (variance == 0 ? 0 : (MathUtils.random(-variance, variance) * hb.width));
+    }
+
+    public static float randomY(Hitbox hb, float variance) {
+        return hb.cY + (variance == 0 ? 0 : (MathUtils.random(-variance, variance) * hb.height));
     }
 
     public static RazorWindEffect razorWind(Hitbox source) {
@@ -230,7 +230,7 @@ public class VFX {
     }
 
     public static VerticalImpactEffect verticalImpact(float cX, float cY) {
-        return new VerticalImpactEffect(cX , cY);
+        return new VerticalImpactEffect(cX, cY);
     }
 
     public static FadingParticleEffect water(Hitbox target, float spread) {

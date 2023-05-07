@@ -36,12 +36,12 @@ public class PMod_DiscardPerCard extends PMod_Do {
     }
 
     @Override
-    public EUITooltip getActionTooltip() {
-        return PGR.core.tooltips.discard;
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
+        return DiscardFromPile::new;
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
-        return DiscardFromPile::new;
+    public EUITooltip getActionTooltip() {
+        return PGR.core.tooltips.discard;
     }
 }

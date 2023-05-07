@@ -38,6 +38,14 @@ public class PCLAugmentPanelItem extends PCLTopPanelItem {
         lerpAmount = 0;
     }
 
+    protected HashMap<PCLAugmentData, Integer> getAugmentData() {
+        HashMap<PCLAugmentData, Integer> map = new HashMap<>();
+        for (String key : PGR.dungeon.augments.keySet()) {
+            map.put(PCLAugmentData.get(key), PGR.dungeon.augments.get(key));
+        }
+        return map;
+    }
+
     @Override
     public void render(SpriteBatch sb) {
         super.render(sb);
@@ -60,14 +68,6 @@ public class PCLAugmentPanelItem extends PCLTopPanelItem {
             currentColor = EUIColors.lerp(Settings.GREEN_TEXT_COLOR, Color.WHITE, lerpAmount);
             lerpAmount += Gdx.graphics.getDeltaTime();
         }
-    }
-
-    protected HashMap<PCLAugmentData, Integer> getAugmentData() {
-        HashMap<PCLAugmentData, Integer> map = new HashMap<>();
-        for (String key : PGR.dungeon.augments.keySet()) {
-            map.put(PCLAugmentData.get(key), PGR.dungeon.augments.get(key));
-        }
-        return map;
     }
 
     protected void onClick() {

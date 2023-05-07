@@ -52,13 +52,19 @@ public class ScreenGradientEffect extends PCLEffect {
     }
 
     @Override
-    public void render(SpriteBatch sb) {
-        renderer.rect(x, y, width, height, actualColor, actualColor2, actualColor3, actualColor4);
+    protected void complete() {
+        super.complete();
+        renderer.end();
     }
 
     @Override
     protected void firstUpdate() {
         renderer.begin();
+    }
+
+    @Override
+    public void render(SpriteBatch sb) {
+        renderer.rect(x, y, width, height, actualColor, actualColor2, actualColor3, actualColor4);
     }
 
     @Override
@@ -75,12 +81,6 @@ public class ScreenGradientEffect extends PCLEffect {
         this.actualColor2 = EUIColors.lerp(color2, targetColor2, lerp);
         this.actualColor3 = EUIColors.lerp(color3, targetColor3, lerp);
         this.actualColor4 = EUIColors.lerp(color4, targetColor4, lerp);
-    }
-
-    @Override
-    protected void complete() {
-        super.complete();
-        renderer.end();
     }
 
     protected float getLerpAmount() {

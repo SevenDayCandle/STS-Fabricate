@@ -31,15 +31,15 @@ public class DodgeEffect extends PCLEffect {
         this.offsetY = STARTING_OFFSET_Y;
     }
 
-    public void render(SpriteBatch sb) {
-        FontHelper.renderFontCentered(sb, FontHelper.losePowerFont, this.msg, this.x, this.y + this.offsetY, this.color, 1.25F);
-    }
-
     protected void firstUpdate() {
         for (int i = 0; i < 10; ++i) {
             AbstractDungeon.effectsQueue.add(new FlyingSpikeEffect(this.x - MathUtils.random(-120.0F, 120.0F) * Settings.scale, this.y + MathUtils.random(90.0F, 110.0F) * Settings.scale, -90.0F, 0.0F, MathUtils.random(-200.0F, -50.0F) * Settings.scale, Settings.BLUE_TEXT_COLOR));
             AbstractDungeon.effectsQueue.add(new FlyingSpikeEffect(this.x - MathUtils.random(-120.0F, 120.0F) * Settings.scale, this.y + MathUtils.random(90.0F, 110.0F) * Settings.scale, 90.0F, 0.0F, MathUtils.random(200.0F, 50.0F) * Settings.scale, Settings.BLUE_TEXT_COLOR));
         }
+    }
+
+    public void render(SpriteBatch sb) {
+        FontHelper.renderFontCentered(sb, FontHelper.losePowerFont, this.msg, this.x, this.y + this.offsetY, this.color, 1.25F);
     }
 
     protected void updateInternal(float deltaTime) {

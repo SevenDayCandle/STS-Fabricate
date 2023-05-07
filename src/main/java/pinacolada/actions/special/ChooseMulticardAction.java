@@ -14,8 +14,8 @@ import pinacolada.resources.PGR;
 import java.util.ArrayList;
 
 public class ChooseMulticardAction extends PCLAction<PCLMultiCard> {
-    protected final ArrayList<AbstractCard> selectedCards = new ArrayList<>();
     private final PCLMultiCard multicard;
+    protected final ArrayList<AbstractCard> selectedCards = new ArrayList<>();
 
     public ChooseMulticardAction(PCLMultiCard multicard, int amount) {
         super(ActionType.CARD_MANIPULATION, Settings.ACTION_DUR_FAST);

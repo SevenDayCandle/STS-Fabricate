@@ -57,12 +57,12 @@ public abstract class AbstractGlyphBlight extends PCLBlight {
         return cacheMinimumLevel;
     }
 
-    public String getUpdatedDescription() {
-        return formatDescription(0, GameUtilities.inGame() ? getPotency() : baseAmount, baseAmountStep);
-    }
-
     public int getPotency() {
         return baseAmount + this.counter * (AbstractDungeon.actNum - 1) * baseAmountStep;
+    }
+
+    public String getUpdatedDescription() {
+        return formatDescription(0, GameUtilities.inGame() ? getPotency() : baseAmount, baseAmountStep);
     }
 
     @Override

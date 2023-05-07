@@ -17,10 +17,10 @@ public abstract class PCLCardRewardAction extends EUIBase {
 
     protected final ActionT1<AbstractCard> onCardAct;
     protected final ActionT1<AbstractCard> onCardAdded;
+    private boolean shouldClose; // Needed to prevent comodification errors
     protected CardRewardActionProvider actionProvider;
     protected boolean canReroll;
     protected RewardItem rewardItem;
-    private boolean shouldClose; // Needed to prevent comodification errors
 
     public PCLCardRewardAction(ActionT1<AbstractCard> onCardAdded,
                                ActionT1<AbstractCard> onCardAct) {
@@ -45,11 +45,14 @@ public abstract class PCLCardRewardAction extends EUIBase {
 
     abstract AbstractCard actionImpl(PCLCardRewardActionButton button, AbstractCard card, int cardIndex);
 
-    protected void onCardReroll(AbstractCard card) {
-        if (onCardAct != null) {
-            onCardAct.invoke(card);
-        }
+    public void close() {
+        setActive(false);
+        buttons.clear();
     }
+
+    abstract PCLCardRewardActionButton getButton(int index);
+
+    abstract Class<? extends CardRewardActionProvider> getTargetClass();
 
     protected void onCardAdded(AbstractCard card) {
         if (onCardAdded != null) {
@@ -57,9 +60,10 @@ public abstract class PCLCardRewardAction extends EUIBase {
         }
     }
 
-    public void close() {
-        setActive(false);
-        buttons.clear();
+    protected void onCardReroll(AbstractCard card) {
+        if (onCardAct != null) {
+            onCardAct.invoke(card);
+        }
     }
 
     public void open(RewardItem rItem, ArrayList<AbstractCard> cards) {
@@ -76,10 +80,6 @@ public abstract class PCLCardRewardAction extends EUIBase {
             }
         }
     }
-
-    abstract Class<? extends CardRewardActionProvider> getTargetClass();
-
-    abstract PCLCardRewardActionButton getButton(int index);
 
     @Override
     public void renderImpl(SpriteBatch sb) {

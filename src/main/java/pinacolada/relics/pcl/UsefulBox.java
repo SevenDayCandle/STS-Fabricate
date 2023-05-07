@@ -27,6 +27,10 @@ public class UsefulBox extends PCLRelic implements OnAllySummonSubscriber {
         setCounter(1);
     }
 
+    public int getValue() {
+        return 2;
+    }
+
     @Override
     public void onAllySummon(PCLCard card, PCLCardAlly ally) {
         if (counter > 0) {
@@ -35,9 +39,5 @@ public class UsefulBox extends PCLRelic implements OnAllySummonSubscriber {
             addCounter(-1);
             flash();
         }
-    }
-
-    public int getValue() {
-        return 2;
     }
 }

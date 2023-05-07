@@ -402,14 +402,14 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
     }
 
     @Override
-    public PMod<T> setExtra(int amount) {
-        super.setExtra(amount);
+    public PMod<T> setExtra(int amount, int upgrade) {
+        super.setExtra(amount, upgrade);
         return this;
     }
 
     @Override
-    public PMod<T> setExtra(int amount, int upgrade) {
-        super.setExtra(amount, upgrade);
+    public PMod<T> setExtra(int amount) {
+        super.setExtra(amount);
         return this;
     }
 
@@ -455,6 +455,18 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
         });
     }
 
+    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info) {
+        return 0;
+    }
+
+    public final int updateAmount(PSkill<?> be, PCLUseInfo info) {
+        cachedValue = getModifiedAmount(be, info);
+        if (extra > 0) {
+            cachedValue = Math.min(extra, cachedValue);
+        }
+        return cachedValue;
+    }
+
     protected void updateChildAmount(PCLUseInfo info) {
         if (this.childEffect != null) {
             if (this.childEffect instanceof PMultiBase) {
@@ -472,17 +484,5 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
                 this.childEffect.setTemporaryAmount(updateAmount(this.childEffect, info));
             }
         }
-    }
-
-    public final int updateAmount(PSkill<?> be, PCLUseInfo info) {
-        cachedValue = getModifiedAmount(be, info);
-        if (extra > 0) {
-            cachedValue = Math.min(extra, cachedValue);
-        }
-        return cachedValue;
-    }
-
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info) {
-        return 0;
     }
 }

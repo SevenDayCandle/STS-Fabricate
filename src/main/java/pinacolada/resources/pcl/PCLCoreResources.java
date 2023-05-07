@@ -19,6 +19,38 @@ public class PCLCoreResources extends PCLResources<PCLAbstractPlayerData, PCLCor
         super(ID, AbstractCard.CardColor.COLORLESS, AbstractPlayer.PlayerClass.IRONCLAD, new PCLCoreImages(ID));
     }
 
+    // Core resources are pulled when a non-PCL character is used, so it should accept all non-filtered colorless cards
+    public boolean containsColorless(AbstractCard card) {
+        return !PCLDungeon.isColorlessCardExclusive(card);
+    }
+
+    @Override
+    public boolean filterColorless(AbstractCard card) {
+        return card instanceof PCLCard && !(card instanceof PCLDynamicCard) && ((PCLCard) card).cardData.resources == this;
+    }
+
+    @Override
+    public PCLAbstractPlayerData getData() {
+        return null;
+    }
+
+    @Override
+    public String getReplacement(String cardID) {
+        // Prevent example templates from showing up for regular characters
+        PCLCardData data = PCLCardData.getStaticData(cardID);
+        return data instanceof TemplateCardData ? ((TemplateCardData) data).originalID : null;
+    }
+
+    @Override
+    public PCLCoreStrings getStrings() {
+        return new PCLCoreStrings(this);
+    }
+
+    @Override
+    public PCLCoreTooltips getTooltips() {
+        return new PCLCoreTooltips();
+    }
+
     protected void postInitialize() {
         tooltips.initializeIcons();
     }
@@ -37,37 +69,5 @@ public class PCLCoreResources extends PCLResources<PCLAbstractPlayerData, PCLCor
         loadCustomStrings(RunModStrings.class);
         loadCustomStrings(StanceStrings.class);
         loadAugmentStrings();
-    }
-
-    // Core resources are pulled when a non-PCL character is used, so it should accept all non-filtered colorless cards
-    public boolean containsColorless(AbstractCard card) {
-        return !PCLDungeon.isColorlessCardExclusive(card);
-    }
-
-    @Override
-    public boolean filterColorless(AbstractCard card) {
-        return card instanceof PCLCard && !(card instanceof PCLDynamicCard) && ((PCLCard) card).cardData.resources == this;
-    }
-
-    @Override
-    public PCLAbstractPlayerData getData() {
-        return null;
-    }
-
-    @Override
-    public PCLCoreTooltips getTooltips() {
-        return new PCLCoreTooltips();
-    }
-
-    @Override
-    public PCLCoreStrings getStrings() {
-        return new PCLCoreStrings(this);
-    }
-
-    @Override
-    public String getReplacement(String cardID) {
-        // Prevent example templates from showing up for regular characters
-        PCLCardData data = PCLCardData.getStaticData(cardID);
-        return data instanceof TemplateCardData ? ((TemplateCardData) data).originalID : null;
     }
 }

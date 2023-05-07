@@ -16,23 +16,19 @@ public class TemplateCardData extends PCLCardData {
         super(type, resources);
         this.originalID = sourceID;
         TEMPLATES.put(sourceID, this);
-        if (TEMPLATES.isEmpty())
-        {
+        if (TEMPLATES.isEmpty()) {
             EUIUtils.logInfo(this, "Templates was empty", TEMPLATES.size());
         }
-        else
-        {
+        else {
             EUIUtils.logInfo(this, "Templates was not empty", TEMPLATES.size());
         }
     }
 
-    public static Collection<TemplateCardData> getTemplates()
-    {
-        return TEMPLATES.values().stream().sorted((a, b) -> StringUtils.compare(a.ID, b.ID)).collect(Collectors.toList());
+    public static TemplateCardData getTemplate(String original) {
+        return TEMPLATES.get(original);
     }
 
-    public static TemplateCardData getTemplate(String original)
-    {
-        return TEMPLATES.get(original);
+    public static Collection<TemplateCardData> getTemplates() {
+        return TEMPLATES.values().stream().sorted((a, b) -> StringUtils.compare(a.ID, b.ID)).collect(Collectors.toList());
     }
 }

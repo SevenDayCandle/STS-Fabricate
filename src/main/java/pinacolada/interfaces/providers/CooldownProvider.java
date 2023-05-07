@@ -13,6 +13,10 @@ public interface CooldownProvider {
         return getCooldown() <= 0;
     }
 
+    int getBaseCooldown();
+
+    int getCooldown();
+
     default ColoredString getCooldownString() {
         int amount = getCooldown();
         if (isDisplayingUpgrade()) {
@@ -48,13 +52,9 @@ public interface CooldownProvider {
         return false;
     }
 
-    int getCooldown();
-
-    void setCooldown(int value);
-
     default void reset() {
         setCooldown(getBaseCooldown());
     }
 
-    int getBaseCooldown();
+    void setCooldown(int value);
 }

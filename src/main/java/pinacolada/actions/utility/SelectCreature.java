@@ -29,6 +29,7 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
     private final Vector2[] points = new Vector2[20];
     private final Vector2 controlPoint = new Vector2();
     private final Vector2 origin = new Vector2();
+    private float arrowScaleTimer;
     protected ActionT1<AbstractCreature> onHovering;
     protected AbstractCreature previous;
     protected AbstractCreature target;
@@ -36,7 +37,6 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
     protected boolean autoSelect;
     protected boolean skipConfirmation;
     protected boolean cancellable;
-    private float arrowScaleTimer;
 
     public SelectCreature(AbstractCreature target) {
         super(ActionType.SPECIAL);
@@ -97,10 +97,10 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
         return this;
     }
 
-    public SelectCreature isCancellable(boolean cancellable) {
-        this.cancellable = cancellable;
-
-        return this;
+    @Override
+    protected void completeImpl() {
+        GameCursor.hidden = false;
+        super.completeImpl();
     }
 
     @Override
@@ -160,6 +160,12 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
         super.firstUpdate();
     }
 
+    public SelectCreature isCancellable(boolean cancellable) {
+        this.cancellable = cancellable;
+
+        return this;
+    }
+
     @Override
     protected void updateInternal(float deltaTime) {
         GameCursor.hidden = true;
@@ -211,41 +217,24 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
         EUI.addPostRender(this::render);
     }
 
-    @Override
-    protected void completeImpl() {
-        GameCursor.hidden = false;
-        super.completeImpl();
-    }
+    protected void drawCurve(SpriteBatch sb, Vector2 start, Vector2 end, Vector2 control) {
+        float radius = 7f * Settings.scale;
 
-    protected void updateTarget(boolean targetPlayer, boolean targetEnemy) {
-        if (target != null) {
-            previous = target;
-            target = null;
-        }
-
-        if (targetPlayer && (player.hb.hovered && !player.isDying)) {
-            target = player;
-        }
-        else if (targetEnemy) {
-            for (AbstractMonster m : GameUtilities.getEnemies(true)) {
-                if (m.hb.hovered && !m.isDying) {
-                    target = m;
-                    break;
-                }
-            }
-        }
-
-        if ((card != null) && (target != null) && (target != previous)) {
-            if (target instanceof AbstractMonster) {
-                card.calculateCardDamage((AbstractMonster) target);
+        for (int i = 0; i < points.length - 1; ++i) {
+            points[i] = Bezier.quadratic(points[i], (float) i / 20f, start, control, end, new Vector2());
+            radius += 0.4F * Settings.scale;
+            float angle;
+            Vector2 tmp;
+            if (i != 0) {
+                tmp = new Vector2(points[i - 1].x - points[i].x, points[i - 1].y - points[i].y);
+                angle = tmp.nor().angle() + 90f;
             }
             else {
-                card.applyPowers();
+                tmp = new Vector2(control.x - points[i].x, control.y - points[i].y);
+                angle = tmp.nor().angle() + 270f;
             }
-        }
 
-        if (onHovering != null) {
-            onHovering.invoke(target);
+            sb.draw(ImageMaster.TARGET_UI_CIRCLE, points[i].x - 64f, points[i].y - 64f, 64f, 64f, 128f, 128f, radius / 18f, radius / 18f, angle, 0, 0, 128, 128, false, false);
         }
     }
 
@@ -319,27 +308,6 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
                 tmp.angle() + 90f, 0, 0, 256, 256, false, false);
     }
 
-    protected void drawCurve(SpriteBatch sb, Vector2 start, Vector2 end, Vector2 control) {
-        float radius = 7f * Settings.scale;
-
-        for (int i = 0; i < points.length - 1; ++i) {
-            points[i] = Bezier.quadratic(points[i], (float) i / 20f, start, control, end, new Vector2());
-            radius += 0.4F * Settings.scale;
-            float angle;
-            Vector2 tmp;
-            if (i != 0) {
-                tmp = new Vector2(points[i - 1].x - points[i].x, points[i - 1].y - points[i].y);
-                angle = tmp.nor().angle() + 90f;
-            }
-            else {
-                tmp = new Vector2(control.x - points[i].x, control.y - points[i].y);
-                angle = tmp.nor().angle() + 270f;
-            }
-
-            sb.draw(ImageMaster.TARGET_UI_CIRCLE, points[i].x - 64f, points[i].y - 64f, 64f, 64f, 128f, 128f, radius / 18f, radius / 18f, angle, 0, 0, 128, 128, false, false);
-        }
-    }
-
     public SelectCreature setMessage(String message) {
         this.message = message;
 
@@ -362,5 +330,37 @@ public class SelectCreature extends PCLAction<AbstractCreature> {
         this.skipConfirmation = skipConfirmation;
 
         return this;
+    }
+
+    protected void updateTarget(boolean targetPlayer, boolean targetEnemy) {
+        if (target != null) {
+            previous = target;
+            target = null;
+        }
+
+        if (targetPlayer && (player.hb.hovered && !player.isDying)) {
+            target = player;
+        }
+        else if (targetEnemy) {
+            for (AbstractMonster m : GameUtilities.getEnemies(true)) {
+                if (m.hb.hovered && !m.isDying) {
+                    target = m;
+                    break;
+                }
+            }
+        }
+
+        if ((card != null) && (target != null) && (target != previous)) {
+            if (target instanceof AbstractMonster) {
+                card.calculateCardDamage((AbstractMonster) target);
+            }
+            else {
+                card.applyPowers();
+            }
+        }
+
+        if (onHovering != null) {
+            onHovering.invoke(target);
+        }
     }
 }

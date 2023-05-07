@@ -57,10 +57,10 @@ import static pinacolada.utilities.GameUtilities.screenW;
 
 // Copied and modified from STS-AnimatorMod
 public class PGR {
-    public static final String BASE_PREFIX = "pcl";
-    public static final PCLDungeon dungeon = PCLDungeon.register();
     private static final HashMap<AbstractCard.CardColor, PCLResources<?, ?, ?, ?>> colorResourceMap = new HashMap<>();
     private static final HashMap<AbstractPlayer.PlayerClass, PCLResources<?, ?, ?, ?>> playerResourceMap = new HashMap<>();
+    public static final String BASE_PREFIX = "pcl";
+    public static final PCLDungeon dungeon = PCLDungeon.register();
     public static PCLCoreResources core;
     public static PCLMainConfig config;
     public static PCLAugmentPanelItem augmentPanel;
@@ -90,21 +90,12 @@ public class PGR {
         return getPng(id, "blights");
     }
 
-    public static String getPng(String id, String subFolder) {
-        String[] s = id.split(Pattern.quote(":"), 2);
-        return "images/" + s[0] + "/" + subFolder + "/" + s[1].replace(":", "_") + ".png";
-    }
-
     public static String getBlightOutlineImage(String id) {
         return getPng(id, "blights/outline");
     }
 
     public static BlightStrings getBlightStrings(String blightID) {
         return getLanguagePack().getBlightString(blightID);
-    }
-
-    public static LocalizedStrings getLanguagePack() {
-        return CardCrawlGame.languagePack;
     }
 
     public static String getCardImage(String id) {
@@ -133,6 +124,10 @@ public class PGR {
         return getLanguagePack().getEventString(eventID);
     }
 
+    public static LocalizedStrings getLanguagePack() {
+        return CardCrawlGame.languagePack;
+    }
+
     public static LoadoutStrings getLoadoutStrings(String stringID) {
         return LoadoutStrings.STRINGS.get(stringID);
     }
@@ -153,16 +148,13 @@ public class PGR {
         return getResources(playerClass).data;
     }
 
-    public static PCLResources<?, ?, ?, ?> getResources(AbstractCard.CardColor cardColor) {
-        return colorResourceMap.getOrDefault(cardColor, core);
-    }
-
     public static PCLAbstractPlayerData getPlayerData(AbstractPlayer.PlayerClass playerClass) {
         return getResources(playerClass).data;
     }
 
-    public static PCLResources<?, ?, ?, ?> getResources(AbstractPlayer.PlayerClass playerClass) {
-        return playerResourceMap.getOrDefault(playerClass, core);
+    public static String getPng(String id, String subFolder) {
+        String[] s = id.split(Pattern.quote(":"), 2);
+        return "images/" + s[0] + "/" + subFolder + "/" + s[1].replace(":", "_") + ".png";
     }
 
     public static String getPowerImage(String id) {
@@ -173,12 +165,24 @@ public class PGR {
         return getLanguagePack().getPowerStrings(powerID);
     }
 
+    public static Collection<PCLResources<?, ?, ?, ?>> getRegisteredResources() {
+        return colorResourceMap.values();
+    }
+
     public static String getRelicImage(String id) {
         return getPng(id, "relics");
     }
 
     public static RelicStrings getRelicStrings(String relicID) {
         return getLanguagePack().getRelicStrings(relicID);
+    }
+
+    public static PCLResources<?, ?, ?, ?> getResources(AbstractCard.CardColor cardColor) {
+        return colorResourceMap.getOrDefault(cardColor, core);
+    }
+
+    public static PCLResources<?, ?, ?, ?> getResources(AbstractPlayer.PlayerClass playerClass) {
+        return playerResourceMap.getOrDefault(playerClass, core);
     }
 
     public static String getRewardImage(String id) {
@@ -203,12 +207,50 @@ public class PGR {
         initialize(core);
     }
 
-    public static boolean isLoaded() {
-        return core != null && core.isLoaded && EUIUtils.all(getRegisteredResources(), r -> r.isLoaded);
+    protected static void initialize(PCLResources<?, ?, ?, ?> resources) {
+        resources.initializeColor();
+
+        BaseMod.subscribe(resources);
     }
 
-    public static Collection<PCLResources<?, ?, ?, ?>> getRegisteredResources() {
-        return colorResourceMap.values();
+    protected static void initializeUI() {
+        PGR.combatScreen = new PCLCombatScreen();
+        PGR.cardPopup = new PCLSingleCardPopup();
+        PGR.seriesSelection = new PCLSeriesSelectScreen();
+        PGR.loadoutEditor = new PCLLoadoutEditor();
+        PGR.customCards = new PCLCustomCardSelectorScreen();
+        PGR.customMode = new PCLCustomRunScreen();
+        PGR.charSelectProvider = new PCLCharacterSelectProvider();
+        PGR.affinityFilters = new PCLAffinityPoolModule(EUI.cardFilters);
+        PGR.libraryFilters = new PCLLibraryModule(EUI.customLibraryScreen);
+        PGR.augmentScreen = new PCLAugmentScreen();
+        PGR.augmentPanel = new PCLAugmentPanelItem();
+        PGR.blackScreen = new EUIImage(EUIRM.images.fullSquare.texture(), new EUIHitbox(screenW(1), screenH(1)))
+                .setPosition(screenW(0.5f), screenH(0.5f))
+                .setColor(0, 0, 0, 0.9f);
+        try {
+            PGR.debugAugments = new PCLDebugAugmentPanel();
+            PGR.debugCards = new PCLDebugCardPanel();
+        }
+        catch (Error | Exception e) {
+            e.printStackTrace();
+            EUIUtils.logError(PGR.class, "Failed to load ImGUI debug panels. These panels will not be available in ImGUI.");
+        }
+
+        EUI.addBattleSubscriber(PGR.combatScreen);
+        EUI.addSubscriber(PGR.cardPopup);
+        EUI.setCustomCardFilter(AbstractCard.CardColor.COLORLESS, PGR.affinityFilters);
+        EUI.setCustomCardFilter(AbstractCard.CardColor.CURSE, PGR.affinityFilters);
+        EUI.setCustomCardLibraryModule(AbstractCard.CardColor.COLORLESS, PGR.libraryFilters);
+        EUI.setCustomCardLibraryModule(AbstractCard.CardColor.CURSE, PGR.libraryFilters);
+        for (PCLResources<?, ?, ?, ?> r : PGR.getRegisteredResources()) {
+            EUI.setCustomCardFilter(r.cardColor, PGR.affinityFilters);
+            EUI.setCustomCardLibraryModule(r.cardColor, PGR.libraryFilters);
+        }
+    }
+
+    public static boolean isLoaded() {
+        return core != null && core.isLoaded && EUIUtils.all(getRegisteredResources(), r -> r.isLoaded);
     }
 
     public static void loadCustomCards() {
@@ -303,42 +345,6 @@ public class PGR {
         ConsoleCommand.addCommand("unlockall", UnlockAllCommand.class);
     }
 
-    protected static void initializeUI() {
-        PGR.combatScreen = new PCLCombatScreen();
-        PGR.cardPopup = new PCLSingleCardPopup();
-        PGR.seriesSelection = new PCLSeriesSelectScreen();
-        PGR.loadoutEditor = new PCLLoadoutEditor();
-        PGR.customCards = new PCLCustomCardSelectorScreen();
-        PGR.customMode = new PCLCustomRunScreen();
-        PGR.charSelectProvider = new PCLCharacterSelectProvider();
-        PGR.affinityFilters = new PCLAffinityPoolModule(EUI.cardFilters);
-        PGR.libraryFilters = new PCLLibraryModule(EUI.customLibraryScreen);
-        PGR.augmentScreen = new PCLAugmentScreen();
-        PGR.augmentPanel = new PCLAugmentPanelItem();
-        PGR.blackScreen = new EUIImage(EUIRM.images.fullSquare.texture(), new EUIHitbox(screenW(1), screenH(1)))
-                .setPosition(screenW(0.5f), screenH(0.5f))
-                .setColor(0, 0, 0, 0.9f);
-        try {
-            PGR.debugAugments = new PCLDebugAugmentPanel();
-            PGR.debugCards = new PCLDebugCardPanel();
-        }
-        catch (Error | Exception e) {
-            e.printStackTrace();
-            EUIUtils.logError(PGR.class, "Failed to load ImGUI debug panels. These panels will not be available in ImGUI.");
-        }
-
-        EUI.addBattleSubscriber(PGR.combatScreen);
-        EUI.addSubscriber(PGR.cardPopup);
-        EUI.setCustomCardFilter(AbstractCard.CardColor.COLORLESS, PGR.affinityFilters);
-        EUI.setCustomCardFilter(AbstractCard.CardColor.CURSE, PGR.affinityFilters);
-        EUI.setCustomCardLibraryModule(AbstractCard.CardColor.COLORLESS, PGR.libraryFilters);
-        EUI.setCustomCardLibraryModule(AbstractCard.CardColor.CURSE, PGR.libraryFilters);
-        for (PCLResources<?, ?, ?, ?> r : PGR.getRegisteredResources()) {
-            EUI.setCustomCardFilter(r.cardColor, PGR.affinityFilters);
-            EUI.setCustomCardLibraryModule(r.cardColor, PGR.libraryFilters);
-        }
-    }
-
     public static void registerResource(PCLResources<?, ?, ?, ?> resources) {
         if (core == null) {
             throw new RuntimeException("No core present");
@@ -346,12 +352,6 @@ public class PGR {
         colorResourceMap.put(resources.cardColor, resources);
         playerResourceMap.put(resources.playerClass, resources);
         initialize(resources);
-    }
-
-    protected static void initialize(PCLResources<?, ?, ?, ?> resources) {
-        resources.initializeColor();
-
-        BaseMod.subscribe(resources);
     }
 
     public static void registerRewards() {

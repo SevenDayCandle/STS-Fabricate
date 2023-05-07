@@ -18,11 +18,11 @@ import java.util.ArrayList;
 // Copied and modified from STS-AnimatorMod
 public abstract class PCLAction<T> extends AbstractGameAction {
     public static AbstractCard currentCard;
+    protected final AbstractPlayer player;
     protected AbstractCard card;
     protected ArrayList<ActionT1<T>> callbacks = new ArrayList<>();
     protected String message;
     protected String name;
-    protected final AbstractPlayer player;
     protected int ticks;
     public AbstractCard sourceCard;
     public PCLActions.ActionOrder originalOrder;
@@ -80,6 +80,10 @@ public abstract class PCLAction<T> extends AbstractGameAction {
         completeImpl();
     }
 
+    protected void completeImpl() {
+        this.isDone = true;
+    }
+
     protected void copySettings(PCLAction<T> other) {
         setDuration(other.startDuration, other.isRealtime);
         isCancellable(other.canCancel);
@@ -90,18 +94,12 @@ public abstract class PCLAction<T> extends AbstractGameAction {
         callbacks.addAll(other.callbacks);
     }
 
-    public PCLAction<T> setDuration(float duration, boolean isRealtime) {
-        this.isRealtime = isRealtime;
-        this.duration = this.startDuration = duration;
+    protected void firstUpdate() {
 
-        return this;
     }
 
-    // Set this to false if an action needs to be executed even if all enemies are dead (e.g. Gain Gold or Heal)
-    public PCLAction<T> isCancellable(boolean canCancel) {
-        this.canCancel = canCancel;
-
-        return this;
+    protected float getDeltaTime() {
+        return isRealtime ? Gdx.graphics.getRawDeltaTime() : Gdx.graphics.getDeltaTime();
     }
 
     protected void initialize(int amount) {
@@ -131,6 +129,20 @@ public abstract class PCLAction<T> extends AbstractGameAction {
         initialize(source, target, amount, null);
     }
 
+    // Set this to false if an action needs to be executed even if all enemies are dead (e.g. Gain Gold or Heal)
+    public PCLAction<T> isCancellable(boolean canCancel) {
+        this.canCancel = canCancel;
+
+        return this;
+    }
+
+    public PCLAction<T> setDuration(float duration, boolean isRealtime) {
+        this.isRealtime = isRealtime;
+        this.duration = this.startDuration = duration;
+
+        return this;
+    }
+
     public PCLAction<T> setOriginalOrder(PCLActions.ActionOrder order) {
         this.originalOrder = order;
 
@@ -149,6 +161,18 @@ public abstract class PCLAction<T> extends AbstractGameAction {
         return this;
     }
 
+    protected boolean tickDuration(float deltaTime) {
+        this.ticks += 1;
+        this.duration -= deltaTime;
+
+        if (this.duration < 0f && ticks >= 3) // ticks are necessary for SuperFastMode at 1000% speed
+        {
+            this.isDone = true;
+        }
+
+        return isDone;
+    }
+
     @Override
     public void update() {
         if (duration == startDuration) {
@@ -163,39 +187,15 @@ public abstract class PCLAction<T> extends AbstractGameAction {
         }
     }
 
-    protected void firstUpdate() {
-
-    }
-
-    protected boolean tickDuration(float deltaTime) {
-        this.ticks += 1;
-        this.duration -= deltaTime;
-
-        if (this.duration < 0f && ticks >= 3) // ticks are necessary for SuperFastMode at 1000% speed
-        {
-            this.isDone = true;
-        }
-
-        return isDone;
-    }
-
-    protected float getDeltaTime() {
-        return isRealtime ? Gdx.graphics.getRawDeltaTime() : Gdx.graphics.getDeltaTime();
+    @Override
+    protected final void tickDuration() {
+        tickDuration(getDeltaTime());
     }
 
     protected void updateInternal(float deltaTime) {
         if (tickDuration(deltaTime)) {
             completeImpl();
         }
-    }
-
-    protected void completeImpl() {
-        this.isDone = true;
-    }
-
-    @Override
-    protected final void tickDuration() {
-        tickDuration(getDeltaTime());
     }
 
     public String updateMessage() {

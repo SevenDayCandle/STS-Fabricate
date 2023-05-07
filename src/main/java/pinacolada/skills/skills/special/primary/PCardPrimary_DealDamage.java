@@ -162,33 +162,6 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
         return this;
     }
 
-    public PCardPrimary_DealDamage setProvider(PointerProvider card) {
-        setTarget(card instanceof PCLCard ? ((PCLCard) card).pclTarget : PCLCardTarget.Single);
-        setSource(card, PCLCardValueSource.Damage, PCLCardValueSource.HitCount);
-        return this;
-    }
-
-    @Override
-    public void useImpl(PCLUseInfo info) {
-        PCLCard pCard = EUIUtils.safeCast(sourceCard, PCLCard.class);
-        if (pCard != null) {
-            switch (target) {
-                case All:
-                    getActions().dealCardDamageToAll(pCard, info.source, fields.attackEffect).forEach(e -> setDamageOptions(e, info));
-                case Team:
-                    getActions().dealCardDamage(pCard, info.source, AbstractDungeon.player, fields.attackEffect).forEach(e -> setDamageOptions(e, info));
-                case AllAlly:
-                    getActions().dealCardDamageToAll(pCard, info.source, fields.attackEffect).forEach(e -> setDamageOptions(e.targetAllies(true), info));
-                    break;
-                case AllEnemy:
-                    getActions().dealCardDamageToAll(pCard, info.source, fields.attackEffect).forEach(e -> setDamageOptions(e, info));
-                    break;
-                default:
-                    getActions().dealCardDamage(pCard, info.source, info.target, fields.attackEffect).forEach(e -> setDamageOptions(e, info));
-            }
-        }
-    }
-
     protected void setDamageOptions(DealDamageToAll damageAction, PCLUseInfo info) {
         if (damageEffect != null) {
             damageAction.setDamageEffect((enemy, __) -> damageEffect.invoke(info.source, enemy));
@@ -213,6 +186,33 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
             }
             else {
                 damageAction.setVFXColor(fields.vfxColor);
+            }
+        }
+    }
+
+    public PCardPrimary_DealDamage setProvider(PointerProvider card) {
+        setTarget(card instanceof PCLCard ? ((PCLCard) card).pclTarget : PCLCardTarget.Single);
+        setSource(card, PCLCardValueSource.Damage, PCLCardValueSource.HitCount);
+        return this;
+    }
+
+    @Override
+    public void useImpl(PCLUseInfo info) {
+        PCLCard pCard = EUIUtils.safeCast(sourceCard, PCLCard.class);
+        if (pCard != null) {
+            switch (target) {
+                case All:
+                    getActions().dealCardDamageToAll(pCard, info.source, fields.attackEffect).forEach(e -> setDamageOptions(e, info));
+                case Team:
+                    getActions().dealCardDamage(pCard, info.source, AbstractDungeon.player, fields.attackEffect).forEach(e -> setDamageOptions(e, info));
+                case AllAlly:
+                    getActions().dealCardDamageToAll(pCard, info.source, fields.attackEffect).forEach(e -> setDamageOptions(e.targetAllies(true), info));
+                    break;
+                case AllEnemy:
+                    getActions().dealCardDamageToAll(pCard, info.source, fields.attackEffect).forEach(e -> setDamageOptions(e, info));
+                    break;
+                default:
+                    getActions().dealCardDamage(pCard, info.source, info.target, fields.attackEffect).forEach(e -> setDamageOptions(e, info));
             }
         }
     }

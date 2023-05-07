@@ -52,16 +52,17 @@ import java.util.List;
 
 // Copied and modified from STS-AnimatorMod
 public abstract class PCLPower extends AbstractPower implements CloneablePowerInterface, ClickableProvider, TooltipProvider {
-    public static final int DUMMY_MULT = 100;
     protected static final StringBuilder builder = new StringBuilder();
     protected static final float ICON_SIZE = 32f;
     protected static final float ICON_SIZE2 = 48f;
     protected static final float CLICKABLE_SIZE = ICON_SIZE * Settings.scale * 1.5f;
     protected static final Color disabledColor = new Color(0.5f, 0.5f, 0.5f, 1);
+    public static final int DUMMY_MULT = 100;
     public static AbstractPlayer player = null;
     public static Random rng = null;
-    public final ArrayList<EUITooltip> tooltips = new ArrayList<>();
     protected final ArrayList<AbstractGameEffect> effects;
+    public final ArrayList<EUITooltip> tooltips = new ArrayList<>();
+    protected PowerStrings powerStrings;
     public EUIHitbox hb;
     public AbstractCreature source;
     public EUITooltip mainTip;
@@ -71,7 +72,6 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
     public boolean hideAmount = false;
     public int baseAmount = 0;
     public int maxAmount = 9999;
-    protected PowerStrings powerStrings;
 
     public PCLPower(AbstractCreature owner, PCLRelic relic) {
         this(owner, null, relic);
@@ -90,70 +90,6 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         hb = new EUIHitbox(CLICKABLE_SIZE, CLICKABLE_SIZE);
     }
 
-    protected void setupStrings(PCLRelic relic) {
-        this.ID = deriveID(relic.relicId);
-        // Vanilla rendering cannot render generated region48 properly
-        if (PGR.config.vanillaPowerRender.get()) {
-            this.img = PCLCoreImages.CardAffinity.unknown.texture();
-        }
-        else {
-            this.region48 = relic.getPowerIcon();
-        }
-        this.powerStrings = new PowerStrings();
-        this.powerStrings.NAME = relic.name;
-        this.powerStrings.DESCRIPTIONS = relic.DESCRIPTIONS;
-        setupDescription();
-    }
-
-    public static String deriveID(String base) {
-        return base + "Power";
-    }
-
-    protected void setupDescription() {
-        this.name = powerStrings.NAME;
-        this.description = getUpdatedDescription();
-        mainTip = new EUITooltip(name, description);
-        mainTip.icon = this.region48 != null ? this.region48 : img != null ? new TextureRegion(img) : null;
-        tooltips.add(mainTip);
-        findTooltipsFromText(description);
-    }
-
-    public String getUpdatedDescription() {
-        return formatDescription(0, amount);
-    }
-
-    protected void findTooltipsFromText(String text) {
-
-        boolean foundIcon = false;
-        for (int i = 0; i < text.length(); i++) {
-            char c = text.charAt(i);
-
-            if (foundIcon) {
-                if (']' != c) {
-                    builder.append(c);
-                    continue;
-                }
-                foundIcon = false;
-                EUITooltip tooltip = EUITooltip.findByID(EUIUtils.invokeBuilder(builder));
-                if (tooltip != null) {
-                    tooltips.add(tooltip);
-                }
-            }
-            else if ('[' == c) {
-                foundIcon = true;
-            }
-        }
-
-    }
-
-    protected String formatDescription(int index, Object... args) {
-        if (powerStrings == null || powerStrings.DESCRIPTIONS == null || powerStrings.DESCRIPTIONS.length <= index) {
-            EUIUtils.logError(this, "powerStrings.DESCRIPTIONS does not exist, " + this.name);
-            return "";
-        }
-        return EUIUtils.format(powerStrings.DESCRIPTIONS[index], args);
-    }
-
     public PCLPower(AbstractCreature owner, PCLCardData cardData) {
         this(owner, null, cardData);
     }
@@ -161,21 +97,6 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
     public PCLPower(AbstractCreature owner, AbstractCreature source, PCLCardData cardData) {
         this(owner, source);
         setupStrings(cardData);
-    }
-
-    protected void setupStrings(PCLCardData cardData) {
-        this.ID = deriveID(cardData.ID);
-        // Vanilla rendering cannot render generated region48 properly
-        if (PGR.config.vanillaPowerRender.get()) {
-            this.img = PCLCoreImages.CardAffinity.unknown.texture();
-        }
-        else {
-            this.region48 = cardData.getCardIcon();
-        }
-        this.powerStrings = new PowerStrings();
-        this.powerStrings.NAME = cardData.strings.NAME;
-        this.powerStrings.DESCRIPTIONS = cardData.strings.EXTENDED_DESCRIPTION;
-        setupDescription();
     }
 
     public PCLPower(AbstractCreature owner, String id) {
@@ -187,26 +108,16 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         setupStrings(id);
     }
 
-    protected void setupStrings(String originalID) {
-        final String imagePath = PGR.getPowerImage(originalID);
-        if (Gdx.files.internal(imagePath).exists()) {
-            this.img = EUIRM.getTexture(imagePath);
-        }
-        if (this.img == null) {
-            this.img = PCLCoreImages.CardAffinity.unknown.texture();
-        }
-
-        this.ID = originalID;
-        this.powerStrings = CardCrawlGame.languagePack.getPowerStrings(originalID);
-        setupDescription();
-    }
-
     public static String createFullID(Class<? extends PCLPower> type) {
         return createFullID(PGR.core, type);
     }
 
     public static String createFullID(PCLResources<?, ?, ?, ?> resources, Class<? extends PCLPower> type) {
         return resources.createID(type.getSimpleName());
+    }
+
+    public static String deriveID(String base) {
+        return base + "Power";
     }
 
     public float atDamageGive(PCLUseInfo info, float block, DamageInfo.DamageType type, AbstractCard c) {
@@ -243,6 +154,38 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         return triggerCondition;
     }
 
+    protected void findTooltipsFromText(String text) {
+
+        boolean foundIcon = false;
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+
+            if (foundIcon) {
+                if (']' != c) {
+                    builder.append(c);
+                    continue;
+                }
+                foundIcon = false;
+                EUITooltip tooltip = EUITooltip.findByID(EUIUtils.invokeBuilder(builder));
+                if (tooltip != null) {
+                    tooltips.add(tooltip);
+                }
+            }
+            else if ('[' == c) {
+                foundIcon = true;
+            }
+        }
+
+    }
+
+    protected String formatDescription(int index, Object... args) {
+        if (powerStrings == null || powerStrings.DESCRIPTIONS == null || powerStrings.DESCRIPTIONS.length <= index) {
+            EUIUtils.logError(this, "powerStrings.DESCRIPTIONS does not exist, " + this.name);
+            return "";
+        }
+        return EUIUtils.format(powerStrings.DESCRIPTIONS[index], args);
+    }
+
     public String getID() {
         return ID;
     }
@@ -252,9 +195,33 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         return mainTip;
     }
 
+    protected ColoredString getPrimaryAmount(Color c) {
+        if (amount != 0) {
+            if (isTurnBased) {
+                return new ColoredString(amount, Color.WHITE, c.a);
+            }
+            else if (this.amount >= 0) {
+                return new ColoredString(amount, Color.GREEN, c.a);
+            }
+            else if (this.canGoNegative) {
+                return new ColoredString(amount, Color.RED, c.a);
+            }
+        }
+
+        return null;
+    }
+
+    protected ColoredString getSecondaryAmount(Color c) {
+        return null;
+    }
+
     @Override
     public List<EUITooltip> getTips() {
         return tooltips;
+    }
+
+    public String getUpdatedDescription() {
+        return formatDescription(0, amount);
     }
 
     public void initialize(int amount) {
@@ -266,6 +233,10 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         this.type = type;
         this.isTurnBased = turnBased;
         updateDescription();
+    }
+
+    public boolean isPriorityTarget() {
+        return false;
     }
 
     @Override
@@ -333,17 +304,49 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         return block;
     }
 
+    protected void onAmountChanged(int previousAmount, int difference) {
+        if (difference != 0) {
+            updateDescription();
+        }
+    }
+
+    protected void onSamePowerApplied(AbstractPower power) {
+
+    }
+
+    public RemoveSpecificPowerAction removePower() {
+        return removePower(PCLActions.bottom);
+    }
+
+    public RemoveSpecificPowerAction removePower(PCLActions order) {
+        return order.removePower(owner, owner, this);
+    }
+
+    protected void renderIconsImpl(SpriteBatch sb, float x, float y, Color borderColor, Color imageColor) {
+        float scale = 1;
+        if (triggerCondition != null) {
+            PCLRenderHelpers.drawCentered(sb, borderColor, PCLCoreImages.Menu.squaredbuttonEmptycenter.texture(), x, y, ICON_SIZE2, ICON_SIZE2, 1f, 0);
+            scale = 0.75f;
+        }
+
+        if (this.region48 != null) {
+            PCLRenderHelpers.drawCentered(sb, imageColor, this.region48, x, y, ICON_SIZE, ICON_SIZE, scale, 0);
+        }
+        else {
+            PCLRenderHelpers.drawCentered(sb, imageColor, this.img, x, y, ICON_SIZE, ICON_SIZE, scale, 0);
+        }
+
+        if (triggerCondition != null && enabled && hb.hovered && clickable) {
+            PCLRenderHelpers.drawCentered(sb, EUIColors.white(0.3f), EUIRM.images.squaredButton.texture(), x, y, ICON_SIZE2, ICON_SIZE2, 1f, 0);
+        }
+
+    }
+
     public int resetAmount() {
         final int previous = amount;
         this.amount = baseAmount;
         onAmountChanged(previous, (amount - previous));
         return amount;
-    }
-
-    protected void onAmountChanged(int previousAmount, int difference) {
-        if (difference != 0) {
-            updateDescription();
-        }
     }
 
     public PCLPower setEnabled(boolean enable) {
@@ -355,6 +358,73 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
     public PCLPower setHitbox(EUIHitbox hb) {
         this.hb = hb;
         return this;
+    }
+
+    protected void setupDescription() {
+        this.name = powerStrings.NAME;
+        this.description = getUpdatedDescription();
+        mainTip = new EUITooltip(name, description);
+        mainTip.icon = this.region48 != null ? this.region48 : img != null ? new TextureRegion(img) : null;
+        tooltips.add(mainTip);
+        findTooltipsFromText(description);
+    }
+
+    protected void setupStrings(PCLRelic relic) {
+        this.ID = deriveID(relic.relicId);
+        // Vanilla rendering cannot render generated region48 properly
+        if (PGR.config.vanillaPowerRender.get()) {
+            this.img = PCLCoreImages.CardAffinity.unknown.texture();
+        }
+        else {
+            this.region48 = relic.getPowerIcon();
+        }
+        this.powerStrings = new PowerStrings();
+        this.powerStrings.NAME = relic.name;
+        this.powerStrings.DESCRIPTIONS = relic.DESCRIPTIONS;
+        setupDescription();
+    }
+
+    protected void setupStrings(PCLCardData cardData) {
+        this.ID = deriveID(cardData.ID);
+        // Vanilla rendering cannot render generated region48 properly
+        if (PGR.config.vanillaPowerRender.get()) {
+            this.img = PCLCoreImages.CardAffinity.unknown.texture();
+        }
+        else {
+            this.region48 = cardData.getCardIcon();
+        }
+        this.powerStrings = new PowerStrings();
+        this.powerStrings.NAME = cardData.strings.NAME;
+        this.powerStrings.DESCRIPTIONS = cardData.strings.EXTENDED_DESCRIPTION;
+        setupDescription();
+    }
+
+    protected void setupStrings(String originalID) {
+        final String imagePath = PGR.getPowerImage(originalID);
+        if (Gdx.files.internal(imagePath).exists()) {
+            this.img = EUIRM.getTexture(imagePath);
+        }
+        if (this.img == null) {
+            this.img = PCLCoreImages.CardAffinity.unknown.texture();
+        }
+
+        this.ID = originalID;
+        this.powerStrings = CardCrawlGame.languagePack.getPowerStrings(originalID);
+        setupDescription();
+    }
+
+    public void stackPower(int stackAmount, boolean updateBaseAmount) {
+        if (updateBaseAmount && (baseAmount += stackAmount) > maxAmount) {
+            baseAmount = maxAmount;
+        }
+        if ((amount + stackAmount) > maxAmount) {
+            stackAmount = maxAmount - amount;
+        }
+
+        final int previous = amount;
+        super.stackPower(stackAmount);
+
+        onAmountChanged(previous, stackAmount);
     }
 
     @Override
@@ -401,20 +471,6 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         stackPower(stackAmount, true);
     }
 
-    public void stackPower(int stackAmount, boolean updateBaseAmount) {
-        if (updateBaseAmount && (baseAmount += stackAmount) > maxAmount) {
-            baseAmount = maxAmount;
-        }
-        if ((amount + stackAmount) > maxAmount) {
-            stackAmount = maxAmount - amount;
-        }
-
-        final int previous = amount;
-        super.stackPower(stackAmount);
-
-        onAmountChanged(previous, stackAmount);
-    }
-
     @Override
     public void reducePower(int reduceAmount) {
         final int previous = amount;
@@ -424,14 +480,6 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         }
 
         onAmountChanged(previous, -Math.max(0, reduceAmount));
-    }
-
-    public RemoveSpecificPowerAction removePower() {
-        return removePower(PCLActions.bottom);
-    }
-
-    public RemoveSpecificPowerAction removePower(PCLActions order) {
-        return order.removePower(owner, owner, this);
     }
 
     @Override
@@ -454,26 +502,6 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         }
     }
 
-    protected void renderIconsImpl(SpriteBatch sb, float x, float y, Color borderColor, Color imageColor) {
-        float scale = 1;
-        if (triggerCondition != null) {
-            PCLRenderHelpers.drawCentered(sb, borderColor, PCLCoreImages.Menu.squaredbuttonEmptycenter.texture(), x, y, ICON_SIZE2, ICON_SIZE2, 1f, 0);
-            scale = 0.75f;
-        }
-
-        if (this.region48 != null) {
-            PCLRenderHelpers.drawCentered(sb, imageColor, this.region48, x, y, ICON_SIZE, ICON_SIZE, scale, 0);
-        }
-        else {
-            PCLRenderHelpers.drawCentered(sb, imageColor, this.img, x, y, ICON_SIZE, ICON_SIZE, scale, 0);
-        }
-
-        if (triggerCondition != null && enabled && hb.hovered && clickable) {
-            PCLRenderHelpers.drawCentered(sb, EUIColors.white(0.3f), EUIRM.images.squaredButton.texture(), x, y, ICON_SIZE2, ICON_SIZE2, 1f, 0);
-        }
-
-    }
-
     @Override
     public void renderAmount(SpriteBatch sb, float x, float y, Color c) {
         if (hideAmount) {
@@ -489,26 +517,6 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         if (amount2 != null) {
             FontHelper.renderFontRightTopAligned(sb, FontHelper.powerAmountFont, amount2.text, x, y + 15f * Settings.scale, 1, amount2.color);
         }
-    }
-
-    protected ColoredString getPrimaryAmount(Color c) {
-        if (amount != 0) {
-            if (isTurnBased) {
-                return new ColoredString(amount, Color.WHITE, c.a);
-            }
-            else if (this.amount >= 0) {
-                return new ColoredString(amount, Color.GREEN, c.a);
-            }
-            else if (this.canGoNegative) {
-                return new ColoredString(amount, Color.RED, c.a);
-            }
-        }
-
-        return null;
-    }
-
-    protected ColoredString getSecondaryAmount(Color c) {
-        return null;
     }
 
     @Override
@@ -559,14 +567,5 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
                 triggerCondition.addUses(1);
             }
         }
-    }
-
-    protected void onSamePowerApplied(AbstractPower power) {
-
-    }
-
-    public boolean isPriorityTarget()
-    {
-        return false;
     }
 }

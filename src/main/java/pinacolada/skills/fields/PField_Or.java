@@ -16,13 +16,13 @@ public class PField_Or extends PField_Not {
         return (PField_Or) new PField_Or().setOr(or).setNot(not);
     }
 
-    public PField_Or setOr(boolean value) {
-        this.or = value;
-        return this;
-    }
-
     public void setupEditor(PCLCustomEffectEditingPane editor) {
         super.setupEditor(editor);
         editor.registerBoolean(PGR.core.strings.cedit_orCondition, v -> or = v, or);
+    }
+
+    public PField_Or setOr(boolean value) {
+        this.or = value;
+        return this;
     }
 }

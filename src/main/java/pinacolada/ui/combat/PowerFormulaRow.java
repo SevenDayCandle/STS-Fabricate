@@ -24,13 +24,14 @@ import java.util.ArrayList;
 
 public class PowerFormulaRow extends EUIHoverable {
     public static final float ICON_SIZE = 32f;
-    public final Type type;
     protected final ArrayList<PowerFormulaItem> powers = new ArrayList<>();
+    public final Type type;
     protected AbstractCard card;
     protected RelativeHitbox resultHb;
     protected EUILabel initial;
     protected EUILabel result;
     protected Texture icon;
+
     public PowerFormulaRow(EUIHitbox hb, Type type) {
         super(hb);
         this.type = type;
@@ -39,10 +40,6 @@ public class PowerFormulaRow extends EUIHoverable {
                 .setSmartText(false);
         this.result = new EUILabel(FontHelper.powerAmountFont, resultHb)
                 .setSmartText(false);
-    }
-
-    protected float getOffsetCx(int size) {
-        return (size + 1.2f) * 2.5f;
     }
 
     protected void addAffinity(PCLAffinity af, float input, float result) {
@@ -87,6 +84,10 @@ public class PowerFormulaRow extends EUIHoverable {
     protected void addSummon(PCLCardAlly ally, int input, int result) {
         powers.add(new PowerFormulaItem(RelativeHitbox.fromPercentages(hb, 1, 1, getOffsetCx(powers.size()), 1), true, ally.card.getTypeIcon(), result).setAddition(result - input));
         resultHb.setOffset(resultHb.width * getOffsetCx(powers.size() + 1), -0.5f);
+    }
+
+    protected float getOffsetCx(int size) {
+        return (size + 1.2f) * 2.5f;
     }
 
     @Override

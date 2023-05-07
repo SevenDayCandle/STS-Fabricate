@@ -66,10 +66,6 @@ public class PCLCustomCardFormEditor extends EUIBase {
         refresh();
     }
 
-    public void setValue(int value) {
-        screen.setCurrentBuilder(value);
-    }
-
     public void decrease() {
         setValue(screen.currentBuilder - 1);
     }
@@ -104,5 +100,9 @@ public class PCLCustomCardFormEditor extends EUIBase {
         increaseButton.setInteractable(screen.currentBuilder < formValues.size() - 1).tryUpdate();
         add.tryUpdate();
         remove.tryUpdate();
+    }
+
+    public void setValue(int value) {
+        screen.setCurrentBuilder(value);
     }
 }

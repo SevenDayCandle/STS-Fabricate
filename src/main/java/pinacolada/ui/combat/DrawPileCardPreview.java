@@ -53,6 +53,19 @@ public class DrawPileCardPreview {
         return preview;
     }
 
+    public static void unsubscribe(DrawPileCardPreviewProvider provider) {
+        PREVIEWS.removeIf(preview -> preview.provider == provider);
+        updatePreviews();
+    }
+
+    public static void updateAndRenderCurrent(SpriteBatch sb) {
+        updatePreviews();
+
+        if (current != null) {
+            current.updateAndRender(sb);
+        }
+    }
+
     public static void updatePreviews() {
         // TODO show text prompting to cycle if multiple previews are present
         if (PREVIEWS.size() > 1) {
@@ -68,17 +81,12 @@ public class DrawPileCardPreview {
         }
     }
 
-    public static void unsubscribe(DrawPileCardPreviewProvider provider) {
-        PREVIEWS.removeIf(preview -> preview.provider == provider);
-        updatePreviews();
+    public AbstractCard getCard() {
+        return foundCard;
     }
 
-    public static void updateAndRenderCurrent(SpriteBatch sb) {
-        updatePreviews();
-
-        if (current != null) {
-            current.updateAndRender(sb);
-        }
+    public boolean isHighlighted() {
+        return highlighted;
     }
 
     // This is performed as a single action because we need to store the draw scale/angle in one go
@@ -118,13 +126,5 @@ public class DrawPileCardPreview {
         else {
             highlighted = false;
         }
-    }
-
-    public AbstractCard getCard() {
-        return foundCard;
-    }
-
-    public boolean isHighlighted() {
-        return highlighted;
     }
 }

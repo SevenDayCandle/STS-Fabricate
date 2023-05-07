@@ -19,6 +19,16 @@ public class HasteAction extends PCLAction<Void> {
     }
 
     @Override
+    protected void completeImpl() {
+        super.completeImpl();
+        if (PCLCardTag.Haste.has(card) && !CombatManager.hasteInfinitesThisTurn().contains(card)) {
+            CardCrawlGame.sound.playA("POWER_FLIGHT", MathUtils.random(0.3f, 0.4f));
+            PCLCardTag.Haste.tryProgress(card);
+            CombatManager.hasteInfinitesThisTurn().add(card);
+        }
+    }
+
+    @Override
     protected void firstUpdate() {
         if (PCLCardTag.Haste.has(card) && !CombatManager.hasteInfinitesThisTurn().contains(card)) {
             PCLActions.top.draw(1);
@@ -26,16 +36,6 @@ public class HasteAction extends PCLAction<Void> {
         }
         else {
             completeImpl();
-        }
-    }
-
-    @Override
-    protected void completeImpl() {
-        super.completeImpl();
-        if (PCLCardTag.Haste.has(card) && !CombatManager.hasteInfinitesThisTurn().contains(card)) {
-            CardCrawlGame.sound.playA("POWER_FLIGHT", MathUtils.random(0.3f, 0.4f));
-            PCLCardTag.Haste.tryProgress(card);
-            CombatManager.hasteInfinitesThisTurn().add(card);
         }
     }
 }

@@ -24,10 +24,33 @@ public class PCLLoadoutsContainer {
     public final ArrayList<AbstractCard> allCards = new ArrayList<>();
     public final HashMap<PCLCard, PCLLoadout> loadoutMap = new HashMap<>();
     public final HashSet<String> bannedCards = new HashSet<>();
+    private PCLAbstractPlayerData data;
     public int currentCardLimit;
     public int totalCardsInPool = 0;
     public PCLCard currentSeriesCard;
-    private PCLAbstractPlayerData data;
+
+    // Calculate the number of cards in each set, then update the loadout representative with that amount
+    public void calculateCardCounts() {
+        totalCardsInPool = 0;
+
+        for (Map.Entry<PCLCard, PCLLoadout> entry : loadoutMap.entrySet()) {
+            int selectedAmount = 0;
+            for (PCLCardData data : entry.getValue().cardDatas) {
+                if (!bannedCards.contains(data.ID)) {
+                    selectedAmount += 1;
+                    totalCardsInPool += 1;
+                }
+            }
+
+            for (PSkill<?> s : entry.getKey().getFullEffects()) {
+                s.setAmount(selectedAmount);
+            }
+        }
+
+        if (data != null) {
+            currentCardLimit = MathUtils.clamp(data.config.cardsCount.get(), MINIMUM_CARDS, totalCardsInPool);
+        }
+    }
 
     public void commitChanges(PCLAbstractPlayerData data) {
         data.selectedLoadout = find(currentSeriesCard);
@@ -37,10 +60,6 @@ public class PCLLoadoutsContainer {
         EUIUtils.logInfoIfDebug(this, "Selected Loadout: " + data.selectedLoadout.getName());
         EUIUtils.logInfoIfDebug(this, "Banned Size: " + data.config.bannedCards.get().size());
         EUIUtils.logInfoIfDebug(this, "Cards Size: " + data.config.cardsCount.get());
-    }
-
-    public PCLLoadout find(PCLCard card) {
-        return loadoutMap.get(card);
     }
 
     public void createCards(PCLAbstractPlayerData data) {
@@ -81,27 +100,8 @@ public class PCLLoadoutsContainer {
         calculateCardCounts();
     }
 
-    // Calculate the number of cards in each set, then update the loadout representative with that amount
-    public void calculateCardCounts() {
-        totalCardsInPool = 0;
-
-        for (Map.Entry<PCLCard, PCLLoadout> entry : loadoutMap.entrySet()) {
-            int selectedAmount = 0;
-            for (PCLCardData data : entry.getValue().cardDatas) {
-                if (!bannedCards.contains(data.ID)) {
-                    selectedAmount += 1;
-                    totalCardsInPool += 1;
-                }
-            }
-
-            for (PSkill<?> s : entry.getKey().getFullEffects()) {
-                s.setAmount(selectedAmount);
-            }
-        }
-
-        if (data != null) {
-            currentCardLimit = MathUtils.clamp(data.config.cardsCount.get(), MINIMUM_CARDS, totalCardsInPool);
-        }
+    public PCLLoadout find(PCLCard card) {
+        return loadoutMap.get(card);
     }
 
     public Collection<AbstractCard> getAllCards() {

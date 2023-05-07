@@ -59,27 +59,6 @@ public final class PCLEffects {
         return effect;
     }
 
-    public ArrayList<AbstractGameEffect> getList() {
-        switch (effectType) {
-            case List:
-                return AbstractDungeon.effectList;
-
-            case Queue:
-                return AbstractDungeon.effectsQueue;
-
-            case TopLevelList:
-                return AbstractDungeon.topLevelEffects;
-
-            case TopLevelQueue:
-                return AbstractDungeon.topLevelEffectsQueue;
-
-            case Manual:
-                return UnlistedEffects;
-        }
-
-        throw new RuntimeException("Enum value does not exist.");
-    }
-
     public BorderFlashEffect borderFlash(Color color) {
         return add(new BorderFlashEffect(color, true));
     }
@@ -128,6 +107,27 @@ public final class PCLEffects {
         return getList().size();
     }
 
+    public ArrayList<AbstractGameEffect> getList() {
+        switch (effectType) {
+            case List:
+                return AbstractDungeon.effectList;
+
+            case Queue:
+                return AbstractDungeon.effectsQueue;
+
+            case TopLevelList:
+                return AbstractDungeon.topLevelEffects;
+
+            case TopLevelQueue:
+                return AbstractDungeon.topLevelEffectsQueue;
+
+            case Manual:
+                return UnlistedEffects;
+        }
+
+        throw new RuntimeException("Enum value does not exist.");
+    }
+
     public ObtainRelicEffect obtainRelic(AbstractRelic relic) {
         return add(new ObtainRelicEffect(relic));
     }
@@ -164,12 +164,12 @@ public final class PCLEffects {
         return add(new ShowCardBrieflyEffect(card, x, y));
     }
 
-    public ShowCardBrieflyEffect showCopy(AbstractCard card) {
-        return showCardBriefly(card.makeStatEquivalentCopy());
-    }
-
     public ShowCardBrieflyEffect showCardBriefly(AbstractCard card) {
         return add(new ShowCardBrieflyEffect(card));
+    }
+
+    public ShowCardBrieflyEffect showCopy(AbstractCard card) {
+        return showCardBriefly(card.makeStatEquivalentCopy());
     }
 
     public SpawnRelicEffect spawnRelic(AbstractRelic relic, float x, float y) {

@@ -11,9 +11,9 @@ public class PCLCardRewardActionButton extends EUIButton {
     private static final float SIZE = scale(50);
     private final float offsetY;
     private final int cardIndex;
+    private AbstractCard card;
     public PCLCardRewardAction container;
     public boolean used;
-    private AbstractCard card;
 
     public PCLCardRewardActionButton(PCLCardRewardAction container, Texture buttonTexture, String title, String description, float offsetY, int cardIndex, boolean useAugment) {
         super(buttonTexture, 0, 0);

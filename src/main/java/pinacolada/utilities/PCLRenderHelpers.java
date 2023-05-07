@@ -241,11 +241,6 @@ public class PCLRenderHelpers extends EUIRenderHelpers {
         return Scalr.resize(image, scalingMethod, (int) (image.getWidth() * xScale), (int) (image.getHeight() * yScale), ops);
     }
 
-    public static Pixmap scalrScaleAsPixmap(Texture image, float xScale, float yScale) {
-        BufferedImage bi = scalrScale(image, xScale, yScale);
-        return bi != null ? getPixmapFromBufferedImage(bi) : null;
-    }
-
     public static BufferedImage scalrScale(Texture image, float xScale, float yScale) {
         return scalrScale(image, xScale, yScale, Scalr.Method.AUTOMATIC);
     }
@@ -274,6 +269,11 @@ public class PCLRenderHelpers extends EUIRenderHelpers {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static Pixmap scalrScaleAsPixmap(Texture image, float xScale, float yScale) {
+        BufferedImage bi = scalrScale(image, xScale, yScale);
+        return bi != null ? getPixmapFromBufferedImage(bi) : null;
     }
 
     public static Pixmap scalrScaleAsPixmap(Pixmap image, float xScale, float yScale) {

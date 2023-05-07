@@ -10,8 +10,8 @@ import pinacolada.powers.PCLPower;
 import pinacolada.utilities.GameUtilities;
 
 public class DelayedDamagePower extends PCLPower implements HealthBarRenderPower {
-    public static final String POWER_ID = createFullID(DelayedDamagePower.class);
     private static final Color healthBarColor = Color.PURPLE.cpy();
+    public static final String POWER_ID = createFullID(DelayedDamagePower.class);
     private final AbstractGameAction.AttackEffect attackEffect;
 
     public DelayedDamagePower(AbstractCreature owner, int amount) {

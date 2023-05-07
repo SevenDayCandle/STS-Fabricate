@@ -30,12 +30,12 @@ public class ControllableCardPile {
     public static final float SCALE = 0.65f;
     public static final float HOVER_TIME_OUT = 0.4F;
     public static EUITooltip tooltip;
-    public final ArrayList<CardController> subscribers = new ArrayList<>();
-    protected final EUIButton cardButton;
     private final EUIHitbox hb = new EUIHitbox(144f * Settings.scale, 288 * Settings.scale, 96 * Settings.scale, 96f * Settings.scale);
-    public boolean isHidden = true;
+    protected final EUIButton cardButton;
+    public final ArrayList<CardController> subscribers = new ArrayList<>();
     protected CardController currentCard;
     protected boolean showPreview;
+    public boolean isHidden = true;
 
     public ControllableCardPile() {
         tooltip = new EUITooltip(PGR.core.strings.combat_controlPile, PGR.core.strings.combat_controlPileDescription);
@@ -72,14 +72,6 @@ public class ControllableCardPile {
                 });
     }
 
-    public boolean setCurrentCard(CardController controller) {
-        if (controller != null && controller.canUse()) {
-            currentCard = controller;
-            return true;
-        }
-        return false;
-    }
-
     public CardController add(AbstractCard card) {
         CardController controller = find(card);
         if (controller == null) {
@@ -90,8 +82,32 @@ public class ControllableCardPile {
         return controller;
     }
 
+    public boolean canUse(AbstractCard card) {
+        CardController chosen = EUIUtils.find(subscribers, c -> c.card == card);
+        return chosen != null && chosen.canUse();
+    }
+
+    public void clear() {
+        subscribers.clear();
+        currentCard = null;
+    }
+
+    public boolean contains(AbstractCard card) {
+        return card != null && find(card) != null;
+    }
+
     public CardController find(AbstractCard card) {
         return EUIUtils.find(subscribers, c -> c.card == card);
+    }
+
+    public int getUsableCount() {
+        return EUIUtils.count(subscribers, CardController::canUse);
+    }
+
+    public void postRender(SpriteBatch sb) {
+        if (!isHidden && currentCard != null) {
+            currentCard.render(sb);
+        }
     }
 
     protected boolean refreshCard(CardController c) {
@@ -114,25 +130,6 @@ public class ControllableCardPile {
         }
 
         return true;
-    }
-
-    public boolean canUse(AbstractCard card) {
-        CardController chosen = EUIUtils.find(subscribers, c -> c.card == card);
-        return chosen != null && chosen.canUse();
-    }
-
-    public void clear() {
-        subscribers.clear();
-        currentCard = null;
-    }
-
-    public boolean contains(AbstractCard card) {
-        return card != null && find(card) != null;
-    }
-
-    public void remove(CardController controller) {
-        subscribers.remove(controller);
-        refreshCards();
     }
 
     public void refreshCards() {
@@ -162,11 +159,36 @@ public class ControllableCardPile {
         }
     }
 
+    public void remove(CardController controller) {
+        subscribers.remove(controller);
+        refreshCards();
+    }
+
     public void render(SpriteBatch sb) {
         if (!isHidden) {
             sb.setColor(Color.WHITE);
             cardButton.renderImpl(sb);
         }
+    }
+
+    public void selectNextCard() {
+        refreshCards();
+        if (currentCard != null) {
+            int startingIndex = subscribers.indexOf(currentCard);
+            int index = startingIndex;
+            index = (index + 1) % subscribers.size();
+            while (index != startingIndex && !setCurrentCard(subscribers.get(index))) {
+                index = (index + 1) % subscribers.size();
+            }
+        }
+    }
+
+    public boolean setCurrentCard(CardController controller) {
+        if (controller != null && controller.canUse()) {
+            currentCard = controller;
+            return true;
+        }
+        return false;
     }
 
     public void update() {
@@ -197,28 +219,6 @@ public class ControllableCardPile {
             }
             else if (PCLHotkeys.controlPileChange.isJustPressed()) {
                 cardButton.onRightClick.invoke(cardButton);
-            }
-        }
-    }
-
-    public int getUsableCount() {
-        return EUIUtils.count(subscribers, CardController::canUse);
-    }
-
-    public void postRender(SpriteBatch sb) {
-        if (!isHidden && currentCard != null) {
-            currentCard.render(sb);
-        }
-    }
-
-    public void selectNextCard() {
-        refreshCards();
-        if (currentCard != null) {
-            int startingIndex = subscribers.indexOf(currentCard);
-            int index = startingIndex;
-            index = (index + 1) % subscribers.size();
-            while (index != startingIndex && !setCurrentCard(subscribers.get(index))) {
-                index = (index + 1) % subscribers.size();
             }
         }
     }

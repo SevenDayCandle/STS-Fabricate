@@ -11,8 +11,8 @@ import static pinacolada.cards.base.fields.PCLAffinity.TOTAL_AFFINITIES;
 
 
 public class PCLCardDataAffinityGroup implements Serializable {
-    public PCLCardDataAffinity star = null;
     protected PCLCardDataAffinity[] list = new PCLCardDataAffinity[TOTAL_AFFINITIES];
+    public PCLCardDataAffinity star = null;
 
     public PCLCardDataAffinityGroup() {
 
@@ -27,6 +27,18 @@ public class PCLCardDataAffinityGroup implements Serializable {
                 list[a.type.id] = a.makeCopy();
             }
         }
+    }
+
+    public PCLCardDataAffinity get(PCLAffinity affinity) {
+        if (affinity == PCLAffinity.Star) {
+            return star;
+        }
+
+        if (affinity.id < 0 || affinity.id >= TOTAL_AFFINITIES) {
+            return null;
+        }
+
+        return list[affinity.id];
     }
 
     public ArrayList<PCLAffinity> getAffinities() {
@@ -50,10 +62,6 @@ public class PCLCardDataAffinityGroup implements Serializable {
             }
         }
         return list;
-    }
-
-    public boolean hasStar() {
-        return star != null && star.value.length > 0;
     }
 
     public ArrayList<PCLCardDataAffinity> getCardAffinities() {
@@ -92,18 +100,6 @@ public class PCLCardDataAffinityGroup implements Serializable {
         }
     }
 
-    public PCLCardDataAffinity get(PCLAffinity affinity) {
-        if (affinity == PCLAffinity.Star) {
-            return star;
-        }
-
-        if (affinity.id < 0 || affinity.id >= TOTAL_AFFINITIES) {
-            return null;
-        }
-
-        return list[affinity.id];
-    }
-
     public int getLevel(PCLAffinity affinity, int form) {
         return getLevel(affinity, form, true);
     }
@@ -129,6 +125,10 @@ public class PCLCardDataAffinityGroup implements Serializable {
 
     public int getUpgrade(PCLAffinity affinity, int form) {
         return getUpgrade(affinity, form, true);
+    }
+
+    public boolean hasStar() {
+        return star != null && star.value.length > 0;
     }
 
     public PCLCardDataAffinity set(PCLAffinity affinity, int level) {

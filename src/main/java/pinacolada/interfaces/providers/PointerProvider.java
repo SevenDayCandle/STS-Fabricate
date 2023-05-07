@@ -28,20 +28,10 @@ public interface PointerProvider {
         return added;
     }
 
-    default ArrayList<PTrigger> getPowerEffects() {
-        return getSkills().powerEffects;
-    }
-
-    Skills getSkills();
-
     default PSkill<?> addUseMove(PSkill<?> effect) {
         PSkill<?> added = effect.setSource(this, PSkill.PCLCardValueSource.XValue);
         getEffects().add(added);
         return added;
-    }
-
-    default ArrayList<PSkill<?>> getEffects() {
-        return getSkills().onUseEffects;
     }
 
     default PSkill<?> addUseMove(PSkill<?> primary, PSkill<?>... effects) {
@@ -76,6 +66,10 @@ public interface PointerProvider {
         return EUIUtils.joinStrings(PGR.config.removeLineBreaks.get() ? " " : EUIUtils.DOUBLE_SPLIT_LINE, EUIUtils.mapAsNonnull(tempEffects, PSkill::getText));
     }
 
+    default ArrayList<PSkill<?>> getEffects() {
+        return getSkills().onUseEffects;
+    }
+
     // GetEffects plus any additional temporary effects not attached to Skills
     default ArrayList<PSkill<?>> getFullEffects() {
         return getEffects();
@@ -105,6 +99,12 @@ public interface PointerProvider {
     default UniqueList<PSkill<?>> getPointers() {
         return getSkills().effectTextMapping;
     }
+
+    default ArrayList<PTrigger> getPowerEffects() {
+        return getSkills().powerEffects;
+    }
+
+    Skills getSkills();
 
     default AbstractCreature getSourceCreature() {
         return AbstractDungeon.player;

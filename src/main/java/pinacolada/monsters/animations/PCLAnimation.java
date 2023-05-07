@@ -5,11 +5,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class PCLAnimation extends AbstractAnimation {
+    protected float vfxTimer;
+    protected Color renderColor;
     public boolean hFlip;
     public boolean vFlip;
     public float alpha;
-    protected float vfxTimer;
-    protected Color renderColor;
 
     public PCLAnimation() {
     }

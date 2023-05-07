@@ -18,12 +18,12 @@ import extendedui.utilities.EUIFontHelper;
 
 public class PCLValueEditor extends EUIHoverable {
     protected static final float ICON_SIZE = scale(36f);
-    public EUILabel header;
     protected ActionT1<Integer> onUpdate;
     protected EUIButton decreaseButton;
     protected EUIButton increaseButton;
     protected EUITextBoxNumericalInput displayValue;
     protected boolean allowZero = true;
+    public EUILabel header;
 
     public PCLValueEditor(EUIHitbox hb, String title, ActionT1<Integer> onUpdate) {
         super(hb);
@@ -61,10 +61,6 @@ public class PCLValueEditor extends EUIHoverable {
 
     public int getValue() {
         return displayValue.getCachedValue();
-    }
-
-    public PCLValueEditor setValue(int value) {
-        return setValue(value, true);
     }
 
     public void increase() {
@@ -128,6 +124,10 @@ public class PCLValueEditor extends EUIHoverable {
         increaseButton.setInteractable(displayValue.getCachedValue() < displayValue.getMax()).tryUpdate();
         displayValue.tryUpdate();
         header.tryUpdate();
+    }
+
+    public PCLValueEditor setValue(int value) {
+        return setValue(value, true);
     }
 
     public PCLValueEditor setValue(int value, boolean invoke) {

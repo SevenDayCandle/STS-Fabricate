@@ -36,7 +36,8 @@ import static extendedui.EUIUtils.safeIndex;
 // TODO create a non-dynamic-only subclass
 public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
     private static final Map<String, PCLCardData> STATIC_DATA = new HashMap<>();
-
+    private Constructor<? extends PCLCard> constructor;
+    private TextureAtlas.AtlasRegion cardIcon = null;
     public Integer[] damage = array(0);
     public Integer[] damageUpgrade = array(0);
     public Integer[] block = array(0);
@@ -77,8 +78,6 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
     public int branchFactor = 0;
     public int slots;
     public transient PCLCard tempCard = null;
-    private Constructor<? extends PCLCard> constructor;
-    private TextureAtlas.AtlasRegion cardIcon = null;
 
     public PCLCardData(Class<? extends PCLCard> invokeClass, PCLResources<?, ?, ?, ?> resources) {
         this(invokeClass, resources, resources.createID(invokeClass.getSimpleName()));
@@ -167,6 +166,15 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
         return card;
     }
 
+    public PCLCard create(int upgrade) throws RuntimeException {
+        PCLCard card = create();
+        for (int i = 0; i < upgrade; i++) {
+            card.upgrade();
+        }
+
+        return card;
+    }
+
     public String getAuthorString() {
         String author = FlavorText.CardStringsFlavorField.flavor.get(strings);
         if (author != null) {
@@ -189,19 +197,6 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
     @Override
     public AbstractCard getCard() {
         return makeCardFromLibrary(0);
-    }
-
-    public AbstractCard makeCardFromLibrary(int upgrade) {
-        return (!invokeClass.isAnnotationPresent(VisibleCard.class) ? create(upgrade) : CardLibrary.getCopy(ID, upgrade, 0));
-    }
-
-    public PCLCard create(int upgrade) throws RuntimeException {
-        PCLCard card = create();
-        for (int i = 0; i < upgrade; i++) {
-            card.upgrade();
-        }
-
-        return card;
     }
 
     public TextureAtlas.AtlasRegion getCardIcon() {
@@ -280,6 +275,10 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
         return tags.get(tag);
     }
 
+    public Collection<PCLCardTagInfo> getTagInfos() {
+        return tags.values();
+    }
+
     public PCLCardTarget getTargetUpgrade(int form) {
         return upgradeCardTarget == null || upgradeCardTarget.length == 0 ? cardTarget : upgradeCardTarget[Math.min(upgradeCardTarget.length - 1, form)];
     }
@@ -298,10 +297,6 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
         }
     }
 
-    public Collection<PCLCardTagInfo> getTagInfos() {
-        return tags.values();
-    }
-
     public void invokeTags(AbstractCard card, int form) {
         for (PCLCardTagInfo i : getTagInfos()) {
             i.invoke(card, form);
@@ -310,6 +305,10 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
 
     public boolean isNotSeen() {
         return UnlockTracker.isCardLocked(ID) || !UnlockTracker.isCardSeen(ID);
+    }
+
+    public AbstractCard makeCardFromLibrary(int upgrade) {
+        return (!invokeClass.isAnnotationPresent(VisibleCard.class) ? create(upgrade) : CardLibrary.getCopy(ID, upgrade, 0));
     }
 
     public void markSeen() {
@@ -376,32 +375,6 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
         return this;
     }
 
-    public PCLCardData setRarityType(AbstractCard.CardRarity rarity, AbstractCard.CardType type) {
-        cardRarity = rarity;
-        cardType = type;
-
-        if (maxCopies == -1) {
-            switch (rarity) {
-                case COMMON:
-                    return setMaxCopies(type == PCLEnum.CardType.SUMMON ? 3 : 6);
-                case UNCOMMON:
-                    return setMaxCopies(type == PCLEnum.CardType.SUMMON ? 2 : 4);
-                case RARE:
-                    return setMaxCopies(type == PCLEnum.CardType.SUMMON ? 2 : 3);
-                default:
-                    return setMaxCopies(0);
-            }
-        }
-
-        return this;
-    }
-
-    public PCLCardData setMaxCopies(int maxCopies) {
-        this.maxCopies = maxCopies;
-
-        return this;
-    }
-
     public PCLCardData setAttack(int cost, AbstractCard.CardRarity rarity, PCLAttackType attackType) {
         return setAttack(cost, rarity, attackType, PCLCardTarget.Single);
     }
@@ -460,8 +433,9 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
         return setLoadout(loadout);
     }
 
-    public PCLCardData setLoadout(PCLLoadout loadout) {
-        return setLoadout(loadout, false);
+    public PCLCardData setColorless() {
+        cardColor = AbstractCard.CardColor.COLORLESS;
+        return this;
     }
 
     public PCLCardData setCore() {
@@ -470,35 +444,6 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
 
     public PCLCardData setCore(boolean colorless) {
         return setLoadout(PGR.getPlayerData(resources.cardColor).getCoreLoadout(), colorless);
-    }
-
-    public PCLCardData setLoadout(PCLLoadout loadout, boolean colorless) {
-        this.loadout = loadout;
-        if (this.loadout != null) {
-            if (colorless) {
-                setColorless();
-                this.loadout.colorlessData.add(this);
-            }
-            else if (cardRarity == AbstractCard.CardRarity.COMMON || cardRarity == AbstractCard.CardRarity.UNCOMMON || cardRarity == AbstractCard.CardRarity.RARE) {
-                this.loadout.cardDatas.add(this);
-            }
-            else {
-                this.loadout.colorlessData.add(this);
-            }
-        }
-
-        // Non-loadout cards, curses, statuses, and special cards cannot get slots
-        if (slots <= 0 && this.loadout != null && !this.loadout.isCore() && cardType != AbstractCard.CardType.CURSE && cardType != AbstractCard.CardType.STATUS && cardRarity != AbstractCard.CardRarity.SPECIAL) {
-            // Commons and Attacks/Skills get an extra slot
-            slots = (cardType == AbstractCard.CardType.POWER ? 1 : 2) + (cardRarity == AbstractCard.CardRarity.COMMON ? 1 : 0);
-        }
-
-        return this;
-    }
-
-    public PCLCardData setColorless() {
-        cardColor = AbstractCard.CardColor.COLORLESS;
-        return this;
     }
 
     public PCLCardData setCostUpgrades(Integer... costUpgrades) {
@@ -604,6 +549,34 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
         return this;
     }
 
+    public PCLCardData setLoadout(PCLLoadout loadout) {
+        return setLoadout(loadout, false);
+    }
+
+    public PCLCardData setLoadout(PCLLoadout loadout, boolean colorless) {
+        this.loadout = loadout;
+        if (this.loadout != null) {
+            if (colorless) {
+                setColorless();
+                this.loadout.colorlessData.add(this);
+            }
+            else if (cardRarity == AbstractCard.CardRarity.COMMON || cardRarity == AbstractCard.CardRarity.UNCOMMON || cardRarity == AbstractCard.CardRarity.RARE) {
+                this.loadout.cardDatas.add(this);
+            }
+            else {
+                this.loadout.colorlessData.add(this);
+            }
+        }
+
+        // Non-loadout cards, curses, statuses, and special cards cannot get slots
+        if (slots <= 0 && this.loadout != null && !this.loadout.isCore() && cardType != AbstractCard.CardType.CURSE && cardType != AbstractCard.CardType.STATUS && cardRarity != AbstractCard.CardRarity.SPECIAL) {
+            // Commons and Attacks/Skills get an extra slot
+            slots = (cardType == AbstractCard.CardType.POWER ? 1 : 2) + (cardRarity == AbstractCard.CardRarity.COMMON ? 1 : 0);
+        }
+
+        return this;
+    }
+
     public PCLCardData setMagicNumber(int heal) {
         this.magicNumber[0] = heal;
         return this;
@@ -622,6 +595,12 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
     public PCLCardData setMagicNumber(Integer[] heal, Integer[] healUpgrade) {
         this.magicNumber = heal;
         this.magicNumberUpgrade = healUpgrade;
+        return this;
+    }
+
+    public PCLCardData setMaxCopies(int maxCopies) {
+        this.maxCopies = maxCopies;
+
         return this;
     }
 
@@ -685,6 +664,26 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
         for (PCLCardTag tag : tags) {
             this.tags.put(tag, tag.make(1, 0));
         }
+        return this;
+    }
+
+    public PCLCardData setRarityType(AbstractCard.CardRarity rarity, AbstractCard.CardType type) {
+        cardRarity = rarity;
+        cardType = type;
+
+        if (maxCopies == -1) {
+            switch (rarity) {
+                case COMMON:
+                    return setMaxCopies(type == PCLEnum.CardType.SUMMON ? 3 : 6);
+                case UNCOMMON:
+                    return setMaxCopies(type == PCLEnum.CardType.SUMMON ? 2 : 4);
+                case RARE:
+                    return setMaxCopies(type == PCLEnum.CardType.SUMMON ? 2 : 3);
+                default:
+                    return setMaxCopies(0);
+            }
+        }
+
         return this;
     }
 

@@ -36,6 +36,10 @@ public class MeteorFallEffect extends AbstractGameEffect {
         this.renderBehind = false;
     }
 
+    private void playRandomSfX() {
+        PCLSFX.play(PCLSFX.ORB_LIGHTNING_EVOKE, 0.5f, 0.7f);
+    }
+
     public void update() {
         if (duration == DUR) {
             for (int i = 0; i < 50; ++i) {
@@ -72,10 +76,6 @@ public class MeteorFallEffect extends AbstractGameEffect {
         this.scale = Interpolation.fade.apply(Settings.scale * 1.1f, Settings.scale * 1.05f, this.duration / 0.6f);
 
         this.duration -= Gdx.graphics.getDeltaTime();
-    }
-
-    private void playRandomSfX() {
-        PCLSFX.play(PCLSFX.ORB_LIGHTNING_EVOKE, 0.5f, 0.7f);
     }
 
     public void render(SpriteBatch sb) {

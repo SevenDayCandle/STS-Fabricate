@@ -131,10 +131,13 @@ public class ViewInGamePoolEffect extends PCLEffectWithCallback<CardGroup> {
         }, AbstractCard.CardColor.COLORLESS, false, false);
     }
 
-    public void refreshCountText() {
-        selectedCount.setLabel(EUIUtils.format(PGR.core.strings.sui_selected, EUIUtils.count(cards.group, card -> !bannedCards.contains(card.cardID)), cards.group.size()));
-        if (onRefresh != null) {
-            onRefresh.invoke();
+    @Override
+    protected void complete() {
+        super.complete();
+
+        if (showTopPanelOnComplete) {
+            GameUtilities.setTopPanelVisible(true);
+            showTopPanelOnComplete = false;
         }
     }
 
@@ -182,13 +185,10 @@ public class ViewInGamePoolEffect extends PCLEffectWithCallback<CardGroup> {
         }
     }
 
-    @Override
-    protected void complete() {
-        super.complete();
-
-        if (showTopPanelOnComplete) {
-            GameUtilities.setTopPanelVisible(true);
-            showTopPanelOnComplete = false;
+    public void refreshCountText() {
+        selectedCount.setLabel(EUIUtils.format(PGR.core.strings.sui_selected, EUIUtils.count(cards.group, card -> !bannedCards.contains(card.cardID)), cards.group.size()));
+        if (onRefresh != null) {
+            onRefresh.invoke();
         }
     }
 

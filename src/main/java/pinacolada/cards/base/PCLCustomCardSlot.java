@@ -20,14 +20,16 @@ import static extendedui.EUIUtils.array;
 import static pinacolada.resources.PCLMainConfig.JSON_FILTER;
 
 public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicData> {
-    public static final String BASE_CARD_ID = "PCLC";
-    public static final String SUBFOLDER = "cards";
     private static final TypeToken<PCLCustomCardSlot> TTOKEN = new TypeToken<PCLCustomCardSlot>() {
     };
     private static final TypeToken<CardForm> TTOKENFORM = new TypeToken<CardForm>() {
     };
     private static final HashMap<AbstractCard.CardColor, ArrayList<PCLCustomCardSlot>> CUSTOM_CARDS = new HashMap<>();
     private static final ArrayList<CustomCardFileProvider> PROVIDERS = new ArrayList<>();
+    public static final String BASE_CARD_ID = "PCLC";
+    public static final String SUBFOLDER = "cards";
+    protected transient String filePath;
+    protected transient String imagePath;
     public String ID;
     public String loadout;
     public Integer maxUpgradeLevel = 1;
@@ -57,8 +59,6 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicData> {
     public String[] tags;
     public String[] forms;
     public transient AbstractCard.CardColor slotColor = AbstractCard.CardColor.COLORLESS;
-    protected transient String filePath;
-    protected transient String imagePath;
 
     public PCLCustomCardSlot(AbstractCard.CardColor color) {
         ID = makeNewID(color);
@@ -71,28 +71,6 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicData> {
                 .setRarity(AbstractCard.CardRarity.COMMON)
                 .setCosts(0);
         builders.add(builder);
-    }
-
-    protected static String makeNewID(AbstractCard.CardColor color) {
-        return makeNewID(getBaseIDPrefix(color), getCards(color));
-    }
-
-    public static String getBaseIDPrefix(AbstractCard.CardColor color) {
-        return getBaseIDPrefix(BASE_CARD_ID, color);
-    }
-
-    public static boolean isIDDuplicate(String input, AbstractCard.CardColor color) {
-        return isIDDuplicate(input, getCards(color));
-    }
-
-    public static ArrayList<PCLCustomCardSlot> getCards(AbstractCard.CardColor color) {
-        if (color == null) {
-            return EUIUtils.flattenList(CUSTOM_CARDS.values());
-        }
-        if (!CUSTOM_CARDS.containsKey(color)) {
-            CUSTOM_CARDS.put(color, new ArrayList<>());
-        }
-        return CUSTOM_CARDS.get(color);
     }
 
     public PCLCustomCardSlot(PCLCard card, AbstractCard.CardColor color) {
@@ -113,9 +91,169 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicData> {
         recordBuilder();
     }
 
+    public PCLCustomCardSlot(PCLCustomCardSlot other, AbstractCard.CardColor color) {
+        this(other);
+        slotColor = color;
+        for (PCLDynamicData builder : builders) {
+            builder.setColor(color);
+        }
+    }
+
+    public PCLCustomCardSlot(PCLCustomCardSlot other) {
+        ID = makeNewID(other.slotColor);
+        filePath = makeFilePath();
+        imagePath = makeImagePath();
+        slotColor = other.slotColor;
+        for (PCLDynamicData builder : other.builders) {
+            builders.add(new PCLDynamicData(builder)
+                    .setID(ID)
+                    .setImagePath(imagePath));
+        }
+        recordBuilder();
+    }
+
+    /**
+     * Subscribe a provider that provides a folder to load custom cards from whenever the cards are reloaded
+     */
+    public static void addProvider(CustomCardFileProvider provider) {
+        PROVIDERS.add(provider);
+    }
+
+    // Only allow a card to be copied into a custom card slot if it is a PCLCard and if all of its skills are in AVAILABLE_SKILLS (i.e. selectable in the card editor)
+    public static boolean canFullyCopyCard(AbstractCard card) {
+        if (card instanceof PCLCard) {
+            return EUIUtils.all(((PCLCard) card).getFullSubEffects(), skill -> skill != null && skill.getClass().isAnnotationPresent(VisibleSkill.class));
+        }
+        return false;
+    }
+
+    public static PCLCustomCardSlot get(String id) {
+        for (ArrayList<PCLCustomCardSlot> slots : CUSTOM_CARDS.values()) {
+            for (PCLCustomCardSlot slot : slots) {
+                if (slot.ID.equals(id)) {
+                    return slot;
+                }
+            }
+        }
+        return null;
+    }
+
+    public static String getBaseIDPrefix(AbstractCard.CardColor color) {
+        return getBaseIDPrefix(BASE_CARD_ID, color);
+    }
+
+    public static ArrayList<PCLCustomCardSlot> getCards(AbstractCard.CardColor color) {
+        if (color == null) {
+            return EUIUtils.flattenList(CUSTOM_CARDS.values());
+        }
+        if (!CUSTOM_CARDS.containsKey(color)) {
+            CUSTOM_CARDS.put(color, new ArrayList<>());
+        }
+        return CUSTOM_CARDS.get(color);
+    }
+
+    public static void initialize() {
+        CUSTOM_CARDS.clear();
+        loadFolder(getCustomFolder(SUBFOLDER));
+        for (CustomCardFileProvider provider : PROVIDERS) {
+            loadFolder(provider.getCardFolder());
+        }
+        if (PGR.debugCards != null) {
+            PGR.debugCards.refreshCards();
+        }
+    }
+
+    public static boolean isIDDuplicate(String input, AbstractCard.CardColor color) {
+        return isIDDuplicate(input, getCards(color));
+    }
+
+    private static void loadFolder(FileHandle folder) {
+        for (FileHandle f : folder.list(JSON_FILTER)) {
+            loadSingleCardImpl(f);
+        }
+    }
+
+    private static void loadSingleCardImpl(FileHandle f) {
+        String path = f.path();
+        try {
+            String jsonString = f.readString();
+            PCLCustomCardSlot slot = EUIUtils.deserialize(jsonString, TTOKEN.getType());
+            slot.setupBuilder(path);
+            getCards(slot.slotColor).add(slot);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            EUIUtils.logError(PCLCustomCardSlot.class, "Could not load Custom Card: " + path);
+        }
+    }
+
+    protected static String makeNewID(AbstractCard.CardColor color) {
+        return makeNewID(getBaseIDPrefix(color), getCards(color));
+    }
+
+    public void commitBuilder() {
+        recordBuilder();
+        String newFilePath = makeFilePath();
+        String newImagePath = makeImagePath();
+
+        // If the file path has changed and the original file exists, we should move the file and its image
+        FileHandle writer = Gdx.files.local(filePath);
+        if (writer.exists() && !newFilePath.equals(filePath)) {
+            writer.moveTo(Gdx.files.local(newFilePath));
+            EUIUtils.logInfo(PCLCustomCardSlot.class, "Moved Custom Card: " + filePath + ", New: " + newFilePath);
+        }
+        writer = Gdx.files.local(newFilePath);
+
+        // The image should have the same file name as the file path
+        FileHandle imgWriter = Gdx.files.local(imagePath);
+        if (imgWriter.exists() && !newImagePath.equals(imagePath)) {
+            imgWriter.moveTo(Gdx.files.local(newImagePath));
+            EUIUtils.logInfo(PCLCustomCardSlot.class, "Moved Custom Card Image: " + imagePath + ", New: " + newImagePath);
+        }
+
+        // If the image in the builder was updated, we need to overwrite the existing image
+        // All builders should have the same image
+        PCLDynamicData builder = getBuilder(0);
+        if (builder != null && builder.portraitImage != null) {
+            PixmapIO.writePNG(imgWriter, builder.portraitImage.texture.getTextureData().consumePixmap());
+            // Forcibly reload the image
+            EUIRM.getLocalTexture(newImagePath, true, true, false);
+        }
+
+        // Unlink temporary portrait images to allow the new saved portrait image to be loaded, and set multiform data as necessary
+        for (PCLDynamicData b : builders) {
+            b.setImage(null).setMultiformData(forms.length, false, forms.length > 1, false);
+        }
+
+        filePath = newFilePath;
+        imagePath = newImagePath;
+
+        writer.writeString(EUIUtils.serialize(this, TTOKEN.getType()), false);
+        EUIUtils.logInfo(PCLCustomCardSlot.class, "Saved Custom Card: " + filePath);
+        if (PGR.debugCards != null) {
+            PGR.debugCards.refreshCards();
+        }
+    }
+
+    public PCLDynamicData getBuilder(int i) {
+        return (builders.size() > i) ? builders.get(i) : null;
+    }
+
+    public FileHandle getImageHandle() {
+        return Gdx.files.local(imagePath);
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
     @Override
     protected String getSubfolderPath() {
         return SUBFOLDER;
+    }
+
+    public PCLDynamicCard makeFirstCard(boolean shouldFindForms) {
+        return getBuilder(0).createImplWithForms(shouldFindForms);
     }
 
     // Copy down the properties from all builders into this slot
@@ -170,88 +308,6 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicData> {
         forms = tempForms.toArray(new String[]{});
     }
 
-    public PCLDynamicData getBuilder(int i) {
-        return (builders.size() > i) ? builders.get(i) : null;
-    }
-
-    public PCLCustomCardSlot(PCLCustomCardSlot other, AbstractCard.CardColor color) {
-        this(other);
-        slotColor = color;
-        for (PCLDynamicData builder : builders) {
-            builder.setColor(color);
-        }
-    }
-
-    public PCLCustomCardSlot(PCLCustomCardSlot other) {
-        ID = makeNewID(other.slotColor);
-        filePath = makeFilePath();
-        imagePath = makeImagePath();
-        slotColor = other.slotColor;
-        for (PCLDynamicData builder : other.builders) {
-            builders.add(new PCLDynamicData(builder)
-                    .setID(ID)
-                    .setImagePath(imagePath));
-        }
-        recordBuilder();
-    }
-
-    /**
-     * Subscribe a provider that provides a folder to load custom cards from whenever the cards are reloaded
-     */
-    public static void addProvider(CustomCardFileProvider provider) {
-        PROVIDERS.add(provider);
-    }
-
-    // Only allow a card to be copied into a custom card slot if it is a PCLCard and if all of its skills are in AVAILABLE_SKILLS (i.e. selectable in the card editor)
-    public static boolean canFullyCopyCard(AbstractCard card) {
-        if (card instanceof PCLCard) {
-            return EUIUtils.all(((PCLCard) card).getFullSubEffects(), skill -> skill != null && skill.getClass().isAnnotationPresent(VisibleSkill.class));
-        }
-        return false;
-    }
-
-    public static PCLCustomCardSlot get(String id) {
-        for (ArrayList<PCLCustomCardSlot> slots : CUSTOM_CARDS.values()) {
-            for (PCLCustomCardSlot slot : slots) {
-                if (slot.ID.equals(id)) {
-                    return slot;
-                }
-            }
-        }
-        return null;
-    }
-
-    public static void initialize() {
-        CUSTOM_CARDS.clear();
-        loadFolder(getCustomFolder(SUBFOLDER));
-        for (CustomCardFileProvider provider : PROVIDERS) {
-            loadFolder(provider.getCardFolder());
-        }
-        if (PGR.debugCards != null) {
-            PGR.debugCards.refreshCards();
-        }
-    }
-
-    private static void loadFolder(FileHandle folder) {
-        for (FileHandle f : folder.list(JSON_FILTER)) {
-            loadSingleCardImpl(f);
-        }
-    }
-
-    private static void loadSingleCardImpl(FileHandle f) {
-        String path = f.path();
-        try {
-            String jsonString = f.readString();
-            PCLCustomCardSlot slot = EUIUtils.deserialize(jsonString, TTOKEN.getType());
-            slot.setupBuilder(path);
-            getCards(slot.slotColor).add(slot);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-            EUIUtils.logError(PCLCustomCardSlot.class, "Could not load Custom Card: " + path);
-        }
-    }
-
     public void setupBuilder(String fp) {
         slotColor = AbstractCard.CardColor.valueOf(color);
         builders = new ArrayList<>();
@@ -271,58 +327,6 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicData> {
         EUIUtils.logInfo(PCLCustomCardSlot.class, "Loaded Custom Card: " + filePath);
     }
 
-    public void commitBuilder() {
-        recordBuilder();
-        String newFilePath = makeFilePath();
-        String newImagePath = makeImagePath();
-
-        // If the file path has changed and the original file exists, we should move the file and its image
-        FileHandle writer = Gdx.files.local(filePath);
-        if (writer.exists() && !newFilePath.equals(filePath)) {
-            writer.moveTo(Gdx.files.local(newFilePath));
-            EUIUtils.logInfo(PCLCustomCardSlot.class, "Moved Custom Card: " + filePath + ", New: " + newFilePath);
-        }
-        writer = Gdx.files.local(newFilePath);
-
-        // The image should have the same file name as the file path
-        FileHandle imgWriter = Gdx.files.local(imagePath);
-        if (imgWriter.exists() && !newImagePath.equals(imagePath)) {
-            imgWriter.moveTo(Gdx.files.local(newImagePath));
-            EUIUtils.logInfo(PCLCustomCardSlot.class, "Moved Custom Card Image: " + imagePath + ", New: " + newImagePath);
-        }
-
-        // If the image in the builder was updated, we need to overwrite the existing image
-        // All builders should have the same image
-        PCLDynamicData builder = getBuilder(0);
-        if (builder != null && builder.portraitImage != null) {
-            PixmapIO.writePNG(imgWriter, builder.portraitImage.texture.getTextureData().consumePixmap());
-            // Forcibly reload the image
-            EUIRM.getLocalTexture(newImagePath, true, true, false);
-        }
-
-        // Unlink temporary portrait images to allow the new saved portrait image to be loaded, and set multiform data as necessary
-        for (PCLDynamicData b : builders) {
-            b.setImage(null).setMultiformData(forms.length, false, forms.length > 1, false);
-        }
-
-        filePath = newFilePath;
-        imagePath = newImagePath;
-
-        writer.writeString(EUIUtils.serialize(this, TTOKEN.getType()), false);
-        EUIUtils.logInfo(PCLCustomCardSlot.class, "Saved Custom Card: " + filePath);
-        if (PGR.debugCards != null) {
-            PGR.debugCards.refreshCards();
-        }
-    }
-
-    public String getImagePath() {
-        return imagePath;
-    }
-
-    public PCLDynamicCard makeFirstCard(boolean shouldFindForms) {
-        return getBuilder(0).createImplWithForms(shouldFindForms);
-    }
-
     public void wipeBuilder() {
         CUSTOM_CARDS.get(slotColor).remove(this);
         FileHandle writer = getImageHandle();
@@ -331,10 +335,6 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicData> {
         writer = Gdx.files.local(filePath);
         writer.delete();
         EUIUtils.logInfo(PCLCustomCardSlot.class, "Deleted Custom Card: " + filePath);
-    }
-
-    public FileHandle getImageHandle() {
-        return Gdx.files.local(imagePath);
     }
 
     public static class CardForm {

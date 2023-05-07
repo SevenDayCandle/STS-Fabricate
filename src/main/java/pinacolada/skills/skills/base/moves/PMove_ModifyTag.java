@@ -31,6 +31,15 @@ public class PMove_ModifyTag extends PMove_Modify<PField_CardModifyTag> {
     }
 
     @Override
+    public ActionT1<AbstractCard> getAction() {
+        return (c) -> {
+            for (PCLCardTag tag : fields.addTags) {
+                getActions().modifyTag(c, tag, amount, amount != 0);
+            }
+        };
+    }
+
+    @Override
     public String getObjectSampleText() {
         return TEXT.cedit_tags;
     }
@@ -51,14 +60,5 @@ public class PMove_ModifyTag extends PMove_Modify<PField_CardModifyTag> {
                 fields.hasGroups() ?
                         TEXT.act_removeFromPlace(giveString, EUIRM.strings.numNoun(getExtraRawString(), pluralCard()), fields.getGroupString()) :
                         TEXT.act_removeFrom(giveString, TEXT.subjects_thisCard);
-    }
-
-    @Override
-    public ActionT1<AbstractCard> getAction() {
-        return (c) -> {
-            for (PCLCardTag tag : fields.addTags) {
-                getActions().modifyTag(c, tag, amount, amount != 0);
-            }
-        };
     }
 }

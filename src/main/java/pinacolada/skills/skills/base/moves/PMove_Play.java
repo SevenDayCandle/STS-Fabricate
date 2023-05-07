@@ -34,12 +34,12 @@ public class PMove_Play extends PMove_Select<PField_CardCategory> {
     }
 
     @Override
-    public EUITooltip getActionTooltip() {
-        return PGR.core.tooltips.play;
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
+        return PlayFromPile::new;
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
-        return PlayFromPile::new;
+    public EUITooltip getActionTooltip() {
+        return PGR.core.tooltips.play;
     }
 }

@@ -20,9 +20,8 @@ import java.util.function.BiConsumer;
 
 // Copied and modified from STS-AnimatorMod
 public class DealDamageToAll extends PCLAction<ArrayList<AbstractCreature>> {
-    public final int[] damage;
-
     protected final ArrayList<AbstractCreature> targets = new ArrayList<>();
+    public final int[] damage;
     protected AbstractOrb orb;
     protected BiConsumer<AbstractCreature, Boolean> onDamageEffect;
     protected boolean applyPowers;

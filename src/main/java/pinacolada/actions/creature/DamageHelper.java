@@ -47,21 +47,6 @@ public class DamageHelper {
         }
     }
 
-    public static ArrayList<AbstractPower> getNonContactPowers(AbstractCreature target) {
-        return EUIUtils.filter(target.powers, power -> {
-            switch (power.ID) {
-                case ThornsPower.POWER_ID:
-                case MalleablePower.POWER_ID:
-                case FlameBarrierPower.POWER_ID:
-                case CurlUpPower.POWER_ID:
-                case PlatedArmorPower.POWER_ID:
-                case ReactivePower.POWER_ID:
-                    return false;
-            }
-            return true;
-        });
-    }
-
     public static void dealDirectHPLoss(AbstractCreature source, AbstractCreature target, int amount, boolean bypassTempHP, boolean bypassPowers) {
         int tempHP = 0;
         if (bypassTempHP) {
@@ -88,5 +73,20 @@ public class DamageHelper {
                 target.powers = prevPowers;
             }
         }
+    }
+
+    public static ArrayList<AbstractPower> getNonContactPowers(AbstractCreature target) {
+        return EUIUtils.filter(target.powers, power -> {
+            switch (power.ID) {
+                case ThornsPower.POWER_ID:
+                case MalleablePower.POWER_ID:
+                case FlameBarrierPower.POWER_ID:
+                case CurlUpPower.POWER_ID:
+                case PlatedArmorPower.POWER_ID:
+                case ReactivePower.POWER_ID:
+                    return false;
+            }
+            return true;
+        });
     }
 }

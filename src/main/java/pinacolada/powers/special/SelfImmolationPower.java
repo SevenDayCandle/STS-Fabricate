@@ -33,6 +33,14 @@ public class SelfImmolationPower extends PCLPower {
         updateDescription();
     }
 
+    private void applyDebuff(int amount) {
+        if (amount > 0) {
+            for (AbstractCreature cr : GameUtilities.getAllCharacters(true)) {
+                PCLActions.bottom.dealDamageAtEndOfTurn(owner, cr, amount, PCLEnum.AttackEffect.CLAW);
+            }
+        }
+    }
+
     @Override
     public void onInitialApplication() {
         super.onInitialApplication();
@@ -64,14 +72,6 @@ public class SelfImmolationPower extends PCLPower {
         if (card.block > 0) {
             applyDebuff(card.block * amount);
             this.flash();
-        }
-    }
-
-    private void applyDebuff(int amount) {
-        if (amount > 0) {
-            for (AbstractCreature cr : GameUtilities.getAllCharacters(true)) {
-                PCLActions.bottom.dealDamageAtEndOfTurn(owner, cr, amount, PCLEnum.AttackEffect.CLAW);
-            }
         }
     }
 }

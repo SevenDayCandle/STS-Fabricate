@@ -73,6 +73,19 @@ public abstract class PCLEffect extends AbstractGameEffect {
         return this;
     }
 
+    protected void complete() {
+        PCLEffects.UnlistedEffects.remove(this);
+        this.isDone = true;
+    }
+
+    protected void firstUpdate() {
+
+    }
+
+    protected float getDeltaTime() {
+        return isRealtime ? Gdx.graphics.getRawDeltaTime() : Gdx.graphics.getDeltaTime();
+    }
+
     public PCLEffect renderBehind(boolean value) {
         renderBehind = value;
 
@@ -138,6 +151,18 @@ public abstract class PCLEffect extends AbstractGameEffect {
         return this;
     }
 
+    protected boolean tickDuration(float deltaTime) {
+        this.ticks += 1;
+        this.duration -= deltaTime;
+
+        if (this.duration < 0f && ticks >= 3) // ticks are necessary for SuperFastMode at 1000% speed
+        {
+            this.isDone = true;
+        }
+
+        return isDone;
+    }
+
     @Override
     public void update() {
         if (duration == startingDuration) {
@@ -162,34 +187,9 @@ public abstract class PCLEffect extends AbstractGameEffect {
 
     }
 
-    protected void firstUpdate() {
-
-    }
-
-    protected boolean tickDuration(float deltaTime) {
-        this.ticks += 1;
-        this.duration -= deltaTime;
-
-        if (this.duration < 0f && ticks >= 3) // ticks are necessary for SuperFastMode at 1000% speed
-        {
-            this.isDone = true;
-        }
-
-        return isDone;
-    }
-
-    protected float getDeltaTime() {
-        return isRealtime ? Gdx.graphics.getRawDeltaTime() : Gdx.graphics.getDeltaTime();
-    }
-
     protected void updateInternal(float deltaTime) {
         if (tickDuration(deltaTime)) {
             complete();
         }
-    }
-
-    protected void complete() {
-        PCLEffects.UnlistedEffects.remove(this);
-        this.isDone = true;
     }
 }

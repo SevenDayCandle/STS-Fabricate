@@ -16,8 +16,8 @@ import java.util.List;
 import static pinacolada.skills.PSkill.EFFECT_CHAR;
 
 public class LogicToken extends PCLTextToken {
-    public static final char LOGIC_TOKEN = '$';
     private static final PCLTextParser internalParser = new PCLTextParser(false);
+    public static final char LOGIC_TOKEN = '$';
     private final List<LogicTokenBlock> blocks;
     private final char variableID;
     private final PSkill<?> move;
@@ -41,6 +41,12 @@ public class LogicToken extends PCLTextToken {
     protected static String getMinString(Collection<LogicTokenBlock> blocks) {
         LogicTokenBlock min = EUIUtils.findMin(blocks, block -> block.token.rawText.length());
         return min != null && min.token.rawText != null ? min.token.rawText : "";
+    }
+
+    private static LogicToken makeToken(PCLCard card, PointerToken pointer, List<LogicTokenBlock> blocks, int initialValue) {
+        return pointer != null && pointer.move != null ?
+                new LogicToken(pointer.variableID, pointer.move, blocks, pointer.move.getAttribute(pointer.variableID)) :
+                new LogicToken(EFFECT_CHAR, null, blocks, initialValue);
     }
 
     public static int tryAdd(PCLTextParser parser) {
@@ -143,12 +149,6 @@ public class LogicToken extends PCLTextToken {
         }
 
         return 0;
-    }
-
-    private static LogicToken makeToken(PCLCard card, PointerToken pointer, List<LogicTokenBlock> blocks, int initialValue) {
-        return pointer != null && pointer.move != null ?
-                new LogicToken(pointer.variableID, pointer.move, blocks, pointer.move.getAttribute(pointer.variableID)) :
-                new LogicToken(EFFECT_CHAR, null, blocks, initialValue);
     }
 
     @Override

@@ -17,6 +17,30 @@ public class WordToken extends PCLTextToken {
         this.extraLength = extraLength;
     }
 
+    protected static boolean isLonger(Character character) {
+        return character == '%';
+    }
+
+    protected static boolean isValidCharacter(Character character, boolean firstCharacter) {
+        if (character == null) {
+            return false;
+        }
+
+        switch (character) {
+            case '~':
+            case '<':
+            case '>':
+                return firstCharacter;
+            case '_':
+            case '%':
+            case '+':
+            case '-':
+                return true;
+            default:
+                return Character.isLetterOrDigit(character);
+        }
+    }
+
     public static int tryAdd(PCLTextParser parser) {
         if (isValidCharacter(parser.character, true)) {
             int additionalWidth = 0;
@@ -70,30 +94,6 @@ public class WordToken extends PCLTextToken {
         }
 
         return 0;
-    }
-
-    protected static boolean isValidCharacter(Character character, boolean firstCharacter) {
-        if (character == null) {
-            return false;
-        }
-
-        switch (character) {
-            case '~':
-            case '<':
-            case '>':
-                return firstCharacter;
-            case '_':
-            case '%':
-            case '+':
-            case '-':
-                return true;
-            default:
-                return Character.isLetterOrDigit(character);
-        }
-    }
-
-    protected static boolean isLonger(Character character) {
-        return character == '%';
     }
 
     @Override

@@ -38,6 +38,7 @@ import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.*;
 import pinacolada.stances.PCLStanceHelper;
+import pinacolada.ui.cardEditor.nodes.PCLCustomEffectNode;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -52,6 +53,8 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     public static final float MAIN_OFFSET = MENU_WIDTH * 1.58f;
     public static final float AUX_OFFSET = MENU_WIDTH * 2.43f;
     protected static ArrayList<AbstractCard> availableCards;
+    private PSkill<?> lastEffect;
+    private float additionalHeight;
     protected ArrayList<EUIHoverable> activeElements = new ArrayList<>();
     protected EUISearchableDropdown<PSkill> effects;
     protected EUIDropdown<PCLAffinity> affinities;
@@ -70,14 +73,11 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     protected PCLCustomCardUpgradableEditor valueEditor;
     protected PCLCustomCardUpgradableEditor extraEditor;
     protected EUIImage backdrop;
-    private PSkill<?> lastEffect;
-    private float additionalHeight;
     public EUIHitbox hb;
     public PCLCustomEffectPage editor;
     public PCLCustomEffectNode node;
 
-    public PCLCustomEffectEditingPane(PCLCustomEffectPage editor, PCLCustomEffectNode node, EUIHitbox hb)
-    {
+    public PCLCustomEffectEditingPane(PCLCustomEffectPage editor, PCLCustomEffectNode node, EUIHitbox hb) {
         this.editor = editor;
         this.node = node;
         this.hb = hb;
@@ -91,113 +91,49 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         availableCards = null;
     }
 
-    protected void initializeSelectors()
-    {
-        final AbstractCard.CardColor cardColor = getColor();
-        effects = (EUISearchableDropdown<PSkill>) new EUISearchableDropdown<PSkill>(hb, skill -> StringUtils.capitalize(skill.getSampleText(editor.rootEffect)))
-                .setOnChange(effects -> {
-                    if (!effects.isEmpty()) {
-                        node.replaceSkill(effects.get(0));
-                    }
-                    editor.updateRootEffect();
-                })
-                .setLabelColorFunctionForOption(this::getColorForEffect)
-                .setClearButtonOptions(false, false)
-                .setCanAutosizeButton(true)
-                .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, node.type.getTitle())
-                .setItems(node.getEffects());
-        valueEditor = new PCLCustomCardUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 5, MENU_HEIGHT, MAIN_OFFSET, OFFSET_AMOUNT)
-                , EUIRM.strings.uiAmount, (val, upVal) -> {
-            if (node.skill != null) {
-                node.skill.setAmount(val, upVal);
-                editor.updateRootEffect();
+    public void close() {
+        editor.currentEditingSkill = null;
+    }
+
+    protected ArrayList<AbstractCard> getAvailableCards() {
+        if (availableCards == null) {
+            AbstractCard.CardColor cardColor = getColor();
+            availableCards = GameUtilities.isPCLOnlyCardColor(cardColor) ? EUIUtils.mapAsNonnull(PCLCardData.getAllData(false, false, cardColor), cd -> cd.makeCardFromLibrary(0))
+                    :
+                    EUIUtils.filter(CardLibrary.getAllCards(),
+                            c -> !PCLDungeon.isColorlessCardExclusive(c) && (c.color == AbstractCard.CardColor.COLORLESS || c.color == AbstractCard.CardColor.CURSE || c.color == cardColor));
+            availableCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(cardColor), c -> c.getBuilder(0).create()));
+            if (cardColor != AbstractCard.CardColor.COLORLESS) {
+                availableCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(AbstractCard.CardColor.COLORLESS), c -> c.getBuilder(0).create()));
             }
-        })
-                .setLimits(-PSkill.DEFAULT_MAX, PSkill.DEFAULT_MAX);
-        extraEditor = new PCLCustomCardUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 5, MENU_HEIGHT, MAIN_OFFSET * 1.3f, OFFSET_AMOUNT)
-                , PGR.core.strings.cedit_extraValue, (val, upVal) -> {
-            if (node.skill != null) {
-                node.skill.setExtra(val, upVal);
-                editor.updateRootEffect();
-            }
-        })
-                .setLimits(-PSkill.DEFAULT_MAX, PSkill.DEFAULT_MAX);
-
-        targets = new EUIDropdown<>(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, AUX_OFFSET, 0)
-                , PCLCardTarget::getTitle)
-                .setOnChange(targets -> {
-                    if (node.skill != null && !targets.isEmpty()) {
-                        node.skill.setTarget(targets.get(0));
-                        editor.updateRootEffect();
-                    }
-                })
-                .setLabelFunctionForOption(PCLCardTarget::getTitle, false)
-                .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_cardTarget)
-                .setCanAutosize(true, true)
-                .setItems(PCLCustomCardAttributesPage.getEligibleTargets(cardColor));
-
-        piles = initializeRegular(PCLCardGroupHelper.getStandard(), PCLCardGroupHelper::getCapitalTitle, PGR.core.strings.cedit_pile);
-        origins = initializeRegular(PCLCardSelection.values(), PCLCardSelection::getTitle, PGR.core.strings.cedit_pile);
-        affinities = initializeSmartSearchable(PCLCustomCardAttributesPage.getEligibleAffinities(cardColor), PGR.core.strings.sui_affinities);
-        powers = initializeSmartSearchable(PCLPowerHelper.sortedValues(), PGR.core.strings.cedit_powers);
-        orbs = initializeSmartSearchable(PCLOrbHelper.visibleValues(), PGR.core.strings.cedit_orbs);
-        stances = initializeSmartSearchable(PCLStanceHelper.values(cardColor), PGR.core.tooltips.stance.title);
-        tags = initializeSmartSearchable(PCLCardTag.getAll(), PGR.core.strings.cedit_tags);
-        cardData = initializeSearchable(getAvailableCards(), c -> c.name, RunHistoryScreen.TEXT[9]);
-        colors = initializeSearchable(AbstractCard.CardColor.values(), EUIGameUtils::getColorName, EUIRM.strings.uiColors);
-        rarities = initializeSearchable(PCLCustomCardPrimaryInfoPage.getEligibleRarities(), EUIGameUtils::textForRarity, CardLibSortHeader.TEXT[0]);
-        types = initializeSearchable(PCLCustomCardPrimaryInfoPage.getEligibleTypes(cardColor), EUIGameUtils::textForType, CardLibSortHeader.TEXT[1]);
-        costs = initializeSearchable(CostFilter.values(), c -> c.name, CardLibSortHeader.TEXT[3]);
+            availableCards.sort((a, b) -> StringUtils.compare(a.name, b.name));
+        }
+        return availableCards;
     }
 
-    public <T> EUIDropdown<T> initializeRegular(T[] items, FuncT1<String, T> labelFunc, String title)
-    {
-        return initializeRegular(Arrays.asList(items), labelFunc, title);
+    public EditorMaker getBuilder() {
+        return editor.screen.getBuilder();
     }
 
-    public <T> EUIDropdown<T> initializeRegular(Collection<T> items, FuncT1<String, T> labelFunc, String title)
-    {
-        return (EUIDropdown<T>) new EUIDropdown<T>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.35f, MENU_HEIGHT, 0, 0))
-                .setLabelFunctionForOption(labelFunc, false)
-                .setIsMultiSelect(true)
-                .setShouldPositionClearAtTop(true)
-                .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, title)
-                .setCanAutosize(true, true)
-                .setItems(items);
+    public AbstractCard.CardColor getColor() {
+        return getBuilder().getCardColor();
     }
 
-    public <T> EUISearchableDropdown<T> initializeSearchable(T[] items, FuncT1<String, T> labelFunc, String title)
-    {
-        return initializeSearchable(Arrays.asList(items), labelFunc, title);
-    }
+    public Color getColorForEffect(PSkill<?> effect) {
 
-    public <T> EUISearchableDropdown<T> initializeSearchable(Collection<T> items, FuncT1<String, T> labelFunc, String title)
-    {
-        return (EUISearchableDropdown<T>) new EUISearchableDropdown<T>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.35f, MENU_HEIGHT, 0, 0))
-                .setLabelFunctionForOption(labelFunc, false)
-                .setIsMultiSelect(true)
-                .setShouldPositionClearAtTop(true)
-                .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, title)
-                .setCanAutosize(true, true)
-                .setItems(items);
-    }
-
-    public <T extends TooltipProvider> EUISearchableDropdown<T> initializeSmartSearchable(T[] items, String title)
-    {
-        return initializeSmartSearchable(Arrays.asList(items), title);
-    }
-
-    public <T extends TooltipProvider> EUISearchableDropdown<T> initializeSmartSearchable(Collection<T> items, String title)
-    {
-        EUISearchableDropdown<T> dropdown = (EUISearchableDropdown<T>) new EUISearchableDropdown<T>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.35f, MENU_HEIGHT, 0, 0))
-                .setLabelFunctionForOption(item -> item.getTooltip().getTitleOrIconForced() + " " + item.getTooltip().title, true)
-                .setIsMultiSelect(true)
-                .setShouldPositionClearAtTop(true)
-                .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, title)
-                .setCanAutosize(true, true)
-                .setItems(items);
-        dropdown.setLabelFunctionForButton((list, __) -> dropdown.makeMultiSelectString(item -> item.getTooltip().getTitleOrIcon()), true);
-        return dropdown;
+        if (editor.rootEffect == null) {
+            return Color.WHITE;
+        }
+        if (effect instanceof PCond) {
+            return editor.rootEffect.isCondAllowed(effect) ? Color.WHITE : Color.GRAY;
+        }
+        if (effect instanceof PMod) {
+            return editor.rootEffect.isModAllowed(effect) ? Color.WHITE : Color.GRAY;
+        }
+        if (effect instanceof PMove) {
+            return editor.rootEffect.isMoveAllowed(effect) ? Color.WHITE : Color.GRAY;
+        }
+        return Color.WHITE;
     }
 
     @Override
@@ -255,45 +191,106 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         }
     }
 
-    protected ArrayList<AbstractCard> getAvailableCards() {
-        if (availableCards == null) {
-            AbstractCard.CardColor cardColor = getColor();
-            availableCards = GameUtilities.isPCLOnlyCardColor(cardColor) ? EUIUtils.mapAsNonnull(PCLCardData.getAllData(false, false, cardColor), cd -> cd.makeCardFromLibrary(0))
-                    :
-                    EUIUtils.filter(CardLibrary.getAllCards(),
-                            c -> !PCLDungeon.isColorlessCardExclusive(c) && (c.color == AbstractCard.CardColor.COLORLESS || c.color == AbstractCard.CardColor.CURSE || c.color == cardColor));
-            availableCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(cardColor), c -> c.getBuilder(0).create()));
-            if (cardColor != AbstractCard.CardColor.COLORLESS) {
-                availableCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(AbstractCard.CardColor.COLORLESS), c -> c.getBuilder(0).create()));
+    public <T> EUIDropdown<T> initializeRegular(T[] items, FuncT1<String, T> labelFunc, String title) {
+        return initializeRegular(Arrays.asList(items), labelFunc, title);
+    }
+
+    public <T> EUIDropdown<T> initializeRegular(Collection<T> items, FuncT1<String, T> labelFunc, String title) {
+        return (EUIDropdown<T>) new EUIDropdown<T>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.35f, MENU_HEIGHT, 0, 0))
+                .setLabelFunctionForOption(labelFunc, false)
+                .setIsMultiSelect(true)
+                .setShouldPositionClearAtTop(true)
+                .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, title)
+                .setCanAutosize(true, true)
+                .setItems(items);
+    }
+
+    public <T> EUISearchableDropdown<T> initializeSearchable(T[] items, FuncT1<String, T> labelFunc, String title) {
+        return initializeSearchable(Arrays.asList(items), labelFunc, title);
+    }
+
+    public <T> EUISearchableDropdown<T> initializeSearchable(Collection<T> items, FuncT1<String, T> labelFunc, String title) {
+        return (EUISearchableDropdown<T>) new EUISearchableDropdown<T>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.35f, MENU_HEIGHT, 0, 0))
+                .setLabelFunctionForOption(labelFunc, false)
+                .setIsMultiSelect(true)
+                .setShouldPositionClearAtTop(true)
+                .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, title)
+                .setCanAutosize(true, true)
+                .setItems(items);
+    }
+
+    protected void initializeSelectors() {
+        final AbstractCard.CardColor cardColor = getColor();
+        effects = (EUISearchableDropdown<PSkill>) new EUISearchableDropdown<PSkill>(hb, skill -> StringUtils.capitalize(skill.getSampleText(editor.rootEffect)))
+                .setOnChange(effects -> {
+                    if (!effects.isEmpty()) {
+                        node.replaceSkill(effects.get(0));
+                    }
+                    editor.updateRootEffect();
+                })
+                .setLabelColorFunctionForOption(this::getColorForEffect)
+                .setClearButtonOptions(false, false)
+                .setCanAutosizeButton(true)
+                .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, node.type.getTitle())
+                .setItems(node.getEffects());
+        valueEditor = new PCLCustomCardUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 5, MENU_HEIGHT, MAIN_OFFSET, OFFSET_AMOUNT)
+                , EUIRM.strings.uiAmount, (val, upVal) -> {
+            if (node.skill != null) {
+                node.skill.setAmount(val, upVal);
+                editor.updateRootEffect();
             }
-            availableCards.sort((a, b) -> StringUtils.compare(a.name, b.name));
-        }
-        return availableCards;
+        })
+                .setLimits(-PSkill.DEFAULT_MAX, PSkill.DEFAULT_MAX);
+        extraEditor = new PCLCustomCardUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 5, MENU_HEIGHT, MAIN_OFFSET * 1.3f, OFFSET_AMOUNT)
+                , PGR.core.strings.cedit_extraValue, (val, upVal) -> {
+            if (node.skill != null) {
+                node.skill.setExtra(val, upVal);
+                editor.updateRootEffect();
+            }
+        })
+                .setLimits(-PSkill.DEFAULT_MAX, PSkill.DEFAULT_MAX);
+
+        targets = new EUIDropdown<>(new OriginRelativeHitbox(hb, MENU_WIDTH, MENU_HEIGHT, AUX_OFFSET, 0)
+                , PCLCardTarget::getTitle)
+                .setOnChange(targets -> {
+                    if (node.skill != null && !targets.isEmpty()) {
+                        node.skill.setTarget(targets.get(0));
+                        editor.updateRootEffect();
+                    }
+                })
+                .setLabelFunctionForOption(PCLCardTarget::getTitle, false)
+                .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_cardTarget)
+                .setCanAutosize(true, true)
+                .setItems(PCLCustomCardAttributesPage.getEligibleTargets(cardColor));
+
+        piles = initializeRegular(PCLCardGroupHelper.getStandard(), PCLCardGroupHelper::getCapitalTitle, PGR.core.strings.cedit_pile);
+        origins = initializeRegular(PCLCardSelection.values(), PCLCardSelection::getTitle, PGR.core.strings.cedit_pile);
+        affinities = initializeSmartSearchable(PCLCustomCardAttributesPage.getEligibleAffinities(cardColor), PGR.core.strings.sui_affinities);
+        powers = initializeSmartSearchable(PCLPowerHelper.sortedValues(), PGR.core.strings.cedit_powers);
+        orbs = initializeSmartSearchable(PCLOrbHelper.visibleValues(), PGR.core.strings.cedit_orbs);
+        stances = initializeSmartSearchable(PCLStanceHelper.values(cardColor), PGR.core.tooltips.stance.title);
+        tags = initializeSmartSearchable(PCLCardTag.getAll(), PGR.core.strings.cedit_tags);
+        cardData = initializeSearchable(getAvailableCards(), c -> c.name, RunHistoryScreen.TEXT[9]);
+        colors = initializeSearchable(AbstractCard.CardColor.values(), EUIGameUtils::getColorName, EUIRM.strings.uiColors);
+        rarities = initializeSearchable(PCLCustomCardPrimaryInfoPage.getEligibleRarities(), EUIGameUtils::textForRarity, CardLibSortHeader.TEXT[0]);
+        types = initializeSearchable(PCLCustomCardPrimaryInfoPage.getEligibleTypes(cardColor), EUIGameUtils::textForType, CardLibSortHeader.TEXT[1]);
+        costs = initializeSearchable(CostFilter.values(), c -> c.name, CardLibSortHeader.TEXT[3]);
     }
 
-    public EditorMaker getBuilder() {
-        return editor.screen.getBuilder();
+    public <T extends TooltipProvider> EUISearchableDropdown<T> initializeSmartSearchable(T[] items, String title) {
+        return initializeSmartSearchable(Arrays.asList(items), title);
     }
 
-    public AbstractCard.CardColor getColor() {
-        return getBuilder().getCardColor();
-    }
-
-    public Color getColorForEffect(PSkill<?> effect) {
-
-        if (editor.rootEffect == null) {
-            return Color.WHITE;
-        }
-        if (effect instanceof PCond) {
-            return editor.rootEffect.isCondAllowed(effect) ? Color.WHITE : Color.GRAY;
-        }
-        if (effect instanceof PMod) {
-            return editor.rootEffect.isModAllowed(effect) ? Color.WHITE : Color.GRAY;
-        }
-        if (effect instanceof PMove) {
-            return editor.rootEffect.isMoveAllowed(effect) ? Color.WHITE : Color.GRAY;
-        }
-        return Color.WHITE;
+    public <T extends TooltipProvider> EUISearchableDropdown<T> initializeSmartSearchable(Collection<T> items, String title) {
+        EUISearchableDropdown<T> dropdown = (EUISearchableDropdown<T>) new EUISearchableDropdown<T>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.35f, MENU_HEIGHT, 0, 0))
+                .setLabelFunctionForOption(item -> item.getTooltip().getTitleOrIconForced() + " " + item.getTooltip().title, true)
+                .setIsMultiSelect(true)
+                .setShouldPositionClearAtTop(true)
+                .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, title)
+                .setCanAutosize(true, true)
+                .setItems(items);
+        dropdown.setLabelFunctionForButton((list, __) -> dropdown.makeMultiSelectString(item -> item.getTooltip().getTitleOrIcon()), true);
+        return dropdown;
     }
 
     protected <U> float position(EUIHoverable element, float x) {
@@ -459,11 +456,6 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         registerDropdown(types, items);
     }
 
-    public void close()
-    {
-        editor.currentEditingSkill = null;
-    }
-
     @Override
     public void updateImpl() {
         boolean wasBusy = EUI.doesActiveElementExist();
@@ -476,8 +468,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
             element.tryUpdate();
         }
         if (EUIInputManager.leftClick.isJustPressed() && !wasBusy &&
-                !backdrop.hb.hovered && !effects.areAnyItemsHovered() && !targets.areAnyItemsHovered() && !valueEditor.hb.hovered && !extraEditor.hb.hovered && !EUIUtils.any(activeElements, e -> e.hb.hovered))
-        {
+                !backdrop.hb.hovered && !effects.areAnyItemsHovered() && !targets.areAnyItemsHovered() && !valueEditor.hb.hovered && !extraEditor.hb.hovered && !EUIUtils.any(activeElements, e -> e.hb.hovered)) {
             close();
         }
     }

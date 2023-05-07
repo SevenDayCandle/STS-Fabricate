@@ -47,14 +47,41 @@ public class PCLDebugCardPanel {
         modList.set(ALL);
     }
 
-    private boolean passes(AbstractCard card) {
-        String mod = modList.get();
-        return (cardFilter.passFilter(card.cardID) || cardFilter.passFilter(card.name)) && (ALL.equals(mod) || getModID(card.cardID).equals(mod));
-    }
-
     private static String getModID(String cardID) {
         int idx = cardID.indexOf(':');
         return idx < 0 ? BASE_GAME : cardID.substring(0, idx);
+    }
+
+    private void addToDeck() {
+        AbstractCard chosen = cardList.get();
+        if (chosen != null) {
+            for (int i = 0; i < cardCount.get(); i++) {
+                PCLEffects.List.add(new ShowCardAndObtainEffect(getCopy(chosen), (float) Settings.WIDTH * 0.5f, (float) Settings.HEIGHT * 0.5f));
+            }
+        }
+    }
+
+    private void addToHand() {
+        AbstractCard chosen = cardList.get();
+        if (chosen != null) {
+            PCLActions.instant.makeCardInHand(getCopy(chosen)).repeat(cardCount.get());
+        }
+    }
+
+    private AbstractCard getCopy(AbstractCard chosen) {
+        AbstractCard copy = chosen.makeCopy();
+        if (copy instanceof PCLCard) {
+            ((PCLCard) copy).changeForm(formCount.get(), 0);
+        }
+        for (int j = 0; j < upgradeCount.get(); ++j) {
+            copy.upgrade();
+        }
+        return copy;
+    }
+
+    private boolean passes(AbstractCard card) {
+        String mod = modList.get();
+        return (cardFilter.passFilter(card.cardID) || cardFilter.passFilter(card.name)) && (ALL.equals(mod) || getModID(card.cardID).equals(mod));
     }
 
     public void refreshCards() {
@@ -87,32 +114,5 @@ public class PCLDebugCardPanel {
                 addToDeck.render(this::addToDeck);
             });
         });
-    }
-
-    private void addToHand() {
-        AbstractCard chosen = cardList.get();
-        if (chosen != null) {
-            PCLActions.instant.makeCardInHand(getCopy(chosen)).repeat(cardCount.get());
-        }
-    }
-
-    private void addToDeck() {
-        AbstractCard chosen = cardList.get();
-        if (chosen != null) {
-            for (int i = 0; i < cardCount.get(); i++) {
-                PCLEffects.List.add(new ShowCardAndObtainEffect(getCopy(chosen), (float) Settings.WIDTH * 0.5f, (float) Settings.HEIGHT * 0.5f));
-            }
-        }
-    }
-
-    private AbstractCard getCopy(AbstractCard chosen) {
-        AbstractCard copy = chosen.makeCopy();
-        if (copy instanceof PCLCard) {
-            ((PCLCard) copy).changeForm(formCount.get(), 0);
-        }
-        for (int j = 0; j < upgradeCount.get(); ++j) {
-            copy.upgrade();
-        }
-        return copy;
     }
 }

@@ -18,10 +18,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 public abstract class AbstractConfig {
+    private static final String CONFIG_ID = "PCLConfig";
     protected static final int BASE_OPTION_OFFSET_X = 400;
     protected static final int BASE_OPTION_OFFSET_Y = 700;
     protected static final int BASE_OPTION_OPTION_HEIGHT = 50;
-    private static final String CONFIG_ID = "PCLConfig";
     protected static ModSettingsScreen.Category pclCategory;
 
     protected final String id;

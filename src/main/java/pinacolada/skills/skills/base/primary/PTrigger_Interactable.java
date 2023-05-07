@@ -29,13 +29,13 @@ public class PTrigger_Interactable extends PTrigger {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
-        return PGR.core.tooltips.interactable.title;
+    public PCLClickableUse getClickable(ClickableProvider provider) {
+        return new PCLClickableUse(provider, getChild(), amount <= 0 ? -1 : amount, !fields.not, true);
     }
 
     @Override
-    public PCLClickableUse getClickable(ClickableProvider provider) {
-        return new PCLClickableUse(provider, getChild(), amount <= 0 ? -1 : amount, !fields.not, true);
+    public String getSampleText(PSkill<?> callingSkill) {
+        return PGR.core.tooltips.interactable.title;
     }
 
     // No-Op, should not subscribe children

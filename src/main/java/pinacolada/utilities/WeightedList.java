@@ -42,6 +42,11 @@ public class WeightedList<T> extends ArrayList<WeightedList<T>.Item> {
         return result;
     }
 
+    private void remove(Item item) {
+        totalWeight -= item.weight;
+        super.remove(item);
+    }
+
     public T retrieve(Random rng) {
         return retrieve(rng, true);
     }
@@ -53,6 +58,14 @@ public class WeightedList<T> extends ArrayList<WeightedList<T>.Item> {
     private T retrieve(int roll, boolean remove) {
         Item i = retrieveWithWeight(roll, remove);
         return i != null ? i.object : null;
+    }
+
+    public T retrieveUnseeded(boolean remove) {
+        return retrieve(EUIUtils.RNG.nextInt(totalWeight + 1), remove);
+    }
+
+    public Item retrieveUnseededWithWeight(boolean remove) {
+        return retrieveWithWeight(EUIUtils.RNG.nextInt(totalWeight + 1), remove);
     }
 
     private Item retrieveWithWeight(int roll, boolean remove) {
@@ -76,19 +89,6 @@ public class WeightedList<T> extends ArrayList<WeightedList<T>.Item> {
         }
 
         return selected;
-    }
-
-    private void remove(Item item) {
-        totalWeight -= item.weight;
-        super.remove(item);
-    }
-
-    public T retrieveUnseeded(boolean remove) {
-        return retrieve(EUIUtils.RNG.nextInt(totalWeight + 1), remove);
-    }
-
-    public Item retrieveUnseededWithWeight(boolean remove) {
-        return retrieveWithWeight(EUIUtils.RNG.nextInt(totalWeight + 1), remove);
     }
 
     public Item retrieveWithWeight(Random rng) {

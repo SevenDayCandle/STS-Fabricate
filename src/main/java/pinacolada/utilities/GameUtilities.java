@@ -100,30 +100,14 @@ import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.player;
 
 // Copied and modified from STS-AnimatorMod
 public class GameUtilities {
-    public final static String EMPTY_STRING = "";
     protected static final String PORTRAIT_PATH = "images/1024Portraits/";
     protected static final String BETA_PATH = "images/1024PortraitsBeta/";
+    public final static String EMPTY_STRING = "";
 
     public static CountingPanelStats<PCLAffinity, PCLAffinity, AbstractCard> affinityStats(Iterable<AbstractCard> cards) {
         return CountingPanelStats.basic(
                 GameUtilities::getVisiblePCLAffinities,
                 cards);
-    }
-
-    public static List<PCLAffinity> getVisiblePCLAffinities(AbstractCard card) {
-        PCLCardAffinities cardAffinities = getPCLCardAffinities(card);
-        return cardAffinities != null ? cardAffinities.getAffinities(false, true) : Collections.singletonList(PCLAffinity.General);
-    }
-
-    public static PCLCardAffinities getPCLCardAffinities(AbstractCard card) {
-        if (card instanceof PCLCard) {
-            return ((PCLCard) card).affinities;
-        }
-        AffinityDisplayModifier mod = AffinityDisplayModifier.get(card);
-        if (mod != null) {
-            return mod.affinities;
-        }
-        return null;
     }
 
     public static void applyPowerInstantly(Iterable<AbstractCreature> targets, PCLPowerHelper powerHelper, int stacks) {
@@ -152,32 +136,10 @@ public class GameUtilities {
         return power;
     }
 
-    public static <T extends AbstractPower> T getPower(AbstractCreature creature, String powerID) {
-        if (creature != null && creature.powers != null) {
-            for (AbstractPower p : creature.powers) {
-                if (p != null && powerID.equals(p.ID)) {
-                    try {
-                        return (T) p;
-                    }
-                    catch (ClassCastException e) {
-                        e.printStackTrace();
-                        return null;
-                    }
-                }
-            }
-        }
-
-        return null;
-    }
-
     public static boolean areMonstersBasicallyDead() {
         final AbstractRoom room = getCurrentRoom();
         final MonsterGroup group = room != null ? room.monsters : null;
         return group == null || group.areMonstersBasicallyDead();
-    }
-
-    public static AbstractRoom getCurrentRoom() {
-        return (AbstractDungeon.currMapNode == null) ? null : AbstractDungeon.currMapNode.getRoom();
     }
 
     public static AbstractMonster asMonster(AbstractCreature c) {
@@ -200,17 +162,16 @@ public class GameUtilities {
                 && !DevConsole.visible && !AbstractDungeon.isScreenUp && !CardCrawlGame.isPopupOpen;
     }
 
-    public static boolean isPlayerTurn(boolean beforeEndTurnEvents) {
-        boolean result = !AbstractDungeon.actionManager.turnHasEnded;
-        if (beforeEndTurnEvents) {
-            result &= CombatManager.isPlayerTurn && !player.isEndingTurn;
-        }
-
-        return result;
-    }
-
     public static boolean canObtainCopy(AbstractCard card) {
         return PGR.dungeon.canObtainCopy(card);
+    }
+
+    public static boolean canOrbApplyFocus(AbstractOrb orb) {
+        return (!Plasma.ORB_ID.equals(orb.ID) && !(orb instanceof PCLOrb && !((PCLOrb) orb).canOrbApplyFocusToPassive));
+    }
+
+    public static boolean canOrbApplyFocusToEvoke(AbstractOrb orb) {
+        return (!Dark.ORB_ID.equals(orb.ID) && !(orb instanceof PCLOrb && !((PCLOrb) orb).canOrbApplyFocusToEvoke));
     }
 
     public static boolean canPlayTwice(AbstractCard card) {
@@ -220,16 +181,6 @@ public class GameUtilities {
     // Does NOT patch card pool screen because this would cause the card pool screen to get messed up when you get a prismatic shard effect in battle
     public static boolean canReceiveAnyColorCard() {
         return GameUtilities.hasRelicEffect(PrismaticShard.ID) || ModHelper.isModEnabled(Diverse.ID);
-    }
-
-    public static boolean hasRelicEffect(String relicID) {
-        return hasRelic(relicID)
-                || CombatManager.getCombatData(relicID, false)
-                || CombatManager.getTurnData(relicID, false);
-    }
-
-    public static boolean hasRelic(String relicID) {
-        return player != null && player.hasRelic(relicID);
     }
 
     public static boolean canRemoveFromDeck(AbstractCard card) {
@@ -243,6 +194,10 @@ public class GameUtilities {
         return !SoulboundField.soulbound.get(card);
     }
 
+    public static boolean canRetain(AbstractCard card) {
+        return !card.isEthereal && !card.retain && !card.selfRetain;
+    }
+
     public static boolean canShowUpgrades(boolean isLibrary) {
         return SingleCardViewPopup.isViewingUpgrade && (player == null || isLibrary
                 || AbstractDungeon.screen == AbstractDungeon.CurrentScreen.COMBAT_REWARD
@@ -252,15 +207,6 @@ public class GameUtilities {
 
     public static boolean chance(float amount) {
         return getRNG().random(100) < amount;
-    }
-
-    public static Random getRNG() {
-        if (PCLCard.rng == null) {
-            EUIUtils.logInfo(GameUtilities.class, "PCLCard.rng was null");
-            return new Random();
-        }
-
-        return PCLCard.rng;
     }
 
     public static void changeCardName(AbstractCard card, String newName) {
@@ -314,68 +260,16 @@ public class GameUtilities {
         modifyBlock(card, Math.max(0, card.baseBlock - amount), temporary);
     }
 
-    public static void modifyBlock(AbstractCard card, int amount, boolean temporary) {
-        if (card instanceof PCLCard) {
-            if (temporary) {
-                ((PCLCard) card).updateBlock(amount);
-            }
-            else {
-                ((PCLCard) card).updateMaxBlock(amount);
-            }
-        }
-        else {
-            card.block = Math.max(0, amount);
-            if (!temporary) {
-                card.baseBlock = card.block;
-            }
-            card.isBlockModified = (card.block != card.baseBlock);
-        }
-    }
-
     public static void decreaseDamage(AbstractCard card, int amount, boolean temporary) {
         modifyDamage(card, Math.max(0, card.baseDamage - amount), temporary);
-    }
-
-    public static void modifyDamage(AbstractCard card, int amount, boolean temporary) {
-        if (card instanceof PCLCard) {
-            if (temporary) {
-                ((PCLCard) card).updateDamage(amount);
-            }
-            else {
-                ((PCLCard) card).updateMaxDamage(amount);
-            }
-        }
-        else {
-            card.damage = Math.max(0, amount);
-            if (!temporary) {
-                card.baseDamage = card.damage;
-            }
-            card.isDamageModified = (card.damage != card.baseDamage);
-        }
     }
 
     public static void decreaseMagicNumber(AbstractCard card, int amount, boolean temporary) {
         modifyMagicNumber(card, Math.max(0, card.baseMagicNumber - amount), temporary);
     }
 
-    public static void modifyMagicNumber(AbstractCard card, int amount, boolean temporary) {
-        card.magicNumber = amount;
-        if (!temporary) {
-            card.baseMagicNumber = card.magicNumber;
-        }
-        card.isMagicNumberModified = (card.magicNumber != card.baseMagicNumber);
-    }
-
     public static void decreaseSecondaryValue(PCLCard card, int amount, boolean temporary) {
         modifySecondaryValue(card, Math.max(0, card.baseHeal - amount), temporary);
-    }
-
-    public static void modifySecondaryValue(PCLCard card, int amount, boolean temporary) {
-        card.heal = amount;
-        if (!temporary) {
-            card.baseHeal = card.heal;
-        }
-        card.isHealModified = (card.heal != card.baseHeal);
     }
 
     public static CardGroup findCardGroup(AbstractCard card, boolean includeLimbo) {
@@ -424,6 +318,38 @@ public class GameUtilities {
         return new Random(Settings.seed + (AbstractDungeon.actNum * a) + (AbstractDungeon.floorNum * b));
     }
 
+    public static AbstractCard.CardColor getActingCardColor(AbstractCard c) {
+        return AbstractDungeon.player != null ? player.getCardColor() : c.color;
+    }
+
+    public static AbstractCard.CardColor getActingColor() {
+        return player != null ? player.getCardColor() : EUI.actingColor;
+    }
+
+    public static ArrayList<AbstractCreature> getAllCharacters(boolean aliveOnly) {
+        final AbstractRoom room = getCurrentRoom();
+        final ArrayList<AbstractCreature> characters = new ArrayList<>();
+        if (room != null && room.monsters != null) {
+            for (AbstractMonster m : room.monsters.monsters) {
+                if (!aliveOnly || !isDeadOrEscaped(m)) {
+                    characters.add(m);
+                }
+            }
+        }
+
+        for (PCLCardAlly summon : CombatManager.summons.summons) {
+            if (!aliveOnly || summon.hasCard()) {
+                characters.add(summon);
+            }
+        }
+
+        if (!aliveOnly || !isDeadOrEscaped(player)) {
+            characters.add(player);
+        }
+
+        return characters;
+    }
+
     public static HashSet<AbstractCard> getAllCopies(String cardID, CardGroup group) {
         return getAllCopies(new HashSet<>(), cardID, group);
     }
@@ -461,27 +387,6 @@ public class GameUtilities {
         return cards;
     }
 
-    public static HashSet<AbstractCard> getMasterDeckCopies(String cardID) {
-        final HashSet<AbstractCard> cards = new HashSet<>();
-        for (AbstractCard c : player.masterDeck.group) {
-            if (c.cardID.equals(cardID)) {
-                cards.add(c);
-            }
-        }
-
-        return cards;
-    }
-
-    public static HashSet<AbstractCard> getAllInstances(UUID uuid) {
-        final HashSet<AbstractCard> cards = getAllInBattleInstances(uuid);
-        final AbstractCard masterDeckInstance = getMasterDeckInstance(uuid);
-        if (masterDeckInstance != null) {
-            cards.add(masterDeckInstance);
-        }
-
-        return cards;
-    }
-
     public static HashSet<AbstractCard> getAllInBattleInstances(UUID uuid) {
         final HashSet<AbstractCard> cards = new HashSet<>();
 
@@ -498,14 +403,14 @@ public class GameUtilities {
         return cards;
     }
 
-    public static AbstractCard getMasterDeckInstance(UUID uuid) {
-        for (AbstractCard c : player.masterDeck.group) {
-            if (c.uuid == uuid) {
-                return c;
-            }
+    public static HashSet<AbstractCard> getAllInstances(UUID uuid) {
+        final HashSet<AbstractCard> cards = getAllInBattleInstances(uuid);
+        final AbstractCard masterDeckInstance = getMasterDeckInstance(uuid);
+        if (masterDeckInstance != null) {
+            cards.add(masterDeckInstance);
         }
 
-        return null;
+        return cards;
     }
 
     public static HashSet<AbstractCard> getAllInstances(HashSet<AbstractCard> cards, UUID uuid, CardGroup group) {
@@ -558,72 +463,16 @@ public class GameUtilities {
         return c instanceof PCLCard ? ((PCLCard) c).getAugments() : null;
     }
 
-    public static int getBlockedHits(AbstractCreature creature) {
-        return GameUtilities.getPowerAmount(creature, BufferPower.POWER_ID);
-    }
-
-    public static int getPowerAmount(AbstractCreature owner, String powerID) {
-        AbstractPower power = getPower(owner, powerID);
-        return power != null ? power.amount : 0;
-    }
-
-    public static BobEffect getBobEffect(AbstractMonster mo) {
-        return ReflectionHacks.getPrivate(mo, AbstractMonster.class, "bobEffect");
-    }
-
-    public static CardGroup getCardPoolSource(AbstractCard.CardRarity rarity) {
-        if (rarity == null) {
-            return AbstractDungeon.srcColorlessCardPool;
-        }
-
-        switch (rarity) {
-            case CURSE:
-                return AbstractDungeon.srcCurseCardPool;
-            case COMMON:
-                return AbstractDungeon.srcCommonCardPool;
-            case UNCOMMON:
-                return AbstractDungeon.srcUncommonCardPool;
-            case RARE:
-                return AbstractDungeon.srcRareCardPool;
-            default:
-                return null;
-        }
-    }
-
-    public static ArrayList<AbstractCard> getCardsFromAllColorCombatPool(FuncT1<Boolean, AbstractCard> filter, int count) {
-        return pickCardsFromList(new RandomizedList<>(getAvailableCardsForAllColors(filter)), count);
-    }
-
-    public static ArrayList<AbstractCard> pickCardsFromList(RandomizedList<AbstractCard> possible, int count) {
-        ArrayList<AbstractCard> returned = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
-            AbstractCard c = possible.retrieve(getRNG(), true);
-            if (c != null) {
-                returned.add(c);
-            }
-        }
-        return returned;
-    }
-
     public static ArrayList<AbstractCard> getAvailableCardsForAllColors(FuncT1<Boolean, AbstractCard> filter) {
         return EUIUtils.filter(CardLibrary.cards.values(), c -> EUIGameUtils.canSeeCard(c) && filter.invoke(c));
     }
 
-    public static RandomizedList<AbstractCard> getCardsFromCombatPool(AbstractCard.CardRarity rarity) {
-        return getCardsFromCombatPool(getCardPool(rarity), null);
+    public static int getBlockedHits(AbstractCreature creature) {
+        return GameUtilities.getPowerAmount(creature, BufferPower.POWER_ID);
     }
 
-    public static RandomizedList<AbstractCard> getCardsFromCombatPool(CardGroup group, FuncT1<Boolean, AbstractCard> filter) {
-        final RandomizedList<AbstractCard> cards = new RandomizedList<>();
-        if (group != null) {
-            for (AbstractCard c : group.group) {
-                if (isObtainableInCombat(c) && (filter == null || filter.invoke(c))) {
-                    cards.add(c);
-                }
-            }
-        }
-
-        return cards;
+    public static BobEffect getBobEffect(AbstractMonster mo) {
+        return ReflectionHacks.getPrivate(mo, AbstractMonster.class, "bobEffect");
     }
 
     public static CardGroup getCardPool(AbstractCard.CardRarity rarity) {
@@ -645,24 +494,64 @@ public class GameUtilities {
         }
     }
 
-    public static boolean isObtainableInCombat(AbstractCard c) {
-        return !c.hasTag(AbstractCard.CardTags.HEALING) && c.rarity != AbstractCard.CardRarity.SPECIAL && !PCLCardTag.Fleeting.has(c) && !c.isLocked;
+    public static CardGroup getCardPoolSource(AbstractCard.CardRarity rarity) {
+        if (rarity == null) {
+            return AbstractDungeon.srcColorlessCardPool;
+        }
+
+        switch (rarity) {
+            case CURSE:
+                return AbstractDungeon.srcCurseCardPool;
+            case COMMON:
+                return AbstractDungeon.srcCommonCardPool;
+            case UNCOMMON:
+                return AbstractDungeon.srcUncommonCardPool;
+            case RARE:
+                return AbstractDungeon.srcRareCardPool;
+            default:
+                return null;
+        }
     }
 
-    public static ArrayList<AbstractCard> getCardsFromStandardCombatPool(FuncT1<Boolean, AbstractCard> filter, int count) {
-        return pickCardsFromList(new RandomizedList<>(getCardsFromStandardCombatPools(filter)), count);
+    public static ArrayList<CardGroup> getCardPoolsInCombat() {
+        return EUIUtils.arrayList(AbstractDungeon.colorlessCardPool, AbstractDungeon.commonCardPool, AbstractDungeon.uncommonCardPool, AbstractDungeon.rareCardPool);
+    }
+
+    public static ArrayList<AbstractCard> getCardsFromAllColorCombatPool(FuncT1<Boolean, AbstractCard> filter, int count) {
+        return pickCardsFromList(new RandomizedList<>(getAvailableCardsForAllColors(filter)), count);
+    }
+
+    public static RandomizedList<AbstractCard> getCardsFromCombatPool(AbstractCard.CardRarity rarity) {
+        return getCardsFromCombatPool(getCardPool(rarity), null);
+    }
+
+    public static RandomizedList<AbstractCard> getCardsFromCombatPool(CardGroup group, FuncT1<Boolean, AbstractCard> filter) {
+        final RandomizedList<AbstractCard> cards = new RandomizedList<>();
+        if (group != null) {
+            for (AbstractCard c : group.group) {
+                if (isObtainableInCombat(c) && (filter == null || filter.invoke(c))) {
+                    cards.add(c);
+                }
+            }
+        }
+
+        return cards;
     }
 
     public static ArrayList<AbstractCard> getCardsFromFullCombatPool(FuncT1<Boolean, AbstractCard> filter, int count) {
         return pickCardsFromList(new RandomizedList<>(getCardsFromFullCombatPools(filter)), count);
     }
 
-    public static RandomizedList<AbstractCard> getCardsFromStandardCombatPools(FuncT1<Boolean, AbstractCard> filter) {
-        return getCardsFromStandardPools(getCardPoolsInCombat(), filter);
-    }
-
     public static RandomizedList<AbstractCard> getCardsFromFullCombatPools(FuncT1<Boolean, AbstractCard> filter) {
         return getCardsFromStandardPools(EUIGameUtils.getGameCardPools(), filter);
+    }
+
+    public static ArrayList<AbstractCard> getCardsFromStandardCombatPool(FuncT1<Boolean, AbstractCard> filter, int count) {
+        return pickCardsFromList(new RandomizedList<>(getCardsFromStandardCombatPools(filter)), count);
+    }
+
+    public static RandomizedList<AbstractCard> getCardsFromStandardCombatPools(FuncT1<Boolean, AbstractCard> filter) {
+        return getCardsFromStandardPools(getCardPoolsInCombat(), filter);
     }
 
     public static RandomizedList<AbstractCard> getCardsFromStandardPools(ArrayList<CardGroup> groups, FuncT1<Boolean, AbstractCard> filter) {
@@ -678,20 +567,16 @@ public class GameUtilities {
         return cards;
     }
 
-    public static ArrayList<CardGroup> getCardPoolsInCombat() {
-        return EUIUtils.arrayList(AbstractDungeon.colorlessCardPool, AbstractDungeon.commonCardPool, AbstractDungeon.uncommonCardPool, AbstractDungeon.rareCardPool);
-    }
-
     public static ArrayList<AbstractCard> getCardsInAnyPile() {
         return getCardsInPile(player.hand, player.discardPile, player.drawPile, player.exhaustPile);
     }
 
-    public static ArrayList<AbstractCard> getCardsInPile(CardGroup... groups) {
-        return EUIUtils.flattenList(EUIUtils.map(groups, group -> group.group));
-    }
-
     public static ArrayList<AbstractCard> getCardsInGame() {
         return getCardsInPile(player.hand, player.discardPile, player.drawPile, player.exhaustPile, player.masterDeck, player.limbo, CombatManager.PURGED_CARDS);
+    }
+
+    public static ArrayList<AbstractCard> getCardsInPile(CardGroup... groups) {
+        return EUIUtils.flattenList(EUIUtils.map(groups, group -> group.group));
     }
 
     public static List<Class<?>> getClassesWithAnnotation(Class<?> annotation) {
@@ -711,12 +596,12 @@ public class GameUtilities {
         return names;
     }
 
-    public static RandomizedList<AbstractCard> getColorlessCardsFromCombatPool() {
-        return getCardsFromCombatPool(getColorlessCardPool(), null);
-    }
-
     public static CardGroup getColorlessCardPool() {
         return getCardPool(null);
+    }
+
+    public static RandomizedList<AbstractCard> getColorlessCardsFromCombatPool() {
+        return getCardsFromCombatPool(getColorlessCardPool(), null);
     }
 
     // Do not return magic number for non-PCLCard cards
@@ -726,6 +611,10 @@ public class GameUtilities {
 
     public static PCLAffinity getCurrentAffinity() {
         return CombatManager.playerSystem.getCurrentAffinity();
+    }
+
+    public static AbstractRoom getCurrentRoom() {
+        return (AbstractDungeon.currMapNode == null) ? null : AbstractDungeon.currMapNode.getRoom();
     }
 
     public static int getCurrentScore() {
@@ -773,58 +662,6 @@ public class GameUtilities {
         return result;
     }
 
-    public static AbstractOrb getFirstOrb(String orbID) {
-        for (AbstractOrb orb : player.orbs) {
-            if (orb != null && (orbID == null || orbID.equals(orb.ID))) {
-                return orb;
-            }
-        }
-
-        return null;
-    }
-
-    public static int getGold() {
-        return player != null ? player.gold : 0;
-    }
-
-    public static int getGroupAffinityCount(PCLAffinity affinity, CardGroup group) {
-        return getGroupPCLAffinities(group).getLevel(affinity, false);
-    }
-
-    public static PCLCardAffinities getGroupPCLAffinities(CardGroup group) {
-        return player == null ? new PCLCardAffinities(null) : getPCLCardAffinities(group.group);
-    }
-
-    public static PCLCardAffinities getPCLCardAffinities(Iterable<AbstractCard> cards) {
-        final PCLCardAffinities affinities = new PCLCardAffinities(null);
-        for (AbstractCard c : cards) {
-            PCLCard card = EUIUtils.safeCast(c, PCLCard.class);
-            if (card != null) {
-                affinities.add(card.affinities, 1);
-            }
-        }
-
-        return affinities;
-    }
-
-    public static int getHealthBarAmount(AbstractCreature c, int amount, boolean subtractBlock, boolean subtractTempHP) {
-        if (c == null || (!subtractBlock && !subtractTempHP)) {
-            return amount;
-        }
-
-        if (amount > 0 && subtractBlock) {
-            int blocked = Math.min(c.currentBlock + GameUtilities.getEndOfTurnBlock(c), amount);
-            amount -= blocked;
-        }
-
-        if (amount > 0 && subtractTempHP) {
-            int blocked = Math.min(TempHPField.tempHp.get(c), amount);
-            amount -= blocked;
-        }
-
-        return Math.max(amount, 0);
-    }
-
     public static int getEndOfTurnBlock(AbstractCreature creature) {
         int amount = 0;
         if (creature != null) {
@@ -869,10 +706,6 @@ public class GameUtilities {
         return amount;
     }
 
-    protected static boolean isPowerBlockGranting(AbstractPower p) {
-        return PlatedArmorPower.POWER_ID.equals(p.ID) || MetallicizePower.POWER_ID.equals(p.ID);
-    }
-
     // TODO less naive approach that accounts for custom conds and out-of-order move hierarchies
     protected static int getEndOfTurnBlockFromTriggers(Iterable<PTrigger> triggers) {
         int amount = 0;
@@ -895,35 +728,6 @@ public class GameUtilities {
         return amount;
     }
 
-    protected static boolean isOrbBlockGranting(AbstractOrb o) {
-        return Frost.ORB_ID.equals(o.ID);
-    }
-
-    public static float getHealthPercentage(AbstractCreature creature) {
-        return creature.currentHealth / (float) creature.maxHealth;
-    }
-
-    public static float getHealthPercentage(AbstractCreature creature, boolean addTempHP, boolean addBlock) {
-        return getHP(creature, addTempHP, addBlock) / (float) getMaxHP(creature, addTempHP, addBlock);
-    }
-
-    public static int getHP(AbstractCreature creature, boolean addTempHP, boolean addBlock) {
-        return creature.currentHealth + (addTempHP ? TempHPField.tempHp.get(creature) : 0) + (addBlock ? creature.currentBlock : 0);
-    }
-
-    public static int getMaxHP(AbstractCreature creature, boolean addTempHP, boolean addBlock) {
-        return creature.maxHealth + (addTempHP ? TempHPField.tempHp.get(creature) : 0) + (addBlock ? creature.currentBlock : 0);
-    }
-
-    public static ArrayList<PCLIntentInfo> getIntents() {
-        final ArrayList<PCLIntentInfo> intents = new ArrayList<>();
-        for (AbstractMonster m : getEnemies(true)) {
-            intents.add(getIntent(m));
-        }
-
-        return intents;
-    }
-
     public static ArrayList<AbstractMonster> getEnemies(boolean aliveOnly) {
         final AbstractRoom room = getCurrentRoom();
         final ArrayList<AbstractMonster> monsters = new ArrayList<>();
@@ -943,12 +747,69 @@ public class GameUtilities {
         return monsters;
     }
 
+    public static AbstractOrb getFirstOrb(String orbID) {
+        for (AbstractOrb orb : player.orbs) {
+            if (orb != null && (orbID == null || orbID.equals(orb.ID))) {
+                return orb;
+            }
+        }
+
+        return null;
+    }
+
+    public static int getGold() {
+        return player != null ? player.gold : 0;
+    }
+
+    public static int getGroupAffinityCount(PCLAffinity affinity, CardGroup group) {
+        return getGroupPCLAffinities(group).getLevel(affinity, false);
+    }
+
+    public static PCLCardAffinities getGroupPCLAffinities(CardGroup group) {
+        return player == null ? new PCLCardAffinities(null) : getPCLCardAffinities(group.group);
+    }
+
+    public static int getHP(AbstractCreature creature, boolean addTempHP, boolean addBlock) {
+        return creature.currentHealth + (addTempHP ? TempHPField.tempHp.get(creature) : 0) + (addBlock ? creature.currentBlock : 0);
+    }
+
+    public static int getHealthBarAmount(AbstractCreature c, int amount, boolean subtractBlock, boolean subtractTempHP) {
+        if (c == null || (!subtractBlock && !subtractTempHP)) {
+            return amount;
+        }
+
+        if (amount > 0 && subtractBlock) {
+            int blocked = Math.min(c.currentBlock + GameUtilities.getEndOfTurnBlock(c), amount);
+            amount -= blocked;
+        }
+
+        if (amount > 0 && subtractTempHP) {
+            int blocked = Math.min(TempHPField.tempHp.get(c), amount);
+            amount -= blocked;
+        }
+
+        return Math.max(amount, 0);
+    }
+
+    public static float getHealthPercentage(AbstractCreature creature) {
+        return creature.currentHealth / (float) creature.maxHealth;
+    }
+
+    public static float getHealthPercentage(AbstractCreature creature, boolean addTempHP, boolean addBlock) {
+        return getHP(creature, addTempHP, addBlock) / (float) getMaxHP(creature, addTempHP, addBlock);
+    }
+
     public static PCLIntentInfo getIntent(AbstractMonster enemy) {
         return PCLIntentInfo.get(enemy);
     }
 
-    public static boolean isDeadOrEscaped(AbstractCreature target) {
-        return target == null || target.isDeadOrEscaped() || target.currentHealth <= 0;
+    public static ArrayList<PCLIntentInfo> getIntents() {
+        final ArrayList<PCLIntentInfo> intents = new ArrayList<>();
+        for (AbstractMonster m : getEnemies(true)) {
+            intents.add(getIntent(m));
+        }
+
+        return intents;
     }
 
     public static AbstractCard getLastCardPlayed(boolean currentTurn) {
@@ -974,12 +835,37 @@ public class GameUtilities {
         return null;
     }
 
+    public static HashSet<AbstractCard> getMasterDeckCopies(String cardID) {
+        final HashSet<AbstractCard> cards = new HashSet<>();
+        for (AbstractCard c : player.masterDeck.group) {
+            if (c.cardID.equals(cardID)) {
+                cards.add(c);
+            }
+        }
+
+        return cards;
+    }
+
+    public static AbstractCard getMasterDeckInstance(UUID uuid) {
+        for (AbstractCard c : player.masterDeck.group) {
+            if (c.uuid == uuid) {
+                return c;
+            }
+        }
+
+        return null;
+    }
+
     public static int getMaxAscensionLevel(AbstractPlayer player) {
         Prefs pref = player.getPrefs();
         if (pref != null) {
             return pref.getInteger("ASCENSION_LEVEL", 0);
         }
         return 0;
+    }
+
+    public static int getMaxHP(AbstractCreature creature, boolean addTempHP, boolean addBlock) {
+        return creature.maxHealth + (addTempHP ? TempHPField.tempHp.get(creature) : 0) + (addBlock ? creature.currentBlock : 0);
     }
 
     public static AbstractCard.CardRarity getNextRarity(AbstractCard.CardRarity rarity) {
@@ -1009,18 +895,6 @@ public class GameUtilities {
         return (f != null ? (int) f : 0);
     }
 
-    public static Object getOrbField(AbstractOrb orb, String field) {
-        try {
-            Field f = AbstractOrb.class.getDeclaredField(field);
-            f.setAccessible(true);
-            return f.get(orb);
-        }
-        catch (NoSuchFieldException | IllegalAccessException var2) {
-            EUIUtils.logWarning(orb, "Orb could not be modified");
-            return null;
-        }
-    }
-
     public static int getOrbBasePassiveAmount(AbstractOrb orb) {
         Object f = getOrbField(orb, "basePassiveAmount");
         return (f != null ? (int) f : 0);
@@ -1047,6 +921,18 @@ public class GameUtilities {
         return count;
     }
 
+    public static Object getOrbField(AbstractOrb orb, String field) {
+        try {
+            Field f = AbstractOrb.class.getDeclaredField(field);
+            f.setAccessible(true);
+            return f.get(orb);
+        }
+        catch (NoSuchFieldException | IllegalAccessException var2) {
+            EUIUtils.logWarning(orb, "Orb could not be modified");
+            return null;
+        }
+    }
+
     public static HashSet<AbstractCard> getOtherCardsInHand(AbstractCard card) {
         final HashSet<AbstractCard> cards = new HashSet<>();
         for (AbstractCard c : player.hand.group) {
@@ -1062,9 +948,37 @@ public class GameUtilities {
         return CombatManager.playerSystem.getLevel(affinity);
     }
 
+    public static PCLCardAffinities getPCLCardAffinities(AbstractCard card) {
+        if (card instanceof PCLCard) {
+            return ((PCLCard) card).affinities;
+        }
+        AffinityDisplayModifier mod = AffinityDisplayModifier.get(card);
+        if (mod != null) {
+            return mod.affinities;
+        }
+        return null;
+    }
+
+    public static PCLCardAffinities getPCLCardAffinities(Iterable<AbstractCard> cards) {
+        final PCLCardAffinities affinities = new PCLCardAffinities(null);
+        for (AbstractCard c : cards) {
+            PCLCard card = EUIUtils.safeCast(c, PCLCard.class);
+            if (card != null) {
+                affinities.add(card.affinities, 1);
+            }
+        }
+
+        return affinities;
+    }
+
     public static PCLCardAffinity getPCLCardAffinity(AbstractCard card, PCLAffinity affinity) {
         final PCLCardAffinities a = getPCLCardAffinities(card);
         return a != null ? a.get(affinity, false) : null;
+    }
+
+    public static int getPCLCardAffinityLevel(AbstractCard card, PCLAffinity affinity, boolean useStarLevel) {
+        final PCLCardAffinities a = getPCLCardAffinities(card);
+        return a != null ? a.getLevel(affinity, useStarLevel) : 0;
     }
 
     public static EUITooltip getPCLOrbTooltip(AbstractOrb orb) {
@@ -1089,8 +1003,22 @@ public class GameUtilities {
         return inGame() && player != null ? player.chosenClass : null;
     }
 
-    public static boolean inGame() {
-        return CardCrawlGame.GameMode.GAMEPLAY.equals(CardCrawlGame.mode);
+    public static <T extends AbstractPower> T getPower(AbstractCreature creature, String powerID) {
+        if (creature != null && creature.powers != null) {
+            for (AbstractPower p : creature.powers) {
+                if (p != null && powerID.equals(p.ID)) {
+                    try {
+                        return (T) p;
+                    }
+                    catch (ClassCastException e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                }
+            }
+        }
+
+        return null;
     }
 
     public static <T> T getPower(AbstractCreature owner, Class<T> powerType) {
@@ -1103,6 +1031,11 @@ public class GameUtilities {
         }
 
         return null;
+    }
+
+    public static int getPowerAmount(AbstractCreature owner, String powerID) {
+        AbstractPower power = getPower(owner, powerID);
+        return power != null ? power.amount : 0;
     }
 
     public static int getPowerAmount(String powerID) {
@@ -1125,41 +1058,17 @@ public class GameUtilities {
         return result;
     }
 
-    public static ArrayList<AbstractCreature> getAllCharacters(boolean aliveOnly) {
-        final AbstractRoom room = getCurrentRoom();
-        final ArrayList<AbstractCreature> characters = new ArrayList<>();
-        if (room != null && room.monsters != null) {
-            for (AbstractMonster m : room.monsters.monsters) {
-                if (!aliveOnly || !isDeadOrEscaped(m)) {
-                    characters.add(m);
-                }
-            }
+    public static Random getRNG() {
+        if (PCLCard.rng == null) {
+            EUIUtils.logInfo(GameUtilities.class, "PCLCard.rng was null");
+            return new Random();
         }
 
-        for (PCLCardAlly summon : CombatManager.summons.summons) {
-            if (!aliveOnly || summon.hasCard()) {
-                characters.add(summon);
-            }
-        }
-
-        if (!aliveOnly || !isDeadOrEscaped(player)) {
-            characters.add(player);
-        }
-
-        return characters;
+        return PCLCard.rng;
     }
 
     public static AbstractCard getRandomAnyColorCombatCard() {
         return getRandomElement(getAvailableCardsForAllColors(null));
-    }
-
-    public static <T> T getRandomElement(List<T> list) {
-        return getRandomElement(list, getRNG());
-    }
-
-    public static <T> T getRandomElement(List<T> list, Random rng) {
-        int size = list.size();
-        return (size > 0) ? list.get(rng.random(list.size() - 1)) : null;
     }
 
     public static AbstractCard getRandomAnyColorCombatCard(FuncT1<Boolean, AbstractCard> filter) {
@@ -1179,6 +1088,15 @@ public class GameUtilities {
         return getRandomElement(getCardsFromStandardCombatPools(filter));
     }
 
+    public static <T> T getRandomElement(List<T> list) {
+        return getRandomElement(list, getRNG());
+    }
+
+    public static <T> T getRandomElement(List<T> list, Random rng) {
+        int size = list.size();
+        return (size > 0) ? list.get(rng.random(list.size() - 1)) : null;
+    }
+
     public static <T> T getRandomElement(T[] arr) {
         return getRandomElement(arr, getRNG());
     }
@@ -1194,21 +1112,6 @@ public class GameUtilities {
 
     public static PCLCardAlly getRandomSummon(Boolean isAlive) {
         return getRandomElement(getSummons(isAlive), getRNG());
-    }
-
-    public static ArrayList<PCLCardAlly> getSummons(Boolean isAlive) {
-        if (isAlive == null) {
-            return CombatManager.summons.summons;
-        }
-
-        final ArrayList<PCLCardAlly> monsters = new ArrayList<>();
-        for (PCLCardAlly m : CombatManager.summons.summons) {
-            if (!m.hasCard() ^ isAlive) {
-                monsters.add(m);
-            }
-        }
-
-        return monsters;
     }
 
     public static <T extends AbstractRelic> T getRelic(String relicID) {
@@ -1277,6 +1180,21 @@ public class GameUtilities {
                 AbstractCard.CardRarity.CURSE,
                 AbstractCard.CardRarity.SPECIAL
         );
+    }
+
+    public static ArrayList<PCLCardAlly> getSummons(Boolean isAlive) {
+        if (isAlive == null) {
+            return CombatManager.summons.summons;
+        }
+
+        final ArrayList<PCLCardAlly> monsters = new ArrayList<>();
+        for (PCLCardAlly m : CombatManager.summons.summons) {
+            if (!m.hasCard() ^ isAlive) {
+                monsters.add(m);
+            }
+        }
+
+        return monsters;
     }
 
     public static String getTagTipString(AbstractCard card) {
@@ -1393,10 +1311,6 @@ public class GameUtilities {
         return orbs;
     }
 
-    public static boolean isValidOrb(AbstractOrb orb) {
-        return orb != null && !(orb instanceof EmptyOrbSlot);
-    }
-
     public static int getUniqueOrbsCount() {
         final HashSet<String> orbs = new HashSet<>();
         for (AbstractOrb orb : player.orbs) {
@@ -1406,6 +1320,11 @@ public class GameUtilities {
         }
 
         return orbs.size();
+    }
+
+    public static List<PCLAffinity> getVisiblePCLAffinities(AbstractCard card) {
+        PCLCardAffinities cardAffinities = getPCLCardAffinities(card);
+        return cardAffinities != null ? cardAffinities.getAffinities(false, true) : Collections.singletonList(PCLAffinity.General);
     }
 
     public static int getXCostEnergy(AbstractCard card) {
@@ -1424,11 +1343,6 @@ public class GameUtilities {
 
     public static boolean hasAffinity(AbstractCard card, PCLAffinity affinity, boolean useStar) {
         return getPCLCardAffinityLevel(card, affinity, useStar) > 0;
-    }
-
-    public static int getPCLCardAffinityLevel(AbstractCard card, PCLAffinity affinity, boolean useStarLevel) {
-        final PCLCardAffinities a = getPCLCardAffinities(card);
-        return a != null ? a.getLevel(affinity, useStarLevel) : 0;
     }
 
     public static boolean hasAllAffinity(AbstractCard card, Collection<PCLAffinity> affinities) {
@@ -1467,6 +1381,16 @@ public class GameUtilities {
         return getOrbCount(orbID) > 0;
     }
 
+    public static boolean hasRelic(String relicID) {
+        return player != null && player.hasRelic(relicID);
+    }
+
+    public static boolean hasRelicEffect(String relicID) {
+        return hasRelic(relicID)
+                || CombatManager.getCombatData(relicID, false)
+                || CombatManager.getTurnData(relicID, false);
+    }
+
     public static void highlightMatchingCards(PCLAffinity affinity) {
         for (AbstractCard c : AbstractDungeon.player.hand.group) {
             final PCLCard temp = EUIUtils.safeCast(c, PCLCard.class);
@@ -1502,6 +1426,10 @@ public class GameUtilities {
         return (room != null) && room.eliteTrigger;
     }
 
+    public static boolean inGame() {
+        return CardCrawlGame.GameMode.GAMEPLAY.equals(CardCrawlGame.mode);
+    }
+
     public static boolean inStance(PCLStanceHelper stance) {
         return player != null && player.stance != null && player.stance.ID.equals(stance.ID);
     }
@@ -1529,23 +1457,8 @@ public class GameUtilities {
         obtainBlight(player.hb.cX, player.hb.cY, new UpgradedHand());
     }
 
-    public static void obtainBlight(float cX, float cY, AbstractBlight blight) {
-        AbstractRoom room = getCurrentRoom();
-        if (room != null) {
-            room.spawnBlightAndObtain(cX, cY, blight);
-        }
-    }
-
     public static void increaseHitCount(PCLCard card, int amount, boolean temporary) {
         modifyHitCount(card, card.baseHitCount + amount, temporary);
-    }
-
-    public static void modifyHitCount(PCLCard card, int amount, boolean temporary) {
-        card.hitCount = amount;
-        if (!temporary) {
-            card.baseHitCount = card.hitCount;
-        }
-        card.isHitCountModified = (card.hitCount != card.baseHitCount);
     }
 
     public static void increaseMagicNumber(AbstractCard card, int amount, boolean temporary) {
@@ -1558,10 +1471,6 @@ public class GameUtilities {
 
     public static boolean isActingColor(AbstractCard.CardColor co) {
         return getActingColor() == co;
-    }
-
-    public static AbstractCard.CardColor getActingColor() {
-        return player != null ? player.getCardColor() : EUI.actingColor;
     }
 
     public static boolean isAttacking(AbstractCreature monster) {
@@ -1590,6 +1499,11 @@ public class GameUtilities {
         return isBuffing(monster.intent);
     }
 
+    // Both colorless and curse are character-independent
+    public static boolean isColorlessCardColor(AbstractCard.CardColor cardColor) {
+        return cardColor == AbstractCard.CardColor.COLORLESS || cardColor == AbstractCard.CardColor.CURSE;
+    }
+
     public static boolean isCommonBuff(AbstractPower power) {
         PCLPowerHelper helper = PCLPowerHelper.get(power.ID);
         return helper != null && helper.isCommon && !helper.isDebuff;
@@ -1603,6 +1517,10 @@ public class GameUtilities {
     public static boolean isCommonPower(AbstractPower power) {
         PCLPowerHelper helper = PCLPowerHelper.get(power.ID);
         return helper != null && helper.isCommon;
+    }
+
+    public static boolean isDeadOrEscaped(AbstractCreature target) {
+        return target == null || target.isDeadOrEscaped() || target.currentHealth <= 0;
     }
 
     public static boolean isDebuff(AbstractPower power) {
@@ -1645,27 +1563,16 @@ public class GameUtilities {
         return c != null && !c.isPlayer;
     }
 
+    public static boolean isObtainableInCombat(AbstractCard c) {
+        return !c.hasTag(AbstractCard.CardTags.HEALING) && c.rarity != AbstractCard.CardRarity.SPECIAL && !PCLCardTag.Fleeting.has(c) && !c.isLocked;
+    }
+
+    protected static boolean isOrbBlockGranting(AbstractOrb o) {
+        return Frost.ORB_ID.equals(o.ID);
+    }
+
     public static boolean isPCLActingCardColor(AbstractCard card) {
         return isPCLCardColor(getActingCardColor(card));
-    }
-
-    // PCL check that includes colorless/curse
-    public static boolean isPCLCardColor(AbstractCard.CardColor cardColor) {
-        return isPCLOnlyCardColor(cardColor) || isColorlessCardColor(cardColor);
-    }
-
-    public static AbstractCard.CardColor getActingCardColor(AbstractCard c) {
-        return AbstractDungeon.player != null ? player.getCardColor() : c.color;
-    }
-
-    // PCL check that excludes colorless/curse
-    public static boolean isPCLOnlyCardColor(AbstractCard.CardColor cardColor) {
-        return EUIUtils.any(PGR.getRegisteredResources(), r -> r.cardColor == cardColor);
-    }
-
-    // Both colorless and curse are character-independent
-    public static boolean isColorlessCardColor(AbstractCard.CardColor cardColor) {
-        return cardColor == AbstractCard.CardColor.COLORLESS || cardColor == AbstractCard.CardColor.CURSE;
     }
 
     public static boolean isPCLBuff(AbstractPower power) {
@@ -1673,9 +1580,19 @@ public class GameUtilities {
         return helper != null && !helper.isDebuff;
     }
 
+    // PCL check that includes colorless/curse
+    public static boolean isPCLCardColor(AbstractCard.CardColor cardColor) {
+        return isPCLOnlyCardColor(cardColor) || isColorlessCardColor(cardColor);
+    }
+
     public static boolean isPCLDebuff(AbstractPower power) {
         PCLPowerHelper helper = PCLPowerHelper.get(power.ID);
         return helper != null && helper.isDebuff;
+    }
+
+    // PCL check that excludes colorless/curse
+    public static boolean isPCLOnlyCardColor(AbstractCard.CardColor cardColor) {
+        return EUIUtils.any(PGR.getRegisteredResources(), r -> r.cardColor == cardColor);
     }
 
     public static boolean isPCLPlayerClass() {
@@ -1699,8 +1616,20 @@ public class GameUtilities {
         return player != null && player.chosenClass == playerClass;
     }
 
-    public static boolean isPriorityTarget(AbstractCreature c)
-    {
+    public static boolean isPlayerTurn(boolean beforeEndTurnEvents) {
+        boolean result = !AbstractDungeon.actionManager.turnHasEnded;
+        if (beforeEndTurnEvents) {
+            result &= CombatManager.isPlayerTurn && !player.isEndingTurn;
+        }
+
+        return result;
+    }
+
+    protected static boolean isPowerBlockGranting(AbstractPower p) {
+        return PlatedArmorPower.POWER_ID.equals(p.ID) || MetallicizePower.POWER_ID.equals(p.ID);
+    }
+
+    public static boolean isPriorityTarget(AbstractCreature c) {
         return c != null && c.powers != null && EUIUtils.any(c.powers, p -> p instanceof PCLPower && ((PCLPower) p).isPriorityTarget());
     }
 
@@ -1713,22 +1642,16 @@ public class GameUtilities {
         return GameUtilities.inGame() && AbstractDungeon.topPanel != null && !Settings.hideTopBar;
     }
 
-    public static void setTopPanelVisible(boolean visible) {
-        Settings.hideTopBar = !visible;
-        Settings.hideRelics = !visible;
-
-        if (AbstractDungeon.topPanel != null) {
-            AbstractDungeon.topPanel.unhoverHitboxes();
-            //AbstractDungeon.topPanel.potionUi.isHidden = !visible;
-        }
-    }
-
     public static boolean isTurnBasedPower(AbstractPower power) {
         return ReflectionHacks.getPrivate(power, AbstractPower.class, "isTurnBased");
     }
 
     public static boolean isUnplayableThisTurn(AbstractCard card) {
         return CombatManager.unplayableCards().contains(card.uuid);
+    }
+
+    public static boolean isValidOrb(AbstractOrb orb) {
+        return orb != null && !(orb instanceof EmptyOrbSlot);
     }
 
     public static boolean isValidTarget(AbstractCreature target) {
@@ -1783,6 +1706,24 @@ public class GameUtilities {
         }
     }
 
+    public static void modifyBlock(AbstractCard card, int amount, boolean temporary) {
+        if (card instanceof PCLCard) {
+            if (temporary) {
+                ((PCLCard) card).updateBlock(amount);
+            }
+            else {
+                ((PCLCard) card).updateMaxBlock(amount);
+            }
+        }
+        else {
+            card.block = Math.max(0, amount);
+            if (!temporary) {
+                card.baseBlock = card.block;
+            }
+            card.isBlockModified = (card.block != card.baseBlock);
+        }
+    }
+
     public static void modifyCardBaseCost(PCLCard card, int amount, boolean relative) {
         if (relative) {
             card.costForTurn = Math.max(0, card.costForTurn + amount);
@@ -1829,6 +1770,24 @@ public class GameUtilities {
         card.isCostModifiedForTurn = (card.cost != card.costForTurn);
     }
 
+    public static void modifyDamage(AbstractCard card, int amount, boolean temporary) {
+        if (card instanceof PCLCard) {
+            if (temporary) {
+                ((PCLCard) card).updateDamage(amount);
+            }
+            else {
+                ((PCLCard) card).updateMaxDamage(amount);
+            }
+        }
+        else {
+            card.damage = Math.max(0, amount);
+            if (!temporary) {
+                card.baseDamage = card.damage;
+            }
+            card.isDamageModified = (card.damage != card.baseDamage);
+        }
+    }
+
     public static int modifyEnergyGainPerTurn(int amount, int minimumEnergy) {
         final int newAmount = player.energy.energy + amount;
         if (newAmount < minimumEnergy) {
@@ -1839,32 +1798,27 @@ public class GameUtilities {
         return amount;
     }
 
+    public static void modifyHitCount(PCLCard card, int amount, boolean temporary) {
+        card.hitCount = amount;
+        if (!temporary) {
+            card.baseHitCount = card.hitCount;
+        }
+        card.isHitCountModified = (card.hitCount != card.baseHitCount);
+    }
+
+    public static void modifyMagicNumber(AbstractCard card, int amount, boolean temporary) {
+        card.magicNumber = amount;
+        if (!temporary) {
+            card.baseMagicNumber = card.magicNumber;
+        }
+        card.isMagicNumberModified = (card.magicNumber != card.baseMagicNumber);
+    }
+
     public static void modifyOrbBaseEvokeAmount(AbstractOrb orb, int amount, boolean isRelative, boolean canModifyNonFocusOrb) {
         if (canModifyNonFocusOrb || (canOrbApplyFocus(orb) && canOrbApplyFocusToEvoke(orb))) {
             modifyOrbField(orb, "baseEvokeAmount", amount, isRelative);
         }
 
-    }
-
-    public static boolean canOrbApplyFocus(AbstractOrb orb) {
-        return (!Plasma.ORB_ID.equals(orb.ID) && !(orb instanceof PCLOrb && !((PCLOrb) orb).canOrbApplyFocusToPassive));
-    }
-
-    public static boolean canOrbApplyFocusToEvoke(AbstractOrb orb) {
-        return (!Dark.ORB_ID.equals(orb.ID) && !(orb instanceof PCLOrb && !((PCLOrb) orb).canOrbApplyFocusToEvoke));
-    }
-
-    public static void modifyOrbField(AbstractOrb orb, String field, int amount, boolean isRelative) {
-        try {
-            Field f = AbstractOrb.class.getDeclaredField(field);
-            f.setAccessible(true);
-            f.set(orb, isRelative ? amount + (int) f.get(orb) : amount);
-            orb.applyFocus();
-            orb.updateDescription();
-        }
-        catch (Exception e) {
-            EUIUtils.logWarning(orb, "Orb could not be modified: " + e.getLocalizedMessage());
-        }
     }
 
     public static void modifyOrbBaseFocus(AbstractOrb orb, int amount, boolean isRelative, boolean canModifyNonFocusOrb) {
@@ -1879,6 +1833,19 @@ public class GameUtilities {
     public static void modifyOrbBasePassiveAmount(AbstractOrb orb, int amount, boolean isRelative, boolean canModifyNonFocusOrb) {
         if (canModifyNonFocusOrb || canOrbApplyFocus(orb)) {
             modifyOrbField(orb, "basePassiveAmount", amount, isRelative);
+        }
+    }
+
+    public static void modifyOrbField(AbstractOrb orb, String field, int amount, boolean isRelative) {
+        try {
+            Field f = AbstractOrb.class.getDeclaredField(field);
+            f.setAccessible(true);
+            f.set(orb, isRelative ? amount + (int) f.get(orb) : amount);
+            orb.applyFocus();
+            orb.updateDescription();
+        }
+        catch (Exception e) {
+            EUIUtils.logWarning(orb, "Orb could not be modified: " + e.getLocalizedMessage());
         }
     }
 
@@ -1897,6 +1864,14 @@ public class GameUtilities {
             card.baseRightCount = card.rightCount;
         }
         card.isRightCountModified = (card.rightCount != card.baseRightCount);
+    }
+
+    public static void modifySecondaryValue(PCLCard card, int amount, boolean temporary) {
+        card.heal = amount;
+        if (!temporary) {
+            card.baseHeal = card.heal;
+        }
+        card.isHealModified = (card.heal != card.baseHeal);
     }
 
     public static void modifySecondaryValueRelative(PCLCard card, int amount, boolean temporary) {
@@ -1946,6 +1921,13 @@ public class GameUtilities {
         }
     }
 
+    public static void obtainBlight(float cX, float cY, AbstractBlight blight) {
+        AbstractRoom room = getCurrentRoom();
+        if (room != null) {
+            room.spawnBlightAndObtain(cX, cY, blight);
+        }
+    }
+
     public static void obtainBlightWithoutEffect(AbstractBlight blight) {
         blight.instantObtain(player, player.blights.size(), false);
     }
@@ -1960,6 +1942,17 @@ public class GameUtilities {
     public static void obtainRelicFromEvent(AbstractRelic relic) {
         relic.instantObtain();
         CardCrawlGame.metricData.addRelicObtainData(relic);
+    }
+
+    public static ArrayList<AbstractCard> pickCardsFromList(RandomizedList<AbstractCard> possible, int count) {
+        ArrayList<AbstractCard> returned = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            AbstractCard c = possible.retrieve(getRNG(), true);
+            if (c != null) {
+                returned.add(c);
+            }
+        }
+        return returned;
     }
 
     public static void playManually(AbstractCard card, AbstractMonster m) {
@@ -2020,10 +2013,6 @@ public class GameUtilities {
         return false;
     }
 
-    public static boolean canRetain(AbstractCard card) {
-        return !card.isEthereal && !card.retain && !card.selfRetain;
-    }
-
     public static float scale(float value) {
         return Settings.scale * value;
     }
@@ -2068,6 +2057,16 @@ public class GameUtilities {
         }*/
     }
 
+    public static void setTopPanelVisible(boolean visible) {
+        Settings.hideTopBar = !visible;
+        Settings.hideRelics = !visible;
+
+        if (AbstractDungeon.topPanel != null) {
+            AbstractDungeon.topPanel.unhoverHitboxes();
+            //AbstractDungeon.topPanel.potionUi.isHidden = !visible;
+        }
+    }
+
     public static void setUnplayableThisTurn(AbstractCard card) {
         CombatManager.unplayableCards().add(card.uuid);
         CombatManager.onTagChanged(card, PCLCardTag.Unplayable, 1);
@@ -2098,18 +2097,6 @@ public class GameUtilities {
         }
     }
 
-    public static boolean trySetPosition(CardGroup group, AbstractCard card) {
-        Vector2 pos = tryGetPosition(group, null);
-        if (pos == null) {
-            return false;
-        }
-
-        card.current_x = pos.x;
-        card.current_y = pos.y;
-
-        return true;
-    }
-
     public static Vector2 tryGetPosition(CardGroup group, AbstractCard card) {
         if (group != null) {
             if (group.type == CardGroup.CardGroupType.DRAW_PILE) {
@@ -2127,6 +2114,18 @@ public class GameUtilities {
         }
 
         return card == null ? null : new Vector2(card.current_x, card.current_y);
+    }
+
+    public static boolean trySetPosition(CardGroup group, AbstractCard card) {
+        Vector2 pos = tryGetPosition(group, null);
+        if (pos == null) {
+            return false;
+        }
+
+        card.current_x = pos.x;
+        card.current_y = pos.y;
+
+        return true;
     }
 
     public static void unlockAllKeys() {

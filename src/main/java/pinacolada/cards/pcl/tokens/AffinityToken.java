@@ -17,9 +17,8 @@ import pinacolada.utilities.RandomizedList;
 import java.util.ArrayList;
 
 public abstract class AffinityToken extends PCLCard {
-    public static final String ID = PGR.core.createID(AffinityToken.class.getSimpleName());
-
     protected static final ArrayList<PCLCardData> cards = new ArrayList<>();
+    public static final String ID = PGR.core.createID(AffinityToken.class.getSimpleName());
 
     protected AffinityToken(AffinityTokenData cardData) {
         super(cardData);
@@ -30,6 +29,17 @@ public abstract class AffinityToken extends PCLCard {
 
     public static String backgroundPath() {
         return PGR.getCardImage(ID);
+    }
+
+    public static CardGroup createTokenGroup(int amount, Random rng, boolean upgrade) {
+        final CardGroup group = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
+        final RandomizedList<PCLCardData> temp = new RandomizedList<>(getCards());
+        while (amount > 0 && temp.size() > 0) {
+            group.group.add(temp.retrieve(rng, true).create(0));
+            amount -= 1;
+        }
+
+        return group;
     }
 
     public static AffinityToken getCard(PCLAffinity affinity) {
@@ -61,6 +71,16 @@ public abstract class AffinityToken extends PCLCard {
         }
     }
 
+    public static ArrayList<PCLCardData> getCards() {
+        if (cards.isEmpty()) {
+            for (PCLAffinity affinity : PCLAffinity.basic()) {
+                cards.add(getCardData(affinity));
+            }
+        }
+
+        return cards;
+    }
+
     public static AffinityToken getCopy(PCLAffinity affinity, boolean upgraded) {
         return (AffinityToken) getCardData(affinity).create(0);
     }
@@ -79,27 +99,6 @@ public abstract class AffinityToken extends PCLCard {
 
     public static SelectFromPile selectTokenAction(String name, int amount, int size, boolean upgrade) {
         return new SelectFromPile(name, amount, createTokenGroup(size, GameUtilities.getRNG(), upgrade));
-    }
-
-    public static CardGroup createTokenGroup(int amount, Random rng, boolean upgrade) {
-        final CardGroup group = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
-        final RandomizedList<PCLCardData> temp = new RandomizedList<>(getCards());
-        while (amount > 0 && temp.size() > 0) {
-            group.group.add(temp.retrieve(rng, true).create(0));
-            amount -= 1;
-        }
-
-        return group;
-    }
-
-    public static ArrayList<PCLCardData> getCards() {
-        if (cards.isEmpty()) {
-            for (PCLAffinity affinity : PCLAffinity.basic()) {
-                cards.add(getCardData(affinity));
-            }
-        }
-
-        return cards;
     }
 
     public PCLAffinity getAffinity() {

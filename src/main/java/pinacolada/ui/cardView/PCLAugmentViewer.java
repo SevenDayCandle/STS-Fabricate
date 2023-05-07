@@ -41,6 +41,10 @@ public class PCLAugmentViewer extends EUIHoverable {
         refreshAugment();
     }
 
+    public float getHeight() {
+        return (-augmentButton.hb.height + augmentDescription.getAutoHeight()) * 1.2f;
+    }
+
     public void refreshAugment() {
         PCLAugment augment = card.getAugment(index);
         if (augment != null) {
@@ -58,10 +62,6 @@ public class PCLAugmentViewer extends EUIHoverable {
             augmentButton.tooltip.setTitle(augmentTitle.text).setDescription(PGR.core.strings.scp_clickToSlot);
             augmentDescription.setLabel("");
         }
-    }
-
-    public float getHeight() {
-        return (-augmentButton.hb.height + augmentDescription.getAutoHeight()) * 1.2f;
     }
 
     @Override

@@ -14,13 +14,13 @@ public abstract class PCLConditionalAction<T, C> extends PCLAction<T> {
         super(type, duration);
     }
 
+    protected boolean checkCondition(C result) {
+        return condition.invoke(result);
+    }
+
     public PCLConditionalAction<T, C> setCondition(FuncT1<Boolean, C> condition) {
         this.condition = condition;
 
         return this;
-    }
-
-    protected boolean checkCondition(C result) {
-        return condition.invoke(result);
     }
 }

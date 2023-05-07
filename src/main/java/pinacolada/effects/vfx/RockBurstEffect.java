@@ -14,10 +14,10 @@ import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.RandomizedList;
 
 public class RockBurstEffect extends PCLEffect {
-    public static final int PROJECTILES = 68;
-    public static final float RADIUS = 240;
     private static final TextureCache[] particles = {PCLCoreImages.Effects.earthParticle1, PCLCoreImages.Effects.earthParticle2, PCLCoreImages.Effects.earthParticle3};
     private static final RandomizedList<TextureCache> textures = new RandomizedList<>();
+    public static final int PROJECTILES = 68;
+    public static final float RADIUS = 240;
     protected float x;
     protected float y;
 
@@ -28,6 +28,15 @@ public class RockBurstEffect extends PCLEffect {
         this.y = startY;
         this.scale = scale;
         this.color = Color.WHITE.cpy();
+    }
+
+    public static Texture getRandomTexture() {
+        if (textures.size() <= 1) // Adds some randomness but still ensures all textures are cycled through
+        {
+            textures.addAll(particles);
+        }
+
+        return textures.retrieveUnseeded(true).texture();
     }
 
     @Override
@@ -45,14 +54,5 @@ public class RockBurstEffect extends PCLEffect {
         }
 
         complete();
-    }
-
-    public static Texture getRandomTexture() {
-        if (textures.size() <= 1) // Adds some randomness but still ensures all textures are cycled through
-        {
-            textures.addAll(particles);
-        }
-
-        return textures.retrieveUnseeded(true).texture();
     }
 }

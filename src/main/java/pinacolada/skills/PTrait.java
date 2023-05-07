@@ -111,16 +111,17 @@ public abstract class PTrait<T extends PField> extends PMove<T> {
         return new PTrait_Unplayable();
     }
 
-    @Override
-    public String getSampleText(PSkill<?> callingSkill) {
-        return TEXT.act_hasAmount(getSampleAmount(), getSubSampleText());
+    public void applyToCard(AbstractCard c, boolean conditionMet) {
     }
 
     public String getSampleAmount() {
         return "+X";
     }
 
-    abstract public String getSubSampleText();
+    @Override
+    public String getSampleText(PSkill<?> callingSkill) {
+        return TEXT.act_hasAmount(getSampleAmount(), getSubSampleText());
+    }
 
     @Override
     public String getSubText() {
@@ -143,9 +144,6 @@ public abstract class PTrait<T extends PField> extends PMove<T> {
         return this;
     }
 
-    public void applyToCard(AbstractCard c, boolean conditionMet) {
-    }
-
     @Override
     public void refresh(PCLUseInfo info, boolean conditionMet) {
         super.refresh(info, conditionMet);
@@ -166,5 +164,7 @@ public abstract class PTrait<T extends PField> extends PMove<T> {
     }
 
     abstract public String getSubDescText();
+
+    abstract public String getSubSampleText();
 
 }

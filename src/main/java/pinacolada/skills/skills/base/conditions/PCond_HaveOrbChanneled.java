@@ -49,13 +49,13 @@ public class PCond_HaveOrbChanneled extends PPassiveCond<PField_Orb> implements 
         return amount == 0 ? count == 0 : fields.not ^ count >= amount;
     }
 
+    public EUITooltip getActionTooltip() {
+        return PGR.core.tooltips.channel;
+    }
+
     @Override
     public String getSampleText(PSkill<?> callingSkill) {
         return callingSkill instanceof PTrigger_When ? TEXT.cond_wheneverYou(TEXT.act_channel(PGR.core.tooltips.orb.title)) : TEXT.cond_ifX(PCLCoreStrings.past(getActionTooltip()));
-    }
-
-    public EUITooltip getActionTooltip() {
-        return PGR.core.tooltips.channel;
     }
 
     @Override

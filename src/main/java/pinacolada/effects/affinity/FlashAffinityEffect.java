@@ -39,6 +39,12 @@ public class FlashAffinityEffect extends PCLEffect {
     }
 
     @Override
+    public void update() {
+        super.update();
+        this.scale = Interpolation.exp5In.apply(baseScale, baseScale * 0.3f, this.duration / this.startingDuration);
+    }
+
+    @Override
     public void render(SpriteBatch sb) {
         sb.setBlendFunction(770, 1);
         sb.setColor(this.color);
@@ -52,12 +58,6 @@ public class FlashAffinityEffect extends PCLEffect {
             this.isDone = true;
         }
         sb.setBlendFunction(770, 771);
-    }
-
-    @Override
-    public void update() {
-        super.update();
-        this.scale = Interpolation.exp5In.apply(baseScale, baseScale * 0.3f, this.duration / this.startingDuration);
     }
 
     public void dispose() {

@@ -11,15 +11,12 @@ import pinacolada.effects.PCLEffects;
 
 public class ScreenOnFireEffect3 extends PCLEffect {
     private static final float INTERVAL = 0.05F;
-    protected int times = 8;
     private float timer = 0.0F;
+    protected int times = 8;
 
     public ScreenOnFireEffect3() {
         this.duration = 3.0F;
         this.startingDuration = this.duration;
-    }
-
-    public void render(SpriteBatch sb) {
     }
 
     public void update() {
@@ -41,6 +38,9 @@ public class ScreenOnFireEffect3 extends PCLEffect {
             this.isDone = true;
         }
 
+    }
+
+    public void render(SpriteBatch sb) {
     }
 
     public void dispose() {

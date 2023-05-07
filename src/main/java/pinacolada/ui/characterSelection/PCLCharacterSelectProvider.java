@@ -30,6 +30,10 @@ public class PCLCharacterSelectProvider implements RunAttributesProvider {
         }
     }
 
+    public AbstractPlayer.PlayerClass getCurrentClass(CharacterOption instance) {
+        return selectedOption != null && selectedOption.c != null ? selectedOption.c.chosenClass : null;
+    }
+
     public void initialize(CharacterSelectScreen selectScreen) {
         GameUtilities.unlockAllKeys();
         charScreen = selectScreen;
@@ -55,12 +59,17 @@ public class PCLCharacterSelectProvider implements RunAttributesProvider {
         loadoutRenderer.renderImpl(sb);
     }
 
-    public AbstractPlayer.PlayerClass getCurrentClass(CharacterOption instance) {
-        return selectedOption != null && selectedOption.c != null ? selectedOption.c.chosenClass : null;
-    }
-
     public void update(CharacterSelectScreen selectScreen) {
         updateSelectedCharacter(selectScreen);
+    }
+
+    public void updateForAscensionChange(CharacterSelectScreen selectScreen) {
+        loadoutRenderer.updateForAscension();
+    }
+
+    public void updateOption(CharacterOption instance) {
+        AbstractPlayer.PlayerClass pc = getCurrentClass(instance);
+        loadoutRenderer.updateImpl();
     }
 
     private void updateSelectedCharacter(CharacterSelectScreen selectScreen) {
@@ -80,14 +89,5 @@ public class PCLCharacterSelectProvider implements RunAttributesProvider {
                 return;
             }
         }
-    }
-
-    public void updateForAscensionChange(CharacterSelectScreen selectScreen) {
-        loadoutRenderer.updateForAscension();
-    }
-
-    public void updateOption(CharacterOption instance) {
-        AbstractPlayer.PlayerClass pc = getCurrentClass(instance);
-        loadoutRenderer.updateImpl();
     }
 }

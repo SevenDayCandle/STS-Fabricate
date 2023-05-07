@@ -38,6 +38,10 @@ public class TriggerOrbPassiveAbility extends PCLAction<ArrayList<AbstractOrb>> 
         this(times, limit, false, null);
     }
 
+    protected boolean checkOrb(AbstractOrb orb) {
+        return GameUtilities.isValidOrb(orb) && (filter == null || filter.invoke(orb));
+    }
+
     @Override
     protected void firstUpdate() {
         if (player.orbs == null || player.orbs.isEmpty()) {
@@ -76,23 +80,6 @@ public class TriggerOrbPassiveAbility extends PCLAction<ArrayList<AbstractOrb>> 
         complete(orbs);
     }
 
-    protected void triggerPassiveEffect(AbstractOrb orb, int times) {
-        if (checkOrb(orb)) {
-            for (int i = 0; i < times; i++) {
-                orb.onStartOfTurn();
-                orb.onEndOfTurn();
-                if (orb instanceof OnStartOfTurnPostDrawSubscriber) {
-                    ((OnStartOfTurnPostDrawSubscriber) orb).onStartOfTurnPostDraw();
-                }
-                orbs.add(orb);
-            }
-        }
-    }
-
-    protected boolean checkOrb(AbstractOrb orb) {
-        return GameUtilities.isValidOrb(orb) && (filter == null || filter.invoke(orb));
-    }
-
     public TriggerOrbPassiveAbility setFilter(FuncT1<Boolean, AbstractOrb> filter) {
         this.filter = filter;
 
@@ -109,5 +96,18 @@ public class TriggerOrbPassiveAbility extends PCLAction<ArrayList<AbstractOrb>> 
         this.isRandom = random;
 
         return this;
+    }
+
+    protected void triggerPassiveEffect(AbstractOrb orb, int times) {
+        if (checkOrb(orb)) {
+            for (int i = 0; i < times; i++) {
+                orb.onStartOfTurn();
+                orb.onEndOfTurn();
+                if (orb instanceof OnStartOfTurnPostDrawSubscriber) {
+                    ((OnStartOfTurnPostDrawSubscriber) orb).onStartOfTurnPostDraw();
+                }
+                orbs.add(orb);
+            }
+        }
     }
 }

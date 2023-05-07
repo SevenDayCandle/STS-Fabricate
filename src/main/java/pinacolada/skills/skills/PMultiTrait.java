@@ -51,79 +51,6 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
-        return null;
-    }
-
-    @Override
-    public String getSubText() {
-        return null;
-    }
-
-    @Override
-    public PMultiTrait makeCopy() {
-        PMultiTrait copy = (PMultiTrait) super.makeCopy();
-        for (PTrait<?> effect : effects) {
-            copy.addEffect(effect.makeCopy());
-        }
-        return copy;
-    }
-
-    @Override
-    public PMultiTrait onRemoveFromCard(AbstractCard card) {
-        removeSubs(card);
-        super.onRemoveFromCard(card);
-        return this;
-    }
-
-    @Override
-    public void refresh(PCLUseInfo info, boolean conditionMet) {
-        for (PSkill<?> effect : effects) {
-            effect.refresh(info, conditionMet);
-        }
-    }
-
-    @Override
-    public String getSubDescText() {
-        return null;
-    }
-
-    @Override
-    public String getSubSampleText() {
-        return null;
-    }
-
-    public PMultiTrait addEffect(PTrait<?> newEffect) {
-        this.effects.add(newEffect);
-        setParentsForChildren();
-        return this;
-    }
-
-    public PTrait<?> getSubEffect(int index) {
-        return index < effects.size() ? effects.get(index) : null;
-    }
-
-    public List<PTrait<?>> getSubEffects() {
-        return effects;
-    }
-
-    public PMultiTrait setEffects(List<PTrait<?>> effects) {
-        this.effects.clear();
-        this.effects.addAll(effects);
-        setParentsForChildren();
-
-        return this;
-    }
-
-    public PMultiTrait setEffects(PTrait<?>... effects) {
-        return setEffects(Arrays.asList(effects));
-    }
-
-    public String getSpecialData() {
-        return PSkill.joinDataAsJson(effects, PSkill::serialize);
-    }
-
-    @Override
     public PSkill<PField_Empty> addAmountForCombat(int amount) {
         for (PSkill<?> effect : effects) {
             effect.addAmountForCombat(amount);
@@ -175,6 +102,10 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
             }
         }
         return c;
+    }
+
+    public String getSpecialData() {
+        return PSkill.joinDataAsJson(effects, PSkill::serialize);
     }
 
     @Override
@@ -348,6 +279,75 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
             effect.useParent(value);
         }
         return this;
+    }
+
+    public PMultiTrait addEffect(PTrait<?> newEffect) {
+        this.effects.add(newEffect);
+        setParentsForChildren();
+        return this;
+    }
+
+    public PTrait<?> getSubEffect(int index) {
+        return index < effects.size() ? effects.get(index) : null;
+    }
+
+    public List<PTrait<?>> getSubEffects() {
+        return effects;
+    }
+
+    public PMultiTrait setEffects(PTrait<?>... effects) {
+        return setEffects(Arrays.asList(effects));
+    }
+
+    public PMultiTrait setEffects(List<PTrait<?>> effects) {
+        this.effects.clear();
+        this.effects.addAll(effects);
+        setParentsForChildren();
+
+        return this;
+    }
+
+    @Override
+    public String getSampleText(PSkill<?> callingSkill) {
+        return null;
+    }
+
+    @Override
+    public String getSubText() {
+        return null;
+    }
+
+    @Override
+    public PMultiTrait makeCopy() {
+        PMultiTrait copy = (PMultiTrait) super.makeCopy();
+        for (PTrait<?> effect : effects) {
+            copy.addEffect(effect.makeCopy());
+        }
+        return copy;
+    }
+
+    @Override
+    public PMultiTrait onRemoveFromCard(AbstractCard card) {
+        removeSubs(card);
+        super.onRemoveFromCard(card);
+        return this;
+    }
+
+    @Override
+    public void refresh(PCLUseInfo info, boolean conditionMet) {
+        for (PSkill<?> effect : effects) {
+            effect.refresh(info, conditionMet);
+        }
+    }
+
+    @Override
+    public String getSubDescText() {
+        return null;
+    }
+
+    @Override
+    public String getSubSampleText() {
+        return null;
     }
 
     @Override

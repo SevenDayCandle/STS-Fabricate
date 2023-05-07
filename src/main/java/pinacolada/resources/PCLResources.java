@@ -33,26 +33,26 @@ import java.util.Map;
 // Copied and modified from STS-AnimatorMod
 public abstract class PCLResources<T extends PCLAbstractPlayerData, U extends PCLImages, V extends PCLTooltips, W extends PCLStrings>
         implements EditCharactersSubscriber, EditKeywordsSubscriber, EditStringsSubscriber, PostInitializeSubscriber {
-    public static final String JSON_AUGMENTS = "AugmentStrings.json";
-    public static final String JSON_CARDS = "CardStrings.json";
-    public static final String JSON_KEYWORDS = "KeywordStrings.json";
-    public static final String JSON_LOADOUTS = "LoadoutStrings.json";
     private static final Type AUGMENT_TYPE = new TypeToken<Map<String, Map<String, AugmentStrings>>>() {
     }.getType();
     private static final Type GROUPED_CARD_TYPE = new TypeToken<Map<String, Map<String, CardStrings>>>() {
     }.getType();
     private static final Type LOADOUT_TYPE = new TypeToken<Map<String, Map<String, LoadoutStrings>>>() {
     }.getType();
+    public static final String JSON_AUGMENTS = "AugmentStrings.json";
+    public static final String JSON_CARDS = "CardStrings.json";
+    public static final String JSON_KEYWORDS = "KeywordStrings.json";
+    public static final String JSON_LOADOUTS = "LoadoutStrings.json";
+    protected final String id;
     public final AbstractCard.CardColor cardColor;
     public final AbstractPlayer.PlayerClass playerClass;
     public final boolean usePCLFrame;
     public final T data;
     public final U images;
-    protected final String id;
-    public V tooltips;
-    public W strings;
     protected CharacterStrings characterStrings;
     protected boolean isLoaded;
+    public V tooltips;
+    public W strings;
 
     protected PCLResources(String id, AbstractCard.CardColor color, AbstractPlayer.PlayerClass playerClass, U images) {
         this(id, color, playerClass, images, true);
@@ -67,7 +67,11 @@ public abstract class PCLResources<T extends PCLAbstractPlayerData, U extends PC
         this.data = getData();
     }
 
-    public abstract T getData();
+    public static void loadAugmentStrings(String jsonString) {
+        final Type typeToken = new TypeToken<Map<String, AugmentStrings>>() {
+        }.getType();
+        AugmentStrings.STRINGS.putAll(new HashMap<String, AugmentStrings>(EUIUtils.deserialize(jsonString, typeToken)));
+    }
 
     public static void loadGroupedCardStrings(String jsonString) {
         final Map<String, CardStrings> localizationStrings = ReflectionHacks.getPrivateStatic(LocalizedStrings.class, "cards");
@@ -124,6 +128,12 @@ public abstract class PCLResources<T extends PCLAbstractPlayerData, U extends PC
         return characterStrings;
     }
 
+    public abstract T getData();
+
+    public FileHandle getFallbackFile(String fileName) {
+        return Gdx.files.internal("localization/" + id.toLowerCase() + "/eng/" + fileName);
+    }
+
     public <Z> Z getFallbackStrings(String fileName, Type typeOfT) {
         FileHandle file = getFallbackFile(fileName);
         if (!file.exists()) {
@@ -135,14 +145,18 @@ public abstract class PCLResources<T extends PCLAbstractPlayerData, U extends PC
         return EUIUtils.deserialize(json, typeOfT);
     }
 
-    public FileHandle getFallbackFile(String fileName) {
-        return Gdx.files.internal("localization/" + id.toLowerCase() + "/eng/" + fileName);
+    public FileHandle getFile(Settings.GameLanguage language, String fileName) {
+        return Gdx.files.internal("localization/" + id.toLowerCase() + "/" + language.name().toLowerCase() + "/" + fileName);
     }
 
     // Intercepts CardLibrary's getCopy to return a different card
     public String getReplacement(String cardID) {
         return null;
     }
+
+    public abstract W getStrings();
+
+    public abstract V getTooltips();
 
     public UIStrings getUIStrings(String stringID) {
         return PGR.getLanguagePack().getUIString(PGR.createID(id, stringID));
@@ -175,6 +189,10 @@ public abstract class PCLResources<T extends PCLAbstractPlayerData, U extends PC
         loadCustomNonBaseStrings(JSON_AUGMENTS, PCLResources::loadAugmentStrings);
     }
 
+    protected void loadCustomCardStrings() {
+        loadCustomNonBaseStrings(JSON_CARDS, PCLResources::loadGroupedCardStrings);
+    }
+
     protected void loadCustomNonBaseStrings(String path, ActionT1<String> loadFunc) {
         String json = getFallbackFile(path).readString(StandardCharsets.UTF_8.name());
         loadFunc.invoke(json);
@@ -184,20 +202,6 @@ public abstract class PCLResources<T extends PCLAbstractPlayerData, U extends PC
             String json2 = file.readString(StandardCharsets.UTF_8.name());
             loadFunc.invoke(json);
         }
-    }
-
-    public static void loadAugmentStrings(String jsonString) {
-        final Type typeToken = new TypeToken<Map<String, AugmentStrings>>() {
-        }.getType();
-        AugmentStrings.STRINGS.putAll(new HashMap<String, AugmentStrings>(EUIUtils.deserialize(jsonString, typeToken)));
-    }
-
-    public FileHandle getFile(Settings.GameLanguage language, String fileName) {
-        return Gdx.files.internal("localization/" + id.toLowerCase() + "/" + language.name().toLowerCase() + "/" + fileName);
-    }
-
-    protected void loadCustomCardStrings() {
-        loadCustomNonBaseStrings(JSON_CARDS, PCLResources::loadGroupedCardStrings);
     }
 
     protected void loadCustomStrings(Class<?> type) {
@@ -214,8 +218,18 @@ public abstract class PCLResources<T extends PCLAbstractPlayerData, U extends PC
         }
     }
 
+    protected void loadKeywords() {
+        EUI.registerKeywords(getFallbackFile(JSON_KEYWORDS));
+        EUI.registerKeywords(getFile(Settings.language, JSON_KEYWORDS));
+    }
+
     protected void loadLoadoutStrings() {
         loadCustomNonBaseStrings(JSON_LOADOUTS, PCLResources::loadLoadoutStrings);
+    }
+
+    protected void postInitialize() {
+        tooltips.initializeIcons();
+        data.initialize();
     }
 
     @Override
@@ -227,20 +241,6 @@ public abstract class PCLResources<T extends PCLAbstractPlayerData, U extends PC
         loadKeywords();
         setupTooltips();
     }
-
-    protected void loadKeywords() {
-        EUI.registerKeywords(getFallbackFile(JSON_KEYWORDS));
-        EUI.registerKeywords(getFile(Settings.language, JSON_KEYWORDS));
-    }
-
-    public void setupTooltips() {
-        tooltips = getTooltips();
-        strings = getStrings();
-    }
-
-    public abstract V getTooltips();
-
-    public abstract W getStrings();
 
     @Override
     public void receiveEditStrings() {
@@ -259,8 +259,8 @@ public abstract class PCLResources<T extends PCLAbstractPlayerData, U extends PC
         this.isLoaded = true;
     }
 
-    protected void postInitialize() {
-        tooltips.initializeIcons();
-        data.initialize();
+    public void setupTooltips() {
+        tooltips = getTooltips();
+        strings = getStrings();
     }
 }

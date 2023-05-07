@@ -8,9 +8,9 @@ import pinacolada.effects.PCLEffect;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class GenericRenderEffect extends PCLEffect {
-    public final TextureRegion image;
     private final float x;
     private final float y;
+    public final TextureRegion image;
     private boolean flipX;
     private boolean flipY;
     private float rotationSpeed;
@@ -33,11 +33,9 @@ public class GenericRenderEffect extends PCLEffect {
         }
     }
 
-    public GenericRenderEffect flip(boolean horizontally, boolean vertically) {
-        this.flipX = horizontally;
-        this.flipY = vertically;
-
-        return this;
+    @Override
+    protected void firstUpdate() {
+        updateInternal(getDeltaTime());
     }
 
     public GenericRenderEffect setRotation(float degrees) {
@@ -57,8 +55,10 @@ public class GenericRenderEffect extends PCLEffect {
     public void dispose() {
     }
 
-    @Override
-    protected void firstUpdate() {
-        updateInternal(getDeltaTime());
+    public GenericRenderEffect flip(boolean horizontally, boolean vertically) {
+        this.flipX = horizontally;
+        this.flipY = vertically;
+
+        return this;
     }
 }

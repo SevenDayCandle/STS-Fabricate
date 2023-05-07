@@ -41,11 +41,6 @@ public class PMod_DrawPerCard extends PMod_Do {
     }
 
     @Override
-    public EUITooltip getActionTooltip() {
-        return PGR.core.tooltips.draw;
-    }
-
-    @Override
     protected PCLAction<ArrayList<AbstractCard>> createPileAction(PCLUseInfo info) {
         DrawCards action = new DrawCards(amount);
         if (isForced()) {
@@ -57,5 +52,10 @@ public class PMod_DrawPerCard extends PMod_Do {
     @Override
     public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
         return FetchFromPile::new;
+    }
+
+    @Override
+    public EUITooltip getActionTooltip() {
+        return PGR.core.tooltips.draw;
     }
 }

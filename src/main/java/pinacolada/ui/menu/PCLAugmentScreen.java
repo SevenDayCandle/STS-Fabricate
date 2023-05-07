@@ -50,20 +50,6 @@ public class PCLAugmentScreen extends AbstractDungeonScreen {
         }
     }
 
-    public void refreshAugments() {
-        panel.clear();
-        HashMap<PCLAugmentData, Integer> entries = getEntries != null ? getEntries.invoke() : new HashMap<>();
-        for (Map.Entry<PCLAugmentData, Integer> params : entries.entrySet()) {
-            PCLAugmentData data = params.getKey();
-            int amount = params.getValue();
-            if (data != null && amount > 0) {
-                PCLAugment augment = data.create();
-                addItem.invoke(augment, amount);
-            }
-        }
-        EUI.countingPanel.openManual(GameUtilities.augmentStats(entries), null, false);
-    }
-
     public void open(FuncT0<HashMap<PCLAugmentData, Integer>> getEntries, int rows, boolean canSelect) {
         super.open(false, false);
         this.getEntries = getEntries;
@@ -103,6 +89,20 @@ public class PCLAugmentScreen extends AbstractDungeonScreen {
         }
         EUI.countingPanel.tryUpdate();
 
+    }
+
+    public void refreshAugments() {
+        panel.clear();
+        HashMap<PCLAugmentData, Integer> entries = getEntries != null ? getEntries.invoke() : new HashMap<>();
+        for (Map.Entry<PCLAugmentData, Integer> params : entries.entrySet()) {
+            PCLAugmentData data = params.getKey();
+            int amount = params.getValue();
+            if (data != null && amount > 0) {
+                PCLAugment augment = data.create();
+                addItem.invoke(augment, amount);
+            }
+        }
+        EUI.countingPanel.openManual(GameUtilities.augmentStats(entries), null, false);
     }
 
 

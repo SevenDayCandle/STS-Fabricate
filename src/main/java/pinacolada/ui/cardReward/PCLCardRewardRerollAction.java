@@ -36,11 +36,6 @@ public class PCLCardRewardRerollAction extends PCLCardRewardAction {
     }
 
     @Override
-    Class<? extends CardRewardActionProvider> getTargetClass() {
-        return AbstractCubes.class;
-    }
-
-    @Override
     PCLCardRewardActionButton getButton(int index) {
         return (PCLCardRewardActionButton) new PCLCardRewardActionButton(this,
                 EUIRM.images.hexagonalButton.texture(), PGR.core.strings.rewards_reroll, PGR.core.strings.rewards_rerollDescription, REWARD_INDEX, index, false)
@@ -48,5 +43,10 @@ public class PCLCardRewardRerollAction extends PCLCardRewardAction {
                 .setDimensions(AbstractCard.IMG_WIDTH * 0.75f, AbstractCard.IMG_HEIGHT * 0.14f)
                 .setColor(Color.TAN)
                 .setBorder(EUIRM.images.hexagonalButtonBorder.texture(), Settings.GOLD_COLOR);
+    }
+
+    @Override
+    Class<? extends CardRewardActionProvider> getTargetClass() {
+        return AbstractCubes.class;
     }
 }

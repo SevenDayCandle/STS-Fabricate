@@ -34,6 +34,11 @@ public class PMove_ModifyBlock extends PMove_Modify<PField_CardCategory> {
     }
 
     @Override
+    public ActionT1<AbstractCard> getAction() {
+        return (c) -> getActions().modifyBlock(c, amount, true, true);
+    }
+
+    @Override
     public String getObjectSampleText() {
         return PGR.core.tooltips.block.title;
     }
@@ -41,11 +46,6 @@ public class PMove_ModifyBlock extends PMove_Modify<PField_CardCategory> {
     @Override
     public String getObjectText() {
         return EUIRM.strings.numNoun(getAmountRawString(), PGR.core.tooltips.block);
-    }
-
-    @Override
-    public ActionT1<AbstractCard> getAction() {
-        return (c) -> getActions().modifyBlock(c, amount, true, true);
     }
 
     @Override

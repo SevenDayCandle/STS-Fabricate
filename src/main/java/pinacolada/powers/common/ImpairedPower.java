@@ -25,6 +25,10 @@ public class ImpairedPower extends PCLPower implements OnOrbApplyFocusSubscriber
         initialize(amount, PowerType.DEBUFF, true);
     }
 
+    public static float getOrbMultiplier() {
+        return (MULTIPLIER + CombatManager.getPlayerEffectBonus(POWER_ID));
+    }
+
     @Override
     public void atStartOfTurnPostDraw() {
         super.atStartOfTurnPostDraw();
@@ -40,10 +44,6 @@ public class ImpairedPower extends PCLPower implements OnOrbApplyFocusSubscriber
     @Override
     public String getUpdatedDescription() {
         return formatDescription(0, PCLRenderHelpers.decimalFormat(getOrbMultiplier()), amount, amount == 1 ? powerStrings.DESCRIPTIONS[1] : powerStrings.DESCRIPTIONS[2]);
-    }
-
-    public static float getOrbMultiplier() {
-        return (MULTIPLIER + CombatManager.getPlayerEffectBonus(POWER_ID));
     }
 
     @Override

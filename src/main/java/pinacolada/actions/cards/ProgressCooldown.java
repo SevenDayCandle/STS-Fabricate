@@ -34,6 +34,12 @@ public class ProgressCooldown extends GenericCardSelection {
         return super.canSelect(card) && getCooldowns(card).size() > 0;
     }
 
+    public ProgressCooldown flash(Color flashColor) {
+        this.flashColor = flashColor;
+
+        return this;
+    }
+
     protected ArrayList<CooldownProvider> getCooldowns(AbstractCard c) {
         ArrayList<CooldownProvider> cooldowns = new ArrayList<>();
         EditorCard eC = EUIUtils.safeCast(c, EditorCard.class);
@@ -51,12 +57,6 @@ public class ProgressCooldown extends GenericCardSelection {
             }
         }
         return cooldowns;
-    }
-
-    public ProgressCooldown flash(Color flashColor) {
-        this.flashColor = flashColor;
-
-        return this;
     }
 
     @Override

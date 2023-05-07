@@ -21,8 +21,8 @@ import java.util.LinkedHashMap;
 import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.player;
 
 public class PCLPlayerSystem extends EUIBase {
-    public final PCLEmptyMeter fakeMeter = new PCLEmptyMeter();
     protected final LinkedHashMap<AbstractPlayer.PlayerClass, PCLPlayerMeter> meters = new LinkedHashMap<>();
+    public final PCLEmptyMeter fakeMeter = new PCLEmptyMeter();
     protected PCLCard lastCardPlayed = null;
 
     public PCLPlayerSystem() {
@@ -30,13 +30,6 @@ public class PCLPlayerSystem extends EUIBase {
 
     public void addLevel(PCLAffinity affinity, int amount) {
         getActiveMeter().addLevel(affinity, amount);
-    }
-
-    public PCLPlayerMeter getActiveMeter() {
-        if (player != null) {
-            return meters.getOrDefault(player.chosenClass, fakeMeter);
-        }
-        return fakeMeter;
     }
 
     public void addSkip(int amount) {
@@ -55,6 +48,13 @@ public class PCLPlayerSystem extends EUIBase {
         return getActiveMeter().generateInfo(card, source, target);
     }
 
+    public PCLPlayerMeter getActiveMeter() {
+        if (player != null) {
+            return meters.getOrDefault(player.chosenClass, fakeMeter);
+        }
+        return fakeMeter;
+    }
+
     public PCLAffinity getAffinity(int index) {
         return getActiveMeter().get(index);
     }
@@ -71,16 +71,16 @@ public class PCLPlayerSystem extends EUIBase {
         return lastCardPlayed;
     }
 
-    public void setLastCardPlayed(AbstractCard card) {
-        lastCardPlayed = EUIUtils.safeCast(card, PCLCard.class);
-    }
-
     public int getLevel(PCLAffinity affinity) {
         return getActiveMeter().getLevel(affinity);
     }
 
     public PCLPlayerMeter getMeter(AbstractPlayer.PlayerClass playerClass) {
         return meters.get(playerClass);
+    }
+
+    public Collection<PCLPlayerMeter> getMeters() {
+        return meters.values();
     }
 
     public Object getRerollDescription() {
@@ -98,10 +98,6 @@ public class PCLPlayerSystem extends EUIBase {
         for (PCLPlayerMeter meter : getMeters()) {
             meter.initialize();
         }
-    }
-
-    public Collection<PCLPlayerMeter> getMeters() {
-        return meters.values();
     }
 
     public float modifyBlock(float block, PCLCard source, PCLCard card, AbstractCreature target) {
@@ -172,6 +168,10 @@ public class PCLPlayerSystem extends EUIBase {
     @Override
     public void updateImpl() {
         getActiveMeter().update(null, null, false);
+    }
+
+    public void setLastCardPlayed(AbstractCard card) {
+        lastCardPlayed = EUIUtils.safeCast(card, PCLCard.class);
     }
 
     public boolean tryUpdate(PCLCard card, AbstractCreature target, boolean draggingCard) {

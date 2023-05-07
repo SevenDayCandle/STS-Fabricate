@@ -17,6 +17,10 @@ public class PCLPreviewList extends RotatingList<EUICardPreview> {
         add(EUICardPreview.generatePreviewCard(card));
     }
 
+    public AbstractCard getCard(int index) {
+        return get(index).defaultPreview;
+    }
+
     public ArrayList<AbstractCard> getCards() {
         return EUIUtils.mapAsNonnull(this, p -> p.defaultPreview);
     }
@@ -30,10 +34,6 @@ public class PCLPreviewList extends RotatingList<EUICardPreview> {
             }
         }
         return -1;
-    }
-
-    public AbstractCard getCard(int index) {
-        return get(index).defaultPreview;
     }
 
     public AbstractCard getUpgrade(int index) {

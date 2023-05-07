@@ -59,11 +59,6 @@ public class PCLCardGroupHelper implements Serializable {
         return StringUtils.capitalize(name);
     }
 
-    public final ArrayList<AbstractCard> getCards() {
-        CardGroup g = getCardGroup();
-        return g != null ? g.group : new ArrayList<>();
-    }
-
     public final CardGroup getCardGroup() {
         if (AbstractDungeon.player != null) {
             switch (pile) {
@@ -80,6 +75,11 @@ public class PCLCardGroupHelper implements Serializable {
             }
         }
         return null;
+    }
+
+    public final ArrayList<AbstractCard> getCards() {
+        CardGroup g = getCardGroup();
+        return g != null ? g.group : new ArrayList<>();
     }
 
     public static class PCLCardGroupHelperAdapter extends TypeAdapter<PCLCardGroupHelper> {

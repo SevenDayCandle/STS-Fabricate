@@ -24,18 +24,17 @@ import java.util.stream.Collectors;
 public class PCLOrbHelper implements TooltipProvider {
     private static final Map<String, PCLOrbHelper> ALL = new HashMap<>();
     private static final WeightedList<PCLOrbHelper> WEIGHTED = new WeightedList<>();
-
     public static final int COMMON_THRESHOLD = 11;
     public static final PCLOrbHelper Dark = new PCLOrbHelper(com.megacrit.cardcrawl.orbs.Dark.ORB_ID, PGR.core.tooltips.dark, PCLAffinity.Purple, com.megacrit.cardcrawl.orbs.Dark::new, COMMON_THRESHOLD);
     public static final PCLOrbHelper Frost = new PCLOrbHelper(com.megacrit.cardcrawl.orbs.Frost.ORB_ID, PGR.core.tooltips.frost, PCLAffinity.Blue, com.megacrit.cardcrawl.orbs.Frost::new, COMMON_THRESHOLD);
     public static final PCLOrbHelper Lightning = new PCLOrbHelper(com.megacrit.cardcrawl.orbs.Lightning.ORB_ID, PGR.core.tooltips.lightning, PCLAffinity.Yellow, com.megacrit.cardcrawl.orbs.Lightning::new, COMMON_THRESHOLD);
     public static final PCLOrbHelper Plasma = new PCLOrbHelper(com.megacrit.cardcrawl.orbs.Plasma.ORB_ID, PGR.core.tooltips.plasma, PCLAffinity.Yellow, com.megacrit.cardcrawl.orbs.Plasma::new, 2);
+    protected final FuncT0<AbstractOrb> constructor;
     public final EUITooltip tooltip;
     public final PCLAffinity affinity;
     public final String ID;
     public final int weight;
     public final AbstractCard.CardColor[] allowedColors;
-    protected final FuncT0<AbstractOrb> constructor;
 
     public PCLOrbHelper(String powerID, EUITooltip tooltip, PCLAffinity affinity, FuncT0<AbstractOrb> constructor, int weight, AbstractCard.CardColor... allowedColors) {
         this.ID = powerID;
@@ -59,10 +58,6 @@ public class PCLOrbHelper implements TooltipProvider {
         return GameUtilities.getRandomElement(EUIUtils.filter(WEIGHTED.getInnerList(), PCLOrbHelper::isCommon));
     }
 
-    public final boolean isCommon() {
-        return weight >= COMMON_THRESHOLD;
-    }
-
     public static PCLOrbHelper randomHelper() {
         return randomHelper(true);
     }
@@ -79,6 +74,14 @@ public class PCLOrbHelper implements TooltipProvider {
         return randomHelper(weighted).create();
     }
 
+    public static Collection<PCLOrbHelper> values() {
+        return ALL.values().stream().sorted((a, b) -> StringUtils.compare(a.tooltip.title, b.tooltip.title)).collect(Collectors.toList());
+    }
+
+    public static Collection<PCLOrbHelper> visibleValues() {
+        return WEIGHTED.getInnerList().stream().sorted((a, b) -> StringUtils.compare(a.tooltip.title, b.tooltip.title)).collect(Collectors.toList());
+    }
+
     public AbstractOrb create() {
         if (constructor != null) {
             return constructor.invoke();
@@ -88,17 +91,13 @@ public class PCLOrbHelper implements TooltipProvider {
         }
     }
 
-    public static Collection<PCLOrbHelper> values() {
-        return ALL.values().stream().sorted((a, b) -> StringUtils.compare(a.tooltip.title, b.tooltip.title)).collect(Collectors.toList());
-    }
-
-    public static Collection<PCLOrbHelper> visibleValues() {
-        return WEIGHTED.getInnerList().stream().sorted((a, b) -> StringUtils.compare(a.tooltip.title, b.tooltip.title)).collect(Collectors.toList());
-    }
-
     @Override
     public List<EUITooltip> getTips() {
         return Collections.singletonList(tooltip);
+    }
+
+    public final boolean isCommon() {
+        return weight >= COMMON_THRESHOLD;
     }
 
     public static class PCLOrbHelperAdapter extends TypeAdapter<PCLOrbHelper> {

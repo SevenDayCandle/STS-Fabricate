@@ -26,10 +26,17 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<
         fields.setCardGroup(groups);
     }
 
-    @Override
-    public String getSampleText(PSkill<?> callingSkill) {
-        return TEXT.act_giveTarget(TEXT.subjects_card, getObjectSampleText());
+    public boolean canCardPass(AbstractCard c) {
+        return fields.getFullCardFilter().invoke(c);
     }
+
+    public void cardAction(List<AbstractCard> cards) {
+        for (AbstractCard c : cards) {
+            getAction().invoke(c);
+        }
+    }
+
+    public abstract ActionT1<AbstractCard> getAction();
 
     public String getObjectSampleText() {
         return getObjectText();
@@ -38,12 +45,22 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<
     public abstract String getObjectText();
 
     @Override
+    public String getSampleText(PSkill<?> callingSkill) {
+        return TEXT.act_giveTarget(TEXT.subjects_card, getObjectSampleText());
+    }
+
+    @Override
     public String getSubText() {
         String giveString = getObjectText();
         return useParent ? TEXT.act_giveTarget(getInheritedString(), giveString) :
                 fields.hasGroups() ?
                         TEXT.act_giveFrom(EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), fields.getFullCardString()), fields.getGroupString(), giveString) :
                         TEXT.act_giveTarget(TEXT.subjects_this, giveString);
+    }
+
+    @Override
+    public boolean isAffectedByMods() {
+        return super.isAffectedByMods() && !fields.not;
     }
 
     @Override
@@ -68,25 +85,7 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<
         return input > 0 && !fields.not ? "+" + input : String.valueOf(input);
     }
 
-    @Override
-    public boolean isAffectedByMods()
-    {
-        return super.isAffectedByMods() && !fields.not;
-    }
-
     public String wrapExtra(int input) {
         return String.valueOf(input);
     }
-
-    public boolean canCardPass(AbstractCard c) {
-        return fields.getFullCardFilter().invoke(c);
-    }
-
-    public void cardAction(List<AbstractCard> cards) {
-        for (AbstractCard c : cards) {
-            getAction().invoke(c);
-        }
-    }
-
-    public abstract ActionT1<AbstractCard> getAction();
 }

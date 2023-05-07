@@ -48,6 +48,23 @@ public class EvokeOrb extends PCLAction<ArrayList<AbstractOrb>> {
         return this;
     }
 
+    protected boolean checkOrb(AbstractOrb orb) {
+        return GameUtilities.isValidOrb(orb) && (filter == null || filter.invoke(orb));
+    }
+
+    protected void doEvoke(AbstractOrb orb, int times) {
+        for (int j = 0; j < (amount - 1); j++) {
+            orb.passiveAmount += additionalFocus;
+            orb.evokeAmount += additionalFocus;
+            orb.onEvoke();
+            orbs.add(orb);
+        }
+        if (amount > 0) {
+            PCLActions.top.add(new EvokeSpecificOrbAction(orb));
+            orbs.add(orb);
+        }
+    }
+
     @Override
     protected void firstUpdate() {
         if (player.orbs == null || player.orbs.isEmpty()) {
@@ -83,23 +100,6 @@ public class EvokeOrb extends PCLAction<ArrayList<AbstractOrb>> {
         }
 
         complete(orbs);
-    }
-
-    protected void doEvoke(AbstractOrb orb, int times) {
-        for (int j = 0; j < (amount - 1); j++) {
-            orb.passiveAmount += additionalFocus;
-            orb.evokeAmount += additionalFocus;
-            orb.onEvoke();
-            orbs.add(orb);
-        }
-        if (amount > 0) {
-            PCLActions.top.add(new EvokeSpecificOrbAction(orb));
-            orbs.add(orb);
-        }
-    }
-
-    protected boolean checkOrb(AbstractOrb orb) {
-        return GameUtilities.isValidOrb(orb) && (filter == null || filter.invoke(orb));
     }
 
     public EvokeOrb setFilter(FuncT1<Boolean, AbstractOrb> filter) {

@@ -18,21 +18,21 @@ import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class AffinityKeywordButton extends EUIBase {
-    public static final float ICON_SIZE = scale(48);
     protected static final Color PANEL_COLOR = new Color(0.3f, 0.3f, 0.3f, 1f);
     protected static final TextureCache STAR_TEXTURE = PCLCoreImages.CardAffinity.starFg;
-    public PCLAffinity type;
-    public EUIButton backgroundButton;
-    public int currentLevel;
-    public float borderRotation;
-    public boolean showBorders = true;
-    public boolean showNumbers = false;
+    public static final float ICON_SIZE = scale(48);
     protected ActionT1<AffinityKeywordButton> onClick;
     protected ActionT1<AffinityKeywordButton> onRightClick;
     protected Texture borderTexture;
     protected Texture borderBGTexture;
     protected Texture borderFGTexture;
     protected float radiusBG;
+    public PCLAffinity type;
+    public EUIButton backgroundButton;
+    public int currentLevel;
+    public float borderRotation;
+    public boolean showBorders = true;
+    public boolean showNumbers = false;
 
     public AffinityKeywordButton(EUIHitbox hb, PCLAffinity affinity) {
         type = affinity;

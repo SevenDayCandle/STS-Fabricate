@@ -16,6 +16,14 @@ public class FortifiedPower extends PCLPower implements MultiplicativePower {
         initialize(amount, PowerType.BUFF, true);
     }
 
+    public static float calculateBlock(float block, float multiplier) {
+        return Math.max(0, block + Math.max(0, block * (multiplier / 100f)));
+    }
+
+    public static float getMultiplier() {
+        return (MULTIPLIER + CombatManager.getPlayerEffectBonus(POWER_ID));
+    }
+
     @Override
     public void atEndOfRound() {
         super.atEndOfRound();
@@ -28,16 +36,8 @@ public class FortifiedPower extends PCLPower implements MultiplicativePower {
         return calculateBlock(block, getMultiplier());
     }
 
-    public static float calculateBlock(float block, float multiplier) {
-        return Math.max(0, block + Math.max(0, block * (multiplier / 100f)));
-    }
-
     @Override
     public String getUpdatedDescription() {
         return formatDescription(0, PCLRenderHelpers.decimalFormat(getMultiplier()), amount, amount == 1 ? powerStrings.DESCRIPTIONS[1] : powerStrings.DESCRIPTIONS[2]);
-    }
-
-    public static float getMultiplier() {
-        return (MULTIPLIER + CombatManager.getPlayerEffectBonus(POWER_ID));
     }
 }

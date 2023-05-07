@@ -42,9 +42,27 @@ public abstract class PCond_DoToCard extends PActiveNonCheckCond<PField_CardCate
     }
 
     @Override
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
+        for (PCLCardGroupHelper group : fields.groupTypes) {
+            if (EUIUtils.filter(group.getCards(), c -> fields.getFullCardFilter().invoke(c)).size() < amount) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
     public String getText(boolean addPeriod) {
         return capital(childEffect == null ? getSubText() : TEXT.cond_inOrderTo(getSubText(), childEffect.getText(false)), addPeriod) + PCLCoreStrings.period(addPeriod);
     }
+
+    public abstract FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction();
+
+    protected String getActionTitle() {
+        return getActionTooltip().title;
+    }
+
+    public abstract EUITooltip getActionTooltip();
 
     @Override
     public String getAmountRawOrAllString() {
@@ -64,28 +82,8 @@ public abstract class PCond_DoToCard extends PActiveNonCheckCond<PField_CardCate
                 : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), fields.getFullCardString());
     }
 
-    protected String getActionTitle() {
-        return getActionTooltip().title;
-    }
-
-    public abstract EUITooltip getActionTooltip();
-
-    @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        for (PCLCardGroupHelper group : fields.groupTypes) {
-            if (EUIUtils.filter(group.getCards(), c -> fields.getFullCardFilter().invoke(c)).size() < amount) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     public ArrayList<Integer> getQualifiers(PCLUseInfo info) {
         return fields.getQualifiers(info);
-    }
-
-    public String getQualifierText(int i) {
-        return "";
     }
 
     public PCLAction<?> useImpl(PCLUseInfo info, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {
@@ -100,6 +98,4 @@ public abstract class PCond_DoToCard extends PActiveNonCheckCond<PField_CardCate
                     }
                 });
     }
-
-    public abstract FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction();
 }

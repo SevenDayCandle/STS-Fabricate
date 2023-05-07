@@ -43,6 +43,12 @@ public class PCLCardPreviews {
         return preview;
     }
 
+    public static void invalidate() {
+        PREVIEWS.clear();
+        lastCard = null;
+        lastPreview = null;
+    }
+
     public static void setPreviews(PCLCard card) {
         if (card != null && lastCard != card) {
             lastCard = card;
@@ -60,11 +66,5 @@ public class PCLCardPreviews {
                 effect.makePreviews(PREVIEWS);
             }
         }
-    }
-
-    public static void invalidate() {
-        PREVIEWS.clear();
-        lastCard = null;
-        lastPreview = null;
     }
 }

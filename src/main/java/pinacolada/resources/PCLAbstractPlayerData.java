@@ -68,10 +68,6 @@ public abstract class PCLAbstractPlayerData {
         this.useAugments = useAugments;
     }
 
-    public abstract PCLCharacterConfig getConfig();
-
-    public abstract PCLLoadout getCoreLoadout();
-
     public static Random getRNG() {
         return PGR.dungeon.getRNG();
     }
@@ -80,6 +76,87 @@ public abstract class PCLAbstractPlayerData {
         GLYPHS.add(new GlyphBlight());
         GLYPHS.add(new GlyphBlight1());
         GLYPHS.add(new GlyphBlight2());
+    }
+
+    protected void addUnlockBundle(PCLLoadout loadout) {
+        if (loadout.unlockLevel > 0) {
+            final String cardID = loadout.cardDatas.get(0).ID;
+            final CustomUnlock unlock = new CustomUnlock(AbstractUnlock.UnlockType.MISC, cardID);
+            unlock.type = AbstractUnlock.UnlockType.CARD;
+            unlock.card = loadout.buildCard();
+            unlock.key = unlock.card.cardID = PGR.core.createID("series:" + loadout.getName());
+
+            CustomUnlockBundle bundle = BaseMod.getUnlockBundleFor(resources.playerClass, loadout.unlockLevel - 1);
+            if (bundle == null) {
+                bundle = new CustomUnlockBundle(AbstractUnlock.UnlockType.MISC, "", "", "");
+                bundle.getUnlocks().clear();
+                bundle.getUnlockIDs().clear();
+                bundle.getUnlockIDs().add(unlock.key);
+                bundle.getUnlocks().add(unlock);
+                bundle.unlockType = AbstractUnlock.UnlockType.CARD;
+            }
+            else {
+                bundle.getUnlockIDs().add(unlock.key);
+                bundle.getUnlocks().add(unlock);
+            }
+
+            BaseMod.addUnlockBundle(bundle, resources.playerClass, loadout.unlockLevel - 1);
+        }
+    }
+
+    private void deserializeCustomLoadouts() {
+        for (FileHandle f : config.getConfigFolder().list(JSON_FILTER)) {
+            String path = f.path();
+            try {
+                String jsonString = f.readString();
+                PCLLoadoutData.LoadoutInfo loadoutInfo = EUIUtils.deserialize(jsonString, TInfo.getType());
+                final PCLLoadout loadout = getLoadout(loadoutInfo.loadout);
+                final PCLLoadoutData loadoutData = new PCLLoadoutData(loadout, loadoutInfo);
+
+                if (loadoutData.validate().isValid) {
+                    loadout.presets[loadoutInfo.preset] = loadoutData;
+                }
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+                EUIUtils.logError(PCLCustomCardSlot.class, "Could not load loadout : " + path);
+            }
+        }
+    }
+
+    private void deserializeTrophies(String data) {
+        trophies.clear();
+
+        if (data != null && data.length() > 0) {
+            //final String decoded = Base64Coder.decodeString(data);
+            final String[] items = EUIUtils.splitString("|", data);
+
+            if (items.length > 0) {
+                selectedLoadout = getLoadout(items[0]);
+                for (int i = 1; i < items.length; i++) {
+                    final PCLTrophies trophies = new PCLTrophies(items[i]);
+                    this.trophies.put(items[0], trophies);
+                }
+            }
+        }
+    }
+
+    public abstract List<PCLLoadout> getAvailableLoadouts();
+
+    public abstract PCLCharacterConfig getConfig();
+
+    public abstract PCLLoadout getCoreLoadout();
+
+    public List<PCLLoadout> getEveryLoadout() {
+        return new ArrayList<>(loadouts.values());
+    }
+
+    public PCLLoadout getLoadout(String id) {
+        return loadouts.get(id);
+    }
+
+    public String getLoadoutPath(String id, int slot) {
+        return config.getConfigPath() + "_" + id.replace(':', '-') + "_" + slot + ".json";
     }
 
     public abstract List<String> getStartingRelics();
@@ -113,86 +190,6 @@ public abstract class PCLAbstractPlayerData {
         }
     }
 
-    public void reload() {
-        if (config != null) {
-            deserializeTrophies(config.trophies.get());
-            deserializeCustomLoadouts();
-
-            if (selectedLoadout == null) {
-                selectedLoadout = getCoreLoadout();
-            }
-        }
-    }
-
-    public abstract List<PCLLoadout> getAvailableLoadouts();
-
-    protected void addUnlockBundle(PCLLoadout loadout) {
-        if (loadout.unlockLevel > 0) {
-            final String cardID = loadout.cardDatas.get(0).ID;
-            final CustomUnlock unlock = new CustomUnlock(AbstractUnlock.UnlockType.MISC, cardID);
-            unlock.type = AbstractUnlock.UnlockType.CARD;
-            unlock.card = loadout.buildCard();
-            unlock.key = unlock.card.cardID = PGR.core.createID("series:" + loadout.getName());
-
-            CustomUnlockBundle bundle = BaseMod.getUnlockBundleFor(resources.playerClass, loadout.unlockLevel - 1);
-            if (bundle == null) {
-                bundle = new CustomUnlockBundle(AbstractUnlock.UnlockType.MISC, "", "", "");
-                bundle.getUnlocks().clear();
-                bundle.getUnlockIDs().clear();
-                bundle.getUnlockIDs().add(unlock.key);
-                bundle.getUnlocks().add(unlock);
-                bundle.unlockType = AbstractUnlock.UnlockType.CARD;
-            }
-            else {
-                bundle.getUnlockIDs().add(unlock.key);
-                bundle.getUnlocks().add(unlock);
-            }
-
-            BaseMod.addUnlockBundle(bundle, resources.playerClass, loadout.unlockLevel - 1);
-        }
-    }
-
-    private void deserializeTrophies(String data) {
-        trophies.clear();
-
-        if (data != null && data.length() > 0) {
-            //final String decoded = Base64Coder.decodeString(data);
-            final String[] items = EUIUtils.splitString("|", data);
-
-            if (items.length > 0) {
-                selectedLoadout = getLoadout(items[0]);
-                for (int i = 1; i < items.length; i++) {
-                    final PCLTrophies trophies = new PCLTrophies(items[i]);
-                    this.trophies.put(items[0], trophies);
-                }
-            }
-        }
-    }
-
-    private void deserializeCustomLoadouts() {
-        for (FileHandle f : config.getConfigFolder().list(JSON_FILTER)) {
-            String path = f.path();
-            try {
-                String jsonString = f.readString();
-                PCLLoadoutData.LoadoutInfo loadoutInfo = EUIUtils.deserialize(jsonString, TInfo.getType());
-                final PCLLoadout loadout = getLoadout(loadoutInfo.loadout);
-                final PCLLoadoutData loadoutData = new PCLLoadoutData(loadout, loadoutInfo);
-
-                if (loadoutData.validate().isValid) {
-                    loadout.presets[loadoutInfo.preset] = loadoutData;
-                }
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-                EUIUtils.logError(PCLCustomCardSlot.class, "Could not load loadout : " + path);
-            }
-        }
-    }
-
-    public PCLLoadout getLoadout(String id) {
-        return loadouts.get(id);
-    }
-
     public PCLLoadout prepareLoadout() {
         int unlockLevel = resources.getUnlockLevel();
         if (selectedLoadout == null || unlockLevel < selectedLoadout.unlockLevel) {
@@ -222,6 +219,46 @@ public abstract class PCLAbstractPlayerData {
         saveTrophies(true);
     }
 
+    public void recordVictory(int ascensionLevel) {
+        if (ascensionLevel < 0) // Ascension reborn mod adds negative ascension levels
+        {
+            return;
+        }
+
+        if (selectedLoadout != null) {
+            selectedLoadout.onVictory(ascensionLevel, 1, 0); // Do not record score unless you are actually at the gameover screen
+        }
+
+        saveTrophies(true);
+    }
+
+    public void reload() {
+        if (config != null) {
+            deserializeTrophies(config.trophies.get());
+            deserializeCustomLoadouts();
+
+            if (selectedLoadout == null) {
+                selectedLoadout = getCoreLoadout();
+            }
+        }
+    }
+
+    public void saveLoadouts() {
+        final int level = resources.getUnlockLevel();
+        for (PCLLoadout loadout : loadouts.values()) {
+            if (loadout.unlockLevel <= level) {
+                for (PCLLoadoutData data : loadout.presets) {
+                    if (data == null) {
+                        continue;
+                    }
+
+                    FileHandle writer = Gdx.files.absolute(getLoadoutPath(loadout.ID, data.preset));
+                    writer.writeString(EUIUtils.serialize(new PCLLoadoutData.LoadoutInfo(loadout.ID, data), TInfo.getType()), false);
+                }
+            }
+        }
+    }
+
     public void saveTrophies(boolean flush) {
         EUIUtils.logInfoIfDebug(this, "Saving Trophies");
 
@@ -243,43 +280,6 @@ public abstract class PCLAbstractPlayerData {
         }
 
         return sj.toString();
-    }
-
-    public List<PCLLoadout> getEveryLoadout() {
-        return new ArrayList<>(loadouts.values());
-    }
-
-    public void recordVictory(int ascensionLevel) {
-        if (ascensionLevel < 0) // Ascension reborn mod adds negative ascension levels
-        {
-            return;
-        }
-
-        if (selectedLoadout != null) {
-            selectedLoadout.onVictory(ascensionLevel, 1, 0); // Do not record score unless you are actually at the gameover screen
-        }
-
-        saveTrophies(true);
-    }
-
-    public void saveLoadouts() {
-        final int level = resources.getUnlockLevel();
-        for (PCLLoadout loadout : loadouts.values()) {
-            if (loadout.unlockLevel <= level) {
-                for (PCLLoadoutData data : loadout.presets) {
-                    if (data == null) {
-                        continue;
-                    }
-
-                    FileHandle writer = Gdx.files.absolute(getLoadoutPath(loadout.ID, data.preset));
-                    writer.writeString(EUIUtils.serialize(new PCLLoadoutData.LoadoutInfo(loadout.ID, data), TInfo.getType()), false);
-                }
-            }
-        }
-    }
-
-    public String getLoadoutPath(String id, int slot) {
-        return config.getConfigPath() + "_" + id.replace(':', '-') + "_" + slot + ".json";
     }
 
     public void updateRelicsForDungeon() {

@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GridCardSelectScreenMultiformPatches {
+    protected static final float ICON_SIZE = 64f * Settings.scale;
+    protected static final int DEFAULT_MAX = 3;
     public static final float[] Y_POSITIONS_2 = new float[]{
             Settings.HEIGHT * 0.75F - 50.0F * Settings.scale,
             Settings.HEIGHT * 0.25F + 50.0F * Settings.scale
@@ -37,8 +39,6 @@ public class GridCardSelectScreenMultiformPatches {
             Settings.HEIGHT * 0.5F,
             Settings.HEIGHT * 0.25F - 25.0F * Settings.scale
     };
-    protected static final float ICON_SIZE = 64f * Settings.scale;
-    protected static final int DEFAULT_MAX = 3;
     protected static List<AbstractCard> cardList;
     protected static EUIButton upButton = new EUIButton(ImageMaster.UPGRADE_ARROW, new EUIHitbox(Settings.WIDTH * 0.75F, Settings.HEIGHT * 0.55F, ICON_SIZE, ICON_SIZE)).setColor(Color.PURPLE).setShaderMode(EUIRenderHelpers.ShaderMode.Colorize).setButtonRotation(90);
     protected static EUIButton downButton = new EUIButton(ImageMaster.UPGRADE_ARROW, new EUIHitbox(Settings.WIDTH * 0.75F, Settings.HEIGHT * 0.45F, ICON_SIZE, ICON_SIZE)).setColor(Color.PURPLE).setShaderMode(EUIRenderHelpers.ShaderMode.Colorize).setButtonRotation(-90);
@@ -53,11 +53,8 @@ public class GridCardSelectScreenMultiformPatches {
         }
     }
 
-    protected static void refreshButtons(GridCardSelectScreen instance) {
-        boolean canUp = minIndex > 0;
-        upButton.setInteractable(canUp).setColor(canUp ? Color.PURPLE : Color.GRAY);
-        boolean canDown = maxIndex < getBranchUpgrades(instance).size() - 1;
-        downButton.setInteractable(canDown).setColor(canDown ? Color.PURPLE : Color.GRAY);
+    protected static List<AbstractCard> getBranchUpgrades(GridCardSelectScreen instance) {
+        return GridCardSelectScreenMultiformPatches.BranchSelectFields.branchUpgrades.get(instance);
     }
 
     /**
@@ -77,8 +74,11 @@ public class GridCardSelectScreenMultiformPatches {
         return list.size() < 4 ? list : list.subList(minIndex, maxIndex);
     }
 
-    protected static List<AbstractCard> getBranchUpgrades(GridCardSelectScreen instance) {
-        return GridCardSelectScreenMultiformPatches.BranchSelectFields.branchUpgrades.get(instance);
+    protected static void refreshButtons(GridCardSelectScreen instance) {
+        boolean canUp = minIndex > 0;
+        upButton.setInteractable(canUp).setColor(canUp ? Color.PURPLE : Color.GRAY);
+        boolean canDown = maxIndex < getBranchUpgrades(instance).size() - 1;
+        downButton.setInteractable(canDown).setColor(canDown ? Color.PURPLE : Color.GRAY);
     }
 
     public static void renderPreviewCard(SpriteBatch sb, AbstractCard card, float unHoveredScale, float y) {
@@ -343,6 +343,15 @@ public class GridCardSelectScreenMultiformPatches {
         public GetBranchingUpgrade() {
         }
 
+        protected static PCLCard getPreviewCard(PCLCard base, int i) {
+            PCLCard previewCard = base.makeStatEquivalentCopy();
+            previewCard.changeForm(i, previewCard.timesUpgraded);
+            previewCard.upgrade();
+            previewCard.displayUpgrades();
+            previewCard.initializeDescription();
+            return previewCard;
+        }
+
         @SpireInsertPatch(
                 locator = GridCardSelectScreenMultiformPatches.GetBranchingUpgrade.Locator.class
         )
@@ -399,16 +408,6 @@ public class GridCardSelectScreenMultiformPatches {
                 downButton.setOnClick(() -> addIndex(__instance));
                 refreshButtons(__instance);
             }
-        }
-
-
-        protected static PCLCard getPreviewCard(PCLCard base, int i) {
-            PCLCard previewCard = base.makeStatEquivalentCopy();
-            previewCard.changeForm(i, previewCard.timesUpgraded);
-            previewCard.upgrade();
-            previewCard.displayUpgrades();
-            previewCard.initializeDescription();
-            return previewCard;
         }
 
         private static class Locator extends SpireInsertLocator {

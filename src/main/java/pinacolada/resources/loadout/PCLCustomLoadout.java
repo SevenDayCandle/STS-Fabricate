@@ -11,8 +11,7 @@ public class PCLCustomLoadout extends PCLLoadout {
         super(color, id, unlockLevel);
     }
 
-    public PCLCustomLoadout(PCLCustomLoadoutInfo info)
-    {
+    public PCLCustomLoadout(PCLCustomLoadoutInfo info) {
         super(info.color, info.ID, info.unlockLevel);
         this.author = info.author;
         this.name = info.name;

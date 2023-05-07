@@ -18,11 +18,6 @@ public class PField_CardTransform extends PField_CardCategory {
         setOr(other.or);
     }
 
-    public PField_CardTransform setOr(boolean value) {
-        this.or = value;
-        return this;
-    }
-
     @Override
     public boolean equals(PField other) {
         return super.equals(other);
@@ -37,12 +32,10 @@ public class PField_CardTransform extends PField_CardCategory {
         editor.registerPile(groupTypes);
         editor.registerCard(Collections.singletonList(result),
                 cards -> {
-                    if (cards.size() > 0)
-                    {
+                    if (cards.size() > 0) {
                         result = cards.get(0).cardID;
                     }
-                    else
-                    {
+                    else {
                         result = null;
                     }
                 }
@@ -53,8 +46,12 @@ public class PField_CardTransform extends PField_CardCategory {
         return result != null ? getCardIDString(result) : "";
     }
 
-    public PField_CardTransform setResult(String result)
-    {
+    public PField_CardTransform setOr(boolean value) {
+        this.or = value;
+        return this;
+    }
+
+    public PField_CardTransform setResult(String result) {
         this.result = result;
         return this;
     }

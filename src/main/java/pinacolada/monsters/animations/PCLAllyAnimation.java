@@ -11,13 +11,13 @@ import pinacolada.monsters.PCLCreature;
 
 public class PCLAllyAnimation extends PCLIntervalAnimation {
     public static final float RADIUS = 320;
-    public PCLCreature owner;
     protected Color shineColor;
     protected float scale = 0.45f;
     protected float angle;
     protected float rate = 40f;
     protected float transitionAlpha;
     protected float targetTransitionAlpha = 1f;
+    public PCLCreature owner;
 
     public PCLAllyAnimation(PCLCreature owner) {
         super();
@@ -39,8 +39,7 @@ public class PCLAllyAnimation extends PCLIntervalAnimation {
         PCLEffects.TopLevelQueue.add(VFX.circularWave(x, y).setScale(0.25f, 12f));
     }
 
-    public void unhighlight() {
-        targetTransitionAlpha = 0f;
+    public void renderSprite(SpriteBatch sb, float x, float y) {
     }
 
     public void update(float deltaTime, float x, float y) {
@@ -49,6 +48,7 @@ public class PCLAllyAnimation extends PCLIntervalAnimation {
         renderColor.a = transitionAlpha = MathUtils.lerp(transitionAlpha, targetTransitionAlpha, EUI.delta() * 12f);
     }
 
-    public void renderSprite(SpriteBatch sb, float x, float y) {
+    public void unhighlight() {
+        targetTransitionAlpha = 0f;
     }
 }

@@ -13,9 +13,8 @@ import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class RazorWindEffect extends PCLEffect {
-    public static final TextureCache image = PCLCoreImages.Effects.airSlice;
     protected static final Color PARTICLE_COLOR = Color.LIME.cpy();
-
+    public static final TextureCache image = PCLCoreImages.Effects.airSlice;
     protected float x;
     protected float y;
     protected float targetY;

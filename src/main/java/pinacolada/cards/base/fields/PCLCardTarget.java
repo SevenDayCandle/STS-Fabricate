@@ -41,33 +41,18 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
         return Arrays.stream(PCLCardTarget.values()).sorted((a, b) -> StringUtils.compare(a.getTitle(), b.getTitle())).collect(Collectors.toList());
     }
 
-    // These strings cannot be put in as an enum variable because cards are initialized before these strings are
-    public final String getTitle() {
+    public final boolean evaluateTargets(AbstractCreature source, AbstractCreature target, Predicate<AbstractCreature> tFunc) {
+        return evaluateTargets(getTargetsForEvaluation(source, target), tFunc);
+    }
+
+    public final boolean evaluateTargets(Iterable<? extends AbstractCreature> targets, Predicate<AbstractCreature> tFunc) {
         switch (this) {
-            case None:
-                return PGR.core.strings.ctype_none;
-            case AllEnemy:
-                return PGR.core.strings.ctype_allEnemy;
             case AllAlly:
-                return PGR.core.strings.ctype_allAlly;
-            case Team:
-                return PGR.core.strings.ctype_team;
             case All:
-                return PGR.core.strings.ctype_allCharacter;
-            case Self:
-                return PGR.core.strings.ctype_self;
-            case Single:
-                return PGR.core.strings.ctype_singleTarget;
-            case SingleAlly:
-                return PGR.core.strings.ctype_singleAlly;
-            case Any:
-                return PGR.core.strings.ctype_any;
-            case RandomEnemy:
-                return PGR.core.strings.ctype_randomEnemy;
-            case RandomAlly:
-                return PGR.core.strings.ctype_randomAlly;
+            case AllEnemy:
+                return EUIUtils.all(targets, tFunc);
         }
-        return "";
+        return EUIUtils.any(targets, tFunc);
     }
 
     // These strings cannot be put in as an enum variable because cards are initialized before these strings are
@@ -163,8 +148,7 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
     }
 
     public final ArrayList<? extends AbstractCreature> getTargetsForEvaluation(AbstractCreature source, AbstractCreature target) {
-        switch (this)
-        {
+        switch (this) {
             case RandomAlly:
                 return GameUtilities.getSummons(true);
             case RandomEnemy:
@@ -175,20 +159,33 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
         return getTargets(source, target);
     }
 
-    public final boolean evaluateTargets(AbstractCreature source, AbstractCreature target, Predicate<AbstractCreature> tFunc)
-    {
-        return evaluateTargets(getTargetsForEvaluation(source, target), tFunc);
-    }
-
-    public final boolean evaluateTargets(Iterable<? extends AbstractCreature> targets, Predicate<AbstractCreature> tFunc)
-    {
+    // These strings cannot be put in as an enum variable because cards are initialized before these strings are
+    public final String getTitle() {
         switch (this) {
-            case AllAlly:
-            case All:
+            case None:
+                return PGR.core.strings.ctype_none;
             case AllEnemy:
-                return EUIUtils.all(targets, tFunc);
+                return PGR.core.strings.ctype_allEnemy;
+            case AllAlly:
+                return PGR.core.strings.ctype_allAlly;
+            case Team:
+                return PGR.core.strings.ctype_team;
+            case All:
+                return PGR.core.strings.ctype_allCharacter;
+            case Self:
+                return PGR.core.strings.ctype_self;
+            case Single:
+                return PGR.core.strings.ctype_singleTarget;
+            case SingleAlly:
+                return PGR.core.strings.ctype_singleAlly;
+            case Any:
+                return PGR.core.strings.ctype_any;
+            case RandomEnemy:
+                return PGR.core.strings.ctype_randomEnemy;
+            case RandomAlly:
+                return PGR.core.strings.ctype_randomAlly;
         }
-        return EUIUtils.any(targets, tFunc);
+        return "";
     }
 
     public final boolean targetsAllies() {

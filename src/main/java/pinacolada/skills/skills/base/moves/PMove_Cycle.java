@@ -36,9 +36,8 @@ public class PMove_Cycle extends PMove_Select<PField_CardCategory> {
     }
 
     @Override
-    public String getSubText() {
-        return useParent ? EUIRM.strings.verbNoun(getActionTitle(), getInheritedString())
-                : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), fields.getFullCardString());
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
+        return (s, c, i, o, g) -> new CycleCards(s, i, o);
     }
 
     @Override
@@ -47,7 +46,8 @@ public class PMove_Cycle extends PMove_Select<PField_CardCategory> {
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
-        return (s, c, i, o, g) -> new CycleCards(s, i, o);
+    public String getSubText() {
+        return useParent ? EUIRM.strings.verbNoun(getActionTitle(), getInheritedString())
+                : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), fields.getFullCardString());
     }
 }

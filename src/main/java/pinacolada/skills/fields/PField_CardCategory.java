@@ -54,46 +54,14 @@ public class PField_CardCategory extends PField_CardGeneric {
         setCardIDs(other.cardIDs);
     }
 
-    public PField_CardCategory setAffinity(List<PCLAffinity> affinities) {
-        this.affinities.clear();
-        this.affinities.addAll(affinities);
-        return this;
-    }
-
-    public PField_CardCategory setColor(List<AbstractCard.CardColor> types) {
-        this.colors.clear();
-        this.colors.addAll(types);
-        return this;
-    }
-
-    public PField_CardCategory setRarity(List<AbstractCard.CardRarity> types) {
-        this.rarities.clear();
-        this.rarities.addAll(types);
-        return this;
-    }
-
-    public PField_CardCategory setType(List<AbstractCard.CardType> types) {
-        this.types.clear();
-        this.types.addAll(types);
-        return this;
-    }
-
-    public PField_CardCategory setTag(List<PCLCardTag> nt) {
-        this.tags.clear();
-        this.tags.addAll(nt);
-        return this;
-    }
-
-    public PField_CardCategory setCost(List<CostFilter> types) {
-        this.costs.clear();
-        this.costs.addAll(types);
-        return this;
-    }
-
-    public PField_CardCategory setCardIDs(Collection<String> cards) {
-        this.cardIDs.clear();
-        this.cardIDs.addAll(cards);
-        return this;
+    public static AbstractCard getCard(String id) {
+        if (id != null) {
+            AbstractCard c = CardLibrary.getCard(id);
+            if (c != null) {
+                return c.makeCopy();
+            }
+        }
+        return null;
     }
 
     public PField_CardCategory addAffinity(PCLAffinity... affinities) {
@@ -104,6 +72,10 @@ public class PField_CardCategory extends PField_CardGeneric {
     public PField_CardCategory addTag(PCLCardTag... tags) {
         this.tags.addAll(Arrays.asList(tags));
         return this;
+    }
+
+    public SelectFromPile createFilteredAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> action, PCLUseInfo info, int subchoices) {
+        return super.createFilteredAction(action, info, subchoices).setFilter(getFullCardFilter());
     }
 
     @Override
@@ -135,30 +107,12 @@ public class PField_CardCategory extends PField_CardGeneric {
         editor.registerCard(cardIDs);
     }
 
-    public String getFullCardStringSingular() {
-        return !cardIDs.isEmpty() ? getCardIDOrString() : getCardXString(PField::getAffinityOrString, PCLCoreStrings::joinWithOr, PCLCoreStrings::singularForce);
-    }
-
-    public String getCardIDOrString() {
-        return getCardIDOrString(cardIDs);
-    }
-
     public String getFullCardString() {
         return getFullCardString(skill.getAmountRawString());
     }
 
-    public SelectFromPile createFilteredAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> action, PCLUseInfo info, int subchoices) {
-        return super.createFilteredAction(action, info, subchoices).setFilter(getFullCardFilter());
-    }
-
-    public FuncT1<Boolean, AbstractCard> getFullCardFilter() {
-        return !cardIDs.isEmpty() ? c -> EUIUtils.any(cardIDs, id -> id.equals(c.cardID)) :
-                (c -> (affinities.isEmpty() || GameUtilities.hasAnyAffinity(c, affinities))
-                        && (colors.isEmpty() || colors.contains(c.color))
-                        && (costs.isEmpty() || EUIUtils.any(costs, cost -> cost.check(c)))
-                        && (rarities.isEmpty() || rarities.contains(c.rarity))
-                        && (tags.isEmpty() || EUIUtils.any(tags, t -> t.has(c)))
-                        && (types.isEmpty() || types.contains(c.type)));
+    public String getFullCardStringSingular() {
+        return !cardIDs.isEmpty() ? getCardIDOrString() : getCardXString(PField::getAffinityOrString, PCLCoreStrings::joinWithOr, PCLCoreStrings::singularForce);
     }
 
     public String getCardAndString() {
@@ -167,6 +121,22 @@ public class PField_CardCategory extends PField_CardGeneric {
 
     public String getCardAndString(Object value) {
         return getCardXString(PField::getAffinityAndString, PCLCoreStrings::joinWithAnd, (s) -> EUIUtils.format(s, value));
+    }
+
+    public String getCardIDAndString() {
+        return getCardIDAndString(cardIDs);
+    }
+
+    public String getCardIDOrString() {
+        return getCardIDOrString(cardIDs);
+    }
+
+    public String getCardOrString() {
+        return getCardOrString(skill.getAmountRawString());
+    }
+
+    public String getCardOrString(Object value) {
+        return getCardXString(PField::getAffinityOrString, PCLCoreStrings::joinWithOr, (s) -> EUIUtils.format(s, value));
     }
 
     public final String getCardXString(FuncT1<String, ArrayList<PCLAffinity>> affinityFunc, FuncT1<String, ArrayList<String>> joinFunc, FuncT1<String, String> pluralFunc) {
@@ -196,108 +166,25 @@ public class PField_CardCategory extends PField_CardGeneric {
         return EUIUtils.joinStrings(" ", stringsToJoin);
     }
 
-    public String getCardIDAndString() {
-        return getCardIDAndString(cardIDs);
-    }
-
-    public String getCardOrString() {
-        return getCardOrString(skill.getAmountRawString());
-    }
-
-    public String getCardOrString(Object value) {
-        return getCardXString(PField::getAffinityOrString, PCLCoreStrings::joinWithOr, (s) -> EUIUtils.format(s, value));
-    }
-
-    public String makeFullString(EUITooltip tooltip) {
-        String tooltipTitle = tooltip.title;
-        return skill.useParent ? EUIRM.strings.verbNoun(tooltipTitle, skill.getInheritedString()) :
-                !groupTypes.isEmpty() ? TEXT.act_genericFrom(tooltipTitle, skill.getAmountRawOrAllString(), !cardIDs.isEmpty() ? getCardIDOrString(cardIDs) : getFullCardString(), getGroupString())
-                        : EUIRM.strings.verbNoun(tooltipTitle, TEXT.subjects_thisCard);
+    public FuncT1<Boolean, AbstractCard> getFullCardFilter() {
+        return !cardIDs.isEmpty() ? c -> EUIUtils.any(cardIDs, id -> id.equals(c.cardID)) :
+                (c -> (affinities.isEmpty() || GameUtilities.hasAnyAffinity(c, affinities))
+                        && (colors.isEmpty() || colors.contains(c.color))
+                        && (costs.isEmpty() || EUIUtils.any(costs, cost -> cost.check(c)))
+                        && (rarities.isEmpty() || rarities.contains(c.rarity))
+                        && (tags.isEmpty() || EUIUtils.any(tags, t -> t.has(c)))
+                        && (types.isEmpty() || types.contains(c.type)));
     }
 
     public String getFullCardString(Object value) {
         return !cardIDs.isEmpty() ? getCardIDOrString() : isRandom() ? PSkill.TEXT.subjects_randomX(getCardOrString(value)) : getCardOrString(value);
     }
 
-    public void makePreviews(RotatingList<EUICardPreview> previews) {
-        for (String cd : cardIDs) {
-            AbstractCard c = getCard(cd);
-            if (c != null) {
-                previews.add(EUICardPreview.generatePreviewCard(c));
-            }
-        }
+    public int getQualifierRange() {
+        return EUIUtils.max(EUIUtils.array(costs, affinities, tags, colors, rarities, types, cardIDs), List::size);
     }
 
-    public ArrayList<Integer> getQualifiers(PCLUseInfo info)
-    {
-        List<? extends AbstractCard> cards = info.getDataAsList(AbstractCard.class);
-        ArrayList<Integer> indexes = new ArrayList<>();
-        if (cards != null)
-        {
-            for (AbstractCard c : cards)
-            {
-                for (int i = 0; i < affinities.size(); i++)
-                {
-                    if (GameUtilities.hasAffinity(c, affinities.get(i)))
-                    {
-                        indexes.add(i);
-                    }
-                }
-                for (int i = 0; i < cardIDs.size(); i++)
-                {
-                    if (c.cardID.equals(cardIDs.get(i)))
-                    {
-                        indexes.add(i);
-                        break;
-                    }
-                }
-                for (int i = 0; i < costs.size(); i++)
-                {
-                    if (costs.get(i).check(c))
-                    {
-                        indexes.add(i);
-                        break;
-                    }
-                }
-                for (int i = 0; i < colors.size(); i++)
-                {
-                    if (c.color == colors.get(i))
-                    {
-                        indexes.add(i);
-                        break;
-                    }
-                }
-                for (int i = 0; i < rarities.size(); i++)
-                {
-                    if (c.rarity == rarities.get(i))
-                    {
-                        indexes.add(i);
-                        break;
-                    }
-                }
-                for (int i = 0; i < tags.size(); i++)
-                {
-                    if (tags.get(i).has(c))
-                    {
-                        indexes.add(i);
-                    }
-                }
-                for (int i = 0; i < types.size(); i++)
-                {
-                    if (c.type == types.get(i))
-                    {
-                        indexes.add(i);
-                        break;
-                    }
-                }
-            }
-        }
-
-        return indexes;
-    }
-
-    public String getQualifierText(int i)
-    {
+    public String getQualifierText(int i) {
         ArrayList<String> stringsToJoin = new ArrayList<>();
         if (costs.size() > i) {
             stringsToJoin.add(PGR.core.strings.subjects_xCost(costs.get(i).name));
@@ -321,43 +208,137 @@ public class PField_CardCategory extends PField_CardGeneric {
         return stringsToJoin.isEmpty() ? TEXT.subjects_other : EUIUtils.joinStrings(" ", stringsToJoin);
     }
 
-    public int getQualifierRange()
-    {
-        return EUIUtils.max(EUIUtils.array(costs, affinities, tags, colors, rarities, types, cardIDs), List::size);
-    }
-
-    public static AbstractCard getCard(String id) {
-        if (id != null) {
-            AbstractCard c = CardLibrary.getCard(id);
-            if (c != null) {
-                return c.makeCopy();
+    public ArrayList<Integer> getQualifiers(PCLUseInfo info) {
+        List<? extends AbstractCard> cards = info.getDataAsList(AbstractCard.class);
+        ArrayList<Integer> indexes = new ArrayList<>();
+        if (cards != null) {
+            for (AbstractCard c : cards) {
+                for (int i = 0; i < affinities.size(); i++) {
+                    if (GameUtilities.hasAffinity(c, affinities.get(i))) {
+                        indexes.add(i);
+                    }
+                }
+                for (int i = 0; i < cardIDs.size(); i++) {
+                    if (c.cardID.equals(cardIDs.get(i))) {
+                        indexes.add(i);
+                        break;
+                    }
+                }
+                for (int i = 0; i < costs.size(); i++) {
+                    if (costs.get(i).check(c)) {
+                        indexes.add(i);
+                        break;
+                    }
+                }
+                for (int i = 0; i < colors.size(); i++) {
+                    if (c.color == colors.get(i)) {
+                        indexes.add(i);
+                        break;
+                    }
+                }
+                for (int i = 0; i < rarities.size(); i++) {
+                    if (c.rarity == rarities.get(i)) {
+                        indexes.add(i);
+                        break;
+                    }
+                }
+                for (int i = 0; i < tags.size(); i++) {
+                    if (tags.get(i).has(c)) {
+                        indexes.add(i);
+                    }
+                }
+                for (int i = 0; i < types.size(); i++) {
+                    if (c.type == types.get(i)) {
+                        indexes.add(i);
+                        break;
+                    }
+                }
             }
         }
-        return null;
+
+        return indexes;
+    }
+
+    public String makeFullString(EUITooltip tooltip) {
+        String tooltipTitle = tooltip.title;
+        return skill.useParent ? EUIRM.strings.verbNoun(tooltipTitle, skill.getInheritedString()) :
+                !groupTypes.isEmpty() ? TEXT.act_genericFrom(tooltipTitle, skill.getAmountRawOrAllString(), !cardIDs.isEmpty() ? getCardIDOrString(cardIDs) : getFullCardString(), getGroupString())
+                        : EUIRM.strings.verbNoun(tooltipTitle, TEXT.subjects_thisCard);
+    }
+
+    public void makePreviews(RotatingList<EUICardPreview> previews) {
+        for (String cd : cardIDs) {
+            AbstractCard c = getCard(cd);
+            if (c != null) {
+                previews.add(EUICardPreview.generatePreviewCard(c));
+            }
+        }
+    }
+
+    public PField_CardCategory setAffinity(List<PCLAffinity> affinities) {
+        this.affinities.clear();
+        this.affinities.addAll(affinities);
+        return this;
     }
 
     public PField_CardCategory setAffinity(PCLAffinity... affinities) {
         return setAffinity(Arrays.asList(affinities));
     }
 
+    public PField_CardCategory setCardIDs(Collection<String> cards) {
+        this.cardIDs.clear();
+        this.cardIDs.addAll(cards);
+        return this;
+    }
+
     public PField_CardCategory setCardIDs(String... cards) {
         return setCardIDs(Arrays.asList(cards));
+    }
+
+    public PField_CardCategory setColor(List<AbstractCard.CardColor> types) {
+        this.colors.clear();
+        this.colors.addAll(types);
+        return this;
     }
 
     public PField_CardCategory setColor(AbstractCard.CardColor... types) {
         return setColor(Arrays.asList(types));
     }
 
+    public PField_CardCategory setCost(List<CostFilter> types) {
+        this.costs.clear();
+        this.costs.addAll(types);
+        return this;
+    }
+
     public PField_CardCategory setCost(CostFilter... types) {
         return setCost(Arrays.asList(types));
+    }
+
+    public PField_CardCategory setRarity(List<AbstractCard.CardRarity> types) {
+        this.rarities.clear();
+        this.rarities.addAll(types);
+        return this;
     }
 
     public PField_CardCategory setRarity(AbstractCard.CardRarity... types) {
         return setRarity(Arrays.asList(types));
     }
 
+    public PField_CardCategory setTag(List<PCLCardTag> nt) {
+        this.tags.clear();
+        this.tags.addAll(nt);
+        return this;
+    }
+
     public PField_CardCategory setTag(PCLCardTag... nt) {
         return setTag(Arrays.asList(nt));
+    }
+
+    public PField_CardCategory setType(List<AbstractCard.CardType> types) {
+        this.types.clear();
+        this.types.addAll(types);
+        return this;
     }
 
     public PField_CardCategory setType(AbstractCard.CardType... types) {

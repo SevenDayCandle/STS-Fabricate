@@ -35,17 +35,34 @@ public class PMod_PerDistinctPower extends PMod_Per<PField_Power> {
         fields.setPower(powerHelpers);
     }
 
-    @Override
-    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info) {
-        return be.baseAmount * getMultiplier(info);
-    }
-
     public String getConditionText(String childText) {
         if (fields.not) {
             return TEXT.cond_genericConditional(childText, TEXT.cond_perDistinct(getAmountRawString(), getSubText()));
         }
         return TEXT.cond_perDistinct(childText,
                 this.amount <= 1 ? getSubText() : EUIRM.strings.numNoun(getAmountRawString(), getSubText()));
+    }
+
+    @Override
+    public int getModifiedAmount(PSkill<?> be, PCLUseInfo info) {
+        return be.baseAmount * getMultiplier(info);
+    }
+
+    @Override
+    public int getMultiplier(PCLUseInfo info) {
+        return fields.powers.isEmpty() ?
+                sumTargets(info, t -> EUIUtils.count(t.powers, fields.debuff ? po -> po.type == AbstractPower.PowerType.DEBUFF : po -> po.type == AbstractPower.PowerType.BUFF)) :
+                sumTargets(info, t -> EUIUtils.count(fields.powers, po -> GameUtilities.getPowerAmount(t, po.ID) >= this.amount));
+    }
+
+    @Override
+    public String getSampleText(PSkill<?> callingSkill) {
+        return TEXT.cond_perDistinct(TEXT.subjects_x, getSubSampleText());
+    }
+
+    @Override
+    public String getSubSampleText() {
+        return TEXT.cedit_powers;
     }
 
     @Override
@@ -64,22 +81,5 @@ public class PMod_PerDistinctPower extends PMod_Per<PField_Power> {
             default:
                 return baseString;
         }
-    }
-
-    @Override
-    public int getMultiplier(PCLUseInfo info) {
-        return fields.powers.isEmpty() ?
-                sumTargets(info, t -> EUIUtils.count(t.powers, fields.debuff ? po -> po.type == AbstractPower.PowerType.DEBUFF : po -> po.type == AbstractPower.PowerType.BUFF)) :
-                sumTargets(info, t -> EUIUtils.count(fields.powers, po -> GameUtilities.getPowerAmount(t, po.ID) >= this.amount));
-    }
-
-    @Override
-    public String getSampleText(PSkill<?> callingSkill) {
-        return TEXT.cond_perDistinct(TEXT.subjects_x, getSubSampleText());
-    }
-
-    @Override
-    public String getSubSampleText() {
-        return TEXT.cedit_powers;
     }
 }

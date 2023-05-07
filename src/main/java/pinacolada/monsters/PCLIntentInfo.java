@@ -30,10 +30,10 @@ public class PCLIntentInfo {
     public static AbstractMonster currentEnemy;
     public final AbstractMonster enemy;
     public final HashMap<String, Integer> modifiers = new HashMap<>();
+    protected ArrayList<AbstractPower> powers = new ArrayList<>();
     public AbstractMonster.Intent intent;
     public EnemyMoveInfo move;
     public boolean isAttacking;
-    protected ArrayList<AbstractPower> powers = new ArrayList<>();
 
     protected PCLIntentInfo(AbstractMonster enemy) {
         this.enemy = enemy;
@@ -54,10 +54,6 @@ public class PCLIntentInfo {
         powers.add(power);
     }
 
-    public static PCLIntentInfo getCurrentIntent() {
-        return currentEnemy == null ? null : get(currentEnemy);
-    }
-
     public static PCLIntentInfo get(AbstractMonster enemy) {
         PCLIntentInfo intent = AbstractMonsterPatches.AbstractMonster_Fields.enemyIntent.get(enemy);
         if (intent == null) {
@@ -72,10 +68,84 @@ public class PCLIntentInfo {
         return intent;
     }
 
+    public static PCLIntentInfo getCurrentIntent() {
+        return currentEnemy == null ? null : get(currentEnemy);
+    }
+
+    protected static void load(AbstractPlayer player, AbstractMonster enemy, HashMap<String, Integer> modifiers) {
+
+        TEMP_PLAYER_POWERS.clear();
+        for (AbstractPower p : player.powers) {
+            if (!(p instanceof InvisiblePower && (!(p instanceof MacroscopePower)))) {
+                TEMP_PLAYER_POWERS.add(p);
+            }
+        }
+        loadPowers(player, PLAYER_POWERS, TEMP_PLAYER_POWERS, modifiers);
+
+        TEMP_ENEMY_POWERS.clear();
+        for (AbstractPower p : enemy.powers) {
+            if (!(p instanceof InvisiblePower && (!(p instanceof MacroscopePower)))) {
+                TEMP_ENEMY_POWERS.add(p);
+            }
+        }
+        loadPowers(enemy, ENEMY_POWERS, TEMP_ENEMY_POWERS, modifiers);
+    }
+
+    protected static boolean loadPower(AbstractCreature owner, ArrayList<AbstractPower> powers, HashMap<String, Integer> modifiers, AbstractPower power) {
+        if ((power.amount = modifiers.getOrDefault(power.ID, 0)) != 0) {
+            power.owner = owner;
+
+            for (int i = 0; i < powers.size(); i++) {
+                final AbstractPower p = powers.get(i);
+                if (p.ID.equals(power.ID)) {
+                    power.amount += p.amount;
+                    if (power.amount == 0) {
+                        powers.remove(i);
+                    }
+                    else {
+                        powers.set(i, power);
+                    }
+
+                    return true;
+                }
+            }
+
+            powers.add(power);
+            return true;
+        }
+
+        return false;
+    }
+
+    protected static void loadPowers(AbstractCreature c, ArrayList<AbstractPower> defaultPowers, ArrayList<AbstractPower> powers, HashMap<String, Integer> modifiers) {
+        boolean sort = false;
+        for (AbstractPower p : defaultPowers) {
+            if (loadPower(c, powers, modifiers, p)) {
+                sort = true;
+            }
+        }
+
+        if (sort) {
+            Collections.sort(powers);
+        }
+    }
+
     public PCLIntentInfo addModifier(String powerID, int amount) {
         modifiers.put(powerID, amount);
 
         return this;
+    }
+
+    public int getBaseDamage(boolean multi) {
+        return isAttacking ? ((multi ? getDamageMulti() : 1) * enemy.getIntentBaseDmg()) : 0;
+    }
+
+    public int getDamage(boolean multi) {
+        return isAttacking ? ((multi ? getDamageMulti() : 1) * enemy.getIntentDmg()) : 0;
+    }
+
+    public int getDamageMulti() {
+        return isAttacking ? (move.isMultiDamage ? move.multiplier : 1) : 0;
     }
 
     public int getFinalDamage() {
@@ -116,73 +186,6 @@ public class PCLIntentInfo {
         return Math.max(0, MathUtils.floor(damage));
     }
 
-    public int getBaseDamage(boolean multi) {
-        return isAttacking ? ((multi ? getDamageMulti() : 1) * enemy.getIntentBaseDmg()) : 0;
-    }
-
-    protected static void load(AbstractPlayer player, AbstractMonster enemy, HashMap<String, Integer> modifiers) {
-
-        TEMP_PLAYER_POWERS.clear();
-        for (AbstractPower p : player.powers) {
-            if (!(p instanceof InvisiblePower && (!(p instanceof MacroscopePower)))) {
-                TEMP_PLAYER_POWERS.add(p);
-            }
-        }
-        loadPowers(player, PLAYER_POWERS, TEMP_PLAYER_POWERS, modifiers);
-
-        TEMP_ENEMY_POWERS.clear();
-        for (AbstractPower p : enemy.powers) {
-            if (!(p instanceof InvisiblePower && (!(p instanceof MacroscopePower)))) {
-                TEMP_ENEMY_POWERS.add(p);
-            }
-        }
-        loadPowers(enemy, ENEMY_POWERS, TEMP_ENEMY_POWERS, modifiers);
-    }
-
-    protected float recordDamage(AbstractPower po, float damage, float result) {
-        PGR.combatScreen.formulaDisplay.addEnemyAttackPower(po, damage, result);
-        return result;
-    }
-
-    protected static void loadPowers(AbstractCreature c, ArrayList<AbstractPower> defaultPowers, ArrayList<AbstractPower> powers, HashMap<String, Integer> modifiers) {
-        boolean sort = false;
-        for (AbstractPower p : defaultPowers) {
-            if (loadPower(c, powers, modifiers, p)) {
-                sort = true;
-            }
-        }
-
-        if (sort) {
-            Collections.sort(powers);
-        }
-    }
-
-    protected static boolean loadPower(AbstractCreature owner, ArrayList<AbstractPower> powers, HashMap<String, Integer> modifiers, AbstractPower power) {
-        if ((power.amount = modifiers.getOrDefault(power.ID, 0)) != 0) {
-            power.owner = owner;
-
-            for (int i = 0; i < powers.size(); i++) {
-                final AbstractPower p = powers.get(i);
-                if (p.ID.equals(power.ID)) {
-                    power.amount += p.amount;
-                    if (power.amount == 0) {
-                        powers.remove(i);
-                    }
-                    else {
-                        powers.set(i, power);
-                    }
-
-                    return true;
-                }
-            }
-
-            powers.add(power);
-            return true;
-        }
-
-        return false;
-    }
-
     public Texture getIntentImage() {
         int tmp = getDamage(true);
 
@@ -206,15 +209,12 @@ public class PCLIntentInfo {
         }
     }
 
-    public int getDamage(boolean multi) {
-        return isAttacking ? ((multi ? getDamageMulti() : 1) * enemy.getIntentDmg()) : 0;
-    }
-
-    public int getDamageMulti() {
-        return isAttacking ? (move.isMultiDamage ? move.multiplier : 1) : 0;
-    }
-
     public boolean isAttacking() {
         return isAttacking;
+    }
+
+    protected float recordDamage(AbstractPower po, float damage, float result) {
+        PGR.combatScreen.formulaDisplay.addEnemyAttackPower(po, damage, result);
+        return result;
     }
 }

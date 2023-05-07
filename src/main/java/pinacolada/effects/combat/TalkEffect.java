@@ -17,17 +17,16 @@ public class TalkEffect extends PCLEffect {
     private static final float WAVY_DISTANCE = 2f * Settings.scale;
     private static final float ADJUST_X = 170f * Settings.scale;
     private static final float ADJUST_Y = 116f * Settings.scale;
-
-    private DialogWord.AppearEffect appearEffect;
     private final String message;
-    private float shadowOffset;
     private final float sourceX;
     private final float sourceY;
+    private final boolean facingRight;
+    private final Color shadowColor;
+    private DialogWord.AppearEffect appearEffect;
+    private float shadowOffset;
     private float wavyY;
     private float wavyHelper;
     private float scaleTimer;
-    private final boolean facingRight;
-    private final Color shadowColor;
 
     public TalkEffect(AbstractCreature source, String message) {
         this(source, message, 2f);
@@ -39,14 +38,6 @@ public class TalkEffect extends PCLEffect {
 
     public TalkEffect(float x, float y, String message, boolean isPlayer) {
         this(x, y, message, isPlayer, 2f);
-    }
-
-    public static float getDialogX(AbstractCreature creature) {
-        return creature.isPlayer ? creature.dialogX : creature.hb.cX + creature.dialogX;
-    }
-
-    public static float getDialogY(AbstractCreature creature) {
-        return creature.isPlayer ? creature.dialogY : creature.hb.cY + creature.dialogY;
     }
 
     public TalkEffect(float x, float y, String text, boolean isPlayer, float duration) {
@@ -64,6 +55,24 @@ public class TalkEffect extends PCLEffect {
         facingRight = !isPlayer;
     }
 
+    public static float getDialogX(AbstractCreature creature) {
+        return creature.isPlayer ? creature.dialogX : creature.hb.cX + creature.dialogX;
+    }
+
+    public static float getDialogY(AbstractCreature creature) {
+        return creature.isPlayer ? creature.dialogY : creature.hb.cY + creature.dialogY;
+    }
+
+    @Override
+    protected void firstUpdate() {
+        if (appearEffect == null) {
+            appearEffect = DialogWord.AppearEffect.BUMP_IN;
+        }
+
+        (PCLEffects.TopLevelList.getList().contains(this) ? PCLEffects.TopLevelQueue : PCLEffects.Queue)
+                .add(new SpeechTextEffect(sourceX, sourceY, duration, message, appearEffect));
+    }
+
     @Override
     public void render(SpriteBatch sb) {
         final int size = 512;
@@ -78,16 +87,6 @@ public class TalkEffect extends PCLEffect {
         sb.setColor(color);
         sb.draw(ImageMaster.SPEECH_BUBBLE_IMG, sourceX - half, sourceY - half + wavyY, half, half, size, size, scale, scale,
                 rotation, 0, 0, size, size, facingRight, false);
-    }
-
-    @Override
-    protected void firstUpdate() {
-        if (appearEffect == null) {
-            appearEffect = DialogWord.AppearEffect.BUMP_IN;
-        }
-
-        (PCLEffects.TopLevelList.getList().contains(this) ? PCLEffects.TopLevelQueue : PCLEffects.Queue)
-                .add(new SpeechTextEffect(sourceX, sourceY, duration, message, appearEffect));
     }
 
     @Override

@@ -24,18 +24,18 @@ public class PField_RelicID extends PField_Random {
         super.setupEditor(editor);
     }
 
-    public PField_RelicID setRelicID(List<String> orbs) {
-        this.relicIDs.clear();
-        this.relicIDs.addAll(orbs);
-        return this;
-    }
-
     public String getRelicIDAndString() {
         return getRelicIDAndString(relicIDs);
     }
 
     public String getRelicIDOrString() {
         return getRelicIDOrString(relicIDs);
+    }
+
+    public PField_RelicID setRelicID(List<String> orbs) {
+        this.relicIDs.clear();
+        this.relicIDs.addAll(orbs);
+        return this;
     }
 
     public PField_RelicID setRelicID(String... orbs) {

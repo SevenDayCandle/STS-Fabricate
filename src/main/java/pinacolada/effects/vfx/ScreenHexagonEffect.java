@@ -20,7 +20,11 @@ public class ScreenHexagonEffect extends PCLEffect {
         this.startingDuration = this.duration;
     }
 
-    public void render(SpriteBatch sb) {
+    public void makeHexagons() {
+        for (int i = 0; i < ROWS; i++) {
+            PCLEffects.Queue.add(new HexagonEffect(-100f * Settings.scale, Settings.HEIGHT * 0.65f - i * HexagonEffect.SIZE * 0.9f, color)
+                    .setRealtime(isRealtime));
+        }
     }
 
     public void update() {
@@ -43,11 +47,7 @@ public class ScreenHexagonEffect extends PCLEffect {
 
     }
 
-    public void makeHexagons() {
-        for (int i = 0; i < ROWS; i++) {
-            PCLEffects.Queue.add(new HexagonEffect(-100f * Settings.scale, Settings.HEIGHT * 0.65f - i * HexagonEffect.SIZE * 0.9f, color)
-                    .setRealtime(isRealtime));
-        }
+    public void render(SpriteBatch sb) {
     }
 
     public void dispose() {

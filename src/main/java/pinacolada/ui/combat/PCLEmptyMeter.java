@@ -19,13 +19,13 @@ public class PCLEmptyMeter extends PCLPlayerMeter {
     }
 
     @Override
-    public EUITutorialPage[] getInfoPages() {
-        return EUIUtils.array(AFFINITY_TUTORIAL, TAG_TUTORIAL);
+    public String getInfoMainDescrption() {
+        return "";
     }
 
     @Override
-    public String getInfoMainDescrption() {
-        return "";
+    public EUITutorialPage[] getInfoPages() {
+        return EUIUtils.array(AFFINITY_TUTORIAL, TAG_TUTORIAL);
     }
 
     @Override

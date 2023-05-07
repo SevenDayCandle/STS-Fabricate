@@ -10,12 +10,12 @@ public class AnimatedParticleEffect extends FadingParticleEffect {
     protected final int rows;
     protected final int width;
     protected final int height;
-    public AnimationMode mode;
-    public int totalFrames;
-    public int frame;
     protected TextureRegion region;
     protected float frameTimer;
     protected float frameDelay;
+    public AnimationMode mode;
+    public int totalFrames;
+    public int frame;
 
     public AnimatedParticleEffect(Texture texture, float x, float y, int rows, int columns) {
         this(texture, x, y, 0, 1, rows, columns, 0.03F);
@@ -38,14 +38,6 @@ public class AnimatedParticleEffect extends FadingParticleEffect {
         this.frame = 0;
     }
 
-    private static int getCellSize(int totalWidth, int cells) {
-        if (totalWidth % cells != 0) {
-            throw new RuntimeException("The texture can't be evenly divided");
-        }
-
-        return totalWidth / cells;
-    }
-
     public AnimatedParticleEffect(Texture texture, float x, float y, int rows, int columns, float frameDuration) {
         this(texture, x, y, 0, 1, rows, columns, frameDuration);
     }
@@ -54,13 +46,12 @@ public class AnimatedParticleEffect extends FadingParticleEffect {
         this(texture, x, y, rot, scale, rows, columns, 0.03F);
     }
 
-    @Override
-    public void render(SpriteBatch sb) {
-        if (region == null) {
-            this.region = getFrameRegion(frame);
+    private static int getCellSize(int totalWidth, int cells) {
+        if (totalWidth % cells != 0) {
+            throw new RuntimeException("The texture can't be evenly divided");
         }
 
-        PCLRenderHelpers.drawCentered(sb, color, region, x, y, width, height, scale, rot, flipX, flipY);
+        return totalWidth / cells;
     }
 
     public TextureRegion getFrameRegion(int frame) {
@@ -75,6 +66,15 @@ public class AnimatedParticleEffect extends FadingParticleEffect {
 
 
         return new TextureRegion(texture.texture, (clampedFrame % columns) * width, (clampedFrame / columns) * height, width, height);
+    }
+
+    @Override
+    public void render(SpriteBatch sb) {
+        if (region == null) {
+            this.region = getFrameRegion(frame);
+        }
+
+        PCLRenderHelpers.drawCentered(sb, color, region, x, y, width, height, scale, rot, flipX, flipY);
     }
 
     @Override

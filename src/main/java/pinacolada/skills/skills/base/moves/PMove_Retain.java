@@ -36,10 +36,8 @@ public class PMove_Retain extends PMove_Select<PField_CardCategory> {
     }
 
     @Override
-    public String getSubText() {
-        return useParent ? TEXT.act_retain(getInheritedString()) :
-                fields.hasGroups() ? TEXT.act_retain(getAmountRawOrAllString(), fields.getFullCardString())
-                        : TEXT.act_retain(TEXT.subjects_thisCard);
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
+        return RetainCards::new;
     }
 
     @Override
@@ -48,7 +46,9 @@ public class PMove_Retain extends PMove_Select<PField_CardCategory> {
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
-        return RetainCards::new;
+    public String getSubText() {
+        return useParent ? TEXT.act_retain(getInheritedString()) :
+                fields.hasGroups() ? TEXT.act_retain(getAmountRawOrAllString(), fields.getFullCardString())
+                        : TEXT.act_retain(TEXT.subjects_thisCard);
     }
 }

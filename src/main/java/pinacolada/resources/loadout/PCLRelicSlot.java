@@ -40,6 +40,10 @@ public class PCLRelicSlot {
         return (selected == null ? 0 : selected.estimatedValue);
     }
 
+    public PCLRelic getRelic() {
+        return selected != null ? selected.relic : null;
+    }
+
     public ArrayList<PCLRelicSlot.Item> getSelectableRelics() {
         final ArrayList<PCLRelicSlot.Item> relics = new ArrayList<>();
         for (Item item : this.relics) {
@@ -58,10 +62,6 @@ public class PCLRelicSlot {
         return relics;
     }
 
-    public PCLRelic getRelic() {
-        return selected != null ? selected.relic : null;
-    }
-
     public int getSlotIndex() {
         return container.relicSlots.indexOf(this);
     }
@@ -74,27 +74,6 @@ public class PCLRelicSlot {
         }
 
         return copy;
-    }
-
-    public PCLRelicSlot select(PCLRelic relic) {
-        int i = 0;
-        for (Item item : relics) {
-            if (item.relic == relic) {
-                return select(i);
-            }
-            i += 1;
-        }
-
-        return null;
-    }
-
-    public PCLRelicSlot select(int index) {
-        return select(relics.setIndex(index));
-    }
-
-    public PCLRelicSlot select(Item item) {
-        selected = item;
-        return this;
     }
 
     public void next() {
@@ -124,6 +103,27 @@ public class PCLRelicSlot {
                 return;
             }
         }
+    }
+
+    public PCLRelicSlot select(PCLRelic relic) {
+        int i = 0;
+        for (Item item : relics) {
+            if (item.relic == relic) {
+                return select(i);
+            }
+            i += 1;
+        }
+
+        return null;
+    }
+
+    public PCLRelicSlot select(int index) {
+        return select(relics.setIndex(index));
+    }
+
+    public PCLRelicSlot select(Item item) {
+        selected = item;
+        return this;
     }
 
     public PCLRelicSlot select(String id) {

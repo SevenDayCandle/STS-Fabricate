@@ -37,28 +37,24 @@ public abstract class PField implements Serializable {
         return or ? getAffinityOrString(affinities) : getAffinityAndString(affinities);
     }
 
-    public static String getAffinityOrString(ArrayList<PCLAffinity> affinities) {
-        return PCLCoreStrings.joinWithOr(EUIUtils.mapAsNonnull(affinities, PField::safeInvokeTip));
-    }
-
     public static String getAffinityAndString(ArrayList<PCLAffinity> affinities) {
         return PCLCoreStrings.joinWithAnd(EUIUtils.mapAsNonnull(affinities, PField::safeInvokeTip));
-    }
-
-    protected static String safeInvokeTip(TooltipProvider provider) {
-        return provider != null ? String.valueOf(provider.getTooltip()) : null;
     }
 
     public static String getAffinityLevelAndOrString(AbstractCard.CardColor co, ArrayList<PCLAffinity> affinities, boolean or) {
         return or ? getAffinityLevelOrString(co, affinities) : getAffinityLevelAndString(co, affinities);
     }
 
+    public static String getAffinityLevelAndString(AbstractCard.CardColor co, ArrayList<PCLAffinity> affinities) {
+        return PCLCoreStrings.joinWithAnd(EUIUtils.mapAsNonnull(affinities, a -> a.getLevelTooltip(co).getTitleOrIcon()));
+    }
+
     public static String getAffinityLevelOrString(AbstractCard.CardColor co, ArrayList<PCLAffinity> affinities) {
         return PCLCoreStrings.joinWithOr(EUIUtils.mapAsNonnull(affinities, a -> a.getLevelTooltip(co).getTitleOrIcon()));
     }
 
-    public static String getAffinityLevelAndString(AbstractCard.CardColor co, ArrayList<PCLAffinity> affinities) {
-        return PCLCoreStrings.joinWithAnd(EUIUtils.mapAsNonnull(affinities, a -> a.getLevelTooltip(co).getTitleOrIcon()));
+    public static String getAffinityOrString(ArrayList<PCLAffinity> affinities) {
+        return PCLCoreStrings.joinWithOr(EUIUtils.mapAsNonnull(affinities, PField::safeInvokeTip));
     }
 
     public static String getAffinityPowerAndString(ArrayList<PCLAffinity> affinities) {
@@ -79,6 +75,14 @@ public abstract class PField implements Serializable {
 
     public static String getCardIDAndString(ArrayList<String> cardIDs) {
         return PCLCoreStrings.joinWithAnd(EUIUtils.map(cardIDs, g -> "{" + getCardNameForID(g) + "}"));
+    }
+
+    public static String getCardIDOrString(ArrayList<String> cardIDs) {
+        return PCLCoreStrings.joinWithOr(EUIUtils.map(cardIDs, PField::getCardIDString));
+    }
+
+    public static String getCardIDString(String cardID) {
+        return "{" + getCardNameForID(cardID) + "}";
     }
 
     public static String getCardNameForID(String cardID) {
@@ -110,24 +114,16 @@ public abstract class PField implements Serializable {
         return "";
     }
 
-    public static String getCardIDString(String cardID) {
-        return "{" + getCardNameForID(cardID) + "}";
-    }
-
-    public static String getCardIDOrString(ArrayList<String> cardIDs) {
-        return PCLCoreStrings.joinWithOr(EUIUtils.map(cardIDs, PField::getCardIDString));
-    }
-
     public static String getGeneralAffinityAndString(ArrayList<PCLAffinity> affinities) {
         return affinities.isEmpty() ? getGeneralAffinityString() : getAffinityAndString(affinities);
     }
 
-    public static String getGeneralAffinityString() {
-        return PGR.core.tooltips.affinityGeneral.getTitleOrIcon();
-    }
-
     public static String getGeneralAffinityOrString(ArrayList<PCLAffinity> affinities) {
         return affinities.isEmpty() ? getGeneralAffinityString() : getAffinityOrString(affinities);
+    }
+
+    public static String getGeneralAffinityString() {
+        return PGR.core.tooltips.affinityGeneral.getTitleOrIcon();
     }
 
     public static String getGroupString(ArrayList<PCLCardGroupHelper> groupTypes, PCLCardSelection origin) {
@@ -167,6 +163,10 @@ public abstract class PField implements Serializable {
         return PCLCoreStrings.joinWithAnd(EUIUtils.map(relicIDs, g -> "{" + getRelicNameForID(g) + "}"));
     }
 
+    public static String getRelicIDOrString(ArrayList<String> relicIDs) {
+        return PCLCoreStrings.joinWithOr(EUIUtils.map(relicIDs, g -> "{" + getRelicNameForID(g) + "}"));
+    }
+
     public static String getRelicNameForID(String relicID) {
         if (relicID != null) {
             AbstractRelic c = RelicLibrary.getRelic(relicID);
@@ -177,10 +177,6 @@ public abstract class PField implements Serializable {
         return "";
     }
 
-    public static String getRelicIDOrString(ArrayList<String> relicIDs) {
-        return PCLCoreStrings.joinWithOr(EUIUtils.map(relicIDs, g -> "{" + getRelicNameForID(g) + "}"));
-    }
-
     public static String getStanceString(ArrayList<PCLStanceHelper> stances) {
         return PCLCoreStrings.joinWithOr(EUIUtils.map(stances, stance -> "{" + (stance.affinity != null ? stance.tooltip.title.replace(stance.affinity.getPowerSymbol(), stance.affinity.getFormattedPowerSymbol()) : stance.tooltip.title) + "}"));
     }
@@ -189,48 +185,49 @@ public abstract class PField implements Serializable {
         return or ? getTagOrString(tags) : getTagAndString(tags);
     }
 
-    public static String getTagOrString(ArrayList<PCLCardTag> tags) {
-        return tags.isEmpty() ? TEXT.cedit_tags : PCLCoreStrings.joinWithOr(PGR.config.displayCardTagDescription.get() ? EUIUtils.map(tags, PField::safeInvokeTipTitle) : EUIUtils.map(tags, PField::safeInvokeTip));
-    }
-
     // If we are not displaying tags as card tag icons, we should not render them as icons in the description either even if the EUI setting is disabled
     public static String getTagAndString(ArrayList<PCLCardTag> tags) {
         return tags.isEmpty() ? TEXT.cedit_tags : PCLCoreStrings.joinWithAnd(PGR.config.displayCardTagDescription.get() ? EUIUtils.map(tags, PField::safeInvokeTipTitle) : EUIUtils.map(tags, PField::safeInvokeTip));
     }
 
-    protected static String safeInvokeTipTitle(TooltipProvider provider) {
-        return provider != null ? String.valueOf(provider.getTooltip().title) : null;
+    public static String getTagOrString(ArrayList<PCLCardTag> tags) {
+        return tags.isEmpty() ? TEXT.cedit_tags : PCLCoreStrings.joinWithOr(PGR.config.displayCardTagDescription.get() ? EUIUtils.map(tags, PField::safeInvokeTipTitle) : EUIUtils.map(tags, PField::safeInvokeTip));
     }
 
     public static String getTagString(ArrayList<PCLCardTag> tags) {
         return tags.isEmpty() ? TEXT.cedit_tags : (EUIUtils.joinStrings(" ", PGR.config.displayCardTagDescription.get() ? EUIUtils.map(tags, PField::safeInvokeTipTitle) : EUIUtils.map(tags, PField::safeInvokeTip)));
     }
 
+    protected static String safeInvokeTip(TooltipProvider provider) {
+        return provider != null ? String.valueOf(provider.getTooltip()) : null;
+    }
+
+    protected static String safeInvokeTipTitle(TooltipProvider provider) {
+        return provider != null ? String.valueOf(provider.getTooltip().title) : null;
+    }
+
     public boolean equals(PField other) {
         return other != null && this.getClass().equals(other.getClass());
     }
+
+    public int getQualiferRange() {
+        return 0;
+    }
+
+    public String getQualifierText(int i) {
+        return "";
+    }
+
+    public ArrayList<Integer> getQualifiers(PCLUseInfo info) {
+        return new ArrayList<>();
+    }
+
+    public abstract PField makeCopy();
 
     public PField setSkill(PSkill<?> skill) {
         this.skill = skill;
         return this;
     }
-
-    public ArrayList<Integer> getQualifiers(PCLUseInfo info)
-    {
-        return new ArrayList<>();
-    }
-
-    public String getQualifierText(int i)
-    {
-        return "";
-    }
-
-    public int getQualiferRange()
-    {
-        return 0;
-    }
-
-    public abstract PField makeCopy();
 
     // Enables selectors for modifying this objects fields to appear in the card editor
     public abstract void setupEditor(PCLCustomEffectEditingPane editor);

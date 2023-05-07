@@ -18,12 +18,12 @@ import java.util.ArrayList;
 public class ProvokedPower extends PCLPower implements OnMonsterMoveSubscriber {
     public static final int ATTACK_MULTIPLIER = 50;
     public static final String POWER_ID = createFullID(ProvokedPower.class);
-    protected int lastDamage;
-    protected int lastMultiplier;
-    protected boolean lastIsMultiDamage;
     private byte moveByte;
     private AbstractMonster.Intent moveIntent;
     private EnemyMoveInfo move;
+    protected int lastDamage;
+    protected int lastMultiplier;
+    protected boolean lastIsMultiDamage;
 
     public ProvokedPower(AbstractCreature owner) {
         super(owner, POWER_ID);

@@ -17,14 +17,14 @@ public class Glyph06 extends Glyph {
         super(DATA);
     }
 
-    public void setup(Object input) {
-        addGainPower(PTrigger.when(PCond.onOtherCardPlayed(randomAffinity()),
-                getSpecialMove(0, this::action, 1).setUpgrade(1)).setAmount(1));
-    }
-
     public void action(PSpecialSkill move, PCLUseInfo info) {
         for (AbstractMonster m1 : GameUtilities.getEnemies(true)) {
             PCLActions.bottom.add(new HealAction(m1, null, move.amount));
         }
+    }
+
+    public void setup(Object input) {
+        addGainPower(PTrigger.when(PCond.onOtherCardPlayed(randomAffinity()),
+                getSpecialMove(0, this::action, 1).setUpgrade(1)).setAmount(1));
     }
 }

@@ -22,6 +22,19 @@ public class ShuffleEnemiesEffect extends AbstractGameEffect {
         this.isDone = false;
     }
 
+    private float translate(float point1, float point2, float alpha) {
+        if (point1 <= point2) {
+            float result = point1 + alpha;
+
+            return Math.min(result, point2);
+        }
+        else {
+            float result = point1 - alpha;
+
+            return Math.max(result, point2);
+        }
+    }
+
     public void update() {
         if (enemy1 == null) {
             RandomizedList<AbstractMonster> enemies = new RandomizedList<>(GameUtilities.getEnemies(true));
@@ -80,18 +93,5 @@ public class ShuffleEnemiesEffect extends AbstractGameEffect {
 
     public void dispose() {
 
-    }
-
-    private float translate(float point1, float point2, float alpha) {
-        if (point1 <= point2) {
-            float result = point1 + alpha;
-
-            return Math.min(result, point2);
-        }
-        else {
-            float result = point1 - alpha;
-
-            return Math.max(result, point2);
-        }
     }
 }

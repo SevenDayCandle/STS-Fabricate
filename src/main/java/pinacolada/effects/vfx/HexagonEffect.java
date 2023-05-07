@@ -14,8 +14,8 @@ import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class HexagonEffect extends PCLEffect {
-    protected static final int SIZE = 96;
     private static final TextureCache image = PCLCoreImages.Effects.hexagon;
+    protected static final int SIZE = 96;
     protected float vfxFrequency = 0.03f;
     protected Texture img;
     protected float x;

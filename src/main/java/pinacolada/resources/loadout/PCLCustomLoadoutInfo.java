@@ -8,30 +8,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class PCLCustomLoadoutInfo extends PCLCustomLoadable {
-    public static final String SUBFOLDER = "loadout";
     private static final HashMap<AbstractCard.CardColor, ArrayList<PCLCustomLoadoutInfo>> CUSTOM_LOADOUTS = new HashMap<>();
-
+    public static final String SUBFOLDER = "loadout";
     public String ID;
     public String author;
     public String name;
     public AbstractCard.CardColor color;
     public int unlockLevel;
 
-    @Override
-    protected String getSubfolderPath() {
-        return SUBFOLDER;
-    }
-
-    protected static String makeNewID(AbstractCard.CardColor color) {
-        return makeNewID(getBaseIDPrefix(color), getCards(color));
-    }
-
     public static String getBaseIDPrefix(AbstractCard.CardColor color) {
         return getBaseIDPrefix(SUBFOLDER, color);
-    }
-
-    public static boolean isIDDuplicate(String input, AbstractCard.CardColor color) {
-        return isIDDuplicate(input, getCards(color));
     }
 
     public static ArrayList<PCLCustomLoadoutInfo> getCards(AbstractCard.CardColor color) {
@@ -42,5 +28,18 @@ public class PCLCustomLoadoutInfo extends PCLCustomLoadable {
             CUSTOM_LOADOUTS.put(color, new ArrayList<>());
         }
         return CUSTOM_LOADOUTS.get(color);
+    }
+
+    public static boolean isIDDuplicate(String input, AbstractCard.CardColor color) {
+        return isIDDuplicate(input, getCards(color));
+    }
+
+    protected static String makeNewID(AbstractCard.CardColor color) {
+        return makeNewID(getBaseIDPrefix(color), getCards(color));
+    }
+
+    @Override
+    protected String getSubfolderPath() {
+        return SUBFOLDER;
     }
 }

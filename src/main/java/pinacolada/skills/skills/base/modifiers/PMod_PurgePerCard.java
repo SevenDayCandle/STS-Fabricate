@@ -35,12 +35,12 @@ public class PMod_PurgePerCard extends PMod_Do {
     }
 
     @Override
-    public EUITooltip getActionTooltip() {
-        return PGR.core.tooltips.purge;
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
+        return PurgeFromPile::new;
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
-        return PurgeFromPile::new;
+    public EUITooltip getActionTooltip() {
+        return PGR.core.tooltips.purge;
     }
 }

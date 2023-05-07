@@ -62,11 +62,6 @@ public class PMod_EvokePerOrb extends PActiveMod<PField_Orb> {
         }
     }
 
-    protected void useImpl(PCLUseInfo info, ActionT0 callback) {
-        getActions().evokeOrb(1, GameUtilities.getOrbCount()).setFilter(fields.getOrbFilter())
-                .addCallback(callback);
-    }
-
     @Override
     public String getSampleText(PSkill<?> callingSkill) {
         return TEXT.act_evoke(TEXT.cond_per(TEXT.subjects_x, TEXT.cedit_orbs));
@@ -75,6 +70,11 @@ public class PMod_EvokePerOrb extends PActiveMod<PField_Orb> {
     @Override
     public String getSubText() {
         return this.amount <= 1 ? fields.getOrbAndString() : EUIRM.strings.numNoun(getAmountRawString(), fields.getOrbAndString());
+    }
+
+    protected void useImpl(PCLUseInfo info, ActionT0 callback) {
+        getActions().evokeOrb(1, GameUtilities.getOrbCount()).setFilter(fields.getOrbFilter())
+                .addCallback(callback);
     }
 
 }

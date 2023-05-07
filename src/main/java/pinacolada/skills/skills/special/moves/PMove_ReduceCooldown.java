@@ -26,6 +26,11 @@ public class PMove_ReduceCooldown extends PMove_Modify<PField_CardCategory> {
     }
 
     @Override
+    public ActionT1<AbstractCard> getAction() {
+        return (c) -> getActions().progressCooldown(getSourceCreature(), c, extra);
+    }
+
+    @Override
     public String getObjectSampleText() {
         return PGR.core.tooltips.cooldown.title;
     }
@@ -46,11 +51,6 @@ public class PMove_ReduceCooldown extends PMove_Modify<PField_CardCategory> {
     @Override
     public String wrapExtra(int input) {
         return String.valueOf(input);
-    }
-
-    @Override
-    public ActionT1<AbstractCard> getAction() {
-        return (c) -> getActions().progressCooldown(getSourceCreature(), c, extra);
     }
 
     @Override

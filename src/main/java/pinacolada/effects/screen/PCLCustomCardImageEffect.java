@@ -45,9 +45,9 @@ import java.util.List;
 import static extendedui.ui.AbstractScreen.createHexagonalButton;
 
 public class PCLCustomCardImageEffect extends PCLEffectWithCallback<Pixmap> {
+    private static final FileNameExtensionFilter EXTENSIONS = new FileNameExtensionFilter("Image files (*.png, *.bmp, *.jpg, *.jpeg)", "png", "bmp", "jpg", "jpeg");
     protected static final int IMG_WIDTH = 500;
     protected static final int IMG_HEIGHT = 380;
-    private static final FileNameExtensionFilter EXTENSIONS = new FileNameExtensionFilter("Image files (*.png, *.bmp, *.jpg, *.jpeg)", "png", "bmp", "jpg", "jpeg");
     private final DraggableHitbox hb;
     private final EUILabel instructionsLabel;
     private final EUIButton cancelButton;
@@ -59,14 +59,14 @@ public class PCLCustomCardImageEffect extends PCLEffectWithCallback<Pixmap> {
     private final SpriteBatch sb;
     private final FrameBuffer imageBuffer;
     private final OrthographicCamera camera;
-    protected float minZoom;
-    protected float maxZoom = 1f;
-    protected float scale = 1f;
     private Pixmap insideImage;
     private Texture baseTexture;
     private TextureRegion insideImageRenderable;
     private TextureRegion outsideImage;
     private PCLGenericSelectCardEffect existingCardSelection;
+    protected float minZoom;
+    protected float maxZoom = 1f;
+    protected float scale = 1f;
 
     public PCLCustomCardImageEffect(PCLDynamicData builder) {
         final float buttonHeight = Settings.HEIGHT * (0.055f);
@@ -155,6 +155,76 @@ public class PCLCustomCardImageEffect extends PCLEffectWithCallback<Pixmap> {
         }
     }
 
+    public void complete() {
+        super.complete();
+        // Ensure textures are unloaded to avoid memory leaks
+        if (baseTexture != null) {
+            baseTexture.dispose();
+        }
+        if (insideImageRenderable != null) {
+            insideImageRenderable.getTexture().dispose();
+        }
+    }
+
+    @Override
+    public void render(SpriteBatch sb) {
+        if (existingCardSelection != null) {
+            existingCardSelection.render(sb);
+        }
+        else {
+            hb.render(sb);
+            cancelButton.tryRender(sb);
+            saveButton.tryRender(sb);
+            loadButton.tryRender(sb);
+            selectExistingButton.tryRender(sb);
+            pasteButton.tryRender(sb);
+            instructionsLabel.tryRender(sb);
+            zoomBar.tryRender(sb);
+
+            if (outsideImage != null) {
+                PCLRenderHelpers.drawCentered(sb, Color.GRAY.cpy(), outsideImage, Settings.WIDTH / 2f, Settings.HEIGHT / 2f, outsideImage.getRegionWidth(), outsideImage.getRegionHeight(), 1, 0);
+            }
+            if (insideImageRenderable != null) {
+                PCLRenderHelpers.drawCentered(sb, Color.WHITE.cpy(), insideImageRenderable, Settings.WIDTH / 2f, Settings.HEIGHT / 2f, insideImageRenderable.getRegionWidth(), insideImageRenderable.getRegionHeight(), 1, 0);
+            }
+        }
+    }
+
+    @Override
+    protected void updateInternal(float deltaTime) {
+        if (existingCardSelection != null) {
+            existingCardSelection.update();
+            if (existingCardSelection.isDone) {
+                existingCardSelection = null;
+            }
+        }
+        else {
+            cancelButton.tryUpdate();
+            saveButton.tryUpdate();
+            loadButton.tryUpdate();
+            selectExistingButton.tryUpdate();
+            pasteButton.tryUpdate();
+            instructionsLabel.tryUpdate();
+            camera.update();
+            if (baseTexture != null) {
+                if (!hb.isDragging()) {
+                    zoomBar.tryUpdate();
+                }
+                if (!zoomBar.isDragging) {
+                    hb.update();
+                    if (hb.isDragging()) {
+                        updatePictures();
+                    }
+                }
+            }
+
+            // TODO see if there is a way to check for the "paste" function for different operating systems
+            if ((Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT)) && Gdx.input.isKeyJustPressed(Input.Keys.V)) {
+                getImageFromClipboard();
+            }
+        }
+    }
+
     private void getImageFromClipboard() {
         Transferable transferable = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
         if (transferable != null && transferable.isDataFlavorSupported(DataFlavor.imageFlavor)) {
@@ -224,76 +294,6 @@ public class PCLCustomCardImageEffect extends PCLEffectWithCallback<Pixmap> {
         catch (Exception e) {
             e.printStackTrace();
             EUIUtils.logError(this, "Failed to load card image.");
-        }
-    }
-
-    @Override
-    public void render(SpriteBatch sb) {
-        if (existingCardSelection != null) {
-            existingCardSelection.render(sb);
-        }
-        else {
-            hb.render(sb);
-            cancelButton.tryRender(sb);
-            saveButton.tryRender(sb);
-            loadButton.tryRender(sb);
-            selectExistingButton.tryRender(sb);
-            pasteButton.tryRender(sb);
-            instructionsLabel.tryRender(sb);
-            zoomBar.tryRender(sb);
-
-            if (outsideImage != null) {
-                PCLRenderHelpers.drawCentered(sb, Color.GRAY.cpy(), outsideImage, Settings.WIDTH / 2f, Settings.HEIGHT / 2f, outsideImage.getRegionWidth(), outsideImage.getRegionHeight(), 1, 0);
-            }
-            if (insideImageRenderable != null) {
-                PCLRenderHelpers.drawCentered(sb, Color.WHITE.cpy(), insideImageRenderable, Settings.WIDTH / 2f, Settings.HEIGHT / 2f, insideImageRenderable.getRegionWidth(), insideImageRenderable.getRegionHeight(), 1, 0);
-            }
-        }
-    }
-
-    @Override
-    protected void updateInternal(float deltaTime) {
-        if (existingCardSelection != null) {
-            existingCardSelection.update();
-            if (existingCardSelection.isDone) {
-                existingCardSelection = null;
-            }
-        }
-        else {
-            cancelButton.tryUpdate();
-            saveButton.tryUpdate();
-            loadButton.tryUpdate();
-            selectExistingButton.tryUpdate();
-            pasteButton.tryUpdate();
-            instructionsLabel.tryUpdate();
-            camera.update();
-            if (baseTexture != null) {
-                if (!hb.isDragging()) {
-                    zoomBar.tryUpdate();
-                }
-                if (!zoomBar.isDragging) {
-                    hb.update();
-                    if (hb.isDragging()) {
-                        updatePictures();
-                    }
-                }
-            }
-
-            // TODO see if there is a way to check for the "paste" function for different operating systems
-            if ((Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT)) && Gdx.input.isKeyJustPressed(Input.Keys.V)) {
-                getImageFromClipboard();
-            }
-        }
-    }
-
-    public void complete() {
-        super.complete();
-        // Ensure textures are unloaded to avoid memory leaks
-        if (baseTexture != null) {
-            baseTexture.dispose();
-        }
-        if (insideImageRenderable != null) {
-            insideImageRenderable.getTexture().dispose();
         }
     }
 

@@ -27,6 +27,22 @@ public class GlyphBlight extends AbstractGlyphBlight {
         super(ID, PGR.config.ascensionGlyph0, PCLAbstractPlayerData.ASCENSION_GLYPH1_UNLOCK, PCLAbstractPlayerData.ASCENSION_GLYPH1_LEVEL_STEP, 0, 1);
     }
 
+    public CardGroup createGlyphGroup() {
+        final CardGroup group = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
+        final RandomizedList<AbstractCard> possiblePicks = new RandomizedList<>();
+        possiblePicks.addAll(EUIUtils.map(Glyph.getCards(), Glyph::makeCopy));
+
+        for (int i = 0; i < MAX_CHOICES; i++) {
+            AbstractCard pick = possiblePicks.retrieve(GameUtilities.getRNG());
+            for (int j = 0; j < getPotency(); j++) {
+                pick.upgrade();
+            }
+            group.group.add(pick);
+        }
+
+        return group;
+    }
+
     @Override
     public String getUpdatedDescription() {
         return formatDescription(0, GameUtilities.inGame() ? EUIUtils.format(strings.DESCRIPTION[1], getPotency()) : "");
@@ -55,22 +71,6 @@ public class GlyphBlight extends AbstractGlyphBlight {
                         flash();
                     }
                 });
-    }
-
-    public CardGroup createGlyphGroup() {
-        final CardGroup group = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
-        final RandomizedList<AbstractCard> possiblePicks = new RandomizedList<>();
-        possiblePicks.addAll(EUIUtils.map(Glyph.getCards(), Glyph::makeCopy));
-
-        for (int i = 0; i < MAX_CHOICES; i++) {
-            AbstractCard pick = possiblePicks.retrieve(GameUtilities.getRNG());
-            for (int j = 0; j < getPotency(); j++) {
-                pick.upgrade();
-            }
-            group.group.add(pick);
-        }
-
-        return group;
     }
 
     @Override

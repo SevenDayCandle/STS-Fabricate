@@ -6,11 +6,10 @@ import pinacolada.effects.PCLSFX;
 
 // Copied and modified from STS-AnimatorMod
 public class PlaySFX extends PCLAction<PlaySFX> {
-    public final String key;
-
     private final float pitchMin;
     private final float pitchMax;
     private final float volume;
+    public final String key;
 
     public PlaySFX(String key) {
         this(key, 1, 1, 1);

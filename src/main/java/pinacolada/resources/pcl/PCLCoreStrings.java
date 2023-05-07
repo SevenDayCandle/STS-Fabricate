@@ -19,10 +19,6 @@ import java.util.List;
 import java.util.StringJoiner;
 
 public class PCLCoreStrings extends PCLStrings {
-    public final String grid_discard = DiscardAction.TEXT[0];
-    public final String grid_exhaust = ExhaustAction.TEXT[0];
-    public final String grid_cycle = GamblingChipAction.TEXT[1];
-    public final String grid_chooseOneCard = CardRewardScreen.TEXT[1];
     private final UIStrings actions = getUIStrings("Actions");
     private final UIStrings cedit = getUIStrings("CardEditor");
     private final UIStrings cetut = getUIStrings("CardEditorTutorial");
@@ -42,7 +38,10 @@ public class PCLCoreStrings extends PCLStrings {
     private final UIStrings scp = getUIStrings("SingleCardPopupButtons");
     private final UIStrings subjects = getUIStrings("Subjects");
     private final UIStrings tutorial = getUIStrings("Tutorial");
-
+    public final String grid_discard = DiscardAction.TEXT[0];
+    public final String grid_exhaust = ExhaustAction.TEXT[0];
+    public final String grid_cycle = GamblingChipAction.TEXT[1];
+    public final String grid_chooseOneCard = CardRewardScreen.TEXT[1];
     // Card Editor
     public final String cedit_attributes = cedit.TEXT[0];
     public final String cedit_effects = cedit.TEXT[1];
@@ -110,7 +109,6 @@ public class PCLCoreStrings extends PCLStrings {
     public final String cedit_pile = cedit.TEXT[63];
     public final String cedit_combat = cedit.TEXT[64];
     public final String cedit_exact = cedit.TEXT[65];
-
     // Card Editor Tutorial
     public final String cetut_selector1 = cetut.TEXT[0];
     public final String cetut_selector2 = cetut.TEXT[1];
@@ -151,7 +149,6 @@ public class PCLCoreStrings extends PCLStrings {
     public final String cetut_passive = cetut.TEXT[36];
     public final String cetut_when = cetut.TEXT[37];
     public final String cetut_bonus = cetut.TEXT[38];
-
     // Card Pile
     public final String cpile_hand = cardPile.TEXT[0];
     public final String cpile_deck = cardPile.TEXT[1];
@@ -160,7 +157,6 @@ public class PCLCoreStrings extends PCLStrings {
     public final String cpile_top = cardPile.TEXT[4];
     public final String cpile_bottom = cardPile.TEXT[5];
     public final String cpile_random = cardPile.TEXT[6];
-
     // Card Type
     public final String ctype_none = cardtype.TEXT[0];
     public final String ctype_allAlly = cardtype.TEXT[1];
@@ -183,7 +179,6 @@ public class PCLCoreStrings extends PCLStrings {
     public final String ctype_turnStartLast = cardtype.TEXT[18];
     public final String ctype_turnEndFirst = cardtype.TEXT[19];
     public final String ctype_turnEndLast = cardtype.TEXT[20];
-
     // Character
     public final String csel_leftText = charselect.TEXT[0];  // Starting Cards:
     public final String csel_rightText = charselect.TEXT[1]; // Unlock
@@ -205,7 +200,6 @@ public class PCLCoreStrings extends PCLStrings {
     public final String csel_copyFrom = charselect.TEXT[23];
     public final String csel_export = charselect.TEXT[24];
     public final String csel_ascensionGlyph = charselect.TEXT[25];
-
     // Combat
     public final String combat_current = combat.TEXT[0];
     public final String combat_next = combat.TEXT[1];
@@ -223,25 +217,21 @@ public class PCLCoreStrings extends PCLStrings {
     public final String combat_afterlifeMet = combat.TEXT[13];
     public final String combat_afterlifeRequirement = combat.TEXT[14];
     public final String combat_rightClickRetarget = combat.TEXT[15];
-
     // Grid
     public final String grid_chooseCards = gridselection.TEXT[0];
     public final String grid_cardsInPile = gridselection.TEXT[1];
     public final String grid_scry = gridselection.TEXT[2];
-
     // Hotkeys
     public final String hotkeys_controlPileChange = hotkeys.TEXT[0];
     public final String hotkeys_controlPileSelect = hotkeys.TEXT[1];
     public final String hotkeys_rerollCurrent = hotkeys.TEXT[2];
     public final String hotkeys_toggleFormulaDisplay = hotkeys.TEXT[3];
     public final String hotkeys_viewAugments = hotkeys.TEXT[4];
-
     // Menu
     public final String menu_editor = menu.TEXT[0];
     public final String menu_card = menu.TEXT[1];
     public final String menu_cardDesc = menu.TEXT[2];
     public final String menu_comingsoon = menu.TEXT[3];
-
     // Misc
     public final String misc_viewAugments = misc.TEXT[0];
     public final String misc_viewAugmentsDescription = misc.TEXT[1];
@@ -254,7 +244,6 @@ public class PCLCoreStrings extends PCLStrings {
     public final String misc_tempPowerPrefix = misc.TEXT[8];
     public final String misc_requirement = misc.TEXT[9];
     public final String misc_edit = misc.TEXT[10];
-
     // Options
     public final String options_cropCardImages = options.TEXT[0];
     public final String options_displayCardTagDescription = options.TEXT[1];
@@ -271,7 +260,6 @@ public class PCLCoreStrings extends PCLStrings {
     public final String options_madnessReplacements = options.TEXT[12];
     public final String options_vanillaPowerRender = options.TEXT[13];
     public final String options_alwaysPCLCard = options.TEXT[14];
-
     // Option Descriptions
     public final String optionDesc_cropCardImages = optionDesc.TEXT[0];
     public final String optionDesc_displayCardTagDescription = optionDesc.TEXT[1];
@@ -285,7 +273,6 @@ public class PCLCoreStrings extends PCLStrings {
     public final String optionDesc_madnessReplacements = optionDesc.TEXT[9];
     public final String optionDesc_vanillaPowerRender = optionDesc.TEXT[10];
     public final String optionDesc_alwaysPCLCard = optionDesc.TEXT[11];
-
     // Reward
     public final String rewards_rewardBreak = rewards.TEXT[0];
     public final String rewards_breakDescription = rewards.TEXT[1];
@@ -297,7 +284,6 @@ public class PCLCoreStrings extends PCLStrings {
     public final String rewards_rightClickPreview = rewards.TEXT[7];
     public final String rewards_potionSlot = rewards.TEXT[8];
     public final String rewards_orbSlot = rewards.TEXT[9];
-
     // Series
     public final String sui_seriesUI = seriesui.TEXT[0];
     public final String sui_affinities = seriesui.TEXT[1];
@@ -317,7 +303,6 @@ public class PCLCoreStrings extends PCLStrings {
     public final String sui_showCardPool = seriesui.TEXT[15];
     public final String sui_save = seriesui.TEXT[16];
     public final String sui_cancel = seriesui.TEXT[17];
-
     // Single View Card Popup
     public final String scp_variant = scp.TEXT[0];
     public final String scp_changeVariant = scp.TEXT[1];
@@ -332,7 +317,6 @@ public class PCLCoreStrings extends PCLStrings {
     public final String scp_clickToSlot = scp.TEXT[10];
     public final String scp_clickToRemove = scp.TEXT[11];
     public final String scp_cannotRemove = scp.TEXT[12];
-
     // Subjects
     public final String subjects_allyN = subjects.TEXT[0];
     public final String subjects_cardN = subjects.TEXT[1];
@@ -388,7 +372,6 @@ public class PCLCoreStrings extends PCLStrings {
     public final String subjects_xTimes = subjects.TEXT[51];
     public final String subjects_xWithY = subjects.TEXT[52];
     public final String subjects_xCost = subjects.TEXT[53];
-
     // Tutorial
     public final String tutorial_learnMore = tutorial.TEXT[0];
     public final String tutorial_tagTutorial = tutorial.TEXT[1];
@@ -410,8 +393,8 @@ public class PCLCoreStrings extends PCLStrings {
         return "{#" + colorHex + ":" + item + "}";
     }
 
-    public static String joinWithAnd(List<String> values) {
-        return joinWith(PGR.core.strings::cond_and, values);
+    public static String headerString(String title, Object desc) {
+        return "{#p:" + title + "}: " + desc;
     }
 
     public static String joinWith(FuncT2<String, String, String> strFunc, List<String> values) {
@@ -429,14 +412,6 @@ public class PCLCoreStrings extends PCLStrings {
         }
 
         return strFunc.invoke(sj.toString(), values.get(i));
-    }
-
-    public final String cond_and(Object desc1, Object desc2) {
-        return condFmt(25, desc1, desc2);
-    }
-
-    public static String joinWithAnd(String... values) {
-        return joinWith(PGR.core.strings::cond_and, values);
     }
 
     public static String joinWith(FuncT2<String, String, String> strFunc, String... values) {
@@ -457,12 +432,16 @@ public class PCLCoreStrings extends PCLStrings {
         return strFunc.invoke(sj.toString(), values[i]);
     }
 
-    public static String joinWithOr(List<String> values) {
-        return joinWith(PGR.core.strings::cond_or, values);
+    public static String joinWithAnd(List<String> values) {
+        return joinWith(PGR.core.strings::cond_and, values);
     }
 
-    public final String cond_or(Object desc1, Object desc2) {
-        return condFmt(28, desc1, desc2);
+    public static String joinWithAnd(String... values) {
+        return joinWith(PGR.core.strings::cond_and, values);
+    }
+
+    public static String joinWithOr(List<String> values) {
+        return joinWith(PGR.core.strings::cond_or, values);
     }
 
     public static String joinWithOr(String... values) {
@@ -509,13 +488,17 @@ public class PCLCoreStrings extends PCLStrings {
         return EUISmartText.parseLogicString(EUIUtils.format(tip, 1));
     }
 
+    private String actFmt(int index, Object... objects) {
+        return EUIUtils.format(actions.TEXT[index], objects);
+    }
+
+    private String actFmt(int index) {
+        return actions.TEXT[index];
+    }
+
     // Actions functions
     public final String act_activate(Object desc1) {
         return actFmt(0, desc1);
-    }
-
-    private String actFmt(int index, Object... objects) {
-        return EUIUtils.format(actions.TEXT[index], objects);
     }
 
     public final String act_addToPile(Object desc1, Object desc2, Object pile) {
@@ -538,16 +521,8 @@ public class PCLCoreStrings extends PCLStrings {
         return act_generic2(PGR.core.tooltips.channel.title, subject);
     }
 
-    public final String act_generic2(Object verb, Object subject) {
-        return EUIRM.strings.verbNoun(verb, subject);
-    }
-
     public final String act_channelX(Object amount, Object subject) {
         return act_generic3(PGR.core.tooltips.channel.title, amount, subject);
-    }
-
-    public final String act_generic3(Object verb, Object adj, Object subject) {
-        return EUIRM.strings.verbAdjNoun(verb, adj, subject);
     }
 
     public final String act_choose(Object amount) {
@@ -602,24 +577,12 @@ public class PCLCoreStrings extends PCLStrings {
         return act_genericTimes(PGR.core.tooltips.evoke.title, subject, amount);
     }
 
-    public final String act_genericTimes(Object verb, Object subject, Object times) {
-        return EUIRM.strings.verbNounAdv(verb, subject, subjects_times(times));
-    }
-
-    public final String subjects_times(Object amount) {
-        return EUIUtils.format(subjects_xTimes, amount);
-    }
-
     public final String act_exhaust(Object amount) {
         return act_generic2(PGR.core.tooltips.exhaust.title, amount);
     }
 
     public final String act_exitStance() {
         return actFmt(11);
-    }
-
-    private String actFmt(int index) {
-        return actions.TEXT[index];
     }
 
     public final String act_fetch(Object amount) {
@@ -634,20 +597,32 @@ public class PCLCoreStrings extends PCLStrings {
         return actFmt(12, amount, power);
     }
 
+    public final String act_generic2(Object verb, Object subject) {
+        return EUIRM.strings.verbNoun(verb, subject);
+    }
+
+    public final String act_generic3(Object verb, Object adj, Object subject) {
+        return EUIRM.strings.verbAdjNoun(verb, adj, subject);
+    }
+
+    public final String act_genericFrom(Object verb, Object amount, Object subject, Object target) {
+        return EUIRM.strings.verbNumNounPlace(verb, amount, subject, subjects_from(target));
+    }
+
+    public final String act_genericTimes(Object verb, Object subject, Object times) {
+        return EUIRM.strings.verbNounAdv(verb, subject, subjects_times(times));
+    }
+
     public final String act_giveFrom(Object subject, Object target, Object power) {
         return act_giveTargetAmount(subject, subjects_from(target), power);
     }
 
-    public final String act_giveTargetAmount(Object target, Object amount, Object power) {
-        return actFmt(14, target, amount, power);
-    }
-
-    public final String subjects_from(Object place) {
-        return EUIUtils.format(subjects_fromX, place);
-    }
-
     public final String act_giveTarget(Object target, Object power) {
         return actFmt(15, target, power);
+    }
+
+    public final String act_giveTargetAmount(Object target, Object amount, Object power) {
+        return actFmt(14, target, amount, power);
     }
 
     public final String act_has(Object amount) {
@@ -668,10 +643,6 @@ public class PCLCoreStrings extends PCLStrings {
 
     public final String act_healOn(Object amount, Object target) {
         return act_objectOnAmount(PGR.core.tooltips.heal.title, amount, PGR.core.tooltips.hp.title, target);
-    }
-
-    public final String act_objectOnAmount(Object action, Object amount, Object object, Object target) {
-        return actFmt(50, action, amount, object, target);
     }
 
     public final String act_increaseBy(Object power, Object amount) {
@@ -710,6 +681,14 @@ public class PCLCoreStrings extends PCLStrings {
         return actFmt(48, object, amount, bonus);
     }
 
+    public final String act_objectOn(Object action, Object object, Object target) {
+        return actFmt(49, action, object, target);
+    }
+
+    public final String act_objectOnAmount(Object action, Object amount, Object object, Object target) {
+        return actFmt(50, action, amount, object, target);
+    }
+
     public final String act_objectTo(Object action, Object object, Object target) {
         return actFmt(51, action, object, target);
     }
@@ -732,10 +711,6 @@ public class PCLCoreStrings extends PCLStrings {
 
     public final String act_playFrom(Object amount, Object subject, Object target) {
         return act_genericFrom(PGR.core.tooltips.play.title, amount, subject, target);
-    }
-
-    public final String act_genericFrom(Object verb, Object amount, Object subject, Object target) {
-        return EUIRM.strings.verbNumNounPlace(verb, amount, subject, subjects_from(target));
     }
 
     public final String act_playXTimes(Object subject, Object amount) {
@@ -826,10 +801,6 @@ public class PCLCoreStrings extends PCLStrings {
         return act_objectOn(PGR.core.tooltips.spread.title, subject, target);
     }
 
-    public final String act_objectOn(Object action, Object object, Object target) {
-        return actFmt(49, action, object, target);
-    }
-
     public final String act_spreadAmount(Object amount, Object subject, Object target) {
         return act_objectOnAmount(PGR.core.tooltips.spread.title, amount, subject, target);
     }
@@ -894,10 +865,6 @@ public class PCLCoreStrings extends PCLStrings {
         return headerString(EUIUtils.format(combat_count, t), desc);
     }
 
-    public static String headerString(String title, Object desc) {
-        return "{#p:" + title + "}: " + desc;
-    }
-
     public final String combat_effect(Object desc) {
         return headerString(combat_effect, desc);
     }
@@ -906,8 +873,21 @@ public class PCLCoreStrings extends PCLStrings {
         return headerString(combat_nextLevelEffect, desc);
     }
 
+    private String condFmt(int index, Object... objects) {
+        String text = conditions.TEXT[index];
+        return EUIUtils.format(text, objects);
+    }
+
+    private String condFmt(int index) {
+        return conditions.TEXT[index];
+    }
+
     public final String cond_activated(Object desc1) {
         return condFmt(24, desc1);
+    }
+
+    public final String cond_and(Object desc1, Object desc2) {
+        return condFmt(25, desc1, desc2);
     }
 
     // Condition functions
@@ -915,17 +895,8 @@ public class PCLCoreStrings extends PCLStrings {
         return condFmt(0, desc1);
     }
 
-    private String condFmt(int index, Object... objects) {
-        String text = conditions.TEXT[index];
-        return EUIUtils.format(text, objects);
-    }
-
     public final String cond_atEndOfTurn() {
         return condFmt(1);
-    }
-
-    private String condFmt(int index) {
-        return conditions.TEXT[index];
     }
 
     public final String cond_atStartOfTurn() {
@@ -952,6 +923,10 @@ public class PCLCoreStrings extends PCLStrings {
         return condFmt(37, desc1, desc2);
     }
 
+    public final String cond_ifTargetDidX(Object target, Object desc1, Object desc2) {
+        return condFmt(9, target, desc1, desc2);
+    }
+
     public final String cond_ifTargetHas(Object target, Object ordinal, Object desc) {
         return condFmt(7, target, ordinal, desc);
     }
@@ -960,36 +935,20 @@ public class PCLCoreStrings extends PCLStrings {
         return cond_ifX(cond_objIs(target, desc1));
     }
 
-    public final String cond_ifX(Object desc1) {
-        return condFmt(10, desc1);
-    }
-
-    public final String cond_objIs(Object desc1, Object desc2) {
-        return condFmt(27, desc1, desc2);
-    }
-
     public final String cond_ifTargetTook(Object target, Object desc) {
         return condFmt(8, target, desc);
+    }
+
+    public final String cond_ifX(Object desc1) {
+        return condFmt(10, desc1);
     }
 
     public final String cond_ifYouDidThisCombat(Object verb, Object obj) {
         return subjects_thisCombat(cond_ifTargetDidX(subjects_you, verb, obj));
     }
 
-    public final String subjects_thisCombat(String base) {
-        return EUIUtils.format(subjects_xThisCombat, base);
-    }
-
-    public final String cond_ifTargetDidX(Object target, Object desc1, Object desc2) {
-        return condFmt(9, target, desc1, desc2);
-    }
-
     public final String cond_ifYouDidThisTurn(Object verb, Object obj) {
         return subjects_thisTurn(cond_ifTargetDidX(subjects_you, verb, obj));
-    }
-
-    public final String subjects_thisTurn(String base) {
-        return EUIUtils.format(subjects_xThisTurn, base);
     }
 
     public final String cond_ifYourHighest(Object desc1) {
@@ -1032,8 +991,16 @@ public class PCLCoreStrings extends PCLStrings {
         return condFmt(26, desc1, desc2);
     }
 
+    public final String cond_objIs(Object desc1, Object desc2) {
+        return condFmt(27, desc1, desc2);
+    }
+
     public final String cond_onGeneric(Object desc1) {
         return condFmt(18, desc1);
+    }
+
+    public final String cond_or(Object desc1, Object desc2) {
+        return condFmt(28, desc1, desc2);
     }
 
     public final String cond_otherwise(Object desc1) {
@@ -1060,12 +1027,12 @@ public class PCLCoreStrings extends PCLStrings {
         return subjects_thisCombat(cond_perXY(desc1, desc2, desc3));
     }
 
-    public final String cond_perXY(Object desc1, Object desc2, Object desc3) {
-        return condFmt(30, desc1, desc2, desc3);
-    }
-
     public final String cond_perThisTurn(Object desc1, Object desc2, Object desc3) {
         return subjects_thisTurn(cond_perXY(desc1, desc2, desc3));
+    }
+
+    public final String cond_perXY(Object desc1, Object desc2, Object desc3) {
+        return condFmt(30, desc1, desc2, desc3);
     }
 
     public final String cond_timesPerCombat(Object desc1) {
@@ -1080,6 +1047,10 @@ public class PCLCoreStrings extends PCLStrings {
         return condFmt(23, desc1, desc2);
     }
 
+    public final String cond_whenMulti(Object desc1, Object desc2) {
+        return condFmt(20, desc1, desc2);
+    }
+
     public final String cond_whenObjectIs(Object subject, Object ord, Object desc) {
         return condFmt(22, subject, ord, desc);
     }
@@ -1090,10 +1061,6 @@ public class PCLCoreStrings extends PCLStrings {
 
     public final String cond_wheneverYou(Object desc1) {
         return cond_whenMulti(subjects_you, desc1);
-    }
-
-    public final String cond_whenMulti(Object desc1, Object desc2) {
-        return condFmt(20, desc1, desc2);
     }
 
     public final String csel_cardsCount(int value) {
@@ -1136,6 +1103,14 @@ public class PCLCoreStrings extends PCLStrings {
         return EUIUtils.format(rewards_maxhpbonusF1, amount);
     }
 
+    public final String subjects_allAllies() {
+        return EUIUtils.format(subjects_allX, PCLCoreStrings.pluralForce(subjects_allyN));
+    }
+
+    public final String subjects_allEnemies() {
+        return EUIUtils.format(subjects_allX, PCLCoreStrings.pluralForce(subjects_enemyN));
+    }
+
     // Subject functions
     public final String subjects_allX(Object amount) {
         return EUIUtils.format(subjects_allX, amount);
@@ -1145,16 +1120,12 @@ public class PCLCoreStrings extends PCLStrings {
         return subjects_withX(subjects_ally, obj);
     }
 
-    public final String subjects_withX(Object obj, Object t) {
-        return EUIUtils.format(subjects_xWithY, obj, t);
-    }
-
-    public final String subjects_allAllies() {
-        return EUIUtils.format(subjects_allX, PCLCoreStrings.pluralForce(subjects_allyN));
-    }
-
     public final String subjects_anyAlly() {
         return EUIUtils.format(subjects_anyX, subjects_ally);
+    }
+
+    public final String subjects_anyEnemy() {
+        return EUIUtils.format(subjects_anyX, subjects_enemy);
     }
 
     public final String subjects_anyPile() {
@@ -1185,6 +1156,10 @@ public class PCLCoreStrings extends PCLStrings {
         return subjects_withX(subjects_enemy, obj);
     }
 
+    public final String subjects_from(Object place) {
+        return EUIUtils.format(subjects_fromX, place);
+    }
+
     public final String subjects_in(Object place) {
         return EUIUtils.format(subjects_fromX, place);
     }
@@ -1205,20 +1180,12 @@ public class PCLCoreStrings extends PCLStrings {
         return subjects_onTarget(desc1, subjects_anyone);
     }
 
-    public final String subjects_onTarget(Object desc1, Object desc2) {
-        return EUIUtils.format(subjects_xOnY, desc1, desc2);
-    }
-
     public final String subjects_onAnyEnemy(Object desc1) {
         return subjects_onTarget(desc1, subjects_anyEnemy());
     }
 
-    public final String subjects_allEnemies() {
-        return EUIUtils.format(subjects_allX, PCLCoreStrings.pluralForce(subjects_enemyN));
-    }
-
-    public final String subjects_anyEnemy() {
-        return EUIUtils.format(subjects_anyX, subjects_enemy);
+    public final String subjects_onTarget(Object desc1, Object desc2) {
+        return EUIUtils.format(subjects_xOnY, desc1, desc2);
     }
 
     public final String subjects_onTheEnemy(Object desc1) {
@@ -1249,12 +1216,28 @@ public class PCLCoreStrings extends PCLStrings {
         return EUIUtils.format(subjects_theirX, amount);
     }
 
+    public final String subjects_thisCombat(String base) {
+        return EUIUtils.format(subjects_xThisCombat, base);
+    }
+
+    public final String subjects_thisTurn(String base) {
+        return EUIUtils.format(subjects_xThisTurn, base);
+    }
+
+    public final String subjects_times(Object amount) {
+        return EUIUtils.format(subjects_xTimes, amount);
+    }
+
     public final String subjects_topOf(Object amount) {
         return EUIUtils.format(subjects_topOfX, amount);
     }
 
     public final String subjects_unblocked(Object amount) {
         return EUIUtils.format(subjects_unblockedX, amount);
+    }
+
+    public final String subjects_withX(Object obj, Object t) {
+        return EUIUtils.format(subjects_xWithY, obj, t);
     }
 
     public final String subjects_xCost(Object amount) {

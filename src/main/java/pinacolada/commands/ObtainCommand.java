@@ -18,6 +18,21 @@ public class ObtainCommand extends ConsoleCommand {
         this.simpleCheck = true;
     }
 
+    public static ArrayList<String> getPCLCards() {
+        return EUIUtils.mapAsNonnull(PCLCardData.getAllData(), d -> d.ID);
+    }
+
+    protected void createCards(PCLCardData data, int count, int upgradeCount, int form) {
+        for (int i = 0; i < count; ++i) {
+            PCLCard copy = data.create(form, upgradeCount);
+            doAction(copy);
+        }
+    }
+
+    protected void doAction(PCLCard copy) {
+        PCLActions.bottom.makeCardInHand(copy);
+    }
+
     @Override
     protected void execute(String[] tokens, int depth) {
         PCLCardData data = PCLCardData.getStaticData(tokens[1]);
@@ -64,20 +79,5 @@ public class ObtainCommand extends ConsoleCommand {
         }
 
         return options;
-    }
-
-    public static ArrayList<String> getPCLCards() {
-        return EUIUtils.mapAsNonnull(PCLCardData.getAllData(), d -> d.ID);
-    }
-
-    protected void createCards(PCLCardData data, int count, int upgradeCount, int form) {
-        for (int i = 0; i < count; ++i) {
-            PCLCard copy = data.create(form, upgradeCount);
-            doAction(copy);
-        }
-    }
-
-    protected void doAction(PCLCard copy) {
-        PCLActions.bottom.makeCardInHand(copy);
     }
 }

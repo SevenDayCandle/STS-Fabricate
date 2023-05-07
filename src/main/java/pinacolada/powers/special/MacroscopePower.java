@@ -46,6 +46,11 @@ public class MacroscopePower extends PCLPower implements InvisiblePower, OnOrbAp
         return block * Macroscope.MULTIPLIER;
     }
 
+    // Purposely not using ModifyOrbOutput because this will cause Magic attacks to get multiplied twice
+    public int getFinalOrbDamage(int initial) {
+        return initial * Macroscope.MULTIPLIER;
+    }
+
     @Override
     public String getUpdatedDescription() {
         return formatDescription(0, Macroscope.MULTIPLIER);
@@ -72,10 +77,5 @@ public class MacroscopePower extends PCLPower implements InvisiblePower, OnOrbAp
                 orb.evokeAmount = getFinalOrbDamage(orb.evokeAmount);
             }
         }
-    }
-
-    // Purposely not using ModifyOrbOutput because this will cause Magic attacks to get multiplied twice
-    public int getFinalOrbDamage(int initial) {
-        return initial * Macroscope.MULTIPLIER;
     }
 }

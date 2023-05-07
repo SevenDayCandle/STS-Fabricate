@@ -67,13 +67,10 @@ public class ReplaceCard extends PCLAction<Map<AbstractCard, AbstractCard>> {
         complete(newCards);
     }
 
-    protected void replace(ArrayList<AbstractCard> cards) {
-        for (int i = 0; i < cards.size(); i++) {
-            AbstractCard original = cards.get(i);
-            if (cardUUID.equals(original.uuid)) {
-                cards.set(i, replace(original));
-            }
-        }
+    public ReplaceCard preserveStats(boolean preserveStats) {
+        this.preserveStats = preserveStats;
+
+        return this;
     }
 
     protected AbstractCard replace(AbstractCard original) {
@@ -96,10 +93,13 @@ public class ReplaceCard extends PCLAction<Map<AbstractCard, AbstractCard>> {
         return replacement;
     }
 
-    public ReplaceCard preserveStats(boolean preserveStats) {
-        this.preserveStats = preserveStats;
-
-        return this;
+    protected void replace(ArrayList<AbstractCard> cards) {
+        for (int i = 0; i < cards.size(); i++) {
+            AbstractCard original = cards.get(i);
+            if (cardUUID.equals(original.uuid)) {
+                cards.set(i, replace(original));
+            }
+        }
     }
 
     public ReplaceCard setUpgrade(boolean upgrade) {

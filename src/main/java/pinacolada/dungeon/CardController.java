@@ -9,12 +9,12 @@ import pinacolada.ui.combat.ControllableCardPile;
 
 public class CardController {
     public final AbstractCard card;
-    public ControllableCardPile sourcePile;
     protected boolean enabled;
     protected FuncT1<Boolean, CardController> useCondition;
     protected ActionT1<CardController> onUpdate;
     protected ActionT1<CardController> onSelect;
     protected ActionT1<CardController> onDelete;
+    public ControllableCardPile sourcePile;
 
     public CardController(ControllableCardPile sourcePile, AbstractCard card) {
         this.sourcePile = sourcePile;
@@ -38,12 +38,8 @@ public class CardController {
         return enabled;
     }
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
     public CardController onDelete(ActionT1<CardController> onCompletion) {
-        onDelete =onCompletion;
+        onDelete = onCompletion;
 
         return this;
     }
@@ -68,6 +64,10 @@ public class CardController {
         if (onSelect != null) {
             onSelect.invoke(this);
         }
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     public CardController setUseCondition(FuncT1<Boolean, CardController> useCondition) {

@@ -64,25 +64,16 @@ public class PCLCardRewardBonus extends EUIBase {
         return null;
     }
 
-    private CardRewardBundle getMaxHPBundle(AbstractCard card, int maxHP) {
-        return new CardRewardBundle(card, this::receiveMaxHP).setAmount(maxHP)
-                .setIcon(ImageMaster.TP_HP, -AbstractCard.RAW_W * 0.45f, -AbstractCard.RAW_H * 0.545f)
-                .setText(PGR.core.strings.rewards_maxHPBonus(maxHP), Color.WHITE, -AbstractCard.RAW_W * 0.165f, -AbstractCard.RAW_H * 0.54f);
-    }
-
     private CardRewardBundle getGoldBundle(AbstractCard card, int gold) {
         return new CardRewardBundle(card, this::receiveGold).setAmount(gold)
                 .setIcon(ImageMaster.UI_GOLD, -AbstractCard.RAW_W * 0.45f, -AbstractCard.RAW_H * 0.545f)
                 .setText(PGR.core.strings.rewards_goldBonus(gold), Color.WHITE, -AbstractCard.RAW_W * 0.165f, -AbstractCard.RAW_H * 0.54f);
     }
 
-    private void receiveMaxHP(CardRewardBundle bundle) {
-        AbstractDungeon.player.increaseMaxHp(bundle.amount, true);
-    }
-
-    private void receiveGold(CardRewardBundle bundle) {
-        PCLSFX.play(PCLSFX.GOLD_GAIN);
-        AbstractDungeon.player.gainGold(bundle.amount);
+    private CardRewardBundle getMaxHPBundle(AbstractCard card, int maxHP) {
+        return new CardRewardBundle(card, this::receiveMaxHP).setAmount(maxHP)
+                .setIcon(ImageMaster.TP_HP, -AbstractCard.RAW_W * 0.45f, -AbstractCard.RAW_H * 0.545f)
+                .setText(PGR.core.strings.rewards_maxHPBonus(maxHP), Color.WHITE, -AbstractCard.RAW_W * 0.165f, -AbstractCard.RAW_H * 0.54f);
     }
 
     public void onCardObtained(AbstractCard hoveredCard) {
@@ -121,6 +112,15 @@ public class PCLCardRewardBonus extends EUIBase {
                 //add(replacement);
             }
         }
+    }
+
+    private void receiveGold(CardRewardBundle bundle) {
+        PCLSFX.play(PCLSFX.GOLD_GAIN);
+        AbstractDungeon.player.gainGold(bundle.amount);
+    }
+
+    private void receiveMaxHP(CardRewardBundle bundle) {
+        AbstractDungeon.player.increaseMaxHp(bundle.amount, true);
     }
 
     private void receiveUpgrade(CardRewardBundle bundle) {

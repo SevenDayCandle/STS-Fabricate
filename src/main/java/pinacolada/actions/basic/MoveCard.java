@@ -52,6 +52,16 @@ public class MoveCard extends PCLAction<AbstractCard> {
     }
 
     @Override
+    protected void complete(AbstractCard result) {
+        super.complete(result);
+
+        // Change card spot based on destination
+        if (destination != null && targetPile.group.remove(card)) {
+            destination.add(targetPile.group, card, 0);
+        }
+    }
+
+    @Override
     protected void firstUpdate() {
         if (sourcePile == null) {
             sourcePile = GameUtilities.findCardGroup(card, false);
@@ -145,28 +155,6 @@ public class MoveCard extends PCLAction<AbstractCard> {
                 PCLActions.bottom.add(new UnlimboAction(card, false));
             }
         }
-    }
-
-    @Override
-    protected void complete(AbstractCard result) {
-        super.complete(result);
-
-        // Change card spot based on destination
-        if (destination != null && targetPile.group.remove(card)) {
-            destination.add(targetPile.group, card, 0);
-        }
-    }
-
-    protected void updateCard() {
-        if (player.hoveredCard == card) {
-            player.releaseCard();
-        }
-
-        card.target_x = targetPosition.x;
-        card.target_y = targetPosition.y;
-        card.targetAngle = 0;
-        card.hoverTimer = 0.5f;
-        card.update();
     }
 
     protected void moveToDiscardPile() {
@@ -337,5 +325,17 @@ public class MoveCard extends PCLAction<AbstractCard> {
         this.showEffect = showEffect;
 
         return this;
+    }
+
+    protected void updateCard() {
+        if (player.hoveredCard == card) {
+            player.releaseCard();
+        }
+
+        card.target_x = targetPosition.x;
+        card.target_y = targetPosition.y;
+        card.targetAngle = 0;
+        card.hoverTimer = 0.5f;
+        card.update();
     }
 }

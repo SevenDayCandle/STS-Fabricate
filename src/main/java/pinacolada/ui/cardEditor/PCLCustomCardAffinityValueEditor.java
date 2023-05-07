@@ -90,36 +90,16 @@ public class PCLCustomCardAffinityValueEditor extends EUIHoverable {
         setValue(value, value2 - 1, true);
     }
 
+    public int getValue() {
+        return value;
+    }
+
     public void increasePrimary() {
         setValue(value + 1, value2, true);
     }
 
     public void increaseSecondary() {
         setValue(value, value2 + 1, true);
-    }
-
-    public PCLCustomCardAffinityValueEditor setValue(int value, boolean update) {
-        return setValue(value, value2, update);
-    }
-
-    public PCLCustomCardAffinityValueEditor setSecondaryValue(int valueSecondary, boolean update) {
-        return setValue(value, valueSecondary, update);
-    }
-
-    public PCLCustomCardAffinityValueEditor setValue(int value, int valueSecondary, boolean update) {
-        this.value = MathUtils.clamp(value, 0, MAX_LEVEL);
-        displayValue.setLabel(this.value);
-        this.value2 = MathUtils.clamp(valueSecondary, -this.value, MAX_LEVEL - this.value);
-        displayValue2.setLabel(this.value2);
-        if (update) {
-            onUpdate.invoke(affinity, this.value, this.value2);
-        }
-
-        return this;
-    }
-
-    public int getValue() {
-        return value;
     }
 
     @Override
@@ -132,6 +112,26 @@ public class PCLCustomCardAffinityValueEditor extends EUIHoverable {
         displayValue2.tryRender(sb);
         displayValue.tryRender(sb);
         affinityImage.tryRender(sb);
+    }
+
+    public PCLCustomCardAffinityValueEditor setSecondaryValue(int valueSecondary, boolean update) {
+        return setValue(value, valueSecondary, update);
+    }
+
+    public PCLCustomCardAffinityValueEditor setValue(int value, boolean update) {
+        return setValue(value, value2, update);
+    }
+
+    public PCLCustomCardAffinityValueEditor setValue(int value, int valueSecondary, boolean update) {
+        this.value = MathUtils.clamp(value, 0, MAX_LEVEL);
+        displayValue.setLabel(this.value);
+        this.value2 = MathUtils.clamp(valueSecondary, -this.value, MAX_LEVEL - this.value);
+        displayValue2.setLabel(this.value2);
+        if (update) {
+            onUpdate.invoke(affinity, this.value, this.value2);
+        }
+
+        return this;
     }
 
     @Override

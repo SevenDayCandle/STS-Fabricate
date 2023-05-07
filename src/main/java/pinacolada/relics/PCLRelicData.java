@@ -25,9 +25,19 @@ public class PCLRelicData extends PCLGenericData<PCLRelic> {
     public AbstractRelic.RelicTier tier = AbstractRelic.RelicTier.DEPRECATED;
     public AbstractRelic.LandingSound sfx = AbstractRelic.LandingSound.CLINK;
 
-    protected static <T extends PCLRelicData> T registerData(T cardData) {
-        STATIC_DATA.put(cardData.ID, cardData);
-        return cardData;
+    public PCLRelicData(Class<? extends PCLRelic> invokeClass, PCLResources<?, ?, ?, ?> resources) {
+        this(invokeClass, resources, resources.createID(invokeClass.getSimpleName()));
+    }
+
+    public PCLRelicData(Class<? extends PCLRelic> invokeClass, PCLResources<?, ?, ?, ?> resources, String cardID) {
+        this(invokeClass, resources, cardID, PGR.getRelicStrings(cardID));
+    }
+
+    public PCLRelicData(Class<? extends PCLRelic> invokeClass, PCLResources<?, ?, ?, ?> resources, String cardID, RelicStrings strings) {
+        super(cardID, invokeClass, resources);
+        this.cardColor = resources.cardColor;
+        this.strings = strings != null ? strings : new RelicStrings();
+        this.imagePath = PGR.getRelicImage(ID);
     }
 
     public static Collection<PCLRelicData> getAllData() {
@@ -54,19 +64,9 @@ public class PCLRelicData extends PCLGenericData<PCLRelic> {
         return getAllData(false, true, a -> a.cardColor == filterColor || a.resources.cardColor == filterColor || a.resources == PGR.core);
     }
 
-    public PCLRelicData(Class<? extends PCLRelic> invokeClass, PCLResources<?, ?, ?, ?> resources) {
-        this(invokeClass, resources, resources.createID(invokeClass.getSimpleName()));
-    }
-
-    public PCLRelicData(Class<? extends PCLRelic> invokeClass, PCLResources<?, ?, ?, ?> resources, String cardID) {
-        this(invokeClass, resources, cardID, PGR.getRelicStrings(cardID));
-    }
-
-    public PCLRelicData(Class<? extends PCLRelic> invokeClass, PCLResources<?, ?, ?, ?> resources, String cardID, RelicStrings strings) {
-        super(cardID, invokeClass, resources);
-        this.cardColor = resources.cardColor;
-        this.strings = strings != null ? strings : new RelicStrings();
-        this.imagePath = PGR.getRelicImage(ID);
+    protected static <T extends PCLRelicData> T registerData(T cardData) {
+        STATIC_DATA.put(cardData.ID, cardData);
+        return cardData;
     }
 
     public PCLRelicData setImagePath(String imagePath) {
@@ -75,20 +75,17 @@ public class PCLRelicData extends PCLGenericData<PCLRelic> {
         return this;
     }
 
-    public PCLRelicData setSfx(AbstractRelic.LandingSound sfx)
-    {
+    public PCLRelicData setSfx(AbstractRelic.LandingSound sfx) {
         this.sfx = sfx;
         return this;
     }
 
-    public PCLRelicData setTier(AbstractRelic.RelicTier tier)
-    {
+    public PCLRelicData setTier(AbstractRelic.RelicTier tier) {
         this.tier = tier;
         return this;
     }
 
-    public PCLRelicData setTier(AbstractRelic.RelicTier tier, AbstractRelic.LandingSound sfx)
-    {
+    public PCLRelicData setTier(AbstractRelic.RelicTier tier, AbstractRelic.LandingSound sfx) {
         this.tier = tier;
         this.sfx = sfx;
         return this;

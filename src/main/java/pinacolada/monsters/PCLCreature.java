@@ -22,8 +22,8 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class PCLCreature extends CustomMonster implements PointerProvider, TooltipProvider {
-    protected static final Color TAKEN_TURN_COLOR = new Color(0.85f, 0.85f, 0.85f, 0.7f);
     private static final Map<String, PCLCreatureData> staticData = new HashMap<>();
+    protected static final Color TAKEN_TURN_COLOR = new Color(0.85f, 0.85f, 0.85f, 0.7f);
     public final PCLCreatureData creatureData;
     public PCLAffinity affinity = PCLAffinity.General;
     public boolean stunned;
@@ -38,15 +38,6 @@ public abstract class PCLCreature extends CustomMonster implements PointerProvid
         super(data.strings.NAME, data.ID, data.hp, data.hbX, data.hbY, data.hbW, data.hbH, data.imgUrl, offsetX, offsetY);
         this.creatureData = data;
         setupHitbox(offsetX, offsetY);
-    }
-
-    // Offset positions should be given with Settings.scaling already applied
-    protected void setupHitbox(float offsetX, float offsetY) {
-        this.drawX = offsetX;
-        this.drawY = offsetY;
-        updateHitbox(creatureData.hbX, creatureData.hbY, creatureData.hbW, creatureData.hbH);
-        refreshHitboxLocation();
-        refreshIntentHbLocation();
     }
 
     public PCLCreature(PCLCreatureData data, float offsetX, float offsetY, boolean ignoreBlights) {
@@ -124,18 +115,19 @@ public abstract class PCLCreature extends CustomMonster implements PointerProvid
         }
     }
 
+    public abstract void performActions(boolean manual);
+
     public void setAnimation(AbstractAnimation animation) {
         this.animation = animation;
     }
 
-    @Override
-    public void update() {
-        super.update();
-    }
-
-    @Override
-    public void takeTurn() {
-        takeTurn(false);
+    // Offset positions should be given with Settings.scaling already applied
+    protected void setupHitbox(float offsetX, float offsetY) {
+        this.drawX = offsetX;
+        this.drawY = offsetY;
+        updateHitbox(creatureData.hbX, creatureData.hbY, creatureData.hbW, creatureData.hbH);
+        refreshHitboxLocation();
+        refreshIntentHbLocation();
     }
 
     public void takeTurn(boolean manual) {
@@ -147,5 +139,13 @@ public abstract class PCLCreature extends CustomMonster implements PointerProvid
         }
     }
 
-    public abstract void performActions(boolean manual);
+    @Override
+    public void update() {
+        super.update();
+    }
+
+    @Override
+    public void takeTurn() {
+        takeTurn(false);
+    }
 }

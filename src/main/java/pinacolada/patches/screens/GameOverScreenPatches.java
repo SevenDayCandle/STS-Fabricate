@@ -20,12 +20,12 @@ import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
 public class GameOverScreenPatches {
-    public static final int MAX_LEVEL = PCLAbstractPlayerData.MAX_UNLOCK_LEVEL;
-    public static final UIStrings uiStrings = CardCrawlGame.languagePack.getUIString("DeathScreen");
     protected static final String SCORE = "score";
     protected static final String UNLOCK_LEVEL = "unlockLevel";
     protected static final String UNLOCK_COST = "unlockCost";
     protected static final String NEXT_UNLOCK_COST = "nextUnlockCost";
+    public static final int MAX_LEVEL = PCLAbstractPlayerData.MAX_UNLOCK_LEVEL;
+    public static final UIStrings uiStrings = CardCrawlGame.languagePack.getUIString("DeathScreen");
 
     protected static boolean getBool(GameOverScreen __instance, String name) {
         return ReflectionHacks.getPrivate(__instance, GameOverScreen.class, name);

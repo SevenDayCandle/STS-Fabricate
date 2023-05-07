@@ -50,13 +50,18 @@ public class PMove_Transform extends PMove_Select<PField_CardTransform> {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
-        return TEXT.act_transform(TEXT.subjects_x, TEXT.subjects_x);
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
+        return SelectFromPile::new;
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
-        return SelectFromPile::new;
+    public EUITooltip getActionTooltip() {
+        return PGR.core.tooltips.transform;
+    }
+
+    @Override
+    public String getSampleText(PSkill<?> callingSkill) {
+        return TEXT.act_transform(TEXT.subjects_x, TEXT.subjects_x);
     }
 
     @Override
@@ -67,15 +72,18 @@ public class PMove_Transform extends PMove_Select<PField_CardTransform> {
     }
 
     @Override
-    public EUITooltip getActionTooltip() {
-        return PGR.core.tooltips.transform;
-    }
-
-    @Override
     public PMove_Transform makePreviews(RotatingList<EUICardPreview> previews) {
         fields.makePreviews(previews);
         super.makePreviews(previews);
         return this;
+    }
+
+    private void transformImpl(AbstractCard c) {
+        AbstractCard c2 = PField_CardCategory.getCard(fields.result);
+        if (c2 != null) {
+            PCLActions.last.replaceCard(c.uuid, c2);
+            PCLEffects.Queue.showCardBriefly(c2.makeStatEquivalentCopy());
+        }
     }
 
     @Override
@@ -93,13 +101,5 @@ public class PMove_Transform extends PMove_Select<PField_CardTransform> {
                     });
         }
         super.use(info);
-    }
-
-    private void transformImpl(AbstractCard c) {
-        AbstractCard c2 = PField_CardCategory.getCard(fields.result);
-        if (c2 != null) {
-            PCLActions.last.replaceCard(c.uuid, c2);
-            PCLEffects.Queue.showCardBriefly(c2.makeStatEquivalentCopy());
-        }
     }
 }

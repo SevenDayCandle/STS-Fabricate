@@ -12,11 +12,11 @@ import pinacolada.utilities.GameUtilities;
 import java.util.Arrays;
 
 public class RerollAffinity extends PCLAction<PCLAffinity> {
-    public boolean isRandom;
-    public boolean showEffect;
     protected PCLPlayerMeter meter;
     protected PCLAffinity[] affinityChoices;
     protected int target;
+    public boolean isRandom;
+    public boolean showEffect;
 
     public RerollAffinity(int target) {
         super(ActionType.POWER, Settings.ACTION_DUR_XFAST);

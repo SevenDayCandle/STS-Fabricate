@@ -36,12 +36,12 @@ public class PMod_ExhaustPerCard extends PMod_Do {
     }
 
     @Override
-    public EUITooltip getActionTooltip() {
-        return PGR.core.tooltips.exhaust;
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
+        return ExhaustFromPile::new;
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
-        return ExhaustFromPile::new;
+    public EUITooltip getActionTooltip() {
+        return PGR.core.tooltips.exhaust;
     }
 }

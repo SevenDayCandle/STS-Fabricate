@@ -35,6 +35,16 @@ public class PMove_ModifyCost extends PMove_Modify<PField_CardCategory> {
     }
 
     @Override
+    public boolean canCardPass(AbstractCard c) {
+        return fields.getFullCardFilter().invoke(c) && ModifyCost.canCardPass(c, amount);
+    }
+
+    @Override
+    public ActionT1<AbstractCard> getAction() {
+        return (c) -> getActions().modifyCost(c, amount, fields.forced, fields.not);
+    }
+
+    @Override
     public String getObjectSampleText() {
         return TEXT.subjects_cost;
     }
@@ -46,23 +56,13 @@ public class PMove_ModifyCost extends PMove_Modify<PField_CardCategory> {
     }
 
     @Override
-    public boolean canCardPass(AbstractCard c) {
-        return fields.getFullCardFilter().invoke(c) && ModifyCost.canCardPass(c, amount);
-    }
-
-    @Override
-    public ActionT1<AbstractCard> getAction() {
-        return (c) -> getActions().modifyCost(c, amount, fields.forced, fields.not);
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        super.setupEditor(editor);
+        fields.registerFBoolean(editor, TEXT.cedit_combat, null);
     }
 
     @Override
     public boolean isDetrimental() {
         return extra > 0;
-    }
-
-    @Override
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-        super.setupEditor(editor);
-        fields.registerFBoolean(editor, TEXT.cedit_combat, null);
     }
 }

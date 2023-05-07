@@ -38,6 +38,17 @@ public class SummonPool extends EUIBase {
         }
     }
 
+    protected PCLCardAlly addSummon(int i) {
+        float dist = OFFSET + BASE_LIMIT * 10.0F * Settings.scale;
+        float angle = 100.0F + BASE_LIMIT * 12.0F;
+        float offsetAngle = angle / 2.0F;
+        angle *= i / (BASE_LIMIT - 1.0F);
+        angle += 90.0F - offsetAngle;
+        float x = dist * MathUtils.cosDeg(angle) + AbstractDungeon.player.drawX;
+        float y = dist * MathUtils.sinDeg(angle) + AbstractDungeon.player.drawY + AbstractDungeon.player.hb_h / 2.0F;
+        return new PCLCardAlly(x, y);
+    }
+
     public void applyPowers() {
         for (PCLCardAlly ally : summons) {
             if (ally.hasCard()) {
@@ -53,32 +64,8 @@ public class SummonPool extends EUIBase {
         }
     }
 
-    public AbstractCreature getRightmostTarget() {
-        for (int i = summons.size() - 1; i >= 0; i--) {
-            PCLCardAlly summon = summons.get(i);
-            if (summon.hasCard()) {
-                return summon;
-            }
-        }
-        return AbstractDungeon.player;
-    }
-
     public void clear() {
         summons.clear();
-    }
-
-    public HashMap<AbstractCreature, Integer> estimateDamage(int damageAmount) {
-        final HashMap<AbstractCreature, Integer> estimatedMap = new HashMap<>();
-        int finalResult = countDamage(damageAmount, (ally, amount) -> {
-            if (amount > 0) {
-                estimatedMap.put(ally, amount);
-            }
-        });
-        if (finalResult > 0) {
-            estimatedMap.put(AbstractDungeon.player, finalResult);
-        }
-
-        return estimatedMap;
     }
 
     /**
@@ -122,6 +109,30 @@ public class SummonPool extends EUIBase {
         return leftover + remainder;
     }
 
+    public HashMap<AbstractCreature, Integer> estimateDamage(int damageAmount) {
+        final HashMap<AbstractCreature, Integer> estimatedMap = new HashMap<>();
+        int finalResult = countDamage(damageAmount, (ally, amount) -> {
+            if (amount > 0) {
+                estimatedMap.put(ally, amount);
+            }
+        });
+        if (finalResult > 0) {
+            estimatedMap.put(AbstractDungeon.player, finalResult);
+        }
+
+        return estimatedMap;
+    }
+
+    public AbstractCreature getRightmostTarget() {
+        for (int i = summons.size() - 1; i >= 0; i--) {
+            PCLCardAlly summon = summons.get(i);
+            if (summon.hasCard()) {
+                return summon;
+            }
+        }
+        return AbstractDungeon.player;
+    }
+
     public ArrayList<AbstractMonster> getSummons(boolean activeOnly) {
         ArrayList<AbstractMonster> returned = new ArrayList<>();
         if (activeOnly) {
@@ -150,17 +161,6 @@ public class SummonPool extends EUIBase {
                 summons.add(addSummon(i));
             }
         }
-    }
-
-    protected PCLCardAlly addSummon(int i) {
-        float dist = OFFSET + BASE_LIMIT * 10.0F * Settings.scale;
-        float angle = 100.0F + BASE_LIMIT * 12.0F;
-        float offsetAngle = angle / 2.0F;
-        angle *= i / (BASE_LIMIT - 1.0F);
-        angle += 90.0F - offsetAngle;
-        float x = dist * MathUtils.cosDeg(angle) + AbstractDungeon.player.drawX;
-        float y = dist * MathUtils.sinDeg(angle) + AbstractDungeon.player.drawY + AbstractDungeon.player.hb_h / 2.0F;
-        return new PCLCardAlly(x, y);
     }
 
     public void onBattleEnd() {

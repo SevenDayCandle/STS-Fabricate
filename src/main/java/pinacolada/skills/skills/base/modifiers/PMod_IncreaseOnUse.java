@@ -36,14 +36,6 @@ public class PMod_IncreaseOnUse extends PPassiveMod<PField_Empty> {
     }
 
     @Override
-    public void onDrag(AbstractMonster m) {
-    }
-
-    @Override
-    public void refresh(PCLUseInfo info, boolean conditionMet) {
-    }
-
-    @Override
     public final ColoredString getColoredValueString() {
         if (baseAmount != amount) {
             return new ColoredString(amount > 0 ? "+" + amount : amount, amount >= baseAmount ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR);
@@ -55,6 +47,14 @@ public class PMod_IncreaseOnUse extends PPassiveMod<PField_Empty> {
     @Override
     public String getText(boolean addPeriod) {
         return TEXT.cond_doThen(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", getSubText()) + PCLCoreStrings.period(addPeriod);
+    }
+
+    @Override
+    public void onDrag(AbstractMonster m) {
+    }
+
+    @Override
+    public void refresh(PCLUseInfo info, boolean conditionMet) {
     }
 
     @Override

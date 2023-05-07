@@ -101,24 +101,29 @@ public class PSkillPower extends PCLPower {
         return modifyBlock(CombatManager.playerSystem.generateInfo(c, owner, owner), block, c);
     }
 
-    public void refreshTriggers(PCLUseInfo info) {
-        for (PTrigger effect : ptriggers) {
-            effect.refresh(info, true);
-        }
-    }
-
-    @Override
-    public String getUpdatedDescription() {
-        this.powerStrings.DESCRIPTIONS = EUIUtils.mapAsNonnull(ptriggers, PSkill::getPowerText).toArray(new String[]{});
-        return StringUtils.capitalize(EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, this.powerStrings.DESCRIPTIONS));
-    }
-
     public float atDamageGive(PCLUseInfo info, float damage, DamageInfo.DamageType type, AbstractCard c) {
         refreshTriggers(info);
         for (PTrigger effect : ptriggers) {
             damage = effect.modifyDamage(info, damage);
         }
         return damage;
+    }
+
+    @Override
+    protected ColoredString getSecondaryAmount(Color c) {
+        for (PTrigger trigger : ptriggers) {
+            int uses = trigger.getUses();
+            if (!(trigger instanceof PTrigger_Interactable) && uses >= 0) {
+                return new ColoredString(uses, uses > 0 ? Color.GREEN : Color.GRAY, c.a);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public String getUpdatedDescription() {
+        this.powerStrings.DESCRIPTIONS = EUIUtils.mapAsNonnull(ptriggers, PSkill::getPowerText).toArray(new String[]{});
+        return StringUtils.capitalize(EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, this.powerStrings.DESCRIPTIONS));
     }
 
     @Override
@@ -167,14 +172,14 @@ public class PSkillPower extends PCLPower {
     }
 
     @Override
-    protected ColoredString getSecondaryAmount(Color c) {
-        for (PTrigger trigger : ptriggers) {
-            int uses = trigger.getUses();
-            if (!(trigger instanceof PTrigger_Interactable) && uses >= 0) {
-                return new ColoredString(uses, uses > 0 ? Color.GREEN : Color.GRAY, c.a);
+    protected void onSamePowerApplied(AbstractPower power) {
+        PSkillPower po = EUIUtils.safeCast(power, PSkillPower.class);
+        if (po != null && this.ID.equals(po.ID)) {
+            // The effects of identical cards will always be in the same order
+            for (int i = 0; i < Math.min(ptriggers.size(), po.ptriggers.size()); i++) {
+                ptriggers.get(i).stack(po.ptriggers.get(i));
             }
         }
-        return null;
     }
 
     public void atStartOfTurn() {
@@ -201,18 +206,13 @@ public class PSkillPower extends PCLPower {
         }
     }
 
-    @Override
-    protected void onSamePowerApplied(AbstractPower power) {
-        PSkillPower po = EUIUtils.safeCast(power, PSkillPower.class);
-        if (po != null && this.ID.equals(po.ID)) {
-            // The effects of identical cards will always be in the same order
-            for (int i = 0; i < Math.min(ptriggers.size(), po.ptriggers.size()); i++) {
-                ptriggers.get(i).stack(po.ptriggers.get(i));
-            }
-        }
-    }
-
     public PSkillPower makeCopyOnTarget(AbstractCreature m, int amount) {
         return new PSkillPower(m, amount, EUIUtils.map(ptriggers, PTrigger::makeCopy));
+    }
+
+    public void refreshTriggers(PCLUseInfo info) {
+        for (PTrigger effect : ptriggers) {
+            effect.refresh(info, true);
+        }
     }
 }

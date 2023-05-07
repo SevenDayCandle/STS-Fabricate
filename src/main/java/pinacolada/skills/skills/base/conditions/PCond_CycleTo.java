@@ -36,12 +36,12 @@ public class PCond_CycleTo extends PCond_DoToCard {
     }
 
     @Override
-    public EUITooltip getActionTooltip() {
-        return PGR.core.tooltips.cycle;
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
+        return (s, c, i, o, g) -> new CycleCards(s, i, o);
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
-        return (s, c, i, o, g) -> new CycleCards(s, i, o);
+    public EUITooltip getActionTooltip() {
+        return PGR.core.tooltips.cycle;
     }
 }

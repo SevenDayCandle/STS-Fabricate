@@ -16,21 +16,21 @@ public class PField_Random extends PField_Not {
         return (PField_Random) new PField_Random().setRandom(random).setNot(not);
     }
 
-    public PField_Random setRandom(boolean value) {
-        this.random = value;
-        return this;
-    }
-
     public void setupEditor(PCLCustomEffectEditingPane editor) {
         registerRandom(editor);
         super.setupEditor(editor);
+    }
+
+    public void registerRBoolean(PCLCustomEffectEditingPane editor, String name, String desc) {
+        editor.registerBoolean(name, desc, v -> random = v, random);
     }
 
     public void registerRandom(PCLCustomEffectEditingPane editor) {
         editor.registerBoolean(PGR.core.strings.cedit_random, v -> random = v, random);
     }
 
-    public void registerRBoolean(PCLCustomEffectEditingPane editor, String name, String desc) {
-        editor.registerBoolean(name, desc, v -> random = v, random);
+    public PField_Random setRandom(boolean value) {
+        this.random = value;
+        return this;
     }
 }

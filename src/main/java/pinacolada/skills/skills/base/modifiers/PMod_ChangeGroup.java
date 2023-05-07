@@ -27,12 +27,16 @@ public abstract class PMod_ChangeGroup extends PActiveMod<PField_CardGeneric> {
         fields.setCardGroup(groups);
     }
 
+    public abstract String getConditionSampleText();
+
+    public String getConditionText() {
+        return getConditionSampleText();
+    }
+
     @Override
     public String getSampleText(PSkill<?> callingSkill) {
         return TEXT.cond_numIf(TEXT.subjects_from(TEXT.subjects_x), getConditionSampleText());
     }
-
-    public abstract String getConditionSampleText();
 
     @Override
     public String getSubText() {
@@ -42,10 +46,6 @@ public abstract class PMod_ChangeGroup extends PActiveMod<PField_CardGeneric> {
     @Override
     public String getText(boolean addPeriod) {
         return TEXT.cond_genericConditional(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", getSubText()) + PCLCoreStrings.period(addPeriod);
-    }
-
-    public String getConditionText() {
-        return getConditionSampleText();
     }
 
     @Override
@@ -66,6 +66,8 @@ public abstract class PMod_ChangeGroup extends PActiveMod<PField_CardGeneric> {
             useImpl(info, () -> childEffect.use(info));
         }
     }
+
+    public abstract boolean meetsCondition(PCLUseInfo info);
 
     // TODO refactor
     protected void useImpl(PCLUseInfo info, ActionT0 callback) {
@@ -90,6 +92,4 @@ public abstract class PMod_ChangeGroup extends PActiveMod<PField_CardGeneric> {
             }
         }
     }
-
-    public abstract boolean meetsCondition(PCLUseInfo info);
 }

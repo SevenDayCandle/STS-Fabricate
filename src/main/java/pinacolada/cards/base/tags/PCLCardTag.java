@@ -64,6 +64,12 @@ public enum PCLCardTag implements TooltipProvider {
         return PCLCardTag.valueOf(name);
     }
 
+    public static List<PCLCardTag> getAll() {
+        PCLCardTag[] values = PCLCardTag.values();
+        Arrays.sort(values, (a, b) -> StringUtils.compare(a.getTip().title, b.getTip().title));
+        return Arrays.asList(values);
+    }
+
     /* Renders all of the tags on a card. Returns the total height of all the tags rendered */
     public static float renderTagsOnCard(SpriteBatch sb, AbstractCard card, float alpha) {
         int offset_y = 0;
@@ -77,95 +83,13 @@ public enum PCLCardTag implements TooltipProvider {
         return offset_y;
     }
 
-    public static List<PCLCardTag> getAll() {
-        PCLCardTag[] values = PCLCardTag.values();
-        Arrays.sort(values, (a, b) -> StringUtils.compare(a.getTip().title, b.getTip().title));
-        return Arrays.asList(values);
-    }
-
-    public boolean has(AbstractCard card) {
-        switch (this) {
-            case Ephemeral:
-                return card.purgeOnUse || EphemeralField.value.get(card);
-            case Ethereal:
-                return card.isEthereal;
-            case Exhaust:
-                return card.exhaust || card.exhaustOnUseOnce || ExhaustiveField.ExhaustiveFields.exhaustive.get(card) > -1;
-            case Innate:
-                return card.isInnate;
-            case Retain:
-                return card.retain || card.selfRetain;
-            // Accounting for hardcoded base game relic checks
-            case Unplayable:
-                return (UnplayableField.value.get(card) && !((GameUtilities.hasRelicEffect(BlueCandle.ID) && card.type == AbstractCard.CardType.CURSE) ||
-                        (GameUtilities.hasRelicEffect(MedicalKit.ID) && card.type == AbstractCard.CardType.STATUS))) || GameUtilities.isUnplayableThisTurn(card);
+    public int add(AbstractCard card, int amount) {
+        int targetValue = getInt(card);
+        // Do not modify the value for infinite items
+        if (targetValue >= 0) {
+            return set(card, targetValue + amount);
         }
-        SpireField<Boolean> field = getFieldBoolean();
-        if (field != null) {
-            return field.get(card);
-        }
-        SpireField<Integer> field2 = getFieldInteger();
-        if (field2 != null) {
-            int val = field2.get(card);
-            return val > 0 || (minValue < 0 && val < 0);
-        }
-        return false;
-    }
-
-    public EUITooltip getTip() {
-        switch (this) {
-            case Autoplay:
-                return PGR.core.tooltips.autoplay;
-            case Bounce:
-                return PGR.core.tooltips.bounce;
-            case Delayed:
-                return PGR.core.tooltips.delayed;
-            case Ephemeral:
-                return PGR.core.tooltips.ephemeral;
-            case Ethereal:
-                return PGR.core.tooltips.ethereal;
-            case Exhaust:
-                return PGR.core.tooltips.exhaust;
-            case Fleeting:
-                return PGR.core.tooltips.fleeting;
-            case Fragile:
-                return PGR.core.tooltips.fragile;
-            case Grave:
-                return PGR.core.tooltips.grave;
-            case Haste:
-                return PGR.core.tooltips.haste;
-            case Innate:
-                return PGR.core.tooltips.innate;
-            case Loyal:
-                return PGR.core.tooltips.loyal;
-            case Purge:
-                return PGR.core.tooltips.purge;
-            case Recast:
-                return PGR.core.tooltips.recast;
-            case Retain:
-                return PGR.core.tooltips.retain;
-            case Unplayable:
-                return PGR.core.tooltips.unplayable;
-        }
-        return new EUITooltip(this.name());
-    }
-
-    public float renderOnCard(SpriteBatch sb, AbstractCard card, float offset_y, float alpha) {
-        Vector2 offset = new Vector2(AbstractCard.RAW_W * 0.45f, AbstractCard.RAW_H * 0.45f + offset_y);
-
-        PCLRenderHelpers.drawOnCardAuto(sb, card, EUIRM.images.baseBadge.texture(), new Vector2(AbstractCard.RAW_W * 0.45f, AbstractCard.RAW_H * 0.45f + offset_y), 64, 64, color, alpha, 1);
-        PCLRenderHelpers.drawOnCardAuto(sb, card, getTip().icon.getTexture(), new Vector2(AbstractCard.RAW_W * 0.45f, AbstractCard.RAW_H * 0.45f + offset_y), 64, 64, Color.WHITE, alpha, 1);
-        PCLRenderHelpers.drawOnCardAuto(sb, card, EUIRM.images.baseBorder.texture(), new Vector2(AbstractCard.RAW_W * 0.45f, AbstractCard.RAW_H * 0.45f + offset_y), 64, 64, Color.WHITE, alpha, 1);
-
-        int tagCount = getInt(card);
-        if (tagCount < 0) {
-            PCLRenderHelpers.drawOnCardAuto(sb, card, PCLCoreImages.Badges.baseInfinite.texture(), new Vector2(AbstractCard.RAW_W * 0.45f, AbstractCard.RAW_H * 0.45f + offset_y), 64, 64, Color.WHITE, alpha, 1);
-        }
-        else if (tagCount > 1) {
-            PCLRenderHelpers.drawOnCardAuto(sb, card, PCLCoreImages.Badges.baseMulti.texture(), new Vector2(AbstractCard.RAW_W * 0.45f, AbstractCard.RAW_H * 0.45f + offset_y), 64, 64, Color.WHITE, alpha, 1);
-        }
-
-        return HEIGHT;
+        return targetValue;
     }
 
     public SpireField<Boolean> getFieldBoolean() {
@@ -231,17 +155,156 @@ public enum PCLCardTag implements TooltipProvider {
         return toInt(has(card));
     }
 
-    private int toInt(boolean amount) {
-        return amount ? 1 : 0;
+    public String getName() {
+        return getTip().title;
     }
 
-    public int add(AbstractCard card, int amount) {
-        int targetValue = getInt(card);
-        // Do not modify the value for infinite items
-        if (targetValue >= 0) {
-            return set(card, targetValue + amount);
+    public TextureCache getTextureCache() {
+        switch (this) {
+            case Autoplay:
+                return PCLCoreImages.Badges.autoplay;
+            case Bounce:
+                return PCLCoreImages.Badges.bounce;
+            case Delayed:
+                return PCLCoreImages.Badges.delayed;
+            case Ephemeral:
+                return PCLCoreImages.Badges.ephemeral;
+            case Ethereal:
+                return PCLCoreImages.Badges.ethereal;
+            case Exhaust:
+                return PCLCoreImages.Badges.exhaust;
+            case Fleeting:
+                return PCLCoreImages.Badges.fleeting;
+            case Fragile:
+                return PCLCoreImages.Badges.fragile;
+            case Grave:
+                return PCLCoreImages.Badges.grave;
+            case Haste:
+                return PCLCoreImages.Badges.haste;
+            case Innate:
+                return PCLCoreImages.Badges.innate;
+            case Loyal:
+                return PCLCoreImages.Badges.loyal;
+            case Purge:
+                return PCLCoreImages.Badges.purge;
+            case Recast:
+                return PCLCoreImages.Badges.recast;
+            case Retain:
+                return PCLCoreImages.Badges.retain;
+            case Unplayable:
+                return PCLCoreImages.Badges.unplayable;
         }
-        return targetValue;
+        throw new EnumConstantNotPresentException(PCLCardTag.class, this.name());
+    }
+
+    public EUITooltip getTip() {
+        switch (this) {
+            case Autoplay:
+                return PGR.core.tooltips.autoplay;
+            case Bounce:
+                return PGR.core.tooltips.bounce;
+            case Delayed:
+                return PGR.core.tooltips.delayed;
+            case Ephemeral:
+                return PGR.core.tooltips.ephemeral;
+            case Ethereal:
+                return PGR.core.tooltips.ethereal;
+            case Exhaust:
+                return PGR.core.tooltips.exhaust;
+            case Fleeting:
+                return PGR.core.tooltips.fleeting;
+            case Fragile:
+                return PGR.core.tooltips.fragile;
+            case Grave:
+                return PGR.core.tooltips.grave;
+            case Haste:
+                return PGR.core.tooltips.haste;
+            case Innate:
+                return PGR.core.tooltips.innate;
+            case Loyal:
+                return PGR.core.tooltips.loyal;
+            case Purge:
+                return PGR.core.tooltips.purge;
+            case Recast:
+                return PGR.core.tooltips.recast;
+            case Retain:
+                return PGR.core.tooltips.retain;
+            case Unplayable:
+                return PGR.core.tooltips.unplayable;
+        }
+        return new EUITooltip(this.name());
+    }
+
+    @Override
+    public List<EUITooltip> getTips() {
+        return Collections.singletonList(getTip());
+    }
+
+    public boolean has(AbstractCard card) {
+        switch (this) {
+            case Ephemeral:
+                return card.purgeOnUse || EphemeralField.value.get(card);
+            case Ethereal:
+                return card.isEthereal;
+            case Exhaust:
+                return card.exhaust || card.exhaustOnUseOnce || ExhaustiveField.ExhaustiveFields.exhaustive.get(card) > -1;
+            case Innate:
+                return card.isInnate;
+            case Retain:
+                return card.retain || card.selfRetain;
+            // Accounting for hardcoded base game relic checks
+            case Unplayable:
+                return (UnplayableField.value.get(card) && !((GameUtilities.hasRelicEffect(BlueCandle.ID) && card.type == AbstractCard.CardType.CURSE) ||
+                        (GameUtilities.hasRelicEffect(MedicalKit.ID) && card.type == AbstractCard.CardType.STATUS))) || GameUtilities.isUnplayableThisTurn(card);
+        }
+        SpireField<Boolean> field = getFieldBoolean();
+        if (field != null) {
+            return field.get(card);
+        }
+        SpireField<Integer> field2 = getFieldInteger();
+        if (field2 != null) {
+            int val = field2.get(card);
+            return val > 0 || (minValue < 0 && val < 0);
+        }
+        return false;
+    }
+
+    public PCLCardTagInfo make() {
+        return new PCLCardTagInfo(this, 1);
+    }
+
+    public PCLCardTagInfo make(Integer value) {
+        return new PCLCardTagInfo(this, value, value);
+    }
+
+    public PCLCardTagInfo make(Integer value, Integer upVals) {
+        return new PCLCardTagInfo(this, value, upVals);
+    }
+
+    public PCLCardTagInfo make(Integer value, Integer[] upVals) {
+        return new PCLCardTagInfo(this, value, upVals);
+    }
+
+    public PCLCardTagInfo make(Integer[] values, Integer[] upVals) {
+        return new PCLCardTagInfo(this, values, upVals);
+    }
+
+    public float renderOnCard(SpriteBatch sb, AbstractCard card, float offset_y, float alpha) {
+        Vector2 offset = new Vector2(AbstractCard.RAW_W * 0.45f, AbstractCard.RAW_H * 0.45f + offset_y);
+
+        PCLRenderHelpers.drawOnCardAuto(sb, card, EUIRM.images.baseBadge.texture(), new Vector2(AbstractCard.RAW_W * 0.45f, AbstractCard.RAW_H * 0.45f + offset_y), 64, 64, color, alpha, 1);
+        PCLRenderHelpers.drawOnCardAuto(sb, card, getTip().icon.getTexture(), new Vector2(AbstractCard.RAW_W * 0.45f, AbstractCard.RAW_H * 0.45f + offset_y), 64, 64, Color.WHITE, alpha, 1);
+        PCLRenderHelpers.drawOnCardAuto(sb, card, EUIRM.images.baseBorder.texture(), new Vector2(AbstractCard.RAW_W * 0.45f, AbstractCard.RAW_H * 0.45f + offset_y), 64, 64, Color.WHITE, alpha, 1);
+
+        int tagCount = getInt(card);
+        if (tagCount < 0) {
+            PCLRenderHelpers.drawOnCardAuto(sb, card, PCLCoreImages.Badges.baseInfinite.texture(), new Vector2(AbstractCard.RAW_W * 0.45f, AbstractCard.RAW_H * 0.45f + offset_y), 64, 64, Color.WHITE, alpha, 1);
+        }
+        else if (tagCount > 1) {
+            PCLRenderHelpers.drawOnCardAuto(sb, card, PCLCoreImages.Badges.baseMulti.texture(), new Vector2(AbstractCard.RAW_W * 0.45f, AbstractCard.RAW_H * 0.45f + offset_y), 64, 64, Color.WHITE, alpha, 1);
+        }
+
+        return HEIGHT;
     }
 
     public int set(AbstractCard card, int amount) {
@@ -298,71 +361,8 @@ public enum PCLCardTag implements TooltipProvider {
         return amount > 0;
     }
 
-    public String getName() {
-        return getTip().title;
-    }
-
-    public TextureCache getTextureCache() {
-        switch (this) {
-            case Autoplay:
-                return PCLCoreImages.Badges.autoplay;
-            case Bounce:
-                return PCLCoreImages.Badges.bounce;
-            case Delayed:
-                return PCLCoreImages.Badges.delayed;
-            case Ephemeral:
-                return PCLCoreImages.Badges.ephemeral;
-            case Ethereal:
-                return PCLCoreImages.Badges.ethereal;
-            case Exhaust:
-                return PCLCoreImages.Badges.exhaust;
-            case Fleeting:
-                return PCLCoreImages.Badges.fleeting;
-            case Fragile:
-                return PCLCoreImages.Badges.fragile;
-            case Grave:
-                return PCLCoreImages.Badges.grave;
-            case Haste:
-                return PCLCoreImages.Badges.haste;
-            case Innate:
-                return PCLCoreImages.Badges.innate;
-            case Loyal:
-                return PCLCoreImages.Badges.loyal;
-            case Purge:
-                return PCLCoreImages.Badges.purge;
-            case Recast:
-                return PCLCoreImages.Badges.recast;
-            case Retain:
-                return PCLCoreImages.Badges.retain;
-            case Unplayable:
-                return PCLCoreImages.Badges.unplayable;
-        }
-        throw new EnumConstantNotPresentException(PCLCardTag.class, this.name());
-    }
-
-    @Override
-    public List<EUITooltip> getTips() {
-        return Collections.singletonList(getTip());
-    }
-
-    public PCLCardTagInfo make() {
-        return new PCLCardTagInfo(this, 1);
-    }
-
-    public PCLCardTagInfo make(Integer value) {
-        return new PCLCardTagInfo(this, value, value);
-    }
-
-    public PCLCardTagInfo make(Integer value, Integer upVals) {
-        return new PCLCardTagInfo(this, value, upVals);
-    }
-
-    public PCLCardTagInfo make(Integer value, Integer[] upVals) {
-        return new PCLCardTagInfo(this, value, upVals);
-    }
-
-    public PCLCardTagInfo make(Integer[] values, Integer[] upVals) {
-        return new PCLCardTagInfo(this, values, upVals);
+    private int toInt(boolean amount) {
+        return amount ? 1 : 0;
     }
 
     public boolean tryProgress(AbstractCard card) {

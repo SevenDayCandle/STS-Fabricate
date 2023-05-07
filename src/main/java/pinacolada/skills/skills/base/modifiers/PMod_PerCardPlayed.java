@@ -33,12 +33,12 @@ public class PMod_PerCardPlayed extends PMod_PerCardHas {
     }
 
     @Override
-    public List<AbstractCard> getCardPile() {
-        return fields.forced ? AbstractDungeon.actionManager.cardsPlayedThisCombat : AbstractDungeon.actionManager.cardsPlayedThisTurn;
+    public EUITooltip getActionTooltip() {
+        return PGR.core.tooltips.play;
     }
 
     @Override
-    public EUITooltip getActionTooltip() {
-        return PGR.core.tooltips.play;
+    public List<AbstractCard> getCardPile() {
+        return fields.forced ? AbstractDungeon.actionManager.cardsPlayedThisCombat : AbstractDungeon.actionManager.cardsPlayedThisTurn;
     }
 }

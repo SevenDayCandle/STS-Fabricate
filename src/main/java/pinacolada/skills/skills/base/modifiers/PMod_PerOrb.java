@@ -34,13 +34,13 @@ public class PMod_PerOrb extends PMod_Per<PField_Orb> {
     }
 
     @Override
-    public String getSubSampleText() {
-        return PGR.core.tooltips.orb.title;
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        super.setupEditor(editor);
     }
 
     @Override
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-        super.setupEditor(editor);
+    public String getSubSampleText() {
+        return PGR.core.tooltips.orb.title;
     }
 
     @Override

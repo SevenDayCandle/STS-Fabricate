@@ -14,6 +14,7 @@ import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.fields.PField_CardGeneric;
+import pinacolada.skills.skills.PBranchCond;
 import pinacolada.skills.skills.PMultiCond;
 import pinacolada.skills.skills.base.conditions.*;
 import pinacolada.skills.skills.base.primary.PTrigger_Passive;
@@ -99,20 +100,12 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
         return new PCond_DiscardTo(amount, h);
     }
 
-    public static PCond_DiscardBranch discardBranch(int amount, PCLCardGroupHelper... groups) {
-        return new PCond_DiscardBranch(amount, groups);
-    }
-
     public static PCond_DiscardTo discardRandom(int amount) {
         return discardRandom(amount, PCLCardGroupHelper.Hand);
     }
 
     public static PCond_DiscardTo discardRandom(int amount, PCLCardGroupHelper... h) {
         return (PCond_DiscardTo) new PCond_DiscardTo(amount, h).edit(PField_CardGeneric::setRandom);
-    }
-
-    public static PCond_DrawBranch drawBranch(int amount) {
-        return new PCond_DrawBranch(amount);
     }
 
     public static PCond_EvokeTo evokeTo(int amount, PCLOrbHelper... h) {
@@ -125,10 +118,6 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
 
     public static PCond_ExhaustTo exhaust(int amount, PCLCardGroupHelper... h) {
         return new PCond_ExhaustTo(amount, h);
-    }
-
-    public static PCond_ExhaustBranch exhaustBranch(int amount) {
-        return new PCond_ExhaustBranch(amount);
     }
 
     public static PCond_ExhaustTo exhaustRandom(int amount) {
@@ -181,10 +170,6 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
 
     public static PCond_HaveTakenDamage haveTakenDamage(int amount) {
         return new PCond_HaveTakenDamage(amount);
-    }
-
-    public static PCond_HighestAffinityBranch highestAffinityBranch(PCLAffinity... groups) {
-        return new PCond_HighestAffinityBranch(groups);
     }
 
     public static PCond_HPPercent hpPercent(int amount) {
@@ -299,24 +284,12 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
         return new PCond_ReshuffleTo(amount, h);
     }
 
-    public static PCond_ReshuffleBranch reshuffleBranch(int amount) {
-        return new PCond_ReshuffleBranch(amount);
-    }
-
     public static PCond_ReshuffleTo reshuffleRandom(int amount) {
         return reshuffleRandom(amount, PCLCardGroupHelper.Hand);
     }
 
     public static PCond_ReshuffleTo reshuffleRandom(int amount, PCLCardGroupHelper... h) {
         return (PCond_ReshuffleTo) new PCond_ReshuffleTo(amount, h).edit(PField_CardGeneric::setRandom);
-    }
-
-    public static PCond_ScoutBranch scoutBranch(int amount) {
-        return new PCond_ScoutBranch(amount);
-    }
-
-    public static PCond_ScryBranch scryBranch(int amount) {
-        return new PCond_ScryBranch(amount);
     }
 
     public static PCond_Starter starter() {
@@ -336,11 +309,21 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
         return this.childEffect == null || !checkCondition(info, false, null) || this.childEffect.canPlay(info);
     }
 
-    public abstract boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource);
-
     @Override
     public Color getConditionColor() {
         return GameUtilities.inBattle() && conditionMetCache ? Settings.GREEN_TEXT_COLOR : null;
+    }
+
+    public int getQualifierRange() {
+        return 1;
+    }
+
+    public String getQualifierText(int i) {
+        return "";
+    }
+
+    public ArrayList<Integer> getQualifiers(PCLUseInfo info) {
+        return EUIUtils.arrayList(checkCondition(info, true, null) ? 1 : 0);
     }
 
     @Override
@@ -481,17 +464,7 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
         }
     }
 
-    public ArrayList<Integer> getQualifiers(PCLUseInfo info) {
-        return EUIUtils.arrayList(checkCondition(info, true, null) ? 1 : 0);
-    }
-
-    public String getQualifierText(int i) {
-        return "";
-    }
-
-    public int getQualifierRange() {
-        return 1;
-    }
+    public abstract boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource);
 
     /* Same as above but for passive conditions */
     public final boolean isPassiveClause() {
@@ -514,6 +487,11 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
             // When a delegate (e.g. on draw) is triggered from an and multicond, it should only execute the effect if the other conditions would pass
             else if (parent instanceof PMultiCond && parent.childEffect != null) {
                 ((PMultiCond) parent).useCond(this, info, 0, (i) -> parent.childEffect.use(i), (i) -> {});
+            }
+            // When a delegate is triggered from a branch, the resulting effect should be chosen based on the info gleaned from the branch
+            else if (parent instanceof PBranchCond)
+            {
+                parent.use(info);
             }
         }
     }

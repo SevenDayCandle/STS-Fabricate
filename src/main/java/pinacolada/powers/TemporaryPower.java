@@ -15,8 +15,8 @@ public class TemporaryPower extends PCLPower {
     public static final String ID = createFullID(TemporaryPower.class);
 
     private final AbstractPower power;
-    public int stabilizeTurns;
     private int sourceMaxAmount = Integer.MAX_VALUE;
+    public int stabilizeTurns;
 
     public TemporaryPower(AbstractCreature owner, AbstractPower sourcePower) {
         super(owner, ID + sourcePower.ID);
@@ -45,6 +45,10 @@ public class TemporaryPower extends PCLPower {
         return null;
     }
 
+    protected boolean amountBelowThreshold(int powerAmount) {
+        return (powerAmount < 0 && !power.canGoNegative) || (powerAmount == 0);
+    }
+
     @Override
     public String getUpdatedDescription() {
         if (power == null) {
@@ -64,9 +68,10 @@ public class TemporaryPower extends PCLPower {
     }
 
     @Override
-    public void updateDescription() {
-        super.updateDescription();
-        mainTip.title = name;
+    protected void renderIconsImpl(SpriteBatch sb, float x, float y, Color borderColor, Color imageColor) {
+        PCLRenderHelpers.drawSepia(sb, (s) ->
+                super.renderIconsImpl(s, x, y, borderColor, imageColor)
+        );
     }
 
     @Override
@@ -90,10 +95,9 @@ public class TemporaryPower extends PCLPower {
     }
 
     @Override
-    protected void renderIconsImpl(SpriteBatch sb, float x, float y, Color borderColor, Color imageColor) {
-        PCLRenderHelpers.drawSepia(sb, (s) ->
-                super.renderIconsImpl(s, x, y, borderColor, imageColor)
-        );
+    public void updateDescription() {
+        super.updateDescription();
+        mainTip.title = name;
     }
 
     @Override
@@ -106,18 +110,14 @@ public class TemporaryPower extends PCLPower {
         }
     }
 
+    public void stabilize(int turns) {
+        stabilizeTurns += turns;
+    }
+
     protected void tryRemoveSourcePower() {
         int powerAmount = GameUtilities.getPowerAmount(owner, power.ID);
         if (amountBelowThreshold(powerAmount)) {
             PCLActions.bottom.removePower(owner, owner, power.ID);
         }
-    }
-
-    protected boolean amountBelowThreshold(int powerAmount) {
-        return (powerAmount < 0 && !power.canGoNegative) || (powerAmount == 0);
-    }
-
-    public void stabilize(int turns) {
-        stabilizeTurns += turns;
     }
 }

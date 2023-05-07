@@ -37,8 +37,16 @@ public class PCLCardTagInfo implements Serializable, TooltipProvider {
         this(tag, array(value), upgrades);
     }
 
+    public Integer get(int form) {
+        return safeIndex(value, form);
+    }
+
     public List<EUITooltip> getTips() {
         return tag.getTips();
+    }
+
+    public Integer getUpgrade(int form) {
+        return EUIUtils.isNullOrEmpty(upgrades) ? null : safeIndex(upgrades, form);
     }
 
     public void invoke(PCLCard card) {
@@ -50,14 +58,6 @@ public class PCLCardTagInfo implements Serializable, TooltipProvider {
         if (value != null) {
             tag.set(card, value);
         }
-    }
-
-    public Integer getUpgrade(int form) {
-        return EUIUtils.isNullOrEmpty(upgrades) ? null : safeIndex(upgrades, form);
-    }
-
-    public Integer get(int form) {
-        return safeIndex(value, form);
     }
 
     public void invoke(AbstractCard card) {

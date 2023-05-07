@@ -36,24 +36,24 @@ public class PField_Power extends PField_Not {
         editor.registerBoolean(PGR.core.tooltips.debuff.title, PGR.core.tooltips.debuff.description(), v -> debuff = v, debuff);
     }
 
-    public PField_Power setDebuff(boolean value) {
-        this.debuff = value;
-        return this;
+    public String getBuffString() {
+        return debuff ? PGR.core.tooltips.debuff.title : PGR.core.tooltips.buff.title;
     }
 
-    public PField_Power setRandom(boolean value) {
-        this.random = value;
-        return this;
+    public String getPowerAndOrString() {
+        return random ? getPowerOrString() : getPowerAndString();
     }
 
-    public PField_Power setPower(List<PCLPowerHelper> powers) {
-        this.powers.clear();
-        this.powers.addAll(powers);
-        return this;
+    public String getPowerAndString() {
+        return getPowerAndString(powers);
     }
 
     public final FuncT1<Boolean, AbstractPower> getPowerFilter() {
         return (c -> (powers.isEmpty() || EUIUtils.any(powers, power -> power.ID.equals(c.ID))));
+    }
+
+    public String getPowerOrString() {
+        return getPowerOrString(powers);
     }
 
     public String getPowerString() {
@@ -64,23 +64,23 @@ public class PField_Power extends PField_Not {
         return powers.isEmpty() ? getBuffString() : getPowerAndOrString();
     }
 
-    public String getBuffString() {
-        return debuff ? PGR.core.tooltips.debuff.title : PGR.core.tooltips.buff.title;
+    public PField_Power setDebuff(boolean value) {
+        this.debuff = value;
+        return this;
     }
 
-    public String getPowerAndOrString() {
-        return random ? getPowerOrString() : getPowerAndString();
-    }
-
-    public String getPowerOrString() {
-        return getPowerOrString(powers);
-    }
-
-    public String getPowerAndString() {
-        return getPowerAndString(powers);
+    public PField_Power setPower(List<PCLPowerHelper> powers) {
+        this.powers.clear();
+        this.powers.addAll(powers);
+        return this;
     }
 
     public PField_Power setPower(PCLPowerHelper... powers) {
         return setPower(Arrays.asList(powers));
+    }
+
+    public PField_Power setRandom(boolean value) {
+        this.random = value;
+        return this;
     }
 }

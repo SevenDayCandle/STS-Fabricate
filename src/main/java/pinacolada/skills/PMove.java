@@ -43,16 +43,18 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
         return new PMove_AddPowerBonus(amount, p);
     }
 
-    public static PMove_StackTemporaryPower applyTemporaryToEnemies(int amount, PCLPowerHelper... powers) {
-        return applyTemporary(PCLCardTarget.AllEnemy, amount, powers);
+    public static PMove_StackPower apply(PCLCardTarget target, int amount, PCLPowerHelper... powers) {
+        return new PMove_StackPower(target, amount, powers);
+    }
+
+    public static PMove_StackPower apply(PCLCardTarget target, PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers) {
+        return (PMove_StackPower) new PMove_StackPower(target, 0, powers)
+                .setSource(card, valueSource)
+                .setAmountFromCard();
     }
 
     public static PMove_StackTemporaryPower applyTemporary(PCLCardTarget target, int amount, PCLPowerHelper... powers) {
         return new PMove_StackTemporaryPower(target, amount, powers);
-    }
-
-    public static PMove_StackTemporaryPower applyTemporaryToEnemies(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers) {
-        return applyTemporary(PCLCardTarget.AllEnemy, card, valueSource, powers);
     }
 
     public static PMove_StackTemporaryPower applyTemporary(PCLCardTarget target, PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers) {
@@ -61,22 +63,12 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
                 .setAmountFromCard();
     }
 
-    @Override
-    public PMove<T> setAmountFromCard() {
-        super.setAmountFromCard();
-        return this;
+    public static PMove_StackTemporaryPower applyTemporaryToEnemies(int amount, PCLPowerHelper... powers) {
+        return applyTemporary(PCLCardTarget.AllEnemy, amount, powers);
     }
 
-    @Override
-    public PMove<T> setSource(PointerProvider card) {
-        super.setSource(card);
-        return this;
-    }
-
-    @Override
-    public PMove<T> setSource(PointerProvider card, PCLCardValueSource valueSource) {
-        super.setSource(card, valueSource);
-        return this;
+    public static PMove_StackTemporaryPower applyTemporaryToEnemies(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers) {
+        return applyTemporary(PCLCardTarget.AllEnemy, card, valueSource, powers);
     }
 
     public static PMove_StackTemporaryPower applyTemporaryToEveryone(int amount, PCLPowerHelper... powers) {
@@ -107,18 +99,8 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
         return apply(PCLCardTarget.AllAlly, amount, powers);
     }
 
-    public static PMove_StackPower apply(PCLCardTarget target, int amount, PCLPowerHelper... powers) {
-        return new PMove_StackPower(target, amount, powers);
-    }
-
     public static PMove_StackPower applyToAllies(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers) {
         return apply(PCLCardTarget.AllAlly, card, valueSource, powers);
-    }
-
-    public static PMove_StackPower apply(PCLCardTarget target, PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers) {
-        return (PMove_StackPower) new PMove_StackPower(target, 0, powers)
-                .setSource(card, valueSource)
-                .setAmountFromCard();
     }
 
     public static PMove_StackPower applyToEnemies(int amount, PCLPowerHelper... powers) {
@@ -634,6 +616,24 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
 
     public static PMove_WithdrawAlly withdrawAlly(PCLCardTarget target, int amount) {
         return new PMove_WithdrawAlly(target, amount);
+    }
+
+    @Override
+    public PMove<T> setAmountFromCard() {
+        super.setAmountFromCard();
+        return this;
+    }
+
+    @Override
+    public PMove<T> setSource(PointerProvider card) {
+        super.setSource(card);
+        return this;
+    }
+
+    @Override
+    public PMove<T> setSource(PointerProvider card, PCLCardValueSource valueSource) {
+        super.setSource(card, valueSource);
+        return this;
     }
 
 }

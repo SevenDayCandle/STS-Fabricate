@@ -17,8 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class PCLBlight extends AbstractBlight implements TooltipProvider {
-    public final BlightStrings strings;
     protected final int initialAmount;
+    public final BlightStrings strings;
     public ArrayList<EUITooltip> tips;
     public EUITooltip mainTooltip;
 
@@ -37,14 +37,6 @@ public abstract class PCLBlight extends AbstractBlight implements TooltipProvide
         updateDescription();
     }
 
-    public String getUpdatedDescription() {
-        return formatDescription(0, counter);
-    }
-
-    protected String formatDescription(int index, Object... args) {
-        return EUIUtils.format(strings.DESCRIPTION[index], args);
-    }
-
     public PCLBlight(String id, int amount) {
         this(id, PGR.getBlightStrings(id), amount);
     }
@@ -53,9 +45,17 @@ public abstract class PCLBlight extends AbstractBlight implements TooltipProvide
         return PGR.core.createID(type.getSimpleName());
     }
 
+    protected String formatDescription(int index, Object... args) {
+        return EUIUtils.format(strings.DESCRIPTION[index], args);
+    }
+
     @Override
     public List<EUITooltip> getTips() {
         return tips;
+    }
+
+    public String getUpdatedDescription() {
+        return formatDescription(0, counter);
     }
 
     public PCLBlight makeCopy() {

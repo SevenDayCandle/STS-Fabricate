@@ -30,10 +30,8 @@ public class PRoot extends PPrimary<PField_Empty> {
     // This is a no-op on cards
     // For relics, this activates the effect at the start of battle
     @Override
-    public String getText(boolean addPeriod)
-    {
-        if (source instanceof AbstractRelic)
-        {
+    public String getText(boolean addPeriod) {
+        if (source instanceof AbstractRelic) {
             return super.getText(addPeriod);
         }
         return childEffect != null ? childEffect.getText(addPeriod) : "";

@@ -36,6 +36,22 @@ public class OrbFlareNotActuallyNeedingOrbEffect extends PCLEffect {
         setColors(OrbFlareEffect.OrbFlareColor.DARK);
     }
 
+    public void render(SpriteBatch sb) {
+        sb.setColor(this.color2);
+        sb.draw(inner, this.cX - (float) inner.packedWidth / 2.0F, this.cY - (float) inner.packedHeight / 2.0F, (float) inner.packedWidth / 2.0F, (float) inner.packedHeight / 2.0F, (float) inner.packedWidth, (float) inner.packedHeight, this.scale * Settings.scale * 1.1F, this.scaleY * Settings.scale, MathUtils.random(-1.0F, 1.0F));
+        sb.setBlendFunction(770, 1);
+        sb.setColor(this.color);
+        sb.draw(outer, this.cX - (float) outer.packedWidth / 2.0F, this.cY - (float) outer.packedHeight / 2.0F, (float) outer.packedWidth / 2.0F, (float) outer.packedHeight / 2.0F, (float) outer.packedWidth, (float) outer.packedHeight, this.scale, this.scaleY * Settings.scale, MathUtils.random(-2.0F, 2.0F));
+        sb.draw(outer, this.cX - (float) outer.packedWidth / 2.0F, this.cY - (float) outer.packedHeight / 2.0F, (float) outer.packedWidth / 2.0F, (float) outer.packedHeight / 2.0F, (float) outer.packedWidth, (float) outer.packedHeight, this.scale, this.scaleY * Settings.scale, MathUtils.random(-2.0F, 2.0F));
+        sb.setBlendFunction(770, 771);
+        sb.setColor(this.color2);
+        sb.draw(inner, this.cX - (float) inner.packedWidth / 2.0F, this.cY - (float) inner.packedHeight / 2.0F, (float) inner.packedWidth / 2.0F, (float) inner.packedHeight / 2.0F, (float) inner.packedWidth, (float) inner.packedHeight, this.scale * Settings.scale * 1.1F, this.scaleY * Settings.scale, MathUtils.random(-1.0F, 1.0F));
+    }
+
+    public void dispose() {
+
+    }
+
     public OrbFlareNotActuallyNeedingOrbEffect setColors(OrbFlareEffect.OrbFlareColor color) {
         switch (color) {
             case DARK:
@@ -58,16 +74,11 @@ public class OrbFlareNotActuallyNeedingOrbEffect extends PCLEffect {
         return this;
     }
 
-    public void render(SpriteBatch sb) {
-        sb.setColor(this.color2);
-        sb.draw(inner, this.cX - (float) inner.packedWidth / 2.0F, this.cY - (float) inner.packedHeight / 2.0F, (float) inner.packedWidth / 2.0F, (float) inner.packedHeight / 2.0F, (float) inner.packedWidth, (float) inner.packedHeight, this.scale * Settings.scale * 1.1F, this.scaleY * Settings.scale, MathUtils.random(-1.0F, 1.0F));
-        sb.setBlendFunction(770, 1);
-        sb.setColor(this.color);
-        sb.draw(outer, this.cX - (float) outer.packedWidth / 2.0F, this.cY - (float) outer.packedHeight / 2.0F, (float) outer.packedWidth / 2.0F, (float) outer.packedHeight / 2.0F, (float) outer.packedWidth, (float) outer.packedHeight, this.scale, this.scaleY * Settings.scale, MathUtils.random(-2.0F, 2.0F));
-        sb.draw(outer, this.cX - (float) outer.packedWidth / 2.0F, this.cY - (float) outer.packedHeight / 2.0F, (float) outer.packedWidth / 2.0F, (float) outer.packedHeight / 2.0F, (float) outer.packedWidth, (float) outer.packedHeight, this.scale, this.scaleY * Settings.scale, MathUtils.random(-2.0F, 2.0F));
-        sb.setBlendFunction(770, 771);
-        sb.setColor(this.color2);
-        sb.draw(inner, this.cX - (float) inner.packedWidth / 2.0F, this.cY - (float) inner.packedHeight / 2.0F, (float) inner.packedWidth / 2.0F, (float) inner.packedHeight / 2.0F, (float) inner.packedWidth, (float) inner.packedHeight, this.scale * Settings.scale * 1.1F, this.scaleY * Settings.scale, MathUtils.random(-1.0F, 1.0F));
+    public OrbFlareNotActuallyNeedingOrbEffect setColors(Color color1, Color color2) {
+        this.color.set(color1);
+        this.color2.set(color2);
+
+        return this;
     }
 
     public void updateInternal() {
@@ -81,16 +92,5 @@ public class OrbFlareNotActuallyNeedingOrbEffect extends PCLEffect {
         this.scale = Interpolation.elasticIn.apply(2.1F, 1.9F, this.duration * 2.0F);
         this.color.a = Interpolation.pow2Out.apply(0.0F, 0.6F, this.duration * 2.0F);
         this.color2.a = this.color.a;
-    }
-
-    public void dispose() {
-
-    }
-
-    public OrbFlareNotActuallyNeedingOrbEffect setColors(Color color1, Color color2) {
-        this.color.set(color1);
-        this.color2.set(color2);
-
-        return this;
     }
 }

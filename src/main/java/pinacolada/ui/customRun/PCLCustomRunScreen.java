@@ -31,6 +31,9 @@ import java.util.List;
 public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttributesProvider {
     public static final HashMap<String, AbstractCard.CardColor> COLOR_MOD_MAPPING = new HashMap<>();
     protected final PCLCustomRunCanvas canvas;
+    protected CharacterOption currentOption;
+    protected String currentSeed = GameUtilities.EMPTY_STRING;
+    protected boolean initialized;
     public HashSet<String> bannedCards = new HashSet<>();
     public HashSet<String> bannedRelics = new HashSet<>();
     public List<CustomMod> activeMods = new ArrayList<>();
@@ -39,12 +42,42 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
     public boolean isEndless;
     public boolean isFinalActAvailable;
     public int ascensionLevel;
-    protected CharacterOption currentOption;
-    protected String currentSeed = GameUtilities.EMPTY_STRING;
-    protected boolean initialized;
 
     public PCLCustomRunScreen() {
         canvas = new PCLCustomRunCanvas(this);
+    }
+
+    private void addCardsForGroup(CardGroup group, AbstractCard.CardColor color) {
+        addCardsFromGroup(group, color, c -> c.rarity != AbstractCard.CardRarity.SPECIAL);
+        if (allowCustomCards) {
+            for (PCLCustomCardSlot slot : PCLCustomCardSlot.getCards(color)) {
+                if (AbstractCard.CardRarity.valueOf(slot.rarity) != AbstractCard.CardRarity.SPECIAL) {
+                    group.group.add(slot.getBuilder(0).createImplWithForms(false));
+                }
+            }
+        }
+    }
+
+    private void addCardsFromGroup(CardGroup group, AbstractCard.CardColor color, FuncT1<Boolean, AbstractCard> evalFunc) {
+        for (AbstractCard c : CustomCardLibraryScreen.CardLists.get(color).group) {
+            if (evalFunc.invoke(c)) {
+                group.group.add(c.makeSameInstanceOf());
+            }
+        }
+    }
+
+    private void addColorlessCardsForGroup(CardGroup group, AbstractCard.CardColor color) {
+        PCLResources<?, ?, ?, ?> resources = PGR.getResources(color);
+        addCardsFromGroup(group, AbstractCard.CardColor.COLORLESS, c -> resources.containsColorless(c) && c.rarity != AbstractCard.CardRarity.SPECIAL);
+        addCardsFromGroup(group, AbstractCard.CardColor.CURSE, c -> resources.containsColorless(c) && c.rarity != AbstractCard.CardRarity.SPECIAL);
+
+        if (allowCustomCards) {
+            for (PCLCustomCardSlot slot : PCLCustomCardSlot.getCards(AbstractCard.CardColor.COLORLESS)) {
+                if (AbstractCard.CardRarity.valueOf(slot.rarity) != AbstractCard.CardRarity.SPECIAL) {
+                    group.group.add(slot.getBuilder(0).createImplWithForms(false));
+                }
+            }
+        }
     }
 
     @Override
@@ -118,39 +151,6 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
         return group;
     }
 
-    private void addCardsForGroup(CardGroup group, AbstractCard.CardColor color) {
-        addCardsFromGroup(group, color, c -> c.rarity != AbstractCard.CardRarity.SPECIAL);
-        if (allowCustomCards) {
-            for (PCLCustomCardSlot slot : PCLCustomCardSlot.getCards(color)) {
-                if (AbstractCard.CardRarity.valueOf(slot.rarity) != AbstractCard.CardRarity.SPECIAL) {
-                    group.group.add(slot.getBuilder(0).createImplWithForms(false));
-                }
-            }
-        }
-    }
-
-    private void addColorlessCardsForGroup(CardGroup group, AbstractCard.CardColor color) {
-        PCLResources<?, ?, ?, ?> resources = PGR.getResources(color);
-        addCardsFromGroup(group, AbstractCard.CardColor.COLORLESS, c -> resources.containsColorless(c) && c.rarity != AbstractCard.CardRarity.SPECIAL);
-        addCardsFromGroup(group, AbstractCard.CardColor.CURSE, c -> resources.containsColorless(c) && c.rarity != AbstractCard.CardRarity.SPECIAL);
-
-        if (allowCustomCards) {
-            for (PCLCustomCardSlot slot : PCLCustomCardSlot.getCards(AbstractCard.CardColor.COLORLESS)) {
-                if (AbstractCard.CardRarity.valueOf(slot.rarity) != AbstractCard.CardRarity.SPECIAL) {
-                    group.group.add(slot.getBuilder(0).createImplWithForms(false));
-                }
-            }
-        }
-    }
-
-    private void addCardsFromGroup(CardGroup group, AbstractCard.CardColor color, FuncT1<Boolean, AbstractCard> evalFunc) {
-        for (AbstractCard c : CustomCardLibraryScreen.CardLists.get(color).group) {
-            if (evalFunc.invoke(c)) {
-                group.group.add(c.makeSameInstanceOf());
-            }
-        }
-    }
-
     public void initialize(CustomModeScreen screen) {
         if (!initialized) {
             canvas.setup(screen);
@@ -165,11 +165,6 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
             initialized = true;
         }
         canvas.resetPositions();
-    }
-
-    public void setCharacter(CharacterOption c) {
-        this.currentOption = c;
-        canvas.setCharacter(c);
     }
 
     public void open() {
@@ -195,6 +190,11 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
     public void setAscension(int i) {
         this.ascensionLevel = i;
         canvas.setAscension(i);
+    }
+
+    public void setCharacter(CharacterOption c) {
+        this.currentOption = c;
+        canvas.setCharacter(c);
     }
 
     public void setSeed(String s) {

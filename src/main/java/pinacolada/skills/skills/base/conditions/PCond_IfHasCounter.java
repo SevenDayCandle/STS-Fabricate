@@ -50,17 +50,16 @@ public class PCond_IfHasCounter extends PFacetCond<PField_Not> {
     }
 
     @Override
-    public String getText(boolean addPeriod) {
-        String base = super.getText(addPeriod);
-        if (!isWhenClause() && !isPassiveClause())
-        {
-            return base + getXRawString();
-        }
-        return base;
+    public int getXValue(AbstractCard card) {
+        return GameUtilities.getCounter(sourceCard);
     }
 
     @Override
-    public int getXValue(AbstractCard card) {
-        return GameUtilities.getCounter(sourceCard);
+    public String getText(boolean addPeriod) {
+        String base = super.getText(addPeriod);
+        if (!isWhenClause() && !isPassiveClause()) {
+            return base + getXRawString();
+        }
+        return base;
     }
 }

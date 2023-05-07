@@ -23,13 +23,13 @@ public class PCLCardAffinity implements Comparable<PCLCardAffinity> {
         this.level = level;
     }
 
+    public int calculateRank() {
+        return this.level * 1000 - this.type.id;
+    }
+
     @Override
     public int compareTo(PCLCardAffinity other) {
         return other.calculateRank() - calculateRank();
-    }
-
-    public int calculateRank() {
-        return this.level * 1000 - this.type.id;
     }
 
     public void render(SpriteBatch sb, Color color, float cX, float cY, float size) {

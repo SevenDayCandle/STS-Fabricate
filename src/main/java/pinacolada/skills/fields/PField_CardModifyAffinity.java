@@ -21,17 +21,6 @@ public class PField_CardModifyAffinity extends PField_CardCategory {
         setOr(other.or);
     }
 
-    public PField_CardModifyAffinity setAddAffinity(List<PCLAffinity> affinities) {
-        this.addAffinities.clear();
-        this.addAffinities.addAll(affinities);
-        return this;
-    }
-
-    public PField_CardModifyAffinity setOr(boolean value) {
-        this.or = value;
-        return this;
-    }
-
     @Override
     public boolean equals(PField other) {
         return super.equals(other);
@@ -51,7 +40,18 @@ public class PField_CardModifyAffinity extends PField_CardCategory {
         return getAffinityAndOrString(addAffinities, or);
     }
 
+    public PField_CardModifyAffinity setAddAffinity(List<PCLAffinity> affinities) {
+        this.addAffinities.clear();
+        this.addAffinities.addAll(affinities);
+        return this;
+    }
+
     public PField_CardModifyAffinity setAddAffinity(PCLAffinity... affinities) {
         return setAddAffinity(Arrays.asList(affinities));
+    }
+
+    public PField_CardModifyAffinity setOr(boolean value) {
+        this.or = value;
+        return this;
     }
 }

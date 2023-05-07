@@ -71,28 +71,39 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
         fields.setCardIDs(cardData);
     }
 
-    @Override
-    public void use(PCLUseInfo info, ActionT1<PCLUseInfo> callback) {
-        final CardGroup choice = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
-        final int limit = Math.max(extra, amount);
-        choice.group = getBaseCards(info);
+    protected String getActionTitle() {
+        return getActionTooltip().title;
+    }
 
-        boolean automatic = choice.size() <= amount;
-        getActions().selectFromPile(getName(), amount, choice)
-                .setOptions((automatic ? PCLCardSelection.Random : PCLCardSelection.Manual).toSelection(), automatic)
-                .addCallback(cards -> {
-                    for (AbstractCard c : cards) {
-                        performAction(info, c);
-                    }
-                    info.setData(cards);
-                    callback.invoke(info);
-                    if (this.childEffect != null) {
-                        this.childEffect.use(info);
-                    }
-                });
-    }    @Override
+    public abstract EUITooltip getActionTooltip();
+
+    @Override
+    public String getAmountRawOrAllString() {
+        return extra > amount ? TEXT.subjects_xOfY(getAmountRawString(), getExtraRawString()) : getAmountRawString();
+    }
+
+    @Override
     public String getSampleText(PSkill<?> callingSkill) {
         return EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects_x);
+    }
+
+    @Override
+    public String getSubText() {
+        return EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), getCopiesOfString());
+    }
+
+    @Override
+    public PMove_GenerateCard makePreviews(RotatingList<EUICardPreview> previews) {
+        fields.makePreviews(previews);
+        super.makePreviews(previews);
+        return this;
+    }
+
+    @Override
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        super.setupEditor(editor);
+        registerUseParentBoolean(editor);
+        fields.registerFBoolean(editor, StringUtils.capitalize(TEXT.subjects_thisCard), null);
     }
 
     protected ArrayList<AbstractCard> getBaseCards(PCLUseInfo info) {
@@ -104,8 +115,7 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
             if (cards != null) {
                 ArrayList<AbstractCard> created = new ArrayList<>();
                 for (AbstractCard card : cards) {
-                    if (!card.purgeOnUse)
-                    {
+                    if (!card.purgeOnUse) {
                         for (int i = 0; i < limit; i++) {
                             created.add(card.makeStatEquivalentCopy());
                         }
@@ -144,20 +154,22 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
         return new ArrayList<>();
     }
 
-    protected Iterable<AbstractCard> getSourceCards(int limit)
-    {
+    protected String getCopiesOfString() {
+        return useParent ? TEXT.subjects_copiesOf(getInheritedString())
+                : (fields.forced || fields.groupTypes.isEmpty()) ? TEXT.subjects_copiesOf(TEXT.subjects_thisCard)
+                : fields.getFullCardString();
+    }
+
+    protected Iterable<AbstractCard> getSourceCards(int limit) {
         if (EUIUtils.any(fields.colors, f -> f != AbstractCard.CardColor.COLORLESS && f != GameUtilities.getActingColor())
                 || EUIUtils.any(fields.types, f -> f == AbstractCard.CardType.STATUS)
-                || EUIUtils.any(fields.rarities, f -> f != AbstractCard.CardRarity.COMMON && f != AbstractCard.CardRarity.UNCOMMON && f != AbstractCard.CardRarity.RARE && f != AbstractCard.CardRarity.CURSE))
-        {
+                || EUIUtils.any(fields.rarities, f -> f != AbstractCard.CardRarity.COMMON && f != AbstractCard.CardRarity.UNCOMMON && f != AbstractCard.CardRarity.RARE && f != AbstractCard.CardRarity.CURSE)) {
             return GameUtilities.getCardsFromAllColorCombatPool(fields.getFullCardFilter(), limit);
         }
-        else if (!fields.rarities.isEmpty() || !fields.types.isEmpty())
-        {
+        else if (!fields.rarities.isEmpty() || !fields.types.isEmpty()) {
             return GameUtilities.getCardsFromFullCombatPool(fields.getFullCardFilter(), limit);
         }
-        else
-        {
+        else {
             return GameUtilities.getCardsFromStandardCombatPool(fields.getFullCardFilter(), limit);
         }
     }
@@ -165,42 +177,25 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
     public abstract void performAction(PCLUseInfo info, AbstractCard c);
 
     @Override
-    public String getSubText() {
-        return EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), getCopiesOfString());
+    public void use(PCLUseInfo info, ActionT1<PCLUseInfo> callback) {
+        final CardGroup choice = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
+        final int limit = Math.max(extra, amount);
+        choice.group = getBaseCards(info);
+
+        boolean automatic = choice.size() <= amount;
+        getActions().selectFromPile(getName(), amount, choice)
+                .setOptions((automatic ? PCLCardSelection.Random : PCLCardSelection.Manual).toSelection(), automatic)
+                .addCallback(cards -> {
+                    for (AbstractCard c : cards) {
+                        performAction(info, c);
+                    }
+                    info.setData(cards);
+                    callback.invoke(info);
+                    if (this.childEffect != null) {
+                        this.childEffect.use(info);
+                    }
+                });
     }
-
-    @Override
-    public String getAmountRawOrAllString() {
-        return extra > amount ? TEXT.subjects_xOfY(getAmountRawString(), getExtraRawString()) : getAmountRawString();
-    }
-
-    @Override
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-        super.setupEditor(editor);
-        registerUseParentBoolean(editor);
-        fields.registerFBoolean(editor, StringUtils.capitalize(TEXT.subjects_thisCard), null);
-    }
-
-    @Override
-    public PMove_GenerateCard makePreviews(RotatingList<EUICardPreview> previews) {
-        fields.makePreviews(previews);
-        super.makePreviews(previews);
-        return this;
-    }
-
-
-
-    protected String getCopiesOfString() {
-        return useParent ? TEXT.subjects_copiesOf(getInheritedString())
-                : (fields.forced || fields.groupTypes.isEmpty()) ? TEXT.subjects_copiesOf(TEXT.subjects_thisCard)
-                : fields.getFullCardString();
-    }
-
-    protected String getActionTitle() {
-        return getActionTooltip().title;
-    }
-
-    public abstract EUITooltip getActionTooltip();
 
 
 }

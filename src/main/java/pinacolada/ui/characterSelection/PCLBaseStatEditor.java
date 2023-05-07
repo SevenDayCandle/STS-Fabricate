@@ -24,9 +24,6 @@ import pinacolada.resources.loadout.PCLLoadoutData;
 // Copied and modified from STS-AnimatorMod
 public class PCLBaseStatEditor extends EUIBase {
     public static final float ICON_SIZE = 64f * Settings.scale;
-    public StatType type;
-    public PCLLoadout loadout;
-    public PCLLoadoutData data;
     protected boolean interactable;
     protected Hitbox hb;
     protected EUIImage image;
@@ -35,6 +32,9 @@ public class PCLBaseStatEditor extends EUIBase {
     protected EUIButton increaseButton;
     protected EUIDropdown<Integer> valueDropdown;
     protected PCLLoadoutEditor editor;
+    public StatType type;
+    public PCLLoadout loadout;
+    public PCLLoadoutData data;
 
     public PCLBaseStatEditor(StatType type, float cX, float cY, PCLLoadoutEditor editor) {
         this.type = type;
@@ -90,16 +90,20 @@ public class PCLBaseStatEditor extends EUIBase {
                 .setItems(EUIUtils.range(type.minValue, type.maxValue, type.valuePerStep));
     }
 
+    public boolean canDecrease() {
+        return valueDropdown.getCurrentIndex() > 0;
+    }
+
+    public boolean canIncrease() {
+        return valueDropdown.getCurrentIndex() < valueDropdown.rows.size() - 1;
+    }
+
     public void decrease() {
         valueDropdown.setSelectionIndices(new int[]{valueDropdown.getCurrentIndex() - 1}, true);
     }
 
     public void increase() {
         valueDropdown.setSelectionIndices(new int[]{valueDropdown.getCurrentIndex() + 1}, true);
-    }
-
-    public void set(int amount) {
-        type.setAmount(data, amount);
     }
 
     @Override
@@ -121,12 +125,8 @@ public class PCLBaseStatEditor extends EUIBase {
         valueDropdown.tryUpdate();
     }
 
-    public boolean canDecrease() {
-        return valueDropdown.getCurrentIndex() > 0;
-    }
-
-    public boolean canIncrease() {
-        return valueDropdown.getCurrentIndex() < valueDropdown.rows.size() - 1;
+    public void set(int amount) {
+        type.setAmount(data, amount);
     }
 
     public PCLBaseStatEditor setEstimatedValue(int value) {
@@ -173,28 +173,16 @@ public class PCLBaseStatEditor extends EUIBase {
             this.unlockLevel = unlockLevel;
         }
 
-        public String getText(PCLLoadout loadout, PCLLoadoutData data) {
-            if (loadout == null || data == null) {
-                return "";
-            }
-            switch (this) {
-                case Gold:
-                    return CharacterOption.TEXT[5] + getAmount(loadout, data);
-                case HP:
-                    return CharacterOption.TEXT[4] + getAmount(loadout, data);
-                case CardDraw:
-                    return PGR.core.strings.rewards_orbSlot + ": " + getAmount(loadout, data);
-                case PotionSlot:
-                    return PGR.core.strings.rewards_potionSlot + ": " + getAmount(loadout, data);
-                case Energy:
-                    return PGR.core.strings.rewards_commonUpgrade + ": " + getAmount(loadout, data);
-                default:
-                    return "";
-            }
-        }
-
         public int getAmount(PCLLoadout loadout, PCLLoadoutData data) {
             return getBase(loadout) + getAmountForValue(data);
+        }
+
+        public int getAmountForValue(PCLLoadoutData data) {
+            return getAmountForValue(data != null ? data.values.getOrDefault(this, 0) : 0);
+        }
+
+        public int getAmountForValue(int value) {
+            return (amountPerStep * value) / valuePerStep;
         }
 
         public int getBase(PCLLoadout loadout) {
@@ -214,12 +202,24 @@ public class PCLBaseStatEditor extends EUIBase {
             }
         }
 
-        public int getAmountForValue(PCLLoadoutData data) {
-            return getAmountForValue(data != null ? data.values.getOrDefault(this, 0) : 0);
-        }
-
-        public int getAmountForValue(int value) {
-            return (amountPerStep * value) / valuePerStep;
+        public String getText(PCLLoadout loadout, PCLLoadoutData data) {
+            if (loadout == null || data == null) {
+                return "";
+            }
+            switch (this) {
+                case Gold:
+                    return CharacterOption.TEXT[5] + getAmount(loadout, data);
+                case HP:
+                    return CharacterOption.TEXT[4] + getAmount(loadout, data);
+                case CardDraw:
+                    return PGR.core.strings.rewards_orbSlot + ": " + getAmount(loadout, data);
+                case PotionSlot:
+                    return PGR.core.strings.rewards_potionSlot + ": " + getAmount(loadout, data);
+                case Energy:
+                    return PGR.core.strings.rewards_commonUpgrade + ": " + getAmount(loadout, data);
+                default:
+                    return "";
+            }
         }
 
         public void setAmount(PCLLoadoutData data, int amount) {

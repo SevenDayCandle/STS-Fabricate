@@ -21,10 +21,10 @@ public abstract class EUICardDraggable<T extends AbstractCard> extends EUIBase {
     protected final STSConfigItem<Vector2> config;
     protected final EUIImage draggablePanel;
     protected final EUIImage draggableIcon;
-    public DraggableHitbox hb;
-    protected Vector2 meterSavedPosition;
     private AbstractCard lastCard;
     private AbstractCreature lastTarget;
+    protected Vector2 meterSavedPosition;
+    public DraggableHitbox hb;
 
     public EUICardDraggable(STSConfigItem<Vector2> config, DraggableHitbox hb, float iconSize) {
         this.config = config;
@@ -35,19 +35,6 @@ public abstract class EUICardDraggable<T extends AbstractCard> extends EUIBase {
                 .setColor(0.05f, 0.05f, 0.05f, 0.5f);
         draggableIcon = new EUIImage(EUIRM.images.draggable.texture(), new RelativeHitbox(hb, scale(40f), scale(40f), iconSize / 2, iconSize / 2))
                 .setColor(EUIColors.white(0.25f));
-    }
-
-    protected void savePosition(DraggableHitbox hb) {
-
-        if (meterSavedPosition != null && config != null) {
-            meterSavedPosition.x = hb.targetCx / (float) Settings.WIDTH;
-            meterSavedPosition.y = hb.targetCy / (float) Settings.HEIGHT;
-            if (meterSavedPosition.dst2(config.get().cpy()) > EPSILON) {
-                EUIUtils.logInfoIfDebug(this, "Saved position: " + meterSavedPosition);
-                config.set(meterSavedPosition.cpy(), true);
-            }
-        }
-
     }
 
     protected AbstractCard getLastCard() {
@@ -68,6 +55,10 @@ public abstract class EUICardDraggable<T extends AbstractCard> extends EUIBase {
         }
     }
 
+    public boolean isHovered() {
+        return draggablePanel.hb.hovered;
+    }
+
     @Override
     public void renderImpl(SpriteBatch sb) {
         this.hb.render(sb);
@@ -77,6 +68,19 @@ public abstract class EUICardDraggable<T extends AbstractCard> extends EUIBase {
 
     public final void updateImpl() {
     } // This should not be called
+
+    protected void savePosition(DraggableHitbox hb) {
+
+        if (meterSavedPosition != null && config != null) {
+            meterSavedPosition.x = hb.targetCx / (float) Settings.WIDTH;
+            meterSavedPosition.y = hb.targetCy / (float) Settings.HEIGHT;
+            if (meterSavedPosition.dst2(config.get().cpy()) > EPSILON) {
+                EUIUtils.logInfoIfDebug(this, "Saved position: " + meterSavedPosition);
+                config.set(meterSavedPosition.cpy(), true);
+            }
+        }
+
+    }
 
     public EUICardDraggable<T> setDimensions(float width, float height) {
         this.hb.resize(width, height);
@@ -115,10 +119,6 @@ public abstract class EUICardDraggable<T extends AbstractCard> extends EUIBase {
             lastCard = card;
             lastTarget = target;
         }
-    }
-
-    public boolean isHovered() {
-        return draggablePanel.hb.hovered;
     }
 
     public abstract void updateImpl(T card, AbstractCreature target, boolean draggingCard, boolean shouldUpdateForCard, boolean shouldUpdateForTarget);

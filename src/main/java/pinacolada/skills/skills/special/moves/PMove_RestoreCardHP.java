@@ -26,6 +26,11 @@ public class PMove_RestoreCardHP extends PMove_Modify<PField_CardCategory> {
     }
 
     @Override
+    public ActionT1<AbstractCard> getAction() {
+        return (c) -> getActions().modifyCardHp(c, extra, false, true);
+    }
+
+    @Override
     public String getObjectSampleText() {
         return PGR.core.tooltips.hp.title;
     }
@@ -45,11 +50,6 @@ public class PMove_RestoreCardHP extends PMove_Modify<PField_CardCategory> {
     @Override
     public String wrapExtra(int input) {
         return String.valueOf(input);
-    }
-
-    @Override
-    public ActionT1<AbstractCard> getAction() {
-        return (c) -> getActions().modifyCardHp(c, extra, false, true);
     }
 
     @Override

@@ -19,12 +19,11 @@ import java.util.Objects;
 
 // Copied and modified from STS-AnimatorMod
 public abstract class PCLStance extends AbstractStance {
-    public static final String STANCE_ID = PGR.core.createID(PCLStance.class.getSimpleName());
-
     protected static final int EXIT_GAIN = 4;
+    public static final String STANCE_ID = PGR.core.createID(PCLStance.class.getSimpleName());
     protected static long sfxId = -1L;
-    public final PCLStanceHelper helper;
     protected final StanceStrings strings;
+    public final PCLStanceHelper helper;
 
     protected PCLStance(PCLStanceHelper helper) {
         this.ID = helper.ID;
@@ -33,6 +32,46 @@ public abstract class PCLStance extends AbstractStance {
         this.helper = helper;
 
         updateDescription();
+    }
+
+    protected static Color createColor(float r1, float r2, float g1, float g2, float b1, float b2) {
+        return new Color(MathUtils.random(r1, r2), MathUtils.random(g1, g2), MathUtils.random(b1, b2), 0);
+    }
+
+    public static String createFullID(Class<? extends PCLStance> type) {
+        return PGR.core.createID(type.getSimpleName());
+    }
+
+    protected String formatDescription(Object... args) {
+        return EUIUtils.format(strings.DESCRIPTION[0], args);
+    }
+
+    protected abstract Color getAuraColor();
+
+    protected abstract Color getMainColor();
+
+    protected abstract Color getParticleColor();
+
+    public void onRefreshStance() {
+
+    }
+
+    protected void queueAura() {
+        PCLEffects.Queue.add(new StanceAura(getAuraColor()));
+    }
+
+    protected void queueParticle() {
+        PCLEffects.Queue.add(new StanceParticleVertical(getParticleColor()));
+    }
+
+    protected boolean tryApplyStance(String stanceID) {
+        String current = CombatManager.getCombatData(PCLStance.class.getSimpleName(), null);
+        if (Objects.equals(stanceID, current)) {
+            return false;
+        }
+
+        CombatManager.setCombatData(PCLStance.class.getSimpleName(), stanceID);
+        return true;
     }
 
     @Override
@@ -53,8 +92,6 @@ public abstract class PCLStance extends AbstractStance {
         sfxId = CardCrawlGame.sound.playAndLoop("STANCE_LOOP_CALM");
         PCLEffects.Queue.add(new BorderFlashEffect(getMainColor(), true));
     }
-
-    protected abstract Color getMainColor();
 
     @Override
     public void onExitStance() {
@@ -80,49 +117,11 @@ public abstract class PCLStance extends AbstractStance {
         }
     }
 
-    protected void queueParticle() {
-        PCLEffects.Queue.add(new StanceParticleVertical(getParticleColor()));
-    }
-
-    protected void queueAura() {
-        PCLEffects.Queue.add(new StanceAura(getAuraColor()));
-    }
-
-    protected abstract Color getParticleColor();
-
-    protected abstract Color getAuraColor();
-
     @Override
     public void stopIdleSfx() {
         if (sfxId != -1L) {
             CardCrawlGame.sound.stop("STANCE_LOOP_CALM", sfxId);
             sfxId = -1L;
         }
-    }
-
-    protected static Color createColor(float r1, float r2, float g1, float g2, float b1, float b2) {
-        return new Color(MathUtils.random(r1, r2), MathUtils.random(g1, g2), MathUtils.random(b1, b2), 0);
-    }
-
-    public static String createFullID(Class<? extends PCLStance> type) {
-        return PGR.core.createID(type.getSimpleName());
-    }
-
-    protected String formatDescription(Object... args) {
-        return EUIUtils.format(strings.DESCRIPTION[0], args);
-    }
-
-    public void onRefreshStance() {
-
-    }
-
-    protected boolean tryApplyStance(String stanceID) {
-        String current = CombatManager.getCombatData(PCLStance.class.getSimpleName(), null);
-        if (Objects.equals(stanceID, current)) {
-            return false;
-        }
-
-        CombatManager.setCombatData(PCLStance.class.getSimpleName(), stanceID);
-        return true;
     }
 }

@@ -24,12 +24,12 @@ import pinacolada.utilities.GameUtilities;
 // Copied and modified from STS-AnimatorMod
 public class PCLClickableUse {
     public final ClickableProvider source;
+    private boolean canUse;
+    private GameActionManager.Phase currentPhase;
     public FuncT1<Boolean, PCLClickableUse> checkCondition;
     public PCLTriggerUsePool pool;
     public PSkill move;
     public boolean clickable;
-    private boolean canUse;
-    private GameActionManager.Phase currentPhase;
 
     public PCLClickableUse(ClickableProvider power, ActionT2<PSpecialSkill, PCLUseInfo> onUse) {
         this(power, new PSpecialSkill(power.getID(), power.getDescription(), onUse));
@@ -69,6 +69,26 @@ public class PCLClickableUse {
         return this;
     }
 
+    public boolean canUse() {
+        return canUse;
+    }
+
+    public boolean checkCondition() {
+        return (checkCondition == null || checkCondition.invoke(this)) && (!(move instanceof PCond) || ((PCond<?>) move).checkCondition(null, false, null));
+    }
+
+    public int getCurrentUses() {
+        return pool.uses;
+    }
+
+    public boolean hasInfiniteUses() {
+        return pool.hasInfiniteUses();
+    }
+
+    public boolean interactable() {
+        return (currentPhase == GameActionManager.Phase.WAITING_ON_USER && GameUtilities.isPlayerTurn(true)) && canUse;
+    }
+
     public void refresh(boolean startOfTurn, boolean forceUpdate) {
         if (startOfTurn) {
             pool.refresh();
@@ -81,37 +101,6 @@ public class PCLClickableUse {
         updateHeader();
     }
 
-    public boolean checkCondition() {
-        return (checkCondition == null || checkCondition.invoke(this)) && (!(move instanceof PCond) || ((PCond<?>) move).checkCondition(null, false, null));
-    }
-
-    public void updateHeader() {
-        EUITooltip tooltip = source.getTooltip();
-        if (tooltip != null) {
-            if (tooltip.subHeader == null) {
-                tooltip.subHeader = new ColoredString();
-            }
-            tooltip.subHeader.color = pool.uses == 0 ? Settings.RED_TEXT_COLOR : Settings.GREEN_TEXT_COLOR;
-            tooltip.subHeader.text = (hasInfiniteUses() ? PGR.core.strings.subjects_infinite : (pool.uses + "/" + pool.baseUses)) + " " + PGR.core.strings.combat_uses;
-        }
-    }
-
-    public boolean hasInfiniteUses() {
-        return pool.hasInfiniteUses();
-    }
-
-    public boolean canUse() {
-        return canUse;
-    }
-
-    public int getCurrentUses() {
-        return pool.uses;
-    }
-
-    public boolean interactable() {
-        return (currentPhase == GameActionManager.Phase.WAITING_ON_USER && GameUtilities.isPlayerTurn(true)) && canUse;
-    }
-
     public PCLClickableUse setCheckCondition(FuncT1<Boolean, PCLClickableUse> checkCondition) {
         this.checkCondition = checkCondition;
 
@@ -120,6 +109,11 @@ public class PCLClickableUse {
 
     public PCLClickableUse setOneUsePerPower(boolean refreshEachTurn) {
         return setUses(1, refreshEachTurn, true);
+    }
+
+    public PCLClickableUse setTarget(PCLCardTarget target) {
+        this.move.setTarget(target);
+        return this;
     }
 
     public PCLClickableUse setUses(int uses, boolean refreshEachTurn, boolean stackAutomatically) {
@@ -131,11 +125,6 @@ public class PCLClickableUse {
         updateHeader();
         refresh(false, true);
 
-        return this;
-    }
-
-    public PCLClickableUse setTarget(PCLCardTarget target) {
-        this.move.setTarget(target);
         return this;
     }
 
@@ -163,6 +152,17 @@ public class PCLClickableUse {
         }
         else {
             this.use(null, amount);
+        }
+    }
+
+    public void updateHeader() {
+        EUITooltip tooltip = source.getTooltip();
+        if (tooltip != null) {
+            if (tooltip.subHeader == null) {
+                tooltip.subHeader = new ColoredString();
+            }
+            tooltip.subHeader.color = pool.uses == 0 ? Settings.RED_TEXT_COLOR : Settings.GREEN_TEXT_COLOR;
+            tooltip.subHeader.text = (hasInfiniteUses() ? PGR.core.strings.subjects_infinite : (pool.uses + "/" + pool.baseUses)) + " " + PGR.core.strings.combat_uses;
         }
     }
 

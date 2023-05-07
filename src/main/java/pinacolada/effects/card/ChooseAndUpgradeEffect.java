@@ -21,9 +21,9 @@ import java.util.Iterator;
 import java.util.function.Predicate;
 
 public class ChooseAndUpgradeEffect extends AbstractGameEffect {
-    public static final String[] TEXT;
     private static final UIStrings uiStrings;
     private static final float DUR = 1.5f;
+    public static final String[] TEXT;
 
     static {
         uiStrings = CardCrawlGame.languagePack.getUIString("CampfireSmithEffect");
@@ -32,8 +32,8 @@ public class ChooseAndUpgradeEffect extends AbstractGameEffect {
 
     private final boolean canCancel;
     private final Color screenColor;
-    Predicate<AbstractCard> filter;
     private boolean openedScreen = false;
+    Predicate<AbstractCard> filter;
 
     public ChooseAndUpgradeEffect(Predicate<AbstractCard> filter) {
         this(filter, true);

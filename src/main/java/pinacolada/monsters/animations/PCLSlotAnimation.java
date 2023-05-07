@@ -9,8 +9,8 @@ import pinacolada.utilities.PCLRenderHelpers;
 
 public class PCLSlotAnimation extends PCLAnimation {
     protected static final float RATE = 0.85f * (float) Math.PI;
-    public float targetTransitionAlpha;
     protected float transitionAlpha;
+    public float targetTransitionAlpha;
 
     public PCLSlotAnimation() {
         super();

@@ -27,6 +27,13 @@ public class PCLDebugAugmentPanel {
         originalSortedAugments.sort((a, b) -> StringUtils.compare(a.ID, b.ID));
     }
 
+    private void obtain() {
+        PCLAugmentData chosen = augmentList.get();
+        if (chosen != null) {
+            PGR.dungeon.addAugment(chosen.ID, augmentCount.get());
+        }
+    }
+
     private boolean passes(PCLAugmentData augment) {
         return (augmentFilter.passFilter(augment.ID) || augmentFilter.passFilter(augment.strings.NAME));
     }
@@ -47,12 +54,5 @@ public class PCLDebugAugmentPanel {
                 obtain.render(this::obtain);
             });
         });
-    }
-
-    private void obtain() {
-        PCLAugmentData chosen = augmentList.get();
-        if (chosen != null) {
-            PGR.dungeon.addAugment(chosen.ID, augmentCount.get());
-        }
     }
 }

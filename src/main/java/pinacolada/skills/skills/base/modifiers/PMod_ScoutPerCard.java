@@ -36,12 +36,12 @@ public class PMod_ScoutPerCard extends PMod_Do {
     }
 
     @Override
-    public EUITooltip getActionTooltip() {
-        return PGR.core.tooltips.scout;
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
+        return (s, c, i, o, g) -> new ScoutCards(s, i);
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
-        return (s, c, i, o, g) -> new ScoutCards(s, i);
+    public EUITooltip getActionTooltip() {
+        return PGR.core.tooltips.scout;
     }
 }

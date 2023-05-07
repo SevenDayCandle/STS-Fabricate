@@ -47,11 +47,6 @@ public class GenericFlashEffect extends PCLEffect {
         return this;
     }
 
-    public void render(SpriteBatch sb) {
-        sb.setColor(this.color);
-        renderImage(sb, this.img, x, y, false, false);
-    }
-
     public void update() {
         this.duration -= Gdx.graphics.getDeltaTime();
         if (this.duration > 0.5f) {
@@ -61,6 +56,11 @@ public class GenericFlashEffect extends PCLEffect {
             this.color.a = Interpolation.fade.apply(0.5f, 0f, 1f - this.duration);
         }
 
+    }
+
+    public void render(SpriteBatch sb) {
+        sb.setColor(this.color);
+        renderImage(sb, this.img, x, y, false, false);
     }
 
     public void dispose() {

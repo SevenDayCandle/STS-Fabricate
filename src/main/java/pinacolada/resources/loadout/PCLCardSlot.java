@@ -64,33 +64,6 @@ public class PCLCardSlot {
         return select(null);
     }
 
-    public PCLCardSlot select(Item item) {
-        return select(item, item == null ? 0 : 1);
-    }
-
-    public PCLCardSlot select(Item item, int amount) {
-        selected = item;
-        if (item == null) {
-            if (min > 0) {
-                throw new RuntimeException("Tried to deselect an item, but at least 1 card needs to be selected.");
-            }
-            this.amount = 0;
-        }
-        else {
-            if (max <= 0) {
-                throw new RuntimeException("Tried to select an item, but no cards are allowed in this slot.");
-            }
-
-            currentMax = Math.min(max, selected.data.maxCopies >= min ? selected.data.maxCopies : max);
-            if (currentMax <= 0) {
-                currentMax = MAX_LIMIT;
-            }
-            this.amount = MathUtils.clamp(amount, min, currentMax);
-        }
-
-        return this;
-    }
-
     public void decrement() {
         if (amount > 1) {
             amount -= 1;
@@ -115,6 +88,10 @@ public class PCLCardSlot {
         return selected != null ? selected.getCard(refresh) : null;
     }
 
+    public PCLCardData getData() {
+        return selected != null ? selected.data : null;
+    }
+
     public int getEstimatedValue() {
         return amount * (selected == null ? 0 : selected.estimatedValue);
     }
@@ -137,10 +114,6 @@ public class PCLCardSlot {
         return cards;
     }
 
-    public PCLCardData getData() {
-        return selected != null ? selected.data : null;
-    }
-
     public int getSlotIndex() {
         return container.cardSlots.indexOf(this);
     }
@@ -153,22 +126,6 @@ public class PCLCardSlot {
         }
 
         return copy;
-    }
-
-    public PCLCardSlot select(PCLCardData data, int amount) {
-        int i = 0;
-        for (Item item : cards) {
-            if (item.data == data) {
-                return select(i, amount);
-            }
-            i += 1;
-        }
-
-        return null;
-    }
-
-    public PCLCardSlot select(int index, int amount) {
-        return select(cards.setIndex(index), amount);
     }
 
     public void markAllSeen() {
@@ -210,6 +167,49 @@ public class PCLCardSlot {
                 return;
             }
         }
+    }
+
+    public PCLCardSlot select(Item item) {
+        return select(item, item == null ? 0 : 1);
+    }
+
+    public PCLCardSlot select(Item item, int amount) {
+        selected = item;
+        if (item == null) {
+            if (min > 0) {
+                throw new RuntimeException("Tried to deselect an item, but at least 1 card needs to be selected.");
+            }
+            this.amount = 0;
+        }
+        else {
+            if (max <= 0) {
+                throw new RuntimeException("Tried to select an item, but no cards are allowed in this slot.");
+            }
+
+            currentMax = Math.min(max, selected.data.maxCopies >= min ? selected.data.maxCopies : max);
+            if (currentMax <= 0) {
+                currentMax = MAX_LIMIT;
+            }
+            this.amount = MathUtils.clamp(amount, min, currentMax);
+        }
+
+        return this;
+    }
+
+    public PCLCardSlot select(PCLCardData data, int amount) {
+        int i = 0;
+        for (Item item : cards) {
+            if (item.data == data) {
+                return select(i, amount);
+            }
+            i += 1;
+        }
+
+        return null;
+    }
+
+    public PCLCardSlot select(int index, int amount) {
+        return select(cards.setIndex(index), amount);
     }
 
     public PCLCardSlot select(String id, int amount) {

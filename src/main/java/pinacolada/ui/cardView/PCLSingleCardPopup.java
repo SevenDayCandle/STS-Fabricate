@@ -172,14 +172,12 @@ public class PCLSingleCardPopup extends EUIBase {
                 .setLabel(PGR.core.strings.scp_artAuthor);
     }
 
-    private void toggleUpgrade(boolean value) {
-        SingleCardViewPopup.isViewingUpgrade = value;
-    }
-
-    private void toggleBetaArt(boolean value) {
-        this.viewBetaArt = value;
-        UnlockTracker.betaCardPref.putBoolean(this.card.cardID, this.viewBetaArt);
-        UnlockTracker.betaCardPref.flush();
+    private void applyAugment(PCLAugment augment) {
+        PGR.dungeon.addAugment(augment.ID, -1);
+        baseCard.addAugment(augment);
+        this.card = baseCard.makePopupCopy();
+        this.upgradedCard = getUpgradeCard();
+        refreshAugments();
     }
 
     private void changeCardForm() {
@@ -200,11 +198,6 @@ public class PCLSingleCardPopup extends EUIBase {
 
     }
 
-    private void toggleAugmentView(boolean value) {
-        showAugments = value;
-        toggleAugment.setText(showAugments ? PGR.core.strings.scp_viewTooltips : PGR.core.strings.scp_viewAugments);
-    }
-
     public void close() {
         if (AbstractDungeon.player != null) {
             SingleCardViewPopup.isViewingUpgrade = false;
@@ -217,6 +210,19 @@ public class PCLSingleCardPopup extends EUIBase {
         this.card = null;
         this.upgradedCard = null;
         this.currentForm = 0;
+    }
+
+    public PCLCard getCard() {
+        if (SingleCardViewPopup.isViewingUpgrade) {
+            if (upgradedCard == null) {
+                upgradedCard = getUpgradeCard();
+            }
+
+            return upgradedCard;
+        }
+        else {
+            return card;
+        }
     }
 
     private String getCardCopiesText() {
@@ -235,6 +241,13 @@ public class PCLSingleCardPopup extends EUIBase {
         else {
             return String.valueOf(maxCopies);
         }
+    }
+
+    private PCLCard getUpgradeCard() {
+        upgradedCard = card.makePopupCopy();
+        upgradedCard.upgrade();
+        upgradedCard.displayUpgrades();
+        return upgradedCard;
     }
 
     public void open(PCLCard card, CardGroup group) {
@@ -339,12 +352,22 @@ public class PCLSingleCardPopup extends EUIBase {
 
     }
 
-    private void applyAugment(PCLAugment augment) {
-        PGR.dungeon.addAugment(augment.ID, -1);
-        baseCard.addAugment(augment);
-        this.card = baseCard.makePopupCopy();
-        this.upgradedCard = getUpgradeCard();
-        refreshAugments();
+    private void openNext(AbstractCard card) {
+        boolean tmp = SingleCardViewPopup.isViewingUpgrade;
+        this.close();
+        CardCrawlGame.cardPopup.open(card, this.group);
+        SingleCardViewPopup.isViewingUpgrade = tmp;
+        this.fadeTimer = 0f;
+        this.fadeColor.a = 0.9f;
+    }
+
+    private void refreshAugments() {
+        float curY = AUGMENT_Y;
+        for (PCLAugmentViewer viewer : currentAugments) {
+            viewer.refreshAugment();
+            viewer.translate(AUGMENT_X, curY);
+            curY += viewer.getHeight();
+        }
     }
 
     private void removeAugment(int index) {
@@ -357,29 +380,22 @@ public class PCLSingleCardPopup extends EUIBase {
         }
     }
 
-    private PCLCard getUpgradeCard() {
-        upgradedCard = card.makePopupCopy();
-        upgradedCard.upgrade();
-        upgradedCard.displayUpgrades();
-        return upgradedCard;
-    }
-
-    private void refreshAugments() {
-        float curY = AUGMENT_Y;
-        for (PCLAugmentViewer viewer : currentAugments) {
-            viewer.refreshAugment();
-            viewer.translate(AUGMENT_X, curY);
-            curY += viewer.getHeight();
+    private void renderArrow(SpriteBatch sb, Hitbox hb, CInputAction action, boolean flipX) {
+        sb.setColor(Color.WHITE);
+        sb.draw(ImageMaster.POPUP_ARROW, hb.cX - 128f, hb.cY - 128f, 128f, 128f, 256f, 256f, Settings.scale, Settings.scale, 0f, 0, 0, 256, 256, flipX, false);
+        if (Settings.isControllerMode) {
+            sb.draw(action.getKeyImg(), hb.cX - 32f, hb.cY - 32f + 100f * Settings.scale, 32f, 32f, 64f, 64f, Settings.scale, Settings.scale, 0f, 0, 0, 64, 64, false, false);
         }
-    }
 
-    private void openNext(AbstractCard card) {
-        boolean tmp = SingleCardViewPopup.isViewingUpgrade;
-        this.close();
-        CardCrawlGame.cardPopup.open(card, this.group);
-        SingleCardViewPopup.isViewingUpgrade = tmp;
-        this.fadeTimer = 0f;
-        this.fadeColor.a = 0.9f;
+        if (hb.hovered) {
+            sb.setBlendFunction(770, 1);
+            sb.setColor(new Color(1f, 1f, 1f, 0.5f));
+            sb.draw(ImageMaster.POPUP_ARROW, hb.cX - 128f, hb.cY - 128f, 128f, 128f, 256f, 256f, Settings.scale, Settings.scale, 0f, 0, 0, 256, 256, flipX, false);
+            sb.setColor(Color.WHITE);
+            sb.setBlendFunction(770, 771);
+        }
+
+        hb.render(sb);
     }
 
     @Override
@@ -463,37 +479,6 @@ public class PCLSingleCardPopup extends EUIBase {
         this.toggleAugment.tryRender(sb);
     }
 
-    public PCLCard getCard() {
-        if (SingleCardViewPopup.isViewingUpgrade) {
-            if (upgradedCard == null) {
-                upgradedCard = getUpgradeCard();
-            }
-
-            return upgradedCard;
-        }
-        else {
-            return card;
-        }
-    }
-
-    private void renderArrow(SpriteBatch sb, Hitbox hb, CInputAction action, boolean flipX) {
-        sb.setColor(Color.WHITE);
-        sb.draw(ImageMaster.POPUP_ARROW, hb.cX - 128f, hb.cY - 128f, 128f, 128f, 256f, 256f, Settings.scale, Settings.scale, 0f, 0, 0, 256, 256, flipX, false);
-        if (Settings.isControllerMode) {
-            sb.draw(action.getKeyImg(), hb.cX - 32f, hb.cY - 32f + 100f * Settings.scale, 32f, 32f, 64f, 64f, Settings.scale, Settings.scale, 0f, 0, 0, 64, 64, false, false);
-        }
-
-        if (hb.hovered) {
-            sb.setBlendFunction(770, 1);
-            sb.setColor(new Color(1f, 1f, 1f, 0.5f));
-            sb.draw(ImageMaster.POPUP_ARROW, hb.cX - 128f, hb.cY - 128f, 128f, 128f, 256f, 256f, Settings.scale, Settings.scale, 0f, 0, 0, 256, 256, flipX, false);
-            sb.setColor(Color.WHITE);
-            sb.setBlendFunction(770, 771);
-        }
-
-        hb.render(sb);
-    }
-
     @Override
     public void updateImpl() {
         if (this.effect != null) {
@@ -540,6 +525,21 @@ public class PCLSingleCardPopup extends EUIBase {
                 augment.tryUpdate();
             }
         }
+    }
+
+    private void toggleAugmentView(boolean value) {
+        showAugments = value;
+        toggleAugment.setText(showAugments ? PGR.core.strings.scp_viewTooltips : PGR.core.strings.scp_viewAugments);
+    }
+
+    private void toggleBetaArt(boolean value) {
+        this.viewBetaArt = value;
+        UnlockTracker.betaCardPref.putBoolean(this.card.cardID, this.viewBetaArt);
+        UnlockTracker.betaCardPref.flush();
+    }
+
+    private void toggleUpgrade(boolean value) {
+        SingleCardViewPopup.isViewingUpgrade = value;
     }
 
     private void updateArrows() {

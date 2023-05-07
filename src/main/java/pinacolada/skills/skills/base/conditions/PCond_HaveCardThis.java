@@ -36,6 +36,8 @@ public abstract class PCond_HaveCardThis extends PPassiveCond<PField_CardGeneric
         return amount == 0 ? count == 0 : fields.not ^ count >= amount;
     }
 
+    abstract public EUITooltip getActionTooltip();
+
     abstract public List<AbstractCard> getCardPile();
 
     @Override
@@ -55,8 +57,6 @@ public abstract class PCond_HaveCardThis extends PPassiveCond<PField_CardGeneric
     public String wrapAmount(int input) {
         return input == 0 ? String.valueOf(input) : (fields.not ? (input + "-") : (input + "+"));
     }
-
-    abstract public EUITooltip getActionTooltip();
 
     @Override
     public void setupEditor(PCLCustomEffectEditingPane editor) {

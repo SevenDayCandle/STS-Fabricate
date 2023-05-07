@@ -2,6 +2,7 @@ package pinacolada.skills.fields;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.cards.base.fields.PCLAffinity;
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.ui.cardEditor.PCLCustomEffectEditingPane;
 import pinacolada.utilities.GameUtilities;
@@ -36,12 +37,6 @@ public class PField_Affinity extends PField_Random {
         super.setupEditor(editor);
     }
 
-    public PField_Affinity setAffinity(List<PCLAffinity> affinities) {
-        this.affinities.clear();
-        this.affinities.addAll(affinities);
-        return this;
-    }
-
     public String getAffinityAndOrString() {
         return getAffinityAndOrString(affinities, random);
     }
@@ -52,10 +47,6 @@ public class PField_Affinity extends PField_Random {
 
     public String getAffinityChoiceString() {
         return affinities.isEmpty() ? TEXT.subjects_anyX(PGR.core.tooltips.affinityGeneral) : getAffinityLevelOrString(getColor(), affinities);
-    }
-
-    public AbstractCard.CardColor getColor() {
-        return skill != null && skill.sourceCard != null ? skill.sourceCard.color : GameUtilities.getActingColor();
     }
 
     public String getAffinityLevelAndOrString() {
@@ -88,6 +79,51 @@ public class PField_Affinity extends PField_Random {
 
     public String getAffinityString() {
         return getAffinityString(affinities);
+    }
+
+    public AbstractCard.CardColor getColor() {
+        return skill != null && skill.sourceCard != null ? skill.sourceCard.color : GameUtilities.getActingColor();
+    }
+
+    public int getQualifierRange() {
+        return affinities.size();
+    }
+
+    public String getQualifierText(int i) {
+        return i < affinities.size() ? affinities.get(i).getTooltip().getTitleOrIcon() : "";
+    }
+
+    public ArrayList<Integer> getQualifiers(PCLUseInfo info) {
+        List<? extends PCLAffinity> list = info.getDataAsList(PCLAffinity.class);
+        ArrayList<Integer> indexes = new ArrayList<>();
+        if (list != null)
+        {
+            for (int i = 0; i < affinities.size(); i++) {
+                if (list.contains(affinities.get(i))) {
+                    indexes.add(i);
+                }
+            }
+        }
+        else
+        {
+            PCLAffinity item = info.getData(PCLAffinity.class);
+            if (item != null)
+            {
+                for (int i = 0; i < affinities.size(); i++) {
+                    if (item == (affinities.get(i))) {
+                        indexes.add(i);
+                        return indexes;
+                    }
+                }
+            }
+        }
+        return indexes;
+    }
+
+    public PField_Affinity setAffinity(List<PCLAffinity> affinities) {
+        this.affinities.clear();
+        this.affinities.addAll(affinities);
+        return this;
     }
 
     public PField_Affinity setAffinity(PCLAffinity... affinities) {

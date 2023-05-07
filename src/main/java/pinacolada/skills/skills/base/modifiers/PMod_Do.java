@@ -46,9 +46,25 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory> {
         fields.setCardGroup(groups);
     }
 
+    protected PCLAction<ArrayList<AbstractCard>> createPileAction(PCLUseInfo info) {
+        SelectFromPile action = fields.createAction(getAction(), info, extra).setAnyNumber(true);
+        if (isForced()) {
+            action = action.setFilter(c -> fields.getFullCardFilter().invoke(c));
+        }
+        return action;
+    }
+
+    public abstract FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction();
+
     protected String getActionPast() {
         return getActionTooltip().past;
     }
+
+    protected String getActionTitle() {
+        return getActionTooltip().title;
+    }
+
+    public abstract EUITooltip getActionTooltip();
 
     @Override
     public String getAmountRawOrAllString() {
@@ -70,12 +86,6 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory> {
         super.setupEditor(editor);
         fields.registerRequired(editor);
     }
-
-    protected String getActionTitle() {
-        return getActionTooltip().title;
-    }
-
-    public abstract EUITooltip getActionTooltip();
 
     @Override
     public int getModifiedAmount(PSkill<?> be, PCLUseInfo info) {
@@ -105,25 +115,6 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory> {
                 });
     }
 
-    protected PCLAction<ArrayList<AbstractCard>> createPileAction(PCLUseInfo info) {
-        SelectFromPile action = fields.createAction(getAction(), info, extra).setAnyNumber(true);
-        if (isForced()) {
-            action = action.setFilter(c -> fields.getFullCardFilter().invoke(c));
-        }
-        return action;
-    }
-
-    public abstract FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction();
-
-    // Useparent on the child should also cause a "forced" filter
-    protected boolean isForced() {
-        return fields.forced || isChildEffectUsingParent();
-    }
-
-    protected boolean isChildEffectUsingParent() {
-        return childEffect != null && (childEffect.useParent || childEffect instanceof PMultiBase && EUIUtils.all(((PMultiBase<?>) childEffect).getSubEffects(), c -> c.useParent));
-    }
-
     @Override
     public void use(PCLUseInfo info, int index) {
         getActions().add(createPileAction(info))
@@ -141,5 +132,14 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory> {
         return !fields.groupTypes.isEmpty() ?
                 TEXT.act_genericFrom(getActionTitle(), getAmountRawOrAllString(), cardString, fields.getGroupString())
                 : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), cardString);
+    }
+
+    protected boolean isChildEffectUsingParent() {
+        return childEffect != null && (childEffect.useParent || childEffect instanceof PMultiBase && EUIUtils.all(((PMultiBase<?>) childEffect).getSubEffects(), c -> c.useParent));
+    }
+
+    // Useparent on the child should also cause a "forced" filter
+    protected boolean isForced() {
+        return fields.forced || isChildEffectUsingParent();
     }
 }

@@ -13,6 +13,7 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @VisibleSkill
@@ -36,29 +37,39 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
         super(DATA, target, amount, extra);
     }
 
-    @Override
-    public String getSubText() {
-        return this.childEffect != null ? this.childEffect.getSubText() : "";
+    public static PBranchCond branch(PCond<?> cond, PSkill<?>... effs) {
+        return (PBranchCond) new PBranchCond().setEffects(effs).setChild(cond);
     }
 
-    @Override
-    public List<PSkill<?>> getSubEffects() {
-        return effects;
+    public static PBranchCond draw(int amount, PSkill<?>... effs) {
+        return (PBranchCond) new PBranchCond().setEffects(effs).setChild(PCond.discard(amount));
+    }
+
+    public static PBranchCond ifElse(PCond<?> cond, PSkill<?> ef1, PSkill<?> ef2) {
+        return (PBranchCond) new PBranchCond().setEffects(ef1, ef2).setChild(cond);
     }
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        if (this.childEffect instanceof PCond && this.effects.size() < 2)
-        {
+        if (this.childEffect instanceof PCond && this.effects.size() < 2) {
             return ((PCond<?>) this.childEffect).checkCondition(info, isUsing, triggerSource);
         }
         return false;
     }
 
     @Override
+    public String getText(boolean addPeriod) {
+        if (this.childEffect != null) {
+            return getEffectTexts(addPeriod);
+        }
+        return "";
+    }
+
+    @Override
     public void use(PCLUseInfo info) {
         if (childEffect instanceof PActiveCond) {
-            ((PActiveCond<?>) childEffect).useImpl(info, (i) -> useSubEffect(i, childEffect.getQualifiers(i)), (i) -> {});
+            ((PActiveCond<?>) childEffect).useImpl(info, (i) -> useSubEffect(i, childEffect.getQualifiers(i)), (i) -> {
+            });
         }
         else if (childEffect instanceof PCallbackMove) {
             ((PCallbackMove<?>) childEffect).use(info, (i) -> useSubEffect(i, childEffect.getQualifiers(i)));
@@ -68,41 +79,14 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
         }
     }
 
-    @Override
-    public String getText(boolean addPeriod) {
-        if (this.childEffect != null)
-        {
-            return getEffectTexts(addPeriod);
-        }
-        return "";
-    }
-
-    public void useSubEffect(PCLUseInfo info, ArrayList<Integer> qualifiers)
-    {
-        if (this.effects.size() > 0)
-        {
-            boolean canGoOver = this.childEffect.getQualifierRange() < this.effects.size();
-            for (int i : qualifiers)
-            {
-                this.effects.get(i).use(info);
-            }
-            if (qualifiers.isEmpty() && canGoOver)
-            {
-                this.effects.get(this.childEffect.getQualifierRange()).use(info);
-            }
-        }
-    }
-
     protected String getEffectTexts(boolean addPeriod) {
-        switch (effects.size())
-        {
+        switch (effects.size()) {
             case 0:
                 return "";
             case 1:
                 return this.effects.get(0).getText(addPeriod);
             case 2:
-                if (childEffect instanceof PCond && this.childEffect.getQualifierRange() < this.effects.size())
-                {
+                if (childEffect instanceof PCond && this.childEffect.getQualifierRange() < this.effects.size()) {
                     return getCapitalSubText(addPeriod) + ": " + this.effects.get(0).getText(addPeriod) + " " +
                             StringUtils.capitalize(TEXT.cond_otherwise(this.effects.get(1).getText(addPeriod)));
                 }
@@ -112,6 +96,39 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
                     effectTexts.add(this.childEffect.getQualifierText(i) + " -> " + this.effects.get(i).getText(addPeriod));
                 }
                 return getSubText() + ": | " + EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, effectTexts);
+        }
+    }
+
+    @Override
+    public List<PSkill<?>> getSubEffects() {
+        return effects;
+    }
+
+    public PBranchCond setEffects(PSkill<?>... effects) {
+        return setEffects(Arrays.asList(effects));
+    }
+
+    public PBranchCond setEffects(List<PSkill<?>> effects) {
+        this.effects.clear();
+        this.effects.addAll(effects);
+        setParentsForChildren();
+        return this;
+    }
+
+    @Override
+    public String getSubText() {
+        return this.childEffect != null ? this.childEffect.getSubText() : "";
+    }
+
+    public void useSubEffect(PCLUseInfo info, ArrayList<Integer> qualifiers) {
+        if (this.effects.size() > 0) {
+            boolean canGoOver = this.childEffect.getQualifierRange() < this.effects.size();
+            for (int i : qualifiers) {
+                this.effects.get(i).use(info);
+            }
+            if (qualifiers.isEmpty() && canGoOver) {
+                this.effects.get(this.childEffect.getQualifierRange()).use(info);
+            }
         }
     }
 }

@@ -27,11 +27,11 @@ public class PCLStanceHelper implements TooltipProvider {
     public static final PCLStanceHelper CalmStance = new PCLStanceHelper(com.megacrit.cardcrawl.stances.CalmStance.STANCE_ID, PGR.core.tooltips.calm, PCLAffinity.General, com.megacrit.cardcrawl.stances.CalmStance::new);
     public static final PCLStanceHelper DivinityStance = new PCLStanceHelper(com.megacrit.cardcrawl.stances.DivinityStance.STANCE_ID, PGR.core.tooltips.divinity, PCLAffinity.General, com.megacrit.cardcrawl.stances.DivinityStance::new);
     public static final PCLStanceHelper WrathStance = new PCLStanceHelper(com.megacrit.cardcrawl.stances.WrathStance.STANCE_ID, PGR.core.tooltips.wrath, PCLAffinity.General, com.megacrit.cardcrawl.stances.WrathStance::new);
+    protected final FuncT0<AbstractStance> constructor;
     public final EUITooltip tooltip;
     public final PCLAffinity affinity;
     public final String ID;
     public final AbstractCard.CardColor[] allowedColors;
-    protected final FuncT0<AbstractStance> constructor;
 
     public PCLStanceHelper(String stanceID, EUITooltip tooltip, PCLAffinity affinity, FuncT0<AbstractStance> constructor, AbstractCard.CardColor... allowedColors) {
         this.ID = stanceID;
@@ -51,25 +51,16 @@ public class PCLStanceHelper implements TooltipProvider {
         return EUIUtils.find(ALL.values(), h -> affinity.equals(h.affinity));
     }
 
-    public static AbstractStance randomStance() {
-        return randomHelper().create();
-    }
-
-    public AbstractStance create() {
-        if (constructor != null) {
-            return constructor.invoke();
-        }
-        else {
-            throw new RuntimeException("Do not create a PCLStanceHelper with a null constructor.");
-        }
+    public static List<PCLStanceHelper> inGameValues(AbstractCard.CardColor targetColor) {
+        return EUIUtils.filter(ALL.values(), s -> s.allowedColors == null || s.allowedColors.length == 0);
     }
 
     public static PCLStanceHelper randomHelper() {
         return GameUtilities.getRandomElement(inGameValues(AbstractDungeon.player != null ? AbstractDungeon.player.getCardColor() : null));
     }
 
-    public static List<PCLStanceHelper> inGameValues(AbstractCard.CardColor targetColor) {
-        return EUIUtils.filter(ALL.values(), s -> s.allowedColors == null || s.allowedColors.length == 0);
+    public static AbstractStance randomStance() {
+        return randomHelper().create();
     }
 
     public static Collection<PCLStanceHelper> values(AbstractCard.CardColor targetColor) {
@@ -80,6 +71,15 @@ public class PCLStanceHelper implements TooltipProvider {
 
     public static Collection<PCLStanceHelper> values() {
         return ALL.values().stream().sorted((a, b) -> StringUtils.compare(a.tooltip.title, b.tooltip.title)).collect(Collectors.toList());
+    }
+
+    public AbstractStance create() {
+        if (constructor != null) {
+            return constructor.invoke();
+        }
+        else {
+            throw new RuntimeException("Do not create a PCLStanceHelper with a null constructor.");
+        }
     }
 
     @Override

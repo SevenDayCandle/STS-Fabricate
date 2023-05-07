@@ -74,11 +74,7 @@ public class SelectFromPile extends CardFilterAction {
         this(ActionType.CARD_MANIPULATION, sourceName, target, amount, origin, groups);
     }
 
-    public SelectFromPile hideTopPanel(boolean hideTopPanel) {
-        this.hideTopPanel = hideTopPanel;
-
-        return this;
-    }    protected void addCard(CardGroup group, AbstractCard card) {
+    protected void addCard(CardGroup group, AbstractCard card) {
         group.group.add(card);
 
         if (!card.isSeen) {
@@ -88,29 +84,50 @@ public class SelectFromPile extends CardFilterAction {
         }
     }
 
-    public void moveToPile(Collection<AbstractCard> result, CardGroup group) {
-        for (AbstractCard card : result) {
-            PCLActions.top.moveCard(card, group).showEffect(showEffect, realtime);
-        }
-    }    protected boolean canSelect(AbstractCard card) {
+    protected boolean canSelect(AbstractCard card) {
         return filter == null || filter.invoke(card);
     }
 
-    public SelectFromPile setAnyNumber(boolean anyNumber) {
-        this.anyNumber = anyNumber;
-
-        return this;
-    }    public SelectFromPile cancellableFromPlayer(boolean value) {
+    public SelectFromPile cancellableFromPlayer(boolean value) {
         this.canPlayerCancel = value;
 
         return this;
     }
 
-    public SelectFromPile setDestination(PCLCardSelection destination) {
-        this.destination = destination.toSelection();
+    public SelectFromPile setCompletionRequirement(FuncT1<Boolean, ArrayList<AbstractCard>> condition) {
+        this.condition = condition;
 
         return this;
-    }    @Override
+    }
+
+    public SelectFromPile setDynamicMessage(FuncT1<String, ArrayList<AbstractCard>> stringFunc) {
+        this.dynamicString = stringFunc;
+
+        return this;
+    }
+
+    public SelectFromPile setFilter(FuncT1<Boolean, AbstractCard> filter) {
+        this.filter = filter;
+
+        return this;
+    }
+
+    public SelectFromPile setOnClick(ActionT3<CardGroup, ArrayList<AbstractCard>, AbstractCard> onClickCard) {
+        this.onClickCard = onClickCard;
+
+        return this;
+    }
+
+    @Override
+    protected void completeImpl() {
+        if (hideTopPanel) {
+            GameUtilities.setTopPanelVisible(true);
+        }
+
+        super.completeImpl();
+    }
+
+    @Override
     protected void firstUpdate() {
         if (hideTopPanel) {
             GameUtilities.setTopPanelVisible(false);
@@ -197,11 +214,7 @@ public class SelectFromPile extends CardFilterAction {
         }
     }
 
-    public SelectFromPile setDestination(ListSelection<AbstractCard> destination) {
-        this.destination = destination;
-
-        return this;
-    }    @Override
+    @Override
     protected void updateInternal(float deltaTime) {
         if (AbstractDungeon.gridSelectScreen.selectedCards.size() != 0) {
             selectedCards.addAll(AbstractDungeon.gridSelectScreen.selectedCards);
@@ -226,23 +239,16 @@ public class SelectFromPile extends CardFilterAction {
         }
     }
 
-    public SelectFromPile setMaxChoices(Integer maxChoices) {
-        return setMaxChoices(maxChoices, PCLCardSelection.Random.toSelection());
-    }    @Override
-    protected void completeImpl() {
-        if (hideTopPanel) {
-            GameUtilities.setTopPanelVisible(true);
-        }
-
-        super.completeImpl();
+    @Override
+    public String updateMessage() {
+        return super.updateMessageInternal(PGR.core.strings.act_generic2(getActionMessage(), EUISmartText.parseLogicString(EUIUtils.format(PGR.core.strings.subjects_cardN, amount))));
     }
 
-    public SelectFromPile setMaxChoices(Integer maxChoices, ListSelection<AbstractCard> origin) {
-        this.maxChoices = maxChoices;
-        this.maxChoicesOrigin = origin;
+    public String getActionMessage() {
+        return PGR.core.tooltips.select.title;
+    }
 
-        return this;
-    }    protected void getCardSubset(List<AbstractCard> source, List<AbstractCard> dest, ListSelection<AbstractCard> o, int count) {
+    protected void getCardSubset(List<AbstractCard> source, List<AbstractCard> dest, ListSelection<AbstractCard> o, int count) {
         boolean remove = o.mode.isRandom();
         int max = Math.min(source.size(), count);
         for (int i = 0; i < max; i++) {
@@ -253,21 +259,57 @@ public class SelectFromPile extends CardFilterAction {
         }
     }
 
+    public SelectFromPile hideTopPanel(boolean hideTopPanel) {
+        this.hideTopPanel = hideTopPanel;
+
+        return this;
+    }
+
+    public void moveToPile(Collection<AbstractCard> result, CardGroup group) {
+        for (AbstractCard card : result) {
+            PCLActions.top.moveCard(card, group).showEffect(showEffect, realtime);
+        }
+    }
+
+    public SelectFromPile setAnyNumber(boolean anyNumber) {
+        this.anyNumber = anyNumber;
+
+        return this;
+    }
+
+    public SelectFromPile setDestination(PCLCardSelection destination) {
+        this.destination = destination.toSelection();
+
+        return this;
+    }
+
+    public SelectFromPile setDestination(ListSelection<AbstractCard> destination) {
+        this.destination = destination;
+
+        return this;
+    }
+
+    public SelectFromPile setMaxChoices(Integer maxChoices) {
+        return setMaxChoices(maxChoices, PCLCardSelection.Random.toSelection());
+    }
+
+    public SelectFromPile setMaxChoices(Integer maxChoices, ListSelection<AbstractCard> origin) {
+        this.maxChoices = maxChoices;
+        this.maxChoicesOrigin = origin;
+
+        return this;
+    }
+
     public SelectFromPile setMessage(String message) {
         this.message = message;
 
         return this;
-    }    @Override
-    public String updateMessage() {
-        return super.updateMessageInternal(PGR.core.strings.act_generic2(getActionMessage(), EUISmartText.parseLogicString(EUIUtils.format(PGR.core.strings.subjects_cardN, amount))));
     }
 
     public SelectFromPile setMessage(String format, Object... args) {
         this.message = EUIUtils.format(format, args);
 
         return this;
-    }    public String getActionMessage() {
-        return PGR.core.tooltips.select.title;
     }
 
     public SelectFromPile setOptions(ListSelection<AbstractCard> origin, boolean anyNumber) {
@@ -294,10 +336,6 @@ public class SelectFromPile extends CardFilterAction {
         this.origin = origin;
 
         return this;
-    }    public SelectFromPile setCompletionRequirement(FuncT1<Boolean, ArrayList<AbstractCard>> condition) {
-        this.condition = condition;
-
-        return this;
     }
 
     public SelectFromPile showEffect(boolean showEffect, boolean isRealtime) {
@@ -306,28 +344,6 @@ public class SelectFromPile extends CardFilterAction {
 
         return this;
     }
-
-    public SelectFromPile setDynamicMessage(FuncT1<String, ArrayList<AbstractCard>> stringFunc) {
-        this.dynamicString = stringFunc;
-
-        return this;
-    }
-
-    public SelectFromPile setFilter(FuncT1<Boolean, AbstractCard> filter) {
-        this.filter = filter;
-
-        return this;
-    }
-
-    public SelectFromPile setOnClick(ActionT3<CardGroup, ArrayList<AbstractCard>, AbstractCard> onClickCard) {
-        this.onClickCard = onClickCard;
-
-        return this;
-    }
-
-
-
-
 
 
 }

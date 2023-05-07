@@ -139,10 +139,6 @@ public class PCLCustomRunCanvas extends EUICanvas {
 
     }
 
-    public void openCardPool() {
-        cardEffect = new ViewInGamePoolEffect(screen.getAllPossibleCards(), screen.bannedCards);
-    }
-
     protected void onScroll(float newPercent) {
         super.onScroll(newPercent);
         updatePositions();
@@ -214,36 +210,13 @@ public class PCLCustomRunCanvas extends EUICanvas {
         }
     }
 
-    protected void updatePositions() {
-        upperScrollBound = Settings.DEFAULT_SCROLL_LIMIT + scale(550);
-        float yPos = SCREEN_Y;
-        yPos = positionElement(titleLabel, SCREEN_X - scale(80), yPos, scale(10));
-        yPos = positionElement(trophiesLabel, titleLabel.hb.cX + titleLabel.getAutoWidth() + scale(160), yPos, scale(80));
-        yPos = positionElement(charTitleLabel, yPos, scale(105));
-        selectedCharacterLabel.setPosition(charTitleLabel.hb.cX + charTitleLabel.getAutoWidth() + scale(40), charTitleLabel.hb.cY - scale(10));
-        editCardPoolButton.setPosition(charTitleLabel.hb.cX + charTitleLabel.getAutoWidth() + scale(400), charTitleLabel.hb.cY);
+    public void open() {
+        confirmButton.show();
+        cancelButton.show(CharacterSelectScreen.TEXT[5]);
+    }
 
-        int column = 0;
-        for (PCLCustomRunCharacterButton character : characters) {
-            character.setPosition(SCREEN_X + column * scale(105), yPos);
-            column += 1;
-            if (column >= ROW_SIZE) {
-                column = 0;
-                yPos -= scale(105);
-                upperScrollBound += scale(105);
-            }
-        }
-        yPos -= scale(105);
-
-        yPos = positionElement(modifiersLabel, yPos, scale(70));
-        yPos = positionElement(endlessToggle, yPos, scale(35));
-        yPos = positionElement(endingActToggle, yPos, scale(35));
-        yPos = positionElement(customCardToggle, yPos, scale(125));
-        seedInput.setPosition(endlessToggle.hb.cX + seedInput.hb.width + scale(50), endingActToggle.hb.cY + scale(30));
-        ascensionEditor.setPosition(seedInput.hb.cX + seedInput.hb.width, endlessToggle.hb.cY);
-
-        yPos = positionElement(modifierDropdown, SCREEN_X - scale(135), yPos, scale(80));
-        lowerScrollBound = upperScrollBound * -1;
+    public void openCardPool() {
+        cardEffect = new ViewInGamePoolEffect(screen.getAllPossibleCards(), screen.bannedCards);
     }
 
     protected float positionElement(EUIHoverable element, float xPos, float yPos, float diff) {
@@ -253,11 +226,6 @@ public class PCLCustomRunCanvas extends EUICanvas {
 
     protected float positionElement(EUIHoverable element, float yPos, float diff) {
         return positionElement(element, SCREEN_X, yPos, diff);
-    }
-
-    public void open() {
-        confirmButton.show();
-        cancelButton.show(CharacterSelectScreen.TEXT[5]);
     }
 
     protected float positionElement(EUIHoverable element, float yPos) {
@@ -291,5 +259,37 @@ public class PCLCustomRunCanvas extends EUICanvas {
         // Snag the modifiers from the original custom run screen, excluding endless/ending act because we handle this manually
         ArrayList<CustomMod> modList = EUIClassUtils.getField(original, "modList");
         modifierDropdown.setItems(EUIUtils.filter(modList, mod -> !MOD_ENDLESS.equals(mod.ID) && !MOD_THE_ENDING.equals(mod.ID)));
+    }
+
+    protected void updatePositions() {
+        upperScrollBound = Settings.DEFAULT_SCROLL_LIMIT + scale(550);
+        float yPos = SCREEN_Y;
+        yPos = positionElement(titleLabel, SCREEN_X - scale(80), yPos, scale(10));
+        yPos = positionElement(trophiesLabel, titleLabel.hb.cX + titleLabel.getAutoWidth() + scale(160), yPos, scale(80));
+        yPos = positionElement(charTitleLabel, yPos, scale(105));
+        selectedCharacterLabel.setPosition(charTitleLabel.hb.cX + charTitleLabel.getAutoWidth() + scale(40), charTitleLabel.hb.cY - scale(10));
+        editCardPoolButton.setPosition(charTitleLabel.hb.cX + charTitleLabel.getAutoWidth() + scale(400), charTitleLabel.hb.cY);
+
+        int column = 0;
+        for (PCLCustomRunCharacterButton character : characters) {
+            character.setPosition(SCREEN_X + column * scale(105), yPos);
+            column += 1;
+            if (column >= ROW_SIZE) {
+                column = 0;
+                yPos -= scale(105);
+                upperScrollBound += scale(105);
+            }
+        }
+        yPos -= scale(105);
+
+        yPos = positionElement(modifiersLabel, yPos, scale(70));
+        yPos = positionElement(endlessToggle, yPos, scale(35));
+        yPos = positionElement(endingActToggle, yPos, scale(35));
+        yPos = positionElement(customCardToggle, yPos, scale(125));
+        seedInput.setPosition(endlessToggle.hb.cX + seedInput.hb.width + scale(50), endingActToggle.hb.cY + scale(30));
+        ascensionEditor.setPosition(seedInput.hb.cX + seedInput.hb.width, endlessToggle.hb.cY);
+
+        yPos = positionElement(modifierDropdown, SCREEN_X - scale(135), yPos, scale(80));
+        lowerScrollBound = upperScrollBound * -1;
     }
 }

@@ -11,6 +11,10 @@ import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class PCLEnergyOrb implements EnergyOrbInterface {
+    protected static final TextureCache DEFAULT_BORDER = PCLCoreImages.Core.controllableCardPileBorder;
+    protected static final TextureCache DEFAULT_FLASH = PCLCoreImages.CardUI.orbFlash;
+    protected static final float BASE_MULT = 3f;
+    protected static final float ORB_IMG_SCALE = 1.15F * Settings.scale;
     public static final TextureCache[] DEFAULT_TEXTURES =
             {
                     PCLCoreImages.CardUI.orbBaseLayer,
@@ -19,10 +23,6 @@ public class PCLEnergyOrb implements EnergyOrbInterface {
                     PCLCoreImages.CardUI.orbTopLayer3,
                     PCLCoreImages.CardUI.orbTopLayer4,
                     };
-    protected static final TextureCache DEFAULT_BORDER = PCLCoreImages.Core.controllableCardPileBorder;
-    protected static final TextureCache DEFAULT_FLASH = PCLCoreImages.CardUI.orbFlash;
-    protected static final float BASE_MULT = 3f;
-    protected static final float ORB_IMG_SCALE = 1.15F * Settings.scale;
     protected TextureCache border;
     protected TextureCache flash;
     protected TextureCache[] images;
@@ -34,11 +34,11 @@ public class PCLEnergyOrb implements EnergyOrbInterface {
     }
 
     public PCLEnergyOrb(TextureCache[] images, TextureCache flash) {
-        this(images, flash, DEFAULT_BORDER,null);
+        this(images, flash, DEFAULT_BORDER, null);
     }
 
     public PCLEnergyOrb(TextureCache[] images, TextureCache flash, TextureCache border) {
-        this(images, flash, border,null);
+        this(images, flash, border, null);
     }
 
     public PCLEnergyOrb(TextureCache[] images, TextureCache flash, TextureCache border, float[] angleMults) {

@@ -14,7 +14,6 @@ import pinacolada.resources.pcl.PCLCoreImages;
 import java.util.ArrayList;
 
 public class ElectricityParticleEffect extends PCLEffect {
-    protected static final int SIZE = 96;
     private static final TextureCache[] images = {
             PCLCoreImages.Effects.electric1,
             PCLCoreImages.Effects.electric2,
@@ -25,6 +24,7 @@ public class ElectricityParticleEffect extends PCLEffect {
             PCLCoreImages.Effects.electric7
     };
     private static final ArrayList<Texture> imageTextures = new ArrayList<>();
+    protected static final int SIZE = 96;
     protected float animFrequency = 0.005f;
     protected float animTimer;
     protected int imgIndex;

@@ -45,6 +45,40 @@ public abstract class PMove_Select<T extends PField_CardGeneric> extends PCallba
         fields.setCardGroup(h);
     }
 
+    public abstract FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction();
+
+    protected String getActionTitle() {
+        return getActionTooltip().title;
+    }
+
+    public abstract EUITooltip getActionTooltip();
+
+    @Override
+    public String getAmountRawOrAllString() {
+        return baseAmount <= 0 ? fields.forced ? TEXT.subjects_all : TEXT.subjects_any
+                : extra > 0 ? TEXT.subjects_xOfY(getExtraRawString(), getAmountRawString())
+                : (fields.forced || fields.origin != PCLCardSelection.Manual) ? getAmountRawString() : getRangeToAmountRawString();
+    }
+
+    @Override
+    public String getSampleText(PSkill<?> callingSkill) {
+        return EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects_x);
+    }
+
+    @Override
+    public String getSubText() {
+        return useParent ? EUIRM.strings.verbNoun(getActionTitle(), getInheritedString()) :
+                !fields.groupTypes.isEmpty() ? TEXT.act_genericFrom(getActionTitle(), getAmountRawOrAllString(), fields.getFullCardString(), fields.getGroupString())
+                        : EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects_thisCard);
+    }
+
+    @Override
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        super.setupEditor(editor);
+        registerUseParentBoolean(editor);
+        fields.registerRequired(editor);
+    }
+
     @Override
     public void use(PCLUseInfo info, ActionT1<PCLUseInfo> callback) {
         fields.getGenericPileAction(getAction(), info, extra)
@@ -55,39 +89,7 @@ public abstract class PMove_Select<T extends PField_CardGeneric> extends PCallba
                         this.childEffect.use(info);
                     }
                 });
-    }    @Override
-    public String getSampleText(PSkill<?> callingSkill) {
-        return EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects_x);
     }
-
-    public abstract FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction();
-
-    @Override
-    public String getSubText() {
-        return useParent ? EUIRM.strings.verbNoun(getActionTitle(), getInheritedString()) :
-                !fields.groupTypes.isEmpty() ? TEXT.act_genericFrom(getActionTitle(), getAmountRawOrAllString(), fields.getFullCardString(), fields.getGroupString())
-                        : EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects_thisCard);
-    }
-
-    @Override
-    public String getAmountRawOrAllString() {
-        return baseAmount <= 0 ? fields.forced ? TEXT.subjects_all : TEXT.subjects_any
-                : extra > 0 ? TEXT.subjects_xOfY(getExtraRawString(), getAmountRawString())
-                : (fields.forced || fields.origin != PCLCardSelection.Manual) ? getAmountRawString() : getRangeToAmountRawString();
-    }
-
-    @Override
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-        super.setupEditor(editor);
-        registerUseParentBoolean(editor);
-        fields.registerRequired(editor);
-    }
-
-    protected String getActionTitle() {
-        return getActionTooltip().title;
-    }
-
-    public abstract EUITooltip getActionTooltip();
 
 
 }

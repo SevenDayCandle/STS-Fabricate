@@ -118,6 +118,7 @@ public class EffekseerEFK {
     public static final EffekseerEFK SWORD28 = new EffekseerEFK("effects/Sword28.efk");
     public static final EffekseerEFK WIND01 = new EffekseerEFK("effects/Wind01.efk");
     public static final EffekseerEFK WIND02 = new EffekseerEFK("effects/Wind02.efk");
+
     public final String ID;
     public final String path;
 
@@ -131,17 +132,17 @@ public class EffekseerEFK {
         ALL.putIfAbsent(ID, this);
     }
 
-    private static String makeID(String path) {
-        String[] splitPath = path.split("/");
-        return splitPath[splitPath.length - 1].split("\\.")[0];
-    }
-
     public static EffekseerEFK get(String id) {
         return ALL.get(id);
     }
 
     public static void initialize() {
         STSEffekseerManager.register(EUIUtils.map(sortedValues(), v -> v.path));
+    }
+
+    private static String makeID(String path) {
+        String[] splitPath = path.split("/");
+        return splitPath[splitPath.length - 1].split("\\.")[0];
     }
 
     public static Collection<EffekseerEFK> sortedValues() {

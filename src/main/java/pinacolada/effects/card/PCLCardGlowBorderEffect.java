@@ -41,11 +41,6 @@ public class PCLCardGlowBorderEffect extends PCLEffect {
 
     }
 
-    public void render(SpriteBatch sb) {
-        sb.setColor(this.color);
-        sb.draw(this.img, this.card.current_x + this.img.offsetX - (float) this.img.originalWidth / 2.0F, this.card.current_y + this.img.offsetY - (float) this.img.originalHeight / 2.0F, (float) this.img.originalWidth / 2.0F - this.img.offsetX, (float) this.img.originalHeight / 2.0F - this.img.offsetY, (float) this.img.packedWidth, (float) this.img.packedHeight, this.scale, this.scale, this.card.angle);
-    }
-
     public void update() {
         this.scale = (1.0F + Interpolation.pow2Out.apply(0.03F, 0.11F * scaleMult, 1.0F - this.duration)) * this.card.drawScale * Settings.scale;
         this.color.a = this.duration / 2.0F;
@@ -55,6 +50,11 @@ public class PCLCardGlowBorderEffect extends PCLEffect {
             this.duration = 0.0F;
         }
 
+    }
+
+    public void render(SpriteBatch sb) {
+        sb.setColor(this.color);
+        sb.draw(this.img, this.card.current_x + this.img.offsetX - (float) this.img.originalWidth / 2.0F, this.card.current_y + this.img.offsetY - (float) this.img.originalHeight / 2.0F, (float) this.img.originalWidth / 2.0F - this.img.offsetX, (float) this.img.originalHeight / 2.0F - this.img.offsetY, (float) this.img.packedWidth, (float) this.img.packedHeight, this.scale, this.scale, this.card.angle);
     }
 
     public void dispose() {

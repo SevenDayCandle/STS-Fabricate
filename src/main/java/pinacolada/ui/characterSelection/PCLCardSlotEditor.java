@@ -16,13 +16,10 @@ import pinacolada.resources.pcl.PCLCoreImages;
 
 // Copied and modified from STS-AnimatorMod
 public class PCLCardSlotEditor extends EUIBase {
+    protected static final float CARD_SCALE = 0.75f;
     public static final float PREVIEW_OFFSET_X = AbstractCard.IMG_WIDTH * 0.6f;
     public static final float PREVIEW_OFFSET_Y = -AbstractCard.IMG_HEIGHT * 0.57f;
     public static final float ITEM_HEIGHT = AbstractCard.IMG_HEIGHT * 0.15f;
-    protected static final float CARD_SCALE = 0.75f;
-    public PCLCardSlot slot;
-    public PCLLoadoutEditor loadoutEditor;
-
     protected EUITextBox cardnameText;
     protected EUITextBox cardvalueText;
     protected EUITextBox cardamountText;
@@ -31,6 +28,8 @@ public class PCLCardSlotEditor extends EUIBase {
     protected EUIButton changeButton;
     protected EUIButton clearButton;
     protected AbstractCard card;
+    public PCLCardSlot slot;
+    public PCLLoadoutEditor loadoutEditor;
 
     public PCLCardSlotEditor(PCLLoadoutEditor loadoutEditor, float cX, float cY) {
         this.loadoutEditor = loadoutEditor;
@@ -61,40 +60,6 @@ public class PCLCardSlotEditor extends EUIBase {
                 .setClickDelay(0.02f);
 
         setSlot(null);
-    }
-
-    public PCLCardSlotEditor setSlot(PCLCardSlot slot) {
-        if (slot == null) {
-            this.slot = null;
-            this.card = null;
-            this.cardamountText.setActive(false);
-            this.cardnameText.setActive(false);
-            this.cardvalueText.setActive(false);
-            this.addButton.setActive(false);
-            this.decrementButton.setActive(false);
-            this.changeButton.setActive(false);
-            this.clearButton.setActive(false);
-            return this;
-        }
-
-        final boolean add = card != null && slot.max > 1;
-        final boolean change = slot.cards.size() > 1;
-        final boolean remove = card != null && slot.max > slot.min;
-
-        this.slot = slot;
-        this.card = slot.getCard(true);
-        this.cardnameText.setLabel(card != null ? card.name : "").setActive(true);
-        this.cardvalueText.setActive(true);
-        this.cardamountText.setActive(card != null);
-        this.addButton.setOnClick(this.slot::add).setInteractable(slot.canAdd()).setActive(true);
-        this.decrementButton.setOnClick(this.slot::decrement).setInteractable(slot.canDecrement()).setActive(true);
-        this.clearButton.setOnClick(() -> {
-            this.slot.clear();
-            this.cardnameText.setLabel("");
-        }).setInteractable(slot.canRemove()).setActive(true);
-        this.changeButton.setOnClick(() -> loadoutEditor.trySelectCard(this.slot)).setInteractable(change).setActive(true);
-
-        return this;
     }
 
     @Override
@@ -166,6 +131,40 @@ public class PCLCardSlotEditor extends EUIBase {
         if (clearButton.isActive) {
             clearButton.setInteractable(slot.canRemove()).updateImpl();
         }
+    }
+
+    public PCLCardSlotEditor setSlot(PCLCardSlot slot) {
+        if (slot == null) {
+            this.slot = null;
+            this.card = null;
+            this.cardamountText.setActive(false);
+            this.cardnameText.setActive(false);
+            this.cardvalueText.setActive(false);
+            this.addButton.setActive(false);
+            this.decrementButton.setActive(false);
+            this.changeButton.setActive(false);
+            this.clearButton.setActive(false);
+            return this;
+        }
+
+        final boolean add = card != null && slot.max > 1;
+        final boolean change = slot.cards.size() > 1;
+        final boolean remove = card != null && slot.max > slot.min;
+
+        this.slot = slot;
+        this.card = slot.getCard(true);
+        this.cardnameText.setLabel(card != null ? card.name : "").setActive(true);
+        this.cardvalueText.setActive(true);
+        this.cardamountText.setActive(card != null);
+        this.addButton.setOnClick(this.slot::add).setInteractable(slot.canAdd()).setActive(true);
+        this.decrementButton.setOnClick(this.slot::decrement).setInteractable(slot.canDecrement()).setActive(true);
+        this.clearButton.setOnClick(() -> {
+            this.slot.clear();
+            this.cardnameText.setLabel("");
+        }).setInteractable(slot.canRemove()).setActive(true);
+        this.changeButton.setOnClick(() -> loadoutEditor.trySelectCard(this.slot)).setInteractable(change).setActive(true);
+
+        return this;
     }
 
     public PCLCardSlotEditor translate(float cX, float cY) {

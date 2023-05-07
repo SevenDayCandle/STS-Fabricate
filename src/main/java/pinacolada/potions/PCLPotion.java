@@ -52,30 +52,12 @@ public abstract class PCLPotion extends AbstractPotion implements TooltipProvide
         initializeTips(playerClass);
     }
 
-    public void setup() {
-    }
-
-    protected void initializeTips(AbstractPlayer.PlayerClass playerClass) {
-        final ArrayList<String> effectStrings = EUIUtils.map(getEffects(), PSkill::getPowerText);
-        this.description = effectStrings.size() > 0 ? effectStrings.get(0) : "";
-        pcltips.clear();
-        pcltips.add(playerClass != null ? new EUITooltip(name, playerClass, effectStrings) : new EUITooltip(name, effectStrings));
-        EUIGameUtils.scanForTips(description, pcltips);
-        this.isThrown = EUIUtils.any(getEffects(), e -> e.target == PCLCardTarget.Single);
-        this.targetRequired = isThrown;
-    }
-
     public static String createFullID(Class<? extends PCLPotion> type) {
         return createFullID(PGR.core, type);
     }
 
     public static String createFullID(PCLResources<?, ?, ?, ?> resources, Class<? extends PCLPotion> type) {
         return resources.createID(type.getSimpleName());
-    }
-
-    @Override
-    public Skills getSkills() {
-        return skills;
     }
 
     @Override
@@ -86,6 +68,11 @@ public abstract class PCLPotion extends AbstractPotion implements TooltipProvide
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public Skills getSkills() {
+        return skills;
     }
 
     @Override
@@ -103,27 +90,14 @@ public abstract class PCLPotion extends AbstractPotion implements TooltipProvide
         return pcltips;
     }
 
-    @Override
-    public void use(AbstractCreature target) {
-        final PCLUseInfo info = CombatManager.playerSystem.generateInfo(null, AbstractDungeon.player, target);
-        for (PSkill<?> ef : getEffects()) {
-            ef.use(info);
-        }
-    }
-
-    public void update() {
-        super.update();
-        if (this.hb.justHovered) {
-            for (PSkill<?> ef : getEffects()) {
-                ef.setAmountFromCard();
-            }
-        }
-    }
-
-    @Override
-    public void shopRender(SpriteBatch sb) {
-        this.generateSparkles(0.0F, 0.0F, false);
-        renderImpl(sb, false);
+    protected void initializeTips(AbstractPlayer.PlayerClass playerClass) {
+        final ArrayList<String> effectStrings = EUIUtils.map(getEffects(), PSkill::getPowerText);
+        this.description = effectStrings.size() > 0 ? effectStrings.get(0) : "";
+        pcltips.clear();
+        pcltips.add(playerClass != null ? new EUITooltip(name, playerClass, effectStrings) : new EUITooltip(name, effectStrings));
+        EUIGameUtils.scanForTips(description, pcltips);
+        this.isThrown = EUIUtils.any(getEffects(), e -> e.target == PCLCardTarget.Single);
+        this.targetRequired = isThrown;
     }
 
     protected void renderImpl(SpriteBatch sb, boolean useOutlineColor) {
@@ -170,14 +144,40 @@ public abstract class PCLPotion extends AbstractPotion implements TooltipProvide
         }
     }
 
-    @SpireOverride
-    protected void updateFlash() {
-        SpireSuper.call();
+    public void setup() {
     }
 
     @SpireOverride
     protected void updateEffect() {
         SpireSuper.call();
+    }
+
+    @SpireOverride
+    protected void updateFlash() {
+        SpireSuper.call();
+    }
+
+    @Override
+    public void use(AbstractCreature target) {
+        final PCLUseInfo info = CombatManager.playerSystem.generateInfo(null, AbstractDungeon.player, target);
+        for (PSkill<?> ef : getEffects()) {
+            ef.use(info);
+        }
+    }
+
+    public void update() {
+        super.update();
+        if (this.hb.justHovered) {
+            for (PSkill<?> ef : getEffects()) {
+                ef.setAmountFromCard();
+            }
+        }
+    }
+
+    @Override
+    public void shopRender(SpriteBatch sb) {
+        this.generateSparkles(0.0F, 0.0F, false);
+        renderImpl(sb, false);
     }
 
     @Override

@@ -24,31 +24,14 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 public class CardLibraryPatches {
-    /** Directly get a card from the card library, bypassing postfixes attached to getCard */
-    public static AbstractCard getDirectCard(String id)
-    {
+    /**
+     * Directly get a card from the card library, bypassing postfixes attached to getCard
+     */
+    public static AbstractCard getDirectCard(String id) {
         return CardLibrary.cards.get(id);
     }
 
-    public static String getStandardReplacementID(String id)
-    {
-        return PGR.getResources(GameUtilities.getPlayerClass()).getReplacement(id);
-    }
-
-    public static String[] splitCardID(String cardID) {
-        return cardID.split(Pattern.quote(":"), 2);
-    }
-
-    public static void tryReplace(AbstractCard[] card) {
-        AbstractCard c = getReplacement(card[0]);
-        if (c != null)
-        {
-            card[0] = c;
-        }
-    }
-
-    public static AbstractCard getReplacement(String cardID)
-    {
+    public static AbstractCard getReplacement(String cardID) {
         return getReplacement(cardID, 0);
     }
 
@@ -64,18 +47,14 @@ public class CardLibraryPatches {
         String replacementID = getStandardReplacementID(cardID);
         if (replacementID != null) {
             PCLCardData data = PCLCardData.getStaticData(replacementID);
-            if (data != null)
-            {
+            if (data != null) {
                 replacement = data.makeCardFromLibrary(upgradeTimes);
             }
-            else if (!PGR.config.replaceCardsPCL.get())
-            {
+            else if (!PGR.config.replaceCardsPCL.get()) {
                 replacement = getDirectCard(replacementID);
-                if (replacement != null)
-                {
+                if (replacement != null) {
                     replacement = replacement.makeCopy();
-                    for (int i = 0; i < upgradeTimes; i++)
-                    {
+                    for (int i = 0; i < upgradeTimes; i++) {
                         replacement.upgrade();
                     }
                 }
@@ -90,8 +69,7 @@ public class CardLibraryPatches {
 
     public static AbstractCard getReplacement(AbstractCard card, int upgradeTimes) {
         AbstractCard replacement = getReplacement(card.cardID, upgradeTimes);
-        if (replacement != null)
-        {
+        if (replacement != null) {
             return replacement;
         }
         else if (PGR.config.replaceCardsPCL.get()) {
@@ -99,6 +77,10 @@ public class CardLibraryPatches {
         }
 
         return replacement;
+    }
+
+    public static String getStandardReplacementID(String id) {
+        return PGR.getResources(GameUtilities.getPlayerClass()).getReplacement(id);
     }
 
     public static AbstractCard makeReplacementCard(AbstractCard card) {
@@ -112,14 +94,24 @@ public class CardLibraryPatches {
         return card;
     }
 
+    public static String[] splitCardID(String cardID) {
+        return cardID.split(Pattern.quote(":"), 2);
+    }
+
+    public static void tryReplace(AbstractCard[] card) {
+        AbstractCard c = getReplacement(card[0]);
+        if (c != null) {
+            card[0] = c;
+        }
+    }
+
     @SpirePatch(clz = CardLibrary.class, method = "getCard", paramtypez = {String.class})
     public static class CardLibraryPatches_GetCard {
         @SpirePrefixPatch
         public static SpireReturn<AbstractCard> prefix(String key) {
             if (PGR.isLoaded()) {
                 // Only make replacements in game
-                if (EUIGameUtils.inGame())
-                {
+                if (EUIGameUtils.inGame()) {
                     AbstractCard res = getReplacement(key);
                     if (res != null) {
                         return SpireReturn.Return(res);

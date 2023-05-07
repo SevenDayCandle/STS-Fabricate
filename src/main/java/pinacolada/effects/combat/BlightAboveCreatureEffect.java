@@ -27,8 +27,8 @@ public class BlightAboveCreatureEffect extends AbstractGameEffect {
     private final AbstractBlight blight;
     private final Color outlineColor = new Color(0f, 0f, 0f, 0f);
     private final Color shineColor = new Color(1f, 1f, 1f, 0f);
-    private float offsetY;
     private final float x;
+    private float offsetY;
     private float y;
 
     public BlightAboveCreatureEffect(float x, float y, AbstractBlight blight) {

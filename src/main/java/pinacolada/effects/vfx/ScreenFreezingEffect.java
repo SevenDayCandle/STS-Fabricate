@@ -21,7 +21,11 @@ public class ScreenFreezingEffect extends PCLEffect {
         this.startingDuration = this.duration;
     }
 
-    public void render(SpriteBatch sb) {
+    public void makeSnowflake() {
+        PCLEffects.Queue.add(new SnowballParticleEffect(MathUtils.random(0.0F, (float) Settings.WIDTH), MathUtils.random(900.0F, 1100.0F) * Settings.scale, color)
+                .setSpeed(MathUtils.random(-70.0F, 70.0F) * Settings.scale, MathUtils.random(-1100.0F, -450.0F) * Settings.scale)
+                .enableTrail()
+                .setRealtime(isRealtime));
     }
 
     public void update() {
@@ -45,11 +49,7 @@ public class ScreenFreezingEffect extends PCLEffect {
 
     }
 
-    public void makeSnowflake() {
-        PCLEffects.Queue.add(new SnowballParticleEffect(MathUtils.random(0.0F, (float) Settings.WIDTH), MathUtils.random(900.0F, 1100.0F) * Settings.scale, color)
-                .setSpeed(MathUtils.random(-70.0F, 70.0F) * Settings.scale, MathUtils.random(-1100.0F, -450.0F) * Settings.scale)
-                .enableTrail()
-                .setRealtime(isRealtime));
+    public void render(SpriteBatch sb) {
     }
 
     public void dispose() {

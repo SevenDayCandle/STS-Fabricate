@@ -16,6 +16,10 @@ public class AugmentCommand extends ConsoleCommand {
         this.simpleCheck = true;
     }
 
+    public static ArrayList<String> getCustoms() {
+        return new ArrayList<>(PCLAugmentData.getIDs());
+    }
+
     @Override
     protected void execute(String[] tokens, int depth) {
         PCLAugmentData augment = PCLAugmentData.get(tokens[1]);
@@ -38,9 +42,5 @@ public class AugmentCommand extends ConsoleCommand {
         }
 
         return options;
-    }
-
-    public static ArrayList<String> getCustoms() {
-        return new ArrayList<>(PCLAugmentData.getIDs());
     }
 }

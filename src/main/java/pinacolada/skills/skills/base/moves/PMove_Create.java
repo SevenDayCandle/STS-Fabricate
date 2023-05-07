@@ -39,14 +39,14 @@ public class PMove_Create extends PMove_GenerateCard {
     }
 
     @Override
-    public String getSubText() {
-        String joinedString = getCopiesOfString();
-        return fields.groupTypes.size() > 0 ? TEXT.act_addToPile(getAmountRawOrAllString(), joinedString, fields.groupTypes.get(0).name) : TEXT.act_addToPile(getAmountRawOrAllString(), joinedString, PCLCardGroupHelper.Hand.name);
+    public EUITooltip getActionTooltip() {
+        return PGR.core.tooltips.create;
     }
 
     @Override
-    public EUITooltip getActionTooltip() {
-        return PGR.core.tooltips.create;
+    public String getSubText() {
+        String joinedString = getCopiesOfString();
+        return fields.groupTypes.size() > 0 ? TEXT.act_addToPile(getAmountRawOrAllString(), joinedString, fields.groupTypes.get(0).name) : TEXT.act_addToPile(getAmountRawOrAllString(), joinedString, PCLCardGroupHelper.Hand.name);
     }
 
     @Override

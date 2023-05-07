@@ -37,18 +37,13 @@ public class PField_Orb extends PField_Random {
         editor.registerOrb(orbs);
     }
 
-    public PField_Orb setOrb(List<PCLOrbHelper> orbs) {
-        this.orbs.clear();
-        this.orbs.addAll(orbs);
-        return this;
+    public String getOrbAmountString() {
+        String efString = skill.getRawString(PSkill.EFFECT_CHAR);
+        return (!orbs.isEmpty() ? random ? getOrbOrString(orbs, efString) : getOrbAndString(orbs, efString) : TEXT.subjects_randomX(skill.plural(PGR.core.tooltips.orb)));
     }
 
     public String getOrbAndOrString() {
         return random ? getOrbOrString() : getOrbAndString();
-    }
-
-    public String getOrbOrString() {
-        return getOrbOrString(orbs, skill.getAmountRawString());
     }
 
     public String getOrbAndString() {
@@ -73,13 +68,12 @@ public class PField_Orb extends PField_Random {
         return orbStr;
     }
 
-    public String getOrbAmountString() {
-        String efString = skill.getRawString(PSkill.EFFECT_CHAR);
-        return (!orbs.isEmpty() ? random ? getOrbOrString(orbs, efString) : getOrbAndString(orbs, efString) : TEXT.subjects_randomX(skill.plural(PGR.core.tooltips.orb)));
-    }
-
     public final FuncT1<Boolean, AbstractOrb> getOrbFilter() {
         return (c -> (orbs.isEmpty() || EUIUtils.any(orbs, orb -> orb.ID.equals(c.ID))));
+    }
+
+    public String getOrbOrString() {
+        return getOrbOrString(orbs, skill.getAmountRawString());
     }
 
     public String getOrbOrString(Object amount) {
@@ -88,6 +82,12 @@ public class PField_Orb extends PField_Random {
 
     public String getOrbString() {
         return getOrbString(orbs);
+    }
+
+    public PField_Orb setOrb(List<PCLOrbHelper> orbs) {
+        this.orbs.clear();
+        this.orbs.addAll(orbs);
+        return this;
     }
 
     public PField_Orb setOrb(PCLOrbHelper... orbs) {

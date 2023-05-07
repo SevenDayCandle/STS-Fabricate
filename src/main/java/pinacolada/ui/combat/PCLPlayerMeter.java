@@ -34,6 +34,7 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implement
     protected String id;
     protected int currentScore;
     protected int highestScore;
+
     public PCLPlayerMeter(String id, STSConfigItem<Vector2> config, float iconSize) {
         super(config, new DraggableHitbox(screenW(0.0366f), screenH(0.425f), iconSize, iconSize, true), iconSize);
         this.id = id;
@@ -43,12 +44,6 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implement
                     EUI.ftueScreen.open(new EUITutorial(getInfoPages()));
                 });
     }
-
-    public abstract String getInfoTitle();
-
-    public abstract String getInfoMainDescrption();
-
-    public abstract EUITutorialPage[] getInfoPages();
 
     public static String createFullID(PCLResources<?, ?, ?, ?> resources, Class<? extends PCLPlayerMeter> type) {
         return resources.createID(type.getSimpleName());
@@ -85,12 +80,12 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implement
         return new PCLUseInfo(card, source, target);
     }
 
-    public PCLAffinity getCurrentAffinity() {
-        return get(0);
-    }
-
     public PCLAffinity get(int target) {
         return PCLAffinity.General;
+    }
+
+    public PCLAffinity getCurrentAffinity() {
+        return get(0);
     }
 
     public int getCurrentScore() {
@@ -108,6 +103,12 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implement
     public EUITooltip getTooltip() {
         return null;
     }
+
+    public abstract String getInfoMainDescrption();
+
+    public abstract EUITutorialPage[] getInfoPages();
+
+    public abstract String getInfoTitle();
 
     public int getLevel(PCLAffinity affinity) {
         return 0;

@@ -414,6 +414,7 @@ public class PCLSFX {
         this.pitchMax = pitchMax;
         this.volume = volume;
     }
+
     public PCLSFX(String key, float pitchMin, float pitchMax) {
         this(key, pitchMin, pitchMax, 1);
     }

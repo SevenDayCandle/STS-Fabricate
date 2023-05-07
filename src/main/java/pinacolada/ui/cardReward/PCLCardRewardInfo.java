@@ -22,11 +22,6 @@ public class PCLCardRewardInfo extends EUIBase {
                 .setOnToggle(this::toggleViewUpgrades);
     }
 
-    private void toggleViewUpgrades(boolean value) {
-        SingleCardViewPopup.isViewingUpgrade = value;
-        upgradeToggle.setToggle(SingleCardViewPopup.isViewingUpgrade);
-    }
-
     public void close() {
         isActive = false;
         upgradeToggle.toggle(false);
@@ -45,5 +40,10 @@ public class PCLCardRewardInfo extends EUIBase {
     @Override
     public void updateImpl() {
         upgradeToggle.updateImpl();
+    }
+
+    private void toggleViewUpgrades(boolean value) {
+        SingleCardViewPopup.isViewingUpgrade = value;
+        upgradeToggle.setToggle(SingleCardViewPopup.isViewingUpgrade);
     }
 }

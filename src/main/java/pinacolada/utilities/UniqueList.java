@@ -15,21 +15,6 @@ public class UniqueList<T> extends ArrayList<T> {
         this.addAll(items);
     }
 
-    public T getOrDefault(int index, T defaultValue) {
-        T found = get(index);
-        return found != null ? found : defaultValue;
-    }
-
-    public T get(int index) {
-        return index >= 0 && size() > index ? super.get(index) : null;
-    }
-
-    public boolean add(T item) {
-        int prevSize = size();
-        int result = addAndGetIndex(item);
-        return result >= prevSize;
-    }
-
     // Returns the index at which the item exists in the map
     public int addAndGetIndex(T item) {
         Integer found = getIndex(item);
@@ -43,8 +28,14 @@ public class UniqueList<T> extends ArrayList<T> {
         return size;
     }
 
-    public Integer getIndex(Object item) {
-        return indexes.get(item);
+    public T get(int index) {
+        return index >= 0 && size() > index ? super.get(index) : null;
+    }
+
+    public boolean add(T item) {
+        int prevSize = size();
+        int result = addAndGetIndex(item);
+        return result >= prevSize;
     }
 
     public T remove(int index) {
@@ -71,5 +62,14 @@ public class UniqueList<T> extends ArrayList<T> {
     public void clear() {
         super.clear();
         indexes.clear();
+    }
+
+    public Integer getIndex(Object item) {
+        return indexes.get(item);
+    }
+
+    public T getOrDefault(int index, T defaultValue) {
+        T found = get(index);
+        return found != null ? found : defaultValue;
     }
 }

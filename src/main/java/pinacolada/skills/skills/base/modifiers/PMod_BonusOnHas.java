@@ -26,6 +26,10 @@ public abstract class PMod_BonusOnHas extends PMod_BonusOn<PField_CardCategory> 
         super(data, amount, count);
     }
 
+    abstract public EUITooltip getActionTooltip();
+
+    abstract public List<AbstractCard> getCardPile();
+
     @Override
     public String getConditionText() {
         return fields.forced ? TEXT.cond_ifYouDidThisCombat(PCLCoreStrings.past(getActionTooltip()), EUIRM.strings.numNoun(getExtraRawString(), fields.getFullCardString(getExtraRawString()))) :
@@ -38,10 +42,6 @@ public abstract class PMod_BonusOnHas extends PMod_BonusOn<PField_CardCategory> 
                 c -> fields.getFullCardFilter().invoke(c));
         return extra == 0 ? count == 0 : fields.not ^ count >= extra;
     }
-
-    abstract public List<AbstractCard> getCardPile();
-
-    abstract public EUITooltip getActionTooltip();
 
     @Override
     public String getSubText() {

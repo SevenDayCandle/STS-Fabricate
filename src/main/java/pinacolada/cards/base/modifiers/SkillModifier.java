@@ -40,6 +40,10 @@ public class SkillModifier extends AbstractCardModifier {
         return skill;
     }
 
+    public void manualUse(AbstractCard card, AbstractPlayer player, AbstractCreature monster) {
+        skill.use(CombatManager.playerSystem.generateInfo(card, player, monster));
+    }
+
     public float modifyDamage(float damage, DamageInfo.DamageType type, AbstractCard card, AbstractMonster target) {
         return skill.modifyDamage(CombatManager.playerSystem.generateInfo(card, AbstractDungeon.player, target), damage);
     }
@@ -62,10 +66,6 @@ public class SkillModifier extends AbstractCardModifier {
         if (!(card instanceof EditorCard)) {
             this.manualUse(card, AbstractDungeon.player, target);
         }
-    }
-
-    public void manualUse(AbstractCard card, AbstractPlayer player, AbstractCreature monster) {
-        skill.use(CombatManager.playerSystem.generateInfo(card, player, monster));
     }
 
     public void onDrawn(AbstractCard card) {

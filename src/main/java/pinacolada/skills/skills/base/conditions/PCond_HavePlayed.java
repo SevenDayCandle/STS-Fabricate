@@ -29,12 +29,12 @@ public class PCond_HavePlayed extends PCond_HaveCard {
     }
 
     @Override
-    public List<AbstractCard> getCardPile() {
-        return fields.forced ? AbstractDungeon.actionManager.cardsPlayedThisCombat : AbstractDungeon.actionManager.cardsPlayedThisTurn;
+    public EUITooltip getActionTooltip() {
+        return PGR.core.tooltips.play;
     }
 
     @Override
-    public EUITooltip getActionTooltip() {
-        return PGR.core.tooltips.play;
+    public List<AbstractCard> getCardPile() {
+        return fields.forced ? AbstractDungeon.actionManager.cardsPlayedThisCombat : AbstractDungeon.actionManager.cardsPlayedThisTurn;
     }
 }

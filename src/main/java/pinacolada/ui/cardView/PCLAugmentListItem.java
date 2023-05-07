@@ -15,11 +15,11 @@ import pinacolada.utilities.PCLRenderHelpers;
 
 public class PCLAugmentListItem extends EUIHoverable {
 
+    protected final PCLAugmentList panel;
     public final PCLAugment augment;
     public final EUIButton button;
     public final EUILabel amountText;
     public final EUILabel title;
-    protected final PCLAugmentList panel;
     public float amount;
 
     public PCLAugmentListItem(PCLAugmentList panel, PCLAugment augment, float amount) {

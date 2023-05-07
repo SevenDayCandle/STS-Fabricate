@@ -80,30 +80,21 @@ public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo> {
         forceRefresh();
     }
 
-    public PCLCustomCardTagEditorRow setPrimary(int value, boolean update) {
-        displayValue.forceSetValue(value, false);
-        if (update) {
-            item.set(form, displayValue.getCachedValue());
-            dr.updateForSelection(true);
-        }
-        return this;
-    }
-
-    public PCLCustomCardTagEditorRow setSecondary(int value2, boolean update) {
-        displayValue2.forceSetValue(value2, false);
-        if (update) {
-            item.setUpgrade(form, displayValue2.getCachedValue());
-            dr.updateForSelection(true);
-        }
-        return this;
-    }
-
     public void decreasePrimary() {
         setPrimary(displayValue.getCachedValue() - 1, true);
     }
 
     public void decreaseSecondary() {
         setSecondary(displayValue2.getCachedValue() - 1, true);
+    }
+
+    public void forceRefresh() {
+        displayValue.forceSetValue(item.get(0), false);
+        displayValue2.forceSetValue(item.getUpgrade(0), false);
+    }
+
+    public int getValue() {
+        return displayValue.getCachedValue();
     }
 
     public void increasePrimary() {
@@ -114,13 +105,8 @@ public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo> {
         setSecondary(displayValue2.getCachedValue() + 1, true);
     }
 
-    public void forceRefresh() {
-        displayValue.forceSetValue(item.get(0), false);
-        displayValue2.forceSetValue(item.getUpgrade(0), false);
-    }
-
-    public int getValue() {
-        return displayValue.getCachedValue();
+    protected boolean isComponentHovered() {
+        return decreaseButton2.hb.hovered || increaseButton2.hb.hovered || decreaseButton.hb.hovered || increaseButton.hb.hovered || displayValue2.hb.hovered || displayValue.hb.hovered;
     }
 
     public void renderRow(SpriteBatch sb) {
@@ -181,8 +167,22 @@ public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo> {
         return false;
     }
 
-    protected boolean isComponentHovered() {
-        return decreaseButton2.hb.hovered || increaseButton2.hb.hovered || decreaseButton.hb.hovered || increaseButton.hb.hovered || displayValue2.hb.hovered || displayValue.hb.hovered;
+    public PCLCustomCardTagEditorRow setPrimary(int value, boolean update) {
+        displayValue.forceSetValue(value, false);
+        if (update) {
+            item.set(form, displayValue.getCachedValue());
+            dr.updateForSelection(true);
+        }
+        return this;
+    }
+
+    public PCLCustomCardTagEditorRow setSecondary(int value2, boolean update) {
+        displayValue2.forceSetValue(value2, false);
+        if (update) {
+            item.setUpgrade(form, displayValue2.getCachedValue());
+            dr.updateForSelection(true);
+        }
+        return this;
     }
 
     public PCLCustomCardTagEditorRow setValue(int value, int valueSecondary, boolean update) {

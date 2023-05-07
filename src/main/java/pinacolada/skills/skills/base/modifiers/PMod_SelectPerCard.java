@@ -41,13 +41,13 @@ public class PMod_SelectPerCard extends PMod_Do {
     }
 
     @Override
-    public EUITooltip getActionTooltip() {
-        return PGR.core.tooltips.select;
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
+        return SelectFromPile::new;
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
-        return SelectFromPile::new;
+    public EUITooltip getActionTooltip() {
+        return PGR.core.tooltips.select;
     }
 
     @Override

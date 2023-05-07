@@ -35,18 +35,6 @@ public abstract class PCLRelic extends CustomRelic implements TooltipProvider {
     public ArrayList<EUITooltip> tips;
     public EUITooltip mainTooltip;
 
-    protected static PCLRelicData register(Class<? extends PCLRelic> type) {
-        return register(type, PGR.core);
-    }
-
-    protected static PCLRelicData register(Class<? extends PCLRelic> type, PCLResources<?, ?, ?, ?> resources) {
-        return registerRelicData(new PCLRelicData(type, resources));
-    }
-
-    protected static <T extends PCLRelicData> T registerRelicData(T cardData) {
-        return PCLRelicData.registerData(cardData);
-    }
-
     public PCLRelic(PCLRelicData data) {
         this(data, EUIRM.getTexture(data.imagePath), data.tier, data.sfx);
     }
@@ -64,6 +52,22 @@ public abstract class PCLRelic extends CustomRelic implements TooltipProvider {
 
     public static String createFullID(PCLResources<?, ?, ?, ?> resources, Class<? extends PCLRelic> type) {
         return resources.createID(type.getSimpleName());
+    }
+
+    protected static PCLRelicData register(Class<? extends PCLRelic> type) {
+        return register(type, PGR.core);
+    }
+
+    protected static PCLRelicData register(Class<? extends PCLRelic> type, PCLResources<?, ?, ?, ?> resources) {
+        return registerRelicData(new PCLRelicData(type, resources));
+    }
+
+    protected static <T extends PCLRelicData> T registerRelicData(T cardData) {
+        return PCLRelicData.registerData(cardData);
+    }
+
+    protected void activateBattleEffect() {
+
     }
 
     public int addCounter(int amount) {
@@ -100,8 +104,20 @@ public abstract class PCLRelic extends CustomRelic implements TooltipProvider {
         return block;
     }
 
+    protected void deactivateBattleEffect() {
+
+    }
+
     protected void displayAboveCreature(AbstractCreature creature) {
         PCLActions.top.add(new RelicAboveCreatureAction(creature, this));
+    }
+
+    protected String formatDescription(int index, Object... args) {
+        return EUIUtils.format(DESCRIPTIONS[index], args);
+    }
+
+    protected String getCounterString() {
+        return String.valueOf(counter);
     }
 
     public TextureAtlas.AtlasRegion getPowerIcon() {
@@ -122,6 +138,25 @@ public abstract class PCLRelic extends CustomRelic implements TooltipProvider {
         return tips;
     }
 
+    public int getValue() {
+        return counter;
+    }
+
+    // Initialize later to ensure relicData is set
+    public void initializePCLTips() {
+        if (tips == null) {
+            tips = new ArrayList<>();
+        }
+        else {
+            tips.clear();
+        }
+
+        AbstractPlayer.PlayerClass playerClass = EUIGameUtils.getPlayerClassForCardColor(relicData.cardColor);
+        mainTooltip = playerClass != null ? new EUITooltip(name, playerClass, description) : new EUITooltip(name, description);
+        tips.add(mainTooltip);
+        EUIGameUtils.scanForTips(description, tips);
+    }
+
     public boolean isEnabled() {
         return !super.grayscale;
     }
@@ -131,8 +166,7 @@ public abstract class PCLRelic extends CustomRelic implements TooltipProvider {
         try {
             return relicData.create();
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             return null;
         }
     }
@@ -146,14 +180,6 @@ public abstract class PCLRelic extends CustomRelic implements TooltipProvider {
     public final void updateDescription(AbstractPlayer.PlayerClass c) {
         this.description = getUpdatedDescription();
         this.mainTooltip.setDescriptions(description);
-    }
-
-    protected String formatDescription(int index, Object... args) {
-        return EUIUtils.format(DESCRIPTIONS[index], args);
-    }
-
-    public int getValue() {
-        return counter;
     }
 
     @Override
@@ -170,10 +196,6 @@ public abstract class PCLRelic extends CustomRelic implements TooltipProvider {
         }
     }
 
-    protected void activateBattleEffect() {
-
-    }
-
     @Override
     public void onUnequip() {
         super.onUnequip();
@@ -181,10 +203,6 @@ public abstract class PCLRelic extends CustomRelic implements TooltipProvider {
         if (GameUtilities.inBattle(true)) {
             deactivateBattleEffect();
         }
-    }
-
-    protected void deactivateBattleEffect() {
-
     }
 
     @Override
@@ -217,10 +235,6 @@ public abstract class PCLRelic extends CustomRelic implements TooltipProvider {
         }
     }
 
-    protected String getCounterString() {
-        return String.valueOf(counter);
-    }
-
     @Override
     public void renderBossTip(SpriteBatch sb) {
         EUITooltip.queueTooltips(tips, Settings.WIDTH * 0.63F, Settings.HEIGHT * 0.63F);
@@ -234,22 +248,6 @@ public abstract class PCLRelic extends CustomRelic implements TooltipProvider {
     @Override
     protected void initializeTips() {
         // No-op, use initializePCLTips() instead
-    }
-
-    // Initialize later to ensure relicData is set
-    public void initializePCLTips()
-    {
-        if (tips == null) {
-            tips = new ArrayList<>();
-        }
-        else {
-            tips.clear();
-        }
-
-        AbstractPlayer.PlayerClass playerClass = EUIGameUtils.getPlayerClassForCardColor(relicData.cardColor);
-        mainTooltip = playerClass != null ? new EUITooltip(name, playerClass, description) : new EUITooltip(name, description);
-        tips.add(mainTooltip);
-        EUIGameUtils.scanForTips(description, tips);
     }
 
     public boolean canSpawn() {

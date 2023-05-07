@@ -21,17 +21,6 @@ public class PField_CardModifyTag extends PField_CardCategory {
         setOr(other.or);
     }
 
-    public PField_CardModifyTag setAddTag(List<PCLCardTag> affinities) {
-        this.addTags.clear();
-        this.addTags.addAll(affinities);
-        return this;
-    }
-
-    public PField_CardModifyTag setOr(boolean value) {
-        this.or = value;
-        return this;
-    }
-
     @Override
     public boolean equals(PField other) {
         return super.equals(other);
@@ -51,7 +40,18 @@ public class PField_CardModifyTag extends PField_CardCategory {
         return getTagAndOrString(addTags, or);
     }
 
+    public PField_CardModifyTag setAddTag(List<PCLCardTag> affinities) {
+        this.addTags.clear();
+        this.addTags.addAll(affinities);
+        return this;
+    }
+
     public PField_CardModifyTag setAddTag(PCLCardTag... affinities) {
         return setAddTag(Arrays.asList(affinities));
+    }
+
+    public PField_CardModifyTag setOr(boolean value) {
+        this.or = value;
+        return this;
     }
 }

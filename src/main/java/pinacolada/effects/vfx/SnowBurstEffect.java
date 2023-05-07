@@ -12,14 +12,24 @@ import pinacolada.utilities.RandomizedList;
 
 
 public class SnowBurstEffect extends PCLEffect {
-    public static final float RADIUS = 320;
     private static final TextureCache[] particles = {PCLCoreImages.Effects.frostSnow1, PCLCoreImages.Effects.frostSnow2, PCLCoreImages.Effects.frostSnow3, PCLCoreImages.Effects.frostSnow4};
     private static final RandomizedList<TextureCache> textures = new RandomizedList<>();
+    public static final float RADIUS = 320;
     protected float x;
     protected float y;
+
     public SnowBurstEffect(float x, float y) {
         this.x = x;
         this.y = y;
+    }
+
+    public static Texture getRandomTexture() {
+        if (textures.size() <= 1) // Adds some randomness but still ensures all textures are cycled through
+        {
+            textures.addAll(particles);
+        }
+
+        return textures.retrieveUnseeded(true).texture();
     }
 
     @Override
@@ -43,14 +53,5 @@ public class SnowBurstEffect extends PCLEffect {
         }
 
         complete();
-    }
-
-    public static Texture getRandomTexture() {
-        if (textures.size() <= 1) // Adds some randomness but still ensures all textures are cycled through
-        {
-            textures.addAll(particles);
-        }
-
-        return textures.retrieveUnseeded(true).texture();
     }
 }

@@ -27,13 +27,13 @@ public class PMove_GainGold extends PMove_Gain {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
-        return TEXT.act_gainAmount(TEXT.subjects_x, PGR.core.tooltips.gold.title);
+    public String gainText() {
+        return PGR.core.tooltips.gold.getTitleOrIcon();
     }
 
     @Override
-    public String gainText() {
-        return PGR.core.tooltips.gold.getTitleOrIcon();
+    public String getSampleText(PSkill<?> callingSkill) {
+        return TEXT.act_gainAmount(TEXT.subjects_x, PGR.core.tooltips.gold.title);
     }
 
     @Override

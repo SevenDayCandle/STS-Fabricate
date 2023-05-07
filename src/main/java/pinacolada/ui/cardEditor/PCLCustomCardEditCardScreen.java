@@ -46,8 +46,34 @@ public class PCLCustomCardEditCardScreen extends PCLCustomEditEntityScreen<PCLCu
         super(slot);
     }
 
-    public void preInitialize(PCLCustomCardSlot slot)
-    {
+    protected void addSkillPages() {
+        if (!fromInGame) {
+            pages.add(new PCLCustomCardPrimaryInfoPage(this));
+        }
+        pages.add(new PCLCustomCardAttributesPage(this));
+        pages.add(new PCLCustomAttackEffectPage(this, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), 0, PGR.core.strings.cedit_damage, be -> {
+            currentDamage = EUIUtils.safeCast(be, PCardPrimary_DealDamage.class);
+            modifyBuilder(e -> e.setAttackSkill(currentDamage));
+        }));
+        pages.add(new PCLCustomBlockEffectPage(this, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), 0, PGR.core.strings.cedit_block, be -> {
+            currentBlock = EUIUtils.safeCast(be, PCardPrimary_GainBlock.class);
+            modifyBuilder(e -> e.setBlockSkill(currentBlock));
+        }));
+        super.addSkillPages();
+    }
+
+    protected void clearPages() {
+        super.clearPages();
+
+        currentDamage = getBuilder().attackSkill;
+        currentBlock = getBuilder().blockSkill;
+    }
+
+    protected EUITooltip getPageTooltip(PCLCustomGenericPage page) {
+        return new EUITooltip(page.getTitle(), page instanceof PCLCustomCardPrimaryInfoPage ? PGR.core.strings.cedit_primaryInfoDesc : "");
+    }
+
+    public void preInitialize(PCLCustomCardSlot slot) {
         super.preInitialize(slot);
         imageButton = createHexagonalButton(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT)
                 .setPosition(cancelButton.hb.cX, undoButton.hb.y + undoButton.hb.height + LABEL_HEIGHT * 0.8f)
@@ -73,16 +99,6 @@ public class PCLCustomCardEditCardScreen extends PCLCustomEditEntityScreen<PCLCu
         invalidateCards();
     }
 
-    protected void editImage() {
-        imageEditor = (PCLCustomCardImageEffect) new PCLCustomCardImageEffect(getBuilder())
-                .addCallback(pixmap -> {
-                            if (pixmap != null) {
-                                setLoadedImage(new Texture(pixmap));
-                            }
-                        }
-                );
-    }
-
     protected void rebuildItem() {
         previewCard = getBuilder().createImplWithForms(false);
         if (SingleCardViewPopup.isViewingUpgrade) {
@@ -96,28 +112,6 @@ public class PCLCustomCardEditCardScreen extends PCLCustomEditEntityScreen<PCLCu
         previewCard.drawScale = previewCard.targetDrawScale = 1f;
         previewCard.current_x = previewCard.target_x = CARD_X;
         previewCard.current_y = previewCard.target_y = CARD_Y;
-    }
-
-    public void updateInnerElements()
-    {
-        super.updateInnerElements();
-        imageButton.tryUpdate();
-        formEditor.tryUpdate();
-        upgradeToggle.tryUpdate();
-        previewCard.update();
-        previewCard.hb.update();
-        if (previewCard.hb.hovered) {
-            EUITooltip.queueTooltips(previewCard);
-        }
-    }
-
-    public void renderInnerElements(SpriteBatch sb)
-    {
-        super.renderInnerElements(sb);
-        imageButton.tryRender(sb);
-        formEditor.tryRender(sb);
-        upgradeToggle.tryRender(sb);
-        previewCard.render(sb);
     }
 
     @Override
@@ -143,12 +137,46 @@ public class PCLCustomCardEditCardScreen extends PCLCustomEditEntityScreen<PCLCu
         }
     }
 
+    public void renderInnerElements(SpriteBatch sb) {
+        super.renderInnerElements(sb);
+        imageButton.tryRender(sb);
+        formEditor.tryRender(sb);
+        upgradeToggle.tryRender(sb);
+        previewCard.render(sb);
+    }
+
+    public void updateInnerElements() {
+        super.updateInnerElements();
+        imageButton.tryUpdate();
+        formEditor.tryUpdate();
+        upgradeToggle.tryUpdate();
+        previewCard.update();
+        previewCard.hb.update();
+        if (previewCard.hb.hovered) {
+            EUITooltip.queueTooltips(previewCard);
+        }
+    }
+
+    protected void updateVariant() {
+        formEditor.refresh();
+    }
+
     protected void complete() {
         super.complete();
         invalidateCards();
         if (loadedImage != null) {
             loadedImage.dispose();
         }
+    }
+
+    protected void editImage() {
+        imageEditor = (PCLCustomCardImageEffect) new PCLCustomCardImageEffect(getBuilder())
+                .addCallback(pixmap -> {
+                            if (pixmap != null) {
+                                setLoadedImage(new Texture(pixmap));
+                            }
+                        }
+                );
     }
 
     public void setLoadedImage(Texture texture) {
@@ -158,43 +186,10 @@ public class PCLCustomCardEditCardScreen extends PCLCustomEditEntityScreen<PCLCu
                 .setImage(new ColoredTexture(loadedImage)));
     }
 
-    protected void clearPages() {
-        super.clearPages();
-
-        currentDamage = getBuilder().attackSkill;
-        currentBlock = getBuilder().blockSkill;
-    }
-
-    protected void addSkillPages()
-    {
-        if (!fromInGame) {
-            pages.add(new PCLCustomCardPrimaryInfoPage(this));
-        }
-        pages.add(new PCLCustomCardAttributesPage(this));
-        pages.add(new PCLCustomAttackEffectPage(this, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), 0, PGR.core.strings.cedit_damage, be -> {
-            currentDamage = EUIUtils.safeCast(be, PCardPrimary_DealDamage.class);
-            modifyBuilder(e -> e.setAttackSkill(currentDamage));
-        }));
-        pages.add(new PCLCustomBlockEffectPage(this, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), 0, PGR.core.strings.cedit_block, be -> {
-            currentBlock = EUIUtils.safeCast(be, PCardPrimary_GainBlock.class);
-            modifyBuilder(e -> e.setBlockSkill(currentBlock));
-        }));
-        super.addSkillPages();
-    }
-
-    protected EUITooltip getPageTooltip(PCLCustomGenericPage page)
-    {
-        return new EUITooltip(page.getTitle(), page instanceof PCLCustomCardPrimaryInfoPage ? PGR.core.strings.cedit_primaryInfoDesc : "");
-    }
-
     private void toggleViewUpgrades(boolean value) {
         SingleCardViewPopup.isViewingUpgrade = !SingleCardViewPopup.isViewingUpgrade;
         modifyBuilder(__ -> {
         });
-    }
-
-    protected void updateVariant() {
-        formEditor.refresh();
     }
 
 }

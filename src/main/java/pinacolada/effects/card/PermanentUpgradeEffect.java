@@ -23,14 +23,6 @@ public class PermanentUpgradeEffect extends PCLEffectWithCallback<AbstractCard> 
     }
 
     @Override
-    public void render(SpriteBatch sb) {
-    }
-
-    @Override
-    public void dispose() {
-    }
-
-    @Override
     protected void firstUpdate() {
         final ArrayList<AbstractCard> upgradableCards = new ArrayList<>();
         for (AbstractCard c : player.masterDeck.group) {
@@ -54,6 +46,14 @@ public class PermanentUpgradeEffect extends PCLEffectWithCallback<AbstractCard> 
             PCLEffects.TopLevelQueue.showCardBriefly(card.makeStatEquivalentCopy(), x + AbstractCard.IMG_WIDTH * 0.5f + 20f * Settings.scale, y);
             PCLEffects.TopLevelQueue.add(new UpgradeShineEffect(x, y));
         }
+    }
+
+    @Override
+    public void render(SpriteBatch sb) {
+    }
+
+    @Override
+    public void dispose() {
     }
 
     @Override

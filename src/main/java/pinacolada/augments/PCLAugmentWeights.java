@@ -77,12 +77,12 @@ public class PCLAugmentWeights {
         return getWeight(affinity) * 100f / (float) Math.max(1, total);
     }
 
-    public int getWeight(PCLAugmentCategory affinity) {
-        return weights.getOrDefault(affinity, 0);
-    }
-
     public int getRareModifier() {
         return rareModifier;
+    }
+
+    public int getWeight(PCLAugmentCategory affinity) {
+        return weights.getOrDefault(affinity, 0);
     }
 
     public List<PCLAugmentCategory> sortedKeys() {

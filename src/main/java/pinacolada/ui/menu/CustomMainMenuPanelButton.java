@@ -10,11 +10,11 @@ import pinacolada.resources.PGR;
 import pinacolada.ui.cardEditor.PCLCustomCardSelectorScreen;
 
 public class CustomMainMenuPanelButton extends MainMenuPanelButton {
+    protected static final int P_H = 206;
+    protected static final int P_W = 317;
     public static final float START_Y = Settings.HEIGHT / 2.0F;
     public static final int PANEL_H = 800;
     public static final int PANEL_W = 512;
-    protected static final int P_H = 206;
-    protected static final int P_W = 317;
 
     public CustomMainMenuPanelButton(MainMenuPanelButton.PanelClickResult setResult, MainMenuPanelButton.PanelColor setColor, float x, float y) {
         this(setResult, setColor, x, y, PANEL_W, PANEL_H);

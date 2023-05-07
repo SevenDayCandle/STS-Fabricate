@@ -12,6 +12,8 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Affinity;
 import pinacolada.skills.skills.PPassiveCond;
 
+import java.util.ArrayList;
+
 @VisibleSkill
 public class PCond_CheckLevel extends PPassiveCond<PField_Affinity> {
     public static final PSkillData<PField_Affinity> DATA = register(PCond_CheckLevel.class, PField_Affinity.class)
@@ -40,6 +42,18 @@ public class PCond_CheckLevel extends PPassiveCond<PField_Affinity> {
             }
         }
         return !fields.random;
+    }
+
+    public ArrayList<Integer> getQualifiers(PCLUseInfo info) {
+        return fields.getQualifiers(info);
+    }
+
+    public String getQualifierText(int i) {
+        return fields.getQualifierText(i);
+    }
+
+    public int getQualifierRange() {
+        return fields.getQualiferRange();
     }
 
     @Override

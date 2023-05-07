@@ -36,13 +36,13 @@ public class PMod_CyclePerCard extends PMod_Do {
     }
 
     @Override
-    public EUITooltip getActionTooltip() {
-        return PGR.core.tooltips.cycle;
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
+        return (s, c, i, o, g) -> new CycleCards(s, i, o);
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
-        return (s, c, i, o, g) -> new CycleCards(s, i, o);
+    public EUITooltip getActionTooltip() {
+        return PGR.core.tooltips.cycle;
     }
 
     @Override

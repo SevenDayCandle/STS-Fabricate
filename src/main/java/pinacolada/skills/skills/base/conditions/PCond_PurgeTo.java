@@ -35,12 +35,12 @@ public class PCond_PurgeTo extends PCond_DoToCard {
     }
 
     @Override
-    public EUITooltip getActionTooltip() {
-        return PGR.core.tooltips.purge;
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
+        return PurgeFromPile::new;
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
-        return PurgeFromPile::new;
+    public EUITooltip getActionTooltip() {
+        return PGR.core.tooltips.purge;
     }
 }

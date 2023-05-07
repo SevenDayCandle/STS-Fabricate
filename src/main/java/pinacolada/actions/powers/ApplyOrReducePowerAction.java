@@ -44,6 +44,16 @@ public class ApplyOrReducePowerAction extends NestedAction<AbstractPower> {
         return this;
     }
 
+    protected AbstractPower extractPower() {
+        if (action instanceof ApplyPowerAction) {
+            return ReflectionHacks.getPrivate(action, ApplyPowerAction.class, "powerToApply");
+        }
+        else if (action instanceof ReducePowerAction) {
+            return ReflectionHacks.getPrivate(action, ReducePowerAction.class, "powerInstance");
+        }
+        return null;
+    }
+
     @Override
     protected void firstUpdate() {
         if (shouldCancelAction() || (amount == 0 && skipIfZero)) {
@@ -74,16 +84,6 @@ public class ApplyOrReducePowerAction extends NestedAction<AbstractPower> {
     protected void onNestCompleted() {
         // TODO check if the power was actually successfully applied
         complete(extractPower());
-    }
-
-    protected AbstractPower extractPower() {
-        if (action instanceof ApplyPowerAction) {
-            return ReflectionHacks.getPrivate(action, ApplyPowerAction.class, "powerToApply");
-        }
-        else if (action instanceof ReducePowerAction) {
-            return ReflectionHacks.getPrivate(action, ReducePowerAction.class, "powerInstance");
-        }
-        return null;
     }
 
     public ApplyOrReducePowerAction skipIfZero(boolean skipIfZero) {

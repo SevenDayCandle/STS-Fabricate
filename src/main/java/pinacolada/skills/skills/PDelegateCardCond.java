@@ -38,6 +38,20 @@ public abstract class PDelegateCardCond extends PDelegateCond<PField_CardCategor
 
     // This should not activate the child effect when played normally
 
+    public String getDelegatePastText() {
+        return getDelegateTooltip().past();
+    }
+
+    public String getDelegateSampleText() {
+        return getDelegateText();
+    }
+
+    public String getDelegateText() {
+        return getDelegateTooltip().title;
+    }
+
+    public abstract EUITooltip getDelegateTooltip();
+
     @Override
     public String getSampleText(PSkill<?> callingSkill) {
         return callingSkill instanceof PTrigger_When ? TEXT.cond_whenAObjectIs(TEXT.subjects_x, getDelegateSampleText()) : TEXT.cond_onGeneric(getDelegateSampleText());
@@ -54,20 +68,6 @@ public abstract class PDelegateCardCond extends PDelegateCond<PField_CardCategor
     public void setupEditor(PCLCustomEffectEditingPane editor) {
         fields.setupEditor(editor);
     }
-
-    public String getDelegatePastText() {
-        return getDelegateTooltip().past();
-    }
-
-    public String getDelegateSampleText() {
-        return getDelegateText();
-    }
-
-    public String getDelegateText() {
-        return getDelegateTooltip().title;
-    }
-
-    public abstract EUITooltip getDelegateTooltip();
 
     public void triggerOnCard(AbstractCard c) {
         if (fields.getFullCardFilter().invoke(c)) {

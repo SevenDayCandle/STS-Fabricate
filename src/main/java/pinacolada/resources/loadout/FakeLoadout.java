@@ -14,22 +14,22 @@ public class FakeLoadout extends PCLLoadout {
     }
 
     @Override
-    public PCLCardData getSymbolicCard() {
-        return QuestionMark.DATA;
-    }
-
-    @Override
     public ArrayList<String> getStartingDeck() {
         return startingDeck;
     }
 
     @Override
-    public void onVictory(int ascensionLevel, int trophyLevel, int score) {
-        //
+    public PCLCardData getSymbolicCard() {
+        return QuestionMark.DATA;
     }
 
     @Override
     public PCLTrophies getTrophies() {
         return null;
+    }
+
+    @Override
+    public void onVictory(int ascensionLevel, int trophyLevel, int score) {
+        //
     }
 }

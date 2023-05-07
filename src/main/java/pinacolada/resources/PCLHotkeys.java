@@ -7,13 +7,12 @@ import com.megacrit.cardcrawl.helpers.input.InputActionSet;
 import java.util.HashMap;
 
 public class PCLHotkeys {
-    public static final HashMap<Integer, Integer> EQUIVALENT_KEYS = new HashMap<>();
-
     private static final String KEYMAP_CONTROL_PILE_CHANGE = PCLMainConfig.createFullID("ControlPileChange");
     private static final String KEYMAP_CONTROL_PILE_SELECT = PCLMainConfig.createFullID("ControlPileSelect");
     private static final String KEYMAP_VIEW_AUGMENT_SCREEN = PCLMainConfig.createFullID("ViewAugmentScreen");
     private static final String KEYMAP_REROLL_CURRENT = PCLMainConfig.createFullID("RerollCurrent");
     private static final String KEYMAP_TOGGLE_FORMULA_DISPLAY = PCLMainConfig.createFullID("ToggleFormulaDisplay");
+    public static final HashMap<Integer, Integer> EQUIVALENT_KEYS = new HashMap<>();
     public static InputAction controlPileChange;
     public static InputAction controlPileSelect;
     public static InputAction viewAugmentScreen;

@@ -51,7 +51,8 @@ public abstract class PCLCharacter extends CustomPlayer {
         sr.setPremultipliedAlpha(true);
     }
 
-    public String description;
+    private String hitAnim = null;
+    private String idleAnim = null;
     protected TextureCache charTexture;
     protected boolean actualFlip;
     protected String atlasUrl;
@@ -60,8 +61,7 @@ public abstract class PCLCharacter extends CustomPlayer {
     protected String skeletonUrl;
     protected String shoulderImage1;
     protected String shoulderImage2;
-    private String hitAnim = null;
-    private String idleAnim = null;
+    public String description;
 
     protected PCLCharacter(String name, PlayerClass playerClass) {
         super(name, playerClass, new PCLEnergyOrb(), new G3DJAnimation(null, null));
@@ -81,77 +81,6 @@ public abstract class PCLCharacter extends CustomPlayer {
                 getLoadout(), 0f, -5f, 240f, 244f, new EnergyManager(3));
 
         reloadDefaultAnimation();
-    }
-
-    public void reloadDefaultAnimation() {
-        reloadAnimation(1f);
-    }
-
-    protected PCLLoadout prepareLoadout() {
-        return PGR.getPlayerData(chosenClass).prepareLoadout();
-    }
-
-    public void reloadAnimation(float scale) {
-        reloadAnimation(atlasUrl, skeletonUrl, DEFAULT_IDLE, DEFAULT_HIT, scale);
-    }
-
-    public void reloadAnimation(String atlasUrl, String skeletonUrl, String idleStr, String hitStr, float scale) {
-        try {
-            this.loadAnimationPCL(atlasUrl, skeletonUrl, scale);
-            tryFindAnimations(idleStr, hitStr);
-            AnimationState.TrackEntry e = this.state.setAnimation(0, idleAnim, true);
-            if (hitAnim != null) {
-                this.stateData.setMix(hitAnim, idleAnim, 0.1f);
-            }
-            e.setTimeScale(0.9f);
-        }
-        catch (Exception e) {
-            EUIUtils.logError(this, "Failed to reload animation with atlas " + atlasUrl + " and skeleton " + skeletonUrl);
-        }
-    }
-
-    // Intentionally avoid calling loadAnimation to avoid registering animations
-    protected void loadAnimationPCL(String atlasUrl, String skeletonUrl, float scale) {
-        this.atlas = new TextureAtlas(Gdx.files.internal(atlasUrl));
-        SkeletonJson json = new SkeletonJson(this.atlas);
-        json.setScale(Settings.renderScale * scale);
-        SkeletonData skeletonData = json.readSkeletonData(Gdx.files.internal(skeletonUrl));
-        this.skeleton = new Skeleton(skeletonData);
-        this.skeleton.setColor(Color.WHITE);
-        this.stateData = new AnimationStateData(skeletonData);
-        this.state = new AnimationState(this.stateData);
-    }
-
-    protected void tryFindAnimations(String idleStr, String hitStr) {
-        Animation idle = getAnimation(idleStr);
-        if (idle == null) {
-            idle = getAnimation(StringUtils.capitalize(idleStr));
-        }
-        if (idle == null) {
-            idle = getAnimation(0);
-        }
-
-        if (idle != null) {
-            idleAnim = idle.getName();
-        }
-        else {
-            idleAnim = null;
-        }
-
-        Animation hit = getAnimation(hitStr);
-        if (idle == null) {
-            idle = getAnimation(StringUtils.capitalize(hitStr));
-        }
-        if (hit == null) {
-            hit = getAnimation(1);
-        }
-
-        if (hit != null) {
-            hitAnim = hit.getName();
-        }
-        else {
-            hitAnim = null;
-        }
     }
 
     protected Animation getAnimation(String key) {
@@ -267,6 +196,51 @@ public abstract class PCLCharacter extends CustomPlayer {
         return list;
     }
 
+    public Color getTransparentColor() {
+        Color c = getCardRenderColor();
+        c.a = 0.7f;
+        return c;
+    }
+
+    // Intentionally avoid calling loadAnimation to avoid registering animations
+    protected void loadAnimationPCL(String atlasUrl, String skeletonUrl, float scale) {
+        this.atlas = new TextureAtlas(Gdx.files.internal(atlasUrl));
+        SkeletonJson json = new SkeletonJson(this.atlas);
+        json.setScale(Settings.renderScale * scale);
+        SkeletonData skeletonData = json.readSkeletonData(Gdx.files.internal(skeletonUrl));
+        this.skeleton = new Skeleton(skeletonData);
+        this.skeleton.setColor(Color.WHITE);
+        this.stateData = new AnimationStateData(skeletonData);
+        this.state = new AnimationState(this.stateData);
+    }
+
+    protected PCLLoadout prepareLoadout() {
+        return PGR.getPlayerData(chosenClass).prepareLoadout();
+    }
+
+    public void reloadAnimation(float scale) {
+        reloadAnimation(atlasUrl, skeletonUrl, DEFAULT_IDLE, DEFAULT_HIT, scale);
+    }
+
+    public void reloadAnimation(String atlasUrl, String skeletonUrl, String idleStr, String hitStr, float scale) {
+        try {
+            this.loadAnimationPCL(atlasUrl, skeletonUrl, scale);
+            tryFindAnimations(idleStr, hitStr);
+            AnimationState.TrackEntry e = this.state.setAnimation(0, idleAnim, true);
+            if (hitAnim != null) {
+                this.stateData.setMix(hitAnim, idleAnim, 0.1f);
+            }
+            e.setTimeScale(0.9f);
+        }
+        catch (Exception e) {
+            EUIUtils.logError(this, "Failed to reload animation with atlas " + atlasUrl + " and skeleton " + skeletonUrl);
+        }
+    }
+
+    public void reloadDefaultAnimation() {
+        reloadAnimation(1f);
+    }
+
     @Override
     public void renderPlayerImage(SpriteBatch sb) {
         if (creatureID == null) {
@@ -339,12 +313,6 @@ public abstract class PCLCharacter extends CustomPlayer {
         }
     }
 
-    public Color getTransparentColor() {
-        Color c = getCardRenderColor();
-        c.a = 0.7f;
-        return c;
-    }
-
     public void resetCreature() {
         creatureID = null;
         reloadDefaultAnimation();
@@ -381,5 +349,37 @@ public abstract class PCLCharacter extends CustomPlayer {
         }
 
         actualFlip = !CreatureAnimationInfo.isPlayer(creatureID);
+    }
+
+    protected void tryFindAnimations(String idleStr, String hitStr) {
+        Animation idle = getAnimation(idleStr);
+        if (idle == null) {
+            idle = getAnimation(StringUtils.capitalize(idleStr));
+        }
+        if (idle == null) {
+            idle = getAnimation(0);
+        }
+
+        if (idle != null) {
+            idleAnim = idle.getName();
+        }
+        else {
+            idleAnim = null;
+        }
+
+        Animation hit = getAnimation(hitStr);
+        if (idle == null) {
+            idle = getAnimation(StringUtils.capitalize(hitStr));
+        }
+        if (hit == null) {
+            hit = getAnimation(1);
+        }
+
+        if (hit != null) {
+            hitAnim = hit.getName();
+        }
+        else {
+            hitAnim = null;
+        }
     }
 }

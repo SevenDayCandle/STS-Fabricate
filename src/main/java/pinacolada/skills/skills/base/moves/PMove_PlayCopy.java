@@ -31,13 +31,13 @@ public class PMove_PlayCopy extends PMove_GenerateCard {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
-        return TEXT.act_play(TEXT.subjects_copiesOf(TEXT.subjects_x));
+    public EUITooltip getActionTooltip() {
+        return PGR.core.tooltips.play;
     }
 
     @Override
-    public EUITooltip getActionTooltip() {
-        return PGR.core.tooltips.play;
+    public String getSampleText(PSkill<?> callingSkill) {
+        return TEXT.act_play(TEXT.subjects_copiesOf(TEXT.subjects_x));
     }
 
     @Override

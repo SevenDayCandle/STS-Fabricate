@@ -19,6 +19,14 @@ public class ResistancePower extends PCLPower implements MultiplicativePower {
         this.maxAmount = MAX_AMOUNT;
     }
 
+    public static float calculatePercentage(int amount) {
+        return Math.max(0.1f, 1f - amount * getMultiplier() / 100f);
+    }
+
+    public static float getMultiplier() {
+        return (MULTIPLIER + CombatManager.getPlayerEffectBonus(POWER_ID));
+    }
+
     @Override
     public float atDamageReceive(float damage, DamageInfo.DamageType type) {
         if (type == DamageInfo.DamageType.NORMAL) {
@@ -28,18 +36,10 @@ public class ResistancePower extends PCLPower implements MultiplicativePower {
         return super.atDamageReceive(damage, type);
     }
 
-    public static float calculatePercentage(int amount) {
-        return Math.max(0.1f, 1f - amount * getMultiplier() / 100f);
-    }
-
     @Override
     public String getUpdatedDescription() {
         this.type = amount < 0 ? PowerType.DEBUFF : PowerType.BUFF;
         return formatDescription(amount < 0 ? 1 : 0, PCLRenderHelpers.decimalFormat(Math.abs(amount * getMultiplier())));
-    }
-
-    public static float getMultiplier() {
-        return (MULTIPLIER + CombatManager.getPlayerEffectBonus(POWER_ID));
     }
 
     @Override

@@ -15,12 +15,7 @@ public abstract class NestedAction<T> extends PCLAction<T> {
         super(type, duration);
     }
 
-    @Override
-    public void updateInternal(float deltaTime) {
-        if (updateAction()) {
-            onNestCompleted();
-        }
-    }
+    protected abstract void onNestCompleted();
 
     protected boolean updateAction() {
         if (action == null) {
@@ -34,5 +29,10 @@ public abstract class NestedAction<T> extends PCLAction<T> {
         return action.isDone;
     }
 
-    protected abstract void onNestCompleted();
+    @Override
+    public void updateInternal(float deltaTime) {
+        if (updateAction()) {
+            onNestCompleted();
+        }
+    }
 }

@@ -35,6 +35,14 @@ public class PMove_EnterStance extends PMove<PField_Stance> {
         fields.setStance(stance);
     }
 
+    public void chooseEffect(PCLUseInfo info, List<PCLStanceHelper> choices) {
+        if (fields.random) {
+            getActions().changeStance(GameUtilities.getRandomElement(choices));
+            return;
+        }
+        getActions().tryChooseSkill(getPCLSource().cardData, amount, info.source, info.target, EUIUtils.map(choices, PMove::enterStance));
+    }
+
     @Override
     public String getSampleText(PSkill<?> callingSkill) {
         return TEXT.act_enterStance(TEXT.subjects_x);
@@ -66,13 +74,5 @@ public class PMove_EnterStance extends PMove<PField_Stance> {
             chooseEffect(info, fields.stances);
         }
         super.use(info);
-    }
-
-    public void chooseEffect(PCLUseInfo info, List<PCLStanceHelper> choices) {
-        if (fields.random) {
-            getActions().changeStance(GameUtilities.getRandomElement(choices));
-            return;
-        }
-        getActions().tryChooseSkill(getPCLSource().cardData, amount, info.source, info.target, EUIUtils.map(choices, PMove::enterStance));
     }
 }

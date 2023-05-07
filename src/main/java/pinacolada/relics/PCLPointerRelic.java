@@ -26,77 +26,6 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
         super(data, texture, tier, sfx);
     }
 
-    @Override
-    public Skills getSkills() {
-        return skills;
-    }
-
-    public void setup() {
-    }
-
-    @Override
-    public String getID() {
-        return relicId;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public int xValue() {
-        return counter;
-    }
-
-    @Override
-    public EUITooltip getTooltip() {
-        return super.getTooltip();
-    }
-
-    @Override
-    public void update() {
-        super.update();
-
-        if (GameUtilities.inBattle() && hb.hovered && EUIInputManager.rightClick.isJustPressed() && triggerCondition != null && triggerCondition.interactable()) {
-            triggerCondition.targetToUse(1);
-        }
-    }
-
-    public float atDamageModify(float block, AbstractCard c) {
-        return atDamageModify(CombatManager.playerSystem.generateInfo(c, player, player), block, c);
-    }    @Override
-    public void atPreBattle() {
-        super.atPreBattle();
-        for (PSkill<?> effect : getEffects()) {
-            // TODO create special skills for relics to distinguish at start of battle from perpetual effects
-            effect.subscribeChildren();
-            PCLClickableUse use = effect.getClickable(this);
-            if (use != null) {
-                triggerCondition = use;
-            }
-        }
-    }
-
-    // Gets called before skills are initialized
-    @Override
-    public String getUpdatedDescription() {
-        if (skills == null) {
-            skills = new Skills();
-            setup();
-        }
-        try {
-            return EUIUtils.joinStrings(" ", EUIUtils.map(getEffects(), PSkill::getPowerText));
-        }
-        catch (Exception e) {
-            return "";
-        }
-    }
-
-    public float atBlockModify(float block, AbstractCard c) {
-        return atBlockModify(CombatManager.playerSystem.generateInfo(c, player, player), block, c);
-    }
-
     public float atBlockModify(PCLUseInfo info, float block, AbstractCard c) {
         refresh(info);
         for (PSkill<?> effect : getEffects()) {
@@ -105,10 +34,22 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
         return block;
     }
 
+    public float atBlockModify(float block, AbstractCard c) {
+        return atBlockModify(CombatManager.playerSystem.generateInfo(c, player, player), block, c);
+    }
+
     public float atDamageModify(PCLUseInfo info, float damage, AbstractCard c) {
         refresh(info);
         for (PSkill<?> effect : getEffects()) {
             damage = effect.modifyDamage(info, damage);
+        }
+        return damage;
+    }
+
+    public float atHealModify(PCLUseInfo info, float damage, AbstractCard c) {
+        refresh(info);
+        for (PSkill<?> effect : getEffects()) {
+            damage = effect.modifyHeal(info, damage);
         }
         return damage;
     }
@@ -137,18 +78,79 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
         return damage;
     }
 
-    public float atHealModify(PCLUseInfo info, float damage, AbstractCard c) {
-        refresh(info);
-        for (PSkill<?> effect : getEffects()) {
-            damage = effect.modifyHeal(info, damage);
+    // Gets called before skills are initialized
+    @Override
+    public String getUpdatedDescription() {
+        if (skills == null) {
+            skills = new Skills();
+            setup();
         }
-        return damage;
+        try {
+            return EUIUtils.joinStrings(" ", EUIUtils.map(getEffects(), PSkill::getPowerText));
+        }
+        catch (Exception e) {
+            return "";
+        }
+    }
+
+    @Override
+    public void atPreBattle() {
+        super.atPreBattle();
+        for (PSkill<?> effect : getEffects()) {
+            // TODO create special skills for relics to distinguish at start of battle from perpetual effects
+            effect.subscribeChildren();
+            PCLClickableUse use = effect.getClickable(this);
+            if (use != null) {
+                triggerCondition = use;
+            }
+        }
+    }
+
+    @Override
+    public String getID() {
+        return relicId;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public Skills getSkills() {
+        return skills;
+    }
+
+    @Override
+    public int xValue() {
+        return counter;
+    }
+
+    @Override
+    public EUITooltip getTooltip() {
+        return super.getTooltip();
     }
 
     public void refresh(PCLUseInfo info) {
         for (PSkill<?> effect : getEffects()) {
             effect.refresh(info, true);
         }
+    }
+
+    public void setup() {
+    }
+
+    @Override
+    public void update() {
+        super.update();
+
+        if (GameUtilities.inBattle() && hb.hovered && EUIInputManager.rightClick.isJustPressed() && triggerCondition != null && triggerCondition.interactable()) {
+            triggerCondition.targetToUse(1);
+        }
+    }
+
+    public float atDamageModify(float block, AbstractCard c) {
+        return atDamageModify(CombatManager.playerSystem.generateInfo(c, player, player), block, c);
     }
 
 

@@ -23,6 +23,10 @@ public class PCLLoadoutValidation {
         refresh(data);
     }
 
+    public static PCLLoadoutValidation createFrom(PCLLoadoutData data) {
+        return new PCLLoadoutValidation(data);
+    }
+
     public PCLLoadoutValidation refresh(PCLLoadoutData data) {
         if (data == null || data.preset < 0 || data.preset >= PCLLoadout.MAX_PRESETS) {
             isValid = false;
@@ -74,9 +78,5 @@ public class PCLLoadoutValidation {
         isValid = totalValue.v2 && cardsCount.v2 && allCardsSeen;
 
         return this;
-    }
-
-    public static PCLLoadoutValidation createFrom(PCLLoadoutData data) {
-        return new PCLLoadoutValidation(data);
     }
 }

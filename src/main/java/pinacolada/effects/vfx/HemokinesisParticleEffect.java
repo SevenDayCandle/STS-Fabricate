@@ -58,6 +58,10 @@ public class HemokinesisParticleEffect extends PCLEffect {
         this.renderBehind = MathUtils.randomBoolean();
     }
 
+    public void update() {
+        this.updateMovement();
+    }
+
     public void render(SpriteBatch sb) {
         if (!this.isDone) {
             sb.setColor(Color.BLACK);
@@ -84,10 +88,6 @@ public class HemokinesisParticleEffect extends PCLEffect {
 
             sb.setBlendFunction(770, 771);
         }
-    }
-
-    public void update() {
-        this.updateMovement();
     }
 
     private void updateMovement() {

@@ -10,11 +10,10 @@ import pinacolada.effects.PCLEffect;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class ShieldEffect extends PCLEffect {
-    public final TextureRegion image;
-
     private final float x;
     private final float sY;
     private final float tY;
+    public final TextureRegion image;
     private float y;
 
     public ShieldEffect(float x, float y) {
@@ -29,6 +28,11 @@ public class ShieldEffect extends PCLEffect {
     }
 
     @Override
+    protected void firstUpdate() {
+        updateInternal(getDeltaTime());
+    }
+
+    @Override
     public void render(SpriteBatch sb) {
         if (this.image != null) {
             PCLRenderHelpers.drawCentered(sb, color, image, x, y, image.getRegionWidth(), image.getRegionHeight(), scale, rotation);
@@ -37,11 +41,6 @@ public class ShieldEffect extends PCLEffect {
 
     @Override
     public void dispose() {
-    }
-
-    @Override
-    protected void firstUpdate() {
-        updateInternal(getDeltaTime());
     }
 
     @Override

@@ -36,10 +36,6 @@ public class CreatureAnimationInfo {
         return creatureAnimations.get(id);
     }
 
-    public static String getIdentifierString(Object c) {
-        return c != null ? c.getClass().getName() : null;
-    }
-
     public static CreatureAnimationInfo getAnimationForIDWithLoading(String id) {
         CreatureAnimationInfo info = getAnimationForID(id);
         if (info == null) {
@@ -59,23 +55,12 @@ public class CreatureAnimationInfo {
         return info;
     }
 
-    public static AbstractCreature tryCreate(String id) {
-        try {
-            Constructor<? extends AbstractCreature> constructor = (Constructor<? extends AbstractCreature>) EUIUtils.tryGetConstructor(Class.forName(id), float.class, float.class);
-            assert constructor != null;
-            return constructor.newInstance(-9999, -9999);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+    public static String getIdentifierString(Object c) {
+        return c != null ? c.getClass().getName() : null;
     }
 
-    public static void registerCreatureSpriter(CustomMonster creature) {
-        AbstractAnimation animation = ReflectionHacks.getPrivate(creature, CustomMonster.class, "animation");
-        if (animation != null) {
-            creatureSpriters.putIfAbsent(getIdentifierString(creature), animation);
-        }
+    public static String getImageForID(String id) {
+        return creatureImages.get(id);
     }
 
     public static String getRandomKey() {
@@ -104,6 +89,25 @@ public class CreatureAnimationInfo {
         creatureImages.putIfAbsent(getIdentifierString(creature), imageUrl);
     }
 
+    public static void registerCreatureSpriter(CustomMonster creature) {
+        AbstractAnimation animation = ReflectionHacks.getPrivate(creature, CustomMonster.class, "animation");
+        if (animation != null) {
+            creatureSpriters.putIfAbsent(getIdentifierString(creature), animation);
+        }
+    }
+
+    public static AbstractCreature tryCreate(String id) {
+        try {
+            Constructor<? extends AbstractCreature> constructor = (Constructor<? extends AbstractCreature>) EUIUtils.tryGetConstructor(Class.forName(id), float.class, float.class);
+            assert constructor != null;
+            return constructor.newInstance(-9999, -9999);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static void tryLoadAnimations(String id) {
         CreatureAnimationInfo info = getAnimationForID(id);
         if (info == null) {
@@ -118,9 +122,5 @@ public class CreatureAnimationInfo {
                 }
             }
         }
-    }
-
-    public static String getImageForID(String id) {
-        return creatureImages.get(id);
     }
 }

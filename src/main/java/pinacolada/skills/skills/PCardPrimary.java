@@ -30,8 +30,6 @@ public abstract class PCardPrimary<T extends PField> extends PPrimary<T> {
         setProvider(card);
     }
 
-    public abstract PCardPrimary<T> setProvider(PointerProvider card);
-
     // Only set the amount for this effect and not its children. Used in refresh to avoid refreshing chained children twice
     public PCardPrimary<T> setAmountFromCardForUpdateOnly() {
         this.amount = getAmountFromCard();
@@ -40,6 +38,8 @@ public abstract class PCardPrimary<T extends PField> extends PPrimary<T> {
         this.baseExtra = getExtraBaseFromCard();
         return this;
     }
+
+    public abstract PCardPrimary<T> setProvider(PointerProvider card);
 
     // We want to execute active mods first because they affect card output, but we want the PCardPrimary to be the parent in order to ensure type safety in the skills object
     @Override

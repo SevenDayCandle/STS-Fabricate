@@ -45,8 +45,18 @@ public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity
     }
 
     @Override
-    public ColoredString getColoredExtraString() {
-        return getColoredValueString(Math.abs(baseExtra), Math.abs(extra));
+    public void cardAction(List<AbstractCard> cards) {
+        if (fields.or && fields.addAffinities.size() > 1) {
+            chooseEffect(cards, fields.addAffinities);
+        }
+        else {
+            super.cardAction(cards);
+        }
+    }
+
+    @Override
+    public ActionT1<AbstractCard> getAction() {
+        return (c) -> getActions().modifyAffinityLevel(c, fields.addAffinities, amount, true, fields.forced);
     }
 
     @Override
@@ -78,22 +88,12 @@ public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity
                         TEXT.act_removeFrom(giveString, TEXT.subjects_thisCard);
     }
 
-    @Override
-    public void cardAction(List<AbstractCard> cards) {
-        if (fields.or && fields.addAffinities.size() > 1) {
-            chooseEffect(cards, fields.addAffinities);
-        }
-        else {
-            super.cardAction(cards);
-        }
-    }
-
-    @Override
-    public ActionT1<AbstractCard> getAction() {
-        return (c) -> getActions().modifyAffinityLevel(c, fields.addAffinities, amount, true, fields.forced);
-    }
-
     public void chooseEffect(List<AbstractCard> cards, List<PCLAffinity> choices) {
         getActions().tryChooseAffinitySkill(getName(), amount, getSourceCreature(), null, EUIUtils.map(choices, a -> PMove.modifyAffinity(amount, a)));
+    }
+
+    @Override
+    public ColoredString getColoredExtraString() {
+        return getColoredValueString(Math.abs(baseExtra), Math.abs(extra));
     }
 }

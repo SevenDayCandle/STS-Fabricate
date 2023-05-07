@@ -87,10 +87,6 @@ public class PCLCustomCardUpgradableEditor extends EUIHoverable {
         return displayValue.getCachedValue();
     }
 
-    public PCLCustomCardUpgradableEditor setValue(int value) {
-        return setValue(value, displayValueSecondary.getCachedValue());
-    }
-
     public void increasePrimary() {
         setValue(displayValue.getCachedValue() + 1, displayValueSecondary.getCachedValue());
     }
@@ -160,6 +156,10 @@ public class PCLCustomCardUpgradableEditor extends EUIHoverable {
         displayValue.tryUpdate();
         displayValueSecondary.tryUpdate();
         header.tryUpdate();
+    }
+
+    public PCLCustomCardUpgradableEditor setValue(int value) {
+        return setValue(value, displayValueSecondary.getCachedValue());
     }
 
     public PCLCustomCardUpgradableEditor setValue(int value, int valueSecondary) {

@@ -57,6 +57,44 @@ public class PCLCardSlotSelectionEffect extends PCLEffectWithCallback<Object> {
         }
     }
 
+    @Override
+    protected void complete() {
+        super.complete();
+
+        if (selectedCard != null && slot.getData() != selectedCard.cardData) {
+            slot.select(selectedCard.cardData, 1);
+        }
+    }
+
+    @Override
+    protected void firstUpdate() {
+        super.firstUpdate();
+
+        if (selectedCard != null) {
+            for (PCLCard card : cards) {
+                if (card.cardID.equals(selectedCard.cardID)) {
+                    selectedCard = card;
+                    selectedCard.beginGlowing();
+                    break;
+                }
+            }
+        }
+    }
+
+    @Override
+    public void render(SpriteBatch sb) {
+        grid.tryRender(sb);
+    }
+
+    @Override
+    protected void updateInternal(float deltaTime) {
+        grid.tryUpdate();
+
+        if (InputHelper.justClickedLeft && grid.hoveredCard == null) {
+            complete();
+        }
+    }
+
     private void onCardClicked(PCLCard card) {
         if (card.cardData.isNotSeen()) {
             CardCrawlGame.sound.play("CARD_REJECT");
@@ -84,44 +122,6 @@ public class PCLCardSlotSelectionEffect extends PCLEffectWithCallback<Object> {
                         .renderImpl(sb);
                 return;
             }
-        }
-    }
-
-    @Override
-    public void render(SpriteBatch sb) {
-        grid.tryRender(sb);
-    }
-
-    @Override
-    protected void firstUpdate() {
-        super.firstUpdate();
-
-        if (selectedCard != null) {
-            for (PCLCard card : cards) {
-                if (card.cardID.equals(selectedCard.cardID)) {
-                    selectedCard = card;
-                    selectedCard.beginGlowing();
-                    break;
-                }
-            }
-        }
-    }
-
-    @Override
-    protected void updateInternal(float deltaTime) {
-        grid.tryUpdate();
-
-        if (InputHelper.justClickedLeft && grid.hoveredCard == null) {
-            complete();
-        }
-    }
-
-    @Override
-    protected void complete() {
-        super.complete();
-
-        if (selectedCard != null && slot.getData() != selectedCard.cardData) {
-            slot.select(selectedCard.cardData, 1);
         }
     }
 

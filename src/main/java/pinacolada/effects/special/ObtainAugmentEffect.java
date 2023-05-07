@@ -24,6 +24,10 @@ public class ObtainAugmentEffect extends PCLEffectWithCallback<PCLAugment> {
         this.renderBehind = false;
     }
 
+    protected void firstUpdate() {
+        PGR.dungeon.addAugment(augment.ID, 1);
+    }
+
     public void render(SpriteBatch sb) {
         EUI.addPriorityPostRender(s -> {
             EUIRenderHelpers.draw(sb, augment.getTexture(), color, x, y, augment.getTexture().getWidth(), augment.getTexture().getHeight());
@@ -33,10 +37,6 @@ public class ObtainAugmentEffect extends PCLEffectWithCallback<PCLAugment> {
 
     public void dispose() {
 
-    }
-
-    protected void firstUpdate() {
-        PGR.dungeon.addAugment(augment.ID, 1);
     }
 
     @Override

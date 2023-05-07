@@ -24,13 +24,13 @@ public class ModifyCost extends GenericCardSelection {
         this.relative = relative;
     }
 
+    public static boolean canCardPass(AbstractCard card, int change) {
+        return card.costForTurn >= 0 && (card.costForTurn != 0 || change > 0);
+    }
+
     @Override
     protected boolean canSelect(AbstractCard card) {
         return super.canSelect(card) && canCardPass(card, relative ? costChange : costChange - card.costForTurn);
-    }
-
-    public static boolean canCardPass(AbstractCard card, int change) {
-        return card.costForTurn >= 0 && (card.costForTurn != 0 || change > 0);
     }
 
     public ModifyCost flash(Color flashColor) {

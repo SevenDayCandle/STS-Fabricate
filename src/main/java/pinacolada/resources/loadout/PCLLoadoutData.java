@@ -11,11 +11,11 @@ import java.util.HashMap;
 
 // Copied and modified from STS-AnimatorMod
 public class PCLLoadoutData {
+    private static final TypeToken<HashMap<PCLBaseStatEditor.StatType, Integer>> TValue = new TypeToken<HashMap<PCLBaseStatEditor.StatType, Integer>>() {
+    };
     public static final TypeToken<TupleT2<String, Integer>> TTuple = new TypeToken<TupleT2<String, Integer>>() {
     };
     public static final TypeToken<LoadoutInfo> TInfo = new TypeToken<LoadoutInfo>() {
-    };
-    private static final TypeToken<HashMap<PCLBaseStatEditor.StatType, Integer>> TValue = new TypeToken<HashMap<PCLBaseStatEditor.StatType, Integer>>() {
     };
     public final HashMap<PCLBaseStatEditor.StatType, Integer> values = new HashMap<>();
     public final ArrayList<PCLCardSlot> cardSlots = new ArrayList<>();

@@ -29,6 +29,11 @@ public class PMove_ModifyDamage extends PMove_Modify<PField_CardCategory> {
     }
 
     @Override
+    public ActionT1<AbstractCard> getAction() {
+        return (c) -> getActions().modifyDamage(c, amount, true, true);
+    }
+
+    @Override
     public String getObjectSampleText() {
         return TEXT.subjects_damage;
     }
@@ -36,11 +41,6 @@ public class PMove_ModifyDamage extends PMove_Modify<PField_CardCategory> {
     @Override
     public String getObjectText() {
         return EUIRM.strings.numNoun(getAmountRawString(), TEXT.subjects_damage);
-    }
-
-    @Override
-    public ActionT1<AbstractCard> getAction() {
-        return (c) -> getActions().modifyDamage(c, amount, true, true);
     }
 
     @Override

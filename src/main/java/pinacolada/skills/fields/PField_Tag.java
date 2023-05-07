@@ -30,14 +30,14 @@ public class PField_Tag extends PField_Random {
         super.setupEditor(editor);
     }
 
+    public String getTagString() {
+        return getTagString(tags);
+    }
+
     public PField_Tag setTag(List<PCLCardTag> tags) {
         this.tags.clear();
         this.tags.addAll(tags);
         return this;
-    }
-
-    public String getTagString() {
-        return getTagString(tags);
     }
 
     public PField_Tag setTag(PCLCardTag... tags) {

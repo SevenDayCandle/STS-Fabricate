@@ -32,15 +32,14 @@ import java.util.ArrayList;
 
 // Copied and modified from STS-AnimatorMod
 public class PCLLoadoutEditor extends AbstractMenuScreen {
+    protected final static PCLLoadoutValidation val = new PCLLoadoutValidation();
     public static final int MAX_CARD_SLOTS = 6;
     public static final int MAX_RELIC_SLOTS = 2;
-    protected final static PCLLoadoutValidation val = new PCLLoadoutValidation();
-    public final EUIContextMenu<ContextOption> contextMenu;
     protected final ArrayList<PCLCardSlotEditor> slotsEditors = new ArrayList<>();
     protected final ArrayList<PCLRelicSlotEditor> relicsEditors = new ArrayList<>();
     protected final ArrayList<PCLBaseStatEditor> baseStatEditors = new ArrayList<>();
     protected final PCLLoadoutData[] presets = new PCLLoadoutData[PCLLoadout.MAX_PRESETS];
-    public PCLBaseStatEditor activeEditor;
+    public final EUIContextMenu<ContextOption> contextMenu;
     protected PCLLoadout loadout;
     protected ActionT0 onClose;
     protected int preset;
@@ -62,6 +61,7 @@ public class PCLLoadoutEditor extends AbstractMenuScreen {
     protected EUITextBox cardsvalueText;
     protected EUITextBox hindrancevalueText;
     protected int rightClickedSlot;
+    public PCLBaseStatEditor activeEditor;
 
     public PCLLoadoutEditor() {
         final float buttonHeight = screenH(0.07f);
@@ -174,74 +174,15 @@ public class PCLLoadoutEditor extends AbstractMenuScreen {
                 .setCanAutosizeButton(true);
     }
 
-    private void openSeriesSelect() {
-        if (characterOption != null && data != null) {
-            PGR.seriesSelection.open(characterOption, data, this.onClose);
-        }
-    }
-
     public void changePreset(int preset) {
         this.preset = preset;
         setSlotsActive(true);
-    }
-
-    public void rightClickPreset(int preset) {
-        rightClickedSlot = preset;
-        if (rightClickedSlot != this.preset) {
-            ArrayList<ContextOption> list = new ArrayList<>();
-            list.add(ContextOption.CopyFrom);
-            list.add(ContextOption.CopyTo);
-
-            contextMenu.setPosition(InputHelper.mX, InputHelper.mY);
-            contextMenu.setItems(list);
-            contextMenu.openOrCloseMenu();
-        }
-
-    }
-
-    public void save() {
-        for (int i = 0, presetsLength = presets.length; i < presetsLength; i++) {
-            loadout.presets[i] = presets[i];
-        }
-
-        loadout.preset = preset;
-        data.saveLoadouts();
-        AbstractDungeon.closeCurrentScreen();
     }
 
     public void clear() {
         PCLLoadoutData defaultData = loadout.getDefaultData(preset);
         presets[preset] = defaultData;
         setSlotsActive(true);
-    }
-
-    public void toggleViewUpgrades(boolean value) {
-        SingleCardViewPopup.isViewingUpgrade = value;
-    }
-
-    public void setSlotsActive(boolean active) {
-        if (active) {
-            final PCLLoadoutData data = presets[preset];
-            for (int i = 0; i < slotsEditors.size(); i++) {
-                final PCLCardSlotEditor editor = slotsEditors.get(i);
-                editor.setActive(data.cardsSize() > i);
-                editor.setSlot(editor.isActive ? data.getCardSlot(i) : null);
-            }
-            for (int i = 0; i < relicsEditors.size(); i++) {
-                final PCLRelicSlotEditor reditor = relicsEditors.get(i);
-                reditor.setActive(data.relicsSize() > i);
-                reditor.setSlot(reditor.isActive ? data.getRelicSlot(i) : null);
-            }
-            for (PCLBaseStatEditor beditor : baseStatEditors) {
-                beditor.setLoadout(loadout, data);
-            }
-            val.refresh(presets[preset]);
-        }
-        else {
-            for (PCLCardSlotEditor editor : slotsEditors) {
-                editor.setActive(false);
-            }
-        }
     }
 
     @Override
@@ -404,8 +345,67 @@ public class PCLLoadoutEditor extends AbstractMenuScreen {
         changePreset(loadout.preset);
     }
 
+    private void openSeriesSelect() {
+        if (characterOption != null && data != null) {
+            PGR.seriesSelection.open(characterOption, data, this.onClose);
+        }
+    }
+
     public void repositionSlotEditor(PCLCardSlotEditor cardSlotEditor, int index) {
         cardSlotEditor.translate(screenW(0.1f), screenH(0.75f - (index * 0.05f)));
+    }
+
+    public void rightClickPreset(int preset) {
+        rightClickedSlot = preset;
+        if (rightClickedSlot != this.preset) {
+            ArrayList<ContextOption> list = new ArrayList<>();
+            list.add(ContextOption.CopyFrom);
+            list.add(ContextOption.CopyTo);
+
+            contextMenu.setPosition(InputHelper.mX, InputHelper.mY);
+            contextMenu.setItems(list);
+            contextMenu.openOrCloseMenu();
+        }
+
+    }
+
+    public void save() {
+        for (int i = 0, presetsLength = presets.length; i < presetsLength; i++) {
+            loadout.presets[i] = presets[i];
+        }
+
+        loadout.preset = preset;
+        data.saveLoadouts();
+        AbstractDungeon.closeCurrentScreen();
+    }
+
+    public void setSlotsActive(boolean active) {
+        if (active) {
+            final PCLLoadoutData data = presets[preset];
+            for (int i = 0; i < slotsEditors.size(); i++) {
+                final PCLCardSlotEditor editor = slotsEditors.get(i);
+                editor.setActive(data.cardsSize() > i);
+                editor.setSlot(editor.isActive ? data.getCardSlot(i) : null);
+            }
+            for (int i = 0; i < relicsEditors.size(); i++) {
+                final PCLRelicSlotEditor reditor = relicsEditors.get(i);
+                reditor.setActive(data.relicsSize() > i);
+                reditor.setSlot(reditor.isActive ? data.getRelicSlot(i) : null);
+            }
+            for (PCLBaseStatEditor beditor : baseStatEditors) {
+                beditor.setLoadout(loadout, data);
+            }
+            val.refresh(presets[preset]);
+        }
+        else {
+            for (PCLCardSlotEditor editor : slotsEditors) {
+                editor.setActive(false);
+            }
+        }
+    }
+
+    public void toggleViewUpgrades(boolean value) {
+        SingleCardViewPopup.isViewingUpgrade = value;
     }
 
     public void trySelectCard(PCLCardSlot cardSlot) {

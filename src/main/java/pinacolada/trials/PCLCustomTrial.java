@@ -26,22 +26,16 @@ public class PCLCustomTrial extends CustomTrial {
     public final ArrayList<String> relicIds = new ArrayList<>();
     public final HashSet<String> bannedCards;
     public final HashSet<String> bannedRelics;
-    public boolean allowCustomCards;
     protected Integer maxHpOverride = null;
     protected boolean isKeepingStarterCards = true;
     protected boolean isKeepingStarterRelic = true;
+    public boolean allowCustomCards;
 
 
     public PCLCustomTrial(HashSet<String> bannedCards, HashSet<String> bannedRelics) {
         super();
         this.bannedCards = bannedCards;
         this.bannedRelics = bannedRelics;
-    }
-
-    public void addMods(Collection<CustomMod> mods) {
-        for (CustomMod mod : mods) {
-            addMod(mod);
-        }
     }
 
     // TODO Add custom mods
@@ -71,8 +65,10 @@ public class PCLCustomTrial extends CustomTrial {
         modIds.add(mod.ID);
     }
 
-    public void setStarterRelics(String... starterRelics) {
-        setStarterRelics(Arrays.asList(starterRelics));
+    public void addMods(Collection<CustomMod> mods) {
+        for (CustomMod mod : mods) {
+            addMod(mod);
+        }
     }
 
     public void addStarterCards(String... moreCardIds) {
@@ -144,6 +140,10 @@ public class PCLCustomTrial extends CustomTrial {
 
     public void setStarterCards(String... moreCardIds) {
         setStarterCards(Arrays.asList(moreCardIds));
+    }
+
+    public void setStarterRelics(String... starterRelics) {
+        setStarterRelics(Arrays.asList(starterRelics));
     }
 
 }

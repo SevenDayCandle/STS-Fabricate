@@ -19,6 +19,14 @@ public class ObtainCustomCommand extends ConsoleCommand {
         this.simpleCheck = true;
     }
 
+    public static ArrayList<String> getCustoms() {
+        return EUIUtils.map(PCLCustomCardSlot.getCards(null), slot -> slot.ID);
+    }
+
+    protected void doAction(PCLCard copy) {
+        PCLActions.bottom.makeCardInHand(copy);
+    }
+
     @Override
     protected void execute(String[] tokens, int depth) {
         PCLCustomCardSlot slot = PCLCustomCardSlot.get(tokens[1]);
@@ -73,13 +81,5 @@ public class ObtainCustomCommand extends ConsoleCommand {
         }
 
         return options;
-    }
-
-    public static ArrayList<String> getCustoms() {
-        return EUIUtils.map(PCLCustomCardSlot.getCards(null), slot -> slot.ID);
-    }
-
-    protected void doAction(PCLCard copy) {
-        PCLActions.bottom.makeCardInHand(copy);
     }
 }

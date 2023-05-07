@@ -33,12 +33,12 @@ public class PMod_BonusOnHasDiscarded extends PMod_BonusOnHas {
     }
 
     @Override
-    public List<AbstractCard> getCardPile() {
-        return fields.forced ? CombatManager.cardsDiscardedThisCombat() : CombatManager.cardsDiscardedThisTurn();
+    public EUITooltip getActionTooltip() {
+        return PGR.core.tooltips.discard;
     }
 
     @Override
-    public EUITooltip getActionTooltip() {
-        return PGR.core.tooltips.discard;
+    public List<AbstractCard> getCardPile() {
+        return fields.forced ? CombatManager.cardsDiscardedThisCombat() : CombatManager.cardsDiscardedThisTurn();
     }
 }

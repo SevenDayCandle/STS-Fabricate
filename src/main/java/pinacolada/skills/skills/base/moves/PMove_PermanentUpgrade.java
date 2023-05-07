@@ -34,23 +34,23 @@ public class PMove_PermanentUpgrade extends PMove_Select<PField_CardCategory> {
     }
 
     @Override
-    public String getSampleText(PSkill<?> callingSkill) {
-        return TEXT.subjects_permanentlyX(TEXT.act_upgrade(TEXT.subjects_x));
-    }
-
-    @Override
     public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
         return (s, c, i, o, g) -> (SelectFromPile) new UpgradeFromPile(s, c, i, o, g).isPermanent(true).isCancellable(false);
     }
 
     @Override
-    public String getSubText() {
-        return TEXT.subjects_permanentlyX(super.getSubText());
+    public EUITooltip getActionTooltip() {
+        return PGR.core.tooltips.upgrade;
     }
 
     @Override
-    public EUITooltip getActionTooltip() {
-        return PGR.core.tooltips.upgrade;
+    public String getSampleText(PSkill<?> callingSkill) {
+        return TEXT.subjects_permanentlyX(TEXT.act_upgrade(TEXT.subjects_x));
+    }
+
+    @Override
+    public String getSubText() {
+        return TEXT.subjects_permanentlyX(super.getSubText());
     }
 
     @Override

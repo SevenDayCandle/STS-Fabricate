@@ -24,7 +24,6 @@ import static com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect;
 public class PCLAttackVFX {
     private static final HashMap<AttackEffect, PCLAttackVFX> ALL = new HashMap<>();
 
-    // Custom:
     public static final PCLAttackVFX BITE = new PCLAttackVFX(PCLEnum.AttackEffect.BITE, null, (sx, sy, cx, cy) -> new BiteEffect(cx, cy, Color.WHITE), PCLSFX.EVENT_VAMP_BITE);
     public static final PCLAttackVFX BLUNT_HEAVY = new PCLAttackVFX(AttackEffect.BLUNT_HEAVY, ImageMaster.ATK_BLUNT_HEAVY, PCLSFX.BLUNT_FAST);
     public static final PCLAttackVFX BLUNT_LIGHT = new PCLAttackVFX(AttackEffect.BLUNT_LIGHT, ImageMaster.ATK_BLUNT_LIGHT, PCLSFX.BLUNT_HEAVY);
@@ -53,12 +52,12 @@ public class PCLAttackVFX {
     public static final PCLAttackVFX SPARK = new PCLAttackVFX(PCLEnum.AttackEffect.SPARK, null, Color.YELLOW, (sx, sy, cx, cy) -> VFX.sparkImpact(cx, cy), PCLSFX.ORB_LIGHTNING_CHANNEL);
     public static final PCLAttackVFX WATER = new PCLAttackVFX(PCLEnum.AttackEffect.WATER, null, Color.BLUE, (sx, sy, cx, cy) -> VFX.water(cx, cy), PCLSFX.PCL_ORB_WATER_EVOKE);
     public static final PCLAttackVFX WIND = new PCLAttackVFX(PCLEnum.AttackEffect.WIND, null, Color.FOREST, (sx, sy, cx, cy) -> VFX.tornado(cx, cy), PCLSFX.POWER_FLIGHT);
+    protected final String[] sounds;
+    protected final FuncT4<AbstractGameEffect, Float, Float, Float, Float> createVFX;
     public final AttackEffect key;
     public final TextureRegion texture;
     public final float damageDelay;
     public final Color damageTint;
-    protected final String[] sounds;
-    protected final FuncT4<AbstractGameEffect, Float, Float, Float, Float> createVFX;
 
     public PCLAttackVFX(AttackEffect key) {
         this(key, null);
@@ -102,31 +101,6 @@ public class PCLAttackVFX {
         return ALL.keySet().stream().sorted((a, b) -> StringUtils.compare(a.name(), b.name())).collect(Collectors.toList());
     }
 
-    public AbstractGameEffect getVFX(float targetCx, float targetCy) {
-        return getVFX(0, 0, targetCx, targetCy);
-    }
-
-    public AbstractGameEffect getVFX(float sourceCx, float sourceCy, float targetCx, float targetCy) {
-        if (createVFX != null) {
-            return createVFX.invoke(sourceCx, sourceCy, targetCx, targetCy);
-        }
-
-        if (texture != null) {
-            return new GenericRenderEffect(texture, targetCx, targetCy)
-                    .setRotation(key == AttackEffect.BLUNT_HEAVY ? MathUtils.random(0, 360) : MathUtils.random(-12f, 12f));
-        }
-
-        return new GenericRenderEffect((TextureRegion) null, targetCx, targetCy);
-    }
-
-    public void playSound(float pitchMin, float pitchMax) {
-        PCLSFX.play(getSound(), pitchMin, pitchMax);
-    }
-
-    public String getSound() {
-        return sounds.length == 0 ? null : sounds.length == 1 ? sounds[0] : EUIUtils.random(sounds);
-    }
-
     public AbstractGameEffect attack(AbstractCreature source, AbstractCreature target, float pitchMin, float pitchMax) {
         return attack(source, target, pitchMin, pitchMax, null);
     }
@@ -147,5 +121,30 @@ public class PCLAttackVFX {
         }
 
         return effect;
+    }
+
+    public String getSound() {
+        return sounds.length == 0 ? null : sounds.length == 1 ? sounds[0] : EUIUtils.random(sounds);
+    }
+
+    public AbstractGameEffect getVFX(float sourceCx, float sourceCy, float targetCx, float targetCy) {
+        if (createVFX != null) {
+            return createVFX.invoke(sourceCx, sourceCy, targetCx, targetCy);
+        }
+
+        if (texture != null) {
+            return new GenericRenderEffect(texture, targetCx, targetCy)
+                    .setRotation(key == AttackEffect.BLUNT_HEAVY ? MathUtils.random(0, 360) : MathUtils.random(-12f, 12f));
+        }
+
+        return new GenericRenderEffect((TextureRegion) null, targetCx, targetCy);
+    }
+
+    public AbstractGameEffect getVFX(float targetCx, float targetCy) {
+        return getVFX(0, 0, targetCx, targetCy);
+    }
+
+    public void playSound(float pitchMin, float pitchMax) {
+        PCLSFX.play(getSound(), pitchMin, pitchMax);
     }
 }

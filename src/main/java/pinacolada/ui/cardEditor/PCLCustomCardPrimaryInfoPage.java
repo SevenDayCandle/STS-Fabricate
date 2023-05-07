@@ -34,15 +34,13 @@ import java.util.List;
 import static pinacolada.ui.cardEditor.PCLCustomCardEditCardScreen.START_Y;
 
 public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
-    public static final int EFFECT_COUNT = 2;
-
-    public static final float MENU_WIDTH = scale(160);
-    public static final float MENU_HEIGHT = scale(40);
-    public static final float SPACING_WIDTH = screenW(0.02f);
     protected static final float START_X = screenW(0.25f);
     protected static final float PAD_X = AbstractCard.IMG_WIDTH * 0.75f + Settings.CARD_VIEW_PAD_X;
     protected static final float PAD_Y = scale(10);
-
+    public static final int EFFECT_COUNT = 2;
+    public static final float MENU_WIDTH = scale(160);
+    public static final float MENU_HEIGHT = scale(40);
+    public static final float SPACING_WIDTH = screenW(0.02f);
     protected PCLCustomCardEditCardScreen effect;
     protected EUILabel header;
     protected EUITextBoxInput idInput;
@@ -195,25 +193,6 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
         refresh();
     }
 
-    private void validifyCardID(String cardID) {
-        String fullID = PCLCustomCardSlot.getBaseIDPrefix(effect.getBuilder().cardColor) + cardID;
-        if (!fullID.equals(effect.currentSlot.ID) && PCLCustomCardSlot.isIDDuplicate(fullID, effect.getBuilder().cardColor)) {
-            idWarning.setActive(true);
-            effect.saveButton.setInteractable(false);
-        }
-        else {
-            idWarning.setActive(false);
-            effect.modifyAllBuilders(e -> e.setID(fullID));
-            effect.saveButton.setInteractable(true);
-        }
-    }
-
-    private void updateLanguage(Settings.GameLanguage language) {
-        activeLanguage = language;
-        nameInput.setFont(language == Settings.language ? EUIFontHelper.cardtitlefontNormal : EUIFontHelper.createBoldFont(language, true, 27.0F, 2f, PCLCard.CARD_TYPE_COLOR, 3f, PCLCard.SHADOW_COLOR), 0.7f)
-                .setLabel(effect.getBuilder().getStringsForLanguage(activeLanguage).NAME);
-    }
-
     protected static List<AbstractCard.CardRarity> getEligibleRarities() {
         return PGR.config.showIrrelevantProperties.get() ? Arrays.asList(AbstractCard.CardRarity.values()) : GameUtilities.getStandardRarities();
     }
@@ -286,5 +265,24 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
         branchUpgrades.tryRender(sb);
         uniqueToggle.tryRender(sb);
         soulboundToggle.tryRender(sb);
+    }
+
+    private void updateLanguage(Settings.GameLanguage language) {
+        activeLanguage = language;
+        nameInput.setFont(language == Settings.language ? EUIFontHelper.cardtitlefontNormal : EUIFontHelper.createBoldFont(language, true, 27.0F, 2f, PCLCard.CARD_TYPE_COLOR, 3f, PCLCard.SHADOW_COLOR), 0.7f)
+                .setLabel(effect.getBuilder().getStringsForLanguage(activeLanguage).NAME);
+    }
+
+    private void validifyCardID(String cardID) {
+        String fullID = PCLCustomCardSlot.getBaseIDPrefix(effect.getBuilder().cardColor) + cardID;
+        if (!fullID.equals(effect.currentSlot.ID) && PCLCustomCardSlot.isIDDuplicate(fullID, effect.getBuilder().cardColor)) {
+            idWarning.setActive(true);
+            effect.saveButton.setInteractable(false);
+        }
+        else {
+            idWarning.setActive(false);
+            effect.modifyAllBuilders(e -> e.setID(fullID));
+            effect.saveButton.setInteractable(true);
+        }
     }
 }

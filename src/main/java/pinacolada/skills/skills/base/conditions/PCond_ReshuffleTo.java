@@ -36,12 +36,12 @@ public class PCond_ReshuffleTo extends PCond_DoToCard {
     }
 
     @Override
-    public EUITooltip getActionTooltip() {
-        return PGR.core.tooltips.reshuffle;
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
+        return ReshuffleFromPile::new;
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
-        return ReshuffleFromPile::new;
+    public EUITooltip getActionTooltip() {
+        return PGR.core.tooltips.reshuffle;
     }
 }

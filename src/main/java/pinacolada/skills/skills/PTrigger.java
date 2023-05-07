@@ -14,8 +14,8 @@ import pinacolada.skills.skills.base.primary.PTrigger_When;
 
 public abstract class PTrigger extends PPrimary<PField_Not> {
     public static final int TRIGGER_PRIORITY = 0;
-    public PSkillPower power;
     protected int usesThisTurn;
+    public PSkillPower power;
 
     public PTrigger(PSkillData<PField_Not> data) {
         this(data, PCLCardTarget.None, -1);
@@ -59,51 +59,31 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
         return PSkill.chain(this, effects);
     }
 
-    public int getUses() {
-        return this.usesThisTurn;
-    }    @Override
+    @Override
     public String getSubText() {
         return fields.not ? TEXT.cond_timesPerCombat(getAmountRawString()) : amount > 0 ? TEXT.cond_timesPerTurn(getAmountRawString()) + ", " : "";
     }
 
-    public PTrigger setUpgrade(int upgrade) {
-        super.setUpgrade(upgrade);
-        this.usesThisTurn = this.amount;
-        return this;
-    }    @Override
+    @Override
     public String getText(boolean addPeriod) {
         return getSubText() + (childEffect != null ? childEffect.getText(addPeriod) : "");
     }
 
-    public PTrigger setUpgradeExtra(int upgrade) {
-        super.setUpgradeExtra(upgrade);
-        this.usesThisTurn = this.amount;
-        return this;
-    }    @Override
+    @Override
     public PTrigger makeCopy() {
         PTrigger copy = (PTrigger) super.makeCopy();
         copy.usesThisTurn = this.usesThisTurn;
         return copy;
     }
 
-    protected boolean triggerOn(FuncT0<Boolean> childAction) {
-        return triggerOn(childAction, makeInfo(null));
-    }    public PTrigger setAmount(int amount) {
-        super.setAmount(amount);
+    public PTrigger setAmount(int amount, int upgrade) {
+        super.setAmount(amount, upgrade);
         this.usesThisTurn = this.amount;
         return this;
     }
 
-    protected boolean triggerOn(FuncT0<Boolean> childAction, PCLUseInfo info) {
-        if (this.childEffect != null && sourceCard != null && usesThisTurn != 0) {
-            if (usesThisTurn > 0) {
-                usesThisTurn -= 1;
-            }
-            return childAction.invoke();
-        }
-        return false;
-    }    public PTrigger setAmount(int amount, int upgrade) {
-        super.setAmount(amount, upgrade);
+    public PTrigger setAmount(int amount) {
+        super.setAmount(amount);
         this.usesThisTurn = this.amount;
         return this;
     }
@@ -125,14 +105,14 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
         return this;
     }
 
-    public PTrigger setExtra(int amount) {
-        super.setExtra(amount);
+    public PTrigger setExtra(int amount, int upgrade) {
+        super.setExtra(amount, upgrade);
         this.usesThisTurn = this.amount;
         return this;
     }
 
-    public PTrigger setExtra(int amount, int upgrade) {
-        super.setExtra(amount, upgrade);
+    public PTrigger setExtra(int amount) {
+        super.setExtra(amount);
         this.usesThisTurn = this.amount;
         return this;
     }
@@ -141,6 +121,39 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
         super.setTemporaryAmount(amount);
         this.usesThisTurn = this.amount;
         return this;
+    }
+
+    public PTrigger stack(PSkill<?> other) {
+        if (rootAmount > 0 && other.rootAmount > 0) {
+            setAmount(rootAmount + other.rootAmount);
+        }
+        if (rootExtra > 0 && other.rootExtra > 0) {
+            setExtra(rootExtra + other.rootExtra);
+        }
+        setAmountFromCard();
+        resetUses();
+
+        // Only update child effects if uses per turn is infinite
+        if (rootAmount <= 0 && this.childEffect != null && other.getChild() != null) {
+            this.childEffect.stack(other.getChild());
+        }
+        return this;
+    }
+
+    public boolean tryPassParent(PSkill<?> source, PCLUseInfo info) {
+        if (usesThisTurn != 0) {
+            if (usesThisTurn > 0) {
+                usesThisTurn -= 1;
+            }
+            boolean result = super.tryPassParent(source, info);
+
+            if (result && power != null) {
+                power.flash();
+            }
+
+            return result;
+        }
+        return false;
     }
 
     @Override
@@ -173,52 +186,39 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
         }
     }
 
+    public int getUses() {
+        return this.usesThisTurn;
+    }
+
     public void resetUses() {
         if (!fields.not) {
             this.usesThisTurn = this.amount;
         }
     }
 
-
-
-
-
-    public PTrigger stack(PSkill<?> other) {
-        if (rootAmount > 0 && other.rootAmount > 0) {
-            setAmount(rootAmount + other.rootAmount);
-        }
-        if (rootExtra > 0 && other.rootExtra > 0) {
-            setExtra(rootExtra + other.rootExtra);
-        }
-        setAmountFromCard();
-        resetUses();
-
-        // Only update child effects if uses per turn is infinite
-        if (rootAmount <= 0 && this.childEffect != null && other.getChild() != null) {
-            this.childEffect.stack(other.getChild());
-        }
+    public PTrigger setUpgrade(int upgrade) {
+        super.setUpgrade(upgrade);
+        this.usesThisTurn = this.amount;
         return this;
     }
 
+    public PTrigger setUpgradeExtra(int upgrade) {
+        super.setUpgradeExtra(upgrade);
+        this.usesThisTurn = this.amount;
+        return this;
+    }
 
-
-
-
-
-
-    public boolean tryPassParent(PSkill<?> source, PCLUseInfo info) {
-        if (usesThisTurn != 0) {
+    protected boolean triggerOn(FuncT0<Boolean> childAction, PCLUseInfo info) {
+        if (this.childEffect != null && sourceCard != null && usesThisTurn != 0) {
             if (usesThisTurn > 0) {
                 usesThisTurn -= 1;
             }
-            boolean result = super.tryPassParent(source, info);
-
-            if (result && power != null) {
-                power.flash();
-            }
-
-            return result;
+            return childAction.invoke();
         }
         return false;
+    }
+
+    protected boolean triggerOn(FuncT0<Boolean> childAction) {
+        return triggerOn(childAction, makeInfo(null));
     }
 }

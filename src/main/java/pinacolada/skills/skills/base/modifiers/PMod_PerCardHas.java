@@ -29,6 +29,8 @@ public abstract class PMod_PerCardHas extends PMod_Per<PField_CardCategory> {
         super(data, amount, count);
     }
 
+    abstract public EUITooltip getActionTooltip();
+
     abstract public List<AbstractCard> getCardPile();
 
     @Override
@@ -57,8 +59,6 @@ public abstract class PMod_PerCardHas extends PMod_Per<PField_CardCategory> {
         super.setupEditor(editor);
         fields.registerFBoolean(editor, TEXT.cedit_combat, null);
     }
-
-    abstract public EUITooltip getActionTooltip();
 
     @Override
     public String getSubText() {

@@ -71,10 +71,6 @@ import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.player;
 
 // Copied and modified from STS-AnimatorMod
 public class CombatManager {
-    public static final CardGroup PURGED_CARDS = new CardGroup(PCLEnum.CardGroupType.PURGED_CARDS);
-    public static final ControllableCardPile controlPile = new ControllableCardPile();
-    public static final PCLPlayerSystem playerSystem = new PCLPlayerSystem();
-    public static final SummonPool summons = new SummonPool();
     private static final ArrayList<AbstractCard> cardsDiscardedThisCombat = new ArrayList<>();
     private static final ArrayList<AbstractCard> cardsDiscardedThisTurn = new ArrayList<>();
     private static final ArrayList<AbstractCard> cardsExhaustedThisCombat = new ArrayList<>();
@@ -93,17 +89,21 @@ public class CombatManager {
     private static final Map<String, Integer> semiLimitedData = new HashMap<>();
     private static final Map<String, Object> combatData = new HashMap<>();
     private static final Map<String, Object> turnData = new HashMap<>();
+    public static final CardGroup PURGED_CARDS = new CardGroup(PCLEnum.CardGroupType.PURGED_CARDS);
+    public static final ControllableCardPile controlPile = new ControllableCardPile();
+    public static final PCLPlayerSystem playerSystem = new PCLPlayerSystem();
+    public static final SummonPool summons = new SummonPool();
+    private static GameActionManager.Phase currentPhase;
+    private static HashMap<AbstractCreature, Integer> estimatedDamages;
+    private static boolean shouldRefreshHand;
+    private static int cardsDrawnThisTurn = 0;
+    private static int turnCount = 0;
     public static AbstractRoom room;
     public static UUID battleID;
     public static boolean isPlayerTurn;
     public static int blockRetained;
     public static int dodgeChance;
     public static int maxHPSinceLastTurn;
-    private static GameActionManager.Phase currentPhase;
-    private static HashMap<AbstractCreature, Integer> estimatedDamages;
-    private static boolean shouldRefreshHand;
-    private static int cardsDrawnThisTurn = 0;
-    private static int turnCount = 0;
 
     public static void addAmplifierBonus(String powerID, int multiplier) {
         addBonus(powerID, Type.Amplifier, multiplier);
@@ -128,35 +128,6 @@ public class CombatManager {
 
         }
 
-    }
-
-    public static float onGainTriggerablePowerBonus(String powerID, Type gainType, float amount) {
-        return subscriberInout(OnGainPowerBonusSubscriber.class, amount, (s, d) -> s.onGainPowerBonus(powerID, gainType, d));
-    }
-
-    public static HashMap<String, Float> getEffectBonusMapForType(Type effectType) {
-        switch (effectType) {
-            case Amplifier:
-                return AMPLIFIER_BONUSES;
-            case Effect:
-                return EFFECT_BONUSES;
-            case PlayerEffect:
-                return PLAYER_EFFECT_BONUSES;
-            case PassiveDamage:
-                return PASSIVE_DAMAGE_BONUSES;
-        }
-        throw new RuntimeException("Unsupported Effect Bonus type.");
-    }
-
-    public static <T extends PCLCombatSubscriber, U> U subscriberInout(Class<T> subscriberClass, U inout, FuncT2<U, T, U> doFor) {
-        for (T subscriber : getSubscriberGroup(subscriberClass)) {
-            inout = doFor.invoke(subscriber, inout);
-        }
-        return inout;
-    }
-
-    private static <T extends PCLCombatSubscriber> ConcurrentLinkedQueue<T> getSubscriberGroup(Class<T> subscriberClass) {
-        return (ConcurrentLinkedQueue<T>) EVENTS.get(subscriberClass);
     }
 
     public static void addEffectBonus(String powerID, float multiplier) {
@@ -241,32 +212,16 @@ public class CombatManager {
         return !hasActivatedLimited(id);
     }
 
-    public static boolean hasActivatedLimited(String id) {
-        return limitedData.containsKey(id);
-    }
-
     public static boolean canActivateLimited(String id, int cap) {
         return !hasActivatedLimited(id, cap);
-    }
-
-    public static boolean hasActivatedLimited(String id, int cap) {
-        return limitedData.containsKey(id) && limitedData.get(id) >= cap;
     }
 
     public static boolean canActivateSemiLimited(String id) {
         return !hasActivatedSemiLimited(id);
     }
 
-    public static boolean hasActivatedSemiLimited(String id) {
-        return semiLimitedData.containsKey(id);
-    }
-
     public static boolean canActivateSemiLimited(String id, int cap) {
         return !hasActivatedSemiLimited(id, cap);
-    }
-
-    public static boolean hasActivatedSemiLimited(String id, int cap) {
-        return semiLimitedData.containsKey(id) && semiLimitedData.get(id) >= cap;
     }
 
     public static boolean canApplyPower(AbstractCreature source, AbstractCreature target, AbstractPower powerToApply, AbstractGameAction action) {
@@ -300,6 +255,65 @@ public class CombatManager {
 
     public static List<AbstractCard> cardsExhaustedThisTurn() {
         return cardsExhaustedThisTurn;
+    }
+
+    public static List<AbstractCard> cardsPlayedThisCombat(int turn) {
+        return cardsPlayedThisCombat.computeIfAbsent(turn, k -> new ArrayList<>());
+    }
+
+    private static <T extends PCLCombatSubscriber> void castAndSubscribe(Class<T> subtype, PCLCombatSubscriber subscriber) {
+        subscribe(subtype, (T) subscriber);
+    }
+
+    private static <T extends PCLCombatSubscriber> void castAndUnsubscribe(Class<T> subtype, PCLCombatSubscriber subscriber) {
+        unsubscribe(subtype, (T) subscriber);
+    }
+
+    private static void clearStats() {
+        refreshPlayer();
+        EUIUtils.logInfoIfDebug(CombatManager.class, "Clearing Stats");
+        for (ConcurrentLinkedQueue<?> event : EVENTS.values()) {
+            event.clear();
+        }
+
+        CardGlowBorderPatches.overrideColor = null;
+        dodgeChance = 0;
+        AMPLIFIER_BONUSES.clear();
+        EFFECT_BONUSES.clear();
+        PASSIVE_DAMAGE_BONUSES.clear();
+        PLAYER_EFFECT_BONUSES.clear();
+        PGR.combatScreen.formulaDisplay.initialize();
+        DrawPileCardPreview.reset();
+        controlPile.clear();
+        GridCardSelectScreenHelper.clear(true);
+        playerSystem.initialize();
+        playerSystem.setLastCardPlayed(null);
+        summons.initialize();
+        maxHPSinceLastTurn = AbstractDungeon.player == null ? 0 : AbstractDungeon.player.currentHealth;
+        blockRetained = 0;
+        battleID = null;
+        estimatedDamages = null;
+
+        shouldRefreshHand = false;
+        turnCount = 0;
+        cardsDrawnThisTurn = 0;
+        orbsEvokedThisCombat.clear();
+        orbsEvokedThisTurn.clear();
+        cardsDiscardedThisCombat.clear();
+        cardsDiscardedThisTurn.clear();
+        cardsPlayedThisCombat.clear();
+        cardsExhaustedThisCombat.clear();
+        cardsExhaustedThisTurn.clear();
+        hasteInfinitesThisTurn.clear();
+        unplayableCards.clear();
+        currentPhase = null;
+        combatData.clear();
+        limitedData.clear();
+        semiLimitedData.clear();
+        turnData.clear();
+
+        CardGlowBorderPatches.overrideColor = null;
+        PURGED_CARDS.clear();
     }
 
     public static Set<Map.Entry<String, Float>> getAllAmplifierBonuses() {
@@ -337,20 +351,42 @@ public class CombatManager {
         return defaultData;
     }
 
+    public static float getEffectBonus(String powerID) {
+        return EFFECT_BONUSES.getOrDefault(powerID, 0f);
+    }
+
     public static float getEffectBonusForPower(AbstractPower po) {
         return (GameUtilities.isPlayer(po.owner)) ? (CombatManager.getPlayerEffectBonus(po.ID)) : (CombatManager.getEffectBonus(po.ID));
+    }
+
+    public static HashMap<String, Float> getEffectBonusMapForType(Type effectType) {
+        switch (effectType) {
+            case Amplifier:
+                return AMPLIFIER_BONUSES;
+            case Effect:
+                return EFFECT_BONUSES;
+            case PlayerEffect:
+                return PLAYER_EFFECT_BONUSES;
+            case PassiveDamage:
+                return PASSIVE_DAMAGE_BONUSES;
+        }
+        throw new RuntimeException("Unsupported Effect Bonus type.");
+    }
+
+    private static List<Class<? extends PCLCombatSubscriber>> getInterfaces(PCLCombatSubscriber subscriber) {
+        return EUIUtils.mapAsNonnull(subscriber.getClass().getInterfaces(), i -> PCLCombatSubscriber.class.isAssignableFrom(i) ? (Class<? extends PCLCombatSubscriber>) i : null);
+    }
+
+    public static float getPassiveDamageBonus(String powerID) {
+        return PASSIVE_DAMAGE_BONUSES.getOrDefault(powerID, 0f);
     }
 
     public static float getPlayerEffectBonus(String powerID) {
         return PLAYER_EFFECT_BONUSES.getOrDefault(powerID, 0f);
     }
 
-    public static float getEffectBonus(String powerID) {
-        return EFFECT_BONUSES.getOrDefault(powerID, 0f);
-    }
-
-    public static float getPassiveDamageBonus(String powerID) {
-        return PASSIVE_DAMAGE_BONUSES.getOrDefault(powerID, 0f);
+    private static <T extends PCLCombatSubscriber> ConcurrentLinkedQueue<T> getSubscriberGroup(Class<T> subscriberClass) {
+        return (ConcurrentLinkedQueue<T>) EVENTS.get(subscriberClass);
     }
 
     public static <T> T getTurnData(String key, T defaultData) {
@@ -364,9 +400,20 @@ public class CombatManager {
         return defaultData;
     }
 
-    public static <T> T setCombatData(String key, T data) {
-        combatData.put(key, data);
-        return data;
+    public static boolean hasActivatedLimited(String id) {
+        return limitedData.containsKey(id);
+    }
+
+    public static boolean hasActivatedLimited(String id, int cap) {
+        return limitedData.containsKey(id) && limitedData.get(id) >= cap;
+    }
+
+    public static boolean hasActivatedSemiLimited(String id) {
+        return semiLimitedData.containsKey(id);
+    }
+
+    public static boolean hasActivatedSemiLimited(String id, int cap) {
+        return semiLimitedData.containsKey(id) && semiLimitedData.get(id) >= cap;
     }
 
     public static List<AbstractCard> hasteInfinitesThisTurn() {
@@ -384,12 +431,6 @@ public class CombatManager {
         }
     }
 
-    public static <T extends PCLCombatSubscriber> ConcurrentLinkedQueue<T> registerSubscribeGroup(Class<T> eventClass) {
-        ConcurrentLinkedQueue<T> event = new ConcurrentLinkedQueue<>();
-        EVENTS.put(eventClass, event);
-        return event;
-    }
-
     public static void onAfterCardPlayed(AbstractCard card) {
         subscriberDo(OnCardPlayedSubscriber.class, s -> s.onCardPlayed(card));
 
@@ -398,10 +439,6 @@ public class CombatManager {
         if (AbstractDungeon.player.limbo.contains(card)) {
             PCLActions.top.add(new UnlimboAction(card));
         }
-    }
-
-    public static List<AbstractCard> cardsPlayedThisCombat(int turn) {
-        return cardsPlayedThisCombat.computeIfAbsent(turn, k -> new ArrayList<>());
     }
 
     public static void onAfterDeath() {
@@ -472,15 +509,6 @@ public class CombatManager {
         }
     }
 
-    public static void onCardCreated(AbstractCard card, boolean startOfBattle) {
-        final PCLCard c = EUIUtils.safeCast(card, PCLCard.class);
-        if (c != null) {
-            c.triggerWhenCreated(startOfBattle);
-        }
-
-        subscriberDo(OnCardCreatedSubscriber.class, s -> s.onCardCreated(card, startOfBattle));
-    }
-
     public static void onBeforeLoseBlock(AbstractCreature creature, int amount, boolean noAnimation) {
         subscriberDo(OnBeforeLoseBlockSubscriber.class, s -> s.onBeforeLoseBlock(creature, amount, noAnimation));
     }
@@ -491,6 +519,15 @@ public class CombatManager {
 
     public static void onBlockGained(AbstractCreature creature, int block) {
         subscriberDo(OnBlockGainedSubscriber.class, s -> s.onBlockGained(creature, block));
+    }
+
+    public static void onCardCreated(AbstractCard card, boolean startOfBattle) {
+        final PCLCard c = EUIUtils.safeCast(card, PCLCard.class);
+        if (c != null) {
+            c.triggerWhenCreated(startOfBattle);
+        }
+
+        subscriberDo(OnCardCreatedSubscriber.class, s -> s.onCardCreated(card, startOfBattle));
     }
 
     public static void onCardDiscarded(AbstractCard card) {
@@ -513,6 +550,10 @@ public class CombatManager {
             controlPile.refreshCards();
             DrawPileCardPreview.refreshAll();
         });
+    }
+
+    public static void onCardPlayed(PCLCard card, PCLUseInfo info) {
+        playerSystem.onCardPlayed(card, info, false);
     }
 
     public static void onCardPurged(AbstractCard card) {
@@ -545,12 +586,6 @@ public class CombatManager {
         subscriberDo(OnCardReshuffledSubscriber.class, s -> s.onCardReshuffled(card, sourcePile));
     }
 
-    public static <T extends PCLCombatSubscriber> void subscriberDo(Class<T> subscriberClass, ActionT1<T> doFor) {
-        for (T subscriber : getSubscriberGroup(subscriberClass)) {
-            doFor.invoke(subscriber);
-        }
-    }
-
     public static void onCardRetain(AbstractCard card) {
         card.onRetained();
 
@@ -581,14 +616,6 @@ public class CombatManager {
         return subscriberCanDeny(OnPCLClickableUsedSubscriber.class, s -> s.onClickablePowerUsed(condition, target, uses));
     }
 
-    public static <T extends PCLCombatSubscriber> boolean subscriberCanDeny(Class<T> subscriberClass, FuncT1<Boolean, T> doFor) {
-        boolean passes = true;
-        for (T subscriber : getSubscriberGroup(subscriberClass)) {
-            passes = passes & doFor.invoke(subscriber);
-        }
-        return passes;
-    }
-
     public static boolean onCooldownTriggered(AbstractCreature source, AbstractCreature m, CooldownProvider cooldown) {
         return subscriberCanDeny(OnCooldownTriggeredSubscriber.class, s -> s.onCooldownTriggered(cooldown, source, m));
     }
@@ -607,58 +634,6 @@ public class CombatManager {
 
     public static void onDeath() {
         clearStats();
-    }
-
-    private static void clearStats() {
-        refreshPlayer();
-        EUIUtils.logInfoIfDebug(CombatManager.class, "Clearing Stats");
-        for (ConcurrentLinkedQueue<?> event : EVENTS.values()) {
-            event.clear();
-        }
-
-        CardGlowBorderPatches.overrideColor = null;
-        dodgeChance = 0;
-        AMPLIFIER_BONUSES.clear();
-        EFFECT_BONUSES.clear();
-        PASSIVE_DAMAGE_BONUSES.clear();
-        PLAYER_EFFECT_BONUSES.clear();
-        PGR.combatScreen.formulaDisplay.initialize();
-        DrawPileCardPreview.reset();
-        controlPile.clear();
-        GridCardSelectScreenHelper.clear(true);
-        playerSystem.initialize();
-        playerSystem.setLastCardPlayed(null);
-        summons.initialize();
-        maxHPSinceLastTurn = AbstractDungeon.player == null ? 0 : AbstractDungeon.player.currentHealth;
-        blockRetained = 0;
-        battleID = null;
-        estimatedDamages = null;
-
-        shouldRefreshHand = false;
-        turnCount = 0;
-        cardsDrawnThisTurn = 0;
-        orbsEvokedThisCombat.clear();
-        orbsEvokedThisTurn.clear();
-        cardsDiscardedThisCombat.clear();
-        cardsDiscardedThisTurn.clear();
-        cardsPlayedThisCombat.clear();
-        cardsExhaustedThisCombat.clear();
-        cardsExhaustedThisTurn.clear();
-        hasteInfinitesThisTurn.clear();
-        unplayableCards.clear();
-        currentPhase = null;
-        combatData.clear();
-        limitedData.clear();
-        semiLimitedData.clear();
-        turnData.clear();
-
-        CardGlowBorderPatches.overrideColor = null;
-        PURGED_CARDS.clear();
-    }
-
-    public static AbstractPlayer refreshPlayer() {
-        PCLCard.rng = PCLPower.rng = PCLRelic.rng = AbstractDungeon.cardRandomRng;
-        return PCLCard.player = PCLPower.player = PCLRelic.player = AbstractDungeon.player;
     }
 
     public static int onEnergyRecharge(int previousEnergy, int currentEnergy) {
@@ -689,6 +664,10 @@ public class CombatManager {
         return subscriberInout(OnGainTempHPSubscriber.class, amount, OnGainTempHPSubscriber::onGainTempHP);
     }
 
+    public static float onGainTriggerablePowerBonus(String powerID, Type gainType, float amount) {
+        return subscriberInout(OnGainPowerBonusSubscriber.class, amount, (s, d) -> s.onGainPowerBonus(powerID, gainType, d));
+    }
+
     public static void onGameStart() {
         clearStats();
 
@@ -702,14 +681,6 @@ public class CombatManager {
 
         subscriberDo(OnHealthBarUpdatedSubscriber.class, s -> s.onHealthBarUpdated(creature));
         refreshHandLayout();
-    }
-
-    public static void refreshHandLayout() {
-        if (GameUtilities.getCurrentRoom() != null) {
-            player.hand.refreshHandLayout();
-            player.hand.applyPowers();
-            player.hand.glowCheck();
-        }
     }
 
     public static void onIncreaseAffinityLevel(PCLAffinity affinity) {
@@ -808,32 +779,21 @@ public class CombatManager {
         clearStats();
     }
 
-    public static void refresh() {
-        refreshPlayer();
-
-        room = GameUtilities.getCurrentRoom();
-
-        if (room == null || AbstractDungeon.player == null) {
-            battleID = null;
-        }
-        else if (room.isBattleOver || AbstractDungeon.player.isDead) {
-            if (room.phase != AbstractRoom.RoomPhase.COMBAT || room.monsters == null || room.monsters.areMonstersBasicallyDead()) {
-                battleID = null;
-            }
-        }
-        else if (battleID == null && room.phase == AbstractRoom.RoomPhase.COMBAT) {
-            battleID = UUID.randomUUID();
-        }
-
-        PGR.combatScreen.initialize();
-    }
-
     public static void onTagChanged(AbstractCard card, PCLCardTag tag, int value) {
         subscriberDo(OnTagChangedSubscriber.class, s -> s.onTagChanged(card, tag, value));
     }
 
     public static AbstractOrb onTryChannelOrb(AbstractOrb orb) {
         return subscriberInout(OnTryChannelOrbSubscriber.class, orb, OnTryChannelOrbSubscriber::onTryChannelOrb);
+    }
+
+    public static int onTrySpendEnergy(AbstractCard card, AbstractPlayer p, int cost) {
+        // Hardcoded base game logic
+        if (p.hasPower(CorruptionPower.POWER_ID) && card.type != AbstractCard.CardType.SKILL) {
+            cost = 0;
+        }
+
+        return subscriberInout(OnTrySpendEnergySubscriber.class, cost, (s, d) -> s.onTrySpendEnergy(card, p, d));
     }
 
     public static int onTryUseXCost(int original, AbstractCard card) {
@@ -877,10 +837,6 @@ public class CombatManager {
         onUsingCardPostActions(card, p, m);
     }
 
-    public static void onCardPlayed(PCLCard card, PCLUseInfo info) {
-        playerSystem.onCardPlayed(card, info, false);
-    }
-
     public static void onUsingCardPostActions(AbstractCard card, AbstractPlayer p, AbstractMonster m) {
         PCLActions.bottom.add(new UseCardAction(card, m));
         if (!card.dontTriggerOnUseCard) {
@@ -905,15 +861,6 @@ public class CombatManager {
         AbstractDungeon.player.hand.glowCheck();
     }
 
-    public static int onTrySpendEnergy(AbstractCard card, AbstractPlayer p, int cost) {
-        // Hardcoded base game logic
-        if (p.hasPower(CorruptionPower.POWER_ID) && card.type != AbstractCard.CardType.SKILL) {
-            cost = 0;
-        }
-
-        return subscriberInout(OnTrySpendEnergySubscriber.class, cost, (s, d) -> s.onTrySpendEnergy(card, p, d));
-    }
-
     public static void onVictory() {
         PGR.dungeon.updateHighestScore(playerSystem.getActiveMeter().getHighestScore());
         clearStats();
@@ -929,6 +876,45 @@ public class CombatManager {
 
     public static void queueRefreshHandLayout() {
         shouldRefreshHand = true;
+    }
+
+    public static void refresh() {
+        refreshPlayer();
+
+        room = GameUtilities.getCurrentRoom();
+
+        if (room == null || AbstractDungeon.player == null) {
+            battleID = null;
+        }
+        else if (room.isBattleOver || AbstractDungeon.player.isDead) {
+            if (room.phase != AbstractRoom.RoomPhase.COMBAT || room.monsters == null || room.monsters.areMonstersBasicallyDead()) {
+                battleID = null;
+            }
+        }
+        else if (battleID == null && room.phase == AbstractRoom.RoomPhase.COMBAT) {
+            battleID = UUID.randomUUID();
+        }
+
+        PGR.combatScreen.initialize();
+    }
+
+    public static void refreshHandLayout() {
+        if (GameUtilities.getCurrentRoom() != null) {
+            player.hand.refreshHandLayout();
+            player.hand.applyPowers();
+            player.hand.glowCheck();
+        }
+    }
+
+    public static AbstractPlayer refreshPlayer() {
+        PCLCard.rng = PCLPower.rng = PCLRelic.rng = AbstractDungeon.cardRandomRng;
+        return PCLCard.player = PCLPower.player = PCLRelic.player = AbstractDungeon.player;
+    }
+
+    public static <T extends PCLCombatSubscriber> ConcurrentLinkedQueue<T> registerSubscribeGroup(Class<T> eventClass) {
+        ConcurrentLinkedQueue<T> event = new ConcurrentLinkedQueue<>();
+        EVENTS.put(eventClass, event);
+        return event;
     }
 
     // TODO add subscribers
@@ -975,6 +961,11 @@ public class CombatManager {
         }
     }
 
+    public static <T> T setCombatData(String key, T data) {
+        combatData.put(key, data);
+        return data;
+    }
+
     public static <T> T setTurnData(String key, T data) {
         turnData.put(key, data);
         return data;
@@ -986,16 +977,16 @@ public class CombatManager {
         }
     }
 
-    private static List<Class<? extends PCLCombatSubscriber>> getInterfaces(PCLCombatSubscriber subscriber) {
-        return EUIUtils.mapAsNonnull(subscriber.getClass().getInterfaces(), i -> PCLCombatSubscriber.class.isAssignableFrom(i) ? (Class<? extends PCLCombatSubscriber>) i : null);
-    }
-
-    private static <T extends PCLCombatSubscriber> void castAndSubscribe(Class<T> subtype, PCLCombatSubscriber subscriber) {
-        subscribe(subtype, (T) subscriber);
-    }
-
     public static <T extends PCLCombatSubscriber> void subscribe(Class<T> subtype, T subscriber) {
         getSubscriberGroup(subtype).add(subscriber);
+    }
+
+    public static <T extends PCLCombatSubscriber> boolean subscriberCanDeny(Class<T> subscriberClass, FuncT1<Boolean, T> doFor) {
+        boolean passes = true;
+        for (T subscriber : getSubscriberGroup(subscriberClass)) {
+            passes = passes & doFor.invoke(subscriber);
+        }
+        return passes;
     }
 
     public static <T extends PCLCombatSubscriber> boolean subscriberCanPass(Class<T> subscriberClass, FuncT1<Boolean, T> doFor) {
@@ -1004,6 +995,19 @@ public class CombatManager {
             passes = passes | doFor.invoke(subscriber);
         }
         return passes;
+    }
+
+    public static <T extends PCLCombatSubscriber> void subscriberDo(Class<T> subscriberClass, ActionT1<T> doFor) {
+        for (T subscriber : getSubscriberGroup(subscriberClass)) {
+            doFor.invoke(subscriber);
+        }
+    }
+
+    public static <T extends PCLCombatSubscriber, U> U subscriberInout(Class<T> subscriberClass, U inout, FuncT2<U, T, U> doFor) {
+        for (T subscriber : getSubscriberGroup(subscriberClass)) {
+            inout = doFor.invoke(subscriber, inout);
+        }
+        return inout;
     }
 
     public static <T extends PCLCombatSubscriber> int subscriberSum(Class<T> subscriberClass, FuncT1<Integer, T> doFor) {
@@ -1042,10 +1046,6 @@ public class CombatManager {
         for (Class<? extends PCLCombatSubscriber> c : getInterfaces(subscriber)) {
             castAndUnsubscribe(c, subscriber);
         }
-    }
-
-    private static <T extends PCLCombatSubscriber> void castAndUnsubscribe(Class<T> subtype, PCLCombatSubscriber subscriber) {
-        unsubscribe(subtype, (T) subscriber);
     }
 
     public static <T extends PCLCombatSubscriber> void unsubscribe(Class<T> subtype, T subscriber) {

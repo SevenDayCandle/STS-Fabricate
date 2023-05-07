@@ -46,6 +46,15 @@ public class PCLTextLine {
         }
     }
 
+    public float calculateHeight(BitmapFont font) {
+        if (tokens.isEmpty()) {
+            return font.getCapHeight() * 0.5f;
+        }
+        else {
+            return font.getCapHeight();
+        }
+    }
+
     public PCLTextToken getEnd() {
         return tokens.getLast();
     }
@@ -88,15 +97,6 @@ public class PCLTextLine {
 
         for (PCLTextToken token : tokens) {
             token.render(sb, context);
-        }
-    }
-
-    public float calculateHeight(BitmapFont font) {
-        if (tokens.isEmpty()) {
-            return font.getCapHeight() * 0.5f;
-        }
-        else {
-            return font.getCapHeight();
         }
     }
 

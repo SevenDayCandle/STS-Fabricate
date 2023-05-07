@@ -29,12 +29,12 @@ public class PCond_HaveExhausted extends PCond_HaveCard {
     }
 
     @Override
-    public List<AbstractCard> getCardPile() {
-        return fields.forced ? CombatManager.cardsExhaustedThisCombat() : CombatManager.cardsExhaustedThisTurn();
+    public EUITooltip getActionTooltip() {
+        return PGR.core.tooltips.exhaust;
     }
 
     @Override
-    public EUITooltip getActionTooltip() {
-        return PGR.core.tooltips.exhaust;
+    public List<AbstractCard> getCardPile() {
+        return fields.forced ? CombatManager.cardsExhaustedThisCombat() : CombatManager.cardsExhaustedThisTurn();
     }
 }

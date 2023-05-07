@@ -140,18 +140,6 @@ public abstract class ListSelection<Item> {
             list.add(getRandomIndex(list.size() - 1), item);
         }
 
-        protected int getRandomIndex(int size) {
-            if (size <= 0) {
-                return 0;
-            }
-            else if (rng == null) {
-                return GameUtilities.getRNG().random(size);
-            }
-            else {
-                return rng.random(size);
-            }
-        }
-
         @Override
         public T get(List<T> list, int index, boolean remove) {
             T card = null;
@@ -164,6 +152,18 @@ public abstract class ListSelection<Item> {
             }
 
             return card;
+        }
+
+        protected int getRandomIndex(int size) {
+            if (size <= 0) {
+                return 0;
+            }
+            else if (rng == null) {
+                return GameUtilities.getRNG().random(size);
+            }
+            else {
+                return rng.random(size);
+            }
         }
     }
 

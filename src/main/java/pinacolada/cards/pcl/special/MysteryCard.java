@@ -48,6 +48,10 @@ public class MysteryCard extends PCLCard {
             super(cardData, index, amount, 0);
         }
 
+        private boolean checkCondition(AbstractCard c) {
+            return c.cost == amount && GameUtilities.isObtainableInCombat(c);
+        }
+
         public final AbstractCard createObscuredCard() {
             ArrayList<AbstractCard> pool = getPool(fields.rarities);
             WeightedList<AbstractCard> possiblePicks = new WeightedList<>();
@@ -83,17 +87,13 @@ public class MysteryCard extends PCLCard {
             return EUIUtils.filter(pool, this::checkCondition);
         }
 
-        private int getWeight(AbstractCard c) {
-            return 10 - Math.max(2, 2 * c.cost);
-        }
-
-        private boolean checkCondition(AbstractCard c) {
-            return c.cost == amount && GameUtilities.isObtainableInCombat(c);
-        }
-
         @Override
         public String getSubText() {
             return EUIUtils.format(cardData.strings.EXTENDED_DESCRIPTION[descIndex], amount, PCLCoreStrings.joinWithOr(EUIUtils.map(fields.rarities, EUIGameUtils::textForRarity)));
+        }
+
+        private int getWeight(AbstractCard c) {
+            return 10 - Math.max(2, 2 * c.cost);
         }
     }
 }

@@ -20,13 +20,17 @@ public class CriticalPower extends PCLPower implements MultiplicativePower {
         initialize(amount, PowerType.BUFF, true);
     }
 
+    public static float calculateDamage(float damage, float multiplier, int stacks) {
+        return Math.max(0, damage + Math.max(0, damage * (stacks + 1) + (multiplier / 100f)));
+    }
+
+    public static float getMultiplier() {
+        return (MULTIPLIER + CombatManager.getPlayerEffectBonus(POWER_ID));
+    }
+
     @Override
     public float atDamageFinalGive(float damage, DamageInfo.DamageType type) {
         return type == DamageInfo.DamageType.NORMAL ? calculateDamage(damage, getMultiplier(), amount) : damage;
-    }
-
-    public static float calculateDamage(float damage, float multiplier, int stacks) {
-        return Math.max(0, damage + Math.max(0, damage * (stacks + 1) + (multiplier / 100f)));
     }
 
     public void onUseCard(AbstractCard card, UseCardAction action) {
@@ -38,9 +42,5 @@ public class CriticalPower extends PCLPower implements MultiplicativePower {
     @Override
     public String getUpdatedDescription() {
         return formatDescription(0, PCLRenderHelpers.decimalFormat(getMultiplier()));
-    }
-
-    public static float getMultiplier() {
-        return (MULTIPLIER + CombatManager.getPlayerEffectBonus(POWER_ID));
     }
 }

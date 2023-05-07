@@ -54,11 +54,14 @@ public class PCLGenericSelectCardEffect extends PCLEffectWithCallback<AbstractCa
                 .setOnCardClick(this::complete);
     }
 
-    public void refresh(CardGroup cards) {
-        this.cards = cards;
-        this.grid = new EUICardGrid()
-                .canDragScreen(false)
-                .addCards(cards.group);
+    @Override
+    protected void complete() {
+        super.complete();
+
+        if (showTopPanelOnComplete) {
+            GameUtilities.setTopPanelVisible(true);
+            showTopPanelOnComplete = false;
+        }
     }
 
     @Override
@@ -81,14 +84,11 @@ public class PCLGenericSelectCardEffect extends PCLEffectWithCallback<AbstractCa
         }
     }
 
-    @Override
-    protected void complete() {
-        super.complete();
-
-        if (showTopPanelOnComplete) {
-            GameUtilities.setTopPanelVisible(true);
-            showTopPanelOnComplete = false;
-        }
+    public void refresh(CardGroup cards) {
+        this.cards = cards;
+        this.grid = new EUICardGrid()
+                .canDragScreen(false)
+                .addCards(cards.group);
     }
 
     public PCLGenericSelectCardEffect setStartingPosition(float x, float y) {

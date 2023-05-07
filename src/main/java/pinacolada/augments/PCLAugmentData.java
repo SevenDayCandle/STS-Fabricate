@@ -34,6 +34,18 @@ public class PCLAugmentData extends PCLGenericData<PCLAugment> {
     public PCLAugmentReqs reqs;
     public boolean isSpecial;
 
+    public PCLAugmentData(Class<? extends PCLAugment> invokeClass, PCLResources<?, ?, ?, ?> resources, PCLAugmentCategorySub lineage, int tier) {
+        this(invokeClass, resources, lineage, tier, resources.createID(invokeClass.getSimpleName()));
+    }
+
+    public PCLAugmentData(Class<? extends PCLAugment> invokeClass, PCLResources<?, ?, ?, ?> resources, PCLAugmentCategorySub lineage, int tier, String id) {
+        super(id, invokeClass, resources);
+        this.tier = tier;
+        this.lineage = lineage;
+        this.category = lineage.parent;
+        strings = PGR.getAugmentStrings(ID);
+    }
+
     public static PCLAugmentData get(String id) {
         return AUGMENT_MAP.get(id);
     }
@@ -95,18 +107,6 @@ public class PCLAugmentData extends PCLGenericData<PCLAugment> {
     protected static <T extends PCLAugmentData> T registerData(T cardData) {
         AUGMENT_MAP.put(cardData.ID, cardData);
         return cardData;
-    }
-
-    public PCLAugmentData(Class<? extends PCLAugment> invokeClass, PCLResources<?, ?, ?, ?> resources, PCLAugmentCategorySub lineage, int tier) {
-        this(invokeClass, resources, lineage, tier, resources.createID(invokeClass.getSimpleName()));
-    }
-
-    public PCLAugmentData(Class<? extends PCLAugment> invokeClass, PCLResources<?, ?, ?, ?> resources, PCLAugmentCategorySub lineage, int tier, String id) {
-        super(id, invokeClass, resources);
-        this.tier = tier;
-        this.lineage = lineage;
-        this.category = lineage.parent;
-        strings = PGR.getAugmentStrings(ID);
     }
 
     public boolean canApply(AbstractCard c) {

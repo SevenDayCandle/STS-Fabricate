@@ -38,76 +38,6 @@ public class PField_CardGeneric extends PField_Not {
         setForced(other.forced);
     }
 
-    public PField_CardGeneric setCardGroup(List<PCLCardGroupHelper> gt) {
-        this.groupTypes.clear();
-        this.groupTypes.addAll(gt);
-        this.baseGroupTypes = this.groupTypes;
-        return this;
-    }
-
-    public PField_CardGeneric setOrigin(PCLCardSelection origin) {
-        this.origin = origin;
-        return this;
-    }
-
-    public PField_CardGeneric setForced(boolean value) {
-        this.forced = value;
-        return this;
-    }
-
-    @Override
-    public boolean equals(PField other) {
-        return super.equals(other)
-                && groupTypes.equals(((PField_CardGeneric) other).groupTypes)
-                && origin.equals(((PField_CardGeneric) other).origin)
-                && not == ((PField_CardGeneric) other).not
-                && forced == ((PField_CardGeneric) other).forced;
-    }
-
-    @Override
-    public PField_CardGeneric makeCopy() {
-        return new PField_CardGeneric(this);
-    }
-
-    public PField_CardGeneric setNot(boolean value) {
-        this.not = value;
-        return this;
-    }
-
-    public void setupEditor(PCLCustomEffectEditingPane editor) {
-        editor.registerOrigin(origin, origins -> setOrigin(origins.size() > 0 ? origins.get(0) : PCLCardSelection.Manual));
-        editor.registerPile(groupTypes);
-    }
-
-    public String getFullCardStringSingular() {
-        return getFullCardString();
-    }
-
-    public String getFullCardString() {
-        return getShortCardString();
-    }
-
-    public String getShortCardString() {
-        return isRandom() ? PSkill.TEXT.subjects_randomX(skill.pluralCard()) : skill.pluralCard();
-    }
-
-    public boolean isRandom() {
-        return origin == PCLCardSelection.Random;
-    }
-
-    public CardFilterAction getGenericPileAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> action, PCLUseInfo info, int subchoices) {
-        if (!skill.useParent && groupTypes.isEmpty()) {
-            return PCLActions.last.add(createFilteredAction(action, info, subchoices));
-        }
-        else {
-            return skill.getActions().add(createFilteredAction(action, info, subchoices));
-        }
-    }
-
-    public SelectFromPile createFilteredAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> action, PCLUseInfo info, int subchoices) {
-        return createAction(action, info, subchoices);
-    }
-
     /**
      * Generates a generic SelectFromPile action on the groups specified by this effect.
      * If the skill's BASE amount is 0 or less, we will go for ALL cards in hand (skills that had their amounts set to 0 by mods still act on 0 cards)
@@ -128,6 +58,34 @@ public class PField_CardGeneric extends PField_Not {
         }
 
         return action.invoke(skill.getName(), skill.target.getTarget(info.source, info.target), choiceSize, origin.toSelection(), g);
+    }
+
+    public SelectFromPile createFilteredAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> action, PCLUseInfo info, int subchoices) {
+        return createAction(action, info, subchoices);
+    }
+
+    @Override
+    public boolean equals(PField other) {
+        return super.equals(other)
+                && groupTypes.equals(((PField_CardGeneric) other).groupTypes)
+                && origin.equals(((PField_CardGeneric) other).origin)
+                && not == ((PField_CardGeneric) other).not
+                && forced == ((PField_CardGeneric) other).forced;
+    }
+
+    @Override
+    public PField_CardGeneric makeCopy() {
+        return new PField_CardGeneric(this);
+    }
+
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        editor.registerOrigin(origin, origins -> setOrigin(origins.size() > 0 ? origins.get(0) : PCLCardSelection.Manual));
+        editor.registerPile(groupTypes);
+    }
+
+    public PField_CardGeneric setNot(boolean value) {
+        this.not = value;
+        return this;
     }
 
     public final CardGroup[] getCardGroup(PCLUseInfo info) {
@@ -151,12 +109,37 @@ public class PField_CardGeneric extends PField_Not {
         }
     }
 
+    public String getFullCardString() {
+        return getShortCardString();
+    }
+
+    public String getFullCardStringSingular() {
+        return getFullCardString();
+    }
+
+    public CardFilterAction getGenericPileAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> action, PCLUseInfo info, int subchoices) {
+        if (!skill.useParent && groupTypes.isEmpty()) {
+            return PCLActions.last.add(createFilteredAction(action, info, subchoices));
+        }
+        else {
+            return skill.getActions().add(createFilteredAction(action, info, subchoices));
+        }
+    }
+
     public String getGroupString() {
         return getGroupString(groupTypes, origin);
     }
 
+    public String getShortCardString() {
+        return isRandom() ? PSkill.TEXT.subjects_randomX(skill.pluralCard()) : skill.pluralCard();
+    }
+
     public boolean hasGroups() {
         return !EUIUtils.isNullOrEmpty(groupTypes);
+    }
+
+    public boolean isRandom() {
+        return origin == PCLCardSelection.Random;
     }
 
     public void registerFBoolean(PCLCustomEffectEditingPane editor, String name, String desc) {
@@ -172,8 +155,25 @@ public class PField_CardGeneric extends PField_Not {
         return this;
     }
 
+    public PField_CardGeneric setCardGroup(List<PCLCardGroupHelper> gt) {
+        this.groupTypes.clear();
+        this.groupTypes.addAll(gt);
+        this.baseGroupTypes = this.groupTypes;
+        return this;
+    }
+
     public PField_CardGeneric setCardGroup(PCLCardGroupHelper... gt) {
         return setCardGroup(Arrays.asList(gt));
+    }
+
+    public PField_CardGeneric setForced(boolean value) {
+        this.forced = value;
+        return this;
+    }
+
+    public PField_CardGeneric setOrigin(PCLCardSelection origin) {
+        this.origin = origin;
+        return this;
     }
 
     public PField_CardGeneric setRandom() {

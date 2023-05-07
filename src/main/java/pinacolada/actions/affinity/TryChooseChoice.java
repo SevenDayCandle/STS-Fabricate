@@ -131,10 +131,23 @@ public class TryChooseChoice<T> extends PCLAction<ArrayList<ChoiceCard<T>>> {
                 });
     }
 
-    public TryChooseChoice<T> cancellableFromPlayer(boolean value) {
-        this.canPlayerCancel = value;
-
+    public TryChooseChoice<T> addCallback(ActionT0 onCompletion) {
+        super.addCallback(onCompletion);
         return this;
+    }
+
+    public TryChooseChoice<T> addCallback(ActionT1<ArrayList<ChoiceCard<T>>> onCompletion) {
+        super.addCallback(onCompletion);
+        return this;
+    }
+
+    @Override
+    protected void completeImpl() {
+        if (hideTopPanel) {
+            GameUtilities.setTopPanelVisible(true);
+        }
+
+        super.completeImpl();
     }
 
     @Override
@@ -218,23 +231,10 @@ public class TryChooseChoice<T> extends PCLAction<ArrayList<ChoiceCard<T>>> {
         }
     }
 
-    public TryChooseChoice<T> addCallback(ActionT1<ArrayList<ChoiceCard<T>>> onCompletion) {
-        super.addCallback(onCompletion);
+    public TryChooseChoice<T> cancellableFromPlayer(boolean value) {
+        this.canPlayerCancel = value;
+
         return this;
-    }
-
-    public TryChooseChoice<T> addCallback(ActionT0 onCompletion) {
-        super.addCallback(onCompletion);
-        return this;
-    }
-
-    @Override
-    protected void completeImpl() {
-        if (hideTopPanel) {
-            GameUtilities.setTopPanelVisible(true);
-        }
-
-        super.completeImpl();
     }
 
     public TryChooseChoice<T> hideTopPanel(boolean hideTopPanel) {

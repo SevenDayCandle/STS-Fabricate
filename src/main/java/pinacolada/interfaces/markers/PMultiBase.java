@@ -14,16 +14,6 @@ public interface PMultiBase<T extends PSkill<?>> {
         return this;
     }
 
-    List<T> getSubEffects();
-
-    default void setParentsForChildren() {
-        for (PSkill<?> be : getSubEffects()) {
-            if (be != null) {
-                be.parent = (PSkill<?>) this;
-            }
-        }
-    }
-
     default void addSubs(AbstractCard c) {
         for (PSkill<?> be : getSubEffects()) {
             be.onAddToCard(c);
@@ -35,6 +25,12 @@ public interface PMultiBase<T extends PSkill<?>> {
             be.displayUpgrades(value);
         }
     }
+
+    default T getSubEffect(int index) {
+        return index < getSubEffects().size() ? getSubEffects().get(index) : null;
+    }
+
+    List<T> getSubEffects();
 
     default void removeSubs(AbstractCard c) {
         for (PSkill<?> be : getSubEffects()) {
@@ -54,14 +50,18 @@ public interface PMultiBase<T extends PSkill<?>> {
         return this;
     }
 
+    default void setParentsForChildren() {
+        for (PSkill<?> be : getSubEffects()) {
+            if (be != null) {
+                be.parent = (PSkill<?>) this;
+            }
+        }
+    }
+
     default PMultiBase<T> stackMulti(PMultiBase<?> other) {
         for (int i = 0; i < Math.min(getSubEffects().size(), other.getSubEffects().size()); i++) {
             getSubEffect(i).stack(other.getSubEffect(i));
         }
         return this;
-    }
-
-    default T getSubEffect(int index) {
-        return index < getSubEffects().size() ? getSubEffects().get(index) : null;
     }
 }

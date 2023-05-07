@@ -17,16 +17,16 @@ import static extendedui.ui.AbstractScreen.createHexagonalButton;
 
 public class PCLAugmentList extends EUICanvasGrid {
 
-    public static final int DEFAULT = 3;
     protected static final float X_START = Settings.WIDTH * 0.22f;
     protected static final float Y_START = Settings.HEIGHT * 0.77f;
     protected static final float X_PAD = Settings.WIDTH * 0.19f;
     protected static final float Y_PAD = scale(80);
-    public ArrayList<PCLAugmentListItem> augments = new ArrayList<>();
+    public static final int DEFAULT = 3;
     protected int hoveredIndex;
     protected EUIButton cancel;
     protected AugmentSortButton sortButton;
     protected ActionT1<PCLAugment> onComplete;
+    public ArrayList<PCLAugmentListItem> augments = new ArrayList<>();
 
     public PCLAugmentList(ActionT1<PCLAugment> onComplete) {
         this(onComplete, DEFAULT);
@@ -41,6 +41,23 @@ public class PCLAugmentList extends EUICanvasGrid {
                 .setOnClick(() -> onComplete.invoke(null))
                 .setColor(Color.FIREBRICK);
         sortButton = new AugmentSortButton(new EUIHitbox(0, 0, scale(170), scale(32)), this::sortAugments);
+    }
+
+    public void addListItem(PCLAugment augment, float amount) {
+        this.augments.add(new PCLAugmentListItem(this, augment, amount));
+    }
+
+    public void addPanelItem(PCLAugment augment, int count, boolean enabled) {
+        this.augments.add(new PCLAugmentButtonListItem(this, augment, count, enabled));
+    }
+
+    public void clear() {
+        augments.clear();
+    }
+
+    @Override
+    public int currentSize() {
+        return augments.size();
     }
 
     protected void sortAugments(AugmentSortButton.Type sortType, boolean sortDesc) {
@@ -60,23 +77,6 @@ public class PCLAugmentList extends EUICanvasGrid {
                 return a.augment.data.tier - b.augment.data.tier;
         }
         return 0;
-    }
-
-    public void addListItem(PCLAugment augment, float amount) {
-        this.augments.add(new PCLAugmentListItem(this, augment, amount));
-    }
-
-    public void addPanelItem(PCLAugment augment, int count, boolean enabled) {
-        this.augments.add(new PCLAugmentButtonListItem(this, augment, count, enabled));
-    }
-
-    public void clear() {
-        augments.clear();
-    }
-
-    @Override
-    public int currentSize() {
-        return augments.size();
     }
 
     @Override

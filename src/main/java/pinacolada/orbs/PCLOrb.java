@@ -28,10 +28,10 @@ import java.lang.reflect.InvocationTargetException;
 // TODO Make into a PointerProvider
 public abstract class PCLOrb extends AbstractOrb {
     public static final int IMAGE_SIZE = 96;
+    protected final OrbStrings orbStrings;
     public final PCLAffinity affinity;
     public final boolean canOrbApplyFocusToEvoke;
     public final boolean canOrbApplyFocusToPassive;
-    protected final OrbStrings orbStrings;
     public boolean clickable;
     public EUITooltip tooltip;
 
@@ -57,12 +57,44 @@ public abstract class PCLOrb extends AbstractOrb {
         return PGR.core.createID(type.getSimpleName());
     }
 
+    public static int getFocus() {
+        return GameUtilities.getPowerAmount(AbstractDungeon.player, FocusPower.POWER_ID);
+    }
+
+    public void evoke() {
+        // Orb Evoke event is already broadcast
+    }
+
+    protected String formatDescription(int index, Object... args) {
+        if (orbStrings.DESCRIPTION == null || orbStrings.DESCRIPTION.length <= index) {
+            EUIUtils.logError(this, "orbStrings.Description does not exist, " + this.name);
+            return "";
+        }
+        return EUIUtils.format(orbStrings.DESCRIPTION[index], args);
+    }
+
     public int getBaseEvokeAmount() {
         return this.baseEvokeAmount;
     }
 
     public int getBasePassiveAmount() {
         return this.basePassiveAmount;
+    }
+
+    protected Color getColor1() {
+        return Color.WHITE;
+    }
+
+    protected Color getColor2() {
+        return Color.LIGHT_GRAY;
+    }
+
+    protected OrbFlareNotActuallyNeedingOrbEffect getOrbFlareEffect() {
+        return new OrbFlareNotActuallyNeedingOrbEffect(this.cX, this.cY).setColors(getColor1(), getColor2());
+    }
+
+    public String getUpdatedDescription() {
+        return formatDescription(0);
     }
 
     public void onChannel() {
@@ -77,12 +109,14 @@ public abstract class PCLOrb extends AbstractOrb {
         CombatManager.onOrbPassiveEffect(this);
     }
 
-    protected OrbFlareNotActuallyNeedingOrbEffect getOrbFlareEffect() {
-        return new OrbFlareNotActuallyNeedingOrbEffect(this.cX, this.cY).setColors(getColor1(), getColor2());
-    }
-
     public void setBaseEvokeAmount(int amount, boolean relative) {
         this.baseEvokeAmount = relative ? this.baseEvokeAmount + amount : amount;
+        applyFocus();
+        this.updateDescription();
+    }
+
+    public void setBasePassiveAmount(int amount, boolean relative) {
+        this.basePassiveAmount = relative ? this.basePassiveAmount + amount : amount;
         applyFocus();
         this.updateDescription();
     }
@@ -94,29 +128,9 @@ public abstract class PCLOrb extends AbstractOrb {
         tooltip.setDescription(this.description);
     }
 
-    public static int getFocus() {
-        return GameUtilities.getPowerAmount(AbstractDungeon.player, FocusPower.POWER_ID);
-    }
-
-    public String getUpdatedDescription() {
-        return formatDescription(0);
-    }
-
-    protected String formatDescription(int index, Object... args) {
-        if (orbStrings.DESCRIPTION == null || orbStrings.DESCRIPTION.length <= index) {
-            EUIUtils.logError(this, "orbStrings.Description does not exist, " + this.name);
-            return "";
-        }
-        return EUIUtils.format(orbStrings.DESCRIPTION[index], args);
-    }
-
     @Override
     public void onEvoke() {
         evoke();
-    }
-
-    public void evoke() {
-        // Orb Evoke event is already broadcast
     }
 
     @Override
@@ -168,19 +182,5 @@ public abstract class PCLOrb extends AbstractOrb {
         for (int i = 0; i < 4; i++) {
             PCLEffects.Queue.add(new OrbEvokeParticle(this.cX, this.cY, EUIColors.lerp(getColor1(), getColor2(), MathUtils.random(0, 0.5f))));
         }
-    }
-
-    protected Color getColor1() {
-        return Color.WHITE;
-    }
-
-    protected Color getColor2() {
-        return Color.LIGHT_GRAY;
-    }
-
-    public void setBasePassiveAmount(int amount, boolean relative) {
-        this.basePassiveAmount = relative ? this.basePassiveAmount + amount : amount;
-        applyFocus();
-        this.updateDescription();
     }
 }

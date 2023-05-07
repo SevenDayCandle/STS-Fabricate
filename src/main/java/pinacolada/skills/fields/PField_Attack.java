@@ -27,14 +27,14 @@ public class PField_Attack extends PField {
     public void setupEditor(PCLCustomEffectEditingPane editor) {
     }
 
-    public PField_Attack setVFXColor(Color vfxColor, Color vfxTargetColor) {
-        this.vfxColor = vfxColor;
-        this.vfxTargetColor = vfxTargetColor;
+    public PField_Attack setAttackEffect(AbstractGameAction.AttackEffect effect) {
+        this.attackEffect = effect;
         return this;
     }
 
-    public PField_Attack setAttackEffect(AbstractGameAction.AttackEffect effect) {
-        this.attackEffect = effect;
+    public PField_Attack setVFXColor(Color vfxColor, Color vfxTargetColor) {
+        this.vfxColor = vfxColor;
+        this.vfxTargetColor = vfxTargetColor;
         return this;
     }
 

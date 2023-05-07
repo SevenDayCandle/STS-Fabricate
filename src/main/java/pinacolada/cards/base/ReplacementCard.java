@@ -24,8 +24,9 @@ public class ReplacementCard extends PCLDynamicCard {
     }
 
     @Override
-    public ReplacementCard makeCopy() {
-        return new ReplacementCard(builder);
+    protected void onUpgrade() {
+        super.onUpgrade();
+        original.upgrade();
     }
 
     public void setup(Object input) {
@@ -33,9 +34,8 @@ public class ReplacementCard extends PCLDynamicCard {
     }
 
     @Override
-    protected void onUpgrade() {
-        super.onUpgrade();
-        original.upgrade();
+    public ReplacementCard makeCopy() {
+        return new ReplacementCard(builder);
     }
 
     protected void updateOriginal() {
@@ -68,6 +68,11 @@ public class ReplacementCard extends PCLDynamicCard {
         @Override
         public void refresh(PCLUseInfo info, boolean conditionMet) {
             card.original.calculateCardDamage(GameUtilities.asMonster(info.target));
+        }
+
+        protected boolean doCard(ActionT1<AbstractCard> childAction) {
+            childAction.invoke(card.original);
+            return true;
         }
 
         @Override
@@ -124,11 +129,6 @@ public class ReplacementCard extends PCLDynamicCard {
         @Override
         public void triggerOnScry(AbstractCard c) {
             doCard(AbstractCard::triggerOnScry);
-        }
-
-        protected boolean doCard(ActionT1<AbstractCard> childAction) {
-            childAction.invoke(card.original);
-            return true;
         }
     }
 }

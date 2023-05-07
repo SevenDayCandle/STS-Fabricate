@@ -29,6 +29,10 @@ public abstract class PMod_BonusOn<T extends PField> extends PPassiveMod<T> {
         super(data, PCLCardTarget.None, amount, extra);
     }
 
+    public String getConditionText() {
+        return getSubText();
+    }
+
     @Override
     public int getModifiedAmount(PSkill<?> be, PCLUseInfo info) {
         return be.baseAmount + (meetsCondition(info) ? amount : 0);
@@ -48,14 +52,10 @@ public abstract class PMod_BonusOn<T extends PField> extends PPassiveMod<T> {
         return TEXT.cond_genericConditional(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", TEXT.cond_numIf(getAmountRawString(), getConditionText())) + PCLCoreStrings.period(addPeriod);
     }
 
-    public String getConditionText() {
-        return getSubText();
-    }
-
-    public abstract boolean meetsCondition(PCLUseInfo info);
-
     @Override
     public String getSampleText(PSkill<?> callingSkill) {
         return TEXT.cond_numIf(TEXT.subjects_x, getSubText());
     }
+
+    public abstract boolean meetsCondition(PCLUseInfo info);
 }

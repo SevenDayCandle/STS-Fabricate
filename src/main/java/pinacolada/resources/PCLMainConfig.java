@@ -22,7 +22,6 @@ import java.util.HashSet;
 import java.util.Locale;
 
 public class PCLMainConfig extends AbstractConfig {
-    public static final FilenameFilter JSON_FILTER = (dir, name) -> name.endsWith(".json");
     private static final String LAST_SEED_KEY = "TSDL";
     private static final String MOD_ID = "PCL";
     private static final String CONFIG_ID = "PCLConfig";
@@ -50,8 +49,9 @@ public class PCLMainConfig extends AbstractConfig {
     private static final String SHOW_IRRELEVANT_PROPERTIES = PCLMainConfig.createFullID("ShowIrrelevantProperties");
     private static final String VANILLA_LIBRARY_SCREEN = PCLMainConfig.createFullID("VanillaLibraryScreen");
     private static final String VANILLA_POWER_RENDER = PCLMainConfig.createFullID("VanillaPowerRender");
+    public static final FilenameFilter JSON_FILTER = (dir, name) -> name.endsWith(".json");
     private static ModSettingsScreen.Category pclCategory;
-
+    private HashSet<String> tips = null;
     public STSConfigItem<Boolean> cropCardImages = new STSConfigItem<Boolean>(CROP_CARD_PORTRAIT, false);
     public STSConfigItem<Boolean> displayCardTagDescription = new STSConfigItem<Boolean>(DISPLAY_CARD_TAG_DESCRIPTION, false);
     public STSConfigItem<Boolean> enableCustomCards = new STSConfigItem<Boolean>(ENABLE_CUSTOM_CARDS, false);
@@ -74,9 +74,7 @@ public class PCLMainConfig extends AbstractConfig {
     public STSStringConfigItem lastCSVPath = new STSStringConfigItem(LAST_CSV_PATH, "");
     public STSStringConfigItem lastImagePath = new STSStringConfigItem(LAST_IMAGE_PATH, "");
     public STSStringConfigItem lastSeed = new STSStringConfigItem(LAST_SEED_KEY, "");
-
     public STSSerializedConfigItem<Vector2> damageFormulaPosition = new STSSerializedConfigItem<Vector2>(DAMAGE_FORMULA_POSITION, new Vector2(0.6f, 0.8f));
-    private HashSet<String> tips = null;
 
     public PCLMainConfig() {
         super(MOD_ID);

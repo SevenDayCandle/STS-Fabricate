@@ -18,6 +18,13 @@ public class PCLCardRewardScreen extends EUIBase {
     public final PCLCardRewardInfo rewardInfo = new PCLCardRewardInfo();
     public final PCLCardRewardRerollAction rerollUI = new PCLCardRewardRerollAction(rewardBundle::add, rewardBundle::remove);
 
+    public void close() {
+        EUI.countingPanel.close();
+        rewardInfo.close();
+        rewardBundle.close();
+        rerollUI.close();
+    }
+
     public void onCardObtained(AbstractCard hoveredCard) {
         rewardBundle.onCardObtained(hoveredCard);
     }
@@ -32,13 +39,6 @@ public class PCLCardRewardScreen extends EUIBase {
         rewardBundle.open(rItem, cards);
         rerollUI.open(rItem, cards);
         rewardInfo.open();
-    }
-
-    public void close() {
-        EUI.countingPanel.close();
-        rewardInfo.close();
-        rewardBundle.close();
-        rerollUI.close();
     }
 
     public void preRender(SpriteBatch sb) {

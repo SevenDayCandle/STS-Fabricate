@@ -86,6 +86,16 @@ public abstract class PCLImages {
         initializeOrbTextures(id);
     }
 
+    public TextureCache[] getOrbTextures() {
+        return new TextureCache[]{
+                orbBaseLayer, orbTopLayer1, orbTopLayer2, orbTopLayer3, orbTopLayer4
+        };
+    }
+
+    protected void initializeAffinityTextures(String id) {
+        affinities = new AffinityIcons(id);
+    }
+
     protected void initializeCardImages(String id) {
         attack = EUIUtils.format(ATTACK_PNG, id);
         skill = EUIUtils.format(SKILL_PNG, id);
@@ -121,10 +131,6 @@ public abstract class PCLImages {
         charBackground = EUIUtils.format(CHAR_BACKGROUND, id);
     }
 
-    protected void initializeAffinityTextures(String id) {
-        affinities = new AffinityIcons(id);
-    }
-
     protected void initializeOrbTextures(String id) {
         orbBaseLayer = new TextureCache(EUIUtils.format(ORB_BASE_LAYER, id));
         orbFlash = new TextureCache(EUIUtils.format(ORB_FLASH, id));
@@ -132,12 +138,6 @@ public abstract class PCLImages {
         orbTopLayer2 = new TextureCache(EUIUtils.format(ORB_TOP_LAYER2, id));
         orbTopLayer3 = new TextureCache(EUIUtils.format(ORB_TOP_LAYER3, id));
         orbTopLayer4 = new TextureCache(EUIUtils.format(ORB_TOP_LAYER4, id));
-    }
-
-    public TextureCache[] getOrbTextures() {
-        return new TextureCache[]{
-                orbBaseLayer, orbTopLayer1, orbTopLayer2, orbTopLayer3, orbTopLayer4
-        };
     }
 
     public static class AffinityIcons {

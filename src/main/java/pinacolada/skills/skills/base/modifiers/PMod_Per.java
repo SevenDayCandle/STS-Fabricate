@@ -40,6 +40,14 @@ public abstract class PMod_Per<T extends PField_Not> extends PPassiveMod<T> {
         super(data, target, amount, extra);
     }
 
+    public String getConditionText(String childText) {
+        if (fields.not) {
+            return TEXT.cond_genericConditional(childText, TEXT.cond_per(getAmountRawString(), getSubText()));
+        }
+        return TEXT.cond_per(childText,
+                this.amount <= 1 ? getSubText() : EUIRM.strings.numNoun(getAmountRawString(), getSubText()));
+    }
+
     @Override
     public int getModifiedAmount(PSkill<?> be, PCLUseInfo info) {
         return fields.not ? (be.baseAmount + (getMultiplier(info) * amount)) : be.baseAmount * getMultiplier(info) / Math.max(1, this.amount);
@@ -62,14 +70,6 @@ public abstract class PMod_Per<T extends PField_Not> extends PPassiveMod<T> {
         return getConditionText(childText) + appendix + PCLCoreStrings.period(addPeriod);
     }
 
-    public String getConditionText(String childText) {
-        if (fields.not) {
-            return TEXT.cond_genericConditional(childText, TEXT.cond_per(getAmountRawString(), getSubText()));
-        }
-        return TEXT.cond_per(childText,
-                this.amount <= 1 ? getSubText() : EUIRM.strings.numNoun(getAmountRawString(), getSubText()));
-    }
-
     public abstract int getMultiplier(PCLUseInfo info);
 
     @Override
@@ -77,13 +77,13 @@ public abstract class PMod_Per<T extends PField_Not> extends PPassiveMod<T> {
         return TEXT.cond_per(TEXT.subjects_x, getSubSampleText());
     }
 
-    public String getSubSampleText() {
-        return getSubText();
-    }
-
     @Override
     public void setupEditor(PCLCustomEffectEditingPane editor) {
         super.setupEditor(editor);
         fields.registerNotBoolean(editor, StringUtils.capitalize(TEXT.subjects_bonus), TEXT.cetut_bonus);
+    }
+
+    public String getSubSampleText() {
+        return getSubText();
     }
 }

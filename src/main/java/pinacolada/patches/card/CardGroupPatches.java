@@ -17,6 +17,23 @@ import pinacolada.utilities.GameUtilities;
 import java.util.ArrayList;
 
 public class CardGroupPatches {
+    private static void delay(ArrayList<AbstractCard> cards, Random rng) {
+        int delayedIndex = 0;
+        for (int i = 0; i < cards.size(); i++) {
+            final AbstractCard c = cards.get(i);
+            if (PCLCardTag.Delayed.has(c)) {
+                if (i != delayedIndex) {
+                    final AbstractCard temp = cards.get(delayedIndex);
+                    cards.set(delayedIndex, c);
+                    cards.set(i, temp);
+                }
+
+                delayedIndex += 1;
+                PCLCardTag.Delayed.tryProgress(c);
+            }
+        }
+    }
+
     private static void shuffle(CardGroup group, Random rng) {
         final ArrayList<AbstractCard> cards = group.group;
         int innateIndex = cards.size() - 1;
@@ -33,23 +50,6 @@ public class CardGroupPatches {
                 }
                 innateIndex -= 1;
                 PCLCardTag.Innate.tryProgress(c);
-            }
-        }
-    }
-
-    private static void delay(ArrayList<AbstractCard> cards, Random rng) {
-        int delayedIndex = 0;
-        for (int i = 0; i < cards.size(); i++) {
-            final AbstractCard c = cards.get(i);
-            if (PCLCardTag.Delayed.has(c)) {
-                if (i != delayedIndex) {
-                    final AbstractCard temp = cards.get(delayedIndex);
-                    cards.set(delayedIndex, c);
-                    cards.set(i, temp);
-                }
-
-                delayedIndex += 1;
-                PCLCardTag.Delayed.tryProgress(c);
             }
         }
     }

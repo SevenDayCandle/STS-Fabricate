@@ -26,18 +26,18 @@ public class PField_Stance extends PField_Random {
         super.setupEditor(editor);
     }
 
-    public PField_Stance setStance(List<PCLStanceHelper> orbs) {
-        this.stances.clear();
-        this.stances.addAll(orbs);
-        return this;
-    }
-
     public String getAnyStanceString() {
         return stances.isEmpty() ? TEXT.cond_any(PGR.core.tooltips.stance.title) : getStanceString();
     }
 
     public String getStanceString() {
         return getStanceString(stances);
+    }
+
+    public PField_Stance setStance(List<PCLStanceHelper> orbs) {
+        this.stances.clear();
+        this.stances.addAll(orbs);
+        return this;
     }
 
     public PField_Stance setStance(PCLStanceHelper... orbs) {

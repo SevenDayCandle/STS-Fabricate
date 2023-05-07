@@ -12,13 +12,13 @@ public class PCLTextParser {
 
     public final boolean ignoreKeywords;
     public final ArrayList<ArrayList<PCLTextToken>> tokenLines = new ArrayList<>();
-    public PCLCard card;
     protected Character character;
     protected CharSequence text;
     protected int remaining;
     protected int characterIndex;
     protected int lineIndex;
     protected float scaleModifier;
+    public PCLCard card;
 
     public PCLTextParser() {
         this(false);
@@ -28,6 +28,11 @@ public class PCLTextParser {
         this.ignoreKeywords = ignoreKeywords;
     }
 
+    protected void addLine() {
+        tokenLines.add(new ArrayList<>());
+        lineIndex += 1;
+    }
+
     protected void addToken(PCLTextToken token) {
         if (token.type == PCLTextTokenType.NewLine) {
             addLine();
@@ -35,11 +40,6 @@ public class PCLTextParser {
         else {
             tokenLines.get(lineIndex).add(token);
         }
-    }
-
-    protected void addLine() {
-        tokenLines.add(new ArrayList<>());
-        lineIndex += 1;
     }
 
     protected void addTooltip(EUITooltip tooltip) {
@@ -55,14 +55,6 @@ public class PCLTextParser {
         }
 
         return false;
-    }
-
-    protected Character nextCharacter(int amount) {
-        if (amount > remaining) {
-            return null;
-        }
-
-        return text.charAt(characterIndex + amount);
     }
 
     public List<PCLTextToken> getTokens() {
@@ -107,6 +99,14 @@ public class PCLTextParser {
         remaining = text.length() - characterIndex - 1;
 
         return remaining >= 0;
+    }
+
+    protected Character nextCharacter(int amount) {
+        if (amount > remaining) {
+            return null;
+        }
+
+        return text.charAt(characterIndex + amount);
     }
 
 }

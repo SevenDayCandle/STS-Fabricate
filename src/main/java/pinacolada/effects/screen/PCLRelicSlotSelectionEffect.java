@@ -22,16 +22,14 @@ import java.util.ArrayList;
 
 // Copied and modified from STS-AnimatorMod
 public class PCLRelicSlotSelectionEffect extends PCLEffect {
-    public static final float TARGET_X = Settings.WIDTH * 0.25f;
-    public static final float START_XY = Settings.WIDTH * 0.5f;
-
     private static final EUITextBox cardValue_text = new
             EUITextBox(EUIRM.images.panelRoundedHalfH.texture(), new EUIHitbox(AbstractCard.IMG_WIDTH * 0.15f, AbstractCard.IMG_HEIGHT * 0.15f))
             .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.1f)
             .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
             .setAlignment(0.5f, 0.5f)
             .setFont(EUIFontHelper.cardtitlefontSmall, 1f);
-
+    public static final float TARGET_X = Settings.WIDTH * 0.25f;
+    public static final float START_XY = Settings.WIDTH * 0.5f;
     private final PCLRelicSlot slot;
     private final ArrayList<RenderItem> relics = new ArrayList<>();
     //private boolean draggingScreen = false;
@@ -53,16 +51,11 @@ public class PCLRelicSlotSelectionEffect extends PCLEffect {
     }
 
     @Override
-    public void render(SpriteBatch sb) {
+    protected void complete() {
+        super.complete();
 
-        for (RenderItem item : relics) {
-            item.relicImage.tryRender(sb);
-            cardValue_text
-                    .setLabel(item.estimatedValue)
-                    .setFontColor(item.estimatedValue < 0 ? Settings.RED_TEXT_COLOR : Settings.GREEN_TEXT_COLOR)
-                    .setPosition(item.relicImage.hb.x - 40 * Settings.scale, item.relicImage.hb.cY)
-                    .renderImpl(sb);
-            item.relicnameText.renderImpl(sb);
+        if (selectedRelic != null && !selectedRelic.relicId.equals(slot.getRelic().relicId)) {
+            slot.select(selectedRelic);
         }
     }
 
@@ -78,6 +71,20 @@ public class PCLRelicSlotSelectionEffect extends PCLEffect {
                     break;
                 }
             }
+        }
+    }
+
+    @Override
+    public void render(SpriteBatch sb) {
+
+        for (RenderItem item : relics) {
+            item.relicImage.tryRender(sb);
+            cardValue_text
+                    .setLabel(item.estimatedValue)
+                    .setFontColor(item.estimatedValue < 0 ? Settings.RED_TEXT_COLOR : Settings.GREEN_TEXT_COLOR)
+                    .setPosition(item.relicImage.hb.x - 40 * Settings.scale, item.relicImage.hb.cY)
+                    .renderImpl(sb);
+            item.relicnameText.renderImpl(sb);
         }
     }
 
@@ -123,15 +130,6 @@ public class PCLRelicSlotSelectionEffect extends PCLEffect {
         CardCrawlGame.sound.play("CARD_SELECT");
         slot.select(relic);
         relic.beginLongPulse();
-    }
-
-    @Override
-    protected void complete() {
-        super.complete();
-
-        if (selectedRelic != null && !selectedRelic.relicId.equals(slot.getRelic().relicId)) {
-            slot.select(selectedRelic);
-        }
     }
 
     public static class RenderItem {

@@ -27,8 +27,8 @@ import java.util.List;
 @VisibleSkill
 public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSkill<?>> {
     public static final PSkillData<PField_Empty> DATA = register(PMultiSkill.class, PField_Empty.class, 0, DEFAULT_MAX);
-    public boolean generated = false;
     protected ArrayList<PSkill<?>> effects = new ArrayList<>();
+    public boolean generated = false;
 
     public PMultiSkill() {
         super(DATA, PCLCardTarget.None, 0);
@@ -63,15 +63,6 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
 
     public static PMultiSkill joinGen(PSkill<?>... effects) {
         return new PMultiSkill(effects).setGenerated(true);
-    }
-
-    public PMultiSkill setGenerated(boolean val) {
-        generated = val;
-        return this;
-    }
-
-    public String getSpecialData() {
-        return PSkill.joinDataAsJson(effects, PSkill::serialize);
     }
 
     @Override
@@ -131,6 +122,10 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     @Override
     public String getSampleText(PSkill<?> callingSkill) {
         return null;
+    }
+
+    public String getSpecialData() {
+        return PSkill.joinDataAsJson(effects, PSkill::serialize);
     }
 
     @Override
@@ -392,15 +387,6 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
         return this;
     }
 
-    public void chooseEffect(PCLUseInfo info) {
-        PCLCard choiceCard = EUIUtils.safeCast(sourceCard, PCLCard.class);
-        if (choiceCard == null) {
-            choiceCard = new QuestionMark();
-        }
-
-        getActions().tryChooseSkill(choiceCard.cardData, amount, info.source, info.target, effects);
-    }
-
     public PMultiSkill addEffect(PSkill<?> newEffect) {
         this.effects.add(newEffect);
         setParentsForChildren();
@@ -415,6 +401,10 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
         return effects;
     }
 
+    public PMultiSkill setEffects(PSkill<?>... effects) {
+        return setEffects(Arrays.asList(effects));
+    }
+
     public PMultiSkill setEffects(List<PSkill<?>> effects) {
         this.effects.clear();
         this.effects.addAll(effects);
@@ -423,8 +413,18 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
         return this;
     }
 
-    public PMultiSkill setEffects(PSkill<?>... effects) {
-        return setEffects(Arrays.asList(effects));
+    public void chooseEffect(PCLUseInfo info) {
+        PCLCard choiceCard = EUIUtils.safeCast(sourceCard, PCLCard.class);
+        if (choiceCard == null) {
+            choiceCard = new QuestionMark();
+        }
+
+        getActions().tryChooseSkill(choiceCard.cardData, amount, info.source, info.target, effects);
+    }
+
+    public PMultiSkill setGenerated(boolean val) {
+        generated = val;
+        return this;
     }
 
     public void useSkill(PCLUseInfo info, int index) {

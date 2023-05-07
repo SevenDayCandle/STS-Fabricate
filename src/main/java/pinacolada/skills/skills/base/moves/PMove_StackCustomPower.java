@@ -40,6 +40,11 @@ public class PMove_StackCustomPower extends PMove<PField_CustomPower> implements
         super(DATA, content);
     }
 
+    // Whether this skill is under a PTrigger and this skill references that same PTrigger
+    protected boolean doesPowerReferenceSelf(PSkill<?> poEff) {
+        return getHighestParent().hasSameUUID(poEff);
+    }
+
     @Override
     public String getSampleText(PSkill<?> callingSkill) {
         return TEXT.act_applyAmount(TEXT.subjects_x, TEXT.cedit_custom);
@@ -128,10 +133,5 @@ public class PMove_StackCustomPower extends PMove<PField_CustomPower> implements
         }
 
         super.use(info);
-    }
-
-    // Whether this skill is under a PTrigger and this skill references that same PTrigger
-    protected boolean doesPowerReferenceSelf(PSkill<?> poEff) {
-        return getHighestParent().hasSameUUID(poEff);
     }
 }

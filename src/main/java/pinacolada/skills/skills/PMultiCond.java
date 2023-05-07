@@ -59,8 +59,118 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         return (PMultiCond) new PMultiCond(effects).edit(r -> r.setOr(true));
     }
 
-    public String getSpecialData() {
-        return PSkill.joinDataAsJson(effects, PSkill::serialize);
+    public PMultiCond addEffect(PCond<?> effect) {
+        this.effects.add(effect);
+        setParentsForChildren();
+        return this;
+    }
+
+    public PCond<?> getSubEffect(int index) {
+        return index < effects.size() ? effects.get(index) : null;
+    }
+
+    public List<PCond<?>> getSubEffects() {
+        return effects;
+    }
+
+    public PMultiCond setEffects(PCond<?>... effects) {
+        return setEffects(Arrays.asList(effects));
+    }
+
+    public PMultiCond setEffects(List<PCond<?>> effects) {
+        this.effects.clear();
+        this.effects.addAll(effects);
+        setParentsForChildren();
+        return this;
+    }
+
+    @Override
+    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
+        return effects.isEmpty() || ((fields.or) ? EUIUtils.any(effects, c -> c == triggerSource || c.checkCondition(info, isUsing, triggerSource)) : EUIUtils.all(effects, c -> c == triggerSource || c.checkCondition(info, isUsing, triggerSource)));
+    }
+
+    @Override
+    public String getText(boolean addPeriod) {
+        if (amount != 0) {
+            return getCapitalSubText(addPeriod) + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : ": ") + childEffect.getText(0, true)) + " " +
+                    StringUtils.capitalize(TEXT.cond_otherwise(childEffect.getText(1, addPeriod))) : "");
+        }
+        return effects.isEmpty() ? (childEffect != null ? childEffect.getText(addPeriod) : "")
+                : getCapitalSubText(addPeriod) + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : ": ") + childEffect.getText(addPeriod)) : PCLCoreStrings.period(addPeriod));
+    }
+
+    @Override
+    public void refresh(PCLUseInfo info, boolean conditionMet) {
+        conditionMetCache = checkCondition(info, false, null);
+        boolean refreshVal = conditionMetCache & conditionMet;
+        for (PSkill<?> effect : effects) {
+            effect.refresh(info, refreshVal);
+        }
+        if (this.childEffect != null) {
+            this.childEffect.refresh(info, refreshVal);
+        }
+    }
+
+    @Override
+    public PMultiCond setAmountFromCard() {
+        super.setAmountFromCard();
+        for (PSkill<?> effect : effects) {
+            effect.setAmountFromCard();
+        }
+        return this;
+    }
+
+    @Override
+    public PMultiCond setSource(PointerProvider card) {
+        super.setSource(card);
+        for (PSkill<?> effect : effects) {
+            effect.setSource(card);
+        }
+        return this;
+    }
+
+    @Override
+    public void use(PCLUseInfo info) {
+        if (amount != 0 && childEffect != null) {
+            if (checkCondition(info, true, null)) {
+                useCond(this, info, 0, (i) -> childEffect.use(info, 0), (i) -> childEffect.use(info, 1));
+            }
+            else {
+                childEffect.use(info, 1);
+            }
+        }
+        else {
+            if (checkCondition(info, true, null) && childEffect != null) {
+                useCond(this, info, 0, (i) -> childEffect.use(info), (i) -> {
+                });
+            }
+        }
+    }
+
+    @Override
+    public void use(PCLUseInfo info, int index) {
+        if (checkCondition(info, true, null) && childEffect != null) {
+            useCond(this, info, 0, (i) -> childEffect.use(info, index), (i) -> {
+            });
+        }
+    }
+
+    @Override
+    public void use(PCLUseInfo info, boolean isUsing) {
+        if (amount != 0 && childEffect != null) {
+            if (checkCondition(info, isUsing, null)) {
+                useCond(this, info, 0, (i) -> childEffect.use(info, 0), (i) -> childEffect.use(info, 1));
+            }
+            else {
+                childEffect.use(info, 1);
+            }
+        }
+        else {
+            if (checkCondition(info, true, null) && childEffect != null) {
+                useCond(this, info, 0, (i) -> childEffect.use(info), (i) -> {
+                });
+            }
+        }
     }
 
     public void displayUpgrades(boolean value) {
@@ -92,6 +202,10 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         return c;
     }
 
+    public String getSpecialData() {
+        return PSkill.joinDataAsJson(effects, PSkill::serialize);
+    }
+
     @Override
     public String getSubText() {
         return EUIUtils.any(effects, effect -> effect instanceof PActiveCond || effect instanceof PFacetCond) ?
@@ -102,16 +216,6 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
     @Override
     public String getText(int index, boolean addPeriod) {
         return effects.size() > index ? effects.get(index).getText(index, addPeriod) : getText(addPeriod);
-    }
-
-    @Override
-    public String getText(boolean addPeriod) {
-        if (amount != 0) {
-            return getCapitalSubText(addPeriod) + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : ": ") + childEffect.getText(0, true)) + " " +
-                    StringUtils.capitalize(TEXT.cond_otherwise(childEffect.getText(1, addPeriod))) : "");
-        }
-        return effects.isEmpty() ? (childEffect != null ? childEffect.getText(addPeriod) : "")
-                : getCapitalSubText(addPeriod) + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : ": ") + childEffect.getText(addPeriod)) : PCLCoreStrings.period(addPeriod));
     }
 
     @Override
@@ -183,22 +287,12 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
             childEffect.setTemporaryExtra(extra);
         }
         return this;
-    }    @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return effects.isEmpty() || ((fields.or) ? EUIUtils.any(effects, c -> c == triggerSource || c.checkCondition(info, isUsing, triggerSource)) : EUIUtils.all(effects, c -> c == triggerSource || c.checkCondition(info, isUsing, triggerSource)));
     }
 
     public PMultiCond stack(PSkill<?> other) {
         super.stack(other);
         if (other instanceof PMultiBase) {
             stackMulti((PMultiBase<?>) other);
-        }
-        return this;
-    }    @Override
-    public PMultiCond setAmountFromCard() {
-        super.setAmountFromCard();
-        for (PSkill<?> effect : effects) {
-            effect.setAmountFromCard();
         }
         return this;
     }
@@ -212,57 +306,9 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         }
     }
 
-    @Override
-    public PMultiCond setSource(PointerProvider card) {
-        super.setSource(card);
-        for (PSkill<?> effect : effects) {
-            effect.setSource(card);
-        }
-        return this;
-    }
-
-    public void unsubscribeChildren() {
-        for (PSkill<?> effect : effects) {
-            effect.unsubscribeChildren();
-        }
-        if (this.childEffect != null) {
-            this.childEffect.unsubscribeChildren();
-        }
-    }
-
-    @Override
-    public void refresh(PCLUseInfo info, boolean conditionMet) {
-        conditionMetCache = checkCondition(info, false, null);
-        boolean refreshVal = conditionMetCache & conditionMet;
-        for (PSkill<?> effect : effects) {
-            effect.refresh(info, refreshVal);
-        }
-        if (this.childEffect != null) {
-            this.childEffect.refresh(info, refreshVal);
-        }
-    }
-
     public void triggerOnAllyDeath(PCLCard c, PCLCardAlly ally) {
         for (PSkill<?> effect : effects) {
             effect.triggerOnAllyDeath(c, ally);
-        }
-    }
-
-    @Override
-    public void use(PCLUseInfo info) {
-        if (amount != 0 && childEffect != null) {
-            if (checkCondition(info, true, null)) {
-                useCond(this, info, 0, (i) -> childEffect.use(info, 0), (i) -> childEffect.use(info, 1));
-            }
-            else {
-                childEffect.use(info, 1);
-            }
-        }
-        else {
-            if (checkCondition(info, true, null) && childEffect != null) {
-                useCond(this, info, 0, (i) -> childEffect.use(info), (i) -> {
-                });
-            }
         }
     }
 
@@ -272,35 +318,9 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         }
     }
 
-    @Override
-    public void use(PCLUseInfo info, int index) {
-        if (checkCondition(info, true, null) && childEffect != null) {
-            useCond(this, info, 0, (i) -> childEffect.use(info, index), (i) -> {
-            });
-        }
-    }
-
     public void triggerOnAllyTrigger(PCLCard c, PCLCardAlly ally) {
         for (PSkill<?> effect : effects) {
             effect.triggerOnAllyTrigger(c, ally);
-        }
-    }
-
-    @Override
-    public void use(PCLUseInfo info, boolean isUsing) {
-        if (amount != 0 && childEffect != null) {
-            if (checkCondition(info, isUsing, null)) {
-                useCond(this, info, 0, (i) -> childEffect.use(info, 0), (i) -> childEffect.use(info, 1));
-            }
-            else {
-                childEffect.use(info, 1);
-            }
-        }
-        else {
-            if (checkCondition(info, true, null) && childEffect != null) {
-                useCond(this, info, 0, (i) -> childEffect.use(info), (i) -> {
-                });
-            }
         }
     }
 
@@ -372,37 +392,21 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         return checkCondition(info, true, source);
     }
 
+    public void unsubscribeChildren() {
+        for (PSkill<?> effect : effects) {
+            effect.unsubscribeChildren();
+        }
+        if (this.childEffect != null) {
+            this.childEffect.unsubscribeChildren();
+        }
+    }
+
     public PMultiCond useParent(boolean value) {
         this.useParent = value;
         for (PSkill<?> effect : effects) {
             effect.useParent(value);
         }
         return this;
-    }
-
-    public PMultiCond addEffect(PCond<?> effect) {
-        this.effects.add(effect);
-        setParentsForChildren();
-        return this;
-    }
-
-    public PCond<?> getSubEffect(int index) {
-        return index < effects.size() ? effects.get(index) : null;
-    }
-
-    public List<PCond<?>> getSubEffects() {
-        return effects;
-    }
-
-    public PMultiCond setEffects(List<PCond<?>> effects) {
-        this.effects.clear();
-        this.effects.addAll(effects);
-        setParentsForChildren();
-        return this;
-    }
-
-    public PMultiCond setEffects(PCond<?>... effects) {
-        return setEffects(Arrays.asList(effects));
     }
 
     public void useCond(PSkill<?> source, PCLUseInfo info, int index, ActionT1<PCLUseInfo> successCallback, ActionT1 failCallback) {
@@ -433,20 +437,6 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
             successCallback.invoke(info);
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

@@ -21,13 +21,6 @@ public class SequentialEffect extends PCLEffect {
     }
 
     @Override
-    public void render(SpriteBatch sb) {
-        if (current != null) {
-            current.render(sb);
-        }
-    }
-
-    @Override
     public void update() {
         if (updateCurrent()) {
             if (effects.size() > 0) {
@@ -36,6 +29,13 @@ public class SequentialEffect extends PCLEffect {
             else {
                 complete();
             }
+        }
+    }
+
+    @Override
+    public void render(SpriteBatch sb) {
+        if (current != null) {
+            current.render(sb);
         }
     }
 

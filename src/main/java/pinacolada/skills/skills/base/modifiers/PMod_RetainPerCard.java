@@ -36,12 +36,12 @@ public class PMod_RetainPerCard extends PMod_Do {
     }
 
     @Override
-    public EUITooltip getActionTooltip() {
-        return PGR.core.tooltips.retain;
+    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
+        return RetainCards::new;
     }
 
     @Override
-    public FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> getAction() {
-        return RetainCards::new;
+    public EUITooltip getActionTooltip() {
+        return PGR.core.tooltips.retain;
     }
 }

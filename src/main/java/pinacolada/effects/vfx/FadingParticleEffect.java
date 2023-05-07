@@ -71,14 +71,14 @@ public class FadingParticleEffect extends PCLEffect {
         return this;
     }
 
-    public FadingParticleEffect setScale(float scale) {
-        this.scale = scale;
+    public FadingParticleEffect setRotation(float startRotation) {
+        this.rot = startRotation;
 
         return this;
     }
 
-    public FadingParticleEffect setRotation(float startRotation) {
-        this.rot = startRotation;
+    public FadingParticleEffect setScale(float scale) {
+        this.scale = scale;
 
         return this;
     }

@@ -21,12 +21,12 @@ import pinacolada.utilities.ListSelection;
 // Copied and modified from STS-AnimatorMod
 public class GenerateCard extends PCLAction<AbstractCard> {
     protected final CardGroup cardGroup;
+    private transient AbstractGameEffect effect = null;
     protected boolean upgrade;
     protected boolean makeCopy;
     protected boolean cancelIfFull;
     protected ListSelection<AbstractCard> destination;
     protected AbstractCard actualCard;
-    private transient AbstractGameEffect effect = null;
 
     public GenerateCard(AbstractCard card, CardGroup group) {
         super(ActionType.CARD_MANIPULATION, Settings.ACTION_DUR_MED);

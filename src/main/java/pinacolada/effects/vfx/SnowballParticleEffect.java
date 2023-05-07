@@ -15,10 +15,10 @@ import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.RandomizedList;
 
 public class SnowballParticleEffect extends PCLEffect {
-    protected static final float GRAVITY = 180f * Settings.scale;
-    protected static final int SIZE = 96;
     private static final TextureCache[] images = {PCLCoreImages.Effects.frostSnow1, PCLCoreImages.Effects.frostSnow2, PCLCoreImages.Effects.frostSnow3, PCLCoreImages.Effects.frostSnow4};
     private static final RandomizedList<TextureCache> textures = new RandomizedList<>();
+    protected static final float GRAVITY = 180f * Settings.scale;
+    protected static final int SIZE = 96;
     protected float vfxFrequency = 0.75f;
     protected Texture img;
     protected float floor;

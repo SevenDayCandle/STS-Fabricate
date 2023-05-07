@@ -160,11 +160,6 @@ public class DealDamage extends PCLAction<AbstractCreature> {
         }
     }
 
-    @Override
-    protected boolean shouldCancelAction() {
-        return this.target == null || (this.source != null && this.source.isDying) || (this.info.owner != null && (this.info.owner.isDying || this.info.owner.halfDead));
-    }
-
     public DealDamage setDamageEffect(EffekseerEFK effekseerKey) {
         this.onDamageEffect = (s, m) -> VFX.eFX(effekseerKey, m.hb).duration;
         return this;
@@ -222,5 +217,10 @@ public class DealDamage extends PCLAction<AbstractCreature> {
         this.enemyTint = enemyTint.cpy();
 
         return this;
+    }
+
+    @Override
+    protected boolean shouldCancelAction() {
+        return this.target == null || (this.source != null && this.source.isDying) || (this.info.owner != null && (this.info.owner.isDying || this.info.owner.halfDead));
     }
 }

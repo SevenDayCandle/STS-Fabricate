@@ -81,6 +81,10 @@ public abstract class PCLAugment implements TooltipProvider {
         }
     }
 
+    public boolean canApply(AbstractCard c) {
+        return c instanceof PCLCard && canApplyImpl((PCLCard) c);
+    }
+
     /* An augment can only be applied if
      *   1. Card has free augment slots
      *   2. Augment requirements are passed
@@ -94,38 +98,12 @@ public abstract class PCLAugment implements TooltipProvider {
                 && (data.lineage == null || !EUIUtils.any(c.getAugments(), a -> a.data.lineage == data.lineage));
     }
 
-    public boolean canApply(AbstractCard c) {
-        return c instanceof PCLCard && canApplyImpl((PCLCard) c);
-    }
-
     public boolean canRemove() {
         return !data.isSpecial;
     }
 
     public Color getColor() {
         return data.category.color;
-    }
-
-    public String getText() {
-        return skill.getText();
-    }
-
-    // TODO More textures
-    public Texture getTexture() {
-        return PCLCoreImages.CardUI.augmentBasic.texture();
-    }
-
-    @Override
-    public List<EUITooltip> getTips() {
-        return Collections.singletonList(getTip());
-    }
-
-    public EUITooltip getTip() {
-        return new EUITooltip(getName(), getFullText());
-    }
-
-    public String getName() {
-        return data.strings.NAME;
     }
 
     public String getFullText() {
@@ -137,12 +115,34 @@ public abstract class PCLAugment implements TooltipProvider {
                 getPowerText());
     }
 
-    public String getReqsString() {
-        return data.reqs == null ? null : data.reqs.getString();
+    public String getName() {
+        return data.strings.NAME;
     }
 
     public String getPowerText() {
         return skill.getPowerText();
+    }
+
+    public String getReqsString() {
+        return data.reqs == null ? null : data.reqs.getString();
+    }
+
+    public String getText() {
+        return skill.getText();
+    }
+
+    // TODO More textures
+    public Texture getTexture() {
+        return PCLCoreImages.CardUI.augmentBasic.texture();
+    }
+
+    public EUITooltip getTip() {
+        return new EUITooltip(getName(), getFullText());
+    }
+
+    @Override
+    public List<EUITooltip> getTips() {
+        return Collections.singletonList(getTip());
     }
 
     public PCLAugment makeCopy() {

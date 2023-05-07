@@ -8,8 +8,8 @@ import pinacolada.effects.PCLEffects;
 // Copied and modified from STS-AnimatorMod
 public class PlayVFX extends PCLAction<AbstractGameEffect> {
     private final AbstractGameEffect effect;
-    private boolean isTopLevelEffect;
     private final boolean wait;
+    private boolean isTopLevelEffect;
 
     public PlayVFX(AbstractGameEffect effect, float duration) {
         super(AbstractGameAction.ActionType.WAIT, duration);

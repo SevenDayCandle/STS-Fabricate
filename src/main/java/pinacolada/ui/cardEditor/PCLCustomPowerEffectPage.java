@@ -11,8 +11,7 @@ public class PCLCustomPowerEffectPage extends PCLCustomEffectPage {
         super(screen, hb, index, title, onUpdate);
     }
 
-    public PPrimary<?> makeRootSkill()
-    {
+    public PPrimary<?> makeRootSkill() {
         return new PTrigger_When();
     }
 }

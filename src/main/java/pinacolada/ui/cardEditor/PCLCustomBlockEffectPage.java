@@ -11,8 +11,7 @@ public class PCLCustomBlockEffectPage extends PCLCustomEffectPage {
         super(screen, hb, index, title, onUpdate);
     }
 
-    public PPrimary<?> makeRootSkill()
-    {
+    public PPrimary<?> makeRootSkill() {
         return new PCardPrimary_GainBlock();
     }
 }

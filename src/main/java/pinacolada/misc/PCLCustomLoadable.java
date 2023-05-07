@@ -12,9 +12,8 @@ public abstract class PCLCustomLoadable {
 
     public String ID;
 
-    protected static char makeRandomCharIndex() {
-        int i = MathUtils.random(65, 100);
-        return (char) (i > 90 ? i - 43 : i);
+    protected static String getBaseIDPrefix(String baseIDPrefix, AbstractCard.CardColor color) {
+        return baseIDPrefix + "_" + color.name() + "_";
     }
 
     protected static FileHandle getCustomFolder(String subfolder) {
@@ -26,8 +25,8 @@ public abstract class PCLCustomLoadable {
         return folder;
     }
 
-    protected static String getBaseIDPrefix(String baseIDPrefix, AbstractCard.CardColor color) {
-        return baseIDPrefix + "_" + color.name() + "_";
+    protected static boolean isIDDuplicate(String input, Iterable<? extends PCLCustomLoadable> items) {
+        return EUIUtils.any(items, c -> c.ID.equals(input));
     }
 
     protected static String makeNewID(String baseIDPrefix, Iterable<? extends PCLCustomLoadable> items) {
@@ -42,9 +41,20 @@ public abstract class PCLCustomLoadable {
         return sb.toString();
     }
 
-    protected static boolean isIDDuplicate(String input, Iterable<? extends PCLCustomLoadable> items) {
-        return EUIUtils.any(items, c -> c.ID.equals(input));
+    protected static char makeRandomCharIndex() {
+        int i = MathUtils.random(65, 100);
+        return (char) (i > 90 ? i - 43 : i);
     }
+
+    protected final String getBaseFolderPath() {
+        return FOLDER + "/" + getSubfolderPath();
+    }
+
+    protected final FileHandle getCustomFolder() {
+        return getCustomFolder(getSubfolderPath());
+    }
+
+    abstract protected String getSubfolderPath();
 
     protected String makeFilePath() {
         return getBaseFolderPath() + "/" + ID + ".json";
@@ -53,15 +63,4 @@ public abstract class PCLCustomLoadable {
     protected String makeImagePath() {
         return getBaseFolderPath() + "/" + ID + ".png";
     }
-
-    protected final FileHandle getCustomFolder() {
-        return getCustomFolder(getSubfolderPath());
-    }
-
-    protected final String getBaseFolderPath()
-    {
-        return FOLDER + "/" + getSubfolderPath();
-    }
-
-    abstract protected String getSubfolderPath();
 }

@@ -23,11 +23,11 @@ import java.util.HashMap;
 public class PCLLibraryModule extends EUIBase implements CustomCardPoolModule {
     private static final HashMap<ColorlessGroup, CardGroup> ColorlessGroupMapping = new HashMap<>();
     private static final HashMap<ColorlessGroup, CardGroup> CurseGroupMapping = new HashMap<>();
-    public static ColorlessGroup group = ColorlessGroup.Default;
     private static AbstractCard.CardColor lastColor;
+    public static ColorlessGroup group = ColorlessGroup.Default;
+    protected CustomCardLibraryScreen screen;
     public EUIButton groupButton;
     public EUIContextMenu<ColorlessGroup> groupMenu;
-    protected CustomCardLibraryScreen screen;
 
     public PCLLibraryModule(CustomCardLibraryScreen screen) {
         this.screen = screen;
@@ -45,15 +45,6 @@ public class PCLLibraryModule extends EUIBase implements CustomCardPoolModule {
                 })
                 .setCanAutosizeButton(true)
                 .setItems(ColorlessGroup.values());
-    }
-
-    protected void togglePool(ColorlessGroup val) {
-        group = val;
-        CardGroup cards = getGroup(val);
-        if (cards != null) {
-            screen.setActiveColor(CustomCardLibraryScreen.currentColor, cards);
-        }
-        groupButton.setText(group.getTitle());
     }
 
     protected CardGroup getGroup(ColorlessGroup val) {
@@ -116,6 +107,15 @@ public class PCLLibraryModule extends EUIBase implements CustomCardPoolModule {
     public void updateImpl() {
         groupMenu.tryUpdate();
         groupButton.tryUpdate();
+    }
+
+    protected void togglePool(ColorlessGroup val) {
+        group = val;
+        CardGroup cards = getGroup(val);
+        if (cards != null) {
+            screen.setActiveColor(CustomCardLibraryScreen.currentColor, cards);
+        }
+        groupButton.setText(group.getTitle());
     }
 
     public enum ColorlessGroup {

@@ -10,8 +10,8 @@ import extendedui.utilities.ColoredString;
 import pinacolada.skills.PSkill;
 
 public class ConditionToken extends PCLTextToken {
-    public static final char CONDITION_TOKEN = '║';
     private static final PCLTextParser internalParser = new PCLTextParser(false);
+    public static final char CONDITION_TOKEN = '║';
     private final PSkill<?> move;
     private final ColoredString coloredString;
     private final Color originalColor;

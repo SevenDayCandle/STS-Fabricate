@@ -44,6 +44,26 @@ public class PCond_Cooldown extends PActiveCond<PField_Empty> implements Cooldow
     }
 
     @Override
+    public int getBaseCooldown() {
+        return baseAmount;
+    }
+
+    @Override
+    public int getCooldown() {
+        return amount;
+    }
+
+    @Override
+    public boolean isDisplayingUpgrade() {
+        return displayUpgrades && getUpgrade() != 0;
+    }
+
+    @Override
+    public void setCooldown(int value) {
+        this.amount = value;
+    }
+
+    @Override
     public final ColoredString getColoredValueString() {
         return getCooldownString();
     }
@@ -76,26 +96,6 @@ public class PCond_Cooldown extends PActiveCond<PField_Empty> implements Cooldow
     // No-op to avoid refreshing effects changing amount
     public PCond_Cooldown setTemporaryAmount(int amount) {
         return this;
-    }
-
-    @Override
-    public boolean isDisplayingUpgrade() {
-        return displayUpgrades && getUpgrade() != 0;
-    }
-
-    @Override
-    public int getCooldown() {
-        return amount;
-    }
-
-    @Override
-    public int getBaseCooldown() {
-        return baseAmount;
-    }
-
-    @Override
-    public void setCooldown(int value) {
-        this.amount = value;
     }
 
     @Override

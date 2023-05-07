@@ -63,9 +63,6 @@ public class PCustomCond extends PCond<PField_CardCategory> {
         super.use(info, isUsing);
     }
 
-    protected void useImpl(PCLUseInfo info) {
-    }
-
     @Override
     public String getSubText() {
         return EUIUtils.format(cardData.strings.EXTENDED_DESCRIPTION[descIndex], amount, extra);
@@ -85,5 +82,8 @@ public class PCustomCond extends PCond<PField_CardCategory> {
         }
 
         return copy;
+    }
+
+    protected void useImpl(PCLUseInfo info) {
     }
 }

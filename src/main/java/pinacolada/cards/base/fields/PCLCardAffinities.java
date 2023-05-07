@@ -23,56 +23,14 @@ import static pinacolada.cards.base.fields.PCLAffinity.TOTAL_AFFINITIES;
 public class PCLCardAffinities {
     private static final ColoredTexture upgradeCircle = new ColoredTexture(PCLCoreImages.Core.circle.texture(), Settings.GREEN_RELIC_COLOR);
     public final ArrayList<PCLCardAffinity> sorted = new ArrayList<>();
+    protected PCLCardAffinity[] list = new PCLCardAffinity[TOTAL_AFFINITIES];
     public AbstractCard card;
     public PCLCardAffinity star = null;
     public boolean collapseDuplicates = false;
-    protected PCLCardAffinity[] list = new PCLCardAffinity[TOTAL_AFFINITIES];
 
     public PCLCardAffinities(AbstractCard card) {
         this.card = card;
         this.updateSortedList();
-    }
-
-    public void updateSortedList() {
-        sorted.clear();
-        for (PCLCardAffinity a : list) {
-            if (a == null || a.level <= 0 || shouldHideAffinity(a.type)) {
-                continue;
-            }
-
-            if (collapseDuplicates) {
-                sorted.add(a);
-            }
-            else {
-                for (int i = 0; i < a.level; i++) {
-                    sorted.add(a);
-                }
-            }
-        }
-        if (star != null && star.level > 0) {
-            if (collapseDuplicates) {
-                sorted.add(star);
-            }
-            else {
-                for (int i = 0; i < star.level; i++) {
-                    sorted.add(star);
-                }
-            }
-        }
-
-        if (sorted.isEmpty() && (PGR.config.showIrrelevantProperties.get() || getAvailableAffinities().length > 0)) {
-            sorted.add(new PCLCardAffinity(General, 1));
-        }
-
-        sorted.sort(PCLCardAffinity::compareTo);
-    }
-
-    protected boolean shouldHideAffinity(PCLAffinity a) {
-        return (!PGR.config.showIrrelevantProperties.get() && card != null && !EUIUtils.any(getAvailableAffinities(), b -> b == a));
-    }
-
-    protected PCLAffinity[] getAvailableAffinities() {
-        return PCLAffinity.getAvailableAffinities(GameUtilities.getActingColor(), !(card instanceof PCLDynamicCard));
     }
 
     public PCLCardAffinities(AbstractCard card, PCLCardAffinities affinities) {
@@ -80,49 +38,9 @@ public class PCLCardAffinities {
         initialize(affinities);
     }
 
-    public PCLCardAffinities initialize(PCLCardAffinities affinities) {
-        if (affinities.star != null) {
-            star = new PCLCardAffinity(PCLAffinity.Star, affinities.star.level);
-        }
-        else {
-            star = null;
-        }
-
-        list = new PCLCardAffinity[TOTAL_AFFINITIES];
-        for (PCLCardAffinity a : affinities.list) {
-            if (a != null) {
-                PCLCardAffinity t = new PCLCardAffinity(a.type, a.level);
-                list[t.type.id] = t;
-            }
-        }
-
-        this.updateSortedList();
-        return this;
-    }
-
     public PCLCardAffinities(PCLCard card, PCLCardDataAffinityGroup affinities) {
         this.card = card;
         initialize(affinities, card.getForm());
-    }
-
-    public PCLCardAffinities initialize(PCLCardDataAffinityGroup affinities, int form) {
-        if (affinities.star != null) {
-            star = new PCLCardAffinity(PCLAffinity.Star, affinities.star.get(form));
-        }
-        else {
-            star = null;
-        }
-
-        list = new PCLCardAffinity[TOTAL_AFFINITIES];
-        for (PCLCardDataAffinity a : affinities.list) {
-            if (a != null) {
-                PCLCardAffinity t = new PCLCardAffinity(a.type, a.get(form));
-                list[t.type.id] = t;
-            }
-        }
-
-        this.updateSortedList();
-        return this;
     }
 
     public PCLCardAffinities add(PCLCardAffinities other, int levelLimit) {
@@ -259,16 +177,16 @@ public class PCLCardAffinities {
         return list;
     }
 
-    public boolean hasStar() {
-        return star != null && star.level > 0;
-    }
-
     public Integer[] getAffinityLevelsAsArray() {
         final Integer[] values = new Integer[PCLAffinity.all().length];
         for (int i = 0; i < values.length; i++) {
             values[i] = getLevel(PCLAffinity.all()[i]);
         }
         return values;
+    }
+
+    protected PCLAffinity[] getAvailableAffinities() {
+        return PCLAffinity.getAvailableAffinities(GameUtilities.getActingColor(), !(card instanceof PCLDynamicCard));
     }
 
     public ArrayList<PCLCardAffinity> getCardAffinities() {
@@ -350,6 +268,50 @@ public class PCLCardAffinities {
         return true;
     }
 
+    public boolean hasStar() {
+        return star != null && star.level > 0;
+    }
+
+    public PCLCardAffinities initialize(PCLCardAffinities affinities) {
+        if (affinities.star != null) {
+            star = new PCLCardAffinity(PCLAffinity.Star, affinities.star.level);
+        }
+        else {
+            star = null;
+        }
+
+        list = new PCLCardAffinity[TOTAL_AFFINITIES];
+        for (PCLCardAffinity a : affinities.list) {
+            if (a != null) {
+                PCLCardAffinity t = new PCLCardAffinity(a.type, a.level);
+                list[t.type.id] = t;
+            }
+        }
+
+        this.updateSortedList();
+        return this;
+    }
+
+    public PCLCardAffinities initialize(PCLCardDataAffinityGroup affinities, int form) {
+        if (affinities.star != null) {
+            star = new PCLCardAffinity(PCLAffinity.Star, affinities.star.get(form));
+        }
+        else {
+            star = null;
+        }
+
+        list = new PCLCardAffinity[TOTAL_AFFINITIES];
+        for (PCLCardDataAffinity a : affinities.list) {
+            if (a != null) {
+                PCLCardAffinity t = new PCLCardAffinity(a.type, a.get(form));
+                list[t.type.id] = t;
+            }
+        }
+
+        this.updateSortedList();
+        return this;
+    }
+
     public PCLCardAffinities initialize(PCLAffinity affinity, int base, int upgrade, int scaling) {
         if (base > 0 || upgrade > 0 || scaling > 0 || get(affinity, false) != null) {
             PCLCardAffinity a = set(affinity, base);
@@ -371,26 +333,6 @@ public class PCLCardAffinities {
         return this;
     }
 
-    public void renderOnCard(SpriteBatch sb, AbstractCard card, boolean highlight) {
-        float size;
-        float step;
-        float y = AbstractCard.RAW_H;
-
-        if (highlight) {
-            size = 64;
-            y *= 0.58f;
-            step = size * 0.9f;
-        }
-        else {
-            size = 48;//48;
-            y *= 0.49f;// -0.51f;
-            step = size * 1.2f;
-        }
-
-        render(sb, card, 0, y, size, step);
-
-    }
-
     public void render(SpriteBatch sb, AbstractCard card, float x, float y, float size, float step) {
         int max = sorted.size();
         final int half = max / 2;
@@ -410,6 +352,26 @@ public class PCLCardAffinities {
 
             item.renderOnCard(sb, card, x, y, size, false, collapseDuplicates);
         }
+    }
+
+    public void renderOnCard(SpriteBatch sb, AbstractCard card, boolean highlight) {
+        float size;
+        float step;
+        float y = AbstractCard.RAW_H;
+
+        if (highlight) {
+            size = 64;
+            y *= 0.58f;
+            step = size * 0.9f;
+        }
+        else {
+            size = 48;//48;
+            y *= 0.49f;// -0.51f;
+            step = size * 1.2f;
+        }
+
+        render(sb, card, 0, y, size, step);
+
     }
 
     public void set(int red, int green, int blue, int orange, int light, int dark, int silver) {
@@ -455,6 +417,44 @@ public class PCLCardAffinities {
 
         this.updateSortedList();
         return star;
+    }
+
+    protected boolean shouldHideAffinity(PCLAffinity a) {
+        return (!PGR.config.showIrrelevantProperties.get() && card != null && !EUIUtils.any(getAvailableAffinities(), b -> b == a));
+    }
+
+    public void updateSortedList() {
+        sorted.clear();
+        for (PCLCardAffinity a : list) {
+            if (a == null || a.level <= 0 || shouldHideAffinity(a.type)) {
+                continue;
+            }
+
+            if (collapseDuplicates) {
+                sorted.add(a);
+            }
+            else {
+                for (int i = 0; i < a.level; i++) {
+                    sorted.add(a);
+                }
+            }
+        }
+        if (star != null && star.level > 0) {
+            if (collapseDuplicates) {
+                sorted.add(star);
+            }
+            else {
+                for (int i = 0; i < star.level; i++) {
+                    sorted.add(star);
+                }
+            }
+        }
+
+        if (sorted.isEmpty() && (PGR.config.showIrrelevantProperties.get() || getAvailableAffinities().length > 0)) {
+            sorted.add(new PCLCardAffinity(General, 1));
+        }
+
+        sorted.sort(PCLCardAffinity::compareTo);
     }
 
 }

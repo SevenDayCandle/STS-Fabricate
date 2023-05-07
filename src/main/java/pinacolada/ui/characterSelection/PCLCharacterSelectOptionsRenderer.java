@@ -36,22 +36,20 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase {
     protected static final float ROW_OFFSET = 60 * Settings.scale;
 
     protected static final Random RNG = new Random();
-    public final ArrayList<PCLGlyphEditor> glyphEditors;
     protected final ArrayList<PCLLoadout> availableLoadouts;
     protected final ArrayList<PCLLoadout> loadouts;
+    public final ArrayList<PCLGlyphEditor> glyphEditors;
+    protected RunAttributesProvider runProvider;
+    protected CharacterOption characterOption;
+    protected PCLAbstractPlayerData data;
+    protected PCLLoadout loadout;
+    protected float textScale;
     public EUIButton seriesButton;
     public EUIButton loadoutEditorButton;
     public EUIButton infoButton;
     public EUILabel startingCardsLabel;
     public EUILabel ascensionGlyphsLabel;
     public EUITextBox startingCardsListLabel;
-    protected RunAttributesProvider runProvider;
-    protected CharacterOption characterOption;
-    protected PCLAbstractPlayerData data;
-    protected PCLLoadout loadout;
-
-
-    protected float textScale;
 
     public PCLCharacterSelectOptionsRenderer() {
         final float leftTextWidth = FontHelper.getSmartWidth(FontHelper.cardTitleFont, PGR.core.strings.csel_leftText, 9999f, 0f); // Ascension
@@ -119,6 +117,50 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase {
         refresh(runProvider, characterOption);
     }
 
+    private void changeLoadout(PCLLoadout loadout) {
+        data.selectedLoadout = loadout;
+        refresh(runProvider, characterOption);
+    }
+
+    private void changePreset() {
+        final int preset = loadout.canChangePreset(loadout.preset + 1) ? (loadout.preset + 1) : 0;
+        if (preset != loadout.preset) {
+            loadout.preset = preset;
+            refreshInternal();
+        }
+    }
+
+    private void openInfo() {
+        if (characterOption != null && data != null) {
+            PCLPlayerMeter meter = CombatManager.playerSystem.getMeter(data.resources.playerClass);
+            if (meter != null) {
+                EUI.ftueScreen.open(new EUITutorial(meter.getInfoPages()), () -> screenRefresh(runProvider, characterOption));
+            }
+        }
+    }
+
+    private void openLoadoutEditor() {
+        if (loadout != null && characterOption != null && data != null) {
+            PGR.loadoutEditor.open(loadout, data, characterOption, () -> screenRefresh(runProvider, characterOption));
+        }
+    }
+
+    private void openSeriesSelect() {
+        if (characterOption != null && data != null) {
+            PGR.seriesSelection.open(characterOption, data, () -> screenRefresh(runProvider, characterOption));
+        }
+    }
+
+    public void randomizeLoadout() {
+        if (availableLoadouts.size() > 1) {
+            while (loadout == data.selectedLoadout) {
+                data.selectedLoadout = GameUtilities.getRandomElement(availableLoadouts, RNG);
+            }
+
+            refresh(runProvider, characterOption);
+        }
+    }
+
     public void refresh(RunAttributesProvider provider, CharacterOption characterOption) {
         refresh(provider, characterOption, GameUtilities.isPCLPlayerClass(characterOption.c.chosenClass));
     }
@@ -158,6 +200,30 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase {
             for (PCLGlyphEditor geditor : glyphEditors) {
                 geditor.setActive(false);
             }
+        }
+    }
+
+    public void refreshInternal() {
+        EUIClassUtils.setField(characterOption, "gold", loadout.getGold());
+        EUIClassUtils.setField(characterOption, "hp", String.valueOf(loadout.getHP()));
+        ((CharSelectInfo) EUIClassUtils.getField(characterOption, "charInfo")).relics = loadout.getStartingRelics();
+
+
+        int currentLevel = data.resources.getUnlockLevel();
+        if (currentLevel < loadout.unlockLevel) {
+            startingCardsListLabel.setLabel(PGR.core.strings.csel_unlocksAtLevel(loadout.unlockLevel, currentLevel)).setFontColor(Settings.RED_TEXT_COLOR);
+            loadoutEditorButton.setInteractable(false);
+            runProvider.disableConfirm(true);
+        }
+        else if (!loadout.validate().isValid) {
+            startingCardsListLabel.setLabel(PGR.core.strings.csel_invalidLoadout).setFontColor(Settings.RED_TEXT_COLOR);
+            loadoutEditorButton.setInteractable(true);
+            runProvider.disableConfirm(true);
+        }
+        else {
+            startingCardsListLabel.setLabel(loadout.getDeckPreviewString(true)).setFontColor(Settings.GREEN_TEXT_COLOR);
+            loadoutEditorButton.setInteractable(true);
+            runProvider.disableConfirm(false);
         }
     }
 
@@ -202,74 +268,6 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase {
         }
         else {
             this.loadout = null;
-        }
-    }
-
-    public void refreshInternal() {
-        EUIClassUtils.setField(characterOption, "gold", loadout.getGold());
-        EUIClassUtils.setField(characterOption, "hp", String.valueOf(loadout.getHP()));
-        ((CharSelectInfo) EUIClassUtils.getField(characterOption, "charInfo")).relics = loadout.getStartingRelics();
-
-
-        int currentLevel = data.resources.getUnlockLevel();
-        if (currentLevel < loadout.unlockLevel) {
-            startingCardsListLabel.setLabel(PGR.core.strings.csel_unlocksAtLevel(loadout.unlockLevel, currentLevel)).setFontColor(Settings.RED_TEXT_COLOR);
-            loadoutEditorButton.setInteractable(false);
-            runProvider.disableConfirm(true);
-        }
-        else if (!loadout.validate().isValid) {
-            startingCardsListLabel.setLabel(PGR.core.strings.csel_invalidLoadout).setFontColor(Settings.RED_TEXT_COLOR);
-            loadoutEditorButton.setInteractable(true);
-            runProvider.disableConfirm(true);
-        }
-        else {
-            startingCardsListLabel.setLabel(loadout.getDeckPreviewString(true)).setFontColor(Settings.GREEN_TEXT_COLOR);
-            loadoutEditorButton.setInteractable(true);
-            runProvider.disableConfirm(false);
-        }
-    }
-
-    private void changeLoadout(PCLLoadout loadout) {
-        data.selectedLoadout = loadout;
-        refresh(runProvider, characterOption);
-    }
-
-    private void changePreset() {
-        final int preset = loadout.canChangePreset(loadout.preset + 1) ? (loadout.preset + 1) : 0;
-        if (preset != loadout.preset) {
-            loadout.preset = preset;
-            refreshInternal();
-        }
-    }
-
-    private void openInfo() {
-        if (characterOption != null && data != null) {
-            PCLPlayerMeter meter = CombatManager.playerSystem.getMeter(data.resources.playerClass);
-            if (meter != null) {
-                EUI.ftueScreen.open(new EUITutorial(meter.getInfoPages()), () -> screenRefresh(runProvider, characterOption));
-            }
-        }
-    }
-
-    private void openLoadoutEditor() {
-        if (loadout != null && characterOption != null && data != null) {
-            PGR.loadoutEditor.open(loadout, data, characterOption, () -> screenRefresh(runProvider, characterOption));
-        }
-    }
-
-    private void openSeriesSelect() {
-        if (characterOption != null && data != null) {
-            PGR.seriesSelection.open(characterOption, data, () -> screenRefresh(runProvider, characterOption));
-        }
-    }
-
-    public void randomizeLoadout() {
-        if (availableLoadouts.size() > 1) {
-            while (loadout == data.selectedLoadout) {
-                data.selectedLoadout = GameUtilities.getRandomElement(availableLoadouts, RNG);
-            }
-
-            refresh(runProvider, characterOption);
         }
     }
 

@@ -33,6 +33,8 @@ import java.util.List;
 // Copied and modified from STS-AnimatorMod
 // TODO Move generic logic into other classes
 public class PCLCardText {
+    private static final ColoredString cs = new ColoredString("", Settings.CREAM_COLOR);
+    private static final PCLTextParser internalParser = new PCLTextParser(false);
     protected final static Color DEFAULT_COLOR = Settings.CREAM_COLOR.cpy();
     protected final static HashMap<AbstractCard.CardRarity, ColoredTexture> panels = new HashMap<>();
     protected final static HashMap<AbstractCard.CardRarity, ColoredTexture> panelsLarge = new HashMap<>();
@@ -48,23 +50,55 @@ public class PCLCardText {
     protected final static float CN_DESC_BOX_WIDTH = IMG_WIDTH * 0.72f;
     protected final static float DESC_BOX_WIDTH = Settings.BIG_TEXT_MODE ? IMG_WIDTH * 0.95f : IMG_WIDTH * 0.79f;
     protected static final GlyphLayout layout = new GlyphLayout();
-    private static final ColoredString cs = new ColoredString("", Settings.CREAM_COLOR);
-    private static final PCLTextParser internalParser = new PCLTextParser(false);
-    public final ArrayList<PCLTextLine> lines = new ArrayList<>();
     protected final PCLCard card;
-    public Color color;
-    public float lineWidth = DESC_BOX_WIDTH;
-    public float startX;
-    public float startY;
+    public final ArrayList<PCLTextLine> lines = new ArrayList<>();
+    private float badgeAlphaTargetOffset = 1f;
+    private float badgeAlphaOffset = -0.2f;
     protected BitmapFont font;
     protected float scaleModifier;
     protected int lineIndex;
     protected String overrideDescription = GameUtilities.EMPTY_STRING;
-    private float badgeAlphaTargetOffset = 1f;
-    private float badgeAlphaOffset = -0.2f;
+    public Color color;
+    public float lineWidth = DESC_BOX_WIDTH;
+    public float startX;
+    public float startY;
 
     public PCLCardText(PCLCard card) {
         this.card = card;
+    }
+
+    protected static boolean isIdeographicLanguage() {
+        switch (Settings.language) {
+            case ZHS:
+            case ZHT:
+            case JPN:
+            case KOR:
+                return true;
+        }
+        return false;
+    }
+
+    protected PCLTextLine addLine() {
+        PCLTextLine line = new PCLTextLine(this);
+
+        lines.add(line);
+        lineIndex += 1;
+
+        return line;
+    }
+
+    protected void addToken(PCLTextToken token) {
+        if (token.type == PCLTextTokenType.NewLine) {
+            addLine();
+        }
+        else {
+            lines.get(lineIndex).add(token);
+        }
+    }
+
+    public void forceRefresh() {
+        card.rawDescription = overrideDescription;
+        initialize(card.rawDescription);
     }
 
     protected TextureCache getHPIcon() {
@@ -89,19 +123,6 @@ public class PCLCardText {
         return card.isPopup ?
                 (card.timing.movesBeforePlayer() ? PCLCoreImages.CardIcons.priorityPlusL : PCLCoreImages.CardIcons.priorityMinusL)
                 : (card.timing.movesBeforePlayer() ? PCLCoreImages.CardIcons.priorityPlus : PCLCoreImages.CardIcons.priorityMinus);
-    }
-
-    public void overrideDescription(String description, boolean forceRefresh) {
-        overrideDescription = description;
-
-        if (forceRefresh) {
-            forceRefresh();
-        }
-    }
-
-    public void forceRefresh() {
-        card.rawDescription = overrideDescription;
-        initialize(card.rawDescription);
     }
 
     public void initialize(String text) {
@@ -187,32 +208,11 @@ public class PCLCardText {
         PCLRenderHelpers.resetFont(font);
     }
 
-    protected static boolean isIdeographicLanguage() {
-        switch (Settings.language) {
-            case ZHS:
-            case ZHT:
-            case JPN:
-            case KOR:
-                return true;
-        }
-        return false;
-    }
+    public void overrideDescription(String description, boolean forceRefresh) {
+        overrideDescription = description;
 
-    protected PCLTextLine addLine() {
-        PCLTextLine line = new PCLTextLine(this);
-
-        lines.add(line);
-        lineIndex += 1;
-
-        return line;
-    }
-
-    protected void addToken(PCLTextToken token) {
-        if (token.type == PCLTextTokenType.NewLine) {
-            addLine();
-        }
-        else {
-            lines.get(lineIndex).add(token);
+        if (forceRefresh) {
+            forceRefresh();
         }
     }
 

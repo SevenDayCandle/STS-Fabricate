@@ -69,6 +69,10 @@ public class PlayCard extends PCLConditionalAction<AbstractMonster, AbstractCard
         }
     }
 
+    protected boolean canUse() {
+        return card.canUse(player, GameUtilities.asMonster(target)) || card.dontTriggerOnUseCard;
+    }
+
     @Override
     protected void firstUpdate() {
         super.firstUpdate();
@@ -145,10 +149,6 @@ public class PlayCard extends PCLConditionalAction<AbstractMonster, AbstractCard
         }
     }
 
-    protected boolean canUse() {
-        return card.canUse(player, GameUtilities.asMonster(target)) || card.dontTriggerOnUseCard;
-    }
-
     protected void queueCardItem(AbstractMonster enemy) {
         addToLimbo();
 
@@ -176,32 +176,6 @@ public class PlayCard extends PCLConditionalAction<AbstractMonster, AbstractCard
         AbstractDungeon.actionManager.cardQueue.add(0, new CardQueueItem(card, enemy, energyOnUse, true, !spendEnergy));
 
         complete(enemy);
-    }
-
-    public PlayCard setTargetPosition(float x, float y) {
-        targetPosition = new Vector2(x, y);
-
-        return this;
-    }
-
-    protected void showCard() {
-        addToLimbo();
-
-        CombatManager.queueRefreshHandLayout();
-        AbstractDungeon.getCurrRoom().souls.remove(card);
-
-        if (currentPosition != null) {
-            card.current_x = currentPosition.x;
-            card.current_y = currentPosition.y;
-        }
-
-        card.target_x = targetPosition.x;
-        card.target_y = targetPosition.y;
-        card.targetAngle = 0f;
-        card.unfadeOut();
-        card.lighten(true);
-        card.drawScale = 0.5f;
-        card.targetDrawScale = 0.75f;
     }
 
     public PlayCard setCondition(FuncT1<Boolean, AbstractCard> condition) {
@@ -242,6 +216,32 @@ public class PlayCard extends PCLConditionalAction<AbstractMonster, AbstractCard
         }
 
         return this;
+    }
+
+    public PlayCard setTargetPosition(float x, float y) {
+        targetPosition = new Vector2(x, y);
+
+        return this;
+    }
+
+    protected void showCard() {
+        addToLimbo();
+
+        CombatManager.queueRefreshHandLayout();
+        AbstractDungeon.getCurrRoom().souls.remove(card);
+
+        if (currentPosition != null) {
+            card.current_x = currentPosition.x;
+            card.current_y = currentPosition.y;
+        }
+
+        card.target_x = targetPosition.x;
+        card.target_y = targetPosition.y;
+        card.targetAngle = 0f;
+        card.unfadeOut();
+        card.lighten(true);
+        card.drawScale = 0.5f;
+        card.targetDrawScale = 0.75f;
     }
 
     public PlayCard spendEnergy(boolean spendEnergy) {

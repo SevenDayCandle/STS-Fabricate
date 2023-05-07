@@ -22,13 +22,13 @@ public class PowerFormulaDisplay extends EUICardDraggable<AbstractCard> {
     public static final float ICON_SIZE = 32f;
     public static final float OFFSET_MULT_X = 0.3f;
     public static final float OFFSET_MULT_Y = -4f;
-    public final PowerFormulaRow attack;
-    public final PowerFormulaRow defend;
-    public final PowerFormulaEnemyRow enemyAttack;
-    protected final EUILabel title;
     private final RelativeHitbox attackHb;
     private final RelativeHitbox defendHb;
     private final RelativeHitbox enemyAttackHb;
+    protected final EUILabel title;
+    public final PowerFormulaRow attack;
+    public final PowerFormulaRow defend;
+    public final PowerFormulaEnemyRow enemyAttack;
 
     public PowerFormulaDisplay() {
         super(PGR.config.damageFormulaPosition, new DraggableHitbox(screenW(0.0366f), screenH(0.425f), ICON_SIZE, ICON_SIZE, true), ICON_SIZE);
@@ -72,6 +72,11 @@ public class PowerFormulaDisplay extends EUICardDraggable<AbstractCard> {
         if (input != result) {
             enemyAttack.addPower(po, input, result);
         }
+    }
+
+    protected float moveHitbox(EUIHitbox hitbox, float offset) {
+        hitbox.setOffsetY(offset);
+        return offset + hb.height * OFFSET_MULT_Y;
     }
 
     @Override
@@ -124,11 +129,6 @@ public class PowerFormulaDisplay extends EUICardDraggable<AbstractCard> {
         if (target != null) {
             enemyAttack.updateImpl(card, target, draggingCard, shouldUpdateForCard, shouldUpdateForTarget);
         }
-    }
-
-    protected float moveHitbox(EUIHitbox hitbox, float offset) {
-        hitbox.setOffsetY(offset);
-        return offset + hb.height * OFFSET_MULT_Y;
     }
 
     public void setAttackResult(float input, float result) {

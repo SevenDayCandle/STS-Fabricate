@@ -12,8 +12,8 @@ import pinacolada.utilities.GameUtilities;
 import java.util.ArrayList;
 
 public abstract class Glyph extends PCLCard {
-    public static final String ID = PGR.core.createID(Glyph.class.getSimpleName());
     private static final ArrayList<Glyph> cards = new ArrayList<>();
+    public static final String ID = PGR.core.createID(Glyph.class.getSimpleName());
 
     protected Glyph(PCLCardData cardData) {
         super(cardData);
