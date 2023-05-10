@@ -1,10 +1,12 @@
 package pinacolada.skills.skills.base.conditions;
 
+import extendedui.EUIRM;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.interfaces.subscribers.OnIntensifySubscriber;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
@@ -15,7 +17,7 @@ import pinacolada.skills.skills.PPassiveCond;
 import java.util.ArrayList;
 
 @VisibleSkill
-public class PCond_CheckLevel extends PPassiveCond<PField_Affinity> {
+public class PCond_CheckLevel extends PPassiveCond<PField_Affinity> implements OnIntensifySubscriber {
     public static final PSkillData<PField_Affinity> DATA = register(PCond_CheckLevel.class, PField_Affinity.class)
             .pclOnly()
             .selfTarget();
@@ -63,6 +65,17 @@ public class PCond_CheckLevel extends PPassiveCond<PField_Affinity> {
 
     @Override
     public String getSubText() {
+        if (isWhenClause()) {
+            return TEXT.cond_wheneverYou(EUIRM.strings.verbNoun(PGR.core.tooltips.level.title, fields.getAffinityLevelOrString()));
+        }
         return TEXT.cond_levelItem(getAmountRawString(), fields.getAffinityChoiceString());
+    }
+
+    @Override
+    public void onIntensify(PCLAffinity aff) {
+        if (fields.affinities.isEmpty() || fields.affinities.contains(aff))
+        {
+            useFromTrigger(makeInfo(null).setData(aff));
+        }
     }
 }

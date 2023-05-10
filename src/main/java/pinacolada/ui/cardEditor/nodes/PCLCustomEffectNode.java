@@ -15,10 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.*;
-import pinacolada.skills.skills.PLimit;
-import pinacolada.skills.skills.PMultiCond;
-import pinacolada.skills.skills.PMultiSkill;
-import pinacolada.skills.skills.PTrigger;
+import pinacolada.skills.skills.*;
 import pinacolada.skills.skills.base.moves.PMove_StackCustomPower;
 import pinacolada.skills.skills.special.primary.PCardPrimary_DealDamage;
 import pinacolada.skills.skills.special.primary.PCardPrimary_GainBlock;
@@ -51,6 +48,7 @@ public class PCLCustomEffectNode extends EUIButton {
         this.type = type;
         this.skill = skill;
 
+        // TODO fix this
         if (this.skill == null) {
             getEffects();
             // TODO single method for checking eligibility
@@ -104,6 +102,8 @@ public class PCLCustomEffectNode extends EUIButton {
             case Multicond:
             case Multimove:
                 return new PCLCustomEffectMultiNode(editor, skill, type, hb);
+            case Branchcond:
+                return new PCLCustomEffectBranchNode(editor, skill, type, hb);
         }
         return new PCLCustomEffectNode(editor, skill, type, hb);
     }
@@ -152,7 +152,7 @@ public class PCLCustomEffectNode extends EUIButton {
 
     protected void onHologramRelease(PCLCustomEffectHologram hologram) {
         if (hologram.highlighted != this && hologram.highlighted != null) {
-            hologram.highlighted.reassignChild(this);
+            hologram.highlighted.receiveNode(this);
             editor.fullRebuild();
         }
         this.hologram = null;
@@ -170,6 +170,10 @@ public class PCLCustomEffectNode extends EUIButton {
             }
             child = newChild;
         }
+    }
+
+    protected void receiveNode(PCLCustomEffectNode node) {
+        reassignChild(node);
     }
 
     public void refresh() {
@@ -234,6 +238,7 @@ public class PCLCustomEffectNode extends EUIButton {
     public enum NodeType {
         Cond,
         Multicond,
+        Branchcond,
         Mod,
         Move,
         Multimove,
@@ -263,8 +268,10 @@ public class PCLCustomEffectNode extends EUIButton {
         public Color getColor() {
             switch (this) {
                 case Cond:
-                    return Color.NAVY;
+                    return Color.SKY;
                 case Multicond:
+                    return Color.NAVY;
+                case Branchcond:
                     return Color.BLUE;
                 case Mod:
                     return Color.FOREST;
@@ -273,12 +280,12 @@ public class PCLCustomEffectNode extends EUIButton {
                 case Multimove:
                     return Color.ORANGE;
                 case Delay:
-                    return Color.SALMON;
+                    return Color.RED;
                 case Limit:
                 case Trigger:
                 case Attack:
                 case Block:
-                    return Color.CORAL;
+                    return Color.SALMON;
             }
             return Color.WHITE;
         }
@@ -291,6 +298,8 @@ public class PCLCustomEffectNode extends EUIButton {
                     return PCond.class;
                 case Multicond:
                     return PMultiCond.class;
+                case Branchcond:
+                    return PBranchCond.class;
                 case Mod:
                     return PMod.class;
                 case Move:
@@ -322,6 +331,7 @@ public class PCLCustomEffectNode extends EUIButton {
             switch (this) {
                 case Cond:
                 case Multicond:
+                case Branchcond:
                     return PCLCoreImages.Menu.nodeCircle.texture();
                 case Mod:
                     return PCLCoreImages.Menu.nodeHexagon.texture();
@@ -345,6 +355,8 @@ public class PCLCustomEffectNode extends EUIButton {
                 case Cond:
                     return PGR.core.strings.cedit_condition;
                 case Multicond:
+                    return PGR.core.strings.cedit_condition;
+                case Branchcond:
                     return PGR.core.strings.cedit_condition;
                 case Mod:
                     return PGR.core.strings.cedit_modifier;
