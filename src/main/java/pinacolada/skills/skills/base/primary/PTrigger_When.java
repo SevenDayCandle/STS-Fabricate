@@ -2,6 +2,7 @@ package pinacolada.skills.skills.base.primary;
 
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.interfaces.subscribers.PCLCombatSubscriber;
+import pinacolada.skills.PCond;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -26,7 +27,7 @@ public class PTrigger_When extends PTrigger {
     }
 
     @Override
-    public boolean isCondAllowed(PSkill<?> skill) {
-        return skill instanceof PCLCombatSubscriber;
+    public boolean isSkillAllowed(PSkill<?> skill) {
+        return !(skill instanceof PCond) || skill instanceof PCLCombatSubscriber;
     }
 }

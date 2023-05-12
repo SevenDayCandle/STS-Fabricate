@@ -7,8 +7,8 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.PTrait;
 import pinacolada.skills.fields.PField_Not;
-import pinacolada.skills.skills.PActiveMod;
 import pinacolada.skills.skills.PPassiveCond;
+import pinacolada.skills.skills.PPassiveMod;
 import pinacolada.skills.skills.PTrigger;
 
 @VisibleSkill
@@ -42,17 +42,9 @@ public class PTrigger_Passive extends PTrigger {
     }
 
     @Override
-    public boolean isCondAllowed(PSkill<?> skill) {
-        return skill instanceof PPassiveCond;
-    }
-
-    @Override
-    public boolean isModAllowed(PSkill<?> skill) {
-        return (!(skill instanceof PActiveMod));
-    }
-
-    @Override
-    public boolean isMoveAllowed(PSkill<?> skill) {
-        return skill instanceof PTrait;
+    public boolean isSkillAllowed(PSkill<?> skill) {
+        return skill instanceof PPassiveCond ||
+                skill instanceof PPassiveMod ||
+                skill instanceof PTrait;
     }
 }

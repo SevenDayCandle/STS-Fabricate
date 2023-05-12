@@ -397,7 +397,6 @@ public class GridCardSelectScreenMultiformPatches {
                     selectPCLCardUpgrade((PCLCard) list.get(0));
                 }
                 else {
-
                     GridCardSelectScreenMultiformPatches.BranchSelectFields.waitingForBranchUpgradeSelection.set(__instance, true);
                 }
 

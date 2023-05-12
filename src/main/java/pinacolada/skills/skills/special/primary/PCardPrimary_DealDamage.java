@@ -25,10 +25,10 @@ import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.resources.PGR;
 import pinacolada.skills.*;
 import pinacolada.skills.fields.PField_Attack;
-import pinacolada.skills.skills.PActiveCond;
-import pinacolada.skills.skills.PActiveMod;
 import pinacolada.skills.skills.PCardPrimary;
 import pinacolada.skills.skills.PDamageTrait;
+import pinacolada.skills.skills.PPassiveCond;
+import pinacolada.skills.skills.PPassiveMod;
 import pinacolada.skills.skills.base.traits.PTrait_HitCount;
 
 @VisibleSkill
@@ -104,18 +104,10 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
     }
 
     @Override
-    public boolean isCondAllowed(PSkill<?> skill) {
-        return (!(skill instanceof PActiveCond));
-    }
-
-    @Override
-    public boolean isModAllowed(PSkill<?> skill) {
-        return (!(skill instanceof PActiveMod));
-    }
-
-    @Override
-    public boolean isMoveAllowed(PSkill<?> skill) {
-        return skill instanceof PDamageTrait;
+    public boolean isSkillAllowed(PSkill<?> skill) {
+        return skill instanceof PPassiveCond ||
+                skill instanceof PPassiveMod ||
+                skill instanceof PDamageTrait;
     }
 
     public PCardPrimary_DealDamage setBonus(PMod<?> mod, int amount) {

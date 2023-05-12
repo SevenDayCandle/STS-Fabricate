@@ -36,7 +36,8 @@ import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
-import pinacolada.skills.*;
+import pinacolada.skills.PSkill;
+import pinacolada.skills.PSkillData;
 import pinacolada.stances.PCLStanceHelper;
 import pinacolada.ui.cardEditor.nodes.PCLCustomEffectNode;
 import pinacolada.utilities.GameUtilities;
@@ -120,20 +121,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     }
 
     public Color getColorForEffect(PSkill<?> effect) {
-
-        if (editor.rootEffect == null) {
-            return Color.WHITE;
-        }
-        if (effect instanceof PCond) {
-            return editor.rootEffect.isCondAllowed(effect) ? Color.WHITE : Color.GRAY;
-        }
-        if (effect instanceof PMod) {
-            return editor.rootEffect.isModAllowed(effect) ? Color.WHITE : Color.GRAY;
-        }
-        if (effect instanceof PMove) {
-            return editor.rootEffect.isMoveAllowed(effect) ? Color.WHITE : Color.GRAY;
-        }
-        return Color.WHITE;
+        return editor.rootEffect == null || editor.rootEffect.isSkillAllowed(effect) ? Color.WHITE : Color.GRAY;
     }
 
     @Override

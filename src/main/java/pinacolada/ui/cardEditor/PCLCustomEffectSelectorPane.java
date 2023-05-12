@@ -43,7 +43,7 @@ public class PCLCustomEffectSelectorPane extends EUIImage {
     protected void onHologramRelease(PCLCustomEffectHologram hologram, PCLCustomEffectNode.NodeType type) {
         if (hologram.highlighted != null) {
             PCLCustomEffectNode node = PCLCustomEffectNode.getNodeForType(editor, null, type, editor.hb);
-            hologram.highlighted.reassignChild(node);
+            hologram.highlighted.receiveNode(node);
             editor.fullRebuild();
         }
         this.hologram = null;

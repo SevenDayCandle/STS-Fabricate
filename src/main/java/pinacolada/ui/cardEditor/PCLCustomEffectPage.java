@@ -32,8 +32,8 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
     protected EUIHitbox hb;
     protected EUILabel header;
     protected PCLCustomEffectNode root;
-    protected PCLCustomEffectEditingPane currentEditingSkill; // TODO set this when clicking on a skill node
-    protected PCLCustomEffectSelectorPane buttonsPane; // TODO finish pane for selecting nodes to create
+    protected PCLCustomEffectEditingPane currentEditingSkill;
+    protected PCLCustomEffectSelectorPane buttonsPane;
 
     public PCLCustomEffectPage(PCLCustomEditEntityScreen<?, ?> screen, EUIHitbox hb, int index, String title, ActionT1<PSkill<?>> onUpdate) {
         this.screen = screen;

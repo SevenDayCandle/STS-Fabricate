@@ -48,25 +48,8 @@ public class PCLCustomEffectNode extends EUIButton {
         this.type = type;
         this.skill = skill;
 
-        // TODO fix this
         if (this.skill == null) {
-            getEffects();
-            // TODO single method for checking eligibility
-            switch (type) {
-                case Cond:
-                case Multicond:
-                    this.skill = EUIUtils.find(effects, ef -> editor.rootEffect.isCondAllowed(ef));
-                    break;
-                case Mod:
-                    this.skill = EUIUtils.find(effects, ef -> editor.rootEffect.isModAllowed(ef));
-                    break;
-                default:
-                    this.skill = EUIUtils.find(effects, ef -> editor.rootEffect.isMoveAllowed(ef));
-            }
-
-            if (this.skill == null) {
-                this.skill = effects.size() > 0 ? effects.get(0) : new PRoot();
-            }
+            initializeDefaultSkill();
         }
 
         this.text = StringUtils.capitalize(this.skill.getSampleText(null));
@@ -97,8 +80,8 @@ public class PCLCustomEffectNode extends EUIButton {
 
     public static PCLCustomEffectNode getNodeForType(PCLCustomEffectPage editor, PSkill<?> skill, NodeType type, EUIHitbox hb) {
         switch (type) {
-            case Misc:
-                return new PCLCustomEffectFakeRootNode(editor, skill, type, hb);
+            case Root:
+                return new PCLCustomEffectRootNode(editor, skill, type, hb);
             case Multicond:
             case Multimove:
                 return new PCLCustomEffectMultiNode(editor, skill, type, hb);
@@ -126,6 +109,11 @@ public class PCLCustomEffectNode extends EUIButton {
                 parent.skill.setChild((PSkill<?>) null);
             }
         }
+        else if (editor.rootEffect == this.skill)
+        {
+            editor.rootEffect = editor.makeRootSkill();
+            editor.rootEffect.setChild(child.skill);
+        }
     }
 
     @SuppressWarnings("rawtypes")
@@ -135,6 +123,22 @@ public class PCLCustomEffectNode extends EUIButton {
                     bc -> skill != null && bc.effectID.equals(skill.effectID) ? skill : bc.scanForTips(bc.getSampleText(editor.rootEffect)));
         }
         return effects;
+    }
+
+    public void initializeDefaultSkill()
+    {
+        getEffects();
+        this.skill = EUIUtils.find(effects, ef -> editor.rootEffect.isSkillAllowed(ef));
+
+        if (this.skill == null) {
+            try {
+                this.skill = effects.size() > 0 ? effects.get(0) : type.getSkillClass().newInstance();
+            }
+            catch (Exception e)
+            {
+                this.skill = new PRoot();
+            }
+        }
     }
 
     public boolean isDragging() {
@@ -172,7 +176,7 @@ public class PCLCustomEffectNode extends EUIButton {
         }
     }
 
-    protected void receiveNode(PCLCustomEffectNode node) {
+    public void receiveNode(PCLCustomEffectNode node) {
         reassignChild(node);
     }
 
@@ -228,6 +232,10 @@ public class PCLCustomEffectNode extends EUIButton {
         if (parent != null) {
             this.parent.skill.setChild(skill);
         }
+        else if (this.skill instanceof PPrimary)
+        {
+            this.editor.rootEffect = (PPrimary<?>) this.skill;
+        }
     }
 
     public void startEdit() {
@@ -248,11 +256,11 @@ public class PCLCustomEffectNode extends EUIButton {
         Attack,
         Block,
         CustomPower,
-        Misc;
+        Root;
 
         // Overriding classes are listed later in the enum
         public static NodeType getTypeForSkill(PSkill<?> skill) {
-            NodeType cur = Misc;
+            NodeType cur = Root;
             for (NodeType type : values()) {
                 if (type.getSkillClass().isInstance(skill)) {
                     cur = type;
@@ -262,7 +270,14 @@ public class PCLCustomEffectNode extends EUIButton {
         }
 
         public boolean canRemove() {
-            return !PPrimary.class.isAssignableFrom(getSkillClass());
+            switch (this)
+            {
+                case Attack:
+                case Block:
+                case Root:
+                    return false;
+            }
+            return true;
         }
 
         public Color getColor() {

@@ -1,6 +1,7 @@
 package pinacolada.skills.skills.special.primary;
 
 import com.megacrit.cardcrawl.relics.AbstractRelic;
+import extendedui.EUIRM;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PPrimary;
@@ -24,7 +25,7 @@ public class PRoot extends PPrimary<PField_Empty> {
 
     @Override
     public String getSubText() {
-        return PGR.core.tooltips.startup.title;
+        return source instanceof AbstractRelic ? PGR.core.tooltips.startup.title : EUIRM.strings.na;
     }
 
     // This is a no-op on cards

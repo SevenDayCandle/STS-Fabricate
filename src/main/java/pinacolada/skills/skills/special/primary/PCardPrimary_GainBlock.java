@@ -12,10 +12,10 @@ import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.resources.PGR;
 import pinacolada.skills.*;
 import pinacolada.skills.fields.PField_Empty;
-import pinacolada.skills.skills.PActiveCond;
-import pinacolada.skills.skills.PActiveMod;
 import pinacolada.skills.skills.PBlockTrait;
 import pinacolada.skills.skills.PCardPrimary;
+import pinacolada.skills.skills.PPassiveCond;
+import pinacolada.skills.skills.PPassiveMod;
 
 @VisibleSkill
 public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty> {
@@ -77,18 +77,10 @@ public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty> {
     }
 
     @Override
-    public boolean isCondAllowed(PSkill<?> skill) {
-        return (!(skill instanceof PActiveCond));
-    }
-
-    @Override
-    public boolean isModAllowed(PSkill<?> skill) {
-        return (!(skill instanceof PActiveMod));
-    }
-
-    @Override
-    public boolean isMoveAllowed(PSkill<?> skill) {
-        return skill instanceof PBlockTrait;
+    public boolean isSkillAllowed(PSkill<?> skill) {
+        return skill instanceof PPassiveCond ||
+                skill instanceof PPassiveMod ||
+                skill instanceof PBlockTrait;
     }
 
     public PCardPrimary_GainBlock setBonus(PMod<?> mod, int amount) {
