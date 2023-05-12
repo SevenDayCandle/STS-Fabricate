@@ -48,7 +48,11 @@ public class PCLTextParser {
         }
     }
 
-    protected boolean compareNext(int amount, char character) {
+    public List<PCLTextToken> getTokens() {
+        return EUIUtils.flattenList(tokenLines);
+    }
+
+    protected boolean isNext(int amount, char character) {
         final Character other = nextCharacter(amount);
         if (other != null) {
             return other == character;
@@ -57,8 +61,13 @@ public class PCLTextParser {
         return false;
     }
 
-    public List<PCLTextToken> getTokens() {
-        return EUIUtils.flattenList(tokenLines);
+    protected boolean isWhitespace(int amount) {
+        final Character other = nextCharacter(amount);
+        if (other != null) {
+            return Character.isWhitespace(other);
+        }
+
+        return false;
     }
 
     public void initialize(PCLCard card, String text) {
@@ -82,7 +91,7 @@ public class PCLTextParser {
                     && (amount = LogicToken.tryAdd(this)) == 0 // $E5$
                     && (amount = SymbolToken.tryAdd(this)) == 0 // [E]
                     && (amount = SpecialToken.tryAdd(this)) == 0 // {code}
-                    && (amount = NewLineToken.tryAdd(this)) == 0 // |
+                    && (amount = NewLineToken.tryAdd(this)) == 0 // | or NL
                     && (amount = WhitespaceToken.tryAdd(this)) == 0 //
                     && (amount = PunctuationToken.tryAdd(this)) == 0 // .,-.:; etc
                     && (amount = WordToken.tryAdd(this)) == 0)// Letters/Digits

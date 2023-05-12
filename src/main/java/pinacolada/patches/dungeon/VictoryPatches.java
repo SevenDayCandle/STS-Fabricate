@@ -1,4 +1,4 @@
-package pinacolada.patches;
+package pinacolada.patches.dungeon;
 
 import basemod.ReflectionHacks;
 import com.badlogic.gdx.math.MathUtils;

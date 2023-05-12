@@ -1,4 +1,4 @@
-package pinacolada.patches;
+package pinacolada.patches.screens;
 
 import com.evacipated.cardcrawl.modthespire.lib.SpireInstrumentPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;

@@ -1197,9 +1197,19 @@ public class GameUtilities {
         return monsters;
     }
 
-    public static String getTagTipString(AbstractCard card) {
+    public static String getTagTipPostString(AbstractCard card)
+    {
+        return getTagTipString(card, PCLCardTag.getPost());
+    }
+
+    public static String getTagTipPreString(AbstractCard card)
+    {
+        return getTagTipString(card, PCLCardTag.getPre());
+    }
+
+    protected static String getTagTipString(AbstractCard card, List<PCLCardTag> tags) {
         ArrayList<String> tagNames = new ArrayList<>();
-        for (PCLCardTag tag : PCLCardTag.values()) {
+        for (PCLCardTag tag : tags) {
             int value = tag.getInt(card);
             switch (value) {
                 case 1:

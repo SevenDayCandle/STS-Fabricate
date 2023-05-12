@@ -1,4 +1,4 @@
-package pinacolada.patches;
+package pinacolada.patches.combat;
 
 import com.evacipated.cardcrawl.modthespire.lib.*;
 import com.megacrit.cardcrawl.core.EnergyManager;

@@ -32,7 +32,7 @@ public class PointerToken extends PCLTextToken {
     }
 
     public static int tryAdd(PCLTextParser parser) {
-        if (parser.character == BOUND_TOKEN && parser.compareNext(3, BOUND_TOKEN)) {
+        if (parser.character == BOUND_TOKEN && parser.isNext(3, BOUND_TOKEN)) {
             final PointerToken token = tryCreateToken(parser.card, parser.nextCharacter(1), parser.nextCharacter(2));
             if (token != null) {
                 parser.addToken(token);

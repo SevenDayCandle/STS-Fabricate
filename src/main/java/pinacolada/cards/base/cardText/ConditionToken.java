@@ -29,7 +29,7 @@ public class ConditionToken extends PCLTextToken {
     }
 
     public static int tryAdd(PCLTextParser parser) {
-        if (parser.character == CONDITION_TOKEN && parser.compareNext(2, CONDITION_TOKEN)) {
+        if (parser.character == CONDITION_TOKEN && parser.isNext(2, CONDITION_TOKEN)) {
             PSkill<?> move = parser.card != null ? parser.card.getEffectAt(parser.nextCharacter(1)) : null;
 
             if (move != null) {

@@ -15,8 +15,11 @@ public class NewLineToken extends PCLTextToken {
     public static int tryAdd(PCLTextParser parser) {
         if (parser.character == NEWLINE) {
             parser.addToken(instance);
-
             return 1;
+        }
+        else if (parser.character == 'N' && parser.isNext(1, 'L') && parser.isWhitespace(2)) {
+            parser.addToken(instance);
+            return 2;
         }
 
         return 0;
@@ -33,6 +36,6 @@ public class NewLineToken extends PCLTextToken {
 
     @Override
     public void render(SpriteBatch sb, PCLCardText context) {
-        throw new RuntimeException("New line token should not be rendered");
+        // Do not render newlines
     }
 }

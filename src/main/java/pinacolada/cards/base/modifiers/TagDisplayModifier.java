@@ -24,10 +24,16 @@ public class TagDisplayModifier extends AbstractCardModifier {
     @Override
     public String modifyDescription(String rawDescription, AbstractCard card) {
         if (PGR.config.displayCardTagDescription.get()) {
-            String tagString = GameUtilities.getTagTipString(card);
-            if (!tagString.isEmpty()) {
-                return rawDescription + EUIUtils.DOUBLE_SPLIT_LINE + tagString;
+            String text = rawDescription;
+            String preString = GameUtilities.getTagTipPreString(card);
+            if (!preString.isEmpty()) {
+                text = preString + EUIUtils.DOUBLE_SPLIT_LINE + text;
             }
+            String postString = GameUtilities.getTagTipPostString(card);
+            if (!postString.isEmpty()) {
+                text = text + EUIUtils.DOUBLE_SPLIT_LINE + postString;
+            }
+            return text;
         }
         return rawDescription;
     }

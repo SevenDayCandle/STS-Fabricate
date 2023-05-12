@@ -1,4 +1,4 @@
-package pinacolada.patches;
+package pinacolada.patches.dungeon;
 
 import com.evacipated.cardcrawl.modthespire.lib.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;

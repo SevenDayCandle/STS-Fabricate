@@ -2,6 +2,7 @@ package pinacolada.cards.base;
 
 import basemod.ReflectionHacks;
 import basemod.abstracts.CustomSavable;
+import basemod.helpers.CardModifierManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -1087,7 +1088,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
             sb.append(appendix);
         }
 
-        return sb.toString();
+        return CardModifierManager.onRenderTitle(this, sb.toString());
     }
 
     public ColoredString getXString(boolean onlyInBattle) {

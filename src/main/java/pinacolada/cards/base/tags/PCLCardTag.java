@@ -23,37 +23,42 @@ import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 public enum PCLCardTag implements TooltipProvider {
-    Autoplay(new Color(0.33f, 0.33f, 0.45f, 1), 0, 1),
-    Bounce(new Color(0.6f, 0.66f, 0.33f, 1), -1, Integer.MAX_VALUE),
-    Delayed(new Color(0.26f, 0.26f, 0.26f, 1), -1, Integer.MAX_VALUE),
-    Ephemeral(new Color(0.7f, 0.7f, 0.7f, 1), 0, 1),
-    Ethereal(new Color(0.51f, 0.69f, 0.6f, 1), 0, 1),
-    Exhaust(new Color(0.81f, 0.35f, 0.35f, 1), 0, Integer.MAX_VALUE),
-    Fleeting(new Color(0.5f, 0.37f, 0.3f, 1), 0, 1),
-    Fragile(new Color(0.80f, 0.46f, 0.7f, 1), 0, 1),
-    Grave(new Color(0.4f, 0.4f, 0.4f, 1), 0, 1),
-    Haste(new Color(0.35f, 0.5f, 0.79f, 1), -1, Integer.MAX_VALUE),
-    Innate(new Color(0.8f, 0.8f, 0.35f, 1), -1, Integer.MAX_VALUE),
-    Loyal(new Color(0.81f, 0.51f, 0.3f, 1), -1, Integer.MAX_VALUE),
-    Purge(new Color(0.71f, 0.3f, 0.55f, 1), 0, Integer.MAX_VALUE),
-    Recast(new Color(0.6f, 0.51f, 0.69f, 1), -1, Integer.MAX_VALUE),
-    Retain(new Color(0.49f, 0.78f, 0.35f, 1), -1, Integer.MAX_VALUE),
-    Unplayable(new Color(0.3f, 0.20f, 0.20f, 1), 0, 1);
+    Autoplay(new Color(0.33f, 0.33f, 0.45f, 1), 0, 1, false),
+    Bounce(new Color(0.6f, 0.66f, 0.33f, 1), -1, Integer.MAX_VALUE, false),
+    Delayed(new Color(0.26f, 0.26f, 0.26f, 1), -1, Integer.MAX_VALUE, true),
+    Ephemeral(new Color(0.7f, 0.7f, 0.7f, 1), 0, 1, true),
+    Ethereal(new Color(0.51f, 0.69f, 0.6f, 1), 0, 1, true),
+    Exhaust(new Color(0.81f, 0.35f, 0.35f, 1), 0, Integer.MAX_VALUE, false),
+    Fleeting(new Color(0.5f, 0.37f, 0.3f, 1), 0, 1, false),
+    Fragile(new Color(0.80f, 0.46f, 0.7f, 1), 0, 1, true),
+    Grave(new Color(0.4f, 0.4f, 0.4f, 1), 0, 1, true),
+    Haste(new Color(0.35f, 0.5f, 0.79f, 1), -1, Integer.MAX_VALUE, true),
+    Innate(new Color(0.8f, 0.8f, 0.35f, 1), -1, Integer.MAX_VALUE, true),
+    Loyal(new Color(0.81f, 0.51f, 0.3f, 1), -1, Integer.MAX_VALUE, true),
+    Purge(new Color(0.71f, 0.3f, 0.55f, 1), 0, Integer.MAX_VALUE, false),
+    Recast(new Color(0.6f, 0.51f, 0.69f, 1), -1, Integer.MAX_VALUE, false),
+    Retain(new Color(0.49f, 0.78f, 0.35f, 1), -1, Integer.MAX_VALUE, true),
+    Unplayable(new Color(0.3f, 0.20f, 0.20f, 1), 0, 1, true);
 
+    private static ArrayList<PCLCardTag> PRE;
+    private static ArrayList<PCLCardTag> POST;
     public static final float HEIGHT = 38f;
+    public final boolean preText;
     public final int minValue;
     public final int maxValue;
     public final Color color;
 
-    PCLCardTag(Color color, int minValue, int maxValue) {
+    PCLCardTag(Color color, int minValue, int maxValue, boolean preText) {
         this.color = color;
         this.minValue = minValue;
         this.maxValue = maxValue;
+        this.preText = preText;
     }
 
     public static PCLCardTag get(AbstractCard.CardTags tag) {
@@ -68,6 +73,41 @@ public enum PCLCardTag implements TooltipProvider {
         PCLCardTag[] values = PCLCardTag.values();
         Arrays.sort(values, (a, b) -> StringUtils.compare(a.getTip().title, b.getTip().title));
         return Arrays.asList(values);
+    }
+
+    public static List<PCLCardTag> getPost()
+    {
+        if (POST == null)
+        {
+            initializePreAndPost();
+        }
+        return POST;
+    }
+
+    public static List<PCLCardTag> getPre()
+    {
+        if (PRE == null)
+        {
+            initializePreAndPost();
+        }
+        return PRE;
+    }
+
+    private static void initializePreAndPost()
+    {
+        PRE = new ArrayList<>();
+        POST = new ArrayList<>();
+        for (PCLCardTag tag : getAll())
+        {
+            if (tag.preText)
+            {
+                PRE.add(tag);
+            }
+            else
+            {
+                POST.add(tag);
+            }
+        }
     }
 
     /* Renders all of the tags on a card. Returns the total height of all the tags rendered */
