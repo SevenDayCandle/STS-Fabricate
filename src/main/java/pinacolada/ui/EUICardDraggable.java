@@ -107,7 +107,7 @@ public abstract class EUICardDraggable<T extends AbstractCard> extends EUIBase {
         return this;
     }
 
-    public void update(T card, AbstractCreature target, boolean draggingCard) {
+    public void update(T card, T originalCard, AbstractCreature target, AbstractCreature originalTarget, boolean draggingCard) {
         if (AbstractDungeon.screen == AbstractDungeon.CurrentScreen.NONE) {
             hb.update();
             draggablePanel.tryUpdate();
@@ -115,11 +115,11 @@ public abstract class EUICardDraggable<T extends AbstractCard> extends EUIBase {
             boolean isHovered = isHovered();
             draggablePanel.setColor(0.05f, 0.05f, 0.05f, isHovered ? 0.5f : 0.05f);
             draggableIcon.setColor(EUIColors.white(isHovered ? 0.75f : 0.1f));
-            updateImpl(card, target, draggingCard, lastCard != card, lastTarget != target);
+            updateImpl(card, originalCard, target, originalTarget, draggingCard, lastCard != card, lastTarget != target);
             lastCard = card;
             lastTarget = target;
         }
     }
 
-    public abstract void updateImpl(T card, AbstractCreature target, boolean draggingCard, boolean shouldUpdateForCard, boolean shouldUpdateForTarget);
+    public abstract void updateImpl(T card, T originalCard, AbstractCreature target, AbstractCreature originalTarget, boolean draggingCard, boolean shouldUpdateForCard, boolean shouldUpdateForTarget);
 }

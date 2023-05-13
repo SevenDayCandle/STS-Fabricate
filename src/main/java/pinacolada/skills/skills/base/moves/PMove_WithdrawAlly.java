@@ -12,6 +12,7 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
 import pinacolada.skills.skills.PCallbackMove;
+import pinacolada.ui.combat.SummonPool;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class PMove_WithdrawAlly extends PCallbackMove<PField_Empty> {
             .pclOnly();
 
     public PMove_WithdrawAlly() {
-        this(1);
+        this(SummonPool.BASE_TRIGGER);
     }
 
     public PMove_WithdrawAlly(int amount) {
@@ -50,7 +51,7 @@ public class PMove_WithdrawAlly extends PCallbackMove<PField_Empty> {
     @Override
     public void use(PCLUseInfo info, ActionT1<PCLUseInfo> callback) {
         List<PCLCardAlly> targets = EUIUtils.map(getTargetList(info), t -> EUIUtils.safeCast(t, PCLCardAlly.class));
-        getActions().withdrawAlly(targets).addCallback(cards ->
+        getActions().withdrawAlly(targets).setTriggerTimes(amount).addCallback(cards ->
         {
             info.setData(cards);
             callback.invoke(info);

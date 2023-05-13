@@ -440,6 +440,11 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
     }
 
     @Override
+    public boolean tryPassParent(PSkill<?> source, PCLUseInfo info) {
+        return checkCondition(info, true, source) && super.tryPassParent(source, info);
+    }
+
+    @Override
     public void use(PCLUseInfo info) {
         if (checkCondition(info, true, null) && childEffect != null) {
             childEffect.use(info);
@@ -474,8 +479,8 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
                 childEffect.use(info);
             }
             // When a delegate (e.g. on draw) is triggered from an and multicond, it should only execute the effect if the other conditions would pass
-            else if (parent instanceof PMultiCond && parent.childEffect != null) {
-                ((PMultiCond) parent).useCond(this, info, 0, (i) -> parent.childEffect.use(i), (i) -> {});
+            else if (parent instanceof PMultiCond) {
+                ((PMultiCond) parent).useDirectly(info);
             }
             // When a delegate is triggered from a branch, the resulting effect should be chosen based on the info gleaned from the branch
             else if (parent instanceof PBranchCond)

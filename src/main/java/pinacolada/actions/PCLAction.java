@@ -17,14 +17,12 @@ import java.util.ArrayList;
 
 // Copied and modified from STS-AnimatorMod
 public abstract class PCLAction<T> extends AbstractGameAction {
-    public static AbstractCard currentCard;
     protected final AbstractPlayer player;
     protected AbstractCard card;
     protected ArrayList<ActionT1<T>> callbacks = new ArrayList<>();
     protected String message;
     protected String name;
     protected int ticks;
-    public AbstractCard sourceCard;
     public PCLActions.ActionOrder originalOrder;
     public boolean canCancel;
     public boolean isRealtime;
@@ -35,7 +33,6 @@ public abstract class PCLAction<T> extends AbstractGameAction {
 
     public PCLAction(ActionType type, float duration) {
         this.player = AbstractDungeon.player;
-        this.sourceCard = currentCard;
         this.duration = this.startDuration = duration;
         this.actionType = type;
         this.canCancel = true;
@@ -90,7 +87,6 @@ public abstract class PCLAction<T> extends AbstractGameAction {
         name = other.name;
         message = other.message;
         originalOrder = other.originalOrder;
-        sourceCard = other.sourceCard;
         callbacks.addAll(other.callbacks);
     }
 
@@ -151,12 +147,6 @@ public abstract class PCLAction<T> extends AbstractGameAction {
 
     public PCLAction<T> setRealtime(boolean isRealtime) {
         this.isRealtime = isRealtime;
-
-        return this;
-    }
-
-    public PCLAction<T> setSourceCard(AbstractCard card) {
-        this.sourceCard = card;
 
         return this;
     }

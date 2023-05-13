@@ -20,7 +20,6 @@ public class SummonAllyAction extends PCLAction<PCLCard> {
     public boolean delayForTurn = true;
     public boolean showEffect = true;
     public boolean summonCardOnly = true;
-    public boolean triggerOnSwap = true;
 
     public SummonAllyAction(PCLCard card, PCLCardAlly slot) {
         super(ActionType.SPECIAL, Settings.FAST_MODE ? Settings.ACTION_DUR_XFAST : Settings.ACTION_DUR_FAST);
@@ -56,26 +55,22 @@ public class SummonAllyAction extends PCLAction<PCLCard> {
         PCLCard returnedCard = this.ally.card;
         // If ally is withdrawn, setting up the new card must come after the previous card is withdrawn
         if (returnedCard != null) {
-            PCLActions.top.withdrawAlly(ally).addCallback(() -> initializeAlly(true));
+            CombatManager.summons.withdraw(ally).addCallback(this::initializeAlly);
         }
         else {
-            initializeAlly(false);
+            initializeAlly();
         }
 
         CombatManager.onAllySummon(card, ally);
         complete(returnedCard);
     }
 
-    protected void initializeAlly(boolean canTrigger) {
+    protected void initializeAlly() {
         PCLActions.bottom.callback(() -> {
             this.ally.initializeForCard(card, retainPowers, delayForTurn);
 
             if (showEffect) {
                 PCLEffects.Queue.add(new SmokeEffect(ally.hb.cX, ally.hb.cY));
-            }
-
-            if (canTrigger && triggerOnSwap) {
-                ally.takeTurn(true);
             }
         });
     }

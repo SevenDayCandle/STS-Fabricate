@@ -3,6 +3,7 @@ package pinacolada.patches.card;
 import com.badlogic.gdx.math.MathUtils;
 import com.evacipated.cardcrawl.modthespire.lib.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
@@ -33,14 +34,11 @@ public class AbstractCardPatches {
         }
     }
 
-    @SpirePatch(clz = AbstractCard.class, method = "cardPlayable")
+    @SpirePatch(clz = AbstractCard.class, method = "canUse")
     public static class AbstractCard_CardPlayable {
-        @SpirePrefixPatch
-        public static SpireReturn<Boolean> method(AbstractCard __instance, AbstractMonster m) {
-            if (PCLCardTag.Unplayable.has(__instance)) {
-                return SpireReturn.Return(false);
-            }
-            return SpireReturn.Continue();
+        @SpirePostfixPatch
+        public static boolean method(boolean retVal, AbstractCard __instance, AbstractPlayer p, AbstractMonster m) {
+            return CombatManager.canPlayCard(__instance, p, m, retVal);
         }
     }
 

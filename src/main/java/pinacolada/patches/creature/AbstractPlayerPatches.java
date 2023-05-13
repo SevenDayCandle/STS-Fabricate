@@ -6,15 +6,18 @@ import com.evacipated.cardcrawl.modthespire.lib.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
+import com.megacrit.cardcrawl.core.EnergyManager;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.monsters.MonsterGroup;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUITooltip;
+import javassist.CannotCompileException;
 import javassist.CtBehavior;
+import javassist.expr.ExprEditor;
+import javassist.expr.MethodCall;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.modifiers.OverrideSkillModifier;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.PCLEnum;
@@ -85,30 +88,27 @@ public class AbstractPlayerPatches {
 
     @SpirePatch(clz = AbstractPlayer.class, method = "useCard")
     public static class AbstractPlayer_UseCard {
-        @SpireInsertPatch(locator = Locator.class)
-        public static SpireReturn<Void> insertPre(AbstractPlayer __instance, AbstractCard c, AbstractMonster m, int energyOnUse) {
-            // TODO make this into an instrument once you have a patch for EYBCard's useCard patch and you can ensure conflicts don't occur
-            // OverrideSkillModifier affects PCLCard skills directly so no need to invoke them below
-            final PCLCard pCard = EUIUtils.safeCast(c, PCLCard.class);
-            if (pCard != null) {
-                CombatManager.onUsingCard(pCard, __instance, m);
-                return SpireReturn.Return();
-            }
 
-            ArrayList<OverrideSkillModifier> wrappers = OverrideSkillModifier.getAll(c);
-            if (!wrappers.isEmpty()) {
-                CombatManager.onUsingCardPostActions(c, __instance, m);
-                return SpireReturn.Return();
-            }
-
-            return SpireReturn.Continue();
+        @SpireInstrumentPatch
+        public static ExprEditor instrument() {
+            return new ExprEditor() {
+                public void edit(MethodCall m) throws CannotCompileException {
+                    if (m.getClassName().equals(AbstractCard.class.getName()) && m.getMethodName().equals("use")) {
+                        m.replace("{ pinacolada.patches.creature.AbstractPlayerPatches.AbstractPlayer_UseCard.use($0, $1, $2); }");
+                    }
+                    else if (m.getClassName().equals(EnergyManager.class.getName()) && m.getMethodName().equals("use")) {
+                        m.replace("{ pinacolada.patches.creature.AbstractPlayerPatches.AbstractPlayer_UseCard.energy(c, this, $1); }");
+                    }
+                }
+            };
         }
 
-        private static class Locator extends SpireInsertLocator {
-            public int[] Locate(CtBehavior ctBehavior) throws Exception {
-                Matcher matcher = new Matcher.MethodCallMatcher(AbstractCard.class, "use");
-                return LineFinder.findInOrder(ctBehavior, matcher);
-            }
+        public static void use(AbstractCard c, AbstractPlayer p, AbstractMonster m) {
+            CombatManager.onUsingCard(c, p, m);
+        }
+
+        public static void energy(AbstractCard c, AbstractPlayer p, int amount) {
+            CombatManager.onTrySpendEnergy(c, p, amount);
         }
     }
 

@@ -97,7 +97,7 @@ public class PowerFormulaDisplay extends EUICardDraggable<AbstractCard> {
     }
 
     @Override
-    public void updateImpl(AbstractCard card, AbstractCreature target, boolean draggingCard, boolean shouldUpdateForCard, boolean shouldUpdateForTarget) {
+    public void updateImpl(AbstractCard card, AbstractCard originalCard, AbstractCreature target, AbstractCreature originalTarget, boolean draggingCard, boolean shouldUpdateForCard, boolean shouldUpdateForTarget) {
         PCLCard pCard = EUIUtils.safeCast(card, PCLCard.class);
         if (shouldUpdateForCard || shouldUpdateForTarget) {
             if (pCard != null) {

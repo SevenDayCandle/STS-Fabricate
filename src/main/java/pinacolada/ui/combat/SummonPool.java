@@ -12,19 +12,25 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT2;
 import extendedui.ui.EUIBase;
 import pinacolada.actions.PCLActions;
+import pinacolada.actions.creature.SummonAllyAction;
+import pinacolada.actions.creature.WithdrawAllyAction;
+import pinacolada.cards.base.PCLCard;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.skills.skills.DelayTiming;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 public class SummonPool extends EUIBase {
+    public static int BASE_TRIGGER = 2;
     public static int BASE_LIMIT = 3;
     public static float OFFSET = scale(120);
     public DamageMode damageMode = DamageMode.Half;
     public ArrayList<PCLCardAlly> summons = new ArrayList<>();
     public HashMap<AbstractCreature, AbstractCreature> assignedTargets = new HashMap<>();
+    public int triggerTimes = BASE_TRIGGER;
 
     public void add(int times) {
         float baseX = 0;
@@ -155,6 +161,7 @@ public class SummonPool extends EUIBase {
     public void initialize() {
         summons.clear();
         assignedTargets.clear();
+        triggerTimes = BASE_TRIGGER;
 
         if (AbstractDungeon.player != null) {
             for (int i = 0; i < BASE_LIMIT; i++) {
@@ -217,6 +224,21 @@ public class SummonPool extends EUIBase {
         for (PCLCardAlly ally : summons) {
             ally.render(sb);
         }
+    }
+
+    public SummonAllyAction summon(PCLCard card, PCLCardAlly target)
+    {
+        return PCLActions.bottom.summonAlly(card, target);
+    }
+
+    public WithdrawAllyAction withdraw(PCLCardAlly target)
+    {
+        return PCLActions.top.withdrawAlly(target).setTriggerTimes(triggerTimes);
+    }
+
+    public WithdrawAllyAction withdraw(Collection<PCLCardAlly> target)
+    {
+        return PCLActions.top.withdrawAlly(target).setTriggerTimes(triggerTimes);
     }
 
     @Override

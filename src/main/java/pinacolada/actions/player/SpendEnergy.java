@@ -25,7 +25,7 @@ public class SpendEnergy extends PCLConditionalAction<Integer, Integer> {
             energy = Math.min(energy, amount);
             if (checkCondition(energy)) {
                 int finalEnergy = CombatManager.onTrySpendEnergy(null, AbstractDungeon.player, energy);
-                player.loseEnergy(finalEnergy);
+                player.energy.use(finalEnergy);
                 complete(finalEnergy);
                 return;
             }

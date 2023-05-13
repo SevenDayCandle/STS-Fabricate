@@ -19,6 +19,7 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.providers.ClickableProvider;
+import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.ui.EUICardDraggable;
@@ -47,6 +48,10 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implement
 
     public static String createFullID(PCLResources<?, ?, ?, ?> resources, Class<? extends PCLPlayerMeter> type) {
         return resources.createID(type.getSimpleName());
+    }
+
+    public static boolean isSwapIntended(PCLCard incoming, PCLCard other) {
+        return incoming.type == PCLEnum.CardType.SUMMON && other.type == PCLEnum.CardType.SUMMON && !(other.uuid.equals(incoming.uuid));
     }
 
     public static String makeTitle(String category, String addendum) {
@@ -137,17 +142,15 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implement
         return super.isHovered() || infoIcon.hb.hovered;
     }
 
+    @Override
     public void renderImpl(SpriteBatch sb) {
         super.renderImpl(sb);
         infoIcon.renderImpl(sb);
     }
 
-    public void updateImpl(PCLCard card, AbstractCreature target, boolean draggingCard, boolean shouldUpdateForCard, boolean shouldUpdateForTarget) {
+    @Override
+    public void updateImpl(PCLCard card, PCLCard originalCard, AbstractCreature target, AbstractCreature originalTarget, boolean draggingCard, boolean shouldUpdateForCard, boolean shouldUpdateForTarget) {
         infoIcon.tryUpdate();
-    }
-
-    public boolean isPowerActive(PCLAffinity affinity) {
-        return false;
     }
 
     public float modifyBlock(float block, PCLCard source, PCLCard card, AbstractCreature target) {

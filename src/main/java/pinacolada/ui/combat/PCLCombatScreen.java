@@ -52,7 +52,9 @@ public class PCLCombatScreen extends EUIBase {
 
         boolean draggingCard = false;
         AbstractCreature target = ReflectionHacks.getPrivate(player, AbstractPlayer.class, "hoveredMonster");
+        AbstractCreature originalTarget = target;
         PCLCard hoveredCard = null;
+        PCLCard originalCard = hoveredCard;
         if (player.hoveredCard != null) {
             hoveredCard = EUIUtils.safeCast(player.hoveredCard, PCLCard.class);
             if (player.isDraggingCard || player.inSingleTargetMode) {
@@ -67,16 +69,18 @@ public class PCLCombatScreen extends EUIBase {
         if (player.hoveredCard == null || player.hoveredCard.type == PCLEnum.CardType.SUMMON) {
             for (PCLCardAlly summon : CombatManager.summons.summons) {
                 if (summon.isHovered()) {
+                    originalTarget = target;
+                    originalCard = hoveredCard;
                     hoveredCard = summon.card;
                     target = summon.target;
                 }
             }
         }
 
-        CombatManager.update(hoveredCard, target, draggingCard);
+        CombatManager.update(hoveredCard, originalCard, target, originalTarget, draggingCard);
 
         if (PGR.config.showFormulaDisplay.get()) {
-            formulaDisplay.update(hoveredCard, target, draggingCard);
+            formulaDisplay.update(hoveredCard, originalCard, target, originalTarget, draggingCard);
         }
         if (PCLHotkeys.toggleFormulaDisplay.isJustPressed()) {
             PGR.config.showFormulaDisplay.set(!PGR.config.showFormulaDisplay.get(), true);

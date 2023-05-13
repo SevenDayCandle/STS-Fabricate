@@ -7,5 +7,5 @@ import pinacolada.annotations.CombatSubscriber;
 
 @CombatSubscriber
 public interface OnTryUsingCardSubscriber extends PCLCombatSubscriber {
-    boolean onTryUsingCard(AbstractCard card, AbstractPlayer p, AbstractMonster m, boolean canUse);
+    boolean canUse(AbstractCard card, AbstractPlayer p, AbstractMonster m, boolean canUse);
 }

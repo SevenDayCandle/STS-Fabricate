@@ -167,7 +167,7 @@ public class PCLPlayerSystem extends EUIBase {
 
     @Override
     public void updateImpl() {
-        getActiveMeter().update(null, null, false);
+        getActiveMeter().update(null, null, null, null, false);
     }
 
     public void setLastCardPlayed(AbstractCard card) {
@@ -176,12 +176,12 @@ public class PCLPlayerSystem extends EUIBase {
 
     public boolean tryUpdate(PCLCard card, AbstractCreature target, boolean draggingCard) {
         if (this.isActive) {
-            this.update(card, target, draggingCard);
+            this.update(card, card, target, target, draggingCard);
         }
         return this.isActive;
     }
 
-    public void update(PCLCard card, AbstractCreature target, boolean draggingCard) {
-        getActiveMeter().update(card, target, draggingCard);
+    public void update(PCLCard hoveredCard, PCLCard originalCard, AbstractCreature target, AbstractCreature originalTarget, boolean draggingCard) {
+        getActiveMeter().update(hoveredCard, originalCard, target, originalTarget, draggingCard);
     }
 }

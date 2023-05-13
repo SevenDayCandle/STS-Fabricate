@@ -48,7 +48,7 @@ public class SkillModifier extends AbstractCardModifier {
         return skill.modifyDamage(CombatManager.playerSystem.generateInfo(card, AbstractDungeon.player, target), damage);
     }
 
-    // Generate infos manually because we cannot be able to attach the skill to the card if it is not an EditorCard
+    // Generate infos manually because we cannot attach the skill to the card if it is not an EditorCard
     public float modifyBlock(float block, AbstractCard card) {
         return skill.modifyBlock(CombatManager.playerSystem.generateInfo(card, AbstractDungeon.player, null), block);
     }

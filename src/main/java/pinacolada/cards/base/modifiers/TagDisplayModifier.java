@@ -27,11 +27,11 @@ public class TagDisplayModifier extends AbstractCardModifier {
             String text = rawDescription;
             String preString = GameUtilities.getTagTipPreString(card);
             if (!preString.isEmpty()) {
-                text = preString + EUIUtils.DOUBLE_SPLIT_LINE + text;
+                text = preString + EUIUtils.LEGACY_DOUBLE_SPLIT_LINE + text;
             }
             String postString = GameUtilities.getTagTipPostString(card);
             if (!postString.isEmpty()) {
-                text = text + EUIUtils.DOUBLE_SPLIT_LINE + postString;
+                text = text + EUIUtils.LEGACY_DOUBLE_SPLIT_LINE + postString;
             }
             return text;
         }

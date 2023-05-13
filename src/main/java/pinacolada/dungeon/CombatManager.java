@@ -6,13 +6,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.actions.GameActionManager;
 import com.megacrit.cardcrawl.actions.utility.UnlimboAction;
-import com.megacrit.cardcrawl.actions.utility.UseCardAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
@@ -32,7 +30,6 @@ import extendedui.interfaces.delegates.FuncT2;
 import extendedui.patches.game.CardGlowBorderPatches;
 import extendedui.ui.EUIBase;
 import extendedui.ui.GridCardSelectScreenHelper;
-import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.special.HasteAction;
 import pinacolada.annotations.CombatSubscriber;
@@ -226,6 +223,18 @@ public class CombatManager {
 
     public static boolean canApplyPower(AbstractCreature source, AbstractCreature target, AbstractPower powerToApply, AbstractGameAction action) {
         return target == null || subscriberCanDeny(OnTryApplyPowerSubscriber.class, s -> s.tryApplyPower(powerToApply, target, source, action));
+    }
+
+    public static boolean canPlayCard(AbstractCard card, AbstractPlayer p, AbstractMonster m, boolean canPlay) {
+        if (GameUtilities.isUnplayableThisTurn(card)) {
+            return false;
+        }
+
+        for (OnTryUsingCardSubscriber s : getSubscriberGroup(OnTryUsingCardSubscriber.class)) {
+            canPlay = s.canUse(card, p, m, canPlay);
+        }
+
+        return canPlay;
     }
 
     public static boolean canReducePower(AbstractCreature source, AbstractCreature target, String powerID, AbstractGameAction action) {
@@ -552,10 +561,6 @@ public class CombatManager {
         });
     }
 
-    public static void onCardPlayed(PCLCard card, PCLUseInfo info) {
-        playerSystem.onCardPlayed(card, info, false);
-    }
-
     public static void onCardPurged(AbstractCard card) {
         if (!PURGED_CARDS.contains(card)) {
             PURGED_CARDS.group.add(card);
@@ -730,6 +735,7 @@ public class CombatManager {
     }
 
     public static void onPlayCardPostActions(AbstractCard card, AbstractMonster m) {
+        CombatManager.playerSystem.setLastCardPlayed(card);
         if (PCLCardTag.Recast.has(card)) {
             PCLCardTag.Recast.tryProgress(card);
             DelayUse.turnStartLast(1, playerSystem.generateInfo(card, AbstractDungeon.player, m), (i) -> PCLActions.bottom.playCopy(card, EUIUtils.safeCast(i.target, AbstractMonster.class))).start();
@@ -800,65 +806,34 @@ public class CombatManager {
         return subscriberInout(OnTryUseXCostSubscriber.class, original, (s, d) -> s.onTryUseXCost(d, card));
     }
 
-    public static boolean onTryUsingCard(AbstractCard card, AbstractPlayer p, AbstractMonster m, boolean canPlay) {
-        if (unplayableCards.contains(card.uuid)) {
-            return false;
-        }
-
-        for (OnTryUsingCardSubscriber s : getSubscriberGroup(OnTryUsingCardSubscriber.class)) {
-            canPlay &= s.onTryUsingCard(card, p, m, canPlay);
-        }
-
-        return canPlay;
-    }
-
-    public static void onUsingCard(PCLCard card, AbstractPlayer p, AbstractMonster m) {
+    public static void onUsingCard(AbstractCard card, AbstractPlayer p, AbstractMonster m) {
         if (card == null) {
             throw new RuntimeException("Card played is null");
         }
 
-        card.unfadeOut();
-        card.lighten(true);
+        PCLCard pclCard = EUIUtils.safeCast(card, PCLCard.class);
+        if (card instanceof PCLCard) {
+            pclCard.unfadeOut();
+            pclCard.lighten(true);
 
-        // The target may have been overwritten with a null value
-        card.calculateCardDamage(m);
-        final PCLUseInfo info = playerSystem.generateInfo(card, p, m);
+            // The target may have been overwritten with a null value
+            pclCard.calculateCardDamage(m);
+            final PCLUseInfo info = playerSystem.generateInfo(pclCard, p, m);
 
-        PCLAction.currentCard = card;
-        if (card.type == PCLEnum.CardType.SUMMON) {
-            PCLActions.bottom.summonAlly(card, EUIUtils.safeCast(info.target, PCLCardAlly.class));
+            if (pclCard.type == PCLEnum.CardType.SUMMON) {
+                summons.summon(pclCard, EUIUtils.safeCast(info.target, PCLCardAlly.class));
+            }
+            else {
+                pclCard.onUse(info);
+            }
+
+            playerSystem.onCardPlayed(pclCard, info, false);
         }
         else {
-            card.onUse(info);
-        }
-        PCLAction.currentCard = null;
-
-        onCardPlayed(card, info);
-        onUsingCardPostActions(card, p, m);
-    }
-
-    public static void onUsingCardPostActions(AbstractCard card, AbstractPlayer p, AbstractMonster m) {
-        PCLActions.bottom.add(new UseCardAction(card, m));
-        if (!card.dontTriggerOnUseCard) {
-            p.hand.triggerOnOtherCardPlayed(card);
+            card.use(p, m);
         }
 
-        p.hand.removeCard(card);
-        p.cardInUse = card;
-        card.target_x = (float) (Settings.WIDTH / 2);
-        card.target_y = (float) (Settings.HEIGHT / 2);
-
-        int spendEnergy = CombatManager.onTrySpendEnergy(card, p, card.costForTurn);
-        if (spendEnergy > 0 && !card.freeToPlay() && !card.isInAutoplay) {
-            p.energy.use(spendEnergy);
-        }
-
-        if (!p.hand.canUseAnyCard() && !p.endTurnQueued) {
-            AbstractDungeon.overlayMenu.endTurnButton.isGlowing = true;
-        }
-
-        CombatManager.playerSystem.setLastCardPlayed(card);
-        AbstractDungeon.player.hand.glowCheck();
+        onPlayCardPostActions(card, m);
     }
 
     public static void onVictory() {
@@ -1052,10 +1027,10 @@ public class CombatManager {
         getSubscriberGroup(subtype).remove(subscriber);
     }
 
-    public static void update(PCLCard hoveredCard, AbstractCreature target, boolean draggingCard) {
+    public static void update(PCLCard hoveredCard, PCLCard originalCard, AbstractCreature target, AbstractCreature originalTarget, boolean draggingCard) {
         summons.update();
         controlPile.update();
-        playerSystem.update(hoveredCard, target, draggingCard);
+        playerSystem.update(hoveredCard, originalCard, target, originalTarget, draggingCard);
         if (currentPhase != AbstractDungeon.actionManager.phase) {
             currentPhase = AbstractDungeon.actionManager.phase;
             subscriberDo(OnPhaseChangedSubscriber.class, s -> s.onPhaseChanged(currentPhase));

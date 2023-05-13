@@ -5,7 +5,6 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
-import extendedui.interfaces.delegates.ActionT1;
 import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.utilities.RotatingList;
 import pinacolada.annotations.VisibleSkill;
@@ -20,15 +19,15 @@ import pinacolada.skills.PCond;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.skills.fields.PField_Or;
+import pinacolada.skills.fields.PField_Not;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 @VisibleSkill
-public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>> {
-    public static final PSkillData<PField_Or> DATA = register(PMultiCond.class, PField_Or.class, 0, 0)
+public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>> {
+    public static final PSkillData<PField_Not> DATA = register(PMultiCond.class, PField_Not.class, 0, 0)
             .selfTarget();
     protected ArrayList<PCond<?>> effects = new ArrayList<>();
 
@@ -51,12 +50,8 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         setParentsForChildren();
     }
 
-    public static PMultiCond and(PCond<?>... effects) {
-        return new PMultiCond(effects);
-    }
-
     public static PMultiCond or(PCond<?>... effects) {
-        return (PMultiCond) new PMultiCond(effects).edit(r -> r.setOr(true));
+        return new PMultiCond(effects);
     }
 
     public PMultiCond addEffect(PCond<?> effect) {
@@ -86,7 +81,7 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return effects.isEmpty() || ((fields.or) ? EUIUtils.any(effects, c -> c == triggerSource || c.checkCondition(info, isUsing, triggerSource)) : EUIUtils.all(effects, c -> c == triggerSource || c.checkCondition(info, isUsing, triggerSource)));
+        return effects.isEmpty() || (fields.not ^ EUIUtils.any(effects, c -> c == triggerSource || c.checkCondition(info, isUsing, triggerSource)));
     }
 
     @Override
@@ -125,19 +120,10 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         return this;
     }
 
-    @Override
-    public void use(PCLUseInfo info) {
-        if (checkCondition(info, true, null) && childEffect != null) {
-            useCond(this, info, 0, (i) -> childEffect.use(info), (i) -> {
-            });
-        }
-    }
-
-    @Override
-    public void use(PCLUseInfo info, boolean isUsing) {
-        if (checkCondition(info, true, null) && childEffect != null) {
-            useCond(this, info, 0, (i) -> childEffect.use(info), (i) -> {
-            });
+    public void useDirectly(PCLUseInfo info) {
+        if (this.childEffect != null)
+        {
+            this.childEffect.use(info);
         }
     }
 
@@ -184,9 +170,7 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
 
     @Override
     public String getSubText() {
-        return EUIUtils.any(effects, effect -> effect instanceof PActiveCond || effect instanceof PFacetCond) ?
-                fields.or ? PCLCoreStrings.joinWithOr(getEffectTextsWithoutPeriod(effects, true)) : PCLCoreStrings.joinWithAnd(getEffectTextsWithoutPeriod(effects, true)) :
-                fields.or ? PCLCoreStrings.joinWithOr(getEffectTextsWithoutPeriod(effects, true)) : PSkill.joinEffectTexts(effects, ". ", true);
+        return fields.not ? TEXT.cond_not(PCLCoreStrings.joinWithOr(getEffectTextsWithoutPeriod(effects, true))) : PCLCoreStrings.joinWithOr(getEffectTextsWithoutPeriod(effects, true));
     }
 
     @Override
@@ -389,35 +373,4 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         }
         return this;
     }
-
-    public void useCond(PSkill<?> source, PCLUseInfo info, int index, ActionT1<PCLUseInfo> successCallback, ActionT1 failCallback) {
-        PCond<?> cond = getSubEffect(index);
-        if (cond instanceof PActiveCond && cond != source) {
-            ((PActiveCond<?>) cond).useImpl(info,
-                    (i) -> {
-                        if (fields.or) {
-                            successCallback.invoke(i);
-                        }
-                        else {
-                            useCond(source, info, index + 1, successCallback, failCallback);
-                        }
-                    },
-                    (i) -> {
-                        if (fields.or) {
-                            useCond(source, info, index + 1, successCallback, failCallback);
-                        }
-                        else {
-                            failCallback.invoke(i);
-                        }
-                    });
-        }
-        else if (index < effects.size() - 1) {
-            useCond(source, info, index + 1, successCallback, failCallback);
-        }
-        else {
-            successCallback.invoke(info);
-        }
-    }
-
-
 }

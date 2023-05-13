@@ -9,8 +9,6 @@ import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.FleetingFie
 import com.evacipated.cardcrawl.mod.stslib.fields.cards.AbstractCard.GraveField;
 import com.evacipated.cardcrawl.modthespire.lib.SpireField;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.relics.BlueCandle;
-import com.megacrit.cardcrawl.relics.MedicalKit;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.markers.TooltipProvider;
@@ -20,7 +18,6 @@ import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.fields.PCLCardTagInfo;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
-import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
 import java.util.ArrayList;
@@ -292,10 +289,6 @@ public enum PCLCardTag implements TooltipProvider {
                 return card.isInnate;
             case Retain:
                 return card.retain || card.selfRetain;
-            // Accounting for hardcoded base game relic checks
-            case Unplayable:
-                return (UnplayableField.value.get(card) && !((GameUtilities.hasRelicEffect(BlueCandle.ID) && card.type == AbstractCard.CardType.CURSE) ||
-                        (GameUtilities.hasRelicEffect(MedicalKit.ID) && card.type == AbstractCard.CardType.STATUS))) || GameUtilities.isUnplayableThisTurn(card);
         }
         SpireField<Boolean> field = getFieldBoolean();
         if (field != null) {

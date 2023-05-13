@@ -1217,14 +1217,13 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     @Override
     public boolean cardPlayable(AbstractMonster m) {
         cantUseMessage = PCLCard.UNPLAYABLE_MESSAGE;
-        return !GameUtilities.isUnplayableThisTurn(this)
-                && isEffectPlayable(m)
-                && super.cardPlayable(m);
+        return isEffectPlayable(m) && super.cardPlayable(m);
     }
 
     @Override
     public boolean canUse(AbstractPlayer p, AbstractMonster m) {
-        return cardPlayable(m) && this.hasEnoughEnergy();
+        boolean init = cardPlayable(m) && this.hasEnoughEnergy();
+        return CombatManager.canPlayCard(this, p, m, init);
     }
 
     @Override

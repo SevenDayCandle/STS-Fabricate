@@ -48,7 +48,7 @@ public class PMove_ExhaustAlly extends PMove<PField_Empty> {
     @Override
     public void use(PCLUseInfo info) {
         List<PCLCardAlly> targets = EUIUtils.map(getTargetList(info), t -> EUIUtils.safeCast(t, PCLCardAlly.class));
-        getActions().withdrawAlly(targets).setDestination(AbstractDungeon.player.exhaustPile).setOptions(true, false).addCallback(cards ->
+        getActions().withdrawAlly(targets).setDestination(AbstractDungeon.player.exhaustPile).setTriggerTimes(0).showEffect(true).addCallback(cards ->
         {
             if (this.childEffect != null) {
                 info.setData(cards);

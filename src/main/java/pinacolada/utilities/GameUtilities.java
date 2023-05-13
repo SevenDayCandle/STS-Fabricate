@@ -1657,7 +1657,7 @@ public class GameUtilities {
     }
 
     public static boolean isUnplayableThisTurn(AbstractCard card) {
-        return CombatManager.unplayableCards().contains(card.uuid);
+        return PCLCardTag.Unplayable.has(card) || CombatManager.unplayableCards().contains(card.uuid);
     }
 
     public static boolean isValidOrb(AbstractOrb orb) {
