@@ -47,7 +47,7 @@ public class PCLCustomEffectRootNode extends PCLCustomEffectNode {
         if (effects.size() > 0)
         {
             replaceSkill(effects.get(0));
-            editor.updateRootEffect();
+            editor.fullRebuild();
             editor.startEdit(editor.root);
         }
     }

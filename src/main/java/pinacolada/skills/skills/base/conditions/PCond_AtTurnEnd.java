@@ -37,10 +37,6 @@ public class PCond_AtTurnEnd extends PDelegateCond<PField_Empty> implements OnEn
     }
 
     @Override
-    public void use(PCLUseInfo info, int index) {
-    }
-
-    @Override
     public String getSampleText(PSkill<?> callingSkill) {
         return callingSkill instanceof PTrigger_When ? TEXT.cond_atEndOfTurn() : TEXT.cond_inXAtTurnEnd(TEXT.cpile_hand);
     }

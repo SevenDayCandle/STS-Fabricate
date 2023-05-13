@@ -85,7 +85,7 @@ public class AbstractPlayerPatches {
 
     @SpirePatch(clz = AbstractPlayer.class, method = "useCard")
     public static class AbstractPlayer_UseCard {
-        @SpireInsertPatch(rloc = 7)
+        @SpireInsertPatch(locator = Locator.class)
         public static SpireReturn<Void> insertPre(AbstractPlayer __instance, AbstractCard c, AbstractMonster m, int energyOnUse) {
             // TODO make this into an instrument once you have a patch for EYBCard's useCard patch and you can ensure conflicts don't occur
             // OverrideSkillModifier affects PCLCard skills directly so no need to invoke them below
@@ -106,7 +106,7 @@ public class AbstractPlayerPatches {
 
         private static class Locator extends SpireInsertLocator {
             public int[] Locate(CtBehavior ctBehavior) throws Exception {
-                Matcher matcher = new Matcher.MethodCallMatcher(AbstractPlayer_UseCard.class, "Use");
+                Matcher matcher = new Matcher.MethodCallMatcher(AbstractCard.class, "use");
                 return LineFinder.findInOrder(ctBehavior, matcher);
             }
         }

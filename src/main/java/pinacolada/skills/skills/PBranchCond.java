@@ -286,12 +286,6 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
         }
     }
 
-    // When a delegate (e.g. on draw) is triggered from an and multicond, it should only execute the effect if the other conditions would pass
-    @Override
-    public boolean tryPassParent(PSkill<?> source, PCLUseInfo info) {
-        return checkCondition(info, true, source);
-    }
-
     @Override
     public void unsubscribeChildren() {
         for (PSkill<?> effect : effects) {

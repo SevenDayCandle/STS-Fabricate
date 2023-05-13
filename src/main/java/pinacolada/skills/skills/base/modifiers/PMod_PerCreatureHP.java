@@ -1,6 +1,5 @@
 package pinacolada.skills.skills.base.modifiers;
 
-import extendedui.EUIRM;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -42,9 +41,6 @@ public class PMod_PerCreatureHP extends PMod_Per<PField_Not> {
     @Override
     public String getSubText() {
         String baseString = getSubSampleText();
-        if (amount > 1) {
-            baseString = EUIRM.strings.numNoun(getAmountRawString(), baseString);
-        }
         switch (target) {
             case All:
             case Any:

@@ -32,10 +32,6 @@ public abstract class PDelegateCardCond extends PDelegateCond<PField_CardCategor
     public void use(PCLUseInfo info) {
     }
 
-    @Override
-    public void use(PCLUseInfo info, int index) {
-    }
-
     // This should not activate the child effect when played normally
 
     public String getDelegatePastText() {

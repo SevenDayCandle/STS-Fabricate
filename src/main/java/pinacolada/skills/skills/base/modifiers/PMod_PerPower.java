@@ -1,7 +1,6 @@
 package pinacolada.skills.skills.base.modifiers;
 
 import com.megacrit.cardcrawl.powers.AbstractPower;
-import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -49,9 +48,6 @@ public class PMod_PerPower extends PMod_Per<PField_Power> {
     @Override
     public String getSubText() {
         String baseString = fields.getPowerSubjectString();
-        if (amount > 1) {
-            baseString = EUIRM.strings.numNoun(getAmountRawString(), baseString);
-        }
         switch (target) {
             case All:
             case Any:

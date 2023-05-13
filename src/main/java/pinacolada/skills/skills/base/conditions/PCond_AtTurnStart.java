@@ -37,10 +37,6 @@ public class PCond_AtTurnStart extends PDelegateCond<PField_Empty> implements On
     }
 
     @Override
-    public void use(PCLUseInfo info, int index) {
-    }
-
-    @Override
     public String getSampleText(PSkill<?> callingSkill) {
         return callingSkill instanceof PTrigger_When ? TEXT.cond_atStartOfTurn() : TEXT.cond_inXAtTurnStart(TEXT.cpile_hand);
     }

@@ -21,6 +21,7 @@ public class PCLCustomEffectProxyNode extends PCLCustomEffectNode {
         this.deleteButton.setActive(false);
         setShaderMode(EUIRenderHelpers.ShaderMode.Normal);
         setOnClick(this::startEdit);
+        this.setTargetColor(FADE_COLOR);
     }
 
     @Override

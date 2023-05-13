@@ -60,6 +60,14 @@ public class PCLCustomEffectMultiNode extends PCLCustomEffectNode {
         }
     }
 
+    @Override
+    public void refreshAll() {
+        super.refresh();
+        for (PCLCustomEffectNode subnode : subnodes) {
+            subnode.refreshAll();
+        }
+    }
+
     public void addSubnode(PCLCustomEffectNode node)
     {
         subnodes.add(node);

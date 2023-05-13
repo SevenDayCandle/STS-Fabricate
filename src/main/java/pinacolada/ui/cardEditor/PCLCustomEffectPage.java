@@ -54,7 +54,7 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
 
     protected PPrimary<?> deconstructEffect() {
         PSkill<?> sourceEffect = getSourceEffect();
-        root = rootEffect != null ? PCLCustomEffectNode.createTree(this, rootEffect, new RelativeHitbox(hb, SIZE_X, SIZE_Y, scale(350), scale(-1200))) : null;
+        root = sourceEffect != null ? PCLCustomEffectNode.createTree(this, sourceEffect, new RelativeHitbox(hb, SIZE_X, SIZE_Y, scale(350), scale(-1200))) : null;
         // Ensure that root is a PPrimary, so that we do not have to put in a separate button for adding primaries and so that the user can just click on the root node to choose between primaries
         PPrimary<?> fEffect = null;
         if (root == null || !(root.skill instanceof PPrimary)) {

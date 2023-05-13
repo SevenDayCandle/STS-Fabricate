@@ -358,7 +358,11 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         }
 
         loadCardsForData(data);
-        loadCustomCards(player);
+        if (isActuallyStartingRun)
+        {
+            loadCustomCards(player);
+        }
+
         banCards(data);
         data.updateRelicsForDungeon();
         if (!panelAdded) {

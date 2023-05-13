@@ -789,7 +789,7 @@ public class CombatManager {
 
     public static int onTrySpendEnergy(AbstractCard card, AbstractPlayer p, int cost) {
         // Hardcoded base game logic
-        if (p.hasPower(CorruptionPower.POWER_ID) && card.type != AbstractCard.CardType.SKILL) {
+        if (p.hasPower(CorruptionPower.POWER_ID) && card.type == AbstractCard.CardType.SKILL) {
             cost = 0;
         }
 
