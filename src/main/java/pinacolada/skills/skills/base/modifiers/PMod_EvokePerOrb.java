@@ -50,12 +50,6 @@ public class PMod_EvokePerOrb extends PActiveMod<PField_Orb> {
         }
     }
 
-    public void use(PCLUseInfo info, int index) {
-        if (childEffect != null) {
-            useImpl(info, () -> childEffect.use(info, index));
-        }
-    }
-
     public void use(PCLUseInfo info, boolean isUsing) {
         if (isUsing && childEffect != null) {
             useImpl(info, () -> childEffect.use(info));

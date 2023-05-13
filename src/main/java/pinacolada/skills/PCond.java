@@ -180,10 +180,6 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
         return new PCond_HPPercent(target, amount);
     }
 
-    public static PMultiCond ifElse(PSkill<?> ef1, PSkill<?> ef2, PCond<?>... conds) {
-        return (PMultiCond) new PMultiCond().setEffects(conds).setChild(ef1, ef2).setAmount(1);
-    }
-
     public static PCond_IsAttacking isAttacking(PCLCardTarget target) {
         return new PCond_IsAttacking(target);
     }
@@ -447,13 +443,6 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
     public void use(PCLUseInfo info) {
         if (checkCondition(info, true, null) && childEffect != null) {
             childEffect.use(info);
-        }
-    }
-
-    @Override
-    public void use(PCLUseInfo info, int index) {
-        if (checkCondition(info, true, null) && childEffect != null) {
-            childEffect.use(info, index);
         }
     }
 

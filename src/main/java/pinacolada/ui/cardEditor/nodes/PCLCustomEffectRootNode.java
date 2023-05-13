@@ -46,7 +46,7 @@ public class PCLCustomEffectRootNode extends PCLCustomEffectNode {
         ArrayList<? extends PPrimary> effects = EUIUtils.mapAsNonnull(getEffects(), s -> EUIUtils.safeCast(s, PPrimary.class));
         if (effects.size() > 0)
         {
-            this.editor.rootEffect = effects.get(0);
+            replaceSkill(effects.get(0));
             editor.updateRootEffect();
             editor.startEdit(editor.root);
         }

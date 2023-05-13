@@ -436,16 +436,6 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
     }
 
     @Override
-    public void use(PCLUseInfo info, int index) {
-        getActions().callback(() -> {
-            if (this.childEffect != null) {
-                updateChildAmount(info);
-                this.childEffect.use(info, index);
-            }
-        });
-    }
-
-    @Override
     public void use(PCLUseInfo info, boolean isUsing) {
         getActions().callback(() -> {
             if (this.childEffect != null) {

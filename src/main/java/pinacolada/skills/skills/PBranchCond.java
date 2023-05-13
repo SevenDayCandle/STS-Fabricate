@@ -50,12 +50,8 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
         return (PBranchCond) new PBranchCond().setEffects(effs).setChild(cond);
     }
 
-    public static PBranchCond draw(int amount, PSkill<?>... effs) {
+    public static PBranchCond discard(int amount, PSkill<?>... effs) {
         return (PBranchCond) new PBranchCond().setEffects(effs).setChild(PCond.discard(amount));
-    }
-
-    public static PBranchCond ifElse(PCond<?> cond, PSkill<?> ef1, PSkill<?> ef2) {
-        return (PBranchCond) new PBranchCond().setEffects(ef1, ef2).setChild(cond);
     }
 
     @Override
@@ -71,7 +67,7 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
         if (this.childEffect != null) {
             return getEffectTexts(addPeriod);
         }
-        return "";
+        return getSubText();
     }
 
     @Override
@@ -103,9 +99,9 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
     protected String getEffectTexts(boolean addPeriod) {
         switch (effects.size()) {
             case 0:
-                return "";
+                return getSubText();
             case 1:
-                return this.effects.get(0).getText(addPeriod);
+                return super.getText(addPeriod);
             case 2:
                 if (childEffect instanceof PCond && this.childEffect.getQualifierRange() < this.effects.size()) {
                     return getCapitalSubText(addPeriod) + ": " + this.effects.get(0).getText(addPeriod) + " " +
@@ -118,6 +114,12 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
                 }
                 return getSubText() + ": | " + EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, effectTexts);
         }
+    }
+
+    public PBranchCond addEffect(PCond<?> effect) {
+        this.effects.add(effect);
+        setParentsForChildren();
+        return this;
     }
 
     public PSkill<?> getSubEffect(int index) {

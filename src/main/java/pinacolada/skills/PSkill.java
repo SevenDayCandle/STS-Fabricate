@@ -1530,10 +1530,6 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         }
     }
 
-    public void use(PCLUseInfo info, int index) {
-        use(info);
-    }
-
     public void use(PCLUseInfo info, boolean isUsing) {
         use(info);
     }

@@ -52,12 +52,6 @@ public class PCustomCond extends PCond<PField_CardCategory> {
     }
 
     @Override
-    public void use(PCLUseInfo info, int index) {
-        useImpl(info);
-        super.use(info, index);
-    }
-
-    @Override
     public void use(PCLUseInfo info, boolean isUsing) {
         useImpl(info);
         super.use(info, isUsing);

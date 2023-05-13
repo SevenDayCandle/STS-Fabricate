@@ -32,7 +32,7 @@ public class PCLCustomEffectMultiCondNode extends PCLCustomEffectMultiNode {
         if (sc != null) {
             this.child = getNodeForSkill(editor, sc, new RelativeHitbox(hb, SIZE_X, SIZE_Y, getOffsetX(), getOffsetY()));
         }
-        else
+        if (this.child == null || this.child instanceof PCLCustomEffectRootNode)
         {
             this.child = new PCLCustomEffectProxyNode(editor, this, new RelativeHitbox(hb, SIZE_X, SIZE_Y, getOffsetX(), getOffsetY()));
         }

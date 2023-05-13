@@ -68,16 +68,6 @@ public class PMod_IncreaseOnUse extends PPassiveMod<PField_Empty> {
     }
 
     @Override
-    public void use(PCLUseInfo info, int index) {
-        if (this.childEffect != null) {
-            this.childEffect.use(info, index);
-            getActions().callback(() -> {
-                this.childEffect.addAmountForCombat(amount);
-            });
-        }
-    }
-
-    @Override
     public String getSampleText(PSkill<?> callingSkill) {
         return TEXT.act_increaseBy(TEXT.subjects_x, TEXT.subjects_x);
     }

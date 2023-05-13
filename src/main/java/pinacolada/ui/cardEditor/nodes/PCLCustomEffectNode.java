@@ -55,8 +55,11 @@ public class PCLCustomEffectNode extends EUIButton {
             initializeDefaultSkill();
         }
 
-        this.text = StringUtils.capitalize(this.skill.getSampleText(null));
-        this.fontScale = 0.5f;
+        if (this.skill != null)
+        {
+            this.text = StringUtils.capitalize(this.skill.getSampleText(null));
+            this.fontScale = 0.5f;
+        }
         setSmartText(true, true);
         setOnClick(this::startEdit);
 
@@ -394,7 +397,7 @@ public class PCLCustomEffectNode extends EUIButton {
                 case Cond:
                     return PGR.core.strings.cedit_condition;
                 case Multicond:
-                    return PGR.core.strings.cedit_condition;
+                    return PGR.core.strings.cedit_orCondition;
                 case Branchcond:
                     return PGR.core.strings.cedit_condition;
                 case Mod:

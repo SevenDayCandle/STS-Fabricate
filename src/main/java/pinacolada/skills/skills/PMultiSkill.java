@@ -361,18 +361,6 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     }
 
     @Override
-    public void use(PCLUseInfo info, int index) {
-        if (amount > 0) {
-            chooseEffect(info);
-        }
-        else {
-            if (index < effects.size() && index >= 0) {
-                effects.get(index).use(info, index);
-            }
-        }
-    }
-
-    @Override
     public void use(PCLUseInfo info, boolean isUsing) {
         use(info);
     }

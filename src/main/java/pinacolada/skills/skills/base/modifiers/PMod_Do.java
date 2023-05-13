@@ -115,18 +115,6 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory> {
                 });
     }
 
-    @Override
-    public void use(PCLUseInfo info, int index) {
-        getActions().add(createPileAction(info))
-                .addCallback(cards -> {
-                    if (this.childEffect != null) {
-                        info.setData(cards);
-                        updateChildAmount(info);
-                        this.childEffect.use(info, index);
-                    }
-                });
-    }
-
     public String getMoveString(boolean addPeriod) {
         String cardString = isForced() ? fields.getFullCardString() : fields.getShortCardString();
         return !fields.groupTypes.isEmpty() ?

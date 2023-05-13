@@ -8,7 +8,6 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.utilities.RotatingList;
-import org.apache.commons.lang3.StringUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -29,7 +28,7 @@ import java.util.List;
 
 @VisibleSkill
 public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>> {
-    public static final PSkillData<PField_Or> DATA = register(PMultiCond.class, PField_Or.class, 0, DEFAULT_MAX)
+    public static final PSkillData<PField_Or> DATA = register(PMultiCond.class, PField_Or.class, 0, 0)
             .selfTarget();
     protected ArrayList<PCond<?>> effects = new ArrayList<>();
 
@@ -92,10 +91,6 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
 
     @Override
     public String getText(boolean addPeriod) {
-        if (amount != 0) {
-            return getCapitalSubText(addPeriod) + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : ": ") + childEffect.getText(0, true)) + " " +
-                    StringUtils.capitalize(TEXT.cond_otherwise(childEffect.getText(1, addPeriod))) : "");
-        }
         return effects.isEmpty() ? (childEffect != null ? childEffect.getText(addPeriod) : "")
                 : getCapitalSubText(addPeriod) + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : ": ") + childEffect.getText(addPeriod)) : PCLCoreStrings.period(addPeriod));
     }
@@ -132,45 +127,17 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
 
     @Override
     public void use(PCLUseInfo info) {
-        if (amount != 0 && childEffect != null) {
-            if (checkCondition(info, true, null)) {
-                useCond(this, info, 0, (i) -> childEffect.use(info, 0), (i) -> childEffect.use(info, 1));
-            }
-            else {
-                childEffect.use(info, 1);
-            }
-        }
-        else {
-            if (checkCondition(info, true, null) && childEffect != null) {
-                useCond(this, info, 0, (i) -> childEffect.use(info), (i) -> {
-                });
-            }
-        }
-    }
-
-    @Override
-    public void use(PCLUseInfo info, int index) {
         if (checkCondition(info, true, null) && childEffect != null) {
-            useCond(this, info, 0, (i) -> childEffect.use(info, index), (i) -> {
+            useCond(this, info, 0, (i) -> childEffect.use(info), (i) -> {
             });
         }
     }
 
     @Override
     public void use(PCLUseInfo info, boolean isUsing) {
-        if (amount != 0 && childEffect != null) {
-            if (checkCondition(info, isUsing, null)) {
-                useCond(this, info, 0, (i) -> childEffect.use(info, 0), (i) -> childEffect.use(info, 1));
-            }
-            else {
-                childEffect.use(info, 1);
-            }
-        }
-        else {
-            if (checkCondition(info, true, null) && childEffect != null) {
-                useCond(this, info, 0, (i) -> childEffect.use(info), (i) -> {
-                });
-            }
+        if (checkCondition(info, true, null) && childEffect != null) {
+            useCond(this, info, 0, (i) -> childEffect.use(info), (i) -> {
+            });
         }
     }
 

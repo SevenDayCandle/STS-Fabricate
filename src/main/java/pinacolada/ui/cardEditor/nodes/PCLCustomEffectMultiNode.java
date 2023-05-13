@@ -6,10 +6,7 @@ import com.megacrit.cardcrawl.helpers.ImageMaster;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.OriginRelativeHitbox;
 import pinacolada.interfaces.markers.PMultiBase;
-import pinacolada.skills.PCond;
 import pinacolada.skills.PSkill;
-import pinacolada.skills.skills.PMultiCond;
-import pinacolada.skills.skills.PMultiSkill;
 import pinacolada.ui.cardEditor.PCLCustomEffectPage;
 import pinacolada.utilities.PCLRenderHelpers;
 
@@ -72,13 +69,9 @@ public class PCLCustomEffectMultiNode extends PCLCustomEffectNode {
 
     public void addEffect(PSkill<?> effect)
     {
-        if (skill instanceof PMultiSkill)
+        if (skill instanceof PMultiBase<?>)
         {
-            ((PMultiSkill) skill).addEffect(effect);
-        }
-        else if (skill instanceof PMultiCond && effect instanceof PCond)
-        {
-            ((PMultiCond) skill).addEffect((PCond<?>) effect);
+            ((PMultiBase<?>) skill).tryAddEffect(effect);
         }
     }
 

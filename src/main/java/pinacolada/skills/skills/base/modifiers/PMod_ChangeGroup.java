@@ -55,12 +55,7 @@ public abstract class PMod_ChangeGroup extends PActiveMod<PField_CardGeneric> {
         }
     }
 
-    public void use(PCLUseInfo info, int index) {
-        if (childEffect != null) {
-            useImpl(info, () -> childEffect.use(info, index));
-        }
-    }
-
+    @Override
     public void use(PCLUseInfo info, boolean isUsing) {
         if (isUsing && childEffect != null) {
             useImpl(info, () -> childEffect.use(info));
