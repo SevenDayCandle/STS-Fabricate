@@ -30,6 +30,7 @@ import pinacolada.effects.EffekseerEFK;
 import pinacolada.misc.AugmentStrings;
 import pinacolada.misc.LoadoutStrings;
 import pinacolada.misc.PCLAffinityPanelFilter;
+import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.resources.pcl.PCLCoreResources;
 import pinacolada.rewards.pcl.AugmentReward;
 import pinacolada.skills.PSkill;
@@ -327,9 +328,14 @@ public class PGR {
         initializeUI();
         PSkill.initialize();
         PCLAugmentData.initialize();
-        PCLCustomCardSlot.initialize();
         EffekseerEFK.initialize();
+        reloadCustoms();
         CountingPanel.register(new PCLAffinityPanelFilter());
+    }
+
+    public static void reloadCustoms() {
+        PCLCustomCardSlot.initialize();
+        PCLCustomRelicSlot.initialize();
     }
 
     public static void registerCommands() {

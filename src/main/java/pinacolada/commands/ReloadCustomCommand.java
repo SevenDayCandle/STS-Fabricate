@@ -2,7 +2,7 @@ package pinacolada.commands;
 
 import basemod.DevConsole;
 import basemod.devcommands.ConsoleCommand;
-import pinacolada.cards.base.PCLCustomCardSlot;
+import pinacolada.resources.PGR;
 
 import java.util.ArrayList;
 
@@ -16,11 +16,11 @@ public class ReloadCustomCommand extends ConsoleCommand {
     @Override
     protected void execute(String[] strings, int depth) {
         try {
-            PCLCustomCardSlot.initialize();
-            DevConsole.log("Reloaded custom cards");
+            PGR.reloadCustoms();
+            DevConsole.log("Reloaded Fabricate items.");
         }
         catch (Exception e) {
-            DevConsole.log("Could not reload custom cards.");
+            DevConsole.log("Could not reload Fabricate items.");
             e.printStackTrace();
         }
     }

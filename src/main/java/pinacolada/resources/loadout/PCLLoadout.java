@@ -211,7 +211,7 @@ public abstract class PCLLoadout {
             return null;
         }
 
-        PCLCard card = ((PCLDynamicCardData) new PCLDynamicCardData(String.valueOf(ID), data.resources)
+        PCLCard card = ((PCLDynamicCardData) new PCLDynamicCardData(String.valueOf(ID))
                 .setImagePath(data.imagePath)
                 .showTypeText(false)
                 .setMaxUpgrades(0))

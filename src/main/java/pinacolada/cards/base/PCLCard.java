@@ -1489,7 +1489,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     }
 
     protected boolean isEffectPlayable(AbstractMonster m) {
-        PCLUseInfo info = new PCLUseInfo(this, getSourceCreature(), m);
+        PCLUseInfo info = CombatManager.playerSystem.generateInfo(this, getSourceCreature(), m);
         for (PSkill<?> be : getFullEffects()) {
             if (!be.canPlay(info)) {
                 return false;
@@ -1670,13 +1670,13 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     // Update damage, block, and magic number from the powers on a given target
     // Every step of the calculation is recorded for display in the damage formula widget
     public void refresh(AbstractMonster enemy) {
-        PCLUseInfo info = new PCLUseInfo(this, getSourceCreature(), enemy);
+        PCLUseInfo info = CombatManager.playerSystem.generateInfo(this, getSourceCreature(), enemy);
         doEffects(be -> be.refresh(info, true));
 
         boolean applyEnemyPowers = (enemy != null && !GameUtilities.isDeadOrEscaped(enemy));
-        float tempBlock = baseBlock;
-        float tempDamage = baseDamage;
-        float tempMagicNumber = CombatManager.onModifyMagicNumber(baseMagicNumber, this);
+        float tempBlock = CardModifierManager.onModifyBaseBlock(baseBlock, this);
+        float tempDamage = CardModifierManager.onModifyBaseDamage(baseDamage, this, enemy);
+        float tempMagicNumber = CardModifierManager.onModifyBaseMagic(CombatManager.onModifyMagicNumber(baseMagicNumber, this), this);
         float tempHitCount = baseHitCount;
         float tempRightCount = baseRightCount;
         tempDamage = modifyDamage(info, tempDamage);
@@ -1702,6 +1702,9 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
                     }
                 }
             }
+
+            tempBlock = CardModifierManager.onModifyBlock(tempDamage, this);
+            tempDamage = CardModifierManager.onModifyDamage(tempDamage, this, enemy);
 
             for (AbstractPower p : owner.powers) {
                 if (p instanceof PCLPower) {
@@ -1799,6 +1802,9 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
                 }
                 addAttackDisplay(p, oldDamage, tempDamage);
             }
+
+            tempBlock = CardModifierManager.onModifyBlockFinal(tempDamage, this);
+            tempDamage = CardModifierManager.onModifyDamageFinal(tempDamage, this, enemy);
 
             if (applyEnemyPowers) {
                 for (AbstractPower p : enemy.powers) {

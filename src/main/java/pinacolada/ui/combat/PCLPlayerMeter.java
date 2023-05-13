@@ -51,7 +51,7 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implement
     }
 
     public static boolean isSwapIntended(PCLCard incoming, PCLCard other) {
-        return incoming.type == PCLEnum.CardType.SUMMON && other.type == PCLEnum.CardType.SUMMON && !(other.uuid.equals(incoming.uuid));
+        return incoming.type == PCLEnum.CardType.SUMMON && other != incoming;
     }
 
     public static String makeTitle(String category, String addendum) {

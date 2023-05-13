@@ -19,9 +19,9 @@ import java.util.stream.Stream;
 public class PCLRelicData extends PCLGenericData<PCLRelic> {
     private static final Map<String, PCLRelicData> STATIC_DATA = new HashMap<>();
 
-    public AbstractCard.CardColor cardColor = AbstractCard.CardColor.COLORLESS;
     public RelicStrings strings;
     public String imagePath;
+    public AbstractCard.CardColor cardColor = AbstractCard.CardColor.COLORLESS;
     public AbstractRelic.RelicTier tier = AbstractRelic.RelicTier.DEPRECATED;
     public AbstractRelic.LandingSound sfx = AbstractRelic.LandingSound.CLINK;
 
@@ -67,6 +67,11 @@ public class PCLRelicData extends PCLGenericData<PCLRelic> {
     protected static <T extends PCLRelicData> T registerData(T cardData) {
         STATIC_DATA.put(cardData.ID, cardData);
         return cardData;
+    }
+
+    public PCLRelicData setColor(AbstractCard.CardColor color) {
+        this.cardColor = color;
+        return this;
     }
 
     public PCLRelicData setImagePath(String imagePath) {

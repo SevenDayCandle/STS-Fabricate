@@ -108,7 +108,7 @@ public class AbstractPlayerPatches {
         }
 
         public static void energy(AbstractCard c, AbstractPlayer p, int amount) {
-            CombatManager.onTrySpendEnergy(c, p, amount);
+            p.energy.use(CombatManager.onTrySpendEnergy(c, p, amount));
         }
     }
 
@@ -149,12 +149,12 @@ public class AbstractPlayerPatches {
     public static class AbstractPlayer_Damage {
         @SpireInsertPatch(localvars = {"damageAmount"}, locator = Locator.class)
         public static void insertPre(AbstractPlayer __instance, DamageInfo info, @ByRef int[] damageAmount) {
-            damageAmount[0] = Math.max(0, CombatManager.onModifyDamageFirst(__instance, info, damageAmount[0]));
+            damageAmount[0] = Math.max(0, CombatManager.onIncomingDamageFirst(__instance, info, damageAmount[0]));
         }
 
         @SpireInsertPatch(localvars = {"damageAmount"}, locator = Locator2.class)
         public static void insertPre2(AbstractPlayer __instance, DamageInfo info, @ByRef int[] damageAmount) {
-            damageAmount[0] = Math.max(0, CombatManager.onModifyDamageLast(__instance, info, damageAmount[0]));
+            damageAmount[0] = Math.max(0, CombatManager.onIncomingDamageLast(__instance, info, damageAmount[0]));
         }
 
         @SpireInsertPatch(localvars = {"damageAmount"}, locator = Locator3.class)

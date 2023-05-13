@@ -179,7 +179,10 @@ public abstract class PCLRelic extends CustomRelic implements TooltipProvider {
     @Override
     public final void updateDescription(AbstractPlayer.PlayerClass c) {
         this.description = getUpdatedDescription();
-        this.mainTooltip.setDescriptions(description);
+        if (this.mainTooltip != null)
+        {
+            this.mainTooltip.setDescriptions(description);
+        }
     }
 
     @Override

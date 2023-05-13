@@ -9,13 +9,17 @@ import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.powers.VulnerablePower;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.powers.PCLPower;
+import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
 // Copied and modified from STS-AnimatorMod
 public class VulnerablePowerPatches {
     public static float estimateDamage(AbstractPower power) {
-        float estimate = power.atDamageReceive(PCLPower.DUMMY_MULT, DamageInfo.DamageType.NORMAL);
-        return estimate - PCLPower.DUMMY_MULT;
+        if (GameUtilities.inGame()) {
+            float estimate = power.atDamageReceive(PCLPower.DUMMY_MULT, DamageInfo.DamageType.NORMAL);
+            return estimate - PCLPower.DUMMY_MULT;
+        }
+        return PCLPower.DUMMY_MULT;
     }
 
     @SpirePatch(clz = VulnerablePower.class, method = "updateDescription")

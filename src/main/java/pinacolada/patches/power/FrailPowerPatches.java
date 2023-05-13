@@ -8,12 +8,16 @@ import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.powers.FrailPower;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.powers.PCLPower;
+import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class FrailPowerPatches {
     public static float estimateDamage(AbstractPower power) {
-        float estimate = power.modifyBlock(PCLPower.DUMMY_MULT);
-        return PCLPower.DUMMY_MULT - estimate;
+        if (GameUtilities.inGame()) {
+            float estimate = power.modifyBlock(PCLPower.DUMMY_MULT);
+            return PCLPower.DUMMY_MULT - estimate;
+        }
+        return PCLPower.DUMMY_MULT;
     }
 
     @SpirePatch(clz = FrailPower.class, method = "updateDescription")

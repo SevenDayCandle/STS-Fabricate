@@ -1,6 +1,8 @@
 package pinacolada.interfaces.markers;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import extendedui.EUIUtils;
+import extendedui.interfaces.delegates.ActionT0;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PTrigger;
 
@@ -41,6 +43,15 @@ public interface EditorMaker {
     ArrayList<PTrigger> getPowers();
 
     <T extends EditorMaker> T makeCopy();
+
+    default void safeLoadValue(ActionT0 loadFunc) {
+        try {
+            loadFunc.invoke();
+        }
+        catch (Exception e) {
+            EUIUtils.logError(this, "Failed to load field: " + e.getMessage());
+        }
+    }
 
     default public EditorMaker setPPower(PTrigger... effect) {
         return setPPower(Arrays.asList(effect));

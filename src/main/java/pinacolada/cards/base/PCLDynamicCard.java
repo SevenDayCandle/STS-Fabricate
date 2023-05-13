@@ -7,7 +7,8 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
-import pinacolada.interfaces.markers.DynamicCard;
+import pinacolada.interfaces.markers.EditorMaker;
+import pinacolada.interfaces.markers.FabricateItem;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PTrigger;
@@ -18,7 +19,7 @@ import pinacolada.utilities.PCLRenderHelpers;
 
 import java.util.ArrayList;
 
-public class PCLDynamicCard extends PCLCard implements DynamicCard {
+public class PCLDynamicCard extends PCLCard implements FabricateItem {
     private TextureAtlas.AtlasRegion vanillaEnergyOrb;
     private TextureAtlas.AtlasRegion vanillaEnergyOrbLarge;
     private TextureAtlas.AtlasRegion vanillaBg;
@@ -59,6 +60,11 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard {
     public void fullReset() {
         findForms();
         super.fullReset();
+    }
+
+    @Override
+    public EditorMaker getDynamicData() {
+        return builder;
     }
 
     @Override

@@ -8,12 +8,16 @@ import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.powers.WeakPower;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.powers.PCLPower;
+import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class WeakPowerPatches {
     public static float estimateDamage(WeakPower power) {
-        float estimate = power.atDamageGive(PCLPower.DUMMY_MULT, DamageInfo.DamageType.NORMAL);
-        return PCLPower.DUMMY_MULT - estimate;
+        if (GameUtilities.inGame()) {
+            float estimate = power.atDamageGive(PCLPower.DUMMY_MULT, DamageInfo.DamageType.NORMAL);
+            return PCLPower.DUMMY_MULT - estimate;
+        }
+        return PCLPower.DUMMY_MULT;
     }
 
     @SpirePatch(clz = WeakPower.class, method = "updateDescription")

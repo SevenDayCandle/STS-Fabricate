@@ -38,7 +38,7 @@ public class PMod_XEnergy extends PPassiveMod<PField_Empty> {
 
     @Override
     public String getText(boolean addPeriod) {
-        return childEffect != null ? childEffect.getText(addPeriod) : "";
+        return childEffect != null ? childEffect.getText(addPeriod) : GameUtilities.EMPTY_STRING;
     }
 
     @Override

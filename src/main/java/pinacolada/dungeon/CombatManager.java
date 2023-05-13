@@ -692,12 +692,12 @@ public class CombatManager {
         subscriberDo(OnIntensifySubscriber.class, s -> s.onIntensify(affinity));
     }
 
-    public static int onModifyDamageFirst(AbstractCreature target, DamageInfo info, int damage) {
-        return subscriberInout(OnModifyDamageFirstSubscriber.class, damage, (s, d) -> s.onModifyDamageFirst(target, info, d));
+    public static int onIncomingDamageFirst(AbstractCreature target, DamageInfo info, int damage) {
+        return subscriberInout(OnReceiveDamageFirstSubscriber.class, damage, (s, d) -> s.onReceiveDamageFirst(target, info, d));
     }
 
-    public static int onModifyDamageLast(AbstractCreature target, DamageInfo info, int damage) {
-        damage = subscriberInout(OnModifyDamageLastSubscriber.class, damage, (s, d) -> s.onModifyDamageLast(target, info, d));
+    public static int onIncomingDamageLast(AbstractCreature target, DamageInfo info, int damage) {
+        damage = subscriberInout(OnReceiveDamageLastSubscriber.class, damage, (s, d) -> s.onReceiveDamageLast(target, info, d));
 
         if (target == AbstractDungeon.player && info.type == DamageInfo.DamageType.NORMAL && GameUtilities.chance(dodgeChance)) {
             AbstractDungeon.player.tint.color.a = 0;

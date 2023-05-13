@@ -5,7 +5,6 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import extendedui.EUIUtils;
-import extendedui.interfaces.delegates.ActionT0;
 import extendedui.utilities.ColoredTexture;
 import pinacolada.cards.base.fields.*;
 import pinacolada.cards.base.tags.CardTagItem;
@@ -256,15 +255,6 @@ public class PCLDynamicCardData extends PCLCardData implements EditorMaker {
     public PCLDynamicCardData removePowerEffect(PTrigger effect) {
         powers.remove(effect);
         return this;
-    }
-
-    private void safeLoadValue(ActionT0 loadFunc) {
-        try {
-            loadFunc.invoke();
-        }
-        catch (Exception e) {
-            EUIUtils.logError(this, "Failed to load field: " + e.getMessage());
-        }
     }
 
     public PCLDynamicCardData setAffinity(PCLAffinity affinity, int level) {

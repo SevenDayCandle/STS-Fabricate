@@ -129,6 +129,7 @@ public class PCLCardText {
         if (card != null) {
             card.getPointers().clear();
             text = (text != null && !text.isEmpty()) ? text : card.getEffectStrings();
+            text = CardModifierManager.onCreateDescription(card, text);
             if (PGR.config.displayCardTagDescription.get()) {
                 String preString = GameUtilities.getTagTipPreString(card);
                 if (!preString.isEmpty()) {
@@ -139,7 +140,6 @@ public class PCLCardText {
                     text = text + EUIUtils.DOUBLE_SPLIT_LINE + postString;
                 }
             }
-            text = CardModifierManager.onCreateDescription(card, text);
         }
 
         if (card != null) {

@@ -9,7 +9,7 @@ import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.tags.CardTagItem;
-import pinacolada.interfaces.providers.CustomCardFileProvider;
+import pinacolada.interfaces.providers.CustomFileProvider;
 import pinacolada.misc.PCLCustomEditorLoadable;
 import pinacolada.resources.PGR;
 
@@ -25,9 +25,10 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
     private static final TypeToken<CardForm> TTOKENFORM = new TypeToken<CardForm>() {
     };
     private static final HashMap<AbstractCard.CardColor, ArrayList<PCLCustomCardSlot>> CUSTOM_CARDS = new HashMap<>();
-    private static final ArrayList<CustomCardFileProvider> PROVIDERS = new ArrayList<>();
+    private static final ArrayList<CustomFileProvider> PROVIDERS = new ArrayList<>();
     public static final String BASE_CARD_ID = "PCLC";
     public static final String SUBFOLDER = "cards";
+
     protected transient String filePath;
     protected transient String imagePath;
     public String loadout;
@@ -64,7 +65,7 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
         filePath = makeFilePath();
         imagePath = makeImagePath();
         slotColor = color;
-        PCLDynamicCardData builder = (PCLDynamicCardData) new PCLDynamicCardData(ID, PGR.getResources(slotColor))
+        PCLDynamicCardData builder = (PCLDynamicCardData) new PCLDynamicCardData(ID)
                 .setText("", "", "")
                 .setColor(color)
                 .setRarity(AbstractCard.CardRarity.COMMON)
@@ -114,7 +115,7 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
     /**
      * Subscribe a provider that provides a folder to load custom cards from whenever the cards are reloaded
      */
-    public static void addProvider(CustomCardFileProvider provider) {
+    public static void addProvider(CustomFileProvider provider) {
         PROVIDERS.add(provider);
     }
 
@@ -154,7 +155,7 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
     public static void initialize() {
         CUSTOM_CARDS.clear();
         loadFolder(getCustomFolder(SUBFOLDER));
-        for (CustomCardFileProvider provider : PROVIDERS) {
+        for (CustomFileProvider provider : PROVIDERS) {
             loadFolder(provider.getCardFolder());
         }
         if (PGR.debugCards != null) {

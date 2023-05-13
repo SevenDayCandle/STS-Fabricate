@@ -52,9 +52,7 @@ public class PCLCombatScreen extends EUIBase {
 
         boolean draggingCard = false;
         AbstractCreature target = ReflectionHacks.getPrivate(player, AbstractPlayer.class, "hoveredMonster");
-        AbstractCreature originalTarget = target;
         PCLCard hoveredCard = null;
-        PCLCard originalCard = hoveredCard;
         if (player.hoveredCard != null) {
             hoveredCard = EUIUtils.safeCast(player.hoveredCard, PCLCard.class);
             if (player.isDraggingCard || player.inSingleTargetMode) {
@@ -64,6 +62,9 @@ public class PCLCombatScreen extends EUIBase {
                 target = player;
             }
         }
+
+        AbstractCreature originalTarget = target;
+        PCLCard originalCard = hoveredCard;
 
         // If you are dragging a Summon over another one, highlight the target Summon instead
         if (player.hoveredCard == null || player.hoveredCard.type == PCLEnum.CardType.SUMMON) {

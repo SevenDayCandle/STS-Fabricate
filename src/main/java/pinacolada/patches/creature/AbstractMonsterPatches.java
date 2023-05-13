@@ -64,12 +64,12 @@ public class AbstractMonsterPatches {
     public static class AbstractMonster_Damage1 {
         @SpireInsertPatch(localvars = {"damageAmount"}, locator = Locator.class)
         public static void insertPre(AbstractMonster __instance, DamageInfo info, @ByRef int[] damageAmount) {
-            damageAmount[0] = Math.max(0, CombatManager.onModifyDamageFirst(__instance, info, damageAmount[0]));
+            damageAmount[0] = Math.max(0, CombatManager.onIncomingDamageFirst(__instance, info, damageAmount[0]));
         }
 
         @SpireInsertPatch(localvars = {"damageAmount"}, locator = Locator2.class)
         public static void insertPre2(AbstractMonster __instance, DamageInfo info, @ByRef int[] damageAmount) {
-            damageAmount[0] = Math.max(0, CombatManager.onModifyDamageLast(__instance, info, damageAmount[0]));
+            damageAmount[0] = Math.max(0, CombatManager.onIncomingDamageLast(__instance, info, damageAmount[0]));
         }
 
         @SpireInsertPatch(localvars = {"damageAmount"}, locator = Locator3.class)

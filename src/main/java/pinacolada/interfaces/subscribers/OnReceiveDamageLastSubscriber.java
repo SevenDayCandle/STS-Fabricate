@@ -5,6 +5,6 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import pinacolada.annotations.CombatSubscriber;
 
 @CombatSubscriber
-public interface OnModifyDamageFirstSubscriber extends PCLCombatSubscriber {
-    int onModifyDamageFirst(AbstractCreature target, DamageInfo info, int damage);
+public interface OnReceiveDamageLastSubscriber extends PCLCombatSubscriber {
+    int onReceiveDamageLast(AbstractCreature target, DamageInfo info, int damage);
 } 
