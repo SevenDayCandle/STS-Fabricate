@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class PCLDynamicData extends PCLCardData implements EditorMaker {
+public class PCLDynamicCardData extends PCLCardData implements EditorMaker {
     private static final TypeToken<HashMap<Settings.GameLanguage, CardStrings>> TStrings = new TypeToken<HashMap<Settings.GameLanguage, CardStrings>>() {
     };
     public final HashMap<Settings.GameLanguage, CardStrings> languageMap = new HashMap<>();
@@ -38,19 +38,19 @@ public class PCLDynamicData extends PCLCardData implements EditorMaker {
     public PCardPrimary_GainBlock blockSkill;
     public boolean showTypeText = true;
 
-    public PCLDynamicData(String id) {
+    public PCLDynamicCardData(String id) {
         super(PCLDynamicCard.class, PGR.core, id, null);
     }
 
-    public PCLDynamicData(String id, PCLResources<?, ?, ?, ?> resources) {
+    public PCLDynamicCardData(String id, PCLResources<?, ?, ?, ?> resources) {
         super(PCLDynamicCard.class, resources, id, null);
     }
 
-    public PCLDynamicData(PCLCard card, boolean copyProperties) {
+    public PCLDynamicCardData(PCLCard card, boolean copyProperties) {
         this(card, card.name, "", copyProperties);
     }
 
-    public PCLDynamicData(PCLCard card, String name, String text, boolean copyProperties) {
+    public PCLDynamicCardData(PCLCard card, String name, String text, boolean copyProperties) {
         this(card.cardData, name, text, copyProperties);
         this.source = card;
         setImage(card.portraitImg, card.portraitForeground);
@@ -60,19 +60,19 @@ public class PCLDynamicData extends PCLCardData implements EditorMaker {
         }
     }
 
-    public PCLDynamicData(PCLCard card, String text, boolean copyProperties) {
+    public PCLDynamicCardData(PCLCard card, String text, boolean copyProperties) {
         this(card, card.name, text, copyProperties);
     }
 
-    public PCLDynamicData(PCLCardData card, boolean copyProperties) {
+    public PCLDynamicCardData(PCLCardData card, boolean copyProperties) {
         this(card, card.strings.NAME, "", copyProperties);
     }
 
-    public PCLDynamicData(PCLCardData card, String text, boolean copyProperties) {
+    public PCLDynamicCardData(PCLCardData card, String text, boolean copyProperties) {
         this(card, card.strings.NAME, text, copyProperties);
     }
 
-    public PCLDynamicData(PCLDynamicData original) {
+    public PCLDynamicCardData(PCLDynamicCardData original) {
         this(original, true);
         this.source = original.source;
 
@@ -88,7 +88,7 @@ public class PCLDynamicData extends PCLCardData implements EditorMaker {
         }
     }
 
-    public PCLDynamicData(PCLCardData original, String name, String text, boolean copyProperties) {
+    public PCLDynamicCardData(PCLCardData original, String name, String text, boolean copyProperties) {
         this(original.ID, original.resources);
 
         if (copyProperties) {
@@ -113,7 +113,7 @@ public class PCLDynamicData extends PCLCardData implements EditorMaker {
         setText(name, text, text);
     }
 
-    public PCLDynamicData(PCLCustomCardSlot data, PCLCustomCardSlot.CardForm f) {
+    public PCLDynamicCardData(PCLCustomCardSlot data, PCLCustomCardSlot.CardForm f) {
         this(data.ID);
         safeLoadValue(() -> setColor(data.slotColor));
         safeLoadValue(() -> setRarity(AbstractCard.CardRarity.valueOf(data.rarity)));
@@ -133,7 +133,7 @@ public class PCLDynamicData extends PCLCardData implements EditorMaker {
         safeLoadValue(() -> cost = data.cost.clone());
         safeLoadValue(() -> costUpgrade = data.costUpgrade.clone());
         safeLoadValue(() -> setLanguageMap(parseLanguageStrings(data.languageStrings)));
-        safeLoadValue(() -> setTags(EUIUtils.map(data.tags, PCLDynamicData::getSafeTag)));
+        safeLoadValue(() -> setTags(EUIUtils.map(data.tags, PCLDynamicCardData::getSafeTag)));
         if (data.loadout != null) {
             setLoadout(PCLLoadout.get(data.loadout));
         }
@@ -216,8 +216,8 @@ public class PCLDynamicData extends PCLCardData implements EditorMaker {
     }
 
     @Override
-    public PCLDynamicData makeCopy() {
-        return new PCLDynamicData(this);
+    public PCLDynamicCardData makeCopy() {
+        return new PCLDynamicCardData(this);
     }
 
     public CardStrings getStringsForLanguage(Settings.GameLanguage language) {
@@ -231,29 +231,29 @@ public class PCLDynamicData extends PCLCardData implements EditorMaker {
         return create(upgrade);
     }
 
-    public PCLDynamicData setColor(AbstractCard.CardColor color) {
+    public PCLDynamicCardData setColor(AbstractCard.CardColor color) {
         super.setColor(color);
         return this;
     }
 
-    public PCLDynamicData setExtraTags(List<CardTagItem> extraTags) {
+    public PCLDynamicCardData setExtraTags(List<CardTagItem> extraTags) {
         this.extraTags = extraTags;
 
         return this;
     }
 
-    public PCLDynamicData setImagePath(String imagePath) {
+    public PCLDynamicCardData setImagePath(String imagePath) {
         this.imagePath = imagePath;
 
         return this;
     }
 
-    public PCLDynamicData removePMove(PSkill<?> effect) {
+    public PCLDynamicCardData removePMove(PSkill<?> effect) {
         moves.remove(effect);
         return this;
     }
 
-    public PCLDynamicData removePowerEffect(PTrigger effect) {
+    public PCLDynamicCardData removePowerEffect(PTrigger effect) {
         powers.remove(effect);
         return this;
     }
@@ -267,80 +267,80 @@ public class PCLDynamicData extends PCLCardData implements EditorMaker {
         }
     }
 
-    public PCLDynamicData setAffinity(PCLAffinity affinity, int level) {
+    public PCLDynamicCardData setAffinity(PCLAffinity affinity, int level) {
         this.affinities.set(affinity, level);
 
         return this;
     }
 
-    public PCLDynamicData setAttackSkill(PCardPrimary_DealDamage damageEffect) {
+    public PCLDynamicCardData setAttackSkill(PCardPrimary_DealDamage damageEffect) {
         this.attackSkill = damageEffect;
 
         return this;
     }
 
-    public PCLDynamicData setAttackType(PCLAttackType attackType) {
+    public PCLDynamicCardData setAttackType(PCLAttackType attackType) {
         this.attackType = attackType;
 
         return this;
     }
 
-    public PCLDynamicData setBlockSkill(PCardPrimary_GainBlock blockEffect) {
+    public PCLDynamicCardData setBlockSkill(PCardPrimary_GainBlock blockEffect) {
         this.blockSkill = blockEffect;
 
         return this;
     }
 
-    public PCLDynamicData setDescription(String description) {
+    public PCLDynamicCardData setDescription(String description) {
         this.strings.DESCRIPTION = description;
 
         return this;
     }
 
-    public PCLDynamicData setID(String id) {
+    public PCLDynamicCardData setID(String id) {
         this.ID = id;
         return this;
     }
 
-    public PCLDynamicData setImage(ColoredTexture portraitImage, ColoredTexture portraitForeground) {
+    public PCLDynamicCardData setImage(ColoredTexture portraitImage, ColoredTexture portraitForeground) {
         this.portraitImage = portraitImage;
         this.portraitForeground = portraitForeground;
 
         return this;
     }
 
-    public PCLDynamicData setImage(ColoredTexture portraitImage) {
+    public PCLDynamicCardData setImage(ColoredTexture portraitImage) {
         this.portraitImage = portraitImage;
 
         return this;
     }
 
-    public PCLDynamicData setLanguageMap(HashMap<Settings.GameLanguage, CardStrings> languageMap) {
+    public PCLDynamicCardData setLanguageMap(HashMap<Settings.GameLanguage, CardStrings> languageMap) {
         this.languageMap.putAll(languageMap);
         return setTextForLanguage();
     }
 
-    public PCLDynamicData setLanguageMapEntry(Settings.GameLanguage language) {
+    public PCLDynamicCardData setLanguageMapEntry(Settings.GameLanguage language) {
         this.languageMap.put(language, this.strings);
         return this;
     }
 
-    public PCLDynamicData setName(String name) {
+    public PCLDynamicCardData setName(String name) {
         this.strings.NAME = name;
 
         return this;
     }
 
-    public PCLDynamicData setRarity(AbstractCard.CardRarity rarity) {
+    public PCLDynamicCardData setRarity(AbstractCard.CardRarity rarity) {
         this.cardRarity = rarity;
         return this;
     }
 
-    public PCLDynamicData setText(String name, String description, String upgradeDescription) {
+    public PCLDynamicCardData setText(String name, String description, String upgradeDescription) {
         return setText(name, description, upgradeDescription != null ? upgradeDescription : description, new String[0]);
     }
 
-    public PCLDynamicData setText(String name, String description, String upgradeDescription, String[] extendedDescription) {
+    public PCLDynamicCardData setText(String name, String description, String upgradeDescription, String[] extendedDescription) {
         this.strings.NAME = name;
         this.strings.DESCRIPTION = description;
         this.strings.UPGRADE_DESCRIPTION = upgradeDescription;
@@ -349,28 +349,28 @@ public class PCLDynamicData extends PCLCardData implements EditorMaker {
         return this;
     }
 
-    public PCLDynamicData setText(CardStrings cardStrings) {
+    public PCLDynamicCardData setText(CardStrings cardStrings) {
         return setText(cardStrings.NAME, cardStrings.DESCRIPTION, cardStrings.UPGRADE_DESCRIPTION);
     }
 
-    public PCLDynamicData setText(String name) {
+    public PCLDynamicCardData setText(String name) {
         return setText(name, "", "", new String[0]);
     }
 
-    public PCLDynamicData setTextForLanguage() {
+    public PCLDynamicCardData setTextForLanguage() {
         return setTextForLanguage(Settings.language);
     }
 
-    public PCLDynamicData setTextForLanguage(Settings.GameLanguage language) {
+    public PCLDynamicCardData setTextForLanguage(Settings.GameLanguage language) {
         return setText(getStringsForLanguage(language));
     }
 
-    public PCLDynamicData setType(AbstractCard.CardType type) {
+    public PCLDynamicCardData setType(AbstractCard.CardType type) {
         this.cardType = type;
         return this;
     }
 
-    public PCLDynamicData showTypeText(boolean showTypeText) {
+    public PCLDynamicCardData showTypeText(boolean showTypeText) {
         this.showTypeText = showTypeText;
 
         return this;

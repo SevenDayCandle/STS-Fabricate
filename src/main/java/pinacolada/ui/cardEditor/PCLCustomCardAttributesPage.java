@@ -13,7 +13,7 @@ import extendedui.ui.controls.EUILabel;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
-import pinacolada.cards.base.PCLDynamicData;
+import pinacolada.cards.base.PCLDynamicCardData;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTagInfo;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -199,7 +199,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
 
     @Override
     public void refresh() {
-        PCLDynamicData builder = screen.getBuilder();
+        PCLDynamicCardData builder = screen.getBuilder();
         boolean isSummon = builder.cardType == PCLEnum.CardType.SUMMON;
 
         costEditor.setValue(builder.getCost(0), builder.getCostUpgrade(0));

@@ -13,10 +13,10 @@ import pinacolada.utilities.GameUtilities;
 import java.util.ArrayList;
 
 public class ReplacementCard extends PCLDynamicCard {
-    protected final ReplacementData builder;
+    protected final ReplacementCardData builder;
     protected AbstractCard original;
 
-    public ReplacementCard(ReplacementData builder) {
+    public ReplacementCard(ReplacementCardData builder) {
         super(builder);
         this.builder = builder;
         // Intentionally bypassing getCard to avoid the original itself being replaced

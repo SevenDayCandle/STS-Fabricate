@@ -10,7 +10,7 @@ import extendedui.interfaces.markers.TooltipProvider;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.PCLCustomCardSlot;
-import pinacolada.cards.base.PCLDynamicData;
+import pinacolada.cards.base.PCLDynamicCardData;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.tags.PCLCardTag;
@@ -102,8 +102,8 @@ public abstract class PField implements Serializable {
             // Try to load data from slots. Do not actually create cards here to avoid infinite loops
             PCLCustomCardSlot slot = PCLCustomCardSlot.get(cardID);
             if (slot != null) {
-                HashMap<Settings.GameLanguage, CardStrings> languageMap = PCLDynamicData.parseLanguageStrings(slot.languageStrings);
-                CardStrings language = languageMap != null ? PCLDynamicData.getStringsForLanguage(languageMap) : null;
+                HashMap<Settings.GameLanguage, CardStrings> languageMap = PCLDynamicCardData.parseLanguageStrings(slot.languageStrings);
+                CardStrings language = languageMap != null ? PCLDynamicCardData.getStringsForLanguage(languageMap) : null;
                 if (language != null) {
                     return language.NAME;
                 }

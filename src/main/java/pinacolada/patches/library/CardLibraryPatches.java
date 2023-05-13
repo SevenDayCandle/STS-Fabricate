@@ -85,7 +85,7 @@ public class CardLibraryPatches {
 
     public static AbstractCard makeReplacementCard(AbstractCard card) {
         if (!(card instanceof PCLCard)) {
-            PCLDynamicCard c = ReplacementData.makeReplacement(card, true);
+            PCLDynamicCard c = ReplacementCardData.makeReplacement(card, true);
             if (card.upgraded) {
                 c.upgrade();
             }

@@ -14,7 +14,7 @@ import extendedui.ui.GridCardSelectScreenHelper;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.ChoiceCard;
-import pinacolada.cards.base.ChoiceData;
+import pinacolada.cards.base.ChoiceCardData;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardSelection;
@@ -33,7 +33,7 @@ public class TryChooseChoice<T> extends PCLAction<ArrayList<ChoiceCard<T>>> {
     protected final ArrayList<ChoiceCard<T>> selectedCards = new ArrayList<>();
     protected final CardGroup group = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
 
-    protected ArrayList<ChoiceData<T>> choices = new ArrayList<>();
+    protected ArrayList<ChoiceCardData<T>> choices = new ArrayList<>();
     protected FuncT1<String, ArrayList<AbstractCard>> dynamicString;
     protected ActionT3<CardGroup, ArrayList<AbstractCard>, AbstractCard> onClickCard;
     protected ListSelection<AbstractCard> origin;
@@ -50,10 +50,10 @@ public class TryChooseChoice<T> extends PCLAction<ArrayList<ChoiceCard<T>>> {
 
     @SafeVarargs
     public TryChooseChoice(ActionType type, PCLCardData sourceData, AbstractCreature source, int amount, int cost, T... items) {
-        this(type, sourceData.strings.NAME, source, amount, cost, EUIUtils.map(items, i -> ChoiceData.create(sourceData, i)));
+        this(type, sourceData.strings.NAME, source, amount, cost, EUIUtils.map(items, i -> ChoiceCardData.create(sourceData, i)));
     }
 
-    public TryChooseChoice(ActionType type, String name, AbstractCreature source, int amount, int cost, Collection<ChoiceData<T>> items) {
+    public TryChooseChoice(ActionType type, String name, AbstractCreature source, int amount, int cost, Collection<ChoiceCardData<T>> items) {
         super(type);
 
         this.choices.addAll(items);
@@ -70,11 +70,11 @@ public class TryChooseChoice<T> extends PCLAction<ArrayList<ChoiceCard<T>>> {
     }
 
     public TryChooseChoice(ActionType type, PCLCardData sourceData, AbstractCreature source, int amount, int cost, Iterable<T> items) {
-        this(type, sourceData.strings.NAME, source, amount, cost, EUIUtils.map(items, i -> ChoiceData.create(sourceData, i)));
+        this(type, sourceData.strings.NAME, source, amount, cost, EUIUtils.map(items, i -> ChoiceCardData.create(sourceData, i)));
     }
 
     @SafeVarargs
-    public TryChooseChoice(ActionType type, PCLCardData sourceData, AbstractCreature source, int amount, int cost, ChoiceData<T>... items) {
+    public TryChooseChoice(ActionType type, PCLCardData sourceData, AbstractCreature source, int amount, int cost, ChoiceCardData<T>... items) {
         this(type, sourceData.strings.NAME, source, amount, cost, Arrays.asList(items));
     }
 
@@ -84,7 +84,7 @@ public class TryChooseChoice<T> extends PCLAction<ArrayList<ChoiceCard<T>>> {
 
     public static TryChooseChoice<PCLAffinity> chooseAffinity(String name, int choices, AbstractCreature source, AbstractCreature target, Collection<PCLAffinity> affinities) {
         return new TryChooseChoice<PCLAffinity>(ActionType.CARD_MANIPULATION, name, source, choices, -2,
-                EUIUtils.map(affinities, ChoiceData::affinity));
+                EUIUtils.map(affinities, ChoiceCardData::affinity));
     }
 
     public static TryChooseChoice<PCLAffinity> useAffinitySkill(String name, int choices, AbstractCreature source, AbstractCreature target, Collection<PSkill<?>> skills) {
@@ -93,7 +93,7 @@ public class TryChooseChoice<T> extends PCLAction<ArrayList<ChoiceCard<T>>> {
 
     public static TryChooseChoice<PCLAffinity> useAffinitySkill(String name, int choices, int cost, AbstractCreature source, AbstractCreature target, Collection<PSkill<?>> skills) {
         return new TryChooseChoice<PCLAffinity>(ActionType.CARD_MANIPULATION, name, source, choices, cost,
-                EUIUtils.map(skills, ChoiceData::skillAffinity))
+                EUIUtils.map(skills, ChoiceCardData::skillAffinity))
                 .addCallback(choiceCards -> {
                     for (ChoiceCard<PCLAffinity> card : choiceCards) {
                         card.onUse(CombatManager.playerSystem.generateInfo(card, source, target));
@@ -107,7 +107,7 @@ public class TryChooseChoice<T> extends PCLAction<ArrayList<ChoiceCard<T>>> {
 
     public static TryChooseChoice<PSkill<?>> useSkill(PCLCardData sourceData, int choices, int cost, AbstractCreature source, AbstractCreature target, Collection<PSkill<?>> skills) {
         return new TryChooseChoice<PSkill<?>>(ActionType.CARD_MANIPULATION, sourceData.strings.NAME, source, choices, cost,
-                EUIUtils.map(skills, i -> ChoiceData.skill(sourceData, i)))
+                EUIUtils.map(skills, i -> ChoiceCardData.skill(sourceData, i)))
                 .addCallback(choiceCards -> {
                     for (ChoiceCard<PSkill<?>> card : choiceCards) {
                         card.value.use(CombatManager.playerSystem.generateInfo(card, source, target));
@@ -121,7 +121,7 @@ public class TryChooseChoice<T> extends PCLAction<ArrayList<ChoiceCard<T>>> {
 
     public static TryChooseChoice<PSkill<?>> useSkillWithTargeting(PCLCardData sourceData, int choices, int cost, AbstractCreature source, Collection<PSkill<?>> skills) {
         return new TryChooseChoice<PSkill<?>>(ActionType.CARD_MANIPULATION, sourceData.strings.NAME, source, choices, cost,
-                EUIUtils.map(skills, i -> ChoiceData.skill(sourceData, i)))
+                EUIUtils.map(skills, i -> ChoiceCardData.skill(sourceData, i)))
                 .addCallback(choiceCards -> {
                     for (ChoiceCard<PSkill<?>> card : choiceCards) {
                         PCLActions.top.selectCreature(card).addCallback(target -> {
@@ -160,7 +160,7 @@ public class TryChooseChoice<T> extends PCLAction<ArrayList<ChoiceCard<T>>> {
         GridCardSelectScreenHelper.setDynamicLabel(dynamicString);
         GridCardSelectScreenHelper.setOnClickCard(onClickCard);
 
-        for (ChoiceData<T> choice : choices) {
+        for (ChoiceCardData<T> choice : choices) {
             group.addToTop(choice.create());
         }
 

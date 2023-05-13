@@ -12,7 +12,7 @@ import extendedui.ui.cardFilter.CountingPanelStats;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
-import pinacolada.cards.base.PCLDynamicData;
+import pinacolada.cards.base.PCLDynamicCardData;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.characters.PCLCharacter;
@@ -211,7 +211,7 @@ public abstract class PCLLoadout {
             return null;
         }
 
-        PCLCard card = ((PCLDynamicData) new PCLDynamicData(String.valueOf(ID), data.resources)
+        PCLCard card = ((PCLDynamicCardData) new PCLDynamicCardData(String.valueOf(ID), data.resources)
                 .setImagePath(data.imagePath)
                 .showTypeText(false)
                 .setMaxUpgrades(0))

@@ -16,7 +16,7 @@ import extendedui.utilities.ColoredTexture;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.cards.base.PCLDynamicCard;
-import pinacolada.cards.base.PCLDynamicData;
+import pinacolada.cards.base.PCLDynamicCardData;
 import pinacolada.effects.screen.PCLCustomCardImageEffect;
 import pinacolada.resources.PGR;
 import pinacolada.skills.skills.special.primary.PCardPrimary_DealDamage;
@@ -27,7 +27,7 @@ import static pinacolada.ui.cardEditor.PCLCustomEffectEditingPane.invalidateCard
 import static pinacolada.ui.cardEditor.PCLCustomEffectPage.MENU_HEIGHT;
 import static pinacolada.ui.cardEditor.PCLCustomEffectPage.MENU_WIDTH;
 
-public class PCLCustomCardEditCardScreen extends PCLCustomEditEntityScreen<PCLCustomCardSlot, PCLDynamicData> {
+public class PCLCustomCardEditCardScreen extends PCLCustomEditEntityScreen<PCLCustomCardSlot, PCLDynamicCardData> {
 
     protected EUIToggle upgradeToggle;
     protected PCardPrimary_DealDamage currentDamage;

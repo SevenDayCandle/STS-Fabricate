@@ -19,7 +19,7 @@ import java.util.HashMap;
 import static extendedui.EUIUtils.array;
 import static pinacolada.resources.PCLMainConfig.JSON_FILTER;
 
-public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicData> {
+public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardData> {
     private static final TypeToken<PCLCustomCardSlot> TTOKEN = new TypeToken<PCLCustomCardSlot>() {
     };
     private static final TypeToken<CardForm> TTOKENFORM = new TypeToken<CardForm>() {
@@ -64,7 +64,7 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicData> {
         filePath = makeFilePath();
         imagePath = makeImagePath();
         slotColor = color;
-        PCLDynamicData builder = (PCLDynamicData) new PCLDynamicData(ID, PGR.getResources(slotColor))
+        PCLDynamicCardData builder = (PCLDynamicCardData) new PCLDynamicCardData(ID, PGR.getResources(slotColor))
                 .setText("", "", "")
                 .setColor(color)
                 .setRarity(AbstractCard.CardRarity.COMMON)
@@ -77,7 +77,7 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicData> {
         filePath = makeFilePath();
         imagePath = makeImagePath();
         slotColor = color;
-        builders.add((PCLDynamicData) new PCLDynamicData(card.cardData, true)
+        builders.add((PCLDynamicCardData) new PCLDynamicCardData(card.cardData, true)
                 .setColor(color)
                 .setID(ID)
                 .setImagePath(imagePath)
@@ -93,7 +93,7 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicData> {
     public PCLCustomCardSlot(PCLCustomCardSlot other, AbstractCard.CardColor color) {
         this(other);
         slotColor = color;
-        for (PCLDynamicData builder : builders) {
+        for (PCLDynamicCardData builder : builders) {
             builder.setColor(color);
         }
     }
@@ -103,8 +103,8 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicData> {
         filePath = makeFilePath();
         imagePath = makeImagePath();
         slotColor = other.slotColor;
-        for (PCLDynamicData builder : other.builders) {
-            builders.add(new PCLDynamicData(builder)
+        for (PCLDynamicCardData builder : other.builders) {
+            builders.add(new PCLDynamicCardData(builder)
                     .setID(ID)
                     .setImagePath(imagePath));
         }
@@ -212,7 +212,7 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicData> {
 
         // If the image in the builder was updated, we need to overwrite the existing image
         // All builders should have the same image
-        PCLDynamicData builder = getBuilder(0);
+        PCLDynamicCardData builder = getBuilder(0);
         if (builder != null && builder.portraitImage != null) {
             PixmapIO.writePNG(imgWriter, builder.portraitImage.texture.getTextureData().consumePixmap());
             // Forcibly reload the image
@@ -220,7 +220,7 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicData> {
         }
 
         // Unlink temporary portrait images to allow the new saved portrait image to be loaded, and set multiform data as necessary
-        for (PCLDynamicData b : builders) {
+        for (PCLDynamicCardData b : builders) {
             b.setImage(null).setMultiformData(forms.length, false, forms.length > 1, false);
         }
 
@@ -234,7 +234,7 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicData> {
         }
     }
 
-    public PCLDynamicData getBuilder(int i) {
+    public PCLDynamicCardData getBuilder(int i) {
         return (builders.size() > i) ? builders.get(i) : null;
     }
 
@@ -260,7 +260,7 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicData> {
         ArrayList<String> tempForms = new ArrayList<>();
 
         // All builders should have identical sets of these properties
-        PCLDynamicData first = getBuilder(0);
+        PCLDynamicCardData first = getBuilder(0);
         if (first != null) {
             ID = first.ID;
             languageStrings = EUIUtils.serialize(first.languageMap);
@@ -291,7 +291,7 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicData> {
             tags = EUIUtils.mapAsNonnull(first.tags.values(), EUIUtils::serialize).toArray(new String[]{});
         }
 
-        for (PCLDynamicData builder : builders) {
+        for (PCLDynamicCardData builder : builders) {
             CardForm f = new CardForm();
             f.target = builder.cardTarget.name();
             f.timing = builder.timing.name();
@@ -313,12 +313,12 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicData> {
 
         for (String fo : forms) {
             CardForm f = EUIUtils.deserialize(fo, TTOKENFORM.getType());
-            PCLDynamicData builder = new PCLDynamicData(this, f);
+            PCLDynamicCardData builder = new PCLDynamicCardData(this, f);
             builders.add(builder);
         }
 
         imagePath = makeImagePath();
-        for (PCLDynamicData builder : builders) {
+        for (PCLDynamicCardData builder : builders) {
             builder.setImagePath(imagePath);
         }
 

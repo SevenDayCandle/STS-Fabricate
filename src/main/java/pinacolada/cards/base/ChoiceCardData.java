@@ -13,26 +13,26 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.List;
 
-public class ChoiceData<T> extends PCLDynamicData {
+public class ChoiceCardData<T> extends PCLDynamicCardData {
     public final boolean fromCustom;
     public final T object;
 
-    public ChoiceData(PCLCard card, T object) {
+    public ChoiceCardData(PCLCard card, T object) {
         super(card, false);
         this.object = object;
         this.showTypeText = false;
         this.fromCustom = card instanceof PCLDynamicCard;
     }
 
-    public ChoiceData(PCLCardData card, T object) {
+    public ChoiceCardData(PCLCardData card, T object) {
         super(card, false);
         this.object = object;
         this.showTypeText = false;
-        this.fromCustom = card instanceof PCLDynamicData;
+        this.fromCustom = card instanceof PCLDynamicCardData;
     }
 
-    public static ChoiceData<PCLAffinity> affinity(PCLAffinity affinity) {
-        ChoiceData<PCLAffinity> builder = new ChoiceData<PCLAffinity>(AffinityToken.getCardData(affinity), affinity);
+    public static ChoiceCardData<PCLAffinity> affinity(PCLAffinity affinity) {
+        ChoiceCardData<PCLAffinity> builder = new ChoiceCardData<PCLAffinity>(AffinityToken.getCardData(affinity), affinity);
         String img = AffinityToken.getCardData(affinity).getImagePath(GameUtilities.getActingColor());
         if (img != null) {
             builder.portraitForeground = new ColoredTexture(EUIRM.getTexture(img, true));
@@ -42,31 +42,31 @@ public class ChoiceData<T> extends PCLDynamicData {
         return builder;
     }
 
-    public static <T> ChoiceData<T> create(PCLCardData card, T object) {
-        return new ChoiceData<T>(card, object);
+    public static <T> ChoiceCardData<T> create(PCLCardData card, T object) {
+        return new ChoiceCardData<T>(card, object);
     }
 
     public static <T> ChoiceCard<T> generate(PCLCardData card, T object) {
-        return new ChoiceData<T>(card, object).create();
+        return new ChoiceCardData<T>(card, object).create();
     }
 
     public static ChoiceCard<PCLAffinity> generateAffinity(PCLAffinity affinity) {
         return affinity(affinity).create();
     }
 
-    public static ChoiceData<PSkill<?>> skill(PCLCardData card, PSkill<?> skill) {
-        return (ChoiceData<PSkill<?>>) ChoiceData.create(card, skill)
+    public static ChoiceCardData<PSkill<?>> skill(PCLCardData card, PSkill<?> skill) {
+        return (ChoiceCardData<PSkill<?>>) ChoiceCardData.create(card, skill)
                 .addPSkill(skill)
                 .setTarget(skill.target);
     }
 
-    public static ChoiceData<PCLAffinity> skillAffinity(PSkill<?> skill, PCLAffinity affinity) {
-        return (ChoiceData<PCLAffinity>) ChoiceData.affinity(affinity)
+    public static ChoiceCardData<PCLAffinity> skillAffinity(PSkill<?> skill, PCLAffinity affinity) {
+        return (ChoiceCardData<PCLAffinity>) ChoiceCardData.affinity(affinity)
                 .addPSkill(skill)
                 .setTarget(skill.target);
     }
 
-    public static ChoiceData<PCLAffinity> skillAffinity(PSkill<?> skill) {
+    public static ChoiceCardData<PCLAffinity> skillAffinity(PSkill<?> skill) {
         PCLAffinity affinity = PCLAffinity.Star;
         PField fields = skill.fields;
         if (fields instanceof PField_Affinity) {
@@ -84,7 +84,7 @@ public class ChoiceData<T> extends PCLDynamicData {
         return skillAffinity(skill, affinity);
     }
 
-    public ChoiceData<T> addPSkill(PSkill<?> effect) {
+    public ChoiceCardData<T> addPSkill(PSkill<?> effect) {
         super.addPSkill(effect, false);
         return this;
     }

@@ -83,12 +83,12 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
         // Use expanded text like PMove_DealDamage if verbose mode is used
         if (PGR.config.expandAbbreviatedEffects.get()) {
             if (target == PCLCardTarget.Self) {
-                return TEXT.act_takeDamage(getAmountRawString());
+                return TEXT.act_takeDamage(amountString);
             }
             if (target == PCLCardTarget.Single) {
-                return TEXT.act_deal(getAmountRawString(), attackString);
+                return TEXT.act_deal(amountString, attackString);
             }
-            return TEXT.act_dealTo(getAmountRawString(), attackString, getTargetString());
+            return TEXT.act_dealTo(amountString, attackString, getTargetString());
         }
 
         String targetShortString = target.getShortString();

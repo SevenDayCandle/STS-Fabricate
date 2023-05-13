@@ -24,7 +24,7 @@ import extendedui.ui.hitboxes.DraggableHitbox;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.PCLDynamicData;
+import pinacolada.cards.base.PCLDynamicCardData;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
@@ -68,7 +68,7 @@ public class PCLCustomCardImageEffect extends PCLEffectWithCallback<Pixmap> {
     protected float maxZoom = 1f;
     protected float scale = 1f;
 
-    public PCLCustomCardImageEffect(PCLDynamicData builder) {
+    public PCLCustomCardImageEffect(PCLDynamicCardData builder) {
         final float buttonHeight = Settings.HEIGHT * (0.055f);
         final float labelHeight = Settings.HEIGHT * (0.04f);
         final float buttonWidth = Settings.WIDTH * (0.16f);

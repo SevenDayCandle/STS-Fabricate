@@ -27,14 +27,14 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard {
     private Texture customBgLarge;
     private Texture customEnergyOrb;
     private Texture customEnergyOrbLarge;
-    protected ArrayList<PCLDynamicData> forms;
-    protected PCLDynamicData builder;
+    protected ArrayList<PCLDynamicCardData> forms;
+    protected PCLDynamicCardData builder;
 
-    public PCLDynamicCard(PCLDynamicData builder) {
+    public PCLDynamicCard(PCLDynamicCardData builder) {
         this(builder, false);
     }
 
-    public PCLDynamicCard(PCLDynamicData builder, boolean shouldFindForms) {
+    public PCLDynamicCard(PCLDynamicCardData builder, boolean shouldFindForms) {
         super(builder, builder.ID, builder.imagePath,
                 builder.getCost(0), builder.cardType, builder.cardColor, builder.cardRarity, builder.cardTarget.cardTarget, 0, 0, new BuilderInfo(builder, shouldFindForms));
         assignActualColor();
@@ -416,13 +416,13 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard {
         }
     }
 
-    public PCLDynamicCard setForms(ArrayList<PCLDynamicData> builders) {
+    public PCLDynamicCard setForms(ArrayList<PCLDynamicCardData> builders) {
         this.forms = builders;
         changeForm(this.auxiliaryData.form, timesUpgraded);
         return this;
     }
 
-    protected void setProperties(PCLDynamicData builder, Integer form, int timesUpgraded) {
+    protected void setProperties(PCLDynamicCardData builder, Integer form, int timesUpgraded) {
         super.setupProperties(builder, form, timesUpgraded);
 
         this.builder = builder;
@@ -466,10 +466,10 @@ public class PCLDynamicCard extends PCLCard implements DynamicCard {
     }
 
     private static class BuilderInfo {
-        protected final PCLDynamicData builder;
+        protected final PCLDynamicCardData builder;
         protected final boolean shouldFindForms;
 
-        BuilderInfo(PCLDynamicData builder, boolean shouldFindForms) {
+        BuilderInfo(PCLDynamicCardData builder, boolean shouldFindForms) {
             this.builder = builder;
             this.shouldFindForms = shouldFindForms;
         }
