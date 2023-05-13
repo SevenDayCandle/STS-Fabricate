@@ -25,9 +25,7 @@ public class PCLCustomEffectMultiNode extends PCLCustomEffectNode {
     }
 
     @Override
-    public void receiveNode(PCLCustomEffectNode node) {
-        node.extractSelf();
-        node.skill.setChild((PSkill<?>) null);
+    public void reassignChild(PCLCustomEffectNode node) {
         addSubnode(node);
         addEffect(node.skill);
     }
@@ -38,11 +36,11 @@ public class PCLCustomEffectMultiNode extends PCLCustomEffectNode {
         if (skill instanceof PMultiBase)
         {
             List<? extends PSkill<?>> subEffects = ((PMultiBase<?>) skill).getSubEffects();
-            float offsetX = subEffects.size() * SIZE_X * -0.5f;
+            float offsetX = (subEffects.size() - 1) * SIZE_X * -0.7f;
             for (PSkill<?> subskill : subEffects)
             {
-                addSubnode(getNodeForSkill(editor, subskill, new OriginRelativeHitbox(hb, SIZE_X, SIZE_Y, offsetX, DISTANCE_Y)));
-                offsetX += SIZE_X;
+                addSubnode(createTree(editor, subskill, new OriginRelativeHitbox(hb, SIZE_X, SIZE_Y, offsetX, DISTANCE_Y)));
+                offsetX += SIZE_X * 1.4f;
             }
         }
         return super.makeSkillChild();
@@ -51,7 +49,7 @@ public class PCLCustomEffectMultiNode extends PCLCustomEffectNode {
     @Override
     public void renderImpl(SpriteBatch sb) {
         for (PCLCustomEffectNode subnode : subnodes) {
-            PCLRenderHelpers.drawCurve(sb, ImageMaster.TARGET_UI_ARROW, Color.SCARLET.cpy(), this.hb, subnode.hb, 0, 0.3f, 0f, 5);
+            PCLRenderHelpers.drawCurve(sb, ImageMaster.TARGET_UI_ARROW, Color.SCARLET.cpy(), this.hb, subnode.hb, 0, 0.15f, 0f, 6);
             subnode.render(sb);
         }
         super.renderImpl(sb);
@@ -68,6 +66,7 @@ public class PCLCustomEffectMultiNode extends PCLCustomEffectNode {
     public void addSubnode(PCLCustomEffectNode node)
     {
         subnodes.add(node);
+        node.index = subnodes.size() - 1;
         node.parent = this;
     }
 

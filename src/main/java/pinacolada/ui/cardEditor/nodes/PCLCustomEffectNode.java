@@ -6,12 +6,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import extendedui.EUIRM;
+import extendedui.EUIRenderHelpers;
 import extendedui.EUIUtils;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.hitboxes.EUIHitbox;
-import extendedui.ui.hitboxes.OriginRelativeHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
 import org.apache.commons.lang3.StringUtils;
+import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.*;
@@ -27,8 +28,8 @@ import pinacolada.utilities.PCLRenderHelpers;
 import java.util.List;
 
 public class PCLCustomEffectNode extends EUIButton {
-    public static final float SIZE_X = scale(150);
-    public static final float SIZE_Y = scale(75);
+    public static final float SIZE_X = scale(120);
+    public static final float SIZE_Y = scale(60);
     public static final float DISTANCE_Y = scale(-100);
     private boolean dragging;
     protected List<PSkill> effects;
@@ -39,11 +40,13 @@ public class PCLCustomEffectNode extends EUIButton {
     public PCLCustomEffectNode child;
     public NodeType type;
     public EUIButton deleteButton;
+    public int index = -1;
 
     // Call getNodeForSkill instead to get the correct node constructor for the given skill type
     protected PCLCustomEffectNode(PCLCustomEffectPage editor, PSkill<?> skill, NodeType type, EUIHitbox hb) {
         super(type.getTexture(), hb);
         this.setColor(type.getColor());
+        this.setShaderMode(EUIRenderHelpers.ShaderMode.Colorize);
         this.editor = editor;
         this.type = type;
         this.skill = skill;
@@ -53,9 +56,9 @@ public class PCLCustomEffectNode extends EUIButton {
         }
 
         this.text = StringUtils.capitalize(this.skill.getSampleText(null));
-        setSmartText(true);
+        this.fontScale = 0.5f;
+        setSmartText(true, true);
         setOnClick(this::startEdit);
-        this.fontScale = 0.66f;
 
         this.deleteButton = new EUIButton(EUIRM.images.x.texture(), new RelativeHitbox(hb, 48, 48, hb.width * 1.2f, hb.height * 0.4f));
         this.deleteButton.setOnClick(() -> {
@@ -83,10 +86,11 @@ public class PCLCustomEffectNode extends EUIButton {
             case Root:
                 return new PCLCustomEffectRootNode(editor, skill, type, hb);
             case Multicond:
+                return new PCLCustomEffectMultiCondNode(editor, skill, type, hb);
             case Multimove:
                 return new PCLCustomEffectMultiNode(editor, skill, type, hb);
             case Branchcond:
-                return new PCLCustomEffectBranchNode(editor, skill, type, hb);
+                return new PCLCustomEffectMultiBranchNode(editor, skill, type, hb);
         }
         return new PCLCustomEffectNode(editor, skill, type, hb);
     }
@@ -102,7 +106,13 @@ public class PCLCustomEffectNode extends EUIButton {
 
     protected void extractSelf() {
         if (parent != null) {
-            if (child != null) {
+            if (parent.skill instanceof PMultiBase && ((PMultiBase<?>) parent.skill).getSubEffects().remove(this.skill))
+            {
+                if (child != null) {
+                    ((PMultiBase<?>) parent.skill).tryAddEffect(child.skill);
+                }
+            }
+            else if (child != null) {
                 parent.skill.setChild(child.skill);
             }
             else {
@@ -112,7 +122,10 @@ public class PCLCustomEffectNode extends EUIButton {
         else if (editor.rootEffect == this.skill)
         {
             editor.rootEffect = editor.makeRootSkill();
-            editor.rootEffect.setChild(child.skill);
+            if (child != null)
+            {
+                editor.rootEffect.setChild(child.skill);
+            }
         }
     }
 
@@ -148,7 +161,7 @@ public class PCLCustomEffectNode extends EUIButton {
     public PCLCustomEffectNode makeSkillChild() {
         PSkill<?> sc = skill.getChild();
         if (sc != null) {
-            this.child = getNodeForSkill(editor, sc, new OriginRelativeHitbox(hb, SIZE_X, SIZE_Y, 0, DISTANCE_Y));
+            this.child = getNodeForSkill(editor, sc, new RelativeHitbox(hb, SIZE_X, SIZE_Y, SIZE_X / 2f, DISTANCE_Y));
             child.parent = this;
         }
         return this.child;
@@ -163,21 +176,23 @@ public class PCLCustomEffectNode extends EUIButton {
         dragging = false;
     }
 
-    public void reassignChild(PCLCustomEffectNode newChild) {
-        if (newChild.parent != this) {
-            newChild.extractSelf();
-            newChild.skill.setChild((PSkill<?>) null);
-
-            skill.setChild(newChild.skill);
-            if (child != null) {
-                newChild.skill.setChild(child.skill.makeCopy());
+    public void reassignChild(PCLCustomEffectNode node) {
+        skill.setChild(node.skill);
+        if (child != null) {
+            PSkill<?> copy = child.skill.makeCopy();
+            if (!(node.skill instanceof PMultiBase && ((PMultiBase<?>) node.skill).tryAddEffect(copy))) {
+                node.skill.setChild(copy);
             }
-            child = newChild;
         }
+        child = node;
     }
 
     public void receiveNode(PCLCustomEffectNode node) {
-        reassignChild(node);
+        if (node.parent != this) {
+            node.extractSelf();
+            node.skill.setChild((PSkill<?>) null);
+            reassignChild(node);
+        }
     }
 
     public void refresh() {
@@ -194,11 +209,11 @@ public class PCLCustomEffectNode extends EUIButton {
     @Override
     public void renderImpl(SpriteBatch sb) {
         if (child != null) {
-            PCLRenderHelpers.drawCurve(sb, ImageMaster.TARGET_UI_ARROW, Color.SCARLET.cpy(), this.hb, child.hb, 0, 0.3f, 0f, 5);
+            PCLRenderHelpers.drawCurve(sb, ImageMaster.TARGET_UI_ARROW, Color.SCARLET.cpy(), this.hb, child.hb, 0, 0.15f, 0f, 6);
             child.render(sb);
         }
         super.renderImpl(sb);
-        deleteButton.renderImpl(sb);
+        deleteButton.render(sb);
     }
 
     @Override
@@ -213,7 +228,7 @@ public class PCLCustomEffectNode extends EUIButton {
         if (hb.hovered && hologram != PCLCustomEffectHologram.current) {
             PCLCustomEffectHologram.setHighlighted(this);
         }
-        deleteButton.updateImpl();
+        deleteButton.update();
     }
 
     protected void onClickStart() {
@@ -230,7 +245,10 @@ public class PCLCustomEffectNode extends EUIButton {
         skill.setChild(this.skill.getChild());
         this.skill = skill;
         if (parent != null) {
-            this.parent.skill.setChild(skill);
+            if (!(this.parent.skill instanceof PMultiBase) || !((PMultiBase<?>) this.parent.skill).tryReplaceEffect(skill, index))
+            {
+                this.parent.skill.setChild(skill);
+            }
         }
         else if (this.skill instanceof PPrimary)
         {
@@ -256,7 +274,8 @@ public class PCLCustomEffectNode extends EUIButton {
         Attack,
         Block,
         CustomPower,
-        Root;
+        Proxy,
+        Root,;
 
         // Overriding classes are listed later in the enum
         public static NodeType getTypeForSkill(PSkill<?> skill) {
@@ -275,6 +294,7 @@ public class PCLCustomEffectNode extends EUIButton {
                 case Attack:
                 case Block:
                 case Root:
+                case Proxy:
                     return false;
             }
             return true;
@@ -301,6 +321,8 @@ public class PCLCustomEffectNode extends EUIButton {
                 case Attack:
                 case Block:
                     return Color.SALMON;
+                case Proxy:
+                    return PCLCustomEffectProxyNode.FADE_COLOR;
             }
             return Color.WHITE;
         }
@@ -345,9 +367,10 @@ public class PCLCustomEffectNode extends EUIButton {
         public Texture getTexture() {
             switch (this) {
                 case Cond:
+                    return PCLCoreImages.Menu.nodeCircle.texture();
                 case Multicond:
                 case Branchcond:
-                    return PCLCoreImages.Menu.nodeCircle.texture();
+                    return PCLCoreImages.Menu.nodeCircle2.texture();
                 case Mod:
                     return PCLCoreImages.Menu.nodeHexagon.texture();
                 case Delay:
@@ -358,11 +381,12 @@ public class PCLCustomEffectNode extends EUIButton {
                 case Block:
                     return PCLCoreImages.Menu.nodeOctagon.texture();
                 case Move:
-                case Multimove:
                 case CustomPower:
                     return PCLCoreImages.Menu.nodeSquare.texture();
+                case Multimove:
+                    return PCLCoreImages.Menu.nodeSquare2.texture();
             }
-            return PCLCoreImages.Menu.nodeCircle.texture();
+            return PCLCoreImages.Menu.nodeCircleSmall.texture();
         }
 
         public String getTitle() {

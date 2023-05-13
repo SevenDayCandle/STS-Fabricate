@@ -13,10 +13,7 @@ import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.ui.EUIHoverable;
 import extendedui.ui.TextureCache;
-import extendedui.ui.controls.EUIDropdown;
-import extendedui.ui.controls.EUIImage;
-import extendedui.ui.controls.EUISearchableDropdown;
-import extendedui.ui.controls.EUIToggle;
+import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.OriginRelativeHitbox;
 import extendedui.ui.tooltips.EUITooltip;
@@ -82,7 +79,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         this.editor = editor;
         this.node = node;
         this.hb = hb;
-        this.backdrop = new EUIImage(EUIRM.images.panelLarge.texture(), new EUIHitbox(hb.x - scale(50), hb.y, CUTOFF * 1.1f, MAIN_OFFSET * 2));
+        this.backdrop = new EUIBorderedImage(EUIRM.images.greySquare.texture(), new EUIHitbox(hb.x - scale(50), hb.y, CUTOFF * 1.1f, MAIN_OFFSET * 2));
         this.backdrop.setColor(Color.GRAY);
         initializeSelectors();
         refresh();
@@ -166,7 +163,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
             node.skill.setupEditor(this);
 
             float xOff = 0;
-            additionalHeight = -MENU_HEIGHT * 2f;
+            additionalHeight = -MENU_HEIGHT * 2.3f;
             if (targets.isActive) {
                 targets.setSelection(node.skill.target, false);
                 xOff = position(targets, xOff);
@@ -291,8 +288,8 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         float end = x + element.hb.width;
         if (end > CUTOFF) {
             additionalHeight -= MENU_HEIGHT * 2f;
-            setX = AUX_OFFSET;
-            end = AUX_OFFSET + element.hb.width;
+            setX = 0;
+            end = element.hb.width;
         }
         element.setOffset(setX, additionalHeight);
         element.hb.update();

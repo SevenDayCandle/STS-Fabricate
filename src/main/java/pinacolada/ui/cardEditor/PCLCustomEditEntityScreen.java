@@ -36,7 +36,7 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
     protected static final float BUTTON_WIDTH = Settings.WIDTH * (0.16f);
     protected static final float LABEL_WIDTH = Settings.WIDTH * (0.20f);
     protected static final float BUTTON_CY = BUTTON_HEIGHT * 1.5f;
-    public static final int EFFECT_COUNT = 2;
+    public static final int EFFECT_COUNT = 3;
     protected final T currentSlot;
     protected final boolean fromInGame;
     protected ArrayList<PSkill<?>> currentEffects = new ArrayList<>();

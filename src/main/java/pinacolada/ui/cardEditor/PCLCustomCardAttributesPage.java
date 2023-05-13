@@ -192,6 +192,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
         return PCLCoreImages.Menu.editorAttribute;
     }
 
+    @Override
     public String getTitle() {
         return header.text;
     }

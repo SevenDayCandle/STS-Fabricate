@@ -1,11 +1,17 @@
 package pinacolada.skills.skills;
 
+import com.badlogic.gdx.graphics.Color;
+import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
+import extendedui.ui.tooltips.EUICardPreview;
+import extendedui.utilities.RotatingList;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.PMultiBase;
+import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
@@ -18,15 +24,18 @@ import java.util.List;
 
 @VisibleSkill
 public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<?>> {
-    public static final PSkillData<PField_Not> DATA = register(PBranchCond.class, PField_Not.class, 0, DEFAULT_MAX);
+    public static final PSkillData<PField_Not> DATA = register(PBranchCond.class, PField_Not.class, 0, DEFAULT_MAX)
+            .selfTarget();
     protected ArrayList<PSkill<?>> effects = new ArrayList<>();
-
-    public PBranchCond(PSkillSaveData content) {
-        super(DATA, content);
-    }
 
     public PBranchCond() {
         super(DATA);
+    }
+
+    public PBranchCond(PSkillSaveData content) {
+        super(DATA, content);
+        effects = EUIUtils.mapAsNonnull(splitJson(content.special), PSkill::get);
+        setParentsForChildren();
     }
 
     public PBranchCond(PCLCardTarget target, int amount) {
@@ -66,6 +75,18 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
     }
 
     @Override
+    public void refresh(PCLUseInfo info, boolean conditionMet) {
+        conditionMetCache = checkCondition(info, false, null);
+        boolean refreshVal = conditionMetCache & conditionMet;
+        for (PSkill<?> effect : effects) {
+            effect.refresh(info, refreshVal);
+        }
+        if (this.childEffect != null) {
+            this.childEffect.refresh(info, refreshVal);
+        }
+    }
+
+    @Override
     public void use(PCLUseInfo info) {
         if (childEffect instanceof PActiveCond) {
             ((PActiveCond<?>) childEffect).useImpl(info, (i) -> useSubEffect(i, childEffect.getQualifiers(i)), (i) -> {
@@ -99,9 +120,147 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
         }
     }
 
+    public PSkill<?> getSubEffect(int index) {
+        return index < effects.size() ? effects.get(index) : null;
+    }
+
     @Override
     public List<PSkill<?>> getSubEffects() {
         return effects;
+    }
+
+    @Override
+    public PBranchCond setTemporaryAmount(int amount) {
+        if (childEffect != null) {
+            childEffect.setTemporaryAmount(amount);
+        }
+        return this;
+    }
+
+    @Override
+    public PBranchCond setTemporaryExtra(int extra) {
+        if (childEffect != null) {
+            childEffect.setTemporaryExtra(extra);
+        }
+        return this;
+    }
+
+    @Override
+    public PBranchCond stack(PSkill<?> other) {
+        super.stack(other);
+        if (other instanceof PMultiBase) {
+            stackMulti((PMultiBase<?>) other);
+        }
+        return this;
+    }
+
+    @Override
+    public PBranchCond setAmountFromCard() {
+        super.setAmountFromCard();
+        for (PSkill<?> effect : effects) {
+            effect.setAmountFromCard();
+        }
+        return this;
+    }
+
+    @Override
+    public PBranchCond setSource(PointerProvider card) {
+        super.setSource(card);
+        for (PSkill<?> effect : effects) {
+            effect.setSource(card);
+        }
+        return this;
+    }
+
+    @Override
+    public void displayUpgrades(boolean value) {
+        super.displayUpgrades(value);
+        displayChildUpgrades(value);
+    }
+
+    @Override
+    public Color getGlowColor() {
+        Color c = super.getGlowColor();
+        for (PSkill<?> effect : effects) {
+            Color c2 = effect.getGlowColor();
+            if (c2 != null) {
+                c = c2;
+            }
+        }
+        return c;
+    }
+
+    @Override
+    public AbstractMonster.Intent getIntent() {
+        AbstractMonster.Intent c = super.getIntent();
+        for (PSkill<?> effect : effects) {
+            AbstractMonster.Intent c2 = effect.getIntent();
+            if (c2 != null) {
+                c = c2;
+            }
+        }
+        return c;
+    }
+
+    @Override
+    public String getSpecialData() {
+        return PSkill.joinDataAsJson(effects, PSkill::serialize);
+    }
+
+    @Override
+    public boolean hasChildType(Class<?> childType) {
+        return super.hasChildType(childType) || EUIUtils.any(effects, child -> childType.isInstance(child) || (child != null && child.hasChildType(childType)));
+    }
+
+    @Override
+    public boolean isBlank() {
+        return effects.size() == 0 && !(childEffect != null && !childEffect.isBlank());
+    }
+
+    @Override
+    public PBranchCond makeCopy() {
+        PBranchCond copy = (PBranchCond) super.makeCopy();
+        for (PSkill<?> effect : effects) {
+            copy.addEffect((PSkill<?>) effect.makeCopy());
+        }
+        return copy;
+    }
+
+    @Override
+    public PBranchCond makePreviews(RotatingList<EUICardPreview> previews) {
+        for (PSkill<?> effect : effects) {
+            effect.makePreviews(previews);
+        }
+        super.makePreviews(previews);
+        return this;
+    }
+
+    @Override
+    public PBranchCond onAddToCard(AbstractCard card) {
+        for (PSkill<?> effect : effects) {
+            effect.onAddToCard(card);
+        }
+        super.onAddToCard(card);
+        return this;
+    }
+
+    @Override
+    public void onDrag(AbstractMonster m) {
+        for (PSkill<?> effect : effects) {
+            effect.onDrag(m);
+        }
+    }
+
+    @Override
+    public PBranchCond onRemoveFromCard(AbstractCard card) {
+        removeSubs(card);
+        super.onRemoveFromCard(card);
+        return this;
+    }
+
+    @Override
+    public boolean requiresTarget() {
+        return target == PCLCardTarget.Single || EUIUtils.any(effects, PSkill::requiresTarget);
     }
 
     public PBranchCond setEffects(PSkill<?>... effects) {
@@ -113,6 +272,32 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
         this.effects.addAll(effects);
         setParentsForChildren();
         return this;
+    }
+
+    @Override
+    public void subscribeChildren() {
+        for (PSkill<?> effect : effects) {
+            effect.subscribeChildren();
+        }
+        if (this.childEffect != null) {
+            this.childEffect.subscribeChildren();
+        }
+    }
+
+    // When a delegate (e.g. on draw) is triggered from an and multicond, it should only execute the effect if the other conditions would pass
+    @Override
+    public boolean tryPassParent(PSkill<?> source, PCLUseInfo info) {
+        return checkCondition(info, true, source);
+    }
+
+    @Override
+    public void unsubscribeChildren() {
+        for (PSkill<?> effect : effects) {
+            effect.unsubscribeChildren();
+        }
+        if (this.childEffect != null) {
+            this.childEffect.unsubscribeChildren();
+        }
     }
 
     @Override

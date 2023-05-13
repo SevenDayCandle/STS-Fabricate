@@ -26,7 +26,8 @@ import java.util.List;
 
 @VisibleSkill
 public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSkill<?>> {
-    public static final PSkillData<PField_Empty> DATA = register(PMultiSkill.class, PField_Empty.class, 0, DEFAULT_MAX);
+    public static final PSkillData<PField_Empty> DATA = register(PMultiSkill.class, PField_Empty.class, 0, DEFAULT_MAX)
+            .selfTarget();
     protected ArrayList<PSkill<?>> effects = new ArrayList<>();
     public boolean generated = false;
 
@@ -42,9 +43,6 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
 
     public PMultiSkill(PSkill<?>... effects) {
         super(DATA, EUIUtils.max(effects, effect -> effect.target), 0);
-        if (target == null) {
-            target = PCLCardTarget.None;
-        }
         this.effects.addAll(Arrays.asList(effects));
         setParentsForChildren();
     }

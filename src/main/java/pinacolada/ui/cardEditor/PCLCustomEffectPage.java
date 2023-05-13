@@ -27,11 +27,11 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
 
     public final PCLCustomEditEntityScreen<?, ?> screen;
     public PPrimary<?> rootEffect;
+    public PCLCustomEffectNode root;
     protected int editorIndex;
     protected ActionT1<PSkill<?>> onUpdate;
     protected EUIHitbox hb;
     protected EUILabel header;
-    protected PCLCustomEffectNode root;
     protected PCLCustomEffectEditingPane currentEditingSkill;
     protected PCLCustomEffectSelectorPane buttonsPane;
 
@@ -62,7 +62,7 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
             fEffect = makeRootSkill();
             root = PCLCustomEffectNode.getNodeForSkill(this, fEffect, new RelativeHitbox(hb, SIZE_X, SIZE_Y, scale(350), scale(-1200)));
             if (prevRoot != null) {
-                root.reassignChild(prevRoot);
+                root.receiveNode(prevRoot);
             }
         }
         else {
@@ -86,6 +86,7 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
         return PCLCoreImages.Menu.editorEffect;
     }
 
+    @Override
     public String getTitle() {
         return header.text;
     }

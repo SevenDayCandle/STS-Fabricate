@@ -64,4 +64,26 @@ public interface PMultiBase<T extends PSkill<?>> {
         }
         return this;
     }
+
+    // Attempt to add a child effect if it is compatible
+    default boolean tryAddEffect(PSkill<?> newEffect) {
+        try {
+            addEffect((T) newEffect);
+        }
+        catch (Exception ignored) {
+            return false;
+        }
+        return true;
+    }
+
+    // Attempt to replace a child effect with another if it is compatible
+    default boolean tryReplaceEffect(PSkill<?> newEffect, int i) {
+        try {
+            getSubEffects().set(i, (T) newEffect);
+        }
+        catch (Exception ignored) {
+            return false;
+        }
+        return true;
+    }
 }

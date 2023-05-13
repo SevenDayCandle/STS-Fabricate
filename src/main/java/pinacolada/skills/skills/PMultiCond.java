@@ -29,7 +29,8 @@ import java.util.List;
 
 @VisibleSkill
 public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>> {
-    public static final PSkillData<PField_Or> DATA = register(PMultiCond.class, PField_Or.class, 0, DEFAULT_MAX);
+    public static final PSkillData<PField_Or> DATA = register(PMultiCond.class, PField_Or.class, 0, DEFAULT_MAX)
+            .selfTarget();
     protected ArrayList<PCond<?>> effects = new ArrayList<>();
 
     public PMultiCond() {
@@ -173,6 +174,7 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         }
     }
 
+    @Override
     public void displayUpgrades(boolean value) {
         super.displayUpgrades(value);
         displayChildUpgrades(value);
@@ -202,6 +204,7 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         return c;
     }
 
+    @Override
     public String getSpecialData() {
         return PSkill.joinDataAsJson(effects, PSkill::serialize);
     }
@@ -237,6 +240,7 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         return copy;
     }
 
+    @Override
     public PMultiCond makePreviews(RotatingList<EUICardPreview> previews) {
         for (PSkill<?> effect : effects) {
             effect.makePreviews(previews);
@@ -289,6 +293,7 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         return this;
     }
 
+    @Override
     public PMultiCond stack(PSkill<?> other) {
         super.stack(other);
         if (other instanceof PMultiBase) {
@@ -297,6 +302,7 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         return this;
     }
 
+    @Override
     public void subscribeChildren() {
         for (PSkill<?> effect : effects) {
             effect.subscribeChildren();
@@ -392,6 +398,7 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         return checkCondition(info, true, source);
     }
 
+    @Override
     public void unsubscribeChildren() {
         for (PSkill<?> effect : effects) {
             effect.unsubscribeChildren();
@@ -401,6 +408,7 @@ public class PMultiCond extends PCond<PField_Or> implements PMultiBase<PCond<?>>
         }
     }
 
+    @Override
     public PMultiCond useParent(boolean value) {
         this.useParent = value;
         for (PSkill<?> effect : effects) {

@@ -2,6 +2,7 @@ package pinacolada.ui.cardEditor;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import extendedui.EUIRM;
+import extendedui.EUIRenderHelpers;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUIImage;
 import extendedui.ui.hitboxes.EUIHitbox;
@@ -18,7 +19,7 @@ public class PCLCustomEffectSelectorPane extends EUIImage {
     public ArrayList<EUIButton> nodeCreateButtons = new ArrayList<>();
 
     public PCLCustomEffectSelectorPane(PCLCustomEffectPage editor) {
-        super(EUIRM.images.rectangularButton.texture(), new EUIHitbox(editor.hb.x + scale(250), editor.hb.y - scale(20), editor.hb.width * 2, editor.hb.height * 1.5f));
+        super(EUIRM.images.longInput.texture(), new EUIHitbox(editor.hb.x + scale(250), editor.hb.y - scale(20), editor.hb.width * 2, editor.hb.height * 1.5f));
         this.editor = editor;
 
         initializeButtons();
@@ -26,9 +27,10 @@ public class PCLCustomEffectSelectorPane extends EUIImage {
 
     protected void addNodeButton(PCLCustomEffectNode.NodeType type) {
         nodeCreateButtons.add(new EUIButton(type.getTexture(), new RelativeHitbox(hb, SIZE_X, SIZE_Y, (nodeCreateButtons.size() + 1) * SIZE_X * 1.1f, SIZE_Y * 0.9f))
-                .setColor(type.getColor())
-                .setTooltip(type.getTitle(), "")
-                .setOnPreClick((button) -> this.startHologram(button, type)));
+                        .setColor(type.getColor())
+                        .setShaderMode(EUIRenderHelpers.ShaderMode.Colorize)
+                        .setTooltip(type.getTitle(), "")
+                        .setOnPreClick((button) -> this.startHologram(button, type)));
     }
 
     public void initializeButtons() {
@@ -37,6 +39,7 @@ public class PCLCustomEffectSelectorPane extends EUIImage {
         addNodeButton(PCLCustomEffectNode.NodeType.Mod);
         addNodeButton(PCLCustomEffectNode.NodeType.Cond);
         addNodeButton(PCLCustomEffectNode.NodeType.Multicond);
+        addNodeButton(PCLCustomEffectNode.NodeType.Branchcond);
         addNodeButton(PCLCustomEffectNode.NodeType.Delay);
     }
 
