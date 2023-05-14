@@ -97,12 +97,19 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
     public void atPreBattle() {
         super.atPreBattle();
         for (PSkill<?> effect : getEffects()) {
-            // TODO create special skills for relics to distinguish at start of battle from perpetual effects
             effect.subscribeChildren();
             PCLClickableUse use = effect.getClickable(this);
             if (use != null) {
                 triggerCondition = use;
             }
+        }
+    }
+
+    @Override
+    public void atBattleStartPreDraw() {
+        super.atBattleStartPreDraw();
+        for (PSkill<?> effect : getEffects()) {
+            effect.triggerOnStartOfBattleForRelic();
         }
     }
 

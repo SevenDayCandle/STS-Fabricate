@@ -45,7 +45,7 @@ public class PCLRelicData extends PCLGenericData<PCLRelic> {
         super(cardID, invokeClass, resources);
         this.cardColor = resources.cardColor;
         this.strings = strings != null ? strings : new RelicStrings();
-        this.imagePath = PGR.getRelicImage(ID);
+        this.initializeImage();
     }
 
     public static Collection<PCLRelicData> getAllData() {
@@ -78,6 +78,10 @@ public class PCLRelicData extends PCLGenericData<PCLRelic> {
 
     public int getCounterUpgrade(int form) {
         return counterUpgrade[Math.min(counterUpgrade.length - 1, form)];
+    }
+
+    public void initializeImage() {
+        this.imagePath = PGR.getRelicImage(ID);
     }
 
     protected static <T extends PCLRelicData> T registerData(T cardData) {

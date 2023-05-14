@@ -10,6 +10,7 @@ import extendedui.utilities.ColoredTexture;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PTrigger;
 import pinacolada.utilities.GameUtilities;
@@ -95,6 +96,9 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker {
     }
 
     public PCLDynamicRelic create() {
+        if (imagePath == null) {
+            imagePath = PCLCoreImages.CardAffinity.unknown.path();
+        }
         return new PCLDynamicRelic(this);
     }
 
@@ -102,6 +106,11 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker {
         return languageMap.getOrDefault(language,
                 languageMap.getOrDefault(Settings.GameLanguage.ENG,
                         languageMap.size() > 0 ? languageMap.entrySet().iterator().next().getValue() : getInitialStrings()));
+    }
+
+    @Override
+    public void initializeImage() {
+        this.imagePath = PCLCoreImages.CardAffinity.unknown.path();
     }
 
     public PCLDynamicRelicData setColor(AbstractCard.CardColor color) {

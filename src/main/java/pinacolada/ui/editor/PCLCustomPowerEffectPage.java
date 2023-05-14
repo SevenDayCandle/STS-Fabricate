@@ -21,4 +21,9 @@ public class PCLCustomPowerEffectPage extends PCLCustomEffectPage {
     public TextureCache getTextureCache() {
         return PCLCoreImages.Menu.editorPower;
     }
+
+    public PSkill<?> getSourceEffect() {
+        PSkill<?> base = screen.currentPowers.get(editorIndex);
+        return base != null ? base.makeCopy() : null;
+    }
 }

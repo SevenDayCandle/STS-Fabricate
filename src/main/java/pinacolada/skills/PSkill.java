@@ -1068,9 +1068,9 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
             // Copy children
             if (this.childEffect != null) {
-                copy.childEffect = this.childEffect.makeCopy();
-                if (copy.childEffect != null) {
-                    copy.childEffect.parent = copy;
+                PSkill<?> cEffect = this.childEffect.makeCopy();
+                if (cEffect != null) {
+                    copy.setChild(cEffect);
                 }
             }
         }
@@ -1509,6 +1509,9 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         else if (this.childEffect != null) {
             this.childEffect.triggerOnScry(c);
         }
+    }
+
+    public void triggerOnStartOfBattleForRelic() {
     }
 
     public boolean tryPassParent(PSkill<?> source, PCLUseInfo info) {

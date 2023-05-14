@@ -25,7 +25,7 @@ public class MenuPanelScreenPatches {
             if (screen == CUSTOM) {
                 __instance.panels.clear();
                 __instance.panels.add(new CustomMainMenuPanelButton(PCLEnum.Panels.CUSTOM_CARDS, MainMenuPanelButton.PanelColor.BEIGE, (float) Settings.WIDTH / 2.0F - 450F * Settings.scale, Settings.HEIGHT * 0.5f));
-                __instance.panels.add(new CustomMainMenuPanelButton(PCLEnum.Panels.CUSTOM_RELICS, MainMenuPanelButton.PanelColor.GRAY, (float) Settings.WIDTH / 2.0F, Settings.HEIGHT * 0.5f));
+                __instance.panels.add(new CustomMainMenuPanelButton(PCLEnum.Panels.CUSTOM_RELICS, MainMenuPanelButton.PanelColor.BLUE, (float) Settings.WIDTH / 2.0F, Settings.HEIGHT * 0.5f));
                 __instance.panels.add(new CustomMainMenuPanelButton(PCLEnum.Panels.CUSTOM_POTIONS, MainMenuPanelButton.PanelColor.GRAY, (float) Settings.WIDTH / 2.0F + 450F * Settings.scale, Settings.HEIGHT * 0.5f));
                 return SpireReturn.Return();
             }

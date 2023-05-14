@@ -23,4 +23,9 @@ public class PCLCustomBlockEffectPage extends PCLCustomEffectPage {
     public TextureCache getTextureCache() {
         return PCLCoreImages.Menu.editorBlock;
     }
+
+    public PSkill<?> getSourceEffect() {
+        PSkill<?> base = screen instanceof PCLCustomCardEditCardScreen ? ((PCLCustomCardEditCardScreen) screen).currentBlock : null;
+        return base != null ? base.makeCopy() : null;
+    }
 }

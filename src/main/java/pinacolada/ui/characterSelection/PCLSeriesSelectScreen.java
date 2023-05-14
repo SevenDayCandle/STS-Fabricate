@@ -7,7 +7,6 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
@@ -82,12 +81,12 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
                 .setLabel(PGR.core.strings.sui_instructions1)
                 .setAlignment(0.9f, 0.1f, true)
                 .setColors(Color.DARK_GRAY, Settings.CREAM_COLOR)
-                .setFont(FontHelper.tipBodyFont, 1f);
+                .setFont(EUIFontHelper.cardTipBodyFont, 1f);
 
         typesAmount = new EUITextBox(panelTexture, new EUIHitbox(xPos, getY.invoke(3.5f), buttonWidth, buttonHeight))
                 .setColors(Color.DARK_GRAY, Settings.GOLD_COLOR)
                 .setAlignment(0.61f, 0.1f, true)
-                .setFont(FontHelper.tipHeaderFont, 1);
+                .setFont(EUIFontHelper.cardTipTitleFont, 1);
 
         previewCards = createHexagonalButton(xPos, getY.invoke(7f), buttonWidth, buttonHeight)
                 .setText(PGR.core.strings.sui_showCardPool)

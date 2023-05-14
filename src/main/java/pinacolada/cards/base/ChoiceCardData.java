@@ -3,6 +3,7 @@ package pinacolada.cards.base;
 import extendedui.EUIRM;
 import extendedui.utilities.ColoredTexture;
 import pinacolada.cards.base.fields.PCLAffinity;
+import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.cards.pcl.tokens.AffinityToken;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
@@ -95,5 +96,15 @@ public class ChoiceCardData<T> extends PCLDynamicCardData {
         }
 
         return new ChoiceCard<T>(this);
+    }
+
+    @Override
+    public void initializeImage() {
+        try {
+            this.imagePath = PGR.getCardImage(ID);
+        }
+        catch (Exception e) {
+            imagePath = QuestionMark.DATA.imagePath;
+        }
     }
 }

@@ -114,7 +114,7 @@
 												"Select the Color to copy this card to.",
 												"Use Parent",
 												"Load From Card",
-												"Open Card Folder",
+												"Open Folder",
 												"Export CSV",
 												"Random",
 												"Required",
@@ -257,6 +257,8 @@
 				"pcl:Conditions": {
 								"TEXT": [
 												"any {0}",
+												"at combat end",
+												"at combat start",
 												"at turn end",
 												"at turn start",
 												"do {0}",

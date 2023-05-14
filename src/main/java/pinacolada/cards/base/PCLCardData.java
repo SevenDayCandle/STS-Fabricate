@@ -85,8 +85,6 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
 
     public PCLCardData(Class<? extends PCLCard> invokeClass, PCLResources<?, ?, ?, ?> resources, String cardID) {
         this(invokeClass, resources, cardID, PGR.getCardStrings(cardID));
-
-        this.imagePath = PGR.getCardImage(cardID);
     }
 
     public PCLCardData(Class<? extends PCLCard> invokeClass, PCLResources<?, ?, ?, ?> resources, String cardID, CardStrings strings) {
@@ -94,6 +92,7 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
         this.cardColor = resources.cardColor;
         this.maxCopies = -1;
         this.strings = strings != null ? strings : new CardStrings();
+        initializeImage();
     }
 
     public static Collection<PCLCardData> getAllData() {
@@ -289,6 +288,10 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
 
     public boolean hasColor(AbstractCard.CardColor color) {
         return cardColor == color || resources.cardColor == color;
+    }
+
+    public void initializeImage() {
+        this.imagePath = PGR.getCardImage(ID);
     }
 
     public void invokeTags(AbstractCard card) {

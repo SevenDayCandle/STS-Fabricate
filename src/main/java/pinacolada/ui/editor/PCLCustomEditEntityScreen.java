@@ -74,32 +74,42 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
 
     protected void addSkillPages() {
         for (int i = 0; i < currentEffects.size(); i++) {
-            int finalI = i;
-            PCLCustomEffectPage page = new PCLCustomEffectPage(this, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), i
-                    , EUIUtils.format(PGR.core.strings.cedit_effectX, i + 1), (be) -> {
-                currentEffects.set(finalI, be);
-                modifyBuilder(e -> e.setPSkill(currentEffects, true, true));
-            });
-            pages.add(page);
-            effectPages.add(page);
-            page.refresh();
+            makeEffectPage(i);
         }
         for (int i = 0; i < currentPowers.size(); i++) {
-            int finalI = i;
-            PCLCustomPowerEffectPage page = new PCLCustomPowerEffectPage(this, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), i
-                    , EUIUtils.format(PGR.core.strings.cedit_powerX, i + 1), (be) -> {
-                if (be instanceof PTrigger) {
-                    currentPowers.set(finalI, (PTrigger) be);
-                }
-                else {
-                    currentPowers.set(finalI, new PTrigger_When());
-                }
-                modifyBuilder(e -> e.setPPower(currentPowers, true, true));
-            });
-            pages.add(page);
-            powerPages.add(page);
-            page.refresh();
+            makePowerPage(i);
         }
+    }
+
+    protected void makeEffectPage(int index) {
+        PCLCustomEffectPage page = new PCLCustomEffectPage(this, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), index
+                , EUIUtils.format(PGR.core.strings.cedit_effectX, index + 1), (be) -> updateEffect(index, be));
+        pages.add(page);
+        effectPages.add(page);
+        page.refresh();
+    }
+
+    protected void updateEffect(int index, PSkill<?> be) {
+        currentEffects.set(index, be);
+        modifyBuilder(e -> e.setPSkill(currentEffects, true, true));
+    }
+
+    protected void makePowerPage(int index) {
+        PCLCustomPowerEffectPage page = new PCLCustomPowerEffectPage(this, new EUIHitbox(START_X, START_Y, MENU_WIDTH, MENU_HEIGHT), index
+                , EUIUtils.format(PGR.core.strings.cedit_powerX, index + 1), (be) -> updatePowerEffect(index, be));
+        pages.add(page);
+        powerPages.add(page);
+        page.refresh();
+    }
+
+    protected void updatePowerEffect(int index, PSkill<?> be) {
+        if (be instanceof PTrigger) {
+            currentPowers.set(index, (PTrigger) be);
+        }
+        else {
+            currentPowers.set(index, new PTrigger_When());
+        }
+        modifyBuilder(e -> e.setPPower(currentPowers, true, true));
     }
 
     protected void clearPages() {

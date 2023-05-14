@@ -39,7 +39,6 @@ public abstract class PCLRelic extends CustomRelic implements TooltipProvider {
         this(data, EUIRM.getTexture(data.imagePath), data.tier, data.sfx);
     }
 
-    // TODO outlines
     public PCLRelic(PCLRelicData data, Texture texture, RelicTier tier, LandingSound sfx) {
         super(data.ID, texture, tier, sfx);
         this.relicData = data;

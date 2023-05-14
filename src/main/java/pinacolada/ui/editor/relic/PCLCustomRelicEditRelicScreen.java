@@ -8,6 +8,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import extendedui.EUIRM;
 import extendedui.ui.controls.EUIButton;
+import extendedui.ui.controls.EUITextBox;
 import extendedui.ui.controls.EUIToggle;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITooltip;
@@ -26,12 +27,14 @@ import static extendedui.ui.AbstractScreen.createHexagonalButton;
 import static pinacolada.ui.editor.PCLCustomEffectEditingPane.invalidateCards;
 
 public class PCLCustomRelicEditRelicScreen extends PCLCustomEditEntityScreen<PCLCustomRelicSlot, PCLDynamicRelicData> {
+    public static final float RELIC_Y = Settings.HEIGHT * 0.87f;
 
     protected EUIToggle upgradeToggle;
     protected PCLDynamicRelic previewRelic;
     protected PCLCustomImageEffect imageEditor;
     protected PCLCustomFormEditor formEditor;
     protected EUIButton imageButton;
+    protected EUITextBox previewDescription;
     protected Texture loadedImage;
 
     public PCLCustomRelicEditRelicScreen(PCLCustomRelicSlot slot) {
@@ -67,6 +70,12 @@ public class PCLCustomRelicEditRelicScreen extends PCLCustomEditEntityScreen<PCL
                 new EUIHitbox(0, 0, Settings.scale * 256f, Settings.scale * 48f)
                         .setCenter(Settings.WIDTH * 0.116f, imageButton.hb.y + imageButton.hb.height + LABEL_HEIGHT * 3.2f), this);
 
+        previewDescription = new EUITextBox(EUIRM.images.panel.texture(), new EUIHitbox(0, 0, Settings.scale * 256f, Settings.scale * 256f))
+                .setColors(Color.DARK_GRAY, Settings.CREAM_COLOR)
+                .setFont(EUIFontHelper.cardTipBodyFont, 1f)
+                .setPosition(Settings.WIDTH * 0.116f, CARD_Y - LABEL_HEIGHT * 2);
+        previewDescription.label.setSmartText(true);
+
         upgradeToggle = new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 48f))
                 .setPosition(Settings.WIDTH * 0.116f, CARD_Y - LABEL_HEIGHT - AbstractCard.IMG_HEIGHT / 2f)
                 .setBackground(EUIRM.images.panel.texture(), Color.DARK_GRAY)
@@ -84,7 +93,8 @@ public class PCLCustomRelicEditRelicScreen extends PCLCustomEditEntityScreen<PCL
         previewRelic = getBuilder().create();
         previewRelic.scale = 1f;
         previewRelic.currentX = previewRelic.targetX = CARD_X;
-        previewRelic.currentY = previewRelic.targetY = CARD_Y;
+        previewRelic.currentY = previewRelic.targetY = RELIC_Y;
+        previewDescription.setLabel(previewRelic.getUpdatedDescription());
     }
 
     @Override
@@ -116,6 +126,7 @@ public class PCLCustomRelicEditRelicScreen extends PCLCustomEditEntityScreen<PCL
         formEditor.tryRender(sb);
         upgradeToggle.tryRender(sb);
         previewRelic.render(sb);
+        previewDescription.tryRender(sb);
     }
 
     public void updateInnerElements() {
@@ -125,6 +136,7 @@ public class PCLCustomRelicEditRelicScreen extends PCLCustomEditEntityScreen<PCL
         upgradeToggle.tryUpdate();
         previewRelic.update();
         previewRelic.hb.update();
+        previewDescription.tryUpdate();
         if (previewRelic.hb.hovered) {
             EUITooltip.queueTooltips(previewRelic);
         }

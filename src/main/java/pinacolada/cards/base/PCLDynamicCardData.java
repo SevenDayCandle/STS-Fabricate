@@ -226,6 +226,10 @@ public class PCLDynamicCardData extends PCLCardData implements EditorMaker {
     }
 
     @Override
+    public void initializeImage() {
+    }
+
+    @Override
     public AbstractCard makeCardFromLibrary(int upgrade) {
         return create(upgrade);
     }

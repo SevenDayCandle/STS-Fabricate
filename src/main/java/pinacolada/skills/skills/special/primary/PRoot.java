@@ -3,11 +3,13 @@ package pinacolada.skills.skills.special.primary;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIRM;
 import pinacolada.annotations.VisibleSkill;
-import pinacolada.resources.PGR;
 import pinacolada.skills.PPrimary;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
+
+import static pinacolada.utilities.GameUtilities.EMPTY_STRING;
 
 // Placeholder class used to ensure that the root of the effect editor is always a primary
 @VisibleSkill
@@ -24,8 +26,13 @@ public class PRoot extends PPrimary<PField_Empty> {
     }
 
     @Override
+    public String getSampleText(PSkill<?> caller) {
+        return EUIRM.strings.na;
+    }
+
+    @Override
     public String getSubText() {
-        return source instanceof AbstractRelic ? PGR.core.tooltips.startup.title : EUIRM.strings.na;
+        return source instanceof AbstractRelic ? TEXT.cond_atStartOfCombat() : EMPTY_STRING;
     }
 
     // This is a no-op on cards
@@ -36,5 +43,11 @@ public class PRoot extends PPrimary<PField_Empty> {
             return super.getText(addPeriod);
         }
         return childEffect != null ? childEffect.getText(addPeriod) : "";
+    }
+
+    public void triggerOnStartOfBattleForRelic() {
+        if (childEffect != null) {
+            childEffect.use(makeInfo(null));
+        }
     }
 }
