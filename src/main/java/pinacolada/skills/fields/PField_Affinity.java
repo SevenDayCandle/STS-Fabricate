@@ -4,7 +4,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
-import pinacolada.ui.cardEditor.PCLCustomEffectEditingPane;
+import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;

@@ -14,7 +14,7 @@ import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.resources.PGR;
-import pinacolada.ui.cardEditor.PCLCustomCardEditCardScreen;
+import pinacolada.ui.editor.card.PCLCustomCardEditCardScreen;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;

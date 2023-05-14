@@ -21,7 +21,7 @@ import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
-import pinacolada.ui.cardEditor.PCLCustomEffectEditingPane;
+import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.ListSelection;
 

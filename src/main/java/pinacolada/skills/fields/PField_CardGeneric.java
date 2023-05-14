@@ -13,7 +13,7 @@ import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
-import pinacolada.ui.cardEditor.PCLCustomEffectEditingPane;
+import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 import pinacolada.utilities.ListSelection;
 
 import java.util.ArrayList;

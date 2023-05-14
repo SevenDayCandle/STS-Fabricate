@@ -2,7 +2,7 @@ package pinacolada.skills.fields;
 
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
-import pinacolada.ui.cardEditor.PCLCustomEffectEditingPane;
+import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 // TODO allow saving of PCLEffekseerEFX
 public class PField_Attack extends PField {

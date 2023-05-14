@@ -49,7 +49,7 @@ import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.skills.PMultiSkill;
 import pinacolada.skills.skills.PTrigger;
-import pinacolada.ui.cardEditor.PCLCustomEffectEditingPane;
+import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 import pinacolada.utilities.GameUtilities;
 
 import java.lang.reflect.Constructor;

@@ -12,7 +12,7 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.PPassiveMod;
-import pinacolada.ui.cardEditor.PCLCustomEffectEditingPane;
+import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 public abstract class PMod_Per<T extends PField_Not> extends PPassiveMod<T> {
     public PMod_Per(PSkillData<T> data, PSkillSaveData content) {

@@ -22,7 +22,7 @@ import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
 import pinacolada.stances.PCLStanceHelper;
-import pinacolada.ui.cardEditor.PCLCustomEffectEditingPane;
+import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 import java.io.Serializable;
 import java.util.ArrayList;

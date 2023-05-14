@@ -5,7 +5,7 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.resources.PGR;
-import pinacolada.ui.cardEditor.PCLCustomEffectEditingPane;
+import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -2,7 +2,7 @@ package pinacolada.skills.fields;
 
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.resources.PGR;
-import pinacolada.ui.cardEditor.PCLCustomEffectEditingPane;
+import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 import java.util.ArrayList;
 import java.util.Arrays;

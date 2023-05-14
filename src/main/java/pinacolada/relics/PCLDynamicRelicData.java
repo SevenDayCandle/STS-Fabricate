@@ -6,6 +6,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.localization.RelicStrings;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIUtils;
+import extendedui.utilities.ColoredTexture;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
@@ -22,6 +23,7 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker {
     public final HashMap<Settings.GameLanguage, RelicStrings> languageMap = new HashMap<>();
     public final ArrayList<PSkill<?>> moves = new ArrayList<>();
     public final ArrayList<PTrigger> powers = new ArrayList<>();
+    public ColoredTexture portraitImage;
 
     public PCLDynamicRelicData(String cardID) {
         super(PCLDynamicRelic.class, PGR.core, cardID);
@@ -51,16 +53,23 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker {
         setSfx(original.sfx);
         setTier(original.tier);
         setLanguageMap(original.languageMap);
+        setCounter(original.counter.clone(), original.counterUpgrade.clone());
         setPSkill(original.moves, true, true);
         setPPower(original.powers, true, true);
     }
 
-    public PCLDynamicRelicData(PCLCustomRelicSlot data) {
+    public PCLDynamicRelicData(PCLCustomRelicSlot data, PCLCustomRelicSlot.RelicForm f) {
         this(data.ID);
         safeLoadValue(() -> setColor(data.slotColor));
         safeLoadValue(() -> setSfx(AbstractRelic.LandingSound.valueOf(data.sfx)));
         safeLoadValue(() -> setTier(AbstractRelic.RelicTier.valueOf(data.tier)));
         safeLoadValue(() -> setLanguageMap(parseLanguageStrings(data.languageStrings)));
+        safeLoadValue(() -> counter = data.counter.clone());
+        safeLoadValue(() -> counterUpgrade = data.counterUpgrade.clone());
+        safeLoadValue(() -> setMaxUpgrades(data.maxUpgradeLevel));
+        safeLoadValue(() -> setBranchFactor(data.branchUpgradeFactor));
+        safeLoadValue(() -> setPSkill(EUIUtils.mapAsNonnull(f.effects, PSkill::get), true, true));
+        safeLoadValue(() -> setPPower(EUIUtils.mapAsNonnull(f.powerEffects, pe -> EUIUtils.safeCast(PSkill.get(pe), PTrigger.class))));
     }
 
     protected static RelicStrings getInitialStrings() {
@@ -93,6 +102,28 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker {
         return languageMap.getOrDefault(language,
                 languageMap.getOrDefault(Settings.GameLanguage.ENG,
                         languageMap.size() > 0 ? languageMap.entrySet().iterator().next().getValue() : getInitialStrings()));
+    }
+
+    public PCLDynamicRelicData setColor(AbstractCard.CardColor color) {
+        super.setColor(color);
+        return this;
+    }
+
+    public PCLDynamicRelicData setID(String fullID) {
+        this.ID = fullID;
+        return this;
+    }
+
+    public PCLDynamicRelicData setImage(ColoredTexture portraitImage) {
+        this.portraitImage = portraitImage;
+
+        return this;
+    }
+
+    public PCLDynamicRelicData setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+
+        return this;
     }
 
     public PCLDynamicRelicData setLanguageMap(HashMap<Settings.GameLanguage, RelicStrings> languageMap) {

@@ -232,6 +232,8 @@ public class PCLCoreStrings extends PCLStrings {
     public final String menu_card = menu.TEXT[1];
     public final String menu_cardDesc = menu.TEXT[2];
     public final String menu_comingsoon = menu.TEXT[3];
+    public final String menu_relic = menu.TEXT[4];
+    public final String menu_relicDesc = menu.TEXT[5];
     // Misc
     public final String misc_viewAugments = misc.TEXT[0];
     public final String misc_viewAugmentsDescription = misc.TEXT[1];

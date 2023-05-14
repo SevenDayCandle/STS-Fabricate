@@ -345,10 +345,5 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
         public String timing;
         public String[] effects;
         public String[] powerEffects;
-
-        public CardForm setNumbers(PCLCardData data) {
-
-            return this;
-        }
     }
 }

@@ -18,7 +18,7 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Orb;
 import pinacolada.skills.skills.PPassiveCond;
 import pinacolada.skills.skills.base.primary.PTrigger_When;
-import pinacolada.ui.cardEditor.PCLCustomEffectEditingPane;
+import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 @VisibleSkill
 public class PCond_HaveOrbChanneled extends PPassiveCond<PField_Orb> implements OnOrbChannelSubscriber {

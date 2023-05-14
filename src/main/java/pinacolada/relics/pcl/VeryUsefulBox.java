@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 @VisibleRelic
 public class VeryUsefulBox extends PCLRelic {
-    public static final PCLRelicData DATA = register(VeryUsefulBox.class).setTier(RelicTier.SPECIAL, LandingSound.SOLID);
+    public static final PCLRelicData DATA = register(VeryUsefulBox.class).setProps(RelicTier.SPECIAL, LandingSound.SOLID);
 
     public VeryUsefulBox() {
         super(DATA);

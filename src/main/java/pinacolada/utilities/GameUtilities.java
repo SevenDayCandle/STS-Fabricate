@@ -1171,7 +1171,7 @@ public class GameUtilities {
         return result;
     }
 
-    public static List<AbstractCard.CardRarity> getStandardRarities() {
+    public static List<AbstractCard.CardRarity> getStandardCardRarities() {
         return Arrays.asList(
                 AbstractCard.CardRarity.BASIC,
                 AbstractCard.CardRarity.COMMON,
@@ -1179,6 +1179,18 @@ public class GameUtilities {
                 AbstractCard.CardRarity.RARE,
                 AbstractCard.CardRarity.CURSE,
                 AbstractCard.CardRarity.SPECIAL
+        );
+    }
+
+    public static List<AbstractRelic.RelicTier> getStandardRelicTiers() {
+        return Arrays.asList(
+                AbstractRelic.RelicTier.STARTER,
+                AbstractRelic.RelicTier.COMMON,
+                AbstractRelic.RelicTier.UNCOMMON,
+                AbstractRelic.RelicTier.RARE,
+                AbstractRelic.RelicTier.SHOP,
+                AbstractRelic.RelicTier.BOSS,
+                AbstractRelic.RelicTier.SPECIAL
         );
     }
 

@@ -1,7 +1,7 @@
 package pinacolada.skills.fields;
 
 import pinacolada.resources.PGR;
-import pinacolada.ui.cardEditor.PCLCustomEffectEditingPane;
+import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 public class PField_Random extends PField_Not {
     public boolean random;

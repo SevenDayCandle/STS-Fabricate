@@ -2,7 +2,7 @@ package pinacolada.skills.fields;
 
 import extendedui.EUIRM;
 import pinacolada.resources.PGR;
-import pinacolada.ui.cardEditor.PCLCustomEffectEditingPane;
+import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 public class PField_Not extends PField {
     public boolean not;

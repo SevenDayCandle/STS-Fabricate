@@ -1,5 +1,6 @@
 package pinacolada.relics;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.localization.RelicStrings;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
@@ -16,6 +17,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static extendedui.EUIUtils.array;
+
 public class PCLRelicData extends PCLGenericData<PCLRelic> {
     private static final Map<String, PCLRelicData> STATIC_DATA = new HashMap<>();
 
@@ -24,6 +27,11 @@ public class PCLRelicData extends PCLGenericData<PCLRelic> {
     public AbstractCard.CardColor cardColor = AbstractCard.CardColor.COLORLESS;
     public AbstractRelic.RelicTier tier = AbstractRelic.RelicTier.DEPRECATED;
     public AbstractRelic.LandingSound sfx = AbstractRelic.LandingSound.CLINK;
+    public Integer[] counter = array(0);
+    public Integer[] counterUpgrade = array(0);
+    public int maxForms = 1;
+    public int maxUpgradeLevel = 0;
+    public int branchFactor = 0;
 
     public PCLRelicData(Class<? extends PCLRelic> invokeClass, PCLResources<?, ?, ?, ?> resources) {
         this(invokeClass, resources, resources.createID(invokeClass.getSimpleName()));
@@ -64,13 +72,48 @@ public class PCLRelicData extends PCLGenericData<PCLRelic> {
         return getAllData(false, true, a -> a.cardColor == filterColor || a.resources.cardColor == filterColor || a.resources == PGR.core);
     }
 
+    public int getCounter(int form) {
+        return counter[Math.min(counter.length - 1, form)];
+    }
+
+    public int getCounterUpgrade(int form) {
+        return counterUpgrade[Math.min(counterUpgrade.length - 1, form)];
+    }
+
     protected static <T extends PCLRelicData> T registerData(T cardData) {
         STATIC_DATA.put(cardData.ID, cardData);
         return cardData;
     }
 
+    public PCLRelicData setBranchFactor(int factor) {
+        this.branchFactor = factor;
+
+        return this;
+    }
+
     public PCLRelicData setColor(AbstractCard.CardColor color) {
         this.cardColor = color;
+        return this;
+    }
+
+    public PCLRelicData setCounter(int heal) {
+        this.counter[0] = heal;
+        return this;
+    }
+
+    public PCLRelicData setCounter(int heal, int healUpgrade) {
+        this.counter[0] = heal;
+        this.counterUpgrade[0] = healUpgrade;
+        return this;
+    }
+
+    public PCLRelicData setCounter(int thp, Integer[] thpUpgrade) {
+        return setCounter(array(thp), thpUpgrade);
+    }
+
+    public PCLRelicData setCounter(Integer[] heal, Integer[] healUpgrade) {
+        this.counter = heal;
+        this.counterUpgrade = healUpgrade;
         return this;
     }
 
@@ -79,6 +122,19 @@ public class PCLRelicData extends PCLGenericData<PCLRelic> {
 
         return this;
     }
+
+    public PCLRelicData setMaxForms(int maxForms) {
+        this.maxForms = maxForms;
+
+        return this;
+    }
+
+    public PCLRelicData setMaxUpgrades(int maxUpgradeLevel) {
+        this.maxUpgradeLevel = MathUtils.clamp(maxUpgradeLevel, -1, Integer.MAX_VALUE);
+
+        return this;
+    }
+
 
     public PCLRelicData setSfx(AbstractRelic.LandingSound sfx) {
         this.sfx = sfx;
@@ -90,7 +146,7 @@ public class PCLRelicData extends PCLGenericData<PCLRelic> {
         return this;
     }
 
-    public PCLRelicData setTier(AbstractRelic.RelicTier tier, AbstractRelic.LandingSound sfx) {
+    public PCLRelicData setProps(AbstractRelic.RelicTier tier, AbstractRelic.LandingSound sfx) {
         this.tier = tier;
         this.sfx = sfx;
         return this;

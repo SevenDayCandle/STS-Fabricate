@@ -11,7 +11,7 @@ import pinacolada.relics.PCLRelicData;
 
 @VisibleRelic
 public class UsefulBox extends PCLRelic implements OnAllySummonSubscriber {
-    public static final PCLRelicData DATA = register(UsefulBox.class).setTier(RelicTier.SPECIAL, LandingSound.SOLID);
+    public static final PCLRelicData DATA = register(UsefulBox.class).setProps(RelicTier.SPECIAL, LandingSound.SOLID);
 
     public UsefulBox() {
         super(DATA);

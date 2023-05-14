@@ -6,7 +6,7 @@ import pinacolada.relics.PCLRelicData;
 @VisibleRelic
 public class SpitefulCubes extends AbstractCubes {
     public static final PCLRelicData DATA = register(SpitefulCubes.class)
-            .setTier(RelicTier.STARTER, LandingSound.SOLID);
+            .setProps(RelicTier.STARTER, LandingSound.SOLID);
     public static final int MAX_STORED_USES = 4;
     public static final int BONUS_PER_CARDS = 40;
 
