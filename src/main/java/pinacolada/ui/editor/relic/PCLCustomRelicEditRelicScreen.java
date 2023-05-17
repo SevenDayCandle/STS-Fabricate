@@ -79,7 +79,7 @@ public class PCLCustomRelicEditRelicScreen extends PCLCustomEditEntityScreen<PCL
         upgradeToggle = new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 48f))
                 .setPosition(Settings.WIDTH * 0.116f, CARD_Y - LABEL_HEIGHT - AbstractCard.IMG_HEIGHT / 2f)
                 .setBackground(EUIRM.images.panel.texture(), Color.DARK_GRAY)
-                .setFont(EUIFontHelper.carddescriptionfontLarge, 0.5f)
+                .setFont(EUIFontHelper.cardDescriptionFontLarge, 0.5f)
                 .setText(SingleCardViewPopup.TEXT[6])
                 .setToggle(SingleCardViewPopup.isViewingUpgrade)
                 .setOnToggle(this::toggleViewUpgrades);

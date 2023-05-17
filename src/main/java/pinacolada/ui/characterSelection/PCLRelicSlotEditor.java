@@ -37,12 +37,12 @@ public class PCLRelicSlotEditor extends EUIBase {
                 .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.1f)
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.5f)
-                .setFont(EUIFontHelper.cardtitlefontSmall, 1f);
+                .setFont(EUIFontHelper.cardTitleFontSmall, 1f);
 
         relicnameText = new EUITextBox(EUIRM.images.panelRoundedHalfH.texture(), new EUIHitbox(relicvalueText.hb.x + relicvalueText.hb.width + SPACING, cY, AbstractCard.IMG_WIDTH * 1.1f, ITEM_HEIGHT))
                 .setColors(Settings.HALF_TRANSPARENT_BLACK_COLOR, Settings.GOLD_COLOR)
                 .setAlignment(0.5f, 0.5f)
-                .setFont(EUIFontHelper.cardtitlefontNormal, 1f);
+                .setFont(EUIFontHelper.cardTitleFontNormal, 1f);
 
         clearButton = new EUIButton(EUIRM.images.x.texture(), new EUIHitbox(relicnameText.hb.x + relicnameText.hb.width, relicnameText.hb.y + 12, 48, 48))
                 .setClickDelay(0.02f);

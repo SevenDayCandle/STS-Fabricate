@@ -52,7 +52,7 @@ public class PCLCustomEffectProxyNode extends PCLCustomEffectNode {
 
     @Override
     public void refresh() {
-        this.tooltip = new EUITooltip("", PGR.core.strings.cetut_blankProxy);
+        this.tooltip = EUITooltip.headerless(PGR.core.strings.cetut_blankProxy);
     }
 
     @Override

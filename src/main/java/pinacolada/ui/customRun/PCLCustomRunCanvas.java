@@ -77,14 +77,14 @@ public class PCLCustomRunCanvas extends EUICanvas {
         trophiesLabel = new EUILabel(FontHelper.tipBodyFont, new EUIHitbox(screenW(0.3f), screenH(0.05f)))
                 .setColor(Settings.RED_TEXT_COLOR)
                 .setLabel(CustomModeScreen.TEXT[1]);
-        selectedCharacterLabel = new EUILabel(EUIFontHelper.cardtitlefontSmall, new EUIHitbox(screenW(0.18f), screenH(0.05f)))
+        selectedCharacterLabel = new EUILabel(EUIFontHelper.cardTitleFontSmall, new EUIHitbox(screenW(0.18f), screenH(0.05f)))
                 .setColor(Settings.BLUE_TEXT_COLOR);
 
         RunModStrings endlessStrings = PGR.getRunModStrings(MOD_ENDLESS);
         RunModStrings endingActStrings = PGR.getRunModStrings(MOD_THE_ENDING);
 
         endlessToggle = (EUIToggle) new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 48f))
-                .setFont(EUIFontHelper.carddescriptionfontLarge, 0.475f)
+                .setFont(EUIFontHelper.cardDescriptionFontLarge, 0.475f)
                 .setText(endlessStrings.NAME)
                 .setOnToggle(v -> {
                     screen.isEndless = v;
@@ -92,7 +92,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
                 .setTooltip(endlessStrings.NAME, endlessStrings.DESCRIPTION);
 
         endingActToggle = (EUIToggle) new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 48f))
-                .setFont(EUIFontHelper.carddescriptionfontLarge, 0.475f)
+                .setFont(EUIFontHelper.cardDescriptionFontLarge, 0.475f)
                 .setText(endingActStrings.NAME)
                 .setOnToggle(v -> {
                     screen.isFinalActAvailable = v;
@@ -100,7 +100,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
                 .setTooltip(endingActStrings.NAME, endingActStrings.DESCRIPTION);
 
         customCardToggle = (EUIToggle) new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 48f))
-                .setFont(EUIFontHelper.carddescriptionfontLarge, 0.475f)
+                .setFont(EUIFontHelper.cardDescriptionFontLarge, 0.475f)
                 .setText(PGR.core.strings.misc_customCards)
                 .setOnToggle(v -> {
                     screen.allowCustomCards = v;
@@ -110,14 +110,14 @@ public class PCLCustomRunCanvas extends EUICanvas {
         seedInput = (EUITextBoxInput) new EUITextBoxInput(EUIRM.images.panel.texture(),
                 new EUIHitbox(scale(280), scale(48)))
                 .setOnComplete(screen::setSeed)
-                .setHeader(EUIFontHelper.cardtitlefontSmall, 1f, Settings.GOLD_COLOR, CustomModeScreen.TEXT[7])
+                .setHeader(EUIFontHelper.cardTitleFontSmall, 1f, Settings.GOLD_COLOR, CustomModeScreen.TEXT[7])
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.1f)
-                .setFont(EUIFontHelper.cardtitlefontSmall, 0.9f);
+                .setFont(EUIFontHelper.cardTitleFontSmall, 0.9f);
         seedInput.header.setAlignment(1f, 0);
 
         ascensionEditor = new PCLValueEditor(new EUIHitbox(scale(64), scale(48)), CustomModeScreen.TEXT[3], screen::setAscension)
-                .setHeader(EUIFontHelper.cardtitlefontSmall, 1f, Settings.GOLD_COLOR, CustomModeScreen.TEXT[3])
+                .setHeader(EUIFontHelper.cardTitleFontSmall, 1f, Settings.GOLD_COLOR, CustomModeScreen.TEXT[3])
                 .setLimits(0, 20)
                 .setTooltip(CustomModeScreen.TEXT[3], "");
         ascensionEditor.header.setAlignment(0.4f, 0f);

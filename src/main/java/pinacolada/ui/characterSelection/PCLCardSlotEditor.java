@@ -38,17 +38,17 @@ public class PCLCardSlotEditor extends EUIBase {
                 .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.1f)
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.5f)
-                .setFont(EUIFontHelper.cardtitlefontSmall, 1f);
+                .setFont(EUIFontHelper.cardTitleFontSmall, 1f);
 
         cardamountText = new EUITextBox(EUIRM.images.panelRoundedHalfH.texture(), new EUIHitbox(cardvalueText.hb.x + cardvalueText.hb.width, cY, AbstractCard.IMG_HEIGHT * 0.15f, ITEM_HEIGHT))
                 .setColors(Settings.HALF_TRANSPARENT_BLACK_COLOR, Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.5f)
-                .setFont(EUIFontHelper.cardtitlefontNormal, 1f);
+                .setFont(EUIFontHelper.cardTitleFontNormal, 1f);
 
         cardnameText = new EUITextBox(EUIRM.images.panelRoundedHalfH.texture(), new EUIHitbox(cardamountText.hb.x + cardamountText.hb.width, cY, AbstractCard.IMG_WIDTH * 1.1f, ITEM_HEIGHT))
                 .setColors(Settings.HALF_TRANSPARENT_BLACK_COLOR, Settings.GOLD_COLOR)
                 .setAlignment(0.5f, 0.5f)
-                .setFont(EUIFontHelper.cardtitlefontNormal, 1f);
+                .setFont(EUIFontHelper.cardTitleFontNormal, 1f);
 
         decrementButton = new EUIButton(EUIRM.images.minus.texture(), new EUIHitbox(cardnameText.hb.x + cardnameText.hb.width, cardnameText.hb.y + 12, 48, 48))
                 .setClickDelay(0.02f);

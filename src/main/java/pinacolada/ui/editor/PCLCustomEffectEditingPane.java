@@ -190,7 +190,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
                 .setLabelFunctionForOption(labelFunc, false)
                 .setIsMultiSelect(true)
                 .setShouldPositionClearAtTop(true)
-                .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, title)
+                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, title)
                 .setCanAutosize(true, true)
                 .setItems(items);
     }
@@ -204,7 +204,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
                 .setLabelFunctionForOption(labelFunc, false)
                 .setIsMultiSelect(true)
                 .setShouldPositionClearAtTop(true)
-                .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, title)
+                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, title)
                 .setCanAutosize(true, true)
                 .setItems(items);
     }
@@ -221,7 +221,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
                 .setLabelColorFunctionForOption(this::getColorForEffect)
                 .setClearButtonOptions(false, false)
                 .setCanAutosizeButton(true)
-                .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, node.type.getTitle())
+                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, node.type.getTitle())
                 .setItems(node.getEffects());
         effects.setActive(effects.size() > 0);
         valueEditor = new PCLCustomCardUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 5, MENU_HEIGHT, MAIN_OFFSET, OFFSET_AMOUNT)
@@ -250,7 +250,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
                     }
                 })
                 .setLabelFunctionForOption(PCLCardTarget::getTitle, false)
-                .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_cardTarget)
+                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_cardTarget)
                 .setCanAutosize(true, true)
                 .setItems(PCLCustomCardAttributesPage.getEligibleTargets(cardColor));
 
@@ -277,7 +277,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
                 .setLabelFunctionForOption(item -> item.getTooltip().getTitleOrIconForced() + " " + item.getTooltip().title, true)
                 .setIsMultiSelect(true)
                 .setShouldPositionClearAtTop(true)
-                .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, title)
+                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, title)
                 .setCanAutosize(true, true)
                 .setItems(items);
         dropdown.setLabelFunctionForButton((list, __) -> dropdown.makeMultiSelectString(item -> item.getTooltip().getTitleOrIcon()), true);
@@ -312,7 +312,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
 
     public void registerBoolean(String title, String desc, ActionT1<Boolean> onChange, boolean initial) {
         registerBoolean(new EUIToggle(new OriginRelativeHitbox(hb, MENU_WIDTH * 0.62f, MENU_HEIGHT, MENU_WIDTH, 0))
-                        .setFont(EUIFontHelper.carddescriptionfontNormal, 0.9f)
+                        .setFont(EUIFontHelper.cardDescriptionFontNormal, 0.9f)
                         .setText(title)
                         .setTooltip(desc != null ? new EUITooltip(title, desc) : null)
                 , onChange, initial);
@@ -409,7 +409,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
                 .setLabelFunctionForOption(textFunc, smartText)
                 .setIsMultiSelect(multiSelect)
                 .setShouldPositionClearAtTop(positionClearAtTop)
-                .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, title)
+                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, title)
                 .setCanAutosize(true, true)
                 .setItems(possibleItems);
         registerDropdown(dropdown, selectedItems);

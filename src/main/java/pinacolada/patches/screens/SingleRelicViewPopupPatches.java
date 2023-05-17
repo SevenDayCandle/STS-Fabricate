@@ -25,8 +25,8 @@ public class SingleRelicViewPopupPatches {
             if (temp instanceof PCLRelic && temp.isSeen) {
                 float width = ReflectionHacks.getPrivateStatic(SingleRelicViewPopup.class, "DESC_LINE_WIDTH");
                 float spacing = ReflectionHacks.getPrivateStatic(SingleRelicViewPopup.class, "DESC_LINE_SPACING");
-                float height = EUISmartText.getSmartHeight(EUIFontHelper.carddescriptionfontNormal, temp.description, width, spacing) / 2.0F;
-                EUISmartText.write(sb, EUIFontHelper.carddescriptionfontNormal, temp.description, (float) Settings.WIDTH / 2.0F - 200.0F * Settings.scale, (float) Settings.HEIGHT / 2.0F - 140.0F * Settings.scale - height, width, spacing, Settings.CREAM_COLOR);
+                float height = EUISmartText.getSmartHeight(EUIFontHelper.cardDescriptionFontNormal, temp.description, width, spacing) / 2.0F;
+                EUISmartText.write(sb, EUIFontHelper.cardDescriptionFontNormal, temp.description, (float) Settings.WIDTH / 2.0F - 200.0F * Settings.scale, (float) Settings.HEIGHT / 2.0F - 140.0F * Settings.scale - height, width, spacing, Settings.CREAM_COLOR);
                 return SpireReturn.Return();
             }
 

@@ -58,7 +58,7 @@ public class PCLBaseStatEditor extends EUIBase {
                 .setText(null);
 
         valueDropdown = new EUIDropdown<Integer>(RelativeHitbox.fromPercentages(hb, 0.85f, 0.75f, 0.5f, -0.2f))
-                .setFontForButton(EUIFontHelper.cardtitlefontSmall, 1f)
+                .setFontForButton(EUIFontHelper.cardTitleFontSmall, 1f)
                 .setOnOpenOrClose(isOpen -> {
                     editor.activeEditor = isOpen ? this : null;
                 })

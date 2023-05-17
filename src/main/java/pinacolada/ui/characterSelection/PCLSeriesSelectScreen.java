@@ -68,7 +68,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
 
         startingDeck = new EUILabel(null, new EUIHitbox(screenW(0.18f), screenH(0.05f))
                 .setCenter(screenW(0.08f), screenH(0.97f)))
-                .setFont(EUIFontHelper.carddescriptionfontNormal, 0.9f)
+                .setFont(EUIFontHelper.cardDescriptionFontNormal, 0.9f)
                 .setSmartText(true)
                 .setColor(Settings.CREAM_COLOR);
 

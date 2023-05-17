@@ -68,7 +68,7 @@ public class PCLCustomCardAffinityValueEditor extends EUIHoverable {
                 .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.1f)
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.5f)
-                .setFont(EUIFontHelper.cardtitlefontSmall, 1f);
+                .setFont(EUIFontHelper.cardTitleFontSmall, 1f);
 
         displayValue2 = (EUITextBoxNumericalInput) new EUITextBoxNumericalInput(EUIRM.images.panelRoundedHalfH.texture(),
                 new RelativeHitbox(hb, hb.width, hb.height, w * 0.5f, -h * 0.35f))
@@ -76,7 +76,7 @@ public class PCLCustomCardAffinityValueEditor extends EUIHoverable {
                 .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.1f)
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.5f)
-                .setFont(EUIFontHelper.cardtitlefontSmall, 1f);
+                .setFont(EUIFontHelper.cardTitleFontSmall, 1f);
 
         this.affinityImage = new EUIImage(affinity.getIcon(), new EUIHitbox(hb.x, hb.y + hb.height * 0.8f, ICON_SIZE, ICON_SIZE))
                 .setTooltip(affinity.getTooltip().title, PGR.core.strings.cetut_attrAffinity);

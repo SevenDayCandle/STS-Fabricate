@@ -72,22 +72,22 @@ public class PCLLoadoutEditor extends AbstractMenuScreen {
 
         startingDeck = new EUILabel(null, new EUIHitbox(screenW(0.18f), screenH(0.05f))
                 .setCenter(screenW(0.08f), screenH(0.97f)))
-                .setFont(EUIFontHelper.carddescriptionfontNormal, 0.9f)
+                .setFont(EUIFontHelper.cardDescriptionFontNormal, 0.9f)
                 .setColor(Settings.CREAM_COLOR);
 
-        deckText = new EUILabel(EUIFontHelper.cardtitlefontLarge,
+        deckText = new EUILabel(EUIFontHelper.cardTitleFontLarge,
                 new EUIHitbox(screenW(0.1f), screenH(0.8f), buttonHeight, buttonHeight))
                 .setLabel(PGR.core.strings.csel_deckHeader)
                 .setFontScale(0.8f)
                 .setAlignment(0.5f, 0.5f);
 
-        relicText = new EUILabel(EUIFontHelper.cardtitlefontLarge,
+        relicText = new EUILabel(EUIFontHelper.cardTitleFontLarge,
                 new EUIHitbox(screenW(0.1f), screenH(0.4f), buttonHeight, buttonHeight))
                 .setLabel(PGR.core.strings.csel_relicsHeader)
                 .setFontScale(0.8f)
                 .setAlignment(0.5f, 0.5f);
 
-        attributesText = new EUILabel(EUIFontHelper.cardtitlefontLarge,
+        attributesText = new EUILabel(EUIFontHelper.cardTitleFontLarge,
                 new EUIHitbox(screenW(0.57f), screenH(0.8f), buttonHeight, buttonHeight))
                 .setLabel(PGR.core.strings.csel_attributesHeader)
                 .setFontScale(0.8f)
@@ -150,7 +150,7 @@ public class PCLLoadoutEditor extends AbstractMenuScreen {
                 .setAlignment(0.5f, 0.5f)
                 .setPosition(saveButton.hb.cX, cardscountText.hb.y + cardscountText.hb.height + labelHeight * 0.5f)
                 .setFont(FontHelper.tipHeaderFont, 1)
-                .setTooltip(new EUITooltip("", EUIUtils.format(PGR.core.strings.csel_hindranceDescription, PCLLoadoutValidation.HINDRANCE_MULTIPLIER)));
+                .setTooltip(EUITooltip.headerless(EUIUtils.format(PGR.core.strings.csel_hindranceDescription, PCLLoadoutValidation.HINDRANCE_MULTIPLIER)));
 
         for (int i = 0; i < MAX_CARD_SLOTS; i++) {
             slotsEditors.add(new PCLCardSlotEditor(this, screenW(0.1f), screenH(0.75f - (i * 0.05f))));

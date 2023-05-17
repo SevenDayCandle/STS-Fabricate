@@ -48,13 +48,13 @@ public class PCLAffinityPoolModule extends EUIBase implements CustomCardFilterMo
                     currentSeries.addAll(selectedSeries);
                     filters.invoke(null);
                 })
-                .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.sui_seriesUI)
+                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.sui_seriesUI)
                 .setIsMultiSelect(true)
                 .setCanAutosizeButton(true);
 
-        affinitiesSectionLabel = new EUILabel(EUIFontHelper.cardtitlefontSmall,
+        affinitiesSectionLabel = new EUILabel(EUIFontHelper.cardTitleFontSmall,
                 new EUIHitbox(0, 0, scale(48), scale(48)))
-                .setFont(EUIFontHelper.cardtitlefontSmall, 0.8f)
+                .setFont(EUIFontHelper.cardTitleFontSmall, 0.8f)
                 .setLabel(PGR.core.strings.sui_affinities)
                 .setColor(Settings.GOLD_COLOR)
                 .setAlignment(0.5f, 0.0f, false);

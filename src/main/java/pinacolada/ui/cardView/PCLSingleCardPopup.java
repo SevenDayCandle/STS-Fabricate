@@ -140,9 +140,9 @@ public class PCLSingleCardPopup extends EUIBase {
                 .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.1f)
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.5f)
-                .setFont(EUIFontHelper.cardtitlefontSmall, 1f);
+                .setFont(EUIFontHelper.cardTitleFontSmall, 1f);
 
-        this.changeVariantLabel = new EUILabel(EUIFontHelper.carddescriptionfontLarge,
+        this.changeVariantLabel = new EUILabel(EUIFontHelper.cardDescriptionFontLarge,
                 new RelativeHitbox(changeVariantHb, ICON_SIZE, ICON_SIZE, changeVariantHb.width / 2 - ICON_SIZE * 2, changeVariantHb.height * 1.6f))
                 .setAlignment(0.5f, 0.5f) // 0.1f
                 .setLabel(PGR.core.strings.scp_variant + ":");
@@ -152,11 +152,11 @@ public class PCLSingleCardPopup extends EUIBase {
                 .setAlignment(0.9f, 0.1f, true)
                 .setLabel(PGR.core.strings.scp_changeVariantTooltipAlways);
 
-        this.maxCopiesLabel = new EUILabel(EUIFontHelper.carddescriptionfontLarge,
+        this.maxCopiesLabel = new EUILabel(EUIFontHelper.cardDescriptionFontLarge,
                 new RelativeHitbox(changeVariantHb, ICON_SIZE, ICON_SIZE, changeVariantHb.width / 2 - ICON_SIZE * 1.5f, changeVariantHb.height * 4.3f))
                 .setAlignment(0.5f, 0.5f);
 
-        this.maxCopiesCount = new EUILabel(EUIFontHelper.cardtitlefontLarge,
+        this.maxCopiesCount = new EUILabel(EUIFontHelper.cardTitleFontLarge,
                 new RelativeHitbox(changeVariantHb, ICON_SIZE, ICON_SIZE, changeVariantHb.width / 2 + ICON_SIZE * 1.5f, changeVariantHb.height * 4.3f))
                 .setColor(new Color(0.7f, 0.9f, 1f, 1f))
                 .setAlignment(0.5f, 0.5f);

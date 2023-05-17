@@ -31,10 +31,10 @@ public class PCLCustomFormEditor extends EUIBase {
         this.hb = hb;
         this.screen = screen;
 
-        this.header = new EUILabel(EUIFontHelper.cardtitlefontSmall,
+        this.header = new EUILabel(EUIFontHelper.cardTitleFontSmall,
                 new EUIHitbox(hb.x, hb.y + hb.height * 0.8f, hb.width, hb.height))
                 .setAlignment(0.5f, 0.0f, false)
-                .setFont(EUIFontHelper.cardtitlefontSmall, 0.8f).setColor(Settings.GOLD_COLOR)
+                .setFont(EUIFontHelper.cardTitleFontSmall, 0.8f).setColor(Settings.GOLD_COLOR)
                 .setLabel(PGR.core.strings.cedit_editForm)
                 .setTooltip(PGR.core.strings.cedit_editForm, PGR.core.strings.cetut_primaryForm);
 
@@ -44,7 +44,7 @@ public class PCLCustomFormEditor extends EUIBase {
                         setValue(types.get(0));
                     }
                 })
-                .setFontForButton(EUIFontHelper.cardtitlefontSmall, 0.9f)
+                .setFontForButton(EUIFontHelper.cardTitleFontSmall, 0.9f)
                 .setCanAutosize(true, true)
                 .setItems(EUIUtils.range(0, screen.tempBuilders.size() - 1));
         decreaseButton = new EUIButton(ImageMaster.CF_LEFT_ARROW, new RelativeHitbox(formValues.hb, ICON_SIZE, ICON_SIZE, ICON_SIZE * -0.4f, formValues.hb.height * 0.5f))

@@ -91,10 +91,10 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
         targetWidth = imageWidth;
         targetHeight = imageHeight;
 
-        instructionsLabel = new EUILabel(EUIFontHelper.cardtitlefontSmall,
+        instructionsLabel = new EUILabel(EUIFontHelper.cardTitleFontSmall,
                 new EUIHitbox(Settings.WIDTH * 0.35f, Settings.HEIGHT * 0.1f, buttonWidth * 2f, buttonHeight))
                 .setAlignment(0.5f, 0f, true)
-                .setFont(EUIFontHelper.cardtitlefontSmall, 0.8f)
+                .setFont(EUIFontHelper.cardTitleFontSmall, 0.8f)
                 .setLabel(PGR.core.strings.cetut_imageSelect);
 
         cancelButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)

@@ -34,7 +34,7 @@ public class PCLLibraryModule extends EUIBase implements CustomCardPoolModule {
         groupButton = new EUIButton(ImageMaster.COLOR_TAB_BAR, new EUIHitbox(Settings.WIDTH * 0.18f, Settings.HEIGHT * 0.9f, scale(210), scale(80)))
                 .setText(group.getTitle())
                 .setColor(Color.DARK_GRAY)
-                .setFont(EUIFontHelper.carddescriptionfontNormal, 1f)
+                .setFont(EUIFontHelper.cardDescriptionFontNormal, 1f)
                 .setSmartText(false)
                 .setOnClick(() -> togglePool(group.next()))
                 .setOnRightClick(() -> groupMenu.positionToOpen());

@@ -44,12 +44,12 @@ public class PCLValueEditor extends EUIHoverable {
                 .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.1f)
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.5f)
-                .setFont(EUIFontHelper.cardtitlefontSmall, 1f);
+                .setFont(EUIFontHelper.cardTitleFontSmall, 1f);
 
-        this.header = new EUILabel(EUIFontHelper.cardtitlefontSmall,
+        this.header = new EUILabel(EUIFontHelper.cardTitleFontSmall,
                 RelativeHitbox.fromPercentages(hb, 1, 1, 0.5f, 1.5f))
                 .setAlignment(0.5f, 0.0f, false)
-                .setFont(EUIFontHelper.cardtitlefontSmall, 0.8f).setColor(Settings.BLUE_TEXT_COLOR)
+                .setFont(EUIFontHelper.cardTitleFontSmall, 0.8f).setColor(Settings.BLUE_TEXT_COLOR)
                 .setLabel(title);
 
         this.onUpdate = onUpdate;

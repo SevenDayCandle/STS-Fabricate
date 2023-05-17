@@ -41,23 +41,23 @@ public class PCLRandomCardAmountDialog extends EUIDialog<PCLRandomCardAmountDial
     public PCLRandomCardAmountDialog(EUIHitbox hb, Texture backgroundTexture, String headerText, String descriptionText) {
         super(hb, backgroundTexture, headerText, descriptionText);
         this.inputCards = (EUITextBoxNumericalInput) new EUITextBoxNumericalInput(EUIRM.images.panelRoundedHalfH.texture(), new EUIHitbox(hb.x + hb.width / 4, hb.y + hb.height / 1.8f, hb.width / 2, scale(54)))
-                .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.sui_characterCards)
+                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.sui_characterCards)
                 .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.1f)
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.5f)
-                .setFont(EUIFontHelper.cardtitlefontSmall, 1f);
+                .setFont(EUIFontHelper.cardTitleFontSmall, 1f);
         this.inputColorless = (EUITextBoxNumericalInput) new EUITextBoxNumericalInput(EUIRM.images.panelRoundedHalfH.texture(), new EUIHitbox(hb.x + hb.width / 4, inputCards.hb.y - inputCards.hb.height * 1.2f, hb.width / 2, scale(54)))
-                .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, EUIGameUtils.getColorName(AbstractCard.CardColor.COLORLESS))
+                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, EUIGameUtils.getColorName(AbstractCard.CardColor.COLORLESS))
                 .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.1f)
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.5f)
-                .setFont(EUIFontHelper.cardtitlefontSmall, 1f);
+                .setFont(EUIFontHelper.cardTitleFontSmall, 1f);
         this.inputCurse = (EUITextBoxNumericalInput) new EUITextBoxNumericalInput(EUIRM.images.panelRoundedHalfH.texture(), new EUIHitbox(hb.x + hb.width / 4, inputColorless.hb.y - inputColorless.hb.height * 1.2f, hb.width / 2, scale(54)))
-                .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, EUIGameUtils.getColorName(AbstractCard.CardColor.CURSE))
+                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, EUIGameUtils.getColorName(AbstractCard.CardColor.CURSE))
                 .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.1f)
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.5f)
-                .setFont(EUIFontHelper.cardtitlefontSmall, 1f);
+                .setFont(EUIFontHelper.cardTitleFontSmall, 1f);
         this.inputCards.forceSetValue(0, false);
         this.inputColorless.forceSetValue(0, false);
         this.inputCurse.forceSetValue(0, false);
@@ -74,7 +74,7 @@ public class PCLRandomCardAmountDialog extends EUIDialog<PCLRandomCardAmountDial
     protected EUIButton getConfirmButton() {
         return new EUIButton(ImageMaster.OPTION_YES,
                 new RelativeHitbox(hb, scale(135), scale(70), hb.width * 0.15f, hb.height * 0.15f))
-                .setFont(EUIFontHelper.cardtitlefontNormal, 0.8f)
+                .setFont(EUIFontHelper.cardTitleFontNormal, 0.8f)
                 .setText(GridCardSelectScreen.TEXT[0])
                 .setOnClick(() -> {
                     if (onComplete != null) {
@@ -86,7 +86,7 @@ public class PCLRandomCardAmountDialog extends EUIDialog<PCLRandomCardAmountDial
     protected EUIButton getCancelButton() {
         return new EUIButton(ImageMaster.OPTION_NO,
                 new RelativeHitbox(hb, scale(135), scale(70), hb.width * 0.85f, hb.height * 0.15f))
-                .setFont(EUIFontHelper.cardtitlefontNormal, 0.8f)
+                .setFont(EUIFontHelper.cardTitleFontNormal, 0.8f)
                 .setText(GridCardSelectScreen.TEXT[1])
                 .setOnClick(() -> {
                     if (onComplete != null) {

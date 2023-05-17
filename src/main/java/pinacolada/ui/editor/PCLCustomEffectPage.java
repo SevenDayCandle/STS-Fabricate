@@ -42,7 +42,7 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
         this.hb = hb;
         this.scrollBar.setPosition(screenW(0.95f), screenH(0.5f));
         this.upperScrollBound = scale(550);
-        this.header = new EUILabel(EUIFontHelper.cardtitlefontLarge, hb)
+        this.header = new EUILabel(EUIFontHelper.cardTitleFontLarge, hb)
                 .setAlignment(0.5f, 0.0f, false)
                 .setFontScale(0.8f).setColor(Color.LIGHT_GRAY)
                 .setLabel(title);

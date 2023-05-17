@@ -63,6 +63,6 @@ public class PCLCustomEffectRootNode extends PCLCustomEffectNode {
 
     public void refresh() {
         this.text = skill.getSampleText(null);
-        this.tooltip = new EUITooltip("", PGR.core.strings.cetut_blankPrimary);
+        this.tooltip = EUITooltip.headerless(PGR.core.strings.cetut_blankPrimary);
     }
 }

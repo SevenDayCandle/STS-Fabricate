@@ -56,7 +56,7 @@ public class PCLCustomCardUpgradableEditor extends EUIHoverable {
                 .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.1f)
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.5f)
-                .setFont(EUIFontHelper.cardtitlefontSmall, 1f);
+                .setFont(EUIFontHelper.cardTitleFontSmall, 1f);
 
         displayValueSecondary = (EUITextBoxNumericalInput) new EUITextBoxNumericalInput(EUIRM.images.panelRoundedHalfH.texture(),
                 new RelativeHitbox(hb, hb.width, hb.height, w * 0.5f, -h * 0.35f))
@@ -64,12 +64,12 @@ public class PCLCustomCardUpgradableEditor extends EUIHoverable {
                 .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.1f)
                 .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
                 .setAlignment(0.5f, 0.5f)
-                .setFont(EUIFontHelper.cardtitlefontSmall, 1f);
+                .setFont(EUIFontHelper.cardTitleFontSmall, 1f);
 
-        this.header = new EUILabel(EUIFontHelper.cardtitlefontSmall,
+        this.header = new EUILabel(EUIFontHelper.cardTitleFontSmall,
                 new RelativeHitbox(hb, w, h, 0, hb.height * 1.2f))
                 .setAlignment(0.5f, 0.0f, false)
-                .setFont(EUIFontHelper.cardtitlefontSmall, 0.8f).setColor(Settings.GOLD_COLOR)
+                .setFont(EUIFontHelper.cardTitleFontSmall, 0.8f).setColor(Settings.GOLD_COLOR)
                 .setLabel(title);
 
         this.onUpdate = onUpdate;

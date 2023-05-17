@@ -155,7 +155,7 @@ public class PCLCardText {
 
         // Set the predicted scale from the text, excluding newline but including expanded conditionals
         // Use different scaling for Ideographic languages (i.e. Chinese, Japanese)
-        this.font = EUIFontHelper.carddescriptionfontNormal;
+        this.font = EUIFontHelper.cardDescriptionFontNormal;
         int predictedLength = EUIUtils.sumInt(internalParser.getTokens(), PCLTextToken::getCharCount);
         final float max = isIdeographicLanguage() ? 32f : 75f;
         if (predictedLength > max) {

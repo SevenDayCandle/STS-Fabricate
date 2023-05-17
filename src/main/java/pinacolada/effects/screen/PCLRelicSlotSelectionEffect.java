@@ -27,7 +27,7 @@ public class PCLRelicSlotSelectionEffect extends PCLEffect {
             .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.1f)
             .setColors(new Color(0, 0, 0, 0.85f), Settings.CREAM_COLOR)
             .setAlignment(0.5f, 0.5f)
-            .setFont(EUIFontHelper.cardtitlefontSmall, 1f);
+            .setFont(EUIFontHelper.cardTitleFontSmall, 1f);
     public static final float TARGET_X = Settings.WIDTH * 0.25f;
     public static final float START_XY = Settings.WIDTH * 0.5f;
     private final PCLRelicSlot slot;

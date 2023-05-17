@@ -49,7 +49,7 @@ public class PCLAugmentPanelItem extends PCLTopPanelItem {
     @Override
     public void render(SpriteBatch sb) {
         super.render(sb);
-        EUIRenderHelpers.writeCentered(sb, EUIFontHelper.cardtitlefontNormal, String.valueOf(PGR.dungeon.getAugmentTotal()), this.x + (this.hb_w * 0.75f), this.y + 16f * Settings.scale, currentColor);
+        EUIRenderHelpers.writeCentered(sb, EUIFontHelper.cardTitleFontNormal, String.valueOf(PGR.dungeon.getAugmentTotal()), this.x + (this.hb_w * 0.75f), this.y + 16f * Settings.scale, currentColor);
     }
 
     public void update() {

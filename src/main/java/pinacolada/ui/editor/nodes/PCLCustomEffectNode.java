@@ -201,7 +201,7 @@ public class PCLCustomEffectNode extends EUIButton {
 
     public void refresh() {
         this.text = skill.getSampleText(null);
-        this.tooltip = new EUITooltip("", skill.getPowerText());
+        this.tooltip = EUITooltip.headerless(skill.getPowerText());
     }
 
     public void refreshAll() {

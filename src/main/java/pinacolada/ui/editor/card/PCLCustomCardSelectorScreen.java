@@ -73,7 +73,7 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
         toggle = new EUIToggle(new EUIHitbox(0, 0, AbstractCard.IMG_WIDTH * 0.2f, ITEM_HEIGHT))
                 .setBackground(EUIRM.images.panel.texture(), com.badlogic.gdx.graphics.Color.DARK_GRAY)
                 .setPosition(Settings.WIDTH * 0.075f, Settings.HEIGHT * 0.65f)
-                .setFont(EUIFontHelper.carddescriptionfontLarge, 0.5f);
+                .setFont(EUIFontHelper.cardDescriptionFontLarge, 0.5f);
         cancelButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(buttonWidth * 0.53f, buttonHeight)
                 .setColor(Color.FIREBRICK)
