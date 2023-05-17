@@ -37,7 +37,7 @@ public class PMod_PerDistinctPower extends PMod_Per<PField_Power> {
 
     public String getConditionText(String childText) {
         if (fields.not) {
-            return TEXT.cond_genericConditional(childText, TEXT.cond_perDistinct(getAmountRawString(), getSubText()));
+            return TEXT.cond_xConditional(childText, TEXT.cond_perDistinct(getAmountRawString(), getSubText()));
         }
         return TEXT.cond_perDistinct(childText,
                 this.amount <= 1 ? getSubText() : EUIRM.strings.numNoun(getAmountRawString(), getSubText()));

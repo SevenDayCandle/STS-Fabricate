@@ -165,7 +165,7 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
     @Override
     public String getSampleText(PSkill<?> caller)
     {
-        return TEXT.cedit_orCondition;
+        return TEXT.cedit_or;
     }
 
     @Override

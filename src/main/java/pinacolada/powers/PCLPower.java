@@ -379,8 +379,8 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
             this.region48 = relic.getPowerIcon();
         }
         this.powerStrings = new PowerStrings();
-        this.powerStrings.NAME = relic.name;
-        this.powerStrings.DESCRIPTIONS = relic.DESCRIPTIONS;
+        this.powerStrings.NAME = relic.getName();
+        this.powerStrings.DESCRIPTIONS = relic.getDescriptions();
         setupDescription();
     }
 

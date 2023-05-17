@@ -458,7 +458,17 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
         }
     }
 
+    public void useOutsideOfBattle() {
+        if (checkConditionOutsideOfBattle() && this.childEffect != null) {
+            this.childEffect.useOutsideOfBattle();
+        }
+    }
+
     public abstract boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource);
+
+    public boolean checkConditionOutsideOfBattle() {
+        return false;
+    }
 
     /* Same as above but for passive conditions */
     public final boolean isPassiveClause() {

@@ -218,7 +218,7 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
         return EUIUtils.mapAsNonnull(TemplateRelicData.getTemplates(),
                 data -> {
                     PCLRelic relic = data.create();
-                    UnlockTracker.markCardAsSeen(data.ID);
+                    UnlockTracker.markRelicAsSeen(data.ID);
                     relic.isSeen = true;
                     return PCLCustomRelicSlot.canFullyRelicCard(relic) ? relic : null;
                 });

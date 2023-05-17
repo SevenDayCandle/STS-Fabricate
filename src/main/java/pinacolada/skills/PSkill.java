@@ -1537,6 +1537,13 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         use(info);
     }
 
+    // TODO implement and use this in metascaling skills
+    public void useOutsideOfBattle() {
+        if (this.childEffect != null) {
+            this.childEffect.useOutsideOfBattle();
+        }
+    }
+
     public PSkill<T> useParent(boolean value) {
         this.useParent = value;
         return this;

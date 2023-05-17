@@ -38,7 +38,7 @@ public class PMod_PerOrbTurn extends PMod_Per<PField_Orb> {
     @Override
     public String getConditionText(String childText) {
         if (fields.not) {
-            return TEXT.cond_genericConditional(childText,
+            return TEXT.cond_xConditional(childText,
                     fields.random ? TEXT.cond_perThisCombat(getAmountRawString(), fields.getOrbAndString(1), PCLCoreStrings.past(PGR.core.tooltips.channel)) : TEXT.cond_perThisTurn(getAmountRawString(), fields.getOrbAndString(1), PCLCoreStrings.past(PGR.core.tooltips.evoke)));
         }
         String subjString = this.amount <= 1 ? fields.getOrbAndString(1) : EUIRM.strings.numNoun(getAmountRawString(), fields.getOrbAndString());

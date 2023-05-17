@@ -36,7 +36,7 @@ public abstract class PMod_PerCardHas extends PMod_Per<PField_CardCategory> {
     @Override
     public String getConditionText(String childText) {
         if (fields.not) {
-            return TEXT.cond_genericConditional(childText,
+            return TEXT.cond_xConditional(childText,
                     fields.forced ? TEXT.cond_perThisCombat(getAmountRawString(), fields.getFullCardStringSingular(), PCLCoreStrings.past(getActionTooltip())) : TEXT.cond_perThisTurn(getAmountRawString(), fields.getFullCardStringSingular(), PCLCoreStrings.past(getActionTooltip())));
         }
         String subjString = this.amount <= 1 ? fields.getFullCardStringSingular() : EUIRM.strings.numNoun(getAmountRawString(), fields.getFullCardStringSingular());

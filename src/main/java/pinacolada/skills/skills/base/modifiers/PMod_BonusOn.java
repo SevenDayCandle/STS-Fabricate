@@ -49,7 +49,7 @@ public abstract class PMod_BonusOn<T extends PField> extends PPassiveMod<T> {
 
     @Override
     public String getText(boolean addPeriod) {
-        return TEXT.cond_genericConditional(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", TEXT.cond_numIf(getAmountRawString(), getConditionText())) + PCLCoreStrings.period(addPeriod);
+        return TEXT.cond_xConditional(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", TEXT.cond_numIf(getAmountRawString(), getConditionText())) + PCLCoreStrings.period(addPeriod);
     }
 
     @Override

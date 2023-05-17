@@ -8,6 +8,7 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.orbs.PCLOrbHelper;
+import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -58,7 +59,7 @@ public class PMod_EvokePerOrb extends PActiveMod<PField_Orb> {
 
     @Override
     public String getSampleText(PSkill<?> callingSkill) {
-        return TEXT.act_evoke(TEXT.cond_per(TEXT.subjects_x, TEXT.cedit_orbs));
+        return TEXT.act_evoke(TEXT.cond_per(TEXT.subjects_x, PGR.core.tooltips.orb.title));
     }
 
     @Override

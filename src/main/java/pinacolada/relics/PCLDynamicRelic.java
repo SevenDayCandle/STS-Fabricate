@@ -1,6 +1,5 @@
 package pinacolada.relics;
 
-import com.badlogic.gdx.graphics.Texture;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.interfaces.markers.FabricateItem;
 import pinacolada.skills.PSkill;
@@ -14,9 +13,10 @@ public class PCLDynamicRelic extends PCLPointerRelic implements FabricateItem {
         setupBuilder(data);
     }
 
-    public PCLDynamicRelic(PCLDynamicRelicData data, Texture texture, RelicTier tier, LandingSound sfx) {
-        super(data, texture, tier, sfx);
-        setupBuilder(data);
+    // Use descriptions from the relicData because DESCRIPTIONS in AbstractRelic will contain the wrong value
+    @Override
+    public String[] getDescriptions() {
+        return relicData.strings.DESCRIPTIONS;
     }
 
     @Override
@@ -31,6 +31,7 @@ public class PCLDynamicRelic extends PCLPointerRelic implements FabricateItem {
 
     public void setupBuilder(PCLDynamicRelicData builder) {
         this.builder = builder;
+        this.isSeen = true; // Set to seen to let this appear in relic grids, etc.
         for (PSkill<?> effect : builder.moves) {
             if (effect == null) {
                 continue;

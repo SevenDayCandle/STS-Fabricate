@@ -58,15 +58,15 @@ public class PCLCoreStrings extends PCLStrings {
     public final String cedit_attackType = cedit.TEXT[12];
     public final String cedit_attackEffect = cedit.TEXT[13];
     public final String cedit_condition = cedit.TEXT[14];
-    public final String cedit_mainCondition = cedit.TEXT[15];
+    public final String cedit_primary = cedit.TEXT[15];
     public final String cedit_effect = cedit.TEXT[16];
     public final String cedit_effectX = cedit.TEXT[17];
     public final String cedit_powerX = cedit.TEXT[18];
     public final String cedit_modifier = cedit.TEXT[19];
     public final String cedit_trigger = cedit.TEXT[20];
-    public final String cedit_not = cedit.TEXT[21];
-    public final String cedit_addTo = cedit.TEXT[22];
-    public final String cedit_orbs = cedit.TEXT[23];
+    public final String cedit_multiEffect = cedit.TEXT[21];
+    public final String cedit_multiCondition = cedit.TEXT[22];
+    public final String cedit_branchCondition = cedit.TEXT[23];
     public final String cedit_powers = cedit.TEXT[24];
     public final String cedit_maxUpgrades = cedit.TEXT[25];
     public final String cedit_flags = cedit.TEXT[26];
@@ -92,8 +92,8 @@ public class PCLCoreStrings extends PCLStrings {
     public final String cedit_primaryInfo = cedit.TEXT[46];
     public final String cedit_primaryInfoDesc = cedit.TEXT[47];
     public final String cedit_choices = cedit.TEXT[48];
-    public final String cedit_ifElseCondition = cedit.TEXT[49];
-    public final String cedit_orCondition = cedit.TEXT[50];
+    public final String cedit_not = cedit.TEXT[49];
+    public final String cedit_or = cedit.TEXT[50];
     public final String cedit_idSuffix = cedit.TEXT[51];
     public final String cedit_idSuffixWarning = cedit.TEXT[52];
     public final String cedit_duplicateToColor = cedit.TEXT[53];
@@ -125,8 +125,8 @@ public class PCLCoreStrings extends PCLStrings {
     public final String cetut_effectTrigger = cetut.TEXT[12];
     public final String cetut_effectTurnDelay = cetut.TEXT[13];
     public final String cetut_effectChoices = cetut.TEXT[14];
-    public final String cetut_effectConditionIfElse = cetut.TEXT[15];
-    public final String cetut_effectConditionOr = cetut.TEXT[16];
+    public final String cetut_effectMultiCondition = cetut.TEXT[15];
+    public final String cetut_effectBranchCondition = cetut.TEXT[16];
     public final String cetut_imageSelect = cetut.TEXT[17];
     public final String cetut_imageCrop = cetut.TEXT[18];
     public final String cetut_maxUpgrades = cetut.TEXT[19];
@@ -149,6 +149,9 @@ public class PCLCoreStrings extends PCLStrings {
     public final String cetut_passive = cetut.TEXT[36];
     public final String cetut_when = cetut.TEXT[37];
     public final String cetut_bonus = cetut.TEXT[38];
+    public final String cetut_nodeTutorial = cetut.TEXT[39];
+    public final String cetut_blankPrimary = cetut.TEXT[40];
+    public final String cetut_blankProxy = cetut.TEXT[41];
     // Card Pile
     public final String cpile_hand = cardPile.TEXT[0];
     public final String cpile_deck = cardPile.TEXT[1];
@@ -435,11 +438,11 @@ public class PCLCoreStrings extends PCLStrings {
     }
 
     public static String joinWithAnd(List<String> values) {
-        return joinWith(PGR.core.strings::cond_and, values);
+        return joinWith(PGR.core.strings::cond_xAndY, values);
     }
 
     public static String joinWithAnd(String... values) {
-        return joinWith(PGR.core.strings::cond_and, values);
+        return joinWith(PGR.core.strings::cond_xAndY, values);
     }
 
     public static String joinWithOr(List<String> values) {
@@ -507,16 +510,16 @@ public class PCLCoreStrings extends PCLStrings {
         return actFmt(1, desc1, desc2, pile);
     }
 
-    public final String act_applyAmount(Object amount, Object power) {
+    public final String act_applyToTarget(Object power, Object target) {
+        return actFmt(2, power, target);
+    }
+
+    public final String act_applyX(Object amount, Object power) {
         return actFmt(4, amount, power);
     }
 
-    public final String act_applyAmountToTarget(Object amount, Object power, Object target) {
+    public final String act_applyXToTarget(Object amount, Object power, Object target) {
         return actFmt(3, amount, power, target);
-    }
-
-    public final String act_applyToTarget(Object power, Object target) {
-        return actFmt(2, power, target);
     }
 
     public final String act_channel(Object subject) {
@@ -811,12 +814,12 @@ public class PCLCoreStrings extends PCLStrings {
         return act_objectOn(PGR.core.tooltips.stabilize.title, subject, target);
     }
 
-    public final String act_stealAmount(Object amount, Object power) {
-        return actFmt(40, amount, power);
-    }
-
     public final String act_stealFrom(Object amount, Object item, Object target) {
         return actFmt(39, amount, item, target);
+    }
+
+    public final String act_stealX(Object amount, Object power) {
+        return actFmt(40, amount, power);
     }
 
     public final String act_stun(Object target) {
@@ -884,14 +887,6 @@ public class PCLCoreStrings extends PCLStrings {
         return conditions.TEXT[index];
     }
 
-    public final String cond_activated(Object desc1) {
-        return condFmt(24, desc1);
-    }
-
-    public final String cond_and(Object desc1, Object desc2) {
-        return condFmt(25, desc1, desc2);
-    }
-
     // Condition functions
     public final String cond_any(Object desc1) {
         return condFmt(0, desc1);
@@ -921,16 +916,8 @@ public class PCLCoreStrings extends PCLStrings {
         return condFmt(6);
     }
 
-    public final String cond_doThen(Object desc3, Object desc4) {
-        return condFmt(38, desc3, desc4);
-    }
-
     public final String cond_forTurns(Object desc3) {
         return condFmt(7, desc3);
-    }
-
-    public final String cond_genericConditional(Object desc3, Object desc4) {
-        return condFmt(39, desc3, desc4);
     }
 
     public final String cond_ifTargetDidX(Object target, Object desc3, Object desc4) {
@@ -1071,6 +1058,22 @@ public class PCLCoreStrings extends PCLStrings {
 
     public final String cond_wheneverYou(Object desc1) {
         return cond_whenMulti(subjects_you, desc1);
+    }
+
+    public final String cond_xActivated(Object desc1) {
+        return condFmt(26, desc1);
+    }
+
+    public final String cond_xAndY(Object desc1, Object desc2) {
+        return condFmt(27, desc1, desc2);
+    }
+
+    public final String cond_xThenY(Object desc3, Object desc4) {
+        return condFmt(38, desc3, desc4);
+    }
+
+    public final String cond_xConditional(Object desc3, Object desc4) {
+        return condFmt(39, desc3, desc4);
     }
 
     public final String csel_cardsCount(int value) {

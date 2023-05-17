@@ -121,7 +121,7 @@ public class PCLRelicSlotEditor extends EUIBase {
 
         this.slot = slot;
         this.relic = slot.getRelic();
-        this.relicnameText.setLabel(relic != null ? relic.name : "").setActive(true);
+        this.relicnameText.setLabel(relic != null ? relic.getName() : "").setActive(true);
         this.relicvalueText.setActive(true);
         this.clearButton.setOnClick(() -> {
             this.slot.clear();

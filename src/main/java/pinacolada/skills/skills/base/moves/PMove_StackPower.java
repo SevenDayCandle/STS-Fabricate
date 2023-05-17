@@ -39,7 +39,7 @@ public class PMove_StackPower extends PMove<PField_Power> {
 
     @Override
     public String getSampleText(PSkill<?> callingSkill) {
-        return TEXT.act_applyAmount(TEXT.subjects_x, TEXT.cedit_powers);
+        return TEXT.act_applyX(TEXT.subjects_x, TEXT.cedit_powers);
     }
 
     @Override
@@ -53,10 +53,10 @@ public class PMove_StackPower extends PMove<PField_Power> {
                 case AllEnemy:
                 case All:
                 case Team:
-                    return TEXT.subjects_randomly(fields.powers.size() > 0 && fields.powers.get(0).isDebuff ? TEXT.act_applyAmountToTarget(getAmountRawString(), joinedString, getTargetString()) : TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), joinedString));
+                    return TEXT.subjects_randomly(fields.powers.size() > 0 && fields.powers.get(0).isDebuff ? TEXT.act_applyXToTarget(getAmountRawString(), joinedString, getTargetString()) : TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), joinedString));
                 case Single:
                 case SingleAlly:
-                    return TEXT.subjects_randomly(fields.powers.size() > 0 && fields.powers.get(0).isDebuff ? TEXT.act_applyAmount(getAmountRawString(), joinedString) : TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), joinedString));
+                    return TEXT.subjects_randomly(fields.powers.size() > 0 && fields.powers.get(0).isDebuff ? TEXT.act_applyX(getAmountRawString(), joinedString) : TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), joinedString));
                 case Self:
                     if (isFromCreature()) {
                         return TEXT.subjects_randomly(TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), joinedString));
@@ -73,10 +73,10 @@ public class PMove_StackPower extends PMove<PField_Power> {
             case AllEnemy:
             case All:
             case Team:
-                return fields.powers.size() > 0 && fields.powers.get(0).isDebuff ? TEXT.act_applyAmountToTarget(getAmountRawString(), joinedString, getTargetString()) : TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
+                return fields.powers.size() > 0 && fields.powers.get(0).isDebuff ? TEXT.act_applyXToTarget(getAmountRawString(), joinedString, getTargetString()) : TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
             case Single:
             case SingleAlly:
-                return fields.powers.size() > 0 && fields.powers.get(0).isDebuff ? TEXT.act_applyAmount(getAmountRawString(), joinedString) : TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
+                return fields.powers.size() > 0 && fields.powers.get(0).isDebuff ? TEXT.act_applyX(getAmountRawString(), joinedString) : TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
             case Self:
                 if (isFromCreature()) {
                     return TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);

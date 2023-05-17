@@ -27,6 +27,32 @@ public class PCLCustomEffectMultiNode extends PCLCustomEffectNode {
         addEffect(node.skill);
     }
 
+    @Override
+    protected void extractSelf() {
+        if (child != null) {
+            super.extractSelf();
+            return;
+        }
+
+        PCLCustomEffectNode first = subnodes.size() > 0 ? subnodes.get(0) : null;
+        if (first != null) {
+            if (parent != null) {
+                if (parent.skill instanceof PMultiBase && ((PMultiBase<?>) parent.skill).getSubEffects().remove(this.skill))
+                {
+                    ((PMultiBase<?>) parent.skill).tryAddEffect(first.skill);
+                }
+                else {
+                    parent.skill.setChild(first.skill);
+                }
+            }
+            else if (editor.rootEffect == this.skill)
+            {
+                editor.rootEffect = editor.makeRootSkill();
+                editor.rootEffect.setChild(first.skill);
+            }
+        }
+    }
+
     // When initializing this node through createTree, also create nodes for the subeffects
     @Override
     public PCLCustomEffectNode makeSkillChild() {
@@ -62,7 +88,7 @@ public class PCLCustomEffectMultiNode extends PCLCustomEffectNode {
 
     @Override
     public void refreshAll() {
-        super.refresh();
+        super.refreshAll();
         for (PCLCustomEffectNode subnode : subnodes) {
             subnode.refreshAll();
         }

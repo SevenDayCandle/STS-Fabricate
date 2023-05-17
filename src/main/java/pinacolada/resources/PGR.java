@@ -346,10 +346,11 @@ public class PGR {
         ConsoleCommand.addCommand("effekseer", EffekseerCommand.class);
         ConsoleCommand.addCommand("exportcsv", ExportCSVCommand.class);
         ConsoleCommand.addCommand("jumpanywhere", JumpAnywhereCommand.class);
-        ConsoleCommand.addCommand("obtain", ObtainCommand.class);
-        ConsoleCommand.addCommand("obtaincustom", ObtainCustomCommand.class);
-        ConsoleCommand.addCommand("obtaindeck", ObtainDeckCommand.class);
-        ConsoleCommand.addCommand("obtaindeckcustom", ObtainDeckCustomCommand.class);
+        ConsoleCommand.addCommand("obtain", ObtainCardCommand.class);
+        ConsoleCommand.addCommand("obtaincustom", ObtainCustomCardCommand.class);
+        ConsoleCommand.addCommand("obtaincustomrelic", ObtainCustomRelicCommand.class);
+        ConsoleCommand.addCommand("obtaindeck", ObtainDeckCardCommand.class);
+        ConsoleCommand.addCommand("obtaindeckcustom", ObtainDeckCustomCardCommand.class);
         ConsoleCommand.addCommand("reloadcustom", ReloadCustomCommand.class);
         ConsoleCommand.addCommand("unlockall", UnlockAllCommand.class);
     }

@@ -1,6 +1,5 @@
 package pinacolada.relics;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIInputManager;
 import extendedui.EUIUtils;
@@ -20,10 +19,6 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
 
     public PCLPointerRelic(PCLRelicData data) {
         super(data);
-    }
-
-    public PCLPointerRelic(PCLRelicData data, Texture texture, RelicTier tier, LandingSound sfx) {
-        super(data, texture, tier, sfx);
     }
 
     public float atBlockModify(PCLUseInfo info, float block, AbstractCard c) {
@@ -78,7 +73,7 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
         return damage;
     }
 
-    // Gets called before skills are initialized
+    // Initialize skills here because this gets called in AbstractRelic's constructor
     @Override
     public String getUpdatedDescription() {
         if (skills == null) {
@@ -96,13 +91,7 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
     @Override
     public void atPreBattle() {
         super.atPreBattle();
-        for (PSkill<?> effect : getEffects()) {
-            effect.subscribeChildren();
-            PCLClickableUse use = effect.getClickable(this);
-            if (use != null) {
-                triggerCondition = use;
-            }
-        }
+        subscribe();
     }
 
     @Override
@@ -114,13 +103,14 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
     }
 
     @Override
-    public String getID() {
-        return relicId;
+    public void onEquip() {
+        super.onEquip();
+        subscribe();
     }
 
     @Override
-    public String getName() {
-        return name;
+    public String getID() {
+        return relicId;
     }
 
     @Override
@@ -145,6 +135,16 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
     }
 
     public void setup() {
+    }
+
+    protected void subscribe() {
+        for (PSkill<?> effect : getEffects()) {
+            effect.subscribeChildren();
+            PCLClickableUse use = effect.getClickable(this);
+            if (use != null) {
+                triggerCondition = use;
+            }
+        }
     }
 
     @Override

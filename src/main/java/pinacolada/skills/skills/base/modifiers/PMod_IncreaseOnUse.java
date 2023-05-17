@@ -46,7 +46,7 @@ public class PMod_IncreaseOnUse extends PPassiveMod<PField_Empty> {
 
     @Override
     public String getText(boolean addPeriod) {
-        return TEXT.cond_doThen(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", getSubText()) + PCLCoreStrings.period(addPeriod);
+        return TEXT.cond_xThenY(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", getSubText()) + PCLCoreStrings.period(addPeriod);
     }
 
     @Override

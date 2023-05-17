@@ -32,7 +32,7 @@ public class PMod_PerCard extends PMod_Per<PField_CardCategory> {
     @Override
     public String getConditionText(String childText) {
         if (fields.not) {
-            return TEXT.cond_genericConditional(childText, TEXT.cond_perIn(getAmountRawString(), fields.getFullCardStringSingular(), fields.getGroupString()));
+            return TEXT.cond_xConditional(childText, TEXT.cond_perIn(getAmountRawString(), fields.getFullCardStringSingular(), fields.getGroupString()));
         }
         return TEXT.cond_perIn(childText,
                 this.amount <= 1 ? fields.getFullCardStringSingular() : EUIRM.strings.numNoun(getAmountRawString(), fields.getFullCardString()), fields.getGroupString());

@@ -29,7 +29,7 @@ public class PCLCustomEffectSelectorPane extends EUIImage {
         nodeCreateButtons.add(new EUIButton(type.getTexture(), new RelativeHitbox(hb, SIZE_X, SIZE_Y, (nodeCreateButtons.size() + 1) * SIZE_X * 1.1f, SIZE_Y * 0.9f))
                         .setColor(type.getColor())
                         .setShaderMode(EUIRenderHelpers.ShaderMode.Colorize)
-                        .setTooltip(type.getTitle(), "")
+                        .setTooltip(type.getTooltip())
                         .setOnPreClick((button) -> this.startHologram(button, type)));
     }
 

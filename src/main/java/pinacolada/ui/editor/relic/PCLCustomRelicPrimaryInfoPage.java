@@ -44,6 +44,7 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
     protected EUILabel header;
     protected EUITextBoxInput idInput;
     protected EUITextBoxInput nameInput;
+    protected EUITextBoxInput flavorInput; // TODO implement this once you have multi-line input available
     protected EUISearchableDropdown<Settings.GameLanguage> languageDropdown;
     protected EUIDropdown<AbstractRelic.RelicTier> tierDropdown;
     protected EUIDropdown<AbstractRelic.LandingSound> sfxDropdown;

@@ -3,7 +3,9 @@ package pinacolada.ui.editor.nodes;
 import com.badlogic.gdx.graphics.Color;
 import extendedui.EUIRenderHelpers;
 import extendedui.ui.hitboxes.EUIHitbox;
+import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIColors;
+import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.ui.editor.PCLCustomEffectHologram;
 import pinacolada.ui.editor.PCLCustomEffectPage;
@@ -17,7 +19,6 @@ public class PCLCustomEffectProxyNode extends PCLCustomEffectNode {
         this.controller = controller;
         this.hb.resize(SIZE_Y, SIZE_Y);
         this.hb.update();
-        this.showText = false;
         this.deleteButton.setActive(false);
         setShaderMode(EUIRenderHelpers.ShaderMode.Normal);
         setOnClick(this::startEdit);
@@ -51,6 +52,7 @@ public class PCLCustomEffectProxyNode extends PCLCustomEffectNode {
 
     @Override
     public void refresh() {
+        this.tooltip = new EUITooltip("", PGR.core.strings.cetut_blankProxy);
     }
 
     @Override

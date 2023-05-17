@@ -42,7 +42,7 @@ public class PMove_ChannelOrb extends PMove<PField_Orb> {
 
     @Override
     public String getSampleText(PSkill<?> callingSkill) {
-        return TEXT.act_channelX(TEXT.subjects_x, TEXT.cedit_orbs);
+        return TEXT.act_channelX(TEXT.subjects_x, PGR.core.tooltips.orb.title);
     }
 
     @Override

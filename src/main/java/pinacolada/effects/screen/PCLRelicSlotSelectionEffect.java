@@ -84,7 +84,7 @@ public class PCLRelicSlotSelectionEffect extends PCLEffect {
                     .setFontColor(item.estimatedValue < 0 ? Settings.RED_TEXT_COLOR : Settings.GREEN_TEXT_COLOR)
                     .setPosition(item.relicImage.hb.x - 40 * Settings.scale, item.relicImage.hb.cY)
                     .renderImpl(sb);
-            item.relicnameText.renderImpl(sb);
+            item.relicNameText.renderImpl(sb);
         }
     }
 
@@ -92,18 +92,18 @@ public class PCLRelicSlotSelectionEffect extends PCLEffect {
     protected void updateInternal(float deltaTime) {
         for (RenderItem item : relics) {
             item.update(deltaTime);
-            if (item.relicImage.hb.hovered || item.relicnameText.hb.hovered) {
-                item.relicnameText.setColor(Color.WHITE);
+            if (item.relicImage.hb.hovered || item.relicNameText.hb.hovered) {
+                item.relicNameText.setColor(Color.WHITE);
             }
             else {
-                item.relicnameText.setColor(Color.GOLD);
+                item.relicNameText.setColor(Color.GOLD);
             }
         }
 
         if (tickDuration(deltaTime)) {
             if (EUIInputManager.leftClick.isJustReleased()) {
                 for (RenderItem item : relics) {
-                    if (item.relicImage.hb.hovered || item.relicnameText.hb.hovered) {
+                    if (item.relicImage.hb.hovered || item.relicNameText.hb.hovered) {
                         onRelicClicked(item.relic);
                     }
                 }
@@ -138,7 +138,7 @@ public class PCLRelicSlotSelectionEffect extends PCLEffect {
         public final int estimatedValue;
         public final EUIRelic relicImage;
         public final PCLRelic relic;
-        public final EUILabel relicnameText = new EUILabel(FontHelper.cardTitleFont, new EUIHitbox(AbstractCard.IMG_WIDTH, AbstractCard.IMG_HEIGHT * 0.15f))
+        public final EUILabel relicNameText = new EUILabel(FontHelper.cardTitleFont, new EUIHitbox(AbstractCard.IMG_WIDTH, AbstractCard.IMG_HEIGHT * 0.15f))
                 .setColor(Settings.GOLD_COLOR)
                 .setAlignment(0.5f, 0.01f);
         public float animTimer;
@@ -150,7 +150,7 @@ public class PCLRelicSlotSelectionEffect extends PCLEffect {
             this.relicImage = new EUIRelic(relic, new EUIHitbox(Settings.WIDTH * 0.5f, Settings.HEIGHT * 0.5f, item.relic.hb.width, item.relic.hb.height));
             this.targetX = TARGET_X;
             this.targetY = Settings.HEIGHT * (0.8f - (index * 0.05f));
-            this.relicnameText.setLabel(item.relic.name);
+            this.relicNameText.setLabel(item.relic.getName());
         }
 
         public void update(float deltaTime) {
@@ -159,9 +159,9 @@ public class PCLRelicSlotSelectionEffect extends PCLEffect {
                 float newX = Interpolation.pow2.apply(START_XY, targetX, this.animTimer / duration);
                 float newY = Interpolation.pow2.apply(START_XY, targetY, this.animTimer / duration);
                 this.relicImage.translate(newX, newY);
-                this.relicnameText.setPosition(relicImage.hb.x + 256 * Settings.scale, relicImage.hb.cY);
+                this.relicNameText.setPosition(relicImage.hb.x + 256 * Settings.scale, relicImage.hb.cY);
             }
-            this.relicnameText.tryUpdate();
+            this.relicNameText.tryUpdate();
             this.relicImage.tryUpdate();
         }
     }

@@ -6,21 +6,27 @@ import basemod.helpers.ConvertHelper;
 import extendedui.EUIUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCard;
-import pinacolada.cards.base.PCLCustomCardSlot;
+import pinacolada.cards.base.PCLCardData;
 
 import java.util.ArrayList;
 
-public class ObtainCustomCommand extends ConsoleCommand {
-
-    public ObtainCustomCommand() {
+public class ObtainCardCommand extends ConsoleCommand {
+    public ObtainCardCommand() {
         this.requiresPlayer = true;
         this.minExtraTokens = 2;
         this.maxExtraTokens = 4;
         this.simpleCheck = true;
     }
 
-    public static ArrayList<String> getCustoms() {
-        return EUIUtils.map(PCLCustomCardSlot.getCards(null), slot -> slot.ID);
+    public static ArrayList<String> getPCLCards() {
+        return EUIUtils.mapAsNonnull(PCLCardData.getAllData(), d -> d.ID);
+    }
+
+    protected void createCards(PCLCardData data, int count, int upgradeCount, int form) {
+        for (int i = 0; i < count; ++i) {
+            PCLCard copy = data.create(form, upgradeCount);
+            doAction(copy);
+        }
     }
 
     protected void doAction(PCLCard copy) {
@@ -29,9 +35,9 @@ public class ObtainCustomCommand extends ConsoleCommand {
 
     @Override
     protected void execute(String[] tokens, int depth) {
-        PCLCustomCardSlot slot = PCLCustomCardSlot.get(tokens[1]);
+        PCLCardData data = PCLCardData.getStaticData(tokens[1]);
 
-        if (slot != null) {
+        if (data != null) {
             int count = 1;
             if (tokens.length > 2 && ConvertHelper.tryParseInt(tokens[2]) != null) {
                 count = ConvertHelper.tryParseInt(tokens[2], 0);
@@ -44,20 +50,12 @@ public class ObtainCustomCommand extends ConsoleCommand {
 
             int form = 0;
             if (tokens.length > 4) {
-                form = Math.min(ConvertHelper.tryParseInt(tokens[4], 0), slot.builders.size() - 1);
+                form = Math.min(ConvertHelper.tryParseInt(tokens[4], 0), data.maxForms - 1);
             }
 
             DevConsole.log("Obtained " + count + (count == 1 ? " copy of " : " copies of ") + tokens[1] + " with " + upgradeCount + " upgrade(s) and form " + form);
 
-            for (int i = 0; i < count; ++i) {
-                PCLCard copy = slot.builders.get(form).createImplWithForms(true);
-
-                for (int j = 0; j < upgradeCount; ++j) {
-                    copy.upgrade();
-                }
-
-                doAction(copy);
-            }
+            createCards(data, count, upgradeCount, form);
         }
         else {
             DevConsole.log("Could not find card " + tokens[1]);
@@ -65,7 +63,7 @@ public class ObtainCustomCommand extends ConsoleCommand {
     }
 
     public ArrayList<String> extraOptions(String[] tokens, int depth) {
-        ArrayList<String> options = getCustoms();
+        ArrayList<String> options = getPCLCards();
         if (options.contains(tokens[depth])) {
             if (tokens.length > depth + 1 && tokens[depth + 1].matches("\\d*")) {
                 if (tokens.length > depth + 2) {

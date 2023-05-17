@@ -146,10 +146,12 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         valueEditor
                 .setLimits(min, max)
                 .setValue(node.skill != null ? node.skill.amount : 0, node.skill != null ? node.skill.getUpgrade() : 0, false)
+                .setHeaderText(PGR.core.strings.cedit_value)
                 .setActive(min != max);
         extraEditor
                 .setLimits(eMin, eMax)
                 .setValue(node.skill != null ? node.skill.extra : 0, node.skill != null ? node.skill.getUpgradeExtra() : 0, false)
+                .setHeaderText(PGR.core.strings.cedit_extraValue)
                 .setActive(eMin != eMax);
         if (node.skill != null && lastEffect != node.skill) {
             lastEffect = node.skill;
@@ -221,6 +223,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
                 .setCanAutosizeButton(true)
                 .setHeader(EUIFontHelper.cardtitlefontSmall, 0.8f, Settings.GOLD_COLOR, node.type.getTitle())
                 .setItems(node.getEffects());
+        effects.setActive(effects.size() > 0);
         valueEditor = new PCLCustomCardUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 5, MENU_HEIGHT, MAIN_OFFSET, OFFSET_AMOUNT)
                 , EUIRM.strings.uiAmount, (val, upVal) -> {
             if (node.skill != null) {
@@ -255,7 +258,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         origins = initializeRegular(PCLCardSelection.values(), PCLCardSelection::getTitle, PGR.core.strings.cedit_pile);
         affinities = initializeSmartSearchable(PCLCustomCardAttributesPage.getEligibleAffinities(cardColor), PGR.core.strings.sui_affinities);
         powers = initializeSmartSearchable(PCLPowerHelper.sortedValues(), PGR.core.strings.cedit_powers);
-        orbs = initializeSmartSearchable(PCLOrbHelper.visibleValues(), PGR.core.strings.cedit_orbs);
+        orbs = initializeSmartSearchable(PCLOrbHelper.visibleValues(), PGR.core.tooltips.orb.title);
         stances = initializeSmartSearchable(PCLStanceHelper.values(cardColor), PGR.core.tooltips.stance.title);
         tags = initializeSmartSearchable(PCLCardTag.getAll(), PGR.core.strings.cedit_tags);
         cardData = initializeSearchable(getAvailableCards(), c -> c.name, RunHistoryScreen.TEXT[9]);

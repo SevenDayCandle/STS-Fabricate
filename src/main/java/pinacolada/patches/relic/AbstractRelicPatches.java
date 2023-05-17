@@ -44,7 +44,7 @@ public class AbstractRelicPatches {
     @SpirePatch(clz = AbstractRelic.class, method = "getPrice")
     public static class AbstractRelicPatches_GetPrice {
         @SpirePrefixPatch
-        public static SpireReturn insert(AbstractRelic __instance) {
+        public static SpireReturn<Integer> insert(AbstractRelic __instance) {
             if (GameUtilities.isPCLPlayerClass() && __instance.tier == AbstractRelic.RelicTier.BOSS) {
                 return SpireReturn.Return(333);
             }

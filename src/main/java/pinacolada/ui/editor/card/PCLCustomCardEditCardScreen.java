@@ -173,7 +173,14 @@ public class PCLCustomCardEditCardScreen extends PCLCustomEditEntityScreen<PCLCu
     }
 
     protected void editImage() {
-        imageEditor = (PCLCustomImageEffect) PCLCustomImageEffect.forCard(loadedImage != null ? loadedImage : getBuilder().portraitImage.texture)
+        Texture image = loadedImage;
+        if (image == null) {
+            ColoredTexture portrait = getBuilder().portraitImage;
+            if (portrait != null) {
+                image = portrait.texture;
+            }
+        }
+        imageEditor = (PCLCustomImageEffect) PCLCustomImageEffect.forCard(image)
                 .addCallback(pixmap -> {
                             if (pixmap != null) {
                                 setLoadedImage(new Texture(pixmap));

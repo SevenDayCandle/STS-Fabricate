@@ -45,7 +45,7 @@ public abstract class PMod_ChangeGroup extends PActiveMod<PField_CardGeneric> {
 
     @Override
     public String getText(boolean addPeriod) {
-        return TEXT.cond_genericConditional(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", getSubText()) + PCLCoreStrings.period(addPeriod);
+        return TEXT.cond_xConditional(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", getSubText()) + PCLCoreStrings.period(addPeriod);
     }
 
     @Override

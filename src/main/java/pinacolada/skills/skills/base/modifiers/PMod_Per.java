@@ -42,7 +42,7 @@ public abstract class PMod_Per<T extends PField_Not> extends PPassiveMod<T> {
 
     public String getConditionText(String childText) {
         if (fields.not) {
-            return TEXT.cond_genericConditional(childText, TEXT.cond_per(getAmountRawString(), getSubText()));
+            return TEXT.cond_xConditional(childText, TEXT.cond_per(getAmountRawString(), getSubText()));
         }
         return TEXT.cond_per(childText,
                 this.amount <= 1 ? getSubText() : EUIRM.strings.numNoun(getAmountRawString(), getSubText()));

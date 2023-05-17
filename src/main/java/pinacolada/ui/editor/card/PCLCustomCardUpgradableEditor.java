@@ -124,6 +124,11 @@ public class PCLCustomCardUpgradableEditor extends EUIHoverable {
         return this;
     }
 
+    public PCLCustomCardUpgradableEditor setHeaderText(String text) {
+        this.header.setLabel(text);
+        return this;
+    }
+
     public PCLCustomCardUpgradableEditor setLimits(int minimum, int maximum) {
         displayValue.setLimits(minimum, maximum);
 

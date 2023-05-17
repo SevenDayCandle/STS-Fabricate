@@ -96,6 +96,7 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker {
     }
 
     public PCLDynamicRelic create() {
+        setTextForLanguage();
         if (imagePath == null) {
             imagePath = PCLCoreImages.CardAffinity.unknown.path();
         }

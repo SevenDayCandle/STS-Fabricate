@@ -1,7 +1,6 @@
 package pinacolada.relics;
 
 import basemod.ReflectionHacks;
-import basemod.abstracts.CustomRelic;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -23,12 +22,13 @@ import pinacolada.actions.PCLActions;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class PCLRelic extends CustomRelic implements TooltipProvider {
+public abstract class PCLRelic extends AbstractRelic implements TooltipProvider {
     public static AbstractPlayer player;
     public static Random rng;
     public final PCLRelicData relicData;
@@ -36,12 +36,9 @@ public abstract class PCLRelic extends CustomRelic implements TooltipProvider {
     public EUITooltip mainTooltip;
 
     public PCLRelic(PCLRelicData data) {
-        this(data, EUIRM.getTexture(data.imagePath), data.tier, data.sfx);
-    }
-
-    public PCLRelic(PCLRelicData data, Texture texture, RelicTier tier, LandingSound sfx) {
-        super(data.ID, texture, tier, sfx);
+        super(data.ID, "", data.tier, data.sfx);
         this.relicData = data;
+        loadImage(data.imagePath);
         initializePCLTips();
     }
 
@@ -112,11 +109,15 @@ public abstract class PCLRelic extends CustomRelic implements TooltipProvider {
     }
 
     protected String formatDescription(int index, Object... args) {
-        return EUIUtils.format(DESCRIPTIONS[index], args);
+        return EUIUtils.format(getDescriptions()[index], args);
     }
 
     protected String getCounterString() {
         return String.valueOf(counter);
+    }
+
+    public String[] getDescriptions() {
+        return DESCRIPTIONS;
     }
 
     public TextureAtlas.AtlasRegion getPowerIcon() {
@@ -137,8 +138,29 @@ public abstract class PCLRelic extends CustomRelic implements TooltipProvider {
         return tips;
     }
 
+    public String getName() {
+        return relicData.strings.NAME;
+    }
+
     public int getValue() {
         return counter;
+    }
+
+    public void loadImage(String path) {
+        loadImage(path, false);
+    }
+
+    public void loadImage(String path, boolean refresh) {
+        Texture t = EUIRM.getTexture(path, true, refresh, true);
+        if (t == null) {
+            t = EUIRM.getLocalTexture(path, true, refresh, true);
+            if (t == null) {
+                path = PCLCoreImages.CardAffinity.unknown.path();
+                t = EUIRM.getTexture(path, true, false, true);
+            }
+        }
+        this.img = t;
+        this.outlineImg = t;
     }
 
     // Initialize later to ensure relicData is set
@@ -151,7 +173,7 @@ public abstract class PCLRelic extends CustomRelic implements TooltipProvider {
         }
 
         AbstractPlayer.PlayerClass playerClass = EUIGameUtils.getPlayerClassForCardColor(relicData.cardColor);
-        mainTooltip = playerClass != null ? new EUITooltip(name, playerClass, description) : new EUITooltip(name, description);
+        mainTooltip = playerClass != null ? new EUITooltip(getName(), playerClass, description) : new EUITooltip(getName(), description);
         tips.add(mainTooltip);
         EUIGameUtils.scanForTips(description, tips);
     }
@@ -161,7 +183,7 @@ public abstract class PCLRelic extends CustomRelic implements TooltipProvider {
     }
 
     @Override
-    public AbstractRelic makeCopy() {
+    public PCLRelic makeCopy() {
         try {
             return relicData.create();
         }

@@ -30,16 +30,10 @@ public class PMod_PerUnblockedHit extends PMod_Per<PField_Not> {
     public int getMultiplier(PCLUseInfo info) {
         int total = 0;
         PCardPrimary_DealDamage damageEff = sourceCard != null ? source.getCardDamage() : null;
-        if (damageEff != null && damageEff.target != null) {
+        if (damageEff != null && damageEff.target != null && damageEff.extra > 0) {
+            int expected = damageEff.amount * damageEff.extra;
             for (AbstractCreature t : damageEff.getTargetList(info)) {
-                int unblocked = GameUtilities.getHealthBarAmount(t, damageEff.amount, true, false);
-                for (int i = 0; i < damageEff.extra; i++) {
-                    unblocked -= damageEff.amount;
-                    total += 1;
-                    if (unblocked <= 0) {
-                        break;
-                    }
-                }
+                total += GameUtilities.getHealthBarAmount(t, expected, true, false) / damageEff.extra;
             }
         }
         return total;

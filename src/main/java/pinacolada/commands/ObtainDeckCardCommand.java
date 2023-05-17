@@ -3,9 +3,9 @@ package pinacolada.commands;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.effects.PCLEffects;
 
-public class ObtainDeckCommand extends ObtainCommand {
+public class ObtainDeckCardCommand extends ObtainCardCommand {
 
-    public ObtainDeckCommand() {
+    public ObtainDeckCardCommand() {
         super();
     }
 

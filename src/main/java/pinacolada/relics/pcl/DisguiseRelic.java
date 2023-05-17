@@ -19,7 +19,7 @@ public abstract class DisguiseRelic extends PCLRelic {
         super.update();
 
         if (GameUtilities.inBattle() && hb.hovered && EUIInputManager.rightClick.isJustPressed()) {
-            PCLActions.bottom.selectCreature(PCLCardTarget.Any, name)
+            PCLActions.bottom.selectCreature(PCLCardTarget.Any, getName())
                     .addCallback(c -> {
                         if (c.id == null) {
                             String p = CreatureAnimationInfo.getRandomKey();

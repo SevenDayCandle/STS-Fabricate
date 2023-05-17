@@ -11,6 +11,7 @@ import extendedui.EUIUtils;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
+import extendedui.ui.tooltips.EUITooltip;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.resources.PGR;
@@ -200,6 +201,7 @@ public class PCLCustomEffectNode extends EUIButton {
 
     public void refresh() {
         this.text = skill.getSampleText(null);
+        this.tooltip = new EUITooltip("", skill.getPowerText());
     }
 
     public void refreshAll() {
@@ -213,7 +215,7 @@ public class PCLCustomEffectNode extends EUIButton {
     public void renderImpl(SpriteBatch sb) {
         if (child != null) {
             PCLRenderHelpers.drawCurve(sb, ImageMaster.TARGET_UI_ARROW, Color.SCARLET.cpy(), this.hb, child.hb, 0, 0.15f, 0f, 6);
-            child.render(sb);
+            child.renderImpl(sb);
         }
         super.renderImpl(sb);
         deleteButton.render(sb);
@@ -223,7 +225,7 @@ public class PCLCustomEffectNode extends EUIButton {
     public void updateImpl() {
         super.updateImpl();
         if (child != null) {
-            child.update();
+            child.updateImpl();
         }
         if (dragging && !hb.hovered && hologram == null) {
             hologram = PCLCustomEffectHologram.queue(this.background, this::onHologramRelease);
@@ -397,26 +399,54 @@ public class PCLCustomEffectNode extends EUIButton {
                 case Cond:
                     return PGR.core.strings.cedit_condition;
                 case Multicond:
-                    return PGR.core.strings.cedit_orCondition;
+                    return PGR.core.strings.cedit_multiCondition;
                 case Branchcond:
-                    return PGR.core.strings.cedit_condition;
+                    return PGR.core.strings.cedit_branchCondition;
                 case Mod:
                     return PGR.core.strings.cedit_modifier;
                 case Move:
                     return PGR.core.strings.cedit_effect;
                 case Multimove:
-                    return PGR.core.strings.cedit_effect;
+                    return PGR.core.strings.cedit_multiEffect;
                 case Delay:
                     return PGR.core.strings.cedit_turnDelay;
-                case Limit:
-                    return PGR.core.strings.cedit_mainCondition;
                 case Trigger:
                     return PGR.core.strings.cedit_trigger;
+                case Limit:
                 case Attack:
                 case Block:
-                    return PGR.core.strings.cedit_mainCondition;
+                    return PGR.core.strings.cedit_primary;
             }
             return "";
+        }
+
+        public String getDescription() {
+            switch (this) {
+                case Cond:
+                    return PGR.core.strings.cetut_effectCondition;
+                case Multicond:
+                    return PGR.core.strings.cetut_effectMultiCondition;
+                case Branchcond:
+                    return PGR.core.strings.cetut_effectBranchCondition;
+                case Mod:
+                    return PGR.core.strings.cetut_effectModifier;
+                case Move:
+                    return PGR.core.strings.cetut_effectEffect;
+                case Multimove:
+                    return PGR.core.strings.cetut_effectChoices;
+                case Delay:
+                    return PGR.core.strings.cetut_effectTurnDelay;
+                case Limit:
+                case Trigger:
+                case Attack:
+                case Block:
+                    return PGR.core.strings.cetut_effectTrigger;
+            }
+            return "";
+        }
+
+        public EUITooltip getTooltip() {
+            return new EUITooltip(getTitle(), getDescription());
         }
     }
 }

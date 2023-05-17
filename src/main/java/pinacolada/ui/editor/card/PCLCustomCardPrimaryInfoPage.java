@@ -84,6 +84,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
                 .setLabel(PGR.core.strings.cedit_idSuffixWarning);
         idWarning.setActive(false);
 
+        // TODO allow editing name for only the current form
         nameInput = (EUITextBoxInput) new EUITextBoxInput(EUIRM.images.longInput.texture(),
                 new EUIHitbox(START_X, screenH(0.72f), MENU_WIDTH * 2.3f, MENU_HEIGHT * 1.15f))
                 .setOnComplete(s -> {
