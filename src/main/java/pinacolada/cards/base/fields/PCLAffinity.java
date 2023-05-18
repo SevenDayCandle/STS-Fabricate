@@ -9,7 +9,7 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.markers.CountingPanelItem;
 import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.ui.TextureCache;
-import extendedui.ui.tooltips.EUITooltip;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
@@ -69,7 +69,7 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>, Cou
         return BASIC_TYPES;
     }
 
-    public static PCLAffinity fromTooltip(EUITooltip tooltip) {   //@Formatter: Off
+    public static PCLAffinity fromTooltip(EUIKeywordTooltip tooltip) {   //@Formatter: Off
         if (tooltip.is(PGR.core.tooltips.affinityRed)) {
             return PCLAffinity.Red;
         }
@@ -239,11 +239,11 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>, Cou
         return getTooltip().getTitleOrIconForced();
     }
 
-    public EUITooltip getLevelTooltip() {
+    public EUIKeywordTooltip getLevelTooltip() {
         return getLevelTooltip(GameUtilities.getActingColor());
     }
 
-    public EUITooltip getLevelTooltip(AbstractCard.CardColor pc) {
+    public EUIKeywordTooltip getLevelTooltip(AbstractCard.CardColor pc) {
         PCLResources<?, ?, ?, ?> resources = PGR.getResources(pc);
         if (pc != null) {
             return resources.tooltips.getLevelTooltip(this);
@@ -304,7 +304,7 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>, Cou
         return EUIRenderHelpers.getCroppedRegion(getIcon(), 10);
     }
 
-    public EUITooltip getTooltip() {
+    public EUIKeywordTooltip getTooltip() {
         switch (this) {
             case Red:
                 return PGR.core.tooltips.affinityRed;
@@ -332,7 +332,7 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>, Cou
     }
 
     @Override
-    public List<EUITooltip> getTips() {
+    public List<EUIKeywordTooltip> getTips() {
         return Collections.singletonList(getTooltip());
     }
 

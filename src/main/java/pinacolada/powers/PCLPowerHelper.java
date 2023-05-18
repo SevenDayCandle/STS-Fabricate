@@ -13,7 +13,7 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT2;
 import extendedui.interfaces.delegates.FuncT3;
 import extendedui.interfaces.markers.TooltipProvider;
-import extendedui.ui.tooltips.EUITooltip;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.powers.common.EnergizedPower;
 import pinacolada.powers.common.*;
@@ -99,9 +99,9 @@ public class PCLPowerHelper implements TooltipProvider {
     public final boolean isCommon;
     public final boolean isDebuff;
     public final boolean isPercentageBonus;
-    public EUITooltip tooltip;
+    public EUIKeywordTooltip tooltip;
 
-    public PCLPowerHelper(String powerID, EUITooltip tooltip, FuncT2<AbstractPower, AbstractCreature, Integer> constructor, Behavior endTurnBehavior, boolean isCommon, boolean isDebuff, boolean isPercentageBonus) {
+    public PCLPowerHelper(String powerID, EUIKeywordTooltip tooltip, FuncT2<AbstractPower, AbstractCreature, Integer> constructor, Behavior endTurnBehavior, boolean isCommon, boolean isDebuff, boolean isPercentageBonus) {
         this.ID = powerID;
         this.tooltip = tooltip;
         this.constructorT2 = constructor;
@@ -114,7 +114,7 @@ public class PCLPowerHelper implements TooltipProvider {
         registerHelper(powerID);
     }
 
-    public PCLPowerHelper(String powerID, EUITooltip tooltip, FuncT3<AbstractPower, AbstractCreature, AbstractCreature, Integer> constructor, Behavior endTurnBehavior, boolean isCommon, boolean isDebuff, boolean isPercentageBonus) {
+    public PCLPowerHelper(String powerID, EUIKeywordTooltip tooltip, FuncT3<AbstractPower, AbstractCreature, AbstractCreature, Integer> constructor, Behavior endTurnBehavior, boolean isCommon, boolean isDebuff, boolean isPercentageBonus) {
         this.ID = powerID;
         this.tooltip = tooltip;
         this.constructorT2 = null;
@@ -193,7 +193,12 @@ public class PCLPowerHelper implements TooltipProvider {
     }
 
     @Override
-    public List<EUITooltip> getTips() {
+    public EUIKeywordTooltip getTooltip() {
+        return tooltip;
+    }
+
+    @Override
+    public List<EUIKeywordTooltip> getTips() {
         return Collections.singletonList(tooltip);
     }
 

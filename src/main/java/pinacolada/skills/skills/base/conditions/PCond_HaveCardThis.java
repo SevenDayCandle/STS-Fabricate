@@ -3,7 +3,7 @@ package pinacolada.skills.skills.base.conditions;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
-import extendedui.ui.tooltips.EUITooltip;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.pcl.PCLCoreStrings;
@@ -36,7 +36,7 @@ public abstract class PCond_HaveCardThis extends PPassiveCond<PField_CardGeneric
         return amount == 0 ? count == 0 : fields.not ^ count >= amount;
     }
 
-    abstract public EUITooltip getActionTooltip();
+    abstract public EUIKeywordTooltip getActionTooltip();
 
     abstract public List<AbstractCard> getCardPile();
 

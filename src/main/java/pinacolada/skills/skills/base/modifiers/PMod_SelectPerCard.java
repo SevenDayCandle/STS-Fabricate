@@ -5,7 +5,7 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIRM;
 import extendedui.interfaces.delegates.FuncT5;
-import extendedui.ui.tooltips.EUITooltip;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.actions.piles.SelectFromPile;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
@@ -46,7 +46,7 @@ public class PMod_SelectPerCard extends PMod_Do {
     }
 
     @Override
-    public EUITooltip getActionTooltip() {
+    public EUIKeywordTooltip getActionTooltip() {
         return PGR.core.tooltips.select;
     }
 

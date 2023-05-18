@@ -1,7 +1,7 @@
 package pinacolada.cards.base.fields;
 
 import extendedui.interfaces.markers.TooltipProvider;
-import extendedui.ui.tooltips.EUITooltip;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.resources.PGR;
 
 import java.util.Collections;
@@ -27,7 +27,8 @@ public enum PCLAttackType implements TooltipProvider {
     }
 
     // These strings cannot be put in as an enum variable because cards are initialized before these strings are
-    public final EUITooltip getTooltip() {
+    @Override
+    public EUIKeywordTooltip getTooltip() {
         switch (this) {
             case Brutal:
                 return PGR.core.tooltips.brutal;
@@ -42,7 +43,7 @@ public enum PCLAttackType implements TooltipProvider {
     }
 
     @Override
-    public List<EUITooltip> getTips() {
+    public List<EUIKeywordTooltip> getTips() {
         return Collections.singletonList(getTooltip());
     }
 }

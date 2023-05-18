@@ -1,6 +1,6 @@
 package pinacolada.skills.skills.base.conditions;
 
-import extendedui.ui.tooltips.EUITooltip;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.interfaces.subscribers.OnAllyDeathSubscriber;
@@ -26,7 +26,7 @@ public class PCond_OnAllyDeath extends PDelegateCardCond implements OnAllyDeathS
     }
 
     @Override
-    public EUITooltip getDelegateTooltip() {
+    public EUIKeywordTooltip getDelegateTooltip() {
         return PGR.core.tooltips.kill;
     }
 

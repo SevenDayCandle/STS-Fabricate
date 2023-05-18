@@ -1,7 +1,7 @@
 package pinacolada.cards.base.cardText;
 
 import extendedui.EUIUtils;
-import extendedui.ui.tooltips.EUITooltip;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.cards.base.PCLCard;
 
 import java.util.ArrayList;
@@ -42,7 +42,7 @@ public class PCLTextParser {
         }
     }
 
-    protected void addTooltip(EUITooltip tooltip) {
+    protected void addTooltip(EUIKeywordTooltip tooltip) {
         if (card != null && tooltip != null && tooltip.title != null && !card.tooltips.contains(tooltip)) {
             card.tooltips.add(tooltip);
         }

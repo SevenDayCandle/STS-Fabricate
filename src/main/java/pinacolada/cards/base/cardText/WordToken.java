@@ -3,12 +3,12 @@ package pinacolada.cards.base.cardText;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
-import extendedui.ui.tooltips.EUITooltip;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.utilities.ColoredString;
 
 // Copied and modified from STS-AnimatorMod
 public class WordToken extends PCLTextToken {
-    protected EUITooltip tooltip = null;
+    protected EUIKeywordTooltip tooltip = null;
     protected ColoredString coloredString = new ColoredString(null, null);
     protected int extraLength;
 
@@ -78,7 +78,7 @@ public class WordToken extends PCLTextToken {
             }
 
             if (!parser.ignoreKeywords) {
-                EUITooltip tooltip = EUITooltip.findByName(word.toLowerCase());
+                EUIKeywordTooltip tooltip = EUIKeywordTooltip.findByName(word.toLowerCase());
                 if (tooltip != null) {
                     parser.addTooltip(tooltip);
                     if (tooltip.canHighlight) {

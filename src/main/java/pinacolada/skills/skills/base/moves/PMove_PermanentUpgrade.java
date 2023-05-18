@@ -4,7 +4,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.interfaces.delegates.FuncT5;
-import extendedui.ui.tooltips.EUITooltip;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.actions.piles.SelectFromPile;
 import pinacolada.actions.piles.UpgradeFromPile;
 import pinacolada.annotations.VisibleSkill;
@@ -39,7 +39,7 @@ public class PMove_PermanentUpgrade extends PMove_Select<PField_CardCategory> {
     }
 
     @Override
-    public EUITooltip getActionTooltip() {
+    public EUIKeywordTooltip getActionTooltip() {
         return PGR.core.tooltips.upgrade;
     }
 

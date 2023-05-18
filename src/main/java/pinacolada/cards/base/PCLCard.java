@@ -36,8 +36,9 @@ import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.*;
 import extendedui.interfaces.delegates.*;
-import extendedui.interfaces.markers.TooltipProvider;
+import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.ui.tooltips.EUICardPreview;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.ColoredString;
 import extendedui.utilities.ColoredTexture;
@@ -86,7 +87,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class PCLCard extends AbstractCard implements TooltipProvider, EditorCard, OnRemovedFromDeckListener, CustomSavable<PCLCardSaveData> {
+public abstract class PCLCard extends AbstractCard implements KeywordProvider, EditorCard, OnRemovedFromDeckListener, CustomSavable<PCLCardSaveData> {
     protected static final TextureAtlas CARD_ATLAS = ReflectionHacks.getPrivateStatic(AbstractCard.class, "cardAtlas");
     protected static final Color COLORLESS_ORB_COLOR = new Color(0.7f, 0.7f, 0.7f, 1);
     protected static final Color CURSE_COLOR = new Color(0.22f, 0.22f, 0.22f, 1);
@@ -107,7 +108,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     public static boolean canCropPortraits = true;
     protected final ArrayList<PCLCardGlowBorderEffect> glowList = new ArrayList<>();
     public final Skills skills = new Skills();
-    public final ArrayList<EUITooltip> tooltips = new ArrayList<>();
+    public final ArrayList<EUIKeywordTooltip> tooltips = new ArrayList<>();
     public final ArrayList<PCLAugment> augments = new ArrayList<>();
     public final PCLCardAffinities affinities;
     public final PCLCardData cardData;
@@ -613,7 +614,9 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     public void setup(Object input) {
     }
 
-    public void generateDynamicTooltips(ArrayList<EUITooltip> dynamicTooltips) {
+    @Override
+    public List<EUIKeywordTooltip> getTipsForRender() {
+        ArrayList<EUIKeywordTooltip> dynamicTooltips = new ArrayList<>();
         // Only show these tooltips outside of combat
         if (!GameUtilities.inBattle() || isPopup || (player != null && player.masterDeck.contains(this))) {
             if (isSoulbound()) {
@@ -640,16 +643,16 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
         // Add tips from tags
         for (PCLCardTag tag : PCLCardTag.getAll()) {
             if (tag.has(this)) {
-                dynamicTooltips.add(tag.getTip());
+                dynamicTooltips.add(tag.getTooltip());
             }
         }
 
-        // Do not show the Normal damage tooltip for card tooltips
-        EUITooltip attackTooltip = attackType.getTooltip();
-        if (attackTooltip != PGR.core.tooltips.normalDamage) {
-            dynamicTooltips.add(attackTooltip);
+        for (EUIKeywordTooltip tip : tooltips) {
+            if (!dynamicTooltips.contains(tip)) {
+                dynamicTooltips.add(tip);
+            }
         }
-
+        return dynamicTooltips;
     }
 
     @Override
@@ -658,7 +661,7 @@ public abstract class PCLCard extends AbstractCard implements TooltipProvider, E
     }
 
     @Override
-    public List<EUITooltip> getTips() {
+    public List<EUIKeywordTooltip> getTips() {
         return tooltips;
     }
 

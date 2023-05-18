@@ -2,7 +2,7 @@ package pinacolada.skills.skills;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import extendedui.ui.tooltips.EUITooltip;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.skills.PSkill;
@@ -46,7 +46,7 @@ public abstract class PDelegateCardCond extends PDelegateCond<PField_CardCategor
         return getDelegateTooltip().title;
     }
 
-    public abstract EUITooltip getDelegateTooltip();
+    public abstract EUIKeywordTooltip getDelegateTooltip();
 
     @Override
     public String getSampleText(PSkill<?> callingSkill) {

@@ -68,7 +68,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
 
         tagsDropdown = new EUIDropdown<PCLCardTagInfo>(new EUIHitbox(START_X, screenH(0.8f), MENU_WIDTH * 1.2f, MENU_HEIGHT))
                 .setOnChange(tags -> screen.modifyBuilder(e -> e.setTags(tags)))
-                .setLabelFunctionForOption(item -> item.tag.getTip().getTitleOrIcon() + " " + item.tag.getTip().title, true)
+                .setLabelFunctionForOption(item -> item.tag.getTooltip().getTitleOrIcon() + " " + item.tag.getTooltip().title, true)
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_tags)
                 .setIsMultiSelect(true)
                 .setCanAutosize(true, true);

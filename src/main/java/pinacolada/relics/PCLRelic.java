@@ -16,7 +16,8 @@ import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
-import extendedui.interfaces.markers.TooltipProvider;
+import extendedui.interfaces.markers.KeywordProvider;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.actions.PCLActions;
 import pinacolada.dungeon.PCLUseInfo;
@@ -28,12 +29,12 @@ import pinacolada.utilities.GameUtilities;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class PCLRelic extends AbstractRelic implements TooltipProvider {
+public abstract class PCLRelic extends AbstractRelic implements KeywordProvider {
     public static AbstractPlayer player;
     public static Random rng;
     public final PCLRelicData relicData;
-    public ArrayList<EUITooltip> tips;
-    public EUITooltip mainTooltip;
+    public ArrayList<EUIKeywordTooltip> tips;
+    public EUIKeywordTooltip mainTooltip;
 
     public PCLRelic(PCLRelicData data) {
         super(data.ID, "", data.tier, data.sfx);
@@ -129,12 +130,12 @@ public abstract class PCLRelic extends AbstractRelic implements TooltipProvider 
     }
 
     @Override
-    public List<EUITooltip> getTipsForFilters() {
+    public List<EUIKeywordTooltip> getTipsForFilters() {
         return tips.subList(1, tips.size());
     }
 
     @Override
-    public List<EUITooltip> getTips() {
+    public List<EUIKeywordTooltip> getTips() {
         return tips;
     }
 
@@ -173,7 +174,7 @@ public abstract class PCLRelic extends AbstractRelic implements TooltipProvider 
         }
 
         AbstractPlayer.PlayerClass playerClass = EUIGameUtils.getPlayerClassForCardColor(relicData.cardColor);
-        mainTooltip = playerClass != null ? new EUITooltip(getName(), playerClass, description) : new EUITooltip(getName(), description);
+        mainTooltip = playerClass != null ? new EUIKeywordTooltip(getName(), playerClass, description) : new EUIKeywordTooltip(getName(), description);
         tips.add(mainTooltip);
         EUIGameUtils.scanForTips(description, tips);
     }

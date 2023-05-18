@@ -8,8 +8,8 @@ import com.evacipated.cardcrawl.mod.stslib.powers.StunMonsterPower;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.vfx.BobEffect;
-import extendedui.interfaces.markers.TooltipProvider;
-import extendedui.ui.tooltips.EUITooltip;
+import extendedui.interfaces.markers.IntentProvider;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.resources.PCLResources;
@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class PCLCreature extends CustomMonster implements PointerProvider, TooltipProvider {
+public abstract class PCLCreature extends CustomMonster implements PointerProvider, IntentProvider {
     private static final Map<String, PCLCreatureData> staticData = new HashMap<>();
     protected static final Color TAKEN_TURN_COLOR = new Color(0.85f, 0.85f, 0.85f, 0.7f);
     public final PCLCreatureData creatureData;
@@ -93,12 +93,12 @@ public abstract class PCLCreature extends CustomMonster implements PointerProvid
     }
 
     @Override
-    public EUITooltip getIntentTip() {
+    public EUIKeywordTooltip getIntentTip() {
         return null;
     }
 
     @Override
-    public List<EUITooltip> getTips() {
+    public List<EUIKeywordTooltip> getTips() {
         return new ArrayList<>();
     }
 

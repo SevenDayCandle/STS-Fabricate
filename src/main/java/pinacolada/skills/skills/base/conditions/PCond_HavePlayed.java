@@ -2,7 +2,7 @@ package pinacolada.skills.skills.base.conditions;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import extendedui.ui.tooltips.EUITooltip;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
@@ -29,7 +29,7 @@ public class PCond_HavePlayed extends PCond_HaveCard {
     }
 
     @Override
-    public EUITooltip getActionTooltip() {
+    public EUIKeywordTooltip getActionTooltip() {
         return PGR.core.tooltips.play;
     }
 

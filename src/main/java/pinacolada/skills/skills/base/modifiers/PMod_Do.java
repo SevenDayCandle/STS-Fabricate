@@ -7,7 +7,7 @@ import com.megacrit.cardcrawl.localization.LocalizedStrings;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT5;
-import extendedui.ui.tooltips.EUITooltip;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.actions.PCLAction;
 import pinacolada.actions.piles.SelectFromPile;
 import pinacolada.cards.base.PCLCardGroupHelper;
@@ -64,7 +64,7 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory> {
         return getActionTooltip().title;
     }
 
-    public abstract EUITooltip getActionTooltip();
+    public abstract EUIKeywordTooltip getActionTooltip();
 
     @Override
     public String getAmountRawOrAllString() {

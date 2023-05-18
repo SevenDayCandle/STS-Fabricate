@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import extendedui.EUIUtils;
 import extendedui.text.EUISmartText;
-import extendedui.ui.tooltips.EUITooltip;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.skills.PSkill;
@@ -108,7 +108,7 @@ public class LogicToken extends PCLTextToken {
                             // Only word tokens are allowed in blocks
                             if (currentBlock != null && token instanceof WordToken) {
                                 currentBlock.token = (WordToken) token;
-                                EUITooltip tooltip = currentBlock.token.tooltip;
+                                EUIKeywordTooltip tooltip = currentBlock.token.tooltip;
                                 if (tooltip != null) {
                                     parser.addTooltip(tooltip);
                                 }

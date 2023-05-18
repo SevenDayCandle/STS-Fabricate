@@ -7,7 +7,8 @@ import com.megacrit.cardcrawl.localization.BlightStrings;
 import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
-import extendedui.interfaces.markers.TooltipProvider;
+import extendedui.interfaces.markers.KeywordProvider;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
@@ -16,11 +17,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class PCLBlight extends AbstractBlight implements TooltipProvider {
+public abstract class PCLBlight extends AbstractBlight implements KeywordProvider {
     protected final int initialAmount;
     public final BlightStrings strings;
-    public ArrayList<EUITooltip> tips;
-    public EUITooltip mainTooltip;
+    public ArrayList<EUIKeywordTooltip> tips;
+    public EUIKeywordTooltip mainTooltip;
 
     public PCLBlight(String id) {
         this(id, PGR.getBlightStrings(id), -1);
@@ -50,7 +51,7 @@ public abstract class PCLBlight extends AbstractBlight implements TooltipProvide
     }
 
     @Override
-    public List<EUITooltip> getTips() {
+    public List<EUIKeywordTooltip> getTips() {
         return tips;
     }
 
@@ -82,7 +83,7 @@ public abstract class PCLBlight extends AbstractBlight implements TooltipProvide
             tips.clear();
         }
 
-        mainTooltip = new EUITooltip(name, description);
+        mainTooltip = new EUIKeywordTooltip(name, description);
         tips.add(mainTooltip);
         EUIGameUtils.scanForTips(description, tips);
     }

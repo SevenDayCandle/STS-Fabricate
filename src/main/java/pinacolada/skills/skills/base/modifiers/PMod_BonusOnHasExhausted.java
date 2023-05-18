@@ -1,7 +1,7 @@
 package pinacolada.skills.skills.base.modifiers;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import extendedui.ui.tooltips.EUITooltip;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.resources.PGR;
@@ -33,7 +33,7 @@ public class PMod_BonusOnHasExhausted extends PMod_BonusOnHas {
     }
 
     @Override
-    public EUITooltip getActionTooltip() {
+    public EUIKeywordTooltip getActionTooltip() {
         return PGR.core.tooltips.exhaust;
     }
 

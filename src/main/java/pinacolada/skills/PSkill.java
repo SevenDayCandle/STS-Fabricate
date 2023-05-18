@@ -21,6 +21,7 @@ import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.text.EUISmartText;
 import extendedui.ui.tooltips.EUICardPreview;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.ColoredString;
 import extendedui.utilities.RotatingList;
@@ -83,7 +84,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     protected PSkill<?> childEffect;
     public AbstractCard sourceCard;
     public ActionT3<PSkill<T>, Integer, Integer> customUpgrade; // Callback for customizing upgrading properties
-    public ArrayList<EUITooltip> tips = new ArrayList<>();
+    public ArrayList<EUIKeywordTooltip> tips = new ArrayList<>();
     public PCLActions.ActionOrder order = PCLActions.ActionOrder.Bottom;
     public PCLCardTarget target = PCLCardTarget.None;
     public PCLCardValueSource amountSource = PCLCardValueSource.None;
@@ -904,7 +905,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     @Override
-    public List<EUITooltip> getTips() {
+    public List<EUIKeywordTooltip> getTips() {
         return tips;
     }
 
@@ -1178,11 +1179,11 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return EUIUtils.mapAsNonnull(split(source), AbstractCard.CardType::valueOf);
     }
 
-    public final String plural(EUITooltip obj) {
+    public final String plural(EUIKeywordTooltip obj) {
         return PCLCoreStrings.plural(obj, getRawString(EFFECT_CHAR));
     }
 
-    public final String plural(EUITooltip obj, char effect) {
+    public final String plural(EUIKeywordTooltip obj, char effect) {
         return PCLCoreStrings.plural(obj, getRawString(effect));
     }
 

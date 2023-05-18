@@ -2,7 +2,7 @@ package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import extendedui.ui.tooltips.EUITooltip;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -39,7 +39,7 @@ public class PMove_Create extends PMove_GenerateCard {
     }
 
     @Override
-    public EUITooltip getActionTooltip() {
+    public EUIKeywordTooltip getActionTooltip() {
         return PGR.core.tooltips.create;
     }
 

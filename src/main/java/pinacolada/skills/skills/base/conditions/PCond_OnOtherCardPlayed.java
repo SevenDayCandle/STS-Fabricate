@@ -1,7 +1,7 @@
 package pinacolada.skills.skills.base.conditions;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import extendedui.ui.tooltips.EUITooltip;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.interfaces.subscribers.OnCardPlayedSubscriber;
 import pinacolada.resources.PGR;
@@ -34,7 +34,7 @@ public class PCond_OnOtherCardPlayed extends PDelegateCardCond implements OnCard
     }
 
     @Override
-    public EUITooltip getDelegateTooltip() {
+    public EUIKeywordTooltip getDelegateTooltip() {
         return PGR.core.tooltips.play;
     }
 

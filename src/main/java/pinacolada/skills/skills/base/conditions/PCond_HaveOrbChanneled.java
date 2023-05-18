@@ -4,7 +4,7 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
-import extendedui.ui.tooltips.EUITooltip;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -49,7 +49,7 @@ public class PCond_HaveOrbChanneled extends PPassiveCond<PField_Orb> implements 
         return amount == 0 ? count == 0 : fields.not ^ count >= amount;
     }
 
-    public EUITooltip getActionTooltip() {
+    public EUIKeywordTooltip getActionTooltip() {
         return PGR.core.tooltips.channel;
     }
 

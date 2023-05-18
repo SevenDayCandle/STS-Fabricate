@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIUtils;
 import extendedui.text.EUISmartText;
-import extendedui.ui.tooltips.EUITooltip;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 
 // Copied and modified from STS-AnimatorMod
 public abstract class SpecialToken extends PCLTextToken {
@@ -39,7 +39,7 @@ public abstract class SpecialToken extends PCLTextToken {
                             color = Settings.GOLD_COLOR;
                         }
                         final String word = builder.toString();
-                        final EUITooltip tooltip = EUITooltip.findByName(word
+                        final EUIKeywordTooltip tooltip = EUIKeywordTooltip.findByName(word
                                 .replace(EUIUtils.SPLIT_LINE, " ")
                                 .split("\\(")[0] // Ignore modifiers
                                 .toLowerCase());

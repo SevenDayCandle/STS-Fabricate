@@ -6,7 +6,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.configuration.EUIConfiguration;
-import extendedui.ui.tooltips.EUITooltip;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLAffinity;
 
@@ -30,14 +30,14 @@ public class SymbolToken extends PCLTextToken {
         tokenCache.put(PCLAffinity.Silver.getPowerSymbol(), new SymbolToken(PCLAffinity.Silver.getFormattedPowerSymbol()));
     }
 
-    protected EUITooltip tooltip;
+    protected EUIKeywordTooltip tooltip;
 
     private SymbolToken(String text) {
         super(PCLTextTokenType.Symbol, text);
-        this.tooltip = EUITooltip.findByName(text);
+        this.tooltip = EUIKeywordTooltip.findByName(text);
     }
 
-    private SymbolToken(EUITooltip tooltip) {
+    private SymbolToken(EUIKeywordTooltip tooltip) {
         super(PCLTextTokenType.Symbol, tooltip.title);
         this.tooltip = tooltip;
     }
@@ -56,7 +56,7 @@ public class SymbolToken extends PCLTextToken {
                     final String key = builder.toString();
                     SymbolToken token = tokenCache.get(key);
                     if (token == null) {
-                        final EUITooltip tooltip = EUITooltip.findByID(key);
+                        final EUIKeywordTooltip tooltip = EUIKeywordTooltip.findByID(key);
                         if (tooltip != null) {
                             token = new SymbolToken(tooltip);
                             tokenCache.put(key, token);

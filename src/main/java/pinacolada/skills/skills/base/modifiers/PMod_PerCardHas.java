@@ -3,7 +3,7 @@ package pinacolada.skills.skills.base.modifiers;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
-import extendedui.ui.tooltips.EUITooltip;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.pcl.PCLCoreStrings;
@@ -29,7 +29,7 @@ public abstract class PMod_PerCardHas extends PMod_Per<PField_CardCategory> {
         super(data, amount, count);
     }
 
-    abstract public EUITooltip getActionTooltip();
+    abstract public EUIKeywordTooltip getActionTooltip();
 
     abstract public List<AbstractCard> getCardPile();
 

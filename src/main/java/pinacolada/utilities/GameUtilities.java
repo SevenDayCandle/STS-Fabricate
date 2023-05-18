@@ -52,6 +52,7 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.AbstractScreen;
 import extendedui.ui.cardFilter.CountingPanelStats;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUITooltip;
 import org.scannotation.AnnotationDB;
 import pinacolada.actions.PCLActions;
@@ -981,7 +982,7 @@ public class GameUtilities {
         return a != null ? a.getLevel(affinity, useStarLevel) : 0;
     }
 
-    public static EUITooltip getPCLOrbTooltip(AbstractOrb orb) {
+    public static EUIKeywordTooltip getPCLOrbTooltip(AbstractOrb orb) {
         // These two Orb tooltips use custom text
         if (Lightning.ORB_ID.equals(orb.ID)) {
             return PGR.core.tooltips.lightning;
@@ -989,7 +990,7 @@ public class GameUtilities {
         else if (Dark.ORB_ID.equals(orb.ID)) {
             return PGR.core.tooltips.dark;
         }
-        return EUITooltip.findByID(orb.ID.replace(PCLCoreResources.ID + ":", ""));
+        return EUIKeywordTooltip.findByID(orb.ID.replace(PCLCoreResources.ID + ":", ""));
     }
 
     public static PCLLoadout getPCLSeries(AbstractCard c) {
@@ -2102,7 +2103,7 @@ public class GameUtilities {
         return PORTRAIT_PATH + path + ".png";
     }
 
-    public static EUITooltip tooltipForType(AbstractCard.CardType type) {
+    public static EUIKeywordTooltip tooltipForType(AbstractCard.CardType type) {
         switch (type) {
             case ATTACK:
                 return PGR.core.tooltips.attack;

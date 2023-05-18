@@ -1,14 +1,14 @@
 package pinacolada.resources;
 
-import extendedui.ui.tooltips.EUITooltip;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.cards.base.fields.PCLAffinity;
 
 public abstract class PCLTooltips {
-    public EUITooltip getLevelTooltip(PCLAffinity affinity) {
+    public EUIKeywordTooltip getLevelTooltip(PCLAffinity affinity) {
         return affinity.getTooltip();
     }
 
-    public EUITooltip getRerollTooltip() {
+    public EUIKeywordTooltip getRerollTooltip() {
         return PGR.core.tooltips.reroll;
     }
 

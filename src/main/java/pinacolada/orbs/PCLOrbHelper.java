@@ -9,7 +9,7 @@ import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT0;
 import extendedui.interfaces.markers.TooltipProvider;
-import extendedui.ui.tooltips.EUITooltip;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.resources.PGR;
@@ -30,13 +30,13 @@ public class PCLOrbHelper implements TooltipProvider {
     public static final PCLOrbHelper Lightning = new PCLOrbHelper(com.megacrit.cardcrawl.orbs.Lightning.ORB_ID, PGR.core.tooltips.lightning, PCLAffinity.Yellow, com.megacrit.cardcrawl.orbs.Lightning::new, COMMON_THRESHOLD);
     public static final PCLOrbHelper Plasma = new PCLOrbHelper(com.megacrit.cardcrawl.orbs.Plasma.ORB_ID, PGR.core.tooltips.plasma, PCLAffinity.Yellow, com.megacrit.cardcrawl.orbs.Plasma::new, 2);
     protected final FuncT0<AbstractOrb> constructor;
-    public final EUITooltip tooltip;
+    public final EUIKeywordTooltip tooltip;
     public final PCLAffinity affinity;
     public final String ID;
     public final int weight;
     public final AbstractCard.CardColor[] allowedColors;
 
-    public PCLOrbHelper(String powerID, EUITooltip tooltip, PCLAffinity affinity, FuncT0<AbstractOrb> constructor, int weight, AbstractCard.CardColor... allowedColors) {
+    public PCLOrbHelper(String powerID, EUIKeywordTooltip tooltip, PCLAffinity affinity, FuncT0<AbstractOrb> constructor, int weight, AbstractCard.CardColor... allowedColors) {
         this.ID = powerID;
         this.tooltip = tooltip;
         this.affinity = affinity;
@@ -92,7 +92,12 @@ public class PCLOrbHelper implements TooltipProvider {
     }
 
     @Override
-    public List<EUITooltip> getTips() {
+    public EUIKeywordTooltip getTooltip() {
+        return tooltip;
+    }
+
+    @Override
+    public List<EUIKeywordTooltip> getTips() {
         return Collections.singletonList(tooltip);
     }
 

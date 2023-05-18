@@ -5,7 +5,7 @@ import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIRM;
 import extendedui.interfaces.delegates.FuncT5;
-import extendedui.ui.tooltips.EUITooltip;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.actions.piles.CycleCards;
 import pinacolada.actions.piles.SelectFromPile;
 import pinacolada.annotations.VisibleSkill;
@@ -41,7 +41,7 @@ public class PMod_CyclePerCard extends PMod_Do {
     }
 
     @Override
-    public EUITooltip getActionTooltip() {
+    public EUIKeywordTooltip getActionTooltip() {
         return PGR.core.tooltips.cycle;
     }
 

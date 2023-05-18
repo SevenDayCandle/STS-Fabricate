@@ -10,7 +10,7 @@ import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT2;
 import extendedui.text.EUISmartText;
-import extendedui.ui.tooltips.EUITooltip;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PCLStrings;
 import pinacolada.resources.PGR;
@@ -458,14 +458,14 @@ public class PCLCoreStrings extends PCLStrings {
     }
 
     public static String past(Object obj) {
-        return obj instanceof EUITooltip ? ((EUITooltip) obj).past() : EUIRM.strings.past(obj);
+        return obj instanceof EUIKeywordTooltip ? ((EUIKeywordTooltip) obj).past() : EUIRM.strings.past(obj);
     }
 
     public static String period(boolean addPeriod) {
         return addPeriod ? LocalizedStrings.PERIOD : "";
     }
 
-    public static String plural(EUITooltip tip, Object evaluated) {
+    public static String plural(EUIKeywordTooltip tip, Object evaluated) {
         return plural(tip.plural(), evaluated);
     }
 
@@ -482,7 +482,7 @@ public class PCLCoreStrings extends PCLStrings {
     }
 
     public static String present(Object obj) {
-        return obj instanceof EUITooltip ? ((EUITooltip) obj).present() : EUIRM.strings.present(obj);
+        return obj instanceof EUIKeywordTooltip ? ((EUIKeywordTooltip) obj).present() : EUIRM.strings.present(obj);
     }
 
     public static String rightClick(Object desc) {

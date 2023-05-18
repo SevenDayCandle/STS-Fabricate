@@ -13,7 +13,7 @@ import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.ui.TextureCache;
-import extendedui.ui.tooltips.EUITooltip;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.fields.PCLCardTagInfo;
 import pinacolada.resources.PGR;
@@ -68,7 +68,7 @@ public enum PCLCardTag implements TooltipProvider {
 
     public static List<PCLCardTag> getAll() {
         PCLCardTag[] values = PCLCardTag.values();
-        Arrays.sort(values, (a, b) -> StringUtils.compare(a.getTip().title, b.getTip().title));
+        Arrays.sort(values, (a, b) -> StringUtils.compare(a.getTooltip().title, b.getTooltip().title));
         return Arrays.asList(values);
     }
 
@@ -112,7 +112,7 @@ public enum PCLCardTag implements TooltipProvider {
         int offset_y = 0;
         if (!PGR.config.displayCardTagDescription.get()) {
             for (PCLCardTag tag : PCLCardTag.getAll()) {
-                if (tag.has(card) && tag.getTip().icon != null) {
+                if (tag.has(card) && tag.getTooltip().icon != null) {
                     offset_y -= tag.renderOnCard(sb, card, offset_y, alpha);
                 }
             }
@@ -193,7 +193,7 @@ public enum PCLCardTag implements TooltipProvider {
     }
 
     public String getName() {
-        return getTip().title;
+        return getTooltip().title;
     }
 
     public TextureCache getTextureCache() {
@@ -234,7 +234,8 @@ public enum PCLCardTag implements TooltipProvider {
         throw new EnumConstantNotPresentException(PCLCardTag.class, this.name());
     }
 
-    public EUITooltip getTip() {
+    @Override
+    public EUIKeywordTooltip getTooltip() {
         switch (this) {
             case Autoplay:
                 return PGR.core.tooltips.autoplay;
@@ -269,12 +270,12 @@ public enum PCLCardTag implements TooltipProvider {
             case Unplayable:
                 return PGR.core.tooltips.unplayable;
         }
-        return new EUITooltip(this.name());
+        return new EUIKeywordTooltip(this.name());
     }
 
     @Override
-    public List<EUITooltip> getTips() {
-        return Collections.singletonList(getTip());
+    public List<EUIKeywordTooltip> getTips() {
+        return Collections.singletonList(getTooltip());
     }
 
     public boolean has(AbstractCard card) {
@@ -326,7 +327,7 @@ public enum PCLCardTag implements TooltipProvider {
         Vector2 offset = new Vector2(AbstractCard.RAW_W * 0.45f, AbstractCard.RAW_H * 0.45f + offset_y);
 
         PCLRenderHelpers.drawOnCardAuto(sb, card, EUIRM.images.baseBadge.texture(), new Vector2(AbstractCard.RAW_W * 0.45f, AbstractCard.RAW_H * 0.45f + offset_y), 64, 64, color, alpha, 1);
-        PCLRenderHelpers.drawOnCardAuto(sb, card, getTip().icon.getTexture(), new Vector2(AbstractCard.RAW_W * 0.45f, AbstractCard.RAW_H * 0.45f + offset_y), 64, 64, Color.WHITE, alpha, 1);
+        PCLRenderHelpers.drawOnCardAuto(sb, card, getTooltip().icon.getTexture(), new Vector2(AbstractCard.RAW_W * 0.45f, AbstractCard.RAW_H * 0.45f + offset_y), 64, 64, Color.WHITE, alpha, 1);
         PCLRenderHelpers.drawOnCardAuto(sb, card, EUIRM.images.baseBorder.texture(), new Vector2(AbstractCard.RAW_W * 0.45f, AbstractCard.RAW_H * 0.45f + offset_y), 64, 64, Color.WHITE, alpha, 1);
 
         int tagCount = getInt(card);

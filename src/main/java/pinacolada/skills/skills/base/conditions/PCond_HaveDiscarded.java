@@ -1,7 +1,7 @@
 package pinacolada.skills.skills.base.conditions;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import extendedui.ui.tooltips.EUITooltip;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.resources.PGR;
@@ -29,7 +29,7 @@ public class PCond_HaveDiscarded extends PCond_HaveCard {
     }
 
     @Override
-    public EUITooltip getActionTooltip() {
+    public EUIKeywordTooltip getActionTooltip() {
         return PGR.core.tooltips.discard;
     }
 

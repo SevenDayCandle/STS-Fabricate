@@ -10,7 +10,7 @@ import com.megacrit.cardcrawl.stances.AbstractStance;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT0;
 import extendedui.interfaces.markers.TooltipProvider;
-import extendedui.ui.tooltips.EUITooltip;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.resources.PGR;
@@ -28,12 +28,12 @@ public class PCLStanceHelper implements TooltipProvider {
     public static final PCLStanceHelper DivinityStance = new PCLStanceHelper(com.megacrit.cardcrawl.stances.DivinityStance.STANCE_ID, PGR.core.tooltips.divinity, PCLAffinity.General, com.megacrit.cardcrawl.stances.DivinityStance::new);
     public static final PCLStanceHelper WrathStance = new PCLStanceHelper(com.megacrit.cardcrawl.stances.WrathStance.STANCE_ID, PGR.core.tooltips.wrath, PCLAffinity.General, com.megacrit.cardcrawl.stances.WrathStance::new);
     protected final FuncT0<AbstractStance> constructor;
-    public final EUITooltip tooltip;
+    public final EUIKeywordTooltip tooltip;
     public final PCLAffinity affinity;
     public final String ID;
     public final AbstractCard.CardColor[] allowedColors;
 
-    public PCLStanceHelper(String stanceID, EUITooltip tooltip, PCLAffinity affinity, FuncT0<AbstractStance> constructor, AbstractCard.CardColor... allowedColors) {
+    public PCLStanceHelper(String stanceID, EUIKeywordTooltip tooltip, PCLAffinity affinity, FuncT0<AbstractStance> constructor, AbstractCard.CardColor... allowedColors) {
         this.ID = stanceID;
         this.tooltip = tooltip;
         this.affinity = affinity;
@@ -83,7 +83,12 @@ public class PCLStanceHelper implements TooltipProvider {
     }
 
     @Override
-    public List<EUITooltip> getTips() {
+    public EUIKeywordTooltip getTooltip() {
+        return tooltip;
+    }
+
+    @Override
+    public List<EUIKeywordTooltip> getTips() {
         return Collections.singletonList(tooltip);
     }
 

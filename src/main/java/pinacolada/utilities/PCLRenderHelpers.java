@@ -16,7 +16,7 @@ import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.Hitbox;
 import extendedui.EUIRenderHelpers;
 import extendedui.interfaces.delegates.ActionT1;
-import extendedui.ui.tooltips.EUITooltip;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.utilities.ColoredTexture;
 import extendedui.utilities.EUIColors;
 import extendedui.utilities.EUIFontHelper;
@@ -162,7 +162,7 @@ public class PCLRenderHelpers extends EUIRenderHelpers {
                 return AbstractCard.orb_special;
 
             default:
-                EUITooltip tooltip = EUITooltip.findByID(id);
+                EUIKeywordTooltip tooltip = EUIKeywordTooltip.findByID(id);
                 return (tooltip != null) ? tooltip.icon : null;
         }
     }

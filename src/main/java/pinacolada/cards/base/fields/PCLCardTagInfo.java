@@ -3,7 +3,7 @@ package pinacolada.cards.base.fields;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIUtils;
 import extendedui.interfaces.markers.TooltipProvider;
-import extendedui.ui.tooltips.EUITooltip;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.tags.PCLCardTag;
 
@@ -41,7 +41,7 @@ public class PCLCardTagInfo implements Serializable, TooltipProvider {
         return safeIndex(value, form);
     }
 
-    public List<EUITooltip> getTips() {
+    public List<EUIKeywordTooltip> getTips() {
         return tag.getTips();
     }
 

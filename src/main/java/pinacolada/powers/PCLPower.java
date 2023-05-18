@@ -25,6 +25,7 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT2;
 import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.ui.hitboxes.EUIHitbox;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.ColoredString;
 import extendedui.utilities.EUIColors;
@@ -61,11 +62,11 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
     public static AbstractPlayer player = null;
     public static Random rng = null;
     protected final ArrayList<AbstractGameEffect> effects;
-    public final ArrayList<EUITooltip> tooltips = new ArrayList<>();
+    public final ArrayList<EUIKeywordTooltip> tooltips = new ArrayList<>();
     protected PowerStrings powerStrings;
     public EUIHitbox hb;
     public AbstractCreature source;
-    public EUITooltip mainTip;
+    public EUIKeywordTooltip mainTip;
     public PCLClickableUse triggerCondition;
     public boolean clickable;
     public boolean enabled = true;
@@ -166,7 +167,7 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
                     continue;
                 }
                 foundIcon = false;
-                EUITooltip tooltip = EUITooltip.findByID(EUIUtils.invokeBuilder(builder));
+                EUIKeywordTooltip tooltip = EUIKeywordTooltip.findByID(EUIUtils.invokeBuilder(builder));
                 if (tooltip != null) {
                     tooltips.add(tooltip);
                 }
@@ -216,7 +217,7 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
     }
 
     @Override
-    public List<EUITooltip> getTips() {
+    public List<EUIKeywordTooltip> getTips() {
         return tooltips;
     }
 
@@ -363,7 +364,7 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
     protected void setupDescription() {
         this.name = powerStrings.NAME;
         this.description = getUpdatedDescription();
-        mainTip = new EUITooltip(name, description);
+        mainTip = new EUIKeywordTooltip(name, description);
         mainTip.icon = this.region48 != null ? this.region48 : img != null ? new TextureRegion(img) : null;
         tooltips.add(mainTip);
         findTooltipsFromText(description);

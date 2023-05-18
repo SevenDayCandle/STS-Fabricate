@@ -17,7 +17,8 @@ import com.megacrit.cardcrawl.potions.AbstractPotion;
 import com.megacrit.cardcrawl.vfx.FlashPotionEffect;
 import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
-import extendedui.interfaces.markers.TooltipProvider;
+import extendedui.interfaces.markers.KeywordProvider;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.CombatManager;
@@ -32,10 +33,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class PCLPotion extends AbstractPotion implements TooltipProvider, PointerProvider {
-    public final ArrayList<EUITooltip> pcltips = new ArrayList<>();
+public abstract class PCLPotion extends AbstractPotion implements KeywordProvider, PointerProvider {
+    public final ArrayList<EUIKeywordTooltip> tips = new ArrayList<>();
     public final Skills skills = new Skills();
     public final String[] extraDescriptions;
+    public EUIKeywordTooltip mainTooltip;
 
     public PCLPotion(String id, PotionRarity rarity, PotionSize size, PotionEffect effect, Color liquidColor, Color hybridColor, Color spotsColor) {
         this(id, rarity, size, effect, liquidColor, hybridColor, spotsColor, null);
@@ -81,21 +83,22 @@ public abstract class PCLPotion extends AbstractPotion implements TooltipProvide
     }
 
     @Override
-    public List<EUITooltip> getTipsForFilters() {
-        return pcltips.subList(1, pcltips.size());
+    public List<EUIKeywordTooltip> getTipsForFilters() {
+        return tips.subList(1, tips.size());
     }
 
     @Override
-    public List<EUITooltip> getTips() {
-        return pcltips;
+    public List<EUIKeywordTooltip> getTips() {
+        return tips;
     }
 
     protected void initializeTips(AbstractPlayer.PlayerClass playerClass) {
         final ArrayList<String> effectStrings = EUIUtils.map(getEffects(), PSkill::getPowerText);
         this.description = effectStrings.size() > 0 ? effectStrings.get(0) : "";
-        pcltips.clear();
-        pcltips.add(playerClass != null ? new EUITooltip(name, playerClass, effectStrings) : new EUITooltip(name, effectStrings));
-        EUIGameUtils.scanForTips(description, pcltips);
+        tips.clear();
+        mainTooltip = playerClass != null ? new EUIKeywordTooltip(name, playerClass, effectStrings) : new EUIKeywordTooltip(name, effectStrings);
+        tips.add(mainTooltip);
+        EUIGameUtils.scanForTips(description, tips);
         this.isThrown = EUIUtils.any(getEffects(), e -> e.target == PCLCardTarget.Single);
         this.targetRequired = isThrown;
     }

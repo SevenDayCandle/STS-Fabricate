@@ -2,7 +2,7 @@ package pinacolada.skills.skills.base.conditions;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
-import extendedui.ui.tooltips.EUITooltip;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.interfaces.subscribers.OnCardReshuffledSubscriber;
 import pinacolada.resources.PGR;
@@ -25,7 +25,7 @@ public class PCond_OnReshuffle extends PDelegateCardCond implements OnCardReshuf
     }
 
     @Override
-    public EUITooltip getDelegateTooltip() {
+    public EUIKeywordTooltip getDelegateTooltip() {
         return PGR.core.tooltips.reshuffle;
     }
 

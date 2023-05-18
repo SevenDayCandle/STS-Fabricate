@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUI;
 import extendedui.EUIUtils;
-import extendedui.ui.tooltips.EUITooltip;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.utilities.ColoredString;
 import pinacolada.skills.PSkill;
 
@@ -41,7 +41,7 @@ public class ConditionToken extends PCLTextToken {
                         if (token instanceof WordToken) {
                             ColoredString w = ((WordToken) token).coloredString;
                             ConditionToken ct = new ConditionToken(move, token.rawText, w != null ? w.color : Settings.CREAM_COLOR);
-                            EUITooltip tooltip = (((WordToken) token).tooltip);
+                            EUIKeywordTooltip tooltip = (((WordToken) token).tooltip);
                             if (tooltip != null) {
                                 parser.addTooltip(tooltip);
                             }
@@ -49,7 +49,7 @@ public class ConditionToken extends PCLTextToken {
                         }
                         else {
                             if (token instanceof SymbolToken) {
-                                EUITooltip tooltip = (((SymbolToken) token).tooltip);
+                                EUIKeywordTooltip tooltip = (((SymbolToken) token).tooltip);
                                 if (tooltip != null) {
                                     parser.addTooltip(tooltip);
                                 }

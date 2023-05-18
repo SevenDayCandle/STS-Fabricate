@@ -115,7 +115,13 @@ public class PCLAttackVFX {
     }
 
     public AbstractGameEffect attackWithoutSound(AbstractCreature source, AbstractCreature target, Color vfxColor, float spread) {
-        final AbstractGameEffect effect = PCLEffects.List.add(getVFX(source.hb.cX, source.hb.cY, VFX.randomX(target.hb, spread), VFX.randomY(target.hb, spread)));
+        AbstractGameEffect effect;
+        if (source != null) {
+            effect = PCLEffects.List.add(getVFX(source.hb.cX, source.hb.cY, VFX.randomX(target.hb, spread), VFX.randomY(target.hb, spread)));
+        }
+        else {
+            effect = PCLEffects.List.add(getVFX(VFX.randomX(target.hb, spread), VFX.randomY(target.hb, spread)));
+        }
         if (vfxColor != null) {
             EUIClassUtils.setField(effect, "color", vfxColor);
         }

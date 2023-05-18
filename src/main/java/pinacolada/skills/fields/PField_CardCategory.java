@@ -148,7 +148,7 @@ public class PField_CardCategory extends PField_CardGeneric {
             stringsToJoin.add(affinityFunc.invoke(affinities));
         }
         if (!tags.isEmpty()) {
-            stringsToJoin.add(joinFunc.invoke(EUIUtils.map(tags, tag -> tag.getTip().getTitleOrIcon())));
+            stringsToJoin.add(joinFunc.invoke(EUIUtils.map(tags, tag -> tag.getTooltip().getTitleOrIcon())));
         }
         if (!colors.isEmpty()) {
             stringsToJoin.add(joinFunc.invoke(EUIUtils.map(colors, EUIGameUtils::getColorName)));
@@ -193,7 +193,7 @@ public class PField_CardCategory extends PField_CardGeneric {
             stringsToJoin.add(affinities.get(i).getTooltip().toString());
         }
         if (tags.size() > i) {
-            stringsToJoin.add(tags.get(i).getTip().getTitleOrIcon());
+            stringsToJoin.add(tags.get(i).getTooltip().getTitleOrIcon());
         }
         if (colors.size() > i) {
             stringsToJoin.add(EUIGameUtils.getColorName(colors.get(i)));

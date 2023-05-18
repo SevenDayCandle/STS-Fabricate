@@ -3,8 +3,8 @@ package pinacolada.skills.skills.special.moves;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
-import extendedui.interfaces.markers.TooltipProvider;
-import extendedui.ui.tooltips.EUITooltip;
+import extendedui.interfaces.markers.KeywordProvider;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;
@@ -47,13 +47,13 @@ public class PMove_ObtainRelic extends PMove<PField_RelicID> {
     @Override
     public PMove_ObtainRelic onAddToCard(AbstractCard card) {
         super.onAddToCard(card);
-        if (card instanceof TooltipProvider) {
-            List<EUITooltip> tips = ((TooltipProvider) card).getTips();
+        if (card instanceof KeywordProvider) {
+            List<EUIKeywordTooltip> tips = ((KeywordProvider) card).getTips();
             if (tips != null) {
                 for (String r : fields.relicIDs) {
                     AbstractRelic relic = RelicLibrary.getRelic(r);
                     if (relic != null) {
-                        tips.add(new EUITooltip(relic.name, relic.description));
+                        tips.add(new EUIKeywordTooltip(relic.name, relic.description));
                     }
                 }
             }
