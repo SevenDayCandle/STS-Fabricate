@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 
 import static com.megacrit.cardcrawl.actions.AbstractGameAction.AttackEffect;
 
-// TODO Refactor
 public class PCLAttackVFX {
     private static final HashMap<AttackEffect, PCLAttackVFX> ALL = new HashMap<>();
 
