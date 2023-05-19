@@ -1,6 +1,5 @@
 package pinacolada.resources.pcl;
 
-import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.rewards.RewardItem;
 import extendedui.EUI;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
@@ -217,7 +216,7 @@ public class PCLCoreTooltips extends PCLTooltips {
     public EUIKeywordTooltip withdraw = EUIKeywordTooltip.findByID("Withdraw");
     public EUIKeywordTooltip wrath = EUIKeywordTooltip.findByID("Wrath");
 
-    public EUIKeywordTooltip gold = new EUIKeywordTooltip(RewardItem.TEXT[1].trim(), (AbstractPlayer.PlayerClass) null);
+    public EUIKeywordTooltip gold = new EUIKeywordTooltip(RewardItem.TEXT[1].trim());
 
     public PCLCoreTooltips() {
         EUIKeywordTooltip.registerID(PCLAffinity.Red.getAffinitySymbol(), affinityRed);

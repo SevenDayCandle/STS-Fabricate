@@ -95,7 +95,7 @@ public abstract class PCLBlight extends AbstractBlight implements KeywordProvide
             initializeTips();
         }
         if (tips.size() > 0) {
-            tips.get(0).setDescriptions(description);
+            tips.get(0).setDescription(description);
         }
     }
 }

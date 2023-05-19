@@ -17,7 +17,7 @@ import extendedui.interfaces.delegates.ActionT2;
 import extendedui.ui.AbstractMenuScreen;
 import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
-import extendedui.ui.tooltips.EUITooltip;
+import extendedui.ui.tooltips.EUIHeaderlessTooltip;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.effects.screen.PCLCardSlotSelectionEffect;
@@ -150,7 +150,7 @@ public class PCLLoadoutEditor extends AbstractMenuScreen {
                 .setAlignment(0.5f, 0.5f)
                 .setPosition(saveButton.hb.cX, cardscountText.hb.y + cardscountText.hb.height + labelHeight * 0.5f)
                 .setFont(FontHelper.tipHeaderFont, 1)
-                .setTooltip(EUITooltip.headerless(EUIUtils.format(PGR.core.strings.csel_hindranceDescription, PCLLoadoutValidation.HINDRANCE_MULTIPLIER)));
+                .setTooltip(new EUIHeaderlessTooltip(EUIUtils.format(PGR.core.strings.csel_hindranceDescription, PCLLoadoutValidation.HINDRANCE_MULTIPLIER)));
 
         for (int i = 0; i < MAX_CARD_SLOTS; i++) {
             slotsEditors.add(new PCLCardSlotEditor(this, screenW(0.1f), screenH(0.75f - (i * 0.05f))));

@@ -66,6 +66,11 @@ public interface PointerProvider {
         return EUIUtils.joinStrings(PGR.config.removeLineBreaks.get() ? " " : EUIUtils.DOUBLE_SPLIT_LINE, EUIUtils.mapAsNonnull(tempEffects, PSkill::getText));
     }
 
+    default String getEffectPowerTextStrings() {
+        ArrayList<PSkill<?>> tempEffects = EUIUtils.filter(getFullEffects(), ef -> ef != null && !(ef instanceof PTrait));
+        return EUIUtils.joinStrings(PGR.config.removeLineBreaks.get() ? " " : EUIUtils.DOUBLE_SPLIT_LINE, EUIUtils.mapAsNonnull(tempEffects, PSkill::getPowerText));
+    }
+
     default ArrayList<PSkill<?>> getEffects() {
         return getSkills().onUseEffects;
     }

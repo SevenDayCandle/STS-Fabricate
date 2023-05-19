@@ -20,7 +20,6 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUITooltip;
-import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.providers.PointerProvider;
@@ -52,6 +51,8 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
         this.potency = this.getPotency();
         setup();
         initializeTips(playerClass);
+        this.isThrown = EUIUtils.any(getEffects(), e -> e.target.targetsSingle());
+        this.targetRequired = isThrown;
     }
 
     public static String createFullID(Class<? extends PCLPotion> type) {
@@ -93,14 +94,11 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
     }
 
     protected void initializeTips(AbstractPlayer.PlayerClass playerClass) {
-        final ArrayList<String> effectStrings = EUIUtils.map(getEffects(), PSkill::getPowerText);
-        this.description = effectStrings.size() > 0 ? effectStrings.get(0) : "";
+        this.description = getEffectPowerTextStrings();
         tips.clear();
-        mainTooltip = playerClass != null ? new EUIKeywordTooltip(name, playerClass, effectStrings) : new EUIKeywordTooltip(name, effectStrings);
+        mainTooltip = playerClass != null ? new EUIKeywordTooltip(name, playerClass, description) : new EUIKeywordTooltip(name, description);
         tips.add(mainTooltip);
         EUIGameUtils.scanForTips(description, tips);
-        this.isThrown = EUIUtils.any(getEffects(), e -> e.target == PCLCardTarget.Single);
-        this.targetRequired = isThrown;
     }
 
     protected void renderImpl(SpriteBatch sb, boolean useOutlineColor) {

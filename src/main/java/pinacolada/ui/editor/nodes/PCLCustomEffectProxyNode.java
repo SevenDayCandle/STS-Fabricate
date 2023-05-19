@@ -3,7 +3,7 @@ package pinacolada.ui.editor.nodes;
 import com.badlogic.gdx.graphics.Color;
 import extendedui.EUIRenderHelpers;
 import extendedui.ui.hitboxes.EUIHitbox;
-import extendedui.ui.tooltips.EUITooltip;
+import extendedui.ui.tooltips.EUIHeaderlessTooltip;
 import extendedui.utilities.EUIColors;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
@@ -52,7 +52,7 @@ public class PCLCustomEffectProxyNode extends PCLCustomEffectNode {
 
     @Override
     public void refresh() {
-        this.tooltip = EUITooltip.headerless(PGR.core.strings.cetut_blankProxy);
+        this.tooltip = new EUIHeaderlessTooltip(PGR.core.strings.cetut_blankProxy);
     }
 
     @Override

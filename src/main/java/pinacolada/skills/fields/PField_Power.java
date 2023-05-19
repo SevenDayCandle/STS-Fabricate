@@ -33,7 +33,7 @@ public class PField_Power extends PField_Not {
 
     public void setupEditor(PCLCustomEffectEditingPane editor) {
         editor.registerPower(powers);
-        editor.registerBoolean(PGR.core.tooltips.debuff.title, PGR.core.tooltips.debuff.description(), v -> debuff = v, debuff);
+        editor.registerBoolean(PGR.core.tooltips.debuff.title, PGR.core.tooltips.debuff.description, v -> debuff = v, debuff);
     }
 
     public String getBuffString() {

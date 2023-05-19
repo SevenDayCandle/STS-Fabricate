@@ -3,7 +3,7 @@ package pinacolada.ui.editor.nodes;
 import extendedui.EUIUtils;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
-import extendedui.ui.tooltips.EUITooltip;
+import extendedui.ui.tooltips.EUIHeaderlessTooltip;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PPrimary;
 import pinacolada.skills.PSkill;
@@ -63,6 +63,6 @@ public class PCLCustomEffectRootNode extends PCLCustomEffectNode {
 
     public void refresh() {
         this.text = skill.getSampleText(null);
-        this.tooltip = EUITooltip.headerless(PGR.core.strings.cetut_blankPrimary);
+        this.tooltip = new EUIHeaderlessTooltip(PGR.core.strings.cetut_blankPrimary);
     }
 }

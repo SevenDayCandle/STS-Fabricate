@@ -11,6 +11,7 @@ import extendedui.EUIUtils;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
+import extendedui.ui.tooltips.EUIHeaderlessTooltip;
 import extendedui.ui.tooltips.EUITooltip;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.interfaces.markers.PMultiBase;
@@ -201,7 +202,7 @@ public class PCLCustomEffectNode extends EUIButton {
 
     public void refresh() {
         this.text = skill.getSampleText(null);
-        this.tooltip = EUITooltip.headerless(skill.getPowerText());
+        this.tooltip = new EUIHeaderlessTooltip(skill.getPowerText());
     }
 
     public void refreshAll() {

@@ -203,7 +203,7 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider 
         this.description = getUpdatedDescription();
         if (this.mainTooltip != null)
         {
-            this.mainTooltip.setDescriptions(description);
+            this.mainTooltip.setDescription(description);
         }
     }
 
