@@ -1,5 +1,6 @@
 package pinacolada.utilities;
 
+import basemod.BaseMod;
 import basemod.DevConsole;
 import basemod.ReflectionHacks;
 import basemod.helpers.CardModifierManager;
@@ -27,6 +28,7 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.helpers.ModHelper;
 import com.megacrit.cardcrawl.helpers.Prefs;
+import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.localization.LocalizedStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
@@ -1145,6 +1147,10 @@ public class GameUtilities {
         return null;
     }
 
+    public static int getRelicCount() {
+        return player != null ? player.relics.size() : 0;
+    }
+
     public static ArrayList<String> getRelicPool(AbstractRelic.RelicTier tier) {
         switch (tier) {
             case COMMON:
@@ -1170,6 +1176,24 @@ public class GameUtilities {
         result.add(AbstractDungeon.bossRelicPool);
         result.add(AbstractDungeon.shopRelicPool);
         return result;
+    }
+
+    public static HashMap<String, AbstractRelic> getRelics(AbstractCard.CardColor cardColor) {
+        switch (cardColor)
+        {
+            case COLORLESS:
+                return ReflectionHacks.getPrivateStatic(RelicLibrary.class, "sharedRelics");
+            case RED:
+                return ReflectionHacks.getPrivateStatic(RelicLibrary.class, "redRelics");
+            case GREEN:
+                return ReflectionHacks.getPrivateStatic(RelicLibrary.class, "greenRelics");
+            case BLUE:
+                return ReflectionHacks.getPrivateStatic(RelicLibrary.class, "blueRelics");
+            case PURPLE:
+                return ReflectionHacks.getPrivateStatic(RelicLibrary.class, "purpleRelics");
+            default:
+                return BaseMod.getRelicsInCustomPool(cardColor);
+        }
     }
 
     public static List<AbstractCard.CardRarity> getStandardCardRarities() {

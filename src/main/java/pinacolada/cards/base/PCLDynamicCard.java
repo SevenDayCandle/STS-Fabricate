@@ -62,6 +62,19 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
         super.fullReset();
     }
 
+    public void setupImages(String imagePath) {
+        portrait = null;
+        if (builder.portraitForeground != null) {
+            this.portraitForeground = builder.portraitForeground;
+        }
+        if (builder.portraitImage != null) {
+            this.portraitImg = builder.portraitImage;
+        }
+        else {
+            loadImage(imagePath, true);
+        }
+    }
+
     @Override
     public EditorMaker getDynamicData() {
         return builder;
@@ -434,13 +447,6 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
         this.builder = builder;
         this.showTypeText = builder.showTypeText;
         this.maxUpgradeLevel = builder.maxUpgradeLevel;
-
-        if (builder.portraitImage != null) {
-            this.portraitImg = builder.portraitImage;
-        }
-        if (builder.portraitForeground != null) {
-            this.portraitForeground = builder.portraitForeground;
-        }
 
         clearSkills();
         onAttackEffect = null;

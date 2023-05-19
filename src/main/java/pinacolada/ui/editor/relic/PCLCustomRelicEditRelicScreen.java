@@ -12,7 +12,6 @@ import extendedui.ui.controls.EUITextBox;
 import extendedui.ui.controls.EUIToggle;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITooltip;
-import extendedui.utilities.ColoredTexture;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.effects.screen.PCLCustomImageEffect;
 import pinacolada.relics.PCLCustomRelicSlot;
@@ -24,7 +23,7 @@ import pinacolada.ui.editor.PCLCustomFormEditor;
 import pinacolada.ui.editor.PCLCustomGenericPage;
 
 import static extendedui.ui.AbstractScreen.createHexagonalButton;
-import static pinacolada.ui.editor.PCLCustomEffectEditingPane.invalidateCards;
+import static pinacolada.ui.editor.PCLCustomEffectEditingPane.invalidateItems;
 
 public class PCLCustomRelicEditRelicScreen extends PCLCustomEditEntityScreen<PCLCustomRelicSlot, PCLDynamicRelicData> {
     public static final float RELIC_Y = Settings.HEIGHT * 0.87f;
@@ -86,7 +85,7 @@ public class PCLCustomRelicEditRelicScreen extends PCLCustomEditEntityScreen<PCL
 
         upgradeToggle.setActive(slot.maxUpgradeLevel != 0);
 
-        invalidateCards();
+        invalidateItems();
     }
 
     protected void rebuildItem() {
@@ -149,7 +148,7 @@ public class PCLCustomRelicEditRelicScreen extends PCLCustomEditEntityScreen<PCL
 
     protected void complete() {
         super.complete();
-        invalidateCards();
+        invalidateItems();
         if (loadedImage != null) {
             loadedImage.dispose();
         }
@@ -158,10 +157,7 @@ public class PCLCustomRelicEditRelicScreen extends PCLCustomEditEntityScreen<PCL
     protected void editImage() {
         Texture image = loadedImage;
         if (image == null) {
-            ColoredTexture portrait = getBuilder().portraitImage;
-            if (portrait != null) {
-                image = portrait.texture;
-            }
+            image = getBuilder().portraitImage;
         }
         imageEditor = (PCLCustomImageEffect) PCLCustomImageEffect.forRelic(image)
                 .addCallback(pixmap -> {
@@ -176,7 +172,7 @@ public class PCLCustomRelicEditRelicScreen extends PCLCustomEditEntityScreen<PCL
         loadedImage = texture;
         modifyAllBuilders(e -> e
                 .setImagePath(currentSlot.getImagePath())
-                .setImage(new ColoredTexture(loadedImage)));
+                .setImage(texture));
     }
 
     private void toggleViewUpgrades(boolean value) {

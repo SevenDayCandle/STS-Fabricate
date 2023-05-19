@@ -2,8 +2,8 @@ package pinacolada.skills.fields;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.localization.CardStrings;
+import com.megacrit.cardcrawl.localization.RelicStrings;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIUtils;
 import extendedui.interfaces.markers.TooltipProvider;
@@ -17,7 +17,11 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.patches.library.CardLibraryPatches;
+import pinacolada.patches.library.RelicLibraryPatches;
 import pinacolada.powers.PCLPowerHelper;
+import pinacolada.relics.PCLCustomRelicSlot;
+import pinacolada.relics.PCLDynamicRelicData;
+import pinacolada.relics.PCLRelicData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
@@ -169,9 +173,26 @@ public abstract class PField implements Serializable {
 
     public static String getRelicNameForID(String relicID) {
         if (relicID != null) {
-            AbstractRelic c = RelicLibrary.getRelic(relicID);
+            // NOT using RelicLibrary.getRelic as the replacement patching on that method may cause text glitches or infinite loops in this method
+            AbstractRelic c = RelicLibraryPatches.getDirectRelic(relicID);
             if (c != null) {
                 return c.name;
+            }
+
+            // Try to load data on relics not in the library
+            PCLRelicData data = PCLRelicData.getStaticData(relicID);
+            if (data != null) {
+                return data.strings.NAME;
+            }
+
+            // Try to load data from slots. Do not actually create relics here to avoid infinite loops
+            PCLCustomRelicSlot slot = PCLCustomRelicSlot.get(relicID);
+            if (slot != null) {
+                HashMap<Settings.GameLanguage, RelicStrings> languageMap = PCLDynamicRelicData.parseLanguageStrings(slot.languageStrings);
+                RelicStrings language = languageMap != null ? PCLDynamicRelicData.getStringsForLanguage(languageMap) : null;
+                if (language != null) {
+                    return language.NAME;
+                }
             }
         }
         return "";

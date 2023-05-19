@@ -124,7 +124,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         log("Banned " + card.cardID + ", Total: " + bannedCards.size());
     }
 
-    private void banCards(PCLAbstractPlayerData data) {
+    private void banItems(PCLAbstractPlayerData data) {
         final ArrayList<CardGroup> groups = new ArrayList<>();
         groups.addAll(EUIGameUtils.getGameCardPools());
         groups.addAll(EUIGameUtils.getSourceCardPools());
@@ -163,6 +163,10 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
             for (CardGroup group : groups) {
                 group.group.removeIf(card -> bannedCards.contains(card.cardID) || isColorlessCardExclusive(card));
             }
+        }
+
+        for (ArrayList<String> relicPool : GameUtilities.getRelicPools()) {
+            relicPool.removeIf(relic -> bannedRelics.contains(relic));
         }
     }
 
@@ -357,7 +361,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
                 BaseMod.removeTopPanelItem(PGR.augmentPanel);
             }
             loadCustomItems(player);
-            banCards(data);
+            banItems(data);
             return;
         }
 
@@ -367,7 +371,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
             loadCustomItems(player);
         }
 
-        banCards(data);
+        banItems(data);
         data.updateRelicsForDungeon();
         if (!panelAdded) {
             panelAdded = true;

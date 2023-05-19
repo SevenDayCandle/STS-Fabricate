@@ -6,7 +6,7 @@ import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Collection;
 
 public class PField_CardTarget extends PField_Random {
     public ArrayList<PCLCardTarget> cardTargets = new ArrayList<>();
@@ -27,7 +27,7 @@ public class PField_CardTarget extends PField_Random {
         super.setupEditor(editor);
     }
 
-    public PField_CardTarget setCardTarget(List<PCLCardTarget> orbs) {
+    public PField_CardTarget setCardTarget(Collection<PCLCardTarget> orbs) {
         this.cardTargets.clear();
         this.cardTargets.addAll(orbs);
         return this;

@@ -107,8 +107,22 @@ public class PField_CardCategory extends PField_CardGeneric {
         editor.registerCard(cardIDs);
     }
 
+    public FuncT1<Boolean, AbstractCard> getFullCardFilter() {
+        return !cardIDs.isEmpty() ? c -> EUIUtils.any(cardIDs, id -> id.equals(c.cardID)) :
+                (c -> (affinities.isEmpty() || GameUtilities.hasAnyAffinity(c, affinities))
+                        && (colors.isEmpty() || colors.contains(c.color))
+                        && (costs.isEmpty() || EUIUtils.any(costs, cost -> cost.check(c)))
+                        && (rarities.isEmpty() || rarities.contains(c.rarity))
+                        && (tags.isEmpty() || EUIUtils.any(tags, t -> t.has(c)))
+                        && (types.isEmpty() || types.contains(c.type)));
+    }
+
     public String getFullCardString() {
         return getFullCardString(skill.getAmountRawString());
+    }
+
+    public String getFullCardString(Object value) {
+        return !cardIDs.isEmpty() ? getCardIDOrString() : isRandom() ? PSkill.TEXT.subjects_randomX(getCardOrString(value)) : getCardOrString(value);
     }
 
     public String getFullCardStringSingular() {
@@ -164,20 +178,6 @@ public class PField_CardCategory extends PField_CardGeneric {
         }
 
         return EUIUtils.joinStrings(" ", stringsToJoin);
-    }
-
-    public FuncT1<Boolean, AbstractCard> getFullCardFilter() {
-        return !cardIDs.isEmpty() ? c -> EUIUtils.any(cardIDs, id -> id.equals(c.cardID)) :
-                (c -> (affinities.isEmpty() || GameUtilities.hasAnyAffinity(c, affinities))
-                        && (colors.isEmpty() || colors.contains(c.color))
-                        && (costs.isEmpty() || EUIUtils.any(costs, cost -> cost.check(c)))
-                        && (rarities.isEmpty() || rarities.contains(c.rarity))
-                        && (tags.isEmpty() || EUIUtils.any(tags, t -> t.has(c)))
-                        && (types.isEmpty() || types.contains(c.type)));
-    }
-
-    public String getFullCardString(Object value) {
-        return !cardIDs.isEmpty() ? getCardIDOrString() : isRandom() ? PSkill.TEXT.subjects_randomX(getCardOrString(value)) : getCardOrString(value);
     }
 
     public int getQualifierRange() {
@@ -275,7 +275,7 @@ public class PField_CardCategory extends PField_CardGeneric {
         }
     }
 
-    public PField_CardCategory setAffinity(List<PCLAffinity> affinities) {
+    public PField_CardCategory setAffinity(Collection<PCLAffinity> affinities) {
         this.affinities.clear();
         this.affinities.addAll(affinities);
         return this;
@@ -295,7 +295,7 @@ public class PField_CardCategory extends PField_CardGeneric {
         return setCardIDs(Arrays.asList(cards));
     }
 
-    public PField_CardCategory setColor(List<AbstractCard.CardColor> types) {
+    public PField_CardCategory setColor(Collection<AbstractCard.CardColor> types) {
         this.colors.clear();
         this.colors.addAll(types);
         return this;
@@ -305,7 +305,7 @@ public class PField_CardCategory extends PField_CardGeneric {
         return setColor(Arrays.asList(types));
     }
 
-    public PField_CardCategory setCost(List<CostFilter> types) {
+    public PField_CardCategory setCost(Collection<CostFilter> types) {
         this.costs.clear();
         this.costs.addAll(types);
         return this;
@@ -315,7 +315,7 @@ public class PField_CardCategory extends PField_CardGeneric {
         return setCost(Arrays.asList(types));
     }
 
-    public PField_CardCategory setRarity(List<AbstractCard.CardRarity> types) {
+    public PField_CardCategory setRarity(Collection<AbstractCard.CardRarity> types) {
         this.rarities.clear();
         this.rarities.addAll(types);
         return this;
@@ -325,7 +325,7 @@ public class PField_CardCategory extends PField_CardGeneric {
         return setRarity(Arrays.asList(types));
     }
 
-    public PField_CardCategory setTag(List<PCLCardTag> nt) {
+    public PField_CardCategory setTag(Collection<PCLCardTag> nt) {
         this.tags.clear();
         this.tags.addAll(nt);
         return this;
@@ -335,7 +335,7 @@ public class PField_CardCategory extends PField_CardGeneric {
         return setTag(Arrays.asList(nt));
     }
 
-    public PField_CardCategory setType(List<AbstractCard.CardType> types) {
+    public PField_CardCategory setType(Collection<AbstractCard.CardType> types) {
         this.types.clear();
         this.types.addAll(types);
         return this;

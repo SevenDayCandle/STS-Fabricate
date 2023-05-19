@@ -5,7 +5,7 @@ import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Collection;
 
 public class PField_Tag extends PField_Random {
     public ArrayList<PCLCardTag> tags = new ArrayList<>();
@@ -34,7 +34,7 @@ public class PField_Tag extends PField_Random {
         return getTagString(tags);
     }
 
-    public PField_Tag setTag(List<PCLCardTag> tags) {
+    public PField_Tag setTag(Collection<PCLCardTag> tags) {
         this.tags.clear();
         this.tags.addAll(tags);
         return this;

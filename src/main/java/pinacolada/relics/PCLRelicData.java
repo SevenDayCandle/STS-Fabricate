@@ -80,6 +80,10 @@ public class PCLRelicData extends PCLGenericData<PCLRelic> {
         return counterUpgrade[Math.min(counterUpgrade.length - 1, form)];
     }
 
+    public static PCLRelicData getStaticData(String cardID) {
+        return STATIC_DATA.get(cardID);
+    }
+
     public void initializeImage() {
         this.imagePath = PGR.getRelicImage(ID);
     }

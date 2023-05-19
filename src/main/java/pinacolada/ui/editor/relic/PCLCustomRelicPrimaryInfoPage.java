@@ -111,7 +111,7 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
                 })
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[0])
                 .setItems(getEligibleRarities())
-                .setTooltip(CardLibSortHeader.TEXT[0], PGR.core.strings.cetut_rarity);
+                .setTooltip(CardLibSortHeader.TEXT[0], PGR.core.strings.cetut_relicRarity);
         sfxDropdown = new EUIDropdown<AbstractRelic.LandingSound>(new EUIHitbox(tierDropdown.hb.x + tierDropdown.hb.width + SPACING_WIDTH, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT)
                 , item -> StringUtils.capitalize(item.toString().toLowerCase()))
                 .setOnChange(types -> {
@@ -124,7 +124,7 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[1])
                 .setCanAutosizeButton(true)
                 .setItems(AbstractRelic.LandingSound.values())
-                .setTooltip(CardLibSortHeader.TEXT[1], PGR.core.strings.cetut_type);
+                .setTooltip(PGR.core.strings.cedit_landingSound, PGR.core.strings.cetut_landingSound);
         maxUpgrades = new PCLValueEditor(new EUIHitbox(START_X, screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , PGR.core.strings.cedit_maxUpgrades, (val) -> effect.modifyAllBuilders(e -> e.setMaxUpgrades(val)))
                 .setLimits(-1, PSkill.DEFAULT_MAX)

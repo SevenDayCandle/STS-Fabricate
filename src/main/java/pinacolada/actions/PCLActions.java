@@ -22,6 +22,7 @@ import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.powers.DrawCardNextTurnPower;
+import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.stances.AbstractStance;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 import com.megacrit.cardcrawl.vfx.BorderFlashEffect;
@@ -43,6 +44,7 @@ import pinacolada.actions.orbs.TriggerOrbPassiveAbility;
 import pinacolada.actions.piles.*;
 import pinacolada.actions.player.SpendEnergy;
 import pinacolada.actions.powers.*;
+import pinacolada.actions.special.ObtainRelicAction;
 import pinacolada.actions.special.ShowAndObtainCardAction;
 import pinacolada.actions.special.UsePotionAction;
 import pinacolada.actions.utility.*;
@@ -567,6 +569,11 @@ public final class PCLActions {
     public MoveCards moveCards(CardGroup source, CardGroup destination, int amount) {
         return add(new MoveCards(destination, source, amount));
     }
+
+    public ObtainRelicAction obtainRelic(AbstractRelic relic) {
+        return add(new ObtainRelicAction(relic));
+    }
+
 
     public PlayCard playCard(AbstractCard card, CardGroup sourcePile, AbstractCreature target) {
         return add(new PlayCard(card, target, false, actionOrder != PCLActions.ActionOrder.Top)).setSourcePile(sourcePile);

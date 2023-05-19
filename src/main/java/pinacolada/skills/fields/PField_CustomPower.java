@@ -6,6 +6,7 @@ import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 public class PField_CustomPower extends PField {
@@ -27,7 +28,7 @@ public class PField_CustomPower extends PField {
         editor.registerDropdown(range, indexes, item -> String.valueOf(item + 1), PGR.core.strings.cedit_powers, false, false, false);
     }
 
-    public PField_CustomPower setIndexes(List<Integer> orbs) {
+    public PField_CustomPower setIndexes(Collection<Integer> orbs) {
         this.indexes.clear();
         this.indexes.addAll(orbs);
         return this;

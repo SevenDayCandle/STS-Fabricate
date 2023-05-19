@@ -9,6 +9,8 @@ import com.evacipated.cardcrawl.modthespire.lib.SpireConfig;
 import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIUtils;
 import extendedui.configuration.STSConfigItem;
+import extendedui.ui.EUIHoverable;
+import extendedui.ui.settings.BasemodSettingsPage;
 import extendedui.ui.settings.ModSettingsScreen;
 import extendedui.ui.settings.ModSettingsToggle;
 import extendedui.utilities.EUIFontHelper;
@@ -20,25 +22,17 @@ import java.nio.file.Files;
 public abstract class AbstractConfig {
     private static final String CONFIG_ID = "PCLConfig";
     protected static final int BASE_OPTION_OFFSET_X = 400;
-    protected static final int BASE_OPTION_OFFSET_Y = 700;
-    protected static final int BASE_OPTION_OPTION_HEIGHT = 50;
+    protected static final int BASE_OPTION_OFFSET_Y = 720;
+    protected static final int BASE_OPTION_OPTION_HEIGHT = 32;
     protected static ModSettingsScreen.Category pclCategory;
 
     protected final String id;
     protected SpireConfig config;
+    protected BasemodSettingsPage settingsBlock;
+    protected ModPanel panel;
 
     public AbstractConfig(String id) {
         this.id = id;
-    }
-
-    protected static int addToggle(ModPanel panel, STSConfigItem<Boolean> option, String label, int ypos) {
-        return addToggle(panel, option, label, ypos, null);
-    }
-
-    protected static int addToggle(ModPanel panel, STSConfigItem<Boolean> option, String label, int ypos, String tip) {
-        panel.addUIElement(new ModLabeledToggleButton(label, tip, BASE_OPTION_OFFSET_X, ypos, Settings.CREAM_COLOR.cpy(), EUIFontHelper.cardDescriptionFontNormal, option.get(), panel, (__) -> {
-        }, (c) -> option.set(c.enabled, true)));
-        return ypos - BASE_OPTION_OPTION_HEIGHT;
     }
 
     protected static ModSettingsToggle makeModToggle(STSConfigItem<Boolean> option, String label, String tip) {
@@ -56,6 +50,17 @@ public abstract class AbstractConfig {
             pclCategory = ModSettingsScreen.registerByClass(AbstractConfig.class);
         }
         return ModSettingsScreen.addBoolean(pclCategory, option, label);
+    }
+
+    protected int addGenericElement(int page, EUIHoverable renderable, int ypos) {
+        settingsBlock.addUIElement(page, renderable);
+        return (int) (ypos - renderable.hb.height);
+    }
+
+    protected int addToggle(int page, STSConfigItem<Boolean> option, String label, int ypos, String tip) {
+        settingsBlock.addUIElement(page, new ModLabeledToggleButton(label, tip, BASE_OPTION_OFFSET_X, ypos, Settings.CREAM_COLOR.cpy(), EUIFontHelper.cardDescriptionFontNormal, option.get(), panel, (__) -> {
+        }, (c) -> option.set(c.enabled, true)));
+        return ypos - BASE_OPTION_OPTION_HEIGHT;
     }
 
     public FileHandle getConfigFolder() {
@@ -95,8 +100,6 @@ public abstract class AbstractConfig {
         }
     }
 
-    abstract public void loadImpl();
-
     public boolean save() {
         try {
             config.save();
@@ -107,4 +110,6 @@ public abstract class AbstractConfig {
             return false;
         }
     }
+
+    abstract public void loadImpl();
 }

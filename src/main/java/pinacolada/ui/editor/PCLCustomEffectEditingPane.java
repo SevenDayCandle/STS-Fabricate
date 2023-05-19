@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
+import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.screens.compendium.CardLibSortHeader;
 import com.megacrit.cardcrawl.screens.runHistory.RunHistoryScreen;
 import extendedui.*;
@@ -31,6 +32,7 @@ import pinacolada.dungeon.PCLDungeon;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.powers.PCLPowerHelper;
+import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
@@ -54,6 +56,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     public static final float MAIN_OFFSET = MENU_WIDTH * 1.58f;
     public static final float AUX_OFFSET = MENU_WIDTH * 2.43f;
     protected static ArrayList<AbstractCard> availableCards;
+    protected static ArrayList<AbstractRelic> availableRelics;
     private PSkill<?> lastEffect;
     private float additionalHeight;
     protected ArrayList<EUIHoverable> activeElements = new ArrayList<>();
@@ -62,6 +65,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     protected EUIDropdown<PCLCardTarget> targets;
     protected EUIDropdown<AbstractCard.CardColor> colors;
     protected EUIDropdown<AbstractCard.CardRarity> rarities;
+    protected EUIDropdown<AbstractRelic.RelicTier> tiers;
     protected EUIDropdown<AbstractCard.CardType> types;
     protected EUIDropdown<CostFilter> costs;
     protected EUIDropdown<PCLCardGroupHelper> piles;
@@ -70,7 +74,8 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     protected EUISearchableDropdown<PCLOrbHelper> orbs;
     protected EUISearchableDropdown<PCLStanceHelper> stances;
     protected EUISearchableDropdown<PCLCardTag> tags;
-    protected EUISearchableDropdown<AbstractCard> cardData;
+    protected EUISearchableDropdown<AbstractCard> cards;
+    protected EUISearchableDropdown<AbstractRelic> relics;
     protected PCLCustomCardUpgradableEditor valueEditor;
     protected PCLCustomCardUpgradableEditor extraEditor;
     protected EUIImage backdrop;
@@ -88,8 +93,9 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         refresh();
     }
 
-    public static void invalidateCards() {
+    public static void invalidateItems() {
         availableCards = null;
+        availableRelics = null;
     }
 
     public void close() {
@@ -99,17 +105,30 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     protected ArrayList<AbstractCard> getAvailableCards() {
         if (availableCards == null) {
             AbstractCard.CardColor cardColor = getColor();
-            availableCards = GameUtilities.isPCLOnlyCardColor(cardColor) ? EUIUtils.mapAsNonnull(PCLCardData.getAllData(false, false, cardColor), cd -> cd.makeCardFromLibrary(0))
-                    :
+            availableCards = GameUtilities.isPCLOnlyCardColor(cardColor) ? EUIUtils.mapAsNonnull(PCLCardData.getAllData(false, false, cardColor), cd -> cd.makeCardFromLibrary(0)) :
                     EUIUtils.filter(CardLibrary.getAllCards(),
                             c -> !PCLDungeon.isColorlessCardExclusive(c) && (c.color == AbstractCard.CardColor.COLORLESS || c.color == AbstractCard.CardColor.CURSE || c.color == cardColor));
-            availableCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(cardColor), c -> c.getBuilder(0).create()));
+            availableCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(cardColor), PCLCustomCardSlot::makeFirstCard));
             if (cardColor != AbstractCard.CardColor.COLORLESS) {
-                availableCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(AbstractCard.CardColor.COLORLESS), c -> c.getBuilder(0).create()));
+                availableCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(AbstractCard.CardColor.COLORLESS), PCLCustomCardSlot::makeFirstCard));
             }
             availableCards.sort((a, b) -> StringUtils.compare(a.name, b.name));
         }
         return availableCards;
+    }
+
+    protected ArrayList<AbstractRelic> getAvailableRelics() {
+        if (availableRelics == null) {
+            AbstractCard.CardColor cardColor = getColor();
+            availableRelics = new ArrayList<>(GameUtilities.getRelics(cardColor).values());
+            availableRelics.addAll(EUIUtils.map(PCLCustomRelicSlot.getRelics(cardColor), PCLCustomRelicSlot::makeRelic));
+            if (cardColor != AbstractCard.CardColor.COLORLESS) {
+                availableRelics.addAll(GameUtilities.getRelics(AbstractCard.CardColor.COLORLESS).values());
+                availableRelics.addAll(EUIUtils.map(PCLCustomRelicSlot.getRelics(AbstractCard.CardColor.COLORLESS), PCLCustomRelicSlot::makeRelic));
+            }
+            availableRelics.sort((a, b) -> StringUtils.compare(a.name, b.name));
+        }
+        return availableRelics;
     }
 
     public EditorMaker getBuilder() {
@@ -261,9 +280,11 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         orbs = initializeSmartSearchable(PCLOrbHelper.visibleValues(), PGR.core.tooltips.orb.title);
         stances = initializeSmartSearchable(PCLStanceHelper.values(cardColor), PGR.core.tooltips.stance.title);
         tags = initializeSmartSearchable(PCLCardTag.getAll(), PGR.core.strings.cedit_tags);
-        cardData = initializeSearchable(getAvailableCards(), c -> c.name, RunHistoryScreen.TEXT[9]);
+        cards = initializeSearchable(getAvailableCards(), c -> c.name, RunHistoryScreen.TEXT[9]);
+        relics = initializeSearchable(getAvailableRelics(), c -> c.name, RunHistoryScreen.TEXT[10]);
         colors = initializeSearchable(AbstractCard.CardColor.values(), EUIGameUtils::getColorName, EUIRM.strings.uiColors);
         rarities = initializeSearchable(PCLCustomCardPrimaryInfoPage.getEligibleRarities(), EUIGameUtils::textForRarity, CardLibSortHeader.TEXT[0]);
+        tiers = initializeSearchable(AbstractRelic.RelicTier.values(), EUIGameUtils::textForRelicTier, CardLibSortHeader.TEXT[0]);
         types = initializeSearchable(PCLCustomCardPrimaryInfoPage.getEligibleTypes(cardColor), EUIGameUtils::textForType, CardLibSortHeader.TEXT[1]);
         costs = initializeSearchable(CostFilter.values(), c -> c.name, CardLibSortHeader.TEXT[3]);
     }
@@ -328,7 +349,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     }
 
     public void registerCard(List<String> cardIDs) {
-        registerDropdown(cardData,
+        registerDropdown(cards,
                 cards -> {
                     cardIDs.clear();
                     cardIDs.addAll(EUIUtils.mapAsNonnull(cards, t -> t.cardID));
@@ -339,7 +360,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     }
 
     public <V> void registerCard(List<String> cardIDs, ActionT1<List<AbstractCard>> onChangeImpl) {
-        registerDropdown(cardData,
+        registerDropdown(cards,
                 onChangeImpl,
                 cardIDs,
                 card -> card.cardID
@@ -433,6 +454,29 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
 
     public void registerRarity(List<AbstractCard.CardRarity> items) {
         registerDropdown(rarities, items);
+    }
+
+    public void registerRelic(List<String> relicIDs) {
+        registerDropdown(relics,
+                relics -> {
+                    relicIDs.clear();
+                    relicIDs.addAll(EUIUtils.mapAsNonnull(relics, t -> t.relicId));
+                },
+                relicIDs,
+                relic -> relic.relicId
+        );
+    }
+
+    public <V> void registerRelic(List<String> relicIDs, ActionT1<List<AbstractRelic>> onChangeImpl) {
+        registerDropdown(relics,
+                onChangeImpl,
+                relicIDs,
+                relic -> relic.relicId
+        );
+    }
+
+    public void registerRelicRarity(List<AbstractRelic.RelicTier> items) {
+        registerDropdown(tiers, items);
     }
 
     public void registerStance(List<PCLStanceHelper> items) {

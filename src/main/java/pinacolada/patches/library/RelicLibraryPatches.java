@@ -1,58 +1,71 @@
 package pinacolada.patches.library;
 
-import basemod.abstracts.CustomSavable;
+import basemod.BaseMod;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
+import com.evacipated.cardcrawl.modthespire.lib.SpirePostfixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
-import extendedui.EUIUtils;
-import pinacolada.relics.PCLRelic;
+import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.resources.PGR;
-
-import java.util.ArrayList;
+import pinacolada.utilities.GameUtilities;
 
 public class RelicLibraryPatches {
     public static final String SEPARATOR = "~";
 
-    public static void addRelic(ArrayList<String> list, AbstractRelic relic) {
-        if (relic instanceof PCLRelic && relic instanceof CustomSavable<?>) {
-            final CustomSavable<?> r = EUIUtils.safeCast(relic, CustomSavable.class);
-            if (r != null && r.savedType() == Integer.class) {
-                list.add(relic.relicId + SEPARATOR + r.onSave());
-                return;
-            }
+    /**
+     * Directly get a card from the card library, bypassing postfixes attached to getRelic. Returns NULL instead of circlet if nothing was found
+     */
+    public static AbstractRelic getDirectRelic(String id) {
+        AbstractRelic relic = null;
+        relic = GameUtilities.getRelics(AbstractCard.CardColor.COLORLESS).get(id);
+        if (relic != null) {
+            return relic;
         }
-
-        list.add(relic.relicId);
-    }
-
-    public static AbstractRelic getRelic(String key) {
-        if (PGR.isLoaded()) {
-            // Do not replace customsavable relics
-            final int sepIndex = key.indexOf(SEPARATOR);
-            if (sepIndex >= 0) {
-                final String baseID = key.substring(0, sepIndex);
-                final AbstractRelic relic = RelicLibrary.getRelic(baseID).makeCopy();
-                final CustomSavable<?> r = EUIUtils.safeCast(relic, CustomSavable.class);
-                if (r != null && r.savedType() == Integer.class) {
-                    //noinspection CastCanBeRemovedNarrowingVariableType
-                    ((CustomSavable<Integer>) r).onLoad(EUIUtils.parseInt(key.substring(sepIndex + 1), -1));
-                }
-
-                return relic;
-            }
+        relic = GameUtilities.getRelics(AbstractCard.CardColor.RED).get(id);
+        if (relic != null) {
+            return relic;
         }
-
-        return null;
+        relic = GameUtilities.getRelics(AbstractCard.CardColor.GREEN).get(id);
+        if (relic != null) {
+            return relic;
+        }
+        relic = GameUtilities.getRelics(AbstractCard.CardColor.BLUE).get(id);
+        if (relic != null) {
+            return relic;
+        }
+        relic = GameUtilities.getRelics(AbstractCard.CardColor.PURPLE).get(id);
+        if (relic != null) {
+            return relic;
+        }
+        return BaseMod.getCustomRelic(id);
     }
 
     @SpirePatch(clz = RelicLibrary.class, method = "getRelic", paramtypez = {String.class})
     public static class RelicLibraryPatches_GetRelic {
         @SpirePrefixPatch
         public static SpireReturn<AbstractRelic> prefix(String key) {
-            AbstractRelic relic = getRelic(key);
-            return relic != null ? SpireReturn.Return(relic) : SpireReturn.Continue();
+            if (PGR.isLoaded()) {
+                // TODO Replacements
+
+                // Allow getRelic to get custom relics too
+                PCLCustomRelicSlot slot = PCLCustomRelicSlot.get(key);
+                if (slot != null) {
+                    return SpireReturn.Return(slot.makeRelic());
+                }
+            }
+
+            return SpireReturn.Continue();
+        }
+    }
+
+    @SpirePatch(clz = RelicLibrary.class, method = "isARelic", paramtypez = {String.class})
+    public static class RelicLibraryPatches_IsARelic {
+        @SpirePostfixPatch
+        public static boolean postfix(boolean retVal, String key) {
+            return retVal || PCLCustomRelicSlot.get(key) != null;
         }
     }
 }

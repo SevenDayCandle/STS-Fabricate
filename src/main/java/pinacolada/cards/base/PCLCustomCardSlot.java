@@ -228,7 +228,7 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
 
         // Unlink temporary portrait images to allow the new saved portrait image to be loaded, and set multiform data as necessary
         for (PCLDynamicCardData b : builders) {
-            b.setImage(null).setMultiformData(forms.length, false, forms.length > 1, false);
+            b.setImagePath(newImagePath).setImage(null).setMultiformData(forms.length, false, forms.length > 1, false);
         }
 
         filePath = newFilePath;

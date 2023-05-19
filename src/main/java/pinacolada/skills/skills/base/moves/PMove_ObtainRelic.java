@@ -1,23 +1,24 @@
-package pinacolada.skills.skills.special.moves;
+package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
+import pinacolada.annotations.VisibleRelic;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
-import pinacolada.skills.fields.PField_RelicID;
-import pinacolada.utilities.GameUtilities;
+import pinacolada.skills.fields.PField_Relic;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-public class PMove_ObtainRelic extends PMove<PField_RelicID> {
-    public static final PSkillData<PField_RelicID> DATA = register(PMove_ObtainRelic.class, PField_RelicID.class)
+@VisibleRelic
+public class PMove_ObtainRelic extends PMove<PField_Relic> {
+    public static final PSkillData<PField_Relic> DATA = register(PMove_ObtainRelic.class, PField_Relic.class)
             .selfTarget();
 
     public PMove_ObtainRelic() {
@@ -66,10 +67,15 @@ public class PMove_ObtainRelic extends PMove<PField_RelicID> {
         for (String r : fields.relicIDs) {
             AbstractRelic relic = RelicLibrary.getRelic(r);
             if (relic != null) {
-                GameUtilities.obtainRelicFromEvent(relic.makeCopy());
+                getActions().obtainRelic(relic.makeCopy());
             }
         }
 
         super.use(info);
+    }
+
+    @Override
+    public boolean isMetascaling() {
+        return true;
     }
 }

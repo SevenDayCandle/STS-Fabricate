@@ -11,7 +11,7 @@ import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Collection;
 
 import static pinacolada.skills.PSkill.EXTRA_CHAR;
 
@@ -84,7 +84,7 @@ public class PField_Orb extends PField_Random {
         return getOrbString(orbs);
     }
 
-    public PField_Orb setOrb(List<PCLOrbHelper> orbs) {
+    public PField_Orb setOrb(Collection<PCLOrbHelper> orbs) {
         this.orbs.clear();
         this.orbs.addAll(orbs);
         return this;

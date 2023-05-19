@@ -6,7 +6,7 @@ import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Collection;
 
 public class PField_AttackType extends PField_Random {
     public ArrayList<PCLAttackType> attackTypes = new ArrayList<>();
@@ -26,7 +26,7 @@ public class PField_AttackType extends PField_Random {
         super.setupEditor(editor);
     }
 
-    public PField_AttackType setAttackType(List<PCLAttackType> orbs) {
+    public PField_AttackType setAttackType(Collection<PCLAttackType> orbs) {
         this.attackTypes.clear();
         this.attackTypes.addAll(orbs);
         return this;

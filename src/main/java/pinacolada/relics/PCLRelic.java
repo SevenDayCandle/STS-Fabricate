@@ -39,8 +39,8 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider 
     public PCLRelic(PCLRelicData data) {
         super(data.ID, "", data.tier, data.sfx);
         this.relicData = data;
-        loadImage(data.imagePath);
         initializePCLTips();
+        setupImages(data.imagePath);
     }
 
     public static String createFullID(Class<? extends PCLRelic> type) {
@@ -196,6 +196,10 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider 
     public boolean setEnabled(boolean value) {
         super.grayscale = !value;
         return value;
+    }
+
+    public void setupImages(String imagePath) {
+        loadImage(imagePath);
     }
 
     @Override

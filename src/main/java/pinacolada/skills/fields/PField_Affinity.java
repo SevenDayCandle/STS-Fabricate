@@ -9,6 +9,7 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 public class PField_Affinity extends PField_Random {
@@ -120,7 +121,7 @@ public class PField_Affinity extends PField_Random {
         return indexes;
     }
 
-    public PField_Affinity setAffinity(List<PCLAffinity> affinities) {
+    public PField_Affinity setAffinity(Collection<PCLAffinity> affinities) {
         this.affinities.clear();
         this.affinities.addAll(affinities);
         return this;

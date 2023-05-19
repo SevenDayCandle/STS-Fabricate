@@ -194,14 +194,14 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
         // All builders should have the same image
         PCLDynamicRelicData builder = getBuilder(0);
         if (builder != null && builder.portraitImage != null) {
-            PixmapIO.writePNG(imgWriter, builder.portraitImage.texture.getTextureData().consumePixmap());
+            PixmapIO.writePNG(imgWriter, builder.portraitImage.getTextureData().consumePixmap());
             // Forcibly reload the image
             EUIRM.getLocalTexture(newImagePath, true, true, false);
         }
 
-        // Unlink temporary portrait images to allow the new saved portrait image to be loaded, and set multiform data as necessary
+        // Point all builders to the new path, or nullify it out if no image was saved
         for (PCLDynamicRelicData b : builders) {
-            b.setImage(null);
+            b.setImagePath(newImagePath).setImage(null);
         }
 
         filePath = newFilePath;

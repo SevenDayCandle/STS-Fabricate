@@ -29,9 +29,22 @@ public class PCLDynamicRelic extends PCLPointerRelic implements FabricateItem {
         return new PCLDynamicRelic(builder);
     }
 
+    @Override
+    public void setupImages(String path) {
+        // No-op, handle images in setupBuilder
+    }
+
     public void setupBuilder(PCLDynamicRelicData builder) {
         this.builder = builder;
         this.isSeen = true; // Set to seen to let this appear in relic grids, etc.
+
+        if (builder.portraitImage != null) {
+            this.outlineImg = this.img = builder.portraitImage;
+        }
+        else {
+            loadImage(builder.imagePath);
+        }
+
         for (PSkill<?> effect : builder.moves) {
             if (effect == null) {
                 continue;

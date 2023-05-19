@@ -18,6 +18,7 @@ import pinacolada.utilities.ListSelection;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 public class PField_CardGeneric extends PField_Not {
@@ -155,7 +156,7 @@ public class PField_CardGeneric extends PField_Not {
         return this;
     }
 
-    public PField_CardGeneric setCardGroup(List<PCLCardGroupHelper> gt) {
+    public PField_CardGeneric setCardGroup(Collection<PCLCardGroupHelper> gt) {
         this.groupTypes.clear();
         this.groupTypes.addAll(gt);
         this.baseGroupTypes = this.groupTypes;

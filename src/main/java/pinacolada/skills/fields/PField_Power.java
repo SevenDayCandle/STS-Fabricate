@@ -9,7 +9,7 @@ import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Collection;
 
 public class PField_Power extends PField_Not {
     public ArrayList<PCLPowerHelper> powers = new ArrayList<>();
@@ -69,7 +69,7 @@ public class PField_Power extends PField_Not {
         return this;
     }
 
-    public PField_Power setPower(List<PCLPowerHelper> powers) {
+    public PField_Power setPower(Collection<PCLPowerHelper> powers) {
         this.powers.clear();
         this.powers.addAll(powers);
         return this;

@@ -5,7 +5,7 @@ import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Collection;
 
 public class PField_CardModifyTag extends PField_CardCategory {
     public ArrayList<PCLCardTag> addTags = new ArrayList<>();
@@ -40,7 +40,7 @@ public class PField_CardModifyTag extends PField_CardCategory {
         return getTagAndOrString(addTags, or);
     }
 
-    public PField_CardModifyTag setAddTag(List<PCLCardTag> affinities) {
+    public PField_CardModifyTag setAddTag(Collection<PCLCardTag> affinities) {
         this.addTags.clear();
         this.addTags.addAll(affinities);
         return this;

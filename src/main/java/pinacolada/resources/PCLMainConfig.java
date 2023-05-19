@@ -11,6 +11,7 @@ import extendedui.configuration.EUIConfiguration;
 import extendedui.configuration.STSConfigItem;
 import extendedui.configuration.STSSerializedConfigItem;
 import extendedui.configuration.STSStringConfigItem;
+import extendedui.ui.settings.BasemodSettingsPage;
 import extendedui.ui.settings.ModSettingsScreen;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardPreviews;
@@ -49,8 +50,9 @@ public class PCLMainConfig extends AbstractConfig {
     private static final String SHOW_IRRELEVANT_PROPERTIES = PCLMainConfig.createFullID("ShowIrrelevantProperties");
     private static final String VANILLA_LIBRARY_SCREEN = PCLMainConfig.createFullID("VanillaLibraryScreen");
     private static final String VANILLA_POWER_RENDER = PCLMainConfig.createFullID("VanillaPowerRender");
-    public static final FilenameFilter JSON_FILTER = (dir, name) -> name.endsWith(".json");
     private static ModSettingsScreen.Category pclCategory;
+    public static final FilenameFilter JSON_FILTER = (dir, name) -> name.endsWith(".json");
+
     private HashSet<String> tips = null;
     public STSConfigItem<Boolean> cropCardImages = new STSConfigItem<Boolean>(CROP_CARD_PORTRAIT, false);
     public STSConfigItem<Boolean> displayCardTagDescription = new STSConfigItem<Boolean>(DISPLAY_CARD_TAG_DESCRIPTION, false);
@@ -118,22 +120,24 @@ public class PCLMainConfig extends AbstractConfig {
     }
 
     public void initializeOptions() {
-        final ModPanel panel = new ModPanel();
+        panel = new ModPanel();
+        settingsBlock = new BasemodSettingsPage();
+        panel.addUIElement(settingsBlock);
 
         int yPos = BASE_OPTION_OFFSET_Y;
 
-        yPos = addToggle(panel, cropCardImages, PGR.core.strings.options_cropCardImages, yPos, PGR.core.strings.optionDesc_cropCardImages);
-        yPos = addToggle(panel, displayCardTagDescription, PGR.core.strings.options_displayCardTagDescription, yPos, PGR.core.strings.optionDesc_displayCardTagDescription);
-        yPos = addToggle(panel, expandAbbreviatedEffects, PGR.core.strings.options_expandAbbreviatedEffects, yPos, PGR.core.strings.optionDesc_expandAbbreviatedEffects);
-        yPos = addToggle(panel, removeLineBreaks, PGR.core.strings.options_removeLineBreaks, yPos, PGR.core.strings.optionDesc_removeLineBreaks);
-        yPos = addToggle(panel, vanillaLibraryScreen, PGR.core.strings.options_vanillaCustomRunMenu, yPos, PGR.core.strings.optionDesc_vanillaCustomRunMenu);
-        yPos = addToggle(panel, vanillaPowerRender, PGR.core.strings.options_vanillaPowerRender, yPos, PGR.core.strings.optionDesc_vanillaPowerRender);
-        yPos = addToggle(panel, showEstimatedDamage, PGR.core.strings.options_showEstimatedDamage, yPos, PGR.core.strings.optionDesc_showEstimatedDamage);
-        yPos = addToggle(panel, showFormulaDisplay, PGR.core.strings.options_showFormulaDisplay, yPos, PGR.core.strings.optionDesc_showFormulaDisplay);
-        yPos = addToggle(panel, showIrrelevantProperties, PGR.core.strings.options_hideIrrelevantAffinities, yPos, PGR.core.strings.optionDesc_hideIrrelevantAffinities);
-        yPos = addToggle(panel, madnessReplacements, PGR.core.strings.options_madnessReplacements, yPos, PGR.core.strings.optionDesc_madnessReplacements);
-        yPos = addToggle(panel, enableCustomCards, PGR.core.strings.options_enableCustomCards, yPos, PGR.core.strings.optionDesc_onlyNewRuns);
-        yPos = addToggle(panel, enableCustomRelics, PGR.core.strings.options_enableCustomRelics, yPos, PGR.core.strings.optionDesc_onlyNewRuns);
+        yPos = addToggle(0, cropCardImages, PGR.core.strings.options_cropCardImages, yPos, PGR.core.strings.optionDesc_cropCardImages);
+        yPos = addToggle(0, displayCardTagDescription, PGR.core.strings.options_displayCardTagDescription, yPos, PGR.core.strings.optionDesc_displayCardTagDescription);
+        yPos = addToggle(0, expandAbbreviatedEffects, PGR.core.strings.options_expandAbbreviatedEffects, yPos, PGR.core.strings.optionDesc_expandAbbreviatedEffects);
+        yPos = addToggle(0, removeLineBreaks, PGR.core.strings.options_removeLineBreaks, yPos, PGR.core.strings.optionDesc_removeLineBreaks);
+        yPos = addToggle(0, vanillaLibraryScreen, PGR.core.strings.options_vanillaCustomRunMenu, yPos, PGR.core.strings.optionDesc_vanillaCustomRunMenu);
+        yPos = addToggle(0, vanillaPowerRender, PGR.core.strings.options_vanillaPowerRender, yPos, PGR.core.strings.optionDesc_vanillaPowerRender);
+        yPos = addToggle(0, showEstimatedDamage, PGR.core.strings.options_showEstimatedDamage, yPos, PGR.core.strings.optionDesc_showEstimatedDamage);
+        yPos = addToggle(0, showFormulaDisplay, PGR.core.strings.options_showFormulaDisplay, yPos, PGR.core.strings.optionDesc_showFormulaDisplay);
+        yPos = addToggle(0, showIrrelevantProperties, PGR.core.strings.options_hideIrrelevantAffinities, yPos, PGR.core.strings.optionDesc_hideIrrelevantAffinities);
+        yPos = addToggle(0, madnessReplacements, PGR.core.strings.options_madnessReplacements, yPos, PGR.core.strings.optionDesc_madnessReplacements);
+        yPos = addToggle(0, enableCustomCards, PGR.core.strings.options_enableCustomCards, yPos, PGR.core.strings.optionDesc_onlyNewRuns);
+        yPos = addToggle(0, enableCustomRelics, PGR.core.strings.options_enableCustomRelics, yPos, PGR.core.strings.optionDesc_onlyNewRuns);
 
         BaseMod.registerModBadge(ImageMaster.loadImage("images/pcl/modBadge.png"), MOD_ID, "PinaColada", "", panel);
 

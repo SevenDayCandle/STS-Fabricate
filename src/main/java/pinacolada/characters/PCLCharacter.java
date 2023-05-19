@@ -23,7 +23,6 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.helpers.ScreenShake;
-import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.screens.CharSelectInfo;
 import com.megacrit.cardcrawl.screens.stats.CharStat;
 import extendedui.EUIRenderHelpers;
@@ -31,7 +30,6 @@ import extendedui.EUIUtils;
 import extendedui.ui.TextureCache;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.effects.PCLSFX;
-import pinacolada.patches.library.RelicLibraryPatches;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
@@ -184,16 +182,6 @@ public abstract class PCLCharacter extends CustomPlayer {
         }
 
         super.damage(info);
-    }
-
-    @Override
-    public ArrayList<String> getRelicNames() {
-        final ArrayList<String> list = new ArrayList<>();
-        for (AbstractRelic r : relics) {
-            RelicLibraryPatches.addRelic(list, r);
-        }
-
-        return list;
     }
 
     public Color getTransparentColor() {

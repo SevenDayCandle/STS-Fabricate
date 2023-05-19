@@ -1,12 +1,12 @@
 package pinacolada.relics;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.localization.RelicStrings;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIUtils;
-import extendedui.utilities.ColoredTexture;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
@@ -24,7 +24,7 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker {
     public final HashMap<Settings.GameLanguage, RelicStrings> languageMap = new HashMap<>();
     public final ArrayList<PSkill<?>> moves = new ArrayList<>();
     public final ArrayList<PTrigger> powers = new ArrayList<>();
-    public ColoredTexture portraitImage;
+    public Texture portraitImage;
 
     public PCLDynamicRelicData(String cardID) {
         super(PCLDynamicRelic.class, PGR.core, cardID);
@@ -50,6 +50,7 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker {
     public PCLDynamicRelicData(PCLDynamicRelicData original) {
         this(original.ID, original.resources);
         setImagePath(original.imagePath);
+        setImage(original.portraitImage);
         setColor(original.cardColor);
         setSfx(original.sfx);
         setTier(original.tier);
@@ -124,7 +125,7 @@ public class PCLDynamicRelicData extends PCLRelicData implements EditorMaker {
         return this;
     }
 
-    public PCLDynamicRelicData setImage(ColoredTexture portraitImage) {
+    public PCLDynamicRelicData setImage(Texture portraitImage) {
         this.portraitImage = portraitImage;
 
         return this;

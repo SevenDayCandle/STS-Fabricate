@@ -122,7 +122,8 @@
 												"Enable",
 												"Pile",
 												"Combat",
-												"Exact"
+												"Exact",
+												"Landing Sound"
 								]
 				},
 				"pcl:CardEditorTutorial": {
@@ -131,13 +132,13 @@
 												"Custom cards can be obtained in #yCustom #yRuns with the #yEnable #yCustom #yCards option selected or through the #oobtaincustom or #oobtaindeckstuom commands in Basemod's console.",
 												"Update the custom card list to reflect the cards present in your custom cards folder. | This will remove any cards that have been moved out of the custom card folder.",
 												"You may change a card's form when you upgrade it at a campfire. All forms share the same #yPrimary #yInfo, but their other attributes and effects may differ.",
-												"Choose the image to use for this card's portrait",
+												"Choose the image to use for this item's portrait",
 												"Flags qualify cards for certain checks (e.g. counting as a #yStrike for {#y:Perfected Strike}).",
 												"Tags affect the way the player interacts with a card (e.g. what happens after they play it). Most tags are removed after activation.",
 												"In the dropdown, the left-hand number signfies the number of uses the tag has while un-upgraded, while the right-hand number determines the number of uses for the upgraded card.",
 												"Affinities are card properties that are used in different ways by different characters. They can also be used as a card filter for effects.",
 												"Conditions determine when effects are allowed activate.",
-												"Effects are activated when the card is played, unless specified otherwise by a condition.",
+												"Effects are activated when a card or relic is activated, unless specified otherwise by a condition.",
 												"Modifiers affect the output of effects.",
 												"Primaries control how conditions are applied to effects, as well as what effects are available.",
 												"Turn Delay determines the number of turns that will pass before this effect is executed.",
@@ -146,11 +147,11 @@
 												"A composite effect that executes one of its sub-effects depending on the output of its child condition.",
 												"#yLoad #yFile: Select a file from your computer | #yLoad #yFrom #yCard: Copy an image from an existing card | #yPaste or #pCtrl-V: Copy an image from your clipboard",
 												"The highlighted portion of the image will be saved. Drag the image to reposition it. Use the scrollbar to zoom in or out.",
-												"The maximum number of times this card can be upgraded at #yRest #ySites.",
+												"The maximum number of times this item can be upgraded.",
 												"If you have reached or surpassed the maximum number of copies, this card will stop appearing in card rewards and shops.",
-												"This suffix will be used to construct file paths for this card, as well as its in-game ID (used when referencing the card in the console). | You cannot have two custom cards of the same color with the same suffix.",
-												"The name of the card as it appears in-game. Selecting another language under the language dropdown will let you modify the card's name for that language. | If a name is missing for a given language, it will fall back on the English name.",
-												"#yRarity determines how often the card appears in card rewards. #yBasic cards only appear in starting loadouts, while #ySpecial cards only appear in special events.",
+												"This suffix will be used to construct file paths for this item, as well as its in-game ID (used when referencing the item in the console). | You cannot have two items of the same color with the same suffix.",
+												"The name of this item as it appears in-game. Selecting another language under the language dropdown will let you modify this item's name for that language. | If a name is missing for a given language, it will fall back on the English name.",
+												"#yRarity determines how often this card appears in rewards (#yCommon, #yUncommon, or #yRare only). Cards of other rarities must be spawned manually through events or other effects.",
 												"#yTypes categorize cards based on their effects.",
 												"Determines what creatures the card is allowed to be played against.",
 												"The upper value determines the base amount for this effect or attribute. The lower value determines how much this amount increases per upgrade.",
@@ -168,7 +169,9 @@
 												"If checked, this modifier's amount will add itself onto the effect's base value instead of multiplying that value.",
 												"Click a node to edit it. Hold and drag it onto another node to assign it as a child to the target node. | To add effects, click one of the node buttons from the top bar to add it to the root, or drag it onto an existing node to add it as a child to that node.",
 												"{#o:Click this to place a Primary here.}",
-												"{#o:Drag a node here to set this node's child, or click this to place an effect here.}"
+												"{#o:Drag a node here to set this node's child, or click this to place an effect here.}",
+												"#yRarity determines how often this relic appears in rewards (#yCommon, #yUncommon, or #yRare only). #yShop relics only appear in shops. #yBoss relics only appear in boss chests. Relics of other rarities must be spawned manually through events or other effects.",
+												"The sound effect that plays when obtaining this relic."
 								]
 				},
 				"pcl:CardPile": {
@@ -449,6 +452,7 @@
 												"${0}@!1:cards@:card$",
 												"${0}@!1:characters@:character$",
 												"${0}@!1:enemies@:enemy$",
+												"${0}@!1:relics@:relic$",
 												"Cost",
 												"Infinite",
 												"Max. {0}",
@@ -477,6 +481,7 @@
 												"playing {0} with this in {1}",
 												"random {0}",
 												"randomly {0}",
+												"relic",
 												"shuffle your deck",
 												"the bottom of {0}",
 												"the left-most {0}",

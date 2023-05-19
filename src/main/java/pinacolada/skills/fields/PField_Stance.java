@@ -6,7 +6,7 @@ import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Collection;
 
 public class PField_Stance extends PField_Random {
     public ArrayList<PCLStanceHelper> stances = new ArrayList<>();
@@ -34,7 +34,7 @@ public class PField_Stance extends PField_Random {
         return getStanceString(stances);
     }
 
-    public PField_Stance setStance(List<PCLStanceHelper> orbs) {
+    public PField_Stance setStance(Collection<PCLStanceHelper> orbs) {
         this.stances.clear();
         this.stances.addAll(orbs);
         return this;
