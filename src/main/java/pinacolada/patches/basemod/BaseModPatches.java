@@ -1,4 +1,4 @@
-package pinacolada.patches;
+package pinacolada.patches.basemod;
 
 import basemod.BaseMod;
 import basemod.patches.com.megacrit.cardcrawl.characters.AbstractPlayer.OnEvokeOrb;

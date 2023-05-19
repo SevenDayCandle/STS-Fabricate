@@ -38,6 +38,7 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
     public HashSet<String> bannedRelics = new HashSet<>();
     public List<CustomMod> activeMods = new ArrayList<>();
     public boolean allowCustomCards;
+    public boolean allowCustomRelics;
     public boolean isAscensionMode;
     public boolean isEndless;
     public boolean isFinalActAvailable;
@@ -113,6 +114,7 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
         PCLCustomTrial trial = new PCLCustomTrial(new HashSet<>(bannedCards), new HashSet<>());
         trial.addMods(activeMods);
         trial.allowCustomCards = allowCustomCards;
+        trial.allowCustomRelics = allowCustomRelics;
         Settings.isEndless = isEndless;
         CustomModeScreen.finalActAvailable = isFinalActAvailable;
         CardCrawlGame.trial = trial;

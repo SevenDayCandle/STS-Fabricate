@@ -344,13 +344,15 @@
 												"View and manage your #yAugments.{0} || {#o:Right-Click to learn more.} ",
 												" (You do not have any #yAugments)",
 												"Custom Cards",
-												"Allow cards created in the Custom Card Editor to appear in runs",
+												"Allow cards created with Fabricate to appear in runs",
 												"Fabricate",
 												"Left-Click",
 												"Right-Click",
 												"Temp. {0}",
 												"Requirement",
-												"Edit"
+												"Edit",
+												"Custom Relics",
+												"Allow relics created with Fabricate to appear in runs"
 								]
 				},
 				"pcl:Options": {

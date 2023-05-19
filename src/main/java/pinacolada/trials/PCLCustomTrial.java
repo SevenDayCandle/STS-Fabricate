@@ -30,6 +30,7 @@ public class PCLCustomTrial extends CustomTrial {
     protected boolean isKeepingStarterCards = true;
     protected boolean isKeepingStarterRelic = true;
     public boolean allowCustomCards;
+    public boolean allowCustomRelics;
 
 
     public PCLCustomTrial(HashSet<String> bannedCards, HashSet<String> bannedRelics) {

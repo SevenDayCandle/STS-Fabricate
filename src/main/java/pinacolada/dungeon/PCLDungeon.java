@@ -33,6 +33,7 @@ import pinacolada.effects.PCLEffects;
 import pinacolada.effects.vfx.SmokeEffect;
 import pinacolada.interfaces.listeners.OnAddToDeckListener;
 import pinacolada.interfaces.listeners.OnAddingToCardRewardListener;
+import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.FakeLoadout;
@@ -66,6 +67,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
     protected transient boolean canJumpNextFloor;
     protected transient int valueDivisor;
     public Boolean allowCustomCards = false;
+    public Boolean allowCustomRelics = false;
     public HashMap<PCLAffinity, Integer> fragments = new HashMap<>();
     public HashMap<String, Integer> augments = new HashMap<>();
     public HashSet<String> bannedCards = new HashSet<>();
@@ -319,6 +321,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         if (data != null) {
             eventLog = new HashMap<>(data.eventLog);
             allowCustomCards = data.allowCustomCards;
+            allowCustomRelics = data.allowCustomRelics;
             rNGCounter = data.rNGCounter;
             highestScore = data.highestScore;
             ascensionGlyphCounters.addAll(data.ascensionGlyphCounters);
@@ -331,6 +334,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         else {
             eventLog = new HashMap<>();
             allowCustomCards = PGR.config.enableCustomCards.get() || (CardCrawlGame.trial instanceof PCLCustomTrial && ((PCLCustomTrial) CardCrawlGame.trial).allowCustomCards);
+            allowCustomRelics = PGR.config.enableCustomRelics.get() || (CardCrawlGame.trial instanceof PCLCustomTrial && ((PCLCustomTrial) CardCrawlGame.trial).allowCustomRelics);
             highestScore = 0;
             rNGCounter = 0;
             currentForm = null;
@@ -352,7 +356,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
                 panelAdded = false;
                 BaseMod.removeTopPanelItem(PGR.augmentPanel);
             }
-            loadCustomCards(player);
+            loadCustomItems(player);
             banCards(data);
             return;
         }
@@ -360,7 +364,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         loadCardsForData(data);
         if (isActuallyStartingRun)
         {
-            loadCustomCards(player);
+            loadCustomItems(player);
         }
 
         banCards(data);
@@ -422,7 +426,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         }
     }
 
-    private void loadCustomCards(AbstractPlayer player) {
+    private void loadCustomItems(AbstractPlayer player) {
         // Add custom cards if applicable
         if (allowCustomCards) {
             for (PCLCustomCardSlot c : PCLCustomCardSlot.getCards(player.getCardColor())) {
@@ -446,6 +450,25 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
                     AbstractDungeon.colorlessCardPool.addToBottom(c.getBuilder(0).create());
                 }
                 EUIUtils.logInfoIfDebug(this, "Added Custom Card " + c.ID + " to Colorless pool");
+            }
+        }
+
+        if (allowCustomRelics) {
+            for (PCLCustomRelicSlot c : PCLCustomRelicSlot.getRelics(player.getCardColor())) {
+                AbstractRelic.RelicTier tier = c.getBuilder(0).tier;
+                ArrayList<String> relicPool = GameUtilities.getRelicPool(tier);
+                if (relicPool != null) {
+                    relicPool.add(c.ID);
+                    EUIUtils.logInfoIfDebug(this, "Added Custom Relic " + c.ID + " to pool " + tier);
+                }
+            }
+            for (PCLCustomRelicSlot c : PCLCustomRelicSlot.getRelics(AbstractCard.CardColor.COLORLESS)) {
+                AbstractRelic.RelicTier tier = c.getBuilder(0).tier;
+                ArrayList<String> relicPool = GameUtilities.getRelicPool(tier);
+                if (relicPool != null) {
+                    relicPool.add(c.ID);
+                    EUIUtils.logInfoIfDebug(this, "Added Custom Relic " + c.ID + " to pool " + tier);
+                }
             }
         }
     }
@@ -676,6 +699,10 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
 
         if (allowCustomCards == null) {
             allowCustomCards = CardCrawlGame.trial instanceof PCLCustomTrial && ((PCLCustomTrial) CardCrawlGame.trial).allowCustomCards;
+        }
+
+        if (allowCustomRelics == null) {
+            allowCustomRelics = CardCrawlGame.trial instanceof PCLCustomTrial && ((PCLCustomTrial) CardCrawlGame.trial).allowCustomRelics;
         }
 
         if (highestScore == null) {

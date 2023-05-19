@@ -249,6 +249,8 @@ public class PCLCoreStrings extends PCLStrings {
     public final String misc_tempPowerPrefix = misc.TEXT[8];
     public final String misc_requirement = misc.TEXT[9];
     public final String misc_edit = misc.TEXT[10];
+    public final String misc_customRelics = misc.TEXT[11];
+    public final String misc_customRelicsDesc = misc.TEXT[12];
     // Options
     public final String options_cropCardImages = options.TEXT[0];
     public final String options_displayCardTagDescription = options.TEXT[1];
