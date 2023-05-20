@@ -360,14 +360,16 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
                 panelAdded = false;
                 BaseMod.removeTopPanelItem(PGR.augmentPanel);
             }
-            loadCustomItems(player);
+            if (isActuallyStartingRun) {
+                loadCustomItems(player);
+            }
+
             banItems(data);
             return;
         }
 
         loadCardsForData(data);
-        if (isActuallyStartingRun)
-        {
+        if (isActuallyStartingRun) {
             loadCustomItems(player);
         }
 

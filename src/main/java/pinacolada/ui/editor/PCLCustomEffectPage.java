@@ -3,12 +3,15 @@ package pinacolada.ui.editor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
+import extendedui.EUIRM;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.ui.TextureCache;
 import extendedui.ui.controls.EUILabel;
+import extendedui.ui.controls.EUITextBox;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.utilities.EUIFontHelper;
+import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PPrimary;
 import pinacolada.skills.PSkill;
@@ -32,6 +35,7 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
     protected ActionT1<PSkill<?>> onUpdate;
     protected EUIHitbox hb;
     protected EUILabel header;
+    protected EUITextBox info;
     protected PCLCustomEffectEditingPane currentEditingSkill;
     protected PCLCustomEffectSelectorPane buttonsPane;
 
@@ -47,6 +51,11 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
                 .setFontScale(0.8f).setColor(Color.LIGHT_GRAY)
                 .setLabel(title);
         this.buttonsPane = new PCLCustomEffectSelectorPane(this);
+        this.info = new EUITextBox(EUIRM.images.panel.texture(), new EUIHitbox(screenW(0.23f), screenH(0.12f), screenW(0.54f), screenH(0.15f)))
+                .setLabel(PGR.core.strings.cetut_nodeTutorial)
+                .setAlignment(0.75f, 0.1f, true)
+                .setColors(Color.DARK_GRAY, Settings.CREAM_COLOR)
+                .setFont(EUIFontHelper.cardTipBodyFont, 0.9f);
         this.canDragScreen = false;
 
         initializeEffects();
@@ -138,6 +147,7 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
             }
 
             this.header.tryUpdate();
+            this.info.tryUpdate();
         }
     }
 
@@ -150,6 +160,7 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
         PCLCustomEffectHologram.updateAndRenderCurrent(sb);
         this.header.tryRender(sb);
         this.buttonsPane.tryRender(sb);
+        this.info.tryRender(sb);
 
         if (this.currentEditingSkill != null) {
             this.currentEditingSkill.render(sb);

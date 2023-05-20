@@ -1706,7 +1706,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
                 }
             }
 
-            tempBlock = CardModifierManager.onModifyBlock(tempDamage, this);
+            tempBlock = CardModifierManager.onModifyBlock(tempBlock, this);
             tempDamage = CardModifierManager.onModifyDamage(tempDamage, this, enemy);
 
             for (AbstractPower p : owner.powers) {
@@ -1806,7 +1806,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
                 addAttackDisplay(p, oldDamage, tempDamage);
             }
 
-            tempBlock = CardModifierManager.onModifyBlockFinal(tempDamage, this);
+            tempBlock = CardModifierManager.onModifyBlockFinal(tempBlock, this);
             tempDamage = CardModifierManager.onModifyDamageFinal(tempDamage, this, enemy);
 
             if (applyEnemyPowers) {

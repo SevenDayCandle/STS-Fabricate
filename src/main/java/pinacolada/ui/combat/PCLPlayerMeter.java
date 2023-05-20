@@ -15,6 +15,7 @@ import extendedui.ui.controls.EUITutorialPage;
 import extendedui.ui.hitboxes.DraggableHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.ui.tooltips.EUITooltip;
+import extendedui.utilities.EUIColors;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.dungeon.PCLUseInfo;
@@ -39,11 +40,12 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implement
     public PCLPlayerMeter(String id, STSConfigItem<Vector2> config, float iconSize) {
         super(config, new DraggableHitbox(screenW(0.0366f), screenH(0.425f), iconSize, iconSize, true), iconSize);
         this.id = id;
-        infoIcon = new EUIButton(EUIRM.images.info.texture(), new RelativeHitbox(hb, scale(40f), scale(40f), scale(20), scale(-50f)))
+        infoIcon = new EUIButton(EUIRM.images.info.texture(), new RelativeHitbox(hb, scale(40f), scale(40f), scale(22), scale(-60f)))
                 .setTooltip(getInfoTitle(), getInfoMainDescrption() + EUIUtils.DOUBLE_SPLIT_LINE + PGR.core.strings.tutorial_learnMore)
                 .setOnClick(() -> {
                     EUI.ftueScreen.open(new EUITutorial(getInfoPages()));
-                });
+                })
+                .setColor(EUIColors.white(0.2f));
     }
 
     public static String createFullID(PCLResources<?, ?, ?, ?> resources, Class<? extends PCLPlayerMeter> type) {
@@ -150,6 +152,7 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implement
 
     @Override
     public void updateImpl(PCLCard card, PCLCard originalCard, AbstractCreature target, AbstractCreature originalTarget, boolean draggingCard, boolean shouldUpdateForCard, boolean shouldUpdateForTarget) {
+        infoIcon.setColor(EUIColors.white(infoIcon.hb.hovered ? 0.75f : 0.2f));
         infoIcon.tryUpdate();
     }
 

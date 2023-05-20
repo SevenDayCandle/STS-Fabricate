@@ -246,10 +246,11 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
     }
 
     protected void setupPageButtons() {
+        float offset = Settings.WIDTH * 0.5f - (pages.size() / 2f * BUTTON_HEIGHT);
         for (int i = 0; i < pages.size(); i++) {
             PCLCustomGenericPage pg = pages.get(i);
             pageButtons.add(new EUIButton(pg.getTextureCache().texture(), new EUIHitbox(0, 0, BUTTON_HEIGHT, BUTTON_HEIGHT))
-                    .setPosition(Settings.WIDTH * (0.45f) + ((i - 1f) * BUTTON_HEIGHT), (BUTTON_HEIGHT * 0.85f))
+                    .setPosition(offset + (i * BUTTON_HEIGHT), (BUTTON_HEIGHT * 0.85f))
                     .setColor(i == 0 ? Color.WHITE : Color.GRAY)
                     .setOnClick(i, this::openPageAtIndex)
                     .setTooltip(getPageTooltip(pg)));
