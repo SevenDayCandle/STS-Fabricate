@@ -1,8 +1,8 @@
 package pinacolada.effects.player;
 
-import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import pinacolada.effects.PCLEffect;
+import pinacolada.utilities.GameUtilities;
 
 public class ObtainRelicEffect extends PCLEffect {
     private final AbstractRelic relic;
@@ -13,8 +13,7 @@ public class ObtainRelicEffect extends PCLEffect {
 
     @Override
     protected void firstUpdate() {
-        relic.instantObtain();
-        CardCrawlGame.metricData.addRelicObtainData(relic);
+        GameUtilities.obtainRelicFromEvent(relic);
 
         complete();
     }

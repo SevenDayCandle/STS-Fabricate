@@ -1117,7 +1117,7 @@ public class GameUtilities {
         return getRandomElement(getSummons(isAlive), getRNG());
     }
 
-    public static <T extends AbstractRelic> T getRelic(String relicID) {
+    public static <T extends AbstractRelic> T getPlayerRelic(String relicID) {
         if (player == null) {
             return null;
         }
@@ -1137,7 +1137,7 @@ public class GameUtilities {
         return null;
     }
 
-    public static <T> T getRelic(Class<T> relicType) {
+    public static <T> T getPlayerRelic(Class<T> relicType) {
         for (AbstractRelic relic : player.relics) {
             if (relicType.isInstance(relic)) {
                 return relicType.cast(relic);
@@ -1166,16 +1166,6 @@ public class GameUtilities {
             default:
                 return null;
         }
-    }
-
-    public static ArrayList<ArrayList<String>> getRelicPools() {
-        final ArrayList<ArrayList<String>> result = new ArrayList<>();
-        result.add(AbstractDungeon.commonRelicPool);
-        result.add(AbstractDungeon.uncommonRelicPool);
-        result.add(AbstractDungeon.rareRelicPool);
-        result.add(AbstractDungeon.bossRelicPool);
-        result.add(AbstractDungeon.shopRelicPool);
-        return result;
     }
 
     public static HashMap<String, AbstractRelic> getRelics(AbstractCard.CardColor cardColor) {
@@ -1987,6 +1977,7 @@ public class GameUtilities {
     }
 
     public static void obtainRelicFromEvent(AbstractRelic relic) {
+        relic.isSeen = true;
         relic.instantObtain();
         CardCrawlGame.metricData.addRelicObtainData(relic);
     }

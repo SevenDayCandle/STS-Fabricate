@@ -134,6 +134,11 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
         }
     }
 
+    public void reset() {
+        skills = new Skills();
+        setup();
+    }
+
     public void setup() {
     }
 

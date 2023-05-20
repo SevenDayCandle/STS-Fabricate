@@ -40,12 +40,12 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implement
     public PCLPlayerMeter(String id, STSConfigItem<Vector2> config, float iconSize) {
         super(config, new DraggableHitbox(screenW(0.0366f), screenH(0.425f), iconSize, iconSize, true), iconSize);
         this.id = id;
-        infoIcon = new EUIButton(EUIRM.images.info.texture(), new RelativeHitbox(hb, scale(40f), scale(40f), scale(22), scale(-60f)))
+        infoIcon = new EUIButton(EUIRM.images.info.texture(), new RelativeHitbox(hb, scale(40f), scale(40f), scale(25), scale(-40f)))
                 .setTooltip(getInfoTitle(), getInfoMainDescrption() + EUIUtils.DOUBLE_SPLIT_LINE + PGR.core.strings.tutorial_learnMore)
                 .setOnClick(() -> {
                     EUI.ftueScreen.open(new EUITutorial(getInfoPages()));
                 })
-                .setColor(EUIColors.white(0.2f));
+                .setColor(EUIColors.white(0.5f));
     }
 
     public static String createFullID(PCLResources<?, ?, ?, ?> resources, Class<? extends PCLPlayerMeter> type) {
@@ -152,7 +152,7 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implement
 
     @Override
     public void updateImpl(PCLCard card, PCLCard originalCard, AbstractCreature target, AbstractCreature originalTarget, boolean draggingCard, boolean shouldUpdateForCard, boolean shouldUpdateForTarget) {
-        infoIcon.setColor(EUIColors.white(infoIcon.hb.hovered ? 0.75f : 0.2f));
+        infoIcon.setColor(EUIColors.white(isHovered() ? 1f : 0.5f));
         infoIcon.tryUpdate();
     }
 

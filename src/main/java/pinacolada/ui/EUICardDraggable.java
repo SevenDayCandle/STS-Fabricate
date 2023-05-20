@@ -34,7 +34,7 @@ public abstract class EUICardDraggable<T extends AbstractCard> extends EUIBase {
         draggablePanel = new EUIImage(EUIRM.images.panelRounded.texture(), hb)
                 .setColor(0.05f, 0.05f, 0.05f, 0.5f);
         draggableIcon = new EUIImage(EUIRM.images.draggable.texture(), new RelativeHitbox(hb, scale(40f), scale(40f), iconSize / 2, iconSize / 2))
-                .setColor(EUIColors.white(0.2f));
+                .setColor(EUIColors.white(0.5f));
     }
 
     protected AbstractCard getLastCard() {
@@ -114,7 +114,7 @@ public abstract class EUICardDraggable<T extends AbstractCard> extends EUIBase {
             draggableIcon.tryUpdate();
             boolean isHovered = isHovered();
             draggablePanel.setColor(0.05f, 0.05f, 0.05f, isHovered ? 0.5f : 0.05f);
-            draggableIcon.setColor(EUIColors.white(isHovered ? 0.75f : 0.2f));
+            draggableIcon.setColor(EUIColors.white(isHovered ? 1f : 0.5f));
             updateImpl(card, originalCard, target, originalTarget, draggingCard, lastCard != card, lastTarget != target);
             lastCard = card;
             lastTarget = target;

@@ -165,7 +165,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
             }
         }
 
-        for (ArrayList<String> relicPool : GameUtilities.getRelicPools()) {
+        for (ArrayList<String> relicPool : EUIGameUtils.getGameRelicPools()) {
             relicPool.removeIf(relic -> bannedRelics.contains(relic));
         }
     }
@@ -461,21 +461,20 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
 
         if (allowCustomRelics) {
             for (PCLCustomRelicSlot c : PCLCustomRelicSlot.getRelics(player.getCardColor())) {
-                AbstractRelic.RelicTier tier = c.getBuilder(0).tier;
-                ArrayList<String> relicPool = GameUtilities.getRelicPool(tier);
-                if (relicPool != null) {
-                    relicPool.add(c.ID);
-                    EUIUtils.logInfoIfDebug(this, "Added Custom Relic " + c.ID + " to pool " + tier);
-                }
+                loadCustomRelicImpl(c);
             }
             for (PCLCustomRelicSlot c : PCLCustomRelicSlot.getRelics(AbstractCard.CardColor.COLORLESS)) {
-                AbstractRelic.RelicTier tier = c.getBuilder(0).tier;
-                ArrayList<String> relicPool = GameUtilities.getRelicPool(tier);
-                if (relicPool != null) {
-                    relicPool.add(c.ID);
-                    EUIUtils.logInfoIfDebug(this, "Added Custom Relic " + c.ID + " to pool " + tier);
-                }
+                loadCustomRelicImpl(c);
             }
+        }
+    }
+
+    private void loadCustomRelicImpl(PCLCustomRelicSlot c) {
+        AbstractRelic.RelicTier tier = c.getBuilder(0).tier;
+        ArrayList<String> relicPool = GameUtilities.getRelicPool(tier);
+        if (relicPool != null && !relicPool.contains(c.ID)) {
+            relicPool.add(c.ID);
+            EUIUtils.logInfoIfDebug(this, "Added Custom Relic " + c.ID + " to pool " + tier);
         }
     }
 

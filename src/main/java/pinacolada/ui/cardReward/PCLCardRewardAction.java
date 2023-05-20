@@ -71,7 +71,7 @@ public abstract class PCLCardRewardAction extends EUIBase {
         rewardItem = rItem;
         isActive = false;
 
-        actionProvider = GameUtilities.getRelic(getTargetClass());
+        actionProvider = GameUtilities.getPlayerRelic(getTargetClass());
         if (actionProvider != null && actionProvider.canActivate(rItem)) {
             isActive = true;
 

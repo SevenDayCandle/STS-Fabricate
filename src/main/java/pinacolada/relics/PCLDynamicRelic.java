@@ -34,6 +34,12 @@ public class PCLDynamicRelic extends PCLPointerRelic implements FabricateItem {
         // No-op, handle images in setupBuilder
     }
 
+    @Override
+    public void reset() {
+        super.reset();
+        setupMoves(builder);
+    }
+
     public void setupBuilder(PCLDynamicRelicData builder) {
         this.builder = builder;
         this.isSeen = true; // Set to seen to let this appear in relic grids, etc.
@@ -45,6 +51,12 @@ public class PCLDynamicRelic extends PCLPointerRelic implements FabricateItem {
             loadImage(builder.imagePath);
         }
 
+        setupMoves(builder);
+        initializePCLTips();
+        updateDescription(null);
+    }
+
+    public void setupMoves(PCLDynamicRelicData builder) {
         for (PSkill<?> effect : builder.moves) {
             if (effect == null) {
                 continue;
@@ -59,7 +71,5 @@ public class PCLDynamicRelic extends PCLPointerRelic implements FabricateItem {
             addPowerMove(pe.makeCopy());
         }
 
-        initializePCLTips();
-        updateDescription(null);
     }
 }

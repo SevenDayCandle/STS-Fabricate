@@ -45,7 +45,6 @@ public class CardPoolScreenPatches {
                         }
                     })
                     .addCallback(() -> {
-                        GameUtilities.setTopPanelVisible(true);
                         if (EUIGameUtils.inGame()) {
                             AbstractDungeon.overlayMenu.cancelButton.show(MasterDeckViewScreen.TEXT[1]);
                         }

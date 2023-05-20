@@ -136,11 +136,6 @@ public class AffinityKeywordButton extends EUIBase {
         return this;
     }
 
-    public AffinityKeywordButton setAlpha(float currentAlpha, float targetAlpha) {
-        backgroundButton.setAlpha(currentAlpha, targetAlpha);
-        return this;
-    }
-
     public AffinityKeywordButton setLevel(int level) {
         currentLevel = level;
         backgroundButton.setColor(currentLevel == 0 ? PANEL_COLOR : Color.WHITE);
