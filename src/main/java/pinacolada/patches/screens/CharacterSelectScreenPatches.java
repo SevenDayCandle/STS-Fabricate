@@ -5,10 +5,10 @@ import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePostfixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterSelectScreen;
 import extendedui.EUI;
-import extendedui.ui.AbstractScreen;
+import extendedui.ui.AbstractMenuScreen;
 import pinacolada.resources.PGR;
 
 public class CharacterSelectScreenPatches {
@@ -37,7 +37,7 @@ public class CharacterSelectScreenPatches {
 
         @SpirePrefixPatch
         public static SpireReturn<Void> prefix(CharacterSelectScreen __instance) {
-            return (EUI.currentScreen != null && AbstractDungeon.screen == AbstractScreen.EUI_SCREEN) ? SpireReturn.Return() : SpireReturn.Continue();
+            return (EUI.currentScreen != null && (CardCrawlGame.mainMenuScreen != null && CardCrawlGame.mainMenuScreen.screen == AbstractMenuScreen.EUI_MENU)) ? SpireReturn.Return() : SpireReturn.Continue();
         }
     }
 }

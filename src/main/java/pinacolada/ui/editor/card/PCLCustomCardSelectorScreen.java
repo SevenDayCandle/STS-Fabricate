@@ -8,7 +8,6 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUI;
@@ -74,32 +73,32 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
                 .setBackground(EUIRM.images.panel.texture(), com.badlogic.gdx.graphics.Color.DARK_GRAY)
                 .setPosition(Settings.WIDTH * 0.075f, Settings.HEIGHT * 0.65f)
                 .setFont(EUIFontHelper.cardDescriptionFontLarge, 0.5f);
-        cancelButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
+        cancelButton = EUIButton.createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(buttonWidth * 0.53f, buttonHeight)
                 .setColor(Color.FIREBRICK)
                 .setText(GridCardSelectScreen.TEXT[1])
-                .setOnClick(AbstractDungeon::closeCurrentScreen);
+                .setOnClick(this::close);
 
-        addButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
+        addButton = EUIButton.createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(cancelButton.hb.cX, cancelButton.hb.y + cancelButton.hb.height + labelHeight * 0.8f)
                 .setColor(Color.FOREST)
                 .setText(PGR.core.strings.cedit_newCard)
                 .setOnClick(this::add);
 
-        openButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
+        openButton = EUIButton.createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(addButton.hb.cX, addButton.hb.y + addButton.hb.height + labelHeight * 0.8f)
                 .setColor(Color.WHITE)
                 .setText(PGR.core.strings.cedit_openFolder)
                 .setOnClick(PCLCustomCardSelectorScreen::openFolder);
 
-        loadExistingButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
+        loadExistingButton = EUIButton.createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(openButton.hb.cX, openButton.hb.y + openButton.hb.height + labelHeight * 0.8f)
                 .setColor(Color.WHITE)
                 .setText(PGR.core.strings.cedit_loadFromCard)
                 .setTooltip(PGR.core.strings.cedit_loadFromCard, PGR.core.strings.cetut_loadFromCardScreen)
                 .setOnClick(this::loadFromExisting);
 
-        reloadButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
+        reloadButton = EUIButton.createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(loadExistingButton.hb.cX, loadExistingButton.hb.y + loadExistingButton.hb.height + labelHeight * 0.8f)
                 .setColor(Color.WHITE)
                 .setText(PGR.core.strings.cedit_reloadCards)

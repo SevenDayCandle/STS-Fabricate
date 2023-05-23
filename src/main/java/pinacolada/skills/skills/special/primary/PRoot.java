@@ -8,6 +8,7 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
+import pinacolada.skills.skills.PDelegateCond;
 
 import static pinacolada.utilities.GameUtilities.EMPTY_STRING;
 
@@ -45,9 +46,15 @@ public class PRoot extends PPrimary<PField_Empty> {
         return childEffect != null ? childEffect.getText(addPeriod) : "";
     }
 
+    @Override
     public void triggerOnStartOfBattleForRelic() {
         if (childEffect != null) {
             childEffect.use(makeInfo(null));
         }
+    }
+
+    @Override
+    public boolean isSkillAllowed(PSkill<?> skill) {
+        return !(source instanceof AbstractRelic) || !(skill instanceof PDelegateCond);
     }
 }

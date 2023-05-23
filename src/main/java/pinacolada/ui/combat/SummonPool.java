@@ -10,6 +10,7 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUI;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT2;
+import extendedui.interfaces.delegates.FuncT2;
 import extendedui.ui.EUIBase;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.creature.SummonAllyAction;
@@ -77,7 +78,7 @@ public class SummonPool extends EUIBase {
     /**
      * Returns the amount of damage that the player should be receiving after factoring in allies
      */
-    public int countDamage(int damageAmount, ActionT2<PCLCardAlly, Integer> onAllyAction) {
+    public int countDamage(int damageAmount, ActionT2<PCLCardAlly, Integer> onAllyAction, FuncT2<Integer, PCLCardAlly, Integer> calculateDamage) {
         int leftover = damageAmount;
         int remainder = 0;
 
@@ -91,7 +92,7 @@ public class SummonPool extends EUIBase {
             case Full:
                 for (PCLCardAlly ally : summons) {
                     if (leftover > 0 && ally.hasCard()) {
-                        final int amount = Math.min(leftover, ally.currentHealth);
+                        final int amount = calculateDamage.invoke(ally, leftover);
                         onAllyAction.invoke(ally, amount);
                         leftover -= amount;
                     }
@@ -103,11 +104,9 @@ public class SummonPool extends EUIBase {
                 leftover = leftover - cut * (livingCount - 1);
                 for (PCLCardAlly ally : summons) {
                     if (ally.hasCard()) {
-                        int amount = cut - ally.currentHealth;
-                        if (amount > 0) {
-                            leftover += amount;
-                        }
+                        int amount = calculateDamage.invoke(ally, cut);
                         onAllyAction.invoke(ally, cut);
+                        leftover += amount;
                     }
                 }
                 break;
@@ -121,7 +120,7 @@ public class SummonPool extends EUIBase {
             if (amount > 0) {
                 estimatedMap.put(ally, amount);
             }
-        });
+        }, GameUtilities::getHealthBarAmount);
         if (finalResult > 0) {
             estimatedMap.put(AbstractDungeon.player, finalResult);
         }
@@ -251,7 +250,7 @@ public class SummonPool extends EUIBase {
     }
 
     public int tryDamage(DamageInfo info, int damageAmount) {
-        return countDamage(damageAmount, (ally, amount) -> ally.damage(new DamageInfo(info.owner, amount, info.type)));
+        return countDamage(damageAmount, (ally, amount) -> ally.damage(new DamageInfo(info.owner, amount, info.type)), (creature, amount) -> Math.min(amount, creature.currentHealth));
     }
 
     public enum DamageMode {

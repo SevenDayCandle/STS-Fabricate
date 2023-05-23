@@ -8,11 +8,11 @@ import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.screens.mainMenu.MainMenuPanelButton;
 import com.megacrit.cardcrawl.screens.mainMenu.MenuPanelScreen;
+import extendedui.ui.AbstractMenuScreen;
 import extendedui.utilities.EUIClassUtils;
 import pinacolada.resources.PCLEnum;
 import pinacolada.ui.menu.CustomMainMenuPanelButton;
 
-import static extendedui.ui.AbstractScreen.EUI_MENU;
 import static pinacolada.resources.PCLEnum.Menus.CUSTOM;
 
 public class MenuPanelScreenPatches {
@@ -37,7 +37,7 @@ public class MenuPanelScreenPatches {
     public static class MenuPanelScreen_Update {
         @SpirePostfixPatch
         public static SpireReturn<Void> postfix(MenuPanelScreen __instance) {
-            return (CardCrawlGame.mainMenuScreen.screen == EUI_MENU) ? SpireReturn.Return() : SpireReturn.Continue();
+            return (CardCrawlGame.mainMenuScreen.screen == AbstractMenuScreen.EUI_MENU) ? SpireReturn.Return() : SpireReturn.Continue();
         }
     }
 }

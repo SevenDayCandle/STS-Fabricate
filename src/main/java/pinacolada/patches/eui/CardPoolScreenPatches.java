@@ -9,7 +9,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.screens.MasterDeckViewScreen;
 import extendedui.EUIGameUtils;
-import extendedui.ui.cardFilter.CardPoolScreen;
+import extendedui.ui.screens.CardPoolScreen;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.interfaces.markers.EditorCard;
@@ -72,8 +72,8 @@ public class CardPoolScreenPatches {
         }
     }
 
-    @SpirePatch(clz = CardPoolScreen.class, method = "updateImpl")
-    public static class CardPoolScreenPatches_UpdateImpl {
+    @SpirePatch(clz = CardPoolScreen.class, method = "update")
+    public static class CardPoolScreenPatches_Update {
         @SpirePrefixPatch
         public static SpireReturn<Void> prefix(CardPoolScreen __instance) {
             if (currentEffect != null) {
@@ -89,8 +89,8 @@ public class CardPoolScreenPatches {
         }
     }
 
-    @SpirePatch(clz = CardPoolScreen.class, method = "renderImpl")
-    public static class CardPoolScreenPatches_RenderImpl {
+    @SpirePatch(clz = CardPoolScreen.class, method = "render")
+    public static class CardPoolScreenPatches_Render {
         @SpirePrefixPatch
         public static SpireReturn<Void> prefix(CardPoolScreen __instance, SpriteBatch sb) {
             if (currentEffect != null) {

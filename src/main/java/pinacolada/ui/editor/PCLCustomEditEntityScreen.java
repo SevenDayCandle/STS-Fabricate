@@ -22,7 +22,7 @@ import pinacolada.skills.skills.base.primary.PTrigger_When;
 
 import java.util.ArrayList;
 
-import static extendedui.ui.AbstractScreen.createHexagonalButton;
+import static extendedui.ui.controls.EUIButton.createHexagonalButton;
 import static pinacolada.ui.editor.PCLCustomEffectPage.MENU_HEIGHT;
 import static pinacolada.ui.editor.PCLCustomEffectPage.MENU_WIDTH;
 

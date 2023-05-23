@@ -11,7 +11,7 @@ import extendedui.EUIUtils;
 import extendedui.configuration.STSConfigItem;
 import extendedui.ui.EUIHoverable;
 import extendedui.ui.settings.BasemodSettingsPage;
-import extendedui.ui.settings.ModSettingsScreen;
+import extendedui.ui.settings.ExtraModSettingsPanel;
 import extendedui.ui.settings.ModSettingsToggle;
 import extendedui.utilities.EUIFontHelper;
 
@@ -24,7 +24,7 @@ public abstract class AbstractConfig {
     protected static final int BASE_OPTION_OFFSET_X = 400;
     protected static final int BASE_OPTION_OFFSET_Y = 720;
     protected static final int BASE_OPTION_OPTION_HEIGHT = 32;
-    protected static ModSettingsScreen.Category pclCategory;
+    protected static ExtraModSettingsPanel.Category pclCategory;
 
     protected final String id;
     protected SpireConfig config;
@@ -47,9 +47,9 @@ public abstract class AbstractConfig {
     protected static ModSettingsToggle makeModToggle(STSConfigItem<Boolean> option, String label) {
         // Must be initialized after Settings.scale is set, or the mod options will be in the wrong position
         if (pclCategory == null) {
-            pclCategory = ModSettingsScreen.registerByClass(AbstractConfig.class);
+            pclCategory = ExtraModSettingsPanel.registerByClass(AbstractConfig.class);
         }
-        return ModSettingsScreen.addBoolean(pclCategory, option, label);
+        return ExtraModSettingsPanel.addBoolean(pclCategory, option, label);
     }
 
     protected int addGenericElement(int page, EUIHoverable renderable, int ypos) {

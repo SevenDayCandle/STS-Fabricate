@@ -7,9 +7,9 @@ import java.lang.reflect.InvocationTargetException;
 
 public class PCLGenericData<T> {
     public final PCLResources<?, ?, ?, ?> resources;
-    private Constructor<? extends T> constructor;
+    public final Class<? extends T> invokeClass;
     public String ID;
-    public Class<? extends T> invokeClass;
+    private Constructor<? extends T> constructor;
 
     public PCLGenericData(String id, Class<? extends T> invokeClass, PCLResources<?, ?, ?, ?> resources) {
         this.ID = id;

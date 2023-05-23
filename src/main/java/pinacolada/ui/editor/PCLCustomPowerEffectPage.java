@@ -9,6 +9,9 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.base.primary.PTrigger_When;
 
 public class PCLCustomPowerEffectPage extends PCLCustomEffectPage {
+
+
+
     public PCLCustomPowerEffectPage(PCLCustomEditEntityScreen<?, ?> screen, EUIHitbox hb, int index, String title, ActionT1<PSkill<?>> onUpdate) {
         super(screen, hb, index, title, onUpdate);
     }

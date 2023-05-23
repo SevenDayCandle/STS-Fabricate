@@ -78,6 +78,10 @@ public class PField_CardCategory extends PField_CardGeneric {
         return super.createFilteredAction(action, info, subchoices).setFilter(getFullCardFilter());
     }
 
+    public SelectFromPile createFilteredAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> action, PCLUseInfo info, int subchoices, boolean allowSelf) {
+        return super.createFilteredAction(action, info, subchoices, allowSelf).setFilter(getFullCardFilter());
+    }
+
     @Override
     public boolean equals(PField other) {
         return super.equals(other)

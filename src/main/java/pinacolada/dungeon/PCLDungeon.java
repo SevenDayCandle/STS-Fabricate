@@ -19,6 +19,7 @@ import com.megacrit.cardcrawl.potions.PotionSlot;
 import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
+import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import com.megacrit.cardcrawl.vfx.UpgradeShineEffect;
 import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
@@ -472,6 +473,8 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
     private void loadCustomRelicImpl(PCLCustomRelicSlot c) {
         AbstractRelic.RelicTier tier = c.getBuilder(0).tier;
         ArrayList<String> relicPool = GameUtilities.getRelicPool(tier);
+        // Mark this relic as seen so it shows up properly in menus, etc.
+        UnlockTracker.markRelicAsSeen(c.ID);
         if (relicPool != null && !relicPool.contains(c.ID)) {
             relicPool.add(c.ID);
             EUIUtils.logInfoIfDebug(this, "Added Custom Relic " + c.ID + " to pool " + tier);

@@ -3,7 +3,6 @@ package pinacolada.ui.characterSelection;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
@@ -108,20 +107,20 @@ public class PCLLoadoutEditor extends AbstractMenuScreen {
                     .setOnRightClick(i, this::rightClickPreset);
         }
 
-        cancelButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
+        cancelButton = EUIButton.createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(buttonWidth * 0.75f, button_cY)
                 .setColor(Color.FIREBRICK)
                 .setText(GridCardSelectScreen.TEXT[1])
-                .setOnClick(AbstractDungeon::closeCurrentScreen);
+                .setOnClick(this::close);
 
-        saveButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
+        saveButton = EUIButton.createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(screenW(1) - (buttonWidth * 0.75f), button_cY)
                 .setColor(Color.FOREST)
                 .setText(GridCardSelectScreen.TEXT[0])
                 .setInteractable(false)
                 .setOnClick(this::save);
 
-        clearButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
+        clearButton = EUIButton.createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(saveButton.hb.cX, saveButton.hb.y + saveButton.hb.height + labelHeight * 0.8f)
                 .setColor(Color.WHITE)
                 .setText(PGR.core.strings.csel_clear)
@@ -376,7 +375,7 @@ public class PCLLoadoutEditor extends AbstractMenuScreen {
 
         loadout.preset = preset;
         data.saveLoadouts();
-        AbstractDungeon.closeCurrentScreen();
+        close();
     }
 
     public void setSlotsActive(boolean active) {

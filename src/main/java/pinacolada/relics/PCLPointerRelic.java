@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIInputManager;
 import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUITooltip;
+import org.apache.commons.lang3.StringUtils;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.providers.ClickableProvider;
@@ -81,7 +82,7 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
             setup();
         }
         try {
-            return EUIUtils.joinStrings(" ", EUIUtils.map(getEffects(), PSkill::getPowerText));
+            return StringUtils.capitalize(EUIUtils.joinStrings(" ", EUIUtils.map(getEffects(), PSkill::getPowerText)));
         }
         catch (Exception e) {
             return "";
@@ -95,8 +96,8 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
     }
 
     @Override
-    public void atBattleStartPreDraw() {
-        super.atBattleStartPreDraw();
+    public void atBattleStart() {
+        super.atBattleStart();
         for (PSkill<?> effect : getEffects()) {
             effect.triggerOnStartOfBattleForRelic();
         }

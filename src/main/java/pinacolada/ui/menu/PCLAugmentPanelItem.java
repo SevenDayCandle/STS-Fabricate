@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUI;
 import extendedui.EUIRM;
 import extendedui.EUIRenderHelpers;
@@ -61,7 +62,7 @@ public class PCLAugmentPanelItem extends PCLTopPanelItem {
             );
             EUITooltip.queueTooltip(this.tooltip);
         }
-        if (PCLHotkeys.viewAugmentScreen.isJustPressed() && EUI.currentScreen != EUI.cardsScreen) {
+        if (PCLHotkeys.viewAugmentScreen.isJustPressed() && AbstractDungeon.screen != PCLAugmentScreen.AUGMENT_SCREEN) {
             onClick();
         }
         if (lerpAmount < 1) {

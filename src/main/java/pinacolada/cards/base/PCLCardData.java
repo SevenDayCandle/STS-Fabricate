@@ -294,14 +294,14 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
         this.imagePath = PGR.getCardImage(ID);
     }
 
-    public void invokeTags(AbstractCard card) {
-        for (PCLCardTagInfo i : getTagInfos()) {
-            i.invoke(card);
-        }
-    }
-
     public void invokeTags(AbstractCard card, int form) {
-        for (PCLCardTagInfo i : getTagInfos()) {
+        Collection<PCLCardTagInfo> infos = getTagInfos();
+        if (infos.size() > 0) {
+            for (PCLCardTag tag : PCLCardTag.values()) {
+                tag.set(card, 0);
+            }
+        }
+        for (PCLCardTagInfo i : infos) {
             i.invoke(card, form);
         }
     }

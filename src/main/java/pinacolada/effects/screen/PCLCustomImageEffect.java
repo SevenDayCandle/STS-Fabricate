@@ -41,7 +41,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.List;
 
-import static extendedui.ui.AbstractScreen.createHexagonalButton;
+import static extendedui.ui.controls.EUIButton.createHexagonalButton;
 
 public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
     private static final FileNameExtensionFilter EXTENSIONS = new FileNameExtensionFilter("Image files (*.png, *.bmp, *.jpg, *.jpeg)", "png", "bmp", "jpg", "jpeg");

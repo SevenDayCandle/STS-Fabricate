@@ -803,7 +803,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     public String getTargetHasString(PCLCardTarget target, String desc) {
         // For the case of self on the player, use ordinal 0 to get "have" in the description
-        return TEXT.cond_ifTargetHas(getTargetSubjectString(target), target == PCLCardTarget.Self && !isFromCreature() ? 0 : target.ordinal(), desc);
+        return TEXT.cond_ifTargetHas(getTargetSubjectString(target), getTargetOrdinal(target), desc);
     }
 
     public String getTargetHasYouString(String desc) {
@@ -820,6 +820,14 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     public final ArrayList<? extends AbstractCreature> getTargetList(PCLUseInfo info) {
         return info != null ? target.getTargets(info.source, info.target) : new ArrayList<>();
+    }
+
+    public final int getTargetOrdinal() {
+        return getTargetOrdinal(target);
+    }
+
+    public final int getTargetOrdinal(PCLCardTarget target) {
+        return target == PCLCardTarget.Self && !isFromCreature() ? 0 : target.ordinal();
     }
 
     public String getTargetString() {
@@ -932,7 +940,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public final String getWheneverAreString(Object impl) {
-        return TEXT.cond_whenObjectIs(getTargetSubjectString(), target.ordinal(), impl);
+        return TEXT.cond_whenObjectIs(getTargetSubjectString(), getTargetOrdinal(target), impl);
     }
 
     public final String getWheneverString(Object impl) {

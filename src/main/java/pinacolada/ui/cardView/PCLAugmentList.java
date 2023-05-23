@@ -13,7 +13,7 @@ import pinacolada.augments.PCLAugment;
 
 import java.util.ArrayList;
 
-import static extendedui.ui.AbstractScreen.createHexagonalButton;
+import static extendedui.ui.controls.EUIButton.createHexagonalButton;
 
 public class PCLAugmentList extends EUICanvasGrid {
 

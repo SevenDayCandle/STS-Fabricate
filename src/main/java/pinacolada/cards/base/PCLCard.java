@@ -1883,7 +1883,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
             return;
         }
 
-        if (GameUtilities.canShowUpgrades(library) && !isPreview && !isPopup && canUpgrade()) {
+        if (EUIGameUtils.canShowUpgrades(library) && !isPreview && !isPopup && canUpgrade()) {
             updateGlow();
             renderGlow(sb);
             renderUpgradePreview(sb);

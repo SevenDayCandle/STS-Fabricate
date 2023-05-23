@@ -42,7 +42,6 @@ import com.megacrit.cardcrawl.relics.Orichalcum;
 import com.megacrit.cardcrawl.relics.PrismaticShard;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import com.megacrit.cardcrawl.rooms.MonsterRoomBoss;
-import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import com.megacrit.cardcrawl.screens.stats.AchievementGrid;
 import com.megacrit.cardcrawl.ui.panels.EnergyPanel;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
@@ -52,7 +51,6 @@ import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
-import extendedui.ui.AbstractScreen;
 import extendedui.ui.cardFilter.CountingPanelStats;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUITooltip;
@@ -199,13 +197,6 @@ public class GameUtilities {
 
     public static boolean canRetain(AbstractCard card) {
         return !card.isEthereal && !card.retain && !card.selfRetain;
-    }
-
-    public static boolean canShowUpgrades(boolean isLibrary) {
-        return SingleCardViewPopup.isViewingUpgrade && (player == null || isLibrary
-                || AbstractDungeon.screen == AbstractDungeon.CurrentScreen.COMBAT_REWARD
-                || AbstractDungeon.screen == AbstractDungeon.CurrentScreen.CARD_REWARD
-                || AbstractDungeon.screen == AbstractScreen.EUI_SCREEN);
     }
 
     public static boolean chance(float amount) {
@@ -774,6 +765,10 @@ public class GameUtilities {
 
     public static int getHP(AbstractCreature creature, boolean addTempHP, boolean addBlock) {
         return creature.currentHealth + (addTempHP ? TempHPField.tempHp.get(creature) : 0) + (addBlock ? creature.currentBlock : 0);
+    }
+
+    public static int getHealthBarAmount(AbstractCreature c, int amount) {
+        return getHealthBarAmount(c, amount, true, true);
     }
 
     public static int getHealthBarAmount(AbstractCreature c, int amount, boolean subtractBlock, boolean subtractTempHP) {

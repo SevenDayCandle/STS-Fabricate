@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
@@ -88,27 +87,27 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
                 .setAlignment(0.61f, 0.1f, true)
                 .setFont(EUIFontHelper.cardTipTitleFont, 1);
 
-        previewCards = createHexagonalButton(xPos, getY.invoke(7f), buttonWidth, buttonHeight)
+        previewCards = EUIButton.createHexagonalButton(xPos, getY.invoke(7f), buttonWidth, buttonHeight)
                 .setText(PGR.core.strings.sui_showCardPool)
                 .setOnClick(() -> previewCardPool(null))
                 .setColor(Color.LIGHT_GRAY);
 
-        selectAllButton = createHexagonalButton(xPos, getY.invoke(8f), buttonWidth, buttonHeight)
+        selectAllButton = EUIButton.createHexagonalButton(xPos, getY.invoke(8f), buttonWidth, buttonHeight)
                 .setText(PGR.core.strings.sui_selectAll)
                 .setOnClick(() -> this.selectAll(true))
                 .setColor(Color.ROYAL);
 
-        deselectAllButton = createHexagonalButton(xPos, getY.invoke(9f), buttonWidth, buttonHeight)
+        deselectAllButton = EUIButton.createHexagonalButton(xPos, getY.invoke(9f), buttonWidth, buttonHeight)
                 .setText(PGR.core.strings.sui_deselectAll)
                 .setOnClick(() -> this.selectAll(false))
                 .setColor(Color.FIREBRICK);
 
-        cancel = createHexagonalButton(xPos, getY.invoke(12f), buttonWidth, buttonHeight * 1.2f)
+        cancel = EUIButton.createHexagonalButton(xPos, getY.invoke(12f), buttonWidth, buttonHeight * 1.2f)
                 .setText(PGR.core.strings.sui_cancel)
                 .setOnClick(this::cancel)
                 .setColor(Color.FIREBRICK);
 
-        confirm = createHexagonalButton(xPos, getY.invoke(13f), buttonWidth, buttonHeight * 1.2f)
+        confirm = EUIButton.createHexagonalButton(xPos, getY.invoke(13f), buttonWidth, buttonHeight * 1.2f)
                 .setText(PGR.core.strings.sui_save)
                 .setOnClick(this::proceed)
                 .setColor(Color.FOREST);
@@ -127,7 +126,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     public void cancel() {
         SingleCardViewPopup.isViewingUpgrade = false;
         cardGrid.clear();
-        AbstractDungeon.closeCurrentScreen();
+        close();
     }
 
     public void chooseSeries(AbstractCard card) {
@@ -224,10 +223,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         SingleCardViewPopup.isViewingUpgrade = false;
         cardGrid.clear();
         container.commitChanges(data);
-        if (onClose != null) {
-            onClose.invoke();
-        }
-        AbstractDungeon.closeCurrentScreen();
+        close();
     }
 
     @Override

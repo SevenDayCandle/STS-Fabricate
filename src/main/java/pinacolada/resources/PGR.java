@@ -251,6 +251,8 @@ public class PGR {
             EUI.setCustomCardFilter(r.cardColor, PGR.affinityFilters);
             EUI.setCustomCardLibraryModule(r.cardColor, PGR.libraryFilters);
         }
+
+        BaseMod.addCustomScreen(PGR.augmentScreen);
     }
 
     public static boolean isLoaded() {

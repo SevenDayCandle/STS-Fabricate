@@ -14,7 +14,6 @@ import extendedui.EUIInputManager;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT0;
-import extendedui.ui.AbstractScreen;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUICardGrid;
 import extendedui.ui.controls.EUILabel;
@@ -96,17 +95,17 @@ public class ViewInGamePoolEffect extends PCLEffectWithCallback<CardGroup> {
                 .setAlignment(0.5f, 0.1f, true)
                 .setFont(FontHelper.tipHeaderFont, 1);
 
-        deselectAllButton = AbstractScreen.createHexagonalButton(xPos, Settings.HEIGHT * 0.65f, buttonWidth, buttonHeight)
+        deselectAllButton = EUIButton.createHexagonalButton(xPos, Settings.HEIGHT * 0.65f, buttonWidth, buttonHeight)
                 .setText(PGR.core.strings.sui_deselectAll)
                 .setOnClick(() -> this.toggleCards(false))
                 .setColor(Color.FIREBRICK);
 
-        selectAllButton = AbstractScreen.createHexagonalButton(xPos, deselectAllButton.hb.y - deselectAllButton.hb.height, buttonWidth, buttonHeight)
+        selectAllButton = EUIButton.createHexagonalButton(xPos, deselectAllButton.hb.y - deselectAllButton.hb.height, buttonWidth, buttonHeight)
                 .setText(PGR.core.strings.sui_selectAll)
                 .setOnClick(() -> this.toggleCards(true))
                 .setColor(Color.ROYAL);
 
-        selectRandomButton = AbstractScreen.createHexagonalButton(xPos, selectAllButton.hb.y - selectAllButton.hb.height, buttonWidth, buttonHeight)
+        selectRandomButton = EUIButton.createHexagonalButton(xPos, selectAllButton.hb.y - selectAllButton.hb.height, buttonWidth, buttonHeight)
                 .setText(PGR.core.strings.sui_selectRandom)
                 .setOnClick(this::startSelectRandom)
                 .setColor(Color.ROYAL);

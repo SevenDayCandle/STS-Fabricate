@@ -1,13 +1,14 @@
 package pinacolada.ui.menu;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.evacipated.cardcrawl.modthespire.lib.SpireEnum;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUI;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT2;
 import extendedui.interfaces.delegates.FuncT0;
-import extendedui.ui.AbstractDungeonScreen;
+import extendedui.ui.screens.EUIDungeonScreen;
 import pinacolada.actions.piles.SelectFromPile;
 import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentData;
@@ -21,7 +22,11 @@ import pinacolada.utilities.GameUtilities;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PCLAugmentScreen extends AbstractDungeonScreen {
+public class PCLAugmentScreen extends EUIDungeonScreen {
+
+    @SpireEnum
+    public static AbstractDungeon.CurrentScreen AUGMENT_SCREEN;
+
     protected PCLAugmentList panel;
     protected PCLEffect curEffect;
     protected FuncT0<HashMap<PCLAugmentData, Integer>> getEntries;
@@ -30,6 +35,11 @@ public class PCLAugmentScreen extends AbstractDungeonScreen {
 
     public PCLAugmentScreen() {
         panel = new PCLAugmentList(this::doAction);
+    }
+
+    @Override
+    public AbstractDungeon.CurrentScreen curScreen() {
+        return AUGMENT_SCREEN;
     }
 
     public void doAction(PCLAugment augment) {
@@ -46,12 +56,12 @@ public class PCLAugmentScreen extends AbstractDungeonScreen {
                     }));
         }
         else {
-            AbstractDungeon.closeCurrentScreen();
+            close();
         }
     }
 
     public void open(FuncT0<HashMap<PCLAugmentData, Integer>> getEntries, int rows, boolean canSelect) {
-        super.open(false, false);
+        super.open();
         this.getEntries = getEntries;
         this.canSelect = canSelect;
         panel = new PCLAugmentList(this::doAction, rows);
@@ -60,24 +70,23 @@ public class PCLAugmentScreen extends AbstractDungeonScreen {
     }
 
     @Override
-    public void preRender(SpriteBatch sb) {
+    public void render(SpriteBatch sb) {
         if (curEffect != null) {
             curEffect.render(sb);
         }
         else {
             panel.renderImpl(sb);
         }
-    }
-
-    @Override
-    public void renderImpl(SpriteBatch sb) {
-        super.renderImpl(sb);
         EUI.countingPanel.tryRender(sb);
     }
 
     @Override
-    public void updateImpl() {
-        super.updateImpl();
+    public void openingSettings() {
+        AbstractDungeon.previousScreen = curScreen();
+    }
+
+    @Override
+    public void update() {
         if (curEffect != null) {
             curEffect.update();
             if (curEffect.isDone) {

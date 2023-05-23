@@ -9,7 +9,7 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.screens.MasterDeckViewScreen;
 import extendedui.EUIGameUtils;
-import extendedui.ui.cardFilter.RelicPoolScreen;
+import extendedui.ui.screens.RelicPoolScreen;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.relics.PCLPointerRelic;
@@ -67,8 +67,8 @@ public class RelicPoolScreenPatches {
         }
     }
 
-    @SpirePatch(clz = RelicPoolScreen.class, method = "updateImpl")
-    public static class RelicPoolScreenPatches_UpdateImpl {
+    @SpirePatch(clz = RelicPoolScreen.class, method = "update")
+    public static class RelicPoolScreenPatches_Update {
         @SpirePrefixPatch
         public static SpireReturn<Void> prefix(RelicPoolScreen __instance) {
             if (currentEffect != null) {
@@ -84,8 +84,8 @@ public class RelicPoolScreenPatches {
         }
     }
 
-    @SpirePatch(clz = RelicPoolScreen.class, method = "renderImpl")
-    public static class RelicPoolScreenPatches_RenderImpl {
+    @SpirePatch(clz = RelicPoolScreen.class, method = "render")
+    public static class RelicPoolScreenPatches_Render {
         @SpirePrefixPatch
         public static SpireReturn<Void> prefix(RelicPoolScreen __instance, SpriteBatch sb) {
             if (currentEffect != null) {

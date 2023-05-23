@@ -12,7 +12,7 @@ import extendedui.configuration.STSConfigItem;
 import extendedui.configuration.STSSerializedConfigItem;
 import extendedui.configuration.STSStringConfigItem;
 import extendedui.ui.settings.BasemodSettingsPage;
-import extendedui.ui.settings.ModSettingsScreen;
+import extendedui.ui.settings.ExtraModSettingsPanel;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardPreviews;
 import pinacolada.utilities.GameUtilities;
@@ -50,7 +50,7 @@ public class PCLMainConfig extends AbstractConfig {
     private static final String SHOW_IRRELEVANT_PROPERTIES = PCLMainConfig.createFullID("ShowIrrelevantProperties");
     private static final String VANILLA_LIBRARY_SCREEN = PCLMainConfig.createFullID("VanillaLibraryScreen");
     private static final String VANILLA_POWER_RENDER = PCLMainConfig.createFullID("VanillaPowerRender");
-    private static ModSettingsScreen.Category pclCategory;
+    private static ExtraModSettingsPanel.Category pclCategory;
     public static final FilenameFilter JSON_FILTER = (dir, name) -> name.endsWith(".json");
 
     private HashSet<String> tips = null;

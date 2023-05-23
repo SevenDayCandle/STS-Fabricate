@@ -18,7 +18,6 @@ import com.megacrit.cardcrawl.screens.mainMenu.MenuCancelButton;
 import com.megacrit.cardcrawl.ui.buttons.GridSelectConfirmButton;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
-import extendedui.ui.AbstractScreen;
 import extendedui.ui.EUIHoverable;
 import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
@@ -138,7 +137,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
                 .setHeader(FontHelper.panelNameFont, 1f, Settings.GOLD_COLOR, CustomModeScreen.TEXT[6])
                 .setCanAutosize(true, true);
 
-        editCardPoolButton = AbstractScreen.createHexagonalButton(0, 0, scale(230), scale(70))
+        editCardPoolButton = EUIButton.createHexagonalButton(0, 0, scale(230), scale(70))
                 .setText(PGR.core.strings.csel_seriesEditor)
                 .setOnClick(this::openCardPool);
 
