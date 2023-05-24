@@ -14,6 +14,7 @@ import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
 import com.megacrit.cardcrawl.screens.custom.CustomMod;
 import com.megacrit.cardcrawl.screens.custom.CustomModeScreen;
+import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.AbstractMenuScreen;
 import extendedui.ui.cardFilter.CustomCardLibraryScreen;
@@ -85,14 +86,18 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
 
     private void addRelicsForGroup(ArrayList<AbstractRelic> group, AbstractCard.CardColor color) {
         for (AbstractRelic c : GameUtilities.getRelics(color).values()) {
-            if (isRelicEligible(c.tier)) {
-                group.add(c.makeCopy());
+            if (isRelicEligible(c.tier) && !UnlockTracker.isRelicLocked(c.relicId)) {
+                AbstractRelic relic = c.makeCopy();
+                relic.isSeen = UnlockTracker.isRelicSeen(relic.relicId);
+                group.add(relic);
             }
         }
-        if (allowCustomCards) {
+        if (allowCustomRelics) {
             for (PCLCustomRelicSlot slot : PCLCustomRelicSlot.getRelics(color)) {
                 if (isRelicEligible(AbstractRelic.RelicTier.valueOf(slot.tier))) {
-                    group.add(slot.makeRelic());
+                    AbstractRelic relic = slot.makeRelic();
+                    relic.isSeen = UnlockTracker.isRelicSeen(relic.relicId);
+                    group.add(relic);
                 }
             }
         }

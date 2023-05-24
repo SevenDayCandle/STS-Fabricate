@@ -267,7 +267,9 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
         currentSlots.clear();
         grid.clear();
         for (PCLCustomRelicSlot slot : PCLCustomRelicSlot.getRelics(currentColor)) {
-            AbstractRelic relic = slot.getBuilder(0).create();
+            AbstractRelic relic = slot.makeRelic();
+            UnlockTracker.markRelicAsSeen(relic.relicId);
+            relic.isSeen = true;
             currentSlots.put(relic, slot);
             grid.addRelic(relic);
         }

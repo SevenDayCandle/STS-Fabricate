@@ -267,7 +267,7 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
         currentSlots.clear();
         grid.clear();
         for (PCLCustomCardSlot slot : PCLCustomCardSlot.getCards(currentColor)) {
-            AbstractCard card = slot.getBuilder(0).createImplWithForms(false);
+            AbstractCard card = slot.makeFirstCard();
             currentSlots.put(card, slot);
             grid.addCard(card);
         }

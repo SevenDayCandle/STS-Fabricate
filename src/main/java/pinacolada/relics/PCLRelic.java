@@ -345,7 +345,7 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider 
     }
 
     public void renderRelicImage(SpriteBatch sb, Color color, float xOffset, float yOffset, float scaleMult) {
-        sb.setColor(Color.WHITE);
+        sb.setColor(color);
         sb.draw(this.img, this.currentX + xOffset, this.currentY + yOffset, 64.0F, 64.0F, 128.0F, 128.0F, this.scale * scaleMult, this.scale * scaleMult, getRotation(), 0, 0, 128, 128, false, false);
     }
 

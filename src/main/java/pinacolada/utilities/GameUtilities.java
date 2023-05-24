@@ -1972,6 +1972,7 @@ public class GameUtilities {
     }
 
     public static void obtainRelicFromEvent(AbstractRelic relic) {
+        UnlockTracker.markRelicAsSeen(relic.relicId);
         relic.isSeen = true;
         relic.instantObtain();
         CardCrawlGame.metricData.addRelicObtainData(relic);
