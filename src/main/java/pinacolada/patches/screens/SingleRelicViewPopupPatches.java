@@ -12,7 +12,6 @@ import com.megacrit.cardcrawl.screens.SingleRelicViewPopup;
 import extendedui.text.EUISmartText;
 import extendedui.utilities.EUIClassUtils;
 import extendedui.utilities.EUIFontHelper;
-import pinacolada.relics.PCLDynamicRelic;
 import pinacolada.relics.PCLRelic;
 
 // TODO custom single relic view popup screen
@@ -22,7 +21,7 @@ public class SingleRelicViewPopupPatches {
         @SpireInsertPatch(rloc = 0)
         public static SpireReturn<Void> insert(SingleRelicViewPopup __instance, SpriteBatch sb) {
             AbstractRelic temp = EUIClassUtils.getField(__instance, "relic");
-            if (temp instanceof PCLDynamicRelic) {
+            if (temp instanceof PCLRelic && temp.isSeen) {
                 float width = ReflectionHacks.getPrivateStatic(SingleRelicViewPopup.class, "DESC_LINE_WIDTH");
                 float spacing = ReflectionHacks.getPrivateStatic(SingleRelicViewPopup.class, "DESC_LINE_SPACING");
                 float height = EUISmartText.getSmartHeight(EUIFontHelper.cardDescriptionFontNormal, temp.description, width, spacing) / 2.0F;
@@ -39,7 +38,7 @@ public class SingleRelicViewPopupPatches {
         @SpireInsertPatch(rloc = 0)
         public static SpireReturn<Void> insert(SingleRelicViewPopup __instance, SpriteBatch sb) {
             AbstractRelic temp = EUIClassUtils.getField(__instance, "relic");
-            if (temp instanceof PCLDynamicRelic) {
+            if (temp instanceof PCLRelic && temp.isSeen) {
                 FontHelper.renderWrappedText(sb, FontHelper.SCP_cardDescFont, ((PCLRelic) temp).getName(), (float)Settings.WIDTH / 2.0F, (float)Settings.HEIGHT / 2.0F + 280.0F * Settings.scale, 9999.0F, Settings.CREAM_COLOR, 0.9F);
                 return SpireReturn.Return();
             }

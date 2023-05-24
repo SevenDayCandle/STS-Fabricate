@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.FontHelper;
-import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
 import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
@@ -361,9 +360,8 @@ public class PCLLoadoutEditor extends AbstractMenuScreen {
             list.add(ContextOption.CopyFrom);
             list.add(ContextOption.CopyTo);
 
-            contextMenu.setPosition(InputHelper.mX, InputHelper.mY);
             contextMenu.setItems(list);
-            contextMenu.openOrCloseMenu();
+            contextMenu.positionToOpen();
         }
 
     }

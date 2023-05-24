@@ -88,7 +88,7 @@ public class PCLCoreStrings extends PCLStrings {
     public final String cedit_confirmDeletion = cedit.TEXT[42];
     public final String cedit_confirmDeletionDesc = cedit.TEXT[43];
     public final String cedit_customCards = cedit.TEXT[44];
-    public final String cedit_customCardsDesc = cedit.TEXT[45];
+    public final String cedit_addToEffect = cedit.TEXT[45];
     public final String cedit_primaryInfo = cedit.TEXT[46];
     public final String cedit_primaryInfoDesc = cedit.TEXT[47];
     public final String cedit_choices = cedit.TEXT[48];

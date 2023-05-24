@@ -10,6 +10,7 @@ import com.megacrit.cardcrawl.daily.mods.*;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.SeedHelper;
 import com.megacrit.cardcrawl.random.Random;
+import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
 import com.megacrit.cardcrawl.screens.custom.CustomMod;
 import com.megacrit.cardcrawl.screens.custom.CustomModeScreen;
@@ -18,6 +19,7 @@ import extendedui.ui.AbstractMenuScreen;
 import extendedui.ui.cardFilter.CustomCardLibraryScreen;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.interfaces.providers.RunAttributesProvider;
+import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.trials.PCLCustomTrial;
@@ -49,11 +51,11 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
     }
 
     private void addCardsForGroup(CardGroup group, AbstractCard.CardColor color) {
-        addCardsFromGroup(group, color, c -> c.rarity != AbstractCard.CardRarity.SPECIAL);
+        addCardsFromGroup(group, color, c -> isCardEligible(c.rarity));
         if (allowCustomCards) {
             for (PCLCustomCardSlot slot : PCLCustomCardSlot.getCards(color)) {
                 if (AbstractCard.CardRarity.valueOf(slot.rarity) != AbstractCard.CardRarity.SPECIAL) {
-                    group.group.add(slot.getBuilder(0).createImplWithForms(false));
+                    group.group.add(slot.makeFirstCard());
                 }
             }
         }
@@ -69,16 +71,54 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
 
     private void addColorlessCardsForGroup(CardGroup group, AbstractCard.CardColor color) {
         PCLResources<?, ?, ?, ?> resources = PGR.getResources(color);
-        addCardsFromGroup(group, AbstractCard.CardColor.COLORLESS, c -> resources.containsColorless(c) && c.rarity != AbstractCard.CardRarity.SPECIAL);
-        addCardsFromGroup(group, AbstractCard.CardColor.CURSE, c -> resources.containsColorless(c) && c.rarity != AbstractCard.CardRarity.SPECIAL);
+        addCardsFromGroup(group, AbstractCard.CardColor.COLORLESS, c -> resources.containsColorless(c) && isCardEligible(c.rarity));
+        addCardsFromGroup(group, AbstractCard.CardColor.CURSE, c -> resources.containsColorless(c) && isCardEligible(c.rarity));
 
         if (allowCustomCards) {
             for (PCLCustomCardSlot slot : PCLCustomCardSlot.getCards(AbstractCard.CardColor.COLORLESS)) {
-                if (AbstractCard.CardRarity.valueOf(slot.rarity) != AbstractCard.CardRarity.SPECIAL) {
-                    group.group.add(slot.getBuilder(0).createImplWithForms(false));
+                if (isCardEligible(AbstractCard.CardRarity.valueOf(slot.rarity))) {
+                    group.group.add(slot.makeFirstCard());
                 }
             }
         }
+    }
+
+    private void addRelicsForGroup(ArrayList<AbstractRelic> group, AbstractCard.CardColor color) {
+        for (AbstractRelic c : GameUtilities.getRelics(color).values()) {
+            if (isRelicEligible(c.tier)) {
+                group.add(c.makeCopy());
+            }
+        }
+        if (allowCustomCards) {
+            for (PCLCustomRelicSlot slot : PCLCustomRelicSlot.getRelics(color)) {
+                if (isRelicEligible(AbstractRelic.RelicTier.valueOf(slot.tier))) {
+                    group.add(slot.makeRelic());
+                }
+            }
+        }
+    }
+
+    private boolean isCardEligible(AbstractCard.CardRarity rarity) {
+        switch (rarity) {
+            case COMMON:
+            case UNCOMMON:
+            case RARE:
+            case CURSE:
+                return true;
+        }
+        return false;
+    }
+
+    private boolean isRelicEligible(AbstractRelic.RelicTier tier) {
+        switch (tier) {
+            case COMMON:
+            case UNCOMMON:
+            case RARE:
+            case BOSS:
+            case SHOP:
+                return true;
+        }
+        return false;
     }
 
     @Override
@@ -150,6 +190,17 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
                 }
             }
         }
+        return group;
+    }
+
+    public ArrayList<AbstractRelic> getAllPossibleRelics() {
+        ArrayList<AbstractRelic> group = new ArrayList<>();
+        AbstractCard.CardColor color = currentOption.c.getCardColor();
+
+        // Always include the player's color and the colorless colors
+        addRelicsForGroup(group, AbstractCard.CardColor.COLORLESS);
+        addRelicsForGroup(group, color);
+
         return group;
     }
 

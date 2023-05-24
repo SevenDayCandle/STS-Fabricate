@@ -22,7 +22,7 @@ import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.effects.PCLEffects;
-import pinacolada.effects.screen.ViewInGamePoolEffect;
+import pinacolada.effects.screen.ViewInGameCardPoolEffect;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
@@ -47,7 +47,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     public final EUIContextMenu<ContextOption> contextMenu;
     protected PCLCard selectedCard;
     protected ActionT0 onClose;
-    protected ViewInGamePoolEffect previewCardsEffect;
+    protected ViewInGameCardPoolEffect previewCardsEffect;
     protected CharacterOption characterOption;
     protected PCLAbstractPlayerData data;
     protected int totalCardsCache = 0;
@@ -173,9 +173,8 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         selectedCard = EUIUtils.safeCast(card, PCLCard.class);
         PCLLoadout c = container.find(selectedCard);
 
-        contextMenu.setPosition(InputHelper.mX, InputHelper.mY);
         contextMenu.setItems(card.type == PCLLoadout.UNSELECTABLE_TYPE ? EUIUtils.array(ContextOption.ViewCards) : ContextOption.values());
-        contextMenu.openOrCloseMenu();
+        contextMenu.positionToOpen();
     }
 
     public void open(CharacterOption characterOption, PCLAbstractPlayerData data, ActionT0 onClose) {
@@ -213,7 +212,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
 
     // Core loadout cards cannot be toggled off
     public void previewCards(CardGroup cards, PCLLoadout loadout) {
-        previewCardsEffect = new ViewInGamePoolEffect(cards, container.bannedCards, this::forceUpdateText)
+        previewCardsEffect = new ViewInGameCardPoolEffect(cards, container.bannedCards, this::forceUpdateText)
                 .setCanToggle(loadout != null && !loadout.isCore())
                 .setStartingPosition(InputHelper.mX, InputHelper.mY);
         PCLEffects.Manual.add(previewCardsEffect);

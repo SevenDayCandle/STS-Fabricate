@@ -134,7 +134,7 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase {
         if (characterOption != null && data != null) {
             PCLPlayerMeter meter = CombatManager.playerSystem.getMeter(data.resources.playerClass);
             if (meter != null) {
-                EUI.ftueScreen.open(new EUITutorial(meter.getInfoPages()), () -> screenRefresh(runProvider, characterOption));
+                EUI.tutorialScreen.open(new EUITutorial(meter.getInfoPages()), () -> screenRefresh(runProvider, characterOption));
             }
         }
     }

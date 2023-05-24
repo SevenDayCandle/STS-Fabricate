@@ -18,7 +18,6 @@ import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.*;
 import pinacolada.skills.skills.*;
-import pinacolada.skills.skills.base.moves.PMove_StackCustomPower;
 import pinacolada.skills.skills.special.primary.PCardPrimary_DealDamage;
 import pinacolada.skills.skills.special.primary.PCardPrimary_GainBlock;
 import pinacolada.skills.skills.special.primary.PRoot;
@@ -278,7 +277,6 @@ public class PCLCustomEffectNode extends EUIButton {
         Trigger,
         Attack,
         Block,
-        CustomPower,
         Proxy,
         Root,;
 
@@ -358,8 +356,6 @@ public class PCLCustomEffectNode extends EUIButton {
                     return PCardPrimary_DealDamage.class;
                 case Block:
                     return PCardPrimary_GainBlock.class;
-                case CustomPower:
-                    return PMove_StackCustomPower.class;
             }
             return PRoot.class;
         }
@@ -386,8 +382,6 @@ public class PCLCustomEffectNode extends EUIButton {
                 case Block:
                     return PCLCoreImages.Menu.nodeOctagon.texture();
                 case Move:
-                case CustomPower:
-                    return PCLCoreImages.Menu.nodeSquare.texture();
                 case Multimove:
                     return PCLCoreImages.Menu.nodeSquare2.texture();
             }

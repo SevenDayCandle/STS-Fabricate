@@ -134,7 +134,6 @@ public class PCLCustomRelicEditRelicScreen extends PCLCustomEditEntityScreen<PCL
         imageButton.tryUpdate();
         formEditor.tryUpdate();
         upgradeToggle.tryUpdate();
-        previewRelic.update();
         previewRelic.hb.update();
         previewDescription.tryUpdate();
         if (previewRelic.hb.hovered) {

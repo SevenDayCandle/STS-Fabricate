@@ -8,7 +8,6 @@ import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
-import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,7 +40,7 @@ public class PField_Relic extends PField_Random {
 
     public FuncT1<Boolean, AbstractRelic> getFullRelicFilter() {
         return !relicIDs.isEmpty() ? c -> EUIUtils.any(relicIDs, id -> id.equals(c.relicId)) :
-                (c -> (colors.isEmpty() || EUIUtils.any(colors, color -> GameUtilities.getRelics(color).containsKey(c.relicId)))
+                (c -> (colors.isEmpty() || colors.contains(EUIGameUtils.getRelicColor(c.relicId)))
                         && (rarities.isEmpty() || rarities.contains(c.tier)));
     }
 

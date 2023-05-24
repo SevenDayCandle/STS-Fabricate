@@ -136,19 +136,23 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
             this.currentEditingSkill.update();
         }
         else {
-            if (PCLCustomEffectHologram.current == null && (this.root == null || !this.root.isDragging())) {
-                super.updateImpl();
-                this.buttonsPane.tryUpdate();
-            }
-
-            if (this.root != null) {
-                this.root.hb.targetCy = START_Y + (scale(scrollDelta));
-                this.root.update();
-            }
-
-            this.header.tryUpdate();
-            this.info.tryUpdate();
+            updateInner();
         }
+    }
+
+    protected void updateInner() {
+        if (PCLCustomEffectHologram.current == null && (this.root == null || !this.root.isDragging())) {
+            super.updateImpl();
+            this.buttonsPane.tryUpdate();
+        }
+
+        if (this.root != null) {
+            this.root.hb.targetCy = START_Y + (scale(scrollDelta));
+            this.root.update();
+        }
+
+        this.header.tryUpdate();
+        this.info.tryUpdate();
     }
 
     @Override

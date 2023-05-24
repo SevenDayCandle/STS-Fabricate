@@ -23,7 +23,9 @@ import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIClassUtils;
 import extendedui.utilities.EUIFontHelper;
-import pinacolada.effects.screen.ViewInGamePoolEffect;
+import pinacolada.effects.PCLEffectWithCallback;
+import pinacolada.effects.screen.ViewInGameCardPoolEffect;
+import pinacolada.effects.screen.ViewInGameRelicPoolEffect;
 import pinacolada.resources.PGR;
 import pinacolada.ui.PCLValueEditor;
 import pinacolada.utilities.GameUtilities;
@@ -53,11 +55,12 @@ public class PCLCustomRunCanvas extends EUICanvas {
     public final EUIToggle customCardToggle;
     public final EUIToggle customRelicToggle;
     public final EUIButton editCardPoolButton;
+    public final EUIButton editRelicPoolButton;
     public final ArrayList<PCLCustomRunCharacterButton> characters = new ArrayList<>();
     public final EUISearchableDropdown<CustomMod> modifierDropdown;
     public final MenuCancelButton cancelButton = new MenuCancelButton();
     public final GridSelectConfirmButton confirmButton;
-    private ViewInGamePoolEffect cardEffect;
+    private PCLEffectWithCallback<?> currentEffect;
 
     public PCLCustomRunCanvas(PCLCustomRunScreen screen) {
         super();
@@ -138,8 +141,12 @@ public class PCLCustomRunCanvas extends EUICanvas {
                 .setCanAutosize(true, true);
 
         editCardPoolButton = EUIButton.createHexagonalButton(0, 0, scale(230), scale(70))
-                .setText(PGR.core.strings.csel_seriesEditor)
+                .setText(EUIRM.strings.uipool_viewCardPool)
                 .setOnClick(this::openCardPool);
+
+        editRelicPoolButton = EUIButton.createHexagonalButton(0, 0, scale(230), scale(70))
+                .setText(EUIRM.strings.uipool_viewRelicPool)
+                .setOnClick(this::openRelicPool);
 
         this.confirmButton = new GridSelectConfirmButton(CharacterSelectScreen.TEXT[1]);
         this.confirmButton.isDisabled = false;
@@ -153,10 +160,10 @@ public class PCLCustomRunCanvas extends EUICanvas {
     }
 
     public void updateImpl() {
-        if (cardEffect != null) {
-            cardEffect.update();
-            if (cardEffect.isDone) {
-                cardEffect = null;
+        if (currentEffect != null) {
+            currentEffect.update();
+            if (currentEffect.isDone) {
+                currentEffect = null;
             }
         }
         else {
@@ -174,6 +181,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
             ascensionEditor.tryUpdate();
             modifierDropdown.tryUpdate();
             editCardPoolButton.updateImpl();
+            editRelicPoolButton.updateImpl();
             confirmButton.update();
             cancelButton.update();
             for (PCLCustomRunCharacterButton b : characters) {
@@ -194,8 +202,8 @@ public class PCLCustomRunCanvas extends EUICanvas {
     }
 
     public void renderImpl(SpriteBatch sb) {
-        if (cardEffect != null) {
-            cardEffect.render(sb);
+        if (currentEffect != null) {
+            currentEffect.render(sb);
         }
         else {
             super.renderImpl(sb);
@@ -215,6 +223,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
                 b.tryRenderCentered(sb);
             }
             editCardPoolButton.renderImpl(sb);
+            editRelicPoolButton.renderImpl(sb);
             confirmButton.render(sb);
             cancelButton.render(sb);
         }
@@ -226,7 +235,11 @@ public class PCLCustomRunCanvas extends EUICanvas {
     }
 
     public void openCardPool() {
-        cardEffect = new ViewInGamePoolEffect(screen.getAllPossibleCards(), screen.bannedCards);
+        currentEffect = new ViewInGameCardPoolEffect(screen.getAllPossibleCards(), screen.bannedCards);
+    }
+
+    public void openRelicPool() {
+        currentEffect = new ViewInGameRelicPoolEffect(screen.getAllPossibleRelics(), screen.bannedRelics);
     }
 
     protected float positionElement(EUIHoverable element, float xPos, float yPos, float diff) {
@@ -278,7 +291,8 @@ public class PCLCustomRunCanvas extends EUICanvas {
         yPos = positionElement(trophiesLabel, titleLabel.hb.cX + titleLabel.getAutoWidth() + scale(160), yPos, scale(80));
         yPos = positionElement(charTitleLabel, yPos, scale(105));
         selectedCharacterLabel.setPosition(charTitleLabel.hb.cX + charTitleLabel.getAutoWidth() + scale(40), charTitleLabel.hb.cY - scale(10));
-        editCardPoolButton.setPosition(charTitleLabel.hb.cX + charTitleLabel.getAutoWidth() + scale(400), charTitleLabel.hb.cY);
+        editCardPoolButton.setPosition(charTitleLabel.hb.cX + charTitleLabel.getAutoWidth() + scale(250), charTitleLabel.hb.cY);
+        editRelicPoolButton.setPosition(editCardPoolButton.hb.cX + editCardPoolButton.hb.width, charTitleLabel.hb.cY);
 
         int column = 0;
         for (PCLCustomRunCharacterButton character : characters) {

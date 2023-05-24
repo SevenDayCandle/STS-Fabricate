@@ -362,7 +362,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
                 BaseMod.removeTopPanelItem(PGR.augmentPanel);
             }
             if (isActuallyStartingRun) {
-                loadCustomItems(player);
+                loadCustomCards(player);
             }
 
             banItems(data);
@@ -371,7 +371,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
 
         loadCardsForData(data);
         if (isActuallyStartingRun) {
-            loadCustomItems(player);
+            loadCustomCards(player);
         }
 
         banItems(data);
@@ -415,8 +415,6 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
                 }
             }
         }
-
-        //PCLCard.ToggleSimpleMode(player.masterDeck.group, SimpleMode);
     }
 
     private void loadCardsForData(PCLAbstractPlayerData data) {
@@ -433,8 +431,8 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         }
     }
 
-    private void loadCustomItems(AbstractPlayer player) {
-        // Add custom cards if applicable
+    // Add custom cards if applicable
+    public void loadCustomCards(AbstractPlayer player) {
         if (allowCustomCards) {
             for (PCLCustomCardSlot c : PCLCustomCardSlot.getCards(player.getCardColor())) {
                 AbstractCard.CardRarity rarity = c.getBuilder(0).cardRarity;
@@ -459,7 +457,10 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
                 EUIUtils.logInfoIfDebug(this, "Added Custom Card " + c.ID + " to Colorless pool");
             }
         }
+    }
 
+    // Add custom relics if applicable. Note that this is loaded in AbstractDungeonPatches_InitializeRelicList
+    public void loadCustomRelics(AbstractPlayer player) {
         if (allowCustomRelics) {
             for (PCLCustomRelicSlot c : PCLCustomRelicSlot.getRelics(player.getCardColor())) {
                 loadCustomRelicImpl(c);

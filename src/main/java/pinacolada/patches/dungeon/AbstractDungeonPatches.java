@@ -40,6 +40,14 @@ public class AbstractDungeonPatches {
         }
     }*/
 
+    @SpirePatch(clz = AbstractDungeon.class, method = "initializeRelicList")
+    public static class AbstractDungeonPatches_InitializeRelicList {
+        @SpirePostfixPatch
+        public static void postfix(AbstractDungeon __instance) {
+            PGR.dungeon.loadCustomRelics(AbstractDungeon.player);
+        }
+    }
+
     @SpirePatch(clz = AbstractDungeon.class, method = "dungeonTransitionSetup")
     public static class AbstractDungeonPatches_DungeonTransitionSetup {
         @SpirePostfixPatch

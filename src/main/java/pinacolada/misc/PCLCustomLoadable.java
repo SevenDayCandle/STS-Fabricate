@@ -63,4 +63,8 @@ public abstract class PCLCustomLoadable {
     protected String makeImagePath() {
         return getBaseFolderPath() + "/" + ID + ".png";
     }
+
+    protected String makeMigrationImagePath() {
+        return FOLDER + "/" + ID + ".png";
+    }
 }

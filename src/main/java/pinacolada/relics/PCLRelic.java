@@ -2,6 +2,7 @@ package pinacolada.relics;
 
 import basemod.ReflectionHacks;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -11,17 +12,11 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
-import com.megacrit.cardcrawl.core.GameCursor;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.helpers.MathHelper;
-import com.megacrit.cardcrawl.helpers.controller.CInputActionSet;
-import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
-import com.megacrit.cardcrawl.rooms.TreasureRoomBoss;
 import com.megacrit.cardcrawl.vfx.FloatyEffect;
-import com.megacrit.cardcrawl.vfx.GlowRelicParticle;
 import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
@@ -34,11 +29,14 @@ import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.GameUtilities;
+import pinacolada.utilities.PCLRenderHelpers;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class PCLRelic extends AbstractRelic implements KeywordProvider {
+    protected static EUITooltip hiddenTooltip;
+
     public static AbstractPlayer player;
     public static Random rng;
     public final PCLRelicData relicData;
@@ -58,6 +56,13 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider 
 
     public static String createFullID(PCLResources<?, ?, ?, ?> resources, Class<? extends PCLRelic> type) {
         return resources.createID(type.getSimpleName());
+    }
+
+    public static EUITooltip getHiddenTooltip() {
+        if (hiddenTooltip == null) {
+            hiddenTooltip = new EUITooltip(LABEL[1], MSG[1]);
+        }
+        return hiddenTooltip;
     }
 
     protected static PCLRelicData register(Class<? extends PCLRelic> type) {
@@ -267,116 +272,81 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider 
         EUITooltip.queueTooltips(this);
     }
 
+    public void renderUnseenTip() {
+        EUITooltip.queueTooltip(getHiddenTooltip());
+    }
+
     @Override
     protected void initializeTips() {
         // No-op, use initializePCLTips() instead
     }
 
-    @Override
-    public void update() {
-        this.updateFlash();
-        if (!this.isDone) {
-            float rotation = getRotation();
-            if (this.isAnimating) {
-                float newGlow = getGlowTimer() - Gdx.graphics.getDeltaTime();
-                FloatyEffect fEffect = getFEffect();
-
-                if (newGlow < 0.0F) {
-                    newGlow = 0.5F;
-                    AbstractDungeon.effectList.add(new GlowRelicParticle(this.img, this.currentX + fEffect.x, this.currentY + fEffect.y, rotation));
-                }
-                setGlowTimer(newGlow);
-
-                fEffect.update();
-                if (this.hb.hovered) {
-                    this.scale = Settings.scale * 0.75F;
-                } else {
-                    this.scale = MathHelper.scaleLerpSnap(this.scale, Settings.scale * 0.55F);
-                }
-            } else if (this.hb.hovered) {
-                this.scale = Settings.scale * 0.625F;
-            } else {
-                this.scale = MathHelper.scaleLerpSnap(this.scale, Settings.scale * 0.5F);
-            }
-
-            if (this.isObtained) {
-                if (rotation != 0.0F) {
-                    setRotation(MathUtils.lerp(rotation, 0.0F, Gdx.graphics.getDeltaTime() * 6.0F * 2.0F));
-                }
-
-                if (this.currentX != this.targetX) {
-                    this.currentX = MathUtils.lerp(this.currentX, this.targetX, Gdx.graphics.getDeltaTime() * 6.0F);
-                    if (Math.abs(this.currentX - this.targetX) < 0.5F) {
-                        this.currentX = this.targetX;
-                    }
-                }
-
-                if (this.currentY != this.targetY) {
-                    this.currentY = MathUtils.lerp(this.currentY, this.targetY, Gdx.graphics.getDeltaTime() * 6.0F);
-                    if (Math.abs(this.currentY - this.targetY) < 0.5F) {
-                        this.currentY = this.targetY;
-                    }
-                }
-
-                if (this.currentY == this.targetY && this.currentX == this.targetX) {
-                    this.isDone = true;
-                    if (AbstractDungeon.topPanel != null) {
-                        AbstractDungeon.topPanel.adjustRelicHbs();
-                    }
-
-                    this.hb.move(this.currentX, this.currentY);
-                    if (this.tier == AbstractRelic.RelicTier.BOSS && AbstractDungeon.getCurrRoom() instanceof TreasureRoomBoss) {
-                        AbstractDungeon.overlayMenu.proceedButton.show();
-                    }
-
-                    this.onEquip();
-                }
-
-                this.scale = Settings.scale * 0.5f;
-            }
-
-            if (this.hb != null) {
-                this.hb.update();
-                if (this.hb.hovered && (!AbstractDungeon.isScreenUp || AbstractDungeon.screen == AbstractDungeon.CurrentScreen.BOSS_REWARD) && AbstractDungeon.screen != AbstractDungeon.CurrentScreen.NEOW_UNLOCK) {
-                    if (InputHelper.justClickedLeft && !this.isObtained) {
-                        InputHelper.justClickedLeft = false;
-                        this.hb.clickStarted = true;
-                    }
-
-                    if ((this.hb.clicked || CInputActionSet.select.isJustPressed()) && !this.isObtained) {
-                        CInputActionSet.select.unpress();
-                        this.hb.clicked = false;
-                        if (!Settings.isTouchScreen) {
-                            this.bossObtainLogic();
-                        } else {
-                            AbstractDungeon.bossRelicScreen.confirmButton.show();
-                            AbstractDungeon.bossRelicScreen.confirmButton.isDisabled = false;
-                            AbstractDungeon.bossRelicScreen.touchRelic = this;
-                        }
-                    }
-                }
-            }
-
-            if (AbstractDungeon.screen == AbstractDungeon.CurrentScreen.BOSS_REWARD) {
-                this.updateAnimation();
-            }
-        } else {
-            if (AbstractDungeon.player != null && AbstractDungeon.player.relics.indexOf(this) / MAX_RELICS_PER_PAGE == relicPage) {
-                this.hb.update();
-            } else {
-                this.hb.hovered = false;
-            }
-
-            if (this.hb.hovered && AbstractDungeon.topPanel.potionUi.isHidden) {
-                this.scale = Settings.scale * 0.625F;
-                CardCrawlGame.cursor.changeType(GameCursor.CursorType.INSPECT);
-            } else {
-                this.scale = MathHelper.scaleLerpSnap(this.scale, Settings.scale * 0.5f);
-            }
-
-            this.updateRelicPopupClick();
+    public void renderInTopPanel(SpriteBatch sb) {
+        if (!Settings.hideRelics) {
+            PCLRenderHelpers.drawGrayscaleIf(sb, s -> renderRelicImage(s, Color.WHITE, getOffsetX() - 64f, -64f,0.5f), grayscale);
+            this.renderCounter(sb, true);
+            this.renderFlash(sb, true);
+            this.hb.render(sb);
         }
+    }
 
+    public void renderWithoutAmount(SpriteBatch sb, Color c) {
+        renderRelicImage(sb, Color.WHITE, -64f, -64f, 0.5f);
+        if (this.hb.hovered) {
+            this.renderTip(sb);
+        }
+        this.hb.render(sb);
+    }
+
+    public void render(SpriteBatch sb) {
+        if (!Settings.hideRelics) {
+            float xOffset = -64;
+            float yOffset = -64;
+
+            if (AbstractDungeon.screen == AbstractDungeon.CurrentScreen.BOSS_REWARD && !isObtained) {
+                FloatyEffect f_effect = getFEffect();
+                xOffset += f_effect.x;
+                yOffset += f_effect.y;
+            }
+
+            renderRelicImage(sb, Color.WHITE, xOffset, yOffset, 0.5f);
+            renderCounter(sb, false);
+            if (this.isDone) {
+                renderFlash(sb, false);
+            }
+            if (this.hb.hovered && !this.isObtained && (!AbstractDungeon.isScreenUp || AbstractDungeon.screen == AbstractDungeon.CurrentScreen.BOSS_REWARD || AbstractDungeon.screen == AbstractDungeon.CurrentScreen.SHOP)) {
+                this.renderBossTip(sb);
+            }
+
+            this.hb.render(sb);
+        }
+    }
+
+    public void render(SpriteBatch sb, boolean renderAmount, Color outlineColor) {
+        renderRelicImage(sb,
+                this.isSeen ? Color.WHITE : this.hb.hovered ? Settings.HALF_TRANSPARENT_BLACK_COLOR : Color.BLACK,
+                -64f,
+                -64f,
+                AbstractDungeon.screen == AbstractDungeon.CurrentScreen.NEOW_UNLOCK ? MathUtils.cosDeg((float)(System.currentTimeMillis() / 5L % 360L)) : 0.5f);
+        renderHoverTip(sb);
+        this.hb.render(sb);
+    }
+
+
+    public void renderHoverTip(SpriteBatch sb) {
+        if (this.hb.hovered && !CardCrawlGame.relicPopup.isOpen) {
+            if (!this.isSeen) {
+                renderUnseenTip();
+            }
+            else {
+                this.renderTip(sb);
+            }
+        }
+    }
+
+    public void renderRelicImage(SpriteBatch sb, Color color, float xOffset, float yOffset, float scaleMult) {
+        sb.setColor(Color.WHITE);
+        sb.draw(this.img, this.currentX + xOffset, this.currentY + yOffset, 64.0F, 64.0F, 128.0F, 128.0F, this.scale * scaleMult, this.scale * scaleMult, getRotation(), 0, 0, 128, 128, false, false);
     }
 
     protected void updateFlash() {
@@ -392,37 +362,16 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider 
         }
     }
 
-    protected void updateRelicPopupClick() {
-        if (this.hb.hovered && InputHelper.justClickedLeft) {
-            this.hb.clickStarted = true;
-        }
-
-        if (this.hb.clicked || this.hb.hovered && CInputActionSet.select.isJustPressed()) {
-            CardCrawlGame.relicPopup.open(this, AbstractDungeon.player.relics);
-            CInputActionSet.select.unpress();
-            this.hb.clicked = false;
-            this.hb.clickStarted = false;
-        }
-    }
-
     protected FloatyEffect getFEffect() {
         return ReflectionHacks.getPrivate(this, AbstractRelic.class, "f_effect");
     }
 
-    protected float getGlowTimer() {
-        return ReflectionHacks.getPrivate(this, AbstractRelic.class, "glowTimer");
+    protected float getOffsetX() {
+        return ReflectionHacks.getPrivate(this, AbstractRelic.class, "offsetX");
     }
 
     protected float getRotation() {
         return ReflectionHacks.getPrivate(this, AbstractRelic.class, "rotation");
-    }
-
-    protected void setGlowTimer(float value) {
-        ReflectionHacks.setPrivate(this, AbstractRelic.class, "glowTimer", value);
-    }
-
-    protected void setRotation(float value) {
-        ReflectionHacks.setPrivate(this, AbstractRelic.class, "rotation", value);
     }
 
     public boolean canSpawn() {
