@@ -71,6 +71,7 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
             root = PCLCustomEffectNode.getNodeForSkill(this, fEffect, new RelativeHitbox(hb, SIZE_X, SIZE_Y, scale(350), scale(-1200)));
             if (prevRoot != null) {
                 root.receiveNode(prevRoot);
+                fullRebuild();
             }
         }
     }

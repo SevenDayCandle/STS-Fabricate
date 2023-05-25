@@ -21,6 +21,7 @@ import extendedui.*;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.EUIBase;
 import extendedui.ui.tooltips.EUICardPreview;
+import extendedui.utilities.EUIColors;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.special.PCLCreatureAttackAnimationAction;
@@ -51,6 +52,8 @@ import static pinacolada.utilities.GameUtilities.scale;
 
 public class PCLCardAlly extends PCLCreature {
     protected static final HashMap<AbstractCard.CardColor, FuncT1<PCLAllyAnimation, PCLCardAlly>> ANIMATION_MAP = new HashMap<>();
+    protected static final Color FADE_INTENT_COLOR = EUIColors.lerp(Color.DARK_GRAY, Settings.CREAM_COLOR, 0.3f);
+    protected static final Color FADE_COOLDOWN_COLOR = EUIColors.lerp(Color.DARK_GRAY, Settings.GREEN_TEXT_COLOR, 0.3f);
     public static final PCLCreatureData DATA = register(PCLCardAlly.class).setHb(0, 0, 128, 128);
     public static PCLSlotAnimation emptyAnimation = new PCLSlotAnimation();
     protected EUICardPreview preview;
@@ -112,8 +115,8 @@ public class PCLCardAlly extends PCLCreature {
         }
     }
 
-    protected Color getHoveredTipColor() {
-        return hasTakenTurn && (!isHovered() || AbstractDungeon.player.hoveredCard == null || AbstractDungeon.player.hoveredCard.type != PCLEnum.CardType.SUMMON) ? TAKEN_TURN_COLOR : Color.WHITE;
+    protected boolean shouldDim() {
+        return hasTakenTurn && (!isHovered() || AbstractDungeon.player.hoveredCard == null || AbstractDungeon.player.hoveredCard.type != PCLEnum.CardType.SUMMON);
     }
 
     // Unused
@@ -347,14 +350,17 @@ public class PCLCardAlly extends PCLCreature {
 
     protected float renderCooldown(SpriteBatch sb, CooldownProvider pr, float startY) {
         boolean canActivate = pr.canActivate();
-        Color renderColor = getHoveredTipColor();
+        boolean dim = shouldDim();
+        Color iconColor = dim ? TAKEN_TURN_COLOR : Color.WHITE;
+        Color textColor = dim ? FADE_INTENT_COLOR : Settings.CREAM_COLOR;
         if (canActivate) {
-            renderCooldownIcon(sb, renderColor, startY);
-            FontHelper.renderFontLeftTopAligned(sb, FontHelper.topPanelInfoFont, Integer.toString(pr.getCooldown()), this.intentHb.cX, startY, Settings.GREEN_TEXT_COLOR);
+            Color cooldownColor = dim ? FADE_COOLDOWN_COLOR : Settings.GREEN_TEXT_COLOR;
+            renderCooldownIcon(sb, iconColor, startY);
+            FontHelper.renderFontLeftTopAligned(sb, FontHelper.topPanelInfoFont, Integer.toString(pr.getCooldown()), this.intentHb.cX, startY, cooldownColor);
         }
         else {
-            PCLRenderHelpers.drawGrayscale(sb, s -> renderCooldownIcon(sb, renderColor, startY));
-            FontHelper.renderFontLeftTopAligned(sb, FontHelper.topPanelInfoFont, Integer.toString(pr.getCooldown()), this.intentHb.cX, startY, Settings.CREAM_COLOR);
+            PCLRenderHelpers.drawGrayscale(sb, s -> renderCooldownIcon(sb, iconColor, startY));
+            FontHelper.renderFontLeftTopAligned(sb, FontHelper.topPanelInfoFont, Integer.toString(pr.getCooldown()), this.intentHb.cX, startY, textColor);
         }
 
         return startY + PGR.core.tooltips.cooldown.icon.getRegionHeight() + Settings.scale * 10f;
@@ -371,9 +377,11 @@ public class PCLCardAlly extends PCLCreature {
     }
 
     protected float renderIntentIcon(SpriteBatch sb, TextureRegion icon, String count, float startY) {
-        Color renderColor = getHoveredTipColor();
-        PCLRenderHelpers.drawCentered(sb, renderColor, icon, this.intentHb.cX - 40.0F * Settings.scale, startY, icon.getRegionWidth(), icon.getRegionHeight(), 0.85f, 0f);
-        FontHelper.renderFontLeftTopAligned(sb, FontHelper.topPanelInfoFont, count, this.intentHb.cX, startY, Settings.CREAM_COLOR);
+        boolean dim = shouldDim();
+        Color iconColor = dim ? TAKEN_TURN_COLOR : Color.WHITE;
+        Color textColor = dim ? FADE_INTENT_COLOR : Settings.CREAM_COLOR;
+        PCLRenderHelpers.drawCentered(sb, iconColor, icon, this.intentHb.cX - 40.0F * Settings.scale, startY, icon.getRegionWidth(), icon.getRegionHeight(), 0.85f, 0f);
+        FontHelper.renderFontLeftTopAligned(sb, FontHelper.topPanelInfoFont, count, this.intentHb.cX, startY, textColor);
         return startY + icon.getRegionHeight() + Settings.scale * 10f;
     }
 

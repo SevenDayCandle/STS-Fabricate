@@ -512,6 +512,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         // Ensure HP is set to the base health
         currentHealth = heal;
 
+        upgradedCost = cost < cardData.getCost(form);
         upgradedDamage = baseDamage > cardData.getDamage(form);
         upgradedBlock = baseBlock > cardData.getBlock(form);
         upgradedMagicNumber = baseMagicNumber > cardData.getMagicNumber(form);

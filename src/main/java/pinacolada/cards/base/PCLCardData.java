@@ -296,11 +296,6 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
 
     public void invokeTags(AbstractCard card, int form) {
         Collection<PCLCardTagInfo> infos = getTagInfos();
-        if (infos.size() > 0) {
-            for (PCLCardTag tag : PCLCardTag.values()) {
-                tag.set(card, 0);
-            }
-        }
         for (PCLCardTagInfo i : infos) {
             i.invoke(card, form);
         }

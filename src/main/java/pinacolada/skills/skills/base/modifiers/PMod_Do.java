@@ -117,8 +117,8 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory> {
 
     public String getMoveString(boolean addPeriod) {
         String cardString = isForced() ? fields.getFullCardString() : fields.getShortCardString();
-        return !fields.groupTypes.isEmpty() ?
-                TEXT.act_genericFrom(getActionTitle(), getAmountRawOrAllString(), cardString, fields.getGroupString())
+        return fields.isHandOnly() ? TEXT.act_generic3(getActionTitle(), getAmountRawOrAllString(), fields.getFullCardString()) :
+                fields.hasGroups() ? TEXT.act_genericFrom(getActionTitle(), getAmountRawOrAllString(), cardString, fields.getGroupString())
                 : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), cardString);
     }
 

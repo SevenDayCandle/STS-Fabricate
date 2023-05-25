@@ -156,6 +156,10 @@ public class PField_CardGeneric extends PField_Not {
         return !EUIUtils.isNullOrEmpty(groupTypes);
     }
 
+    public boolean isHandOnly() {
+        return groupTypes.size() == 1 && groupTypes.get(0) == PCLCardGroupHelper.Hand;
+    }
+
     public boolean isRandom() {
         return origin == PCLCardSelection.Random;
     }

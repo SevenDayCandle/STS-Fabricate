@@ -14,13 +14,13 @@ import pinacolada.utilities.PCLRenderHelpers;
 public class TemporaryPower extends PCLPower {
     public static final String ID = createFullID(TemporaryPower.class);
 
-    private final AbstractPower power;
+    private final AbstractPower originalPower;
     private int sourceMaxAmount = Integer.MAX_VALUE;
     public int stabilizeTurns;
 
     public TemporaryPower(AbstractCreature owner, AbstractPower sourcePower) {
         super(owner, ID + sourcePower.ID);
-        power = sourcePower;
+        originalPower = sourcePower;
         this.img = sourcePower.img;
         this.amount = sourcePower.amount;
         this.region48 = sourcePower.region128;
@@ -38,7 +38,7 @@ public class TemporaryPower extends PCLPower {
     public static TemporaryPower getFromCreature(AbstractCreature owner, String sourcePowerID) {
         for (AbstractPower po : owner.powers) {
             TemporaryPower tmp = EUIUtils.safeCast(po, TemporaryPower.class);
-            if (tmp != null && sourcePowerID.equals(tmp.power.ID)) {
+            if (tmp != null && sourcePowerID.equals(tmp.originalPower.ID)) {
                 return tmp;
             }
         }
@@ -46,20 +46,20 @@ public class TemporaryPower extends PCLPower {
     }
 
     protected boolean amountBelowThreshold(int powerAmount) {
-        return (powerAmount < 0 && !power.canGoNegative) || (powerAmount == 0);
+        return (powerAmount < 0 && !originalPower.canGoNegative) || (powerAmount == 0);
     }
 
     @Override
     public String getUpdatedDescription() {
-        if (power == null) {
+        if (originalPower == null) {
             return super.getUpdatedDescription();
         }
-        return amount < 0 ? formatDescription(1, -amount, power.name) : formatDescription(0, amount, power.name);
+        return amount < 0 ? formatDescription(1, -amount, originalPower.name) : formatDescription(0, amount, originalPower.name);
     }
 
     @Override
     protected void onAmountChanged(int previousAmount, int difference) {
-        PCLActions.top.applyPower(owner, owner, power, difference).ignoreArtifact(true).addCallback(this::tryRemoveSourcePower);
+        PCLActions.top.applyPower(owner, owner, originalPower, difference).ignoreArtifact(true).addCallback(this::tryRemoveSourcePower);
 
         // The type should be set to Neutral after the initial stacking occurs (i.e. after artifact checks) so that this power will not influence buff/debuff count checks
         type = NeutralPowertypePatch.NEUTRAL;
@@ -76,7 +76,7 @@ public class TemporaryPower extends PCLPower {
 
     @Override
     public void stackPower(int stackAmount, boolean updateBaseAmount) {
-        int sourceAmount = GameUtilities.getPowerAmount(owner, power.ID);
+        int sourceAmount = GameUtilities.getPowerAmount(owner, originalPower.ID);
         if (updateBaseAmount && (baseAmount += stackAmount) > maxAmount) {
             baseAmount = maxAmount;
         }
@@ -115,9 +115,9 @@ public class TemporaryPower extends PCLPower {
     }
 
     protected void tryRemoveSourcePower() {
-        int powerAmount = GameUtilities.getPowerAmount(owner, power.ID);
+        int powerAmount = GameUtilities.getPowerAmount(owner, originalPower.ID);
         if (amountBelowThreshold(powerAmount)) {
-            PCLActions.bottom.removePower(owner, owner, power.ID);
+            PCLActions.bottom.removePower(owner, owner, originalPower.ID);
         }
     }
 }

@@ -1,5 +1,6 @@
 package pinacolada.skills.skills;
 
+import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.interfaces.delegates.FuncT0;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -57,6 +58,12 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
 
     public PTrigger chain(PSkill<?>... effects) {
         return PSkill.chain(this, effects);
+    }
+
+    // When attached to a power, get the power this is attached to
+    @Override
+    public AbstractCreature getOwnerCreature() {
+        return power != null ? power.owner : super.getOwnerCreature();
     }
 
     @Override

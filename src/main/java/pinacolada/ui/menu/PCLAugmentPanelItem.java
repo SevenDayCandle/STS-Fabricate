@@ -83,6 +83,6 @@ public class PCLAugmentPanelItem extends PCLTopPanelItem {
         this.getHitbox().unhover();
         EUITutorial tutorial = new EUITutorial(new EUIHitbox((float) Settings.WIDTH / 2.0F - 675.0F, Settings.OPTION_Y - 450.0F, 1350.0F, 900.0F), EUIRM.images.greySquare.texture(),
                 new EUITutorialPage(PGR.core.strings.misc_viewAugments, PGR.core.strings.tutorial_augmentTutorial1), new EUITutorialPage(PGR.core.strings.misc_viewAugments, PGR.core.strings.tutorial_augmentTutorial2));
-        EUI.ftueScreen.open(tutorial);
+        EUI.ftueScreen.openScreen(tutorial);
     }
 }

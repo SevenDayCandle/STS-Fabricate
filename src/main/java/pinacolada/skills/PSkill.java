@@ -1104,7 +1104,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return this.childEffect != null ? this.childEffect.modifyDamage(info, amount) : amount;
     }
 
-    public float modifyDamageIncoming(PCLUseInfo info, float damage, DamageInfo.DamageType type) {
+    public float modifyDamageIncoming(PCLUseInfo info, float amount, DamageInfo.DamageType type) {
         return this.childEffect != null ? this.childEffect.modifyDamageIncoming(info, amount, type) : amount;
     }
 

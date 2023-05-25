@@ -37,7 +37,8 @@ public class PSkillPower extends PCLPower {
         this.powerStrings = new PowerStrings();
 
         for (PTrigger effect : effects) {
-            this.ptriggers.add(effect.makeCopy());
+            effect = effect.makeCopy();
+            this.ptriggers.add(effect);
             effect.power = this;
             effect.resetUses();
 

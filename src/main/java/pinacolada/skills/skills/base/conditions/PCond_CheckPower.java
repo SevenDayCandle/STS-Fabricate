@@ -49,10 +49,8 @@ public class PCond_CheckPower extends PPassiveCond<PField_Power> implements OnAp
                 evaluateTargets(info, t -> fields.debuff ? EUIUtils.any(fields.powers, po -> checkPowers(po, t)) : EUIUtils.all(fields.powers, po -> checkPowers(po, t)))));
     }
 
-    // fields.debuff is treated as a "not" condition if the amount is above 0
     private boolean checkPowers(PCLPowerHelper po, AbstractCreature t) {
-        return amount == 0 ? GameUtilities.getPowerAmount(t, po.ID) == amount :
-                fields.debuff == (GameUtilities.getPowerAmount(t, po.ID) < amount);
+        return fields.doesValueMatchThreshold(GameUtilities.getPowerAmount(t, po.ID));
     }
 
     @Override

@@ -184,7 +184,7 @@ public class SummonPool extends EUIBase {
 
     public void onEndOfTurnFirst() {
         for (PCLCardAlly ally : summons) {
-            if (ally.priority == DelayTiming.EndOfTurnFirst) {
+            if (ally.priority == DelayTiming.EndOfTurnFirst && !ally.hasTakenTurn) {
                 PCLActions.last.triggerAlly(ally, false);
             }
         }
@@ -192,7 +192,7 @@ public class SummonPool extends EUIBase {
 
     public void onEndOfTurnLast() {
         for (PCLCardAlly ally : summons) {
-            if (ally.priority == DelayTiming.EndOfTurnLast) {
+            if (ally.priority == DelayTiming.EndOfTurnLast && !ally.hasTakenTurn) {
                 PCLActions.last.triggerAlly(ally);
             }
         }
