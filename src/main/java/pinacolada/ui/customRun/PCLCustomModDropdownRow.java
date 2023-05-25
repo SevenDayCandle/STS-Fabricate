@@ -1,6 +1,7 @@
 package pinacolada.ui.customRun;
 
 import com.badlogic.gdx.graphics.Color;
+import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.helpers.controller.CInputActionSet;
@@ -60,7 +61,7 @@ public class PCLCustomModDropdownRow extends EUIDropdownRow<CustomMod> {
             if (InputHelper.justClickedLeft) {
                 this.hb.clickStarted = true;
             }
-            EUITooltip.queueTooltip(tooltip, Settings.WIDTH * 0.5f, Settings.HEIGHT * 0.5f);
+            EUITooltip.queueTooltip(tooltip, CardCrawlGame.popupMX + 20 * Settings.scale, CardCrawlGame.popupMY + 20 * Settings.scale);
         }
         else {
             this.label.setColor(cForString);

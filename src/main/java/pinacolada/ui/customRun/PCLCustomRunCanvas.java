@@ -21,16 +21,20 @@ import extendedui.EUIUtils;
 import extendedui.ui.EUIHoverable;
 import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
+import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIClassUtils;
 import extendedui.utilities.EUIFontHelper;
+import org.apache.commons.lang3.StringUtils;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.effects.screen.ViewInGameCardPoolEffect;
 import pinacolada.effects.screen.ViewInGameRelicPoolEffect;
 import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.ui.PCLValueEditor;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class PCLCustomRunCanvas extends EUICanvas {
@@ -60,6 +64,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
     public final EUISearchableDropdown<CustomMod> modifierDropdown;
     public final MenuCancelButton cancelButton = new MenuCancelButton();
     public final GridSelectConfirmButton confirmButton;
+    public final EUITooltip modsTooltip;
     private PCLEffectWithCallback<?> currentEffect;
 
     public PCLCustomRunCanvas(PCLCustomRunScreen screen) {
@@ -135,18 +140,23 @@ public class PCLCustomRunCanvas extends EUICanvas {
 
         modifierDropdown = (EUISearchableDropdown<CustomMod>) new EUISearchableDropdown<CustomMod>(new EUIHitbox(scale(128), scale(48)), mod -> mod.name)
                 .setRowFunction(PCLCustomModDropdownRow::new)
-                .setOnChange(items -> this.screen.activeMods = items)
+                .setOnChange(this::onUpdateModifiers)
                 .setIsMultiSelect(true)
-                .setHeader(FontHelper.panelNameFont, 1f, Settings.GOLD_COLOR, CustomModeScreen.TEXT[6])
+                .setHeader(EUIFontHelper.cardTitleFontSmall, 1f, Settings.GOLD_COLOR, CustomModeScreen.TEXT[6])
                 .setCanAutosize(true, true);
 
-        editCardPoolButton = EUIButton.createHexagonalButton(0, 0, scale(230), scale(70))
+        editCardPoolButton = EUIButton.createHexagonalButton(0, 0, scale(230), scale(55))
+                .setFont(EUIFontHelper.cardTitleFontSmall, 1f)
                 .setText(EUIRM.strings.uipool_viewCardPool)
                 .setOnClick(this::openCardPool);
 
-        editRelicPoolButton = EUIButton.createHexagonalButton(0, 0, scale(230), scale(70))
+        editRelicPoolButton = EUIButton.createHexagonalButton(0, 0, scale(230), scale(55))
+                .setFont(EUIFontHelper.cardTitleFontSmall, 1f)
                 .setText(EUIRM.strings.uipool_viewRelicPool)
                 .setOnClick(this::openRelicPool);
+
+        modsTooltip = new EUITooltip(CustomModeScreen.TEXT[6]);
+        modifierDropdown.setTooltip(modsTooltip);
 
         this.confirmButton = new GridSelectConfirmButton(CharacterSelectScreen.TEXT[1]);
         this.confirmButton.isDisabled = false;
@@ -157,6 +167,11 @@ public class PCLCustomRunCanvas extends EUICanvas {
     protected void onScroll(float newPercent) {
         super.onScroll(newPercent);
         updatePositions();
+    }
+
+    protected void onUpdateModifiers(List<CustomMod> mods) {
+        this.screen.activeMods = mods;
+        modsTooltip.setDescription(EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, EUIUtils.map(mods, m -> PCLCoreStrings.colorString(m.color, m.name))));
     }
 
     public void updateImpl() {
@@ -281,7 +296,18 @@ public class PCLCustomRunCanvas extends EUICanvas {
 
         // Snag the modifiers from the original custom run screen, excluding endless/ending act because we handle this manually
         ArrayList<CustomMod> modList = EUIClassUtils.getField(original, "modList");
-        modifierDropdown.setItems(EUIUtils.filter(modList, mod -> !MOD_ENDLESS.equals(mod.ID) && !MOD_THE_ENDING.equals(mod.ID)));
+        modList = EUIUtils.filter(modList, mod -> !MOD_ENDLESS.equals(mod.ID) && !MOD_THE_ENDING.equals(mod.ID));
+        modList.sort(this::compareMod);
+        modifierDropdown.setItems(modList);
+    }
+
+    // Group mods by original color, then sort them alphabetically
+    protected int compareMod(CustomMod a, CustomMod b) {
+        int colorComp = StringUtils.compare(a.color, b.color);
+        if (colorComp != 0) {
+            return colorComp;
+        }
+        return StringUtils.compare(a.name, b.name);
     }
 
     protected void updatePositions() {
@@ -291,8 +317,6 @@ public class PCLCustomRunCanvas extends EUICanvas {
         yPos = positionElement(trophiesLabel, titleLabel.hb.cX + titleLabel.getAutoWidth() + scale(160), yPos, scale(80));
         yPos = positionElement(charTitleLabel, yPos, scale(105));
         selectedCharacterLabel.setPosition(charTitleLabel.hb.cX + charTitleLabel.getAutoWidth() + scale(40), charTitleLabel.hb.cY - scale(10));
-        editCardPoolButton.setPosition(charTitleLabel.hb.cX + charTitleLabel.getAutoWidth() + scale(250), charTitleLabel.hb.cY);
-        editRelicPoolButton.setPosition(editCardPoolButton.hb.cX + editCardPoolButton.hb.width, charTitleLabel.hb.cY);
 
         int column = 0;
         for (PCLCustomRunCharacterButton character : characters) {
@@ -311,10 +335,13 @@ public class PCLCustomRunCanvas extends EUICanvas {
         yPos = positionElement(endingActToggle, yPos, scale(35));
         yPos = positionElement(customCardToggle, yPos, scale(35));
         yPos = positionElement(customRelicToggle, yPos, scale(125));
-        seedInput.setPosition(endlessToggle.hb.cX + seedInput.hb.width + scale(50), endingActToggle.hb.cY + scale(30));
-        ascensionEditor.setPosition(seedInput.hb.cX + seedInput.hb.width, endlessToggle.hb.cY);
+        modifierDropdown.setPosition(endlessToggle.hb.cX + modifierDropdown.hb.width, endingActToggle.hb.y);
+        ascensionEditor.setPosition(modifierDropdown.hb.cX + modifierDropdown.hb.width, endlessToggle.hb.y);
+        seedInput.setPosition(ascensionEditor.hb.cX + seedInput.hb.width, endingActToggle.hb.y);
 
-        yPos = positionElement(modifierDropdown, SCREEN_X - scale(135), yPos, scale(80));
+        yPos = positionElement(editCardPoolButton, yPos, scale(66));
+        yPos = positionElement(editRelicPoolButton, yPos, scale(66));
+
         lowerScrollBound = upperScrollBound * -1;
     }
 }
