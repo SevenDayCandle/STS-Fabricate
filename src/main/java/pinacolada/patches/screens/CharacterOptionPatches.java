@@ -17,7 +17,7 @@ public class CharacterOptionPatches {
         @SpirePostfixPatch
         public static void postfix(CharacterOption __instance, SpriteBatch sb) {
             if (__instance.selected && __instance.c != null) {
-                PGR.charSelectProvider.renderOption(__instance, sb);
+                PGR.charSelectProvider.render(sb);
             }
         }
     }
@@ -25,8 +25,15 @@ public class CharacterOptionPatches {
     @SpirePatch(clz = CharacterOption.class, method = "renderRelics")
     public static class CharacterOption_RenderRelics {
         @SpirePrefixPatch
-        public static SpireReturn prefix(CharacterOption __instance) {
-            return (EUI.currentScreen != null && (CardCrawlGame.mainMenuScreen != null && CardCrawlGame.mainMenuScreen.screen == AbstractMenuScreen.EUI_MENU)) ? SpireReturn.Return() : SpireReturn.Continue();
+        public static SpireReturn<Void> prefix(CharacterOption __instance, SpriteBatch sb) {
+            if ((EUI.currentScreen != null && (CardCrawlGame.mainMenuScreen != null && CardCrawlGame.mainMenuScreen.screen == AbstractMenuScreen.EUI_MENU))) {
+                return SpireReturn.Return();
+            }
+            if (PGR.charSelectProvider.shouldRenderPCLRelics()) {
+                PGR.charSelectProvider.renderRelicInfo(sb);
+                return SpireReturn.Return();
+            }
+            return SpireReturn.Continue();
         }
     }
 
@@ -35,7 +42,7 @@ public class CharacterOptionPatches {
         @SpirePostfixPatch
         public static void postfix(CharacterOption __instance) {
             if (__instance.selected && __instance.c != null) {
-                PGR.charSelectProvider.updateOption(__instance);
+                PGR.charSelectProvider.update();
             }
         }
     }
@@ -44,7 +51,7 @@ public class CharacterOptionPatches {
     public static class CharacterOptionPatches_DecrementAscensionLevel {
         @SpirePostfixPatch
         public static void postfix(CharacterOption __instance) {
-            PGR.charSelectProvider.updateForAscensionChange(CardCrawlGame.mainMenuScreen.charSelectScreen);
+            PGR.charSelectProvider.updateForAscension();
         }
     }
 
@@ -52,7 +59,7 @@ public class CharacterOptionPatches {
     public static class CharacterOptionPatches_IncrementAscensionLevel {
         @SpirePostfixPatch
         public static void postfix(CharacterOption __instance) {
-            PGR.charSelectProvider.updateForAscensionChange(CardCrawlGame.mainMenuScreen.charSelectScreen);
+            PGR.charSelectProvider.updateForAscension();
         }
     }
 }

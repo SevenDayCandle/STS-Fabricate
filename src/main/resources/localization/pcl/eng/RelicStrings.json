@@ -24,11 +24,11 @@
 	  "FLAVOR": "You could roll with this all day.",
 	  "NAME": "Dung Ball"
 	},
-	"pcl:FoolishCubes":
+	"pcl:GenericDice":
 	{
 		"DESCRIPTIONS": ["You may reroll cards from card rewards. | Entering #yMonster rooms gives #b1 use(s) per #b{0} cards in the pool. Store up to #b{1} uses."],
-		"FLAVOR": "A pair of simple rolling cubes.",
-		"NAME": "Foolish Cubes"
+		"FLAVOR": "It's just an ordinary dice cube. Don't think about it too much.",
+		"NAME": "Generic Dice"
 	},
 	"pcl:JadePendant":
 	{

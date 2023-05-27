@@ -1,7 +1,6 @@
 package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import extendedui.EUIRM;
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.cards.ModifyCost;
 import pinacolada.annotations.VisibleSkill;
@@ -45,14 +44,14 @@ public class PMove_ModifyCost extends PMove_Modify<PField_CardCategory> {
     }
 
     @Override
-    public String getObjectSampleText() {
+    public String getObjectText() {
         return TEXT.subjects_cost;
     }
 
     @Override
-    public String getObjectText() {
-        String base = EUIRM.strings.numNoun(getAmountRawString(), TEXT.subjects_cost);
-        return !fields.forced ? TEXT.subjects_thisTurn(base) : EUIRM.strings.numNoun(getAmountRawString(), TEXT.subjects_cost);
+    public String getSubText() {
+        String base = super.getSubText();
+        return !fields.forced ? TEXT.subjects_thisTurn(base) : base;
     }
 
     @Override
@@ -63,6 +62,6 @@ public class PMove_ModifyCost extends PMove_Modify<PField_CardCategory> {
 
     @Override
     public boolean isDetrimental() {
-        return extra > 0;
+        return !fields.not && extra > 0;
     }
 }

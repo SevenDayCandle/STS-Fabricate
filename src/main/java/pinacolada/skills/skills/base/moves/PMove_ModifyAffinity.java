@@ -56,7 +56,12 @@ public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity
 
     @Override
     public ActionT1<AbstractCard> getAction() {
-        return (c) -> getActions().modifyAffinityLevel(c, fields.addAffinities, amount, true, fields.forced);
+        return (c) -> getActions().modifyAffinityLevel(c, fields.addAffinities, amount, !fields.not, fields.forced);
+    }
+
+    @Override
+    public String getNumericalObjectText() {
+        return amount > 1 ? EUIRM.strings.numNoun(getAmountRawString(), getObjectText()) : getObjectText();
     }
 
     @Override
@@ -66,26 +71,19 @@ public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity
 
     @Override
     public String getObjectText() {
-        String base = fields.getAddAffinityChoiceString();
-        return amount > 1 ? EUIRM.strings.numNoun(getAmountRawString(), base) : base;
+        return fields.getAddAffinityChoiceString();
     }
 
     @Override
     public String getSubText() {
-        String giveString = getObjectText();
         if (fields.forced) {
-            return useParent ? TEXT.act_setTheOf(PGR.core.tooltips.affinityGeneral, getInheritedString(), giveString) :
+            String giveString = getNumericalObjectText();
+            return useParent ? TEXT.act_setOf(PGR.core.tooltips.affinityGeneral, getInheritedString(), giveString) :
                     fields.hasGroups() ?
-                            TEXT.act_setTheOfFrom(PGR.core.tooltips.affinityGeneral, EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), pluralCard()), fields.getGroupString(), giveString) :
-                            TEXT.act_setTheOf(PGR.core.tooltips.affinityGeneral, TEXT.subjects_thisCard, giveString);
+                            TEXT.act_setOfFrom(PGR.core.tooltips.affinityGeneral, EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), pluralCard()), fields.getGroupString(), giveString) :
+                            TEXT.act_setOf(PGR.core.tooltips.affinityGeneral, TEXT.subjects_thisCard, giveString);
         }
-        if (extra >= 0) {
-            return super.getSubText();
-        }
-        return useParent ? TEXT.act_removeFrom(giveString, getInheritedString()) :
-                fields.hasGroups() ?
-                        TEXT.act_removeFromPlace(giveString, EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), pluralCard()), fields.getGroupString()) :
-                        TEXT.act_removeFrom(giveString, TEXT.subjects_thisCard);
+        return getBasicGiveString();
     }
 
     public void chooseEffect(List<AbstractCard> cards, List<PCLAffinity> choices) {

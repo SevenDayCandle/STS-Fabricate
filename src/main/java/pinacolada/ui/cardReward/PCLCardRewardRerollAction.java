@@ -10,8 +10,6 @@ import extendedui.utilities.EUIFontHelper;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.PCLSFX;
 import pinacolada.effects.card.HideCardEffect;
-import pinacolada.interfaces.providers.CardRewardActionProvider;
-import pinacolada.relics.pcl.AbstractCubes;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
@@ -36,17 +34,12 @@ public class PCLCardRewardRerollAction extends PCLCardRewardAction {
     }
 
     @Override
-    PCLCardRewardActionButton getButton(int index) {
+    public PCLCardRewardActionButton getButton(int index) {
         return (PCLCardRewardActionButton) new PCLCardRewardActionButton(this,
                 EUIRM.images.hexagonalButton.texture(), PGR.core.strings.rewards_reroll, PGR.core.strings.rewards_rerollDescription, REWARD_INDEX, index, false)
                 .setFont(EUIFontHelper.buttonFont, 0.85f)
                 .setDimensions(AbstractCard.IMG_WIDTH * 0.75f, AbstractCard.IMG_HEIGHT * 0.14f)
                 .setColor(Color.TAN)
                 .setBorder(EUIRM.images.hexagonalButtonBorder.texture(), Settings.GOLD_COLOR);
-    }
-
-    @Override
-    Class<? extends CardRewardActionProvider> getTargetClass() {
-        return AbstractCubes.class;
     }
 }

@@ -173,7 +173,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         selectedCard = EUIUtils.safeCast(card, PCLCard.class);
         PCLLoadout c = container.find(selectedCard);
 
-        contextMenu.setItems(card.type == PCLLoadout.UNSELECTABLE_TYPE ? EUIUtils.array(ContextOption.ViewCards) : ContextOption.values());
+        contextMenu.setItems(card.type != PCLLoadout.SELECTABLE_TYPE ? EUIUtils.array(ContextOption.ViewCards) : ContextOption.values());
         contextMenu.positionToOpen();
     }
 
@@ -223,6 +223,18 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         cardGrid.clear();
         container.commitChanges(data);
         close();
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+
+        PCLCard.canCropPortraits = true;
+        toggleViewUpgrades(false);
+
+        if (onClose != null) {
+            onClose.invoke();
+        }
     }
 
     @Override

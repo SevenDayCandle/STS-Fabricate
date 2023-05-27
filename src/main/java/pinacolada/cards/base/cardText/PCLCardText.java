@@ -188,7 +188,7 @@ public class PCLCardText {
                     // Do not add punctuation if the word preceding it would not fit on the next line
                     PCLTextToken end = line1.popEnd();
 
-                    if (end instanceof PunctuationToken) {
+                    if (end.type == PCLTextTokenType.Punctuation) {
                         w = line1.getEndWidth() + end.getWidth(this);
                         if (line1.width - w <= line2.width + w) {
                             line1.pushEnd(end);
@@ -198,7 +198,7 @@ public class PCLCardText {
 
                     // Whitespaces are truncated between lines so we need to add them back when moving two adjacent words
                     PCLTextToken start = line2.getStart();
-                    if (!(end instanceof WhitespaceToken) && !(start instanceof WhitespaceToken || start instanceof PunctuationToken)) {
+                    if (!(end instanceof WhitespaceToken) && !(start instanceof WhitespaceToken || start.type == PCLTextTokenType.Punctuation)) {
                         line2.pushStart(WhitespaceToken.Default);
                     }
 

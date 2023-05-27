@@ -473,7 +473,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public final String getAmountRawString() {
-        return source != null ? EUIUtils.format(BOUND_FORMAT, "E" + getCardPointer()) : wrapAmountChild(amount);
+        return source != null ? EUIUtils.format(BOUND_FORMAT, "E" + getCardPointer()) : wrapAmountChild(this, amount);
     }
 
     public EUITooltip getAttackTooltip() {
@@ -496,7 +496,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     public String getAttributeString(char attributeID) {
         switch (attributeID) {
             case EFFECT_CHAR:
-                return wrapAmountChild(baseAmount);
+                return wrapAmountChild(this, baseAmount);
             case XVALUE_CHAR:
                 return getXString();
             case EXTRA_CHAR:
@@ -551,7 +551,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public ColoredString getColoredValueString() {
-        return getColoredValueString(wrapAmountChild(baseAmount), wrapAmountChild(amount));
+        return getColoredValueString(wrapAmountChild(this, baseAmount), wrapAmountChild(this, amount));
     }
 
     public ColoredString getColoredValueString(Object displayBase, Object displayAmount) {
@@ -1021,7 +1021,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     // Used to determine whether this effect is detrimental to the owner
     public boolean isDetrimental() {
-        return false;
+        return childEffect != null && childEffect.isDetrimental();
     }
 
     public final boolean isFromCreature() {
@@ -1562,20 +1562,20 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return String.valueOf(input);
     }
 
-    public String wrapAmountChild(int input) {
-        return wrapAmountChild(wrapAmount(input));
+    public String wrapAmountChild(PSkill<?> source, int input) {
+        return wrapAmountChild(source, wrapAmount(input));
     }
 
-    public String wrapAmountChild(String input) {
-        return parent != null ? parent.wrapAmountChild(input) : input;
+    public String wrapAmountChild(PSkill<?> source, String input) {
+        return parent != null ? parent.wrapAmountChild(source, input) : input;
     }
 
     public String wrapExtra(int input) {
         return wrapAmount(input);
     }
 
-    public String wrapExtraChild(String input) {
-        return parent != null ? parent.wrapExtraChild(input) : input;
+    public String wrapExtraChild(PSkill<?> source, String input) {
+        return parent != null ? parent.wrapExtraChild(source, input) : input;
     }
 
     public enum PCLCardValueSource {

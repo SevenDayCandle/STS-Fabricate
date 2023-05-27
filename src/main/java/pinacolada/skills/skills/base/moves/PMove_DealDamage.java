@@ -70,7 +70,7 @@ public class PMove_DealDamage extends PMove<PField_Attack> {
             getActions().dealDamageToAll(damage, DamageInfo.DamageType.THORNS, fields.attackEffect);
         }
         else {
-            getActions().dealDamage(getSourceCreature(), target == PCLCardTarget.Self ? getSourceCreature() : info.target, amount, DamageInfo.DamageType.THORNS, fields.attackEffect).isCancellable(target != PCLCardTarget.Self);
+            getActions().dealDamage(getSourceCreature(), target == PCLCardTarget.Self ? getSourceCreature() : target.getTarget(info.target), amount, DamageInfo.DamageType.THORNS, fields.attackEffect).isCancellable(target != PCLCardTarget.Self);
         }
         super.use(info);
     }

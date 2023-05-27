@@ -59,7 +59,7 @@ public class ScreenGradientEffect extends PCLEffect {
 
     @Override
     protected void firstUpdate() {
-        renderer.begin();
+        renderer.begin(ShapeRenderer.ShapeType.Filled);
     }
 
     @Override

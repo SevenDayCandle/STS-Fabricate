@@ -246,6 +246,9 @@ public class PCLCardAlly extends PCLCreature {
 
     public void refreshAction() {
         if (card != null) {
+            if (card.pclTarget.targetsRandom()) {
+                target = GameUtilities.getRandomEnemy(true);
+            }
             if (target == null || GameUtilities.isDeadOrEscaped(target)) {
                 target = EUIUtils.findMin(GameUtilities.getEnemies(true), e -> e.currentHealth);
             }

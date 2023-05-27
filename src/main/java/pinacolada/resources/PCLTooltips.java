@@ -8,9 +8,5 @@ public abstract class PCLTooltips {
         return affinity.getTooltip();
     }
 
-    public EUIKeywordTooltip getRerollTooltip() {
-        return PGR.core.tooltips.reroll;
-    }
-
     abstract public void initializeIcons();
 }

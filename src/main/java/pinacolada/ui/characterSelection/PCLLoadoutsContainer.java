@@ -34,6 +34,9 @@ public class PCLLoadoutsContainer {
         totalCardsInPool = 0;
 
         for (Map.Entry<PCLCard, PCLLoadout> entry : loadoutMap.entrySet()) {
+            if (entry.getValue().isLocked()) {
+                continue;
+            }
             int selectedAmount = 0;
             for (PCLCardData data : entry.getValue().cardDatas) {
                 if (!bannedCards.contains(data.ID)) {
@@ -76,7 +79,7 @@ public class PCLLoadoutsContainer {
                 loadoutMap.put(gridCard, series);
                 gridCard.targetTransparency = 1f;
 
-                if (series.ID == (data.selectedLoadout.ID)) {
+                if (Objects.equals(series.ID, data.selectedLoadout.ID)) {
                     currentSeriesCard = gridCard;
                     gridCard.setCardRarity(AbstractCard.CardRarity.RARE);
                     gridCard.beginGlowing();
@@ -118,7 +121,7 @@ public class PCLLoadoutsContainer {
 
     // You cannot select core loadout cards
     public boolean selectCard(PCLCard card) {
-        if (loadoutMap.containsKey(card) && card.type != PCLLoadout.UNSELECTABLE_TYPE) {
+        if (loadoutMap.containsKey(card) && card.type == PCLLoadout.SELECTABLE_TYPE) {
             currentSeriesCard = card;
             for (PCLCard c : loadoutMap.keySet()) {
                 c.stopGlowing();

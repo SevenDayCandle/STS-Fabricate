@@ -391,6 +391,19 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
         return cachedValue;
     }
 
+    protected boolean isSkillAffected(PSkill<?> move) {
+        if (!move.isAffectedByMods()) {
+            return false;
+        }
+        if (move == childEffect) {
+            return true;
+        }
+        else if (childEffect instanceof PMultiBase<?>) {
+            return ((PMultiBase<?>) childEffect).getSubEffects().contains(move);
+        }
+        return false;
+    }
+
     @Override
     public void onDrag(AbstractMonster m) {
         updateChildAmount(makeInfo(m));

@@ -521,8 +521,8 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         upgradedRightCount = baseRightCount > cardData.getRightCount(form);
 
         int newCost = timesUpgraded > 0 ? cardData.getCost(form) + cardData.getCostUpgrade(form) : cardData.getCost(form);
+        upgradedCost = baseCost != newCost;
         setCost(newCost + costDiff);
-        upgradedCost = cost != newCost;
 
         return setForm(form, timesUpgraded);
     }
@@ -837,7 +837,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         if (player != null && player.hand.contains(this) && (!this.hasEnoughEnergy() || GameUtilities.isUnplayableThisTurn(this))) {
             result.color = new Color(1f, 0.3f, 0.3f, transparency);
         }
-        else if ((upgradedCost && isCostModified) || costForTurn < cost || (cost > 0 && this.freeToPlay())) {
+        else if (upgradedCost || isCostModified || costForTurn < cost || (cost > 0 && this.freeToPlay())) {
             result.color = new Color(0.4f, 1f, 0.4f, transparency);
         }
         else {
@@ -1076,23 +1076,24 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     // Upgrade name is determined by number of upgrades and the current form (if multiple exist)
     // E.g. Form 0 -> +A, Form 1 -> +B, etc.
     protected String getUpgradeName() {
-        if (!upgraded) {
-            return cardData.strings.NAME;
-        }
-        StringBuilder sb = new StringBuilder(cardData.strings.NAME);
-        sb.append("+");
+        String name = cardData.strings.NAME;
+        if (upgraded) {
+            StringBuilder sb = new StringBuilder(name);
+            sb.append("+");
 
-        if (maxUpgradeLevel < 0 || maxUpgradeLevel > 1) {
-            sb.append(this.timesUpgraded);
+            if (maxUpgradeLevel < 0 || maxUpgradeLevel > 1) {
+                sb.append(this.timesUpgraded);
+            }
+
+            // Do not show appended characters for non-multiform or linear upgrade path cards
+            if (this.cardData.maxForms > 1 && this.cardData.branchFactor != 1) {
+                char appendix = (char) (auxiliaryData.form + CHAR_OFFSET);
+                sb.append(appendix);
+            }
+            name = sb.toString();
         }
 
-        // Do not show appended characters for non-multiform or linear upgrade path cards
-        if (this.cardData.maxForms > 1 && this.cardData.branchFactor != 1) {
-            char appendix = (char) (auxiliaryData.form + CHAR_OFFSET);
-            sb.append(appendix);
-        }
-
-        return CardModifierManager.onRenderTitle(this, sb.toString());
+        return CardModifierManager.onRenderTitle(this, name);
     }
 
     public ColoredString getXString(boolean onlyInBattle) {
@@ -1110,6 +1111,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         return -1;
     }
 
+    // When resetting the description, we should also reset the name because card modifiers may modify it
     @Override
     public void initializeDescription() {
         if (cardText != null) {
@@ -1120,6 +1122,10 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     @Override
     public final void initializeDescriptionCN() {
         initializeDescription();
+    }
+
+    public void initializeName() {
+        name = getUpgradeName();
     }
 
     @Override
@@ -1172,7 +1178,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     protected void upgradeName() {
         ++this.timesUpgraded;
         this.upgraded = true;
-        this.name = getUpgradeName();
+        this.initializeName();
         this.initializeTitle();
     }
 
@@ -2234,7 +2240,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         this.auxiliaryData.form = (form == null) ? 0 : MathUtils.clamp(form, 0, this.getMaxForms() - 1);
         cardData.invokeTags(this, this.auxiliaryData.form);
         setTarget(cardData.getTargetUpgrade(this.auxiliaryData.form));
-        this.name = getUpgradeName();
+        initializeName();
         if (onAttackEffect != null) {
             onAttackEffect.setAmountFromCard().onUpgrade();
         }

@@ -4,6 +4,7 @@ import basemod.ReflectionHacks;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.evacipated.cardcrawl.modthespire.ModInfo;
 import com.evacipated.cardcrawl.modthespire.lib.SpireOverride;
 import com.evacipated.cardcrawl.modthespire.lib.SpireSuper;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
@@ -96,7 +97,8 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
     protected void initializeTips(AbstractPlayer.PlayerClass playerClass) {
         this.description = getEffectPowerTextStrings();
         tips.clear();
-        mainTooltip = playerClass != null ? new EUIKeywordTooltip(name, playerClass, description) : new EUIKeywordTooltip(name, description);
+        ModInfo info = EUIGameUtils.getModInfo(playerClass);
+        mainTooltip = info != null ? new EUIKeywordTooltip(name, description, info.ID) : new EUIKeywordTooltip(name, description);
         tips.add(mainTooltip);
         EUIGameUtils.scanForTips(description, tips);
     }

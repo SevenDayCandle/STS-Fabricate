@@ -9,6 +9,7 @@ import pinacolada.cards.base.PCLCard;
 public class ChimeraCardsPatches {
 
     // Skip description additions of tag mods, because PCLCard already handles them
+    // TODO use dynamic patches
 
     @SpirePatch(cls = "CardAugments.cardmods.common.BootMod", method = "modifyDescription", optional = true)
     public static class CardAugmentPatches_BootMod {

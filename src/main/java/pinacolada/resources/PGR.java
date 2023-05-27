@@ -35,7 +35,7 @@ import pinacolada.resources.pcl.PCLCoreResources;
 import pinacolada.rewards.pcl.AugmentReward;
 import pinacolada.skills.PSkill;
 import pinacolada.ui.cardView.PCLSingleCardPopup;
-import pinacolada.ui.characterSelection.PCLCharacterSelectProvider;
+import pinacolada.ui.characterSelection.PCLCharacterSelectOptionsRenderer;
 import pinacolada.ui.characterSelection.PCLLoadoutEditor;
 import pinacolada.ui.characterSelection.PCLSeriesSelectScreen;
 import pinacolada.ui.combat.PCLCombatScreen;
@@ -68,7 +68,7 @@ public class PGR {
     public static PCLAugmentPanelItem augmentPanel;
     public static PCLAffinityPoolModule affinityFilters;
     public static PCLAugmentScreen augmentScreen;
-    public static PCLCharacterSelectProvider charSelectProvider;
+    public static PCLCharacterSelectOptionsRenderer charSelectProvider;
     public static PCLCombatScreen combatScreen;
     public static PCLCustomCardSelectorScreen customCards;
     public static PCLCustomRelicSelectorScreen customRelics;
@@ -224,7 +224,7 @@ public class PGR {
         PGR.customCards = new PCLCustomCardSelectorScreen();
         PGR.customRelics = new PCLCustomRelicSelectorScreen();
         PGR.customMode = new PCLCustomRunScreen();
-        PGR.charSelectProvider = new PCLCharacterSelectProvider();
+        PGR.charSelectProvider = new PCLCharacterSelectOptionsRenderer();
         PGR.affinityFilters = new PCLAffinityPoolModule(EUI.cardFilters);
         PGR.libraryFilters = new PCLLibraryModule(EUI.customLibraryScreen);
         PGR.augmentScreen = new PCLAugmentScreen();

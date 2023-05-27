@@ -508,366 +508,288 @@ public class PCLCoreStrings extends PCLStrings {
         return actions.TEXT[index];
     }
 
+    //@Formatter: Off
+
     // Actions functions
     public final String act_activate(Object desc1) {
         return actFmt(0, desc1);
     }
-
     public final String act_addToPile(Object desc1, Object desc2, Object pile) {
         return actFmt(1, desc1, desc2, pile);
     }
-
     public final String act_applyToTarget(Object power, Object target) {
         return actFmt(2, power, target);
     }
-
+    public final String act_applyXToTarget(Object amount, Object power, Object target) {
+        return actFmt(3, amount, power, target);
+    }
     public final String act_applyX(Object amount, Object power) {
         return actFmt(4, amount, power);
     }
-
-    public final String act_applyXToTarget(Object amount, Object power, Object target) {
-        return actFmt(3, amount, power, target);
+    public final String act_choose(Object amount) {
+        return actFmt(5, amount);
+    }
+    public final String act_costs(Object amount) {
+        return actFmt(6, amount);
+    }
+    public final String act_deal(Object amount, Object damage) {
+        return actFmt(7, amount, damage);
+    }
+    public final String act_dealTo(Object amount, Object damage, Object target) {
+        return actFmt(8, amount, damage, target);
+    }
+    public final String act_deals(Object power) {
+        return actFmt(9, power);
+    }
+    public final String act_enterStance(Object stance) {
+        return actFmt(10, stance);
+    }
+    public final String act_exitStance() {
+        return actFmt(11);
+    }
+    public final String act_gainAmount(Object amount, Object power) {
+        return actFmt(12, amount, power);
+    }
+    public final String act_gain(Object power) {
+        return actFmt(13, power);
+    }
+    public final String act_giveTarget(Object target, Object power) {
+        return actFmt(14, target, power);
+    }
+    public final String act_giveTargetAmount(Object target, Object amount, Object power) {
+        return actFmt(15, target, amount, power);
+    }
+    public final String act_has(Object amount) {
+        return actFmt(16, amount);
+    }
+    public final String act_hasAmount(Object amount, Object power) {
+        return actFmt(17, amount, power);
+    }
+    public final String act_haveObject(Object amount, Object power) {
+        return actFmt(18, amount, power);
+    }
+    public final String act_increaseBy(Object power, Object amount) {
+        return actFmt(19, power, amount);
+    }
+    public final String act_increasePropertyBy(Object property, Object target, Object amount) {
+        return actFmt(20, property, target, amount);
+    }
+    public final String act_increasePropertyFromBy(Object property, Object target, Object source, Object amount) {
+        return actFmt(21, property, target, source, amount);
+    }
+    public final String act_lose(Object power) {
+        return actFmt(22, power);
+    }
+    public final String act_loseAmount(Object amount, Object power) {
+        return actFmt(23, amount, power);
+    }
+    public final String act_move(Object amount, Object target) {
+        return actFmt(24, amount, target);
+    }
+    public final String act_moveTo(Object amount, Object dest, Object target) {
+        return actFmt(25, amount, dest, target);
+    }
+    public final String act_obtain(Object card) {
+        return actFmt(26, card);
+    }
+    public final String act_obtainAmount(Object amount, Object card) {
+        return actFmt(27, amount, card);
+    }
+    public final String act_pay(Object amount, Object power) {
+        return actFmt(28, amount, power);
+    }
+    public final String act_reduceBy(Object power, Object amount) {
+        return actFmt(29, power, amount);
+    }
+    public final String act_reducePropertyBy(Object property, Object target, Object amount) {
+        return actFmt(30, property, target, amount);
+    }
+    public final String act_reducePropertyFromBy(Object property, Object target, Object source, Object amount) {
+        return actFmt(31, property, target, source, amount);
+    }
+    public final String act_remove(Object item) {
+        return actFmt(32, item);
+    }
+    public final String act_removeFrom(Object item, Object target) {
+        return actFmt(33, item, target);
+    }
+    public final String act_removeFromPlace(Object item, Object target, Object place) {
+        return actFmt(34, item, target, place);
+    }
+    public final String act_repeat(Object times) {
+        return actFmt(35, times);
+    }
+    public final String act_select(Object amount) {
+        return actFmt(36, amount);
+    }
+    public final String act_setOf(Object item, Object target, Object affinity5) {
+        return actFmt(37, item, target, affinity5);
+    }
+    public final String act_setOfFrom(Object item, Object target, Object place, Object affinity5) {
+        return actFmt(38, item, target, place, affinity5);
+    }
+    public final String act_setTo(Object item, Object affinity) {
+        return actFmt(39, item, affinity);
+    }
+    public final String act_setTheLast(Object amount, Object item, Object affinity) {
+        return actFmt(40, amount, item, affinity);
+    }
+    public final String act_stealFrom(Object amount, Object item, Object target) {
+        return actFmt(41, amount, item, target);
+    }
+    public final String act_stealX(Object amount, Object power) {
+        return actFmt(42, amount, power);
+    }
+    public final String act_stun(Object target) {
+        return actFmt(43, target);
+    }
+    public final String act_takeDamage(Object amount) {
+        return actFmt(44, amount);
+    }
+    public final String act_transform(Object subject, Object target) {
+        return actFmt(45, subject, target);
+    }
+    public final String act_use(Object target) {
+        return actFmt(46, target);
+    }
+    public final String act_youCannotGain(Object target) {
+        return actFmt(47, target);
+    }
+    public final String act_zGainsBonus(Object object, Object amount, Object bonus) {
+        return actFmt(48, object, amount, bonus);
+    }
+    public final String act_zHas(Object object, Object amount) {
+        return actFmt(49, object, amount);
+    }
+    public final String act_zLoses(Object object, Object amount, Object bonus) {
+        return actFmt(50, object, amount, bonus);
+    }
+    public final String act_zOn(Object action, Object object, Object target) {
+        return actFmt(51, action, object, target);
+    }
+    public final String act_zOnAmount(Object action, Object amount, Object object, Object target) {
+        return actFmt(52, action, amount, object, target);
+    }
+    public final String act_zTo(Object action, Object object, Object target) {
+        return actFmt(53, action, object, target);
     }
 
     public final String act_channel(Object subject) {
         return act_generic2(PGR.core.tooltips.channel.title, subject);
     }
-
     public final String act_channelX(Object amount, Object subject) {
         return act_generic3(PGR.core.tooltips.channel.title, amount, subject);
     }
-
-    public final String act_choose(Object amount) {
-        return actFmt(5, amount);
-    }
-
-    public final String act_costs(Object amount) {
-        return actFmt(6, amount);
-    }
-
     public final String act_cycle(Object amount) {
         return act_generic2(PGR.core.tooltips.cycle.title, amount);
     }
-
     public final String act_cycleType(Object amount, Object subject) {
         return act_generic3(PGR.core.tooltips.cycle.title, amount, subject);
     }
-
-    public final String act_deal(Object amount, Object damage) {
-        return actFmt(8, amount, damage);
-    }
-
-    public final String act_dealTo(Object amount, Object damage, Object target) {
-        return actFmt(7, amount, damage, target);
-    }
-
-    public final String act_deals(Object power) {
-        return actFmt(9, power);
-    }
-
     public final String act_discard(Object amount) {
         return act_generic2(PGR.core.tooltips.discard.title, amount);
     }
-
     public final String act_draw(Object amount) {
         return act_generic2(PGR.core.tooltips.draw.title, amount);
     }
-
     public final String act_drawType(Object amount, Object subject) {
         return act_generic3(PGR.core.tooltips.draw.title, amount, subject);
     }
-
-    public final String act_enterStance(Object stance) {
-        return actFmt(10, stance);
-    }
-
     public final String act_evoke(Object subject) {
         return act_generic2(PGR.core.tooltips.evoke.title, subject);
     }
-
     public final String act_evokeXTimes(Object subject, Object amount) {
         return act_genericTimes(PGR.core.tooltips.evoke.title, subject, amount);
     }
-
     public final String act_exhaust(Object amount) {
         return act_generic2(PGR.core.tooltips.exhaust.title, amount);
     }
-
-    public final String act_exitStance() {
-        return actFmt(11);
-    }
-
     public final String act_fetch(Object amount) {
         return act_generic2(PGR.core.tooltips.fetch.title, amount);
     }
-
-    public final String act_gain(Object power) {
-        return actFmt(13, power);
-    }
-
-    public final String act_gainAmount(Object amount, Object power) {
-        return actFmt(12, amount, power);
-    }
-
     public final String act_generic2(Object verb, Object subject) {
         return EUIRM.strings.verbNoun(verb, subject);
     }
-
     public final String act_generic3(Object verb, Object adj, Object subject) {
         return EUIRM.strings.verbAdjNoun(verb, adj, subject);
     }
-
     public final String act_genericFrom(Object verb, Object amount, Object subject, Object target) {
         return EUIRM.strings.verbNumNounPlace(verb, amount, subject, subjects_from(target));
     }
-
     public final String act_genericTimes(Object verb, Object subject, Object times) {
         return EUIRM.strings.verbNounAdv(verb, subject, subjects_times(times));
     }
-
     public final String act_giveFrom(Object subject, Object target, Object power) {
         return act_giveTargetAmount(subject, subjects_from(target), power);
     }
-
-    public final String act_giveTarget(Object target, Object power) {
-        return actFmt(15, target, power);
-    }
-
-    public final String act_giveTargetAmount(Object target, Object amount, Object power) {
-        return actFmt(14, target, amount, power);
-    }
-
-    public final String act_has(Object amount) {
-        return actFmt(16, amount);
-    }
-
-    public final String act_hasAmount(Object amount, Object power) {
-        return actFmt(17, amount, power);
-    }
-
-    public final String act_haveObject(Object amount, Object power) {
-        return actFmt(18, amount, power);
-    }
-
     public final String act_heal(Object amount) {
         return act_generic3(PGR.core.tooltips.heal.title, amount, PGR.core.tooltips.hp.title);
     }
-
     public final String act_healOn(Object amount, Object target) {
-        return act_objectOnAmount(PGR.core.tooltips.heal.title, amount, PGR.core.tooltips.hp.title, target);
+        return act_zOnAmount(PGR.core.tooltips.heal.title, amount, PGR.core.tooltips.hp.title, target);
     }
-
-    public final String act_increaseBy(Object power, Object amount) {
-        return actFmt(19, power, amount);
-    }
-
     public final String act_kill(String targetString) {
         return act_generic2(PGR.core.tooltips.kill.title, targetString);
     }
-
-    public final String act_lose(Object power) {
-        return actFmt(20, power);
-    }
-
-    public final String act_loseAmount(Object amount, Object power) {
-        return actFmt(21, amount, power);
-    }
-
-    public final String act_move(Object amount, Object target) {
-        return actFmt(22, amount, target);
-    }
-
-    public final String act_moveTo(Object amount, Object dest, Object target) {
-        return actFmt(23, amount, dest, target);
-    }
-
-    public final String act_objectGainsBonus(Object object, Object amount, Object bonus) {
-        return actFmt(46, object, amount, bonus);
-    }
-
-    public final String act_objectHas(Object object, Object amount) {
-        return actFmt(47, object, amount);
-    }
-
-    public final String act_objectLoses(Object object, Object amount, Object bonus) {
-        return actFmt(48, object, amount, bonus);
-    }
-
-    public final String act_objectOn(Object action, Object object, Object target) {
-        return actFmt(49, action, object, target);
-    }
-
-    public final String act_objectOnAmount(Object action, Object amount, Object object, Object target) {
-        return actFmt(50, action, amount, object, target);
-    }
-
-    public final String act_objectTo(Object action, Object object, Object target) {
-        return actFmt(51, action, object, target);
-    }
-
-    public final String act_obtain(Object card) {
-        return actFmt(25, card);
-    }
-
-    public final String act_obtainAmount(Object amount, Object card) {
-        return actFmt(24, amount, card);
-    }
-
-    public final String act_pay(Object amount, Object power) {
-        return actFmt(26, amount, power);
-    }
-
     public final String act_play(Object amount) {
         return EUIRM.strings.verbNoun(PGR.core.tooltips.play.title, amount);
     }
-
     public final String act_playFrom(Object amount, Object subject, Object target) {
         return act_genericFrom(PGR.core.tooltips.play.title, amount, subject, target);
     }
-
     public final String act_playXTimes(Object subject, Object amount) {
         return act_genericTimes(PGR.core.tooltips.play.title, subject, amount);
     }
-
     public final String act_purge(Object amount) {
         return act_generic2(PGR.core.tooltips.purge.title, amount);
     }
-
-    public final String act_reduceBy(Object power, Object amount) {
-        return actFmt(27, power, amount);
-    }
-
     public final String act_reduceCooldown(Object target, Object amount) {
         return act_reducePropertyBy(PGR.core.tooltips.cooldown.title, target, amount);
     }
-
-    public final String act_reducePropertyBy(Object property, Object target, Object amount) {
-        return actFmt(28, property, target, amount);
-    }
-
-    public final String act_remove(Object item) {
-        return actFmt(29, item);
-    }
-
-    public final String act_removeFrom(Object item, Object target) {
-        return actFmt(30, item, target);
-    }
-
-    public final String act_removeFromPlace(Object item, Object target, Object place) {
-        return actFmt(31, item, target, place);
-    }
-
-    public final String act_repeat(Object times) {
-        return actFmt(32, times);
-    }
-
     public final String act_reshuffle(Object amount) {
         return act_generic2(PGR.core.tooltips.reshuffle.title, amount);
     }
-
     public final String act_retain(Object amount, Object subject) {
         return EUIRM.strings.verbAdjNoun(PGR.core.tooltips.retain.title, amount, subject);
     }
-
     public final String act_retain(Object amount) {
         return act_generic2(PGR.core.tooltips.retain.title, amount);
     }
-
     public final String act_retainX(Object amount, Object subject) {
         return act_generic3(PGR.core.tooltips.retain.title, amount, subject);
     }
-
     public final String act_scout(Object amount) {
         return act_generic2(PGR.core.tooltips.scout.title, amount);
     }
-
     public final String act_scry(Object amount) {
         return act_generic2(PGR.core.tooltips.scry.title, amount);
     }
-
-    public final String act_select(Object amount) {
-        return actFmt(33, amount);
-    }
-
-    public final String act_setTheItem(Object item, Object affinity) {
-        return actFmt(36, item, affinity);
-    }
-
-    public final String act_setTheLast(Object amount, Object item, Object affinity) {
-        return actFmt(37, amount, item, affinity);
-    }
-
-    public final String act_setTheOf(Object item, Object target, Object affinity2) {
-        return actFmt(34, item, target, affinity2);
-    }
-
-    public final String act_setTheOfFrom(Object item, Object target, Object place, Object affinity2) {
-        return actFmt(35, item, target, place, affinity2);
-    }
-
-    public final String act_shift(Object item) {
-        return actFmt(38, item);
-    }
-
     public final String act_spread(Object subject, Object target) {
-        return act_objectOn(PGR.core.tooltips.spread.title, subject, target);
+        return act_zOn(PGR.core.tooltips.spread.title, subject, target);
     }
-
     public final String act_spreadAmount(Object amount, Object subject, Object target) {
-        return act_objectOnAmount(PGR.core.tooltips.spread.title, amount, subject, target);
+        return act_zOnAmount(PGR.core.tooltips.spread.title, amount, subject, target);
     }
-
     public final String act_stabilize(Object subject, Object target) {
-        return act_objectOn(PGR.core.tooltips.stabilize.title, subject, target);
+        return act_zOn(PGR.core.tooltips.stabilize.title, subject, target);
     }
-
-    public final String act_stealFrom(Object amount, Object item, Object target) {
-        return actFmt(39, amount, item, target);
-    }
-
-    public final String act_stealX(Object amount, Object power) {
-        return actFmt(40, amount, power);
-    }
-
-    public final String act_stun(Object target) {
-        return actFmt(41, target);
-    }
-
-    public final String act_takeDamage(Object amount) {
-        return actFmt(42, amount);
-    }
-
-    public final String act_transform(Object subject, Object target) {
-        return actFmt(43, subject, target);
-    }
-
     public final String act_trigger(Object subject) {
         return act_generic2(PGR.core.tooltips.trigger.title, subject);
     }
-
     public final String act_triggerXTimes(Object subject, Object amount) {
         return act_genericTimes(PGR.core.tooltips.trigger.title, subject, amount);
     }
-
     public final String act_upgrade(Object amount) {
         return act_generic2(PGR.core.tooltips.upgrade.title, amount);
     }
-
     public final String act_upgradeFrom(Object amount, Object subject, Object target) {
         return act_genericFrom(PGR.core.tooltips.upgrade.title, amount, subject, target);
     }
-
-    public final String act_use(Object target) {
-        return actFmt(44, target);
-    }
-
     public final String act_withdraw(Object subject) {
         return act_generic2(PGR.core.tooltips.withdraw.title, subject);
     }
 
-    public final String act_youCannotGain(Object target) {
-        return actFmt(45, target);
-    }
+
 
     public final String combat_controlPileDescriptionFull(String keyName) {
         return EUIUtils.format(combat_controlPileDescription, keyName);
@@ -1287,4 +1209,6 @@ public class PCLCoreStrings extends PCLStrings {
     public final String sui_unlocked(Object amount, Object total) {
         return EUIUtils.format(sui_unlocked, amount, total);
     }
+
+    //@Formatter: On
 }

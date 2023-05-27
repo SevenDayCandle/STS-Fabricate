@@ -57,15 +57,21 @@ public abstract class ListSelection<Item> {
         First,
         Special;
 
-        //@Formatter: Off
-        public boolean isFirst()  { return First.equals(this);  }
+        public boolean isFirst() {
+            return First.equals(this);
+        }
 
-        public boolean isLast()     { return Last.equals(this);     }
+        public boolean isLast() {
+            return Last.equals(this);
+        }
 
-        public boolean isRandom()  { return Random.equals(this);  }
+        public boolean isRandom() {
+            return Random.equals(this);
+        }
 
-        public boolean isSpecial() { return Special.equals(this); }
-        //@Formatter: On
+        public boolean isSpecial() {
+            return Special.equals(this);
+        }
     }
 
     private static class First<T> extends ListSelection<T> {

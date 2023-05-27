@@ -44,7 +44,7 @@ public class PMove_LoseHPPercent extends PMove<PField_Empty> {
         if (target == PCLCardTarget.Self && !isFromCreature()) {
             return TEXT.act_loseAmount(percentLoss, PGR.core.tooltips.hp.title);
         }
-        return TEXT.act_objectLoses(getTargetString(), percentLoss, PGR.core.tooltips.hp.title);
+        return TEXT.act_zLoses(getTargetString(), percentLoss, PGR.core.tooltips.hp.title);
 
     }
 

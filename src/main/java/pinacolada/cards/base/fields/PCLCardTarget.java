@@ -242,6 +242,16 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
         return false;
     }
 
+    public final boolean targetsRandom() {
+        switch (this) {
+            case RandomAlly:
+            case RandomEnemy:
+            case Any:
+                return true;
+        }
+        return false;
+    }
+
     public final boolean vanillaCompatible() {
         switch (this) {
             case SingleAlly:

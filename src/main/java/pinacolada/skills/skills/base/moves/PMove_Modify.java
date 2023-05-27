@@ -38,11 +38,15 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<
 
     public abstract ActionT1<AbstractCard> getAction();
 
-    public String getObjectSampleText() {
-        return getObjectText();
+    public String getNumericalObjectText() {
+        return EUIRM.strings.numNoun(getAmountRawString(), TEXT.subjects_damage);
     }
 
     public abstract String getObjectText();
+
+    public String getObjectSampleText() {
+        return getObjectText();
+    }
 
     @Override
     public String getSampleText(PSkill<?> callingSkill) {
@@ -51,11 +55,7 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<
 
     @Override
     public String getSubText() {
-        String giveString = getObjectText();
-        return useParent ? TEXT.act_giveTarget(getInheritedString(), giveString) :
-                fields.hasGroups() ?
-                        TEXT.act_giveFrom(EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), fields.getFullCardString()), fields.getGroupString(), giveString) :
-                        TEXT.act_giveTarget(TEXT.subjects_this, giveString);
+        return getBasicAddString();
     }
 
     @Override
@@ -87,5 +87,39 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<
 
     public String wrapExtra(int input) {
         return String.valueOf(input);
+    }
+
+    public String getBasicAddString() {
+        String giveString = getObjectText();
+        if (fields.not) {
+            return useParent ? TEXT.act_setOf(giveString, getInheritedString(), getAmountRawString()) :
+                    fields.hasGroups() ?
+                            TEXT.act_setOfFrom(giveString, EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), fields.getFullCardString()), fields.getGroupString(), getAmountRawString()) :
+                            TEXT.act_setOf(giveString, TEXT.subjects_thisCard, getAmountRawString());
+        }
+        if (amount >= 0) {
+            return useParent ? TEXT.act_increasePropertyBy(giveString, getInheritedString(), getAmountRawString()) :
+                    fields.hasGroups() ?
+                            TEXT.act_increasePropertyFromBy(giveString, EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), fields.getFullCardString()), fields.getGroupString(), getAmountRawString()) :
+                            TEXT.act_increasePropertyBy(giveString, TEXT.subjects_thisCard, getAmountRawString());
+        }
+        return useParent ? TEXT.act_reducePropertyBy(giveString, getInheritedString(), getAmountRawString()) :
+                fields.hasGroups() ?
+                        TEXT.act_reducePropertyFromBy(giveString, EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), fields.getFullCardString()), fields.getGroupString(), getAmountRawString()) :
+                        TEXT.act_reducePropertyBy(giveString, TEXT.subjects_thisCard, getAmountRawString());
+    }
+
+    public String getBasicGiveString() {
+        String giveString = getNumericalObjectText();
+        if (amount >= 0) {
+            return useParent ? TEXT.act_giveTarget(getInheritedString(), giveString) :
+                    fields.hasGroups() ?
+                            TEXT.act_giveFrom(EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), fields.getFullCardString()), fields.getGroupString(), giveString) :
+                            TEXT.act_giveTarget(TEXT.subjects_this, giveString);
+        }
+        return useParent ? TEXT.act_removeFrom(giveString, getInheritedString()) :
+                fields.hasGroups() ?
+                        TEXT.act_removeFromPlace(giveString, EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), pluralCard()), fields.getGroupString()) :
+                        TEXT.act_removeFrom(giveString, TEXT.subjects_thisCard);
     }
 }

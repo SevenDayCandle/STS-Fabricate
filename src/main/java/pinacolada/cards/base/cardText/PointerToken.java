@@ -62,12 +62,7 @@ public class PointerToken extends PCLTextToken {
 
     @Override
     protected float getWidth(BitmapFont font, String text) {
-        if (text == null) {
-            return super.getWidth(font, "_."); //20f * Settings.scale * font.getScaleX(); // AbstractCard.MAGIC_NUM_W
-        }
-        else {
-            return super.getWidth(font, text);
-        }
+        return super.getWidth(font, "_.");
     }
 
     @Override

@@ -32,7 +32,7 @@ public abstract class PCLAbstractPlayerData {
     public static final int ASCENSION_GLYPH1_LEVEL_STEP = 2;
     public static final int ASCENSION_GLYPH1_UNLOCK = 16;
     public static final int MAX_UNLOCK_LEVEL = 8;
-    public static final int DEFAULT_HP = 60;
+    public static final int DEFAULT_HP = 70;
     public static final int DEFAULT_GOLD = 99;
     public static final int DEFAULT_DRAW = 5;
     public static final int DEFAULT_ENERGY = 3;

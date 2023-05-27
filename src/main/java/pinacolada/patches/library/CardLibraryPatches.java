@@ -13,6 +13,7 @@ import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.random.Random;
 import extendedui.EUIGameUtils;
 import extendedui.EUIUtils;
+import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.cards.base.*;
 import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.resources.PGR;
@@ -150,7 +151,11 @@ public class CardLibraryPatches {
     public static class CardLibraryPatches_GetCurse {
         @SpirePrefixPatch
         public static SpireReturn<AbstractCard> prefix() {
-            return CardLibraryPatches_GetCurse2.postfix(null, AbstractDungeon.cardRng);
+            AbstractCard curse = getRandomFilteredCurse(c -> c.rarity != AbstractCard.CardRarity.SPECIAL && getStandardReplacementID(c.cardID) == null, AbstractDungeon.cardRng);
+            if (curse != null) {
+                return SpireReturn.Return(curse);
+            }
+            return SpireReturn.Continue();
         }
     }
 
@@ -158,16 +163,11 @@ public class CardLibraryPatches {
     public static class CardLibraryPatches_GetCurse2 {
         @SpirePrefixPatch
         public static SpireReturn<AbstractCard> postfix(AbstractCard ignore, Random rng) {
-            final RandomizedList<String> cards = new RandomizedList<>();
-            final HashMap<String, AbstractCard> curses = ReflectionHacks.getPrivateStatic(CardLibrary.class, "curses");
-            for (Map.Entry<String, AbstractCard> entry : curses.entrySet()) {
-                final AbstractCard c = entry.getValue();
-                if (c.rarity != AbstractCard.CardRarity.SPECIAL && (ignore == null || !c.cardID.equals(ignore.cardID)) && getStandardReplacementID(c.cardID) == null) {
-                    cards.add(entry.getKey());
-                }
+            AbstractCard curse = getRandomFilteredCurse(c -> c.rarity != AbstractCard.CardRarity.SPECIAL && (ignore == null || !c.cardID.equals(ignore.cardID)) && getStandardReplacementID(c.cardID) == null, rng);
+            if (curse != null) {
+                return SpireReturn.Return(curse);
             }
-
-            return SpireReturn.Return(CardLibrary.cards.get(cards.retrieve(rng)));
+            return SpireReturn.Continue();
         }
     }
 
@@ -185,5 +185,17 @@ public class CardLibraryPatches {
         public static SpireReturn<AbstractCard> prefix(AbstractCard.CardRarity rarity) {
             return SpireReturn.Return(GameUtilities.getAnyColorRewardCard(rarity, null, true, true));
         }
+    }
+
+    protected static AbstractCard getRandomFilteredCurse(FuncT1<Boolean, AbstractCard> filterFunc, Random rng) {
+        final RandomizedList<String> cards = new RandomizedList<>();
+        final HashMap<String, AbstractCard> curses = ReflectionHacks.getPrivateStatic(CardLibrary.class, "curses");
+        for (Map.Entry<String, AbstractCard> entry : curses.entrySet()) {
+            final AbstractCard c = entry.getValue();
+            if (filterFunc.invoke(c)) {
+                cards.add(entry.getKey());
+            }
+        }
+        return CardLibrary.cards.get(cards.retrieve(rng));
     }
 }

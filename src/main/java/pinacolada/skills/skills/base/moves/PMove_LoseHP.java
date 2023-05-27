@@ -42,7 +42,7 @@ public class PMove_LoseHP extends PMove<PField_Empty> {
         if (target == PCLCardTarget.Self && !isFromCreature()) {
             return TEXT.act_loseAmount(getAmountRawString(), PGR.core.tooltips.hp.title);
         }
-        return TEXT.act_objectLoses(getTargetString(), getAmountRawString(), PGR.core.tooltips.hp.title);
+        return TEXT.act_zLoses(getTargetString(), getAmountRawString(), PGR.core.tooltips.hp.title);
 
     }
 

@@ -2,28 +2,25 @@ package pinacolada.relics.pcl;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.rewards.RewardItem;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import com.megacrit.cardcrawl.rooms.MonsterRoom;
-import extendedui.EUIUtils;
+import pinacolada.annotations.VisibleRelic;
 import pinacolada.interfaces.providers.CardRewardActionProvider;
 import pinacolada.relics.PCLRelic;
 import pinacolada.relics.PCLRelicData;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
-import java.util.ArrayList;
+@VisibleRelic
+public class GenericDice extends PCLRelic implements CardRewardActionProvider {
+    public static final PCLRelicData DATA = register(GenericDice.class)
+            .setProps(RelicTier.STARTER, LandingSound.SOLID);
+    public static final int MAX_STORED_USES = 5;
+    public static final int BONUS_PER_CARDS = 60;
 
-public abstract class AbstractCubes extends PCLRelic implements CardRewardActionProvider {
-    public final int normalUses;
-    public final int maxUses;
-
-    public AbstractCubes(PCLRelicData data, int normalUses, int maxUses) {
-        super(data);
-        this.normalUses = normalUses;
-        this.maxUses = maxUses;
-        this.updateDescription(null);
+    public GenericDice() {
+        super(DATA);
     }
 
     public boolean canAct() {
@@ -41,29 +38,7 @@ public abstract class AbstractCubes extends PCLRelic implements CardRewardAction
 
     @Override
     public String getUpdatedDescription() {
-        return formatDescription(0, normalUses, maxUses);
-    }
-
-    @Override
-    public void onEquip() {
-        super.onEquip();
-
-        setCounter(1);
-    }
-
-    @Override
-    public void obtain() {
-        ArrayList<AbstractRelic> relics = player.relics;
-        for (int i = 0; i < relics.size(); i++) {
-            AbstractCubes relic = EUIUtils.safeCast(relics.get(i), AbstractCubes.class);
-            if (relic != null) {
-                instantObtain(player, i, true);
-                setCounter(relic.counter);
-                return;
-            }
-        }
-
-        super.obtain();
+        return formatDescription(0, BONUS_PER_CARDS, MAX_STORED_USES);
     }
 
     @Override
@@ -71,8 +46,15 @@ public abstract class AbstractCubes extends PCLRelic implements CardRewardAction
         super.onEnterRoom(room);
 
         if (room instanceof MonsterRoom) {
-            setCounter(Math.min(maxUses, counter + (GameUtilities.getTotalCardsInPlay() / normalUses)));
+            setCounter(Math.min(MAX_STORED_USES, counter + (GameUtilities.getTotalCardsInPlay() / BONUS_PER_CARDS)));
             flash();
         }
+    }
+
+    @Override
+    public void onEquip() {
+        super.onEquip();
+
+        setCounter(1);
     }
 }

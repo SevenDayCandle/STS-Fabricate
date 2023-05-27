@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.MathUtils;
+import com.evacipated.cardcrawl.modthespire.ModInfo;
 import com.megacrit.cardcrawl.actions.common.RelicAboveCreatureAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
@@ -187,8 +188,8 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider 
             tips.clear();
         }
 
-        AbstractPlayer.PlayerClass playerClass = EUIGameUtils.getPlayerClassForCardColor(relicData.cardColor);
-        mainTooltip = playerClass != null ? new EUIKeywordTooltip(getName(), playerClass, description) : new EUIKeywordTooltip(getName(), description);
+        ModInfo info = EUIGameUtils.getModInfo(relicData.cardColor);
+        mainTooltip = info != null ? new EUIKeywordTooltip(getName(), description, info.ID) : new EUIKeywordTooltip(getName(), description);
         tips.add(mainTooltip);
         EUIGameUtils.scanForTips(description, tips);
     }
@@ -291,7 +292,7 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider 
     }
 
     public void renderWithoutAmount(SpriteBatch sb, Color c) {
-        renderRelicImage(sb, Color.WHITE, -64f, -64f, 0.5f);
+        renderRelicImage(sb, c, -64f, -64f, 0.5f);
         if (this.hb.hovered) {
             this.renderTip(sb);
         }

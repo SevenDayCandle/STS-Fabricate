@@ -1,13 +1,18 @@
 package pinacolada.ui.characterSelection;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.FontHelper;
+import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.random.Random;
+import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.screens.CharSelectInfo;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
+import com.megacrit.cardcrawl.screens.charSelect.CharacterSelectScreen;
 import extendedui.EUI;
 import extendedui.EUIRM;
+import extendedui.EUIUtils;
 import extendedui.ui.EUIBase;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUILabel;
@@ -20,7 +25,9 @@ import org.apache.commons.lang3.StringUtils;
 import pinacolada.blights.common.AbstractGlyphBlight;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.interfaces.providers.RunAttributesProvider;
+import pinacolada.patches.UnlockTrackerPatches;
 import pinacolada.resources.PCLAbstractPlayerData;
+import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.pcl.PCLCoreImages;
@@ -30,7 +37,7 @@ import pinacolada.utilities.GameUtilities;
 import java.util.ArrayList;
 
 // Copied and modified from STS-AnimatorMod
-public class PCLCharacterSelectOptionsRenderer extends EUIBase {
+public class PCLCharacterSelectOptionsRenderer extends EUIBase implements RunAttributesProvider {
     protected static final float POS_X = 1190f * Settings.scale;
     protected static final float POS_Y = Settings.HEIGHT / 1.75f;
     protected static final float ROW_OFFSET = 60 * Settings.scale;
@@ -38,8 +45,9 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase {
     protected static final Random RNG = new Random();
     protected final ArrayList<PCLLoadout> availableLoadouts;
     protected final ArrayList<PCLLoadout> loadouts;
+    protected ArrayList<AbstractRelic> cachedRelics;
     public final ArrayList<PCLGlyphEditor> glyphEditors;
-    protected RunAttributesProvider runProvider;
+    protected CharacterSelectScreen charScreen;
     protected CharacterOption characterOption;
     protected PCLAbstractPlayerData data;
     protected PCLLoadout loadout;
@@ -50,6 +58,7 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase {
     public EUILabel startingCardsLabel;
     public EUILabel ascensionGlyphsLabel;
     public EUITextBox startingCardsListLabel;
+
 
     public PCLCharacterSelectOptionsRenderer() {
         final float leftTextWidth = FontHelper.getSmartWidth(FontHelper.cardTitleFont, PGR.core.strings.csel_leftText, 9999f, 0f); // Ascension
@@ -108,18 +117,30 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase {
         }
     }
 
+    @Override
+    public int ascensionLevel() {
+        return charScreen != null ? charScreen.ascensionLevel : 0;
+    }
+
+    @Override
+    public void disableConfirm(boolean value) {
+        if (charScreen != null) {
+            charScreen.confirmButton.isDisabled = value;
+        }
+    }
+
     private void changeLoadout(int index) {
         int actualIndex = index % loadouts.size();
         if (actualIndex < 0) {
             actualIndex = loadouts.size() - 1;
         }
         data.selectedLoadout = loadouts.get(actualIndex);
-        refresh(runProvider, characterOption);
+        refresh(characterOption);
     }
 
     private void changeLoadout(PCLLoadout loadout) {
         data.selectedLoadout = loadout;
-        refresh(runProvider, characterOption);
+        refresh(characterOption);
     }
 
     private void changePreset() {
@@ -130,24 +151,37 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase {
         }
     }
 
+    public void initialize(CharacterSelectScreen selectScreen) {
+        GameUtilities.unlockAllKeys();
+        charScreen = selectScreen;
+        characterOption = null;
+
+        final float size = Settings.scale * 36;
+
+        for (PCLResources<?, ?, ?, ?> resources : PGR.getRegisteredResources()) {
+            UnlockTrackerPatches.validate(resources);
+        }
+    }
+
+
     private void openInfo() {
         if (characterOption != null && data != null) {
             PCLPlayerMeter meter = CombatManager.playerSystem.getMeter(data.resources.playerClass);
             if (meter != null) {
-                EUI.tutorialScreen.open(new EUITutorial(meter.getInfoPages()), () -> screenRefresh(runProvider, characterOption));
+                EUI.tutorialScreen.open(new EUITutorial(meter.getInfoPages()), () -> refresh(characterOption));
             }
         }
     }
 
     private void openLoadoutEditor() {
         if (loadout != null && characterOption != null && data != null) {
-            PGR.loadoutEditor.open(loadout, data, characterOption, () -> screenRefresh(runProvider, characterOption));
+            PGR.loadoutEditor.open(loadout, data, characterOption, () -> refresh(characterOption));
         }
     }
 
     private void openSeriesSelect() {
         if (characterOption != null && data != null) {
-            PGR.seriesSelection.open(characterOption, data, () -> screenRefresh(runProvider, characterOption));
+            PGR.seriesSelection.open(characterOption, data, () -> refresh(characterOption));
         }
     }
 
@@ -157,16 +191,15 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase {
                 data.selectedLoadout = GameUtilities.getRandomElement(availableLoadouts, RNG);
             }
 
-            refresh(runProvider, characterOption);
+            refresh(characterOption);
         }
     }
 
-    public void refresh(RunAttributesProvider provider, CharacterOption characterOption) {
-        refresh(provider, characterOption, GameUtilities.isPCLPlayerClass(characterOption.c.chosenClass));
+    public void refresh(CharacterOption characterOption) {
+        refresh(characterOption, GameUtilities.isPCLPlayerClass(characterOption.c.chosenClass));
     }
 
-    public void refresh(RunAttributesProvider provider, CharacterOption characterOption, boolean canOpen) {
-        this.runProvider = provider;
+    public void refresh(CharacterOption characterOption, boolean canOpen) {
         this.characterOption = characterOption;
 
         if (characterOption != null && canOpen) {
@@ -175,19 +208,16 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase {
             refreshInternal();
         }
 
-        if (canOpen) {
-            startingCardsLabel.setActive(provider instanceof PCLCharacterSelectProvider);
-            startingCardsListLabel.setActive(provider instanceof PCLCharacterSelectProvider);
-
-            if (data != null) {
-                seriesButton.setActive(true);
-                loadoutEditorButton.setActive(true);
-                infoButton.setActive(true);
-                ascensionGlyphsLabel.setActive(true);
-                for (PCLGlyphEditor geditor : glyphEditors) {
-                    geditor.refresh(provider.ascensionLevel());
-                    geditor.setActive(true);
-                }
+        if (canOpen && data != null) {
+            startingCardsLabel.setActive(true);
+            startingCardsListLabel.setActive(true);
+            seriesButton.setActive(true);
+            loadoutEditorButton.setActive(true);
+            infoButton.setActive(true);
+            ascensionGlyphsLabel.setActive(true);
+            for (PCLGlyphEditor geditor : glyphEditors) {
+                geditor.refresh(ascensionLevel());
+                geditor.setActive(true);
             }
         }
         else {
@@ -206,24 +236,30 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase {
     public void refreshInternal() {
         EUIClassUtils.setField(characterOption, "gold", loadout.getGold());
         EUIClassUtils.setField(characterOption, "hp", String.valueOf(loadout.getHP()));
-        ((CharSelectInfo) EUIClassUtils.getField(characterOption, "charInfo")).relics = loadout.getStartingRelics();
+        ArrayList<String> startingRelics = loadout.getStartingRelics();
+        ((CharSelectInfo) EUIClassUtils.getField(characterOption, "charInfo")).relics = startingRelics;
+        cachedRelics = EUIUtils.map(startingRelics, RelicLibrary::getRelic);
 
+        // Instead of continually refreshing relics at every render, change them only when the character or loadout changes
+        for (AbstractRelic r : cachedRelics) {
+            r.updateDescription(characterOption.c.chosenClass);
+        }
 
         int currentLevel = data.resources.getUnlockLevel();
         if (currentLevel < loadout.unlockLevel) {
             startingCardsListLabel.setLabel(PGR.core.strings.csel_unlocksAtLevel(loadout.unlockLevel, currentLevel)).setFontColor(Settings.RED_TEXT_COLOR);
             loadoutEditorButton.setInteractable(false);
-            runProvider.disableConfirm(true);
+            disableConfirm(true);
         }
         else if (!loadout.validate().isValid) {
             startingCardsListLabel.setLabel(PGR.core.strings.csel_invalidLoadout).setFontColor(Settings.RED_TEXT_COLOR);
             loadoutEditorButton.setInteractable(true);
-            runProvider.disableConfirm(true);
+            disableConfirm(true);
         }
         else {
             startingCardsListLabel.setLabel(loadout.getDeckPreviewString(true)).setFontColor(Settings.GREEN_TEXT_COLOR);
             loadoutEditorButton.setInteractable(true);
-            runProvider.disableConfirm(false);
+            disableConfirm(false);
         }
     }
 
@@ -271,6 +307,14 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase {
         }
     }
 
+    public void renderRelicInfo(SpriteBatch sb) {
+        if (cachedRelics != null) {
+            for (AbstractRelic r : cachedRelics) {
+                r.renderWithoutAmount(sb, Color.WHITE);
+            }
+        }
+    }
+
     public void renderImpl(SpriteBatch sb) {
         seriesButton.tryRender(sb);
         loadoutEditorButton.tryRender(sb);
@@ -293,18 +337,51 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase {
         for (PCLGlyphEditor geditor : glyphEditors) {
             geditor.tryUpdate();
         }
+        if (cachedRelics != null && characterOption != null) {
+            for(int i = 0; i < cachedRelics.size(); i++) {
+                AbstractRelic r = cachedRelics.get(i);
+                r.currentX = getInfoX() + i * 72.0F * Settings.scale * (1.01F - 0.019F * cachedRelics.size());
+                r.currentY = getInfoY() - 60.0F * Settings.scale;
+                r.hb.move(r.currentX, r.currentY);
+                r.hb.update();
+            }
+        }
     }
 
-    public void screenRefresh(RunAttributesProvider provider, CharacterOption characterOption) {
-        refresh(provider, characterOption);
-        this.runProvider.onRefresh();
+    // When rendering PCL players, we should use our own relic method because the default method won't render PCL relics properly
+    public boolean shouldRenderPCLRelics() {
+        return startingCardsLabel.isActive && cachedRelics != null;
     }
 
     public void updateForAscension() {
-        if (runProvider != null) {
-            for (PCLGlyphEditor glyphEditor : glyphEditors) {
-                glyphEditor.refresh(runProvider.ascensionLevel());
+        for (PCLGlyphEditor glyphEditor : glyphEditors) {
+            glyphEditor.refresh(ascensionLevel());
+        }
+    }
+
+    public void updateSelectedCharacter(CharacterSelectScreen selectScreen) {
+        charScreen = selectScreen;
+        final CharacterOption current = characterOption;
+        characterOption = null;
+
+        for (CharacterOption o : selectScreen.options) {
+            if (o.selected) {
+                characterOption = o;
+
+                if (current != o) {
+                    refresh(o);
+                }
+
+                return;
             }
         }
+    }
+
+    protected float getInfoX() {
+        return EUIClassUtils.getField(characterOption, "infoX");
+    }
+
+    protected float getInfoY() {
+        return EUIClassUtils.getField(characterOption, "infoY");
     }
 }

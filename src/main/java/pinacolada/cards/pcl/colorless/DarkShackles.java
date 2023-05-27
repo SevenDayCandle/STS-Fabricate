@@ -24,6 +24,6 @@ public class DarkShackles extends PCLCard {
     }
 
     public void setup(Object input) {
-        addUseMove(PMove.applyToSingle(-9, PCLPowerHelper.Shackles).setUpgrade(-6));
+        addUseMove(PMove.applyToSingle(9, PCLPowerHelper.Shackles).setUpgrade(6));
     }
 }

@@ -1,6 +1,5 @@
 package pinacolada.patches.screens;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePostfixPatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
@@ -20,19 +19,11 @@ public class CharacterSelectScreenPatches {
         }
     }
 
-    @SpirePatch(clz = CharacterSelectScreen.class, method = "render")
-    public static class CharacterSelectScreen_Render {
-        @SpirePostfixPatch
-        public static void postfix(CharacterSelectScreen __instance, SpriteBatch sb) {
-            PGR.charSelectProvider.render(__instance, sb);
-        }
-    }
-
     @SpirePatch(clz = CharacterSelectScreen.class, method = "update")
     public static class CharacterSelectScreen_Update {
         @SpirePostfixPatch
         public static void postfix(CharacterSelectScreen __instance) {
-            PGR.charSelectProvider.update(__instance);
+            PGR.charSelectProvider.updateSelectedCharacter(__instance);
         }
 
         @SpirePrefixPatch

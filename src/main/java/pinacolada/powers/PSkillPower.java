@@ -1,7 +1,6 @@
 package pinacolada.powers;
 
 import com.badlogic.gdx.graphics.Color;
-import com.evacipated.cardcrawl.mod.stslib.patches.NeutralPowertypePatch;
 import com.megacrit.cardcrawl.actions.utility.UseCardAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
@@ -68,10 +67,10 @@ public class PSkillPower extends PCLPower {
 
         setupDescription();
         if (turns > 0) {
-            initialize(turns, NeutralPowertypePatch.NEUTRAL, true);
+            initialize(turns, getPowerType(), true);
         }
         else {
-            initialize(-1, NeutralPowertypePatch.NEUTRAL, false);
+            initialize(-1, getPowerType(), false);
         }
     }
 
@@ -108,6 +107,15 @@ public class PSkillPower extends PCLPower {
             damage = effect.modifyDamage(info, damage);
         }
         return damage;
+    }
+
+    public PowerType getPowerType() {
+        for (PTrigger trigger : ptriggers) {
+            if (trigger.isDetrimental()) {
+                return PowerType.DEBUFF;
+            }
+        }
+        return PowerType.BUFF;
     }
 
     @Override

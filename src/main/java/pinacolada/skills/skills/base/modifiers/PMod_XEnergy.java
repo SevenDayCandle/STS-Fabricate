@@ -74,13 +74,16 @@ public class PMod_XEnergy extends PPassiveMod<PField_Empty> {
     }
 
     @Override
-    public String wrapAmountChild(String input) {
-        // If the value is not parseable, don't remove the numbers
-        int value = EUIUtils.parseInt(input, 2);
-        if (value == 1) {
-            input = GameUtilities.EMPTY_STRING;
+    public String wrapAmountChild(PSkill<?> source, String input) {
+        // Only apply X modifier text if the source is the skill that is actually being modified by this modifier
+        if (isSkillAffected(source)) {
+            // If the value is not parseable, don't remove the numbers
+            int value = EUIUtils.parseInt(input, 2);
+            if (value == 1) {
+                input = GameUtilities.EMPTY_STRING;
+            }
+            input = this.amount > 0 ? input + TEXT.subjects_x + "+" + this.amount : input + TEXT.subjects_x;
         }
-        input = this.amount > 0 ? input + TEXT.subjects_x + "+" + this.amount : input + TEXT.subjects_x;
-        return parent != null ? parent.wrapAmountChild(input) : (input);
+        return parent != null ? parent.wrapAmountChild(source, input) : (input);
     }
 }

@@ -1,9 +1,11 @@
 package pinacolada.skills.skills;
 
+import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT2;
 import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
@@ -59,6 +61,12 @@ public class PSpecialSkill extends PSkill<PField_CardCategory> {
     @Override
     public String getText(boolean addPeriod) {
         return EUIUtils.format(getSubText(), getAmountRawString(), getExtraRawString()) + PCLCoreStrings.period(addPeriod);
+    }
+
+    // Assume that special card skill powers are always beneficial to the player (i.e. they are debuffs on enemies and buffs on you/allies)
+    @Override
+    public boolean isDetrimental() {
+        return getOwnerCreature() instanceof AbstractMonster && !(getOwnerCreature() instanceof PCLCardAlly);
     }
 
     @Override

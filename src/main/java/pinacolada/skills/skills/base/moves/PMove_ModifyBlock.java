@@ -1,7 +1,6 @@
 package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import extendedui.EUIRM;
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
@@ -39,13 +38,8 @@ public class PMove_ModifyBlock extends PMove_Modify<PField_CardCategory> {
     }
 
     @Override
-    public String getObjectSampleText() {
-        return PGR.core.tooltips.block.title;
-    }
-
-    @Override
     public String getObjectText() {
-        return EUIRM.strings.numNoun(getAmountRawString(), PGR.core.tooltips.block);
+        return PGR.core.tooltips.block.title;
     }
 
     @Override

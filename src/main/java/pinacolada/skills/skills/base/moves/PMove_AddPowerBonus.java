@@ -30,12 +30,12 @@ public class PMove_AddPowerBonus extends PMove<PField_Power> {
 
     @Override
     public String getSampleText(PSkill<?> callingSkill) {
-        return TEXT.act_objectGainsBonus(TEXT.subjects_x, TEXT.subjects_x, TEXT.subjects_effectBonus);
+        return TEXT.act_zGainsBonus(TEXT.subjects_x, TEXT.subjects_x, TEXT.subjects_effectBonus);
     }
 
     @Override
     public String getSubText() {
-        return TEXT.act_objectGainsBonus(PField.getPowerString(fields.powers), (amount > 0 ? ("+ " + getAmountRawString()) : getAmountRawString()), TEXT.subjects_effectBonus);
+        return TEXT.act_zGainsBonus(PField.getPowerString(fields.powers), (amount > 0 ? ("+ " + getAmountRawString()) : getAmountRawString()), TEXT.subjects_effectBonus);
     }
 
     @Override

@@ -12,13 +12,15 @@ import extendedui.ui.cardFilter.CountingPanelStats;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
+import pinacolada.cards.base.PCLDynamicCard;
 import pinacolada.cards.base.PCLDynamicCardData;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.characters.PCLCharacter;
 import pinacolada.misc.LoadoutStrings;
 import pinacolada.relics.PCLRelic;
-import pinacolada.relics.pcl.*;
+import pinacolada.relics.pcl.GenericDice;
+import pinacolada.relics.pcl.Macroscope;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
@@ -34,7 +36,7 @@ import static pinacolada.ui.characterSelection.PCLLoadoutEditor.MAX_RELIC_SLOTS;
 public abstract class PCLLoadout {
     private static final HashMap<AbstractCard.CardColor, ArrayList<PCLLoadout>> COLOR_LOADOUTS = new HashMap<>();
     private static final HashMap<String, PCLLoadout> LOADOUTS = new HashMap<>();
-    public static final AbstractCard.CardType UNSELECTABLE_TYPE = AbstractCard.CardType.CURSE;
+    public static final AbstractCard.CardType SELECTABLE_TYPE = AbstractCard.CardType.SKILL;
     public static final int MAX_PRESETS = 5;
     public static final int MAX_VALUE = 20;
     public static final int MIN_CARDS = 10;
@@ -192,9 +194,8 @@ public abstract class PCLLoadout {
     }
 
     public void addLoadoutRelics(PCLRelicSlot r1) {
-        r1.addItem(new Macroscope(), 2);
-        r1.addItem(new SpitefulCubes(), 2);
-        r1.addItem(new UsefulBox(), 10);
+        r1.addItem(new GenericDice(), 5);
+        r1.addItem(new Macroscope(), 5);
     }
 
     public void addStarterRelic(ArrayList<String> res, String id) {
@@ -211,17 +212,21 @@ public abstract class PCLLoadout {
             return null;
         }
 
-        PCLCard card = ((PCLDynamicCardData) new PCLDynamicCardData(String.valueOf(ID))
-                .setImagePath(data.imagePath)
+        PCLDynamicCardData cd = ((PCLDynamicCardData) new PCLDynamicCardData(String.valueOf(ID))
                 .showTypeText(false)
-                .setMaxUpgrades(0))
-                .createImplWithForms(false);
+                .setMaxUpgrades(0));
+        if (!isLocked()) {
+            cd.setImagePath(data.imagePath);
+        }
+
+        PCLDynamicCard card = cd.createImplWithForms(false, false);
 
         card.name = isCore() ? PGR.core.strings.sui_core : getName();
         card.clearSkills();
 
         if (isLocked()) {
-            card.isSeen = false;
+            card.isLocked = true;
+            card.color = data.cardColor;
             card.cardText.overrideDescription(PGR.core.strings.csel_unlocksAtLevel(unlockLevel, data.resources.getUnlockLevel()), false);
             card.setCardRarityType(AbstractCard.CardRarity.COMMON, AbstractCard.CardType.STATUS);
         }
@@ -229,11 +234,11 @@ public abstract class PCLLoadout {
             card.addUseMove(new FakeSkill());
             if (isCore()) {
                 card.color = AbstractCard.CardColor.COLORLESS;
-                card.setCardRarityType(AbstractCard.CardRarity.CURSE, UNSELECTABLE_TYPE);
+                card.setCardRarityType(AbstractCard.CardRarity.CURSE, AbstractCard.CardType.CURSE);
             }
             else {
                 card.color = data.cardColor;
-                card.setCardRarityType(AbstractCard.CardRarity.COMMON, AbstractCard.CardType.SKILL);
+                card.setCardRarityType(AbstractCard.CardRarity.COMMON, SELECTABLE_TYPE);
             }
         }
 
@@ -319,8 +324,8 @@ public abstract class PCLLoadout {
         data.getCardSlot(0).select(0, 4).markAllSeen();
         data.getCardSlot(1).select(0, 4).markAllSeen();
         data.getCardSlot(2).select(0, 1).markCurrentSeen();
-        data.getCardSlot(3).select(1, 1).markCurrentSeen();
-        data.getCardSlot(4).select(firstCommonIndex, 1).markCurrentSeen();
+        data.getCardSlot(3).select(firstCommonIndex, 1).markCurrentSeen();
+        data.getCardSlot(4).select(firstCommonIndex + 1, 1).markCurrentSeen();
         data.getCardSlot(5).select(null);
         data.getRelicSlot(0).select((PCLRelic) null);
         data.getRelicSlot(1).select((PCLRelic) null);
@@ -425,21 +430,9 @@ public abstract class PCLLoadout {
             }
         }
 
-        addStarterRelic(res, FoolishCubes.DATA.ID);
-
-        // TODO don't hardcode this
         for (PCLRelicSlot rSlot : getPreset().relicSlots) {
             if (rSlot.selected != null && rSlot.selected.relic != null) {
-                String relicID = rSlot.selected.relic.relicId;
-                if (SpitefulCubes.DATA.ID.equals(relicID)) {
-                    res.set(1, relicID);
-                }
-                else if (VeryUsefulBox.DATA.ID.equals(relicID)) {
-                    res.set(2, relicID);
-                }
-                else {
-                    res.add(rSlot.selected.relic.relicId);
-                }
+                res.add(rSlot.selected.relic.relicId);
             }
         }
         return res;

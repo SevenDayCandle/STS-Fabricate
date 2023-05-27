@@ -12,6 +12,7 @@ public class PCLTextParser {
 
     public final boolean ignoreKeywords;
     public final ArrayList<ArrayList<PCLTextToken>> tokenLines = new ArrayList<>();
+    protected PCLTextToken previous;
     protected Character character;
     protected CharSequence text;
     protected int remaining;
@@ -36,9 +37,11 @@ public class PCLTextParser {
     protected void addToken(PCLTextToken token) {
         if (token.type == PCLTextTokenType.NewLine) {
             addLine();
+            previous = null;
         }
         else {
             tokenLines.get(lineIndex).add(token);
+            previous = token;
         }
     }
 
@@ -90,10 +93,12 @@ public class PCLTextParser {
                     && (amount = PointerToken.tryAdd(this)) == 0 // ¦E5¦
                     && (amount = LogicToken.tryAdd(this)) == 0 // $E5$
                     && (amount = SymbolToken.tryAdd(this)) == 0 // [E]
+                    && (amount = VariableToken.tryAdd(this)) == 0 // !D!
                     && (amount = SpecialToken.tryAdd(this)) == 0 // {code}
                     && (amount = NewLineToken.tryAdd(this)) == 0 // | or NL
                     && (amount = WhitespaceToken.tryAdd(this)) == 0 //
-                    && (amount = PunctuationToken.tryAdd(this)) == 0 // .,-.:; etc
+                    && (amount = ModifierSplitToken.tryAdd(this)) == 0 //:
+                    && (amount = PunctuationToken.tryAdd(this)) == 0 // .,-.; etc
                     && (amount = WordToken.tryAdd(this)) == 0)// Letters/Digits
             {
                 EUIUtils.logError(this, "Error parsing card text, Character: " + character + ", Text: " + this.text);
@@ -116,6 +121,15 @@ public class PCLTextParser {
         }
 
         return text.charAt(characterIndex + amount);
+    }
+
+    protected boolean removeLastToken() {
+        ArrayList<PCLTextToken> line = tokenLines.get(lineIndex);
+        if (line.size() > 0) {
+            line.remove(line.size() - 1);
+            return true;
+        }
+        return false;
     }
 
 }

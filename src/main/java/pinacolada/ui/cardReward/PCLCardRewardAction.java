@@ -52,8 +52,6 @@ public abstract class PCLCardRewardAction extends EUIBase {
 
     abstract PCLCardRewardActionButton getButton(int index);
 
-    abstract Class<? extends CardRewardActionProvider> getTargetClass();
-
     protected void onCardAdded(AbstractCard card) {
         if (onCardAdded != null) {
             onCardAdded.invoke(card);
@@ -71,7 +69,7 @@ public abstract class PCLCardRewardAction extends EUIBase {
         rewardItem = rItem;
         isActive = false;
 
-        actionProvider = GameUtilities.getPlayerRelic(getTargetClass());
+        actionProvider = GameUtilities.getPlayerRelic(CardRewardActionProvider.class);
         if (actionProvider != null && actionProvider.canActivate(rItem)) {
             isActive = true;
 

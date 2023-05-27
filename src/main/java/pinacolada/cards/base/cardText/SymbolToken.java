@@ -15,11 +15,10 @@ import java.util.Map;
 
 // Copied and modified from STS-AnimatorMod
 public class SymbolToken extends PCLTextToken {
-    public static final Map<String, SymbolToken> tokenCache = new HashMap<>();
+    private static final Map<String, SymbolToken> tokenCache = new HashMap<>();
+    protected EUIKeywordTooltip tooltip;
 
     static {
-//        tokenCache.put("R", new SymbolToken("[R]"));
-//        tokenCache.put("G", new SymbolToken("[G]"));
         tokenCache.put("E", new SymbolToken("[E]")); // Energy
         tokenCache.put(PCLAffinity.Red.getPowerSymbol(), new SymbolToken(PCLAffinity.Red.getFormattedPowerSymbol()));
         tokenCache.put(PCLAffinity.Green.getPowerSymbol(), new SymbolToken(PCLAffinity.Green.getFormattedPowerSymbol()));
@@ -29,8 +28,6 @@ public class SymbolToken extends PCLTextToken {
         tokenCache.put(PCLAffinity.Purple.getPowerSymbol(), new SymbolToken(PCLAffinity.Purple.getFormattedPowerSymbol()));
         tokenCache.put(PCLAffinity.Silver.getPowerSymbol(), new SymbolToken(PCLAffinity.Silver.getFormattedPowerSymbol()));
     }
-
-    protected EUIKeywordTooltip tooltip;
 
     private SymbolToken(String text) {
         super(PCLTextTokenType.Symbol, text);

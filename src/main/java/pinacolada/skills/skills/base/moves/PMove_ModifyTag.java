@@ -34,9 +34,14 @@ public class PMove_ModifyTag extends PMove_Modify<PField_CardModifyTag> {
     public ActionT1<AbstractCard> getAction() {
         return (c) -> {
             for (PCLCardTag tag : fields.addTags) {
-                getActions().modifyTag(c, tag, amount, amount != 0);
+                getActions().modifyTag(c, tag, amount, !fields.not);
             }
         };
+    }
+
+    @Override
+    public String getNumericalObjectText() {
+        return amount > 1 ? EUIRM.strings.numNoun(getAmountRawString(), getObjectText()) : getObjectText();
     }
 
     @Override
@@ -46,19 +51,11 @@ public class PMove_ModifyTag extends PMove_Modify<PField_CardModifyTag> {
 
     @Override
     public String getObjectText() {
-        String base = fields.getAddTagChoiceString();
-        return amount > 1 ? EUIRM.strings.numNoun(getAmountRawString(), base) : amount < 0 ? EUIRM.strings.numNoun(TEXT.subjects_infinite, base) : base;
+        return fields.getAddTagChoiceString();
     }
 
     @Override
     public String getSubText() {
-        if (extra != 0) {
-            return super.getSubText();
-        }
-        String giveString = getObjectText();
-        return useParent ? TEXT.act_removeFrom(giveString, getInheritedString()) :
-                fields.hasGroups() ?
-                        TEXT.act_removeFromPlace(giveString, EUIRM.strings.numNoun(getExtraRawString(), pluralCard()), fields.getGroupString()) :
-                        TEXT.act_removeFrom(giveString, TEXT.subjects_thisCard);
+        return getBasicGiveString();
     }
 }

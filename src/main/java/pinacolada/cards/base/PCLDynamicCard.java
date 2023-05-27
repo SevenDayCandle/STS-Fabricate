@@ -32,14 +32,16 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
     protected PCLDynamicCardData builder;
 
     public PCLDynamicCard(PCLDynamicCardData builder) {
-        this(builder, false);
+        this(builder, false, true);
     }
 
-    public PCLDynamicCard(PCLDynamicCardData builder, boolean shouldFindForms) {
+    public PCLDynamicCard(PCLDynamicCardData builder, boolean shouldFindForms, boolean shouldSetTextures) {
         super(builder, builder.ID, builder.imagePath,
                 builder.getCost(0), builder.cardType, builder.cardColor, builder.cardRarity, builder.cardTarget.cardTarget, 0, 0, new BuilderInfo(builder, shouldFindForms));
         assignActualColor();
-        initializeTextures();
+        if (shouldSetTextures) {
+            initializeTextures();
+        }
     }
 
     // Several in-game checks assume color = CURSE, so we need to have consistency

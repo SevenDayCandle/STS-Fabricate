@@ -213,6 +213,10 @@ public class PCLIntentInfo {
         return isAttacking;
     }
 
+    public boolean isIntentVisible() {
+        return enemy.intentAlphaTarget > 0;
+    }
+
     protected float recordDamage(AbstractPower po, float damage, float result) {
         PGR.combatScreen.formulaDisplay.addEnemyAttackPower(po, damage, result);
         return result;

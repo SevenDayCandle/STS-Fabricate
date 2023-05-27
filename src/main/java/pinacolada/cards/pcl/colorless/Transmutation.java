@@ -25,6 +25,6 @@ public class Transmutation extends PCLCard {
     }
 
     public void setup(Object input) {
-        addUseMove(PMod.xEnergy(0).setUpgrade(1), PMove.createRandom(1, 1, PCLCardGroupHelper.Hand).edit(f -> f.setColor(CardColor.COLORLESS)), PMove.modifyCost(-5, 99).useParent(true));
+        addUseMove(PMod.xEnergy(0).setUpgrade(1), PMove.createRandom(1, 1, PCLCardGroupHelper.Hand).edit(f -> f.setColor(CardColor.COLORLESS)), PMove.modifyCostExactForTurn(0, 99).useParent(true));
     }
 }

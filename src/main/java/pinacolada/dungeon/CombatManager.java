@@ -1053,12 +1053,14 @@ public class CombatManager {
         int expectedDamage = 0;
 
         for (PCLIntentInfo intent : intents) {
-            int hits = intent.getDamageMulti();
-            while (bufferCount > 0 && hits > 0) {
-                hits -= 1;
-                bufferCount -= 1;
+            if (intent.isIntentVisible()) {
+                int hits = intent.getDamageMulti();
+                while (bufferCount > 0 && hits > 0) {
+                    hits -= 1;
+                    bufferCount -= 1;
+                }
+                expectedDamage += intent.getDamage(false) * hits;
             }
-            expectedDamage += intent.getDamage(false) * hits;
         }
 
         expectedDamage = GameUtilities.getHealthBarAmount(player, expectedDamage, true, true);

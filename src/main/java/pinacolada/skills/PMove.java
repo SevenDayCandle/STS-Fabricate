@@ -441,12 +441,28 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
         return (PMove_ModifyCost) new PMove_ModifyCost(cost, amount, groups).edit(f -> f.setForced(true));
     }
 
+    public static PMove_ModifyCost modifyCostExact(int cost) {
+        return (PMove_ModifyCost) new PMove_ModifyCost(cost, 1).edit(f -> f.setNot(true).setForced(true));
+    }
+
+    public static PMove_ModifyCost modifyCostExact(int cost, int amount, PCLCardGroupHelper... groups) {
+        return (PMove_ModifyCost) new PMove_ModifyCost(cost, amount, groups).edit(f -> f.setNot(true).setForced(true));
+    }
+
     public static PMove_ModifyCost modifyCostForTurn(int cost) {
         return new PMove_ModifyCost(cost, 1);
     }
 
     public static PMove_ModifyCost modifyCostForTurn(int cost, int amount, PCLCardGroupHelper... groups) {
         return new PMove_ModifyCost(cost, amount, groups);
+    }
+
+    public static PMove_ModifyCost modifyCostExactForTurn(int cost) {
+        return (PMove_ModifyCost) new PMove_ModifyCost(cost, 1).edit(f -> f.setNot(true));
+    }
+
+    public static PMove_ModifyCost modifyCostExactForTurn(int cost, int amount, PCLCardGroupHelper... groups) {
+        return (PMove_ModifyCost) new PMove_ModifyCost(cost, amount, groups).edit(f -> f.setNot(true));
     }
 
     public static PMove_ModifyDamage modifyDamage(int damage) {

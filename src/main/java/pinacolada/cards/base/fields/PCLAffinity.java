@@ -70,34 +70,34 @@ public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>, Cou
     }
 
     public static PCLAffinity fromTooltip(EUIKeywordTooltip tooltip) {   //@Formatter: Off
-        if (tooltip.is(PGR.core.tooltips.affinityRed)) {
+        if (tooltip.idEquals(PGR.core.tooltips.affinityRed)) {
             return PCLAffinity.Red;
         }
-        if (tooltip.is(PGR.core.tooltips.affinityGreen)) {
+        if (tooltip.idEquals(PGR.core.tooltips.affinityGreen)) {
             return PCLAffinity.Green;
         }
-        if (tooltip.is(PGR.core.tooltips.affinityBlue)) {
+        if (tooltip.idEquals(PGR.core.tooltips.affinityBlue)) {
             return PCLAffinity.Blue;
         }
-        if (tooltip.is(PGR.core.tooltips.affinityOrange)) {
+        if (tooltip.idEquals(PGR.core.tooltips.affinityOrange)) {
             return PCLAffinity.Orange;
         }
-        if (tooltip.is(PGR.core.tooltips.affinityYellow)) {
+        if (tooltip.idEquals(PGR.core.tooltips.affinityYellow)) {
             return PCLAffinity.Yellow;
         }
-        if (tooltip.is(PGR.core.tooltips.affinityPurple)) {
+        if (tooltip.idEquals(PGR.core.tooltips.affinityPurple)) {
             return PCLAffinity.Purple;
         }
-        if (tooltip.is(PGR.core.tooltips.affinitySilver)) {
+        if (tooltip.idEquals(PGR.core.tooltips.affinitySilver)) {
             return PCLAffinity.Silver;
         }
-        if (tooltip.is(PGR.core.tooltips.multicolor)) {
+        if (tooltip.idEquals(PGR.core.tooltips.multicolor)) {
             return PCLAffinity.Star;
         }
-        if (tooltip.is(PGR.core.tooltips.affinityGeneral)) {
+        if (tooltip.idEquals(PGR.core.tooltips.affinityGeneral)) {
             return PCLAffinity.General;
         }
-        if (tooltip.is(PGR.core.tooltips.affinityUnknown)) {
+        if (tooltip.idEquals(PGR.core.tooltips.affinityUnknown)) {
             return PCLAffinity.Unknown;
         }
         return null;

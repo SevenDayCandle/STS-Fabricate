@@ -1,8 +1,10 @@
 package pinacolada.skills.skills;
 
+import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PSkill;
@@ -62,6 +64,13 @@ public class PCustomCond extends PCond<PField_CardCategory> {
         return EUIUtils.format(cardData.strings.EXTENDED_DESCRIPTION[descIndex], amount, extra);
     }
 
+    // Assume that special card skill powers are always beneficial to the player (i.e. they are debuffs on enemies and buffs on you/allies)
+    @Override
+    public boolean isDetrimental() {
+        return getOwnerCreature() instanceof AbstractMonster && !(getOwnerCreature() instanceof PCLCardAlly);
+    }
+
+    @Override
     public PCustomCond makeCopy() {
         PCustomCond copy = null;
         try {

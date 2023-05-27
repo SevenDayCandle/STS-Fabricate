@@ -174,7 +174,6 @@ public class PCLCoreTooltips extends PCLTooltips {
     public EUIKeywordTooltip rebound = EUIKeywordTooltip.findByID("Rebound");
     public EUIKeywordTooltip recast = EUIKeywordTooltip.findByID("Recast");
     public EUIKeywordTooltip regeneration = EUIKeywordTooltip.findByID("Regeneration");
-    public EUIKeywordTooltip reroll = EUIKeywordTooltip.findByID("Reroll");
     public EUIKeywordTooltip resistance = EUIKeywordTooltip.findByID("Resistance");
     public EUIKeywordTooltip resolve = EUIKeywordTooltip.findByID("Resolve");
     public EUIKeywordTooltip retain = EUIKeywordTooltip.findByID("~Retain");

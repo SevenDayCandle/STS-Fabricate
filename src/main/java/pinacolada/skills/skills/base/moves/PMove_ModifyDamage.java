@@ -1,7 +1,6 @@
 package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import extendedui.EUIRM;
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
@@ -30,17 +29,12 @@ public class PMove_ModifyDamage extends PMove_Modify<PField_CardCategory> {
 
     @Override
     public ActionT1<AbstractCard> getAction() {
-        return (c) -> getActions().modifyDamage(c, amount, true, true);
-    }
-
-    @Override
-    public String getObjectSampleText() {
-        return TEXT.subjects_damage;
+        return (c) -> getActions().modifyDamage(c, amount, true, !fields.not);
     }
 
     @Override
     public String getObjectText() {
-        return EUIRM.strings.numNoun(getAmountRawString(), TEXT.subjects_damage);
+        return TEXT.subjects_damage;
     }
 
     @Override
