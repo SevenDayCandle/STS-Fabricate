@@ -61,19 +61,15 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
         initializeEffects();
     }
 
-    protected void deconstructEffect() {
+    protected PPrimary<?> deconstructEffect() {
         PSkill<?> sourceEffect = getSourceEffect();
-        root = sourceEffect != null ? PCLCustomEffectNode.createTree(this, sourceEffect, new RelativeHitbox(hb, SIZE_X, SIZE_Y, scale(350), scale(-1200))) : null;
         // Ensure that root is a PPrimary, so that we do not have to put in a separate button for adding primaries and so that the user can just click on the root node to choose between primaries
-        if (root == null || !(root.skill instanceof PPrimary)) {
-            PCLCustomEffectNode prevRoot = root;
-            PPrimary<?> fEffect = makeRootSkill();
-            root = PCLCustomEffectNode.getNodeForSkill(this, fEffect, new RelativeHitbox(hb, SIZE_X, SIZE_Y, scale(350), scale(-1200)));
-            if (prevRoot != null) {
-                root.receiveNode(prevRoot);
-                fullRebuild();
-            }
+        PPrimary<?> rootEffect = sourceEffect instanceof PPrimary ? (PPrimary<?>) sourceEffect : makeRootSkill();
+        if (rootEffect != sourceEffect) {
+            rootEffect.setChild(sourceEffect);
         }
+        root = PCLCustomEffectNode.createTree(this, rootEffect, new RelativeHitbox(hb, SIZE_X, SIZE_Y, scale(350), scale(-1200)));
+        return rootEffect;
     }
 
     public void fullRebuild() {
@@ -112,13 +108,7 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
     }
 
     public void initializeEffects() {
-        deconstructEffect();
-        if (root != null) {
-            rootEffect = (PPrimary<?>) root.skill;
-        }
-        else {
-            rootEffect = null;
-        }
+        rootEffect = deconstructEffect();
 
         refresh();
     }

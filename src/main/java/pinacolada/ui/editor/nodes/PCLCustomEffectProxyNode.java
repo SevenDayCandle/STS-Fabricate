@@ -6,7 +6,6 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUIHeaderlessTooltip;
 import extendedui.utilities.EUIColors;
 import pinacolada.resources.PGR;
-import pinacolada.skills.PSkill;
 import pinacolada.ui.editor.PCLCustomEffectHologram;
 import pinacolada.ui.editor.PCLCustomEffectPage;
 
@@ -28,7 +27,6 @@ public class PCLCustomEffectProxyNode extends PCLCustomEffectNode {
     @Override
     public void receiveNode(PCLCustomEffectNode node) {
         node.extractSelf();
-        node.skill.setChild((PSkill<?>) null);
         controller.skill.setChild(node.skill);
     }
 

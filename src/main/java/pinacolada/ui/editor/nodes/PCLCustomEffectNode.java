@@ -130,6 +130,7 @@ public class PCLCustomEffectNode extends EUIButton {
                 editor.rootEffect.setChild(child.skill);
             }
         }
+        skill.setChild((PSkill<?>) null);
     }
 
     @SuppressWarnings("rawtypes")
@@ -193,7 +194,6 @@ public class PCLCustomEffectNode extends EUIButton {
     public void receiveNode(PCLCustomEffectNode node) {
         if (node.parent != this) {
             node.extractSelf();
-            node.skill.setChild((PSkill<?>) null);
             reassignChild(node);
         }
     }

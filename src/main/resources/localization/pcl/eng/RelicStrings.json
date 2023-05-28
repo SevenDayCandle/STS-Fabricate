@@ -38,8 +38,8 @@
 	},
 	"pcl:Macroscope":
 	{
-	  "DESCRIPTIONS": ["At the start of battle, the HP of ALL characters is multiplied by {0} until the end of combat. During battle, ALL HP, damage, [Block], and [THP] values are multiplied by {0}."],
-	  "FLAVOR": "You can't beat the heat!",
+	  "DESCRIPTIONS": ["During battle, ALL HP, damage, and Block values are multiplied by {0}."],
+	  "FLAVOR": "Everything looks bigger up close.",
 	  "NAME": "Macroscope"
 	},
 	"pcl:MagicEraser":

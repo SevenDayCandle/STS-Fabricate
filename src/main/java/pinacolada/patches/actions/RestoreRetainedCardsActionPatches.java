@@ -7,6 +7,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import javassist.CannotCompileException;
 import javassist.expr.ExprEditor;
 import pinacolada.cards.base.tags.PCLCardTag;
+import pinacolada.dungeon.CombatManager;
 
 @SpirePatch(clz = RestoreRetainedCardsAction.class, method = "update", optional = true)
 public class RestoreRetainedCardsActionPatches {
@@ -22,6 +23,7 @@ public class RestoreRetainedCardsActionPatches {
     }
 
     public static void patch(AbstractCard card) {
+        CombatManager.onCardRetain(card);
         if (PCLCardTag.Retain.tryProgress(card)) {
             card.retain = false;
         }
