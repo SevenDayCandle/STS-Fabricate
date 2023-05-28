@@ -37,7 +37,7 @@ public class PCond_Shuffle extends PDelegateCond<PField_Empty> implements OnShuf
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return triggerSource != null;
+        return triggerSource == this;
     }
 
     @Override

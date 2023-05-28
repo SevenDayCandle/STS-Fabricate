@@ -37,6 +37,9 @@ public class PCond_InStance extends PPassiveCond<PField_Stance> implements OnSta
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
+        if (isUsing) {
+            return triggerSource == this;
+        }
         return fields.random ^ (fields.stances.isEmpty() ? !GameUtilities.inStance(NeutralStance.STANCE_ID) : EUIUtils.any(fields.stances, GameUtilities::inStance));
     }
 

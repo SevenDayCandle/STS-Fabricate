@@ -28,7 +28,7 @@ public abstract class PDelegateCond<T extends PField> extends PCond<T> {
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return triggerSource != null;
+        return triggerSource == this;
     }
 
     @Override

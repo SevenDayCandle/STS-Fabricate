@@ -32,6 +32,9 @@ public class PCond_CheckBlock extends PPassiveCond<PField_Not> implements OnBloc
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
+        if (isUsing) {
+            return triggerSource == this;
+        }
         return evaluateTargets(info, m -> fields.doesValueMatchThreshold(m.currentBlock, amount));
     }
 

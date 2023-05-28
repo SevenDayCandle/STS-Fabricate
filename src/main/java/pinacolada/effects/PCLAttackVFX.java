@@ -50,6 +50,7 @@ public class PCLAttackVFX {
     public static final PCLAttackVFX SMASH = new PCLAttackVFX(AttackEffect.SMASH, null, (sx, sy, cx, cy) -> VFX.whack(cx, cy), PCLSFX.BLUNT_FAST);
     public static final PCLAttackVFX SPARK = new PCLAttackVFX(PCLEnum.AttackEffect.SPARK, null, Color.YELLOW, (sx, sy, cx, cy) -> VFX.sparkImpact(cx, cy), PCLSFX.ORB_LIGHTNING_CHANNEL);
     public static final PCLAttackVFX WATER = new PCLAttackVFX(PCLEnum.AttackEffect.WATER, null, Color.BLUE, (sx, sy, cx, cy) -> VFX.water(cx, cy), PCLSFX.PCL_ORB_WATER_EVOKE);
+    public static final PCLAttackVFX WAVE = new PCLAttackVFX(PCLEnum.AttackEffect.WAVE, null, Color.LIME, (sx, sy, cx, cy) -> VFX.circularWave(cx, cy), PCLSFX.PCL_PING);
     public static final PCLAttackVFX WIND = new PCLAttackVFX(PCLEnum.AttackEffect.WIND, null, Color.FOREST, (sx, sy, cx, cy) -> VFX.tornado(cx, cy), PCLSFX.POWER_FLIGHT);
     protected final String[] sounds;
     protected final FuncT4<AbstractGameEffect, Float, Float, Float, Float> createVFX;

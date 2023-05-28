@@ -36,7 +36,7 @@ public class PCond_HaveTakenDamage extends PPassiveCond<PField_Random> implement
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
         // Return true when used from triggers
         if (isUsing) {
-            return true;
+            return triggerSource == this;
         }
         int count = fields.random ? GameActionManager.damageReceivedThisCombat : GameActionManager.damageReceivedThisTurn;
         return amount == 0 ? count == 0 : fields.not ^ count >= amount;
