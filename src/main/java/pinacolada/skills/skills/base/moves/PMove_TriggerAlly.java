@@ -2,6 +2,7 @@ package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.monsters.PCLCardAlly;
@@ -41,7 +42,11 @@ public class PMove_TriggerAlly extends PMove<PField_Empty> {
 
     @Override
     public String getSubText() {
-        return amount == 1 ? TEXT.act_trigger(getTargetString()) : TEXT.act_triggerXTimes(getTargetString(), getAmountRawString());
+        String base = amount == 1 ? TEXT.act_trigger(getTargetString()) : TEXT.act_triggerXTimes(getTargetString(), getAmountRawString());
+        if ((target == PCLCardTarget.Single || target == PCLCardTarget.SingleAlly) && sourceCard instanceof PCLCard && ((PCLCard) sourceCard).pclTarget.targetsSingle()) {
+            return TEXT.cond_ifTargetIs(TEXT.subjects_target, TEXT.subjects_ally) + ", " + base;
+        }
+        return base;
     }
 
     @Override

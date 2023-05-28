@@ -5,6 +5,7 @@ import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.piles.RemoveFromPile;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
+import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.skills.PSkill;
@@ -38,6 +39,13 @@ public class PMove_RemoveCard extends PCallbackMove<PField_CardCategory> {
     }
 
     @Override
+    public String getAmountRawOrAllString() {
+        return baseAmount <= 0 ? fields.forced ? TEXT.subjects_all : TEXT.subjects_any
+                : extra > 0 ? TEXT.subjects_xOfY(getExtraRawString(), getAmountRawString())
+                : (fields.forced || fields.origin != PCLCardSelection.Manual) ? getAmountRawString() : getRangeToAmountRawString();
+    }
+
+    @Override
     public String getSampleText(PSkill<?> callingSkill) {
         return TEXT.act_removeFrom(TEXT.subjects_card, TEXT.cpile_deck);
     }
@@ -45,9 +53,9 @@ public class PMove_RemoveCard extends PCallbackMove<PField_CardCategory> {
     @Override
     public String getSubText() {
         String cString = useParent ? TEXT.subjects_them
-                : fields.groupTypes.size() > 0 ? EUIRM.strings.numNoun(extra > amount ? TEXT.subjects_xOfY(getAmountRawString(), getExtraRawString()) : getAmountRawString(), fields.getCardOrString(getRawString(EXTRA_CHAR)))
+                : fields.groupTypes.size() > 0 ? EUIRM.strings.numNoun(getAmountRawOrAllString(), fields.getCardOrString(getRawString(EXTRA_CHAR)))
                 : TEXT.subjects_thisCard;
-        return TEXT.act_removeFrom(cString, fields.getGroupString());
+        return TEXT.act_removeInPlace(cString, fields.getGroupString(), TEXT.cpile_deck);
     }
 
     @Override

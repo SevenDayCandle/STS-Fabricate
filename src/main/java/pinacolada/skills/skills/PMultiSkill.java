@@ -5,6 +5,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
+import extendedui.interfaces.delegates.ActionT1;
 import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.utilities.RotatingList;
 import pinacolada.annotations.VisibleSkill;
@@ -146,6 +147,16 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     @Override
     public boolean hasChildType(Class<?> childType) {
         return super.hasChildType(childType) || EUIUtils.any(effects, child -> childType.isInstance(child) || (child != null && child.hasChildType(childType)));
+    }
+
+    @Override
+    public <U> void invokeCastChildren(Class<U> targetClass, ActionT1<U> onUse) {
+        for (PSkill<?> effect : effects) {
+            effect.invokeCastChildren(targetClass, onUse);
+        }
+        if (this.childEffect != null) {
+            this.childEffect.invokeCastChildren(targetClass, onUse);
+        }
     }
 
     @Override

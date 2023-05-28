@@ -65,6 +65,9 @@ public class PCond_CheckLevel extends PPassiveCond<PField_Affinity> implements O
 
     @Override
     public String getSubText() {
+        if (isBranch()) {
+            return TEXT.cond_wheneverYou(PGR.core.tooltips.level.title);
+        }
         if (isWhenClause()) {
             return TEXT.cond_wheneverYou(EUIRM.strings.verbNoun(PGR.core.tooltips.level.title, fields.getAffinityLevelOrString()));
         }

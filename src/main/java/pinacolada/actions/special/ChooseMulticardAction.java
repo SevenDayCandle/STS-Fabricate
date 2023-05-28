@@ -17,11 +17,11 @@ public class ChooseMulticardAction extends PCLAction<PCLMultiCard> {
     private final PCLMultiCard multicard;
     protected final ArrayList<AbstractCard> selectedCards = new ArrayList<>();
 
-    public ChooseMulticardAction(PCLMultiCard multicard, int amount) {
+    public ChooseMulticardAction(PCLMultiCard multicard) {
         super(ActionType.CARD_MANIPULATION, Settings.ACTION_DUR_FAST);
 
         this.multicard = multicard;
-        initialize(amount);
+        initialize(multicard.getMultiCardMove().baseAmount);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class ChooseMulticardAction extends PCLAction<PCLMultiCard> {
 
         CardGroup cardGroup = new CardGroup(CardGroup.CardGroupType.MASTER_DECK);
         for (AbstractCard c : player.masterDeck.getPurgeableCards().group) {
-            if (!isBanned(c)) {
+            if (!isBanned(c) && multicard.acceptCard(c)) {
                 cardGroup.addToBottom(c);
             }
         }
@@ -70,7 +70,6 @@ public class ChooseMulticardAction extends PCLAction<PCLMultiCard> {
         return c.cost < 0
                 || c.purgeOnUse
                 || PCLCardTag.Fleeting.has(c)
-                || c instanceof PCLMultiCard
-                || multicard.isBanned(c);
+                || c instanceof PCLMultiCard;
     }
 }

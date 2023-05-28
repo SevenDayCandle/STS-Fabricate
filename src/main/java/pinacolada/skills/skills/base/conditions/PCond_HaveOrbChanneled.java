@@ -60,6 +60,9 @@ public class PCond_HaveOrbChanneled extends PPassiveCond<PField_Orb> implements 
 
     @Override
     public String getSubText() {
+        if (isBranch()) {
+            return TEXT.cond_wheneverYou(PGR.core.tooltips.channel.title);
+        }
         String tt = fields.getOrbAndOrString();
         if (isWhenClause()) {
             return TEXT.cond_wheneverYou(TEXT.act_channel(tt));

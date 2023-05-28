@@ -1585,6 +1585,10 @@ public class GameUtilities {
         return isDefending(monster.intent);
     }
 
+    public static boolean isEnemy(AbstractCreature c) {
+        return c != null && !c.isPlayer && !(c instanceof PCLCardAlly);
+    }
+
     public static boolean isFatal(AbstractCreature enemy, boolean includeMinions) {
         return (enemy.isDead || enemy.isDying || enemy.currentHealth <= 0)
                 && !enemy.hasPower(RegrowPower.POWER_ID)

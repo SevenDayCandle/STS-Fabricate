@@ -125,7 +125,7 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
             }
         }
         // For these actions, also treat the "forced" parameter as a self-target to allow users to create effects that create copies of the calling card in a specific pile
-        else if ((fields.forced || fields.groupTypes.isEmpty()) && sourceCard != null) {
+        else if (fields.forced && sourceCard != null) {
             ArrayList<AbstractCard> created = new ArrayList<>();
             for (int i = 0; i < limit; i++) {
                 created.add(sourceCard.makeStatEquivalentCopy());
@@ -156,7 +156,7 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
 
     protected String getCopiesOfString() {
         return useParent ? TEXT.subjects_copiesOf(getInheritedString())
-                : (fields.forced || fields.groupTypes.isEmpty()) ? TEXT.subjects_copiesOf(TEXT.subjects_thisCard)
+                : (fields.forced && sourceCard != null) ? TEXT.subjects_copiesOf(TEXT.subjects_thisCard)
                 : fields.getFullCardString();
     }
 

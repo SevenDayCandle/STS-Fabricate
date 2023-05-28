@@ -7,7 +7,6 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUI;
 import extendedui.interfaces.delegates.ActionT2;
-import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.ColoredString;
 import pinacolada.actions.PCLActions;
@@ -26,7 +25,6 @@ public class PCLClickableUse {
     public final ClickableProvider source;
     private boolean canUse;
     private GameActionManager.Phase currentPhase;
-    public FuncT1<Boolean, PCLClickableUse> checkCondition;
     public PCLTriggerUsePool pool;
     public PSkill move;
     public boolean clickable;
@@ -43,6 +41,7 @@ public class PCLClickableUse {
         this.source = power;
         this.move = move;
         this.pool = pool;
+        canUse = move != null;
     }
 
     public PCLClickableUse(ClickableProvider power, ActionT2<PSpecialSkill, PCLUseInfo> onUse, int uses, boolean refreshEachTurn, boolean stackAutomatically) {
@@ -74,7 +73,7 @@ public class PCLClickableUse {
     }
 
     public boolean checkCondition() {
-        return (checkCondition == null || checkCondition.invoke(this)) && (!(move instanceof PCond) || ((PCond<?>) move).checkCondition(null, false, null));
+        return pool.canUse() && (!(move instanceof PCond) || ((PCond<?>) move).checkCondition(null, false, null));
     }
 
     public int getCurrentUses() {
@@ -95,16 +94,10 @@ public class PCLClickableUse {
         }
         final GameActionManager.Phase phase = AbstractDungeon.actionManager.phase;
         if (startOfTurn || forceUpdate || currentPhase != phase || EUI.elapsed50()) {
-            canUse = pool.canUse() && checkCondition();
+            canUse = checkCondition();
             currentPhase = phase;
         }
         updateHeader();
-    }
-
-    public PCLClickableUse setCheckCondition(FuncT1<Boolean, PCLClickableUse> checkCondition) {
-        this.checkCondition = checkCondition;
-
-        return this;
     }
 
     public PCLClickableUse setOneUsePerPower(boolean refreshEachTurn) {
@@ -160,6 +153,7 @@ public class PCLClickableUse {
         if (tooltip != null) {
             if (tooltip.subHeader == null) {
                 tooltip.subHeader = new ColoredString();
+                tooltip.invalidateHeight();
             }
             tooltip.subHeader.color = pool.uses == 0 ? Settings.RED_TEXT_COLOR : Settings.GREEN_TEXT_COLOR;
             tooltip.subHeader.text = (hasInfiniteUses() ? PGR.core.strings.subjects_infinite : (pool.uses + "/" + pool.baseUses)) + " " + PGR.core.strings.combat_uses;
@@ -168,7 +162,7 @@ public class PCLClickableUse {
 
     public void use(AbstractMonster m, int amount) {
         // Manually check to use to prevent abuse
-        if (!(pool.canUse(amount) && checkCondition())) {
+        if (!(checkCondition())) {
             return;
         }
 

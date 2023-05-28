@@ -41,6 +41,21 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
         return Arrays.stream(PCLCardTarget.values()).sorted((a, b) -> StringUtils.compare(a.getTitle(), b.getTitle())).collect(Collectors.toList());
     }
 
+    public static ArrayList<AbstractCreature> getPlayerTeam() {
+        final ArrayList<AbstractCreature> targets = new ArrayList<AbstractCreature>(GameUtilities.getSummons(true));
+        targets.add(AbstractDungeon.player);
+        return targets;
+    }
+
+    public static ArrayList<AbstractCreature> getRandomTargets(List<? extends AbstractCreature> source, int autoAmount) {
+        final RandomizedList<AbstractCreature> list = new RandomizedList<>(source);
+        final ArrayList<AbstractCreature> targets = new ArrayList<>();
+        while (list.size() > 0 && targets.size() < autoAmount) {
+            targets.add(list.retrieve(GameUtilities.getRNG()));
+        }
+        return targets;
+    }
+
     public final boolean evaluateTargets(AbstractCreature source, AbstractCreature target, Predicate<AbstractCreature> tFunc) {
         return evaluateTargets(getTargetsForEvaluation(source, target), tFunc);
     }
@@ -84,6 +99,7 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
         return getTargets(source, target, 1);
     }
 
+    // TODO flip targets based on the source
     public final ArrayList<? extends AbstractCreature> getTargets(AbstractCreature source, AbstractCreature target, int autoAmount) {
         switch (this) {
             case None: {
@@ -97,7 +113,7 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
                 return EUIUtils.arrayList();
             }
             case AllEnemy: {
-                return GameUtilities.getEnemies(true);
+                return GameUtilities.isEnemy(source) ? getPlayerTeam() : GameUtilities.getEnemies(true);
             }
             case Self: {
                 return EUIUtils.arrayList(source);
@@ -107,40 +123,23 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
                     return EUIUtils.arrayList(target);
                 }
                 else {
-                    final RandomizedList<AbstractCreature> list = new RandomizedList<>(GameUtilities.getAllCharacters(true));
-                    final ArrayList<AbstractCreature> targets = new ArrayList<>();
-                    while (list.size() > 0 && targets.size() < autoAmount) {
-                        targets.add(list.retrieve(GameUtilities.getRNG()));
-                    }
-                    return targets;
+                    return getRandomTargets(GameUtilities.getAllCharacters(true), autoAmount);
                 }
             }
             case RandomEnemy: {
-                final RandomizedList<AbstractCreature> list = new RandomizedList<>(GameUtilities.getEnemies(true));
-                final ArrayList<AbstractCreature> targets = new ArrayList<>();
-                while (list.size() > 0 && targets.size() < autoAmount) {
-                    targets.add(list.retrieve(GameUtilities.getRNG()));
-                }
-                return targets;
+                return getRandomTargets(GameUtilities.isEnemy(source) ? getPlayerTeam() : GameUtilities.getEnemies(true), autoAmount);
             }
             case All: {
                 return GameUtilities.getAllCharacters(true);
             }
             case AllAlly: {
-                return GameUtilities.getSummons(true);
+                return GameUtilities.isEnemy(source) ? GameUtilities.getEnemies(true) : GameUtilities.getSummons(true);
             }
             case Team: {
-                final ArrayList<AbstractCreature> targets = new ArrayList<AbstractCreature>(GameUtilities.getSummons(true));
-                targets.add(AbstractDungeon.player);
-                return targets;
+                return GameUtilities.isEnemy(source) ? GameUtilities.getEnemies(true) : getPlayerTeam();
             }
             case RandomAlly: {
-                final RandomizedList<AbstractCreature> list = new RandomizedList<>(GameUtilities.getSummons(true));
-                final ArrayList<AbstractCreature> targets = new ArrayList<>();
-                while (list.size() > 0 && targets.size() < autoAmount) {
-                    targets.add(list.retrieve(GameUtilities.getRNG()));
-                }
-                return targets;
+                return getRandomTargets(GameUtilities.isEnemy(source) ? GameUtilities.getEnemies(true) : GameUtilities.getSummons(true), autoAmount);
             }
         }
 
@@ -150,9 +149,9 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
     public final ArrayList<? extends AbstractCreature> getTargetsForEvaluation(AbstractCreature source, AbstractCreature target) {
         switch (this) {
             case RandomAlly:
-                return GameUtilities.getSummons(true);
+                return GameUtilities.isEnemy(source) ? GameUtilities.getEnemies(true) : GameUtilities.getSummons(true);
             case RandomEnemy:
-                GameUtilities.getEnemies(true);
+                return GameUtilities.isEnemy(source) ? getPlayerTeam() : GameUtilities.getEnemies(true);
             case Any:
                 return GameUtilities.getAllCharacters(true);
         }

@@ -50,7 +50,6 @@ import java.util.Map;
 import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.player;
 
 // Copied and modified from STS-AnimatorMod
-// TODO Rework
 public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscriber, StartGameSubscriber, OnStartBattleSubscriber, StartActSubscriber {
     public static final AbstractCard.CardRarity[] poolOrdering = AbstractCard.CardRarity.values();
     public final ArrayList<Integer> ascensionGlyphCounters = new ArrayList<>();

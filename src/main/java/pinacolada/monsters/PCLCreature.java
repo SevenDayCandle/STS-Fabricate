@@ -67,9 +67,9 @@ public abstract class PCLCreature extends CustomMonster implements PointerProvid
         hasTakenTurn = false;
     }
 
-    public void doActionAnimation(boolean takenTurn) {
+    public void doActionAnimation(boolean setTakenTurn) {
         useFastAttackAnimation();
-        if (takenTurn) {
+        if (setTakenTurn) {
             hasTakenTurn = true;
         }
     }

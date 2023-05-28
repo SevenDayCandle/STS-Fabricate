@@ -9,6 +9,7 @@ import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.powers.PCLPowerHelper;
@@ -470,17 +471,22 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
         return false;
     }
 
+    /* Check if this skill should display as a branch (i.e. defer to branch for listing out items in conditions) */
+    public final boolean isBranch() {
+        return (parent instanceof PBranchCond && ((PBranchCond) parent).getSubEffects().size() > 2);
+    }
+
     /* Same as above but for passive conditions */
     public final boolean isPassiveClause() {
-        return (parent != null && parent.hasParentType(PTrigger_Passive.class) && (!(parent instanceof PCond) || (parent instanceof PMultiCond && ((PMultiCond) parent).isPassiveClause())));
+        return (parent != null && parent.hasParentType(PTrigger_Passive.class) && (!(parent instanceof PCond) || (parent instanceof PMultiBase && ((PCond<?>) parent).isPassiveClause())));
     }
 
     /*
         Returns true if this is the skill that activates on a when trigger
-        i.e. this is either the first condition underneath a when trigger, or if this is part of a multicond that meets the first clause
+        i.e. this is either the first condition underneath a when trigger, or if this is part of a branching condition that meets the first clause
     */
     public final boolean isWhenClause() {
-        return (parent != null && parent.hasParentType(PTrigger_When.class) && (!(parent instanceof PCond) || (parent instanceof PMultiCond && ((PMultiCond) parent).isWhenClause())));
+        return (parent != null && parent.hasParentType(PTrigger_When.class) && (!(parent instanceof PCond) || (parent instanceof PMultiBase && ((PCond<?>) parent).isWhenClause())));
     }
 
     protected void useFromTrigger(PCLUseInfo info) {

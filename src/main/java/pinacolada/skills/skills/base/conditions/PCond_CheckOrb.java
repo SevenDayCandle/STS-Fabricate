@@ -8,6 +8,7 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.subscribers.OnOrbPassiveEffectSubscriber;
 import pinacolada.orbs.PCLOrbHelper;
+import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -44,6 +45,9 @@ public class PCond_CheckOrb extends PPassiveCond<PField_Orb> implements OnOrbPas
 
     @Override
     public String getSubText() {
+        if (isBranch()) {
+            return TEXT.cond_wheneverYou(PGR.core.tooltips.trigger.title);
+        }
         String tt = fields.getOrbAndOrString();
         if (isWhenClause()) {
             return TEXT.cond_wheneverYou(TEXT.act_trigger(tt));

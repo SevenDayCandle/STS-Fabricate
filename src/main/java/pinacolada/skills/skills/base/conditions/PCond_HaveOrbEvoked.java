@@ -60,6 +60,9 @@ public class PCond_HaveOrbEvoked extends PPassiveCond<PField_Orb> implements OnO
 
     @Override
     public String getSubText() {
+        if (isBranch()) {
+            return TEXT.cond_wheneverYou(PGR.core.tooltips.evoke.title);
+        }
         Object tt = fields.getOrbAndOrString();
         if (isWhenClause()) {
             return TEXT.cond_wheneverYou(TEXT.act_evoke(tt));

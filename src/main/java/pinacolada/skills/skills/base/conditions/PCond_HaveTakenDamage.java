@@ -34,6 +34,10 @@ public class PCond_HaveTakenDamage extends PPassiveCond<PField_Random> implement
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
+        // Return true when used from triggers
+        if (isUsing) {
+            return true;
+        }
         int count = fields.random ? GameActionManager.damageReceivedThisCombat : GameActionManager.damageReceivedThisTurn;
         return amount == 0 ? count == 0 : fields.not ^ count >= amount;
     }
@@ -57,10 +61,10 @@ public class PCond_HaveTakenDamage extends PPassiveCond<PField_Random> implement
         return input == 0 ? String.valueOf(input) : (fields.not ? (input + "-") : (input + "+"));
     }
 
-    // When the owner receives damage, triggers the effect onto the attacker
+    // When the owner receives damage, triggers the effect onto the attacker (info.owner)
     @Override
-    public void onAttack(DamageInfo info, int damageAmount, AbstractCreature t) {
-        if (info.type == DamageInfo.DamageType.NORMAL && target.getTargets(getOwnerCreature(), t).contains(t)) {
+    public void onAttack(DamageInfo info, int damageAmount, AbstractCreature receiver) {
+        if (info.type == DamageInfo.DamageType.NORMAL && this.target.getTargets(getOwnerCreature(), receiver).contains(receiver)) {
             useFromTrigger(makeInfo(info.owner));
         }
     }

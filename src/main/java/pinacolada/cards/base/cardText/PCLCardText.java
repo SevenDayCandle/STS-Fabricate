@@ -261,7 +261,7 @@ public class PCLCardText {
     }
 
     protected void renderAttributes(SpriteBatch sb) {
-        if (card.type == PCLEnum.CardType.SUMMON) {
+        if (card.type == PCLEnum.CardType.SUMMON && card.showTypeText) {
             renderAttributeBannerWithText(sb, getHPIcon(), card.getHPString(), "/" + card.heal, 0.029f, 0.85f, -1);
             renderAttributeBanner(sb, getPriorityIcon(), 1, -25f);
         }

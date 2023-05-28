@@ -491,8 +491,8 @@ public class CombatManager {
         subscriberDo(OnApplyPowerSubscriber.class, s -> s.onApplyPower(power, target, source));
     }
 
-    public static void onAttack(DamageInfo info, int damageAmount, AbstractCreature target) {
-        subscriberDo(OnAttackSubscriber.class, s -> s.onAttack(info, damageAmount, target));
+    public static void onAttack(DamageInfo info, int damageAmount, AbstractCreature receiver) {
+        subscriberDo(OnAttackSubscriber.class, s -> s.onAttack(info, damageAmount, receiver));
     }
 
     public static void onBattleEnd() {

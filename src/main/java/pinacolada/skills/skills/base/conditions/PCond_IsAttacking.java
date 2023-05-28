@@ -25,7 +25,7 @@ public class PCond_IsAttacking extends PPassiveCond<PField_Not> implements OnAtt
     }
 
     public PCond_IsAttacking() {
-        super(DATA, PCLCardTarget.AllEnemy, 1);
+        super(DATA, PCLCardTarget.Self, 1);
     }
 
     public PCond_IsAttacking(PCLCardTarget target) {
@@ -34,6 +34,10 @@ public class PCond_IsAttacking extends PPassiveCond<PField_Not> implements OnAtt
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
+        // Return true when used from triggers
+        if (isUsing) {
+            return true;
+        }
         if (target == PCLCardTarget.Single) {
             return fields.not ^ (GameUtilities.isAttacking(info.target));
         }
@@ -55,9 +59,9 @@ public class PCond_IsAttacking extends PPassiveCond<PField_Not> implements OnAtt
 
     // When the owner attacks, triggers the effect on the target
     @Override
-    public void onAttack(DamageInfo info, int damageAmount, AbstractCreature t) {
-        if (info.type == DamageInfo.DamageType.NORMAL && target.getTargets(getOwnerCreature(), t).contains(info.owner)) {
-            useFromTrigger(makeInfo(t));
+    public void onAttack(DamageInfo info, int damageAmount, AbstractCreature receiver) {
+        if (info.type == DamageInfo.DamageType.NORMAL && target.getTargets(getOwnerCreature(), info.owner).contains(info.owner)) {
+            useFromTrigger(makeInfo(receiver));
         }
     }
 }

@@ -10,12 +10,14 @@ import extendedui.EUIUtils;
 import extendedui.configuration.EUIHotkeys;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.ui.tooltips.EUICardPreview;
+import pinacolada.actions.special.ChooseMulticardAction;
 import pinacolada.augments.PCLAugment;
 import pinacolada.cards.base.fields.PCLCardSaveData;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.cards.pcl.special.MysteryCard;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
+import pinacolada.interfaces.listeners.OnAddToDeckListener;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
@@ -26,13 +28,24 @@ import pinacolada.utilities.PCLPreviewList;
 
 import java.util.ArrayList;
 
-public abstract class PCLMultiCard extends PCLCard {
-    public static final int COPIED_CARDS = 2;
+public abstract class PCLMultiCard extends PCLCard implements OnAddToDeckListener {
     protected PCLPreviewList inheritedCards = new PCLPreviewList();
+    protected PCLMultiCardMove multiCardMove;
     protected boolean hasAttackOrSkill;
 
     public PCLMultiCard(PCLCardData cardData) {
         super(cardData);
+    }
+
+    protected abstract PCLMultiCardMove createMulticardMove();
+    public abstract boolean acceptCard(AbstractCard c);
+
+    public PCLMultiCardMove getMultiCardMove() {
+        if (multiCardMove == null) {
+            multiCardMove = createMulticardMove();
+            addUseMove(multiCardMove);
+        }
+        return multiCardMove;
     }
 
     // Augments are applied to children
@@ -54,7 +67,8 @@ public abstract class PCLMultiCard extends PCLCard {
     }
 
     public void setup(Object input) {
-        addUseMove(new PCLMultiCardMove(cardData, this));
+        multiCardMove = createMulticardMove();
+        addUseMove(multiCardMove);
     }
 
     @Override
@@ -114,6 +128,12 @@ public abstract class PCLMultiCard extends PCLCard {
     }
 
     @Override
+    public boolean onAddToDeck() {
+        PCLEffects.Queue.callback(new ChooseMulticardAction(this));
+        return true;
+    }
+
+    @Override
     public PCLCardSaveData onSave() {
         ArrayList<String> ids = new ArrayList<>();
         for (AbstractCard card : getCards()) {
@@ -163,8 +183,8 @@ public abstract class PCLMultiCard extends PCLCard {
 
     @Override
     public void triggerWhenCreated(boolean startOfBattle) {
-        if (inheritedCards.size() < COPIED_CARDS) {
-            while (inheritedCards.size() < COPIED_CARDS) {
+        if (inheritedCards.size() < multiCardMove.baseAmount) {
+            while (inheritedCards.size() < multiCardMove.baseAmount) {
                 addInheritedCard(new MysteryCard(false));
             }
         }
@@ -182,6 +202,7 @@ public abstract class PCLMultiCard extends PCLCard {
         super.triggerWhenCreated(startOfBattle);
     }
 
+    // TODO make configurable using skill
     protected void addCardProperties(AbstractCard card) {
         if (this.cost == -2 || card.cost == -1) {
             this.cost = this.costForTurn = card.cost;
@@ -221,14 +242,11 @@ public abstract class PCLMultiCard extends PCLCard {
         return inheritedCards.getCards();
     }
 
-    public boolean isBanned(AbstractCard c) {
-        return false;
-    }
-
     public void onCardsRemoved() {
 
     }
 
+    // TODO make configurable using skill
     protected void refreshCardType(AbstractCard card) {
         if (card.type == CardType.ATTACK) {
             if (this.type == CardType.POWER) {
@@ -292,8 +310,8 @@ public abstract class PCLMultiCard extends PCLCard {
     public static class PCLMultiCardMove extends PCustomCond {
         protected PCLMultiCard multicard;
 
-        public PCLMultiCardMove(PCLCardData data, PCLMultiCard multicard) {
-            super(data);
+        public PCLMultiCardMove(PCLCardData data, PCLMultiCard multicard, int amount) {
+            super(data, amount);
             this.multicard = multicard;
         }
 
@@ -332,7 +350,7 @@ public abstract class PCLMultiCard extends PCLCard {
         @Override
         public String getSubText() {
             return multicard.getCards().size() > 0 ?
-                    PGR.core.strings.act_has(PCLCoreStrings.joinWithAnd(EUIUtils.map(multicard.getCards(), c -> c.name))) : EUIUtils.format(cardData.strings.EXTENDED_DESCRIPTION[0], COPIED_CARDS);
+                    PGR.core.strings.act_has(PCLCoreStrings.joinWithAnd(EUIUtils.map(multicard.getCards(), c -> c.name))) : super.getSubText();
         }
 
         protected void useImpl(PCLUseInfo info) {

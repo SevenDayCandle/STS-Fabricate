@@ -36,6 +36,7 @@
 												"remove {0}",
 												"remove {0} from {1}",
 												"remove {0} from {1} in {2}",
+												"remove {0} in {1} from {2}",
 												"repeat {0}",
 												"Select {0}",
 												"set the {0} of {1} to {2}",

@@ -5,7 +5,6 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import extendedui.interfaces.delegates.FuncT2;
 import pinacolada.actions.PCLAction;
@@ -130,7 +129,7 @@ public class DealDamage extends PCLAction<AbstractCreature> {
         if (tickDuration(deltaTime)) {
             if (applyPowers) {
                 if (card != null) {
-                    card.calculateCardDamage((AbstractMonster) target);
+                    card.calculateCardDamage(GameUtilities.asMonster(target));
                     this.info.output = card.damage;
                 }
                 else {

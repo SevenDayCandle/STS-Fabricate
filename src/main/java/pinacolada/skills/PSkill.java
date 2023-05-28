@@ -1002,6 +1002,15 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return this;
     }
 
+    public <U> void invokeCastChildren(Class<U> targetClass, ActionT1<U> onUse) {
+        if (targetClass.isInstance(this)) {
+            onUse.invoke(targetClass.cast(this));
+        }
+        if (this.childEffect != null) {
+            this.childEffect.invokeCastChildren(targetClass, onUse);
+        }
+    }
+
     public boolean isAffectedByMods() {
         return !useParent;
     }

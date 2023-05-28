@@ -6,17 +6,17 @@ import pinacolada.monsters.PCLCreature;
 
 public class PCLCreatureAttackAnimationAction extends PCLAction<Void> {
     public final PCLCreature pSource;
-    public final boolean takenTurn;
+    public final boolean setTakenTurn;
 
-    public PCLCreatureAttackAnimationAction(PCLCreature source, boolean takenTurn) {
+    public PCLCreatureAttackAnimationAction(PCLCreature source, boolean setTakenTurn) {
         super(ActionType.WAIT, Settings.ACTION_DUR_FAST);
         this.source = source;
         this.pSource = source;
-        this.takenTurn = takenTurn;
+        this.setTakenTurn = setTakenTurn;
     }
 
     public void firstUpdate() {
         super.firstUpdate();
-        pSource.doActionAnimation(takenTurn);
+        pSource.doActionAnimation(setTakenTurn);
     }
 }

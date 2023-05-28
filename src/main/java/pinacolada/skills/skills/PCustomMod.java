@@ -38,6 +38,10 @@ public class PCustomMod extends PMod<PField_CardCategory> {
         this(cardData, index, amount, 0);
     }
 
+    public PCustomMod(PCustomMod other) {
+        this(other.cardData, other.descIndex, other.amount, other.extra);
+    }
+
     @Override
     public String getSubText() {
         return EUIUtils.format(cardData.strings.EXTENDED_DESCRIPTION[descIndex], amount, extra);
@@ -46,9 +50,9 @@ public class PCustomMod extends PMod<PField_CardCategory> {
     public PCustomMod makeCopy() {
         PCustomMod copy = null;
         try {
-            Constructor<? extends PCustomMod> c = EUIUtils.tryGetConstructor(this.getClass(), PCLCardData.class);
+            Constructor<? extends PCustomMod> c = EUIUtils.tryGetConstructor(this.getClass(), PCustomMod.class);
             if (c != null) {
-                copy = c.newInstance(cardData);
+                copy = c.newInstance(this);
                 makeCopyProperties(copy);
             }
         }

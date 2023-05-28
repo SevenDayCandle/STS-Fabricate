@@ -42,6 +42,10 @@ public class PCustomCond extends PCond<PField_CardCategory> {
         this(cardData, index, amount, 0);
     }
 
+    public PCustomCond(PCustomCond other) {
+        this(other.cardData, other.descIndex, other.amount, other.extra);
+    }
+
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
         return false;
@@ -74,9 +78,9 @@ public class PCustomCond extends PCond<PField_CardCategory> {
     public PCustomCond makeCopy() {
         PCustomCond copy = null;
         try {
-            Constructor<? extends PCustomCond> c = EUIUtils.tryGetConstructor(this.getClass(), PCLCardData.class);
+            Constructor<? extends PCustomCond> c = EUIUtils.tryGetConstructor(this.getClass(), PCustomCond.class);
             if (c != null) {
-                copy = c.newInstance(cardData);
+                copy = c.newInstance(this);
                 makeCopyProperties(copy);
             }
         }

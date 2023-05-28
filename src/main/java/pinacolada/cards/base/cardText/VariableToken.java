@@ -7,6 +7,7 @@ import basemod.helpers.CardModifierManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.evacipated.cardcrawl.modthespire.Loader;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUI;
 import extendedui.EUIUtils;
@@ -63,10 +64,10 @@ public class VariableToken extends PCLTextToken {
     @Override
     public void render(SpriteBatch sb, PCLCardText context) {
         if (coloredString == null) {
-            coloredString = new ColoredString(var.value(context.card), getColor(context.card));
+            coloredString = new ColoredString(getVal(context.card), getColor(context.card));
         }
         else if (EUI.elapsed25()) {
-            coloredString.text = String.valueOf(var.value(context.card));
+            coloredString.text = String.valueOf(getVal(context.card));
             coloredString.color = getColor(context.card);
         }
 
@@ -75,7 +76,12 @@ public class VariableToken extends PCLTextToken {
 
     @Override
     protected float getWidth(BitmapFont font, String text) {
-        return super.getWidth(font, "_.");
+        if (text == null) {
+            return super.getWidth(font, "_."); //20f * Settings.scale * font.getScaleX(); // AbstractCard.MAGIC_NUM_W
+        }
+        else {
+            return super.getWidth(font, text);
+        }
     }
 
     protected int getVal(AbstractCard card) {
@@ -84,7 +90,7 @@ public class VariableToken extends PCLTextToken {
                 return (int) valueFunc.invoke(mod, card);
             }
             catch (Exception e) {
-
+                e.printStackTrace();
             }
         }
         return var.value(card);
@@ -102,13 +108,16 @@ public class VariableToken extends PCLTextToken {
     }
 
     protected void setDynamics(String key, AbstractCard card) {
-        if (dynaClass == null) {
+        if (dynaClass == null && Loader.isModLoaded("CardAugments")) {
             try {
                 dynaClass = Class.forName("CardAugments.dynvars.DynamicDynamicVariableManager");
             }
             catch (Exception ignored) {
                 dynaClass = this.getClass();
             }
+        }
+        else {
+            dynaClass = this.getClass();
         }
         try {
             if (dynaClass.isInstance(var)) {

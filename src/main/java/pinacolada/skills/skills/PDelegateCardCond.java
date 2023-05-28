@@ -55,6 +55,9 @@ public abstract class PDelegateCardCond extends PDelegateCond<PField_CardCategor
 
     @Override
     public String getSubText() {
+        if (isBranch()) {
+            return TEXT.cond_wheneverYou(getDelegateText());
+        }
         if (isWhenClause()) {
             return TEXT.cond_whenAObjectIs(fields.getFullCardStringSingular(), getDelegatePastText());
         }
