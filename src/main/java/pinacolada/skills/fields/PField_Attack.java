@@ -38,7 +38,8 @@ public class PField_Attack extends PField {
                 }
                 , item -> StringUtils.capitalize(item.toString().toLowerCase()),
                 PGR.core.strings.cedit_attackEffect,
-                true).setTooltip(PGR.core.strings.cedit_attackEffect, PGR.core.strings.cetut_attackEffect);
+                true,
+                false, true).setTooltip(PGR.core.strings.cedit_attackEffect, PGR.core.strings.cetut_attackEffect);
     }
 
     public PField_Attack setAttackEffect(AbstractGameAction.AttackEffect effect) {
