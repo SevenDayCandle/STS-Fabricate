@@ -2,6 +2,10 @@ package pinacolada.skills.fields;
 
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
+import extendedui.EUIUtils;
+import org.apache.commons.lang3.StringUtils;
+import pinacolada.effects.PCLAttackVFX;
+import pinacolada.resources.PGR;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 // TODO allow saving of PCLEffekseerEFX
@@ -25,6 +29,16 @@ public class PField_Attack extends PField {
 
     @Override
     public void setupEditor(PCLCustomEffectEditingPane editor) {
+        editor.registerDropdown(PCLAttackVFX.keys()
+                , EUIUtils.arrayList(attackEffect)
+                , item -> {
+                    if (item.size() > 0) {
+                        attackEffect = item.get(0);
+                    }
+                }
+                , item -> StringUtils.capitalize(item.toString().toLowerCase()),
+                PGR.core.strings.cedit_attackEffect,
+                true).setTooltip(PGR.core.strings.cedit_attackEffect, PGR.core.strings.cetut_attackEffect);
     }
 
     public PField_Attack setAttackEffect(AbstractGameAction.AttackEffect effect) {

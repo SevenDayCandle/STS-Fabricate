@@ -378,13 +378,4 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
         }
         return this;
     }
-
-    @Override
-    public PMultiTrait setSource(PointerProvider card, PCLCardValueSource source) {
-        super.setSource(card, source);
-        for (PSkill<?> effect : effects) {
-            effect.setSource(card, source);
-        }
-        return this;
-    }
 }

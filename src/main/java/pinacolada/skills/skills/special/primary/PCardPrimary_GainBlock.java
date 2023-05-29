@@ -19,7 +19,8 @@ import pinacolada.skills.skills.PPassiveMod;
 
 @VisibleSkill
 public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty> {
-    public static final PSkillData<PField_Empty> DATA = register(PCardPrimary_GainBlock.class, PField_Empty.class);
+    public static final PSkillData<PField_Empty> DATA = register(PCardPrimary_GainBlock.class, PField_Empty.class)
+            .setExtra(1, DEFAULT_MAX);
 
     public PCardPrimary_GainBlock() {
         super(DATA, PCLCardTarget.Self, 0);
@@ -31,6 +32,14 @@ public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty> {
 
     public PCardPrimary_GainBlock(PointerProvider card) {
         super(DATA, card);
+    }
+
+    public PCLCardValueSource getAmountSource() {
+        return PCLCardValueSource.Block;
+    }
+
+    public PCLCardValueSource getExtraSource() {
+        return PCLCardValueSource.RightCount;
     }
 
     @Override
@@ -104,7 +113,7 @@ public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty> {
     }
 
     public PCardPrimary_GainBlock setProvider(PointerProvider card) {
-        setSource(card, PCLCardValueSource.Block, PCLCardValueSource.RightCount);
+        setSource(card);
         return this;
     }
 

@@ -8,8 +8,6 @@ public class PSkillSaveData implements Serializable {
     public String effectID;
     public String effectData;
     public String target;
-    public String extraSource;
-    public String valueSource;
     public String children;
     public String special; // Used for multibase skills
     public int amount;
@@ -21,7 +19,6 @@ public class PSkillSaveData implements Serializable {
     public PSkillSaveData(PSkill<?> effect) {
         this.effectID = effect.effectID;
         this.target = effect.target.name();
-        this.valueSource = effect.amountSource.name();
         this.amount = effect.amount;
         this.extra = effect.extra;
         this.upgrade = effect.upgrade;

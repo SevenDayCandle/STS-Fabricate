@@ -7,6 +7,7 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.OriginRelativeHitbox;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.skills.PSkill;
+import pinacolada.skills.skills.special.primary.PRoot;
 import pinacolada.ui.editor.PCLCustomEffectPage;
 import pinacolada.utilities.PCLRenderHelpers;
 
@@ -47,7 +48,7 @@ public class PCLCustomEffectMultiNode extends PCLCustomEffectNode {
             }
             else if (editor.rootEffect == this.skill)
             {
-                editor.rootEffect = editor.makeRootSkill();
+                editor.rootEffect = new PRoot();
                 editor.rootEffect.setChild(first.skill);
             }
         }

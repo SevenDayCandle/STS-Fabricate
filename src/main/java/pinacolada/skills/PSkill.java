@@ -87,8 +87,6 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     public ArrayList<EUIKeywordTooltip> tips = new ArrayList<>();
     public PCLActions.ActionOrder order = PCLActions.ActionOrder.Bottom;
     public PCLCardTarget target = PCLCardTarget.None;
-    public PCLCardValueSource amountSource = PCLCardValueSource.None;
-    public PCLCardValueSource extraSource = PCLCardValueSource.None;
     public PSkill<?> parent;
     public PointerProvider source;
     public String effectID;
@@ -415,7 +413,8 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public final int getAmountBaseFromCard() {
-        if (this.sourceCard != null && this.amountSource != null) {
+        PCLCardValueSource amountSource = getAmountSource();
+        if (this.sourceCard != null && amountSource != null) {
             switch (amountSource) {
                 case Block:
                     return sourceCard.baseBlock;
@@ -437,8 +436,9 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public final int getAmountFromCard() {
+        PCLCardValueSource amountSource = getAmountSource();
         if (this.sourceCard != null) {
-            if (this.amountSource != null) {
+            if (amountSource != null) {
                 switch (amountSource) {
                     case Block:
                         return sourceCard.block;
@@ -474,6 +474,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     public final String getAmountRawString() {
         return source != null ? EUIUtils.format(BOUND_FORMAT, "E" + getCardPointer()) : wrapAmountChild(this, amount);
+    }
+
+    public PCLCardValueSource getAmountSource() {
+        return PCLCardValueSource.None;
     }
 
     public EUITooltip getAttackTooltip() {
@@ -629,7 +633,8 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public final int getExtraBaseFromCard() {
-        if (this.sourceCard != null && this.extraSource != null) {
+        PCLCardValueSource extraSource = getExtraSource();
+        if (this.sourceCard != null && extraSource != null) {
             switch (extraSource) {
                 case Block:
                     return sourceCard.baseBlock;
@@ -651,8 +656,9 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public final int getExtraFromCard() {
+        PCLCardValueSource extraSource = getExtraSource();
         if (this.sourceCard != null) {
-            if (this.extraSource != null) {
+            if (extraSource != null) {
                 switch (extraSource) {
                     case Block:
                         return sourceCard.block;
@@ -681,6 +687,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     public final String getExtraRawString() {
         return source != null ? EUIUtils.format(BOUND_FORMAT, "G" + getCardPointer()) : wrapExtra(amount);
+    }
+
+    public PCLCardValueSource getExtraSource() {
+        return PCLCardValueSource.None;
     }
 
     public Color getGlowColor() {
@@ -984,7 +994,6 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     protected PSkill<T> initializeFromSaveData(PSkillSaveData saveData) {
         this.effectID = saveData.effectID;
         this.target = PCLCardTarget.valueOf(saveData.target);
-        this.amountSource = PCLCardValueSource.valueOf(saveData.valueSource);
         this.rootAmount = this.baseAmount = this.amount = saveData.amount;
         this.rootExtra = this.baseExtra = this.extra = saveData.extra;
         this.upgrade = saveData.upgrade;
@@ -1071,7 +1080,6 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         if (copy != null) {
             copy.effectID = effectID;
             copy.target = target;
-            copy.amountSource = amountSource;
             copy.rootAmount = copy.baseAmount = copy.amount = amount;
             copy.rootExtra = copy.baseExtra = copy.extra = extra;
             copy.upgrade = upgrade.clone();
@@ -1262,13 +1270,6 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return this;
     }
 
-    public PSkill<T> setAmountSource(PCLCardValueSource valueSource) {
-        this.amountSource = valueSource;
-        this.amount = getAmountFromCard();
-        this.baseAmount = getAmountBaseFromCard();
-        return this;
-    }
-
     public PSkill<T> setChain(PSkill<?> effect, PSkill<?>... effects) {
         this.childEffect = PSkill.chain(effect, effects);
         this.childEffect.parent = this;
@@ -1308,13 +1309,6 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return this;
     }
 
-    public PSkill<T> setExtraSource(PCLCardValueSource valueSource) {
-        this.extraSource = valueSource;
-        this.extra = getExtraFromCard();
-        this.baseExtra = getExtraBaseFromCard();
-        return this;
-    }
-
     public final PSkill<T> setOrder(PCLActions.ActionOrder order) {
         this.order = order;
         return this;
@@ -1331,16 +1325,6 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
             this.childEffect.setSource(card);
         }
         return this;
-    }
-
-    public PSkill<T> setSource(PointerProvider card, PCLCardValueSource valueSource) {
-        return setSource(card, valueSource, extraSource);
-    }
-
-    public PSkill<T> setSource(PointerProvider card, PCLCardValueSource valueSource, PCLCardValueSource extraSource) {
-        this.amountSource = valueSource;
-        this.extraSource = extraSource;
-        return setSource(card);
     }
 
     public final PSkill<T> setTarget(PCLCardTarget target) {

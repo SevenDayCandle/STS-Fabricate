@@ -2,7 +2,6 @@ package pinacolada.skills;
 
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLAffinity;
@@ -47,68 +46,32 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
         return new PMove_StackPower(target, amount, powers);
     }
 
-    public static PMove_StackPower apply(PCLCardTarget target, PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers) {
-        return (PMove_StackPower) new PMove_StackPower(target, 0, powers)
-                .setSource(card, valueSource)
-                .setAmountFromCard();
-    }
-
     public static PMove_StackTemporaryPower applyTemporary(PCLCardTarget target, int amount, PCLPowerHelper... powers) {
         return new PMove_StackTemporaryPower(target, amount, powers);
-    }
-
-    public static PMove_StackTemporaryPower applyTemporary(PCLCardTarget target, PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers) {
-        return (PMove_StackTemporaryPower) new PMove_StackTemporaryPower(target, 0, powers)
-                .setSource(card, valueSource)
-                .setAmountFromCard();
     }
 
     public static PMove_StackTemporaryPower applyTemporaryToEnemies(int amount, PCLPowerHelper... powers) {
         return applyTemporary(PCLCardTarget.AllEnemy, amount, powers);
     }
 
-    public static PMove_StackTemporaryPower applyTemporaryToEnemies(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers) {
-        return applyTemporary(PCLCardTarget.AllEnemy, card, valueSource, powers);
-    }
-
     public static PMove_StackTemporaryPower applyTemporaryToEveryone(int amount, PCLPowerHelper... powers) {
         return applyTemporary(PCLCardTarget.All, amount, powers);
-    }
-
-    public static PMove_StackTemporaryPower applyTemporaryToEveryone(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers) {
-        return applyTemporary(PCLCardTarget.All, card, valueSource, powers);
     }
 
     public static PMove_StackTemporaryPower applyTemporaryToRandom(int amount, PCLPowerHelper... powers) {
         return applyTemporary(PCLCardTarget.RandomEnemy, amount, powers);
     }
 
-    public static PMove_StackTemporaryPower applyTemporaryToRandom(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers) {
-        return applyTemporary(PCLCardTarget.RandomEnemy, card, valueSource, powers);
-    }
-
     public static PMove_StackTemporaryPower applyTemporaryToSingle(int amount, PCLPowerHelper... powers) {
         return applyTemporary(PCLCardTarget.Single, amount, powers);
-    }
-
-    public static PMove_StackTemporaryPower applyTemporaryToSingle(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers) {
-        return applyTemporary(PCLCardTarget.Single, card, valueSource, powers);
     }
 
     public static PMove_StackPower applyToAllies(int amount, PCLPowerHelper... powers) {
         return apply(PCLCardTarget.AllAlly, amount, powers);
     }
 
-    public static PMove_StackPower applyToAllies(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers) {
-        return apply(PCLCardTarget.AllAlly, card, valueSource, powers);
-    }
-
     public static PMove_StackPower applyToEnemies(int amount, PCLPowerHelper... powers) {
         return apply(PCLCardTarget.AllEnemy, amount, powers);
-    }
-
-    public static PMove_StackPower applyToEnemies(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers) {
-        return apply(PCLCardTarget.AllEnemy, card, valueSource, powers);
     }
 
     public static PMove_StackPower applyToEveryone(int amount, PCLPowerHelper... powers) {
@@ -119,33 +82,16 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
         return apply(PCLCardTarget.RandomEnemy, amount, powers);
     }
 
-    public static PMove_StackPower applyToRandom(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers) {
-        return apply(PCLCardTarget.RandomEnemy, card, valueSource, powers);
-    }
-
     public static PMove_StackPower applyToSingle(int amount, PCLPowerHelper... powers) {
         return apply(PCLCardTarget.Single, amount, powers);
-    }
-
-    public static PMove_StackPower applyToSingle(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers) {
-        return apply(PCLCardTarget.Single, card, valueSource, powers);
     }
 
     public static PMove_StackPower applyToTeam(int amount, PCLPowerHelper... powers) {
         return apply(PCLCardTarget.Team, amount, powers);
     }
 
-    public static PMove_StackPower applyToTeam(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers) {
-        return apply(PCLCardTarget.Team, card, valueSource, powers);
-    }
-
     public static PMove_ChannelOrb channelOrb(int amount, PCLOrbHelper... orb) {
         return new PMove_ChannelOrb(amount, orb);
-    }
-
-    public static PMove_ChannelOrb channelOrb(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLOrbHelper... orb) {
-        return (PMove_ChannelOrb) new PMove_ChannelOrb(0, orb)
-                .setSource(card, valueSource);
     }
 
     public static PMove_Create create(int amount) {
@@ -202,19 +148,6 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
 
     public static PMove_DealDamage dealDamageToAll(int amount, AbstractGameAction.AttackEffect attackEffect) {
         return new PMove_DealDamage(amount, attackEffect, PCLCardTarget.AllEnemy);
-    }
-
-    public static PMove_DealDamage dealDamageToAll(PCLCard card) {
-        return dealDamageToAll(card, PSkill.PCLCardValueSource.Damage, AbstractGameAction.AttackEffect.NONE);
-    }
-
-    public static PMove_DealDamage dealDamageToAll(PCLCard card, PSkill.PCLCardValueSource valueSource, AbstractGameAction.AttackEffect attackEffect) {
-        return (PMove_DealDamage) new PMove_DealDamage(0, attackEffect, PCLCardTarget.AllEnemy)
-                .setSource(card, valueSource);
-    }
-
-    public static PMove_DealDamage dealDamageToAll(PCLCard card, AbstractGameAction.AttackEffect attackEffect) {
-        return dealDamageToAll(card, PSkill.PCLCardValueSource.Damage, attackEffect);
     }
 
     public static PMove_DealDamage dealDamageToRandom(int amount) {
@@ -303,26 +236,12 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
         return new PMove_StackPower(PCLCardTarget.Self, amount, powers);
     }
 
-    public static PMove_StackPower gain(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers) {
-        return (PMove_StackPower) new PMove_StackPower(PCLCardTarget.Self, 0, powers)
-                .setSource(card, valueSource);
-    }
-
     public static PMove_GainBlock gainBlock(int amount) {
         return new PMove_GainBlock(amount);
     }
 
     public static PMove_GainBlock gainBlock(PCLCardTarget target, int amount) {
         return new PMove_GainBlock(target, amount);
-    }
-
-    public static PMove_GainBlock gainBlock(PCLCard card) {
-        return gainBlock(card, PSkill.PCLCardValueSource.Block);
-    }
-
-    public static PMove_GainBlock gainBlock(PCLCard card, PSkill.PCLCardValueSource valueSource) {
-        return (PMove_GainBlock) new PMove_GainBlock(0)
-                .setSource(card, valueSource);
     }
 
     public static PMove_GainBlock gainBlockPlayer(int amount) {
@@ -341,17 +260,8 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
         return new PMove_GainOrbSlots(amount);
     }
 
-    public static PMove_GainOrbSlots gainOrbSlots(PCLCard card, PSkill.PCLCardValueSource valueSource) {
-        return (PMove_GainOrbSlots) new PMove_GainOrbSlots(0)
-                .setSource(card, valueSource);
-    }
-
     public static PMove_StackPower gainPlayer(int amount, PCLPowerHelper... powers) {
         return apply(PCLCardTarget.None, amount, powers);
-    }
-
-    public static PMove_StackPower gainPlayer(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers) {
-        return apply(PCLCardTarget.None, card, valueSource, powers);
     }
 
     public static PMove_GainTempHP gainTempHP(int amount) {
@@ -362,31 +272,12 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
         return new PMove_GainTempHP(target, amount);
     }
 
-    public static PMove_GainTempHP gainTempHP(PCLCard card) {
-        return gainTempHP(card, PSkill.PCLCardValueSource.MagicNumber);
-    }
-
-    public static PMove_GainTempHP gainTempHP(PCLCard card, PSkill.PCLCardValueSource valueSource) {
-        return (PMove_GainTempHP) new PMove_GainTempHP(0)
-                .setSource(card, valueSource);
-    }
-
     public static PMove_StackTemporaryPower gainTemporary(int amount, PCLPowerHelper... powers) {
         return new PMove_StackTemporaryPower(PCLCardTarget.Self, amount, powers);
     }
 
-    public static PMove_StackTemporaryPower gainTemporary(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers) {
-        return (PMove_StackTemporaryPower) new PMove_StackTemporaryPower(PCLCardTarget.Self, 0, powers)
-                .setSource(card, valueSource);
-    }
-
     public static PMove_StackTemporaryPower gainTemporaryPlayer(int amount, PCLPowerHelper... powers) {
         return new PMove_StackTemporaryPower(PCLCardTarget.None, amount, powers);
-    }
-
-    public static PMove_StackTemporaryPower gainTemporaryPlayer(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLPowerHelper... powers) {
-        return (PMove_StackTemporaryPower) new PMove_StackTemporaryPower(PCLCardTarget.None, 0, powers)
-                .setSource(card, valueSource);
     }
 
     public static PMove_Heal heal(int amount) {
@@ -603,11 +494,6 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
         return new PMove_TriggerOrb(amount, extra, orb);
     }
 
-    public static PMove_TriggerOrb triggerOrb(PCLCard card, PSkill.PCLCardValueSource valueSource, PCLOrbHelper... orb) {
-        return (PMove_TriggerOrb) new PMove_TriggerOrb(0, orb)
-                .setSource(card, valueSource);
-    }
-
     public static PMove_Upgrade upgrade(int amount) {
         return new PMove_Upgrade(amount, PCLCardGroupHelper.Hand);
     }
@@ -643,12 +529,6 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
     @Override
     public PMove<T> setSource(PointerProvider card) {
         super.setSource(card);
-        return this;
-    }
-
-    @Override
-    public PMove<T> setSource(PointerProvider card, PCLCardValueSource valueSource) {
-        super.setSource(card, valueSource);
         return this;
     }
 

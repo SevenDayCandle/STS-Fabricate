@@ -13,10 +13,8 @@ import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
-import pinacolada.skills.PPrimary;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.base.moves.PMove_StackCustomPower;
-import pinacolada.skills.skills.base.primary.PTrigger_When;
 import pinacolada.ui.editor.nodes.PCLCustomEffectNode;
 
 public class PCLCustomPowerEffectPage extends PCLCustomEffectPage {
@@ -58,11 +56,6 @@ public class PCLCustomPowerEffectPage extends PCLCustomEffectPage {
 
     protected String getNameForEffect(int i) {
         return EUIUtils.format(PGR.core.strings.cedit_effectX, i + 1);
-    }
-
-    @Override
-    public PPrimary<?> makeRootSkill() {
-        return new PTrigger_When();
     }
 
     @Override

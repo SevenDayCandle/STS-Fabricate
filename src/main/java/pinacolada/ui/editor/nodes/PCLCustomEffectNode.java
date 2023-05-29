@@ -124,7 +124,7 @@ public class PCLCustomEffectNode extends EUIButton {
         }
         else if (editor.rootEffect == this.skill)
         {
-            editor.rootEffect = editor.makeRootSkill();
+            editor.rootEffect = new PRoot();
             if (child != null)
             {
                 editor.rootEffect.setChild(child.skill);

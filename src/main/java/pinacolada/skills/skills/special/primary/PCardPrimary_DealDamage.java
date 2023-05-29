@@ -33,7 +33,8 @@ import pinacolada.skills.skills.base.traits.PTrait_HitCount;
 
 @VisibleSkill
 public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
-    public static final PSkillData<PField_Attack> DATA = register(PCardPrimary_DealDamage.class, PField_Attack.class);
+    public static final PSkillData<PField_Attack> DATA = register(PCardPrimary_DealDamage.class, PField_Attack.class)
+            .setExtra(1, DEFAULT_MAX);
 
     // Damage effects are only customizable in code and cannot be saved in fields
     protected FuncT2<Float, AbstractCreature, AbstractCreature> damageEffect;
@@ -54,6 +55,14 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
     public PCardPrimary_DealDamage(PointerProvider card, AbstractGameAction.AttackEffect attackEffect) {
         super(DATA, card);
         fields.attackEffect = attackEffect;
+    }
+
+    public PCLCardValueSource getAmountSource() {
+        return PCLCardValueSource.Damage;
+    }
+
+    public PCLCardValueSource getExtraSource() {
+        return PCLCardValueSource.HitCount;
     }
 
     @Override
@@ -184,7 +193,7 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
 
     public PCardPrimary_DealDamage setProvider(PointerProvider card) {
         setTarget(card instanceof PCLCard ? ((PCLCard) card).pclTarget : PCLCardTarget.Single);
-        setSource(card, PCLCardValueSource.Damage, PCLCardValueSource.HitCount);
+        setSource(card);
         return this;
     }
 

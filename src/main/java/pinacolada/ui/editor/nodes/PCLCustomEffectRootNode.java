@@ -10,6 +10,8 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.special.primary.PRoot;
 import pinacolada.ui.editor.PCLCustomEffectPage;
 import pinacolada.ui.editor.PCLCustomPowerEffectPage;
+import pinacolada.ui.editor.card.PCLCustomAttackEffectPage;
+import pinacolada.ui.editor.card.PCLCustomBlockEffectPage;
 import pinacolada.ui.editor.relic.PCLCustomRelicEditRelicScreen;
 
 import java.util.ArrayList;
@@ -38,7 +40,10 @@ public class PCLCustomEffectRootNode extends PCLCustomEffectNode {
     // For root nodes, we should show triggers while underneath a power or relic
     public List<PSkill> getEffects() {
         if (effects == null) {
-            NodeType targetType = editor instanceof PCLCustomPowerEffectPage || editor.screen instanceof PCLCustomRelicEditRelicScreen ? NodeType.Trigger : NodeType.Limit;
+            NodeType targetType =
+                    editor instanceof PCLCustomAttackEffectPage ? NodeType.Attack :
+                    editor instanceof PCLCustomBlockEffectPage ? NodeType.Block :
+                    editor instanceof PCLCustomPowerEffectPage || editor.screen instanceof PCLCustomRelicEditRelicScreen ? NodeType.Trigger : NodeType.Limit;
             effects = EUIUtils.map(targetType.getSkills(editor.screen.getBuilder().getCardColor()),
                     bc -> bc.scanForTips(bc.getSampleText(editor.rootEffect)));
         }

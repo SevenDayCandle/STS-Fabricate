@@ -429,18 +429,6 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
     }
 
     @Override
-    public PCond<T> setSource(PointerProvider card, PCLCardValueSource valueSource) {
-        super.setSource(card, valueSource);
-        return this;
-    }
-
-    @Override
-    public PCond<T> setSource(PointerProvider card, PCLCardValueSource valueSource, PCLCardValueSource extraSource) {
-        super.setSource(card, valueSource, extraSource);
-        return this;
-    }
-
-    @Override
     public boolean tryPassParent(PSkill<?> source, PCLUseInfo info) {
         return checkCondition(info, true, source) && super.tryPassParent(source, info);
     }

@@ -29,13 +29,13 @@ public interface PointerProvider {
     }
 
     default PSkill<?> addUseMove(PSkill<?> effect) {
-        PSkill<?> added = effect.setSource(this, PSkill.PCLCardValueSource.XValue);
+        PSkill<?> added = effect.setSource(this);
         getEffects().add(added);
         return added;
     }
 
     default PSkill<?> addUseMove(PSkill<?> primary, PSkill<?>... effects) {
-        PSkill<?> added = PSkill.chain(primary, effects).setSource(this, PSkill.PCLCardValueSource.XValue);
+        PSkill<?> added = PSkill.chain(primary, effects).setSource(this);
         getEffects().add(added);
         return added;
     }

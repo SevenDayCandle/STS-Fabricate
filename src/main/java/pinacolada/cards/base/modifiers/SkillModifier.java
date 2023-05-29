@@ -59,7 +59,7 @@ public class SkillModifier extends AbstractCardModifier {
     public void onInitialApplication(AbstractCard card) {
         if (card instanceof PointerProvider)
         {
-            skill.setSource((PointerProvider) card, PSkill.PCLCardValueSource.XValue);
+            skill.setSource((PointerProvider) card);
         }
         else
         {

@@ -64,7 +64,7 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
     protected PPrimary<?> deconstructEffect() {
         PSkill<?> sourceEffect = getSourceEffect();
         // Ensure that root is a PPrimary, so that we do not have to put in a separate button for adding primaries and so that the user can just click on the root node to choose between primaries
-        PPrimary<?> rootEffect = sourceEffect instanceof PPrimary ? (PPrimary<?>) sourceEffect : makeRootSkill();
+        PPrimary<?> rootEffect = sourceEffect instanceof PPrimary ? (PPrimary<?>) sourceEffect : new PRoot();
         if (rootEffect != sourceEffect) {
             rootEffect.setChild(sourceEffect);
         }
@@ -111,10 +111,6 @@ public class PCLCustomEffectPage extends PCLCustomGenericPage {
         rootEffect = deconstructEffect();
 
         refresh();
-    }
-
-    public PPrimary<?> makeRootSkill() {
-        return new PRoot();
     }
 
     public void startEdit(PCLCustomEffectNode node) {

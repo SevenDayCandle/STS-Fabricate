@@ -39,6 +39,7 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.stances.PCLStanceHelper;
 import pinacolada.ui.editor.card.PCLCustomCardAttributesPage;
+import pinacolada.ui.editor.card.PCLCustomCardEditCardScreen;
 import pinacolada.ui.editor.card.PCLCustomCardPrimaryInfoPage;
 import pinacolada.ui.editor.card.PCLCustomCardUpgradableEditor;
 import pinacolada.ui.editor.nodes.PCLCustomEffectNode;
@@ -164,12 +165,12 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         effects.setSelection(node.skill, false);
         valueEditor
                 .setLimits(min, max)
-                .setValue(node.skill != null ? node.skill.amount : 0, node.skill != null ? node.skill.getUpgrade() : 0, false)
+                .setValue(getAmountForSkill(node.skill), getAmountUpgradeForSkill(node.skill), false)
                 .setHeaderText(PGR.core.strings.cedit_value)
                 .setActive(min != max);
         extraEditor
                 .setLimits(eMin, eMax)
-                .setValue(node.skill != null ? node.skill.extra : 0, node.skill != null ? node.skill.getUpgradeExtra() : 0, false)
+                .setValue(getExtraForSkill(node.skill), getExtraUpgradeForSkill(node.skill), false)
                 .setHeaderText(PGR.core.strings.cedit_extraValue)
                 .setActive(eMin != eMax);
         if (node.skill != null && lastEffect != node.skill) {
@@ -198,6 +199,156 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
             backdrop.hb.height = hb.height + additionalHeight * -1 + MENU_HEIGHT * 2;
             backdrop.hb.y = hb.y - backdrop.hb.height + MENU_HEIGHT * 2;
         }
+    }
+
+    public void changeAmountForSkill(PSkill<?> skill, int val, int upVal) {
+        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditCardScreen.class);
+        if (sc != null) {
+            switch (skill.getAmountSource()) {
+                case Damage:
+                    sc.modifyBuilder(e -> e.setDamage(val, upVal));
+                    return;
+                case Block:
+                    sc.modifyBuilder(e -> e.setBlock(val, upVal));
+                    return;
+                case MagicNumber:
+                    sc.modifyBuilder(e -> e.setMagicNumber(val, upVal));
+                    return;
+                case SecondaryNumber:
+                    sc.modifyBuilder(e -> e.setHp(val, upVal));
+                    return;
+                case HitCount:
+                    sc.modifyBuilder(e -> e.setHitCount(val, upVal));
+                    return;
+                case RightCount:
+                    sc.modifyBuilder(e -> e.setRightCount(val, upVal));
+                    return;
+            }
+        }
+        skill.setAmount(val, upVal);
+    }
+
+    public void changeExtraForSkill(PSkill<?> skill, int val, int upVal) {
+        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditCardScreen.class);
+        if (sc != null) {
+            switch (skill.getExtraSource()) {
+                case Damage:
+                    sc.modifyBuilder(e -> e.setDamage(val, upVal));
+                    return;
+                case Block:
+                    sc.modifyBuilder(e -> e.setBlock(val, upVal));
+                    return;
+                case MagicNumber:
+                    sc.modifyBuilder(e -> e.setMagicNumber(val, upVal));
+                    return;
+                case SecondaryNumber:
+                    sc.modifyBuilder(e -> e.setHp(val, upVal));
+                    return;
+                case HitCount:
+                    sc.modifyBuilder(e -> e.setHitCount(val, upVal));
+                    return;
+                case RightCount:
+                    sc.modifyBuilder(e -> e.setRightCount(val, upVal));
+                    return;
+            }
+        }
+        skill.setExtra(val, upVal);
+    }
+
+    public int getAmountForSkill(PSkill<?> skill) {
+        if (skill == null) {
+            return 0;
+        }
+        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditCardScreen.class);
+        if (sc != null) {
+            switch (skill.getAmountSource()) {
+                case Damage:
+                    return sc.getBuilder().getDamage(0);
+                case Block:
+                    return sc.getBuilder().getBlock(0);
+                case MagicNumber:
+                    return sc.getBuilder().getMagicNumber(0);
+                case SecondaryNumber:
+                    return sc.getBuilder().getHp(0);
+                case HitCount:
+                    return sc.getBuilder().getHitCount(0);
+                case RightCount:
+                    return sc.getBuilder().getRightCount(0);
+            }
+        }
+        return skill.amount;
+    }
+
+    public int getAmountUpgradeForSkill(PSkill<?> skill) {
+        if (skill == null) {
+            return 0;
+        }
+        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditCardScreen.class);
+        if (sc != null) {
+            switch (skill.getAmountSource()) {
+                case Damage:
+                    return sc.getBuilder().getDamageUpgrade(0);
+                case Block:
+                    return sc.getBuilder().getBlockUpgrade(0);
+                case MagicNumber:
+                    return sc.getBuilder().getMagicNumberUpgrade(0);
+                case SecondaryNumber:
+                    return sc.getBuilder().getHpUpgrade(0);
+                case HitCount:
+                    return sc.getBuilder().getHitCountUpgrade(0);
+                case RightCount:
+                    return sc.getBuilder().getRightCountUpgrade(0);
+            }
+        }
+        return skill.getUpgrade();
+    }
+
+    public int getExtraForSkill(PSkill<?> skill) {
+        if (skill == null) {
+            return 0;
+        }
+        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditCardScreen.class);
+        if (sc != null) {
+            switch (skill.getExtraSource()) {
+                case Damage:
+                    return sc.getBuilder().getDamage(0);
+                case Block:
+                    return sc.getBuilder().getBlock(0);
+                case MagicNumber:
+                    return sc.getBuilder().getMagicNumber(0);
+                case SecondaryNumber:
+                    return sc.getBuilder().getHp(0);
+                case HitCount:
+                    return sc.getBuilder().getHitCount(0);
+                case RightCount:
+                    return sc.getBuilder().getRightCount(0);
+            }
+        }
+        return skill.extra;
+    }
+
+    public int getExtraUpgradeForSkill(PSkill<?> skill) {
+        if (skill == null) {
+            return 0;
+        }
+        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.screen, PCLCustomCardEditCardScreen.class);
+        if (sc != null) {
+            switch (skill.getExtraSource()) {
+                case Damage:
+                    return sc.getBuilder().getDamageUpgrade(0);
+                case Block:
+                    return sc.getBuilder().getBlockUpgrade(0);
+                case MagicNumber:
+                    return sc.getBuilder().getMagicNumberUpgrade(0);
+                case SecondaryNumber:
+                    return sc.getBuilder().getHpUpgrade(0);
+                case HitCount:
+                    return sc.getBuilder().getHitCountUpgrade(0);
+                case RightCount:
+                    return sc.getBuilder().getRightCountUpgrade(0);
+            }
+        }
+        return skill.getUpgradeExtra();
     }
 
     public <T> EUIDropdown<T> initializeRegular(T[] items, FuncT1<String, T> labelFunc, String title) {
@@ -242,19 +393,19 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
                 .setCanAutosizeButton(true)
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, node.type.getTitle())
                 .setItems(node.getEffects());
-        effects.setActive(effects.size() > 0);
-        valueEditor = new PCLCustomCardUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 5, MENU_HEIGHT, MAIN_OFFSET, OFFSET_AMOUNT)
+        effects.setActive(effects.size() > 1);
+        valueEditor = new PCLCustomCardUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 5, MENU_HEIGHT, effects.isActive ? MAIN_OFFSET : 0, OFFSET_AMOUNT)
                 , EUIRM.strings.uiAmount, (val, upVal) -> {
             if (node.skill != null) {
-                node.skill.setAmount(val, upVal);
+                changeAmountForSkill(node.skill, val, upVal);
                 editor.updateRootEffect();
             }
         })
                 .setLimits(-PSkill.DEFAULT_MAX, PSkill.DEFAULT_MAX);
-        extraEditor = new PCLCustomCardUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 5, MENU_HEIGHT, MAIN_OFFSET * 1.3f, OFFSET_AMOUNT)
+        extraEditor = new PCLCustomCardUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 5, MENU_HEIGHT, effects.isActive ? MAIN_OFFSET * 1.3f : MAIN_OFFSET * 0.3f, OFFSET_AMOUNT)
                 , PGR.core.strings.cedit_extraValue, (val, upVal) -> {
             if (node.skill != null) {
-                node.skill.setExtra(val, upVal);
+                changeExtraForSkill(node.skill, val, upVal);
                 editor.updateRootEffect();
             }
         })
@@ -375,7 +526,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         registerDropdown(costs, items);
     }
 
-    public <U, V> void registerDropdown(EUIDropdown<U> dropdown, ActionT1<List<U>> onChangeImpl, List<V> items, FuncT1<V, U> convertFunc) {
+    public <U, V> EUIDropdown<U> registerDropdown(EUIDropdown<U> dropdown, ActionT1<List<U>> onChangeImpl, Collection<V> items, FuncT1<V, U> convertFunc) {
         if (dropdown.size() > 0) {
             activeElements.add(dropdown);
             dropdown.setOnChange(targets -> {
@@ -384,9 +535,10 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
             });
             dropdown.setSelection(items, convertFunc, false);
         }
+        return dropdown;
     }
 
-    public <U> void registerDropdown(EUIDropdown<U> dropdown, ActionT1<List<U>> onChangeImpl, List<U> items) {
+    public <U> EUIDropdown<U> registerDropdown(EUIDropdown<U> dropdown, ActionT1<List<U>> onChangeImpl, Collection<U> items) {
         if (dropdown.size() > 0) {
             activeElements.add(dropdown);
             dropdown.setOnChange(targets -> {
@@ -395,9 +547,10 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
             });
             dropdown.setSelection(items, false);
         }
+        return dropdown;
     }
 
-    public <U> void registerDropdown(EUIDropdown<U> dropdown, List<U> items) {
+    public <U> EUIDropdown<U> registerDropdown(EUIDropdown<U> dropdown, Collection<U> items) {
         if (dropdown.size() > 0) {
             activeElements.add(dropdown);
             dropdown.setOnChange(targets -> {
@@ -407,9 +560,10 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
             });
             dropdown.setSelection(items, false);
         }
+        return dropdown;
     }
 
-    public <U> void registerDropdown(EUIDropdown<U> dropdown, ActionT1<List<U>> onChangeImpl, U item) {
+    public <U> EUIDropdown<U> registerDropdown(EUIDropdown<U> dropdown, ActionT1<List<U>> onChangeImpl, U item) {
         if (dropdown.size() > 0) {
             activeElements.add(dropdown);
             dropdown.setOnChange(targets -> {
@@ -418,13 +572,14 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
             });
             dropdown.setSelection(item, false);
         }
+        return dropdown;
     }
 
-    public <U> void registerDropdown(List<U> possibleItems, List<U> selectedItems, FuncT1<String, U> textFunc, String title, boolean smartText) {
-        registerDropdown(possibleItems, selectedItems, textFunc, title, smartText, true, true);
+    public <U> EUIDropdown<U> registerDropdown(Collection<U> possibleItems, Collection<U> selectedItems, FuncT1<String, U> textFunc, String title, boolean smartText) {
+        return registerDropdown(possibleItems, selectedItems, textFunc, title, smartText, true, true);
     }
 
-    public <U> void registerDropdown(List<U> possibleItems, List<U> selectedItems, FuncT1<String, U> textFunc, String title, boolean smartText, boolean multiSelect, boolean positionClearAtTop) {
+    public <U> EUIDropdown<U> registerDropdown(Collection<U> possibleItems, Collection<U> selectedItems, FuncT1<String, U> textFunc, String title, boolean smartText, boolean multiSelect, boolean positionClearAtTop) {
         EUIDropdown<U> dropdown = new EUIDropdown<>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.35f, MENU_HEIGHT, AUX_OFFSET, 0)
                 , textFunc)
                 .setLabelFunctionForOption(textFunc, smartText)
@@ -433,7 +588,23 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, title)
                 .setCanAutosize(true, true)
                 .setItems(possibleItems);
-        registerDropdown(dropdown, selectedItems);
+        return registerDropdown(dropdown, selectedItems);
+    }
+
+    public <U> EUIDropdown<U> registerDropdown(Collection<U> possibleItems, Collection<U> selectedItems, ActionT1<List<U>> onChangeImpl, FuncT1<String, U> textFunc, String title, boolean smartText) {
+        return registerDropdown(possibleItems, selectedItems, textFunc, title, smartText, true, true);
+    }
+
+    public <U> EUIDropdown<U> registerDropdown(Collection<U> possibleItems, Collection<U> selectedItems, ActionT1<List<U>> onChangeImpl, FuncT1<String, U> textFunc, String title, boolean smartText, boolean multiSelect, boolean positionClearAtTop) {
+        EUIDropdown<U> dropdown = new EUIDropdown<>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.35f, MENU_HEIGHT, AUX_OFFSET, 0)
+                , textFunc)
+                .setLabelFunctionForOption(textFunc, smartText)
+                .setIsMultiSelect(multiSelect)
+                .setShouldPositionClearAtTop(positionClearAtTop)
+                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, title)
+                .setCanAutosize(true, true)
+                .setItems(possibleItems);
+        return registerDropdown(dropdown, onChangeImpl, selectedItems);
     }
 
     public void registerOrb(List<PCLOrbHelper> items) {
