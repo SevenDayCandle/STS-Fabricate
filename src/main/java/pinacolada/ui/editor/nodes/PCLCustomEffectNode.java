@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import extendedui.EUIRM;
 import extendedui.EUIRenderHelpers;
@@ -306,28 +307,28 @@ public class PCLCustomEffectNode extends EUIButton {
         public Color getColor() {
             switch (this) {
                 case Cond:
-                    return Color.SKY;
+                    return Color.SKY.cpy();
                 case Multicond:
-                    return Color.NAVY;
+                    return Color.NAVY.cpy();
                 case Branchcond:
-                    return Color.BLUE;
+                    return Color.BLUE.cpy();
                 case Mod:
-                    return Color.FOREST;
+                    return Color.FOREST.cpy();
                 case Move:
-                    return Color.GOLDENROD;
+                    return Settings.GOLD_COLOR.cpy();
                 case Multimove:
-                    return Color.ORANGE;
+                    return Color.ORANGE.cpy();
                 case Delay:
-                    return Color.RED;
+                    return Settings.RED_TEXT_COLOR.cpy();
                 case Limit:
                 case Trigger:
                 case Attack:
                 case Block:
-                    return Color.SALMON;
+                    return Color.SALMON.cpy();
                 case Proxy:
-                    return PCLCustomEffectProxyNode.FADE_COLOR;
+                    return PCLCustomEffectProxyNode.FADE_COLOR.cpy();
             }
-            return Color.WHITE;
+            return Color.WHITE.cpy();
         }
 
         // Because PCond/PMod/PMove cannot be reified further

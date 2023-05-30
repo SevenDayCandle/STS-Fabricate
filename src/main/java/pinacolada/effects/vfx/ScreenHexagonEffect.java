@@ -31,7 +31,7 @@ public class ScreenHexagonEffect extends PCLEffect {
         if (this.duration == this.startingDuration) {
             PCLSFX.play(PCLSFX.PCL_BOOST, 0.5f, 0.5f);
             PCLSFX.play(PCLSFX.ORB_LIGHTNING_CHANNEL, 0.7f, 0.7f);
-            PCLEffects.Queue.add(new BorderLongFlashEffect(Color.GOLDENROD));
+            PCLEffects.Queue.add(new BorderLongFlashEffect(this.color.cpy()));
         }
 
         this.duration -= Gdx.graphics.getDeltaTime();

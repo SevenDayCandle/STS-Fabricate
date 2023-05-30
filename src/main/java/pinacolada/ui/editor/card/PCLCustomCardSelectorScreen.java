@@ -44,7 +44,7 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
     protected static final float ITEM_HEIGHT = AbstractCard.IMG_HEIGHT * 0.15f;
     public static AbstractCard.CardColor currentColor = AbstractCard.CardColor.COLORLESS;
     public static AbstractPlayer.PlayerClass currentClass;
-    protected final EUIStaticCardGrid grid;
+    protected final EUICardGrid grid;
     protected final EUIToggle toggle;
     private AbstractCard clickedCard;
     protected ActionT0 onClose;
@@ -65,7 +65,7 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
         final float buttonWidth = screenW(0.18f);
         final float labelWidth = screenW(0.20f);
 
-        this.grid = (EUIStaticCardGrid) new EUIStaticCardGrid(1f)
+        this.grid = new EUICardGrid(1f)
                 .setEnlargeOnHover(false)
                 .setOnCardClick(this::onCardClicked)
                 .setOnCardRightClick(this::onCardRightClicked);
@@ -297,8 +297,8 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
             currentDialog.render(sb);
         }
         else {
-            info.tryRender(sb);
             grid.tryRender(sb);
+            info.tryRender(sb);
             cancelButton.tryRender(sb);
             addButton.tryRender(sb);
             openButton.tryRender(sb);

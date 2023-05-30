@@ -89,7 +89,7 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
 
     @Override
     public String getSubText() {
-        return EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), getCopiesOfString());
+        return EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), fields.not ? TEXT.subjects_randomX(getCopiesOfString()) : getCopiesOfString());
     }
 
     @Override
@@ -104,6 +104,7 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
         super.setupEditor(editor);
         registerUseParentBoolean(editor);
         fields.registerFBoolean(editor, StringUtils.capitalize(TEXT.subjects_thisCard), null);
+        fields.registerNotBoolean(editor, StringUtils.capitalize(TEXT.cedit_random), null);
     }
 
     protected ArrayList<AbstractCard> getBaseCards(PCLUseInfo info) {
@@ -182,7 +183,7 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
         final int limit = Math.max(extra, amount);
         choice.group = getBaseCards(info);
 
-        boolean automatic = choice.size() <= amount;
+        boolean automatic = fields.not || choice.size() <= amount;
         getActions().selectFromPile(getName(), amount, choice)
                 .setOptions((automatic ? PCLCardSelection.Random : PCLCardSelection.Manual).toSelection(), automatic)
                 .addCallback(cards -> {
