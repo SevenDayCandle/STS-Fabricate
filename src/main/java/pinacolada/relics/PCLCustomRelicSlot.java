@@ -190,22 +190,22 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
             EUIUtils.logInfo(PCLCustomCardSlot.class, "Moved Custom Relic Image: " + imagePath + ", New: " + newImagePath);
         }
 
+        filePath = newFilePath;
+        imagePath = newImagePath;
+
         // If the image in the builder was updated, we need to overwrite the existing image
         // All builders should have the same image
         PCLDynamicRelicData builder = getBuilder(0);
         if (builder != null && builder.portraitImage != null) {
             PixmapIO.writePNG(imgWriter, builder.portraitImage.getTextureData().consumePixmap());
             // Forcibly reload the image
-            EUIRM.getLocalTexture(newImagePath, true, true, false);
+            EUIRM.reloadTexture(newImagePath, true, true);
         }
 
         // Point all builders to the new path, or nullify it out if no image was saved
         for (PCLDynamicRelicData b : builders) {
             b.setImagePath(newImagePath).setImage(null);
         }
-
-        filePath = newFilePath;
-        imagePath = newImagePath;
 
         writer.writeString(EUIUtils.serialize(this, TTOKEN.getType()), false);
         EUIUtils.logInfo(PCLCustomRelicSlot.class, "Saved Custom Relic: " + filePath);

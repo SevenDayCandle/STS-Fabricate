@@ -24,11 +24,7 @@ public interface EditorCard extends PointerProvider, CacheableCard {
 
     int hitCountBase();
 
-    default void loadImage(String path) {
-        loadImage(path, false);
-    }
-
-    void loadImage(String path, boolean refresh);
+    void loadImage(String path);
 
     default void renderForPreview(SpriteBatch sb) {
         if (this instanceof AbstractCard) {

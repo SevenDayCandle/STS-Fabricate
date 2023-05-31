@@ -244,22 +244,22 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
             EUIUtils.logInfo(PCLCustomCardSlot.class, "Moved Custom Card Image: " + imagePath + ", New: " + newImagePath);
         }
 
+        filePath = newFilePath;
+        imagePath = newImagePath;
+
         // If the image in the builder was updated, we need to overwrite the existing image
         // All builders should have the same image
         PCLDynamicCardData builder = getBuilder(0);
         if (builder != null && builder.portraitImage != null) {
             PixmapIO.writePNG(imgWriter, builder.portraitImage.texture.getTextureData().consumePixmap());
             // Forcibly reload the image
-            EUIRM.getLocalTexture(newImagePath, true, true, false);
+            EUIRM.reloadTexture(newImagePath, true, true);
         }
 
         // Unlink temporary portrait images to allow the new saved portrait image to be loaded, and set multiform data as necessary
         for (PCLDynamicCardData b : builders) {
             b.setImagePath(newImagePath).setImage(null).setMultiformData(forms.length, false, forms.length > 1, false);
         }
-
-        filePath = newFilePath;
-        imagePath = newImagePath;
 
         writer.writeString(EUIUtils.serialize(this, TTOKEN.getType()), false);
         EUIUtils.logInfo(PCLCustomCardSlot.class, "Saved Custom Card: " + filePath);

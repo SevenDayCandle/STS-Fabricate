@@ -163,17 +163,10 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider 
     }
 
     public void loadImage(String path) {
-        loadImage(path, false);
-    }
-
-    public void loadImage(String path, boolean refresh) {
-        Texture t = EUIRM.getTexture(path, true, refresh, true);
+        Texture t = EUIRM.getTexture(path, true, true);
         if (t == null) {
-            t = EUIRM.getLocalTexture(path, true, refresh, true);
-            if (t == null) {
-                path = PCLCoreImages.CardAffinity.unknown.path();
-                t = EUIRM.getTexture(path, true, false, true);
-            }
+            path = PCLCoreImages.CardAffinity.unknown.path();
+            t = EUIRM.getTexture(path, true, true);
         }
         this.img = t;
         this.outlineImg = t;

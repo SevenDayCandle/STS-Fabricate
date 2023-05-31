@@ -583,17 +583,10 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     }
 
     public void loadImage(String path) {
-        loadImage(path, false);
-    }
-
-    public void loadImage(String path, boolean refresh) {
-        Texture t = EUIRM.getTexture(path, true, refresh, true);
+        Texture t = EUIRM.getTexture(path, true, false);
         if (t == null) {
-            t = EUIRM.getLocalTexture(path, true, refresh, true);
-            if (t == null) {
-                path = QuestionMark.DATA.imagePath;
-                t = EUIRM.getTexture(path, true, false, true);
-            }
+            path = QuestionMark.DATA.imagePath;
+            t = EUIRM.getTexture(path, true, true);
         }
         assetUrl = path;
         portraitImg = new ColoredTexture(t, null);

@@ -74,7 +74,7 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
             assetUrl = imagePath;
         }
         else {
-            loadImage(imagePath, true);
+            loadImage(imagePath);
         }
     }
 

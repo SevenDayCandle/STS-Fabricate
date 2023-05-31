@@ -298,6 +298,7 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
         }
         else {
             grid.tryRender(sb);
+            EUI.customHeader.render(sb);
             info.tryRender(sb);
             cancelButton.tryRender(sb);
             addButton.tryRender(sb);
@@ -331,6 +332,7 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
                 EUI.openCardFiltersButton.tryUpdate();
                 info.tryUpdate();
                 colorButtons.tryUpdate();
+                EUI.customHeader.update();
                 grid.tryUpdate();
                 cancelButton.tryUpdate();
                 addButton.tryUpdate();
