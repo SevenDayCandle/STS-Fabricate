@@ -17,9 +17,14 @@ public class MapRoomNodePatches {
     public static class MapRoomNodePatches_IsConnectedTo {
         @SpirePostfixPatch
         public static boolean postfix(boolean __result, MapRoomNode __instance, MapRoomNode node) {
+            // Jump anywhere debug command
+            if (PGR.dungeon.canJumpAnywhere()) {
+                return true;
+            }
+            // Relics that enable winged boots-esque effects
             if (PGR.dungeon.canJumpNextFloor()) {
                 for (MapEdge edge : __instance.getEdges()) {
-                    if (node.y == edge.dstY || PGR.dungeon.canJumpAnywhere()) {
+                    if (node.y == edge.dstY) {
                         return true;
                     }
                 }

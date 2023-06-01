@@ -149,6 +149,14 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
         return new PCond_HaveExhausted(amount);
     }
 
+    public static PCond_HaveLostHP haveLostHP() {
+        return new PCond_HaveLostHP();
+    }
+
+    public static PCond_HaveLostHP haveLostHP(int amount) {
+        return new PCond_HaveLostHP(amount);
+    }
+
     public static PCond_HavePlayed havePlayed() {
         return new PCond_HavePlayed();
     }
@@ -289,6 +297,10 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
         return (PCond_ReshuffleTo) new PCond_ReshuffleTo(amount, h).edit(PField_CardGeneric::setRandom);
     }
 
+    public static PCond_Shuffle shuffle() {
+        return new PCond_Shuffle();
+    }
+
     public static PCond_Starter starter() {
         return new PCond_Starter();
     }
@@ -299,6 +311,10 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
 
     public static PCond_TakeDamageTo takeDamageTo(int amount) {
         return new PCond_TakeDamageTo(amount);
+    }
+
+    public static PCond_UnblockedDamage unblockedDamage() {
+        return new PCond_UnblockedDamage();
     }
 
     @Override

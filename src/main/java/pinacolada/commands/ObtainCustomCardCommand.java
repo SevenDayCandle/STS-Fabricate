@@ -15,7 +15,7 @@ public class ObtainCustomCardCommand extends ConsoleCommand {
     public ObtainCustomCardCommand() {
         this.requiresPlayer = true;
         this.minExtraTokens = 2;
-        this.maxExtraTokens = 5;
+        this.maxExtraTokens = 4;
         this.simpleCheck = true;
     }
 
@@ -72,7 +72,7 @@ public class ObtainCustomCardCommand extends ConsoleCommand {
                     if (tokens[depth + 2].matches("\\d+")) {
                         ConsoleCommand.complete = true;
                     }
-                    else if (tokens[depth + 4].length() > 0) {
+                    else if (tokens[depth + 2].length() > 0) {
                         tooManyTokensError();
                     }
                 }
