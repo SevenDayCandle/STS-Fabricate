@@ -295,8 +295,6 @@ public class PCLCustomEffectNode extends EUIButton {
         public boolean canRemove() {
             switch (this)
             {
-                case Attack:
-                case Block:
                 case Root:
                 case Proxy:
                     return false;

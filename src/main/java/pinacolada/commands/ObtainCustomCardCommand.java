@@ -15,7 +15,7 @@ public class ObtainCustomCardCommand extends ConsoleCommand {
     public ObtainCustomCardCommand() {
         this.requiresPlayer = true;
         this.minExtraTokens = 2;
-        this.maxExtraTokens = 4;
+        this.maxExtraTokens = 5;
         this.simpleCheck = true;
     }
 

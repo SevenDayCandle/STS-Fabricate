@@ -52,7 +52,7 @@ public class PMove_RemoveCard extends PCallbackMove<PField_CardCategory> {
 
     @Override
     public String getSubText() {
-        String cString = useParent ? TEXT.subjects_them
+        String cString = useParent ? TEXT.subjects_themX
                 : fields.groupTypes.size() > 0 ? EUIRM.strings.numNoun(getAmountRawOrAllString(), fields.getCardOrString(getRawString(EXTRA_CHAR)))
                 : TEXT.subjects_thisCard;
         return TEXT.act_removeInPlace(cString, fields.getGroupString(), TEXT.cpile_deck);

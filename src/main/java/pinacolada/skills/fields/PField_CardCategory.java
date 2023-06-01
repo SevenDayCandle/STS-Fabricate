@@ -121,11 +121,15 @@ public class PField_CardCategory extends PField_CardGeneric {
                         && (types.isEmpty() || types.contains(c.type)));
     }
 
-    public String getFullCardString() {
-        return getFullCardString(skill.getAmountRawString());
+    public String getFullCardAndString(Object value) {
+        return !cardIDs.isEmpty() ? getCardIDAndString() : isRandom() ? PSkill.TEXT.subjects_randomX(getCardOrString(value)) : getCardAndString(value);
     }
 
-    public String getFullCardString(Object value) {
+    public String getFullCardString() {
+        return getFullCardOrString(skill.getAmountRawString());
+    }
+
+    public String getFullCardOrString(Object value) {
         return !cardIDs.isEmpty() ? getCardIDOrString() : isRandom() ? PSkill.TEXT.subjects_randomX(getCardOrString(value)) : getCardOrString(value);
     }
 

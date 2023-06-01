@@ -25,9 +25,7 @@ import org.apache.commons.lang3.StringUtils;
 import pinacolada.blights.common.AbstractGlyphBlight;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.interfaces.providers.RunAttributesProvider;
-import pinacolada.patches.UnlockTrackerPatches;
 import pinacolada.resources.PCLAbstractPlayerData;
-import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.pcl.PCLCoreImages;
@@ -152,15 +150,8 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase implements RunAtt
     }
 
     public void initialize(CharacterSelectScreen selectScreen) {
-        GameUtilities.unlockAllKeys();
         charScreen = selectScreen;
         characterOption = null;
-
-        final float size = Settings.scale * 36;
-
-        for (PCLResources<?, ?, ?, ?> resources : PGR.getRegisteredResources()) {
-            UnlockTrackerPatches.validate(resources);
-        }
     }
 
 

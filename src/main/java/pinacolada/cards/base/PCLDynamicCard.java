@@ -7,6 +7,9 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
+import extendedui.EUIRM;
+import extendedui.utilities.ColoredTexture;
+import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.interfaces.markers.FabricateItem;
 import pinacolada.resources.pcl.PCLCoreImages;
@@ -62,6 +65,18 @@ public class PCLDynamicCard extends PCLCard implements FabricateItem {
     public void fullReset() {
         findForms();
         super.fullReset();
+    }
+
+    // Do not show errors for custom image paths
+    @Override
+    public void loadImage(String path) {
+        Texture t = EUIRM.getTexture(path, true, true);
+        if (t == null) {
+            path = QuestionMark.DATA.imagePath;
+            t = EUIRM.getTexture(path, true, true);
+        }
+        assetUrl = path;
+        portraitImg = new ColoredTexture(t, null);
     }
 
     public void setupImages(String imagePath) {

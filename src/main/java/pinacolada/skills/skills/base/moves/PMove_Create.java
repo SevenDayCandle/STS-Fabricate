@@ -5,6 +5,7 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
+import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
@@ -45,8 +46,8 @@ public class PMove_Create extends PMove_GenerateCard {
 
     @Override
     public String getSubText() {
-        String joinedString = getCopiesOfString();
-        return fields.groupTypes.size() > 0 ? TEXT.act_addToPile(getAmountRawOrAllString(), joinedString, fields.groupTypes.get(0).name) : TEXT.act_addToPile(getAmountRawOrAllString(), joinedString, PCLCardGroupHelper.Hand.name);
+        String base = fields.groupTypes.size() > 0 ? TEXT.act_addToPile(getAmountRawOrAllString(), getCopiesOfString(), fields.groupTypes.get(0).name) : TEXT.act_addToPile(getAmountRawOrAllString(), getCopiesOfString(), PCLCardGroupHelper.Hand.name);
+        return fields.origin != PCLCardSelection.Manual && !fields.cardIDs.isEmpty() ? TEXT.subjects_randomly(base) : base;
     }
 
     @Override

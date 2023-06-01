@@ -14,6 +14,7 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
+import pinacolada.skills.skills.PTrigger;
 import pinacolada.skills.skills.base.moves.PMove_StackCustomPower;
 import pinacolada.ui.editor.nodes.PCLCustomEffectNode;
 
@@ -31,11 +32,12 @@ public class PCLCustomPowerEffectPage extends PCLCustomEffectPage {
                     }
                 })
                 .setCanAutosizeButton(true);
-        quickAddButton = new EUIButton(EUIRM.images.hexagonalButton.texture(), new EUIHitbox(hb.x + MENU_WIDTH * 5f, hb.y - scale(20), MENU_WIDTH, MENU_HEIGHT))
+        quickAddButton = new EUIButton(EUIRM.images.hexagonalButton.texture(), new EUIHitbox(hb.x + MENU_WIDTH * 3.5f, hb.y - scale(20), MENU_WIDTH, MENU_HEIGHT))
                 .setColor(Color.GRAY)
                 .setBorder(EUIRM.images.hexagonalButtonBorder.texture(), Color.GRAY)
                 .setFont(EUIFontHelper.cardTitleFontSmall, 0.8f)
                 .setText(PGR.core.strings.cedit_addToEffect)
+                .setTooltip(PGR.core.strings.cedit_addToEffect, PGR.core.strings.cetut_addToEffect)
                 .setOnClick(this::openDropdown);
     }
 
@@ -72,7 +74,7 @@ public class PCLCustomPowerEffectPage extends PCLCustomEffectPage {
     @Override
     public void updateInner() {
         super.updateInner();
-        quickAddButton.tryUpdate();
+        quickAddButton.setColor(rootEffect instanceof PTrigger ? Color.NAVY : Color.GRAY).tryUpdate();
         quickAddMenu.tryUpdate();
     }
 

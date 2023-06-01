@@ -16,8 +16,8 @@ import pinacolada.utilities.RandomizedList;
 public class RockBurstEffect extends PCLEffect {
     private static final TextureCache[] particles = {PCLCoreImages.Effects.earthParticle1, PCLCoreImages.Effects.earthParticle2, PCLCoreImages.Effects.earthParticle3};
     private static final RandomizedList<TextureCache> textures = new RandomizedList<>();
-    public static final int PROJECTILES = 68;
-    public static final float RADIUS = 310;
+    public static final int PROJECTILES = 65;
+    public static final float RADIUS = 250;
     protected float x;
     protected float y;
 
@@ -48,9 +48,9 @@ public class RockBurstEffect extends PCLEffect {
             float angle = random(-500f, 500f);
             PCLEffects.Queue.add(new FadingParticleEffect(getRandomTexture(), x, y)
                     .setColor(EUIColors.random(0.7f, 1f, true))
-                    .setScale(scale * random(0.18f, 0.66f))
+                    .setScale(scale * random(0.13f, 0.6f))
                     .setRotation(0, random(500f, 800f))
-                    .setTargetPosition(x + RADIUS * MathUtils.cos(angle), y + RADIUS * MathUtils.sin(angle), random(350f, 400f)))
+                    .setTargetPosition(x + RADIUS * MathUtils.cos(angle), y + RADIUS * MathUtils.sin(angle), random(100f, 400f)))
                     .setDuration(duration, true);
         }
 

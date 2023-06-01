@@ -18,7 +18,6 @@ import pinacolada.misc.PCLCustomEditorLoadable;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PTrigger;
-import pinacolada.skills.skills.base.primary.PTrigger_When;
 
 import java.util.ArrayList;
 
@@ -107,7 +106,7 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
             currentPowers.set(index, (PTrigger) be);
         }
         else {
-            currentPowers.set(index, new PTrigger_When());
+            currentPowers.set(index, null);
         }
         modifyBuilder(e -> e.setPPower(currentPowers, true, true));
     }

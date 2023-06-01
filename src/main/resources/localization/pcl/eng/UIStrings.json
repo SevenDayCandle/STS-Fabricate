@@ -170,11 +170,12 @@
 												"#yPassives modify the attributes of cards or #yOrbs while their condition is met. | Greyed-out effects will have no effect.",
 												"#yWhens activate when the specified events occur. | Greyed-out conditions will have no effect unless they are chained after a valid condition.",
 												"If checked, this modifier's amount will add itself onto the effect's base value instead of multiplying that value.",
-												"Click a node to edit it. Hold and drag it onto another node to assign it as a child to the target node. | To add effects, click one of the node buttons from the top bar to add it to the root, or drag it onto an existing node to add it as a child to that node.",
-												"{#o:Click this to place a Primary here.}",
+												"#oLeft-Click a node to edit it. Hold and drag it onto another node to assign it as a child to the target node. | To add effects, click one of the node buttons from the top bar to add it to the root, or drag it onto an existing node to add it as a child to that node.",
+												"{#o:Click this to add a Primary node here.}",
 												"{#o:Drag a node here to set this node's child, or click this to place an effect here.}",
 												"#yRarity determines how often this relic appears in rewards (#yCommon, #yUncommon, or #yRare only). #yShop relics only appear in shops. #yBoss relics only appear in boss chests. Relics of other rarities must be spawned manually through events or other effects.",
-												"The sound effect that plays when obtaining this relic."
+												"The sound effect that plays when obtaining this relic.",
+												"Create a node with an effect that applies this power."
 								]
 				},
 				"pcl:CardPile": {
@@ -492,7 +493,7 @@
 												"the target",
 												"the top of {0}",
 												"their {0}",
-												"them",
+												"${0}@!1:it@:them$",
 												"this card",
 												"this",
 												"unblocked {0}",

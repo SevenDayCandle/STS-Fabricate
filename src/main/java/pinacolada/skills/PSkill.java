@@ -751,7 +751,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public String getParentString() {
-        return TEXT.subjects_them;
+        return TEXT.subjects_them(baseAmount);
     }
 
     public String getPowerText() {

@@ -155,6 +155,7 @@ public class PCLCoreStrings extends PCLStrings {
     public final String cetut_blankProxy = cetut.TEXT[41];
     public final String cetut_relicRarity = cetut.TEXT[42];
     public final String cetut_landingSound = cetut.TEXT[43];
+    public final String cetut_addToEffect = cetut.TEXT[44];
     // Card Pile
     public final String cpile_hand = cardPile.TEXT[0];
     public final String cpile_deck = cardPile.TEXT[1];
@@ -369,7 +370,7 @@ public class PCLCoreStrings extends PCLStrings {
     public final String subjects_target = subjects.TEXT[38];
     public final String subjects_topOfX = subjects.TEXT[39];
     public final String subjects_theirX = subjects.TEXT[40];
-    public final String subjects_them = subjects.TEXT[41];
+    public final String subjects_themX = subjects.TEXT[41];
     public final String subjects_thisCard = subjects.TEXT[42];
     public final String subjects_this = subjects.TEXT[43];
     public final String subjects_unblockedX = subjects.TEXT[44];
@@ -1159,6 +1160,10 @@ public class PCLCoreStrings extends PCLStrings {
 
     public final String subjects_theirX(Object amount) {
         return EUIUtils.format(subjects_theirX, amount);
+    }
+
+    public final String subjects_them(Object amount) {
+        return EUIUtils.format(subjects_themX, amount);
     }
 
     public final String subjects_thisCombat(String base) {

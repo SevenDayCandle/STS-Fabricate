@@ -1,7 +1,10 @@
 package pinacolada.relics;
 
+import com.badlogic.gdx.graphics.Texture;
+import extendedui.EUIRM;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.interfaces.markers.FabricateItem;
+import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.skills.PTrigger;
 
@@ -22,6 +25,18 @@ public class PCLDynamicRelic extends PCLPointerRelic implements FabricateItem {
     @Override
     public EditorMaker getDynamicData() {
         return builder;
+    }
+
+    // Do not show errors for custom image paths
+    @Override
+    public void loadImage(String path) {
+        Texture t = EUIRM.getTexture(path, true, true);
+        if (t == null) {
+            path = PCLCoreImages.CardAffinity.unknown.path();
+            t = EUIRM.getTexture(path, true, true);
+        }
+        this.img = t;
+        this.outlineImg = t;
     }
 
     @Override

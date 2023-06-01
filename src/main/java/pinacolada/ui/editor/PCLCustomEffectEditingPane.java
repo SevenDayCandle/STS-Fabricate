@@ -35,6 +35,7 @@ import pinacolada.powers.PCLPowerHelper;
 import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
+import pinacolada.skills.PPrimary;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.stances.PCLStanceHelper;
@@ -141,7 +142,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     }
 
     public Color getColorForEffect(PSkill<?> effect) {
-        return editor.rootEffect == null || editor.rootEffect.isSkillAllowed(effect) ? Color.WHITE : Color.GRAY;
+        return editor.rootEffect == null || effect instanceof PPrimary || editor.rootEffect.isSkillAllowed(effect) ? Color.WHITE : Color.GRAY;
     }
 
     @Override
@@ -188,7 +189,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
             node.skill.setupEditor(this);
 
             float xOff = 0;
-            additionalHeight = -MENU_HEIGHT * 2.3f;
+            additionalHeight = -MENU_HEIGHT * 2.5f;
             if (targets.isActive) {
                 targets.setSelection(node.skill.target, false);
                 xOff = position(targets, xOff);
@@ -351,14 +352,14 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         return skill.getUpgradeExtra();
     }
 
-    public <T> EUIDropdown<T> initializeRegular(T[] items, FuncT1<String, T> labelFunc, String title) {
-        return initializeRegular(Arrays.asList(items), labelFunc, title);
+    public <T> EUIDropdown<T> initializeRegular(T[] items, FuncT1<String, T> labelFunc, String title, boolean multiselect) {
+        return initializeRegular(Arrays.asList(items), labelFunc, title, multiselect);
     }
 
-    public <T> EUIDropdown<T> initializeRegular(Collection<T> items, FuncT1<String, T> labelFunc, String title) {
+    public <T> EUIDropdown<T> initializeRegular(Collection<T> items, FuncT1<String, T> labelFunc, String title, boolean multiselect) {
         return (EUIDropdown<T>) new EUIDropdown<T>(new OriginRelativeHitbox(hb, MENU_WIDTH * 1.35f, MENU_HEIGHT, 0, 0))
                 .setLabelFunctionForOption(labelFunc, false)
-                .setIsMultiSelect(true)
+                .setIsMultiSelect(multiselect)
                 .setShouldPositionClearAtTop(true)
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, title)
                 .setCanAutosize(true, true)
@@ -424,8 +425,8 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
                 .setCanAutosize(true, true)
                 .setItems(PCLCustomCardAttributesPage.getEligibleTargets(cardColor));
 
-        piles = initializeRegular(PCLCardGroupHelper.getStandard(), PCLCardGroupHelper::getCapitalTitle, PGR.core.strings.cedit_pile);
-        origins = initializeRegular(PCLCardSelection.values(), PCLCardSelection::getTitle, PGR.core.strings.cedit_pile);
+        origins = initializeRegular(PCLCardSelection.values(), PCLCardSelection::getTitle, PGR.core.strings.cedit_origins, false);
+        piles = initializeRegular(PCLCardGroupHelper.getStandard(), PCLCardGroupHelper::getCapitalTitle, PGR.core.strings.cedit_pile, true);
         affinities = initializeSmartSearchable(PCLCustomCardAttributesPage.getEligibleAffinities(cardColor), PGR.core.strings.sui_affinities);
         powers = initializeSmartSearchable(PCLPowerHelper.sortedValues(), PGR.core.strings.cedit_powers);
         orbs = initializeSmartSearchable(PCLOrbHelper.visibleValues(), PGR.core.tooltips.orb.title);

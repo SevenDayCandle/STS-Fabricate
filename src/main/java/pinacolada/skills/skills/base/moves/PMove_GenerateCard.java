@@ -89,7 +89,8 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
 
     @Override
     public String getSubText() {
-        return EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), fields.not ? TEXT.subjects_randomX(getCopiesOfString()) : getCopiesOfString());
+        String base = EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), getCopiesOfString());
+        return fields.origin != PCLCardSelection.Manual && !fields.cardIDs.isEmpty() ? TEXT.subjects_randomly(base) : base;
     }
 
     @Override
@@ -104,7 +105,6 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
         super.setupEditor(editor);
         registerUseParentBoolean(editor);
         fields.registerFBoolean(editor, StringUtils.capitalize(TEXT.subjects_thisCard), null);
-        fields.registerNotBoolean(editor, StringUtils.capitalize(TEXT.cedit_random), null);
     }
 
     protected ArrayList<AbstractCard> getBaseCards(PCLUseInfo info) {
@@ -158,7 +158,7 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
     protected String getCopiesOfString() {
         return useParent ? TEXT.subjects_copiesOf(getInheritedString())
                 : (fields.forced && sourceCard != null) ? TEXT.subjects_copiesOf(TEXT.subjects_thisCard)
-                : fields.getFullCardString();
+                : extra > amount || fields.origin != PCLCardSelection.Manual ? fields.getFullCardString() : fields.getFullCardAndString(getAmountRawString());
     }
 
     protected Iterable<AbstractCard> getSourceCards(int limit) {
@@ -183,9 +183,9 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
         final int limit = Math.max(extra, amount);
         choice.group = getBaseCards(info);
 
-        boolean automatic = fields.not || choice.size() <= amount;
+        boolean automatic = choice.size() <= amount;
         getActions().selectFromPile(getName(), amount, choice)
-                .setOptions((automatic ? PCLCardSelection.Random : PCLCardSelection.Manual).toSelection(), automatic)
+                .setOptions((automatic ? PCLCardSelection.Random : fields.origin).toSelection(), !fields.not)
                 .addCallback(cards -> {
                     for (AbstractCard c : cards) {
                         performAction(info, c);
