@@ -74,7 +74,7 @@ public class PCLCustomPowerEffectPage extends PCLCustomEffectPage {
     @Override
     public void updateInner() {
         super.updateInner();
-        quickAddButton.setColor(rootEffect instanceof PTrigger ? Color.NAVY : Color.GRAY).tryUpdate();
+        quickAddButton.setColor(rootEffect instanceof PTrigger ? Color.SKY : Color.GRAY).tryUpdate();
         quickAddMenu.tryUpdate();
     }
 

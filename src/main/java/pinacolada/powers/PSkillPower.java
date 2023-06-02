@@ -36,30 +36,30 @@ public class PSkillPower extends PCLPower {
         this.powerStrings = new PowerStrings();
 
         for (PTrigger effect : effects) {
-            effect = effect.makeCopy();
-            this.ptriggers.add(effect);
-            effect.power = this;
-            effect.resetUses();
+            PTrigger effectCopy = effect.makeCopy();
+            this.ptriggers.add(effectCopy);
+            effectCopy.power = this;
+            effectCopy.resetUses();
 
             if (this.powerStrings.NAME == null) {
                 this.ID = createPowerID(effect);
-                if (effect.sourceCard instanceof EditorCard) {
+                if (effectCopy.sourceCard instanceof EditorCard) {
                     // Vanilla rendering cannot render generated region48 properly
                     if (PGR.config.vanillaPowerRender.get()) {
                         this.img = PCLCoreImages.CardAffinity.unknown.texture();
                     }
                     else {
-                        this.region48 = PCLRenderHelpers.generateIcon(((EditorCard) effect.sourceCard).getPortraitImageTexture());
+                        this.region48 = PCLRenderHelpers.generateIcon(((EditorCard) effectCopy.sourceCard).getPortraitImageTexture());
                     }
-                    this.powerStrings.NAME = effect.sourceCard.name;
+                    this.powerStrings.NAME = effectCopy.sourceCard.name;
                 }
                 else {
                     this.img = PCLCoreImages.CardAffinity.unknown.texture();
-                    this.powerStrings.NAME = effect.source != null ? effect.source.getName() : effect.effectID != null ? effect.effectID : this.getClass().getSimpleName();
+                    this.powerStrings.NAME = effectCopy.source != null ? effectCopy.source.getName() : effectCopy.effectID != null ? effectCopy.effectID : this.getClass().getSimpleName();
                 }
             }
 
-            PCLClickableUse use = effect.getClickable(this);
+            PCLClickableUse use = effectCopy.getClickable(this);
             if (use != null) {
                 triggerCondition = use;
             }

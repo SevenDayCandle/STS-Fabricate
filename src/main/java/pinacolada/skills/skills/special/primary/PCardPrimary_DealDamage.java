@@ -12,10 +12,12 @@ import extendedui.configuration.EUIConfiguration;
 import extendedui.interfaces.delegates.FuncT2;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.ColoredString;
+import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.creature.DealDamage;
 import pinacolada.actions.creature.DealDamageToAll;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCard;
+import pinacolada.cards.base.fields.PCLAttackType;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.EffekseerEFK;
@@ -30,6 +32,10 @@ import pinacolada.skills.skills.PDamageTrait;
 import pinacolada.skills.skills.PPassiveCond;
 import pinacolada.skills.skills.PPassiveMod;
 import pinacolada.skills.skills.base.traits.PTrait_HitCount;
+import pinacolada.ui.editor.PCLCustomEffectEditingPane;
+import pinacolada.ui.editor.card.PCLCustomCardEditCardScreen;
+
+import java.util.Arrays;
 
 @VisibleSkill
 public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
@@ -195,6 +201,26 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
         setTarget(card instanceof PCLCard ? ((PCLCard) card).pclTarget : PCLCardTarget.Single);
         setSource(card);
         return this;
+    }
+
+    @Override
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        PCLCustomCardEditCardScreen sc = EUIUtils.safeCast(editor.editor.screen, PCLCustomCardEditCardScreen.class);
+        if (sc != null) {
+            editor.registerDropdown(Arrays.asList(PCLAttackType.values())
+                    , EUIUtils.arrayList(sc.getBuilder().attackType)
+                    , item -> {
+                        if (item.size() > 0) {
+                            sc.modifyBuilder(e -> e.setAttackType(item.get(0)));
+                        }
+                    }
+                    , item -> StringUtils.capitalize(item.toString().toLowerCase()),
+                    PGR.core.strings.cedit_attackType,
+                    true,
+                    false, true).setTooltip(PGR.core.strings.cedit_attackType, PGR.core.strings.cetut_attackType);
+        }
+
+        super.setupEditor(editor);
     }
 
     @Override
