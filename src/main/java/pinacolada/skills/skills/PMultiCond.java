@@ -92,6 +92,17 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
     }
 
     @Override
+    public void recurse(ActionT1<PSkill<?>> onRecurse) {
+        onRecurse.invoke(this);
+        for (PSkill<?> effect : effects) {
+            effect.recurse(onRecurse);
+        }
+        if (this.childEffect != null) {
+            this.childEffect.recurse(onRecurse);
+        }
+    }
+
+    @Override
     public void refresh(PCLUseInfo info, boolean conditionMet) {
         conditionMetCache = checkCondition(info, false, null);
         boolean refreshVal = conditionMetCache & conditionMet;

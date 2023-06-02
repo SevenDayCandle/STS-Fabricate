@@ -46,7 +46,7 @@ public class PCLLoadoutValidation {
             cardsCount.v1 += slot.amount;
 
             if (slot.selected != null) {
-                if (slot.selected.data.isNotSeen()) {
+                if (slot.selected.data.isLocked()) {
                     allCardsSeen = false;
                 }
 

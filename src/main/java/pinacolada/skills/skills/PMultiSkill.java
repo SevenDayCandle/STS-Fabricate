@@ -280,6 +280,17 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     }
 
     @Override
+    public void recurse(ActionT1<PSkill<?>> onRecurse) {
+        onRecurse.invoke(this);
+        for (PSkill<?> effect : effects) {
+            effect.recurse(onRecurse);
+        }
+        if (this.childEffect != null) {
+            this.childEffect.recurse(onRecurse);
+        }
+    }
+
+    @Override
     public void refresh(PCLUseInfo info, boolean conditionMet) {
         for (PSkill<?> effect : effects) {
             effect.refresh(info, conditionMet);

@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
+import extendedui.interfaces.delegates.ActionT1;
 import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.utilities.RotatingList;
 import org.apache.commons.lang3.StringUtils;
@@ -68,6 +69,17 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
             return getEffectTexts(addPeriod);
         }
         return getSubText();
+    }
+
+    @Override
+    public void recurse(ActionT1<PSkill<?>> onRecurse) {
+        onRecurse.invoke(this);
+        for (PSkill<?> effect : effects) {
+            effect.recurse(onRecurse);
+        }
+        if (this.childEffect != null) {
+            this.childEffect.recurse(onRecurse);
+        }
     }
 
     @Override

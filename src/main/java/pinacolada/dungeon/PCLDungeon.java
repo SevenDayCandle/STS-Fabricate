@@ -94,6 +94,25 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         PGR.augmentPanel.flash();
     }
 
+    public void addCard(AbstractCard card, AbstractCard.CardRarity rarity) {
+        CardGroup pool = GameUtilities.getCardPool(rarity);
+        if (pool != null && !EUIUtils.any(pool.group, c -> c.cardID.equals(card.cardID))) {
+            pool.addToBottom(card);
+        }
+        CardGroup spool = GameUtilities.getCardPoolSource(rarity);
+        if (spool != null && !EUIUtils.any(spool.group, c -> c.cardID.equals(card.cardID))) {
+            spool.addToBottom(card);
+        }
+        bannedCards.remove(card.cardID);
+    }
+
+    public void addCard(String cardID) {
+        AbstractCard c = CardLibrary.getCard(cardID);
+        if (c != null) {
+            addCard(c, c.rarity);
+        }
+    }
+
     public void addDivisor(int divisor) {
         valueDivisor = Math.max(1, valueDivisor + divisor);
     }

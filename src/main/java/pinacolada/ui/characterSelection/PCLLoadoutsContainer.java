@@ -123,9 +123,10 @@ public class PCLLoadoutsContainer {
     public boolean selectCard(PCLCard card) {
         if (loadoutMap.containsKey(card) && card.type == PCLLoadout.SELECTABLE_TYPE) {
             currentSeriesCard = card;
-            for (PCLCard c : loadoutMap.keySet()) {
+            for (Map.Entry<PCLCard, PCLLoadout> entry : loadoutMap.entrySet()) {
+                PCLCard c = entry.getKey();
                 c.stopGlowing();
-                c.setCardRarity(AbstractCard.CardRarity.COMMON);
+                c.setCardRarity(entry.getValue().isCore() ? AbstractCard.CardRarity.CURSE : AbstractCard.CardRarity.COMMON);
             }
             card.setCardRarity(AbstractCard.CardRarity.RARE);
             card.beginGlowing();

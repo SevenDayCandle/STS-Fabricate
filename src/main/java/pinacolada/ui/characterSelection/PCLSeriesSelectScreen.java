@@ -82,7 +82,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
                 .setColors(Color.DARK_GRAY, Settings.CREAM_COLOR)
                 .setFont(EUIFontHelper.cardTipBodyFont, 1f);
 
-        typesAmount = new EUITextBox(panelTexture, new EUIHitbox(xPos, getY.invoke(3.5f), buttonWidth, buttonHeight))
+        typesAmount = new EUITextBox(panelTexture, new EUIHitbox(xPos, getY.invoke(3.5f), buttonWidth, buttonHeight * 1.5f))
                 .setColors(Color.DARK_GRAY, Settings.GOLD_COLOR)
                 .setAlignment(0.61f, 0.1f, true)
                 .setFont(EUIFontHelper.cardTipTitleFont, 1);
@@ -146,6 +146,9 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         if (loadout != null) {
             for (PCLCardData data : loadout.cardDatas) {
                 AbstractCard nc = data.makeCardFromLibrary(SingleCardViewPopup.isViewingUpgrade ? 1 : 0);
+                if (nc instanceof PCLCard) {
+                    ((PCLCard) nc).affinities.updateSortedList();
+                }
                 cards.group.add(nc);
             }
         }
@@ -153,6 +156,9 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
             for (PCLLoadout cs : container.getAllLoadouts()) {
                 for (PCLCardData data : cs.cardDatas) {
                     AbstractCard nc = data.makeCardFromLibrary(SingleCardViewPopup.isViewingUpgrade ? 1 : 0);
+                    if (nc instanceof PCLCard) {
+                        ((PCLCard) nc).affinities.updateSortedList();
+                    }
                     cards.group.add(nc);
                 }
             }
@@ -323,7 +329,11 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
             EUI.countingPanel.open(container.allCards);
         }
 
-        typesAmount.setLabel(PCLCoreStrings.colorString(totalCards >= MINIMUM_CARDS ? "g" : "r", PGR.core.strings.sui_totalCards(totalCards, MINIMUM_CARDS)));
+        typesAmount.setLabel(PGR.core.strings.sui_totalCards(
+                totalCards,
+                totalCards + container.bannedCards.size(),
+                totalCards >= MINIMUM_CARDS ? "g" : "r",
+                MINIMUM_CARDS));
 
         confirm.setInteractable(container.isValid());
     }

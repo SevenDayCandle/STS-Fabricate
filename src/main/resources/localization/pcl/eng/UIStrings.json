@@ -421,7 +421,7 @@
 												"Deselect All",
 												"Select All",
 												"Show All",
-												"Total Cards: {0}/{1}",
+												"Selected Cards: {0}/{1} | {#{2}:Required Cards: {3}}",
 												"#oLeft-Click a group to use it as your loadout. | #oRight-Click a group to add/remove its cards from the card pool.",
 												"#oLeft-Click a card to add/remove it from the pool. Removed cards are faded out.",
 												"Character Cards",

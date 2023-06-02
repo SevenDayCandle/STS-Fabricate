@@ -1220,6 +1220,13 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return EUIUtils.format(PGR.core.strings.subjects_cardN, baseExtra);
     }
 
+    public void recurse(ActionT1<PSkill<?>> onRecurse) {
+        onRecurse.invoke(this);
+        if (this.childEffect != null) {
+            this.childEffect.recurse(onRecurse);
+        }
+    }
+
     public void refresh(PCLUseInfo info, boolean conditionMet) {
         if (this.childEffect != null) {
             this.childEffect.refresh(info, conditionMet);

@@ -39,7 +39,6 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<CardGroup> {
     private final HashSet<String> bannedCards;
     private EUIButton deselectAllButton;
     private EUIButton selectAllButton;
-    private EUIButton selectCustomButton;
     private EUIButton selectRandomButton;
     private EUILabel selectedCount;
     private EUIToggle upgradeToggle;
@@ -246,6 +245,7 @@ public class ViewInGameCardPoolEffect extends PCLEffectWithCallback<CardGroup> {
         this.canToggle = canToggle;
         selectAllButton.setActive(canToggle);
         deselectAllButton.setActive(canToggle);
+        selectRandomButton.setActive(canToggle);
         selectedCount.setActive(canToggle);
         return this;
     }

@@ -240,7 +240,7 @@ public class PCLCardSlot {
                 PCLCard eCard = EUIUtils.safeCast(CardLibrary.getCard(data.ID), PCLCard.class);
                 if (eCard != null) {
                     card = (PCLCard) CardLibrary.getCard(data.ID).makeCopy();
-                    if (data.isNotSeen()) {
+                    if (data.isLocked()) {
                         card.isSeen = false;
                     }
                 }

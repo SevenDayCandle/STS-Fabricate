@@ -32,8 +32,7 @@ import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public abstract class PCLRelic extends AbstractRelic implements KeywordProvider {
     protected static EUITooltip hiddenTooltip;
@@ -231,6 +230,18 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider 
         if (GameUtilities.inBattle(true)) {
             activateBattleEffect();
         }
+
+        if (getBanCardIDs() != null) {
+            for (String cardID : getBanCardIDs()) {
+                PGR.dungeon.ban(cardID);
+            }
+        }
+
+        if (getEnableCardIDs() != null) {
+            for (String cardID : getBanCardIDs()) {
+                PGR.dungeon.addCard(cardID);
+            }
+        }
     }
 
     @Override
@@ -247,6 +258,28 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider 
         super.atPreBattle();
 
         activateBattleEffect();
+    }
+
+    @Override
+    public void obtain()
+    {
+        String[] replacements = getReplacementIDs();
+        if (replacements != null)
+        {
+            Set<String> ids = new HashSet<>(Arrays.asList(replacements));
+            ArrayList<AbstractRelic> relics = player.relics;
+            for (int i = 0; i < relics.size(); i++)
+            {
+                if (ids.contains(relics.get(i).relicId))
+                {
+                    instantObtain(player, i, true);
+                    setCounter(relics.get(i).counter);
+                    return;
+                }
+            }
+        }
+
+        super.obtain();
     }
 
     @Override
@@ -285,7 +318,7 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider 
     }
 
     public void renderWithoutAmount(SpriteBatch sb, Color c) {
-        renderRelicImage(sb, c, -64f, -64f, 0.5f);
+        renderRelicImage(sb, Color.WHITE, -64f, -64f, 0.5f);
         if (this.hb.hovered) {
             this.renderTip(sb);
         }
@@ -371,4 +404,13 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider 
     public boolean canSpawn() {
         return relicData.cardColor.equals(GameUtilities.getActingColor());
     }
+
+    // Cards that cannot appear or be required when this relic is held
+    public String[] getBanCardIDs() {return null;}
+
+    // Cards that can only appear when this relic is held
+    public String[] getEnableCardIDs() {return null;}
+
+    // Relics that are replaced with this one when obtained
+    public String[] getReplacementIDs() {return null;}
 }

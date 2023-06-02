@@ -40,8 +40,7 @@ public abstract class PCLLoadout {
     public static final int MAX_PRESETS = 5;
     public static final int MAX_VALUE = 20;
     public static final int MIN_CARDS = 10;
-    public static final int COMMON_LOADOUT_VALUE = 7;
-    public static final int COMMON_CORE_VALUE = 5;
+    public static final int COMMON_LOADOUT_VALUE = 6;
     public static final int CURSE_VALUE = -7;
     public static final int CARD_SLOTS = 4;
     public final AbstractCard.CardColor color;
@@ -183,7 +182,7 @@ public abstract class PCLLoadout {
 
         for (PCLCardData data : getPlayerData().getCoreLoadout().cardDatas) {
             if (data.cardRarity == AbstractCard.CardRarity.COMMON) {
-                slot.addItem(data, COMMON_CORE_VALUE);
+                slot.addItem(data, COMMON_LOADOUT_VALUE);
             }
         }
 
@@ -320,15 +319,8 @@ public abstract class PCLLoadout {
             data.values.put(type, 0);
         }
 
-        int firstCommonIndex = Math.max(0, data.getCardSlot(3).findIndex(i -> i.estimatedValue == COMMON_CORE_VALUE));
-        data.getCardSlot(0).select(0, 4).markAllSeen();
-        data.getCardSlot(1).select(0, 4).markAllSeen();
-        data.getCardSlot(2).select(0, 1).markCurrentSeen();
-        data.getCardSlot(3).select(firstCommonIndex, 1).markCurrentSeen();
-        data.getCardSlot(4).select(firstCommonIndex + 1, 1).markCurrentSeen();
-        data.getCardSlot(5).select(null);
-        data.getRelicSlot(0).select((PCLRelic) null);
-        data.getRelicSlot(1).select((PCLRelic) null);
+        setDefaultCardsForData(data);
+        setDefaultRelicsForData(data);
         return data;
     }
 
@@ -520,6 +512,21 @@ public abstract class PCLLoadout {
             trophies.glyph2 = Math.max(trophies.glyph2, PGR.dungeon.ascensionGlyphCounters.get(2));
             trophies.highScore = Math.max(trophies.highScore, score);
         }
+    }
+
+    protected void setDefaultCardsForData(PCLLoadoutData data) {
+        int firstCommonIndex = Math.max(0, data.getCardSlot(3).findIndex(i -> i.data.loadout != this));
+        data.getCardSlot(0).select(0, 4).markAllSeen();
+        data.getCardSlot(1).select(0, 4).markAllSeen();
+        data.getCardSlot(2).select(0, 1).markCurrentSeen();
+        data.getCardSlot(3).select(firstCommonIndex, 1).markCurrentSeen();
+        data.getCardSlot(4).select(firstCommonIndex + 1, 1).markCurrentSeen();
+        data.getCardSlot(5).select(null);
+    }
+
+    protected void setDefaultRelicsForData(PCLLoadoutData data) {
+        data.getRelicSlot(0).select((PCLRelic) null);
+        data.getRelicSlot(1).select((PCLRelic) null);
     }
 
     public void sortItems() {

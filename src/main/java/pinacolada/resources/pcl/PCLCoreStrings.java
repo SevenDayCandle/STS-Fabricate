@@ -1210,8 +1210,8 @@ public class PCLCoreStrings extends PCLStrings {
         return EUIUtils.format(sui_selected, amount, total);
     }
 
-    public final String sui_totalCards(Object cardCount, Object req) {
-        return EUIUtils.format(sui_totalCards, cardCount, req);
+    public final String sui_totalCards(Object cardCount, Object total, Object color, Object req) {
+        return EUIUtils.format(sui_totalCards, cardCount, total, color, req);
     }
 
     public final String sui_unlocked(Object amount, Object total) {

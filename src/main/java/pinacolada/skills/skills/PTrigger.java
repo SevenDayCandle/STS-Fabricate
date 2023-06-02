@@ -12,6 +12,7 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.base.primary.PTrigger_Interactable;
 import pinacolada.skills.skills.base.primary.PTrigger_When;
+import pinacolada.utilities.GameUtilities;
 
 public abstract class PTrigger extends PPrimary<PField_Not> {
     public static final int TRIGGER_PRIORITY = 0;
@@ -154,7 +155,7 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
             }
             boolean result = super.tryPassParent(source, info);
 
-            if (result && power != null) {
+            if (result && power != null && !GameUtilities.isDeadOrEscaped(power.owner)) {
                 power.flash();
             }
 

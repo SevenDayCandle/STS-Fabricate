@@ -238,6 +238,18 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
         }
     }
 
+    @Override
+    public void recurse(ActionT1<PSkill<?>> onRecurse) {
+        onRecurse.invoke(this);
+        for (PSkill<?> effect : effects) {
+            effect.recurse(onRecurse);
+        }
+        if (this.childEffect != null) {
+            this.childEffect.recurse(onRecurse);
+        }
+    }
+
+    @Override
     public boolean removable() {
         return effects.isEmpty() || EUIUtils.all(effects, PSkill::removable);
     }

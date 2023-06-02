@@ -301,7 +301,7 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
         }
     }
 
-    public boolean isNotSeen() {
+    public boolean isLocked() {
         return UnlockTracker.isCardLocked(ID) || !UnlockTracker.isCardSeen(ID);
     }
 

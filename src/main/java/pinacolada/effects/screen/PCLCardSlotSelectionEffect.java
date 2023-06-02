@@ -96,7 +96,7 @@ public class PCLCardSlotSelectionEffect extends PCLEffectWithCallback<Object> {
     }
 
     private void onCardClicked(PCLCard card) {
-        if (card.cardData.isNotSeen()) {
+        if (card.cardData.isLocked()) {
             CardCrawlGame.sound.play("CARD_REJECT");
         }
         else {
