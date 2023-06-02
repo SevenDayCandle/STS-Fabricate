@@ -76,7 +76,7 @@ public abstract class EUICardDraggable<T extends AbstractCard> extends EUIBase {
             meterSavedPosition.y = hb.targetCy / (float) Settings.HEIGHT;
             if (meterSavedPosition.dst2(config.get().cpy()) > EPSILON) {
                 EUIUtils.logInfoIfDebug(this, "Saved position: " + meterSavedPosition);
-                config.set(meterSavedPosition.cpy(), true);
+                config.set(meterSavedPosition.cpy());
             }
         }
 

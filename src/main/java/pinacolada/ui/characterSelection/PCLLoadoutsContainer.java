@@ -57,8 +57,8 @@ public class PCLLoadoutsContainer {
 
     public void commitChanges(PCLAbstractPlayerData data) {
         data.selectedLoadout = find(currentSeriesCard);
-        data.config.bannedCards.set(bannedCards, true);
-        data.config.cardsCount.set(Math.max(MINIMUM_CARDS, currentCardLimit), true);
+        data.config.bannedCards.set(new HashSet<>(bannedCards));
+        data.config.cardsCount.set(Math.max(MINIMUM_CARDS, currentCardLimit));
 
         EUIUtils.logInfoIfDebug(this, "Selected Loadout: " + data.selectedLoadout.getName());
         EUIUtils.logInfoIfDebug(this, "Banned Size: " + data.config.bannedCards.get().size());
@@ -95,9 +95,6 @@ public class PCLLoadoutsContainer {
                 if (card != null) {
                     allCards.add(card);
                 }
-
-                // Ensure that banned cards are not banned
-                bannedCards.remove(cData.ID);
             }
         }
         calculateCardCounts();

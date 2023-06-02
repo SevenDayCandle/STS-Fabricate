@@ -230,18 +230,6 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider 
         if (GameUtilities.inBattle(true)) {
             activateBattleEffect();
         }
-
-        if (getBanCardIDs() != null) {
-            for (String cardID : getBanCardIDs()) {
-                PGR.dungeon.ban(cardID);
-            }
-        }
-
-        if (getEnableCardIDs() != null) {
-            for (String cardID : getBanCardIDs()) {
-                PGR.dungeon.addCard(cardID);
-            }
-        }
     }
 
     @Override
@@ -402,14 +390,8 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider 
     }
 
     public boolean canSpawn() {
-        return relicData.cardColor.equals(GameUtilities.getActingColor());
+        return relicData.cardColor == AbstractCard.CardColor.COLORLESS || relicData.cardColor.equals(GameUtilities.getActingColor());
     }
-
-    // Cards that cannot appear or be required when this relic is held
-    public String[] getBanCardIDs() {return null;}
-
-    // Cards that can only appear when this relic is held
-    public String[] getEnableCardIDs() {return null;}
 
     // Relics that are replaced with this one when obtained
     public String[] getReplacementIDs() {return null;}

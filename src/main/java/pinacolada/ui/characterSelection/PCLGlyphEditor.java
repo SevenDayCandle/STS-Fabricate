@@ -51,14 +51,14 @@ public class PCLGlyphEditor extends EUIHoverable {
     public void decrease() {
         if (enabled && blight.counter > minimumLevel) {
             blight.addAmount(-1);
-            blight.configOption.set(blight.counter, true);
+            blight.configOption.set(blight.counter);
         }
     }
 
     public void increase() {
         if (enabled && blight.counter < maximumLevel) {
             blight.addAmount(1);
-            blight.configOption.set(blight.counter, true);
+            blight.configOption.set(blight.counter);
         }
     }
 
@@ -67,7 +67,7 @@ public class PCLGlyphEditor extends EUIHoverable {
         minimumLevel = blight.getMinimumLevel(ascensionLevel);
         if (blight.counter < minimumLevel) {
             blight.setAmount(minimumLevel);
-            blight.configOption.set(blight.counter, true);
+            blight.configOption.set(blight.counter);
         }
         tooltip.setDescription(enabled ? blight.getAscensionTooltipDescription(ascensionLevel) : blight.getLockedTooltipDescription());
         image.setShaderMode(enabled ? EUIRenderHelpers.ShaderMode.Normal : EUIRenderHelpers.ShaderMode.Grayscale);

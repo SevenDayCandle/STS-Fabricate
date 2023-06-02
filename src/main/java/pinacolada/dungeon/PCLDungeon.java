@@ -401,7 +401,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
 
         if (isActuallyStartingRun) {
             if (Settings.isStandardRun()) {
-                data.saveTrophies(true);
+                data.saveTrophies();
             }
 
             // Modify starting potion slots

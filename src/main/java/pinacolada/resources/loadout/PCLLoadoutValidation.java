@@ -2,6 +2,7 @@ package pinacolada.resources.loadout;
 
 import extendedui.EUIUtils;
 import extendedui.utilities.TupleT2;
+import pinacolada.resources.PGR;
 import pinacolada.ui.characterSelection.PCLBaseStatEditor;
 
 import java.util.HashMap;
@@ -14,6 +15,7 @@ public class PCLLoadoutValidation {
     public int hindranceLevel;
     public boolean allCardsSeen;
     public boolean isValid;
+    public boolean withinLimit;
 
     public PCLLoadoutValidation() {
 
@@ -25,6 +27,19 @@ public class PCLLoadoutValidation {
 
     public static PCLLoadoutValidation createFrom(PCLLoadoutData data) {
         return new PCLLoadoutValidation(data);
+    }
+
+    public String getFailingString() {
+        if (!allCardsSeen && !withinLimit) {
+            return EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, PGR.core.strings.csel_invalidLoadoutDescLimit, PGR.core.strings.csel_invalidLoadoutDescSeen);
+        }
+        else if (!allCardsSeen) {
+            return PGR.core.strings.csel_invalidLoadoutDescSeen;
+        }
+        else if (!withinLimit) {
+            return PGR.core.strings.csel_invalidLoadoutDescLimit;
+        }
+        return PGR.core.strings.csel_invalidLoadout;
     }
 
     public PCLLoadoutValidation refresh(PCLLoadoutData data) {
@@ -46,7 +61,7 @@ public class PCLLoadoutValidation {
             cardsCount.v1 += slot.amount;
 
             if (slot.selected != null) {
-                if (slot.selected.data.isLocked()) {
+                if (slot.isInvalid()) {
                     allCardsSeen = false;
                 }
 
@@ -75,7 +90,8 @@ public class PCLLoadoutValidation {
         totalValue.v1 += (int) EUIUtils.sum(values.values(), Float::valueOf) + hindranceLevel;
         totalValue.v2 = totalValue.v1 <= PCLLoadout.MAX_VALUE;
         cardsCount.v2 = cardsCount.v1 >= PCLLoadout.MIN_CARDS;
-        isValid = totalValue.v2 && cardsCount.v2 && allCardsSeen;
+        withinLimit = totalValue.v2 && cardsCount.v2;
+        isValid = withinLimit && allCardsSeen;
 
         return this;
     }

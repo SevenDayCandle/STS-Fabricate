@@ -7,6 +7,7 @@ import extendedui.utilities.RotatingList;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.fields.PCLCardAffinities;
+import pinacolada.resources.PCLAbstractPlayerData;
 
 import java.util.ArrayList;
 import java.util.function.Predicate;
@@ -116,6 +117,15 @@ public class PCLCardSlot {
 
     public int getSlotIndex() {
         return container.cardSlots.indexOf(this);
+    }
+
+    public boolean isIDBanned(String id) {
+        PCLAbstractPlayerData playerData = container.loadout.getPlayerData();
+        return playerData != null && playerData.config.bannedCards.get().contains(id);
+    }
+
+    public boolean isInvalid() {
+        return selected.data.isLocked() || isIDBanned(selected.data.ID);
     }
 
     public PCLCardSlot makeCopy(PCLLoadoutData container) {
@@ -239,7 +249,7 @@ public class PCLCardSlot {
             if (card == null || forceRefresh) {
                 PCLCard eCard = EUIUtils.safeCast(CardLibrary.getCard(data.ID), PCLCard.class);
                 if (eCard != null) {
-                    card = (PCLCard) CardLibrary.getCard(data.ID).makeCopy();
+                    card = eCard.makeStatEquivalentCopy();
                     if (data.isLocked()) {
                         card.isSeen = false;
                     }

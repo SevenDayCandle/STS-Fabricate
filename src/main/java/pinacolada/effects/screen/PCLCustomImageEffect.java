@@ -297,7 +297,7 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
 
             cd = fc.getCurrentDirectory();
             if (cd != null && cd.isDirectory()) {
-                PGR.config.lastImagePath.set(cd.getAbsolutePath(), true);
+                PGR.config.lastImagePath.set(cd.getAbsolutePath());
             }
 
             if (result == JFileChooser.APPROVE_OPTION) {

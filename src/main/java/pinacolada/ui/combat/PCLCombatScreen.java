@@ -84,7 +84,7 @@ public class PCLCombatScreen extends EUIBase {
             formulaDisplay.update(hoveredCard, originalCard, target, originalTarget, draggingCard);
         }
         if (PCLHotkeys.toggleFormulaDisplay.isJustPressed()) {
-            PGR.config.showFormulaDisplay.set(!PGR.config.showFormulaDisplay.get(), true);
+            PGR.config.showFormulaDisplay.set(!PGR.config.showFormulaDisplay.get());
         }
     }
 }

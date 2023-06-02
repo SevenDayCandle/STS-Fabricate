@@ -20,18 +20,30 @@ public class PCLLoadoutData {
     public final HashMap<PCLBaseStatEditor.StatType, Integer> values = new HashMap<>();
     public final ArrayList<PCLCardSlot> cardSlots = new ArrayList<>();
     public final ArrayList<PCLRelicSlot> relicSlots = new ArrayList<>();
+    public final PCLLoadout loadout;
     public int preset;
 
-    protected PCLLoadoutData() {
-    }
-
     public PCLLoadoutData(PCLLoadout loadout) {
+        this.loadout = loadout;
         loadout.initializeData(this);
     }
 
     public PCLLoadoutData(PCLLoadout loadout, LoadoutInfo info) {
+        this.loadout = loadout;
         loadout.initializeData(this);
         info.fill(this);
+    }
+
+    public PCLLoadoutData(PCLLoadoutData other) {
+        loadout = other.loadout;
+        preset = other.preset;
+        values.putAll(other.values);
+        for (PCLCardSlot slot : other.cardSlots) {
+            cardSlots.add(slot.makeCopy(other));
+        }
+        for (PCLRelicSlot slot : other.relicSlots) {
+            relicSlots.add(slot.makeCopy(other));
+        }
     }
 
     public PCLCardSlot addCardSlot() {
@@ -69,17 +81,7 @@ public class PCLLoadoutData {
     }
 
     public PCLLoadoutData makeCopy(int preset) {
-        final PCLLoadoutData copy = new PCLLoadoutData();
-        copy.preset = preset;
-        copy.values.putAll(values);
-        for (PCLCardSlot slot : cardSlots) {
-            copy.cardSlots.add(slot.makeCopy(copy));
-        }
-        for (PCLRelicSlot slot : relicSlots) {
-            copy.relicSlots.add(slot.makeCopy(copy));
-        }
-
-        return copy;
+        return new PCLLoadoutData(this);
     }
 
     public int relicsSize() {

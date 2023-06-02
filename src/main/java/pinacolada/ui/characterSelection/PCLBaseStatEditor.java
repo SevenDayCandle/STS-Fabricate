@@ -127,12 +127,7 @@ public class PCLBaseStatEditor extends EUIBase {
 
     public void set(int amount) {
         type.setAmount(data, amount);
-    }
-
-    public PCLBaseStatEditor setEstimatedValue(int value) {
-        valueDropdown.setSelection(value, true);
-
-        return this;
+        editor.updateValidation();
     }
 
     public PCLBaseStatEditor setInteractable(boolean interactable) {

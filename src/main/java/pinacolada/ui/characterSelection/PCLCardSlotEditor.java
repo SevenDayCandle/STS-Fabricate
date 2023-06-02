@@ -28,6 +28,7 @@ public class PCLCardSlotEditor extends EUIBase {
     protected EUIButton changeButton;
     protected EUIButton clearButton;
     protected AbstractCard card;
+    protected Color nameColor;
     public PCLCardSlot slot;
     public PCLLoadoutEditor loadoutEditor;
 
@@ -58,6 +59,7 @@ public class PCLCardSlotEditor extends EUIBase {
                 .setClickDelay(0.02f);
         changeButton = new EUIButton(PCLCoreImages.Menu.edit.texture(), new EUIHitbox(clearButton.hb.x + clearButton.hb.width + 16, cardnameText.hb.y + 12, 48, 48))
                 .setClickDelay(0.02f);
+        nameColor = Settings.GOLD_COLOR;
 
         setSlot(null);
     }
@@ -98,7 +100,7 @@ public class PCLCardSlotEditor extends EUIBase {
             cardnameText.setFontColor(Color.WHITE);
         }
         else {
-            cardnameText.setFontColor(Color.GOLD);
+            cardnameText.setFontColor(nameColor);
         }
 
         card = slot.getCard(false);
@@ -114,10 +116,7 @@ public class PCLCardSlotEditor extends EUIBase {
             cardamountText.setLabel("").updateImpl();
         }
 
-        int value = slot.getEstimatedValue();
-        cardvalueText.setLabel(value)
-                .setFontColor(value == 0 ? Settings.CREAM_COLOR : value < 0 ? Settings.RED_TEXT_COLOR : Settings.GREEN_TEXT_COLOR)
-                .tryUpdate();
+        cardvalueText.tryUpdate();
 
         if (addButton.isActive) {
             addButton.setInteractable(slot.canAdd()).updateImpl();
@@ -156,15 +155,31 @@ public class PCLCardSlotEditor extends EUIBase {
         this.cardnameText.setLabel(card != null ? card.name : "").setActive(true);
         this.cardvalueText.setActive(true);
         this.cardamountText.setActive(card != null);
-        this.addButton.setOnClick(this.slot::add).setInteractable(slot.canAdd()).setActive(true);
-        this.decrementButton.setOnClick(this.slot::decrement).setInteractable(slot.canDecrement()).setActive(true);
+        this.addButton.setOnClick(() -> {
+            this.slot.add();
+            refreshValues();
+        }).setInteractable(slot.canAdd()).setActive(true);
+        this.decrementButton.setOnClick(() -> {
+            this.slot.decrement();
+            refreshValues();
+        }).setInteractable(slot.canDecrement()).setActive(true);
         this.clearButton.setOnClick(() -> {
             this.slot.clear();
             this.cardnameText.setLabel("");
+            refreshValues();
         }).setInteractable(slot.canRemove()).setActive(true);
         this.changeButton.setOnClick(() -> loadoutEditor.trySelectCard(this.slot)).setInteractable(change).setActive(true);
+        this.nameColor = card != null && slot.isIDBanned(card.cardID) ? Settings.RED_TEXT_COLOR : Settings.GOLD_COLOR;
 
+        refreshValues();
         return this;
+    }
+
+    public void refreshValues() {
+        int value = slot == null ? 0 : slot.getEstimatedValue();
+        cardvalueText.setLabel(value)
+                .setFontColor(value == 0 ? Settings.CREAM_COLOR : value < 0 ? Settings.RED_TEXT_COLOR : Settings.GREEN_TEXT_COLOR);
+        loadoutEditor.updateValidation();
     }
 
     public PCLCardSlotEditor translate(float cX, float cY) {

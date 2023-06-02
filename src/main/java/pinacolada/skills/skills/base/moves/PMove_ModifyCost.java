@@ -40,7 +40,7 @@ public class PMove_ModifyCost extends PMove_Modify<PField_CardCategory> {
 
     @Override
     public ActionT1<AbstractCard> getAction() {
-        return (c) -> getActions().modifyCost(c, amount, fields.forced, fields.not);
+        return (c) -> getActions().modifyCost(c, amount, fields.forced, !fields.not);
     }
 
     @Override

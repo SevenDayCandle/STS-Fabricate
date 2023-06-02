@@ -226,7 +226,6 @@ public abstract class PCLLoadout {
         if (isLocked()) {
             card.isLocked = true;
             card.color = data.cardColor;
-            card.cardText.overrideDescription(PGR.core.strings.csel_unlocksAtLevel(unlockLevel, data.resources.getUnlockLevel()), false);
             card.setCardRarityType(AbstractCard.CardRarity.COMMON, AbstractCard.CardType.STATUS);
         }
         else {
@@ -536,7 +535,7 @@ public abstract class PCLLoadout {
         colorlessData.sort((a, b) -> StringUtils.compare(a.ID, b.ID));
     }
 
-    public PCLLoadoutValidation validate() {
+    public PCLLoadoutValidation createValidation() {
         return getPreset().validate();
     }
 

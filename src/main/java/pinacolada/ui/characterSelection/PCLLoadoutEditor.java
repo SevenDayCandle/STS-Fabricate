@@ -16,6 +16,7 @@ import extendedui.ui.AbstractMenuScreen;
 import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUIHeaderlessTooltip;
+import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.effects.screen.PCLCardSlotSelectionEffect;
@@ -248,7 +249,6 @@ public class PCLLoadoutEditor extends AbstractMenuScreen {
     public void updateImpl() {
         super.updateImpl();
 
-        val.refresh(presets[preset]);
         PGR.blackScreen.updateImpl();
         startingDeck.updateImpl();
         deckText.updateImpl();
@@ -287,7 +287,7 @@ public class PCLLoadoutEditor extends AbstractMenuScreen {
 
             for (PCLBaseStatEditor beditor : baseStatEditors) {
                 if (activeEditor == null || activeEditor == beditor) {
-                    beditor.setEstimatedValue(val.values.getOrDefault(beditor.type, 0)).tryUpdate();
+                    beditor.tryUpdate();
                 }
             }
 
@@ -303,13 +303,29 @@ public class PCLLoadoutEditor extends AbstractMenuScreen {
             }
         }
 
-        hindrancevalueText.setLabel(PGR.core.strings.csel_hindranceValue(val.hindranceLevel)).tryUpdate();
-        hindrancevalueText.tooltip.setTitle(hindrancevalueText.label.text);
-        cardscountText.setLabel(PGR.core.strings.csel_cardsCount(val.cardsCount.v1)).setFontColor(val.cardsCount.v2 ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR).tryUpdate();
-        cardsvalueText.setLabel(PGR.core.strings.csel_totalValue(val.totalValue.v1, PCLLoadout.MAX_VALUE)).setFontColor(val.totalValue.v2 ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR).tryUpdate();
-        saveButton.setInteractable(val.isValid).tryUpdate();
+        hindrancevalueText.tryUpdate();
+        cardscountText.tryUpdate();
+        cardsvalueText.tryUpdate();
+        saveButton.tryUpdate();
 
         contextMenu.tryUpdate();
+    }
+
+    public void updateValidation() {
+        val.refresh(presets[preset]);
+
+        hindrancevalueText.setLabel(PGR.core.strings.csel_hindranceValue(val.hindranceLevel));
+        hindrancevalueText.tooltip.setTitle(hindrancevalueText.label.text);
+        cardscountText.setLabel(PGR.core.strings.csel_cardsCount(val.cardsCount.v1)).setFontColor(val.cardsCount.v2 ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR);
+        cardsvalueText.setLabel(PGR.core.strings.csel_totalValue(val.totalValue.v1, PCLLoadout.MAX_VALUE)).setFontColor(val.totalValue.v2 ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR);
+
+        saveButton.setInteractable(val.isValid);
+        if (val.isValid) {
+            saveButton.setTooltip(null);
+        }
+        else {
+            saveButton.setTooltip(new EUITooltip(PGR.core.strings.csel_invalidLoadout, val.getFailingString()));
+        }
     }
 
     public void open(PCLLoadout loadout, PCLAbstractPlayerData data, CharacterOption option, ActionT0 onClose) {
@@ -399,6 +415,7 @@ public class PCLLoadoutEditor extends AbstractMenuScreen {
                 editor.setActive(false);
             }
         }
+        updateValidation();
     }
 
     public void toggleViewUpgrades(boolean value) {

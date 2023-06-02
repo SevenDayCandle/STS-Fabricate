@@ -93,10 +93,7 @@ public class PCLRelicSlotEditor extends EUIBase {
             relicImage.updateImpl();
         }
 
-        int value = slot.getEstimatedValue();
-        relicvalueText.setLabel(value)
-                .setFontColor(value == 0 ? Settings.CREAM_COLOR : value < 0 ? Settings.RED_TEXT_COLOR : Settings.GREEN_TEXT_COLOR)
-                .tryUpdate();
+        relicvalueText.tryUpdate();
 
         if (changeButton.isActive) {
             changeButton.updateImpl();
@@ -127,6 +124,7 @@ public class PCLRelicSlotEditor extends EUIBase {
             this.slot.clear();
             this.relicnameText.setLabel("");
             this.relicImage = null;
+            refreshValues();
         }).setInteractable(slot.canRemove()).setActive(relic != null);
         this.changeButton.setOnClick(() -> loadoutEditor.trySelectRelic(this.slot)).setActive(change);
         if (relic != null) {
@@ -137,6 +135,13 @@ public class PCLRelicSlotEditor extends EUIBase {
         }
 
         return this;
+    }
+
+    public void refreshValues() {
+        int value = slot == null ? 0 : slot.getEstimatedValue();
+        relicvalueText.setLabel(value)
+                .setFontColor(value == 0 ? Settings.CREAM_COLOR : value < 0 ? Settings.RED_TEXT_COLOR : Settings.GREEN_TEXT_COLOR);
+        loadoutEditor.updateValidation();
     }
 
     public PCLRelicSlotEditor translate(float cX, float cY) {

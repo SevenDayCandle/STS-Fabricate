@@ -53,6 +53,7 @@ public class PCLCardSlotSelectionEffect extends PCLEffectWithCallback<Object> {
         for (PCLCard card : cards) {
             card.current_x = InputHelper.mX;
             card.current_y = InputHelper.mY;
+            card.targetTransparency = slot.isIDBanned(card.cardID) ? 0.5f : 1f;
             grid.addCard(card);
         }
     }
@@ -90,13 +91,13 @@ public class PCLCardSlotSelectionEffect extends PCLEffectWithCallback<Object> {
     protected void updateInternal(float deltaTime) {
         grid.tryUpdate();
 
-        if (InputHelper.justClickedLeft && grid.hoveredCard == null) {
+        if (InputHelper.justClickedLeft && !grid.isHovered()) {
             complete();
         }
     }
 
     private void onCardClicked(PCLCard card) {
-        if (card.cardData.isLocked()) {
+        if (card.cardData.isLocked() || slot.isIDBanned(card.cardData.ID)) {
             CardCrawlGame.sound.play("CARD_REJECT");
         }
         else {
@@ -117,7 +118,7 @@ public class PCLCardSlotSelectionEffect extends PCLEffectWithCallback<Object> {
             if (item.data == card.cardData) {
                 cardValue_text
                         .setLabel(item.estimatedValue)
-                        .setFontColor(item.estimatedValue < 0 ? Settings.RED_TEXT_COLOR : Settings.GREEN_TEXT_COLOR)
+                        .setFontColor(slot.isIDBanned(item.data.ID) ? Color.GRAY : item.estimatedValue < 0 ? Settings.RED_TEXT_COLOR : Settings.GREEN_TEXT_COLOR)
                         .setPosition(card.hb.cX, card.hb.cY - (card.hb.height * 0.65f))
                         .renderImpl(sb);
                 return;

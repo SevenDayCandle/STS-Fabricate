@@ -19,6 +19,7 @@ import extendedui.ui.controls.EUILabel;
 import extendedui.ui.controls.EUITextBox;
 import extendedui.ui.controls.EUITutorial;
 import extendedui.ui.hitboxes.EUIHitbox;
+import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIClassUtils;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
@@ -28,6 +29,7 @@ import pinacolada.interfaces.providers.RunAttributesProvider;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
+import pinacolada.resources.loadout.PCLLoadoutValidation;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.ui.combat.PCLPlayerMeter;
 import pinacolada.utilities.GameUtilities;
@@ -59,8 +61,7 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase implements RunAtt
 
 
     public PCLCharacterSelectOptionsRenderer() {
-        final float leftTextWidth = FontHelper.getSmartWidth(FontHelper.cardTitleFont, PGR.core.strings.csel_leftText, 9999f, 0f); // Ascension
-        final float rightTextWidth = FontHelper.getSmartWidth(FontHelper.cardTitleFont, PGR.core.strings.csel_rightText, 9999f, 0f); // Level 22
+        final float leftTextWidth = FontHelper.getSmartWidth(FontHelper.cardTitleFont, PGR.core.strings.csel_leftText, 9999f, 0f);
 
         textScale = Settings.scale;
 
@@ -237,18 +238,22 @@ public class PCLCharacterSelectOptionsRenderer extends EUIBase implements RunAtt
         }
 
         int currentLevel = data.resources.getUnlockLevel();
+        startingCardsListLabel.setLabel(loadout.getDeckPreviewString(true));
+        PCLLoadoutValidation validation = loadout.createValidation();
         if (currentLevel < loadout.unlockLevel) {
-            startingCardsListLabel.setLabel(PGR.core.strings.csel_unlocksAtLevel(loadout.unlockLevel, currentLevel)).setFontColor(Settings.RED_TEXT_COLOR);
+            EUITooltip invalidTooltip = new EUITooltip(PGR.core.strings.csel_invalidLoadout, PGR.core.strings.csel_invalidLoadoutDescLocked);
+            startingCardsListLabel.setFontColor(Settings.RED_TEXT_COLOR).setTooltip(invalidTooltip);
             loadoutEditorButton.setInteractable(false);
             disableConfirm(true);
         }
-        else if (!loadout.validate().isValid) {
-            startingCardsListLabel.setLabel(PGR.core.strings.csel_invalidLoadout).setFontColor(Settings.RED_TEXT_COLOR);
+        else if (!validation.isValid) {
+            EUITooltip invalidTooltip = new EUITooltip(PGR.core.strings.csel_invalidLoadout, validation.getFailingString());
+            startingCardsListLabel.setFontColor(Settings.RED_TEXT_COLOR).setTooltip(invalidTooltip);
             loadoutEditorButton.setInteractable(true);
             disableConfirm(true);
         }
         else {
-            startingCardsListLabel.setLabel(loadout.getDeckPreviewString(true)).setFontColor(Settings.GREEN_TEXT_COLOR);
+            startingCardsListLabel.setFontColor(Settings.GREEN_TEXT_COLOR).setTooltip(null);
             loadoutEditorButton.setInteractable(true);
             disableConfirm(false);
         }

@@ -31,6 +31,7 @@ import pinacolada.misc.AugmentStrings;
 import pinacolada.misc.LoadoutStrings;
 import pinacolada.misc.PCLAffinityPanelFilter;
 import pinacolada.relics.PCLCustomRelicSlot;
+import pinacolada.relics.PCLRelic;
 import pinacolada.resources.pcl.PCLCoreResources;
 import pinacolada.rewards.pcl.AugmentReward;
 import pinacolada.skills.PSkill;
@@ -272,7 +273,7 @@ public class PGR {
             }
             catch (Exception e) {
                 e.printStackTrace();
-                EUIUtils.logError(PGR.class, "Failed to load potion " + ct.getName() + ": " + e.getLocalizedMessage());
+                EUIUtils.logError(PGR.class, "Failed to load card " + ct.getName() + ": " + e.getLocalizedMessage());
             }
         }
     }
@@ -315,8 +316,28 @@ public class PGR {
         for (Class<?> ct : GameUtilities.getClassesWithAnnotation(VisibleRelic.class)) {
             try {
                 AbstractRelic relic = (AbstractRelic) ct.getConstructor().newInstance();
-                // TODO get color from relic and add it to the proper pool
-                BaseMod.addRelic(relic, RelicType.SHARED);
+                // TODO figure out whether we should only use annotation
+                AbstractCard.CardColor color = relic instanceof PCLRelic ? ((PCLRelic) relic).relicData.cardColor : ct.getAnnotation(VisibleRelic.class).color();
+                switch (color) {
+                    case COLORLESS:
+                    case CURSE:
+                        BaseMod.addRelic(relic, RelicType.SHARED);
+                        break;
+                    case RED:
+                        BaseMod.addRelic(relic, RelicType.RED);
+                        break;
+                    case GREEN:
+                        BaseMod.addRelic(relic, RelicType.GREEN);
+                        break;
+                    case BLUE:
+                        BaseMod.addRelic(relic, RelicType.BLUE);
+                        break;
+                    case PURPLE:
+                        BaseMod.addRelic(relic, RelicType.PURPLE);
+                        break;
+                    default:
+                        BaseMod.addRelicToCustomPool(relic, color);
+                }
             }
             catch (Exception e) {
                 e.printStackTrace();

@@ -216,7 +216,7 @@ public abstract class PCLAbstractPlayerData {
             selectedLoadout.onVictory(ascensionLevel, trophyLevel, score);
         }
 
-        saveTrophies(true);
+        saveTrophies();
     }
 
     public void recordVictory(int ascensionLevel) {
@@ -229,7 +229,7 @@ public abstract class PCLAbstractPlayerData {
             selectedLoadout.onVictory(ascensionLevel, 1, 0); // Do not record score unless you are actually at the gameover screen
         }
 
-        saveTrophies(true);
+        saveTrophies();
     }
 
     public void reload() {
@@ -259,10 +259,10 @@ public abstract class PCLAbstractPlayerData {
         }
     }
 
-    public void saveTrophies(boolean flush) {
+    public void saveTrophies() {
         EUIUtils.logInfoIfDebug(this, "Saving Trophies");
 
-        config.trophies.set(serializeTrophies(), flush);
+        config.trophies.set(serializeTrophies());
     }
 
     // SelectedLoadout|Series_1,Trophy1,Trophy2,Trophy3|Series_2,Trophy1,Trophy2,Trophy3|...

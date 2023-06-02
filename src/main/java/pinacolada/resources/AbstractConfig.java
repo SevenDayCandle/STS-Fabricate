@@ -59,7 +59,7 @@ public abstract class AbstractConfig {
 
     protected int addToggle(int page, STSConfigItem<Boolean> option, String label, int ypos, String tip) {
         settingsBlock.addUIElement(page, new ModLabeledToggleButton(label, tip, BASE_OPTION_OFFSET_X, ypos, Settings.CREAM_COLOR.cpy(), EUIFontHelper.cardDescriptionFontNormal, option.get(), panel, (__) -> {
-        }, (c) -> option.set(c.enabled, true)));
+        }, (c) -> option.set(c.enabled)));
         return ypos - BASE_OPTION_OPTION_HEIGHT;
     }
 

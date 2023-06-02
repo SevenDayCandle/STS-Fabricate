@@ -217,10 +217,10 @@
 				"pcl:CharacterSelect": {
 								"TEXT": [
 												"Current Loadout: ",
-												"Locked Series",
-												"Unlocks at Level {0} | (You are Level {1})",
-												"Invalid Loadout (Please Edit)",
-												"Unlocks at Ascension {0}",
+												"Invalid Loadout",
+												"Loadout value surpasses the limit",
+												"Loadout contains cards filtered out from the card pool",
+												"Current loadout has not been unlocked. Please select a different one.",
 												"Loadout Editor",
 												"#pLeft-Click to open the editor. | #pRight-Click to change preset.",
 												"Obtain #yBronze #yTrophy at ascension #b{0} to unlock",

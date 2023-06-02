@@ -188,8 +188,10 @@ public class PCLCoreStrings extends PCLStrings {
     public final String ctype_turnEndLast = cardtype.TEXT[20];
     // Character
     public final String csel_leftText = charselect.TEXT[0];  // Starting Cards:
-    public final String csel_rightText = charselect.TEXT[1]; // Unlock
-    public final String csel_invalidLoadout = charselect.TEXT[3];
+    public final String csel_invalidLoadout = charselect.TEXT[1];
+    public final String csel_invalidLoadoutDescLimit = charselect.TEXT[2];
+    public final String csel_invalidLoadoutDescSeen = charselect.TEXT[3];
+    public final String csel_invalidLoadoutDescLocked = charselect.TEXT[4];
     public final String csel_deckEditor = charselect.TEXT[5];
     public final String csel_deckEditorInfo = charselect.TEXT[6];
     public final String csel_seriesEditor = charselect.TEXT[8];
@@ -1023,14 +1025,6 @@ public class PCLCoreStrings extends PCLStrings {
 
     public final String csel_totalValue(int value, int max) {
         return EUIUtils.format(charselect.TEXT[17], value, max);
-    }
-
-    public final String csel_unlocksAtAscension(int ascension) {
-        return EUIUtils.format(charselect.TEXT[4], ascension);
-    }
-
-    public final String csel_unlocksAtLevel(int unlockLevel, int currentLevel) {
-        return EUIUtils.format(charselect.TEXT[2], unlockLevel, currentLevel);
     }
 
     public final String grid_cardsInPile(Object item, int amount) {
