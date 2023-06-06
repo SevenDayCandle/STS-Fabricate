@@ -45,6 +45,6 @@ public class PCond_CheckRelic extends PPassiveCond<PField_Relic> {
 
     @Override
     public String wrapAmount(int input) {
-        return input == 0 ? String.valueOf(input) : (fields.random ? (input + "-") : (input + "+"));
+        return fields.getThresholdValString(input);
     }
 }

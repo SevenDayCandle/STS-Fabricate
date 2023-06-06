@@ -42,6 +42,11 @@ public class PCond_CheckEnergy extends PPassiveCond<PField_Not> {
 
     @Override
     public String getSubText() {
-        return getTargetHasString(fields.getThresholdString(PGR.core.tooltips.energy.toString()));
+        return getTargetHasString(fields.getThresholdRawString(PGR.core.tooltips.energy.toString()));
+    }
+
+    @Override
+    public String wrapAmount(int input) {
+        return fields.getThresholdValString(input);
     }
 }

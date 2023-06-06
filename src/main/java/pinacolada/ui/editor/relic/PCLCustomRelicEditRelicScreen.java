@@ -60,9 +60,8 @@ public class PCLCustomRelicEditRelicScreen extends PCLCustomEditEntityScreen<PCL
         imageButton = createHexagonalButton(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT)
                 .setPosition(cancelButton.hb.cX, undoButton.hb.y + undoButton.hb.height + LABEL_HEIGHT * 0.8f)
                 .setColor(Color.WHITE)
-                .setText(PGR.core.strings.cedit_loadImage)
                 .setTooltip(PGR.core.strings.cedit_loadImage, PGR.core.strings.cetut_primaryImage)
-                .setFont(EUIFontHelper.buttonFont, 0.85f)
+                .setLabel(EUIFontHelper.buttonFont, 0.85f, PGR.core.strings.cedit_loadImage)
                 .setOnClick(this::editImage);
 
         formEditor = new PCLCustomFormEditor(

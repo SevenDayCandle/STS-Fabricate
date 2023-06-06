@@ -28,23 +28,19 @@ public class PField_Not extends PField {
     public void setupEditor(PCLCustomEffectEditingPane editor) {
     }
 
-    public String getThresholdString(String subject) {
-        return getThresholdString(skill.getAmountRawString(), subject, skill.baseAmount);
+    public String getThresholdRawString(String subject) {
+        return getThresholdRawString(skill.getAmountRawString(), subject, skill.baseAmount);
     }
 
-    public String getThresholdString(String valueStr, String subject, int amount) {
-        return amount == 1 && !not ? subject : EUIRM.strings.numNoun(getThresholdValString(valueStr, amount), subject);
+    public String getThresholdRawString(String valueStr, String subject, int amount) {
+        return amount == 1 && !not ? subject : EUIRM.strings.numNoun(valueStr, subject);
     }
 
-    public String getThresholdValString() {
-        return getThresholdValString(skill.getAmountRawString(), skill.baseAmount);
-    }
-
-    public String getThresholdValString(String valueStr, int amount) {
+    public String getThresholdValString(int amount) {
         if (not && amount == 0) {
-            return valueStr;
+            return String.valueOf(amount);
         }
-        return valueStr + (not ? "-" : "+");
+        return amount + (not ? "-" : "+");
     }
 
     public void registerNotBoolean(PCLCustomEffectEditingPane editor) {

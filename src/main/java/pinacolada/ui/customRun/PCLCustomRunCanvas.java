@@ -146,13 +146,11 @@ public class PCLCustomRunCanvas extends EUICanvas {
                 .setCanAutosize(true, true);
 
         editCardPoolButton = EUIButton.createHexagonalButton(0, 0, scale(230), scale(55))
-                .setFont(EUIFontHelper.cardTitleFontSmall, 1f)
-                .setText(EUIRM.strings.uipool_viewCardPool)
+                .setLabel(EUIFontHelper.cardTitleFontSmall, 1f, EUIRM.strings.uipool_viewCardPool)
                 .setOnClick(this::openCardPool);
 
         editRelicPoolButton = EUIButton.createHexagonalButton(0, 0, scale(230), scale(55))
-                .setFont(EUIFontHelper.cardTitleFontSmall, 1f)
-                .setText(EUIRM.strings.uipool_viewRelicPool)
+                .setLabel(EUIFontHelper.cardTitleFontSmall, 1f, EUIRM.strings.uipool_viewRelicPool)
                 .setOnClick(this::openRelicPool);
 
         modsTooltip = new EUITooltip(CustomModeScreen.TEXT[6]);

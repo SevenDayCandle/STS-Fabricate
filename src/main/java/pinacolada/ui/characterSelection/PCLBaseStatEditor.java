@@ -50,12 +50,10 @@ public class PCLBaseStatEditor extends EUIBase {
                 .setColor(type.labelColor);
 
         decreaseButton = new EUIButton(ImageMaster.CF_LEFT_ARROW, new RelativeHitbox(hb, ICON_SIZE * 0.9f, ICON_SIZE * 0.9f, -(ICON_SIZE * 0.5f), h * -0.15f))
-                .setOnClick(this::decrease)
-                .setText(null);
+                .setOnClick(this::decrease);
 
         increaseButton = new EUIButton(ImageMaster.CF_RIGHT_ARROW, new RelativeHitbox(hb, ICON_SIZE * 0.9f, ICON_SIZE * 0.9f, w + (ICON_SIZE * 0.5f), h * -0.15f))
-                .setOnClick(this::increase)
-                .setText(null);
+                .setOnClick(this::increase);
 
         valueDropdown = new EUIDropdown<Integer>(RelativeHitbox.fromPercentages(hb, 0.85f, 0.75f, 0.5f, -0.2f))
                 .setFontForButton(EUIFontHelper.cardTitleFontSmall, 1f)

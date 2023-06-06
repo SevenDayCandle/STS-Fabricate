@@ -22,8 +22,7 @@ public class AugmentSortButton extends EUIButton {
     public AugmentSortButton(EUIHitbox hitbox, ActionT2<Type, Boolean> onSort) {
         super(EUIRM.images.rectangularButton.texture(), hitbox);
         this.onSort = onSort;
-        setFont(EUIFontHelper.cardDescriptionFontNormal, 0.7f);
-        setText(sortType.getText());
+        setLabel(EUIFontHelper.cardDescriptionFontNormal, 0.7f, sortType.getText());
         setOnClick(this::changeSorting);
 
         sortDirectionToggle = new EUIToggle(new RelativeHitbox(hb, scale(48), scale(48), 0.8f, 0.5f))

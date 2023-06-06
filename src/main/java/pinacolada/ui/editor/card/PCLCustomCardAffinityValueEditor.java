@@ -45,23 +45,19 @@ public class PCLCustomCardAffinityValueEditor extends EUIHoverable {
 
         decreaseButton = new EUIButton(ImageMaster.CF_LEFT_ARROW, new RelativeHitbox(hb, ICON_SIZE, ICON_SIZE, ICON_SIZE * -0.4f, h * 0.5f))
                 .setOnClick(this::decreasePrimary)
-                .setHoverBlendColor(EUIColors.lerp(Color.SCARLET, Color.ORANGE, 0.5f))
-                .setText(null);
+                .setHoverBlendColor(EUIColors.lerp(Color.SCARLET, Color.ORANGE, 0.5f));
 
         decreaseButton2 = new EUIButton(ImageMaster.CF_LEFT_ARROW, new RelativeHitbox(hb, ICON_SIZE, ICON_SIZE, ICON_SIZE * -0.4f, -h * 0.35f))
                 .setOnClick(this::decreaseSecondary)
-                .setHoverBlendColor(EUIColors.lerp(Color.SCARLET, Color.ORANGE, 0.5f))
-                .setText(null);
+                .setHoverBlendColor(EUIColors.lerp(Color.SCARLET, Color.ORANGE, 0.5f));
 
         increaseButton = new EUIButton(ImageMaster.CF_RIGHT_ARROW, new RelativeHitbox(hb, ICON_SIZE, ICON_SIZE, w + (ICON_SIZE * 0.4f), h * 0.5f))
                 .setOnClick(this::increasePrimary)
-                .setHoverBlendColor(EUIColors.lerp(Color.SCARLET, Color.ORANGE, 0.5f))
-                .setText(null);
+                .setHoverBlendColor(EUIColors.lerp(Color.SCARLET, Color.ORANGE, 0.5f));
 
         increaseButton2 = new EUIButton(ImageMaster.CF_RIGHT_ARROW, new RelativeHitbox(hb, ICON_SIZE, ICON_SIZE, w + (ICON_SIZE * 0.4f), -h * 0.35f))
                 .setOnClick(this::increaseSecondary)
-                .setHoverBlendColor(EUIColors.lerp(Color.SCARLET, Color.ORANGE, 0.5f))
-                .setText(null);
+                .setHoverBlendColor(EUIColors.lerp(Color.SCARLET, Color.ORANGE, 0.5f));
 
         displayValue = (EUITextBoxNumericalInput) new EUITextBoxNumericalInput(EUIRM.images.panelRoundedHalfH.texture(), hb)
                 .setOnComplete(v -> this.setValue(v, true))

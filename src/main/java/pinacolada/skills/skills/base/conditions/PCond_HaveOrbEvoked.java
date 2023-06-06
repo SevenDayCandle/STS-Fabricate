@@ -73,7 +73,7 @@ public class PCond_HaveOrbEvoked extends PPassiveCond<PField_Orb> implements OnO
 
     @Override
     public String wrapAmount(int input) {
-        return input == 0 ? String.valueOf(input) : (fields.not ? (input + "-") : (input + "+"));
+        return fields.getThresholdValString(input);
     }
 
     @Override

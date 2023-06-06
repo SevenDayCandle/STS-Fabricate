@@ -10,9 +10,11 @@ import extendedui.EUIRM;
 import extendedui.EUIRenderHelpers;
 import extendedui.EUIUtils;
 import extendedui.ui.controls.EUIButton;
+import extendedui.ui.controls.EUILabel;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.ui.tooltips.EUITooltip;
+import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.resources.PGR;
@@ -48,6 +50,7 @@ public class PCLCustomEffectNode extends EUIButton {
         super(type.getTexture(), hb);
         this.setColor(type.getColor());
         this.setShaderMode(EUIRenderHelpers.ShaderMode.Colorize);
+        this.label = new EUILabel(EUIFontHelper.buttonFont, RelativeHitbox.fromPercentages(hb, 0.66f, 1f), 0.45f, 0.68f, 0.26f, true);
         this.editor = editor;
         this.type = type;
         this.skill = skill;
@@ -58,10 +61,8 @@ public class PCLCustomEffectNode extends EUIButton {
 
         if (this.skill != null)
         {
-            this.text = StringUtils.capitalize(this.skill.getSampleText(null));
-            this.fontScale = 0.5f;
+            refresh();
         }
-        setSmartText(true, true);
         setOnClick(this::startEdit);
 
         this.deleteButton = new EUIButton(EUIRM.images.x.texture(), new RelativeHitbox(hb, 48, 48, hb.width * 1.2f, hb.height * 0.4f));
@@ -200,8 +201,11 @@ public class PCLCustomEffectNode extends EUIButton {
     }
 
     public void refresh() {
-        this.text = skill.getSampleText(null);
-        this.tooltip = new EUITooltip(type.getTitle(), skill.getPowerText());
+        String text = skill.getSampleText(null);
+        if (text != null) {
+            setTextAndAlign2D(StringUtils.capitalize(text), 0.26f, 0.68f, 0.26f, 0.08f);
+        }
+        this.tooltip = new EUITooltip(type.getTitle(), skill.getExportText());
     }
 
     public void refreshAll() {

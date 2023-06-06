@@ -54,7 +54,7 @@ public class PCond_HaveTakenDamage extends PPassiveCond<PField_Random> implement
 
     @Override
     public String wrapAmount(int input) {
-        return input == 0 ? String.valueOf(input) : (fields.not ? (input + "-") : (input + "+"));
+        return fields.getThresholdValString(input);
     }
 
     // When the owner receives damage, triggers the effect onto the attacker (info.owner)

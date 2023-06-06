@@ -121,20 +121,17 @@ public class PCLSingleCardPopup extends EUIBase {
                 .setColor(Color.FIREBRICK);
 
         this.changeVariantNext = new EUIButton(ImageMaster.CF_RIGHT_ARROW, changeVariantNextHb)
-                .setOnClick(() -> changePreviewForm(currentForm + 1))
-                .setText(null);
+                .setOnClick(() -> changePreviewForm(currentForm + 1));
 
         this.changeVariantPrev = new EUIButton(ImageMaster.CF_LEFT_ARROW, changeVariantPrevHb)
-                .setOnClick(() -> changePreviewForm(currentForm - 1))
-                .setText(null);
+                .setOnClick(() -> changePreviewForm(currentForm - 1));
 
         this.toggleAugment = new EUIButton(EUIRM.images.hexagonalButton.texture(),
                 new EUIHitbox(Settings.WIDTH * 0.85f, Settings.HEIGHT * 0.95f, scale(240), scale(50)))
-                .setFont(EUIFontHelper.buttonFont, 0.9f)
+                .setLabel(EUIFontHelper.buttonFont, 0.9f, PGR.core.strings.scp_viewTooltips)
                 .setColor(Color.GRAY)
                 .setBorder(EUIRM.images.hexagonalButtonBorder.texture(), Color.GRAY)
-                .setOnClick(() -> toggleAugmentView(!showAugments))
-                .setText(PGR.core.strings.scp_viewTooltips);
+                .setOnClick(() -> toggleAugmentView(!showAugments));
 
         this.changeVariantNumber = new EUITextBox(EUIRM.images.panelRoundedHalfH.texture(), changeVariantValueHb)
                 .setBackgroundTexture(EUIRM.images.panelRoundedHalfH.texture(), new Color(0.5f, 0.5f, 0.5f, 1f), 1.1f)

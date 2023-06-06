@@ -48,12 +48,10 @@ public class PCLCustomFormEditor extends EUIBase {
                 .setCanAutosize(true, true)
                 .setItems(EUIUtils.range(0, screen.tempBuilders.size() - 1));
         decreaseButton = new EUIButton(ImageMaster.CF_LEFT_ARROW, new RelativeHitbox(formValues.hb, ICON_SIZE, ICON_SIZE, ICON_SIZE * -0.4f, formValues.hb.height * 0.5f))
-                .setOnClick(this::decrease)
-                .setText(null);
+                .setOnClick(this::decrease);
 
         increaseButton = new EUIButton(ImageMaster.CF_RIGHT_ARROW, new RelativeHitbox(formValues.hb, ICON_SIZE, ICON_SIZE, formValues.hb.width + (ICON_SIZE * 0.4f), formValues.hb.height * 0.5f))
-                .setOnClick(this::increase)
-                .setText(null);
+                .setOnClick(this::increase);
 
         add = new EUIButton(EUIRM.images.plus.texture(), new RelativeHitbox(hb, scale(48), scale(48), scale(162), scale(24)))
                 .setOnClick(screen::addBuilder)

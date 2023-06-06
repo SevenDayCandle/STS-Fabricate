@@ -6,7 +6,6 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.vfx.cardManip.ExhaustCardEffect;
 import extendedui.EUIRM;
 import extendedui.interfaces.delegates.ActionT1;
-import extendedui.utilities.EUIFontHelper;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.PCLSFX;
 import pinacolada.effects.card.HideCardEffect;
@@ -37,7 +36,6 @@ public class PCLCardRewardRerollAction extends PCLCardRewardAction {
     public PCLCardRewardActionButton getButton(int index) {
         return (PCLCardRewardActionButton) new PCLCardRewardActionButton(this,
                 EUIRM.images.hexagonalButton.texture(), PGR.core.strings.rewards_reroll, PGR.core.strings.rewards_rerollDescription, REWARD_INDEX, index, false)
-                .setFont(EUIFontHelper.buttonFont, 0.85f)
                 .setDimensions(AbstractCard.IMG_WIDTH * 0.75f, AbstractCard.IMG_HEIGHT * 0.14f)
                 .setColor(Color.TAN)
                 .setBorder(EUIRM.images.hexagonalButtonBorder.texture(), Settings.GOLD_COLOR);

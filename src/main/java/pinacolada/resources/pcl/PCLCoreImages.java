@@ -45,6 +45,8 @@ public class PCLCoreImages extends PCLImages {
         public static final TextureCache editorEffect = new TextureCache("images/pcl/ui/menu/EditorEffect.png");
         public static final TextureCache editorPower = new TextureCache("images/pcl/ui/menu/EditorPower.png");
         public static final TextureCache info = new TextureCache("images/pcl/ui/menu/Info.png");
+        public static final TextureCache menuCard = new TextureCache("images/pcl/ui/menu/MenuCard.png");
+        public static final TextureCache menuRelic = new TextureCache("images/pcl/ui/menu/MenuRelic.png");
         public static final TextureCache nodeCircle = new TextureCache("images/pcl/ui/menu/NodeCircle.png");
         public static final TextureCache nodeCircle2 = new TextureCache("images/pcl/ui/menu/NodeCircle2.png");
         public static final TextureCache nodeCircleSmall = new TextureCache("images/pcl/ui/menu/NodeCircleSmall.png");

@@ -178,6 +178,7 @@ public class PCLCardText {
 
         // Simple rebalancing of last two lines of each section.
         // Move words from the first of them to the second until we can no longer do so without the second line getting longer than the first
+        // This is a lot faster than trying to balance all lines perfectly (O(log n) vs O(n^2) if using dynamic programming)
         for (Integer index : indexes) {
             int first = index - 1;
             final PCLTextLine line2 = lines.get(index);

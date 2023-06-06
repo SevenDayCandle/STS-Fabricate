@@ -44,9 +44,14 @@ public class PCond_IfHasCounter extends PFacetCond<PField_Not> {
     @Override
     public String getSubText() {
         if (isWhenClause() || isPassiveClause()) {
-            return EUIRM.strings.adjNoun(fields.getThresholdString(plural(PGR.core.tooltips.counter)), TEXT.subjects_card);
+            return EUIRM.strings.adjNoun(fields.getThresholdRawString(plural(PGR.core.tooltips.counter)), TEXT.subjects_card);
         }
-        return TEXT.cond_ifTargetHas(TEXT.subjects_thisCard, 1, fields.getThresholdString(plural(PGR.core.tooltips.counter)));
+        return TEXT.cond_ifTargetHas(TEXT.subjects_thisCard, 1, fields.getThresholdRawString(plural(PGR.core.tooltips.counter)));
+    }
+
+    @Override
+    public String wrapAmount(int input) {
+        return fields.getThresholdValString(input);
     }
 
     @Override

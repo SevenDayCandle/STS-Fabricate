@@ -35,8 +35,7 @@ public class PCLCustomPowerEffectPage extends PCLCustomEffectPage {
         quickAddButton = new EUIButton(EUIRM.images.hexagonalButton.texture(), new EUIHitbox(hb.x + MENU_WIDTH * 3.5f, hb.y - scale(20), MENU_WIDTH, MENU_HEIGHT))
                 .setColor(Color.GRAY)
                 .setBorder(EUIRM.images.hexagonalButtonBorder.texture(), Color.GRAY)
-                .setFont(EUIFontHelper.cardTitleFontSmall, 0.8f)
-                .setText(PGR.core.strings.cedit_addToEffect)
+                .setLabel(EUIFontHelper.cardTitleFontSmall, 0.8f, PGR.core.strings.cedit_addToEffect)
                 .setTooltip(PGR.core.strings.cedit_addToEffect, PGR.core.strings.cetut_addToEffect)
                 .setOnClick(this::openDropdown);
     }

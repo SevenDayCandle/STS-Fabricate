@@ -61,7 +61,6 @@ public abstract class PCLTextToken {
 
     protected void render(SpriteBatch sb, PCLCardText context, ColoredString string) {
         if (string == null) {
-            //PCLUtils.LogWarning(this, "Text could not be rendered.");
             return;
         }
         render(sb, context, string.text, string.color != null ? string.color : context.color);

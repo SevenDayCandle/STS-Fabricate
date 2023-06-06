@@ -100,37 +100,32 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
         cancelButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(buttonWidth * 0.6f, button_cY)
                 .setColor(Color.FIREBRICK)
-                .setText(GridCardSelectScreen.TEXT[1])
-                .setFont(EUIFontHelper.buttonFont, 0.85f)
+                .setLabel(EUIFontHelper.buttonFont, 0.85f, GridCardSelectScreen.TEXT[1])
                 .setOnClick((ActionT0) this::complete);
 
         saveButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(cancelButton.hb.cX, cancelButton.hb.y + cancelButton.hb.height + labelHeight * 0.8f)
                 .setColor(Color.FOREST)
-                .setText(GridCardSelectScreen.TEXT[0])
-                .setFont(EUIFontHelper.buttonFont, 0.85f)
+                .setLabel(EUIFontHelper.buttonFont, 0.85f, GridCardSelectScreen.TEXT[0])
                 .setInteractable(false)
                 .setOnClick(this::commit);
 
         pasteButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(cancelButton.hb.cX, saveButton.hb.y + saveButton.hb.height + labelHeight * 0.8f)
                 .setColor(Color.WHITE)
-                .setText(PGR.core.strings.cedit_paste)
-                .setFont(EUIFontHelper.buttonFont, 0.85f)
+                .setLabel(EUIFontHelper.buttonFont, 0.85f, PGR.core.strings.cedit_paste)
                 .setOnClick(this::getImageFromClipboard);
 
         selectExistingButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(cancelButton.hb.cX, pasteButton.hb.y + pasteButton.hb.height + labelHeight * 0.8f)
                 .setColor(Color.WHITE)
-                .setText(PGR.core.strings.cedit_loadFromCard)
-                .setFont(EUIFontHelper.buttonFont, 0.85f)
+                .setLabel(EUIFontHelper.buttonFont, 0.85f, PGR.core.strings.cedit_loadFromCard)
                 .setOnClick(this::selectExistingCards);
 
         loadButton = createHexagonalButton(0, 0, buttonWidth, buttonHeight)
                 .setPosition(cancelButton.hb.cX, selectExistingButton.hb.y + selectExistingButton.hb.height + labelHeight * 0.8f)
                 .setColor(Color.WHITE)
-                .setText(PGR.core.strings.cedit_loadFile)
-                .setFont(EUIFontHelper.buttonFont, 0.85f)
+                .setLabel(EUIFontHelper.buttonFont, 0.85f, PGR.core.strings.cedit_loadFile)
                 .setOnClick(this::getImageFromFileDialog);
 
 

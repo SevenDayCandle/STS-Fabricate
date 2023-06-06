@@ -5,9 +5,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import extendedui.EUI;
 import extendedui.EUIRM;
-import extendedui.EUIRenderHelpers;
 import extendedui.EUIUtils;
 import extendedui.ui.controls.EUITutorial;
 import extendedui.ui.controls.EUITutorialPage;
@@ -50,7 +50,7 @@ public class PCLAugmentPanelItem extends PCLTopPanelItem {
     @Override
     public void render(SpriteBatch sb) {
         super.render(sb);
-        EUIRenderHelpers.writeCentered(sb, EUIFontHelper.cardTitleFontNormal, String.valueOf(PGR.dungeon.getAugmentTotal()), this.x + (this.hb_w * 0.75f), this.y + 16f * Settings.scale, currentColor);
+        FontHelper.renderFontCentered(sb, EUIFontHelper.cardTitleFontNormal, String.valueOf(PGR.dungeon.getAugmentTotal()), this.x + (this.hb_w * 0.75f), this.y + 16f * Settings.scale, currentColor);
     }
 
     public void update() {

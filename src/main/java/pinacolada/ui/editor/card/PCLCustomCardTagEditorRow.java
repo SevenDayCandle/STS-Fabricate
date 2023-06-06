@@ -62,20 +62,16 @@ public class PCLCustomCardTagEditorRow extends EUIDropdownRow<PCLCardTagInfo> {
                 .setFont(EUIFontHelper.cardTitleFontSmall, 1f);
 
         decreaseButton = new EUIButton(ImageMaster.CF_LEFT_ARROW, new RelativeHitbox(displayValue.hb, ICON_SIZE, ICON_SIZE, ICON_SIZE * -0.4f, MENU_HEIGHT * 0.5f).setIsPopupCompatible(true).setParentElement(dr))
-                .setOnClick(this::decreasePrimary)
-                .setText(null);
+                .setOnClick(this::decreasePrimary);
 
         decreaseButton2 = new EUIButton(ImageMaster.CF_LEFT_ARROW, new RelativeHitbox(displayValue.hb, ICON_SIZE, ICON_SIZE, 2.7f * MENU_HEIGHT + ICON_SIZE * -0.4f, MENU_HEIGHT * 0.5f).setIsPopupCompatible(true).setParentElement(dr))
-                .setOnClick(this::decreaseSecondary)
-                .setText(null);
+                .setOnClick(this::decreaseSecondary);
 
         increaseButton = new EUIButton(ImageMaster.CF_RIGHT_ARROW, new RelativeHitbox(displayValue.hb, ICON_SIZE, ICON_SIZE, MENU_HEIGHT + (ICON_SIZE * 0.4f), MENU_HEIGHT * 0.5f).setIsPopupCompatible(true).setParentElement(dr))
-                .setOnClick(this::increasePrimary)
-                .setText(null);
+                .setOnClick(this::increasePrimary);
 
         increaseButton2 = new EUIButton(ImageMaster.CF_RIGHT_ARROW, new RelativeHitbox(displayValue.hb, ICON_SIZE, ICON_SIZE, 3.7f * MENU_HEIGHT + (ICON_SIZE * 0.4f), MENU_HEIGHT * 0.5f).setIsPopupCompatible(true).setParentElement(dr))
-                .setOnClick(this::increaseSecondary)
-                .setText(null);
+                .setOnClick(this::increaseSecondary);
 
         forceRefresh();
     }

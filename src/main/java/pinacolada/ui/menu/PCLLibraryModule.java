@@ -31,10 +31,8 @@ public class PCLLibraryModule extends EUIBase implements CustomCardPoolModule {
     public PCLLibraryModule(CustomCardLibraryScreen screen) {
         this.screen = screen;
         groupButton = new EUIButton(ImageMaster.COLOR_TAB_BAR, new EUIHitbox(Settings.WIDTH * 0.18f, Settings.HEIGHT * 0.9f, scale(210), scale(80)))
-                .setText(group.getTitle())
                 .setColor(Color.DARK_GRAY)
-                .setFont(EUIFontHelper.cardDescriptionFontNormal, 1f)
-                .setSmartText(false)
+                .setLabel(EUIFontHelper.cardDescriptionFontNormal, 1f, group.getTitle())
                 .setOnClick(() -> togglePool(group.next()))
                 .setOnRightClick(() -> groupMenu.positionToOpen());
         groupMenu = (EUIContextMenu<ColorlessGroup>) new EUIContextMenu<>(new EUIHitbox(0, 0, scale(240), scale(48)).setIsPopupCompatible(true), ColorlessGroup::getTitle)

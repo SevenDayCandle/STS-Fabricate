@@ -63,7 +63,7 @@ public class PCond_CheckPower extends PPassiveCond<PField_Power> implements OnAp
 
     @Override
     public String getSubText() {
-        String baseString = fields.getThresholdString(fields.getPowerSubjectString());
+        String baseString = fields.getThresholdRawString(fields.getPowerSubjectString());
         if (isWhenClause()) {
             return getWheneverString(TEXT.act_gain(baseString));
         }
@@ -78,5 +78,10 @@ public class PCond_CheckPower extends PPassiveCond<PField_Power> implements OnAp
                 : (fields.getPowerFilter().invoke(power) && (target.targetsSingle() ? t == getOwnerCreature() : target.getTargets(source, t).contains(t)))) {
             useFromTrigger(makeInfo(t).setData(power));
         }
+    }
+
+    @Override
+    public String wrapAmount(int input) {
+        return fields.getThresholdValString(input);
     }
 }

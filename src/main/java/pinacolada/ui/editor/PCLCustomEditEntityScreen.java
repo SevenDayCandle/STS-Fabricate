@@ -170,22 +170,19 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         cancelButton = createHexagonalButton(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT)
                 .setPosition(BUTTON_WIDTH * 0.6f, BUTTON_CY)
                 .setColor(Color.FIREBRICK)
-                .setText(GridCardSelectScreen.TEXT[1])
-                .setFont(EUIFontHelper.buttonFont, 0.85f)
+                .setLabel(EUIFontHelper.buttonFont, 0.85f, GridCardSelectScreen.TEXT[1])
                 .setOnClick(this::end);
 
         saveButton = createHexagonalButton(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT)
                 .setPosition(cancelButton.hb.cX, cancelButton.hb.y + cancelButton.hb.height + LABEL_HEIGHT * 0.8f)
                 .setColor(Color.FOREST)
-                .setText(GridCardSelectScreen.TEXT[0])
-                .setFont(EUIFontHelper.buttonFont, 0.85f)
+                .setLabel(EUIFontHelper.buttonFont, 0.85f, GridCardSelectScreen.TEXT[0])
                 .setOnClick(this::save);
 
         undoButton = createHexagonalButton(0, 0, BUTTON_WIDTH, BUTTON_HEIGHT)
                 .setPosition(cancelButton.hb.cX, saveButton.hb.y + saveButton.hb.height + LABEL_HEIGHT * 0.8f)
                 .setColor(Color.WHITE)
-                .setText(PGR.core.strings.cedit_undo)
-                .setFont(EUIFontHelper.buttonFont, 0.85f)
+                .setLabel(EUIFontHelper.buttonFont, 0.85f, PGR.core.strings.cedit_undo)
                 .setOnClick(this::undo);
     }
 

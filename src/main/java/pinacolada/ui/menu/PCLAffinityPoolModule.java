@@ -67,7 +67,7 @@ public class PCLAffinityPoolModule extends EUIBase implements CustomCardFilterMo
         for (int i = 0; i < currentAffinities.size(); i++) {
             PCLCardAffinity a = currentAffinities.get(i);
             affinityButtons.add(new AffinityKeywordButton(
-                    new RelativeHitbox(affinitiesSectionLabel.hb, ICON_SIZE, ICON_SIZE, ICON_SIZE * (0.5f + i * 1.05f), -0.6f * (ICON_SIZE)).setIsPopupCompatible(true), a.type)
+                    new RelativeHitbox(affinitiesSectionLabel.hb, ICON_SIZE, ICON_SIZE, ICON_SIZE * (0.5f + i * 1.05f), -0.3f * (ICON_SIZE)).setIsPopupCompatible(true), a.type)
                     .setLevel(a.level)
                     .setOptions(false, true)
                     .setOnClick((button) -> {
@@ -149,7 +149,7 @@ public class PCLAffinityPoolModule extends EUIBase implements CustomCardFilterMo
     @Override
     public void updateImpl() {
         this.seriesDropdown.setPosition(filters.typesDropdown.hb.x + filters.typesDropdown.hb.width + SPACING * 2, DRAW_START_Y + filters.getScrollDelta()).tryUpdate();
-        this.affinitiesSectionLabel.setPosition(filters.descriptionInput.hb.x + filters.descriptionInput.hb.width + SPACING * 6, DRAW_START_Y + filters.getScrollDelta() - SPACING * 2f).tryUpdate();
+        this.affinitiesSectionLabel.setPosition(filters.descriptionInput.hb.x + filters.descriptionInput.hb.width + SPACING * 5.5f, DRAW_START_Y + filters.getScrollDelta() - SPACING * 1.2f).tryUpdate();
         for (AffinityKeywordButton c : affinityButtons) {
             c.tryUpdate();
         }

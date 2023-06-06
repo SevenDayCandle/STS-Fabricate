@@ -55,7 +55,7 @@ public abstract class PCond_HaveCardThis extends PPassiveCond<PField_CardGeneric
 
     @Override
     public String wrapAmount(int input) {
-        return input == 0 ? String.valueOf(input) : (fields.not ? (input + "-") : (input + "+"));
+        return fields.getThresholdValString(input);
     }
 
     @Override

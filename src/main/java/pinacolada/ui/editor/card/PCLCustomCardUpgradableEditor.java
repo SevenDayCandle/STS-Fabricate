@@ -36,20 +36,16 @@ public class PCLCustomCardUpgradableEditor extends EUIHoverable {
         final float h = hb.height;
 
         decreaseButton = new EUIButton(ImageMaster.CF_LEFT_ARROW, new RelativeHitbox(hb, ICON_SIZE, ICON_SIZE, ICON_SIZE * -0.4f, h * 0.5f))
-                .setOnClick(this::decreasePrimary)
-                .setText(null);
+                .setOnClick(this::decreasePrimary);
 
         decreaseButton2 = new EUIButton(ImageMaster.CF_LEFT_ARROW, new RelativeHitbox(hb, ICON_SIZE, ICON_SIZE, ICON_SIZE * -0.4f, -h * 0.35f))
-                .setOnClick(this::decreaseSecondary)
-                .setText(null);
+                .setOnClick(this::decreaseSecondary);
 
         increaseButton = new EUIButton(ImageMaster.CF_RIGHT_ARROW, new RelativeHitbox(hb, ICON_SIZE, ICON_SIZE, w + (ICON_SIZE * 0.4f), h * 0.5f))
-                .setOnClick(this::increasePrimary)
-                .setText(null);
+                .setOnClick(this::increasePrimary);
 
         increaseButton2 = new EUIButton(ImageMaster.CF_RIGHT_ARROW, new RelativeHitbox(hb, ICON_SIZE, ICON_SIZE, w + (ICON_SIZE * 0.4f), -h * 0.35f))
-                .setOnClick(this::increaseSecondary)
-                .setText(null);
+                .setOnClick(this::increaseSecondary);
 
         displayValue = (EUITextBoxNumericalInput) new EUITextBoxNumericalInput(EUIRM.images.panelRoundedHalfH.texture(), hb)
                 .setOnComplete(this::setValue)

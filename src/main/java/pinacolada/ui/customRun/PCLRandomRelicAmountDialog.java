@@ -66,8 +66,7 @@ public class PCLRandomRelicAmountDialog extends EUIDialog<PCLRandomRelicAmountDi
     protected EUIButton getConfirmButton() {
         return new EUIButton(ImageMaster.OPTION_YES,
                 new RelativeHitbox(hb, scale(135), scale(70), hb.width * 0.15f, hb.height * 0.15f))
-                .setFont(EUIFontHelper.cardTitleFontNormal, 0.8f)
-                .setText(GridCardSelectScreen.TEXT[0])
+                .setLabel(EUIFontHelper.cardTitleFontNormal, 0.8f, GridCardSelectScreen.TEXT[0])
                 .setOnClick(() -> {
                     if (onComplete != null) {
                         onComplete.invoke(getConfirmValue());
@@ -78,8 +77,7 @@ public class PCLRandomRelicAmountDialog extends EUIDialog<PCLRandomRelicAmountDi
     protected EUIButton getCancelButton() {
         return new EUIButton(ImageMaster.OPTION_NO,
                 new RelativeHitbox(hb, scale(135), scale(70), hb.width * 0.85f, hb.height * 0.15f))
-                .setFont(EUIFontHelper.cardTitleFontNormal, 0.8f)
-                .setText(GridCardSelectScreen.TEXT[1])
+                .setLabel(EUIFontHelper.cardTitleFontNormal, 0.8f, GridCardSelectScreen.TEXT[1])
                 .setOnClick(() -> {
                     if (onComplete != null) {
                         onComplete.invoke(getCancelValue());

@@ -89,7 +89,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         this.editor = editor;
         this.node = node;
         this.hb = hb;
-        this.backdrop = new EUIBorderedImage(EUIRM.images.greySquare.texture(), new EUIHitbox(hb.x - scale(50), hb.y, CUTOFF * 1.1f, MAIN_OFFSET * 2));
+        this.backdrop = new EUIBorderedImage(EUIRM.images.greySquare.texture(), new EUIHitbox(hb.x - scale(85), hb.y, CUTOFF * 1.3f, MAIN_OFFSET * 2));
         this.backdrop.setColor(Color.GRAY);
         initializeSelectors();
         refresh();
@@ -197,8 +197,8 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
             for (EUIHoverable element : activeElements) {
                 xOff = position(element, xOff);
             }
-            backdrop.hb.height = hb.height + additionalHeight * -1 + MENU_HEIGHT * 2;
-            backdrop.hb.y = hb.y - backdrop.hb.height + MENU_HEIGHT * 2;
+            backdrop.hb.height = hb.height + additionalHeight * -1 + MENU_HEIGHT * 3.6f;
+            backdrop.hb.y = hb.y - backdrop.hb.height + MENU_HEIGHT * 3.1f;
         }
         else if (node.skill == null) {
             valueEditor.setHeaderText(PGR.core.strings.cedit_value);

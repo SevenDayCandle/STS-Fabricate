@@ -39,7 +39,7 @@ public class PCond_PileHas extends PPassiveCond<PField_CardCategory> {
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
         int count = EUIUtils.sumInt(fields.groupTypes, g -> EUIUtils.count(g.getCards(),
                 c -> fields.getFullCardFilter().invoke(c)));
-        return amount == 0 ? count == 0 : fields.forced ^ count >= amount;
+        return amount == 0 ? count == 0 : fields.not ^ count >= amount;
     }
 
     @Override
@@ -56,6 +56,6 @@ public class PCond_PileHas extends PPassiveCond<PField_CardCategory> {
 
     @Override
     public String wrapAmount(int input) {
-        return input == 0 ? String.valueOf(input) : (fields.forced ? (input + "-") : (input + "+"));
+        return fields.getThresholdValString(input);
     }
 }

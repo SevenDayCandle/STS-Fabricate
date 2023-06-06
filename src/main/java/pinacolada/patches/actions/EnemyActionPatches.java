@@ -9,7 +9,7 @@ import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import pinacolada.dungeon.CombatManager;
 
-// Make the enemy hit itself (Also VampireDamageAction because it obviously does not inherit from DamageAction)
+// Copied and modified from STS-AnimatorMod
 public class EnemyActionPatches {
     @SpirePatch(clz = DamageAction.class, method = SpirePatch.CONSTRUCTOR, paramtypez = {AbstractCreature.class, DamageInfo.class, AbstractGameAction.AttackEffect.class})
     public static class DamageAction_ctor {

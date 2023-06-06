@@ -7,6 +7,7 @@ import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.screens.mainMenu.MainMenuPanelButton;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.ui.editor.card.PCLCustomCardSelectorScreen;
 import pinacolada.ui.editor.relic.PCLCustomRelicSelectorScreen;
 
@@ -45,13 +46,13 @@ public class CustomMainMenuPanelButton extends MainMenuPanelButton {
             ReflectionHacks.setPrivate(this, MainMenuPanelButton.class, "panelImg", ImageMaster.MENU_PANEL_BG_BEIGE);
             ReflectionHacks.setPrivate(this, MainMenuPanelButton.class, "header", PGR.core.strings.menu_card);
             ReflectionHacks.setPrivate(this, MainMenuPanelButton.class, "description", PGR.core.strings.menu_cardDesc);
-            ReflectionHacks.setPrivate(this, MainMenuPanelButton.class, "portraitImg", ImageMaster.P_INFO_CARD);
+            ReflectionHacks.setPrivate(this, MainMenuPanelButton.class, "portraitImg", PCLCoreImages.Menu.menuCard.texture());
         }
         else if (result == PCLEnum.Panels.CUSTOM_RELICS) {
             ReflectionHacks.setPrivate(this, MainMenuPanelButton.class, "panelImg", ImageMaster.MENU_PANEL_BG_BLUE);
             ReflectionHacks.setPrivate(this, MainMenuPanelButton.class, "header", PGR.core.strings.menu_relic);
             ReflectionHacks.setPrivate(this, MainMenuPanelButton.class, "description", PGR.core.strings.menu_relicDesc);
-            ReflectionHacks.setPrivate(this, MainMenuPanelButton.class, "portraitImg", ImageMaster.P_INFO_RELIC);
+            ReflectionHacks.setPrivate(this, MainMenuPanelButton.class, "portraitImg", PCLCoreImages.Menu.menuRelic.texture());
         }
         else {
             ReflectionHacks.setPrivate(this, MainMenuPanelButton.class, "panelImg", ImageMaster.MENU_PANEL_BG_GRAY);

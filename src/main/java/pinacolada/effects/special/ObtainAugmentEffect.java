@@ -31,7 +31,7 @@ public class ObtainAugmentEffect extends PCLEffectWithCallback<PCLAugment> {
     public void render(SpriteBatch sb) {
         EUI.addPriorityPostRender(s -> {
             EUIRenderHelpers.draw(sb, augment.getTexture(), color, x, y, augment.getTexture().getWidth(), augment.getTexture().getHeight());
-            EUIRenderHelpers.writeCentered(sb, FontHelper.cardTitleFont, augment.getName(), x + augment.getTexture().getWidth() * 2f, y + augment.getTexture().getHeight() / 2f, color);
+            FontHelper.renderFontCentered(sb, FontHelper.cardTitleFont, augment.getName(), x + augment.getTexture().getWidth() * 2f, y + augment.getTexture().getHeight() / 2f, color);
         });
     }
 
