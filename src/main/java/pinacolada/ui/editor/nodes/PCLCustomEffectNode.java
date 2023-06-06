@@ -50,7 +50,8 @@ public class PCLCustomEffectNode extends EUIButton {
         super(type.getTexture(), hb);
         this.setColor(type.getColor());
         this.setShaderMode(EUIRenderHelpers.ShaderMode.Colorize);
-        this.label = new EUILabel(EUIFontHelper.buttonFont, RelativeHitbox.fromPercentages(hb, 0.66f, 1f), 0.45f, 0.68f, 0.26f, true);
+        this.label = new EUILabel(EUIFontHelper.buttonFont, hb, 0.45f, 0.68f, 0.4f, true);
+        this.label.setSmartText(true, true);
         this.editor = editor;
         this.type = type;
         this.skill = skill;
@@ -203,7 +204,7 @@ public class PCLCustomEffectNode extends EUIButton {
     public void refresh() {
         String text = skill.getSampleText(null);
         if (text != null) {
-            setTextAndAlign2D(StringUtils.capitalize(text), 0.26f, 0.68f, 0.26f, 0.08f);
+            setTextAndAlign(StringUtils.capitalize(text), 0.4f, 0.4f);
         }
         this.tooltip = new EUITooltip(type.getTitle(), skill.getExportText());
     }

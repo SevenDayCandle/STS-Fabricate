@@ -15,6 +15,7 @@ import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
 import com.megacrit.cardcrawl.screens.custom.CustomMod;
 import com.megacrit.cardcrawl.screens.custom.CustomModeScreen;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
+import extendedui.EUI;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.AbstractMenuScreen;
 import extendedui.ui.cardFilter.CustomCardLibraryScreen;
@@ -234,6 +235,13 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
             Settings.seed = null;
             Settings.specialSeed = null;
         }
+    }
+
+    // TODO investigate what is causing the screen to take focus away from everything else
+    public void close() {
+        super.close();
+        EUI.setActiveElement(null);
+        CardCrawlGame.isPopupOpen = false;
     }
 
     public void renderImpl(SpriteBatch sb) {

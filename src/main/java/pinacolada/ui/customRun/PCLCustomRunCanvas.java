@@ -16,6 +16,7 @@ import com.megacrit.cardcrawl.screens.custom.CustomModeScreen;
 import com.megacrit.cardcrawl.screens.mainMenu.MenuButton;
 import com.megacrit.cardcrawl.screens.mainMenu.MenuCancelButton;
 import com.megacrit.cardcrawl.ui.buttons.GridSelectConfirmButton;
+import extendedui.EUI;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.ui.EUIHoverable;
@@ -201,15 +202,14 @@ public class PCLCustomRunCanvas extends EUICanvas {
                 b.tryUpdate();
             }
 
-            if (this.cancelButton.hb.clicked || InputHelper.pressedEscape) {
-                InputHelper.pressedEscape = false;
-                this.cancelButton.hb.clicked = false;
-                this.cancelButton.hide();
-                CardCrawlGame.mainMenuScreen.panelScreen.refresh();
-            }
-            else if (this.confirmButton.hb.clicked || CInputActionSet.proceed.isJustPressed()) {
-                this.confirmButton.hb.clicked = false;
-                this.screen.confirm();
+            if (!EUI.doesActiveElementExist()) {
+                if (this.cancelButton.hb.clicked || InputHelper.pressedEscape) {
+                    close();
+                }
+                else if (this.confirmButton.hb.clicked || CInputActionSet.proceed.isJustPressed()) {
+                    this.confirmButton.hb.clicked = false;
+                    this.screen.confirm();
+                }
             }
         }
     }
@@ -245,6 +245,13 @@ public class PCLCustomRunCanvas extends EUICanvas {
     public void open() {
         confirmButton.show();
         cancelButton.show(CharacterSelectScreen.TEXT[5]);
+    }
+
+    public void close() {
+        InputHelper.pressedEscape = false;
+        this.cancelButton.hb.clicked = false;
+        this.cancelButton.hide();
+        CardCrawlGame.mainMenuScreen.panelScreen.refresh();
     }
 
     public void openCardPool() {
@@ -334,8 +341,8 @@ public class PCLCustomRunCanvas extends EUICanvas {
         yPos = positionElement(customCardToggle, yPos, scale(35));
         yPos = positionElement(customRelicToggle, yPos, scale(125));
         modifierDropdown.setPosition(endlessToggle.hb.cX + modifierDropdown.hb.width, endingActToggle.hb.y);
-        ascensionEditor.setPosition(modifierDropdown.hb.cX + modifierDropdown.hb.width, endlessToggle.hb.y);
-        seedInput.setPosition(ascensionEditor.hb.cX + seedInput.hb.width, endingActToggle.hb.y);
+        ascensionEditor.setPosition(modifierDropdown.hb.cX + modifierDropdown.hb.width, endlessToggle.hb.y - scale(5));
+        seedInput.setPosition(ascensionEditor.hb.cX + seedInput.hb.width, modifierDropdown.hb.y + scale(20));
 
         yPos = positionElement(editCardPoolButton, yPos, scale(66));
         yPos = positionElement(editRelicPoolButton, yPos, scale(66));

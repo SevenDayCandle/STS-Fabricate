@@ -189,7 +189,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
             node.skill.setupEditor(this);
 
             float xOff = 0;
-            additionalHeight = -MENU_HEIGHT * 2.5f;
+            additionalHeight = -MENU_HEIGHT * 2.7f;
             if (targets.isActive) {
                 targets.setSelection(node.skill.target, false);
                 xOff = position(targets, xOff);
