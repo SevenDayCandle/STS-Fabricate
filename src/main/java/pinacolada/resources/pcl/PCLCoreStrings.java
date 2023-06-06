@@ -191,9 +191,10 @@ public class PCLCoreStrings extends PCLStrings {
     public final String csel_invalidLoadout = charselect.TEXT[1];
     public final String csel_invalidLoadoutDescLimit = charselect.TEXT[2];
     public final String csel_invalidLoadoutDescSeen = charselect.TEXT[3];
-    public final String csel_invalidLoadoutDescLocked = charselect.TEXT[4];
-    public final String csel_deckEditor = charselect.TEXT[5];
-    public final String csel_deckEditorInfo = charselect.TEXT[6];
+    public final String csel_invalidLoadoutDescNotEnough = charselect.TEXT[4];
+    public final String csel_invalidLoadoutDescLocked = charselect.TEXT[5];
+    public final String csel_deckEditor = charselect.TEXT[6];
+    public final String csel_deckEditorInfo = charselect.TEXT[7];
     public final String csel_seriesEditor = charselect.TEXT[8];
     public final String csel_seriesEditorInfo = charselect.TEXT[9];
     public final String csel_deckHeader = charselect.TEXT[10];

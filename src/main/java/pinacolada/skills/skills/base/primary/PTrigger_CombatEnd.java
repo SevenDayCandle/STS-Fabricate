@@ -14,7 +14,8 @@ import pinacolada.skills.skills.base.moves.PMove_LoseHP;
 
 @VisibleSkill
 public class PTrigger_CombatEnd extends PTrigger implements OnBattleEndSubscriber {
-    public static final PSkillData<PField_Not> DATA = register(PTrigger_CombatEnd.class, PField_Not.class, 0, 0);
+    public static final PSkillData<PField_Not> DATA = register(PTrigger_CombatEnd.class, PField_Not.class, 0, 0)
+            .selfTarget();
 
     public PTrigger_CombatEnd() {
         super(DATA);

@@ -20,7 +20,7 @@ public class MoveCards extends PCLAction<ArrayList<AbstractCard>> {
     protected ListSelection<AbstractCard> origin;
     protected CardGroup targetPile;
     protected CardGroup sourcePile;
-    protected boolean showEffect;
+    protected boolean showEffect = true;
     protected boolean realtime;
     protected float effectDuration;
 

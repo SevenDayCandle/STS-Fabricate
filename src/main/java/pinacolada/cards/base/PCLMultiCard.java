@@ -311,7 +311,7 @@ public abstract class PCLMultiCard extends PCLCard implements OnAddToDeckListene
         protected PCLMultiCard multicard;
 
         public PCLMultiCardMove(PCLCardData data, PCLMultiCard multicard, int amount) {
-            super(data, amount);
+            super(data, 0, amount);
             this.multicard = multicard;
         }
 

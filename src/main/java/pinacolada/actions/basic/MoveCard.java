@@ -33,7 +33,7 @@ public class MoveCard extends PCLAction<AbstractCard> {
     protected pinacolada.utilities.ListSelection<AbstractCard> destination;
     protected CardGroup targetPile;
     protected CardGroup sourcePile;
-    protected boolean showEffect;
+    protected boolean showEffect = true;
     protected Vector2 targetPosition;
 
     public MoveCard(AbstractCard card, CardGroup targetPile) {

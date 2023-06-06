@@ -697,6 +697,14 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return childEffect != null ? childEffect.getGlowColor() : null;
     }
 
+    public String getHeaderTextForAmount() {
+        return PGR.core.strings.cedit_value;
+    }
+
+    public String getHeaderTextForExtra() {
+        return PGR.core.strings.cedit_extraValue;
+    }
+
     public final PSkill<?> getHighestParent() {
         if (this.parent != null) {
             return this.parent.getHighestParent();

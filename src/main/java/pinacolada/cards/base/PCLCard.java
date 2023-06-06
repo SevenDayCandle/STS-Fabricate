@@ -92,7 +92,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     protected static final Color COLORLESS_ORB_COLOR = new Color(0.7f, 0.7f, 0.7f, 1);
     protected static final Color CURSE_COLOR = new Color(0.22f, 0.22f, 0.22f, 1);
     protected static final Color COLOR_SECRET = new Color(0.6f, 0.18f, 1f, 1f);
-    protected static final Color COLOR_ULTRA_RARE = new Color(0.99f, 0.3f, 0.2f, 1f);
+    protected static final Color COLOR_ULTRA_RARE = new Color(1f, 0.44f, 0.2f, 1f);
     protected static final Color HOVER_IMG_COLOR = new Color(1f, 0.815f, 0.314f, 0.8f);
     protected static final Color SELECTED_CARD_COLOR = new Color(0.5f, 0.9f, 0.9f, 1f);
     protected static final String UNPLAYABLE_MESSAGE = CardCrawlGame.languagePack.getCardStrings(Tactician.ID).EXTENDED_DESCRIPTION[0];

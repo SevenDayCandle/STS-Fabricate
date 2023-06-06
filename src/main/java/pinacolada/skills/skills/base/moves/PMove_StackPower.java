@@ -17,14 +17,15 @@ import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
 public class PMove_StackPower extends PMove<PField_Power> {
-    public static final PSkillData<PField_Power> DATA = register(PMove_StackPower.class, PField_Power.class, -DEFAULT_MAX, DEFAULT_MAX);
+    public static final PSkillData<PField_Power> DATA = register(PMove_StackPower.class, PField_Power.class, -DEFAULT_MAX, DEFAULT_MAX)
+            .setExtra(1, 1);
 
     public PMove_StackPower() {
         this(PCLCardTarget.Self, 1);
     }
 
     public PMove_StackPower(PCLCardTarget target, int amount, PCLPowerHelper... powers) {
-        super(DATA, target, amount);
+        super(DATA, target, amount, 1);
         fields.setPower(powers);
     }
 
@@ -104,20 +105,22 @@ public class PMove_StackPower extends PMove<PField_Power> {
 
     @Override
     public void use(PCLUseInfo info) {
-        if (fields.random) {
-            PCLPowerHelper power = GameUtilities.getRandomElement(fields.powers);
-            if (power != null) {
-                getActions().applyPower(info.source, info.target, target, power, amount);
+        if (!fields.powers.isEmpty()) {
+            if (fields.random) {
+                PCLPowerHelper power = GameUtilities.getRandomElement(fields.powers);
+                if (power != null) {
+                    getActions().applyPower(info.source, info.target, target, power, amount);
+                }
             }
-        }
-        else if (!fields.powers.isEmpty()) {
-            for (PCLPowerHelper power : fields.powers) {
-                getActions().applyPower(info.source, info.target, target, power, amount);
+            else {
+                for (PCLPowerHelper power : fields.powers) {
+                    getActions().applyPower(info.source, info.target, target, power, amount);
+                }
             }
         }
         else {
             for (int i = 0; i < amount; i++) {
-                getActions().applyPower(info.source, info.target, target, fields.debuff ? PCLPowerHelper.randomDebuff() : PCLPowerHelper.randomBuff(), amount);
+                getActions().applyPower(info.source, info.target, target, fields.debuff ? PCLPowerHelper.randomDebuff() : PCLPowerHelper.randomBuff(), extra);
             }
         }
         super.use(info);

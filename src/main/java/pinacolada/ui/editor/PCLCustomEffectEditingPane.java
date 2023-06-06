@@ -167,16 +167,16 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         valueEditor
                 .setLimits(min, max)
                 .setValue(getAmountForSkill(node.skill), getAmountUpgradeForSkill(node.skill), false)
-                .setHeaderText(PGR.core.strings.cedit_value)
                 .setActive(min != max);
         extraEditor
                 .setLimits(eMin, eMax)
                 .setValue(getExtraForSkill(node.skill), getExtraUpgradeForSkill(node.skill), false)
-                .setHeaderText(PGR.core.strings.cedit_extraValue)
                 .setActive(eMin != eMax);
         if (node.skill != null && lastEffect != node.skill) {
             lastEffect = node.skill;
             activeElements.clear();
+            valueEditor.setHeaderText(node.skill.getHeaderTextForAmount());
+            extraEditor.setHeaderText(node.skill.getHeaderTextForExtra());
             targets
                     .setItems(PSkill.getEligibleTargets(node.skill))
                     .setActive(targets.getAllItems().size() > 1);
@@ -199,6 +199,10 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
             }
             backdrop.hb.height = hb.height + additionalHeight * -1 + MENU_HEIGHT * 2;
             backdrop.hb.y = hb.y - backdrop.hb.height + MENU_HEIGHT * 2;
+        }
+        else if (node.skill == null) {
+            valueEditor.setHeaderText(PGR.core.strings.cedit_value);
+            extraEditor.setHeaderText(PGR.core.strings.cedit_extraValue);
         }
     }
 

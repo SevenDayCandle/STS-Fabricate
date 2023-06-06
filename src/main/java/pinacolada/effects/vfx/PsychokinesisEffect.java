@@ -64,13 +64,13 @@ public class PsychokinesisEffect extends PCLEffect {
             if (randomBoolean(0.2f)) {
                 PCLEffects.Queue.add(new FadingParticleEffect(PCLCoreImages.Effects.circle.texture(), x, y)
                                 .setColor(EUIColors.random(0.83f, 1f, false))
-                                .setScale(this.scaleLower * 0.05f, scale * 2, 5f))
+                                .setScaleTarget(this.scaleLower * 0.05f, scale * 2, 5f))
                         .setDuration(1.5f, true);
             }
             else {
                 PCLEffects.Queue.add(new AnimatedParticleEffect(PCLCoreImages.Effects.psi.texture(), x, y, 5, 5, 0.01f)
                         .setColor(EUIColors.random(0.83f, 1f, false))
-                        .setScale(this.scaleLower * 0.05f, scale, 5f));
+                        .setScaleTarget(this.scaleLower * 0.05f, scale, 5f));
             }
 
             vfxFrequency += vfxFrequencyGrowth;

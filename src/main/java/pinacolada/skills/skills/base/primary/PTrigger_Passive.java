@@ -13,7 +13,8 @@ import pinacolada.skills.skills.PTrigger;
 
 @VisibleSkill
 public class PTrigger_Passive extends PTrigger {
-    public static final PSkillData<PField_Not> DATA = register(PTrigger_Passive.class, PField_Not.class, -1, DEFAULT_MAX);
+    public static final PSkillData<PField_Not> DATA = register(PTrigger_Passive.class, PField_Not.class, -1, DEFAULT_MAX)
+            .selfTarget();
 
     public PTrigger_Passive() {
         super(DATA);

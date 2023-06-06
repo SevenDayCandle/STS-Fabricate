@@ -54,6 +54,16 @@ public class PCond_TriggerTo extends PActiveCond<PField_Orb> {
 
     @Override
     protected PCLAction<?> useImpl(PCLUseInfo info, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {
-        return getActions().triggerOrbPassive(1, amount, false).setFilter(fields.getOrbFilter());
+        return getActions().triggerOrbPassive(1, amount, false)
+                .setFilter(fields.getOrbFilter())
+                .addCallback(orbs -> {
+                    if (orbs.size() >= amount) {
+                        info.setData(orbs);
+                        onComplete.invoke(info);
+                    }
+                    else {
+                        onFail.invoke(info);
+                    }
+                });
     }
 }

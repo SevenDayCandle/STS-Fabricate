@@ -52,7 +52,7 @@ public class CircularWaveEffect extends PCLEffect {
             PCLEffects.Queue.add(new FadingParticleEffect(PCLCoreImages.Effects.circle2.texture(), x, y)
                             .setBlendingMode(PCLRenderHelpers.BlendingMode.Glowing)
                             .setColor(color, endColor, 2f)
-                            .setScale(this.scaleLower, scaleUpper, scaleUpper - scaleLower + 0.5f))
+                            .setScaleTarget(scaleLower, scaleUpper, 1f))
                     .setDuration(startingDuration * 1.5f, true);
             vfxTimer = vfxFrequency;
         }

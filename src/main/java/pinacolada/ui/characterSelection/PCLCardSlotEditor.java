@@ -170,6 +170,7 @@ public class PCLCardSlotEditor extends EUIBase {
         }).setInteractable(slot.canRemove()).setActive(true);
         this.changeButton.setOnClick(() -> loadoutEditor.trySelectCard(this.slot)).setInteractable(change).setActive(true);
         this.nameColor = card != null && slot.isIDBanned(card.cardID) ? Settings.RED_TEXT_COLOR : Settings.GOLD_COLOR;
+        cardamountText.setFontColor(this.nameColor == Settings.RED_TEXT_COLOR ? Settings.RED_TEXT_COLOR : Settings.CREAM_COLOR);
 
         refreshValues();
         return this;
@@ -179,6 +180,7 @@ public class PCLCardSlotEditor extends EUIBase {
         int value = slot == null ? 0 : slot.getEstimatedValue();
         cardvalueText.setLabel(value)
                 .setFontColor(value == 0 ? Settings.CREAM_COLOR : value < 0 ? Settings.RED_TEXT_COLOR : Settings.GREEN_TEXT_COLOR);
+
         loadoutEditor.updateValidation();
     }
 

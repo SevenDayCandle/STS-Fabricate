@@ -34,10 +34,6 @@ public class PCond_IsAttacking extends PPassiveCond<PField_Not> implements OnAtt
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        // Return true when used from triggers
-        if (isUsing) {
-            return triggerSource == this;
-        }
         if (target == PCLCardTarget.Single) {
             return fields.not ^ (GameUtilities.isAttacking(info.target));
         }

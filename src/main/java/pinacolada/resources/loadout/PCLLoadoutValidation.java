@@ -6,6 +6,7 @@ import pinacolada.resources.PGR;
 import pinacolada.ui.characterSelection.PCLBaseStatEditor;
 
 import java.util.HashMap;
+import java.util.StringJoiner;
 
 public class PCLLoadoutValidation {
     public static final int HINDRANCE_MULTIPLIER = 20;
@@ -15,7 +16,6 @@ public class PCLLoadoutValidation {
     public int hindranceLevel;
     public boolean allCardsSeen;
     public boolean isValid;
-    public boolean withinLimit;
 
     public PCLLoadoutValidation() {
 
@@ -30,16 +30,22 @@ public class PCLLoadoutValidation {
     }
 
     public String getFailingString() {
-        if (!allCardsSeen && !withinLimit) {
-            return EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, PGR.core.strings.csel_invalidLoadoutDescLimit, PGR.core.strings.csel_invalidLoadoutDescSeen);
+        StringJoiner sj = new StringJoiner(EUIUtils.SPLIT_LINE);
+
+        if (!totalValue.v2)
+        {
+            sj.add(PGR.core.strings.csel_invalidLoadoutDescLimit);
         }
-        else if (!allCardsSeen) {
-            return PGR.core.strings.csel_invalidLoadoutDescSeen;
+        if (!cardsCount.v2)
+        {
+            sj.add(PGR.core.strings.csel_invalidLoadoutDescNotEnough);
         }
-        else if (!withinLimit) {
-            return PGR.core.strings.csel_invalidLoadoutDescLimit;
+        if (!allCardsSeen)
+        {
+            sj.add(PGR.core.strings.csel_invalidLoadoutDescSeen);
         }
-        return PGR.core.strings.csel_invalidLoadout;
+
+        return sj.toString();
     }
 
     public PCLLoadoutValidation refresh(PCLLoadoutData data) {
@@ -90,8 +96,7 @@ public class PCLLoadoutValidation {
         totalValue.v1 += (int) EUIUtils.sum(values.values(), Float::valueOf) + hindranceLevel;
         totalValue.v2 = totalValue.v1 <= PCLLoadout.MAX_VALUE;
         cardsCount.v2 = cardsCount.v1 >= PCLLoadout.MIN_CARDS;
-        withinLimit = totalValue.v2 && cardsCount.v2;
-        isValid = withinLimit && allCardsSeen;
+        isValid = totalValue.v2 && cardsCount.v2 && allCardsSeen;
 
         return this;
     }

@@ -27,7 +27,7 @@ public class DarknessEffect extends PCLEffect {
             PCLEffects.Queue.add(new FadingParticleEffect(images[i].texture(), x, y)
                     .setColor(new Color(0.47f, 0.35f, 0.6f, 0.4f))
                     .setBlendingMode(i <= 2 ? PCLRenderHelpers.BlendingMode.Glowing : PCLRenderHelpers.BlendingMode.Normal)
-                    .setScale(scale * MathUtils.random(0.2f, i < 2 ? 0.7f : 0.4f), scale * MathUtils.random(1.7f, i < 2 ? 4.3f : 2.6f), 2.2f)
+                    .setScaleTarget(scale * MathUtils.random(0.2f, i < 2 ? 0.7f : 0.4f), scale * MathUtils.random(1.7f, i < 2 ? 4.3f : 2.6f), 2.2f)
                     .setRotation(MathUtils.random(-800f, 800f), MathUtils.random(400, 600f) * i % 2 == 0 ? -1 : 1)
                     .setDuration(MathUtils.random(0.8F, 1.0F), true));
         }

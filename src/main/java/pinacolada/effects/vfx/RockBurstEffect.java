@@ -17,12 +17,12 @@ public class RockBurstEffect extends PCLEffect {
     private static final TextureCache[] particles = {PCLCoreImages.Effects.earthParticle1, PCLCoreImages.Effects.earthParticle2, PCLCoreImages.Effects.earthParticle3};
     private static final RandomizedList<TextureCache> textures = new RandomizedList<>();
     public static final int PROJECTILES = 65;
-    public static final float RADIUS = 250;
+    public static final float RADIUS = 220;
     protected float x;
     protected float y;
 
     public RockBurstEffect(float startX, float startY, float scale) {
-        super(1f, true);
+        super(0.7f, true);
 
         this.x = startX;
         this.y = startY;
@@ -48,9 +48,10 @@ public class RockBurstEffect extends PCLEffect {
             float angle = random(-500f, 500f);
             PCLEffects.Queue.add(new FadingParticleEffect(getRandomTexture(), x, y)
                     .setColor(EUIColors.random(0.7f, 1f, true))
-                    .setScale(scale * random(0.13f, 0.6f))
-                    .setRotation(0, random(500f, 800f))
-                    .setTargetPosition(x + RADIUS * MathUtils.cos(angle), y + RADIUS * MathUtils.sin(angle), random(100f, 400f)))
+                    .setScale(scale * random(0.06f, 0.45f))
+                    .setRotation(0, random(400f, 500f))
+                    .setTargetPosition(x + RADIUS * MathUtils.cos(angle), y + RADIUS * MathUtils.sin(angle), random(60f, 280f)))
+                    .setAcceleration(0, -200f)
                     .setDuration(duration, true);
         }
 

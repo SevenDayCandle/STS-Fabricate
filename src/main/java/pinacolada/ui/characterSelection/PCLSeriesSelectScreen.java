@@ -137,7 +137,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
 
     public void forceUpdateText() {
         container.calculateCardCounts();
-        totalCardsCache = container.totalCardsInPool;
+        totalCardsCache = container.shownCards.size();
         totalCardsChanged(totalCardsCache);
     }
 
@@ -193,7 +193,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         cardGrid.addCards(container.getAllCards());
         updateStartingDeckText();
 
-        EUI.countingPanel.open(container.allCards);
+        EUI.countingPanel.open(container.shownCards, data.resources.cardColor, false);
     }
 
     protected void openLoadoutEditor() {
@@ -205,7 +205,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     }
 
     public void previewCardPool(AbstractCard source) {
-        if (container.totalCardsInPool > 0) {
+        if (container.shownCards.size() > 0) {
             PCLLoadout loadout = null;
             if (source != null) {
                 source.unhover();
@@ -289,8 +289,8 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
             super.updateImpl();
         }
 
-        if (totalCardsCache != container.totalCardsInPool) {
-            totalCardsCache = container.totalCardsInPool;
+        if (totalCardsCache != container.shownCards.size()) {
+            totalCardsCache = container.shownCards.size();
             totalCardsChanged(totalCardsCache);
         }
 
@@ -326,7 +326,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
 
     protected void totalCardsChanged(int totalCards) {
         if (EUI.countingPanel.isActive) {
-            EUI.countingPanel.open(container.allCards);
+            EUI.countingPanel.open(container.shownCards, data.resources.cardColor, false);
         }
 
         typesAmount.setLabel(PGR.core.strings.sui_totalCards(

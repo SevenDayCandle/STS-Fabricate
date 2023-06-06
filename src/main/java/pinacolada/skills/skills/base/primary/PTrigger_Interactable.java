@@ -14,7 +14,8 @@ import pinacolada.skills.skills.PTrigger;
 @VisibleSkill
 public class PTrigger_Interactable extends PTrigger {
 
-    public static final PSkillData<PField_Not> DATA = register(PTrigger_Interactable.class, PField_Not.class, -1, DEFAULT_MAX);
+    public static final PSkillData<PField_Not> DATA = register(PTrigger_Interactable.class, PField_Not.class, -1, DEFAULT_MAX)
+            .selfTarget();
 
     public PTrigger_Interactable() {
         this(1);

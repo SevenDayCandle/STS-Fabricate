@@ -23,7 +23,6 @@ import java.util.HashMap;
 public class PCLLibraryModule extends EUIBase implements CustomCardPoolModule {
     private static final HashMap<ColorlessGroup, CardGroup> ColorlessGroupMapping = new HashMap<>();
     private static final HashMap<ColorlessGroup, CardGroup> CurseGroupMapping = new HashMap<>();
-    private static AbstractCard.CardColor lastColor;
     public static ColorlessGroup group = ColorlessGroup.Default;
     protected CustomCardLibraryScreen screen;
     public EUIButton groupButton;
@@ -77,21 +76,16 @@ public class PCLLibraryModule extends EUIBase implements CustomCardPoolModule {
     }
 
     @Override
-    public void onClose() {
-        // Nullify lastColor so that the colorless check is run when the screen is reopened
-        lastColor = null;
-    }
-
-    @Override
-    public void open(ArrayList<AbstractCard> arrayList) {
+    public void open(ArrayList<AbstractCard> arrayList, AbstractCard.CardColor color, Object payload) {
         // Must refresh the description to have the proper character-specific icons show up
         for (AbstractCard c : arrayList) {
             c.initializeDescription();
         }
 
-        // LastColor check prevents infinite loops from Open
-        if (CustomCardLibraryScreen.currentColor != lastColor) {
-            lastColor = CustomCardLibraryScreen.currentColor;
+        // Only trigger the custom module if:
+        // 1. Just switching into the colorless/curse pool (to initialize the module)
+        // 2. When clicking on the button
+        if (payload == null) {
             groupButton.setActive(getMapping(CustomCardLibraryScreen.currentColor) != null);
             togglePool(group);
         }
@@ -113,7 +107,7 @@ public class PCLLibraryModule extends EUIBase implements CustomCardPoolModule {
         group = val;
         CardGroup cards = getGroup(val);
         if (cards != null) {
-            screen.setActiveColor(CustomCardLibraryScreen.currentColor, cards);
+            screen.setActiveColor(CustomCardLibraryScreen.currentColor, cards, CustomCardLibraryScreen.currentColor);
         }
         groupButton.setText(group.getTitle());
     }

@@ -85,11 +85,11 @@ public class PCLAugmentList extends EUICanvasGrid {
         int row = 0;
         int column = 0;
 
-        sortButton.setTargetPosition(X_START, Y_START + scrollDelta + yPadding).updateImpl();
+        sortButton.setTargetPosition(X_START, Y_START + scrollDelta + padY).updateImpl();
 
         for (int i = 0; i < augments.size(); i++) {
             PCLAugmentListItem item = augments.get(i);
-            item.hb.setTargetCenter((X_START) + (column * X_PAD), Y_START + scrollDelta - (row * yPadding));
+            item.hb.setTargetCenter((X_START) + (column * X_PAD), Y_START + scrollDelta - (row * padY));
             item.updateImpl();
 
             if (item.hb.hovered) {

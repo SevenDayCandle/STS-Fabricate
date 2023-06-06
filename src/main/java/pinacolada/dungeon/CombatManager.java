@@ -592,14 +592,10 @@ public class CombatManager {
     }
 
     public static void onCardRetain(AbstractCard card) {
-        card.onRetained();
-
         subscriberDo(OnCardRetainSubscriber.class, s -> s.onRetain(card));
     }
 
     public static void onCardScry(AbstractCard card) {
-        card.triggerOnScry();
-
         subscriberDo(OnCardScrySubscriber.class, s -> s.onScry(card));
     }
 

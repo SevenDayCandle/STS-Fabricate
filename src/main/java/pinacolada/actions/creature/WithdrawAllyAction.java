@@ -58,6 +58,7 @@ public class WithdrawAllyAction extends PCLAction<ArrayList<PCLCard>> {
         PCLCard returnedCard = ally.releaseCard();
         if (returnedCard != null) {
             PCLActions.top.makeCard(returnedCard, destination)
+                    .setDuration(startDuration, isRealtime)
                     .addCallback(returnedCard::unfadeOut);
         }
 

@@ -5,6 +5,7 @@ import extendedui.interfaces.delegates.FuncT0;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.powers.PSkillPower;
+import pinacolada.resources.PGR;
 import pinacolada.skills.PPrimary;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
@@ -59,6 +60,11 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
 
     public PTrigger chain(PSkill<?>... effects) {
         return PSkill.chain(this, effects);
+    }
+
+    @Override
+    public String getHeaderTextForAmount() {
+        return PGR.core.strings.combat_uses;
     }
 
     // When attached to a power, get the power this is attached to

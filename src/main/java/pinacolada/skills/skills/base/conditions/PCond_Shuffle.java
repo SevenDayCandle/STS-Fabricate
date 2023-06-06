@@ -36,11 +36,6 @@ public class PCond_Shuffle extends PDelegateCond<PField_Empty> implements OnShuf
     }
 
     @Override
-    public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return triggerSource == this;
-    }
-
-    @Override
     public String getSampleText(PSkill<?> callingSkill) {
         return callingSkill instanceof PTrigger_When ? TEXT.cond_wheneverYou(TEXT.subjects_shuffleYourDeck) : TEXT.subjects_shuffleYourDeck;
     }

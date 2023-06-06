@@ -21,17 +21,17 @@ public class PCLLoadoutsContainer {
     public static final int CHANCE_UNCOMMON = 40;
     public static final int CHANCE_RARE = 10;
 
-    public final ArrayList<AbstractCard> allCards = new ArrayList<>();
+    public final ArrayList<AbstractCard> shownCards = new ArrayList<>();
+    public final HashMap<String, AbstractCard> allCards = new HashMap<>();
     public final HashMap<PCLCard, PCLLoadout> loadoutMap = new HashMap<>();
     public final HashSet<String> bannedCards = new HashSet<>();
     private PCLAbstractPlayerData data;
     public int currentCardLimit;
-    public int totalCardsInPool = 0;
     public PCLCard currentSeriesCard;
 
     // Calculate the number of cards in each set, then update the loadout representative with that amount
     public void calculateCardCounts() {
-        totalCardsInPool = 0;
+        shownCards.clear();
 
         for (Map.Entry<PCLCard, PCLLoadout> entry : loadoutMap.entrySet()) {
             if (entry.getValue().isLocked()) {
@@ -41,7 +41,10 @@ public class PCLLoadoutsContainer {
             for (PCLCardData data : entry.getValue().cardDatas) {
                 if (!bannedCards.contains(data.ID)) {
                     selectedAmount += 1;
-                    totalCardsInPool += 1;
+                    AbstractCard c = allCards.get(data.ID);
+                    if (c != null) {
+                        shownCards.add(c);
+                    }
                 }
             }
 
@@ -51,7 +54,7 @@ public class PCLLoadoutsContainer {
         }
 
         if (data != null) {
-            currentCardLimit = MathUtils.clamp(data.config.cardsCount.get(), MINIMUM_CARDS, totalCardsInPool);
+            currentCardLimit = MathUtils.clamp(data.config.cardsCount.get(), MINIMUM_CARDS, shownCards.size());
         }
     }
 
@@ -68,6 +71,7 @@ public class PCLLoadoutsContainer {
     public void createCards(PCLAbstractPlayerData data) {
         this.data = data;
         allCards.clear();
+        shownCards.clear();
         loadoutMap.clear();
         bannedCards.clear();
 
@@ -93,7 +97,7 @@ public class PCLLoadoutsContainer {
             for (PCLCardData cData : series.cardDatas) {
                 AbstractCard card = CardLibrary.getCard(cData.ID);
                 if (card != null) {
-                    allCards.add(card);
+                    allCards.put(cData.ID, card);
                 }
             }
         }
@@ -113,7 +117,7 @@ public class PCLLoadoutsContainer {
     }
 
     public boolean isValid() {
-        return totalCardsInPool >= MINIMUM_CARDS;
+        return shownCards.size() >= MINIMUM_CARDS;
     }
 
     // You cannot select core loadout cards

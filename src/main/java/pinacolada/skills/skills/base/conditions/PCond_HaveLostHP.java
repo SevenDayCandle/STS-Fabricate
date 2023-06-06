@@ -33,9 +33,6 @@ public class PCond_HaveLostHP extends PPassiveCond<PField_Random> implements OnL
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        if (isUsing) {
-            return triggerSource == this;
-        }
         return amount == 0 ? GameActionManager.hpLossThisCombat == 0 : fields.not ^ GameActionManager.hpLossThisCombat >= amount;
     }
 

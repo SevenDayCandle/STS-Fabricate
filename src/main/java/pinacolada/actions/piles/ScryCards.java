@@ -23,6 +23,7 @@ public class ScryCards extends DiscardFromPile {
             p.onScry();
         }
         for (AbstractCard c : result) {
+            c.triggerOnScry();
             CombatManager.onCardScry(c);
         }
 

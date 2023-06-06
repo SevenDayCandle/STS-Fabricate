@@ -52,7 +52,7 @@ public class ChooseMulticardAction extends PCLAction<PCLMultiCard> {
 
     @Override
     protected void updateInternal(float deltaTime) {
-        if (AbstractDungeon.gridSelectScreen.selectedCards.size() >= 2) {
+        if (AbstractDungeon.gridSelectScreen.selectedCards.size() >= amount) {
             for (AbstractCard card : AbstractDungeon.gridSelectScreen.selectedCards) {
                 AbstractDungeon.player.masterDeck.removeCard(card);
                 AbstractCard newCard = card.makeCopy();

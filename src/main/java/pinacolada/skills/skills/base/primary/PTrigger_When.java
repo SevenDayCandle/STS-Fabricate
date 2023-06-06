@@ -11,7 +11,8 @@ import pinacolada.skills.skills.PTrigger;
 
 @VisibleSkill
 public class PTrigger_When extends PTrigger {
-    public static final PSkillData<PField_Not> DATA = register(PTrigger_When.class, PField_Not.class, -1, DEFAULT_MAX);
+    public static final PSkillData<PField_Not> DATA = register(PTrigger_When.class, PField_Not.class, -1, DEFAULT_MAX)
+            .selfTarget();
 
     public PTrigger_When() {
         super(DATA);

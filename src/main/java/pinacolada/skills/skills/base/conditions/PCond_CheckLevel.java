@@ -33,9 +33,6 @@ public class PCond_CheckLevel extends PPassiveCond<PField_Affinity> implements O
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        if (isUsing) {
-            return triggerSource == this;
-        }
         if (fields.affinities.isEmpty()) {
             return fields.random ^ CombatManager.playerSystem.getLevel(PCLAffinity.General) >= amount;
         }

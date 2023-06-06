@@ -24,6 +24,10 @@ public class FadingParticleEffect extends PCLEffect {
     protected float vY;
     protected float vRot;
     protected float vScale;
+    protected float aX;
+    protected float aY;
+    protected float aRot;
+    protected float aScale;
     protected float alpha;
     protected boolean flipX;
     protected boolean flipY;
@@ -103,16 +107,28 @@ public class FadingParticleEffect extends PCLEffect {
     @Override
     protected void updateInternal(float deltaTime) {
         super.updateInternal(deltaTime);
-        this.x += vX * deltaTime * Settings.scale;
-        this.y += vY * deltaTime * Settings.scale;
+        float deltaScale = deltaTime * Settings.scale;
+        this.x += vX * deltaScale;
+        this.y += vY * deltaScale;
         this.rot += vRot * deltaTime;
         this.scale += vScale * deltaTime;
+        this.vX += aX * deltaScale;
+        this.vY += aY * deltaScale;
+        this.vRot += aRot * deltaTime;
+        this.vScale += aScale * deltaTime;
         this.color = EUIColors.lerp(this.color, targetColor, deltaTime * colorSpeed);
 
         final float halfDuration = startingDuration * 0.5f;
         if (this.duration < halfDuration) {
             this.color.a = Interpolation.exp5In.apply(0.0F, this.alpha, this.duration / halfDuration);
         }
+    }
+
+    public FadingParticleEffect setAcceleration(float aX, float aY) {
+        this.aX = aX;
+        this.aY = aY;
+
+        return this;
     }
 
     public FadingParticleEffect setFlip(boolean flipX, boolean flipY) {
@@ -143,9 +159,17 @@ public class FadingParticleEffect extends PCLEffect {
         return this;
     }
 
-    public FadingParticleEffect setRotation(float startRotation, float target, float speed) {
+    public FadingParticleEffect setRotation(float startRotation, float speed, float accel) {
         this.rot = startRotation;
-        this.vScale = (target - startRotation) / speed;
+        this.vRot = speed;
+        this.aRot = accel;
+
+        return this;
+    }
+
+    public FadingParticleEffect setRotationTarget(float startRotation, float target, float speed) {
+        this.rot = startRotation;
+        this.vRot = (target - startRotation) / speed;
 
         return this;
     }
@@ -157,7 +181,15 @@ public class FadingParticleEffect extends PCLEffect {
         return this;
     }
 
-    public FadingParticleEffect setScale(float scale, float target, float speed) {
+    public FadingParticleEffect setScale(float scale, float speed, float accel) {
+        this.scale = scale;
+        this.vScale = speed;
+        this.aScale = accel;
+
+        return this;
+    }
+
+    public FadingParticleEffect setScaleTarget(float scale, float target, float speed) {
         this.scale = scale;
         this.vScale = (target - scale) / speed;
 

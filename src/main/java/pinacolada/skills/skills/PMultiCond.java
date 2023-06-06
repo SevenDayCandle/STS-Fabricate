@@ -82,7 +82,10 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return effects.isEmpty() || (fields.not ^ EUIUtils.any(effects, c -> c == triggerSource || c.checkCondition(info, isUsing, triggerSource)));
+        if (triggerSource != null && EUIUtils.any(effects, ef -> ef == triggerSource)) {
+            return true;
+        }
+        return effects.isEmpty() || (fields.not ^ EUIUtils.any(effects, c -> c.checkCondition(info, isUsing, triggerSource)));
     }
 
     @Override

@@ -35,7 +35,7 @@ public class PCLCardRewardScreen extends EUIBase {
             return;
         }
 
-        EUI.countingPanel.open(AbstractDungeon.player.masterDeck.group);
+        EUI.countingPanel.open(AbstractDungeon.player.masterDeck.group, AbstractDungeon.player.getCardColor(), false);
         rewardBundle.open(rItem, cards);
         rerollUI.open(rItem, cards);
         rewardInfo.open();

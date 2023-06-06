@@ -100,12 +100,16 @@ public class PCLCardSlot {
     public ArrayList<PCLCard> getSelectableCards() {
         final ArrayList<PCLCard> cards = new ArrayList<>();
         for (Item item : this.cards) {
-            boolean add = true;
-            for (PCLCardSlot slot : container.cardSlots) {
-                if (slot != this && slot.getData() == item.data) {
-                    add = false;
+            boolean add = !isIDBanned(item.data.ID) && !item.data.isLocked();
+            if (add)
+            {
+                for (PCLCardSlot slot : container.cardSlots) {
+                    if (slot != this && slot.getData() == item.data) {
+                        add = false;
+                    }
                 }
             }
+
 
             if (add) {
                 cards.add(item.getCard(true));
@@ -250,9 +254,6 @@ public class PCLCardSlot {
                 PCLCard eCard = EUIUtils.safeCast(CardLibrary.getCard(data.ID), PCLCard.class);
                 if (eCard != null) {
                     card = eCard.makeStatEquivalentCopy();
-                    if (data.isLocked()) {
-                        card.isSeen = false;
-                    }
                 }
             }
 

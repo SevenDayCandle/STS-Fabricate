@@ -9,6 +9,7 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.skills.PDelegateCardCond;
+import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 @VisibleSkill
 public class PCond_OnOtherCardPlayed extends PDelegateCardCond implements OnCardPlayedSubscriber {
@@ -36,6 +37,11 @@ public class PCond_OnOtherCardPlayed extends PDelegateCardCond implements OnCard
     @Override
     public EUIKeywordTooltip getDelegateTooltip() {
         return PGR.core.tooltips.play;
+    }
+
+    @Override
+    public void setupEditor(PCLCustomEffectEditingPane editor) {
+        fields.setupEditor(editor);
     }
 
     @Override

@@ -494,7 +494,8 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
     }
 
     protected void useFromTrigger(PCLUseInfo info) {
-        if (tryPassParent(this, info)) {
+        // Use the super pass parent to bypass the cond check for the triggering cond
+        if (super.tryPassParent(this, info)) {
             if (childEffect != null) {
                 childEffect.use(info);
             }

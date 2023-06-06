@@ -91,7 +91,7 @@ public class HexagonEffect extends PCLEffect {
                                 .setBlendingMode(PCLRenderHelpers.BlendingMode.Glowing)
                                 .setColor(this.color.cpy())
                                 .setRotation(36000f, vR)
-                                .setScale(scale * 0.75f, 0f, 3f))
+                                .setScale(scale * 0.75f, 3f))
                         .setDuration(1f, true);
                 vfxTimer = vfxFrequency;
             }
