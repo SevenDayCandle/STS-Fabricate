@@ -2,10 +2,13 @@ package pinacolada.skills.skills.base.moves;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
+import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.interfaces.markers.OutOfCombatMove;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;
@@ -14,7 +17,7 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
 
 @VisibleSkill
-public class PMove_LoseHPPercent extends PMove<PField_Empty> {
+public class PMove_LoseHPPercent extends PMove<PField_Empty> implements OutOfCombatMove {
     public static final PSkillData<PField_Empty> DATA = register(PMove_LoseHPPercent.class, PField_Empty.class);
 
     public PMove_LoseHPPercent() {
@@ -60,5 +63,13 @@ public class PMove_LoseHPPercent extends PMove<PField_Empty> {
             getActions().loseHP(info.source, t, reduction, AbstractGameAction.AttackEffect.NONE).ignorePowers(true).isCancellable(false);
         }
         super.use(info);
+    }
+
+
+    @Override
+    public void useOutsideOfBattle() {
+        super.useOutsideOfBattle();
+        int reduction = MathUtils.ceil(AbstractDungeon.player.maxHealth * amount / 100f);
+        AbstractDungeon.player.damage(new DamageInfo(AbstractDungeon.player, reduction));
     }
 }

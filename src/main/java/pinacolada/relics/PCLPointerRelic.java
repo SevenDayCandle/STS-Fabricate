@@ -106,7 +106,19 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
     @Override
     public void onEquip() {
         super.onEquip();
+        for (PSkill<?> effect : getEffects()) {
+            effect.triggerOnObtain();
+        }
         subscribe();
+    }
+
+    @Override
+    public void onUnequip() {
+        super.onUnequip();
+        for (PSkill<?> effect : getEffects()) {
+            effect.triggerOnRemoval();
+            effect.unsubscribeChildren();
+        }
     }
 
     @Override

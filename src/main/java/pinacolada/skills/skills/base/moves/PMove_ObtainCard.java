@@ -6,13 +6,16 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.effects.PCLEffects;
+import pinacolada.effects.card.ChooseCardsToObtainEffect;
+import pinacolada.interfaces.markers.OutOfCombatMove;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
 
 @VisibleSkill
-public class PMove_ObtainCard extends PMove_GenerateCard {
+public class PMove_ObtainCard extends PMove_GenerateCard implements OutOfCombatMove {
     public static final PSkillData<PField_CardCategory> DATA = register(PMove_ObtainCard.class, PField_CardCategory.class)
             .setExtra(1, DEFAULT_MAX)
             .setGroups(PCLCardGroupHelper.MasterDeck)
@@ -43,5 +46,11 @@ public class PMove_ObtainCard extends PMove_GenerateCard {
     @Override
     public boolean isMetascaling() {
         return true;
+    }
+
+    @Override
+    public void useOutsideOfBattle() {
+        super.useOutsideOfBattle();
+        PCLEffects.Queue.add(new ChooseCardsToObtainEffect(amount, getBaseCards(null), null));
     }
 }

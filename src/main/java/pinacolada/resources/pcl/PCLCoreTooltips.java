@@ -81,6 +81,7 @@ public class PCLCoreTooltips extends PCLTooltips {
     public EUIKeywordTooltip pay = EUIKeywordTooltip.findByID("Pay").showText(false).canHighlight(false);
     public EUIKeywordTooltip play = EUIKeywordTooltip.findByID("Play").showText(false).canHighlight(false);
     public EUIKeywordTooltip power = EUIKeywordTooltip.findByID("Power").showText(false).canHighlight(false);
+    public EUIKeywordTooltip remove = EUIKeywordTooltip.findByID("Remove").showText(false).canHighlight(false).canFilter(false);
     public EUIKeywordTooltip reshuffle = EUIKeywordTooltip.findByID("Reshuffle").showText(false).canHighlight(false);
     public EUIKeywordTooltip select = EUIKeywordTooltip.findByID("Select").showText(false).canHighlight(false).canFilter(false);
     public EUIKeywordTooltip skill = EUIKeywordTooltip.findByID("Skill").showText(false).canHighlight(false);

@@ -111,7 +111,7 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
         final int limit = Math.max(extra, amount);
         // When sourcing cards from the parent skill, make exact copies of the cards
         // Skip ephemeral cards because this can cause infinite loops
-        if (useParent) {
+        if (useParent && info != null) {
             List<? extends AbstractCard> cards = info.getDataAsList(AbstractCard.class);
             if (cards != null) {
                 ArrayList<AbstractCard> created = new ArrayList<>();

@@ -3,21 +3,29 @@ package pinacolada.skills.skills.base.moves;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
+import extendedui.EUIUtils;
+import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.effects.PCLEffects;
+import pinacolada.interfaces.markers.OutOfCombatMove;
+import pinacolada.relics.PCLRelic;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.fields.PField_Relic;
+import pinacolada.utilities.GameUtilities;
+import pinacolada.utilities.RandomizedList;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 @VisibleSkill
-public class PMove_ObtainRelic extends PMove<PField_Relic> {
+public class PMove_ObtainRelic extends PMove<PField_Relic> implements OutOfCombatMove {
     public static final PSkillData<PField_Relic> DATA = register(PMove_ObtainRelic.class, PField_Relic.class)
             .selfTarget();
 
@@ -42,7 +50,7 @@ public class PMove_ObtainRelic extends PMove<PField_Relic> {
 
     @Override
     public String getSubText() {
-        return TEXT.act_obtain(fields.random ? fields.getRelicIDOrString() : fields.getRelicIDAndString());
+        return TEXT.act_obtain(fields.getFullRelicString());
     }
 
     @Override
@@ -64,18 +72,60 @@ public class PMove_ObtainRelic extends PMove<PField_Relic> {
 
     @Override
     public void use(PCLUseInfo info) {
-        for (String r : fields.relicIDs) {
-            AbstractRelic relic = RelicLibrary.getRelic(r);
-            if (relic != null) {
-                getActions().obtainRelic(relic.makeCopy());
-            }
-        }
-
+        createRelic(r -> getActions().obtainRelic(r));
         super.use(info);
     }
 
     @Override
     public boolean isMetascaling() {
         return true;
+    }
+
+    @Override
+    public void useOutsideOfBattle() {
+        super.useOutsideOfBattle();
+        createRelic(PCLEffects.Queue::obtainRelic);
+    }
+
+    protected void createRelic(ActionT1<AbstractRelic> onCreate) {
+        if (!fields.relicIDs.isEmpty()) {
+            for (String r : fields.relicIDs) {
+                AbstractRelic relic = RelicLibrary.getRelic(r);
+                if (relic != null) {
+                    onCreate.invoke(relic.makeCopy());
+                }
+            }
+        }
+        else {
+            RandomizedList<String> choices = new RandomizedList<>();
+            if (!fields.colors.isEmpty()) {
+                if (fields.rarities.isEmpty()) {
+                    for (AbstractCard.CardColor color : fields.colors) {
+                        choices.addAll(GameUtilities.getRelics(color).keySet());
+                    }
+                }
+                else {
+                    for (AbstractCard.CardColor color : fields.colors) {
+                        for (Map.Entry<String, AbstractRelic> relic : GameUtilities.getRelics(color).entrySet()) {
+                            if (EUIUtils.any(fields.rarities, r -> r == relic.getValue().tier)) {
+                                choices.add(relic.getKey());
+                            }
+                        }
+                    }
+                }
+            }
+            else if (!fields.rarities.isEmpty()) {
+                for (AbstractRelic.RelicTier rarity : fields.rarities) {
+                    choices.addAll(GameUtilities.getRelicPool(rarity));
+                }
+            }
+
+            for (int i = 0; i < amount; i++) {
+                AbstractRelic relic = RelicLibrary.getRelic(choices.retrieve(PCLRelic.rng, true));
+                if (relic != null) {
+                    onCreate.invoke(relic.makeCopy());
+                }
+            }
+        }
     }
 }

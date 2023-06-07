@@ -17,7 +17,6 @@ import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.cards.pcl.special.MysteryCard;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
-import pinacolada.interfaces.listeners.OnAddToDeckListener;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreStrings;
@@ -28,7 +27,7 @@ import pinacolada.utilities.PCLPreviewList;
 
 import java.util.ArrayList;
 
-public abstract class PCLMultiCard extends PCLCard implements OnAddToDeckListener {
+public abstract class PCLMultiCard extends PCLCard {
     protected PCLPreviewList inheritedCards = new PCLPreviewList();
     protected PCLMultiCardMove multiCardMove;
     protected boolean hasAttackOrSkill;
@@ -130,7 +129,7 @@ public abstract class PCLMultiCard extends PCLCard implements OnAddToDeckListene
     @Override
     public boolean onAddToDeck() {
         PCLEffects.Queue.callback(new ChooseMulticardAction(this));
-        return true;
+        return super.onAddToDeck();
     }
 
     @Override

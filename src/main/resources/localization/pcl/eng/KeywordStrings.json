@@ -364,9 +364,12 @@
 		"DESCRIPTION": "Heal HP at the end of the turn. Reduce by 1 each turn.",
 		"NAME": "Regeneration"
 	},
-	"Reroll":	{
-		"DESCRIPTION": "Change the #yCurrent #yAffinity.",
-		"NAME": "Reroll"
+	"Remove":	{
+		"DESCRIPTION": "Remove the specified card from your deck.",
+		"NAME": "Remove",
+		"PAST": "removed",
+		"PRESENT": "removes",
+		"PROGRESSIVE": "removing"
 	},
 	"Reshuffle":	{
 		"DESCRIPTION": "Reshuffling moves cards to your draw pile.",

@@ -8,6 +8,9 @@ import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.effects.PCLEffects;
+import pinacolada.effects.card.ChooseCardsToPurgeEffect;
+import pinacolada.interfaces.markers.OutOfCombatMove;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -15,7 +18,7 @@ import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.skills.skills.PCallbackMove;
 
 @VisibleSkill
-public class PMove_RemoveCard extends PCallbackMove<PField_CardCategory> {
+public class PMove_RemoveCard extends PCallbackMove<PField_CardCategory> implements OutOfCombatMove {
     public static final PSkillData<PField_CardCategory> DATA = register(PMove_RemoveCard.class, PField_CardCategory.class)
             .setGroups(PCLCardGroupHelper.MasterDeck)
             .selfTarget();
@@ -75,5 +78,11 @@ public class PMove_RemoveCard extends PCallbackMove<PField_CardCategory> {
                         this.childEffect.use(info);
                     }
                 });
+    }
+
+    @Override
+    public void useOutsideOfBattle() {
+        super.useOutsideOfBattle();
+        PCLEffects.Queue.add(new ChooseCardsToPurgeEffect(amount, fields.getFullCardFilter()));
     }
 }

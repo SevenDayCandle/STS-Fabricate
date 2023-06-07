@@ -1,4 +1,4 @@
-package pinacolada.effects.special;
+package pinacolada.effects.card;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -15,21 +15,21 @@ import pinacolada.resources.PGR;
 
 import java.util.ArrayList;
 
-public class GenericChooseCardsToRemoveEffect extends PCLEffectWithCallback<GenericChooseCardsToRemoveEffect> {
-    private static final int GROUP_SIZE = 3;
-    private final FuncT1<Boolean, AbstractCard> filter;
-    private final Color screenColor;
+public abstract class GenericChooseCardsEffect extends PCLEffectWithCallback<GenericChooseCardsEffect> {
+    protected final Color screenColor;
+    protected final FuncT1<Boolean, AbstractCard> filter;
+    protected int cardsToChoose;
+    protected boolean canCancel;
     public final ArrayList<AbstractCard> cards = new ArrayList<>();
-    private int cardsToRemove;
 
-    public GenericChooseCardsToRemoveEffect(int remove) {
-        this(remove, null);
+    public GenericChooseCardsEffect(int choose) {
+        this(choose, null);
     }
 
-    public GenericChooseCardsToRemoveEffect(int remove, FuncT1<Boolean, AbstractCard> filter) {
+    public GenericChooseCardsEffect(int choose, FuncT1<Boolean, AbstractCard> filter) {
         super(0.75f, true);
 
-        this.cardsToRemove = remove;
+        this.cardsToChoose = choose;
         this.filter = filter;
         this.screenColor = AbstractDungeon.fadeColor.cpy();
         this.screenColor.a = 0f;
@@ -40,8 +40,8 @@ public class GenericChooseCardsToRemoveEffect extends PCLEffectWithCallback<Gene
     protected void firstUpdate() {
         super.firstUpdate();
 
-        if (cardsToRemove > 0) {
-            openpanelRemove();
+        if (cardsToChoose > 0) {
+            openPanel();
         }
         else {
             complete();
@@ -59,16 +59,16 @@ public class GenericChooseCardsToRemoveEffect extends PCLEffectWithCallback<Gene
 
     @Override
     protected void updateInternal(float deltaTime) {
-        if (cardsToRemove > 0) {
-            if (AbstractDungeon.gridSelectScreen.selectedCards.size() == cardsToRemove) {
+        if (cardsToChoose > 0) {
+            if (AbstractDungeon.gridSelectScreen.selectedCards.size() == cardsToChoose) {
                 for (AbstractCard card : AbstractDungeon.gridSelectScreen.selectedCards) {
                     cards.add(card.makeCopy());
-                    AbstractDungeon.player.masterDeck.removeCard(card);
+                    onCardSelected(card);
                 }
 
                 AbstractDungeon.gridSelectScreen.selectedCards.clear();
                 AbstractDungeon.gridSelectScreen.targetGroup.clear();
-                cardsToRemove = 0;
+                cardsToChoose = 0;
             }
         }
         else if (tickDuration(deltaTime)) {
@@ -77,15 +77,15 @@ public class GenericChooseCardsToRemoveEffect extends PCLEffectWithCallback<Gene
         }
     }
 
-    public void openpanelRemove() {
-        CardGroup cardGroup = new CardGroup(player.masterDeck.type);
-        for (AbstractCard card : player.masterDeck.getPurgeableCards().group) {
+    public void openPanel() {
+        CardGroup cardGroup = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
+        for (AbstractCard card : getGroup()) {
             if (filter == null || filter.invoke(card)) {
                 cardGroup.addToBottom(card);
             }
         }
 
-        if (cardGroup.size() < cardsToRemove) {
+        if (cardGroup.size() < cardsToChoose) {
             complete();
             return;
         }
@@ -97,6 +97,27 @@ public class GenericChooseCardsToRemoveEffect extends PCLEffectWithCallback<Gene
         }
 
         AbstractDungeon.getCurrRoom().phase = AbstractRoom.RoomPhase.INCOMPLETE;
-        AbstractDungeon.gridSelectScreen.open(cardGroup, cardsToRemove, PGR.core.strings.grid_chooseCards(cardsToRemove), false, false, false, true);
+        AbstractDungeon.gridSelectScreen.open(cardGroup, cardsToChoose, getSelectString(), forUpgrade(), forTransform(), canCancel, forPurge());
     }
+
+    protected String getSelectString() {
+        return PGR.core.strings.grid_chooseCards(cardsToChoose);
+    }
+
+    protected boolean forUpgrade() {
+        return false;
+    }
+
+    protected boolean forTransform() {
+        return false;
+    }
+
+    protected boolean forPurge() {
+        return false;
+    }
+
+    protected abstract ArrayList<AbstractCard> getGroup();
+    public abstract void onCardSelected(AbstractCard c);
+
+
 }

@@ -11,6 +11,7 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
+import pinacolada.skills.skills.base.primary.PTrigger_CombatEnd;
 import pinacolada.skills.skills.base.primary.PTrigger_Interactable;
 import pinacolada.skills.skills.base.primary.PTrigger_When;
 import pinacolada.utilities.GameUtilities;
@@ -32,6 +33,10 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
     public PTrigger(PSkillData<PField_Not> data, PSkillSaveData content) {
         super(data, content);
         this.usesThisTurn = this.amount;
+    }
+
+    public static PTrigger combatEnd(PSkill<?>... effects) {
+        return chain(new PTrigger_CombatEnd(), effects);
     }
 
     public static PTrigger interactAny(PSkill<?>... effects) {

@@ -8,10 +8,8 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.random.Random;
-import extendedui.EUIUtils;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.CombatManager;
-import pinacolada.interfaces.listeners.OnRemovedFromDeckListener;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
@@ -50,19 +48,6 @@ public class CardGroupPatches {
                 }
                 innateIndex -= 1;
                 PCLCardTag.Innate.tryProgress(c);
-            }
-        }
-    }
-
-    @SpirePatch(clz = CardGroup.class, method = "removeCard", paramtypez = {AbstractCard.class})
-    public static class CardGroupPatches_RemoveCard {
-        @SpirePostfixPatch
-        public static void postfix(CardGroup __instance, AbstractCard c) {
-            if (__instance.type == CardGroup.CardGroupType.MASTER_DECK) {
-                OnRemovedFromDeckListener card = EUIUtils.safeCast(c, OnRemovedFromDeckListener.class);
-                if (card != null) {
-                    card.onRemovedFromDeck();
-                }
             }
         }
     }

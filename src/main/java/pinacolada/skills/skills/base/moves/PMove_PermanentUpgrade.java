@@ -9,6 +9,9 @@ import pinacolada.actions.piles.SelectFromPile;
 import pinacolada.actions.piles.UpgradeFromPile;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
+import pinacolada.effects.PCLEffects;
+import pinacolada.effects.card.ChooseCardsToUpgradeEffect;
+import pinacolada.interfaces.markers.OutOfCombatMove;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
@@ -17,7 +20,7 @@ import pinacolada.skills.fields.PField_CardCategory;
 import pinacolada.utilities.ListSelection;
 
 @VisibleSkill
-public class PMove_PermanentUpgrade extends PMove_Select<PField_CardCategory> {
+public class PMove_PermanentUpgrade extends PMove_Select<PField_CardCategory> implements OutOfCombatMove {
     public static final PSkillData<PField_CardCategory> DATA = register(PMove_PermanentUpgrade.class, PField_CardCategory.class)
             .selfTarget();
 
@@ -56,5 +59,11 @@ public class PMove_PermanentUpgrade extends PMove_Select<PField_CardCategory> {
     @Override
     public boolean isMetascaling() {
         return true;
+    }
+
+    @Override
+    public void useOutsideOfBattle() {
+        super.useOutsideOfBattle();
+        PCLEffects.Queue.add(new ChooseCardsToUpgradeEffect(amount, fields.getFullCardFilter()));
     }
 }

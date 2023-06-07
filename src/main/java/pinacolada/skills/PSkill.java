@@ -209,31 +209,51 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return efTexts;
     }
 
-    public static <U extends PSkill<?>> List<PSkillData<?>> getEligibleClasses(Class<U> targetClass) {
+    public static <U extends PSkill<?>> ArrayList<PSkillData<?>> getEligibleClasses(Class<U> targetClass) {
         return EUIUtils.filter(AVAILABLE_SKILLS, d -> targetClass.isAssignableFrom(d.effectClass));
     }
 
-    public static <U extends PSkill<?>> List<PSkillData<?>> getEligibleClasses(Class<U> targetClass, AbstractCard.CardColor co) {
+    @SafeVarargs
+    public static <U extends PSkill<?>> ArrayList<PSkillData<?>> getEligibleClasses(Class<? extends U>... targetClasses) {
+        return EUIUtils.filter(AVAILABLE_SKILLS, d -> EUIUtils.any(targetClasses, targetClass -> targetClass.isAssignableFrom(d.effectClass)));
+    }
+
+    public static <U extends PSkill<?>> ArrayList<PSkillData<?>> getEligibleClasses(AbstractCard.CardColor co, Class<U> targetClass) {
         return EUIUtils.filter(AVAILABLE_SKILLS, d -> targetClass.isAssignableFrom(d.effectClass) && d.isColorCompatible(co));
     }
 
-    public static <U extends PSkill<?>> List<U> getEligibleEffects(Class<U> targetClass) {
-        return getEligibleEffectsImpl(targetClass, getEligibleClasses(targetClass));
+    @SafeVarargs
+    public static <U extends PSkill<?>> ArrayList<PSkillData<?>> getEligibleClasses(AbstractCard.CardColor co, Class<? extends U>... targetClasses) {
+        return EUIUtils.filter(AVAILABLE_SKILLS, d -> d.isColorCompatible(co) && EUIUtils.any(targetClasses, targetClass -> targetClass.isAssignableFrom(d.effectClass)));
     }
 
-    public static <U extends PSkill<?>> List<U> getEligibleEffects(Class<U> targetClass, AbstractCard.CardColor co) {
-        return getEligibleEffectsImpl(targetClass, getEligibleClasses(targetClass, co));
+    public static <U extends PSkill<?>> ArrayList<U> getEligibleEffects(Class<U> targetClass) {
+        return getEligibleEffects(targetClass, getEligibleClasses(targetClass));
+    }
+
+    @SafeVarargs
+    public static <U extends PSkill<?>> ArrayList<U> getEligibleEffects(Class<U> targetClass, Class<? extends U>... subClasses) {
+        return getEligibleEffects(targetClass, getEligibleClasses(subClasses));
+    }
+
+    public static <U extends PSkill<?>> ArrayList<U> getEligibleEffects(AbstractCard.CardColor co, Class<U> targetClass) {
+        return getEligibleEffects(targetClass, getEligibleClasses(co, targetClass));
+    }
+
+    @SafeVarargs
+    public static <U extends PSkill<?>> ArrayList<U> getEligibleEffects(AbstractCard.CardColor co, Class<U> targetClass, Class<? extends U>... subClasses) {
+        return getEligibleEffects(targetClass, getEligibleClasses(co, subClasses));
     }
 
     /**
      * Returns a list of all available skills that the current card color can use in the card editor, and that fall under the specified PSkill superclass
      */
-    private static <U extends PSkill<?>> List<U> getEligibleEffectsImpl(Class<U> targetClass, List<PSkillData<?>> effects) {
+    public static <U extends PSkill<?>> ArrayList<U> getEligibleEffects(Class<U> targetClass, List<PSkillData<?>> effects) {
         return EUIUtils.mapAsNonnull(effects, cl -> {
                     Constructor<? extends PSkill<?>> c = EUIUtils.tryGetConstructor(cl.effectClass);
                     if (c != null) {
                         try {
-                            return (U) c.newInstance();
+                            return targetClass.cast(c.newInstance());
                         }
                         catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
                             e.printStackTrace();
@@ -244,7 +264,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
                 })
                 .stream()
                 .sorted((a, b) -> StringUtils.compareIgnoreCase(a.getSampleText(null), b.getSampleText(null)))
-                .collect(Collectors.toList());
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public static List<PCLCardSelection> getEligibleOrigins(PSkill<?> e) {
@@ -1483,6 +1503,9 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         }
     }
 
+    public void triggerOnObtain() {
+    }
+
     public void triggerOnOtherCardPlayed(AbstractCard c) {
         if (this instanceof OnCardPlayedSubscriber) {
             ((OnCardPlayedSubscriber) this).onCardPlayed(c);
@@ -1499,6 +1522,9 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         else if (this.childEffect != null) {
             this.childEffect.triggerOnPurge(c);
         }
+    }
+
+    public void triggerOnRemoval() {
     }
 
     public void triggerOnReshuffle(AbstractCard c, CardGroup sourcePile) {
@@ -1554,7 +1580,6 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         use(info);
     }
 
-    // TODO implement and use this in metascaling skills
     public void useOutsideOfBattle() {
         if (this.childEffect != null) {
             this.childEffect.useOutsideOfBattle();

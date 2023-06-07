@@ -366,7 +366,13 @@ public class PCLCustomEffectNode extends EUIButton {
 
         @SuppressWarnings("rawtypes")
         public List<? extends PSkill> getSkills(AbstractCard.CardColor color) {
-            return (PGR.config.showIrrelevantProperties.get() ? PSkill.getEligibleEffects(getSkillClass()) : PSkill.getEligibleEffects(getSkillClass(), color));
+            switch (this) {
+                case Limit:
+                    return (PGR.config.showIrrelevantProperties.get() ? PSkill.getEligibleEffects(PPrimary.class, PLimit.class, PShift.class) : PSkill.getEligibleEffects(color, PPrimary.class, PLimit.class, PShift.class));
+                case Trigger:
+                   return (PGR.config.showIrrelevantProperties.get() ? PSkill.getEligibleEffects(PPrimary.class, PTrigger.class, PShift.class) : PSkill.getEligibleEffects(color, PPrimary.class, PTrigger.class, PShift.class));
+            }
+            return (PGR.config.showIrrelevantProperties.get() ? PSkill.getEligibleEffects(getSkillClass()) : PSkill.getEligibleEffects(color, getSkillClass()));
         }
 
         public Texture getTexture() {

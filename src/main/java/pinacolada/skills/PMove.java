@@ -256,6 +256,10 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
         return new PMove_GainGold(amount);
     }
 
+    public static PMove_GainMaxHP gainMaxHP(int amount) {
+        return new PMove_GainMaxHP(amount);
+    }
+
     public static PMove_GainOrbSlots gainOrbSlots(int amount) {
         return new PMove_GainOrbSlots(amount);
     }

@@ -58,7 +58,7 @@ import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.EffekseerEFK;
 import pinacolada.effects.PCLAttackVFX;
 import pinacolada.effects.card.PCLCardGlowBorderEffect;
-import pinacolada.interfaces.listeners.OnRemovedFromDeckListener;
+import pinacolada.interfaces.listeners.OnAddToDeckListener;
 import pinacolada.interfaces.listeners.OnSetFormListener;
 import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.markers.SummonOnlyMove;
@@ -87,7 +87,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class PCLCard extends AbstractCard implements KeywordProvider, EditorCard, OnRemovedFromDeckListener, CustomSavable<PCLCardSaveData> {
+public abstract class PCLCard extends AbstractCard implements KeywordProvider, EditorCard, OnAddToDeckListener, CustomSavable<PCLCardSaveData> {
     protected static final TextureAtlas CARD_ATLAS = ReflectionHacks.getPrivateStatic(AbstractCard.class, "cardAtlas");
     protected static final Color COLORLESS_ORB_COLOR = new Color(0.7f, 0.7f, 0.7f, 1);
     protected static final Color CURSE_COLOR = new Color(0.22f, 0.22f, 0.22f, 1);
@@ -1580,12 +1580,20 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         return amount;
     }
 
+    @Override
+    public boolean onAddToDeck() {
+        doEffects(PSkill::triggerOnObtain);
+        return true;
+    }
+
     public void onDrag(AbstractMonster m) {
         doEffects(be -> be.onDrag(m));
     }
 
     @Override
-    public void onRemovedFromDeck() {
+    public void onRemoveFromMasterDeck() {
+        super.onRemoveFromMasterDeck();
+        doEffects(PSkill::triggerOnRemoval);
         for (PCLAugment augment : getAugments()) {
             if (augment.canRemove()) {
                 PGR.dungeon.addAugment(augment.ID, 1);

@@ -2,6 +2,7 @@ package pinacolada.skills.skills.base.primary;
 
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.interfaces.markers.OutOfCombatMove;
 import pinacolada.interfaces.subscribers.OnBattleEndSubscriber;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
@@ -10,7 +11,6 @@ import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.PPassiveCond;
 import pinacolada.skills.skills.PPassiveMod;
 import pinacolada.skills.skills.PTrigger;
-import pinacolada.skills.skills.base.moves.PMove_LoseHP;
 
 @VisibleSkill
 public class PTrigger_CombatEnd extends PTrigger implements OnBattleEndSubscriber {
@@ -59,7 +59,6 @@ public class PTrigger_CombatEnd extends PTrigger implements OnBattleEndSubscribe
     public boolean isSkillAllowed(PSkill<?> skill) {
         return skill instanceof PPassiveCond ||
                 skill instanceof PPassiveMod ||
-                skill instanceof PMove_LoseHP ||
-                skill.isMetascaling();
+                skill instanceof OutOfCombatMove;
     }
 }
