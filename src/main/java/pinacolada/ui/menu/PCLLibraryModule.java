@@ -30,7 +30,7 @@ public class PCLLibraryModule extends EUIBase implements CustomCardPoolModule {
 
     public PCLLibraryModule(CustomCardLibraryScreen screen) {
         this.screen = screen;
-        groupButton = new EUIButton(ImageMaster.COLOR_TAB_BAR, new EUIHitbox(Settings.WIDTH * 0.18f, Settings.HEIGHT * 0.9f, scale(210), scale(80)))
+        groupButton = new EUIButton(ImageMaster.COLOR_TAB_BAR, new EUIHitbox(Settings.WIDTH * 0.18f, Settings.HEIGHT * 0.905f, scale(210), scale(80)))
                 .setColor(Color.DARK_GRAY)
                 .setLabel(EUIFontHelper.cardDescriptionFontNormal, 1f, group.getTitle())
                 .setOnClick(() -> togglePool(group.next()))

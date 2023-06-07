@@ -3,6 +3,7 @@ package pinacolada.skills.skills.base.moves;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.effects.PCLSFX;
 import pinacolada.interfaces.markers.OutOfCombatMove;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
@@ -45,6 +46,7 @@ public class PMove_GainGold extends PMove_Gain implements OutOfCombatMove {
 
     @Override
     public void use(PCLUseInfo info) {
+        PCLSFX.play(PCLSFX.GOLD_GAIN);
         getActions().gainGold(amount);
         super.use(info);
     }
@@ -52,6 +54,7 @@ public class PMove_GainGold extends PMove_Gain implements OutOfCombatMove {
     @Override
     public void useOutsideOfBattle() {
         super.useOutsideOfBattle();
+        PCLSFX.play(PCLSFX.GOLD_GAIN);
         AbstractDungeon.player.gainGold(amount);
     }
 }

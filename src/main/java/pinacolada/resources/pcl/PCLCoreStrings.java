@@ -156,6 +156,8 @@ public class PCLCoreStrings extends PCLStrings {
     public final String cetut_relicRarity = cetut.TEXT[42];
     public final String cetut_landingSound = cetut.TEXT[43];
     public final String cetut_addToEffect = cetut.TEXT[44];
+    public final String cetut_primaryWarning = cetut.TEXT[45];
+    public final String cetut_corruptedWarning = cetut.TEXT[46];
     // Card Pile
     public final String cpile_hand = cardPile.TEXT[0];
     public final String cpile_deck = cardPile.TEXT[1];
@@ -668,8 +670,8 @@ public class PCLCoreStrings extends PCLStrings {
     public final String act_zHas(Object object, Object amount) {
         return actFmt(50, object, amount);
     }
-    public final String act_zLoses(Object object, Object amount, Object bonus) {
-        return actFmt(51, object, amount, bonus);
+    public final String act_zLoses(Object object, Object ordinal, Object amount, Object bonus) {
+        return actFmt(51, object, ordinal, amount, bonus);
     }
     public final String act_zOn(Object action, Object object, Object target) {
         return actFmt(52, action, object, target);

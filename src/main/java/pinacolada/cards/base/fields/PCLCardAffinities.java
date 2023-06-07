@@ -350,7 +350,7 @@ public class PCLCardAffinities {
                 x = (step * 0.5f) + (step * (i - half));
             }
 
-            item.renderOnCard(sb, card, x, y, size, false, collapseDuplicates);
+            item.renderOnCard(sb, card, x, y, size, collapseDuplicates);
         }
     }
 
@@ -455,6 +455,31 @@ public class PCLCardAffinities {
         }
 
         sorted.sort(PCLCardAffinity::compareTo);
+    }
+
+    public void displayUpgrades(ArrayList<PCLCardAffinity> prev) {
+        if (prev == null) {
+            return;
+        }
+
+        int i = 0;
+        int j = 0;
+
+        while (i < prev.size() && j < sorted.size()) {
+            if (sorted.get(j).type != prev.get(i).type) {
+                sorted.get(j).renderColor = Settings.GREEN_RELIC_COLOR.cpy();
+                j++;
+            }
+            else {
+                i++;
+                j++;
+            }
+        }
+
+        while (j < sorted.size()) {
+            sorted.get(j).renderColor = Settings.GREEN_RELIC_COLOR.cpy();
+            j++;
+        }
     }
 
 }

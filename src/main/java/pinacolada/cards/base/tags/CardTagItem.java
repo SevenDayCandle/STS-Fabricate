@@ -1,64 +1,70 @@
 package pinacolada.cards.base.tags;
 
+import com.google.gson.TypeAdapter;
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.cards.red.Defend_Red;
-import com.megacrit.cardcrawl.cards.red.Strike_Red;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
 import extendedui.EUIUtils;
 import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.ui.tooltips.EUITooltip;
 import org.apache.commons.lang3.StringUtils;
-import pinacolada.utilities.GameUtilities;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.io.IOException;
+import java.util.*;
+import java.util.stream.Collectors;
 
-// TODO do not make this an enum, to allow adding new items
-public enum CardTagItem implements TooltipProvider {
-    Defend(AbstractCard.CardTags.STARTER_DEFEND),
-    Strike(AbstractCard.CardTags.STRIKE);
+@JsonAdapter(CardTagItem.CardTagItemAdapter.class)
+public class CardTagItem implements TooltipProvider {
+    private static final Map<String, CardTagItem> ALL = new HashMap<>();
 
+    public static final CardTagItem Defend = new CardTagItem(AbstractCard.CardTags.STARTER_DEFEND);
+    public static final CardTagItem Strike = new CardTagItem(AbstractCard.CardTags.STRIKE);
+
+    public final String ID;
     public final AbstractCard.CardTags tag;
     public final AbstractCard.CardColor[] colors;
+    public String name;
 
-    CardTagItem(AbstractCard.CardTags tag, AbstractCard.CardColor... colors) {
+    public CardTagItem(AbstractCard.CardTags tag, AbstractCard.CardColor... colors) {
+        this(tag.toString(), tag, colors);
+    }
+
+    public CardTagItem(String id, AbstractCard.CardTags tag, AbstractCard.CardColor... colors) {
+        this.ID = id;
         this.tag = tag;
         this.colors = colors;
+        ALL.putIfAbsent(ID, this);
     }
 
     public static CardTagItem get(AbstractCard.CardTags tag) {
         return get(EUIUtils.capitalize(tag.toString()));
     }
 
-    public static CardTagItem get(String name) {
-        return CardTagItem.valueOf(name);
+    public static CardTagItem get(String id) {
+        return ALL.get(id);
     }
 
-    public static List<CardTagItem> getAll() {
-        CardTagItem[] values = CardTagItem.values();
-        Arrays.sort(values, (a, b) -> StringUtils.compare(a.getTip().title, b.getTip().title));
-        return Arrays.asList(values);
+    public static Collection<CardTagItem> getAll() {
+        return ALL.values().stream().sorted((a, b) -> StringUtils.compare(a.getName(), b.getName())).collect(Collectors.toList());
     }
 
-    public static List<CardTagItem> getCompatible(AbstractCard.CardColor co) {
-        List<CardTagItem> values = EUIUtils.filter(CardTagItem.values(), v -> v.isCompatible(co));
-        values.sort((a, b) -> StringUtils.compare(a.getTip().title, b.getTip().title));
-        return values;
+    public static Collection<CardTagItem> getAll(AbstractCard.CardColor targetColor) {
+        return targetColor == null ? getAll() : EUIUtils.filter(ALL.values(), s -> s.colors == null || s.colors.length == 0 || EUIUtils.any(s.colors, t -> t == targetColor))
+                .stream()
+                .sorted((a, b) -> StringUtils.compare(a.getName(), b.getName())).collect(Collectors.toList());
     }
 
     public static List<CardTagItem> getFromCard(AbstractCard card) {
         return EUIUtils.mapAsNonnull(card.tags, CardTagItem::get);
     }
 
+    public String getName() {
+        return name != null ? name : ID;
+    }
+
     public EUITooltip getTip() {
-        switch (this) {
-            case Defend:
-                return new EUITooltip(CardCrawlGame.languagePack.getCardStrings(Defend_Red.ID).NAME);
-            case Strike:
-                return new EUITooltip(CardCrawlGame.languagePack.getCardStrings(Strike_Red.ID).NAME);
-        }
-        return new EUITooltip(this.name());
+        return new EUITooltip(getName());
     }
 
     @Override
@@ -66,15 +72,19 @@ public enum CardTagItem implements TooltipProvider {
         return Collections.singletonList(getTip());
     }
 
-    public boolean has(AbstractCard card) {
-        return card.hasTag(tag);
-    }
-
     public boolean isCompatible(AbstractCard.CardColor color) {
         return colors == null || colors.length == 0 || EUIUtils.any(colors, t -> t == color);
     }
 
-    public void set(AbstractCard card, boolean value) {
-        GameUtilities.setCardTag(card, tag, value);
+    public static class CardTagItemAdapter extends TypeAdapter<CardTagItem> {
+        @Override
+        public void write(JsonWriter writer, CardTagItem value) throws IOException {
+            writer.value(value.ID);
+        }
+
+        @Override
+        public CardTagItem read(JsonReader in) throws IOException {
+            return get(in.nextString());
+        }
     }
 }

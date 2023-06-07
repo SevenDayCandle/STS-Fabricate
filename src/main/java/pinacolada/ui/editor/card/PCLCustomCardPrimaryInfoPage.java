@@ -138,7 +138,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_flags)
                 .setCanAutosizeButton(true)
                 .setIsMultiSelect(true)
-                .setItems(PGR.config.showIrrelevantProperties.get() ? CardTagItem.getAll() : CardTagItem.getCompatible(effect.currentSlot.slotColor))
+                .setItems(PGR.config.showIrrelevantProperties.get() ? CardTagItem.getAll() : CardTagItem.getAll(effect.currentSlot.slotColor))
                 .setTooltip(PGR.core.strings.cedit_flags, PGR.core.strings.cetut_primaryFlags);
 
         loadoutDropdown = new EUISearchableDropdown<PCLLoadout>(new EUIHitbox(flagsDropdown.hb.x + flagsDropdown.hb.width + SPACING_WIDTH, screenH(0.5f), MENU_WIDTH, MENU_HEIGHT), PCLLoadout::getName)

@@ -52,7 +52,7 @@
 												"you cannot gain {0}",
 												"{0} gains {1} {2}",
 												"{0} have {1}",
-												"{0} loses {1} {2}",
+												"{0} ${1}@?0?2?3:loses@:lose$ {2} {3}",
 												"{0} {1} on {2}",
 												"{0} {1} {2} on {3}",
 												"{0} {1} to {2}"
@@ -175,7 +175,9 @@
 												"{#o:Drag a node here to set this node's child, or click this to place an effect here.}",
 												"#yRarity determines how often this relic appears in rewards (#yCommon, #yUncommon, or #yRare only). #yShop relics only appear in shops. #yBoss relics only appear in boss chests. Relics of other rarities must be spawned manually through events or other effects.",
 												"The sound effect that plays when obtaining this relic.",
-												"Create a node with an effect that applies this power."
+												"Create a node with an effect that applies this power.",
+												"Has no effect under the current #yPrimary.",
+												"This skill is corrupted."
 								]
 				},
 				"pcl:CardPile": {

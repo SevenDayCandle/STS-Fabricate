@@ -343,15 +343,6 @@ public class GridCardSelectScreenMultiformPatches {
         public GetBranchingUpgrade() {
         }
 
-        protected static PCLCard getPreviewCard(PCLCard base, int i) {
-            PCLCard previewCard = base.makeStatEquivalentCopy();
-            previewCard.changeForm(i, previewCard.timesUpgraded);
-            previewCard.upgrade();
-            previewCard.displayUpgrades();
-            previewCard.initializeDescription();
-            return previewCard;
-        }
-
         @SpireInsertPatch(
                 locator = GridCardSelectScreenMultiformPatches.GetBranchingUpgrade.Locator.class
         )
@@ -374,7 +365,7 @@ public class GridCardSelectScreenMultiformPatches {
                     */
                 if (base.cardData.branchFactor <= 0) {
                     for (int i = 0; i < base.getMaxForms(); i++) {
-                        list.add(getPreviewCard(base, i));
+                        list.add(base.makeUpgradePreview(i));
                     }
                 }
                 else {
@@ -383,13 +374,13 @@ public class GridCardSelectScreenMultiformPatches {
                             : base.timesUpgraded + 1;
 
                     for (int i = minForm; i < Math.min(base.getMaxForms(), minForm + base.cardData.branchFactor); i++) {
-                        list.add(getPreviewCard(base, i));
+                        list.add(base.makeUpgradePreview(i));
                     }
                 }
 
                 // If you ran out of forms, do not change the card form
                 if (list.size() == 0) {
-                    list.add(getPreviewCard(base, base.getForm()));
+                    list.add(base.makeUpgradePreview(base.getForm()));
                 }
 
                 // If there is only one card, it should be auto-selected

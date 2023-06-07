@@ -44,7 +44,7 @@ public class PMove_GainMaxHP extends PMove_Gain implements OutOfCombatMove {
     @Override
     public void use(PCLUseInfo info) {
         if (amount < 0) {
-            info.source.decreaseMaxHealth(amount);
+            info.source.decreaseMaxHealth(-amount);
         }
         else {
             info.source.increaseMaxHp(amount, true);
@@ -56,7 +56,7 @@ public class PMove_GainMaxHP extends PMove_Gain implements OutOfCombatMove {
     public void useOutsideOfBattle() {
         super.useOutsideOfBattle();
         if (amount < 0) {
-            AbstractDungeon.player.decreaseMaxHealth(amount);
+            AbstractDungeon.player.decreaseMaxHealth(-amount);
         }
         else {
             AbstractDungeon.player.increaseMaxHp(amount, true);

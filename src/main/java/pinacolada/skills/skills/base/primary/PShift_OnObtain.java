@@ -21,12 +21,12 @@ public class PShift_OnObtain extends PShift {
     }
 
     @Override
-    public String getSubText() {
-        return TEXT.cond_onGeneric(PGR.core.tooltips.obtain.title) + ": ";
+    public String getDelegateText() {
+        return PGR.core.tooltips.obtain.title;
     }
 
     @Override
-    public void triggerOnRemoval() {
+    public void triggerOnObtain() {
         useOutsideOfBattle();
     }
 }

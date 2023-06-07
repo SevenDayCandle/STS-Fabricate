@@ -2,6 +2,7 @@ package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
+import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -13,6 +14,7 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
+import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
 public class PMove_ObtainCard extends PMove_GenerateCard implements OutOfCombatMove {
@@ -51,6 +53,11 @@ public class PMove_ObtainCard extends PMove_GenerateCard implements OutOfCombatM
     @Override
     public void useOutsideOfBattle() {
         super.useOutsideOfBattle();
-        PCLEffects.Queue.add(new ChooseCardsToObtainEffect(amount, getBaseCards(null), null));
+        if (GameUtilities.inBattle()) {
+            use(makeInfo(getOwnerCreature()), __ -> {}, PCLActions.top);
+        }
+        else {
+            PCLEffects.Queue.add(new ChooseCardsToObtainEffect(amount, getBaseCards(null), null));
+        }
     }
 }

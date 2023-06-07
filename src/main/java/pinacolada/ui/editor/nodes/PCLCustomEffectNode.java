@@ -10,9 +10,11 @@ import extendedui.EUIRM;
 import extendedui.EUIRenderHelpers;
 import extendedui.EUIUtils;
 import extendedui.ui.controls.EUIButton;
+import extendedui.ui.controls.EUIImage;
 import extendedui.ui.controls.EUILabel;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
+import extendedui.ui.tooltips.EUIHeaderlessTooltip;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
@@ -29,6 +31,7 @@ import pinacolada.ui.editor.PCLCustomEffectPage;
 import pinacolada.utilities.PCLRenderHelpers;
 
 import java.util.List;
+import java.util.StringJoiner;
 
 public class PCLCustomEffectNode extends EUIButton {
     public static final float SIZE_X = scale(120);
@@ -43,6 +46,7 @@ public class PCLCustomEffectNode extends EUIButton {
     public PCLCustomEffectNode child;
     public NodeType type;
     public EUIButton deleteButton;
+    public EUIImage warningImage;
     public int index = -1;
 
     // Call getNodeForSkill instead to get the correct node constructor for the given skill type
@@ -55,6 +59,14 @@ public class PCLCustomEffectNode extends EUIButton {
         this.editor = editor;
         this.type = type;
         this.skill = skill;
+        this.warningImage = new EUIImage(EUIRM.images.warning.texture(), new RelativeHitbox(hb, 48, 48, hb.width * -0.2f, hb.height * 0.4f));
+        this.warningImage.setActive(false);
+        this.deleteButton = new EUIButton(EUIRM.images.x.texture(), new RelativeHitbox(hb, 48, 48, hb.width * 1.2f, hb.height * 0.4f));
+        this.deleteButton.setOnClick(() -> {
+            if (canRemove()) {
+                deleteSelf();
+            }
+        });
 
         if (this.skill == null) {
             initializeDefaultSkill();
@@ -66,12 +78,6 @@ public class PCLCustomEffectNode extends EUIButton {
         }
         setOnClick(this::startEdit);
 
-        this.deleteButton = new EUIButton(EUIRM.images.x.texture(), new RelativeHitbox(hb, 48, 48, hb.width * 1.2f, hb.height * 0.4f));
-        this.deleteButton.setOnClick(() -> {
-            if (canRemove()) {
-                deleteSelf();
-            }
-        });
     }
 
     public static PCLCustomEffectNode createTree(PCLCustomEffectPage editor, PSkill<?> skill, EUIHitbox hb) {
@@ -207,6 +213,25 @@ public class PCLCustomEffectNode extends EUIButton {
             setTextAndAlign(StringUtils.capitalize(text), 0.4f, 0.4f);
         }
         this.tooltip = new EUITooltip(type.getTitle(), skill.getExportText());
+
+        warningImage.tooltip = getWarningTooltip();
+        warningImage.setActive(warningImage.tooltip != null);
+    }
+
+    protected EUIHeaderlessTooltip getWarningTooltip() {
+        StringJoiner sj = new StringJoiner(EUIUtils.SPLIT_LINE);
+
+        if (!(editor.rootEffect == null || skill instanceof PPrimary || editor.rootEffect.isSkillAllowed(skill)))
+        {
+            sj.add(PGR.core.strings.cetut_primaryWarning);
+        }
+        if (skill == null)
+        {
+            sj.add(PGR.core.strings.cetut_corruptedWarning);
+        }
+
+        String res = sj.toString();
+        return StringUtils.isEmpty(res) ? null : new EUIHeaderlessTooltip(res);
     }
 
     public void refreshAll() {
@@ -224,6 +249,7 @@ public class PCLCustomEffectNode extends EUIButton {
         }
         super.renderImpl(sb);
         deleteButton.render(sb);
+        warningImage.render(sb);
     }
 
     @Override
@@ -239,6 +265,7 @@ public class PCLCustomEffectNode extends EUIButton {
             PCLCustomEffectHologram.setHighlighted(this);
         }
         deleteButton.update();
+        warningImage.update();
     }
 
     protected void onClickStart() {
@@ -290,7 +317,7 @@ public class PCLCustomEffectNode extends EUIButton {
         public static NodeType getTypeForSkill(PSkill<?> skill) {
             NodeType cur = Root;
             for (NodeType type : values()) {
-                if (type.getSkillClass().isInstance(skill)) {
+                if (type.matchesNode(skill)) {
                     cur = type;
                 }
             }
@@ -451,6 +478,15 @@ public class PCLCustomEffectNode extends EUIButton {
 
         public EUITooltip getTooltip() {
             return new EUITooltip(getTitle(), getDescription());
+        }
+
+        public boolean matchesNode(PSkill<?> skill) {
+            switch (this) {
+                case Limit:
+                case Trigger:
+                    return getSkillClass().isInstance(skill) || skill instanceof PShift;
+            }
+            return getSkillClass().isInstance(skill);
         }
     }
 }

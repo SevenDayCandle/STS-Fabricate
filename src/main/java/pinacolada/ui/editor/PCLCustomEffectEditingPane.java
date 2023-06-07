@@ -434,7 +434,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         affinities = initializeSmartSearchable(PCLCustomCardAttributesPage.getEligibleAffinities(cardColor), PGR.core.strings.sui_affinities);
         powers = initializeSmartSearchable(PCLPowerHelper.sortedValues(), PGR.core.strings.cedit_powers);
         orbs = initializeSmartSearchable(PCLOrbHelper.visibleValues(), PGR.core.tooltips.orb.title);
-        stances = initializeSmartSearchable(PCLStanceHelper.values(cardColor), PGR.core.tooltips.stance.title);
+        stances = initializeSmartSearchable(PCLStanceHelper.getAll(cardColor), PGR.core.tooltips.stance.title);
         tags = initializeSmartSearchable(PCLCardTag.getAll(), PGR.core.strings.cedit_tags);
         cards = initializeSearchable(getAvailableCards(), c -> c.name, RunHistoryScreen.TEXT[9]);
         relics = initializeSearchable(getAvailableRelics(), c -> c.name, RunHistoryScreen.TEXT[10]);

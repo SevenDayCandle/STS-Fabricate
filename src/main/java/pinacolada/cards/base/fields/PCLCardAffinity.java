@@ -5,13 +5,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.core.Settings;
-import extendedui.EUI;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.PCLRenderHelpers;
 
 public class PCLCardAffinity implements Comparable<PCLCardAffinity> {
     public final PCLAffinity type;
+    public Color renderColor = Color.WHITE.cpy();
     public int level;
 
     public PCLCardAffinity(PCLAffinity affinity) {
@@ -50,32 +49,25 @@ public class PCLCardAffinity implements Comparable<PCLCardAffinity> {
         }
     }
 
-    public void renderOnCard(SpriteBatch sb, AbstractCard card, float x, float y, float size, boolean highlight, boolean allowAlternateBorder) {
+    public void renderOnCard(SpriteBatch sb, AbstractCard card, float x, float y, float size, boolean allowAlternateBorder) {
         float borderScale = 1f;
-        final Color color = Color.WHITE.cpy();
-        Color backgroundColor = color.cpy();
-        Color borderColor = color;
-        if (highlight) {
-            borderColor = Settings.GREEN_RELIC_COLOR.cpy();
-            borderColor.a = color.a;
-            borderScale += EUI.timeSin(0.015f, 2.5f);
-        }
+        renderColor.a = card.transparency;
 
         Texture background = type.getBackground(allowAlternateBorder ? level : Math.min(1, level));
         if (background != null) {
-            PCLRenderHelpers.drawOnCardAuto(sb, card, background, new Vector2(x, y), size, size, Color.LIGHT_GRAY, card.transparency, 1f, 0);
+            PCLRenderHelpers.drawOnCardAuto(sb, card, background, new Vector2(x, y), size, size, renderColor, card.transparency, 1f, 0);
         }
 
-        PCLRenderHelpers.drawOnCardAuto(sb, card, type.getIcon(), new Vector2(x, y), size, size, color, card.transparency, 1f, 0f);
+        PCLRenderHelpers.drawOnCardAuto(sb, card, type.getIcon(), new Vector2(x, y), size, size, renderColor, card.transparency, 1f, 0f);
 
         Texture border = type.getBorder(allowAlternateBorder ? level : Math.min(1, level));
         if (border != null) {
-            PCLRenderHelpers.drawOnCardAuto(sb, card, border, new Vector2(x, y), size, size, borderColor, card.transparency, borderScale, 0f);
+            PCLRenderHelpers.drawOnCardAuto(sb, card, border, new Vector2(x, y), size, size, renderColor, card.transparency, 1f, 0f);
         }
 
         if (type == PCLAffinity.Star) {
             Texture star = PCLCoreImages.CardAffinity.starFg.texture();
-            PCLRenderHelpers.drawOnCardAuto(sb, card, star, new Vector2(x, y), size, size, color, card.transparency, 1f, 0);
+            PCLRenderHelpers.drawOnCardAuto(sb, card, star, new Vector2(x, y), size, size, renderColor, card.transparency, 1f, 0);
         }
     }
 

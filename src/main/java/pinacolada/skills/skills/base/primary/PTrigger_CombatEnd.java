@@ -46,7 +46,7 @@ public class PTrigger_CombatEnd extends PTrigger implements OnBattleEndSubscribe
     @Override
     public void onBattleEnd() {
         if (this.childEffect != null) {
-            this.childEffect.use(makeInfo(null));
+            this.childEffect.useOutsideOfBattle();
         }
     }
 

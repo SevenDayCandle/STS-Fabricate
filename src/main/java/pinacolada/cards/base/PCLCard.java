@@ -106,7 +106,8 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     public static AbstractPlayer player = null;
     public static Random rng = null;
     public static boolean canCropPortraits = true;
-    protected final ArrayList<PCLCardGlowBorderEffect> glowList = new ArrayList<>();
+    protected final transient ArrayList<PCLCardGlowBorderEffect> glowList = new ArrayList<>();
+    protected transient ArrayList<PCLCardAffinity> previousAffinities;
     public final Skills skills = new Skills();
     public final ArrayList<EUIKeywordTooltip> tooltips = new ArrayList<>();
     public final ArrayList<PCLAugment> augments = new ArrayList<>();
@@ -727,11 +728,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         PCLCard upgrade = cardData.tempCard;
 
         if (upgrade == null || upgrade.uuid != this.uuid || (upgrade.timesUpgraded != (timesUpgraded + 1))) {
-            upgrade = cardData.tempCard = (PCLCard) this.makeSameInstanceOf();
-            upgrade.changeForm(auxiliaryData.form, timesUpgraded);
-            upgrade.isPreview = true;
-            upgrade.upgrade();
-            upgrade.displayUpgrades();
+            upgrade = cardData.tempCard = makeUpgradePreview(auxiliaryData.form);
         }
 
         return upgrade;
@@ -830,7 +827,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         if (player != null && player.hand.contains(this) && (!this.hasEnoughEnergy() || GameUtilities.isUnplayableThisTurn(this))) {
             result.color = new Color(1f, 0.3f, 0.3f, transparency);
         }
-        else if (upgradedCost || isCostModified || costForTurn < cost || (cost > 0 && this.freeToPlay())) {
+        else if (isCostModified || costForTurn < cost || (cost > 0 && this.freeToPlay())) {
             result.color = new Color(0.4f, 1f, 0.4f, transparency);
         }
         else {
@@ -850,6 +847,10 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
     protected boolean getDarken() {
         return ReflectionHacks.getPrivate(this, AbstractCard.class, "darken");
+    }
+
+    public String getDescriptionForSort() {
+        return CardModifierManager.onCreateDescription(this, makeExportString(getEffectStrings()));
     }
 
     protected Texture getEnergyOrb() {
@@ -1164,7 +1165,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
         // Force refresh the descriptions, affinities, and augments
         initializeDescription();
-        affinities.updateSortedList();
+        affinities.displayUpgrades(previousAffinities);
     }
 
     @Override
@@ -1535,7 +1536,17 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     }
 
     public String makePowerString() {
-        return makePowerString(rawDescription);
+        return makePowerString(getEffectStrings());
+    }
+
+    public PCLCard makeUpgradePreview(int form) {
+        PCLCard upgrade = (PCLCard) this.makeSameInstanceOf();
+        upgrade.changeForm(form, timesUpgraded);
+        upgrade.isPreview = true;
+        upgrade.previousAffinities = new ArrayList<>(upgrade.affinities.sorted);
+        upgrade.upgrade();
+        upgrade.displayUpgrades();
+        return upgrade;
     }
 
     protected float modifyBlock(PCLUseInfo info, float amount) {

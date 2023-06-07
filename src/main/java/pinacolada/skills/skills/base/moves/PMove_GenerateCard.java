@@ -9,6 +9,7 @@ import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.RotatingList;
 import org.apache.commons.lang3.StringUtils;
+import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -179,12 +180,16 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
 
     @Override
     public void use(PCLUseInfo info, ActionT1<PCLUseInfo> callback) {
+        use(info, callback, getActions());
+    }
+
+    public void use(PCLUseInfo info, ActionT1<PCLUseInfo> callback, PCLActions actionOrder) {
         final CardGroup choice = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
         final int limit = Math.max(extra, amount);
         choice.group = getBaseCards(info);
 
         boolean automatic = choice.size() <= amount;
-        getActions().selectFromPile(getName(), amount, choice)
+        actionOrder.selectFromPile(getName(), amount, choice)
                 .setOptions((automatic ? PCLCardSelection.Random : fields.origin).toSelection(), !fields.not)
                 .addCallback(cards -> {
                     for (AbstractCard c : cards) {

@@ -63,13 +63,13 @@ public class PCLStanceHelper implements TooltipProvider {
         return randomHelper().create();
     }
 
-    public static Collection<PCLStanceHelper> values(AbstractCard.CardColor targetColor) {
-        return targetColor == null ? values() : EUIUtils.filter(ALL.values(), s -> s.allowedColors == null || s.allowedColors.length == 0 || EUIUtils.any(s.allowedColors, t -> t == targetColor))
+    public static Collection<PCLStanceHelper> getAll(AbstractCard.CardColor targetColor) {
+        return targetColor == null ? getAll() : EUIUtils.filter(ALL.values(), s -> s.allowedColors == null || s.allowedColors.length == 0 || EUIUtils.any(s.allowedColors, t -> t == targetColor))
                 .stream()
                 .sorted((a, b) -> a.tooltip != null && b.tooltip != null ? StringUtils.compare(a.tooltip.title, b.tooltip.title) : 0).collect(Collectors.toList());
     }
 
-    public static Collection<PCLStanceHelper> values() {
+    public static Collection<PCLStanceHelper> getAll() {
         return ALL.values().stream().sorted((a, b) -> StringUtils.compare(a.tooltip.title, b.tooltip.title)).collect(Collectors.toList());
     }
 

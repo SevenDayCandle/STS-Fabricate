@@ -21,8 +21,8 @@ public class PShift_OnRemove extends PShift {
     }
 
     @Override
-    public String getSubText() {
-        return TEXT.cond_onGeneric(PGR.core.tooltips.remove.title) + ": ";
+    public String getDelegateText() {
+        return PGR.core.tooltips.remove.title;
     }
 
     @Override

@@ -15,7 +15,7 @@
 	"Augment":	{
 		"DESCRIPTION": "#yAugments modify the effect or properties of the card they are slotted into.",
 		"NAME": "Augment",
-		"PLURAL": "Augments"
+		"PLURAL": "${0}@>1:Augments@:Augment$"
 	},
 	"Autoplay":	{
 		"DESCRIPTION": "Automatically played when in hand. Still uses [E].",
@@ -52,7 +52,7 @@
 		"DESCRIPTION": "Powers with positive effects.",
 		"NAME": "Buff",
 		"PAST": "buffed",
-		"PLURAL": "buffs",
+		"PLURAL": "${0}@>1:buffs@:buff$",
 		"PRESENT": "buffs",
 		"PROGRESSIVE": "buffing"
 	},
@@ -102,7 +102,7 @@
 	"Debuff":	{
 		"DESCRIPTION": "Powers with negative effects.",
 		"PAST": "debuffed",
-		"PLURAL": "debuffs",
+		"PLURAL": "${0}@>1:debuffs@:debuff$",
 		"PRESENT": "debuffs",
 		"PROGRESSIVE": "debuffing",
 		"NAME": "Debuff"
@@ -203,8 +203,7 @@
 	},
 	"Interactable":	{
 		"DESCRIPTION": "Once per turn (unless specified otherwise), activate this effect by clicking this power's icon and paying its cost.",
-		"NAME": "Interactable",
-		"PLURAL": "Interactables"
+		"NAME": "Interactable"
 	},
 	"Invigorated":	{
 		"DESCRIPTION": "#yAttacks deal #b+{0}% damage.",
@@ -250,7 +249,7 @@
 	},
 	"Max HP":	{
 		"DESCRIPTION": "",
-		"NAME": "Max Health"
+		"NAME": "Max HP"
 	},
 	"Metallicize":	{
 		"DESCRIPTION": "Gain [Block] at the start of your turn.",
@@ -434,8 +433,7 @@
 	},
 	"Special Augment":	{
 		"DESCRIPTION": "#ySpecial #yAugments cannot be obtained from combat rewards, nor can they be removed from cards.",
-		"NAME": "Special Augment",
-		"PLURAL": "Special Augments"
+		"NAME": "Special Augment"
 	},
 	"Spread":	{
 		"DESCRIPTION": "Spread a target's power to ALL other enemies.",
@@ -466,7 +464,7 @@
 		"DESCRIPTION": "#ySummon cards act every turn and intercept unblocked damage.",
 		"NAME": "Summon",
 		"PAST": "Summoned",
-		"PLURAL": "Summons",
+		"PLURAL": "${0}@>1:Summons@:Summon$",
 		"PRESENT": "Summons",
 		"PROGRESSIVE": "Summoning"
 	},

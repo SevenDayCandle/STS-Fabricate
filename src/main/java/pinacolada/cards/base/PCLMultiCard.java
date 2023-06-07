@@ -107,7 +107,7 @@ public abstract class PCLMultiCard extends PCLCard {
                 upgrade.addInheritedCard(iCard.makeSameInstanceOf());
             }
             upgrade.refreshProperties();
-
+            upgrade.previousAffinities = new ArrayList<>(upgrade.affinities.sorted);
             upgrade.upgrade();
             upgrade.displayUpgrades();
         }
