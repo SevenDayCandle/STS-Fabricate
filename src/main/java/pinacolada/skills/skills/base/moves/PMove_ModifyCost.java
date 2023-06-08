@@ -50,7 +50,7 @@ public class PMove_ModifyCost extends PMove_Modify<PField_CardCategory> {
 
     @Override
     public String getSubText() {
-        String base = super.getSubText();
+        String base = useParent ? TEXT.act_zCosts(getInheritedTheyString(), parent != null ? parent.baseAmount : 1, getAmountRawString()) : super.getSubText();
         return !fields.forced ? TEXT.subjects_thisTurn(base) : base;
     }
 

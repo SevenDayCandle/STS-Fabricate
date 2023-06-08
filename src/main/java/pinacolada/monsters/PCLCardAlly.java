@@ -206,7 +206,7 @@ public class PCLCardAlly extends PCLCreature {
         this.unhover();
         card.stopFlash();
 
-        FuncT1<PCLAllyAnimation, PCLCardAlly> animFunc = ANIMATION_MAP.get(card.color);
+        FuncT1<PCLAllyAnimation, PCLCardAlly> animFunc = ANIMATION_MAP.get(card.cardData.resources.cardColor);
         if (animFunc != null) {
             this.animation = animFunc.invoke(this);
         }

@@ -20,7 +20,11 @@ public class PCLAllyAnimation extends PCLIntervalAnimation {
     public PCLCreature owner;
 
     public PCLAllyAnimation(PCLCreature owner) {
-        super();
+        this(owner, 0.3f, 0.4f);
+    }
+
+    public PCLAllyAnimation(PCLCreature owner, float intMin, float intMax) {
+        super(intMin, intMax);
         renderColor = Color.WHITE.cpy();
         renderColor.a = transitionAlpha;
         this.shineColor = renderColor.cpy();

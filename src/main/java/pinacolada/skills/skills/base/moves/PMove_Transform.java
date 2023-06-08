@@ -67,7 +67,7 @@ public class PMove_Transform extends PMove_Select<PField_CardTransform> {
     @Override
     public String getSubText() {
         return TEXT.act_transform(
-                useParent ? getInheritedString() : fields.groupTypes.size() > 0 ? EUIRM.strings.numNounPlace(getAmountRawString(), fields.getFullCardString(), TEXT.subjects_from(fields.getGroupString())) : TEXT.subjects_thisCard, fields.getCardIDString()
+                useParent ? getInheritedThemString() : fields.groupTypes.size() > 0 ? EUIRM.strings.numNounPlace(getAmountRawString(), fields.getFullCardString(), TEXT.subjects_from(fields.getGroupString())) : TEXT.subjects_thisCard, fields.getCardIDString()
         );
     }
 

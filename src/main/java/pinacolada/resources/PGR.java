@@ -24,6 +24,7 @@ import pinacolada.annotations.VisiblePower;
 import pinacolada.annotations.VisibleRelic;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.cards.base.PCLCustomCardSlot;
+import pinacolada.cards.base.tags.CardFlag;
 import pinacolada.commands.*;
 import pinacolada.dungeon.PCLDungeon;
 import pinacolada.effects.EffekseerEFK;
@@ -347,14 +348,15 @@ public class PGR {
     }
 
     public static void postInitialize() {
-        PGR.registerCommands();
+        registerCommands();
         PCLAbstractPlayerData.postInitialize();
-        PGR.config.load(CardCrawlGame.saveSlot);
-        PGR.config.initializeOptions();
+        config.load(CardCrawlGame.saveSlot);
+        config.initializeOptions();
         initializeUI();
         PSkill.initialize();
         PCLAugmentData.initialize();
         EffekseerEFK.initialize();
+        CardFlag.postInitialize();
         reloadCustoms();
         CountingPanel.register(new PCLAffinityPanelFilter());
     }

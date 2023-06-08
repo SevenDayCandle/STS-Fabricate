@@ -50,7 +50,7 @@ import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.cards.base.cardText.PCLCardText;
 import pinacolada.cards.base.fields.*;
-import pinacolada.cards.base.tags.CardTagItem;
+import pinacolada.cards.base.tags.CardFlag;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.dungeon.CombatManager;
@@ -160,7 +160,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
             augments.add(null);
         }
 
-        setupExtraTags();
+        setupFlags();
         setupProperties(cardData, form, timesUpgraded);
         setup(input);
         setForm(form, timesUpgraded);
@@ -885,6 +885,10 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
     public int getMaxForms() {
         return cardData != null ? cardData.maxForms : 1;
+    }
+
+    public String getNameForSort() {
+        return name;
     }
 
     protected Texture getPortraitFrame() {
@@ -2336,18 +2340,20 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         this.timing = timing;
     }
 
-    protected void setupExtraTags() {
+    protected void setupFlags() {
         // Set Soulbound
         if (!cardData.removableFromDeck) {
             SoulboundField.soulbound.set(this, true);
         }
 
-        if (cardData.extraTags != null) {
-            for (CardTagItem item : cardData.extraTags) {
-                this.tags.add(item.tag);
-                // Starter Strike tags should automatically be added to Basic cards with the Strike, so they can be upgraded in Simplicity, etc.
-                if (item == CardTagItem.Strike && this.rarity == CardRarity.BASIC) {
-                    this.tags.add(CardTags.STARTER_STRIKE);
+        if (cardData.flags != null) {
+            for (CardFlag item : cardData.flags) {
+                if (item.gameFlag != null) {
+                    this.tags.add(item.gameFlag);
+                    // Starter Strike tags should automatically be added to Basic cards with the Strike, so they can be upgraded in Simplicity, etc.
+                    if (item == CardFlag.Strike && this.rarity == CardRarity.BASIC) {
+                        this.tags.add(CardTags.STARTER_STRIKE);
+                    }
                 }
             }
         }

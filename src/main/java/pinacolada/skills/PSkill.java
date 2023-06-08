@@ -733,8 +733,12 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return this;
     }
 
-    public final String getInheritedString() {
-        return parent != null ? parent.getParentString() : this.getParentString();
+    public final String getInheritedThemString() {
+        return parent != null ? parent.getParentThemString() : this.getParentThemString();
+    }
+
+    public final String getInheritedTheyString() {
+        return parent != null ? parent.getParentTheyString() : this.getParentTheyString();
     }
 
     public AbstractMonster.Intent getIntent() {
@@ -779,8 +783,12 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return parent;
     }
 
-    public String getParentString() {
-        return TEXT.subjects_them(baseAmount);
+    public String getParentThemString() {
+        return EUISmartText.parseLogicString(TEXT.subjects_them(amount));
+    }
+
+    public String getParentTheyString() {
+        return EUISmartText.parseLogicString(TEXT.subjects_they(amount));
     }
 
     public String getPowerText() {

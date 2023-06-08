@@ -82,7 +82,7 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
             setup();
         }
         try {
-            return StringUtils.capitalize(EUIUtils.joinStrings(" ", EUIUtils.map(getEffects(), PSkill::getPowerText)));
+            return StringUtils.capitalize(EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, EUIUtils.map(getEffects(), PSkill::getPowerText)));
         }
         catch (Exception e) {
             return "";

@@ -376,20 +376,21 @@ public class PCLCoreStrings extends PCLStrings {
     public final String subjects_topOfX = subjects.TEXT[39];
     public final String subjects_theirX = subjects.TEXT[40];
     public final String subjects_themX = subjects.TEXT[41];
-    public final String subjects_thisCard = subjects.TEXT[42];
-    public final String subjects_this = subjects.TEXT[43];
-    public final String subjects_unblockedX = subjects.TEXT[44];
-    public final String subjects_x = subjects.TEXT[45];
-    public final String subjects_you = subjects.TEXT[46];
-    public final String subjects_yourFirstX = subjects.TEXT[47];
-    public final String subjects_yourX = subjects.TEXT[48];
-    public final String subjects_xOfY = subjects.TEXT[49];
-    public final String subjects_xOnY = subjects.TEXT[50];
-    public final String subjects_xThisCombat = subjects.TEXT[51];
-    public final String subjects_xThisTurn = subjects.TEXT[52];
-    public final String subjects_xTimes = subjects.TEXT[53];
-    public final String subjects_xWithY = subjects.TEXT[54];
-    public final String subjects_xCost = subjects.TEXT[55];
+    public final String subjects_theyX = subjects.TEXT[42];
+    public final String subjects_thisCard = subjects.TEXT[43];
+    public final String subjects_this = subjects.TEXT[44];
+    public final String subjects_unblockedX = subjects.TEXT[45];
+    public final String subjects_x = subjects.TEXT[46];
+    public final String subjects_you = subjects.TEXT[47];
+    public final String subjects_yourFirstX = subjects.TEXT[48];
+    public final String subjects_yourX = subjects.TEXT[49];
+    public final String subjects_xOfY = subjects.TEXT[50];
+    public final String subjects_xOnY = subjects.TEXT[51];
+    public final String subjects_xThisCombat = subjects.TEXT[52];
+    public final String subjects_xThisTurn = subjects.TEXT[53];
+    public final String subjects_xTimes = subjects.TEXT[54];
+    public final String subjects_xWithY = subjects.TEXT[55];
+    public final String subjects_xCost = subjects.TEXT[56];
     // Tutorial
     public final String tutorial_learnMore = tutorial.TEXT[0];
     public final String tutorial_tagTutorial = tutorial.TEXT[1];
@@ -664,23 +665,26 @@ public class PCLCoreStrings extends PCLStrings {
     public final String act_youCannotGain(Object target) {
         return actFmt(48, target);
     }
+    public final String act_zCosts(Object object, Object ordinal, Object amount) {
+        return actFmt(49, object, ordinal, amount);
+    }
     public final String act_zGainsBonus(Object object, Object amount, Object bonus) {
-        return actFmt(49, object, amount, bonus);
+        return actFmt(50, object, amount, bonus);
     }
     public final String act_zHas(Object object, Object amount) {
-        return actFmt(50, object, amount);
+        return actFmt(51, object, amount);
     }
     public final String act_zLoses(Object object, Object ordinal, Object amount, Object bonus) {
-        return actFmt(51, object, ordinal, amount, bonus);
+        return actFmt(52, object, ordinal, amount, bonus);
     }
     public final String act_zOn(Object action, Object object, Object target) {
-        return actFmt(52, action, object, target);
+        return actFmt(53, action, object, target);
     }
     public final String act_zOnAmount(Object action, Object amount, Object object, Object target) {
-        return actFmt(53, action, amount, object, target);
+        return actFmt(54, action, amount, object, target);
     }
     public final String act_zTo(Object action, Object object, Object target) {
-        return actFmt(54, action, object, target);
+        return actFmt(55, action, object, target);
     }
 
     public final String act_channel(Object subject) {
@@ -1161,6 +1165,10 @@ public class PCLCoreStrings extends PCLStrings {
 
     public final String subjects_them(Object amount) {
         return EUIUtils.format(subjects_themX, amount);
+    }
+
+    public final String subjects_they(Object amount) {
+        return EUIUtils.format(subjects_theyX, amount);
     }
 
     public final String subjects_thisCombat(String base) {

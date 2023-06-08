@@ -78,7 +78,7 @@ public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity
     public String getSubText() {
         if (fields.forced) {
             String giveString = getNumericalObjectText();
-            return useParent ? TEXT.act_setOf(PGR.core.tooltips.affinityGeneral, getInheritedString(), giveString) :
+            return useParent ? TEXT.act_setOf(PGR.core.tooltips.affinityGeneral, getInheritedThemString(), giveString) :
                     fields.hasGroups() ?
                             TEXT.act_setOfFrom(PGR.core.tooltips.affinityGeneral, EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), pluralCard()), fields.getGroupString(), giveString) :
                             TEXT.act_setOf(PGR.core.tooltips.affinityGeneral, TEXT.subjects_thisCard, giveString);

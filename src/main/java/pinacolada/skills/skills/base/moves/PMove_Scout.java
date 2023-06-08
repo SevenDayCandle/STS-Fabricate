@@ -46,7 +46,7 @@ public class PMove_Scout extends PMove_Select<PField_CardCategory> {
 
     @Override
     public String getSubText() {
-        return useParent ? EUIRM.strings.verbNoun(getActionTitle(), getInheritedString())
+        return useParent ? EUIRM.strings.verbNoun(getActionTitle(), getInheritedThemString())
                 : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawString(), fields.getFullCardString());
     }
 }

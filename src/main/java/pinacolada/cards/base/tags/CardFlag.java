@@ -5,6 +5,9 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.cards.red.Defend_Red;
+import com.megacrit.cardcrawl.cards.red.Strike_Red;
+import com.megacrit.cardcrawl.core.CardCrawlGame;
 import extendedui.EUIUtils;
 import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.ui.tooltips.EUITooltip;
@@ -14,49 +17,54 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@JsonAdapter(CardTagItem.CardTagItemAdapter.class)
-public class CardTagItem implements TooltipProvider {
-    private static final Map<String, CardTagItem> ALL = new HashMap<>();
+@JsonAdapter(CardFlag.CardFlagAdapter.class)
+public class CardFlag implements TooltipProvider {
+    private static final Map<String, CardFlag> ALL = new HashMap<>();
 
-    public static final CardTagItem Defend = new CardTagItem(AbstractCard.CardTags.STARTER_DEFEND);
-    public static final CardTagItem Strike = new CardTagItem(AbstractCard.CardTags.STRIKE);
+    public static final CardFlag Defend = new CardFlag(AbstractCard.CardTags.STARTER_DEFEND);
+    public static final CardFlag Strike = new CardFlag(AbstractCard.CardTags.STRIKE);
 
     public final String ID;
-    public final AbstractCard.CardTags tag;
+    public final AbstractCard.CardTags gameFlag;
     public final AbstractCard.CardColor[] colors;
     public String name;
 
-    public CardTagItem(AbstractCard.CardTags tag, AbstractCard.CardColor... colors) {
-        this(tag.toString(), tag, colors);
+    public CardFlag(AbstractCard.CardTags gameFlag, AbstractCard.CardColor... colors) {
+        this(gameFlag.toString(), gameFlag, colors);
     }
 
-    public CardTagItem(String id, AbstractCard.CardTags tag, AbstractCard.CardColor... colors) {
+    public CardFlag(String id, AbstractCard.CardTags gameFlag, AbstractCard.CardColor... colors) {
         this.ID = id;
-        this.tag = tag;
+        this.gameFlag = gameFlag;
         this.colors = colors;
         ALL.putIfAbsent(ID, this);
     }
 
-    public static CardTagItem get(AbstractCard.CardTags tag) {
+    public static CardFlag get(AbstractCard.CardTags tag) {
         return get(EUIUtils.capitalize(tag.toString()));
     }
 
-    public static CardTagItem get(String id) {
+    public static CardFlag get(String id) {
         return ALL.get(id);
     }
 
-    public static Collection<CardTagItem> getAll() {
+    public static Collection<CardFlag> getAll() {
         return ALL.values().stream().sorted((a, b) -> StringUtils.compare(a.getName(), b.getName())).collect(Collectors.toList());
     }
 
-    public static Collection<CardTagItem> getAll(AbstractCard.CardColor targetColor) {
+    public static Collection<CardFlag> getAll(AbstractCard.CardColor targetColor) {
         return targetColor == null ? getAll() : EUIUtils.filter(ALL.values(), s -> s.colors == null || s.colors.length == 0 || EUIUtils.any(s.colors, t -> t == targetColor))
                 .stream()
                 .sorted((a, b) -> StringUtils.compare(a.getName(), b.getName())).collect(Collectors.toList());
     }
 
-    public static List<CardTagItem> getFromCard(AbstractCard card) {
-        return EUIUtils.mapAsNonnull(card.tags, CardTagItem::get);
+    public static List<CardFlag> getFromCard(AbstractCard card) {
+        return EUIUtils.mapAsNonnull(card.tags, CardFlag::get);
+    }
+
+    public static void postInitialize() {
+        Defend.name = CardCrawlGame.languagePack.getCardStrings(Defend_Red.ID).NAME;
+        Strike.name = CardCrawlGame.languagePack.getCardStrings(Strike_Red.ID).NAME;
     }
 
     public String getName() {
@@ -76,14 +84,14 @@ public class CardTagItem implements TooltipProvider {
         return colors == null || colors.length == 0 || EUIUtils.any(colors, t -> t == color);
     }
 
-    public static class CardTagItemAdapter extends TypeAdapter<CardTagItem> {
+    public static class CardFlagAdapter extends TypeAdapter<CardFlag> {
         @Override
-        public void write(JsonWriter writer, CardTagItem value) throws IOException {
+        public void write(JsonWriter writer, CardFlag value) throws IOException {
             writer.value(value.ID);
         }
 
         @Override
-        public CardTagItem read(JsonReader in) throws IOException {
+        public CardFlag read(JsonReader in) throws IOException {
             return get(in.nextString());
         }
     }

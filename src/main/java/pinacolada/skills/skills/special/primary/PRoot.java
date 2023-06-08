@@ -47,6 +47,11 @@ public class PRoot extends PPrimary<PField_Empty> {
     }
 
     @Override
+    public boolean isBlank() {
+        return this.childEffect == null;
+    }
+
+    @Override
     public void triggerOnStartOfBattleForRelic() {
         if (childEffect != null) {
             childEffect.use(makeInfo(null));

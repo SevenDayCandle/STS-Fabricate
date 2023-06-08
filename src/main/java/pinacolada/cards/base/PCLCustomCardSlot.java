@@ -8,7 +8,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
-import pinacolada.cards.base.tags.CardTagItem;
+import pinacolada.cards.base.tags.CardFlag;
 import pinacolada.interfaces.providers.CustomFileProvider;
 import pinacolada.misc.PCLCustomEditorLoadable;
 import pinacolada.resources.PGR;
@@ -57,6 +57,7 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
     public Integer[] cost = array(0);
     public Integer[] costUpgrade = array(0);
     public String[] tags;
+    public String[] flags;
     public String[] forms;
     public transient AbstractCard.CardColor slotColor = AbstractCard.CardColor.COLORLESS;
 
@@ -84,7 +85,7 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
                 .setImagePath(imagePath)
                 .setAttackSkill(card.onAttackEffect)
                 .setBlockSkill(card.onBlockEffect)
-                .setExtraTags(CardTagItem.getFromCard(card))
+                .setFlags(CardFlag.getFromCard(card))
                 .setPSkill(card.getEffects(), true, true)
                 .setPPower(card.getPowerEffects(), true, true)
         );
@@ -328,6 +329,7 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
             branchUpgradeFactor = first.branchFactor;
             affinities = EUIUtils.serialize(first.affinities);
             tags = EUIUtils.mapAsNonnull(first.tags.values(), EUIUtils::serialize).toArray(new String[]{});
+            flags = EUIUtils.mapAsNonnull(first.flags, f -> f.ID).toArray(new String[]{});
         }
 
         for (PCLDynamicCardData builder : builders) {

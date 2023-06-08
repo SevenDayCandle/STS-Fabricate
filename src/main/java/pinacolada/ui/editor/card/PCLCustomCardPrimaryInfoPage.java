@@ -18,7 +18,7 @@ import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCustomCardSlot;
-import pinacolada.cards.base.tags.CardTagItem;
+import pinacolada.cards.base.tags.CardFlag;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
@@ -49,7 +49,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
     protected EUIDropdown<AbstractCard.CardRarity> raritiesDropdown;
     protected EUIDropdown<AbstractCard.CardType> typesDropdown;
     protected EUIDropdown<PCLLoadout> loadoutDropdown;
-    protected EUIDropdown<CardTagItem> flagsDropdown;
+    protected EUIDropdown<CardFlag> flagsDropdown;
     protected EUILabel idWarning;
     protected PCLValueEditor maxUpgrades;
     protected PCLValueEditor maxCopies;
@@ -131,14 +131,14 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
                 .setCanAutosizeButton(true)
                 .setItems(getEligibleTypes(effect.getBuilder().cardColor))
                 .setTooltip(CardLibSortHeader.TEXT[1], PGR.core.strings.cetut_type);
-        flagsDropdown = new EUISearchableDropdown<CardTagItem>(new EUIHitbox(START_X, screenH(0.5f), MENU_WIDTH, MENU_HEIGHT), cs -> cs.getTip().title)
+        flagsDropdown = new EUISearchableDropdown<CardFlag>(new EUIHitbox(START_X, screenH(0.5f), MENU_WIDTH, MENU_HEIGHT), cs -> cs.getTip().title)
                 .setOnChange(selectedSeries -> {
-                    effect.modifyAllBuilders(e -> e.setExtraTags(selectedSeries));
+                    effect.modifyAllBuilders(e -> e.setFlags(selectedSeries));
                 })
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_flags)
                 .setCanAutosizeButton(true)
                 .setIsMultiSelect(true)
-                .setItems(PGR.config.showIrrelevantProperties.get() ? CardTagItem.getAll() : CardTagItem.getAll(effect.currentSlot.slotColor))
+                .setItems(PGR.config.showIrrelevantProperties.get() ? CardFlag.getAll() : CardFlag.getAll(effect.currentSlot.slotColor))
                 .setTooltip(PGR.core.strings.cedit_flags, PGR.core.strings.cetut_primaryFlags);
 
         loadoutDropdown = new EUISearchableDropdown<PCLLoadout>(new EUIHitbox(flagsDropdown.hb.x + flagsDropdown.hb.width + SPACING_WIDTH, screenH(0.5f), MENU_WIDTH, MENU_HEIGHT), PCLLoadout::getName)
@@ -221,7 +221,7 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
         raritiesDropdown.setSelection(effect.getBuilder().cardRarity, false);
         typesDropdown.setSelection(effect.getBuilder().cardType, false);
         loadoutDropdown.setSelection(effect.getBuilder().loadout, false);
-        flagsDropdown.setSelection(effect.getBuilder().extraTags, false);
+        flagsDropdown.setSelection(effect.getBuilder().flags, false);
         maxUpgrades.setValue(effect.getBuilder().maxUpgradeLevel, false);
         branchUpgrades.setValue(effect.getBuilder().branchFactor, false);
         maxCopies.setValue(effect.getBuilder().maxCopies, false);

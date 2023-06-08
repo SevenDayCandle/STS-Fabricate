@@ -1,10 +1,14 @@
 package pinacolada.relics.pcl;
 
+import extendedui.utilities.CostFilter;
 import pinacolada.annotations.VisibleRelic;
+import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.relics.PCLPointerRelic;
 import pinacolada.relics.PCLRelicData;
+import pinacolada.skills.PMove;
 import pinacolada.skills.skills.PShift;
 import pinacolada.skills.skills.base.moves.PMove_ObtainCard;
+import pinacolada.skills.skills.special.primary.PRoot;
 
 @VisibleRelic
 public class UsefulBox extends PCLPointerRelic {
@@ -16,6 +20,7 @@ public class UsefulBox extends PCLPointerRelic {
     }
 
     public void setup() {
-        addUseMove(PShift.obtain(), new PMove_ObtainCard(3, 6));
+        addUseMove(PShift.obtain(), new PMove_ObtainCard(1, 3));
+        addUseMove(new PRoot(), PMove.createRandom(1, 3, PCLCardGroupHelper.Hand).edit(f -> f.setCost(CostFilter.Cost0)));
     }
 }

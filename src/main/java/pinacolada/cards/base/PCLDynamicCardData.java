@@ -7,7 +7,7 @@ import com.megacrit.cardcrawl.localization.CardStrings;
 import extendedui.EUIUtils;
 import extendedui.utilities.ColoredTexture;
 import pinacolada.cards.base.fields.*;
-import pinacolada.cards.base.tags.CardTagItem;
+import pinacolada.cards.base.tags.CardFlag;
 import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.interfaces.markers.EditorMaker;
 import pinacolada.resources.PCLResources;
@@ -109,6 +109,7 @@ public class PCLDynamicCardData extends PCLCardData implements EditorMaker {
         setRarity(original.cardRarity);
         setType(original.cardType);
         setLoadout(original.loadout);
+        setFlags(original.flags);
         setText(name, text, text);
     }
 
@@ -132,11 +133,14 @@ public class PCLDynamicCardData extends PCLCardData implements EditorMaker {
         safeLoadValue(() -> cost = data.cost.clone());
         safeLoadValue(() -> costUpgrade = data.costUpgrade.clone());
         safeLoadValue(() -> setLanguageMap(parseLanguageStrings(data.languageStrings)));
-        safeLoadValue(() -> setTags(EUIUtils.map(data.tags, PCLDynamicCardData::getSafeTag)));
+        safeLoadValue(() -> setTags(EUIUtils.mapAsNonnull(data.tags, PCLDynamicCardData::getSafeTag)));
+        safeLoadValue(() -> setFlags(EUIUtils.mapAsNonnull(data.flags, CardFlag::get)));
         if (data.loadout != null) {
             setLoadout(PCLLoadout.get(data.loadout));
         }
-        safeLoadValue(() -> setAffinities(EUIUtils.deserialize(data.affinities, PCLCardDataAffinityGroup.class)));
+        if (data.affinities != null) {
+            safeLoadValue(() -> setAffinities(EUIUtils.deserialize(data.affinities, PCLCardDataAffinityGroup.class)));
+        }
         safeLoadValue(() -> setMaxUpgrades(data.maxUpgradeLevel));
         safeLoadValue(() -> setMaxCopies(data.maxCopies));
         safeLoadValue(() -> setUnique(data.unique));
@@ -243,8 +247,8 @@ public class PCLDynamicCardData extends PCLCardData implements EditorMaker {
         return this;
     }
 
-    public PCLDynamicCardData setExtraTags(List<CardTagItem> extraTags) {
-        this.extraTags = extraTags;
+    public PCLDynamicCardData setFlags(List<CardFlag> flags) {
+        this.flags = flags == null || flags.isEmpty() ? null : new ArrayList<>(flags);
 
         return this;
     }

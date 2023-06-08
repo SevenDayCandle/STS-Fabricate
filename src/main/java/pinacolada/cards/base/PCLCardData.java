@@ -14,7 +14,7 @@ import extendedui.interfaces.markers.CardObject;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.annotations.VisibleCard;
 import pinacolada.cards.base.fields.*;
-import pinacolada.cards.base.tags.CardTagItem;
+import pinacolada.cards.base.tags.CardFlag;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.misc.PCLGenericData;
 import pinacolada.resources.PCLEnum;
@@ -59,7 +59,7 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
     public DelayTiming[] upgradeTiming;
     public PCLCardTarget cardTarget = PCLCardTarget.None;
     public PCLCardTarget[] upgradeCardTarget;
-    public List<CardTagItem> extraTags;
+    public List<CardFlag> flags;
     public AbstractCard.CardType cardType = AbstractCard.CardType.SKILL;
     public AbstractCard.CardColor cardColor = AbstractCard.CardColor.COLORLESS;
     public AbstractCard.CardRarity cardRarity = AbstractCard.CardRarity.BASIC;
@@ -506,12 +506,12 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
     public PCLCardData setDefend() {
         this.loadout = PGR.getPlayerData(resources.cardColor).getCoreLoadout();
         this.loadout.defends.add(this);
-        this.extraTags = Collections.singletonList(CardTagItem.Defend);
+        this.flags = Collections.singletonList(CardFlag.Defend);
         return this;
     }
 
-    public PCLCardData setExtraTags(List<CardTagItem> extraTags) {
-        this.extraTags = extraTags;
+    public PCLCardData setFlags(List<CardFlag> flags) {
+        this.flags = flags;
 
         return this;
     }
@@ -728,7 +728,7 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
     public PCLCardData setStrike() {
         this.loadout = PGR.getPlayerData(resources.cardColor).getCoreLoadout();
         this.loadout.strikes.add(this);
-        this.extraTags = Collections.singletonList(CardTagItem.Strike);
+        this.flags = Collections.singletonList(CardFlag.Strike);
         return this;
     }
 
