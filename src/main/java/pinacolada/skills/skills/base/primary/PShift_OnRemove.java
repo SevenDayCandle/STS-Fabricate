@@ -22,7 +22,7 @@ public class PShift_OnRemove extends PShift {
 
     @Override
     public String getDelegateText() {
-        return PGR.core.tooltips.remove.title;
+        return PGR.core.tooltips.remove.past();
     }
 
     @Override

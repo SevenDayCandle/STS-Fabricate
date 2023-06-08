@@ -3,6 +3,7 @@ package pinacolada.skills.skills.base.primary;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.markers.OutOfCombatMove;
+import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.interfaces.subscribers.OnBattleEndSubscriber;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
@@ -57,7 +58,8 @@ public class PTrigger_CombatEnd extends PTrigger implements OnBattleEndSubscribe
 
     @Override
     public boolean isSkillAllowed(PSkill<?> skill) {
-        return skill instanceof PPassiveCond ||
+        return skill instanceof PMultiBase ||
+                skill instanceof PPassiveCond ||
                 skill instanceof PPassiveMod ||
                 skill instanceof OutOfCombatMove;
     }

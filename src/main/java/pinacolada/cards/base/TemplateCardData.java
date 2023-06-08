@@ -1,6 +1,5 @@
 package pinacolada.cards.base;
 
-import extendedui.EUIUtils;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.resources.PCLResources;
 
@@ -16,12 +15,6 @@ public class TemplateCardData extends PCLCardData {
         super(type, resources);
         this.originalID = sourceID;
         TEMPLATES.put(sourceID, this);
-        if (TEMPLATES.isEmpty()) {
-            EUIUtils.logInfo(this, "Templates was empty", TEMPLATES.size());
-        }
-        else {
-            EUIUtils.logInfo(this, "Templates was not empty", TEMPLATES.size());
-        }
     }
 
     public static TemplateCardData getTemplate(String original) {

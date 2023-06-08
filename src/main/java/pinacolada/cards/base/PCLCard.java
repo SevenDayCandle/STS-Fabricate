@@ -221,7 +221,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     }
 
     protected static <T extends PCLCardData> T registerCardData(T cardData) {
-        return PCLCardData.reigsterData(cardData);
+        return PCLCardData.registerData(cardData);
     }
 
     protected static TemplateCardData registerTemplate(Class<? extends PCLCard> type, String sourceID) {
@@ -229,7 +229,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     }
 
     protected static TemplateCardData registerTemplate(Class<? extends PCLCard> type, PCLResources<?, ?, ?, ?> resources, String sourceID) {
-        return PCLCardData.reigsterData(new TemplateCardData(type, resources, sourceID));
+        return PCLCardData.registerData(new TemplateCardData(type, resources, sourceID));
     }
 
     protected static int[] ups(int damage, int block) {

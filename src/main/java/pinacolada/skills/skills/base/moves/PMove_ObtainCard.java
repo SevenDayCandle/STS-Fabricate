@@ -31,6 +31,10 @@ public class PMove_ObtainCard extends PMove_GenerateCard implements OutOfCombatM
         super(DATA, PCLCardTarget.None, copies, cardData);
     }
 
+    public PMove_ObtainCard(int copies, int choices, String... cardData) {
+        super(DATA, PCLCardTarget.None, copies, choices, cardData);
+    }
+
     public PMove_ObtainCard(PSkillSaveData content) {
         super(DATA, content);
     }

@@ -72,6 +72,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     protected static final String CONDITION_FORMAT = "║{0}║";
     protected static final String SINGLE_FORMAT = "1";
     public static final String EFFECT_SEPARATOR = LocalizedStrings.PERIOD + " ";
+    public static final String COMMA_SEPARATOR = ", ";
     public static final char EFFECT_CHAR = 'E';
     public static final char XVALUE_CHAR = 'F';
     public static final char EXTRA_CHAR = 'G';

@@ -64,6 +64,12 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
     }
 
     @Override
+    public String getSampleText(PSkill<?> caller)
+    {
+        return TEXT.cedit_branchCondition;
+    }
+
+    @Override
     public String getText(boolean addPeriod) {
         if (this.childEffect != null) {
             return getEffectTexts(addPeriod);

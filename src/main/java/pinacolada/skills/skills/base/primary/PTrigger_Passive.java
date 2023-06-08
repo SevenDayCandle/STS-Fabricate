@@ -2,6 +2,7 @@ package pinacolada.skills.skills.base.primary;
 
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -44,7 +45,8 @@ public class PTrigger_Passive extends PTrigger {
 
     @Override
     public boolean isSkillAllowed(PSkill<?> skill) {
-        return skill instanceof PPassiveCond ||
+        return skill instanceof PMultiBase ||
+                skill instanceof PPassiveCond ||
                 skill instanceof PPassiveMod ||
                 skill instanceof PTrait;
     }

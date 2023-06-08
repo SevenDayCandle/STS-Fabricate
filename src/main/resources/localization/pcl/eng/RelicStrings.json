@@ -1,17 +1,5 @@
 
 {
-	"pcl:BountyMap":
-	{
-		"DESCRIPTIONS": ["When you enter (in order) a #yMonster room, an #yElite room, a #yTreasure room, and a #yShop room, the next ? room you enter will trigger a special event.{0}"," | Current Required Room: #b"],
-		"FLAVOR": "Hunt the Cocogoat. Wanted dead or alive.",
-		"NAME": "Bounty Map"
-	},
-	"pcl:BountyMap2":
-	{
-		"DESCRIPTIONS": ["When you enter (in order) a #yMonster room, an #yShop room, a #yCampfire room, and a #yElite room, the next ? room you enter will trigger a special event.{0}"," | Current Required Room: #b"],
-		"FLAVOR": "Hunt the Pyrotechnician. Wanted dead or alive.",
-		"NAME": "Bounty Map"
-	},
 	"pcl:ChiliPepper":
 	{
 		"DESCRIPTIONS": [""],
@@ -30,11 +18,11 @@
 		"FLAVOR": "It's just an ordinary dice cube. Don't think about it too much.",
 		"NAME": "Generic Dice"
 	},
-	"pcl:JadePendant":
+	"pcl:HomeRunBats":
 	{
-		"DESCRIPTIONS": ["At the start of battle, gain {0} [Resistance]."],
-		"FLAVOR": "You can't beat the heat!",
-		"NAME": "Jade Pendant"
+		"DESCRIPTIONS": [""],
+		"FLAVOR": "Using two bats will increase your chances of hitting the ball.",
+		"NAME": "Home Run Bats"
 	},
 	"pcl:Macroscope":
 	{
@@ -42,47 +30,23 @@
 	  "FLAVOR": "Everything looks bigger up close.",
 	  "NAME": "Macroscope"
 	},
-	"pcl:MagicEraser":
-	{
-		"DESCRIPTIONS": ["Replaces #yFoolish #yCubes. You may break cards from card rewards to obtain #yAugments. | Gain #b1 use when you enter a #yElite or #yBoss room. Store up to #b{0} uses."],
-		"FLAVOR": "Erases everything and anything!",
-		"NAME": "Magic Eraser"
-	},
 	"pcl:Pacifiier":
 	{
 	  "DESCRIPTIONS": ["Upon pickup, double your Max. HP. All Max. HP gains from now on are doubled. All your Attacks deal 0 damage."],
 	  "FLAVOR": "You can't beat the heat!",
 	  "NAME": "Chili Pepper"
 	},
-	"pcl:PCLStarterRelic":
-	{
-		"DESCRIPTIONS": ["#gRight-Click: Apply any #yBlue #yAugment to this relic to modify its effect.", "#pCurrent #pAugment: {0} | #oRight-Click: Retrieve {0}."],
-		"FLAVOR": "",
-		"NAME": ""
-	},
 	"pcl:PizzaBox":
 	{
-		"DESCRIPTIONS": ["Once per combat, when you end your turn with spare [E]: Gain {0} [Energized], [NTD], and [Vigor]."],
+		"DESCRIPTIONS": [],
 		"FLAVOR": "It's pizza time!",
 		"NAME": "Pizza Box"
-	},
-	"pcl:PortableCactus":
-	{
-		"DESCRIPTIONS": ["Start each battle with #b{0} [Malleable]. Whenever you receive #yAttack damage: Gain #b{0} #yTemp. [Thorns]."],
-		"FLAVOR": "Now you can finally fulfill your lifelong dream of being a Spiker!",
-		"NAME": "Portable Cactus"
 	},
 	"pcl:ReconScanner":
 	{
 		"DESCRIPTIONS": ["You can now see a list of possible encounters before entering a room."],
 		"FLAVOR": "You can't beat the heat!",
 		"NAME": "Recon Scanner"
-	},
-	"pcl:SpitefulCubes":
-	{
-		"DESCRIPTIONS": ["Replaces #yFoolish #yCubes. You may reroll cards from card rewards. | Entering #yMonster rooms gives #b1 use(s) per #b{0} cards in the pool. Store up to #b{1} uses."],
-		"FLAVOR": "A pair of black cubes. You probably should not roll them.",
-		"NAME": "Spiteful Cubes"
 	},
 	"pcl:TimeShare":
 	{
@@ -92,14 +56,8 @@
 	},
 	"pcl:UsefulBox":
 	{
-	  "DESCRIPTIONS": ["The first time each turn you #ySummon a #ySummon card, you and it gain {0} [Block].", "#gCurrent #gBonus: {0}"],
+	  "DESCRIPTIONS": [""],
 	  "FLAVOR": "A box that is useful.",
 	  "NAME": "Useful Box"
-	},
-	"pcl:VeryUsefulBox":
-	{
-	  "DESCRIPTIONS": ["At the start of combat, #ySummon a random #yCommon #ySummon and activate an effect based on your current form.", "#gCurrent #gBonus: {0}"],
-	  "FLAVOR": "A box that is very useful.",
-	  "NAME": "Very-Useful Box"
 	}
 }

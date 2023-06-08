@@ -22,7 +22,7 @@ public class PShift_OnObtain extends PShift {
 
     @Override
     public String getDelegateText() {
-        return PGR.core.tooltips.obtain.title;
+        return PGR.core.tooltips.obtain.past();
     }
 
     @Override

@@ -77,6 +77,18 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider 
         return PCLRelicData.registerData(cardData);
     }
 
+    protected static TemplateRelicData registerTemplate(Class<? extends PCLRelic> type) {
+        return registerTemplate(type, PGR.core, type.getSimpleName());
+    }
+
+    protected static TemplateRelicData registerTemplate(Class<? extends PCLRelic> type, String sourceID) {
+        return registerTemplate(type, PGR.core, sourceID);
+    }
+
+    protected static TemplateRelicData registerTemplate(Class<? extends PCLRelic> type, PCLResources<?, ?, ?, ?> resources, String sourceID) {
+        return PCLRelicData.registerData(new TemplateRelicData(type, resources, sourceID));
+    }
+
     protected void activateBattleEffect() {
 
     }

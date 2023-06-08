@@ -50,10 +50,10 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
         PROVIDERS.add(provider);
     }
 
-    // Only allow a card to be copied into a custom card slot if it is a PCLCard and if all of its skills are in AVAILABLE_SKILLS (i.e. selectable in the card editor)
-    public static boolean canFullyRelicCard(AbstractRelic card) {
-        if (card instanceof PCLPointerRelic) {
-            return EUIUtils.all(((PCLPointerRelic) card).getFullSubEffects(), skill -> skill != null && skill.getClass().isAnnotationPresent(VisibleSkill.class));
+    // Only allow a relic to be copied into a custom slot if it is a PCLPointerRelic and if all of its skills are in AVAILABLE_SKILLS (i.e. selectable in the editor)
+    public static boolean canFullyCopyRelic(AbstractRelic relic) {
+        if (relic instanceof PCLPointerRelic) {
+            return EUIUtils.all(((PCLPointerRelic) relic).getFullSubEffects(), skill -> skill != null && skill.getClass().isAnnotationPresent(VisibleSkill.class));
         }
         return false;
     }

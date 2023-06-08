@@ -1,7 +1,11 @@
 package pinacolada.skills.skills;
 
 import pinacolada.interfaces.markers.OutOfCombatMove;
-import pinacolada.skills.*;
+import pinacolada.interfaces.markers.PMultiBase;
+import pinacolada.skills.PPrimary;
+import pinacolada.skills.PSkill;
+import pinacolada.skills.PSkillData;
+import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
 import pinacolada.skills.skills.base.primary.PShift_OnObtain;
 import pinacolada.skills.skills.base.primary.PShift_OnRemove;
@@ -26,17 +30,18 @@ public abstract class PShift extends PPrimary<PField_Empty> {
 
     @Override
     public String getText(boolean addPeriod) {
-        return getCapitalSubText(addPeriod) + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : ": ") + childEffect.getText(addPeriod)) : "");
+        return getCapitalSubText(addPeriod) + (childEffect != null ? (": " + childEffect.getText(addPeriod)) : "");
     }
 
     @Override
     public String getSubText() {
-        return TEXT.cond_onGeneric(getDelegateText());
+        return TEXT.cond_whenSingle(getDelegateText());
     }
 
     @Override
     public boolean isSkillAllowed(PSkill<?> skill) {
-        return skill instanceof PPassiveCond ||
+        return skill instanceof PMultiBase ||
+                skill instanceof PPassiveCond ||
                 skill instanceof PPassiveMod ||
                 skill instanceof OutOfCombatMove;
     }

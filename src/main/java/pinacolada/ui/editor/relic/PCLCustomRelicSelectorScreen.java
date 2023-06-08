@@ -212,14 +212,13 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
         return list;
     }
 
-    // TODO add replacement cards
     private ArrayList<AbstractRelic> getAvailableRelicsToCopy() {
         return EUIUtils.mapAsNonnull(TemplateRelicData.getTemplates(),
                 data -> {
                     PCLRelic relic = data.create();
                     UnlockTracker.markRelicAsSeen(data.ID);
                     relic.isSeen = true;
-                    return PCLCustomRelicSlot.canFullyRelicCard(relic) ? relic : null;
+                    return PCLCustomRelicSlot.canFullyCopyRelic(relic) ? relic : null;
                 });
     }
 

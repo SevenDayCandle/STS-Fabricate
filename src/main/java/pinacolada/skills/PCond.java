@@ -341,7 +341,7 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
 
     @Override
     public String getText(boolean addPeriod) {
-        return getConditionRawString() + (childEffect != null ? ((childEffect instanceof PCond ? EFFECT_SEPARATOR : ": ") + childEffect.getText(addPeriod)) : "");
+        return getConditionRawString() + (childEffect != null ? ((childEffect instanceof PCond && !(childEffect instanceof PBranchCond) ? EFFECT_SEPARATOR : ": ") + childEffect.getText(addPeriod)) : "");
     }
 
     @Override

@@ -1,6 +1,7 @@
 package pinacolada.skills.skills.base.primary;
 
 import pinacolada.annotations.VisibleSkill;
+import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.interfaces.subscribers.PCLCombatSubscriber;
 import pinacolada.skills.PCond;
 import pinacolada.skills.PSkill;
@@ -29,6 +30,6 @@ public class PTrigger_When extends PTrigger {
 
     @Override
     public boolean isSkillAllowed(PSkill<?> skill) {
-        return !(skill instanceof PCond) || skill instanceof PCLCombatSubscriber;
+        return !(skill instanceof PCond) || skill instanceof PMultiBase || skill instanceof PCLCombatSubscriber;
     }
 }

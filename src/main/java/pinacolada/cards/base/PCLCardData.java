@@ -133,7 +133,7 @@ public class PCLCardData extends PCLGenericData<PCLCard> implements CardObject {
         return STATIC_DATA.get(cardID);
     }
 
-    protected static <T extends PCLCardData> T reigsterData(T cardData) {
+    protected static <T extends PCLCardData> T registerData(T cardData) {
         PCLCardData.STATIC_DATA.put(cardData.ID, cardData);
         return cardData;
     }
