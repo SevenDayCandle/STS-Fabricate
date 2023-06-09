@@ -17,7 +17,7 @@ public class PMod_PerCardPlayed extends PMod_PerCardHas {
     public static final PSkillData<PField_CardCategory> DATA = register(PMod_PerCardPlayed.class, PField_CardCategory.class).selfTarget();
 
     public PMod_PerCardPlayed() {
-        this(1, 1);
+        this(1, 0);
     }
 
     public PMod_PerCardPlayed(int amount, int extra) {
@@ -29,7 +29,7 @@ public class PMod_PerCardPlayed extends PMod_PerCardHas {
     }
 
     public PMod_PerCardPlayed(int amount) {
-        super(DATA, amount, 1);
+        super(DATA, amount, 0);
     }
 
     @Override

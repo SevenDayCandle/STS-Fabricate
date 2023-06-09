@@ -267,7 +267,7 @@ public class SelectFromPile extends CardFilterAction {
 
     public void moveToPile(Collection<AbstractCard> result, CardGroup group) {
         for (AbstractCard card : result) {
-            PCLActions.top.moveCard(card, group).showEffect(showEffect, realtime);
+            PCLActions.top.moveCard(card, group).showEffect(showEffect, realtime).setDestination(destination);
         }
     }
 

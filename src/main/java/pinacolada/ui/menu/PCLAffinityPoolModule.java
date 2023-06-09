@@ -84,7 +84,7 @@ public class PCLAffinityPoolModule extends EUIBase implements CustomCardFilterMo
     }
 
     @Override
-    public void initializeSelection(Collection<AbstractCard> cards) {
+    public void initializeSelection(Collection<? extends AbstractCard> cards) {
         HashSet<PCLLoadout> availableSeries = new HashSet<>();
         for (AbstractCard card : cards) {
             availableSeries.add(GameUtilities.getPCLSeries(card));
@@ -103,7 +103,7 @@ public class PCLAffinityPoolModule extends EUIBase implements CustomCardFilterMo
     }
 
     @Override
-    public boolean isCardValid(AbstractCard c) {
+    public boolean isItemValid(AbstractCard c) {
         if (!currentSeries.isEmpty() && !currentSeries.contains(GameUtilities.getPCLSeries(c))) {
             return false;
         }

@@ -17,7 +17,7 @@ public class PMod_PerCardDiscarded extends PMod_PerCardHas {
     public static final PSkillData<PField_CardCategory> DATA = register(PMod_PerCardDiscarded.class, PField_CardCategory.class).selfTarget();
 
     public PMod_PerCardDiscarded() {
-        this(1, 1);
+        this(1, 0);
     }
 
     public PMod_PerCardDiscarded(int amount, int extra) {
@@ -29,7 +29,7 @@ public class PMod_PerCardDiscarded extends PMod_PerCardHas {
     }
 
     public PMod_PerCardDiscarded(int amount) {
-        super(DATA, amount, 1);
+        super(DATA, amount, 0);
     }
 
     @Override

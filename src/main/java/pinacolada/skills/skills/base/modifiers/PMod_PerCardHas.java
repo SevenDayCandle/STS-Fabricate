@@ -22,7 +22,7 @@ public abstract class PMod_PerCardHas extends PMod_Per<PField_CardCategory> {
     }
 
     public PMod_PerCardHas(PSkillData<PField_CardCategory> data) {
-        this(data, 0, 1);
+        this(data, 0, 0);
     }
 
     public PMod_PerCardHas(PSkillData<PField_CardCategory> data, int amount, int count) {

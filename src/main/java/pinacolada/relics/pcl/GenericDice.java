@@ -16,8 +16,7 @@ import pinacolada.utilities.GameUtilities;
 public class GenericDice extends PCLRelic implements CardRewardActionProvider {
     public static final PCLRelicData DATA = register(GenericDice.class)
             .setProps(RelicTier.STARTER, LandingSound.SOLID);
-    public static final int MAX_STORED_USES = 5;
-    public static final int BONUS_PER_CARDS = 60;
+    public static final int BONUS_PER_CARDS = 50;
 
     public GenericDice() {
         super(DATA);
@@ -38,7 +37,7 @@ public class GenericDice extends PCLRelic implements CardRewardActionProvider {
 
     @Override
     public String getUpdatedDescription() {
-        return formatDescription(0, BONUS_PER_CARDS, MAX_STORED_USES);
+        return formatDescription(0, BONUS_PER_CARDS);
     }
 
     @Override
@@ -46,7 +45,7 @@ public class GenericDice extends PCLRelic implements CardRewardActionProvider {
         super.onEnterRoom(room);
 
         if (room instanceof MonsterRoom) {
-            setCounter(Math.min(MAX_STORED_USES, counter + (GameUtilities.getTotalCardsInPlay() / BONUS_PER_CARDS)));
+            setCounter(counter + (GameUtilities.getTotalCardsInPlay() / BONUS_PER_CARDS));
             flash();
         }
     }
@@ -55,6 +54,6 @@ public class GenericDice extends PCLRelic implements CardRewardActionProvider {
     public void onEquip() {
         super.onEquip();
 
-        setCounter(1);
+        setCounter(0);
     }
 }

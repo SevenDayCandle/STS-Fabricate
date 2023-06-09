@@ -569,4 +569,8 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
             }
         }
     }
+
+    public void onRemoveDamagePowers() {
+
+    }
 }

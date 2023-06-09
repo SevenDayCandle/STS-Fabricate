@@ -23,6 +23,7 @@ public class Chrysalis extends PCLCard {
     }
 
     public void setup(Object input) {
-        addUseMove(PMove.createRandom(3, 3, PCLCardGroupHelper.DrawPile).setUpgrade(2).setUpgradeExtra(2).edit(f -> f.setType(CardType.SKILL)), PMove.modifyCostExactForTurn(0, 99).useParent(true));
+        addUseMove(PMove.createRandom(3, 3, PCLCardGroupHelper.DrawPile).setUpgrade(2).setUpgradeExtra(2).edit(f -> f.setType(CardType.SKILL)),
+                PMove.modifyCostExact(0, 99).useParent(true));
     }
 }

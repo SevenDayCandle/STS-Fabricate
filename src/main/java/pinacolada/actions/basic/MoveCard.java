@@ -74,7 +74,7 @@ public class MoveCard extends PCLAction<AbstractCard> {
         }
 
         if (sourcePile == targetPile) {
-            completeImpl();
+            complete(card);
             return;
         }
 

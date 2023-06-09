@@ -889,29 +889,31 @@ public class CombatManager {
         return event;
     }
 
-    // TODO add subscribers
     public static void removeDamagePowers(AbstractCreature creature) {
-        PenNibPower penNib = GameUtilities.getPower(creature, PenNibPower.POWER_ID);
-        if (penNib != null) {
-            PCLActions.bottom.applyPower(creature, creature, penNib, -1);
-
-            if (creature == player) {
-                final AbstractRelic relic = player.getRelic(PenNib.ID);
-                if (relic != null) {
-                    relic.counter = 0;
-                    relic.flash();
-                    relic.stopPulse();
-                }
-            }
-        }
-
+        // Remove temp vigor first to avoid it glitching out the existing vigor
         TemporaryPower tmpVigor = TemporaryPower.getFromCreature(creature, VigorPower.POWER_ID);
         if (tmpVigor != null) {
             PCLActions.bottom.removePower(creature, tmpVigor);
         }
 
-        if (creature.hasPower(VigorPower.POWER_ID)) {
-            PCLActions.bottom.removePower(creature, creature, VigorPower.POWER_ID);
+        for (AbstractPower po : creature.powers) {
+            if (VigorPower.POWER_ID.equals(po.ID)) {
+                PCLActions.bottom.removePower(creature, po);
+            }
+            else if (PenNibPower.POWER_ID.equals(po.ID)) {
+                PCLActions.bottom.applyPower(creature, creature, po, -1);
+                if (creature == player) {
+                    final AbstractRelic relic = player.getRelic(PenNib.ID);
+                    if (relic != null) {
+                        relic.counter = 0;
+                        relic.flash();
+                        relic.stopPulse();
+                    }
+                }
+            }
+            else if (po instanceof PCLPower) {
+                ((PCLPower)po).onRemoveDamagePowers();
+            }
         }
     }
 
