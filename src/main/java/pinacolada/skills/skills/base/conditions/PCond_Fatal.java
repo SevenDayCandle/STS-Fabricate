@@ -16,7 +16,6 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Random;
 import pinacolada.skills.skills.PActiveNonCheckCond;
 import pinacolada.skills.skills.PLimit;
-import pinacolada.skills.skills.base.primary.PTrigger_When;
 import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
@@ -34,7 +33,7 @@ public class PCond_Fatal extends PActiveNonCheckCond<PField_Random> implements O
 
     @Override
     public String getSampleText(PSkill<?> callingSkill) {
-        return callingSkill instanceof PTrigger_When ? TEXT.cond_whenSingle(PGR.core.tooltips.kill.present()) : super.getSampleText(callingSkill);
+        return isUnderWhen(callingSkill) ? TEXT.cond_whenSingle(PGR.core.tooltips.kill.present()) : super.getSampleText(callingSkill);
     }
 
     @Override

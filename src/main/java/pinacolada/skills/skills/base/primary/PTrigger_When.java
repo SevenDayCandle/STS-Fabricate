@@ -28,8 +28,9 @@ public class PTrigger_When extends PTrigger {
         return capital(TEXT.cond_whenSingle(TEXT.subjects_x), true);
     }
 
+    // Restrict conditions that do not subscribe to anything and are not under a condition that does so
     @Override
     public boolean isSkillAllowed(PSkill<?> skill) {
-        return !(skill instanceof PCond) || skill instanceof PMultiBase || skill instanceof PCLCombatSubscriber;
+        return !(skill instanceof PCond) || skill instanceof PMultiBase || skill instanceof PCLCombatSubscriber || skill.parent instanceof PCond;
     }
 }

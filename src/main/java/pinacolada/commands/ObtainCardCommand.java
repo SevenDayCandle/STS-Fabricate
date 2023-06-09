@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class ObtainCardCommand extends ConsoleCommand {
     public ObtainCardCommand() {
         this.requiresPlayer = true;
-        this.minExtraTokens = 2;
+        this.minExtraTokens = 1;
         this.maxExtraTokens = 4;
         this.simpleCheck = true;
     }

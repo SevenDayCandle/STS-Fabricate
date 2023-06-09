@@ -17,7 +17,6 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Orb;
 import pinacolada.skills.skills.PPassiveCond;
-import pinacolada.skills.skills.base.primary.PTrigger_When;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 @VisibleSkill
@@ -55,7 +54,7 @@ public class PCond_HaveOrbChanneled extends PPassiveCond<PField_Orb> implements 
 
     @Override
     public String getSampleText(PSkill<?> callingSkill) {
-        return callingSkill instanceof PTrigger_When ? TEXT.cond_wheneverYou(TEXT.act_channel(PGR.core.tooltips.orb.title)) : TEXT.cond_ifX(PCLCoreStrings.past(getActionTooltip()));
+        return isUnderWhen(callingSkill) ? TEXT.cond_wheneverYou(TEXT.act_channel(PGR.core.tooltips.orb.title)) : TEXT.cond_ifX(PCLCoreStrings.past(getActionTooltip()));
     }
 
     @Override

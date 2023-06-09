@@ -13,7 +13,6 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.PPassiveCond;
-import pinacolada.skills.skills.base.primary.PTrigger_When;
 import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
@@ -42,7 +41,7 @@ public class PCond_IsAttacking extends PPassiveCond<PField_Not> implements OnAtt
 
     @Override
     public String getSampleText(PSkill<?> callingSkill) {
-        return callingSkill instanceof PTrigger_When ? TEXT.cond_whenSingle(PGR.core.tooltips.attack.present()) : TEXT.cond_objIs(TEXT.subjects_target, PGR.core.tooltips.attack.progressive());
+        return isUnderWhen(callingSkill) ? TEXT.cond_whenSingle(PGR.core.tooltips.attack.present()) : TEXT.cond_objIs(TEXT.subjects_target, PGR.core.tooltips.attack.progressive());
     }
 
     @Override

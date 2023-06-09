@@ -9,7 +9,6 @@ import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_CardCategory;
-import pinacolada.skills.skills.base.primary.PTrigger_When;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 import java.util.Collections;
@@ -50,7 +49,7 @@ public abstract class PDelegateCardCond extends PDelegateCond<PField_CardCategor
 
     @Override
     public String getSampleText(PSkill<?> callingSkill) {
-        return callingSkill instanceof PTrigger_When ? TEXT.cond_whenAObjectIs(TEXT.subjects_x, getDelegateSampleText()) : TEXT.cond_onGeneric(getDelegateSampleText());
+        return isUnderWhen(callingSkill) ? TEXT.cond_whenAObjectIs(TEXT.subjects_x, getDelegateSampleText()) : TEXT.cond_onGeneric(getDelegateSampleText());
     }
 
     @Override

@@ -1,6 +1,7 @@
 package pinacolada.patches.card;
 
 
+import basemod.devcommands.hand.HandDiscard;
 import com.evacipated.cardcrawl.modthespire.lib.*;
 import com.evacipated.cardcrawl.modthespire.patcher.PatchingException;
 import com.megacrit.cardcrawl.actions.common.DiscardAction;
@@ -13,6 +14,14 @@ import javassist.CtBehavior;
 import pinacolada.dungeon.CombatManager;
 
 public class DiscardActionPatches {
+
+    @SpirePatch(clz = HandDiscard.class, method = "execute")
+    public static class HandDiscard_Execute {
+        @SpireInsertPatch(localvars = {"c"}, locator = Locator.class)
+        public static void insertPre(HandDiscard __instance, AbstractCard c) {
+            CombatManager.onCardDiscarded(c);
+        }
+    }
 
     @SpirePatch(clz = DiscardAction.class, method = "update")
     public static class DiscardAction_Update {

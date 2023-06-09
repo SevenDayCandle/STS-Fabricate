@@ -52,6 +52,9 @@ public class PCLCustomEffectMultiNode extends PCLCustomEffectNode {
                 editor.rootEffect.setChild(first.skill);
             }
         }
+        else {
+            super.extractSelf();
+        }
     }
 
     // When initializing this node through createTree, also create nodes for the subeffects

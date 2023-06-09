@@ -9,7 +9,6 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
 import pinacolada.skills.skills.PDelegateCond;
-import pinacolada.skills.skills.base.primary.PTrigger_When;
 
 @VisibleSkill
 public class PCond_AtTurnEnd extends PDelegateCond<PField_Empty> implements OnEndOfTurnFirstSubscriber {
@@ -38,7 +37,7 @@ public class PCond_AtTurnEnd extends PDelegateCond<PField_Empty> implements OnEn
 
     @Override
     public String getSampleText(PSkill<?> callingSkill) {
-        return callingSkill instanceof PTrigger_When ? TEXT.cond_atEndOfTurn() : TEXT.cond_inXAtTurnEnd(TEXT.cpile_hand);
+        return isUnderWhen(callingSkill) ? TEXT.cond_atEndOfTurn() : TEXT.cond_inXAtTurnEnd(TEXT.cpile_hand);
     }
 
     @Override

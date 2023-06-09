@@ -343,6 +343,10 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
     public String getText(boolean addPeriod) {
         return getConditionRawString() + (childEffect != null ? ((childEffect instanceof PCond && !(childEffect instanceof PBranchCond) ? EFFECT_SEPARATOR : ": ") + childEffect.getText(addPeriod)) : "");
     }
+    
+    public boolean isUnderWhen(PSkill<?> callingSkill) {
+        return callingSkill instanceof PTrigger_When && !(parent instanceof PCond);
+    }
 
     @Override
     public float modifyBlock(PCLUseInfo info, float amount) {

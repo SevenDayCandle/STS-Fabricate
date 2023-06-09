@@ -16,7 +16,6 @@ import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.PActiveNonCheckCond;
 import pinacolada.skills.skills.PLimit;
-import pinacolada.skills.skills.base.primary.PTrigger_When;
 
 import java.util.HashMap;
 
@@ -34,7 +33,7 @@ public class PCond_UnblockedDamage extends PActiveNonCheckCond<PField_Not> imple
 
     @Override
     public String getSampleText(PSkill<?> callingSkill) {
-        return callingSkill instanceof PTrigger_When ? TEXT.cond_whenSingle(TEXT.act_deals(TEXT.subjects_unblocked(TEXT.subjects_x))) : super.getSampleText(callingSkill);
+        return isUnderWhen(callingSkill) ? TEXT.cond_whenSingle(TEXT.act_deals(TEXT.subjects_unblocked(TEXT.subjects_x))) : super.getSampleText(callingSkill);
     }
 
     @Override

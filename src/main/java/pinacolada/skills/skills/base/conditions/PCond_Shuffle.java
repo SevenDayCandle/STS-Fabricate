@@ -9,7 +9,6 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
 import pinacolada.skills.skills.PDelegateCond;
-import pinacolada.skills.skills.base.primary.PTrigger_When;
 
 @VisibleSkill
 public class PCond_Shuffle extends PDelegateCond<PField_Empty> implements OnShuffleSubscriber {
@@ -37,7 +36,7 @@ public class PCond_Shuffle extends PDelegateCond<PField_Empty> implements OnShuf
 
     @Override
     public String getSampleText(PSkill<?> callingSkill) {
-        return callingSkill instanceof PTrigger_When ? TEXT.cond_wheneverYou(TEXT.subjects_shuffleYourDeck) : TEXT.subjects_shuffleYourDeck;
+        return isUnderWhen(callingSkill) ? TEXT.cond_wheneverYou(TEXT.subjects_shuffleYourDeck) : TEXT.subjects_shuffleYourDeck;
     }
 
     @Override

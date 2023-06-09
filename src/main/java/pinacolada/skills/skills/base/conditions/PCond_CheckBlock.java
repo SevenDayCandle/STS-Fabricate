@@ -12,7 +12,6 @@ import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
 import pinacolada.skills.skills.PPassiveCond;
-import pinacolada.skills.skills.base.primary.PTrigger_When;
 
 @VisibleSkill
 public class PCond_CheckBlock extends PPassiveCond<PField_Not> implements OnBlockGainedSubscriber {
@@ -37,7 +36,7 @@ public class PCond_CheckBlock extends PPassiveCond<PField_Not> implements OnBloc
 
     @Override
     public String getSampleText(PSkill<?> callingSkill) {
-        return callingSkill instanceof PTrigger_When ? TEXT.cond_whenSingle(TEXT.act_gain(PGR.core.tooltips.block.title)) : EUIRM.strings.numNoun(TEXT.subjects_x, PGR.core.tooltips.block.title);
+        return isUnderWhen(callingSkill) ? TEXT.cond_whenSingle(TEXT.act_gain(PGR.core.tooltips.block.title)) : EUIRM.strings.numNoun(TEXT.subjects_x, PGR.core.tooltips.block.title);
     }
 
     @Override
