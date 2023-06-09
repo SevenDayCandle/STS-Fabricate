@@ -99,7 +99,6 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
         return getTargets(source, target, 1);
     }
 
-    // TODO flip targets based on the source
     public final ArrayList<? extends AbstractCreature> getTargets(AbstractCreature source, AbstractCreature target, int autoAmount) {
         switch (this) {
             case None: {

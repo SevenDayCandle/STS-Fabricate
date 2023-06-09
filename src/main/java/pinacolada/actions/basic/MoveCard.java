@@ -173,6 +173,7 @@ public class MoveCard extends PCLAction<AbstractCard> {
 
         if (sourcePile.type != CardGroup.CardGroupType.EXHAUST_PILE) {
             player.onCardDrawOrDiscard();
+            CombatManager.onCardDiscarded(card);
             card.triggerOnManualDiscard();
             GameActionManager.incrementDiscard(false);
         }

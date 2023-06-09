@@ -1,5 +1,6 @@
 package pinacolada.skills.skills;
 
+import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.OutOfCombatMove;
 import pinacolada.interfaces.markers.PMultiBase;
 import pinacolada.skills.PPrimary;
@@ -45,6 +46,16 @@ public abstract class PShift extends PPrimary<PField_Empty> {
                 skill instanceof PPassiveMod ||
                 skill instanceof OutOfCombatMove;
     }
+
+    // Should not activate effects when played normally in battle
+    @Override
+    public void use(PCLUseInfo info) {
+    }
+
+    @Override
+    public void use(PCLUseInfo info, boolean isUsing) {
+    }
+
 
     public abstract String getDelegateText();
 }

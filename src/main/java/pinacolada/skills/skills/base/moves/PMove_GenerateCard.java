@@ -80,7 +80,7 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
 
     @Override
     public String getAmountRawOrAllString() {
-        return extra > amount ? TEXT.subjects_xOfY(getAmountRawString(), getExtraRawString()) : getAmountRawString();
+        return isOutOf() ? TEXT.subjects_xOfY(getAmountRawString(), getExtraRawString()) : getAmountRawString();
     }
 
     @Override
@@ -91,7 +91,7 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
     @Override
     public String getSubText() {
         String base = EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), getCopiesOfString());
-        return fields.origin != PCLCardSelection.Manual && !fields.cardIDs.isEmpty() ? TEXT.subjects_randomly(base) : base;
+        return fields.origin != PCLCardSelection.Manual && generateSpecificCards() ? TEXT.subjects_randomly(base) : base;
     }
 
     @Override
@@ -136,17 +136,39 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
         }
         // Otherwise, we prioritize making card ID copies first if they exist, then color-specific cards if colors exist, then any cards
         else {
-            if (!fields.cardIDs.isEmpty()) {
+            if (generateSpecificCards()) {
                 ArrayList<AbstractCard> created = new ArrayList<>();
-                for (String cd : fields.cardIDs) {
-                    // getCard already makes a copy
-                    AbstractCard c = PField_CardCategory.getCard(cd);
-                    if (c != null) {
-                        for (int i = 0; i < amount; i++) {
-                            created.add(c.makeCopy());
+                // When creating specific cards in an X of Y effect, only create up to Y cards.
+                if (isOutOf()) {
+                    for (String cd : fields.cardIDs) {
+                        // getCard already makes a copy
+                        AbstractCard c = PField_CardCategory.getCard(cd);
+                        if (c != null) {
+                            created.add(c);
+                        }
+                    }
+                    // If the list is not empty and we have less than Y cards, we can create 1 of each card until we have Y cards
+                    if (!created.isEmpty()) {
+                        int ind = 0;
+                        while (created.size() < limit) {
+                            created.add(created.get(0).makeCopy());
+                            ind++;
                         }
                     }
                 }
+                // Otherwise, create X copies of each card
+                else {
+                    for (String cd : fields.cardIDs) {
+                        // getCard already makes a copy
+                        AbstractCard c = PField_CardCategory.getCard(cd);
+                        if (c != null) {
+                            for (int i = 0; i < limit; i++) {
+                                created.add(c);
+                            }
+                        }
+                    }
+                }
+
                 return created;
             }
             return EUIUtils.map(getSourceCards(limit),
@@ -156,10 +178,18 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
         return new ArrayList<>();
     }
 
+    protected boolean generateSpecificCards() {
+        return !fields.cardIDs.isEmpty();
+    }
+
+    protected boolean isOutOf() {
+        return extra > amount;
+    }
+
     protected String getCopiesOfString() {
         return useParent ? TEXT.subjects_copiesOf(getInheritedThemString())
                 : (fields.forced && sourceCard != null) ? TEXT.subjects_copiesOf(TEXT.subjects_thisCard)
-                : extra > amount || fields.origin != PCLCardSelection.Manual ? fields.getFullCardString() : fields.getFullCardAndString(getAmountRawString());
+                : isOutOf() || fields.origin != PCLCardSelection.Manual ? fields.getFullCardString() : fields.getFullCardAndString(getAmountRawString());
     }
 
     protected Iterable<AbstractCard> getSourceCards(int limit) {
@@ -184,13 +214,13 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
     }
 
     public void use(PCLUseInfo info, ActionT1<PCLUseInfo> callback, PCLActions actionOrder) {
-        final CardGroup choice = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
-        final int limit = Math.max(extra, amount);
+        CardGroup choice = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
         choice.group = getBaseCards(info);
+        // When not doing an X out of Y choice, amount may produce more than the advertised amount if we are generating multiple card IDs
+        int itemsToGet = isOutOf() ? amount : choice.group.size();
 
-        boolean automatic = choice.size() <= amount;
-        actionOrder.selectFromPile(getName(), amount, choice)
-                .setOptions((automatic ? PCLCardSelection.Random : fields.origin).toSelection(), !fields.not)
+        actionOrder.selectFromPile(getName(), itemsToGet, choice)
+                .setOptions((!isOutOf() ? PCLCardSelection.Random : fields.origin).toSelection(), !fields.not)
                 .addCallback(cards -> {
                     for (AbstractCard c : cards) {
                         performAction(info, c);

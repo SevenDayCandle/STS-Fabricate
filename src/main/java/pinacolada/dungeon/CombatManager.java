@@ -41,6 +41,7 @@ import pinacolada.effects.PCLEffects;
 import pinacolada.effects.PCLSFX;
 import pinacolada.effects.combat.DodgeEffect;
 import pinacolada.interfaces.listeners.OnRelicObtainedListener;
+import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.providers.CooldownProvider;
 import pinacolada.interfaces.subscribers.*;
 import pinacolada.monsters.PCLCardAlly;
@@ -531,7 +532,7 @@ public class CombatManager {
     }
 
     public static void onCardCreated(AbstractCard card, boolean startOfBattle) {
-        final PCLCard c = EUIUtils.safeCast(card, PCLCard.class);
+        final EditorCard c = EUIUtils.safeCast(card, EditorCard.class);
         if (c != null) {
             c.triggerWhenCreated(startOfBattle);
         }
@@ -566,8 +567,8 @@ public class CombatManager {
             PURGED_CARDS.group.add(card);
         }
 
-        if (card instanceof PCLCard) {
-            ((PCLCard) card).triggerOnPurge();
+        if (card instanceof EditorCard) {
+            ((EditorCard) card).triggerOnPurge();
         }
 
         for (SkillModifier wrapper : SkillModifier.getAll(card)) {
@@ -580,8 +581,8 @@ public class CombatManager {
     }
 
     public static void onCardReshuffled(AbstractCard card, CardGroup sourcePile) {
-        if (card instanceof PCLCard) {
-            ((PCLCard) card).triggerOnReshuffle(sourcePile);
+        if (card instanceof EditorCard) {
+            ((EditorCard) card).triggerOnReshuffle(sourcePile);
         }
 
         for (SkillModifier wrapper : SkillModifier.getAll(card)) {

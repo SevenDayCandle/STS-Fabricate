@@ -42,15 +42,6 @@ public class AbstractCardPatches {
         }
     }
 
-    @SpirePatch(clz = AbstractCard.class, method = "triggerOnManualDiscard")
-    public static class AbstractCard_TriggerOnManualDiscard {
-        @SpirePrefixPatch
-        public static SpireReturn<Void> method(AbstractCard __instance) {
-            CombatManager.onCardDiscarded(__instance);
-            return SpireReturn.Continue();
-        }
-    }
-
     @SpirePatch(clz = AbstractCard.class, method = "triggerOnOtherCardPlayed", paramtypez = {AbstractCard.class})
     public static class CardGroupPatches_TriggerOnOtherCardPlayed {
         @SpirePrefixPatch

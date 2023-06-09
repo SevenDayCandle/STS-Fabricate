@@ -49,7 +49,7 @@ public class PCLCustomPowerEffectPage extends PCLCustomEffectPage {
     protected void startPowerHologram(int i) {
         PCLCustomEffectPage page = screen.effectPages.get(i);
         screen.openPageAtIndex(screen.pages.indexOf(page));
-        PMove_StackCustomPower applyPower = new PMove_StackCustomPower(PCLCardTarget.Self, -1, i);
+        PMove_StackCustomPower applyPower = new PMove_StackCustomPower(PCLCardTarget.Self, -1, editorIndex);
         PCLCustomEffectNode node = PCLCustomEffectNode.getNodeForType(page, applyPower, PCLCustomEffectNode.NodeType.Move, page.hb);
         page.root.receiveNode(node);
         page.fullRebuild();

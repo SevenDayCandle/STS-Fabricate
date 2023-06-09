@@ -23,7 +23,7 @@ import java.util.Map;
 
 public abstract class PCLCreature extends CustomMonster implements PointerProvider, IntentProvider {
     private static final Map<String, PCLCreatureData> staticData = new HashMap<>();
-    protected static final Color TAKEN_TURN_COLOR = new Color(0.64f, 0.64f, 0.64f, 0.55f);
+    protected static final Color TAKEN_TURN_COLOR = new Color(0.64f, 0.64f, 0.64f, 1f);
     public final PCLCreatureData creatureData;
     public PCLAffinity affinity = PCLAffinity.General;
     public boolean stunned;

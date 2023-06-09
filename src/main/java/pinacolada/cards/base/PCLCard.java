@@ -369,6 +369,11 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         return added;
     }
 
+    @Override
+    public PCLAttackType attackType() {
+        return attackType;
+    }
+
     public PCardPrimary_GainBlock getCardBlock() {
         return onBlockEffect;
     }
@@ -543,13 +548,13 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         }
     }
 
-    protected void doEffects(ActionT1<PSkill<?>> action) {
+    public void doEffects(ActionT1<PSkill<?>> action) {
         for (PSkill<?> be : getFullEffects()) {
             action.invoke(be);
         }
     }
 
-    protected void doNonPowerEffects(ActionT1<PSkill<?>> action) {
+    public void doNonPowerEffects(ActionT1<PSkill<?>> action) {
         for (PSkill<?> be : getFullEffects()) {
             if (!(be instanceof SummonOnlyMove)) {
                 action.invoke(be);
@@ -1695,13 +1700,14 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
     // Update damage, block, and magic number from the powers on a given target
     // Every step of the calculation is recorded for display in the damage formula widget
-    public void refresh(AbstractMonster enemy) {
+    public void refresh(AbstractCreature enemy) {
         PCLUseInfo info = CombatManager.playerSystem.generateInfo(this, getSourceCreature(), enemy);
         doEffects(be -> be.refresh(info, true));
+        AbstractMonster asEnemy = GameUtilities.asMonster(enemy);
 
         boolean applyEnemyPowers = (enemy != null && !GameUtilities.isDeadOrEscaped(enemy));
         float tempBlock = CardModifierManager.onModifyBaseBlock(baseBlock, this);
-        float tempDamage = CardModifierManager.onModifyBaseDamage(baseDamage, this, enemy);
+        float tempDamage = CardModifierManager.onModifyBaseDamage(baseDamage, this, asEnemy);
         float tempMagicNumber = CardModifierManager.onModifyBaseMagic(CombatManager.onModifyMagicNumber(baseMagicNumber, this), this);
         float tempHitCount = baseHitCount;
         float tempRightCount = baseRightCount;
@@ -1730,7 +1736,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
             }
 
             tempBlock = CardModifierManager.onModifyBlock(tempBlock, this);
-            tempDamage = CardModifierManager.onModifyDamage(tempDamage, this, enemy);
+            tempDamage = CardModifierManager.onModifyDamage(tempDamage, this, asEnemy);
 
             for (AbstractPower p : owner.powers) {
                 if (p instanceof PCLPower) {
@@ -1830,7 +1836,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
             }
 
             tempBlock = CardModifierManager.onModifyBlockFinal(tempBlock, this);
-            tempDamage = CardModifierManager.onModifyDamageFinal(tempDamage, this, enemy);
+            tempDamage = CardModifierManager.onModifyDamageFinal(tempDamage, this, asEnemy);
 
             if (applyEnemyPowers) {
                 for (AbstractPower p : enemy.powers) {
