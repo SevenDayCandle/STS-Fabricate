@@ -2,6 +2,7 @@ package pinacolada.skills.skills.base.modifiers;
 
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Not;
@@ -25,7 +26,7 @@ public class PMod_PerDamage extends PMod_Per<PField_Not> {
 
     @Override
     public int getMultiplier(PCLUseInfo info) {
-        return (sourceCard != null ? sourceCard.damage : 0);
+        return (sourceCard != null ? sourceCard.damage / PGR.dungeon.getDivisor() : 0);
     }
 
     @Override

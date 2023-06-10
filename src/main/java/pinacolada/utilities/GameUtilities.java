@@ -105,13 +105,13 @@ public class GameUtilities {
     protected static final String BETA_PATH = "images/1024PortraitsBeta/";
     public final static String EMPTY_STRING = "";
 
-    public static CountingPanelStats<PCLAffinity, PCLAffinity, AbstractCard> affinityStats(Iterable<AbstractCard> cards) {
+    public static CountingPanelStats<PCLAffinity, PCLAffinity, AbstractCard> affinityStats(Iterable<? extends AbstractCard> cards) {
         return CountingPanelStats.basic(
                 GameUtilities::getVisiblePCLAffinities,
                 cards);
     }
 
-    public static void applyPowerInstantly(Iterable<AbstractCreature> targets, PCLPowerHelper powerHelper, int stacks) {
+    public static void applyPowerInstantly(Iterable<? extends AbstractCreature> targets, PCLPowerHelper powerHelper, int stacks) {
         for (AbstractCreature target : targets) {
             applyPowerInstantly(target, powerHelper, stacks);
         }
@@ -957,7 +957,7 @@ public class GameUtilities {
         return null;
     }
 
-    public static PCLCardAffinities getPCLCardAffinities(Iterable<AbstractCard> cards) {
+    public static PCLCardAffinities getPCLCardAffinities(Iterable<? extends AbstractCard> cards) {
         final PCLCardAffinities affinities = new PCLCardAffinities(null);
         for (AbstractCard c : cards) {
             PCLCard card = EUIUtils.safeCast(c, PCLCard.class);
@@ -1297,6 +1297,12 @@ public class GameUtilities {
                 + AbstractDungeon.uncommonCardPool.size()
                 + AbstractDungeon.rareCardPool.size()
                 + AbstractDungeon.curseCardPool.size();
+    }
+
+    public static int getTotalCardsInRewardPool() {
+        return AbstractDungeon.commonCardPool.size()
+                + AbstractDungeon.uncommonCardPool.size()
+                + AbstractDungeon.rareCardPool.size();
     }
 
     public static int getTotalCardsPlayed(AbstractCard ignoreLast, boolean currentTurn) {

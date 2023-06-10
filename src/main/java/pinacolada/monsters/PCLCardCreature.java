@@ -21,7 +21,7 @@ import pinacolada.powers.PSkillPower;
 import pinacolada.powers.PSpecialCardPower;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.Skills;
-import pinacolada.skills.skills.DelayTiming;
+import pinacolada.skills.delay.DelayTiming;
 import pinacolada.utilities.GameUtilities;
 
 import static pinacolada.utilities.GameUtilities.scale;

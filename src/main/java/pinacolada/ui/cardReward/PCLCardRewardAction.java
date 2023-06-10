@@ -39,7 +39,6 @@ public abstract class PCLCardRewardAction extends EUIBase {
         onCardReroll(targetCard);
         onCardAdded(returnedCard);
 
-        button.setActive(false);
         setActive(actionProvider.canAct());
     }
 

@@ -5,7 +5,7 @@ import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentCategorySub;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.skills.PSkill;
-import pinacolada.skills.PTrait;
+import pinacolada.skills.skills.PTrait;
 
 @VisibleAugment
 public class SDamageCount2 extends PCLAugment {

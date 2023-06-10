@@ -1,4 +1,4 @@
-package pinacolada.skills.skills;
+package pinacolada.skills.delay;
 
 import pinacolada.resources.PGR;
 

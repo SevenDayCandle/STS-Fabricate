@@ -17,7 +17,7 @@ import pinacolada.actions.creature.SummonAllyAction;
 import pinacolada.actions.creature.WithdrawAllyAction;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.monsters.PCLCardAlly;
-import pinacolada.skills.skills.DelayTiming;
+import pinacolada.skills.delay.DelayTiming;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;

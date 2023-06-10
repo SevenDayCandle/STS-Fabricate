@@ -24,7 +24,10 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUITooltip;
+import pinacolada.actions.PCLAction;
 import pinacolada.actions.PCLActions;
+import pinacolada.cards.base.fields.PCLCardTarget;
+import pinacolada.characters.CreatureAnimationInfo;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
@@ -374,6 +377,21 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider 
     public void renderRelicImage(SpriteBatch sb, Color color, float xOffset, float yOffset, float scaleMult) {
         sb.setColor(color);
         sb.draw(this.img, this.currentX + xOffset, this.currentY + yOffset, 64.0F, 64.0F, 128.0F, 128.0F, this.scale * scaleMult, this.scale * scaleMult, getRotation(), 0, 0, 128, 128, false, false);
+    }
+
+    protected PCLAction<AbstractCreature> selectCreatureForTransform() {
+        return PCLActions.bottom.selectCreature(PCLCardTarget.Any, getName())
+                .addCallback(c -> {
+                    if (c.id == null) {
+                        String p = CreatureAnimationInfo.getRandomKey();
+                        if (p != null) {
+                            PGR.dungeon.setCreature(p);
+                        }
+                    }
+                    else {
+                        PGR.dungeon.setCreature(CreatureAnimationInfo.getIdentifierString(c));
+                    }
+                });
     }
 
     protected void updateFlash() {

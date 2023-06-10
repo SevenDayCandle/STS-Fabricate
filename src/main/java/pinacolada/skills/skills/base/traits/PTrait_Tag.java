@@ -6,9 +6,9 @@ import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.skills.PTrait;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.fields.PField_Tag;
+import pinacolada.skills.skills.PTrait;
 import pinacolada.skills.skills.PTrigger;
 
 @VisibleSkill

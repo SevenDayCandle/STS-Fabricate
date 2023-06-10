@@ -1,16 +1,10 @@
 
 {
-	"pcl:ChiliPepper":
+	"pcl:GiftGivingGift":
 	{
-		"DESCRIPTIONS": [""],
-		"FLAVOR": "You can't beat the heat!",
-		"NAME": "Chili Pepper"
-	},
-	"pcl:DungBall":
-	{
-	  "DESCRIPTIONS": ["#oRight-Click: Spend #b{0} charges to fetch the bottom card of your discard pile. Gain #b1 charge whenever you manually discard or #yReshuffle a card. Store up to #b{1} charges."],
-	  "FLAVOR": "You could roll with this all day.",
-	  "NAME": "Dung Ball"
+		"DESCRIPTIONS": ["Cards in card rewards may come with an additional #yGold or #yMax. #yHP bonus."],
+		"FLAVOR": "It just keeps giving. Until it doesn't.",
+		"NAME": "Gift-Giving Gift"
 	},
 	"pcl:GenericDice":
 	{
@@ -21,7 +15,7 @@
 	"pcl:HomeRunBats":
 	{
 		"DESCRIPTIONS": [""],
-		"FLAVOR": "Using two bats will increase your chances of hitting the ball.",
+		"FLAVOR": "Using two bats increases your chances of hitting the ball.",
 		"NAME": "Home Run Bats"
 	},
 	"pcl:Macroscope":

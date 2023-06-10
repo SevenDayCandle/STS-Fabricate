@@ -10,12 +10,12 @@ import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.resources.PGR;
-import pinacolada.skills.*;
+import pinacolada.skills.PMod;
+import pinacolada.skills.PSkill;
+import pinacolada.skills.PSkillData;
+import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
-import pinacolada.skills.skills.PBlockTrait;
-import pinacolada.skills.skills.PCardPrimary;
-import pinacolada.skills.skills.PPassiveCond;
-import pinacolada.skills.skills.PPassiveMod;
+import pinacolada.skills.skills.*;
 
 @VisibleSkill
 public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty> {

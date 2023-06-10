@@ -2,11 +2,18 @@ package pinacolada.skills;
 
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
+import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
+import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.effects.EffekseerEFK;
+import pinacolada.effects.PCLEffects;
+import pinacolada.effects.VFX;
 import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.orbs.PCLOrbHelper;
 import pinacolada.powers.PCLPowerHelper;
@@ -18,6 +25,8 @@ import pinacolada.skills.skills.special.moves.PMove_Stun;
 import pinacolada.stances.PCLStanceHelper;
 
 public abstract class PMove<T extends PField> extends PSkill<T> {
+    protected FuncT1<AbstractGameEffect, PCLUseInfo> vfxFunc;
+
     public PMove(PSkillData<T> data, PSkillSaveData content) {
         super(data, content);
     }
@@ -534,6 +543,23 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
     public PMove<T> setSource(PointerProvider card) {
         super.setSource(card);
         return this;
+    }
+
+    public PMove<T> setVFX(EffekseerEFK efk) {
+        this.vfxFunc = (info) -> VFX.eFX(efk, info.source != null ? info.source.hb : AbstractDungeon.player.hb);
+        return this;
+    }
+
+    public PMove<T> setVFX(FuncT1<AbstractGameEffect, PCLUseInfo> vfxFunc) {
+        this.vfxFunc = vfxFunc;
+        return this;
+    }
+
+    public void use(PCLUseInfo info) {
+        if (this.vfxFunc != null) {
+            PCLEffects.Queue.add(vfxFunc.invoke(info));
+        }
+        super.use(info);
     }
 
 }

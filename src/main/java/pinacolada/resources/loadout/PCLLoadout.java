@@ -20,6 +20,7 @@ import pinacolada.characters.PCLCharacter;
 import pinacolada.misc.LoadoutStrings;
 import pinacolada.relics.PCLRelic;
 import pinacolada.relics.pcl.GenericDice;
+import pinacolada.relics.pcl.GiftGivingGift;
 import pinacolada.relics.pcl.Macroscope;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PCLResources;
@@ -40,8 +41,8 @@ public abstract class PCLLoadout {
     public static final int MAX_PRESETS = 5;
     public static final int MAX_VALUE = 20;
     public static final int MIN_CARDS = 10;
-    public static final int COMMON_LOADOUT_VALUE = 6;
-    public static final int CURSE_VALUE = -7;
+    public static final int COMMON_LOADOUT_VALUE = 5;
+    public static final int CURSE_VALUE = -6;
     public static final int CARD_SLOTS = 4;
     public final AbstractCard.CardColor color;
     public final String ID;
@@ -193,8 +194,9 @@ public abstract class PCLLoadout {
     }
 
     public void addLoadoutRelics(PCLRelicSlot r1) {
-        r1.addItem(new GenericDice(), 5);
-        r1.addItem(new Macroscope(), 5);
+        r1.addItem(new GenericDice(), 4);
+        r1.addItem(new Macroscope(), 4);
+        r1.addItem(new GiftGivingGift(), 15);
     }
 
     public void addStarterRelic(ArrayList<String> res, String id) {
@@ -224,7 +226,7 @@ public abstract class PCLLoadout {
         card.clearSkills();
 
         if (isLocked()) {
-            card.isLocked = true;
+            card.isSeen = false;
             card.color = data.cardColor;
             card.setCardRarityType(AbstractCard.CardRarity.COMMON, AbstractCard.CardType.STATUS);
         }
@@ -240,7 +242,7 @@ public abstract class PCLLoadout {
             }
         }
 
-        if (!isCore()) {
+        if (!isCore() && card.isSeen) {
             int i = 0;
             int maxLevel = 2;
             float maxPercentage = 0;
@@ -293,6 +295,10 @@ public abstract class PCLLoadout {
 
     public int getBaseHP() {
         return getBaseHP(color);
+    }
+
+    public int getBaseOrbs() {
+        return getBaseOrbs(color);
     }
 
     public String getDeckPreviewString(boolean forceRefresh) {
@@ -524,7 +530,7 @@ public abstract class PCLLoadout {
     }
 
     protected void setDefaultRelicsForData(PCLLoadoutData data) {
-        data.getRelicSlot(0).select((PCLRelic) null);
+        data.getRelicSlot(0).select(0);
         data.getRelicSlot(1).select((PCLRelic) null);
     }
 

@@ -1,4 +1,4 @@
-package pinacolada.skills;
+package pinacolada.skills.skills;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
@@ -7,6 +7,10 @@ import pinacolada.cards.base.fields.PCLAttackType;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.skills.PMove;
+import pinacolada.skills.PSkill;
+import pinacolada.skills.PSkillData;
+import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.skills.base.traits.*;
 import pinacolada.skills.skills.special.traits.PTrait_Affinity;

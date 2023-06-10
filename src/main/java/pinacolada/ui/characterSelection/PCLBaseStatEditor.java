@@ -142,9 +142,9 @@ public class PCLBaseStatEditor extends EUIBase {
 
     public enum StatType {
         HP(ImageMaster.TP_HP, Settings.RED_TEXT_COLOR, 2, 1, -6, 6, 0),
-        Gold(ImageMaster.TP_GOLD, Settings.GOLD_COLOR, 15, 1, -6, 6, 0),
-        PotionSlot(ImageMaster.POTION_PLACEHOLDER, Settings.CREAM_COLOR, 1, 15, -2, 2, 12),
-        OrbSlot(ImageMaster.ORB_SLOT_1, Settings.CREAM_COLOR, 1, 20, -3, 1, 12),
+        Gold(ImageMaster.TP_GOLD, Settings.GOLD_COLOR, 14, 1, -6, 6, 0),
+        PotionSlot(ImageMaster.POTION_PLACEHOLDER, Settings.CREAM_COLOR, 1, 12, -2, 2, 12),
+        OrbSlot(ImageMaster.ORB_SLOT_1, Settings.CREAM_COLOR, 1, 10, -3, 1, 12),
         CardDraw(ImageMaster.TINY_CARD_BACKGROUND, Settings.CREAM_COLOR, 1, 25, -1, 1, 12),
         Energy(ImageMaster.ENERGY_RED_LAYER1, Settings.CREAM_COLOR, 1, 30, -1, 1, 12);
 
@@ -186,10 +186,10 @@ public class PCLBaseStatEditor extends EUIBase {
                     return loadout.getBaseHP();
                 case CardDraw:
                     return loadout.getBaseDraw();
-                case PotionSlot:
-                    return 0;
                 case Energy:
                     return loadout.getBaseEnergy();
+                case OrbSlot:
+                    return loadout.getBaseOrbs();
                 default:
                     return 0;
             }

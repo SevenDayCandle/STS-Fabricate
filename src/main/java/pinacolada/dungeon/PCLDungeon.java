@@ -65,7 +65,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
     protected transient PCLAbstractPlayerData data;
     protected transient boolean canJumpAnywhere;
     protected transient boolean canJumpNextFloor;
-    protected transient int valueDivisor;
+    protected transient int valueDivisor = 1;
     public Boolean allowCustomCards = false;
     public Boolean allowCustomRelics = false;
     public HashMap<PCLAffinity, Integer> fragments = new HashMap<>();

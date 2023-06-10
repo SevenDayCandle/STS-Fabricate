@@ -16,7 +16,7 @@ public class PCLCardRewardScreen extends EUIBase {
 
     public final PCLCardRewardBonus rewardBundle = new PCLCardRewardBonus();
     public final PCLCardRewardInfo rewardInfo = new PCLCardRewardInfo();
-    public final PCLCardRewardRerollAction rerollUI = new PCLCardRewardRerollAction(rewardBundle::add, rewardBundle::remove);
+    public final PCLCardRewardRerollAction rerollUI = new PCLCardRewardRerollAction(rewardBundle::addManual, rewardBundle::remove);
 
     public void close() {
         EUI.countingPanel.close();

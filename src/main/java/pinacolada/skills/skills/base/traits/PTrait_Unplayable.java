@@ -6,8 +6,8 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.skills.PTrait;
 import pinacolada.skills.fields.PField_Empty;
+import pinacolada.skills.skills.PTrait;
 
 @VisibleSkill
 public class PTrait_Unplayable extends PTrait<PField_Empty> {

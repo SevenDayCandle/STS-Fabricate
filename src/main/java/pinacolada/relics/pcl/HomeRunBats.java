@@ -20,7 +20,7 @@ public class HomeRunBats extends PCLPointerRelic {
     }
 
     public void setup() {
-        addUseMove(PTrigger.when(PCond.onOtherCardPlayed(AbstractCard.CardType.ATTACK),
+        addUseMove(PTrigger.when(1, PCond.onOtherCardPlayed(AbstractCard.CardType.ATTACK),
                 PBranchCond.branch(PCond.checkPowerSingle(2, PCLPowerHelper.LockOn),
                         PMove.gain(1, PCLPowerHelper.Critical),
                         PMove.applyToSingle(1, PCLPowerHelper.LockOn))));

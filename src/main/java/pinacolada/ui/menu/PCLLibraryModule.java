@@ -74,7 +74,7 @@ public class PCLLibraryModule extends EUIBase implements CustomCardPoolModule {
     }
 
     @Override
-    public void open(ArrayList<AbstractCard> arrayList, AbstractCard.CardColor color, Object payload) {
+    public void open(ArrayList<? extends AbstractCard> arrayList, AbstractCard.CardColor color, Object payload) {
         // Must refresh the description to have the proper character-specific icons show up
         for (AbstractCard c : arrayList) {
             c.initializeDescription();

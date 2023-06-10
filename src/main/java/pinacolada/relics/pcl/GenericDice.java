@@ -45,7 +45,7 @@ public class GenericDice extends PCLRelic implements CardRewardActionProvider {
         super.onEnterRoom(room);
 
         if (room instanceof MonsterRoom) {
-            setCounter(counter + (GameUtilities.getTotalCardsInPlay() / BONUS_PER_CARDS));
+            setCounter(counter + getBonus());
             flash();
         }
     }
@@ -55,5 +55,9 @@ public class GenericDice extends PCLRelic implements CardRewardActionProvider {
         super.onEquip();
 
         setCounter(0);
+    }
+
+    protected int getBonus() {
+        return GameUtilities.getTotalCardsInRewardPool() / BONUS_PER_CARDS;
     }
 }

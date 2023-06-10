@@ -109,7 +109,24 @@ public class PCLLoadoutsContainer {
     }
 
     public Collection<AbstractCard> getAllCards() {
-        return loadoutMap.keySet().stream().sorted((a, b) -> StringUtils.compare(a.name, b.name)).collect(Collectors.toList());
+        return loadoutMap.entrySet()
+                .stream()
+                .sorted((a, b) -> {
+                    PCLLoadout lA = a.getValue();
+                    PCLLoadout lB = b.getValue();
+                    if (lA.isCore()) {
+                        return -1;
+                    }
+                    else if (lB.isCore()) {
+                        return 1;
+                    }
+                    else if (lA.unlockLevel != lB.unlockLevel) {
+                        return lA.unlockLevel - lB.unlockLevel;
+                    }
+                    return StringUtils.compare(a.getKey().name, b.getKey().name);
+                })
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
     }
 
     public Collection<PCLLoadout> getAllLoadouts() {

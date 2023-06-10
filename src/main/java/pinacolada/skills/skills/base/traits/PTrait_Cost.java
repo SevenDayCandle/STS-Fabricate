@@ -6,8 +6,8 @@ import pinacolada.cards.base.PCLCard;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.skills.PTrait;
 import pinacolada.skills.fields.PField_Empty;
+import pinacolada.skills.skills.PTrait;
 import pinacolada.utilities.GameUtilities;
 
 @VisibleSkill
