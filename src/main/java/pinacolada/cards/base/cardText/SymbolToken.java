@@ -40,7 +40,7 @@ public class SymbolToken extends PCLTextToken {
     }
 
     public static int tryAdd(PCLTextParser parser) {
-        if (parser.character == '[' && parser.remaining > 1) {
+        if ((parser.character == '[' || parser.character == '†') && parser.remaining > 1) {
             builder.setLength(0);
 
             int i = 1;
@@ -81,12 +81,12 @@ public class SymbolToken extends PCLTextToken {
 
     @Override
     public int getCharCount() {
-        return (EUIConfiguration.disableDescrptionIcons.get()) ? rawText.length() : 1;
+        return (EUIConfiguration.enableDescriptionIcons.get()) ? 1 : rawText.length();
     }
 
     @Override
     protected float getWidth(BitmapFont font, String text) {
-        return EUIConfiguration.disableDescrptionIcons.get() ? super.getWidth(font, text) : font.getLineHeight() * 0.8f;// AbstractCard.CARD_ENERGY_IMG_WIDTH
+        return EUIConfiguration.enableDescriptionIcons.get() ? font.getLineHeight() * 0.8f : super.getWidth(font, text);// AbstractCard.CARD_ENERGY_IMG_WIDTH
     }
 
     @Override
@@ -95,7 +95,7 @@ public class SymbolToken extends PCLTextToken {
         float size = getWidth(context);// 24f * Settings.scale * card.drawScale * context.scaleModifier;
         float partial = size / 12f;
 
-        if (tooltip.icon != null && !EUIConfiguration.disableDescrptionIcons.get()) {
+        if (tooltip.icon != null && EUIConfiguration.enableDescriptionIcons.get()) {
             float iconW = size * tooltip.iconmultiW;
             float iconH = size * tooltip.iconmultiH;
             float diff = partial / tooltip.iconmultiW;

@@ -7,6 +7,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.effects.PCLSFX;
+import pinacolada.monsters.PCLTutorialMonster;
 import pinacolada.patches.library.BlightHelperPatches;
 import pinacolada.resources.PGR;
 
@@ -38,7 +39,7 @@ public class PCLModInitializer implements OnStartBattleSubscriber, PostBattleSub
 
     @Override
     public void receiveOnBattleStart(AbstractRoom abstractRoom) {
-        CombatManager.onBattleStart();
+        PCLTutorialMonster.tryStart();
     }
 
     @Override

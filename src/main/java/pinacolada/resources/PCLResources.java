@@ -17,12 +17,14 @@ import com.megacrit.cardcrawl.localization.*;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUI;
 import extendedui.EUIUtils;
+import extendedui.configuration.STSConfigItem;
 import extendedui.interfaces.delegates.ActionT1;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.misc.AugmentStrings;
 import pinacolada.misc.LoadoutStrings;
+import pinacolada.monsters.PCLCreatureData;
 import pinacolada.utilities.GameUtilities;
 
 import java.lang.reflect.Type;
@@ -53,6 +55,7 @@ public abstract class PCLResources<T extends PCLAbstractPlayerData, U extends PC
     protected boolean isLoaded;
     public V tooltips;
     public W strings;
+    public HashMap<STSConfigItem<Boolean>, PCLCreatureData> tutorials;
 
     protected PCLResources(String id, AbstractCard.CardColor color, AbstractPlayer.PlayerClass playerClass, U images) {
         this(id, color, playerClass, images, true);

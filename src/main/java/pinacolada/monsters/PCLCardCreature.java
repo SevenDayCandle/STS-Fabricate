@@ -26,7 +26,7 @@ import pinacolada.utilities.GameUtilities;
 
 import static pinacolada.utilities.GameUtilities.scale;
 
-public class PCLCardCreature extends PCLCreature {
+public abstract class PCLCardCreature extends PCLSkillCreature {
     protected EUICardPreview preview;
     public PCLCard card;
     public AbstractCreature target;

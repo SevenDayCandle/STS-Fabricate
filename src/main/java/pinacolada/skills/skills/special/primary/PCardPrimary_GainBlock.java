@@ -66,7 +66,7 @@ public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty> {
         String amountString = count > 1 ? getAmountRawString() + "x" + getExtraRawString() : getAmountRawString();
 
         // Use expanded text like PMove_GainBlock if verbose mode is used
-        if (PGR.config.expandAbbreviatedEffects.get()) {
+        if (isVerbose()) {
             if (isSelfOnlyTarget()) {
                 return amount < 0 ? TEXT.act_loseAmount(amountString, PGR.core.tooltips.block) : TEXT.act_gainAmount(amountString, PGR.core.tooltips.block);
             }

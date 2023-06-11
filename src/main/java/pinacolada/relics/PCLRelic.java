@@ -198,7 +198,7 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider 
         ModInfo info = EUIGameUtils.getModInfo(this);
         mainTooltip = info != null ? new EUIKeywordTooltip(getName(), description, info.ID) : new EUIKeywordTooltip(getName(), description);
         tips.add(mainTooltip);
-        EUIGameUtils.scanForTips(description, tips);
+        EUITooltip.scanForTips(description, tips);
     }
 
     public boolean isEnabled() {

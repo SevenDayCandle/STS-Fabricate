@@ -13,4 +13,8 @@ public abstract class PCLCustomGenericPage extends EUICanvas {
     abstract public String getTitle();
 
     abstract public void refresh();
+
+    public void onOpen() {
+
+    }
 }

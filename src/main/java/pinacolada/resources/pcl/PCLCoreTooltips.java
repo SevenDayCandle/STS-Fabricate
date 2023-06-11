@@ -53,13 +53,13 @@ public class PCLCoreTooltips extends PCLTooltips {
     public static final String ICON_WEAK = "weak";
     public static final String ICON_VULNERABLE = "vulnerable";
 
-    public EUIKeywordTooltip affinityBlue = EUIKeywordTooltip.findByID("Blue Affinity").showText(false);
-    public EUIKeywordTooltip affinityGreen = EUIKeywordTooltip.findByID("Green Affinity").showText(false);
-    public EUIKeywordTooltip affinityOrange = EUIKeywordTooltip.findByID("Orange Affinity").showText(false);
-    public EUIKeywordTooltip affinityPurple = EUIKeywordTooltip.findByID("Purple Affinity").showText(false);
-    public EUIKeywordTooltip affinityRed = EUIKeywordTooltip.findByID("Red Affinity").showText(false);
-    public EUIKeywordTooltip affinitySilver = EUIKeywordTooltip.findByID("Silver Affinity").showText(false);
-    public EUIKeywordTooltip affinityYellow = EUIKeywordTooltip.findByID("Yellow Affinity").showText(false);
+    public EUIKeywordTooltip affinityBlue = EUIKeywordTooltip.findByID("Blue Affinity").showText(false).forceIcon(true);
+    public EUIKeywordTooltip affinityGreen = EUIKeywordTooltip.findByID("Green Affinity").showText(false).forceIcon(true);
+    public EUIKeywordTooltip affinityOrange = EUIKeywordTooltip.findByID("Orange Affinity").showText(false).forceIcon(true);
+    public EUIKeywordTooltip affinityPurple = EUIKeywordTooltip.findByID("Purple Affinity").showText(false).forceIcon(true);
+    public EUIKeywordTooltip affinityRed = EUIKeywordTooltip.findByID("Red Affinity").showText(false).forceIcon(true);
+    public EUIKeywordTooltip affinitySilver = EUIKeywordTooltip.findByID("Silver Affinity").showText(false).forceIcon(true);
+    public EUIKeywordTooltip affinityYellow = EUIKeywordTooltip.findByID("Yellow Affinity").showText(false).forceIcon(true);
     public EUIKeywordTooltip attack = EUIKeywordTooltip.findByID("Attack").showText(false).canHighlight(false);
     public EUIKeywordTooltip block = EUIKeywordTooltip.findByID("Block").showText(false).canHighlight(false);
     public EUIKeywordTooltip buff = EUIKeywordTooltip.findByID("Buff").showText(false).canHighlight(false);
@@ -70,7 +70,7 @@ public class PCLCoreTooltips extends PCLTooltips {
     public EUIKeywordTooltip debuff = EUIKeywordTooltip.findByID("Debuff").showText(false).canHighlight(false);
     public EUIKeywordTooltip discard = EUIKeywordTooltip.findByID("Discard").showText(false).canHighlight(false);
     public EUIKeywordTooltip draw = EUIKeywordTooltip.findByID("Draw").showText(false).canHighlight(false);
-    public EUIKeywordTooltip energy = EUIKeywordTooltip.findByName("[E]").showText(false);
+    public EUIKeywordTooltip energy = EUIKeywordTooltip.findByName("[E]").showText(false).forceIcon(true);
     public EUIKeywordTooltip fetch = EUIKeywordTooltip.findByID("~Fetch").showText(false).canHighlight(false);
     public EUIKeywordTooltip heal = EUIKeywordTooltip.findByID("Heal").showText(false).canHighlight(false);
     public EUIKeywordTooltip hp = EUIKeywordTooltip.findByID("HP").showText(false).canHighlight(false);
@@ -153,8 +153,7 @@ public class PCLCoreTooltips extends PCLTooltips {
     // TODO change description depending on the current character
     public EUIKeywordTooltip match = EUIKeywordTooltip.findByID("Match");
     public EUIKeywordTooltip metallicize = EUIKeywordTooltip.findByID("Metallicize");
-    public EUIKeywordTooltip mismatch = EUIKeywordTooltip.findByID("Mismatch");
-    public EUIKeywordTooltip multicolor = EUIKeywordTooltip.findByID("Multicolor");
+    public EUIKeywordTooltip multicolor = EUIKeywordTooltip.findByID("Multicolor").forceIcon(true);
     public EUIKeywordTooltip multiform = EUIKeywordTooltip.findByID("Multiform");
     public EUIKeywordTooltip neutralStance = EUIKeywordTooltip.findByID("Neutral Stance");
     public EUIKeywordTooltip nextTurnBlock = EUIKeywordTooltip.findByID("Next Turn Block");

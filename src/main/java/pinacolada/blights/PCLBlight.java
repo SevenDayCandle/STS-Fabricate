@@ -4,7 +4,6 @@ package pinacolada.blights;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.blights.AbstractBlight;
 import com.megacrit.cardcrawl.localization.BlightStrings;
-import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.markers.KeywordProvider;
@@ -85,7 +84,7 @@ public abstract class PCLBlight extends AbstractBlight implements KeywordProvide
 
         mainTooltip = new EUIKeywordTooltip(name, description);
         tips.add(mainTooltip);
-        EUIGameUtils.scanForTips(description, tips);
+        EUITooltip.scanForTips(description, tips);
     }
 
     @Override

@@ -11,7 +11,6 @@ import com.megacrit.cardcrawl.vfx.BobEffect;
 import extendedui.interfaces.markers.IntentProvider;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.cards.base.fields.PCLAffinity;
-import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
@@ -21,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class PCLCreature extends CustomMonster implements PointerProvider, IntentProvider {
+public abstract class PCLCreature extends CustomMonster implements IntentProvider {
     private static final Map<String, PCLCreatureData> staticData = new HashMap<>();
     protected static final Color TAKEN_TURN_COLOR = new Color(0.64f, 0.64f, 0.64f, 1f);
     public final PCLCreatureData creatureData;
@@ -76,16 +75,6 @@ public abstract class PCLCreature extends CustomMonster implements PointerProvid
 
     public BobEffect getBobEffect() {
         return GameUtilities.getBobEffect(this);
-    }
-
-    @Override
-    public String getID() {
-        return id;
-    }
-
-    @Override
-    public String getName() {
-        return name;
     }
 
     public Color getIntentColor() {

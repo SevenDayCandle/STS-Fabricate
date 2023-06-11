@@ -5,15 +5,19 @@ import basemod.abstracts.CustomUnlock;
 import basemod.abstracts.CustomUnlockBundle;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.unlock.AbstractUnlock;
 import extendedui.EUIUtils;
+import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.blights.common.AbstractGlyphBlight;
 import pinacolada.blights.common.GlyphBlight;
 import pinacolada.blights.common.GlyphBlight1;
 import pinacolada.blights.common.GlyphBlight2;
 import pinacolada.cards.base.PCLCustomCardSlot;
+import pinacolada.monsters.PCLCreatureData;
+import pinacolada.monsters.PCLTutorialMonster;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.loadout.PCLLoadoutData;
 import pinacolada.resources.loadout.PCLTrophies;
@@ -283,5 +287,13 @@ public abstract class PCLAbstractPlayerData {
     }
 
     public void updateRelicsForDungeon() {
+    }
+
+    public void addTutorial(PCLCreatureData data) {
+        PCLTutorialMonster.register(config.seenTutorial, data, p -> p.chosenClass == this.resources.playerClass);
+    }
+
+    public void addTutorial(PCLCreatureData data, FuncT1<Boolean, AbstractPlayer> canShow) {
+        PCLTutorialMonster.register(config.seenTutorial, data, canShow);
     }
 }

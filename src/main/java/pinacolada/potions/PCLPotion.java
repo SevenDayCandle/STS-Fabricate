@@ -7,13 +7,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.evacipated.cardcrawl.modthespire.ModInfo;
 import com.evacipated.cardcrawl.modthespire.lib.SpireOverride;
 import com.evacipated.cardcrawl.modthespire.lib.SpireSuper;
-import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.MathHelper;
-import com.megacrit.cardcrawl.localization.PotionStrings;
 import com.megacrit.cardcrawl.potions.AbstractPotion;
 import com.megacrit.cardcrawl.vfx.FlashPotionEffect;
 import extendedui.EUIGameUtils;
@@ -29,29 +26,23 @@ import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.Skills;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class PCLPotion extends AbstractPotion implements KeywordProvider, PointerProvider {
     public final ArrayList<EUIKeywordTooltip> tips = new ArrayList<>();
+    public final PCLPotionData potionData;
     public final Skills skills = new Skills();
-    public final String[] extraDescriptions;
     public EUIKeywordTooltip mainTooltip;
 
-    public PCLPotion(String id, PotionRarity rarity, PotionSize size, PotionEffect effect, Color liquidColor, Color hybridColor, Color spotsColor) {
-        this(id, rarity, size, effect, liquidColor, hybridColor, spotsColor, null);
-    }
-
     // We deliberately avoid using initializeData because we need to load the PotionStrings after the super call
-    public PCLPotion(String id, PotionRarity rarity, PotionSize size, PotionEffect effect, Color liquidColor, Color hybridColor, Color spotsColor, AbstractPlayer.PlayerClass playerClass) {
-        super("", id, rarity, size, effect, liquidColor.cpy(), hybridColor.cpy(), spotsColor.cpy());
-        PotionStrings potionStrings = CardCrawlGame.languagePack.getPotionString(id);
-        name = potionStrings.NAME;
-        extraDescriptions = potionStrings.DESCRIPTIONS;
+    public PCLPotion(PCLPotionData data) {
+        super("", data.ID, data.rarity, data.size, data.effect, data.liquidColor.cpy(), data.hybridColor.cpy(), data.spotsColor.cpy());
+        this.potionData = data;
+        name = data.strings.NAME;
         this.potency = this.getPotency();
         setup();
-        initializeTips(playerClass);
+        initializeTips();
         this.isThrown = EUIUtils.any(getEffects(), e -> e.target.targetsSingle());
         this.targetRequired = isThrown;
     }
@@ -62,6 +53,30 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
 
     public static String createFullID(PCLResources<?, ?, ?, ?> resources, Class<? extends PCLPotion> type) {
         return resources.createID(type.getSimpleName());
+    }
+
+    protected static PCLPotionData register(Class<? extends PCLPotion> type) {
+        return register(type, PGR.core);
+    }
+
+    protected static PCLPotionData register(Class<? extends PCLPotion> type, PCLResources<?, ?, ?, ?> resources) {
+        return registerPotionData(new PCLPotionData(type, resources));
+    }
+
+    protected static <T extends PCLPotionData> T registerPotionData(T cardData) {
+        return PCLPotionData.registerData(cardData);
+    }
+
+    protected static TemplatePotionData registerTemplate(Class<? extends PCLPotion> type) {
+        return registerTemplate(type, PGR.core, type.getSimpleName());
+    }
+
+    protected static TemplatePotionData registerTemplate(Class<? extends PCLPotion> type, String sourceID) {
+        return registerTemplate(type, PGR.core, sourceID);
+    }
+
+    protected static TemplatePotionData registerTemplate(Class<? extends PCLPotion> type, PCLResources<?, ?, ?, ?> resources, String sourceID) {
+        return (TemplatePotionData)PCLPotionData.registerData(new TemplatePotionData(type, resources, sourceID));
     }
 
     @Override
@@ -94,13 +109,13 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
         return tips;
     }
 
-    protected void initializeTips(AbstractPlayer.PlayerClass playerClass) {
+    protected void initializeTips() {
         this.description = getEffectPowerTextStrings();
         tips.clear();
-        ModInfo info = EUIGameUtils.getModInfo(playerClass);
+        ModInfo info = EUIGameUtils.getModInfo(this);
         mainTooltip = info != null ? new EUIKeywordTooltip(name, description, info.ID) : new EUIKeywordTooltip(name, description);
         tips.add(mainTooltip);
-        EUIGameUtils.scanForTips(description, tips);
+        EUITooltip.scanForTips(description, tips);
     }
 
     protected void renderImpl(SpriteBatch sb, boolean useOutlineColor) {
@@ -191,10 +206,9 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
     @Override
     public AbstractPotion makeCopy() {
         try {
-            return getClass().getConstructor().newInstance();
+            return potionData.create();
         }
-        catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-            EUIUtils.logError(this, e.getMessage());
+        catch (Exception e) {
             return null;
         }
     }

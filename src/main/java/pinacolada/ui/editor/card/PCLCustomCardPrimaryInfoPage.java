@@ -14,6 +14,7 @@ import extendedui.EUIUtils;
 import extendedui.ui.TextureCache;
 import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
+import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
@@ -212,6 +213,18 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
 
     public String getTitle() {
         return header.text;
+    }
+
+    @Override
+    public void onOpen() {
+        // TODO readd config
+        EUITourTooltip.queueTutorial(
+                idInput.makeTour(true),
+                nameInput.makeTour(true),
+                languageDropdown.makeTour(true),
+                raritiesDropdown.makeTour(true),
+                typesDropdown.makeTour(true),
+                flagsDropdown.makeTour(true));
     }
 
     @Override

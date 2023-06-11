@@ -178,7 +178,8 @@
 												"The sound effect that plays when obtaining this relic.",
 												"Create a node with an effect that applies this power.",
 												"Has no effect under the current #yPrimary.",
-												"This skill is corrupted."
+												"This skill is corrupted.",
+												"Revert the last change made to this item. Note that this only keeps track of one change."
 								]
 				},
 				"pcl:CardPile": {
@@ -229,10 +230,11 @@
 												"#pLeft-Click to open the editor. | #pRight-Click to cycle between presets.",
 												"Pool Editor",
 												"Choose which cards will appear in your runs.",
+												"Reset Tutorials",
+												"Click this to have the interactive tutorial replay at the start of your run.",
 												"Deck",
 												"Relics",
 												"Attributes",
-												"Deck Value",
 												"Hindrance: {0}",
 												"Affinity: {0}",
 												"Cards: {0}",

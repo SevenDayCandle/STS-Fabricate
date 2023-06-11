@@ -27,7 +27,7 @@ public class PTrait_BlockCount extends PBlockTrait<PField_Empty> {
 
     @Override
     public String getSubText() {
-        if (PGR.config.expandAbbreviatedEffects.get()) {
+        if (isVerbose()) {
             return TEXT.act_hasAmount(getAmountRawString(), getSubDescText());
         }
         return super.getSubText();

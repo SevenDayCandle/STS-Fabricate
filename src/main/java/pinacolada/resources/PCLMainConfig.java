@@ -29,16 +29,15 @@ public class PCLMainConfig extends AbstractConfig {
     private static final String ASCENSIONGLYPH0 = PCLMainConfig.createFullID("AscensionGlyph0");
     private static final String ASCENSIONGLYPH1 = PCLMainConfig.createFullID("AscensionGlyph1");
     private static final String ASCENSIONGLYPH2 = PCLMainConfig.createFullID("AscensionGlyph2");
+    private static final String ABBREVIATED_EFFECTS = PCLMainConfig.createFullID("AbbreviateEffects");
     private static final String CROP_CARD_PORTRAIT = PCLMainConfig.createFullID("UseCroppedPortrait");
     private static final String DAMAGE_FORMULA_POSITION = PCLMainConfig.createFullID("DamageFormulaPosition");
     private static final String DISPLAY_CARD_TAG_DESCRIPTION = PCLMainConfig.createFullID("DisplayCardTagDescription");
     private static final String DISPLAY_CARD_TAG_TEXT = PCLMainConfig.createFullID("DisplayCardTagText");
-    private static final String EDITOR_FTUE_SCREEN = PCLMainConfig.createFullID("EditorFtueScreen");
     private static final String ENABLE_CUSTOM_CARDS = PCLMainConfig.createFullID("EnableCustomCards");
     private static final String ENABLE_CUSTOM_EVENTS = PCLMainConfig.createFullID("EnableCustomEvents");
     private static final String ENABLE_CUSTOM_POTIONS = PCLMainConfig.createFullID("EnableCustomPotions");
     private static final String ENABLE_CUSTOM_RELICS = PCLMainConfig.createFullID("EnableCustomRelics");
-    private static final String EXPAND_ABBREVIATED_EFFECTS = PCLMainConfig.createFullID("ExpandAbbreviatedEffects");
     private static final String HIDE_TIP_DESCRIPTION = PCLMainConfig.createFullID("HideTipDescription");
     private static final String LAST_CSV_PATH = PCLMainConfig.createFullID("LastCSVPath");
     private static final String LAST_IMAGE_PATH = PCLMainConfig.createFullID("LastImagePath");
@@ -48,19 +47,29 @@ public class PCLMainConfig extends AbstractConfig {
     private static final String SHOW_ESTIMATED_DAMAGE = PCLMainConfig.createFullID("ShowEstimatedDamage");
     private static final String SHOW_FORMULA_DISPLAY = PCLMainConfig.createFullID("ShowFormulaDisplay");
     private static final String SHOW_IRRELEVANT_PROPERTIES = PCLMainConfig.createFullID("ShowIrrelevantProperties");
+    private static final String TOUR_CARDATTRIBUTE = PCLMainConfig.createFullID("TourCardAttribute");
+    private static final String TOUR_CARDPRIMARY = PCLMainConfig.createFullID("TourCardPrimary");
+    private static final String TOUR_CHARSELECT = PCLMainConfig.createFullID("TourCharSelect");
+    private static final String TOUR_EDITOREFFECT = PCLMainConfig.createFullID("TourEditorEffect");
+    private static final String TOUR_EDITORFORM = PCLMainConfig.createFullID("TourEditorForm");
+    private static final String TOUR_EDITORPOWER = PCLMainConfig.createFullID("TourEditorPower");
+    private static final String TOUR_ITEMSCREEN = PCLMainConfig.createFullID("TourItemScreen");
+    private static final String TOUR_LOADOUT = PCLMainConfig.createFullID("TourLoadout");
+    private static final String TOUR_RELICPRIMARY = PCLMainConfig.createFullID("TourRelicPrimary");
+    private static final String TOUR_SERIESSELECT = PCLMainConfig.createFullID("TourSeriesSelect");
     private static final String VANILLA_LIBRARY_SCREEN = PCLMainConfig.createFullID("VanillaLibraryScreen");
     private static final String VANILLA_POWER_RENDER = PCLMainConfig.createFullID("VanillaPowerRender");
     private static ExtraModSettingsPanel.Category pclCategory;
     public static final FilenameFilter JSON_FILTER = (dir, name) -> name.endsWith(".json");
 
     private HashSet<String> tips = null;
+    public STSConfigItem<Boolean> abbreviateEffects = new STSConfigItem<Boolean>(ABBREVIATED_EFFECTS, false);
     public STSConfigItem<Boolean> cropCardImages = new STSConfigItem<Boolean>(CROP_CARD_PORTRAIT, false);
     public STSConfigItem<Boolean> displayCardTagDescription = new STSConfigItem<Boolean>(DISPLAY_CARD_TAG_DESCRIPTION, false);
     public STSConfigItem<Boolean> enableCustomCards = new STSConfigItem<Boolean>(ENABLE_CUSTOM_CARDS, false);
     public STSConfigItem<Boolean> enableCustomEvents = new STSConfigItem<Boolean>(ENABLE_CUSTOM_EVENTS, false);
     public STSConfigItem<Boolean> enableCustomPotions = new STSConfigItem<Boolean>(ENABLE_CUSTOM_POTIONS, false);
     public STSConfigItem<Boolean> enableCustomRelics = new STSConfigItem<Boolean>(ENABLE_CUSTOM_RELICS, false);
-    public STSConfigItem<Boolean> expandAbbreviatedEffects = new STSConfigItem<Boolean>(EXPAND_ABBREVIATED_EFFECTS, false);
     public STSConfigItem<Boolean> madnessReplacements = new STSConfigItem<Boolean>(MADNESS_REPLACEMENTS, false);
     public STSConfigItem<Boolean> removeLineBreaks = new STSConfigItem<Boolean>(REMOVE_LINE_BREAKS, false);
     public STSConfigItem<Boolean> replaceCardsPCL = new STSConfigItem<Boolean>(REPLACE_CARDS_PCL, false);
@@ -69,7 +78,16 @@ public class PCLMainConfig extends AbstractConfig {
     public STSConfigItem<Boolean> showIrrelevantProperties = new STSConfigItem<Boolean>(SHOW_IRRELEVANT_PROPERTIES, false);
     public STSConfigItem<Boolean> vanillaLibraryScreen = new STSConfigItem<Boolean>(VANILLA_LIBRARY_SCREEN, false);
     public STSConfigItem<Boolean> vanillaPowerRender = new STSConfigItem<Boolean>(VANILLA_POWER_RENDER, false);
-    public STSConfigItem<Boolean> editorFtueScreen = new STSConfigItem<Boolean>(EDITOR_FTUE_SCREEN, false);
+    public STSConfigItem<Boolean> tourCardAttribute = new STSConfigItem<Boolean>(TOUR_CARDATTRIBUTE, false);
+    public STSConfigItem<Boolean> tourCardPrimary = new STSConfigItem<Boolean>(TOUR_CARDPRIMARY, false);
+    public STSConfigItem<Boolean> tourCharSelect = new STSConfigItem<Boolean>(TOUR_CHARSELECT, false);
+    public STSConfigItem<Boolean> tourEditorEffect = new STSConfigItem<Boolean>(TOUR_EDITOREFFECT, false);
+    public STSConfigItem<Boolean> tourEditorForm = new STSConfigItem<Boolean>(TOUR_EDITORFORM, false);
+    public STSConfigItem<Boolean> tourEditorPower = new STSConfigItem<Boolean>(TOUR_EDITORPOWER, false);
+    public STSConfigItem<Boolean> tourItemScreen = new STSConfigItem<Boolean>(TOUR_ITEMSCREEN, false);
+    public STSConfigItem<Boolean> tourLoadout = new STSConfigItem<Boolean>(TOUR_LOADOUT, false);
+    public STSConfigItem<Boolean> tourRelicPrimary = new STSConfigItem<Boolean>(TOUR_RELICPRIMARY, false);
+    public STSConfigItem<Boolean> tourSeriesSelect = new STSConfigItem<Boolean>(TOUR_SERIESSELECT, false);
     public STSConfigItem<Integer> ascensionGlyph0 = new STSConfigItem<Integer>(ASCENSIONGLYPH0, 0);
     public STSConfigItem<Integer> ascensionGlyph1 = new STSConfigItem<Integer>(ASCENSIONGLYPH1, 0);
     public STSConfigItem<Integer> ascensionGlyph2 = new STSConfigItem<Integer>(ASCENSIONGLYPH2, 0);
@@ -126,9 +144,9 @@ public class PCLMainConfig extends AbstractConfig {
 
         int yPos = BASE_OPTION_OFFSET_Y;
 
+        yPos = addToggle(0, abbreviateEffects, PGR.core.strings.options_expandAbbreviatedEffects, yPos, PGR.core.strings.optionDesc_expandAbbreviatedEffects);
         yPos = addToggle(0, cropCardImages, PGR.core.strings.options_cropCardImages, yPos, PGR.core.strings.optionDesc_cropCardImages);
         yPos = addToggle(0, displayCardTagDescription, PGR.core.strings.options_displayCardTagDescription, yPos, PGR.core.strings.optionDesc_displayCardTagDescription);
-        yPos = addToggle(0, expandAbbreviatedEffects, PGR.core.strings.options_expandAbbreviatedEffects, yPos, PGR.core.strings.optionDesc_expandAbbreviatedEffects);
         yPos = addToggle(0, removeLineBreaks, PGR.core.strings.options_removeLineBreaks, yPos, PGR.core.strings.optionDesc_removeLineBreaks);
         yPos = addToggle(0, vanillaLibraryScreen, PGR.core.strings.options_vanillaCustomRunMenu, yPos, PGR.core.strings.optionDesc_vanillaCustomRunMenu);
         yPos = addToggle(0, vanillaPowerRender, PGR.core.strings.options_vanillaPowerRender, yPos, PGR.core.strings.optionDesc_vanillaPowerRender);
@@ -141,21 +159,22 @@ public class PCLMainConfig extends AbstractConfig {
 
         BaseMod.registerModBadge(ImageMaster.loadImage("images/pcl/modBadge.png"), MOD_ID, "PinaColada", "", panel);
 
+        makeModToggle(abbreviateEffects, PGR.core.strings.options_expandAbbreviatedEffects, PGR.core.strings.optionDesc_expandAbbreviatedEffects);
         makeModToggle(cropCardImages, PGR.core.strings.options_cropCardImages, PGR.core.strings.optionDesc_cropCardImages);
         makeModToggle(displayCardTagDescription, PGR.core.strings.options_displayCardTagDescription, PGR.core.strings.optionDesc_displayCardTagDescription);
-        makeModToggle(expandAbbreviatedEffects, PGR.core.strings.options_expandAbbreviatedEffects, PGR.core.strings.optionDesc_expandAbbreviatedEffects);
         makeModToggle(removeLineBreaks, PGR.core.strings.options_removeLineBreaks, PGR.core.strings.optionDesc_removeLineBreaks);
         makeModToggle(showEstimatedDamage, PGR.core.strings.options_showEstimatedDamage, PGR.core.strings.optionDesc_showEstimatedDamage);
         makeModToggle(showFormulaDisplay, PGR.core.strings.options_showFormulaDisplay, PGR.core.strings.optionDesc_showFormulaDisplay);
         makeModToggle(showIrrelevantProperties, PGR.core.strings.options_hideIrrelevantAffinities, PGR.core.strings.optionDesc_hideIrrelevantAffinities);
 
-        EUIConfiguration.disableDescrptionIcons.addListener(val -> this.updateCardDescriptions());
+        EUIConfiguration.enableDescriptionIcons.addListener(val -> this.updateCardDescriptions());
         displayCardTagDescription.addListener(val -> this.updateCardDescriptions());
-        expandAbbreviatedEffects.addListener(val -> this.updateCardDescriptions());
+        abbreviateEffects.addListener(val -> this.updateCardDescriptions());
         removeLineBreaks.addListener(val -> this.updateCardDescriptions());
     }
 
     public void loadImpl() {
+        abbreviateEffects.addConfig(config);
         ascensionGlyph0.addConfig(config);
         ascensionGlyph1.addConfig(config);
         ascensionGlyph2.addConfig(config);
@@ -166,7 +185,6 @@ public class PCLMainConfig extends AbstractConfig {
         enableCustomEvents.addConfig(config);
         enableCustomPotions.addConfig(config);
         enableCustomRelics.addConfig(config);
-        expandAbbreviatedEffects.addConfig(config);
         removeLineBreaks.addConfig(config);
         showEstimatedDamage.addConfig(config);
         showFormulaDisplay.addConfig(config);
@@ -178,7 +196,16 @@ public class PCLMainConfig extends AbstractConfig {
         lastSeed.addConfig(config);
         madnessReplacements.addConfig(config);
         replaceCardsPCL.addConfig(config);
-        editorFtueScreen.addConfig(config);
+        tourCardAttribute.addConfig(config);
+        tourCardPrimary.addConfig(config);
+        tourCharSelect.addConfig(config);
+        tourEditorEffect.addConfig(config);
+        tourEditorForm.addConfig(config);
+        tourEditorPower.addConfig(config);
+        tourItemScreen.addConfig(config);
+        tourLoadout.addConfig(config);
+        tourRelicPrimary.addConfig(config);
+        tourSeriesSelect.addConfig(config);
     }
 
     // Whenever this setting is updated, we need to force all cards everywhere to refresh their descriptions

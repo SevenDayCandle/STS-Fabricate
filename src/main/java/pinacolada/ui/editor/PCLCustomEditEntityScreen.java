@@ -64,6 +64,7 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
 
         preInitialize(currentSlot);
         setupPages();
+        openPageAtIndex(0);
     }
 
     public void addBuilder() {
@@ -164,6 +165,7 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
         for (int j = 0; j < pageButtons.size(); j++) {
             pageButtons.get(j).setColor(j == index ? Color.WHITE : Color.GRAY);
         }
+        pages.get(index).onOpen();
     }
 
     public void preInitialize(T currentSlot) {
@@ -183,6 +185,7 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
                 .setPosition(cancelButton.hb.cX, saveButton.hb.y + saveButton.hb.height + LABEL_HEIGHT * 0.8f)
                 .setColor(Color.WHITE)
                 .setLabel(EUIFontHelper.buttonFont, 0.85f, PGR.core.strings.cedit_undo)
+                .setTooltip(PGR.core.strings.cedit_undo, PGR.core.strings.cetut_undo)
                 .setOnClick(this::undo);
     }
 

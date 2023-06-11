@@ -2,7 +2,6 @@ package pinacolada.skills.skills.base.traits;
 
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
@@ -26,7 +25,7 @@ public class PTrait_HitCount extends PDamageTrait<PField_Empty> {
 
     @Override
     public String getSubText() {
-        if (PGR.config.expandAbbreviatedEffects.get()) {
+        if (isVerbose()) {
             return TEXT.act_hasAmount(getAmountRawString(), getSubDescText());
         }
         return super.getSubText();

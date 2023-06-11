@@ -155,7 +155,7 @@
 		"NAME": "Fleeting"
 	},
 	"Flight":	{
-		"DESCRIPTION": "Take 50% less #yAttack damage. Lose #b1 [Flight] after taking #yAttack damage. Restore [Flight] at the start of turn if it wasn't reduced to #b0.",
+		"DESCRIPTION": "Take 50% less #yAttack damage. Reduced after taking #yAttack damage. Restored at the start of turn if it wasn't reduced to #b0.",
 		"NAME": "Flight"
 	},
 	"Fortified":	{
@@ -287,7 +287,7 @@
 		"NAME": "No Draw"
 	},
 	"Normal Damage":	{
-		"DESCRIPTION": "Affected by [Thorns].",
+		"DESCRIPTION": "Affected by powers activating on contact.",
 		"NAME": "Normal Damage"
 	},
 	"Noxious Fumes":	{
@@ -344,7 +344,7 @@
 		"NAME": "Purple Affinity"
 	},
 	"Ranged Damage":	{
-		"DESCRIPTION": "Ignores [Flight] and #yPowers activating on contact.",
+		"DESCRIPTION": "Ignores #yPowers that activate on contact.",
 		"NAME": "Ranged Damage"
 	},
 	"Rebound":	{
@@ -400,7 +400,7 @@
 		"NAME": "Select"
 	},
 	"Self-Immolation":	{
-		"DESCRIPTION": "When you play a card with [Block], ALL characters take [DD] equal to its [Block] times this power's stacks.",
+		"DESCRIPTION": "When you play a card with [Block], ALL characters take damage at the end of their turns equal to its [Block] times this power's stacks.",
 		"NAME": "Self-Immolation"
 	},
 	"Semi-Limited":	{
@@ -424,7 +424,7 @@
 		"NAME": "Slow"
 	},
 	"Sorcery":	{
-		"DESCRIPTION": "Increase the potency of the next Orb Channeled. Also increases [Immaterial Damage] while active.",
+		"DESCRIPTION": "Increase the potency of the next Orb Channeled. Also increases [Immaterial Damage] dealt while active.",
 		"NAME": "Sorcery"
 	},
 	"Soulbound":	{
@@ -485,7 +485,7 @@
 		"NAME": "Timing"
 	},
 	"Toxicology":	{
-		"DESCRIPTION": "Whenever you apply [Poison], [Bruised], [Blinded], or [Shackles], apply additional stacks.",
+		"DESCRIPTION": "Apply additional stacks of stack-based debuffs.",
 		"NAME": "Toxicology"
 	},
 	"Transform":	{

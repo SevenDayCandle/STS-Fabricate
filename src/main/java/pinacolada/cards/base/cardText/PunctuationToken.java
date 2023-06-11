@@ -37,6 +37,7 @@ public class PunctuationToken extends PCLTextToken {
             case '-':
             case '%':
             case ':':
+            case '†':
                 return false;
         }
         return true;

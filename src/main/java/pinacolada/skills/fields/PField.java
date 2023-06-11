@@ -6,6 +6,7 @@ import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.localization.RelicStrings;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIUtils;
+import extendedui.configuration.EUIConfiguration;
 import extendedui.interfaces.markers.TooltipProvider;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLCardGroupHelper;
@@ -148,7 +149,7 @@ public abstract class PField implements Serializable {
     }
 
     public static String getOrbString(ArrayList<PCLOrbHelper> orbs) {
-        return EUIUtils.joinStrings(" ", EUIUtils.mapAsNonnull(orbs, PField::safeInvokeTip));
+        return EUIConfiguration.enableDescriptionIcons.get() ? EUIUtils.joinStrings(" ", EUIUtils.mapAsNonnull(orbs, PField::safeInvokeTip)) : getOrbAndString(orbs, 1);
     }
 
     public static String getPowerAndString(ArrayList<PCLPowerHelper> powers) {
@@ -160,7 +161,7 @@ public abstract class PField implements Serializable {
     }
 
     public static String getPowerString(ArrayList<PCLPowerHelper> powers) {
-        return EUIUtils.joinStrings(" ", EUIUtils.mapAsNonnull(powers, PField::safeInvokeTip));
+        return EUIConfiguration.enableDescriptionIcons.get() ? EUIUtils.joinStrings(" ", EUIUtils.mapAsNonnull(powers, PField::safeInvokeTip)) : getPowerAndString(powers);
     }
 
     public static String getRelicIDAndString(ArrayList<String> relicIDs) {
@@ -216,7 +217,8 @@ public abstract class PField implements Serializable {
     }
 
     public static String getTagString(ArrayList<PCLCardTag> tags) {
-        return tags.isEmpty() ? TEXT.cedit_tags : (EUIUtils.joinStrings(" ", PGR.config.displayCardTagDescription.get() ? EUIUtils.map(tags, PField::safeInvokeTipTitle) : EUIUtils.map(tags, PField::safeInvokeTip)));
+        return (PGR.config.displayCardTagDescription.get() || PSkill.isVerbose()) ? getTagAndString(tags) :
+                tags.isEmpty() ? TEXT.cedit_tags : (EUIUtils.joinStrings(" ", EUIUtils.map(tags, PField::safeInvokeTip)));
     }
 
     protected static String safeInvokeTip(TooltipProvider provider) {

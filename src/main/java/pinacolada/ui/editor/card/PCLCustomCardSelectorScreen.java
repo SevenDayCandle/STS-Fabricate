@@ -19,6 +19,7 @@ import extendedui.interfaces.delegates.ActionT3;
 import extendedui.ui.AbstractMenuScreen;
 import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
+import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCustomCardSlot;
@@ -275,6 +276,13 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
             grid.moveToTop();
             grid.forceUpdateCardPositions();
         }, currentColor, false, true);
+
+        // TODO readd config
+        EUITourTooltip.queueTutorial(
+                addButton.makeTour(true),
+                openButton.makeTour(true),
+                loadExistingButton.makeTour(true),
+                reloadButton.makeTour(true));
     }
 
     public void remove(AbstractCard card, PCLCustomCardSlot cardSlot) {

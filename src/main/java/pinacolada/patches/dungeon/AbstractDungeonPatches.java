@@ -7,13 +7,16 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.random.Random;
+import com.megacrit.cardcrawl.saveAndContinue.SaveFile;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUIUtils;
 import javassist.CannotCompileException;
+import javassist.CtBehavior;
 import javassist.expr.ExprEditor;
 import javassist.expr.MethodCall;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.pcl.special.QuestionMark;
+import pinacolada.dungeon.CombatManager;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
@@ -140,6 +143,28 @@ public class AbstractDungeonPatches {
             // If no suitable card is found, create a dummy card because the method will crash if no card is actually found
             AbstractCard found = PGR.dungeon.getRandomCard(rarity, null, false);
             return tryReturnCard(found);
+        }
+    }
+
+    @SpirePatch(
+            clz = AbstractDungeon.class,
+            method = "nextRoomTransition"
+            , paramtypez = {SaveFile.class}
+    )
+    public static class AbstractDungeonPatches_NextRoomTransition {
+
+        @SpireInsertPatch(
+                locator=Locator.class
+        )
+        public static void Insert(AbstractDungeon __instance) {
+            CombatManager.onBattleStart();
+        }
+
+        private static class Locator extends SpireInsertLocator {
+            public int[] Locate(CtBehavior ctBehavior) throws Exception {
+                Matcher matcher = new Matcher.MethodCallMatcher(AbstractPlayer.class, "preBattlePrep");
+                return LineFinder.findInOrder(ctBehavior, matcher);
+            }
         }
     }
 

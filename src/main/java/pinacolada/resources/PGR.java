@@ -162,6 +162,10 @@ public class PGR {
         return "images/" + s[0] + "/" + subFolder + "/" + s[1].replace(":", "_") + ".png";
     }
 
+    public static PotionStrings getPotionStrings(String relicID) {
+        return getLanguagePack().getPotionString(relicID);
+    }
+
     public static String getPowerImage(String id) {
         return getPng(id, "powers");
     }

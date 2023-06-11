@@ -94,10 +94,10 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
 
         // When displayed as text, we can just write normal damage down as "damage"
         EUITooltip attackTooltip = getAttackTooltip();
-        String attackString = attackTooltip == PGR.core.tooltips.normalDamage && (EUIConfiguration.disableDescrptionIcons.get() || PGR.config.expandAbbreviatedEffects.get()) ? PGR.core.strings.subjects_damage : attackTooltip.toString();
+        String attackString = attackTooltip == PGR.core.tooltips.normalDamage && (!EUIConfiguration.enableDescriptionIcons.get() || isVerbose()) ? PGR.core.strings.subjects_damage : attackTooltip.toString();
 
         // Use expanded text like PMove_DealDamage if verbose mode is used
-        if (PGR.config.expandAbbreviatedEffects.get()) {
+        if (isVerbose()) {
             if (target == PCLCardTarget.Self) {
                 return TEXT.act_takeDamage(amountString);
             }

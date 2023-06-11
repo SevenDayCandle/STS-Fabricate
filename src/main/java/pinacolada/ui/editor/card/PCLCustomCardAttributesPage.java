@@ -11,6 +11,7 @@ import extendedui.ui.controls.EUIDropdown;
 import extendedui.ui.controls.EUIDropdownRow;
 import extendedui.ui.controls.EUILabel;
 import extendedui.ui.hitboxes.EUIHitbox;
+import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLDynamicCardData;
@@ -146,8 +147,8 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
                 , PGR.core.tooltips.hp.title, (val, upVal) -> screen.modifyBuilder(e -> e.setHp(val, upVal)))
                 .setLimits(0, PSkill.DEFAULT_MAX)
                 .setTooltip(PGR.core.tooltips.hp.makeCopy());
-        magicNumberEditor.tooltip.setChild(upgradeLabel.tooltip);
-        hpEditor.tooltip.setChild(upgradeLabel.tooltip);
+        magicNumberEditor.tooltip.setChildren(upgradeLabel.tooltip);
+        hpEditor.tooltip.setChildren(upgradeLabel.tooltip);
 
         // Affinity editors
 
@@ -195,6 +196,15 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
     @Override
     public String getTitle() {
         return header.text;
+    }
+
+    @Override
+    public void onOpen() {
+        // TODO readd config
+        EUITourTooltip.queueTutorial(
+                targetDropdown.makeTour(true),
+                tagsDropdown.makeTour(true),
+                upgradeLabel.makeTour(true));
     }
 
     @Override

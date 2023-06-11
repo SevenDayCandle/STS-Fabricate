@@ -12,7 +12,6 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.localization.LocalizedStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
-import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
@@ -298,6 +297,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
                 EUIUtils.logError(PSkill.class, "Failed to load skill " + ct.getName() + ": " + e.getLocalizedMessage());
             }
         }
+    }
+
+    public static boolean isVerbose() {
+        return !PGR.config.abbreviateEffects.get();
     }
 
     public static <T> String joinData(T[] items, FuncT1<String, T> stringFunction) {
@@ -1284,7 +1287,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     public final PSkill<T> scanForTips(String source) {
         tips.clear();
-        EUIGameUtils.scanForTips(source, tips);
+        EUITooltip.scanForTips(source, tips);
         return this;
     }
 

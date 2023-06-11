@@ -25,8 +25,7 @@ import pinacolada.utilities.GameUtilities;
 import java.util.ArrayList;
 
 public abstract class PCond<T extends PField> extends PSkill<T> {
-    public static final int CONDITION_PRIORITY = 1;
-    public static final int SPECIAL_CONDITION_PRIORITY = 0;
+    public static final String COND_SEPARATOR = ", ";
     protected boolean conditionMetCache = false;
 
     public PCond(PSkillData<T> data, PSkillSaveData content) {
@@ -341,7 +340,7 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
 
     @Override
     public String getText(boolean addPeriod) {
-        return getConditionRawString() + (childEffect != null ? ((childEffect instanceof PCond && !(childEffect instanceof PBranchCond) ? EFFECT_SEPARATOR : ": ") + childEffect.getText(addPeriod)) : "");
+        return getConditionRawString() + (childEffect != null ? ((childEffect instanceof PCond && !(childEffect instanceof PBranchCond) ? EFFECT_SEPARATOR : COND_SEPARATOR) + childEffect.getText(addPeriod)) : "");
     }
     
     public boolean isUnderWhen(PSkill<?> callingSkill) {

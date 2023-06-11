@@ -12,6 +12,7 @@ import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUIToggle;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITooltip;
+import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.ColoredTexture;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLCustomCardSlot;
@@ -99,6 +100,11 @@ public class PCLCustomCardEditCardScreen extends PCLCustomEditEntityScreen<PCLCu
 
         upgradeToggle.setActive(slot.maxUpgradeLevel != 0);
         invalidateItems();
+        EUITourTooltip.queueTutorial(
+                imageButton.makeTour(true),
+                new EUITourTooltip(formEditor.header.hb, formEditor.header.tooltip.title, formEditor.header.tooltip.description).setCanDismiss(true),
+                undoButton.makeTour(true),
+                saveButton.makeTour(true));
     }
 
     protected void rebuildItem() {

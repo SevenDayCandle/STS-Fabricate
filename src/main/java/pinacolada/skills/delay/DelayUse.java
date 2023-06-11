@@ -46,11 +46,13 @@ public abstract class DelayUse implements PCLCombatSubscriber {
     protected void act() {
         turns -= 1;
         if (turns <= 0) {
-            if (capturedCardUseInfo.card != null) {
-                PCLEffects.Queue.showCardBriefly(capturedCardUseInfo.card.makeStatEquivalentCopy());
-            }
-            if (capturedCardUseInfo.target == null || GameUtilities.isDeadOrEscaped(capturedCardUseInfo.target)) {
-                capturedCardUseInfo = CombatManager.playerSystem.generateInfo(capturedCardUseInfo.card, capturedCardUseInfo.source, GameUtilities.getRandomEnemy(true));
+            if (capturedCardUseInfo != null) {
+                if (capturedCardUseInfo.card != null) {
+                    PCLEffects.Queue.showCardBriefly(capturedCardUseInfo.card.makeStatEquivalentCopy());
+                }
+                if (capturedCardUseInfo.target == null || GameUtilities.isDeadOrEscaped(capturedCardUseInfo.target)) {
+                    capturedCardUseInfo = CombatManager.playerSystem.generateInfo(capturedCardUseInfo.card, capturedCardUseInfo.source, GameUtilities.getRandomEnemy(true));
+                }
             }
             onUse.invoke(capturedCardUseInfo);
             CombatManager.unsubscribe(this);

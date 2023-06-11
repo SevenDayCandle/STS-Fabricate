@@ -158,6 +158,7 @@ public class PCLCoreStrings extends PCLStrings {
     public final String cetut_addToEffect = cetut.TEXT[44];
     public final String cetut_primaryWarning = cetut.TEXT[45];
     public final String cetut_corruptedWarning = cetut.TEXT[46];
+    public final String cetut_undo = cetut.TEXT[47];
     // Card Pile
     public final String cpile_hand = cardPile.TEXT[0];
     public final String cpile_deck = cardPile.TEXT[1];
@@ -199,19 +200,20 @@ public class PCLCoreStrings extends PCLStrings {
     public final String csel_deckEditorInfo = charselect.TEXT[7];
     public final String csel_seriesEditor = charselect.TEXT[8];
     public final String csel_seriesEditorInfo = charselect.TEXT[9];
-    public final String csel_deckHeader = charselect.TEXT[10];
-    public final String csel_relicsHeader = charselect.TEXT[11];
-    public final String csel_attributesHeader = charselect.TEXT[12];
-    public final String csel_valueHeader = charselect.TEXT[13];
-    public final String csel_hindranceValue = charselect.TEXT[14];
-    public final String csel_hindranceDescription = charselect.TEXT[18];
-    public final String csel_info = charselect.TEXT[19];
-    public final String csel_unsavedChanges = charselect.TEXT[20];
-    public final String csel_clear = charselect.TEXT[21];
-    public final String csel_copyTo = charselect.TEXT[22];
-    public final String csel_copyFrom = charselect.TEXT[23];
-    public final String csel_export = charselect.TEXT[24];
-    public final String csel_ascensionGlyph = charselect.TEXT[25];
+    public final String csel_resetTutorial = charselect.TEXT[10];
+    public final String csel_resetTutorialInfo = charselect.TEXT[11];
+    public final String csel_deckHeader = charselect.TEXT[12];
+    public final String csel_relicsHeader = charselect.TEXT[13];
+    public final String csel_attributesHeader = charselect.TEXT[14];
+    public final String csel_hindranceValue = charselect.TEXT[15];
+    public final String csel_hindranceDescription = charselect.TEXT[19];
+    public final String csel_info = charselect.TEXT[20];
+    public final String csel_unsavedChanges = charselect.TEXT[21];
+    public final String csel_clear = charselect.TEXT[22];
+    public final String csel_copyTo = charselect.TEXT[23];
+    public final String csel_copyFrom = charselect.TEXT[24];
+    public final String csel_export = charselect.TEXT[25];
+    public final String csel_ascensionGlyph = charselect.TEXT[26];
     // Combat
     public final String combat_current = combat.TEXT[0];
     public final String combat_next = combat.TEXT[1];
