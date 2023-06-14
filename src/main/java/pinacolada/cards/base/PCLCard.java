@@ -1932,6 +1932,8 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         renderTint(sb);
         renderEnergy(sb);
         hb.render(sb);
+
+        CardModifierManager.onRender(this, sb);
     }
 
     protected void renderAtlas(SpriteBatch sb, Color color, TextureAtlas.AtlasRegion img, float drawX, float drawY) {

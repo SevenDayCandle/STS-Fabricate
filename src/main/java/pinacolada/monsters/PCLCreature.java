@@ -4,6 +4,7 @@ import basemod.ReflectionHacks;
 import basemod.abstracts.CustomMonster;
 import basemod.animations.AbstractAnimation;
 import com.badlogic.gdx.graphics.Color;
+import com.evacipated.cardcrawl.mod.stslib.patches.core.AbstractCreature.TempHPField;
 import com.evacipated.cardcrawl.mod.stslib.powers.StunMonsterPower;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.AbstractPower;
@@ -75,6 +76,10 @@ public abstract class PCLCreature extends CustomMonster implements IntentProvide
 
     public BobEffect getBobEffect() {
         return GameUtilities.getBobEffect(this);
+    }
+
+    public int getEffectiveHPForTurn() {
+        return currentHealth + currentBlock + GameUtilities.getEndOfTurnBlock(this) + TempHPField.tempHp.get(this);
     }
 
     public Color getIntentColor() {

@@ -67,19 +67,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
                 .setFont(EUIFontHelper.cardTitleFontLarge, 0.8f).setColor(Color.LIGHT_GRAY)
                 .setLabel(PGR.core.strings.cedit_attributes);
 
-        tagsDropdown = new EUIDropdown<PCLCardTagInfo>(new EUIHitbox(START_X, screenH(0.8f), MENU_WIDTH * 1.2f, MENU_HEIGHT))
-                .setOnChange(tags -> screen.modifyBuilder(e -> e.setTags(tags)))
-                .setLabelFunctionForOption(item -> item.tag.getTooltip().getTitleOrIcon() + " " + item.tag.getTooltip().title, true)
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_tags)
-                .setIsMultiSelect(true)
-                .setCanAutosize(true, true);
-        tagsDropdown.setLabelFunctionForButton((list, __) -> tagsDropdown.makeMultiSelectString(item -> item.tag.getTooltip().getTitleOrIcon()), true)
-                .setHeaderRow(new PCLCustomCardTagEditorHeaderRow(tagsDropdown))
-                .setRowFunction(PCLCustomCardTagEditorRow::new)
-                .setRowWidthFunction((a, b, c) -> a.calculateRowWidth() + MENU_HEIGHT * 6)
-                .setItems(EUIUtils.map(PCLCardTag.getAll(), t -> t.make(1, 1)))
-                .setTooltip(PGR.core.strings.cedit_tags, EUIUtils.joinStrings(EUIUtils.DOUBLE_SPLIT_LINE, PGR.core.strings.cetut_attrTags1, PGR.core.strings.cetut_attrTags2));
-        targetDropdown = new EUIDropdown<PCLCardTarget>(new EUIHitbox(tagsDropdown.hb.x + tagsDropdown.hb.width + SPACING_WIDTH / 1.5f, screenH(0.8f), MENU_WIDTH, MENU_HEIGHT)
+        targetDropdown = new EUIDropdown<PCLCardTarget>(new EUIHitbox(START_X, screenH(0.8f), MENU_WIDTH, MENU_HEIGHT)
                 , item -> StringUtils.capitalize(item.toString().toLowerCase()))
                 .setOnChange(targets -> {
                     if (!targets.isEmpty()) {
@@ -91,6 +79,18 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
                 .setCanAutosizeButton(true)
                 .setItems(getEligibleTargets(screen.getBuilder().cardColor))
                 .setTooltip(PGR.core.strings.cedit_cardTarget, PGR.core.strings.cetut_cardTarget);
+        tagsDropdown = new EUIDropdown<PCLCardTagInfo>(new EUIHitbox(targetDropdown.hb.x + targetDropdown.hb.width + SPACING_WIDTH / 1.5f, screenH(0.8f), MENU_WIDTH * 1.2f, MENU_HEIGHT))
+                .setOnChange(tags -> screen.modifyBuilder(e -> e.setTags(tags)))
+                .setLabelFunctionForOption(item -> item.tag.getTooltip().getTitleOrIcon() + " " + item.tag.getTooltip().title, true)
+                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_tags)
+                .setIsMultiSelect(true)
+                .setCanAutosize(true, true);
+        tagsDropdown.setLabelFunctionForButton((list, __) -> tagsDropdown.makeMultiSelectString(item -> item.tag.getTooltip().getTitleOrIcon()), true)
+                .setHeaderRow(new PCLCustomCardTagEditorHeaderRow(tagsDropdown))
+                .setRowFunction(PCLCustomCardTagEditorRow::new)
+                .setRowWidthFunction((a, b, c) -> a.calculateRowWidth() + MENU_HEIGHT * 6)
+                .setItems(EUIUtils.map(PCLCardTag.getAll(), t -> t.make(1, 1)))
+                .setTooltip(PGR.core.strings.cedit_tags, EUIUtils.joinStrings(EUIUtils.DOUBLE_SPLIT_LINE, PGR.core.strings.cetut_attrTags1, PGR.core.strings.cetut_attrTags2));
         timingDropdown = new EUIDropdown<DelayTiming>(new EUIHitbox(targetDropdown.hb.x + targetDropdown.hb.width + SPACING_WIDTH / 1.5f, screenH(0.8f), MENU_WIDTH, MENU_HEIGHT)
                 , item -> StringUtils.capitalize(item.toString().toLowerCase()))
                 .setOnChange(targets -> {

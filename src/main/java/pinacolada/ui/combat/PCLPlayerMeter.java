@@ -26,14 +26,6 @@ import pinacolada.resources.PGR;
 import pinacolada.ui.EUICardDraggable;
 
 public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implements ClickableProvider {
-    public static EUITutorialPage AFFINITY_TUTORIAL = new EUITutorialPage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.tooltips.affinityGeneral.title), PGR.core.strings.tutorial_affinityTutorial);
-    public static EUITutorialPage TAG_TUTORIAL = new EUITutorialPage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.strings.cedit_tags), PGR.core.strings.tutorial_tagTutorial);
-    public static EUITutorialPage SUMMON_TUTORIAL1 = new EUITutorialPage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.tooltips.summon.title, 1), PGR.core.strings.tutorial_summonTutorial1);
-    public static EUITutorialPage SUMMON_TUTORIAL2 = new EUITutorialPage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.tooltips.summon.title, 2), PGR.core.strings.tutorial_summonTutorial2);
-    public static EUITutorialPage SUMMON_TUTORIAL3 = new EUITutorialPage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.tooltips.summon.title, 3), PGR.core.strings.tutorial_summonTutorial3);
-    public static EUITutorialPage SUMMON_TUTORIAL4 = new EUITutorialPage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.tooltips.summon.title, 4), PGR.core.strings.tutorial_summonTutorial4);
-    public static EUITutorialPage SUMMON_TUTORIAL5 = new EUITutorialPage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.tooltips.summon.title, 5), PGR.core.strings.tutorial_summonTutorial5);
-    public static EUITutorialPage SUMMON_TUTORIAL6 = new EUITutorialPage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.tooltips.summon.title, 6), PGR.core.strings.tutorial_summonTutorial6);
     protected EUIButton infoIcon;
     protected String id;
     protected int currentScore;

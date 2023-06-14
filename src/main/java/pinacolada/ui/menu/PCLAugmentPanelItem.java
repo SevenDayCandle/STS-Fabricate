@@ -7,11 +7,9 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import extendedui.EUI;
-import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.ui.controls.EUITutorial;
 import extendedui.ui.controls.EUITutorialPage;
-import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.panelitems.PCLTopPanelItem;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIColors;
@@ -81,7 +79,7 @@ public class PCLAugmentPanelItem extends PCLTopPanelItem {
     protected void onRightClick() {
         super.onRightClick();
         this.getHitbox().unhover();
-        EUITutorial tutorial = new EUITutorial(new EUIHitbox((float) Settings.WIDTH / 2.0F - 675.0F, Settings.OPTION_Y - 450.0F, 1350.0F, 900.0F), EUIRM.images.greySquare.texture(),
+        EUITutorial tutorial = new EUITutorial(
                 new EUITutorialPage(PGR.core.strings.misc_viewAugments, PGR.core.strings.tutorial_augmentTutorial1), new EUITutorialPage(PGR.core.strings.misc_viewAugments, PGR.core.strings.tutorial_augmentTutorial2));
         EUI.ftueScreen.openScreen(tutorial);
     }

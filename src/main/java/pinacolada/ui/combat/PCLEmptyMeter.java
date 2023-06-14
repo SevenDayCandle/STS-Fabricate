@@ -25,7 +25,10 @@ public class PCLEmptyMeter extends PCLPlayerMeter {
 
     @Override
     public EUITutorialPage[] getInfoPages() {
-        return EUIUtils.array(AFFINITY_TUTORIAL, TAG_TUTORIAL);
+        return EUIUtils.array(
+                new EUITutorialPage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.tooltips.affinityGeneral.title), PGR.core.strings.tutorial_affinityTutorial),
+                new EUITutorialPage(makeTitle(PGR.core.strings.misc_fabricate, PGR.core.strings.cedit_tags), PGR.core.strings.tutorial_tagTutorial)
+        );
     }
 
     @Override

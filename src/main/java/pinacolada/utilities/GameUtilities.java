@@ -776,6 +776,7 @@ public class GameUtilities {
             return amount;
         }
 
+        int max = c.currentHealth;
         if (amount > 0 && subtractBlock) {
             int blocked = Math.min(c.currentBlock + GameUtilities.getEndOfTurnBlock(c), amount);
             amount -= blocked;
@@ -786,7 +787,7 @@ public class GameUtilities {
             amount -= blocked;
         }
 
-        return Math.max(amount, 0);
+        return MathUtils.clamp(amount, 0, max);
     }
 
     public static float getHealthPercentage(AbstractCreature creature) {

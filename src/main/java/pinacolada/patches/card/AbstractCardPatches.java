@@ -60,7 +60,6 @@ public class AbstractCardPatches {
             // Call the field directly instead of querying card tag, because card tag also checks for purgeOnUse
             if (EphemeralField.value.get(__instance)) {
                 PCLActions.last.purge(__instance);
-                return SpireReturn.Return();
             }
             return SpireReturn.Continue();
         }
