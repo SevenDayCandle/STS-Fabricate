@@ -7,9 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.MathUtils;
-import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.Hitbox;
 import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
@@ -23,7 +21,6 @@ public abstract class PCLEffect extends AbstractGameEffect {
     public final static Hitbox SKY_HB_LOW_L = new Hitbox(Settings.WIDTH * 0.48f, Settings.HEIGHT * 0.5f, 2, 2);
     public final static Hitbox SKY_HB_LOW_R = new Hitbox(Settings.WIDTH * 0.52f, Settings.HEIGHT * 0.5f, 2, 2);
     public static final Random RNG = new Random();
-    public final AbstractPlayer player;
     public boolean isRealtime;
     public int ticks;
 
@@ -38,7 +35,6 @@ public abstract class PCLEffect extends AbstractGameEffect {
     public PCLEffect(float duration, boolean isRealtime) {
         this.isRealtime = isRealtime;
         this.duration = this.startingDuration = duration;
-        this.player = AbstractDungeon.player;
     }
 
     protected static int random(int min, int max) {

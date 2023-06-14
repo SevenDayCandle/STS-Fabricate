@@ -47,6 +47,6 @@ public class PCond_Chance extends PPassiveCond<PField_Not> {
 
     @Override
     public String getSubText() {
-        return TEXT.act_generic2(PGR.core.tooltips.chance.title, amount + "%");
+        return TEXT.cond_ifX(TEXT.act_generic2(PGR.core.tooltips.chance.title, getAmountRawString() + "%"));
     }
 }

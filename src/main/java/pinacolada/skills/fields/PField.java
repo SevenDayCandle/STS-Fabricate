@@ -51,11 +51,11 @@ public abstract class PField implements Serializable {
     }
 
     public static String getAffinityLevelAndString(AbstractCard.CardColor co, ArrayList<PCLAffinity> affinities) {
-        return PCLCoreStrings.joinWithAnd(EUIUtils.mapAsNonnull(affinities, a -> a.getLevelTooltip(co).getTitleOrIcon()));
+        return PCLCoreStrings.joinWithAnd(EUIUtils.mapAsNonnull(affinities, a -> a.getLevelTooltip(co).getTitleOrIconForced()));
     }
 
     public static String getAffinityLevelOrString(AbstractCard.CardColor co, ArrayList<PCLAffinity> affinities) {
-        return PCLCoreStrings.joinWithOr(EUIUtils.mapAsNonnull(affinities, a -> a.getLevelTooltip(co).getTitleOrIcon()));
+        return PCLCoreStrings.joinWithOr(EUIUtils.mapAsNonnull(affinities, a -> a.getLevelTooltip(co).getTitleOrIconForced()));
     }
 
     public static String getAffinityOrString(ArrayList<PCLAffinity> affinities) {
@@ -63,15 +63,15 @@ public abstract class PField implements Serializable {
     }
 
     public static String getAffinityPowerAndString(ArrayList<PCLAffinity> affinities) {
-        return PCLCoreStrings.joinWithAnd(EUIUtils.mapAsNonnull(affinities, a -> a.getLevelTooltip().getTitleOrIcon()));
+        return PCLCoreStrings.joinWithAnd(EUIUtils.mapAsNonnull(affinities, a -> a.getLevelTooltip().getTitleOrIconForced()));
     }
 
     public static String getAffinityPowerOrString(ArrayList<PCLAffinity> affinities) {
-        return PCLCoreStrings.joinWithOr(EUIUtils.mapAsNonnull(affinities, a -> a.getLevelTooltip().getTitleOrIcon()));
+        return PCLCoreStrings.joinWithOr(EUIUtils.mapAsNonnull(affinities, a -> a.getLevelTooltip().getTitleOrIconForced()));
     }
 
     public static String getAffinityPowerString(ArrayList<PCLAffinity> affinities) {
-        return EUIUtils.joinStrings(" ", EUIUtils.mapAsNonnull(affinities, a -> a.getLevelTooltip().getTitleOrIcon()));
+        return EUIUtils.joinStrings(" ", EUIUtils.mapAsNonnull(affinities, a -> a.getLevelTooltip().getTitleOrIconForced()));
     }
 
     public static String getAffinityString(ArrayList<PCLAffinity> affinities) {
@@ -128,7 +128,7 @@ public abstract class PField implements Serializable {
     }
 
     public static String getGeneralAffinityString() {
-        return PGR.core.tooltips.affinityGeneral.getTitleOrIcon();
+        return PGR.core.tooltips.affinityGeneral.title;
     }
 
     public static String getGroupString(ArrayList<PCLCardGroupHelper> groupTypes, PCLCardSelection origin) {

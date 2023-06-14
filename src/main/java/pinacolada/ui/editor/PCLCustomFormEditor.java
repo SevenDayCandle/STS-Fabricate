@@ -20,12 +20,12 @@ public class PCLCustomFormEditor extends EUIBase {
 
     public Hitbox hb;
     public EUILabel header;
+    public EUIButton decreaseButton;
+    public EUIButton increaseButton;
+    public EUIButton add;
+    public EUIButton remove;
     protected PCLCustomEditEntityScreen<?,?> screen;
     protected EUIDropdown<Integer> formValues;
-    protected EUIButton decreaseButton;
-    protected EUIButton increaseButton;
-    protected EUIButton add;
-    protected EUIButton remove;
 
     public PCLCustomFormEditor(Hitbox hb, PCLCustomEditEntityScreen<?,?> screen) {
         this.hb = hb;

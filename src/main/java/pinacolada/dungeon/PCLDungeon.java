@@ -36,6 +36,8 @@ import pinacolada.interfaces.listeners.OnAddToDeckListener;
 import pinacolada.interfaces.listeners.OnAddingToCardRewardListener;
 import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.resources.PCLAbstractPlayerData;
+import pinacolada.resources.PCLCharacterConfig;
+import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.FakeLoadout;
 import pinacolada.resources.loadout.PCLLoadout;
@@ -62,7 +64,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
     protected Map<String, String> eventLog = new HashMap<>();
     protected Random rng;
     protected String startingLoadout;
-    protected transient PCLAbstractPlayerData data;
+    protected transient PCLAbstractPlayerData<?,?> data;
     protected transient boolean canJumpAnywhere;
     protected transient boolean canJumpNextFloor;
     protected transient int valueDivisor = 1;
@@ -143,7 +145,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         log("Banned " + card.cardID + ", Total: " + bannedCards.size());
     }
 
-    private void banItems(PCLAbstractPlayerData data) {
+    private void banItems(PCLAbstractPlayerData<?,?> data) {
         final ArrayList<CardGroup> groups = new ArrayList<>();
         groups.addAll(EUIGameUtils.getGameCardPools());
         groups.addAll(EUIGameUtils.getSourceCardPools());
@@ -435,7 +437,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         }
     }
 
-    private void loadCardsForData(PCLAbstractPlayerData data) {
+    private void loadCardsForData(PCLAbstractPlayerData<?,?> data) {
         // Always include the selected loadout. If for some reason none exists, assign one at random
         if (data.selectedLoadout == null) {
             data.selectedLoadout = EUIUtils.random(EUIUtils.filter(data.getEveryLoadout(), loadout -> data.resources.getUnlockLevel() >= loadout.unlockLevel));

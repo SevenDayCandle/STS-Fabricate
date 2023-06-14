@@ -200,8 +200,7 @@ public class PCLCustomCardAttributesPage extends PCLCustomGenericPage {
 
     @Override
     public void onOpen() {
-        // TODO readd config
-        EUITourTooltip.queueTutorial(
+        EUITourTooltip.queueFirstView(PGR.config.tourCardAttribute,
                 targetDropdown.makeTour(true),
                 tagsDropdown.makeTour(true),
                 upgradeLabel.makeTour(true));

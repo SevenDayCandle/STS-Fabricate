@@ -100,9 +100,11 @@ public class PCLCustomCardEditCardScreen extends PCLCustomEditEntityScreen<PCLCu
 
         upgradeToggle.setActive(slot.maxUpgradeLevel != 0);
         invalidateItems();
-        EUITourTooltip.queueTutorial(
-                imageButton.makeTour(true),
+        EUITourTooltip.queueFirstView(PGR.config.tourEditorForm,
                 new EUITourTooltip(formEditor.header.hb, formEditor.header.tooltip.title, formEditor.header.tooltip.description).setCanDismiss(true),
+                formEditor.add.makeTour(true),
+                formEditor.remove.makeTour(true),
+                imageButton.makeTour(true),
                 undoButton.makeTour(true),
                 saveButton.makeTour(true));
     }

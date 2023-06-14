@@ -7,10 +7,10 @@ import extendedui.interfaces.delegates.ActionT1;
 import extendedui.utilities.ColoredString;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLAffinity;
-import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.fields.PField;
 import pinacolada.skills.fields.PField_CardModifyAffinity;
 
 import java.util.List;
@@ -78,10 +78,10 @@ public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity
     public String getSubText() {
         if (fields.forced) {
             String giveString = getNumericalObjectText();
-            return useParent ? TEXT.act_setOf(PGR.core.tooltips.affinityGeneral, getInheritedThemString(), giveString) :
+            return useParent ? TEXT.act_setOf(PField.getGeneralAffinityString(), getInheritedThemString(), giveString) :
                     fields.hasGroups() ?
-                            TEXT.act_setOfFrom(PGR.core.tooltips.affinityGeneral, EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), pluralCard()), fields.getGroupString(), giveString) :
-                            TEXT.act_setOf(PGR.core.tooltips.affinityGeneral, TEXT.subjects_thisCard, giveString);
+                            TEXT.act_setOfFrom(PField.getGeneralAffinityString(), EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), pluralCard()), fields.getGroupString(), giveString) :
+                            TEXT.act_setOf(PField.getGeneralAffinityString(), TEXT.subjects_thisCard, giveString);
         }
         return getBasicGiveString();
     }

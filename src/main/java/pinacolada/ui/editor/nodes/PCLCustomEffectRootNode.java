@@ -68,6 +68,6 @@ public class PCLCustomEffectRootNode extends PCLCustomEffectNode {
 
     public void refresh() {
         setText(skill.getSampleText(null));
-        this.tooltip = new EUIHeaderlessTooltip(PGR.core.strings.cetut_blankPrimary);
+        this.tooltip = new EUIHeaderlessTooltip(EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, PGR.core.strings.cetut_blankPrimary, PGR.core.strings.cetut_effectPrimary));
     }
 }

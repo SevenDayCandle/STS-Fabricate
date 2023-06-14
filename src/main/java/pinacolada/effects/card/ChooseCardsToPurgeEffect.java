@@ -22,7 +22,7 @@ public class ChooseCardsToPurgeEffect extends GenericChooseCardsEffect {
 
     @Override
     protected ArrayList<AbstractCard> getGroup() {
-        return player.masterDeck.getPurgeableCards().group;
+        return AbstractDungeon.player.masterDeck.getPurgeableCards().group;
     }
 
     public void onCardSelected(AbstractCard c) {

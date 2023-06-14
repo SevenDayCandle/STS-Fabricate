@@ -471,7 +471,7 @@ public class PCLCustomEffectNode extends EUIButton {
                 case Trigger:
                 case Attack:
                 case Block:
-                    return PGR.core.strings.cetut_effectTrigger;
+                    return PGR.core.strings.cetut_effectPrimary;
             }
             return "";
         }

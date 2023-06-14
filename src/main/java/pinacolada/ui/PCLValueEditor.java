@@ -14,6 +14,7 @@ import extendedui.ui.controls.EUITextBoxNumericalInput;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.ui.tooltips.EUITooltip;
+import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
 
 public class PCLValueEditor extends EUIHoverable {
@@ -63,6 +64,17 @@ public class PCLValueEditor extends EUIHoverable {
 
     public void increase() {
         setValue(displayValue.getCachedValue() + 1);
+    }
+
+    public EUITourTooltip makeTour(boolean canDismiss) {
+        if (this.tooltip != null) {
+            EUITourTooltip tip = new EUITourTooltip(this.hb, this.tooltip.title, this.tooltip.description);
+            tip.setFlash(this.displayValue.image);
+            tip.setCanDismiss(canDismiss);
+            return tip;
+        } else {
+            return null;
+        }
     }
 
     @Override

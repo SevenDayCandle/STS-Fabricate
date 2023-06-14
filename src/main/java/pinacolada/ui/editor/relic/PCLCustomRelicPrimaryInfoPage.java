@@ -17,6 +17,7 @@ import extendedui.ui.controls.EUILabel;
 import extendedui.ui.controls.EUISearchableDropdown;
 import extendedui.ui.controls.EUITextBoxInput;
 import extendedui.ui.hitboxes.EUIHitbox;
+import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
@@ -150,6 +151,16 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
 
     public String getTitle() {
         return header.text;
+    }
+
+    @Override
+    public void onOpen() {
+        EUITourTooltip.queueFirstView(PGR.config.tourRelicPrimary,
+                idInput.makeTour(true),
+                nameInput.makeTour(true),
+                languageDropdown.makeTour(true),
+                tierDropdown.makeTour(true),
+                sfxDropdown.makeTour(true));
     }
 
     @Override

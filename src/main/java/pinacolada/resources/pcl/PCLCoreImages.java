@@ -37,6 +37,7 @@ public class PCLCoreImages extends PCLImages {
     public static class Menu {
 
         public static final TextureCache augmentPanel = new TextureCache("images/pcl/ui/menu/AugmentPanel.png");
+        public static final TextureCache check = new TextureCache("images/pcl/ui/menu/Check.png");
         public static final TextureCache edit = new TextureCache("images/pcl/ui/menu/Edit.png");
         public static final TextureCache editorPrimary = new TextureCache("images/pcl/ui/menu/EditorPrimary.png");
         public static final TextureCache editorAttribute = new TextureCache("images/pcl/ui/menu/EditorAttribute.png");

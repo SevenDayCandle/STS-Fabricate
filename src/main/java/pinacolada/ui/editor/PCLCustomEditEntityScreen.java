@@ -11,6 +11,7 @@ import extendedui.interfaces.delegates.ActionT1;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITooltip;
+import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.effects.PCLEffectWithCallback;
 import pinacolada.interfaces.markers.EditorMaker;
@@ -132,6 +133,8 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
 
     protected void end() {
         complete(null);
+        // In case the tutorial is still playing
+        EUITourTooltip.clearTutorialQueue();
     }
 
     public U getBuilder() {

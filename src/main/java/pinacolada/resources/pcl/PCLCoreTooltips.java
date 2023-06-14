@@ -1,7 +1,9 @@
 package pinacolada.resources.pcl;
 
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.rewards.RewardItem;
 import extendedui.EUI;
+import extendedui.EUIGameUtils;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.tags.PCLCardTag;
@@ -10,6 +12,7 @@ import pinacolada.powers.replacement.PCLLockOnPower;
 import pinacolada.powers.special.ProvokedPower;
 import pinacolada.powers.special.SelfImmolationPower;
 import pinacolada.powers.special.SilencedPower;
+import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PCLTooltips;
 import pinacolada.resources.PGR;
 
@@ -53,13 +56,13 @@ public class PCLCoreTooltips extends PCLTooltips {
     public static final String ICON_WEAK = "weak";
     public static final String ICON_VULNERABLE = "vulnerable";
 
-    public EUIKeywordTooltip affinityBlue = EUIKeywordTooltip.findByID("Blue Affinity").showText(false).forceIcon(true);
-    public EUIKeywordTooltip affinityGreen = EUIKeywordTooltip.findByID("Green Affinity").showText(false).forceIcon(true);
-    public EUIKeywordTooltip affinityOrange = EUIKeywordTooltip.findByID("Orange Affinity").showText(false).forceIcon(true);
-    public EUIKeywordTooltip affinityPurple = EUIKeywordTooltip.findByID("Purple Affinity").showText(false).forceIcon(true);
-    public EUIKeywordTooltip affinityRed = EUIKeywordTooltip.findByID("Red Affinity").showText(false).forceIcon(true);
-    public EUIKeywordTooltip affinitySilver = EUIKeywordTooltip.findByID("Silver Affinity").showText(false).forceIcon(true);
-    public EUIKeywordTooltip affinityYellow = EUIKeywordTooltip.findByID("Yellow Affinity").showText(false).forceIcon(true);
+    public EUIKeywordTooltip affinityBlue = EUIKeywordTooltip.findByID("Blue Affinity").forceIcon(true);
+    public EUIKeywordTooltip affinityGreen = EUIKeywordTooltip.findByID("Green Affinity").forceIcon(true);
+    public EUIKeywordTooltip affinityOrange = EUIKeywordTooltip.findByID("Orange Affinity").forceIcon(true);
+    public EUIKeywordTooltip affinityPurple = EUIKeywordTooltip.findByID("Purple Affinity").forceIcon(true);
+    public EUIKeywordTooltip affinityRed = EUIKeywordTooltip.findByID("Red Affinity").forceIcon(true);
+    public EUIKeywordTooltip affinitySilver = EUIKeywordTooltip.findByID("Silver Affinity").forceIcon(true);
+    public EUIKeywordTooltip affinityYellow = EUIKeywordTooltip.findByID("Yellow Affinity").forceIcon(true);
     public EUIKeywordTooltip attack = EUIKeywordTooltip.findByID("Attack").showText(false).canHighlight(false);
     public EUIKeywordTooltip block = EUIKeywordTooltip.findByID("Block").showText(false).canHighlight(false);
     public EUIKeywordTooltip buff = EUIKeywordTooltip.findByID("Buff").showText(false).canHighlight(false);
@@ -255,16 +258,23 @@ public class PCLCoreTooltips extends PCLTooltips {
         turnStart.setIcon(PCLCoreImages.CardIcons.priorityPlus.texture()).setIconSizeMulti(0.85f, 0.85f);
         energy.setIconFunc(EUI::getEnergyIcon);
 
-        affinityRed.setIconFunc(PCLAffinity.Red::getTextureRegion).setIconSizeMulti(0.85f, 0.85f);
-        affinityGreen.setIconFunc(PCLAffinity.Green::getTextureRegion).setIconSizeMulti(0.85f, 0.85f);
-        affinityBlue.setIconFunc(PCLAffinity.Blue::getTextureRegion).setIconSizeMulti(0.85f, 0.85f);
-        affinityOrange.setIconFunc(PCLAffinity.Orange::getTextureRegion).setIconSizeMulti(0.85f, 0.85f);
-        affinityYellow.setIconFunc(PCLAffinity.Yellow::getTextureRegion).setIconSizeMulti(0.85f, 0.85f);
-        affinityPurple.setIconFunc(PCLAffinity.Purple::getTextureRegion).setIconSizeMulti(0.85f, 0.85f);
-        affinitySilver.setIconFunc(PCLAffinity.Silver::getTextureRegion).setIconSizeMulti(0.85f, 0.85f);
-        affinityGeneral.setIcon(PCLAffinity.General.getDefaultIcon().texture()).setIconSizeMulti(0.85f, 0.85f);
-        affinityUnknown.setIcon(PCLAffinity.Unknown.getDefaultIcon().texture()).setIconSizeMulti(0.85f, 0.85f);
-        multicolor.setIcon(PCLAffinity.Star.getDefaultIcon().texture()).setIconSizeMulti(0.85f, 0.85f);
+        affinityRed.setIconFunc(PCLAffinity.Red::getTextureRegion);
+        affinityGreen.setIconFunc(PCLAffinity.Green::getTextureRegion);
+        affinityBlue.setIconFunc(PCLAffinity.Blue::getTextureRegion);
+        affinityOrange.setIconFunc(PCLAffinity.Orange::getTextureRegion);
+        affinityYellow.setIconFunc(PCLAffinity.Yellow::getTextureRegion);
+        affinityPurple.setIconFunc(PCLAffinity.Purple::getTextureRegion);
+        affinitySilver.setIconFunc(PCLAffinity.Silver::getTextureRegion);
+        affinityGeneral.setIcon(PCLAffinity.General.getDefaultIcon().texture());
+        affinityUnknown.setIcon(PCLAffinity.Unknown.getDefaultIcon().texture());
+        multicolor.setIcon(PCLAffinity.Star.getDefaultIcon().texture());
+
+        attack.setIcon(EUIGameUtils.iconForType(AbstractCard.CardType.ATTACK));
+        skill.setIcon(EUIGameUtils.iconForType(AbstractCard.CardType.SKILL));
+        power.setIcon(EUIGameUtils.iconForType(AbstractCard.CardType.POWER));
+        curse.setIcon(EUIGameUtils.iconForType(AbstractCard.CardType.CURSE));
+        status.setIcon(EUIGameUtils.iconForType(AbstractCard.CardType.STATUS));
+        summon.setIcon(EUIGameUtils.iconForType(PCLEnum.CardType.SUMMON));
 
         lightning.setIcon(PCLCoreImages.Tooltips.lightning.texture(), 6);
         plasma.setIcon(PCLCoreImages.Tooltips.plasma.texture(), 6);

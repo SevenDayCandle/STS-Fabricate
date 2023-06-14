@@ -29,6 +29,7 @@ public class PCLCoreStrings extends PCLStrings {
     private final UIStrings conditions = getUIStrings("Conditions");
     private final UIStrings gridselection = getUIStrings("GridSelection");
     private final UIStrings hotkeys = getUIStrings("Hotkeys");
+    private final UIStrings loadout = getUIStrings("Loadout");
     private final UIStrings menu = getUIStrings("Menu");
     private final UIStrings misc = getUIStrings("Misc");
     private final UIStrings options = getUIStrings("Options");
@@ -123,7 +124,7 @@ public class PCLCoreStrings extends PCLStrings {
     public final String cetut_effectCondition = cetut.TEXT[9];
     public final String cetut_effectEffect = cetut.TEXT[10];
     public final String cetut_effectModifier = cetut.TEXT[11];
-    public final String cetut_effectTrigger = cetut.TEXT[12];
+    public final String cetut_effectPrimary = cetut.TEXT[12];
     public final String cetut_effectTurnDelay = cetut.TEXT[13];
     public final String cetut_effectChoices = cetut.TEXT[14];
     public final String cetut_effectMultiCondition = cetut.TEXT[15];
@@ -159,6 +160,8 @@ public class PCLCoreStrings extends PCLStrings {
     public final String cetut_primaryWarning = cetut.TEXT[45];
     public final String cetut_corruptedWarning = cetut.TEXT[46];
     public final String cetut_undo = cetut.TEXT[47];
+    public final String cetut_openFolder = cetut.TEXT[48];
+    public final String cetut_topBarTutorial = cetut.TEXT[49];
     // Card Pile
     public final String cpile_hand = cardPile.TEXT[0];
     public final String cpile_deck = cardPile.TEXT[1];
@@ -191,29 +194,16 @@ public class PCLCoreStrings extends PCLStrings {
     public final String ctype_turnEndLast = cardtype.TEXT[20];
     // Character
     public final String csel_leftText = charselect.TEXT[0];  // Starting Cards:
-    public final String csel_invalidLoadout = charselect.TEXT[1];
-    public final String csel_invalidLoadoutDescLimit = charselect.TEXT[2];
-    public final String csel_invalidLoadoutDescSeen = charselect.TEXT[3];
-    public final String csel_invalidLoadoutDescNotEnough = charselect.TEXT[4];
-    public final String csel_invalidLoadoutDescLocked = charselect.TEXT[5];
-    public final String csel_deckEditor = charselect.TEXT[6];
-    public final String csel_deckEditorInfo = charselect.TEXT[7];
-    public final String csel_seriesEditor = charselect.TEXT[8];
-    public final String csel_seriesEditorInfo = charselect.TEXT[9];
-    public final String csel_resetTutorial = charselect.TEXT[10];
-    public final String csel_resetTutorialInfo = charselect.TEXT[11];
-    public final String csel_deckHeader = charselect.TEXT[12];
-    public final String csel_relicsHeader = charselect.TEXT[13];
-    public final String csel_attributesHeader = charselect.TEXT[14];
-    public final String csel_hindranceValue = charselect.TEXT[15];
-    public final String csel_hindranceDescription = charselect.TEXT[19];
-    public final String csel_info = charselect.TEXT[20];
-    public final String csel_unsavedChanges = charselect.TEXT[21];
-    public final String csel_clear = charselect.TEXT[22];
-    public final String csel_copyTo = charselect.TEXT[23];
-    public final String csel_copyFrom = charselect.TEXT[24];
-    public final String csel_export = charselect.TEXT[25];
-    public final String csel_ascensionGlyph = charselect.TEXT[26];
+    public final String csel_deckEditor = charselect.TEXT[1];
+    public final String csel_deckEditorInfo = charselect.TEXT[2];
+    public final String csel_seriesEditor = charselect.TEXT[3];
+    public final String csel_seriesEditorInfo = charselect.TEXT[4];
+    public final String csel_resetTutorial = charselect.TEXT[5];
+    public final String csel_resetTutorialInfo = charselect.TEXT[6];
+    public final String csel_resetTutorialConfirm = charselect.TEXT[7];
+    public final String csel_charTutorial = charselect.TEXT[8];
+    public final String csel_charTutorialInfo = charselect.TEXT[9];
+    public final String csel_ascensionGlyph = charselect.TEXT[10];
     // Combat
     public final String combat_current = combat.TEXT[0];
     public final String combat_next = combat.TEXT[1];
@@ -241,6 +231,41 @@ public class PCLCoreStrings extends PCLStrings {
     public final String hotkeys_rerollCurrent = hotkeys.TEXT[2];
     public final String hotkeys_toggleFormulaDisplay = hotkeys.TEXT[3];
     public final String hotkeys_viewAugments = hotkeys.TEXT[4];
+    // Loadout
+    public final String loadout_deckHeader = loadout.TEXT[0];
+    public final String loadout_relicHeader = loadout.TEXT[1];
+    public final String loadout_attributesHeader = loadout.TEXT[2];
+    public final String loadout_add = loadout.TEXT[3];
+    public final String loadout_decrease = loadout.TEXT[4];
+    public final String loadout_remove = loadout.TEXT[5];
+    public final String loadout_change = loadout.TEXT[6];
+    public final String loadout_maxHP = loadout.TEXT[7];
+    public final String loadout_gold = loadout.TEXT[8];
+    public final String loadout_potionSlot = loadout.TEXT[9];
+    public final String loadout_orbSlot = loadout.TEXT[10];
+    public final String loadout_cardDraw = loadout.TEXT[11];
+    public final String loadout_cardDrawDesc = loadout.TEXT[12];
+    public final String loadout_energy = loadout.TEXT[13];
+    public final String loadout_energyDesc = loadout.TEXT[14];
+    public final String loadout_hindranceValue = loadout.TEXT[15];
+    public final String loadout_hindranceDescription = loadout.TEXT[16];
+    public final String loadout_cardsCount = loadout.TEXT[17];
+    public final String loadout_totalValue = loadout.TEXT[18];
+    public final String loadout_invalidLoadout = loadout.TEXT[19];
+    public final String loadout_invalidLoadoutDescLimit = loadout.TEXT[20];
+    public final String loadout_invalidLoadoutDescSeen = loadout.TEXT[21];
+    public final String loadout_invalidLoadoutDescNotEnough = loadout.TEXT[22];
+    public final String loadout_invalidLoadoutDescLocked = loadout.TEXT[23];
+    public final String loadout_unsavedChanges = loadout.TEXT[24];
+    public final String loadout_reset = loadout.TEXT[25];
+    public final String loadout_copyTo = loadout.TEXT[26];
+    public final String loadout_copyFrom = loadout.TEXT[27];
+    public final String loadout_export = loadout.TEXT[28];
+    public final String loadout_tutorialCard = loadout.TEXT[29];
+    public final String loadout_tutorialValue = loadout.TEXT[30];
+    public final String loadout_tutorialRelic = loadout.TEXT[31];
+    public final String loadout_tutorialAttributes = loadout.TEXT[32];
+    public final String loadout_tutorialRequired = loadout.TEXT[33];
     // Menu
     public final String menu_editor = menu.TEXT[0];
     public final String menu_card = menu.TEXT[1];
@@ -314,13 +339,16 @@ public class PCLCoreStrings extends PCLStrings {
     public final String sui_totalCards = seriesui.TEXT[8];
     public final String sui_instructions1 = seriesui.TEXT[9];
     public final String sui_instructions2 = seriesui.TEXT[10];
-    public final String sui_characterCards = seriesui.TEXT[11];
-    public final String sui_selectAll = seriesui.TEXT[12];
-    public final String sui_deselectAll = seriesui.TEXT[13];
-    public final String sui_selectRandom = seriesui.TEXT[14];
-    public final String sui_showCardPool = seriesui.TEXT[15];
-    public final String sui_save = seriesui.TEXT[16];
-    public final String sui_cancel = seriesui.TEXT[17];
+    public final String sui_viewPoolInstructions = seriesui.TEXT[11];
+    public final String sui_characterCards = seriesui.TEXT[12];
+    public final String sui_selectAll = seriesui.TEXT[13];
+    public final String sui_selectAllDesc = seriesui.TEXT[14];
+    public final String sui_deselectAll = seriesui.TEXT[15];
+    public final String sui_deselectDesc = seriesui.TEXT[16];
+    public final String sui_selectRandom = seriesui.TEXT[17];
+    public final String sui_showCardPool = seriesui.TEXT[18];
+    public final String sui_coreInstructions = seriesui.TEXT[19];
+    public final String sui_totalInstructions = seriesui.TEXT[20];
     // Single View Card Popup
     public final String scp_variant = scp.TEXT[0];
     public final String scp_changeVariant = scp.TEXT[1];
@@ -401,10 +429,16 @@ public class PCLCoreStrings extends PCLStrings {
     public final String tutorial_summonTutorial2 = tutorial.TEXT[4];
     public final String tutorial_summonTutorial3 = tutorial.TEXT[5];
     public final String tutorial_summonTutorial4 = tutorial.TEXT[6];
-    public final String tutorial_characterTutorial1 = tutorial.TEXT[7];
-    public final String tutorial_characterTutorial2 = tutorial.TEXT[8];
-    public final String tutorial_augmentTutorial1 = tutorial.TEXT[9];
-    public final String tutorial_augmentTutorial2 = tutorial.TEXT[10];
+    public final String tutorial_summonTutorial5 = tutorial.TEXT[7];
+    public final String tutorial_summonTutorial6 = tutorial.TEXT[8];
+    public final String tutorial_summonTutorial7 = tutorial.TEXT[9];
+    public final String tutorial_augmentTutorial1 = tutorial.TEXT[10];
+    public final String tutorial_augmentTutorial2 = tutorial.TEXT[11];
+    public final String tutorial_tutorialReplay = tutorial.TEXT[12];
+    public final String tutorial_tutorialNextStep = tutorial.TEXT[13];
+    public final String tutorial_tutorialComplete = tutorial.TEXT[14];
+    public final String tutorial_tutorialStepHeader = tutorial.TEXT[15];
+    public final String tutorial_tutorialCompleteHeader = tutorial.TEXT[16];
 
     public PCLCoreStrings(PCLResources<?, ?, ?, ?> resources) {
         super(resources);
@@ -835,380 +869,291 @@ public class PCLCoreStrings extends PCLStrings {
     public final String cond_any(Object desc1) {
         return condFmt(0, desc1);
     }
-
     public final String cond_atEndOfCombat() {
         return condFmt(1);
     }
-
     public final String cond_atStartOfCombat() {
         return condFmt(2);
     }
-
     public final String cond_atEndOfTurn() {
         return condFmt(3);
     }
-
     public final String cond_atStartOfTurn() {
         return condFmt(4);
     }
-
     public final String cond_doX(Object desc3) {
         return condFmt(5, desc3);
     }
-
     public final String cond_doForEach() {
         return condFmt(6);
     }
-
     public final String cond_forTurns(Object desc3) {
         return condFmt(7, desc3);
     }
-
     public final String cond_ifTargetDidX(Object target, Object desc3, Object desc4) {
         return condFmt(11, target, desc3, desc4);
     }
-
     public final String cond_ifTargetHas(Object target, Object ordinal, Object desc) {
         return condFmt(9, target, ordinal, desc);
     }
-
     public final String cond_ifTargetIs(Object target, Object desc3) {
         return cond_ifX(cond_objIs(target, desc3));
     }
-
     public final String cond_ifTargetTook(Object target, Object desc) {
         return condFmt(10, target, desc);
     }
-
     public final String cond_ifX(Object desc3) {
         return condFmt(12, desc3);
     }
-
     public final String cond_ifYouDidThisCombat(Object verb, Object obj) {
         return subjects_thisCombat(cond_ifTargetDidX(subjects_you, verb, obj));
     }
-
     public final String cond_ifYouDidThisTurn(Object verb, Object obj) {
         return subjects_thisTurn(cond_ifTargetDidX(subjects_you, verb, obj));
     }
-
     public final String cond_ifYourHighest(Object desc3) {
         return condFmt(8, desc3);
     }
-
     public final String cond_inOrderTo(Object desc3, Object desc4) {
         return condFmt(37, desc3, desc4);
     }
-
     public final String cond_inTurns(Object desc3) {
         return condFmt(15, desc3);
     }
-
     public final String cond_inXAtTurnEnd(Object desc3) {
         return condFmt(13, desc3);
     }
-
     public final String cond_inXAtTurnStart(Object desc3) {
         return condFmt(14, desc3);
     }
-
     public final String cond_levelItem(Object level, Object desc3) {
         return condFmt(16, level, desc3);
     }
-
     public final String cond_nextTurn() {
         return condFmt(17);
     }
-
     public final String cond_no(Object desc3) {
         return condFmt(18, desc3);
     }
-
     public final String cond_not(Object desc3) {
         return condFmt(19, desc3);
     }
-
     public final String cond_numIf(Object desc3, Object desc4) {
         return condFmt(28, desc3, desc4);
     }
-
     public final String cond_objIs(Object desc3, Object desc4) {
         return condFmt(29, desc3, desc4);
     }
-
     public final String cond_onGeneric(Object desc3) {
         return condFmt(20, desc3);
     }
-
     public final String cond_or(Object desc3, Object desc4) {
         return condFmt(30, desc3, desc4);
     }
-
     public final String cond_otherwise(Object desc3) {
         return condFmt(21, desc3);
     }
-
     public final String cond_passive() {
         return condFmt(40);
     }
-
     public final String cond_per(Object subject, Object per) {
         return condFmt(31, subject, per);
     }
-
     public final String cond_perDistinct(Object desc3, Object desc4) {
         return condFmt(34, desc3, desc4);
     }
-
     public final String cond_perIn(Object desc3, Object desc4, Object desc5) {
         return condFmt(33, desc3, desc4, desc5);
     }
-
     public final String cond_perThisCombat(Object desc3, Object desc4, Object desc5) {
         return subjects_thisCombat(cond_perXY(desc3, desc4, desc5));
     }
-
     public final String cond_perThisTurn(Object desc3, Object desc4, Object desc5) {
         return subjects_thisTurn(cond_perXY(desc3, desc4, desc5));
     }
-
     public final String cond_perXY(Object desc3, Object desc4, Object desc5) {
         return condFmt(32, desc3, desc4, desc5);
     }
-
     public final String cond_timesPerCombat(Object desc3) {
         return condFmt(35, desc3);
     }
-
     public final String cond_timesPerTurn(Object desc3) {
         return condFmt(36, desc3);
     }
-
     public final String cond_whenAObjectIs(Object desc3, Object desc4) {
         return condFmt(25, desc3, desc4);
     }
-
     public final String cond_whenMulti(Object desc3, Object desc4) {
         return condFmt(22, desc3, desc4);
     }
-
     public final String cond_whenObjectIs(Object subject, Object ord, Object desc) {
         return condFmt(24, subject, ord, desc);
     }
-
     public final String cond_whenSingle(Object desc3) {
         return condFmt(23, desc3);
     }
-
     public final String cond_wheneverYou(Object desc1) {
         return cond_whenMulti(subjects_you, desc1);
     }
-
     public final String cond_xActivated(Object desc1) {
         return condFmt(26, desc1);
     }
-
     public final String cond_xAndY(Object desc1, Object desc2) {
         return condFmt(27, desc1, desc2);
     }
-
     public final String cond_xThenY(Object desc3, Object desc4) {
         return condFmt(38, desc3, desc4);
     }
-
     public final String cond_xConditional(Object desc3, Object desc4) {
         return condFmt(39, desc3, desc4);
-    }
-
-    public final String csel_cardsCount(int value) {
-        return EUIUtils.format(charselect.TEXT[16], value);
-    }
-
-    public final String csel_hindranceValue(int value) {
-        return EUIUtils.format(csel_hindranceValue, value);
     }
 
     public final String csel_obtainBronzeAtAscension(int ascension) {
         return EUIUtils.format(charselect.TEXT[7], ascension);
     }
 
-    public final String csel_totalValue(int value, int max) {
-        return EUIUtils.format(charselect.TEXT[17], value, max);
-    }
-
     public final String grid_cardsInPile(Object item, int amount) {
         return EUIUtils.format(grid_cardsInPile, item, amount);
     }
-
     public final String grid_chooseCards(int amount) {
         return EUIUtils.format(grid_chooseCards, amount);
+    }
+
+    public final String loadout_cardsCount(int value) {
+        return EUIUtils.format(loadout_cardsCount, value);
+    }
+    public final String loadout_hindranceValue(int value) {
+        return EUIUtils.format(loadout_hindranceValue, value);
+    }
+    public final String loadout_totalValue(int value, int max) {
+        return EUIUtils.format(loadout_totalValue, value, max);
     }
 
     public final String rewards_goldBonus(int amount) {
         return EUIUtils.format(rewards_goldbonusF1, amount);
     }
-
     public final String rewards_maxHPBonus(int amount) {
         return EUIUtils.format(rewards_maxhpbonusF1, amount);
     }
 
+    // Subject functions
     public final String subjects_allAllies() {
         return EUIUtils.format(subjects_allX, PCLCoreStrings.pluralForce(subjects_allyN));
     }
-
     public final String subjects_allEnemies() {
         return EUIUtils.format(subjects_allX, PCLCoreStrings.pluralForce(subjects_enemyN));
     }
-
-    // Subject functions
     public final String subjects_allX(Object amount) {
         return EUIUtils.format(subjects_allX, amount);
     }
-
     public final String subjects_allyWithX(Object obj) {
         return subjects_withX(subjects_ally, obj);
     }
-
     public final String subjects_anyAlly() {
         return EUIUtils.format(subjects_anyX, subjects_ally);
     }
-
     public final String subjects_anyEnemy() {
         return EUIUtils.format(subjects_anyX, subjects_enemy);
     }
-
     public final String subjects_anyPile() {
         return EUIUtils.format(subjects_anyX, cpile_pile);
     }
-
     public final String subjects_anyX(Object amount) {
         return EUIUtils.format(subjects_anyX, amount);
     }
-
     public final String subjects_bottomOf(Object amount) {
         return EUIUtils.format(subjects_bottomOfX, amount);
     }
-
     public final String subjects_characterWithX(Object obj) {
         return subjects_withX(subjects_character, obj);
     }
-
     public final String subjects_copiesOf(Object obj) {
         return EUIUtils.format(subjects_copiesOfX, obj);
     }
-
     public final String subjects_count(Object amount) {
         return EUIUtils.format(subjects_xCount, amount);
     }
-
     public final String subjects_enemyWithX(Object obj) {
         return subjects_withX(subjects_enemy, obj);
     }
-
     public final String subjects_from(Object place) {
         return EUIUtils.format(subjects_fromX, place);
     }
-
     public final String subjects_in(Object place) {
         return EUIUtils.format(subjects_fromX, place);
     }
-
     public final String subjects_max(Object amount) {
         return EUIUtils.format(subjects_maxX, amount);
     }
-
     public final String subjects_min(Object amount) {
         return EUIUtils.format(subjects_minX, amount);
     }
-
     public final String subjects_ofX(Object amount) {
         return EUIUtils.format(subjects_ofX, amount);
     }
-
     public final String subjects_onAnyCharacter(Object desc1) {
         return subjects_onTarget(desc1, subjects_anyone);
     }
-
     public final String subjects_onAnyEnemy(Object desc1) {
         return subjects_onTarget(desc1, subjects_anyEnemy());
     }
-
     public final String subjects_onTarget(Object desc1, Object desc2) {
         return EUIUtils.format(subjects_xOnY, desc1, desc2);
     }
-
     public final String subjects_onTheEnemy(Object desc1) {
         return subjects_onTarget(desc1, subjects_target);
     }
-
     public final String subjects_onYou(Object desc1) {
         return subjects_onTarget(desc1, subjects_you);
     }
-
     public final String subjects_permanentlyX(Object obj) {
         return EUIUtils.format(subjects_permanentlyX, obj);
     }
-
     public final String subjects_playingXWith(Object t1, Object t2) {
         return EUIUtils.format(subjects_playingXWithY, t1, t2);
     }
-
     public final String subjects_randomX(Object amount) {
         return EUIUtils.format(subjects_randomX, amount);
     }
-
     public final String subjects_randomly(Object amount) {
         return EUIUtils.format(subjects_randomlyX, amount);
     }
-
     public final String subjects_theirX(Object amount) {
         return EUIUtils.format(subjects_theirX, amount);
     }
-
     public final String subjects_them(Object amount) {
         return EUIUtils.format(subjects_themX, amount);
     }
-
     public final String subjects_they(Object amount) {
         return EUIUtils.format(subjects_theyX, amount);
     }
-
     public final String subjects_thisCombat(String base) {
         return EUIUtils.format(subjects_xThisCombat, base);
     }
-
     public final String subjects_thisTurn(String base) {
         return EUIUtils.format(subjects_xThisTurn, base);
     }
-
     public final String subjects_times(Object amount) {
         return EUIUtils.format(subjects_xTimes, amount);
     }
-
     public final String subjects_topOf(Object amount) {
         return EUIUtils.format(subjects_topOfX, amount);
     }
-
     public final String subjects_unblocked(Object amount) {
         return EUIUtils.format(subjects_unblockedX, amount);
     }
-
     public final String subjects_withX(Object obj, Object t) {
         return EUIUtils.format(subjects_xWithY, obj, t);
     }
-
     public final String subjects_xCost(Object amount) {
         return EUIUtils.format(subjects_xCost, amount);
     }
-
     public final String subjects_xOfY(Object obj, Object t) {
         return EUIUtils.format(subjects_xOfY, obj, t);
     }
-
     public final String subjects_your(Object amount) {
         return EUIUtils.format(subjects_yourX, amount);
     }
-
     public final String subjects_yourFirst(Object amount) {
         return EUIUtils.format(subjects_yourFirstX, amount);
     }

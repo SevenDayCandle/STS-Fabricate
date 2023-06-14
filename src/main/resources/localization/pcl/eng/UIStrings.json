@@ -179,7 +179,9 @@
 												"Create a node with an effect that applies this power.",
 												"Has no effect under the current #yPrimary.",
 												"This skill is corrupted.",
-												"Revert the last change made to this item. Note that this only keeps track of one change."
+												"Revert the last change made to this item.",
+												"Opens the folder containing your custom items in your system's file explorer.",
+												"Drag and drop nodes from this pane onto the white circle to add effects to this item. Hovering over the nodes will show their effects."
 								]
 				},
 				"pcl:CardPile": {
@@ -221,31 +223,15 @@
 				"pcl:CharacterSelect": {
 								"TEXT": [
 												"Current Loadout: ",
-												"Invalid Loadout",
-												"Loadout value is over limit",
-												"Loadout contains banned or locked cards",
-												"Loadout has less than 10 cards",
-												"Current loadout has not been unlocked. Please select an unlocked loadout.",
-												"Loadout Editor",
-												"#pLeft-Click to open the editor. | #pRight-Click to cycle between presets.",
-												"Pool Editor",
+												"Edit Loadout",
+												"Customize your starting deck, relics, and attributes.",
+												"Edit Pool",
 												"Choose which cards will appear in your runs.",
 												"Reset Tutorials",
 												"Click this to have the interactive tutorial replay at the start of your run.",
-												"Deck",
-												"Relics",
-												"Attributes",
-												"Hindrance: {0}",
-												"Affinity: {0}",
-												"Cards: {0}",
-												"Value: {0}/{1}",
-												"Your Hindrance level is equal to the percentage of negative-valued cards in your deck (as a decimal) times #b-{0}.",
-												"Character Tutorial",
-												"You have unsaved changes to your loadout that will be lost upon leaving. Are you sure you want to leave this menu?",
-												"Reset",
-												"Copy Current To Slot",
-												"Import From Slot",
-												"Export",
+												"Are you sure you want to reset this character's tutorials?",
+												"Character Reference",
+												"View an archive of this character's mechanics",
 												"Ascension Glyphs:"
 								]
 				},
@@ -292,7 +278,7 @@
 												"no {0}",
 												"not {0}",
 												"on {0}",
-												"else: {0}",
+												"otherwise, {0}",
 												"when {0} {1}",
 												"when {0}",
 												"when {0} ${1}@?0:are@:is$ {2}",
@@ -337,6 +323,44 @@
 												"Toggle Formula Display",
 												"Open Augments Screen"
 								]
+				},
+				"pcl:Loadout": {
+					"TEXT": [
+						"Deck",
+						"Relics",
+						"Attributes",
+						"Add Copies",
+						"Decrease Copies",
+						"Remove Item",
+						"Change Item",
+						"Your starting Max. HP",
+						"Your starting #yGold",
+						"The number of additional slots for #yPotions you start runs with",
+						"The number of additional #yOrb #ySlots you start runs with",
+						"Card Draw",
+						"The number of cards you draw each turn",
+						"Energy",
+						"The base amount of [E] you are given each turn",
+						"Hindrance: {0}",
+						"Your Hindrance level is equal to the percentage of negative-valued cards in your deck (as a decimal) times #b-{0}.",
+						"Cards: {0}",
+						"Value: {0}/{1}",
+						"Invalid Loadout",
+						"Loadout value is over limit",
+						"Loadout contains banned or locked cards",
+						"Loadout has less than 10 cards",
+						"Current loadout has not been unlocked. Please select an unlocked loadout.",
+						"You have unsaved changes to your loadout. Are you sure you want to exit without saving?",
+						"Reset",
+						"Copy Current To Slot",
+						"Import From Slot",
+						"Export",
+						"Each row shows the number of copies of each card that your starting deck will contain. The first two row are reserved for basic cards, while the other rows can contain #yCommon cards or #yCurses.",
+						"This leftmost number is the value this item. #yCommon cards are worth more, while #yCurse cards are worth less.",
+						"You can select additional relics to start your run with, which also have their own values.",
+						"You can adjust various other starting parameters, such as Max. HP and Gold. Click on the center button to see all available options, along with the excepted value of each option.",
+						"The total value amongst all items cannot exceed {0}. In addition, your deck must have at least {1} cards."
+					]
 				},
 				"pcl:Menu": {
 								"TEXT": [
@@ -427,15 +451,18 @@
 												"Select All",
 												"Show All",
 												"Selected Cards: {0}/{1} | {#{2}:Required Cards: {3}}",
-												"#oLeft-Click a group to use it as your loadout. | #oRight-Click a group to add/remove its cards from the card pool.",
+												"#oLeft-Click a group to use its cards in your loadout.",
+												"#oRight-Click a group to add or remove its cards from the pool.",
 												"#oLeft-Click a card to add/remove it from the pool. Removed cards are faded out.",
 												"Character Cards",
 												"Add All",
+												"Add all available cards into the card pool",
 												"Remove All",
+												"Remove all cards outside of the #yCore #ySet from the card pool",
 												"Select Random",
 												"Show card pool",
-												"Save Changes",
-												"Cancel"
+												"The #yCore #ySet cannot be selected as a loadout, and its cards cannot be removed from the card pool.",
+												"This shows the number of cards currently in the pool out of all of the cards currently available. You must have at least {0} cards in the pool to save your changes."
 								]
 				},
 				"pcl:SingleCardPopupButtons": {
@@ -521,14 +548,20 @@
 												"{#o:Click this icon to learn more.}",
 												"#yTags determine what happens when that card is played or is moved between piles. A card's #yTags are shown on the top-right corner of a card.",
 												"#yAffinities are card properties that allow it to interact with checks and systems on custom characters. A card's #yAffinities are shown above its name. [A-A] counts as #b1 of every #yAffinity. [A-W] counts as no #yAffinity. In tooltips, [A-W] is used as a shorthand for #yAffinities in general.",
-												"#ySummon is a card type denoted by a green hexagon. All #ySummons have a HP value shown to the left of its type symbol. | To play a #ySummon card, drag it onto a #ySummon #ySlot (shown by the flashing ovals that appear upon clicking on the card). This is referred to as #ySummoning a card, and doing so moves the card into that #ySlot.",
-												"#ySummoned cards will be played at the start of your turn (unless specified otherwise). This is referred to as a #yTrigger. | If you would receive unblocked damage, your right-most #ySummon intercepts #b50% of that damage. If a #ySummon runs out of HP, it is #yPurged.",
+												"#ySummon is a card type denoted by a green hexagon †Summon]. These cards have an HP value denoted by the heart symbol to the left of the card type, and a #yTiming property shown to the right of the card type.",
+												"A #ySummon card is played by dragging it onto a #ySummon #ySlot. Doing so creates an ally that stores the card you played, and who is given HP based on that card's HP value.",
+												"#ySummons with #yTurn #yStart #yTiming †Turn Start Timing] make their move at the start of your turn, while those with #yTurn #yEnd #yTiming †Turn End Timing] make their move at the end of your turn. This is referred to as a #yTrigger. #ySummons will not #yTrigger on the turn they are set onto the field.",
+												"Hover over a #ySummon to see what creature it will target. #oRight-Click on a #ySummon to select a new target for it.",
 												"#ySummoning a card onto a #ySummon #ySlot that already has a #ySummon will #yWithdraw the previous #ySummon, #yTriggering it #b2 times and moving it to your discard pile.",
-												"Hovering over a #ySummon will show which target it intends to be played against. #oRight-Click on a #ySummon will bring up another arrow that will let you select a new target for it.",
-												"The #yPool #yEditor allows you to choose your starting #yLoadout and filter out cards from your run. Cards not specific to #yLoadouts are referred to as #yCore #ySet cards, and these cannot be filtered out.",
-												"The #yLoadout #yEditor allows you to further customize your starting #yLoadout. You may customize your starting deck using any card from that #yLoadout and any #yCore #ySet card. You can also choose additional relics and customize attributes like #yHP and #yGold.",
+												"#ySummons can be targeted with Attacks and Skills like other monsters can.",
+												"If you would receive unblocked damage, your right-most #ySummon intercepts #b50% of that damage. If a #ySummon runs out of HP, it is #yPurged. You can view the expected damage your #ySummon will take by enabling the #yShow #yEstimated #yDamage option in #yFabricate.",
 												"Some cards can be slotted with #yAugments to alter their effects. #yAugments can be obtained from events and at the end of monster fights. | The available slots for #yAugments on a card are shown on the left-hand border of the card, underneath its energy cost.",
-												"To view your #yAugments, click on the #yAugment icon on the top bar. You may then click on individual #yAugments to apply them to a card in your deck. || You may also slot #yAugments onto a card by clicking on its #yAugment icons in its pop-up view mode in your master deck. Here, you can either click on an empty #yAugment slot to put an eligible #yAugment in that slot, or click on a filled #yAugment slot to retrieve that #yAugment. || You may insert and remove #yAugment as many times as you wish at any time, but changes will not be applied to cards in the current battle."
+												"To view your #yAugments, click on the #yAugment icon on the top bar. You may then click on individual #yAugments to apply them to a card in your deck. || You may also slot #yAugments onto a card by clicking on its #yAugment icons in its pop-up view mode in your master deck. Here, you can either click on an empty #yAugment slot to put an eligible #yAugment in that slot, or click on a filled #yAugment slot to retrieve that #yAugment. || You may insert and remove #yAugment as many times as you wish at any time, but changes will not be applied to cards in the current battle.",
+												"To replay this step, end your turn.",
+												"Nice! End your turn when you are ready for the next step of this tutorial.",
+												"You have completed this tutorial! If you ever need to see it again, click on the #yReset #yTutorial button on this character's character select page. End your turn to leave this tutorial.",
+												"Step Complete!",
+												"Tutorial Complete!"
 								]
 				}
 }

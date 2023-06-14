@@ -12,6 +12,7 @@ import extendedui.ui.controls.EUITextBox;
 import extendedui.ui.controls.EUIToggle;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITooltip;
+import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.effects.screen.PCLCustomImageEffect;
 import pinacolada.relics.PCLCustomRelicSlot;
@@ -85,6 +86,13 @@ public class PCLCustomRelicEditRelicScreen extends PCLCustomEditEntityScreen<PCL
         upgradeToggle.setActive(slot.maxUpgradeLevel != 0);
 
         invalidateItems();
+        EUITourTooltip.queueFirstView(PGR.config.tourEditorForm,
+                new EUITourTooltip(formEditor.header.hb, formEditor.header.tooltip.title, formEditor.header.tooltip.description).setCanDismiss(true),
+                formEditor.add.makeTour(true),
+                formEditor.remove.makeTour(true),
+                imageButton.makeTour(true),
+                undoButton.makeTour(true),
+                saveButton.makeTour(true));
     }
 
     protected void rebuildItem() {

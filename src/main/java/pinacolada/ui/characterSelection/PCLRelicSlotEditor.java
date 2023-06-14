@@ -13,6 +13,7 @@ import extendedui.ui.controls.EUITextBox;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.relics.PCLRelic;
+import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLRelicSlot;
 import pinacolada.resources.pcl.PCLCoreImages;
 
@@ -28,9 +29,9 @@ public class PCLRelicSlotEditor extends EUIBase {
     protected EUIRelic relicImage;
     protected PCLRelic relic;
     public PCLRelicSlot slot;
-    public PCLLoadoutEditor loadoutEditor;
+    public PCLLoadoutScreen loadoutEditor;
 
-    public PCLRelicSlotEditor(PCLLoadoutEditor loadoutEditor, float cX, float cY) {
+    public PCLRelicSlotEditor(PCLLoadoutScreen loadoutEditor, float cX, float cY) {
         this.loadoutEditor = loadoutEditor;
 
         relicValueText = new EUITextBox(EUIRM.images.panelRoundedHalfH.texture(), new EUIHitbox(cX, cY, AbstractCard.IMG_WIDTH * 0.2f, ITEM_HEIGHT))
@@ -45,8 +46,10 @@ public class PCLRelicSlotEditor extends EUIBase {
                 .setFont(EUIFontHelper.cardTitleFontNormal, 1f);
 
         clearButton = new EUIButton(EUIRM.images.x.texture(), new EUIHitbox(relicNameText.hb.x + relicNameText.hb.width, relicNameText.hb.y + 12, 48, 48))
+                .setTooltip(PGR.core.strings.loadout_remove,"")
                 .setClickDelay(0.02f);
         changeButton = new EUIButton(PCLCoreImages.Menu.edit.texture(), new EUIHitbox(clearButton.hb.x + clearButton.hb.width + 16, relicNameText.hb.y + 12, 48, 48))
+                .setTooltip(PGR.core.strings.loadout_change,"")
                 .setClickDelay(0.02f);
 
         setSlot(null);

@@ -37,8 +37,8 @@ import pinacolada.resources.pcl.PCLCoreResources;
 import pinacolada.rewards.pcl.AugmentReward;
 import pinacolada.skills.PSkill;
 import pinacolada.ui.cardView.PCLSingleCardPopup;
-import pinacolada.ui.characterSelection.PCLCharacterSelectOptionsRenderer;
-import pinacolada.ui.characterSelection.PCLLoadoutEditor;
+import pinacolada.ui.characterSelection.PCLCharacterSelectOverlay;
+import pinacolada.ui.characterSelection.PCLLoadoutScreen;
 import pinacolada.ui.characterSelection.PCLSeriesSelectScreen;
 import pinacolada.ui.combat.PCLCombatScreen;
 import pinacolada.ui.customRun.PCLCustomRunScreen;
@@ -63,6 +63,8 @@ import static pinacolada.utilities.GameUtilities.screenW;
 public class PGR {
     private static final HashMap<AbstractCard.CardColor, PCLResources<?, ?, ?, ?>> colorResourceMap = new HashMap<>();
     private static final HashMap<AbstractPlayer.PlayerClass, PCLResources<?, ?, ?, ?>> playerResourceMap = new HashMap<>();
+    private static final String IMAGES_FOLDER = "images/";
+    private static final String REWARDS_SUBFOLDER = "ui/rewards";
     public static final String BASE_PREFIX = "pcl";
     public static final PCLDungeon dungeon = PCLDungeon.register();
     public static PCLCoreResources core;
@@ -70,13 +72,13 @@ public class PGR {
     public static PCLAugmentPanelItem augmentPanel;
     public static PCLAffinityPoolModule affinityFilters;
     public static PCLAugmentScreen augmentScreen;
-    public static PCLCharacterSelectOptionsRenderer charSelectProvider;
+    public static PCLCharacterSelectOverlay charSelectProvider;
     public static PCLCombatScreen combatScreen;
     public static PCLCustomCardSelectorScreen customCards;
     public static PCLCustomRelicSelectorScreen customRelics;
     public static PCLCustomRunScreen customMode;
     public static PCLLibraryModule libraryFilters;
-    public static PCLLoadoutEditor loadoutEditor;
+    public static PCLLoadoutScreen loadoutEditor;
     public static PCLSeriesSelectScreen seriesSelection;
     public static PCLSingleCardPopup cardPopup;
     public static PCLDebugAugmentPanel debugAugments;
@@ -149,17 +151,17 @@ public class PGR {
         return getLanguagePack().getOrbString(orbID);
     }
 
-    public static PCLAbstractPlayerData getPlayerData(AbstractCard.CardColor playerClass) {
+    public static PCLAbstractPlayerData<?,?> getPlayerData(AbstractCard.CardColor playerClass) {
         return getResources(playerClass).data;
     }
 
-    public static PCLAbstractPlayerData getPlayerData(AbstractPlayer.PlayerClass playerClass) {
+    public static PCLAbstractPlayerData<?,?> getPlayerData(AbstractPlayer.PlayerClass playerClass) {
         return getResources(playerClass).data;
     }
 
     public static String getPng(String id, String subFolder) {
         String[] s = id.split(Pattern.quote(":"), 2);
-        return "images/" + s[0] + "/" + subFolder + "/" + s[1].replace(":", "_") + ".png";
+        return IMAGES_FOLDER + s[0] + "/" + subFolder + "/" + s[1].replace(":", "_") + ".png";
     }
 
     public static PotionStrings getPotionStrings(String relicID) {
@@ -195,7 +197,7 @@ public class PGR {
     }
 
     public static String getRewardImage(String id) {
-        return getPng(id, "ui/rewards");
+        return getPng(id, REWARDS_SUBFOLDER);
     }
 
     public static RunModStrings getRunModStrings(String stringID) {
@@ -226,11 +228,11 @@ public class PGR {
         PGR.combatScreen = new PCLCombatScreen();
         PGR.cardPopup = new PCLSingleCardPopup();
         PGR.seriesSelection = new PCLSeriesSelectScreen();
-        PGR.loadoutEditor = new PCLLoadoutEditor();
+        PGR.loadoutEditor = new PCLLoadoutScreen();
         PGR.customCards = new PCLCustomCardSelectorScreen();
         PGR.customRelics = new PCLCustomRelicSelectorScreen();
         PGR.customMode = new PCLCustomRunScreen();
-        PGR.charSelectProvider = new PCLCharacterSelectOptionsRenderer();
+        PGR.charSelectProvider = new PCLCharacterSelectOverlay();
         PGR.affinityFilters = new PCLAffinityPoolModule(EUI.cardFilters);
         PGR.libraryFilters = new PCLLibraryModule(EUI.customLibraryScreen);
         PGR.augmentScreen = new PCLAugmentScreen();

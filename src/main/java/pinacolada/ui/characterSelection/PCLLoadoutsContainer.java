@@ -8,6 +8,8 @@ import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.resources.PCLAbstractPlayerData;
+import pinacolada.resources.PCLCharacterConfig;
+import pinacolada.resources.PCLResources;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.skills.PSkill;
 
@@ -25,7 +27,7 @@ public class PCLLoadoutsContainer {
     public final HashMap<String, AbstractCard> allCards = new HashMap<>();
     public final HashMap<PCLCard, PCLLoadout> loadoutMap = new HashMap<>();
     public final HashSet<String> bannedCards = new HashSet<>();
-    private PCLAbstractPlayerData data;
+    private PCLAbstractPlayerData<?,?> data;
     public int currentCardLimit;
     public PCLCard currentSeriesCard;
 
@@ -58,7 +60,7 @@ public class PCLLoadoutsContainer {
         }
     }
 
-    public void commitChanges(PCLAbstractPlayerData data) {
+    public void commitChanges(PCLAbstractPlayerData<?,?> data) {
         data.selectedLoadout = find(currentSeriesCard);
         data.config.bannedCards.set(new HashSet<>(bannedCards));
         data.config.cardsCount.set(Math.max(MINIMUM_CARDS, currentCardLimit));
@@ -68,7 +70,7 @@ public class PCLLoadoutsContainer {
         EUIUtils.logInfoIfDebug(this, "Cards Size: " + data.config.cardsCount.get());
     }
 
-    public void createCards(PCLAbstractPlayerData data) {
+    public void createCards(PCLAbstractPlayerData<?,?> data) {
         this.data = data;
         allCards.clear();
         shownCards.clear();

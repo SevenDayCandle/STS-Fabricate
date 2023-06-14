@@ -16,6 +16,7 @@ import pinacolada.blights.common.GlyphBlight;
 import pinacolada.blights.common.GlyphBlight1;
 import pinacolada.blights.common.GlyphBlight2;
 import pinacolada.cards.base.PCLCustomCardSlot;
+import pinacolada.effects.PCLEffect;
 import pinacolada.monsters.PCLCreatureData;
 import pinacolada.monsters.PCLTutorialMonster;
 import pinacolada.resources.loadout.PCLLoadout;
@@ -32,7 +33,7 @@ import static pinacolada.resources.PCLMainConfig.JSON_FILTER;
 import static pinacolada.resources.loadout.PCLLoadoutData.TInfo;
 
 // Copied and modified from STS-AnimatorMod
-public abstract class PCLAbstractPlayerData {
+public abstract class PCLAbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, U extends PCLCharacterConfig> {
     public static final int ASCENSION_GLYPH1_LEVEL_STEP = 2;
     public static final int ASCENSION_GLYPH1_UNLOCK = 16;
     public static final int MAX_UNLOCK_LEVEL = 8;
@@ -44,8 +45,8 @@ public abstract class PCLAbstractPlayerData {
     public static final ArrayList<AbstractGlyphBlight> GLYPHS = new ArrayList<>();
     public final HashMap<String, PCLLoadout> loadouts = new HashMap<>();
     public final HashMap<String, PCLTrophies> trophies = new HashMap<>();
-    public final PCLCharacterConfig config;
-    public final PCLResources<?, ?, ?, ?> resources;
+    public final T resources;
+    public final U config;
     public final int baseHP;
     public final int baseGold;
     public final int baseDraw;
@@ -55,11 +56,11 @@ public abstract class PCLAbstractPlayerData {
     public final boolean useAugments;
     public PCLLoadout selectedLoadout;
 
-    public PCLAbstractPlayerData(PCLResources<?, ?, ?, ?> resources) {
+    public PCLAbstractPlayerData(T resources) {
         this(resources, DEFAULT_HP, DEFAULT_GOLD, DEFAULT_DRAW, DEFAULT_ENERGY, DEFAULT_ORBS, true, true);
     }
 
-    public PCLAbstractPlayerData(PCLResources<?, ?, ?, ?> resources, int hp, int gold, int draw, int energy, int orbs, boolean useSummons, boolean useAugments) {
+    public PCLAbstractPlayerData(T resources, int hp, int gold, int draw, int energy, int orbs, boolean useSummons, boolean useAugments) {
         this.resources = resources;
         this.config = getConfig();
         this.selectedLoadout = getCoreLoadout();
@@ -80,6 +81,14 @@ public abstract class PCLAbstractPlayerData {
         GLYPHS.add(new GlyphBlight());
         GLYPHS.add(new GlyphBlight1());
         GLYPHS.add(new GlyphBlight2());
+    }
+
+    public void addTutorial(PCLCreatureData data) {
+        PCLTutorialMonster.register(config.seenTutorial, data, p -> p.chosenClass == this.resources.playerClass);
+    }
+
+    public void addTutorial(PCLCreatureData data, FuncT1<Boolean, AbstractPlayer> canShow) {
+        PCLTutorialMonster.register(config.seenTutorial, data, canShow);
     }
 
     protected void addUnlockBundle(PCLLoadout loadout) {
@@ -145,11 +154,9 @@ public abstract class PCLAbstractPlayerData {
         }
     }
 
-    public abstract List<PCLLoadout> getAvailableLoadouts();
-
-    public abstract PCLCharacterConfig getConfig();
-
-    public abstract PCLLoadout getCoreLoadout();
+    public PCLEffect getCharSelectScreenAnimation() {
+        return null;
+    }
 
     public List<PCLLoadout> getEveryLoadout() {
         return new ArrayList<>(loadouts.values());
@@ -162,8 +169,6 @@ public abstract class PCLAbstractPlayerData {
     public String getLoadoutPath(String id, int slot) {
         return config.getConfigPath() + "_" + id.replace(':', '-') + "_" + slot + ".json";
     }
-
-    public abstract List<String> getStartingRelics();
 
     public PCLTrophies getTrophies(String id) {
         return trophies.get(id);
@@ -289,11 +294,11 @@ public abstract class PCLAbstractPlayerData {
     public void updateRelicsForDungeon() {
     }
 
-    public void addTutorial(PCLCreatureData data) {
-        PCLTutorialMonster.register(config.seenTutorial, data, p -> p.chosenClass == this.resources.playerClass);
-    }
+    public abstract List<PCLLoadout> getAvailableLoadouts();
 
-    public void addTutorial(PCLCreatureData data, FuncT1<Boolean, AbstractPlayer> canShow) {
-        PCLTutorialMonster.register(config.seenTutorial, data, canShow);
-    }
+    public abstract U getConfig();
+
+    public abstract PCLLoadout getCoreLoadout();
+
+    public abstract List<String> getStartingRelics();
 }

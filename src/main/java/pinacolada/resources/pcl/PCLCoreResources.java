@@ -9,10 +9,11 @@ import pinacolada.cards.base.PCLDynamicCard;
 import pinacolada.cards.base.TemplateCardData;
 import pinacolada.dungeon.PCLDungeon;
 import pinacolada.resources.PCLAbstractPlayerData;
+import pinacolada.resources.PCLCharacterConfig;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 
-public class PCLCoreResources extends PCLResources<PCLAbstractPlayerData, PCLCoreImages, PCLCoreTooltips, PCLCoreStrings> {
+public class PCLCoreResources extends PCLResources<PCLAbstractPlayerData<?,?>, PCLCoreImages, PCLCoreTooltips, PCLCoreStrings> {
     public static final String ID = PGR.BASE_PREFIX;
 
     public PCLCoreResources() {
@@ -30,7 +31,7 @@ public class PCLCoreResources extends PCLResources<PCLAbstractPlayerData, PCLCor
     }
 
     @Override
-    public PCLAbstractPlayerData getData() {
+    public PCLAbstractPlayerData<?,?> getData() {
         return null;
     }
 

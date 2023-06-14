@@ -20,6 +20,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+// TODO move off of enum
+// TODO deprecate powersymbol or name
 public enum PCLAffinity implements TooltipProvider, Comparable<PCLAffinity>, CountingPanelItem {
     Red(0, "Red", "R"),
     Green(1, "Green", "G"),

@@ -25,7 +25,7 @@ public class PermanentUpgradeEffect extends PCLEffectWithCallback<AbstractCard> 
     @Override
     protected void firstUpdate() {
         final ArrayList<AbstractCard> upgradableCards = new ArrayList<>();
-        for (AbstractCard c : player.masterDeck.group) {
+        for (AbstractCard c : AbstractDungeon.player.masterDeck.group) {
             if (c.canUpgrade() && filter.invoke(c)) {
                 upgradableCards.add(c);
             }
@@ -38,7 +38,7 @@ public class PermanentUpgradeEffect extends PCLEffectWithCallback<AbstractCard> 
 
             card = selection.get(upgradableCards, 1, false);
             card.upgrade();
-            player.bottledCardUpgradeCheck(card);
+            AbstractDungeon.player.bottledCardUpgradeCheck(card);
 
             final float x = Settings.WIDTH * (0.4f + (0.1f * EUIUtils.count(AbstractDungeon.topLevelEffects, e -> e instanceof PermanentUpgradeEffect)));
             final float y = Settings.HEIGHT * 0.5f;

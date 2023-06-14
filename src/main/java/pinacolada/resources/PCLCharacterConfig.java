@@ -36,4 +36,8 @@ public class PCLCharacterConfig extends AbstractConfig {
         seenTutorial.addConfig(config);
         trophies.addConfig(config);
     }
+
+    public void resetTutorial() {
+        seenTutorial.set(false);
+    }
 }

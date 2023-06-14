@@ -1,16 +1,19 @@
 package pinacolada.patches.screens;
 
-import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
-import com.evacipated.cardcrawl.modthespire.lib.SpirePostfixPatch;
-import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
-import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.evacipated.cardcrawl.modthespire.lib.*;
+import com.evacipated.cardcrawl.modthespire.patcher.PatchingException;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterSelectScreen;
 import extendedui.EUI;
 import extendedui.ui.AbstractMenuScreen;
+import javassist.CannotCompileException;
+import javassist.CtBehavior;
 import pinacolada.resources.PGR;
 
 public class CharacterSelectScreenPatches {
+
+
     @SpirePatch(clz = CharacterSelectScreen.class, method = "initialize")
     public static class CharacterSelectScreen_Initialize {
         @SpirePostfixPatch
@@ -29,6 +32,23 @@ public class CharacterSelectScreenPatches {
         @SpirePrefixPatch
         public static SpireReturn<Void> prefix(CharacterSelectScreen __instance) {
             return (EUI.currentScreen != null && (CardCrawlGame.mainMenuScreen != null && CardCrawlGame.mainMenuScreen.screen == AbstractMenuScreen.EUI_MENU)) ? SpireReturn.Return() : SpireReturn.Continue();
+        }
+    }
+
+    @SpirePatch(clz = CharacterSelectScreen.class, method = "render")
+    public static class CharacterSelectScreen_Render {
+        @SpireInsertPatch(locator = Locator.class)
+        public static void insertPre(CharacterSelectScreen __instance, SpriteBatch sb) {
+            if (PGR.charSelectProvider.playEffect != null) {
+                PGR.charSelectProvider.playEffect.render(sb);
+            }
+        }
+
+        private static class Locator extends SpireInsertLocator {
+            public int[] Locate(CtBehavior ctMethodToPatch) throws CannotCompileException, PatchingException {
+                Matcher finalMatcher = new Matcher.FieldAccessMatcher(CharacterSelectScreen.class, "cancelButton");
+                return LineFinder.findAllInOrder(ctMethodToPatch, finalMatcher);
+            }
         }
     }
 }

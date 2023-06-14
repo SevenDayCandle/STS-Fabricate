@@ -29,7 +29,7 @@
 		"NAME": "Blinded"
 	},
 	"Blue Affinity":	{
-		"DESCRIPTION": "",
+		"DESCRIPTION": "A card attribute appearing above the card's title.",
 		"NAME": "Blue Affinity"
 	},
 	"Blur":	{
@@ -171,7 +171,7 @@
 		"NAME": "Grave"
 	},
 	"Green Affinity":	{
-		"DESCRIPTION": "",
+		"DESCRIPTION": "A card attribute appearing above the card's title.",
 		"NAME": "Green Affinity"
 	},
 	"HP":	{
@@ -302,7 +302,7 @@
 		"PROGRESSIVE": "obtaining"
 	},
 	"Orange Affinity":	{
-		"DESCRIPTION": "",
+		"DESCRIPTION": "A card attribute appearing above the card's title.",
 		"NAME": "Orange Affinity"
 	},
 	"Orb Slot":	{
@@ -340,7 +340,7 @@
 		"NAME": "Provoked"
 	},
 	"Purple Affinity":	{
-		"DESCRIPTION": "",
+		"DESCRIPTION": "A card attribute appearing above the card's title.",
 		"NAME": "Purple Affinity"
 	},
 	"Ranged Damage":	{
@@ -356,7 +356,7 @@
 		"NAME": "Recast"
 	},
 	"Red Affinity":	{
-		"DESCRIPTION": "",
+		"DESCRIPTION": "A card attribute appearing above the card's title.",
 		"NAME": "Red Affinity"
 	},
 	"Regeneration":	{
@@ -416,7 +416,7 @@
 		"NAME": "Silenced"
 	},
 	"Silver Affinity":	{
-		"DESCRIPTION": "",
+		"DESCRIPTION": "A card attribute appearing above the card's title.",
 		"NAME": "Silver Affinity"
 	},
 	"Slow":	{
@@ -538,7 +538,7 @@
 		"PROGRESSIVE": "withdrawing"
 	},
 	"Yellow Affinity":	{
-		"DESCRIPTION": "",
+		"DESCRIPTION": "A card attribute appearing above the card's title.",
 		"NAME": "Yellow Affinity"
 	},
 	"~Ethereal":	{

@@ -9,6 +9,7 @@ import extendedui.ui.TextureCache;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUIContextMenu;
 import extendedui.ui.hitboxes.EUIHitbox;
+import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.resources.PGR;
@@ -38,6 +39,14 @@ public class PCLCustomPowerEffectPage extends PCLCustomEffectPage {
                 .setLabel(EUIFontHelper.cardTitleFontSmall, 0.8f, PGR.core.strings.cedit_addToEffect)
                 .setTooltip(PGR.core.strings.cedit_addToEffect, PGR.core.strings.cetut_addToEffect)
                 .setOnClick(this::openDropdown);
+    }
+
+    @Override
+    public void onOpen() {
+        super.onOpen();
+        EUITourTooltip.queueFirstView(PGR.config.tourEditorPower,
+                quickAddButton.makeTour(true)
+        );
     }
 
     protected void openDropdown() {

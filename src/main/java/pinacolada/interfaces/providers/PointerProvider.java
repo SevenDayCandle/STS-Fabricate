@@ -160,7 +160,6 @@ public interface PointerProvider {
         return sb.toString();
     }
 
-    // TODO optimize with switch
     default String makePowerString(String baseString) {
         if (baseString == null) {
             return "";
@@ -168,37 +167,49 @@ public interface PointerProvider {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < baseString.length(); i++) {
             char c = baseString.charAt(i);
-            if (c == CONDITION_TOKEN && EUIRenderHelpers.isCharAt(baseString, i + 2, CONDITION_TOKEN)) {
-                PSkill<?> move = getEffectAt(baseString.charAt(i + 1));
-                if (move != null) {
-                    sb.append(makePowerString(move.getSubText()));
-                }
-                i += 2;
-            }
-            else if (c == BOUND_TOKEN && EUIRenderHelpers.isCharAt(baseString, i + 3, BOUND_TOKEN)) {
-                PSkill<?> move = getEffectAt(baseString.charAt(i + 2));
-                if (move != null) {
-                    String s = move.getAttributeString(baseString.charAt(i + 1));
-                    if (!s.isEmpty()) {
-                        sb.append("#b").append(s);
+            switch (c) {
+                case CONDITION_TOKEN:
+                    if (EUIRenderHelpers.isCharAt(baseString, i + 2, CONDITION_TOKEN)) {
+                        PSkill<?> move = getEffectAt(baseString.charAt(i + 1));
+                        if (move != null) {
+                            sb.append(makePowerString(move.getSubText()));
+                        }
+                        i += 2;
                     }
-                }
-                i += 3;
-            }
-            else if (c == '$') {
-                StringBuilder sub = new StringBuilder();
-                while (i + 1 < baseString.length()) {
-                    i += 1;
-                    c = baseString.charAt(i);
-                    sub.append(c);
-                    if (c == '$') {
-                        break;
+                    break;
+                case BOUND_TOKEN:
+                    if (EUIRenderHelpers.isCharAt(baseString, i + 3, BOUND_TOKEN)) {
+                        PSkill<?> move = getEffectAt(baseString.charAt(i + 2));
+                        if (move != null) {
+                            String s = move.getAttributeString(baseString.charAt(i + 1));
+                            if (!s.isEmpty()) {
+                                sb.append("#b").append(s);
+                            }
+                        }
+                        i += 3;
                     }
-                }
-                sb.append(EUISmartText.parseLogicString(sub.toString()));
-            }
-            else if (!PGR.config.vanillaPowerRender.get() || !(c == '{' || c == '}' || c == '[' || c == ']')) {
-                sb.append(c);
+                    break;
+                case '$':
+                    StringBuilder sub = new StringBuilder();
+                    while (i + 1 < baseString.length()) {
+                        i += 1;
+                        c = baseString.charAt(i);
+                        sub.append(c);
+                        if (c == '$') {
+                            break;
+                        }
+                    }
+                    sb.append(EUISmartText.parseLogicString(sub.toString()));
+                    break;
+                case '{':
+                case '}':
+                case '[':
+                case ']':
+                    if (PGR.config.vanillaPowerRender.get()) {
+                        continue;
+                    }
+                default:
+                    sb.append(c);
             }
         }
 

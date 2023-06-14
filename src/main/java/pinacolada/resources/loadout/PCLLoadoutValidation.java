@@ -34,15 +34,15 @@ public class PCLLoadoutValidation {
 
         if (!totalValue.v2)
         {
-            sj.add(PGR.core.strings.csel_invalidLoadoutDescLimit);
+            sj.add(PGR.core.strings.loadout_invalidLoadoutDescLimit);
         }
         if (!cardsCount.v2)
         {
-            sj.add(PGR.core.strings.csel_invalidLoadoutDescNotEnough);
+            sj.add(PGR.core.strings.loadout_invalidLoadoutDescNotEnough);
         }
         if (!allCardsSeen)
         {
-            sj.add(PGR.core.strings.csel_invalidLoadoutDescSeen);
+            sj.add(PGR.core.strings.loadout_invalidLoadoutDescSeen);
         }
 
         return sj.toString();

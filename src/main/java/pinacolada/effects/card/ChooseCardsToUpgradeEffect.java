@@ -2,6 +2,7 @@ package pinacolada.effects.card;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.vfx.UpgradeShineEffect;
 import extendedui.interfaces.delegates.FuncT1;
 import pinacolada.effects.PCLEffects;
@@ -24,7 +25,7 @@ public class ChooseCardsToUpgradeEffect extends GenericChooseCardsEffect {
 
     @Override
     protected ArrayList<AbstractCard> getGroup() {
-        return player.masterDeck.getUpgradableCards().group;
+        return AbstractDungeon.player.masterDeck.getUpgradableCards().group;
     }
 
     public void onCardSelected(AbstractCard c) {

@@ -5,49 +5,50 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.FontHelper;
-import com.megacrit.cardcrawl.helpers.Hitbox;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
 import extendedui.EUIUtils;
-import extendedui.ui.EUIBase;
+import extendedui.ui.EUIHoverable;
 import extendedui.ui.controls.EUIButton;
 import extendedui.ui.controls.EUIDropdown;
 import extendedui.ui.controls.EUIImage;
 import extendedui.ui.controls.EUILabel;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
+import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.loadout.PCLLoadoutData;
 
 // Copied and modified from STS-AnimatorMod
-public class PCLBaseStatEditor extends EUIBase {
+public class PCLBaseStatEditor extends EUIHoverable {
     public static final float ICON_SIZE = 64f * Settings.scale;
     protected boolean interactable;
-    protected Hitbox hb;
     protected EUIImage image;
     protected EUILabel label;
     protected EUIButton decreaseButton;
     protected EUIButton increaseButton;
     protected EUIDropdown<Integer> valueDropdown;
-    protected PCLLoadoutEditor editor;
+    protected PCLLoadoutScreen editor;
     public StatType type;
     public PCLLoadout loadout;
     public PCLLoadoutData data;
 
-    public PCLBaseStatEditor(StatType type, float cX, float cY, PCLLoadoutEditor editor) {
+    public PCLBaseStatEditor(StatType type, float cX, float cY, PCLLoadoutScreen editor) {
+        super(new EUIHitbox(0, 0, ICON_SIZE * 2.5f, ICON_SIZE).setCenter(cX, cY));
         this.type = type;
-        this.hb = new EUIHitbox(0, 0, ICON_SIZE * 2.5f, ICON_SIZE).setCenter(cX, cY);
         this.editor = editor;
+        this.tooltip = type.getTip();
 
         final float w = hb.width;
         final float h = hb.height;
 
-        image = new EUIImage(type.icon, new RelativeHitbox(hb, ICON_SIZE, ICON_SIZE, ICON_SIZE * -0.13f, h * 0.5f));
+        image = new EUIImage(type.icon, new RelativeHitbox(hb, ICON_SIZE, ICON_SIZE, ICON_SIZE * -0.13f, h * 0.5f)).setTooltip(this.tooltip);
         label = new EUILabel(FontHelper.tipHeaderFont, new RelativeHitbox(hb, w - ICON_SIZE, h, w * 0.5f + ICON_SIZE * -0.13f, h * 0.5f))
                 .setAlignment(0.5f, 0f, false)
-                .setColor(type.labelColor);
+                .setColor(type.labelColor)
+                .setTooltip(this.tooltip);
 
         decreaseButton = new EUIButton(ImageMaster.CF_LEFT_ARROW, new RelativeHitbox(hb, ICON_SIZE * 0.9f, ICON_SIZE * 0.9f, -(ICON_SIZE * 0.5f), h * -0.15f))
                 .setOnClick(this::decrease);
@@ -204,15 +205,57 @@ public class PCLBaseStatEditor extends EUIBase {
                     return CharacterOption.TEXT[5] + getAmount(loadout, data);
                 case HP:
                     return CharacterOption.TEXT[4] + getAmount(loadout, data);
-                case CardDraw:
+                case OrbSlot:
                     return PGR.core.strings.rewards_orbSlot + ": " + getAmount(loadout, data);
                 case PotionSlot:
                     return PGR.core.strings.rewards_potionSlot + ": " + getAmount(loadout, data);
                 case Energy:
-                    return PGR.core.strings.rewards_commonUpgrade + ": " + getAmount(loadout, data);
+                    return PGR.core.strings.loadout_energy + ": " + getAmount(loadout, data);
+                case CardDraw:
+                    return PGR.core.strings.loadout_cardDraw + ": " + getAmount(loadout, data);
                 default:
                     return "";
             }
+        }
+
+        public String getDescription() {
+            switch (this) {
+                case Gold:
+                    return PGR.core.strings.loadout_gold;
+                case HP:
+                    return PGR.core.strings.loadout_maxHP;
+                case CardDraw:
+                    return PGR.core.strings.loadout_cardDrawDesc;
+                case PotionSlot:
+                    return PGR.core.strings.loadout_potionSlot;
+                case Energy:
+                    return PGR.core.strings.loadout_energyDesc;
+                case OrbSlot:
+                    return PGR.core.strings.loadout_orbSlot;
+            }
+            return "";
+        }
+
+        public String getTitle() {
+            switch (this) {
+                case Gold:
+                    return PGR.core.tooltips.gold.title;
+                case HP:
+                    return PGR.core.tooltips.maxHP.title;
+                case CardDraw:
+                    return PGR.core.strings.loadout_cardDraw;
+                case PotionSlot:
+                    return PGR.core.strings.rewards_potionSlot;
+                case Energy:
+                    return PGR.core.strings.loadout_energy;
+                case OrbSlot:
+                    return PGR.core.strings.rewards_orbSlot;
+            }
+            return "";
+        }
+
+        public EUITooltip getTip() {
+            return new EUITooltip(getTitle(), getDescription());
         }
 
         public void setAmount(PCLLoadoutData data, int amount) {

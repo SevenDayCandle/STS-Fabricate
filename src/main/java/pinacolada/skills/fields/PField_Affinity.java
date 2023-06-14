@@ -3,7 +3,6 @@ package pinacolada.skills.fields;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.resources.PGR;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 import pinacolada.utilities.GameUtilities;
 
@@ -47,7 +46,7 @@ public class PField_Affinity extends PField_Random {
     }
 
     public String getAffinityChoiceString() {
-        return affinities.isEmpty() ? TEXT.subjects_anyX(PGR.core.tooltips.affinityGeneral) : getAffinityLevelOrString(getColor(), affinities);
+        return affinities.isEmpty() ? TEXT.subjects_anyX(getGeneralAffinityString()) : getAffinityLevelOrString(getColor(), affinities);
     }
 
     public String getAffinityLevelAndOrString() {

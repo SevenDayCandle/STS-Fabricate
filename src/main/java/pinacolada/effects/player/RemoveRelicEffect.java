@@ -1,5 +1,6 @@
 package pinacolada.effects.player;
 
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import pinacolada.effects.PCLEffectWithCallback;
 
@@ -13,8 +14,8 @@ public class RemoveRelicEffect extends PCLEffectWithCallback<AbstractRelic> {
     @Override
     protected void firstUpdate() {
         relic.onUnequip();
-        player.relics.remove(relic);
-        player.reorganizeRelics();
+        AbstractDungeon.player.relics.remove(relic);
+        AbstractDungeon.player.reorganizeRelics();
 
         complete(relic);
     }

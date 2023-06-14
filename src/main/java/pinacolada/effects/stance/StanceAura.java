@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Interpolation;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import pinacolada.effects.PCLEffect;
 
@@ -21,8 +22,8 @@ public class StanceAura extends PCLEffect {
         this.img = ImageMaster.EXHAUST_L;
         this.scale = random(2.7f, 2.5f) * Settings.scale;
         this.color = color.cpy();
-        this.x = player.hb.cX + random(-player.hb.width / 16f, player.hb.width / 16f);
-        this.y = player.hb.cY + random(-player.hb.height / 16f, player.hb.height / 12f);
+        this.x = AbstractDungeon.player.hb.cX + random(-AbstractDungeon.player.hb.width / 16f, AbstractDungeon.player.hb.width / 16f);
+        this.y = AbstractDungeon.player.hb.cY + random(-AbstractDungeon.player.hb.height / 16f, AbstractDungeon.player.hb.height / 12f);
         this.x -= img.packedWidth * 0.5f;
         this.y -= img.packedHeight * 0.5f;
         this.renderBehind = true;

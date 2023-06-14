@@ -90,6 +90,7 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
                 .setPosition(addButton.hb.cX, addButton.hb.y + addButton.hb.height + labelHeight * 0.8f)
                 .setColor(Color.WHITE)
                 .setText(PGR.core.strings.cedit_openFolder)
+                .setTooltip(PGR.core.strings.cedit_openFolder, PGR.core.strings.cetut_openFolder)
                 .setOnClick(PCLCustomCardSelectorScreen::openFolder);
 
         loadExistingButton = EUIButton.createHexagonalButton(0, 0, buttonWidth, buttonHeight)
@@ -277,8 +278,7 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
             grid.forceUpdateCardPositions();
         }, currentColor, false, true);
 
-        // TODO readd config
-        EUITourTooltip.queueTutorial(
+        EUITourTooltip.queueFirstView(PGR.config.tourItemScreen,
                 addButton.makeTour(true),
                 openButton.makeTour(true),
                 loadExistingButton.makeTour(true),

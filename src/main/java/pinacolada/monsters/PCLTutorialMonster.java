@@ -1,10 +1,11 @@
 package pinacolada.monsters;
 
 import basemod.BaseMod;
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import extendedui.EUIRM;
+import extendedui.EUIUtils;
 import extendedui.configuration.EUIConfiguration;
 import extendedui.configuration.STSConfigItem;
 import extendedui.interfaces.delegates.FuncT0;
@@ -14,6 +15,9 @@ import extendedui.ui.tooltips.EUITourTooltip;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.PCLSFX;
 import pinacolada.effects.vfx.FadingParticleEffect;
+import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreImages;
+import pinacolada.resources.pcl.PCLCoreStrings;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -67,25 +71,36 @@ public abstract class PCLTutorialMonster extends PCLCreature implements TourProv
         if (current < steps.size()) {
             EUITourTooltip.clearTutorialQueue();
             waitingTip = steps.get(current).invoke();
-            waitingTip.setWaitOnProvider(this);
+            waitingTip.setWaitOnProvider(this)
+                    .setDescription(waitingTip.description + EUIUtils.DOUBLE_SPLIT_LINE + PCLCoreStrings.colorString("p", PGR.core.strings.tutorial_tutorialReplay));
             EUITourTooltip.queueTutorial(waitingTip);
         }
         else {
+            EUITourTooltip.clearTutorialQueue();
             die();
         }
     }
 
-    public PCLTutorialMonster addSteps(FuncT0<EUITourTooltip>... steps) {
+    @SafeVarargs
+    public final PCLTutorialMonster addSteps(FuncT0<EUITourTooltip>... steps) {
         this.steps.addAll(Arrays.asList(steps));
         return this;
     }
 
     public void onComplete() {
         PCLSFX.play(PCLSFX.TINGSHA);
-        PCLEffects.Queue.add(new FadingParticleEffect(EUIRM.images.plus.texture(), Settings.WIDTH * 0.75f, Settings.HEIGHT * 0.5f)
-                .setTargetPosition(Settings.WIDTH * 0.75f, Settings.HEIGHT * 0.6f)
-                .setDuration(1.5f, true)
+        PCLEffects.Queue.add(new FadingParticleEffect(PCLCoreImages.Menu.check.texture(), Settings.WIDTH * 0.75f, Settings.HEIGHT * 0.6f)
+                .setTargetPosition(Settings.WIDTH * 0.75f, Settings.HEIGHT * 0.68f)
+                .setDuration(1.8f, true)
         );
+        if (current < steps.size() - 1) {
+            EUITourTooltip.queueTutorial(new EUITourTooltip(this.hb,
+                    PGR.core.strings.tutorial_tutorialStepHeader, PGR.core.strings.tutorial_tutorialNextStep).setCanDismiss(true));
+        }
+        else {
+            EUITourTooltip.queueTutorial(new EUITourTooltip(this.hb,
+                    PGR.core.strings.tutorial_tutorialCompleteHeader, PGR.core.strings.tutorial_tutorialComplete).setCanDismiss(true));
+        }
     }
 
     public void talk(String message) {
@@ -97,6 +112,15 @@ public abstract class PCLTutorialMonster extends PCLCreature implements TourProv
         AbstractDungeon.player.hand.group = new ArrayList<>();
         AbstractDungeon.player.discardPile.group = new ArrayList<>();
         AbstractDungeon.player.limbo.group = new ArrayList<>();
+    }
+
+    public void addToHand(AbstractCard... cards) {
+        AbstractDungeon.player.hand.group.addAll(Arrays.asList(cards));
+    }
+
+    public void replaceHandWith(AbstractCard... cards) {
+        clearLists();
+        addToHand(cards);
     }
 
     public static class TutorialInfo {

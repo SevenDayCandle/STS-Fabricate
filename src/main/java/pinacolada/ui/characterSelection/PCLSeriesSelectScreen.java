@@ -9,6 +9,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterOption;
+import com.megacrit.cardcrawl.screens.select.GridCardSelectScreen;
 import extendedui.EUI;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
@@ -18,6 +19,7 @@ import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.AbstractMenuScreen;
 import extendedui.ui.controls.*;
 import extendedui.ui.hitboxes.EUIHitbox;
+import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
@@ -26,7 +28,6 @@ import pinacolada.effects.screen.ViewInGameCardPoolEffect;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.PCLLoadout;
-import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.resources.pcl.PCLCoreStrings;
 
 import static pinacolada.ui.characterSelection.PCLLoadoutsContainer.MINIMUM_CARDS;
@@ -49,14 +50,14 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     protected ActionT0 onClose;
     protected ViewInGameCardPoolEffect previewCardsEffect;
     protected CharacterOption characterOption;
-    protected PCLAbstractPlayerData data;
+    protected PCLAbstractPlayerData<?,?> data;
     protected int totalCardsCache = 0;
     public boolean isScreenDisabled;
 
     public PCLSeriesSelectScreen() {
         final Texture panelTexture = EUIRM.images.panel.texture();
         final FuncT1<Float, Float> getY = (delta) -> screenH(0.95f) - screenH(0.07f * delta);
-        final float buttonHeight = screenH(0.06f);
+        final float buttonHeight = screenH(0.05f);
         final float buttonWidth = screenW(0.18f);
         final float xPos = screenW(0.82f);
 
@@ -71,18 +72,20 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
                 .setSmartText(true)
                 .setColor(Settings.CREAM_COLOR);
 
-        loadoutEditor = new EUIButton(PCLCoreImages.Menu.swapCards.texture(), new EUIHitbox(0, 0, scale(64), scale(64)))
-                .setPosition(startingDeck.hb.x + scale(80), startingDeck.hb.y - scale(48)).setText("")
+        loadoutEditor = new EUIButton(EUIRM.images.rectangularButton.texture(),
+                new EUIHitbox(startingDeck.hb.x + scale(30), startingDeck.hb.y - scale(90), scale(150), scale(52)))
                 .setTooltip(PGR.core.strings.csel_deckEditor, PGR.core.strings.csel_deckEditorInfo)
+                .setLabel(EUIFontHelper.cardDescriptionFontNormal, 0.9f, PGR.core.strings.csel_deckEditor)
+                .setColor(new Color(0.3f, 0.5f, 0.8f, 1))
                 .setOnClick(this::openLoadoutEditor);
 
-        previewCardsInfo = new EUITextBox(panelTexture, new EUIHitbox(xPos, getY.invoke(2.5f), buttonWidth, buttonHeight * 3f))
-                .setLabel(PGR.core.strings.sui_instructions1)
+        previewCardsInfo = new EUITextBox(panelTexture, new EUIHitbox(xPos, getY.invoke(2.5f), buttonWidth, screenH(0.18f)))
+                .setLabel(EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, PGR.core.strings.sui_instructions1, PGR.core.strings.sui_instructions2))
                 .setAlignment(0.9f, 0.1f, true)
                 .setColors(Color.DARK_GRAY, Settings.CREAM_COLOR)
                 .setFont(EUIFontHelper.cardTipBodyFont, 1f);
 
-        typesAmount = new EUITextBox(panelTexture, new EUIHitbox(xPos, getY.invoke(3.5f), buttonWidth, buttonHeight * 1.5f))
+        typesAmount = new EUITextBox(panelTexture, new EUIHitbox(xPos, getY.invoke(3.5f), buttonWidth, screenH(0.09f)))
                 .setColors(Color.DARK_GRAY, Settings.GOLD_COLOR)
                 .setAlignment(0.61f, 0.1f, true)
                 .setFont(EUIFontHelper.cardTipTitleFont, 1);
@@ -92,23 +95,23 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
                 .setOnClick(() -> previewCardPool(null))
                 .setColor(Color.LIGHT_GRAY);
 
-        selectAllButton = EUIButton.createHexagonalButton(xPos, getY.invoke(8f), buttonWidth, buttonHeight)
+        selectAllButton = EUIButton.createHexagonalButton(xPos, getY.invoke(7.9f), buttonWidth, buttonHeight)
                 .setText(PGR.core.strings.sui_selectAll)
                 .setOnClick(() -> this.selectAll(true))
                 .setColor(Color.ROYAL);
 
-        deselectAllButton = EUIButton.createHexagonalButton(xPos, getY.invoke(9f), buttonWidth, buttonHeight)
+        deselectAllButton = EUIButton.createHexagonalButton(xPos, getY.invoke(8.8f), buttonWidth, buttonHeight)
                 .setText(PGR.core.strings.sui_deselectAll)
                 .setOnClick(() -> this.selectAll(false))
                 .setColor(Color.FIREBRICK);
 
-        cancel = EUIButton.createHexagonalButton(xPos, getY.invoke(12f), buttonWidth, buttonHeight * 1.2f)
-                .setText(PGR.core.strings.sui_cancel)
+        cancel = EUIButton.createHexagonalButton(xPos, getY.invoke(12f), buttonWidth, buttonHeight * 1.25f)
+                .setText(GridCardSelectScreen.TEXT[1])
                 .setOnClick(this::cancel)
                 .setColor(Color.FIREBRICK);
 
-        confirm = EUIButton.createHexagonalButton(xPos, getY.invoke(13f), buttonWidth, buttonHeight * 1.2f)
-                .setText(PGR.core.strings.sui_save)
+        confirm = EUIButton.createHexagonalButton(xPos, getY.invoke(13f), buttonWidth, buttonHeight * 1.25f)
+                .setText(GridCardSelectScreen.TEXT[0])
                 .setOnClick(this::proceed)
                 .setColor(Color.FOREST);
 
@@ -183,7 +186,7 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         contextMenu.positionToOpen();
     }
 
-    public void open(CharacterOption characterOption, PCLAbstractPlayerData data, ActionT0 onClose) {
+    public void open(CharacterOption characterOption, PCLAbstractPlayerData<?,?> data, ActionT0 onClose) {
         super.open();
         this.onClose = onClose;
         this.characterOption = characterOption;
@@ -194,6 +197,18 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
         updateStartingDeckText();
 
         EUI.countingPanel.open(container.shownCards, data.resources.cardColor, false);
+
+        EUITourTooltip.queueFirstView(PGR.config.tourSeriesSelect,
+                new EUITourTooltip(cardGrid.cards.group.get(1).hb, PGR.core.strings.csel_seriesEditor, PGR.core.strings.sui_instructions1)
+                        .setPosition(Settings.WIDTH * 0.25f, Settings.HEIGHT * 0.75f),
+                new EUITourTooltip(cardGrid.cards.group.get(1).hb, PGR.core.strings.csel_seriesEditor, PGR.core.strings.sui_instructions2)
+                        .setPosition(Settings.WIDTH * 0.25f, Settings.HEIGHT * 0.75f),
+                new EUITourTooltip(cardGrid.cards.group.get(0).hb, PGR.core.strings.csel_seriesEditor, PGR.core.strings.sui_coreInstructions)
+                        .setPosition(Settings.WIDTH * 0.20f, Settings.HEIGHT * 0.75f),
+                new EUITourTooltip(typesAmount.hb, PGR.core.strings.csel_seriesEditor, PGR.core.strings.sui_totalInstructions)
+                        .setPosition(Settings.WIDTH * 0.6f, Settings.HEIGHT * 0.75f),
+                loadoutEditor.makeTour(true)
+        );
     }
 
     protected void openLoadoutEditor() {

@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Interpolation;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import pinacolada.effects.PCLEffect;
 
@@ -24,8 +25,8 @@ public class StanceParticleVertical extends PCLEffect {
         img = ImageMaster.GLOW_SPARK;
         scale = random(0.6f, 1f) * multi;
         color = particleColor.cpy();
-        x = player.hb.cX + random(-player.hb.width / 2f - 30f * multi, player.hb.width / 2f + 30f * multi);
-        y = player.hb.cY + random(-player.hb.height / 2f - -10f * multi, player.hb.height / 2f - 10f * multi);
+        x = AbstractDungeon.player.hb.cX + random(-AbstractDungeon.player.hb.width / 2f - 30f * multi, AbstractDungeon.player.hb.width / 2f + 30f * multi);
+        y = AbstractDungeon.player.hb.cY + random(-AbstractDungeon.player.hb.height / 2f - -10f * multi, AbstractDungeon.player.hb.height / 2f - 10f * multi);
         x -= (float) img.packedWidth / 2f;
         y -= (float) img.packedHeight / 2f;
         renderBehind = randomBoolean(0.2f + (scale - 0.5f));

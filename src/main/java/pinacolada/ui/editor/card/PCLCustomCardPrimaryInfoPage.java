@@ -217,14 +217,18 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
 
     @Override
     public void onOpen() {
-        // TODO readd config
-        EUITourTooltip.queueTutorial(
+        EUITourTooltip.queueFirstView(PGR.config.tourCardPrimary,
                 idInput.makeTour(true),
                 nameInput.makeTour(true),
                 languageDropdown.makeTour(true),
                 raritiesDropdown.makeTour(true),
                 typesDropdown.makeTour(true),
-                flagsDropdown.makeTour(true));
+                flagsDropdown.makeTour(true),
+                maxUpgrades.makeTour(true),
+                maxCopies.makeTour(true),
+                branchUpgrades.makeTour(true),
+                uniqueToggle.makeTour(true),
+                soulboundToggle.makeTour(true));
     }
 
     @Override

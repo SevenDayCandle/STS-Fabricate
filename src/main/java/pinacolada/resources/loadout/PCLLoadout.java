@@ -9,6 +9,7 @@ import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
 import extendedui.ui.cardFilter.CountingPanelStats;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCardData;
@@ -23,6 +24,7 @@ import pinacolada.relics.pcl.GenericDice;
 import pinacolada.relics.pcl.GiftGivingGift;
 import pinacolada.relics.pcl.Macroscope;
 import pinacolada.resources.PCLAbstractPlayerData;
+import pinacolada.resources.PCLCharacterConfig;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.skills.skills.PSpecialSkill;
@@ -31,7 +33,7 @@ import pinacolada.utilities.GameUtilities;
 
 import java.util.*;
 
-import static pinacolada.ui.characterSelection.PCLLoadoutEditor.MAX_RELIC_SLOTS;
+import static pinacolada.ui.characterSelection.PCLLoadoutScreen.MAX_RELIC_SLOTS;
 
 // Copied and modified from STS-AnimatorMod
 public abstract class PCLLoadout {
@@ -79,7 +81,7 @@ public abstract class PCLLoadout {
     }
 
     public static int getBaseDraw(AbstractCard.CardColor color) {
-        PCLAbstractPlayerData data = PGR.getPlayerData(color);
+        PCLAbstractPlayerData<?,?> data = PGR.getPlayerData(color);
         if (data != null) {
             return data.baseDraw;
         }
@@ -93,7 +95,7 @@ public abstract class PCLLoadout {
     }
 
     public static int getBaseEnergy(AbstractCard.CardColor color) {
-        PCLAbstractPlayerData data = PGR.getPlayerData(color);
+        PCLAbstractPlayerData<?,?> data = PGR.getPlayerData(color);
         if (data != null) {
             return data.baseEnergy;
         }
@@ -101,7 +103,7 @@ public abstract class PCLLoadout {
     }
 
     public static int getBaseGold(AbstractCard.CardColor color) {
-        PCLAbstractPlayerData data = PGR.getPlayerData(color);
+        PCLAbstractPlayerData<?,?> data = PGR.getPlayerData(color);
         if (data != null) {
             return data.baseGold;
         }
@@ -115,7 +117,7 @@ public abstract class PCLLoadout {
     }
 
     public static int getBaseHP(AbstractCard.CardColor color) {
-        PCLAbstractPlayerData data = PGR.getPlayerData(color);
+        PCLAbstractPlayerData<?,?> data = PGR.getPlayerData(color);
         if (data != null) {
             return data.baseHP;
         }
@@ -129,7 +131,7 @@ public abstract class PCLLoadout {
     }
 
     public static int getBaseOrbs(AbstractCard.CardColor color) {
-        PCLAbstractPlayerData data = PGR.getPlayerData(color);
+        PCLAbstractPlayerData<?,?> data = PGR.getPlayerData(color);
         if (data != null) {
             return data.baseOrbs;
         }
@@ -269,6 +271,10 @@ public abstract class PCLLoadout {
 
         card.initializeDescription();
 
+        if (isCore()) {
+            card.tooltips.add(new EUIKeywordTooltip(PGR.core.strings.sui_core, PGR.core.strings.sui_coreInstructions));
+        }
+
         return card;
     }
 
@@ -365,7 +371,7 @@ public abstract class PCLLoadout {
         return getPlayerData().useSummons ? 0 : PCLBaseStatEditor.StatType.Energy.getAmount(this, getPreset());
     }
 
-    public PCLAbstractPlayerData getPlayerData() {
+    public PCLAbstractPlayerData<?,?> getPlayerData() {
         return PGR.getPlayerData(color);
     }
 
@@ -419,7 +425,7 @@ public abstract class PCLLoadout {
     public ArrayList<String> getStartingRelics() {
         final ArrayList<String> res = new ArrayList<>();
 
-        PCLAbstractPlayerData data = getPlayerData();
+        PCLAbstractPlayerData<?,?> data = getPlayerData();
         if (data != null) {
             List<String> starterRelics = data.getStartingRelics();
             for (String starterRelic : starterRelics) {
@@ -443,7 +449,7 @@ public abstract class PCLLoadout {
     }
 
     public PCLTrophies getTrophies() {
-        PCLAbstractPlayerData data = getPlayerData();
+        PCLAbstractPlayerData<?,?> data = getPlayerData();
         if (data == null) {
             return null;
         }
@@ -505,7 +511,7 @@ public abstract class PCLLoadout {
 
     public void onVictory(int ascensionLevel, int trophyLevel, int score) {
         PCLTrophies trophies = getTrophies();
-        PCLAbstractPlayerData data = getPlayerData();
+        PCLAbstractPlayerData<?,?> data = getPlayerData();
         if (data != null && data.selectedLoadout.ID.equals(ID)) {
             if (trophyLevel >= 2) {
                 trophies.trophy2 = Math.max(trophies.trophy2, ascensionLevel);

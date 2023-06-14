@@ -33,7 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 // Copied and modified from STS-AnimatorMod
-public abstract class PCLResources<T extends PCLAbstractPlayerData, U extends PCLImages, V extends PCLTooltips, W extends PCLStrings>
+public abstract class PCLResources<T extends PCLAbstractPlayerData<?,?>, U extends PCLImages, V extends PCLTooltips, W extends PCLStrings>
         implements EditCharactersSubscriber, EditKeywordsSubscriber, EditStringsSubscriber, PostInitializeSubscriber {
     private static final Type AUGMENT_TYPE = new TypeToken<Map<String, Map<String, AugmentStrings>>>() {
     }.getType();
