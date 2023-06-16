@@ -864,7 +864,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     }
 
     public final String getTargetIsString(PCLCardTarget target, String subject) {
-        return TEXT.cond_ifX(TEXT.cond_objIs(getTargetSubjectString(target), subject));
+        return TEXT.cond_ifX(TEXT.cond_xIsY(getTargetSubjectString(target), subject));
     }
 
     public final ArrayList<? extends AbstractCreature> getTargetList(PCLUseInfo info) {

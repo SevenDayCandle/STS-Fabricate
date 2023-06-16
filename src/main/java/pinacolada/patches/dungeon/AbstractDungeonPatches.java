@@ -34,6 +34,7 @@ public class AbstractDungeonPatches {
     public static class AbstractDungeonPatches_GetMonsterForRoomCreation {
         @SpirePostfixPatch
         public static MonsterGroup postfix(MonsterGroup retVal, AbstractDungeon __instance) {
+            // Note that this will not affect boss rooms because they use a different method to obtain their monsters. We do not want these tutorials to pop up over boss rooms
             MonsterGroup group = PCLTutorialMonster.tryStart();
             return group != null ? group : retVal;
         }

@@ -35,12 +35,12 @@ public abstract class PMod_ChangeGroup extends PActiveMod<PField_CardGeneric> {
 
     @Override
     public String getSampleText(PSkill<?> callingSkill) {
-        return TEXT.cond_numIf(TEXT.subjects_from(TEXT.subjects_x), getConditionSampleText());
+        return TEXT.cond_xIfY(TEXT.subjects_from(TEXT.subjects_x), getConditionSampleText());
     }
 
     @Override
     public String getSubText() {
-        return TEXT.cond_numIf(fields.getGroupString(), getConditionText());
+        return TEXT.cond_xIfY(fields.getGroupString(), getConditionText());
     }
 
     @Override

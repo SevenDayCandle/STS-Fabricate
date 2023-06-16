@@ -1,9 +1,15 @@
 package pinacolada.resources.pcl;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import com.megacrit.cardcrawl.cards.status.Burn;
+import com.megacrit.cardcrawl.cards.status.Dazed;
+import com.megacrit.cardcrawl.cards.status.VoidCard;
+import com.megacrit.cardcrawl.cards.status.Wound;
+import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.rewards.RewardItem;
 import extendedui.EUI;
 import extendedui.EUIGameUtils;
+import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.tags.PCLCardTag;
@@ -66,10 +72,10 @@ public class PCLCoreTooltips extends PCLTooltips {
     public EUIKeywordTooltip attack = EUIKeywordTooltip.findByID("Attack").showText(false).canHighlight(false);
     public EUIKeywordTooltip block = EUIKeywordTooltip.findByID("Block").showText(false).canHighlight(false);
     public EUIKeywordTooltip buff = EUIKeywordTooltip.findByID("Buff").showText(false).canHighlight(false);
-    public EUIKeywordTooltip burn = EUIKeywordTooltip.findByID("Burn").showText(false);
+    public EUIKeywordTooltip burn = EUIKeywordTooltip.findByID("Burn").setPreviewFunc(() -> makePreview(Burn.ID)).showText(false);
     public EUIKeywordTooltip create = EUIKeywordTooltip.findByID("Create").showText(false).canHighlight(false);
     public EUIKeywordTooltip curse = EUIKeywordTooltip.findByID("Curse").showText(false);
-    public EUIKeywordTooltip dazed = EUIKeywordTooltip.findByID("Dazed").showText(false);
+    public EUIKeywordTooltip dazed = EUIKeywordTooltip.findByID("Dazed").setPreviewFunc(() -> makePreview(Dazed.ID)).showText(false);
     public EUIKeywordTooltip debuff = EUIKeywordTooltip.findByID("Debuff").showText(false).canHighlight(false);
     public EUIKeywordTooltip discard = EUIKeywordTooltip.findByID("Discard").showText(false).canHighlight(false);
     public EUIKeywordTooltip draw = EUIKeywordTooltip.findByID("Draw").showText(false).canHighlight(false);
@@ -91,7 +97,8 @@ public class PCLCoreTooltips extends PCLTooltips {
     public EUIKeywordTooltip spread = EUIKeywordTooltip.findByID("Spread").showText(false).canHighlight(false);
     public EUIKeywordTooltip status = EUIKeywordTooltip.findByID("Status").showText(false);
     public EUIKeywordTooltip upgrade = EUIKeywordTooltip.findByID("Upgrade").showText(false).canHighlight(false);
-    public EUIKeywordTooltip voidCard = EUIKeywordTooltip.findByID("Void").showText(false);
+    public EUIKeywordTooltip woundCard = EUIKeywordTooltip.findByID("Wound").setPreviewFunc(() -> makePreview(Wound.ID)).showText(false);
+    public EUIKeywordTooltip voidCard = EUIKeywordTooltip.findByID("Void").setPreviewFunc(() -> makePreview(VoidCard.ID)).showText(false);
 
     public EUIKeywordTooltip affinityGeneral = EUIKeywordTooltip.findByID("Affinity");
     public EUIKeywordTooltip affinityUnknown = EUIKeywordTooltip.findByID("Unknown Affinity");
@@ -352,5 +359,13 @@ public class PCLCoreTooltips extends PCLTooltips {
         steal.formatDescription(StolenGoldPower.GOLD_BOSS, StolenGoldPower.GOLD_ELITE, StolenGoldPower.GOLD_NORMAL);
 
         EUIKeywordTooltip.updateTooltipIcons();
+    }
+
+    public static EUICardPreview makePreview(String cardID) {
+        AbstractCard copy = CardLibrary.getCard(cardID);
+        if (copy != null) {
+            return new EUICardPreview(copy, false);
+        }
+        return null;
     }
 }

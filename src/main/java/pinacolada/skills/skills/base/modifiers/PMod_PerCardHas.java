@@ -51,7 +51,7 @@ public abstract class PMod_PerCardHas extends PMod_Per<PField_CardCategory> {
 
     @Override
     public String getSampleText(PSkill<?> callingSkill) {
-        return TEXT.cond_perXY(TEXT.subjects_x, TEXT.subjects_card, PCLCoreStrings.past(getActionTooltip()));
+        return TEXT.cond_xPerYZ(TEXT.subjects_x, TEXT.subjects_card, PCLCoreStrings.past(getActionTooltip()));
     }
 
     @Override

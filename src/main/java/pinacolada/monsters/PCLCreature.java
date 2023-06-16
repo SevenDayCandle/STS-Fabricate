@@ -5,14 +5,19 @@ import basemod.abstracts.CustomMonster;
 import basemod.animations.AbstractAnimation;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.esotericsoftware.spine.*;
 import com.evacipated.cardcrawl.mod.stslib.patches.core.AbstractCreature.TempHPField;
 import com.evacipated.cardcrawl.mod.stslib.powers.StunMonsterPower;
+import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.AbstractPower;
+import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import com.megacrit.cardcrawl.vfx.BobEffect;
+import extendedui.EUIGameUtils;
 import extendedui.interfaces.markers.IntentProvider;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.cards.base.fields.PCLAffinity;
@@ -146,6 +151,61 @@ public abstract class PCLCreature extends CustomMonster implements IntentProvide
         }
         else {
             performActions(manual);
+        }
+    }
+
+    public void render(SpriteBatch sb) {
+        if (!this.isDead && !this.escaped) {
+            this.renderAnimation(sb);
+
+            if (this == AbstractDungeon.getCurrRoom().monsters.hoveredMonster && this.atlas == null && this.animation == null) {
+                sb.setBlendFunction(770, 1);
+                sb.setColor(new Color(1.0F, 1.0F, 1.0F, 0.1F));
+                sb.draw(this.img, this.drawX - (float)this.img.getWidth() * Settings.scale / 2.0F + this.animX, this.drawY + this.animY + AbstractDungeon.sceneOffsetY, (float)this.img.getWidth() * Settings.scale, (float)this.img.getHeight() * Settings.scale, 0, 0, this.img.getWidth(), this.img.getHeight(), this.flipHorizontal, this.flipVertical);
+                sb.setBlendFunction(770, 771);
+            }
+
+            if (!this.isDying && !this.isEscaping && AbstractDungeon.getCurrRoom().phase == AbstractRoom.RoomPhase.COMBAT && !AbstractDungeon.player.isDead && EUIGameUtils.canViewEnemyIntents(this) && !Settings.hideCombatElements) {
+                this.renderIntentVfxBehind(sb);
+                this.renderIntent(sb);
+                this.renderIntentVfxAfter(sb);
+                this.renderDamageRange(sb);
+            }
+
+            this.hb.render(sb);
+            this.intentHb.render(sb);
+            this.healthHb.render(sb);
+        }
+
+        if (!AbstractDungeon.player.isDead) {
+            this.renderHealth(sb);
+            this.renderName(sb);
+        }
+    }
+
+    public void renderAnimation(SpriteBatch sb) {
+        renderAnimation(sb, tint.color);
+    }
+
+    public void renderAnimation(SpriteBatch sb, Color color) {
+        if (this.animation != null && this.animation.type() == AbstractAnimation.Type.SPRITE) {
+            this.animation.renderSprite(sb, this.drawX + this.animX, this.drawY + this.animY + AbstractDungeon.sceneOffsetY);
+        } else if (this.atlas == null) {
+            sb.setColor(color);
+            sb.draw(this.img, this.drawX - (float)this.img.getWidth() * Settings.scale / 2.0F + this.animX, this.drawY + this.animY + AbstractDungeon.sceneOffsetY, (float)this.img.getWidth() * Settings.scale, (float)this.img.getHeight() * Settings.scale, 0, 0, this.img.getWidth(), this.img.getHeight(), this.flipHorizontal, this.flipVertical);
+        } else {
+            this.state.update(Gdx.graphics.getDeltaTime());
+            this.state.apply(this.skeleton);
+            this.skeleton.updateWorldTransform();
+            this.skeleton.setPosition(this.drawX + this.animX, this.drawY + this.animY + AbstractDungeon.sceneOffsetY);
+            this.skeleton.setColor(color);
+            this.skeleton.setFlip(this.flipHorizontal, this.flipVertical);
+            sb.end();
+            CardCrawlGame.psb.begin();
+            AbstractMonster.sr.draw(CardCrawlGame.psb, this.skeleton);
+            CardCrawlGame.psb.end();
+            sb.begin();
+            sb.setBlendFunction(770, 771);
         }
     }
 

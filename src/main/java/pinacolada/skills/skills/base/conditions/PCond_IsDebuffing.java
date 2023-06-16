@@ -38,7 +38,7 @@ public class PCond_IsDebuffing extends PPassiveCond<PField_Not> {
 
     @Override
     public String getSampleText(PSkill<?> callingSkill) {
-        return isUnderWhen(callingSkill) ? TEXT.cond_whenSingle(PGR.core.tooltips.debuff.present()) : TEXT.cond_objIs(TEXT.subjects_target, PGR.core.tooltips.debuff.progressive());
+        return isUnderWhen(callingSkill) ? TEXT.cond_whenSingle(PGR.core.tooltips.debuff.present()) : TEXT.cond_xIsY(TEXT.subjects_target, PGR.core.tooltips.debuff.progressive());
     }
 
     @Override

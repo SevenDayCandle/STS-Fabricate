@@ -38,7 +38,7 @@ public class PMod_BonusInStance extends PMod_BonusOn<PField_Stance> {
     @Override
     public String getText(boolean addPeriod) {
         String base = fields.getAnyStanceString();
-        return TEXT.cond_xConditional(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", TEXT.cond_numIf(getAmountRawString(), fields.random ? TEXT.cond_not(base) : base)) + PCLCoreStrings.period(addPeriod);
+        return TEXT.cond_xConditional(childEffect != null ? capital(childEffect.getText(false), addPeriod) : "", TEXT.cond_xIfY(getAmountRawString(), fields.random ? TEXT.cond_not(base) : base)) + PCLCoreStrings.period(addPeriod);
     }
 
     @Override

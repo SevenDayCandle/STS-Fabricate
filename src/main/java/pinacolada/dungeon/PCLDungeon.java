@@ -36,8 +36,6 @@ import pinacolada.interfaces.listeners.OnAddToDeckListener;
 import pinacolada.interfaces.listeners.OnAddingToCardRewardListener;
 import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.resources.PCLAbstractPlayerData;
-import pinacolada.resources.PCLCharacterConfig;
-import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.loadout.FakeLoadout;
 import pinacolada.resources.loadout.PCLLoadout;
@@ -406,17 +404,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
                 data.saveTrophies();
             }
 
-            // Modify starting potion slots
-            if (data.selectedLoadout != null) {
-                player.potionSlots += data.selectedLoadout.getPotionSlots();
-                while (player.potions.size() > player.potionSlots && player.potions.get(player.potions.size() - 1) instanceof PotionSlot) {
-                    player.potions.remove(player.potions.size() - 1);
-                }
-                while (player.potionSlots > player.potions.size()) {
-                    player.potions.add(new PotionSlot(player.potions.size() - 1));
-                }
-                player.adjustPotionPositions();
-            }
+            initializeLoadoutAttributes();
 
             // Add glyphs
             for (int i = 0; i < PCLAbstractPlayerData.GLYPHS.size(); i++) {
@@ -434,6 +422,22 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
                     GameUtilities.obtainBlightWithoutEffect(blight);
                 }
             }
+        }
+    }
+
+    // Modify starting potion slots and energy
+    private void initializeLoadoutAttributes() {
+        if (data.selectedLoadout != null) {
+            player.energy.energyMaster = data.selectedLoadout.getEnergy();
+
+            player.potionSlots += data.selectedLoadout.getPotionSlots();
+            while (player.potions.size() > player.potionSlots && player.potions.get(player.potions.size() - 1) instanceof PotionSlot) {
+                player.potions.remove(player.potions.size() - 1);
+            }
+            while (player.potionSlots > player.potions.size()) {
+                player.potions.add(new PotionSlot(player.potions.size() - 1));
+            }
+            player.adjustPotionPositions();
         }
     }
 

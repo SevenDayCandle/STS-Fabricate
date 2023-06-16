@@ -44,7 +44,7 @@ public class PCLBaseStatEditor extends EUIHoverable {
         final float w = hb.width;
         final float h = hb.height;
 
-        image = new EUIImage(type.icon, new RelativeHitbox(hb, ICON_SIZE, ICON_SIZE, ICON_SIZE * -0.13f, h * 0.5f)).setTooltip(this.tooltip);
+        image = new EUIImage(type.getTexture(), new RelativeHitbox(hb, ICON_SIZE, ICON_SIZE, ICON_SIZE * -0.13f, h * 0.5f)).setTooltip(this.tooltip);
         label = new EUILabel(FontHelper.tipHeaderFont, new RelativeHitbox(hb, w - ICON_SIZE, h, w * 0.5f + ICON_SIZE * -0.13f, h * 0.5f))
                 .setAlignment(0.5f, 0f, false)
                 .setColor(type.labelColor)
@@ -142,14 +142,13 @@ public class PCLBaseStatEditor extends EUIHoverable {
     }
 
     public enum StatType {
-        HP(ImageMaster.TP_HP, Settings.RED_TEXT_COLOR, 2, 1, -6, 6, 0),
-        Gold(ImageMaster.TP_GOLD, Settings.GOLD_COLOR, 14, 1, -6, 6, 0),
-        OrbSlot(ImageMaster.ORB_SLOT_1, Settings.CREAM_COLOR, 1, 10, 12),
-        PotionSlot(ImageMaster.POTION_PLACEHOLDER, Settings.CREAM_COLOR, 1, 12, 12),
-        CardDraw(ImageMaster.TINY_CARD_BACKGROUND, Settings.CREAM_COLOR, 1, 25, 12),
-        Energy(ImageMaster.ENERGY_RED_LAYER1, Settings.CREAM_COLOR, 1, 30, 12);
+        HP(Settings.RED_TEXT_COLOR, 2, 1, -6, 6, 0),
+        Gold(Settings.GOLD_COLOR, 14, 1, -6, 6, 0),
+        OrbSlot(Settings.CREAM_COLOR, 1, 5, 12),
+        PotionSlot(Settings.CREAM_COLOR, 1, 6, 12),
+        CardDraw(Settings.CREAM_COLOR, 1, 26, 12),
+        Energy(Settings.CREAM_COLOR, 1, 35, 12);
 
-        public final Texture icon;
         public final Color labelColor;
         public final int amountPerStep;
         public final int valuePerStep;
@@ -157,12 +156,11 @@ public class PCLBaseStatEditor extends EUIHoverable {
         public final int maxValue;
         public final int unlockLevel;
 
-        StatType(Texture icon, Color labelColor, int amountPerStep, int valuePerStep, int unlockLevel) {
-            this(icon, labelColor, amountPerStep, valuePerStep, -valuePerStep, valuePerStep, unlockLevel);
+        StatType(Color labelColor, int amountPerStep, int valuePerStep, int unlockLevel) {
+            this(labelColor, amountPerStep, valuePerStep, -valuePerStep, valuePerStep, unlockLevel);
         }
 
-        StatType(Texture icon, Color labelColor, int amountPerStep, int valuePerStep, int minValue, int maxValue, int unlockLevel) {
-            this.icon = icon;
+        StatType(Color labelColor, int amountPerStep, int valuePerStep, int minValue, int maxValue, int unlockLevel) {
             this.labelColor = labelColor;
             this.amountPerStep = amountPerStep;
             this.valuePerStep = valuePerStep;
@@ -238,6 +236,24 @@ public class PCLBaseStatEditor extends EUIHoverable {
                     return PGR.core.strings.loadout_orbSlot;
             }
             return "";
+        }
+
+        public Texture getTexture() {
+            switch (this) {
+                case Gold:
+                    return ImageMaster.TP_GOLD;
+                case HP:
+                    return ImageMaster.TP_HP;
+                case CardDraw:
+                    return ImageMaster.DECK_BTN_BASE;
+                case PotionSlot:
+                    return ImageMaster.POTION_PLACEHOLDER;
+                case Energy:
+                    return ImageMaster.ORB_PLASMA;
+                case OrbSlot:
+                    return ImageMaster.ORB_SLOT_1;
+            }
+            return ImageMaster.WARNING_ICON_VFX;
         }
 
         public String getTitle() {

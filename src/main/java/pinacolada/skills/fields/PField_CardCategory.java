@@ -277,7 +277,7 @@ public class PField_CardCategory extends PField_CardGeneric {
     public void makePreviews(RotatingList<EUICardPreview> previews) {
         for (String cd : cardIDs) {
             AbstractCard c = getCard(cd);
-            if (c != null) {
+            if (c != null && !EUIUtils.any(previews, p -> p.defaultPreview.cardID.equals(c.cardID))) {
                 previews.add(EUICardPreview.generatePreviewCard(c));
             }
         }

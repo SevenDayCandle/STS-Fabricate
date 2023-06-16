@@ -1,7 +1,9 @@
 package pinacolada.cards.base;
 
+import extendedui.EUIUtils;
 import extendedui.configuration.EUIHotkeys;
 import extendedui.ui.tooltips.EUICardPreview;
+import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.utilities.RotatingList;
 import pinacolada.skills.PSkill;
 
@@ -65,6 +67,13 @@ public class PCLCardPreviews {
                 }
                 effect.makePreviews(PREVIEWS);
             }
+            for (EUIKeywordTooltip tip : card.tooltips) {
+                EUICardPreview preview = tip.createPreview();
+                if (preview != null && !EUIUtils.any(PREVIEWS, p -> p.defaultPreview.cardID.equals(preview.defaultPreview.cardID))) {
+                    PREVIEWS.add(preview);
+                }
+            }
+
         }
     }
 }

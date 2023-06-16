@@ -25,6 +25,7 @@ import pinacolada.cards.base.PCLCardData;
 import pinacolada.misc.AugmentStrings;
 import pinacolada.misc.LoadoutStrings;
 import pinacolada.monsters.PCLCreatureData;
+import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.utilities.GameUtilities;
 
 import java.lang.reflect.Type;
@@ -107,7 +108,11 @@ public abstract class PCLResources<T extends PCLAbstractPlayerData<?,?>, U exten
 
     // The colorless pool is filled with ALL colorless cards by default. This will determine whether a colorless card is allowed when playing as a PCL character
     public boolean containsColorless(AbstractCard card) {
-        return card instanceof PCLCard;
+        if (card instanceof PCLCard) {
+            PCLLoadout loadout = ((PCLCard) card).cardData.loadout;
+            return loadout == null || !loadout.isLocked();
+        }
+        return false;
     }
 
     public String createID(String suffix) {
