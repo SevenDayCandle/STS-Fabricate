@@ -33,7 +33,7 @@ public class PTrait_Priority extends PTrait<PField_Empty> {
     }
 
     @Override
-    public float modifyMagicNumber(PCLUseInfo info, float amount) {
+    public float modifySkillBonus(PCLUseInfo info, float amount) {
         return amount + this.amount;
     }
 }

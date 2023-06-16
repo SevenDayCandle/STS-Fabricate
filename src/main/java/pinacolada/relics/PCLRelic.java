@@ -122,11 +122,11 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider 
         return block;
     }
 
-    public float atMagicNumberModify(PCLUseInfo info, float block, AbstractCard c) {
+    public float atRightCountModify(PCLUseInfo info, float block, AbstractCard c) {
         return block;
     }
 
-    public float atRightCountModify(PCLUseInfo info, float block, AbstractCard c) {
+    public float atSkillBonusModify(PCLUseInfo info, float block, AbstractCard c) {
         return block;
     }
 

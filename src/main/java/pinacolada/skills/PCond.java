@@ -388,9 +388,9 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
     }
 
     @Override
-    public float modifyMagicNumber(PCLUseInfo info, float amount) {
+    public float modifySkillBonus(PCLUseInfo info, float amount) {
         if (this.childEffect != null && sourceCard != null && checkCondition(info, false, null)) {
-            return this.childEffect.modifyMagicNumber(info, amount);
+            return this.childEffect.modifySkillBonus(info, amount);
         }
         return amount;
     }

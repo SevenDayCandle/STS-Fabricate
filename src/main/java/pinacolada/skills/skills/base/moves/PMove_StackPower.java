@@ -1,8 +1,8 @@
 package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import extendedui.EUIRM;
 import extendedui.EUIUtils;
-import extendedui.utilities.ColoredString;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -31,11 +31,6 @@ public class PMove_StackPower extends PMove<PField_Power> {
 
     public PMove_StackPower(PSkillSaveData content) {
         super(DATA, content);
-    }
-
-    @Override
-    public ColoredString getColoredValueString() {
-        return target == PCLCardTarget.Self ? getColoredValueString(Math.abs(baseAmount), Math.abs(amount)) : super.getColoredValueString();
     }
 
     @Override
@@ -74,13 +69,17 @@ public class PMove_StackPower extends PMove<PField_Power> {
             case AllEnemy:
             case All:
             case Team:
-                return fields.powers.size() > 0 && fields.powers.get(0).isDebuff ? TEXT.act_applyXToTarget(getAmountRawString(), joinedString, getTargetString()) : TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
+                return amount < 0 ? TEXT.act_removeFrom(EUIRM.strings.numNoun(getAmountRawString(), joinedString), getTargetString())
+                        : fields.powers.size() > 0 && fields.powers.get(0).isDebuff
+                        ? TEXT.act_applyXToTarget(getAmountRawString(), joinedString, getTargetString()) : TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
             case Single:
             case SingleAlly:
-                return fields.powers.size() > 0 && fields.powers.get(0).isDebuff ? TEXT.act_applyX(getAmountRawString(), joinedString) : TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
+                return amount < 0 ? TEXT.act_remove(EUIRM.strings.numNoun(getAmountRawString(), joinedString)) :
+                        fields.powers.size() > 0 && fields.powers.get(0).isDebuff ?
+                                TEXT.act_applyX(getAmountRawString(), joinedString) : TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
             case Self:
                 if (isFromCreature()) {
-                    return TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
+                    return amount < 0 ? TEXT.act_removeFrom(EUIRM.strings.numNoun(getAmountRawString(), joinedString), getTargetString()) : TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
                 }
             default:
                 return amount < 0 ? TEXT.act_loseAmount(getAmountRawString(), joinedString)
@@ -124,6 +123,10 @@ public class PMove_StackPower extends PMove<PField_Power> {
             }
         }
         super.use(info);
+    }
 
+    @Override
+    public String wrapAmount(int input) {
+        return String.valueOf(Math.abs(input));
     }
 }

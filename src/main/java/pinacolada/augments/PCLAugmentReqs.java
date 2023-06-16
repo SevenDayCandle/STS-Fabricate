@@ -70,7 +70,7 @@ public class PCLAugmentReqs {
                 rightMax != Integer.MAX_VALUE ? PGR.core.strings.subjects_count(PGR.core.tooltips.block) + " <= " + rightMax : null,
                 maxEffects != Integer.MAX_VALUE ? PGR.core.strings.cedit_effects + " <= " + maxEffects : null
         );
-        return base.isEmpty() ? EUIRM.strings.na : base;
+        return base.isEmpty() ? EUIRM.strings.ui_na : base;
     }
 
     public PCLAugmentReqs setAffinities(PCLAffinity... values) {

@@ -47,7 +47,7 @@ public class PCond_IsAttacking extends PPassiveCond<PField_Not> implements OnAtt
     @Override
     public String getSubText() {
         if (isWhenClause()) {
-            return getWheneverString(PGR.core.tooltips.attack.present());
+            return getWheneverString(TEXT.subjects_attacks(getTargetOrdinal()));
         }
         return getTargetIsString(fields.not ? TEXT.cond_not(PGR.core.tooltips.attack.progressive()) : PGR.core.tooltips.attack.progressive());
     }

@@ -5,8 +5,8 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.monsters.MonsterGroup;
 import extendedui.EUIUtils;
-import extendedui.configuration.EUIConfiguration;
 import extendedui.configuration.STSConfigItem;
 import extendedui.interfaces.delegates.FuncT0;
 import extendedui.interfaces.delegates.FuncT1;
@@ -24,6 +24,7 @@ import java.util.Arrays;
 
 public abstract class PCLTutorialMonster extends PCLCreature implements TourProvider {
     public static ArrayList<TutorialInfo> tutorials = new ArrayList<>();
+    public static STSConfigItem<Boolean> currentConfig;
 
     public ArrayList<FuncT0<EUITourTooltip>> steps = new ArrayList<>();
     public int current;
@@ -34,14 +35,17 @@ public abstract class PCLTutorialMonster extends PCLCreature implements TourProv
         BaseMod.addMonster(data.ID, data::create);
     }
 
-    public static boolean tryStart() {
+    public static MonsterGroup tryStart() {
         for (PCLTutorialMonster.TutorialInfo tutorialInfo : PCLTutorialMonster.tutorials) {
-            if (tutorialInfo.shouldShow.invoke(AbstractDungeon.player) && EUIConfiguration.triggerOnFirstView(tutorialInfo.config)) {
-                tutorialInfo.data.forceEncounter();
-                return true;
+            if (tutorialInfo.shouldShow.invoke(AbstractDungeon.player) && !tutorialInfo.config.get()) {
+                MonsterGroup group = tutorialInfo.data.getEncounter();
+                if (group != null) {
+                    currentConfig = tutorialInfo.config;
+                    return group;
+                }
             }
         }
-        return false;
+        return null;
     }
 
     public PCLTutorialMonster(PCLCreatureData data) {
@@ -76,8 +80,7 @@ public abstract class PCLTutorialMonster extends PCLCreature implements TourProv
             EUITourTooltip.queueTutorial(waitingTip);
         }
         else {
-            EUITourTooltip.clearTutorialQueue();
-            die();
+            finishTutorial();
         }
     }
 
@@ -100,6 +103,14 @@ public abstract class PCLTutorialMonster extends PCLCreature implements TourProv
         else {
             EUITourTooltip.queueTutorial(new EUITourTooltip(this.hb,
                     PGR.core.strings.tutorial_tutorialCompleteHeader, PGR.core.strings.tutorial_tutorialComplete).setCanDismiss(true));
+        }
+    }
+
+    public void finishTutorial() {
+        EUITourTooltip.clearTutorialQueue();
+        die();
+        if (currentConfig != null) {
+            currentConfig.set(true);
         }
     }
 

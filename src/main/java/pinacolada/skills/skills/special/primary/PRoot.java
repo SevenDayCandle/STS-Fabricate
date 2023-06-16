@@ -28,7 +28,7 @@ public class PRoot extends PPrimary<PField_Empty> {
 
     @Override
     public String getSampleText(PSkill<?> caller) {
-        return EUIRM.strings.na;
+        return EUIRM.strings.ui_na;
     }
 
     @Override

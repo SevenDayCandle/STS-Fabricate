@@ -6,6 +6,7 @@ import com.megacrit.cardcrawl.cards.curses.AscendersBane;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
+import com.megacrit.cardcrawl.monsters.MonsterGroup;
 import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.saveAndContinue.SaveFile;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
@@ -17,6 +18,7 @@ import javassist.expr.MethodCall;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.pcl.special.QuestionMark;
 import pinacolada.dungeon.CombatManager;
+import pinacolada.monsters.PCLTutorialMonster;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
@@ -26,23 +28,16 @@ import java.util.Map;
 
 // Copied and modified from STS-AnimatorMod
 public class AbstractDungeonPatches {
-/*    @SpirePatch(clz = AbstractDungeon.class, method = "getEvent", paramtypez = Random.class)
-    public static class AbstractDungeonPatches_GetEvent
-    {
-        @SpirePrefixPatch
-        public static SpireReturn<AbstractEvent> prefix(Random rng)
-        {
+    public static boolean filterCardGroupForValid;
 
-            AbstractEvent event = PCLEvent.GenerateSpecialEvent(CardCrawlGame.dungeon, rng, GameUtilities.IsPCLPlayerClass() || PGR.core.Config.EnableEventsForOtherCharacters.Get());
-            if (event != null)
-            {
-                return SpireReturn.Return(event);
-            }
-
-
-            return SpireReturn.Continue();
+    @SpirePatch(clz = AbstractDungeon.class, method = "getMonsterForRoomCreation")
+    public static class AbstractDungeonPatches_GetMonsterForRoomCreation {
+        @SpirePostfixPatch
+        public static MonsterGroup postfix(MonsterGroup retVal, AbstractDungeon __instance) {
+            MonsterGroup group = PCLTutorialMonster.tryStart();
+            return group != null ? group : retVal;
         }
-    }*/
+    }
 
     @SpirePatch(clz = AbstractDungeon.class, method = "initializeRelicList")
     public static class AbstractDungeonPatches_InitializeRelicList {
@@ -78,15 +73,18 @@ public class AbstractDungeonPatches {
     public static class AbstractDungeonPatches_AddCurseCards {
         @SpirePrefixPatch
         public static SpireReturn<Void> prefix() {
-
-            for (Map.Entry<String, AbstractCard> entry : CardLibrary.cards.entrySet()) {
-                AbstractCard c = entry.getValue();
-                if (c.type == AbstractCard.CardType.CURSE && c.rarity != AbstractCard.CardRarity.SPECIAL) {
-                    AbstractDungeon.curseCardPool.addToTop(c);
+            if (GameUtilities.isPCLPlayerClass()) {
+                for (Map.Entry<String, AbstractCard> entry : CardLibrary.cards.entrySet()) {
+                    AbstractCard c = entry.getValue();
+                    if (c.type == AbstractCard.CardType.CURSE && c.rarity != AbstractCard.CardRarity.SPECIAL) {
+                        AbstractDungeon.curseCardPool.addToTop(c);
+                    }
                 }
+
+                return SpireReturn.Return();
             }
 
-            return SpireReturn.Return();
+            return SpireReturn.Continue();
         }
     }
 
@@ -106,12 +104,16 @@ public class AbstractDungeonPatches {
         }
     }
 
-    // The vanilla GetRandomCard from AbstractDungeon does an infinite loop (e.g. in the shop) if there are no uncommon and rare power cards in the pool...
     @SpirePatch(clz = AbstractDungeon.class, method = "getCardFromPool", optional = true)
     public static class AbstractDungeonPatches_GetCardFromPool {
         @SpirePrefixPatch
-        public static SpireReturn<AbstractCard> prefix(AbstractCard.CardRarity rarity, AbstractCard.CardType type, boolean useRng) {
-            AbstractCard found = PGR.dungeon.getRandomCard(rarity, type, useRng ? AbstractDungeon.cardRng : null, true);
+        public static void prefix(AbstractCard.CardRarity rarity, AbstractCard.CardType type, boolean useRng) {
+            filterCardGroupForValid = true;
+        }
+
+        @SpirePostfixPatch
+        public static AbstractCard postfix(AbstractCard found) {
+            filterCardGroupForValid = false;
             return tryReturnCard(found);
         }
     }
@@ -119,9 +121,13 @@ public class AbstractDungeonPatches {
     @SpirePatch(clz = AbstractDungeon.class, method = "getCard", paramtypez = {AbstractCard.CardRarity.class}, optional = true)
     public static class AbstractDungeonPatches_GetRewardCards {
         @SpirePrefixPatch
-        public static SpireReturn<AbstractCard> prefix(AbstractCard.CardRarity rarity) {
-            // If no suitable card is found, create a dummy card because the method will crash if no card is actually found
-            AbstractCard found = PGR.dungeon.getRandomCard(rarity, AbstractDungeon.cardRng, true);
+        public static void prefix(AbstractCard.CardRarity rarity) {
+            filterCardGroupForValid = true;
+        }
+
+        @SpirePostfixPatch
+        public static AbstractCard postfix(AbstractCard found) {
+            filterCardGroupForValid = false;
             return tryReturnCard(found);
         }
     }
@@ -129,9 +135,13 @@ public class AbstractDungeonPatches {
     @SpirePatch(clz = AbstractDungeon.class, method = "getCard", paramtypez = {AbstractCard.CardRarity.class, Random.class}, optional = true)
     public static class AbstractDungeonPatches_GetRewardCards2 {
         @SpirePrefixPatch
-        public static SpireReturn<AbstractCard> prefix(AbstractCard.CardRarity rarity, Random rng) {
-            // If no suitable card is found, create a dummy card because the method will crash if no card is actually found
-            AbstractCard found = PGR.dungeon.getRandomCard(rarity, rng, true);
+        public static void prefix(AbstractCard.CardRarity rarity, Random rng) {
+            filterCardGroupForValid = true;
+        }
+
+        @SpirePostfixPatch
+        public static AbstractCard postfix(AbstractCard found) {
+            filterCardGroupForValid = false;
             return tryReturnCard(found);
         }
     }
@@ -139,9 +149,13 @@ public class AbstractDungeonPatches {
     @SpirePatch(clz = AbstractDungeon.class, method = "getCardWithoutRng", paramtypez = {AbstractCard.CardRarity.class}, optional = true)
     public static class AbstractDungeonPatches_GetCardWithoutRng {
         @SpirePrefixPatch
-        public static SpireReturn<AbstractCard> prefix(AbstractCard.CardRarity rarity) {
-            // If no suitable card is found, create a dummy card because the method will crash if no card is actually found
-            AbstractCard found = PGR.dungeon.getRandomCard(rarity, null, false);
+        public static void prefix(AbstractCard.CardRarity rarity) {
+            filterCardGroupForValid = true;
+        }
+
+        @SpirePostfixPatch
+        public static AbstractCard postfix(AbstractCard found) {
+            filterCardGroupForValid = false;
             return tryReturnCard(found);
         }
     }
@@ -153,6 +167,7 @@ public class AbstractDungeonPatches {
     )
     public static class AbstractDungeonPatches_NextRoomTransition {
 
+        // This must be initialized before the battle starts
         @SpireInsertPatch(
                 locator=Locator.class
         )
@@ -168,11 +183,12 @@ public class AbstractDungeonPatches {
         }
     }
 
-    protected static SpireReturn<AbstractCard> tryReturnCard(AbstractCard card) {
+    // If no suitable card is found, create a dummy card because the method will crash if no card is actually found
+    protected static AbstractCard tryReturnCard(AbstractCard card) {
         if (card == null) {
             EUIUtils.logError(AbstractDungeonPatches.class, "Failed to find card from specified rarity");
-            return SpireReturn.Return(new QuestionMark());
+            return new QuestionMark();
         }
-        return SpireReturn.Return(card);
+        return card;
     }
 }

@@ -124,7 +124,7 @@ public class PCLLibraryModule extends EUIBase implements CustomCardPoolModule {
             if (this == ColorlessGroup.PCL) {
                 return PGR.core.strings.misc_fabricate;
             }
-            return EUIRM.strings.uiBasegame;
+            return EUIRM.strings.ui_basegame;
         }
 
         public boolean isMatch(AbstractCard c) {

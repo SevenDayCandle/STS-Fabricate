@@ -192,9 +192,9 @@ public class PMultiTrait extends PTrait<PField_Empty> implements PMultiBase<PTra
     }
 
     @Override
-    public float modifyMagicNumber(PCLUseInfo info, float amount) {
+    public float modifySkillBonus(PCLUseInfo info, float amount) {
         for (PSkill<?> be : effects) {
-            amount = be.modifyMagicNumber(info, amount);
+            amount = be.modifySkillBonus(info, amount);
         }
         return amount;
     }

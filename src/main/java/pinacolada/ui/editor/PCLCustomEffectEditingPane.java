@@ -400,7 +400,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
                 .setItems(node.getEffects());
         effects.setActive(effects.size() > 1);
         valueEditor = new PCLCustomCardUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 5, MENU_HEIGHT, effects.isActive ? MAIN_OFFSET : 0, OFFSET_AMOUNT)
-                , EUIRM.strings.uiAmount, (val, upVal) -> {
+                , EUIRM.strings.ui_amount, (val, upVal) -> {
             if (node.skill != null) {
                 changeAmountForSkill(node.skill, val, upVal);
                 editor.updateRootEffect();
@@ -438,7 +438,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         tags = initializeSmartSearchable(PCLCardTag.getAll(), PGR.core.strings.cedit_tags);
         cards = initializeSearchable(getAvailableCards(), c -> c.name, RunHistoryScreen.TEXT[9]);
         relics = initializeSearchable(getAvailableRelics(), c -> c.name, RunHistoryScreen.TEXT[10]);
-        colors = initializeSearchable(AbstractCard.CardColor.values(), EUIGameUtils::getColorName, EUIRM.strings.uiColors);
+        colors = initializeSearchable(AbstractCard.CardColor.values(), EUIGameUtils::getColorName, EUIRM.strings.ui_colors);
         rarities = initializeSearchable(PCLCustomCardPrimaryInfoPage.getEligibleRarities(), EUIGameUtils::textForRarity, CardLibSortHeader.TEXT[0]);
         tiers = initializeSearchable(AbstractRelic.RelicTier.values(), EUIGameUtils::textForRelicTier, CardLibSortHeader.TEXT[0]);
         types = initializeSearchable(PCLCustomCardPrimaryInfoPage.getEligibleTypes(cardColor), EUIGameUtils::textForType, CardLibSortHeader.TEXT[1]);

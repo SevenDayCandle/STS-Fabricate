@@ -7,7 +7,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIUtils;
 import extendedui.interfaces.markers.CustomCardFilterModule;
 import extendedui.ui.EUIBase;
-import extendedui.ui.cardFilter.CardKeywordFilters;
+import extendedui.ui.cardFilter.filters.CardKeywordFilters;
 import extendedui.ui.controls.EUILabel;
 import extendedui.ui.controls.EUISearchableDropdown;
 import extendedui.ui.hitboxes.EUIHitbox;
@@ -27,8 +27,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
 
-import static extendedui.ui.cardFilter.CardKeywordFilters.DRAW_START_Y;
-import static extendedui.ui.cardFilter.CardKeywordFilters.SPACING;
+import static extendedui.ui.cardFilter.filters.CardKeywordFilters.DRAW_START_Y;
+import static extendedui.ui.cardFilter.filters.CardKeywordFilters.SPACING;
 import static pinacolada.ui.AffinityKeywordButton.ICON_SIZE;
 
 public class PCLAffinityPoolModule extends EUIBase implements CustomCardFilterModule {

@@ -6,6 +6,8 @@ import com.megacrit.cardcrawl.core.Settings;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.utilities.ColoredString;
 
+import static pinacolada.cards.base.cardText.PointerToken.DUMMY;
+
 // Copied and modified from STS-AnimatorMod
 public class WordToken extends PCLTextToken {
     protected EUIKeywordTooltip tooltip = null;
@@ -104,7 +106,7 @@ public class WordToken extends PCLTextToken {
     @Override
     protected float getWidth(BitmapFont font, String text) {
         if (text == null) {
-            return super.getWidth(font, "_.");
+            return super.getWidth(font, DUMMY);
         }
         else {
             return super.getWidth(font, text);

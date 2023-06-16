@@ -16,6 +16,8 @@ import extendedui.utilities.ColoredString;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 
+import static pinacolada.cards.base.cardText.PointerToken.DUMMY;
+
 // Copied and modified from STS-AnimatorMod
 public class VariableToken extends PCLTextToken {
     protected static Class<?> dynaClass;
@@ -77,7 +79,7 @@ public class VariableToken extends PCLTextToken {
     @Override
     protected float getWidth(BitmapFont font, String text) {
         if (text == null) {
-            return super.getWidth(font, "_."); //20f * Settings.scale * font.getScaleX(); // AbstractCard.MAGIC_NUM_W
+            return super.getWidth(font, DUMMY); //20f * Settings.scale * font.getScaleX(); // AbstractCard.MAGIC_NUM_W
         }
         else {
             return super.getWidth(font, text);

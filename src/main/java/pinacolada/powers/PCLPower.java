@@ -289,7 +289,7 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         return block;
     }
 
-    public float modifyMagicNumber(PCLUseInfo info, float block, AbstractCard c) {
+    public float modifySkillBonus(PCLUseInfo info, float block, AbstractCard c) {
         return block;
     }
 

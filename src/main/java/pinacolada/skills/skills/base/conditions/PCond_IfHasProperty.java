@@ -1,7 +1,6 @@
 package pinacolada.skills.skills.base.conditions;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -77,7 +76,7 @@ public class PCond_IfHasProperty extends PFacetCond<PField_CardCategory> {
             conditions.add(PField.getTagOrString(fields.tags));
         }
         if (!fields.costs.isEmpty()) {
-            conditions.add(PCLCoreStrings.joinWithOr(EUIUtils.map(fields.costs, c -> c.name)));
+            conditions.add(PCLCoreStrings.joinWithOr(c -> c.name, fields.costs));
         }
 
         return TEXT.cond_ifTargetHas(TEXT.subjects_thisCard, 1, PCLCoreStrings.joinWithOr(conditions));

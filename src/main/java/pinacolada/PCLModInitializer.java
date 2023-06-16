@@ -7,12 +7,11 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.effects.PCLSFX;
-import pinacolada.monsters.PCLTutorialMonster;
 import pinacolada.patches.library.BlightHelperPatches;
 import pinacolada.resources.PGR;
 
 @SpireInitializer //
-public class PCLModInitializer implements OnStartBattleSubscriber, PostBattleSubscriber, PostDeathSubscriber, PostDrawSubscriber,
+public class PCLModInitializer implements PostBattleSubscriber, PostDeathSubscriber, PostDrawSubscriber,
                                           PreStartGameSubscriber, OnPlayerTurnStartPostDrawSubscriber, OnPlayerTurnStartSubscriber,
                                           EditCardsSubscriber, EditRelicsSubscriber, PostInitializeSubscriber, AddAudioSubscriber {
     private static final PCLModInitializer instance = new PCLModInitializer();
@@ -35,11 +34,6 @@ public class PCLModInitializer implements OnStartBattleSubscriber, PostBattleSub
     @Override
     public void receiveEditRelics() {
         PGR.loadCustomRelics();
-    }
-
-    @Override
-    public void receiveOnBattleStart(AbstractRoom abstractRoom) {
-        PCLTutorialMonster.tryStart();
     }
 
     @Override

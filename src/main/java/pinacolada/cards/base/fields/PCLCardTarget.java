@@ -5,6 +5,7 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
+import extendedui.interfaces.delegates.FuncT1;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
@@ -13,7 +14,6 @@ import pinacolada.utilities.RandomizedList;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public enum PCLCardTarget implements Comparable<PCLCardTarget> {
@@ -56,11 +56,11 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
         return targets;
     }
 
-    public final boolean evaluateTargets(AbstractCreature source, AbstractCreature target, Predicate<AbstractCreature> tFunc) {
+    public final boolean evaluateTargets(AbstractCreature source, AbstractCreature target, FuncT1<Boolean, AbstractCreature> tFunc) {
         return evaluateTargets(getTargetsForEvaluation(source, target), tFunc);
     }
 
-    public final boolean evaluateTargets(Iterable<? extends AbstractCreature> targets, Predicate<AbstractCreature> tFunc) {
+    public final boolean evaluateTargets(Iterable<? extends AbstractCreature> targets, FuncT1<Boolean, AbstractCreature> tFunc) {
         switch (this) {
             case AllAlly:
             case All:

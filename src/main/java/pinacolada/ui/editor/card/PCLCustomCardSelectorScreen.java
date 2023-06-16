@@ -14,6 +14,7 @@ import extendedui.EUI;
 import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
+import extendedui.exporter.EUIExporter;
 import extendedui.interfaces.delegates.ActionT0;
 import extendedui.interfaces.delegates.ActionT3;
 import extendedui.ui.AbstractMenuScreen;
@@ -317,6 +318,7 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
             colorButtons.tryRender(sb);
             if (!EUI.cardFilters.isActive) {
                 EUI.openCardFiltersButton.tryRender(sb);
+                EUIExporter.exportCardButton.tryRender(sb);
             }
         }
     }
@@ -338,6 +340,7 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
             boolean shouldDoStandardUpdate = !EUI.cardFilters.tryUpdate() && !CardCrawlGame.isPopupOpen;
             if (shouldDoStandardUpdate) {
                 EUI.openCardFiltersButton.tryUpdate();
+                EUIExporter.exportCardButton.tryUpdate();
                 info.tryUpdate();
                 colorButtons.tryUpdate();
                 EUI.customHeader.update();
@@ -348,6 +351,7 @@ public class PCLCustomCardSelectorScreen extends AbstractMenuScreen {
                 loadExistingButton.tryUpdate();
                 reloadButton.tryUpdate();
             }
+            EUIExporter.exportDropdown.tryUpdate();
         }
     }
 

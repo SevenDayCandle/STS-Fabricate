@@ -15,6 +15,7 @@ import extendedui.EUI;
 import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
+import extendedui.exporter.EUIExporter;
 import extendedui.interfaces.delegates.ActionT0;
 import extendedui.interfaces.delegates.ActionT3;
 import extendedui.ui.AbstractMenuScreen;
@@ -307,8 +308,9 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
             reloadButton.tryRender(sb);
             contextMenu.tryRender(sb);
             colorButtons.tryRender(sb);
-            if (!EUI.cardFilters.isActive) {
-                EUI.openCardFiltersButton.tryRender(sb);
+            if (!EUI.relicFilters.isActive) {
+                EUI.openRelicFiltersButton.tryRender(sb);
+                EUIExporter.exportRelicButton.tryRender(sb);
             }
         }
     }
@@ -327,9 +329,10 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
             // Do not close the screen with esc if there is an effect going on
             super.updateImpl();
             contextMenu.tryUpdate();
-            boolean shouldDoStandardUpdate = !EUI.cardFilters.tryUpdate() && !CardCrawlGame.isPopupOpen;
+            boolean shouldDoStandardUpdate = !EUI.relicFilters.tryUpdate() && !CardCrawlGame.isPopupOpen;
             if (shouldDoStandardUpdate) {
-                EUI.openCardFiltersButton.tryUpdate();
+                EUI.openRelicFiltersButton.tryUpdate();
+                EUIExporter.exportRelicButton.tryUpdate();
                 info.tryUpdate();
                 colorButtons.tryUpdate();
                 grid.tryUpdate();
@@ -339,6 +342,7 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
                 loadExistingButton.tryUpdate();
                 reloadButton.tryUpdate();
             }
+            EUIExporter.exportDropdown.tryUpdate();
         }
     }
 

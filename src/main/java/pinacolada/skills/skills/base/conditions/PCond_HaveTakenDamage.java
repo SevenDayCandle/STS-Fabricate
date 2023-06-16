@@ -39,7 +39,7 @@ public class PCond_HaveTakenDamage extends PPassiveCond<PField_Random> implement
 
     @Override
     public String getSampleText(PSkill<?> callingSkill) {
-        return isUnderWhen(callingSkill) ? TEXT.cond_whenSingle(TEXT.act_takeDamage(TEXT.subjects_x)) : TEXT.cond_ifX(TEXT.act_takeDamage(TEXT.subjects_x));
+        return isUnderWhen(callingSkill) ? TEXT.cond_whenSingle(PGR.core.tooltips.attack.past()) : TEXT.cond_ifX(TEXT.act_takeDamage(TEXT.subjects_x));
     }
 
     @Override

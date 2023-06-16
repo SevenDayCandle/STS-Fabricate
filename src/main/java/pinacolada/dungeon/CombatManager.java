@@ -707,8 +707,8 @@ public class CombatManager {
         return damage;
     }
 
-    public static float onModifyMagicNumber(float amount, AbstractCard card) {
-        return subscriberInout(OnModifyMagicNumberSubscriber.class, amount, (s, d) -> s.onModifyMagicNumber(d, card));
+    public static float onModifySkillBonus(float amount, AbstractCard card) {
+        return subscriberInout(OnModifySkillBonusSubscriber.class, amount, (s, d) -> s.onModifySkillBonus(d, card));
     }
 
     public static void onMonsterDeath(AbstractMonster monster, boolean triggerRelics) {

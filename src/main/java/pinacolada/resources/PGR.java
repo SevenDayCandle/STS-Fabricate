@@ -375,7 +375,6 @@ public class PGR {
     public static void registerCommands() {
         ConsoleCommand.addCommand("augment", AugmentCommand.class);
         ConsoleCommand.addCommand("effekseer", EffekseerCommand.class);
-        ConsoleCommand.addCommand("exportcsv", ExportCSVCommand.class);
         ConsoleCommand.addCommand("jumpanywhere", JumpAnywhereCommand.class);
         ConsoleCommand.addCommand("obtain", ObtainCardCommand.class);
         ConsoleCommand.addCommand("obtaincustom", ObtainCustomCardCommand.class);
@@ -384,6 +383,7 @@ public class PGR {
         ConsoleCommand.addCommand("obtaindeckcustom", ObtainDeckCustomCardCommand.class);
         ConsoleCommand.addCommand("reloadcustom", ReloadCustomCommand.class);
         ConsoleCommand.addCommand("unlockall", UnlockAllCommand.class);
+        ConsoleCommand.addCommand("unlockascension", UnlockAscensionCommand.class);
     }
 
     public static void registerResource(PCLResources<?, ?, ?, ?> resources) {

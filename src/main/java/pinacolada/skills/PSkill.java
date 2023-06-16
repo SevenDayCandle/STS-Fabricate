@@ -55,7 +55,6 @@ import pinacolada.utilities.GameUtilities;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public abstract class PSkill<T extends PField> implements TooltipProvider {
@@ -411,7 +410,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return this;
     }
 
-    public final boolean evaluateTargets(PCLUseInfo info, Predicate<AbstractCreature> evalFunc) {
+    public final boolean evaluateTargets(PCLUseInfo info, FuncT1<Boolean, AbstractCreature> evalFunc) {
         return info != null && target.evaluateTargets(info.source, info.target, evalFunc);
     }
 
@@ -1173,10 +1172,6 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return this.childEffect != null ? this.childEffect.modifyHitCount(info, amount) : amount;
     }
 
-    public float modifyMagicNumber(PCLUseInfo info, float amount) {
-        return this.childEffect != null ? this.childEffect.modifyMagicNumber(info, amount) : amount;
-    }
-
     public float modifyOrbIncoming(PCLUseInfo info, float amount) {
         return this.childEffect != null ? this.childEffect.modifyOrbIncoming(info, amount) : amount;
     }
@@ -1187,6 +1182,10 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
     public float modifyRightCount(PCLUseInfo info, float amount) {
         return this.childEffect != null ? this.childEffect.modifyRightCount(info, amount) : amount;
+    }
+
+    public float modifySkillBonus(PCLUseInfo info, float amount) {
+        return this.childEffect != null ? this.childEffect.modifySkillBonus(info, amount) : amount;
     }
 
     public PSkill<T> onAddToCard(AbstractCard card) {

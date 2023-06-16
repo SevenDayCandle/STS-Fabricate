@@ -8,6 +8,7 @@ import com.megacrit.cardcrawl.localization.UIStrings;
 import com.megacrit.cardcrawl.screens.CardRewardScreen;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
+import extendedui.interfaces.delegates.FuncT1;
 import extendedui.interfaces.delegates.FuncT2;
 import extendedui.text.EUISmartText;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
@@ -381,46 +382,47 @@ public class PCLCoreStrings extends PCLStrings {
     public final String subjects_any = subjects.TEXT[14];
     public final String subjects_anyX = subjects.TEXT[15];
     public final String subjects_anyone = subjects.TEXT[16];
-    public final String subjects_bonus = subjects.TEXT[17];
-    public final String subjects_card = subjects.TEXT[18];
-    public final String subjects_character = subjects.TEXT[19];
-    public final String subjects_copiesOfX = subjects.TEXT[20];
-    public final String subjects_damage = subjects.TEXT[21];
-    public final String subjects_effectBonus = subjects.TEXT[22];
-    public final String subjects_enemy = subjects.TEXT[23];
-    public final String subjects_everyone = subjects.TEXT[24];
-    public final String subjects_fromX = subjects.TEXT[25];
-    public final String subjects_hits = subjects.TEXT[26];
-    public final String subjects_inX = subjects.TEXT[27];
-    public final String subjects_ofX = subjects.TEXT[28];
-    public final String subjects_permanentlyX = subjects.TEXT[29];
-    public final String subjects_playingXWithY = subjects.TEXT[30];
-    public final String subjects_randomX = subjects.TEXT[31];
-    public final String subjects_randomlyX = subjects.TEXT[32];
-    public final String subjects_relic = subjects.TEXT[33];
-    public final String subjects_shuffleYourDeck = subjects.TEXT[34];
-    public final String subjects_bottomOfX = subjects.TEXT[35];
-    public final String subjects_leftmostX = subjects.TEXT[36];
-    public final String subjects_rightmostX = subjects.TEXT[37];
-    public final String subjects_target = subjects.TEXT[38];
-    public final String subjects_topOfX = subjects.TEXT[39];
-    public final String subjects_theirX = subjects.TEXT[40];
-    public final String subjects_themX = subjects.TEXT[41];
-    public final String subjects_theyX = subjects.TEXT[42];
-    public final String subjects_thisCard = subjects.TEXT[43];
-    public final String subjects_this = subjects.TEXT[44];
-    public final String subjects_unblockedX = subjects.TEXT[45];
-    public final String subjects_x = subjects.TEXT[46];
-    public final String subjects_you = subjects.TEXT[47];
-    public final String subjects_yourFirstX = subjects.TEXT[48];
-    public final String subjects_yourX = subjects.TEXT[49];
-    public final String subjects_xOfY = subjects.TEXT[50];
-    public final String subjects_xOnY = subjects.TEXT[51];
-    public final String subjects_xThisCombat = subjects.TEXT[52];
-    public final String subjects_xThisTurn = subjects.TEXT[53];
-    public final String subjects_xTimes = subjects.TEXT[54];
-    public final String subjects_xWithY = subjects.TEXT[55];
-    public final String subjects_xCost = subjects.TEXT[56];
+    public final String subjects_attacks = subjects.TEXT[17];
+    public final String subjects_bonus = subjects.TEXT[18];
+    public final String subjects_card = subjects.TEXT[19];
+    public final String subjects_character = subjects.TEXT[20];
+    public final String subjects_copiesOfX = subjects.TEXT[21];
+    public final String subjects_damage = subjects.TEXT[22];
+    public final String subjects_effectBonus = subjects.TEXT[23];
+    public final String subjects_enemy = subjects.TEXT[24];
+    public final String subjects_everyone = subjects.TEXT[25];
+    public final String subjects_fromX = subjects.TEXT[26];
+    public final String subjects_hits = subjects.TEXT[27];
+    public final String subjects_inX = subjects.TEXT[28];
+    public final String subjects_ofX = subjects.TEXT[29];
+    public final String subjects_permanentlyX = subjects.TEXT[30];
+    public final String subjects_playingXWithY = subjects.TEXT[31];
+    public final String subjects_randomX = subjects.TEXT[32];
+    public final String subjects_randomlyX = subjects.TEXT[33];
+    public final String subjects_relic = subjects.TEXT[34];
+    public final String subjects_shuffleYourDeck = subjects.TEXT[35];
+    public final String subjects_bottomOfX = subjects.TEXT[36];
+    public final String subjects_leftmostX = subjects.TEXT[37];
+    public final String subjects_rightmostX = subjects.TEXT[38];
+    public final String subjects_target = subjects.TEXT[39];
+    public final String subjects_topOfX = subjects.TEXT[40];
+    public final String subjects_theirX = subjects.TEXT[41];
+    public final String subjects_themX = subjects.TEXT[42];
+    public final String subjects_theyX = subjects.TEXT[43];
+    public final String subjects_thisCard = subjects.TEXT[44];
+    public final String subjects_this = subjects.TEXT[45];
+    public final String subjects_unblockedX = subjects.TEXT[46];
+    public final String subjects_x = subjects.TEXT[47];
+    public final String subjects_you = subjects.TEXT[48];
+    public final String subjects_yourFirstX = subjects.TEXT[49];
+    public final String subjects_yourX = subjects.TEXT[50];
+    public final String subjects_xOfY = subjects.TEXT[51];
+    public final String subjects_xOnY = subjects.TEXT[52];
+    public final String subjects_xThisCombat = subjects.TEXT[53];
+    public final String subjects_xThisTurn = subjects.TEXT[54];
+    public final String subjects_xTimes = subjects.TEXT[55];
+    public final String subjects_xWithY = subjects.TEXT[56];
+    public final String subjects_xCost = subjects.TEXT[57];
     // Tutorial
     public final String tutorial_learnMore = tutorial.TEXT[0];
     public final String tutorial_tagTutorial = tutorial.TEXT[1];
@@ -487,20 +489,74 @@ public class PCLCoreStrings extends PCLStrings {
         return strFunc.invoke(sj.toString(), values[i]);
     }
 
+    public static <T> String joinWith(FuncT2<String, String, String> strFunc, FuncT1<String, T> valueToStr, List<T> values) {
+        if (values.size() == 0) {
+            return "";
+        }
+        if (values.size() == 1) {
+            return valueToStr.invoke(values.get(0));
+        }
+        StringJoiner sj = new StringJoiner(", ");
+
+        int i = 0;
+        for (i = 0; i < values.size() - 1; i++) {
+            sj.add(valueToStr.invoke(values.get(i)));
+        }
+
+        return strFunc.invoke(sj.toString(), valueToStr.invoke(values.get(i)));
+    }
+
+    @SafeVarargs
+    public static <T> String joinWith(FuncT2<String, String, String> strFunc, FuncT1<String, T> valueToStr, T... values) {
+        if (values.length == 0) {
+            return "";
+        }
+        if (values.length == 1) {
+            return valueToStr.invoke(values[0]);
+        }
+        StringJoiner sj = new StringJoiner(", ");
+        int var4 = values.length;
+
+        int i = 0;
+        for (i = 0; i < values.length - 1; i++) {
+            sj.add(valueToStr.invoke(values[i]));
+        }
+
+        return strFunc.invoke(sj.toString(), valueToStr.invoke(values[i]));
+    }
+
     public static String joinWithAnd(List<String> values) {
         return joinWith(PGR.core.strings::cond_xAndY, values);
+    }
+
+    public static <T> String joinWithAnd(FuncT1<String, T> valueToStr, List<T> values) {
+        return joinWith(PGR.core.strings::cond_xAndY, valueToStr, values);
     }
 
     public static String joinWithAnd(String... values) {
         return joinWith(PGR.core.strings::cond_xAndY, values);
     }
 
+    @SafeVarargs
+    public static <T> String joinWithAnd(FuncT1<String, T> valueToStr, T... values) {
+        return joinWith(PGR.core.strings::cond_xAndY, valueToStr, values);
+    }
+
     public static String joinWithOr(List<String> values) {
         return joinWith(PGR.core.strings::cond_or, values);
     }
 
+    public static <T> String joinWithOr(FuncT1<String, T> valueToStr, List<T> values) {
+        return joinWith(PGR.core.strings::cond_or, valueToStr, values);
+    }
+
     public static String joinWithOr(String... values) {
         return joinWith(PGR.core.strings::cond_or, values);
+    }
+
+    @SafeVarargs
+    public static <T> String joinWithOr(FuncT1<String, T> valueToStr, T... values) {
+        return joinWith(PGR.core.strings::cond_or, valueToStr, values);
     }
 
     public static String leftClick(Object desc) {
@@ -1060,6 +1116,9 @@ public class PCLCoreStrings extends PCLStrings {
     }
     public final String subjects_anyX(Object amount) {
         return EUIUtils.format(subjects_anyX, amount);
+    }
+    public final String subjects_attacks(Object ordinal) {
+        return EUIUtils.format(subjects_attacks, ordinal);
     }
     public final String subjects_bottomOf(Object amount) {
         return EUIUtils.format(subjects_bottomOfX, amount);

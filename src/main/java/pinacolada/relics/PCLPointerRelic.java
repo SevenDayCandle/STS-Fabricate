@@ -58,18 +58,18 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
         return damage;
     }
 
-    public float atMagicNumberModify(PCLUseInfo info, float damage, AbstractCard c) {
-        refresh(info);
-        for (PSkill<?> effect : getEffects()) {
-            damage = effect.modifyMagicNumber(info, damage);
-        }
-        return damage;
-    }
-
     public float atRightCountModify(PCLUseInfo info, float damage, AbstractCard c) {
         refresh(info);
         for (PSkill<?> effect : getEffects()) {
             damage = effect.modifyRightCount(info, damage);
+        }
+        return damage;
+    }
+
+    public float atSkillBonusModify(PCLUseInfo info, float damage, AbstractCard c) {
+        refresh(info);
+        for (PSkill<?> effect : getEffects()) {
+            damage = effect.modifySkillBonus(info, damage);
         }
         return damage;
     }

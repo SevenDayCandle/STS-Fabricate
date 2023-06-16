@@ -4,7 +4,6 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
-import extendedui.utilities.ColoredString;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.skills.PMove;
@@ -91,7 +90,7 @@ public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity
     }
 
     @Override
-    public ColoredString getColoredExtraString() {
-        return getColoredValueString(Math.abs(baseExtra), Math.abs(extra));
+    public String wrapExtra(int input) {
+        return String.valueOf(Math.abs(input));
     }
 }

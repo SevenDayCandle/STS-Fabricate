@@ -1083,21 +1083,24 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     // Upgrade name is determined by number of upgrades and the current form (if multiple exist)
     // E.g. Form 0 -> +A, Form 1 -> +B, etc.
     protected String getUpgradeName() {
-        String name = cardData.strings.NAME;
-        if (upgraded) {
-            StringBuilder sb = new StringBuilder(name);
-            sb.append("+");
+        // In case cardData is somehow null, return a generic name
+        if (cardData != null) {
+            String name = cardData.strings != null ? cardData.strings.NAME : "";
+            if (upgraded) {
+                StringBuilder sb = new StringBuilder(name);
+                sb.append("+");
 
-            if (maxUpgradeLevel < 0 || maxUpgradeLevel > 1) {
-                sb.append(this.timesUpgraded);
-            }
+                if (maxUpgradeLevel < 0 || maxUpgradeLevel > 1) {
+                    sb.append(this.timesUpgraded);
+                }
 
-            // Do not show appended characters for non-multiform or linear upgrade path cards
-            if (this.cardData.maxForms > 1 && this.cardData.branchFactor != 1) {
-                char appendix = (char) (auxiliaryData.form + CHAR_OFFSET);
-                sb.append(appendix);
+                // Do not show appended characters for non-multiform or linear upgrade path cards
+                if (this.cardData.maxForms > 1 && this.cardData.branchFactor != 1) {
+                    char appendix = (char) (auxiliaryData.form + CHAR_OFFSET);
+                    sb.append(appendix);
+                }
+                name = sb.toString();
             }
-            name = sb.toString();
         }
 
         return CardModifierManager.onRenderTitle(this, name);
@@ -1590,13 +1593,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         return amount;
     }
 
-    protected float modifyMagicNumber(PCLUseInfo info, float amount) {
-        for (PSkill<?> be : getFullEffects()) {
-            amount = be.modifyMagicNumber(info, amount);
-        }
-        return amount;
-    }
-
     protected float modifyRightCount(PCLUseInfo info, float amount) {
         for (PSkill<?> be : getFullEffects()) {
             amount = be.modifyRightCount(info, amount);
@@ -1706,13 +1702,15 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     // Every step of the calculation is recorded for display in the damage formula widget
     public void refresh(AbstractCreature enemy) {
         PCLUseInfo info = CombatManager.playerSystem.generateInfo(this, getSourceCreature(), enemy);
+        // We use magicNumber for the counter mechanic; effects have their amounts determined separately
+        // Thus, we instead funnel onModifyBaseMagic into a separate addition to apply to our effects
+        float effectBonus = CardModifierManager.onModifyBaseMagic(CombatManager.onModifySkillBonus(0, this), this);
         doEffects(be -> be.refresh(info, true));
         AbstractMonster asEnemy = GameUtilities.asMonster(enemy);
 
         boolean applyEnemyPowers = (enemy != null && !GameUtilities.isDeadOrEscaped(enemy));
         float tempBlock = CardModifierManager.onModifyBaseBlock(baseBlock, this);
         float tempDamage = CardModifierManager.onModifyBaseDamage(baseDamage, this, asEnemy);
-        float tempMagicNumber = CardModifierManager.onModifyBaseMagic(CombatManager.onModifyMagicNumber(baseMagicNumber, this), this);
         float tempHitCount = baseHitCount;
         float tempRightCount = baseRightCount;
         tempDamage = modifyDamage(info, tempDamage);
@@ -1732,7 +1730,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
                 for (AbstractRelic r : ((AbstractPlayer) owner).relics) {
                     if (r instanceof PCLRelic) {
-                        tempMagicNumber = ((PCLRelic) r).atMagicNumberModify(info, tempMagicNumber, this);
+                        effectBonus = ((PCLRelic) r).atSkillBonusModify(info, effectBonus, this);
                         tempHitCount = ((PCLRelic) r).atHitCountModify(info, tempHitCount, this);
                         tempRightCount = ((PCLRelic) r).atRightCountModify(info, tempRightCount, this);
                     }
@@ -1744,7 +1742,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
             for (AbstractPower p : owner.powers) {
                 if (p instanceof PCLPower) {
-                    tempMagicNumber = ((PCLPower) p).modifyMagicNumber(info, tempMagicNumber, this);
+                    effectBonus = ((PCLPower) p).modifySkillBonus(info, effectBonus, this);
                     tempHitCount = ((PCLPower) p).modifyHitCount(info, tempHitCount, this);
                     tempRightCount = ((PCLPower) p).modifyRightCount(info, tempRightCount, this);
                 }
@@ -1855,18 +1853,26 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         }
 
         // Do not use the regular update methods because those will refresh amounts from onAttack with the standard setAmount
-        // TODO heal modify
         block = Math.max(0, MathUtils.floor(tempBlock));
         damage = Math.max(0, MathUtils.floor(tempDamage));
-        magicNumber = MathUtils.floor(modifyMagicNumber(info, tempMagicNumber));
         hitCount = Math.max(1, MathUtils.floor(modifyHitCount(info, tempHitCount)));
         rightCount = Math.max(1, MathUtils.floor(modifyRightCount(info, tempRightCount)));
 
         this.isBlockModified = (baseBlock != block);
         this.isDamageModified = (baseDamage != damage);
         this.isHitCountModified = (baseHitCount != hitCount);
-        this.isMagicNumberModified = (baseMagicNumber != magicNumber);
         this.isRightCountModified = (baseRightCount != rightCount);
+
+        // Apply effect multipliers to non Attack/Block effects
+        if (effectBonus > 0) {
+            int finalEffectBonus = (int) effectBonus;
+            doEffects(
+                    be -> be.recurse(child -> {
+                       if (child.isAffectedByMods()) {
+                           child.setTemporaryAmount(finalEffectBonus + child.baseAmount);
+                       }
+                    }));
+        }
 
         if (onAttackEffect != null) {
             onAttackEffect.setAmountFromCardForUpdateOnly();

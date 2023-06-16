@@ -164,18 +164,18 @@ public class PSkillPower extends PCLPower {
         return damage;
     }
 
-    public float modifyMagicNumber(PCLUseInfo info, float damage, AbstractCard c) {
-        refreshTriggers(info);
-        for (PTrigger effect : ptriggers) {
-            damage = effect.modifyMagicNumber(info, damage);
-        }
-        return damage;
-    }
-
     public float modifyRightCount(PCLUseInfo info, float damage, AbstractCard c) {
         refreshTriggers(info);
         for (PTrigger effect : ptriggers) {
             damage = effect.modifyRightCount(info, damage);
+        }
+        return damage;
+    }
+
+    public float modifySkillBonus(PCLUseInfo info, float damage, AbstractCard c) {
+        refreshTriggers(info);
+        for (PTrigger effect : ptriggers) {
+            damage = effect.modifySkillBonus(info, damage);
         }
         return damage;
     }

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 public class PointerToken extends PCLTextToken {
     public static final char BOUND_TOKEN = '¦';
+    public static final String DUMMY = "_.";
     public static final ArrayList<Character> VALID_TOKENS = new ArrayList<>();
 
     static {
@@ -63,7 +64,7 @@ public class PointerToken extends PCLTextToken {
     @Override
     protected float getWidth(BitmapFont font, String text) {
         if (text == null) {
-            return super.getWidth(font, "_."); //20f * Settings.scale * font.getScaleX(); // AbstractCard.MAGIC_NUM_W
+            return super.getWidth(font, coloredString != null ? coloredString.text : DUMMY); //20f * Settings.scale * font.getScaleX(); // AbstractCard.MAGIC_NUM_W
         }
         else {
             return super.getWidth(font, text);

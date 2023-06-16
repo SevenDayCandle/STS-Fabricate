@@ -29,17 +29,12 @@ import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
-import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
-import java.awt.dnd.DnDConstants;
-import java.awt.dnd.DropTarget;
-import java.awt.dnd.DropTargetDropEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.List;
 
 import static extendedui.ui.controls.EUIButton.createHexagonalButton;
 
@@ -249,56 +244,8 @@ public class PCLCustomImageEffect extends PCLEffectWithCallback<Pixmap> {
 
     private void getImageFromFileDialog() {
         try {
-            JFileChooser fc = new JFileChooser();
-            fc.setFileFilter(EXTENSIONS);
-            fc.setDropTarget(new DropTarget() {
-                public synchronized void drop(DropTargetDropEvent evt) {
-                    try {
-                        evt.acceptDrop(DnDConstants.ACTION_COPY);
-                        Transferable t = evt.getTransferable();
-                        if (t != null && t.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
-                            List<File> droppedFiles = (List<File>) evt.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
-                            for (File file : droppedFiles) {
-                                fc.setSelectedFiles(droppedFiles.toArray(new File[]{}));
-                            }
-                            evt.dropComplete(true);
-                        }
-                        else {
-                            evt.dropComplete(false);
-                        }
-                    }
-                    catch (Exception e) {
-                        e.printStackTrace();
-                        evt.dropComplete(false);
-                    }
-                }
-            });
-
-            File cd = new File(PGR.config.lastImagePath.get());
-            if (cd.isDirectory()) {
-                fc.setCurrentDirectory(cd);
-            }
-
-            JFrame f = new JFrame();
-            f.toFront();
-            f.setAlwaysOnTop(true);
-            f.setLocationRelativeTo(null);
-            f.setPreferredSize(new Dimension(Settings.WIDTH / 2, Settings.HEIGHT / 2));
-            f.setVisible(true);
-
-            int result = fc.showOpenDialog(f);
-            f.setVisible(false);
-            f.dispose();
-
-            cd = fc.getCurrentDirectory();
-            if (cd != null && cd.isDirectory()) {
-                PGR.config.lastImagePath.set(cd.getAbsolutePath());
-            }
-
-            if (result == JFileChooser.APPROVE_OPTION) {
-                File openedFile = fc.getSelectedFile();
-                updateImage(new Texture(new FileHandle(openedFile), true));
-            }
+            File openedFile = EUIUtils.chooseFile(EXTENSIONS, PGR.config.lastImagePath);
+            updateImage(new Texture(new FileHandle(openedFile), true));
         }
         catch (Exception e) {
             e.printStackTrace();

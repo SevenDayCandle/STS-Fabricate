@@ -1,20 +1,24 @@
 package pinacolada.patches.card;
 
-import com.evacipated.cardcrawl.modthespire.lib.SpirePatch;
-import com.evacipated.cardcrawl.modthespire.lib.SpirePostfixPatch;
-import com.evacipated.cardcrawl.modthespire.lib.SpirePrefixPatch;
-import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
+import com.evacipated.cardcrawl.modthespire.lib.*;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.random.Random;
+import extendedui.EUIUtils;
+import javassist.CannotCompileException;
+import javassist.expr.ExprEditor;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.CombatManager;
+import pinacolada.patches.dungeon.AbstractDungeonPatches;
+import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 
 public class CardGroupPatches {
+    private static ArrayList<AbstractCard> tmpCards;
+
     private static void delay(ArrayList<AbstractCard> cards, Random rng) {
         int delayedIndex = 0;
         for (int i = 0; i < cards.size(); i++) {
@@ -75,7 +79,7 @@ public class CardGroupPatches {
         @SpirePrefixPatch
         public static SpireReturn<AbstractCard> prefix(CardGroup __instance) {
             if (__instance.group.size() == 0) {
-                return SpireReturn.Return(null);
+                return SpireReturn.Return((AbstractCard) null);
             }
             else {
                 return SpireReturn.Continue();
@@ -88,7 +92,7 @@ public class CardGroupPatches {
         @SpirePrefixPatch
         public static SpireReturn<AbstractCard> prefix(CardGroup __instance) {
             if (__instance.group.size() == 0) {
-                return SpireReturn.Return(null);
+                return SpireReturn.Return((AbstractCard) null);
             }
             else {
                 return SpireReturn.Continue();
@@ -98,12 +102,22 @@ public class CardGroupPatches {
 
     @SpirePatch(clz = CardGroup.class, method = "getRandomCard", paramtypez = {Random.class})
     public static class CardGroupPatches_GetRandomCard1 {
+
         @SpirePrefixPatch
         public static SpireReturn<AbstractCard> prefix(CardGroup __instance, Random rng) {
+            tmpCards = __instance.group;
+            if (AbstractDungeonPatches.filterCardGroupForValid) {
+                __instance.group = EUIUtils.filter(__instance.group, PGR.dungeon::canObtainCopy);
+            }
             if (__instance.group.size() == 0) {
-                return SpireReturn.Return(null);
+                return SpireReturn.Return((AbstractCard) null);
             }
             return SpireReturn.Continue();
+        }
+
+        @SpirePostfixPatch
+        public static void postfix(CardGroup __instance) {
+            __instance.group = tmpCards;
         }
     }
 
@@ -111,10 +125,61 @@ public class CardGroupPatches {
     public static class CardGroupPatches_GetRandomCard2 {
         @SpirePrefixPatch
         public static SpireReturn<AbstractCard> prefix(CardGroup __instance, boolean useRng) {
+            tmpCards = __instance.group;
+            if (AbstractDungeonPatches.filterCardGroupForValid) {
+                __instance.group = EUIUtils.filter(__instance.group, PGR.dungeon::canObtainCopy);
+            }
             if (__instance.group.size() == 0) {
-                return SpireReturn.Return(null);
+                return SpireReturn.Return((AbstractCard) null);
             }
             return SpireReturn.Continue();
+        }
+
+        @SpirePostfixPatch
+        public static void postfix(CardGroup __instance) {
+            __instance.group = tmpCards;
+        }
+    }
+
+    @SpirePatch(clz = CardGroup.class, method = "getRandomCard", paramtypez = {boolean.class, AbstractCard.CardRarity.class})
+    public static class CardGroupPatches_GetRandomCard3 {
+        @SpireInstrumentPatch
+        public static ExprEditor instrument() {
+            return new ExprEditor() {
+                public void edit(javassist.expr.FieldAccess m) throws CannotCompileException {
+                    if (m.getClassName().equals(AbstractCard.class.getName()) && m.getFieldName().equals("rarity") && m.isReader()) {
+                        m.replace("$_ = pinacolada.patches.card.CardGroupPatches.checkRarity($0);");
+                    }
+                }
+            };
+        }
+    }
+
+    @SpirePatch(clz = CardGroup.class, method = "getRandomCard", paramtypez = {Random.class, AbstractCard.CardRarity.class})
+    public static class CardGroupPatches_GetRandomCard4 {
+        @SpireInstrumentPatch
+        public static ExprEditor instrument() {
+            return new ExprEditor() {
+                public void edit(javassist.expr.FieldAccess m) throws CannotCompileException {
+                    if (m.getClassName().equals(AbstractCard.class.getName()) && m.getFieldName().equals("rarity") && m.isReader()) {
+                        m.replace("$_ = pinacolada.patches.card.CardGroupPatches.checkRarity($0);");
+                    }
+                }
+            };
+        }
+    }
+
+    @SpirePatch(clz = CardGroup.class, method = "getRandomCard", paramtypez = {AbstractCard.CardType.class, boolean.class})
+    public static class CardGroupPatches_GetRandomCard5 {
+        @SpireInstrumentPatch
+        public static ExprEditor instrument() {
+            return new ExprEditor() {
+                public void edit(javassist.expr.FieldAccess m) throws CannotCompileException {
+                    if (m.getClassName().equals(AbstractCard.class.getName()) && m.getFieldName().equals("type") && m.isReader()) {
+                        m.replace("$_ = pinacolada.patches.card.CardGroupPatches.checkType($0);");
+                    }
+                }
+            };
         }
     }
 
@@ -142,5 +207,19 @@ public class CardGroupPatches {
                 CombatManager.summons.applyPowers();
             }
         }
+    }
+
+    public static AbstractCard.CardRarity checkRarity(AbstractCard c) {
+        if (!AbstractDungeonPatches.filterCardGroupForValid) {
+            return c.rarity;
+        }
+        return PGR.dungeon.canObtainCopy(c) ? c.rarity : null;
+    }
+
+    public static AbstractCard.CardType checkType(AbstractCard c) {
+        if (!AbstractDungeonPatches.filterCardGroupForValid) {
+            return c.type;
+        }
+        return PGR.dungeon.canObtainCopy(c) ? c.type : null;
     }
 }

@@ -7,7 +7,7 @@ import com.evacipated.cardcrawl.modthespire.lib.SpireReturn;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIGameUtils;
 import extendedui.ui.TextureCache;
-import extendedui.ui.cardFilter.filters.CardTypePanelFilterItem;
+import extendedui.ui.cardFilter.panels.CardTypePanelFilterItem;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.resources.PCLEnum;
 import pinacolada.resources.PGR;

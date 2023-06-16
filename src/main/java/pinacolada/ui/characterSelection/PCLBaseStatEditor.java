@@ -144,10 +144,10 @@ public class PCLBaseStatEditor extends EUIHoverable {
     public enum StatType {
         HP(ImageMaster.TP_HP, Settings.RED_TEXT_COLOR, 2, 1, -6, 6, 0),
         Gold(ImageMaster.TP_GOLD, Settings.GOLD_COLOR, 14, 1, -6, 6, 0),
-        PotionSlot(ImageMaster.POTION_PLACEHOLDER, Settings.CREAM_COLOR, 1, 12, -2, 2, 12),
-        OrbSlot(ImageMaster.ORB_SLOT_1, Settings.CREAM_COLOR, 1, 10, -3, 1, 12),
-        CardDraw(ImageMaster.TINY_CARD_BACKGROUND, Settings.CREAM_COLOR, 1, 25, -1, 1, 12),
-        Energy(ImageMaster.ENERGY_RED_LAYER1, Settings.CREAM_COLOR, 1, 30, -1, 1, 12);
+        OrbSlot(ImageMaster.ORB_SLOT_1, Settings.CREAM_COLOR, 1, 10, 12),
+        PotionSlot(ImageMaster.POTION_PLACEHOLDER, Settings.CREAM_COLOR, 1, 12, 12),
+        CardDraw(ImageMaster.TINY_CARD_BACKGROUND, Settings.CREAM_COLOR, 1, 25, 12),
+        Energy(ImageMaster.ENERGY_RED_LAYER1, Settings.CREAM_COLOR, 1, 30, 12);
 
         public final Texture icon;
         public final Color labelColor;
@@ -156,6 +156,10 @@ public class PCLBaseStatEditor extends EUIHoverable {
         public final int minValue;
         public final int maxValue;
         public final int unlockLevel;
+
+        StatType(Texture icon, Color labelColor, int amountPerStep, int valuePerStep, int unlockLevel) {
+            this(icon, labelColor, amountPerStep, valuePerStep, -valuePerStep, valuePerStep, unlockLevel);
+        }
 
         StatType(Texture icon, Color labelColor, int amountPerStep, int valuePerStep, int minValue, int maxValue, int unlockLevel) {
             this.icon = icon;

@@ -1,7 +1,6 @@
 package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import extendedui.utilities.ColoredString;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -34,11 +33,6 @@ public class PMove_GainBlock extends PMove<PField_Empty> {
     }
 
     @Override
-    public ColoredString getColoredValueString() {
-        return getColoredValueString(Math.abs(baseAmount), Math.abs(amount));
-    }
-
-    @Override
     public String getSampleText(PSkill<?> callingSkill) {
         return TEXT.act_gainAmount(TEXT.subjects_x, PGR.core.tooltips.block.title);
     }
@@ -65,5 +59,10 @@ public class PMove_GainBlock extends PMove<PField_Empty> {
         }
 
         super.use(info);
+    }
+
+    @Override
+    public String wrapAmount(int input) {
+        return String.valueOf(Math.abs(input));
     }
 }

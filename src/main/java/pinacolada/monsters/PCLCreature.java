@@ -3,9 +3,13 @@ package pinacolada.monsters;
 import basemod.ReflectionHacks;
 import basemod.abstracts.CustomMonster;
 import basemod.animations.AbstractAnimation;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.esotericsoftware.spine.*;
 import com.evacipated.cardcrawl.mod.stslib.patches.core.AbstractCreature.TempHPField;
 import com.evacipated.cardcrawl.mod.stslib.powers.StunMonsterPower;
+import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.vfx.BobEffect;
@@ -99,6 +103,18 @@ public abstract class PCLCreature extends CustomMonster implements IntentProvide
     @Override
     public void loadAnimation(String atlasUrl, String skeletonUrl, float scale) {
         super.loadAnimation(atlasUrl, skeletonUrl, scale);
+    }
+
+    // Intentionally avoid calling loadAnimation to avoid registering animations
+    protected void loadAnimationPCL(String atlasUrl, String skeletonUrl, float scale) {
+        this.atlas = new TextureAtlas(Gdx.files.internal(atlasUrl));
+        SkeletonJson json = new SkeletonJson(this.atlas);
+        json.setScale(Settings.renderScale * scale);
+        SkeletonData skeletonData = json.readSkeletonData(Gdx.files.internal(skeletonUrl));
+        this.skeleton = new Skeleton(skeletonData);
+        this.skeleton.setColor(Color.WHITE);
+        this.stateData = new AnimationStateData(skeletonData);
+        this.state = new AnimationState(this.stateData);
     }
 
     @Override
