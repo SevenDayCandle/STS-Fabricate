@@ -1,6 +1,7 @@
 package pinacolada.skills.skills.base.modifiers;
 
 import extendedui.EUIUtils;
+import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -42,23 +43,23 @@ public class PMod_XEnergy extends PPassiveMod<PField_Empty> {
     }
 
     @Override
-    public void use(PCLUseInfo info) {
-        getActions().callback(() -> {
+    public void use(PCLUseInfo info, PCLActions order) {
+        order.callback(() -> {
             if (this.childEffect != null) {
                 updateChildAmount(info);
                 GameUtilities.useXCostEnergy(sourceCard);
-                this.childEffect.use(info);
+                this.childEffect.use(info, order);
             }
         });
     }
 
     @Override
-    public void use(PCLUseInfo info, boolean isUsing) {
-        getActions().callback(() -> {
+    public void use(PCLUseInfo info, PCLActions order, boolean isUsing) {
+        order.callback(() -> {
             if (this.childEffect != null) {
                 updateChildAmount(info);
                 GameUtilities.useXCostEnergy(sourceCard);
-                this.childEffect.use(info, isUsing);
+                this.childEffect.use(info, order, isUsing);
             }
         });
     }

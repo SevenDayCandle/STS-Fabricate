@@ -10,6 +10,7 @@ import extendedui.EUIUtils;
 import extendedui.configuration.EUIHotkeys;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.ui.tooltips.EUICardPreview;
+import pinacolada.actions.PCLActions;
 import pinacolada.actions.special.ChooseMulticardAction;
 import pinacolada.augments.PCLAugment;
 import pinacolada.cards.base.fields.PCLCardSaveData;
@@ -352,7 +353,7 @@ public abstract class PCLMultiCard extends PCLCard {
                     PGR.core.strings.act_has(PCLCoreStrings.joinWithAnd(c -> c.name, multicard.getCards())) : super.getSubText();
         }
 
-        protected void useImpl(PCLUseInfo info) {
+        protected void useImpl(PCLUseInfo info, PCLActions order) {
             AbstractMonster m = EUIUtils.safeCast(info.target, AbstractMonster.class);
             ArrayList<AbstractCard> played = AbstractDungeon.actionManager.cardsPlayedThisTurn;
             // Allow Starter effects on inherited cards to take effect

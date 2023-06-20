@@ -3,6 +3,7 @@ package pinacolada.skills.skills.base.conditions;
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLAction;
+import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -46,8 +47,8 @@ public class PCond_TakeDamageTo extends PActiveCond<PField_Not> {
     }
 
     @Override
-    protected PCLAction<?> useImpl(PCLUseInfo info, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {
-        return fields.not ? getActions().loseHP(amount, AbstractGameAction.AttackEffect.NONE).addCallback(c -> onComplete.invoke(info))
-                : getActions().takeDamage(amount, AbstractGameAction.AttackEffect.NONE).addCallback(c -> onComplete.invoke(info));
+    protected PCLAction<?> useImpl(PCLUseInfo info, PCLActions order, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {
+        return fields.not ? order.loseHP(amount, AbstractGameAction.AttackEffect.NONE).addCallback(c -> onComplete.invoke(info))
+                : order.takeDamage(amount, AbstractGameAction.AttackEffect.NONE).addCallback(c -> onComplete.invoke(info));
     }
 }

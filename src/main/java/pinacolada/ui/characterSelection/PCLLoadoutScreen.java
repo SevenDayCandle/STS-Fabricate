@@ -19,7 +19,6 @@ import extendedui.ui.tooltips.EUIHeaderlessTooltip;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
-import pinacolada.cards.base.PCLCard;
 import pinacolada.effects.screen.PCLCardSlotSelectionEffect;
 import pinacolada.effects.screen.PCLRelicSlotSelectionEffect;
 import pinacolada.resources.PCLAbstractPlayerData;
@@ -192,7 +191,6 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
     public void dispose() {
         super.dispose();
 
-        PCLCard.canCropPortraits = true;
         toggleViewUpgrades(false);
 
         if (onClose != null) {
@@ -357,7 +355,6 @@ public class PCLLoadoutScreen extends AbstractMenuScreen {
 
         startingDeck.setLabel(PGR.core.strings.csel_leftText + EUIUtils.SPLIT_LINE + PCLCoreStrings.colorString("y", loadout.getName()));
 
-        PCLCard.canCropPortraits = false;
         toggleViewUpgrades(false);
         changePreset(loadout.preset);
 

@@ -2,6 +2,7 @@ package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import extendedui.EUIRM;
+import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -56,24 +57,24 @@ public class PMove_ChannelOrb extends PMove<PField_Orb> {
     }
 
     @Override
-    public void use(PCLUseInfo info) {
+    public void use(PCLUseInfo info, PCLActions order) {
         if (!fields.orbs.isEmpty()) {
             if (fields.random) {
                 PCLOrbHelper orb = GameUtilities.getRandomElement(fields.orbs);
                 if (orb != null) {
-                    getActions().channelOrbs(orb, amount).addCallback(this::modifyFocus);
+                    order.channelOrbs(orb, amount).addCallback(this::modifyFocus);
                 }
             }
             else {
                 for (PCLOrbHelper orb : fields.orbs) {
-                    getActions().channelOrbs(orb, amount).addCallback(this::modifyFocus);
+                    order.channelOrbs(orb, amount).addCallback(this::modifyFocus);
                 }
             }
         }
         else {
-            getActions().channelRandomOrbs(amount).addCallback(this::modifyFocus);
+            order.channelRandomOrbs(amount).addCallback(this::modifyFocus);
         }
-        super.use(info);
+        super.use(info, order);
     }
 
     protected void modifyFocus(List<AbstractOrb> orbs) {

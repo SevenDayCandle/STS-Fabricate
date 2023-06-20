@@ -2,8 +2,9 @@ package pinacolada.skills.skills;
 
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
-import extendedui.interfaces.delegates.ActionT2;
+import extendedui.interfaces.delegates.ActionT3;
 import extendedui.interfaces.delegates.FuncT1;
+import pinacolada.actions.PCLActions;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.resources.pcl.PCLCoreStrings;
@@ -17,13 +18,13 @@ public class PSpecialSkill extends PSkill<PField_CardCategory> {
             .setExtra(-DEFAULT_MAX, DEFAULT_MAX)
             .selfTarget();
     private final String description;
-    private final ActionT2<PSpecialSkill, PCLUseInfo> onUse;
+    private final ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse;
 
-    public PSpecialSkill(String effectID, String description, ActionT2<PSpecialSkill, PCLUseInfo> onUse) {
+    public PSpecialSkill(String effectID, String description, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse) {
         this(effectID, description, onUse, 1, 0);
     }
 
-    public PSpecialSkill(String effectID, String description, ActionT2<PSpecialSkill, PCLUseInfo> onUse, int amount, int extra) {
+    public PSpecialSkill(String effectID, String description, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, int amount, int extra) {
         super(DATA);
         setAmount(amount);
         setExtra(extra);
@@ -32,15 +33,15 @@ public class PSpecialSkill extends PSkill<PField_CardCategory> {
         this.onUse = onUse;
     }
 
-    public PSpecialSkill(String effectID, String description, ActionT2<PSpecialSkill, PCLUseInfo> onUse, int amount) {
+    public PSpecialSkill(String effectID, String description, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, int amount) {
         this(effectID, description, onUse, amount, 0);
     }
 
-    public PSpecialSkill(String effectID, FuncT1<String, PSpecialSkill> strFunc, ActionT2<PSpecialSkill, PCLUseInfo> onUse) {
+    public PSpecialSkill(String effectID, FuncT1<String, PSpecialSkill> strFunc, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse) {
         this(effectID, strFunc, onUse, 1, 0);
     }
 
-    public PSpecialSkill(String effectID, FuncT1<String, PSpecialSkill> strFunc, ActionT2<PSpecialSkill, PCLUseInfo> onUse, int amount, int extra) {
+    public PSpecialSkill(String effectID, FuncT1<String, PSpecialSkill> strFunc, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, int amount, int extra) {
         super(DATA);
         setAmount(amount);
         setExtra(extra);
@@ -49,7 +50,7 @@ public class PSpecialSkill extends PSkill<PField_CardCategory> {
         this.onUse = onUse;
     }
 
-    public PSpecialSkill(String effectID, FuncT1<String, PSpecialSkill> strFunc, ActionT2<PSpecialSkill, PCLUseInfo> onUse, int amount) {
+    public PSpecialSkill(String effectID, FuncT1<String, PSpecialSkill> strFunc, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, int amount) {
         this(effectID, strFunc, onUse, amount, 0);
     }
 
@@ -75,7 +76,7 @@ public class PSpecialSkill extends PSkill<PField_CardCategory> {
     }
 
     @Override
-    public void use(PCLUseInfo info) {
-        onUse.invoke(this, info);
+    public void use(PCLUseInfo info, PCLActions order) {
+        onUse.invoke(this, info, order);
     }
 }

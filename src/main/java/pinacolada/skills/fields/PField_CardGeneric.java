@@ -25,6 +25,7 @@ public class PField_CardGeneric extends PField_Not {
     public ArrayList<PCLCardGroupHelper> groupTypes = new ArrayList<>();
     public ArrayList<PCLCardGroupHelper> baseGroupTypes = groupTypes;
     public PCLCardSelection origin = PCLCardSelection.Manual;
+    public PCLCardSelection destination = PCLCardSelection.Manual;
     public boolean forced;
 
     public PField_CardGeneric() {
@@ -35,6 +36,7 @@ public class PField_CardGeneric extends PField_Not {
         super();
         setCardGroup(other.groupTypes);
         setOrigin(other.origin);
+        setDestination(other.destination);
         setNot(other.not);
         setForced(other.forced);
     }
@@ -54,15 +56,18 @@ public class PField_CardGeneric extends PField_Not {
 
         // Set automatic selection when self targeting, or if the action is forced and we must select every available card
         if ((!skill.useParent && groupTypes.isEmpty()) || (forced && skill.baseAmount <= 0)) {
-            return action.invoke(skill.getName(), skill.target.getTarget(info.source, info.target), choiceSize, PCLCardSelection.Random.toSelection(), g);
+            return action.invoke(skill.getName(), skill.target.getTarget(info.source, info.target), choiceSize, PCLCardSelection.Random.toSelection(), g)
+                    .setDestination(destination.toSelection());
         }
         else if (subchoices > 0 && subchoices <= choiceSize) {
             ListSelection<AbstractCard> selection = origin.toSelection();
             return action.invoke(skill.getName(), skill.target.getTarget(info.source, info.target), subchoices, PCLCardSelection.Manual.toSelection(), g)
-                    .setMaxChoices(choiceSize, selection != null ? selection : PCLCardSelection.Random.toSelection());
+                    .setMaxChoices(choiceSize, selection != null ? selection : PCLCardSelection.Random.toSelection())
+                    .setDestination(destination.toSelection());
         }
 
-        return action.invoke(skill.getName(), skill.target.getTarget(info.source, info.target), choiceSize, origin.toSelection(), g);
+        return action.invoke(skill.getName(), skill.target.getTarget(info.source, info.target), choiceSize, origin.toSelection(), g)
+                .setDestination(destination.toSelection());
     }
 
     public SelectFromPile createFilteredAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> action, PCLUseInfo info, int subchoices) {
@@ -78,6 +83,7 @@ public class PField_CardGeneric extends PField_Not {
         return super.equals(other)
                 && groupTypes.equals(((PField_CardGeneric) other).groupTypes)
                 && origin.equals(((PField_CardGeneric) other).origin)
+                && destination.equals(((PField_CardGeneric) other).destination)
                 && not == ((PField_CardGeneric) other).not
                 && forced == ((PField_CardGeneric) other).forced;
     }
@@ -127,6 +133,10 @@ public class PField_CardGeneric extends PField_Not {
         }
     }
 
+    public String getDestinationString(String base) {
+        return getOriginWrappedString(base, destination);
+    }
+
     public String getFullCardString() {
         return getShortCardString();
     }
@@ -135,12 +145,12 @@ public class PField_CardGeneric extends PField_Not {
         return getFullCardString();
     }
 
-    public CardFilterAction getGenericPileAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> action, PCLUseInfo info, int subchoices) {
+    public CardFilterAction getGenericPileAction(FuncT5<SelectFromPile, String, AbstractCreature, Integer, ListSelection<AbstractCard>, CardGroup[]> action, PCLUseInfo info, PCLActions order, int subchoices) {
         if (!skill.useParent && groupTypes.isEmpty() && skill.sourceCard != null) {
             return PCLActions.last.add(createFilteredAction(action, info, subchoices));
         }
         else {
-            return skill.getActions().add(createFilteredAction(action, info, subchoices));
+            return order.add(createFilteredAction(action, info, subchoices));
         }
     }
 
@@ -195,6 +205,11 @@ public class PField_CardGeneric extends PField_Not {
 
     public PField_CardGeneric setOrigin(PCLCardSelection origin) {
         this.origin = origin;
+        return this;
+    }
+
+    public PField_CardGeneric setDestination(PCLCardSelection destination) {
+        this.destination = destination;
         return this;
     }
 

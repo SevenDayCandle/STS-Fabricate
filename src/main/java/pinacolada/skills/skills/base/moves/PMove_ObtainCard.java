@@ -45,8 +45,8 @@ public class PMove_ObtainCard extends PMove_GenerateCard implements OutOfCombatM
     }
 
     @Override
-    public void performAction(PCLUseInfo info, AbstractCard c) {
-        getActions().showAndObtain(c);
+    public void performAction(PCLUseInfo info, PCLActions order, AbstractCard c) {
+        order.showAndObtain(c);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class PMove_ObtainCard extends PMove_GenerateCard implements OutOfCombatM
     public void useOutsideOfBattle() {
         super.useOutsideOfBattle();
         if (GameUtilities.inBattle()) {
-            use(makeInfo(getOwnerCreature()), __ -> {}, PCLActions.top);
+            use(makeInfo(getOwnerCreature()), PCLActions.top, __ -> {});
         }
         else {
             PCLEffects.Queue.add(new ChooseCardsToObtainEffect(amount, getBaseCards(null), null));

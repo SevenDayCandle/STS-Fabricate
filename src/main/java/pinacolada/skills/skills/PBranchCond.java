@@ -8,6 +8,7 @@ import extendedui.interfaces.delegates.ActionT1;
 import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.utilities.RotatingList;
 import org.apache.commons.lang3.StringUtils;
+import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -101,16 +102,16 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
     }
 
     @Override
-    public void use(PCLUseInfo info) {
+    public void use(PCLUseInfo info, PCLActions order) {
         if (childEffect instanceof PActiveCond) {
-            ((PActiveCond<?>) childEffect).useImpl(info, (i) -> useSubEffect(i, childEffect.getQualifiers(i)), (i) -> {
+            ((PActiveCond<?>) childEffect).useImpl(info, order, (i) -> useSubEffect(i, order, childEffect.getQualifiers(i)), (i) -> {
             });
         }
         else if (childEffect instanceof PCallbackMove) {
-            ((PCallbackMove<?>) childEffect).use(info, (i) -> useSubEffect(i, childEffect.getQualifiers(i)));
+            ((PCallbackMove<?>) childEffect).use(info, order, (i) -> useSubEffect(i, order, childEffect.getQualifiers(i)));
         }
         else if (childEffect != null) {
-            useSubEffect(info, childEffect.getQualifiers(info));
+            useSubEffect(info, order, childEffect.getQualifiers(info));
         }
     }
 
@@ -304,6 +305,10 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
         }
     }
 
+    public boolean tryPassParent(PSkill<?> source, PCLUseInfo info) {
+        return source == childEffect ? (parent == null || parent.tryPassParent(source, info)) : super.tryPassParent(source, info);
+    }
+
     @Override
     public void unsubscribeChildren() {
         for (PSkill<?> effect : effects) {
@@ -319,14 +324,14 @@ public class PBranchCond extends PCond<PField_Not> implements PMultiBase<PSkill<
         return this.childEffect != null ? this.childEffect.getSubText() : "";
     }
 
-    public void useSubEffect(PCLUseInfo info, ArrayList<Integer> qualifiers) {
+    public void useSubEffect(PCLUseInfo info, PCLActions order, ArrayList<Integer> qualifiers) {
         if (this.effects.size() > 0) {
             boolean canGoOver = this.childEffect.getQualifierRange() < this.effects.size();
             for (int i : qualifiers) {
-                this.effects.get(i).use(info);
+                this.effects.get(i).use(info, order);
             }
             if (qualifiers.isEmpty() && canGoOver) {
-                this.effects.get(this.childEffect.getQualifierRange()).use(info);
+                this.effects.get(this.childEffect.getQualifierRange()).use(info, order);
             }
         }
     }

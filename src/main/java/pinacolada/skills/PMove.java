@@ -4,7 +4,9 @@ import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
+import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.FuncT1;
+import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLAffinity;
@@ -534,6 +536,12 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
     }
 
     @Override
+    public PMove<T> edit(ActionT1<T> editFunc) {
+        editFunc.invoke(fields);
+        return this;
+    }
+
+    @Override
     public PMove<T> setAmountFromCard() {
         super.setAmountFromCard();
         return this;
@@ -555,11 +563,11 @@ public abstract class PMove<T extends PField> extends PSkill<T> {
         return this;
     }
 
-    public void use(PCLUseInfo info) {
+    public void use(PCLUseInfo info, PCLActions order) {
         if (this.vfxFunc != null) {
             PCLEffects.Queue.add(vfxFunc.invoke(info));
         }
-        super.use(info);
+        super.use(info, order);
     }
 
 }

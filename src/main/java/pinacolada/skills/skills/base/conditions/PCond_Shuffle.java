@@ -1,5 +1,6 @@
 package pinacolada.skills.skills.base.conditions;
 
+import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -31,7 +32,7 @@ public class PCond_Shuffle extends PDelegateCond<PField_Empty> implements OnShuf
     }
 
     @Override
-    public void use(PCLUseInfo info) {
+    public void use(PCLUseInfo info, PCLActions order) {
     }
 
     @Override

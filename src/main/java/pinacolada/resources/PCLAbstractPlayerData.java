@@ -137,6 +137,17 @@ public abstract class PCLAbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, 
         }
     }
 
+    private void deserializeSelectedLoadout() {
+        selectedLoadout = getLoadout(config.lastLoadout.get());
+        if (selectedLoadout == null) {
+            selectedLoadout = EUIUtils.random(EUIUtils.filter(getEveryLoadout(), loadout -> resources.getUnlockLevel() >= loadout.unlockLevel));
+        }
+        if (selectedLoadout == null) {
+            selectedLoadout = getCoreLoadout();
+        }
+    }
+
+    @Deprecated
     private void deserializeTrophies(String data) {
         trophies.clear();
 
@@ -145,7 +156,6 @@ public abstract class PCLAbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, 
             final String[] items = EUIUtils.splitString("|", data);
 
             if (items.length > 0) {
-                selectedLoadout = getLoadout(items[0]);
                 for (int i = 1; i < items.length; i++) {
                     final PCLTrophies trophies = new PCLTrophies(items[i]);
                     this.trophies.put(items[0], trophies);
@@ -170,6 +180,7 @@ public abstract class PCLAbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, 
         return config.getConfigPath() + "_" + id.replace(':', '-') + "_" + slot + ".json";
     }
 
+    @Deprecated
     public PCLTrophies getTrophies(String id) {
         return trophies.get(id);
     }
@@ -245,10 +256,7 @@ public abstract class PCLAbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, 
         if (config != null) {
             deserializeTrophies(config.trophies.get());
             deserializeCustomLoadouts();
-
-            if (selectedLoadout == null) {
-                selectedLoadout = getCoreLoadout();
-            }
+            deserializeSelectedLoadout();
         }
     }
 
@@ -266,8 +274,13 @@ public abstract class PCLAbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, 
                 }
             }
         }
+        if (selectedLoadout == null) {
+            selectedLoadout = EUIUtils.random(EUIUtils.filter(getEveryLoadout(), loadout -> resources.getUnlockLevel() >= loadout.unlockLevel));
+        }
+        config.lastLoadout.set(selectedLoadout.ID);
     }
 
+    @Deprecated
     public void saveTrophies() {
         EUIUtils.logInfoIfDebug(this, "Saving Trophies");
 
@@ -276,13 +289,9 @@ public abstract class PCLAbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, 
 
     // SelectedLoadout|Series_1,Trophy1,Trophy2,Trophy3|Series_2,Trophy1,Trophy2,Trophy3|...
     // TODO rework
+    @Deprecated
     private String serializeTrophies() {
         final StringJoiner sj = new StringJoiner("|");
-
-        if (selectedLoadout == null) {
-            selectedLoadout = EUIUtils.random(EUIUtils.filter(getEveryLoadout(), loadout -> resources.getUnlockLevel() >= loadout.unlockLevel));
-        }
-        sj.add(String.valueOf(selectedLoadout.ID));
 
         for (PCLTrophies t : trophies.values()) {
             sj.add(t.serialize());

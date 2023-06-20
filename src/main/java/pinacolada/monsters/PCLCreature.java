@@ -130,6 +130,10 @@ public abstract class PCLCreature extends CustomMonster implements IntentProvide
         }
     }
 
+    protected boolean shouldShowIntents() {
+        return !this.isDying && !this.isEscaping && AbstractDungeon.getCurrRoom().phase == AbstractRoom.RoomPhase.COMBAT && !AbstractDungeon.player.isDead && EUIGameUtils.canViewEnemyIntents(this) && !Settings.hideCombatElements;
+    }
+
     public abstract void performActions(boolean manual);
 
     public void setAnimation(AbstractAnimation animation) {
@@ -165,7 +169,7 @@ public abstract class PCLCreature extends CustomMonster implements IntentProvide
                 sb.setBlendFunction(770, 771);
             }
 
-            if (!this.isDying && !this.isEscaping && AbstractDungeon.getCurrRoom().phase == AbstractRoom.RoomPhase.COMBAT && !AbstractDungeon.player.isDead && EUIGameUtils.canViewEnemyIntents(this) && !Settings.hideCombatElements) {
+            if (shouldShowIntents()) {
                 this.renderIntentVfxBehind(sb);
                 this.renderIntent(sb);
                 this.renderIntentVfxAfter(sb);

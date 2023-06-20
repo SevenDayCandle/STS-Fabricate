@@ -22,7 +22,7 @@ import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
-import extendedui.interfaces.delegates.ActionT2;
+import extendedui.interfaces.delegates.ActionT3;
 import extendedui.interfaces.markers.TooltipProvider;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
@@ -125,17 +125,17 @@ public abstract class PCLPower extends AbstractPower implements CloneablePowerIn
         return atDamageGive(block, type, c);
     }
 
-    public PCLClickableUse createTrigger(ActionT2<PSpecialSkill, PCLUseInfo> onUse) {
+    public PCLClickableUse createTrigger(ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse) {
         triggerCondition = new PCLClickableUse(this, onUse);
         return triggerCondition;
     }
 
-    public PCLClickableUse createTrigger(ActionT2<PSpecialSkill, PCLUseInfo> onUse, int uses, boolean refreshEachTurn, boolean stackAutomatically) {
+    public PCLClickableUse createTrigger(ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, int uses, boolean refreshEachTurn, boolean stackAutomatically) {
         triggerCondition = new PCLClickableUse(this, onUse, uses, refreshEachTurn, stackAutomatically);
         return triggerCondition;
     }
 
-    public PCLClickableUse createTrigger(ActionT2<PSpecialSkill, PCLUseInfo> onUse, PCLTriggerUsePool pool) {
+    public PCLClickableUse createTrigger(ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, PCLTriggerUsePool pool) {
         triggerCondition = new PCLClickableUse(this, onUse, pool);
         return triggerCondition;
     }

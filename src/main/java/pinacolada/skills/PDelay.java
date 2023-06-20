@@ -1,6 +1,7 @@
 package pinacolada.skills;
 
 import extendedui.interfaces.delegates.ActionT1;
+import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.pcl.PCLCoreStrings;
@@ -78,9 +79,9 @@ public abstract class PDelay extends PSkill<PField_Empty> {
     }
 
     @Override
-    public void use(PCLUseInfo info) {
+    public void use(PCLUseInfo info, PCLActions order) {
         if (this.childEffect != null) {
-            getDelayUse(info, (i) -> this.childEffect.use(i)).start();
+            getDelayUse(info, (i) -> this.childEffect.use(i, order)).start();
         }
     }
 }

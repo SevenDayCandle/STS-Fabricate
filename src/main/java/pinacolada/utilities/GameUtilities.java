@@ -60,12 +60,14 @@ import pinacolada.augments.PCLAugment;
 import pinacolada.augments.PCLAugmentCategory;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.blights.common.UpgradedHand;
+import pinacolada.cardmods.AffinityDisplayModifier;
+import pinacolada.cardmods.TagDisplayModifier;
+import pinacolada.cardmods.TemporaryBlockModifier;
+import pinacolada.cardmods.TemporaryDamageModifier;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardAffinities;
 import pinacolada.cards.base.fields.PCLCardAffinity;
-import pinacolada.cards.base.modifiers.AffinityDisplayModifier;
-import pinacolada.cards.base.modifiers.TagDisplayModifier;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.characters.PCLCharacter;
 import pinacolada.dungeon.CombatManager;
@@ -248,14 +250,6 @@ public class GameUtilities {
         }
 
         return retVal;
-    }
-
-    public static void decreaseBlock(AbstractCard card, int amount, boolean temporary) {
-        modifyBlock(card, Math.max(0, card.baseBlock - amount), temporary);
-    }
-
-    public static void decreaseDamage(AbstractCard card, int amount, boolean temporary) {
-        modifyDamage(card, Math.max(0, card.baseDamage - amount), temporary);
     }
 
     public static void decreaseMagicNumber(AbstractCard card, int amount, boolean temporary) {
@@ -1477,14 +1471,6 @@ public class GameUtilities {
         return player != null && player.stance != null && player.stance.ID.equals(stanceID);
     }
 
-    public static void increaseBlock(AbstractCard card, int amount, boolean temporary) {
-        modifyBlock(card, card.baseBlock + amount, temporary);
-    }
-
-    public static void increaseDamage(AbstractCard card, int amount, boolean temporary) {
-        modifyDamage(card, card.baseDamage + amount, temporary);
-    }
-
     public static void increaseHandSizePermanently() {
         for (AbstractBlight blight : player.blights) {
             if (blight instanceof UpgradedHand) {
@@ -1749,36 +1735,19 @@ public class GameUtilities {
         }
     }
 
-    public static void modifyBlock(AbstractCard card, int amount, boolean temporary) {
+    public static void modifyBlock(AbstractCard card, int amount, boolean removeOnPlay, boolean temporary) {
+        if (temporary || removeOnPlay) {
+            TemporaryBlockModifier.apply(card, amount, removeOnPlay, temporary);
+        }
+        else {
+            card.baseBlock = card.block = Math.max(0, amount);
+        }
+
         if (card instanceof PCLCard) {
-            if (temporary) {
-                ((PCLCard) card).updateBlock(amount);
-            }
-            else {
-                ((PCLCard) card).updateMaxBlock(amount);
-            }
+            ((PCLCard) card).updateBlockVars();
         }
         else {
-            card.block = Math.max(0, amount);
-            if (!temporary) {
-                card.baseBlock = card.block;
-            }
-            card.isBlockModified = (card.block != card.baseBlock);
-        }
-    }
-
-    public static void modifyCardBaseCost(PCLCard card, int amount, boolean relative) {
-        if (relative) {
-            card.costForTurn = Math.max(0, card.costForTurn + amount);
-            card.cost = Math.max(0, card.cost + amount);
-        }
-        else {
-            card.costForTurn = amount + (card.costForTurn - card.cost);
-            card.cost = amount;
-        }
-
-        if (card.cost != card.cardData.getCost(card.getForm())) {
-            card.isCostModified = true;
+            card.isBlockModified = false;
         }
     }
 
@@ -1793,7 +1762,7 @@ public class GameUtilities {
     }
 
     public static void modifyCostForCombat(AbstractCard card, int amount, boolean relative) {
-        final int previousCost = card.cost;
+        final int previousCost = card instanceof PCLCard ? ((PCLCard) card).cardData.getCost(((PCLCard) card).getForm()) : card.cost;
         if (relative) {
             card.costForTurn = Math.max(0, card.costForTurn + amount);
             card.cost = Math.max(0, card.cost + amount);
@@ -1813,21 +1782,19 @@ public class GameUtilities {
         card.isCostModifiedForTurn = (card.cost != card.costForTurn);
     }
 
-    public static void modifyDamage(AbstractCard card, int amount, boolean temporary) {
-        if (card instanceof PCLCard) {
-            if (temporary) {
-                ((PCLCard) card).updateDamage(amount);
-            }
-            else {
-                ((PCLCard) card).updateMaxDamage(amount);
-            }
+    public static void modifyDamage(AbstractCard card, int amount, boolean removeOnPlay, boolean temporary) {
+        if (temporary || removeOnPlay) {
+            TemporaryDamageModifier.apply(card, amount, removeOnPlay, temporary);
         }
         else {
-            card.damage = Math.max(0, amount);
-            if (!temporary) {
-                card.baseDamage = card.damage;
-            }
-            card.isDamageModified = (card.damage != card.baseDamage);
+            card.baseDamage = card.damage = Math.max(0, amount);
+        }
+
+        if (card instanceof PCLCard) {
+            ((PCLCard) card).updateDamageVars();
+        }
+        else {
+            card.isDamageModified = false;
         }
     }
 

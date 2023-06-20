@@ -2,6 +2,7 @@ package pinacolada.skills.skills;
 
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
+import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.monsters.PCLCardAlly;
@@ -52,15 +53,15 @@ public class PCustomCond extends PCond<PField_CardCategory> {
     }
 
     @Override
-    public void use(PCLUseInfo info) {
-        useImpl(info);
-        super.use(info);
+    public void use(PCLUseInfo info, PCLActions order) {
+        useImpl(info, order);
+        super.use(info, order);
     }
 
     @Override
-    public void use(PCLUseInfo info, boolean isUsing) {
-        useImpl(info);
-        super.use(info, isUsing);
+    public void use(PCLUseInfo info, PCLActions order, boolean isUsing) {
+        useImpl(info, order);
+        super.use(info, order, isUsing);
     }
 
     @Override
@@ -91,6 +92,6 @@ public class PCustomCond extends PCond<PField_CardCategory> {
         return copy;
     }
 
-    protected void useImpl(PCLUseInfo info) {
+    protected void useImpl(PCLUseInfo info, PCLActions order) {
     }
 }

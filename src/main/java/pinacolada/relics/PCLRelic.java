@@ -180,7 +180,7 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider 
         Texture t = EUIRM.getTexture(path, true, false);
         if (t == null) {
             path = PCLCoreImages.CardAffinity.unknown.path();
-            t = EUIRM.getTexture(path, true, true);
+            t = EUIRM.getTexture(path, true, false);
         }
         this.img = t;
         this.outlineImg = t;

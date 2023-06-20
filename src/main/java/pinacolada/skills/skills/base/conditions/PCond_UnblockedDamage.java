@@ -62,11 +62,11 @@ public class PCond_UnblockedDamage extends PActiveNonCheckCond<PField_Not> imple
     @Override
     public void onAttack(DamageInfo info, int damageAmount, AbstractCreature t) {
         if (damageAmount > 0 && info.type == DamageInfo.DamageType.NORMAL && target.getTargets(getOwnerCreature(), t).contains(info.owner)) {
-            useFromTrigger(makeInfo(t));
+            useFromTrigger(makeInfo(t), isFromCreature() ? PCLActions.bottom : PCLActions.top);
         }
     }
 
-    protected PCLAction<?> useImpl(PCLUseInfo info, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {
+    protected PCLAction<?> useImpl(PCLUseInfo info, PCLActions order, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {
         // Checks to see if any of the targets' health is decreased after this card is used
         HashMap<? extends AbstractCreature, Integer> healthMap = EUIUtils.hashMap(getTargetList(info), c -> c.currentHealth);
         return PCLActions.last.callback(healthMap, (targets, __) -> {

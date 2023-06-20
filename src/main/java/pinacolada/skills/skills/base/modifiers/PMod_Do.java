@@ -9,6 +9,7 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT5;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import pinacolada.actions.PCLAction;
+import pinacolada.actions.PCLActions;
 import pinacolada.actions.piles.SelectFromPile;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -104,21 +105,20 @@ public abstract class PMod_Do extends PActiveMod<PField_CardCategory> {
     }
 
     @Override
-    public void use(PCLUseInfo info) {
-        getActions().add(createPileAction(info))
+    public void use(PCLUseInfo info, PCLActions order) {
+        order.add(createPileAction(info))
                 .addCallback(cards -> {
                     if (this.childEffect != null) {
                         info.setData(cards);
                         updateChildAmount(info);
-                        this.childEffect.use(info);
+                        this.childEffect.use(info, order);
                     }
                 });
     }
 
     public String getMoveString(boolean addPeriod) {
         String cardString = isForced() ? fields.getFullCardString() : fields.getShortCardString();
-        return fields.isHandOnly() ? TEXT.act_generic3(getActionTitle(), getAmountRawOrAllString(), fields.getFullCardString()) :
-                fields.hasGroups() ? TEXT.act_genericFrom(getActionTitle(), getAmountRawOrAllString(), cardString, fields.getGroupString())
+        return fields.hasGroups() && !fields.isHandOnly() ? TEXT.act_zXFromY(getActionTitle(), getAmountRawOrAllString(), cardString, fields.getGroupString())
                 : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), cardString);
     }
 

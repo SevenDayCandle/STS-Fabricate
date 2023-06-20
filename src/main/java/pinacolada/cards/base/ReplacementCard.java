@@ -5,6 +5,7 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
+import pinacolada.actions.PCLActions;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.patches.library.CardLibraryPatches;
 import pinacolada.skills.skills.PCustomCond;
@@ -80,7 +81,7 @@ public class ReplacementCard extends PCLDynamicCard {
             return card.original.rawDescription;
         }
 
-        protected void useImpl(PCLUseInfo info) {
+        protected void useImpl(PCLUseInfo info, PCLActions order) {
             AbstractMonster m = EUIUtils.safeCast(info.target, AbstractMonster.class);
             ArrayList<AbstractCard> played = AbstractDungeon.actionManager.cardsPlayedThisTurn;
             // Allow Starter effects on inherited cards to take effect

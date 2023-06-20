@@ -2,6 +2,7 @@ package pinacolada.skills.skills.special.moves;
 
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUIUtils;
+import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.monsters.PCLCardAlly;
@@ -46,13 +47,13 @@ public class PMove_ExhaustAlly extends PMove<PField_Empty> {
     }
 
     @Override
-    public void use(PCLUseInfo info) {
+    public void use(PCLUseInfo info, PCLActions order) {
         List<PCLCardAlly> targets = EUIUtils.map(getTargetList(info), t -> EUIUtils.safeCast(t, PCLCardAlly.class));
-        getActions().withdrawAlly(targets).setDestination(AbstractDungeon.player.exhaustPile).setTriggerTimes(0).showEffect(true).addCallback(cards ->
+        order.withdrawAlly(targets).setDestination(AbstractDungeon.player.exhaustPile).setTriggerTimes(0).showEffect(true).addCallback(cards ->
         {
             if (this.childEffect != null) {
                 info.setData(cards);
-                this.childEffect.use(info);
+                this.childEffect.use(info, order);
             }
         });
     }

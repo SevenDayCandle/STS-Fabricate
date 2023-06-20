@@ -3,6 +3,7 @@ package pinacolada.skills.skills.special.moves;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.powers.common.StolenGoldPower;
@@ -49,14 +50,14 @@ public class PMove_StealGold extends PMove<PField_Empty> {
     }
 
     @Override
-    public void use(PCLUseInfo info) {
+    public void use(PCLUseInfo info, PCLActions order) {
         AbstractCreature m = info.target;
         if (m == null) {
             m = GameUtilities.getRandomEnemy(true);
         }
         if (m instanceof AbstractMonster) {
-            getActions().applyPower(info.source, new StolenGoldPower(m, amount));
+            order.applyPower(info.source, new StolenGoldPower(m, amount));
         }
-        super.use(info);
+        super.use(info, order);
     }
 }

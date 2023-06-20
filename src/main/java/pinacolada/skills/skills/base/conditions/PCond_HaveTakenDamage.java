@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.actions.GameActionManager;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIRM;
+import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -60,7 +61,7 @@ public class PCond_HaveTakenDamage extends PPassiveCond<PField_Random> implement
     @Override
     public void onAttack(DamageInfo info, int damageAmount, AbstractCreature receiver) {
         if (info.type == DamageInfo.DamageType.NORMAL && this.target.getTargets(getOwnerCreature(), receiver).contains(receiver)) {
-            useFromTrigger(makeInfo(info.owner));
+            useFromTrigger(makeInfo(info.owner), isFromCreature() ? PCLActions.bottom : PCLActions.top);
         }
     }
 }

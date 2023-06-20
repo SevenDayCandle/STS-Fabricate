@@ -4,6 +4,7 @@ import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLAction;
+import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -53,8 +54,8 @@ public class PCond_TriggerTo extends PActiveCond<PField_Orb> {
     }
 
     @Override
-    protected PCLAction<?> useImpl(PCLUseInfo info, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {
-        return getActions().triggerOrbPassive(1, amount, false)
+    protected PCLAction<?> useImpl(PCLUseInfo info, PCLActions order, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {
+        return order.triggerOrbPassive(1, amount, false)
                 .setFilter(fields.getOrbFilter())
                 .addCallback(orbs -> {
                     if (orbs.size() >= amount) {

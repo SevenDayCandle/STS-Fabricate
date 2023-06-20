@@ -1,5 +1,6 @@
 package pinacolada.skills.skills.base.moves;
 
+import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
@@ -31,8 +32,8 @@ public class PMove_GainEnergy extends PMove_Gain {
     }
 
     @Override
-    public void use(PCLUseInfo info) {
-        getActions().gainEnergy(amount);
-        super.use(info);
+    public void use(PCLUseInfo info, PCLActions order) {
+        order.gainEnergy(amount);
+        super.use(info, order);
     }
 }

@@ -1,6 +1,7 @@
 package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -50,12 +51,12 @@ public class PMove_TriggerAlly extends PMove<PField_Empty> {
     }
 
     @Override
-    public void use(PCLUseInfo info) {
+    public void use(PCLUseInfo info, PCLActions order) {
         for (AbstractCreature t : getTargetList(info)) {
             if (t instanceof PCLCardAlly) {
-                getActions().triggerAlly((PCLCardAlly) t, amount);
+                order.triggerAlly((PCLCardAlly) t, amount);
             }
         }
-        super.use(info);
+        super.use(info, order);
     }
 }

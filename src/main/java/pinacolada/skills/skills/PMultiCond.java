@@ -8,6 +8,7 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.utilities.RotatingList;
+import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -135,10 +136,10 @@ public class PMultiCond extends PCond<PField_Not> implements PMultiBase<PCond<?>
         return this;
     }
 
-    public void useDirectly(PCLUseInfo info) {
+    public void useDirectly(PCLUseInfo info, PCLActions order) {
         if (this.childEffect != null)
         {
-            this.childEffect.use(info);
+            this.childEffect.use(info, order);
         }
     }
 

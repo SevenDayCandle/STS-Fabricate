@@ -189,6 +189,7 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
     protected String getCopiesOfString() {
         return useParent ? TEXT.subjects_copiesOf(getInheritedThemString())
                 : (fields.forced && sourceCard != null) ? TEXT.subjects_copiesOf(TEXT.subjects_thisCard)
+                : fields.cardIDs.size() >= 4 ? fields.getShortCardString()
                 : isOutOf() || fields.origin != PCLCardSelection.Manual ? fields.getFullCardString() : fields.getFullCardAndString(getAmountRawString());
     }
 
@@ -206,29 +207,25 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
         }
     }
 
-    public abstract void performAction(PCLUseInfo info, AbstractCard c);
+    public abstract void performAction(PCLUseInfo info, PCLActions order, AbstractCard c);
 
     @Override
-    public void use(PCLUseInfo info, ActionT1<PCLUseInfo> callback) {
-        use(info, callback, getActions());
-    }
-
-    public void use(PCLUseInfo info, ActionT1<PCLUseInfo> callback, PCLActions actionOrder) {
+    public void use(PCLUseInfo info, PCLActions order, ActionT1<PCLUseInfo> callback) {
         CardGroup choice = new CardGroup(CardGroup.CardGroupType.UNSPECIFIED);
         choice.group = getBaseCards(info);
         // When not doing an X out of Y choice, amount may produce more than the advertised amount if we are generating multiple card IDs
         int itemsToGet = isOutOf() ? amount : choice.group.size();
 
-        actionOrder.selectFromPile(getName(), itemsToGet, choice)
+        order.selectFromPile(getName(), itemsToGet, choice)
                 .setOptions((!isOutOf() ? PCLCardSelection.Random : fields.origin).toSelection(), !fields.not)
                 .addCallback(cards -> {
                     for (AbstractCard c : cards) {
-                        performAction(info, c);
+                        performAction(info, order, c);
                     }
                     info.setData(cards);
                     callback.invoke(info);
                     if (this.childEffect != null) {
-                        this.childEffect.use(info);
+                        this.childEffect.use(info, order);
                     }
                 });
     }

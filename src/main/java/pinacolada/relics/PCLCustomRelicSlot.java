@@ -199,7 +199,7 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
         if (builder != null && builder.portraitImage != null) {
             PixmapIO.writePNG(imgWriter, builder.portraitImage.getTextureData().consumePixmap());
             // Forcibly reload the image
-            EUIRM.reloadTexture(newImagePath, true, true);
+            EUIRM.reloadTexture(newImagePath, true, false);
         }
 
         // Point all builders to the new path, or nullify it out if no image was saved

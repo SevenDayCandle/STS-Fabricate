@@ -1,27 +1,17 @@
 package pinacolada.actions.cards;
 
-import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import extendedui.utilities.EUIColors;
-import pinacolada.actions.utility.GenericCardSelection;
+import pinacolada.cardmods.CostUntilPlayedModifier;
 import pinacolada.utilities.GameUtilities;
 
-public class ModifyCost extends GenericCardSelection {
-    protected boolean permanent;
-    protected boolean relative;
-    protected int costChange;
-    protected Color flashColor = EUIColors.gold(1).cpy();
+public class ModifyCost extends ModifyCard {
 
-    public ModifyCost(AbstractCard card, int costChange, boolean permanent, boolean relative) {
-        this(card, 1, costChange, permanent, relative);
+    public ModifyCost(AbstractCard card, int costChange, boolean permanent, boolean relative, boolean untilPlayed) {
+        this(card, 1, costChange, permanent, relative, untilPlayed);
     }
 
-    protected ModifyCost(AbstractCard card, int amount, int costChange, boolean permanent, boolean relative) {
-        super(card, amount);
-
-        this.costChange = costChange;
-        this.permanent = permanent;
-        this.relative = relative;
+    protected ModifyCost(AbstractCard card, int amount, int costChange, boolean permanent, boolean relative, boolean untilPlayed) {
+        super(card, amount, costChange, permanent, relative, untilPlayed);
     }
 
     public static boolean canCardPass(AbstractCard card, int change) {
@@ -30,28 +20,29 @@ public class ModifyCost extends GenericCardSelection {
 
     @Override
     protected boolean canSelect(AbstractCard card) {
-        return super.canSelect(card) && canCardPass(card, relative ? costChange : costChange - card.costForTurn);
+        return super.canSelect(card) && canCardPass(card, getActualChange(card));
     }
 
-    public ModifyCost flash(Color flashColor) {
-        this.flashColor = flashColor;
-
-        return this;
+    protected int getActualChange(AbstractCard card) {
+        return relative ? change : change - card.costForTurn;
     }
 
     @Override
     protected void selectCard(AbstractCard card) {
         super.selectCard(card);
 
-        if (flashColor != null) {
-            GameUtilities.flash(card, flashColor, true);
-        }
+        if (untilPlayed) {
+            CostUntilPlayedModifier.apply(card, getActualChange(card), !permanent);
 
-        if (permanent) {
-            GameUtilities.modifyCostForCombat(card, costChange, relative);
         }
         else {
-            GameUtilities.modifyCostForTurn(card, costChange, relative);
+            if (permanent) {
+                GameUtilities.modifyCostForCombat(card, change, relative);
+            }
+            else {
+                GameUtilities.modifyCostForTurn(card, change, relative);
+            }
         }
+
     }
 }

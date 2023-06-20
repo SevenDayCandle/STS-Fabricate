@@ -6,7 +6,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUI;
-import extendedui.interfaces.delegates.ActionT2;
+import extendedui.interfaces.delegates.ActionT3;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.ColoredString;
 import pinacolada.actions.PCLActions;
@@ -26,38 +26,38 @@ public class PCLClickableUse {
     private boolean canUse;
     private GameActionManager.Phase currentPhase;
     public PCLTriggerUsePool pool;
-    public PSkill move;
+    public PSkill<?> move;
     public boolean clickable;
 
-    public PCLClickableUse(ClickableProvider power, ActionT2<PSpecialSkill, PCLUseInfo> onUse) {
+    public PCLClickableUse(ClickableProvider power, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse) {
         this(power, new PSpecialSkill(power.getID(), power.getDescription(), onUse));
     }
 
-    public PCLClickableUse(ClickableProvider power, PSkill move) {
+    public PCLClickableUse(ClickableProvider power, PSkill<?> move) {
         this(power, move, new PCLTriggerUsePool());
     }
 
-    public PCLClickableUse(ClickableProvider power, PSkill move, PCLTriggerUsePool pool) {
+    public PCLClickableUse(ClickableProvider power, PSkill<?> move, PCLTriggerUsePool pool) {
         this.source = power;
         this.move = move;
         this.pool = pool;
         canUse = move != null;
     }
 
-    public PCLClickableUse(ClickableProvider power, ActionT2<PSpecialSkill, PCLUseInfo> onUse, int uses, boolean refreshEachTurn, boolean stackAutomatically) {
+    public PCLClickableUse(ClickableProvider power, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, int uses, boolean refreshEachTurn, boolean stackAutomatically) {
         this(power, new PSpecialSkill(power.getID(), power.getDescription(), onUse), new PCLTriggerUsePool(uses, refreshEachTurn, stackAutomatically));
     }
 
-    public PCLClickableUse(ClickableProvider power, ActionT2<PSpecialSkill, PCLUseInfo> onUse, PCLCardTarget target, int uses, boolean refreshEachTurn, boolean stackAutomatically) {
+    public PCLClickableUse(ClickableProvider power, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, PCLCardTarget target, int uses, boolean refreshEachTurn, boolean stackAutomatically) {
         this(power, new PSpecialSkill(power.getID(), power.getDescription(), onUse).setTarget(target), new PCLTriggerUsePool(uses, refreshEachTurn, stackAutomatically));
     }
 
-    public PCLClickableUse(ClickableProvider power, ActionT2<PSpecialSkill, PCLUseInfo> onUse, PCLTriggerUsePool pool) {
+    public PCLClickableUse(ClickableProvider power, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, PCLTriggerUsePool pool) {
         this(power, new PSpecialSkill(power.getID(), power.getDescription(), onUse), pool);
     }
 
 
-    public PCLClickableUse(ClickableProvider power, PSkill move, int uses, boolean refreshEachTurn, boolean stackAutomatically) {
+    public PCLClickableUse(ClickableProvider power, PSkill<?> move, int uses, boolean refreshEachTurn, boolean stackAutomatically) {
         this(power, move, new PCLTriggerUsePool(uses, refreshEachTurn, stackAutomatically));
     }
 
@@ -172,7 +172,7 @@ public class PCLClickableUse {
         }
         PCLUseInfo info = CombatManager.playerSystem.generateInfo(move.sourceCard, owner, m);
         info.setData(amount);
-        move.use(info, CombatManager.onClickableUsed(this, m, amount));
+        move.use(info, PCLActions.bottom, CombatManager.onClickableUsed(this, m, amount));
         pool.use(amount);
         source.onClicked();
         refresh(false, true);

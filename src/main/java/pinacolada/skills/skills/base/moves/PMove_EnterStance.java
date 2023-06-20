@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.stances.NeutralStance;
 import extendedui.EUIUtils;
+import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
@@ -35,12 +36,12 @@ public class PMove_EnterStance extends PMove<PField_Stance> {
         fields.setStance(stance);
     }
 
-    public void chooseEffect(PCLUseInfo info, List<PCLStanceHelper> choices) {
+    public void chooseEffect(PCLUseInfo info, PCLActions order, List<PCLStanceHelper> choices) {
         if (fields.random) {
-            getActions().changeStance(GameUtilities.getRandomElement(choices));
+            order.changeStance(GameUtilities.getRandomElement(choices));
             return;
         }
-        getActions().tryChooseSkill(getPCLSource().cardData, amount, info.source, info.target, EUIUtils.map(choices, PMove::enterStance));
+        order.tryChooseSkill(getPCLSource().cardData, amount, info.source, info.target, EUIUtils.map(choices, PMove::enterStance));
     }
 
     @Override
@@ -60,19 +61,19 @@ public class PMove_EnterStance extends PMove<PField_Stance> {
     }
 
     @Override
-    public void use(PCLUseInfo info) {
+    public void use(PCLUseInfo info, PCLActions order) {
         if (fields.stances.isEmpty()) {
-            getActions().changeStance(NeutralStance.STANCE_ID);
+            order.changeStance(NeutralStance.STANCE_ID);
         }
         else if (extra > 0) {
-            chooseEffect(info, PCLStanceHelper.inGameValues(AbstractDungeon.player != null ? AbstractDungeon.player.getCardColor() : AbstractCard.CardColor.COLORLESS));
+            chooseEffect(info, order, PCLStanceHelper.inGameValues(AbstractDungeon.player != null ? AbstractDungeon.player.getCardColor() : AbstractCard.CardColor.COLORLESS));
         }
         else if (fields.stances.size() == 1) {
-            getActions().changeStance(fields.stances.get(0));
+            order.changeStance(fields.stances.get(0));
         }
         else {
-            chooseEffect(info, fields.stances);
+            chooseEffect(info, order, fields.stances);
         }
-        super.use(info);
+        super.use(info, order);
     }
 }

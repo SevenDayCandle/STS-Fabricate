@@ -3,6 +3,7 @@ package pinacolada.skills.skills.base.moves;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
+import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -70,12 +71,12 @@ public class PMove_StackPower extends PMove<PField_Power> {
             case All:
             case Team:
                 return amount < 0 ? TEXT.act_removeFrom(EUIRM.strings.numNoun(getAmountRawString(), joinedString), getTargetString())
-                        : fields.powers.size() > 0 && fields.powers.get(0).isDebuff
+                        : fields.powers.size() > 0 && fields.powers.get(0).isDebuff && !useParent
                         ? TEXT.act_applyXToTarget(getAmountRawString(), joinedString, getTargetString()) : TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
             case Single:
             case SingleAlly:
                 return amount < 0 ? TEXT.act_remove(EUIRM.strings.numNoun(getAmountRawString(), joinedString)) :
-                        fields.powers.size() > 0 && fields.powers.get(0).isDebuff ?
+                        fields.powers.size() > 0 && fields.powers.get(0).isDebuff && !useParent ?
                                 TEXT.act_applyX(getAmountRawString(), joinedString) : TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
             case Self:
                 if (isFromCreature()) {
@@ -103,26 +104,26 @@ public class PMove_StackPower extends PMove<PField_Power> {
     }
 
     @Override
-    public void use(PCLUseInfo info) {
+    public void use(PCLUseInfo info, PCLActions order) {
         if (!fields.powers.isEmpty()) {
             if (fields.random) {
                 PCLPowerHelper power = GameUtilities.getRandomElement(fields.powers);
                 if (power != null) {
-                    getActions().applyPower(info.source, info.target, target, power, amount);
+                    order.applyPower(info.source, info.target, target, power, amount);
                 }
             }
             else {
                 for (PCLPowerHelper power : fields.powers) {
-                    getActions().applyPower(info.source, info.target, target, power, amount);
+                    order.applyPower(info.source, info.target, target, power, amount);
                 }
             }
         }
         else {
             for (int i = 0; i < amount; i++) {
-                getActions().applyPower(info.source, info.target, target, fields.debuff ? PCLPowerHelper.randomDebuff() : PCLPowerHelper.randomBuff(), extra);
+                order.applyPower(info.source, info.target, target, fields.debuff ? PCLPowerHelper.randomDebuff() : PCLPowerHelper.randomBuff(), extra);
             }
         }
-        super.use(info);
+        super.use(info, order);
     }
 
     @Override

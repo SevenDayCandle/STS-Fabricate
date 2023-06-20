@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -55,11 +56,11 @@ public class PMove_LoseHP extends PMove<PField_Empty> implements OutOfCombatMove
     }
 
     @Override
-    public void use(PCLUseInfo info) {
+    public void use(PCLUseInfo info, PCLActions order) {
         for (AbstractCreature t : getTargetList(info)) {
-            getActions().loseHP(info.source, t, amount, AbstractGameAction.AttackEffect.NONE).isCancellable(false);
+            order.loseHP(info.source, t, amount, AbstractGameAction.AttackEffect.NONE).isCancellable(false);
         }
-        super.use(info);
+        super.use(info, order);
     }
 
     @Override

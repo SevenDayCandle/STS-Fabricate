@@ -106,7 +106,7 @@ public final class PCLActions {
 
     public <T extends AbstractGameAction> T add(T action) {
         if (action instanceof PCLAction) {
-            ((PCLAction) action).setOriginalOrder(actionOrder);
+            ((PCLAction<?>) action).setOriginalOrder(actionOrder);
         }
 
         switch (actionOrder) {
@@ -526,20 +526,20 @@ public final class PCLActions {
         return add(new ModifyAllInstances(uuid));
     }
 
-    public ModifyBlock modifyBlock(AbstractCard card, int costChange, boolean permanent, boolean relative) {
-        return add(new ModifyBlock(card, costChange, permanent, relative));
+    public ModifyBlock modifyBlock(AbstractCard card, int costChange, boolean permanent, boolean relative, boolean forTurn) {
+        return add(new ModifyBlock(card, costChange, permanent, relative, forTurn));
     }
 
     public ModifyCardHP modifyCardHp(AbstractCard card, int costChange, boolean permanent, boolean relative) {
         return add(new ModifyCardHP(card, costChange, permanent, relative));
     }
 
-    public ModifyCost modifyCost(AbstractCard card, int costChange, boolean permanent, boolean relative) {
-        return add(new ModifyCost(card, costChange, permanent, relative));
+    public ModifyCost modifyCost(AbstractCard card, int costChange, boolean permanent, boolean relative, boolean forTurn) {
+        return add(new ModifyCost(card, costChange, permanent, relative, forTurn));
     }
 
-    public ModifyDamage modifyDamage(AbstractCard card, int costChange, boolean permanent, boolean relative) {
-        return add(new ModifyDamage(card, costChange, permanent, relative));
+    public ModifyDamage modifyDamage(AbstractCard card, int costChange, boolean permanent, boolean relative, boolean forTurn) {
+        return add(new ModifyDamage(card, costChange, permanent, relative, forTurn));
     }
 
     public ModifyMagicNumber modifyMagicNumber(AbstractCard card, int costChange, boolean permanent, boolean relative) {
@@ -694,8 +694,12 @@ public final class PCLActions {
         return add(new SelectFromPile(sourceName, amount, new CardGroup(CardGroup.CardGroupType.UNSPECIFIED)));
     }
 
-    public SequentialAction sequential(AbstractGameAction action, AbstractGameAction action2) {
-        return add(new SequentialAction(action, action2));
+    public SequentialAction sequential(AbstractGameAction... action) {
+        return add(new SequentialAction(action));
+    }
+
+    public SequentialAction sequential(List<? extends AbstractGameAction> action) {
+        return add(new SequentialAction(action));
     }
 
     public ShakeScreenAction shakeScreen(float actionDuration, ScreenShake.ShakeDur shakeDuration, ScreenShake.ShakeIntensity intensity) {

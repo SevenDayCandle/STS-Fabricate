@@ -2,6 +2,7 @@ package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.actions.AbstractGameAction;
 import com.megacrit.cardcrawl.cards.DamageInfo;
+import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -64,14 +65,14 @@ public class PMove_DealDamage extends PMove<PField_Attack> {
     }
 
     @Override
-    public void use(PCLUseInfo info) {
+    public void use(PCLUseInfo info, PCLActions order) {
         if (target.targetsMulti()) {
             int[] damage = DamageInfo.createDamageMatrix(amount, true, false);
-            getActions().dealDamageToAll(damage, DamageInfo.DamageType.THORNS, fields.attackEffect);
+            order.dealDamageToAll(damage, DamageInfo.DamageType.THORNS, fields.attackEffect);
         }
         else {
-            getActions().dealDamage(getSourceCreature(), target == PCLCardTarget.Self ? getSourceCreature() : target.getTarget(info.target), amount, DamageInfo.DamageType.THORNS, fields.attackEffect).isCancellable(target != PCLCardTarget.Self);
+            order.dealDamage(getSourceCreature(), target == PCLCardTarget.Self ? getSourceCreature() : target.getTarget(info.target), amount, DamageInfo.DamageType.THORNS, fields.attackEffect).isCancellable(target != PCLCardTarget.Self);
         }
-        super.use(info);
+        super.use(info, order);
     }
 }

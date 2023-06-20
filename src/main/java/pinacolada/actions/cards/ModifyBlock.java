@@ -2,32 +2,28 @@ package pinacolada.actions.cards;
 
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import extendedui.utilities.EUIColors;
-import pinacolada.actions.utility.GenericCardSelection;
 import pinacolada.utilities.GameUtilities;
 
-public class ModifyBlock extends GenericCardSelection {
-    protected boolean permanent;
-    protected boolean relative;
-    protected int change;
-    protected Color flashColor = EUIColors.gold(1).cpy();
+public class ModifyBlock extends ModifyCard {
 
-    public ModifyBlock(AbstractCard card, int change, boolean permanent, boolean relative) {
-        this(card, 1, change, permanent, relative);
+    public ModifyBlock(AbstractCard card, int costChange, boolean permanent, boolean relative, boolean untilPlayed) {
+        this(card, 1, costChange, permanent, relative, untilPlayed);
     }
 
-    protected ModifyBlock(AbstractCard card, int amount, int change, boolean permanent, boolean relative) {
-        super(card, amount);
-
-        this.change = change;
-        this.permanent = permanent;
-        this.relative = relative;
+    protected ModifyBlock(AbstractCard card, int amount, int costChange, boolean permanent, boolean relative, boolean untilPlayed) {
+        super(card, amount, costChange, permanent, relative, untilPlayed);
     }
+
 
     public ModifyBlock flash(Color flashColor) {
         this.flashColor = flashColor;
 
         return this;
+    }
+
+    @Override
+    protected int getActualChange(AbstractCard card) {
+        return relative ? card.baseBlock + change : change;
     }
 
     @Override
@@ -38,6 +34,6 @@ public class ModifyBlock extends GenericCardSelection {
             GameUtilities.flash(card, flashColor, true);
         }
 
-        GameUtilities.modifyBlock(card, relative ? card.baseBlock + change : change, !permanent);
+        GameUtilities.modifyBlock(card, relative && permanent && !untilPlayed ? getActualChange(card) : change, !permanent, untilPlayed);
     }
 }

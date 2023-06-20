@@ -1,5 +1,6 @@
 package pinacolada.cards.pcl.glyphs;
 
+import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.dungeon.CombatManager;
@@ -14,7 +15,7 @@ public class Glyph05 extends Glyph {
         super(DATA);
     }
 
-    public void action(PSpecialSkill move, PCLUseInfo info) {
+    public void action(PSpecialSkill move, PCLUseInfo info, PCLActions order) {
         for (PCLAffinity af : move.fields.affinities) {
             for (PCLPlayerMeter meter : CombatManager.playerSystem.getMeters()) {
                 meter.disableAffinity(af);

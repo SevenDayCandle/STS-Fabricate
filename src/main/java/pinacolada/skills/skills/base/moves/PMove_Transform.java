@@ -87,19 +87,19 @@ public class PMove_Transform extends PMove_Select<PField_CardTransform> {
     }
 
     @Override
-    public void use(PCLUseInfo info) {
+    public void use(PCLUseInfo info, PCLActions order) {
         if (!fields.hasGroups() && !useParent && sourceCard != null) {
             transformImpl(sourceCard);
         }
         else {
             // Extra is used for other purposes
-            fields.getGenericPileAction(getAction(), info, -1)
+            fields.getGenericPileAction(getAction(), info, order, -1)
                     .addCallback(cards -> {
                         for (AbstractCard c : cards) {
                             transformImpl(c);
                         }
                     });
         }
-        super.use(info);
+        super.use(info, order);
     }
 }

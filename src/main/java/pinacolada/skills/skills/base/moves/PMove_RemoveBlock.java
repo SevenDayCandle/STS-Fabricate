@@ -1,6 +1,7 @@
 package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.actions.common.RemoveAllBlockAction;
+import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -43,8 +44,8 @@ public class PMove_RemoveBlock extends PMove<PField_Empty> {
     }
 
     @Override
-    public void use(PCLUseInfo info) {
-        getActions().add(new RemoveAllBlockAction(info.target, info.source));
-        super.use(info);
+    public void use(PCLUseInfo info, PCLActions order) {
+        order.add(new RemoveAllBlockAction(info.target, info.source));
+        super.use(info, order);
     }
 }

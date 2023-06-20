@@ -3,6 +3,7 @@ package pinacolada.skills.skills;
 import com.badlogic.gdx.graphics.Color;
 import com.megacrit.cardcrawl.core.Settings;
 import extendedui.utilities.EUIColors;
+import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.pcl.PCLCoreStrings;
@@ -64,16 +65,16 @@ public abstract class PLimit extends PPrimary<PField_Empty> {
     }
 
     @Override
-    public void use(PCLUseInfo info) {
+    public void use(PCLUseInfo info, PCLActions order) {
         if (tryActivate(info) && childEffect != null) {
-            childEffect.use(info);
+            childEffect.use(info, order);
         }
     }
 
     @Override
-    public void use(PCLUseInfo info, boolean isUsing) {
+    public void use(PCLUseInfo info, PCLActions order, boolean isUsing) {
         if ((isUsing ? tryActivate(info) : canActivate(info)) && childEffect != null) {
-            childEffect.use(info);
+            childEffect.use(info, order);
         }
     }
 

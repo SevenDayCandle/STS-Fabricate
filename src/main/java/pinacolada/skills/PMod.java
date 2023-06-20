@@ -3,7 +3,9 @@ package pinacolada.skills;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import extendedui.interfaces.delegates.ActionT1;
 import extendedui.utilities.ColoredString;
+import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -371,6 +373,12 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
         return new PMod_XEnergy(value);
     }
 
+    @Override
+    public PMod<T> edit(ActionT1<T> editFunc) {
+        editFunc.invoke(fields);
+        return this;
+    }
+
     public ColoredString getColoredValueString() {
         if (baseAmount != amount) {
             return new ColoredString(amount, amount >= baseAmount ? Settings.GREEN_TEXT_COLOR : Settings.RED_TEXT_COLOR);
@@ -439,21 +447,21 @@ public abstract class PMod<T extends PField> extends PSkill<T> {
     }
 
     @Override
-    public void use(PCLUseInfo info) {
-        getActions().callback(() -> {
+    public void use(PCLUseInfo info, PCLActions order) {
+        order.callback(() -> {
             if (this.childEffect != null) {
                 updateChildAmount(info);
-                this.childEffect.use(info);
+                this.childEffect.use(info, order);
             }
         });
     }
 
     @Override
-    public void use(PCLUseInfo info, boolean isUsing) {
-        getActions().callback(() -> {
+    public void use(PCLUseInfo info, PCLActions order, boolean isUsing) {
+        order.callback(() -> {
             if (this.childEffect != null) {
                 updateChildAmount(info);
-                this.childEffect.use(info, isUsing);
+                this.childEffect.use(info, order, isUsing);
             }
         });
     }

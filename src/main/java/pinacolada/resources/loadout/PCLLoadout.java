@@ -24,7 +24,6 @@ import pinacolada.relics.pcl.GenericDice;
 import pinacolada.relics.pcl.GiftGivingGift;
 import pinacolada.relics.pcl.Macroscope;
 import pinacolada.resources.PCLAbstractPlayerData;
-import pinacolada.resources.PCLCharacterConfig;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.skills.skills.PSpecialSkill;
@@ -554,14 +553,13 @@ public abstract class PCLLoadout {
     // This is used to show the number of cards currently selected. We update the amount of this skill to update the card description without rebuilding it from scratch
     protected class FakeSkill extends PSpecialSkill {
         public FakeSkill() {
-            super("", PGR.core.strings.sui_selected, (a, b) -> {
-            }, 0, cardDatas.size());
+            super("", PGR.core.strings.sui_selected, (a, b, c) -> {}, 0, cardDatas.size());
         }
     }
 
     protected class FakeSkill2 extends PSpecialSkill {
         public FakeSkill2() {
-            super("", PGR.core.strings.sui_unlocked, (a, b) -> {
+            super("", PGR.core.strings.sui_unlocked, (a, b, c) -> {
             }, 0, cardDatas.size());
         }
     }

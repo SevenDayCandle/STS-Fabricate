@@ -33,9 +33,9 @@ import extendedui.ui.GridCardSelectScreenHelper;
 import pinacolada.actions.PCLActions;
 import pinacolada.actions.special.HasteAction;
 import pinacolada.annotations.CombatSubscriber;
+import pinacolada.cardmods.SkillModifier;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLAffinity;
-import pinacolada.cards.base.modifiers.SkillModifier;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.PCLSFX;
@@ -578,6 +578,10 @@ public class CombatManager {
         for (OnCardPurgedSubscriber s : getSubscriberGroup(OnCardPurgedSubscriber.class)) {
             s.onPurge(card);
         }
+    }
+
+    public static void onCardReset(AbstractCard card) {
+        subscriberDo(OnCardResetSubscriber.class, s -> s.onCardReset(card));
     }
 
     public static void onCardReshuffled(AbstractCard card, CardGroup sourcePile) {

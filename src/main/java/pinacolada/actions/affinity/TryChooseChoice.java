@@ -110,7 +110,7 @@ public class TryChooseChoice<T> extends PCLAction<ArrayList<ChoiceCard<T>>> {
                 EUIUtils.map(skills, i -> ChoiceCardData.skill(sourceData, i)))
                 .addCallback(choiceCards -> {
                     for (ChoiceCard<PSkill<?>> card : choiceCards) {
-                        card.value.use(CombatManager.playerSystem.generateInfo(card, source, target));
+                        card.value.use(CombatManager.playerSystem.generateInfo(card, source, target), PCLActions.bottom);
                     }
                 });
     }
@@ -125,7 +125,7 @@ public class TryChooseChoice<T> extends PCLAction<ArrayList<ChoiceCard<T>>> {
                 .addCallback(choiceCards -> {
                     for (ChoiceCard<PSkill<?>> card : choiceCards) {
                         PCLActions.top.selectCreature(card).addCallback(target -> {
-                            card.value.use(CombatManager.playerSystem.generateInfo(card, source, target));
+                            card.value.use(CombatManager.playerSystem.generateInfo(card, source, target), PCLActions.bottom);
                         });
                     }
                 });

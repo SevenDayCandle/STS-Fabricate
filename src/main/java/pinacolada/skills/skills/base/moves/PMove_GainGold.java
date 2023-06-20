@@ -1,6 +1,7 @@
 package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.PCLSFX;
@@ -45,10 +46,10 @@ public class PMove_GainGold extends PMove_Gain implements OutOfCombatMove {
     }
 
     @Override
-    public void use(PCLUseInfo info) {
+    public void use(PCLUseInfo info, PCLActions order) {
         PCLSFX.play(PCLSFX.GOLD_GAIN);
-        getActions().gainGold(amount);
-        super.use(info);
+        order.gainGold(amount);
+        super.use(info, order);
     }
 
     @Override

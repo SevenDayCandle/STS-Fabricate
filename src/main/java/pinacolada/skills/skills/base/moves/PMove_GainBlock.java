@@ -1,6 +1,7 @@
 package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -46,19 +47,19 @@ public class PMove_GainBlock extends PMove<PField_Empty> {
     }
 
     @Override
-    public void use(PCLUseInfo info) {
+    public void use(PCLUseInfo info, PCLActions order) {
         if (amount < 0) {
             for (AbstractCreature c : getTargetList(info)) {
-                getActions().loseBlock(c, -amount);
+                order.loseBlock(c, -amount);
             }
         }
         else {
             for (AbstractCreature c : getTargetList(info)) {
-                getActions().gainBlock(c, amount);
+                order.gainBlock(c, amount);
             }
         }
 
-        super.use(info);
+        super.use(info, order);
     }
 
     @Override

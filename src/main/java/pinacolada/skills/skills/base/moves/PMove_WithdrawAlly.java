@@ -2,6 +2,7 @@ package pinacolada.skills.skills.base.moves;
 
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
+import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -49,14 +50,14 @@ public class PMove_WithdrawAlly extends PCallbackMove<PField_Empty> {
     }
 
     @Override
-    public void use(PCLUseInfo info, ActionT1<PCLUseInfo> callback) {
+    public void use(PCLUseInfo info, PCLActions order, ActionT1<PCLUseInfo> callback) {
         List<PCLCardAlly> targets = EUIUtils.map(getTargetList(info), t -> EUIUtils.safeCast(t, PCLCardAlly.class));
-        getActions().withdrawAlly(targets).setTriggerTimes(amount).addCallback(cards ->
+        order.withdrawAlly(targets).setTriggerTimes(amount).addCallback(cards ->
         {
             info.setData(cards);
             callback.invoke(info);
             if (this.childEffect != null) {
-                this.childEffect.use(info);
+                this.childEffect.use(info, order);
             }
         });
     }

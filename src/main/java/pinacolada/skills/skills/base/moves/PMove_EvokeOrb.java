@@ -1,6 +1,7 @@
 package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
+import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -55,8 +56,8 @@ public class PMove_EvokeOrb extends PMove<PField_Orb> {
     }
 
     @Override
-    public void use(PCLUseInfo info) {
-        getActions().evokeOrb(amount, extra <= 0 ? GameUtilities.getOrbCount() : extra, fields.random).setFilter(fields.orbs.isEmpty() ? null : fields.getOrbFilter());
-        super.use(info);
+    public void use(PCLUseInfo info, PCLActions order) {
+        order.evokeOrb(amount, extra <= 0 ? GameUtilities.getOrbCount() : extra, fields.random).setFilter(fields.orbs.isEmpty() ? null : fields.getOrbFilter());
+        super.use(info, order);
     }
 }

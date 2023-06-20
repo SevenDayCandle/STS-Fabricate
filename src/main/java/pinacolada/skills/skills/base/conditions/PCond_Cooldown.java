@@ -6,6 +6,7 @@ import extendedui.EUIRM;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.utilities.ColoredString;
 import pinacolada.actions.PCLAction;
+import pinacolada.actions.PCLActions;
 import pinacolada.actions.special.CooldownProgressAction;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -114,8 +115,8 @@ public class PCond_Cooldown extends PActiveCond<PField_Empty> implements Cooldow
     }
 
     @Override
-    protected PCLAction<?> useImpl(PCLUseInfo info, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {
-        return getActions().add(new CooldownProgressAction(this, info.source, info.target, 1))
+    protected PCLAction<?> useImpl(PCLUseInfo info, PCLActions order, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {
+        return order.add(new CooldownProgressAction(this, info.source, info.target, 1))
                 .addCallback(result -> {
                     if (result) {
                         onComplete.invoke(info);

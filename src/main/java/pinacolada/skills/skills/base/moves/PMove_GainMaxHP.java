@@ -1,6 +1,7 @@
 package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.OutOfCombatMove;
@@ -42,14 +43,14 @@ public class PMove_GainMaxHP extends PMove_Gain implements OutOfCombatMove {
     }
 
     @Override
-    public void use(PCLUseInfo info) {
+    public void use(PCLUseInfo info, PCLActions order) {
         if (amount < 0) {
             info.source.decreaseMaxHealth(-amount);
         }
         else {
             info.source.increaseMaxHp(amount, true);
         }
-        super.use(info);
+        super.use(info, order);
     }
 
     @Override

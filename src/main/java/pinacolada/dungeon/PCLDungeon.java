@@ -428,8 +428,6 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
     // Modify starting potion slots and energy
     private void initializeLoadoutAttributes() {
         if (data.selectedLoadout != null) {
-            player.energy.energyMaster = data.selectedLoadout.getEnergy();
-
             player.potionSlots += data.selectedLoadout.getPotionSlots();
             while (player.potions.size() > player.potionSlots && player.potions.get(player.potions.size() - 1) instanceof PotionSlot) {
                 player.potions.remove(player.potions.size() - 1);

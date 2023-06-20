@@ -5,15 +5,13 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIRM;
 import extendedui.utilities.ColoredString;
+import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.resources.PGR;
-import pinacolada.skills.PMod;
-import pinacolada.skills.PSkill;
-import pinacolada.skills.PSkillData;
-import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.*;
 import pinacolada.skills.fields.PField_Empty;
 import pinacolada.skills.skills.*;
 
@@ -92,6 +90,16 @@ public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty> {
                 skill instanceof PBlockTrait;
     }
 
+    public PCardPrimary_GainBlock setBonus(PCond<?> mod, int amount) {
+        setChain(mod, PTrait.block(amount));
+        return this;
+    }
+
+    public PCardPrimary_GainBlock setBonus(PCond<?> mod, int amount, int... upgrade) {
+        setChain(mod, PTrait.block(amount).setUpgrade(upgrade));
+        return this;
+    }
+
     public PCardPrimary_GainBlock setBonus(PMod<?> mod, int amount) {
         setChain(mod, PTrait.block(amount));
         return this;
@@ -99,6 +107,16 @@ public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty> {
 
     public PCardPrimary_GainBlock setBonus(PMod<?> mod, int amount, int... upgrade) {
         setChain(mod, PTrait.block(amount).setUpgrade(upgrade));
+        return this;
+    }
+
+    public PCardPrimary_GainBlock setBonusPercent(PCond<?> mod, int amount) {
+        setChain(mod, PTrait.blockMultiplier(amount));
+        return this;
+    }
+
+    public PCardPrimary_GainBlock setBonusPercent(PCond<?> mod, int amount, int... upgrade) {
+        setChain(mod, PTrait.blockMultiplier(amount).setUpgrade(upgrade));
         return this;
     }
 
@@ -118,11 +136,11 @@ public class PCardPrimary_GainBlock extends PCardPrimary<PField_Empty> {
     }
 
     @Override
-    public void useImpl(PCLUseInfo info) {
+    public void useImpl(PCLUseInfo info, PCLActions order) {
         for (AbstractCreature c : getTargetList(info)) {
             // Extra has the value of right count
             for (int i = 0; i < extra; i++) {
-                getActions().gainBlock(amount);
+                order.gainBlock(amount);
             }
         }
     }

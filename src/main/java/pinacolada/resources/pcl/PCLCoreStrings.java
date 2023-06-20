@@ -301,9 +301,10 @@ public class PCLCoreStrings extends PCLStrings {
     public final String options_enableCustomRelics = options.TEXT[9];
     public final String options_enableCustomPotions = options.TEXT[10];
     public final String options_enableCustomEvents = options.TEXT[11];
-    public final String options_madnessReplacements = options.TEXT[12];
-    public final String options_vanillaPowerRender = options.TEXT[13];
-    public final String options_alwaysPCLCard = options.TEXT[14];
+    public final String options_lowVRAM = options.TEXT[12];
+    public final String options_madnessReplacements = options.TEXT[13];
+    public final String options_vanillaPowerRender = options.TEXT[14];
+    public final String options_alwaysPCLCard = options.TEXT[15];
     // Option Descriptions
     public final String optionDesc_cropCardImages = optionDesc.TEXT[0];
     public final String optionDesc_displayCardTagDescription = optionDesc.TEXT[1];
@@ -314,9 +315,10 @@ public class PCLCoreStrings extends PCLStrings {
     public final String optionDesc_showFormulaDisplay = optionDesc.TEXT[6];
     public final String optionDesc_hideIrrelevantAffinities = optionDesc.TEXT[7];
     public final String optionDesc_onlyNewRuns = optionDesc.TEXT[8];
-    public final String optionDesc_madnessReplacements = optionDesc.TEXT[9];
-    public final String optionDesc_vanillaPowerRender = optionDesc.TEXT[10];
-    public final String optionDesc_alwaysPCLCard = optionDesc.TEXT[11];
+    public final String optionDesc_lowVRAM= optionDesc.TEXT[9];
+    public final String optionDesc_madnessReplacements = optionDesc.TEXT[10];
+    public final String optionDesc_vanillaPowerRender = optionDesc.TEXT[11];
+    public final String optionDesc_alwaysPCLCard = optionDesc.TEXT[12];
     // Reward
     public final String rewards_rewardBreak = rewards.TEXT[0];
     public final String rewards_breakDescription = rewards.TEXT[1];
@@ -421,8 +423,9 @@ public class PCLCoreStrings extends PCLStrings {
     public final String subjects_xThisCombat = subjects.TEXT[53];
     public final String subjects_xThisTurn = subjects.TEXT[54];
     public final String subjects_xTimes = subjects.TEXT[55];
-    public final String subjects_xWithY = subjects.TEXT[56];
-    public final String subjects_xCost = subjects.TEXT[57];
+    public final String subjects_xUntilY = subjects.TEXT[56];
+    public final String subjects_xWithY = subjects.TEXT[57];
+    public final String subjects_xCost = subjects.TEXT[58];
     // Tutorial
     public final String tutorial_learnMore = tutorial.TEXT[0];
     public final String tutorial_tagTutorial = tutorial.TEXT[1];
@@ -775,8 +778,17 @@ public class PCLCoreStrings extends PCLStrings {
     public final String act_zOnAmount(Object action, Object amount, Object object, Object target) {
         return actFmt(54, action, amount, object, target);
     }
-    public final String act_zTo(Object action, Object object, Object target) {
-        return actFmt(55, action, object, target);
+    public final String act_zXFromY(Object verb, Object amount, Object subject, Object target) {
+        return actFmt(55, verb, amount, subject, target);
+    }
+    public final String act_zXFromYToZ(Object verb, Object amount, Object subject, Object dest, Object target) {
+        return actFmt(56, verb, amount, subject, dest, target);
+    }
+    public final String act_zToX(Object action, Object object, Object target) {
+        return actFmt(57, action, object, target);
+    }
+    public final String act_zXToY(Object verb, Object amount, Object subject, Object target) {
+        return actFmt(58, verb, amount, subject, target);
     }
 
     public final String act_channel(Object subject) {
@@ -818,9 +830,6 @@ public class PCLCoreStrings extends PCLStrings {
     public final String act_generic3(Object verb, Object adj, Object subject) {
         return EUIRM.strings.verbAdjNoun(verb, adj, subject);
     }
-    public final String act_genericFrom(Object verb, Object amount, Object subject, Object target) {
-        return EUIRM.strings.verbNumNounPlace(verb, amount, subject, subjects_from(target));
-    }
     public final String act_genericTimes(Object verb, Object subject, Object times) {
         return EUIRM.strings.verbNounAdv(verb, subject, subjects_times(times));
     }
@@ -840,7 +849,7 @@ public class PCLCoreStrings extends PCLStrings {
         return EUIRM.strings.verbNoun(PGR.core.tooltips.play.title, amount);
     }
     public final String act_playFrom(Object amount, Object subject, Object target) {
-        return act_genericFrom(PGR.core.tooltips.play.title, amount, subject, target);
+        return act_zXFromY(PGR.core.tooltips.play.title, amount, subject, target);
     }
     public final String act_playXTimes(Object subject, Object amount) {
         return act_genericTimes(PGR.core.tooltips.play.title, subject, amount);
@@ -888,7 +897,7 @@ public class PCLCoreStrings extends PCLStrings {
         return act_generic2(PGR.core.tooltips.upgrade.title, amount);
     }
     public final String act_upgradeFrom(Object amount, Object subject, Object target) {
-        return act_genericFrom(PGR.core.tooltips.upgrade.title, amount, subject, target);
+        return act_zXFromY(PGR.core.tooltips.upgrade.title, amount, subject, target);
     }
     public final String act_withdraw(Object subject) {
         return act_generic2(PGR.core.tooltips.withdraw.title, subject);
@@ -1199,6 +1208,9 @@ public class PCLCoreStrings extends PCLStrings {
     }
     public final String subjects_unblocked(Object amount) {
         return EUIUtils.format(subjects_unblockedX, amount);
+    }
+    public final String subjects_untilX(Object obj, Object t) {
+        return EUIUtils.format(subjects_xUntilY, obj, t);
     }
     public final String subjects_withX(Object obj, Object t) {
         return EUIUtils.format(subjects_xWithY, obj, t);

@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
+import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.skills.PMove;
@@ -44,18 +45,18 @@ public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity
     }
 
     @Override
-    public void cardAction(List<AbstractCard> cards) {
+    public void cardAction(List<AbstractCard> cards, PCLActions order) {
         if (fields.or && fields.addAffinities.size() > 1) {
-            chooseEffect(cards, fields.addAffinities);
+            chooseEffect(cards, fields.addAffinities, order);
         }
         else {
-            super.cardAction(cards);
+            super.cardAction(cards, order);
         }
     }
 
     @Override
-    public ActionT1<AbstractCard> getAction() {
-        return (c) -> getActions().modifyAffinityLevel(c, fields.addAffinities, amount, !fields.not, fields.forced);
+    public ActionT1<AbstractCard> getAction(PCLActions order) {
+        return (c) -> order.modifyAffinityLevel(c, fields.addAffinities, amount, !fields.not, fields.forced);
     }
 
     @Override
@@ -85,8 +86,8 @@ public class PMove_ModifyAffinity extends PMove_Modify<PField_CardModifyAffinity
         return getBasicGiveString();
     }
 
-    public void chooseEffect(List<AbstractCard> cards, List<PCLAffinity> choices) {
-        getActions().tryChooseAffinitySkill(getName(), amount, getSourceCreature(), null, EUIUtils.map(choices, a -> PMove.modifyAffinity(amount, a)));
+    public void chooseEffect(List<AbstractCard> cards, List<PCLAffinity> choices, PCLActions order) {
+        order.tryChooseAffinitySkill(getName(), amount, getSourceCreature(), null, EUIUtils.map(choices, a -> PMove.modifyAffinity(amount, a)));
     }
 
     @Override

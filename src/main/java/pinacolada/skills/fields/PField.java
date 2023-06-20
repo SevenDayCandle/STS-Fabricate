@@ -133,7 +133,7 @@ public abstract class PField implements Serializable {
 
     public static String getGroupString(ArrayList<PCLCardGroupHelper> groupTypes, PCLCardSelection origin) {
         String base = getGroupString(groupTypes);
-        return origin == PCLCardSelection.Top ? TEXT.subjects_topOf(base) : origin == PCLCardSelection.Bottom ? TEXT.subjects_bottomOf(base) : base;
+        return getOriginWrappedString(base, origin);
     }
 
     public static String getGroupString(List<PCLCardGroupHelper> groups) {
@@ -150,6 +150,10 @@ public abstract class PField implements Serializable {
 
     public static String getOrbString(ArrayList<PCLOrbHelper> orbs) {
         return EUIConfiguration.enableDescriptionIcons.get() ? EUIUtils.joinStringsMapNonnull(" ", PField::safeInvokeTip, orbs) : getOrbAndString(orbs, 1);
+    }
+
+    public static String getOriginWrappedString(String base, PCLCardSelection origin) {
+        return origin == PCLCardSelection.Top ? TEXT.subjects_topOf(base) : origin == PCLCardSelection.Bottom ? TEXT.subjects_bottomOf(base) : base;
     }
 
     public static String getPowerAndString(ArrayList<PCLPowerHelper> powers) {

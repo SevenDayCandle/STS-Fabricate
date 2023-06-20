@@ -1,4 +1,4 @@
-package pinacolada.cards.base.modifiers;
+package pinacolada.cardmods;
 
 import basemod.abstracts.AbstractCardModifier;
 import basemod.helpers.CardModifierManager;
@@ -10,6 +10,7 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
+import pinacolada.actions.PCLActions;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.providers.PointerProvider;
@@ -77,11 +78,13 @@ public class SkillModifier extends AbstractCardModifier {
         info = refreshInfo(card, mo);
     }
 
+    @Override
     public float modifyDamage(float damage, DamageInfo.DamageType type, AbstractCard card, AbstractMonster target) {
         return skill.modifyDamage(getInfo(card, target), damage);
     }
 
     // Generate infos manually because we cannot attach the skill to the card if it is not an EditorCard
+    @Override
     public float modifyBlock(float block, AbstractCard card) {
         return skill.modifyBlock(getInfo(card, null), block);
     }
@@ -93,7 +96,7 @@ public class SkillModifier extends AbstractCardModifier {
 
     @Override
     public void onUse(AbstractCard card, AbstractCreature target, UseCardAction action) {
-        skill.use(getInfo(card, target));
+        skill.use(getInfo(card, target), PCLActions.bottom);
     }
 
     public void onDrawn(AbstractCard card) {

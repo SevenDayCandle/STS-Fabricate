@@ -3,6 +3,7 @@ package pinacolada.skills.skills.base.moves;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
 import extendedui.interfaces.delegates.ActionT1;
+import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.tags.PCLCardTag;
@@ -31,10 +32,10 @@ public class PMove_ModifyTag extends PMove_Modify<PField_CardModifyTag> {
     }
 
     @Override
-    public ActionT1<AbstractCard> getAction() {
+    public ActionT1<AbstractCard> getAction(PCLActions order) {
         return (c) -> {
             for (PCLCardTag tag : fields.addTags) {
-                getActions().modifyTag(c, tag, amount, !fields.not);
+                order.modifyTag(c, tag, amount, !fields.not);
             }
         };
     }

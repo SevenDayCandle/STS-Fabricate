@@ -1,7 +1,12 @@
 package pinacolada.skills.skills.base.conditions;
 
+import com.megacrit.cardcrawl.core.AbstractCreature;
+import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLAction;
+import pinacolada.actions.PCLActions;
+import pinacolada.actions.powers.ApplyPowerAutoAction;
+import pinacolada.actions.utility.SequentialAction;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -55,11 +60,10 @@ public class PCond_PayPower extends PActiveCond<PField_Power> {
     }
 
     @Override
-    protected PCLAction<?> useImpl(PCLUseInfo info, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {
-        return getActions().callback(() -> {
-            for (PCLPowerHelper power : fields.powers) {
-                getActions().applyPower(PCLCardTarget.Self, power, -amount);
-            }
+    protected PCLAction<?> useImpl(PCLUseInfo info, PCLActions order, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {
+        AbstractCreature sourceCreature = getSourceCreature();
+        return order.callback(new SequentialAction(EUIUtils.map(fields.powers, power -> new ApplyPowerAutoAction(sourceCreature, sourceCreature, PCLCardTarget.Self, power, -amount))), action -> {
+            onComplete.invoke(info);
         });
     }
 }

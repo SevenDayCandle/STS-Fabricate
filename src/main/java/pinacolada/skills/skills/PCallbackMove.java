@@ -1,6 +1,7 @@
 package pinacolada.skills.skills;
 
 import extendedui.interfaces.delegates.ActionT1;
+import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.skills.PMove;
@@ -26,10 +27,9 @@ public abstract class PCallbackMove<T extends PField> extends PMove<T> {
         super(data, target, amount, extra);
     }
 
-    public void use(PCLUseInfo info) {
-        use(info, __ -> {
-        });
+    public void use(PCLUseInfo info, PCLActions order) {
+        use(info, order, __ -> {});
     }
 
-    public abstract void use(PCLUseInfo info, ActionT1<PCLUseInfo> callback);
+    public abstract void use(PCLUseInfo info, PCLActions order, ActionT1<PCLUseInfo> callback);
 }

@@ -8,6 +8,7 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.utilities.RotatingList;
+import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -366,25 +367,25 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     }
 
     @Override
-    public void use(PCLUseInfo info) {
+    public void use(PCLUseInfo info, PCLActions order) {
         if (amount > 0) {
-            chooseEffect(info);
+            chooseEffect(info, order);
         }
         else {
             if (useParent) {
                 for (PSkill<?> effect : effects) {
-                    effect.use(info);
+                    effect.use(info, order);
                 }
             }
             else {
-                useSkill(info, 0);
+                useSkill(info, order, 0);
             }
         }
     }
 
     @Override
-    public void use(PCLUseInfo info, boolean isUsing) {
-        use(info);
+    public void use(PCLUseInfo info, PCLActions order, boolean isUsing) {
+        use(info, order);
     }
 
     public PMultiSkill useParent(boolean value) {
@@ -421,13 +422,13 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
         return this;
     }
 
-    public void chooseEffect(PCLUseInfo info) {
+    public void chooseEffect(PCLUseInfo info, PCLActions order) {
         PCLCard choiceCard = EUIUtils.safeCast(sourceCard, PCLCard.class);
         if (choiceCard == null) {
             choiceCard = new QuestionMark();
         }
 
-        getActions().tryChooseSkill(choiceCard.cardData, amount, info.source, info.target, effects);
+        order.tryChooseSkill(choiceCard.cardData, amount, info.source, info.target, effects);
     }
 
     public PMultiSkill setGenerated(boolean val) {
@@ -435,17 +436,17 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
         return this;
     }
 
-    public void useSkill(PCLUseInfo info, int index) {
+    public void useSkill(PCLUseInfo info, PCLActions order, int index) {
         PSkill<?> skill = getSubEffect(index);
         if (skill instanceof PCallbackMove) {
-            ((PCallbackMove<?>) skill).use(info, i -> useSkill(i, index + 1));
+            ((PCallbackMove<?>) skill).use(info, order, i -> useSkill(i, order, index + 1));
         }
         else {
             if (skill != null) {
-                skill.use(info);
+                skill.use(info, order);
             }
             if (index < effects.size() - 1) {
-                useSkill(info, index + 1);
+                useSkill(info, order, index + 1);
             }
         }
     }

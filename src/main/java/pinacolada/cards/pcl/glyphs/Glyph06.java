@@ -17,7 +17,7 @@ public class Glyph06 extends Glyph {
         super(DATA);
     }
 
-    public void action(PSpecialSkill move, PCLUseInfo info) {
+    public void action(PSpecialSkill move, PCLUseInfo info, PCLActions order) {
         for (AbstractMonster m1 : GameUtilities.getEnemies(true)) {
             PCLActions.bottom.add(new HealAction(m1, null, move.amount));
         }

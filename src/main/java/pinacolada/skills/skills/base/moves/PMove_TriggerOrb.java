@@ -1,5 +1,6 @@
 package pinacolada.skills.skills.base.moves;
 
+import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -46,10 +47,10 @@ public class PMove_TriggerOrb extends PMove<PField_Orb> {
     }
 
     @Override
-    public void use(PCLUseInfo info) {
-        getActions().triggerOrbPassive(amount, extra <= 0 ? GameUtilities.getOrbCount() : extra, fields.random)
+    public void use(PCLUseInfo info, PCLActions order) {
+        order.triggerOrbPassive(amount, extra <= 0 ? GameUtilities.getOrbCount() : extra, fields.random)
                 .setFilter(fields.getOrbFilter());
 
-        super.use(info);
+        super.use(info, order);
     }
 }

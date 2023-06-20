@@ -9,6 +9,7 @@ import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.FuncT5;
 import extendedui.ui.tooltips.EUITooltip;
 import pinacolada.actions.PCLAction;
+import pinacolada.actions.PCLActions;
 import pinacolada.actions.piles.SelectFromPile;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -78,8 +79,7 @@ public abstract class PCond_DoToCard extends PActiveNonCheckCond<PField_CardCate
 
     @Override
     public String getSubText() {
-        return fields.isHandOnly() ? TEXT.act_generic3(getActionTitle(), getAmountRawOrAllString(), fields.getFullCardString()) :
-                fields.hasGroups() ? TEXT.act_genericFrom(getActionTitle(), getAmountRawOrAllString(), fields.getFullCardString(), fields.getGroupString())
+        return fields.hasGroups() && !fields.isHandOnly() ? TEXT.act_zXFromY(getActionTitle(), getAmountRawOrAllString(), fields.getFullCardString(), fields.getGroupString())
                 : EUIRM.strings.verbNumNoun(getActionTitle(), getAmountRawOrAllString(), fields.getFullCardString());
     }
 
@@ -87,8 +87,8 @@ public abstract class PCond_DoToCard extends PActiveNonCheckCond<PField_CardCate
         return fields.getQualifiers(info);
     }
 
-    public PCLAction<?> useImpl(PCLUseInfo info, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {
-        return getActions().add(fields.getGenericPileAction(getAction(), info, extra))
+    public PCLAction<?> useImpl(PCLUseInfo info, PCLActions order, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {
+        return order.add(fields.getGenericPileAction(getAction(), info, order, extra))
                 .addCallback(cards -> {
                     if (cards.size() >= amount) {
                         info.setData(cards);

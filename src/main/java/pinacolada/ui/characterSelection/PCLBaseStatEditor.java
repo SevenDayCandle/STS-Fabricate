@@ -142,9 +142,9 @@ public class PCLBaseStatEditor extends EUIHoverable {
     }
 
     public enum StatType {
-        HP(Settings.RED_TEXT_COLOR, 2, 1, -6, 6, 0),
-        Gold(Settings.GOLD_COLOR, 14, 1, -6, 6, 0),
-        OrbSlot(Settings.CREAM_COLOR, 1, 5, 12),
+        HP(Settings.RED_TEXT_COLOR, 2, 1, -7, 7, 0),
+        Gold(Settings.GOLD_COLOR, 14, 1, -7, 7, 0),
+        OrbSlot(Settings.CREAM_COLOR, 1, 5, 0, 5, 12),
         PotionSlot(Settings.CREAM_COLOR, 1, 6, 12),
         CardDraw(Settings.CREAM_COLOR, 1, 26, 12),
         Energy(Settings.CREAM_COLOR, 1, 35, 12);

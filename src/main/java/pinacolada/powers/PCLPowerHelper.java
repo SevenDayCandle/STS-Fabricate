@@ -20,6 +20,7 @@ import pinacolada.powers.common.*;
 import pinacolada.powers.replacement.PCLConstrictedPower;
 import pinacolada.powers.replacement.PCLCurlUpPower;
 import pinacolada.powers.replacement.PCLLockOnPower;
+import pinacolada.powers.special.ProvokedPower;
 import pinacolada.powers.special.SelfImmolationPower;
 import pinacolada.powers.special.SilencedPower;
 import pinacolada.resources.PCLEnum;
@@ -49,12 +50,14 @@ public class PCLPowerHelper implements TooltipProvider {
     public static final PCLPowerHelper NoBlock = new PCLPowerHelper(NoBlockPower.POWER_ID, PGR.core.tooltips.noBlock, (o, s, a) -> new NoBlockPower(o, a, shouldExtend(o, s)), Behavior.TurnBased, false, true, false);
     public static final PCLPowerHelper NoDraw = new PCLPowerHelper(NoDrawPower.POWER_ID, PGR.core.tooltips.noDraw, (o, s, a) -> new NoDrawPower(o), Behavior.SingleTurn, false, true, false);
     public static final PCLPowerHelper Poison = new PCLPowerHelper(PoisonPower.POWER_ID, PGR.core.tooltips.poison, PoisonPower::new, Behavior.TurnBased, true, true, false);
+    public static final PCLPowerHelper Provoked = new PCLPowerHelper(ProvokedPower.POWER_ID, PGR.core.tooltips.provoked, ProvokedPower::new, Behavior.TurnBased, false, true, false);
     public static final PCLPowerHelper SelfImmolation = new PCLPowerHelper(SelfImmolationPower.POWER_ID, PGR.core.tooltips.selfImmolation, (o, s, a) -> new SelfImmolationPower(o, a, shouldExtend(o, s)), Behavior.TurnBased, false, true, false);
     public static final PCLPowerHelper Shackles = new PCLPowerHelper(ShacklesPower.POWER_ID, PGR.core.tooltips.shackles, ShacklesPower::new, Behavior.SingleTurn, true, true, false);
     public static final PCLPowerHelper Silenced = new PCLPowerHelper(SilencedPower.POWER_ID, PGR.core.tooltips.silenced, SilencedPower::new, Behavior.TurnBased, false, true, false);
     public static final PCLPowerHelper Slow = new PCLPowerHelper(SlowPower.POWER_ID, PGR.core.tooltips.slow, SlowPower::new, Behavior.Permanent, false, true, true);
     public static final PCLPowerHelper Vulnerable = new PCLPowerHelper(VulnerablePower.POWER_ID, PGR.core.tooltips.vulnerable, (o, s, a) -> new VulnerablePower(o, a, shouldExtend(o, s)), Behavior.TurnBased, true, true, true);
     public static final PCLPowerHelper Weak = new PCLPowerHelper(WeakPower.POWER_ID, PGR.core.tooltips.weak, (o, s, a) -> new WeakPower(o, a, shouldExtend(o, s)), Behavior.TurnBased, true, true, true);
+
     public static final PCLPowerHelper Artifact = new PCLPowerHelper(ArtifactPower.POWER_ID, PGR.core.tooltips.artifact, ArtifactPower::new, Behavior.Permanent, true, false, false);
     public static final PCLPowerHelper Blur = new PCLPowerHelper(BlurPower.POWER_ID, PGR.core.tooltips.blur, BlurPower::new, Behavior.TurnBased, true, false, false);
     public static final PCLPowerHelper Buffer = new PCLPowerHelper(BufferPower.POWER_ID, PGR.core.tooltips.buffer, BufferPower::new, Behavior.Permanent, true, false, false);

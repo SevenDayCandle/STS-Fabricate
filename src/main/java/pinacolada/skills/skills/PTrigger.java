@@ -2,6 +2,7 @@ package pinacolada.skills.skills;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.interfaces.delegates.FuncT0;
+import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.powers.PSkillPower;
@@ -176,22 +177,22 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
     }
 
     @Override
-    public void use(PCLUseInfo info) {
+    public void use(PCLUseInfo info, PCLActions order) {
         if (usesThisTurn != 0) {
             if (usesThisTurn > 0) {
                 usesThisTurn -= 1;
             }
-            this.childEffect.use(info);
+            this.childEffect.use(info, order);
         }
     }
 
     @Override
-    public void use(PCLUseInfo info, boolean isUsing) {
+    public void use(PCLUseInfo info, PCLActions order, boolean isUsing) {
         if (usesThisTurn != 0) {
             if (usesThisTurn > 0) {
                 usesThisTurn -= 1;
             }
-            this.childEffect.use(info, isUsing);
+            this.childEffect.use(info, order, isUsing);
         }
     }
 

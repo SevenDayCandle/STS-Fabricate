@@ -2,6 +2,7 @@ package pinacolada.skills.skills.special.primary;
 
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIRM;
+import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.skills.PPrimary;
 import pinacolada.skills.PSkill;
@@ -54,7 +55,7 @@ public class PRoot extends PPrimary<PField_Empty> {
     @Override
     public void triggerOnStartOfBattleForRelic() {
         if (childEffect != null) {
-            childEffect.use(makeInfo(null));
+            childEffect.use(makeInfo(null), PCLActions.bottom);
         }
     }
 

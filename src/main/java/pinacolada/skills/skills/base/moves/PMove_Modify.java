@@ -2,11 +2,14 @@ package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
+import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
+import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.resources.PGR;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
@@ -30,13 +33,13 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<
         return fields.getFullCardFilter().invoke(c);
     }
 
-    public void cardAction(List<AbstractCard> cards) {
+    public void cardAction(List<AbstractCard> cards, PCLActions order) {
         for (AbstractCard c : cards) {
-            getAction().invoke(c);
+            getAction(order).invoke(c);
         }
     }
 
-    public abstract ActionT1<AbstractCard> getAction();
+    public abstract ActionT1<AbstractCard> getAction(PCLActions order);
 
     public String getNumericalObjectText() {
         return EUIRM.strings.numNoun(getAmountRawString(), getObjectText());
@@ -71,13 +74,13 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<
     }
 
     @Override
-    public void use(PCLUseInfo info) {
+    public void use(PCLUseInfo info, PCLActions order) {
         boolean selectAll = baseExtra <= 0 || useParent;
-        getActions().selectFromPile(getName(), selectAll ? Integer.MAX_VALUE : extra, fields.getCardGroup(info))
+        order.selectFromPile(getName(), selectAll ? Integer.MAX_VALUE : extra, fields.getCardGroup(info))
                 .setFilter(this::canCardPass)
                 .setOptions((selectAll || fields.groupTypes.isEmpty() ? PCLCardSelection.Random : fields.origin).toSelection(), !fields.forced)
-                .addCallback(this::cardAction);
-        super.use(info);
+                .addCallback(cards -> cardAction(cards, order));
+        super.use(info, order);
     }
 
     @Override
@@ -121,5 +124,9 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<
                 fields.hasGroups() ?
                         TEXT.act_removeFromPlace(giveString, EUIRM.strings.numNoun(baseExtra <= 0 ? TEXT.subjects_all : getExtraRawString(), pluralCard()), fields.getGroupString()) :
                         TEXT.act_removeFrom(giveString, TEXT.subjects_thisCard);
+    }
+
+    public String getUntilPlayedString() {
+        return EUIUtils.capitalize(TEXT.subjects_untilX("", PGR.core.tooltips.play.past()).trim());
     }
 }

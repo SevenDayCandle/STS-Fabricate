@@ -132,7 +132,7 @@ public abstract class PCLCardCreature extends PCLSkillCreature {
 
         for (PSkill<?> s : card.getFullEffects()) {
             if (s instanceof SummonOnlyMove) {
-                s.use(CombatManager.playerSystem.generateInfo(card, this, this));
+                s.use(CombatManager.playerSystem.generateInfo(card, this, this), PCLActions.bottom);
             }
         }
 

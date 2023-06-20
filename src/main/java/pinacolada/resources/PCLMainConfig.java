@@ -3,6 +3,7 @@ package pinacolada.resources;
 import basemod.BaseMod;
 import basemod.ModPanel;
 import com.badlogic.gdx.math.Vector2;
+import com.evacipated.cardcrawl.modthespire.lib.SpireConfig;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
@@ -18,6 +19,7 @@ import pinacolada.cards.base.PCLCardPreviews;
 import pinacolada.utilities.GameUtilities;
 
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Locale;
@@ -25,7 +27,6 @@ import java.util.Locale;
 public class PCLMainConfig extends AbstractConfig {
     private static final String LAST_SEED_KEY = "TSDL";
     private static final String MOD_ID = "PCL";
-    private static final String CONFIG_ID = "PCLConfig";
     private static final String ASCENSIONGLYPH0 = PCLMainConfig.createFullID("AscensionGlyph0");
     private static final String ASCENSIONGLYPH1 = PCLMainConfig.createFullID("AscensionGlyph1");
     private static final String ASCENSIONGLYPH2 = PCLMainConfig.createFullID("AscensionGlyph2");
@@ -41,6 +42,7 @@ public class PCLMainConfig extends AbstractConfig {
     private static final String HIDE_TIP_DESCRIPTION = PCLMainConfig.createFullID("HideTipDescription");
     private static final String LAST_CSV_PATH = PCLMainConfig.createFullID("LastCSVPath");
     private static final String LAST_IMAGE_PATH = PCLMainConfig.createFullID("LastImagePath");
+    private static final String LOW_VRAM = PCLMainConfig.createFullID("LowVRAM");
     private static final String MADNESS_REPLACEMENTS = PCLMainConfig.createFullID("MadnessReplacements");
     private static final String REMOVE_LINE_BREAKS = PCLMainConfig.createFullID("RemoveLineBreaks");
     private static final String REPLACE_CARDS_PCL = PCLMainConfig.createFullID("ReplaceCardsPCL");
@@ -70,6 +72,7 @@ public class PCLMainConfig extends AbstractConfig {
     public STSConfigItem<Boolean> enableCustomEvents = new STSConfigItem<Boolean>(ENABLE_CUSTOM_EVENTS, false);
     public STSConfigItem<Boolean> enableCustomPotions = new STSConfigItem<Boolean>(ENABLE_CUSTOM_POTIONS, false);
     public STSConfigItem<Boolean> enableCustomRelics = new STSConfigItem<Boolean>(ENABLE_CUSTOM_RELICS, false);
+    public STSConfigItem<Boolean> lowVRAM = new STSConfigItem<Boolean>(LOW_VRAM, false);
     public STSConfigItem<Boolean> madnessReplacements = new STSConfigItem<Boolean>(MADNESS_REPLACEMENTS, false);
     public STSConfigItem<Boolean> removeLineBreaks = new STSConfigItem<Boolean>(REMOVE_LINE_BREAKS, false);
     public STSConfigItem<Boolean> replaceCardsPCL = new STSConfigItem<Boolean>(REPLACE_CARDS_PCL, false);
@@ -154,6 +157,7 @@ public class PCLMainConfig extends AbstractConfig {
         yPos = addToggle(0, showFormulaDisplay, PGR.core.strings.options_showFormulaDisplay, yPos, PGR.core.strings.optionDesc_showFormulaDisplay);
         yPos = addToggle(0, showIrrelevantProperties, PGR.core.strings.options_hideIrrelevantAffinities, yPos, PGR.core.strings.optionDesc_hideIrrelevantAffinities);
         yPos = addToggle(0, madnessReplacements, PGR.core.strings.options_madnessReplacements, yPos, PGR.core.strings.optionDesc_madnessReplacements);
+        yPos = addToggle(0, lowVRAM, PGR.core.strings.options_lowVRAM, yPos, PGR.core.strings.optionDesc_lowVRAM);
         yPos = addToggle(0, enableCustomCards, PGR.core.strings.options_enableCustomCards, yPos, PGR.core.strings.optionDesc_onlyNewRuns);
         yPos = addToggle(0, enableCustomRelics, PGR.core.strings.options_enableCustomRelics, yPos, PGR.core.strings.optionDesc_onlyNewRuns);
 
@@ -173,6 +177,20 @@ public class PCLMainConfig extends AbstractConfig {
         removeLineBreaks.addListener(val -> this.updateCardDescriptions());
     }
 
+    public void load() {
+        try {
+            config = new SpireConfig(MOD_ID, MOD_ID);
+            loadImpl();
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void load(int slot) {
+        load();
+    }
+
     public void loadImpl() {
         abbreviateEffects.addConfig(config);
         ascensionGlyph0.addConfig(config);
@@ -185,6 +203,7 @@ public class PCLMainConfig extends AbstractConfig {
         enableCustomEvents.addConfig(config);
         enableCustomPotions.addConfig(config);
         enableCustomRelics.addConfig(config);
+        lowVRAM.addConfig(config);
         removeLineBreaks.addConfig(config);
         showEstimatedDamage.addConfig(config);
         showFormulaDisplay.addConfig(config);

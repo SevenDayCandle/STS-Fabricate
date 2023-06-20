@@ -52,7 +52,7 @@ public class PCond_Fatal extends PActiveNonCheckCond<PField_Random> implements O
         useFromTrigger(makeInfo(monster));
     }
 
-    protected PCLAction<?> useImpl(PCLUseInfo info, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {
+    protected PCLAction<?> useImpl(PCLUseInfo info, PCLActions order, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail) {
         return PCLActions.last.callback(getTargetList(info), (targets, __) -> {
             if (targets.size() > 0 && EUIUtils.any(targets, t -> GameUtilities.isFatal(t, fields.random)) && (!(parent instanceof PLimit) || ((PLimit) parent).tryActivate(info))) {
                 onComplete.invoke(info);

@@ -2,6 +2,7 @@ package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUIUtils;
+import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -40,10 +41,18 @@ public class PMove_StackTemporaryPower extends PMove<PField_Power> {
         String joinedString = EUIUtils.format(TEXT.misc_tempPowerPrefix, fields.getPowerString());
         switch (target) {
             case RandomEnemy:
+            case AllAlly:
             case AllEnemy:
+            case All:
+            case Team:
                 return fields.powers.size() > 0 && fields.powers.get(0).isDebuff ? TEXT.act_applyXToTarget(getAmountRawString(), joinedString, getTargetString()) : TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
             case Single:
+            case SingleAlly:
                 return fields.powers.size() > 0 && fields.powers.get(0).isDebuff ? TEXT.act_applyX(getAmountRawString(), joinedString) : TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
+            case Self:
+                if (isFromCreature()) {
+                    return TEXT.act_giveTargetAmount(getTargetString(), getAmountRawString(), joinedString);
+                }
             default:
                 return amount < 0 ? TEXT.act_loseAmount(getAmountRawString(), joinedString)
                         : TEXT.act_gainAmount(getAmountRawString(), joinedString);
@@ -60,10 +69,10 @@ public class PMove_StackTemporaryPower extends PMove<PField_Power> {
     }
 
     @Override
-    public void use(PCLUseInfo info) {
+    public void use(PCLUseInfo info, PCLActions order) {
         for (PCLPowerHelper power : fields.powers) {
-            getActions().applyPower(info.source, info.target, target, power, amount, true);
+            order.applyPower(info.source, info.target, target, power, amount, true);
         }
-        super.use(info);
+        super.use(info, order);
     }
 }

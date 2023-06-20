@@ -3,6 +3,7 @@ package pinacolada.skills.skills.special.moves;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
 import extendedui.interfaces.delegates.ActionT1;
+import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
@@ -26,8 +27,8 @@ public class PMove_ReduceCooldown extends PMove_Modify<PField_CardCategory> {
     }
 
     @Override
-    public ActionT1<AbstractCard> getAction() {
-        return (c) -> getActions().progressCooldown(getSourceCreature(), c, extra);
+    public ActionT1<AbstractCard> getAction(PCLActions order) {
+        return (c) -> order.progressCooldown(getSourceCreature(), c, extra);
     }
 
     @Override

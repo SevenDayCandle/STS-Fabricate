@@ -1,5 +1,6 @@
 package pinacolada.skills.skills;
 
+import pinacolada.actions.PCLActions;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.markers.OutOfCombatMove;
 import pinacolada.interfaces.markers.PMultiBase;
@@ -49,11 +50,11 @@ public abstract class PShift extends PPrimary<PField_Empty> {
 
     // Should not activate effects when played normally in battle
     @Override
-    public void use(PCLUseInfo info) {
+    public void use(PCLUseInfo info, PCLActions order) {
     }
 
     @Override
-    public void use(PCLUseInfo info, boolean isUsing) {
+    public void use(PCLUseInfo info, PCLActions order, boolean isUsing) {
     }
 
 

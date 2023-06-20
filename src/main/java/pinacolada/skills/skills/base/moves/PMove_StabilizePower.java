@@ -2,6 +2,7 @@ package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.powers.IntangiblePower;
+import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -53,35 +54,35 @@ public class PMove_StabilizePower extends PMove<PField_Power> {
     }
 
     @Override
-    public void use(PCLUseInfo info) {
+    public void use(PCLUseInfo info, PCLActions order) {
         List<? extends AbstractCreature> targets = getTargetList(info);
         if (fields.powers.isEmpty()) {
             for (PCLPowerHelper power : PCLPowerHelper.commonDebuffs()) {
-                stabilizePower(info.source, targets, power);
+                stabilizePower(info.source, targets, power, order);
             }
         }
         else if (fields.random) {
             PCLPowerHelper power = GameUtilities.getRandomElement(fields.powers);
             if (power != null) {
-                stabilizePower(info.source, targets, power);
+                stabilizePower(info.source, targets, power, order);
             }
         }
         else {
             for (PCLPowerHelper power : fields.powers) {
-                stabilizePower(info.source, targets, power);
+                stabilizePower(info.source, targets, power, order);
             }
         }
-        super.use(info);
+        super.use(info, order);
     }
 
-    protected void stabilizePower(AbstractCreature p, List<? extends AbstractCreature> targets, PCLPowerHelper power) {
+    protected void stabilizePower(AbstractCreature p, List<? extends AbstractCreature> targets, PCLPowerHelper power, PCLActions order) {
         for (AbstractCreature t : targets) {
-            getActions().stabilizePower(p, t, power.ID, amount);
+            order.stabilizePower(p, t, power.ID, amount);
         }
         // Handle powers that are equivalent in terms of what the player sees but that have different IDs
         if (power == PCLPowerHelper.Intangible) {
             for (AbstractCreature t : targets) {
-                getActions().stabilizePower(p, t, IntangiblePower.POWER_ID, amount);
+                order.stabilizePower(p, t, IntangiblePower.POWER_ID, amount);
             }
         }
     }

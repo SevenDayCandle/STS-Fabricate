@@ -2,6 +2,7 @@ package pinacolada.skills.skills.base.moves;
 
 import extendedui.EUIRM;
 import extendedui.interfaces.delegates.ActionT1;
+import pinacolada.actions.PCLActions;
 import pinacolada.actions.piles.RemoveFromPile;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
@@ -72,15 +73,15 @@ public class PMove_RemoveCard extends PCallbackMove<PField_CardCategory> impleme
     }
 
     @Override
-    public void use(PCLUseInfo info, ActionT1<PCLUseInfo> callback) {
-        getActions().add(fields.createAction(RemoveFromPile::new, info, extra))
+    public void use(PCLUseInfo info, PCLActions order, ActionT1<PCLUseInfo> callback) {
+        order.add(fields.createAction(RemoveFromPile::new, info, extra))
                 .setFilter(c -> fields.getFullCardFilter().invoke(c))
                 .setAnyNumber(!fields.forced)
                 .addCallback(cards -> {
                     info.setData(cards);
                     callback.invoke(info);
                     if (this.childEffect != null) {
-                        this.childEffect.use(info);
+                        this.childEffect.use(info, order);
                     }
                 });
     }

@@ -254,7 +254,7 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
         if (builder != null && builder.portraitImage != null) {
             PixmapIO.writePNG(imgWriter, builder.portraitImage.texture.getTextureData().consumePixmap());
             // Forcibly reload the image
-            EUIRM.reloadTexture(newImagePath, true, true);
+            EUIRM.reloadTexture(newImagePath, true, PGR.config.lowVRAM.get());
         }
 
         // Unlink temporary portrait images to allow the new saved portrait image to be loaded, and set multiform data as necessary

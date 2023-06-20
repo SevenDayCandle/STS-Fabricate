@@ -2,6 +2,7 @@ package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
+import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -41,7 +42,7 @@ public class PMove_PlayCopy extends PMove_GenerateCard {
     }
 
     @Override
-    public void performAction(PCLUseInfo info, AbstractCard c) {
-        getActions().playCopy(c, target.getTarget(info.source, info.target));
+    public void performAction(PCLUseInfo info, PCLActions order, AbstractCard c) {
+        order.playCopy(c, target.getTarget(info.source, info.target));
     }
 }

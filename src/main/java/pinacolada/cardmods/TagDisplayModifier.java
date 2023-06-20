@@ -1,4 +1,4 @@
-package pinacolada.cards.base.modifiers;
+package pinacolada.cardmods;
 
 import basemod.abstracts.AbstractCardModifier;
 import basemod.helpers.CardModifierManager;

@@ -3,6 +3,7 @@ package pinacolada.skills.skills;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
+import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.skills.PSkill;
@@ -28,7 +29,7 @@ public abstract class PDelegateCardCond extends PDelegateCond<PField_CardCategor
     }
 
     @Override
-    public void use(PCLUseInfo info) {
+    public void use(PCLUseInfo info, PCLActions order) {
     }
 
     // This should not activate the child effect when played normally

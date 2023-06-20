@@ -214,6 +214,7 @@ public class PGR {
         }
 
         config = new PCLMainConfig();
+        config.load();
         core = new PCLCoreResources();
         initialize(core);
     }

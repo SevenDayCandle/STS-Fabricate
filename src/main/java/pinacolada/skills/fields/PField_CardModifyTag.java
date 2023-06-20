@@ -7,9 +7,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
-public class PField_CardModifyTag extends PField_CardCategory {
+public class PField_CardModifyTag extends PField_CardModify {
     public ArrayList<PCLCardTag> addTags = new ArrayList<>();
-    public boolean or;
 
     public PField_CardModifyTag() {
         super();
@@ -18,7 +17,6 @@ public class PField_CardModifyTag extends PField_CardCategory {
     public PField_CardModifyTag(PField_CardModifyTag other) {
         super(other);
         setAddTag(other.addTags);
-        setOr(other.or);
     }
 
     @Override

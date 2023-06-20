@@ -1,6 +1,7 @@
 package pinacolada.skills.skills.base.modifiers;
 
 import extendedui.interfaces.delegates.ActionT0;
+import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -49,16 +50,16 @@ public abstract class PMod_ChangeGroup extends PActiveMod<PField_CardGeneric> {
     }
 
     @Override
-    public void use(PCLUseInfo info) {
+    public void use(PCLUseInfo info, PCLActions order) {
         if (childEffect != null) {
-            useImpl(info, () -> childEffect.use(info));
+            useImpl(info, () -> childEffect.use(info, order));
         }
     }
 
     @Override
-    public void use(PCLUseInfo info, boolean isUsing) {
+    public void use(PCLUseInfo info, PCLActions order, boolean isUsing) {
         if (isUsing && childEffect != null) {
-            useImpl(info, () -> childEffect.use(info));
+            useImpl(info, () -> childEffect.use(info, order));
         }
     }
 

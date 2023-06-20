@@ -13,6 +13,7 @@ import extendedui.interfaces.delegates.FuncT2;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.ColoredString;
 import org.apache.commons.lang3.StringUtils;
+import pinacolada.actions.PCLActions;
 import pinacolada.actions.creature.DealDamage;
 import pinacolada.actions.creature.DealDamageToAll;
 import pinacolada.annotations.VisibleSkill;
@@ -25,10 +26,7 @@ import pinacolada.effects.PCLEffects;
 import pinacolada.effects.VFX;
 import pinacolada.interfaces.providers.PointerProvider;
 import pinacolada.resources.PGR;
-import pinacolada.skills.PMod;
-import pinacolada.skills.PSkill;
-import pinacolada.skills.PSkillData;
-import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.*;
 import pinacolada.skills.fields.PField_Attack;
 import pinacolada.skills.skills.*;
 import pinacolada.skills.skills.base.traits.PTrait_HitCount;
@@ -126,6 +124,16 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
                 skill instanceof PDamageTrait;
     }
 
+    public PCardPrimary_DealDamage setBonus(PCond<?> cond, int amount) {
+        setChain(cond, PTrait.damage(amount));
+        return this;
+    }
+
+    public PCardPrimary_DealDamage setBonus(PCond<?> cond, int amount, int... upgrade) {
+        setChain(cond, PTrait.damage(amount).setUpgrade(upgrade));
+        return this;
+    }
+
     public PCardPrimary_DealDamage setBonus(PMod<?> mod, int amount) {
         setChain(mod, PTrait.damage(amount));
         return this;
@@ -133,6 +141,16 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
 
     public PCardPrimary_DealDamage setBonus(PMod<?> mod, int amount, int... upgrade) {
         setChain(mod, PTrait.damage(amount).setUpgrade(upgrade));
+        return this;
+    }
+
+    public PCardPrimary_DealDamage setBonusPercent(PCond<?> cond, int amount) {
+        setChain(cond, PTrait.damageMultiplier(amount));
+        return this;
+    }
+
+    public PCardPrimary_DealDamage setBonusPercent(PCond<?> cond, int amount, int... upgrade) {
+        setChain(cond, PTrait.damageMultiplier(amount).setUpgrade(upgrade));
         return this;
     }
 
@@ -225,22 +243,22 @@ public class PCardPrimary_DealDamage extends PCardPrimary<PField_Attack> {
     }
 
     @Override
-    public void useImpl(PCLUseInfo info) {
+    public void useImpl(PCLUseInfo info, PCLActions order) {
         PCLCard pCard = EUIUtils.safeCast(sourceCard, PCLCard.class);
         if (pCard != null) {
             switch (target) {
                 case All:
-                    getActions().dealCardDamageToAll(pCard, info.source, fields.attackEffect).forEach(e -> setDamageOptions(e, info));
+                    order.dealCardDamageToAll(pCard, info.source, fields.attackEffect).forEach(e -> setDamageOptions(e, info));
                 case Team:
-                    getActions().dealCardDamage(pCard, info.source, AbstractDungeon.player, fields.attackEffect).forEach(e -> setDamageOptions(e, info));
+                    order.dealCardDamage(pCard, info.source, AbstractDungeon.player, fields.attackEffect).forEach(e -> setDamageOptions(e, info));
                 case AllAlly:
-                    getActions().dealCardDamageToAll(pCard, info.source, fields.attackEffect).forEach(e -> setDamageOptions(e.targetAllies(true), info));
+                    order.dealCardDamageToAll(pCard, info.source, fields.attackEffect).forEach(e -> setDamageOptions(e.targetAllies(true), info));
                     break;
                 case AllEnemy:
-                    getActions().dealCardDamageToAll(pCard, info.source, fields.attackEffect).forEach(e -> setDamageOptions(e, info));
+                    order.dealCardDamageToAll(pCard, info.source, fields.attackEffect).forEach(e -> setDamageOptions(e, info));
                     break;
                 default:
-                    getActions().dealCardDamage(pCard, info.source, info.target, fields.attackEffect).forEach(e -> setDamageOptions(e, info));
+                    order.dealCardDamage(pCard, info.source, info.target, fields.attackEffect).forEach(e -> setDamageOptions(e, info));
             }
         }
     }

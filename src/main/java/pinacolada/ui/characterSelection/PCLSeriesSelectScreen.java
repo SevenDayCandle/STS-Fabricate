@@ -250,7 +250,6 @@ public class PCLSeriesSelectScreen extends AbstractMenuScreen {
     public void dispose() {
         super.dispose();
 
-        PCLCard.canCropPortraits = true;
         toggleViewUpgrades(false);
 
         if (onClose != null) {

@@ -6,7 +6,7 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import extendedui.EUIUtils;
 import extendedui.utilities.EUIColors;
 import pinacolada.actions.utility.GenericCardSelection;
-import pinacolada.cards.base.modifiers.SkillModifier;
+import pinacolada.cardmods.SkillModifier;
 import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.providers.CooldownProvider;
 import pinacolada.skills.PSkill;

@@ -1,6 +1,7 @@
 package pinacolada.cards.pcl.glyphs;
 
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCardData;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
@@ -14,7 +15,7 @@ public class Glyph02 extends Glyph {
         super(DATA);
     }
 
-    public void action(PSpecialSkill move, PCLUseInfo info) {
+    public void action(PSpecialSkill move, PCLUseInfo info, PCLActions order) {
         for (AbstractMonster mo : GameUtilities.getEnemies(true)) {
             mo.increaseMaxHp(Math.max(1, mo.maxHealth * move.amount / 100), true);
         }

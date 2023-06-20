@@ -2,6 +2,7 @@ package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.powers.IntangiblePower;
+import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -50,37 +51,37 @@ public class PMove_SpreadPower extends PMove<PField_Power> {
     }
 
     @Override
-    public void use(PCLUseInfo info) {
+    public void use(PCLUseInfo info, PCLActions order) {
         List<? extends AbstractCreature> targets = getTargetList(info);
         if (fields.powers.isEmpty()) {
             for (PCLPowerHelper power : PCLPowerHelper.commonDebuffs()) {
-                spreadPower(info.source, targets, power);
+                spreadPower(info.source, targets, power, order);
             }
         }
         else if (fields.random) {
             PCLPowerHelper power = GameUtilities.getRandomElement(fields.powers);
             if (power != null) {
-                spreadPower(info.source, targets, power);
+                spreadPower(info.source, targets, power, order);
             }
         }
         else {
             for (PCLPowerHelper power : fields.powers) {
-                spreadPower(info.source, targets, power);
+                spreadPower(info.source, targets, power, order);
             }
         }
-        super.use(info);
+        super.use(info, order);
     }
 
-    protected void spreadPower(AbstractCreature p, List<? extends AbstractCreature> targets, PCLPowerHelper power) {
+    protected void spreadPower(AbstractCreature p, List<? extends AbstractCreature> targets, PCLPowerHelper power, PCLActions order) {
         // Spread amount 0 will spread the entire power
         if (amount > 0 || baseAmount <= 0) {
             for (AbstractCreature t : targets) {
-                getActions().spreadPower(p, t, power.ID, amount);
+                order.spreadPower(p, t, power.ID, amount);
             }
             // Handle powers that are equivalent in terms of what the player sees but that have different IDs
             if (power == PCLPowerHelper.Intangible) {
                 for (AbstractCreature t : targets) {
-                    getActions().spreadPower(p, t, IntangiblePower.POWER_ID, amount);
+                    order.spreadPower(p, t, IntangiblePower.POWER_ID, amount);
                 }
             }
         }

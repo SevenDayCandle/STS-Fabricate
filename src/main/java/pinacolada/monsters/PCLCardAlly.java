@@ -13,6 +13,7 @@ import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.powers.AbstractPower;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
+import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import com.megacrit.cardcrawl.vfx.ExhaustBlurEffect;
 import extendedui.EUI;
 import extendedui.EUIInputManager;
@@ -191,6 +192,18 @@ public class PCLCardAlly extends PCLCardCreature {
         return null;
     }
 
+    public void renderAnimation(SpriteBatch sb, Color color) {
+        super.renderAnimation(sb, color);
+        if (card != null) {
+            card.setPosition(this.hb.cX, this.hb.y + scale(60f) + getBobEffect().y * -0.5f);
+            card.setDrawScale(0.2f);
+            card.updateGlow(1.5f);
+            card.renderGlowManual(sb);
+            card.renderOuterGlow(sb);
+            card.renderImage(sb, false, true);
+        }
+    }
+
     protected float renderCooldown(SpriteBatch sb, CooldownProvider pr, float startY) {
         boolean canActivate = pr.canActivate();
         boolean dim = shouldDim();
@@ -230,21 +243,6 @@ public class PCLCardAlly extends PCLCardCreature {
         }
     }
 
-    @Override
-    protected void renderIntent(SpriteBatch sb) {
-        if (stunned) {
-            super.renderIntent(sb);
-        }
-        else if (card != null) {
-            card.setPosition(this.hb.cX, this.hb.y + scale(60f) + getBobEffect().y * -0.5f);
-            card.setDrawScale(0.2f);
-            card.updateGlow(1.5f);
-            card.renderGlowManual(sb);
-            card.renderOuterGlow(sb);
-            card.renderImage(sb, false, true);
-        }
-    }
-
     protected float renderIntentIcon(SpriteBatch sb, TextureRegion icon, String count, float startY) {
         boolean dim = shouldDim();
         Color iconColor = dim ? TAKEN_TURN_COLOR : Color.WHITE;
@@ -255,6 +253,10 @@ public class PCLCardAlly extends PCLCardCreature {
 
     protected boolean shouldDim() {
         return hasTakenTurn && (!isHovered() || AbstractDungeon.player.hoveredCard == null || AbstractDungeon.player.hoveredCard.type != PCLEnum.CardType.SUMMON);
+    }
+
+    protected boolean shouldShowIntents() {
+        return !this.isDying && !this.isEscaping && AbstractDungeon.getCurrRoom().phase == AbstractRoom.RoomPhase.COMBAT && !AbstractDungeon.player.isDead && !Settings.hideCombatElements;
     }
 
     public void tryTarget() {

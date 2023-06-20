@@ -84,7 +84,6 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     public AbstractCard sourceCard;
     public ActionT3<PSkill<T>, Integer, Integer> customUpgrade; // Callback for customizing upgrading properties
     public ArrayList<EUIKeywordTooltip> tips = new ArrayList<>();
-    public PCLActions.ActionOrder order = PCLActions.ActionOrder.Bottom;
     public PCLCardTarget target = PCLCardTarget.None;
     public PSkill<?> parent;
     public PointerProvider source;
@@ -405,34 +404,13 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         }
     }
 
-    public final PSkill<T> edit(ActionT1<T> editFunc) {
+    public PSkill<T> edit(ActionT1<T> editFunc) {
         editFunc.invoke(fields);
         return this;
     }
 
     public final boolean evaluateTargets(PCLUseInfo info, FuncT1<Boolean, AbstractCreature> evalFunc) {
         return info != null && target.evaluateTargets(info.source, info.target, evalFunc);
-    }
-
-    public final PCLActions getActions() {
-        switch (order) {
-            case Top:
-                return PCLActions.top;
-            case Last:
-                return PCLActions.last;
-            case Instant:
-                return PCLActions.instant;
-            case TurnStart:
-                return PCLActions.turnStart;
-            case Delayed:
-                return PCLActions.delayed;
-            case DelayedTop:
-                return PCLActions.delayedTop;
-            case NextCombat:
-                return PCLActions.nextCombat;
-            default:
-                return PCLActions.bottom;
-        }
     }
 
     public final int getAmountBaseFromCard() {
@@ -1125,7 +1103,6 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
             copy.upgradeExtra = upgradeExtra.clone();
             copy.fields = (T) fields.makeCopy();
             copy.fields.skill = copy;
-            copy.order = order;
             copy.useParent = useParent;
             copy.source = source;
             copy.sourceCard = sourceCard;
@@ -1355,11 +1332,6 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         return this;
     }
 
-    public final PSkill<T> setOrder(PCLActions.ActionOrder order) {
-        this.order = order;
-        return this;
-    }
-
     public PSkill<T> setSource(PointerProvider card) {
         this.source = card;
         this.sourceCard = EUIUtils.safeCast(card, AbstractCard.class);
@@ -1581,14 +1553,14 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         }
     }
 
-    public void use(PCLUseInfo info) {
+    public void use(PCLUseInfo info, PCLActions order) {
         if (this.childEffect != null) {
-            this.childEffect.use(info);
+            this.childEffect.use(info, order);
         }
     }
 
-    public void use(PCLUseInfo info, boolean isUsing) {
-        use(info);
+    public void use(PCLUseInfo info, PCLActions order, boolean isUsing) {
+        use(info, order);
     }
 
     public void useOutsideOfBattle() {

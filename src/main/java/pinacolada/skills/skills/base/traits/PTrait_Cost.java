@@ -2,7 +2,6 @@ package pinacolada.skills.skills.base.traits;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import pinacolada.annotations.VisibleSkill;
-import pinacolada.cards.base.PCLCard;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -28,12 +27,7 @@ public class PTrait_Cost extends PTrait<PField_Empty> {
 
     @Override
     public void applyToCard(AbstractCard c, boolean conditionMet) {
-        if (c instanceof PCLCard) {
-            GameUtilities.modifyCardBaseCost((PCLCard) c, conditionMet ? amount : -amount, true);
-        }
-        else {
-            GameUtilities.modifyCostForCombat(c, conditionMet ? amount : -amount, true);
-        }
+        GameUtilities.modifyCostForCombat(c, conditionMet ? amount : -amount, true);
     }
 
     @Override

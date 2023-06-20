@@ -2,6 +2,7 @@ package pinacolada.skills.skills;
 
 import extendedui.interfaces.delegates.ActionT1;
 import pinacolada.actions.PCLAction;
+import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.skills.PCond;
@@ -42,20 +43,20 @@ public abstract class PActiveCond<T extends PField> extends PCond<T> {
     }
 
     @Override
-    public void use(PCLUseInfo info) {
+    public void use(PCLUseInfo info, PCLActions order) {
         if (childEffect != null) {
-            useImpl(info, (i) -> childEffect.use(info), (i) -> {
+            useImpl(info, order, (i) -> childEffect.use(info, order), (i) -> {
             });
         }
     }
 
     @Override
-    public void use(PCLUseInfo info, boolean isUsing) {
+    public void use(PCLUseInfo info, PCLActions order, boolean isUsing) {
         if (isUsing && childEffect != null) {
-            useImpl(info, (i) -> childEffect.use(i), (i) -> {
+            useImpl(info, order, (i) -> childEffect.use(i, order), (i) -> {
             });
         }
     }
 
-    protected abstract PCLAction<?> useImpl(PCLUseInfo info, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail);
+    protected abstract PCLAction<?> useImpl(PCLUseInfo info, PCLActions order, ActionT1<PCLUseInfo> onComplete, ActionT1<PCLUseInfo> onFail);
 }

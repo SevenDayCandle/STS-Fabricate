@@ -1,5 +1,6 @@
 package pinacolada.skills.skills.base.traits;
 
+import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
@@ -46,7 +47,7 @@ public class PTrait_Unplayable extends PTrait<PField_Empty> {
     }
 
     @Override
-    public void use(PCLUseInfo info) {
+    public void use(PCLUseInfo info, PCLActions order) {
 
     }
 

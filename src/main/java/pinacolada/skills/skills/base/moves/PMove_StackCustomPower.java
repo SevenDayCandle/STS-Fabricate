@@ -3,6 +3,7 @@ package pinacolada.skills.skills.base.moves;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.localization.LocalizedStrings;
 import extendedui.EUIUtils;
+import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -93,15 +94,15 @@ public class PMove_StackCustomPower extends PMove<PField_CustomPower> implements
     }
 
     @Override
-    public void use(PCLUseInfo info) {
+    public void use(PCLUseInfo info, PCLActions order) {
         if (!(sourceCard instanceof EditorCard)) {
-            super.use(info);
+            super.use(info, order);
             return;
         }
 
         List<PTrigger> triggers = EUIUtils.mapAsNonnull(fields.indexes, i -> ((EditorCard) sourceCard).getPowerEffect(i));
         if (triggers.isEmpty()) {
-            super.use(info);
+            super.use(info, order);
             return;
         }
 
@@ -122,16 +123,16 @@ public class PMove_StackCustomPower extends PMove<PField_CustomPower> implements
         if (referencesSelf && baseAmount <= 0) {
             String id = PSkillPower.createPowerID(triggers.get(triggers.size() - 1));
             for (AbstractCreature c : getTargetList(info)) {
-                getActions().removePower(c, c, id);
+                order.removePower(c, c, id);
             }
         }
         else {
             // Deliberately allowing applyPower to work with negative values because infinite turn powers need to be negative, unless it references itself
             for (AbstractCreature c : getTargetList(info)) {
-                getActions().applyPower(new PSkillPower(c, amount, triggers)).skipIfZero(referencesSelf).allowNegative(!referencesSelf);
+                order.applyPower(new PSkillPower(c, amount, triggers)).skipIfZero(referencesSelf).allowNegative(!referencesSelf);
             }
         }
 
-        super.use(info);
+        super.use(info, order);
     }
 }

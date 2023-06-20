@@ -25,10 +25,10 @@ public class ProvokedPower extends PCLPower implements OnMonsterMoveSubscriber {
     protected int lastMultiplier;
     protected boolean lastIsMultiDamage;
 
-    public ProvokedPower(AbstractCreature owner) {
+    public ProvokedPower(AbstractCreature owner, int amount) {
         super(owner, POWER_ID);
 
-        initialize(1, PowerType.DEBUFF, true);
+        initialize(amount, PowerType.DEBUFF, true);
     }
 
     @Override

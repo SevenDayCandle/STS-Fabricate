@@ -7,6 +7,7 @@ import extendedui.EUIRM;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.FuncT5;
 import extendedui.ui.tooltips.EUITooltip;
+import pinacolada.actions.PCLActions;
 import pinacolada.actions.piles.SelectFromPile;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLCardSelection;
@@ -69,7 +70,7 @@ public abstract class PMove_Select<T extends PField_CardGeneric> extends PCallba
     public String getSubText() {
         return useParent ? EUIRM.strings.verbNoun(getActionTitle(), getInheritedThemString()) :
                 fields.isHandOnly() ? TEXT.act_generic3(getActionTitle(), getAmountRawOrAllString(), fields.getFullCardString()) :
-                fields.hasGroups() ? TEXT.act_genericFrom(getActionTitle(), getAmountRawOrAllString(), fields.getFullCardString(), fields.getGroupString())
+                fields.hasGroups() ? TEXT.act_zXFromY(getActionTitle(), getAmountRawOrAllString(), fields.getFullCardString(), fields.getGroupString())
                         : EUIRM.strings.verbNoun(getActionTitle(), TEXT.subjects_thisCard);
     }
 
@@ -81,13 +82,13 @@ public abstract class PMove_Select<T extends PField_CardGeneric> extends PCallba
     }
 
     @Override
-    public void use(PCLUseInfo info, ActionT1<PCLUseInfo> callback) {
-        fields.getGenericPileAction(getAction(), info, extra)
+    public void use(PCLUseInfo info, PCLActions order, ActionT1<PCLUseInfo> callback) {
+        fields.getGenericPileAction(getAction(), info, order, extra)
                 .addCallback(cards -> {
                     info.setData(cards);
                     callback.invoke(info);
                     if (this.childEffect != null) {
-                        this.childEffect.use(info);
+                        this.childEffect.use(info, order);
                     }
                 });
     }

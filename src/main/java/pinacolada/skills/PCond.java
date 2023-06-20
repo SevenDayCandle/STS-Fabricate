@@ -5,6 +5,8 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.Settings;
 import extendedui.EUIUtils;
+import extendedui.interfaces.delegates.ActionT1;
+import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCardGroupHelper;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -322,6 +324,12 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
     }
 
     @Override
+    public PCond<T> edit(ActionT1<T> editFunc) {
+        editFunc.invoke(fields);
+        return this;
+    }
+
+    @Override
     public Color getConditionColor() {
         return GameUtilities.inBattle() && conditionMetCache ? Settings.GREEN_TEXT_COLOR : null;
     }
@@ -453,16 +461,16 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
     }
 
     @Override
-    public void use(PCLUseInfo info) {
+    public void use(PCLUseInfo info, PCLActions order) {
         if (checkCondition(info, true, null) && childEffect != null) {
-            childEffect.use(info);
+            childEffect.use(info, order);
         }
     }
 
     @Override
-    public void use(PCLUseInfo info, boolean isUsing) {
+    public void use(PCLUseInfo info, PCLActions order, boolean isUsing) {
         if (checkCondition(info, isUsing, null) && childEffect != null) {
-            childEffect.use(info);
+            childEffect.use(info, order);
         }
     }
 
@@ -497,19 +505,23 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
     }
 
     protected void useFromTrigger(PCLUseInfo info) {
+        useFromTrigger(info, PCLActions.bottom);
+    }
+
+    protected void useFromTrigger(PCLUseInfo info, PCLActions order) {
         // Use the super pass parent to bypass the cond check for the triggering cond
         if (super.tryPassParent(this, info)) {
             if (childEffect != null) {
-                childEffect.use(info);
+                childEffect.use(info, order);
             }
             // When a delegate (e.g. on draw) is triggered from an and multicond, it should only execute the effect if the other conditions would pass
             else if (parent instanceof PMultiCond) {
-                ((PMultiCond) parent).useDirectly(info);
+                ((PMultiCond) parent).useDirectly(info, order);
             }
             // When a delegate is triggered from a branch, the resulting effect should be chosen based on the info gleaned from the branch
             else if (parent instanceof PBranchCond)
             {
-                parent.use(info);
+                parent.use(info, order);
             }
         }
     }

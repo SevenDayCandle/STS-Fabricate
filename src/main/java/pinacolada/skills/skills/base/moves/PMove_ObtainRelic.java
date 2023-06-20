@@ -7,6 +7,7 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
+import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.effects.PCLEffects;
@@ -71,9 +72,9 @@ public class PMove_ObtainRelic extends PMove<PField_Relic> implements OutOfComba
     }
 
     @Override
-    public void use(PCLUseInfo info) {
-        createRelic(r -> getActions().obtainRelic(r));
-        super.use(info);
+    public void use(PCLUseInfo info, PCLActions order) {
+        createRelic(r -> order.obtainRelic(r));
+        super.use(info, order);
     }
 
     @Override

@@ -3,6 +3,7 @@ package pinacolada.skills.skills.base.moves;
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -58,12 +59,12 @@ public class PMove_HealPercent extends PMove<PField_Empty> implements OutOfComba
     }
 
     @Override
-    public void use(PCLUseInfo info) {
+    public void use(PCLUseInfo info, PCLActions order) {
         for (AbstractCreature t : getTargetList(info)) {
             int heal = MathUtils.ceil(t.maxHealth * amount / 100f);
-            getActions().heal(info.source, t, heal);
+            order.heal(info.source, t, heal);
         }
-        super.use(info);
+        super.use(info, order);
     }
 
     @Override

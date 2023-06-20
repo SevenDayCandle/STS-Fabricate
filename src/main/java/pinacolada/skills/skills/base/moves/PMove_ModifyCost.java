@@ -2,17 +2,19 @@ package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.interfaces.delegates.ActionT1;
+import pinacolada.actions.PCLActions;
 import pinacolada.actions.cards.ModifyCost;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
+import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
-import pinacolada.skills.fields.PField_CardCategory;
+import pinacolada.skills.fields.PField_CardModify;
 import pinacolada.ui.editor.PCLCustomEffectEditingPane;
 
 @VisibleSkill
-public class PMove_ModifyCost extends PMove_Modify<PField_CardCategory> {
-    public static final PSkillData<PField_CardCategory> DATA = PMove_Modify.register(PMove_ModifyCost.class, PField_CardCategory.class)
+public class PMove_ModifyCost extends PMove_Modify<PField_CardModify> {
+    public static final PSkillData<PField_CardModify> DATA = PMove_Modify.register(PMove_ModifyCost.class, PField_CardModify.class)
             .setAmounts(-DEFAULT_MAX, DEFAULT_MAX)
             .setExtra(0, DEFAULT_MAX)
             .selfTarget();
@@ -39,8 +41,8 @@ public class PMove_ModifyCost extends PMove_Modify<PField_CardCategory> {
     }
 
     @Override
-    public ActionT1<AbstractCard> getAction() {
-        return (c) -> getActions().modifyCost(c, amount, fields.forced, !fields.not);
+    public ActionT1<AbstractCard> getAction(PCLActions order) {
+        return (c) -> order.modifyCost(c, amount, fields.forced, !fields.not, fields.or);
     }
 
     @Override
@@ -51,13 +53,20 @@ public class PMove_ModifyCost extends PMove_Modify<PField_CardCategory> {
     @Override
     public String getSubText() {
         String base = useParent ? TEXT.act_zCosts(getInheritedTheyString(), parent != null ? parent.baseAmount : 1, getAmountRawString()) : super.getSubText();
-        return !fields.forced ? TEXT.subjects_thisTurn(base) : base;
+        if (!fields.forced) {
+            base = TEXT.subjects_thisTurn(base);
+        }
+        if (fields.or) {
+            base = TEXT.subjects_untilX(base, PGR.core.tooltips.play.past());
+        }
+        return base;
     }
 
     @Override
     public void setupEditor(PCLCustomEffectEditingPane editor) {
         super.setupEditor(editor);
         fields.registerFBoolean(editor, TEXT.cedit_combat, null);
+        fields.registerOrBoolean(editor, getUntilPlayedString(), null);
     }
 
     @Override

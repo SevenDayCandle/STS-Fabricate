@@ -42,6 +42,15 @@ public class AbstractCardPatches {
         }
     }
 
+    @SpirePatch(clz = AbstractCard.class, method = "resetAttributes")
+    public static class AbstractCard_ResetAttributes
+    {
+        @SpirePostfixPatch
+        public static void method(AbstractCard __instance) {
+            CombatManager.onCardReset(__instance);
+        }
+    }
+
     @SpirePatch(clz = AbstractCard.class, method = "triggerOnOtherCardPlayed", paramtypez = {AbstractCard.class})
     public static class CardGroupPatches_TriggerOnOtherCardPlayed {
         @SpirePrefixPatch

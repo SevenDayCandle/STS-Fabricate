@@ -109,7 +109,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     public static final int CHAR_OFFSET = 97;
     public static AbstractPlayer player = null;
     public static Random rng = null;
-    public static boolean canCropPortraits = true;
     protected final transient ArrayList<PCLCardGlowBorderEffect> glowList = new ArrayList<>();
     protected transient ArrayList<PCLCardAffinity> previousAffinities;
     public final Skills skills = new Skills();
@@ -120,6 +119,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     public final PCLCardText cardText;
     protected ColoredTexture portraitForeground;
     protected ColoredTexture portraitImg;
+    private ColoredTexture portraitImgBackup;
     public ColoredString bottomText;
     public DelayTiming timing = DelayTiming.StartOfTurnLast;
     public PCLAttackType attackType = PCLAttackType.Normal;
@@ -429,25 +429,25 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         return addSpecialCond(descIndex, onUse, amount, 0);
     }
 
-    protected PSpecialSkill addSpecialMove(int descIndex, ActionT2<PSpecialSkill, PCLUseInfo> onUse) {
+    protected PSpecialSkill addSpecialMove(int descIndex, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse) {
         return addSpecialMove(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, 1, 0);
     }
 
-    protected PSpecialSkill addSpecialMove(String description, ActionT2<PSpecialSkill, PCLUseInfo> onUse, int amount, int extra) {
+    protected PSpecialSkill addSpecialMove(String description, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, int amount, int extra) {
         PSpecialSkill move = (PSpecialSkill) getSpecialMove(description, onUse, amount, extra).setSource(this).onAddToCard(this);
         getEffects().add(move);
         return move;
     }
 
-    protected PSpecialSkill addSpecialMove(int descIndex, ActionT2<PSpecialSkill, PCLUseInfo> onUse, int amount) {
+    protected PSpecialSkill addSpecialMove(int descIndex, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, int amount) {
         return addSpecialMove(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, amount, 0);
     }
 
-    protected PSpecialSkill addSpecialMove(int descIndex, ActionT2<PSpecialSkill, PCLUseInfo> onUse, int amount, int extra) {
+    protected PSpecialSkill addSpecialMove(int descIndex, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, int amount, int extra) {
         return addSpecialMove(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, amount, extra);
     }
 
-    protected PSpecialSkill addSpecialMove(String description, ActionT2<PSpecialSkill, PCLUseInfo> onUse, int amount) {
+    protected PSpecialSkill addSpecialMove(String description, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, int amount) {
         return addSpecialMove(description, onUse, amount, 0);
     }
 
@@ -593,13 +593,27 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     }
 
     public void loadImage(String path) {
-        Texture t = EUIRM.getTexture(path, true, false);
+        Texture t = EUIRM.getTexture(path, true, PGR.config.lowVRAM.get());
         if (t == null) {
             path = QuestionMark.DATA.imagePath;
-            t = EUIRM.getTexture(path, true, true);
+            t = EUIRM.getTexture(path, true, PGR.config.lowVRAM.get());
         }
         assetUrl = path;
         portraitImg = new ColoredTexture(t, null);
+    }
+
+    public final void loadSingleCardView() {
+        if (PGR.config.lowVRAM.get() || portraitImg.getWidth() < 400) { // Half-size portraits are 250, but they won't be reloaded until game reset
+            portraitImgBackup = portraitImg;
+            portraitImg = new ColoredTexture(EUIRM.createTexture(Gdx.files.internal(assetUrl), true, false));
+        }
+    }
+
+    public final void unloadSingleCardView() {
+        if (portraitImgBackup != null) {
+            portraitImg.texture.dispose();
+            portraitImg = portraitImgBackup;
+        }
     }
 
     @Override
@@ -1016,27 +1030,27 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         return getSpecialCond(descIndex, onUse, amount, 0);
     }
 
-    protected PSpecialSkill getSpecialMove(String description, ActionT2<PSpecialSkill, PCLUseInfo> onUse, int amount, int extra) {
+    protected PSpecialSkill getSpecialMove(String description, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, int amount, int extra) {
         return new PSpecialSkill(this.cardID + this.getEffects().size(), description, onUse, amount, extra);
     }
 
-    protected PSpecialSkill getSpecialMove(int descIndex, ActionT2<PSpecialSkill, PCLUseInfo> onUse) {
+    protected PSpecialSkill getSpecialMove(int descIndex, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse) {
         return getSpecialMove(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, 1, 0);
     }
 
-    protected PSpecialSkill getSpecialMove(int descIndex, ActionT2<PSpecialSkill, PCLUseInfo> onUse, int amount) {
+    protected PSpecialSkill getSpecialMove(int descIndex, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, int amount) {
         return getSpecialMove(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, amount, 0);
     }
 
-    protected PSpecialSkill getSpecialMove(int descIndex, ActionT2<PSpecialSkill, PCLUseInfo> onUse, int amount, int extra) {
+    protected PSpecialSkill getSpecialMove(int descIndex, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, int amount, int extra) {
         return getSpecialMove(cardData.strings.EXTENDED_DESCRIPTION[descIndex], onUse, amount, extra);
     }
 
-    protected PSpecialSkill getSpecialMove(FuncT1<String, PSpecialSkill> strFunc, ActionT2<PSpecialSkill, PCLUseInfo> onUse, int amount) {
+    protected PSpecialSkill getSpecialMove(FuncT1<String, PSpecialSkill> strFunc, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, int amount) {
         return getSpecialMove(strFunc, onUse, amount, 0);
     }
 
-    protected PSpecialSkill getSpecialMove(FuncT1<String, PSpecialSkill> strFunc, ActionT2<PSpecialSkill, PCLUseInfo> onUse, int amount, int extra) {
+    protected PSpecialSkill getSpecialMove(FuncT1<String, PSpecialSkill> strFunc, ActionT3<PSpecialSkill, PCLUseInfo, PCLActions> onUse, int amount, int extra) {
         return new PSpecialSkill(this.cardID + this.getEffects().size(), strFunc, onUse, amount, extra);
     }
 
@@ -1084,23 +1098,21 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     // E.g. Form 0 -> +A, Form 1 -> +B, etc.
     protected String getUpgradeName() {
         // In case cardData is somehow null, return a generic name
-        if (cardData != null) {
-            String name = cardData.strings != null ? cardData.strings.NAME : "";
-            if (upgraded) {
-                StringBuilder sb = new StringBuilder(name);
-                sb.append("+");
+        String name = cardData != null && cardData.strings != null ? cardData.strings.NAME : originalName;
+        if (upgraded) {
+            StringBuilder sb = new StringBuilder(name);
+            sb.append("+");
 
-                if (maxUpgradeLevel < 0 || maxUpgradeLevel > 1) {
-                    sb.append(this.timesUpgraded);
-                }
-
-                // Do not show appended characters for non-multiform or linear upgrade path cards
-                if (this.cardData.maxForms > 1 && this.cardData.branchFactor != 1) {
-                    char appendix = (char) (auxiliaryData.form + CHAR_OFFSET);
-                    sb.append(appendix);
-                }
-                name = sb.toString();
+            if (maxUpgradeLevel < 0 || maxUpgradeLevel > 1) {
+                sb.append(this.timesUpgraded);
             }
+
+            // Do not show appended characters for non-multiform or linear upgrade path cards
+            if (cardData != null && this.cardData.maxForms > 1 && this.cardData.branchFactor != 1) {
+                char appendix = (char) (auxiliaryData.form + CHAR_OFFSET);
+                sb.append(appendix);
+            }
+            name = sb.toString();
         }
 
         return CardModifierManager.onRenderTitle(this, name);
@@ -1479,7 +1491,8 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
             }
 
             if (best > 0) {
-                updateDamage(best);
+                damage = Math.max(0, MathUtils.floor(best));
+                updateDamageVars();
             }
         }
         else {
@@ -1632,10 +1645,10 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
             changeForm(data.form, timesUpgraded);
             this.auxiliaryData = new PCLCardSaveData(data);
             if (data.modifiedDamage != 0) {
-                GameUtilities.modifyDamage(this, baseDamage + data.modifiedDamage, false);
+                GameUtilities.modifyDamage(this, baseDamage + data.modifiedDamage, false, false);
             }
             if (data.modifiedBlock != 0) {
-                GameUtilities.modifyBlock(this, baseBlock + data.modifiedBlock, false);
+                GameUtilities.modifyBlock(this, baseBlock + data.modifiedBlock, false, false);
             }
             if (data.modifiedMagicNumber != 0) {
                 GameUtilities.modifyMagicNumber(this, baseMagicNumber + data.modifiedMagicNumber, false);
@@ -1694,7 +1707,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
     public void onUse(PCLUseInfo info) {
         if (!dontTriggerOnUseCard) {
-            doEffects(be -> be.use(info));
+            doEffects(be -> be.use(info, PCLActions.bottom));
         }
     }
 
@@ -2117,7 +2130,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
             return;
         }
 
-        final boolean cropPortrait = canCropPortraits && PGR.config.cropCardImages.get();
+        final boolean cropPortrait = PGR.config.cropCardImages.get() && !PGR.config.lowVRAM.get();
 
         // TODO support for animated pictures
         if (portraitImg != null) {
@@ -2535,16 +2548,14 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         return false;
     }
 
-    public void updateBlock(float amount) {
-        block = Math.max(0, MathUtils.floor(amount));
+    public void updateBlockVars() {
         this.isBlockModified = (baseBlock != block);
         if (onBlockEffect != null) {
             onBlockEffect.setAmountFromCard();
         }
     }
 
-    public void updateDamage(float amount) {
-        damage = Math.max(0, MathUtils.floor(amount));
+    public void updateDamageVars() {
         this.isDamageModified = (baseDamage != damage);
         if (onAttackEffect != null) {
             onAttackEffect.setAmountFromCard();
@@ -2601,22 +2612,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         this.isMagicNumberModified = (baseMagicNumber != magicNumber);
     }
 
-    public void updateMaxBlock(int amount) {
-        baseBlock = block = Math.max(0, amount);
-        this.isBlockModified = false;
-        if (onBlockEffect != null) {
-            onBlockEffect.setAmountFromCard();
-        }
-    }
-
-    public void updateMaxDamage(int amount) {
-        baseDamage = damage = Math.max(0, amount);
-        this.isDamageModified = false;
-        if (onAttackEffect != null) {
-            onAttackEffect.setAmountFromCard();
-        }
-    }
-
     public void updateRightCount(float amount) {
         rightCount = Math.max(1, MathUtils.floor(amount));
         this.isRightCountModified = (baseRightCount != rightCount);
@@ -2645,6 +2640,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
 
     // Used by summons when triggered, as power effects should only be cast when the summon is first summoned
     public void useEffectsWithoutPowers(PCLUseInfo info) {
-        doNonPowerEffects(be -> be.use(info));
+        doNonPowerEffects(be -> be.use(info, PCLActions.bottom));
     }
 }

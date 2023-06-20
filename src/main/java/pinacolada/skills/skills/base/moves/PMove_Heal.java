@@ -2,6 +2,7 @@ package pinacolada.skills.skills.base.moves;
 
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -56,11 +57,11 @@ public class PMove_Heal extends PMove<PField_Empty> implements OutOfCombatMove {
     }
 
     @Override
-    public void use(PCLUseInfo info) {
+    public void use(PCLUseInfo info, PCLActions order) {
         for (AbstractCreature t : getTargetList(info)) {
-            getActions().heal(info.source, t, amount);
+            order.heal(info.source, t, amount);
         }
-        super.use(info);
+        super.use(info, order);
     }
 
     @Override

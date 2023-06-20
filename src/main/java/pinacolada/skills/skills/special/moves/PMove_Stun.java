@@ -3,6 +3,7 @@ package pinacolada.skills.skills.special.moves;
 import com.evacipated.cardcrawl.mod.stslib.powers.StunMonsterPower;
 import com.megacrit.cardcrawl.actions.watcher.PressEndTurnButtonAction;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.skills.PMove;
@@ -37,13 +38,13 @@ public class PMove_Stun extends PMove<PField_Empty> {
     }
 
     @Override
-    public void use(PCLUseInfo info) {
+    public void use(PCLUseInfo info, PCLActions order) {
         if (info.target instanceof AbstractMonster) {
-            getActions().applyPower(info.source, new StunMonsterPower((AbstractMonster) info.target, amount));
+            order.applyPower(info.source, new StunMonsterPower((AbstractMonster) info.target, amount));
         }
         else {
-            getActions().add(new PressEndTurnButtonAction());
+            order.add(new PressEndTurnButtonAction());
         }
-        super.use(info);
+        super.use(info, order);
     }
 }

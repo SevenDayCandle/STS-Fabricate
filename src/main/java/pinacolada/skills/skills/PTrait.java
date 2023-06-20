@@ -2,6 +2,7 @@ package pinacolada.skills.skills;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
+import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.cards.base.fields.PCLAttackType;
 import pinacolada.cards.base.fields.PCLCardTarget;
@@ -20,6 +21,7 @@ import pinacolada.skills.skills.special.traits.PTrait_Priority;
 
 public abstract class PTrait<T extends PField> extends PMove<T> {
     protected boolean conditionMetCache;
+    protected AbstractCard appliedCard;
 
     public PTrait(PSkillData<T> data, PSkillSaveData content) {
         super(data, content);
@@ -140,10 +142,18 @@ public abstract class PTrait<T extends PField> extends PMove<T> {
     }
 
     @Override
+    public PTrait<T> onAddToCard(AbstractCard card) {
+        super.onAddToCard(card);
+        appliedCard = card;
+        return this;
+    }
+
+    @Override
     public PTrait<T> onRemoveFromCard(AbstractCard card) {
         if (conditionMetCache) {
             applyToCard(card, false);
         }
+        appliedCard = null;
         super.onRemoveFromCard(card);
         return this;
     }
@@ -158,7 +168,27 @@ public abstract class PTrait<T extends PField> extends PMove<T> {
     }
 
     @Override
-    public void use(PCLUseInfo info) {
+    public PTrait<T> setAmount(int amount) {
+        if (conditionMetCache && appliedCard != null) {
+            applyToCard(appliedCard, false);
+            conditionMetCache = false;
+        }
+        super.setAmount(amount);
+        return this;
+    }
+
+    @Override
+    public PTrait<T> setTemporaryAmount(int amount) {
+        if (conditionMetCache && appliedCard != null) {
+            applyToCard(appliedCard, false);
+            conditionMetCache = false;
+        }
+        super.setTemporaryAmount(amount);
+        return this;
+    }
+
+    @Override
+    public void use(PCLUseInfo info, PCLActions order) {
 
     }
 

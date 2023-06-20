@@ -74,9 +74,9 @@ public abstract class PCLCharacter extends CustomPlayer {
         this.corpseImage = skeletonUrl;
         this.description = description;
 
-
+        PCLLoadout loadout = prepareLoadout();
         initializeClass(null, shoulderImage2, shoulderImage1, corpseImage,
-                getLoadout(), 0f, -5f, 240f, 244f, new EnergyManager(3));
+                prepareLoadout().getLoadout(name, description, this), 0f, -5f, 240f, 244f, new EnergyManager(loadout.getEnergy()));
 
         reloadDefaultAnimation();
     }

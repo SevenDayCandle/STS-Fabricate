@@ -3,6 +3,7 @@ package pinacolada.skills.skills.base.modifiers;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.utilities.ColoredString;
+import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -58,10 +59,10 @@ public class PMod_IncreaseOnUse extends PPassiveMod<PField_Empty> {
     }
 
     @Override
-    public void use(PCLUseInfo info) {
+    public void use(PCLUseInfo info, PCLActions order) {
         if (this.childEffect != null) {
-            this.childEffect.use(info);
-            getActions().callback(() -> {
+            this.childEffect.use(info, order);
+            order.callback(() -> {
                 this.childEffect.addAmountForCombat(amount);
             });
         }

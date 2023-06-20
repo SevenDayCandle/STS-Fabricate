@@ -7,9 +7,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
-public class PField_CardModifyAffinity extends PField_CardCategory {
+public class PField_CardModifyAffinity extends PField_CardModify {
     public ArrayList<PCLAffinity> addAffinities = new ArrayList<>();
-    public boolean or;
 
     public PField_CardModifyAffinity() {
         super();
@@ -18,7 +17,6 @@ public class PField_CardModifyAffinity extends PField_CardCategory {
     public PField_CardModifyAffinity(PField_CardModifyAffinity other) {
         super(other);
         setAddAffinity(other.addAffinities);
-        setOr(other.or);
     }
 
     @Override

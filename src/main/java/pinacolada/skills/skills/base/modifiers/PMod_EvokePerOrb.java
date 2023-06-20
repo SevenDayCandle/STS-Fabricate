@@ -4,6 +4,7 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.ActionT0;
+import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -45,15 +46,15 @@ public class PMod_EvokePerOrb extends PActiveMod<PField_Orb> {
     }
 
     @Override
-    public void use(PCLUseInfo info) {
+    public void use(PCLUseInfo info, PCLActions order) {
         if (childEffect != null) {
-            useImpl(info, () -> childEffect.use(info));
+            useImpl(info, order, () -> childEffect.use(info, order));
         }
     }
 
-    public void use(PCLUseInfo info, boolean isUsing) {
+    public void use(PCLUseInfo info, PCLActions order, boolean isUsing) {
         if (isUsing && childEffect != null) {
-            useImpl(info, () -> childEffect.use(info));
+            useImpl(info, order, () -> childEffect.use(info, order));
         }
     }
 
@@ -67,8 +68,8 @@ public class PMod_EvokePerOrb extends PActiveMod<PField_Orb> {
         return this.amount <= 1 ? fields.getOrbAndString() : EUIRM.strings.numNoun(getAmountRawString(), fields.getOrbAndString());
     }
 
-    protected void useImpl(PCLUseInfo info, ActionT0 callback) {
-        getActions().evokeOrb(1, GameUtilities.getOrbCount()).setFilter(fields.getOrbFilter())
+    protected void useImpl(PCLUseInfo info, PCLActions order, ActionT0 callback) {
+        order.evokeOrb(1, GameUtilities.getOrbCount()).setFilter(fields.getOrbFilter())
                 .addCallback(callback);
     }
 

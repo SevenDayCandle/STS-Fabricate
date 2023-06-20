@@ -70,7 +70,7 @@ public class PSpecialPowerSkill extends PSkill<PField_Empty> implements SummonOn
     }
 
     @Override
-    public void use(PCLUseInfo info) {
+    public void use(PCLUseInfo info, PCLActions order) {
         PCLActions.bottom.applyPower(powerFunc.invoke(this, info)).allowNegative(true);
     }
 }

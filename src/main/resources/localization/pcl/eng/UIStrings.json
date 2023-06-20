@@ -56,7 +56,10 @@
 												"{0} ${1}@?0?2?3:loses@:lose$ {2} {3}",
 												"{0} {1} on {2}",
 												"{0} {1} {2} on {3}",
-												"{0} {1} to {2}"
+												"{0} {1} {2} from {3}",
+												"{0} {1} {2} from {3} to {4}",
+												"{0} {1} to {2}",
+												"{0} {1} {2} to {3}"
 								]
 				},
 				"pcl:CardEditor": {
@@ -406,6 +409,7 @@
 												"Enable custom relics in normal runs",
 												"Enable custom poitons in normal runs",
 												"Enable custom events in normal runs",
+												"Low VRAM mode",
 												"Use Madness for missing cards",
 												"Use Vanilla power tip rendering",
 												"Use custom card framework for all cards"
@@ -413,7 +417,7 @@
 				},
 				"pcl:OptionDescriptions": {
 								"TEXT": [
-												"Card portraits will be zoomed in when not hovering over them. Only works for custom cards, and has no effect in Single Card Popup View.",
+												"Card portraits will be zoomed in when not hovering over them. Only works for custom cards, and has no effect in the single card popup view.",
 												"Tags normally appearing on the top-right corner of custom cards will instead appear as keywords in their descriptions.",
 												"If checked, certain effects (e.g. card damage and Block effects) will have shortened text to make them quicker to parse.",
 												"If checked, all of a card's effects will be displayed in the same paragraph instead of being separated by line breaks.",
@@ -422,6 +426,7 @@
 												"Enables a draggable widget that shows damage formula calculations for custom cards when dragging them over targets.",
 												"Certain custom card properties (e.g. Affinities) are hidden by default for characters that don't use them. Check this option to always show these properties regardless of the character. NL This setting also enables editing and interacting with these properties in the card editor for any card color.",
 												"This setting will only be applied to new runs.",
+												"If checked, card images are loaded at half-resolution when viewed outside of the single card popup view. This may lower VRAM usage, but it may result in longer loading times. Requires restart, and disables Dynamic card portraits while active",
 												"If a non-existent card is created, a placeholder card will be generated with that card's supposed ID. Check this option to have that card be a Madness instead, mimicking base-game behavior.",
 												"If checked, power tip descriptions will be rendering with base game logic instead of custom logic from EUI. This setting may be necessary to turn on if you have mods installed that use their own power tip rendering logic, but Fabricate powers will not be able to render icons.",
 												"Forces all cards encountered in a run to be built with this mod's card framework, which may improve compatibility between them and certain custom card effects. NL WARNING: This setting will likely break functionality from other mods."
@@ -541,6 +546,7 @@
 												"{0} this combat",
 												"{0} this turn",
 												"{0} ${0}@!1:times@:time$",
+												"{0} until {1}",
 												"{0} with {1}",
 												"{0}-cost"
 								]

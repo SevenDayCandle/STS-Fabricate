@@ -9,6 +9,7 @@ import pinacolada.actions.piles.ReshuffleFromPile;
 import pinacolada.actions.piles.SelectFromPile;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.PCLCardGroupHelper;
+import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
@@ -43,5 +44,15 @@ public class PCond_ReshuffleTo extends PCond_DoToCard {
     @Override
     public EUIKeywordTooltip getActionTooltip() {
         return PGR.core.tooltips.reshuffle;
+    }
+
+    @Override
+    public String getSubText() {
+        if (fields.destination == PCLCardSelection.Manual) {
+            return super.getSubText();
+        }
+        String dest = fields.getDestinationString(PCLCardGroupHelper.DrawPile.name);
+        return fields.hasGroups() && !fields.isHandOnly() ? TEXT.act_zXFromYToZ(getActionTitle(), getAmountRawOrAllString(), fields.getFullCardString(), fields.getGroupString(), dest)
+                : TEXT.act_zXToY(getActionTitle(), getAmountRawOrAllString(), fields.getFullCardString(), dest);
     }
 }

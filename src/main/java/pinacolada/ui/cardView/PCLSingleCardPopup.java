@@ -202,6 +202,11 @@ public class PCLSingleCardPopup extends EUIBase {
 
         InputHelper.justReleasedClickLeft = false;
         CardCrawlGame.isPopupOpen = false;
+
+        if (this.card != null) {
+            this.card.unloadSingleCardView();
+        }
+
         this.isActive = false;
         this.baseCard = null;
         this.card = null;
@@ -250,8 +255,13 @@ public class PCLSingleCardPopup extends EUIBase {
     public void open(PCLCard card, CardGroup group) {
         CardCrawlGame.isPopupOpen = true;
 
+        if (this.baseCard != null) {
+            this.baseCard.unloadSingleCardView();
+        }
+
         this.baseCard = card;
         this.card = card.makePopupCopy();
+        this.card.loadSingleCardView();
         this.upgradedCard = null;
         this.isActive = true;
         this.prevCard = null;

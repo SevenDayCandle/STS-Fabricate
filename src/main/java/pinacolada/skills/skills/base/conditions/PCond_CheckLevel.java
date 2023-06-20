@@ -22,6 +22,8 @@ public class PCond_CheckLevel extends PPassiveCond<PField_Affinity> implements O
             .pclOnly()
             .selfTarget();
 
+    public PCond_CheckLevel() {this(1);}
+
     public PCond_CheckLevel(PSkillSaveData content) {
         super(DATA, content);
     }
@@ -34,16 +36,16 @@ public class PCond_CheckLevel extends PPassiveCond<PField_Affinity> implements O
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
         if (fields.affinities.isEmpty()) {
-            return fields.random ^ CombatManager.playerSystem.getLevel(PCLAffinity.General) >= amount;
+            return fields.not ^ CombatManager.playerSystem.getLevel(PCLAffinity.General) >= amount;
         }
         else {
             for (PCLAffinity affinity : fields.affinities) {
                 if (CombatManager.playerSystem.getLevel(affinity) < amount) {
-                    return fields.random;
+                    return fields.not;
                 }
             }
         }
-        return !fields.random;
+        return !fields.not;
     }
 
     public ArrayList<Integer> getQualifiers(PCLUseInfo info) {
@@ -69,7 +71,7 @@ public class PCond_CheckLevel extends PPassiveCond<PField_Affinity> implements O
             return TEXT.cond_wheneverYou(PGR.core.tooltips.level.title);
         }
         if (isWhenClause()) {
-            return TEXT.cond_wheneverYou(EUIRM.strings.verbNoun(PGR.core.tooltips.level.title, fields.getAffinityLevelOrString()));
+            return TEXT.cond_wheneverYou(EUIRM.strings.verbNoun(PGR.core.tooltips.level.title, fields.getAffinityChoiceString()));
         }
         return TEXT.cond_levelItem(getAmountRawString(), fields.getAffinityChoiceString());
     }

@@ -1,5 +1,6 @@
 package pinacolada.skills.skills.base.moves;
 
+import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.dungeon.PCLUseInfo;
@@ -39,10 +40,10 @@ public class PMove_AddPowerBonus extends PMove<PField_Power> {
     }
 
     @Override
-    public void use(PCLUseInfo info) {
+    public void use(PCLUseInfo info, PCLActions order) {
         for (PCLPowerHelper power : fields.powers) {
-            getActions().addPowerEffectEnemyBonus(power.ID, amount);
+            order.addPowerEffectEnemyBonus(power.ID, amount);
         }
-        super.use(info);
+        super.use(info, order);
     }
 }

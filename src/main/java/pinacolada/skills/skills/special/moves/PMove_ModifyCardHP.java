@@ -3,6 +3,7 @@ package pinacolada.skills.skills.special.moves;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
 import extendedui.interfaces.delegates.ActionT1;
+import pinacolada.actions.PCLActions;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -26,8 +27,8 @@ public class PMove_ModifyCardHP extends PMove_Modify<PField_CardCategory> {
     }
 
     @Override
-    public ActionT1<AbstractCard> getAction() {
-        return (c) -> getActions().modifyCardHp(c, extra, true, true);
+    public ActionT1<AbstractCard> getAction(PCLActions order) {
+        return (c) -> order.modifyCardHp(c, extra, true, true);
     }
 
     @Override

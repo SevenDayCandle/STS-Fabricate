@@ -18,6 +18,7 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUITooltip;
+import pinacolada.actions.PCLActions;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.providers.PointerProvider;
@@ -179,7 +180,7 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
     public void use(AbstractCreature target) {
         final PCLUseInfo info = CombatManager.playerSystem.generateInfo(null, AbstractDungeon.player, target);
         for (PSkill<?> ef : getEffects()) {
-            ef.use(info);
+            ef.use(info, PCLActions.bottom);
         }
     }
 

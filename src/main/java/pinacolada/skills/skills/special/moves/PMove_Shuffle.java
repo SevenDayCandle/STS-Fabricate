@@ -1,5 +1,6 @@
 package pinacolada.skills.skills.special.moves;
 
+import pinacolada.actions.PCLActions;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.skills.PMove;
 import pinacolada.skills.PSkill;
@@ -29,8 +30,8 @@ public class PMove_Shuffle extends PMove<PField_Empty> {
     }
 
     @Override
-    public void use(PCLUseInfo info) {
-        getActions().reshuffleDiscardPile(false);
-        super.use(info);
+    public void use(PCLUseInfo info, PCLActions order) {
+        order.reshuffleDiscardPile(false);
+        super.use(info, order);
     }
 }
