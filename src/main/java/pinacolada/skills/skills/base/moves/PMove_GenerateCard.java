@@ -141,10 +141,9 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
                 // When creating specific cards in an X of Y effect, only create up to Y cards.
                 if (isOutOf()) {
                     for (String cd : fields.cardIDs) {
-                        // getCard already makes a copy
                         AbstractCard c = PField_CardCategory.getCard(cd);
                         if (c != null) {
-                            created.add(c);
+                            created.add(c.makeCopy());
                         }
                     }
                     // If the list is not empty and we have less than Y cards, we can create 1 of each card until we have Y cards
@@ -163,7 +162,7 @@ public abstract class PMove_GenerateCard extends PCallbackMove<PField_CardCatego
                         AbstractCard c = PField_CardCategory.getCard(cd);
                         if (c != null) {
                             for (int i = 0; i < limit; i++) {
-                                created.add(c);
+                                created.add(c.makeCopy());
                             }
                         }
                     }

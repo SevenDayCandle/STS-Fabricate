@@ -56,10 +56,7 @@ public class PField_CardCategory extends PField_CardGeneric {
 
     public static AbstractCard getCard(String id) {
         if (id != null) {
-            AbstractCard c = CardLibrary.getCard(id);
-            if (c != null) {
-                return c.makeCopy();
-            }
+            return CardLibrary.getCard(id);
         }
         return null;
     }
@@ -278,7 +275,7 @@ public class PField_CardCategory extends PField_CardGeneric {
         for (String cd : cardIDs) {
             AbstractCard c = getCard(cd);
             if (c != null && !EUIUtils.any(previews, p -> p.defaultPreview.cardID.equals(c.cardID))) {
-                previews.add(EUICardPreview.generatePreviewCard(c));
+                previews.add(EUICardPreview.generatePreviewCard(c.makeCopy()));
             }
         }
     }

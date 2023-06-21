@@ -81,7 +81,7 @@ public class PMove_Transform extends PMove_Select<PField_CardTransform> {
     private void transformImpl(AbstractCard c) {
         AbstractCard c2 = PField_CardCategory.getCard(fields.result);
         if (c2 != null) {
-            PCLActions.last.replaceCard(c.uuid, c2);
+            PCLActions.last.replaceCard(c.uuid, c2.makeCopy());
             PCLEffects.Queue.showCardBriefly(c2.makeStatEquivalentCopy());
         }
     }
