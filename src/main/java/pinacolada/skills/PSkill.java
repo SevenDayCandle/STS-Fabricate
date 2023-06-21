@@ -81,6 +81,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     public static final PCLCoreStrings TEXT = PGR.core.strings;
     public final PSkillData<T> data;
     protected PSkill<?> childEffect;
+    protected UUID uuid = UUID.randomUUID();
     public AbstractCard sourceCard;
     public ActionT3<PSkill<T>, Integer, Integer> customUpgrade; // Callback for customizing upgrading properties
     public ArrayList<EUIKeywordTooltip> tips = new ArrayList<>();
@@ -89,7 +90,6 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     public PointerProvider source;
     public String effectID;
     public T fields;
-    public UUID uuid = UUID.randomUUID();
     public boolean useParent;
     public boolean displayUpgrades;
     public int amount;
@@ -965,6 +965,8 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     public final int getUpgradeLevel() {
         return sourceCard != null ? sourceCard.timesUpgraded : 0;
     }
+
+    public final UUID getUUID() {return uuid;}
 
     public final String getWheneverAreString(Object impl) {
         return TEXT.cond_whenObjectIs(getTargetSubjectString(), getTargetOrdinal(target), impl);

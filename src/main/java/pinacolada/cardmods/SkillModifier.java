@@ -122,7 +122,7 @@ public class SkillModifier extends AbstractCardModifier {
 
     @Override
     public String identifier(AbstractCard card) {
-        return skill.effectID + skill.uuid;
+        return skill.effectID + skill.getUUID();
     }
 
     public boolean pclCanPlayCard(AbstractCard card)

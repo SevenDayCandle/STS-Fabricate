@@ -7,14 +7,14 @@ import pinacolada.relics.PCLRelicData;
 import pinacolada.ui.cardReward.CardRewardBundle;
 import pinacolada.utilities.GameUtilities;
 
-public class GiftGivingGift extends PCLRelic implements CardRewardBonusProvider {
-    public static final PCLRelicData DATA = registerTemplate(GiftGivingGift.class)
+public class HeartShapedBox extends PCLRelic implements CardRewardBonusProvider {
+    public static final PCLRelicData DATA = registerTemplate(HeartShapedBox.class)
             .setTier(RelicTier.SPECIAL);
     public static final float BASE_CHANCE = 0.3f;
     public static final int BASE_GOLD = 10;
     public static final int BASE_HP = 1;
 
-    public GiftGivingGift() {
+    public HeartShapedBox() {
         super(DATA);
     }
 

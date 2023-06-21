@@ -33,7 +33,7 @@ public class PCond_TakeDamageTo extends PActiveCond<PField_Not> {
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return fields.not ? info.source.currentHealth > amount : info.source.currentHealth + info.source.currentBlock > amount;
+        return info != null && (fields.not ? info.source.currentHealth > amount : info.source.currentHealth + info.source.currentBlock > amount);
     }
 
     @Override

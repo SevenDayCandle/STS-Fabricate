@@ -33,7 +33,7 @@ public class PCond_PayBlock extends PActiveCond<PField_Empty> {
 
     @Override
     public boolean checkCondition(PCLUseInfo info, boolean isUsing, PSkill<?> triggerSource) {
-        return info.source.currentBlock >= amount;
+        return info != null && info.source.currentBlock >= amount;
     }
 
     @Override

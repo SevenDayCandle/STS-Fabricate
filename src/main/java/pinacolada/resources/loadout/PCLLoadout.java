@@ -21,7 +21,7 @@ import pinacolada.characters.PCLCharacter;
 import pinacolada.misc.LoadoutStrings;
 import pinacolada.relics.PCLRelic;
 import pinacolada.relics.pcl.GenericDice;
-import pinacolada.relics.pcl.GiftGivingGift;
+import pinacolada.relics.pcl.HeartShapedBox;
 import pinacolada.relics.pcl.Macroscope;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PCLResources;
@@ -197,7 +197,7 @@ public abstract class PCLLoadout {
     public void addLoadoutRelics(PCLRelicSlot r1) {
         r1.addItem(new GenericDice(), 4);
         r1.addItem(new Macroscope(), 4);
-        r1.addItem(new GiftGivingGift(), 15);
+        r1.addItem(new HeartShapedBox(), 15);
     }
 
     public void addStarterRelic(ArrayList<String> res, String id) {

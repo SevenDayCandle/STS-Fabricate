@@ -2,10 +2,9 @@
 				"pcl:Actions": {
 								"TEXT": [
 												"activate {0}",
-												"add {0} {1} to {2}",
+												"add {0} to {1}",
 												"apply {0} to {1}",
-												"apply {0} {1} to {2}",
-												"apply {0} {1}",
+												"apply {0}",
 												"choose {0}",
 												"costs {0}",
 												"deal {0} {1}",
@@ -287,6 +286,7 @@
 												"when {0} ${1}@?0:are@:is$ {2}",
 												"when a {0} {1}",
 												"when a {0} is {1}",
+												"when a {0} is {1} on {2}",
 												"{0} active",
 												"{0} and {1}",
 												"{0} if {1}",

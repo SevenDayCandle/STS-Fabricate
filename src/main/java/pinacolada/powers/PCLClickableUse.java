@@ -73,7 +73,7 @@ public class PCLClickableUse {
     }
 
     public boolean checkCondition() {
-        return pool.canUse() && (!(move instanceof PCond) || ((PCond<?>) move).checkCondition(null, false, null));
+        return pool.canUse() && (!(move instanceof PCond) || ((PCond<?>) move).checkCondition(move.makeInfo(source.getSource()), false, null));
     }
 
     public int getCurrentUses() {

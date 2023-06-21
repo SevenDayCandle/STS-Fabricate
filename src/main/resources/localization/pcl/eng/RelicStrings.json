@@ -1,16 +1,16 @@
 
 {
-	"pcl:GiftGivingGift":
-	{
-		"DESCRIPTIONS": ["Cards in card rewards may come with an additional #yGold or #yMax. #yHP bonus."],
-		"FLAVOR": "It just keeps giving. Until it doesn't.",
-		"NAME": "Gift-Giving Gift"
-	},
 	"pcl:GenericDice":
 	{
 		"DESCRIPTIONS": ["You may reroll cards from card rewards. | Entering #yMonster rooms gives #b1 use per #b{0} cards in the pool."],
 		"FLAVOR": "It's just an ordinary dice cube. Don't think about it too much.",
 		"NAME": "Generic Dice"
+	},
+	"pcl:HeartShapedBox":
+	{
+		"DESCRIPTIONS": ["Cards in card rewards may come with an additional #yGold or #yMax. #yHP bonus."],
+		"FLAVOR": "You'll get a lot of complaints about this thing.",
+		"NAME": "Heart-Shaped Box"
 	},
 	"pcl:HomeRunBats":
 	{

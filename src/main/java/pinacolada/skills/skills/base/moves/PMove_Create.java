@@ -47,7 +47,7 @@ public class PMove_Create extends PMove_GenerateCard {
 
     @Override
     public String getSubText() {
-        String base = fields.groupTypes.size() > 0 ? TEXT.act_addToPile(getAmountRawOrAllString(), getCopiesOfString(), fields.groupTypes.get(0).name) : TEXT.act_addToPile(getAmountRawOrAllString(), getCopiesOfString(), PCLCardGroupHelper.Hand.name);
+        String base = fields.groupTypes.size() > 0 ? TEXT.act_addAmountToPile(getAmountRawOrAllString(), getCopiesOfString(), fields.groupTypes.get(0).name) : TEXT.act_addAmountToPile(getAmountRawOrAllString(), getCopiesOfString(), PCLCardGroupHelper.Hand.name);
         return fields.origin != PCLCardSelection.Manual && !fields.cardIDs.isEmpty() ? TEXT.subjects_randomly(base) : base;
     }
 

@@ -113,7 +113,10 @@ public abstract class PMove_Modify<T extends PField_CardCategory> extends PMove<
     }
 
     public String getBasicGiveString() {
-        String giveString = getNumericalObjectText();
+        return getBasicGiveString(getNumericalObjectText());
+    }
+
+    public String getBasicGiveString(String giveString) {
         if (amount >= 0) {
             return useParent ? TEXT.act_giveTarget(getInheritedThemString(), giveString) :
                     fields.hasGroups() ?

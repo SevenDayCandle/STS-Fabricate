@@ -22,7 +22,6 @@ import pinacolada.monsters.PCLTutorialMonster;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.loadout.PCLLoadoutData;
 import pinacolada.resources.loadout.PCLTrophies;
-import pinacolada.utilities.RandomizedList;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -97,7 +96,7 @@ public abstract class PCLAbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, 
             final CustomUnlock unlock = new CustomUnlock(AbstractUnlock.UnlockType.MISC, cardID);
             unlock.type = AbstractUnlock.UnlockType.CARD;
             unlock.card = loadout.buildCard();
-            unlock.key = unlock.card.cardID = PGR.core.createID("series:" + loadout.getName());
+            unlock.key = unlock.card.cardID = PGR.core.createID(loadout.getName());
 
             CustomUnlockBundle bundle = BaseMod.getUnlockBundleFor(resources.playerClass, loadout.unlockLevel - 1);
             if (bundle == null) {
@@ -140,7 +139,7 @@ public abstract class PCLAbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, 
     private void deserializeSelectedLoadout() {
         selectedLoadout = getLoadout(config.lastLoadout.get());
         if (selectedLoadout == null) {
-            selectedLoadout = EUIUtils.random(EUIUtils.filter(getEveryLoadout(), loadout -> resources.getUnlockLevel() >= loadout.unlockLevel));
+            selectedLoadout = prepareLoadout();
         }
         if (selectedLoadout == null) {
             selectedLoadout = getCoreLoadout();
@@ -153,7 +152,7 @@ public abstract class PCLAbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, 
 
         if (data != null && data.length() > 0) {
             //final String decoded = Base64Coder.decodeString(data);
-            final String[] items = EUIUtils.splitString("|", data);
+            final String[] items = EUIUtils.splitString(EUIUtils.SPLIT_LINE, data);
 
             if (items.length > 0) {
                 for (int i = 1; i < items.length; i++) {
@@ -196,6 +195,7 @@ public abstract class PCLAbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, 
         PCLLoadout core = getCoreLoadout();
         loadouts.put(core.ID, core);
         List<PCLLoadout> availableLoadouts = getAvailableLoadouts();
+        this.selectedLoadout = core;
         if (availableLoadouts.size() > 0) {
             this.selectedLoadout = availableLoadouts.get(0);
             for (PCLLoadout loadout : getAvailableLoadouts()) {
@@ -213,14 +213,13 @@ public abstract class PCLAbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, 
     public PCLLoadout prepareLoadout() {
         int unlockLevel = resources.getUnlockLevel();
         if (selectedLoadout == null || unlockLevel < selectedLoadout.unlockLevel) {
-            RandomizedList<PCLLoadout> list = new RandomizedList<>();
             for (PCLLoadout loadout : loadouts.values()) {
                 if (unlockLevel >= loadout.unlockLevel) {
-                    list.add(loadout);
+                    selectedLoadout = loadout;
+                    break;
                 }
             }
-
-            selectedLoadout = list.retrieve(new com.megacrit.cardcrawl.random.Random());
+            selectedLoadout = getCoreLoadout();
         }
 
         return selectedLoadout;
@@ -274,8 +273,8 @@ public abstract class PCLAbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, 
                 }
             }
         }
-        if (selectedLoadout == null) {
-            selectedLoadout = EUIUtils.random(EUIUtils.filter(getEveryLoadout(), loadout -> resources.getUnlockLevel() >= loadout.unlockLevel));
+        if (selectedLoadout == null || selectedLoadout == getCoreLoadout()) {
+            selectedLoadout = prepareLoadout();
         }
         config.lastLoadout.set(selectedLoadout.ID);
     }
@@ -287,11 +286,11 @@ public abstract class PCLAbstractPlayerData<T extends PCLResources<?, ?, ?, ?>, 
         config.trophies.set(serializeTrophies());
     }
 
-    // SelectedLoadout|Series_1,Trophy1,Trophy2,Trophy3|Series_2,Trophy1,Trophy2,Trophy3|...
+    // Series_1,Trophy1,Trophy2,Trophy3|Series_2,Trophy1,Trophy2,Trophy3|...
     // TODO rework
     @Deprecated
     private String serializeTrophies() {
-        final StringJoiner sj = new StringJoiner("|");
+        final StringJoiner sj = new StringJoiner(EUIUtils.SPLIT_LINE);
 
         for (PCLTrophies t : trophies.values()) {
             sj.add(t.serialize());
