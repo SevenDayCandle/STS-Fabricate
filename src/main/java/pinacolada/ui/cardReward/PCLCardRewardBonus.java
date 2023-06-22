@@ -5,7 +5,6 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.rewards.RewardItem;
 import extendedui.ui.EUIBase;
-import pinacolada.interfaces.listeners.OnAddingToCardRewardListener;
 import pinacolada.interfaces.providers.CardRewardBonusProvider;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
@@ -58,7 +57,7 @@ public class PCLCardRewardBonus extends EUIBase {
 
         final ArrayList<AbstractCard> toRemove = new ArrayList<>();
         for (AbstractCard card : cards) {
-            if (card instanceof OnAddingToCardRewardListener && ((OnAddingToCardRewardListener) card).shouldCancel()) {
+            if (PGR.dungeon.tryCancelCardReward(card)) {
                 toRemove.add(card);
             }
         }
@@ -76,6 +75,7 @@ public class PCLCardRewardBonus extends EUIBase {
             }
         }
 
+        // TODO allow card reward bonus provider to be cards/blights as well
         provider = GameUtilities.getPlayerRelic(CardRewardBonusProvider.class);
         if (provider != null && provider.canActivate(rewardItem)) {
             for (AbstractCard c : cards) {

@@ -6,6 +6,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import extendedui.EUI;
+import extendedui.EUIRM;
 import extendedui.interfaces.delegates.ActionT3;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.ColoredString;
@@ -156,7 +157,8 @@ public class PCLClickableUse {
                 tooltip.invalidateHeight();
             }
             tooltip.subHeader.color = pool.uses == 0 ? Settings.RED_TEXT_COLOR : Settings.GREEN_TEXT_COLOR;
-            tooltip.subHeader.text = (hasInfiniteUses() ? PGR.core.strings.subjects_infinite : (pool.uses + "/" + pool.baseUses)) + " " + PGR.core.strings.combat_uses;
+            tooltip.subHeader.text = (hasInfiniteUses() ? PGR.core.strings.subjects_infinite :
+                    EUIRM.strings.numNoun((pool.uses + "/" + pool.baseUses), pool.refreshEachTurn ? PGR.core.strings.subjects_thisTurn(PGR.core.strings.combat_uses) : PGR.core.strings.subjects_thisCombat(PGR.core.strings.combat_uses)));
         }
     }
 

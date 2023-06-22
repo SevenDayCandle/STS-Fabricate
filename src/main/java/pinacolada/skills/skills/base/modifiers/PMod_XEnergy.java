@@ -54,12 +54,12 @@ public class PMod_XEnergy extends PPassiveMod<PField_Empty> {
     }
 
     @Override
-    public void use(PCLUseInfo info, PCLActions order, boolean isUsing) {
+    public void use(PCLUseInfo info, PCLActions order, boolean shouldPay) {
         order.callback(() -> {
             if (this.childEffect != null) {
                 updateChildAmount(info);
                 GameUtilities.useXCostEnergy(sourceCard);
-                this.childEffect.use(info, order, isUsing);
+                this.childEffect.use(info, order, shouldPay);
             }
         });
     }

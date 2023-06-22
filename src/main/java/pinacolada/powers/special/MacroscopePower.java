@@ -8,14 +8,13 @@ import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import pinacolada.dungeon.CombatManager;
-import pinacolada.interfaces.markers.MultiplicativePower;
 import pinacolada.interfaces.subscribers.OnOrbApplyFocusSubscriber;
 import pinacolada.powers.PCLPower;
 import pinacolada.relics.pcl.Macroscope;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
-public class MacroscopePower extends PCLPower implements InvisiblePower, OnOrbApplyFocusSubscriber, MultiplicativePower {
+public class MacroscopePower extends PCLPower implements InvisiblePower, OnOrbApplyFocusSubscriber {
     public static final String POWER_ID = createFullID(MacroscopePower.class);
 
     public MacroscopePower(AbstractCreature owner) {

@@ -7,18 +7,17 @@ import com.megacrit.cardcrawl.metrics.MetricData;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.screens.select.BossRelicSelectScreen;
 import pinacolada.dungeon.CombatManager;
-import pinacolada.interfaces.listeners.OnRelicObtainedListener;
 
 public class RelicObtainedPatches {
-    protected static void onRelicObtain(AbstractRelic relic, OnRelicObtainedListener.Trigger trigger) {
-        CombatManager.onRelicObtained(relic, trigger);
+    protected static void onRelicObtain(AbstractRelic relic) {
+        CombatManager.onRelicObtained(relic);
     }
 
     @SpirePatch(clz = AbstractRelic.class, method = "onEquip")
     public static class AbstractRelic_OnEquip {
         @SpirePostfixPatch
         public static void postfix(AbstractRelic relic) {
-            onRelicObtain(relic, OnRelicObtainedListener.Trigger.Equip);
+            onRelicObtain(relic);
         }
     }
 
@@ -26,7 +25,7 @@ public class RelicObtainedPatches {
     public static class BossRelicSelectScreenPatch {
         @SpirePrefixPatch
         public static void prefix(BossRelicSelectScreen __instance, AbstractRelic relic) {
-            onRelicObtain(relic, OnRelicObtainedListener.Trigger.Obtain);
+            onRelicObtain(relic);
         }
     }
 
@@ -34,7 +33,7 @@ public class RelicObtainedPatches {
     public static class AbstractRelic_Obtain {
         @SpirePostfixPatch
         public static void postfix(AbstractRelic relic) {
-            onRelicObtain(relic, OnRelicObtainedListener.Trigger.Obtain);
+            onRelicObtain(relic);
         }
     }
 
@@ -42,7 +41,7 @@ public class RelicObtainedPatches {
     public static class MetricData_AddRelicObtainData {
         @SpirePrefixPatch
         public static void prefix(MetricData __instance, AbstractRelic relic) {
-            onRelicObtain(relic, OnRelicObtainedListener.Trigger.MetricData);
+            onRelicObtain(relic);
         }
     }
 }

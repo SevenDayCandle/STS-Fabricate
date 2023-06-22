@@ -23,7 +23,6 @@ import pinacolada.skills.fields.PField;
 import pinacolada.skills.fields.PField_CardGeneric;
 import pinacolada.skills.skills.base.moves.*;
 import pinacolada.skills.skills.special.moves.PMove_ReduceCooldown;
-import pinacolada.skills.skills.special.moves.PMove_Stun;
 import pinacolada.stances.PCLStanceHelper;
 
 public abstract class PMove<T extends PField> extends PSkill<T> {

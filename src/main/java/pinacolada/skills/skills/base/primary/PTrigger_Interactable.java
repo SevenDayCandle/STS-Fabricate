@@ -1,10 +1,12 @@
 package pinacolada.skills.skills.base.primary;
 
+import com.megacrit.cardcrawl.relics.AbstractRelic;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.interfaces.providers.ClickableProvider;
 import pinacolada.powers.PCLClickableUse;
 import pinacolada.resources.PGR;
+import pinacolada.resources.pcl.PCLCoreStrings;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
@@ -46,6 +48,7 @@ public class PTrigger_Interactable extends PTrigger {
 
     @Override
     public String getSubText() {
-        return PGR.core.tooltips.interactable.title + ": " + (fields.not ? TEXT.cond_timesPerCombat(amount) + ", " : amount > 1 ? TEXT.cond_timesPerTurn(amount) + ", " : "");
+        String sub = (fields.not ? TEXT.cond_timesPerCombat(amount) + ", " : amount > 1 ? TEXT.cond_timesPerTurn(amount) + ", " : "");
+        return source instanceof AbstractRelic ? PCLCoreStrings.rightClick(sub) : PGR.core.tooltips.interactable.title + ": " + (fields.not ? TEXT.cond_timesPerCombat(amount) + ", " : amount > 1 ? TEXT.cond_timesPerTurn(amount) + ", " : "");
     }
 }

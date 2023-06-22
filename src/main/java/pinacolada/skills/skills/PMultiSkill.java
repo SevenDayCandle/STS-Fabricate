@@ -384,7 +384,7 @@ public class PMultiSkill extends PSkill<PField_Empty> implements PMultiBase<PSki
     }
 
     @Override
-    public void use(PCLUseInfo info, PCLActions order, boolean isUsing) {
+    public void use(PCLUseInfo info, PCLActions order, boolean shouldPay) {
         use(info, order);
     }
 

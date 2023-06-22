@@ -14,15 +14,16 @@ import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.hitboxes.RelativeHitbox;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.fields.PCLAffinity;
-import pinacolada.interfaces.markers.MultiplicativePower;
 import pinacolada.monsters.PCLCardAlly;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.PCLRenderHelpers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class PowerFormulaRow extends EUIHoverable {
+    private static final HashMap<String, Boolean> IS_MULTIPLICATIVE = new HashMap<>();
     public static final float ICON_SIZE = 32f;
     protected final ArrayList<PowerFormulaItem> powers = new ArrayList<>();
     public final Type type;
@@ -70,7 +71,7 @@ public class PowerFormulaRow extends EUIHoverable {
         else {
             // Assume that powers that have % relate to power multipliers
             // Only do string searching if absolutely necessary.
-            if (po instanceof MultiplicativePower || po.description.contains("%")) {
+            if (isMultiplicative(po)) {
                 item.setMultiplier(result / input);
             }
             else {
@@ -88,6 +89,15 @@ public class PowerFormulaRow extends EUIHoverable {
 
     protected float getOffsetCx(int size) {
         return (size + 1.2f) * 2.5f;
+    }
+
+    protected boolean isMultiplicative(AbstractPower po) {
+        if (IS_MULTIPLICATIVE.containsKey(po.ID)) {
+            return IS_MULTIPLICATIVE.get(po.ID);
+        }
+        boolean hasPercent = po.description.contains("%");
+        IS_MULTIPLICATIVE.put(po.ID, hasPercent);
+        return hasPercent;
     }
 
     @Override

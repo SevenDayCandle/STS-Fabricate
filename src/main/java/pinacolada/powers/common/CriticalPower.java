@@ -6,11 +6,10 @@ import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import pinacolada.dungeon.CombatManager;
-import pinacolada.interfaces.markers.MultiplicativePower;
 import pinacolada.powers.PCLPower;
 import pinacolada.utilities.PCLRenderHelpers;
 
-public class CriticalPower extends PCLPower implements MultiplicativePower {
+public class CriticalPower extends PCLPower {
     public static final String POWER_ID = createFullID(CriticalPower.class);
     public static final int MULTIPLIER = 100;
 

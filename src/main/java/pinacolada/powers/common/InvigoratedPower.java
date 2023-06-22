@@ -3,11 +3,10 @@ package pinacolada.powers.common;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import pinacolada.dungeon.CombatManager;
-import pinacolada.interfaces.markers.MultiplicativePower;
 import pinacolada.powers.PCLPower;
 import pinacolada.utilities.PCLRenderHelpers;
 
-public class InvigoratedPower extends PCLPower implements MultiplicativePower {
+public class InvigoratedPower extends PCLPower {
     public static final String POWER_ID = createFullID(InvigoratedPower.class);
     public static final int MULTIPLIER = 25;
 

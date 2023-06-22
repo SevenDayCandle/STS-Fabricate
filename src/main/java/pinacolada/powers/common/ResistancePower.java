@@ -3,11 +3,10 @@ package pinacolada.powers.common;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import pinacolada.dungeon.CombatManager;
-import pinacolada.interfaces.markers.MultiplicativePower;
 import pinacolada.powers.PCLPower;
 import pinacolada.utilities.PCLRenderHelpers;
 
-public class ResistancePower extends PCLPower implements MultiplicativePower {
+public class ResistancePower extends PCLPower {
     public static final String POWER_ID = createFullID(ResistancePower.class);
     public static final float MULTIPLIER = 5;
     public static final int MAX_AMOUNT = 15;

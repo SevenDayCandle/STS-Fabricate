@@ -7,7 +7,7 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.CardGroup;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.shop.Merchant;
-import pinacolada.interfaces.listeners.OnAddingToCardRewardListener;
+import pinacolada.resources.PGR;
 
 import java.util.HashMap;
 
@@ -54,11 +54,9 @@ public class MerchantPatches {
             protected CardGroup getReplacement(CardGroup group) {
                 final CardGroup replacement = new CardGroup(CardGroup.CardGroupType.CARD_POOL);
                 for (AbstractCard c : group.group) {
-                    if (c instanceof OnAddingToCardRewardListener && ((OnAddingToCardRewardListener) c).shouldCancel()) {
-                        continue;
+                    if (!PGR.dungeon.tryCancelCardReward(c)) {
+                        replacement.group.add(c);
                     }
-
-                    replacement.group.add(c);
                 }
 
                 return replacement;

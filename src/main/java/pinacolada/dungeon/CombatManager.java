@@ -619,7 +619,7 @@ public class CombatManager {
     }
 
     public static boolean onClickableUsed(PCLClickableUse condition, AbstractMonster target, int uses) {
-        return subscriberCanDeny(OnPCLClickableUsedSubscriber.class, s -> s.onClickablePowerUsed(condition, target, uses));
+        return subscriberCanDeny(OnClickableUsedSubscriber.class, s -> s.onClickablePowerUsed(condition, target, uses));
     }
 
     public static boolean onCooldownTriggered(AbstractCreature source, AbstractCreature m, CooldownProvider cooldown) {
@@ -751,18 +751,18 @@ public class CombatManager {
         return damageAmount;
     }
 
-    public static void onRelicObtained(AbstractRelic relic, OnRelicObtainedListener.Trigger trigger) {
+    public static void onRelicObtained(AbstractRelic relic) {
         refreshPlayer();
 
         for (AbstractCard c : AbstractDungeon.player.masterDeck.group) {
             if (c instanceof OnRelicObtainedListener) {
-                ((OnRelicObtainedListener) c).onRelicObtained(relic, trigger);
+                ((OnRelicObtainedListener) c).onRelicObtained(relic);
             }
         }
 
         for (AbstractRelic r : AbstractDungeon.player.relics) {
             if (r instanceof OnRelicObtainedListener) {
-                ((OnRelicObtainedListener) r).onRelicObtained(relic, trigger);
+                ((OnRelicObtainedListener) r).onRelicObtained(relic);
             }
         }
     }

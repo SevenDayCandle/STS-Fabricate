@@ -3,13 +3,12 @@ package pinacolada.powers.common;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
 import pinacolada.dungeon.CombatManager;
-import pinacolada.interfaces.markers.MultiplicativePower;
 import pinacolada.interfaces.subscribers.OnOrbApplyFocusSubscriber;
 import pinacolada.powers.PCLPower;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
-public class ImpairedPower extends PCLPower implements OnOrbApplyFocusSubscriber, MultiplicativePower {
+public class ImpairedPower extends PCLPower implements OnOrbApplyFocusSubscriber {
     public static final String POWER_ID = createFullID(ImpairedPower.class);
     public static final int MULTIPLIER = 50;
     public boolean justApplied;

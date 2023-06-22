@@ -54,7 +54,7 @@ public abstract class PShift extends PPrimary<PField_Empty> {
     }
 
     @Override
-    public void use(PCLUseInfo info, PCLActions order, boolean isUsing) {
+    public void use(PCLUseInfo info, PCLActions order, boolean shouldPay) {
     }
 
 

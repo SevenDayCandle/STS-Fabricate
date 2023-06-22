@@ -1,6 +1,7 @@
 package pinacolada.interfaces.listeners;
 
-// TODO rework
+import com.megacrit.cardcrawl.cards.AbstractCard;
+
 public interface OnAddingToCardRewardListener {
-    boolean shouldCancel();
+    boolean shouldCancel(AbstractCard card);
 }

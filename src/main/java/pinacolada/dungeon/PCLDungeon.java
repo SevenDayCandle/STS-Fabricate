@@ -316,16 +316,12 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         boolean searchingCard = true;
 
         while (searchingCard) {
-            searchingCard = false;
-
             final AbstractCard temp = getRandomCard(rarity, c -> !(EUIUtils.any(ignore, i -> i.cardID.equals(c.cardID))) && canObtainCopy(c), rng, allowOtherRarities);
             if (temp == null) {
                 break;
             }
 
-            if (temp instanceof OnAddingToCardRewardListener && ((OnAddingToCardRewardListener) temp).shouldCancel()) {
-                searchingCard = true;
-            }
+            searchingCard = tryCancelCardReward(temp);
 
             if (!searchingCard) {
                 replacement = temp.makeCopy();
@@ -337,6 +333,21 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         }
 
         return replacement;
+    }
+
+    // TODO check master deck
+    public boolean tryCancelCardReward(AbstractCard temp) {
+        for (AbstractRelic r : player.relics) {
+            if (r instanceof OnAddingToCardRewardListener && ((OnAddingToCardRewardListener) r).shouldCancel(temp)) {
+                return true;
+            }
+        }
+        for (AbstractBlight r : player.blights) {
+            if (r instanceof OnAddingToCardRewardListener && ((OnAddingToCardRewardListener) r).shouldCancel(temp)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     protected void importBaseData(PCLDungeon data) {

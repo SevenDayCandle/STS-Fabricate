@@ -202,7 +202,7 @@
 		"NAME": "Innovation"
 	},
 	"Interactable":	{
-		"DESCRIPTION": "Once per turn (unless specified otherwise), activate this effect by clicking this power's icon and paying its cost.",
+		"DESCRIPTION": "Once per turn (unless specified otherwise), activate this effect by clicking this item and paying its cost.",
 		"NAME": "Interactable"
 	},
 	"Invigorated":	{

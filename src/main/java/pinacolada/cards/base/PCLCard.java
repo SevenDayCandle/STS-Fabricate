@@ -59,7 +59,6 @@ import pinacolada.effects.EffekseerEFK;
 import pinacolada.effects.PCLAttackVFX;
 import pinacolada.effects.card.PCLCardGlowBorderEffect;
 import pinacolada.interfaces.listeners.OnAddToDeckListener;
-import pinacolada.interfaces.listeners.OnSetFormListener;
 import pinacolada.interfaces.markers.EditorCard;
 import pinacolada.interfaces.markers.SummonOnlyMove;
 import pinacolada.monsters.PCLCardAlly;
@@ -2302,14 +2301,6 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         }
 
         initializeDescription();
-
-        if (player != null && player.relics != null) {
-            for (AbstractRelic relic : player.relics) {
-                if (relic instanceof OnSetFormListener) {
-                    ((OnSetFormListener) relic).onSetForm(this, oldForm, this.auxiliaryData.form);
-                }
-            }
-        }
 
         return this.auxiliaryData.form;
     }

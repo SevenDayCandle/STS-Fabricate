@@ -468,8 +468,8 @@ public abstract class PCond<T extends PField> extends PSkill<T> {
     }
 
     @Override
-    public void use(PCLUseInfo info, PCLActions order, boolean isUsing) {
-        if (checkCondition(info, isUsing, null) && childEffect != null) {
+    public void use(PCLUseInfo info, PCLActions order, boolean shouldPay) {
+        if (checkCondition(info, shouldPay, null) && childEffect != null) {
             childEffect.use(info, order);
         }
     }

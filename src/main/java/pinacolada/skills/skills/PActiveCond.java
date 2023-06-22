@@ -51,10 +51,12 @@ public abstract class PActiveCond<T extends PField> extends PCond<T> {
     }
 
     @Override
-    public void use(PCLUseInfo info, PCLActions order, boolean isUsing) {
-        if (isUsing && childEffect != null) {
-            useImpl(info, order, (i) -> childEffect.use(i, order), (i) -> {
-            });
+    public void use(PCLUseInfo info, PCLActions order, boolean shouldPay) {
+        if (shouldPay) {
+            use(info, order);
+        }
+        else if (childEffect != null) {
+            childEffect.use(info, order);
         }
     }
 

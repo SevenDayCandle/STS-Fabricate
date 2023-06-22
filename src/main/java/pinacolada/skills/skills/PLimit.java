@@ -72,8 +72,8 @@ public abstract class PLimit extends PPrimary<PField_Empty> {
     }
 
     @Override
-    public void use(PCLUseInfo info, PCLActions order, boolean isUsing) {
-        if ((isUsing ? tryActivate(info) : canActivate(info)) && childEffect != null) {
+    public void use(PCLUseInfo info, PCLActions order, boolean shouldPay) {
+        if ((shouldPay ? tryActivate(info) : canActivate(info)) && childEffect != null) {
             childEffect.use(info, order);
         }
     }

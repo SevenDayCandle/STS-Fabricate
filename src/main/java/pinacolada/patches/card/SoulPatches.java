@@ -12,9 +12,7 @@ import javassist.expr.MethodCall;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.effects.PCLEffects;
 import pinacolada.effects.PCLSFX;
-import pinacolada.interfaces.listeners.OnAddedToDrawPileListener;
 import pinacolada.resources.PGR;
-import pinacolada.utilities.ListSelection;
 
 // Copied and modified from STS-AnimatorMod
 public class SoulPatches {
@@ -64,26 +62,6 @@ public class SoulPatches {
                     }
                 }
             };
-        }
-    }
-
-    @SpirePatch(clz = Soul.class, method = "onToBottomOfDeck", paramtypez = {AbstractCard.class})
-    public static class SoulPatches_OnToBottomOfDeck {
-        @SpirePostfixPatch
-        public static void postfix(Soul soul, AbstractCard card) {
-            if (card instanceof OnAddedToDrawPileListener) {
-                ((OnAddedToDrawPileListener) card).onAddedToDrawPile(false, ListSelection.Mode.First);
-            }
-        }
-    }
-
-    @SpirePatch(clz = Soul.class, method = "onToDeck", paramtypez = {AbstractCard.class, boolean.class, boolean.class})
-    public static class SoulPatches_OnToDeck {
-        @SpirePostfixPatch
-        public static void postfix(Soul soul, AbstractCard card, boolean randomSpot, boolean visualOnly) {
-            if (card instanceof OnAddedToDrawPileListener) {
-                ((OnAddedToDrawPileListener) card).onAddedToDrawPile(visualOnly, randomSpot ? ListSelection.Mode.Random : ListSelection.Mode.Last);
-            }
         }
     }
 }

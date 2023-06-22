@@ -187,12 +187,12 @@ public abstract class PTrigger extends PPrimary<PField_Not> {
     }
 
     @Override
-    public void use(PCLUseInfo info, PCLActions order, boolean isUsing) {
+    public void use(PCLUseInfo info, PCLActions order, boolean shouldPay) {
         if (usesThisTurn != 0) {
             if (usesThisTurn > 0) {
                 usesThisTurn -= 1;
             }
-            this.childEffect.use(info, order, isUsing);
+            this.childEffect.use(info, order, shouldPay);
         }
     }
 

@@ -1561,7 +1561,7 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
         }
     }
 
-    public void use(PCLUseInfo info, PCLActions order, boolean isUsing) {
+    public void use(PCLUseInfo info, PCLActions order, boolean shouldPay) {
         use(info, order);
     }
 

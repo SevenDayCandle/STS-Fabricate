@@ -736,56 +736,59 @@ public class PCLCoreStrings extends PCLStrings {
     public final String act_setTheLast(Object amount, Object item, Object affinity) {
         return actFmt(40, amount, item, affinity);
     }
+    public final String act_skipTurn() {
+        return actFmt(41);
+    }
     public final String act_stealFrom(Object amount, Object item, Object target) {
-        return actFmt(41, amount, item, target);
+        return actFmt(42, amount, item, target);
     }
     public final String act_stealX(Object amount, Object power) {
-        return actFmt(42, amount, power);
+        return actFmt(43, amount, power);
     }
     public final String act_stun(Object target) {
-        return actFmt(43, target);
+        return actFmt(44, target);
     }
     public final String act_takeDamage(Object amount) {
-        return actFmt(44, amount);
+        return actFmt(45, amount);
     }
     public final String act_transform(Object subject, Object target) {
-        return actFmt(45, subject, target);
+        return actFmt(46, subject, target);
     }
     public final String act_use(Object target) {
-        return actFmt(46, target);
-    }
-    public final String act_youCannotGain(Object target) {
         return actFmt(47, target);
     }
+    public final String act_youCannotGain(Object target) {
+        return actFmt(48, target);
+    }
     public final String act_zCosts(Object object, Object ordinal, Object amount) {
-        return actFmt(48, object, ordinal, amount);
+        return actFmt(49, object, ordinal, amount);
     }
     public final String act_zGainsBonus(Object object, Object amount, Object bonus) {
-        return actFmt(49, object, amount, bonus);
+        return actFmt(50, object, amount, bonus);
     }
     public final String act_zHas(Object object, Object amount) {
-        return actFmt(50, object, amount);
+        return actFmt(51, object, amount);
     }
     public final String act_zLoses(Object object, Object ordinal, Object amount, Object bonus) {
-        return actFmt(51, object, ordinal, amount, bonus);
+        return actFmt(52, object, ordinal, amount, bonus);
     }
     public final String act_zOn(Object action, Object object, Object target) {
-        return actFmt(52, action, object, target);
+        return actFmt(53, action, object, target);
     }
     public final String act_zOnAmount(Object action, Object amount, Object object, Object target) {
-        return actFmt(53, action, amount, object, target);
+        return actFmt(54, action, amount, object, target);
     }
     public final String act_zXFromY(Object verb, Object amount, Object subject, Object target) {
-        return actFmt(54, verb, amount, subject, target);
+        return actFmt(55, verb, amount, subject, target);
     }
     public final String act_zXFromYToZ(Object verb, Object amount, Object subject, Object dest, Object target) {
-        return actFmt(55, verb, amount, subject, dest, target);
+        return actFmt(56, verb, amount, subject, dest, target);
     }
     public final String act_zToX(Object action, Object object, Object target) {
-        return actFmt(56, action, object, target);
+        return actFmt(57, action, object, target);
     }
     public final String act_zXToY(Object verb, Object amount, Object subject, Object target) {
-        return actFmt(57, verb, amount, subject, target);
+        return actFmt(58, verb, amount, subject, target);
     }
 
     public final String act_addAmountToPile(Object amount, Object desc2, Object pile) {

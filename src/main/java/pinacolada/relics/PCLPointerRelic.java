@@ -96,10 +96,24 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
     }
 
     @Override
+    public void onVictory() {
+        super.onVictory();
+        unsubscribe();
+    }
+
+    @Override
     public void atBattleStart() {
         super.atBattleStart();
         for (PSkill<?> effect : getEffects()) {
             effect.triggerOnStartOfBattleForRelic();
+        }
+    }
+
+    @Override
+    public void atTurnStart() {
+        super.atTurnStart();
+        if (triggerCondition != null) {
+            triggerCondition.refresh(true, true);
         }
     }
 
@@ -165,12 +179,25 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
         }
     }
 
+    protected void unsubscribe() {
+        if (triggerCondition != null) {
+            triggerCondition = null;
+            mainTooltip.subHeader = null;
+            mainTooltip.invalidateHeight();
+        }
+    }
+
     @Override
     public void update() {
         super.update();
 
+        if (triggerCondition != null) {
+            triggerCondition.refresh(false, hb.justHovered);
+        }
+
         if (GameUtilities.inBattle() && hb.hovered && EUIInputManager.rightClick.isJustPressed() && triggerCondition != null && triggerCondition.interactable()) {
             triggerCondition.targetToUse(1);
+            flash();
         }
     }
 
