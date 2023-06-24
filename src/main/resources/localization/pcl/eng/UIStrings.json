@@ -130,13 +130,16 @@
 												"Pile",
 												"Combat",
 												"Exact",
-												"Landing Sound"
+												"Liquid Color",
+												"Hybrid Color",
+												"Spots Color"
 								]
 				},
 				"pcl:CardEditorTutorial": {
 								"TEXT": [
 												"{#o:Left-click} a card to edit it. {#o:Right-click} a card for more options. || Custom cards can be obtained in #yCustom #yRuns with the #yEnable #yCustom #yCards option selected or through the #oobtaincustom or #oobtaindeckcustom commands in Basemod's console.",
-												"{#o:Left-click} a relic to edit it. {#o:Right-click} a relic for more options. || Custom relic can be obtained in #yCustom #yRuns with the #yEnable #yCustom #yRelics option selected or through the #orelic or #oobtaincustomrelic commands in Basemod's console.",
+												"{#o:Left-click} a relic to edit it. {#o:Right-click} a relic for more options. || Custom relics can be obtained in #yCustom #yRuns with the #yEnable #yCustom #yRelics option selected or through the #orelic or #oobtaincustomrelic commands in Basemod's console.",
+												"{#o:Left-click} a potion to edit it. {#o:Right-click} a potion for more options. || Custom potion can be obtained in #yCustom #yRuns with the #yEnable #yCustom #yPotions option selected or through the #opotion or #oobtaincustompotion commands in Basemod's console.",
 												"Refreshes this grid to reflect the item present in your custom items folder. | This will remove any items that have been moved out of the custom folder.",
 												"An item's form can be changed when manually upgrading it. All forms share the same #yPrimary #yInfo, but their other attributes and effects may differ.",
 												"Choose the image to use for this item's portrait",
@@ -184,7 +187,11 @@
 												"This skill is corrupted.",
 												"Revert the last change made to this item.",
 												"Opens the folder containing your custom items in your system's file explorer.",
-												"Drag and drop nodes from this pane onto the white circle to add effects to this item. Hovering over the nodes will show their effects."
+												"Drag and drop nodes from this pane onto the white circle to add effects to this item. Hovering over the nodes will show their effects.",
+												"#yRarity determines how often this potion appears in rewards",
+												"The shape of the bottle used for this potion's sprite.",
+												"A visual effect that is rendered around this potion.",
+												"Determines how the potion's sprite is colored. Colors can be changed by typing in a hexadecimal color code or by clicking on the button to pick a color from a palette."
 								]
 				},
 				"pcl:CardPile": {
@@ -372,7 +379,6 @@
 												"Editor",
 												"Card Editor",
 												"View, create, or edit custom cards to use in Custom Runs.",
-												"Under Construction",
 												"Relic Editor",
 												"View, create, or edit custom relics to use in Custom Runs.",
 												"Potion Editor",
@@ -393,7 +399,9 @@
 												"Requirement",
 												"Edit",
 												"Custom Relics",
-												"Allow relics created with Fabricate to appear in runs"
+												"Allow relics created with Fabricate to appear in runs",
+												"Custom Potions",
+												"Allow potions created with Fabricate to appear in runs"
 								]
 				},
 				"pcl:Options": {
@@ -495,6 +503,7 @@
 												"${0}@!1:cards@:card$",
 												"${0}@!1:characters@:character$",
 												"${0}@!1:enemies@:enemy$",
+												"${0}@!1:potions@:potion$",
 												"${0}@!1:relics@:relic$",
 												"Cost",
 												"Infinite",
@@ -523,6 +532,7 @@
 												"of {0}",
 												"permanently {0}",
 												"playing {0} with this in {1}",
+												"potion",
 												"random {0}",
 												"randomly {0}",
 												"relic",

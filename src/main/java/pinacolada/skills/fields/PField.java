@@ -3,7 +3,9 @@ package pinacolada.skills.fields;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.localization.CardStrings;
+import com.megacrit.cardcrawl.localization.PotionStrings;
 import com.megacrit.cardcrawl.localization.RelicStrings;
+import com.megacrit.cardcrawl.potions.AbstractPotion;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import extendedui.EUIUtils;
 import extendedui.configuration.EUIConfiguration;
@@ -17,8 +19,12 @@ import pinacolada.cards.base.fields.PCLCardSelection;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.orbs.PCLOrbHelper;
+import pinacolada.patches.basemod.PotionPoolPatches;
 import pinacolada.patches.library.CardLibraryPatches;
 import pinacolada.patches.library.RelicLibraryPatches;
+import pinacolada.potions.PCLCustomPotionSlot;
+import pinacolada.potions.PCLDynamicPotionData;
+import pinacolada.potions.PCLPotionData;
 import pinacolada.powers.PCLPowerHelper;
 import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.relics.PCLDynamicRelicData;
@@ -154,6 +160,41 @@ public abstract class PField implements Serializable {
 
     public static String getOriginWrappedString(String base, PCLCardSelection origin) {
         return origin == PCLCardSelection.Top ? TEXT.subjects_topOf(base) : origin == PCLCardSelection.Bottom ? TEXT.subjects_bottomOf(base) : base;
+    }
+
+    public static String getPotionIDAndString(ArrayList<String> potionIDs) {
+        return PCLCoreStrings.joinWithAnd(g -> "{" + getPotionNameForID(g) + "}", potionIDs);
+    }
+
+    public static String getPotionIDOrString(ArrayList<String> potionIDs) {
+        return PCLCoreStrings.joinWithOr(g -> "{" + getPotionNameForID(g) + "}", potionIDs);
+    }
+
+    public static String getPotionNameForID(String potionID) {
+        if (potionID != null) {
+            // NOT using PotionHelper.getPotion as the replacement patching on that method may cause text glitches or infinite loops in this method
+            AbstractPotion c = PotionPoolPatches.getDirectPotion(potionID);
+            if (c != null) {
+                return c.name;
+            }
+
+            // Try to load data on potions not in the library
+            PCLPotionData data = PCLPotionData.getStaticData(potionID);
+            if (data != null) {
+                return data.strings.NAME;
+            }
+
+            // Try to load data from slots. Do not actually create potions here to avoid infinite loops
+            PCLCustomPotionSlot slot = PCLCustomPotionSlot.get(potionID);
+            if (slot != null) {
+                HashMap<Settings.GameLanguage, PotionStrings> languageMap = PCLDynamicPotionData.parseLanguageStrings(slot.languageStrings);
+                PotionStrings language = languageMap != null ? PCLDynamicPotionData.getStringsForLanguage(languageMap) : null;
+                if (language != null) {
+                    return language.NAME;
+                }
+            }
+        }
+        return "";
     }
 
     public static String getPowerAndString(ArrayList<PCLPowerHelper> powers) {

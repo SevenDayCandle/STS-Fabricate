@@ -34,6 +34,7 @@ import pinacolada.effects.PCLEffects;
 import pinacolada.effects.vfx.SmokeEffect;
 import pinacolada.interfaces.listeners.OnAddToDeckListener;
 import pinacolada.interfaces.listeners.OnAddingToCardRewardListener;
+import pinacolada.potions.PCLCustomPotionSlot;
 import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.resources.PCLAbstractPlayerData;
 import pinacolada.resources.PGR;
@@ -67,6 +68,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
     protected transient boolean canJumpNextFloor;
     protected transient int valueDivisor = 1;
     public Boolean allowCustomCards = false;
+    public Boolean allowCustomPotions = false;
     public Boolean allowCustomRelics = false;
     public HashMap<PCLAffinity, Integer> fragments = new HashMap<>();
     public HashMap<String, Integer> augments = new HashMap<>();
@@ -355,6 +357,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         if (data != null) {
             eventLog = new HashMap<>(data.eventLog);
             allowCustomCards = data.allowCustomCards;
+            allowCustomPotions = data.allowCustomPotions;
             allowCustomRelics = data.allowCustomRelics;
             rNGCounter = data.rNGCounter;
             highestScore = data.highestScore;
@@ -368,6 +371,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
         else {
             eventLog = new HashMap<>();
             allowCustomCards = PGR.config.enableCustomCards.get() || (CardCrawlGame.trial instanceof PCLCustomTrial && ((PCLCustomTrial) CardCrawlGame.trial).allowCustomCards);
+            allowCustomPotions = PGR.config.enableCustomPotions.get() || (CardCrawlGame.trial instanceof PCLCustomTrial && ((PCLCustomTrial) CardCrawlGame.trial).allowCustomPotions);
             allowCustomRelics = PGR.config.enableCustomRelics.get() || (CardCrawlGame.trial instanceof PCLCustomTrial && ((PCLCustomTrial) CardCrawlGame.trial).allowCustomRelics);
             highestScore = 0;
             rNGCounter = 0;
@@ -471,12 +475,12 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
                 AbstractCard.CardRarity rarity = c.getBuilder(0).cardRarity;
                 CardGroup pool = GameUtilities.getCardPool(rarity);
                 if (pool != null) {
-                    pool.addToBottom(c.makeFirstCard(true));
+                    pool.addToBottom(c.make(true));
                     EUIUtils.logInfoIfDebug(this, "Added Custom Card " + c.ID + " to pool " + rarity);
                 }
                 CardGroup spool = GameUtilities.getCardPoolSource(rarity);
                 if (spool != null) {
-                    spool.addToBottom(c.makeFirstCard(true));
+                    spool.addToBottom(c.make(true));
                     EUIUtils.logInfoIfDebug(this, "Added Custom Card " + c.ID + " to source pool " + rarity);
                 }
             }
@@ -488,6 +492,25 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
                     AbstractDungeon.colorlessCardPool.addToBottom(c.getBuilder(0).create());
                 }
                 EUIUtils.logInfoIfDebug(this, "Added Custom Card " + c.ID + " to Colorless pool");
+            }
+        }
+    }
+
+    // Add custom relics if applicable. Note that this is loaded in PotionPoolPatches
+    public void loadCustomPotions(ArrayList<String> result, AbstractPlayer.PlayerClass p, boolean getAll) {
+        if (allowCustomPotions) {
+            if (getAll) {
+                for (PCLCustomPotionSlot c : PCLCustomPotionSlot.getPotions(null)) {
+                    result.add(c.ID);
+                }
+            }
+            else {
+                for (PCLCustomPotionSlot c : PCLCustomPotionSlot.getPotions(player.getCardColor())) {
+                    result.add(c.ID);
+                }
+                for (PCLCustomPotionSlot c : PCLCustomPotionSlot.getPotions(AbstractCard.CardColor.COLORLESS)) {
+                    result.add(c.ID);
+                }
             }
         }
     }
@@ -741,6 +764,10 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
 
         if (allowCustomCards == null) {
             allowCustomCards = CardCrawlGame.trial instanceof PCLCustomTrial && ((PCLCustomTrial) CardCrawlGame.trial).allowCustomCards;
+        }
+
+        if (allowCustomPotions == null) {
+            allowCustomPotions = CardCrawlGame.trial instanceof PCLCustomTrial && ((PCLCustomTrial) CardCrawlGame.trial).allowCustomPotions;
         }
 
         if (allowCustomRelics == null) {

@@ -2,7 +2,6 @@ package pinacolada.relics;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIInputManager;
-import extendedui.EUIUtils;
 import extendedui.ui.tooltips.EUITooltip;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.dungeon.CombatManager;
@@ -82,7 +81,7 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
             setup();
         }
         try {
-            return StringUtils.capitalize(EUIUtils.joinStrings(EUIUtils.SPLIT_LINE, EUIUtils.map(getEffects(), PSkill::getPowerText)));
+            return StringUtils.capitalize(getEffectPowerTextStrings());
         }
         catch (Exception e) {
             return "";
@@ -179,6 +178,11 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
         }
     }
 
+    @Override
+    public int timesUpgraded() {
+        return auxiliaryData != null ? auxiliaryData.timesUpgraded : 0;
+    }
+
     protected void unsubscribe() {
         if (triggerCondition != null) {
             triggerCondition = null;
@@ -199,6 +203,21 @@ public class PCLPointerRelic extends PCLRelic implements PointerProvider, Clicka
             triggerCondition.targetToUse(1);
             flash();
         }
+    }
+
+    @Override
+    public PCLPointerRelic upgrade() {
+        if (this.canUpgrade()) {
+            auxiliaryData.timesUpgraded += 1;
+            for (PSkill<?> ef : getEffects()) {
+                ef.setAmountFromCard().onUpgrade();
+            }
+            for (PSkill<?> ef : getPowerEffects()) {
+                ef.setAmountFromCard().onUpgrade();
+            }
+            updateDescription(null);
+        }
+        return this;
     }
 
     public float atDamageModify(float block, AbstractCard c) {

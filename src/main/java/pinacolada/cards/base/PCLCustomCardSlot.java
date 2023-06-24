@@ -19,7 +19,7 @@ import java.util.HashMap;
 import static extendedui.EUIUtils.array;
 import static pinacolada.resources.PCLMainConfig.JSON_FILTER;
 
-public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardData> {
+public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardData, PCLDynamicCard> {
     private static final TypeToken<PCLCustomCardSlot> TTOKEN = new TypeToken<PCLCustomCardSlot>() {
     };
     private static final TypeToken<CardForm> TTOKENFORM = new TypeToken<CardForm>() {
@@ -286,12 +286,12 @@ public class PCLCustomCardSlot extends PCLCustomEditorLoadable<PCLDynamicCardDat
         return SUBFOLDER;
     }
 
-    public PCLDynamicCard makeFirstCard() {
-        return makeFirstCard(false);
+    public PCLDynamicCard make() {
+        return make(false);
     }
 
     /** Create the card from the first builder; i.e. the base card for this slot. Useful when showing card previews, etc. */
-    public PCLDynamicCard makeFirstCard(boolean shouldFindForms) {
+    public PCLDynamicCard make(boolean shouldFindForms) {
         return getBuilder(0).createImplWithForms(shouldFindForms);
     }
 

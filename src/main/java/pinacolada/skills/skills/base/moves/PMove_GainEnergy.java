@@ -4,6 +4,7 @@ import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
+import pinacolada.skills.PSkill;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField_Empty;
@@ -24,6 +25,11 @@ public class PMove_GainEnergy extends PMove_Gain {
 
     public PMove_GainEnergy(PSkillSaveData content) {
         super(DATA, content);
+    }
+
+    @Override
+    public String getSampleText(PSkill<?> callingSkill) {
+        return TEXT.act_gainAmount(TEXT.subjects_x, PGR.core.tooltips.energy.title);
     }
 
     @Override

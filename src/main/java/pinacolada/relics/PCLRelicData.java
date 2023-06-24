@@ -11,6 +11,7 @@ import pinacolada.misc.PCLGenericData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,6 +22,7 @@ import static extendedui.EUIUtils.array;
 
 public class PCLRelicData extends PCLGenericData<PCLRelic> {
     private static final Map<String, PCLRelicData> STATIC_DATA = new HashMap<>();
+    private static final ArrayList<PCLRelicData> TEMPLATES = new ArrayList<>();
 
     public RelicStrings strings;
     public String imagePath;
@@ -84,12 +86,22 @@ public class PCLRelicData extends PCLGenericData<PCLRelic> {
         return STATIC_DATA.get(cardID);
     }
 
+    public static Collection<PCLRelicData> getTemplates() {
+        return TEMPLATES.stream().sorted((a, b) -> StringUtils.compare(a.ID, b.ID)).collect(Collectors.toList());
+    }
+
     public void initializeImage() {
         this.imagePath = PGR.getRelicImage(ID);
     }
 
     protected static <T extends PCLRelicData> T registerData(T cardData) {
         STATIC_DATA.put(cardData.ID, cardData);
+        return cardData;
+    }
+
+    protected static <T extends PCLRelicData> T registerTemplate(T cardData) {
+        STATIC_DATA.put(cardData.ID, cardData);
+        TEMPLATES.add(cardData);
         return cardData;
     }
 

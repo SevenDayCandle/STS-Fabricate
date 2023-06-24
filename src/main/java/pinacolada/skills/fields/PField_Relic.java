@@ -29,7 +29,11 @@ public class PField_Relic extends PField_Random {
 
     @Override
     public PField_Relic makeCopy() {
-        return (PField_Relic) new PField_Relic().setRelicID(relicIDs).setRandom(random);
+        return (PField_Relic) new PField_Relic()
+                .setRelicID(relicIDs)
+                .setColor(colors)
+                .setRarity(rarities)
+                .setRandom(random);
     }
 
     public void setupEditor(PCLCustomEffectEditingPane editor) {

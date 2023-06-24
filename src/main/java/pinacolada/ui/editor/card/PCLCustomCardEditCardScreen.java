@@ -38,7 +38,6 @@ public class PCLCustomCardEditCardScreen extends PCLCustomEditEntityScreen<PCLCu
     protected PCardPrimary_GainBlock currentBlock;
     protected PCLDynamicCard previewCard;
     protected PCLCustomFormEditor formEditor;
-    protected PCLCustomImageEffect imageEditor;
     protected EUIButton imageButton;
     protected Texture loadedImage;
 
@@ -124,29 +123,6 @@ public class PCLCustomCardEditCardScreen extends PCLCustomEditEntityScreen<PCLCu
         previewCard.current_y = previewCard.target_y = CARD_Y;
     }
 
-    @Override
-    public void render(SpriteBatch sb) {
-        if (imageEditor != null) {
-            imageEditor.render(sb);
-        }
-        else {
-            super.render(sb);
-        }
-    }
-
-    @Override
-    protected void updateInternal(float deltaTime) {
-        if (imageEditor != null) {
-            imageEditor.update();
-            if (imageEditor.isDone) {
-                imageEditor = null;
-            }
-        }
-        else {
-            super.updateInternal(deltaTime);
-        }
-    }
-
     public void renderInnerElements(SpriteBatch sb) {
         super.renderInnerElements(sb);
         imageButton.tryRender(sb);
@@ -187,7 +163,7 @@ public class PCLCustomCardEditCardScreen extends PCLCustomEditEntityScreen<PCLCu
                 image = portrait.texture;
             }
         }
-        imageEditor = (PCLCustomImageEffect) PCLCustomImageEffect.forCard(image)
+        currentDialog = (PCLCustomImageEffect) PCLCustomImageEffect.forCard(image)
                 .addCallback(pixmap -> {
                             if (pixmap != null) {
                                 setLoadedImage(new Texture(pixmap));

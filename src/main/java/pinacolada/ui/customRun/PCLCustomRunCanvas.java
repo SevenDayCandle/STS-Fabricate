@@ -59,6 +59,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
     public final EUIToggle endingActToggle;
     public final EUIToggle customCardToggle;
     public final EUIToggle customRelicToggle;
+    public final EUIToggle customPotionToggle;
     public final EUIButton editCardPoolButton;
     public final EUIButton editRelicPoolButton;
     public final ArrayList<PCLCustomRunCharacterButton> characters = new ArrayList<>();
@@ -123,6 +124,14 @@ public class PCLCustomRunCanvas extends EUICanvas {
                     screen.allowCustomRelics = v;
                 })
                 .setTooltip(PGR.core.strings.misc_customRelics, PGR.core.strings.misc_customRelicsDesc);
+
+        customPotionToggle = (EUIToggle) new EUIToggle(new EUIHitbox(Settings.scale * 256f, Settings.scale * 48f))
+                .setFont(EUIFontHelper.cardDescriptionFontLarge, 0.475f)
+                .setText(PGR.core.strings.misc_customPotions)
+                .setOnToggle(v -> {
+                    screen.allowCustomPotions = v;
+                })
+                .setTooltip(PGR.core.strings.misc_customPotions, PGR.core.strings.misc_customPotionsDesc);
 
         seedInput = (EUITextBoxInput) new EUITextBoxInput(EUIRM.images.panel.texture(),
                 new EUIHitbox(scale(280), scale(48)))
@@ -191,6 +200,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
             endingActToggle.tryUpdate();
             customCardToggle.tryUpdate();
             customRelicToggle.tryUpdate();
+            customPotionToggle.tryUpdate();
             seedInput.tryUpdate();
             ascensionEditor.tryUpdate();
             modifierDropdown.tryUpdate();
@@ -229,6 +239,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
             endingActToggle.tryRender(sb);
             customCardToggle.tryRender(sb);
             customRelicToggle.tryRender(sb);
+            customPotionToggle.tryRender(sb);
             seedInput.tryRender(sb);
             ascensionEditor.tryRender(sb);
             modifierDropdown.tryRender(sb);
@@ -340,6 +351,7 @@ public class PCLCustomRunCanvas extends EUICanvas {
         yPos = positionElement(endingActToggle, yPos, scale(35));
         yPos = positionElement(customCardToggle, yPos, scale(35));
         yPos = positionElement(customRelicToggle, yPos, scale(125));
+        yPos = positionElement(customPotionToggle, yPos, scale(125));
         modifierDropdown.setPosition(endlessToggle.hb.cX + modifierDropdown.hb.width, endingActToggle.hb.y);
         ascensionEditor.setPosition(modifierDropdown.hb.cX + modifierDropdown.hb.width, endlessToggle.hb.y - scale(5));
         seedInput.setPosition(ascensionEditor.hb.cX + seedInput.hb.width, modifierDropdown.hb.y + scale(20));

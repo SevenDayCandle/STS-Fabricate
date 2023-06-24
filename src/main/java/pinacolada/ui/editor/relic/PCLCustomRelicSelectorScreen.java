@@ -30,7 +30,7 @@ import pinacolada.misc.PCLCustomLoadable;
 import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.relics.PCLPointerRelic;
 import pinacolada.relics.PCLRelic;
-import pinacolada.relics.TemplateRelicData;
+import pinacolada.relics.PCLRelicData;
 import pinacolada.resources.PGR;
 
 import java.awt.*;
@@ -47,7 +47,7 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
     protected static final float ITEM_HEIGHT = AbstractCard.IMG_HEIGHT * 0.15f;
     public static AbstractCard.CardColor currentColor = AbstractCard.CardColor.COLORLESS;
     public static AbstractPlayer.PlayerClass currentClass;
-    protected final EUIStaticRelicGrid grid;
+    protected final EUIRelicGrid grid;
     protected final EUIToggle toggle;
     private AbstractRelic clickedRelic;
     protected ActionT0 onClose;
@@ -68,7 +68,7 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
         final float buttonWidth = screenW(0.18f);
         final float labelWidth = screenW(0.20f);
 
-        this.grid = (EUIStaticRelicGrid) new EUIStaticRelicGrid(1f)
+        this.grid = new EUIRelicGrid(1f)
                 .setOnRelicClick(this::onRelicClicked)
                 .setOnRelicRightClick(this::onRelicRightClicked);
         toggle = new EUIToggle(new EUIHitbox(0, 0, AbstractCard.IMG_WIDTH * 0.2f, ITEM_HEIGHT))
@@ -142,7 +142,7 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
             PCLCustomRelicSlot slot = new PCLCustomRelicSlot(currentColor);
             currentDialog = new PCLCustomRelicEditRelicScreen(slot)
                     .setOnSave(() -> {
-                        AbstractRelic newRelic = slot.makeRelic();
+                        AbstractRelic newRelic = slot.make();
                         currentSlots.put(newRelic, slot);
                         PCLCustomRelicSlot.getRelics(currentColor).add(slot);
                         grid.addRelic(newRelic);
@@ -214,12 +214,12 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
     }
 
     private ArrayList<AbstractRelic> getAvailableRelicsToCopy() {
-        return EUIUtils.mapAsNonnull(TemplateRelicData.getTemplates(),
+        return EUIUtils.mapAsNonnull(PCLRelicData.getTemplates(),
                 data -> {
                     PCLRelic relic = data.create();
                     UnlockTracker.markRelicAsSeen(data.ID);
                     relic.isSeen = true;
-                    return PCLCustomRelicSlot.canFullyCopyRelic(relic) ? relic : null;
+                    return PCLCustomRelicSlot.canFullyCopy(relic) ? relic : null;
                 });
     }
 
@@ -231,7 +231,7 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
                     currentDialog = new PCLCustomRelicEditRelicScreen(slot)
                             .setOnSave(() -> {
                                 slot.commitBuilder();
-                                AbstractRelic newRelic = slot.makeRelic();
+                                AbstractRelic newRelic = slot.make();
                                 currentSlots.put(newRelic, slot);
                                 PCLCustomRelicSlot.getRelics(currentColor).add(slot);
                                 grid.addRelic(newRelic);
@@ -267,7 +267,7 @@ public class PCLCustomRelicSelectorScreen extends AbstractMenuScreen {
         currentSlots.clear();
         grid.clear();
         for (PCLCustomRelicSlot slot : PCLCustomRelicSlot.getRelics(currentColor)) {
-            AbstractRelic relic = slot.makeRelic();
+            AbstractRelic relic = slot.make();
             UnlockTracker.markRelicAsSeen(relic.relicId);
             relic.isSeen = true;
             currentSlots.put(relic, slot);

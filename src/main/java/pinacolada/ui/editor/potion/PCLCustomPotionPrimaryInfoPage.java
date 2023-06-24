@@ -1,32 +1,33 @@
-package pinacolada.ui.editor.card;
+package pinacolada.ui.editor.potion;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.FontHelper;
+import com.megacrit.cardcrawl.potions.AbstractPotion;
 import com.megacrit.cardcrawl.screens.compendium.CardLibSortHeader;
 import com.megacrit.cardcrawl.screens.leaderboards.LeaderboardScreen;
 import com.megacrit.cardcrawl.screens.options.OptionsPanel;
 import extendedui.EUIGameUtils;
 import extendedui.EUIRM;
-import extendedui.EUIUtils;
 import extendedui.ui.TextureCache;
-import extendedui.ui.controls.*;
+import extendedui.ui.controls.EUIDropdown;
+import extendedui.ui.controls.EUILabel;
+import extendedui.ui.controls.EUISearchableDropdown;
+import extendedui.ui.controls.EUITextBoxInput;
 import extendedui.ui.hitboxes.EUIHitbox;
 import extendedui.ui.tooltips.EUITourTooltip;
 import extendedui.utilities.EUIFontHelper;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCustomCardSlot;
-import pinacolada.cards.base.tags.CardFlag;
-import pinacolada.resources.PCLEnum;
-import pinacolada.resources.PCLResources;
+import pinacolada.effects.screen.PCLCustomColorPickerEffect;
 import pinacolada.resources.PGR;
-import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.skills.PSkill;
 import pinacolada.ui.PCLValueEditor;
+import pinacolada.ui.editor.PCLCustomColorEditor;
 import pinacolada.ui.editor.PCLCustomEditEntityScreen;
 import pinacolada.ui.editor.PCLCustomGenericPage;
 import pinacolada.utilities.GameUtilities;
@@ -34,7 +35,7 @@ import pinacolada.utilities.GameUtilities;
 import java.util.Arrays;
 import java.util.List;
 
-public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
+public class PCLCustomPotionPrimaryInfoPage extends PCLCustomGenericPage {
     protected static final float START_X = screenW(0.25f);
     protected static final float PAD_X = AbstractCard.IMG_WIDTH * 0.75f + Settings.CARD_VIEW_PAD_X;
     protected static final float PAD_Y = scale(10);
@@ -42,24 +43,23 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
     public static final float MENU_WIDTH = scale(160);
     public static final float MENU_HEIGHT = scale(40);
     public static final float SPACING_WIDTH = screenW(0.02f);
-    protected PCLCustomCardEditCardScreen effect;
+    protected PCLCustomPotionEditPotionScreen effect;
     protected EUILabel header;
     protected EUITextBoxInput idInput;
     protected EUITextBoxInput nameInput;
     protected EUISearchableDropdown<Settings.GameLanguage> languageDropdown;
-    protected EUIDropdown<AbstractCard.CardRarity> raritiesDropdown;
-    protected EUIDropdown<AbstractCard.CardType> typesDropdown;
-    protected EUIDropdown<PCLLoadout> loadoutDropdown;
-    protected EUIDropdown<CardFlag> flagsDropdown;
+    protected EUIDropdown<AbstractPotion.PotionRarity> rarityDropdown;
+    protected EUIDropdown<AbstractPotion.PotionSize> sizeDropdown;
+    protected EUIDropdown<AbstractPotion.PotionEffect> effectDropdown;
     protected EUILabel idWarning;
+    protected PCLCustomColorEditor liquidColorEditor;
+    protected PCLCustomColorEditor hybridColorEditor;
+    protected PCLCustomColorEditor spotsColorEditor;
     protected PCLValueEditor maxUpgrades;
-    protected PCLValueEditor maxCopies;
     protected PCLValueEditor branchUpgrades;
-    protected EUIToggle uniqueToggle;
-    protected EUIToggle soulboundToggle;
     protected Settings.GameLanguage activeLanguage = Settings.language;
 
-    public PCLCustomCardPrimaryInfoPage(PCLCustomCardEditCardScreen effect) {
+    public PCLCustomPotionPrimaryInfoPage(PCLCustomPotionEditPotionScreen effect) {
         this.effect = effect;
 
         this.header = new EUILabel(EUIFontHelper.cardTitleFontLarge,
@@ -85,7 +85,6 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
                 .setLabel(PGR.core.strings.cedit_idSuffixWarning);
         idWarning.setActive(false);
 
-        // TODO allow editing name for only the current form
         nameInput = (EUITextBoxInput) new EUITextBoxInput(EUIRM.images.longInput.texture(),
                 new EUIHitbox(START_X, screenH(0.72f), MENU_WIDTH * 2.3f, MENU_HEIGHT * 1.15f))
                 .setOnComplete(s -> {
@@ -110,100 +109,68 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
                 .setCanAutosizeButton(true)
                 .setSelection(activeLanguage, false)
                 .setTooltip(LeaderboardScreen.TEXT[7], PGR.core.strings.cetut_nameLanguage);
-        raritiesDropdown = new EUIDropdown<AbstractCard.CardRarity>(new EUIHitbox(START_X, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT), EUIGameUtils::textForRarity)
+        rarityDropdown = new EUIDropdown<AbstractPotion.PotionRarity>(new EUIHitbox(START_X, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT), EUIGameUtils::textForPotionRarity)
                 .setOnChange(rarities -> {
                     if (!rarities.isEmpty()) {
-                        effect.modifyAllBuilders(e -> e.setRarityType(rarities.get(0), e.cardType));
+                        effect.modifyAllBuilders(e -> e.setRarity(rarities.get(0)));
                     }
                 })
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[0])
                 .setItems(getEligibleRarities())
-                .setTooltip(CardLibSortHeader.TEXT[0], PGR.core.strings.cetut_rarity);
-        typesDropdown = new EUIDropdown<AbstractCard.CardType>(new EUIHitbox(raritiesDropdown.hb.x + raritiesDropdown.hb.width + SPACING_WIDTH, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT)
-                , EUIGameUtils::textForType)
+                .setTooltip(CardLibSortHeader.TEXT[0], PGR.core.strings.cetut_potionRarity);
+        sizeDropdown = new EUIDropdown<AbstractPotion.PotionSize>(new EUIHitbox(rarityDropdown.hb.x + rarityDropdown.hb.width + SPACING_WIDTH, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT)
+                , item -> StringUtils.capitalize(item.toString().toLowerCase()))
                 .setOnChange(types -> {
                     if (!types.isEmpty()) {
-                        // Pages need to refresh because changing card type affects available skill options or attributes
-                        effect.modifyAllBuilders(e -> e.setRarityType(e.cardRarity, types.get(0)));
-                        effect.refreshPages();
+                        effect.modifyAllBuilders(e -> e.setSize(types.get(0)));
                     }
                 })
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[1])
+                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, EUIRM.strings.potion_size)
                 .setCanAutosizeButton(true)
-                .setItems(getEligibleTypes(effect.getBuilder().cardColor))
-                .setTooltip(CardLibSortHeader.TEXT[1], PGR.core.strings.cetut_type);
-        flagsDropdown = new EUISearchableDropdown<CardFlag>(new EUIHitbox(typesDropdown.hb.x + typesDropdown.hb.width + SPACING_WIDTH, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT), cs -> cs.getTip().title)
-                .setOnChange(selectedSeries -> {
-                    effect.modifyAllBuilders(e -> e.setFlags(selectedSeries));
+                .setItems(AbstractPotion.PotionSize.values())
+                .setTooltip(EUIRM.strings.potion_size, PGR.core.strings.cetut_potionSize);
+        effectDropdown = new EUIDropdown<AbstractPotion.PotionEffect>(new EUIHitbox(sizeDropdown.hb.x + sizeDropdown.hb.width + SPACING_WIDTH, screenH(0.62f), MENU_WIDTH, MENU_HEIGHT)
+                , item -> StringUtils.capitalize(item.toString().toLowerCase()))
+                .setOnChange(types -> {
+                    if (!types.isEmpty()) {
+                        effect.modifyAllBuilders(e -> e.setEffect(types.get(0)));
+                    }
                 })
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.cedit_flags)
+                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, EUIRM.strings.potion_visualEffect)
                 .setCanAutosizeButton(true)
-                .setIsMultiSelect(true)
-                .setItems(PGR.config.showIrrelevantProperties.get() ? CardFlag.getAll() : CardFlag.getAll(effect.currentSlot.slotColor))
-                .setTooltip(PGR.core.strings.cedit_flags, PGR.core.strings.cetut_primaryFlags);
-
-        loadoutDropdown = new EUISearchableDropdown<PCLLoadout>(new EUIHitbox(START_X, screenH(0.5f), MENU_WIDTH, MENU_HEIGHT), PCLLoadout::getName)
-                .setOnChange(selectedSeries -> {
-                    effect.modifyAllBuilders(e -> e.setLoadout(!selectedSeries.isEmpty() ? selectedSeries.get(0) : null));
+                .setItems(AbstractPotion.PotionEffect.values())
+                .setTooltip(EUIRM.strings.potion_visualEffect, PGR.core.strings.cetut_potionEffect);
+        liquidColorEditor = new PCLCustomColorEditor(new EUIHitbox(START_X, screenH(0.5f), MENU_WIDTH, MENU_HEIGHT), PGR.core.strings.cedit_liquidColor,
+                this::openColorEditor, color -> {
+                    effect.modifyAllBuilders(e -> e.setLiquidColor(color));
                 })
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, PGR.core.strings.sui_seriesUI)
-                .setCanAutosizeButton(true)
-                .setShowClearForSingle(true)
-                .setTooltip(PGR.core.strings.sui_seriesUI, PGR.core.strings.cetut_attrAffinity);
-        loadoutDropdown
-                .setActive(GameUtilities.isPCLCardColor(effect.currentSlot.slotColor) && loadoutDropdown.size() > 0);
-
+                .setTooltip(PGR.core.strings.cedit_liquidColor, PGR.core.strings.cetut_potionColor);
+        hybridColorEditor = new PCLCustomColorEditor(new EUIHitbox(liquidColorEditor.hb.x + liquidColorEditor.hb.width + SPACING_WIDTH * 3, screenH(0.5f), MENU_WIDTH, MENU_HEIGHT), PGR.core.strings.cedit_hybridColor,
+                this::openColorEditor, color -> {
+            effect.modifyAllBuilders(e -> e.setHybridColor(color));
+        })
+                .setTooltip(PGR.core.strings.cedit_hybridColor, PGR.core.strings.cetut_potionColor);
+        spotsColorEditor = new PCLCustomColorEditor(new EUIHitbox(hybridColorEditor.hb.x + hybridColorEditor.hb.width + SPACING_WIDTH * 3, screenH(0.5f), MENU_WIDTH, MENU_HEIGHT), PGR.core.strings.cedit_spotsColor,
+                this::openColorEditor, color -> {
+            effect.modifyAllBuilders(e -> e.setSpotsColor(color));
+        })
+                .setTooltip(PGR.core.strings.cedit_spotsColor, PGR.core.strings.cetut_potionColor);
         maxUpgrades = new PCLValueEditor(new EUIHitbox(START_X, screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , PGR.core.strings.cedit_maxUpgrades, (val) -> effect.modifyAllBuilders(e -> e.setMaxUpgrades(val)))
                 .setLimits(-1, PSkill.DEFAULT_MAX)
                 .setTooltip(PGR.core.strings.cedit_maxUpgrades, PGR.core.strings.cetut_maxUpgrades)
                 .setHasInfinite(true, true);
-        maxCopies = new PCLValueEditor(new EUIHitbox(screenW(0.35f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
-                , PGR.core.strings.cedit_maxCopies, (val) -> effect.modifyAllBuilders(e -> e.setMaxCopies(val)))
-                .setLimits(-1, PSkill.DEFAULT_MAX)
-                .setTooltip(PGR.core.strings.cedit_maxCopies, PGR.core.strings.cetut_maxCopies)
-                .setHasInfinite(true, true);
-        branchUpgrades = new PCLValueEditor(new EUIHitbox(screenW(0.45f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
+        branchUpgrades = new PCLValueEditor(new EUIHitbox(screenW(0.35f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , PGR.core.strings.cedit_branchUpgrade, (val) -> effect.modifyAllBuilders(e -> e.setBranchFactor(val)))
                 .setLimits(0, PSkill.DEFAULT_MAX)
                 .setTooltip(PGR.core.strings.cedit_branchUpgrade, PGR.core.strings.cetut_branchUpgrade)
                 .setHasInfinite(true, true);
-        uniqueToggle = new EUIToggle(new EUIHitbox(screenW(0.53f), screenH(0.4f), MENU_WIDTH, MENU_HEIGHT))
-                .setFont(EUIFontHelper.cardDescriptionFontNormal, 0.9f)
-                .setText(PGR.core.tooltips.unique.title)
-                .setOnToggle(val -> effect.modifyAllBuilders(e -> {
-                    e.setUnique(val);
-                }))
-                .setTooltip(PGR.core.tooltips.unique);
-        soulboundToggle = new EUIToggle(new EUIHitbox(screenW(0.61f), screenH(0.4f), MENU_WIDTH, MENU_HEIGHT))
-                .setFont(EUIFontHelper.cardDescriptionFontNormal, 0.9f)
-                .setText(PGR.core.tooltips.soulbound.title)
-                .setOnToggle(val -> effect.modifyAllBuilders(e -> {
-                    e.setRemovableFromDeck(!val);
-                }))
-                .setTooltip(PGR.core.tooltips.soulbound);
-
-        PCLResources<?, ?, ?, ?> resources = PGR.getResources(effect.currentSlot.slotColor);
-        if (resources != null) {
-            loadoutDropdown.setItems(PCLLoadout.getAll(effect.currentSlot.slotColor));
-        }
-        else {
-            loadoutDropdown.setActive(false);
-        }
 
         refresh();
     }
 
-    public static List<AbstractCard.CardRarity> getEligibleRarities() {
-        return PGR.config.showIrrelevantProperties.get() ? Arrays.asList(AbstractCard.CardRarity.values()) : GameUtilities.getStandardCardRarities();
-    }
-
-    // Colorless/Curse should not be able to see Summon in the card editor
-    public static List<AbstractCard.CardType> getEligibleTypes(AbstractCard.CardColor color) {
-        if (GameUtilities.isPCLOnlyCardColor(color) || PGR.config.showIrrelevantProperties.get()) {
-            return Arrays.asList(AbstractCard.CardType.values());
-        }
-        return EUIUtils.filter(AbstractCard.CardType.values(), v -> v != PCLEnum.CardType.SUMMON);
+    public static List<AbstractPotion.PotionRarity> getEligibleRarities() {
+        return PGR.config.showIrrelevantProperties.get() ? Arrays.asList(AbstractPotion.PotionRarity.values()) : GameUtilities.getStandardPotionTiers();
     }
 
     @Override
@@ -217,33 +184,26 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
 
     @Override
     public void onOpen() {
-        EUITourTooltip.queueFirstView(PGR.config.tourCardPrimary,
+        EUITourTooltip.queueFirstView(PGR.config.tourRelicPrimary,
                 idInput.makeTour(true),
                 nameInput.makeTour(true),
                 languageDropdown.makeTour(true),
-                raritiesDropdown.makeTour(true),
-                typesDropdown.makeTour(true),
-                flagsDropdown.makeTour(true),
-                maxUpgrades.makeTour(true),
-                maxCopies.makeTour(true),
-                branchUpgrades.makeTour(true),
-                uniqueToggle.makeTour(true),
-                soulboundToggle.makeTour(true));
+                rarityDropdown.makeTour(true),
+                sizeDropdown.makeTour(true));
     }
 
     @Override
     public void refresh() {
         idInput.setLabel(StringUtils.removeStart(effect.getBuilder().ID, PCLCustomCardSlot.getBaseIDPrefix(effect.getBuilder().cardColor)));
         nameInput.setLabel(effect.getBuilder().strings.NAME);
-        raritiesDropdown.setSelection(effect.getBuilder().cardRarity, false);
-        typesDropdown.setSelection(effect.getBuilder().cardType, false);
-        loadoutDropdown.setSelection(effect.getBuilder().loadout, false);
-        flagsDropdown.setSelection(effect.getBuilder().flags, false);
+        rarityDropdown.setSelection(effect.getBuilder().rarity, false);
+        sizeDropdown.setSelection(effect.getBuilder().size, false);
+        effectDropdown.setSelection(effect.getBuilder().effect, false);
+        liquidColorEditor.setColor(effect.getBuilder().liquidColor, false);
+        hybridColorEditor.setColor(effect.getBuilder().hybridColor, false);
+        spotsColorEditor.setColor(effect.getBuilder().spotsColor, false);
         maxUpgrades.setValue(effect.getBuilder().maxUpgradeLevel, false);
         branchUpgrades.setValue(effect.getBuilder().branchFactor, false);
-        maxCopies.setValue(effect.getBuilder().maxCopies, false);
-        uniqueToggle.setToggle(effect.getBuilder().unique);
-        soulboundToggle.setToggle(!effect.getBuilder().removableFromDeck);
 
         effect.upgradeToggle.setActive(effect.getBuilder().maxUpgradeLevel != 0);
     }
@@ -252,36 +212,39 @@ public class PCLCustomCardPrimaryInfoPage extends PCLCustomGenericPage {
     public void updateImpl() {
         header.tryUpdate();
         idWarning.tryUpdate();
-        maxUpgrades.tryUpdate();
-        maxCopies.tryUpdate();
-        loadoutDropdown.tryUpdate();
-        flagsDropdown.tryUpdate();
-        raritiesDropdown.tryUpdate();
-        typesDropdown.tryUpdate();
+        rarityDropdown.tryUpdate();
+        sizeDropdown.tryUpdate();
+        effectDropdown.tryUpdate();
+        liquidColorEditor.tryUpdate();
+        hybridColorEditor.tryUpdate();
+        spotsColorEditor.tryUpdate();
         languageDropdown.tryUpdate();
         nameInput.tryUpdate();
         idInput.tryUpdate();
+        maxUpgrades.tryUpdate();
         branchUpgrades.tryUpdate();
-        uniqueToggle.tryUpdate();
-        soulboundToggle.tryUpdate();
     }
 
     @Override
     public void renderImpl(SpriteBatch sb) {
         header.tryRender(sb);
         idWarning.tryRender(sb);
-        maxUpgrades.tryRender(sb);
-        maxCopies.tryRender(sb);
-        raritiesDropdown.tryRender(sb);
-        typesDropdown.tryRender(sb);
-        loadoutDropdown.tryRender(sb);
-        flagsDropdown.tryRender(sb);
+        rarityDropdown.tryRender(sb);
+        sizeDropdown.tryRender(sb);
+        effectDropdown.tryRender(sb);
+        liquidColorEditor.tryRender(sb);
+        hybridColorEditor.tryRender(sb);
+        spotsColorEditor.tryRender(sb);
         languageDropdown.tryRender(sb);
         nameInput.tryRender(sb);
         idInput.tryRender(sb);
+        maxUpgrades.tryRender(sb);
         branchUpgrades.tryRender(sb);
-        uniqueToggle.tryRender(sb);
-        soulboundToggle.tryRender(sb);
+    }
+
+    protected void openColorEditor(PCLCustomColorEditor editor) {
+        effect.currentDialog = new PCLCustomColorPickerEffect(editor.header.text, editor.getColor())
+                .addCallback(editor::setColor);
     }
 
     private void updateLanguage(Settings.GameLanguage language) {

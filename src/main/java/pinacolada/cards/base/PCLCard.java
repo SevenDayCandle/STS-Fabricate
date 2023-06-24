@@ -40,10 +40,7 @@ import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.ui.tooltips.EUICardPreview;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUITooltip;
-import extendedui.utilities.ColoredString;
-import extendedui.utilities.ColoredTexture;
-import extendedui.utilities.EUIClassUtils;
-import extendedui.utilities.EUIFontHelper;
+import extendedui.utilities.*;
 import pinacolada.actions.PCLActions;
 import pinacolada.annotations.VisibleSkill;
 import pinacolada.augments.PCLAugment;
@@ -292,7 +289,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
             augments.add(augment);
         }
         if (save) {
-            auxiliaryData.augments.add(augment.ID);
+            auxiliaryData.addAugment(augment.ID);
         }
         augment.onAddToCard(this);
         refresh(null);
@@ -1081,6 +1078,11 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         return new ColoredString(misc, misc > 0 ? Settings.GREEN_TEXT_COLOR : Settings.CREAM_COLOR);
     }
 
+    @Override
+    public TargetFilter getTargetFilter() {
+        return pclTarget.getTargetFilter();
+    }
+
     protected Color getTypeColor() {
         return ReflectionHacks.getPrivate(this, AbstractCard.class, "typeColor");
     }
@@ -1653,13 +1655,13 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
                 GameUtilities.modifyMagicNumber(this, baseMagicNumber + data.modifiedMagicNumber, false);
             }
             if (data.modifiedHeal != 0) {
-                GameUtilities.modifySecondaryValue(this, baseHeal + data.modifiedHeal, false);
+                updateHeal(baseHeal + data.modifiedHeal);
             }
             if (data.modifiedHitCount != 0) {
-                GameUtilities.modifyHitCount(this, baseHitCount + data.modifiedHitCount, false);
+                updateHitCount(baseHitCount + data.modifiedHitCount);
             }
             if (data.modifiedRightCount != 0) {
-                GameUtilities.modifyRightCount(this, baseRightCount + data.modifiedRightCount, false);
+                updateRightCount(baseRightCount + data.modifiedRightCount);
             }
             if (cost >= 0 && data.modifiedCost != 0) {
                 GameUtilities.modifyCostForCombat(this, data.modifiedCost, true);
@@ -1910,7 +1912,7 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
             if (augment != null && augment.canRemove()) {
                 augments.set(index, null);
                 if (save) {
-                    auxiliaryData.augments.set(index, null);
+                    auxiliaryData.removeAugmentAt(index);
                 }
                 augment.onRemoveFromCard(this);
                 refresh(null);
@@ -2429,6 +2431,11 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         EUIClassUtils.setField(this, "glowTimer", delay);
     }
 
+    @Override
+    public int timesUpgraded() {
+        return timesUpgraded;
+    }
+
     public void triggerOnPurge() {
         doEffects(be -> be.triggerOnPurge(this));
     }
@@ -2518,20 +2525,12 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     }
 
     protected boolean tryUpgrade() {
-        return tryUpgrade(true);
-    }
-
-    protected boolean tryUpgrade(boolean updateDescription) {
         if (this.canUpgrade()) {
             this.timesUpgraded += 1;
             this.upgraded = true;
 
-
             initializeTitle();
-
-            if (updateDescription) {
-                initializeDescription();
-            }
+            initializeDescription();
 
             return true;
         }
@@ -2581,50 +2580,26 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         }
     }
 
-    public void updateHeal(float amount) {
-        int prevHeal = heal;
-        heal = Math.max(0, MathUtils.floor(amount));
-        this.isHealModified = (baseHeal != heal);
-        if (prevHeal != heal) {
-            currentHealth += (prevHeal - heal);
-        }
-    }
-
-    public void updateHitCount(float amount) {
-        hitCount = Math.max(1, MathUtils.floor(amount));
-        this.isHitCountModified = (baseHitCount != hitCount);
+    public void updateHitCount(int amount) {
+        this.baseHitCount = Math.max(1, amount);
+        this.hitCount = this.baseHitCount;
+        this.upgradedHitCount = true;
         if (onAttackEffect != null) {
             onAttackEffect.setAmountFromCard();
         }
     }
 
-    public void updateMagicNumber(float amount) {
-        magicNumber = Math.max(0, MathUtils.floor(amount));
-        this.isMagicNumberModified = (baseMagicNumber != magicNumber);
-    }
-
-    public void updateRightCount(float amount) {
-        rightCount = Math.max(1, MathUtils.floor(amount));
-        this.isRightCountModified = (baseRightCount != rightCount);
+    public void updateRightCount(int amount) {
+        this.baseRightCount = Math.max(1, amount);
+        this.rightCount = this.baseRightCount;
+        this.upgradedRightCount = true;
         if (onBlockEffect != null) {
             onBlockEffect.setAmountFromCard();
         }
     }
 
-    protected void upgradeHitCount(int amount) {
-        this.baseHitCount += amount;
-        this.hitCount = this.baseHitCount;
-        this.upgradedHitCount = true;
-    }
-
-    protected void upgradeRightCount(int amount) {
-        this.baseRightCount += amount;
-        this.rightCount = this.baseRightCount;
-        this.upgradedRightCount = true;
-    }
-
-    protected void upgradeSecondaryValue(int amount) {
-        this.baseHeal += amount;
+    public void updateHeal(int amount) {
+        this.baseHeal = Math.max(1, amount);
         this.currentHealth = this.heal = this.baseHeal;
         this.upgradedHeal = true;
     }

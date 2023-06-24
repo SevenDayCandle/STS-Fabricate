@@ -25,6 +25,7 @@ import pinacolada.cards.base.PCLCardData;
 import pinacolada.misc.AugmentStrings;
 import pinacolada.misc.LoadoutStrings;
 import pinacolada.monsters.PCLCreatureData;
+import pinacolada.patches.basemod.PotionPoolPatches;
 import pinacolada.resources.loadout.PCLLoadout;
 import pinacolada.utilities.GameUtilities;
 
@@ -238,6 +239,7 @@ public abstract class PCLResources<T extends PCLAbstractPlayerData<?,?>, U exten
     protected void postInitialize() {
         tooltips.initializeIcons();
         data.initialize();
+        PotionPoolPatches.initialize();
     }
 
     @Override

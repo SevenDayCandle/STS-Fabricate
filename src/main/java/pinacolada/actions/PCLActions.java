@@ -570,10 +570,13 @@ public final class PCLActions {
         return add(new MoveCards(destination, source, amount));
     }
 
+    public ObtainPotionAction obtainPotion(AbstractPotion potion) {
+        return add(new ObtainPotionAction(potion));
+    }
+
     public ObtainRelicAction obtainRelic(AbstractRelic relic) {
         return add(new ObtainRelicAction(relic));
     }
-
 
     public PlayCard playCard(AbstractCard card, CardGroup sourcePile, AbstractCreature target) {
         return add(new PlayCard(card, target, false, actionOrder != PCLActions.ActionOrder.Top)).setSourcePile(sourcePile);

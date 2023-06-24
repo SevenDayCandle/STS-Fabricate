@@ -31,6 +31,7 @@ import pinacolada.effects.EffekseerEFK;
 import pinacolada.misc.AugmentStrings;
 import pinacolada.misc.LoadoutStrings;
 import pinacolada.misc.PCLAffinityPanelFilter;
+import pinacolada.potions.PCLCustomPotionSlot;
 import pinacolada.relics.PCLCustomRelicSlot;
 import pinacolada.relics.PCLRelic;
 import pinacolada.resources.pcl.PCLCoreResources;
@@ -45,6 +46,7 @@ import pinacolada.ui.customRun.PCLCustomRunScreen;
 import pinacolada.ui.debug.PCLDebugAugmentPanel;
 import pinacolada.ui.debug.PCLDebugCardPanel;
 import pinacolada.ui.editor.card.PCLCustomCardSelectorScreen;
+import pinacolada.ui.editor.potion.PCLCustomPotionSelectorScreen;
 import pinacolada.ui.editor.relic.PCLCustomRelicSelectorScreen;
 import pinacolada.ui.menu.PCLAffinityPoolModule;
 import pinacolada.ui.menu.PCLAugmentPanelItem;
@@ -75,6 +77,7 @@ public class PGR {
     public static PCLCharacterSelectOverlay charSelectProvider;
     public static PCLCombatScreen combatScreen;
     public static PCLCustomCardSelectorScreen customCards;
+    public static PCLCustomPotionSelectorScreen customPotions;
     public static PCLCustomRelicSelectorScreen customRelics;
     public static PCLCustomRunScreen customMode;
     public static PCLLibraryModule libraryFilters;
@@ -231,6 +234,7 @@ public class PGR {
         PGR.seriesSelection = new PCLSeriesSelectScreen();
         PGR.loadoutEditor = new PCLLoadoutScreen();
         PGR.customCards = new PCLCustomCardSelectorScreen();
+        PGR.customPotions = new PCLCustomPotionSelectorScreen();
         PGR.customRelics = new PCLCustomRelicSelectorScreen();
         PGR.customMode = new PCLCustomRunScreen();
         PGR.charSelectProvider = new PCLCharacterSelectOverlay();
@@ -371,6 +375,7 @@ public class PGR {
     public static void reloadCustoms() {
         PCLCustomCardSlot.initialize();
         PCLCustomRelicSlot.initialize();
+        PCLCustomPotionSlot.initialize();
     }
 
     public static void registerCommands() {
@@ -379,6 +384,7 @@ public class PGR {
         ConsoleCommand.addCommand("jumpanywhere", JumpAnywhereCommand.class);
         ConsoleCommand.addCommand("obtain", ObtainCardCommand.class);
         ConsoleCommand.addCommand("obtaincustom", ObtainCustomCardCommand.class);
+        ConsoleCommand.addCommand("obtaincustompotion", ObtainCustomPotionCommand.class);
         ConsoleCommand.addCommand("obtaincustomrelic", ObtainCustomRelicCommand.class);
         ConsoleCommand.addCommand("obtaindeck", ObtainDeckCardCommand.class);
         ConsoleCommand.addCommand("obtaindeckcustom", ObtainDeckCustomCardCommand.class);

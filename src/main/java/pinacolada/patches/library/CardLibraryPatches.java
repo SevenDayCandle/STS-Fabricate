@@ -122,7 +122,7 @@ public class CardLibraryPatches {
                 // Allow getCard to get custom cards too
                 PCLCustomCardSlot slot = PCLCustomCardSlot.get(key);
                 if (slot != null) {
-                    return SpireReturn.Return(slot.makeFirstCard(true));
+                    return SpireReturn.Return(slot.make(true));
                 }
             }
 

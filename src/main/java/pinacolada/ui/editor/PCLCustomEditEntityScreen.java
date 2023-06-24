@@ -26,7 +26,7 @@ import static extendedui.ui.controls.EUIButton.createHexagonalButton;
 import static pinacolada.ui.editor.PCLCustomEffectPage.MENU_HEIGHT;
 import static pinacolada.ui.editor.PCLCustomEffectPage.MENU_WIDTH;
 
-public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadable<U>, U extends EditorMaker> extends PCLEffectWithCallback<Object> {
+public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadable<U, ?>, U extends EditorMaker> extends PCLEffectWithCallback<Object> {
     public static final float BUTTON_HEIGHT = Settings.HEIGHT * (0.055f);
     public static final float CARD_X = Settings.WIDTH * 0.11f;
     public static final float CARD_Y = Settings.HEIGHT * 0.76f;
@@ -52,6 +52,7 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
     public ArrayList<U> prevBuilders;
     public ArrayList<U> tempBuilders;
     public int currentBuilder;
+    public PCLEffectWithCallback<?> currentDialog;
     protected ActionT0 onSave;
 
     public PCLCustomEditEntityScreen(T slot) {
@@ -207,12 +208,25 @@ public abstract class PCLCustomEditEntityScreen<T extends PCLCustomEditorLoadabl
 
     @Override
     public void render(SpriteBatch sb) {
-        renderInnerElements(sb);
+        if (currentDialog != null) {
+            currentDialog.render(sb);
+        }
+        else {
+            renderInnerElements(sb);
+        }
     }
 
     @Override
     protected void updateInternal(float deltaTime) {
-        updateInnerElements();
+        if (currentDialog != null) {
+            currentDialog.update();
+            if (currentDialog.isDone) {
+                currentDialog = null;
+            }
+        }
+        else {
+            updateInnerElements();
+        }
     }
 
     public void renderInnerElements(SpriteBatch sb) {

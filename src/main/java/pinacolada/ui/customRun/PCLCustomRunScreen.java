@@ -42,6 +42,7 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
     public HashSet<String> bannedRelics = new HashSet<>();
     public List<CustomMod> activeMods = new ArrayList<>();
     public boolean allowCustomCards;
+    public boolean allowCustomPotions;
     public boolean allowCustomRelics;
     public boolean isAscensionMode;
     public boolean isEndless;
@@ -57,7 +58,7 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
         if (allowCustomCards) {
             for (PCLCustomCardSlot slot : PCLCustomCardSlot.getCards(color)) {
                 if (AbstractCard.CardRarity.valueOf(slot.rarity) != AbstractCard.CardRarity.SPECIAL) {
-                    group.group.add(slot.makeFirstCard());
+                    group.group.add(slot.make());
                 }
             }
         }
@@ -79,7 +80,7 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
         if (allowCustomCards) {
             for (PCLCustomCardSlot slot : PCLCustomCardSlot.getCards(AbstractCard.CardColor.COLORLESS)) {
                 if (isCardEligible(AbstractCard.CardRarity.valueOf(slot.rarity))) {
-                    group.group.add(slot.makeFirstCard());
+                    group.group.add(slot.make());
                 }
             }
         }
@@ -96,7 +97,7 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
         if (allowCustomRelics) {
             for (PCLCustomRelicSlot slot : PCLCustomRelicSlot.getRelics(color)) {
                 if (isRelicEligible(AbstractRelic.RelicTier.valueOf(slot.tier))) {
-                    AbstractRelic relic = slot.makeRelic();
+                    AbstractRelic relic = slot.make();
                     relic.isSeen = UnlockTracker.isRelicSeen(relic.relicId);
                     group.add(relic);
                 }
@@ -160,6 +161,7 @@ public class PCLCustomRunScreen extends AbstractMenuScreen implements RunAttribu
         PCLCustomTrial trial = new PCLCustomTrial(new HashSet<>(bannedCards), new HashSet<>());
         trial.addMods(activeMods);
         trial.allowCustomCards = allowCustomCards;
+        trial.allowCustomPotions = allowCustomPotions;
         trial.allowCustomRelics = allowCustomRelics;
         Settings.isEndless = isEndless;
         CustomModeScreen.finalActAvailable = isFinalActAvailable;

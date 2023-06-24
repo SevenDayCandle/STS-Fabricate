@@ -460,8 +460,11 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
 
             return rootAmount + sourceCard.timesUpgraded * getUpgrade();
         }
-        if (source != null && amountSource == PCLCardValueSource.XValue) {
-            return source.xValue();
+        if (source != null) {
+            if (amountSource == PCLCardValueSource.XValue) {
+                return source.xValue();
+            }
+            return rootAmount + source.timesUpgraded() * getUpgrade();
         }
         return rootAmount;
     }

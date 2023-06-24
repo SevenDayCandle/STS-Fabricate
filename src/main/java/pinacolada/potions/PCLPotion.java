@@ -1,12 +1,14 @@
 package pinacolada.potions;
 
 import basemod.ReflectionHacks;
+import basemod.abstracts.CustomSavable;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.evacipated.cardcrawl.modthespire.ModInfo;
 import com.evacipated.cardcrawl.modthespire.lib.SpireOverride;
 import com.evacipated.cardcrawl.modthespire.lib.SpireSuper;
+import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
@@ -18,34 +20,34 @@ import extendedui.EUIUtils;
 import extendedui.interfaces.markers.KeywordProvider;
 import extendedui.ui.tooltips.EUIKeywordTooltip;
 import extendedui.ui.tooltips.EUITooltip;
+import org.apache.commons.lang3.StringUtils;
 import pinacolada.actions.PCLActions;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.interfaces.providers.PointerProvider;
+import pinacolada.misc.PCLCollectibleSaveData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
 import pinacolada.skills.Skills;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class PCLPotion extends AbstractPotion implements KeywordProvider, PointerProvider {
+public abstract class PCLPotion extends AbstractPotion implements KeywordProvider, PointerProvider, CustomSavable<PCLCollectibleSaveData> {
     public final ArrayList<EUIKeywordTooltip> tips = new ArrayList<>();
     public final PCLPotionData potionData;
-    public final Skills skills = new Skills();
+    public Skills skills;
     public EUIKeywordTooltip mainTooltip;
+    public PCLCollectibleSaveData auxiliaryData = new PCLCollectibleSaveData();
 
     // We deliberately avoid using initializeData because we need to load the PotionStrings after the super call
     public PCLPotion(PCLPotionData data) {
         super("", data.ID, data.rarity, data.size, data.effect, data.liquidColor.cpy(), data.hybridColor.cpy(), data.spotsColor.cpy());
         this.potionData = data;
         name = data.strings.NAME;
-        this.potency = this.getPotency();
-        setup();
-        initializeTips();
-        this.isThrown = EUIUtils.any(getEffects(), e -> e.target.targetsSingle());
-        this.targetRequired = isThrown;
+        initialize();
     }
 
     public static String createFullID(Class<? extends PCLPotion> type) {
@@ -68,16 +70,16 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
         return PCLPotionData.registerData(cardData);
     }
 
-    protected static TemplatePotionData registerTemplate(Class<? extends PCLPotion> type) {
-        return registerTemplate(type, PGR.core, type.getSimpleName());
+    protected static PCLPotionData registerTemplate(Class<? extends PCLPotion> type) {
+        return registerTemplate(type, PGR.core);
     }
 
-    protected static TemplatePotionData registerTemplate(Class<? extends PCLPotion> type, String sourceID) {
-        return registerTemplate(type, PGR.core, sourceID);
+    protected static PCLPotionData registerTemplate(Class<? extends PCLPotion> type, PCLResources<?, ?, ?, ?> resources) {
+        return PCLPotionData.registerTemplate(new PCLPotionData(type, resources));
     }
 
-    protected static TemplatePotionData registerTemplate(Class<? extends PCLPotion> type, PCLResources<?, ?, ?, ?> resources, String sourceID) {
-        return (TemplatePotionData)PCLPotionData.registerData(new TemplatePotionData(type, resources, sourceID));
+    public boolean canUpgrade() {
+        return auxiliaryData.timesUpgraded < potionData.maxUpgradeLevel || potionData.maxUpgradeLevel < 0;
     }
 
     @Override
@@ -95,9 +97,19 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
         return skills;
     }
 
+    public String getUpdatedDescription() {
+        return StringUtils.capitalize(getEffectPowerTextStrings());
+    }
+
+    // May be null before potion data is initialized
+    @Override
+    public int getPotency(int i) {
+        return potionData != null && auxiliaryData != null ? potionData.getCounter(auxiliaryData.form) : 0;
+    }
+
     @Override
     public int xValue() {
-        return getPotency();
+        return this.potency;
     }
 
     @Override
@@ -111,7 +123,7 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
     }
 
     protected void initializeTips() {
-        this.description = getEffectPowerTextStrings();
+        this.description = getUpdatedDescription();
         tips.clear();
         ModInfo info = EUIGameUtils.getModInfo(this);
         mainTooltip = info != null ? new EUIKeywordTooltip(name, description, info.ID) : new EUIKeywordTooltip(name, description);
@@ -146,7 +158,7 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
             sb.draw(hybridImg, this.posX - 32.0F, this.posY - 32.0F, 32.0F, 32.0F, 64.0F, 64.0F, this.scale, this.scale, angle, 0, 0, 64, 64, false, false);
         }
 
-        if (this.spotsColor != null) {
+        if (this.spotsColor != null && spotsImg != null) {
             sb.setColor(this.spotsColor);
             sb.draw(spotsImg, this.posX - 32.0F, this.posY - 32.0F, 32.0F, 32.0F, 64.0F, 64.0F, this.scale, this.scale, angle, 0, 0, 64, 64, false, false);
         }
@@ -163,7 +175,23 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
         }
     }
 
+    public void initialize() {
+        skills = new Skills();
+        this.potency = this.getPotency();
+        setup();
+        this.isThrown = EUIUtils.any(getEffects(), e -> e.target.targetsSingle());
+        this.targetRequired = isThrown;
+        initializeTips();
+
+        // TODO create sacred bark hook for effect upgrades
+    }
+
     public void setup() {
+    }
+
+    @Override
+    public int timesUpgraded() {
+        return auxiliaryData.timesUpgraded;
     }
 
     @SpireOverride
@@ -193,6 +221,14 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
         }
     }
 
+    public PCLPotion upgrade() {
+        if (this.canUpgrade()) {
+            auxiliaryData.timesUpgraded += 1;
+            initializeTips();
+        }
+        return this;
+    }
+
     @Override
     public void shopRender(SpriteBatch sb) {
         this.generateSparkles(0.0F, 0.0F, false);
@@ -213,5 +249,24 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
             return null;
         }
     }
+
+    @Override
+    public PCLCollectibleSaveData onSave() {
+        return auxiliaryData;
+    }
+
+    @Override
+    public void onLoad(PCLCollectibleSaveData data) {
+        if (data != null) {
+            this.auxiliaryData = new PCLCollectibleSaveData(data);
+        }
+    }
+
+    @Override
+    public Type savedType() {
+        return new TypeToken<PCLCollectibleSaveData>() {
+        }.getType();
+    }
+
 
 }

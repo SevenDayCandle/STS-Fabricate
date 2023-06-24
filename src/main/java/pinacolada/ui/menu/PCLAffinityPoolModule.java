@@ -148,7 +148,7 @@ public class PCLAffinityPoolModule extends EUIBase implements CustomCardFilterMo
 
     @Override
     public void updateImpl() {
-        this.seriesDropdown.setPosition(filters.typesDropdown.hb.x + filters.typesDropdown.hb.width + SPACING * 2, DRAW_START_Y + filters.getScrollDelta()).tryUpdate();
+        this.seriesDropdown.setPosition(filters.seenDropdown.hb.x + filters.seenDropdown.hb.width + SPACING * 2, DRAW_START_Y + filters.getScrollDelta()).tryUpdate();
         this.affinitiesSectionLabel.setPosition(filters.descriptionInput.hb.x + filters.descriptionInput.hb.width + SPACING * 5f, DRAW_START_Y + filters.getScrollDelta() - SPACING * 1.9f).tryUpdate();
         for (AffinityKeywordButton c : affinityButtons) {
             c.tryUpdate();

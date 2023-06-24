@@ -160,6 +160,7 @@ public class PCLMainConfig extends AbstractConfig {
         yPos = addToggle(0, lowVRAM, PGR.core.strings.options_lowVRAM, yPos, PGR.core.strings.optionDesc_lowVRAM);
         yPos = addToggle(0, enableCustomCards, PGR.core.strings.options_enableCustomCards, yPos, PGR.core.strings.optionDesc_onlyNewRuns);
         yPos = addToggle(0, enableCustomRelics, PGR.core.strings.options_enableCustomRelics, yPos, PGR.core.strings.optionDesc_onlyNewRuns);
+        yPos = addToggle(0, enableCustomPotions, PGR.core.strings.options_enableCustomPotions, yPos, PGR.core.strings.optionDesc_onlyNewRuns);
 
         BaseMod.registerModBadge(ImageMaster.loadImage("images/pcl/modBadge.png"), MOD_ID, "PinaColada", "", panel);
 

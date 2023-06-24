@@ -46,12 +46,12 @@ public class PMove_ObtainRelic extends PMove<PField_Relic> implements OutOfComba
 
     @Override
     public String getSampleText(PSkill<?> callingSkill) {
-        return TEXT.act_obtain(TEXT.subjects_x);
+        return TEXT.act_obtain(TEXT.subjects_relic);
     }
 
     @Override
     public String getSubText() {
-        return TEXT.act_obtain(fields.getFullRelicString());
+        return fields.relicIDs.isEmpty() ? TEXT.act_obtainAmount(getAmountRawString(), fields.getFullRelicString()) : TEXT.act_obtain(fields.getFullRelicString());
     }
 
     @Override
@@ -73,7 +73,7 @@ public class PMove_ObtainRelic extends PMove<PField_Relic> implements OutOfComba
 
     @Override
     public void use(PCLUseInfo info, PCLActions order) {
-        createRelic(r -> order.obtainRelic(r));
+        createRelic(order::obtainRelic);
         super.use(info, order);
     }
 

@@ -5,9 +5,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
+import com.megacrit.cardcrawl.potions.AbstractPotion;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.screens.compendium.CardLibSortHeader;
-import com.megacrit.cardcrawl.screens.runHistory.RunHistoryScreen;
 import extendedui.*;
 import extendedui.interfaces.delegates.ActionT1;
 import extendedui.interfaces.delegates.FuncT1;
@@ -42,7 +42,6 @@ import pinacolada.stances.PCLStanceHelper;
 import pinacolada.ui.editor.card.PCLCustomCardAttributesPage;
 import pinacolada.ui.editor.card.PCLCustomCardEditCardScreen;
 import pinacolada.ui.editor.card.PCLCustomCardPrimaryInfoPage;
-import pinacolada.ui.editor.card.PCLCustomCardUpgradableEditor;
 import pinacolada.ui.editor.nodes.PCLCustomEffectNode;
 import pinacolada.utilities.GameUtilities;
 
@@ -58,6 +57,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     public static final float MAIN_OFFSET = MENU_WIDTH * 1.58f;
     public static final float AUX_OFFSET = MENU_WIDTH * 2.43f;
     protected static ArrayList<AbstractCard> availableCards;
+    protected static ArrayList<AbstractPotion> availablePotions;
     protected static ArrayList<AbstractRelic> availableRelics;
     private PSkill<?> lastEffect;
     private float additionalHeight;
@@ -67,6 +67,8 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     protected EUIDropdown<PCLCardTarget> targets;
     protected EUIDropdown<AbstractCard.CardColor> colors;
     protected EUIDropdown<AbstractCard.CardRarity> rarities;
+    protected EUIDropdown<AbstractPotion.PotionRarity> potionRarities;
+    protected EUIDropdown<AbstractPotion.PotionSize> potionSizes;
     protected EUIDropdown<AbstractRelic.RelicTier> tiers;
     protected EUIDropdown<AbstractCard.CardType> types;
     protected EUIDropdown<CostFilter> costs;
@@ -77,9 +79,10 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     protected EUISearchableDropdown<PCLStanceHelper> stances;
     protected EUISearchableDropdown<PCLCardTag> tags;
     protected EUISearchableDropdown<AbstractCard> cards;
+    protected EUISearchableDropdown<AbstractPotion> potions;
     protected EUISearchableDropdown<AbstractRelic> relics;
-    protected PCLCustomCardUpgradableEditor valueEditor;
-    protected PCLCustomCardUpgradableEditor extraEditor;
+    protected PCLCustomUpgradableEditor valueEditor;
+    protected PCLCustomUpgradableEditor extraEditor;
     protected EUIImage backdrop;
     public EUIHitbox hb;
     public PCLCustomEffectPage editor;
@@ -110,23 +113,32 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
             availableCards = GameUtilities.isPCLOnlyCardColor(cardColor) ? EUIUtils.mapAsNonnull(PCLCardData.getAllData(false, false, cardColor), cd -> cd.makeCardFromLibrary(0)) :
                     EUIUtils.filter(CardLibrary.getAllCards(),
                             c -> !PCLDungeon.isColorlessCardExclusive(c) && (c.color == AbstractCard.CardColor.COLORLESS || c.color == AbstractCard.CardColor.CURSE || c.color == cardColor));
-            availableCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(cardColor), PCLCustomCardSlot::makeFirstCard));
+            availableCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(cardColor), PCLCustomCardSlot::make));
             if (cardColor != AbstractCard.CardColor.COLORLESS) {
-                availableCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(AbstractCard.CardColor.COLORLESS), PCLCustomCardSlot::makeFirstCard));
+                availableCards.addAll(EUIUtils.map(PCLCustomCardSlot.getCards(AbstractCard.CardColor.COLORLESS), PCLCustomCardSlot::make));
             }
             availableCards.sort((a, b) -> StringUtils.compare(a.name, b.name));
         }
         return availableCards;
     }
 
+    protected ArrayList<AbstractPotion> getAvailablePotions() {
+        if (availablePotions == null) {
+            AbstractCard.CardColor cardColor = getColor();
+            availablePotions = new ArrayList<>(GameUtilities.getPotions(cardColor));
+            availablePotions.sort((a, b) -> StringUtils.compare(a.name, b.name));
+        }
+        return availablePotions;
+    }
+
     protected ArrayList<AbstractRelic> getAvailableRelics() {
         if (availableRelics == null) {
             AbstractCard.CardColor cardColor = getColor();
             availableRelics = new ArrayList<>(GameUtilities.getRelics(cardColor).values());
-            availableRelics.addAll(EUIUtils.map(PCLCustomRelicSlot.getRelics(cardColor), PCLCustomRelicSlot::makeRelic));
+            availableRelics.addAll(EUIUtils.map(PCLCustomRelicSlot.getRelics(cardColor), PCLCustomRelicSlot::make));
             if (cardColor != AbstractCard.CardColor.COLORLESS) {
                 availableRelics.addAll(GameUtilities.getRelics(AbstractCard.CardColor.COLORLESS).values());
-                availableRelics.addAll(EUIUtils.map(PCLCustomRelicSlot.getRelics(AbstractCard.CardColor.COLORLESS), PCLCustomRelicSlot::makeRelic));
+                availableRelics.addAll(EUIUtils.map(PCLCustomRelicSlot.getRelics(AbstractCard.CardColor.COLORLESS), PCLCustomRelicSlot::make));
             }
             availableRelics.sort((a, b) -> StringUtils.compare(a.name, b.name));
         }
@@ -399,7 +411,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
                 .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, node.type.getTitle())
                 .setItems(node.getEffects());
         effects.setActive(effects.size() > 1);
-        valueEditor = new PCLCustomCardUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 5, MENU_HEIGHT, effects.isActive ? MAIN_OFFSET : 0, OFFSET_AMOUNT)
+        valueEditor = new PCLCustomUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 5, MENU_HEIGHT, effects.isActive ? MAIN_OFFSET : 0, OFFSET_AMOUNT)
                 , EUIRM.strings.ui_amount, (val, upVal) -> {
             if (node.skill != null) {
                 changeAmountForSkill(node.skill, val, upVal);
@@ -407,7 +419,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
             }
         })
                 .setLimits(-PSkill.DEFAULT_MAX, PSkill.DEFAULT_MAX);
-        extraEditor = new PCLCustomCardUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 5, MENU_HEIGHT, effects.isActive ? MAIN_OFFSET * 1.3f : MAIN_OFFSET * 0.3f, OFFSET_AMOUNT)
+        extraEditor = new PCLCustomUpgradableEditor(new OriginRelativeHitbox(hb, MENU_WIDTH / 5, MENU_HEIGHT, effects.isActive ? MAIN_OFFSET * 1.3f : MAIN_OFFSET * 0.3f, OFFSET_AMOUNT)
                 , PGR.core.strings.cedit_extraValue, (val, upVal) -> {
             if (node.skill != null) {
                 changeExtraForSkill(node.skill, val, upVal);
@@ -436,10 +448,14 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         orbs = initializeSmartSearchable(PCLOrbHelper.visibleValues(), PGR.core.tooltips.orb.title);
         stances = initializeSmartSearchable(PCLStanceHelper.getAll(cardColor), PGR.core.tooltips.stance.title);
         tags = initializeSmartSearchable(PCLCardTag.getAll(), PGR.core.strings.cedit_tags);
-        cards = initializeSearchable(getAvailableCards(), c -> c.name, RunHistoryScreen.TEXT[9]);
-        relics = initializeSearchable(getAvailableRelics(), c -> c.name, RunHistoryScreen.TEXT[10]);
+        cards = initializeSearchable(getAvailableCards(), c -> c.name, PGR.core.strings.subjects_card);
+        relics = initializeSearchable(getAvailableRelics(), c -> c.name, PGR.core.strings.subjects_relic);
+        potions = initializeSearchable(getAvailablePotions(), c -> c.name, PGR.core.strings.subjects_potion);
         colors = initializeSearchable(AbstractCard.CardColor.values(), EUIGameUtils::getColorName, EUIRM.strings.ui_colors);
         rarities = initializeSearchable(PCLCustomCardPrimaryInfoPage.getEligibleRarities(), EUIGameUtils::textForRarity, CardLibSortHeader.TEXT[0]);
+        potionRarities = initializeSearchable(AbstractPotion.PotionRarity.values(), EUIGameUtils::textForPotionRarity, CardLibSortHeader.TEXT[0]);
+        potionSizes = initializeSearchable(AbstractPotion.PotionSize.values(), EUIGameUtils::textForPotionSize, EUIRM.strings.potion_size);
+        potionSizes.sortByLabel();
         tiers = initializeSearchable(AbstractRelic.RelicTier.values(), EUIGameUtils::textForRelicTier, CardLibSortHeader.TEXT[0]);
         types = initializeSearchable(PCLCustomCardPrimaryInfoPage.getEligibleTypes(cardColor), EUIGameUtils::textForType, CardLibSortHeader.TEXT[1]);
         costs = initializeSearchable(CostFilter.values(), c -> c.name, CardLibSortHeader.TEXT[3]);
@@ -622,6 +638,33 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
 
     public void registerPile(List<PCLCardGroupHelper> items) {
         registerDropdown(piles, items);
+    }
+
+    public void registerPotion(List<String> potionIDs) {
+        registerDropdown(potions,
+                relics -> {
+                    potionIDs.clear();
+                    potionIDs.addAll(EUIUtils.mapAsNonnull(relics, t -> t.ID));
+                },
+                potionIDs,
+                potion -> potion.ID
+        );
+    }
+
+    public <V> void registerPotion(List<String> potionIDs, ActionT1<List<AbstractPotion>> onChangeImpl) {
+        registerDropdown(potions,
+                onChangeImpl,
+                potionIDs,
+                potion -> potion.ID
+        );
+    }
+
+    public void registerPotionRarity(List<AbstractPotion.PotionRarity> items) {
+        registerDropdown(potionRarities, items);
+    }
+
+    public void registerPotionSize(List<AbstractPotion.PotionSize> items) {
+        registerDropdown(potionSizes, items);
     }
 
     public void registerPower(List<PCLPowerHelper> items) {

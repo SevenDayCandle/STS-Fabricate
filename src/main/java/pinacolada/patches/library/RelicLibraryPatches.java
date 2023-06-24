@@ -13,8 +13,6 @@ import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
 
 public class RelicLibraryPatches {
-    public static final String SEPARATOR = "~";
-
     /**
      * Directly get a card from the card library, bypassing postfixes attached to getRelic. Returns NULL instead of circlet if nothing was found
      */
@@ -53,7 +51,7 @@ public class RelicLibraryPatches {
                 // Allow getRelic to get custom relics too
                 PCLCustomRelicSlot slot = PCLCustomRelicSlot.get(key);
                 if (slot != null) {
-                    return SpireReturn.Return(slot.makeRelic());
+                    return SpireReturn.Return(slot.make());
                 }
             }
 

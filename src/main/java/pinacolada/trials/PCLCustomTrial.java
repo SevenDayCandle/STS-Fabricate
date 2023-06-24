@@ -30,6 +30,7 @@ public class PCLCustomTrial extends CustomTrial {
     protected boolean isKeepingStarterCards = true;
     protected boolean isKeepingStarterRelic = true;
     public boolean allowCustomCards;
+    public boolean allowCustomPotions;
     public boolean allowCustomRelics;
 
 

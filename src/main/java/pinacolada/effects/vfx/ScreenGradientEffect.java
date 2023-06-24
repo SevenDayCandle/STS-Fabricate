@@ -52,19 +52,13 @@ public class ScreenGradientEffect extends PCLEffect {
     }
 
     @Override
-    protected void complete() {
-        super.complete();
-        renderer.end();
-    }
-
-    @Override
-    protected void firstUpdate() {
-        renderer.begin(ShapeRenderer.ShapeType.Filled);
-    }
-
-    @Override
     public void render(SpriteBatch sb) {
+        sb.end();
+        renderer.setProjectionMatrix(sb.getProjectionMatrix());
+        renderer.begin(ShapeRenderer.ShapeType.Filled);
         renderer.rect(x, y, width, height, actualColor, actualColor2, actualColor3, actualColor4);
+        renderer.end();
+        sb.begin();
     }
 
     @Override

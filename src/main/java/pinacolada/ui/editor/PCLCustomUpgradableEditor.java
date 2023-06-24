@@ -1,4 +1,4 @@
-package pinacolada.ui.editor.card;
+package pinacolada.ui.editor;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -17,7 +17,7 @@ import extendedui.ui.hitboxes.RelativeHitbox;
 import extendedui.ui.tooltips.EUITooltip;
 import extendedui.utilities.EUIFontHelper;
 
-public class PCLCustomCardUpgradableEditor extends EUIHoverable {
+public class PCLCustomUpgradableEditor extends EUIHoverable {
     protected static final float ICON_SIZE = 36f * Settings.scale;
 
     protected ActionT2<Integer, Integer> onUpdate;
@@ -29,7 +29,7 @@ public class PCLCustomCardUpgradableEditor extends EUIHoverable {
     protected EUITextBoxNumericalInput displayValue;
     protected EUITextBoxNumericalInput displayValueSecondary;
 
-    public PCLCustomCardUpgradableEditor(EUIHitbox hb, String title, ActionT2<Integer, Integer> onUpdate) {
+    public PCLCustomUpgradableEditor(EUIHitbox hb, String title, ActionT2<Integer, Integer> onUpdate) {
         super(hb);
 
         final float w = hb.width;
@@ -103,45 +103,45 @@ public class PCLCustomCardUpgradableEditor extends EUIHoverable {
         header.tryRender(sb);
     }
 
-    public PCLCustomCardUpgradableEditor setHeader(BitmapFont font, float fontScale, Color textColor, String text) {
+    public PCLCustomUpgradableEditor setHeader(BitmapFont font, float fontScale, Color textColor, String text) {
         return setHeader(font, fontScale, textColor, text, false);
     }
 
-    public PCLCustomCardUpgradableEditor setHeader(BitmapFont font, float fontScale, Color textColor, String text, boolean smartText) {
+    public PCLCustomUpgradableEditor setHeader(BitmapFont font, float fontScale, Color textColor, String text, boolean smartText) {
         this.header.setFont(font, fontScale).setColor(textColor).setLabel(text).setSmartText(smartText).setActive(true);
 
         return this;
     }
 
-    public PCLCustomCardUpgradableEditor setHeader(float x, float y, BitmapFont font, float fontScale, Color textColor, String text, boolean smartText) {
+    public PCLCustomUpgradableEditor setHeader(float x, float y, BitmapFont font, float fontScale, Color textColor, String text, boolean smartText) {
         this.header.setPosition(x, y)
                 .setFont(font, fontScale).setColor(textColor).setLabel(text).setSmartText(smartText).setActive(true);
 
         return this;
     }
 
-    public PCLCustomCardUpgradableEditor setHeaderText(String text) {
+    public PCLCustomUpgradableEditor setHeaderText(String text) {
         this.header.setLabel(text);
         return this;
     }
 
-    public PCLCustomCardUpgradableEditor setLimits(int minimum, int maximum) {
+    public PCLCustomUpgradableEditor setLimits(int minimum, int maximum) {
         displayValue.setLimits(minimum, maximum);
 
         return this;
     }
 
-    public PCLCustomCardUpgradableEditor setSecondaryValue(int valueSecondary) {
+    public PCLCustomUpgradableEditor setSecondaryValue(int valueSecondary) {
         return setValue(displayValue.getCachedValue(), valueSecondary);
     }
 
-    public PCLCustomCardUpgradableEditor setTooltip(String name, String desc) {
+    public PCLCustomUpgradableEditor setTooltip(String name, String desc) {
         super.setTooltip(name, desc);
         header.setTooltip(this.tooltip);
         return this;
     }
 
-    public PCLCustomCardUpgradableEditor setTooltip(EUITooltip tip) {
+    public PCLCustomUpgradableEditor setTooltip(EUITooltip tip) {
         super.setTooltip(tip);
         header.setTooltip(tip);
         return this;
@@ -159,15 +159,15 @@ public class PCLCustomCardUpgradableEditor extends EUIHoverable {
         header.tryUpdate();
     }
 
-    public PCLCustomCardUpgradableEditor setValue(int value) {
+    public PCLCustomUpgradableEditor setValue(int value) {
         return setValue(value, displayValueSecondary.getCachedValue());
     }
 
-    public PCLCustomCardUpgradableEditor setValue(int value, int valueSecondary) {
+    public PCLCustomUpgradableEditor setValue(int value, int valueSecondary) {
         return setValue(value, valueSecondary, true);
     }
 
-    public PCLCustomCardUpgradableEditor setValue(int value, int valueSecondary, boolean invoke) {
+    public PCLCustomUpgradableEditor setValue(int value, int valueSecondary, boolean invoke) {
         displayValue.forceSetValue(value, false);
         displayValueSecondary.forceSetValue(MathUtils.clamp(valueSecondary, displayValue.getMin() - displayValue.getCachedValue(), displayValue.getMax() - displayValue.getCachedValue()), false);
         if (invoke) {

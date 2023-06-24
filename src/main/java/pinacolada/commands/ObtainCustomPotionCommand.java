@@ -3,16 +3,16 @@ package pinacolada.commands;
 import basemod.DevConsole;
 import basemod.devcommands.ConsoleCommand;
 import basemod.helpers.ConvertHelper;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import extendedui.EUIUtils;
-import pinacolada.effects.PCLEffects;
-import pinacolada.relics.PCLCustomRelicSlot;
-import pinacolada.relics.PCLRelic;
+import pinacolada.potions.PCLCustomPotionSlot;
+import pinacolada.potions.PCLPotion;
 
 import java.util.ArrayList;
 
-public class ObtainCustomRelicCommand extends ConsoleCommand {
+public class ObtainCustomPotionCommand extends ConsoleCommand {
 
-    public ObtainCustomRelicCommand() {
+    public ObtainCustomPotionCommand() {
         this.requiresPlayer = true;
         this.minExtraTokens = 1;
         this.maxExtraTokens = 3;
@@ -20,16 +20,16 @@ public class ObtainCustomRelicCommand extends ConsoleCommand {
     }
 
     public static ArrayList<String> getCustoms() {
-        return EUIUtils.map(PCLCustomRelicSlot.getRelics(null), slot -> slot.ID);
+        return EUIUtils.map(PCLCustomPotionSlot.getPotions(null), slot -> slot.ID);
     }
 
-    protected void doAction(PCLRelic copy) {
-        PCLEffects.Queue.obtainRelic(copy);
+    protected void doAction(PCLPotion copy) {
+        AbstractDungeon.player.obtainPotion(copy);
     }
 
     @Override
     protected void execute(String[] tokens, int depth) {
-        PCLCustomRelicSlot slot = PCLCustomRelicSlot.get(tokens[1]);
+        PCLCustomPotionSlot slot = PCLCustomPotionSlot.get(tokens[1]);
 
         if (slot != null) {
             int upgrade = 0;
@@ -43,14 +43,14 @@ public class ObtainCustomRelicCommand extends ConsoleCommand {
 
             DevConsole.log("Obtained "  + tokens[1] + " with upgrade level " + upgrade + " with form " + form);
 
-            PCLRelic copy = slot.builders.get(form).create();
+            PCLPotion copy = slot.builders.get(form).create();
             for (int i = 0; i < upgrade; i++) {
                 copy.upgrade();
             }
             doAction(copy);
         }
         else {
-            DevConsole.log("Could not find relic " + tokens[1]);
+            DevConsole.log("Could not find potion " + tokens[1]);
         }
     }
 

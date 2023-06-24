@@ -4,8 +4,10 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import extendedui.interfaces.delegates.FuncT1;
+import extendedui.utilities.TargetFilter;
 import org.apache.commons.lang3.StringUtils;
 import pinacolada.resources.PGR;
 import pinacolada.utilities.GameUtilities;
@@ -22,12 +24,18 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
     AllAlly(AbstractCard.CardTarget.ALL_ENEMY),
     AllEnemy(AbstractCard.CardTarget.ALL_ENEMY),
     Any(AbstractCard.CardTarget.SELF_AND_ENEMY),
-    RandomAlly(AbstractCard.CardTarget.ALL),
+    RandomAlly(AbstractCard.CardTarget.ALL_ENEMY),
     RandomEnemy(AbstractCard.CardTarget.ALL_ENEMY),
     Self(AbstractCard.CardTarget.SELF),
     Single(AbstractCard.CardTarget.ENEMY),
     SingleAlly(AbstractCard.CardTarget.ENEMY),
-    Team(AbstractCard.CardTarget.ALL_ENEMY);
+    Team(AbstractCard.CardTarget.SELF);
+
+    public static final TargetFilter T_AllAlly = new TargetFilter(PGR.core.strings.ctype_allAlly);
+    public static final TargetFilter T_RandomAlly = new TargetFilter(PGR.core.strings.ctype_randomAlly);
+    public static final TargetFilter T_RandomEnemy = new TargetFilter(PGR.core.strings.ctype_randomEnemy);
+    public static final TargetFilter T_SingleAlly = new TargetFilter(PGR.core.strings.ctype_singleAlly);
+    public static final TargetFilter T_Team = new TargetFilter(PGR.core.strings.ctype_team);
 
     public static AbstractCreature source;
     public static AbstractCreature target;
@@ -157,27 +165,55 @@ public enum PCLCardTarget implements Comparable<PCLCardTarget> {
         return getTargets(source, target);
     }
 
+    public TargetFilter getTargetFilter() {
+        switch (this) {
+            case None:
+                return TargetFilter.None;
+            case AllEnemy:
+                return TargetFilter.AllEnemy;
+            case AllAlly:
+                return T_AllAlly;
+            case Team:
+                return T_Team;
+            case All:
+                return TargetFilter.All;
+            case Self:
+                return TargetFilter.Self;
+            case Single:
+                return TargetFilter.Single;
+            case SingleAlly:
+                return T_SingleAlly;
+            case Any:
+                return TargetFilter.Any;
+            case RandomEnemy:
+                return T_RandomEnemy;
+            case RandomAlly:
+                return T_RandomAlly;
+        }
+        return TargetFilter.None;
+    }
+
     // These strings cannot be put in as an enum variable because cards are initialized before these strings are
     public final String getTitle() {
         switch (this) {
             case None:
-                return PGR.core.strings.ctype_none;
+                return EUIRM.strings.target_none;
             case AllEnemy:
-                return PGR.core.strings.ctype_allEnemy;
+                return EUIRM.strings.target_allEnemy;
             case AllAlly:
                 return PGR.core.strings.ctype_allAlly;
             case Team:
                 return PGR.core.strings.ctype_team;
             case All:
-                return PGR.core.strings.ctype_allCharacter;
+                return EUIRM.strings.target_allCharacter;
             case Self:
-                return PGR.core.strings.ctype_self;
+                return EUIRM.strings.target_self;
             case Single:
-                return PGR.core.strings.ctype_singleTarget;
+                return EUIRM.strings.target_singleTarget;
             case SingleAlly:
                 return PGR.core.strings.ctype_singleAlly;
             case Any:
-                return PGR.core.strings.ctype_any;
+                return EUIRM.strings.target_any;
             case RandomEnemy:
                 return PGR.core.strings.ctype_randomEnemy;
             case RandomAlly:

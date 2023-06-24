@@ -1,6 +1,7 @@
 package pinacolada.relics;
 
 import basemod.ReflectionHacks;
+import basemod.abstracts.CustomSavable;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -8,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.MathUtils;
 import com.evacipated.cardcrawl.modthespire.ModInfo;
+import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.actions.common.RelicAboveCreatureAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
@@ -29,15 +31,19 @@ import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.characters.CreatureAnimationInfo;
 import pinacolada.dungeon.PCLUseInfo;
+import pinacolada.misc.PCLCollectibleSaveData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.resources.pcl.PCLCoreImages;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.PCLRenderHelpers;
 
+import java.lang.reflect.Type;
 import java.util.*;
 
-public abstract class PCLRelic extends AbstractRelic implements KeywordProvider {
+import static pinacolada.cards.base.PCLCard.CHAR_OFFSET;
+
+public abstract class PCLRelic extends AbstractRelic implements KeywordProvider, CustomSavable<PCLCollectibleSaveData> {
     protected static EUITooltip hiddenTooltip;
 
     public static AbstractPlayer player;
@@ -45,6 +51,7 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider 
     public final PCLRelicData relicData;
     public ArrayList<EUIKeywordTooltip> tips;
     public EUIKeywordTooltip mainTooltip;
+    public PCLCollectibleSaveData auxiliaryData = new PCLCollectibleSaveData();
 
     public PCLRelic(PCLRelicData data) {
         super(data.ID, "", data.tier, data.sfx);
@@ -80,16 +87,12 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider 
         return PCLRelicData.registerData(cardData);
     }
 
-    protected static TemplateRelicData registerTemplate(Class<? extends PCLRelic> type) {
-        return registerTemplate(type, PGR.core, type.getSimpleName());
+    protected static PCLRelicData registerTemplate(Class<? extends PCLRelic> type) {
+        return registerTemplate(type, PGR.core);
     }
 
-    protected static TemplateRelicData registerTemplate(Class<? extends PCLRelic> type, String sourceID) {
-        return registerTemplate(type, PGR.core, sourceID);
-    }
-
-    protected static TemplateRelicData registerTemplate(Class<? extends PCLRelic> type, PCLResources<?, ?, ?, ?> resources, String sourceID) {
-        return PCLRelicData.registerData(new TemplateRelicData(type, resources, sourceID));
+    protected static PCLRelicData registerTemplate(Class<? extends PCLRelic> type, PCLResources<?, ?, ?, ?> resources) {
+        return PCLRelicData.registerTemplate(new PCLRelicData(type, resources));
     }
 
     protected void activateBattleEffect() {
@@ -128,6 +131,10 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider 
 
     public float atSkillBonusModify(PCLUseInfo info, float block, AbstractCard c) {
         return block;
+    }
+
+    public boolean canUpgrade() {
+        return auxiliaryData.timesUpgraded < relicData.maxUpgradeLevel || relicData.maxUpgradeLevel < 0;
     }
 
     protected void deactivateBattleEffect() {
@@ -169,7 +176,23 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider 
     }
 
     public String getName() {
-        return relicData.strings.NAME;
+        String name = relicData.strings.NAME;
+        if (auxiliaryData.timesUpgraded > 0) {
+            StringBuilder sb = new StringBuilder(name);
+            sb.append("+");
+
+            if (relicData.maxUpgradeLevel < 0 || relicData.maxUpgradeLevel > 1) {
+                sb.append(auxiliaryData.timesUpgraded);
+            }
+
+            // Do not show appended characters for non-multiform or linear upgrade path cards
+            if (relicData.maxForms > 1 && relicData.branchFactor != 1) {
+                char appendix = (char) (auxiliaryData.form + CHAR_OFFSET);
+                sb.append(appendix);
+            }
+            name = sb.toString();
+        }
+        return name;
     }
 
     public int getValue() {
@@ -407,6 +430,14 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider 
         }
     }
 
+    public PCLRelic upgrade() {
+        if (this.canUpgrade()) {
+            auxiliaryData.timesUpgraded += 1;
+            updateDescription(null);
+        }
+        return this;
+    }
+
     protected FloatyEffect getFEffect() {
         return ReflectionHacks.getPrivate(this, AbstractRelic.class, "f_effect");
     }
@@ -421,6 +452,24 @@ public abstract class PCLRelic extends AbstractRelic implements KeywordProvider 
 
     public boolean canSpawn() {
         return relicData.cardColor == AbstractCard.CardColor.COLORLESS || relicData.cardColor.equals(GameUtilities.getActingColor());
+    }
+
+    @Override
+    public PCLCollectibleSaveData onSave() {
+        return auxiliaryData;
+    }
+
+    @Override
+    public void onLoad(PCLCollectibleSaveData data) {
+        if (data != null) {
+            this.auxiliaryData = new PCLCollectibleSaveData(data);
+        }
+    }
+
+    @Override
+    public Type savedType() {
+        return new TypeToken<PCLCollectibleSaveData>() {
+        }.getType();
     }
 
     // Relics that are replaced with this one when obtained

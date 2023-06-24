@@ -12,6 +12,7 @@ import pinacolada.misc.PCLGenericData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +23,7 @@ import static extendedui.EUIUtils.array;
 
 public class PCLPotionData extends PCLGenericData<PCLPotion> {
     private static final Map<String, PCLPotionData> STATIC_DATA = new HashMap<>();
+    private static final ArrayList<PCLPotionData> TEMPLATES = new ArrayList<>();
 
     public PotionStrings strings;
     public String imagePath;
@@ -89,6 +91,10 @@ public class PCLPotionData extends PCLGenericData<PCLPotion> {
         return STATIC_DATA.get(cardID);
     }
 
+    public static Collection<PCLPotionData> getTemplates() {
+        return TEMPLATES.stream().sorted((a, b) -> StringUtils.compare(a.ID, b.ID)).collect(Collectors.toList());
+    }
+
     public void initializeImage() {
         this.imagePath = PGR.getRelicImage(ID);
     }
@@ -98,10 +104,16 @@ public class PCLPotionData extends PCLGenericData<PCLPotion> {
         return cardData;
     }
 
+    protected static <T extends PCLPotionData> T registerTemplate(T cardData) {
+        STATIC_DATA.put(cardData.ID, cardData);
+        TEMPLATES.add(cardData);
+        return cardData;
+    }
+
     public PCLPotionData setBottleColor(Color liquidColor, Color hybridColor, Color spotsColor) {
-        this.hybridColor = hybridColor;
-        this.liquidColor = liquidColor;
-        this.spotsColor = spotsColor;
+        this.hybridColor = hybridColor != null ? hybridColor : Color.WHITE;
+        this.liquidColor = liquidColor != null ? liquidColor : Color.WHITE;
+        this.spotsColor = spotsColor != null ? spotsColor : Color.WHITE;
         return this;
     }
 
@@ -137,9 +149,19 @@ public class PCLPotionData extends PCLGenericData<PCLPotion> {
         return this;
     }
 
+    public PCLPotionData setHybridColor(Color hybridColor) {
+        this.hybridColor = hybridColor != null ? hybridColor : Color.WHITE;
+        return this;
+    }
+
     public PCLPotionData setImagePath(String imagePath) {
         this.imagePath = imagePath;
 
+        return this;
+    }
+
+    public PCLPotionData setLiquidColor(Color liquidColor) {
+        this.liquidColor = liquidColor != null ? liquidColor : Color.WHITE;
         return this;
     }
 
@@ -174,6 +196,11 @@ public class PCLPotionData extends PCLGenericData<PCLPotion> {
     public PCLPotionData setProps(AbstractPotion.PotionRarity tier, AbstractPotion.PotionSize sfx) {
         this.rarity = tier;
         this.size = sfx;
+        return this;
+    }
+
+    public PCLPotionData setSpotsColor(Color spotsColor) {
+        this.spotsColor = spotsColor != null ? spotsColor : Color.WHITE;
         return this;
     }
 }

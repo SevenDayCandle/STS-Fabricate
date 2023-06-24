@@ -48,10 +48,10 @@ public class ModifyCardHP extends GenericCardSelection {
 
         if (card instanceof PCLCard) {
             if (relative) {
-                GameUtilities.modifySecondaryValueRelative((PCLCard) card, change, !permanent);
+                ((PCLCard) card).updateHeal(card.baseHeal + change);
             }
             else {
-                GameUtilities.modifySecondaryValue((PCLCard) card, change, !permanent);
+                ((PCLCard) card).updateHeal(change);
             }
         }
     }

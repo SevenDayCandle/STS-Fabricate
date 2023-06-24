@@ -25,15 +25,13 @@ import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.daily.mods.Diverse;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.helpers.CardLibrary;
-import com.megacrit.cardcrawl.helpers.ModHelper;
-import com.megacrit.cardcrawl.helpers.Prefs;
-import com.megacrit.cardcrawl.helpers.RelicLibrary;
+import com.megacrit.cardcrawl.helpers.*;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.localization.LocalizedStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.monsters.MonsterGroup;
 import com.megacrit.cardcrawl.orbs.*;
+import com.megacrit.cardcrawl.potions.AbstractPotion;
 import com.megacrit.cardcrawl.powers.*;
 import com.megacrit.cardcrawl.random.Random;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
@@ -250,14 +248,6 @@ public class GameUtilities {
         }
 
         return retVal;
-    }
-
-    public static void decreaseMagicNumber(AbstractCard card, int amount, boolean temporary) {
-        modifyMagicNumber(card, Math.max(0, card.baseMagicNumber - amount), temporary);
-    }
-
-    public static void decreaseSecondaryValue(PCLCard card, int amount, boolean temporary) {
-        modifySecondaryValue(card, Math.max(0, card.baseHeal - amount), temporary);
     }
 
     public static CardGroup findCardGroup(AbstractCard card, boolean includeLimbo) {
@@ -996,6 +986,10 @@ public class GameUtilities {
         return inGame() && player != null ? player.chosenClass : null;
     }
 
+    public static ArrayList<AbstractPotion> getPotions(AbstractCard.CardColor cardColor) {
+        return EUIUtils.map(PotionHelper.getPotions(EUIGameUtils.getPlayerClassForCardColor(cardColor), true), PotionHelper::getPotion);
+    }
+
     public static <T extends AbstractPower> T getPower(AbstractCreature creature, String powerID) {
         if (creature != null && creature.powers != null) {
             for (AbstractPower p : creature.powers) {
@@ -1184,6 +1178,14 @@ public class GameUtilities {
                 AbstractCard.CardRarity.RARE,
                 AbstractCard.CardRarity.CURSE,
                 AbstractCard.CardRarity.SPECIAL
+        );
+    }
+
+    public static List<AbstractPotion.PotionRarity> getStandardPotionTiers() {
+        return Arrays.asList(
+                AbstractPotion.PotionRarity.COMMON,
+                AbstractPotion.PotionRarity.UNCOMMON,
+                AbstractPotion.PotionRarity.RARE
         );
     }
 
@@ -1480,18 +1482,6 @@ public class GameUtilities {
         }
 
         obtainBlight(player.hb.cX, player.hb.cY, new UpgradedHand());
-    }
-
-    public static void increaseHitCount(PCLCard card, int amount, boolean temporary) {
-        modifyHitCount(card, card.baseHitCount + amount, temporary);
-    }
-
-    public static void increaseMagicNumber(AbstractCard card, int amount, boolean temporary) {
-        modifyMagicNumber(card, card.baseMagicNumber + amount, temporary);
-    }
-
-    public static void increaseSecondaryValue(PCLCard card, int amount, boolean temporary) {
-        modifySecondaryValue(card, card.baseHeal + amount, temporary);
     }
 
     public static boolean isActingColor(AbstractCard.CardColor co) {
@@ -1808,14 +1798,6 @@ public class GameUtilities {
         return amount;
     }
 
-    public static void modifyHitCount(PCLCard card, int amount, boolean temporary) {
-        card.hitCount = amount;
-        if (!temporary) {
-            card.baseHitCount = card.hitCount;
-        }
-        card.isHitCountModified = (card.hitCount != card.baseHitCount);
-    }
-
     public static void modifyMagicNumber(AbstractCard card, int amount, boolean temporary) {
         card.magicNumber = amount;
         if (!temporary) {
@@ -1868,33 +1850,6 @@ public class GameUtilities {
         }
     }
 
-    public static void modifyRightCount(PCLCard card, int amount, boolean temporary) {
-        card.rightCount = amount;
-        if (!temporary) {
-            card.baseRightCount = card.rightCount;
-        }
-        card.isRightCountModified = (card.rightCount != card.baseRightCount);
-    }
-
-    public static void modifySecondaryValue(PCLCard card, int amount, boolean temporary) {
-        card.heal = amount;
-        if (!temporary) {
-            card.baseHeal = card.heal;
-        }
-        card.isHealModified = (card.heal != card.baseHeal);
-    }
-
-    public static void modifySecondaryValueRelative(PCLCard card, int amount, boolean temporary) {
-        if (!temporary) {
-            card.heal += amount;
-            card.baseHeal += amount;
-        }
-        else {
-            card.heal = Math.min(card.baseHeal, card.heal + amount);
-        }
-        card.isHealModified = (card.heal != card.baseHeal);
-    }
-
     public static void modifyTag(AbstractCard card, PCLCardTag tag, int value) {
         modifyTag(card, tag, value, false);
     }
@@ -1907,10 +1862,10 @@ public class GameUtilities {
                 // Save the tag permanently on the card
                 if (pCard.auxiliaryData != null) {
                     if (targetValue != 0) {
-                        pCard.auxiliaryData.addedTags.add(tag);
+                        pCard.auxiliaryData.addTag(tag);
                     }
                     else {
-                        pCard.auxiliaryData.removedTags.add(tag);
+                        pCard.auxiliaryData.addTagToRemove(tag);
                     }
                 }
 

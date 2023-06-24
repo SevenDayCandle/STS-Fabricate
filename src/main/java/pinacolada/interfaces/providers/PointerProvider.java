@@ -216,6 +216,10 @@ public interface PointerProvider {
         return sb.toString();
     }
 
+    default int timesUpgraded() {
+        return 0;
+    }
+
     default PSkill<?> tryRemove(int index) {
         PSkill<?> toRemove = index < getEffects().size() ? getEffects().get(index) : null;
         if (toRemove == null || !toRemove.removable()) {

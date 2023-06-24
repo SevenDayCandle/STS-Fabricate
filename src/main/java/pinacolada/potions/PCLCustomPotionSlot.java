@@ -1,11 +1,11 @@
-package pinacolada.relics;
+package pinacolada.potions;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.PixmapIO;
 import com.google.gson.reflect.TypeToken;
 import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.relics.AbstractRelic;
+import com.megacrit.cardcrawl.potions.AbstractPotion;
 import extendedui.EUIRM;
 import extendedui.EUIUtils;
 import pinacolada.annotations.VisibleSkill;
@@ -20,15 +20,15 @@ import java.util.HashMap;
 import static extendedui.EUIUtils.array;
 import static pinacolada.resources.PCLMainConfig.JSON_FILTER;
 
-public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicData, PCLDynamicRelic> {
-    private static final TypeToken<PCLCustomRelicSlot> TTOKEN = new TypeToken<PCLCustomRelicSlot>() {
+public class PCLCustomPotionSlot extends PCLCustomEditorLoadable<PCLDynamicPotionData, PCLDynamicPotion> {
+    private static final TypeToken<PCLCustomPotionSlot> TTOKEN = new TypeToken<PCLCustomPotionSlot>() {
     };
-    private static final TypeToken<RelicForm> TTOKENFORM = new TypeToken<RelicForm>() {
+    private static final TypeToken<PotionForm> TTOKENFORM = new TypeToken<PotionForm>() {
     };
-    private static final HashMap<AbstractCard.CardColor, ArrayList<PCLCustomRelicSlot>> CUSTOM_RELICS = new HashMap<>();
+    private static final HashMap<AbstractCard.CardColor, ArrayList<PCLCustomPotionSlot>> CUSTOM_POTIONS = new HashMap<>();
     private static final ArrayList<CustomFileProvider> PROVIDERS = new ArrayList<>();
-    public static final String BASE_RELIC_ID = "PCLR";
-    public static final String SUBFOLDER = "relics";
+    public static final String BASE_POTION_ID = "PCLP";
+    public static final String SUBFOLDER = "potions";
 
     protected transient String filePath;
     protected transient String imagePath;
@@ -36,9 +36,13 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
     public Integer branchUpgradeFactor = 0;
     public Integer[] counter = array(0);
     public Integer[] counterUpgrade = array(0);
-    public String tier;
-    public String sfx;
+    public String effect;
+    public String rarity;
+    public String size;
     public String color;
+    public String liquidColor;
+    public String hybridColor;
+    public String spotsColor;
     public String languageStrings;
     public String[] forms;
     public transient AbstractCard.CardColor slotColor = AbstractCard.CardColor.COLORLESS;
@@ -50,17 +54,17 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
         PROVIDERS.add(provider);
     }
 
-    // Only allow a relic to be copied into a custom slot if it is a PCLPointerRelic and if all of its skills are in AVAILABLE_SKILLS (i.e. selectable in the editor)
-    public static boolean canFullyCopy(AbstractRelic relic) {
-        if (relic instanceof PCLPointerRelic) {
-            return EUIUtils.all(((PCLPointerRelic) relic).getFullSubEffects(), skill -> skill != null && skill.getClass().isAnnotationPresent(VisibleSkill.class));
+    // Only allow a potion to be copied into a custom slot if it is a PCLPotion and if all of its skills are in AVAILABLE_SKILLS (i.e. selectable in the editor)
+    public static boolean canFullyCopy(AbstractPotion potion) {
+        if (potion instanceof PCLPotion) {
+            return EUIUtils.all(((PCLPotion) potion).getFullSubEffects(), skill -> skill != null && skill.getClass().isAnnotationPresent(VisibleSkill.class));
         }
         return false;
     }
 
-    public static PCLCustomRelicSlot get(String id) {
-        for (ArrayList<PCLCustomRelicSlot> slots : CUSTOM_RELICS.values()) {
-            for (PCLCustomRelicSlot slot : slots) {
+    public static PCLCustomPotionSlot get(String id) {
+        for (ArrayList<PCLCustomPotionSlot> slots : CUSTOM_POTIONS.values()) {
+            for (PCLCustomPotionSlot slot : slots) {
                 if (slot.ID.equals(id)) {
                     return slot;
                 }
@@ -70,21 +74,21 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
     }
 
     public static String getBaseIDPrefix(AbstractCard.CardColor color) {
-        return getBaseIDPrefix(BASE_RELIC_ID, color);
+        return getBaseIDPrefix(BASE_POTION_ID, color);
     }
 
-    public static ArrayList<PCLCustomRelicSlot> getRelics(AbstractCard.CardColor color) {
+    public static ArrayList<PCLCustomPotionSlot> getPotions(AbstractCard.CardColor color) {
         if (color == null) {
-            return EUIUtils.flattenList(CUSTOM_RELICS.values());
+            return EUIUtils.flattenList(CUSTOM_POTIONS.values());
         }
-        if (!CUSTOM_RELICS.containsKey(color)) {
-            CUSTOM_RELICS.put(color, new ArrayList<>());
+        if (!CUSTOM_POTIONS.containsKey(color)) {
+            CUSTOM_POTIONS.put(color, new ArrayList<>());
         }
-        return CUSTOM_RELICS.get(color);
+        return CUSTOM_POTIONS.get(color);
     }
 
     public static void initialize() {
-        CUSTOM_RELICS.clear();
+        CUSTOM_POTIONS.clear();
         loadFolder(getCustomFolder(SUBFOLDER));
         for (CustomFileProvider provider : PROVIDERS) {
             loadFolder(provider.getCardFolder());
@@ -95,51 +99,51 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
     }
 
     public static boolean isIDDuplicate(String input, AbstractCard.CardColor color) {
-        return isIDDuplicate(input, getRelics(color));
+        return isIDDuplicate(input, getPotions(color));
     }
 
     private static void loadFolder(FileHandle folder) {
         for (FileHandle f : folder.list(JSON_FILTER)) {
-            loadSingleRelicImpl(f);
+            loadSinglePotionImpl(f);
         }
     }
 
-    private static void loadSingleRelicImpl(FileHandle f) {
+    private static void loadSinglePotionImpl(FileHandle f) {
         String path = f.path();
         try {
             String jsonString = f.readString();
-            PCLCustomRelicSlot slot = EUIUtils.deserialize(jsonString, TTOKEN.getType());
+            PCLCustomPotionSlot slot = EUIUtils.deserialize(jsonString, TTOKEN.getType());
             slot.setupBuilder(path);
-            getRelics(slot.slotColor).add(slot);
+            getPotions(slot.slotColor).add(slot);
         }
         catch (Exception e) {
             e.printStackTrace();
-            EUIUtils.logError(PCLCustomCardSlot.class, "Could not load Custom Relic: " + path);
+            EUIUtils.logError(PCLCustomCardSlot.class, "Could not load Custom Potion: " + path);
         }
     }
 
     protected static String makeNewID(AbstractCard.CardColor color) {
-        return makeNewID(getBaseIDPrefix(color), getRelics(color));
+        return makeNewID(getBaseIDPrefix(color), getPotions(color));
     }
 
-    public PCLCustomRelicSlot(AbstractCard.CardColor color) {
+    public PCLCustomPotionSlot(AbstractCard.CardColor color) {
         ID = makeNewID(color);
         filePath = makeFilePath();
         imagePath = makeImagePath();
         slotColor = color;
-        PCLDynamicRelicData builder = (PCLDynamicRelicData) new PCLDynamicRelicData(ID)
-                .setText("", new String[]{}, "")
+        PCLDynamicPotionData builder = (PCLDynamicPotionData) new PCLDynamicPotionData(ID)
+                .setText("", new String[]{})
                 .setColor(color)
-                .setTier(AbstractRelic.RelicTier.COMMON);
+                .setRarity(AbstractPotion.PotionRarity.COMMON);
         builders.add(builder);
     }
 
-    public PCLCustomRelicSlot(PCLPointerRelic card, AbstractCard.CardColor color) {
+    public PCLCustomPotionSlot(PCLPotion card, AbstractCard.CardColor color) {
         ID = makeNewID(color);
         filePath = makeFilePath();
         imagePath = makeImagePath();
         slotColor = color;
-        builders.add((PCLDynamicRelicData) new PCLDynamicRelicData(card.relicData)
+        builders.add((PCLDynamicPotionData) new PCLDynamicPotionData(card.potionData)
                 .setID(ID)
                 .setColor(color)
                 .setImagePath(imagePath)
@@ -149,21 +153,21 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
         recordBuilder();
     }
 
-    public PCLCustomRelicSlot(PCLCustomRelicSlot other, AbstractCard.CardColor color) {
+    public PCLCustomPotionSlot(PCLCustomPotionSlot other, AbstractCard.CardColor color) {
         this(other);
         slotColor = color;
-        for (PCLDynamicRelicData builder : builders) {
+        for (PCLDynamicPotionData builder : builders) {
             builder.setColor(color);
         }
     }
 
-    public PCLCustomRelicSlot(PCLCustomRelicSlot other) {
+    public PCLCustomPotionSlot(PCLCustomPotionSlot other) {
         ID = makeNewID(other.slotColor);
         filePath = makeFilePath();
         imagePath = makeImagePath();
         slotColor = other.slotColor;
-        for (PCLDynamicRelicData builder : other.builders) {
-            builders.add(new PCLDynamicRelicData(builder)
+        for (PCLDynamicPotionData builder : other.builders) {
+            builders.add(new PCLDynamicPotionData(builder)
                     .setID(ID)
                     .setImagePath(imagePath));
         }
@@ -179,7 +183,7 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
         FileHandle writer = Gdx.files.local(filePath);
         if (writer.exists() && !newFilePath.equals(filePath)) {
             writer.moveTo(Gdx.files.local(newFilePath));
-            EUIUtils.logInfo(PCLCustomCardSlot.class, "Moved Custom Relic: " + filePath + ", New: " + newFilePath);
+            EUIUtils.logInfo(PCLCustomCardSlot.class, "Moved Custom Potion: " + filePath + ", New: " + newFilePath);
         }
         writer = Gdx.files.local(newFilePath);
 
@@ -187,7 +191,7 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
         FileHandle imgWriter = Gdx.files.local(imagePath);
         if (imgWriter.exists() && !newImagePath.equals(imagePath)) {
             imgWriter.moveTo(Gdx.files.local(newImagePath));
-            EUIUtils.logInfo(PCLCustomCardSlot.class, "Moved Custom Relic Image: " + imagePath + ", New: " + newImagePath);
+            EUIUtils.logInfo(PCLCustomCardSlot.class, "Moved Custom Potion Image: " + imagePath + ", New: " + newImagePath);
         }
 
         filePath = newFilePath;
@@ -195,7 +199,7 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
 
         // If the image in the builder was updated, we need to overwrite the existing image
         // All builders should have the same image
-        PCLDynamicRelicData builder = getBuilder(0);
+        PCLDynamicPotionData builder = getBuilder(0);
         if (builder != null && builder.portraitImage != null) {
             PixmapIO.writePNG(imgWriter, builder.portraitImage.getTextureData().consumePixmap());
             // Forcibly reload the image
@@ -203,18 +207,18 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
         }
 
         // Point all builders to the new path, or nullify it out if no image was saved
-        for (PCLDynamicRelicData b : builders) {
+        for (PCLDynamicPotionData b : builders) {
             b.setImagePath(newImagePath).setImage(null);
         }
 
         writer.writeString(EUIUtils.serialize(this, TTOKEN.getType()), false);
-        EUIUtils.logInfo(PCLCustomRelicSlot.class, "Saved Custom Relic: " + filePath);
+        EUIUtils.logInfo(PCLCustomPotionSlot.class, "Saved Custom Potion: " + filePath);
         if (PGR.debugCards != null) {
             PGR.debugCards.refreshCards();
         }
     }
 
-    public PCLDynamicRelicData getBuilder(int i) {
+    public PCLDynamicPotionData getBuilder(int i) {
         return (builders.size() > i) ? builders.get(i) : null;
     }
 
@@ -231,7 +235,7 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
         return SUBFOLDER;
     }
 
-    public PCLDynamicRelic make() {
+    public PCLDynamicPotion make() {
         return getBuilder(0).create();
     }
 
@@ -240,12 +244,16 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
         ArrayList<String> tempForms = new ArrayList<>();
 
         // All builders should have identical sets of these properties
-        PCLDynamicRelicData first = getBuilder(0);
+        PCLDynamicPotionData first = getBuilder(0);
         if (first != null) {
             ID = first.ID;
             languageStrings = EUIUtils.serialize(first.languageMap);
-            tier = first.tier.name();
-            sfx = first.sfx.name();
+            rarity = first.rarity.name();
+            effect = first.effect.name();
+            size = first.size.name();
+            hybridColor = first.hybridColor.toString();
+            liquidColor = first.liquidColor.toString();
+            spotsColor = first.spotsColor.toString();
             color = first.cardColor.name();
             counter = first.counter.clone();
             counterUpgrade = first.counterUpgrade.clone();
@@ -253,8 +261,8 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
             branchUpgradeFactor = first.branchFactor;
         }
 
-        for (PCLDynamicRelicData builder : builders) {
-            RelicForm f = new RelicForm();
+        for (PCLDynamicPotionData builder : builders) {
+            PotionForm f = new PotionForm();
             f.effects = EUIUtils.mapAsNonnull(builder.moves, b -> b != null ? b.serialize() : null).toArray(new String[]{});
             f.powerEffects = EUIUtils.mapAsNonnull(builder.powers, b -> b != null ? b.serialize() : null).toArray(new String[]{});
 
@@ -269,31 +277,31 @@ public class PCLCustomRelicSlot extends PCLCustomEditorLoadable<PCLDynamicRelicD
         builders = new ArrayList<>();
 
         for (String fo : forms) {
-            RelicForm f = EUIUtils.deserialize(fo, TTOKENFORM.getType());
-            PCLDynamicRelicData builder = new PCLDynamicRelicData(this, f);
+            PotionForm f = EUIUtils.deserialize(fo, TTOKENFORM.getType());
+            PCLDynamicPotionData builder = new PCLDynamicPotionData(this, f);
             builders.add(builder);
         }
 
         imagePath = makeImagePath();
-        for (PCLDynamicRelicData builder : builders) {
+        for (PCLDynamicPotionData builder : builders) {
             builder.setImagePath(imagePath);
         }
 
         filePath = fp;
-        EUIUtils.logInfo(PCLCustomCardSlot.class, "Loaded Custom Relic: " + filePath);
+        EUIUtils.logInfo(PCLCustomCardSlot.class, "Loaded Custom Potion: " + filePath);
     }
 
     public void wipeBuilder() {
-        CUSTOM_RELICS.get(slotColor).remove(this);
+        CUSTOM_POTIONS.get(slotColor).remove(this);
         FileHandle writer = getImageHandle();
         writer.delete();
-        EUIUtils.logInfo(PCLCustomCardSlot.class, "Deleted Custom Relic Image: " + imagePath);
+        EUIUtils.logInfo(PCLCustomCardSlot.class, "Deleted Custom Potion Image: " + imagePath);
         writer = Gdx.files.local(filePath);
         writer.delete();
-        EUIUtils.logInfo(PCLCustomCardSlot.class, "Deleted Custom Relic: " + filePath);
+        EUIUtils.logInfo(PCLCustomCardSlot.class, "Deleted Custom Potion: " + filePath);
     }
 
-    public static class RelicForm {
+    public static class PotionForm {
         public String[] effects;
         public String[] powerEffects;
     }

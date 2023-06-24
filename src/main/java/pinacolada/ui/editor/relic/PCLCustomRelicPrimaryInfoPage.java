@@ -117,21 +117,19 @@ public class PCLCustomRelicPrimaryInfoPage extends PCLCustomGenericPage {
                 , item -> StringUtils.capitalize(item.toString().toLowerCase()))
                 .setOnChange(types -> {
                     if (!types.isEmpty()) {
-                        // Pages need to refresh because changing card type affects available skill options or attributes
                         effect.modifyAllBuilders(e -> e.setSfx(types.get(0)));
-                        effect.refreshPages();
                     }
                 })
-                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, CardLibSortHeader.TEXT[1])
+                .setHeader(EUIFontHelper.cardTitleFontSmall, 0.8f, Settings.GOLD_COLOR, EUIRM.strings.relic_landingSound)
                 .setCanAutosizeButton(true)
                 .setItems(AbstractRelic.LandingSound.values())
-                .setTooltip(PGR.core.strings.cedit_landingSound, PGR.core.strings.cetut_landingSound);
+                .setTooltip(EUIRM.strings.relic_landingSound, PGR.core.strings.cetut_landingSound);
         maxUpgrades = new PCLValueEditor(new EUIHitbox(START_X, screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , PGR.core.strings.cedit_maxUpgrades, (val) -> effect.modifyAllBuilders(e -> e.setMaxUpgrades(val)))
                 .setLimits(-1, PSkill.DEFAULT_MAX)
                 .setTooltip(PGR.core.strings.cedit_maxUpgrades, PGR.core.strings.cetut_maxUpgrades)
                 .setHasInfinite(true, true);
-        branchUpgrades = new PCLValueEditor(new EUIHitbox(screenW(0.45f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
+        branchUpgrades = new PCLValueEditor(new EUIHitbox(screenW(0.35f), screenH(0.4f), MENU_WIDTH / 4, MENU_HEIGHT)
                 , PGR.core.strings.cedit_branchUpgrade, (val) -> effect.modifyAllBuilders(e -> e.setBranchFactor(val)))
                 .setLimits(0, PSkill.DEFAULT_MAX)
                 .setTooltip(PGR.core.strings.cedit_branchUpgrade, PGR.core.strings.cetut_branchUpgrade)

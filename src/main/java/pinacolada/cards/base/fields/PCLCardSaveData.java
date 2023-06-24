@@ -16,13 +16,13 @@ public class PCLCardSaveData {
     public int modifiedCost;
     public int[] modifiedAffinities;
     public int[] modifiedScaling;
-    public HashSet<PCLCardTag> addedTags = new HashSet<>();
-    public HashSet<PCLCardTag> removedTags = new HashSet<>();
-    public ArrayList<String> augments = new ArrayList<>();
-    public ArrayList<String> additionalData = new ArrayList<>();
+    public HashSet<PCLCardTag> addedTags;
+    public HashSet<PCLCardTag> removedTags;
+    public ArrayList<String> augments;
+    public ArrayList<String> additionalData;
 
     public PCLCardSaveData() {
-        this.form = 0;
+        this(0);
     }
 
     public PCLCardSaveData(int form) {
@@ -63,6 +63,33 @@ public class PCLCardSaveData {
         if (original.additionalData != null) {
             this.additionalData = new ArrayList<>();
             this.additionalData.addAll(original.additionalData);
+        }
+    }
+
+    public void addAugment(String id) {
+        if (augments == null) {
+            augments = new ArrayList<>();
+        }
+        augments.add(id);
+    }
+
+    public void addTag(PCLCardTag tag) {
+        if (addedTags == null) {
+            addedTags = new HashSet<>();
+        }
+        addedTags.add(tag);
+    }
+
+    public void addTagToRemove(PCLCardTag tag) {
+        if (removedTags == null) {
+            removedTags = new HashSet<>();
+        }
+        removedTags.add(tag);
+    }
+
+    public void removeAugmentAt(int index) {
+        if (augments != null) {
+            augments.set(index, null);
         }
     }
 }
