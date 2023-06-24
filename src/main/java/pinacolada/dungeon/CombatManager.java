@@ -807,7 +807,7 @@ public class CombatManager {
         return subscriberInout(OnTryUseXCostSubscriber.class, original, (s, d) -> s.onTryUseXCost(d, card));
     }
 
-    public static void onUsingCard(AbstractCard card, AbstractPlayer p, AbstractMonster m) {
+    public static boolean onUsingCard(AbstractCard card, AbstractPlayer p, AbstractMonster m) {
         if (card == null) {
             throw new RuntimeException("Card played is null");
         }
@@ -829,12 +829,11 @@ public class CombatManager {
             }
 
             playerSystem.onCardPlayed(pclCard, info, false);
+            return true;
         }
         else {
-            card.use(p, m);
+            return false;
         }
-
-        onPlayCardPostActions(card, m);
     }
 
     public static void onVictory() {

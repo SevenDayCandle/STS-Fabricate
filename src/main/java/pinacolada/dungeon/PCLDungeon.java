@@ -498,7 +498,7 @@ public class PCLDungeon implements CustomSavable<PCLDungeon>, PreStartGameSubscr
 
     // Add custom relics if applicable. Note that this is loaded in PotionPoolPatches
     public void loadCustomPotions(ArrayList<String> result, AbstractPlayer.PlayerClass p, boolean getAll) {
-        if (allowCustomPotions) {
+        if (allowCustomPotions || getAll) {
             if (getAll) {
                 for (PCLCustomPotionSlot c : PCLCustomPotionSlot.getPotions(null)) {
                     result.add(c.ID);

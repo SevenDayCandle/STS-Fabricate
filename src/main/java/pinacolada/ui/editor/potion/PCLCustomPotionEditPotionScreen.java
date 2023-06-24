@@ -133,7 +133,7 @@ public class PCLCustomPotionEditPotionScreen extends PCLCustomEditEntityScreen<P
         //imageButton.tryRender(sb);
         formEditor.tryRender(sb);
         upgradeToggle.tryRender(sb);
-        preview.render(sb);
+        preview.labRender(sb);
         previewDescription.tryRender(sb);
     }
 

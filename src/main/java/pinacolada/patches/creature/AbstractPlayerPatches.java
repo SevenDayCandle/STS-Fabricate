@@ -3,6 +3,7 @@ package pinacolada.patches.creature;
 import basemod.ReflectionHacks;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.evacipated.cardcrawl.modthespire.lib.*;
+import com.megacrit.cardcrawl.actions.GameActionManager;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
@@ -94,7 +95,7 @@ public class AbstractPlayerPatches {
             return new ExprEditor() {
                 public void edit(MethodCall m) throws CannotCompileException {
                     if (m.getClassName().equals(AbstractCard.class.getName()) && m.getMethodName().equals("use")) {
-                        m.replace("{ pinacolada.patches.creature.AbstractPlayerPatches.AbstractPlayer_UseCard.use($0, $1, $2); }");
+                        m.replace("{ if (!pinacolada.patches.creature.AbstractPlayerPatches.AbstractPlayer_UseCard.use($0, $1, $2)) $proceed($$); }");
                     }
                     else if (m.getClassName().equals(EnergyManager.class.getName()) && m.getMethodName().equals("use")) {
                         m.replace("{ pinacolada.patches.creature.AbstractPlayerPatches.AbstractPlayer_UseCard.energy(c, this, $1); }");
@@ -103,8 +104,20 @@ public class AbstractPlayerPatches {
             };
         }
 
-        public static void use(AbstractCard c, AbstractPlayer p, AbstractMonster m) {
-            CombatManager.onUsingCard(c, p, m);
+        @SpireInsertPatch(locator = Locator.class, localvars = {"c", "monster"})
+        public static void insert(AbstractPlayer __instance, AbstractCard c, AbstractMonster monster) {
+            CombatManager.onPlayCardPostActions(c, monster);
+        }
+
+        private static class Locator extends SpireInsertLocator {
+            public int[] Locate(CtBehavior ctBehavior) throws Exception {
+                final Matcher matcher = new Matcher.MethodCallMatcher(GameActionManager.class, "addToBottom");
+                return LineFinder.findInOrder(ctBehavior, matcher);
+            }
+        }
+
+        public static boolean use(AbstractCard c, AbstractPlayer p, AbstractMonster m) {
+            return CombatManager.onUsingCard(c, p, m);
         }
 
         public static void energy(AbstractCard c, AbstractPlayer p, int amount) {

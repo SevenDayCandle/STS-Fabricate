@@ -987,7 +987,7 @@ public class GameUtilities {
     }
 
     public static ArrayList<AbstractPotion> getPotions(AbstractCard.CardColor cardColor) {
-        return EUIUtils.map(PotionHelper.getPotions(EUIGameUtils.getPlayerClassForCardColor(cardColor), true), PotionHelper::getPotion);
+        return EUIUtils.map(PotionHelper.getPotions(EUIGameUtils.getPlayerClassForCardColor(cardColor), cardColor == null), PotionHelper::getPotion);
     }
 
     public static <T extends AbstractPower> T getPower(AbstractCreature creature, String powerID) {

@@ -892,6 +892,23 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
                 if (isFromCreature()) {
                     return TEXT.subjects_thisCard;
                 }
+            case SelfAllEnemy:
+                if (isFromCreature()) {
+                    return PCLCoreStrings.joinWithAnd(TEXT.subjects_thisCard, TEXT.subjects_allEnemies());
+                }
+                return PCLCoreStrings.joinWithAnd(TEXT.subjects_you, TEXT.subjects_allEnemies());
+            case SelfSingle:
+                String base = count > 1 ? EUIRM.strings.numNoun(count, PCLCoreStrings.pluralEvaluated(TEXT.subjects_enemyN, count)) : TEXT.subjects_enemy;
+                if (isFromCreature()) {
+                    return PCLCoreStrings.joinWithAnd(TEXT.subjects_thisCard, base);
+                }
+                return PCLCoreStrings.joinWithAnd(TEXT.subjects_you, base);
+            case SelfSingleAlly:
+                String allyBase = count > 1 ? EUIRM.strings.numNoun(count, PCLCoreStrings.pluralEvaluated(TEXT.subjects_allyN, count)) : TEXT.subjects_ally;
+                if (isFromCreature()) {
+                    return PCLCoreStrings.joinWithAnd(TEXT.subjects_thisCard, allyBase);
+                }
+                return PCLCoreStrings.joinWithAnd(TEXT.subjects_you, allyBase);
             default:
                 return TEXT.subjects_you;
         }
@@ -921,6 +938,21 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
                 if (isFromCreature()) {
                     return TEXT.subjects_thisCard;
                 }
+            case SelfAllEnemy:
+                if (isFromCreature()) {
+                    return PCLCoreStrings.joinWithAnd(TEXT.subjects_thisCard, TEXT.subjects_allEnemies());
+                }
+                return PCLCoreStrings.joinWithAnd(TEXT.subjects_you, TEXT.subjects_allEnemies());
+            case SelfSingle:
+                if (isFromCreature()) {
+                    return PCLCoreStrings.joinWithAnd(TEXT.subjects_thisCard, TEXT.subjects_target);
+                }
+                return PCLCoreStrings.joinWithAnd(TEXT.subjects_you, TEXT.subjects_target);
+            case SelfSingleAlly:
+                if (isFromCreature()) {
+                    return PCLCoreStrings.joinWithAnd(TEXT.subjects_thisCard, TEXT.subjects_ally);
+                }
+                return PCLCoreStrings.joinWithAnd(TEXT.subjects_you, TEXT.subjects_ally);
             default:
                 return PGR.core.strings.subjects_you;
         }

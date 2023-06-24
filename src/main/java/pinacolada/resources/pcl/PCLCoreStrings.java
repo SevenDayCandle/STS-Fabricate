@@ -178,30 +178,28 @@ public class PCLCoreStrings extends PCLStrings {
     public final String cpile_top = cardPile.TEXT[4];
     public final String cpile_bottom = cardPile.TEXT[5];
     public final String cpile_random = cardPile.TEXT[6];
-    // Card Type
-    public final String ctype_none = cardtype.TEXT[0];
-    public final String ctype_allAlly = cardtype.TEXT[1];
-    public final String ctype_allCharacter = cardtype.TEXT[2];
-    public final String ctype_allEnemy = cardtype.TEXT[3];
-    public final String ctype_any = cardtype.TEXT[4];
-    public final String ctype_randomAlly = cardtype.TEXT[5];
-    public final String ctype_randomEnemy = cardtype.TEXT[6];
-    public final String ctype_self = cardtype.TEXT[7];
-    public final String ctype_singleAlly = cardtype.TEXT[8];
-    public final String ctype_singleTarget = cardtype.TEXT[9];
-    public final String ctype_team = cardtype.TEXT[10];
-    public final String ctype_legendary = cardtype.TEXT[11];
-    public final String ctype_secretRare = cardtype.TEXT[12];
-    public final String ctype_general = cardtype.TEXT[13];
-    public final String ctype_tagAll = cardtype.TEXT[14];
-    public final String ctype_tagAoE = cardtype.TEXT[15];
-    public final String ctype_tagRandom = cardtype.TEXT[16];
-    public final String ctype_turnStartFirst = cardtype.TEXT[17];
-    public final String ctype_turnStartLast = cardtype.TEXT[18];
-    public final String ctype_turnEndFirst = cardtype.TEXT[19];
-    public final String ctype_turnEndLast = cardtype.TEXT[20];
+
+    public final String ctype_allAlly = cardtype.TEXT[0];
+    public final String ctype_randomAlly = cardtype.TEXT[1];
+    public final String ctype_randomEnemy = cardtype.TEXT[2];
+    public final String ctype_selfAllEnemy = cardtype.TEXT[3];
+    public final String ctype_selfSingleAlly = cardtype.TEXT[4];
+    public final String ctype_selfSingle = cardtype.TEXT[5];
+    public final String ctype_singleAlly = cardtype.TEXT[6];
+    public final String ctype_team = cardtype.TEXT[7];
+    public final String ctype_legendary = cardtype.TEXT[8];
+    public final String ctype_secretRare = cardtype.TEXT[9];
+    public final String ctype_general = cardtype.TEXT[10];
+    public final String ctype_tagAll = cardtype.TEXT[11];
+    public final String ctype_tagAoE = cardtype.TEXT[12];
+    public final String ctype_tagRandom = cardtype.TEXT[13];
+    public final String ctype_turnStartFirst = cardtype.TEXT[14];
+    public final String ctype_turnStartLast = cardtype.TEXT[15];
+    public final String ctype_turnEndFirst = cardtype.TEXT[16];
+    public final String ctype_turnEndLast = cardtype.TEXT[17];
+
     // Character
-    public final String csel_leftText = charselect.TEXT[0];  // Starting Cards:
+    public final String csel_leftText = charselect.TEXT[0];
     public final String csel_deckEditor = charselect.TEXT[1];
     public final String csel_deckEditorInfo = charselect.TEXT[2];
     public final String csel_seriesEditor = charselect.TEXT[3];
@@ -700,107 +698,95 @@ public class PCLCoreStrings extends PCLStrings {
     public final String act_moveTo(Object amount, Object dest, Object target) {
         return actFmt(24, amount, dest, target);
     }
-    public final String act_obtain(Object card) {
-        return actFmt(25, card);
-    }
-    public final String act_obtainAmount(Object amount, Object card) {
-        return actFmt(26, amount, card);
-    }
-    public final String act_pay(Object amount, Object power) {
-        return actFmt(27, amount, power);
-    }
     public final String act_reduceBy(Object power, Object amount) {
-        return actFmt(28, power, amount);
+        return actFmt(25, power, amount);
     }
     public final String act_reducePropertyBy(Object property, Object target, Object amount) {
-        return actFmt(29, property, target, amount);
+        return actFmt(26, property, target, amount);
     }
     public final String act_reducePropertyFromBy(Object property, Object target, Object source, Object amount) {
-        return actFmt(30, property, target, source, amount);
+        return actFmt(27, property, target, source, amount);
     }
     public final String act_remove(Object item) {
-        return actFmt(31, item);
+        return actFmt(28, item);
     }
     public final String act_removeFrom(Object item, Object target) {
-        return actFmt(32, item, target);
+        return actFmt(29, item, target);
     }
     public final String act_removeFromPlace(Object item, Object target, Object place) {
-        return actFmt(33, item, target, place);
+        return actFmt(30, item, target, place);
     }
     public final String act_removeInPlace(Object item, Object target, Object place) {
-        return actFmt(34, item, target, place);
+        return actFmt(31, item, target, place);
     }
     public final String act_repeat(Object times) {
-        return actFmt(35, times);
+        return actFmt(32, times);
     }
     public final String act_select(Object amount) {
-        return actFmt(36, amount);
+        return actFmt(33, amount);
     }
-    public final String act_setOf(Object item, Object target, Object affinity5) {
-        return actFmt(37, item, target, affinity5);
+    public final String act_setOf(Object item, Object target, Object affinity2) {
+        return actFmt(34, item, target, affinity2);
     }
-    public final String act_setOfFrom(Object item, Object target, Object place, Object affinity5) {
-        return actFmt(38, item, target, place, affinity5);
+    public final String act_setOfFrom(Object item, Object target, Object place, Object affinity2) {
+        return actFmt(35, item, target, place, affinity2);
     }
     public final String act_setTo(Object item, Object affinity) {
-        return actFmt(39, item, affinity);
+        return actFmt(36, item, affinity);
     }
     public final String act_setTheLast(Object amount, Object item, Object affinity) {
-        return actFmt(40, amount, item, affinity);
+        return actFmt(37, amount, item, affinity);
     }
     public final String act_skipTurn() {
-        return actFmt(41);
+        return actFmt(38);
     }
     public final String act_stealFrom(Object amount, Object item, Object target) {
-        return actFmt(42, amount, item, target);
+        return actFmt(39, amount, item, target);
     }
     public final String act_stealX(Object amount, Object power) {
-        return actFmt(43, amount, power);
-    }
-    public final String act_stun(Object target) {
-        return actFmt(44, target);
+        return actFmt(40, amount, power);
     }
     public final String act_takeDamage(Object amount) {
-        return actFmt(45, amount);
+        return actFmt(41, amount);
     }
     public final String act_transform(Object subject, Object target) {
-        return actFmt(46, subject, target);
+        return actFmt(42, subject, target);
     }
     public final String act_use(Object target) {
-        return actFmt(47, target);
+        return actFmt(43, target);
     }
     public final String act_youCannotGain(Object target) {
-        return actFmt(48, target);
+        return actFmt(44, target);
     }
     public final String act_zCosts(Object object, Object ordinal, Object amount) {
-        return actFmt(49, object, ordinal, amount);
+        return actFmt(45, object, ordinal, amount);
     }
     public final String act_zGainsBonus(Object object, Object amount, Object bonus) {
-        return actFmt(50, object, amount, bonus);
+        return actFmt(46, object, amount, bonus);
     }
     public final String act_zHas(Object object, Object amount) {
-        return actFmt(51, object, amount);
+        return actFmt(47, object, amount);
     }
     public final String act_zLoses(Object object, Object ordinal, Object amount, Object bonus) {
-        return actFmt(52, object, ordinal, amount, bonus);
+        return actFmt(48, object, ordinal, amount, bonus);
     }
     public final String act_zOn(Object action, Object object, Object target) {
-        return actFmt(53, action, object, target);
+        return actFmt(49, action, object, target);
     }
     public final String act_zOnAmount(Object action, Object amount, Object object, Object target) {
-        return actFmt(54, action, amount, object, target);
+        return actFmt(50, action, amount, object, target);
     }
     public final String act_zXFromY(Object verb, Object amount, Object subject, Object target) {
-        return actFmt(55, verb, amount, subject, target);
+        return actFmt(51, verb, amount, subject, target);
     }
     public final String act_zXFromYToZ(Object verb, Object amount, Object subject, Object dest, Object target) {
-        return actFmt(56, verb, amount, subject, dest, target);
+        return actFmt(52, verb, amount, subject, dest, target);
     }
     public final String act_zToX(Object action, Object object, Object target) {
-        return actFmt(57, action, object, target);
+        return actFmt(53, action, object, target);
     }
     public final String act_zXToY(Object verb, Object amount, Object subject, Object target) {
-        return actFmt(58, verb, amount, subject, target);
+        return actFmt(54, verb, amount, subject, target);
     }
 
     public final String act_addAmountToPile(Object amount, Object desc2, Object pile) {
@@ -866,6 +852,15 @@ public class PCLCoreStrings extends PCLStrings {
     public final String act_kill(String targetString) {
         return act_generic2(PGR.core.tooltips.kill.title, targetString);
     }
+    public final String act_obtain(Object card) {
+        return act_generic2(PGR.core.tooltips.obtain.title, card);
+    }
+    public final String act_obtainAmount(Object amount, Object card) {
+        return act_generic3(PGR.core.tooltips.obtain.title, amount, card);
+    }
+    public final String act_pay(Object amount, Object power) {
+        return act_generic3(PGR.core.tooltips.pay.title, amount, power);
+    }
     public final String act_play(Object amount) {
         return EUIRM.strings.verbNoun(PGR.core.tooltips.play.title, amount);
     }
@@ -907,6 +902,9 @@ public class PCLCoreStrings extends PCLStrings {
     }
     public final String act_stabilize(Object subject, Object target) {
         return act_zOn(PGR.core.tooltips.stabilize.title, subject, target);
+    }
+    public final String act_stun(Object target) {
+        return act_generic2(PGR.core.tooltips.stun.title, target);
     }
     public final String act_trigger(Object subject) {
         return act_generic2(PGR.core.tooltips.trigger.title, subject);

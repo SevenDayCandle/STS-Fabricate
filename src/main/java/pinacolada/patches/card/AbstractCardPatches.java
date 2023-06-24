@@ -13,6 +13,7 @@ import pinacolada.cards.base.tags.EphemeralField;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.CombatManager;
 import pinacolada.relics.PCLRelic;
+import pinacolada.resources.PGR;
 
 public class AbstractCardPatches {
     @SpirePatch(clz = AbstractCard.class, method = "applyPowersToBlock")
@@ -47,7 +48,9 @@ public class AbstractCardPatches {
     {
         @SpirePostfixPatch
         public static void method(AbstractCard __instance) {
-            CombatManager.onCardReset(__instance);
+            if (PGR.isLoaded()) {
+                CombatManager.onCardReset(__instance);
+            }
         }
     }
 

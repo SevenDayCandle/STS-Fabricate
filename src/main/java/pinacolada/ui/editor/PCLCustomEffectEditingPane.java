@@ -100,6 +100,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
 
     public static void invalidateItems() {
         availableCards = null;
+        availablePotions = null;
         availableRelics = null;
     }
 
@@ -125,7 +126,7 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
     protected ArrayList<AbstractPotion> getAvailablePotions() {
         if (availablePotions == null) {
             AbstractCard.CardColor cardColor = getColor();
-            availablePotions = new ArrayList<>(GameUtilities.getPotions(cardColor));
+            availablePotions = new ArrayList<>(GameUtilities.getPotions(null));
             availablePotions.sort((a, b) -> StringUtils.compare(a.name, b.name));
         }
         return availablePotions;
@@ -449,8 +450,8 @@ public class PCLCustomEffectEditingPane extends PCLCustomGenericPage {
         stances = initializeSmartSearchable(PCLStanceHelper.getAll(cardColor), PGR.core.tooltips.stance.title);
         tags = initializeSmartSearchable(PCLCardTag.getAll(), PGR.core.strings.cedit_tags);
         cards = initializeSearchable(getAvailableCards(), c -> c.name, PGR.core.strings.subjects_card);
-        relics = initializeSearchable(getAvailableRelics(), c -> c.name, PGR.core.strings.subjects_relic);
-        potions = initializeSearchable(getAvailablePotions(), c -> c.name, PGR.core.strings.subjects_potion);
+        relics = initializeSearchable(getAvailableRelics(), c -> c.name, StringUtils.capitalize(PGR.core.strings.subjects_relic));
+        potions = initializeSearchable(getAvailablePotions(), c -> c.name, StringUtils.capitalize(PGR.core.strings.subjects_potion));
         colors = initializeSearchable(AbstractCard.CardColor.values(), EUIGameUtils::getColorName, EUIRM.strings.ui_colors);
         rarities = initializeSearchable(PCLCustomCardPrimaryInfoPage.getEligibleRarities(), EUIGameUtils::textForRarity, CardLibSortHeader.TEXT[0]);
         potionRarities = initializeSearchable(AbstractPotion.PotionRarity.values(), EUIGameUtils::textForPotionRarity, CardLibSortHeader.TEXT[0]);

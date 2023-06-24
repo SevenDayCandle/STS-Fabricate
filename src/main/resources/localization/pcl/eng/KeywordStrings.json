@@ -454,6 +454,13 @@
 		"DESCRIPTION": "Play this effect at the start of combat.",
 		"NAME": "Startup"
 	},
+	"Steal":	{
+		"DESCRIPTION": "Move items from the target to yourself.",
+		"NAME": "Steal",
+		"PAST": "stolen",
+		"PRESENT": "steals",
+		"PROGRESSIVE": "stealing"
+	},
 	"Stun":	{
 		"DESCRIPTION": "Cannot act.",
 		"NAME": "Stun",
@@ -573,12 +580,5 @@
 		"PAST": "Retained",
 		"PRESENT": "Retains",
 		"PROGRESSIVE": "Retaining"
-	},
-	"~Steal":	{
-		"DESCRIPTION": "You can steal up to #b{0} #yGold from a boss, #b{1} #yGold from an elite, or #b{2} #yGold from other non-minion enemies.",
-		"NAME": "Steal",
-		"PAST": "stolen",
-		"PRESENT": "steals",
-		"PROGRESSIVE": "stealing"
 	}
 }

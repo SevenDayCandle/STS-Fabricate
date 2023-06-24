@@ -202,8 +202,9 @@ public class PCLCoreTooltips extends PCLTooltips {
     public EUIKeywordTooltip stance = EUIKeywordTooltip.findByID("Stance");
     public EUIKeywordTooltip starter = EUIKeywordTooltip.findByID("Starter");
     public EUIKeywordTooltip startup = EUIKeywordTooltip.findByID("Startup");
-    public EUIKeywordTooltip steal = EUIKeywordTooltip.findByID("~Steal");
+    public EUIKeywordTooltip steal = EUIKeywordTooltip.findByID("Steal");
     public EUIKeywordTooltip strength = EUIKeywordTooltip.findByID("Strength");
+    public EUIKeywordTooltip stun = EUIKeywordTooltip.findByID("Stun");
     public EUIKeywordTooltip summon = EUIKeywordTooltip.findByID("Summon");
     public EUIKeywordTooltip supercharged = EUIKeywordTooltip.findByID("Supercharged");
     public EUIKeywordTooltip tempHP = EUIKeywordTooltip.findByID("Temporary HP");
@@ -356,7 +357,6 @@ public class PCLCoreTooltips extends PCLTooltips {
         invigorated.formatDescription(InvigoratedPower.MULTIPLIER);
         lockOn.formatDescription(PCLLockOnPower.BASE);
         provoked.formatDescription(ProvokedPower.ATTACK_MULTIPLIER);
-        steal.formatDescription(StolenGoldPower.GOLD_BOSS, StolenGoldPower.GOLD_ELITE, StolenGoldPower.GOLD_NORMAL);
 
         EUIKeywordTooltip.updateTooltipIcons();
     }

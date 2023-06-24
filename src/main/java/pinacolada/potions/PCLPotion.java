@@ -153,7 +153,7 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
         this.renderOutline(sb, useOutlineColor ? this.labOutlineColor : Settings.HALF_TRANSPARENT_BLACK_COLOR);
         sb.setColor(this.liquidColor);
         sb.draw(liquidImg, this.posX - 32.0F, this.posY - 32.0F, 32.0F, 32.0F, 64.0F, 64.0F, this.scale, this.scale, angle, 0, 0, 64, 64, false, false);
-        if (this.hybridColor != null) {
+        if (this.hybridColor != null && hybridImg != null) {
             sb.setColor(this.hybridColor);
             sb.draw(hybridImg, this.posX - 32.0F, this.posY - 32.0F, 32.0F, 32.0F, 64.0F, 64.0F, this.scale, this.scale, angle, 0, 0, 64, 64, false, false);
         }
@@ -227,6 +227,11 @@ public abstract class PCLPotion extends AbstractPotion implements KeywordProvide
             initializeTips();
         }
         return this;
+    }
+
+    @Override
+    public void render(SpriteBatch sb) {
+        renderImpl(sb, false);
     }
 
     @Override
