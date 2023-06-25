@@ -1577,6 +1577,15 @@ public abstract class PSkill<T extends PField> implements TooltipProvider {
     public void triggerOnStartOfBattleForRelic() {
     }
 
+    public void triggerOnUpgrade(AbstractCard c) {
+        if (this instanceof OnCardUpgradeSubscriber) {
+            ((OnCardUpgradeSubscriber) this).onUpgrade(c);
+        }
+        else if (this.childEffect != null) {
+            this.childEffect.triggerOnUpgrade(c);
+        }
+    }
+
     public boolean tryPassParent(PSkill<?> source, PCLUseInfo info) {
         return parent == null || parent.tryPassParent(source, info);
     }

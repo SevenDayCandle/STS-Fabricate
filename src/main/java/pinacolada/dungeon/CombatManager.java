@@ -542,6 +542,7 @@ public class CombatManager {
             c.triggerWhenCreated(startOfBattle);
         }
 
+        playerSystem.onCardCreated(card, startOfBattle);
         subscriberDo(OnCardCreatedSubscriber.class, s -> s.onCardCreated(card, startOfBattle));
     }
 
@@ -607,6 +608,18 @@ public class CombatManager {
 
     public static void onCardScry(AbstractCard card) {
         subscriberDo(OnCardScrySubscriber.class, s -> s.onScry(card));
+    }
+
+    public static void onCardUpgrade(AbstractCard card) {
+        if (card instanceof PCLCard) {
+            ((PCLCard) card).triggerOnUpgrade();
+        }
+
+        for (SkillModifier wrapper : SkillModifier.getAll(card)) {
+            wrapper.onUpgraded(card);
+        }
+
+        subscriberDo(OnCardUpgradeSubscriber.class, s -> s.onUpgrade(card));
     }
 
     public static void onChangeStance(AbstractStance oldStance, AbstractStance newStance) {

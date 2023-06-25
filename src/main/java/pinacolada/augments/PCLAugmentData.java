@@ -11,9 +11,9 @@ import pinacolada.misc.PCLGenericData;
 import pinacolada.resources.PCLResources;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkill;
+import pinacolada.skills.PTrait;
 import pinacolada.skills.skills.PMultiSkill;
 import pinacolada.skills.skills.PMultiTrait;
-import pinacolada.skills.skills.PTrait;
 import pinacolada.utilities.GameUtilities;
 import pinacolada.utilities.WeightedList;
 

@@ -4,8 +4,8 @@ import pinacolada.dungeon.PCLUseInfo;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.PTrait;
 import pinacolada.skills.fields.PField_Empty;
-import pinacolada.skills.skills.PTrait;
 
 public class PTrait_Priority extends PTrait<PField_Empty> {
     public static final PSkillData<PField_Empty> DATA = register(PTrait_Priority.class, PField_Empty.class);

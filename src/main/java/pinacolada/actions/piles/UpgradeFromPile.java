@@ -48,11 +48,13 @@ public class UpgradeFromPile extends SelectFromPile {
 
             if (card.canUpgrade()) {
                 card.upgrade();
+                CombatManager.onCardUpgrade(card);
             }
 
             for (AbstractCard c : GameUtilities.getAllInBattleInstances(card.uuid)) {
                 if (c != card && c.canUpgrade()) {
                     c.upgrade();
+                    CombatManager.onCardUpgrade(c);
                 }
             }
 

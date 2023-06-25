@@ -6,7 +6,7 @@ import pinacolada.augments.PCLAugmentCategorySub;
 import pinacolada.augments.PCLAugmentData;
 import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.skills.PSkill;
-import pinacolada.skills.skills.PTrait;
+import pinacolada.skills.PTrait;
 
 @VisibleAugment
 public class GBlue1 extends PCLAugment {

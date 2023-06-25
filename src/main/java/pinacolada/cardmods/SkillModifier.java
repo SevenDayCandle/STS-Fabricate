@@ -128,6 +128,10 @@ public class SkillModifier extends AbstractCardModifier {
         skill.triggerOnReshuffle(card, group);
     }
 
+    public void onUpgraded(AbstractCard card) {
+        skill.triggerOnUpgrade(card);
+    }
+
     public boolean pclCanPlayCard(AbstractCard card) {
         return skill.canPlay(getInfo(card, null));
     }

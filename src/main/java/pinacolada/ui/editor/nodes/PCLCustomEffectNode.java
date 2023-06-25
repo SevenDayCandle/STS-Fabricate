@@ -295,6 +295,7 @@ public class PCLCustomEffectNode extends EUIButton {
         Mod,
         Move,
         Multimove,
+        Trait,
         Delay,
         Limit,
         Trigger,
@@ -338,6 +339,8 @@ public class PCLCustomEffectNode extends EUIButton {
                     return Settings.GOLD_COLOR.cpy();
                 case Multimove:
                     return Color.ORANGE.cpy();
+                case Trait:
+                    return Color.OLIVE.cpy();
                 case Delay:
                     return Settings.RED_TEXT_COLOR.cpy();
                 case Limit:
@@ -365,6 +368,8 @@ public class PCLCustomEffectNode extends EUIButton {
                     return PGR.core.strings.cetut_effectEffect;
                 case Multimove:
                     return PGR.core.strings.cetut_effectChoices;
+                case Trait:
+                    return PGR.core.strings.cetut_effectTrait;
                 case Delay:
                     return PGR.core.strings.cetut_effectTurnDelay;
                 case Limit:
@@ -392,6 +397,8 @@ public class PCLCustomEffectNode extends EUIButton {
                     return PMove.class;
                 case Multimove:
                     return PMultiSkill.class;
+                case Trait:
+                    return PTrait.class;
                 case Delay:
                     return PDelay.class;
                 case Limit:
@@ -436,6 +443,8 @@ public class PCLCustomEffectNode extends EUIButton {
                 case Move:
                 case Multimove:
                     return PCLCoreImages.Menu.nodeSquare2.texture();
+                case Trait:
+                    return PCLCoreImages.Menu.nodeDiamond.texture();
             }
             return PCLCoreImages.Menu.nodeCircleSmall.texture();
         }
@@ -454,6 +463,8 @@ public class PCLCustomEffectNode extends EUIButton {
                     return PGR.core.strings.cedit_effect;
                 case Multimove:
                     return PGR.core.strings.cedit_multiEffect;
+                case Trait:
+                    return PGR.core.strings.cedit_trait;
                 case Delay:
                     return PGR.core.strings.cedit_turnDelay;
                 case Trigger:

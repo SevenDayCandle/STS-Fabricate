@@ -156,6 +156,10 @@ public abstract class PCLPlayerMeter extends EUICardDraggable<PCLCard> implement
         return initial;
     }
 
+    public void onCardCreated(AbstractCard card, boolean startOfBattle) {
+
+    }
+
     public void onCardPlayed(PCLCard card, PCLUseInfo info, boolean fromSummon) {
     }
 

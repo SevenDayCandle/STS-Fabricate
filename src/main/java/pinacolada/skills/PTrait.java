@@ -1,4 +1,4 @@
-package pinacolada.skills.skills;
+package pinacolada.skills;
 
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import extendedui.EUIRM;
@@ -8,10 +8,6 @@ import pinacolada.cards.base.fields.PCLAttackType;
 import pinacolada.cards.base.fields.PCLCardTarget;
 import pinacolada.cards.base.tags.PCLCardTag;
 import pinacolada.dungeon.PCLUseInfo;
-import pinacolada.skills.PMove;
-import pinacolada.skills.PSkill;
-import pinacolada.skills.PSkillData;
-import pinacolada.skills.PSkillSaveData;
 import pinacolada.skills.fields.PField;
 import pinacolada.skills.skills.base.traits.*;
 import pinacolada.skills.skills.special.traits.PTrait_Affinity;
@@ -19,7 +15,7 @@ import pinacolada.skills.skills.special.traits.PTrait_CardTarget;
 import pinacolada.skills.skills.special.traits.PTrait_HP;
 import pinacolada.skills.skills.special.traits.PTrait_Priority;
 
-public abstract class PTrait<T extends PField> extends PMove<T> {
+public abstract class PTrait<T extends PField> extends PSkill<T> {
     protected boolean conditionMetCache;
     protected AbstractCard appliedCard;
 

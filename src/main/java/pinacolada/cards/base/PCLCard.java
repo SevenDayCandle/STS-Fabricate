@@ -1440,6 +1440,12 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
     }
 
     @Override
+    public void triggerOnExhaust() {
+        super.triggerOnExhaust();
+        doEffects(be -> be.triggerOnExhaust(this));
+    }
+
+    @Override
     public void triggerOnOtherCardPlayed(AbstractCard c) {
         super.triggerOnOtherCardPlayed(c);
         doEffects(be -> be.triggerOnOtherCardPlayed(c));
@@ -1457,15 +1463,15 @@ public abstract class PCLCard extends AbstractCard implements KeywordProvider, E
         doEffects(be -> be.triggerOnScry(this));
     }
 
+    // Only called if the card is upgraded in battle through an action
+    public void triggerOnUpgrade() {
+        doEffects(be -> be.triggerOnUpgrade(this));
+    }
+
     @Override
     public void onRetained() {
         super.onRetained();
         doEffects(be -> be.triggerOnRetain(this));
-    }
-
-    public void triggerOnExhaust() {
-        super.triggerOnExhaust();
-        doEffects(be -> be.triggerOnExhaust(this));
     }
 
     @Override

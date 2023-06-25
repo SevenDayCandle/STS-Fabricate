@@ -6,8 +6,8 @@ import pinacolada.cards.base.fields.PCLAffinity;
 import pinacolada.resources.PGR;
 import pinacolada.skills.PSkillData;
 import pinacolada.skills.PSkillSaveData;
+import pinacolada.skills.PTrait;
 import pinacolada.skills.fields.PField_Affinity;
-import pinacolada.skills.skills.PTrait;
 import pinacolada.utilities.GameUtilities;
 
 // Only used for augments

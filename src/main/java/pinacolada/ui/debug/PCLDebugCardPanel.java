@@ -13,7 +13,6 @@ import pinacolada.actions.PCLActions;
 import pinacolada.cards.base.PCLCard;
 import pinacolada.cards.base.PCLCustomCardSlot;
 import pinacolada.effects.PCLEffects;
-import pinacolada.utilities.GameUtilities;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -105,7 +104,7 @@ public class PCLDebugCardPanel {
                 upgradeCount.renderInline();
                 formCount.render();
             });
-            DEUIUtils.disabledIf(!GameUtilities.inBattle() || cardList.get() == null, () ->
+            DEUIUtils.disabledIf(AbstractDungeon.player == null || cardList.get() == null, () ->
             {
                 addToHand.renderInline(this::addToHand);
             });

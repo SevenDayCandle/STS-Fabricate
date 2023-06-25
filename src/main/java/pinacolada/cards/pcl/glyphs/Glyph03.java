@@ -1,8 +1,8 @@
 package pinacolada.cards.pcl.glyphs;
 
 import pinacolada.cards.base.PCLCardData;
+import pinacolada.skills.PTrait;
 import pinacolada.skills.skills.PMultiTrait;
-import pinacolada.skills.skills.PTrait;
 import pinacolada.skills.skills.PTrigger;
 import pinacolada.skills.skills.base.conditions.PCond_IfHasProperty;
 import pinacolada.skills.skills.base.traits.PTrait_BlockMultiplier;

@@ -36,6 +36,7 @@ public class PCLCustomEffectSelectorPane extends EUIImage {
     public void initializeButtons() {
         addNodeButton(PCLCustomEffectNode.NodeType.Move);
         addNodeButton(PCLCustomEffectNode.NodeType.Multimove);
+        addNodeButton(PCLCustomEffectNode.NodeType.Trait);
         addNodeButton(PCLCustomEffectNode.NodeType.Mod);
         addNodeButton(PCLCustomEffectNode.NodeType.Cond);
         addNodeButton(PCLCustomEffectNode.NodeType.Multicond);

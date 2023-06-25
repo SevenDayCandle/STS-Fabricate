@@ -140,6 +140,10 @@ public class PCLPlayerSystem extends EUIBase {
         return (int) initial;
     }
 
+    public void onCardCreated(AbstractCard card, boolean startOfBattle) {
+        getActiveMeter().onCardCreated(card, startOfBattle);
+    }
+
     public void onCardPlayed(PCLCard card, PCLUseInfo info, boolean fromSummon) {
         getActiveMeter().onCardPlayed(card, info, fromSummon);
     }
